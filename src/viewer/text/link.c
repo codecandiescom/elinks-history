@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.70 2003/10/17 17:37:07 jonas Exp $ */
+/* $Id: link.c,v 1.71 2003/10/17 18:12:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,17 +126,26 @@ sort_links(struct document *document)
 static void
 draw_link(struct terminal *t, struct document_view *doc_view, int l)
 {
+	static int *allow_dark_on_black = NULL;
 	struct link *link;
 	int xmax, ymax;
 	int xpos, ypos;
 	int i;
 	int cursor_offset = 0;
 	struct screen_char *template;
+	enum color_flags color_flags = COLOR_DECREASE_LIGHTNESS;
 
 	assert(t && doc_view && doc_view->vs);
 	if_assert_failed return;
 	assertm(!doc_view->link_bg, "link background not empty");
 	if_assert_failed mem_free(doc_view->link_bg);
+
+	if (allow_dark_on_black == NULL) {
+		allow_dark_on_black =
+			&get_opt_bool("document.colors.allow_dark_on_black");
+	}
+
+	if (!*allow_dark_on_black) color_flags |= COLOR_INCREASE_CONTRAST;
 
 	if (l == -1) return;
 
@@ -180,7 +189,7 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	/* Setup the template char. */
 	template = &doc_view->link_bg[link->n].c;
 	template->attr = 0;
-	set_term_color(template, &link->color, COLOR_DECREASE_LIGHTNESS,
+	set_term_color(template, &link->color, color_flags,
 		       doc_view->document->opt.color_mode);
 
 	xmax = doc_view->xp + doc_view->xw;

@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.56 2003/10/17 17:37:07 jonas Exp $ */
+/* $Id: color.c,v 1.57 2003/10/17 18:12:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,7 +7,6 @@
 
 #include "elinks.h"
 
-#include "document/options.h"
 #include "terminal/color.h"
 #include "terminal/draw.h"
 #include "util/color.h"
@@ -192,7 +191,7 @@ set_term_color16(struct screen_char *schar, enum color_flags flags,
 		 unsigned char fg, unsigned char bg)
 {
 	/* Adjusts the foreground color to be more visible. */
-	if (d_opt && !d_opt->allow_dark_on_black) {
+	if (flags & COLOR_INCREASE_CONTRAST) {
 		fg = fg_color[fg][bg];
 	}
 
@@ -212,7 +211,7 @@ set_term_color16(struct screen_char *schar, enum color_flags flags,
 	}
 
 	/* Adjusts the foreground color to be more visible. */
-	if ((d_opt && !d_opt->allow_dark_on_black) || bg == fg) {
+	if ((flags & COLOR_INCREASE_CONTRAST) || bg == fg) {
 		fg = fg_color[fg][bg];
 
 		if (fg & SCREEN_ATTR_BOLD) {
@@ -271,6 +270,9 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 	case COLOR_MODE_256:
 		/* TODO: Handle decrease lightness by converting to
 		 * hue-ligthness-saturation color model */
+		break;
+
+	default:
 		break;
 	}
 

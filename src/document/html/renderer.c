@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.297 2003/10/17 17:37:07 jonas Exp $ */
+/* $Id: renderer.c,v 1.298 2003/10/17 18:12:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -262,8 +262,12 @@ get_format_screen_char(struct part *part)
 
 		if (part->document) {
 			color_mode = part->document->opt.color_mode;
+
 			if (!part->document->opt.underline)
 				color_flags |= COLOR_ENHANCE_UNDERLINE;
+
+			if (!part->document->opt.allow_dark_on_black)
+				color_flags |= COLOR_INCREASE_CONTRAST;
 		}
 
 		schar_cache.attr = 0;

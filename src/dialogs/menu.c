@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.103 2003/06/07 20:08:12 pasky Exp $ */
+/* $Id: menu.c,v 1.104 2003/06/07 20:55:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -379,8 +379,8 @@ static struct menu_item file_menu11[] = {
 	{N_("~Go to URL"), "g", MENU_FUNC menu_goto_url, (void *)0, 0, 0},
 	{N_("Go ~back"), "<-", MENU_FUNC menu_go_back, (void *)0, 0, 0},
 	{N_("~Reload"), "Ctrl-R", MENU_FUNC menu_reload, (void *)0, 0, 0},
-	{N_("~History"), M_SUBMENU, MENU_FUNC history_menu, (void *)0, 1, 0},
-	{N_("Unhis~tory"), M_SUBMENU, MENU_FUNC unhistory_menu, (void *)0, 1, 0},
+	{N_("~History"), M_SUBMENU, MENU_FUNC history_menu, (void *)0, 0, 1,
+	{N_("Unhis~tory"), M_SUBMENU, MENU_FUNC unhistory_menu, (void *)0, 0, 1},
 };
 
 static struct menu_item file_menu12[] = {
@@ -555,8 +555,8 @@ static struct menu_item assoc_menu[] = {
 
 static struct menu_item ext_menu[] = {
 	{N_("~Add"), "", MENU_FUNC menu_add_ext, NULL, 0, 0},
-	{N_("~Modify"), M_SUBMENU, MENU_FUNC menu_list_ext, menu_add_ext, 1, 0},
-	{N_("~Delete"), M_SUBMENU, MENU_FUNC menu_list_ext, menu_del_ext, 1, 0},
+	{N_("~Modify"), M_SUBMENU, MENU_FUNC menu_list_ext, menu_add_ext, 0, 1},
+	{N_("~Delete"), M_SUBMENU, MENU_FUNC menu_list_ext, menu_del_ext, 0, 1},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
@@ -568,12 +568,12 @@ do_ext_menu(struct terminal *term, void *xxx, struct session *ses)
 
 static struct menu_item setup_menu[] = {
 #ifdef ENABLE_NLS
-	{N_("~Language"), M_SUBMENU, MENU_FUNC menu_language_list, NULL, 1, 0},
+	{N_("~Language"), M_SUBMENU, MENU_FUNC menu_language_list, NULL, 0, 1},
 #endif
-	{N_("C~haracter set"), M_SUBMENU, MENU_FUNC charset_list, (void *)1, 1, 0},
+	{N_("C~haracter set"), M_SUBMENU, MENU_FUNC charset_list, (void *)1, 0, 1},
 	{N_("~Terminal options"), "", MENU_FUNC terminal_options, NULL, 0, 0},
-/*	{N_("~Associations"), M_SUBMENU, MENU_FUNC do_menu, assoc_menu, 1, 0}, */
-	{N_("File ~extensions"), M_SUBMENU, MENU_FUNC do_ext_menu, NULL, 1, 0},
+/*	{N_("~Associations"), M_SUBMENU, MENU_FUNC do_menu, assoc_menu, 0, 1}, */
+	{N_("File ~extensions"), M_SUBMENU, MENU_FUNC do_ext_menu, NULL, 0, 1},
 	{"", M_BAR, NULL, NULL, 0, 0},
 	{N_("~Options manager"), "o", MENU_FUNC menu_options_manager, NULL, 0, 0},
 	{N_("~Keybinding manager"), "k", MENU_FUNC menu_keybinding_manager, NULL, 0, 0},
@@ -582,8 +582,8 @@ static struct menu_item setup_menu[] = {
 };
 
 static struct menu_item setup_menu_anon[] = {
-	{N_("~Language"), M_SUBMENU, MENU_FUNC menu_language_list, NULL, 1, 0},
-	{N_("C~haracter set"), M_SUBMENU, MENU_FUNC charset_list, (void *)1, 1, 0},
+	{N_("~Language"), M_SUBMENU, MENU_FUNC menu_language_list, NULL, 0, 1},
+	{N_("C~haracter set"), M_SUBMENU, MENU_FUNC charset_list, (void *)1, 0, 1},
 	{N_("~Terminal options"), "", MENU_FUNC terminal_options, NULL, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };

@@ -32,6 +32,8 @@ combinations.
 	When title/status bar is turned off, there's still a blank line on
 top/bottom of screen.
 
-$Id: BUGS,v 1.15 2002/03/16 00:37:05 pasky Exp $
+	About dialog is containing garbage content during a transfer.
+
+$Id: BUGS,v 1.16 2002/03/16 12:31:14 pasky Exp $
 
 vim: textwidth=80

@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.4 2004/12/19 01:47:17 miciah Exp $ */
+/* $Id: finger.c,v 1.5 2005/02/23 21:52:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,8 +35,7 @@ finger_end_request(struct connection *conn, enum connection_state state)
 
 	if (conn->state == S_OK) {
 		if (conn->cached) {
-			truncate_entry(conn->cached, conn->from, 1);
-			conn->cached->incomplete = 0;
+			normalize_cache_entry(conn->cached, conn->from);
 		}
 	}
 	abort_connection(conn);

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.186 2005/01/21 11:24:12 zas Exp $ */
+/* $Id: ftp.c,v 1.187 2005/02/23 21:52:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1344,8 +1344,7 @@ ftp_end_request(struct connection *conn, enum connection_state state)
 	set_connection_state(conn, state);
 
 	if (conn->state == S_OK && conn->cached) {
-		truncate_entry(conn->cached, conn->from, 1);
-		conn->cached->incomplete = 0;
+		normalize_cache_entry(conn->cached, conn->from);
 	}
 
 	add_keepalive_connection(conn, FTP_KEEPALIVE_TIMEOUT, NULL);

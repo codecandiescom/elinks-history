@@ -1,5 +1,5 @@
 /* Pseudo about: protocol implementation */
-/* $Id: about.c,v 1.8 2004/08/14 05:59:17 jonas Exp $ */
+/* $Id: about.c,v 1.9 2005/02/23 21:52:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@ about_protocol_handler(struct connection *conn)
 
 	/* Only do this the first time */
 	if (cached && !cached->content_type) {
-		cached->incomplete = 0;
+		normalize_cache_entry(cached, 0);
 
 		/* Set content to known type */
 		mem_free_set(&cached->content_type, stracpy("text/html"));

@@ -1,5 +1,5 @@
 /* Connection and data transport handling */
-/* $Id: connection.c,v 1.3 2004/11/10 21:08:10 jonas Exp $ */
+/* $Id: connection.c,v 1.4 2005/02/23 21:52:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -222,7 +222,7 @@ nntp_end_request(struct connection *conn, enum connection_state state)
 
 	if (conn->state == S_OK) {
 		if (conn->cached) {
-			conn->cached->incomplete = 0;
+			normalize_cache_entry(conn->cached, conn->from);
 		}
 	} else if (conn->state == S_OUT_OF_MEM) {
 		/* FIXME: Clear the socket buffers before ending so the one

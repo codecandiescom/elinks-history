@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.97 2005/02/23 19:09:42 jonas Exp $ */
+/* $Id: cache.h,v 1.98 2005/02/23 21:52:08 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -109,6 +109,10 @@ int add_fragment(struct cache_entry *cached, int offset,
  * complete source of all currently downloaded fragments. Returns NULL if
  * validation of the fragments fails. */
 struct fragment *get_cache_fragment(struct cache_entry *cached);
+
+/* Should be called when creation of a new cache has been completed. Most
+ * importantly, it will updates cached->incomplete. */
+void normalize_cache_entry(struct cache_entry *cached, int length);
 
 void truncate_entry(struct cache_entry *cached, int offset, int final);
 void free_entry_to(struct cache_entry *cached, int offset);

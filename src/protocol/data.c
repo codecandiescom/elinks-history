@@ -1,5 +1,5 @@
 /* The "data" URI protocol implementation (RFC 2397) */
-/* $Id: data.c,v 1.9 2004/11/10 21:22:54 jonas Exp $ */
+/* $Id: data.c,v 1.10 2005/02/23 21:52:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,15 +153,15 @@ data_protocol_handler(struct connection *conn)
 		decode_uri(data);
 	}
 
-	/* This will not release the newly created header */
-	delete_entry_content(cached);
+	{
+		/* Use strlen() to get the correct decoded length */
+		int datalen = strlen(data);
 
-	/* Use strlen() to get the correct decoded length */
-	add_fragment(cached, conn->from, data, strlen(data));
+		add_fragment(cached, conn->from, data, datalen);
+		normalize_cache_entry(cached, datalen);
+	}
 
 	mem_free(data);
-
-	cached->incomplete = 0;
 
 	abort_conn_with_state(conn, S_OK);
 }

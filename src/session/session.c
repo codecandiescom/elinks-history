@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.596 2005/02/03 23:36:59 adamg Exp $ */
+/* $Id: session.c,v 1.597 2005/02/23 21:52:08 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -467,11 +467,11 @@ maybe_pre_format_html(struct cache_entry *cached, struct session *ses)
 
 	if (src && src != fragment->data) {
 		add_fragment(cached, 0, src, len);
-		truncate_entry(cached, len, 1);
-		cached->incomplete = 0; /* XXX */
+		normalize_cache_entry(cached, len);
 		mem_free(src);
 	}
 
+	/* XXX: Keep after normalize_cache_entry()! */
 	cached->preformatted = 1;
 }
 #endif

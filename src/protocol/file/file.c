@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.189 2005/02/20 00:12:02 jonas Exp $ */
+/* $Id: file.c,v 1.190 2005/02/23 21:52:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -302,6 +302,8 @@ file_protocol_handler(struct connection *connection)
 				state = S_OUT_OF_MEM;
 
 		} else {
+			add_fragment(cached, 0, page.source, page.length);
+
 			if (!cached->content_type) {
 				unsigned char *ctype = null_or_stracpy(type);
 
@@ -310,18 +312,16 @@ file_protocol_handler(struct connection *connection)
 				if (type && !ctype)
 					state = S_OUT_OF_MEM;
 				else
-					cached->incomplete = 0;
+					normalize_cache_entry(cached, page.length);
 
 				/* Setup file read or directory listing for
 				 * viewing. */
 				mem_free_set(&cached->content_type, ctype);
 
 			} else {
-				cached->incomplete = 0;
+				normalize_cache_entry(cached, page.length);
 			}
 
-			add_fragment(cached, 0, page.source, page.length);
-			truncate_entry(cached, page.length, 1);
 			done_string(&page);
 		}
 	}

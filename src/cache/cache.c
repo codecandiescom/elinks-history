@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.195 2005/02/02 17:33:14 jonas Exp $ */
+/* $Id: cache.c,v 1.196 2005/02/23 21:52:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -640,6 +640,17 @@ delete_cache_entry(struct cache_entry *cached)
 	mem_free_if(cached->etag);
 
 	mem_free(cached);
+}
+
+
+void
+normalize_cache_entry(struct cache_entry *cached, int truncate_length)
+{
+	assert(truncate_length >= 0);
+
+	truncate_entry(cached, truncate_length, 1);
+	cached->incomplete = 0;
+	cached->preformatted = 0;
 }
 
 

@@ -285,14 +285,28 @@ LIBS_X="$LIBS"
 cf_result=no
 
 if test -z "$disable_lua"; then
-	for luadir in "" /usr /usr/local; do
+	# It's double here in order to have the piggyswitch hack working
+	# Hack, indeed. Guess why? Yes, it's Debian!
+	for luadir in "" /usr /usr /usr/local /usr/local; do
 		if test "$cf_result" = no; then
-			if test ! -z "$luadir"; then
-				LIBS="-L$luadir/lib -llua -llualib -lm $LIBS_X"
-				CFLAGS="$CFLAGS_X -I$luadir/include -I$luadir/include/lua"
+			if test "$xyz_piggyswitch" = "cow"; then
+				LIBS="-llua40 -llualib40 -lm $LIBS_X"
 			else
 				LIBS="-llua -llualib -lm $LIBS_X"
 			fi
+
+			if test ! -z "$luadir"; then
+				LIBS="-L$luadir/lib $LIBS"
+				if test "$xyz_piggyswitch" = "cow"; then
+					CFLAGS="$CFLAGS_X -I$luadir/include -I$luadir/include/lua40"
+					# The switch should be performed at the last occurence
+					xyz_piggyswitch=sheep
+				else
+					CFLAGS="$CFLAGS_X -I$luadir/include -I$luadir/include/lua"
+					xyz_piggyswitch=cow
+				fi
+			fi
+
 			AC_TRY_LINK([#include <lua.h>],
 				    [lua_open(0)],
 				    cf_result=yes, cf_result=no)
@@ -453,6 +467,9 @@ AC_MSG_CHECKING([for GNU TLS])
 AC_MSG_RESULT($cf_result)
 
 #endif
+
+AC_MSG_CHECKING([whether to be or not to be])
+AC_MSG_RESULT([needs to be determined experimentally])
 
 dnl ===================================================================
 dnl Check for IPv6 support and related functions.

@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.23 2004/11/08 23:51:19 jonas Exp $ */
+/* $Id: gopher.c,v 1.24 2004/11/09 00:33:29 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -212,9 +212,12 @@ add_gopher_command(struct connection *conn, struct string *command,
 
 	/* Check if no search is required */
 	if (!query || !query[1]) {
+		/* Exclude '?' */
+		if (query) selectorlen -= 1;
 		query = NULL;
 		querylen = 0;
 	} else {
+		query += 1;
 		querylen = selector + selectorlen - query;
 		/* Exclude '?' */
 		selectorlen -= querylen + 1;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.322 2004/01/04 00:44:15 zas Exp $ */
+/* $Id: parser.c,v 1.323 2004/01/07 20:01:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -717,6 +717,8 @@ static unsigned char *last_form_tag;
 static unsigned char *last_form_attr;
 static unsigned char *last_input_tag;
 
+static unsigned char *object_src;
+
 static void
 put_link_line(unsigned char *prefix, unsigned char *linkname,
 	      unsigned char *link, unsigned char *target)
@@ -920,9 +922,12 @@ html_img(unsigned char *a)
 		} else if (ismap) {
 			al = stracpy("ISMAP");
 		} else {
-			unsigned char *src = get_url_val(a, "src");
+			unsigned char *src = NULL;
 			int max_real_len;
 			int max_len;
+
+			src = null_or_stracpy(object_src);
+			if (!src) src = get_url_val(a, "src");
 
 			/* We can display image as [foo.gif]. */
 
@@ -1000,7 +1005,9 @@ html_img(unsigned char *a)
 			goto show_al;
 		}
 
-		if ((s = get_url_val(a, "src")) || (s = get_url_val(a, "dynsrc"))) {
+		if ((s = null_or_stracpy(object_src))
+		    || (s = get_url_val(a, "src"))
+		    || (s = get_url_val(a, "dynsrc"))) {
 			format.image = join_urls(format.href_base, s);
 			mem_free(s);
 		}
@@ -2127,9 +2134,10 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 static void
 html_iframe(unsigned char *a)
 {
-	unsigned char *name, *url;
+	unsigned char *name, *url = NULL;
 
-	url = get_url_val(a, "src");
+	url = null_or_stracpy(object_src);
+	if (!url) url = get_url_val(a, "src");
 	if (!url) return;
 
 	name = get_attr_val(a, "name");
@@ -2150,6 +2158,40 @@ html_iframe(unsigned char *a)
 	}
 
 	mem_free(name);
+	mem_free(url);
+}
+
+static void
+html_object(unsigned char *a)
+{
+	unsigned char *type, *url;
+
+	/* This is just some dirty wrapper. We emulate various things through
+	 * this, which is anyway in the spirit of <object> element, unifying
+	 * <img> and <iframe> etc. */
+
+	url = get_url_val(a, "data");
+	if (!url) return;
+
+	type = get_attr_val(a, "type");
+	if (!type) { mem_free(url); return; }
+
+	if (!strncasecmp(type, "text/", 5)) {
+		/* We will just emulate <iframe>. */
+		object_src = url;
+		html_iframe(a);
+		object_src = NULL;
+		html_skip(a);
+
+	} else if (!strncasecmp(type, "image/", 6)) {
+		/* <img> emulation. */
+		/* TODO: Use the enclosed text as 'alt' attribute. */
+		object_src = url;
+		html_img(a);
+		object_src = NULL;
+	}
+
+	mem_free(type);
 	mem_free(url);
 }
 
@@ -2794,6 +2836,7 @@ static struct element_info elements[] = {
 	{"LISTING",	html_pre,	2, 0},
 	{"MENU",	html_ul,	2, 0},
 	{"NOFRAMES",	html_noframes,	0, 0},
+	{"OBJECT",	html_object,	1, 1},
 	{"OL",		html_ol,	2, 0},
 	{"OPTION",	html_option,	1, 1},
 	{"P",		html_p,		2, 2},

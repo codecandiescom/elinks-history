@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.79 2003/09/19 13:55:20 jonas Exp $ */
+/* $Id: screen.c,v 1.80 2003/09/19 14:09:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,6 +72,12 @@ static struct string vt100_frame_seqs[] = {
 	/* begin border: */	TERM_STRING("\x0e"),
 };
 
+static struct string underline_seqs[] = {
+	/* begin underline: */	TERM_STRING("\033[24m"),
+	/* end underline: */	TERM_STRING("\033[4m"),
+};
+
+
 /* Used in print_char() and redraw_screen() to reduce the logic. */
 /* TODO: termcap/terminfo can maybe gradually be introduced via this
  *	 structure. We'll see. --jonas */
@@ -93,10 +99,12 @@ struct screen_driver {
 	/* The frame mode setup and teardown sequences. May be NULL. */
 	struct string *frame_seqs;
 
+	/* The underline mode setup and teardown sequences. May be NULL. */
+	struct string *underline;
+
 	/* These are directly derived from the terminal options. */
 	unsigned int colors:1;
 	unsigned int trans:1;
-	unsigned int underline:1;
 
 	/* The terminal._template_ name. */
 	unsigned char name[1]; /* XXX: Keep last! */
@@ -108,9 +116,9 @@ static struct screen_driver dumb_screen_driver = {
 	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
 	/* frame: */		frame_dumb,
 	/* frame_seqs: */	NULL,
+	/* underline: */	underline_seqs,
 	/* colors: */		1,
 	/* trans: */		1,
-	/* underline: */	1,
 };
 
 static struct screen_driver vt100_screen_driver = {
@@ -119,9 +127,9 @@ static struct screen_driver vt100_screen_driver = {
 	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
 	/* frame: */		frame_vt100,	/* No UTF8 I/O */
 	/* frame_seqs: */	vt100_frame_seqs, /* No UTF8 I/O */
+	/* underline: */	underline_seqs,
 	/* colors: */		1,
 	/* trans: */		1,
-	/* underline: */	1,
 };
 
 static struct screen_driver linux_screen_driver = {
@@ -130,9 +138,9 @@ static struct screen_driver linux_screen_driver = {
 	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
 	/* frame: */		NULL,		/* No restrict_852 */
 	/* frame_seqs: */	NULL,		/* No m11_hack */
+	/* underline: */	underline_seqs,
 	/* colors: */		1,
 	/* trans: */		1,
-	/* underline: */	1,
 };
 
 static struct screen_driver koi8_screen_driver = {
@@ -141,9 +149,9 @@ static struct screen_driver koi8_screen_driver = {
 	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
 	/* frame: */		frame_koi,
 	/* frame_seqs: */	NULL,
+	/* underline: */	underline_seqs,
 	/* colors: */		1,
 	/* trans: */		1,
-	/* underline: */	1,
 };
 
 /* XXX: Keep in sync with enum term_mode_type. */
@@ -163,7 +171,12 @@ update_screen_driver(struct screen_driver *driver, struct option *term_spec)
 
 	driver->colors = get_opt_bool_tree(term_spec, "colors");
 	driver->trans = get_opt_bool_tree(term_spec, "transparency");
-	driver->underline = get_opt_bool_tree(term_spec, "underline");
+
+	if (get_opt_bool_tree(term_spec, "underline")) {
+		driver->underline = underline_seqs;
+	} else {
+		driver->underline = NULL;
+	}
 
 	if (utf8_io) {
 		driver->charsets[0] = get_opt_int_tree(term_spec, "charset");
@@ -311,11 +324,7 @@ print_char(struct string *screen, struct screen_driver *driver,
 			/* Completely handle the underlining. */
 			state->underline = underline;
 
-			if (underline) {
-				add_bytes_to_string(screen, "\033[4m", 4);
-			} else {
-				add_bytes_to_string(screen, "\033[24m", 5);
-			}
+			add_term_string(screen, driver->underline[!!underline]);
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.272 2004/04/19 15:56:49 zas Exp $ */
+/* $Id: download.c,v 1.273 2004/04/21 22:19:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -671,7 +671,7 @@ get_temp_name(struct uri *uri)
 }
 
 
-unsigned char *
+static unsigned char *
 subst_file(unsigned char *prog, unsigned char *file)
 {
 	struct string name;

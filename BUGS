@@ -31,6 +31,9 @@ Frame handling:
 Document handling:
 ~~~~~~~~~~~~~~~~~~
 
+- Term title changes to default one when viewing document source.
+  It should keep html document title, perhaps with a prefix 'Source of:'
+  
 - It seems that <meta http-equiv="refresh" content="5;url=http://foo.com/" />
   tag is interpreted in that text file... Try to open it in ELinks.
 
@@ -82,4 +85,4 @@ Misc:
 
 - Call to OS Shell doesn't release mouse handler.
 
-$Id: BUGS,v 1.58 2003/05/08 18:13:46 jonas Exp $
+$Id: BUGS,v 1.59 2003/05/10 02:18:15 zas Exp $

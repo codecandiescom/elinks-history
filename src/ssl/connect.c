@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.83 2004/08/04 05:07:55 miciah Exp $ */
+/* $Id: connect.c,v 1.84 2004/08/04 05:16:57 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,16 +241,19 @@ ssl_connect(struct connection *conn, struct connection_socket *socket)
 
 		case SSL_ERROR_NONE:
 #ifdef CONFIG_GNUTLS
-			if (get_opt_bool("connection.ssl.cert_verify"))
-				if (gnutls_certificate_verify_peers(*((ssl_t *) socket->ssl)))
-					goto ssl_error;
+			if (!get_opt_bool("connection.ssl.cert_verify"))
+				break;
+
+			if (!gnutls_certificate_verify_peers(*((ssl_t *) socket->ssl)))
 #endif
-			break;
+				break;
 
 		default:
-			/* DBG("sslerr %s", gnutls_strerror(ret)); */
-			conn->no_tls = 1;
-ssl_error:
+			if (ret != SSL_ERROR_NONE) {
+				/* DBG("sslerr %s", gnutls_strerror(ret)); */
+				conn->no_tls = 1;
+			}
+
 			set_connection_state(conn, S_SSL_ERROR);
 			close_socket(NULL, conn->conn_info->socket);
 			dns_found(conn, 0);

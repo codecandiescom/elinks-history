@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.56 2004/10/13 08:17:00 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.57 2004/10/21 20:50:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -209,6 +209,21 @@ static const JSPropertySpec window_props[] = {
 };
 
 
+static JSObject *
+try_resolve_frame(struct document_view *doc_view, unsigned char *id)
+{
+	struct session *ses = doc_view->session;
+	struct frame *target;
+
+	assert(ses);
+	target = ses_find_frame(ses, id);
+	if (!target) return NULL;
+	if (target->vs.ecmascript_fragile)
+		ecmascript_reset_state(&target->vs);
+	if (!target->vs.ecmascript) return NULL;
+	return JS_GetGlobalObject(target->vs.ecmascript->backend_data);
+}
+
 #if 0
 static struct frame_desc *
 find_child_frame(struct document_view *doc_view, struct frame_desc *tframe)
@@ -237,10 +252,22 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct document_view *doc_view = vs->doc_view;
 
 	VALUE_TO_JSVAL_START;
-	/* No need for special location measurements - when location is
-	 * then evaluated in string context, toString() is called which
-	 * we overrode for that class below, so everything's fine. */
-	if (!JSVAL_IS_INT(id))
+	/* No need for special window.location measurements - when
+	 * location is then evaluated in string context, toString()
+	 * is called which we overrode for that class below, so
+	 * everything's fine. */
+	if (JSVAL_IS_STRING(id)) {
+		JSObject *obj;
+
+		JSVAL_TO_VALUE_START;
+		JSVAL_REQUIRE(&id, STRING);
+		obj = try_resolve_frame(doc_view, v.string);
+		/* TODO: Try other lookups (mainly element lookup) until
+		 * something yields data. */
+		if (!obj) goto bye;
+		p.object = obj; prop_type = JSPT_OBJECT;
+		goto convert;
+	} else if (!JSVAL_IS_INT(id))
 		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
@@ -305,6 +332,7 @@ found_parent:
 		goto bye;
 	}
 
+convert:
 	VALUE_TO_JSVAL_END(vp);
 }
 

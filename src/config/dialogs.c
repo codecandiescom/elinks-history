@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.8 2002/12/08 17:14:50 pasky Exp $ */
+/* $Id: dialogs.c,v 1.9 2002/12/08 18:30:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,28 +178,33 @@ push_info_button(struct dialog_data *dlg,
 }
 
 
-static void
-finish_edit_dialog(struct dialog *dlg)
+int
+check_valid_option(struct dialog_data *dlg, struct widget_data *di)
 {
-	struct option *option = dlg->udata;
-	unsigned char *value = dlg->items[0].data;
+	struct terminal *term = dlg->win->term;
+	struct option *option = dlg->dlg->udata;
+	unsigned char *value = di->cdata;
 	unsigned char *chinon;
 
 	commandline = 1;
 	chinon = option_types[option->type].read(option, &value);
-	commandline = 0;
-	if (chinon && option_types[option->type].set) {
-		/* XXX: Ideally, we should preserve the old value even when
-		 * set fails, but we will need more finetuning then, since
-		 * we clear option->ptr initiatively in .set handlers. Probably
-		 * another commandline overloading. */
-		free_option_value(option);
-		option->ptr = NULL;
-		if (option_types[option->type].set(option, chinon))
-			return;
+	if (chinon) {
+		if (option_types[option->type].set &&
+		    option_types[option->type].set(option, chinon)) {
+			commandline = 0;
+			mem_free(chinon);
+			return 0;
+		}
+		mem_free(chinon);
 	}
+	commandline = 0;
 
-	/* TODO: msg_box(); */
+	msg_box(term, NULL,
+		TEXT(T_ERROR), AL_LEFT,
+		TEXT(T_BAD_OPTION_VALUE),
+		NULL, 1,
+		TEXT(T_CANCEL), NULL, B_ESC | B_ENTER);
+	return 1;
 }
 
 static void
@@ -307,8 +312,10 @@ build_edit_dialog(struct terminal *term, struct option *option)
 
 	d->title = TEXT(T_EDIT);
 	d->fn = layout_edit_dialog;
+#if 0
 	d->refresh = (void (*)(void *)) finish_edit_dialog;
 	d->refresh_data = d;
+#endif
 	d->udata = option;
 
 	value = (unsigned char *) &d->items[EDIT_DIALOG_FIELDS_NB + 1];
@@ -319,7 +326,7 @@ build_edit_dialog(struct terminal *term, struct option *option)
 	d->items[0].type = D_FIELD;
 	d->items[0].dlen = MAX_STR_LEN;
 	d->items[0].data = value;
-	/* TODO: d->items[0].fn = check_valid_option; */
+	d->items[0].fn = check_valid_option;
 
 	d->items[1].type = D_BUTTON;
 	d->items[1].gid = B_ENTER;

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.148 2004/06/05 21:14:33 jonas Exp $ */
+/* $Id: cache.c,v 1.149 2004/06/07 16:25:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,8 +109,8 @@ find_in_cache(struct uri *uri)
 
 	foreach (cached, cache_entries) {
 		if (!cached->valid
-		    || (proxy && cached->proxy_uri != uri)
-		    || (!proxy && cached->uri != uri))
+		    || (proxy && !compare_uri(cached->proxy_uri, uri, 0))
+		    || (!proxy && !compare_uri(cached->uri, uri, 0)))
 			continue;
 
 		/* Move it on the top of the list. */

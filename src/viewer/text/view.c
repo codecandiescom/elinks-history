@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.436 2004/06/04 13:43:00 jonas Exp $ */
+/* $Id: view.c,v 1.437 2004/06/07 16:26:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -608,7 +608,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 					/* TODO: Support for cross-document
 					 * marks. See marks.c for detailed
 					 * TODOs. --pasky */
-					if (doc_view->vs->uri != vs->uri)
+					if (!compare_uri(doc_view->vs->uri, vs->uri, 0))
 						break;
 
 					destroy_vs(doc_view->vs);

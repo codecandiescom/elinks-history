@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.177 2004/05/31 23:56:39 jonas Exp $ */
+/* $Id: connection.c,v 1.178 2004/06/07 16:26:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -811,7 +811,8 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 	}
 
 	foreach (conn, queue) {
-		if (conn->detached || conn->uri != proxy_uri)
+		if (conn->detached
+		    || !compare_uri(conn->uri, proxy_uri, 0))
 			continue;
 
 		done_uri(proxy_uri);

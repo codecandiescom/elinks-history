@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.13 2002/04/16 20:53:44 pasky Exp $ */
+/* $Id: cookies.c,v 1.14 2002/04/20 09:49:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -562,11 +562,10 @@ load_cookies() {
 	struct cookie *c;
 
 	/* Must be called after init_home */
-	if (!links_home) return;
+	/* if (!links_home) return; */ /* straconcat() checks that --Zas */
 
-	cookfile = stracpy(links_home);
+	cookfile = straconcat(links_home, "cookies", NULL);
 	if (!cookfile) return;
-	add_to_strn(&cookfile, "cookies");
 
 	/* Do it here, as we will delete whole cookies list if the file was
 	 * removed */
@@ -654,9 +653,8 @@ save_cookies() {
 	FILE *fp;
 	mode_t mask;
 
-	cookfile = stracpy(links_home);
+	cookfile = straconcat(links_home, "cookies", NULL);
 	if (!cookfile) return;
-	add_to_strn(&cookfile, "cookies");
 
 	mask = umask(066); /* 0600 permissions for cookies file */
 	fp = fopen(cookfile, "w");

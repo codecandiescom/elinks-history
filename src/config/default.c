@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.15 2002/04/19 14:28:00 pasky Exp $ */
+/* $Id: default.c,v 1.16 2002/04/20 09:49:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -362,6 +362,7 @@ unsigned char *get_home(int *new)
 first_failed:
 	mem_free(home_links);
 
+	/* FIXME: home_links == NULL case --Zas */
 	home_links = stracpy(home);
 	add_to_strn(&home_links, "links");
 
@@ -408,22 +409,28 @@ void init_home()
 	}
 }
 
-void load_config_file(unsigned char *prefix, unsigned char *name)
+void
+load_config_file(unsigned char *prefix, unsigned char *name)
 {
 	unsigned char *c, *config_file;
-	config_file = stracpy(prefix);
+
+	config_file = straconcat(prefix, name, NULL);
 	if (!config_file) return;
-	add_to_strn(&config_file, name);
-	if ((c = read_config_file(config_file))) goto ok;
+
+	c = read_config_file(config_file);
+	if (c) goto ok;
 	mem_free(config_file);
-	config_file = stracpy(prefix);
+
+	config_file = straconcat(prefix, ".", name, NULL);
 	if (!config_file) return;
-	add_to_strn(&config_file, ".");
-	add_to_strn(&config_file, name);
-	if ((c = read_config_file(config_file))) goto ok;
+
+	c = read_config_file(config_file);
+	if (c) goto ok;
+
 	mem_free(config_file);
 	return;
-	ok:
+
+ok:
 	parse_config_file(config_file, c, all_options);
 	mem_free(c);
 	mem_free(config_file);
@@ -437,16 +444,21 @@ void load_config()
 	load_config_file(links_home, "user.cfg");
 }
 
-int write_config_file(unsigned char *prefix, unsigned char *name, struct option *o, struct terminal *term)
+int
+write_config_file(unsigned char *prefix, unsigned char *name, struct option *o,
+		  struct terminal *term)
 {
-	unsigned char *c, *config_file;
-	if (!(c = create_config_string(o))) return -1;
-	config_file = stracpy(prefix);
+	unsigned char *config_file;
+	unsigned char *c = create_config_string(o);
+
+	if (!c) return -1;
+	
+	config_file = straconcat(prefix, name, NULL);
 	if (!config_file) {
 		mem_free(c);
 		return -1;
 	}
-	add_to_strn(&config_file, name);
+
 	if (write_to_config_file(config_file, c)) {
 		if (term) {
 			msg_box(term, NULL,
@@ -459,6 +471,7 @@ int write_config_file(unsigned char *prefix, unsigned char *name, struct option 
 		mem_free(config_file);
 		return -1;
 	}
+
 	mem_free(c);
 	mem_free(config_file);
 	return 0;
@@ -1514,12 +1527,11 @@ int load_url_history()
 
 	if (anonymous) return 0;
 	/* Must have been called after init_home */
-	if (!links_home) return 0;
+	/* if (!links_home) return 0; */ /* strconcat() checks it --Zas */
 
-	history_file = stracpy(links_home);
+	history_file = straconcat(links_home, "links.his", NULL);
 	if (!history_file) return 0;
 
-	add_to_strn(&history_file, "links.his");
 	fp = fopen(history_file, "r");
 	if (!fp) {
 		mem_free(history_file);
@@ -1546,12 +1558,11 @@ int save_url_history()
 
 	if (anonymous) return 0;
 	/* Must have been called after init_home */
-	if (!links_home) return 0;
+	/* if (!links_home) return 0; */ /* straconcat() checks it --Zas */
 
-	history_file = stracpy(links_home);
+	history_file = straconcat(links_home, "links.his", NULL);
 	if (!history_file) return 0;
 
-	add_to_strn(&history_file, "links.his");
 	fp = fopen(history_file, "w");
 	if (!fp) {
 		mem_free(history_file);
@@ -1568,4 +1579,3 @@ int save_url_history()
 	mem_free(history_file);
 	return 0;
 }
-

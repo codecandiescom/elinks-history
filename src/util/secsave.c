@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.1 2002/04/19 14:28:00 pasky Exp $ */
+/* $Id: secsave.c,v 1.2 2002/04/20 09:49:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,8 +19,8 @@
 /* If secure_save is set:
  * ~~~~~~~~~~~~~~~~~~~~~
  *
- * A call to secure_open("filename", mask) will open a file named
- * "filename.tmp" in links_home and return a pointer to a structure
+ * A call to secure_open("/home/me/.links/filename", mask) will open a file
+ * named "filename.tmp" in /home/me/.links/ and return a pointer to a structure
  * secure_save_info on success or NULL on error.
  * 
  * Note: if a file named "filename.tmp" exists, it will be truncated to a size
@@ -30,7 +30,7 @@
  * FILE * field named fp.
  *
  * If an error is encountered, secure_save_info int field named err is set
- * (automatically if using secure_fput*() functions or by programmer)
+ * (automatically if using secure_fp*() functions or by programmer)
  *
  * When secure_close() is called, "filename.tmp" is closed, and if
  * secure_save_info err field has a value of zero, "filename.tmp" is renamed
@@ -55,7 +55,7 @@
 /* Open a file for writing in a secure way. It returns a pointer to a structure
  * secure_save_info on success, or NULL on failure. */
 struct secure_save_info *
-secure_open(unsigned char *name, mode_t mask)
+secure_open(unsigned char *file_name, mode_t mask)
 {
 	mode_t saved_mask;
 	unsigned char *ext = NULL;
@@ -66,7 +66,7 @@ secure_open(unsigned char *name, mode_t mask)
 
 	ssi->err = 0;
 
-	ssi->file_name = straconcat(links_home, name, NULL);
+	ssi->file_name = stracpy(file_name);
 	if (!ssi->file_name) goto free_f;
 
 	if (secure_save) ext = ".tmp";

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.17 2002/04/07 14:13:10 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.18 2002/04/20 09:49:43 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -184,9 +184,8 @@ read_bookmarks()
 	unsigned char *url;	/* Pointer to the start of url in buffer */
 	FILE *f;
 
-	file_name = stracpy(links_home);
+	file_name = straconcat(links_home, "bookmarks", NULL);
 	if (!file_name) return;
-	add_to_strn(&file_name, "bookmarks");
 
 	f = fopen(file_name, "r");
 	mem_free(file_name);
@@ -241,9 +240,8 @@ write_bookmarks()
 	FILE *out;
 	unsigned char *file_name;
 
-	file_name = stracpy(links_home);
+	file_name = straconcat(links_home, "bookmarks", NULL);
 	if (!file_name) return;
-	add_to_strn(&file_name, "bookmarks");
 
 	out = fopen(file_name, "w");
 	mem_free(file_name);

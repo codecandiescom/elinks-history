@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.66 2003/07/08 15:31:41 jonas Exp $ */
+/* $Id: cookies.c,v 1.67 2003/07/09 01:59:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -270,7 +270,8 @@ set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 		}
 	}
 	if (cookie->domain[0] == '.')
-		memmove(cookie->domain, cookie->domain + 1, uri->hostlen);
+		memmove(cookie->domain, cookie->domain + 1,
+			strlen(cookie->domain));
 
 	secure = parse_http_header_param(str, "secure");
 	if (secure) {

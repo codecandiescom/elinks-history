@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.126 2003/12/21 14:56:54 zas Exp $ */
+/* $Id: menu.c,v 1.127 2003/12/21 15:20:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -783,7 +783,7 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 				s = 2;
 
 			if (!s) {
-				delete_window_ev(win, action == ACT_CANCEL
+				delete_window_ev(win, action != ACT_CANCEL
 						      ? ev : NULL);
 			} else {
 				display_mainmenu(win->term, menu);

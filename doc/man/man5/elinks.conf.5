@@ -893,7 +893,7 @@ and various server-side scripts --- the server only returns the client's
 request back to the client verbatim. Note that this type of request may
 not be enabled on all servers.
 .TP
-\f3protocol.http.user_agent\f2 <str>\f1 (textmode; %s; %t)")
+\f3protocol.http.user_agent\f2 <str>\f1 (default: "ELinks/%v (textmode; %s; %t)")
 Change the User Agent ID. That means identification string, which
 is sent to HTTP server when a document is requested.
 %v in the string means ELinks version

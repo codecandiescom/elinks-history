@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.34 2003/07/31 15:17:47 jonas Exp $ */
+/* $Id: draw.c,v 1.35 2003/07/31 15:46:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,10 +197,10 @@ draw_frame(struct terminal *t, int x, int y, int xw, int yw,
 	int xwt = xw - 2;
 	unsigned char color = get_screen_char_attr(c);
 
-	set_border_char(t, x, y, (unsigned char) p[0], color);
-	set_border_char(t, xt, y, (unsigned char) p[1], color);
-	set_border_char(t, x, yt, (unsigned char) p[2], color);
-	set_border_char(t, xt, yt, (unsigned char) p[3], color);
+	set_border_char(t, x, y, p[0], color);
+	set_border_char(t, xt, y, p[1], color);
+	set_border_char(t, x, yt, p[2], color);
+	set_border_char(t, xt, yt, p[3], color);
 
 	fill_border_area(t, x, y1, 1, ywt, p[4], color);
 	fill_border_area(t, xt, y1, 1, ywt, p[4], color);

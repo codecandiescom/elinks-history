@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.35 2003/12/05 19:12:42 jonas Exp $ */
+/* $Id: cgi.c,v 1.36 2003/12/05 21:00:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,7 +238,9 @@ test_path(unsigned char *path)
 	unsigned char **path_ptr;
 	unsigned char *filename;
 
-	for (path_ptr = &cgi_path; (filename = get_next_path_filename(path_ptr, ':'));) {
+	for (path_ptr = &cgi_path;
+	     (filename = get_next_path_filename(path_ptr, ':'));
+	     ) {
 		int res = strcmp(path, filename);
 
 		mem_free(filename);

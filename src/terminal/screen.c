@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.94 2003/10/02 15:18:28 jonas Exp $ */
+/* $Id: screen.c,v 1.95 2003/10/02 15:37:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -285,7 +285,7 @@ done_screen_drivers(void)
 struct screen_state {
 	unsigned char border;
 	unsigned char underline;
-	unsigned char color[0];
+	unsigned char color[1];
 };
 
 #define compare_color(a, b)	((a)[0] == (b)[0])

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.39 2003/07/25 02:34:41 jonas Exp $ */
+/* $Id: uri.c,v 1.40 2003/07/25 02:59:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -667,26 +667,24 @@ http:				prefix = "http://";
 }
 
 unsigned char *
-extract_position(unsigned char *url)
+extract_position(unsigned char *uri)
 {
-	unsigned char *uu, *r;
-	unsigned char *u = strchr(url, POST_CHAR);
+	unsigned char *fragment;
+	unsigned char *start = strchr(uri, '#');
+	unsigned char *end;
 
-	if (!u) u = url + strlen(url);
-	uu = u;
-	while (--uu >= url && *uu != '#');
+	if (!start) return NULL;
 
-	if (uu < url) return NULL;
+	start++;
+	end = strchr(start, POST_CHAR);
+	if (!end) end = start + strlen(start);
 
-	r = mem_alloc(u - uu);
-	if (!r) return NULL;
+	fragment = memacpy(start, end - start);
 
-	memcpy(r, uu + 1, u - uu - 1);
-	r[u - uu - 1] = 0;
+	/* Even though fragment wasn't allocated remove it from the @uri */
+	memmove(start - 1, end, strlen(end) + 1);
 
-	memmove(uu, u, strlen(u) + 1);
-
-	return r;
+	return fragment;
 }
 
 unsigned char *

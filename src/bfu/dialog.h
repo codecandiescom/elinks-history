@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.4 2003/05/04 19:54:32 pasky Exp $ */
+/* $Id: dialog.h,v 1.5 2003/05/07 10:39:04 zas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -18,25 +18,31 @@ struct dialog_data;
 
 struct dialog {
 	unsigned char *title;
+	void *udata;
+	void *udata2;
+	void *refresh_data;
+
 	void (*fn)(struct dialog_data *);
 	int (*handle_event)(struct dialog_data *, struct event *);
 	void (*abort)(struct dialog_data *);
-	void *udata;
-	void *udata2;
-	enum format_align align;
 	void (*refresh)(void *);
-	void *refresh_data;
-	struct widget items[1];
+
+	enum format_align align;
+
+	struct widget items[1]; /* must be at end of struct */
 };
 
 struct dialog_data {
 	struct window *win;
 	struct dialog *dlg;
-	int x, y, xw, yw;
+	struct memory_list *ml;
+
+	int x, y;
+	int xw, yw;
 	int n;
 	int selected;
-	struct memory_list *ml;
-	struct widget_data items[1];
+
+	struct widget_data items[1]; /* must be at end of struct */
 };
 
 

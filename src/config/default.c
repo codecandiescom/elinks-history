@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.14 2002/04/17 22:22:20 pasky Exp $ */
+/* $Id: default.c,v 1.15 2002/04/19 14:28:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -984,6 +984,8 @@ int cookies_save = 1;
 int cookies_resave = 1;
 int cookies_paranoid_security = 0;
 
+int secure_save = 1;
+
 int async_lookup = 1;
 int download_utime = 0;
 int max_connections = 10;
@@ -1275,8 +1277,8 @@ struct option links_options[] = {
 	 	0, 0, &current_language,
 		"Language of user interface." },
 
-		/* TODO - this is somewhat implemented by ff, but commented out
-		 * for now as it doesn't work somewhat. */
+		/* TODO - this is somehow implemented by ff, but commented out
+		 * for now as it doesn't work. */
 #if 0
 	{	"links-wraparound", "links_wraparound",
 		gen_cmd, num_rd, num_wr,
@@ -1331,10 +1333,17 @@ struct option links_options[] = {
 	 	1, 16, &max_tries,
 		"Number of tries to estabilish a connection." },
 
-	{	"source", NULL,
-		dump_cmd, NULL, NULL,
-	 	D_SOURCE, 0, NULL,
-		"Write the given HTML document in source form to stdout." },
+		/* TODO - this is not used anywhere yet. */
+#if 0
+	{	"secure-save", "secure_save",
+		gen_cmd, num_rd, num_wr,
+		0, 1, &secure_save,
+		"First write data to 'file.tmp', rename to 'file' upon\n"
+		"successful finishing this. Note that this relates only to\n"
+       		"config files, not downloaded files. You may want to disable\n"
+		"it, if you want some config file as a symlink or with some\n"
+		"exotic permissions." },
+#endif
 
 	{	"show-status-bar", "show_status_bar",
 		gen_cmd, num_rd, num_wr,
@@ -1345,6 +1354,11 @@ struct option links_options[] = {
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &show_title_bar,
 		"Show title bar on the screen?" },
+
+	{	"source", NULL,
+		dump_cmd, NULL, NULL,
+	 	D_SOURCE, 0, NULL,
+		"Write the given HTML document in source form to stdout." },
 
 		/* TODO - this is implemented, but commented out for now as
 		 * it's buggy. */

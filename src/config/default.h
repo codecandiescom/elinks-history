@@ -1,4 +1,4 @@
-/* $Id: default.h,v 1.5 2002/04/17 22:22:20 pasky Exp $ */
+/* $Id: default.h,v 1.6 2002/04/19 14:28:00 pasky Exp $ */
 
 #ifndef EL__CONFIG_DEFAULT_H
 #define EL__CONFIG_DEFAULT_H
@@ -59,6 +59,8 @@ extern enum cookies_accept cookies_accept;
 extern int cookies_save;
 extern int cookies_resave;
 extern int cookies_paranoid_security;
+
+extern int secure_save;
 
 extern int async_lookup;
 extern int download_utime;

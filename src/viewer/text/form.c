@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.42 2003/10/17 13:59:11 jonas Exp $ */
+/* $Id: form.c,v 1.43 2003/10/17 14:02:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -672,22 +672,23 @@ encode_error:
 }
 
 static void
-reset_form(struct document_view *f, int form_num)
+reset_form(struct document_view *doc_view, int form_num)
 {
 	struct form_control *frm;
 
-	assert(f && f->document);
+	assert(doc_view && doc_view->document);
 	if_assert_failed return;
 
-	foreach (frm, f->document->forms) if (frm->form_num == form_num) {
-		struct form_state *fs = find_form_state(f, frm);
+	foreach (frm, doc_view->document->forms)
+		if (frm->form_num == form_num) {
+			struct form_state *fs = find_form_state(doc_view, frm);
 
-		if (fs) init_ctrl(frm, fs);
-	}
+			if (fs) init_ctrl(frm, fs);
+		}
 }
 
 unsigned char *
-get_form_url(struct session *ses, struct document_view *f,
+get_form_url(struct session *ses, struct document_view *doc_view,
 	     struct form_control *frm)
 {
 	struct list_head submit;
@@ -698,19 +699,19 @@ get_form_url(struct session *ses, struct document_view *f,
 
 	assert(ses && ses->tab && ses->tab->term);
 	if_assert_failed return NULL;
-	assert(f && f->document && frm);
+	assert(doc_view && doc_view->document && frm);
 	if_assert_failed return NULL;
 
 	if (frm->type == FC_RESET) {
-		reset_form(f, frm->form_num);
+		reset_form(doc_view, frm->form_num);
 		return NULL;
 	}
 	if (!frm->action) return NULL;
 
-	get_succesful_controls(f, frm, &submit);
+	get_succesful_controls(doc_view, frm, &submit);
 
 	cp_from = get_opt_int_tree(ses->tab->term->spec, "charset");
-	cp_to = f->document->cp;
+	cp_to = doc_view->document->cp;
 	if (frm->method == FM_GET || frm->method == FM_POST)
 		encode_controls(&submit, &data, cp_from, cp_to);
 	else

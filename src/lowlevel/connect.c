@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.66 2004/03/31 20:31:22 jonas Exp $ */
+/* $Id: connect.c,v 1.67 2004/04/13 10:15:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,18 @@
 #ifdef HAVE_NETINET_IP_H
 #include <netinet/ip.h>
 #endif
+
+#ifdef HAVE_GETIFADDRS
+#ifdef HAVE_NETDB_H
+#include <netdb.h>
+#endif
+#ifdef HAVE_NET_IF_H
+#include <net/if.h>
+#endif
+#ifdef HAVE_IFADDRS_H
+#include <ifaddrs.h>		/* getifaddrs() */
+#endif
+#endif				/* HAVE_GETIFADDRS */
 
 #include "elinks.h"
 

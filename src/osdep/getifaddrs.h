@@ -1,4 +1,4 @@
-/* $Id: getifaddrs.h,v 1.1 2004/02/03 19:20:02 zas Exp $ */
+/* $Id: getifaddrs.h,v 1.2 2004/04/13 10:15:40 zas Exp $ */
 
 #ifndef EL__OSDEP_GETIFADDRS_H
 #define EL__OSDEP_GETIFADDRS_H
@@ -68,18 +68,6 @@ struct ifaddrs {
 
 int getifaddrs(struct ifaddrs **);
 void freeifaddrs(struct ifaddrs *);
-
-#else				/* HAVE_GETIFADDRS */
-
-#ifdef HAVE_NETDB_H
-#include <netdb.h>
-#endif
-#ifdef HAVE_NET_IF_H
-#include <net/if.h>
-#endif
-#ifdef HAVE_IFADDRS_H
-#include <ifaddrs.h>		/* getifaddrs() */
-#endif
 
 #endif				/* HAVE_GETIFADDRS */
 

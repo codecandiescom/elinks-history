@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.217 2003/10/09 09:49:39 jonas Exp $ */
+/* $Id: parser.c,v 1.218 2003/10/12 15:28:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3557,7 +3557,6 @@ scan_http_equiv(unsigned char *s, unsigned char *eof, struct string *head,
 {
 	unsigned char *name, *attr, *he, *c;
 	int namelen;
-	int h = 0;
 
 	if (title && !init_string(title)) return;
 
@@ -3576,12 +3575,10 @@ sp:
 	if (parse_element(s, eof, &name, &namelen, &attr, &s)) goto sp;
 
 ps:
-	if (namelen == 4 && !strncasecmp(name, "HEAD", 4)) {
-		h = 1;
-		goto se;
-	}
+	if (namelen == 4 && !strncasecmp(name, "HEAD", 4)) goto se;
 	if (namelen == 5 && !strncasecmp(name, "/HEAD", 5)) return;
-	if (title && h && !title->length && namelen == 5 && !strncasecmp(name, "TITLE", 5)) {
+	if (namelen == 4 && !strncasecmp(name, "BODY", 4)) return;
+	if (title && !title->length && namelen == 5 && !strncasecmp(name, "TITLE", 5)) {
 		unsigned char *s1;
 
 xse:
@@ -3601,7 +3598,7 @@ xsp:
 		clr_spaces(title->source);
 		goto ps;
 	}
-	if (!h || namelen != 4 || strncasecmp(name, "META", 4)) goto se;
+	if (namelen != 4 || strncasecmp(name, "META", 4)) goto se;
 
 	he = get_attr_val(attr, "charset");
 	if (he) {

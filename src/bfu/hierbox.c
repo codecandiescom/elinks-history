@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.119 2003/12/06 02:56:01 jonas Exp $ */
+/* $Id: hierbox.c,v 1.120 2003/12/06 21:57:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -248,6 +248,13 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 			return EVENT_NOT_PROCESSED;
 		}
 	}
+
+#ifdef BOOKMARKS
+	/* FIXME - move from here to bookmarks/dialogs.c! */
+	/* We should probably call provided callback function, notifying the
+	 * user of expansion change. --pasky */
+	bookmarks_dirty = 1;
+#endif
 
 	display_dlg_item(dlg_data, dlg_data->widgets_data, 1);
 

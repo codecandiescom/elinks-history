@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.115 2004/08/16 11:05:09 miciah Exp $ */
+/* $Id: renderer.c,v 1.116 2004/08/16 12:20:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -309,7 +309,6 @@ add_document_line(struct plain_renderer *renderer,
 						last_link_end = line_pos + len;
 					}
 
-					was_alpha_char = 1;
 				} else {
 					was_alpha_char = is_alpha_char;
 				}

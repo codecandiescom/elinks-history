@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.151 2004/12/24 23:24:42 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.152 2004/12/24 23:28:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -322,7 +322,9 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			value_to_jsval(ctx, vp, &prop);
 		}
 		return JS_TRUE;
-	} else if (!JSVAL_IS_INT(id))
+	}
+
+	if (!JSVAL_IS_INT(id))
 		return JS_TRUE;
 
 	switch (JSVAL_TO_INT(id)) {

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.107 2003/06/08 14:40:30 zas Exp $ */
+/* $Id: parser.c,v 1.108 2003/06/08 14:42:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,8 +64,9 @@ atchr(unsigned char c)
 /* It returns -1 when it failed (returned values in pointers are invalid) and
  * 0 for success. */
 int
-parse_element(unsigned char *e, unsigned char *eof, unsigned char **name,
-	      int *namelen, unsigned char **attr, unsigned char **end)
+parse_element(register unsigned char *e, unsigned char *eof,
+	      unsigned char **name, int *namelen,
+	      unsigned char **attr, unsigned char **end)
 {
 	unsigned char tmp;
 
@@ -152,7 +153,7 @@ static int get_attr_val_eat_nl = 0;
  * - name is searched attribute */
 /* Returns allocated string containing the attribute, or NULL on unsuccess. */
 unsigned char *
-get_attr_val(unsigned char *e, unsigned char *name)
+get_attr_val(register unsigned char *e, unsigned char *name)
 {
 	unsigned char *n;
 	unsigned char *a = NULL;

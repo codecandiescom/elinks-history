@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.129 2004/06/19 13:21:41 jonas Exp $ */
+/* $Id: textarea.c,v 1.130 2004/06/19 13:42:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -426,7 +426,7 @@ free_and_return:
 	fs = NULL;
 }
 
-int
+void
 menu_textarea_edit(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct document_view *doc_view;
@@ -434,24 +434,23 @@ menu_textarea_edit(struct terminal *term, void *xxx, struct session *ses)
 	struct form_state *fs;
 
 	assert(term && ses);
-	if_assert_failed return 1;
+	if_assert_failed return;
 
 	doc_view = current_frame(ses);
 
 	assert(doc_view && doc_view->vs && doc_view->document);
-	if_assert_failed return 1;
+	if_assert_failed return;
 
 	link = get_current_link(doc_view);
-	if (!link) return 1;
+	if (!link) return;
 
 	if (form_field_is_readonly(link->form_control))
-		return 1;
+		return;
 
 	fs = find_form_state(doc_view, link->form_control);
-	if (!fs) return 1;
+	if (!fs) return;
 
 	textarea_edit(0, term, fs, doc_view, link);
-	return 2;
 }
 
 

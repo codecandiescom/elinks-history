@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.37 2003/07/11 17:25:21 jonas Exp $ */
+/* $Id: auth.c,v 1.38 2003/07/12 16:51:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,21 +110,14 @@ auth_cancel(struct dialog_data *dlg, struct widget_data *di)
 	return cancel_dialog(dlg, di);
 }
 
-/* FIXME: This should be exported properly. --pasky */
-extern struct list_head http_auth_basic_list;
-
 void
 do_auth_dialog(struct session *ses)
 {
 	struct dialog *d;
 	struct dialog_data *dd;
 	struct terminal *term = ses->tab->term;
-	struct http_auth_basic *a = NULL;
+	struct http_auth_basic *a = get_invalid_auth_entry();
 	unsigned char sticker[MAX_STR_LEN];
-
-	if (!list_empty(http_auth_basic_list)
-	    && !((struct http_auth_basic *) http_auth_basic_list.next)->valid)
-		  a = (struct http_auth_basic *) http_auth_basic_list.next;
 
 	if (!a || a->blocked) return;
 	a->blocked = 1;

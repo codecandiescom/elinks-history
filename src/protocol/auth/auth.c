@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.46 2003/07/12 13:08:43 jonas Exp $ */
+/* $Id: auth.c,v 1.47 2003/07/12 16:51:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@
 #include "util/string.h"
 
 
-INIT_LIST_HEAD(http_auth_basic_list);
+static INIT_LIST_HEAD(http_auth_basic_list);
 
 
 /* Find if url/realm is in auth list. If a matching url is found, but realm is
@@ -272,4 +272,16 @@ free_auth(void)
 		del_auth_entry(http_auth_basic_list.next);
 
 	free_list(questions_queue);
+}
+
+struct http_auth_basic *
+get_invalid_auth_entry(void)
+{
+	struct http_auth_basic *entry;
+
+	foreach (entry, http_auth_basic_list)
+	    if (!auth_entry_has_userinfo(entry))
+		    return entry;
+
+	return NULL;
 }

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.151 2004/08/03 16:19:27 zas Exp $ */
+/* $Id: screen.c,v 1.152 2004/08/30 03:08:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,6 +187,7 @@ static struct screen_driver *screen_drivers[] = {
 	/* TERM_KOI8: */	&koi8_screen_driver,
 	/* TERM_FREEBSD: */	&freebsd_screen_driver,
 };
+
 
 static INIT_LIST_HEAD(active_screen_drivers);
 

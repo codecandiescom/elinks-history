@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.261 2003/08/25 12:04:17 zas Exp $ */
+/* $Id: options.c,v 1.262 2003/08/26 12:40:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,11 +228,15 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 	unsigned char *name, enum option_flags flags, enum option_type type,
 	int min, int max, void *ptr, unsigned char *desc)
 {
-	struct option *option = mem_alloc(sizeof(struct option));
+	struct option *option = mem_calloc(1, sizeof(struct option));
 
 	if (!option) return NULL;
 
-	option->name = stracpy(name); /* I hope everyone will like this. */
+	option->name = stracpy(name);
+	if (!option->name) {
+		mem_free(option);
+		return NULL;
+	}
 	option->flags = flags;
 	option->type = type;
 	option->min = min;
@@ -240,11 +244,8 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 	option->ptr = ptr;
 	option->capt = capt;
 	option->desc = desc;
-	option->change_hook = NULL;
 
-	if (option->type == OPT_ALIAS || !(tree->flags & OPT_LISTBOX)) {
-		option->box_item = NULL;
-	} else {
+	if (option->type != OPT_ALIAS && tree->flags & OPT_LISTBOX) {
 		option->box_item = mem_calloc(1, sizeof(struct listbox_item));
 		if (option->box_item) {
 			init_list(option->box_item->child);
@@ -253,7 +254,11 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 			option->box_item->text = option->capt ? option->capt : option->name;
 			option->box_item->box = &option_boxes;
 			option->box_item->udata = option;
-			option->box_item->type = type == OPT_TREE ? BI_FOLDER : BI_LEAF;
+			option->box_item->type = (type == OPT_TREE) ? BI_FOLDER : BI_LEAF;
+		} else {
+			mem_free(option->name);
+			mem_free(option);
+			return NULL;
 		}
 	}
 
@@ -275,16 +280,20 @@ free_option_value(struct option *option)
 		free_options_tree((struct list_head *) option->ptr);
 	}
 
-	if (option->type == OPT_BOOL ||
-			option->type == OPT_INT ||
-			option->type == OPT_LONG ||
-			option->type == OPT_STRING ||
-			option->type == OPT_LANGUAGE ||
-			option->type == OPT_CODEPAGE ||
-			option->type == OPT_COLOR ||
-			option->type == OPT_ALIAS ||
-			option->type == OPT_TREE) {
-		mem_free(option->ptr);
+	switch (option->type) {
+		case OPT_BOOL:
+		case OPT_INT:
+		case OPT_LONG:
+		case OPT_STRING:
+		case OPT_LANGUAGE:
+		case OPT_CODEPAGE:
+		case OPT_COLOR:
+		case OPT_ALIAS:
+		case OPT_TREE:
+			mem_free(option->ptr);
+			break;
+		default:
+			break;
 	}
 }
 
@@ -376,10 +385,7 @@ free_options_tree(struct list_head *tree)
 {
 	struct option *option;
 
-	foreach (option, *tree) {
-		free_option(option);
-	}
-
+	foreach (option, *tree) free_option(option);
 	free_list(*tree);
 }
 
@@ -531,6 +537,7 @@ eval_cmd(struct option *o, unsigned char ***argv, int *argc)
 static unsigned char *
 forcehtml_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
+	/* XXX: risk of buffer overflow ? --Zas */
 	strcpy(get_opt_str("mime.default_type"), "text/html");
 	return NULL;
 }

@@ -107,7 +107,8 @@ Felix von Leitner <felix@convergence.de>
 	Set file date/time when downloading
 
 Flemming Frandsen <ff@partyticket.net>
-	HTML hacking - tabindex support
+	Random hacking
+	accesskey,tabindex support
 
 Gianluca Montecchi <gianluca@pluto.linux.it>
 	Italian translation
@@ -269,4 +270,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	Bookmarks hacking
 	Misc minor improvements
 
-$Id: AUTHORS,v 1.36 2002/03/10 20:42:16 pasky Exp $
+$Id: AUTHORS,v 1.37 2002/03/12 18:18:03 pasky Exp $

@@ -646,16 +646,30 @@ void html_italic(unsigned char *a) { format.attr |= AT_ITALIC; }
 void html_underline(unsigned char *a) { format.attr |= AT_UNDERLINE; }
 void html_fixed(unsigned char *a) { format.attr |= AT_FIXED; }
 
-/* Figure out real value of tabindex attribute.
- * Call this from each element which supports tabindex. */
-void html_tabindex(unsigned char *a)
+/* Extract the extra information that is available for elements which can
+ * receive focus. Call this from each element which supports tabindex or
+ * accesskey. */
+void html_focusable(unsigned char *a)
 {
+	char *accesskey = get_attr_val(a, "accesskey");
 	int tabindex = get_num(a, "tabindex");
+	
+	format.accesskey = 0;
+	format.tabindex = 0x80000000;
 
-	if (tabindex > 0)
+	if (accesskey) {
+		accesskey[0] = upcase(accesskey[0]);
+		format.accesskey = parse_key(accesskey);
+#if 0
+		if (!format.accesskey)
+			internal("Invalid accesskey %s", accesskey);
+#endif
+		mem_free(accesskey);
+	}
+
+	if (tabindex > 0) {
 		format.tabindex = (tabindex & 0x7fff) << 16;
-	else
-		format.tabindex = 0x80000000;
+	}
 }
 
 void html_a(unsigned char *a)
@@ -677,7 +691,7 @@ void html_a(unsigned char *a)
 		}
 		/*format.attr ^= AT_BOLD;*/
 		memcpy(&format.fg, &format.clink, sizeof(struct rgb));
-		html_tabindex(a);
+		html_focusable(a);
 	} else kill_html_stack_item(&html_top);
 	if ((al = get_attr_val(a, "name"))) {
 		special_f(ff, SP_TAG, al);
@@ -1118,7 +1132,7 @@ void html_button(unsigned char *a)
 	char *al;
 	struct form_control *fc;
 	find_form_for_input(a);
-	html_tabindex(a);
+	html_focusable(a);
 	if (!(fc = mem_alloc(sizeof(struct form_control)))) return;
 	memset(fc, 0, sizeof(struct form_control));
 	if (!(al = get_attr_val(a, "type"))) {
@@ -1171,7 +1185,7 @@ void html_input(unsigned char *a)
 	unsigned char *al;
 	struct form_control *fc;
 	find_form_for_input(a);
-	html_tabindex(a);
+	html_focusable(a);
 	if (!(fc = mem_alloc(sizeof(struct form_control)))) return;
 	memset(fc, 0, sizeof(struct form_control));
 	if (!(al = get_attr_val(a, "type"))) {
@@ -1275,7 +1289,7 @@ void html_select(unsigned char *a)
 	char *al = get_attr_val(a, "name");
 	
 	if (!al) return;
-	html_tabindex(a);
+	html_focusable(a);
 	html_top.dontkill = 1;
 	format.select = al;
 	format.select_disabled = 2 * has_attr(a, "disabled");
@@ -1491,7 +1505,7 @@ int do_html_select(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	
 	if (has_attr(attr, "multiple")) return 1;
 	find_form_for_input(attr);
-	html_tabindex(attr);
+	html_focusable(attr);
 	lbl = NULL;
 	val = DUMMY;
 	order = 0, group = 0, preselect = -1;
@@ -1634,7 +1648,7 @@ void do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *e
 	int cols, rows;
 	int i;
 	find_form_for_input(attr);
-	html_tabindex(attr);
+	html_focusable(attr);
 	while (html < eof && (*html == '\n' || *html == '\r')) html++;
 	p = html;
 	while (p < eof && *p != '<') {

@@ -885,12 +885,12 @@ void draw_formatted(struct session *ses)
 	redraw_from_window(ses->win);
 }
 
-#define D_BUF	65536
-
 extern unsigned char frame_dumb[];
 
 int dump_to_file(struct f_data *fd, int h)
 {
+#define D_BUF	65536
+	
 	int x, y;
 	unsigned char *buf;
 	int bptr = 0;
@@ -917,6 +917,7 @@ int dump_to_file(struct f_data *fd, int h)
 	}
 	mem_free(buf);
 	return 0;
+#undef D_BUF
 }
 
 int in_viewx(struct f_data_c *f, struct link *l)
@@ -1349,8 +1350,8 @@ void encode_multipart(struct session *ses, struct list_head *l, unsigned char **
 			add_to_str(data, len, p);
 			mem_free(p);
 		} else {
-			int fh, rd;
 #define F_BUFLEN 1024
+			int fh, rd;
 			unsigned char buffer[F_BUFLEN];
 			
 			/*if (!check_file_name(sv->value)) {
@@ -1476,6 +1477,8 @@ unsigned char *get_form_url(struct session *ses, struct f_data_c *f, struct form
 	free_succesful_controls(&submit);
 	return go;
 }
+
+#undef BL
 
 unsigned char *get_link_url(struct session *ses, struct f_data_c *f, struct link *l)
 {
@@ -1967,12 +1970,11 @@ void search_for(struct session *ses, unsigned char *str)
 	find_next(ses, f, 1);
 }
 
-#define HASH_SIZE	4096
-
-#define HASH(p) (((p.y << 6) + p.x) & (HASH_SIZE - 1))
-
 int point_intersect(struct point *p1, int l1, struct point *p2, int l2)
 {
+#define HASH_SIZE	4096
+#define HASH(p) (((p.y << 6) + p.x) & (HASH_SIZE - 1))
+
 	int i, j;
 	static char hash[HASH_SIZE];
 	static char init = 0;
@@ -1987,6 +1989,9 @@ int point_intersect(struct point *p1, int l1, struct point *p2, int l2)
 	}
 	for (i = 0; i < l1; i++) hash[HASH(p1[i])] = 0;
 	return 0;
+
+#undef HASH
+#undef HASH_SIZE
 }
 
 int find_next_link_in_search(struct f_data_c *f, int d)
@@ -2095,23 +2100,58 @@ struct link *choose_mouse_link(struct f_data_c *f, struct event *ev)
 	return NULL;
 }
 
-void goto_link_number(struct session *ses, unsigned char *num)
+/* This is common backend for goto_link_number() and try_document_key(). */
+static void goto_link_number_do(struct session *ses, struct f_data_c *fd, int n)
 {
+#if 0
+	struct link *link = &fd->f_data->links[n];
+#endif	
+	fd->vs->current_link = n;
+	check_vs(fd);
+#if 0
+	/* I think I don't like this. Maybe make it a configurable option?
+	 * --pasky */
+	if (link->type != L_AREA && link->type != L_FIELD)
+		enter(ses, fd, 0);
+#endif
+}
+
+static void goto_link_number(struct session *ses, unsigned char *num)
+{
+	struct f_data_c *fd = current_frame(ses);
 	int n = atoi(num);
-	struct f_data_c *f = current_frame(ses);
-	struct link *link;
 	
-	if (!f) return;
-	if (n < 0 || n > f->f_data->nlinks) return;
-	f->vs->current_link = n - 1;
-	link = &f->f_data->links[f->vs->current_link];
-	check_vs(f);
-	if (link->type != L_AREA && link->type != L_FIELD) enter(ses, f, 0);
+	if (!fd) return;
+	if (n < 0 || n > fd->f_data->nlinks) return;
+	goto_link_number_do(ses, fd, n - 1);
+}
+
+/* See if this document is interested in the key user pressed. */
+static int try_document_key(struct session *ses, struct f_data_c *fd,
+			    struct event *ev)
+{
+	int i; /* GOD I HATE C! --FF */ /* YEAH, BRAINFUCK RULEZ! --pasky */
+	long x = (ev->x < 0x100) ? upcase(ev->x) : ev->x;
+
+	/* Run through all the links and see if one of them is bound to the
+	 * key we test.. */
+
+	for (i = 0; i < fd->f_data->nlinks; i++) {
+		struct link *link = &fd->f_data->links[i];
+
+		if (x == link->accesskey
+		    && (x < 'A' || x > 'Z' || ev->y == KBD_ALT)) {
+			goto_link_number_do(ses, fd, i);
+			return 1;
+		}
+	}
+
+	return 0;
 }
 
 void frm_download(struct session *, struct f_data_c *);
 void send_image(struct terminal *term, void *xxx, struct session *ses);
-    
+
 int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 {
 	int x = 1;
@@ -2128,6 +2168,11 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 		return 1;
 	}
 	if (ev->ev == EV_KBD) {
+		if (accesskey_priority >= 2 && try_document_key(ses, fd, ev)) {
+			/* The document ate the key! */
+			return 1;
+		}
+		
 		switch (kbd_action(KM_MAIN, ev, NULL)) {
 			case ACT_PAGE_DOWN: rep_ev(ses, fd, page_down, 0); break;
 			case ACT_PAGE_UP: rep_ev(ses, fd, page_up, 0); break;
@@ -2156,6 +2201,9 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 			case ACT_VIEW_IMAGE: send_image(ses->term, NULL, ses); break;
 			default:
 				if (ev->x >= '1' && ev->x <= '9' && !ev->y) {
+					/* FIXME: This probably doesn't work
+					 * together with the keybinding...? */
+
 					struct f_data *f_data = fd->f_data;
 					int nl, lnl;
 					unsigned char d[2];
@@ -2194,7 +2242,14 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 					x = 0;
 				}
 #endif
-				else x = 0;
+				else if (accesskey_priority == 1
+					 && try_document_key(ses, fd, ev)) {
+					/* The document ate the key! */
+					return 1;
+
+				} else {
+					x = 0;
+				}
 		}
 	} else if (ev->ev == EV_MOUSE) {
 		struct link *l = choose_mouse_link(fd, ev);
@@ -2334,6 +2389,7 @@ void send_event(struct session *ses, struct event *ev)
 		int func_ref;
 		
 		if (send_to_frame(ses, ev)) return;
+		
 		switch (kbd_action(KM_MAIN, ev, &func_ref)) {
 			case ACT_MENU:
 				activate_bfu_technology(ses, -1);
@@ -2444,9 +2500,19 @@ void send_event(struct session *ses, struct event *ev)
 					m->handler(m, ev, 0);
 					if (ses->term->windows.next == m) {
 						delete_window(m);
+
 					} else goto x;
 					ev->y |= ~KBD_ALT;
 				}
+		}
+
+		if (accesskey_priority <= 0 && current_frame(ses)
+		    && try_document_key(ses, current_frame(ses), ev)) {
+			/* The document ate the key! */
+			draw_doc(ses->term, current_frame(ses), 1);
+			print_screen_status(ses);
+			redraw_from_window(ses->win);
+			return;
 		}
 	}
 	if (ev->ev == EV_MOUSE) {

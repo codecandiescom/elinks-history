@@ -100,10 +100,16 @@ diferent things. Yes, that's another thing you shouldn't do. If reasonable,
 initialize variables during their declaration and don't group too much
 variables in one line. ALWAYS make blank line after declaration part.
 
+And don't specify variable names in prototypes - just types of variables, who's
+interested in the function, he'll probably want to look at the code anyway. And
+prefix all local functions with 'static'.
+
 Indent shift width is 8, that means one tab. I'm using to prefer 2, but links
 is actually written using 8, and it doesn't appear to be wise to change this.
 { should be in same line as condition near for, if, while, switch etc, but on
 separate line near function header in function definition.
+
+Please _USE_ one tab instead of 8 spaces! It's making things easier.
 
 Always make spaces around '=', after ',', and - if reasonable - around other
 operators as well. You shouldn't make assigments in conditionals, so do:
@@ -184,4 +190,4 @@ applies.
 
 Happy hacking!
 
-$Id: HACKING,v 1.9 2002/01/26 15:21:47 pasky Exp $
+$Id: HACKING,v 1.10 2002/03/12 18:18:03 pasky Exp $

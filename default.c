@@ -966,6 +966,7 @@ int show_status_bar = 1;
 int show_title_bar = 1;
 
 int form_submit_confirm = 1;
+int accesskey_priority = 1;
 
 int allow_special_files = 0;
 int keep_unhistory = 0;
@@ -1002,6 +1003,14 @@ struct option links_options[] = {
 	 * <cmdread_cmdline>, <cmdread_file>, <cmdwrite_file>,
 	 * <minval>, <maxval>, <varname>
 	 * <description> */ 
+
+	{	"accesskey-priority", "accesskey_priority",
+		gen_cmd, num_rd, num_wr,
+	 	0, 2, &accesskey_priority,
+		"Priority of 'accesskey' HTML attribute:\n"
+		"0 is first try all normal bindings and if it fails, check accesskey\n"
+		"1 is first try only frame bindings and if it fails, check accesskey\n"
+		"2 is first check accesskey (that can be dangerous)" },
 
 	{	"allow-special-files", "allow_special_files",
 		gen_cmd, num_rd, num_wr,

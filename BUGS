@@ -36,6 +36,8 @@ field in structure passed to end_dump().
 	When title/status bar is turned off, there's still a blank line on
 top/bottom of screen.
 
-$Id: BUGS,v 1.12 2002/03/10 13:11:32 pasky Exp $
+	F1-F5 keys may not be recognized correctly on some terminals.
+
+$Id: BUGS,v 1.13 2002/03/12 18:18:03 pasky Exp $
 
 vim: textwidth=80

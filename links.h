@@ -1274,6 +1274,7 @@ struct form_state {
 struct link {
 	int type;
 	int num;
+	long accesskey;
 	unsigned char *where;
 	unsigned char *target;
 	unsigned char *where_img;
@@ -1885,6 +1886,7 @@ struct text_attrib {
 	unsigned char *select;
 	int select_disabled;
 	unsigned int tabindex;
+	long accesskey;
 };
 
 #define P_NUMBER	1
@@ -2115,6 +2117,7 @@ extern int show_status_bar;
 extern int show_title_bar;
 
 extern int form_submit_confirm;
+extern int accesskey_priority;
 
 extern int allow_special_files;
 
@@ -2254,6 +2257,7 @@ enum {
 
 void init_keymaps();
 void free_keymaps();
+long parse_key(unsigned char *);
 int kbd_action(int, struct event *, int *);
 unsigned char *bind_rd(struct option *, unsigned char *);
 unsigned char *unbind_rd(struct option *, unsigned char *);

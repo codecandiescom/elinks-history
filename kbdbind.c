@@ -96,7 +96,7 @@ static int parse_keymap(unsigned char *s)
 	return strtonum(table, s);
 }
 
-static long parse_key(unsigned char *s)
+long parse_key(unsigned char *s)
 {
 	struct strtonum table[] = {
 		{ "Enter", KBD_ENTER },
@@ -127,6 +127,7 @@ static long parse_key(unsigned char *s)
 		{ "F12", KBD_F12 },
 		{ NULL, 0 }
 	};
+
 	return (strlen(s) == 1) ? *s : strtonum(table, s);
 }
 

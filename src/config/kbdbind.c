@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.32 2002/07/09 15:27:38 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.33 2002/07/11 20:59:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -302,6 +302,7 @@ static struct strtonum action_table[] = {
 	{ "header-info", ACT_HEADER_INFO },
 	{ "history-manager", ACT_HISTORY_MANAGER },
 	{ "home", ACT_HOME },
+	{ "home-forget", ACT_HOME_FORGET },
 	{ "kill-to-bol", ACT_KILL_TO_BOL },
 	{ "kill-to-eol", ACT_KILL_TO_EOL },
 	{ "left", ACT_LEFT },

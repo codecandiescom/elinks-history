@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.61 2002/07/09 15:27:39 pasky Exp $ */
+/* $Id: view.c,v 1.62 2002/07/11 20:59:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2543,7 +2543,9 @@ void send_event(struct session *ses, struct event *ev)
 				dialog_goto_url(ses, url);
 				goto x;
 			}
-			case ACT_GOTO_URL_HOME: {
+			case ACT_GOTO_URL_HOME:
+go_home:
+			{
 				unsigned char *url = getenv("WWW_HOME");
 
 				if (!url || !*url) url = WWW_HOME_URL;
@@ -2553,6 +2555,9 @@ void send_event(struct session *ses, struct event *ev)
 			case ACT_FORGET_CREDENTIALS:
 				free_auth();
 				goto x;
+			case ACT_HOME_FORGET:
+				free_auth();
+				goto go_home;
 			case ACT_SAVE_FORMATTED:
 				/* TODO: if (!anonymous) for non-HTTI ? --pasky */
 				menu_save_formatted(ses->term, NULL, ses);

@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.12 2004/04/17 14:29:12 jonas Exp $ */
+/* $Id: listmenu.c,v 1.13 2004/04/17 14:35:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,10 +42,8 @@ do_select_submenu(struct terminal *term, struct menu_item *menu,
 		  struct session *ses)
 {
 	struct menu_item *m;
-	int def = get_current_state(ses);
+	int def = int_max(0, get_current_state(ses));
 	int sel = 0;
-
-	if (def < 0) def = 0;
 
 	foreach_menu_item (m, menu) {
 		sel++;

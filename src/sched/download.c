@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.121 2003/10/27 23:58:30 pasky Exp $ */
+/* $Id: download.c,v 1.122 2003/10/29 11:12:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -421,9 +421,9 @@ display_download(struct terminal *term, struct file_download *down,
 			goto found;
 	return;
 
-#define DOWNLOAD_DLG_SIZE 3
+#define DOWNLOAD_WIDGETS_COUNT 3
 found:
-	dlg = calloc_dialog(DOWNLOAD_DLG_SIZE, 0);
+	dlg = calloc_dialog(DOWNLOAD_WIDGETS_COUNT, 0);
 	if (!dlg) return;
 
 	undisplay_download(down);
@@ -440,7 +440,7 @@ found:
 
 	add_dlg_end(dlg, n);
 
-	assert(n == DOWNLOAD_DLG_SIZE);
+	assert(n == DOWNLOAD_WIDGETS_COUNT);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }

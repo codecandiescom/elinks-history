@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.86 2003/10/27 10:35:26 jonas Exp $ */
+/* $Id: dialogs.c,v 1.87 2003/10/29 11:12:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@ write_config_error(struct terminal *term, struct memory_list *ml,
 ****************************************************************************/
 
 /* The location of the box in the options manager */
-#define	OP_BOX_IND		7
+#define	OP_WIDGETS_COUNT		7
 
 /* Creates the box display (holds everything EXCEPT the actual rendering
  * data) */
@@ -77,7 +77,7 @@ option_dialog_abort_handler(struct dialog_data *dlg_data)
 {
 	struct listbox_data *box;
 
-	box = (struct listbox_data *) dlg_data->dlg->widgets[OP_BOX_IND].data;
+	box = (struct listbox_data *) dlg_data->dlg->widgets[OP_WIDGETS_COUNT].data;
 
 	del_from_list(box);
 	/* Delete the box structure */
@@ -102,7 +102,7 @@ push_info_button(struct dialog_data *dlg_data,
 	struct option *option;
 	struct listbox_data *box;
 
-	box = (struct listbox_data *) dlg_data->dlg->widgets[OP_BOX_IND].data;
+	box = (struct listbox_data *) dlg_data->dlg->widgets[OP_WIDGETS_COUNT].data;
 
 	/* Show history item info */
 	if (!box->sel || !box->sel->udata) return 0;
@@ -279,7 +279,7 @@ static void
 build_edit_dialog(struct terminal *term, struct session *ses,
 		  struct option *option)
 {
-#define EDIT_DIALOG_FIELDS_NB 3
+#define EDIT_WIDGETS_COUNT 3
 	struct dialog *dlg;
 	unsigned char *value;
 	struct string tvalue;
@@ -292,7 +292,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	commandline = 0;
 
 	/* Create the dialog */
-	dlg = calloc_dialog(EDIT_DIALOG_FIELDS_NB, MAX_STR_LEN);
+	dlg = calloc_dialog(EDIT_WIDGETS_COUNT, MAX_STR_LEN);
 	if (!dlg) {
 		done_string(&tvalue);
 		return;
@@ -303,7 +303,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	dlg->udata = option;
 	dlg->udata2 = ses;
 
-	value = (unsigned char *) &dlg->widgets[EDIT_DIALOG_FIELDS_NB + 1];
+	value = (unsigned char *) &dlg->widgets[EDIT_WIDGETS_COUNT + 1];
 	safe_strncpy(value, tvalue.source, MAX_STR_LEN);
 	done_string(&tvalue);
 
@@ -315,10 +315,10 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 
 	add_dlg_end(dlg, n);
 
-	assert(n == EDIT_DIALOG_FIELDS_NB);
+	assert(n == EDIT_WIDGETS_COUNT);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
-#undef EDIT_DIALOG_FIELDS_NB
+#undef EDIT_WIDGETS_COUNT
 }
 
 static int
@@ -329,7 +329,7 @@ push_edit_button(struct dialog_data *dlg_data,
 	struct option *option;
 	struct listbox_data *box;
 
-	box = (struct listbox_data *) dlg_data->dlg->widgets[OP_BOX_IND].data;
+	box = (struct listbox_data *) dlg_data->dlg->widgets[OP_WIDGETS_COUNT].data;
 
 	/* Show history item info */
 	if (!box->sel || !box->sel->udata) return 0;
@@ -370,7 +370,7 @@ push_add_button(struct dialog_data *dlg_data,
 {
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box =
-		(struct listbox_data *) dlg_data->dlg->widgets[OP_BOX_IND].data;
+		(struct listbox_data *) dlg_data->dlg->widgets[OP_WIDGETS_COUNT].data;
 	struct option *option;
 
 	if (!box->sel || !box->sel->udata) {
@@ -438,7 +438,7 @@ push_del_button(struct dialog_data *dlg_data,
 {
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box =
-		(struct listbox_data *) dlg_data->dlg->widgets[OP_BOX_IND].data;
+		(struct listbox_data *) dlg_data->dlg->widgets[OP_WIDGETS_COUNT].data;
 	struct option *option;
 
 	if (!box->sel || !box->sel->udata) {
@@ -487,7 +487,7 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	int n = 0;
 
 	/* Create the dialog */
-	dlg = calloc_dialog(OP_BOX_IND + 1, sizeof(struct option) + 2 * MAX_STR_LEN);
+	dlg = calloc_dialog(OP_WIDGETS_COUNT + 1, sizeof(struct option) + 2 * MAX_STR_LEN);
 	if (!dlg) return;
 
 	dlg->title = _("Options manager", term);
@@ -504,7 +504,7 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	add_dlg_button(dlg, n, B_ENTER, push_save_button, _("Save", term), ses);
 	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
 
-	assert(n == OP_BOX_IND);
+	assert(n == OP_WIDGETS_COUNT);
 
 	add_dlg_listbox(dlg, n, 12, option_dlg_box_build());
 
@@ -520,7 +520,7 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 ****************************************************************************/
 
 /* The location of the box in the keybinding manager */
-#define	KB_BOX_IND		5
+#define	KB_WIDGETS_COUNT		5
 
 /* Creates the box display (holds everything EXCEPT the actual rendering
  * data) */
@@ -546,7 +546,7 @@ kbdbind_dialog_abort_handler(struct dialog_data *dlg_data)
 {
 	struct listbox_data *box;
 
-	box = (struct listbox_data *) dlg_data->dlg->widgets[KB_BOX_IND].data;
+	box = (struct listbox_data *) dlg_data->dlg->widgets[KB_WIDGETS_COUNT].data;
 
 	del_from_list(box);
 	/* Delete the box structure */
@@ -584,7 +584,7 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 {
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box
-		= (struct listbox_data *) dlg_data->dlg->widgets[KB_BOX_IND].data;
+		= (struct listbox_data *) dlg_data->dlg->widgets[KB_WIDGETS_COUNT].data;
 	struct listbox_item *item = box->sel;
 	struct kbdbind_add_hop *hop;
 	unsigned char *text;
@@ -677,7 +677,7 @@ push_kbdbind_del_button(struct dialog_data *dlg_data,
 {
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box =
-		(struct listbox_data *) dlg_data->dlg->widgets[KB_BOX_IND].data;
+		(struct listbox_data *) dlg_data->dlg->widgets[KB_WIDGETS_COUNT].data;
 	struct keybinding *keybinding;
 
 	if (!box->sel || box->sel->depth < 2) {
@@ -722,7 +722,7 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 	int n = 0;
 
 	/* Create the dialog */
-	dlg = calloc_dialog(KB_BOX_IND + 1, sizeof(struct option) + 2 * MAX_STR_LEN);
+	dlg = calloc_dialog(KB_WIDGETS_COUNT + 1, sizeof(struct option) + 2 * MAX_STR_LEN);
 	if (!dlg) return;
 
 	dlg->title = _("Keybinding manager", term);
@@ -737,7 +737,7 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 	add_dlg_button(dlg, n, B_ENTER, push_kbdbind_save_button, _("Save", term), ses);
 	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
 
-	assert(n == KB_BOX_IND);
+	assert(n == KB_WIDGETS_COUNT);
 
 	add_dlg_listbox(dlg, n, 12, kbdbind_dlg_box_build());
 

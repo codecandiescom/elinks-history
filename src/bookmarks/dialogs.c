@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.102 2003/10/26 14:04:09 zas Exp $ */
+/* $Id: dialogs.c,v 1.103 2003/10/29 11:12:03 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -35,8 +35,8 @@
  * (add/modify/delete). */
 #define BOOKMARKS_RESAVE	1
 
-/* The location of the box in the bookmark manager */
-#define	BM_BOX_IND		8
+/* Number of widgets excluding the listbox. */
+#define	BM_WIDGETS_COUNT		8
 
 
 #ifdef BOOKMARKS
@@ -78,7 +78,7 @@ bookmark_dlg_box_build(void)
 static void
 bookmark_dialog_abort_handler(struct dialog_data *dlg_data)
 {
-	struct widget *widget = &(dlg_data->dlg->widgets[BM_BOX_IND]);
+	struct widget *widget = &(dlg_data->dlg->widgets[BM_WIDGETS_COUNT]);
 	struct listbox_data *box = (struct listbox_data *) widget->data;
 
 	del_from_list(box);
@@ -136,7 +136,7 @@ static void
 do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
 {
 	struct bookmark *bm = NULL;
-	struct widget_data *widget_data = &dlg_data->widgets_data[BM_BOX_IND];
+	struct widget_data *widget_data = &dlg_data->widgets_data[BM_WIDGETS_COUNT];
 	struct listbox_data *box;
 
 	box = (struct listbox_data *) widget_data->widget->data;
@@ -179,7 +179,7 @@ push_add_folder_button(struct dialog_data *dlg_data, struct widget_data *widget_
 static int
 push_goto_button(struct dialog_data *dlg_data, struct widget_data *goto_btn)
 {
-	struct widget *widget = &(dlg_data->dlg->widgets[BM_BOX_IND]);
+	struct widget *widget = &(dlg_data->dlg->widgets[BM_WIDGETS_COUNT]);
 	struct listbox_data *box = (struct listbox_data *) widget->data;
 
 	/* Do nothing with a folder */
@@ -223,7 +223,7 @@ bookmark_edit_cancel(struct dialog *dlg) {
 static int
 push_edit_button(struct dialog_data *dlg_data, struct widget_data *edit_btn)
 {
-	struct widget *widget = &(dlg_data->dlg->widgets[BM_BOX_IND]);
+	struct widget *widget = &(dlg_data->dlg->widgets[BM_WIDGETS_COUNT]);
 	struct listbox_data *box = (struct listbox_data *) widget->data;
 
 	/* Follow the bookmark */
@@ -437,7 +437,7 @@ push_delete_button(struct dialog_data *dlg_data,
 		   struct widget_data *some_useless_delete_button)
 {
 	struct terminal *term = dlg_data->win->term;
-	struct widget *widget = &(dlg_data->dlg->widgets[BM_BOX_IND]);
+	struct widget *widget = &(dlg_data->dlg->widgets[BM_WIDGETS_COUNT]);
 	struct listbox_data *box = (struct listbox_data *) widget->data;
 
 	listbox_delete_bookmark(term, box);
@@ -533,7 +533,7 @@ push_move_button(struct dialog_data *dlg_data,
 {
 	struct bookmark *dest = NULL;
 	struct list_head *destb = NULL, *desti = NULL;
-	struct widget_data *widget_data = &dlg_data->widgets_data[BM_BOX_IND];
+	struct widget_data *widget_data = &dlg_data->widgets_data[BM_WIDGETS_COUNT];
 	struct listbox_data *box = (struct listbox_data *) widget_data->widget->data;
 
 	if (!box->sel) return 0; /* nowhere to move to */
@@ -596,7 +596,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	}
 
 	/* Create the dialog */
-	dlg = calloc_dialog(BM_BOX_IND + 1, sizeof(struct bookmark) + 2 * MAX_STR_LEN);
+	dlg = calloc_dialog(BM_WIDGETS_COUNT + 1, sizeof(struct bookmark) + 2 * MAX_STR_LEN);
 	if (!dlg) return;
 
 	dlg->title = _("Bookmark manager", term);
@@ -614,7 +614,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	add_dlg_button(dlg, n, B_ENTER, push_search_button, _("Search", term), NULL);
 	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
 
-	assert(n == BM_BOX_IND);
+	assert(n == BM_WIDGETS_COUNT);
 
 	add_dlg_listbox(dlg, n, 12, bookmark_dlg_box_build());
 
@@ -640,7 +640,7 @@ bookmark_add_add(struct dialog *dlg)
 	if (dlg->udata) {
 		struct dialog_data *dlg_data = (struct dialog_data *) dlg->udata;
 
-		widget_data = &(dlg_data->widgets_data[BM_BOX_IND]);
+		widget_data = &(dlg_data->widgets_data[BM_WIDGETS_COUNT]);
 		box = (struct listbox_data *) widget_data->widget->data;
 
 		if (box->sel) {
@@ -720,7 +720,7 @@ bookmark_search_do(struct dialog *dlg)
 		internal("Bookmarks search without udata in dialog! Let's panic.");
 
 	dlg_data = (struct dialog_data *) dlg->udata;
-	widget_data = &(dlg_data->widgets_data[BM_BOX_IND]);
+	widget_data = &(dlg_data->widgets_data[BM_WIDGETS_COUNT]);
 	box = (struct listbox_data *) widget_data->widget->data;
 
 	/* Memorize last searched title */

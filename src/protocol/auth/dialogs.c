@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.64 2003/10/28 09:29:03 zas Exp $ */
+/* $Id: dialogs.c,v 1.65 2003/10/29 11:12:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,14 +133,14 @@ do_auth_dialog(struct session *ses)
 		_("Authentication required for %s at %s", term),
 		a->realm, a->url);
 
-#define AUTH_DLG_SIZE 4
-	dlg = calloc_dialog(AUTH_DLG_SIZE, strlen(sticker) + 1);
+#define AUTH_WIDGETS_COUNT 4
+	dlg = calloc_dialog(AUTH_WIDGETS_COUNT, strlen(sticker) + 1);
 	if (!dlg) return;
 
 	dlg->title = _("HTTP Authentication", term);
 	dlg->fn = auth_layout;
 
-	dlg->udata = (char *)dlg + sizeof_dialog(AUTH_DLG_SIZE, 0);
+	dlg->udata = (char *)dlg + sizeof_dialog(AUTH_WIDGETS_COUNT, 0);
 	strcpy(dlg->udata, sticker);
 
 	dlg->udata2 = a;
@@ -154,7 +154,7 @@ do_auth_dialog(struct session *ses)
 
 	add_dlg_end(dlg, n);
 
-	assert(n == AUTH_DLG_SIZE);
+	assert(n == AUTH_WIDGETS_COUNT);
 
 	dlg_data = do_dialog(term, dlg, getml(dlg, NULL));
 	/* When there's some username, but no password, automagically jump at

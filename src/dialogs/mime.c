@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.57 2003/10/27 10:35:26 jonas Exp $ */
+/* $Id: mime.c,v 1.58 2003/10/29 11:12:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,8 +205,8 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 		opt = NULL;
 	}
 
-#define MIME_DLG_SIZE 4
-	dlg = calloc_dialog(MIME_DLG_SIZE, sizeof(struct extension) + 3 * MAX_STR_LEN);
+#define MIME_WIDGETS_COUNT 4
+	dlg = calloc_dialog(MIME_WIDGETS_COUNT, sizeof(struct extension) + 3 * MAX_STR_LEN);
 	if (!dlg) {
 		if (fcp) {
 			mem_free(fcp);
@@ -215,7 +215,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 		return;
 	}
 
-	new = (struct extension *) &dlg->widgets[MIME_DLG_SIZE + 1];
+	new = (struct extension *) &dlg->widgets[MIME_WIDGETS_COUNT + 1];
 	new->ext = ext = (unsigned char *) (new + 1);
 	new->ct = ct = ext + MAX_STR_LEN;
 	new->ext_orig = ext_orig = ct + MAX_STR_LEN;
@@ -244,7 +244,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 
 	add_dlg_end(dlg, n);
 
-	assert(n == MIME_DLG_SIZE);
+	assert(n == MIME_WIDGETS_COUNT);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 

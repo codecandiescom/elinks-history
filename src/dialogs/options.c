@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.97 2003/10/29 10:51:14 zas Exp $ */
+/* $Id: options.c,v 1.98 2003/10/29 11:12:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,9 +183,9 @@ terminal_options_fn(struct dialog_data *dlg_data)
 }
 
 #ifdef USE_256_COLORS
-#define TERMOPT_WIDGETS 16
+#define TERMOPT_WIDGETS_COUNT 16
 #else
-#define TERMOPT_WIDGETS 15
+#define TERMOPT_WIDGETS_COUNT 15
 #endif
 
 void
@@ -198,7 +198,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	termopt_hop = mem_calloc(1, sizeof(struct termopt_hop));
 	if (!termopt_hop) return;
 
-	dlg = calloc_dialog(TERMOPT_WIDGETS, 0);
+	dlg = calloc_dialog(TERMOPT_WIDGETS_COUNT, 0);
 	if (!dlg) {
 		mem_free(termopt_hop);
 		return;
@@ -244,7 +244,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 
 	add_dlg_end(dlg, n);
 
-	assert(n == TERMOPT_WIDGETS);
+	assert(n == TERMOPT_WIDGETS_COUNT);
 
 	do_dialog(term, dlg, getml(dlg, termopt_hop, NULL));
 }
@@ -309,8 +309,8 @@ dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 	sprintf(x_str, "%d", x);
 	sprintf(y_str, "%d", y);
 
-#define RESIZE_DLG_SIZE 4
-	dlg = calloc_dialog(RESIZE_DLG_SIZE, 0);
+#define RESIZE_WIDGETS_COUNT 4
+	dlg = calloc_dialog(RESIZE_WIDGETS_COUNT, 0);
 	if (!dlg) return;
 
 	dlg->title = _("Resize terminal", term);
@@ -327,7 +327,7 @@ dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 
 	add_dlg_end(dlg, n);
 
-	assert(n == RESIZE_DLG_SIZE);
+	assert(n == RESIZE_WIDGETS_COUNT);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.76 2003/10/29 10:51:14 zas Exp $ */
+/* $Id: search.c,v 1.77 2003/10/29 11:12:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1094,14 +1094,14 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	hop->cases = get_opt_int("document.browse.search.case");
 	hop->data = data;
 
-#define SEARCH_DLG_SIZE 8
-	dlg = calloc_dialog(SEARCH_DLG_SIZE, l);
+#define SEARCH_WIDGETS_COUNT 8
+	dlg = calloc_dialog(SEARCH_WIDGETS_COUNT, l);
 	if (!dlg) {
 		mem_free(hop);
 		return;
 	}
 
-	field = (unsigned char *) dlg + sizeof_dialog(SEARCH_DLG_SIZE, 0);
+	field = (unsigned char *) dlg + sizeof_dialog(SEARCH_WIDGETS_COUNT, 0);
 	*field = 0;
 
 	if (def) {
@@ -1130,7 +1130,7 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 
 	add_dlg_end(dlg, n);
 
-	assert(n == SEARCH_DLG_SIZE);
+	assert(n == SEARCH_WIDGETS_COUNT);
 
 	add_to_ml(&ml, dlg, NULL);
 	do_dialog(term, dlg, ml);

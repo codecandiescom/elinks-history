@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.100 2003/10/28 19:03:55 jonas Exp $ */
+/* $Id: core.c,v 1.101 2003/10/29 11:12:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -426,11 +426,11 @@ l_edit_bookmark_dialog(LS)
 		return 1;
 	}
 
-#define L_EDIT_BMK_DLG_SIZE 5
-	dlg = calloc_dialog(L_EDIT_BMK_DLG_SIZE, sizeof(struct lua_dlg_data));
+#define L_EDIT_BMK_WIDGETS_COUNT 5
+	dlg = calloc_dialog(L_EDIT_BMK_WIDGETS_COUNT, sizeof(struct lua_dlg_data));
 	if (!dlg) return 0;
 
-	data = (struct lua_dlg_data *)&dlg->widgets[L_EDIT_BMK_DLG_SIZE + 1];
+	data = (struct lua_dlg_data *)&dlg->widgets[L_EDIT_BMK_WIDGETS_COUNT + 1];
 	data->state = S;
 	safe_strncpy(data->cat, (uchar *)lua_tostring(S, 1), MAX_STR_LEN-1);
 	safe_strncpy(data->name, (uchar *)lua_tostring(S, 2), MAX_STR_LEN-1);
@@ -452,7 +452,7 @@ l_edit_bookmark_dialog(LS)
 
 	add_dlg_end(dlg, n);
 
-	assert(n == L_EDIT_BMK_DLG_SIZE);
+	assert(n == L_EDIT_BMK_WIDGETS_COUNT);
 
 	do_dialog(lua_ses->tab->term, dlg, getml(dlg, NULL));
 

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.73 2003/10/29 10:51:14 zas Exp $ */
+/* $Id: inpfield.c,v 1.74 2003/10/29 11:12:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -192,11 +192,11 @@ input_field(struct terminal *term, struct memory_list *ml, int intl,
 		cancelbutton = _(cancelbutton, term);
 	}
 
-#define INPUT_DLG_SIZE 3
-	dlg = calloc_dialog(INPUT_DLG_SIZE, l);
+#define INPUT_WIDGETS_COUNT 3
+	dlg = calloc_dialog(INPUT_WIDGETS_COUNT, l);
 	if (!dlg) return;
 
-	field = (unsigned char *) dlg + sizeof_dialog(INPUT_DLG_SIZE, 0);
+	field = (unsigned char *) dlg + sizeof_dialog(INPUT_WIDGETS_COUNT, 0);
 	/* *field = 0; */ /* calloc() should take care of it. */
 
 	if (def) {
@@ -217,7 +217,7 @@ input_field(struct terminal *term, struct memory_list *ml, int intl,
 
 	add_dlg_end(dlg, n);
 
-	assert(n == INPUT_DLG_SIZE);
+	assert(n == INPUT_WIDGETS_COUNT);
 
 	add_to_ml(&ml, dlg, NULL);
 	do_dialog(term, dlg, ml);

@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.51 2003/10/27 10:35:26 jonas Exp $ */
+/* $Id: edit.c,v 1.52 2003/10/29 11:12:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,13 +112,13 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	if (intl) title = _(title, term);
 
 	/* Number of fields in edit dialog --Zas */
-#define EDIT_DIALOG_FIELDS_NB 5
+#define EDIT_WIDGETS_COUNT 5
 
 	/* Create the dialog */
-	dlg = calloc_dialog(EDIT_DIALOG_FIELDS_NB, 2 * MAX_STR_LEN);
+	dlg = calloc_dialog(EDIT_WIDGETS_COUNT, 2 * MAX_STR_LEN);
 	if (!dlg) return;
 
-	name = (unsigned char *) &dlg->widgets[EDIT_DIALOG_FIELDS_NB + 1];
+	name = (unsigned char *) &dlg->widgets[EDIT_WIDGETS_COUNT + 1];
 	url = name + MAX_STR_LEN;
 
 	/* Get the name */
@@ -161,9 +161,9 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 
 	add_dlg_end(dlg, n);
 
-	assert(n == EDIT_DIALOG_FIELDS_NB);
+	assert(n == EDIT_WIDGETS_COUNT);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 
-#undef EDIT_DIALOG_FIELDS_NB
+#undef EDIT_WIDGETS_COUNT
 }

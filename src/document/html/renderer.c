@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.396 2004/01/01 18:21:56 zas Exp $ */
+/* $Id: renderer.c,v 1.397 2004/01/05 05:51:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1212,12 +1212,6 @@ html_special(struct part *part, enum html_special_type c, ...)
 	return NULL;
 }
 
-static inline void
-do_format(char *start, char *end, struct part *part, unsigned char *head)
-{
-	parse_html(start, end, part, head);
-}
-
 void
 free_table_cache(void)
 {
@@ -1331,7 +1325,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 
 	html_state = init_html_parser_state(ELEMENT_IMMORTAL, align, m, width);
 
-	do_format(start, end, part, head);
+	parse_html(start, end, part, head);
 
 	done_html_parser_state(html_state);
 

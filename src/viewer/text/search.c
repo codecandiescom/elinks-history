@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.246 2004/06/25 10:52:31 zas Exp $ */
+/* $Id: search.c,v 1.247 2004/06/26 10:25:33 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1263,8 +1263,20 @@ search_typeahead(struct session *ses, struct document_view *doc_view, int action
 			/* Falling forward .. good punk rock */
 		case ACT_MAIN_SEARCH_TYPEAHEAD:
 		default:
-			handler = link_typeahead_handler;
-			history = NULL;
+			if (doc_view->document->nlinks) {
+				handler = link_typeahead_handler;
+				history = NULL;
+				break;
+			}
+
+			msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+				N_("Typeahead"), AL_CENTER,
+				msg_text(ses->tab->term,
+					 N_("No links in current document")),
+				NULL, 1,
+				N_("OK"), NULL, B_ENTER | B_ESC);
+
+			return;
 	}
 
 	input_field_line(ses, prompt, data, history, handler);

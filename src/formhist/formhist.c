@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.8 2003/08/02 16:03:53 jonas Exp $ */
+/* $Id: formhist.c,v 1.9 2003/08/02 16:06:45 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -196,8 +196,7 @@ remember_form(struct form_history_item *fmem_data)
 	form->url = stracpy(fmem_data->url);
 	if (!form->url) goto fail;
 
-	/* FIXME: i don't like "password" as name for this file. --Zas */
-	file = straconcat(elinks_home, "password", NULL);
+	file = straconcat(elinks_home, "formhist", NULL);
 	if (!file) goto fail;
 
 	ssi = secure_open(file, 0177);

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.44 2003/12/27 17:18:34 jonas Exp $ */
+/* $Id: status.c,v 1.45 2004/01/01 14:03:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,9 +9,7 @@
 
 #include "elinks.h"
 
-#ifdef USE_LEDS
 #include "bfu/leds.h"
-#endif
 #include "bfu/msgbox.h"
 #include "bfu/style.h"
 #include "config/options.h"
@@ -142,7 +140,7 @@ update_status(void)
 	int show_title_bar = get_opt_int("ui.show_title_bar");
 	int show_status_bar = get_opt_int("ui.show_status_bar");
 	int show_tabs_bar = get_opt_int("ui.tabs.show_bar");
-#ifdef USE_LEDS
+#ifdef CONFIG_LEDS
 	int show_leds = get_opt_int("ui.leds.enable");
 #endif
 	int set_window_title = get_opt_bool("ui.window_title");
@@ -179,7 +177,7 @@ update_status(void)
 			render_document_frames(ses);
 			dirty = 1;
 		}
-#if USE_LEDS
+#if CONFIG_LEDS
 		if (status->show_leds != show_leds) {
 			status->show_leds = show_leds;
 			dirty = 1;
@@ -273,7 +271,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 		int xend = term->width - 1;
 		int width;
 
-#ifdef USE_LEDS
+#ifdef CONFIG_LEDS
 		if (ses->status.show_leds)
 			xend -= LEDS_COUNT + 2;
 #endif
@@ -475,7 +473,7 @@ display_window_title(struct session *ses, struct terminal *term)
 	}
 }
 
-#ifdef USE_LEDS
+#ifdef CONFIG_LEDS
 static inline void
 display_leds(struct session *ses, struct session_status *status)
 {
@@ -495,7 +493,7 @@ display_leds(struct session *ses, struct session_status *status)
 
 	draw_leds(ses);
 }
-#endif /* USE_LEDS */
+#endif /* CONFIG_LEDS */
 
 /* Print statusbar and titlebar, set terminal title. */
 void
@@ -515,7 +513,7 @@ print_screen_status(struct session *ses)
 
 		if (status->show_status_bar)
 			display_status_bar(ses, term, tabs_count);
-#ifdef USE_LEDS
+#ifdef CONFIG_LEDS
 		if (status->show_leds)
 			display_leds(ses, status);
 #endif

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.286 2004/01/01 09:56:02 jonas Exp $ */
+/* $Id: session.c,v 1.287 2004/01/01 14:03:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,9 +11,7 @@
 
 #include "elinks.h"
 
-#ifdef USE_LEDS
 #include "bfu/leds.h"
-#endif
 #include "bfu/msgbox.h"
 #include "bfu/style.h"
 #include "bookmarks/bookmarks.h"
@@ -556,7 +554,7 @@ create_basic_session(struct window *tab)
 	ses->task.type = TASK_NONE;
 	ses->display_timer = -1;
 
-#ifdef USE_LEDS
+#ifdef CONFIG_LEDS
 	init_led_panel(&ses->status.leds);
 	ses->status.ssl_led = register_led(ses, 0);
 #endif

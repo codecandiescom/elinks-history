@@ -1,11 +1,9 @@
-/* $Id: session.h,v 1.87 2003/12/27 03:12:12 miciah Exp $ */
+/* $Id: session.h,v 1.88 2004/01/01 14:03:52 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
 
-#ifdef USE_LEDS
 #include "bfu/leds.h"
-#endif
 #include "cache/cache.h"
 #include "sched/connection.h"
 #include "sched/history.h"
@@ -95,7 +93,7 @@ struct session_status {
 	unsigned int set_window_title:1;
 	unsigned char *last_title;
 
-#ifdef USE_LEDS
+#ifdef CONFIG_LEDS
 	unsigned int show_leds:1;
 	struct led_panel leds;
 	struct led *ssl_led;

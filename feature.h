@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.24 2004/01/01 13:54:57 jonas Exp $ */
+/* $Id: feature.h,v 1.25 2004/01/01 14:03:51 jonas Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -48,7 +48,7 @@
  *
  * Default: disabled */
 
-/* #define USE_LEDS */
+/* #define CONFIG_LEDS */
 
 
 /*** Bookmarks

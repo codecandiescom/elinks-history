@@ -1,11 +1,11 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.39 2003/12/27 12:27:49 pasky Exp $ */
+/* $Id: leds.c,v 1.40 2004/01/01 14:03:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef USE_LEDS
+#ifdef CONFIG_LEDS
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,7 +1,9 @@
-/* $Id: leds.h,v 1.15 2003/12/27 12:50:35 pasky Exp $ */
+/* $Id: leds.h,v 1.16 2004/01/01 14:03:51 jonas Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
+
+#ifdef CONFIG_LEDS
 
 #include "modules/module.h"
 #include "util/color.h"
@@ -44,4 +46,5 @@ void draw_leds(struct session *ses);
 struct led *register_led(struct session *ses, int number);
 void unregister_led(struct led *);
 
+#endif
 #endif

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.27 2003/06/11 22:14:53 pasky Exp $ */
+/* $Id: session.h,v 1.28 2003/06/11 22:29:56 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -52,7 +52,7 @@ struct kbdprefix {
 /* This describes, what are we trying to do right now. We pass this around so
  * that we can use generic scheduler routines and when the control will get
  * back to our subsystem, we will know what are we up to. */
-enum session_wtd {
+enum session_wtd { /* What To Do? */
 	WTD_NO,
 	WTD_FORWARD,
 	WTD_IMGMAP,
@@ -61,51 +61,89 @@ enum session_wtd {
 	WTD_UNBACK,
 };
 
+/* This is one of the building stones of ELinks architecture --- this tructure
+ * carries information about the specific ELinks session. Each tab (thus, at
+ * least one per terminal, in the normal case) has own session. Session
+ * describes mainly the current browsing and control state, from the currently
+ * viewed document through the browsing history of this session to the status
+ * bar information. */
 struct session {
 	LIST_HEAD(struct session);
 
-	struct list_head history;
-	struct list_head unhistory;
-	struct list_head scrn_frames;
-	struct list_head more_files;
 
-	struct status loading;
-	struct kbdprefix kbdprefix;
-	struct status tq;
+	/* The vital session data */
+
+	int id;
 
 	struct window *tab;
-	struct cache_entry *tq_ce;
-	struct f_data_c *screen;
 
-	unsigned char *wtd_target;
+
+	/* Browsing history */
+
+	struct list_head history; /* struct location */
+	struct list_head unhistory; /* struct location */
+
+
+	/* The current document */
+
+	struct list_head more_files; /* struct file_to_load */
+
+	struct status loading;
 	unsigned char *loading_url;
+
+	int reloadlevel;
+	int redirect_cnt;
+
+	struct f_data_c *screen;
+	struct list_head scrn_frames; /* struct f_data_c */
+
+	unsigned char *dn_url;
+
+	unsigned char *ref_url;
+
 	unsigned char *goto_position;
+
 	unsigned char *imgmap_href_base;
 	unsigned char *imgmap_target_base;
+
+
+	/* The current action-in-progress selector */
+
+	enum session_wtd wtd;
+	unsigned char *wtd_target;
+
+
+	/* The current browsing state */
+
+	int search_direction;
+	struct kbdprefix kbdprefix;
+	int exit_query;
+	int display_timer;
+
+	unsigned char *search_word;
+	unsigned char *last_search_word;
+
+
+	/* The possibly running type query (what-to-do-with-that-file?) */
+
+	struct status tq;
+	struct cache_entry *tq_ce;
 	unsigned char *tq_url;
 	unsigned char *tq_goto_position;
 	unsigned char *tq_prog;
-	unsigned char *dn_url;
-	unsigned char *ref_url;
-	unsigned char *search_word;
-	unsigned char *last_search_word;
-	unsigned char *last_title;
-
-	int id;
-	int display_timer;
-	int reloadlevel;
-	int redirect_cnt;
 	int tq_prog_flags;
-	int search_direction;
-	int exit_query;
+
+
+	/* The Bars */
+
 	int visible_tabs_bar;
 	int visible_status_bar;
 	int visible_title_bar;
 
-	enum session_wtd wtd;
+	unsigned char *last_title;
 };
 
-extern struct list_head sessions;
+extern struct list_head sessions; /* struct session */
 
 
 void print_screen_status(struct session *);

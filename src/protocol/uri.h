@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.76 2004/04/02 22:35:10 jonas Exp $ */
+/* $Id: uri.h,v 1.77 2004/04/02 22:51:42 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -150,9 +150,6 @@ int end_with_known_tld(unsigned char *s, int slen);
 
 /* Returns the length of url, without post data. */
 int get_no_post_url_length(unsigned char *url);
-
-/* Returns pointer to start of post data in @url or NULL if none. */
-unsigned char *post_data_start(unsigned char *url);
 
 /* Return an allocated string containing url without postdata.
  * If @url_len is non-NULL, then *url_len is set to length of new string. */

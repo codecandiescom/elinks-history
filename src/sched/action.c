@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.78 2004/06/20 21:02:40 jonas Exp $ */
+/* $Id: action.c,v 1.79 2004/06/22 10:52:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -495,13 +495,14 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			do_frame_action(ses, set_frame, 0);
 			break;
 
-		case ACT_MAIN_MOVE_LINK_DOWN:
 		case ACT_MAIN_EDIT:
-		case ACT_MAIN_MOVE_DOCUMENT_END:
-		case ACT_MAIN_MOVE_DOCUMENT_START:
 		case ACT_MAIN_JUMP_TO_LINK:
 		case ACT_MAIN_MARK_SET:
 		case ACT_MAIN_MARK_GOTO:
+		case ACT_MAIN_MOVE_DOCUMENT_END:
+		case ACT_MAIN_MOVE_DOCUMENT_START:
+		case ACT_MAIN_MOVE_LINK_NEXT:
+		case ACT_MAIN_MOVE_LINK_PREV:
 		case ACT_MAIN_MOVE_PAGE_DOWN:
 		case ACT_MAIN_MOVE_PAGE_UP:
 		case ACT_MAIN_SCRIPTING_FUNCTION:
@@ -509,7 +510,6 @@ do_action(struct session *ses, enum main_action action, int verbose)
 		case ACT_MAIN_SCROLL_LEFT:
 		case ACT_MAIN_SCROLL_RIGHT:
 		case ACT_MAIN_SCROLL_UP:
-		case ACT_MAIN_MOVE_LINK_UP:
 		default:
 			if (verbose) {
 				INTERNAL("No action handling defined for '%s'.",

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.225 2004/06/21 11:02:53 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.226 2004/06/22 10:52:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -487,8 +487,8 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "move-cursor-up", ACT_MAIN_MOVE_CURSOR_UP, DACT(N_("Move cursor up")) },
 	{ "move-document-end", ACT_MAIN_MOVE_DOCUMENT_END, DACT(N_("Move to the end of the document")) },
 	{ "move-document-start", ACT_MAIN_MOVE_DOCUMENT_START, DACT(N_("Move to the start of the document")) },
-	{ "move-link-down", ACT_MAIN_MOVE_LINK_DOWN, DACT(N_("Move downwards one link")) },
-	{ "move-link-up", ACT_MAIN_MOVE_LINK_UP, DACT(N_("Move upwards one link")) },
+	{ "move-link-next", ACT_MAIN_MOVE_LINK_NEXT, DACT(N_("Move to the next link")) },
+	{ "move-link-prev", ACT_MAIN_MOVE_LINK_PREV, DACT(N_("Move to the previous link")) },
 	{ "move-page-down", ACT_MAIN_MOVE_PAGE_DOWN, DACT(N_("Move downwards by a page")) },
 	{ "move-page-up", ACT_MAIN_MOVE_PAGE_UP, DACT(N_("Move upwards by a page")) },
 	{ "next-frame", ACT_MAIN_NEXT_FRAME, DACT(N_("Move to the next frame")) },
@@ -906,7 +906,7 @@ add_default_keybindings(void)
 
 static struct strtonum main_action_aliases[] = {
 	{ "back", ACT_MAIN_HISTORY_MOVE_BACK, "history-move-back" },
-	{ "down", ACT_MAIN_MOVE_LINK_DOWN, "move-link-down" },
+	{ "down", ACT_MAIN_MOVE_LINK_NEXT, "move-link-next" },
 	{ "download", ACT_MAIN_LINK_DOWNLOAD, "link-download" },
 	{ "download-image", ACT_MAIN_LINK_DOWNLOAD_IMAGE, "link-download-image" },
 	{ "end", ACT_MAIN_MOVE_DOCUMENT_END, "move-document-end" },
@@ -917,7 +917,7 @@ static struct strtonum main_action_aliases[] = {
 	{ "page-up", ACT_MAIN_MOVE_PAGE_UP, "move-page-up" },
 	{ "resume-download", ACT_MAIN_LINK_DOWNLOAD_RESUME, "link-download-resume" },
 	{ "unback", ACT_MAIN_HISTORY_MOVE_FORWARD, "history-move-forward" },
-	{ "up",	ACT_MAIN_MOVE_LINK_UP, "move-link-up" },
+	{ "up",	ACT_MAIN_MOVE_LINK_PREV, "move-link-prev" },
 
 	{ NULL, 0, NULL }
 };

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.513 2004/06/21 12:55:44 miciah Exp $ */
+/* $Id: view.c,v 1.514 2004/06/22 10:52:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -850,8 +850,8 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 	switch (kbd_action(KM_MAIN, ev, NULL)) {
 		case ACT_MAIN_MOVE_PAGE_DOWN: move_page_down(ses, doc_view); break;
 		case ACT_MAIN_MOVE_PAGE_UP: move_page_up(ses, doc_view); break;
-		case ACT_MAIN_MOVE_LINK_DOWN: move_link_down(ses, doc_view); break;
-		case ACT_MAIN_MOVE_LINK_UP: move_link_up(ses, doc_view); break;
+		case ACT_MAIN_MOVE_LINK_NEXT: move_link_down(ses, doc_view); break;
+		case ACT_MAIN_MOVE_LINK_PREV: move_link_up(ses, doc_view); break;
 		case ACT_MAIN_MOVE_DOCUMENT_START: move_document_start(ses, doc_view); break;
 		case ACT_MAIN_MOVE_DOCUMENT_END: move_document_end(ses, doc_view); break;
 

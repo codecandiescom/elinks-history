@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.101 2004/06/20 21:02:39 jonas Exp $ */
+/* $Id: info.c,v 1.102 2004/06/22 10:52:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,8 +64,8 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 	int actions[MAIN_ACTIONS] = {
 		ACT_MAIN_MENU,
 		ACT_MAIN_QUIT,
-		ACT_MAIN_MOVE_LINK_DOWN,
-		ACT_MAIN_MOVE_LINK_UP,
+		ACT_MAIN_MOVE_LINK_NEXT,
+		ACT_MAIN_MOVE_LINK_PREV,
 		ACT_MAIN_SCROLL_DOWN,
 		ACT_MAIN_SCROLL_UP,
 		ACT_MAIN_SCROLL_LEFT,

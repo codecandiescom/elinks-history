@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.42 2003/09/03 16:15:30 zas Exp $ */
+/* $Id: formhist.c,v 1.43 2003/09/03 22:32:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,7 +67,7 @@ free_form_in_list(struct formhist_data *form)
 
 	foreach (sv, form->submit) {
 		svtmp = sv;
-		sv = sv->next;
+		sv = sv->prev;
 		del_from_list(svtmp);
 		free_submitted_value(svtmp);
 	}

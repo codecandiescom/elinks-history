@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.491 2004/06/19 17:58:37 jonas Exp $ */
+/* $Id: view.c,v 1.492 2004/06/19 18:26:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -713,31 +713,11 @@ rep_ev(struct session *ses, struct document_view *doc_view,
 
 /* Move cursor @y and @x steps */
 static enum frame_event_status
-move_cursor(struct session *ses, struct document_view *doc_view, int y, int x)
+move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 {
 	struct terminal *term = ses->tab->term;
 	struct box *box = &doc_view->box;
 	struct link *link;
-
-	/* If we are already routing the cursor it should be already in a sane
-	 * position. */
-	if (ses->navigate_mode == NAVIGATE_CURSOR_ROUTING) {
-		x += ses->tab->x;
-		y += ses->tab->y;
-
-	} else {
-		/* Now if block_cursor option is enabled we cannot use the
-		 * current cursor position so either use position of current
-		 * link or fall back to upper left corner. */
-		link = get_current_link(doc_view);
-		if (link) {
-			x += link->points->x - doc_view->vs->x + box->x;
-			y += link->points->y - doc_view->vs->y + box->y;
-		} else {
-			x += ses->tab->x;
-			y += ses->tab->y;
-		}
-	}
 
 	/* If cursor was moved outside the document view scroll it, but only
 	 * within the document canvas */
@@ -772,10 +752,11 @@ move_cursor(struct session *ses, struct document_view *doc_view, int y, int x)
 	ses->navigate_mode = NAVIGATE_CURSOR_ROUTING;
 
 	link = choose_mouse_link(doc_view, x - box->x, y - box->y);
-	if (link)
+	if (link) {
 		doc_view->vs->current_link = link - doc_view->document->links;
-	else
+	} else {
 		doc_view->vs->current_link = -1;
+	}
 
 	/* Set the unblockable cursor position and update the window pointer so
 	 * stuff like the link menu will be drawn relative to the cursor. */
@@ -785,10 +766,10 @@ move_cursor(struct session *ses, struct document_view *doc_view, int y, int x)
 	return FRAME_EVENT_REFRESH;
 }
 
-#define move_cursor_up(ses, view)	move_cursor(ses, view, -1, 0)
-#define move_cursor_down(ses, view)	move_cursor(ses, view, 1, 0)
-#define move_cursor_left(ses, view)	move_cursor(ses, view, 0, -1)
-#define move_cursor_right(ses, view)	move_cursor(ses, view, 0, 1)
+#define move_cursor_left(ses, view)	move_cursor(ses, view, ses->tab->x - 1, ses->tab->y)
+#define move_cursor_right(ses, view)	move_cursor(ses, view, ses->tab->x + 1, ses->tab->y)
+#define move_cursor_up(ses, view)	move_cursor(ses, view, ses->tab->x, ses->tab->y - 1)
+#define move_cursor_down(ses, view)	move_cursor(ses, view, ses->tab->x, ses->tab->y + 1)
 
 
 static int

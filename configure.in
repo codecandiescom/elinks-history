@@ -1035,7 +1035,7 @@ dnl A little fine tuning of gcc specific options (continued)
 dnl ===================================================================
 
 if test "x$ac_cv_prog_gcc" = "xyes"; then
-  if test "x$hm_enabled_debug" = "xyes"; then
+  if test "$CONFIG_DEBUG" = "yes"; then
     dnl We want to see all warnings and live with none (in debug mode).
     CFLAGS="$CFLAGS -Werror"
   fi

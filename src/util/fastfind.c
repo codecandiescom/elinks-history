@@ -14,7 +14,7 @@
  *
  *  (c) 2003 Laurent MONIN (aka Zas)
  * Feel free to do whatever you want with that code. */
-/* $Id: fastfind.c,v 1.4 2003/06/13 18:38:23 jonas Exp $ */
+/* $Id: fastfind.c,v 1.5 2003/06/13 21:47:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,7 +151,7 @@ alloc_line(struct fastfind_info *info)
 	info->memory_usage += sizeof(struct ff_elt *);
 #endif
 
-	line = mem_calloc(sizeof(struct ff_elt), info->uniq_chars_count);
+	line = mem_calloc(info->uniq_chars_count, sizeof(struct ff_elt));
 	if (!line) return 0;
 #ifdef FASTFIND_DEBUG
 	info->memory_usage += sizeof(struct ff_elt) * info->uniq_chars_count;

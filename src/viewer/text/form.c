@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.59 2003/11/18 14:32:51 kuser Exp $ */
+/* $Id: form.c,v 1.60 2003/11/18 15:09:13 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -821,16 +821,10 @@ field_op(struct session *ses, struct document_view *doc_view, struct link *l,
 	if (ev->ev == EV_KBD) {
 		switch (kbd_action(KM_EDIT, ev, NULL)) {
 			case ACT_LEFT:
-				fs->state = fs->state ? fs->state - 1 : 0;
+				fs->state = int_max(fs->state - 1, 0);
 				break;
 			case ACT_RIGHT:
-				{
-					int fsv_len = strlen(fs->value);
-
-					fs->state = fs->state < fsv_len
-						    ? fs->state + 1
-						      : fsv_len;
-				}
+				fs->state = int_min(fs->state + 1, strlen(fs->value));
 				break;
 			case ACT_HOME:
 				if (frm->type == FC_TEXTAREA) {

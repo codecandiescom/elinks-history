@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.83 2003/11/08 02:37:17 pasky Exp $ */
+/* $Id: cache.c,v 1.84 2003/11/08 12:02:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@ do { \
 	struct fragment *frag; \
         int count = 0;	\
  \
-	debug("url=%s, comment=%s cache_size=%li", entry->url, comment, cache_size); \
+	debug("%s: url=%s, cache_size=%li", comment, entry->url, cache_size); \
 	foreach (frag, entry->frag) \
 		dump_frag(frag, ++count); \
 } while (0)
@@ -144,7 +144,12 @@ static inline void
 enlarge_entry(struct cache_entry *ce, int size)
 {
 	ce->data_size += size;
+	assertm(ce->data_size >= 0, "cache entry data_size underflow: %ld", ce->data_size);
+	if_assert_failed { ce->data_size = 0; }
+
 	cache_size += size;
+	assertm(cache_size >= 0, "cache_size underflow: %ld", cache_size);
+	if_assert_failed { cache_size = 0; }
 }
 
 #define CACHE_PAD(x) (((x) | 0x3fff) + 1)
@@ -421,15 +426,12 @@ free_entry_to(struct cache_entry *ce, int off)
 void
 delete_entry_content(struct cache_entry *ce)
 {
-	cache_size -= ce->data_size;
-	assertm(cache_size >= 0, "cache_size underflow: %ld", cache_size);
-	if_assert_failed { cache_size = 0; }
+	enlarge_entry(ce, -ce->data_size);
 
 	free_list(ce->frag);
 	ce->id_tag = id_tag_counter++;
 	ce->length = 0;
 	ce->incomplete = 1;
-	ce->data_size = 0;
 
 	if (ce->last_modified) {
 		mem_free(ce->last_modified);

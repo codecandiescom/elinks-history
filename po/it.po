@@ -1082,7 +1082,7 @@ msgstr "Apre gestore cache"
 
 #: src/config/kbdbind.c:404
 msgid "Free unused cache entries"
-msgstr ""
+msgstr "Libera elementi in cache non usati"
 
 #: src/config/kbdbind.c:405
 msgid "Cancel current state"
@@ -1410,7 +1410,7 @@ msgstr "Chiudi scheda"
 
 #: src/config/kbdbind.c:490
 msgid "Close all tabs but the current one"
-msgstr "Chiudi tutti tranne quello corrente"
+msgstr "Chiudi tutte tranne quella corrente"
 
 #: src/config/kbdbind.c:491
 msgid "Open the tab menu"
@@ -3779,12 +3779,16 @@ msgstr ""
 #: src/config/options.inc:1244
 msgid "Auto save and restore session folder name"
 msgstr ""
+"Nome della cartella per il salvataggio e ripristino automatico della sessione"
 
 #: src/config/options.inc:1246
 msgid ""
 "Name of the bookmarks folder used for auto saving and restoring session.\n"
 "This only makes sense with bookmark support."
 msgstr ""
+"Nome della cartella dei segnalibri usata per il salvataggio e ripristino\n"
+"automatico della sessione.\n"
+"Questo ha senso solo con il supporto ai segnalibri abilitato."
 
 #: src/config/options.inc:1249
 msgid "Homepage URI"
@@ -3797,6 +3801,9 @@ msgid ""
 "Set to \"\" if the environment variable WWW_HOME should be used\n"
 "used as homepage URI instead."
 msgstr ""
+"L'URI da caricare all'avvio quando non si sono specificati URI\n"
+"Sulla riga di comando o quando richiesto dall'azione goto-url-home.\n"
+"Impostare a \"\" se si vuole usare la variabile d'ambiente WWW_HOME invece."
 
 #: src/config/options.inc:1257
 msgid "Set window title"
@@ -4231,7 +4238,7 @@ msgstr "Chiudi scheda"
 
 #: src/dialogs/menu.c:208
 msgid "C~lose all tabs but the current"
-msgstr "Chiudi ~tutti tranne questo"
+msgstr "~Chiudi tutte tranne questa"
 
 #: src/dialogs/menu.c:212
 msgid "B~ookmark all tabs"
@@ -4585,16 +4592,18 @@ msgid "elapsed time"
 msgstr "tempo trascorso"
 
 #: src/dialogs/status.c:114
+#, fuzzy
 msgid "ETT"
-msgstr ""
+msgstr "ETT"
 
 #: src/dialogs/status.c:122
 msgid "estimated time"
 msgstr "tempo stimato"
 
 #: src/dialogs/status.c:123
+#, fuzzy
 msgid "ETA"
-msgstr ""
+msgstr "ETA"
 
 #: src/dialogs/status.c:210 src/viewer/text/search.c:942
 msgid "Typeahead"

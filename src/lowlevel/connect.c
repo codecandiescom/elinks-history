@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.87 2004/08/01 09:01:28 jonas Exp $ */
+/* $Id: connect.c,v 1.88 2004/08/01 09:07:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,15 +69,15 @@ void dns_found(/* struct connection */ void *, int);
 static void connected(/* struct connection */ void *);
 
 void
-close_socket(struct connection *conn, int *socket)
+close_socket(struct connection *conn, struct connection_socket *socket)
 {
-	if (*socket == -1) return;
+	if (socket->fd == -1) return;
 #ifdef CONFIG_SSL
 	if (conn && conn->ssl) ssl_close(conn);
 #endif
-	close(*socket);
-	set_handlers(*socket, NULL, NULL, NULL, NULL);
-	*socket = -1;
+	close(socket->fd);
+	set_handlers(socket->fd, NULL, NULL, NULL, NULL);
+	socket->fd = -1;
 }
 
 void
@@ -86,7 +86,7 @@ dns_exception(void *data)
 	struct connection *conn = data;
 
 	set_connection_state(conn, S_EXCEPT);
-	close_socket(NULL, &conn->conn_info->socket->fd);
+	close_socket(NULL, conn->conn_info->socket);
 	dns_found(conn, 0);
 }
 
@@ -475,7 +475,7 @@ connected(void *data)
 		set_connection_state(conn, -err);
 
 		/* There are maybe still some more candidates. */
-		close_socket(NULL, &socket->fd);
+		close_socket(NULL, socket);
 		dns_found(conn, 0);
 		return;
 	}

@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.54 2004/08/01 08:45:55 jonas Exp $ */
+/* $Id: smb.c,v 1.55 2004/08/01 09:07:27 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -480,8 +480,8 @@ ignored:
 	}
 
 bye:
-	close_socket(conn, &conn->socket.fd);
-	close_socket(conn, &conn->data_socket.fd);
+	close_socket(conn, &conn->socket);
+	close_socket(conn, &conn->data_socket);
 	abort_conn_with_state(conn, S_OK);
 }
 

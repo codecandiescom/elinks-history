@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.21 2004/08/01 09:01:28 jonas Exp $ */
+/* $Id: connect.h,v 1.22 2004/08/01 09:07:27 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -34,7 +34,7 @@ struct read_buffer {
 	unsigned char data[1]; /* must be at end of struct */
 };
 
-void close_socket(struct connection *, int *);
+void close_socket(struct connection *conn, struct connection_socket *socket);
 void make_connection(struct connection *, int, struct connection_socket *, void (*)(struct connection *));
 void dns_found(/* struct connection */ void *, int);
 int get_pasv_socket(struct connection *, int, unsigned char *);

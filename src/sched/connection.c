@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.190 2004/08/01 08:45:55 jonas Exp $ */
+/* $Id: connection.c,v 1.191 2004/08/01 09:07:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -353,7 +353,7 @@ free_connection_data(struct connection *conn)
 		set_handlers(conn->socket.fd, NULL, NULL, NULL, NULL);
 	if (conn->data_socket.fd != -1)
 		set_handlers(conn->data_socket.fd, NULL, NULL, NULL, NULL);
-	close_socket(NULL, &conn->data_socket.fd);
+	close_socket(NULL, &conn->data_socket);
 
 	/* XXX: See also protocol/http/http.c:uncompress_shutdown(). */
 	if (conn->stream) {
@@ -596,7 +596,7 @@ interrupt_connection(struct connection *conn)
 	if (conn->ssl) done_ssl_connection(conn);
 #endif
 
-	close_socket(conn, &conn->socket.fd);
+	close_socket(conn, &conn->socket);
 	free_connection_data(conn);
 }
 

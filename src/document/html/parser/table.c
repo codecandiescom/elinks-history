@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.28 2004/10/22 10:16:41 zas Exp $ */
+/* $Id: table.c,v 1.29 2004/10/22 10:36:18 zas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -136,6 +136,34 @@ get_column_width(unsigned char *attr, int *width, int sh)
 	mem_free(al);
 }
 
+static void
+set_table_frame(struct table *table, unsigned char *attr)
+{
+	unsigned char *al;
+
+	if (!table->border) {
+		table->frame = TABLE_FRAME_VOID;
+		return;
+	}
+
+	table->frame = TABLE_FRAME_BOX;
+
+	al = get_attr_val(attr, "frame");
+	if (!al) return;
+
+	if (!strcasecmp(al, "void")) table->frame = TABLE_FRAME_VOID;
+	else if (!strcasecmp(al, "above")) table->frame = TABLE_FRAME_ABOVE;
+	else if (!strcasecmp(al, "below")) table->frame = TABLE_FRAME_BELOW;
+	else if (!strcasecmp(al, "hsides")) table->frame = TABLE_FRAME_HSIDES;
+	else if (!strcasecmp(al, "vsides")) table->frame = TABLE_FRAME_VSIDES;
+	else if (!strcasecmp(al, "lhs")) table->frame = TABLE_FRAME_LHS;
+	else if (!strcasecmp(al, "rhs")) table->frame = TABLE_FRAME_RHS;
+	/* Following tests are useless since TABLE_FRAME_BOX is the default.
+	 * else if (!strcasecmp(al, "box")) table->frame = TABLE_FRAME_BOX;
+	 * else if (!strcasecmp(al, "border")) table->frame = TABLE_FRAME_BOX;
+	 */
+	mem_free(al);
+}
 
 static void
 parse_table_attributes(struct table *table, unsigned char *attr, int real)
@@ -175,24 +203,9 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real)
 
 		table->cellspacing = get_num(attr, "cellspacing");
 		int_bounds(&table->cellspacing, 1, 2);
-
-		table->frame = TABLE_FRAME_BOX;
-		al = get_attr_val(attr, "frame");
-		if (al) {
-			if (!strcasecmp(al, "void")) table->frame = TABLE_FRAME_VOID;
-			else if (!strcasecmp(al, "above")) table->frame = TABLE_FRAME_ABOVE;
-			else if (!strcasecmp(al, "below")) table->frame = TABLE_FRAME_BELOW;
-			else if (!strcasecmp(al, "hsides")) table->frame = TABLE_FRAME_HSIDES;
-			else if (!strcasecmp(al, "vsides")) table->frame = TABLE_FRAME_VSIDES;
-			else if (!strcasecmp(al, "lhs")) table->frame = TABLE_FRAME_LHS;
-			else if (!strcasecmp(al, "rhs")) table->frame = TABLE_FRAME_RHS;
-			else if (!strcasecmp(al, "box")) table->frame = TABLE_FRAME_BOX;
-			else if (!strcasecmp(al, "border")) table->frame = TABLE_FRAME_BOX;
-			mem_free(al);
-		}
-	} else {
-		table->frame = TABLE_FRAME_VOID;
 	}
+
+	set_table_frame(table, attr);
 
 	table->cellpadding = get_num(attr, "cellpadding");
 	if (table->cellpadding == -1) {

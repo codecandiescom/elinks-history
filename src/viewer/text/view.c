@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.101 2003/06/11 15:26:39 pasky Exp $ */
+/* $Id: view.c,v 1.102 2003/06/11 15:29:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3237,7 +3237,6 @@ no_mem:
 		}
 		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = stracpy(fd->f_data->url);
-		if (!ses->ref_url) goto no_mem;
 		query_file(ses, ses->dn_url, (resume ? resume_download : start_download), NULL, 1);
 	}
 }
@@ -3274,11 +3273,6 @@ send_download_do(struct terminal *term, void *xxx, struct session *ses,
 	if (ses->dn_url) {
 		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = stracpy(fd->f_data->url);
-		if (!ses->ref_url) {
-			mem_free(ses->dn_url);
-			ses->dn_url = NULL;
-			return;
-		}
 		query_file(ses, ses->dn_url, start_download, NULL, 1);
 	}
 }
@@ -3389,11 +3383,12 @@ save_url(struct session *ses, unsigned char *url)
 		print_error_dialog(ses, &stat);
 		return;
 	}
+
 	if (ses->dn_url) mem_free(ses->dn_url);
-	if (ses->ref_url) mem_free(ses->ref_url);
 	ses->dn_url = u;
+
+	if (ses->ref_url) mem_free(ses->ref_url);
 	ses->ref_url = stracpy(fd->f_data->url);
-	if (!ses->ref_url) return;
 	query_file(ses, ses->dn_url, start_download, NULL, 1);
 }
 

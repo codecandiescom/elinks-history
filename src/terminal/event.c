@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.22 2003/12/21 12:40:41 pasky Exp $ */
+/* $Id: event.c,v 1.23 2003/12/21 14:13:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,7 +88,7 @@ in_term(struct terminal *term)
 	r = safe_read(term->fdin, iq + term->qlen, term->qfreespace);
 	if (r <= 0) {
 		if (r == -1 && errno != ECONNRESET)
-			error(_("Could not read event: %d (%s)", term),
+			ERROR(_("Could not read event: %d (%s)", term),
 			      errno, (unsigned char *) strerror(errno));
 
 		destroy_terminal(term);
@@ -108,7 +108,7 @@ test_queue:
 	    && ev->ev != EV_KBD
 	    && ev->ev != EV_MOUSE
 	    && ev->ev != EV_ABORT) {
-		error(_("Bad event %d", term), ev->ev);
+		ERROR(_("Bad event %d", term), ev->ev);
 		goto mm;
 	}
 
@@ -145,7 +145,7 @@ test_queue:
 			}
 
 			if (badchar) {
-				error(_("Warning: terminal name contains illicit chars.", term));
+				ERROR(_("Warning: terminal name contains illicit chars.", term));
 				strcat(name, "_template_");
 			} else {
 				strcat(name, term->term);
@@ -168,7 +168,7 @@ test_queue:
 		struct window *win;
 
 		if (ev->x < 0 || ev->y < 0) {
-			error(_("Bad terminal size: %d, %d", term),
+			ERROR(_("Bad terminal size: %d, %d", term),
 			      (int) ev->x, (int) ev->y);
 			goto mm;
 		}

@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.36 2003/12/21 12:51:56 pasky Exp $ */
+/* $Id: error.h,v 1.37 2003/12/21 14:13:21 zas Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -34,8 +34,8 @@ void elinks_wdebug(unsigned char *fmt, ...);
 /* @error(format_string) is used to report non-fatal errors during the ELinks
  * run. It tries to (not that agressively) draw user's attention to the error,
  * but never dumps core or so. */
-#undef error
-#define error errfile = __FILE__, errline = __LINE__, elinks_error
+#undef ERROR
+#define ERROR errfile = __FILE__, errline = __LINE__, elinks_error
 void elinks_error(unsigned char *fmt, ...);
 
 /* @internal(format_string) is used to report fatal errors during the ELinks

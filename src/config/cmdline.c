@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.20 2003/12/21 12:25:36 pasky Exp $ */
+/* $Id: cmdline.c,v 1.21 2003/12/21 14:13:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,7 +67,7 @@ _parse_options(int argc, unsigned char *argv[], struct option *opt)
 
 				if (err) {
 					if (err[0])
-						error(gettext("Cannot parse option %s: %s"), argv[-1], err);
+						ERROR(gettext("Cannot parse option %s: %s"), argv[-1], err);
 
 					return NULL;
 				}
@@ -80,7 +80,7 @@ _parse_options(int argc, unsigned char *argv[], struct option *opt)
 
 		} else {
 unknown_option:
-			error(gettext("Unknown option %s"), argv[-1]);
+			ERROR(gettext("Unknown option %s"), argv[-1]);
 			return NULL;
 		}
 	}
@@ -134,7 +134,7 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 #ifdef HAVE_HERROR
 		herror(gettext("error"));
 #else
-		error(gettext("Host not found"));
+		ERROR(gettext("Host not found"));
 #endif
 		return "";
 	}
@@ -148,7 +148,7 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 				(addr.sin6_family == AF_INET6 ? (void *) &addr.sin6_addr
 							      : (void *) &((struct sockaddr_in *) &addr)->sin_addr),
 				p, INET6_ADDRSTRLEN))
-			error(gettext("Resolver error"));
+			ERROR(gettext("Resolver error"));
 		else
 			printf("%s\n", p);
 #else

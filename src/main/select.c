@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.37 2003/12/01 14:15:32 pasky Exp $ */
+/* $Id: select.c,v 1.38 2003/12/21 14:13:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -336,7 +336,7 @@ select_loop(void (*init)(void))
 			critical_section = 0;
 			uninstall_alarm();
 			if (errno != EINTR) {
-				error(gettext("select() failed: %d (%s)"),
+				ERROR(gettext("select() failed: %d (%s)"),
 				      errno, (unsigned char *) strerror(errno));
 				if (++select_errors > 10) /* Infinite loop prevention. */
 					internal(gettext("%d select() failures."),

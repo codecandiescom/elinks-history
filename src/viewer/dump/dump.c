@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.70 2003/12/21 11:25:30 pasky Exp $ */
+/* $Id: dump.c,v 1.71 2003/12/21 14:13:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,10 +76,10 @@ nextfrag:
 			detach_connection(status, dump_pos);
 
 			if (w < 0)
-				error(gettext("Can't write to stdout: %s"),
+				ERROR(gettext("Can't write to stdout: %s"),
 				      (unsigned char *) strerror(errno));
 			else
-				error(gettext("Can't write to stdout."));
+				ERROR(gettext("Can't write to stdout."));
 
 			retval = RET_ERROR;
 			return 1;
@@ -182,7 +182,7 @@ dump_end(struct download *status, void *p)
 	}
 
 	if (status->state != S_OK) {
-		error(get_err_msg(status->state, NULL));
+		ERROR(get_err_msg(status->state, NULL));
 		retval = RET_ERROR;
 		goto terminate;
 	}
@@ -198,7 +198,7 @@ dump_start(unsigned char *url)
 	unsigned char *wd;
 
 	if (!*url) {
-		error(gettext("URL expected after %s."),
+		ERROR(gettext("URL expected after %s."),
 			get_opt_int_tree(cmdline_options, "source")
 			? "-source" : "-dump");
 		goto terminate;

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.40 2003/12/09 22:59:28 jonas Exp $ */
+/* $Id: kbd.c,v 1.41 2003/12/21 14:13:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -277,7 +277,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	int env;
 
 	if (get_terminal_size(ctl_in, &x, &y)) {
-		error(gettext("Could not get terminal size"));
+		ERROR(gettext("Could not get terminal size"));
 		return;
 	}
 
@@ -941,7 +941,7 @@ in_kbd(struct itrm *itrm)
 
 	itrm->qlen += r;
 	if (itrm->qlen > IN_BUF_SIZE) {
-		error(gettext("Too many bytes read from the itrm!"));
+		ERROR(gettext("Too many bytes read from the itrm!"));
 		itrm->qlen = IN_BUF_SIZE;
 	}
 

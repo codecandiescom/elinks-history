@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.13 2003/09/13 00:51:56 zas Exp $ */
+/* $Id: memory.c,v 1.14 2003/12/21 14:13:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,7 +23,7 @@ patience(unsigned char *of)
 {
 	++alloc_try;
 	if (alloc_try < ALLOC_MAXTRIES) {
-		error("Out of memory (%s returned NULL): retry #%d,"
+		ERROR("Out of memory (%s returned NULL): retry #%d,"
 			" I still exercise my patience and retry tirelessly.",
 			of, alloc_try);
 		sleep(ALLOC_DELAY);
@@ -35,7 +35,7 @@ patience(unsigned char *of)
 		" I give up. See ya on the other side.",
 		of, alloc_try);
 #else
-	error("Out of memory (%s returned NULL) after %d tries,"
+	ERROR("Out of memory (%s returned NULL) after %d tries,"
 		" I give up and try to continue. Pray for me, please.",
 		of, alloc_try);
 #endif

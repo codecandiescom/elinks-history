@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.138 2003/12/20 21:57:21 pasky Exp $ */
+/* $Id: core.c,v 1.139 2003/12/21 14:13:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -592,7 +592,7 @@ alert_lua_error(unsigned char *msg)
 		return;
 	}
 
-	error("Lua: %s", msg);
+	ERROR("Lua: %s", msg);
 	sleep(3);
 }
 

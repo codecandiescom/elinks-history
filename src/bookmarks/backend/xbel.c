@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.28 2003/12/16 19:54:56 fabio Exp $ */
+/* $Id: xbel.c,v 1.29 2003/12/21 14:13:19 zas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -97,7 +97,7 @@ read_bookmarks_xbel(FILE *f)
 
 	p = XML_ParserCreate(NULL);
 	if (!p) {
-		error(gettext("read_bookmarks_xbel(): "
+		ERROR(gettext("read_bookmarks_xbel(): "
 			      "Error in XML_ParserCreate()"));
 		return;
 	}
@@ -109,7 +109,7 @@ read_bookmarks_xbel(FILE *f)
 		int len = fread(in_buffer, 1, BUFSIZ, f);
 
 		if (ferror(f)) {
-			error(gettext("read_bookmarks_xbel(): "
+			ERROR(gettext("read_bookmarks_xbel(): "
 				      "Error reading %s"),
 			      filename_bookmarks_xbel(0));
 			err = 1;
@@ -118,7 +118,7 @@ read_bookmarks_xbel(FILE *f)
 			done = feof(f);
 
 			if (!err && !XML_Parse(p, in_buffer, len, done)) {
-				error(gettext("read_bookmarks_xbel(): "
+				ERROR(gettext("read_bookmarks_xbel(): "
 					      "Parse error in %s at line %d "
 					      "column %d:\n%s"),
 				      filename_bookmarks_xbel(0),

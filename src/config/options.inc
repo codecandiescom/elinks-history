@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.107 2004/05/22 13:18:33 jonas Exp $ */
+/* $Id: options.inc,v 1.108 2004/05/25 16:29:00 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -879,7 +879,7 @@ struct option_info config_options_info[] = {
 		"so that inversed text is displayed correctly.")),
 
 	INIT_OPT_INT("terminal._template_", N_("Color mode"),
-		"colors", 0, 0, 2, 0,
+		"colors", 0, 0, COLOR_MODES - 1, 0,
 		N_("The color mode controls what colors are used and how they are\n"
 		"output to the terminal. The color modes are:\n"
 		"0 is mono mode, only 2 colors are used\n"

@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.71 2004/01/01 15:50:29 jonas Exp $ */
+/* $Id: color.c,v 1.72 2004/05/25 16:29:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,16 +116,12 @@ static struct color_mode_info color_mode_256 = {
 #endif
 
 static struct color_mode_info *color_modes[] = {
+	/* COLOR_MODE_DUMP */	NULL,
 	/* COLOR_MODE_MONO */	&color_mode_16,
 	/* COLOR_MODE_16 */	&color_mode_16,
 #ifdef CONFIG_256_COLORS
 	/* COLOR_MODE_256 */	&color_mode_256,
-#else
-	/* When 256 color mode is not compiled in the user can still have
-	 * terminal._template_.colors = 2. */
-	/* COLOR_MODE_16 */	&color_mode_16,
 #endif
-	/* COLOR_MODE_DUMP */	NULL,
 };
 
 /* Colors values used in the foreground color table:
@@ -242,7 +238,7 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 	enum palette_range palette_range = PALETTE_FULL;
 	unsigned char fg, bg;
 
-	assert(color_mode >= 0 && color_mode < COLOR_MODES);
+	assert(color_mode >= COLOR_MODE_DUMP && color_mode < COLOR_MODES);
 
 	/* Options for the various color modes. */
 	switch (color_mode) {
@@ -269,12 +265,12 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 		if (flags & COLOR_DECREASE_LIGHTNESS)
 			palette_range = PALETTE_HALF;
 		break;
-
+#ifdef CONFIG_256_COLORS
 	case COLOR_MODE_256:
 		/* TODO: Handle decrease lightness by converting to
 		 * hue-ligthness-saturation color model */
 		break;
-
+#endif
 	case COLOR_MODE_DUMP:
 		return;
 
@@ -295,8 +291,8 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 		INTERNAL("Bad color mode, it should _never_ occur here.");
 		break;
 
-	case COLOR_MODE_256:
 #ifdef CONFIG_256_COLORS
+	case COLOR_MODE_256:
 		/* Adjusts the foreground color to be more visible. */
 		/* TODO: Be smarter! Here we just choose either black or white
 		 * ANSI color to make sure the color is visible. Pasky

@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.30 2004/01/01 15:50:29 jonas Exp $ */
+/* $Id: color.h,v 1.31 2004/05/25 16:29:00 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -42,10 +42,12 @@ enum color_flags {
 };
 
 enum color_mode {
-	COLOR_MODE_MONO = 0,
+	COLOR_MODE_DUMP = -1,
+	COLOR_MODE_MONO,
 	COLOR_MODE_16,
+#ifdef CONFIG_256_COLORS
 	COLOR_MODE_256,
-	COLOR_MODE_DUMP,
+#endif
 
 	COLOR_MODES, /* XXX: Keep last */
 };

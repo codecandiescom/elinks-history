@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.41 2004/07/23 01:56:45 pasky Exp $ */
+/* $Id: forms.c,v 1.42 2004/07/24 06:18:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,11 +101,9 @@ get_html_form(unsigned char *a, struct form *form)
 		/* No action URI should contain post data */
 		assert(!form->action || !strchr(form->action, POST_CHAR));
 
-		/* GET method URIs should not have '?' unless it is a file://
-		 * URI where the '?' is part of the filename. */
+		/* GET method URIs should not have '?'. */
 		assert(!form->action
 			|| form->method != FORM_METHOD_GET
-			|| html_context.base_href->protocol == PROTOCOL_FILE
 			|| !strchr(form->action, '?'));
 	}
 

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.43 2004/06/20 21:19:29 jonas Exp $ */
+/* $Id: parse.c,v 1.44 2004/06/21 13:26:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -261,13 +261,14 @@ get_num(unsigned char *a, unsigned char *name)
 int
 get_width(unsigned char *a, unsigned char *name, int limit_it)
 {
-	unsigned char *str = get_attr_val(a, name);
+	unsigned char *value = get_attr_val(a, name);
+	unsigned char *str = value;
 	unsigned char *end;
 	int percentage = 0;
 	int len;
 	int width;
 
-	if (!str) return -1;
+	if (!value) return -1;
 
 	/* Skip spaces at start of string if any. */
 	while (isspace(*str)) str++;
@@ -277,14 +278,14 @@ get_width(unsigned char *a, unsigned char *name, int limit_it)
 
 	/* Go back, and skip spaces after width if any. */
 	while (len && isspace(str[len - 1])) len--;
-	if (!len) { mem_free(str); return -1; } /* Nothing to parse. */
+	if (!len) { mem_free(value); return -1; } /* Nothing to parse. */
 
 	/* Is this a percentage ? */
 	if (str[len - 1] == '%') len--, percentage = 1;
 
 	/* Skip spaces between width number and percentage if any. */
 	while (len && isspace(str[len - 1])) len--;
-	if (!len) { mem_free(str); return -1; }; /* Nothing to parse. */
+	if (!len) { mem_free(value); return -1; }; /* Nothing to parse. */
 
 	/* Shorten the string a bit, so strtoul() will work on useful
 	 * part of it. */
@@ -293,7 +294,7 @@ get_width(unsigned char *a, unsigned char *name, int limit_it)
 	/* Convert to number if possible. */
 	errno = 0;
 	width = strtoul((char *)str, (char **)&end, 10);
-	mem_free(str);
+	mem_free(value);
 	if (errno || *end) return -1; /* Not a valid number. */
 
 #define WIDTH_PIXELS2CHARS(width) ((width) + (HTML_CHAR_WIDTH - 1) / 2) / HTML_CHAR_WIDTH;

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.66 2003/05/02 14:55:06 zas Exp $ */
+/* $Id: renderer.c,v 1.67 2003/05/02 15:41:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1867,6 +1867,9 @@ html_interpret(struct session *ses)
 	struct f_data_c *fd;
 	struct f_data_c *cf = NULL;
 	struct view_state *l = NULL;
+	int show_title_bar = get_opt_int("ui.show_title_bar");
+	int show_status_bar = get_opt_int("ui.show_status_bar");
+        int show_tab_bar = get_opt_int("ui.show_tabs_bar");
 
 	if (!ses->screen) {
 		ses->screen = mem_calloc(1, sizeof(struct f_data_c));
@@ -1879,8 +1882,10 @@ html_interpret(struct session *ses)
 	o.xp = 0;
 	o.yp = 1;
 	o.xw = ses->term->x;
-        o.yw = ses->term->y - 2;
-        o.yw--; /* One more line for tabbar */
+	o.yw = ses->term->y;
+	if (show_title_bar) o.yw--;
+	if (show_status_bar) o.yw--;
+	if (show_tab_bar) o.yw--; /* One more line for tabbar */
 	o.col = get_opt_bool_tree(ses->term->spec, "colors");
 	o.cp = get_opt_int_tree(ses->term->spec, "charset");
 

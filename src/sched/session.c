@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.7 2003/05/02 14:55:06 zas Exp $ */
+/* $Id: session.c,v 1.8 2003/05/02 15:41:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,9 +217,7 @@ print_screen_status(struct session *ses)
 	unsigned char *msg = NULL;
 	int show_title_bar = get_opt_int("ui.show_title_bar");
 	int show_status_bar = get_opt_int("ui.show_status_bar");
-        int show_tab_bar = 1;
-
-	/* TODO: Make this optionally switchable off. */
+        int show_tab_bar = get_opt_int("ui.show_tabs_bar");
 
 	if (show_title_bar)
 		fill_area(term, 0, 0, term->x, 1, get_bfu_color(term, "title.title-bar"));
@@ -268,42 +266,45 @@ print_screen_status(struct session *ses)
 			}
 		}
 
-                if (show_tab_bar) {
+                if (show_tab_bar > 0) {
                         int number = number_of_tabs(term);
-                        int tab_width = term->x/number;
-                        int tab;
-                        int msglen;
-			int mainmenu_selected_color = get_bfu_color(term, "mainmenu.selected");
-			int mainmenu_normal_color = get_bfu_color(term, "mainmenu.normal");
 
-                        for (tab = 0; tab < number; tab++){
-                                struct window *win = get_tab_by_number(term,tab);
+			if (!(show_tab_bar == 1 && number < 2)) {
+				int tab_width = term->x / number;
+				int tab;
+				int msglen;
+				int mainmenu_selected_color = get_bfu_color(term, "mainmenu.selected");
+				int mainmenu_normal_color = get_bfu_color(term, "mainmenu.normal");
 
-                                if(win->data &&
-                                   current_frame(win->data) &&
-                                   current_frame(win->data)->f_data->title &&
-                                   strlen(current_frame(win->data)->f_data->title))
-                                        msg = current_frame(win->data)->f_data->title;
-                                else
-                                        msg = N_("Untitled");
+				for (tab = 0; tab < number; tab++){
+					struct window *win = get_tab_by_number(term,tab);
 
-                                msglen = strlen(msg);
-                                if(msglen > tab_width)
-                                        msglen = tab_width - 1;
+					if (win->data &&
+					    current_frame(win->data) &&
+					    current_frame(win->data)->f_data->title &&
+					    strlen(current_frame(win->data)->f_data->title))
+						msg = current_frame(win->data)->f_data->title;
+					else
+						msg = N_("Untitled");
 
-                                fill_area(term,
-                                          tab*tab_width, term->y - 2,
-                                          tab_width, 1,
-                                          (tab == term->current_tab)
-					  ? mainmenu_selected_color
-					  : mainmenu_normal_color);
-                                print_text(term,
-                                           tab * tab_width, term->y - 2,
-                                           msglen, msg,
-                                           (tab == term->current_tab)
-					   ? mainmenu_selected_color
-					   : mainmenu_normal_color);
-                        }
+					msglen = strlen(msg);
+					if(msglen > tab_width)
+						msglen = tab_width - 1;
+
+					fill_area(term,
+						  tab * tab_width, term->y - 2,
+						  tab_width, 1,
+						  (tab == term->current_tab)
+						  ? mainmenu_selected_color
+						  : mainmenu_normal_color);
+					print_text(term,
+						   tab * tab_width, term->y - 2,
+						   msglen, msg,
+						   (tab == term->current_tab)
+						   ? mainmenu_selected_color
+						   : mainmenu_normal_color);
+				}
+			}
                 }
 
 		if (show_title_bar) {

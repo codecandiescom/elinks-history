@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.389 2003/11/21 23:15:37 jonas Exp $ */
+/* $Id: renderer.c,v 1.390 2003/11/26 21:58:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1162,7 +1162,7 @@ html_special(struct part *part, enum html_special_type c, ...)
 			if (!fsp->parent && document->frame_desc) return NULL;
 
 			frameset_desc = create_frameset(fsp);
-			if (!document->frame_desc)
+			if (!fsp->parent && !document->frame_desc)
 				document->frame_desc = frameset_desc;
 			return frameset_desc;
 		}

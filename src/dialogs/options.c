@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.104 2003/10/31 21:33:41 pasky Exp $ */
+/* $Id: options.c,v 1.105 2003/10/31 21:46:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,11 +260,6 @@ menu_language_list(struct terminal *term, void *xxx, struct session *ses)
 
 /* FIXME: This doesn't in fact belong here at all. --pasky */
 
-static unsigned char *resize_texts[] = {
-	N_("Columns"),
-	N_("Rows"),
-};
-
 static unsigned char x_str[4];
 static unsigned char y_str[4];
 
@@ -296,7 +291,6 @@ dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 
 	dlg->title = _("Resize terminal", term);
 	dlg->fn = group_fn;
-	dlg->udata = resize_texts;
 	dlg->refresh = (void (*)(void *)) do_resize_terminal;
 	dlg->refresh_data = term;
 

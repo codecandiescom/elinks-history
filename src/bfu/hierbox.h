@@ -1,9 +1,10 @@
-/* $Id: hierbox.h,v 1.8 2003/11/08 23:46:53 jonas Exp $ */
+/* $Id: hierbox.h,v 1.9 2003/11/09 00:19:41 jonas Exp $ */
 
-#ifndef EL__DIALOGS_HIERBOX_H
-#define EL__DIALOGS_HIERBOX_H
+#ifndef EL__BFU_HIERBOX_H
+#define EL__BFU_HIERBOX_H
 
 #include "bfu/dialog.h"
+#include "bfu/listbox.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
 

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.112 2003/11/09 00:11:10 jonas Exp $ */
+/* $Id: dialogs.c,v 1.113 2003/11/09 00:19:41 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -15,6 +15,7 @@
 
 #include "bfu/button.h"
 #include "bfu/dialog.h"
+#include "bfu/hierbox.h"
 #include "bfu/inpfield.h"
 #include "bfu/listbox.h"
 #include "bfu/msgbox.h"
@@ -22,7 +23,6 @@
 #include "bookmarks/bookmarks.h"
 #include "bookmarks/dialogs.h"
 #include "dialogs/edit.h"
-#include "dialogs/hierbox.h"
 #include "intl/gettext/libintl.h"
 #include "sched/session.h"
 #include "terminal/kbd.h"

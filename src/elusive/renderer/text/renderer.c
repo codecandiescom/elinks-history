@@ -1,5 +1,5 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.8 2003/01/17 23:06:15 pasky Exp $ */
+/* $Id: renderer.c,v 1.9 2003/01/17 23:16:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,8 +145,8 @@ text_init(struct renderer_state *state)
 	state->layouter_state = elusive_layouter_init(state->layouter,
 							state->parser);
 
-	if (!state->output) return;
 	state->output = mem_calloc(1, sizeof(struct f_data_c));
+	if (!state->output) return;
 	console_frame_data = state->output;
 
 	console_frame_data->xw = document_options->xw;

@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.12 2002/12/21 02:56:33 pasky Exp $ */
+/* $Id: parser.h,v 1.13 2002/12/22 00:04:59 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -169,8 +169,6 @@ struct html_element {
 
 extern struct list_head html_stack;
 extern int line_breax;
-
-extern int body_bgcolor; /* XXX! */
 
 extern unsigned char *startf;
 extern unsigned char *eofff;

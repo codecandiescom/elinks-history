@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.12 2002/11/29 17:52:21 zas Exp $ */
+/* $Id: renderer.h,v 1.13 2002/12/22 00:04:59 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -170,7 +170,6 @@ struct part {
 	int xa;
 	int cx, cy;
 	struct f_data *data;
-	int bgcolor;
 	unsigned char *spaces;
 	int spl;
 	int link_num;

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.53 2002/12/21 02:56:33 pasky Exp $ */
+/* $Id: renderer.c,v 1.54 2002/12/22 00:04:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,7 +114,7 @@ realloc_lines(struct part *p, int y)
 
 	for (i = p->data->y; i <= y; i++) {
 		p->data->data[i].l = 0;
-		p->data->data[i].c = p->bgcolor;
+		p->data->data[i].c = find_nearest_color(&par_format.bgcolor, 8);
 		p->data->data[i].d = NULL;
 	}
 
@@ -144,7 +144,7 @@ realloc_line(struct part *p, int y, int x)
 		p->data->data[y].d[i] = (p->data->data[y].c << 11) | ' ';
 	}
 
-	p->data->data[y].c = p->bgcolor;
+	p->data->data[y].c = find_nearest_color(&par_format.bgcolor, 8);
 	p->data->data[y].l = i;
 
 	return 0;
@@ -226,7 +226,7 @@ set_hchar(struct part *part, int x, int y, unsigned c)
 {
 	if (xpand_lines(part, y)) return;
 	if (xpand_line(part, y, x)) return;
-	c |= part->bgcolor << 11; /* XXX: for easy table borders */
+	c |= find_nearest_color(&par_format.bgcolor, 8) << 11; /* XXX: for easy table borders */
 	POS(x, y) = c;
 }
 
@@ -235,7 +235,7 @@ set_hchars(struct part *part, int x, int y, int xl, unsigned c)
 {
 	if (xpand_lines(part, y)) return;
 	if (xpand_line(part, y, x + xl - 1)) return;
-	c |= part->bgcolor << 11; /* XXX: for easy table borders */
+	c |= find_nearest_color(&par_format.bgcolor, 8) << 11; /* XXX: for easy table borders */
 	for (; xl; xl--, x++) POS(x, y) = c;
 }
 
@@ -358,7 +358,7 @@ shift_chars(struct part *part, int y, int shift)
 	if (!a) return;
 
 	memcpy(a, &POS(0, y), len * sizeof(chr));
-	set_hchars(part, 0, y, shift, (part->data->data[y].c << 11) | ' ');
+	set_hchars(part, 0, y, shift, /*(part->data->data[y].c << 11) |*/ ' ');
 	copy_chars(part, shift, y, len, a);
 	mem_free(a);
 
@@ -495,7 +495,7 @@ justify_line(struct part *part, int y)
 		int word;
 
 		set_hchars(part, 0, y, overlap(par_format),
-			   (part->data->data[y].c << 11) | ' ');
+			   /*(part->data->data[y].c << 11) |*/ ' ');
 
 		for (word = 0; word < spaces; word++) {
 			/* We have to increase line length by 'insert' num. of
@@ -1252,7 +1252,6 @@ uncached:
 	part->xp = xs;
 	part->yp = ys;
 	part->xmax = part->xa = 0;
-	part->bgcolor = find_nearest_color(&par_format.bgcolor, 8);
 	part->spaces = NULL;
 	part->spl = 0;
 	part->link_num = link_num;
@@ -1527,9 +1526,7 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 		form.target = NULL;
 	}
 
-	screen->bg = (body_bgcolor >= 0 ? body_bgcolor
-					: find_nearest_color(&par_format.bgcolor, 8))
-			<< 11;
+	screen->bg = find_nearest_color(&par_format.bgcolor, 8);
 
 	kill_html_stack_item(html_stack.next);
 

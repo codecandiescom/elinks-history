@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.62 2002/12/21 02:56:33 pasky Exp $ */
+/* $Id: parser.c,v 1.63 2002/12/22 00:04:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -922,8 +922,6 @@ html_img(unsigned char *a)
 	/*put_chrs(" ", 1, put_chars_f, ff);*/
 }
 
-int body_bgcolor = -1;
-
 static inline void
 html_body(unsigned char *a)
 {
@@ -932,7 +930,10 @@ html_body(unsigned char *a)
 	get_color(a, "vlink", &format.vlink);
 	get_bgcolor(a, &par_format.bgcolor);
 	if (get_bgcolor(a, &format.bg) >= 0) {
-		body_bgcolor = find_nearest_color(&format.bg, 8);
+		/* Modify the root HTML element - format_html_part() will take
+		 * this from there. */
+		((struct html_element *) html_stack.prev)->parattr.bgcolor = par_format.bgcolor;
+		((struct html_element *) html_stack.prev)->attr.bg = format.bg;
 	}
 }
 

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.43 2002/11/13 22:12:25 pasky Exp $ */
+/* $Id: listbox.c,v 1.44 2002/11/27 14:08:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,7 +210,7 @@ box_sel_move_do(struct listbox_item *item, void *data_, int offset)
 		if (data->box->sel_offset > 0) {
 			data->box->sel_offset--;
 		} else {
-			data->box->top = 
+			data->box->top =
 				traverse_listbox_items_list(data->box->top,
 					-1, 1, NULL, NULL);
 		}
@@ -494,6 +494,20 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 			if (ev->x == KBD_PAGE_UP) {
 				box_sel_move(&dlg->items[dlg->n - 1],
 					     -dlg->items[dlg->n - 1].h / 2);
+				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
+
+				return EVENT_PROCESSED;
+			}
+
+			if (ev->x == KBD_HOME) {
+				box_sel_move(&dlg->items[dlg->n - 1], -MAXINT);
+				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
+
+				return EVENT_PROCESSED;
+			}
+
+			if (ev->x == KBD_END) {
+				box_sel_move(&dlg->items[dlg->n - 1], MAXINT);
 				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
 
 				return EVENT_PROCESSED;

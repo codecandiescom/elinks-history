@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.220 2004/06/13 22:55:34 jonas Exp $ */
+/* $Id: link.c,v 1.221 2004/06/14 10:16:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -448,12 +448,14 @@ find_link(struct document_view *doc_view, int direction, int page_mode)
 	if_assert_failed return;
 
 	if (direction == -1) {
+		/* UP */
 		line = doc_view->document->lines2;
 		if (!line) goto nolink;
 		y = doc_view->vs->y + doc_view->box.height - 1;
 		int_upper_bound(&y, doc_view->document->height - 1);
 		if (y < 0) goto nolink;
 	} else {
+		/* DOWN */
 		line = doc_view->document->lines1;
 		if (!line) goto nolink;
 		y = doc_view->vs->y;
@@ -465,18 +467,30 @@ find_link(struct document_view *doc_view, int direction, int page_mode)
 	ymax = int_min(doc_view->document->height,
 		       doc_view->vs->y + doc_view->box.height);
 
-	/* TODO: split by direction. */
-	do {
-		if (line[y]
-		    && (!link || (direction > 0 ? line[y] < link : line[y] > link)))
-			link = line[y];
-		y += direction;
-	} while (y >= ymin && y < ymax);
+	if (direction == -1) {
+		/* UP */
+		do {
+			struct link *cur = line[y--];
+
+			if (cur && (!link || cur > link))
+				link = cur;
+		} while (y >= ymin && y < ymax);
+
+	} else {
+		/* DOWN */
+		do {
+			struct link *cur = line[y++];
+
+			if (cur && (!link || cur < link))
+				link = cur;
+		} while (y >= ymin && y < ymax);
+	}
 
 	if (!link) goto nolink;
 
 	link_pos = link - doc_view->document->links;
 	if (page_mode) {
+		/* PAGE */
 		next_in_view(doc_view, link_pos, direction, in_view, NULL);
 		return;
 	}

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.137 2004/05/29 17:12:57 jonas Exp $ */
+/* $Id: cookies.c,v 1.138 2004/05/29 19:28:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -566,13 +566,13 @@ is_in_domain(unsigned char *d, unsigned char *s, int sl)
 
 
 static inline int
-is_path_prefix(unsigned char *d, unsigned char *s, int sl)
+is_path_prefix(unsigned char *d, unsigned char *s)
 {
 	int dl = strlen(d);
 
 	/* TODO: strlcmp()? --pasky */
 
-	if (dl > sl) return 0;
+	if (dl > strlen(s)) return 0;
 
 	return !memcmp(d, s, dl);
 }
@@ -586,8 +586,7 @@ send_cookies(struct uri *uri)
 {
 	struct c_domain *cd;
 	struct cookie *c, *d;
-	unsigned char *data = NULL;
-	int datalen = uri->datalen + 1;
+	unsigned char *path = NULL;
 	static struct string header;
 
 	if (!uri->host || !uri->data)
@@ -595,17 +594,17 @@ send_cookies(struct uri *uri)
 
 	foreach (cd, c_domains)
 		if (is_in_domain(cd->domain, uri->host, uri->hostlen)) {
-			data = uri->data - 1;
+			path = get_uri_string(uri, URI_PATH);
 			break;
 		}
 
-	if (!data) return NULL;
+	if (!path) return NULL;
 
 	init_string(&header);
 
 	foreach (c, cookies) {
 		if (!is_in_domain(c->domain, uri->host, uri->hostlen)
-		    || !is_path_prefix(c->path, data, datalen))
+		    || !is_path_prefix(c->path, path))
 			continue;
 
 		if (is_expired(c->expires)) {
@@ -637,6 +636,8 @@ send_cookies(struct uri *uri)
 		DBG("Cookie: %s=%s", c->name, c->value);
 #endif
 	}
+
+	mem_free(path);
 
 	if (cookies_dirty && get_cookies_save() && get_cookies_resave())
 		save_cookies();

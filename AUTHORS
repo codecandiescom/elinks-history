@@ -204,6 +204,9 @@ Sergei Borushevsky <b_sp@usa.net>
 Simos Xenitellis <simos@hellug.gr>
 	Greek codepages & translation
 
+Stefan de Groot <stefan@nllinux.nl>
+	Dutch translation
+
 Stepan Roh <stepan@srnet.cz>
 	Set-Cookie expires attribute proper parsing bugfixes
 
@@ -232,4 +235,4 @@ zas@norz.org
 	Bookmarks hacking
 	Misc minor improvements
 
-$Id: AUTHORS,v 1.19 2002/01/26 15:21:47 pasky Exp $
+$Id: AUTHORS,v 1.20 2002/01/29 22:10:22 pasky Exp $

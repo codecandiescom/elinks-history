@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.62 2004/01/04 11:42:10 jonas Exp $ */
+/* $Id: globhist.c,v 1.63 2004/01/04 11:57:35 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -18,6 +18,7 @@
 #include <time.h>
 #endif
 
+#include "bfu/inphist.h" /* For struct input_history */
 #include "bfu/listbox.h"
 #include "config/options.h"
 #include "globhist/dialogs.h"
@@ -38,9 +39,11 @@
 #define GLOBAL_HISTORY_FILENAME		"globhist"
 
 
-struct global_history_list global_history = {
+struct input_history global_history = {
+	{ D_LIST_HEAD(global_history.entries) },
 	0,
-	{ D_LIST_HEAD(global_history.items) }
+	0,
+	0,
 };
 
 
@@ -99,8 +102,6 @@ static struct option_info global_history_options[] = {
 
 static struct hash *globhist_cache = NULL;
 static int globhist_cache_entries = 0;
-static int globhist_dirty = 0;
-static int globhist_nosave = 0;
 
 
 static void
@@ -127,9 +128,8 @@ delete_global_history_item(struct global_history_item *historyitem)
 	free_global_history_item(historyitem);
 	del_from_list(historyitem);
 	mem_free(historyitem);
-	global_history.n--;
-
-	globhist_dirty = 1;
+	global_history.size--;
+	global_history.dirty = 1;
 }
 
 /* Search global history for item matching url. */
@@ -205,12 +205,12 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 	history_item = get_global_history_item(url);
 	if (history_item) delete_global_history_item(history_item);
 
-	while (global_history.n >= max_globhist_items) {
-		history_item = global_history.items.prev;
+	while (global_history.size >= max_globhist_items) {
+		history_item = global_history.entries.prev;
 
-		if ((void *) history_item == &global_history.items) {
+		if ((void *) history_item == &global_history.entries) {
 			INTERNAL("global history is empty");
-			global_history.n = 0;
+			global_history.size = 0;
 			return;
 		}
 
@@ -235,8 +235,8 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 	}
 	object_nolock(history_item);
 
-	add_to_list(global_history.items, history_item);
-	global_history.n++;
+	add_to_list(global_history.entries, history_item);
+	global_history.size++;
 
 	text = get_globhist_display_type()
 		? history_item->title : history_item->url;
@@ -246,7 +246,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 						       history_item);
 	if (!history_item->box_item) return;
 
-	if (!globhist_nosave) globhist_dirty = 1;
+	if (!global_history.nosave) global_history.dirty = 1;
 
 	/* Hash creation if needed. */
 	if (!globhist_cache)
@@ -285,13 +285,13 @@ globhist_simple_search(unsigned char *search_url, unsigned char *search_title)
 	}
 
 	if (!*search_title && !*search_url) {
-		foreach (item, global_history.items) {
+		foreach (item, global_history.entries) {
 			item->box_item->visible = 1;
 		}
 		return 1;
 	}
 
-	foreach (item, global_history.items) {
+	foreach (item, global_history.entries) {
 		if ((search_title && *search_title
 		     && strcasestr(item->title, search_title)) ||
 		    (search_url && *search_url
@@ -326,7 +326,7 @@ read_global_history(void)
 	if (!f) return;
 
 	title = in_buffer;
-	globhist_nosave = 1;
+	global_history.nosave = 1;
 
 	while (safe_fgets(in_buffer, MAX_STR_LEN, f)) {
 		/* Drop ending '\n'. */
@@ -350,7 +350,7 @@ read_global_history(void)
 	}
 
 	fclose(f);
-	globhist_nosave = 0;
+	global_history.nosave = 0;
 }
 
 static void
@@ -360,7 +360,7 @@ write_global_history(void)
 	unsigned char *file_name;
 	struct secure_save_info *ssi;
 
-	if (!globhist_dirty || !elinks_home
+	if (!global_history.dirty || !elinks_home
 	    || !get_globhist_enable())
 		return;
 
@@ -371,7 +371,7 @@ write_global_history(void)
 	mem_free(file_name);
 	if (!ssi) return;
 
-	foreachback (historyitem, global_history.items) {
+	foreachback (historyitem, global_history.entries) {
 		unsigned char *p;
 		int i;
 		int bad = 0;
@@ -396,7 +396,7 @@ write_global_history(void)
 
 	secure_close(ssi);
 
-	globhist_dirty = 0;
+	global_history.dirty = 0;
 }
 
 static void
@@ -406,10 +406,10 @@ free_global_history(void)
 
 	free_globhist_cache();
 
-	foreach (historyitem, global_history.items) {
+	foreach (historyitem, global_history.entries) {
 		free_global_history_item(historyitem);
 	}
-	free_list(global_history.items);
+	free_list(global_history.entries);
 }
 
 static void

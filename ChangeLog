@@ -1,3 +1,46 @@
+Tue Jul 29 17:53:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/core.c:
+
+	l_current_document_formatted(): Cleanup.  
+
+Tue Jul 29 17:41:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/dump/dump.c:
+
+	dump_to_file(): Cleanup.  
+
+Tue Jul 29 15:39:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/colors.c:
+
+	find_nearest_color(): Oops some missing renames.  
+
+Tue Jul 29 15:34:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/colors.c:
+
+	find_nearest_color(): Rename variables and tidy up.  
+
+Tue Jul 29 09:48:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	init_string() was moved after all return NULL, it fixes bug 233.
+	Patch by Zardoz.  
+
+Mon Jul 28 22:17:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	print_char(): More SCREEN_ATTR_FRAME usage.  
+
+Mon Jul 28 22:12:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	put_chars(): a charslen > 0 assertion filure was fixed.  
+
 Mon Jul 28 21:45:57 2003  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/parser.c:

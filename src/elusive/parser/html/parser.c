@@ -1,5 +1,5 @@
 /* Parser HTML backend */
-/* $Id: parser.c,v 1.31 2003/01/19 17:51:20 jonas Exp $ */
+/* $Id: parser.c,v 1.32 2003/01/19 18:25:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,7 +127,7 @@ html_state_pop(struct parser_state *state)
 /* This just eats plain HTML text until it hits something neat. */
 /* TODO: Do the text transformations (newlines eating, whitespaces compression,
  * ...). */
-static int
+static enum pstate_code
 plain_parse(struct parser_state *state, unsigned char **str, int *len)
 {
 	struct html_parser_state *pstate = state->data;
@@ -171,7 +171,7 @@ plain_parse(struct parser_state *state, unsigned char **str, int *len)
 /* This tries to eat a HTML entity and add it as a node. */
 /* XXX: Now this is in fact only variant of plain_parse() - the real code
  * is missing yet. */
-static int
+static enum pstate_code
 entity_parse(struct parser_state *state, unsigned char **str, int *len)
 {
 	struct html_parser_state *pstate = state->data;
@@ -215,7 +215,7 @@ entity_parse(struct parser_state *state, unsigned char **str, int *len)
 
 /* This handles a sign of the allmighty tag, determines what the tag is about.
  * It also handles the tag's death. */
-static int
+static enum pstate_code
 tag_parse(struct parser_state *state, unsigned char **str, int *len)
 {
 	struct html_parser_state *pstate = state->data;
@@ -291,7 +291,7 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 }
 
 /* This skips sequence of whitespaces inside of a tag. */
-static int
+static enum pstate_code
 tag_white_parse(struct parser_state *state, unsigned char **str, int *len)
 {
 	struct html_parser_state *pstate = state->data;
@@ -315,7 +315,7 @@ tag_white_parse(struct parser_state *state, unsigned char **str, int *len)
 
 /* This eats name of the tag. Also, it maintains the corresponding struct
  * syntree_node. */
-static int
+static enum pstate_code
 tag_name_parse(struct parser_state *state, unsigned char **str, int *len)
 {
 	struct html_parser_state *pstate = state->data;
@@ -389,7 +389,7 @@ tag_name_parse(struct parser_state *state, unsigned char **str, int *len)
 }
 
 /* This eats tag attributes names. */
-static int
+static enum pstate_code
 tag_attr_parse(struct parser_state *state, unsigned char **str, int *len)
 {
 	struct html_parser_state *pstate = state->data;
@@ -446,7 +446,7 @@ tag_attr_parse(struct parser_state *state, unsigned char **str, int *len)
 /* This eats tag value, if there is any. It also adds the attribute to the
  * syntax tree node (as a property). */
 /* TODO: Parse entities inside of the attribute values! --pasky */
-static int
+static enum pstate_code
 tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 {
 	struct html_parser_state *pstate = state->data;
@@ -517,7 +517,7 @@ tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 }
 
 /* Walk through a comment towards the light. */
-static int
+static enum pstate_code
 comment_parse(struct parser_state *state, unsigned char **str, int *len)
 {
 	struct html_parser_state *pstate = state->data;

@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.7 2003/01/19 17:51:20 jonas Exp $ */
+/* $Id: parser.h,v 1.8 2003/01/19 18:25:59 jonas Exp $ */
 
 #ifndef EL__USIVE_PARSER_PARSER_H
 #define EL__USIVE_PARSER_PARSER_H
@@ -48,9 +48,6 @@ enum pstate_code {
 	/* Returned when we can't parse further and the string wasn't completed
 	 * yet. */
 	PSTATE_SUSPEND  = -1,
-
-	/* Returned when recovering from syntax errors is needed. */
-	PSTATE_RECOVER  = -2,
 };
 
 

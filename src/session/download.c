@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.304 2004/07/22 21:39:56 zas Exp $ */
+/* $Id: download.c,v 1.305 2004/07/22 21:54:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -321,23 +321,21 @@ download_data_store(struct download *download, struct file_download *file_downlo
 
 	if (download->state != S_OK) {
 		unsigned char *errmsg = get_err_msg(download->state, term);
-		unsigned char *url;
+		unsigned char *url = get_uri_string(file_download->uri, URI_PUBLIC);
 
-		if (!errmsg) goto abort;
+		if (url) {
+			msg_box(term, NULL, MSGBOX_FREE_TEXT,
+				N_("Download error"), ALIGN_CENTER,
+				msg_text(term, N_("Error downloading %s:\n\n%s"), url, errmsg),
+				get_download_ses(file_download), 1,
+				N_("OK"), NULL, B_ENTER | B_ESC /*,
+				N_(T_RETRY), NULL, 0 */ /* FIXME: retry */);
 
-		url = get_uri_string(file_download->uri, URI_PUBLIC);
+			mem_free(url);
+		}
 
-		if (!url) goto abort;
-
-		msg_box(term, NULL, MSGBOX_FREE_TEXT,
-			N_("Download error"), ALIGN_CENTER,
-			msg_text(term, N_("Error downloading %s:\n\n%s"), url, errmsg),
-			get_download_ses(file_download), 1,
-			N_("OK"), NULL, B_ENTER | B_ESC /*,
-			N_(T_RETRY), NULL, 0 */ /* FIXME: retry */);
-
-		mem_free(url);
-		goto abort;
+		abort_download_and_beep(file_download, term);
+		return;
 	}
 
 	if (file_download->prog) {

@@ -1,3 +1,93 @@
+Tue May  4 11:45:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: options.c, options.h:
+
+	Don't get CSS options if it is disabled.  
+
+Tue May  4 10:50:08 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/info.c, util/memdebug.c, util/memdebug.h:
+
+	Count and show memory truly allocated (including memory used by
+	memory debug itself).  
+
+Tue May  4 07:55:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, features.conf, src/document/Makefile.am,
+	src/document/html/parser.c, src/document/html/parser/link.c,
+	src/document/html/parser/parse.c, src/modules/module.c:
+
+	Make CSS optional.  
+
+Tue May  4 01:48:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Avoid int <-> void * conversion by passing strtonum pointers ... ok
+	this is getting too ugly so I will stop this now besides it is
+	passed my bedtime.  
+
+Tue May  4 01:46:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/: menu.c, menu.h:
+
+	Yucky hacks to fix compile errors >:).  
+
+Tue May  4 01:43:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/dialogs.c:
+
+	make 
+
+Tue May  4 01:22:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/: menu.c, menu.h:
+
+	Avoid int <-> void * conversion by passing the open_in_new pointer
+	instead of term_env enum.  
+
+Tue May  4 01:21:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/options.c:
+
+	Avoid int <-> void * conversion by passing the codepage name and
+	looking up the index.  
+
+Tue May  4 01:10:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/css/scanner.c, util/scanner.c, util/scanner.h:
+
+	Avoid int <-> void * conversion by storing the start of the a
+	scanner table range in a string. A bit ugly but ...  
+
+Tue May  4 01:08:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/charsets.c:
+
+	Make @strings static.  
+
+Tue May  4 00:55:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/charsets.c:
+
+	Avoid int <-> void * conversion by storing the codepage_desc pointer
+	as the fastfind data.  
+
+Mon May  3 23:04:08 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cache/dialogs.c:
+
+	Add a space before ... when url is truncated, it is less ambiguous.  
+
+Mon May  3 22:57:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cache/dialogs.c:
+
+	draw_cache_entry_item() was added to display only "public" parts or
+	uri in cache manager. Post data do not appear as is, but an
+	indication is left to user in the form of " (POST DATA)" aooended to
+	uri string. Password info will be hidden too. It fixes bug 445.  
+
 Mon May  3 21:40:29 2004  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/button.c:

@@ -1,3 +1,218 @@
+Tue Jul 20 22:07:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/proxy.c:
+
+	get_proxy_worker(): space fix.  
+
+Tue Jul 20 22:05:58 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/proxy.c:
+
+	get_proxy_worker(): use else if for protocol tests.  
+
+Tue Jul 20 22:04:27 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/proxy.c:
+
+	get_proxy_worker(): extract no_proxy stuff only if needed.  
+
+Tue Jul 20 22:02:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/proxy.c:
+
+	get_proxy_worker(): test for ftp protocol in uri before extracting
+	environment variables related to ftp proxy.  
+
+Tue Jul 20 22:01:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/proxy.c:
+
+	get_proxy_worker(): test for https protocol in uri before extracting
+	environment variables related to https proxy.  
+
+Tue Jul 20 21:59:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/proxy.c:
+
+	get_proxy_worker(): test for http protocol in uri before extracting
+	environment variables related to http proxy.  
+
+Tue Jul 20 21:56:39 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/proxy.c:
+
+	get_proxy_worker(): drop useless else, and invert a test.  
+
+Tue Jul 20 21:55:58 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Move the quit: label after the check |ev->x == KBD_CTRL_C|, which is
+	already done before the only goto for that label.  
+
+Tue Jul 20 21:54:26 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Rewrap and add a blank line.  
+
+Tue Jul 20 21:54:17 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/proxy.c:
+
+	get_proxy_worker(): reindent code.  
+
+Tue Jul 20 21:52:40 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Re-indent part of send_event.  
+
+Tue Jul 20 21:52:20 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/proxy.c:
+
+	get_proxy_worker(): prepare for reindentation, slightly increase
+	code redundancy.  
+
+Tue Jul 20 21:46:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/proxy.c:
+
+	Move code from get_proxy_worker() to new proxy_uri().  
+
+Tue Jul 20 21:39:18 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/proxy.c:
+
+	get_proxy_worker(): move (http|https|ftp|no)_proxy to inner branch,
+	where they are used.  
+
+Tue Jul 20 19:01:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/dialogs.c:
+
+	Introduce add_bookmark_after_selected() and use it after calls to
+	add_bookmark() to insert it more logically.  
+
+Tue Jul 20 09:18:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/osdep.c:
+
+	Simplify the #if jungle.  
+
+Tue Jul 20 09:18:00 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Tue Jul 20 09:01:45 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/generic.h:
+
+	Describe.  
+
+Tue Jul 20 07:58:44 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	In the option manager, when the user selects 'Add', add the new
+	option to the selected item's parent if the selected item is a
+	collapsed folder.  
+
+Tue Jul 20 07:39:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/mime/mime.c:
+
+	In check_extension_type, do not free handler->program, which is
+	allocated along with handler since 2003-12-31 08:50:39, 'Introduce
+	mime handler initializer and allocate the program with the struct so
+	freeing is easier.' 
+	
+	This change fixes a segfault when one creates an option
+	mime.type.image.x-foo with a valid handler and tries to load a file
+	with the extension foo for which no content type is supplied by the
+	server or by a mime.extension.foo option.  
+
+Tue Jul 20 07:26:27 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: mime/backend/mimetypes.c, protocol/uri.c, sched/download.c:
+
+	get_extension_from_uri: Include the leading '.' in the returned
+	extension.  
+	
+	get_temp_name: Now that get_extension_from_uri includes the '.', do
+	not add another here.  
+	
+	get_content_type_mimetypes: Increment |extension| before the first
+	iteration to skip the leading '.'. The loop iteratively truncates
+	the beginning of the string up to and including the first '.' and
+	looks up the result, and so the routine would still work without
+	this change, but it looks better with the increment and avoid a
+	first interation in which we would look up the content type for an
+	empty extension.  
+	
+	The impetus for this change was to fix the code in http_got_header
+	that detects whether the content encoding matches the extension of
+	the file, which is the heuristic used to determine whether to
+	decompress the data.  http_got_header passes the result of
+	|get_extension_from_uri(uri)| to guess_encoding, which expects the
+	leading '.'. Thus, we were always decoding the data, and now we
+	again decode only when the extension does not match the content
+	encoding 
+	(e.g., 'Content-Encoding: gzip' and file name 'foo.tar.gz').  
+
+Tue Jul 20 01:36:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.h:
+
+	Describe the rest of the menu_item_flags.  
+
+Tue Jul 20 01:11:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, mime/dialogs.c:
+
+	Move NO_INTL flag to new_menu() call for File :: History menus. Use
+	NO_INTL for URI passing to command menu and mime extension menu.  
+
+Tue Jul 20 00:35:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Fix double free error in external URI passing. I guess it is not
+	that well tested ;) 
+
+Tue Jul 20 00:14:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, sched/action.c,
+	viewer/text/link.c:
+
+	Remove ACT_MAIN_EDIT 'fake' action. Improve caption for
+	ACT_EDIT_EDIT. Workaround rtext only working for main mappings by
+	initializing it the cruel way. Pointed out by miernik.  
+
+Mon Jul 19 23:19:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/color.html:
+
+	The color test now uses table and contains all colors in
+	util/color.inc 
+
+Mon Jul 19 23:09:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Heh fix isscreensafe() bugfix.  
+
+Mon Jul 19 22:52:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/plain/renderer.c, terminal/screen.c,
+	util/string.h, viewer/dump/dump.c:
+
+	Introduce isscreensafe() for testing if char is usable for screen
+	writing. Fixes bug in plain renderer.  
+
 Mon Jul 19 22:09:49 2004  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/text.c:

@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.61 2004/08/16 00:33:41 jonas Exp $ */
+/* $Id: mime.c,v 1.62 2004/08/16 00:34:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,36 +174,36 @@ get_cache_header_content_type(struct cache_entry *cached)
 	struct uri *uri = get_cache_uri(cached);
 	unsigned char *extension, *ctype;
 
-		ctype = parse_header(cached->head, "Content-Type", NULL);
+	ctype = parse_header(cached->head, "Content-Type", NULL);
+	if (ctype) {
+		unsigned char *end = strchr(ctype, ';');
+		int ctypelen;
+
+		if (end) *end = '\0';
+
+		ctypelen = strlen(ctype);
+		while (ctypelen && ctype[--ctypelen] <= ' ')
+			ctype[ctypelen] = '\0';
+
+		debug_ctype(ctype);
+
+		if (*ctype) {
+			return ctype;
+		}
+
+		mem_free(ctype);
+	}
+
+	/* This searches cached->head for filename so put here */
+	extension = uri ? get_content_filename(uri, cached) : NULL;
+	debug_extension(extension);
+	if (extension) {
+		ctype = get_extension_content_type(extension);
+		mem_free(extension);
 		if (ctype) {
-			unsigned char *end = strchr(ctype, ';');
-			int ctypelen;
-
-			if (end) *end = '\0';
-
-			ctypelen = strlen(ctype);
-			while (ctypelen && ctype[--ctypelen] <= ' ')
-				ctype[ctypelen] = '\0';
-
-			debug_ctype(ctype);
-
-			if (*ctype) {
-				return ctype;
-			}
-
-			mem_free(ctype);
+			return ctype;
 		}
-
-		/* This searches cached->head for filename so put here */
-		extension = uri ? get_content_filename(uri, cached) : NULL;
-		debug_extension(extension);
-		if (extension) {
-			ctype = get_extension_content_type(extension);
-			mem_free(extension);
-			if (ctype) {
-				return ctype;
-			}
-		}
+	}
 
 	return NULL;
 }

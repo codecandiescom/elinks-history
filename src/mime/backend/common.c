@@ -1,5 +1,5 @@
 /* MIME handling backends multiplexing */
-/* $Id: common.c,v 1.4 2003/06/04 18:39:01 jonas Exp $ */
+/* $Id: common.c,v 1.5 2003/06/04 19:04:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,11 +23,15 @@
 
 #include "mime/backend/default.h"
 #include "mime/backend/mailcap.h"
+#include "mime/backend/mimetypes.h"
 
 static struct mime_backend *mime_backends[] = {
 	&default_mime_backend,
 #ifdef MAILCAP
 	&mailcap_mime_backend,
+#endif
+#ifdef MIMETYPES
+	&mimetypes_mime_backend,
 #endif
 	NULL
 };

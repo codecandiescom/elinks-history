@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.1 2003/05/06 17:16:15 jonas Exp $
+## $Id: Makefile.am,v 1.2 2003/06/04 19:04:33 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -17,4 +17,6 @@ libmimebackend_a_SOURCES = \
  default.c \
  default.h \
  mailcap.c \
- mailcap.h
+ mailcap.h \
+ mimetypes.c \
+ mimetypes.h

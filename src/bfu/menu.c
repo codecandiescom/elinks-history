@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.205 2004/04/17 11:52:03 jonas Exp $ */
+/* $Id: menu.c,v 1.206 2004/04/17 11:58:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,7 +98,7 @@ do_menu_selected(struct terminal *term, struct menu_item *items,
 		menu->view = 0;
 		menu->items = items;
 		menu->data = data;
-		menu->ni = count_items(items);
+		menu->size = count_items(items);
 		menu->hotkeys = hotkeys;
 #ifdef ENABLE_NLS
 		menu->lang = -1;
@@ -157,7 +157,7 @@ select_menu_item(struct terminal *term, struct menu_item *it, void *data)
 static inline void
 select_menu(struct terminal *term, struct menu *menu)
 {
-	if (menu->selected < 0 || menu->selected >= menu->ni)
+	if (menu->selected < 0 || menu->selected >= menu->size)
 		return;
 
 	select_menu_item(term, &menu->items[menu->selected], menu->data);
@@ -231,7 +231,7 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	int mx = 0;
 	int my;
 
-	for (my = 0; my < menu->ni; my++)
+	for (my = 0; my < menu->size; my++)
 		int_lower_bound(&mx, get_menuitem_width(term, &menu->items[my], width));
 
 	int_upper_bound(&my, height);
@@ -257,7 +257,7 @@ scroll_menu(struct menu *menu, int d)
 	int_lower_bound(&scr_i, 0);
 	int_lower_bound(&w, 0);
 
-	if (menu->ni < 1) {
+	if (menu->size < 1) {
 		menu->selected = -1;
 		menu->view = 0;
 		return;
@@ -265,15 +265,15 @@ scroll_menu(struct menu *menu, int d)
 
 	menu->selected += d;
 
-	menu->selected %= menu->ni;
+	menu->selected %= menu->size;
 	if (menu->selected < 0)
-		menu->selected += menu->ni;
+		menu->selected += menu->size;
 
-	int_bounds(&menu->selected, 0, menu->ni - 1);
+	int_bounds(&menu->selected, 0, menu->size - 1);
 	while (!mi_is_selectable(menu->items[menu->selected])) {
 		menu->selected += d/abs(d);
 
-		if (menu->selected < 0 || menu->selected >= menu->ni) {
+		if (menu->selected < 0 || menu->selected >= menu->size) {
 			menu->selected = -1;
 			menu->view = 0;
 			return;
@@ -281,7 +281,7 @@ scroll_menu(struct menu *menu, int d)
 	}
 
 	int_bounds(&menu->view, menu->selected - w + scr_i + 1, menu->selected - scr_i);
-	int_bounds(&menu->view, 0, menu->ni - w);
+	int_bounds(&menu->view, 0, menu->size - w);
 }
 
 static inline void
@@ -389,7 +389,7 @@ display_menu(struct terminal *term, struct menu *menu)
 	draw_border(term, menu->x, menu->y, menu->width, menu->height, frame_color, 1);
 
 	for (p = menu->view, y = my;
-	     p < menu->ni && p < menu->view + mheight;
+	     p < menu->size && p < menu->view + mheight;
 	     p++, y++) {
 		struct color_pair *color = normal_color;
 
@@ -553,7 +553,7 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 		    && ev->y < menu->y + menu->height - 1) {
 			int sel = ev->y - menu->y - 1 + menu->view;
 
-			if (sel >= 0 && sel < menu->ni
+			if (sel >= 0 && sel < menu->size
 			    && mi_is_selectable(menu->items[sel])) {
 				menu->selected = sel;
 				scroll_menu(menu, 0);
@@ -573,7 +573,7 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 static void
 menu_page_up(struct menu *menu)
 {
-	int current = int_max(0, int_min(menu->selected, menu->ni - 1));
+	int current = int_max(0, int_min(menu->selected, menu->size - 1));
 	int step;
 	int i;
 	int next_sep = 0;
@@ -593,19 +593,19 @@ menu_page_up(struct menu *menu)
 static void
 menu_page_down(struct menu *menu)
 {
-	int current = int_max(0, int_min(menu->selected, menu->ni - 1));
+	int current = int_max(0, int_min(menu->selected, menu->size - 1));
 	int step;
 	int i;
-	int next_sep = menu->ni - 1;
+	int next_sep = menu->size - 1;
 
-	for (i = current + 1; i < menu->ni; i++)
+	for (i = current + 1; i < menu->size; i++)
 		if (mi_is_horizontal_bar(menu->items[i])) {
 			next_sep = i;
 			break;
 		}
 
 	step = next_sep - current + 1;
-	int_bounds(&step, 0, int_min(menu->ni - 1 - current, DIST));
+	int_bounds(&step, 0, int_min(menu->size - 1 - current, DIST));
 
 	scroll_menu(menu, step);
 }
@@ -649,7 +649,7 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 			break;
 
 		case ACT_MENU_END:
-			menu->selected = menu->ni;
+			menu->selected = menu->size;
 			scroll_menu(menu, -1);
 			break;
 
@@ -756,12 +756,12 @@ do_mainmenu(struct terminal *term, struct menu_item *items,
 	menu->selected = (sel == -1 ? 0 : sel);
 	menu->items = items;
 	menu->data = data;
-	menu->ni = count_items(items);
+	menu->size = count_items(items);
 
 #ifdef ENABLE_NLS
-	clear_hotkeys_cache(items, menu->ni, 1);
+	clear_hotkeys_cache(items, menu->size, 1);
 #endif
-	init_hotkeys(term, items, menu->ni, 1);
+	init_hotkeys(term, items, menu->size, 1);
 	add_window(term, mainmenu_handler, menu);
 
 	if (sel != -1) {
@@ -798,9 +798,9 @@ display_mainmenu(struct terminal *term, struct menu *menu)
 	}
 
 	if (menu->last_displayed <= 0)
-		menu->last_displayed = menu->ni - 1;
+		menu->last_displayed = menu->size - 1;
 
-	int_bounds(&menu->last_displayed, 0, menu->ni - 1);
+	int_bounds(&menu->last_displayed, 0, menu->size - 1);
 	int_bounds(&menu->first_displayed, 0, menu->last_displayed);
 
 	draw_area(term, 0, 0, term->width, 1, ' ', 0, normal_color);
@@ -810,7 +810,7 @@ display_mainmenu(struct terminal *term, struct menu *menu)
 
 	p += L_MAINMENU_SPACE;
 
-	for (i = menu->first_displayed; i < menu->ni; i++) {
+	for (i = menu->first_displayed; i < menu->size; i++) {
 		struct color_pair *color = normal_color;
 		unsigned char *text = menu->items[i].text;
 		int l = menu->items[i].hotkey_pos;
@@ -854,7 +854,7 @@ display_mainmenu(struct terminal *term, struct menu *menu)
 
 	menu->last_displayed = i - 1;
 	int_lower_bound(&menu->last_displayed, menu->first_displayed);
-	if (menu->last_displayed < menu->ni - 1)
+	if (menu->last_displayed < menu->size - 1)
 		draw_area(term, term->width - R_MAINMENU_SPACE, 0, R_MAINMENU_SPACE, 1, '>', 0, normal_color);
 
 	redraw_from_window(menu->win);
@@ -882,7 +882,7 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 		 * since it breaks horizontal
 		 * scrolling using mouse in some
 		 * cases. --Zas */
-		for (i = 0; i < menu->ni; i++) {
+		for (i = 0; i < menu->size; i++) {
 			int o = p;
 
 			if (mi_has_left_text(menu->items[i])) {
@@ -903,14 +903,14 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 
 				menu->selected--;
 				if (menu->selected < 0)
-					menu->selected = menu->ni - 1;
+					menu->selected = menu->size - 1;
 
 			} else if (ev->x >= p) {
 				if (ev->x < win->term->width - R_MAINMENU_SPACE)
 					continue;
 
 				menu->selected++;
-				if (menu->selected > menu->ni - 1)
+				if (menu->selected > menu->size - 1)
 					menu->selected = 0;
 
 			} else {
@@ -948,12 +948,12 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 	if (action == ACT_MENU_LEFT) {
 		menu->selected--;
 		if (menu->selected < 0)
-			menu->selected = menu->ni - 1;
+			menu->selected = menu->size - 1;
 		s = 1;
 
 	} else if (action == ACT_MENU_RIGHT) {
 		menu->selected++;
-		if (menu->selected >= menu->ni)
+		if (menu->selected >= menu->size)
 			menu->selected = 0;
 		s = 1;
 	}

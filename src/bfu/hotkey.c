@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.16 2004/04/17 11:52:03 jonas Exp $ */
+/* $Id: hotkey.c,v 1.17 2004/04/17 11:58:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,8 +114,8 @@ refresh_hotkeys(struct terminal *term, struct menu *menu)
 {
 #ifdef ENABLE_NLS
  	if (current_language != menu->lang) {
-		clear_hotkeys_cache(menu->items, menu->ni, menu->hotkeys);
-		init_hotkeys(term, menu->items, menu->ni, menu->hotkeys);
+		clear_hotkeys_cache(menu->items, menu->size, menu->hotkeys);
+		init_hotkeys(term, menu->items, menu->size, menu->hotkeys);
 		menu->lang = current_language;
 	}
 #else
@@ -158,15 +158,15 @@ check_hotkeys(struct menu *menu, unsigned char hotkey, struct terminal *term)
 	int i = menu->selected;
 	int start;
 
-	if (menu->ni < 1) return 0;
+	if (menu->size < 1) return 0;
 
-	i %= menu->ni;
-	if (i < 0) i += menu->ni;
+	i %= menu->size;
+	if (i < 0) i += menu->size;
 
 	start = i;
 
 	while (1) {
-		if (i + 1 == menu->ni) i = 0;
+		if (i + 1 == menu->size) i = 0;
 		else i++;
 
 		if (is_hotkey(&menu->items[i], key, term)) {
@@ -193,15 +193,15 @@ check_not_so_hot_keys(struct menu *menu, unsigned char key, struct terminal *ter
 	int i = menu->selected;
 	int start;
 
-	if (menu->ni < 1) return 0;
+	if (menu->size < 1) return 0;
 
-	i %= menu->ni;
-	if (i < 0) i += menu->ni;
+	i %= menu->size;
+	if (i < 0) i += menu->size;
 
 	start = i;
 
 	while (1) {
-		if (i + 1 == menu->ni) i = 0;
+		if (i + 1 == menu->size) i = 0;
 		else i++;
 
 		if (!mi_has_left_text(menu->items[i])) continue;

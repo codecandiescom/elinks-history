@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.52 2004/04/17 11:52:03 jonas Exp $ */
+/* $Id: menu.h,v 1.53 2004/04/17 11:58:45 jonas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -125,10 +125,13 @@ do {									\
 
 struct menu {
 	struct window *win;
+
+	/* The items in the menu and how many there are. */
 	struct menu_item *items;
+	int size;
+
 	void *data;
 	int selected;
-	int ni;
 	int view;
 	int x, y;
 	int width, height;

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.228 2004/06/16 13:53:21 jonas Exp $ */
+/* $Id: link.c,v 1.229 2004/06/16 18:33:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,8 +135,22 @@ init_link_drawing(struct document_view *doc_view, struct link *link, int invert)
 
 		/* Highlight text-input form-fields correctly if contrast
 		 * correction is needed. */
-		if (link_is_textinput(link))
+		if (link_is_textinput(link)) {
+			/* Make sure to use the options belonging to the
+			 * current document when checking for fg and bg color
+			 * usage. */
+			doc_opts = &doc_view->document->options;
+
+			/* Are we fallen angels who didn't want to believe that
+			 * nothing /is/ nothing and so were born to lose our
+			 * loved ones and dear friends one by one and finally
+			 * our own life, to see it proved? --Kerouac */
+
+			/* Wipe out all default correction for 16 color mode */
+			color_flags = (color_flags & ~COLOR_INCREASE_CONTRAST);
+			/* Make contrast correction invert things properly */
 			color_flags |= COLOR_ENSURE_INVERTED_CONTRAST;
+		}
 
 	} else {
 		colors.foreground = link->color.foreground;

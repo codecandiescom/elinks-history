@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.95 2004/12/17 13:56:00 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.96 2004/12/17 13:58:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -344,7 +344,7 @@ found_parent:
 		if (top_view->vs->ecmascript_fragile)
 			ecmascript_reset_state(top_view->vs);
 		if (!top_view->vs->ecmascript) break;
-		p.object=JS_GetGlobalObject(top_view->vs->ecmascript->backend_data);
+		p.object = JS_GetGlobalObject(top_view->vs->ecmascript->backend_data);
 		prop_type = JSPT_OBJECT;
 		break;
 	}

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.287 2004/07/30 09:43:57 zas Exp $ */
+/* $Id: link.c,v 1.288 2004/07/30 09:46:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -998,7 +998,7 @@ try_document_key(struct session *ses, struct document_view *doc_view,
 	for (i = 0; i < doc_view->document->nlinks; i++) {
 		struct link *link = &doc_view->document->links[i];
 
-		if (key== link->accesskey) {
+		if (key == link->accesskey) {
 			if (passed != i && i <= doc_view->vs->current_link) {
 				/* This is here in order to rotate between
 				 * links with same accesskey. */

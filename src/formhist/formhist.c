@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.30 2003/08/29 21:29:36 pasky Exp $ */
+/* $Id: formhist.c,v 1.31 2003/09/01 19:32:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,13 +147,13 @@ form_already_saved(unsigned char *url, struct list_head *submit)
 		if (strcmp(form->url, url)) continue;
 
 		savedsv = (struct submitted_value *) form->submit->next;
-		foreachback (sv, *submit) {
+		foreach (sv, *submit) {
 			if (sv->type != FC_TEXT && sv->type != FC_PASSWORD)
 				continue;
 
 			if (savedsv == (struct submitted_value *) form->submit)
 				break;
-
+		
 			if (strcmp(sv->name, savedsv->name) ||
 			    strcmp(sv->value, savedsv->value)) return 0;
 

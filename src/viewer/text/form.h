@@ -1,9 +1,8 @@
-/* $Id: form.h,v 1.26 2004/06/16 07:15:50 miciah Exp $ */
+/* $Id: form.h,v 1.27 2004/06/16 09:51:47 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
 
-#include "sched/action.h" /* enum frame_event_status */
 #include "util/lists.h" /* LIST_HEAD */
 
 struct document;

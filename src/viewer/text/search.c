@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.292 2004/10/18 03:14:45 miciah Exp $ */
+/* $Id: search.c,v 1.293 2004/10/18 04:12:42 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1202,8 +1202,20 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			direction = -1;
 			i--;
 			if (i >= 0) break;
-			if (!get_opt_bool("document.browse.search.wraparound"))
+			if (!get_opt_bool("document.browse.search.wraparound")) {
+search_hit_boundary:
+				if (match_link_text(&document->links[current],
+						    text, strlen(text),
+						    get_opt_bool("document"
+								 ".browse"
+								 ".search"
+								 ".case"))
+				     >= 0) {
+					return TYPEAHEAD_ERROR_NO_FURTHER;
+				}
+
 				return TYPEAHEAD_ERROR;
+			}
 
 			i = doc_view->document->nlinks - 1;
 			break;
@@ -1214,7 +1226,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			i++;
 			if (i < doc_view->document->nlinks) break;
 			if (!get_opt_bool("document.browse.search.wraparound"))
-				return TYPEAHEAD_ERROR;
+				goto search_hit_boundary;
 
 			i = 0;
 			break;

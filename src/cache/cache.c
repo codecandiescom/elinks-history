@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.40 2003/08/05 01:12:13 pasky Exp $ */
+/* $Id: cache.c,v 1.41 2003/09/07 11:08:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -256,13 +256,6 @@ ff:;
 
 	if (trunc) truncate_entry(e, offset + length, 0);
 
-#if 0
-	foreach (f, e->frag)
-		fprintf(stderr, "%d, %d, %d\n",
-			f->offset, f->length, f->real_length);
-	debug("ret-");
-#endif
-
 	return ret;
 }
 
@@ -334,7 +327,9 @@ truncate_entry(struct cache_entry *e, int off, int final)
 	}
 
 	foreach (f, e->frag) {
-		if (f->offset >= off) {
+		long size = off - f->offset;
+
+		if (size < 0) {
 
 del:
 			while ((void *)f != &e->frag) {
@@ -346,14 +341,11 @@ del:
 			}
 			return;
 		}
-		if (f->offset + f->length > off) {
-			f->length = off - f->offset;
-			/* FIXME: quite strange:
-			 * if f->length = off - f->offset
-			 * then -(f->offset + f->length - off) =
-			 * -(f->offset + (off - f->offset) - off) = 0
-			 * Conclusion: it never enlarges ... --Zas */
-			enlarge(e, -(f->offset + f->length - off));
+
+		if (f->length > size) {
+			enlarge(e, -(f->length - size));
+			f->length = size;
+
 			if (final) {
 				g = mem_realloc(f, sizeof(struct fragment)
 						   + f->length);
@@ -383,9 +375,11 @@ free_entry_to(struct cache_entry *e, int off)
 			del_from_list(g);
 			mem_free(g);
 		} else if (f->offset < off) {
-			enlarge(e, f->offset - off);
-			f->length -= off - f->offset;
-			memmove(f->data, f->data + off - f->offset, f->length);
+			long size = off - f->offset;
+
+			enlarge(e, -size);
+			f->length -= size;
+			memmove(f->data, f->data + size, f->length);
 			f->offset = off;
 		} else break;
 	}
@@ -444,6 +438,9 @@ garbage_collection(int u)
 	long ccs = 0;
 	int no = 0;
 	long opt_cache_memory_size = get_opt_long("document.cache.memory.size");
+	long opt_cache_gc_size = opt_cache_memory_size
+				 * MEMORY_CACHE_GC_PERCENT  / 100;
+
 
 	if (!u && cache_size <= opt_cache_memory_size) return;
 
@@ -464,9 +461,8 @@ garbage_collection(int u)
 
 	if (!u && ncs <= opt_cache_memory_size) return;
 
-	for (e = cache.prev; (void *)e != &cache; e = e->prev) {
-		if (!u && ncs <= opt_cache_memory_size * MEMORY_CACHE_GC_PERCENT
-				 / 100)
+	foreachback (e, cache) {
+		if (!u && ncs <= opt_cache_gc_size)
 			goto g;
 		if (e->refcount || is_entry_used(e)) {
 			no = 1;
@@ -489,10 +485,10 @@ g:
 
 	if (!u) {
 		for (f = e; (void *)f != &cache; f = f->next) {
-			if (ncs + f->data_size <= opt_cache_memory_size
-						  * MEMORY_CACHE_GC_PERCENT
-						  / 100) {
-				ncs += f->data_size;
+			long newncs = ncs + f->data_size;
+
+			if (newncs <= opt_cache_gc_size) {
+				ncs = newncs;
 				f->tgc = 0;
 			}
 		}
@@ -504,8 +500,7 @@ g:
 			delete_cache_entry(f->prev);
 	}
 #if 0
-	if (!no && cache_size > get_opt_long("document.cache.memory.size")
-				* MEMORY_CACHE_GC_PERCENT / 100) {
+	if (!no && cache_size > opt_cache_gc_size) {
 		internal("garbage collection doesn't work, cache size %ld",
 			 cache_size);
 	}

@@ -392,7 +392,7 @@ msgstr "Modifica segnalibro"
 #. delete_item
 #: src/bookmarks/dialogs.c:144
 msgid "Delete this bookmark?"
-msgstr ""
+msgstr "Cancellare questo segnalibro?"
 
 #. clear_all_items_title
 #: src/bookmarks/dialogs.c:146
@@ -533,7 +533,7 @@ msgstr "non valido"
 
 #: src/cache/dialogs.c:127
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: src/cache/dialogs.c:130 src/config/options.inc:585
 msgid "Header"
@@ -903,7 +903,7 @@ msgstr ""
 
 #: src/config/cmdline.c:715
 msgid "Control an already running ELinks"
-msgstr ""
+msgstr "Controlla una istanza di ELinks in esecuzione"
 
 #: src/config/cmdline.c:717
 msgid ""
@@ -990,7 +990,7 @@ msgstr ""
 
 #: src/config/cmdline.c:760
 msgid "Verbose level"
-msgstr ""
+msgstr "Livello di verbosità"
 
 #: src/config/cmdline.c:762
 msgid ""
@@ -1060,8 +1060,8 @@ msgid ""
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
 "## Ovviamente, se non ti piace quello che ELinks farà di questo file,\n"
-"## puoi cambiare il comportamento modificando l'opzione config."
-"saving_style.\n"
+"## puoi cambiare il comportamento modificando l'opzione "
+"config.saving_style.\n"
 "## Dai, siamo dei bravi ragazzi dopo tutto.\n"
 
 #: src/config/conf.c:722
@@ -2148,7 +2148,7 @@ msgstr "Dimensione predefinita dell'input nei form se nessuna è specificata."
 
 #: src/config/options.inc:190
 msgid "Insert mode"
-msgstr ""
+msgstr "Modalità inserimento"
 
 #: src/config/options.inc:192
 msgid ""
@@ -2434,7 +2434,7 @@ msgstr ""
 
 #: src/config/options.inc:328
 msgid "Vertical step"
-msgstr ""
+msgstr "Passo verticale"
 
 #: src/config/options.inc:330
 msgid ""
@@ -3555,8 +3555,8 @@ msgid ""
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 "Gestore (programma esterno) per questo protocollo. Chiama\n"
-"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, unix-"
-"xwin)."
+"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, "
+"unix-xwin)."
 
 #: src/config/options.inc:935
 #, fuzzy
@@ -4739,12 +4739,12 @@ msgstr "Spiacente, ma la cartella \"%s\" è in uso in questo momento."
 #. delete_marked_items_title
 #: src/dialogs/download.c:414
 msgid "Interrupt marked downloads"
-msgstr ""
+msgstr "Interrompi download selezionati"
 
 #. delete_marked_items
 #: src/dialogs/download.c:416
 msgid "Interrupt marked downloads?"
-msgstr ""
+msgstr "Interrompere i download selezionati?"
 
 #. delete_item_title
 #: src/dialogs/download.c:422
@@ -4755,12 +4755,12 @@ msgstr "Interrotto"
 #. delete_item
 #: src/dialogs/download.c:424
 msgid "Interrupt this download?"
-msgstr ""
+msgstr "Interrompere questo download?"
 
 #. clear_all_items_title
 #: src/dialogs/download.c:426
 msgid "Interrupt all downloads"
-msgstr ""
+msgstr "Interrompe tutti i download"
 
 #. clear_all_items_title
 #: src/dialogs/download.c:428
@@ -5516,8 +5516,8 @@ msgstr "Form non salvato"
 #: src/formhist/dialogs.c:179
 msgid ""
 "No saved information for this URL.\n"
-"If you want to save passwords for this URL, enable it by the \"Toggle saving"
-"\" button."
+"If you want to save passwords for this URL, enable it by the \"Toggle "
+"saving\" button."
 msgstr ""
 "Non ci sono informazioni salvate per questo URL.\n"
 "Se desideri salvare le password per questo URL, abilitale tramite il "
@@ -5900,8 +5900,8 @@ msgstr ""
 "Associazione Gestore <-> tipo MIME. Il primo sotto albero è la\n"
 "classe MIME, mentre il secondo sotto albero è il tipo MIME (il\n"
 "gestore di image/gif risiedera in mime.type.image.gif). Ogni opzione\n"
-"del tipo MIME dovrebbe contenere il nome (considerando le maiuscole/"
-"minuscole)\n"
+"del tipo MIME dovrebbe contenere il nome (considerando le "
+"maiuscole/minuscole)\n"
 "del gestore MIME (le sue proprietà sono memorizzate in mime.handler.<nome>)."
 
 #: src/mime/backend/default.c:35
@@ -6057,8 +6057,8 @@ msgid ""
 "also be checked before deciding the handler."
 msgstr ""
 "Dà priorità alle voci per l'ordine dei file nel percorso di\n"
-"mailcap. Questo significa che anche le voci con metacaratteri (come image/"
-"*)\n"
+"mailcap. Questo significa che anche le voci con metacaratteri (come "
+"image/*)\n"
 "saranno controllate prima di decidere il gestore."
 
 #: src/mime/backend/mailcap.c:128
@@ -6801,9 +6801,9 @@ msgid ""
 "saved to the configuration file, instead of just all the options. This "
 "simplifies our situation greatly when we see that some option has "
 "inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of config."
-"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
-"for any inconvience caused."
+"a subtle way. Thus, we recommend you to change the value of "
+"config.saving_style option to 3 in order to get the \"right\" behaviour. "
+"Apologies for any inconvience caused."
 msgstr ""
 "Hai l'opzione config.saving_style impostata a un valore obsoleto. Gli "
 "algoritmi di salvataggio della configurazione di ELinks sono stati cambiati "
@@ -6811,9 +6811,9 @@ msgstr ""
 "sono salvate nel file di configurazione, invece di tutte quante. Questo "
 "semplifica molto la situazione quando vediamo che delle opzioni hanno un "
 "valore predefinito inappropriato o abbiamo bisogno di cambiarne la "
-"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione config."
-"saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le mie "
-"scuse per qualsiasi inconveniente causato."
+"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione "
+"config.saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le "
+"mie scuse per qualsiasi inconveniente causato."
 
 #: src/sched/session.c:683
 msgid "Welcome"
@@ -7042,17 +7042,17 @@ msgstr "valore"
 
 #: src/viewer/text/form.c:1470
 msgid "read only"
-msgstr ""
+msgstr "sola lettura"
 
 #: src/viewer/text/form.c:1481
 #, c-format
 msgid "press %s to navigate"
-msgstr ""
+msgstr "premere %s per la navigazione"
 
 #: src/viewer/text/form.c:1483
 #, c-format
 msgid "press %s to edit"
-msgstr ""
+msgstr "premere %s per modificare"
 
 #: src/viewer/text/form.c:1505
 #, fuzzy, c-format
@@ -7178,7 +7178,7 @@ msgstr "Impossibile trovare un collegamento con il testo '%s'."
 
 #: src/viewer/text/search.c:1396
 msgid "No links in current document"
-msgstr ""
+msgstr "Nessun collegamento nel documento corrente"
 
 #: src/viewer/text/search.c:1476
 msgid "Search for text"
@@ -7211,6 +7211,7 @@ msgstr "Cerca indietro"
 #: src/viewer/text/textarea.c:361
 msgid "You cannot launch an external editor in the anonymous mode."
 msgstr ""
+"Impossibile lanciare un editor esterno quando si è in modalità anonima."
 
 #: src/viewer/text/textarea.c:370
 msgid "You can do this only on the master terminal"

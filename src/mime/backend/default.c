@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.31 2003/12/31 08:50:40 jonas Exp $ */
+/* $Id: default.c,v 1.32 2004/04/15 14:27:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,7 +158,6 @@ get_mime_handler_name(unsigned char *type, int xwin)
 {
 	struct option *opt;
 	unsigned char *name = get_mime_type_name(type);
-	unsigned char *system_str;
 
 	if (!name) return NULL;
 
@@ -166,14 +165,8 @@ get_mime_handler_name(unsigned char *type, int xwin)
 	mem_free(name);
 	if (!opt) return NULL;
 
-	system_str = get_system_str(xwin);
-	if (!system_str) return NULL;
-
-	name = straconcat("mime.handler.", opt->value.string,
-			  ".", system_str, NULL);
-	mem_free(system_str);
-
-	return name;
+	return straconcat("mime.handler.", opt->value.string,
+			  ".", get_system_str(xwin), NULL);
 }
 
 static struct mime_handler *

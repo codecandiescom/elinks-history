@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.65 2004/04/15 14:21:49 jonas Exp $ */
+/* $Id: user.c,v 1.66 2004/04/15 14:27:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,15 +30,9 @@ get_user_program(struct terminal *term, unsigned char *progid, int progidlen)
 {
 	struct option *opt;
 	int xwin = term ? term->environment & ENV_XWIN : 0;
-	unsigned char *system_str = get_system_str(xwin);
 	struct string name;
 
-	if (!system_str) return NULL;
-
-	if (!init_string(&name)) {
-		mem_free(system_str);
-		return NULL;
-	}
+	if (!init_string(&name)) return NULL;
 
 	add_to_string(&name, "protocol.user.");
 
@@ -48,8 +42,7 @@ get_user_program(struct terminal *term, unsigned char *progid, int progidlen)
 	assert(sizeof("protocol.user.") - 1 == 14);
 
 	add_char_to_string(&name, '.');
-	add_to_string(&name, system_str);
-	mem_free(system_str);
+	add_to_string(&name, get_system_str(xwin));
 
 	opt = get_opt_rec_real(config_options, name.source);
 

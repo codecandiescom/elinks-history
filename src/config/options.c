@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.387 2003/10/26 16:47:13 jonas Exp $ */
+/* $Id: options.c,v 1.388 2003/10/26 23:43:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -569,6 +569,7 @@ register_change_hooks(struct change_hook_info *change_hooks)
 		struct option *option = get_opt_rec(config_options,
 						    change_hooks[i].name);
 
+		assert(option);
 		option->change_hook = change_hooks[i].change_hook;
 	}
 }
@@ -1020,6 +1021,21 @@ change_hook_html(struct session *ses, struct option *current, struct option *cha
 }
 
 static int
+change_hook_active_link(struct session *ses, struct option *current, struct option *changed)
+{
+	if (!d_opt) return 0;
+
+	d_opt->active_link_fg = get_opt_color("document.browse.links.active_link.colors.text");
+	d_opt->active_link_bg = get_opt_color("document.browse.links.active_link.colors.background");
+	d_opt->color_active_link = get_opt_bool("document.browse.links.active_link.enable_color");
+	d_opt->invert_active_link = get_opt_bool("document.browse.links.active_link.invert");
+	d_opt->underline_active_link = get_opt_bool("document.browse.links.active_link.underline");
+	d_opt->bold_active_link = get_opt_bool("document.browse.links.active_link.bold");
+
+	return 0;
+}
+
+static int
 change_hook_terminal(struct session *ses, struct option *current, struct option *changed)
 {
 	cls_redraw_all_terminals();
@@ -1070,6 +1086,8 @@ static struct change_hook_info change_hooks[] = {
 	{ "config.show_template",	change_hook_stemplate },
 	{ "connection",			change_hook_connection },
 	{ "document.browse",		change_hook_html },
+	{ "document.browse.links.active_link",
+					change_hook_active_link },
 	{ "document.cache",		change_hook_cache },
 	{ "document.colors",		change_hook_html },
 	{ "document.html",		change_hook_html },

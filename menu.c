@@ -1444,12 +1444,14 @@ void auth_layout(struct dialog_data *dlg)
 
 int auth_ok(struct dialog_data *dlg, struct dialog_item_data *di)
 {
+	((struct http_auth_basic *)dlg->dlg->udata2)->blocked = 0;
 	reload(dlg->dlg->refresh_data, -1);
 	return ok_dialog(dlg, di);
 }
 
 int auth_cancel(struct dialog_data *dlg, struct dialog_item_data *di)
 {
+	((struct http_auth_basic *)dlg->dlg->udata2)->blocked = 0;
 	del_auth_entry(dlg->dlg->udata2);
 	return cancel_dialog(dlg, di);
 }

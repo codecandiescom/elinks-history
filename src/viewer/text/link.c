@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.211 2004/06/13 22:08:30 zas Exp $ */
+/* $Id: link.c,v 1.212 2004/06/13 22:19:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -438,10 +438,12 @@ set_pos_y(struct document_view *doc_view, struct link *link)
 		   doc_view->document->height - doc_view->box.height);
 }
 
+/* direction == 1 -> DOWN
+ * direction == -1 -> UP
+ * normal == 0 -> PAGE	*/ /* TODO: invert test -> page */
 void
-find_link(struct document_view *doc_view, int p, int s)
+find_link(struct document_view *doc_view, int direction, int normal)
 {
-	/* p=1 - top, p=-1 - bottom, s=0 - pgdn, s=1 - down */
 	struct link **line;
 	struct link *link = NULL;
 	int link_pos;
@@ -450,7 +452,7 @@ find_link(struct document_view *doc_view, int p, int s)
 	assert(doc_view && doc_view->document && doc_view->vs);
 	if_assert_failed return;
 
-	if (p == -1) {
+	if (direction == -1) {
 		line = doc_view->document->lines2;
 		if (!line) goto nolink;
 		y = doc_view->vs->y + doc_view->box.height - 1;
@@ -467,18 +469,20 @@ find_link(struct document_view *doc_view, int p, int s)
 	ymin = int_max(0, doc_view->vs->y);
 	ymax = int_min(doc_view->document->height,
 		       doc_view->vs->y + doc_view->box.height);
+
+	/* TODO: split by direction. */
 	do {
 		if (line[y]
-		    && (!link || (p > 0 ? line[y] < link : line[y] > link)))
+		    && (!link || (direction > 0 ? line[y] < link : line[y] > link)))
 			link = line[y];
-		y += p;
+		y += direction;
 	} while (y >= ymin && y < ymax);
 
 	if (!link) goto nolink;
 
 	link_pos = link - doc_view->document->links;
-	if (s == 0) {
-		next_in_view(doc_view, link_pos, p, in_view, NULL);
+	if (!normal) {
+		next_in_view(doc_view, link_pos, direction, in_view, NULL);
 		return;
 	}
 	doc_view->vs->current_link = link_pos;

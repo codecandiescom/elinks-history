@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.54 2005/03/27 00:51:40 rrowan Exp $
+# $Id: hooks.pl,v 1.55 2005/03/27 01:17:53 rrowan Exp $
 #
 # This file is (c) Russ Rowan and GPL'd.
 
@@ -106,6 +106,8 @@ smart prefixes:
           MirrorDot: md or mirrordot
           Coral cache: cc, coral, or nyud (requires URL)
           W3C page validators: vhtml or vcss (current url or specified)
+          the Dialectizer: dia <dialect> (current url or specified)
+               redneck, jive, cockney, fudd, bork, moron, piglatin, or hacker
 elinks: el / elinks, bz / bug (# or search optional), doc(|s|umentation), faq
 
 =cut

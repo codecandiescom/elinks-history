@@ -768,6 +768,7 @@ void draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int
 		for (i = 0; i < fsd->x; i++) {
 			int wwx = fsd->f[i].xw;
 			
+			/* FIXME: don't use hardcoded charcodes..? */
 			if (i) fill_area(t, x, y + 1, 1, wwy, 179 | ATTR_FRAME);
 			if (j) fill_area(t, x + 1, y, wwx, 1, 196 | ATTR_FRAME);
 			if (i && j) set_char(t, x, y, 197 | ATTR_FRAME);
@@ -2166,7 +2167,8 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 					if (lnl > 1)
 						input_field(ses->term, NULL, TEXT(T_GO_TO_LINK), TEXT(T_ENTER_LINK_NUMBER), TEXT(T_OK), TEXT(T_CANCEL), ses, NULL, lnl, d, 1, f_data->nlinks, check_number, (void (*)(void *, unsigned char *)) goto_link_number, NULL);
 				}
-				/*else if (ev->x == 'x') {
+#if 0
+				else if (ev->x == 'x') {
 					struct node *node;
 					static int n = -1;
 					int i;
@@ -2190,7 +2192,8 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 					}
 					if (i >= 0) n = -1;
 					x = 0;
-				}*/
+				}
+#endif
 				else x = 0;
 		}
 	} else if (ev->ev == EV_MOUSE) {
@@ -2278,7 +2281,7 @@ void do_for_frame(struct session *ses, void (*f)(struct session *, struct f_data
 void do_mouse_event(struct session *ses, struct event *ev)
 {
 	struct event evv;
-	struct f_data_c *fdd, *fd = current_frame(ses);	/* !!! FXIME: frames */
+	struct f_data_c *fdd, *fd = current_frame(ses);	/* !!! FIXME: frames */
 	struct document_options *o;
 	
 	if (!fd) return;

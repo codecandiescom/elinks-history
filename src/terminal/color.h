@@ -1,17 +1,17 @@
-/* $Id: color.h,v 1.1 2003/08/23 16:33:21 jonas Exp $ */
+/* $Id: color.h,v 1.2 2003/08/24 02:53:27 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
 
 #include "util/color.h"
 
+/* Mixes the two colors to a terminal text color. */
+/* If @allow_dark_on_black is non zero the foreground color will be adjusted. */
+unsigned char mix_color_pair(struct color_pair *colors);
+
 #if 0
 #include "terminal/draw.h"
 #include "terminal/terminal.h"
-
-/* Mixes the two colors to a terminal text color. */
-/* If @allow_dark_on_black is non zero the foreground color will be adjusted. */
-unsigned char mix_colors(color_t background, color_t foreground);
 
 /* Mixes the two colors and adds attribute enhancements to the color. */
 unsigned char mix_attr_colors(color_t background, color_t foreground,

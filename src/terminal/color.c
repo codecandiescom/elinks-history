@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.1 2003/08/23 16:33:21 jonas Exp $ */
+/* $Id: color.c,v 1.2 2003/08/24 02:53:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -262,19 +262,18 @@ fg_color(int fg, int bg)
 	return fg;
 }
 
-#if 0
 unsigned char
-mix_colors(color_t background, color_t foreground)
+mix_color_pair(struct color_pair *color)
 {
-	register unsigned char fg = find_nearest_color(foreground, 16);
-	register unsigned char bg = find_nearest_color(background, 8);
+	register unsigned char fg = find_nearest_color(color->foreground, 16);
+	register unsigned char bg = find_nearest_color(color->background, 8);
 
-	if (d_opt && !d_opt->allow_dark_on_black)
-		fg = fg_color(fg, bg);
+	fg = fg_color(fg, bg);
 
 	return ((fg & 0x08) << 3) | (bg << 3) | (fg & 0x07);
 }
 
+#if 0
 unsigned char
 mix_attr_colors(color_t background, color_t foreground,
 		enum screen_char_attr attr, enum term_mode_type type)

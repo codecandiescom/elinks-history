@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: find_unused_translations.sh,v 1.6 2002/12/15 02:18:35 zas Exp $
+# $Id: find_unused_translations.sh,v 1.7 2002/12/15 02:27:49 zas Exp $
 
 # This script lists unused translations and, if given the argument 'patch',
 # generates <language>.lng.patch for each translation file to remove them.
@@ -39,7 +39,7 @@ if [ "$1" = 'patch' ]
 then
 	echo 'Generating english.lng.patch ...'
 	sed -e "s/^\\($(< translations_unused tr '\n' ' ' | sed -e 's/ $/\
-/;s/ /\\\|/g')\\)/#\\1/" english.lng |
+/;s/ /,\\\|/g')\\)/#\\1/" english.lng |
 		diff -u english.lng - > english.lng.patch
 fi
 

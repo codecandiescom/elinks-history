@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.64 2004/11/24 22:16:54 zas Exp $ */
+/* $Id: group.c,v 1.65 2004/12/28 13:10:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,7 +90,7 @@ group_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int w = dialog_max_width(term);
-	int rw = 0;
+	int rw = int_min(w, strlen(dlg_data->dlg->title));
 	int y = 0;
 	int n = dlg_data->number_of_widgets - 2;
 

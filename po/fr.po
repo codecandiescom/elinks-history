@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"POT-Creation-Date: 2004-07-29 12:13+0200\n"
-"PO-Revision-Date: 2004-07-29 12:15+0200\n"
+"POT-Creation-Date: 2004-07-30 18:11+0200\n"
+"PO-Revision-Date: 2004-07-30 18:15+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -58,7 +58,7 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/viewer/text/search.c:950 src/viewer/text/search.c:1286
 #: src/viewer/text/search.c:1398 src/viewer/text/textarea.c:363
 #: src/viewer/text/textarea.c:372 src/viewer/text/view.c:577
-#: src/viewer/text/view.c:1138
+#: src/viewer/text/view.c:1159
 msgid "OK"
 msgstr "OK"
 
@@ -787,20 +787,31 @@ msgstr "Ne pas numéroter les liens en sortie (dump)"
 
 #: src/config/cmdline.c:705
 msgid ""
-"Prevents numbering of links (and showing their list at the end of\n"
-"the dumped document) in the -dump output; this was the default behaviour\n"
-"until 0.5pre12. Note that this really affects only -dump, nothing else."
+"Prevents numbering of links in the -dump output; this was the\n"
+"default behaviour until 0.5pre12.\n"
+"Note that this really affects only -dump, nothing else."
 msgstr ""
-"Supprime la numérotation des liens (et la liste de ceux-ci en fin de\n"
-"document) dans la sortie de -dump; ceci était le fonctionnement par\n"
-"défaut jusqu'à la version 0.5pre12. Note que cette option n'affecte\n"
-"que -dump et rien d'autre."
+"Supprime la numérotation des liens dans la sortie de -dump; ceci \n"
+"était le fonctionnement par défaut jusqu'à la version 0.5pre12.\n"
+"Notez que cette option ne concerne que -dump et rien d'autre."
 
 #: src/config/cmdline.c:709
+msgid "Do not dump links references in dump output"
+msgstr "Ne pas afficher les références des liens dans la sortie (dump)"
+
+#: src/config/cmdline.c:711
+msgid ""
+"Prevents dumping of links references (URIs) in the -dump output.\n"
+"Note that this really affects only -dump, nothing else."
+msgstr ""
+"Supprime l'affichage des références des liens dans la sortie de -dump.\n"
+"Notez que cette option ne concerne que -dump et rien d'autre."
+
+#: src/config/cmdline.c:714
 msgid "Control an already running ELinks"
 msgstr "Contrôler une instance préexistante d'ELinks"
 
-#: src/config/cmdline.c:711
+#: src/config/cmdline.c:716
 msgid ""
 "Mozilla compliant support for controlling a remote ELinks instance.\n"
 "The command takes an additional argument containing the method which\n"
@@ -832,11 +843,11 @@ msgstr ""
 "  addBookmark(URL)          -- ajoute un signet pour l'URL\n"
 "  xfeDoCommand(openBrowser) -- ouvre une nouvelle fenêtre"
 
-#: src/config/cmdline.c:725
+#: src/config/cmdline.c:730
 msgid "Connect to session ring with given ID"
 msgstr "Se connecter au groupe de sessions correspondant à cet ID"
 
-#: src/config/cmdline.c:727
+#: src/config/cmdline.c:732
 msgid ""
 "ID of session ring this ELinks session should connect to. ELinks\n"
 "works in so-called session rings, whereby all instances of ELinks\n"
@@ -867,21 +878,21 @@ msgstr ""
 "-no-connect. Dans tous les cas, les fichiers d'état ne sont pas modifiés\n"
 "sur le disque, sauf si vous utilisez conjointement l'option -touch-files."
 
-#: src/config/cmdline.c:742
+#: src/config/cmdline.c:747
 msgid "Write the source of given URL to stdout"
 msgstr "Ecrire la source de l'URL sur la sortie standard"
 
-#: src/config/cmdline.c:744
+#: src/config/cmdline.c:749
 msgid "Write the given HTML document in source form to stdout."
 msgstr "Ecrire la source du document sur la sortie standard."
 
-#: src/config/cmdline.c:748
+#: src/config/cmdline.c:753
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
 msgstr ""
 "Modifier les fichiers dans ~/.elinks avec les options -no-connect/-session-"
 "ring"
 
-#: src/config/cmdline.c:750
+#: src/config/cmdline.c:755
 msgid ""
 "Set to 1 to have runtime state files (bookmarks, history, ...)\n"
 "changed even when -no-connect or -session-ring is used; has no\n"
@@ -891,11 +902,11 @@ msgstr ""
 "soient modifiés même si les options -no-connect ou -session-ring\n"
 "sont utilisées; aucun effet sans ces options."
 
-#: src/config/cmdline.c:754
+#: src/config/cmdline.c:759
 msgid "Verbose level"
 msgstr "Niveau de verbosité"
 
-#: src/config/cmdline.c:756
+#: src/config/cmdline.c:761
 msgid ""
 "The verbose level controls what messages are shown at\n"
 "start up and while running:\n"
@@ -909,11 +920,11 @@ msgstr ""
 "\t1 pour ne montrer que les erreurs sérieuses et les warnings\n"
 "\t2 pour montrer tous les messages\n"
 
-#: src/config/cmdline.c:762
+#: src/config/cmdline.c:767
 msgid "Print version information and exit"
 msgstr "Afficher la version et quitter"
 
-#: src/config/cmdline.c:764
+#: src/config/cmdline.c:769
 msgid "Print ELinks version information and exit."
 msgstr "Afficher la version d'ELinks et quitter."
 
@@ -6770,10 +6781,10 @@ msgstr "Aller au lien"
 msgid "Enter link number"
 msgstr "Entrez un numéro de lien"
 
-#: src/viewer/text/view.c:1135
+#: src/viewer/text/view.c:1156
 msgid "Save error"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/viewer/text/view.c:1136
+#: src/viewer/text/view.c:1157
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"

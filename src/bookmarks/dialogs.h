@@ -1,4 +1,4 @@
-/* $Id: dialogs.h,v 1.14 2004/07/15 00:45:33 jonas Exp $ */
+/* $Id: dialogs.h,v 1.15 2005/03/30 10:09:03 zas Exp $ */
 
 #ifndef EL__BOOKMARKS_DIALOGS_H
 #define EL__BOOKMARKS_DIALOGS_H
@@ -9,7 +9,7 @@
 #include "sched/session.h"
 
 /* Search memorization */
-extern unsigned char *bm_last_searched_name;
+extern unsigned char *bm_last_searched_title;
 extern unsigned char *bm_last_searched_url;
 extern struct hierbox_browser bookmark_browser;
 

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.163 2005/03/22 05:09:39 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.164 2005/03/30 10:09:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -179,7 +179,7 @@ done_bookmarks(struct module *module)
 
 	write_bookmarks();
 	free_bookmarks(&bookmarks, &bookmark_browser.root.child);
-	mem_free_if(bm_last_searched_name);
+	mem_free_if(bm_last_searched_title);
 	mem_free_if(bm_last_searched_url);
 }
 

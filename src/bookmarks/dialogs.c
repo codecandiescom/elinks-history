@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.214 2005/03/30 10:01:39 zas Exp $ */
+/* $Id: dialogs.c,v 1.215 2005/03/30 10:09:03 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -34,7 +34,7 @@
 
 
 /* Last searched values */
-unsigned char *bm_last_searched_name = NULL;
+unsigned char *bm_last_searched_title = NULL;
 unsigned char *bm_last_searched_url = NULL;
 
 static void
@@ -494,7 +494,7 @@ void
 bookmark_manager(struct session *ses)
 {
 	/* Reset momorized search criterias */
-	mem_free_set(&bm_last_searched_name, NULL);
+	mem_free_set(&bm_last_searched_title, NULL);
 	mem_free_set(&bm_last_searched_url, NULL);
 	bookmark_browser.expansion_callback = bookmarks_set_dirty;
 	hierbox_browser(&bookmark_browser, ses);
@@ -576,13 +576,13 @@ bookmark_search_do(void *data)
 		return;
 
 	/* Memorize last searched title */
-	mem_free_set(&bm_last_searched_name, stracpy(ctx.title));
-	if (!bm_last_searched_name) return;
+	mem_free_set(&bm_last_searched_title, stracpy(ctx.title));
+	if (!bm_last_searched_title) return;
 
 	/* Memorize last searched url */
 	mem_free_set(&bm_last_searched_url, stracpy(ctx.url));
 	if (!bm_last_searched_url) {
-		mem_free(bm_last_searched_name);
+		mem_free(bm_last_searched_title);
 		return;
 	}
 
@@ -603,7 +603,7 @@ launch_bm_search_doc_dialog(struct terminal *term,
 			    struct session *ses)
 {
 	do_edit_dialog(term, 1, N_("Search bookmarks"),
-		       bm_last_searched_name, bm_last_searched_url,
+		       bm_last_searched_title, bm_last_searched_url,
 		       ses, parent, bookmark_search_do, NULL, NULL,
 		       EDIT_DLG_SEARCH);
 }

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.34 2003/06/08 15:09:31 jonas Exp $ */
+/* $Id: mailcap.c,v 1.35 2003/06/11 03:04:05 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -169,37 +169,37 @@ add_mailcap_entry(struct mailcap_entry *entry, unsigned char *type)
  *
  * line wraps with a \ at the end of the line, # for comments. */
 
+#define skip_whitespace(S) \
+	do { while (*(S) && isspace(*(S))) (S)++; } while (0)
+
 /* Returns a NULL terminated rfc 1524 field, while modifying <next> to point
  * to the next field. */
 static unsigned char *
 get_field(unsigned char **next)
 {
 	unsigned char *field;
-	unsigned char *p;
+	unsigned char *fieldend;
 
 	if (!next || !*next) return NULL;
 
 	field = *next;
-	while (0xfed) { /* with chars */
-		/* Get pointer to the next occurence of ; or \ */
-		*next = strpbrk(field, ";\\");
 
-		if (!*next) break;
-
-		if (**next == '\\') {
-			field = *next + 1;
-			if (*field) field++;
-		} else {
-			*(*next) = 0;
-			(*next)++;
-			/* Skip whitespace */
-			while (**next && isspace(**next)) (*next)++;
-			break;
-		}
+	/* End field at the next occurence of ; */
+	fieldend = strchr(field, ';');
+	if (fieldend) {
+		*fieldend = '\0';
+		*next = fieldend;
+		fieldend--;
+		(*next)++;
+		skip_whitespace(*next);
+	} else {
+		*next = NULL;
+		fieldend = field + strlen(field) - 1;
 	}
+
 	/* Remove trailing whitespace */
-	for (p = field + strlen(field) - 1; p >= field && isspace(*p); p--)
-		*p = 0;
+	while (field <= fieldend && isspace(*fieldend))
+		*fieldend-- = '\0';
 
 	return field;
 }
@@ -212,20 +212,19 @@ get_field(unsigned char **next)
 static unsigned char *
 get_field_text(unsigned char *field)
 {
-	/* Skip whitespace */
-	while (*field && isspace(*field)) field++;
+	skip_whitespace(field);
 
 	if (*field == '=') {
 		field++;
-
-		/* Skip whitespace */
-		while (*field && isspace(*field)) field++;
+		skip_whitespace(field);
 
 		return stracpy(field);
 	}
 
 	return NULL;
 }
+
+#undef skip_whitespace
 
 /* Parse optional extra definitions. Zero return value means syntax error  */
 static inline int

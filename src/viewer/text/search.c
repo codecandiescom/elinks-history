@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.227 2004/06/03 21:01:54 zas Exp $ */
+/* $Id: search.c,v 1.228 2004/06/03 21:08:06 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1318,17 +1318,15 @@ search_dlg_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 }
 
 /* XXX: @data is ignored. */
-void
+static void
 search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
-	    unsigned char *title,
-	    unsigned char *text,
-	    unsigned char *okbutton,
-	    unsigned char *cancelbutton,
-	    void *data, struct input_history *history, int l,
-	    unsigned char *def, int min, int max,
-	    int (*check)(struct dialog_data *, struct widget_data *),
-	    void (*fn)(void *, unsigned char *),
-	    void (*cancelfn)(void *))
+	      unsigned char *title, unsigned char *text,
+	      unsigned char *okbutton, unsigned char *cancelbutton,
+	      void *data, struct input_history *history, int l,
+	      unsigned char *def, int min, int max,
+	      int (*check)(struct dialog_data *, struct widget_data *),
+	      void (*fn)(void *, unsigned char *),
+	      void (*cancelfn)(void *))
 {
 	struct dialog *dlg;
 	unsigned char *field;
@@ -1390,7 +1388,6 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	do_dialog(term, dlg, ml);
 }
 
-
 void
 search_dlg(struct session *ses, struct document_view *doc_view, int a)
 {
@@ -1398,11 +1395,13 @@ search_dlg(struct session *ses, struct document_view *doc_view, int a)
 	void *search_function = a > 0 ? search_for   : search_for_back;
 
 	search_dlg_do(ses->tab->term, NULL, 1,
-		    title, N_("Search for text"),
-		    N_("OK"), N_("Cancel"), ses, &search_history,
-		    MAX_STR_LEN, "", 0, 0, NULL,
-		    search_function,
-		    NULL);
+		      title, N_("Search for text"),
+		      N_("OK"), N_("Cancel"),
+		      ses, &search_history, MAX_STR_LEN,
+		      "", 0, 0,
+		      NULL,
+		      search_function,
+		      NULL);
 }
 
 void

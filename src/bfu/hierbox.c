@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.54 2003/11/09 13:33:37 pasky Exp $ */
+/* $Id: hierbox.c,v 1.55 2003/11/09 14:02:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@ recursively_set_expanded(struct listbox_item *box, int expanded)
 {
 	struct listbox_item *child;
 
-	if (box->sel->type != BI_FOLDER)
+	if (box->type != BI_FOLDER)
 		return;
 
 	box->expanded = expanded;

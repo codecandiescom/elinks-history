@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.102 2003/10/27 01:33:35 pasky Exp $ */
+/* $Id: osdep.c,v 1.103 2003/10/27 01:38:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,32 +251,6 @@ unsigned int resize_count = 0;
 
 #elif defined(WIN32)
 
-int
-exe(unsigned char *path)
-{
-	int r;
-	unsigned char *x1 = !GETSHELL ? DEFAULT_SHELL : GETSHELL;
-	unsigned char *x = *path != '"' ? " /c start /wait " : " /c start /wait \"\" ";
-	unsigned char *p = malloc((strlen(x1) + strlen(x) + strlen(path)) * 2 + 1);
-
-	if (!p) return -1;
-	strcpy(p, x1);
-	strcat(p, x);
-	strcat(p, path);
-	x = p;
-	while (*x) {
-		if (*x == '\\') {
-			memmove(x + 1, x, strlen(x) + 1);
-			x++;
-		}
-		x++;
-	}
-	r = system(p);
-	free(p);
-
-	return r;
-}
-
 #else
 
 int
@@ -486,7 +460,6 @@ unblock_stdin(void)
 
 #if defined(BEOS)
 
-
 #elif defined(HAVE_BEGINTHREAD)
 
 #elif defined(HAVE_CLONE)
@@ -679,31 +652,6 @@ get_output_handle(void)
 
 #elif defined(WIN32)
 
-void input_function(int fd);
-void set_proc_id(int id);
-
-int
-get_input_handle(void)
-{
-	int fd[2];
-	static int ti = -1;
-	static int tp = -1;
-	int pid;
-
-	if (ti != -1) return ti;
-	if (c_pipe(fd) < 0) return 0;
-	ti = fd[0];
-	tp = fd[1];
-
-	pid = fork();
-	if (!pid)
-		input_function(tp);
-	else
-		set_proc_id(pid);
-
-	return ti;
-}
-
 #else
 
 int
@@ -874,12 +822,6 @@ get_common_env(void)
 
 #elif defined(WIN32)
 
-int
-get_system_env(void)
-{
-	return get_common_env() | ENV_WIN32;
-}
-
 #else
 
 int
@@ -940,10 +882,7 @@ void open_in_new_fullscreen(struct terminal *term, unsigned char *exe_name,
 #ifdef WIN32
 void
 open_in_new_win32(struct terminal *term, unsigned char *exe_name,
-		  unsigned char *param)
-{
-	exec_new_elinks(term, "", exe_name, param);
-}
+		  unsigned char *param);
 #endif
 
 #ifdef BEOS

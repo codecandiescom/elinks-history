@@ -1,5 +1,5 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.7 2003/10/09 05:54:39 witekfl Exp $ */
+/* $Id: win32.c,v 1.8 2003/10/27 01:38:55 pasky Exp $ */
 
 #if defined(_WIN32)
 
@@ -153,6 +153,74 @@ void
 set_proc_id(int id)
 {
 	w32_input_pid = id;
+}
+
+
+int
+exe(unsigned char *path)
+{
+	int r;
+	unsigned char *x1 = !GETSHELL ? DEFAULT_SHELL : GETSHELL;
+	unsigned char *x = *path != '"' ? " /c start /wait " : " /c start /wait \"\" ";
+	unsigned char *p = malloc((strlen(x1) + strlen(x) + strlen(path)) * 2 + 1);
+
+	if (!p) return -1;
+	strcpy(p, x1);
+	strcat(p, x);
+	strcat(p, path);
+	x = p;
+	while (*x) {
+		if (*x == '\\') {
+			memmove(x + 1, x, strlen(x) + 1);
+			x++;
+		}
+		x++;
+	}
+	r = system(p);
+	free(p);
+
+	return r;
+}
+
+
+void input_function(int fd);
+void set_proc_id(int id);
+
+int
+get_input_handle(void)
+{
+	int fd[2];
+	static int ti = -1;
+	static int tp = -1;
+	int pid;
+
+	if (ti != -1) return ti;
+	if (c_pipe(fd) < 0) return 0;
+	ti = fd[0];
+	tp = fd[1];
+
+	pid = fork();
+	if (!pid)
+		input_function(tp);
+	else
+		set_proc_id(pid);
+
+	return ti;
+}
+
+
+int
+get_system_env(void)
+{
+	return get_common_env() | ENV_WIN32;
+}
+
+
+void
+open_in_new_win32(struct terminal *term, unsigned char *exe_name,
+		  unsigned char *param)
+{
+	exec_new_elinks(term, "", exe_name, param);
 }
 
 # endif

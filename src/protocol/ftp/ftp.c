@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.67 2002/10/16 14:04:16 pasky Exp $ */
+/* $Id: ftp.c,v 1.68 2002/10/29 23:18:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -837,7 +837,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 								"got "
 								"c->prg.start! "
 								"Call "
-								"pasky@ji.cz "
+								"pasky@ucw.cz "
 								"immediatelly, "
 								"please. And "
 								"expect segfault"

@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.42 2003/05/04 21:45:38 pasky Exp $ */
+/* $Id: error.c,v 1.43 2003/05/04 21:53:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,10 +153,10 @@ dump_backtrace(FILE *f, int trouble)
 
 	strings = backtrace_symbols(stack, size);
 
-	printf("Obtained %d stack frames:\n", size);
+	fprintf(f, "Obtained %d stack frames:\n", size);
 
 	for (i = 0; i < size; i++)
-		printf("[%p] %s\n", stack[i], strings[i]);
+		fprintf(f, "[%p] %s\n", stack[i], strings[i]);
 
 	free(strings);
 

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.21 2003/07/21 04:38:00 jonas Exp $ */
+/* $Id: uri.c,v 1.22 2003/07/21 04:51:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,85 +189,86 @@ get_uri_port(struct uri *uri)
 unsigned char *
 get_uri_string(struct uri *uri, enum uri_component components)
 {
-	unsigned char *str = init_str();
-	int len = 0;
-	enum protocol protocol = check_protocol(uri->protocol,
-						uri->protocollen);
+	struct string string;
+ 	enum protocol protocol = check_protocol(uri->protocol,
+ 						uri->protocollen);
+ 
+ 	assert(uri->protocol && uri->protocollen);
+	if_assert_failed { return NULL; }
 
-	if (!str) return NULL;
-	assert(uri->protocol && uri->protocollen);
-	if_assert_failed { mem_free(str); return NULL; }
+	if (!init_string(&string)) return NULL;
+ 
+ 	if (protocol == PROTOCOL_UNKNOWN
+ 	    || get_protocol_free_syntax(protocol)) {
+ 		/* Custom or unknown or free-syntax protocol;
+ 		 * keep the URI untouched. */
+		add_to_string(&string, uri->protocol);
 
-	if (protocol == PROTOCOL_UNKNOWN
-	    || get_protocol_free_syntax(protocol)) {
-		/* Custom or unknown or free-syntax protocol;
-		 * keep the URI untouched. */
-		mem_free(str);
-		return stracpy(uri->protocol);
-	}
-
+		return string.source;
+ 	}
+ 
 #define wants(x) (components & (x))
-
-	if (wants(URI_PROTOCOL)) {
-		add_bytes_to_str(&str, &len, uri->protocol, uri->protocollen);
-		add_chr_to_str(&str, &len, ':');
-		if (get_protocol_need_slashes(protocol))
-			add_to_str(&str, &len, "//");
-	}
-
-	if (wants(URI_USER) && uri->userlen) {
-		add_bytes_to_str(&str, &len, uri->user, uri->userlen);
-
-		if (wants(URI_PASSWORD) && uri->passwordlen) {
-			add_chr_to_str(&str, &len, ':');
-			add_bytes_to_str(&str, &len, uri->password,
-						     uri->passwordlen);
-		}
-
-		add_chr_to_str(&str, &len, '@');
-	}
-
-	if (wants(URI_HOST) && uri->hostlen) {
+ 
+ 	if (wants(URI_PROTOCOL)) {
+		add_bytes_to_string(&string, uri->protocol, uri->protocollen);
+		add_char_to_string(&string, ':');
+ 		if (get_protocol_need_slashes(protocol))
+			add_to_string(&string, "//");
+ 	}
+ 
+ 	if (wants(URI_USER) && uri->userlen) {
+		add_bytes_to_string(&string, uri->user, uri->userlen);
+ 
+ 		if (wants(URI_PASSWORD) && uri->passwordlen) {
+			add_char_to_string(&string, ':');
+			add_bytes_to_string(&string, uri->password,
+ 						     uri->passwordlen);
+ 		}
+ 
+		add_char_to_string(&string, '@');
+ 	}
+ 
+ 	if (wants(URI_HOST) && uri->host) {
 #ifdef IPV6
-		int brackets = !!memchr(uri->host, ':', uri->hostlen);
-
-		if (brackets) add_chr_to_str(&str, &len, '[');
+ 		int brackets = !!memchr(uri->host, ':', uri->hostlen);
+ 
+		if (brackets) add_char_to_string(&string, '[');
 #endif
-		add_bytes_to_str(&str, &len, uri->host, uri->hostlen);
+		add_bytes_to_string(&string, uri->host, uri->hostlen);
 #ifdef IPV6
-		if (brackets) add_chr_to_str(&str, &len, ']');
+		if (brackets) add_char_to_string(&string, ']');
 #endif
-	}
-
-	if (wants(URI_PORT)) {
-		if (uri->portlen) {
-			add_chr_to_str(&str, &len, ':');
-			add_bytes_to_str(&str, &len, uri->port, uri->portlen);
-		}
+ 	}
+ 
+ 	if (wants(URI_PORT)) {
+ 		if (uri->portlen) {
+			add_char_to_string(&string, ':');
+			add_bytes_to_string(&string, uri->port, uri->portlen);
+ 		}
 #if 0
 		/* We needs to add possibility to only add port if it's
 		 * different from the default protocol port. */
 		else if (protocol != PROTOCOL_USER) {
 			/* For user protocols we don't know a default port.
 			 * Should user protocols ports be configurable? */
-			add_chr_to_str(&str, &len, ':');
-			add_num_to_str(&str, &len, get_protocol_port(protocol));
+			add_char_to_string(&string, ':');
+			add_num_to_str(&string, get_protocol_port(protocol));
 		}
 #endif
 	}
 
 	if (get_protocol_need_slash_after_host(protocol))
-		add_chr_to_str(&str, &len, '/');
+		add_char_to_string(&string, '/');
 
 	if (wants(URI_DATA) && uri->datalen)
-		add_bytes_to_str(&str, &len, uri->data, uri->datalen);
+		add_bytes_to_string(&string, uri->data, uri->datalen);
 
 	if (wants(URI_POST) && uri->post)
-		add_bytes_to_str(&str, &len, uri->post, strlen(uri->post));
+		add_bytes_to_string(&string, uri->post, strlen(uri->post));
 
 #undef wants
 
-	return str;
+	return string.source;
 }
 
 /* This reconstructs URI with password stripped. */
@@ -753,25 +754,30 @@ void
 encode_uri_string(unsigned char *name, unsigned char **data, int *len)
 {
 	unsigned char n[4];
+	struct string string;
 
+	string.source = *data;
+	string.length = *len;
 	n[0] = '%';
 	n[3] = '\0';
 
 	for (; *name; name++) {
 #if 0
 		/* This is probably correct only for query part of URI..? */
-		if (*name == ' ') add_chr_to_str(data, len, '+');
+		if (*name == ' ') add_char_to_string(data, len, '+');
 		else
 #endif
 		if (safe_char(*name)) {
-			add_chr_to_str(data, len, *name);
+			add_char_to_string(&string, *name);
 		} else {
 			/* Hex it. */
 			n[1] = hx((((int) *name) & 0xF0) >> 4);
 			n[2] = hx(((int) *name) & 0xF);
-			add_to_str(data, len, n);
+			add_to_string(&string, n);
 		}
 	}
+	*data = string.source;
+	*len = string.length;
 }
 
 /* This function is evil, it modifies its parameter. */

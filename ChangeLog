@@ -1,3 +1,64 @@
+Mon Oct 18 05:08:40 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Use match_link_text instead of search_link_text when handling a
+	redraw event in link_typeahead_handler to check whether we need to
+	call draw_typeahead_match.  
+
+Mon Oct 18 04:18:24 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Return TYPEAHEAD_ERROR_NO_FURTHER from do_typeahead when 
+	search_link_text returns the current link as a match and the user
+	has told ELinks to go to the next or previous match.  
+	
+	Now ELinks will tell the user that there are no further matches when
+	there are no further matches, even when it loops around from the
+	current match back to the current match.  
+
+Mon Oct 18 04:12:42 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Return TYPEAHEAD_ERROR_NO_FURTHER instead of TYPEAHEAD_ERROR from
+	do_typeahead when document.browse.search.wraparound is disabled, the
+	current link matches the search pattern, and the user tells ELinks 
+	to go to the next or previous match.  
+	
+	This avoids the repeated "Could not find a link with the text '...'" 
+	messages, fixing bug 513 a little more (the previous fix only
+	improved the situation when wraparound was enabled).  
+
+Mon Oct 18 03:14:45 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Swap an if block and its implicit else block.  
+
+Mon Oct 18 03:12:23 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Factor the code to match a string against a link out from
+	search_link_text to the new match_link_text.  
+
+Mon Oct 18 03:06:45 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Eliminate the match_link_text macro, and expand its one call, in
+	search_link_text; 
+
+Sun Oct 17 23:15:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	Hmm, further improve on the checks introduced in sched/action.c
+	(1.108 -> 1.109) fixing problems with moving viewer event handling
+	to do_action().  
+
 Sun Oct 17 21:36:25 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/viewer/text/view.c:

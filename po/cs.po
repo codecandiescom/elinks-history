@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-11-25 09:29+0100\n"
-"PO-Revision-Date: 2003-11-24 21:46+0100\n"
+"PO-Revision-Date: 2003-11-25 23:03+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -102,9 +102,9 @@ msgid "Delete item"
 msgstr "Smazat polo¾ku"
 
 #: src/bfu/hierbox.c:551
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot delete \"%s\""
-msgstr "Tuto volbu nemù¾u smazat."
+msgstr "Nemù¾u smazat \"%s\""
 
 #: src/bfu/hierbox.c:560
 msgid "Delete folder"
@@ -371,7 +371,6 @@ msgid "Header"
 msgstr "Hlavièka"
 
 #: src/cache/dialogs.c:150
-#, fuzzy
 msgid "Cache manager"
 msgstr "Správce cache"
 
@@ -1097,12 +1096,12 @@ msgid ""
 "     the file"
 msgstr ""
 "Urèuje, co se stane, kdy¾ øeknete ELinksu, aby ulo¾il va¹e nastavení:\n"
-"1 znamená, ¾e budou v konfiguraèním souboru pouze zmìnìny hodnoty voleb,\n"
+"0 znamená, ¾e budou v konfiguraèním souboru pouze zmìnìny hodnoty voleb,\n"
 "  které jsou v nìm ji¾ ulo¾eny\n"
-"2 znamená, ¾e budou v konfiguraèním souboru zmìnìny hodnoty voleb, které\n"
+"1 znamená, ¾e budou v konfiguraèním souboru zmìnìny hodnoty voleb, které\n"
 "  jsou v nìm ji¾ ulo¾eny, a na konec souboru budou pøidány chybìjící volby\n"
-"3 znamená, ¾e bude konfiguraèní soubor pøepsán novou (kompletní) kopií\n"
-"4 znamená, ¾e budou v konfiguraèním souboru zmìnìny hodnoty voleb, které\n"
+"2 znamená, ¾e bude konfiguraèní soubor pøepsán novou (kompletní) kopií\n"
+"3 znamená, ¾e budou v konfiguraèním souboru zmìnìny hodnoty voleb, které\n"
 "  jsou v nìm ji¾ ulo¾eny, a na konec souboru budou pøidány chybìjící volby,\n"
 "  ale pouze ty, které byly od spu¹tìní ELinksu zmìnìny"
 
@@ -4060,9 +4059,8 @@ msgid "Coo~kies"
 msgstr "Coo~kies"
 
 #: src/dialogs/menu.c:338
-#, fuzzy
 msgid "Form histor~y"
-msgstr "Formuláøová pamì»"
+msgstr "~Formuláøová pamì»"
 
 #: src/dialogs/menu.c:344
 msgid "Sa~ve as"
@@ -4362,9 +4360,8 @@ msgid "Resize terminal"
 msgstr "Zmìò velikost terminálu"
 
 #: src/formhist/dialogs.c:129
-#, fuzzy
 msgid "Form history manager"
-msgstr "Správce historie"
+msgstr "Správce formuláøové historie"
 
 #. TODO: Remember multiple login for the same form.
 #. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
@@ -4431,9 +4428,8 @@ msgid "Bookmark"
 msgstr "Bookmark"
 
 #: src/globhist/dialogs.c:194
-#, fuzzy
 msgid "Global history manager"
-msgstr "Globální historie"
+msgstr "Správce globální historie"
 
 #: src/globhist/globhist.c:70
 msgid "Global history"

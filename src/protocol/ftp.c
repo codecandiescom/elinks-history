@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.43 2002/10/02 10:08:45 zas Exp $ */
+/* $Id: ftp.c,v 1.44 2002/10/02 14:07:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,8 @@ static struct ftp_connection_info *add_file_cmd_to_str(struct connection *);
 /* Returns 0 if there's no numeric response, -1 if error, the positive response
  * number otherwise. */
 static int
-get_ftp_response(struct connection *conn, struct read_buffer *rb, int part, unsigned char *ports_info)
+get_ftp_response(struct connection *conn, struct read_buffer *rb, int part,
+		 struct sockaddr_storage *sa)
 {
 	int pos;
 
@@ -100,41 +101,55 @@ again:
 				return -1;
 
 			if (response == 227) { /* PASV response parsing. */
-				unsigned char h1, h2, h3, h4, p1, p2;
-				int ret;
+				struct sockaddr_in *s = (struct sockaddr_in *) sa;
+				unsigned char p[6];
 				unsigned char *begin = strchr(num_end, ',');
 
 				/* find beginning of ports_info */
-				if (begin == NULL)
+				if (!begin)
 					return -1;
 				while (isdigit(*(--begin)));
 				begin++;
 
+				memset(p, 0, 6 * sizeof(unsigned char));
+
 				/* %hhd -> unsigned char */
-				ret = sscanf(begin, "%hhd,%hhd,%hhd,%hhd,%hhd,%hhd", &h1, &h2, &h3, &h4, &p1, &p2);
-				if (ret != 6)
+				if (6 != sscanf(begin, "%hhd,%hhd,%hhd,%hhd,%hhd,%hhd",
+						&p[0], &p[1],
+						&p[2], &p[3],
+						&p[4], &p[5]))
 					return -1;
-				ports_info[0] = h1;
-				ports_info[1] = h2;
-				ports_info[2] = h3;
-				ports_info[3] = h4;
-				ports_info[4] = p1;
-				ports_info[5] = p2;
+
+				memset(s, 0, sizeof(struct sockaddr_in));
+				s->sin_family = AF_INET;
+				s->sin_addr.s_addr = htonl((p[0] << 24) + (p[1] << 16) + (p[2] << 8) + p[3]);
+				s->sin_port = htons((p[4] << 8) + p[5]);
 			}
 
 #ifdef IPV6
 			if (response == 229) { /* EPSV response parsing. */
 				/* See RFC 2428 */
-				unsigned char h1, h2, h3, h4;
+				struct sockaddr_in6 *s = (struct sockaddr_in6 *) sa;
+				unsigned char p[6];
 				unsigned int port;
-				int ret;
+				int sal;
 				unsigned char *begin = strchr(num_end, '(');
 
-				ret = sscanf(begin + 1, "%c%c%c%d%c", &h1, &h2, &h3, &port, &h4);
-				if (ret != 4)
+				if (!begin)
 					return -1;
-				ports_info[4] = (port >> 8) & 255;
-				ports_info[5] = port & 255;
+
+				memset(p, 0, 6 * sizeof(unsigned char));
+
+				if (4 != sscanf(begin + 1, "%c%c%c%d%c",
+						&p[0], &p[1],
+						&p[2], &port, &p[3]))
+					return -1;
+
+				memset(s, 0, sizeof(struct sockaddr_in6));
+				if (!getpeername(conn->sock1, (struct sockaddr *)&sa, &sal))
+					return -1;
+				s->sin6_family = AF_INET6;
+				s->sin6_port = htons(port);
 			}
 #endif
 
@@ -693,13 +708,11 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 {
 	struct ftp_connection_info *c_i = conn->info;
 	int response;
-	unsigned char p[14];
 	int fd;
-	struct sockaddr_in serv_addr;
-
+	struct sockaddr_storage sa;
 
 	if (c_i->pending_commands > 1) {
-		response = get_ftp_response(conn, rb, 0, p);
+		response = get_ftp_response(conn, rb, 0, &sa);
 
 		if (response == -1) {
 			abort_conn_with_state(conn, S_FTP_ERROR);
@@ -719,18 +732,21 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 				abort_conn_with_state(conn, S_FTP_ERROR);
 				return;
 			}
-			memset((char *)&serv_addr, 0, sizeof(serv_addr));
-			serv_addr.sin_family = AF_INET;
-			serv_addr.sin_addr.s_addr = htonl((p[0] << 24) + (p[1] << 16) + (p[2] << 8) + p[3]);
-			serv_addr.sin_port = htons((p[4] << 8) + p[5]);
-			connect(fd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
-			fcntl(fd, F_SETFL, O_NONBLOCK);
 			conn->sock2 = fd;
+			fcntl(fd, F_SETFL, O_NONBLOCK);
+			connect(fd, (struct sockaddr *)&sa, sizeof(struct sockaddr_in));
 		}
 
 #ifdef IPV6
 		if (response == 229) {
-		/* TODO: see RFC 2428 */
+			fd = socket(PF_INET6, SOCK_STREAM, 0);
+			if (fd < 0) {
+				abort_conn_with_state(conn, S_FTP_ERROR);
+				return;
+			}
+			conn->sock2 = fd;
+			fcntl(fd, F_SETFL, O_NONBLOCK);
+			connect(fd, (struct sockaddr *)&sa, sizeof(struct sockaddr_in6));
 		}
 #endif
 

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-17 18:39+0100\n"
+"POT-Creation-Date: 2003-12-19 09:26+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -1635,7 +1635,7 @@ msgstr "Gestion d'erreur de préfrappe"
 
 #: src/config/options.inc:239
 msgid ""
-"How to handler errors when typeahead doesn't match any links:\n"
+"How to handle errors when typeahead doesn't match any links:\n"
 "0 means do nothing\n"
 "1 means beep the terminal\n"
 "2 means pop up message box"
@@ -4538,11 +4538,11 @@ msgstr "temps restant estimé"
 msgid "Typeahead: %s (-> %s)"
 msgstr "Préfrappe: %s (-> %s)"
 
-#: src/dialogs/status.c:295
+#: src/dialogs/status.c:293
 msgid "Untitled"
 msgstr "Sans titre"
 
-#: src/dialogs/status.c:297
+#: src/dialogs/status.c:295
 msgid "No document"
 msgstr "Aucun document"
 

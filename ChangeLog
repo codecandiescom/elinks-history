@@ -1,3 +1,50 @@
+Tue Feb 10 20:29:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/dump/dump.h:
+
+	struct list_head is expanded to list_head_elinks and we need to
+	include the lists.h file or it could lead to bad things.  
+
+Tue Feb 10 20:25:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Cleanup.  
+
+Tue Feb 10 20:15:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Use strstr() for link typeahead matching so we don't only match from
+	the start of the link text. It is a bit buggy for wrapped links
+	though. Hmm.  
+
+Tue Feb 10 19:15:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Reintroduce usage of link->name for typeahead search because it is
+	so neat and it should be made to work.  
+
+Tue Feb 10 18:45:46 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: protocol/file/file.c, osdep/osdep.c:
+
+	Fixed reading from stdin.  
+
+Tue Feb 10 17:17:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Trim leading spaces from the link text. Visible at the software map
+	at sf.net and making it harder to link typeahead.  
+
+Tue Feb 10 06:35:44 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: main.c, viewer/dump/dump.c, viewer/dump/dump.h:
+
+	Support for many urls in dump mode.  
+
 Mon Feb  9 12:06:52 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/bfu/inpfield.c:

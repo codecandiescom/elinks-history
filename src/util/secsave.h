@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.h,v 1.4 2003/06/04 17:05:43 zas Exp $ */
+/* $Id: secsave.h,v 1.5 2003/06/04 17:14:37 pasky Exp $ */
 
 #ifndef EL__UTIL_SECFILE_H
 #define EL__UTIL_SECFILE_H
@@ -8,10 +8,10 @@
 #include <sys/types.h> /* mode_t */
 
 enum secsave_errno_set {
-	NONE = 0,
-	DISABLED = 1, /* secsave is disabled. */
-	OUT_OF_MEM = 2, /* memory allocation failure */
-	OTHER = 3, /* see err field in struct secure_save_info */
+	SS_ERR_NONE,
+	SS_ERR_DISABLED, /* secsave is disabled. */
+	SS_ERR_OUT_OF_MEM, /* memory allocation failure */
+	SS_ERR_OTHER, /* see err field in struct secure_save_info */
 };
 
 extern enum secsave_errno_set secsave_errno; /* internal secsave error number */

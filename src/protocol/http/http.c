@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.319 2004/08/02 23:58:58 jonas Exp $ */
+/* $Id: http.c,v 1.320 2004/08/03 00:04:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -294,6 +294,9 @@ static void http_get_header(struct connection *);
 
 #define IS_PROXY_URI(x) ((x)->protocol == PROTOCOL_PROXY)
 
+#define connection_is_https_proxy(conn) \
+	(IS_PROXY_URI((conn)->uri) && (conn)->proxied_uri->protocol == PROTOCOL_HTTPS)
+
 static void
 http_send_header(struct connection *conn)
 {
@@ -335,7 +338,7 @@ http_send_header(struct connection *conn)
 		return;
 	}
 
-	use_connect = IS_PROXY_URI(conn->uri) && (uri->protocol == PROTOCOL_HTTPS) && !conn->socket.ssl;
+	use_connect = connection_is_https_proxy(conn) && !conn->socket.ssl;
 
 	if (trace) {
 		add_to_string(&header, "TRACE ");
@@ -356,7 +359,7 @@ http_send_header(struct connection *conn)
 		/* Add port if it was specified or the default port */
 		add_uri_to_string(&header, uri, URI_HTTP_CONNECT);
 	} else {
-		if (IS_PROXY_URI(conn->uri) && (uri->protocol == PROTOCOL_HTTPS) && conn->socket.ssl) {
+		if (connection_is_https_proxy(conn) && conn->socket.ssl) {
 			add_url_to_http_string(&header, uri, URI_DATA);
 		} else {
 			add_url_to_http_string(&header, conn->uri, URI_DATA);
@@ -1166,8 +1169,7 @@ again:
 		http_end_request(conn, S_OK, 0);
 		return;
 	}
-	if (h == 200 && IS_PROXY_URI(conn->uri)
-	    && uri->protocol == PROTOCOL_HTTPS && !conn->socket.ssl) {
+	if (h == 200 && connection_is_https_proxy(conn) && !conn->socket.ssl) {
 #ifdef CONFIG_SSL
 		if (init_ssl_connection(conn) == S_SSL_ERROR) {
 			abort_conn_with_state(conn, S_SSL_ERROR);

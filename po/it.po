@@ -937,7 +937,7 @@ msgstr "Cerca testo all'indietro"
 
 #: src/config/kbdbind.c:452
 msgid "Search link text by typing ahead"
-msgstr ""
+msgstr "Cerca testo nei collegamenti mentre scrivi"
 
 #: src/config/kbdbind.c:453 src/terminal/tab.c:187
 msgid "Close tab"
@@ -1631,15 +1631,17 @@ msgstr "Mostra i numeri a fianco dei collegamenti."
 
 #: src/config/options.inc:233
 msgid "Wraparound typeahead"
-msgstr ""
+msgstr "Ricomincia dall'inizio"
 
 #: src/config/options.inc:235
 msgid "Wrap around when searching for the next link matching a typeahead."
 msgstr ""
+"Ricomincia dall'inizio per il successivo collegamento corrispondente dopo "
+"l'ultimo."
 
 #: src/config/options.inc:237
 msgid "Typeahead error handling"
-msgstr ""
+msgstr "Gestione errore"
 
 #: src/config/options.inc:239
 msgid ""
@@ -1648,6 +1650,11 @@ msgid ""
 "1 means beep the terminal\n"
 "2 means pop up message box"
 msgstr ""
+"Gestione degli errori quando \"trova mentre scrivi\" non trova "
+"corrispondenze:\n"
+"0 significa non fare niente\n"
+"1 significa fare beep\n"
+"2 significa mostra una finestra di dialogo"
 
 #: src/config/options.inc:244
 msgid "Use tabindex"
@@ -4584,7 +4591,7 @@ msgstr "tempo stimato"
 #: src/dialogs/status.c:203
 #, c-format
 msgid "Typeahead: %s (-> %s)"
-msgstr ""
+msgstr "Trova: %s (-> %s)"
 
 #: src/dialogs/status.c:295
 msgid "Untitled"
@@ -5778,9 +5785,8 @@ msgid "Search string '%s' not found"
 msgstr "Stringa '%s' non trovata"
 
 #: src/viewer/text/search.c:999
-#, fuzzy
 msgid "Typeahead"
-msgstr "Tipo"
+msgstr "Trova mentre scrivi"
 
 #: src/viewer/text/search.c:1000
 #, c-format

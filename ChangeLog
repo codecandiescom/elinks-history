@@ -1,8 +1,476 @@
-Tue Jun 15 22:08:00 2004  Laurent Monin <zas@norz.org>:
+Wed Jun 16 21:47:13 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Jun 16 21:39:56 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Use @fc instead of @frm for form control.  
+
+Wed Jun 16 21:33:51 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: form.c, form.h, textarea.c:
+
+	struct submitted_value @frm field was renamed @form_control.  
+
+Wed Jun 16 21:30:07 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	Use @fc instead of @frm for form control.  
+
+Wed Jun 16 21:25:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	area_cursor(): use int_bounds().  
+
+Wed Jun 16 21:21:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	area_cursor(): cleanup and optimization.  
+
+Wed Jun 16 21:16:19 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	@form is a misleading name for a form control, just use @fc.  
+
+Wed Jun 16 21:13:26 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	@l, @l_ -> @link, @link_.  
+
+Wed Jun 16 21:11:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	Label x -> free_and_return.  
+
+Wed Jun 16 21:07:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	textarea_op_home(): code cleanup and optimization.  
+
+Wed Jun 16 20:59:27 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	textarea_op_up(): code cleanup and optimization.  
+
+Wed Jun 16 20:55:24 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	textarea_op_end(): reduce indentation level.  
+
+Wed Jun 16 20:53:32 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	textarea_op_down(): code cleanup and optimization.  
+
+Wed Jun 16 20:49:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	get_form_info(): Redo the read only stuff.  
+
+Wed Jun 16 20:37:21 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	textarea_op_end(): code cleanup and optimization.  
+
+Wed Jun 16 20:16:06 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	Add some hints about bob/eob, and affects @position after
+	assertions.  
+
+Wed Jun 16 20:08:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	textarea_op_enter(): code cleanup.  
+
+Wed Jun 16 19:59:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	Fix textarea up and down handler so they ignore the actions when on
+	the first and last line respectively.  
+
+Wed Jun 16 19:42:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: formhist/formhist.c, viewer/text/form.c,
+	viewer/text/form.h:
+
+	s/new_/init_/ and s/free_/done_/ the new submitted value functions.  
+
+Wed Jun 16 19:34:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	@b -> @begin, @sk -> @skip.  
+
+Wed Jun 16 19:30:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	@en -> @end, @st -> @start, @ln -> @line, @lnn -> @line_number, @lnx
+	-> @linex.  
+
+Wed Jun 16 19:19:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	get_current_link_info(): Move form handling up front.  
+
+Wed Jun 16 18:50:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	Fix indentation in last patch. Improve information given for read
+	only fields.  
+
+Wed Jun 16 18:44:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	get_form_info(): Split out code to add_form_attr_to_string() used
+	for adding name and default value info.  
+
+Wed Jun 16 18:33:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	... and finally after 2 and a freaking half hour he picks up his
+	patchooka .. aims .. with a roaring speed it moves towards the
+	target .. hey it looks like a winner ... he actually got it right
+	this time .. insert mode highlights in the g, fm and bug sector ..
+	'twill be a most joyful experience.  
+
+Wed Jun 16 17:21:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, textarea.c, textarea.h:
+
+	Make the rest of the textarea_op_*() functions return
+	frame_event_status. A lot of 0 return values for assertion and
+	allocation failure was changed to *_OK and 1 values is also *_OK.  
+
+Wed Jun 16 17:11:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, textarea.c, textarea.h:
+
+	textarea_op_eob(): Return frame_event_status. Tiny enforcement by
+	the space police.  
+
+Wed Jun 16 17:07:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, textarea.c, textarea.h:
+
+	textarea_op_enter(): Return frame_event_status.  
+
+Wed Jun 16 16:56:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	It don.t make sense to return submit label for FC_HIDDEN in
+	get_form_label() so return NULL. Idea by zas. Make ending switch in
+	get_form_info() complete with labels for all values of enum
+	form_type.  
+
+Wed Jun 16 15:41:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Use @fc to handle link->form_control.  
+
+Wed Jun 16 15:32:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	Drop free_form_in_list() and use free_submitted_value_list()
+	instead.  
+
+Wed Jun 16 15:28:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: form.c, form.h:
+
+	free_succesful_controls() was renamed free_submitted_value_list()
+	and we now export it.  
+
+Wed Jun 16 15:26:14 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	free_succesful_controls(): use free_submitted_value().  
+
+Wed Jun 16 15:20:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	add_submitted_value_to_list(): use new_submitted_value() and get rid
+	of label fi_rep.  
+
+Wed Jun 16 14:51:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: formhist/formhist.c, viewer/text/form.c,
+	viewer/text/form.h:
+
+	new_submitted_value(): let it be a complete constructor.  
+
+Wed Jun 16 14:47:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: formhist/formhist.c, viewer/text/form.c,
+	viewer/text/form.h:
+
+	Move new_submitted_value() and free_submitted_value() to
+	viewer/text/form.h. Later it will move to document/form/.  
+
+Wed Jun 16 14:43:19 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.h:
+
+	struct submitted_value int @type -> enum form_type.  
+
+Wed Jun 16 14:24:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	new_link(): Remove a bit of the noise.  
+
+Wed Jun 16 13:53:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: terminal/color.c, terminal/color.h, viewer/text/link.c:
+
+	A best effort attempt at fixing text-input form-field insert mode
+	highlighting by introducing COLOR_ENSURE_INVERTED_CONTRAST flag and
+	applying it when inverting text-input links. This fixes the issue
+	for me with -no-home. When using document colors it might still be
+	possible for some color combos to get it wrong.  
+
+Wed Jun 16 10:34:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: link.c, link.h:
+
+	enter(): @a -> @do_reload.  
+
+Wed Jun 16 10:23:39 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: view.c, view.h:
+
+	Make clear (using xxxx) that parameter is unused.  
+
+Wed Jun 16 10:18:03 2004  Laurent Monin <zas@norz.org>:
 
 	* src/viewer/text/view.c:
 
-	Indentation fix and code aeration.  
+	Do not inline rep_ev(), and make try_jump_to_link_number() static.  
+
+Wed Jun 16 09:51:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: form.h, link.h:
+
+	Remove sched/action.h inclusions.  
+
+Wed Jun 16 09:43:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/action.h, viewer/text/view.h:
+
+	Move enum frame_event_status from sched/action.h to
+	viewer/text/view.h.  
+
+Wed Jun 16 09:20:42 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/leds.c:
+
+	Revert my next-to-last patch to leds.c because I'm stupid. Thanks,
+	zas, for noticing.  
+
+Wed Jun 16 09:15:57 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/: form.c, textarea.c, view.c:
+
+	Before I changed its return value from an integer to enum
+	frame_event_status, field_op returned either 0 (event not handled)
+	or 1 (event handled, redraw).  Now that field_op uses the enum, it
+	can return any of FRAME_EVENT_IGNORED, FRAME_EVENT_REFRESH, and
+	FRAME_EVENT_OK. However, when I changed the return value to the
+	enum, I did a straight conversion from return values of 0 to 
+	FRAME_EVENT_IGNORED and return values of 1 to FRAME_EVENT_REFRESH.
+	Now I'll improve on that...  
+	
+	Modify frame_ev and set_textarea to work properly when field_op
+	returns FRAME_EVENT_OK.  
+	
+	Change field_op to return FRAME_EVENT_OK instead of
+	FRAME_EVENT_IGNORED when the event is handled (where 'handled' means
+	'should not be handled elsewhere') but a redraw is not necessary: 
+	
+	 - when an assertion fails; 
+	 - when one of the textarea_op_* functions fails; or 
+	 - when malloc fails.  
+	
+	Prevent unnecessary redraws: 
+	
+	 - when one tries to backspace, to delete, to kill-to-bol, or to
+	   kill-to-eol when there is nothing to delete; 
+	 - when one tries to enter text into a text field that has reached 
+	   its maximum length; or 
+	 - when one copies a text-field's contents to clipboard.  
+	
+	Return FRAME_EVENT_IGNORED, allowing key-presses to fall back to the
+	main key-map, when one tries to edit text in a read-only text-field.  
+	
+	Two bugs have been fixed: 
+	
+	 - When one presses a key while editing a text field that has reached
+	   its maximum capacity, return FRAME_EVENT_OK instead of
+	   FRAME_EVENT_IGNORED, so that the key press does not fall back to the
+	   main map (imagine if you entered a given field's maximum of forty
+	   characters and then proceeded to type in a sentence beginning with
+	   'Q'). This bug appeared with src/viewer/text/form.c:1.156->1.157,
+	   'field_op_do(): Cleanup the default label.' 
+	
+	 - The handler for the redraw action would return
+	   FRAME_EVENT_IGNORED, even tho it handles the redraw, leading to an
+	   extra redraw. Note that handle_interlink_event grabs Ctrl-L before
+	   it reaches field_op, so this was unlikely to happen in practice.
+	   This bug appeared with the introduction of ACT_REDRAW,
+	   src/viewer/text/form.c:1.66->1.67, 'Introduce ACT_REDRAW used for
+	redrawing the terminal. Bound to ctrl-(l|L) in all mappings.' 
+
+Wed Jun 16 08:12:23 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Jun 16 07:26:23 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In frame_ev, do not initialise |status| as it is always set later
+	before it is used.  
+
+Wed Jun 16 07:15:50 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/: form.c, form.h:
+
+	Change the return value type of field_op to enum frame_event_status.  
+
+Wed Jun 16 06:34:41 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/form.c:
+
+	In field_op, return 0, not 1, when the key press is not handled, so
+	that the key press can be handled elsewhere (e.g., by the code for
+	the main key-map). This corrects a bug introduced in
+	src/viewer/text/form.c:1.156->1.157, 'field_op_do(): Cleanup the
+	default label.' 
+
+Wed Jun 16 06:06:51 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/form.c:
+
+	s/press %s to enter insert mode/press %s to edit/ 
+
+Wed Jun 16 06:02:46 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/leds.c:
+
+	Update the comment listing the allocated LEDs: change the SSL
+	indicator's listed value from 1 to 0 (as 0 is the base index) and
+	list the insert-mode indicator, which is allocated LED 1.  
+
+Wed Jun 16 05:58:56 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/leds.c:
+
+	In register_led, fail not only when |number >= LEDS_COUNT| but also
+	when |number > LEDS_COUNT|. LEDs are indexed from 0.  
+
+Wed Jun 16 05:49:42 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.inc:
+
+	Tweak the description for document.browse.forms.insert_mode.  
+
+Wed Jun 16 05:23:16 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.c:
+
+	Split the call to update_status from change_hook_html into a new
+	hook, change_hook_insert_mode. This might not save more than a few
+	cycles, but it is clearer and eliminates the need for a comment.  
+
+Wed Jun 16 05:02:30 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.h:
+
+	Trivial correction to a comment on get_opt_type_tree().  
+
+Wed Jun 16 04:56:55 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	In check_valid_option, slightly simplify the loop that calls the
+	change-hooks for the changed option and its ancestors.  
+
+Wed Jun 16 04:11:42 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/form.c:
+
+	In field_op, |ses| was asserted after it was dereferenced to get the
+	terminal, which was saved to |term|. As |term| was subsequently used
+	only twice, substitute |ses->tab->term|.  
+
+Wed Jun 16 03:07:47 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Remove a stale comment.  
+
+Tue Jun 15 22:56:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	frame_ev_kbd(): Cleanup and decrease indentation in goto link dialog
+	setup.  
+
+Tue Jun 15 22:54:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, view.c:
+
+	frame_ev_kbd(): Cleanup goto link dialog setup.  
+
+Tue Jun 15 22:18:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	get_form_info(): Split out label setup switch to get_form_label().  
+
+Tue Jun 15 22:13:07 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Group cursor navigation and scrolling actions.  
+
+Tue Jun 15 22:12:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	get_form_into(): Now the switch noodling is complete also for
+	LINK_BUTTON handling.  
 
 Tue Jun 15 22:04:00 2004  Laurent Monin <zas@norz.org>:
 

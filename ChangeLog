@@ -1,3 +1,262 @@
+Tue Jan 27 23:08:28 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Fixed an apparently missing break (Jonas?) in the atrule parser,
+	reported by <M.Miroslaw@elka.pw.edu.pl>.  
+
+Tue Jan 27 20:05:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Remove support for talking scanners. It has to be added in a saner
+	way.  
+
+Tue Jan 27 19:08:38 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Have @name of the selector extracted in the same way as everything
+	else.  
+
+Tue Jan 27 18:45:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.c:
+
+	Allow namelen==-1 for init_css_selector() ergo get_css_selector().  
+
+Tue Jan 27 18:43:30 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	When parsing a selector, save id/class/pseudo to separate variables
+	instead of @selector members.  
+
+Tue Jan 27 10:37:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/info.c:
+
+	Make it more clear how the action table in menu_keys() toggling is
+	build.  
+
+Tue Jan 27 02:28:33 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/css/selectors.html:
+
+	Some simple selector support tests.  
+
+Tue Jan 27 02:28:03 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Throw away id/class/pseudo selectors for now. They are just spoiling
+	things by applying some specific styles to all the element instances
+	etc. It is easy to reenable when we'll start really supporting them.  
+
+Tue Jan 27 02:23:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	mem_free(pkg) properly even in the worst situation.  
+
+Tue Jan 27 02:22:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Do not be so pathetic and do not free selector's id/class/pseudo
+	upon syntax error... it's gonna bring us only trouble.  
+
+Tue Jan 27 02:16:06 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/css/cascading.html:
+
+	Trivial cascading testcase.  
+
+Tue Jan 27 02:09:37 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Grm.  
+
+Tue Jan 27 02:07:33 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Free up the selectors after we're done with them.  
+
+Tue Jan 27 02:05:04 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Use kludgy wrapper struct selector_pkg to pass selectors around.  
+
+Tue Jan 27 01:23:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Why it doesn't matter that we have multiple same properties in one
+	selector.  
+
+Tue Jan 27 01:15:59 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.c:
+
+	Misc. compilation fixes.  
+
+Tue Jan 27 01:14:11 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.c:
+
+	Typo fix.  
+
+Tue Jan 27 01:13:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: stylesheet.c, stylesheet.h:
+
+	Erhm, fixed the hybridness of mirror_css_selector().  
+
+Tue Jan 27 01:12:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: parser.c, stylesheet.c, stylesheet.h:
+
+	Support for multi-selector rulesets (sel1,sel2,sel3{rule}).  
+
+Tue Jan 27 01:05:07 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Way back, committed the wrong file. Sorry 'bout that.  
+
+Tue Jan 27 01:03:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	Fixed init_css_selector() call.  
+
+Tue Jan 27 01:03:40 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: parser.c, stylesheet.c:
+
+	Oops, clone_css_selector() is actually used.  
+
+Tue Jan 27 00:54:52 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	CSS_TOKEN_HASH/HEX_COLOR already contain the token string of ident,
+	as pointed out by Jonas.  
+
+Tue Jan 27 00:52:38 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.c:
+
+	Disable the unused functions.  
+
+Tue Jan 27 00:49:27 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: css/apply.c, css/stylesheet.c, css/stylesheet.h,
+	html/parser.c:
+
+	Mirror @default_stylesheet to @css_styles in
+	init_html_parser_state() so that we will not need to let the cascade
+	fall into two stylesheets but only one. The real benefits will show
+	as we will start to support more complex selectors, and it should be
+	faster (can you spare a bit of memory, bro'?).  
+
+Tue Jan 27 00:42:50 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	If we're fixing memory leaks...  
+
+Tue Jan 27 00:24:59 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.c:
+
+	Fixed init_css_stylesheet() to also initialize selectors list.  
+
+Tue Jan 27 00:23:46 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, stylesheet.c, stylesheet.h:
+
+	Support for proper styles cascading. Hopefully.  
+
+Tue Jan 27 00:16:22 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	Construct a virtual selector for the style attribute instead of just
+	properties list.  
+
+Tue Jan 27 00:14:38 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: stylesheet.c, stylesheet.h:
+
+	Export (init|done)_css_selector().  
+
+Tue Jan 27 00:13:03 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.c:
+
+	Moved (struct css_selector) destructor to done_css_selector().  
+
+Tue Jan 27 00:11:50 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.c:
+
+	Make it possible to have NULL @css and/or @name passed to
+	get_css_selector().  
+
+Tue Jan 27 00:07:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	Use static inlines instead of macros for token getter.  
+
+Mon Jan 26 23:56:17 2004  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/document/css/parser.c:
+
+	Prevent a memleak.  
+
+Mon Jan 26 23:37:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Chop indent2type to pieces. One generic part now does the table look
+	up and the table is now also part of the scanner_info .. for no good
+	reason it seems.  
+
+Mon Jan 26 23:37:08 2004  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/document/css/parser.c:
+
+	s/css/scanner in get_next_css_token() calls.  
+
+Mon Jan 26 23:30:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	struct css_indentifier -> struct scanner_string_mapping.  
+
+Mon Jan 26 23:23:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.h:
+
+	Fixed init_css_stylesheet() decl.  
+
+Mon Jan 26 23:22:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: stylesheet.c, stylesheet.h:
+
+	Introduced init_css_stylesheet().  
+
+Mon Jan 26 23:18:15 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/README:
+
+	Removed the horrible uniform indentation ;-).  
+
 Mon Jan 26 23:03:13 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/css/: parser.c, stylesheet.c:

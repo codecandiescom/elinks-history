@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.341 2004/01/18 14:55:01 zas Exp $ */
+/* $Id: parser.c,v 1.342 2004/01/18 14:58:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2258,7 +2258,7 @@ html_frame(unsigned char *a)
 }
 
 static void
-parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int **op, int *olp)
+parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int **new_values, int *new_values_count)
 {
 	unsigned char *tmp_str;
 	unsigned long n;
@@ -2273,7 +2273,7 @@ new_ch:
 	errno = 0;
 	n = strtoul(str, (char **)&str, 10);
 	if (errno) {
-		*olp = 0;
+		*new_values_count = 0;
 		return;
 	}
 
@@ -2286,7 +2286,7 @@ new_ch:
 	oo = mem_realloc(o, (ol + 1) * sizeof(int));
 	if (oo) (o = oo)[ol++] = q;
 	else {
-		*olp = 0;
+		*new_values_count = 0;
 		return;
 	}
 	tmp_str = strchr(str, ',');
@@ -2294,8 +2294,8 @@ new_ch:
 		str = tmp_str + 1;
 		goto new_ch;
 	}
-	*op = o;
-	*olp = ol;
+	*new_values = o;
+	*new_values_count = ol;
 	q = 2 * ol - 1;
 	for (i = 0; i < ol; i++) if (o[i] > 0) q += o[i] - 1;
 
@@ -2330,7 +2330,7 @@ distribute:
 
 		oo = mem_alloc(ol * sizeof(int));
 		if (!oo) {
-			*olp = 0;
+			*new_values_count = 0;
 			return;
 		}
 		memcpy(oo, o, ol * sizeof(int));

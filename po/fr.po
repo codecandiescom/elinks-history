@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"POT-Creation-Date: 2004-05-07 11:00+0200\n"
+"POT-Creation-Date: 2004-05-19 18:03+0200\n"
 "PO-Revision-Date: 2004-03-04 11:48+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
@@ -22,7 +22,7 @@ msgstr "Fermer"
 #: src/bfu/hierbox.c:463 src/bfu/hierbox.c:485 src/cache/dialogs.c:185
 #: src/config/dialogs.c:458 src/cookies/dialogs.c:335
 #: src/dialogs/document.c:44 src/dialogs/document.c:226
-#: src/dialogs/download.c:422 src/formhist/dialogs.c:165
+#: src/dialogs/download.c:423 src/formhist/dialogs.c:165
 #: src/globhist/dialogs.c:182
 msgid "Info"
 msgstr "Info"
@@ -52,12 +52,12 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/sched/session.c:124 src/sched/session.c:586 src/sched/session.c:603
 #: src/sched/session.c:627 src/scripting/lua/core.c:401
 #: src/scripting/lua/core.c:482 src/scripting/lua/core.c:600
-#: src/scripting/lua/core.c:724 src/viewer/text/form.c:641
-#: src/viewer/text/search.c:851 src/viewer/text/search.c:879
-#: src/viewer/text/search.c:904 src/viewer/text/search.c:935
-#: src/viewer/text/search.c:1384 src/viewer/text/textarea.c:270
-#: src/viewer/text/textarea.c:279 src/viewer/text/view.c:703
-#: src/viewer/text/view.c:1116
+#: src/scripting/lua/core.c:724 src/viewer/text/form.c:638
+#: src/viewer/text/search.c:847 src/viewer/text/search.c:875
+#: src/viewer/text/search.c:900 src/viewer/text/search.c:931
+#: src/viewer/text/search.c:1380 src/viewer/text/textarea.c:266
+#: src/viewer/text/textarea.c:275 src/viewer/text/view.c:715
+#: src/viewer/text/view.c:1129
 msgid "OK"
 msgstr "OK"
 
@@ -300,8 +300,8 @@ msgstr "Nom du dossier"
 #: src/sched/download.c:1006 src/sched/download.c:1015
 #: src/sched/download.c:1035 src/sched/download.c:1047
 #: src/scripting/lua/core.c:402 src/scripting/lua/core.c:483
-#: src/scripting/lua/core.c:724 src/viewer/text/search.c:1384
-#: src/viewer/text/view.c:703
+#: src/scripting/lua/core.c:724 src/viewer/text/search.c:1380
+#: src/viewer/text/view.c:715
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -336,8 +336,8 @@ msgid "Add"
 msgstr "Ajouter"
 
 #: src/bookmarks/dialogs.c:381 src/globhist/dialogs.c:187
-#: src/viewer/text/search.c:848 src/viewer/text/search.c:875
-#: src/viewer/text/search.c:899 src/viewer/text/search.c:1379
+#: src/viewer/text/search.c:844 src/viewer/text/search.c:871
+#: src/viewer/text/search.c:895 src/viewer/text/search.c:1375
 msgid "Search"
 msgstr "Chercher"
 
@@ -912,7 +912,7 @@ msgid "Description"
 msgstr "Description"
 
 #: src/config/dialogs.c:287 src/sched/session.c:121
-#: src/viewer/text/textarea.c:267 src/viewer/text/textarea.c:276
+#: src/viewer/text/textarea.c:263 src/viewer/text/textarea.c:272
 msgid "Error"
 msgstr "Erreur"
 
@@ -4070,7 +4070,7 @@ msgstr "Expiration"
 msgid "Secure"
 msgstr "Sécurisé"
 
-#: src/cookies/dialogs.c:339 src/dialogs/download.c:428 src/dialogs/edit.c:100
+#: src/cookies/dialogs.c:339 src/dialogs/download.c:429 src/dialogs/edit.c:100
 #: src/formhist/dialogs.c:168 src/globhist/dialogs.c:189
 msgid "Clear"
 msgstr "Effacer"
@@ -4128,28 +4128,28 @@ msgstr "Info. entêtes"
 msgid "No header info."
 msgstr "Aucune information d'entête."
 
-#: src/dialogs/download.c:255 src/dialogs/menu.c:496 src/sched/download.c:345
+#: src/dialogs/download.c:256 src/dialogs/menu.c:496 src/sched/download.c:345
 msgid "Download"
 msgstr "Téléchargement"
 
-#: src/dialogs/download.c:262
+#: src/dialogs/download.c:263
 msgid "Background"
 msgstr "Arrière-plan"
 
-#: src/dialogs/download.c:263
+#: src/dialogs/download.c:264
 msgid "Background with notify"
 msgstr "Arrière-plan et notifier"
 
-#: src/dialogs/download.c:264 src/dialogs/download.c:423
+#: src/dialogs/download.c:265 src/dialogs/download.c:424
 msgid "Abort"
 msgstr "Arrêter"
 
 #. This requires more work to make locking work and query the user
-#: src/dialogs/download.c:265 src/dialogs/download.c:426
+#: src/dialogs/download.c:266 src/dialogs/download.c:427
 msgid "Abort and delete file"
 msgstr "Arrêter et supprimer fichier"
 
-#: src/dialogs/download.c:433
+#: src/dialogs/download.c:434
 msgid "Download manager"
 msgstr "Gestionnaire de téléchargements"
 
@@ -4652,11 +4652,11 @@ msgstr "temps restant estimé"
 msgid "ETA"
 msgstr "ETA"
 
-#: src/dialogs/status.c:314
+#: src/dialogs/status.c:316
 msgid "Untitled"
 msgstr "Sans titre"
 
-#: src/dialogs/status.c:316
+#: src/dialogs/status.c:318
 msgid "No document"
 msgstr "Aucun document"
 
@@ -5354,7 +5354,7 @@ msgstr ""
 "  pas se produire.\n"
 
 #. name:
-#: src/protocol/protocol.c:182
+#: src/protocol/protocol.c:185
 msgid "Protocol"
 msgstr "Protocole"
 
@@ -5735,7 +5735,15 @@ msgstr "Cette version de ELinks ne supporte ni SSL ni TLS"
 msgid "JavaScript is currently not supported."
 msgstr "Javascript n'est pas implémenté pour l'instant."
 
-#: src/sched/error.c:115
+#: src/sched/error.c:89
+msgid "This version of ELinks does not contain finger protocol support"
+msgstr "Cette version de ELinks ne supporte pas le protocole finger"
+
+#: src/sched/error.c:93
+msgid "This version of ELinks does not contain SMB protocol support"
+msgstr "Cette version de ELinks ne supporte pas le protocole SMB"
+
+#: src/sched/error.c:123
 msgid "Unknown error"
 msgstr "Erreur inconnue"
 
@@ -5924,11 +5932,11 @@ msgstr "Êtes-vous sûr de vouloir fermer l'onglet courant?"
 msgid "Do you really want to close all except the current tab?"
 msgstr "Êtes-vous sûr de vouloir fermer tous les onglets sauf celui-ci ?"
 
-#: src/viewer/text/form.c:637
+#: src/viewer/text/form.c:634
 msgid "Error while posting form"
 msgstr "Erreur lors de l'envoi du formulaire"
 
-#: src/viewer/text/form.c:638
+#: src/viewer/text/form.c:635
 #, c-format
 msgid "Could not get file %s: %s"
 msgstr "Impossible d'obtenir le fichier %s: %s"
@@ -6061,81 +6069,81 @@ msgstr "Envoi à"
 msgid "post to"
 msgstr "Transfert à"
 
-#: src/viewer/text/search.c:849
+#: src/viewer/text/search.c:845
 msgid "No previous search"
 msgstr "Aucune clef de recherche"
 
-#: src/viewer/text/search.c:876
+#: src/viewer/text/search.c:872
 msgid "Search hit top, continuing at bottom."
 msgstr "La recherche a atteint le haut du document, poursuite à partir du bas."
 
-#: src/viewer/text/search.c:877
+#: src/viewer/text/search.c:873
 msgid "Search hit bottom, continuing at top."
 msgstr "La recherche a atteint le bas du document, poursuite à partir du haut."
 
-#: src/viewer/text/search.c:901
+#: src/viewer/text/search.c:897
 #, c-format
 msgid "Search string '%s' not found"
 msgstr "Chaîne recherchée '%s' introuvable"
 
-#: src/viewer/text/search.c:930
+#: src/viewer/text/search.c:926
 msgid "Typeahead"
 msgstr "Préfrappe"
 
-#: src/viewer/text/search.c:931
+#: src/viewer/text/search.c:927
 #, c-format
 msgid "Could not find a link with the text '%s'."
 msgstr "Ne peut trouver un lien avec le texte '%s'."
 
-#: src/viewer/text/search.c:1360
+#: src/viewer/text/search.c:1356
 msgid "Normal search"
 msgstr "Plein texte"
 
-#: src/viewer/text/search.c:1361
+#: src/viewer/text/search.c:1357
 msgid "Regexp search"
 msgstr "Expression régulière"
 
-#: src/viewer/text/search.c:1362
+#: src/viewer/text/search.c:1358
 msgid "Extended regexp search"
 msgstr "Expression régulière étendue"
 
-#: src/viewer/text/search.c:1363
+#: src/viewer/text/search.c:1359
 msgid "Case sensitive"
 msgstr "Respecter la casse"
 
-#: src/viewer/text/search.c:1364
+#: src/viewer/text/search.c:1360
 msgid "Case insensitive"
 msgstr "Ignorer la casse"
 
-#: src/viewer/text/search.c:1379
+#: src/viewer/text/search.c:1375
 msgid "Search backward"
 msgstr "Chercher en arrière"
 
-#: src/viewer/text/search.c:1383
+#: src/viewer/text/search.c:1379
 msgid "Search for text"
 msgstr "Recherche du texte"
 
-#: src/viewer/text/textarea.c:268
+#: src/viewer/text/textarea.c:264
 msgid "You cannot launch an external editor in the anonymous mode."
 msgstr "Vous ne pouvez utiliser un éditeur externe en mode anonyme."
 
-#: src/viewer/text/textarea.c:277
+#: src/viewer/text/textarea.c:273
 msgid "You can do this only on the master terminal"
 msgstr "Vous ne pouvez faire ça que dans le terminal maître"
 
-#: src/viewer/text/view.c:702
+#: src/viewer/text/view.c:714
 msgid "Go to link"
 msgstr "Aller au lien"
 
-#: src/viewer/text/view.c:702
+#: src/viewer/text/view.c:714
 msgid "Enter link number"
 msgstr "Entrez un numéro de lien"
 
-#: src/viewer/text/view.c:1113
+#: src/viewer/text/view.c:1126
 msgid "Save error"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/viewer/text/view.c:1114
+#: src/viewer/text/view.c:1127
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
 

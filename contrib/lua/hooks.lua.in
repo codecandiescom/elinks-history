@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.16 2003/05/20 22:11:17 pasky Exp $
+-- $Id: hooks.lua.in,v 1.17 2003/05/20 22:41:46 zas Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -22,7 +22,7 @@ dofile (home_dir.."/.elinks/config.lua")
 -- FIXME: Handle pattern classes.
 
 function gisub (s, pat, repl, n)
-    pat = gsub (pat, '(%a)', 
+    pat = gsub (pat, '(%a)',
 	        function (v) return '['..strupper(v)..strlower(v)..']' end)
     if n then
 	return gsub (s, pat, repl, n)
@@ -63,6 +63,7 @@ end
 
 dumbprefixes = {
     b = "http://babelfish.altavista.com/babelfish/tr",
+    bz = "http://bugzilla.elinks.or.cz",
     g  = "http://www.google.com/",
     gg = "http://www.google.com/",
     go = "http://www.google.com/",
@@ -86,6 +87,7 @@ smartprefixes = {
     bb = "http://babelfish.altavista.com/babelfish/tr?urltext=%s",
     bb_fr_en = "http://babelfish.altavista.com/babelfish/tr?lp=fr_en&submit=1&urltext=%s",
     bb_en_fr = "http://babelfish.altavista.com/babelfish/tr?lp=en_fr&submit=1&urltext=%s",
+    bug = "http://bugzilla.elinks.or.cz/show_bug.cgi?id=%s",
     g  = "http://www.google.com/search?q=%s&btnG=Google+Search",
     gg = "http://www.google.com/search?q=%s&btnG=Google+Search",
     go = "http://www.google.com/search?q=%s&btnG=Google+Search",
@@ -350,7 +352,7 @@ console_hook_functions = {
 }
 
 function lua_console_hook (expr)
-    local x = console_hook_functions[expr] 
+    local x = console_hook_functions[expr]
     if type (x) == "function" then
 	return x ()
     else
@@ -372,7 +374,7 @@ function quit_hook ()
     if bookmark_addon then
 	bm_save_bookmarks ()
     end
-    
+
     if tmp_files and remove then
         tmp_files.n = nil
         for i,v in tmp_files do remove (v) end

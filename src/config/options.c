@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.190 2003/01/26 23:02:39 pasky Exp $ */
+/* $Id: options.c,v 1.191 2003/04/16 21:16:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -538,7 +538,7 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 	if (*argc > 1) return gettext("Too many parameters");
 
 	(*argv)++; (*argc)--;
-	if (do_real_lookup(*(*argv - 1), &addrs, &addrno)) {
+	if (do_real_lookup(*(*argv - 1), &addrs, &addrno, 0)) {
 #ifdef HAVE_HERROR
 		herror("error");
 #else

@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.25 2003/04/16 21:14:33 pasky Exp $ */
+/* $Id: dns.c,v 1.26 2003/04/16 21:16:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,7 +67,8 @@ struct dnsquery {
 struct list_head dns_cache = {&dns_cache, &dns_cache};
 
 int
-do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno)
+do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno,
+		int in_thread)
 {
 #ifdef IPV6
 	struct addrinfo hint, *ai, *ai_cur;
@@ -108,9 +109,13 @@ do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno
 	for (i = 0; hostent->h_addr_list[i] != NULL; i++);
 #endif
 
-	*addrno = i;
-	*addrs = mem_calloc(i, sizeof(struct sockaddr_storage));
+	/* We cannot use mem_*() in thread ("It will chew memory on OS/2 and
+	 * BeOS because there are no locks around the memory debugging code."
+	 * -- Mikulas).  So we don't if in_thread != 0. */
+	*addrs = in_thread ? calloc(i, sizeof(struct sockaddr_storage))
+			   : mem_calloc(i, sizeof(struct sockaddr_storage));
 	if (!*addrs) return -1;
+	*addrno = i;
 
 #ifdef IPV6
 	for (i = 0, ai_cur = ai; ai_cur; i++, ai_cur = ai_cur->ai_next) {
@@ -141,7 +146,7 @@ lookup_fn(void *data, int h)
 	struct sockaddr_storage *addrs;
 	int addrno, i;
 
-	if (do_real_lookup(name, &addrs, &addrno) < 0) return;
+	if (do_real_lookup(name, &addrs, &addrno, 1) < 0) return;
 
 	/* We will do blocking I/O here, however it's only local communication
 	 * and it's supposed to be just a flash talk, so it shouldn't matter.
@@ -164,7 +169,8 @@ lookup_fn(void *data, int h)
 		} while (done < sizeof(struct sockaddr_storage));
 	}
 
-	mem_free(addrs);
+	/* We're in thread, thus we must do plain free(). */
+	free(addrs);
 }
 
 void
@@ -237,7 +243,7 @@ do_lookup(struct dnsquery *query, int force_async)
 		int res;
 
 sync_lookup:
-		res = do_real_lookup(query->name, query->addr, query->addrno);
+		res = do_real_lookup(query->name, query->addr, query->addrno, 0);
 		query->xfn(query, res);
 
 		return 0;

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre7.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-11-11 21:00+0100\n"
-"PO-Revision-Date: 2003-11-08 01:00+0200\n"
+"PO-Revision-Date: 2003-11-12 06:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -342,34 +342,28 @@ msgid "Automatically saved keybindings\n"
 msgstr "Automatycznie zapisane przypisania klawiszy\n"
 
 #: src/config/conf.c:701
-#, fuzzy
 msgid "Secure file error"
-msgstr "B³±d plikowy FTP"
+msgstr "B³±d przy bezpiecznym otwieraniu pliku"
 
 #: src/config/conf.c:707
-#, fuzzy
 msgid "Cannot read the file"
-msgstr "B³±d zapisu do pliku"
+msgstr "B³±d odczytu z pliku"
 
 #: src/config/conf.c:710
-#, fuzzy
 msgid "Cannot stat the file"
-msgstr "B³±d zapisu do pliku"
+msgstr "B³±d przy wykonywaniu stat()"
 
 #: src/config/conf.c:713
-#, fuzzy
 msgid "Cannot access the file"
-msgstr "B³±d zapisu do pliku"
+msgstr "B³±d dostêpu do pliku"
 
 #: src/config/conf.c:716
-#, fuzzy
 msgid "Cannot create temp file"
-msgstr "B³±d zapisu do pliku"
+msgstr "B³±d przy tworzeniu pliku tymczasowego"
 
 #: src/config/conf.c:719
-#, fuzzy
 msgid "Cannot rename the file"
-msgstr "B³±d zapisu do pliku"
+msgstr "B³±d przy zmianie nazwy pliku"
 
 #: src/config/conf.c:722
 msgid "File saving disabled by option"
@@ -5528,9 +5522,3 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1412
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
-
-#~ msgid "Secure open failed"
-#~ msgstr "Bezpieczne otwieranie nie powiod³o siê"
-
-#~ msgid "Unknown event."
-#~ msgstr "Nieznane zdarzenie."

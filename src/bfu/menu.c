@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.16 2002/09/17 13:38:08 zas Exp $ */
+/* $Id: menu.c,v 1.17 2002/11/27 17:06:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -387,31 +387,65 @@ menu_func(struct window *win, struct event *ev, int fwd)
 					menu->selected = menu->ni;
 					scroll_menu(menu, -1);
 					break;
-
+#define DIST 5
 				case ACT_PAGE_UP:
-					menu->selected -= menu->yw - 3;
-					if (menu->selected < -1)
-						menu->selected = -1;
+				{
+					int i = menu->selected - 2;
+					int found = 0;
+					int step = -1;
 
-					menu->view -= menu->yw - 2;
-					if (menu->view < 0)
-						menu->view = 0;
+					for (;i >= 0; i--) {
+						if (menu->items[i].hotkey == M_BAR) {
+							found = 1;
+							break;
+						}
+					}
 
-					scroll_menu(menu, -1);
+					if (found) {
+						step = i + 1 - menu->selected;
+					} else {
+						step = -DIST;
+					}
+
+					if (menu->selected + step <= 0)
+						step = -menu->selected;
+					if (step < -DIST) step = DIST;
+					if (step >= 0)
+						step = menu->selected - menu->ni - 1;
+
+					scroll_menu(menu, step);
+				}
 					break;
 
 				case ACT_PAGE_DOWN:
-					menu->selected += menu->yw - 3;
-					if (menu->selected > menu->ni)
-						menu->selected = menu->ni;
+				{
+					int i = menu->selected;
+					int found = 0;
+					int step = 1;
 
-					menu->view += menu->yw - 2;
-					if (menu->view >= menu->ni - menu->yw + 2)
-						menu->view = menu->ni - menu->yw + 2;
+					for (;i < menu->ni; i++) {
+						if (menu->items[i].hotkey == M_BAR) {
+							found = 1;
+							break;
+						}
+					}
 
-					scroll_menu(menu, 1);
+					if (found) {
+						step = i + 1 - menu->selected;
+					} else {
+						step = DIST;
+					}
+
+					if (menu->selected + step >= menu->ni)
+						step = menu->ni - menu->selected;
+					if (step > DIST) step = DIST;
+					if (step >= menu->ni)
+						step = menu->ni - 1;
+
+					scroll_menu(menu, step);
+				}
 					break;
-
+#undef DIST
 				default:
 					if ((ev->x >= KBD_F1 && ev->x <= KBD_F12) ||
 					    ev->y == KBD_ALT) {

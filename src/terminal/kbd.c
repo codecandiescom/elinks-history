@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.106 2004/07/31 09:53:17 jonas Exp $ */
+/* $Id: kbd.c,v 1.107 2004/07/31 09:59:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -734,7 +734,7 @@ static int
 decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 {
 	unsigned char c;
-	int key = 0, modifier = 0;
+	int key = -1, modifier = 0;
 	int v;
 	int el;
 
@@ -831,7 +831,7 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 	}
 
 	/* The event might have been changed to a mouse event */
-	if (ev->ev == EVENT_KBD) {
+	if (ev->ev == EVENT_KBD && key != -1) {
 		ev->info.keyboard.key = key;
 		ev->info.keyboard.modifier = modifier;
 	}

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.134 2003/06/17 13:29:37 zas Exp $ */
+/* $Id: renderer.c,v 1.135 2003/06/17 13:42:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1148,10 +1148,9 @@ create_frameset(struct f_data *fda, struct frameset_param *fp)
 	int i;
 	struct frameset_desc *fd;
 
-	if (!fp->x || !fp->y) {
-		internal("zero size of frameset");
-		return NULL;
-	}
+	assert(fp);
+	assertm(fp->x > 0 && fp->y > 0,
+		"Bad size of frameset: x=%d y=%d", fp->x, fp->y);
 
 	fd = mem_calloc(1, sizeof(struct frameset_desc)
 			   + fp->x * fp->y * sizeof(struct frame_desc));
@@ -1176,6 +1175,8 @@ create_frameset(struct f_data *fda, struct frameset_param *fp)
 static inline void
 create_frame(struct frame_param *fp)
 {
+	assert(fp && fp->parent);
+
 	add_frameset_entry(fp->parent, NULL, fp->name, fp->url);
 }
 
@@ -1187,6 +1188,8 @@ html_special(struct part *part, enum html_special_type c, ...)
 	struct form_control *fc;
 	struct frameset_param *fsp;
 	struct frame_param *fp;
+
+	assert(part);
 
 	va_start(l, c);
 	switch (c) {
@@ -1309,10 +1312,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 		}
 	}
 
-	if (ys < 0) {
-		internal("format_html_part: ys == %d", ys);
-		return NULL;
-	}
+	assertm(ys >= 0, "format_html_part: ys == %d", ys);
 
 	if (data) {
 		struct node *n = mem_alloc(sizeof(struct node));
@@ -1448,10 +1448,8 @@ push_base_format(unsigned char *url, struct document_options *opt)
 {
 	struct html_element *e;
 
-	if (html_stack.next != &html_stack) {
-		internal("something on html stack");
-		init_list(html_stack);
-	}
+	assert(url);
+	assertm(html_stack.next == &html_stack, "something on html stack");
 
 	e = mem_calloc(1, sizeof(struct html_element));
 	if (!e) return;

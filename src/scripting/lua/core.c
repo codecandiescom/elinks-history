@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.76 2003/10/02 12:47:15 kuser Exp $ */
+/* $Id: core.c,v 1.77 2003/10/02 12:54:36 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -850,14 +850,17 @@ lua_console(struct session *ses, unsigned char *expr)
 	}
 }
 
-void
-dialog_lua_console(struct session *ses)
+enum evhook_status
+dialog_lua_console(va_list ap, void *data)
 {
+	struct session *ses = va_arg(ap, struct session *);
+
 	input_field(ses->tab->term, NULL, 1,
 		    N_("Lua Console"), N_("Enter expression"),
 		    N_("OK"), N_("Cancel"), ses, &lua_console_history,
 		    MAX_STR_LEN, "", 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) lua_console, NULL);
+	return EHS_NEXT;
 }
 
 enum evhook_status

@@ -1,4 +1,4 @@
-/* $Id: core.h,v 1.9 2003/10/02 12:47:15 kuser Exp $ */
+/* $Id: core.h,v 1.10 2003/10/02 12:54:36 kuser Exp $ */
 
 #ifndef EL__SCRIPTING_LUA_CORE_H
 #define EL__SCRIPTING_LUA_CORE_H
@@ -18,7 +18,7 @@ void finish_lua(void);
 void alert_lua_error(unsigned char *);
 void alert_lua_error2(unsigned char *, unsigned char *);
 
-void dialog_lua_console(struct session *);
+enum evhook_status dialog_lua_console(va_list ap, void *data);
 enum evhook_status free_lua_console_history(va_list ap, void *data);
 
 extern struct scripting_backend lua_scripting_backend;

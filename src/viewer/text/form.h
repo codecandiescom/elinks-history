@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.18 2004/05/29 00:53:48 jonas Exp $ */
+/* $Id: form.h,v 1.19 2004/06/09 07:49:55 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -41,14 +41,15 @@ struct form_control {
 	int ctrl_num;
 	int g_ctrl_num;
 	int position;
+	enum form_type type;
+
 	enum form_method method;
 	unsigned char *action;
 	unsigned char *target;
-	enum form_type type;
 	unsigned char *name;
 	unsigned char *alt;
-	int ro;
 	unsigned char *default_value;
+	int ro;
 	int default_state;
 	int size;
 	int cols, rows, wrap;
@@ -64,7 +65,8 @@ struct form_state {
 	int ctrl_num;
 	int g_ctrl_num;
 	int position;
-	int type;
+	enum form_type type;
+
 	unsigned char *value;
 	int state;
 	int vpos;

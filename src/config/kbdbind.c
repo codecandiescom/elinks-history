@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.122 2003/12/21 23:56:12 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.123 2003/12/26 12:18:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -846,6 +846,16 @@ add_default_keybindings(void)
 
 	for (kb = default_menu_keymap; kb->key; kb++)
 		add_keybinding(KM_MENU, kb->action, kb->key, kb->meta, EVENT_NONE);
+}
+
+void
+add_keystroke_to_string(struct string *string, enum keyact action,
+			enum keymap map)
+{
+	struct keybinding *kb = kbd_act_lookup(map, action);
+
+	if (kb)
+		make_keystroke(string, kb->key, kb->meta, 0);
 }
 
 void

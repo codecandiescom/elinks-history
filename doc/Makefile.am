@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.2 2002/12/30 16:14:45 jonas Exp $
+## $Id: Makefile.am,v 1.3 2003/01/01 17:23:35 jonas Exp $
 
-SUBDIRS = manual
+SUBDIRS = book
 
 EXTRA_DIST = *

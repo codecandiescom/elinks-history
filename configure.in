@@ -621,7 +621,7 @@ AC_OUTPUT([ \
  contrib/elinks.spec \
  contrib/lua/hooks.lua \
  doc/Makefile \
- doc/manual/Makefile \
+ doc/book/Makefile \
  intl/Makefile \
  src/Makefile \
  src/bfu/Makefile \

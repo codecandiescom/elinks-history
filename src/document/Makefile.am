@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.26 2003/10/31 19:54:09 jonas Exp $
+## $Id: Makefile.am,v 1.27 2003/10/31 22:15:41 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -16,8 +16,6 @@ libdocument_a_LIBADD = \
 libdocument_a_SOURCES = \
  document.c \
  document.h \
- draw.c \
- draw.h \
  options.c \
  options.h \
  plain.c \

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: plain.c,v 1.4 2003/10/31 20:40:25 jonas Exp $ */
+/* $Id: plain.c,v 1.5 2003/10/31 22:15:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,7 +12,6 @@
 
 #include "cache/cache.h"
 #include "document/document.h"
-#include "document/draw.h"
 #include "document/html/renderer.h" /* TODO: Move get_convert_table() */
 #include "terminal/draw.h"
 #include "util/error.h"
@@ -22,9 +21,49 @@
 
 /* TODO: Highlight uris in the plaintext (optional ofcourse) */
 
+#define LINES_GRANULARITY	0x7F
+#define LINE_GRANULARITY	0x0F
+
+#define ALIGN_LINES(x, o, n) mem_align_alloc(x, o, n, sizeof(struct line), LINES_GRANULARITY)
+#define ALIGN_LINE(x, o, n) mem_align_alloc(x, o, n, sizeof(struct screen_char), LINE_GRANULARITY)
+
+static struct line *
+realloc_lines(struct document *document, int y)
+{
+	assert(document);
+	if_assert_failed return 0;
+
+	if (document->height <= y) {
+		if (!ALIGN_LINES(&document->data, document->height, y + 1))
+			return NULL;
+
+		document->height = y + 1;
+	}
+
+	return &document->data[y];
+}
+
+static struct screen_char *
+realloc_line(struct document *document, int y, int x)
+{
+	struct line *line = realloc_lines(document, y);
+
+	if (!line) return NULL;
+
+	if (line->l <= x) {
+		if (!ALIGN_LINE(&line->d, line->l, x + 1))
+			return NULL;
+
+		line->l = x + 1;
+	}
+
+	return line->d;
+}
+
 static void
 add_document_lines(struct document *document, unsigned char *source)
 {
+	struct screen_char template;
 	struct color_pair colors;
 	int length = strlen(source);
 	int lineno;
@@ -34,6 +73,10 @@ add_document_lines(struct document *document, unsigned char *source)
 	/* Setup the style */
 	colors.foreground = d_opt->default_fg;
 	colors.background = d_opt->default_bg;
+
+	template.attr = 0;
+	template.data = ' ';
+	set_term_color(&template, &colors, d_opt->color_flags, d_opt->color_mode);
 
 	for (lineno = 0; length > 0; lineno++) {
 		unsigned char *lineend = strchr(source, '\n');
@@ -50,12 +93,13 @@ add_document_lines(struct document *document, unsigned char *source)
 			add_to_list(document->nodes, node);
 		}
 
-		pos = get_document_line(document, lineno, width, &colors);
+		pos = realloc_line(document, lineno, width);
 		if (!pos) continue;
 
 		for (end = pos + width; pos < end; pos++, source++) {
-			pos->data = (*source < ' ' || *source == ASCII_ESC)
-				  ? ' ' : *source;
+			template.data = (*source < ' ' || *source == ASCII_ESC)
+					? ' ' : *source;
+			copy_screen_chars(pos, &template, 1);
 		}
 
 		/* Skip the newline too. */

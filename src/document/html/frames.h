@@ -1,8 +1,9 @@
-/* $Id: frames.h,v 1.16 2003/10/23 21:43:29 pasky Exp $ */
+/* $Id: frames.h,v 1.17 2003/10/29 16:10:29 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
 
+#include "document/document.h"
 #include "document/options.h"
 #include "lowlevel/ttime.h"
 #include "terminal/draw.h"
@@ -25,62 +26,6 @@ struct frameset_desc {
 	int xp, yp;
 
 	struct frame_desc f[1]; /* must be last of struct. --Zas */
-};
-
-/* For struct document */
-struct line {
-	struct screen_char *d;
-	int l;
-};
-
-enum cp_status {
-	CP_STATUS_NONE,
-	CP_STATUS_SERVER,
-	CP_STATUS_ASSUMED,
-	CP_STATUS_IGNORED
-};
-
-struct document_refresh {
-	int timer;
-	unsigned long seconds;
-	unsigned char url[1]; /* XXX: Keep last! */
-};
-
-struct document {
-	LIST_HEAD(struct document);
-
-	struct document_options opt;
-
-	struct list_head forms;
-	struct list_head tags;
-	struct list_head nodes;
-
-	unsigned char *url;
-	unsigned char *title;
-
-	struct frameset_desc *frame_desc;
-	struct document_refresh *refresh;
-
-	struct line *data;
-
-	struct link *links;
-	struct link **lines1;
-	struct link **lines2;
-
-	struct search *search;
-	struct search **slines1;
-	struct search **slines2;
-
-	unsigned int id_tag; /* Used to check cache entries. */
-
-	int refcount;
-	int cp;
-	int x, y; /* size of document */
-	int nlinks;
-	int nsearch;
-	color_t bgcolor;
-
-	enum cp_status cp_status;
 };
 
 struct view_state;

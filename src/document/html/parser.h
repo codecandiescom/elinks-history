@@ -1,10 +1,11 @@
-/* $Id: parser.h,v 1.34 2003/10/23 21:43:29 pasky Exp $ */
+/* $Id: parser.h,v 1.35 2003/10/29 16:10:29 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
 
 #include "bfu/dialog.h"
 #include "bfu/style.h"
+#include "document/document.h"
 #include "document/html/frames.h"
 #include "util/color.h"
 #include "util/lists.h"

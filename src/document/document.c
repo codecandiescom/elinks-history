@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.93 2005/03/04 17:36:29 zas Exp $ */
+/* $Id: document.c,v 1.94 2005/03/30 15:25:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,8 +181,7 @@ release_document(struct document *document)
 
 	if (document->refresh) kill_document_refresh(document->refresh);
 	object_unlock(document);
-	del_from_list(document);
-	add_to_list(format_cache, document);
+	move_to_top_of_list(format_cache, document);
 }
 
 /* Formatted document cache management */
@@ -234,8 +233,7 @@ get_cached_document(struct cache_entry *cached, struct document_options *options
 		}
 
 		/* Reactivate */
-		del_from_list(document);
-		add_to_list(format_cache, document);
+		move_to_top_of_list(format_cache, document);
 
 		object_lock(document);
 

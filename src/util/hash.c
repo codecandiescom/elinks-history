@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.30 2005/03/05 21:16:06 zas Exp $ */
+/* $Id: hash.c,v 1.31 2005/03/30 15:25:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,10 +105,7 @@ get_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen)
 		/* Watch the MFR (Move Front Rule)! Basically, it self-orders
 		 * the list by popularity of its items. Inspired from Links,
 		 * probably PerM. --pasky */
-		if (item != list->next) { /* If not already first. */
-			del_from_list(item);
-			add_to_list(*list, item);
-		}
+		move_to_top_of_list(*list, item);
 
 		return item;
 	}

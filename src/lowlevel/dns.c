@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.56 2005/03/05 22:14:31 zas Exp $ */
+/* $Id: dns.c,v 1.57 2005/03/30 15:25:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -314,8 +314,7 @@ find_in_dns_cache(unsigned char *name, struct dnsentry **dnsentry)
 
 	foreach (e, dns_cache)
 		if (!strcasecmp(e->name, name)) {
-			del_from_list(e);
-			add_to_list(dns_cache, e);
+			move_to_top_of_list(dns_cache, e);
 			*dnsentry = e;
 			return 0;
 		}

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.528 2005/03/05 21:34:30 jonas Exp $ */
+/* $Id: renderer.c,v 1.529 2005/03/30 15:25:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1428,8 +1428,7 @@ check_html_form_hierarchy(struct part *part)
 			    && fc->position <= form->form_end)
 				continue;
 
-			del_from_list(fc);
-			add_to_list(form_controls, fc);
+			move_to_top_of_list(form_controls, fc);
 		}
 	}
 
@@ -1442,9 +1441,8 @@ check_html_form_hierarchy(struct part *part)
 			    || form->form_end < fc->position)
 				continue;
 
-			del_from_list(fc);
 			fc->form = form;
-			add_to_list(form->items, fc);
+			move_to_top_of_list(form->items, fc);
 			break;
 		}
 	}

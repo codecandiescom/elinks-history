@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.201 2005/03/26 13:07:25 jonas Exp $ */
+/* $Id: cache.c,v 1.202 2005/03/30 15:25:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,9 +97,7 @@ find_in_cache(struct uri *uri)
 		if (!compare_uri(c_uri, uri, URI_BASE))
 			continue;
 
-		/* Move it on the top of the list. */
-		del_from_list(cached);
-		add_to_list(cache_entries, cached);
+		move_to_top_of_list(cache_entries, cached);
 
 		return cached;
 	}

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.145 2004/05/07 11:24:21 zas Exp $ */
+/* $Id: listbox.c,v 1.146 2004/05/07 12:21:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,9 +30,7 @@ dlg_format_box(struct terminal *term, struct widget_data *widget_data,
 {
 	int min, optimal_h;
 
-	widget_data->dimensions.x = x;
-	widget_data->dimensions.y = *y;
-	widget_data->dimensions.width = w;
+	set_rect(widget_data->dimensions, x, *y, w, 1);
 
 	if (rw) int_bounds(rw, widget_data->dimensions.width, w);
 
@@ -535,9 +533,10 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	}
 
 	if (check_mouse_action(ev, B_UP)) {
-		if (!check_mouse_wheel(ev) &&
-		    (ev->y >= widget_data->dimensions.y && ev->y < widget_data->dimensions.y + widget_data->dimensions.height) &&
-		    (ev->x >= widget_data->dimensions.x && ev->x <= widget_data->dimensions.x + widget_data->dimensions.width)) {
+		if (check_mouse_wheel(ev))
+			return EVENT_NOT_PROCESSED;
+		
+		if (is_in_rect(widget_data->dimensions, ev->x, ev->y)) {
 			/* Clicked in the box. */
 			int offset = ev->y - widget_data->dimensions.y;
 

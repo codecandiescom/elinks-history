@@ -1,5 +1,5 @@
 /* HTML viewer (and many more) */
-/* $Id: view.c,v 1.12 2002/03/26 22:02:06 pasky Exp $ */
+/* $Id: view.c,v 1.13 2002/03/27 13:32:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1303,10 +1303,10 @@ void encode_controls(struct list_head *l, unsigned char **data, int *len,
 		d_opt = &o;
 		if (sv->type == FC_TEXTAREA) p = encode_textarea(sv->value);
 		if (lst) add_to_str(data, len, "&"); else lst = 1;
-		encode_string(sv->name, data, len);
+		encode_url_string(sv->name, data, len);
 		add_to_str(data, len, "=");
 		p2 = convert_string(convert_table, p, strlen(p));
-		encode_string(p2, data, len);
+		encode_url_string(p2, data, len);
 		mem_free(p2);
 		if (sv->type == FC_TEXTAREA) mem_free(p);
 	}

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.7 2002/03/26 22:02:07 pasky Exp $ */
+/* $Id: url.c,v 1.8 2002/03/27 13:32:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -702,7 +702,7 @@ static inline int safe_char(unsigned char c)
 	       || c == '*' || c == '\''|| c == '(' || c == ')';
 }
 
-void encode_string(unsigned char *name, unsigned char **data, int *len)
+void encode_url_string(unsigned char *name, unsigned char **data, int *len)
 {
 	for (; *name; name++) {
 #if 0
@@ -719,3 +719,36 @@ void encode_string(unsigned char *name, unsigned char **data, int *len)
 		}
 	}
 }
+
+/* This function is evil, it modifies its parameter. */
+void decode_url_string(unsigned char *src) {
+	char *dst = src;
+	char c;
+
+	do {
+		c = *src++;
+
+		if (c == '%') {
+			int x1 = unhx(*src);
+
+			if (x1 >= 0) {
+				int x2 = unhx(*(src + 1));
+
+				if (x2 >= 0) {
+					x1 = x1 * 16 + x2;
+					if (x1 != 0) { /* don't allow %00 */
+						c = (char) x1;
+						src += 2;
+					}
+				}
+			}
+
+		} else if (c == '+') {
+			c = ' ';
+		}
+
+		*dst++ = c;
+	} while (c != '\0');
+}
+
+

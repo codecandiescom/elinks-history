@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.10 2003/08/30 20:51:08 jonas Exp $ */
+/* $Id: color.c,v 1.11 2003/08/31 00:19:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,6 +8,7 @@
 #include "elinks.h"
 
 #include "document/options.h"
+#include "terminal/color.h"
 #include "terminal/draw.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
@@ -137,63 +138,58 @@ find_nearest_color(color_t color, int level)
 #undef HASH_RGB
 #undef RGB_HASH_SIZE
 
-/* Adjusts the foreground color to be more visible on the background. */
-static inline unsigned char
-fg_color(unsigned char fg, unsigned char bg)
-{
-	/* 0 == black       6 == cyan        12 == brightblue
-	 * 1 == red         7 == brightgrey  13 == brightmagenta
-	 * 2 == green       8 == darkgrey    14 == brightcyan
-	 * 3 == brown       9 == brightred   15 == brightwhite
-	 * 4 == blue       10 == brightgreen
-	 * 5 == magenta    11 == brightyellow
-	 */
+/* Colors values used in the foreground color table:
+ *
+ *	0 == black	 8 == darkgrey (brightblack ;)
+ *	1 == red	 9 == brightred
+ *	2 == green	10 == brightgreen
+ *	3 == brown	11 == brightyellow
+ *	4 == blue	12 == brightblue
+ *	5 == magenta	13 == brightmagenta
+ *	6 == cyan	14 == brightcyan
+ *	7 == white	15 == brightwhite
+ *
+ * Bright colors will be rendered bold. */
 
-	/* This table is based mostly on wild guesses of mine. Feel free to
-	 * correct it. --pasky */
-	/* Indexed by [fg][bg]->fg: */
-	static int xlat[16][8] = {
-		/* bk  r  gr  br  bl   m   c   w */
+/* This table is based mostly on wild guesses of mine. Feel free to
+ * correct it. --pasky */
+/* Indexed by [fg][bg]->fg: */
+static unsigned char fg_color[16][8] = {
+	/* bk  r  gr  br  bl   m   c   w */
 
-		/* 0 (black) */
-		{  7,  0,  0,  0,  7,  0,  0,  0 },
-		/* 1 (red) */
-		{  1,  9,  1,  9,  9,  9,  1,  1 },
-		/* 2 (green) */
-		{  2,  2, 10,  2,  2,  2, 10, 10 },
-		/* 3 (brown) */
-		{  3, 11,  3, 11,  3, 11,  3,  3 },
-		/* 4 (blue) */
-		{ 12, 12,  4,  4, 12, 15,  4,  4 },
-		/* 5 (magenta) */
-		{  5, 13,  5, 13, 13, 13,  5,  5 },
-		/* 6 (cyan) */
-		{  6,  6, 14,  6,  6,  6, 14, 14 },
-		/* 7 (grey) */
-		{  7,  7,  0,  7,  7,  7,  0,  0 }, /* Don't s/0/8/, messy --pasky */
-		/* 8 (darkgrey) */
-		{ 15, 15,  8, 15, 15, 15,  8,  8 },
-		/* 9 (brightred) */
-		{  9,  9,  1,  9,  9,  9,  1,  9 }, /* I insist on 7->9 --pasky */
-		/* 10 (brightgreen) */
-		{ 10, 10, 10, 10, 10, 10, 10, 10 },
-		/* 11 (brightyellow) */
-		{ 11, 11, 11, 11, 11, 11, 11, 11 },
-		/* 12 (brightblue) */
-		{ 12, 12, 12,  4,  6,  6,  4, 12 },
-		/* 13 (brightmagenta) */
-		{ 13, 13,  5, 13, 13, 13,  5,  5 },
-		/* 14 (brightcyan) */
-		{ 14, 14, 14, 14, 14, 14, 14, 14 },
-		/* 15 (brightwhite) */
-		{ 15, 15, 15, 15, 15, 15, 15,  7 },
-	};
-
-	if (d_opt && !d_opt->allow_dark_on_black)
-		return xlat[fg][bg];
-	else
-		return fg;
-}
+	/* 0 (black) */
+	{  7,  0,  0,  0,  7,  0,  0,  0 },
+	/* 1 (red) */
+	{  1,  9,  1,  9,  9,  9,  1,  1 },
+	/* 2 (green) */
+	{  2,  2, 10,  2,  2,  2, 10, 10 },
+	/* 3 (brown) */
+	{  3, 11,  3, 11,  3, 11,  3,  3 },
+	/* 4 (blue) */
+	{ 12, 12,  4,  4, 12, 15,  4,  4 },
+	/* 5 (magenta) */
+	{  5, 13,  5, 13, 13, 13,  5,  5 },
+	/* 6 (cyan) */
+	{  6,  6, 14,  6,  6,  6, 14, 14 },
+	/* 7 (grey) */
+	{  7,  7,  0,  7,  7,  7,  0,  0 }, /* Don't s/0/8/, messy --pasky */
+	/* 8 (darkgrey) */
+	{ 15, 15,  8, 15, 15, 15,  8,  8 },
+	/* 9 (brightred) */
+	{  9,  9,  1,  9,  9,  9,  1,  9 }, /* I insist on 7->9 --pasky */
+	/* 10 (brightgreen) */
+	{ 10, 10, 10, 10, 10, 10, 10, 10 },
+	/* 11 (brightyellow) */
+	{ 11, 11, 11, 11, 11, 11, 11, 11 },
+	/* 12 (brightblue) */
+	{ 12, 12, 12,  4,  6,  6,  4, 12 },
+	/* 13 (brightmagenta) */
+	{ 13, 13,  5, 13, 13, 13,  5,  5 },
+	/* 14 (brightcyan) */
+	{ 14, 14, 14, 14, 14, 14, 14, 14 },
+	/* 15 (brightwhite) */
+	{ 15, 15, 15, 15, 15, 15, 15,  7 },
+};
 
 /* TODO: Either only #define mix_color_pair() in header file to use
  * mix_attr_colors() as backend or reduce code duplication some other way. */
@@ -232,7 +228,8 @@ mix_color_pair(struct color_pair *pair)
 	register unsigned char bg = find_nearest_color(pair->background, 8);
 	register unsigned char color;
 
-	fg = fg_color(fg, bg);
+	if (d_opt && !d_opt->allow_dark_on_black)
+		fg = fg_color[fg][bg];
 
 	encode_color(color, bg, fg);
 
@@ -272,7 +269,8 @@ mix_attr_colors(struct color_pair *pair, enum screen_char_attr attr)
 #endif
 	}
 
-	fg = fg_color(fg, bg);
+	if (d_opt && !d_opt->allow_dark_on_black)
+		fg = fg_color[fg][bg];
 
 	encode_color(color, bg, fg);
 

@@ -1,3 +1,64 @@
+Mon Mar  4 23:07:10 2002  Petr Baudis <pasky@ji.cz>:
+
+	* cookies.c:
+	
+	rewritten parsing of name=value, so that it's now more tolerant to
+	whitespaces (permitted around = and before ;) - so now i.e.
+	bugzilla should work properly in elinks; thanks for inspiration to
+	report by <lenbok@mailandnews.com> and proposed fix by
+	<qmax@civo.aca.nsc.ru> (from 6/7 Sep 2001)
+
+Mon Mar  4 22:09:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS:
+	
+	nitpicking
+
+Mon Mar  4 22:06:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* cookies.c:
+	
+	set_cookie tidyup
+
+Mon Mar  4 20:35:15 2002  Petr Baudis <pasky@ji.cz>:
+
+	* http.c:
+	
+	silenced one warning
+
+Mon Mar  4 20:34:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html.c, http.c, url.c:
+	
+	removed the url spaces patch (and 'manual' stripping of
+	leeading/trailing spaces) - it didn't work well (the stripping is
+	pretty tricky and ugly to do, xlated url wasn't shown in info etc
+	etc)
+
+Mon Mar  4 20:18:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* BUGS:
+	
+	hopefully already obsolete bug deleted
+
+Mon Mar  4 20:11:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* url.c:
+	
+	remove debug things ;)
+
+Mon Mar  4 20:09:44 2002  Petr Baudis <pasky@ji.cz>:
+
+	* url.c:
+	
+	strip spaces on start and end of url - INCOMPLETE
+
+Mon Mar  4 15:24:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* entity.inc, Unicode/entities.lnx:
+	
+	euro and euml was swapped - fix based on patch by zas
+
 Mon Mar  4 00:55:33 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure.in,

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.219 2004/06/01 00:09:36 jonas Exp $ */
+/* $Id: uri.c,v 1.220 2004/06/01 00:42:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -931,9 +931,11 @@ extract_fragment(unsigned char *uri)
 	frag_start = strchr(uri, '#');
 	if (!frag_start) return NULL;
 
+	frag_len = get_no_post_url_length(frag_start + 1);
+
 	/* Copy fragment string (without '#') and without trailing
 	 * post data if any. */
-	fragment = get_no_post_url(frag_start + 1, &frag_len);
+	fragment = memacpy(frag_start + 1, frag_len);
 
 	/* Start position of post data if any. */
 	post_start = frag_start + frag_len + 1;
@@ -1075,16 +1077,6 @@ get_no_post_url_length(unsigned char *url)
 	int len = postchar ? postchar - url : strlen(url);
 
 	return len;
-}
-
-unsigned char *
-get_no_post_url(unsigned char *url, int *url_len)
-{
-	int len = get_no_post_url_length(url);
-
-	if (url_len) *url_len = len;
-
-	return memacpy(url, len);
 }
 
 

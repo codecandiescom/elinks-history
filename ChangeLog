@@ -1,3 +1,157 @@
+Mon Mar 22 14:35:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, cache/dialogs.c,
+	cookies/cookies.c, dialogs/document.c, dialogs/download.c,
+	dialogs/menu.c, dialogs/status.c, document/document.c,
+	document/document.h, document/refresh.c, document/renderer.c,
+	document/html/frames.c, document/plain/renderer.c,
+	lowlevel/connect.c, mime/mime.c, mime/mime.h, protocol/finger.c,
+	protocol/uri.c, protocol/uri.h, protocol/user.c,
+	protocol/auth/auth.c, protocol/file/cgi.c, protocol/file/file.c,
+	protocol/ftp/ftp.c, protocol/http/blacklist.c,
+	protocol/http/blacklist.h, protocol/http/codes.c,
+	protocol/http/http.c, protocol/rewrite/rewrite.c,
+	sched/connection.c, sched/connection.h, sched/download.c,
+	sched/download.h, sched/history.c, sched/location.c,
+	sched/location.h, sched/session.c, sched/session.h, sched/task.c,
+	util/string.h, viewer/dump/dump.c, viewer/text/marks.c,
+	viewer/text/view.c, viewer/text/vs.c, viewer/text/vs.h:
+
+	Revert the lot of struct uri changes. Pasky warned me that it
+	sounded scary and the very first bug report plus the fact that it
+	was all made in a proof of concept manner was too convincing. We
+	should still persue the idea tho' because they rock.  
+
+Mon Mar 22 04:51:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: document.c, document.h, renderer.c:
+
+	Pass URI directly to init_document() to avoid error handling.  
+
+Mon Mar 22 04:32:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	done_uri(): Optimize to only lookup in the map when releasing URIs.  
+
+Mon Mar 22 04:15:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/codes.c:
+
+	Use URI struct for http error code handling.  
+
+Mon Mar 22 04:03:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/location.c, sched/session.c, sched/task.c,
+	viewer/text/marks.c:
+
+	Cleanup and don't allocate extra memory for the URI string.  
+
+Mon Mar 22 04:00:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/dump/dump.c:
+
+	Oops clear local view state variable.  
+
+Mon Mar 22 03:59:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: location.h, session.h:
+
+	Remove deprecated comments.  
+
+Mon Mar 22 03:58:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/dump/dump.c:
+
+	Cleanup and use local view state variable.  
+
+Mon Mar 22 03:47:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/document.c, dialogs/menu.c, document/renderer.c,
+	document/html/frames.c, sched/location.h, sched/session.c,
+	sched/task.c, viewer/dump/dump.c, viewer/text/view.c,
+	viewer/text/vs.c, viewer/text/vs.h:
+
+	Use struct URI for view states. Removing lots of dangerous code and
+	simplifying things.  
+
+Mon Mar 22 03:23:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/document.c, protocol/rewrite/rewrite.c,
+	sched/history.c, sched/location.h, sched/session.c, sched/task.c:
+
+	Use get_location_url() macro when dealing with view states.  
+
+Mon Mar 22 03:01:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/document.c, document/renderer.c,
+	document/html/frames.c, viewer/text/vs.h:
+
+	Use get_vs_cache_entry() macro when dealing with view states.  
+
+Mon Mar 22 02:51:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/location.c, sched/session.c, viewer/dump/dump.c,
+	viewer/text/marks.c:
+
+	Getting ready for a hostile take over. Use mem_calloc() when dealing
+	with view states.  
+
+Mon Mar 22 02:44:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Tidy up.  
+
+Mon Mar 22 02:43:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/history.c, sched/session.c, viewer/text/view.c,
+	viewer/text/vs.h:
+
+	get_vs_url_copy(): Wrap the world.  
+
+Mon Mar 22 01:18:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: mime/mime.c, protocol/uri.c, protocol/uri.h,
+	protocol/http/http.c, sched/download.c:
+
+	get_extension_from_url(): Take struct URI and rename to
+	get_uri_extension().  
+
+Mon Mar 22 01:08:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: mime/mime.c, mime/mime.h, sched/download.c:
+
+	Pass URI to get_content_type().  
+
+Mon Mar 22 01:04:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/refresh.c, sched/download.c, sched/session.c,
+	sched/session.h:
+
+	Use struct URI for type queries.  
+
+Sun Mar 21 23:55:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/file/cgi.c, protocol/http/http.c,
+	sched/connection.c, sched/connection.h, sched/download.c,
+	sched/session.c, sched/session.h, sched/task.c, viewer/dump/dump.c:
+
+	Change both session->ref_url and connection->ref_url to use URI
+	struct and rename to referrer.  
+
+Sun Mar 21 23:26:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Use URI for file_to_load struct.  
+
+Sun Mar 21 23:18:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/download.c, sched/download.c, sched/download.h:
+
+	Use URI for file downloads.  
+
 Sun Mar 21 22:57:35 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: document/renderer.c, document/plain/renderer.c,

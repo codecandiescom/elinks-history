@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.22 2002/06/16 17:12:03 pasky Exp $ */
+/* $Id: error.c,v 1.23 2002/06/16 17:16:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -272,6 +272,10 @@ debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 		return NULL;
 	}
 
+#ifdef FILL_ON_ALLOC
+	memset(ah, FILL_ON_ALLOC_VALUE, SIZE_BASE2AH(size));
+#endif
+
 	mem_amount += size;
 
 	ah->size = size;
@@ -354,7 +358,7 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 #endif
 
 	/* We compare oldsize to new size, and if equal we just return ptr
-	 * and change nothing, this is conform to most realloc() behavior. */
+	 * and change nothing, this conforms to usual realloc() behavior. */
 	if (ah->size == size) return (void *) ptr;
 
 	ah = realloc(ah, SIZE_BASE2AH(size));

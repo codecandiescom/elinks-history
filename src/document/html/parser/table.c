@@ -1,5 +1,5 @@
-/* HTML tables renderer */
-/* $Id: table.c,v 1.2 2004/06/28 20:16:17 jonas Exp $ */
+/* HTML tables parser */
+/* $Id: table.c,v 1.3 2004/06/28 20:23:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,17 +14,10 @@
 #include "document/html/parser/parse.h"
 #include "document/html/parser/table.h"
 #include "document/html/parser.h"
-#include "document/html/renderer.h"
-#include "document/options.h"
-#include "terminal/draw.h"
 #include "util/color.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"
-#include "util/string.h"
-
-/* Unsafe macros */
-#include "document/html/internal.h"
 
 
 #define INIT_REAL_COLS		2

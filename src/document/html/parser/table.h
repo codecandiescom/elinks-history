@@ -1,9 +1,11 @@
-/* $Id: table.h,v 1.2 2004/06/28 20:16:17 jonas Exp $ */
+/* $Id: table.h,v 1.3 2004/06/28 20:23:16 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_TABLE_H
 #define EL__DOCUMENT_HTML_PARSER_TABLE_H
 
 #include "util/color.h"
+
+struct part;
 
 /* Fix namespace clash on MacOS. */
 #define table table_elinks

@@ -1,11 +1,10 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.251 2004/06/28 20:16:17 jonas Exp $ */
+/* $Id: tables.c,v 1.252 2004/06/28 20:23:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 

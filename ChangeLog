@@ -1,3 +1,30 @@
+Mon Oct 11 18:14:56 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Fix the fix :).  
+
+Mon Oct 11 18:13:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Fix bug 532, crash on <script src> with NULL part->document,
+	reported by zas.  
+
+Mon Oct 11 10:25:00 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Oct 10 23:09:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/document.c, document/document.h,
+	document/renderer.c, document/html/parser.c,
+	document/html/parser.h, document/html/renderer.c, sched/session.c:
+
+	<script src> support.  
+
 Sun Oct 10 20:39:07 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/dialogs/exmode.c:

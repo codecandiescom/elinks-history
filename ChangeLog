@@ -1,3 +1,102 @@
+Tue Apr  5 21:02:43 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Remove ; after if statement.  
+
+Tue Apr  5 20:26:29 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* debian/changelog:
+
+	Merge Gervais changelog entry from 0.10.2-2.  
+
+Tue Apr  5 20:18:07 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* debian/changelog:
+
+	Clarify that keyboard accelerators for buttons _have_ _been_
+	defined, not merely that they _can_ _be_ defined.  
+
+Tue Apr  5 20:09:40 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* NEWS:
+
+	Elaborate on keyboard accelerators.  
+
+Tue Apr  5 20:02:48 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* debian/changelog:
+
+	Close some more debian bugs.  
+
+Tue Apr  5 19:48:49 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* debian/changelog:
+
+	Close some more debian bugs.  
+
+Tue Apr  5 19:47:52 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS:
+
+	Normalize and add button shortcuts.  
+
+Tue Apr  5 19:47:16 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, faq.html, index.txt:
+
+	Add FAQ from homepage. (debian bug 301861) 
+
+Tue Apr  5 15:41:12 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/parse.c:
+
+	parse_ftp_vms_permissions(): reduce code redundancy.  
+
+Tue Apr  5 12:45:16 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	parse_year() assumes the epoch is starting at 1.1.1970 so no need
+	for that in parse_ftp_winnt_response(). Sloppy me.  
+
+Tue Apr  5 12:42:53 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.h:
+
+	s/ftp/FTP/ in last patch.  
+
+Tue Apr  5 12:37:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.h:
+
+	Describe the FTP parser testing #define.  
+
+Tue Apr  5 12:35:51 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	Fix garbage VMS-style line to have correct line end. Use
+	parse_year() in parse_ftp_winnt_response().  
+
+Tue Apr  5 12:01:50 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/: ftp.c, parse.c, parse.h:
+
+	Add FTP parser testing infrastructure.  
+
+Tue Apr  5 11:52:51 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/date.c:
+
+	parse_month(): Fix buffer end guarding bug.  
+
+Tue Apr  5 07:53:39 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/cmdline.c:
+
+	By default should warnings too.  
+
 Mon Apr  4 12:33:30 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/connection.c:

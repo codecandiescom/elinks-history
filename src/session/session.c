@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.576 2004/10/14 20:10:28 jonas Exp $ */
+/* $Id: session.c,v 1.577 2004/10/23 08:04:03 pasky Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -479,6 +479,22 @@ maybe_pre_format_html(struct cache_entry *cached, struct session *ses)
 }
 #endif
 
+static int
+check_incomplete_redirects(struct cache_entry *cached)
+{
+	while (cached) {
+		if (cached->redirect) {
+			cached = find_in_cache(cached->redirect);
+			continue;
+		}
+
+		/* XXX: This is not quite true, but does that difference
+		 * matter here? */
+		return cached->incomplete;
+	}
+	return 0;
+}
+
 int
 session_is_loading(struct session *ses)
 {
@@ -487,13 +503,19 @@ session_is_loading(struct session *ses)
 	if (ses->task.type) {
 		if (!is_in_result_state(ses->loading.state))
 			return 1;
+		if (check_incomplete_redirects(ses->loading.cached))
+			return 1;
 	} else if (have_location(ses)) {
 		if (!is_in_result_state(cur_loc(ses)->download.state))
+			return 1;
+		if (check_incomplete_redirects(cur_loc(ses)->download.cached))
 			return 1;
 	}
 
 	foreach (ftl, ses->more_files) {
 		if (!is_in_result_state(ftl->download.state))
+			return 1;
+		if (check_incomplete_redirects(ftl->download.cached))
 			return 1;
 	}
 

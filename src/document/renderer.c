@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.128 2004/10/22 09:56:41 zas Exp $ */
+/* $Id: renderer.c,v 1.129 2004/10/23 08:04:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,6 +141,9 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 
 		cached = find_in_cache(uri);
 		done_uri(uri);
+
+		while (cached && cached->redirect)
+			cached = find_in_cache(cached->redirect);
 
 		if (!cached) {
 			/* At this time (!gradual_rerendering), we should've

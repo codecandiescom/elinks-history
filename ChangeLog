@@ -1,3 +1,27 @@
+Fri Dec 12 23:19:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre12 
+
+Fri Dec 12 23:18:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	_builtin_ user prefixes support 
+
+Fri Dec 12 23:14:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Fixed keybinding info for Tab::Go forward ('->' -> 'u') as well.  
+
+Fri Dec 12 23:13:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Fixed hotkeys conflict.  
+
 Fri Dec 12 23:01:03 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,

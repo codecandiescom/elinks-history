@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.274 2003/11/25 22:55:03 pasky Exp $ */
+/* $Id: view.c,v 1.275 2003/11/26 17:59:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1019,8 +1019,8 @@ quak:
 				shrink_memory(1); /* flush caches */
 				goto x;
 			case ACT_SAVE_FORMATTED:
-				/* TODO: if (!anonymous) for non-HTTI ? --pasky */
-				menu_save_formatted(ses->tab->term, (void *) 1, ses);
+				if (!get_opt_int_tree(cmdline_options, "anonymous"))
+					menu_save_formatted(ses->tab->term, (void *) 1, ses);
 				goto x;
 			case ACT_ADD_BOOKMARK:
 #ifdef BOOKMARKS

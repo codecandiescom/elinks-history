@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.71 2003/10/28 09:45:23 zas Exp $ */
+/* $Id: inpfield.c,v 1.72 2003/10/28 09:48:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -302,7 +302,7 @@ mouse_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 {
 	if (ev->y != widget_data->y || ev->x < widget_data->x
 	    || ev->x >= widget_data->x + widget_data->w
-	    ||  !widget_has_history(widget_data))
+	    || !widget_has_history(widget_data))
 		return EVENT_NOT_PROCESSED;
 
 	switch (ev->b & BM_BUTT) {

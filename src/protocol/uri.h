@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.17 2003/07/22 02:28:11 jonas Exp $ */
+/* $Id: uri.h,v 1.18 2003/07/22 14:25:13 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -56,9 +56,13 @@ enum uri_component {
 	URI_POST	= (1 << 6),
 };
 
-/* This function recreates the URI string part by part. */
+/* These functionss recreates the URI string part by part. */
 /* The @components bitmask describes the set of URI components used for
  * construction of the URI string.  */
+
+/* Adds the components to an already initialized string. */
+struct string *add_uri_to_string(struct string *string, struct uri *uri, enum uri_component components);
+
 /* Returns the new URI string or NULL upon an error. */
 unsigned char *get_uri_string(struct uri *uri, enum uri_component components);
 

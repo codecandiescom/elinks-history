@@ -1,5 +1,5 @@
 /* SGML node handling */
-/* $Id: parser.c,v 1.3 2004/09/24 02:08:14 jonas Exp $ */
+/* $Id: parser.c,v 1.4 2004/09/26 01:41:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,6 +86,7 @@ add_sgml_attribute(struct dom_navigator *navigator,
 	node->data.attribute.type      = info->type;
 	node->data.attribute.id	       = !!(info->flags & SGML_ATTRIBUTE_IDENTIFIER);
 	node->data.attribute.reference = !!(info->flags & SGML_ATTRIBUTE_REFERENCE);
+	node->data.attribute.quoted    = (valtoken->type == SGML_TOKEN_STRING);
 
 	pop_dom_node(navigator);
 }

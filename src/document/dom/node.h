@@ -1,4 +1,4 @@
-/* $Id: node.h,v 1.2 2004/09/24 00:44:59 jonas Exp $ */
+/* $Id: node.h,v 1.3 2004/09/26 01:41:36 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOM_NODE_H
 #define EL__DOCUMENT_DOM_NODE_H
@@ -135,6 +135,9 @@ struct dom_attribute_node {
 
 	/* The attribute value references some other resource */
 	unsigned int reference:1;
+
+	/* The attribute value is delimited by quotes */
+	unsigned int quoted:1;
 };
 
 struct dom_text_node {

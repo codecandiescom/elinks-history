@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.6 2004/09/24 02:53:32 jonas Exp $ */
+/* $Id: renderer.c,v 1.7 2004/09/26 01:41:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -577,9 +577,10 @@ render_dom_attribute_source(struct dom_navigator *navigator, struct dom_node *no
 
 	render_dom_node_text(renderer, template, node);
 
-	if (node->data.attribute.value && node->data.attribute.valuelen) {
-		unsigned char *value = node->data.attribute.value;
-		int valuelen = node->data.attribute.valuelen;
+	if (node->data.attribute.value) {
+		int quoted = node->data.attribute.quoted == 1;
+		unsigned char *value = node->data.attribute.value - quoted;
+		int valuelen = node->data.attribute.valuelen + quoted * 2;
 
 		if (check_dom_node_source(renderer, value, 0)) {
 			render_dom_flush(renderer, value);

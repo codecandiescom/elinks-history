@@ -746,6 +746,20 @@ void term_wr(struct option *o, unsigned char **s, int *l)
 	}
 }
 
+unsigned char *color_rd(struct option *o, unsigned char *c)
+{
+	unsigned char *val = get_token(&c);
+	
+	if (!val) {
+		return "Missing argument";
+	} else {
+		int err = decode_color(val, o->ptr);
+		
+		mem_free(val);
+		return (err) ? "Error decoding color" : NULL;
+	}
+}
+
 unsigned char *gen_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
 	unsigned char *r;
@@ -846,6 +860,8 @@ unsigned char *printhelp_cmd(struct option *o, unsigned char ***argv, int *argc)
 				printf("<num>");
 			else if (option->rd_cfg == str_rd)
 				printf("<str>");
+			else if (option->rd_cfg == color_rd)
+				printf("<color|#rrggbb>");
 			else if (option->rd_cfg)
 				printf("<...>");
 
@@ -972,7 +988,7 @@ struct option links_options[] = {
 	 * <cmdread_cmdline>, <cmdread_file>, <cmdwrite_file>,
 	 * <minval>, <maxval>, <varname>
 	 * <description> */ 
-	 
+
 	{	"allow-special-files", "allow_special_files",
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &allow_special_files,
@@ -1010,7 +1026,33 @@ struct option links_options[] = {
 	       	gen_cmd, num_rd, NULL,
 		0, 1, &color_dirs,
 		"Highlight directories when listing local disk content." },
-	 
+
+	{	"default-fg", "default_fg",
+	       	gen_cmd, color_rd, NULL,
+		0, 1, &default_fg,
+		"Default foreground color." },
+
+		/* FIXME - this produces ugly results now */
+#if 0
+	{	"default-bg", "default_bg",
+	       	gen_cmd, color_rd, NULL,
+		0, 1, &default_bg,
+		"Default background color." },
+#endif
+
+	{	"default-link", "default_link",
+	       	gen_cmd, color_rd, NULL,
+		0, 1, &default_link,
+		"Default link color." },
+
+		/* FIXME - this is not yet implemented */
+#if 0
+	{	"default-vlink", "default_vlink",
+	       	gen_cmd, color_rd, NULL,
+		0, 1, &default_vlink,
+		"Default vlink color." },
+#endif
+
 	{	"download-dir", "download_dir",
 		gen_cmd, str_rd, str_wr,
 	 	0, MAX_STR_LEN, download_dir,

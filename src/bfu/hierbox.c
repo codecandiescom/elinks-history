@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.121 2003/12/06 21:58:41 pasky Exp $ */
+/* $Id: hierbox.c,v 1.122 2003/12/19 11:53:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@ struct hierbox_dialog_list_item {
 	struct dialog_data *dlg_data;
 };
 
+
 void
 update_hierbox_browser(struct hierbox_browser *browser)
 {
@@ -38,6 +39,7 @@ update_hierbox_browser(struct hierbox_browser *browser)
 		display_dlg_item(item->dlg_data, widget_data, 1);
 	}
 }
+
 
 struct listbox_item *
 init_browser_box_item(struct hierbox_browser *browser, unsigned char *text,
@@ -59,6 +61,7 @@ init_browser_box_item(struct hierbox_browser *browser, unsigned char *text,
 
 	return item;
 }
+
 
 /* Find a box to replace @item. This is done by trying first to traverse down, then
  * up and if both traversals end up returning the box we want to replace bail
@@ -114,7 +117,6 @@ recursively_set_expanded(struct listbox_item *box, int expanded)
 		recursively_set_expanded(child, expanded);
 }
 
-
 static int
 test_search(struct listbox_item *item, void *data_, int *offset)
 {
@@ -125,7 +127,6 @@ test_search(struct listbox_item *item, void *data_, int *offset)
 	if (item == listbox_context->box->sel) *offset = 0;
 	return 0;
 }
-
 
 /* We install own dialog event handler, so that we can give the listbox widget
  * an early chance to catch the event. Basically, the listbox widget is itself
@@ -260,6 +261,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 	return EVENT_PROCESSED;
 }
 
+
 struct dialog_data *
 hierbox_browser(struct hierbox_browser *browser, struct session *ses)
 {
@@ -308,6 +310,7 @@ hierbox_browser(struct hierbox_browser *browser, struct session *ses)
 	return do_dialog(term, dlg, getml(dlg, NULL));
 }
 
+
 /* Action info management */
 
 static int
@@ -335,6 +338,7 @@ scan_for_used(struct listbox_item *item, void *info_, int *offset)
 
 	return 0;
 }
+
 
 static struct listbox_context *
 init_listbox_context(struct listbox_data *box, struct terminal *term,
@@ -370,6 +374,7 @@ done_listbox_context(void *context_)
 		context->box->ops->unlock(context->item);
 }
 
+
 /* Info action */
 
 int
@@ -404,6 +409,7 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 	return 0;
 }
 
+
 /* Goto action */
 
 int
@@ -430,8 +436,8 @@ push_hierbox_goto_button(struct dialog_data *dlg_data,
 	return 0;
 }
 
-/* Delete action */
 
+/* Delete action */
 
 enum delete_error {
 	DELETE_IMPOSSIBLE = 0,
@@ -605,6 +611,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 
 	return 0;
 }
+
 
 /* Clear action */
 

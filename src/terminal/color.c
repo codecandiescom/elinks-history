@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.6 2003/08/29 17:31:09 jonas Exp $ */
+/* $Id: color.c,v 1.7 2003/08/29 23:57:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,7 +83,7 @@ color_distance(struct rgb *c1, struct rgb *c2)
 	register int g = c1->g - c2->g;
 	register int b = c1->b - c2->b;
 
-	return (6 * r * r) + (4 * g * g) + (2 * b * b);
+	return (3 * r * r) + (4 * g * g) + (2 * b * b);
 }
 
 #define RGB_HASH_SIZE 4096

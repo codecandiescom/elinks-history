@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.215 2004/06/26 10:37:15 zas Exp $ */
+/* $Id: tables.c,v 1.216 2004/06/26 10:45:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,7 +114,7 @@ struct table {
 
 	int *rows_heights;
 
-	int x, y;
+	int cols, rows;
 	int rx, ry;
 	int border;
 	int cellpadding;
@@ -250,8 +250,8 @@ free_table(struct table *table)
 	mem_free_if(table->fragment_id);
 	mem_free_if(table->cols_x);
 
-	for (i = 0; i < table->x; i++)
-		for (j = 0; j < table->y; j++)
+	for (i = 0; i < table->cols; i++)
+		for (j = 0; j < table->rows; j++)
 			mem_free_if(CELL(table, i, j)->fragment_id);
 
 	mem_free(table->cells);
@@ -262,18 +262,18 @@ free_table(struct table *table)
 static void
 expand_cells(struct table *table, int x, int y)
 {
-	if (x >= table->x) {
-		if (table->x) {
-			int last_col = table->x - 1;
+	if (x >= table->cols) {
+		if (table->cols) {
+			int last_col = table->cols - 1;
 			int row;
 
-			for (row = 0; row < table->y; row++) {
+			for (row = 0; row < table->rows; row++) {
 				int col;
 				struct table_cell *cellp = CELL(table, last_col, row);
 
 				if (cellp->colspan != -1) continue;
 
-				for (col = table->x; col <= x; col++) {
+				for (col = table->cols; col <= x; col++) {
 					struct table_cell *cell = CELL(table, col, row);
 
 					cell->is_used = 1;
@@ -285,21 +285,21 @@ expand_cells(struct table *table, int x, int y)
 				}
 			}
 		}
-		table->x = x + 1;
+		table->cols = x + 1;
 	}
 
-	if (y >= table->y) {
-		if (table->y) {
-			int last_row = table->y - 1;
+	if (y >= table->rows) {
+		if (table->rows) {
+			int last_row = table->rows - 1;
 			int col;
 
-			for (col = 0; col < table->x; col++) {
+			for (col = 0; col < table->cols; col++) {
 				int row;
 				struct table_cell *cellp = CELL(table, col, last_row);
 
 				if (cellp->rowspan != -1) continue;
 
-				for (row = table->y; row <= y; row++) {
+				for (row = table->rows; row <= y; row++) {
 					struct table_cell *cell = CELL(table, col, row);
 
 					cell->is_used = 1;
@@ -311,14 +311,14 @@ expand_cells(struct table *table, int x, int y)
 				}
 			}
 		}
-		table->y = y + 1;
+		table->rows = y + 1;
 	}
 }
 
 static struct table_cell *
 new_cell(struct table *table, int x, int y)
 {
-	if (x < table->x && y < table->y)
+	if (x < table->cols && y < table->rows)
 		return CELL(table, x, y);
 
 	while (1) {
@@ -344,8 +344,8 @@ new_cell(struct table *table, int x, int y)
 					     sizeof(struct table_cell));
 		if (!new_table.cells) return NULL;
 
-		for (col = 0; col < table->x; col++) {
-			for (row = 0; row < table->y; row++) {
+		for (col = 0; col < table->cols; col++) {
+			for (row = 0; row < table->rows; row++) {
 				memcpy(CELL(&new_table, col, row),
 				       CELL(table, col, row),
 				       sizeof(struct table_cell));
@@ -727,8 +727,7 @@ qwe:
 			set_td_width(table, col, width, 0);
 	}
 
-	qqq = table->x;
-
+	qqq = table->cols;
 	for (i = 1; colspan != -1 ? i < colspan : i < qqq; i++) {
 		struct table_cell *span_cell = new_cell(table, col + i, row);
 
@@ -746,7 +745,7 @@ qwe:
 		span_cell->row = row;
 	}
 
-	qqq = table->y;
+	qqq = table->rows;
 	for (j = 1; rowspan != -1 ? j < rowspan : j < qqq; j++) {
 		for (k = 0; k < i; k++) {
 			struct table_cell *span_cell = new_cell(table, col + k, row + j);
@@ -784,17 +783,17 @@ scan_done:
 
 	mem_free_if(l_fragment_id);
 
-	for (col = 0; col < table->x; col++) for (row = 0; row < table->y; row++) {
+	for (col = 0; col < table->cols; col++) for (row = 0; row < table->rows; row++) {
 		struct table_cell *cell = CELL(table, col, row);
 
 		if (!cell->is_spanned) {
-			if (cell->colspan == -1) cell->colspan = table->x - col;
-			if (cell->rowspan == -1) cell->rowspan = table->y - row;
+			if (cell->colspan == -1) cell->colspan = table->cols - col;
+			if (cell->rowspan == -1) cell->rowspan = table->rows - row;
 		}
 	}
 
-	if (table->y) {
-		table->rows_heights = mem_calloc(table->y, sizeof(int));
+	if (table->rows) {
+		table->rows_heights = mem_calloc(table->rows, sizeof(int));
 		if (!table->rows_heights) {
 			free_table(table);
 			return NULL;
@@ -804,7 +803,7 @@ scan_done:
 	for (col = 0; col < table->columns_count; col++)
 		if (table->columns[col].width != WIDTH_AUTO)
 			set_td_width(table, col, table->columns[col].width, 1);
-	set_td_width(table, table->x, WIDTH_AUTO, 0);
+	set_td_width(table, table->cols, WIDTH_AUTO, 0);
 
 	return table;
 }
@@ -856,7 +855,7 @@ check_cell_widths(struct table *table)
 {
 	int col, row;
 
-	for (row = 0; row < table->y; row++) for (col = 0; col < table->x; col++) {
+	for (row = 0; row < table->rows; row++) for (col = 0; col < table->cols; col++) {
 		int min, max;
 		struct table_cell *cell = CELL(table, col, row);
 
@@ -877,8 +876,8 @@ get_cell_widths(struct table *table)
 	int col, row;
 
 	if (!global_doc_opts->table_order)
-		for (row = 0; row < table->y; row++)
-			for (col = 0; col < table->x; col++) {
+		for (row = 0; row < table->rows; row++)
+			for (col = 0; col < table->cols; col++) {
 				struct table_cell *cell = CELL(table, col, row);
 
 				if (!cell->start) continue;
@@ -887,8 +886,8 @@ get_cell_widths(struct table *table)
 					       &cell->min_width, &cell->max_width, nl, &nl);
 			}
 	else
-		for (col = 0; col < table->x; col++)
-			for (row = 0; row < table->y; row++) {
+		for (col = 0; col < table->cols; col++)
+			for (row = 0; row < table->rows; row++) {
 				struct table_cell *cell = CELL(table, col, row);
 
 				if (!cell->start) continue;
@@ -973,7 +972,7 @@ get_hline_width(struct table *table, int row)
 	} else if (table->rules == TABLE_RULE_GROUPS) {
 		int col;
 
-		for (col = 0; col < table->x; col++)
+		for (col = 0; col < table->cols; col++)
 			if (CELL(table, col, row)->group) {
 				if (table->cellspacing || table->vcellpadding)
 					return table->cellspacing;
@@ -989,15 +988,15 @@ get_column_widths(struct table *table)
 {
 	int colspan;
 
-	if (!table->x) return -1; /* prevents calloc(0, sizeof(int)) calls */
+	if (!table->cols) return -1; /* prevents calloc(0, sizeof(int)) calls */
 
 	if (!table->min_cols_widths) {
-		table->min_cols_widths = mem_calloc(table->x, sizeof(int));
+		table->min_cols_widths = mem_calloc(table->cols, sizeof(int));
 		if (!table->min_cols_widths) return -1;
 	}
 
 	if (!table->max_cols_widths) {
-		table->max_cols_widths = mem_calloc(table->x, sizeof(int));
+		table->max_cols_widths = mem_calloc(table->cols, sizeof(int));
 	   	if (!table->max_cols_widths) {
 			mem_free_set(&table->min_cols_widths, NULL);
 			return -1;
@@ -1005,7 +1004,7 @@ get_column_widths(struct table *table)
 	}
 
 	if (!table->cols_widths) {
-		table->cols_widths = mem_calloc(table->x, sizeof(int));
+		table->cols_widths = mem_calloc(table->cols, sizeof(int));
 		if (!table->cols_widths) {
 			mem_free_set(&table->min_cols_widths, NULL);
 			mem_free_set(&table->max_cols_widths, NULL);
@@ -1018,12 +1017,12 @@ get_column_widths(struct table *table)
 		int i, j;
 		int new_colspan = MAXINT;
 
-		for (i = 0; i < table->x; i++) for (j = 0; j < table->y; j++) {
+		for (i = 0; i < table->cols; i++) for (j = 0; j < table->rows; j++) {
 			struct table_cell *cell = CELL(table, i, j);
 
 			if (cell->is_spanned || !cell->is_used) continue;
 
-			assertm(cell->colspan + i <= table->x, "colspan out of table");
+			assertm(cell->colspan + i <= table->cols, "colspan out of table");
 			if_assert_failed return -1;
 
 			if (cell->colspan == colspan) {
@@ -1068,7 +1067,7 @@ get_table_width(struct table *table)
 	int max = 0;
 	int i;
 
-	for (i = 0; i < table->x; i++) {
+	for (i = 0; i < table->cols; i++) {
 		int vl = (get_vline_width(table, i) >= 0);
 
 		min += vl + table->min_cols_widths[i];
@@ -1099,19 +1098,19 @@ distribute_widths(struct table *table, int width)
 	int mmax_c = 0;
 	int tx_size;
 
-	if (!table->x) return;
+	if (!table->cols) return;
 
 	assertm(d >= 0, "too small width %d, required %d", width, table->min_width);
 
-	for (i = 0; i < table->x; i++)
+	for (i = 0; i < table->cols; i++)
 		int_lower_bound(&mmax_c, table->max_cols_widths[i]);
 
-	tx_size = table->x * sizeof(int);
+	tx_size = table->cols * sizeof(int);
 	memcpy(table->cols_widths, table->min_cols_widths, tx_size);
 	table->real_width = width;
 
 	/* XXX: We don't need to fail if unsuccessful. See below. --Zas */
-	u = fmem_alloc(table->x);
+	u = fmem_alloc(table->cols);
 
 	w = fmem_alloc(tx_size);
 	if (!w) goto end;
@@ -1128,7 +1127,7 @@ distribute_widths(struct table *table, int width)
 		memset(w, 0, tx_size);
 		memset(mx, 0, tx_size);
 
-		for (i = 0; i < table->x; i++) {
+		for (i = 0; i < table->cols; i++) {
 			switch (om) {
 				case 0:
 					if (table->cols_widths[i] < table->cols_x[i]) {
@@ -1197,13 +1196,13 @@ distribute_widths(struct table *table, int width)
 		}
 
 		wq = 0;
-		if (u) memset(u, 0, table->x);
+		if (u) memset(u, 0, table->cols);
 		dd = d;
 
 a:
 		mss = 0;
 		mii = -1;
-		for (i = 0; i < table->x; i++) if (w[i]) {
+		for (i = 0; i < table->cols; i++) if (w[i]) {
 			int ss;
 
 			if (u && u[i]) continue;
@@ -1252,11 +1251,11 @@ check_table_widths(struct table *table)
 	int colspan;
 	int width, new_width;
 	int max, max_index = 0; /* go away, warning! */
-	int *widths = mem_calloc(table->x, sizeof(int));
+	int *widths = mem_calloc(table->cols, sizeof(int));
 
 	if (!widths) return;
 
-	for (j = 0; j < table->y; j++) for (i = 0; i < table->x; i++) {
+	for (j = 0; j < table->rows; j++) for (i = 0; i < table->cols; i++) {
 		struct table_cell *cell = CELL(table, i, j);
 		int k, p = 0;
 
@@ -1277,12 +1276,12 @@ check_table_widths(struct table *table)
 	do {
 		int new_colspan = MAXINT;
 
-		for (i = 0; i < table->x; i++) for (j = 0; j < table->y; j++) {
+		for (i = 0; i < table->cols; i++) for (j = 0; j < table->rows; j++) {
 			struct table_cell *cell = CELL(table, i, j);
 
 			if (!cell->start) continue;
 
-			assertm(cell->colspan + i <= table->x, "colspan out of table");
+			assertm(cell->colspan + i <= table->cols, "colspan out of table");
 			if_assert_failed goto end;
 
 			if (cell->colspan == colspan) {
@@ -1305,7 +1304,7 @@ check_table_widths(struct table *table)
 	} while (colspan != MAXINT);
 
 	width = new_width = 0;
-	for (i = 0; i < table->x; i++) {
+	for (i = 0; i < table->cols; i++) {
 		width += table->cols_widths[i];
 		new_width += widths[i];
 	}
@@ -1316,7 +1315,7 @@ check_table_widths(struct table *table)
 	}
 
 	max = -1;
-	for (i = 0; i < table->x; i++)
+	for (i = 0; i < table->cols; i++)
 		if (table->max_cols_widths[i] > max) {
 			max = table->max_cols_widths[i];
 			max_index = i;
@@ -1342,8 +1341,8 @@ get_table_heights(struct table *table)
 	int rowspan;
 	int i, j;
 
-	for (j = 0; j < table->y; j++) {
-		for (i = 0; i < table->x; i++) {
+	for (j = 0; j < table->rows; j++) {
+		for (i = 0; i < table->cols; i++) {
 			struct table_cell *cell = CELL(table, i, j);
 			struct part *part;
 			int width = 0, sp;
@@ -1369,8 +1368,8 @@ get_table_heights(struct table *table)
 	do {
 		int new_rowspan = MAXINT;
 
-		for (j = 0; j < table->y; j++) {
-			for (i = 0; i < table->x; i++) {
+		for (j = 0; j < table->rows; j++) {
+			for (i = 0; i < table->cols; i++) {
 				struct table_cell *cell = CELL(table, i, j);
 
 				if (!cell->is_used || cell->is_spanned) continue;
@@ -1401,7 +1400,7 @@ get_table_heights(struct table *table)
 
 		get_table_frames(table, &table_frames);
 		table->real_height = table_frames.top + table_frames.bottom;
-		for (j = 0; j < table->y; j++) {
+		for (j = 0; j < table->rows; j++) {
 			table->real_height += table->rows_heights[j] +
 				 (j && get_hline_width(table, j) >= 0);
 		}
@@ -1425,13 +1424,13 @@ display_complicated_table(struct table *table, int x, int y, int *yy)
 		add_fragment_identifier(table->part, table->fragment_id);
 
 	xp = x + table_frames.left;
-	for (i = 0; i < table->x; i++) {
+	for (i = 0; i < table->cols; i++) {
 		yp = y + table_frames.top;
 
-		for (j = 0; j < table->y; j++) {
+		for (j = 0; j < table->rows; j++) {
 			struct table_cell *cell = CELL(table, i, j);
 			int row_height = table->rows_heights[j] +
-				(j < table->y - 1 && get_hline_width(table, j + 1) >= 0);
+				(j < table->rows - 1 && get_hline_width(table, j + 1) >= 0);
 			int row;
 
 			par_format.bgcolor = default_bgcolor;
@@ -1509,18 +1508,18 @@ display_complicated_table(struct table *table, int x, int y, int *yy)
 			}
 
 			yp += table->rows_heights[j] +
-			      (j < table->y - 1 && get_hline_width(table, j + 1) >= 0);
+			      (j < table->rows - 1 && get_hline_width(table, j + 1) >= 0);
 		}
 
-		if (i < table->x - 1) {
+		if (i < table->cols - 1) {
 			xp += table->cols_widths[i] + (get_vline_width(table, j + 1) >= 0);
 		}
 	}
 
 	yp = y;
-	for (j = 0; j < table->y; j++) {
+	for (j = 0; j < table->rows; j++) {
 		yp += table->rows_heights[j] +
-		      (j < table->y - 1 && get_hline_width(table, j + 1) >= 0);
+		      (j < table->rows - 1 && get_hline_width(table, j + 1) >= 0);
 	}
 
 	*yy = yp + table_frames.top + table_frames.bottom;
@@ -1535,8 +1534,8 @@ get_frame_pos(int a, int a_size, int b, int b_size)
 	return a + 1 + (a_size + 2) * b;
 }
 
-#define H_FRAME_POSITION(tt, xx, yy) frame[0][get_frame_pos(xx, (tt)->x, yy, (tt)->y)]
-#define V_FRAME_POSITION(tt, xx, yy) frame[1][get_frame_pos(yy, (tt)->y, xx, (tt)->x)]
+#define H_FRAME_POSITION(tt, xx, yy) frame[0][get_frame_pos(xx, (tt)->cols, yy, (tt)->rows)]
+#define V_FRAME_POSITION(tt, xx, yy) frame[1][get_frame_pos(yy, (tt)->rows, xx, (tt)->cols)]
 
 static inline void
 draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
@@ -1613,8 +1612,8 @@ display_table_frames(struct table *table, int x, int y)
  	signed char *frame[2];
   	int i, j;
   	int cx, cy;
-  	int fh_size = (table->x + 2) * (table->y + 1);
-  	int fv_size = (table->x + 1) * (table->y + 2);
+  	int fh_size = (table->cols + 2) * (table->rows + 1);
+  	int fv_size = (table->cols + 1) * (table->rows + 2);
 
  	frame[0] = fmem_alloc(fh_size + fv_size);
  	if (!frame[0]) return;
@@ -1624,14 +1623,14 @@ display_table_frames(struct table *table, int x, int y)
 
 	if (table->rules == TABLE_RULE_NONE) goto cont2;
 
-	for (j = 0; j < table->y; j++) for (i = 0; i < table->x; i++) {
+	for (j = 0; j < table->rows; j++) for (i = 0; i < table->cols; i++) {
 		int xsp, ysp;
 		struct table_cell *cell = CELL(table, i, j);
 
 		if (!cell->is_used || cell->is_spanned) continue;
 
-		xsp = cell->colspan ? cell->colspan : table->x - i;
-		ysp = cell->rowspan ? cell->rowspan : table->y - j;
+		xsp = cell->colspan ? cell->colspan : table->cols - i;
+		ysp = cell->rowspan ? cell->rowspan : table->rows - j;
 
 		if (table->rules != TABLE_RULE_COLS) {
 			memset(&H_FRAME_POSITION(table, i, j), table->cellspacing, xsp);
@@ -1645,17 +1644,17 @@ display_table_frames(struct table *table, int x, int y)
 	}
 
 	if (table->rules == TABLE_RULE_GROUPS) {
-		for (i = 1; i < table->x; i++) {
+		for (i = 1; i < table->cols; i++) {
 			if (!table->cols_x[i])
-				memset(&V_FRAME_POSITION(table, i, 0), 0, table->y);
+				memset(&V_FRAME_POSITION(table, i, 0), 0, table->rows);
 		}
 
-		for (j = 1; j < table->y; j++) {
-			for (i = 0; i < table->x; i++)
+		for (j = 1; j < table->rows; j++) {
+			for (i = 0; i < table->cols; i++)
 				if (CELL(table, i, j)->group)
 					goto cont;
 
-			memset(&H_FRAME_POSITION(table, 0, j), 0, table->x);
+			memset(&H_FRAME_POSITION(table, 0, j), 0, table->cols);
 cont:;
 		}
 	}
@@ -1663,27 +1662,27 @@ cont:;
 cont2:
 
 	get_table_frames(table, &table_frames);
-	memset(&H_FRAME_POSITION(table, 0, 0), table_frames.top, table->x);
-	memset(&H_FRAME_POSITION(table, 0, table->y), table_frames.bottom, table->x);
-	memset(&V_FRAME_POSITION(table, 0, 0), table_frames.left, table->y);
-	memset(&V_FRAME_POSITION(table, table->x, 0), table_frames.right, table->y);
+	memset(&H_FRAME_POSITION(table, 0, 0), table_frames.top, table->cols);
+	memset(&H_FRAME_POSITION(table, 0, table->rows), table_frames.bottom, table->cols);
+	memset(&V_FRAME_POSITION(table, 0, 0), table_frames.left, table->rows);
+	memset(&V_FRAME_POSITION(table, table->cols, 0), table_frames.right, table->rows);
 
 	cy = y;
-	for (j = 0; j <= table->y; j++) {
+	for (j = 0; j <= table->rows; j++) {
 		cx = x;
-		if ((j > 0 && j < table->y && get_hline_width(table, j) >= 0)
+		if ((j > 0 && j < table->rows && get_hline_width(table, j) >= 0)
 		    || (j == 0 && table_frames.top)
-		    || (j == table->y && table_frames.bottom)) {
+		    || (j == table->rows && table_frames.bottom)) {
 			int w = table_frames.left ? table->border : -1;
 
-			for (i = 0; i < table->x; i++) {
+			for (i = 0; i < table->cols; i++) {
 				if (i > 0)
 					w = get_vline_width(table, i);
 
 				if (w >= 0) {
 					draw_frame_point(table, frame, cx, cy, i, j,
 							 par_format.bgcolor, table->bordercolor);
-					if (j < table->y)
+					if (j < table->rows)
 						draw_frame_vline(table, frame, cx, cy + 1, i, j,
 								 par_format.bgcolor, table->bordercolor);
 					cx++;
@@ -1697,7 +1696,7 @@ cont2:
 			if (table_frames.right) {
 				draw_frame_point(table, frame, cx, cy, i, j,
 						 par_format.bgcolor, table->bordercolor);
-				if (j < table->y)
+				if (j < table->rows)
 					draw_frame_vline(table, frame, cx, cy + 1, i, j,
 							 par_format.bgcolor, table->bordercolor);
 				cx++;
@@ -1705,20 +1704,20 @@ cont2:
 
 			cy++;
 
-		} else if (j < table->y) {
-			for (i = 0; i <= table->x; i++) {
-				if ((i > 0 && i < table->x && get_vline_width(table, i) >= 0)
+		} else if (j < table->rows) {
+			for (i = 0; i <= table->cols; i++) {
+				if ((i > 0 && i < table->cols && get_vline_width(table, i) >= 0)
 				    || (i == 0 && table_frames.left)
-				    || (i == table->x && table_frames.right)) {
+				    || (i == table->cols && table_frames.right)) {
 					draw_frame_vline(table, frame, cx, cy, i, j,
 							 par_format.bgcolor, table->bordercolor);
 					cx++;
 				}
-				if (i < table->x) cx += table->cols_widths[i];
+				if (i < table->cols) cx += table->cols_widths[i];
 			}
 		}
 
-		if (j < table->y) cy += table->rows_heights[j];
+		if (j < table->rows) cy += table->rows_heights[j];
 		/*for (cyy = cy1; cyy < cy; cyy++) expand_line(table->p, cyy, cx - 1);*/
 	}
 

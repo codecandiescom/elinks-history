@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.64 2003/08/23 16:33:20 jonas Exp $ */
+/* $Id: options.h,v 1.65 2003/09/03 22:34:59 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -10,6 +10,8 @@ struct listbox_item;
 #include "util/lists.h"
 #include "util/memory.h"
 #include "util/string.h"
+
+/* TODO: We should provide some generic mechanism for options caching. */
 
 /* This in particular is *not* a nice occassion for putting in any funny
  * replacement as we want our keyboards to survive debugging sessions, which

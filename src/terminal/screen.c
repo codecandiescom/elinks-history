@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.69 2003/09/03 22:05:21 jonas Exp $ */
+/* $Id: screen.c,v 1.70 2003/09/03 22:34:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,13 +72,14 @@ static struct frame_seq vt100_frame_seqs[] = {
 	/* begin border: */	{ "\x0e", 1 },
 };
 
-/* In print_char() and redraw_screen(), we must be extremely careful about
- * get_opt() calls, as they are CPU hog here. */
-
-/* TODO: We should provide some generic mechanism for options caching. */
+/* Used in print_char() and redraw_screen() to reduce the logic. */
+/* TODO: termcap/terminfo can maybe gradually be introduced via this
+ *	 structure. We'll see. --jonas */
 struct screen_driver {
 	LIST_HEAD(struct screen_driver);
 
+	/* The terminal._template_.type. Together with the @name member the
+	 * uniquely identify the screen_driver. */
 	enum term_mode_type type;
 
 	/* Charsets when doing UTF8 I/O. */
@@ -97,6 +98,7 @@ struct screen_driver {
 	unsigned int trans:1;
 	unsigned int underline:1;
 
+	/* The terminal._template_ name. */
 	unsigned char name[1]; /* XXX: Keep last! */
 };
 

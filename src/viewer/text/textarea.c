@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.126 2004/06/19 12:58:03 jonas Exp $ */
+/* $Id: textarea.c,v 1.127 2004/06/19 13:02:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -340,7 +340,7 @@ textarea_edit(int op, struct terminal *term_, struct form_state *fs_,
 			N_("You cannot launch an external editor in the anonymous mode."),
 			NULL, 1,
 			N_("OK"), NULL, B_ENTER | B_ESC);
-		goto free_and_return;
+		return;
 	}
 
 	if (op == 0 && !term_->master) {
@@ -349,7 +349,7 @@ textarea_edit(int op, struct terminal *term_, struct form_state *fs_,
 			N_("You can do this only on the master terminal"),
 			NULL, 1,
 			N_("OK"), NULL, B_ENTER | B_ESC);
-		goto free_and_return;
+		return;
 	}
 
 	if (fs_) fs = fs_;

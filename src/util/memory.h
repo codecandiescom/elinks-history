@@ -1,14 +1,14 @@
-/* $Id: memory.h,v 1.30 2004/10/19 14:38:00 zas Exp $ */
+/* $Id: memory.h,v 1.31 2004/10/19 18:29:17 pasky Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
 
 /* If defined, we'll crash if ALLOC_MAXTRIES is attained,
  * if not defined, we'll try to continue. */
-#define CRASH_IF_ALLOC_MAXTRIES
+/* #define CRASH_IF_ALLOC_MAXTRIES */
 
 /* Max. number of retry in case of memory allocation failure. */
-#define ALLOC_MAXTRIES 5
+#define ALLOC_MAXTRIES 3
 
 /* Delay in seconds between each alloc try. */
 #define ALLOC_DELAY 3

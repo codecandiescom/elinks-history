@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.138 2004/01/17 15:21:52 pasky Exp $ */
+/* $Id: tables.c,v 1.139 2004/02/05 23:17:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1473,7 +1473,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 static inline int
 get_frame_pos(int a, int a_size, int b, int b_size)
 {
-	assertm(a >= -1 || a < a_size + 2 || b >= 0 || b <= b_size);
+	assert(a >= -1 || a < a_size + 2 || b >= 0 || b <= b_size);
 	if_assert_failed return 0;
 	return a + 1 + (a_size + 2) * b;
 }

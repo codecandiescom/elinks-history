@@ -1,3 +1,9 @@
+Mon Nov 29 17:31:06 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inpfield.c:
+
+	Typo fix in comment.  
+
 Sat Nov 27 17:53:35 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* configure.in, src/protocol/Makefile.am,

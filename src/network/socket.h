@@ -1,10 +1,12 @@
-/* $Id: socket.h,v 1.28 2004/08/03 10:31:16 jonas Exp $ */
+/* $Id: socket.h,v 1.29 2004/10/07 02:54:50 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
 
 #include <sys/types.h>
+#ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h> /* OS/2 needs this after sys/types.h */
+#endif
 
 struct connection;
 struct connection_socket;

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.283 2004/09/30 10:51:50 zas Exp $ */
+/* $Id: uri.c,v 1.284 2004/10/07 02:54:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
+#ifdef HAVE_NETDB_H
 #include <netdb.h> /* OS/2 needs this after sys/types.h */
+#endif
 
 #include "elinks.h"
 

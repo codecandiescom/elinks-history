@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.91 2004/09/04 11:19:11 jonas Exp $ */
+/* $Id: interlink.c,v 1.92 2004/10/07 02:54:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,9 @@
 #endif
 
 /* Blame BSD for position of this includes. */
+#ifdef HAVE_NETINET_IN_H
 #include <netinet/in.h>
+#endif
 #ifdef HAVE_SYS_SELECT_H
 #include <sys/select.h>
 #endif
@@ -228,7 +230,9 @@ unlink_unix(struct sockaddr *addr)
 /*** TCP socket for internal communication. ***/
 /* FIXME: IPv6 support. */
 
+#ifdef HAVE_ARPA_INET_H
 #include <arpa/inet.h>
+#endif
 
 /* These may not be defined in netinet/in.h on some systems. */
 #ifndef INADDR_LOOPBACK

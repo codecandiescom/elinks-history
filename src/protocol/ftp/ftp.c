@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.171 2004/09/27 01:10:24 pasky Exp $ */
+/* $Id: ftp.c,v 1.172 2004/10/07 02:54:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,9 @@
 #endif
 
 /* We need to have it here. Stupid BSD. */
+#ifdef HAVE_NETINET_IN_H
 #include <netinet/in.h>
+#endif
 #ifdef HAVE_ARPA_INET_H
 #include <arpa/inet.h>
 #endif

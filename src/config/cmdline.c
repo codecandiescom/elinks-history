@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.102 2004/09/04 11:31:29 jonas Exp $ */
+/* $Id: cmdline.c,v 1.103 2004/10/07 02:54:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,10 +12,14 @@
 #include <sys/socket.h> /* OS/2 needs this after sys/types.h */
 #endif
 #include <sys/stat.h> /* OS/2 needs this after sys/types.h */
+#ifdef HAVE_NETDB_H
 #include <netdb.h>
+#endif
 
 /* We need to have it here. Stupid BSD. */
+#ifdef HAVE_NETINET_IN_H
 #include <netinet/in.h>
+#endif
 #ifdef HAVE_ARPA_INET_H
 #include <arpa/inet.h>
 #endif

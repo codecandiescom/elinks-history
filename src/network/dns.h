@@ -1,9 +1,11 @@
-/* $Id: dns.h,v 1.5 2003/12/01 14:01:01 pasky Exp $ */
+/* $Id: dns.h,v 1.6 2004/10/07 02:54:50 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_DNS_H
 #define EL__LOWLEVEL_DNS_H
 
+#ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
+#endif
 #include <sys/types.h>
 
 int do_real_lookup(unsigned char *, struct sockaddr_storage **, int *, int);

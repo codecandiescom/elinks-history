@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.203 2004/06/17 23:41:36 jonas Exp $ */
+/* $Id: form.c,v 1.204 2004/06/17 23:51:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -306,19 +306,21 @@ draw_form_entry(struct terminal *term, struct document_view *doc_view,
 			if (!link->npoints) break;
 
 			y = link->points[0].y + dy;
-			if (row_is_in_box(box, y)) {
-				len = strlen(fs->value) - fs->vpos;
-				x = link->points[0].x + dx;
-				for (i = 0; i < fc->size; i++, x++) {
-					if (!col_is_in_box(box, x)) continue;
-					if (fs->value && i >= -fs->vpos && i < len)
-						draw_char_data(term, x, y,
-							       fc->type != FC_PASSWORD
-							       ? fs->value[i + fs->vpos]
-							       : '*');
-					else
-						draw_char_data(term, x, y, '_');
-				}
+			if (!row_is_in_box(box, y))
+				break;
+
+			len = strlen(fs->value) - fs->vpos;
+			x = link->points[0].x + dx;
+
+			for (i = 0; i < fc->size; i++, x++) {
+				if (!col_is_in_box(box, x)) continue;
+				if (fs->value && i >= -fs->vpos && i < len)
+					draw_char_data(term, x, y,
+						       fc->type != FC_PASSWORD
+						       ? fs->value[i + fs->vpos]
+						       : '*');
+				else
+					draw_char_data(term, x, y, '_');
 			}
 			break;
 		case FC_TEXTAREA:

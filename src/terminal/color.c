@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.5 2003/08/29 12:16:33 jonas Exp $ */
+/* $Id: color.c,v 1.6 2003/08/29 17:31:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,43 +69,12 @@ static struct rgb palette[] = {
 	{-1, -1, -1}
 };
 
-#if 0
-static struct rgb bgpalette[] = {
-	{0x22, 0x22, 0x22},
-	{0xbb, 0x22, 0x22},
-	{0x22, 0xbb, 0x22},
-	{0xcc, 0xbb, 0x22},
-	{0x22, 0x22, 0xbb},
-	{0xbb, 0x22, 0xbb},
-	{0x22, 0xbb, 0xbb},
-	{0xcc, 0xcc, 0xcc},
-	{-1, -1, -1}
-};
-#endif
-
 struct rgb_cache_entry {
 	int color;
 	int l;
 	color_t rgb;
 };
 
-
-#if 0
-struct rgb rgbcache = {0, 0, 0};
-int rgbcache_c = 0;
-
-static inline int
-find_nearest_color(struct rgb *r, int l)
-{
-	int dist, dst, min, i;
-	if (r->r == rgbcache.r && r->g == rgbcache.g && r->b == rgbcache.b) return rgbcache_c;
-	dist = 0xffffff;
-	min = 0;
-	for (i = 0; i < l; i++) if ((dst = color_distance(r, &palette[i])) < dist)
-		dist = dst, min = i;
-	return min;
-}
-#endif
 
 static inline int
 color_distance(struct rgb *c1, struct rgb *c2)
@@ -114,13 +83,8 @@ color_distance(struct rgb *c1, struct rgb *c2)
 	register int g = c1->g - c2->g;
 	register int b = c1->b - c2->b;
 
-	return 3 * r * r +
-	       4 * g * g +
-	       2 * b * b;
+	return (6 * r * r) + (4 * g * g) + (2 * b * b);
 }
-
-/* Defined in viewer/dump/dump.c */
-extern int dump_pos;
 
 #define RGB_HASH_SIZE 4096
 #define HASH_RGB(rgb, l) ((((rgb).r << 3) + \
@@ -133,16 +97,12 @@ static inline unsigned char
 find_nearest_color(color_t color, int level)
 {
 	static struct rgb_cache_entry rgb_fgcache[RGB_HASH_SIZE];
-	/*static struct rgb_cache_entry rgb_bgcache[RGB_HASH_SIZE];*/
-	struct rgb_cache_entry *rgb_cache = /*l == 8 ? rgb_bgcache :*/ rgb_fgcache;
+	struct rgb_cache_entry *rgb_cache = rgb_fgcache;
 	struct rgb rgb;
 	static int cache_init = 0;
 	register int h, i;
 	int min_dist = 0xffffff;
 	unsigned char nearest_color = 0;
-
-	/* We don't ever care about colors while dumping stuff. */
-	if (dump_pos) return 0;
 
 	if (!cache_init) {
 		for (h = 0; h < RGB_HASH_SIZE; h++)
@@ -178,8 +138,8 @@ find_nearest_color(color_t color, int level)
 #undef RGB_HASH_SIZE
 
 /* Adjusts the foreground color to be more visible on the background. */
-static inline int
-fg_color(int fg, int bg)
+static inline unsigned char
+fg_color(unsigned char fg, unsigned char bg)
 {
 	/* 0 == black       6 == cyan        12 == brightblue
 	 * 1 == red         7 == brightgrey  13 == brightmagenta
@@ -231,40 +191,8 @@ fg_color(int fg, int bg)
 
 	if (d_opt && !d_opt->allow_dark_on_black)
 		return xlat[fg][bg];
-
-	/* This is the original code - you can't really guess from it what is
-	 * translated to what and easily modify it. Also, it supports well only
-	 * the black background. */
-#if 0
-	/* This looks like it should be more efficient. It results in
-	 * different machine-code, but the same number of instructions:
-	 * int l, h;
-	 * if (bg < fg) l = bg, h = fg; else l = fg, h = bg;
-	 */
-	int l = bg < fg ? bg : fg;
-	int h = bg < fg ? fg : bg;
-
-	if (l == h
-		/* Check for clashing colours. For example, 3 (red) clashes
-		 * with 5 (magenta) and 12 (brightblue). */
-		|| (l == 0 && (h == 8))
-		|| (l == 1 && (h == 3 || h == 5 || h == 12))
-		|| (l == 2 && (h == 6))
-		|| (l == 3 && (h == 5 || h == 12))
-		|| ((l == 4 || l == 5) && (h == 8 || h == 12))
-		|| (!d_opt->allow_dark_on_black &&
-			/* ^- FIXME: when possibility to change bg color... */
-			   ((l == 0 && (h == 4 || h == 12)) ||
-			    (l == 1 && (h == 8)))
-		   )
-	   )
-		return (fg == 4 || fg == 12)
-			&& (bg == 0 || bg == 8) ? 6
-						: (7 - 7 * (bg == 2 ||
-							    bg == 6 ||
-							    bg == 7));
-#endif
-	return fg;
+	else
+		return fg;
 }
 
 unsigned char
@@ -285,12 +213,21 @@ mix_color_pair(struct color_pair *pair)
 	return color;
 }
 
+/* Defined in viewer/dump/dump.c */
+extern int dump_pos;
+
 unsigned char
 mix_attr_colors(struct color_pair *pair, enum screen_char_attr attr)
 {
-	register unsigned char fg = find_nearest_color(pair->foreground, 16);
-	register unsigned char bg = find_nearest_color(pair->background, 8);
+	register unsigned char fg;
+	register unsigned char bg;
 	register unsigned char color;
+
+	/* We don't ever care about colors while dumping stuff. */
+	if (dump_pos) return 0;
+
+	fg = find_nearest_color(pair->foreground, 16);
+	bg = find_nearest_color(pair->background, 8);
 
 	if (attr) {
 		if (attr & SCREEN_ATTR_ITALIC)

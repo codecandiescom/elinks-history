@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.127 2004/08/17 07:09:24 miciah Exp $ */
+/* $Id: renderer.c,v 1.128 2004/08/17 07:16:22 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,18 +166,25 @@ get_uri_length(unsigned char *line, int length)
 static int
 print_document_link(struct plain_renderer *renderer, int lineno,
 		    unsigned char *line, int line_pos, int width,
-		    int expanded)
+		    int expanded, struct screen_char *pos)
 {
 	struct document *document = renderer->document;
 	unsigned char *start = &line[line_pos];
 	int len = get_uri_length(start, width - line_pos);
-	int link_end = line_pos + len;
+	//int link_end = line_pos + len;
+	struct screen_char template = renderer->template;
+	int i;
 
 	if (!len || !check_link_word(document, start, len, line_pos + expanded,
 				    lineno))
 		return 0;
 
-	return link_end;
+	for (i = len; i; i--) {
+		template.data = line[line_pos++];
+		copy_screen_chars(pos++, &template, 1);
+	}
+
+	return len;
 }
 
 static inline int
@@ -307,6 +314,8 @@ add_document_line(struct plain_renderer *renderer,
 			if (template->attr)
 				template->attr |= pos->attr;
 		} else {
+			int added_chars = 0;
+
 			if (document->options.plain_display_links) {
 				/* We only want to detect url if there is at least
 				 * to consecutive alphanumeric characters, or when
@@ -314,27 +323,32 @@ add_document_line(struct plain_renderer *renderer,
 				 * It improves performance a bit. --Zas */
 				int is_alpha_char = isalpha(line_char);
 
-				if (is_alpha_char && was_alpha_char
-				    && line_pos > last_link_end) {
+				if (is_alpha_char && was_alpha_char) {
 					int backup = !!line_pos;
 
-					last_link_end =
-						print_document_link(renderer,
-								lineno, line,
-								line_pos
-								 - backup,
-								width,
-								expanded)
-						 - backup;
+					added_chars = print_document_link(
+							renderer,
+							lineno, line,
+							line_pos - backup,
+							width, expanded,
+							pos - backup);
+
+					if (added_chars) {
+						added_chars -= backup;
+						line_pos += added_chars - 1;
+						pos += added_chars;
+					}
 				} else {
 					was_alpha_char = is_alpha_char;
 				}
 			}
 
-			if (!isscreensafe(line_char))
-				line_char = '.';
-			template->data = line_char;
-			copy_screen_chars(pos++, template, 1);
+			if (!added_chars) {
+				if (!isscreensafe(line_char))
+					line_char = '.';
+				template->data = line_char;
+				copy_screen_chars(pos++, template, 1);
+			}
 
 			*template = saved_renderer_template;
 		}

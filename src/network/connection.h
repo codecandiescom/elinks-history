@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.78 2004/09/28 16:21:48 pasky Exp $ */
+/* $Id: connection.h,v 1.79 2004/09/28 16:28:25 pasky Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -201,9 +201,9 @@ struct download {
 
 	struct connection *conn;
 	struct cache_entry *cached;
-	/* The callback is called every time the state changes, connection
-	 * dies, and also periodically after the download starts receiving
-	 * some data. */
+	/* The callback is called when connection gets into a progress state,
+	 * after it's over (in a result state), and also periodically after
+	 * the download starts receiving some data. */
 	void (*callback)(struct download *, void *);
 	void *data;
 	struct remaining_info *prg;

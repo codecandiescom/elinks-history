@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.3 2003/01/03 01:25:48 pasky Exp $ */
+/* $Id: libintl.h,v 1.4 2003/01/03 02:04:15 pasky Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -15,16 +15,35 @@
 
 #include "intl/gettext/libgettext.h"
 
+
 /* TODO: Make use of the term. */
 #define _(msg,term) gettext(msg)
 
 /* no-op - just for marking */
 #define N_(msg) gettext_noop(msg)
 
-/* The current state - the language is stored as a ISO 639 code or string
- * "system" - then value of system_language is used. */
-/* The state should be initialized a by set_language("system") call. */
-extern unsigned char *current_language, *system_language;
-extern void set_language(unsigned char *language);
+
+/* Languages table lookups. */
+
+struct language {
+	unsigned char *name;
+	unsigned char *iso639;
+};
+
+extern struct language languages[];
+
+/* These two calls return 1 (english) if the code/name wasn't found. */
+extern int name_to_language(unsigned char *name);
+extern int iso639_to_language(unsigned char *iso639);
+
+extern unsigned char *language_to_name(int language);
+extern unsigned char *language_to_iso639(int language);
+
+
+/* The current state. The state should be initialized a by set_language(0)
+ * call. */
+
+extern int current_language, system_language;
+extern void set_language(int language);
 
 #endif

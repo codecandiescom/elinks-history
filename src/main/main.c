@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.73 2003/01/03 01:25:48 pasky Exp $ */
+/* $Id: main.c,v 1.74 2003/01/03 02:08:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -269,7 +269,7 @@ init()
 #ifdef ENABLE_NLS
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
-	set_language("system");
+	set_language(0);
 #endif
 
 	init_options();

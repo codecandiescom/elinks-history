@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.162 2003/07/03 21:20:02 zas Exp $ */
+/* $Id: renderer.c,v 1.163 2003/07/03 21:25:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1766,7 +1766,7 @@ cached_format_html(struct view_state *vs, struct f_data_c *screen,
 	screen->vs = vs;
 	screen->xl = screen->yl = -1;
 	screen->f_data = NULL;
-	
+
 	if (!find_in_cache(vs->url, &cee) || !cee) {
 		internal("document %s to format not found", vs->url);
 		return;
@@ -1904,8 +1904,7 @@ find_fd(struct session *ses, unsigned char *name,
 /* FIXME: url parameter is not used ... --Zas */
 static struct f_data_c *
 format_frame(struct session *ses, unsigned char *name,
-	     unsigned char *url, struct document_options *o,
-	     int depth)
+	     struct document_options *o, int depth)
 {
 	struct cache_entry *ce;
 	struct view_state *vs;
@@ -1942,8 +1941,8 @@ static void
 format_frames(struct session *ses, struct frameset_desc *fsd,
 	      struct document_options *op, int depth)
 {
-	int i, j, n;
 	struct document_options o;
+	int j, n;
 
 	assert(ses && fsd && op);
 
@@ -1955,6 +1954,8 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 
 	n = 0;
 	for (j = 0; j < fsd->y; j++) {
+		register int i;
+
 		o.xp = op->xp;
 		for (i = 0; i < fsd->x; i++) {
 			struct f_data_c *fdc;
@@ -1965,7 +1966,7 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 			if (fsd->f[n].subframe)
 				format_frames(ses, fsd->f[n].subframe, &o, depth + 1);
 			else if (fsd->f[n].name) {
-				fdc = format_frame(ses, fsd->f[n].name, fsd->f[n].url, &o, depth);
+				fdc = format_frame(ses, fsd->f[n].name, &o, depth);
 				if (fdc && fdc->f_data && fdc->f_data->frame)
 					format_frames(ses, fdc->f_data->frame_desc, &o, depth + 1);
 			}
@@ -1974,18 +1975,6 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 		}
 		o.yp += o.yw + 1;
 	}
-
-#if 0
-	for (i = 0; i < fsd->n; i++) {
-		if (!fsd->horiz) o.xw = fsd->f[i].width;
-		else o.yw = fsd->f[i].width;
-		o.framename = fsd->f[i].name;
-		if (fsd->f[i].subframe) format_frames(ses, fsd->f[i].subframe, &o);
-		else format_frame(ses, fsd->f[i].name, fsd->f[i].url, &o);
-		if (!fsd->horiz) o.xp += fsd->f[i].width + 1;
-		else o.yp += fsd->f[i].width + 1;
-	}
-#endif
 }
 
 void

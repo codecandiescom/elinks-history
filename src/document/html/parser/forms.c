@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.12 2004/05/21 11:21:02 jonas Exp $ */
+/* $Id: forms.c,v 1.13 2004/05/29 00:53:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,6 +74,8 @@ get_html_form(unsigned char *a, struct form *form)
 			if (enctype) {
 				if (!strcasecmp(enctype, "multipart/form-data"))
 					form->method = FM_POST_MP;
+				if (!strcasecmp(enctype, "text/plain"))
+					form->method = FM_POST_TEXT_PLAIN;
 				mem_free(enctype);
 			}
 		}

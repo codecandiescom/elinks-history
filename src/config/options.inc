@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.109 2004/05/28 20:19:38 pasky Exp $ */
+/* $Id: options.inc,v 1.110 2004/05/29 00:53:48 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -820,6 +820,7 @@ struct option_info config_options_info[] = {
 	INIT_OPT_STRING("protocol.user._template_", NULL,
 		"_template_", 0, "",
 		N_("Handler (external program) for this protocol and system.\n"
+		"%f in the string means file name to include form data from\n"
 		"%h in the string means hostname (or email address)\n"
 		"%p in the string means port\n"
 		"%d in the string means path (everything after the port)\n"

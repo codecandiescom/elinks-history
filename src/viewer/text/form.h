@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.17 2004/05/25 00:16:40 jonas Exp $ */
+/* $Id: form.h,v 1.18 2004/05/29 00:53:48 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -17,6 +17,7 @@ enum form_method {
 	FM_GET,
 	FM_POST,
 	FM_POST_MP,
+	FM_POST_TEXT_PLAIN,
 };
 
 enum form_type {

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.108 2004/05/29 00:45:50 zas Exp $ */
+/* $Id: form.c,v 1.109 2004/05/29 00:53:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -649,6 +649,78 @@ encode_error:
 }
 
 static void
+encode_newlines(struct string *string, unsigned char *data)
+{
+	unsigned char buffer[4];
+
+	memset(buffer, 0, sizeof(buffer));
+
+	for (; *data; data++) {
+		if (*data == '\n' || *data == '\r') {
+			/* Hex it. */
+			buffer[0] = '%';
+			buffer[1] = hx((((int) *data) & 0xF0) >> 4);
+			buffer[2] = hx(((int) *data) & 0xF);
+		} else {
+			buffer[0] = *data;
+			buffer[1] = 0;
+		}
+
+		add_to_string(string, buffer);
+	}
+}
+
+static void
+encode_text_plain(struct list_head *l, struct string *data,
+		  int cp_from, int cp_to)
+{
+	struct submitted_value *sv;
+	struct conv_table *convert_table = get_translation_table(cp_from, cp_to);
+
+	assert(l && data);
+	if_assert_failed return;
+
+	if (!init_string(data)) return;
+
+	foreach (sv, *l) {
+		unsigned char *p2 = NULL;
+
+		add_to_string(data, sv->name);
+		add_char_to_string(data, '=');
+
+		/* Convert back to original encoding (see html_form_control()
+		 * for the original recoding). */
+		switch (sv->type) {
+		case FC_TEXTAREA:
+		{
+			unsigned char *p = encode_textarea(sv);
+
+			if (!p) break;
+
+			p2 = convert_string(convert_table, p, strlen(p),
+					    CSM_FORM, NULL);
+			mem_free(p);
+			break;
+		}
+		case FC_TEXT:
+		case FC_PASSWORD:
+			p2 = convert_string(convert_table, sv->value,
+					    strlen(sv->value), CSM_FORM, NULL);
+			break;
+
+		default:
+			p2 = stracpy(sv->value);
+		}
+
+		if (p2) {
+			encode_newlines(data, p2);
+			add_to_string(data, "\r\n");
+			mem_free(p2);
+		}
+	}
+}
+
+static void
 do_reset_form(struct document_view *doc_view, int form_num)
 {
 	struct form_control *frm;
@@ -701,10 +773,19 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 
 	cp_from = get_opt_int_tree(ses->tab->term->spec, "charset");
 	cp_to = doc_view->document->cp;
-	if (frm->method == FM_GET || frm->method == FM_POST)
+	switch (frm->method) {
+	case FM_GET:
+	case FM_POST:
 		encode_controls(&submit, &data, cp_from, cp_to);
-	else
+		break;
+
+	case FM_POST_MP:
 		encode_multipart(ses, &submit, &data, bound, cp_from, cp_to);
+		break;
+
+	case FM_POST_TEXT_PLAIN:
+		encode_text_plain(&submit, &data, cp_from, cp_to);
+	}
 
 #ifdef CONFIG_FORMHIST
 	/* XXX: We check data.source here because a NULL value can indicate
@@ -722,7 +803,9 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 
 	if (!init_string(&go)) return NULL;
 
-	if (frm->method == FM_GET) {
+	switch (frm->method) {
+	case FM_GET:
+	{
 		unsigned char *pos = strchr(frm->action, '#');
 
 		if (pos) {
@@ -739,24 +822,39 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 		add_string_to_string(&go, &data);
 
 		if (pos) add_to_string(&go, pos);
-	} else {
+		break;
+	}
+	case FM_POST:
+	case FM_POST_MP:
+	case FM_POST_TEXT_PLAIN:
+	{
 		register int i;
 
 		add_to_string(&go, frm->action);
 		add_char_to_string(&go, POST_CHAR);
 		if (frm->method == FM_POST) {
 			add_to_string(&go, "application/x-www-form-urlencoded\n");
+
+		} else if (frm->method == FM_POST_TEXT_PLAIN) {
+			/* Dunno about this one but we don't want the full
+			 * hextcat thingy. --jonas */
+			add_to_string(&go, "text/plain\n");
+			add_to_string(&go, data.source);
+			break;
+
 		} else {
 			add_to_string(&go, "multipart/form-data; boundary=");
 			add_bytes_to_string(&go, bound, BL);
 			add_char_to_string(&go, '\n');
 		}
+
 		for (i = 0; i < data.length; i++) {
 			unsigned char p[3];
 
 			ulonghexcat(p, NULL, (int) data.source[i], 2, '0', 0);
 			add_to_string(&go, p);
 		}
+	}
 	}
 
 	done_string(&data);

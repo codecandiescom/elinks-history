@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.69 2004/05/28 23:44:59 jonas Exp $ */
+/* $Id: user.c,v 1.70 2004/05/29 00:53:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,6 +7,10 @@
 
 #include <ctype.h>
 #include <stdlib.h>
+#include <stdio.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 
 #include "elinks.h"
 
@@ -21,6 +25,7 @@
 #include "terminal/terminal.h"
 #include "terminal/window.h"
 #include "util/conv.h"
+#include "util/file.h"
 #include "util/memory.h"
 #include "util/string.h"
 
@@ -52,7 +57,8 @@ get_user_program(struct terminal *term, unsigned char *progid, int progidlen)
 
 
 static unsigned char *
-subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj)
+subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj,
+	  unsigned char *formfile)
 {
 	struct string string;
 
@@ -113,6 +119,10 @@ subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj)
 					add_shell_safe_to_string(&string, subj,
 								 strlen(subj));
 				break;
+			case 'f':
+				if (formfile)
+					add_to_string(&string, formfile);
+				break;
 			default:
 				add_bytes_to_string(&string, cmd - 1, 2);
 				break;
@@ -142,10 +152,45 @@ get_subject_from_query(unsigned char *query)
 	return memacpy(subject, strcspn(subject, "&\001"));
 }
 
+static unsigned char *
+save_form_data_to_file(struct uri *uri)
+{
+	unsigned char *filename = get_tempdir_filename("elinks-XXXXXX");
+	int formfd;
+	FILE *formfile;
+
+	if (!filename) return NULL;
+
+	formfd = mkstemp(filename);
+	if (formfd < 0) {
+		mem_free(filename);
+		return NULL;
+	}
+
+	formfile = fdopen(formfd, "w");
+	if (!formfile) {
+		mem_free(filename);
+		close(formfd);
+		return NULL;
+	}
+
+	if (uri->post) {
+		/* Jump the content type */
+		unsigned char *formdata = strchr(uri->post, '\n');
+
+		formdata = formdata ? formdata + 1 : uri->post;
+		fwrite(formdata, strlen(formdata), 1, formfile);
+	}
+	fclose(formfile);
+
+	return filename;
+}
+
 void
 user_protocol_handler(struct session *ses, struct uri *uri)
 {
 	unsigned char *subj, *prog;
+	unsigned char *formfilename;
 
 	prog = get_user_program(ses->tab->term, struri(uri), uri->protocollen);
 	if (!prog || !*prog) {
@@ -176,10 +221,19 @@ user_protocol_handler(struct session *ses, struct uri *uri)
 		subj = NULL;
 	}
 
-	prog = subst_cmd(prog, uri, subj);
+	formfilename = save_form_data_to_file(uri);
+
+	prog = subst_cmd(prog, uri, subj, formfilename);
 	mem_free_if(subj);
 	if (prog) {
-		exec_on_terminal(ses->tab->term, prog, "", 1);
+		unsigned char *delete = empty_string_or_(formfilename);
+
+		exec_on_terminal(ses->tab->term, prog, delete, 1);
 		mem_free(prog);
+
+	} else if (formfilename) {
+		unlink(formfilename);
 	}
+
+	mem_free_if(formfilename);
 }

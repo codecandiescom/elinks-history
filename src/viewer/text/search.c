@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.283 2004/08/15 11:52:51 jonas Exp $ */
+/* $Id: search.c,v 1.284 2004/08/22 15:14:33 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -989,7 +989,7 @@ print_find_error(struct session *ses, enum find_error find_error)
 		case FIND_ERROR_REGEX:
 			print_find_error_not_found(ses, N_("Search"),
 						   N_("Could not compile"
-						      " reguler expression"
+						      " regular expression"
 						      " '%s'"),
 						   ses->search_word);
 

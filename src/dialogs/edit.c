@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.60 2003/11/05 20:16:24 jonas Exp $ */
+/* $Id: edit.c,v 1.61 2003/11/05 20:24:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,12 +76,12 @@ layout_add_dialog(struct dialog_data *dlg_data)
 	y = dlg_data->y + DIALOG_TB;
 	dlg_format_text(term, edit_add_msg[0], dlg_data->x + DIALOG_LB,
 			&y, w, NULL, dialog_text_color, AL_LEFT);
-	dlg_format_field(NULL, term, &dlg_data->widgets_data[0], dlg_data->x + DIALOG_LB,
+	dlg_format_field(NULL, &dlg_data->widgets_data[0], dlg_data->x + DIALOG_LB,
 			 &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_text(term, edit_add_msg[1], dlg_data->x + DIALOG_LB,
 			&y, w, NULL, dialog_text_color, AL_LEFT);
-	dlg_format_field(term, term, &dlg_data->widgets_data[1], dlg_data->x + DIALOG_LB,
+	dlg_format_field(term, &dlg_data->widgets_data[1], dlg_data->x + DIALOG_LB,
 			 &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_buttons(term, &dlg_data->widgets_data[2], 3, dlg_data->x + DIALOG_LB,

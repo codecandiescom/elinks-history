@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.72 2003/11/05 20:16:23 jonas Exp $ */
+/* $Id: auth.c,v 1.73 2003/11/05 20:24:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,14 +83,14 @@ auth_layout(struct dialog_data *dlg_data)
 	dlg_format_text(term,
 			label_login, dlg_data->x + DIALOG_LB, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
-	dlg_format_field(term, term,
+	dlg_format_field(term,
 			 &dlg_data->widgets_data[0],
 			 dlg_data->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_text(term,
 			label_password, dlg_data->x + DIALOG_LB, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
-	dlg_format_field(term, term,
+	dlg_format_field(term,
 			 &dlg_data->widgets_data[1],
 			 dlg_data->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;

@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.26 2004/04/23 20:44:27 pasky Exp $ */
+/* $Id: listmenu.c,v 1.27 2004/05/28 15:40:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -193,17 +193,21 @@ void
 add_select_item(struct list_menu *menu, struct string *string,
 		unsigned char **value, int order, int dont_add)
 {
+	int pos = order - 1;
+	
 	assert(menu && string);
-
+	
 	if (!string->source) return;
 
-	if (!value[order - 1])
-		value[order - 1] = memacpy(string->source, string->length);
+	assert(value && pos >= 0);
+
+	if (!value[pos])
+		value[pos] = memacpy(string->source, string->length);
 
 	if (dont_add) {
 		done_string(string);
 	} else {
-		new_menu_item(menu, string->source, order - 1, 1);
+		new_menu_item(menu, string->source, pos, 1);
 		string->source = NULL;
 		string->length = 0;
 	}

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.377 2004/12/19 02:38:42 miciah Exp $ */
+/* $Id: http.c,v 1.378 2004/12/19 02:46:24 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,6 +177,8 @@ struct option_info http_options[] = {
 	NULL_OPTION_INFO,
 };
 
+static void done_http();
+
 struct module http_protocol_module = struct_module(
 	/* name: */		N_("HTTP"),
 	/* options: */		http_options,
@@ -184,11 +186,17 @@ struct module http_protocol_module = struct_module(
 	/* submodules: */	NULL,
 	/* data: */		NULL,
 	/* init: */		NULL,
-	/* done: */		NULL
+	/* done: */		done_http
 );
 
 
 static void decompress_shutdown(struct connection *);
+
+static void
+done_http()
+{
+	if (accept_charset) free(accept_charset);
+}
 
 static void
 init_accept_charset()

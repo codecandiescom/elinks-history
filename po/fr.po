@@ -5,14 +5,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"POT-Creation-Date: 2005-02-17 18:34+0100\n"
-"PO-Revision-Date: 2005-02-17 18:36+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-03-03 00:06+0100\n"
+"PO-Revision-Date: 2005-03-02 23:45+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
+"Plural-Forms: nplurals=2; plural=n>1;\n"
 
 #: src/bfu/hierbox.c:348
 msgid "Close"
@@ -32,8 +33,8 @@ msgid "Press space to expand this folder."
 msgstr "Pressez espace pour déployer le dossier."
 
 #: src/bfu/hierbox.c:447 src/bfu/hierbox.c:458 src/bfu/hierbox.c:638
-#: src/bfu/hierbox.c:945 src/bfu/hierbox.c:974 src/bfu/inpfield.c:69
-#: src/bfu/inpfield.c:80 src/bfu/inpfield.c:100 src/bfu/leds.c:276
+#: src/bfu/hierbox.c:945 src/bfu/hierbox.c:974 src/bfu/inpfield.c:67
+#: src/bfu/inpfield.c:78 src/bfu/inpfield.c:98 src/bfu/leds.c:276
 #: src/bfu/msgbox.c:175 src/bookmarks/dialogs.c:263
 #: src/bookmarks/dialogs.c:666 src/config/dialogs.c:56
 #: src/config/dialogs.c:101 src/config/dialogs.c:338 src/config/dialogs.c:407
@@ -44,8 +45,8 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
 #: src/dialogs/menu.c:97 src/dialogs/menu.c:523 src/dialogs/menu.c:574
 #: src/dialogs/options.c:202 src/dialogs/options.c:282
-#: src/ecmascript/spidermonkey.c:372 src/ecmascript/spidermonkey.c:1964
-#: src/ecmascript/spidermonkey.c:1990 src/formhist/dialogs.c:179
+#: src/ecmascript/spidermonkey.c:373 src/ecmascript/spidermonkey.c:2015
+#: src/ecmascript/spidermonkey.c:2041 src/formhist/dialogs.c:179
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
 #: src/protocol/nntp/codes.c:132 src/protocol/protocol.c:227
 #: src/protocol/user.c:268 src/sched/download.c:229 src/sched/download.c:325
@@ -60,7 +61,7 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/viewer/text/search.c:1014 src/viewer/text/search.c:1459
 #: src/viewer/text/search.c:1570 src/viewer/text/textarea.c:366
 #: src/viewer/text/textarea.c:375 src/viewer/text/view.c:730
-#: src/viewer/text/view.c:1283
+#: src/viewer/text/view.c:1311
 msgid "OK"
 msgstr "OK"
 
@@ -100,14 +101,14 @@ msgstr "Supprimer les items marqués ?"
 
 #: src/bfu/hierbox.c:745 src/bfu/hierbox.c:781 src/bfu/hierbox.c:802
 #: src/bfu/hierbox.c:873 src/config/dialogs.c:825 src/dialogs/menu.c:126
-#: src/formhist/formhist.c:457 src/mime/dialogs.c:70 src/sched/task.c:274
+#: src/formhist/formhist.c:457 src/mime/dialogs.c:70 src/sched/task.c:267
 #: src/terminal/tab.c:191 src/terminal/tab.c:227
 msgid "Yes"
 msgstr "Oui"
 
 #: src/bfu/hierbox.c:746 src/bfu/hierbox.c:782 src/bfu/hierbox.c:803
 #: src/bfu/hierbox.c:874 src/config/dialogs.c:826 src/dialogs/menu.c:127
-#: src/formhist/formhist.c:458 src/mime/dialogs.c:71 src/sched/task.c:275
+#: src/formhist/formhist.c:458 src/mime/dialogs.c:71 src/sched/task.c:268
 #: src/terminal/tab.c:192 src/terminal/tab.c:228
 msgid "No"
 msgstr "Non"
@@ -178,24 +179,24 @@ msgstr "Nom"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: src/bfu/inpfield.c:66 src/bfu/inpfield.c:75
+#: src/bfu/inpfield.c:64 src/bfu/inpfield.c:73
 msgid "Bad number"
 msgstr "Nombre incorrect"
 
-#: src/bfu/inpfield.c:67
+#: src/bfu/inpfield.c:65
 msgid "Number expected in field"
 msgstr "Saisir un nombre"
 
-#: src/bfu/inpfield.c:77
+#: src/bfu/inpfield.c:75
 #, c-format
 msgid "Number should be in the range from %d to %d."
 msgstr "Le nombre doit être compris entre %d et %d."
 
-#: src/bfu/inpfield.c:97
+#: src/bfu/inpfield.c:95
 msgid "Bad string"
 msgstr "Mauvaise chaîne"
 
-#: src/bfu/inpfield.c:98
+#: src/bfu/inpfield.c:96
 msgid "Empty string not allowed"
 msgstr "Chaîne vide non autorisée"
 
@@ -1971,7 +1972,7 @@ msgstr ""
 "configuration."
 
 #. Keep options in alphabetical order.
-#: src/config/options.inc:71
+#: src/config/options.inc:71 src/dialogs/info.c:193
 msgid "Connections"
 msgstr "Connexions"
 
@@ -2828,7 +2829,7 @@ msgstr ""
 "limite du cache mémoire (dans ce cas, aucun autre document ne\n"
 "pourra être mise en cache)."
 
-#: src/config/options.inc:492
+#: src/config/options.inc:492 src/dialogs/info.c:212
 msgid "Memory cache"
 msgstr "Cache mémoire"
 
@@ -3595,7 +3596,7 @@ msgstr "Texte"
 msgid "Dialog text colors."
 msgstr "Couleurs du texte des dialogues."
 
-#: src/config/options.inc:943 src/viewer/text/form.c:1442
+#: src/config/options.inc:943 src/viewer/text/form.c:1438
 msgid "Checkbox"
 msgstr "Case à cocher"
 
@@ -3635,7 +3636,7 @@ msgstr "Raccourci du bouton"
 msgid "Selected button shortcut"
 msgstr "Raccourci du bouton sélectionné"
 
-#: src/config/options.inc:967 src/viewer/text/form.c:1446
+#: src/config/options.inc:967 src/viewer/text/form.c:1442
 msgid "Text field"
 msgstr "Champ texte"
 
@@ -4495,38 +4496,134 @@ msgstr ""
 "modifier selon les termes de la GNU General Public License publiée par la  "
 "Free Software Foundation, spécifiquement la version 2 de la licence."
 
-#: src/dialogs/info.c:169
-msgid "master"
-msgstr "maître"
-
-#: src/dialogs/info.c:169
-msgid "slave"
-msgstr "esclave"
-
-#: src/dialogs/info.c:181
-#, c-format
-msgid ""
-"Resources: %d handles, %d timers.\n"
-"Connections: %d connections, %d connecting, %d transferring, %d keepalive.\n"
-"Memory cache: %d bytes, %d files, %d locked, %d loading.\n"
-"Document cache: %d formatted, %d locked, %d refreshing.\n"
-"Interlinking: %s terminal, %d terminals, %d sessions."
-msgstr ""
-"Ressources: %d descripteurs, %d timers.\n"
-"Connexions: %d connexions, %d en établiss., %d en transfert, %d en "
-"maintien.\n"
-"Cache mémoire: %d octets, %d fichiers, %d verrouillés, %d en chargement.\n"
-"Cache documents: %d formattés, %d verrouillés, %d en rafraîchissement.\n"
-"Com. interne: terminal %s, %d terminals, %d sessions."
-
-#: src/dialogs/info.c:200
-#, c-format
-msgid "Memory allocated: %ld bytes, %ld bytes overhead (%0.2f%%)."
-msgstr "Mémoire allouée: %ld octets, %ld octets surconsommés (%0.2f%%)."
-
-#: src/dialogs/info.c:211
+#: src/dialogs/info.c:182 src/dialogs/info.c:286
 msgid "Resources"
 msgstr "Ressources"
+
+#: src/dialogs/info.c:186
+#, c-format
+msgid "%d handle"
+msgid_plural "%d handles"
+msgstr[0] "%d descripteur"
+msgstr[1] "%d descripteurs"
+
+#: src/dialogs/info.c:190
+#, c-format
+msgid "%d timer"
+msgid_plural "%d timers"
+msgstr[0] "%d chrono"
+msgstr[1] "%d chronos"
+
+#: src/dialogs/info.c:197
+#, c-format
+msgid "%d connection"
+msgid_plural "%d connections"
+msgstr[0] "%d connexion"
+msgstr[1] "%d connexions"
+
+#: src/dialogs/info.c:201
+#, c-format
+msgid "%d connecting"
+msgid_plural "%d connecting"
+msgstr[0] "%d en cours de connexion"
+msgstr[1] "%d en cours de connexion"
+
+#: src/dialogs/info.c:205
+#, c-format
+msgid "%d transferring"
+msgid_plural "%d transferring"
+msgstr[0] "%d en cours de transfert"
+msgstr[1] "%d en cours de transfert"
+
+#: src/dialogs/info.c:209
+#, c-format
+msgid "%d keepalive"
+msgid_plural "%d keepalive"
+msgstr[0] "%d en maintien"
+msgstr[1] "%d en maintien"
+
+#: src/dialogs/info.c:216 src/dialogs/info.c:268
+#, c-format
+msgid "%d byte"
+msgid_plural "%d bytes"
+msgstr[0] "%d octet"
+msgstr[1] "%d octets"
+
+#: src/dialogs/info.c:220
+#, c-format
+msgid "%d file"
+msgid_plural "%d files"
+msgstr[0] "%d fichier"
+msgstr[1] "%d fichiers"
+
+#: src/dialogs/info.c:224 src/dialogs/info.c:239
+#, c-format
+msgid "%d locked"
+msgid_plural "%d locked"
+msgstr[0] "%d vérouillé"
+msgstr[1] "%d vérouillés"
+
+#: src/dialogs/info.c:228
+#, c-format
+msgid "%d loading"
+msgid_plural "%d loading"
+msgstr[0] "%d en chargement"
+msgstr[1] "%d en chargement"
+
+#: src/dialogs/info.c:231
+msgid "Document cache"
+msgstr "Cache documents"
+
+#: src/dialogs/info.c:235
+#, c-format
+msgid "%d formatted"
+msgid_plural "%d formatted"
+msgstr[0] "%d formaté"
+msgstr[1] "%d formatés"
+
+#: src/dialogs/info.c:243
+#, c-format
+msgid "%d refreshing"
+msgid_plural "%d refreshing"
+msgstr[0] "%d en rafraîchissement"
+msgstr[1] "%d en rafraîchissement"
+
+#: src/dialogs/info.c:246
+msgid "Interlinking"
+msgstr "Communication interne"
+
+#: src/dialogs/info.c:249
+msgid "master terminal"
+msgstr "terminal maître"
+
+#: src/dialogs/info.c:251
+msgid "slave terminal"
+msgstr "terminal esclave"
+
+#: src/dialogs/info.c:255
+#, c-format
+msgid "%d terminal"
+msgid_plural "%d terminals"
+msgstr[0] "%d terminal"
+msgstr[1] "%d terminaux"
+
+#: src/dialogs/info.c:259
+#, c-format
+msgid "%d session"
+msgid_plural "%d sessions"
+msgstr[0] "%d session"
+msgstr[1] "%d sessions"
+
+#: src/dialogs/info.c:264
+msgid "Memory allocated"
+msgstr "Mémoire allouée"
+
+#: src/dialogs/info.c:272
+#, c-format
+msgid "%d byte overhead"
+msgid_plural "%d bytes overhead"
+msgstr[0] "%d octet surconsommé"
+msgstr[1] "%d octets surconsommés"
 
 #: src/dialogs/menu.c:96
 msgid "Save URL"
@@ -5123,24 +5220,24 @@ msgstr ""
 "Interdire ou non l'ouverture de fenêtres ou d'onglets\n"
 "par les scripts."
 
-#: src/ecmascript/spidermonkey.c:369
+#: src/ecmascript/spidermonkey.c:370
 msgid "JavaScript Alert"
 msgstr "Alerte JavaScript"
 
-#: src/ecmascript/spidermonkey.c:1945
+#: src/ecmascript/spidermonkey.c:1996
 #, c-format
 msgid "A script embedded in the current document raised the following%s%s%s%s"
 msgstr "Un script contenu dans le document courant a provoqué%s%s%s%s"
 
-#: src/ecmascript/spidermonkey.c:1962
+#: src/ecmascript/spidermonkey.c:2013
 msgid "JavaScript Error"
 msgstr "Erreur Javascript"
 
-#: src/ecmascript/spidermonkey.c:1982
+#: src/ecmascript/spidermonkey.c:2033
 msgid "JavaScript Emergency"
 msgstr "Alerte JavaScript"
 
-#: src/ecmascript/spidermonkey.c:1984
+#: src/ecmascript/spidermonkey.c:2035
 #, c-format
 msgid ""
 "A script embedded in the current document was running\n"
@@ -6926,7 +7023,7 @@ msgstr ""
 msgid "Unknown error"
 msgstr "Erreur inconnue"
 
-#: src/sched/session.c:694 src/sched/session.c:714 src/sched/task.c:271
+#: src/sched/session.c:694 src/sched/session.c:714 src/sched/task.c:264
 msgid "Warning"
 msgstr "Avertissement"
 
@@ -6985,7 +7082,7 @@ msgstr ""
 "Pressez ESC pour accèder au menu.\n"
 "La documentation est disponible dans le menu Aide."
 
-#: src/sched/task.c:239
+#: src/sched/task.c:232
 #, c-format
 msgid ""
 "The URL you are about to follow might be maliciously crafted in order to "
@@ -7001,14 +7098,14 @@ msgstr ""
 "\n"
 "Voulez-vous aller à l'URL %s ?"
 
-#: src/sched/task.c:249
+#: src/sched/task.c:242
 #, c-format
 msgid "Do you want to follow the redirect and post form data to URL %s?"
 msgstr ""
 "Voulez-vous suivre la redirection et poster les données de formulaire à "
 "l'URL %s ?"
 
-#: src/sched/task.c:253
+#: src/sched/task.c:246
 #, c-format
 msgid ""
 "The form data you are about to post might be incomplete.\n"
@@ -7017,12 +7114,12 @@ msgstr ""
 "Le formulaire que vous tentez de soumettre est peut-être incomplet.\n"
 "Voulez-vous tout de même le soumettre à l'URL %s ?"
 
-#: src/sched/task.c:257
+#: src/sched/task.c:250
 #, c-format
 msgid "Do you want to post form data to URL %s?"
 msgstr "Voulez-vous poster les données de formulaire à l'URL %s ?"
 
-#: src/sched/task.c:260
+#: src/sched/task.c:253
 #, c-format
 msgid "Do you want to repost form data to URL %s?"
 msgstr "Voulez-vous re-poster les données de formulaire à l'URL %s ?"
@@ -7184,155 +7281,155 @@ msgstr "Erreur lors de l'envoi du formulaire"
 msgid "Could not load file %s: %s"
 msgstr "Impossible de charger le fichier %s: %s"
 
-#: src/viewer/text/form.c:1427
+#: src/viewer/text/form.c:1423
 msgid "Reset form"
 msgstr "Réinitialiser le formulaire"
 
-#: src/viewer/text/form.c:1429
+#: src/viewer/text/form.c:1425
 msgid "Harmless button"
 msgstr "Bouton sans impact"
 
-#: src/viewer/text/form.c:1437
+#: src/viewer/text/form.c:1433
 msgid "Submit form to"
 msgstr "Envoi du formulaire à"
 
-#: src/viewer/text/form.c:1438
+#: src/viewer/text/form.c:1434
 msgid "Post form to"
 msgstr "Transfert du formulaire à"
 
-#: src/viewer/text/form.c:1440
+#: src/viewer/text/form.c:1436
 msgid "Radio button"
 msgstr "Bouton radio"
 
-#: src/viewer/text/form.c:1444
+#: src/viewer/text/form.c:1440
 msgid "Select field"
 msgstr "Liste"
 
-#: src/viewer/text/form.c:1448
+#: src/viewer/text/form.c:1444
 msgid "Text area"
 msgstr "Champ texte multiligne"
 
-#: src/viewer/text/form.c:1450
+#: src/viewer/text/form.c:1446
 msgid "File upload"
 msgstr "Envoi de fichier"
 
-#: src/viewer/text/form.c:1452
+#: src/viewer/text/form.c:1448
 msgid "Password field"
 msgstr "Champ mot de passe"
 
-#: src/viewer/text/form.c:1490
+#: src/viewer/text/form.c:1486
 msgid "name"
 msgstr "Nom"
 
-#: src/viewer/text/form.c:1502
+#: src/viewer/text/form.c:1498
 msgid "value"
 msgstr "Valeur"
 
-#: src/viewer/text/form.c:1515
+#: src/viewer/text/form.c:1511
 msgid "read only"
 msgstr "lecture seule"
 
-#: src/viewer/text/form.c:1526
+#: src/viewer/text/form.c:1522
 #, c-format
 msgid "press %s to navigate"
 msgstr "pressez %s pour naviguer"
 
-#: src/viewer/text/form.c:1528
+#: src/viewer/text/form.c:1524
 #, c-format
 msgid "press %s to edit"
 msgstr "pressez %s pour éditer"
 
-#: src/viewer/text/form.c:1564
+#: src/viewer/text/form.c:1560
 #, c-format
 msgid "press %s to submit to %s"
 msgstr "pressez %s pour soumettre à %s"
 
-#: src/viewer/text/form.c:1566
+#: src/viewer/text/form.c:1562
 #, c-format
 msgid "press %s to post to %s"
 msgstr "pressez %s pour poster à %s"
 
-#: src/viewer/text/link.c:1140
+#: src/viewer/text/link.c:1152
 msgid "Display ~usemap"
 msgstr "Afficher ~usemap"
 
-#: src/viewer/text/link.c:1143
+#: src/viewer/text/link.c:1155
 msgid "~Follow link"
 msgstr "~Suivre le lien"
 
-#: src/viewer/text/link.c:1145
+#: src/viewer/text/link.c:1157
 msgid "Follow link and r~eload"
 msgstr "Suivre le lien et ~recharger"
 
-#: src/viewer/text/link.c:1149
+#: src/viewer/text/link.c:1161
 msgid "Open in new ~window"
 msgstr "Ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:1151
+#: src/viewer/text/link.c:1163
 msgid "Open in new ~tab"
 msgstr "Ouvrir dans un nouvel ongle~t"
 
-#: src/viewer/text/link.c:1153
+#: src/viewer/text/link.c:1165
 msgid "Open in new tab in ~background"
 msgstr "Ouvrir dans un nouvel onglet en arrière-~plan"
 
-#: src/viewer/text/link.c:1158
+#: src/viewer/text/link.c:1170
 msgid "~Download link"
 msgstr "~Enregistrer le lien"
 
-#: src/viewer/text/link.c:1161
+#: src/viewer/text/link.c:1173
 msgid "~Add link to bookmarks"
 msgstr "~Ajouter ce lien aux signets"
 
-#: src/viewer/text/link.c:1173 src/viewer/text/link.c:1208
+#: src/viewer/text/link.c:1185 src/viewer/text/link.c:1220
 msgid "~Reset form"
 msgstr "Remettre à ~zéro le formulaire"
 
-#: src/viewer/text/link.c:1185
+#: src/viewer/text/link.c:1197
 msgid "Open in ~external editor"
 msgstr "Ouvrir dans un ~éditeur externe"
 
-#: src/viewer/text/link.c:1191
+#: src/viewer/text/link.c:1203
 msgid "~Submit form"
 msgstr "~Envoyer le formulaire"
 
-#: src/viewer/text/link.c:1192
+#: src/viewer/text/link.c:1204
 msgid "Submit form and rel~oad"
 msgstr "Envoyer le formulaire et ~recharger"
 
-#: src/viewer/text/link.c:1196
+#: src/viewer/text/link.c:1208
 msgid "Submit form and open in new ~window"
 msgstr "Envoyer le formulaire et ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:1198
+#: src/viewer/text/link.c:1210
 msgid "Submit form and open in new ~tab"
 msgstr "Envoyer le formulaire et ouvrir un ~onglet"
 
-#: src/viewer/text/link.c:1201
+#: src/viewer/text/link.c:1213
 msgid "Submit form and open in new tab in ~background"
 msgstr "Envoyer le formulaire et ouvrir un onglet en ~arrière-plan"
 
-#: src/viewer/text/link.c:1206
+#: src/viewer/text/link.c:1218
 msgid "Submit form and ~download"
 msgstr "Envoyer le formulaire et ~télécharger"
 
-#: src/viewer/text/link.c:1213
+#: src/viewer/text/link.c:1225
 msgid "V~iew image"
 msgstr "~Voir l'image"
 
-#: src/viewer/text/link.c:1215
+#: src/viewer/text/link.c:1227
 msgid "Download ima~ge"
 msgstr "Enregistrer l'~image"
 
-#: src/viewer/text/link.c:1223
+#: src/viewer/text/link.c:1235
 msgid "No link selected"
 msgstr "Aucun lien sélectionné"
 
-#: src/viewer/text/link.c:1275
+#: src/viewer/text/link.c:1287
 msgid "Image"
 msgstr "Image"
 
-#: src/viewer/text/link.c:1280
+#: src/viewer/text/link.c:1292
 msgid "Usemap"
 msgstr "Usemap"
 
@@ -7415,13 +7512,37 @@ msgstr "Aller au lien"
 msgid "Enter link number"
 msgstr "Entrez un numéro de lien"
 
-#: src/viewer/text/view.c:1280
+#: src/viewer/text/view.c:1308
 msgid "Save error"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/viewer/text/view.c:1281
+#: src/viewer/text/view.c:1309
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
+
+#~ msgid "Memory allocated: %ld bytes, %ld bytes overhead (%0.2f%%)."
+#~ msgstr "Mémoire allouée: %ld octets, %ld octets surconsommés (%0.2f%%)."
+
+#~ msgid "master"
+#~ msgstr "maître"
+
+#~ msgid "slave"
+#~ msgstr "esclave"
+
+#~ msgid ""
+#~ "Resources: %d handles, %d timers.\n"
+#~ "Connections: %d connections, %d connecting, %d transferring, %d "
+#~ "keepalive.\n"
+#~ "Memory cache: %d bytes, %d files, %d locked, %d loading.\n"
+#~ "Document cache: %d formatted, %d locked, %d refreshing.\n"
+#~ "Interlinking: %s terminal, %d terminals, %d sessions."
+#~ msgstr ""
+#~ "Ressources: %d descripteurs, %d timers.\n"
+#~ "Connexions: %d connexions, %d en établiss., %d en transfert, %d en "
+#~ "maintien.\n"
+#~ "Cache mémoire: %d octets, %d fichiers, %d verrouillés, %d en chargement.\n"
+#~ "Cache documents: %d formattés, %d verrouillés, %d en rafraîchissement.\n"
+#~ "Com. interne: terminal %s, %d terminals, %d sessions."
 
 #~ msgid "Would you like to save the file '%s' (type: %s) or display it?"
 #~ msgstr "Voulez-vous sauvegarder le fichier '%s' (type: %s) ou l'afficher ?"

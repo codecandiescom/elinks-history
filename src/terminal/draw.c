@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.67 2003/09/09 21:52:52 zas Exp $ */
+/* $Id: draw.c,v 1.68 2003/09/15 20:28:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -229,23 +229,29 @@ draw_text(struct terminal *term, int x, int y,
 	  unsigned char *text, int length,
 	  enum screen_char_attr attr, struct color_pair *color)
 {
-	int position, end;
-	struct screen_char schar = INIT_SCREEN_CHAR(' ', attr, 0);
+	struct screen_char *pos, *end;
 
 	assert(term && term->screen && term->screen->image && text && length >= 0);
 	if_assert_failed return;
 	check_range(term, x, y);
 
-	if (color) set_term_color(&schar, color, COLOR_DEFAULT);
+	pos = &term->screen->image[x + term->x * y];
 
-	end = int_min(length, term->x - x);
-	position = x + term->x * y;
-
-	for (end += position; position < end && *text; text++, position++) {
-		schar.data = *text;
-		copy_screen_chars(&term->screen->image[position], &schar, 1);
+	/* Use the last char as template. */
+	end = &pos[int_min(length, term->x - x) - 1];
+	end->attr = attr;
+	if (color) {
+		set_term_color(end, color, COLOR_DEFAULT);
+	} else {
+		end->color = 0;
 	}
 
+	for (; pos < end && *text; text++, pos++) {
+		end->data = *text;
+		copy_screen_chars(pos, end, 1);
+	}
+
+	end->data = *text;
 	term->screen->dirty = 1;
 }
 

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.349 2004/07/01 19:23:06 pasky Exp $ */
+/* $Id: tables.c,v 1.350 2004/07/02 02:11:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -445,6 +445,7 @@ stretch_columns(struct table *table, int widths[], int max_widths[],
 
 			col_spare_width = total_spare_width * widths[col] / total_width;
 			int_bounds(&col_spare_width, 1, max_widths[col]);
+
 			if (col_spare_width > stretch_width) {
 				stretch_width = col_spare_width;
 				stretch_col = col;

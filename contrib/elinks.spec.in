@@ -7,14 +7,14 @@
 #
 # Spec file format from < http://www.rpm.org/RPM-HOWTO/build.html >
 #
-# $Id: elinks.spec.in,v 1.5 2003/01/26 19:23:19 pasky Exp $
+# $Id: elinks.spec.in,v 1.6 2003/07/20 21:10:43 pasky Exp $
 
 Summary: Enhanced version of Links (Lynx-like text WWW browser)
 Name: elinks
 Version: @VERSION@
 Release: 1
 Prefix: /usr
-Copyright: GPL
+License: GPL
 Vendor: ELinks project <pasky@ucw.cz>
 #Packager: Petr Baudis <pasky@ucw.cz>
 Group: Applications/Internet

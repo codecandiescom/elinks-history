@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.32 2002/11/12 21:05:36 pasky Exp $ */
+/* $Id: url.c,v 1.33 2002/11/12 22:33:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,7 +148,7 @@ parse_url(unsigned char *url, int *prlen,
 	lbracket = strchr(prefix_end, '[');
 	rbracket = strchr(prefix_end, ']');
 
-	/* [address] is permitted only inside hostname part. */
+	/* [address] is handled only inside of hostname part (surprisingly). */
 	if (prefix_end + strcspn(prefix_end, "/") < (rbracket ? rbracket : lbracket))
 		lbracket = rbracket = NULL;
 
@@ -900,9 +900,11 @@ http:				prefix = "http://";
 		return NULL;
 	}
 
-	/* Try prefix:some.url -> prefix://some.url.. */
 	newurl = memacpy(url, ch - url + 1);
 	if (!newurl) return NULL;
+
+	/* Try prefix:some.url -> prefix://some.url.. */
+	if (strncmp(ch + 1, "//", 2)) {
 	add_to_strn(&newurl, "//");
 	add_to_strn(&newurl, ch + 1);
 	if (!parse_url(newurl, NULL,
@@ -916,6 +918,7 @@ http:				prefix = "http://";
 		translate_directories(newurl);
 
 		return newurl;
+	}
 	}
 
 	/* ..and with slash */

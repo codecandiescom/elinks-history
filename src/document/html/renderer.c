@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.222 2003/08/26 23:14:04 jonas Exp $ */
+/* $Id: renderer.c,v 1.223 2003/08/26 23:23:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -306,7 +306,7 @@ xset_vchars(struct part *part, int x, int y, int yl,
 	assert(part->document->data);
 	if_assert_failed return;
 
-	schar.color = find_nearest_color(*bgcolor, 8) << 3;
+	schar.color = find_nearest_color(bgcolor, 8) << 3;
 	schar.data = data;
 	schar.attr = attr;
 

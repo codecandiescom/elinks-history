@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.513 2004/06/13 23:50:20 jonas Exp $ */
+/* $Id: session.c,v 1.514 2004/06/14 00:08:27 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -820,18 +820,6 @@ init_remote_session(struct session *ses, enum remote_session_flags *remote_ptr,
 }
 
 
-
-/* The session info encoder and decoder:
- *
- * This is responsible for handling the initial connection between a dumb and
- * master terminal. We might be connecting to an older or newer version of
- * ELinks and has to be able to keep some kind of compatibility so that
- * everything will work as expected while being able to change the format
- * of the decoded session info. In order to avoid sending too much information
- * we use magic numbers to signal the identity of the dump client terminal.
- *
- * Magic numbers are composed by the SESSION_MAGIC() macro. It is a negative
- * magic to be able to distinguish the oldest format from the newer ones. */
 
 struct string *
 encode_session_info(struct string *info, struct list_head *url_list)

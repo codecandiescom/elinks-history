@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.17 2002/12/07 20:05:56 pasky Exp $ */
+/* $Id: kbd.c,v 1.18 2002/12/17 11:50:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,12 +55,11 @@ struct itrm {
 	unsigned char *orig_title;
 };
 
-void free_trm(struct itrm *);
-void in_kbd(struct itrm *);
-void in_sock(struct itrm *);
+static struct itrm *ditrm = NULL;
 
-struct itrm *ditrm = NULL;
-
+static void free_trm(struct itrm *);
+static void in_kbd(struct itrm *);
+static void in_sock(struct itrm *);
 
 int
 is_blocked()
@@ -76,7 +75,7 @@ free_all_itrms()
 }
 
 
-void
+static void
 write_ev_queue(struct itrm *itrm)
 {
 	int l;
@@ -103,7 +102,7 @@ write_ev_queue(struct itrm *itrm)
 }
 
 
-void
+static void
 queue_event(struct itrm *itrm, unsigned char *data, int len)
 {
 	int w = 0;
@@ -154,16 +153,16 @@ unsigned char *init_seq = "\033[?1000h\033[?47h\0337";
 unsigned char *term_seq = "\033[2J\033[?1000l\033[?47l\0338\b \b";
 */
 
-unsigned char *init_seq = "\033)0\0337";
-unsigned char *init_seq_x_mouse = "\033[?1000h";
-unsigned char *init_seq_tw_mouse = "\033[?9h";
-unsigned char *term_seq = "\033[2J\0338\r \b";
-unsigned char *term_seq_x_mouse = "\033[?1000l";
-unsigned char *term_seq_tw_mouse = "\033[?9l";
+static unsigned char *init_seq = "\033)0\0337";
+static unsigned char *init_seq_x_mouse = "\033[?1000h";
+static unsigned char *init_seq_tw_mouse = "\033[?9h";
+static unsigned char *term_seq = "\033[2J\0338\r \b";
+static unsigned char *term_seq_x_mouse = "\033[?1000l";
+static unsigned char *term_seq_tw_mouse = "\033[?9l";
 
 /*unsigned char *term_seq = "\033[2J\033[?1000l\0338\b \b";*/
 
-void
+static inline void
 send_init_sequence(int h, int flags)
 {
 	hard_write(h, init_seq, strlen(init_seq));
@@ -176,7 +175,7 @@ send_init_sequence(int h, int flags)
 }
 
 
-void
+static inline void
 send_term_sequence(int h, int flags)
 {
 	hard_write(h, term_seq, strlen(term_seq));
@@ -202,7 +201,7 @@ resize_terminal()
 }
 
 
-int
+static int
 setraw(int fd, struct termios *p)
 {
 	struct termios t;
@@ -240,6 +239,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 		return;
 	}
 
+	/* TODO: mem_calloc() here ? --Zas */
 	itrm = mem_alloc(sizeof(struct itrm));
 	if (!itrm) return;
 
@@ -340,7 +340,7 @@ end:
 }
 
 
-void
+static inline void
 unblock_itrm_x(void *h)
 {
 	close_handle(h);
@@ -398,7 +398,7 @@ block_itrm(int fd)
 }
 
 
-void
+static void
 free_trm(struct itrm *itrm)
 {
 	if (!itrm) return;
@@ -432,7 +432,7 @@ free_trm(struct itrm *itrm)
 }
 
 
-void
+static inline void
 resize_terminal_x(unsigned char *text)
 {
 	int x, y;
@@ -469,7 +469,7 @@ dispatch_special(unsigned char *text)
 	else if ((hard_read(itrm->sock_in, &cc, 1)) <= 0) goto fr; \
 	xx = cc; }
 
-void
+static void
 in_sock(struct itrm *itrm)
 {
 	unsigned char *path, *delete;
@@ -591,11 +591,12 @@ nasty_thing:
 	goto qwerty;
 }
 
+#undef RD
 
 int process_queue(struct itrm *);
 
 
-void
+static void
 kbd_timeout(struct itrm *itrm)
 {
 	struct event ev = {EV_KBD, KBD_ESC, 0, 0};
@@ -621,8 +622,9 @@ kbd_timeout(struct itrm *itrm)
 }
 
 
-int
-get_esc_code(char *str, int len, char *code, int *num, int *el)
+static inline int
+get_esc_code(unsigned char *str, int len, unsigned char *code,
+	     int *num, int *el)
 {
 	int pos;
 
@@ -649,7 +651,7 @@ struct key {
 /* Oh, is anyone going to ever modify this? --pasky */
 /* Not me. --Zas */
 
-struct key os2xtd[256] = {
+static struct key os2xtd[256] = {
 /* 0 */
 {0,0}, {0,0}, {' ',KBD_CTRL}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {KBD_BS,KBD_ALT}, {0,0},
 /* 16 */
@@ -705,9 +707,10 @@ struct key os2xtd[256] = {
 /* 256 */
 };
 
-int xterm_button = -1;
+static int xterm_button = -1;
 
 /* I feeeeeel the neeeed ... to rewrite this ... --pasky */
+/* Just Do it ! --Zas */
 
 int
 process_queue(struct itrm *itrm)
@@ -911,7 +914,7 @@ ret:
 }
 
 
-void
+static void
 in_kbd(struct itrm *itrm)
 {
 	int r;

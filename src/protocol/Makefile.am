@@ -1,7 +1,11 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.25 2004/05/02 13:30:15 jonas Exp $
+## $Id: Makefile.am,v 1.26 2004/05/09 23:04:40 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
+
+if CONFIG_FINGER
+fingerobj = finger.o
+endif
 
 if CONFIG_SMB
 smbdir = smb
@@ -17,11 +21,10 @@ SUBDIRS = auth file ftp http $(rewritedir) $(smbdir)
 
 noinst_LIBRARIES = libprotocol.a
 
-libprotocol_a_LIBADD = $(rewriteobj) $(smbobj)
+EXTRA_libprotocol_a_SOURCES = finger.c finger.h
+libprotocol_a_LIBADD = $(fingerobj) $(rewriteobj) $(smbobj)
 
 libprotocol_a_SOURCES = \
- finger.c \
- finger.h \
  protocol.c \
  protocol.h \
  proxy.c \

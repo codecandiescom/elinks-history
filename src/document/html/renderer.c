@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.259 2003/09/10 14:10:31 jonas Exp $ */
+/* $Id: renderer.c,v 1.260 2003/09/10 15:49:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -762,16 +762,13 @@ new_link(struct document *f, int link_number, unsigned char *name, int namelen)
 		f->links = l;
 	}
 
-	memset(&f->links[f->nlinks], 0, sizeof(struct link));
-
 	link = &f->links[f->nlinks++];
+	memset(link, 0, sizeof(struct link));
 
 	link->num = format.tabindex + link_number - 1;
 	link->accesskey = format.accesskey;
-	link->pos = NULL;
-	link->n = 0;
-
 	link->title = format.title ? stracpy(format.title) : NULL;
+	link->where_img = format.image ? stracpy(format.image) : NULL;
 
 	if (!format.form) {
 		link->type = L_LINK;
@@ -804,8 +801,6 @@ new_link(struct document *f, int link_number, unsigned char *name, int namelen)
 		link->form = form;
 		link->target = form->target ? stracpy(form->target) : NULL;
 	}
-
-	link->where_img = format.image ? stracpy(format.image) : NULL;
 
 	if (link->type != L_FIELD && link->type != L_AREA) {
 		link->color.background = format.clink;

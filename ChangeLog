@@ -1,3 +1,88 @@
+Wed Jul  7 05:45:36 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/draw.c:
+
+	Move assignment to |vs->y| and call to set_link from
+	check_document_fragment to draw_doc.  
+
+Wed Jul  7 05:36:08 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/draw.c:
+
+	Whoops, don't set did_fragment if the page isn't done loading.  
+
+Wed Jul  7 04:26:01 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/draw.c:
+
+	Assign |vs->did_fragment = 1;| in |draw_doc| rather than in
+	|check_document_fragment|. Now, all references to |did_fragment| are
+	in the same routine.  
+
+Wed Jul  7 04:22:40 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/draw.c:
+
+	Negatory, revert. Prepare for a different approach, with help from
+	Jonas.  
+
+Wed Jul  7 04:12:19 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/draw.c:
+
+	check_document_fragment's return value is never used, so change the
+	return type to void.  
+
+Wed Jul  7 03:04:41 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/hierbox.c:
+
+	In search_hierbox_browser, pass init_listbox_context |NULL| for its
+	|item| argument, which it assigns to |context->item|, instead of
+	passing it |box->sel| and then assigning NULL to |context->item|.  
+
+Wed Jul  7 02:59:16 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/hierbox.c:
+
+	Delete an extra semicolon introduced in revision 1.95.  
+
+Wed Jul  7 02:44:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	smart_config_string(): Fix bad attempt at matching _template_
+	options. I think. I mean it is smart code. Too smart for me. Anyways
+	the comment suggests that the purpose is to match _template_ options
+	so I take it's word for it. It's bad because with searching
+	invisible items might not be saved and with _template_ options
+	visible they could be saved. Ok there is a check for _template_
+	later in the function but hope the point is clear.  
+
+Wed Jul  7 02:24:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, bfu/listbox.h,
+	bookmarks/dialogs.c, cache/dialogs.c, config/dialogs.c,
+	cookies/dialogs.c, dialogs/download.c, formhist/dialogs.c,
+	globhist/dialogs.c, protocol/auth/dialogs.c:
+
+	Attempt to provide generic hierbox browser searching. It sucks I
+	know and that is why _you_ need to help and improve it. ;) 
+
+Wed Jul  7 02:02:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, dialogs/download.c:
+
+	Fix misplaced box->ops->get_info(), it should be get_text(). Add
+	NULL returning get_file_download_info() to fix crash when pressing
+	the 'Abort' button in the download manager.  
+
+Wed Jul  7 01:37:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/dialogs.c:
+
+	Ditch listbox_info enum and add get_text() op. Idea by Miciah.  
+
 Tue Jul  6 11:05:03 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: bfu/hierbox.c, bfu/listbox.c, bfu/listbox.h,

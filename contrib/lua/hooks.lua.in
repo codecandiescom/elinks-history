@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.42 2005/03/24 21:33:14 miciah Exp $
+-- $Id: hooks.lua.in,v 1.43 2005/03/24 21:38:04 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -476,6 +476,25 @@ end
 table.insert(pre_format_html_hooks, mangle_unclosed_a_tags)
 
 
+function mangle_linuxtoday (url, html)
+    if not sstrfind (url, "linuxtoday.com") then return nil,nil end
+
+    if sstrfind (url, "news_story") then
+	html = string.gsub (html, '<TABLE CELLSPACING="0".-</TABLE>', '', 1)
+	html = string.gsub (html, '<TR BGCOLOR="#FFF.-</TR></TABLE>', '', 1)
+    else
+	html = string.gsub (html, 'WIDTH="120">\n<TR.+</TABLE></TD>', '>', 1)
+    end
+    html = string.gsub (html, '<A HREF="http://www.internet.com.-</A>', '')
+    html = string.gsub (html, "<IFRAME.-</IFRAME>", "")
+    -- emphasis in text is lost
+    html = string.gsub (html, 'text="#002244"', 'text="#001133"', 1)
+
+    return html,1
+end
+table.insert(pre_format_html_hooks, mangle_linuxtoday)
+
+
 function pre_format_html_hook_ (url, html)
     local ret = nil
 
@@ -494,21 +513,8 @@ function pre_format_html_hook_ (url, html)
 
     -- These quick 'n dirty patterns don't maintain proper HTML.
 
-    -- linuxtoday.com
-    if sstrfind (url, "linuxtoday.com") then
-        if sstrfind (url, "news_story") then
-            html = string.gsub (html, '<TABLE CELLSPACING="0".-</TABLE>', '', 1)
-            html = string.gsub (html, '<TR BGCOLOR="#FFF.-</TR></TABLE>', '', 1)
-        else
-            html = string.gsub (html, 'WIDTH="120">\n<TR.+</TABLE></TD>', '>', 1)
-        end
-        html = string.gsub (html, '<A HREF="http://www.internet.com.-</A>', '')
-        html = string.gsub (html, "<IFRAME.-</IFRAME>", "")
-        -- emphasis in text is lost
-        return string.gsub (html, 'text="#002244"', 'text="#001133"', 1)
-
     -- dictionary.com
-    elseif sstrfind (url, "dictionary.com/cgi-bin/dict.pl") then
+    if sstrfind (url, "dictionary.com/cgi-bin/dict.pl") then
 	local t = { t = "" }
 	local _, n = string.gsub (html, "resultItemStart %-%-%>(.-)%<%!%-%- resultItemEnd",
 			   function (x) t.t = t.t.."<tr><td>"..x.."</td></tr>" end)

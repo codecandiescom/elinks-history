@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.63 2003/11/08 01:09:33 pasky Exp $ */
+/* $Id: cache.c,v 1.64 2003/11/08 01:12:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -459,7 +459,9 @@ garbage_collection(int whole)
 	struct cache_entry *ce, *entry;
 	long new_cache_size = cache_size;
 	long ccs = 0;
-	int no = 0;
+	/* Whether we've hit an used (unfreeable) entry when collecting
+	 * garbage. */
+	int obstacle_entry = 0;
 	long opt_cache_memory_size = get_opt_long("document.cache.memory.size");
 	static long old_opt_cache_memory_size = -1;
 	long opt_cache_gc_size = opt_cache_memory_size
@@ -499,7 +501,7 @@ garbage_collection(int whole)
 		if (!whole && new_cache_size <= opt_cache_gc_size)
 			goto g;
 		if (ce->refcount || is_entry_used(ce)) {
-			no = 1;
+			obstacle_entry = 1;
 			ce->gc_target = 0;
 			continue;
 		}
@@ -536,7 +538,7 @@ g:
 			delete_cache_entry(entry->prev);
 	}
 
-	if ((whole || !no) && cache_size > opt_cache_gc_size) {
+	if ((whole || !obstacle_entry) && cache_size > opt_cache_gc_size) {
 		/* Given cache size is too low regarding currently used cache
 		 * elements so we set it to a reasonable value. */
 		/* TODO: warn user about it. */

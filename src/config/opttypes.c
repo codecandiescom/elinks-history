@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.22 2002/07/06 17:41:14 pasky Exp $ */
+/* $Id: opttypes.c,v 1.23 2002/08/08 18:01:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,7 +15,7 @@
 #include "document/html/colors.h"
 #include "intl/charsets.h"
 #include "intl/language.h"
-#include "protocol/types.h"
+#include "protocol/mime.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.81 2002/08/07 02:56:59 pasky Exp $ */
+/* $Id: options.c,v 1.82 2002/08/08 18:01:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,7 @@
 #include "intl/charsets.h"
 #include "intl/language.h"
 #include "lowlevel/dns.h"
-#include "protocol/types.h"
+#include "protocol/mime.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"

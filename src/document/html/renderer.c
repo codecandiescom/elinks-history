@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.454 2004/06/23 10:07:33 zas Exp $ */
+/* $Id: renderer.c,v 1.455 2004/06/23 14:54:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,11 +79,18 @@ struct table_cache_entry {
 
 /* Global variables */
 
-static int table_cache_entries = 0;
-static int last_link_to_move;
-static struct tag *last_tag_to_move;
-static struct tag *last_tag_for_newline;
-static struct link_state_info link_state_info;
+struct renderer_context {
+	int table_cache_entries;
+
+	int last_link_to_move;
+	struct tag *last_tag_to_move;
+	struct tag *last_tag_for_newline;
+
+	struct link_state_info link_state_info;
+};
+
+static struct renderer_context renderer_context;
+
 static int nobreak;
 static int nosearchable;
 static int nowrap = 0; /* Activated/deactivated by SP_NOWRAP. */
@@ -395,7 +402,7 @@ static void
 move_links(struct part *part, int xf, int yf, int xt, int yt)
 {
 	struct tag *tag;
-	int nlink = last_link_to_move;
+	int nlink = renderer_context.last_link_to_move;
 	int matched = 0;
 
 	assert(part && part->document);
@@ -437,14 +444,16 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 			}
 		}
 
-		if (!matched) last_link_to_move = nlink;
+		if (!matched) {
+			renderer_context.last_link_to_move = nlink;
+		}
 	}
 
 	/* Don't move tags when removing links. */
 	if (yt < 0) return;
 
 	matched = 0;
-	tag = last_tag_to_move->next;
+	tag = renderer_context.last_tag_to_move->next;
 
 	for (; (void *) tag != &part->document->tags; tag = tag->next) {
 		if (tag->y == Y(yf)) {
@@ -454,7 +463,7 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 			}
 		}
 
-		if (!matched) last_tag_to_move = tag;
+		if (!matched) renderer_context.last_tag_to_move = tag;
 	}
 }
 
@@ -854,8 +863,8 @@ html_tag(struct document *document, unsigned char *t, int x, int y)
 		tag->y = y;
 		memcpy(tag->name, t, tag_len + 1);
 		add_to_list(document->tags, tag);
-		if ((void *) last_tag_for_newline == &document->tags)
-			last_tag_for_newline = tag;
+		if ((void *) renderer_context.last_tag_for_newline == &document->tags)
+			renderer_context.last_tag_for_newline = tag;
 	}
 }
 
@@ -924,23 +933,23 @@ static inline void
 init_link_state_info(unsigned char *link, unsigned char *target,
 		     unsigned char *image, struct form_control *form)
 {
-	assert_link_variable(link_state_info.image, image);
-	assert_link_variable(link_state_info.target, target);
-	assert_link_variable(link_state_info.link, link);
+	assert_link_variable(renderer_context.link_state_info.image, image);
+	assert_link_variable(renderer_context.link_state_info.target, target);
+	assert_link_variable(renderer_context.link_state_info.link, link);
 
-	link_state_info.link = null_or_stracpy(link);
-	link_state_info.target = null_or_stracpy(target);
-	link_state_info.image = null_or_stracpy(image);
-	link_state_info.form = format.form;
+	renderer_context.link_state_info.link = null_or_stracpy(link);
+	renderer_context.link_state_info.target = null_or_stracpy(target);
+	renderer_context.link_state_info.image = null_or_stracpy(image);
+	renderer_context.link_state_info.form = format.form;
 }
 
 static inline void
 done_link_state_info(void)
 {
-	mem_free_if(link_state_info.link);
-	mem_free_if(link_state_info.target);
-	mem_free_if(link_state_info.image);
-	memset(&link_state_info, 0, sizeof(struct link_state_info));
+	mem_free_if(renderer_context.link_state_info.link);
+	mem_free_if(renderer_context.link_state_info.target);
+	mem_free_if(renderer_context.link_state_info.image);
+	memset(&renderer_context.link_state_info, 0, sizeof(struct link_state_info));
 }
 
 static inline void
@@ -1013,11 +1022,13 @@ get_link_state(void)
 	if (!(format.link || format.image || format.form)) {
 		state = LINK_STATE_NONE;
 
-	} else if ((link_state_info.link || link_state_info.image || link_state_info.form)
-		   && !xstrcmp(format.link, link_state_info.link)
-		   && !xstrcmp(format.target, link_state_info.target)
-		   && !xstrcmp(format.image, link_state_info.image)
-		   && format.form == link_state_info.form) {
+	} else if ((renderer_context.link_state_info.link
+		    || renderer_context.link_state_info.image
+		    || renderer_context.link_state_info.form)
+		   && !xstrcmp(format.link, renderer_context.link_state_info.link)
+		   && !xstrcmp(format.target, renderer_context.link_state_info.target)
+		   && !xstrcmp(format.image, renderer_context.link_state_info.image)
+		   && format.form == renderer_context.link_state_info.form) {
 
 		return LINK_STATE_SAME;
 
@@ -1063,7 +1074,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	}
 
 	if (chars[0] != ' ' || (charslen > 1 && chars[1] != ' ')) {
-		last_tag_for_newline = (void *) &part->document->tags;
+		renderer_context.last_tag_for_newline = (void *) &part->document->tags;
 	}
 
 	int_lower_bound(&part->box.height, part->cy + 1);
@@ -1149,7 +1160,7 @@ line_break(struct part *part)
 
 	if (part->cx > 0) align_line(part, part->cy, 1);
 
-	for (t = last_tag_for_newline;
+	for (t = renderer_context.last_tag_for_newline;
 	     t && (void *) t != &part->document->tags;
 	     t = t->prev) {
 		t->x = X(0);
@@ -1316,7 +1327,7 @@ free_table_cache(void)
 	}
 
 	table_cache = NULL;
-	table_cache_entries = 0;
+	renderer_context.table_cache_entries = 0;
 }
 
 struct part *
@@ -1327,8 +1338,8 @@ format_html_part(unsigned char *start, unsigned char *end,
 {
 	struct part *part;
 	struct html_element *html_state;
-	int llm = last_link_to_move;
-	struct tag *ltm = last_tag_to_move;
+	int llm = renderer_context.last_link_to_move;
+	struct tag *ltm = renderer_context.last_tag_to_move;
 	/*struct tag *ltn = last_tag_for_newline;*/
 	int lm = html_context.margin;
 	int ef = empty_format;
@@ -1381,13 +1392,13 @@ format_html_part(unsigned char *start, unsigned char *end,
 			add_to_list(document->nodes, node);
 		}
 
-		last_link_to_move = document->nlinks;
-		last_tag_to_move = (void *) &document->tags;
-		last_tag_for_newline = (void *) &document->tags;
+		renderer_context.last_link_to_move = document->nlinks;
+		renderer_context.last_tag_to_move = (void *) &document->tags;
+		renderer_context.last_tag_for_newline = (void *) &document->tags;
 	} else {
-		last_link_to_move = 0;
-		last_tag_to_move = NULL;
-		last_tag_for_newline = NULL;
+		renderer_context.last_link_to_move = 0;
+		renderer_context.last_tag_to_move = NULL;
+		renderer_context.last_tag_for_newline = NULL;
 	}
 
 	html_context.margin = m;
@@ -1426,14 +1437,14 @@ format_html_part(unsigned char *start, unsigned char *end,
 	}
 
 ret:
-	last_link_to_move = llm;
-	last_tag_to_move = ltm;
+	renderer_context.last_link_to_move = llm;
+	renderer_context.last_tag_to_move = ltm;
 	/*last_tag_for_newline = ltn;*/
 	html_context.margin = lm;
 	empty_format = ef;
 
 	if (html_context.table_level > 1 && !document && table_cache
-	    && table_cache_entries < MAX_TABLE_CACHE_ENTRIES) {
+	    && renderer_context.table_cache_entries < MAX_TABLE_CACHE_ENTRIES) {
 		/* Create a new entry. */
 		/* Clear memory to prevent bad key comparaison due to alignment
 		 * of key fields. */
@@ -1455,7 +1466,7 @@ ret:
 				   sizeof(struct table_cache_entry_key), tce)) {
 			mem_free(tce);
 		} else {
-			table_cache_entries++;
+			renderer_context.table_cache_entries++;
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* CSS micro-engine */
-/* $Id: css.c,v 1.4 2004/01/17 07:23:12 jonas Exp $ */
+/* $Id: css.c,v 1.5 2004/01/17 07:43:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -207,6 +207,22 @@ css_parse_value(enum css_decl_valtype valtype, union css_decl_value *value,
 	return 0;
 }
 
+struct css_property_info {
+	unsigned char *name;
+	int namelen;
+	enum css_decl_property property;
+};
+
+#define CSS_PROPERTY(name, property) { name, sizeof(name) - 1, property }
+
+/* TODO: Use fastfind when we get a lot of properties. */
+struct css_property_info css_property_info[] = {
+	CSS_PROPERTY("color", CSS_DP_COLOR),
+	CSS_PROPERTY("background-color", CSS_DP_BACKGROUND_COLOR),
+	CSS_PROPERTY("font-weight", CSS_DP_FONT_WEIGHT),
+
+	CSS_PROPERTY("", CSS_DP_NONE),
+};
 
 /* This function takes a declaration from the given string, parses it to atoms,
  * and possibly creates {struct css_property} and chains it up to the specified
@@ -222,7 +238,7 @@ css_parse_decl(struct list_head *props, unsigned char *string)
 {
 	enum css_decl_property property = CSS_DP_NONE;
 	struct css_property *prop;
-	int pos;
+	int pos, i;
 
 	assert(props && string);
 
@@ -240,12 +256,13 @@ css_parse_decl(struct list_head *props, unsigned char *string)
 		return 0;
 	}
 
-	if (!strlcasecmp(string, pos, "color", 5)) {
-		property = CSS_DP_COLOR;
-	} else if (!strlcasecmp(string, pos, "background-color", 16)) {
-		property = CSS_DP_BACKGROUND_COLOR;
-	} else if (!strlcasecmp(string, pos, "font-weight", 11)) {
-		property = CSS_DP_FONT_WEIGHT;
+	for (i = 0; css_property_info[i].namelen; i++) {
+		struct css_property_info *info = &css_property_info[i];
+
+		if (!strlcasecmp(string, pos, info->name, info->namelen)) {
+			property = info->property;
+			break;
+		}
 	}
 
 	string += pos + 1;

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.5 2002/09/01 11:57:04 pasky Exp $ */
+/* $Id: globhist.c,v 1.6 2002/09/05 16:21:39 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -106,11 +106,21 @@ get_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 {
 	struct global_history_item *historyitem;
 
-	foreach (historyitem, global_history.items) {
-		if ((!url || !strcmp(historyitem->url, url)) &&
-		    (!title || !strcmp(historyitem->title, title)) &&
-		    (!time || historyitem->last_visit == time)) {
-			return historyitem;
+	/* Code duplication vs performance, since this function is called most
+	 * of time for url matching only... Execution time is divided by 2. */
+	if (url && !title && !time) {
+		foreach (historyitem, global_history.items) {
+			if (!strcmp(historyitem->url, url)) {
+				return historyitem;
+			}
+		}
+	} else {
+		foreach (historyitem, global_history.items) {
+			if ((!url || !strcmp(historyitem->url, url)) &&
+			    (!title || !strcmp(historyitem->title, title)) &&
+			    (!time || historyitem->last_visit == time)) {
+				return historyitem;
+			}
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.138 2003/06/21 00:03:03 pasky Exp $ */
+/* $Id: parser.c,v 1.139 2003/06/21 14:13:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1035,9 +1035,9 @@ html_blockquote(unsigned char *a)
 }
 
 static void
-html_h(int h, unsigned char *a)
+html_h(int h, unsigned char *a, enum format_align default_align)
 {
-	par_format.align = AL_LEFT;
+	par_format.align = default_align;
 	html_linebrk(a);
 	switch (par_format.align) {
 		case AL_LEFT:
@@ -1063,31 +1063,31 @@ html_h(int h, unsigned char *a)
 static void
 html_h2(unsigned char *a)
 {
-	html_h(2, a);
+	html_h(2, a, AL_LEFT);
 }
 
 static void
 html_h3(unsigned char *a)
 {
-	html_h(3, a);
+	html_h(3, a, AL_LEFT);
 }
 
 static void
 html_h4(unsigned char *a)
 {
-	html_h(4, a);
+	html_h(4, a, AL_LEFT);
 }
 
 static void
 html_h5(unsigned char *a)
 {
-	html_h(5, a);
+	html_h(5, a, AL_LEFT);
 }
 
 static void
 html_h6(unsigned char *a)
 {
-	html_h(6, a);
+	html_h(6, a, AL_LEFT);
 }
 
 static void

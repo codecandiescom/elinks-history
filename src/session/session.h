@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.26 2003/06/10 14:50:55 pasky Exp $ */
+/* $Id: session.h,v 1.27 2003/06/11 22:14:53 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -16,7 +16,7 @@ struct session;
 #include "util/lists.h"
 #include "viewer/text/vs.h"
 
-/* This is used to pass along initial session parameters. */
+/* This is used to pass along the initial session parameters. */
 struct initial_session_info {
 	/* The session whose state to copy, -1 is none. */
 	int base_session;
@@ -24,29 +24,34 @@ struct initial_session_info {
 	unsigned char *url;
 };
 
-/* For map_selected() */
+/* This is for map_selected(), it is used to pass around informations about
+ * in-imagemap links. */
 struct link_def {
 	unsigned char *link;
 	unsigned char *target;
 };
 
-/* For ses_*_frame*() */
+/* This is generic frame descriptor, meaningful mainly for ses_*_frame*(). */
 struct frame {
 	LIST_HEAD(struct frame);
 
 	unsigned char *name;
-	int redirect_cnt;
 	struct view_state vs;
+
+	int redirect_cnt;
 };
 
-/* For struct session */
+/* This is the repeat count being inserted by user so far. It is stored
+ * intermediately per-session. */
 struct kbdprefix {
 	int rep;
 	int rep_num;
 	int prefix;
 };
 
-/* This should be used only internally */
+/* This describes, what are we trying to do right now. We pass this around so
+ * that we can use generic scheduler routines and when the control will get
+ * back to our subsystem, we will know what are we up to. */
 enum session_wtd {
 	WTD_NO,
 	WTD_FORWARD,
@@ -98,7 +103,6 @@ struct session {
 	int visible_title_bar;
 
 	enum session_wtd wtd;
-
 };
 
 extern struct list_head sessions;

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.235 2003/12/27 11:45:02 zas Exp $ */
+/* $Id: menu.c,v 1.236 2003/12/27 12:14:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -295,13 +295,17 @@ menu_toggle_document_colors(struct terminal *term, void *ddd, struct session *se
 	toggle_document_colors(ses, ses->doc_view, 0);
 }
 
-static void
+void
 menu_shell(struct terminal *term, void *xxx, void *yyy)
 {
-	unsigned char *sh = GETSHELL;
+	unsigned char *sh;
 
-	if (!sh) sh = DEFAULT_SHELL;
-	exec_on_terminal(term, sh, "", 1);
+	if (!can_open_os_shell(term->environment)) return;
+	
+	sh = GETSHELL;
+	if (!sh || !*sh) sh = DEFAULT_SHELL;
+	if (sh && *sh)
+		exec_on_terminal(term, sh, "", 1);
 }
 
 static inline void
@@ -451,7 +455,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	x = 1;
 	if (!anonymous && can_open_os_shell(term->environment)) {
-		SET_MENU_ITEM(e, N_("~OS shell"), NULL, ACT_NONE,
+		SET_MENU_ITEM(e, N_("~OS shell"), NULL, ACT_OPEN_OS_SHELL,
 			      menu_shell, NULL,
 			      0, 0, HKS_SHOW);
 		e++;

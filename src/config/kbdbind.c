@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.128 2003/12/27 11:45:02 zas Exp $ */
+/* $Id: kbdbind.c,v 1.129 2003/12/27 12:14:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -438,6 +438,7 @@ static struct strtonum action_table[] = {
 	{ "open-link-in-new-tab-in-background", ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND,
 						DACT(N_("Open the current link a new tab in background")) },
 	{ "open-link-in-new-window", ACT_OPEN_LINK_IN_NEW_WINDOW, DACT(N_("Open the current link in a new window")) },
+	{ "open-os-shell", ACT_OPEN_OS_SHELL, DACT(N_("Open an OS shell")) },
 	{ "options-manager", ACT_OPTIONS_MANAGER, DACT(N_("Open options manager")) },
 	{ "page-down", ACT_PAGE_DOWN, DACT(N_("Move downwards by a page")) },
 	{ "page-up", ACT_PAGE_UP, DACT(N_("Move upwards by a page")) },

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.313 2003/12/27 11:45:03 zas Exp $ */
+/* $Id: view.c,v 1.314 2003/12/27 12:14:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1170,6 +1170,10 @@ quit:
 				goto x;
 			case ACT_TOGGLE_DOCUMENT_COLORS:
 				toggle_document_colors(ses, ses->doc_view, 0);
+				goto x;
+			case ACT_OPEN_OS_SHELL:
+				if (!get_opt_int_tree(cmdline_options, "anonymous"))
+					menu_shell(ses->tab->term, NULL, NULL);
 				goto x;
 			case ACT_OPEN_NEW_WINDOW:
 				open_in_new_window(ses->tab->term, send_open_new_window, ses);

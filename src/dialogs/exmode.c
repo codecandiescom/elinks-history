@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.47 2004/07/04 11:26:40 jonas Exp $ */
+/* $Id: exmode.c,v 1.48 2004/07/04 14:03:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 #include "config/options.h"
 #include "dialogs/exmode.h"
 #include "intl/gettext/libintl.h"
+#include "modules/module.h"
 #include "sched/action.h"
 #include "sched/session.h"
 #include "sched/task.h"
@@ -35,7 +36,9 @@
  * config-file commands. */
 
 
-INIT_INPUT_HISTORY(exmode_history);
+#define EXMODE_HISTORY_FILENAME		"exmodehist"
+
+static INIT_INPUT_HISTORY(exmode_history);
 
 typedef int (*exmode_handler)(struct session *, unsigned char *, unsigned char *);
 
@@ -131,3 +134,27 @@ exmode_start(struct session *ses)
 {
 	input_field_line(ses, ":", NULL, &exmode_history, exmode_input_handler);
 }
+
+
+static void
+init_exmode(struct module *module)
+{
+	load_input_history(&exmode_history, EXMODE_HISTORY_FILENAME);
+}
+
+static void
+done_exmode(struct module *module)
+{
+	save_input_history(&exmode_history, EXMODE_HISTORY_FILENAME);
+	free_list(exmode_history.entries);
+}
+
+struct module exmode_module = struct_module(
+	/* name: */		"Exmode",
+	/* options: */		NULL,
+	/* hooks: */		NULL,
+	/* submodules: */	NULL,
+	/* data: */		NULL,
+	/* init: */		init_exmode,
+	/* done: */		done_exmode
+);

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.340 2004/06/28 11:07:10 jonas Exp $ */
+/* $Id: menu.c,v 1.341 2004/07/04 14:03:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -539,9 +539,6 @@ free_history_lists(void)
 {
 	free_list(goto_url_history.entries);
 	free_list(file_history.entries);
-#ifdef CONFIG_EXMODE
-	free_list(exmode_history.entries);
-#endif
 #ifdef CONFIG_SCRIPTING
 	trigger_event_name("free-history");
 #endif

@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.33 2004/05/04 07:55:48 jonas Exp $ */
+/* $Id: module.c,v 1.34 2004/07/04 14:03:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "bfu/leds.h"
 #include "bookmarks/bookmarks.h"
 #include "cookies/cookies.h"
+#include "dialogs/exmode.h"
 #include "document/css/css.h"
 #include "document/document.h"
 #include "formhist/formhist.h"
@@ -58,6 +59,9 @@ struct module *builtin_modules[] = {
 #endif
 #ifdef CONFIG_SCRIPTING
 	&scripting_module,
+#endif
+#ifdef CONFIG_EXMODE
+	&exmode_module,
 #endif
 	NULL
 };

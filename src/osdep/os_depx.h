@@ -1,4 +1,4 @@
-/* $Id: os_depx.h,v 1.2 2002/07/03 23:40:49 pasky Exp $ */
+/* $Id: os_depx.h,v 1.3 2002/09/19 15:49:15 pasky Exp $ */
 
 #ifndef EL__OS_DEPX_H
 #define EL__OS_DEPX_H
@@ -22,12 +22,6 @@
 #ifndef HAVE_CFMAKERAW
 #include <termios.h>
 void cfmakeraw(struct termios *t);
-#endif
-
-#ifdef __EMX__
-#define strcasecmp stricmp
-#define read _read
-#define write _write
 #endif
 
 #ifdef BEOS
@@ -54,10 +48,6 @@ void cfmakeraw(struct termios *t);
 #undef errno
 #endif
 #define errno 1
-#endif
-
-#if defined(O_SIZE) && defined(__EMX__)
-#define USE_OPEN_PREALLOC
 #endif
 
 #endif

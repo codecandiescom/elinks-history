@@ -1,4 +1,4 @@
-/* $Id: os_dep.h,v 1.7 2002/09/09 12:36:45 zas Exp $ */
+/* $Id: os_dep.h,v 1.8 2002/09/19 15:49:15 pasky Exp $ */
 
 #ifndef EL__OS_DEP_H
 #define EL__OS_DEP_H
@@ -29,8 +29,14 @@
 #ifdef __EMX__
 #define strcasecmp stricmp
 #define strncasecmp strnicmp
+#ifndef HAVE_STRNCASECMP
+#define HAVE_STRNCASECMP
+#endif
 #define read _read
 #define write _write
+#ifdef O_SIZE
+#define USE_OPEN_PREALLOC
+#endif
 #endif
 
 #if defined(UNIX)

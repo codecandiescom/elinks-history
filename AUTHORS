@@ -254,9 +254,6 @@ Martin Norback <d95mback@dtek.chalmers.se>
 Matthew Mueller <donut@azstarnet.com>
 	Random hacking
 
-Mediavilla David <f4j900zx001@NOSPAMsneakemail.com>
-	Updated Spanish translation
-
 Michail Litvak <mci@owl.openwall.com>
 	Patch configure.in to force error if OpenSSL not found
 
@@ -419,4 +416,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.113 2003/01/02 15:01:35 pasky Exp $
+$Id: AUTHORS,v 1.114 2003/01/03 21:53:56 pasky Exp $

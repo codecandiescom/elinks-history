@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.26 2004/08/03 21:02:03 zas Exp $ */
+/* $Id: hotkey.c,v 1.27 2004/08/03 21:25:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,18 +34,18 @@ find_hotkey_pos(unsigned char *text)
 }
 
 void
-init_hotkeys(struct terminal *term, struct menu_item *items, int hotkeys)
+init_hotkeys(struct terminal *term, struct menu *menu)
 {
 	struct menu_item *mi;
 
 #ifdef CONFIG_DEBUG
 	/* hotkey debugging */
-	if (hotkeys) {
+	if (menu->hotkeys) {
 		struct menu_item *used_hotkeys[255];
 
 		memset(used_hotkeys, 0, sizeof(used_hotkeys));
 
-		foreach_menu_item(mi, items) {
+		foreach_menu_item(mi, menu->items) {
 			unsigned char *text = mi->text;
 
 			if (!mi_has_left_text(mi)) continue;
@@ -74,8 +74,8 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int hotkeys)
 	}
 #endif
 
-	foreach_menu_item(mi, items) {
-		if (!hotkeys) {
+	foreach_menu_item(mi, menu->items) {
+		if (!menu->hotkeys) {
 			mi->hotkey_pos = 0;
 			mi->hotkey_state = HKS_IGNORE;
 		} else if (mi->hotkey_state != HKS_CACHED
@@ -96,12 +96,12 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int hotkeys)
 
 #ifdef ENABLE_NLS
 void
-clear_hotkeys_cache(struct menu_item *items, int hotkeys)
+clear_hotkeys_cache(struct menu *menu)
 {
 	struct menu_item *item;
 
-	foreach_menu_item(item, items) {
-		item->hotkey_state = hotkeys ? HKS_SHOW : HKS_IGNORE;
+	foreach_menu_item(item, menu->items) {
+		item->hotkey_state = menu->hotkeys ? HKS_SHOW : HKS_IGNORE;
 		item->hotkey_pos = 0;
 	}
 }
@@ -112,12 +112,12 @@ refresh_hotkeys(struct terminal *term, struct menu *menu)
 {
 #ifdef ENABLE_NLS
  	if (current_language != menu->lang) {
-		clear_hotkeys_cache(menu->items, menu->hotkeys);
-		init_hotkeys(term, menu->items, menu->hotkeys);
+		clear_hotkeys_cache(menu);
+		init_hotkeys(term, menu);
 		menu->lang = current_language;
 	}
 #else
-	init_hotkeys(term, menu->items, menu->hotkeys);
+	init_hotkeys(term, menu);
 #endif
 }
 

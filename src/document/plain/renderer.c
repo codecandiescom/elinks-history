@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.24 2003/11/14 15:03:06 zas Exp $ */
+/* $Id: renderer.c,v 1.25 2003/11/16 01:23:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "document/document.h"
 #include "document/html/renderer.h" /* TODO: Move get_convert_table() */
 #include "document/plain/renderer.h"
+#include "protocol/protocol.h"
 #include "protocol/uri.h"
 #include "terminal/draw.h"
 #include "util/error.h"
@@ -117,7 +118,9 @@ check_link_word(struct document *document, unsigned char *uri, int length,
 	if (mailto && mailto - uri < length) {
 		where = straconcat("mailto:", uri, NULL);
 
-	} else if (parse_uri(&test, uri) && (test.datalen || test.hostlen)) {
+	} else if (parse_uri(&test, uri)
+		   && test.protocol != PROTOCOL_UNKNOWN
+		   && (test.datalen || test.hostlen)) {
 		where = memacpy(uri, length);
 	}
 

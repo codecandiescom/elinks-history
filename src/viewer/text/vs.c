@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.36 2004/06/08 13:49:10 jonas Exp $ */
+/* $Id: vs.c,v 1.37 2004/06/08 16:36:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,7 @@ init_vs(struct view_state *vs, struct uri *uri, int plain)
 	vs->current_link = -1;
 	vs->plain = plain;
 	vs->uri = get_uri_reference(uri);
+	vs->did_fragment = !uri->fragmentlen;
 }
 
 void
@@ -50,7 +51,7 @@ copy_vs(struct view_state *dst, struct view_state *src)
 
 	dst->uri = get_uri_reference(src->uri);
 	/* Redo fragment if there is one? */
-	dst->did_fragment = !src->uri->fragment;
+	dst->did_fragment = !src->uri->fragmentlen;
 
 	if (src->form_info_len) {
 		dst->form_info = mem_alloc(src->form_info_len

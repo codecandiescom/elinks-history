@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.441 2004/06/08 13:49:10 jonas Exp $ */
+/* $Id: view.c,v 1.442 2004/06/08 16:36:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -209,7 +209,7 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 	check_vs(doc_view);
 	vs = doc_view->vs;
 
-	if (vs->uri->fragment && !vs->did_fragment) {
+	if (!vs->did_fragment) {
 		unsigned char *tag = vs->uri->fragment;
 		int taglen = vs->uri->fragmentlen;
 
@@ -223,6 +223,7 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 			if (!cached || cached->incomplete)
 				break;
 
+			vs->did_fragment = 1;
 			tag = memacpy(tag, taglen);
 
 			msg_box(term, NULL, MSGBOX_FREE_TEXT,
@@ -241,6 +242,7 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 			int_bounds(&vy, 0, doc_view->document->height - 1);
 			vs->y = vy;
 			set_link(doc_view);
+			vs->did_fragment = 1;
 		}
 	}
 	vx = vs->x;

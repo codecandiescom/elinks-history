@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.10 2003/09/07 20:09:38 zas Exp $ */
+/* $Id: signals.c,v 1.11 2003/10/24 09:35:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,12 +86,7 @@ sig_tstp(struct terminal *t)
 static void
 sig_cont(struct terminal *t)
 {
-	if (!unblock_itrm(0)) {
-		/* redraw_terminal_cls(t); */
-		resize_terminal();
-	} /* else {
-		register_bottom_half(raise, SIGSTOP);
-	} */
+	if (!unblock_itrm(0)) resize_terminal();
 }
 
 #ifdef BACKTRACE
@@ -148,29 +143,6 @@ handle_basic_signals(struct terminal *term)
 	install_signal_handler(SIGSEGV, (void (*)(void *))sig_segv, term, 1);
 #endif
 }
-
-#if 0
-void
-handle_slave_signals(struct terminal *term)
-{
-	install_signal_handler(SIGHUP, (void (*)(void *))sig_terminate, term, 0);
-	install_signal_handler(SIGINT, (void (*)(void *))sig_terminate, term, 0);
-	install_signal_handler(SIGTERM, (void (*)(void *))sig_terminate, term, 0);
-#ifdef SIGTSTP
-	install_signal_handler(SIGTSTP, (void (*)(void *))sig_tstp, term, 0);
-#endif
-#ifdef SIGTTIN
-	install_signal_handler(SIGTTIN, (void (*)(void *))sig_tstp, term, 0);
-#endif
-#ifdef SIGTTOU
-	install_signal_handler(SIGTTOU, (void (*)(void *))sig_ign, term, 0);
-#endif
-#ifdef SIGCONT
-	install_signal_handler(SIGCONT, (void (*)(void *))sig_cont, term, 0);
-#endif
-}
-#endif
-
 
 void
 unhandle_terminal_signals(struct terminal *term)
@@ -271,7 +243,6 @@ install_signal_handler(int sig, void (*fn)(void *), void *data, int critical)
 		sa.sa_handler = got_signal;
 
 	sigfillset(&sa.sa_mask);
-	/*sa.sa_flags = SA_RESTART;*/
 	if (!fn) sigaction(sig, &sa, NULL);
 	signal_info[sig].handler = fn;
 	signal_info[sig].data = data;
@@ -296,9 +267,6 @@ check_for_select_race(void)
 		install_signal_handler(SIGALRM, alarm_handler, NULL, 1);
 #endif
 		pending_alarm = 1;
-#ifdef HAVE_ALARM
-		/*alarm(1);*/
-#endif
 	}
 }
 

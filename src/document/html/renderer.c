@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.309 2003/10/18 16:55:52 jonas Exp $ */
+/* $Id: renderer.c,v 1.310 2003/10/18 17:04:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -280,6 +280,11 @@ draw_frame_vchars(struct part *part, int x, int y, int yl, unsigned char data)
 	}
 }
 
+/* This is more or less the standard options in case part->document is not
+ * available. */
+#define DEFAULT_COLOR_FLAGS \
+	(COLOR_ENSURE_CONTRAST | COLOR_INCREASE_CONTRAST | COLOR_ENHANCE_UNDERLINE)
+
 static inline struct screen_char *
 get_format_screen_char(struct part *part, enum link_state link_state)
 {
@@ -289,10 +294,11 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 	if (memcmp(&ta_cache, &format, sizeof(struct text_attrib_beginning))) {
 		struct color_pair colors = INIT_COLOR_PAIR(format.bg, format.fg);
 		static enum color_mode color_mode;
-		static enum color_flags color_flags = 0;
+		static enum color_flags color_flags = DEFAULT_COLOR_FLAGS;
 
 		if (part->document) {
 			color_mode = part->document->opt.color_mode;
+			color_flags = 0;
 
 			if (!part->document->opt.underline)
 				color_flags |= COLOR_ENHANCE_UNDERLINE;

@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"POT-Creation-Date: 2004-07-18 14:33+0200\n"
-"PO-Revision-Date: 2004-07-18 12:52+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-07-18 17:57+0200\n"
+"PO-Revision-Date: 2004-07-18 17:59+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:348
 msgid "Close"
@@ -108,7 +108,8 @@ msgstr "Oui"
 msgid "No"
 msgstr "Non"
 
-#: src/bfu/hierbox.c:762
+#. delete_folder_title
+#: src/bfu/hierbox.c:762 src/bookmarks/dialogs.c:137
 msgid "Delete folder"
 msgstr "Supprimer un dossier"
 
@@ -338,15 +339,14 @@ msgstr "Désolé, mais le signet \"%s\" est actuellement utilisé ailleurs."
 #. cant_delete_folder
 #: src/bookmarks/dialogs.c:129
 #, c-format
-msgid "Sorry, but bookmark's folder \"%s\" cannot be deleted."
-msgstr "Désolé, mais le dossier de signets \"%s\" ne peut être supprimé."
+msgid "Sorry, but folder \"%s\" cannot be deleted."
+msgstr "Désolé, mais le dossier \"%s\" ne peut être supprimé."
 
 #. cant_delete_used_folder
 #: src/bookmarks/dialogs.c:131
 #, c-format
-msgid "Sorry, but bookmark's folder \"%s\" is being used by something else."
-msgstr ""
-"Désolé, mais le dossier de signets \"%s\" est actuellement utilisé ailleurs."
+msgid "Sorry, but folder \"%s\" is being used by something else."
+msgstr "Désolé, mais le dossier \"%s\" est actuellement utilisé ailleurs."
 
 #. delete_marked_items_title
 #: src/bookmarks/dialogs.c:133
@@ -357,11 +357,6 @@ msgstr "Supprimer les signets sélectionnés"
 #: src/bookmarks/dialogs.c:135
 msgid "Delete marked bookmarks?"
 msgstr "Supprimer les signets sélectionnés ?"
-
-#. delete_folder_title
-#: src/bookmarks/dialogs.c:137
-msgid "Delete bookmark's folder"
-msgstr "Supprimer un dossier de signets"
 
 #. delete_folder
 #: src/bookmarks/dialogs.c:139
@@ -2880,7 +2875,6 @@ msgid "Rules for passing URIs to external commands."
 msgstr "Règles de passage d'URIs aux commandes externes."
 
 #: src/config/options.inc:626
-#, c-format
 msgid ""
 "A rule for passing URI to an external command.\n"
 "The format is:\n"
@@ -4387,15 +4381,15 @@ msgstr "Désolé, mais le cookie \"%s\" est actuellement utilisé ailleurs."
 #. cant_delete_folder
 #: src/cookies/dialogs.c:167
 #, c-format
-msgid "Sorry, but cookie's folder \"%s\" cannot be deleted."
-msgstr "Désolé, mais le dossier de cookies \"%s\" ne peut être supprimé."
+msgid "Sorry, but cookie domain \"%s\" cannot be deleted."
+msgstr "Désolé, mais le domaine du cookie \"%s\" ne peut être supprimé."
 
 #. cant_delete_used_folder
 #: src/cookies/dialogs.c:169
 #, c-format
-msgid "Sorry, but cookie's folder \"%s\" is being used by something else."
+msgid "Sorry, but cookie domain \"%s\" is being used by something else."
 msgstr ""
-"Désolé, mais le dossier de cookies \"%s\" est actuellement utilisé ailleurs."
+"Désolé, mais le domaine du cookie \"%s\" est actuellement utilisé ailleurs."
 
 #. delete_marked_items_title
 #: src/cookies/dialogs.c:171
@@ -5211,8 +5205,6 @@ msgstr "Bascule sauvegarde"
 msgid "Form history manager"
 msgstr "Gestionnaire d'historique de formulaires"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:34
 msgid "Show forms history dialog"
 msgstr "Dialogue de mémorisation de formulaires"
@@ -5603,6 +5595,7 @@ msgstr "Système de configuration"
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
+#. name:
 #: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:126
 #: src/mime/backend/mailcap.c:685
 msgid "Mailcap"
@@ -5962,7 +5955,6 @@ msgid "Dumb prefixes."
 msgstr "Préfixes simples."
 
 #: src/protocol/rewrite/rewrite.c:68
-#, c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
 "%c in the string means the current URL\n"

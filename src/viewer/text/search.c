@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.74 2003/10/27 15:40:30 jonas Exp $ */
+/* $Id: search.c,v 1.75 2003/10/27 15:52:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -911,7 +911,7 @@ find_next_back(struct session *ses, struct document_view *doc_view, int a)
 
 
 
-struct input_history search_history = {
+static struct input_history search_history = {
 	/* items: */	{ D_LIST_HEAD(search_history.items) },
 	/* size: */	0,
 	/* dirty: */	0,
@@ -1160,13 +1160,14 @@ search_dlg(struct session *ses, struct document_view *doc_view, int a)
 }
 
 void
-load_search_history(void)
+init_search_history(void)
 {
 	load_input_history(&search_history, "searchhist");
 }
 
 void
-save_search_history(void)
+done_search_history(void)
 {
 	save_input_history(&search_history, "searchhist");
+	free_list(search_history.items);
 }

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.145 2003/10/27 02:17:51 jonas Exp $ */
+/* $Id: main.c,v 1.146 2003/10/27 15:52:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,7 +163,7 @@ init(void)
 	init_modules();
 	init_timer();
 	load_url_history();
-	load_search_history();
+	init_search_history();
 	init_ssl();
 
 	if (get_opt_int_tree(cmdline_options, "dump") ||
@@ -222,7 +222,7 @@ terminate_all_subsystems(void)
 		trigger_event_name("quit");
 #endif
 		save_url_history();
-		save_search_history();
+		done_search_history();
 		done_modules();
 	}
 

@@ -1,9 +1,8 @@
-/* $Id: search.h,v 1.8 2003/10/21 15:12:51 jonas Exp $ */
+/* $Id: search.h,v 1.9 2003/10/27 15:52:45 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_SEARCH_H
 #define EL__VIEWER_TEXT_SEARCH_H
 
-#include "bfu/inphist.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
 
@@ -14,13 +13,11 @@ void search_for_back(struct session *, unsigned char *);
 void find_next(struct session *, struct document_view *doc_view, int);
 void find_next_back(struct session *, struct document_view *doc_view, int);
 
-extern struct input_history search_history;
-
 void search_dlg(struct session *ses, struct document_view *doc_view, int a);
 void search_back_dlg(struct session *ses, struct document_view *doc_view, int a);
 
-void load_search_history(void);
-void save_search_history(void);
+void init_search_history(void);
+void done_search_history(void);
 
 static inline int has_search_word(struct document_view *doc_view)
 {

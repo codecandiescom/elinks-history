@@ -1,11 +1,9 @@
-/* $Id: stack.h,v 1.3 2004/04/23 23:08:12 pasky Exp $ */
+/* $Id: stack.h,v 1.4 2004/04/23 23:08:32 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_STACK_H
 #define EL__DOCUMENT_HTML_PARSER_STACK_H
 
 #include "document/html/parser.h"
-
-struct html_element;
 
 struct html_element *search_html_stack(unsigned char *name);
 

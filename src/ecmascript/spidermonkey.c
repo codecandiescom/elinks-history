@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.58 2004/10/21 20:52:52 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.59 2004/10/21 23:11:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@
 
 #include "bfu/msgbox.h"
 #include "bfu/style.h"
+#include "cookies/cookies.h"
 #include "dialogs/menu.h"
 #include "dialogs/status.h"
 #include "document/html/frames.h"
@@ -73,7 +74,7 @@ union prop_union {
 };
 
 #define VALUE_TO_JSVAL_START \
-	enum prop_type prop_type; \
+	enum prop_type prop_type = JSPT_UNDEF; \
 	union prop_union p; \
  \
 	/* Prevent "Unused variable" warnings. */ \
@@ -505,6 +506,8 @@ static const JSClass document_class = {
 };
 
 enum document_prop { JSP_DOC_REF, JSP_DOC_TITLE, JSP_DOC_URL };
+/* "cookie" is special; it isn't a regular property but we channel it to the
+ * cookie-module. XXX: Would it work if "cookie" was defined in this array? */
 static const JSPropertySpec document_props[] = {
 	{ "location",	JSP_DOC_URL,	JSPROP_ENUMERATE },
 	{ "referrer",	JSP_DOC_REF,	JSPROP_ENUMERATE | JSPROP_READONLY },
@@ -523,7 +526,22 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct session *ses = doc_view->session;
 
 	VALUE_TO_JSVAL_START;
-	if (!JSVAL_IS_INT(id))
+	if (JSVAL_IS_STRING(id)) {
+		JSVAL_TO_VALUE_START;
+		JSVAL_REQUIRE(&id, STRING);
+#ifdef CONFIG_COOKIES
+		if (!strcmp(v.string, "cookie")) {
+			struct string *cookies = send_cookies(vs->uri);
+
+			if (cookies) {
+				p.string = cookies->source;
+				prop_type = JSPT_STRING;
+				goto convert;
+			}
+		}
+#endif
+		goto bye;
+	} else if (!JSVAL_IS_INT(id))
 		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
@@ -560,6 +578,7 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		goto bye;
 	}
 
+convert:
 	VALUE_TO_JSVAL_END(vp);
 }
 
@@ -572,7 +591,19 @@ document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct document *document = doc_view->document;
 
 	JSVAL_TO_VALUE_START;
-	if (!JSVAL_IS_INT(id))
+	if (JSVAL_IS_STRING(id)) {
+		JSVAL_REQUIRE(&id, STRING);
+#ifdef CONFIG_COOKIES
+		if (!strcmp(v.string, "cookie")) {
+			JSVAL_REQUIRE(vp, STRING);
+			set_cookie(vs->uri, v.string);
+			/* Do NOT touch our .cookie property, evil
+			 * SpiderMonkey!! */
+			return JS_FALSE;
+		}
+#endif
+		goto bye;
+	} else if (!JSVAL_IS_INT(id))
 		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {

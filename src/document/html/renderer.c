@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.125 2003/06/17 12:31:21 zas Exp $ */
+/* $Id: renderer.c,v 1.126 2003/06/17 12:43:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,7 +227,7 @@ xpand_spaces(struct part *p, int l)
 static inline void
 set_hchar(struct part *part, int x, int y, unsigned c)
 {
-	assert(part && part->data);
+	assert(part && part->data && part->data->data);
 
 	if (xpand_lines(part, y)
 	    || xpand_line(part, y, x))
@@ -238,7 +238,7 @@ set_hchar(struct part *part, int x, int y, unsigned c)
 static inline void
 set_hchars(struct part *part, int x, int y, int xl, unsigned c)
 {
-	assert(part && part->data);
+	assert(part && part->data && part->data->data);
 
 	if (xpand_lines(part, y)
 	    || xpand_line(part, y, x + xl - 1))
@@ -275,7 +275,8 @@ set_hline(struct part *part, int x, int y,
 
 	for (; charslen > 0; charslen--, x++, chars++) {
 		part->spaces[x] = (*chars == ' ');
-		if (part->data) POS(x, y) = (*chars | attr);
+		if (part->data && part->data->data)
+			POS(x, y) = (*chars | attr);
 	}
 }
 
@@ -347,7 +348,7 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 static inline void
 copy_chars(struct part *part, int x, int y, int xl, chr *d)
 {
-	assert(xl > 0 && part && part->data);
+	assert(xl > 0 && part && part->data && part->data->data);
 
 	if (xpand_lines(part, y)
 	    || xpand_line(part, y, x + xl - 1))
@@ -359,6 +360,8 @@ copy_chars(struct part *part, int x, int y, int xl, chr *d)
 static inline void
 move_chars(struct part *part, int x, int y, int nx, int ny)
 {
+	assert(part && part->data && part->data->data);
+
 	if (LEN(y) - x <= 0) return;
 	copy_chars(part, nx, ny, LEN(y) - x, &POS(x, y));
 	SLEN(y, x);
@@ -369,7 +372,11 @@ static inline void
 shift_chars(struct part *part, int y, int shift)
 {
 	chr *a;
-	int len = LEN(y);
+	int len;
+       
+	assert(part && part->data && part->data->data);
+	
+	len = LEN(y);
 
 	a = fmem_alloc(len * sizeof(chr));
 	if (!a) return;
@@ -395,6 +402,8 @@ shift_chars(struct part *part, int y, int shift)
 static inline void
 del_chars(struct part *part, int x, int y)
 {
+	assert(part && part->data && part->data->data);
+
 	SLEN(y, x);
 	move_links(part, x, y, -1, -1);
 }
@@ -407,12 +416,14 @@ split_line_at(struct part *part, register int x)
 	register int tmp;
 	int new_x = x + par_format.rightmargin;
 
+	assert(part);
+	
 	/* Make sure that we count the right margin to the total
 	 * actual box width. */
 	if (new_x > part->x)
 		part->x = new_x;
 
-	if (part->data) {
+	if (part->data && part->data->data) {
 		assertm((POS(x, part->cy) & 0xff) == ' ',
 			"bad split: %c", (char) POS(x, part->cy));
 		move_chars(part, x + 1, part->cy, par_format.leftmargin, part->cy + 1);
@@ -431,7 +442,7 @@ split_line_at(struct part *part, register int x)
 	memset(part->spaces + tmp, 0, x);
 
 	tmp = part->spaces_len - par_format.leftmargin;
-	assertm(tmp > 0, "part->spl - par_format.leftmargin == %d", tmp);
+	assertm(tmp > 0, "part->spaces_len - par_format.leftmargin == %d", tmp);
 	memmove(part->spaces + par_format.leftmargin, part->spaces, tmp);
 
 	part->cy++;
@@ -460,6 +471,8 @@ split_line(struct part *part)
 {
 	register int x;
 
+	assert(part);
+	
 	for (x = overlap(par_format); x >= par_format.leftmargin; x--)
 		if (x < part->spaces_len && part->spaces[x])
 			return split_line_at(part, x);
@@ -486,10 +499,13 @@ static void
 justify_line(struct part *part, int y)
 {
 	chr *line; /* we save original line here */
-	int len = LEN(y);
+	int len;
 	int pos;
 	int *space_list;
 	int spaces;
+
+	assert(part && part->data && part->data->data);
+	len = LEN(y);
 
 	line = fmem_alloc(len * sizeof(chr));
 	if (!line) return;

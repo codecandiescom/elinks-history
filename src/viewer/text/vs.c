@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.23 2003/11/18 11:51:52 kuser Exp $ */
+/* $Id: vs.c,v 1.24 2003/11/24 22:56:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,7 @@ init_vs(struct view_state *vs, unsigned char *url, int plain)
 	memset(vs, 0, sizeof(struct view_state) + url_len);
 	vs->current_link = -1;
 	vs->plain = plain;
+	object_nolock(vs);
 	memcpy(vs->url, url, url_len);
 	vs->url_len = url_len;
 }

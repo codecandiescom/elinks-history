@@ -81,6 +81,7 @@ Dakshinamurthy Karra <kd@blr.vsnl.net.in>
 
 David Mediavilla Ezquibela <davidme.forum@bigfoot.com>
 	Spanish translation
+	Example config file with all links-0.96 keybindings
 
 David Weinehall <tao@acc.umu.se>
 	Display radiobuttons differently than checkboxes
@@ -291,4 +292,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 <zimon@niksula.hut.fi>
 	RPM spec file in contrib/
 
-$Id: AUTHORS,v 1.47 2002/04/03 17:32:11 pasky Exp $
+$Id: AUTHORS,v 1.48 2002/04/03 20:52:41 pasky Exp $

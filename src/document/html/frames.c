@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.11 2003/08/23 18:24:44 jonas Exp $ */
+/* $Id: frames.c,v 1.12 2003/08/28 19:24:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,8 +31,11 @@ add_frameset_entry(struct frameset_desc *fsd, struct frameset_desc *subframe,
 	assert(fsd);
 	if_assert_failed return;
 
-	/* FIXME: next is triggered by http://www.thegoodlookingorganisation.co.uk/main.htm
-	 * It may exists a true fix for that... --Zas */
+	/* FIXME: The following is triggered by
+	 * http://www.thegoodlookingorganisation.co.uk/main.htm.
+	 * There may exist a true fix for this... --Zas */
+	/* May the one truly fixing this notify'n'close bug 237 in the
+	 * Bugzilla... --pasky */
 	if (fsd->yp >= fsd->y) return;
 
 	idx = fsd->xp + fsd->yp * fsd->x;

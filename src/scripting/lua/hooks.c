@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.12 2003/07/24 01:43:15 pasky Exp $ */
+/* $Id: hooks.c,v 1.13 2003/07/24 01:48:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,26 +87,30 @@ script_hook_follow_url(struct session *ses, unsigned char *url)
 	lua_getglobal(L, "follow_url_hook");
 	if (lua_isnil(L, -1)) {
 		lua_pop(L, 1);
-		return stracpy(url);
+		return NULL;
 	}
 
 	lua_pushstring(L, url);
 	if (prepare_lua(ses))
-		return NULL;
+		return stracpy("");
 	err = lua_call(L, 1, 1);
 	finish_lua();
 	if (err)
-		return NULL;
+		return stracpy("");
 
 	if (lua_isstring(L, -1)) {
 		int len = lua_strlen(L, -1);
 
 		s = memacpy((unsigned char *)lua_tostring(L, -1), len);
 	}
-	else if (!lua_isnil(L, -1))
+	else if (!lua_isnil(L, -1)) {
 		alert_lua_error("follow_url_hook must return a string or nil");
-
+	}
+	else {
+		s = stracpy("");
+	}
 	lua_pop(L, 1);
+
 	return s;
 }
 

@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.10 2002/05/10 09:19:14 zas Exp $ */
+/* $Id: error.c,v 1.11 2002/05/10 12:46:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,8 +61,8 @@ void *sp_realloc(void *, size_t);
 #endif
 
 
-static
-inline void force_dump()
+static inline void
+force_dump()
 {
 	fprintf(stderr, "\n\033[1m%s\033[0m\n", "Forcing core dump");
 	fflush(stderr);

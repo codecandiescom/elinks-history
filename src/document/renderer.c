@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.123 2004/10/14 14:21:29 jonas Exp $ */
+/* $Id: renderer.c,v 1.124 2004/10/14 20:02:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -152,10 +152,8 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 			continue;
 		}
 
-		defrag_entry(cached);
-		fragment = cached->frag.next;
-		if (!list_empty(cached->frag)
-		    && !fragment->offset && fragment->length) {
+		fragment = get_cache_fragment(cached);
+		if (fragment) {
 			struct string code = INIT_STRING(fragment->data, fragment->length);
 
 			ecmascript_eval(interpreter, &code);
@@ -167,14 +165,16 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 static void
 render_encoded_document(struct cache_entry *cached, struct document *document)
 {
-	struct fragment *fr = cached->frag.next;
 	struct uri *uri = cached->uri;
 	enum stream_encoding encoding = ENCODING_NONE;
-	struct string buffer = INIT_STRING(fr->data, fr->length);
 	unsigned char *extension;
+	struct fragment *fragment = get_cache_fragment(cached);
+	struct string buffer = NULL_STRING;
 
-	if (list_empty(cached->frag) || fr->offset || !fr->length)
-		return;
+	if (!fragment) return;
+
+	buffer.source = fragment->data;
+	buffer.length = fragment->length;
 
 	extension = get_extension_from_uri(uri);
 	if (extension) {
@@ -280,8 +280,6 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 		doc_view->document = document;
 
 		shrink_memory(0);
-
-		defrag_entry(cached);
 
 		render_encoded_document(cached, document);
 		sort_links(document);

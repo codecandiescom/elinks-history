@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.18 2004/07/01 14:26:31 jonas Exp $ */
+/* $Id: table.c,v 1.19 2004/07/01 19:47:52 pasky Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -34,7 +34,7 @@
 #define realloc_bad_html(bad_html, size) \
 	mem_align_alloc(bad_html, size, (size) + 1, struct html_start_end, 0xFF)
 
-static inline void
+static void
 add_table_bad_html_start(struct table *table, unsigned char *start)
 {
 	if (table->caption.start && !table->caption.end)
@@ -49,7 +49,7 @@ add_table_bad_html_start(struct table *table, unsigned char *start)
 		table->bad_html[table->bad_html_size++].start = start;
 }
 
-static inline void
+static void
 add_table_bad_html_end(struct table *table, unsigned char *end)
 {
 	if (table->caption.start && !table->caption.end) {

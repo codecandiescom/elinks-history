@@ -7,6 +7,8 @@ TODO list for links (sorted approximatelly by priority):
 
 	Support for vlink
 
+	When no WWW_HOME is set, optionally pop up goto dialog upon startup
+
 	Use terminfo instead of hardwired ANSI control sequences
 
 	Improve keybinding so that it works more universally
@@ -49,4 +51,4 @@ suffix appropriate to the file type.
 	CSS (?)
 
 
-$Id: TODO,v 1.12 2002/03/10 20:07:29 pasky Exp $
+$Id: TODO,v 1.13 2002/03/14 17:38:39 pasky Exp $

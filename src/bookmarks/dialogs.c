@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.57 2002/12/06 23:22:21 pasky Exp $ */
+/* $Id: dialogs.c,v 1.58 2002/12/06 23:27:21 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -118,6 +118,8 @@ push_search_button(struct dialog_data *dlg, struct widget_data *di)
 }
 
 
+/**** ADD FOLDER *****************************************************/
+
 static void
 do_add_folder(struct dialog_data *dlg, unsigned char *name)
 {
@@ -166,6 +168,8 @@ push_add_folder_button(struct dialog_data *dlg, struct widget_data *di)
 }
 
 
+/**** GOTO ***********************************************************/
+
 /* Called when the goto button is pushed */
 static int
 push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
@@ -188,6 +192,8 @@ push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 	return 0;
 }
 
+
+/**** EDIT ***********************************************************/
 
 /* Called when an edit is complete. */
 static void
@@ -234,13 +240,14 @@ push_edit_button(struct dialog_data *dlg, struct widget_data *edit_btn)
 }
 
 
+/**** DELETE *********************************************************/
+
 /* Used to carry extra info between the push_delete_button() and the
  * really_del_bookmark() */
 struct push_del_button_hop_struct {
 	struct terminal *term;
 	struct bookmark *bm;
 };
-
 
 /* Do the job needed for really deleting a bookmark. */
 static void
@@ -387,6 +394,8 @@ push_delete_button(struct dialog_data *dlg,
 }
 
 
+/**** MOVE ***********************************************************/
+
 static struct bookmark *move_cache_root_avoid;
 
 static void
@@ -519,6 +528,8 @@ push_move_button(struct dialog_data *dlg,
 	return 0;
 }
 
+
+/**** MANAGEMENT *****************************************************/
 
 /* Builds the "Bookmark manager" dialog */
 void

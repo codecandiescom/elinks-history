@@ -1,4 +1,4 @@
-/* $Id: ssl.h,v 1.13 2003/10/27 21:43:37 jonas Exp $ */
+/* $Id: ssl.h,v 1.14 2003/10/27 22:32:34 jonas Exp $ */
 
 #ifndef EL__SSL_SSL_H
 #define EL__SSL_SSL_H
@@ -47,14 +47,11 @@
 #else
 #error "Huh?! You have SSL enabled, but not OPENSSL nor GNUTLS!! And then you want exactly *what* from me?"
 #endif
-#endif
 
-#ifdef HAVE_SSL
 #ifdef HAVE_OPENSSL
 #define	ssl_t	SSL
 #elif defined(HAVE_GNUTLS)
 #define	ssl_t	GNUTLS_STATE
-#endif
 #else
 #define	ssl_t	void
 #endif
@@ -64,4 +61,5 @@ void free_ssl(ssl_t *);
 
 unsigned char *get_ssl_cipher_str(ssl_t *);
 
+#endif /* HAVE_SSL */
 #endif

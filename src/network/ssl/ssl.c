@@ -1,17 +1,17 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.28 2003/10/27 21:46:22 jonas Exp $ */
+/* $Id: ssl.c,v 1.29 2003/10/27 22:32:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #ifdef HAVE_SSL
+
 #ifdef HAVE_OPENSSL
 #include <openssl/ssl.h>
 #include <openssl/rand.h>
 #elif defined(HAVE_GNUTLS)
 #include <gnutls/gnutls.h>
-#endif
 #endif
 
 #ifdef HAVE_LIMITS_H
@@ -38,7 +38,6 @@
  * decentralized manner. */
 
 
-#ifdef HAVE_SSL
 #ifdef HAVE_OPENSSL
 SSL_CTX *context = NULL;
 #elif defined(HAVE_GNUTLS)
@@ -156,12 +155,9 @@ struct module ssl_module = struct_module(
 	/* done: */		done_ssl
 );
 
-#endif /* HAVE_SSL */
-
 ssl_t *
 get_ssl(void)
 {
-#ifdef HAVE_SSL
 #ifdef HAVE_OPENSSL
 	return (SSL_new(context));
 #elif defined(HAVE_GNUTLS)
@@ -209,22 +205,17 @@ get_ssl(void)
 
 	return state;
 #endif
-#else
-	return NULL;
-#endif
 }
 
 void
 free_ssl(ssl_t *ssl)
 {
 	if (!ssl) return;
-#ifdef HAVE_SSL
 #ifdef HAVE_OPENSSL
 	SSL_free(ssl);
 #elif defined(HAVE_GNUTLS)
 	gnutls_deinit(*ssl);
 	mem_free(ssl);
-#endif
 #endif
 }
 
@@ -233,7 +224,6 @@ unsigned char *
 get_ssl_cipher_str(ssl_t *ssl)
 {
 	struct string str = NULL_STRING;
-#ifdef HAVE_SSL
 
 	if (!init_string(&str)) return NULL;
 
@@ -264,7 +254,8 @@ get_ssl_cipher_str(ssl_t *ssl)
 			gnutls_compression_get_name(gnutls_compression_get(*ssl)));
 	add_char_to_string(&str, ')');
 #endif
-#endif
 
 	return str.source;
 }
+
+#endif /* HAVE_SSL */

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.48 2003/10/26 23:17:40 zas Exp $ */
+/* $Id: connect.c,v 1.49 2003/10/27 22:32:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,9 @@ void
 close_socket(struct connection *conn, int *s)
 {
 	if (*s == -1) return;
+#ifdef HAVE_SSL
 	if (conn && conn->ssl) ssl_close(conn);
+#endif
 	close(*s);
 	set_handlers(*s, NULL, NULL, NULL, NULL);
 	*s = -1;
@@ -338,7 +340,9 @@ dns_found(void *data, int state)
 		return;
 	}
 
+#ifdef HAVE_SSL
 	if (conn->ssl && ssl_connect(conn, sock) < 0) return;
+#endif
 
 	conn->conn_info = NULL;
 	c_i->func(conn);
@@ -378,7 +382,9 @@ connected(void *data)
 		return;
 	}
 
+#ifdef HAVE_SSL
 	if (conn->ssl && ssl_connect(conn, *c_i->sock) < 0) return;
+#endif
 
 	conn->conn_info = NULL;
 	func(conn);
@@ -404,10 +410,13 @@ write_select(struct connection *conn)
 	printf("-\n");
 #endif
 
+#ifdef HAVE_SSL
 	if (conn->ssl) {
 		wr = ssl_write(conn, wb);
 		if (wr <= 0) return;
-	} else {
+	} else
+#endif
+	{
 		assert(wb->len - wb->pos > 0);
 		wr = safe_write(wb->sock, wb->data + wb->pos, wb->len - wb->pos);
 		if (wr <= 0) {
@@ -486,10 +495,13 @@ read_select(struct connection *conn)
 		conn->buffer = rb;
 	}
 
+#ifdef HAVE_SSL
 	if (conn->ssl) {
 		rd = ssl_read(conn, rb);
 		if (rd <= 0) return;
-	} else {
+	} else
+#endif
+	{
 		rd = safe_read(rb->sock, rb->data + rb->len, rb->freespace);
 		if (rd <= 0) {
 			if (rb->close && !rd) {

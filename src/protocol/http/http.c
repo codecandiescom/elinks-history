@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.193 2003/10/27 03:13:52 pasky Exp $ */
+/* $Id: http.c,v 1.194 2003/10/27 22:32:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1181,10 +1181,12 @@ again:
 		}
 	}
 
+#ifdef HAVE_SSL
 	if (conn->ssl) {
 		if (conn->cache->ssl_info) mem_free(conn->cache->ssl_info);
 		conn->cache->ssl_info = get_ssl_cipher_str(conn->ssl);
 	}
+#endif
 
 	if (h == 204) {
 		http_end_request(conn, S_OK);

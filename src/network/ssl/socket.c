@@ -1,9 +1,11 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.37 2003/10/27 22:07:56 jonas Exp $ */
+/* $Id: socket.c,v 1.38 2003/10/27 22:32:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#ifdef HAVE_SSL
 
 #include <errno.h>
 
@@ -22,7 +24,6 @@
 
 
 /* SSL errors */
-#ifdef HAVE_SSL
 #ifdef HAVE_OPENSSL
 #define	SSL_ERROR_WANT_READ2	9999 /* XXX */
 #define	SSL_ERROR_WANT_WRITE2	SSL_ERROR_WANT_WRITE
@@ -36,10 +37,8 @@
 #define	SSL_ERROR_SYSCALL	GNUTLS_E_PUSH_ERROR
 #define	SSL_ERROR_SYSCALL2	GNUTLS_E_PULL_ERROR
 #endif
-#endif
 
 
-#ifdef HAVE_SSL
 static void
 ssl_set_no_tls(struct connection *conn)
 {
@@ -127,12 +126,10 @@ ssl_set_no_tls(struct connection *conn)
 	gnutls_dh_set_prime_bits(*((ssl_t *) conn->ssl), 1024);
 #endif
 }
-#endif
 
 void
 ssl_want_read(struct connection *conn)
 {
-#ifdef HAVE_SSL
 	struct conn_info *b = conn->conn_info;
 
 	if (!b) return;
@@ -169,14 +166,12 @@ ssl_want_read(struct connection *conn)
 			conn->no_tsl = 1;
 			retry_conn_with_state(conn, S_SSL_ERROR);
 	}
-#endif
 }
 
 /* Return -1 on error, 0 or success. */
 int
 ssl_connect(struct connection *conn, int sock)
 {
-#ifdef HAVE_SSL
 	int ret;
 
 	assertm(conn->ssl, "No ssl handle");
@@ -225,7 +220,6 @@ ssl_error:
 			dns_found(conn, 0);
 			return -1;
 	}
-#endif
 
 	return 0;
 }
@@ -236,7 +230,6 @@ ssl_write(struct connection *conn, struct write_buffer *wb)
 {
 	int wr = -1;
 
-#ifdef HAVE_SSL
 #ifdef HAVE_OPENSSL
 	wr = SSL_write(conn->ssl, wb->data + wb->pos,
 		       wb->len - wb->pos);
@@ -268,7 +261,6 @@ ssl_write(struct connection *conn, struct write_buffer *wb)
 
 		return -1;
 	}
-#endif
 
 	return wr;
 }
@@ -279,7 +271,6 @@ ssl_read(struct connection *conn, struct read_buffer *rb)
 {
 	int rd = -1;
 
-#ifdef HAVE_SSL
 #ifdef HAVE_OPENSSL
 	rd = SSL_read(conn->ssl, rb->data + rb->len, rb->freespace);
 #elif defined(HAVE_GNUTLS)
@@ -323,7 +314,6 @@ ssl_read(struct connection *conn, struct read_buffer *rb)
 
 		return -1;
 	}
-#endif
 
 	return rd;
 }
@@ -331,7 +321,6 @@ ssl_read(struct connection *conn, struct read_buffer *rb)
 int
 ssl_close(struct connection *conn)
 {
-#ifdef HAVE_SSL
 #ifdef HAVE_OPENSSL
 	/* Hmh? No idea.. */
 #elif defined(HAVE_GNUTLS)
@@ -340,6 +329,8 @@ ssl_close(struct connection *conn)
 #endif
 	free_ssl(conn->ssl);
 	conn->ssl = NULL;
-#endif
+
 	return 0;
 }
+
+#endif

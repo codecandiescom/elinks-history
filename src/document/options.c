@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.43 2003/12/30 18:26:43 zas Exp $ */
+/* $Id: options.c,v 1.44 2003/12/30 19:37:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,7 +85,8 @@ compare_opt(struct document_options *o1, struct document_options *o2)
 		|| strcasecmp(o1->framename, o2->framename)
 		|| ((o1->needs_height || o2->needs_height)
 		    && o1->height != o2->height)
-		|| (!o1->plain && o1->width != o2->width);
+		|| ((o1->needs_width || o2->needs_width)
+		    && o1->width != o2->width);
 }
 
 inline void

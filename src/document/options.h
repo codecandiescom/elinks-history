@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.38 2003/12/30 18:26:43 zas Exp $ */
+/* $Id: options.h,v 1.39 2003/12/30 19:37:16 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -71,6 +71,7 @@ struct document_options {
 	 * frames uses it and we only compare it if @needs_height is set. */
 	int height;
 	unsigned int needs_height:1;
+	unsigned int needs_width:1;
 
 	/* Active link coloring */
 	/* This is mostly here to make use of this option cache so link

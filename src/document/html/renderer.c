@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.394 2003/12/25 09:57:45 jonas Exp $ */
+/* $Id: renderer.c,v 1.395 2003/12/30 19:37:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1508,6 +1508,16 @@ render_html_document(struct cache_entry *ce, struct document *document)
 
 	for (i = 0; i < document->height; i++)
 		document->width = int_max(document->width, document->data[i].length);
+
+	/* FIXME: This needs more tuning since if we are centering stuff it
+	 * does not work. */
+#if 1
+	document->options.needs_width = 1;
+#else
+	document->options.needs_width =
+				(document->width + document->options.margin
+				 >= document->options.width);
+#endif
 
 	document->bgcolor = par_format.bgcolor;
 

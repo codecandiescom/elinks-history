@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.20 2004/01/08 00:57:03 jonas Exp $ */
+/* $Id: action.c,v 1.21 2004/01/08 01:09:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,6 +97,18 @@ goto_url_home(struct session *ses)
 
 	if (!url || !*url) url = WWW_HOME_URL;
 	goto_url_with_hook(ses, url);
+}
+
+static void
+goto_url_action(struct session *ses,
+		unsigned char *(*get_url)(struct session *, unsigned char *, size_t))
+{
+	unsigned char url[MAX_STR_LEN];
+
+	if (!get_url || !get_url(ses, url, sizeof(url)))
+		url[0] = 0;
+
+	dialog_goto_url(ses, url);
 }
 
 /* This could gradually become some mulitplexor / switch noodle containing
@@ -199,35 +211,16 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			break;
 
 		case ACT_GOTO_URL:
-goto_empty_url:
-			dialog_goto_url(ses, "");
+			goto_url_action(ses, NULL);
 			break;
 
 		case ACT_GOTO_URL_CURRENT:
-		{
-			unsigned char *url;
-
-			if (!have_location(ses))
-				goto goto_empty_url;
-
-			url = get_no_post_url(cur_loc(ses)->vs.url, NULL);
-			if (!url) goto goto_empty_url;
-
-			dialog_goto_url(ses, url);
-			mem_free(url);
+			goto_url_action(ses, get_current_url);
 			break;
-		}
 
 		case ACT_GOTO_URL_CURRENT_LINK:
-		{
-			unsigned char url[MAX_STR_LEN];
-
-			if (!get_current_link_url(ses, url, sizeof url))
-				goto goto_empty_url;
-
-			dialog_goto_url(ses, url);
+			goto_url_action(ses, get_current_link_url);
 			break;
-		}
 
 		case ACT_GOTO_URL_HOME:
 			goto_url_home(ses);

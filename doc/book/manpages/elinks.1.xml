@@ -1,8 +1,9 @@
-<!-- $Id: elinks.1.xml,v 1.7 2003/06/10 16:15:44 jonas Exp $ -->
+<!-- $Id: elinks.1.xml,v 1.8 2003/06/10 20:32:48 jonas Exp $ -->
 
 <!DOCTYPE refentry SYSTEM "../elinksbook.dtd">
+<?dbhtml filename="elinks.1.html"?>
 
-<refentry id="elinks">
+<refentry id="elinks.1">
 
 <refmeta>
 	<refentrytitle>elinks</refentrytitle>

@@ -1,7 +1,8 @@
 <chapter id="bookmarks"><title> The Ultimate Bookmarks Guide </title>
+<?dbhtml filename="bookmarks.html"?>
 <chapterinfo>
-	<pubdate> $Date: 2003/06/10 18:16:50 $ </pubdate>
-	<releaseinfo> $Revision: 1.1 $ </releaseinfo>
+	<pubdate> $Date: 2003/06/10 20:32:48 $ </pubdate>
+	<releaseinfo> $Revision: 1.2 $ </releaseinfo>
 </chapterinfo>
 <para>
 

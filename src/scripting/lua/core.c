@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.136 2003/12/01 16:33:26 pasky Exp $ */
+/* $Id: core.c,v 1.137 2003/12/06 21:57:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,6 +39,7 @@
 #include "protocol/uri.h"
 #include "sched/event.h"
 #include "sched/session.h"
+#include "sched/task.h"
 #include "scripting/lua/core.h"
 #include "scripting/lua/hooks.h"
 #include "scripting/scripting.h"

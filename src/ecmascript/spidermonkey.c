@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.113 2004/12/18 14:25:10 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.114 2004/12/18 15:13:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -736,12 +736,15 @@ static const JSPropertySpec forms_props[] = {
 static JSObject *
 get_form_object(JSContext *ctx, JSObject *jsdoc, struct form *form)
 {
-	/* jsdoc ('document') is form's parent */
-	JSObject *jsform = JS_NewObject(ctx, (JSClass *) &form_class, NULL, jsdoc);
+	if (!form->ecmascript_obj) {
+		/* jsdoc ('document') is form's parent */
+		JSObject *jsform = JS_NewObject(ctx, (JSClass *) &form_class, NULL, jsdoc);
 
-	JS_DefineFunctions(ctx, jsform, (JSFunctionSpec *)&form_funcs);
-	JS_SetPrivate(ctx, jsform, form);
-	return jsform;
+		JS_DefineFunctions(ctx, jsform, (JSFunctionSpec *)&form_funcs);
+		JS_SetPrivate(ctx, jsform, form);
+		form->ecmascript_obj = jsform;
+	}
+	return form->ecmascript_obj;
 }
 
 static JSBool

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.188 2005/02/28 14:17:32 zas Exp $ */
+/* $Id: ftp.c,v 1.189 2005/03/08 13:56:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,6 +127,8 @@ static void ftp_got_final_response(struct connection *, struct read_buffer *);
 static void got_something_from_data_connection(struct connection *);
 static void ftp_end_request(struct connection *, int);
 static struct ftp_connection_info *add_file_cmd_to_str(struct connection *);
+static void ftp_send_pwd(struct connection *);
+static void ftp_got_pwd(struct connection *, struct read_buffer *);
 
 /* Parse EPSV or PASV response for address and/or port.
  * int *n should point to a sizeof(int) * 6 space.
@@ -523,8 +525,69 @@ ftp_pass_info(struct connection *conn, struct read_buffer *rb)
 		return;
 	}
 
+	ftp_send_pwd(conn);
+}
+
+/* Send PWD command. */
+static void
+ftp_send_pwd(struct connection *conn)
+{
+	struct string cmd;
+	struct auth_entry *auth;
+
+	auth = find_auth(conn->uri);
+
+	if (!init_string(&cmd)) {
+		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		return;
+	}
+
+	add_to_string(&cmd, "PWD");
+	add_crlf_to_string(&cmd);
+
+	send_cmd(conn, &cmd, (void *) ftp_got_pwd, S_GETH);
+}
+
+/* Parse PWD command response. */
+static void
+ftp_got_pwd(struct connection *conn, struct read_buffer *rb)
+{
+	int response = get_ftp_response(conn, rb, 2, NULL);
+
+	if (response == -1) {
+		abort_conn_with_state(conn, S_FTP_ERROR);
+		return;
+	}
+
+	if (!response) {
+		read_from_socket(conn, &conn->socket, rb, ftp_got_pwd);
+		set_connection_state(conn, S_GETH);
+		return;
+	}
+
+	if (response == 257) {
+		/* Extract base directory from PWD response. */
+		unsigned char *data = rb->data;
+		int i, start = -1, end = -1;
+
+		for (i = 0; i < rb->len && data[i] != ASCII_LF; i++) {
+			if (data[i] == '"') {
+				if (start == -1)
+					start = i + 1;
+				else if (end == -1)
+					end = i - 1;
+			}
+		}
+
+		if (start != -1 && end != -1 && end >= start && data[start] == '/') {
+			mem_free_set(&conn->basedir,
+				     memacpy(&data[start], end - start + 1));
+		}
+	}
+
 	ftp_send_retr_req(conn, S_GETH);
 }
+
 
 /* Construct PORT command. */
 static void
@@ -676,9 +739,10 @@ add_file_cmd_to_str(struct connection *conn)
 		add_crlf_to_string(&command);
 
 		add_to_string(&command, "CWD ");
+		if (conn->basedir)
+			add_to_string(&command, conn->basedir);
 		add_uri_to_string(&command, conn->uri, URI_PATH);
 		add_crlf_to_string(&command);
-
 		add_to_string(&command, "LIST");
 		add_crlf_to_string(&command);
 
@@ -721,6 +785,8 @@ add_file_cmd_to_str(struct connection *conn)
 		}
 
 		add_to_string(&command, "RETR ");
+		if (conn->basedir)
+			add_to_string(&command, conn->basedir);
 		add_uri_to_string(&command, conn->uri, URI_PATH);
 		add_crlf_to_string(&command);
 	}

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.93 2005/03/05 22:14:32 zas Exp $ */
+/* $Id: connection.h,v 1.94 2005/03/08 13:56:28 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -156,6 +156,7 @@ struct connection {
 	void *buffer;
 	struct cache_entry *cached;
 	struct stream_encoded *stream;
+	unsigned char *basedir; /* Used for ftp pwd stuff. */
 
 	/* Only used by ftp in send_cmd/get_resp. Put here
 	 * since having no connection->info is apparently valid. */

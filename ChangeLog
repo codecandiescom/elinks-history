@@ -1,3 +1,85 @@
+Thu May 13 20:40:06 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/dialog.c, bfu/menu.c, terminal/draw.c, terminal/draw.h:
+
+	draw_area() -> draw_box(), draw_border_box() -> draw_border(),
+	draw_shadow_box() -> draw_shadow().  
+
+Thu May 13 20:31:24 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Use draw_border_box().  
+
+Thu May 13 13:26:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/menu.c, terminal/draw.c, terminal/draw.h:
+
+	draw_border_box() was introduced, it is now used by menus.  
+
+Thu May 13 09:33:22 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/status.c:
+
+	Use draw_box() instead of draw_area().  
+
+Thu May 13 09:22:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: viewer/text/view.c, dialogs/download.c:
+
+	Use draw_box() instead of draw_area().  
+
+Thu May 13 09:15:38 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/text.c:
+
+	Use draw_box() instead of draw_area().  
+
+Thu May 13 09:08:06 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: menu.c, inpfield.c, listbox.c:
+
+	Use draw_box() instead of draw_area().  
+
+Thu May 13 09:07:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Use draw_box() instead of draw_area(), and use draw_shadow_box().  
+
+Thu May 13 09:06:32 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/: draw.c, draw.h:
+
+	Draw_box() and draw_shadow_box() were introduced.  
+
+Thu May 13 01:29:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Peek at $enable_xbel and do all the expat checking _before_
+	CONFIG_XBEL_BOOKMARKS is set up so it can depend properly on it and
+	report the correct value to the feature log.  
+
+Thu May 13 01:08:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/Makefile.am:
+
+	Fix trailing \ in last patch.  
+
+Thu May 13 00:53:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/Makefile.am:
+
+	Only add scanner object if building with CSS support.  
+
+Thu May 13 00:19:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, features.conf, src/main.c, src/sched/session.h,
+	src/viewer/text/Makefile.am, src/viewer/text/view.c:
+
+	Make document marks optional.  
+
 Wed May 12 19:43:18 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* features.conf:

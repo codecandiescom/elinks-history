@@ -483,14 +483,6 @@ CFLAGS_X="$CFLAGS"
 LIBS_X="$LIBS"
 cf_result=no
 
-if test "$enable_guile" = "yes" && test -z "$disable_lua"; then
-	AC_MSG_RESULT([pah!]) # Get rid of previous AC_MSG_CHECKING.
-	AC_MSG_WARN([You enabled Guile but did not disable Lua!])
-	AC_MSG_WARN([Sorry, but you cannot use both. Disabling Lua.])
-	disable_lua=yes
-	AC_MSG_CHECKING([for Lua])
-fi
-
 if test -z "$disable_lua"; then
 	if test ! -d "$withval"; then
 		withval="";

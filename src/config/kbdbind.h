@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.42 2003/07/21 05:52:26 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.43 2003/08/24 14:30:56 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -88,6 +88,7 @@ enum keyact {
 	ACT_TOGGLE_DISPLAY_TABLES,
 	ACT_TOGGLE_HTML_PLAIN,
 	ACT_TOGGLE_NUMBERED_LINKS,
+	ACT_TOGGLE_DOCUMENT_COLORS,
 	ACT_UNBACK,
 	ACT_UP,
 	ACT_VIEW_IMAGE,

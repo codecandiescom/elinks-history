@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.259 2003/08/23 16:33:20 jonas Exp $ */
+/* $Id: options.c,v 1.260 2003/08/24 14:30:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1243,6 +1243,8 @@ register_options(void)
 		"allow_dark_on_black", 0, 0,
 		N_("Allow dark colors on black background."));
 
+	/* If you change this please also change ACT_DOCUMENT_COLORS action
+	 * handling. */
 	add_opt_int("document.colors", N_("Use document-specified colors"),
 		"use_document_colors", 0, 0, 2, 2,
 		N_("Use colors specified in document:\n"

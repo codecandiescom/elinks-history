@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.192 2003/08/23 18:24:44 jonas Exp $ */
+/* $Id: view.c,v 1.193 2003/08/24 14:30:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1098,6 +1098,15 @@ quit:
 			case ACT_TOGGLE_NUMBERED_LINKS:
 				get_opt_int("document.browse.links.numbering") =
 					!get_opt_int("document.browse.links.numbering");
+				html_interpret(ses);
+				draw_formatted(ses);
+				goto x;
+			case ACT_TOGGLE_DOCUMENT_COLORS:
+			{
+				int *mode = &get_opt_int("document.colors.use_document_colors");
+
+				*mode = (*mode + 1 <= 2) ? *mode + 1 : 0;
+			}
 				html_interpret(ses);
 				draw_formatted(ses);
 				goto x;

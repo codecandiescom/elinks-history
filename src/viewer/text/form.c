@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.178 2004/06/16 04:11:42 miciah Exp $ */
+/* $Id: form.c,v 1.179 2004/06/16 06:06:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1329,7 +1329,7 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 			if (!key) break;
 
 			add_to_string(&str, " (");
-			add_format_to_string(&str, _("press %s to enter insert mode", term), key);
+			add_format_to_string(&str, _("press %s to edit", term), key);
 			add_char_to_string(&str, ')');
 			mem_free(key);
 			break;

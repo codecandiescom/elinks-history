@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.17 2003/06/06 17:24:14 jonas Exp $ */
+/* $Id: mailcap.c,v 1.18 2003/06/06 17:37:39 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -41,8 +41,14 @@
 
 #define BACKEND_NAME	"mailcap"
 
+struct mailcap_hash_item {
+	unsigned char *type;
+	struct list_head entries;
+};
+
 struct mailcap_entry {
-	unsigned char *type;		/* base/type field. Use as hash key */
+	LIST_HEAD(struct mailcap_entry);
+
 	unsigned char *command;		/* Ready for ses->tq_prog ;) */
 	unsigned char *testcommand;	/* To verify if command qualifies */
 	unsigned char *description;	/* Used as name for the handler */
@@ -50,7 +56,6 @@ struct mailcap_entry {
 	int copiousoutput;		/* If "| ${PAGER}" should be added */
 	int testneedsfile;		/* If testing requires a filename */
 	unsigned int priority;		/* Increased for each sourced file */
-	struct mailcap_entry *next;	/* If several handlers for one type */
 };
 
 /* State variables */
@@ -62,7 +67,6 @@ static inline void
 done_mailcap_entry(struct mailcap_entry *entry)
 {
 	if (!entry) return;
-	if (entry->type) mem_free(entry->type);
 	if (entry->testcommand)	mem_free(entry->testcommand);
 	if (entry->description)	mem_free(entry->description);
 	mem_free(entry);
@@ -74,9 +78,10 @@ done_mailcap_entry(struct mailcap_entry *entry)
 static inline struct mailcap_entry *
 init_mailcap_entry(unsigned char *type, unsigned char *command, int priority)
 {
+	struct mailcap_hash_item *mitem;
 	struct mailcap_entry *entry;
 	struct hash_item *item;
-	int typelen;
+	int typelen = strlen(type);
 	int commandlen = strlen(command);
 
 	entry = mem_calloc(1, sizeof(struct mailcap_entry) + commandlen + 1);
@@ -86,20 +91,31 @@ init_mailcap_entry(unsigned char *type, unsigned char *command, int priority)
 	entry->command = (unsigned char *)entry + sizeof(struct mailcap_entry);
 	safe_strncpy(entry->command, command, commandlen + 1);
 
-	typelen = strlen(type);
-	entry->type = memacpy(type, typelen);
-	if (!entry->type) {
-		mem_free(entry);
-		return NULL;
-	}
-
 	entry->priority = priority;
 
 	/* Time to get the entry into the mailcap_map */
 	/* First check if the type is already checked in */
-	item = get_hash_item(mailcap_map, entry->type, typelen);
+	item = get_hash_item(mailcap_map, type, typelen);
 	if (!item) {
-		if (!add_hash_item(mailcap_map, entry->type, typelen, entry)) {
+
+#define MAILCAP_HASH_ITEM_SIZE sizeof(struct mailcap_hash_item)
+
+		mitem = mem_alloc(MAILCAP_HASH_ITEM_SIZE + typelen + 1);
+		if (!mitem) {
+			done_mailcap_entry(entry);
+			return NULL;
+		}
+
+		mitem->type = (unsigned char *)mitem + MAILCAP_HASH_ITEM_SIZE;
+		safe_strncpy(mitem->type, type, typelen + 1);
+
+#undef MAILCAP_HASH_ITEM_SIZE
+
+		init_list(mitem->entries);
+
+		item = add_hash_item(mailcap_map, mitem->type, typelen, mitem);
+		if (!item) {
+			mem_free(mitem);
 			done_mailcap_entry(entry);
 			return NULL;
 		}
@@ -107,17 +123,14 @@ init_mailcap_entry(unsigned char *type, unsigned char *command, int priority)
 		done_mailcap_entry(entry);
 		return NULL;
 	} else {
-		struct mailcap_entry *current = item->value;
-
-		/* Add as the last item */
-		while (current->next) current = current->next;
-		current->next = entry;
+		mitem = item->value;
 	}
 
+	add_to_list_bottom(mitem->entries, entry);
 	mailcap_map_entries++;
+
 	return entry;
 }
-
 
 /* Parsing of a rfc1524 mailcap file */
 /* The format is:
@@ -273,7 +286,7 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 
 		if (!parse_optional_fields(entry, linepos)) {
 			error("Bad formated entry for type %s in \"%s\" line %d",
-			      entry->type, filename, lineno);
+			      type, filename, lineno);
 		}
 	}
 
@@ -327,17 +340,19 @@ done_mailcap(void)
 	if (!mailcap_map)
 		return;
 
-	foreach_hash_item(item, *mailcap_map, i) {
-		struct mailcap_entry *entry = item->value;
+	foreach_hash_item (item, *mailcap_map, i) {
+		struct mailcap_hash_item *mitem = item->value;
 
-		if (!entry) continue;
+		if (!mitem) continue;
 
-		while (entry) {
-			struct mailcap_entry *next = entry->next;
+		while (!list_empty(mitem->entries)) {
+			struct mailcap_entry *entry = mitem->entries.next;
 
+			del_from_list(entry);
 			done_mailcap_entry(entry);
-			entry = next;
 		}
+
+		mem_free(mitem);
 	}
 
 	free_hash(mailcap_map);
@@ -425,10 +440,11 @@ format_command(unsigned char *command, unsigned char *type, int copiousoutput)
 /* Returns first usable mailcap_entry from a list where @entry is the head.
  * Use of @filename is not supported (yet). */
 static struct mailcap_entry *
-check_entries(struct mailcap_entry *entry)
+check_entries(struct mailcap_hash_item *item)
 {
-	/* Use the list of entries to find a final match */
-	for (; entry; entry = entry->next) {
+	struct mailcap_entry *entry;
+
+	foreach (entry, item->entries) {
 		unsigned char *test;
 
 		/* TODO Entries with testneedsfile should not be in the map */
@@ -437,7 +453,7 @@ check_entries(struct mailcap_entry *entry)
 
 		/* Accept current if no test is needed */
 		if (!entry->testcommand)
-			break;
+			return entry;
 
 		/* We have to run the test command */
 		test = format_command(entry->testcommand, NULL, 0);
@@ -446,11 +462,11 @@ check_entries(struct mailcap_entry *entry)
 
 			mem_free(test);
 			if (!exitcode)
-				break;
+				return entry;
 		}
 	}
 
-	return entry;
+	return NULL;
 }
 
 /* Attempts to find the given type in the mailcap association map.  On success,

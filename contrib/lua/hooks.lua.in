@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.7 2002/12/10 21:09:00 pasky Exp $
+-- $Id: hooks.lua.in,v 1.8 2002/12/10 21:16:16 pasky Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -96,6 +96,7 @@ smartprefixes = {
     encz = "http://www.slovnik.cz/bin/ecd?ecd_il=1&ecd_vcb=%s&ecd_trn=translate&ecd_trn_dir=0&ecd_lines=15&ecd_hptxt=0",
     czen = "http://www.slovnik.cz/bin/ecd?ecd_il=1&ecd_vcb=%s&ecd_trn=translate&ecd_trn_dir=1&ecd_lines=15&ecd_hptxt=0",
     dict = "http://www.dictionary.com/cgi-bin/dict.pl?db=%%2A&term=%s",
+    a = "http://acronymfinder.com/af-query.asp?String=exact&Acronym=%s",
     whatis = "http://uptime.netcraft.com/up/graph/?host=%s",
     -- rfc by number
     rfc = "http://www.rfc-editor.org/rfc/rfc%s.txt",

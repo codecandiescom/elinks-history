@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.327 2003/10/22 19:50:22 jonas Exp $ */
+/* $Id: options.c,v 1.328 2003/10/22 20:07:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -886,11 +886,15 @@ update_visibility(struct list_head *tree, int show)
 
 	foreach (opt, *tree) {
 		if (!strcmp(opt->name, "_template_")) {
-			if (opt->box_item) opt->box_item->visible = show & 1;
+			if (opt->box_item)
+				opt->box_item->visible = (show & 1);
+
 			if (opt->type == OPT_TREE)
 				update_visibility(opt->value.tree, show | 2);
 		} else {
-			if (opt->box_item && show & 2) opt->box_item->visible = show & 1;
+			if (opt->box_item && (show & 2))
+				opt->box_item->visible = (show & 1);
+
 			if (opt->type == OPT_TREE)
 				update_visibility(opt->value.tree, show);
 		}
@@ -907,7 +911,7 @@ change_hook_stemplate(struct session *ses, struct option *current, struct option
 static int
 change_hook_language(struct session *ses, struct option *current, struct option *changed)
 {
-/* FIXME */
+	/* FIXME */ /* Fix what? ;) --jonas */
 #ifdef ENABLE_NLS
 	set_language(changed->value.number);
 #endif

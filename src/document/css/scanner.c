@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.131 2004/09/21 20:49:39 pasky Exp $ */
+/* $Id: scanner.c,v 1.132 2004/09/21 20:54:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,10 +43,10 @@ static const struct scan_table_info css_scan_table_info[] = {
 
 	SCAN_TABLE_STRING(" \f\n\r\t\v\000", CSS_CHAR_WHITESPACE),
 	SCAN_TABLE_STRING("\f\n\r",	 CSS_CHAR_NEWLINE),
-	SCAN_TABLE_STRING("-*",		 CSS_CHAR_IDENT),
+	SCAN_TABLE_STRING("-",		 CSS_CHAR_IDENT),
 	SCAN_TABLE_STRING(".#@!\"'<-/",	 CSS_CHAR_TOKEN_START),
 	/* Unicode escape (that we do not handle yet) + other special chars */
-	SCAN_TABLE_STRING("\\_",	 CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+	SCAN_TABLE_STRING("\\_*",	 CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
 	/* This should contain mostly used char tokens like ':' and maybe a few
 	 * garbage chars that people might put in their CSS code */
 	SCAN_TABLE_STRING("({});:,.>",	 CSS_CHAR_TOKEN),

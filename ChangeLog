@@ -1,3 +1,39 @@
+Wed Jul 16 08:41:59 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt_BR.po, pt.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po and french translation was updated.  
+
+Wed Jul 16 02:45:24 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	point_intersect(): Removed assert(p1) because p1 will not have been
+	set if the last search yielded no results.  
+
+Tue Jul 15 23:15:07 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/globhist/globhist.c:
+
+	Consistency fix from Jonas: s/void\nstatic /static void\n/ 
+
+Tue Jul 15 22:32:10 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, document/html/parser.c:
+
+	An option named document.html.link_display was added to control how
+	html link elements are rendered.  
+
+Tue Jul 15 22:18:00 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: main.c, config/options.c, globhist/globhist.c,
+	globhist/globhist.h:
+
+	Fix bug 157: Periodically save globhist to disk.  
+
 Tue Jul 15 22:15:56 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/viewer/text/form.c:

@@ -1,3 +1,6 @@
+/* FTP directory parsing */
+/* $Id: ftpparse.c,v 1.2 2002/10/01 16:31:16 zas Exp $ */
+
 /*** NOTE: the following source file has been modified to compile cleanly
  *** under gcc-2.95. The functionality should remain unchanged from the public
  *** distribution.

@@ -1,3 +1,6 @@
+/* FTP directory parsing */
+/* $Id: ftpparse.h,v 1.2 2002/10/01 16:31:17 zas Exp $ */
+
 #ifndef FTPPARSE_H
 #define FTPPARSE_H
 

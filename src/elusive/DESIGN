@@ -30,7 +30,9 @@ have arbitrary attributes and can be arbitrary sized (in none, one or two
 dimensions). These rectangles can contain either nothing (these are also called
 spacers), end-data (usually text, but also ie. images or other objects) or
 other rectangles. The layout is not dependent of type of the output - thus it
-can be used either for graphics or text or whatever you imagine.
+can be used either for graphics or text or whatever you imagine. It is also
+independent on size of the output device, thus when resizing the viewport, you
+will be still able to use the same layout.
 
 Its interface is defined at layouter/layouter.h.
 

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.85 2003/10/18 22:15:33 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.86 2003/10/19 11:10:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -216,7 +216,7 @@ struct strtonum {
 };
 
 static long
-strtonum(struct strtonum *table, char *str)
+strtonum(struct strtonum *table, unsigned char *str)
 {
 	struct strtonum *rec;
 
@@ -359,94 +359,101 @@ make_keystroke(struct string *str, long key, long meta)
 	add_to_string(str, write_key(key));
 }
 
+#ifndef ELINKS_SMALL
+#define DACT(x) (x)
+#else
+#define DACT(x) (NULL)
+#endif
 
 /* Please keep this table in alphabetical order, and in sync with
  * the ACT_* constants in kbdbind.h.  */
 static struct strtonum action_table[] = {
 	{ "none", ACT_NONE, NULL },
-	{ "abort-connection", ACT_ABORT_CONNECTION, N_("Abort connection") },
-	{ "add-bookmark", ACT_ADD_BOOKMARK, N_("Add a new bookmark") },
-	{ "add-bookmark-link", ACT_ADD_BOOKMARK_LINK, N_("Add a new bookmark using current link") },
-	{ "auto-complete", ACT_AUTO_COMPLETE, N_("Attempt to auto-complete the input") },
-	{ "auto-complete-unambiguous", ACT_AUTO_COMPLETE_UNAMBIGUOUS, N_("Attempt to unambiguously auto-complete the input") },
-	{ "back", ACT_BACK, N_("Return to the previous document in history") },
-	{ "backspace", ACT_BACKSPACE, N_("Delete character in front of the cursor") },
-	{ "bookmark-manager", ACT_BOOKMARK_MANAGER, N_("Open bookmark manager") },
-	{ "cookies-load", ACT_COOKIES_LOAD, N_("Reload cookies file") },
-	{ "copy-clipboard", ACT_COPY_CLIPBOARD, N_("Copy text to clipboard") },
-	{ "cut-clipboard", ACT_CUT_CLIPBOARD, N_("Delete text from clipboard") },
-	{ "delete", ACT_DELETE, N_("Delete character under cursor") },
-	{ "document-info", ACT_DOCUMENT_INFO, N_("Show information about the current page") },
-	{ "down", ACT_DOWN, N_("Move cursor downwards") },
-	{ "download", ACT_DOWNLOAD, N_("Download the current link") },
-	{ "download-image", ACT_DOWNLOAD_IMAGE, N_("Download the current image") },
-	{ "edit", ACT_EDIT, N_("Begin editing") }, /* FIXME */
-	{ "end", ACT_END, N_("Go to the end of the page/line") },
-	{ "enter", ACT_ENTER, N_("Follow the current link") },
-	{ "enter-reload", ACT_ENTER_RELOAD, N_("Follow the current link, forcing reload of the target") },
-	{ "file-menu", ACT_FILE_MENU, N_("Open the File menu") },
-	{ "find-next", ACT_FIND_NEXT, N_("Find the next occurrence of the current search text") },
-	{ "find-next-back", ACT_FIND_NEXT_BACK, N_("Find the previous occurrence of the current search text") },
-	{ "forget-credentials", ACT_FORGET_CREDENTIALS, N_("Forget authentication credentials") },
-	{ "goto-url", ACT_GOTO_URL, N_("Open \"Go to URL\" dialog box") },
-	{ "goto-url-current", ACT_GOTO_URL_CURRENT, N_("Open \"Go to URL\" dialog box containing the current URL") },
-	{ "goto-url-current-link", ACT_GOTO_URL_CURRENT_LINK, N_("Open \"Go to URL\" dialog box containing the current link URL") },
-	{ "goto-url-home", ACT_GOTO_URL_HOME, N_("Go to the homepage") },
-	{ "header-info", ACT_HEADER_INFO, N_("Show information about the current page HTTP headers") },
-	{ "history-manager", ACT_HISTORY_MANAGER, N_("Open history manager") },
-	{ "home", ACT_HOME, N_("Go to the start of the page/line") },
-	{ "kill-to-bol", ACT_KILL_TO_BOL, N_("Delete to beginning of line") },
-	{ "kill-to-eol", ACT_KILL_TO_EOL, N_("Delete to end of line") },
-	{ "keybinding-manager", ACT_KEYBINDING_MANAGER, N_("Open keybinding manager") },
-	{ "left", ACT_LEFT, N_("Move the cursor left") },
-	{ "link-menu", ACT_LINK_MENU, N_("Open the link context menu") },
-	{ "jump-to-link", ACT_JUMP_TO_LINK, N_("Jump to link") },
+	{ "abort-connection", ACT_ABORT_CONNECTION, DACT(N_("Abort connection")) },
+	{ "add-bookmark", ACT_ADD_BOOKMARK, DACT(N_("Add a new bookmark")) },
+	{ "add-bookmark-link", ACT_ADD_BOOKMARK_LINK, DACT(N_("Add a new bookmark using current link")) },
+	{ "auto-complete", ACT_AUTO_COMPLETE, DACT(N_("Attempt to auto-complete the input")) },
+	{ "auto-complete-unambiguous", ACT_AUTO_COMPLETE_UNAMBIGUOUS, DACT(N_("Attempt to unambiguously auto-complete the input")) },
+	{ "back", ACT_BACK, DACT(N_("Return to the previous document in history")) },
+	{ "backspace", ACT_BACKSPACE, DACT(N_("Delete character in front of the cursor")) },
+	{ "bookmark-manager", ACT_BOOKMARK_MANAGER, DACT(N_("Open bookmark manager")) },
+	{ "cookies-load", ACT_COOKIES_LOAD, DACT(N_("Reload cookies file")) },
+	{ "copy-clipboard", ACT_COPY_CLIPBOARD, DACT(N_("Copy text to clipboard")) },
+	{ "cut-clipboard", ACT_CUT_CLIPBOARD, DACT(N_("Delete text from clipboard")) },
+	{ "delete", ACT_DELETE, DACT(N_("Delete character under cursor")) },
+	{ "document-info", ACT_DOCUMENT_INFO, DACT(N_("Show information about the current page")) },
+	{ "down", ACT_DOWN, DACT(N_("Move cursor downwards")) },
+	{ "download", ACT_DOWNLOAD, DACT(N_("Download the current link")) },
+	{ "download-image", ACT_DOWNLOAD_IMAGE, DACT(N_("Download the current image")) },
+	{ "edit", ACT_EDIT, DACT(N_("Begin editing")) }, /* FIXME */
+	{ "end", ACT_END, DACT(N_("Go to the end of the page/line")) },
+	{ "enter", ACT_ENTER, DACT(N_("Follow the current link")) },
+	{ "enter-reload", ACT_ENTER_RELOAD, DACT(N_("Follow the current link, forcing reload of the target")) },
+	{ "file-menu", ACT_FILE_MENU, DACT(N_("Open the File menu")) },
+	{ "find-next", ACT_FIND_NEXT, DACT(N_("Find the next occurrence of the current search text")) },
+	{ "find-next-back", ACT_FIND_NEXT_BACK, DACT(N_("Find the previous occurrence of the current search text")) },
+	{ "forget-credentials", ACT_FORGET_CREDENTIALS, DACT(N_("Forget authentication credentials")) },
+	{ "goto-url", ACT_GOTO_URL, DACT(N_("Open \"Go to URL\" dialog box")) },
+	{ "goto-url-current", ACT_GOTO_URL_CURRENT, DACT(N_("Open \"Go to URL\" dialog box containing the current URL")) },
+	{ "goto-url-current-link", ACT_GOTO_URL_CURRENT_LINK, DACT(N_("Open \"Go to URL\" dialog box containing the current link URL")) },
+	{ "goto-url-home", ACT_GOTO_URL_HOME, DACT(N_("Go to the homepage")) },
+	{ "header-info", ACT_HEADER_INFO, DACT(N_("Show information about the current page HTTP headers")) },
+	{ "history-manager", ACT_HISTORY_MANAGER, DACT(N_("Open history manager")) },
+	{ "home", ACT_HOME, DACT(N_("Go to the start of the page/line")) },
+	{ "kill-to-bol", ACT_KILL_TO_BOL, DACT(N_("Delete to beginning of line")) },
+	{ "kill-to-eol", ACT_KILL_TO_EOL, DACT(N_("Delete to end of line")) },
+	{ "keybinding-manager", ACT_KEYBINDING_MANAGER, DACT(N_("Open keybinding manager")) },
+	{ "left", ACT_LEFT,DACT( N_("Move the cursor left")) },
+	{ "link-menu", ACT_LINK_MENU, DACT(N_("Open the link context menu")) },
+	{ "jump-to-link", ACT_JUMP_TO_LINK, DACT(N_("Jump to link")) },
 #ifdef HAVE_LUA
-	{ "lua-console", ACT_LUA_CONSOLE, N_("Open a Lua console") },
+	{ "lua-console", ACT_LUA_CONSOLE, DACT(N_("Open a Lua console")) },
 #else
-	{ "lua-console", ACT_LUA_CONSOLE, N_("Open a Lua console (DISABLED)") },
+	{ "lua-console", ACT_LUA_CONSOLE, DACT(N_("Open a Lua console (DISABLED)")) },
 #endif
 	{ " *scripting-function*", ACT_SCRIPTING_FUNCTION, NULL }, /* internal use only */
-	{ "menu", ACT_MENU, N_("Activate the menu") },
-	{ "next-frame", ACT_NEXT_FRAME, N_("Move to the next frame") },
-	{ "open-new-tab", ACT_OPEN_NEW_TAB, N_("Open a new tab") },
-	{ "open-new-tab-in-background", ACT_OPEN_NEW_TAB_IN_BACKGROUND, N_("Open a new tab in background") },
-	{ "open-new-window", ACT_OPEN_NEW_WINDOW, N_("Open a new window") },
-	{ "open-link-in-new-tab", ACT_OPEN_LINK_IN_NEW_TAB, N_("Open the current link in a new tab") },
+	{ "menu", ACT_MENU, DACT(N_("Activate the menu")) },
+	{ "next-frame", ACT_NEXT_FRAME, DACT(N_("Move to the next frame")) },
+	{ "open-new-tab", ACT_OPEN_NEW_TAB, DACT(N_("Open a new tab")) },
+	{ "open-new-tab-in-background", ACT_OPEN_NEW_TAB_IN_BACKGROUND, DACT(N_("Open a new tab in background")) },
+	{ "open-new-window", ACT_OPEN_NEW_WINDOW, DACT(N_("Open a new window")) },
+	{ "open-link-in-new-tab", ACT_OPEN_LINK_IN_NEW_TAB, DACT(N_("Open the current link in a new tab")) },
 	{ "open-link-in-new-tab-in-background", ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND,
-							N_("Open the current link a new tab in background") },
-	{ "open-link-in-new-window", ACT_OPEN_LINK_IN_NEW_WINDOW, N_("Open the current link in a new window") },
-	{ "options-manager", ACT_OPTIONS_MANAGER, N_("Open options manager") },
-	{ "page-down", ACT_PAGE_DOWN, N_("Move downwards by a page") },
-	{ "page-up", ACT_PAGE_UP, N_("Move upwards by a page") },
-	{ "paste-clipboard", ACT_PASTE_CLIPBOARD, N_("Paste text from the clipboard") },
-	{ "previous-frame", ACT_PREVIOUS_FRAME, N_("Move to the previous frame") },
-	{ "quit", ACT_QUIT, N_("Open a quit confirmation dialog box") },
-	{ "really-quit", ACT_REALLY_QUIT, N_("Quit without confirmation") },
-	{ "reload", ACT_RELOAD, N_("Reload the current page") },
-	{ "resume-download", ACT_RESUME_DOWNLOAD, N_("Attempt to resume download of the current link") },
-	{ "right", ACT_RIGHT, N_("Move the cursor right") },
-	{ "save-formatted", ACT_SAVE_FORMATTED, N_("Save formatted document") },
-	{ "scroll-down", ACT_SCROLL_DOWN, N_("Scroll down") },
-	{ "scroll-left", ACT_SCROLL_LEFT, N_("Scroll left") },
-	{ "scroll-right", ACT_SCROLL_RIGHT, N_("Scroll right") },
-	{ "scroll-up", ACT_SCROLL_UP, N_("Scroll up") },
-	{ "search", ACT_SEARCH, N_("Search for a text pattern") },
-	{ "search-back", ACT_SEARCH_BACK, N_("Search backwards for a text pattern") },
-	{ "tab-close", ACT_TAB_CLOSE, N_("Close tab") },
-	{ "tab-next", ACT_TAB_NEXT, N_("Next tab") },
-	{ "tab-prev", ACT_TAB_PREV, N_("Previous tab") },
-	{ "toggle-display-images", ACT_TOGGLE_DISPLAY_IMAGES, N_("Toggle displaying of links to images") },
-	{ "toggle-display-tables", ACT_TOGGLE_DISPLAY_TABLES, N_("Toggle rendering of tables") },
-	{ "toggle-html-plain", ACT_TOGGLE_HTML_PLAIN, N_("Toggle rendering page as HTML / plain text") },
-	{ "toggle-numbered-links", ACT_TOGGLE_NUMBERED_LINKS, N_("Toggle displaying of links numbers") },
-	{ "toggle-document-colors", ACT_TOGGLE_DOCUMENT_COLORS, N_("Toggle usage of document specific colors") },
-	{ "unback", ACT_UNBACK, N_("Go forward in the unhistory") },
-	{ "up", ACT_UP, N_("Move cursor upwards") },
-	{ "view-image", ACT_VIEW_IMAGE, N_("View the current image") },
-	{ "zoom-frame", ACT_ZOOM_FRAME, N_("Maximize the current frame") },
+						DACT(N_("Open the current link a new tab in background")) },
+	{ "open-link-in-new-window", ACT_OPEN_LINK_IN_NEW_WINDOW, DACT(N_("Open the current link in a new window")) },
+	{ "options-manager", ACT_OPTIONS_MANAGER, DACT(N_("Open options manager")) },
+	{ "page-down", ACT_PAGE_DOWN, DACT(N_("Move downwards by a page")) },
+	{ "page-up", ACT_PAGE_UP, DACT(N_("Move upwards by a page")) },
+	{ "paste-clipboard", ACT_PASTE_CLIPBOARD, DACT(N_("Paste text from the clipboard")) },
+	{ "previous-frame", ACT_PREVIOUS_FRAME, DACT(N_("Move to the previous frame")) },
+	{ "quit", ACT_QUIT, DACT(N_("Open a quit confirmation dialog box")) },
+	{ "really-quit", ACT_REALLY_QUIT, DACT(N_("Quit without confirmation")) },
+	{ "reload", ACT_RELOAD, DACT(N_("Reload the current page")) },
+	{ "resume-download", ACT_RESUME_DOWNLOAD, DACT(N_("Attempt to resume download of the current link")) },
+	{ "right", ACT_RIGHT, DACT(N_("Move the cursor right")) },
+	{ "save-formatted", ACT_SAVE_FORMATTED, DACT(N_("Save formatted document")) },
+	{ "scroll-down", ACT_SCROLL_DOWN, DACT(N_("Scroll down")) },
+	{ "scroll-left", ACT_SCROLL_LEFT, DACT(N_("Scroll left")) },
+	{ "scroll-right", ACT_SCROLL_RIGHT, DACT(N_("Scroll right")) },
+	{ "scroll-up", ACT_SCROLL_UP, DACT(N_("Scroll up")) },
+	{ "search", ACT_SEARCH, DACT(N_("Search for a text pattern")) },
+	{ "search-back", ACT_SEARCH_BACK, DACT(N_("Search backwards for a text pattern")) },
+	{ "tab-close", ACT_TAB_CLOSE, DACT(N_("Close tab")) },
+	{ "tab-next", ACT_TAB_NEXT, DACT(N_("Next tab")) },
+	{ "tab-prev", ACT_TAB_PREV,DACT( N_("Previous tab")) },
+	{ "toggle-display-images", ACT_TOGGLE_DISPLAY_IMAGES, DACT(N_("Toggle displaying of links to images")) },
+	{ "toggle-display-tables", ACT_TOGGLE_DISPLAY_TABLES, DACT(N_("Toggle rendering of tables")) },
+	{ "toggle-html-plain", ACT_TOGGLE_HTML_PLAIN, DACT(N_("Toggle rendering page as HTML / plain text")) },
+	{ "toggle-numbered-links", ACT_TOGGLE_NUMBERED_LINKS, DACT(N_("Toggle displaying of links numbers")) },
+	{ "toggle-document-colors", ACT_TOGGLE_DOCUMENT_COLORS, DACT(N_("Toggle usage of document specific colors")) },
+	{ "unback", ACT_UNBACK, DACT(N_("Go forward in the unhistory")) },
+	{ "up", ACT_UP, DACT(N_("Move cursor upwards")) },
+	{ "view-image", ACT_VIEW_IMAGE, DACT(N_("View the current image")) },
+	{ "zoom-frame", ACT_ZOOM_FRAME, DACT(N_("Maximize the current frame")) },
 	{ NULL, 0, NULL }
 };
+
+#undef DACT
 
 static int
 read_action(unsigned char *action)
@@ -482,7 +489,7 @@ init_action_listboxes(void)
 		box_item->expanded = 0; /* Maybe you would like this being 1? */
 		box_item->depth = 0;
 		box_item->box = &kbdbind_boxes;
-		box_item->text = act->desc;
+		box_item->text = act->desc ? act->desc : act->str;
 
 		for (i = 0; i < KM_MAX; i++) {
 			struct listbox_item *keymap;

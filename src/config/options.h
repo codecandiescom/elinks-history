@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.65 2003/09/03 22:34:59 jonas Exp $ */
+/* $Id: options.h,v 1.66 2003/10/19 11:10:23 zas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -171,88 +171,96 @@ extern struct option *add_opt(struct option *, unsigned char *, unsigned char *,
 			      unsigned char *, enum option_flags, enum option_type,
 			      int, int, void *, unsigned char *);
 
+/* Hack which permit to disable option descriptions, to reduce elinks binary size.
+ * It may of some use for people wanting a very small static non-i18n elinks binary,
+ * at time of writing gain is over 25Kbytes. --Zas */
+#ifndef ELINKS_SMALL
+#define DESC(x) (x)
+#else
+#define DESC(x) ((unsigned char *) "")
+#endif
+
 #define add_opt_bool_tree(tree, path, capt, name, flags, def, desc) do { \
 	int *ptr = mem_alloc(sizeof(int)); \
-	add_opt(tree, path, capt, name, flags, OPT_BOOL, 0, 1, ptr, desc); \
+	add_opt(tree, path, capt, name, flags, OPT_BOOL, 0, 1, ptr, DESC(desc)); \
 	*ptr = def; } while (0)
 
 #define add_opt_int_tree(tree, path, capt, name, flags, min, max, def, desc) do { \
 	int *ptr = mem_alloc(sizeof(int)); \
-	add_opt(tree, path, capt, name, flags, OPT_INT, min, max, ptr, desc); \
+	add_opt(tree, path, capt, name, flags, OPT_INT, min, max, ptr, DESC(desc)); \
 	*ptr = def; } while (0)
 
 #define add_opt_long_tree(tree, path, capt, name, flags, min, max, def, desc) do { \
 	long *ptr = mem_alloc(sizeof(long)); \
-	add_opt(tree, path, capt, name, flags, OPT_LONG, min, max, ptr, desc); \
+	add_opt(tree, path, capt, name, flags, OPT_LONG, min, max, ptr, DESC(desc)); \
 	*ptr = def; } while (0)
 
 #define add_opt_str_tree(tree, path, capt, name, flags, def, desc) do { \
 	unsigned char *ptr = mem_alloc(MAX_STR_LEN); \
-	add_opt(tree, path, capt, name, flags, OPT_STRING, 0, MAX_STR_LEN, ptr, desc); \
+	add_opt(tree, path, capt, name, flags, OPT_STRING, 0, MAX_STR_LEN, ptr, DESC(desc)); \
 	safe_strncpy(ptr, def, MAX_STR_LEN); } while (0)
 
 #define add_opt_codepage_tree(tree, path, capt, name, flags, def, desc) do { \
 	int *ptr = mem_alloc(sizeof(int)); \
-	add_opt(tree, path, capt, name, flags, OPT_CODEPAGE, 0, 0, ptr, desc); \
+	add_opt(tree, path, capt, name, flags, OPT_CODEPAGE, 0, 0, ptr, DESC(desc)); \
 	*ptr = def; } while (0)
 
 extern int color_set(struct option *, unsigned char *); /* XXX */
 
 #define add_opt_color_tree(tree, path, capt, name, flags, def, desc) do { \
 	color_t *ptr = mem_alloc(sizeof(color_t)); \
-	color_set(add_opt(tree, path, capt, name, flags, OPT_COLOR, 0, 0, ptr, desc), def); \
+	color_set(add_opt(tree, path, capt, name, flags, OPT_COLOR, 0, 0, ptr, DESC(desc)), def); \
 	} while (0)
 
 #define add_opt_ptr_tree(tree, path, capt, name, flags, type, def, desc) \
-	add_opt(tree, path, capt, name, flags, type, 0, 0, def, desc);
+	add_opt(tree, path, capt, name, flags, type, 0, 0, def, DESC(desc));
 
 #define add_opt_void_tree(tree, path, capt, name, flags, type, desc) \
-	add_opt(tree, path, capt, name, flags, type, 0, 0, NULL, desc);
+	add_opt(tree, path, capt, name, flags, type, 0, 0, NULL, DESC(desc));
 
 #define add_opt_command_tree(tree, path, capt, name, flags, cmd, desc) \
-	add_opt(tree, path, capt, name, flags, OPT_COMMAND, 0, 0, cmd, desc);
+	add_opt(tree, path, capt, name, flags, OPT_COMMAND, 0, 0, cmd, DESC(desc));
 
 #define add_opt_alias_tree(tree, path, capt, name, flags, def, desc) do { \
 	unsigned char *ptr = mem_alloc(MAX_STR_LEN); \
-	add_opt(tree, path, capt, name, flags, OPT_ALIAS, 0, MAX_STR_LEN, ptr, desc); \
+	add_opt(tree, path, capt, name, flags, OPT_ALIAS, 0, MAX_STR_LEN, ptr, DESC(desc)); \
 	safe_strncpy(ptr, def, MAX_STR_LEN); } while (0)
 
 #define add_opt_tree_tree(tree, path, capt, name, flags, desc) \
-	add_opt(tree, path, capt, name, flags, OPT_TREE, 0, 0, init_options_tree(), desc);
+	add_opt(tree, path, capt, name, flags, OPT_TREE, 0, 0, init_options_tree(), DESC(desc));
 
 #define add_opt_bool(path, capt, name, flags, def, desc) \
-	add_opt_bool_tree(config_options, path, capt, name, flags, def, desc)
+	add_opt_bool_tree(config_options, path, capt, name, flags, def, DESC(desc))
 
 #define add_opt_int(path, capt, name, flags, min, max, def, desc) \
-	add_opt_int_tree(config_options, path, capt, name, flags, min, max, def, desc)
+	add_opt_int_tree(config_options, path, capt, name, flags, min, max, def, DESC(desc))
 
 #define add_opt_long(path, capt, name, flags, min, max, def, desc) \
-	add_opt_long_tree(config_options, path, capt, name, flags, min, max, def, desc)
+	add_opt_long_tree(config_options, path, capt, name, flags, min, max, def, DESC(desc))
 
 #define add_opt_str(path, capt, name, flags, def, desc) \
-	add_opt_str_tree(config_options, path, capt, name, flags, def, desc)
+	add_opt_str_tree(config_options, path, capt, name, flags, def, DESC(desc))
 
 #define add_opt_codepage(path, capt, name, flags, def, desc) \
-	add_opt_codepage_tree(config_options, path, capt, name, flags, def, desc)
+	add_opt_codepage_tree(config_options, path, capt, name, flags, def, DESC(desc))
 
 #define add_opt_color(path, capt, name, flags, def, desc) \
-	add_opt_color_tree(config_options, path, capt, name, flags, def, desc)
+	add_opt_color_tree(config_options, path, capt, name, flags, def, DESC(desc))
 
 #define add_opt_ptr(path, capt, name, flags, type, def, desc) \
-	add_opt_ptr_tree(config_options, path, capt, name, flags, type, def, desc)
+	add_opt_ptr_tree(config_options, path, capt, name, flags, type, def, DESC(desc))
 
 #define add_opt_void(path, capt, name, flags, type, desc) \
-	add_opt_void_tree(config_options, path, capt, name, flags, type, desc)
+	add_opt_void_tree(config_options, path, capt, name, flags, type, DESC(desc))
 
 #define add_opt_command(path, capt, name, flags, cmd, desc) \
-	add_opt_command_tree(config_options, path, capt, name, flags, cmd, desc)
+	add_opt_command_tree(config_options, path, capt, name, flags, cmd, DESC(desc))
 
 #define add_opt_alias(path, capt, name, flags, def, desc) \
-	add_opt_alias_tree(config_options, path, capt, name, flags, def, desc)
+	add_opt_alias_tree(config_options, path, capt, name, flags, def, DESC(desc))
 
 #define add_opt_tree(path, capt, name, flags, desc) \
-	add_opt_tree_tree(config_options, path, capt, name, flags, desc)
-
+	add_opt_tree_tree(config_options, path, capt, name, flags, DESC(desc))
 
 /* TODO: We need to do *something* with this ;). */
 

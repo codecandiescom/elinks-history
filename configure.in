@@ -855,6 +855,8 @@ AC_ARG_ENABLE(own-libc, [  --enable-own-libc       Force use of internal functio
 AC_ARG_ENABLE(256-colors, [  --enable-256-colors     Add support for using 256 colors, requires capable Xterm],
 	      [if test "$enableval" = yes; then AC_DEFINE(USE_256_COLORS) fi])
 
+AC_ARG_ENABLE(small, [  --enable-small          Reduce binary size as far as possible.],
+	      [if test "$enableval" = yes; then AC_DEFINE(ELINKS_SMALL) fi])
 
 dnl == EMX hack
 

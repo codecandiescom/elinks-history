@@ -111,3 +111,6 @@
 
 /* Define to 1 if we should support 256 colors in xterm256 */
 #undef USE_256_COLORS
+
+/* Define to 1 to reduce binary size as far as possible. */
+#undef ELINKS_SMALL

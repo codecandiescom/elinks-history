@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.88 2004/07/28 13:17:37 jonas Exp $ */
+/* $Id: kbd.c,v 1.89 2004/07/28 13:19:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -654,14 +654,13 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 				    && itrm->kqueue[3] >= 'A'
 				    && itrm->kqueue[3] <= 'L') {
 					ev->x = KBD_F1 + itrm->kqueue[3] - 'A';
-					el = 4;
-				} else {
-					return -1;
+					return 4;
 				}
 
+				return -1;
 			}
 
-			else switch (c) {
+			switch (c) {
 				case 0: return -1;
 				case 'A': ev->x = KBD_UP; break;
 				case 'B': ev->x = KBD_DOWN; break;

@@ -1,3 +1,37 @@
+Fri Apr 26 17:26:46 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/czech.lng, intl/danish.lng, intl/dutch.lng,
+	intl/english.lng, intl/estonian.lng, intl/finnish.lng,
+	intl/french.lng, intl/galician.lng, intl/german.lng,
+	intl/greek.lng, intl/hungarian.lng, intl/icelandic.lng,
+	intl/indonesian.lng, intl/italian.lng, intl/lithuanian.lng,
+	intl/polish.lng, intl/romanian.lng, intl/russian.lng,
+	intl/slovak.lng, intl/spanish.lng, intl/swedish.lng,
+	intl/turkish.lng, intl/ukrainian.lng, src/config/default.c,
+	src/dialogs/options.c, src/intl/charsets.c, src/intl/charsets.h,
+	src/intl/lang_defs.h, src/intl/language.inc,
+	src/lowlevel/terminal.c, src/lowlevel/terminal.h:
+	
+	Support for UTF8 I/O (terminal option utf8_io), patch by Ben
+	Sitter, cosmetical changes by me.
+
+Fri Apr 26 17:07:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/parser.c:
+	
+	Tidyup of various element handlers, some more fail checks. Call
+	html_focusable() before each put_link_line(), fixes the bug that
+	Link: lines and similiar have invalid tabindex, thus the navigation
+	messes up, reported by Kevin Everets <kevin.everets@alcatel.com>.
+
+Fri Apr 26 16:06:49 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/sched.c:
+	
+	Fixed possible segfault in memory allocation failure handling in
+	load_url() (stat may be NULL, but is always dereferenced).
+
 Fri Apr 26 15:48:13 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, src/protocol/http/http.c:

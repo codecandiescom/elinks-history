@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.88 2004/06/17 22:24:07 jonas Exp $ */
+/* $Id: textarea.c,v 1.89 2004/06/17 22:36:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -555,7 +555,7 @@ textarea_op_bob(struct form_state *fs, struct form_control *fc, int rep)
 {
 	unsigned char *position;
 	struct line_info *line;
-	int y;
+	int y, state = 0;
 
 	assert(fs && fs->value && fc);
 	if_assert_failed return FRAME_EVENT_OK;
@@ -567,19 +567,19 @@ textarea_op_bob(struct form_state *fs, struct form_control *fc, int rep)
 
 	for (y = 0; line[y].start; y++) {
 		if (position <= line[y].end) {
-			fs->state -= line[y].start - fs->value;
+			state -= line[y].start - fs->value;
 
-			position = fs->value + fs->state;
+			position = fs->value + state;
 			if (position > line[0].end)
-				fs->state = line[0].end - fs->value;
+				state = line[0].end - fs->value;
 
-			goto free_and_return;
+			break;
 		}
 	}
-	fs->state = 0;
 
-free_and_return:
+	fs->state = state;
 	mem_free(line);
+
 	return FRAME_EVENT_REFRESH;
 }
 

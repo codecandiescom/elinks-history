@@ -12,6 +12,7 @@ int parse_element(unsigned char *e, unsigned char *eof, unsigned char **name, in
 	if (e >= eof || *(e++) != '<') return -1;
 	if (name) *name = e;
 	if (e < eof && *e == '/') e++;
+	if (e >= eof || !isA(*e)) return -1;
 	while (e < eof && isA(*e)) e++;
 	if (e >= eof || (!WHITECHAR(*e) && *e != '>' && *e != '/' && *e != ':')) return -1;
 	if (name && namelen) *namelen = e - *name;

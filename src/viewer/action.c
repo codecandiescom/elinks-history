@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.10 2004/01/07 16:29:00 jonas Exp $ */
+/* $Id: action.c,v 1.11 2004/01/07 16:42:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,13 +10,15 @@
 
 #include "bookmarks/dialogs.h"
 #include "cache/dialogs.h"
-#include "config/kbdbind.h"
+#include "config/conf.h"
 #include "config/dialogs.h"
+#include "config/kbdbind.h"
 #include "config/options.h"
 #include "cookies/dialogs.h"
 #include "dialogs/document.h"
 #include "dialogs/download.h"
 #include "dialogs/menu.h"
+#include "dialogs/options.h"
 #include "dialogs/status.h"
 #include "document/document.h"
 #include "document/view.h"
@@ -218,6 +220,11 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			reload(ses, CACHE_MODE_INCREMENT);
 			break;
 
+		case ACT_SAVE_OPTIONS:
+			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+				write_config(term);
+			break;
+
 		case ACT_SEARCH:
 			do_frame_action(ses, search_dlg);
 			break;
@@ -228,6 +235,10 @@ do_action(struct session *ses, enum keyact action, int verbose)
 
 		case ACT_SEARCH_TYPEAHEAD:
 			do_frame_action(ses, search_typeahead);
+			break;
+
+		case ACT_SHOW_TERM_OPTIONS:
+			terminal_options(term, NULL, ses);
 			break;
 
 		case ACT_TAB_NEXT:
@@ -327,14 +338,12 @@ do_action(struct session *ses, enum keyact action, int verbose)
 		case ACT_SAVE_AS:
 		case ACT_SAVE_URL_AS:
 		case ACT_SAVE_FORMATTED:
-		case ACT_SAVE_OPTIONS:
 		case ACT_SCRIPTING_FUNCTION:
 		case ACT_SCROLL_DOWN:
 		case ACT_SCROLL_LEFT:
 		case ACT_SCROLL_RIGHT:
 		case ACT_SCROLL_UP:
 		case ACT_SELECT:
-		case ACT_SHOW_TERM_OPTIONS:
 		case ACT_TAB_MENU:
 		case ACT_UNEXPAND:
 		case ACT_UP:

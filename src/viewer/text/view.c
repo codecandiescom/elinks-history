@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.338 2004/01/07 16:29:00 jonas Exp $ */
+/* $Id: view.c,v 1.339 2004/01/07 16:42:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1005,10 +1005,6 @@ quak:
 				if (!get_opt_int_tree(cmdline_options, "anonymous"))
 					menu_save_formatted(ses->tab->term, (void *) 1, ses);
 				goto x;
-			case ACT_SAVE_OPTIONS:
-				if (!get_opt_int_tree(cmdline_options, "anonymous"))
-					write_config(ses->tab->term);
-				goto x;
 			case ACT_COOKIES_LOAD:
 #ifdef CONFIG_COOKIES
 				if (!get_opt_int_tree(cmdline_options, "anonymous")
@@ -1033,9 +1029,6 @@ quak:
 
 quit:
 				exit_prog(ses->tab->term, (void *)(ev->x == KBD_CTRL_C), ses);
-				goto x;
-			case ACT_SHOW_TERM_OPTIONS:
-				terminal_options(ses->tab->term, NULL, ses);
 				goto x;
 			case ACT_TAB_MENU:
 			{

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.61 2002/12/06 18:48:56 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.62 2002/12/07 09:21:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,25 +138,38 @@ int
 update_bookmark(struct bookmark *bm, const unsigned char *title,
 		const unsigned char *url)
 {
+	unsigned char *title2 = NULL;
+	unsigned char *url2 = NULL;
+
 	if (title) {
+		title2 = stracpy((unsigned char *) title);
+		if (!title2) return 0;
+	}
+
+	if (url) {
+		url2 = stracpy((unsigned char *) url);
+		if (!url2) {
+			if (title2) mem_free(title2);
+			return 0;
+		}
+	}
+
+	if (title2) {
 		struct listbox_item *b2;
 		struct list_head *orig_child;
-
-		mem_free(bm->title);
-		bm->title = stracpy((unsigned char *) title);
-		if (!bm->title) return 0;
 
 		orig_child = &bm->box_item->child;
 		b2 = mem_realloc(bm->box_item,
 				 sizeof(struct listbox_item)
-				 + strlen(bm->title) + 1);
+				 + strlen(title2) + 1);
 		if (!b2) {
-			/* XXX: The original bookmark is preserved, so we
-			 * should keep this even when we'll be out-of-sync
-			 * with the dialog. --pasky */
-			/* mem_free(bm->title); */
+			mem_free(title2);
+			if (url2) mem_free(url2);
 			return 0;
 		}
+
+		mem_free(bm->title);
+		bm->title = title2;
 
 		if (b2 != bm->box_item) {
 			struct listbox_item *item;
@@ -191,17 +204,11 @@ update_bookmark(struct bookmark *bm, const unsigned char *title,
 		strcpy(bm->box_item->text, bm->title);
 	}
 
-	if (url) {
+	if (url2) {
 		mem_free(bm->url);
-		bm->url = stracpy((unsigned char *) url);
-		if (!bm->url) {
-			if (title) {
-				mem_free(bm->title);
-				mem_free(bm->box_item);
-			}
-			return 0;
-		}
+		bm->url = url2;
 	}
+
 	bookmarks_dirty = 1;
 
 	return 1;

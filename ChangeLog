@@ -1,3 +1,55 @@
+Sun Jun 29 21:55:26 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/align.h:
+
+	get_bfu_color() was optimized.  
+
+Sun Jun 29 16:07:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Minor optimization.  
+
+Sun Jun 29 15:55:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	A variable declaration was moved near where it is used.  
+
+Sun Jun 29 15:51:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Multiple if were replaced by a switch.  
+
+Sun Jun 29 12:52:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Loading message was inappropriate, it was replaced by "No document"
+	message.  
+
+Sun Jun 29 12:37:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Cleanup, optimizations concerning tab bar. A loading message is now
+	printed when we do not have any title yet, and a tab separator is
+	now printed.  
+
+Sat Jun 28 23:34:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, config/options.h, dialogs/mime.c,
+	mime/backend/default.c:
+
+	Introduce generic function for encoding/decoding option names.  
+
+Sat Jun 28 23:07:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/hash.c:
+
+	Minor cleanup + use of register keyword.  
+
 Sat Jun 28 21:43:55 2003  Laurent Monin <zas@norz.org>:
 
 	* src/osdep/: os_dep.c, os_dep.h:

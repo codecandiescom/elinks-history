@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.39 2003/10/24 00:33:00 pasky Exp $ */
+/* $Id: history.c,v 1.40 2003/10/24 00:49:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ clean_unhistory(struct ses_history *history)
 {
 	if (!history->current) return;
 
-	while (history->current->next != history) {
+	while (history->current->next != (struct location *) history->history) {
 		struct location *loc = history->current->next;
 
 		del_from_list(loc);

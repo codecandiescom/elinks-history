@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.86 2004/08/01 08:55:09 jonas Exp $ */
+/* $Id: socket.c,v 1.87 2004/08/01 09:01:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,7 +86,7 @@ dns_exception(void *data)
 	struct connection *conn = data;
 
 	set_connection_state(conn, S_EXCEPT);
-	close_socket(NULL, conn->conn_info->sock);
+	close_socket(NULL, &conn->conn_info->socket->fd);
 	dns_found(conn, 0);
 }
 
@@ -118,7 +118,7 @@ make_connection(struct connection *conn, int port,
 	}
 
 	c_i->func = func;
-	c_i->sock = &socket->fd;
+	c_i->socket = socket;
 	c_i->port = port;
 	c_i->triedno = -1;
 	c_i->addr = NULL;
@@ -337,8 +337,8 @@ dns_found(void *data, int state)
 
 	/* Clear handlers, the connection to the previous RR really timed
 	 * out and doesn't interest us anymore. */
-	if (c_i->sock && *c_i->sock >= 0)
-		set_handlers(*c_i->sock, NULL, NULL, NULL, conn);
+	if (c_i->socket && c_i->socket->fd >= 0)
+		set_handlers(c_i->socket->fd, NULL, NULL, NULL, conn);
 
 	for (i = c_i->triedno + 1; i < c_i->addrno; i++) {
 #ifdef CONFIG_IPV6
@@ -380,7 +380,7 @@ dns_found(void *data, int state)
 			close(sock);
 			continue;
 		}
-		*c_i->sock = sock;
+		c_i->socket->fd = sock;
 
 #ifdef CONFIG_IPV6
 		addr.sin6_port = htons(c_i->port);
@@ -453,13 +453,14 @@ connected(void *data)
 {
 	struct connection *conn = (struct connection *) data;
 	struct conn_info *c_i = conn->conn_info;
+	struct connection_socket *socket = c_i->socket;
 	int err = 0;
 	int len = sizeof(int);
 
 	assertm(c_i, "Lost conn_info!");
 	if_assert_failed return;
 
-	if (getsockopt(*c_i->sock, SOL_SOCKET, SO_ERROR, (void *) &err, &len) == 0) {
+	if (getsockopt(socket->fd, SOL_SOCKET, SO_ERROR, (void *) &err, &len) == 0) {
 		/* Why does EMX return so large values? */
 		if (err >= 10000) err -= 10000;
 	} else {
@@ -474,13 +475,13 @@ connected(void *data)
 		set_connection_state(conn, -err);
 
 		/* There are maybe still some more candidates. */
-		close_socket(NULL, c_i->sock);
+		close_socket(NULL, &socket->fd);
 		dns_found(conn, 0);
 		return;
 	}
 
 #ifdef CONFIG_SSL
-	if (conn->ssl && ssl_connect(conn, *c_i->sock) < 0) return;
+	if (conn->ssl && ssl_connect(conn, socket->fd) < 0) return;
 #endif
 
 	conn->conn_info = NULL;

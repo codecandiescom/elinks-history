@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.61 2004/05/25 22:56:02 jonas Exp $ */
+/* $Id: kbd.c,v 1.62 2004/05/25 23:00:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,6 +65,7 @@ static struct itrm *ditrm = NULL;
 static void free_trm(struct itrm *);
 static void in_kbd(struct itrm *);
 static void in_sock(struct itrm *);
+static int process_queue(struct itrm *);
 
 int
 is_blocked(void)
@@ -557,8 +558,6 @@ free_and_return:
 	free_trm(itrm);
 }
 
-int process_queue(struct itrm *);
-
 
 static void
 kbd_timeout(struct itrm *itrm)
@@ -670,7 +669,7 @@ static struct key os2xtd[256] = {
 };
 
 /* Define it to dump queue content in a readable form,
- * it may help to determine terminal sequences, and see what's go on. --Zas*/
+ * it may help to determine terminal sequences, and see what goes on. --Zas */
 /* #define DEBUG_ITRM_QUEUE */
 
 #ifdef DEBUG_ITRM_QUEUE
@@ -679,7 +678,7 @@ static struct key os2xtd[256] = {
 
 /* I feeeeeel the neeeed ... to rewrite this ... --pasky */
 /* Just Do it ! --Zas */
-int
+static int
 process_queue(struct itrm *itrm)
 {
 	struct term_event ev = INIT_TERM_EVENT(EV_KBD, -1, 0, 0);

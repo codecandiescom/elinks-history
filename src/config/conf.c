@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.142 2004/06/26 09:52:17 zas Exp $ */
+/* $Id: conf.c,v 1.143 2004/06/27 13:06:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -266,13 +266,13 @@ parse_bind(struct option *opt_tree, unsigned char **file, int *line,
 			err = ERROR_VALUE;
 		}
 	} else {
-		if (get_cmd_opt_bool("default-keys")) {
-			/* Just ignore keybinding from configuration file. */
-			err = ERROR_NONE;
+		/* We don't bother to bind() if -default-keys. */
+		if (!get_cmd_opt_bool("default-keys")
+		    && bind_do(keymap, keystroke, action)) {
+			/* bind_do() tried but failed. */
+			err = ERROR_VALUE;
 		} else {
-			err = bind_do(keymap, keystroke, action)
-			      ? ERROR_VALUE
-			      : ERROR_NONE;
+			err = ERROR_NONE;
 		}
 	}
 	mem_free(keymap); mem_free(keystroke); mem_free(action);

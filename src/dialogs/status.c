@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.32 2003/12/23 19:08:52 jonas Exp $ */
+/* $Id: status.c,v 1.33 2003/12/25 13:10:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,7 +183,7 @@ update_status(void)
 
 		if (!dirty) continue;
 
-		set_screen_dirty(ses->tab->term->screen, 0, ses->tab->term->height);
+		set_screen_dirty(term->screen, 0, term->height);
 	}
 }
 
@@ -463,7 +463,7 @@ print_screen_status(struct session *ses)
 	struct terminal *term = ses->tab->term;
 	struct session_status *status = &ses->status;
 	int tabs_count = number_of_tabs(term);
-	int ses_tab_is_current = (ses->tab == get_current_tab(ses->tab->term));
+	int ses_tab_is_current = (ses->tab == get_current_tab(term));
 
 	if (ses_tab_is_current) {
 		if (status->set_window_title)

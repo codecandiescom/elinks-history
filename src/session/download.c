@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.307 2004/07/22 22:02:05 zas Exp $ */
+/* $Id: download.c,v 1.308 2004/07/22 22:04:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,6 +80,8 @@ get_download_ses(struct file_download *file_download)
 {
 	struct session *ses;
 
+	if (list_empty(sessions)) return NULL;
+
 	foreach (ses, sessions)
 		if (ses == file_download->ses)
 			return ses;
@@ -88,10 +90,7 @@ get_download_ses(struct file_download *file_download)
 		if (ses->tab->term == file_download->term)
 			return ses;
 
-	if (!list_empty(sessions))
-		return sessions.next;
-
-	return NULL;
+	return sessions.next;
 }
 
 

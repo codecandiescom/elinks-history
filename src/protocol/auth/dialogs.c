@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.39 2003/07/12 17:17:43 jonas Exp $ */
+/* $Id: dialogs.c,v 1.40 2003/07/23 08:21:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,7 +144,7 @@ do_auth_dialog(struct session *ses)
 
 	d->items[0].type = D_FIELD;
 	d->items[0].dlen = MAX_UID_LEN;
-	d->items[0].data = a->uid;
+	d->items[0].data = a->user;
 
 	d->items[1].type = D_FIELD_PASS;
 	d->items[1].dlen = MAX_PASSWD_LEN;
@@ -163,6 +163,6 @@ do_auth_dialog(struct session *ses)
 	dd = do_dialog(term, d, getml(d, NULL));
 	/* When there's some username, but no password, automagically jump at
 	 * the password. */
-	if (a->uid[0] && !a->passwd[0])
+	if (a->user[0] && !a->passwd[0])
 		dd->selected = 1;
 }

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.44 2003/07/21 06:52:18 jonas Exp $ */
+/* $Id: mailcap.c,v 1.45 2003/09/22 14:59:35 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -54,9 +54,6 @@ struct mailcap_hash_item {
 struct mailcap_entry {
 	LIST_HEAD(struct mailcap_entry);
 
-	/* The 'raw' unformatted (view)command from the mailcap files. */
-	unsigned char *command;
-
 	/* To verify if command qualifies. Cannot contain %s formats. */
 	unsigned char *testcommand;
 
@@ -74,6 +71,9 @@ struct mailcap_entry {
 	 * pipe the output into a buffer and let ELinks display it but this
 	 * will have to do for now. */
 	unsigned int copiousoutput:1;
+
+	/* The 'raw' unformatted (view)command from the mailcap files. */
+	unsigned char command[1];
 };
 
 /* State variables */
@@ -100,12 +100,11 @@ init_mailcap_entry(unsigned char *command, int priority)
 	struct mailcap_entry *entry;
 	int commandlen = strlen(command);
 
-	entry = mem_calloc(1, sizeof(struct mailcap_entry) + commandlen + 1);
+	entry = mem_calloc(1, sizeof(struct mailcap_entry) + commandlen);
 	if (!entry)
 		return NULL;
 
-	entry->command = (unsigned char *)entry + sizeof(struct mailcap_entry);
-	safe_strncpy(entry->command, command, commandlen + 1);
+	memcpy(entry->command, command, commandlen);
 
 	entry->priority = priority;
 

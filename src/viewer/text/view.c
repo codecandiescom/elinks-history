@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.466 2004/06/15 16:44:16 zas Exp $ */
+/* $Id: view.c,v 1.467 2004/06/15 19:28:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -694,6 +694,234 @@ rep_ev(struct session *ses, struct document_view *doc_view,
 	while (i--) f(ses, doc_view);
 }
 
+static enum frame_event_status
+frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_event *ev)
+{
+	enum frame_event_status status = FRAME_EVENT_REFRESH;
+
+#ifdef CONFIG_MARKS
+	if (ses->kbdprefix.mark != KP_MARK_NOTHING) {
+		/* Marks */
+		unsigned char mark = ev->x;
+
+		switch (ses->kbdprefix.mark) {
+			case KP_MARK_NOTHING:
+				assert(0);
+				break;
+
+			case KP_MARK_SET:
+				/* It is intentional to set the mark
+				 * to NULL if !doc_view->vs. */
+				set_mark(mark, doc_view->vs);
+				break;
+
+			case KP_MARK_GOTO:
+				goto_mark(mark, doc_view->vs);
+				break;
+		}
+
+		ses->kbdprefix.rep = 0;
+		ses->kbdprefix.mark = KP_MARK_NOTHING;
+		return FRAME_EVENT_REFRESH;
+	}
+#endif
+
+	if (ev->x >= '0' + !ses->kbdprefix.rep && ev->x <= '9'
+	    && (ev->y
+		|| !doc_view->document->options.num_links_key
+		|| (doc_view->document->options.num_links_key == 1
+		    && !doc_view->document->options.num_links_display))) {
+		/* Repeat count */
+
+		if (!ses->kbdprefix.rep) {
+			ses->kbdprefix.rep_num = ev->x - '0';
+		} else {
+			ses->kbdprefix.rep_num = ses->kbdprefix.rep_num * 10
+						 + ev->x - '0';
+		}
+
+		int_upper_bound(&ses->kbdprefix.rep_num, 65536);
+
+		ses->kbdprefix.rep = 1;
+		return FRAME_EVENT_OK;
+	}
+
+	if (get_opt_int("document.browse.accesskey.priority") >= 2
+	    && try_document_key(ses, doc_view, ev)) {
+		/* The document ate the key! */
+		return FRAME_EVENT_REFRESH;
+	}
+
+	switch (kbd_action(KM_MAIN, ev, NULL)) {
+		case ACT_MAIN_COPY_CLIPBOARD:
+		case ACT_MAIN_ENTER:
+		case ACT_MAIN_ENTER_RELOAD:
+		case ACT_MAIN_DOWNLOAD:
+		case ACT_MAIN_RESUME_DOWNLOAD:
+		case ACT_MAIN_VIEW_IMAGE:
+		case ACT_MAIN_DOWNLOAD_IMAGE:
+		case ACT_MAIN_LINK_MENU:
+		case ACT_MAIN_JUMP_TO_LINK:
+		case ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW:
+		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB:
+		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
+			if (!ses->kbdprefix.rep) break;
+
+			if (ses->kbdprefix.rep_num
+			    > doc_view->document->nlinks) {
+				ses->kbdprefix.rep = 0;
+				return FRAME_EVENT_OK;
+			}
+
+			jump_to_link_number(ses,
+					    current_frame(ses),
+					    ses->kbdprefix.rep_num
+						- 1);
+
+			refresh_view(ses, doc_view, 0);
+	}
+
+	switch (kbd_action(KM_MAIN, ev, NULL)) {
+		case ACT_MAIN_PAGE_DOWN: rep_ev(ses, doc_view, page_down); break;
+		case ACT_MAIN_PAGE_UP: rep_ev(ses, doc_view, page_up); break;
+		case ACT_MAIN_DOWN: rep_ev(ses, doc_view, down); break;
+		case ACT_MAIN_UP: rep_ev(ses, doc_view, up); break;
+		case ACT_MAIN_COPY_CLIPBOARD: {
+			/* This looks bogus. Why print_current_link()
+			 * it adds all kins of stuff that is not part
+			 * of the current link. I'd propose to use
+			 * get_link_uri() or something. --jonas */
+			char *current_link = get_current_link_info(ses, doc_view);
+
+			if (current_link) {
+				set_clipboard_text(current_link);
+				mem_free(current_link);
+			}
+			break;
+		}
+
+		/* XXX: Code duplication of following for mouse */
+		case ACT_MAIN_SCROLL_UP: scroll_up(ses, doc_view); break;
+		case ACT_MAIN_SCROLL_DOWN: scroll_down(ses, doc_view); break;
+		case ACT_MAIN_SCROLL_LEFT: rep_ev(ses, doc_view, scroll_left); break;
+		case ACT_MAIN_SCROLL_RIGHT: rep_ev(ses, doc_view, scroll_right); break;
+
+		case ACT_MAIN_HOME: rep_ev(ses, doc_view, home); break;
+		case ACT_MAIN_END:  rep_ev(ses, doc_view, x_end); break;
+		case ACT_MAIN_ENTER: status = enter(ses, doc_view, 0); break;
+		case ACT_MAIN_ENTER_RELOAD: status = enter(ses, doc_view, 1); break;
+		case ACT_MAIN_JUMP_TO_LINK: status = FRAME_EVENT_OK; break;
+		case ACT_MAIN_MARK_SET:
+#ifdef CONFIG_MARKS
+			ses->kbdprefix.mark = KP_MARK_SET;
+#endif
+			status = FRAME_EVENT_OK;
+			break;
+		case ACT_MAIN_MARK_GOTO:
+#ifdef CONFIG_MARKS
+			/* TODO: Show promptly a menu (or even listbox?)
+			 * with all the marks. But the next letter must
+			 * still choose a mark directly! --pasky */
+			ses->kbdprefix.mark = KP_MARK_GOTO;
+#endif
+			status = FRAME_EVENT_OK;
+			break;
+		default:
+			if (ev->x >= '1' && ev->x <= '9' && !ev->y) {
+				/* FIXME: This probably doesn't work
+				 * together with the keybinding...? */
+
+				struct document *document = doc_view->document;
+				int nl, lnl;
+				unsigned char d[2];
+
+				d[0] = ev->x;
+				d[1] = 0;
+				nl = document->nlinks, lnl = 1;
+				while (nl) nl /= 10, lnl++;
+					if (lnl > 1)
+					input_field(ses->tab->term, NULL, 1,
+						    N_("Go to link"), N_("Enter link number"),
+						    N_("OK"), N_("Cancel"), ses, NULL,
+						    lnl, d, 1, document->nlinks, check_number,
+						    (void (*)(void *, unsigned char *)) goto_link_number, NULL);
+			} else if (get_opt_int("document.browse.accesskey.priority") == 1
+				   && try_document_key(ses, doc_view, ev)) {
+				/* The document ate the key! */
+				status = FRAME_EVENT_OK;
+			} else {
+				status = FRAME_EVENT_IGNORED;
+			}
+	}
+
+	ses->kbdprefix.rep = 0;
+	return status;
+}
+
+#ifdef CONFIG_MOUSE
+static enum frame_event_status
+frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_event *ev)
+{
+	enum frame_event_status status = FRAME_EVENT_REFRESH;
+	struct link *link = choose_mouse_link(doc_view, ev);
+
+	if (check_mouse_wheel(ev)) {
+		if (!check_mouse_action(ev, B_DOWN)) {
+			/* We handle only B_DOWN case... */
+		} else if (check_mouse_button(ev, B_WHEEL_UP)) {
+			rep_ev(ses, doc_view, scroll_mouse_up);
+		} else if (check_mouse_button(ev, B_WHEEL_DOWN)) {
+			rep_ev(ses, doc_view, scroll_mouse_down);
+		}
+
+	} else if (link) {
+		doc_view->vs->current_link = link - doc_view->document->links;
+
+		if (!link_is_textinput(link)
+		    && check_mouse_action(ev, B_UP)) {
+
+			status = FRAME_EVENT_OK;
+
+			refresh_view(ses, doc_view, 0);
+
+			if (check_mouse_button(ev, B_LEFT))
+				status = enter(ses, doc_view, 0);
+			else if (check_mouse_button(ev, B_MIDDLE))
+				open_current_link_in_new_tab(ses, 1);
+			else
+				link_menu(ses->tab->term, NULL, ses);
+		}
+
+	} else if (check_mouse_button(ev, B_LEFT)) {
+		/* Clicking the edge of screen will scroll the document. */
+
+		int scrollmargin = get_opt_int("document.browse.scrolling.margin");
+
+		/* XXX: This is code duplication with kbd handlers. But
+		 * repeatcount-free here. */
+
+		if (ev->y < scrollmargin) {
+			rep_ev(ses, doc_view, scroll_mouse_up);
+		}
+		if (ev->y >= doc_view->box.height - scrollmargin) {
+			rep_ev(ses, doc_view, scroll_mouse_down);
+		}
+
+		if (ev->x < scrollmargin * 2) {
+			rep_ev(ses, doc_view, scroll_mouse_left);
+		}
+		if (ev->x >= doc_view->box.width - scrollmargin * 2) {
+			rep_ev(ses, doc_view, scroll_mouse_right);
+		}
+
+	} else {
+		status = FRAME_EVENT_IGNORED;
+	}
+
+	return status;
+}
+#endif /* CONFIG_MOUSE */
+
 /* We return |x| at the end of the function. */
 static enum frame_event_status
 frame_ev(struct session *ses, struct document_view *doc_view, struct term_event *ev)
@@ -712,216 +940,13 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 		return FRAME_EVENT_REFRESH;
 
 	if (ev->ev == EV_KBD) {
-#ifdef CONFIG_MARKS
-		if (ses->kbdprefix.mark != KP_MARK_NOTHING) {
-			/* Marks */
-			unsigned char mark = ev->x;
+		status = frame_ev_kbd(ses, doc_view, ev);
 
-			switch (ses->kbdprefix.mark) {
-				case KP_MARK_NOTHING:
-					assert(0);
-					break;
-
-				case KP_MARK_SET:
-					/* It is intentional to set the mark
-					 * to NULL if !doc_view->vs. */
-					set_mark(mark, doc_view->vs);
-					break;
-
-				case KP_MARK_GOTO:
-					goto_mark(mark, doc_view->vs);
-					break;
-			}
-
-			ses->kbdprefix.rep = 0;
-			ses->kbdprefix.mark = KP_MARK_NOTHING;
-			return FRAME_EVENT_REFRESH;
-		}
-#endif
-
-		if (ev->x >= '0' + !ses->kbdprefix.rep && ev->x <= '9'
-		    && (ev->y
-			|| !doc_view->document->options.num_links_key
-			|| (doc_view->document->options.num_links_key == 1
-			    && !doc_view->document->options.num_links_display))) {
-			/* Repeat count */
-
-			if (!ses->kbdprefix.rep) {
-				ses->kbdprefix.rep_num = ev->x - '0';
-			} else {
-				ses->kbdprefix.rep_num = ses->kbdprefix.rep_num * 10
-							 + ev->x - '0';
-			}
-
-			int_upper_bound(&ses->kbdprefix.rep_num, 65536);
-
-			ses->kbdprefix.rep = 1;
-			return FRAME_EVENT_OK;
-		}
-
-		if (get_opt_int("document.browse.accesskey.priority") >= 2
-		    && try_document_key(ses, doc_view, ev)) {
-			/* The document ate the key! */
-			return FRAME_EVENT_REFRESH;
-		}
-
-		switch (kbd_action(KM_MAIN, ev, NULL)) {
-			case ACT_MAIN_COPY_CLIPBOARD:
-			case ACT_MAIN_ENTER:
-			case ACT_MAIN_ENTER_RELOAD:
-			case ACT_MAIN_DOWNLOAD:
-			case ACT_MAIN_RESUME_DOWNLOAD:
-			case ACT_MAIN_VIEW_IMAGE:
-			case ACT_MAIN_DOWNLOAD_IMAGE:
-			case ACT_MAIN_LINK_MENU:
-			case ACT_MAIN_JUMP_TO_LINK:
-			case ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW:
-			case ACT_MAIN_OPEN_LINK_IN_NEW_TAB:
-			case ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
-				if (!ses->kbdprefix.rep) break;
-
-				if (ses->kbdprefix.rep_num
-				    > doc_view->document->nlinks) {
-					ses->kbdprefix.rep = 0;
-					return FRAME_EVENT_OK;
-				}
-
-				jump_to_link_number(ses,
-						    current_frame(ses),
-						    ses->kbdprefix.rep_num
-							- 1);
-
-				refresh_view(ses, doc_view, 0);
-		}
-
-		switch (kbd_action(KM_MAIN, ev, NULL)) {
-			case ACT_MAIN_PAGE_DOWN: rep_ev(ses, doc_view, page_down); break;
-			case ACT_MAIN_PAGE_UP: rep_ev(ses, doc_view, page_up); break;
-			case ACT_MAIN_DOWN: rep_ev(ses, doc_view, down); break;
-			case ACT_MAIN_UP: rep_ev(ses, doc_view, up); break;
-			case ACT_MAIN_COPY_CLIPBOARD: {
-				/* This looks bogus. Why print_current_link()
-				 * it adds all kins of stuff that is not part
-				 * of the current link. I'd propose to use
-				 * get_link_uri() or something. --jonas */
-				char *current_link = get_current_link_info(ses, doc_view);
-
-				if (current_link) {
-					set_clipboard_text(current_link);
-					mem_free(current_link);
-				}
-				break;
-			}
-
-			/* XXX: Code duplication of following for mouse */
-			case ACT_MAIN_SCROLL_UP: scroll_up(ses, doc_view); break;
-			case ACT_MAIN_SCROLL_DOWN: scroll_down(ses, doc_view); break;
-			case ACT_MAIN_SCROLL_LEFT: rep_ev(ses, doc_view, scroll_left); break;
-			case ACT_MAIN_SCROLL_RIGHT: rep_ev(ses, doc_view, scroll_right); break;
-
-			case ACT_MAIN_HOME: rep_ev(ses, doc_view, home); break;
-			case ACT_MAIN_END:  rep_ev(ses, doc_view, x_end); break;
-			case ACT_MAIN_ENTER: status = enter(ses, doc_view, 0); break;
-			case ACT_MAIN_ENTER_RELOAD: status = enter(ses, doc_view, 1); break;
-			case ACT_MAIN_JUMP_TO_LINK: status = FRAME_EVENT_OK; break;
-			case ACT_MAIN_MARK_SET:
-#ifdef CONFIG_MARKS
-				ses->kbdprefix.mark = KP_MARK_SET;
-#endif
-				status = FRAME_EVENT_OK;
-				break;
-			case ACT_MAIN_MARK_GOTO:
-#ifdef CONFIG_MARKS
-				/* TODO: Show promptly a menu (or even listbox?)
-				 * with all the marks. But the next letter must
-				 * still choose a mark directly! --pasky */
-				ses->kbdprefix.mark = KP_MARK_GOTO;
-#endif
-				status = FRAME_EVENT_OK;
-				break;
-			default:
-				if (ev->x >= '1' && ev->x <= '9' && !ev->y) {
-					/* FIXME: This probably doesn't work
-					 * together with the keybinding...? */
-
-					struct document *document = doc_view->document;
-					int nl, lnl;
-					unsigned char d[2];
-
-					d[0] = ev->x;
-					d[1] = 0;
-					nl = document->nlinks, lnl = 1;
-					while (nl) nl /= 10, lnl++;
-					if (lnl > 1)
-						input_field(ses->tab->term, NULL, 1,
-							    N_("Go to link"), N_("Enter link number"),
-							    N_("OK"), N_("Cancel"), ses, NULL,
-							    lnl, d, 1, document->nlinks, check_number,
-							    (void (*)(void *, unsigned char *)) goto_link_number, NULL);
-				} else if (get_opt_int("document.browse.accesskey.priority") == 1
-					   && try_document_key(ses, doc_view, ev)) {
-					/* The document ate the key! */
-					return FRAME_EVENT_OK;
-
-				} else {
-					status = FRAME_EVENT_IGNORED;
-				}
-		}
 #ifdef CONFIG_MOUSE
 	} else if (ev->ev == EV_MOUSE) {
-		struct link *link = choose_mouse_link(doc_view, ev);
-
-		if (check_mouse_wheel(ev)) {
-			if (!check_mouse_action(ev, B_DOWN)) {
-				/* We handle only B_DOWN case... */
-			} else if (check_mouse_button(ev, B_WHEEL_UP)) {
-				rep_ev(ses, doc_view, scroll_mouse_up);
-			} else if (check_mouse_button(ev, B_WHEEL_DOWN)) {
-				rep_ev(ses, doc_view, scroll_mouse_down);
-			}
-
-		} else if (link) {
-			doc_view->vs->current_link = link - doc_view->document->links;
-
-			if (!link_is_textinput(link)
-			    && check_mouse_action(ev, B_UP)) {
-
-				status = FRAME_EVENT_OK;
-
-				refresh_view(ses, doc_view, 0);
-
-				if (check_mouse_button(ev, B_LEFT))
-					status = enter(ses, doc_view, 0);
-				else if (check_mouse_button(ev, B_MIDDLE))
-					open_current_link_in_new_tab(ses, 1);
-				else
-					link_menu(ses->tab->term, NULL, ses);
-			}
-		} else if (check_mouse_button(ev, B_LEFT)) {
-			/* Clicking the edge of screen will scroll the document. */
-
-			int scrollmargin = get_opt_int("document.browse.scrolling.margin");
-
-			/* XXX: This is code duplication with kbd handlers. But
-			 * repeatcount-free here. */
-
-			if (ev->y < scrollmargin) {
-				rep_ev(ses, doc_view, scroll_mouse_up);
-			}
-			if (ev->y >= doc_view->box.height - scrollmargin) {
-				rep_ev(ses, doc_view, scroll_mouse_down);
-			}
-
-			if (ev->x < scrollmargin * 2) {
-				rep_ev(ses, doc_view, scroll_mouse_left);
-			}
-			if (ev->x >= doc_view->box.width - scrollmargin * 2) {
-				rep_ev(ses, doc_view, scroll_mouse_right);
-			}
-		} else {
-			status = FRAME_EVENT_IGNORED;
-		}
+		status = frame_ev_mouse(ses, doc_view, ev);
 #endif /* CONFIG_MOUSE */
+
 	} else {
 		status = FRAME_EVENT_IGNORED;
 	}
@@ -930,7 +955,6 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 	    && link != get_current_link(doc_view))
 		ses->insert_mode = INSERT_MODE_OFF;
 
-	ses->kbdprefix.rep = 0;
 	return status;
 }
 

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.14 2004/01/19 00:02:10 jonas Exp $ */
+/* $Id: scanner.c,v 1.15 2004/01/19 01:02:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,7 +99,6 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		}
 
 	} else {
-		/* TODO: Strings */
 		/* TODO: Better composing of error tokens. For now we just
 		 * split them down into char tokens */
 		if (!first_char) {

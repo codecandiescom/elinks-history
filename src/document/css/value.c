@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.53 2004/06/28 11:14:20 jonas Exp $ */
+/* $Id: value.c,v 1.54 2004/06/30 05:51:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -248,6 +248,28 @@ css_parse_text_decoration_value(struct css_property_info *propinfo,
 
 	} else if (scanner_token_contains(token, "none")) {
 		value->font_attribute.rem |= AT_UNDERLINE;
+
+	} else {
+		return 0;
+	}
+
+	skip_css_tokens(scanner, CSS_TOKEN_IDENT);
+	return 1;
+}
+
+int
+css_parse_white_space_value(struct css_property_info *propinfo,
+			    union css_property_value *value,
+			    struct scanner *scanner)
+{
+	struct scanner_token *token = get_scanner_token(scanner);
+
+	assert(propinfo->value_type == CSS_VT_FONT_ATTRIBUTE);
+
+	if (token->type != CSS_TOKEN_IDENT) return 0;
+
+	if (scanner_token_contains(token, "pre")) {
+		value->font_attribute.add |= AT_PREFORMATTED;
 
 	} else {
 		return 0;

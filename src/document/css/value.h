@@ -1,4 +1,4 @@
-/* $Id: value.h,v 1.13 2004/01/28 00:04:52 jonas Exp $ */
+/* $Id: value.h,v 1.14 2004/06/30 05:51:10 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_VALUE_H
 #define EL__DOCUMENT_CSS_VALUE_H
@@ -50,4 +50,8 @@ int css_parse_text_align_value(struct css_property_info *propinfo,
 				union css_property_value *value,
 				struct scanner *scanner);
 
+/* Takes no parser_data. */
+int css_parse_white_space_value(struct css_property_info *propinfo,
+				union css_property_value *value,
+				struct scanner *scanner);
 #endif

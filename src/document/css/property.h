@@ -1,4 +1,4 @@
-/* $Id: property.h,v 1.16 2004/01/28 00:04:52 jonas Exp $ */
+/* $Id: property.h,v 1.17 2004/06/30 05:51:10 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PROPERTY_H
 #define EL__DOCUMENT_CSS_PROPERTY_H
@@ -27,6 +27,7 @@ struct css_property {
 		CSS_PT_FONT_WEIGHT,
 		CSS_PT_TEXT_ALIGN,
 		CSS_PT_TEXT_DECORATION,
+		CSS_PT_WHITE_SPACE,
 		CSS_PT_LAST,
 	} type;
 

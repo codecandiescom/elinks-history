@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.3 2003/11/17 22:22:36 jonas Exp $ */
+/* $Id: dialogs.c,v 1.4 2003/11/18 07:52:48 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,22 +47,6 @@ update_all_cookie_dialogs(void)
 
 		display_dlg_item(item->dlg_data, widget_data, 1);
 	}
-}
-
-/* Creates the box display (holds everything EXCEPT the actual rendering data) */
-static struct listbox_data *
-cookie_dialog_box_build(void)
-{
-	struct listbox_data *box;
-
-	/* Deleted in abort */
-	box = mem_calloc(1, sizeof(struct listbox_data));
-	if (!box) return NULL;
-
-	box->items = &cookie_box_items;
-	add_to_list(cookie_boxes, box);
-
-	return box;
 }
 
 
@@ -170,7 +154,10 @@ menu_cookie_manager(struct terminal *term, void *fcp, struct session *ses)
 	}
 
 	dlg_data = hierbox_browser(term, N_("Cookie manager"),
-			0, cookie_dialog_box_build(), ses,
+			0,
+			hierbox_browser_box_build(&cookie_boxes,
+						  &cookie_box_items, NULL),
+			ses,
 			2,
 			N_("Info"), push_info_button, B_ENTER, ses,
 			N_("Save"), push_save_button, B_ENTER, ses);

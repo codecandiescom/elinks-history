@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.114 2003/11/18 05:51:37 miciah Exp $ */
+/* $Id: dialogs.c,v 1.115 2003/11/18 07:52:48 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -52,25 +52,6 @@ static struct listbox_ops bookmarks_listbox_ops = {
 /****************************************************************************
   Bookmark manager stuff.
 ****************************************************************************/
-
-/* Creates the box display (holds everything EXCEPT the actual rendering
- * data) */
-static struct listbox_data *
-bookmark_dlg_box_build(void)
-{
-	struct listbox_data *box;
-
-	/* Deleted in abort */
-	box = mem_calloc(1, sizeof(struct listbox_data));
-	if (!box) return NULL;
-
-	box->ops = &bookmarks_listbox_ops;
-	box->items = &bookmark_box_items;
-	add_to_list(bookmark_boxes, box);
-
-	return box;
-}
-
 
 void launch_bm_add_doc_dialog(struct terminal *, struct dialog_data *,
 			      struct session *);
@@ -577,7 +558,11 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	}
 
 	hierbox_browser(term, N_("Bookmark manager"),
-			BOOKMARK_MANAGER_ADDSIZE, bookmark_dlg_box_build(), ses,
+			BOOKMARK_MANAGER_ADDSIZE,
+			hierbox_browser_box_build(&bookmark_boxes,
+						  &bookmark_box_items,
+						  &bookmarks_listbox_ops),
+			ses,
 			BOOKMARK_MANAGER_BUTTONS,
 			N_("Goto"), push_goto_button, B_ENTER, ses,
 			N_("Edit"), push_edit_button, B_ENTER, ses,

@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.13 2003/11/09 14:09:38 jonas Exp $ */
+/* $Id: hierbox.h,v 1.14 2003/11/18 07:52:48 miciah Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -40,4 +40,11 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 		struct listbox_data *listbox_data, void *udata,
 		size_t buttons, ...);
 
+
+/* Creates the box display (holds everything EXCEPT
+ * the actual rendering data) */
+struct listbox_data *
+hierbox_browser_box_build(struct list_head *boxes,
+			  struct list_head *items,
+			  struct listbox_ops *ops);
 #endif

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.67 2003/11/18 05:51:37 miciah Exp $ */
+/* $Id: dialogs.c,v 1.68 2003/11/18 07:52:48 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,23 +54,6 @@ update_all_history_dialogs(void)
 
 		display_dlg_item(item->dlg_data, widget_data, 1);
 	}
-}
-
-/* Creates the box display (holds everything EXCEPT the actual rendering data) */
-static struct listbox_data *
-history_dialog_box_build(void)
-{
-	struct listbox_data *box;
-
-	/* Deleted in abort */
-	box = mem_calloc(1, sizeof(struct listbox_data));
-	if (!box) return NULL;
-
-	box->ops = &gh_listbox_ops;
-	box->items = &gh_box_items;
-	add_to_list(gh_boxes, box);
-
-	return box;
 }
 
 
@@ -434,7 +417,10 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	}
 
 	dlg_data = hierbox_browser(term, N_("Global history"),
-			GLOBHIST_MANAGER_ADDSIZE, history_dialog_box_build(), ses,
+			GLOBHIST_MANAGER_ADDSIZE,
+			hierbox_browser_box_build(&gh_boxes, &gh_box_items,
+						  &gh_listbox_ops),
+			ses,
 			GLOBHIST_MANAGER_BUTTONS,
 			N_("Goto"), push_goto_button, B_ENTER, ses,
 			N_("Info"), push_info_button, B_ENTER, ses,

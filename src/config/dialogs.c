@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.114 2003/11/10 00:51:29 jonas Exp $ */
+/* $Id: dialogs.c,v 1.115 2003/11/18 07:52:48 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,24 +49,6 @@ write_config_error(struct terminal *term, struct memory_list *ml,
 /****************************************************************************
   Option manager stuff.
 ****************************************************************************/
-
-/* Creates the box display (holds everything EXCEPT the actual rendering
- * data) */
-static struct listbox_data *
-option_dlg_box_build(void)
-{
-	struct listbox_data *box;
-
-	/* Deleted in abort */
-	box = mem_calloc(1, sizeof(struct listbox_data));
-	if (!box) return NULL;
-
-	box->items = &config_options->box_item->child;
-	add_to_list(option_boxes, box);
-
-	return box;
-}
-
 
 static void
 done_info_button(void *vhop)
@@ -398,8 +380,12 @@ push_save_button(struct dialog_data *dlg_data,
 void
 menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 {
+	struct list_head *items = &config_options->box_item->child;
+
 	hierbox_browser(term, N_("Option manager"),
-			OPTION_MANAGER_ADDSIZE, option_dlg_box_build(), ses,
+			OPTION_MANAGER_ADDSIZE,
+			hierbox_browser_box_build(&option_boxes, items, NULL),
+			ses,
 			OPTION_MANAGER_BUTTONS,
 			N_("Info"), push_info_button, B_ENTER, ses,
 			N_("Edit"), push_edit_button, B_ENTER, ses,
@@ -413,24 +399,6 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 /****************************************************************************
   Keybinding manager stuff.
 ****************************************************************************/
-
-/* Creates the box display (holds everything EXCEPT the actual rendering
- * data) */
-static struct listbox_data *
-kbdbind_dlg_box_build(void)
-{
-	struct listbox_data *box;
-
-	/* Deleted in abort */
-	box = mem_calloc(1, sizeof(struct listbox_data));
-	if (!box) return NULL;
-
-	box->items = &kbdbind_box_items;
-	add_to_list(kbdbind_boxes, box);
-
-	return box;
-}
-
 
 struct kbdbind_add_hop {
 	struct terminal *term;
@@ -598,7 +566,11 @@ void
 menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	hierbox_browser(term, N_("Keybinding manager"),
-			KEYBINDING_MANAGER_ADDSIZE, kbdbind_dlg_box_build(), ses,
+			KEYBINDING_MANAGER_ADDSIZE,
+			hierbox_browser_box_build(&kbdbind_boxes,
+						  &kbdbind_box_items,
+						  NULL),
+			ses,
 			KEYBINDING_MANAGER_BUTTONS,
 			N_("Add"), push_kbdbind_add_button, B_ENTER, ses,
 			N_("Delete"), push_kbdbind_del_button, B_ENTER, ses,

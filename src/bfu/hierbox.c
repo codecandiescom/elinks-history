@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.59 2003/11/11 15:35:17 zas Exp $ */
+/* $Id: hierbox.c,v 1.60 2003/11/18 07:52:48 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,4 +214,21 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 	add_dlg_end(dlg, buttons + 2);
 
 	return do_dialog(term, dlg, getml(dlg, NULL));
+}
+
+struct listbox_data *
+hierbox_browser_box_build(struct list_head *boxes,
+			  struct list_head *items,
+			  struct listbox_ops *ops)
+{
+	struct listbox_data *box;
+
+	box = mem_calloc(1, sizeof(struct listbox_data));
+	if (!box) return NULL;
+
+	box->ops = ops;
+	box->items = items;
+	add_to_list(*boxes, box);
+
+	return box;
 }

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.104 2004/09/19 22:33:40 pasky Exp $ */
+/* $Id: parser.c,v 1.105 2004/09/19 22:35:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -266,9 +266,9 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 		pkg = mem_calloc(1, sizeof(struct selector_pkg));
 		if (!pkg) continue;
-		pkg->selector = selector;
-
 		add_to_list(*selectors, pkg);
+
+		pkg->selector = selector;
 
 
 		/* Multiple elements hooked up to this ruleset? */

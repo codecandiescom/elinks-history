@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.50 2003/09/17 01:04:46 jonas Exp $ */
+/* $Id: string.h,v 1.51 2003/10/01 17:16:15 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -67,11 +67,6 @@ int xstrcmp(unsigned char *s1, unsigned char *s2);
 
 /* Copies at most @len chars into @dst. Ensures null termination of @dst. */
 unsigned char *safe_strncpy(unsigned char *dst, const unsigned char *src, size_t len);
-
-/* Trims any starting and ending chars equal to @trim from @str modifying it.
- * If @len != NULL, it is set to length of the new string. */
-unsigned char *trim_chars(unsigned char *str, unsigned char trim, int *len);
-
 
 /* strlcmp() is the middle child of history, everyone is using it differently.
  * On some weird *systems* it seems to be defined (equivalent to strcasecmp()),

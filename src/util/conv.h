@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.20 2003/09/21 14:10:07 jonas Exp $ */
+/* $Id: conv.h,v 1.21 2003/10/01 17:16:15 zas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -129,5 +129,23 @@ unsigned char *decode_shell_safe_url(unsigned char *);
 /* Return 0 if starting with jan, 11 for dec, -1 for failure.
  * @month must be a lowercased string. */
 int month2num(const unsigned char *month);
+
+/* Trim starting and ending chars equal to @c in string @s.
+ * If @len != NULL, it stores new string length in pointed integer.
+ * It returns @s for convenience. */
+static inline unsigned char *
+trim_chars(unsigned char *s, unsigned char c, int *len)
+{
+	register int l = strlen(s);
+	register unsigned char *p = s;
+
+	while (*p == c) p++, l--;
+	while (l && p[l - 1] == c) p[--l] = '\0';
+
+	memmove(s, p, l + 1);
+	if (len) *len = l;
+
+	return s;
+}
 
 #endif

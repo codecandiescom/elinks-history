@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.84 2003/10/01 14:19:33 zas Exp $ */
+/* $Id: string.c,v 1.85 2003/10/01 17:16:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,21 +187,6 @@ safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 	dst[dst_size - 1] = 0;
 
 	return dst;
-}
-
-inline unsigned char *
-trim_chars(unsigned char *s, unsigned char c, int *len)
-{
-	int l = strlen(s);
-	unsigned char *p = s;
-
-	while (*p == c) p++, l--;
-	while (l && p[l - 1] == c) p[--l] = '\0';
-
-	memmove(s, p, l + 1);
-	if (len) *len = l;
-
-	return s;
 }
 
 #define strlcmp_device(c,s1,n1,s2,n2,t1,t2) {\

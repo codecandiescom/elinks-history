@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.98 2004/05/23 02:39:01 jonas Exp $ */
+/* $Id: uri.h,v 1.99 2004/05/23 14:15:43 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -36,6 +36,9 @@ struct uri {
 	/* @data can contain both the path and query uri fields.
 	 * It can never be NULL but can have zero length. */
 	unsigned char *data;
+	/* @post can contain some special encoded form data, used internally
+	 * to make form data handling more efficient. The data is marked by
+	 * POST_CHAR in the uri string. */
 	unsigned char *post;
 
 	/* @protocollen should only be usable if @protocol is either
@@ -44,12 +47,11 @@ struct uri {
 	int userlen:16;
 	int passwordlen:16;
 	int hostlen:16;
-	int portlen:16;
+	int portlen:8;
 	int datalen:16;
 
-	/* @post can contain some special encoded form data, used internally
-	 * to make form data handling more efficient. The data is marked by
-	 * POST_CHAR in the uri string. */
+	/* Flags */
+	unsigned int ipv6:1;
 
 	/* Usage count object. */
 	struct object object;

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.195 2004/05/23 01:31:20 jonas Exp $ */
+/* $Id: uri.c,v 1.196 2004/05/23 14:15:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,6 +126,8 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 		/* [address] is handled only inside of hostname part (surprisingly). */
 		if (rbracket && prefix_end + strcspn(prefix_end, "/") < rbracket)
 			lbracket = rbracket = NULL;
+		else
+			uri->ipv6 = 1;
 	} else {
 		rbracket = NULL;
 	}
@@ -151,14 +153,14 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	}
 
 #ifdef CONFIG_IPV6
-	if (rbracket)
+	if (uri->ipv6)
 		host_end = rbracket + strcspn(rbracket, ":/?");
 	else
 #endif
 		host_end = prefix_end + strcspn(prefix_end, ":/?");
 
 #ifdef CONFIG_IPV6
-	if (rbracket) {
+	if (uri->ipv6) {
 		int addrlen = rbracket - lbracket - 1;
 
 		/* Check for valid length.
@@ -186,6 +188,10 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 
 		uri->port = host_end;
 		uri->portlen = port_end - host_end;
+
+		/* We only use 8 bits for portlen so better check */
+		if (uri->portlen != port_end - host_end)
+			return URI_ERRNO_INVALID_PORT;
 
 		/* test if port is number */
 		/* TODO: possibly lookup for the service otherwise? --pasky */
@@ -270,9 +276,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
 
  	if (wants(URI_HOST) && uri->hostlen) {
 #ifdef CONFIG_IPV6
- 		int brackets = !!memchr(uri->host, ':', uri->hostlen);
-
-		if (brackets) add_char_to_string(string, '[');
+		if (uri->ipv6) add_char_to_string(string, '[');
 #endif
 #ifdef HAVE_LIBIDN
 		/* Support for the GNU International Domain Name library.
@@ -302,7 +306,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
 #endif
 			add_bytes_to_string(string, uri->host, uri->hostlen);
 #ifdef CONFIG_IPV6
-		if (brackets) add_char_to_string(string, ']');
+		if (uri->ipv6) add_char_to_string(string, ']');
 #endif
  	}
 

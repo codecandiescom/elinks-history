@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.28 2004/01/19 19:26:41 jonas Exp $ */
+/* $Id: parser.c,v 1.29 2004/01/20 02:00:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,11 +196,6 @@ css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string)
 
 		} else if (token->type == CSS_TOKEN_ATRULE) {
 			css_parse_atrule(css, &scanner);
-
-		} else if (token->type == '<') {
-			/* The scanner will generate SGML comment tokens so
-			 * this must be some ending <style> tag so bail out. */
-			return;
 
 		} else {
 			/* TODO: Skip to ';' or block if '{' */

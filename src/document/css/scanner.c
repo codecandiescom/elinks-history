@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.38 2004/01/20 01:42:58 jonas Exp $ */
+/* $Id: scanner.c,v 1.39 2004/01/20 02:00:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,6 +129,11 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			type = CSS_TOKEN_IDENTIFIER;
 		}
 
+	} else if (first_char == '<' && *string == '/') {
+		/* Some kind of SGML tag end ... better bail out screaming */
+		type = CSS_TOKEN_NONE;
+		string = NULL;
+
 	} else {
 		/* TODO: Better composing of error tokens. For now we just
 		 * split them down into char tokens */
@@ -163,7 +168,7 @@ scan_css_tokens(struct css_scanner *scanner)
 	/* Set all unused tokens to CSS_TOKEN_NONE */
 	memset(&table[move_to_front], 0, sizeof(struct css_token) * (CSS_SCANNER_TOKENS - move_to_front));
 
-	if (!*scanner->position) {
+	if (!scanner->position) {
 		scanner->tokens = move_to_front ? move_to_front : -1;
 		scanner->current = 0;
 		return;
@@ -182,11 +187,17 @@ scan_css_tokens(struct css_scanner *scanner)
 
 		if (token->type == CSS_TOKEN_GARBAGE) {
 			current--;
+
+		} else if (token->type == CSS_TOKEN_NONE) {
+ 			current--;
+			break;
 		}
 	}
 
 	scanner->tokens = current;
 	scanner->current = 0;
+	if (scanner->position && !*scanner->position)
+		scanner->position = NULL;
 }
 
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.416 2004/06/04 07:40:10 jonas Exp $ */
+/* $Id: session.c,v 1.417 2004/06/04 12:46:34 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -213,7 +213,7 @@ request_frame(struct session *ses, unsigned char *name, struct uri *uri)
 	} else {
 		unsigned char *pos = NULL;
 
-		uri = get_translated_uri(struri(uri), NULL, &pos);
+		uri = get_translated_uri(struri(uri), ses->tab->term->cwd, &pos);
 		if (!uri) {
 			mem_free(frame->name);
 			mem_free(frame);

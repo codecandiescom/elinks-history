@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.22 2003/12/23 10:10:05 jonas Exp $ */
+/* $Id: download.c,v 1.23 2003/12/25 14:02:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,7 +103,7 @@ download_abort_function(struct dialog_data *dlg_data)
 
 static void
 download_progress_bar(struct terminal *term,
-	     	      int x, int *y, int width,
+	     	      int x, int y, int width,
 		      longlong current, longlong total)
 {
 	/* FIXME: not yet perfect, pasky will improve it later. --Zas */
@@ -123,19 +123,15 @@ download_progress_bar(struct terminal *term,
 		percent_len = 1;
 	}
 
-	(*y)++;
-
 	/* Draw the progress meter part "[###    ]" */
-	draw_char_data(term, x, *y, '[');
-	draw_area(term, x + 1, *y, barprogress, 1, ' ', 0, meter_color);
-	draw_char_data(term, x + width - 1, *y, ']');
+	draw_char_data(term, x, y, '[');
+	draw_area(term, x + 1, y, barprogress, 1, ' ', 0, meter_color);
+	draw_char_data(term, x + width - 1, y, ']');
 
 	/* Draw the percentage centered in the progress meter */
 	for (x += (width - percent_len) / 2; percent_len > 0; percent_len--) {
-		draw_char_data(term, x + percent_len, *y, percent[percent_len - 1]);
+		draw_char_data(term, x + percent_len, y, percent[percent_len - 1]);
 	}
-
-	(*y)++;
 }
 
 static void
@@ -198,10 +194,13 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 	dlg_format_text_do(term, url, x, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 
-	if (t && download->prg->size >= 0)
-		download_progress_bar(term, x, &y, w,
+	if (t && download->prg->size >= 0) {
+		y++;
+		download_progress_bar(term, x, y, w,
 				      download->prg->pos,
 				      download->prg->size);
+		y++;
+	}
 
 	y++;
 	dlg_format_text_do(term, msg, x, &y, w, NULL,
@@ -321,7 +320,6 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 	int length = strlen(text);
 	int trimmedlen;
 	int meter = DOWNLOAD_METER_WIDTH;
-	int temp_y;
 
 	/* We have nothing to work with */
 	if (width < 4) return;
@@ -357,10 +355,9 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 
 	if (trimmedlen + meter >= width) return;
 
-	temp_y = y - 1;
 	x += width - meter;
 
-	download_progress_bar(context->term, x, &temp_y, meter,
+	download_progress_bar(context->term, x, y, meter,
 			      download->prg->pos,
 			      download->prg->size);
 }

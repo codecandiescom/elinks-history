@@ -298,6 +298,9 @@ Uwe Hermann <uh1763@bingo-ev.de>
 Unai Uribarri <unai@telecable.es>
 	History
 
+Witold Filipczyk <juandon@poczta.onet.pl>
+	HTTP code hacking
+
 Wojtek Bojdo/l <wojboj@lp.net.pl>
 	Updated Polish localization
 
@@ -308,4 +311,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.54 2002/04/22 15:39:26 pasky Exp $
+$Id: AUTHORS,v 1.55 2002/04/26 15:48:13 pasky Exp $

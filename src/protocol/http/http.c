@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.9 2002/04/24 19:20:01 zas Exp $ */
+/* $Id: http.c,v 1.10 2002/04/26 15:48:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,6 +233,7 @@ void http_send_header(struct connection *c)
 		
 		/* Nop, this doesn't stand for EuroURL, but Encoded URL. */
 		unsigned char *eurl;
+		unsigned char *p, *p1;
 		
 		if (!post) {
 			eurl = stracpy(url_data);
@@ -240,8 +241,9 @@ void http_send_header(struct connection *c)
 			eurl = memacpy(url_data, post - url_data - 1);
 		}
 		
+#if 0
 		/* XXX: This is pretty ugly and ineffective (read as slow). */
-		while (strchr(eurl, ' ')) {
+ 		while (strchr(eurl, ' ')) {
 			unsigned char *space = strchr(eurl, ' ');
 			unsigned char *neurl = mem_alloc(strlen(eurl) + 3);
 			
@@ -255,6 +257,19 @@ void http_send_header(struct connection *c)
 		}
 		
 		add_to_str(&hdr, &l, eurl);
+		mem_free(eurl);
+#endif
+
+		p = eurl;
+		while ((p1 = strchr(p, ' '))) {
+			*p1 = 0;
+			add_to_str(&hdr, &l, p);
+			add_to_str(&hdr, &l, "%20");
+			/* This is probably not needed, but who cares.. ;) */
+			*p1 = ' ';
+			p = p1 + 1;
+		}
+		add_to_str(&hdr, &l, p);
 		mem_free(eurl);
 	}
 

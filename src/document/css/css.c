@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.49 2004/09/21 17:34:02 jonas Exp $ */
+/* $Id: css.c,v 1.50 2004/10/14 20:00:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,12 +63,8 @@ import_css(struct css_stylesheet *css, struct uri *uri)
 	    || css->import_level >= MAX_REDIRECTS)
 		return;
 
-	defrag_entry(cached);
-	fragment = cached->frag.next;
-
-	if (!list_empty(cached->frag)
-	    && !fragment->offset
-	    && fragment->length) {
+	fragment = get_cache_fragment(cached);
+	if (fragment) {
 		unsigned char *end = fragment->data + fragment->length;
 
 		css->import_level++;

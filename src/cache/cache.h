@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.92 2004/10/14 19:00:56 jonas Exp $ */
+/* $Id: cache.h,v 1.93 2004/10/14 20:00:44 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -93,6 +93,11 @@ struct cache_entry *get_validated_cache_entry(struct uri *uri, enum cache_mode c
  *	    0 if only old data were overwritten. */
 int add_fragment(struct cache_entry *cached, int offset,
 		 unsigned char *data, int length);
+
+/* Defragments the cache entry and returns the resulting fragment containing the
+ * complete source of all currently downloaded fragments. Returns NULL if
+ * validation of the fragments fails. */
+struct fragment *get_cache_fragment(struct cache_entry *cached);
 
 void defrag_entry(struct cache_entry *);
 void truncate_entry(struct cache_entry *, int, int);

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.186 2004/10/14 19:00:56 jonas Exp $ */
+/* $Id: cache.c,v 1.187 2004/10/14 20:00:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -454,6 +454,20 @@ defrag_entry(struct cache_entry *cached)
 	add_to_list(cached->frag, new_frag);
 
 	dump_frags(cached, "defrag_entry");
+}
+
+struct fragment *
+get_cache_fragment(struct cache_entry *cached)
+{
+	struct fragment *fragment;
+
+	defrag_entry(cached);
+
+	fragment = cached->frag.next;
+	if (list_empty(cached->frag) || fragment->offset || !fragment->length)
+		return NULL;
+	else
+		return fragment;
 }
 
 static void

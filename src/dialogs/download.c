@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.24 2003/12/25 15:09:21 jonas Exp $ */
+/* $Id: download.c,v 1.25 2003/12/26 08:04:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,6 +114,11 @@ download_progress_bar(struct terminal *term,
 	int barprogress = int_min((width - 2) * progress / 100, width - 2);
 	struct color_pair *meter_color = get_bfu_color(term, "dialog.meter");
 
+	/* Draw the progress meter part "[###    ]" */
+	draw_text(term, x, y, "[", 1, 0, NULL);
+	draw_area(term, x + 1, y, barprogress, 1, ' ', 0, meter_color);
+	draw_text(term, x + width - 1, y, "]", 1, 0, NULL);
+
 	/* On error, will print '?' only, should not occur. */
 	if (!ulongcat(percent, &percent_len, progress, sizeof(percent) - 1, 0)
 	     && percent_len < width - 3) {
@@ -122,11 +127,6 @@ download_progress_bar(struct terminal *term,
 		percent[0] = '?';
 		percent_len = 1;
 	}
-
-	/* Draw the progress meter part "[###    ]" */
-	draw_text(term, x, y, "[", 1, 0, NULL);
-	draw_area(term, x + 1, y, barprogress, 1, ' ', 0, meter_color);
-	draw_text(term, x + width - 1, y, "]", 1, 0, NULL);
 
 	/* Draw the percentage centered in the progress meter */
 	x += (width - percent_len) / 2;

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.13 2003/12/01 21:47:16 jonas Exp $ */
+/* $Id: status.c,v 1.14 2003/12/01 21:50:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -392,20 +392,20 @@ print_screen_status(struct session *ses)
 
 	init_bars_status(ses, &tabs_count, NULL);
 
-	if (ses->visible_status_bar && ses_tab_is_current) {
-		display_status_bar(ses, term, tabs_count);
+	if (ses_tab_is_current) {
+		if (ses->set_window_title)
+			display_window_title(ses, term);
+
+		if (ses->visible_title_bar)
+			display_title_bar(ses, term);
+
+		if (ses->visible_status_bar)
+			display_status_bar(ses, term, tabs_count);
 	}
 
 	if (ses->visible_tabs_bar) {
 		display_tab_bar(ses, term, tabs_count);
 	}
-
-	if (ses_tab_is_current && ses->visible_title_bar) {
-		display_title_bar(ses, term);
-	}
-
-	if (ses_tab_is_current && ses->set_window_title)
-		display_window_title(ses, term);
 
 	redraw_from_window(ses->tab);
 

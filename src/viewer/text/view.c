@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.607 2004/10/10 01:46:57 miciah Exp $ */
+/* $Id: view.c,v 1.608 2004/10/10 01:53:43 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -509,34 +509,45 @@ move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 	return FRAME_EVENT_REFRESH;
 }
 
-#define kbdprefix_repeat_count_or_one(ses) \
-	(ses->kbdprefix.repeat_count ? (ses)->kbdprefix.repeat_count : 1)
-
 enum frame_event_status
 move_cursor_left(struct session *ses, struct document_view *view)
 {
-	return move_cursor(ses, view, ses->tab->x - kbdprefix_repeat_count_or_one(ses), ses->tab->y);
+	int count = ses->kbdprefix.repeat_count;
+
+	int_lower_bound(&count, 1);
+
+	return move_cursor(ses, view, ses->tab->x - count, ses->tab->y);
 }
 
 enum frame_event_status
 move_cursor_right(struct session *ses, struct document_view *view)
 {
-	return move_cursor(ses, view, ses->tab->x + kbdprefix_repeat_count_or_one(ses), ses->tab->y);
+	int count = ses->kbdprefix.repeat_count;
+
+	int_lower_bound(&count, 1);
+
+	return move_cursor(ses, view, ses->tab->x + count, ses->tab->y);
 }
 
 enum frame_event_status
 move_cursor_up(struct session *ses, struct document_view *view)
 {
-	return move_cursor(ses, view, ses->tab->x, ses->tab->y - kbdprefix_repeat_count_or_one(ses));
+	int count = ses->kbdprefix.repeat_count;
+
+	int_lower_bound(&count, 1);
+
+	return move_cursor(ses, view, ses->tab->x, ses->tab->y - count);
 }
 
 enum frame_event_status
 move_cursor_down(struct session *ses, struct document_view *view)
 {
-	return move_cursor(ses, view, ses->tab->x, ses->tab->y + kbdprefix_repeat_count_or_one(ses));
-}
+	int count = ses->kbdprefix.repeat_count;
 
-#undef kbdprefix_repeat_count_or_one
+	int_lower_bound(&count, 1);
+
+	return move_cursor(ses, view, ses->tab->x, ses->tab->y + count);
+}
 
 
 enum frame_event_status

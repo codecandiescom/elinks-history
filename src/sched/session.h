@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.161 2004/09/27 00:10:44 pasky Exp $ */
+/* $Id: session.h,v 1.162 2004/09/27 00:43:43 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -110,7 +110,7 @@ enum navigate_mode {
 
 /* This is one of the building stones of ELinks architecture --- this structure
  * carries information about the specific ELinks session. Each tab (thus, at
- * least one per terminal, in the normal case) has own session. Session
+ * least one per terminal, in the normal case) has its own session. Session
  * describes mainly the current browsing and control state, from the currently
  * viewed document through the browsing history of this session to the status
  * bar information. */

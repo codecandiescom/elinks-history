@@ -647,7 +647,7 @@ msgstr "Lade die aktuelle Seite erneut"
 
 #: src/config/kbdbind.c:422
 msgid "Attempt to resume download of the current link"
-msgstr "Versuche den Download des aktuellen Links wieder zu starten"
+msgstr "Versuche den Download des aktuellen Links wieder aufzunehmen"
 
 #: src/config/kbdbind.c:423
 msgid "Move the cursor right"
@@ -3656,14 +3656,13 @@ msgid ""
 msgstr ""
 
 #: src/dialogs/info.c:169
-#, fuzzy
 msgid "No entry."
 msgstr "Kein Eintrag."
 
 #: src/dialogs/info.c:175
 #, c-format
 msgid "%ld more entries."
-msgstr ""
+msgstr "%ld Einträge übrig."
 
 #: src/dialogs/info.c:181
 msgid "Cache info"
@@ -3820,9 +3819,8 @@ msgid "Pre~v tab"
 msgstr ""
 
 #: src/dialogs/menu.c:478
-#, fuzzy
 msgid "~Close tab"
-msgstr "Schließen"
+msgstr ""
 
 #: src/dialogs/menu.c:484
 msgid "~ELinks homepage"
@@ -3979,7 +3977,7 @@ msgstr "KOI8-R-Rahmen"
 
 #: src/dialogs/options.c:128
 msgid "No colors (mono)"
-msgstr ""
+msgstr "Keine Farben (Mono)"
 
 #: src/dialogs/options.c:129
 msgid "16 colors"
@@ -4003,7 +4001,7 @@ msgstr "Transparenz"
 
 #: src/dialogs/options.c:137
 msgid "Underline"
-msgstr ""
+msgstr "Unterstreichen"
 
 #: src/dialogs/options.c:138
 msgid "UTF-8 I/O"
@@ -4103,43 +4101,43 @@ msgstr ""
 #: src/lowlevel/interlink.c:333
 #, c-format
 msgid "accept() failed: %d (%s)"
-msgstr ""
+msgstr "accept() fehlgeschlagen: %d (%s)"
 
 #: src/lowlevel/interlink.c:372 src/lowlevel/interlink.c:431
 #, c-format
 msgid "socket() failed: %d (%s)"
-msgstr ""
+msgstr "socket() fehlgeschlagen: %d (%s)"
 
 #: src/lowlevel/interlink.c:381
 #, c-format
 msgid "bind() failed: %d (%s)"
-msgstr ""
+msgstr "bind() fehlgeschlagen: %d (%s)"
 
 #: src/lowlevel/interlink.c:401
 #, c-format
 msgid "listen() failed: %d (%s)"
-msgstr ""
+msgstr "listen() fehlgeschlagen: %d (%s)"
 
 #: src/lowlevel/interlink.c:443
 #, c-format
 msgid "connect() failed: %d (%s)"
-msgstr ""
+msgstr "connect() fehlgeschlagen: %d (%s)"
 
 #: src/lowlevel/select.c:341
 #, c-format
 msgid "select() failed: %d (%s)"
-msgstr ""
+msgstr "select() fehlgeschlagen: %d (%s)"
 
 #. Infinite loop prevention.
 #: src/lowlevel/select.c:344
 #, c-format
 msgid "%d select() failures."
-msgstr ""
+msgstr "%d select() Fehler."
 
 #: src/lowlevel/signals.c:242
 #, fuzzy, c-format
 msgid "Bad signal number: %d"
-msgstr "fehlerhafte Zahl"
+msgstr "Fehlerhaftes Signal: %d"
 
 #: src/main.c:113
 msgid "Cannot create a pipe for internal communication."
@@ -4255,23 +4253,27 @@ msgid "Could not create file %s: %s"
 msgstr "Datei %s konnte nicht erstellt werden: %s"
 
 #: src/sched/download.c:612
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error downloading %s:\n"
 "\n"
 "%s"
-msgstr "Downloadfehler"
+msgstr ""
+"Downloadfehler %s:\n\n"
+"%s"
 
 #: src/sched/download.c:637
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Download complete:\n"
 "%s"
-msgstr "Download beendet"
+msgstr ""
+"Download beendet:\n"
+"%s"
 
 #: src/sched/download.c:766
 msgid "File exists"
-msgstr ""
+msgstr "Datei existiert"
 
 #: src/sched/download.c:767
 #, c-format
@@ -4282,25 +4284,32 @@ msgid ""
 "The alternative filename is:\n"
 "%s"
 msgstr ""
+"Diese Datei existiert bereits:\n"
+"%s\n"
+"\n"
+"Der alternative Dateiname ist:\n"
+"%s"
 
 #: src/sched/download.c:774
 msgid "Save under the alternative name"
-msgstr ""
+msgstr "Speicher mit dem alternativen Namen"
 
 #: src/sched/download.c:775
 msgid "Overwrite the original file"
-msgstr ""
+msgstr "Überschreibe die Originaldatei"
 
 #: src/sched/download.c:776
 msgid "Resume download of the original file"
-msgstr ""
+msgstr "Nehme Download der Originaldatei wieder auf"
 
 #: src/sched/download.c:858
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not create file '%s':\n"
 "%s"
-msgstr "In Datei konnte nicht geschrieben werden"
+msgstr ""
+"Konnte die Datei '%s' nicht anlegen:\n"
+"%s"
 
 #: src/sched/download.c:1247 src/sched/download.c:1258
 msgid "Unknown type"
@@ -4309,7 +4318,7 @@ msgstr "Unbekannter Typ"
 #: src/sched/download.c:1248
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
-msgstr ""
+msgstr "Soll die Datei '%s' (Typ: %s) gespeichert oder angezeigt werden?"
 
 #: src/sched/download.c:1254 src/sched/download.c:1263
 #: src/sched/download.c:1290 src/sched/download.c:1302
@@ -4319,7 +4328,7 @@ msgstr "Anzeigen"
 #: src/sched/download.c:1259
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
-msgstr ""
+msgstr "Soll die Datei '%s' (Typ: %s) angezeigt werden?"
 
 #: src/sched/download.c:1281 src/sched/download.c:1294
 msgid "What to do?"
@@ -4331,6 +4340,8 @@ msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', save it or display it?"
 msgstr ""
+"Soll die Datei '%s' (Typ: %s%s%s)\n mit '%s' geöffnet,\n"
+"gespeichert oder angezeigt werden?"
 
 #: src/sched/download.c:1288 src/sched/download.c:1301
 msgid "Open"
@@ -4342,6 +4353,8 @@ msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', or display it?"
 msgstr ""
+"Soll die Datei '%s' (Typ: %s%s%s)\n mit '%s' geöffnet\n"
+"oder angezeigt werden?"
 
 #: src/sched/error.c:29
 msgid "Waiting in queue"
@@ -4421,7 +4434,7 @@ msgstr "Fehlerhafte HTTP-Antwort"
 
 #: src/sched/error.c:55
 msgid "HTTP 100 (???)"
-msgstr ""
+msgstr "HTTP 100 (???)"
 
 #: src/sched/error.c:56
 msgid "No content"
@@ -4481,26 +4494,26 @@ msgstr "momentan"
 
 #: src/sched/session.c:294
 msgid "Untitled"
-msgstr "Ohne Title"
+msgstr "Ohne Titel"
 
 #: src/sched/session.c:296
 msgid "No document"
 msgstr "Kein Dokument"
 
 #: src/sched/session.c:635
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to follow redirect and post form data to URL %s?"
-msgstr "Umleitung folgen und Daten an neue Adresse senden.?"
+msgstr "Weiterleitung folgen und Daten an neue Adresse '%s' senden?"
 
 #: src/sched/session.c:638
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to post form data to URL %s?"
-msgstr "Diese Daten senden?"
+msgstr "Diese Daten zur URL %s senden?"
 
 #: src/sched/session.c:640
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to repost form data to URL %s?"
-msgstr "Diese Daten erneut senden?"
+msgstr "Diese Daten erneut zur URL %s senden?"
 
 #: src/sched/session.c:646 src/sched/session.c:1177 src/sched/session.c:1197
 msgid "Warning"
@@ -4573,24 +4586,24 @@ msgstr "Konnte Ereignis nicht lesen: %d (%s)"
 #: src/terminal/event.c:109
 #, c-format
 msgid "Bad event %d"
-msgstr ""
+msgstr "Ungültiges Ereignis %d"
 
 #: src/terminal/event.c:146
 msgid "Warning: terminal name contains illicit chars."
-msgstr ""
+msgstr "Warnung: der Name des Terminals enthält nicht erlaubte Zeichen."
 
 #: src/terminal/event.c:168
 #, c-format
 msgid "Bad terminal size: %d, %d"
-msgstr ""
+msgstr "Ungültige Größe des Terminals: %d, %d"
 
 #: src/terminal/kbd.c:278
 msgid "Could not get terminal size"
-msgstr ""
+msgstr "Konnte die Größe des Terminals nicht ermitteln"
 
 #: src/terminal/kbd.c:944
 msgid "Too many bytes read from the itrm!"
-msgstr ""
+msgstr "Zu viele Bytes von itrm gelesen!"
 
 #: src/util/version.c:48
 msgid "Text WWW browser"
@@ -4603,7 +4616,7 @@ msgstr "Features"
 
 #: src/util/version.c:52
 msgid "Standard"
-msgstr ""
+msgstr "Standard"
 
 #: src/util/version.c:54
 msgid "Debug"
@@ -4615,7 +4628,7 @@ msgstr ""
 
 #: src/util/version.c:60
 msgid "Own Libc Routines"
-msgstr ""
+msgstr "Eigene Libc Routinen"
 
 #: src/util/version.c:63
 msgid "No Backtrace"
@@ -4628,7 +4641,7 @@ msgstr "Verlaufsmanager"
 
 #: src/util/version.c:92
 msgid "LED indicators"
-msgstr ""
+msgstr "LED Indikatoren"
 
 #: src/util/version.c:107
 msgid "Forms memory"
@@ -4650,16 +4663,16 @@ msgstr "Kann nicht auf die Standardausgabe schreiben."
 #: src/viewer/dump/dump.c:194
 #, c-format
 msgid "URL expected after %s."
-msgstr ""
+msgstr "URL erwartet nach %s."
 
 #: src/viewer/text/form.c:663
 msgid "Error while posting form"
 msgstr "Fehler beim Senden des Formular"
 
 #: src/viewer/text/form.c:664
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get file %s: %s"
-msgstr "Datei konnte nicht übertragen werden."
+msgstr "Datei %s konnte nicht übertragen werden: %s"
 
 #: src/viewer/text/link.c:841
 msgid "Display ~usemap"
@@ -4784,11 +4797,11 @@ msgstr "es wurde noch keine Suche durchgeführt"
 
 #: src/viewer/text/search.c:856
 msgid "Search hit bottom, continuing at top."
-msgstr ""
+msgstr "Am Ende angekommen, führe die Suche am Anfang fort."
 
 #: src/viewer/text/search.c:862
 msgid "Search hit top, continuing at bottom."
-msgstr ""
+msgstr "Am Anfang angekommen, führe die Suche am Ende fort."
 
 #: src/viewer/text/search.c:884
 #, c-format
@@ -4809,11 +4822,11 @@ msgstr "Suche mit erweiterten regulären Ausdrücken"
 
 #: src/viewer/text/search.c:919
 msgid "Case sensitive"
-msgstr ""
+msgstr "Groß-/Kleinschreibung beachten"
 
 #: src/viewer/text/search.c:920
 msgid "Case insensitive"
-msgstr ""
+msgstr "Groß-/Kleinschreibung ignorieren"
 
 #: src/viewer/text/search.c:1169
 msgid "Search backward"

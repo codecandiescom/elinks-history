@@ -1,3 +1,100 @@
+Sat Nov 20 11:32:57 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: common.h, hierbox.h, inpfield.c, inpfield.h, widget.h:
+
+	Drop WIDGET_HANDLER_FUNC() macro, and introduce new type
+	t_widget_handler.  
+
+Sat Nov 20 04:29:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/: auth.c, auth.h:
+
+	Make find_auth_entry() once again static.  
+
+Sat Nov 20 03:52:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/ftp.c:
+
+	I never did quite understand why find_auth() was not good enough for
+	FTP authentication. It checks for blocked entries and the user/pass
+	checking is only to validate that they were not updated through the
+	goto dialog. So use find_auth() for FTP.  
+
+Sat Nov 20 02:50:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Wrap digest code in CONFIG_SSL_DIGEST #ifdef.  
+
+Sat Nov 20 02:08:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Move WWW-Authenticate HTTP header field checking to
+	check_http_authentication().  
+
+Sat Nov 20 01:32:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/digest.c:
+
+	Introduce init_uri_method_digest() for calculating that H(A2).  
+
+Sat Nov 20 01:27:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/digest.c:
+
+	digest_calc_ha1() -> init_credential_digest().  
+
+Sat Nov 20 00:46:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/digest.c:
+
+	random_cnonce() -> init_random_cnonce().  
+
+Sat Nov 20 00:44:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/digest.c:
+
+	Use stack allocated buffers through typedef'ed md5_hex_digest.  
+
+Sat Nov 20 00:33:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/digest.c:
+
+	Make all the hex'ed digest lengths explicit.  
+
+Sat Nov 20 00:26:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/digest.c:
+
+	Only make digest_calc_response() worry about ha1 calculation.  
+
+Sat Nov 20 00:09:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/digest.c:
+
+	digest_calc_ha1(): Drop unused cnonce arg.  
+
+Fri Nov 19 23:46:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/: digest.c, digest.h:
+
+	Make auth digest helpers static.  
+
+Fri Nov 19 23:45:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: auth/digest.c, auth/digest.h, http/http.c:
+
+	Oops misread the RFC
+	s/get_http_auth_digest_challenge/get_http_auth_digest_response/.  
+
+Fri Nov 19 23:40:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: auth/digest.c, auth/digest.h, http/http.c:
+
+	Move HTTP auth digest challenge computation and string construction
+	to new get_http_auth_digest_challenge().  
+
 Fri Nov 19 19:05:40 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/bfu/checkbox.h:

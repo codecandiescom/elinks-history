@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.7 2002/07/05 01:29:10 pasky Exp $ */
+/* $Id: connect.c,v 1.8 2002/07/05 01:54:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ ssl_connect(struct connection *conn, int sock)
 #ifdef HAVE_SSL
         struct conn_info *c_i = (struct conn_info *) conn->buffer;
 
-	conn->ssl = getSSL();
+	conn->ssl = get_ssl();
 	SSL_set_fd(conn->ssl, sock);
 	if (conn->no_tsl)
 		conn->ssl->options |= SSL_OP_NO_TLSv1;

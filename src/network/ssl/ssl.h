@@ -1,4 +1,4 @@
-/* $Id: ssl.h,v 1.4 2002/07/05 01:49:23 pasky Exp $ */
+/* $Id: ssl.h,v 1.5 2002/07/05 01:54:25 pasky Exp $ */
 
 #ifndef EL__SSL_SSL_H
 #define EL__SSL_SSL_H
@@ -12,6 +12,7 @@
 void init_ssl();
 void done_ssl();
 
-ssl_t *getSSL();
+ssl_t *get_ssl();
+void free_ssl(ssl_t *);
 
 #endif

@@ -1,14 +1,11 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.34 2002/07/05 01:29:09 pasky Exp $ */
+/* $Id: sched.c,v 1.35 2002/07/05 01:54:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <string.h>
-#ifdef HAVE_SSL
-#include <openssl/ssl.h>
-#endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -26,6 +23,7 @@
 #include "lowlevel/ttime.h"
 #include "lua/hooks.h"
 #include "protocol/url.h"
+#include "ssl/ssl.h"
 #include "util/base64.h"
 #include "util/error.h"
 #include "util/memory.h"
@@ -529,9 +527,7 @@ interrupt_connection(struct connection *c)
 {
 	if (c->ssl == (void *)-1) c->ssl = 0;
 	if (c->ssl) {
-#ifdef HAVE_SSL
-		SSL_free(c->ssl);
-#endif
+		free_ssl(c->ssl);
 		c->ssl=NULL;
 	}
 

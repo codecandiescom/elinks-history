@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.5 2002/07/05 01:49:23 pasky Exp $ */
+/* $Id: ssl.c,v 1.6 2002/07/05 01:54:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,12 +33,20 @@ init_ssl()
 }
 
 ssl_t *
-getSSL(void)
+get_ssl(void)
 {
 #ifdef HAVE_SSL
 	return (SSL_new(context));
 #else
 	return NULL;
+#endif
+}
+
+void
+free_ssl(ssl_t *ssl)
+{
+#ifdef HAVE_SSL
+	SSL_free(ssl);
 #endif
 }
 

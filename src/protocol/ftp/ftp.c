@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.63 2002/10/13 18:45:25 zas Exp $ */
+/* $Id: ftp.c,v 1.64 2002/10/13 18:57:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -622,9 +622,10 @@ add_file_cmd_to_str(struct connection *conn)
 			else
 				add_portcmd_to_str(&str, &strl, pc);
 
-		if (conn->from) {
+		if (conn->from || conn->prg.start) {
 			add_to_str(&str, &strl, "REST ");
-			add_num_to_str(&str, &strl, conn->from);
+			add_num_to_str(&str, &strl, conn->from ? conn->from
+							: conn->prg.start);
 			add_to_str(&str, &strl, "\r\n");
 
 			c_i->rest_sent = 1;
@@ -800,10 +801,57 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 			case 3:	/* REST / CWD */
 				if (response >= 400) {
 					if (c_i->dir) {
-						abort_conn_with_state(conn, S_FTP_NO_FILE);
+						abort_conn_with_state(conn,
+								S_FTP_NO_FILE);
 						return;
 					}
 					conn->from = 0;
+				} else {
+					if (response == 350)
+						conn->from = conn->prg.start;
+					/* Come on, don't be nervous ;-). */
+					if (conn->prg.start) {
+						/* I'm not really sure about
+						 * this. --pasky */
+						struct download *down =
+							((struct status *)
+							 conn->statuss.next
+							 )->data;
+
+						/* Update to the real value
+						 * which we've got from
+						 * Content-Range. */
+						/* This is certainly not the
+						 * best place to do it, the
+						 * struct download looks alien
+						 * here, but I'm not aware
+						 * about any other place where
+						 * we could do this elegantly.
+						 */
+
+						if (!down)
+							internal("Eek! We've "
+								"NULL down "
+								"(c->stat->data)"
+								" even when we "
+								"got "
+								"c->prg.start! "
+								"Call "
+								"pasky@ji.cz "
+								"immediatelly, "
+								"please. And "
+								"expect segfault"
+								" right now.");
+						if (lseek(down->handle,
+							  conn->from, SEEK_SET)
+							< 0) {
+							abort_conn_with_state(
+								conn, -errno);
+							return;
+						}
+						down->last_pos = conn->from;
+					}
+					conn->prg.start = conn->from;
 				}
 				break;
 

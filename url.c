@@ -438,66 +438,110 @@ unsigned char *translate_url(unsigned char *url, unsigned char *cwd)
 {
 	static int r = 0;
 	unsigned char *ch;
-	unsigned char *nu, *da;
-	while(*url == ' ') url++;
-	if (!casecmp("proxy://", url, 8)) goto prx;
-	if (!parse_url(url, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &da, NULL, NULL)) {
-		nu = stracpy(url);
-		insert_wd(&nu, cwd);
-		translate_directories(nu);
-		return nu;
+	unsigned char *newurl;
+	
+	/* Strip starting spaces */
+	while (*url == ' ') url++;
+	
+	if (!casecmp("proxy://", url, 8)) goto proxy;
+	
+	/* Ordinary parse */
+	if (!parse_url(url, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
+		newurl = stracpy(url);
+		insert_wd(&newurl, cwd);
+		translate_directories(newurl);
+		return newurl;
 	}
-	if (strstr(url, "//") && (nu = stracpy(url))) {
-		add_to_strn(&nu, "/");
-		if (!parse_url(nu, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
-			insert_wd(&nu, cwd);
-			translate_directories(nu);
-			return nu;
+	
+	/* Try to add slash to end */
+	if (strstr(url, "//") && (newurl = stracpy(url))) {
+		add_to_strn(&newurl, "/");
+		if (!parse_url(newurl, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
+			insert_wd(&newurl, cwd);
+			translate_directories(newurl);
+			return newurl;
 		}
-		mem_free(nu);
+		mem_free(newurl);
 	}
-	prx:
+	
+proxy:
+	/* No protocol name */
 	ch = url + strcspn(url, ".:/@");
-	if (*ch != ':' || *(url + strcspn(url, "/@")) == '@') {
+	if (*ch != ':' || url[strcspn(url, "/@")] == '@') {
 		unsigned char *prefix = "file://";
-		int sl = 0;
+		int not_file = 0;
+		
+		/* Contains domain name? */
 		if (*url != '.' && *ch == '.') {
-			unsigned char *f, *e;
+			unsigned char *host_end, *domain;
 			int i;
-			for (e = ch + 1; *(f = e + strcspn(e, ".:/")) == '.'; e = f + 1) ;
-			for (i = 0; i < f - e; i++) if (e[i] >= '0' && e[i] <= '9') goto http;
-			if (f - e == 2) http: prefix = "http://", sl = 1;
-			else if (f - e == 3) {
+			
+			/* Process the hostname */
+			for (domain = ch + 1;
+			     *(host_end = domain + strcspn(domain, ".:/")) == '.';
+			     domain = host_end + 1);
+			
+			/* It's IP? */
+			for (i = 0; i < host_end - domain; i++)
+				if (domain[i] >= '0' && domain[i] <= '9')
+					goto http;
+
+			/* FIXME: Following is completely braindead. TODO: Remove it. */
+		
+			/* It's two-letter TLD? */
+			if (host_end - domain == 2) {
+http:				prefix = "http://";
+				not_file = 1;
+			
+			} else if (host_end - domain == 3) {
 				unsigned char *tld[] = { "com", "edu", "net", "org", "gov", "mil", "int", NULL };
-				for (i = 0; tld[i]; i++) if (!casecmp(tld[i], e, 3)) goto http;
+				
+				for (i = 0; tld[i]; i++)
+					if (!casecmp(tld[i], domain, 3))
+						goto http;
 			}
 		}
-		if (*ch == '@' || *ch == ':' || !cmpbeg(url, "ftp.")) prefix = "ftp://", sl = 1;
-		if (!(nu = stracpy(prefix))) return NULL;
-		add_to_strn(&nu, url);
-		if (sl && !strchr(url, '/')) add_to_strn(&nu, "/");
-		if (parse_url(nu, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)) mem_free(nu), nu = NULL;
-		else {
-			insert_wd(&nu, cwd);
-			translate_directories(nu);
+		
+		if (*ch == '@' || *ch == ':' || !cmpbeg(url, "ftp.")) {
+			prefix = "ftp://";
+			not_file = 1;
 		}
-		return nu;
+		
+		newurl = stracpy(prefix);
+		if (!newurl) return NULL;
+		add_to_strn(&newurl, url);
+		if (not_file && !strchr(url, '/')) add_to_strn(&newurl, "/");
+		
+		if (!parse_url(newurl, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
+			insert_wd(&newurl, cwd);
+			translate_directories(newurl);
+			return newurl;
+		}
+		
+		mem_free(newurl);
+		return NULL;
 	}
-	if (!(nu = memacpy(url, ch - url + 1))) return NULL;
-	add_to_strn(&nu, "//");
-	add_to_strn(&nu, ch + 1);
-	if (!parse_url(nu, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
-		insert_wd(&nu, cwd);
-		translate_directories(nu);
-		return nu;
+	
+	newurl = memacpy(url, ch - url + 1);
+	if (!newurl) return NULL;
+	add_to_strn(&newurl, "//");
+	add_to_strn(&newurl, ch + 1);
+	
+	if (!parse_url(newurl, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
+		insert_wd(&newurl, cwd);
+		translate_directories(newurl);
+		return newurl;
 	}
-	add_to_strn(&nu, "/");
-	if (!parse_url(nu, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
-		insert_wd(&nu, cwd);
-		translate_directories(nu);
-		return nu;
+	
+	add_to_strn(&newurl, "/");
+	
+	if (!parse_url(newurl, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
+		insert_wd(&newurl, cwd);
+		translate_directories(newurl);
+		return newurl;
 	}
-	mem_free(nu);
+	
+	mem_free(newurl);
 	return NULL;
 }
 

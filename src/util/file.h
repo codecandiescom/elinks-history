@@ -1,4 +1,4 @@
-/* $Id: file.h,v 1.11 2004/04/26 15:48:28 zas Exp $ */
+/* $Id: file.h,v 1.12 2004/05/29 00:45:16 jonas Exp $ */
 
 #ifndef EL__UTIL_FILE_H
 #define EL__UTIL_FILE_H
@@ -21,6 +21,10 @@ unsigned char *expand_tilde(unsigned char *filename);
  * adding suffix counter (e.g. '.42'). */
 /* The returned file name is allocated if @fileprefix is not unique. */
 unsigned char *get_unique_name(unsigned char *fileprefix);
+
+/* Checks various environment variables to get the name of the temp dir.
+ * Returns a filename by concatenating "<tmpdir>/<name>". */
+unsigned char *get_tempdir_filename(unsigned char *name);
 
 /* Read a line from @file into the dynamically allocated @line, increasing
  * @line if necessary. Ending whitespace is trimmed. If a line ends

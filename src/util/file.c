@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.24 2004/04/26 15:48:28 zas Exp $ */
+/* $Id: file.c,v 1.25 2004/05/29 00:45:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,6 +134,19 @@ get_unique_name(unsigned char *fileprefix)
 	}
 
 	return file;
+}
+
+unsigned char *
+get_tempdir_filename(unsigned char *name)
+{
+	unsigned char *tmpdir = getenv("TMPDIR");
+
+	if (!tmpdir || !*tmpdir) tmpdir = getenv("TMP");
+	if (!tmpdir || !*tmpdir) tmpdir = getenv("TEMPDIR");
+	if (!tmpdir || !*tmpdir) tmpdir = getenv("TEMP");
+	if (!tmpdir || !*tmpdir) tmpdir = "/tmp";
+
+	return straconcat(tmpdir, "/", name, NULL);
 }
 
 unsigned char *

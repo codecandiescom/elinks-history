@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.48 2004/01/20 16:13:13 jonas Exp $ */
+/* $Id: scanner.c,v 1.49 2004/01/20 16:40:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,6 +83,12 @@ get_number_identifier(unsigned char *ident, int length)
 	return CSS_TOKEN_DIMENSION;
 }
 
+
+/* Check whéther it is safe to skip the char @c when looking for @skipto */
+#define check_css_precedence(c, skipto)					\
+	!(((skipto) == ':' && ((c) == ';' || (c) == '{' || (c) == '}'))	\
+	  || ((skipto) == ';' && ((c) == '{' || (c) == '}'))		\
+	  || ((skipto) == '{' && (c) == '}'))
 
 /* TODO: CSS_TOKEN_HASH:.it conflicts a bit with hex color token. Color should
  * have precedens and the selector parser will just have to treat
@@ -322,21 +328,20 @@ get_next_css_token_(struct css_scanner *scanner)
 }
 
 struct css_token *
-skip_css_tokens_(struct css_scanner *scanner, enum css_token_type type)
+skip_css_tokens_(struct css_scanner *scanner, enum css_token_type skipto)
 {
 	struct css_token *token = get_css_token_(scanner);
 
 	/* Skip tokens while handling some basic precedens of special chars
 	 * so we don't skip to long. */
 	while (token) {
-		if (token->type == type
-		    || (token->type == ';' && type == ':')
-		    || (token->type == '}' && (type == ';' || type == ':')))
+		if (token->type == skipto
+		    || !check_css_precedence(token->type, skipto))
 			break;
 		token = get_next_css_token_(scanner);
 	}
 
-	return (token && token->type == type)
+	return (token && token->type == skipto)
 		? get_next_css_token_(scanner) : NULL;
 }
 

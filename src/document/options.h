@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.12 2003/09/27 00:32:03 jonas Exp $ */
+/* $Id: options.h,v 1.13 2003/09/27 11:40:08 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -38,7 +38,7 @@ struct document_options {
 
 extern struct document_options *d_opt;
 
-void mk_document_options(struct document_options *doo);
+void init_document_options(struct document_options *doo);
 void copy_opt(struct document_options *o1, struct document_options *o2);
 int compare_opt(struct document_options *o1, struct document_options *o2);
 

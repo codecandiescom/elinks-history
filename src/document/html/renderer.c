@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.277 2003/09/22 15:10:09 zas Exp $ */
+/* $Id: renderer.c,v 1.278 2003/09/27 11:40:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1716,10 +1716,10 @@ html_interpret(struct session *ses)
 
 	init_bars_status(ses, NULL, &o);
 
+	init_document_options(&o);
+
 	o.col = get_opt_bool_tree(ses->tab->term->spec, "colors");
 	o.cp = get_opt_int_tree(ses->tab->term->spec, "charset");
-
-	mk_document_options(&o);
 
 	if (l) {
 		if (l->plain < 0) l->plain = 0;
@@ -1727,13 +1727,6 @@ html_interpret(struct session *ses)
 	} else {
 		o.plain = 1;
 	}
-
-	o.default_fg = get_opt_color("document.colors.text");
-	o.default_bg = get_opt_color("document.colors.background");
-	o.default_link = get_opt_color("document.colors.link");
-	o.default_vlink = get_opt_color("document.colors.vlink");
-
-	o.framename = "";
 
 	foreach (fd, ses->scrn_frames) fd->used = 0;
 

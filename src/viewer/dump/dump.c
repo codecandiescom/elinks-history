@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.36 2003/09/14 01:04:22 miciah Exp $ */
+/* $Id: dump.c,v 1.37 2003/09/27 11:40:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,20 +110,15 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 	memset(vs, 0, sizeof(struct view_state));
 	memset(&formatted, 0, sizeof(struct document_view));
 
+	init_document_options(&o);
 	o.xp = 0;
 	o.yp = 1;
 	o.xw = get_opt_int("document.dump.width");
 	o.yw = 25;
-	o.col = 0;
 	o.cp = get_opt_int("document.dump.codepage");
-	mk_document_options(&o);
+	o.col = 0;
 	o.plain = 0;
 	o.frames = 0;
-	o.default_fg = get_opt_color("document.colors.text");
-	o.default_bg = get_opt_color("document.colors.background");
-	o.default_link = get_opt_color("document.colors.link");
-	o.default_vlink = get_opt_color("document.colors.vlink");
-	o.framename = "";
 
 	init_vs(vs, ce->url);
 	cached_format_html(vs, &formatted, &o);

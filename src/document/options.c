@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.21 2003/09/27 00:32:03 jonas Exp $ */
+/* $Id: options.c,v 1.22 2003/09/27 11:40:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,16 +23,28 @@
 
 struct document_options *d_opt;
 
-
 void
-mk_document_options(struct document_options *doo)
+init_document_options(struct document_options *doo)
 {
+#if 0
+	/* TODO: Find out why this does not work. --jonas */
+	memset(doo, 0, sizeof(struct document_options));
+#endif
+
 	doo->assume_cp = get_opt_int("document.codepage.assume");
 	doo->hard_assume = get_opt_int("document.codepage.force_assumed");
+
 	doo->use_document_colours = get_opt_int("document.colors.use_document_colors");
 	doo->margin = get_opt_int("document.browse.margin_width");
 	doo->num_links_key = get_opt_int("document.browse.links.number_keys_select_link");
 
+	/* Default colors. */
+	doo->default_fg = get_opt_color("document.colors.text");
+	doo->default_bg = get_opt_color("document.colors.background");
+	doo->default_link = get_opt_color("document.colors.link");
+	doo->default_vlink = get_opt_color("document.colors.vlink");
+
+	/* Boolean options. */
 	doo->num_links_display = get_opt_bool("document.browse.links.numbering");
 	doo->allow_dark_on_black = get_opt_bool("document.colors.allow_dark_on_black");
 	doo->table_order = get_opt_bool("document.browse.table_move_order");
@@ -41,6 +53,8 @@ mk_document_options(struct document_options *doo)
 	doo->images = get_opt_bool("document.browse.images.show_as_links");
 	doo->display_subs = get_opt_bool("document.html.display_subs");
 	doo->display_sups = get_opt_bool("document.html.display_sups");
+
+	doo->framename = "";
 }
 
 int

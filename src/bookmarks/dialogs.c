@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.131 2003/11/22 22:05:44 jonas Exp $ */
+/* $Id: dialogs.c,v 1.132 2003/11/23 17:06:36 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -232,7 +232,7 @@ push_edit_button(struct dialog_data *dlg_data, struct widget_data *edit_btn)
 		object_lock(bm);
 		do_edit_dialog(dlg_data->win->term, 1, N_("Edit bookmark"),
 			       name, url,
-			       (struct session *) edit_btn->widget->udata, dlg_data,
+			       (struct session *) dlg_data->dlg->udata, dlg_data,
 			       bookmark_edit_done, bookmark_edit_cancel,
 			       (void *) bm, EDIT_DLG_ADD);
 	}
@@ -388,8 +388,8 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	hierbox_browser(term, N_("Bookmark manager"),
 			BOOKMARK_MANAGER_ADDSIZE, &bookmark_browser, ses,
 			BOOKMARK_MANAGER_BUTTONS,
-			N_("Goto"), push_hierbox_goto_button, B_ENTER, ses,
-			N_("Edit"), push_edit_button, B_ENTER, ses,
+			N_("Goto"), push_hierbox_goto_button, B_ENTER, NULL,
+			N_("Edit"), push_edit_button, B_ENTER, NULL,
 			N_("Delete"), push_hierbox_delete_button, B_ENTER, NULL,
 			N_("Move"), push_move_button, B_ENTER, NULL,
 			N_("Add folder"), push_add_folder_button, B_ENTER, NULL,

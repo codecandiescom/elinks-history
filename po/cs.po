@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-23 10:23+0200\n"
-"PO-Revision-Date: 2003-10-22 19:20+0200\n"
+"PO-Revision-Date: 2003-10-23 10:43+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -849,9 +849,9 @@ msgid "Template option folder"
 msgstr "©ablonová slo¾ka"
 
 #: src/config/options.c:710
-#, fuzzy, c-format
+#, c-format
 msgid "    %s%s%s %s (default: %ld)"
-msgstr "    %s%s%s %s (výchozí: %d)"
+msgstr "    %s%s%s %s (výchozí: %ld)"
 
 #: src/config/options.c:715 src/config/options.c:739
 #, c-format
@@ -913,7 +913,6 @@ msgstr ""
 "1 is univerzální formát zalo¾ený na XML, XBEL (BEZ PODPORY DIAKRITIKY!)"
 
 #: src/config/options.inc:26
-#, fuzzy
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default ELinks (Links 0.9x compatible) format\n"

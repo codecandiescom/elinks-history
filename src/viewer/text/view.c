@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.144 2003/07/02 23:47:31 pasky Exp $ */
+/* $Id: view.c,v 1.145 2003/07/02 23:49:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2161,7 +2161,7 @@ close:
 /* TODO: Unify the textarea field_op handlers to one trampoline function. */
 
 static int
-textarea_op_home(struct form_state *fs, struct form_control *frm)
+textarea_op_home(struct form_state *fs, struct form_control *frm, int rep)
 {
 	struct line_info *ln;
 	int y;
@@ -2184,7 +2184,7 @@ x:
 }
 
 static int
-textarea_op_up(struct form_state *fs, struct form_control *frm)
+textarea_op_up(struct form_state *fs, struct form_control *frm, int rep)
 {
 	struct line_info *ln;
 	int y;
@@ -2216,7 +2216,7 @@ xx:
 }
 
 static int
-textarea_op_down(struct form_state *fs, struct form_control *frm)
+textarea_op_down(struct form_state *fs, struct form_control *frm, int rep)
 {
 	struct line_info *ln;
 	int y;
@@ -2247,7 +2247,7 @@ yy:
 }
 
 static int
-textarea_op_end(struct form_state *fs, struct form_control *frm)
+textarea_op_end(struct form_state *fs, struct form_control *frm, int rep)
 {
 	struct line_info *ln;
 	int y;
@@ -2275,7 +2275,7 @@ yyyy:
 }
 
 static int
-textarea_op_enter(struct form_state *fs, struct form_control *frm)
+textarea_op_enter(struct form_state *fs, struct form_control *frm, int rep)
 {
 	if (!frm->ro && strlen(fs->value) < frm->maxlength) {
 		unsigned char *v = mem_realloc(fs->value, strlen(fs->value) + 2);
@@ -2323,25 +2323,25 @@ field_op(struct session *ses, struct f_data_c *f, struct link *l,
 				break;
 			case ACT_HOME:
 				if (frm->type == FC_TEXTAREA) {
-					if (textarea_op_home(fs, frm))
+					if (textarea_op_home(fs, frm, rep))
 						goto b;
 				} else fs->state = 0;
 				break;
 			case ACT_UP:
 				if (frm->type == FC_TEXTAREA) {
-					if (textarea_op_up(fs, frm))
+					if (textarea_op_up(fs, frm, rep))
 						goto b;
 				} else x = 0;
 				break;
 			case ACT_DOWN:
 				if (frm->type == FC_TEXTAREA) {
-					if (textarea_op_down(fs, frm))
+					if (textarea_op_down(fs, frm, rep))
 						goto b;
 				} else x = 0;
 				break;
 			case ACT_END:
 				if (frm->type == FC_TEXTAREA) {
-					if (textarea_op_end(fs, frm))
+					if (textarea_op_end(fs, frm, rep))
 						goto b;
 				} else fs->state = strlen(fs->value);
 				break;
@@ -2379,7 +2379,7 @@ field_op(struct session *ses, struct f_data_c *f, struct link *l,
 			}
 			case ACT_ENTER:
 				if (frm->type == FC_TEXTAREA) {
-					if (textarea_op_enter(fs, frm))
+					if (textarea_op_enter(fs, frm, rep))
 						goto b;
 				} else x = 0;
 				break;

@@ -3598,7 +3598,7 @@ msgstr "Typ boolowski"
 
 #: src/config/opttypes.c:441
 msgid "[0|1]"
-msgstr ""
+msgstr "[0|1]"
 
 #: src/config/opttypes.c:442
 msgid "Integer"
@@ -4190,7 +4190,7 @@ msgstr "Wiersze"
 
 #: src/formhist/formhist.c:331
 msgid "Form memory"
-msgstr "Pamiêæ formularzy"
+msgstr "Zapamiêtywanie formularzy"
 
 #: src/formhist/formhist.c:332
 msgid ""
@@ -4613,7 +4613,7 @@ msgstr "Nieprawid³owa odpowied¼ HTTP"
 
 #: src/sched/error.c:55
 msgid "HTTP 100 (???)"
-msgstr ""
+msgstr "HTTP 100 (???)"
 
 #: src/sched/error.c:56
 msgid "No content"
@@ -4819,7 +4819,7 @@ msgstr "Standard"
 
 #: src/util/version.c:52
 msgid "Debug"
-msgstr ""
+msgstr "Debug"
 
 #
 #: src/util/version.c:55
@@ -4844,7 +4844,7 @@ msgstr "Wska¼niki LED"
 
 #: src/util/version.c:100
 msgid "Forms memory"
-msgstr "Pamiêæ formularzy"
+msgstr "Zapamiêtywanie formularzy"
 
 #: src/viewer/dump/dump.c:75
 #, c-format
@@ -4879,7 +4879,7 @@ msgstr "Wybierz od~no¶nik"
 
 #: src/viewer/text/link.c:833
 msgid "Follow link and r~eload"
-msgstr "Wybierz link i prz~e³aduj"
+msgstr "Wybierz odno¶nik i prz~e³aduj"
 
 #: src/viewer/text/link.c:837
 msgid "Open in new ~window"

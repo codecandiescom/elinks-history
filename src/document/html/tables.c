@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.179 2004/06/18 23:26:48 pasky Exp $ */
+/* $Id: tables.c,v 1.180 2004/06/20 10:06:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,26 +186,26 @@ static inline void
 get_column_width(unsigned char *attr, int *width, int sh)
 {
 	unsigned char *al = get_attr_val(attr, "width");
+	int len;
 
-	if (al) {
-		int len = strlen(al);
+	if (!al) return;
 
-		if (len && al[len - 1] == '*') {
-			unsigned char *en;
-			int n;
+	len = strlen(al);
+	if (len && al[len - 1] == '*') {
+		unsigned char *en;
+		int n;
 
-			al[len - 1] = '\0';
-			errno = 0;
-			n = strtoul(al, (char **)&en, 10);
-			if (!errno && n >= 0 && !*en)
-				*width = WIDTH_RELATIVE - n;
-		} else {
-			int w = get_width(attr, "width", sh);
+		al[len - 1] = '\0';
+		errno = 0;
+		n = strtoul(al, (char **)&en, 10);
+		if (!errno && n >= 0 && !*en)
+			*width = WIDTH_RELATIVE - n;
+	} else {
+		int w = get_width(attr, "width", sh);
 
-			if (w >= 0) *width = w;
-		}
-		mem_free(al);
+		if (w >= 0) *width = w;
 	}
+	mem_free(al);
 }
 
 static struct table *

@@ -10,10 +10,8 @@ new features, but still provide good rock-solid releases inside stable branches.
 
 See the manpage for a detailed description of ELinks and its features.  If you
 are more interested, you can examine the Links website at http://links.sf.net/.
-For new Links/ELinks version announcements and bug reports, please see the
-links-list mailing list at linuxfromscratch.org.  If you have any feature
-requests or hints for developers, please post them to the links-discuss mailing
-list at the same place.
+For new ELinks version announcements please see the elinks-user mailing list at
+http://linuxfromscratch.org/mailman/listinfo/elinks-users.
 
 The ELinks site with some basic information is available at
 http://elinks.or.cz/.  Please see the SITES file for mirrors or other
@@ -39,8 +37,9 @@ If you want to add a new language, please read intl/README document.
 If you want to write some documentation, well you're welcomed ;)
 
 If you want to request features or report bugs, use the mailing list as
-mentioned above, or come and see us on irc.openprojects.net #elinks.
+mentioned above, bugzilla at bugzilla.elinks.or.cz or come and see us on
+irc.freenode.net #elinks.
 
-$Id: README,v 1.17 2003/06/21 22:40:09 pasky Exp $
+$Id: README,v 1.18 2003/10/05 13:20:21 jonas Exp $
 
 vim: textwidth=80

@@ -52,6 +52,11 @@ its config files and writes to it. If the path begins with
 a '/' its used as an absolute path. Else it is assumed to
 be relative to your \fBHOME\fR dir.
 .TP
+\fB-conffile <str> (default: "elinks.conf")\fR
+Name of the file with configuration, from which and to
+which all the configuration shall be written. It should be
+relative to confdir.
+.TP
 \fB-default-mime-type (alias for mime.default_type) \fR
 Default MIME type to assume for documents of unknown type.
 .TP

@@ -1,4 +1,4 @@
-/* $Id: main.h,v 1.9 2003/05/23 21:22:20 zas Exp $ */
+/* $Id: main.h,v 1.10 2003/06/13 17:04:39 zas Exp $ */
 
 #ifndef EL__MAIN_H
 #define EL__MAIN_H
@@ -16,6 +16,9 @@ enum retval {
 extern enum retval retval;
 extern int terminate;
 extern unsigned char *path_to_exe;
+#ifdef USE_FASTFIND
+extern void *ff_info_tags;
+#endif
 
 void shrink_memory(int);
 void init(void);

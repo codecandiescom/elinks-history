@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.96 2003/06/08 22:11:46 pasky Exp $ */
+/* $Id: main.c,v 1.97 2003/06/13 17:04:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,6 +62,9 @@
 #include "ssl/ssl.h"
 #include "util/blacklist.h"
 #include "util/error.h"
+#ifdef USE_FASTFIND
+#include "util/fastfind.h"
+#endif
 #include "util/memdebug.h"
 #include "util/memory.h"
 #include "util/version.h"
@@ -70,6 +73,9 @@
 int terminate = 0;
 enum retval retval = RET_OK;
 unsigned char *path_to_exe;
+#ifdef USE_FASTFIND
+void *ff_info_tags = NULL;
+#endif
 
 static int ac;
 static unsigned char **av;
@@ -257,7 +263,9 @@ terminate_all_subsystems(void)
 	}
 
 	shrink_memory(1);
-
+#ifdef USE_FASTFIND
+	fastfind_terminate(ff_info_tags);
+#endif
 	free_table_cache();
 	free_history_lists();
 	free_auth();

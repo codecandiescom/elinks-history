@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.125 2003/06/10 00:24:11 jonas Exp $ */
+/* $Id: parser.c,v 1.126 2003/06/13 17:04:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 
 #include "elinks.h"
 
+#include "main.h"
 #include "bfu/align.h"
 #include "bfu/menu.h"
 #include "config/options.h"
@@ -30,6 +31,9 @@
 #include "terminal/terminal.h"
 #include "util/conv.h"
 #include "util/error.h"
+#ifdef USE_FASTFIND
+#include "util/fastfind.h"
+#endif
 #include "util/memdebug.h"
 #include "util/memlist.h"
 #include "util/memory.h"
@@ -2663,12 +2667,41 @@ process_head(unsigned char *head)
 	}
 }
 
-
+#ifndef USE_FASTFIND
 static int
 compar(const void *a, const void *b)
 {
 	return strcasecmp(((struct element_info *) a)->name, ((struct element_info *) b)->name);
 }
+#else
+static struct element_info *internal_pointer;
+
+/* Reset internal list pointer */
+void
+tags_list_reset(void)
+{
+	internal_pointer = elements;
+}
+
+/* Returns a pointer to a struct that contains
+ * current key and data pointers and increment
+ * internal pointer.
+ * It returns NULL when key is NULL. */
+struct fastfind_key_value *
+tags_list_next(void)
+{
+	static struct fastfind_key_value kv;
+
+	if (!internal_pointer->name) return NULL;
+
+	kv.key = internal_pointer->name;
+	kv.data = internal_pointer;
+
+	internal_pointer++;
+
+	return &kv;
+}
+#endif /* USE_FASTFIND */
 
 void
 parse_html(unsigned char *html, unsigned char *eof,
@@ -2680,8 +2713,6 @@ parse_html(unsigned char *html, unsigned char *eof,
 {
 	/*unsigned char *start = html;*/
 	unsigned char *lt;
-	struct element_info elem;
-	unsigned char tmp;
 
 	putsp = -1;
 	line_breax = table_level ? 2 : 1;
@@ -2832,11 +2863,33 @@ ng:;
 			   (strlen(ei->name) != namelen || strncasecmp(ei->name, name, namelen)))
 				continue;
 #endif
-		tmp = name[namelen];
-		name[namelen] = '\0';
-		elem.name = name;
-		ei = bsearch(&elem, elements, NUMBER_OF_TAGS, sizeof(struct element_info), compar);
-		name[namelen] = tmp;
+
+#ifndef USE_FASTFIND
+		{
+			struct element_info elem;
+			unsigned char tmp;
+
+			tmp = name[namelen];
+			name[namelen] = '\0';
+
+			elem.name = name;
+			ei = bsearch(&elem, elements, NUMBER_OF_TAGS, sizeof(struct element_info), compar);
+			name[namelen] = tmp;
+		}
+#else
+		{
+			static int do_index = 1;
+
+			if (do_index) {
+				ff_info_tags = fastfind_index(&tags_list_reset, &tags_list_next, 0);
+				fastfind_index_compress(NULL, ff_info_tags);
+				do_index = 0;
+			}
+
+			ei = (struct element_info *) fastfind_search(name, namelen, ff_info_tags);
+
+		}
+#endif
 		while (ei) { /* This exists just to be able to conviently break; out. */
 			if (!inv) {
 				unsigned char *a;

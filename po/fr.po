@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2004-02-18 14:57+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-02-22 14:14+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:358
 msgid "Close"
@@ -45,16 +45,16 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/dialogs/info.c:137 src/dialogs/info.c:158 src/dialogs/menu.c:64
 #: src/dialogs/menu.c:446 src/dialogs/menu.c:473 src/dialogs/options.c:169
 #: src/dialogs/options.c:242 src/formhist/dialogs.c:132 src/mime/dialogs.c:159
-#: src/protocol/auth/dialogs.c:77 src/protocol/protocol.c:67
+#: src/protocol/auth/dialogs.c:78 src/protocol/protocol.c:67
 #: src/protocol/user.c:158 src/protocol/user.c:174 src/sched/download.c:188
 #: src/sched/download.c:276 src/sched/download.c:311 src/sched/download.c:582
-#: src/sched/error.c:42 src/sched/session.c:124 src/sched/session.c:611
-#: src/sched/session.c:628 src/sched/session.c:652 src/sched/session.c:950
+#: src/sched/error.c:42 src/sched/session.c:124 src/sched/session.c:613
+#: src/sched/session.c:630 src/sched/session.c:654 src/sched/session.c:952
 #: src/scripting/lua/core.c:401 src/scripting/lua/core.c:482
 #: src/scripting/lua/core.c:591 src/scripting/lua/core.c:715
 #: src/viewer/text/form.c:664 src/viewer/text/search.c:859
 #: src/viewer/text/search.c:887 src/viewer/text/search.c:912
-#: src/viewer/text/search.c:943 src/viewer/text/search.c:1379
+#: src/viewer/text/search.c:943 src/viewer/text/search.c:1392
 #: src/viewer/text/textarea.c:270 src/viewer/text/textarea.c:279
 #: src/viewer/text/view.c:707 src/viewer/text/view.c:1223
 msgid "OK"
@@ -273,11 +273,11 @@ msgstr "Nom du dossier"
 #: src/config/dialogs.c:614 src/dialogs/edit.c:103 src/dialogs/menu.c:64
 #: src/dialogs/menu.c:446 src/dialogs/menu.c:473 src/dialogs/options.c:172
 #: src/dialogs/options.c:243 src/mime/dialogs.c:160
-#: src/protocol/auth/dialogs.c:78 src/sched/download.c:498
+#: src/protocol/auth/dialogs.c:79 src/sched/download.c:498
 #: src/sched/download.c:1008 src/sched/download.c:1017
 #: src/sched/download.c:1037 src/sched/download.c:1049
 #: src/scripting/lua/core.c:402 src/scripting/lua/core.c:483
-#: src/scripting/lua/core.c:715 src/viewer/text/search.c:1379
+#: src/scripting/lua/core.c:715 src/viewer/text/search.c:1392
 #: src/viewer/text/view.c:707
 msgid "Cancel"
 msgstr "Annuler"
@@ -313,7 +313,7 @@ msgstr "Ajouter"
 
 #: src/bookmarks/dialogs.c:381 src/globhist/dialogs.c:187
 #: src/viewer/text/search.c:856 src/viewer/text/search.c:883
-#: src/viewer/text/search.c:907 src/viewer/text/search.c:1374
+#: src/viewer/text/search.c:907 src/viewer/text/search.c:1387
 msgid "Search"
 msgstr "Chercher"
 
@@ -905,7 +905,7 @@ msgid "Description"
 msgstr "Description"
 
 #: src/config/dialogs.c:252 src/protocol/protocol.c:64 src/sched/session.c:121
-#: src/sched/session.c:946 src/viewer/text/textarea.c:267
+#: src/sched/session.c:948 src/viewer/text/textarea.c:267
 #: src/viewer/text/textarea.c:276
 msgid "Error"
 msgstr "Erreur"
@@ -2702,7 +2702,7 @@ msgstr "Nom d'utilisateur"
 msgid "Proxy authentication username."
 msgstr "Nom d'utilisateur pour l'authentification proxy"
 
-#: src/config/options.inc:645 src/protocol/auth/dialogs.c:75
+#: src/config/options.inc:645 src/protocol/auth/dialogs.c:76
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -3924,7 +3924,7 @@ msgid "Folder"
 msgstr "Dossier"
 
 #. name:
-#: src/cookies/cookies.c:91 src/cookies/cookies.c:818
+#: src/cookies/cookies.c:91 src/cookies/cookies.c:819
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -4002,11 +4002,11 @@ msgstr ""
 "Sauvegarde des cookies après chaque modification ?\n"
 "Aucun effet si la sauvegarde est désactivée."
 
-#: src/cookies/cookies.c:551
+#: src/cookies/cookies.c:552
 msgid "Accept cookie?"
 msgstr "Accepter le cookie ?"
 
-#: src/cookies/cookies.c:552
+#: src/cookies/cookies.c:553
 #, c-format
 msgid ""
 "Do you want to accept a cookie from %s?\n"
@@ -4025,23 +4025,23 @@ msgstr ""
 "Expiration: %s\n"
 "Securisé: %s\n"
 
-#: src/cookies/cookies.c:561
+#: src/cookies/cookies.c:562
 msgid "at quit time"
 msgstr "au moment de quitter"
 
-#: src/cookies/cookies.c:562 src/cookies/dialogs.c:93
+#: src/cookies/cookies.c:563 src/cookies/dialogs.c:93
 msgid "yes"
 msgstr "oui"
 
-#: src/cookies/cookies.c:562 src/cookies/dialogs.c:93
+#: src/cookies/cookies.c:563 src/cookies/dialogs.c:93
 msgid "no"
 msgstr "non"
 
-#: src/cookies/cookies.c:564
+#: src/cookies/cookies.c:565
 msgid "Accept"
 msgstr "Accepter"
 
-#: src/cookies/cookies.c:565
+#: src/cookies/cookies.c:566
 msgid "Reject"
 msgstr "Rejeter"
 
@@ -4717,7 +4717,7 @@ msgstr ""
 "Si vous désirez sauver les mots de passe pour cette URL,\n"
 "utilisez le bouton \"Bascule sauvegarde\"."
 
-#: src/formhist/dialogs.c:164 src/protocol/auth/dialogs.c:74
+#: src/formhist/dialogs.c:164 src/protocol/auth/dialogs.c:75
 msgid "Login"
 msgstr "Login"
 
@@ -5340,14 +5340,45 @@ msgstr "~Plein écran"
 msgid "~BeOS terminal"
 msgstr "Terminal ~BeOS"
 
-#: src/protocol/auth/dialogs.c:57
+#: src/protocol/auth/dialogs.c:58
 #, c-format
 msgid "Authentication required for %s at %s"
 msgstr "Authentication requise pour %s à %s"
 
-#: src/protocol/auth/dialogs.c:64
+#: src/protocol/auth/dialogs.c:65
 msgid "HTTP Authentication"
 msgstr "Authentification HTTP"
+
+#: src/protocol/http/codes.c:105
+#, c-format
+msgid "HTTP error %03d"
+msgstr "Erreur HTTP %03d"
+
+#: src/protocol/http/codes.c:128
+msgid ""
+"  An error occurred on the server while fetching the document you\n"
+"  requested. Moreover, the server did not send back any explanation of what\n"
+"  happenned whatsoever - it would be nice if you notified the web server\n"
+"  administrator about this, as it is not a nice behaviour from the web\n"
+"  server at all and it frequently indicates some much deeper problem with\n"
+"  the web server software.\n"
+"  <br><br>\n"
+"  I have no idea about what is wrong, sorry. Please contact the web\n"
+"  server administrator if you believe that this error should not occur.\n"
+msgstr ""
+"  Une erreur s'est produite sur le serveur lors de l'accès au document que\n"
+"  vous avez demandé. De plus, le serveur n'a retourné aucune explication\n"
+"  concernant l'erreur rencontrée, il serait bien de notifier "
+"l'administrateur\n"
+"  du serveur web concerné à ce sujet, car cela n'est pas un comportement\n"
+"  agréable sur le web, et cela indique généralement un problème sous-"
+"jascent\n"
+"  dans le logiciel du serveur web.\n"
+"  <br><br>\n"
+"  Aucune idée à propos de ce qui n'a pas fonctionné, désolé. Contactez\n"
+"  l'administrateur du serveur web si vous pensez que cette erreur ne "
+"devrait\n"
+"  pas se produire.\n"
 
 #: src/protocol/protocol.c:65
 msgid "JavaScript is currently not supported."
@@ -5368,11 +5399,10 @@ msgid ""
 msgstr ""
 "Règles de ré-écriture des URIs entrées dans le dialogue \"Atteindre l'URL"
 "\".\n"
-"Cela rend possible la définitition d'un ensemble de préfixes qui\n"
-"seront évaluer si une chaîne correspondante est entrée dans le\n"
-"dialogue \"Atteindre l'URL\".\n"
+"Cela rend possible la définition de préfixes qui seront évalués si une\n"
+"chaîne correspondante est entrée dans le dialogue \"Atteindre l'URL\".\n"
 "Les préfixes peuvent être simples, c'est-à-dire qu'ils fonctionnent\n"
-"comme des abbrèviations d'URIs, ou plus intelligents, avec possibilité\n"
+"comme des abréviations d'URIs, ou plus intelligents, avec possibilité\n"
 "de passer des arguments, comme des mots clés pour moteur de recherche."
 
 #: src/protocol/rewrite/rewrite.c:56
@@ -5703,11 +5733,11 @@ msgstr "Cette version de ELinks ne supporte ni SSL ni TLS"
 msgid "Unknown error"
 msgstr "Erreur inconnue"
 
-#: src/sched/session.c:606
+#: src/sched/session.c:608
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#: src/sched/session.c:607
+#: src/sched/session.c:609
 msgid ""
 "Welcome to ELinks!\n"
 "\n"
@@ -5718,11 +5748,11 @@ msgstr ""
 "Pressez ESC pour accèder au menu.\n"
 "La documentation est accessible par le menu Aide."
 
-#: src/sched/session.c:616 src/sched/session.c:636 src/sched/task.c:166
+#: src/sched/session.c:618 src/sched/session.c:638 src/sched/task.c:166
 msgid "Warning"
 msgstr "Avertissement"
 
-#: src/sched/session.c:617
+#: src/sched/session.c:619
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -5741,7 +5771,7 @@ msgstr ""
 "défaut sera utilisée. Si vous n'avez aucune idée de quoi nous parlons alors "
 "faites juste ça. Toutes nos excuses pour ce désagrément."
 
-#: src/sched/session.c:637
+#: src/sched/session.c:639
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -5762,7 +5792,7 @@ msgstr ""
 "l'option config.saving_style dans le but d'obtenir un fonctionnement "
 "correct. Toutes nos excuses pour l'éventuel désagrément causé."
 
-#: src/sched/session.c:947
+#: src/sched/session.c:949
 msgid ""
 "This URL contains a protocol not yet known by ELinks.\n"
 "You can configure an external handler for it through options system."
@@ -6082,31 +6112,31 @@ msgstr "Préfrappe"
 msgid "Could not find a link with the text '%s'."
 msgstr "Ne peut trouver un lien avec le texte '%s'."
 
-#: src/viewer/text/search.c:1355
+#: src/viewer/text/search.c:1368
 msgid "Normal search"
 msgstr "Plein texte"
 
-#: src/viewer/text/search.c:1356
+#: src/viewer/text/search.c:1369
 msgid "Regexp search"
 msgstr "Expression régulière"
 
-#: src/viewer/text/search.c:1357
+#: src/viewer/text/search.c:1370
 msgid "Extended regexp search"
 msgstr "Expression régulière étendue"
 
-#: src/viewer/text/search.c:1358
+#: src/viewer/text/search.c:1371
 msgid "Case sensitive"
 msgstr "Respecter la casse"
 
-#: src/viewer/text/search.c:1359
+#: src/viewer/text/search.c:1372
 msgid "Case insensitive"
 msgstr "Ignorer la casse"
 
-#: src/viewer/text/search.c:1374
+#: src/viewer/text/search.c:1387
 msgid "Search backward"
 msgstr "Chercher en arrière"
 
-#: src/viewer/text/search.c:1378
+#: src/viewer/text/search.c:1391
 msgid "Search for text"
 msgstr "Recherche du texte"
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.375 2004/01/24 12:36:17 zas Exp $ */
+/* $Id: parser.c,v 1.376 2004/01/24 13:00:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,19 +189,18 @@ next_attr:
 	while (atchr(*n) && atchr(*e) && upcase(*e) == upcase(*n)) e++, n++;
 	found = !*n && !atchr(*e);
 
+	if (found && test_only) return name_start;
+
 	while (atchr(*e)) e++;
 	while (isspace(*e)) e++;
 	if (*e != '=') {
-		if (found) {
-			if (test_only) return name_start;
-			goto found_endattr;
-		}
+		if (found) goto found_endattr;
 		goto next_attr;
 	}
 	e++;
 	while (isspace(*e)) e++;
 
-	if (found && !test_only) {
+	if (found) {
 		if (!IS_QUOTE(*e)) {
 			while (!isspace(*e) && !end_of_tag(*e)) {
 				if (!*e) goto parse_error;
@@ -256,8 +255,6 @@ found_endattr:
 				e++;
 			} while (*e == quote);
 		}
-
-		if (found) return name_start;
 	}
 
 	goto next_attr;

@@ -333,9 +333,10 @@ _nl_free_domain_conv (domain)
 }
 
 
-#include "util/memory.h"
-#include "util/string.h"
 #include "main.h"
+
+/* We cannot use our memory functions here because of circular library
+ * dependencies. */
 
 /* This is hacked for ELinks - we want to look up for the translations at the
  * correct place even if we are being ran from the source/build tree. */
@@ -343,25 +344,41 @@ static unsigned char *
 internal_function
 source_tree_filename(struct loaded_l10nfile *domain_file)
 {
-	unsigned char *language = memacpy((unsigned char *)
-					domain_file->langdirname,
-					domain_file->langdirnamelen);
-	unsigned char *dirname = stracpy(path_to_exe), *slash;
-	unsigned char *filename = NULL;
+	unsigned char *language = malloc(domain_file->langdirnamelen + 1);
+	unsigned char *dirname = strdup(path_to_exe), *slash = NULL;
+	unsigned char *filename = NULL, *fp;
 
-	if (!language) return stracpy("");
+	if (!language) return strdup("");
+	strncpy(language, domain_file->langdirname,
+			domain_file->langdirnamelen);
+	language[domain_file->langdirnamelen] = 0;
 
-	if (dirname) {
-		slash = strrchr(dirname, '/');
-		if (slash) {
-			*(++slash) = 0;
-			filename = straconcat(dirname, "../po/", language,
-						".gmo", NULL);
+	if (dirname) slash = strrchr(dirname, '/');
+
+	if (slash) {
+		*(++slash) = 0;
+		filename = malloc(strlen(dirname) + strlen(language)
+				+ 6 + 3 + 1);
+		if (!filename) {
+			free(dirname);
+			return strdup("");
 		}
-		mem_free(dirname);
+		fp = stpcpy(filename, dirname);
+		fp = stpcpy(fp, "../po/");
+		fp = stpcpy(fp, language);
+		fp = stpcpy(fp, ".gmo");
+
 	} else {
-		filename = straconcat("../po/", language, ".gmo", NULL);
+		filename = malloc(strlen(language) + 6 + 3 + 1);
+		if (!filename) {
+			return strdup("");
+		}
+		fp = stpcpy(filename, "../po/");
+		fp = stpcpy(fp, language);
+		fp = stpcpy(fp, ".gmo");
 	}
+
+	if (dirname) free(dirname);
 
 	return filename;
 }
@@ -398,7 +415,7 @@ _nl_load_domain (domain_file, domainbinding)
 	  unsigned char *name = source_tree_filename(domain_file);
 
 	  fd = open (name, O_RDONLY | O_BINARY);
-	  mem_free(name);
+	  free(name);
 
 	  if (fd != -1)
 	      goto source_success;

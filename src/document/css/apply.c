@@ -1,5 +1,5 @@
 /* CSS micro-engine */
-/* $Id: apply.c,v 1.7 2004/01/17 14:16:28 pasky Exp $ */
+/* $Id: apply.c,v 1.8 2004/01/17 14:26:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -305,13 +305,12 @@ ride_on:
 }
 
 
-int
+void
 css_apply(struct html_element *element)
 {
 	INIT_LIST_HEAD(props);
 	unsigned char *code;
 	struct css_property *prop;
-	int i = 0;
 
 	assert(element && element->options);
 
@@ -323,7 +322,6 @@ css_apply(struct html_element *element)
 	mem_free(code);
 
 	foreach (prop, props) {
-		i++;
 		switch (prop->property) {
 			case CSS_DP_BACKGROUND_COLOR:
 				assert(prop->value_type == CSS_DV_COLOR);
@@ -349,6 +347,4 @@ css_apply(struct html_element *element)
 		del_from_list(prop);
 		mem_free(prop);
 	}
-
-	return i;
 }

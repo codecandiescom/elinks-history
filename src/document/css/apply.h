@@ -1,4 +1,4 @@
-/* $Id: apply.h,v 1.1 2004/01/17 01:26:58 pasky Exp $ */
+/* $Id: apply.h,v 1.2 2004/01/17 14:26:18 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_CSS_H
 #define EL__DOCUMENT_HTML_CSS_H
@@ -25,9 +25,8 @@ struct html_element;
  * found, it is parsed and applied to the current element. */
 
 
-/* This function takes @element, applies its 'style' attribute onto its
- * attributes (if it contains such an attribute), and returns non-zero value
- * if any action was taken, zero if the @element was not modified. */
-int css_apply(struct html_element *element);
+/* This function takes @element and applies its 'style' attribute onto its
+ * attributes (if it contains such an attribute). */
+void css_apply(struct html_element *element);
 
 #endif

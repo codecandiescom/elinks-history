@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.1 2002/12/26 02:46:10 pasky Exp $ */
+/* $Id: parser.c,v 1.2 2002/12/27 00:01:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,9 +20,20 @@ struct parser_backend *parser_backends[] = {
 };
 
 void
-elusive_parser(enum parser_backend_type parser, struct syntree_node **root,
+elusive_parser(enum parser_backend_type parser, struct parser_state **state,
 		unsigned char **str, int *len)
 {
-	if (parser_backends[parser] && parser_backends[parser]->parse)
-		parser_backends[parser]->parse(root, str, len);
+	if (!parser_backends[parser] || !parser_backends[parser]->parse)
+		return;
+
+	if (!*state) {
+		*state = mem_calloc(1, sizeof(struct parser_state));
+		if (!*state)
+			return; /* Try next time, buddy. */
+
+		(*state)->root = init_syntree_node(NULL);
+		(*state)->current = (*state)->root;
+	}
+
+	parser_backends[parser]->parse(*state, str, len);
 }

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.256 2004/01/06 23:59:15 jonas Exp $ */
+/* $Id: menu.c,v 1.257 2004/01/07 00:06:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -192,18 +192,6 @@ history_menu_model(unhistory_menu, next);
 
 
 static inline void
-menu_doc_info(struct terminal *term, void *ddd, struct session *ses)
-{
-	state_msg(ses);
-}
-
-static inline void
-menu_header_info(struct terminal *term, void *ddd, struct session *ses)
-{
-	head_msg(ses);
-}
-
-static inline void
 menu_toggle_plain_html(struct terminal *term, void *ddd, struct session *ses)
 {
 	toggle_plain_html(ses, ses->doc_view, 0);
@@ -238,12 +226,6 @@ menu_shell(struct terminal *term, void *xxx, void *yyy)
 	if (!sh || !*sh) sh = DEFAULT_SHELL;
 	if (sh && *sh)
 		exec_on_terminal(term, sh, "", 1);
-}
-
-static inline void
-menu_kill_background_connections(struct terminal *term, void *xxx, void *yyy)
-{
-	abort_background_connections();
 }
 
 
@@ -331,14 +313,11 @@ static struct menu_item file_menu21[] = {
 
 static struct menu_item file_menu22[] = {
 	BAR_MENU_ITEM,
-	INIT_MENU_ITEM(N_("~Kill background connections"), NULL, ACT_KILL_BACKGROUNDED_CONNECTIONS,
-			menu_kill_background_connections, NULL, 0),
+	INIT_MENU_ITEM(N_("~Kill background connections"), NULL, ACT_KILL_BACKGROUNDED_CONNECTIONS, NULL, NULL, 0),
 	INIT_MENU_ITEM(N_("Flush all ~caches"), NULL, ACT_CACHE_MINIMIZE, NULL, NULL, 0),
-	INIT_MENU_ITEM(N_("Resource ~info"), NULL, ACT_NONE,
-			res_inf, NULL, 0),
+	INIT_MENU_ITEM(N_("Resource ~info"), NULL, ACT_NONE, res_inf, NULL, 0),
 #ifdef LEAK_DEBUG
-	INIT_MENU_ITEM(N_("~Memory info"), NULL, ACT_NONE,
-			memory_inf, NULL, 0),
+	INIT_MENU_ITEM(N_("~Memory info"), NULL, ACT_NONE, memory_inf, NULL, 0),
 #endif
 	BAR_MENU_ITEM,
 };
@@ -418,8 +397,8 @@ static struct menu_item view_menu[] = {
 	INIT_MENU_ITEM(N_("Toggle i~mages"), NULL, ACT_TOGGLE_DISPLAY_IMAGES, menu_toggle_images, NULL, 0),
 	INIT_MENU_ITEM(N_("Toggle ~link numbering"), NULL, ACT_TOGGLE_NUMBERED_LINKS, menu_toggle_link_numbering, NULL, 0),
 	INIT_MENU_ITEM(N_("Toggle ~document colors"), NULL, ACT_TOGGLE_DOCUMENT_COLORS, menu_toggle_document_colors, NULL, 0),
-	INIT_MENU_ITEM(N_("Document ~info"), NULL, ACT_DOCUMENT_INFO, menu_doc_info, NULL, 0),
-	INIT_MENU_ITEM(N_("H~eader info"), NULL, ACT_HEADER_INFO, menu_header_info, NULL, 0),
+	INIT_MENU_ITEM(N_("Document ~info"), NULL, ACT_DOCUMENT_INFO, NULL, NULL, 0),
+	INIT_MENU_ITEM(N_("H~eader info"), NULL, ACT_HEADER_INFO, NULL, NULL, 0),
 	INIT_MENU_ITEM(N_("Frame at ~full-screen"), NULL, ACT_ZOOM_FRAME, menu_for_frame, (void *)set_frame, 0),
 	BAR_MENU_ITEM,
 	INIT_MENU_ITEM(N_("Nex~t tab"), NULL, ACT_TAB_NEXT, NULL, NULL, 0),
@@ -619,8 +598,20 @@ do_action(struct session *ses, enum keyact action, void *data)
 			shrink_memory(1);
 			break;
 
+		case ACT_DOCUMENT_INFO:
+			state_msg(ses);
+			break;
+
 		case ACT_GOTO_URL:
 			dialog_goto_url(ses, "");
+			break;
+
+		case ACT_HEADER_INFO:
+			head_msg(ses);
+			break;
+
+		case ACT_KILL_BACKGROUNDED_CONNECTIONS:
+			abort_background_connections();
 			break;
 
 		case ACT_RELOAD:
@@ -659,7 +650,6 @@ do_action(struct session *ses, enum keyact action, void *data)
 		case ACT_COPY_CLIPBOARD:
 		case ACT_CUT_CLIPBOARD:
 		case ACT_DELETE:
-		case ACT_DOCUMENT_INFO:
 		case ACT_DOWN:
 		case ACT_DOWNLOAD:
 		case ACT_DOWNLOAD_IMAGE:
@@ -678,10 +668,8 @@ do_action(struct session *ses, enum keyact action, void *data)
 		case ACT_GOTO_URL_CURRENT:
 		case ACT_GOTO_URL_CURRENT_LINK:
 		case ACT_GOTO_URL_HOME:
-		case ACT_HEADER_INFO:
 		case ACT_HISTORY_MANAGER:
 		case ACT_HOME:
-		case ACT_KILL_BACKGROUNDED_CONNECTIONS:
 		case ACT_KILL_TO_BOL:
 		case ACT_KILL_TO_EOL:
 		case ACT_KEYBINDING_MANAGER:

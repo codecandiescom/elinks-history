@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.89 2003/10/25 14:41:42 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.90 2003/11/12 16:52:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -199,6 +199,21 @@ kbd_nm_lookup(enum keymap kmap, unsigned char *name, int *func_ref)
 
 		if (kb->action == ACT_SCRIPTING_FUNCTION && func_ref)
 			*func_ref = kb->func_ref;
+
+		return kb;
+	}
+
+	return NULL;
+}
+
+struct keybinding *
+kbd_act_lookup(enum keymap map, enum keyact action)
+{
+	struct keybinding *kb;
+
+	foreach (kb, keymaps[map]) {
+		if (action != kb->action)
+			continue;
 
 		return kb;
 	}
@@ -812,3 +827,24 @@ add_default_keybindings(void)
 	for (kb = default_menu_keymap; kb->key; kb++)
 		add_keybinding(KM_MENU, kb->action, kb->key, kb->meta, EVENT_NONE);
 }
+
+void
+add_keyactions_to_string(struct string *string, enum keyact *actions,
+			 struct terminal *term)
+{
+	int i;
+
+	for (i = 0; actions[i] != ACT_NONE; i++) {
+		struct keybinding *kb = kbd_act_lookup(KM_MAIN, actions[i]);
+		int keystrokelen = string->length;
+		unsigned char *desc = numtodesc(action_table, actions[i]);
+
+		assert(kb);
+
+		make_keystroke(string, kb->key, kb->meta);
+		keystrokelen = string->length - keystrokelen;
+		add_xchar_to_string(string, ' ', int_max(10 - keystrokelen, 1));
+		add_to_string(string, _(desc, term));
+		add_bytes_to_string(string, "\n", 1);
+	}
+}	

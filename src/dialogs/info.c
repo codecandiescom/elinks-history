@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.70 2003/11/09 15:35:03 zas Exp $ */
+/* $Id: info.c,v 1.71 2003/11/12 16:52:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #include "bfu/msgbox.h"
 #include "dialogs/info.h"
 #include "dialogs/refresh.h"
+#include "config/kbdbind.h"
 #include "config/options.h"
 #include "cache/cache.h"
 #include "document/html/renderer.h"
@@ -52,25 +53,38 @@ menu_about(struct terminal *term, void *d, struct session *ses)
 void
 menu_keys(struct terminal *term, void *d, struct session *ses)
 {
-	msg_box(term, NULL, 0,
+	enum keyact actions[] = {
+		ACT_MENU,
+		ACT_QUIT,
+		ACT_DOWN,
+		ACT_UP,
+		ACT_SCROLL_DOWN,
+		ACT_SCROLL_UP,
+		ACT_SCROLL_LEFT,
+		ACT_SCROLL_RIGHT,
+		ACT_BACK,
+		ACT_ENTER,
+		ACT_GOTO_URL,
+		ACT_GOTO_URL_CURRENT,
+		ACT_DOCUMENT_INFO,
+		ACT_HEADER_INFO,
+		ACT_SEARCH,
+		ACT_SEARCH_BACK,
+		ACT_FIND_NEXT,
+		ACT_FIND_NEXT_BACK,
+		ACT_DOWNLOAD,
+
+		ACT_NONE,
+	};
+	struct string keys;
+
+	if (!init_string(&keys)) return;
+
+	add_keyactions_to_string(&keys, actions, term);
+
+	msg_box(term, NULL, MSGBOX_NO_INTL | MSGBOX_FREE_TEXT,
 		N_("Keys"), AL_LEFT,
-		N_("ESC      display menu\n"
-		   "^C, q    quit\n"
-		   "^P, ^N   scroll up, down\n"
-		   "[, ]     scroll left, right\n"
-		   "up, down select link\n"
-		   "->       follow link\n"
-		   "<-       go back\n"
-		   "g        go to URL\n"
-		   "G        go to URL based on current URL\n"
-		   "/        search\n"
-		   "?        search back\n"
-		   "n        find next\n"
-		   "N        find previous\n"
-		   "=        document info\n"
-		   "|        header info\n"
-		   "\\        document source\n"
-		   "d        download"),
+		keys.source,
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 }

@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.47 2003/07/24 02:01:21 jonas Exp $ */
+/* $Id: string.h,v 1.48 2003/08/29 11:13:14 jonas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -143,9 +143,9 @@ struct string *init_string(struct string *string);
 /* Resets @string and free()s the @source member. */
 void done_string(struct string *string);
 
-struct string *add_bytes_to_string(struct string *string, unsigned char *bytes, int length);
-struct string *add_to_string(struct string *string, unsigned char *text);
-struct string *add_char_to_string(struct string *string, unsigned char character);
+inline struct string *add_bytes_to_string(struct string *string, unsigned char *bytes, int length);
+inline struct string *add_to_string(struct string *string, unsigned char *text);
+inline struct string *add_char_to_string(struct string *string, unsigned char character);
 struct string *add_string_to_string(struct string *to, struct string *from);
 
 /* Adds each C string to @string until a terminating NULL is met. */

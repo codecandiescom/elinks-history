@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.78 2003/08/21 14:55:27 zas Exp $ */
+/* $Id: string.c,v 1.79 2003/08/29 11:13:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -291,7 +291,7 @@ done_string(struct string *string)
 #define realloc_string(_string_, _newlength_)				\
 	mem_gralloc((_string_)->source, unsigned char, (_string_)->length, _newlength_, ALLOC_GR)
 
-struct string *
+inline struct string *
 add_bytes_to_string(struct string *string, unsigned char *bytes, int length)
 {
 	int newlength;
@@ -313,7 +313,7 @@ add_bytes_to_string(struct string *string, unsigned char *bytes, int length)
 	return string;
 }
 
-struct string *
+inline struct string *
 add_to_string(struct string *string, unsigned char *source)
 {
 	assertm(string && source, "[add_to_string]");
@@ -325,7 +325,7 @@ add_to_string(struct string *string, unsigned char *source)
 			: string);
 }
 
-struct string *
+inline struct string *
 add_string_to_string(struct string *string, struct string *from)
 {
 	assertm(string && from, "[add_string_to_string]");

@@ -1,7 +1,7 @@
-/* $Id: connection.h,v 1.13 2003/07/03 00:12:57 pasky Exp $ */
+/* $Id: connection.h,v 1.14 2003/07/03 00:15:09 pasky Exp $ */
 
-#ifndef EL__SCHED_SCHED_H
-#define EL__SCHED_SCHED_H
+#ifndef EL__SCHED_CONNECTION_H
+#define EL__SCHED_CONNECTION_H
 
 #include "elinks.h" /* SSL stuff */
 

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.82 2004/02/08 17:37:27 jonas Exp $ */
+/* $Id: renderer.c,v 1.83 2004/03/21 01:45:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,7 +121,7 @@ check_link_word(struct document *document, unsigned char *uri, int length,
 
 	} else if (parse_uri(&test, uri)
 		   && test.protocol != PROTOCOL_UNKNOWN
-		   && (test.datalen || test.hostlen)) {
+		   && (test.datalen || !string_is_empty(&test.host))) {
 		where = memacpy(uri, length);
 	}
 

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.55 2004/03/21 00:21:13 jonas Exp $ */
+/* $Id: uri.h,v 1.56 2004/03/21 01:45:55 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -114,7 +114,7 @@ static inline unsigned char *
 get_uri_host(struct uri *uri)
 {
 	return string_is_empty(&uri->user)
-		? uri->hoststr : uri->user.source;
+		? uri->host.source : uri->user.source;
 }
 
 static inline int
@@ -122,7 +122,7 @@ get_uri_host_length(struct uri *uri, enum uri_component components)
 {
 	return ((components & URI_PORT) && !string_is_empty(&uri->port))
 		? uri->port.source + uri->port.length - get_uri_host(uri)
-		: uri->hoststr + uri->hostlen - get_uri_host(uri);
+		: uri->host.source + uri->host.length - get_uri_host(uri);
 }
 
 

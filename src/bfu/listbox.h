@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.71 2004/07/14 12:02:20 jonas Exp $ */
+/* $Id: listbox.h,v 1.72 2004/07/14 13:51:18 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -84,6 +84,8 @@ struct listbox_ops {
 	unsigned char *(*get_info)(struct listbox_item *, struct terminal *);
 
 	struct uri *(*get_uri)(struct listbox_item *);
+
+	struct listbox_item *(*get_root)(struct listbox_item *);
 
 	/* Do a search on the item. */
 	enum listbox_match (*match)(struct listbox_item *, struct terminal *,

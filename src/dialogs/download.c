@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.60 2004/07/07 02:24:49 jonas Exp $ */
+/* $Id: download.c,v 1.61 2004/07/14 13:51:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "bfu/msgbox.h"
 #include "bfu/style.h"
 #include "bfu/text.h"
+#include "dialogs/download.h"
 #include "dialogs/menu.h"
 #include "dialogs/status.h"
 #include "intl/gettext/libintl.h"
@@ -313,6 +314,12 @@ get_file_download_uri(struct listbox_item *item)
 	return get_uri_reference(file_download->uri);
 }
 
+static struct listbox_item *
+get_file_download_root(struct listbox_item *item)
+{
+	return NULL;
+}
+
 static int
 can_delete_file_download(struct listbox_item *item)
 {
@@ -428,6 +435,7 @@ static struct listbox_ops downloads_listbox_ops = {
 	get_file_download_text,
 	get_file_download_info,
 	get_file_download_uri,
+	get_file_download_root,
 	NULL,
 	can_delete_file_download,
 	delete_file_download,

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.121 2004/07/07 02:24:49 jonas Exp $ */
+/* $Id: dialogs.c,v 1.122 2004/07/14 13:51:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,6 +76,12 @@ get_globhist_item_info(struct listbox_item *box_item, struct terminal *term)
 	return info.source;
 }
 
+static struct listbox_item *
+get_globhist_item_root(struct listbox_item *box_item)
+{
+	return NULL;
+}
+
 static struct uri *
 get_globhist_item_uri(struct listbox_item *item)
 {
@@ -134,6 +140,7 @@ static struct listbox_ops gh_listbox_ops = {
 	get_globhist_item_text,
 	get_globhist_item_info,
 	get_globhist_item_uri,
+	get_globhist_item_root,
 	NULL,
 	can_delete_globhist_item,
 	delete_globhist_item,

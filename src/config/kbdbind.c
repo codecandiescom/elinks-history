@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.238 2004/06/27 09:49:48 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.239 2004/07/14 13:51:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@ static struct strtonum *action_table[KM_MAX];
 /* XXX: ACTION_BOX_SIZE is just a quick hack, we ought to allocate
  * the sub-arrays separately. --pasky */
 #define ACTION_BOX_SIZE 128
-static struct listbox_item *action_box_items[KM_MAX][ACTION_BOX_SIZE];
+struct listbox_item *action_box_items[KM_MAX][ACTION_BOX_SIZE];
 static struct list_head keymaps[KM_MAX];
 
 static void add_default_keybindings(void);

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.180 2004/07/14 12:02:20 jonas Exp $ */
+/* $Id: hierbox.c,v 1.181 2004/07/14 13:51:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,7 +184,9 @@ hierbox_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 		 * whole parent folder will be closed. */
 		if (list_empty(selected->child)
 		    || !selected->expanded) {
-			if (selected->root) {
+			struct listbox_item *root = box->ops->get_root(selected);
+
+			if (root) {
 				struct listbox_context ctx;
 
 				memset(&ctx, 0, sizeof(struct listbox_context));
@@ -192,7 +194,7 @@ hierbox_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 				ctx.offset = 1;
 
 				traverse_listbox_items_list(
-						selected->root, box, 0, 1,
+						root, box, 0, 1,
 						test_search, &ctx);
 				box_sel_move(dlg_data->widgets_data,
 					     ctx.offset);
@@ -678,6 +680,7 @@ static void
 push_ok_delete_button(void *context_)
 {
 	struct listbox_context *context = context_;
+	struct listbox_item *root;
 	int last = 0;
 
 	if (context->item) {
@@ -689,8 +692,9 @@ push_ok_delete_button(void *context_)
 		if (!context->item) return;
 	}
 
-	if (context->item->root) {
-		last = context->item == context->item->root->child.prev;
+	root = context->box->ops->get_root(context->item);
+	if (root) {
+		last = context->item == root->child.prev;
 	}
 
 	/* Delete the last one (traversal should save one to delete) */

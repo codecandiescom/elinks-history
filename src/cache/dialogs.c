@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.75 2004/07/07 02:24:49 jonas Exp $ */
+/* $Id: dialogs.c,v 1.76 2004/07/14 13:51:18 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -138,6 +138,12 @@ get_cache_entry_uri(struct listbox_item *item)
 	return get_uri_reference(cached->uri);
 }
 
+static struct listbox_item *
+get_cache_entry_root(struct listbox_item *item)
+{
+	return NULL;
+}
+
 static int
 can_delete_cache_entry(struct listbox_item *item)
 {
@@ -201,6 +207,7 @@ static struct listbox_ops cache_entry_listbox_ops = {
 	get_cache_entry_text,
 	get_cache_entry_info,
 	get_cache_entry_uri,
+	get_cache_entry_root,
 	match_cache_entry,
 	can_delete_cache_entry,
 	delete_cache_entry_item,

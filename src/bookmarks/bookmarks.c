@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.132 2004/07/14 00:45:27 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.133 2004/07/14 13:51:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -269,7 +269,6 @@ add_bookmark(struct bookmark *root, int place, unsigned char *title,
 	bm->box_item = mem_calloc(1, sizeof(struct listbox_item));
 	if (!bm->box_item) return NULL;
 	if (root) {
-		bm->box_item->root = root->box_item;
 		bm->box_item->depth = root->box_item->depth + 1;
 	}
 	init_list(bm->box_item->child);

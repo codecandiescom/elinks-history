@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.183 2004/07/07 02:24:49 jonas Exp $ */
+/* $Id: dialogs.c,v 1.184 2004/07/14 13:51:18 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -219,6 +219,12 @@ get_option_info(struct listbox_item *item, struct terminal *term)
 	return info.source;
 }
 
+static struct listbox_item *
+get_option_root(struct listbox_item *item)
+{
+	return item->root;
+}
+
 static enum listbox_match
 match_option(struct listbox_item *item, struct terminal *term,
 	     unsigned char *text)
@@ -269,6 +275,7 @@ static struct listbox_ops options_listbox_ops = {
 	get_option_text,
 	get_option_info,
 	NULL,
+	get_option_root,
 	match_option,
 	can_delete_option,
 	delete_option_item,
@@ -587,6 +594,12 @@ get_keybinding_info(struct listbox_item *item, struct terminal *term)
 	return info.source;
 }
 
+static struct listbox_item *
+get_keybinding_root(struct listbox_item *item)
+{
+	return item->root;
+}
+
 static enum listbox_match
 match_keybinding(struct listbox_item *item, struct terminal *term,
 		 unsigned char *text)
@@ -630,6 +643,7 @@ static struct listbox_ops keybinding_listbox_ops = {
 	get_keybinding_text,
 	get_keybinding_info,
 	NULL,
+	get_keybinding_root,
 	match_keybinding,
 	can_delete_keybinding,
 	delete_keybinding_item,

@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.107 2004/07/07 02:24:49 jonas Exp $ */
+/* $Id: dialogs.c,v 1.108 2004/07/14 13:51:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,6 +153,12 @@ get_http_auth_basic_uri(struct listbox_item *item)
 	return get_composed_uri(http_auth_basic->uri, URI_HTTP_AUTH);
 }
 
+static struct listbox_item *
+get_http_auth_basic_root(struct listbox_item *box_item)
+{
+	return NULL;
+}
+
 static int
 can_delete_http_auth_basic(struct listbox_item *item)
 {
@@ -203,6 +209,7 @@ static struct listbox_ops auth_listbox_ops = {
 	get_http_auth_basic_text,
 	get_http_auth_basic_info,
 	get_http_auth_basic_uri,
+	get_http_auth_basic_root,
 	NULL,
 	can_delete_http_auth_basic,
 	delete_http_auth_basic,

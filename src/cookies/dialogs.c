@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.67 2004/07/14 12:02:20 jonas Exp $ */
+/* $Id: dialogs.c,v 1.68 2004/07/14 13:51:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,6 +114,19 @@ get_cookie_info(struct listbox_item *item, struct terminal *term)
 	return string.source;
 }
 
+static struct listbox_item *
+get_cookie_root(struct listbox_item *item)
+{
+	/* Are we dealing with a folder? */
+	if (item->type == BI_FOLDER) {
+		return NULL;
+	} else {
+		struct cookie *cookie = item->udata;
+
+		return cookie->server->box_item;
+	}
+}
+
 static int
 can_delete_cookie(struct listbox_item *item)
 {
@@ -179,6 +192,7 @@ static struct listbox_ops cookies_listbox_ops = {
 	get_cookie_text,
 	get_cookie_info,
 	NULL,
+	get_cookie_root,
 	NULL,
 	can_delete_cookie,
 	delete_cookie,

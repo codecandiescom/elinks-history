@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.173 2004/07/13 21:22:25 jonas Exp $ */
+/* $Id: dialogs.c,v 1.174 2004/07/14 13:51:18 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -92,6 +92,14 @@ get_bookmark_uri(struct listbox_item *item)
 		? get_uri(bookmark->url, 0) : NULL;
 }
 
+static struct listbox_item *
+get_bookmark_root(struct listbox_item *item)
+{
+	struct bookmark *bookmark = item->udata;
+
+	return bookmark->root ? bookmark->root->box_item : NULL;
+}
+
 static int
 can_delete_bookmark(struct listbox_item *item)
 {
@@ -146,6 +154,7 @@ static struct listbox_ops bookmarks_listbox_ops = {
 	get_bookmark_text,
 	get_bookmark_info,
 	get_bookmark_uri,
+	get_bookmark_root,
 	NULL,
 	can_delete_bookmark,
 	delete_bookmark_item,
@@ -343,10 +352,8 @@ do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 
 			if (blind_insert) {
 				bm->root = dest;
-				bm->box_item->root = dest->box_item;
 			} else {
 				bm->root = dest->root;
-				bm->box_item->root = dest->box_item->root;
 			}
 			bm->box_item->depth = bm->root ? bm->root->box_item->depth + 1 : 0;
 			if (bm->box_item->type == BI_FOLDER)

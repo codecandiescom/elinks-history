@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.33 2004/07/07 02:24:49 jonas Exp $ */
+/* $Id: dialogs.c,v 1.34 2004/07/14 13:51:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,6 +96,12 @@ get_formhist_data_uri(struct listbox_item *item)
 	return get_uri(formhist_data->url, 0);
 }
 
+static struct listbox_item *
+get_formhist_data_root(struct listbox_item *item)
+{
+	return NULL;
+}
+
 static int
 can_delete_formhist_data(struct listbox_item *item)
 {
@@ -147,6 +153,7 @@ static struct listbox_ops formhist_listbox_ops = {
 	get_formhist_data_text,
 	get_formhist_data_info,
 	get_formhist_data_uri,
+	get_formhist_data_root,
 	NULL,
 	can_delete_formhist_data,
 	delete_formhist_data,

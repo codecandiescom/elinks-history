@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.155 2004/07/06 11:05:03 jonas Exp $ */
+/* $Id: listbox.c,v 1.156 2004/07/14 13:51:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,7 +129,7 @@ traverse_listbox_items_list(struct listbox_item *item, struct listbox_data *box,
 		 * and no dangling children. */
 #define	item_cache(item) \
 	do { \
-		croot = item->root; cprev = item->prev; cnext = item->next; \
+		croot = box->ops->get_root(item); cprev = item->prev; cnext = item->next; \
 	} while (0)
 		struct listbox_item *croot, *cprev, *cnext;
 
@@ -338,7 +338,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 
 		for (i = depth - d; i; i--) {
 			child = root;
-			if (root) root = root->root;
+			if (root) root = data->box->ops->get_root(root);
 		}
 
 		/* XXX */
@@ -358,8 +358,10 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 		int i, x;
 
 		if (item->type == BI_LEAF) {
-			if (item->root) {
-				if (item == item->root->child.prev) {
+			struct listbox_item *root = data->box->ops->get_root(item);
+
+			if (root) {
+				if (item == root->child.prev) {
 					str[1] = BORDER_SDLCORNER;
 				}
 			} else {

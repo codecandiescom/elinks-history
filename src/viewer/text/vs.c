@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.11 2003/09/12 23:23:35 zas Exp $ */
+/* $Id: vs.c,v 1.12 2003/09/12 23:37:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,10 +22,13 @@
 void
 init_vs(struct view_state *vs, unsigned char *url)
 {
-	memset(vs, 0, sizeof(struct view_state));
+	int url_len = strlen(url);
+
+	memset(vs, 0, sizeof(struct view_state) + url_len + 1);
 	vs->current_link = -1;
 	vs->plain = -1;
-	strcpy(vs->url, url);
+	memcpy(vs->url, url, url_len);
+	vs->url_len = url_len;
 }
 
 void
@@ -53,7 +56,10 @@ copy_vs(struct view_state *dst, struct view_state *src)
 	 * an overflow will occur inducing a totally unexpected behavior
 	 * and a crash in more or less time.
 	 * I warned you. --Zas */
-	strcpy(dst->url, src->url);
+	assert(dst->url_len >= src->url_len);
+	if_assert_failed return;
+
+	memcpy(dst->url, src->url, src->url_len);
 
 	dst->goto_position = src->goto_position ?
 			     stracpy(src->goto_position) : NULL;

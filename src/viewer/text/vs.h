@@ -1,4 +1,4 @@
-/* $Id: vs.h,v 1.3 2003/09/12 22:49:57 zas Exp $ */
+/* $Id: vs.h,v 1.4 2003/09/12 23:37:16 zas Exp $ */
 
 /* Placing this before the #ifndef, we'll fix some crossdep problems. */
 #include "document/html/parser.h"
@@ -16,7 +16,7 @@ struct view_state {
 	int view_posx;
 	int current_link;
 	int plain;
-
+	int url_len;
 	unsigned char url[1];	/* Must be last. */
 };
 

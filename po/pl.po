@@ -231,7 +231,7 @@ msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
 msgstr ""
-"Nie mo¿na skasowaæ tej opcji."
+"Ta opcja nie mo¿e byæ edytowana."
 
 #: src/config/dialogs.c:387 src/config/dialogs.c:401
 msgid "Add option"

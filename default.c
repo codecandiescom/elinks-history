@@ -1339,63 +1339,67 @@ struct option html_options[] = {
 
 extern struct history goto_url_history ;
 
+/* Load history file */
 int load_url_history()
 {
-	unsigned char *history_file ;
-	FILE *fp ;
-	char	url[MAX_INPUT_URL_LEN];
+	FILE *fp;
+	unsigned char *history_file;
+	unsigned char url[MAX_INPUT_URL_LEN];
 
 	if (anonymous) return 0;
 	/* Must have been called after init_home */
-	if (!links_home)
-		return 0;
-	history_file = stracpy (links_home) ;
-	if (!history_file)
-		return 0;
-	add_to_strn(&history_file, "links.his");
-	if (!(fp = fopen(history_file, "r")))
-	{
-		mem_free (history_file) ;
-		return 0;
-	}
-	while (fgets (url, MAX_INPUT_URL_LEN, fp))
-	{
-		url[strlen(url)-1] = 0 ;
-		add_to_history(&goto_url_history, url) ;
-	}
-	fclose (fp) ;
-	mem_free (history_file) ;
-	return 0 ;
-}
+	if (!links_home) return 0;
 
-int save_url_history()
-{
-	struct history_item* hi ;
-	unsigned char *history_file ;
-	int  i = 0 ;
-	FILE *fp ;
-	if (anonymous) return 0;
+	history_file = stracpy(links_home);
+	if (!history_file) return 0;
 
-	/* Must have been called after init_home */
-	if (!links_home)
-		return 0;
-	history_file = stracpy (links_home) ;
-	if (!history_file)
-		return 0;
 	add_to_strn(&history_file, "links.his");
-	if (!(fp = fopen(history_file, "w"))) {
+	fp = fopen(history_file, "r");
+	if (!fp) {
 		mem_free(history_file);
 		return 0;
 	}
-	foreachback(hi,goto_url_history.items)
-	{
-		if (i++ > MAX_HISTORY_ITEMS)
-			break ;
-		else
-			fputs (hi->d, fp), fputc ('\n', fp) ;
+ 
+	while (fgets(url, MAX_INPUT_URL_LEN, fp)) {
+		url[strlen(url) - 1] = 0;
+		add_to_history(&goto_url_history, url, 0);
 	}
-	fclose (fp) ;
-	mem_free (history_file) ;
-	return 0 ;
+	
+	fclose(fp);
+	mem_free(history_file);
+	return 0;
+}
+
+/* Write history list to file */
+int save_url_history()
+{
+	struct history_item* historyitem;
+	unsigned char *history_file;
+	int i = 0;
+	FILE *fp;
+	
+	if (anonymous) return 0;
+	/* Must have been called after init_home */
+	if (!links_home) return 0;
+	
+	history_file = stracpy(links_home);
+	if (!history_file) return 0;
+	
+	add_to_strn(&history_file, "links.his");
+	fp = fopen(history_file, "w");
+	if (!fp) {
+		mem_free(history_file);
+		return 0;
+	}
+	
+	foreachback(historyitem, goto_url_history.items) {
+		if (i++ > MAX_HISTORY_ITEMS) break;
+		fputs(historyitem->d, fp);
+		fputc('\n', fp);
+	}
+
+	fclose(fp);
+	mem_free(history_file);
+	return 0;
 }
 

@@ -1471,35 +1471,64 @@ void msg_box(struct terminal *term, struct memory_list *ml, unsigned char *title
 	do_dialog(term, dlg, ml);
 }
 
-void add_to_history(struct history *h, unsigned char *t)
+/* search duplicate entries in history list and remove older ones */
+static void remove_duplicate_from_history(struct history *historylist, unsigned char *url)
 {
-	struct history_item *hi, *hs;
-	int l;
-	if (!h || !t || !*t) return;
-	l = strlen(t) + 1;
-	if (!(hi = mem_alloc(sizeof(struct history_item) + l))) return;
-	memcpy(hi->d, t, l);
-	foreach(hs, h->items) if (!strcmp(hs->d, t)) {
-		struct history_item *hd = hs;
-		hs = hs->prev;
-		del_from_list(hd);
-		mem_free(hd);
-		h->n--;
-	}
-	add_to_list(h->items, hi);
-	h->n++;
-	while (h->n > MAX_HISTORY_ITEMS) {
-		struct history_item *hd = h->items.prev;
-		if ((void *)hd == &h->items) {
-			internal("history is empty");
-			h->n = 0;
-			return;
+	struct history_item *historyitem;
+
+	if (!historylist || !url || !*url) return;
+
+	foreach(historyitem, historylist->items) {
+		if (!strcmp(historyitem->d, url)) {
+			struct history_item *tmphistoryitem = historyitem;
+
+			/* found a duplicate -> remove it from history list */
+			historyitem = historyitem->prev;
+			del_from_list(tmphistoryitem);
+			mem_free(tmphistoryitem);
+			historylist->n--;
 		}
-		del_from_list(hd);
-		mem_free(hd);
-		h->n--;
 	}
 }
+
+/* Add a new entry in history list, take care of duplicate 
+ * if check_duplicate and respect history size limit  */
+void add_to_history(struct history *historylist, unsigned char *url, int check_duplicate)
+{
+	struct history_item *newhistoryitem;
+	int url_len;
+	
+	if (!historylist || !url || !*url) return;
+	url_len = strlen(url) + 1;
+	
+	newhistoryitem = mem_alloc(sizeof(struct history_item) + url_len);
+	
+	if (!newhistoryitem) return;
+	memcpy(newhistoryitem->d, url, url_len);
+	
+	if (check_duplicate) remove_duplicate_from_history(historylist, url);
+	
+	/* add new entry to history list */
+	add_to_list(historylist->items, newhistoryitem);
+	historylist->n++;
+
+	/* limit size of history to MAX_HISTORY_ITEMS
+	 * removing first entries if needed */
+	while (historylist->n > MAX_HISTORY_ITEMS) {
+		struct history_item *tmphistoryitem = historylist->items.prev;
+
+		if ((void *) tmphistoryitem == &historylist->items) {
+			internal("history is empty");
+			historylist->n = 0;
+			return;
+		}
+
+		del_from_list(tmphistoryitem);
+		mem_free(tmphistoryitem);
+		historylist->n--;
+	}
+}
+
 
 int input_field_cancel(struct dialog_data *dlg, struct dialog_item_data *di)
 {
@@ -1515,8 +1544,9 @@ int input_field_ok(struct dialog_data *dlg, struct dialog_item_data *di)
 	void (*fn)(void *, unsigned char *) = di->item->udata;
 	void *data = dlg->dlg->udata2;
 	unsigned char *text = dlg->items->cdata;
+
 	if (check_dialog(dlg)) return 1;
-	add_to_history(dlg->dlg->items->history, text);
+	add_to_history(dlg->dlg->items->history, text, 1);
 	if (fn) fn(data, text);
 	ok_dialog(dlg, di);
 	return 0;

@@ -1762,7 +1762,8 @@ int clear_dialog(struct dialog_data *, struct dialog_item_data *);
 void msg_box(struct terminal *, struct memory_list *, unsigned char *, int, /*unsigned char *, void *, int,*/ ...);
 void input_field_fn(struct dialog_data *);
 void input_field(struct terminal *, struct memory_list *, unsigned char *, unsigned char *, unsigned char *, unsigned char *, void *, struct history *, int, unsigned char *, int, int, int (*)(struct dialog_data *, struct dialog_item_data *), void (*)(void *, unsigned char *), void (*)(void *));
-void add_to_history(struct history *, unsigned char *);
+
+void add_to_history(struct history *, unsigned char *, int);
 
 void box_sel_move(struct dialog_item_data *, int ); 
 void show_dlg_item_box(struct dialog_data *, struct dialog_item_data *);

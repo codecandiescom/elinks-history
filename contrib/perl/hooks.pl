@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.48 2005/03/26 23:05:51 pasky Exp $
+# $Id: hooks.pl,v 1.49 2005/03/26 23:42:26 rrowan Exp $
 #
 # This file is (c) Russ Rowan and GPL'd.
 
@@ -14,17 +14,17 @@ use Carp;
 
 Save this as ~/.elinks/config.pl :
 
-	bork:       yep     # BORKify Google?
-	collapse:   okay    # Collapse all XBEL bookmark folders on exit?
-	fortune:    elinks  # *fortune*, *elinks* tip, or *none* on quit?
-	googlebeta: hell no # I miss DejaNews...
-	gotosearch: not yet # Don't use this yet.  It's broken.
-	ipv6:       sure    # IPV4 or 6 address blocks with "ip" prefix?
-	language:   english # "bf nl en" still works, but now "bf nl" does too
-	news:       msnbc   # Agency to use for "news" and "n" prefixes
-	search:     elgoog  # Engine for (search|find|www|web|s|f|go) prefixes
-	usenet:     google  # *google* or *standard* view for news:// URLs
-	weather:    cnn     # Server for "weather" and "w" prefixes
+	bork:       yep       # BORKify Google?
+	collapse:   okay      # Collapse all XBEL bookmark folders on exit?
+	fortune:    elinks    # *fortune*, *elinks* tip, or *none* on quit?
+	googlebeta: hell no   # I miss DejaNews...
+	gotosearch: not yet   # Don't use this yet.  It's broken.
+	ipv6:       sure      # IPV4 or 6 address blocks with "ip" prefix?
+	language:   english   # "bf nl en" still works, but now "bf nl" does too
+	news:       msnbc     # Agency to use for "news" and "n" prefixes
+	search:     elgoog    # Engine for (search|find|www|web|s|f|go) prefixes
+	usenet:     google    # *google* or *standard* view for news:// URLs
+	weather:    cnn       # Server for "weather" and "w" prefixes
 
 	# news:    bbc, msnbc, cnn, fox, google, yahoo, reuters, eff, wired,
 	#          slashdot, newsforge, usnews, newsci, discover, sciam
@@ -101,11 +101,11 @@ smart prefixes:
           Google Library / Project Gutenberg: book or read
           Internet Public Library: ipl
      other:
-          usenet: deja, gg, groups, gr, nntp, usenet, nn
-          page translation: babelfish, babel, bf, translate, trans, or b
+          Google Groups: deja, gg, groups, gr, nntp, usenet, nn
+          AltaVista Babelfish: babelfish, babel, bf, translate, trans, or b
           MirrorDot: md or mirrordot
           Coral cache: cc, coral, or nyud (requires URL)
-          page validators: vhtml or vcss (current url or specified)
+          W3C page validators: vhtml or vcss (current url or specified)
 elinks: el / elinks, bz / bug (# or search optional), doc(|s|umentation), faq
 
 =cut
@@ -243,11 +243,11 @@ sub goto_url_hook
 	}
 
 	if ($url =~ '^(zip|usps)(| .*)$'
-	    or $url =~ '^ip(| .*)$'
-	    or $url =~ '^whois(| .*)$'
-	    or $url =~ '^rfc(| .*)$'
-	    or $url =~ '^(weather|w)(| .*)$'
-	    or $url =~ '^(whatis|uptime)(| .*)$') {
+		or $url =~ '^ip(| .*)$'
+		or $url =~ '^whois(| .*)$'
+		or $url =~ '^rfc(| .*)$'
+		or $url =~ '^(weather|w)(| .*)$'
+		or $url =~ '^(whatis|uptime)(| .*)$') {
 		my ($thingy) = $url =~ /^[a-z]* (.*)/;
 		my ($domain) = $current_url =~ /([a-z0-9-]+\.(com|net|org|edu|gov|mil))/;
 
@@ -430,6 +430,23 @@ sub goto_url_hook
 		}
 		return $url;
 	}
+
+	# the Dialectizer (dia <dialect> <url>)
+	if ($url =~ '^dia(| [a-z]*(| .*))$')
+	{
+		my ($dialect) = $url =~ /^dia ([a-z]*)/;
+			$dialect = "hckr" if $dialect and $dialect eq 'hacker';
+		my ($victim) = $url =~ /^dia [a-z]* (.*)$/;
+			$victim = $current_url if (!$victim and $current_url and $dialect);
+		$url = 'http://rinkworks.com/dialect';
+		if ($dialect and $dialect =~ '^(redneck|jive|cockney|fudd|bork|moron|piglatin|hckr)$' and $victim)
+		{
+			$victim =~ s/^http:\/\///;
+			$url = $url . '/dialectp.cgi?dialect=' . $dialect . '&url=http%3a%2f%2f' . $victim . '&inside=1';
+		}
+		return $url;
+	}
+
 
 	# Anything not otherwise useful could be a search
 	if ($current_url and loadrc("gotosearch") eq "yes")

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-02 15:14+0100\n"
+"POT-Creation-Date: 2003-12-02 17:24+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -4417,47 +4417,59 @@ msgstr "Redimensionner le terminal"
 #. FIXME: The following is a PITA from the l10n standpoint. A *big*
 #. * one, _("of")-like pearls are a nightmare. Format strings need to
 #. * be introduced to this fuggy corner of code as well. --pasky
-#: src/dialogs/status.c:69
+#: src/dialogs/status.c:70
 msgid "Received"
 msgstr "Réception"
 
-#: src/dialogs/status.c:74
+#: src/dialogs/status.c:75
 msgid "of"
 msgstr "sur"
 
-#: src/dialogs/status.c:83
+#: src/dialogs/status.c:84
+msgid "Average speed"
+msgstr "Vitesse moyenne"
+
+#: src/dialogs/status.c:85
 msgid "average speed"
 msgstr "vitesse moyenne"
 
-#: src/dialogs/status.c:83
+#: src/dialogs/status.c:86
 msgid "avg"
 msgstr "moy."
 
-#: src/dialogs/status.c:85
+#: src/dialogs/status.c:89
+msgid "Speed"
+msgstr "Vitesse"
+
+#: src/dialogs/status.c:89
 msgid "speed"
 msgstr "vitesse"
 
-#: src/dialogs/status.c:95
+#: src/dialogs/status.c:100
 msgid "current speed"
 msgstr "vitesse actuelle"
 
-#: src/dialogs/status.c:95
+#: src/dialogs/status.c:100
 msgid "cur"
 msgstr "act."
 
-#: src/dialogs/status.c:107
+#: src/dialogs/status.c:112
+msgid "Elapsed time"
+msgstr "Temps écoulé"
+
+#: src/dialogs/status.c:112
 msgid "elapsed time"
 msgstr "temps écoulé"
 
-#: src/dialogs/status.c:113
+#: src/dialogs/status.c:119
 msgid "estimated time"
 msgstr "temps restant estimé"
 
-#: src/dialogs/status.c:250
+#: src/dialogs/status.c:256
 msgid "Untitled"
 msgstr "Sans titre"
 
-#: src/dialogs/status.c:252
+#: src/dialogs/status.c:258
 msgid "No document"
 msgstr "Aucun document"
 

@@ -1,3 +1,70 @@
+Sun Jun 15 21:56:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Huh. Reverted strange patch by Jonas. It is not clear what exactly
+	it fixes, and whatever it fixes, it certainly fixes it at the wrong
+	place.  
+
+Sun Jun 15 19:57:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/history.c:
+
+	Bug 202 should be fixed by that.  
+
+Sun Jun 15 19:12:17 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.po files were resynced. French translation was updated.  
+
+Sun Jun 15 17:21:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Elaborated a bit in the mime.mimetypes describtion. Hope it's ok Zas
+	;).  
+
+Sun Jun 15 17:11:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Remove unused argument to type_query().  
+
+Sun Jun 15 17:06:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	2nd step of mime/ integration. Move mailcap options to mime.* and
+	introduce options for the mimetype backend.  
+
+Sun Jun 15 16:58:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Fix grave option alias bug to actually fetch the aliased option.  
+
+Sun Jun 15 15:59:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	Hm, forgot to update NEWS. Whatever... ;-).  
+
+Sun Jun 15 15:47:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, configure.in:
+
+	Compile time configuration for mimetypes backend.  
+
+Sun Jun 15 15:25:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre1.CVS --- let the fun begin again 
+
 Sun Jun 15 15:20:28 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

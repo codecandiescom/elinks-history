@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.83 2003/09/16 18:00:11 jonas Exp $ */
+/* $Id: tables.c,v 1.84 2003/09/16 18:08:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1429,8 +1429,8 @@ get_frame_pos(int a, int a_size, int b, int b_size)
 	return a + 1 + (a_size + 2) * b;
 }
 
-#define H_LINE_X(tt, xx, yy) frame[0][get_frame_pos(xx, (tt)->x, yy, (tt)->y)]
-#define V_LINE_X(tt, xx, yy) frame[1][get_frame_pos(yy, (tt)->y, xx, (tt)->x)]
+#define H_FRAME_POSITION(tt, xx, yy) frame[0][get_frame_pos(xx, (tt)->x, yy, (tt)->y)]
+#define V_FRAME_POSITION(tt, xx, yy) frame[1][get_frame_pos(yy, (tt)->y, xx, (tt)->x)]
 
 static inline void
 draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
@@ -1452,10 +1452,10 @@ draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
 	};
 	/* Note: I have no clue wether any of these names are suitable but they
 	 * should give an idea of what is going on. --jonas */
-	signed char left   = H_LINE_X(table, i - 1,     j);
-	signed char right  = H_LINE_X(table,     i,     j);
-	signed char top    = V_LINE_X(table,     i, j - 1);
-	signed char bottom = V_LINE_X(table,     i,     j);
+	signed char left   = H_FRAME_POSITION(table, i - 1,     j);
+	signed char right  = H_FRAME_POSITION(table,     i,     j);
+	signed char top    = V_FRAME_POSITION(table,     i, j - 1);
+	signed char bottom = V_FRAME_POSITION(table,     i,     j);
 	register int pos;
 
 	if (left < 0 && right < 0 && top < 0 && bottom < 0) return;
@@ -1473,7 +1473,7 @@ draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
 		 int i, int j)
 {
  	static unsigned char hltable[] = { ' ', BORDER_SHLINE, BORDER_DHLINE };
- 	int pos = H_LINE_X(table, i, j);
+ 	int pos = H_FRAME_POSITION(table, i, j);
  
  	assertm(pos < 3, "Horizontal table position out of bound [%d]", pos);
  
@@ -1487,7 +1487,7 @@ draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
 		 int i, int j)
 {
  	static unsigned char vltable[] = { ' ', BORDER_SVLINE, BORDER_DVLINE };
- 	int pos = V_LINE_X(table, i, j);
+ 	int pos = V_FRAME_POSITION(table, i, j);
  
  	assertm(pos < 3, "Vertical table position out of bound [%d]", pos);
  
@@ -1525,27 +1525,27 @@ display_table_frames(struct table *t, int x, int y)
 		if (!ysp) ysp = t->y - j;
 
 		if (t->rules != R_COLS) {
-			memset(&H_LINE_X(t, i, j), t->cellsp, xsp);
-			memset(&H_LINE_X(t, i, j + ysp), t->cellsp, xsp);
+			memset(&H_FRAME_POSITION(t, i, j), t->cellsp, xsp);
+			memset(&H_FRAME_POSITION(t, i, j + ysp), t->cellsp, xsp);
 		}
 
 		if (t->rules != R_ROWS) {
-			memset(&V_LINE_X(t, i, j), t->cellsp, ysp);
-			memset(&V_LINE_X(t, i + xsp, j), t->cellsp, ysp);
+			memset(&V_FRAME_POSITION(t, i, j), t->cellsp, ysp);
+			memset(&V_FRAME_POSITION(t, i + xsp, j), t->cellsp, ysp);
 		}
 	}
 
 	if (t->rules == R_GROUPS) {
 		for (i = 1; i < t->x; i++) {
 			if (/*i < t->xc &&*/ t->xcols[i]) continue;
-			memset(&V_LINE_X(t, i, 0), 0, t->y);
+			memset(&V_FRAME_POSITION(t, i, 0), 0, t->y);
 		}
 		for (j = 1; j < t->y; j++) {
 			for (i = 0; i < t->x; i++)
 				if (CELL(t, i, j)->group)
 					goto cont;
 
-			memset(&H_LINE_X(t, 0, j), 0, t->x);
+			memset(&H_FRAME_POSITION(t, 0, j), 0, t->x);
 cont:;
 		}
 	}
@@ -1558,11 +1558,11 @@ cont2:
 		fr = !!(t->frame & F_RHS);
 	}
 
-	memset(&H_LINE_X(t, 0, 0), fa, t->x);
-	memset(&H_LINE_X(t, 0, t->y), fb, t->x);
+	memset(&H_FRAME_POSITION(t, 0, 0), fa, t->x);
+	memset(&H_FRAME_POSITION(t, 0, t->y), fb, t->x);
 
-	memset(&V_LINE_X(t, 0, 0), fl, t->y);
-	memset(&V_LINE_X(t, t->x, 0), fr, t->y);
+	memset(&V_FRAME_POSITION(t, 0, 0), fl, t->y);
+	memset(&V_FRAME_POSITION(t, t->x, 0), fr, t->y);
 
 	cy = y;
 	for (j = 0; j <= t->y; j++) {

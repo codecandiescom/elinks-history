@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.275 2004/04/09 03:40:13 jonas Exp $ */
+/* $Id: http.c,v 1.276 2004/04/09 03:43:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -445,14 +445,7 @@ http_send_header(struct connection *conn)
 
 		case REFERER_SAME_URL:
 			add_to_string(&header, "Referer: ");
-			add_uri_to_string(&header, uri, URI_HTTP_REFERRER_HOST);
-
-			if (!IS_PROXY_URI(conn->uri)
-			    || header.source[header.length - 1] != '/')
-				add_char_to_string(&header, '/');
-
-			add_url_to_http_string(&header, uri, URI_DATA);
-
+			add_url_to_http_string(&header, uri, URI_PUBLIC);
 			add_to_string(&header, "\r\n");
 			break;
 	}

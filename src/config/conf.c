@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.53 2002/10/13 12:11:23 pasky Exp $ */
+/* $Id: conf.c,v 1.54 2002/11/29 19:04:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,6 +84,7 @@ enum parse_error {
 	ERROR_COMMAND,
 	ERROR_OPTION,
 	ERROR_VALUE,
+	ERROR_NOMEM,
 };
 
 /* Parse a command. Returns error code. */
@@ -110,6 +111,7 @@ parse_set(struct list_head *opt_tree, unsigned char **file, int *line,
 	bin = **file;
 	**file = '\0';
 	optname = stracpy(optname);
+	if (!optname) return ERROR_NOMEM;
 	**file = bin;
 
 	*file = skip_white(*file, line);
@@ -222,6 +224,8 @@ parse_include(struct list_head *opt_tree, unsigned char **file, int *line,
 	unsigned char *dumbstr = init_str();
 	int dumblen = 0;
 
+	if (!dumbstr) return ERROR_NOMEM;
+	
 	*file = skip_white(*file, line);
 	if (!*file) return ERROR_PARSE;
 
@@ -282,6 +286,7 @@ parse_config_file(struct list_head *options, unsigned char *name,
 		"unknown command",
 		"unknown option",
 		"bad value",
+		"no memory left",
 	};
 
 	while (file && *file) {
@@ -364,6 +369,7 @@ read_config_file(unsigned char *name)
 	set_bin(fd);
 
 	s = init_str();
+	if (!s) return NULL;
 
 	while ((r = read(fd, cfg_buffer, FILE_BUF)) > 0) {
 		int i;
@@ -577,6 +583,8 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	int origlen;
 	int savestyle = get_opt_int("config_saving_style");
 
+	if (!str) return NULL;
+	
 	/* Scaring. */
 	if (savestyle == 2 || (savestyle < 2
 				&& (load_config_file(prefix, name, options,

@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.41 2004/07/22 00:17:24 pasky Exp $ */
+/* $Id: proxy.c,v 1.42 2004/07/22 06:09:35 miciah Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -137,11 +137,8 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 		if (!no_proxy || !*no_proxy) no_proxy = getenv("no_proxy");
 
 		if (!proxy_probe_no_proxy(uri->host, no_proxy))
-			proxy = protocol_proxy;
+			return proxy_uri(uri, protocol_proxy);
 	}
-
-	if (proxy)
-		return proxy_uri(uri, proxy);
 
 	return get_composed_uri(uri, URI_BASE);
 }

@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.10 2003/08/23 18:24:44 jonas Exp $ */
+/* $Id: vs.c,v 1.11 2003/09/12 23:23:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,13 @@ copy_vs(struct view_state *dst, struct view_state *src)
 {
 	memcpy(dst, src, sizeof(struct view_state));
 
+	/* XXX: Beware @dst should point to a large enough memory space
+	 * to copy @src _and_ @src->url string. If it's not the case
+	 * an overflow will occur inducing a totally unexpected behavior
+	 * and a crash in more or less time.
+	 * I warned you. --Zas */
 	strcpy(dst->url, src->url);
+
 	dst->goto_position = src->goto_position ?
 			     stracpy(src->goto_position) : NULL;
 

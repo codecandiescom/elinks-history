@@ -3656,7 +3656,7 @@ msgstr "~Manuel"
 
 #: src/dialogs/menu.c:541
 msgid "~Lua Reference manual"
-msgstr "~Lua Manuel de référence"
+msgstr "Manuel de ~référence Lua"
 
 #: src/dialogs/menu.c:543
 msgid "~Copying"

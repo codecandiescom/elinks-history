@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.88 2004/05/13 13:26:01 zas Exp $ */
+/* $Id: draw.c,v 1.89 2004/05/13 20:40:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,51 +134,8 @@ draw_line(struct terminal *term, int x, int y, int l, struct screen_char *line)
 }
 
 void
-draw_border(struct terminal *term, int x, int y, int xw, int yw,
-	   struct color_pair *color, int width)
-{
-	static enum border_char p1[] = {
-		BORDER_SULCORNER,
-		BORDER_SURCORNER,
-		BORDER_SDLCORNER,
-		BORDER_SDRCORNER,
-		BORDER_SVLINE,
-		BORDER_SHLINE,
-	};
-	static enum border_char p2[] = {
-		BORDER_DULCORNER,
-		BORDER_DURCORNER,
-		BORDER_DDLCORNER,
-		BORDER_DDRCORNER,
-		BORDER_DVLINE,
-		BORDER_DHLINE,
-	};
-	enum border_char *p = (width > 1) ? p2 : p1;
-	int xt = x + xw - 1;
-	int yt = y + yw - 1;
-	int y1 = y + 1;
-	int x1 = x + 1;
-	int ywt = yw - 2;
-	int xwt = xw - 2;
-
-	draw_area(term, x, y1, 1, ywt, p[4], SCREEN_ATTR_FRAME, color);
-	draw_area(term, xt, y1, 1, ywt, p[4], SCREEN_ATTR_FRAME, color);
-	draw_area(term, x1, y, xwt, 1, p[5], SCREEN_ATTR_FRAME, color);
-	draw_area(term, x1, yt, xwt, 1, p[5], SCREEN_ATTR_FRAME, color);
-
-	if (xw > 1 && yw > 1) {
-		draw_border_char(term, x, y, p[0], color);
-		draw_border_char(term, xt, y, p[1], color);
-		draw_border_char(term, x, yt, p[2], color);
-		draw_border_char(term, xt, yt, p[3], color);
-	}
-
-	set_screen_dirty(term->screen, y, y + yw);
-}
-
-void
-draw_border_box(struct terminal *term, struct rect *box,
-	        struct color_pair *color, int width)
+draw_border(struct terminal *term, struct rect *box,
+	    struct color_pair *color, int width)
 {
 	static enum border_char p1[] = {
 		BORDER_SULCORNER,
@@ -265,23 +222,23 @@ draw_char(struct terminal *term, int x, int y,
 }
 
 void
-draw_area(struct terminal *term, int x, int y, int xw, int yw,
-	  unsigned char data, enum screen_char_attr attr,
-	  struct color_pair *color)
+draw_box(struct terminal *term, struct rect *box,
+	 unsigned char data, enum screen_char_attr attr,
+	 struct color_pair *color)
 {
 	struct screen_char *line, *pos, *end;
 	int width, height;
 
 	assert(term && term->screen && term->screen->image);
 	if_assert_failed return;
-	check_range(term, x, y);
+	check_range(term, box->x, box->y);
 
-	height = int_min(yw, term->height - y);
-	width = int_min(xw, term->width - x);
+	height = int_min(box->height, term->height - box->y);
+	width = int_min(box->width, term->width - box->x);
 
 	if (height <= 0 || width <= 0) return;
 
-	line = &term->screen->image[x + term->width * y];
+	line = &term->screen->image[box->x + term->width * box->y];
 
 	/* Compose off the ending screen position in the areas first line. */
 	end = &line[width - 1];
@@ -307,22 +264,12 @@ draw_area(struct terminal *term, int x, int y, int xw, int yw,
 		copy_screen_chars(pos, line, width);
 	}
 
-	set_screen_dirty(term->screen, y, y + yw);
+	set_screen_dirty(term->screen, box->y, box->y + box->height);
 }
 
 void
-draw_box(struct terminal *term, struct rect *box,
-	 unsigned char data, enum screen_char_attr attr,
-	 struct color_pair *color)
-{
-	/* draw_area() may disappear later. --Zas */
-	draw_area(term, box->x,  box->y, box->width, box->height,
-		  data, attr, color);
-}
-
-void
-draw_shadow_box(struct terminal *term, struct rect *box,
-		struct color_pair *color, int width, int height)
+draw_shadow(struct terminal *term, struct rect *box,
+	    struct color_pair *color, int width, int height)
 {
 	struct rect dbox;
 
@@ -408,6 +355,9 @@ set_cursor(struct terminal *term, int x, int y, int blockable)
 void
 clear_terminal(struct terminal *term)
 {
-	draw_area(term, 0, 0, term->width, term->height, ' ', 0, NULL);
+	struct rect box;
+
+	set_rect(&box, 0, 0, term->width, term->height);
+	draw_box(term, &box, ' ', 0, NULL);
 	set_cursor(term, 0, 0, 1);
 }

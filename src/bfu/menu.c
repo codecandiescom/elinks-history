@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.230 2004/05/13 13:26:01 zas Exp $ */
+/* $Id: menu.c,v 1.231 2004/05/13 20:40:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -384,7 +384,7 @@ display_menu(struct terminal *term, struct menu *menu)
 		 int_max(0, menu->dimensions.height - MENU_BORDER_SIZE * 2));
 
 	draw_box(term, &box, ' ', 0, normal_color);
-	draw_border_box(term, &box, frame_color, 1);
+	draw_border(term, &box, frame_color, 1);
 
 	copy_rect(&nbox, &box);
 

@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.57 2003/10/05 12:54:57 pasky Exp $ */
+/* $Id: document.c,v 1.58 2003/10/05 20:18:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,14 +107,16 @@ loc_msg(struct terminal *term, struct location *location,
 			add_format_to_string(&msg, "(%s)", _("incomplete", term));
 		}
 
-		add_format_to_string(&msg, "\n%s: %s", _("Codepage", term),
-				get_cp_name(frame->document->cp));
+		if (frame) {
+			add_format_to_string(&msg, "\n%s: %s", _("Codepage", term),
+					get_cp_name(frame->document->cp));
 
-		if (frame->document->cp_status == CP_STATUS_ASSUMED) {
-			add_format_to_string(&msg, " (%s)", _("assumed", term));
-		} else if (frame->document->cp_status == CP_STATUS_IGNORED) {
-			add_format_to_string(&msg, " (%s)",
-					_("ignoring server setting", term));
+			if (frame->document->cp_status == CP_STATUS_ASSUMED) {
+				add_format_to_string(&msg, " (%s)", _("assumed", term));
+			} else if (frame->document->cp_status == CP_STATUS_IGNORED) {
+				add_format_to_string(&msg, " (%s)",
+						_("ignoring server setting", term));
+			}
 		}
 
 		a = parse_http_header(ce->head, "Server", NULL);

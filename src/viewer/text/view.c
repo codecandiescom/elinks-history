@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.267 2003/11/17 21:41:41 pasky Exp $ */
+/* $Id: view.c,v 1.268 2003/11/18 11:40:52 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,9 +215,7 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 	if (vs->goto_position) {
 		vy = find_tag(doc_view->document, vs->goto_position);
 		if (vy != -1) {
-			if (vy > doc_view->document->height)
-				vy = doc_view->document->height - 1; /* XXX:zas: -1 ?? */
-			if (vy < 0) vy = 0;
+			int_bounds(&vy, 0, doc_view->document->height - 1);
 			vs->y = vy;
 			set_link(doc_view);
 			mem_free(vs->goto_position);
@@ -242,7 +240,7 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 	if (!doc_view->document->height) return;
 
 	while (vs->y >= doc_view->document->height) vs->y -= height;
-	if (vs->y < 0) vs->y = 0;
+	int_lower_bound(&vs->y, 0);
 	if (vy != vs->y) vy = vs->y, check_vs(doc_view);
 	for (y = int_max(vy, 0);
 	     y < int_min(doc_view->document->height, height + vy);
@@ -277,8 +275,8 @@ draw_frames(struct session *ses)
 	       n++;
 	}
 	l = &cur_loc(ses)->vs.current_link;
-	if (*l < 0) *l = 0;
-	if (!n) n = 1;
+	int_lower_bound(l, 0);
+	int_lower_bound(&n, 1);
 	*l %= n;
 	i = *l;
 	current_doc_view = current_frame(ses);

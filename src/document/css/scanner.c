@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.36 2004/01/20 00:56:51 jonas Exp $ */
+/* $Id: scanner.c,v 1.37 2004/01/20 01:05:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,6 +49,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 	unsigned char first_char = *string;
 	enum css_token_type type = CSS_TOKEN_GARBAGE;
 
+	assert(first_char);
 	token->string = string++;
 
 	if (is_css_char_token(first_char)) {
@@ -131,11 +132,6 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 	} else {
 		/* TODO: Better composing of error tokens. For now we just
 		 * split them down into char tokens */
-		if (!first_char) {
-			string--;
-			token->string = NULL;
-			type = CSS_TOKEN_NONE;
-		}
 	}
 
 	token->type = type;
@@ -182,10 +178,10 @@ scan_css_tokens(struct css_scanner *scanner)
 		struct css_token *token = &table[current];
 
 		scan_css(scanner->position, CSS_CHAR_WHITESPACE);
+		if (!*scanner->position) break;
 
-		if (scan_css_token(scanner, token) == CSS_TOKEN_NONE) {
+		if (scan_css_token(scanner, token) == CSS_TOKEN_GARBAGE) {
 			current--;
-			break;
 		}
 	}
 

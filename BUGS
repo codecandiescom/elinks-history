@@ -1,7 +1,5 @@
 Known bugs:
 
-	Deleting marked bookmarks/globhist causes segfaults. 
-	
 	Frames don't work if there's more frames with same name. Turn them off
 in such case.
 
@@ -28,6 +26,6 @@ top/bottom of screen.
 
 	Call to OS Shell doesn't release mouse handler.
 
-$Id: BUGS,v 1.32 2003/04/26 09:47:44 zas Exp $
+$Id: BUGS,v 1.33 2003/04/29 13:22:22 zas Exp $
 
 vim: textwidth=80

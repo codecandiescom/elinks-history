@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.82 2003/06/01 11:53:43 miciah Exp $ */
+/* $Id: view.c,v 1.83 2003/06/01 17:02:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2685,7 +2685,7 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 				if (!ses->kbdprefix.rep) break;
 
 				if (ses->kbdprefix.rep_num
-						> fd->f_data->nlinks) {
+				    > fd->f_data->nlinks) {
 					ses->kbdprefix.rep = 0;
 					return 2;
 				}
@@ -2693,7 +2693,7 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 				jump_to_link_number(ses,
 						    current_frame(ses),
 						    ses->kbdprefix.rep_num
-						     - 1);
+							- 1);
 		}
 
 		switch (kbd_action(KM_MAIN, ev, NULL)) {

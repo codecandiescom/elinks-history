@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.34 2004/08/14 05:59:20 jonas Exp $ */
+/* $Id: codes.c,v 1.35 2005/01/03 13:58:00 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -128,14 +128,11 @@ get_http_error_document(struct terminal *term, struct uri *uri, int code)
 #ifndef CONFIG_SMALL
 	add_format_to_string(&string, _(
 		"  An error occurred on the server while fetching the document you\n"
-		"  requested. Moreover, the server did not send back any explanation of what\n"
-		"  happenned whatsoever - it would be nice if you notified the web server\n"
-		"  administrator about this, as it is not a nice behaviour from the web\n"
-		"  server at all and it frequently indicates some much deeper problem with\n"
-		"  the web server software.\n"
-		"  <br><br>\n"
-		"  I have no idea about what is wrong, sorry. Please contact the web\n"
-		"  server administrator if you believe that this error should not occur.\n",
+		"  requested. However, the server did not send back any explanation of what\n"
+		"  happenned, so it is unknown what went wrong. Please contact the web server\n"
+		"  administrator about this, if you believe that this error should not occur\n"
+		"  since it is not a nice behaviour from the web server at all and indicates\n"
+		"  that there is some much deeper problem with the web server software.\n",
 		term));
 
 	add_format_to_string(&string,

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.180 2004/11/14 15:49:05 jonas Exp $ */
+/* $Id: ftp.c,v 1.181 2004/11/20 03:52:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -350,7 +350,7 @@ ftp_login(struct connection *conn)
 	struct string cmd;
 	struct auth_entry* auth;
 
-	auth = find_auth_entry(conn->uri, NULL);
+	auth = find_auth(conn->uri);
 
 	if (!init_string(&cmd)) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
@@ -362,8 +362,10 @@ ftp_login(struct connection *conn)
 		struct uri *uri = conn->uri;
 
 		add_bytes_to_string(&cmd, uri->user, uri->userlen);
-	} else if (auth && !auth->blocked && auth->valid) {
+
+	} else if (auth && auth->valid) {
 		add_to_string(&cmd, auth->user);
+
 	} else {
 		add_to_string(&cmd, "anonymous");
 	}
@@ -459,7 +461,7 @@ ftp_pass(struct connection *conn)
 	struct string cmd;
 	struct auth_entry *auth;
 
-	auth = find_auth_entry(conn->uri, NULL);
+	auth = find_auth(conn->uri);
 
 	if (!init_string(&cmd)) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
@@ -471,12 +473,14 @@ ftp_pass(struct connection *conn)
 		struct uri *uri = conn->uri;
 
 		add_bytes_to_string(&cmd, uri->password, uri->passwordlen);
-	} else if (auth && !auth->blocked && auth->valid) {
+
+	} else if (auth && auth->valid) {
 		if (!auth_user_matching_uri(auth, conn->uri)) {
 			prompt_username_pw(conn);
 			return;
 		}
 		add_to_string(&cmd, auth->password);
+
 	} else {
 		add_to_string(&cmd, get_opt_str("protocol.ftp.anon_passwd"));
 	}

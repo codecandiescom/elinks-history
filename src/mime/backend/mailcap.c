@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.71 2003/11/12 23:15:20 zas Exp $ */
+/* $Id: mailcap.c,v 1.72 2003/11/27 13:08:01 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -406,8 +406,6 @@ init_mailcap_map(void)
 	unsigned char *path;
 	unsigned int priority = 0;
 
-	if (!get_mailcap_enable()) return NULL;
-
 	mailcap_map = init_hash(8, &strhash);
 	if (!mailcap_map) return NULL;
 
@@ -476,6 +474,9 @@ init_mailcap(struct module *module)
 	};
 
 	register_change_hooks(mimetypes_change_hooks);
+
+	if (get_opt_bool_tree(cmdline_options, "anonymous"))
+		get_mailcap_enable() = 0;
 }
 
 /* The command semantics include the following:
@@ -604,8 +605,6 @@ get_mailcap_entry(unsigned char *type)
 	struct mailcap_entry *entry;
 	struct hash_item *item;
 
-	if (!mailcap_map && !init_mailcap_map()) return NULL;
-
 	item = get_hash_item(mailcap_map, type, strlen(type));
 
 	/* Check list of entries */
@@ -644,10 +643,15 @@ get_mailcap_entry(unsigned char *type)
 static struct mime_handler *
 get_mime_handler_mailcap(unsigned char *type, int options)
 {
-	struct mailcap_entry *entry = get_mailcap_entry(type);
+	struct mailcap_entry *entry;
 	struct mime_handler *handler;
 	unsigned char *program;
 
+	if (!get_mailcap_enable()
+	    || (!mailcap_map && !init_mailcap_map()))
+		return NULL;
+
+	entry = get_mailcap_entry(type);
 	if (!entry) return NULL;
 
 	program = format_command(entry->command, type, entry->copiousoutput);

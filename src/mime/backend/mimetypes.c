@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.33 2003/10/27 01:12:15 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.34 2003/11/27 13:08:01 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -182,9 +182,6 @@ init_mimetypes_map(void)
 {
 	unsigned char *path;
 
-	if (!get_mimetypes_enable())
-		return NULL;
-
 	mimetypes_map = init_hash(8, &strhash);
 	if (!mimetypes_map)
 		return NULL;
@@ -246,6 +243,9 @@ init_mimetypes(struct module *module)
 	};
 
 	register_change_hooks(mimetypes_change_hooks);
+
+	if (get_opt_bool_tree(cmdline_options, "anonymous"))
+		get_mimetypes_enable() = 0;
 }
 
 
@@ -255,7 +255,8 @@ get_content_type_mimetypes(unsigned char *extension)
 	struct hash_item *item;
 	int extensionlen;
 
-	if (!mimetypes_map && !init_mimetypes_map())
+	if (!get_mimetypes_enable()
+	    || (!mimetypes_map && !init_mimetypes_map()))
 		return NULL;
 
 	extensionlen = strlen(extension);

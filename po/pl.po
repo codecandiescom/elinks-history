@@ -224,7 +224,7 @@ msgid ""
 "to take effect."
 msgstr ""
 "Czy w³±czyæ wy¶wietlanie cyfrowego zegara. Wiedz, ¿e\n"
-"wska¼niki LED powinny byæ w³±czone by zmiana ta odnios³a skutek\n"
+"wska¼niki LED powinny byæ w³±czone by zmiana ta odnios³a skutek"
 
 #: src/bfu/leds.c:87
 msgid ""

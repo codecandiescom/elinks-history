@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.11 2002/06/22 21:20:52 pasky Exp $ */
+/* $Id: charsets.c,v 1.12 2002/08/18 13:04:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,7 @@
 
 struct table_entry {
 	unsigned char c;
-	int u;
+	unsigned int u;
 };
 
 struct codepage_desc {
@@ -103,9 +103,9 @@ new_translation_table(struct conv_table *p)
 
 #define BIN_SEARCH(table, entry, entries, key, result)					\
 {											\
-	int _s = 0, _e = (entries) - 1;							\
+	unsigned int _s = 0, _e = (entries) - 1;					\
 	while (_s <= _e || !((result) = -1)) {						\
-		int _m = (_s + _e) / 2;							\
+		unsigned int _m = (_s + _e) / 2;					\
 		if ((table)[_m].entry == (key)) {					\
 			(result) = _m;							\
 			break;								\
@@ -115,7 +115,7 @@ new_translation_table(struct conv_table *p)
 	}										\
 }											\
 
-int strange_chars[32] = {
+unsigned int strange_chars[32] = {
 0x20ac, 0x0000, 0x002a, 0x0000, 0x201e, 0x2026, 0x2020, 0x2021,
 0x005e, 0x2030, 0x0160, 0x003c, 0x0152, 0x0000, 0x0000, 0x0000,
 0x0000, 0x0060, 0x0027, 0x0022, 0x0022, 0x002a, 0x2013, 0x2014,
@@ -123,7 +123,7 @@ int strange_chars[32] = {
 };
 
 unsigned char *
-u2cp(int u, int to)
+u2cp(unsigned int u, int to)
 {
 	int j, s;
 
@@ -150,7 +150,7 @@ u2cp(int u, int to)
 unsigned char utf_buffer[7];
 
 unsigned char *
-encode_utf_8(int u)
+encode_utf_8(unsigned int u)
 {
 	memset(utf_buffer, 0, 7);
 
@@ -204,7 +204,7 @@ cp2utf_8(int from, int c)
 }
 
 void
-add_utf_8(struct conv_table *ct, int u, unsigned char *str)
+add_utf_8(struct conv_table *ct, unsigned int u, unsigned char *str)
 {
 	unsigned char *p = encode_utf_8(u);
 
@@ -364,7 +364,7 @@ xxstrcmp(unsigned char *s1, unsigned char *s2, int l2)
 unsigned char *
 get_entity_string(unsigned char *st, int l, int encoding)
 {
-	int n;
+	unsigned int n;
 
 	if (l <= 0) return NULL;
 	if (st[0] == '#') {
@@ -403,11 +403,11 @@ get_entity_string(unsigned char *st, int l, int encoding)
 			} while (--l);
 		}
 	} else {
-		int s = 0, e = N_ENTITIES - 1;
+		unsigned int s = 0, e = N_ENTITIES - 1;
 
 		while (s <= e) {
 			int c;
-			int m = (s + e) / 2;
+			unsigned int m = (s + e) / 2;
 
 			c = xxstrcmp(entities[m].s, st, l);
 			if (!c) {

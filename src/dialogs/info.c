@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.34 2003/05/04 17:25:53 pasky Exp $ */
+/* $Id: info.c,v 1.35 2003/05/07 13:45:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,9 +60,10 @@ void menu_about(struct terminal *term, void *d, struct session *ses)
 		_("Text WWW browser", term),
 
 		"\n\n",
-		_("Features: ", term),
+		_("Features:", term),
+#ifndef DEBUG
 		_(" Standard", term), ",",
-#ifdef DEBUG
+#else
 		_(" Debug", term), ",",
 #endif
 #ifdef FASTMEM

@@ -1959,14 +1959,14 @@ void format_table(unsigned char *, unsigned char *, unsigned char *, unsigned ch
 #define MAX_STR_LEN	1024
 
 struct option {
-	int p;
+	unsigned char *cmd_name;
+	unsigned char *cfg_name;
 	unsigned char *(*rd_cmd)(struct option *, unsigned char ***, int *);
 	unsigned char *(*rd_cfg)(struct option *, unsigned char *);
 	void (*wr_cfg)(struct option *, unsigned char **, int *);
 	int min, max;
 	void *ptr;
-	unsigned char *cfg_name;
-	unsigned char *cmd_name;
+	unsigned char *desc;
 };
 
 unsigned char *parse_options(int, unsigned char *[]);

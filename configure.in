@@ -12,11 +12,7 @@ dnl ===================================================================
 dnl Load feature configuration file.
 dnl ===================================================================
 
-if test "x$srcdir" != x; then
-	features="$srcdir/features.conf"
-else
-	features="features.conf"
-fi
+features="$srcdir/features.conf"
 
 AC_MSG_CHECKING([for features.conf])
 if test -e "$features"; then

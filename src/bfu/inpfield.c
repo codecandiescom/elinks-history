@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.161 2004/09/12 02:56:55 miciah Exp $ */
+/* $Id: inpfield.c,v 1.162 2004/10/10 18:04:03 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -573,7 +573,7 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 		    || widget_data->info.field.cpos <= strlen(input_line->buffer))
 			return EVENT_NOT_PROCESSED;
 
-		action = ACT_EDIT_NONE;
+		action = ACT_EDIT_REDRAW;
 		break;
 
 	default:

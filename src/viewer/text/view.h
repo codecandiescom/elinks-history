@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.53 2004/06/16 10:23:39 zas Exp $ */
+/* $Id: view.h,v 1.54 2004/06/20 13:13:37 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -27,8 +27,6 @@ void draw_formatted(struct session *ses, int rerender);
 
 void set_frame(struct session *ses, struct document_view *doc_view, int xxxx);
 struct document_view *current_frame(struct session *);
-
-void down(struct session *ses, struct document_view *doc_view);
 
 /* Used for changing between formatted and source (plain) view. */
 void toggle_plain_html(struct session *ses, struct document_view *doc_view, int xxxx);

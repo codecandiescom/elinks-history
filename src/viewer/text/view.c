@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.501 2004/06/20 12:43:23 zas Exp $ */
+/* $Id: view.c,v 1.502 2004/06/20 13:13:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -469,7 +469,7 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 	}
 }
 
-void
+static void
 down(struct session *ses, struct document_view *doc_view)
 {
 	int count = ses->kbdprefix.repeat_count;

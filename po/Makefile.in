@@ -168,7 +168,10 @@ update-po: Makefile $(srcdir)/$(PACKAGE).pot update-po-do
 
 update-po-do: Makefile
 	@cd $(srcdir); \
-	catalogs=`echo $(PO) | sed 's/\.po/.gmo/'`; \
+	if test -n "$(PO)"; then \
+	  lang=`echo $(PO) | sed 's/\.po//'`; \
+	  catalogs=$$lang.gmo; \
+	fi; \
 	if test -z "$$catalogs"; then catalogs='$(GMOFILES)'; fi; \
 	for cat in $$catalogs; do \
 	  cat=`basename $$cat`; \

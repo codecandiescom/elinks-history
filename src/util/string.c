@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.10 2002/11/23 19:49:52 zas Exp $ */
+/* $Id: string.c,v 1.11 2002/11/25 10:21:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,12 +46,12 @@ debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
 {
 	unsigned char *m;
 
-	if (!src) { fatalfl("memacpy src=NULL"); return NULL; }
+	if (len < 0) { warnfl("memacpy len < 1"); len = 0; }
 
 	m = debug_mem_alloc(f, l, len + 1);
 	if (!m) return NULL;
 		
-	memcpy(m, src, len);
+	if (src && len) memcpy(m, src, len);
 	m[len] = 0;
 
 	return m;
@@ -83,19 +83,25 @@ debug_copy_string(unsigned char *f, int l, unsigned char **dst,
 
 #else /* LEAK_DEBUG */
 
+/* Copy len bytes to an allocated space of len + 1 bytes,
+ * last byte is always set to 0.
+ * If src == NULL or len < 0 then allocate only one byte
+ * and set it to 0.
+ * On allocation failure, it returns NULL.
+ */
 inline unsigned char *
 memacpy(unsigned char *src, int len)
 {
 	unsigned char *m;
 
-	if (!src) { fatal("memacpy src=NULL"); return NULL; }
+	if (len < 0) { warn("memacpy len < 0"); len = 0; }
 	
 	m = mem_alloc(len + 1);
 	if (!m) return NULL;
 		
-	memcpy(m, src, len);
+	if (src && len) memcpy(m, src, len);
 	m[len] = 0;
-
+	
 	return m;
 }
 

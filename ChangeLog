@@ -1,3 +1,70 @@
+Tue Mar 22 16:05:03 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	draw_text():Detect attempts to read outside valid memory, it may be
+	caused by wrong calculations. Only active when CONFIG_DEBUG is
+	defined.  
+
+Tue Mar 22 15:18:43 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/button.c:
+
+	Typo fix, hidden bug introduced by 1.86 -> 1.87.  
+
+Tue Mar 22 14:56:23 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, checkbox.c, group.c, inpfield.c, widget.h:
+
+	Revert patch "Width and height fields were added to struct
+	widget...", bad move.  
+
+Tue Mar 22 11:41:52 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Update Danish translation.  
+
+Tue Mar 22 11:11:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* debian/changelog:
+
+	Close a few bugs.  
+
+Tue Mar 22 05:25:54 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/options.inc, util/secsave.c:
+
+	Introduce the option infofiles.secure_save_fsync, which allows one 
+	to configure whether secure file saving calls fsync(3).  
+	
+	Idea by Russ Rowan.  
+
+Tue Mar 22 05:09:39 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Add a change-hook for bookmarks.folder_state that marks the
+	bookmarks dirty when folder_state is disabled. This ensures that the
+	bookmarks will be saved, thereby ensuring that folders really will
+	be collapsed.  
+
+Tue Mar 22 04:43:44 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/backend/xbel.c:
+
+	Minor simplification in write_bookmarks_list concerning folder_state
+	logic.  
+
+Tue Mar 22 00:49:31 2005  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/options.c:
+
+	Do not display terminal options help text when terminal height is
+	too low. User should be able to change the options even with small
+	terminal. It is just a fast hack, a better solution resides in
+	scrollable dialog boxes...  
+
 Mon Mar 21 11:29:51 2005  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

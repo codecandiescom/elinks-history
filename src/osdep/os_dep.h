@@ -1,7 +1,7 @@
-/* $Id: os_dep.h,v 1.15 2003/06/08 15:20:30 jonas Exp $ */
+/* $Id: os_dep.h,v 1.16 2003/06/28 10:47:53 jonas Exp $ */
 
-#ifndef EL__OS_DEP_H
-#define EL__OS_DEP_H
+#ifndef EL__OSDEP_OS_DEP_H
+#define EL__OSDEP_OS_DEP_H
 
 
 /* Some common ascii codes. */

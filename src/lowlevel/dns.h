@@ -1,7 +1,7 @@
-/* $Id: dns.h,v 1.3 2003/04/16 21:16:27 pasky Exp $ */
+/* $Id: dns.h,v 1.4 2003/06/28 10:47:53 jonas Exp $ */
 
-#ifndef EL__DNS_H
-#define EL__DNS_H
+#ifndef EL__LOWLEVEL_DNS_H
+#define EL__LOWLEVEL_DNS_H
 
 /* We MAY have problems with this. If there will be any, just tell me, and
  * I will move it to start of links.h. */

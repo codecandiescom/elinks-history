@@ -1,7 +1,7 @@
-/* $Id: cache.h,v 1.15 2003/05/16 21:25:01 zas Exp $ */
+/* $Id: cache.h,v 1.16 2003/06/28 10:47:53 jonas Exp $ */
 
-#ifndef EL__CACHE_H
-#define EL__CACHE_H
+#ifndef EL__DOCUMENT_CACHE_H
+#define EL__DOCUMENT_CACHE_H
 
 #include "util/lists.h"
 #include "elinks.h" /* tcount */

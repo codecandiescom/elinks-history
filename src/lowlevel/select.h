@@ -1,7 +1,7 @@
-/* $Id: select.h,v 1.6 2003/05/24 20:26:47 pasky Exp $ */
+/* $Id: select.h,v 1.7 2003/06/28 10:47:53 jonas Exp $ */
 
-#ifndef EL__SELECT_H
-#define EL__SELECT_H
+#ifndef EL__LOWLEVEL_SELECT_H
+#define EL__LOWLEVEL_SELECT_H
 
 #include "lowlevel/ttime.h"
 

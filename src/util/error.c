@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.48 2003/05/14 16:34:38 zas Exp $ */
+/* $Id: error.c,v 1.49 2003/05/19 14:12:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,14 +20,14 @@
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "version.h"
 
 void
 list_magic_error_(unsigned char *where, unsigned char *what, unsigned char *file, int line)
 {
 	fprintf(stderr, "%s:%d", file, line);
 	fprintf(stderr, " %s %s: bad list magic\n", where, what);
-	fflush(stderr);
-	raise(SIGSEGV);
+	force_dump();
 }
 
 void
@@ -36,6 +36,7 @@ force_dump()
 	fprintf(stderr,
 		"\n\033[1m%s\033[0m %s\n", "Forcing core dump!",
 	        "Man the Lifeboats! Women and children first!\n");
+	fputs(full_static_version, stderr);
 	fflush(stderr);
 	raise(SIGSEGV);
 }
@@ -164,15 +165,17 @@ dump_backtrace(FILE *f, int trouble)
 	 * find out what are we doing... ;-) --pasky */
 	/* TODO: Be more cruel when in trouble? ;-) --pasky */
 
-	fprintf(f, "Wheeeeeeeeeee! You played with the config.h by hand, didn't you?\n");
-	fprintf(f, "Of _COURSE_ you did! Is that how a nice .. creature behaves like?\n");
-	fprintf(f, "Of _COURSE_ it isn't! I feel offended and thus I will revenge now!\n");
-	fprintf(f, "You will _suffer_ >:).\n");
-	fprintf(f, "\n");
-	fprintf(f, "CPU burning sequence initiated...\n");
+	fputs(	"Wheeeeeeeeeee! You played with the config.h by hand, didn't you?\n"
+		"Of _COURSE_ you did! Is that how a nice .. creature behaves like?\n"
+		"Of _COURSE_ it isn't! I feel offended and thus I will revenge now!\n"
+		"You will _suffer_ >:).\n"
+		"\n"
+		"CPU burning sequence initiated...\n", f);
+	
 	/* TODO: Include cpuburn.c here. --pasky */
 	while (1);
 #endif
+	fflush(f);
 }
 
 #endif

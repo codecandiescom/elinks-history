@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.89 2003/05/08 21:50:07 zas Exp $ */
+/* $Id: main.c,v 1.90 2003/05/19 14:12:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,6 +66,7 @@
 #include "util/error.h"
 #include "util/memdebug.h"
 #include "util/memory.h"
+#include "version.h"
 #include "viewer/dump/dump.h"
 
 enum retval retval = RET_OK;
@@ -138,16 +139,20 @@ static void
 sig_segv(struct terminal *t)
 {
 	/* Get some attention. */
-	fprintf(stderr,"\a"); fflush(stderr); sleep(1);	fprintf(stderr,"\a\n");
+	fputs("\a", stderr); fflush(stderr); sleep(1); fputs("\a\n", stderr);
 
 	/* Rant. */
-	fprintf(stderr, "ELinks crashed. That shouldn't happen. Please report this incident to\n");
-	fprintf(stderr, "developers. Preferrably please include information about what probably\n");
-	fprintf(stderr, "triggered this and the listout below. Note that it does NOT supercede the gdb\n");
-	fprintf(stderr, "output, which is way more useful for developers. If you would like to help to\n");
-	fprintf(stderr, "debug the problem you just uncovered, please keep the core you just got and\n");
-	fprintf(stderr, "send the developers output of 'bt' command entered inside of gdb (which you run\n");
-	fprintf(stderr, "as gdb elinks core). Thanks a lot for your cooperation!\n\n");
+	fputs(	"ELinks crashed. That shouldn't happen. Please report this incident to\n"
+		"developers. Preferrably please include information about what probably\n"
+		"triggered this and the listout below. Note that it does NOT supercede the gdb\n"
+		"output, which is way more useful for developers. If you would like to help to\n"
+		"debug the problem you just uncovered, please keep the core you just got and\n"
+		"send the developers output of 'bt' command entered inside of gdb (which you run\n"
+		"as gdb elinks core). Thanks a lot for your cooperation!\n\n", stderr);
+
+	/* version information */
+	fputs(full_static_version, stderr);
+	fputs("\n\n", stderr);
 
 	/* Backtrace. */
 	dump_backtrace(stderr, 1);
@@ -297,6 +302,8 @@ init(void)
 	void *info;
 	int len;
 	unsigned char *u = NULL;
+
+	init_static_version();
 
 #ifdef HAVE_LOCALE_H
 	setlocale(LC_ALL, "");

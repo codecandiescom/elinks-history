@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.42 2003/05/19 13:23:03 zas Exp $ */
+/* $Id: info.c,v 1.43 2003/05/19 14:12:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,76 +32,12 @@
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"
-
+#include "version.h"
 
 void
 menu_about(struct terminal *term, void *d, struct session *ses)
 {
-	unsigned char *s;
-
-	/* XXX: The s is then gettextized again inside of msgbox, it looks. */
-	/* XXX: I don't see where ... --Zas */
-	s = straconcat(
-		"ELinks ",
-		/* FIXME: This should be elsewhere. */
-		VERSION_STRING "\n",
-#ifdef DEBUG
-		"("
-#ifdef __DATE__
-		__DATE__
-#endif
-		" "
-#ifdef __TIME__
-		__TIME__
-#endif
-		")"
-#endif
-		"\n",
-		"\n",
-		_("Text WWW browser", term),
-
-		"\n\n",
-		_("Features:", term), " ",
-#ifndef DEBUG
-		_("Standard", term), ", ",
-#else
-		_("Debug", term), ", ",
-#endif
-#ifdef FASTMEM
-		_("Fastmem", term), ", ",
-#endif
-#ifdef HAVE_SSL
-		_("SSL", term),
-#ifdef HAVE_OPENSSL
-		"(OpenSSL)",
-#elif defined(HAVE_GNUTLS)
-		"(GNUTLS)",
-#endif
-		 ", ",
-#endif
-#ifdef HAVE_LUA
-		"Lua", ", ",
-#endif
-#ifdef IPV6
-		"IPv6", ", ",
-#endif
-#ifdef BOOKMARKS
-		_("Bookmarks", term), ", ",
-#endif
-#ifdef COOKIES
-		_("Cookies", term), ", ",
-#endif
-#ifdef GLOBHIST
-		_("GlobHist", term), ", ",
-#endif
-#ifdef HAVE_ZLIB_H
-		"gzip" ", ",
-#endif
-#ifdef HAVE_BZLIB_H
-		" bzip2",
-#endif
-		NULL
-	);
+	unsigned char *s = get_dyn_full_version(term);
 
 	if (s) {
 		msg_box(term, getml(s, NULL),

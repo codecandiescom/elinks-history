@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.87 2002/10/17 20:26:41 pasky Exp $ */
+/* $Id: view.c,v 1.88 2002/10/18 19:39:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1877,6 +1877,17 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 	static char *fn = NULL;
 	int flen;
 
+	if (op == 0 && !term->master) {
+		if (fn) mem_free(fn); fn = NULL; fs = NULL;
+
+		msg_box(term, NULL,
+			TEXT(T_ERROR), AL_CENTER,
+			TEXT(T_NEED_MASTER_TERMINAL),
+			NULL, 1,
+			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+		return;
+	}
+
 	if (form_) form_maxlength = form_->maxlength;
 	if (fs_) fs = fs_;
 	if (f_) f = f_;
@@ -1920,15 +1931,6 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 		mem_free(ex);
 
 		textarea_editor = 1;
-
-	} else if (op == 0 && !term->master) {
-		if (fn) mem_free(fn); fn = NULL; fs = NULL;
-
-		msg_box(term, NULL,
-			TEXT(T_ERROR), AL_CENTER,
-			TEXT(T_NEED_MASTER_TERMINAL),
-			NULL, 1,
-			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
 
 	} else if (op == 1 && fs) {
 		FILE *taf = fopen(fn, "r+");

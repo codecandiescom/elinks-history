@@ -4,12 +4,12 @@
 	//-->
 </script>
 <script type="text/javascript">
-	function nice_href() { 'elinks.or.cz'; }
+	function nice_href() { return 'elinks.or.cz'; }
 	document.title = document.url + ' xyzzy ';
 </script>
 <script type="text/perl">
 	document.title += ' ERROR ERROR ';
 </script>
 <body onLoad=foo()>
-	<p><a href="javascript:nice_href()">Quee</a></p>
+	<p><a href="javascript:nice_href();">Quee</a></p>
 </body>

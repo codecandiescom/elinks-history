@@ -1,5 +1,7 @@
 <!-- The DTD used for costumization and common entities. -->
-<!-- $Id: elinksbook.dtd,v 1.6 2003/06/10 21:29:43 jonas Exp $ -->
+<!-- $Id: elinksbook.dtd,v 1.7 2003/06/10 21:39:55 jonas Exp $ -->
+
+<!ENTITY version	"0.1">
 
 <!-- ================================================================== -->
 <!-- Costumize section							-->
@@ -52,3 +54,13 @@
 <!ENTITY config-mime		SYSTEM "config/mime.xml">
 <!ENTITY features-bookmarks	SYSTEM "features/bookmarks.xml">
 <!ENTITY intro-installation	SYSTEM "intro/installation.xml">
+
+<!-- Files that need to be readded: -->
+
+<!ENTITY info-authors		SYSTEM "info/authors.xml">
+<!ENTITY info-preface		SYSTEM "info/preface.xml">
+<!ENTITY info-revision		SYSTEM "info/revision.xml">
+<!ENTITY intro-about		SYSTEM "intro/about.xml">
+<!ENTITY config-intro		SYSTEM "config/intro.xml">
+<!ENTITY config-options		SYSTEM "config/options.xml">
+<!ENTITY features-mailcap	SYSTEM "features/mailcap.xml">

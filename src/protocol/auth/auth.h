@@ -1,4 +1,4 @@
-/* $Id: auth.h,v 1.28 2004/11/14 19:42:25 jonas Exp $ */
+/* $Id: auth.h,v 1.29 2004/11/20 04:30:06 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_AUTH_AUTH_H
 #define EL__PROTOCOL_AUTH_AUTH_H
@@ -37,7 +37,6 @@ struct auth_entry {
 	(*(_entry_)->user || *(_entry_)->password)
 
 struct auth_entry *find_auth(struct uri *);
-struct auth_entry *find_auth_entry(struct uri *uri, unsigned char *realm);
 struct auth_entry *add_auth_entry(struct uri *, unsigned char *,
 	unsigned char *, unsigned char *, unsigned int);
 void del_auth_entry(struct auth_entry *);

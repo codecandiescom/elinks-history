@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.53 2005/03/25 04:57:48 miciah Exp $
+-- $Id: hooks.lua.in,v 1.54 2005/03/25 04:59:09 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -602,11 +602,15 @@ if not tmp_files then
     tmp_files = {}
 end
 
-function quit_hook_ ()
+function bookmarks_quit_hook ()
     if bookmark_addon then
 	bm_save_bookmarks ()
     end
+end
+table.insert(quit_hooks, bookmarks_quit_hook)
 
+
+function quit_hook_ ()
     if tmp_files and os and os.remove then
         tmp_files.n = nil
         for i,v in tmp_files do os.remove (v) end

@@ -1,3 +1,47 @@
+Fri Feb 13 20:33:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/: Makefile.am, color.c, color.inc, color_s.inc,
+	fastfind.c:
+
+	Color names <-> rgb was improved. ELinks now understands almost all
+	color names, old and small color table was moved to
+	src/util/color_s.inc and will be used if ELINKS_SMALL is defined,
+	new extended one is in src/util/color.inc and is used by default.
+	Fastfind stuff was changed to handle up to 1024 keys (needed).
+	"gray" color value was changed from 0x808080 to correct 0xBEBEBE.  
+
+Fri Feb 13 18:33:12 2004  Peter Samek <samek@upc.uniba.sk>:
+
+	* po/sk.po:
+
+	Slovak translation update.  
+
+Fri Feb 13 18:08:21 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Feb 13 17:52:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/parser.c, intl/charsets.c, util/color.c,
+	util/fastfind.c, util/fastfind.h:
+
+	FastFind debugging features were improved: support for a comment,
+	more stats. Tidy up.  
+
+Fri Feb 13 17:11:30 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: bfu/leds.c, config/options.inc:
+
+	Digital clock. Enable LEDs, timer and clock to make it work.  
+
+Fri Feb 13 08:02:47 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: config/cmdline.c, config/cmdline.h, main.c:
+
+	Removed obsolete option -stdin and stuff related with single url.  
+
 Thu Feb 12 17:51:38 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/main.c:

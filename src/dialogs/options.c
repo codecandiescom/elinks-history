@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.79 2003/09/30 00:24:19 jonas Exp $ */
+/* $Id: options.c,v 1.80 2003/10/02 17:12:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,6 +127,9 @@ static unsigned char *td_labels[] = {
 	N_("KOI8-R frames"),
 	N_("No colors (mono)"),
 	N_("16 colors"),
+#ifdef USE_256_COLORS
+	N_("256 colors"),
+#endif
 	N_("Use ^[[11m"),
 	N_("Restrict frames in cp850/852"),
 	N_("Block the cursor"),
@@ -178,7 +181,11 @@ terminal_options_fn(struct dialog_data *dlg)
 			   AL_CENTER);
 }
 
+#ifdef USE_256_COLORS
+#define TERMOPT_WIDGETS 16
+#else
 #define TERMOPT_WIDGETS 15
+#endif
 
 #define TERMOPT_WIDGET_SIZE (TERMOPT_WIDGETS * sizeof(struct widget))
 
@@ -240,6 +247,9 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 
 	set_term_opt_checkbox(d, pos, 2, COLOR_MODE_MONO, termopt_hop->colors);
 	set_term_opt_checkbox(d, pos, 2, COLOR_MODE_16, termopt_hop->colors);
+#ifdef USE_256_COLORS
+	set_term_opt_checkbox(d, pos, 2, COLOR_MODE_256, termopt_hop->colors);
+#endif
 
 	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->m11_hack);
 	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->restrict_852);

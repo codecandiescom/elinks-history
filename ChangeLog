@@ -1,3 +1,38 @@
+Sun Jan 26 23:02:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Fixed registation of the protocol.http.trace option. Thanks to
+	<Len_Lattanzi@StanfordAlumni.org> for a report.  
+
+Sun Jan 26 19:48:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, src/config/options.c, src/protocol/http/http.c:
+
+	Introduced support for the HTTP TRACE request (option
+	protocol.http.trace), patch by Bennett Todd.  
+
+Sun Jan 26 19:23:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/elinks.spec.in:
+
+	elinks.pld.org.pl -> elinks.or.cz, based on Bennett's suggestion 
+
+Sun Jan 26 17:40:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/sched.c:
+
+	Fixed possible removal of used cache_entry (altough I can't imagine
+	well how could it happen).  
+
+Sun Jan 26 17:34:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/options.c, lowlevel/connect.c, lowlevel/connect.h,
+	lowlevel/dns.c, lowlevel/dns.h:
+
+	Cleanup of DNS code, a lot of sockaddr -> sockaddr_storage changes.
+	Hopefully fixes some possible overflow problems reported by Jose.  
+
 Fri Jan 24 23:20:58 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.200 2003/11/26 04:43:52 jonas Exp $ */
+/* $Id: menu.c,v 1.201 2003/11/26 04:47:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -225,41 +225,6 @@ history_menu_model(history_menu, prev);
 history_menu_model(unhistory_menu, next);
 
 #undef history_menu_model
-
-
-static struct menu_item no_downloads_menu[] = {
-	INIT_MENU_ITEM(N_("No downloads"), M_BAR, NULL, NULL, 0),
-	NULL_MENU_ITEM
-};
-
-static void
-downloads_menu(struct terminal *term, void *ddd, struct session *ses)
-{
-	struct file_download *d;
-	struct menu_item *mi = NULL;
-	int n = 0;
-
-	foreachback (d, downloads) {
-		unsigned char *url;
-
-		if (!mi) {
-			mi = new_menu(FREE_LIST | FREE_TEXT);
-			if (!mi) return;
-		}
-
-		url = get_no_post_url(d->url, NULL);
-		if (url) {
-			add_to_menu(&mi, url, "", (menu_func) display_download,
-			    	    d, NO_INTL);
-			n++;
-		}
-	}
-
-	if (!n)
-		do_menu(term, no_downloads_menu, ses, 0);
-	else
-		do_menu(term, mi, ses, 0);
-}
 
 
 static inline void
@@ -523,7 +488,6 @@ static struct menu_item main_menu[] = {
 	INIT_MENU_ITEM(N_("~File"), "", do_file_menu, NULL, FREE_LIST | SUBMENU),
 	INIT_MENU_ITEM(N_("~View"), "", do_view_menu, NULL, FREE_LIST | SUBMENU),
 	INIT_MENU_ITEM(N_("~Link"), "", link_menu, NULL, FREE_LIST | SUBMENU),
-	INIT_MENU_ITEM(N_("~Downloads"), "", downloads_menu, NULL, FREE_LIST | SUBMENU),
 	INIT_MENU_ITEM(N_("~Tools"), "", do_tools_menu, NULL, FREE_LIST | SUBMENU),
 	INIT_MENU_ITEM(N_("~Setup"), "", do_setup_menu, NULL, FREE_LIST | SUBMENU),
 	INIT_MENU_ITEM(N_("~Help"), "", do_help_menu, NULL, FREE_LIST | SUBMENU),

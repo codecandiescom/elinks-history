@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.46 2003/10/05 11:32:57 pasky Exp $ */
+/* $Id: cache.c,v 1.47 2003/10/05 11:34:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,23 +29,23 @@ static int cache_count = 0;
 
 #ifdef DEBUG_CACHE
 
-#define dump_frag(f) \
+#define dump_frag(frag) \
 do { \
 	debug("%p: offset=%d length=%d real_length=%d\n", \
-		f, f->offset, f->length, f->real_length); \
+		frag, frag->offset, frag->length, frag->real_length); \
 } while (0)
 
-#define dump_frags(e, comment) \
+#define dump_frags(entry, comment) \
 do { \
-	struct fragment *f; \
+	struct fragment *frag; \
  \
-	debug("url=%s, comment=%s\n", e->url, comment); \
-	foreach (f, e->frag) \
-		dump_frag(f); \
+	debug("url=%s, comment=%s\n", entry->url, comment); \
+	foreach (frag, entry->frag) \
+		dump_frag(frag); \
 } while (0)
 
 #else
-#define dump_frags(e, c)
+#define dump_frags(entry, comment)
 #endif /* DEBUG_CACHE */
 
 

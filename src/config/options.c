@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.157 2002/12/14 16:21:26 jonas Exp $ */
+/* $Id: options.c,v 1.158 2002/12/15 00:02:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -580,6 +580,34 @@ version_cmd(struct option *o, unsigned char ***argv, int *argc)
 static unsigned char *
 printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 {
+	version_cmd(NULL, NULL, NULL);
+	printf("\n");
+	printf("Usage: elinks [options] [url]\n\n");
+	printf("Options:\n");
+
+	foreach (option, *((struct list_head *) cmdline_options.ptr)) {
+		int spaces;
+
+		if (!option->capt) continue;
+
+		spaces = 20 - strlen(option->name);
+		spaces -= strlen(option_types[option->type].help_str);
+
+		printf("  -%s", option->name);
+		printf(" %s", option_types[option->type].help_str);
+
+		if (spaces < 1) spaces = 1;
+		while (spaces-- > 0) printf(" ");
+
+		printf("%s\n", option->capt);
+	}
+	fflush(stdout);
+	return "";
+}
+
+static unsigned char *
+printlonghelp_cmd(struct option *option, unsigned char ***argv, int *argc)
+{
 	int action;
 
 	if (!strcmp(option->name, "help-config"))
@@ -591,7 +619,7 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 		version_cmd(NULL, NULL, NULL);
 		printf("\n");
 
-		printf("Usage: elinks [OPTION]... [URL]\n\n");
+		printf("Usage: elinks [options] [url]\n\n");
 		printf("Options:\n\n");
 	}
 
@@ -2163,7 +2191,7 @@ register_options()
 		"auto-submit", 0, 0,
 		"Go and submit the first form you'll stumble upon.");
 
-	add_opt_int_tree(&cmdline_options, "", "ID of session to clone",
+	add_opt_int_tree(&cmdline_options, "", "Clone session with given ID",
 		"base-session", 0, 0, MAXINT, 0,
 		"ID of session (ELinks instance) which we want to clone.\n"
 		"This is internal ELinks option, you don't want to use it.");
@@ -2181,7 +2209,7 @@ register_options()
 		"dump-width", 0, "document.dump.width",
 		"Width of the dump output.");
 
-	add_opt_command_tree(&cmdline_options, "", "Evaluated configuration option",
+	add_opt_command_tree(&cmdline_options, "", "Evaluate given configuration option",
 		"eval", 0, eval_cmd,
 		"Specify elinks.conf config options on the command-line:\n"
 		"  -eval 'set protocol.file.allow_special_files = 1'");
@@ -2190,13 +2218,17 @@ register_options()
 		"?", 0, printhelp_cmd,
 		NULL);
 
-	add_opt_command_tree(&cmdline_options, "", "Print brief usage help and exit",
+	add_opt_command_tree(&cmdline_options, "", "Print usage help and exit",
 		"h", 0, printhelp_cmd,
 		NULL);
 
 	add_opt_command_tree(&cmdline_options, "", "Print usage help and exit",
 		"help", 0, printhelp_cmd,
 		"Print usage help and exit.");
+
+	add_opt_command_tree(&cmdline_options, "", "Print detailed usage help and exit",
+		"long-help", 0, printlonghelp_cmd,
+		"Print detailed usage help and exit.");
 
 #if 0
 	add_opt_command_tree(&cmdline_options, "",
@@ -2215,11 +2247,11 @@ register_options()
 		"(I mean bookmarks, history and so on) are written to the disk\n"
 		"with this option on - see also -touch-files.");
 
-	add_opt_bool_tree(&cmdline_options, "", "No usage of files in ~/.elinks",
+	add_opt_bool_tree(&cmdline_options, "", "Don't use files in ~/.elinks",
 		"no-home", 0, 0,
 		"Don't attempt to create and/or use home rc directory (~/.elinks).");
 
-	add_opt_int_tree(&cmdline_options, "", "ID of session ring to connect to",
+	add_opt_int_tree(&cmdline_options, "", "Connect to session ring with given ID",
 		"session-ring", 0, 0, MAXINT, 0,
 		"ID of session ring this ELinks should connect to. The ELinks\n"
 		"works in so-called session rings, where all instances of ELinks\n"

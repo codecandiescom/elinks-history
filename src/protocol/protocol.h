@@ -1,10 +1,23 @@
-/* $Id: protocol.h,v 1.2 2003/06/26 18:34:38 jonas Exp $ */
+/* $Id: protocol.h,v 1.3 2003/06/26 18:35:01 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
 
 #include "sched/sched.h"
 #include "sched/session.h"
+
+enum uri_scheme {
+	SCHEME_USER,
+	SCHEME_FILE,
+	SCHEME_HTTP,
+	SCHEME_HTTPS,
+	SCHEME_PROXY,
+	SCHEME_FTP,
+	SCHEME_FINGER,
+	SCHEME_JAVASCRIPT,
+	SCHEME_LUA,
+	SCHEME_UNKNOWN
+};
 
 struct protocol_backend {
 	unsigned char *name;

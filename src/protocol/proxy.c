@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.11 2004/04/01 07:56:00 jonas Exp $ */
+/* $Id: proxy.c,v 1.12 2004/04/01 18:34:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,7 +45,7 @@ proxy_probe_no_proxy(unsigned char *url, unsigned char *no_proxy)
 	return 0;
 }
 
-static unsigned char *
+static struct uri *
 get_proxy_worker(struct uri *uri, unsigned char *proxy)
 {
 	unsigned char *http_proxy, *https_proxy, *ftp_proxy, *no_proxy;
@@ -105,25 +105,31 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 	}
 
 	if (proxy) {
-		return straconcat("proxy://", proxy, "/", struri(uri), NULL);
+		unsigned char *string;
+
+		string = straconcat("proxy://", proxy, "/", struri(uri), NULL);
+		if (!string) return NULL;
+
+		uri = get_uri(string);
+		mem_free(string);
+		return uri;
 	}
 
-	return stracpy(struri(uri));
+	return get_uri_reference(uri);
 }
 
-unsigned char *
+struct uri *
 get_proxy(struct uri *uri)
 {
 #ifdef HAVE_SCRIPTING
 	unsigned char *tmp = NULL;
-	unsigned char *ret;
 	static int get_proxy_event_id = EVENT_NONE;
 
 	set_event_id(get_proxy_event_id, "get-proxy");
 	trigger_event(get_proxy_event_id, &tmp, struri(uri));
-	ret = get_proxy_worker(uri, tmp);
+	uri = get_proxy_worker(uri, tmp);
 	if (tmp) mem_free(tmp);
-	return ret;
+	return uri;
 #else
 	return get_proxy_worker(uri, NULL);
 #endif

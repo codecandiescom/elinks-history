@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.151 2004/04/01 07:53:52 jonas Exp $ */
+/* $Id: connection.c,v 1.152 2004/04/01 18:34:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,25 +221,16 @@ check_queue_bugs(void)
 
 
 static struct connection *
-init_connection(unsigned char *url, struct uri *referrer, int start,
+init_connection(struct uri *uri, struct uri *referrer, int start,
 		enum cache_mode cache_mode, enum connection_priority priority)
 {
 	struct connection *conn = mem_calloc(1, sizeof(struct connection));
 
 	if (!conn) return NULL;
 
-	conn->uri = get_uri(url);
-	/* FIXME: Move validation to get_uri() it's ugly. --jonas */
-	if (!conn->uri
-	    || (VALID_PROTOCOL(conn->uri->protocol)
-		&& get_protocol_need_slash_after_host(conn->uri->protocol)
-		&& !conn->uri->hostlen)) {
-		/* Alert small hack to signal parse uri failure. */
-		*url = 0;
-		mem_free(conn);
-		return NULL;
-	}
-
+	/* load_uri() gets the URI from get_proxy() which grabs a reference for
+	 * us. */
+	conn->uri = uri;
 	conn->id = connection_id++;
 	conn->referrer = get_uri_reference(referrer);
 	conn->pri[priority] =  1;
@@ -768,7 +759,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 {
 	struct cache_entry *ce = NULL;
 	struct connection *conn;
-	unsigned char *u;
+	struct uri *proxy_uri;
 
 	if (download) {
 		download->conn = NULL;
@@ -820,17 +811,25 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 		}
 	}
 
-	u = get_proxy(uri);
-	if (!u) {
-		if (download) download->end(download, download->data);
+	proxy_uri = get_proxy(uri);
+	if (!proxy_uri
+	    || (VALID_PROTOCOL(proxy_uri->protocol)
+		&& get_protocol_need_slash_after_host(proxy_uri->protocol)
+		&& !proxy_uri->hostlen)) {
+
+		if (download) {
+			download->state = proxy_uri ? S_BAD_URL : S_OUT_OF_MEM;
+			download->end(download, download->data);
+		}
+		if (proxy_uri) done_uri(proxy_uri);
 		return -1;
 	}
 
 	foreach (conn, queue) {
-		if (conn->detached || strcmp(struri(conn->uri), u))
+		if (conn->detached || conn->uri != proxy_uri)
 			continue;
 
-		mem_free(u);
+		done_uri(proxy_uri);
 
 		if (get_priority(conn) > pri) {
 			del_from_list(conn);
@@ -852,14 +851,13 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 		return 0;
 	}
 
-	conn = init_connection(u, referrer, start, cache_mode, pri);
-	mem_free(u);
+	conn = init_connection(proxy_uri, referrer, start, cache_mode, pri);
 	if (!conn) {
 		if (download) {
-			/* Zero length uri signals parse uri failure */
-			download->state = (!*u ? S_BAD_URL : S_OUT_OF_MEM);
+			download->state = S_OUT_OF_MEM;
 			download->end(download, download->data);
 		}
+		if (proxy_uri) done_uri(proxy_uri);
 		return -1;
 	}
 

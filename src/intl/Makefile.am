@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.11 2004/05/06 22:35:43 jonas Exp $
+## $Id: Makefile.am,v 1.12 2004/07/17 20:08:54 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -13,7 +13,6 @@ noinst_LIBRARIES = libintl.a
 libintl_a_SOURCES = \
  charsets.c \
  charsets.h \
- codepage.h \
  codepage.inc \
  entity.inc \
  uni_7b.inc

@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.6 2002/04/28 15:11:32 pasky Exp $ */
+/* $Id: options.c,v 1.7 2002/04/28 18:03:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,8 +57,8 @@ get_opt_rec(unsigned char *name)
 {
 	struct option *opt;
 
-	for (opt = links_options; opt->cfg_name || opt->cmd_name; opt++) {
-		if (opt->cfg_name && !strcmp(opt->cfg_name, name)) {
+	for (opt = links_options; opt->name; opt++) {
+		if (!strcmp(opt->name, name)) {
 			return opt;
 		}
 	}
@@ -78,6 +78,20 @@ get_opt(unsigned char *name)
 	return opt->ptr;
 }
 
+/* Get command-line alias for option name */
+unsigned char *
+cmd_name(unsigned char *name)
+{
+	unsigned char *cname = stracpy(name);
+	unsigned char *ptr;
+
+	for (ptr = cname; *ptr; ptr++) {
+		if (*ptr == '_') *ptr = '-';
+	}
+
+	return cname;
+}
+
 
 /**********************************************************************
  Options handlers
@@ -86,7 +100,7 @@ get_opt(unsigned char *name)
 void add_nm(struct option *o, unsigned char **s, int *l)
 {
 	if (*l) add_to_str(s, l, NEWLINE);
-	add_to_str(s, l, o->cfg_name);
+	add_to_str(s, l, o->name);
 	add_to_str(s, l, " ");
 }
 
@@ -518,9 +532,12 @@ unsigned char *printhelp_cmd(struct option *o, unsigned char ***argv, int *argc)
 	printf("Usage: links [OPTION]... [URL]\n\n");
 	printf("Options:\n\n");
 
-	for (option = links_options; option->cmd_name || option->cfg_name; option++) {
-		if (option->cmd_name) {
-			printf("-%s ", option->cmd_name);
+	for (option = links_options; option->name; option++) {
+		if (option->flags & OPT_CMDLINE) {
+			unsigned char *cname = cmd_name(option->name);
+
+			printf("-%s ", cname);
+			mem_free(cname);
 
 			if (option->rd_cfg == num_rd)
 				printf("<num>");
@@ -531,7 +548,7 @@ unsigned char *printhelp_cmd(struct option *o, unsigned char ***argv, int *argc)
 			else if (option->rd_cfg)
 				printf("<...>");
 
-			printf("\n");
+			printf("  (%s)\n", option->name);
 
 			if (option->desc) {
 				int l = strlen(option->desc);
@@ -684,13 +701,13 @@ struct option links_options[] = {
 	 * <minval>, <maxval>, <varname>
 	 * <description> */
 
-	{	"accesskey-enter", "accesskey_enter",
+	{	"accesskey_enter", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &accesskey_enter,
 		"Automatically follow link / submit form if appropriate accesskey\n"
 		"is pressed - this is standart behaviour, however dangerous." },
 
-	{	"accesskey-priority", "accesskey_priority",
+	{	"accesskey_priority", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 2, &accesskey_priority,
 		"Priority of 'accesskey' HTML attribute:\n"
@@ -698,13 +715,13 @@ struct option links_options[] = {
 		"1 is first try only frame bindings and if it fails, check accesskey\n"
 		"2 is first check accesskey (that can be dangerous)" },
 
-	{	"allow-special-files", "allow_special_files",
+	{	"allow_special_files", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &allow_special_files,
 		"Allow reading from non-regular files? (DANGEROUS - reading\n"
 		"/dev/urandom or /dev/zero can ruin your day!)" },
 
-	{	"anonymous", NULL,
+	{	"anonymous", OPT_CMDLINE,
 		anonymous_cmd, NULL, NULL,
 	 	0, 0, &anonymous,
 	      	"Restrict links so that it can run on an anonymous account.\n"
@@ -712,31 +729,31 @@ struct option links_options[] = {
 		"is allowed, but user can't add or modify entries in\n"
 		"association table." },
 
-	{	"assume-codepage", "assume_codepage",
+	{	"assume_codepage", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, cp_rd, NULL,
 	 	0, 0, &dds.assume_cp,
 		"Use the given codepage when the webpage did not specify\n"
 		"its codepage.\n"
 		"Default: ISO 8859-1" },
 
-	{	"async-dns", "async_dns",
+	{	"async_dns", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &async_lookup,
 		"Use asynchronous DNS resolver?" },
 
-	{	"base-session", NULL,
+	{	"base_session", OPT_CMDLINE,
 		gen_cmd, num_rd, NULL,
 	 	0, MAXINT, &base_session,
 	 	"Run this links in separate session - instances of links with\n"
-       		"same base-session will connect together and share runtime\n"
-		"informations. By default, base-session is 0." },
+       		"same base_session will connect together and share runtime\n"
+		"informations. By default, base_session is 0." },
 
-	{	"color-dirs", "color_dirs",
+	{	"color_dirs", OPT_CMDLINE | OPT_CFGFILE,
 	       	gen_cmd, num_rd, num_wr,
 		0, 1, &color_dirs,
 		"Highlight directories when listing local disk content?" },
 
-	{	"cookies-accept", "cookies_accept",
+	{	"cookies_accept", OPT_CMDLINE | OPT_CFGFILE,
 	       	gen_cmd, num_rd, num_wr,
 		COOKIES_ACCEPT_NONE, COOKIES_ACCEPT_ALL, &cookies_accept,
 		"Mode of accepting cookies:\n"
@@ -744,143 +761,143 @@ struct option links_options[] = {
 		"1 is ask for confirmation before accepting cookie (UNIMPLEMENTED)\n"
 		"2 is accept all cookies" },
 
-	{	"cookies-paranoid-security", "cookies_paranoid_security",
+	{	"cookies_paranoid_security", OPT_CMDLINE | OPT_CFGFILE,
 	       	gen_cmd, num_rd, num_wr,
 		0, 1, &cookies_paranoid_security,
 		"When enabled, we'll require three dots in cookies domain for all\n"
 		"non-international domains (instead of just two dots). Please see\n"
 		"code (cookies.c:check_domain_security()) for further description" },
 
-	{	"cookies-save", "cookies_save",
+	{	"cookies_save", OPT_CMDLINE | OPT_CFGFILE,
 	       	gen_cmd, num_rd, num_wr,
 		0, 1, &cookies_save,
 		"Load/save cookies from/to disk?" },
 
-	{	"cookies-resave", "cookies_resave",
+	{	"cookies_resave", OPT_CMDLINE | OPT_CFGFILE,
 	       	gen_cmd, num_rd, num_wr,
 		0, 1, &cookies_resave,
 		"Save cookies after each change in cookies list? No effect when\n"
-		"cookies-save is off." },
+		"cookies_save is off." },
 
-	{	"default-fg", "default_fg",
+	{	"default_fg", OPT_CMDLINE | OPT_CFGFILE,
 	       	gen_cmd, color_rd, NULL,
 		0, 1, &default_fg,
 		"Default foreground color." },
 
 		/* FIXME - this produces ugly results now */
 #if 0
-	{	"default-bg", "default_bg",
+	{	"default_bg", OPT_CMDLINE | OPT_CFGFILE,
 	       	gen_cmd, color_rd, NULL,
 		0, 1, &default_bg,
 		"Default background color." },
 #endif
 
-	{	"default-link", "default_link",
+	{	"default_link", OPT_CMDLINE | OPT_CFGFILE,
 	       	gen_cmd, color_rd, NULL,
 		0, 1, &default_link,
 		"Default link color." },
 
-	{	"default-vlink", "default_vlink",
+	{	"default_vlink", OPT_CMDLINE | OPT_CFGFILE,
 	       	gen_cmd, color_rd, NULL,
 		0, 1, &default_vlink,
 		"Default vlink color." },
 
-	{	"default-mime-type", "default_mime_type",
+	{	"default_mime_type", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, str_rd, str_wr,
 		0, MAX_STR_LEN, default_mime_type,
 		"MIME type for a document we should assume by default (when we are\n"
 		"unable to guess it properly from known informations about the\n"
 		"document)." },
 
-	{	"download-dir", "download_dir",
+	{	"download_dir", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, str_rd, str_wr,
 	 	0, MAX_STR_LEN, download_dir,
 		"Default download directory." },
 
-	{	"download-utime", "download_utime",
+	{	"download_utime", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &download_utime,
 	 	"Set time of downloaded files?" },
 
 	/* FIXME: Yes, you shouldn't be able to specify this in a config file.
 	 * This will be fixed later. --pasky */
-	{	"dump", "dump",
+	{	"dump", OPT_CMDLINE,
 		dump_cmd, NULL, NULL,
 	 	D_DUMP, 0, &dmp,
 		"Write a plain-text version of the given HTML document to\n"
 		"stdout." },
 
-	{	"dump-width", "dump_width",
+	{	"dump_width", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	40, 512, &dump_width,
 	 	"Size of screen in characters, when dumping a HTML document." },
 
-	{	"format-cache-size", "format_cache_size",
+	{	"format_cache_size", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 256, &max_format_cache_entries,
 		"Number of cached formatted pages." },
 
-	{	"form-submit-auto", "form_submit_auto",
+	{	"form_submit_auto", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &form_submit_auto,
 		"Automagically submit a form when enter pressed on text field." },
 
-	{	"form-submit-confirm", "form_submit_confirm",
+	{	"form_submit_confirm", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &form_submit_confirm,
 		"Ask for confirmation when submitting a form." },
 
-	{	"ftp.anonymous-password", "ftp.anonymous_password",
+	{	"ftp.anonymous_password", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, str_rd, str_wr,
 	 	0, MAX_STR_LEN, default_anon_pass,
 		"FTP anonymous password to be sent." },
 
-	{	"ftp-proxy", "ftp_proxy",
+	{	"ftp_proxy", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, str_rd, str_wr,
 	 	0, MAX_STR_LEN, ftp_proxy,
 		"Host and port number (host:port) of the FTP proxy, or blank." },
 
-	{	"?", NULL,
+	{	"?", OPT_CMDLINE,
 		printhelp_cmd, NULL, NULL,
 	 	0, 0, NULL,
 	 	NULL },
 
-	{	"h", NULL,
+	{	"h", OPT_CMDLINE,
 		printhelp_cmd, NULL, NULL,
 	 	0, 0, NULL,
 	 	NULL },
 
-	{	"help", NULL,
+	{	"help", OPT_CMDLINE,
 		printhelp_cmd, NULL, NULL,
 		0, 0, NULL,
 	 	"Print usage help and exit." },
 
-	{	"http-bugs.allow-blacklist", "http_bugs.allow_blacklist",
+	{	"http_bugs.allow_blacklist", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &http_bugs.allow_blacklist,
 		"Allow blacklist of buggy servers?" },
 
-	{	"http-bugs.bug-302-redirect", "http_bugs.bug_302_redirect",
+	{	"http_bugs.bug_302_redirect", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &http_bugs.bug_302_redirect,
 		"Broken 302 redirect (violates RFC but compatible with Netscape)?" },
 
-	{	"http-bugs.bug-post-no-keepalive", "http_bugs.bug_post_no_keepalive",
+	{	"http_bugs.bug_post_no_keepalive", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &http_bugs.bug_post_no_keepalive,
 		"No keepalive connection after POST request?" },
 
-	{	"http-bugs.http10", "http_bugs.http10",
+	{	"http_bugs.http10", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &http_bugs.http10,
 		"Use HTTP/1.0 protocol?" },
 
-	{	"http-proxy", "http_proxy",
+	{	"http_proxy", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, str_rd, str_wr,
 	 	0, MAX_STR_LEN, http_proxy,
 		"Host and port number (host:port) of the HTTP proxy, or blank." },
 
-	{	"http-referer", "http_referer",
+	{	"http_referer", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	REFERER_NONE, REFERER_TRUE, &referer,
 		"Mode of sending HTTP referer:\n"
@@ -889,23 +906,24 @@ struct option links_options[] = {
 		"2 is send fixed fake referer\n"
 		"3 is send previous URL as referer (correct, but insecure)\n" },
 
-	{	"fake-referer", "fake_referer", /* exception to alphabetical order */
+		/* XXX: Exception to alphabetical order. */
+	{	"fake_referer", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, str_rd, str_wr,
 	 	0, MAX_STR_LEN, fake_referer,
-		"Fake referer to be sent when http-referer is 3." },
+		"Fake referer to be sent when http_referer is 3." },
 
 		/* XXX: Disable global history if -anonymous is given? */
-	{	"global-history", "enable_global_history",
+	{	"enable_global_history", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &enable_global_history,
 	 	"Enable global history (\"history of all pages visited\")?" },
 
-	{	"keep-unhistory", "keep_unhistory",
+	{	"keep_unhistory", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &keep_unhistory,
 	 	"Keep unhistory (\"forward history\")?" },
 
-	{	"language", "language",
+	{	"language", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, lang_rd, lang_wr,
 	 	0, 0, &current_language,
 		"Language of user interface." },
@@ -913,60 +931,60 @@ struct option links_options[] = {
 		/* TODO - this is somehow implemented by ff, but commented out
 		 * for now as it doesn't work. */
 #if 0
-	{	"links-wraparound", "links_wraparound",
+	{	"links_wraparound", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &links_wraparound,
 	 	"When pressing 'down' on the last link, jump at the first one, and\n"
 		"vice versa." },
 #endif
 
-	{	"lookup", NULL,
+	{	"lookup", OPT_CMDLINE,
 		lookup_cmd, NULL, NULL,
 	 	0, 0, NULL,
 	 	"Make lookup for specified host." },
 
-	{	"max-connections", "max_connections",
+	{	"max_connections", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	1, 16, &max_connections,
 		"Maximum number of concurrent connections." },
 
-	{	"max-connections-to-host", "max_connections_to_host",
+	{	"max_connections_to_host", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	1, 8, &max_connections_to_host,
 		"Maximum number of concurrent connection to a given host." },
 
-	{	"memory-cache-size", "memory_cache_size",
+	{	"memory_cache_size", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, MAXINT, &memory_cache_size,
 		"Memory cache size (in kilobytes)." },
 
-	{	"no-connect", NULL,
+	{	"no_connect", OPT_CMDLINE,
 		no_connect_cmd, NULL, NULL,
 	 	0, 0, NULL,
 	 	"Run links as a separate instance - instead of connecting to\n"
 	 	"existing instance." },
 
-	{	"proxy-user", "proxy_user",
+	{	"proxy_user", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, str_rd, str_wr,
 		0, MAX_STR_LEN, proxy_user,
 		"Proxy authentication user" },
 
-	{	"proxy-passwd", "proxy_passwd",
+	{	"proxy_passwd", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, str_rd, str_wr,
 		0, MAX_STR_LEN, proxy_passwd,
 		"Proxy authentication passwd" },
 
-	{	"receive-timeout", "receive_timeout",
+	{	"receive_timeout", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	1, 1800, &receive_timeout,
 		"Timeout on receive (in seconds)." },
 
-	{	"retries", "retries",
+	{	"retries", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	1, 16, &max_tries,
 		"Number of tries to estabilish a connection." },
 
-	{	"secure-save", "secure_save",
+	{	"secure_save", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 		0, 1, &secure_save,
 		"First write data to 'file.tmp', rename to 'file' upon\n"
@@ -975,95 +993,95 @@ struct option links_options[] = {
 		"it, if you want some config file as a symlink or with some\n"
 		"exotic permissions." },
 
-	{	"show-status-bar", "show_status_bar",
+	{	"show_status_bar", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &show_status_bar,
 		"Show status bar on the screen?" },
 
-	{	"show-title-bar", "show_title_bar",
+	{	"show_title_bar", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &show_title_bar,
 		"Show title bar on the screen?" },
 
-	{	"source", NULL,
+	{	"source", OPT_CMDLINE,
 		dump_cmd, NULL, NULL,
-	 	D_SOURCE, 0, NULL,
+	 	D_SOURCE, 0, &dmp,
 		"Write the given HTML document in source form to stdout." },
 
 		/* TODO - this is implemented, but commented out for now as
 		 * it's buggy. */
 #if 0
-	{	"startup-goto-dialog", "startup_goto_dialog",
+	{	"startup_goto_dialog", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &startup_goto_dialog,
 		"Pop up goto dialog on startup when there's no homepage?" },
 #endif
 
-	{	"unrestartable-receive-timeout", "unrestartable_receive_timeout",
+	{	"unrestartable_receive_timeout", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	1, 1800, &unrestartable_receive_timeout,
 		"Timeout on non restartable connections (in seconds)." },
 
-	{	"user-agent", "user_agent",
+	{	"user_agent", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, str_rd, str_wr,
 	 	0, MAX_STR_LEN, user_agent,
 	        "Change the User Agent. That means identification string, which\n"
 		"is sent to HTTP server, when a document is requested.\n"
 		"If empty, defaults to: ELinks (<version>; <system_id>; <term_size>)" },
 			
-	{	"version", NULL,
+	{	"version", OPT_CMDLINE,
 		version_cmd, NULL, NULL,
 	 	0, 0, NULL,
 	 	"Print links version information and exit." },
 
 	/* config-file-only options */
 
-	{	NULL, "terminal",
+	{	"terminal", OPT_CFGFILE,
 		NULL, term_rd, term_wr,
 	 	0, 0, NULL,
 		NULL },
 
-	{	NULL, "terminal2",
+	{	"terminal2", OPT_CFGFILE,
 		NULL, term2_rd, NULL,
 	 	0, 0, NULL,
 		NULL },
 
-	{	NULL, "association",
+	{	"association", OPT_CFGFILE,
 		NULL, type_rd, type_wr,
 	 	0, 0, NULL,
 		NULL },
 
-	{	NULL, "extension",
+	{	"extension", OPT_CFGFILE,
 		NULL, ext_rd, ext_wr,
 	 	0, 0, NULL,
 		NULL },
 
-	{	NULL, "mailto",
+	{	"mailto", OPT_CFGFILE,
 		NULL, prog_rd, prog_wr,
 	 	0, 0, &mailto_prog,
 		NULL },
 
-	{	NULL, "telnet",
+	{	"telnet", OPT_CFGFILE,
 		NULL, prog_rd, prog_wr,
 	 	0, 0, &telnet_prog,
 		NULL },
 
-	{	NULL, "tn3270",
+	{	"tn3270", OPT_CFGFILE,
 		NULL, prog_rd, prog_wr,
 	 	0, 0, &tn3270_prog,
 		NULL },
 
-	{	NULL, "bind",
+	{	"bind", OPT_CFGFILE,
 		NULL, bind_rd, NULL,
 	 	0, 0, NULL,
 		NULL },
 
-	{	NULL, "unbind",
+	{	"unbind", OPT_CFGFILE,
 		NULL, unbind_rd, NULL,
 	 	0, 0, NULL,
 		NULL },
 
-	{	NULL, NULL,
+	{	NULL, 0,
 		NULL, NULL, NULL,
 	 	0, 0, NULL,
 		NULL },
@@ -1071,57 +1089,57 @@ struct option links_options[] = {
 
 struct option html_options[] = {
 
-	{	"html-assume-codepage", "html_assume_codepage",
+	{	"html_assume_codepage", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, cp_rd, cp_wr,
 	 	0, 0, &dds.assume_cp,
 		"Default document codepage." },
 
-	{	"html-avoid-dark-on-black", "html_avoid_dark_on_black",
+	{	"html_avoid_dark_on_black", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &dds.avoid_dark_on_black,
 		"Avoid dark colors on black background." },
 
-	{	"html-frames", "html_frames",
+	{	"html_frames", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &dds.frames,
 		"Display frames." },
 
-	{	"html-hard-assume", "html_hard_assume",
+	{	"html_hard_assume", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &dds.hard_assume,
 		"Ignore charset info sent by server." },
 
-	{	"html-images", "html_images",
+	{	"html_images", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &dds.images,
 		"Display links to images." },
 
-	{	"html-margin", "html_margin",
+	{	"html_margin", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 9, &dds.margin,
 		"Text margin." },
 
-	{	"html-numbered-links", "html_numbered_links",
+	{	"html_numbered_links", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &dds.num_links,
 		"Display links numbered." },
 
-	{	"html-tables", "html_tables",
+	{	"html_tables", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &dds.tables,
 		"Display tables." },
 
-	{	"html-table-order", "html_table_order",
+	{	"html_table_order", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &dds.table_order,
 		"Move by columns in table." },
 
-	{	"html-use-document-colours", "html_use_document_colours",
+	{	"html_use_document_colours", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &dds.use_document_colours,
 		"Use colors specified in document." },
 
-	{	NULL, NULL,
+	{	NULL, 0,
 		NULL, NULL, NULL,
 	 	0, 0, NULL,
 		NULL },

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.4 2002/04/28 14:33:27 pasky Exp $ */
+/* $Id: options.h,v 1.5 2002/04/28 18:03:41 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -8,9 +8,15 @@
 
 #define option option_dirty_workaround_for_name_clash_with_include_on_cygwin
 
+enum option_flags {
+	/* bitmask */
+	OPT_CMDLINE = 1,
+	OPT_CFGFILE = 2,
+};
+
 struct option {
-	unsigned char *cmd_name;
-	unsigned char *cfg_name;
+	unsigned char *name;
+	enum option_flags flags;
 	unsigned char *(*rd_cmd)(struct option *, unsigned char ***, int *);
 	unsigned char *(*rd_cfg)(struct option *, unsigned char *);
 	void (*wr_cfg)(struct option *, unsigned char **, int *);
@@ -24,12 +30,16 @@ extern struct option html_options[];
 extern struct option *all_options[];
 
 
+extern struct option *get_opt_rec(unsigned char *);
+
 extern void *get_opt(unsigned char *);
 
 #define get_opt_int(name) *((int *) get_opt(name))
 #define get_opt_long(name) *((long *) get_opt(name))
 #define get_opt_char(name) *((unsigned char *) get_opt(name))
 #define get_opt_str(name) ((unsigned char *) get_opt(name))
+
+extern unsigned char *cmd_name(unsigned char *);
 
 
 extern int anonymous;

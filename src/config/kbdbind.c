@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.90 2003/11/12 16:52:00 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.91 2003/11/13 01:46:26 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -845,6 +845,6 @@ add_keyactions_to_string(struct string *string, enum keyact *actions,
 		keystrokelen = string->length - keystrokelen;
 		add_xchar_to_string(string, ' ', int_max(10 - keystrokelen, 1));
 		add_to_string(string, _(desc, term));
-		add_bytes_to_string(string, "\n", 1);
+		add_char_to_string(string, '\n');
 	}
 }	

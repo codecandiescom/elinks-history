@@ -1,5 +1,5 @@
 /* MIME handling backends multiplexing */
-/* $Id: common.c,v 1.3 2003/06/04 18:01:24 jonas Exp $ */
+/* $Id: common.c,v 1.4 2003/06/04 18:39:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 
 #include "mime/backend/common.h"
 #include "mime/mime.h"
+#include "protocol/url.h" /* For end_of_dir() */
 #include "util/file.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -128,4 +129,36 @@ get_next_path_filename(unsigned char **path_ptr, unsigned char separator)
 	}
 
 	return filename;
+}
+
+int
+get_extension_from_url(unsigned char *url, unsigned char **ext)
+{
+	int lo = !strncasecmp(url, "file://", 7); /* dsep() *hint* *hint* */
+	unsigned char *extension = NULL;
+	int extensionlen = 0;
+
+#define dsep(x) (lo ? dir_sep(x) : (x) == '/')
+
+	/* Hmmm, well, can we do better there ? --Zas */
+	for (; *url && !end_of_dir(*url); url++) {
+		if (*url == '.') {
+			extension = url + 1;
+		} else if (dsep(*url)) {
+			extension = NULL;
+		}
+	}
+
+	if (extension) {
+		while (extension[extensionlen]
+		       && !dsep(extension[extensionlen])
+		       && !end_of_dir(extension[extensionlen])) {
+			extensionlen++;
+		}
+	}
+
+#undef dsep
+
+	*ext = extension;
+	return extensionlen;
 }

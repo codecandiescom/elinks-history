@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.53 2004/12/19 11:18:31 pasky Exp $ */
+/* $Id: vs.c,v 1.54 2004/12/19 11:19:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,8 +100,8 @@ copy_vs(struct view_state *dst, struct view_state *src)
 			memcpy(dst->form_info, src->form_info,
 			       src->form_info_len * sizeof(struct form_state));
 			for (i = 0; i < src->form_info_len; i++) {
-				struct from_state *srcfs = &src->form_info[i];
-				struct from_state *dstfs = &dst->form_info[i];
+				struct form_state *srcfs = &src->form_info[i];
+				struct form_state *dstfs = &dst->form_info[i];
 
 				if (srcfs->value)
 					dstfs->value = stracpy(srcfs->value);

@@ -1,3 +1,192 @@
+Wed Dec 31 22:15:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Removed now-obsolete --without-xbel.  
+
+Wed Dec 31 22:02:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* feature.h:
+
+	Fixed forced disabling of the xbel/backtrace.  
+
+Wed Dec 31 22:01:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* acconfig.h, configure.in, feature.h:
+
+	Move backtrace printing support enabling to feature.h.  
+
+Wed Dec 31 21:52:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* feature.h:
+
+	Added notice to developers about what to include in this file and
+	how.  
+
+Wed Dec 31 21:44:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* feature.h:
+
+	Added details about what happens if disabled or why to enable it to
+	features missing it.  
+
+Wed Dec 31 21:35:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* feature.h:
+
+	Cleanup of the MIME/256colors entries.  
+
+Wed Dec 31 21:31:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* acconfig.h, configure.in, feature.h:
+
+	Moved cookies and global history to features.h.  
+
+Wed Dec 31 21:28:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Quite big update featuring the color cleanups and additions, auto
+	save stuff and sorting changes.  
+
+Wed Dec 31 21:26:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, configure.in, feature.h:
+
+	Move mailcap, mimetypes and 256 color configuration to feature.h
+	file.  
+
+Wed Dec 31 19:13:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* INSTALL, acconfig.h, configure.in, feature.h:
+
+	Introduced feature.h, which should hold most of the fine-tuned
+	compile-time features configuration. As an example case, leds and
+	bookmarks were already moved there. Idea stolen from vim.  
+
+Wed Dec 31 18:47:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* INSTALL:
+
+	Whitespaces cleanup.  
+
+Wed Dec 31 17:43:49 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* po/de.po:
+
+	German translation update.  
+
+Wed Dec 31 14:26:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/modules/: module.h, version.c:
+
+	Move builtin_modules declaration.  
+
+Wed Dec 31 14:25:07 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Dec 31 13:32:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/modules/: module.c, module.h, version.c:
+
+	Introduce module iterators to ease module hacking.  
+
+Wed Dec 31 12:57:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/Makefile.am:
+
+	.. and move libmime.a to link correctly.  
+
+Wed Dec 31 12:53:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/Makefile.am, dialogs/menu.c, dialogs/mime.c,
+	dialogs/mime.h, mime/Makefile.am, mime/dialogs.c, mime/dialogs.h:
+
+	dialogs/mime.* -> mime/dialogs.*, suggested by Jonas.  
+
+Wed Dec 31 10:44:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/snprintf.c:
+
+	Remove MAX(). It is already defined.  
+
+Wed Dec 31 10:42:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: mime/backend/mailcap.c, mime/backend/mimetypes.c,
+	util/string.h:
+
+	Move skip_whitespace() macro.  
+
+Wed Dec 31 08:50:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: mime/mime.h, mime/backend/common.c, mime/backend/common.h,
+	mime/backend/default.c, mime/backend/mailcap.c, sched/download.c:
+
+	Introduce mime handler initializer and allocate the program with the
+	struct so freeing is easier.  
+
+Wed Dec 31 08:37:14 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/smb/smb.c:
+
+	Glum.  
+
+Wed Dec 31 08:14:10 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/smb/smb.c:
+
+	Small, untested optimisation.  
+
+Wed Dec 31 07:53:39 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/formhist/dialogs.c:
+
+	In push_login_button, allow the title of the "Form not saved"
+	message box to be localised.  
+
+Wed Dec 31 07:25:48 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/task.c:
+
+	Whoops, bfu/style.h _does_ need to be included. Pointed out by
+	Jonas.  
+
+Wed Dec 31 06:20:40 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Remove a superfluous test.  
+
+Wed Dec 31 04:48:00 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/task.c:
+
+	Remove an unnecessary #include.  
+
+Wed Dec 31 02:57:51 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.c:
+
+	Include terminal/terminal.h for cls_redraw_all_terminals(). This
+	effectively reverts src/config/options.c:1.415->1.416. My first
+	reversion, and it is a patch by pasky, too. How 'bout that.  
+
+Wed Dec 31 02:49:38 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/task.h:
+
+	Declare struct download instead of struct dowload, and include
+	cache/cache.h for enum cache_mode.  
+
+Wed Dec 31 00:34:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Simplified tabs.unselected description.  
+
 Tue Dec 30 22:44:36 2003  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

@@ -1,5 +1,5 @@
 /* Perl scripting engine */
-/* $Id: core.c,v 1.11 2004/05/20 12:49:45 jonas Exp $ */
+/* $Id: core.c,v 1.12 2005/04/01 09:47:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,6 @@
 #include "lowlevel/home.h"
 #include "modules/module.h"
 #include "scripting/perl/core.h"
-#include "scripting/perl/hooks.h"
 #include "util/file.h"
 
 #define PERL_HOOKS_FILENAME	"hooks.pl"
@@ -58,7 +57,7 @@ precleanup_perl(struct module *module)
 	my_perl = NULL;
 }
 
-static void
+void
 cleanup_perl(struct module *module)
 {
 	precleanup_perl(module);
@@ -68,7 +67,7 @@ cleanup_perl(struct module *module)
 }
 
 
-static void
+void
 init_perl(struct module *module)
 {
 	/* FIXME: it seems that some systems like OS/2 requires PERL_SYS_INIT3
@@ -108,14 +107,3 @@ init_perl(struct module *module)
 		if (err) precleanup_perl(module);
 	}
 }
-
-
-struct module perl_scripting_module = struct_module(
-	/* name: */		"Perl",
-	/* options: */		NULL,
-	/* hooks: */		perl_scripting_hooks,
-	/* submodules: */	NULL,
-	/* data: */		NULL,
-	/* init: */		init_perl,
-	/* done: */		cleanup_perl
-);

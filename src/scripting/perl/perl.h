@@ -1,10 +1,10 @@
-/* $Id: perl.h,v 1.1 2005/01/03 03:40:51 jonas Exp $ */
+/* $Id: perl.h,v 1.2 2005/04/01 09:47:28 zas Exp $ */
 
 #ifndef EL__SCRIPTING_PERL_PERL_H
 #define EL__SCRIPTING_PERL_PERL_H
 
-#include "modules/module.h"
+struct module;
 
-extern struct module perl_scripting_module;
+struct module perl_scripting_module;
 
 #endif

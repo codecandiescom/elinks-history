@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.96 2004/05/28 15:43:00 zas Exp $ */
+/* $Id: text.c,v 1.97 2004/06/14 00:53:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,7 @@
 #include "config/kbdbind.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/draw.h"
-#include "terminal/kbd.h"
+#include "terminal/mouse.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
 

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.233 2004/05/26 21:31:01 zas Exp $ */
+/* $Id: menu.c,v 1.234 2004/06/14 00:53:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "terminal/draw.h"
 #include "terminal/event.h"
 #include "terminal/kbd.h"
+#include "terminal/mouse.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
 #include "util/color.h"

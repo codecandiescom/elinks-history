@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.69 2004/06/12 15:34:50 jonas Exp $ */
+/* $Id: dialogs.c,v 1.70 2004/06/14 00:53:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,6 @@
 #include "protocol/uri.h"
 #include "sched/session.h"
 #include "terminal/draw.h"
-#include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "util/memory.h"
 #include "util/object.h"

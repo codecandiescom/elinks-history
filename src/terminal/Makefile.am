@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.11 2003/10/01 15:09:53 jonas Exp $
+## $Id: Makefile.am,v 1.12 2004/06/14 00:53:48 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -17,6 +17,7 @@ libterminal_a_SOURCES = \
  hardio.h \
  kbd.c \
  kbd.h \
+ mouse.h \
  palette.inc \
  screen.c \
  screen.h \

@@ -1,5 +1,5 @@
 /* UNIX system-specific routines. */
-/* $Id: unix.c,v 1.12 2004/05/25 17:39:20 jonas Exp $ */
+/* $Id: unix.c,v 1.13 2004/06/14 00:53:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,6 @@
 #include "osdep/unix/unix.h"
 #include "osdep/osdep.h"
 #include "terminal/event.h"
-#include "terminal/kbd.h"
 #include "util/memory.h"
 
 

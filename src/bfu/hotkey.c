@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.20 2004/05/26 21:12:37 zas Exp $ */
+/* $Id: hotkey.c,v 1.21 2004/06/14 00:53:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,6 @@
 #include "config/kbdbind.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/draw.h"
-#include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
 #include "util/conv.h"

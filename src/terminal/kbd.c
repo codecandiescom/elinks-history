@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.68 2004/06/13 18:56:37 jonas Exp $ */
+/* $Id: kbd.c,v 1.69 2004/06/14 00:53:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@
 #include "osdep/osdep.h"
 #include "terminal/hardio.h"
 #include "terminal/kbd.h"
+#include "terminal/mouse.h"
 #include "terminal/terminal.h"
 #include "util/error.h"
 #include "util/memory.h"

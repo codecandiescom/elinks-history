@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.10 2004/06/14 00:08:27 jonas Exp $ */
+/* $Id: event.h,v 1.11 2004/06/14 00:53:48 jonas Exp $ */
 
 #ifndef EL__TERMINAL_EVENT_H
 #define EL__TERMINAL_EVENT_H
@@ -61,12 +61,5 @@ void term_send_event(struct terminal *, struct term_event *);
 void in_term(struct terminal *);
 
 #define INIT_TERM_EVENT(type, x, y, b) { (type), (x), (y), (b) }
-
-#define get_mouse_action(event)		 ((event)->b & BM_ACT)
-#define check_mouse_action(event, value) (get_mouse_action(event) == (value))
-
-#define get_mouse_button(event)		 ((event)->b & BM_BUTT)
-#define check_mouse_button(event, value) (get_mouse_button(event) == (value))
-#define check_mouse_wheel(event)	 (get_mouse_button(event) >= B_WHEEL_UP)
 
 #endif /* EL__TERMINAL_EVENT_H */

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.213 2003/12/06 00:04:14 pasky Exp $ */
+/* $Id: http.c,v 1.214 2003/12/06 00:25:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1082,6 +1082,7 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 again:
 	a = get_header(rb);
 	if (a == -1) {
+http_error:
 		abort_conn_with_state(conn, S_HTTP_ERROR);
 		return;
 	}
@@ -1093,8 +1094,7 @@ again:
 	if (a == -2) a = 0;
 	if ((a && get_http_code(rb->data, &h, &version))
 	    || h == 101) {
-		abort_conn_with_state(conn, S_HTTP_ERROR);
-		return;
+		goto http_error;
 	}
 
 	/* When no header, HTTP/0.9 document. That's always text/html,
@@ -1111,6 +1111,14 @@ again:
 		mem_free(head);
 		retry_conn_with_state(conn, S_RESTART);
 		return;
+	}
+
+	if ((d = parse_http_header(ch, "Status", NULL))) {
+		int h2 = atoi(d);
+
+		if (h2 >= 100 && h2 < 600) h = h2;
+		if (h == 101) goto http_error;
+		mem_free(d);
 	}
 
 #ifdef COOKIES

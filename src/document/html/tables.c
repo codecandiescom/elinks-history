@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.267 2004/06/29 02:34:28 jonas Exp $ */
+/* $Id: tables.c,v 1.268 2004/06/29 02:35:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1009,7 +1009,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	struct html_element *state;
 	color_t bgcolor = par_format.bgcolor;
 	int border, cellspacing, vcellpadding, cellpadding, align;
-	int rules;
 	int cye;
 	int x;
 	int cpd_pass, cpd_width, cpd_last;
@@ -1084,14 +1083,14 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		mem_free(al);
 	}
 
-	rules = border ? TABLE_RULE_ALL : TABLE_RULE_NONE;
+	table->rules = border ? TABLE_RULE_ALL : TABLE_RULE_NONE;
 	al = get_attr_val(attr, "rules");
 	if (al) {
-		if (!strcasecmp(al, "none")) rules = TABLE_RULE_NONE;
-		else if (!strcasecmp(al, "groups")) rules = TABLE_RULE_GROUPS;
-		else if (!strcasecmp(al, "rows")) rules = TABLE_RULE_ROWS;
-		else if (!strcasecmp(al, "cols")) rules = TABLE_RULE_COLS;
-		else if (!strcasecmp(al, "all")) rules = TABLE_RULE_ALL;
+		if (!strcasecmp(al, "none")) table->rules = TABLE_RULE_NONE;
+		else if (!strcasecmp(al, "groups")) table->rules = TABLE_RULE_GROUPS;
+		else if (!strcasecmp(al, "rows")) table->rules = TABLE_RULE_ROWS;
+		else if (!strcasecmp(al, "cols")) table->rules = TABLE_RULE_COLS;
+		else if (!strcasecmp(al, "all")) table->rules = TABLE_RULE_ALL;
 		mem_free(al);
 	}
 
@@ -1100,7 +1099,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	table->cellpadding = cellpadding;
 	table->vcellpadding = vcellpadding;
 	table->cellspacing = cellspacing;
-	table->rules = rules;
 
 	format_bad_table_html(table);
 

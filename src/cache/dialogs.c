@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.34 2003/11/22 22:05:44 jonas Exp $ */
+/* $Id: dialogs.c,v 1.35 2003/11/23 17:09:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,7 +146,7 @@ menu_cache_manager(struct terminal *term, void *fcp, struct session *ses)
 	hierbox_browser(term, N_("Cache"),
 			0, &cache_browser, ses,
 			3,
-			N_("Info"), push_hierbox_info_button, B_ENTER, ses,
-			N_("Delete"), push_hierbox_delete_button, B_ENTER, ses,
-			N_("Goto"), push_hierbox_goto_button, B_ENTER, ses);
+			N_("Info"), push_hierbox_info_button, B_ENTER, NULL,
+			N_("Delete"), push_hierbox_delete_button, B_ENTER, NULL,
+			N_("Goto"), push_hierbox_goto_button, B_ENTER, NULL);
 }

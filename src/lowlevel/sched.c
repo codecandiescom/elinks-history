@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.14 2002/04/21 19:12:35 pasky Exp $ */
+/* $Id: sched.c,v 1.15 2002/04/24 14:14:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1215,22 +1215,25 @@ unsigned char *find_auth(unsigned char *url)
 }
 
 
-/* del_auth_entry() */
-void del_auth_entry(struct http_auth_basic *a)
+/* Delete an entry from auth list. */
+void
+del_auth_entry(struct http_auth_basic *entry)
 {
-	if (a->url) mem_free(a->url);
-	if (a->realm) mem_free(a->realm);
-	if (a->uid) mem_free(a->uid);
-	if (a->passwd) mem_free(a->passwd);
-	del_from_list(a);
-	mem_free(a);
+	if (entry->url) mem_free(entry->url);
+	if (entry->realm) mem_free(entry->realm);
+	if (entry->uid) mem_free(entry->uid);
+	if (entry->passwd) mem_free(entry->passwd);
+	del_from_list(entry);
+	mem_free(entry);
 }
 
 
-/* free_auth() */
-void free_auth()
+/* Free all entries in auth list and questions in queue. */
+void
+free_auth()
 {
 	while (!list_empty(http_auth_basic_list))
 		del_auth_entry(http_auth_basic_list.next);
+
 	free_list(questions_queue);
 }

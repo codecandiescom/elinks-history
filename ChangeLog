@@ -1,3 +1,38 @@
+Sat Feb  7 10:58:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Drawin the download notification dialog when having the download
+	browser open is apparently a little racy. Deleting the box item will
+	update the download browser _after_ the notification dialog has been
+	drawn whereby it will be hidden. This should make the download
+	browser update before launcing any notification by removing the list
+	box item.  
+
+Sat Feb  7 01:39:49 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/interlink.c:
+
+	Use stricter mask for local socket creation, so socket is only
+	readable/writable by its user on systems honouring unix sockets
+	permissions (see unix(7)).  
+
+Sat Feb  7 01:04:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/secsave.c:
+
+	Comments about secure_file_saving were updated.  
+
+Sat Feb  7 00:58:56 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/secsave.c:
+
+	Use fflush()/fsync()/fclose() sequence to ensure data is written to
+	disk when using secure saving. This is needed since fclose() only
+	calls fflush() which only flush libc buffers, so while fclose() may
+	have returned, data may still be in kernel buffers. See fclose(2),
+	fflush(2) and fsync(2) man pages for more information.  
+
 Fri Feb  6 22:41:04 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: bfu/inphist.h, config/urlhist.c, dialogs/exmode.c,

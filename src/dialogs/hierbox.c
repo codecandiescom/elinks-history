@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.38 2003/11/06 16:52:08 jonas Exp $ */
+/* $Id: hierbox.c,v 1.39 2003/11/06 16:59:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,7 +164,7 @@ layout_hierbox_browser(struct dialog_data *dlg_data)
 			   &y, w, &rw, AL_CENTER);
 	w = rw;
 
-	draw_dlg(dlg_data, w, y, AL_CENTER);
+	draw_dialog(dlg_data, w, y, AL_CENTER);
 
 	y = dlg_data->y + DIALOG_TB;
 	y++;

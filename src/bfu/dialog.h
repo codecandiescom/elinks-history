@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.15 2003/11/06 16:52:08 jonas Exp $ */
+/* $Id: dialog.h,v 1.16 2003/11/06 16:59:09 jonas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -59,8 +59,8 @@ struct dialog_data *do_dialog(struct terminal *, struct dialog *,
 
 void dialog_func(struct window *, struct term_event *, int);
 
-void draw_dlg(struct dialog_data *dlg_data, int width, int height,
-	      enum format_align align);
+void draw_dialog(struct dialog_data *dlg_data, int width, int height,
+		 enum format_align align);
 
 int ok_dialog(struct dialog_data *, struct widget_data *);
 int cancel_dialog(struct dialog_data *, struct widget_data *);

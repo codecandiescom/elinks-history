@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.69 2003/11/06 16:52:08 jonas Exp $ */
+/* $Id: dialog.c,v 1.70 2003/11/06 16:59:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -357,8 +357,8 @@ clear_dialog(struct dialog_data *dlg_data, struct widget_data *unused)
 }
 
 void
-draw_dlg(struct dialog_data *dlg_data, int width, int height,
-	 enum format_align align)
+draw_dialog(struct dialog_data *dlg_data, int width, int height,
+	    enum format_align align)
 {
 	struct terminal *term = dlg_data->win->term;
  

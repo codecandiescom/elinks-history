@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.52 2004/05/10 12:56:13 zas Exp $ */
+/* $Id: button.c,v 1.53 2004/05/10 15:15:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,20 +96,21 @@ display_button(struct widget_data *widget_data, struct dialog_data *dlg_data, in
 {
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *color;
-	int len = strlen(widget_data->widget->text);
-	int x = widget_data->dimensions.x + BUTTON_LEFT_LEN;
+	struct rect *pos = &widget_data->dimensions;
+	int len = widget_data->dimensions.width - BUTTON_LR_LEN;
+	int x = pos->x + BUTTON_LEFT_LEN;
 
 	color = get_bfu_color(term, sel ? "dialog.button-selected"
 					: "dialog.button");
 	if (!color) return;
 
-	draw_text(term, widget_data->dimensions.x, widget_data->dimensions.y, BUTTON_LEFT, BUTTON_LEFT_LEN, 0, color);
-	draw_text(term, x, widget_data->dimensions.y, widget_data->widget->text, len, 0, color);
-	draw_text(term, x + len, widget_data->dimensions.y, BUTTON_RIGHT, BUTTON_RIGHT_LEN, 0, color);
+	draw_text(term, pos->x, pos->y, BUTTON_LEFT, BUTTON_LEFT_LEN, 0, color);
+	draw_text(term, x, pos->y, widget_data->widget->text, len, 0, color);
+	draw_text(term, x + len, pos->y, BUTTON_RIGHT, BUTTON_RIGHT_LEN, 0, color);
 
 	if (sel) {
-		set_cursor(term, x, widget_data->dimensions.y, 0);
-		set_window_ptr(dlg_data->win, widget_data->dimensions.x, widget_data->dimensions.y);
+		set_cursor(term, x, pos->y, 0);
+		set_window_ptr(dlg_data->win, pos->x, pos->y);
 	}
 }
 

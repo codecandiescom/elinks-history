@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.1 2004/04/23 23:05:25 pasky Exp $ */
+/* $Id: stack.c,v 1.2 2004/04/23 23:06:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,7 +159,7 @@ html_stack_dup(enum html_element_type type)
 }
 
 void
-kill_until(int ls, ...)
+kill_html_stack_until(int ls, ...)
 {
 	int l;
 	struct html_element *e = &html_top;

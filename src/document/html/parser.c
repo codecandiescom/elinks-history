@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.405 2004/04/23 23:05:25 pasky Exp $ */
+/* $Id: parser.c,v 1.406 2004/04/23 23:06:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1126,7 +1126,7 @@ static void
 html_th(unsigned char *a)
 {
 	/*html_linebrk(a);*/
-	kill_until(1, "TD", "TH", "", "TR", "TABLE", NULL);
+	kill_html_stack_until(1, "TD", "TH", "", "TR", "TABLE", NULL);
 	format.attr |= AT_BOLD;
 	put_chrs(" ", 1, put_chars_f, ff);
 }
@@ -1135,7 +1135,7 @@ static void
 html_td(unsigned char *a)
 {
 	/*html_linebrk(a);*/
-	kill_until(1, "TD", "TH", "", "TR", "TABLE", NULL);
+	kill_html_stack_until(1, "TD", "TH", "", "TR", "TABLE", NULL);
 	format.attr &= ~AT_BOLD;
 	put_chrs(" ", 1, put_chars_f, ff);
 }
@@ -1226,7 +1226,7 @@ html_li(unsigned char *a)
 		ln_break(1, line_break_f, ff);
 	}
 
-	/*kill_until(0, "", "UL", "OL", NULL);*/
+	/*kill_html_stack_until(0, "", "UL", "OL", NULL);*/
 	if (!par_format.list_number) {
 		unsigned char x[7] = "*&nbsp;";
 		int t = par_format.flags & P_LISTMASK;
@@ -1296,7 +1296,7 @@ html_dl(unsigned char *a)
 static void
 html_dt(unsigned char *a)
 {
-	kill_until(0, "", "DL", NULL);
+	kill_html_stack_until(0, "", "DL", NULL);
 	par_format.align = AL_LEFT;
 	par_format.leftmargin = par_format.dd_margin;
 	if (!(par_format.flags & P_COMPACT) && !has_attr(a, "compact"))
@@ -1306,7 +1306,7 @@ html_dt(unsigned char *a)
 static void
 html_dd(unsigned char *a)
 {
-	kill_until(0, "", "DL", NULL);
+	kill_html_stack_until(0, "", "DL", NULL);
 
 	par_format.leftmargin = par_format.dd_margin + (table_level ? 3 : 8);
 	if (!table_level)

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.45 2003/06/30 22:22:57 zas Exp $ */
+/* $Id: tables.c,v 1.46 2003/06/30 22:57:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1606,19 +1606,18 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	     unsigned char **end, void *f)
 {
 	struct part *p = f;
+	struct table *t;
+	struct s_e *bad_html;
+	struct node *n, *nn;
+	unsigned char *al;
+	struct rgb bgcolor;
 	int border, cellsp, vcellpd, cellpd, align;
 	int frame, rules, width, wf;
-	struct rgb bgcolor;
-	struct table *t;
-	char *al;
 	int cye;
 	int x;
 	int i;
-	struct s_e *bad_html;
 	int bad_html_n;
-	struct node *n, *nn;
 	int cpd_pass, cpd_width, cpd_last;
-	/* int llm = last_link_to_move; */
 
 	table_level++;
 	memcpy(&bgcolor, &par_format.bgcolor, sizeof(struct rgb));
@@ -1627,8 +1626,31 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	border = get_num(attr, "border");
 	if (border == -1) border = has_attr(attr, "border");
 
-	cellsp = get_num(attr, "cellspacing");
-	if (cellsp == -1) cellsp = 1;
+	if (border) {
+		if (border > 2) border = 2;
+
+		cellsp = get_num(attr, "cellspacing");
+		if (cellsp < 1) cellsp = 1;
+		else if (cellsp > 2) cellsp = 2;
+
+		frame = F_BOX;
+		al = get_attr_val(attr, "frame");
+		if (al) {
+			if (!strcasecmp(al, "void")) frame = F_VOID;
+			else if (!strcasecmp(al, "above")) frame = F_ABOVE;
+			else if (!strcasecmp(al, "below")) frame = F_BELOW;
+			else if (!strcasecmp(al, "hsides")) frame = F_HSIDES;
+			else if (!strcasecmp(al, "vsides")) frame = F_VSIDES;
+			else if (!strcasecmp(al, "lhs")) frame = F_LHS;
+			else if (!strcasecmp(al, "rhs")) frame = F_RHS;
+			else if (!strcasecmp(al, "box")) frame = F_BOX;
+			else if (!strcasecmp(al, "border")) frame = F_BOX;
+			mem_free(al);
+		}
+	} else {
+		cellsp = 0;
+		frame = F_VOID;
+	}
 
 	cellpd = get_num(attr, "cellpadding");
 	if (cellpd == -1) {
@@ -1639,12 +1661,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		cellpd = (cellpd >= HTML_CHAR_WIDTH / 2 + 1);
 	}
 
-	if (!border) cellsp = 0;
-	else if (!cellsp) cellsp = 1;
-
-	if (border > 2) border = 2;
-	if (cellsp > 2) cellsp = 2;
-
 	align = par_format.align;
 	if (align == AL_NONE || align == AL_BLOCK) align = AL_LEFT;
 
@@ -1653,21 +1669,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		if (!strcasecmp(al, "left")) align = AL_LEFT;
 		else if (!strcasecmp(al, "center")) align = AL_CENTER;
 		else if (!strcasecmp(al, "right")) align = AL_RIGHT;
-		mem_free(al);
-	}
-
-	frame = F_BOX;
-	al = get_attr_val(attr, "frame");
-	if (al) {
-		if (!strcasecmp(al, "void")) frame = F_VOID;
-		else if (!strcasecmp(al, "above")) frame = F_ABOVE;
-		else if (!strcasecmp(al, "below")) frame = F_BELOW;
-		else if (!strcasecmp(al, "hsides")) frame = F_HSIDES;
-		else if (!strcasecmp(al, "vsides")) frame = F_VSIDES;
-		else if (!strcasecmp(al, "lhs")) frame = F_LHS;
-		else if (!strcasecmp(al, "rhs")) frame = F_RHS;
-		else if (!strcasecmp(al, "box")) frame = F_BOX;
-		else if (!strcasecmp(al, "border")) frame = F_BOX;
 		mem_free(al);
 	}
 
@@ -1682,9 +1683,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		mem_free(al);
 	}
 
-	if (!border) frame = F_VOID;
 	wf = 0;
-
 	width = get_width(attr, "width", (p->data || p->xp));
 	if (width == -1) {
 		width = par_format.width - par_format.leftmargin - par_format.rightmargin;
@@ -1779,21 +1778,26 @@ again:
 	check_table_widths(t);
 #endif
 
-	x = par_format.leftmargin;
-	if (align == AL_CENTER)
-		x = (par_format.width + par_format.leftmargin
-		     - par_format.rightmargin - t->rw) / 2;
-	if (align == AL_RIGHT)
-		x = par_format.width - par_format.rightmargin - t->rw;
-	if (x + t->rw > par_format.width) x = par_format.width - t->rw;
-	if (x < 0) x = 0;
+	{
+		int ww = par_format.width - t->rw;
 
-	/*display_table(t, x, p->cy, &cye);*/
+
+		x = par_format.leftmargin;
+		if (align == AL_CENTER)
+			x = (ww + par_format.leftmargin
+		     	     - par_format.rightmargin) / 2;
+		else if (align == AL_RIGHT)
+			x = ww - par_format.rightmargin;
+		if (x > ww) x = ww;
+		if (x < 0) x = 0;
+	}
+
 	get_table_heights(t);
 
 	if (!p->data) {
-		if (t->rw + par_format.leftmargin + par_format.rightmargin > p->x)
-			p->x = t->rw + par_format.leftmargin + par_format.rightmargin;
+		int ww = t->rw + par_format.leftmargin + par_format.rightmargin;
+
+		if (ww > p->x) p->x = ww;
 		p->cy += t->rh;
 		goto ret2;
 	}
@@ -1812,13 +1816,6 @@ again:
 		add_to_list(p->data->nodes, nn);
 	}
 
-	/* sdbg(p->data); */
-#if 0
-	for (y = p->cy; y < cye; y++) {
-		last_link_to_move = llm;
-		align_line(p, y, 0);
-	}
-#endif
 
 	if (p->cy + t->rh != cye)
 		internal("size does not match; 1:%d, 2:%d", p->cy + t->rh, cye);

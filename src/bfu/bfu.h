@@ -1,9 +1,10 @@
-/* $Id: bfu.h,v 1.10 2002/06/17 08:00:14 pasky Exp $ */
+/* $Id: bfu.h,v 1.11 2002/07/04 01:07:12 pasky Exp $ */
 
-#ifndef EL__BFU_H
-#define EL__BFU_H
+#ifndef EL__BFU_BFU_H
+#define EL__BFU_BFU_H
 
 #include "bfu/align.h"
+#include "bfu/button.h"
 #include "lowlevel/terminal.h"
 #include "util/lists.h"
 
@@ -23,7 +24,7 @@ void add_to_input_history(struct input_history *, unsigned char *, int);
 
 
 struct dialog_item_data;
-struct dialog_data;
+struct dialog_data; /* XXX */
 
 enum dialog_item_type {
 	D_END,
@@ -33,10 +34,6 @@ enum dialog_item_type {
 	D_BUTTON,
 	D_BOX,
 };
-
-/* Button flags, go into dialog_item.gid */
-#define B_ENTER		1
-#define B_ESC		2
 
 struct dialog_item {
 	enum dialog_item_type type;
@@ -122,8 +119,6 @@ struct box_item {
 	enum box_item_free free_i;
 };
 
-void show_dlg_item_box(struct dialog_data *, struct dialog_item_data *);
-
 
 struct dialog_data *do_dialog(struct terminal *, struct dialog *,
 			      struct memory_list *);
@@ -162,8 +157,6 @@ void display_dlg_item(struct dialog_data *, struct dialog_item_data *, int);
 int ok_dialog(struct dialog_data *, struct dialog_item_data *);
 int cancel_dialog(struct dialog_data *, struct dialog_item_data *);
 int clear_dialog(struct dialog_data *, struct dialog_item_data *);
-
-void msg_box(struct terminal *, struct memory_list *, unsigned char *, enum format_align, /*unsigned char *, void *, int,*/ ...);
 
 void input_field_fn(struct dialog_data *);
 void input_field(struct terminal *, struct memory_list *, unsigned char *,

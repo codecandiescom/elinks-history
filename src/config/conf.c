@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.50 2002/07/03 21:21:50 pasky Exp $ */
+/* $Id: conf.c,v 1.51 2002/07/04 01:07:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,8 +18,7 @@
 
 #include "links.h"
 
-#include "bfu/align.h"
-#include "bfu/bfu.h"
+#include "bfu/msgbox.h"
 #include "config/conf.h"
 #include "config/kbdbind.h"
 #include "config/options.h"

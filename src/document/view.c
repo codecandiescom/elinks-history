@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.57 2002/07/04 00:28:07 pasky Exp $ */
+/* $Id: view.c,v 1.58 2002/07/04 01:07:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,8 +20,8 @@
 #include "links.h"
 
 #include "main.h"
-#include "bfu/bfu.h"
 #include "bfu/menu.h"
+#include "bfu/msgbox.h"
 #include "dialogs/menu.h"
 #include "bookmarks/dialogs.h"
 #include "cookies/cookies.h"

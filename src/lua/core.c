@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.8 2002/07/03 12:02:03 pasky Exp $ */
+/* $Id: core.c,v 1.9 2002/07/04 01:07:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 
 #include "bfu/align.h"
 #include "bfu/bfu.h"
+#include "bfu/msgbox.h"
 #include "config/kbdbind.h"
 #include "document/cache.h"
 #include "document/history.h"

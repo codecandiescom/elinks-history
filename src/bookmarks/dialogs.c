@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.9 2002/06/17 07:42:29 pasky Exp $ */
+/* $Id: dialogs.c,v 1.10 2002/07/04 01:07:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 
 #include "bfu/align.h"
 #include "bfu/bfu.h"
+#include "bfu/msgbox.h"
 #include "bookmarks/bookmarks.h"
 #include "bookmarks/dialogs.h"
 #include "dialogs/edit.h"

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.11 2002/06/16 23:38:21 pasky Exp $
+## $Id: Makefile.am,v 1.12 2002/07/04 01:07:12 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -8,6 +8,9 @@ libbfu_a_SOURCES = \
  align.h \
  bfu.c \
  bfu.h \
+ button.h \
  menu.c \
- menu.h
+ menu.h \
+ msgbox.c \
+ msgbox.h
 

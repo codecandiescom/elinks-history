@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.35 2002/07/03 15:04:36 pasky Exp $ */
+/* $Id: types.c,v 1.36 2002/07/04 01:07:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "bfu/align.h"
 #include "bfu/bfu.h"
 #include "bfu/menu.h"
+#include "bfu/msgbox.h"
 #include "config/options.h"
 #include "intl/language.h"
 #include "lowlevel/terminal.h"

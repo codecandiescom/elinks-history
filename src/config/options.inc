@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.29 2003/11/14 01:35:32 jonas Exp $ */
+/* $Id: options.inc,v 1.30 2003/11/14 13:59:39 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -540,7 +540,7 @@ struct option_info config_options_info[] = {
 		N_("Options concerning the display of plain text pages.")),
 
 	INIT_OPT_BOOL("document.plain", N_("Display URIs"),
-		"display_links", 0, 1,
+		"display_links", 0, 0,
 		N_("Display URIs in the document as links.")),
 
 	/* Keep options in alphabetical order. */

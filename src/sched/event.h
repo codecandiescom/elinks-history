@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.5 2003/09/23 14:03:06 pasky Exp $ */
+/* $Id: event.h,v 1.6 2003/09/23 14:06:10 pasky Exp $ */
 
 #ifndef EL__SCHED_EVENT_H
 #define EL__SCHED_EVENT_H
@@ -16,6 +16,9 @@ enum evhook_status {
 	EHS_LAST,
 };
 
+/* The event hook prototype. Abide. */
+typedef enum evhook_status (*event_hook)(va_list ap);
+
 
 /*** The life of events */
 
@@ -28,10 +31,9 @@ int register_event(unsigned char *name);
  * further recyclation. */
 int unregister_event(int event);
 
-int register_event_hook(int id, enum evhook_status (*callback)(va_list ap),
-			int priority);
+int register_event_hook(int id, event_hook callback, int priority);
 
-void unregister_event_hook(int id, enum evhook_status (*callback)(va_list ap));
+void unregister_event_hook(int id, event_hook callback);
 
 
 /*** The events resolver */

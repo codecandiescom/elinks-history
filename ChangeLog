@@ -1,3 +1,23 @@
+Fri Jul  9 18:01:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Add more to FIXME about protocol detection.  
+
+Fri Jul  9 17:55:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	translate_url(): In the handling for unknown protocols in the the
+	parse_uri goto loop's URI_ERRN_OK switch label.  
+	
+	- Improve <IP-address>:<port> check by ``resetting'' the infinite
+	  loop prevention.  
+	
+	- Use check_uri_file() to detect local files with ':'s in the name.  
+	
+	- Add FIXME about code duplication.  
+
 Thu Jul  8 21:06:46 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/html/tables.c:

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.11 2002/04/17 08:53:58 pasky Exp $ */
+/* $Id: url.c,v 1.12 2002/04/20 16:48:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,15 +187,15 @@ int parse_url(unsigned char *url, int *prlen,
 
 
 	if (*host_end == ':') { /* we have port here */
-		unsigned char *port_end = host_end + strcspn(host_end, "/");
+		unsigned char *port_end = ++host_end + strcspn(host_end, "/");
 		int idx;
 
-		if (port) *port = host_end + 1;
-		if (polen) *polen = port_end - host_end - 1;
+		if (port) *port = host_end;
+		if (polen) *polen = port_end - host_end;
 
 		/* test if port is number */
 		/* TODO: possibly lookup for the service otherwise? --pasky */
-		for (idx = 1; idx < port_end - host_end; idx++)
+		for (idx = 0; idx < port_end - host_end; idx++)
 			if (host_end[idx] < '0' || host_end[idx] > '9')
 				return -1;
 

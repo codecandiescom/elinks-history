@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.46 2003/10/20 08:12:37 zas Exp $ */
+/* $Id: fastfind.c,v 1.47 2003/10/20 08:42:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "util/memdebug.h"
 #include "util/memory.h"
 
+#ifdef USE_FASTFIND
 
 /* It replaces bsearch() + strcasecmp() + callback + ...
  *
@@ -730,3 +731,5 @@ main(int argc, char **argv)
 }
 
 #endif
+
+#endif /* USE_FASTFIND */

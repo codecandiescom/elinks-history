@@ -1,12 +1,14 @@
-/* $Id: fastfind.h,v 1.11 2003/06/15 12:38:24 pasky Exp $ */
+/* $Id: fastfind.h,v 1.12 2003/10/20 08:42:30 zas Exp $ */
 
 #ifndef EL__UTIL_FASTFIND_H
 #define EL__UTIL_FASTFIND_H
 
 /* Whether to use these routines or not. */
-/* TODO: Remove this macro altogether after this will be sufficiently tested.
- * --pasky */
+#ifndef ELINKS_SMALL
 #define USE_FASTFIND 1
+#else
+#undef USE_FASTFIND
+#endif
 
 #ifdef USE_FASTFIND
 

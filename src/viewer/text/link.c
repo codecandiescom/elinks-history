@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.119 2003/12/05 22:01:04 zas Exp $ */
+/* $Id: link.c,v 1.120 2003/12/05 22:31:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -471,7 +471,7 @@ set_pos_x(struct document_view *doc_view, struct link *link)
 	if_assert_failed return;
 
 	for (i = 0; i < link->n; i++) {
-		int y = link->pos[i].y + doc_view->vs->y;
+		int y = link->pos[i].y - doc_view->vs->y;
 
 		if (y >= 0 && y < doc_view->height) {
 			int_lower_bound(&xm, link->pos[i].x + 1);

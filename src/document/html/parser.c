@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.294 2003/12/20 21:22:27 pasky Exp $ */
+/* $Id: parser.c,v 1.295 2003/12/20 21:49:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -484,6 +484,8 @@ static int was_br;
 static int was_li;
 static int was_xmp;
 
+static int uttered_glyph; /* keep it poetic ;-) */
+
 static inline void
 ln_break(int n, void (*line_break)(void *), void *f)
 {
@@ -497,6 +499,7 @@ static void
 put_chrs(unsigned char *start, int len,
 	 void (*put_chars)(void *, unsigned char *, int), void *f)
 {
+	uttered_glyph = 1;
 	if (par_format.align == AL_NONE) putsp = 0;
 	if (!len || html_top.invisible) return;
 	if (putsp == 1) put_chars(f, " ", 1), position++, putsp = -1;
@@ -2479,7 +2482,8 @@ html_frameset(unsigned char *a)
 	unsigned char *cols, *rows;
 	int width, height;
 
-	if (!global_doc_opts->frames || !special_f(ff, SP_USED, NULL))
+	if (encountered_body || uttered_glyph
+	    || !global_doc_opts->frames || !special_f(ff, SP_USED, NULL))
 		return;
 
 	cols = get_attr_val(a, "cols");
@@ -3808,6 +3812,7 @@ init_html_parser(unsigned char *url, struct document_options *options,
 	last_form_attr = NULL;
 	last_input_tag = NULL;
 	encountered_body = 0;
+	uttered_glyph = 0;
 }
 
 void

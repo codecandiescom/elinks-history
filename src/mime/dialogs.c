@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.2 2002/08/11 18:25:49 pasky Exp $ */
+/* $Id: dialogs.c,v 1.3 2002/09/07 08:53:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,6 +53,7 @@ add_ext_fn(struct dialog_data *dlg)
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
+	int dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	max_text_width(term, ext_msg[0], &max);
 	min_text_width(term, ext_msg[0], &min);
@@ -71,13 +72,13 @@ add_ext_fn(struct dialog_data *dlg)
 	dlg_format_text(NULL, term,
 			ext_msg[0],
 			0, &y, w, &rw,
-			get_bfu_color(term, "dialog.text"), AL_LEFT);
+			dialog_text_color, AL_LEFT);
 
 	y += 2;
 	dlg_format_text(NULL, term,
 			ext_msg[1],
 			0, &y, w, &rw,
-			get_bfu_color(term, "dialog.text"), AL_LEFT);
+			dialog_text_color, AL_LEFT);
 
 	y += 2;
 	dlg_format_buttons(NULL, term,
@@ -96,7 +97,7 @@ add_ext_fn(struct dialog_data *dlg)
 	dlg_format_text(term, term,
 			ext_msg[0],
 			dlg->x + DIALOG_LB, &y, w, NULL,
-			get_bfu_color(term, "dialog.text"), AL_LEFT);
+			dialog_text_color, AL_LEFT);
 	dlg_format_field(term, term,
 			 &dlg->items[0],
 			 dlg->x + DIALOG_LB, &y, w, NULL,
@@ -106,7 +107,7 @@ add_ext_fn(struct dialog_data *dlg)
 	dlg_format_text(term, term,
 			ext_msg[1],
 			dlg->x + DIALOG_LB, &y, w, NULL,
-			get_bfu_color(term, "dialog.text"), AL_LEFT);
+			dialog_text_color, AL_LEFT);
 	dlg_format_field(term, term,
 			 &dlg->items[1],
 			 dlg->x + DIALOG_LB, &y, w, NULL,
@@ -130,7 +131,7 @@ void
 really_del_ext(void *fcp)
 {
 	struct option *opt;
-	
+
 	opt = get_real_opt("mime.extension", (unsigned char *) fcp);
 	if (opt) delete_option(opt);
 }
@@ -146,7 +147,7 @@ menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 
 	if (translated) {
 		int i;
-		
+
 		for (i = strlen(translated) - 1; i >= 0; i--)
 			if (translated[i] == '.')
 				translated[i] = '*';
@@ -295,7 +296,7 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 	struct list_head *opt_tree;
 	struct option *opt;
 	struct menu_item *mi = NULL;
-	
+
 	opt_tree = (struct list_head *) get_opt_ptr("mime.extension");
 
 	foreachback (opt, *opt_tree) {

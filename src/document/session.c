@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.63 2002/10/12 16:34:16 pasky Exp $ */
+/* $Id: session.c,v 1.64 2002/10/16 14:27:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,17 +120,20 @@ unknow_error:
 void
 add_xnum_to_str(unsigned char **s, int *l, int n)
 {
-	unsigned char suff = 0;
+	unsigned char suff[3] = "\0";
 	int d = -1;
 
-	if (n >= 1000000)  {
-		suff = 'M';
-	       	d = (n / 100000) % 10;
-	       	n /= 1000000;
-	} else if (n >= 1000) {
-		suff = 'k';
-	       	d = (n / 100) % 10;
-		n /= 1000;
+	/* XXX: I don't completely like the computation of d here. --pasky */
+	/* Mebi (Mi), 2^20 */
+	if (n >= 1048576)  {
+		suff[0] = 'M'; suff[1] = 'i';
+	       	d = (n / 104858) % 10;
+	       	n /= 1048576;
+	/* Kibi (Ki), 2^10 */
+	} else if (n >= 1024) {
+		suff[0] = 'K'; suff[1] = 'i';
+	       	d = (n / 102) % 10;
+		n /= 1024;
 	}
 	add_num_to_str(s, l, n);
 
@@ -140,7 +143,7 @@ add_xnum_to_str(unsigned char **s, int *l, int n)
 	}
 	add_chr_to_str(s, l, ' ');
 
-	if (suff) add_chr_to_str(s, l, suff);
+	if (suff[0]) add_to_str(s, l, suff);
 	add_chr_to_str(s, l, 'B');
 }
 

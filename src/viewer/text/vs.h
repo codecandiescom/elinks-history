@@ -1,4 +1,4 @@
-/* $Id: vs.h,v 1.16 2004/03/22 14:35:41 jonas Exp $ */
+/* $Id: vs.h,v 1.17 2004/04/01 05:01:47 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VS_H
 #define EL__VIEWER_TEXT_VS_H
@@ -7,8 +7,10 @@
 struct document_view;
 struct session;
 struct form_state;
+struct uri;
 
 struct view_state {
+	struct uri *uri;
 	unsigned char *goto_position;
 
 	struct form_state *form_info;

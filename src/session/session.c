@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.335 2004/04/01 02:48:53 jonas Exp $ */
+/* $Id: session.c,v 1.336 2004/04/01 05:01:48 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -980,6 +980,8 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 	if_assert_failed { return NULL; }
 
 	foreachback (frame, loc->frames) {
+		struct uri *uri;
+
 		if (strcasecmp(frame->name, name)) continue;
 
 		if (url_len > frame->vs.url_len) {
@@ -999,6 +1001,13 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 
 			frame = new_frame;
 		}
+
+		uri = get_uri(url);
+		if (!uri) return NULL;
+
+		done_uri(frame->vs.uri);
+		frame->vs.uri = uri;
+
 		memcpy(frame->vs.url, url, url_len + 1);
 		frame->vs.url_len = url_len;
 

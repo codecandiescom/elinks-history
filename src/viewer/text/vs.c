@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.29 2004/03/22 14:35:41 jonas Exp $ */
+/* $Id: vs.c,v 1.30 2004/04/01 05:01:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 
 #include "document/document.h"
 #include "document/view.h"
+#include "protocol/uri.h"
 #include "sched/session.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -31,6 +32,7 @@ init_vs(struct view_state *vs, unsigned char *url, int plain)
 	memset(vs, 0, sizeof(struct view_state) + url_len);
 	vs->current_link = -1;
 	vs->plain = plain;
+	vs->uri = get_uri(url);
 	memcpy(vs->url, url, url_len);
 	vs->url_len = url_len;
 }
@@ -39,6 +41,8 @@ void
 destroy_vs(struct view_state *vs)
 {
 	int i;
+
+	if (vs->uri) done_uri(vs->uri);
 
 	if (vs->goto_position)
 		mem_free(vs->goto_position);
@@ -65,6 +69,7 @@ copy_vs(struct view_state *dst, struct view_state *src)
 
 	memcpy(dst->url, src->url, src->url_len + 1);
 
+	dst->uri = get_uri_reference(src->uri);
 	dst->goto_position = src->goto_position ?
 			     stracpy(src->goto_position) : NULL;
 

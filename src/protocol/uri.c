@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.266 2004/07/23 05:21:11 miciah Exp $ */
+/* $Id: uri.c,v 1.267 2004/07/31 18:29:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -676,7 +676,12 @@ transform_file_url(struct uri *uri, unsigned char *cwd)
 
 	/* Who would name their file/dir '...' ? */
 	if (*path == '.' || !*path) {
-		int cwdlen = strlen(cwd);
+		struct string dir;
+
+		if (!init_string(&dir))
+			return NULL;
+
+		encode_uri_string(&dir, cwd, 0);
 
 		/* Either we will end up with '//' and translate_directories()
 		 * will shorten it or the '/' will mark the inserted cwd as a
@@ -684,7 +689,10 @@ transform_file_url(struct uri *uri, unsigned char *cwd)
 		if (*path == '.') *path = '/';
 
 		/* Insert the current working directory. */
-		insert_in_string(&struri(uri), 7, cwd, cwdlen);
+		/* The offset is 7 == sizeof("file://") - 1. */
+		insert_in_string(&struri(uri), 7, dir.source, dir.length);
+
+		done_string(&dir);
 		return uri;
 	}
 

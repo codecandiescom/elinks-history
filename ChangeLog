@@ -1,3 +1,61 @@
+Mon Mar 18 13:01:58 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, src/protocol/http/date.c:
+	
+	Rewritten HTTP date parser, (slightly modified) patch by Stephane
+	CHAZELAS <Stephane_CHAZELAS@yahoo.fr>
+
+Mon Mar 18 11:34:02 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/default.c, config/default.h, dialogs/menu.c,
+	document/Makefile.am, document/dump.c, document/options.c,
+	document/options.h, document/session.c, document/session.h,
+	document/view.c, document/html/renderer.c,
+	document/html/renderer.h, intl/charsets.c:
+	
+	moved documet_(options|setup) to one common document/options.*
+
+Mon Mar 18 10:55:37 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: document/dump.c, document/session.c,
+	document/html/renderer.c, document/html/renderer.h,
+	lowlevel/Makefile.am, lowlevel/dns.c, lowlevel/sched.c,
+	lowlevel/sched.h, lowlevel/select.c, lowlevel/select.h,
+	lowlevel/ttime.c, lowlevel/ttime.h:
+	
+	moved typedef ttime and get_time() from lowlevel/select.c to
+	lowlevel/ttime.c
+
+Mon Mar 18 06:33:12 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/bfu.c, bfu/bfu.h, dialogs/menu.c, document/session.c,
+	document/html/parser.c, document/html/parser.h,
+	document/html/renderer.h, util/Makefile.am, util/error.c,
+	util/memlist.c, util/memlist.h:
+	
+	moved memory_list implementation from bfu/bfu.c to util/memlist.c
+
+Mon Mar 18 06:19:58 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: document/dump.c, document/dump.h, document/view.c,
+	document/view.h, lowlevel/terminal.h:
+	
+	move dump_to_file from view.c to dump.c
+
+Sun Mar 17 23:21:02 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.am, wipe-out-ssl, wipe-out-ssl.awk,
+	contrib/wipe-out-ssl, contrib/wipe-out-ssl.awk:
+	
+	moves wipe-out-ssl script to contrib/ directory, added
+	ChangeLog.orig to EXTRA_DIST
+
+Sun Mar 17 23:19:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* rebuild:
+	
+	removed 'rebuild' script, totally obsoleted actually ;)
+
 Sun Mar 17 23:16:51 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in, src/Makefile.am, src/main.c,

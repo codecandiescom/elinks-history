@@ -1,5 +1,5 @@
 /* Color parser */
-/* $Id: color.c,v 1.18 2004/06/25 10:52:31 zas Exp $ */
+/* $Id: color.c,v 1.19 2004/07/19 12:45:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,6 +91,7 @@ decode_color(unsigned char *str, int slen, color_t *color)
 
 		str++;
 
+decode_hex_color:
 		if (slen == 4) {
 			/* Expand the short hex color format */
 			buffer[0] = buffer[1] = str[0];
@@ -119,6 +120,13 @@ decode_color(unsigned char *str, int slen, color_t *color)
 		if (cs && cs->name) {
 			*color = cs->rgb;
 			return 0;
+
+		} else if (slen == 6 || slen == 3) {
+			int len = 0;
+
+			while (len < slen && isxdigit(str[len])) len++;
+
+			if (len == slen) goto decode_hex_color;
 		}
 	}
 

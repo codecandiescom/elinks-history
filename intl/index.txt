@@ -1,7 +1,6 @@
 english
 catalan
 croatian
-dutch
 estonian
 finnish
 galician

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.224 2004/06/27 08:25:42 zas Exp $ */
+/* $Id: tables.c,v 1.225 2004/06/27 08:28:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -810,10 +810,10 @@ scan_done:
 }
 
 static inline struct part *
-format_cell(struct table *table, int column, int row,
+format_cell(struct table *table, int col, int row,
 	    struct document *document, int x, int y, int width)
 {
-	struct table_cell *cell = CELL(table, column, row);
+	struct table_cell *cell = CELL(table, col, row);
 
 	if (document) {
 		x += table->part->box.x;

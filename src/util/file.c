@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.37 2004/08/12 08:44:04 miciah Exp $ */
+/* $Id: file.c,v 1.38 2004/09/23 23:34:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -431,9 +431,14 @@ stat_size(struct string *string, struct stat *stp)
 	if (!stp) {
 		add_to_string(string, "         ");
 	} else {
-		unsigned char size[9];
+		unsigned char size[64];
+		int width = 9;
 
-		ulongcat(size, NULL, stp->st_size, 8, ' ');
+		width = ulongcat(size, NULL, stp->st_size, width, ' ');
+		if (0 < width && width < sizeof(size)) {
+			ulongcat(size, NULL, stp->st_size, width, ' ');
+		}
+
 		add_to_string(string, size);
 		add_char_to_string(string, ' ');
 	}

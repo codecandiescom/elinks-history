@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.116 2003/06/16 16:13:41 pasky Exp $ */
+/* $Id: renderer.c,v 1.117 2003/06/17 07:27:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -385,7 +385,7 @@ del_chars(struct part *part, int x, int y)
 
 #define overlap(x) ((x).width - (x).rightmargin > 0 ? (x).width - (x).rightmargin : 0)
 
-static int
+static int inline
 split_line_at(struct part *part, register int x)
 {
 	register int tmp;
@@ -437,15 +437,12 @@ static int
 split_line(struct part *part)
 {
 	register int x;
+	int new_x = part->cx + par_format.rightmargin;
 
-	{
-		/* Make sure that we count the right margin to the total
-		 * actual box width. */
-		int new_x = part->cx + par_format.rightmargin;
-
-		if (new_x > part->x)
-			part->x = new_x;
-	}
+	/* Make sure that we count the right margin to the total
+	 * actual box width. */
+	if (new_x > part->x)
+		part->x = new_x;
 
 	for (x = overlap(par_format); x >= par_format.leftmargin; x--)
 		if (x < part->spaces_len && part->spaces[x])

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.304 2004/12/20 00:29:30 jonas Exp $ */
+/* $Id: uri.c,v 1.305 2004/12/27 01:25:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1428,6 +1428,7 @@ free_uri_list(struct uri_list *list)
 	}
 
 	mem_free(list->uris);
+	list->size = 0;
 }
 
 /* URI cache */

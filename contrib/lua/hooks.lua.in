@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.26 2003/12/21 21:28:39 pasky Exp $
+-- $Id: hooks.lua.in,v 1.27 2004/05/01 05:29:36 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -38,13 +38,6 @@ end
 
 function match (prefix, url)
     return strsub (url, 1, strlen (prefix)) == prefix
-end
-
-function mod (dividend, divisor)
-    while dividend >= divisor
-    do dividend = dividend - divisor
-    end
-    return dividend
 end
 
 function hx (c)

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.153 2004/04/29 23:32:18 jonas Exp $ */
+/* $Id: core.c,v 1.154 2004/05/01 05:29:36 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -523,6 +523,7 @@ init_lua(struct module *module)
 {
 	L = lua_open(0);
 	lua_baselibopen(L);
+	lua_mathlibopen(L);
 	lua_strlibopen(L);
 	lua_register(L, LUA_ALERT, l_alert);
 	lua_register(L, "current_url", l_current_url);

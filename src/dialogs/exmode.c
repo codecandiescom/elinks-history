@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.51 2004/10/10 20:39:07 pasky Exp $ */
+/* $Id: exmode.c,v 1.52 2004/11/19 15:39:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,11 +10,9 @@
 
 #include "elinks.h"
 
-#include "bfu/dialog.h"
 #include "bfu/inpfield.h"
 #include "bfu/inphist.h"
 #include "bfu/style.h"
-#include "bfu/widget.h"
 #include "config/conf.h"
 #include "config/kbdbind.h"
 #include "config/options.h"

@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.44 2004/10/06 13:48:31 zas Exp $ */
+/* $Id: terminal.h,v 1.45 2004/10/25 12:56:38 jonas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -40,6 +40,8 @@ enum term_env_type {
 	ENV_TWIN = 32,
 	/* Microsoft Windows cmdline thing. */
 	ENV_WIN32 = 64,
+	/* Match all terminal environments */
+	ENV_ANY = ~0,
 };
 
 

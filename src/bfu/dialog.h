@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.25 2003/11/09 15:19:37 jonas Exp $ */
+/* $Id: dialog.h,v 1.26 2003/11/09 15:22:23 pasky Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -20,7 +20,7 @@ struct dialog_layout {
 	/* Whether to adjust the dialog width to the maximal width. If not set
 	 * only use required width. */
 	unsigned int maximize_width:1;
-	/* Whether to pad the top of the dialog before any widgets. */
+	/* Whether to leave one blank line at the top of the dialog. */
 	unsigned int padding_top:1;
 	/* Whether to adjust width to fit datalen of _first_ widget. */
 	unsigned int fit_datalen:1;

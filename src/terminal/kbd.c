@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.47 2004/03/26 17:42:05 zas Exp $ */
+/* $Id: kbd.c,v 1.48 2004/03/26 17:46:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -469,12 +469,6 @@ safe_hard_write(int fd, unsigned char *buf, int len)
 	done_draw();
 }
 
-#define RD(xx) { \
-	unsigned char cc; \
-	if (p < c) cc = buf[p++]; \
-	else if ((hard_read(itrm->sock_in, &cc, 1)) <= 0) goto fr; \
-	xx = cc; }
-
 static void
 in_sock(struct itrm *itrm)
 {
@@ -509,6 +503,12 @@ ex:
 	c -= i;
 	p = 0;
 
+#define RD(xx) { \
+	unsigned char cc; \
+	if (p < c) cc = buf[p++]; \
+	else if ((hard_read(itrm->sock_in, &cc, 1)) <= 0) goto fr; \
+	xx = cc; }
+
 	RD(fg);
 
 	/* FIXME: goto fr on error ?? */
@@ -529,6 +529,8 @@ ex:
 		if (!ch) break;
 		add_char_to_string(&delete, ch);
 	}
+
+#undef RD
 
 	if (!*path.source) {
 		dispatch_special(delete.source);
@@ -587,8 +589,6 @@ nasty_thing:
 
 	goto qwerty;
 }
-
-#undef RD
 
 int process_queue(struct itrm *);
 

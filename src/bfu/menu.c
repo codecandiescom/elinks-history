@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.134 2003/12/26 10:49:20 zas Exp $ */
+/* $Id: menu.c,v 1.135 2003/12/26 10:55:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,7 +241,7 @@ draw_menu_left_text(struct terminal *term, unsigned char *text, int len,
 	if (len < 0) len = strlen(text);
 	if (!len) return;
 
-	xbase = x + 1;
+	xbase = x;
 	int_upper_bound(&len, width - 2);
 
 	for (x = 0; len; x++, len--)
@@ -258,7 +258,7 @@ draw_menu_left_text_hk(struct terminal *term, unsigned char *text, int len,
 	struct color_pair *hk_color = get_bfu_color(term, "menu.hotkey.normal");
 	struct color_pair *hk_color_sel = get_bfu_color(term, "menu.hotkey.selected");
 	unsigned char c;
-	int xbase = x + 1;
+	int xbase = x;
 	int hk = 0;
 #ifdef DEBUG
 	/* For redundant hotkeys highlighting. */
@@ -377,12 +377,12 @@ display_menu(struct terminal *term, struct menu *menu)
 
 				if (l) {
 					draw_menu_left_text_hk(term, text, l,
-							       mx, y, mwidth, color,
+							       mx + 1, y, mwidth, color,
 							       (p == menu->selected));
 
 				} else {
 					draw_menu_left_text(term, text, -1,
-							    mx, y, mwidth, color);
+							    mx + 1, y, mwidth, color);
 		  		}
 			}
 

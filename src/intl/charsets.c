@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.34 2003/06/05 14:38:17 zas Exp $ */
+/* $Id: charsets.c,v 1.35 2003/06/05 15:45:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -360,7 +360,7 @@ xxstrcmp(unsigned char *s1, unsigned char *s2, int l2)
 }
 
 /* To enable experimental entity cache, define it. */
-#if 0
+#if 1
 #define ENTITY_CACHE
 #else
 #undef ENTITY_CACHE

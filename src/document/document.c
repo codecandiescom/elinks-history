@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.47 2004/01/17 15:21:52 pasky Exp $ */
+/* $Id: document.c,v 1.48 2004/01/19 21:33:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 #include "document/html/renderer.h"
 #include "document/options.h"
 #include "document/refresh.h"
+#include "modules/module.h"
 #include "terminal/draw.h"
 #include "util/color.h"
 #include "util/lists.h"
@@ -285,15 +286,25 @@ formatted_info(int type)
 	return 0;
 }
 
-void
-init_documents(void)
+static void
+init_documents(struct module *module)
 {
 	init_tags_lookup();
 }
 
-void
-done_documents(void)
+static void
+done_documents(struct module *module)
 {
 	free_tags_lookup();
 	free_table_cache();
 }
+
+struct module document_module = struct_module(
+	/* name: */		"Document",
+	/* options: */		NULL,
+	/* hooks: */		NULL,
+	/* submodules: */	NULL,
+	/* data: */		NULL,
+	/* init: */		init_documents,
+	/* done: */		done_documents
+);

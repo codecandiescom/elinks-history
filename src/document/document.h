@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.41 2004/01/07 00:40:47 jonas Exp $ */
+/* $Id: document.h,v 1.42 2004/01/19 21:33:30 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -9,6 +9,7 @@
 
 struct screen_char;
 struct cache_entry;
+struct module;
 
 
 struct tag {
@@ -147,7 +148,6 @@ long formatted_info(int);
 
 void shrink_format_cache(int);
 
-void init_documents(void);
-void done_documents(void);
+extern struct module document_module;
 
 #endif

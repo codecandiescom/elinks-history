@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.163 2004/01/19 20:35:02 jonas Exp $ */
+/* $Id: main.c,v 1.164 2004/01/19 21:33:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,10 +89,11 @@ init(void)
 
 	init_charsets_lookup();
 	init_colors_lookup();
-	init_documents();
+	init_modules(main_modules);
 
 	init_event();
 	init_options();
+	register_modules_options(main_modules);
 	register_modules_options(builtin_modules);
 	set_sigcld();
 	get_system_name();
@@ -226,7 +227,7 @@ terminate_all_subsystems(void)
 	shrink_memory(1);
 	free_charsets_lookup();
 	free_colors_lookup();
-	done_documents();
+	done_modules(main_modules);
 	free_history_lists();
 	free_auth();
 	free_keymaps();
@@ -239,6 +240,7 @@ terminate_all_subsystems(void)
 	done_bfu_colors();
 	done_timer();
 	unregister_modules_options(builtin_modules);
+	unregister_modules_options(main_modules);
 	done_options();
 	done_event();
 	terminate_osdep();

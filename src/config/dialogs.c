@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.6 2002/12/08 16:55:27 pasky Exp $ */
+/* $Id: dialogs.c,v 1.7 2002/12/08 16:58:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -286,7 +286,9 @@ build_edit_dialog(struct terminal *term, struct option *option)
 
 	if (!tvalue) return;
 
+	commandline = 1;
 	option_types[option->type].write(option, &tvalue, &tval_len);
+	commandline = 0;
 
 	/* Create the dialog */
 	d = mem_calloc(1, sizeof(struct dialog)

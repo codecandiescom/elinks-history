@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.36 2002/12/08 16:55:27 pasky Exp $ */
+/* $Id: opttypes.c,v 1.37 2002/12/08 16:58:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,13 +184,13 @@ redir_remove(struct option *opt, unsigned char *str)
 void
 add_quoted_to_str(unsigned char **s, int *l, unsigned char *q)
 {
-	add_chr_to_str(s, l, '"');
+	if (!commandline) add_chr_to_str(s, l, '"');
 	while (*q) {
 		if (*q == '"' || *q == '\\') add_chr_to_str(s, l, '\\');
 		add_chr_to_str(s, l, *q);
 		q++;
 	}
-	add_chr_to_str(s, l, '"');
+	if (!commandline) add_chr_to_str(s, l, '"');
 }
 
 

@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.69 2005/03/27 13:02:39 pasky Exp $
+# $Id: hooks.pl,v 1.70 2005/03/27 13:23:28 pasky Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -1147,15 +1147,36 @@ Quip few words of wisdom from ELinks the Sage. Prints a fortune. ;-)
 
 
 
-################################################################################
-#
-# The following performs name->URL mapping for various URI rewrites. It probably
-# is of no interest to the hooks user so it has no POD documentation.
-#
+
+=head1 MAPPING ROUTINES
+
+In this section, name mapping routines are described. They are probably of no
+interest to regular hooks users, only for hooks developers.
+
+These routines do a name->URL mapping - e.g. the I<goto_url_hook()> described
+above maps certain prefix to C<google> and then asks the I<search()> mapping
+routine described below to map the C<google> string to an appropriate URL.
+
+The mapping themselves should be obvious and are not described here. Interested
+readers can look them up themselves in the I<hooks.pl> file.
+
+There are generally two URLs per each name, one for a direct shortcut jump and
+another for a search on the given site (if any string is specified after the
+prefix, usually).
+
+=cut
 
 
-################################################################################
-### Search engines #############################################################
+=head2 SEARCH ENGINES
+
+The I<%search_engines> hash maps each engine name to two URLs, I<home> and
+I<search>.  In case of I<search>, the query is appended to the mapped URL.
+
+B<!bork!> string in the URL is substitued for an optional I<xx-bork>
+localization specifier, but only in the C<google> mapping.
+
+=cut
+
 my %search_engines = (
 	"elgoog"     => {
 		home     => 'http://alltooflat.com/geeky/elgoog/m/index.cgi',
@@ -1219,6 +1240,17 @@ my %search_engines = (
 	},
 );
 
+=pod
+
+The search engines mapping is done by the I<search()> function, taking the
+search engine name as its first parameter and optional search string as its
+second parameter. It returns the mapped target URL.
+
+I<Google> is used as the default search engine if the given engine is not
+found.
+
+=cut
+
 sub search
 {
 	my ($engine, $search) = @_;
@@ -1249,8 +1281,13 @@ sub search
 }
 
 
-################################################################################
-### News servers ###############################################################
+=head2 NEWS SERVERS
+
+The I<%news_servers> hash maps each engine name to two URLs, I<home> and
+I<search>.  In case of I<search>, the query is appended to the mapped URL.
+
+=cut
+
 my %news_servers = (
 	"bbc"       => {
 		home    => 'http://news.bbc.co.uk',
@@ -1315,6 +1352,17 @@ my %news_servers = (
 	},
 );
 
+=pod
+
+The news servers mapping is done by the I<news()> function, taking the
+search engine name as its first parameter and optional search string as its
+second parameter. It returns the mapped target URL.
+
+I<BBC> is used as the default search engine if the given engine is not
+found.
+
+=cut
+
 sub news
 {
 	my ($server, $search) = @_;
@@ -1329,8 +1377,23 @@ sub news
 }
 
 
-################################################################################
-### Locators ###################################################################
+=head2 LOCATORS
+
+The I<%locators> hash maps each engine name to two URLs, I<home> and
+I<search>.
+
+B<!bork!> string in the URL is substitued for an optional I<xx-bork>
+localization specifier (for any mappings in this case, not only C<google>).
+
+B<!current!> string in the URL is substitued for the URL of the current
+document.
+
+B<!query!> string in the I<search> URL is substitued for the search string. If
+no B<!query!> string is found in the URL, the query is appended to the mapped
+URL.
+
+=cut
+
 my %locators = (
 	'imdb'        => {
 		home      => 'http://imdb.com',
@@ -1381,6 +1444,17 @@ my %locators = (
 		search    => 'http://ipl.org/div/searchresults/?words=',
 	},
 );
+
+=pod
+
+The locators mapping is done by the I<location()> function, taking the search
+engine name as its first parameter, optional search string as its second
+parameter and the current document's URL as its third parameter.  It returns
+the mapped target URL.
+
+An error is produced if the given locator is not found.
+
+=cut
 
 sub location
 {

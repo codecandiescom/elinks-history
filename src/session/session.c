@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.63 2003/05/09 17:27:29 zas Exp $ */
+/* $Id: session.c,v 1.64 2003/05/12 19:06:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -643,14 +643,6 @@ post_yes(struct wtd_data *w)
 static void
 post_no(struct wtd_data *w)
 {
-	/* Ok, no test needed, see ses_goto() */
-	*strchr(w->url, POST_CHAR) = 0;
-	post_yes(w);
-}
-
-static void
-post_cancel(struct wtd_data *w)
-{
 	reload(w->ses, NC_CACHE);
 }
 
@@ -711,8 +703,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 		m1, " ", m2, "?", NULL,
 		wtd_data, 3,
 		N_("Yes"), post_yes, B_ENTER,
-		N_("No"), post_no, 0,
-		N_("Cancel"), post_cancel, B_ESC);
+		N_("No"), post_no, B_ESC);
 }
 
 static int

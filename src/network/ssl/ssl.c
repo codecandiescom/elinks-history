@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.39 2003/10/27 23:55:19 jonas Exp $ */
+/* $Id: ssl.c,v 1.40 2003/10/28 09:26:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,9 +69,18 @@ done_openssl(struct module *module)
 	if (context) SSL_CTX_free(context);
 }
 
+static struct option_info openssl_options[] = {
+	INIT_OPT_BOOL("connection.ssl", N_("Verify certificates"),
+		"cert_verify", 0, 0,
+		N_("Verify the peer's SSL certificate. Note that this\n"
+		"needs extensive configuration of OpenSSL by the user.")),
+
+	NULL_OPTION_INFO,
+};
+
 static struct module openssl_module = struct_module(
 	/* name: */		"OpenSSL",
-	/* options: */		NULL,
+	/* options: */		openssl_options,
 	/* events: */		NULL,
 	/* submodules: */	NULL,
 	/* data: */		NULL,
@@ -129,9 +138,18 @@ done_gnutls(struct module *module)
 	gnutls_global_deinit();
 }
 
+static struct option_info gnutls_options[] = {
+	INIT_OPT_BOOL("connection.ssl", N_("Verify certificates"),
+		"cert_verify", 0, 0,
+		N_("Verify the peer's SSL certificate. Note that this\n"
+		"probably doesn't work properly at all with GnuTLS.")),
+
+	NULL_OPTION_INFO,
+};
+
 static struct module gnutls_module = struct_module(
 	/* name: */		"GnuTLS",
-	/* options: */		NULL,
+	/* options: */		gnutls_options,
 	/* events: */		NULL,
 	/* submodules: */	NULL,
 	/* data: */		NULL,
@@ -140,6 +158,14 @@ static struct module gnutls_module = struct_module(
 );
 
 #endif /* HAVE_OPENSSL or HAVE_GNUTLS */
+
+static struct option_info ssl_options[] = {
+	INIT_OPT_TREE("connection", N_("SSL"),
+		"ssl", 0,
+		N_("SSL options.")),
+
+	NULL_OPTION_INFO,
+};
 
 static struct module *ssl_modules[] = {
 #ifdef HAVE_OPENSSL
@@ -152,7 +178,7 @@ static struct module *ssl_modules[] = {
 
 struct module ssl_module = struct_module(
 	/* name: */		N_("SSL"),
-	/* options: */		NULL,
+	/* options: */		ssl_options,
 	/* events: */		NULL,
 	/* submodules: */	ssl_modules,
 	/* data: */		NULL,

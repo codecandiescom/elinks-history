@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.20 2003/10/26 18:41:24 jonas Exp $ */
+/* $Id: options.inc,v 1.21 2003/10/28 09:26:35 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -70,27 +70,6 @@ struct option_info config_options_info[] = {
 	INIT_OPT_TREE("", N_("Connections"),
 		"connection", 0,
 		N_("Connection options.")),
-
-
-	INIT_OPT_TREE("connection", N_("SSL"),
-		"ssl", 0,
-		N_("SSL options.")),
-
-#ifdef HAVE_OPENSSL
-	INIT_OPT_BOOL("connection.ssl", N_("Verify certificates"),
-		"cert_verify", 0, 0,
-		N_("Verify the peer's SSL certificate. Note that this\n"
-		"needs extensive configuration of OpenSSL by the user.")),
-#elif defined(HAVE_GNUTLS)
-	INIT_OPT_BOOL("connection.ssl", N_("Verify certificates"),
-		"cert_verify", 0, 0,
-		N_("Verify the peer's SSL certificate. Note that this\n"
-		"probably doesn't work properly at all with GnuTLS.")),
-#else
-	INIT_OPT_BOOL("connection.ssl", N_("Verify certificates"),
-		"cert_verify", 0, 0,
-		N_("Verify the peer's SSL certificate.")),
-#endif
 
 
 	INIT_OPT_BOOL("connection", N_("Asynchronous DNS"),

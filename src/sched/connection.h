@@ -1,13 +1,16 @@
-/* $Id: connection.h,v 1.31 2003/07/05 00:29:42 jonas Exp $ */
+/* $Id: connection.h,v 1.32 2003/07/05 00:47:55 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
 
 #include "elinks.h" /* SSL stuff */
 
+/* We need to declare these first :/. Damn cross-dependencies. */
+struct connection;
+
 #include "document/cache.h"
-#include "lowlevel/ttime.h"
 #include "lowlevel/connect.h"
+#include "lowlevel/ttime.h"
 #include "protocol/uri.h"
 #include "ssl/ssl.h"
 #include "util/encoding.h"
@@ -114,7 +117,7 @@ struct connection {
 	unsigned char *url;
 	unsigned char *ref_url;
 	void *dnsquery;
-	void *conn_info;
+	struct conn_info *conn_info;
 	void *info;
 	void *buffer;
 	struct cache_entry *cache;

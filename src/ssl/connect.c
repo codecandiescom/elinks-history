@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.25 2003/07/04 23:20:21 jonas Exp $ */
+/* $Id: connect.c,v 1.26 2003/07/05 00:47:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,7 +187,7 @@ int
 ssl_connect(struct connection *conn, int sock)
 {
 #ifdef HAVE_SSL
-        struct conn_info *c_i = (struct conn_info *) conn->conn_info;
+        struct conn_info *c_i = conn->conn_info;
 	int ret;
 
 	conn->ssl = get_ssl();

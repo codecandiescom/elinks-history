@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.11 2003/06/10 14:46:50 pasky Exp $ */
+/* $Id: history.c,v 1.12 2003/06/10 14:47:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,7 +119,8 @@ ses_back(struct session *ses)
 void
 ses_unback(struct session *ses)
 {
-	ses_leave_location(ses, 1);
+	if (ses_leave_location(ses, 1) < 1)
+		return;
 
 	if (!list_empty(ses->unhistory)) {
 		struct location *loc = ses->unhistory.next;

@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.20 2003/11/06 00:15:05 jonas Exp $ */
+/* $Id: text.c,v 1.21 2003/11/06 00:32:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,30 +51,30 @@ dlg_format_text(struct terminal *term,
 {
 	do {
 		unsigned char *tx;
-		unsigned char *tt = text;
-		int s;
+		unsigned char *split = text;
+		int shift;
 		int xx = x;
 		int ww;
 
 		do {
-			while (*text && *text != '\n' && *text != ' ') {
-				text++;
+			while (*split && *split != '\n' && *split != ' ') {
+				split++;
 			       	xx++;
 			}
 
-			tx = ++text;
+			tx = ++split;
 			ww = xx - x;
 			xx++;
-			if (*(text - 1) != ' ') break;
+			if (*(split - 1) != ' ') break;
 
 			while (*tx && *tx != '\n' && *tx != ' ')
 				tx++;
-		} while (tx - text < w - ww);
+		} while (tx - split < w - ww);
 
-		s = (align == AL_CENTER ? int_max((w - ww) / 2, 0) : 0);
+		shift = (align == AL_CENTER ? int_max((w - ww) / 2, 0) : 0);
 
-		if (s >= w) {
-			s = 0;
+		if (shift >= w) {
+			shift = 0;
 			(*y)++;
 			if (rw) {
 				*rw = w;
@@ -82,10 +82,14 @@ dlg_format_text(struct terminal *term,
 			}
 		}
 
-		if (term)
-			draw_text(term, x + s, *y, tt, text - tt, 0, color);
+		if (term) {
+			int length = split - text;
 
-		if (rw && ww > *rw) *rw = ww;
+			draw_text(term, x + shift, *y, text, length, 0, color);
+		}
+
+		if (rw) int_lower_bound(rw, ww);
+		text = split;
 		(*y)++;
 	} while (*(text - 1));
 }

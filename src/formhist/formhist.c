@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.2 2003/08/02 15:03:30 jonas Exp $ */
+/* $Id: formhist.c,v 1.3 2003/08/02 15:35:17 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -14,15 +14,17 @@
 
 #include "elinks.h"
 
+#include "bfu/msgbox.h"
 #include "document/html/parser.h"
-#include "viewer/text/form.h"
 #include "formhist/formhist.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
 #include "util/base64.h"
 #include "util/file.h"
 #include "util/lists.h"
 #include "util/secsave.h"
 #include "util/string.h"
+#include "viewer/text/form.h"
 
 INIT_LIST_HEAD(saved_forms);
 
@@ -240,6 +242,56 @@ remember_form(struct form_history_item *fmem_data)
 fail:
 	free_form(form);
 	return 0;
+}
+
+struct list_head *
+memorize_form(struct session *ses, struct list_head *submit,
+	      struct form_control *frm)
+{
+	struct form_history_item *fm_data;
+	struct list_head *sb;
+	struct submitted_value *sv;
+	int save = 0;
+
+	foreach (sv, *submit) {
+		if (sv->type == FC_PASSWORD && sv->value && *sv->value) {
+			save = 1;
+			break;
+		}
+	}
+
+	if (!save || form_already_saved(frm->action, submit)) return NULL;
+
+	fm_data = mem_alloc(sizeof(struct form_history_item));
+	if (!fm_data) return NULL;
+
+	init_list(fm_data->submit);
+
+	/* Set up a new list_head, as @submit will be destroyed as soon as
+	 * get_form_url() returns */
+	sb = &fm_data->submit;
+	sb->next = submit->next;
+	sb->prev = submit->prev;
+	((struct submitted_value *) sb->next)->prev = (struct submitted_value *) sb;
+	((struct submitted_value *) sb->prev)->next = (struct submitted_value *) sb;
+
+	fm_data->url = stracpy(frm->action);
+	if (!fm_data->url) {
+		mem_free(fm_data);
+		return NULL;
+	}
+
+	msg_box(ses->tab->term, NULL, 0,
+		N_("Form memory"), AL_CENTER,
+		N_("Should I remember this login?\n\n"
+		   "Please note that passwords will be stored "
+		   "obscured (i.e. unencrypted) in a file on your disk.\n\n"
+		   "If you are using a valuable password answer NO."),
+		fm_data, 2,
+		N_("Yes"), remember_form, B_ENTER,
+		N_("No"), free_form, NULL);
+
+	return sb;
 }
 
 void

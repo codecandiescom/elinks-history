@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.89 2004/05/28 16:51:47 jonas Exp $ */
+/* $Id: task.c,v 1.90 2004/05/28 17:35:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,7 +108,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 {
 	struct task *task = uri->form ? mem_alloc(sizeof(struct task)) : NULL;
 	unsigned char *m1, *m2;
-	struct cache_entry *referrer = NULL;
+	int referrer_incomplete = 0;
 	int confirm_submit = uri->form;
 
 	if (ses->doc_view
@@ -125,6 +125,8 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	/* Figure out whether to confirm submit or not */
 
 	/* Only confirm submit if we are posting form data */
+	/* Note uri->post might be empty here but we are still supposely
+	 * posting form data so this should be more correct. */
 	if (!task || !uri->form) {
 		confirm_submit = 0;
 
@@ -134,11 +136,13 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 		/* First check if the referring URI was incomplete. It
 		 * indicates that the posted form data might be incomplete too.
 		 * See bug 460. */
-		if (ses->referrer)
-			referrer = find_in_cache(ses->referrer);
+		if (ses->referrer) {
+			cached = find_in_cache(ses->referrer);
+			referrer_incomplete = (cached && cached->incomplete);
+		}
 
 		if (!get_opt_int("document.browse.forms.confirm_submit")
-		    && (!referrer || !referrer->incomplete)) {
+		    && !referrer_incomplete) {
 			confirm_submit = 0;
 
 		} else {
@@ -184,7 +188,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 		m1 = N_("Do you want to follow redirect and post form data "
 			"to URL %s?");
 
-	} else if (referrer && referrer->incomplete) {
+	} else if (referrer_incomplete) {
 		m1 = N_("The form data you are about to post might be incomplete.\n"
 			"Do you want to post to URL %s?");
 

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.16 2003/06/06 16:03:34 jonas Exp $ */
+/* $Id: mailcap.c,v 1.17 2003/06/06 17:24:14 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -98,20 +98,20 @@ init_mailcap_entry(unsigned char *type, unsigned char *command, int priority)
 	/* Time to get the entry into the mailcap_map */
 	/* First check if the type is already checked in */
 	item = get_hash_item(mailcap_map, entry->type, typelen);
-	if (item) {
-		struct mailcap_entry *current = item->value;
-
-		if (!current)
-			return NULL;
-
-		/* Add as the last item */
-		while (current->next) current = current->next;
-		current->next = entry;
-	} else {
+	if (!item) {
 		if (!add_hash_item(mailcap_map, entry->type, typelen, entry)) {
 			done_mailcap_entry(entry);
 			return NULL;
 		}
+	} else if (!item->value) {
+		done_mailcap_entry(entry);
+		return NULL;
+	} else {
+		struct mailcap_entry *current = item->value;
+
+		/* Add as the last item */
+		while (current->next) current = current->next;
+		current->next = entry;
 	}
 
 	mailcap_map_entries++;
@@ -269,6 +269,7 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 		if (!command) continue;
 
 		entry = init_mailcap_entry(type, command, priority);
+		if (!entry) continue;
 
 		if (!parse_optional_fields(entry, linepos)) {
 			error("Bad formated entry for type %s in \"%s\" line %d",
@@ -300,6 +301,8 @@ init_mailcap(void)
 		return; /* and leave mailcap_map = NULL */
 
 	mailcap_map = init_hash(8, &strhash);
+	if (!mailcap_map)
+		return;
 
 	/* Try to setup mailcap_path */
 	path = get_opt_str("mime.mailcap.path");
@@ -318,25 +321,26 @@ init_mailcap(void)
 static void
 done_mailcap(void)
 {
-	if (mailcap_map) {
-		struct hash_item *item;
-		int i;
+	struct hash_item *item;
+	int i;
 
-		foreach_hash_item(item, *mailcap_map, i)
-			if (item->value) {
-				struct mailcap_entry *entry = item->value;
+	if (!mailcap_map)
+		return;
 
-				while (entry) {
-					struct mailcap_entry *next = entry->next;
+	foreach_hash_item(item, *mailcap_map, i) {
+		struct mailcap_entry *entry = item->value;
 
-					done_mailcap_entry(entry);
-					entry = next;
-				}
-			}
+		if (!entry) continue;
 
-		free_hash(mailcap_map);
+		while (entry) {
+			struct mailcap_entry *next = entry->next;
+
+			done_mailcap_entry(entry);
+			entry = next;
+		}
 	}
 
+	free_hash(mailcap_map);
 	mailcap_map = NULL;
 	mailcap_map_entries = 0;
 }

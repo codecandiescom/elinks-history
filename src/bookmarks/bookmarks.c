@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.154 2005/01/03 01:00:09 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.155 2005/01/03 01:59:57 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "elinks.h"
 
 #include "bfu/dialog.h"
+#include "bfu/hierbox.h"
 #include "bookmarks/backend/common.h"
 #include "bookmarks/bookmarks.h"
 #include "bookmarks/dialogs.h"
@@ -314,7 +315,12 @@ add_bookmark(struct bookmark *root, int place, unsigned char *title,
 	object_nolock(bm, "bookmark");
 
 	/* Setup box_item */
-	bm->box_item = mem_calloc(1, sizeof(struct listbox_item));
+	bm->box_item = add_listbox_item(&bookmark_browser,
+					root ? root->box_item : NULL,
+					url && *url ? BI_LEAF : BI_FOLDER,
+					(void *) bm,
+					place ? -1 : 1);
+
 	if (!bm->box_item) {
 		mem_free(bm->url);
 		mem_free(bm->title);
@@ -322,30 +328,7 @@ add_bookmark(struct bookmark *root, int place, unsigned char *title,
 		return NULL;
 	}
 
-	if (root) {
-		bm->box_item->depth = root->box_item->depth + 1;
-	}
-	init_list(bm->box_item->child);
-	bm->box_item->visible = 1;
-
-	bm->box_item->udata = (void *) bm;
-	bm->box_item->type = (url && *url ? BI_LEAF : BI_FOLDER);
-
 	add_bookmark_item_to_bookmarks(bm, root, place);
-
-	if (place) {
-		if (root)
-			add_to_list_end(root->box_item->child,
-					bm->box_item);
-		else
-			add_to_list_end(bookmark_browser.root.child,
-					bm->box_item);
-	} else {
-		if (root)
-			add_to_list(root->box_item->child, bm->box_item);
-		else
-			add_to_list(bookmark_browser.root.child, bm->box_item);
-	}
 
 	return bm;
 }

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.37 2003/10/27 23:58:31 pasky Exp $ */
+/* $Id: kbd.c,v 1.38 2003/10/28 01:21:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -380,7 +380,7 @@ unblock_itrm(int fd)
 	set_handlers(itrm->std_in, (void (*)(void *)) in_kbd, NULL,
 		     (void (*)(void *)) free_trm, itrm);
 
-	itrm->mouse_h = handle_mouse(0, (void (*)(void *, unsigned char *, int)) queue_event, itrm);
+	resume_mouse(itrm->mouse_h);
 
 	handle_terminal_resize(itrm->ctl_in, resize_terminal);
 	unblock_stdin();
@@ -403,7 +403,7 @@ block_itrm(int fd)
 	tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
 	set_handlers(itrm->std_in, NULL, NULL,
 		     (void (*)(void *)) free_trm, itrm);
-	unhandle_mouse(itrm->mouse_h);
+	suspend_mouse(itrm->mouse_h);
 }
 
 

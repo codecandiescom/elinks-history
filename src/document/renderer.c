@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.78 2004/09/24 02:08:14 jonas Exp $ */
+/* $Id: renderer.c,v 1.79 2004/09/24 10:47:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,6 +59,7 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 	} else {
 		struct string_list_item *iter = queued_snippets->next;
 
+		doc_current = (struct string_list_item *) doc_snippets;
 		assert(!list_empty(*queued_snippets));
 		while (iter != *current) {
 			doc_current = doc_current->next;

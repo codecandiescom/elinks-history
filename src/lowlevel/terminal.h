@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.16 2002/08/27 03:00:08 pasky Exp $ */
+/* $Id: terminal.h,v 1.17 2002/09/11 15:33:32 zas Exp $ */
 
 #ifndef EL__LOWLEVEL_TERMINAL_H
 #define EL__LOWLEVEL_TERMINAL_H
@@ -97,8 +97,8 @@ unsigned char *get_cwd();
 void set_cwd(unsigned char *);
 struct terminal *init_term(int, int, void (*)(struct window *, struct event *, int));
 void destroy_terminal(struct terminal *);
-void redraw_terminal(struct terminal *);
-void redraw_terminal_all(struct terminal *);
+#define redraw_terminal(term) redraw_terminal_ev((term), EV_REDRAW)
+#define redraw_terminal_all(term) redraw_terminal_ev((term), EV_RESIZE)
 void redraw_terminal_cls(struct terminal *);
 void cls_redraw_all_terminals();
 void redraw_from_window(struct window *);
@@ -107,7 +107,7 @@ void add_window(struct terminal *, void (*)(struct window *, struct event *, int
 void add_window_at_pos(struct terminal *, void (*)(struct window *, struct event *, int), void *, struct window *);
 void delete_window(struct window *);
 void delete_window_ev(struct window *, struct event *ev);
-void set_window_ptr(struct window *, int, int);
+#define set_window_ptr(window, x, y) 	(window)->xp = (x), (window)->yp = (y)
 void get_parent_ptr(struct window *, int *, int *);
 struct window *get_root_window(struct terminal *);
 void add_empty_window(struct terminal *, void (*)(void *), void *);
@@ -136,6 +136,6 @@ void exec_on_terminal(struct terminal *, unsigned char *, unsigned char *, int);
 void set_terminal_title(struct terminal *, unsigned char *);
 void do_terminal_function(struct terminal *, unsigned char, unsigned char *);
 
-void term_send_event(struct terminal *, struct event *);
+#define term_send_event(terminal, event) ((struct window *) &(terminal)->windows)->next->handler((terminal)->windows.next, (event), 0)
 
 #endif

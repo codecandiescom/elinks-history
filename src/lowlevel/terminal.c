@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.24 2002/09/11 15:10:41 zas Exp $ */
+/* $Id: terminal.c,v 1.25 2002/09/11 15:33:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,6 +162,8 @@ redraw_terminal_ev(struct terminal *term, int e)
 	term->redrawing = 0;
 }
 
+#if 0
+/* These are macros - see terminal.h */
 void
 redraw_terminal(struct terminal *term)
 {
@@ -173,6 +175,7 @@ redraw_terminal_all(struct terminal *term)
 {
 	redraw_terminal_ev(term, EV_RESIZE);
 }
+#endif
 
 void
 erase_screen(struct terminal *term)
@@ -294,12 +297,15 @@ delete_window_ev(struct window *win, struct event *ev)
 	if (ev && w && w->next != w) w->handler(w, ev, 1);
 }
 
+#if 0
+/* Converted to macro - see terminal.h */
 void
 set_window_ptr(struct window *win, int x, int y)
 {
 	win->xp = x;
 	win->yp = y;
 }
+#endif
 
 void
 get_parent_ptr(struct window *win, int *x, int *y)
@@ -435,13 +441,15 @@ init_term(int fdin, int fdout,
 	return term;
 }
 
-
+#if 0
+/* Converted to macro - see terminal.h */
 void
 term_send_event(struct terminal *term, struct event *ev)
 {
 	((struct window *) &term->windows)->next->handler(term->windows.next,
 							  ev, 0);
 }
+#endif
 
 static inline void
 term_send_ucs(struct terminal *term, struct event *ev, unicode_val u)
@@ -639,12 +647,16 @@ mm:
 	goto test_queue;
 }
 
+#if 0
+/* Converted to macro - see below */
 inline int
 getcompcode(int c)
 {
 	return (c<<1 | (c&4)>>2) & 7;
 }
+#endif
 
+#define getcompcode(c) ((int)((int)(c)<<1 | ((int)(c)&4)>>2) & 7)
 
 unsigned char frame_dumb[48] =	"   ||||++||++++++--|-+||++--|-+----++++++++     ";
 unsigned char frame_vt100[48] =	"aaaxuuukkuxkjjjkmvwtqnttmlvwtqnvvwwmmllnnjla    ";

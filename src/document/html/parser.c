@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.68 2003/01/17 16:47:54 zas Exp $ */
+/* $Id: parser.c,v 1.69 2003/04/17 17:57:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1573,6 +1573,7 @@ xxx:
 			format.attr |= AT_BOLD;
 			put_chrs("[&nbsp;", 7, put_chars_f, ff);
 			if (fc->alt) put_chrs(fc->alt, strlen(fc->alt), put_chars_f, ff);
+			else if (fc->name) put_chrs(fc->name, strlen(fc->name), put_chars_f, ff);
 			else put_chrs("Submit", 6, put_chars_f, ff);
 			put_chrs("&nbsp;]", 7, put_chars_f, ff);
 			break;

@@ -1,3 +1,15 @@
+Sat Nov 16 20:10:44 2002  Laurent Monin <zas@norz.org>:
+
+	* elinks.1:
+
+	Manpage was updated to reflect current commandline options.  
+
+Sat Nov 16 19:46:26 2002  Laurent Monin <zas@norz.org>:
+
+	* TODO:
+
+	Some entries were added ;).  
+
 Fri Nov 15 17:20:30 2002  Laurent Monin <zas@norz.org>:
 
 	* src/: dialogs/document.c, document/html/parser.c,

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.151 2005/03/02 15:09:14 jonas Exp $ */
+/* $Id: task.c,v 1.152 2005/03/02 15:11:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -512,7 +512,7 @@ b:
 void
 loading_callback(struct download *download, struct session *ses)
 {
-	int d;
+	enum do_move d;
 
 	assertm(ses->task.type, "loading_callback: no ses->task");
 	if_assert_failed return;

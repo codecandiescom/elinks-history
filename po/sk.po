@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-23 03:23+0100\n"
+"POT-Creation-Date: 2004-12-24 17:55+0100\n"
 "PO-Revision-Date: 2004-02-13 19:07+0100\n"
 "Last-Translator: Peter Samek <samek@upc.uniba.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -45,8 +45,8 @@ msgstr "Na rozbalenie tejto zlo¾ky stlaè medzeru."
 #: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
 #: src/dialogs/menu.c:96 src/dialogs/menu.c:516 src/dialogs/menu.c:567
 #: src/dialogs/options.c:172 src/dialogs/options.c:249
-#: src/ecmascript/spidermonkey.c:460 src/ecmascript/spidermonkey.c:2054
-#: src/ecmascript/spidermonkey.c:2081 src/formhist/dialogs.c:179
+#: src/ecmascript/spidermonkey.c:476 src/ecmascript/spidermonkey.c:2115
+#: src/ecmascript/spidermonkey.c:2142 src/formhist/dialogs.c:179
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
 #: src/protocol/protocol.c:227 src/protocol/user.c:268
 #: src/sched/download.c:231 src/sched/download.c:327 src/sched/download.c:368
@@ -4979,11 +4979,11 @@ msgstr ""
 msgid "Maximum execution time in seconds for a script."
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:457
+#: src/ecmascript/spidermonkey.c:473
 msgid "JavaScript Alert"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:2037
+#: src/ecmascript/spidermonkey.c:2098
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following%s%s%s%s: \n"
@@ -4994,7 +4994,7 @@ msgid ""
 ".%*s^%*s."
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:2045
+#: src/ecmascript/spidermonkey.c:2106
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following%s%s%s%s: \n"
@@ -5002,15 +5002,15 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:2052
+#: src/ecmascript/spidermonkey.c:2113
 msgid "JavaScript Error"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:2072
+#: src/ecmascript/spidermonkey.c:2133
 msgid "JavaScript Emergency"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:2074
+#: src/ecmascript/spidermonkey.c:2135
 #, c-format
 msgid ""
 "A script embedded in the current document was running for more than %d "
@@ -5309,50 +5309,46 @@ msgid "Italian"
 msgstr "talianèina"
 
 #: src/intl/gettext/libintl.c:45
-msgid "Leet"
-msgstr ""
-
-#: src/intl/gettext/libintl.c:46
 msgid "Lithuanian"
 msgstr "litovèina"
 
-#: src/intl/gettext/libintl.c:47
+#: src/intl/gettext/libintl.c:46
 msgid "Norwegian"
 msgstr "nórèina"
 
-#: src/intl/gettext/libintl.c:48
+#: src/intl/gettext/libintl.c:47
 msgid "Polish"
 msgstr "poµ¹tina"
 
-#: src/intl/gettext/libintl.c:49
+#: src/intl/gettext/libintl.c:48
 msgid "Portuguese"
 msgstr "portugalèina"
 
-#: src/intl/gettext/libintl.c:50
+#: src/intl/gettext/libintl.c:49
 msgid "Romanian"
 msgstr "rumunèina"
 
-#: src/intl/gettext/libintl.c:51
+#: src/intl/gettext/libintl.c:50
 msgid "Russian"
 msgstr "ru¹tina"
 
-#: src/intl/gettext/libintl.c:52
+#: src/intl/gettext/libintl.c:51
 msgid "Slovak"
 msgstr "slovenèina"
 
-#: src/intl/gettext/libintl.c:53
+#: src/intl/gettext/libintl.c:52
 msgid "Spanish"
 msgstr "¹panielèina"
 
-#: src/intl/gettext/libintl.c:54
+#: src/intl/gettext/libintl.c:53
 msgid "Swedish"
 msgstr "¹védèina"
 
-#: src/intl/gettext/libintl.c:55
+#: src/intl/gettext/libintl.c:54
 msgid "Turkish"
 msgstr "tureètina"
 
-#: src/intl/gettext/libintl.c:56
+#: src/intl/gettext/libintl.c:55
 msgid "Ukrainian"
 msgstr "ukrajinèina"
 

@@ -227,11 +227,11 @@ Position Oriented Navigation:
 Configuration of terminals
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ELinks does not use neither (n)curses nor termcap/terminfo so unless you are
-using a terminal that is known by ELinks and have a built-in configuration
-(see below for a list) you might be required to do a little configuring of how
-your terminal should be handled. The easiest way to do this is using the
-Terminal Options dialog located in the Setup submenu of the Main menu.
+ELinks uses neither (n)curses nor termcap/terminfo so unless you are using a
+terminal that is known by ELinks and have a built-in configuration (see below
+for a list) you might be required to do a little configuring of how your
+terminal should be handled. The easiest way to do this is using the Terminal
+Options dialog located in the Setup submenu of the Main menu.
 
 It is possible to have configurations for multiple terminals as long as the
 TERM environment variable -- used to distinguish terminals from one another --
@@ -361,4 +361,4 @@ Useful Document Display Options:
 
  - Insert mode in text-input form-fields
 
-$Id: introduction.txt,v 1.7 2004/12/30 12:57:59 jonas Exp $
+$Id: introduction.txt,v 1.8 2004/12/30 13:57:53 jonas Exp $

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.69 2003/05/25 01:39:46 zas Exp $ */
+/* $Id: session.c,v 1.70 2003/05/25 01:55:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -463,7 +463,7 @@ print_screen_status(struct session *ses)
 	if (ses_tab_is_current)
 		set_terminal_title(ses,
 				   (unsigned char *) TERM_TITLE_PREFIX,
-				   (unsigned char *) TERM_TITLE_DEFAULT,
+				   _("No title", term),
 				   (unsigned char *) TERM_TITLE_SUFFIX);
 
 	redraw_from_window(ses->tab);

@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.20 2003/07/28 09:05:26 jonas Exp $ */
+/* $Id: draw.c,v 1.21 2003/07/28 09:30:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,64 +14,68 @@
 
 
 void
-set_char(struct terminal *t, int x, int y, unsigned c)
+set_char(struct terminal *term, int x, int y, unsigned c)
 {
-	int position = x + t->x * y;
+	struct terminal_screen *screen = term->screen;
+	int position = x + term->x * y;
 
-	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
+	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 	if_assert_failed { return; }
 
-	t->screen->image[position].data = get_screen_char_data(c);
-	t->screen->image[position].attr = get_screen_char_attr(c);
-	t->screen->dirty = 1;
+	screen->image[position].data = get_screen_char_data(c);
+	screen->image[position].attr = get_screen_char_attr(c);
+	screen->dirty = 1;
 }
 
 unsigned
-get_char(struct terminal *t, int x, int y)
+get_char(struct terminal *term, int x, int y)
 {
-	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
+	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 	if_assert_failed { return 0; }
 
-	return encode_screen_char(t->screen->image[x + t->x * y]);
+	return encode_screen_char(term->screen->image[x + term->x * y]);
 }
 
 void
-set_color(struct terminal *t, int x, int y, unsigned c)
+set_color(struct terminal *term, int x, int y, unsigned c)
 {
-	int position = x + t->x * y;
+	struct terminal_screen *screen = term->screen;
+	int position = x + term->x * y;
 
-	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
+	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 	if_assert_failed { return; }
 
-	t->screen->image[position].attr = (t->screen->image[position].attr & 0x80) | (get_screen_char_attr(c) & ~0x80);
-	t->screen->dirty = 1;
+	screen->image[position].attr = (screen->image[position].attr & 0x80) | (get_screen_char_attr(c) & ~0x80);
+	screen->dirty = 1;
 }
 
 void
-set_only_char(struct terminal *t, int x, int y, unsigned c)
+set_only_char(struct terminal *term, int x, int y, unsigned c)
 {
-	int position = x + t->x * y;
+	struct terminal_screen *screen = term->screen;
+	int position = x + term->x * y;
 
-	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
+	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 	if_assert_failed { return; }
 
-	t->screen->image[position].data = get_screen_char_data(c);
-	t->screen->dirty = 1;
+	screen->image[position].data = get_screen_char_data(c);
+	screen->dirty = 1;
 }
 
 /* Updates a line in the terms screen. */
 /* When doing frame drawing @x can be different than 0. */
 void
-set_line(struct terminal *t, int x, int y, int l, chr *line)
+set_line(struct terminal *term, int x, int y, int l, chr *line)
 {
-	int end = (l <= t->x - x) ? l : t->x - x;
-	register int offset = x + t->x * y;
+	struct terminal_screen *screen = term->screen;
+	int end = (l <= term->x - x) ? l : term->x - x;
+	register int offset = x + term->x * y;
 	register int i;
 
 	assert(line);
 	if_assert_failed { return; }
 
-	assert(l >= 0 && l <= t->x && x >= 0 && x < t->x && y >= 0 && y < t->y);
+	assert(l >= 0 && l <= term->x && x >= 0 && x < term->x && y >= 0 && y < term->y);
 	if_assert_failed { return; }
 
 	if (end == 0) return;
@@ -79,10 +83,10 @@ set_line(struct terminal *t, int x, int y, int l, chr *line)
 	for (i = 0; i < end; i++) {
 		int position = i + offset;
 
-		t->screen->image[position].data = get_screen_char_data(line[i]);
-		t->screen->image[position].attr = get_screen_char_attr(line[i]);
+		screen->image[position].data = get_screen_char_data(line[i]);
+		screen->image[position].attr = get_screen_char_attr(line[i]);
 	}
-	t->screen->dirty = 1;
+	screen->dirty = 1;
 }
 
 #if 0
@@ -105,31 +109,32 @@ set_line_color(struct terminal *t, int x, int y, int l, unsigned c)
 #endif
 
 void
-fill_area(struct terminal *t, int x, int y, int xw, int yw, unsigned c)
+fill_area(struct terminal *term, int x, int y, int xw, int yw, unsigned c)
 {
+	struct terminal_screen *screen = term->screen;
 	int starty = (y >= 0) ? 0 : -y;
 	int startx = (x >= 0) ? 0 : -x;
-	int endy = (yw < t->y - y) ? yw : t->y - y;
-	int endx = (xw < t->x - x) ? xw : t->x - x;
-	int offset_base = x + t->x * y;
+	int endy = (yw < term->y - y) ? yw : term->y - y;
+	int endx = (xw < term->x - x) ? xw : term->x - x;
+	int offset_base = x + term->x * y;
 	register int j;
 
-	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
+	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 	if_assert_failed { return; }
 
 	for (j = starty; j < endy; j++) {
-		register int offset = offset_base + t->x * j;
+		register int offset = offset_base + term->x * j;
 		register int position = startx + offset;
 
 		/* No, we can't use memset() here :(. It's int, not char. */
 		/* TODO: Make screen two arrays actually. Enables various
 		 * optimalizations, consumes nearly same memory. --pasky */
 		for (; position < endx + offset; position++) {
-			t->screen->image[position].data = get_screen_char_data(c);
-			t->screen->image[position].attr = get_screen_char_attr(c);
+			screen->image[position].data = get_screen_char_data(c);
+			screen->image[position].attr = get_screen_char_attr(c);
 		}
 	}
-	t->screen->dirty = 1;
+	screen->dirty = 1;
 }
 
 void
@@ -174,22 +179,23 @@ draw_frame(struct terminal *t, int x, int y, int xw, int yw,
 }
 
 void
-print_text(struct terminal *t, int x, int y, int l,
+print_text(struct terminal *term, int x, int y, int l,
 	   unsigned char *text, unsigned c)
 {
-	int end = (l <= t->x - x) ? l : t->x - x;
-	int position = x + t->x * y;
+	struct terminal_screen *screen = term->screen;
+	int end = (l <= term->x - x) ? l : term->x - x;
+	int position = x + term->x * y;
 
 	assert(text && l >= 0);
 	if_assert_failed { return; }
-	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
+	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 	if_assert_failed { return; }
 
 	for (end += position; position < end && *text; text++, position++) {
-		t->screen->image[position].data = get_screen_char_data((*text + c));
-		t->screen->image[position].attr = get_screen_char_attr((*text + c));
+		screen->image[position].data = *text;
+		screen->image[position].attr = get_screen_char_attr(c);
 	}
-	t->screen->dirty = 1;
+	screen->dirty = 1;
 }
 
 

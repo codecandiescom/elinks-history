@@ -1,4 +1,4 @@
-/* $Id: property.h,v 1.8 2004/01/18 14:22:08 pasky Exp $ */
+/* $Id: property.h,v 1.9 2004/01/18 14:25:13 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PROPERTY_H
 #define EL__DOCUMENT_CSS_PROPERTY_H
@@ -25,7 +25,7 @@ struct css_property {
 		CSS_DP_FONT_WEIGHT,
 		CSS_DP_TEXT_ALIGN,
 		CSS_DP_LAST,
-	} property;
+	} type;
 
 	/* Property value. If it is a pointer, it points always to a memory
 	 * to be free()d together with this structure. */
@@ -57,7 +57,7 @@ struct css_property {
  * have and what internal type they have. */
 struct css_property_info {
 	unsigned char *name;
-	enum css_property_type property;
+	enum css_property_type type;
 
 	/* This is the storage type, basically describing what to save to
 	 * css_property.value. Many properties can share the same valtype.

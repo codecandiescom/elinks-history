@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.272 2004/01/07 16:42:27 jonas Exp $ */
+/* $Id: menu.c,v 1.273 2004/01/07 16:46:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -405,7 +405,7 @@ static struct menu_item setup_menu[] = {
 static struct menu_item setup_menu_anon[] = {
 	INIT_MENU_ITEM(N_("~Language"), NULL, ACT_NONE, menu_language_list, NULL, SUBMENU),
 	INIT_MENU_ITEM(N_("C~haracter set"), NULL, ACT_NONE, charset_list, NULL, SUBMENU),
-	INIT_MENU_ITEM(N_("~Terminal options"), NULL, ACT_NONE, terminal_options, NULL, 0),
+	INIT_MENU_ACTION(N_("~Terminal options"), ACT_SHOW_TERM_OPTIONS),
 	NULL_MENU_ITEM
 };
 

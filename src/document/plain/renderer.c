@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.65 2003/12/29 19:43:25 zas Exp $ */
+/* $Id: renderer.c,v 1.66 2003/12/29 19:44:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -402,4 +402,3 @@ render_plain_document(struct cache_entry *ce, struct document *document)
 
 	document->bgcolor = global_doc_opts->default_bg;
 }
-

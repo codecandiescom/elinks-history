@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.196 2003/09/05 13:40:32 jonas Exp $ */
+/* $Id: parser.c,v 1.197 2003/09/09 10:11:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,52 +157,51 @@ get_attr_val(register unsigned char *e, unsigned char *name)
 	unsigned char *n;
 	unsigned char *attr = NULL;
 	int attrlen = 0;
-	int found = 0;
+	int found;
 
-nextattr:
+next_attr:
 	while (WHITECHAR(*e)) e++;
 	if (*e == '>' || *e == '<') return NULL;
 	n = name;
 
 	while (*n && upcase(*e) == upcase(*n)) e++, n++;
-	found = !*n;
-	while (atchr(*e)) found = 0, e++;
+	found = !*n && !atchr(*e);
+
+	while (atchr(*e)) e++;
 	while (WHITECHAR(*e)) e++;
-	if (*e != '=') goto found_endattr;
+	if (*e != '=') {
+		if (found) goto found_endattr;
+		goto next_attr;
+	}
 	e++;
 	while (WHITECHAR(*e)) e++;
-	if (!IS_QUOTE(*e)) {
-		while (!WHITECHAR(*e) && *e != '>' && *e != '<') {
-			if (found) add_chr(attr, attrlen, *e);
-			e++;
-		}
-	} else {
-		unsigned char quote = *e;
 
-found_parse_quoted_value:
-		e++;
-		while (*e != quote) {
-			if (!*e) {
-				if (attr) mem_free(attr);
-				return NULL;
+	if (found) {
+		if (!IS_QUOTE(*e)) {
+			while (!WHITECHAR(*e) && *e != '>' && *e != '<') {
+				add_chr(attr, attrlen, *e);
+				e++;
 			}
-			if (found && *e != ASCII_CR) {
+		} else {
+			unsigned char quote = *e;
+
+parse_quoted_value:
+			while (*(++e) != quote) {
+				if (*e == ASCII_CR) continue;
+				if (!*e) goto end;
 				if (*e != ASCII_TAB && *e != ASCII_LF)
 					add_chr(attr, attrlen, *e);
 				else if (!get_attr_val_eat_nl)
 					add_chr(attr, attrlen, ' ');
 			}
 			e++;
+			if (*e == quote) {
+				add_chr(attr, attrlen, *e);
+				goto parse_quoted_value;
+			}
 		}
-		e++;
-		if (*e == quote) {
-			if (found) add_chr(attr, attrlen, *e);
-			goto found_parse_quoted_value;
-		}
-	}
 
 found_endattr:
-	if (found) {
 		add_chr(attr, attrlen, 0);
 		attrlen--;
 		if (memchr(attr, '&', attrlen)) {
@@ -214,9 +213,26 @@ found_endattr:
 
 		set_mem_comment(trim_chars(attr, ' ', NULL), name, strlen(name));
 		return attr;
+
+	} else {
+		if (!IS_QUOTE(*e)) {
+			while (!WHITECHAR(*e) && *e != '>' && *e != '<') e++;
+		} else {
+			unsigned char quote = *e;
+
+			do {
+				while (*(++e) != quote)
+					if (!*e) goto end;
+				e++;
+			} while (*e == quote);
+		}
 	}
 
-	goto nextattr;
+	goto next_attr;
+
+end:
+	if (attr) mem_free(attr);
+	return NULL;
 }
 
 #undef add_chr

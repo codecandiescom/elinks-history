@@ -1,3 +1,46 @@
+Thu Sep  5 21:02:42 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/colors.c:
+
+	Compilation fix.  
+
+Thu Sep  5 17:30:55 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, intl/polish.lng, src/intl/language.inc:
+
+	Polish translation updates by Jakub Bogusz <qboosh@pld.org.pl>.  
+
+Thu Sep  5 16:21:39 2002  Laurent Monin <zas@norz.org>:
+
+	* src/globhist/globhist.c:
+
+	Performance optimization using code duplication in
+	get_global_history_item().  
+
+Thu Sep  5 15:26:18 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/view.c:
+
+	Tidyup. Minor optimizations.  
+
+Thu Sep  5 10:10:22 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/setup.h, src/dialogs/menu.c, src/intl/lang_defs.h,
+	src/intl/language.inc:
+
+	A menu item was added in Help dialog, it permits direct access to
+	ELinks home page (configured in setup.h).  
+
 Wed Sep  4 16:43:37 2002  Laurent Monin <zas@norz.org>:
 
 	* src/protocol/ftp.c:

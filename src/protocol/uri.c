@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.69 2003/11/29 00:45:42 pasky Exp $ */
+/* $Id: uri.c,v 1.70 2003/11/29 00:47:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -447,10 +447,26 @@ transform_file_uri(unsigned char **up, unsigned char *cwd)
 	 * assumed to be a local disk specification. */
 	/* TODO: Use FTP for non-localhost hosts. --pasky */
 
-	if (url[0] == '.') /* Who would name their file/dir '...' ? */
-		goto insert;
+	/* Who would name their file/dir '...' ? */
+	if (url[0] == '.') {
+		/* Insert the current working directory. */
 
-	/* We are not going to do what name of this function hints. */
+		cwdlen = strlen(cwd);
+		/* XXX: Post data copy. --zas */
+		url = mem_alloc(strlen(*up) + cwdlen + 2);
+		if (!url) return;
+
+		memcpy(url, *up, 7);
+		strcpy(url + 7, cwd);
+
+		if (!dir_sep(cwd[cwdlen - 1])) strcat(url, "/");
+
+		strcat(url, *up + 7);
+		mem_free(*up);
+		*up = url;
+
+		return;
+	}
 
 #ifdef DOS_FS
 	if (upcase(url[0]) >= 'A' && upcase(url[0]) <= 'Z'
@@ -465,24 +481,6 @@ transform_file_uri(unsigned char **up, unsigned char *cwd)
 	 * until we will support the FTP transformation. --pasky */
 
 	memmove(url, path, strlen(path) + 1);
-	return;
-
-	/* Insert the current working directory. */
-
-insert:
-	cwdlen = strlen(cwd);
-	/* XXX: Post data copy. --zas */
-	url = mem_alloc(strlen(*up) + cwdlen + 2);
-	if (!url) return;
-
-	memcpy(url, *up, 7);
-	strcpy(url + 7, cwd);
-
-	if (!dir_sep(cwd[cwdlen - 1])) strcat(url, "/");
-
-	strcat(url, *up + 7);
-	mem_free(*up);
-	*up = url;
 }
 
 unsigned char *

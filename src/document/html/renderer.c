@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.523 2005/01/12 02:44:24 jonas Exp $ */
+/* $Id: renderer.c,v 1.524 2005/01/28 14:10:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1353,6 +1353,10 @@ html_special_form(struct part *part, struct form *form)
 				"%d %d", nform->form_num, nform->form_end);
 			break;
 		}
+	} else {
+		/* If it is the first form make sure it eats the whole form
+		 * range. */
+		form->form_num = 0;
 	}
 
 	add_to_list(part->document->forms, form);

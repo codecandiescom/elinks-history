@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.128 2004/09/21 09:32:32 pasky Exp $ */
+/* $Id: parser.c,v 1.129 2004/09/21 09:41:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,12 +183,17 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 {
 	/* Shell for the last selector (the whole selector chain, that is). */
 	struct selector_pkg *pkg = NULL;
-	/* In 'p#x.y', it's NULL for 'p', and 'p' for '#x' and '.y'. */
+	/* In 'p#x.y i.z', it's NULL for 'p', 'p' for '#x', '.y' and 'i', and
+	 * 'i' for '.z'. */
 	struct css_selector *prev_element_selector = NULL;
-	/* In 'p#x.y:q', it's NULL for 'p' and '#x', '#x' for '.y', and '.y'
-	 * for ':q'. */
+	/* In 'p#x.y:q i', it's NULL for 'p' and '#x', '#x' for '.y', and '.y'
+	 * for ':q', and again NULL for 'i'. */
 	struct css_selector *prev_specific_selector = NULL;
-	/* In 'p#x.y div.z:a' it is NULL for 'p#x.y' and 'p' for 'div.z:a'. */
+	/* In 'p#x.y div.z:a' it is NULL for 'p#x.y' and 'div', and 'p' for
+	 * '.z' and ':a'. So the difference from @prev_element_selector is that
+	 * it is changed after the current selector fragment is finished, not
+	 * right after the base selector is loaded. So it is set differently
+	 * for the '#x.y' and '.z:a' parts of selector. */
 	struct css_selector *last_chained_selector = NULL;
 	/* In 'p#x.y div.z:a, i.b {}', it's set for ':a' and '.b'. */
 	int last_fragment = 0;

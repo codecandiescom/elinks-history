@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.293 2003/12/20 18:59:39 pasky Exp $ */
+/* $Id: parser.c,v 1.294 2003/12/20 21:22:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -679,6 +679,8 @@ static unsigned char *last_form_tag;
 static unsigned char *last_form_attr;
 static unsigned char *last_input_tag;
 
+static int encountered_body;
+
 static void
 put_link_line(unsigned char *prefix, unsigned char *linkname,
 	      unsigned char *link, unsigned char *target)
@@ -1003,6 +1005,7 @@ html_body(unsigned char *a)
 	get_color(a, "text", &format.fg);
 	get_color(a, "link", &format.clink);
 	get_color(a, "vlink", &format.vlink);
+
 	get_bgcolor(a, &par_format.bgcolor);
 	if (get_bgcolor(a, &format.bg) >= 0) {
 		/* Modify the root HTML element - format_html_part() will take
@@ -1012,7 +1015,11 @@ html_body(unsigned char *a)
 		e->parattr.bgcolor = par_format.bgcolor;
 		e->attr.bg = format.bg;
 	}
-	special_f(ff, SP_COLOR_LINK_LINES);
+
+	if (!encountered_body) {
+		encountered_body = 1;
+		special_f(ff, SP_COLOR_LINK_LINES);
+	}
 }
 
 static void
@@ -3800,6 +3807,7 @@ init_html_parser(unsigned char *url, struct document_options *options,
 	last_form_tag = NULL;
 	last_form_attr = NULL;
 	last_input_tag = NULL;
+	encountered_body = 0;
 }
 
 void

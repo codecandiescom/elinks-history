@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.184 2004/06/16 14:51:44 zas Exp $ */
+/* $Id: form.c,v 1.185 2004/06/16 15:20:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,7 +70,7 @@ new_submitted_value(unsigned char *name, unsigned char *value, enum form_type ty
 	sv->type = type;
 	sv->frm = fc;
 	sv->position = position;
-	
+
 	return sv;
 }
 
@@ -435,57 +435,60 @@ add_submitted_value_to_list(struct form_control *frm,
 		            struct list_head *list)
 {
 	struct submitted_value *sub;
-	int fi = 0;
+	unsigned char *name;
+	enum form_type type;
+	int position;
 
 	assert(frm && fs && list);
 
-	if ((frm->type == FC_CHECKBOX
-	     || frm->type == FC_RADIO)
-	    && !fs->state)
-		return;
-
-	if (frm->type == FC_SELECT && !frm->nvalues)
-		return;
-
-fi_rep:
-	sub = mem_calloc(1, sizeof(struct submitted_value));
-	if (!sub) return;
-
-	sub->type = frm->type;
-	sub->name = stracpy(frm->name);
+	name = frm->name;
+	position = frm->form_num + frm->ctrl_num;
+	type = frm->type;
 
 	switch (frm->type) {
 	case FC_TEXT:
 	case FC_PASSWORD:
 	case FC_FILE:
 	case FC_TEXTAREA:
-		sub->value = stracpy(fs->value);
+		sub = new_submitted_value(name, fs->value, type, frm, position);
+		if (sub) add_to_list(*list, sub);
 		break;
+
 	case FC_CHECKBOX:
 	case FC_RADIO:
+		if (!fs->state) break;
+		/* fall through */
+
 	case FC_SUBMIT:
 	case FC_HIDDEN:
 	case FC_RESET:
-		sub->value = stracpy(frm->default_value);
+		sub = new_submitted_value(name, frm->default_value, type, frm,
+					  position);
+		if (sub) add_to_list(*list, sub);
 		break;
+
 	case FC_SELECT:
+		if (!frm->nvalues) break;
+
 		fixup_select_state(frm, fs);
-		sub->value = stracpy(fs->value);
+		sub = new_submitted_value(name, fs->value, type, frm, position);
+		if (sub) add_to_list(*list, sub);
 		break;
+
 	case FC_IMAGE:
-		add_to_strn(&sub->name, fi ? ".x" : ".y");
-		sub->value = stracpy("0");
+	        name = straconcat(frm->name, ".x", NULL);
+		if (!name) break;
+		sub = new_submitted_value(name, "0", type, frm, position);
+		mem_free(name);
+		if (sub) add_to_list(*list, sub);
+
+		name = straconcat(frm->name, ".y", NULL);
+		if (!name) break;
+		sub = new_submitted_value(name, "0", type, frm, position);
+		mem_free(name);
+		if (sub) add_to_list(*list, sub);
+
 		break;
-	}
-
-	sub->frm = frm;
-	sub->position = frm->form_num + frm->ctrl_num;
-
-	add_to_list(*list, sub);
-
-	if (frm->type == FC_IMAGE && !fi) {
-		fi = 1;
-		goto fi_rep;
 	}
 }
 

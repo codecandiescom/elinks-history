@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.28 2003/10/25 22:21:52 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.29 2003/10/25 22:26:20 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -191,7 +191,7 @@ init_mimetypes_map(void)
 
 	/* Determine the path  */
 	path = get_mimetypes_path();
-	if (!path || !*path) return mimetypes_map;
+	if (!path || !*path) path = DEFAULT_MIMETYPES_PATH;
 
 	while (*path) {
 		unsigned char *filename = get_next_path_filename(&path, ':');
@@ -293,6 +293,7 @@ struct module mimetypes_mime_module = INIT_MODULE(
 	/* name: */		"mimetypes",
 	/* options: */		mimetypes_options,
 	/* submodules: */	NULL,
+	/* data: */		NULL,
 	/* init: */		init_mimetypes,
 	/* done: */		done_mimetypes
 );

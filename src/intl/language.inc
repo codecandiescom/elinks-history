@@ -3908,7 +3908,7 @@ struct translation translation_french [] = {
   {T_SIZE, "Taille"},
   {T_TITLE, "Titre"},
   {T_LAST_VISIT_TIME, "Date de dernière visite"},
-  {T_LINK_TITLE, NULL},
+  {T_LINK_TITLE, "Titre du lien"},
   {T_UNKNOWN, "Inconnu"},
   {T_INCOMPLETE, "incomplet"},
   {T_CODEPAGE, "Jeu de caractères"},

@@ -1,11 +1,10 @@
 /* CSS micro-engine */
-/* $Id: css.c,v 1.6 2004/01/17 07:49:29 jonas Exp $ */
+/* $Id: css.c,v 1.7 2004/01/17 14:16:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 

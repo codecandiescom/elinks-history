@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.34 2003/08/01 14:42:04 zas Exp $ */
+/* $Id: select.c,v 1.35 2003/10/30 17:01:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@
 
 #include "elinks.h"
 
-#include "document/cache.h"
+#include "cache/cache.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
 #include "lowlevel/signals.h"

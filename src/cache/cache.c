@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.59 2003/10/26 23:17:40 zas Exp $ */
+/* $Id: cache.c,v 1.60 2003/10/30 17:01:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,8 +9,8 @@
 
 #include "elinks.h"
 
+#include "cache/cache.h"
 #include "config/options.h"
-#include "document/cache.h"
 #include "main.h"
 #include "protocol/uri.h"
 #include "sched/connection.h"

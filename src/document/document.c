@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.7 2003/10/30 11:41:16 zas Exp $ */
+/* $Id: document.c,v 1.8 2003/10/30 17:01:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,7 +12,7 @@
 
 #include "elinks.h"
 
-#include "document/cache.h"
+#include "cache/cache.h"
 #include "document/document.h"
 #include "document/html/frames.h"
 #include "document/options.h"

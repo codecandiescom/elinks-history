@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.62 2003/10/30 15:50:54 zas Exp $ */
+/* $Id: info.c,v 1.63 2003/10/30 17:01:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,7 @@
 #include "dialogs/info.h"
 #include "dialogs/refresh.h"
 #include "config/options.h"
-#include "document/cache.h"
+#include "cache/cache.h"
 #include "document/html/renderer.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"

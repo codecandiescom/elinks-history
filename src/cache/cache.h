@@ -1,7 +1,7 @@
-/* $Id: cache.h,v 1.24 2003/10/17 11:39:30 jonas Exp $ */
+/* $Id: cache.h,v 1.25 2003/10/30 17:01:37 pasky Exp $ */
 
-#ifndef EL__DOCUMENT_CACHE_H
-#define EL__DOCUMENT_CACHE_H
+#ifndef EL__CACHE_CACHE_H
+#define EL__CACHE_CACHE_H
 
 #include "util/lists.h"
 

@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.22 2003/10/26 23:17:40 zas Exp $ */
+/* $Id: finger.c,v 1.23 2003/10/30 17:01:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,7 +7,7 @@
 
 #include "elinks.h"
 
-#include "document/cache.h"
+#include "cache/cache.h"
 #include "lowlevel/connect.h"
 #include "protocol/finger.h"
 #include "protocol/protocol.h"

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.41 2003/10/26 23:23:24 zas Exp $ */
+/* $Id: connection.h,v 1.42 2003/10/30 17:01:42 pasky Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -9,7 +9,7 @@
 struct connection;
 struct read_buffer;
 
-#include "document/cache.h"
+#include "cache/cache.h"
 #include "lowlevel/connect.h"
 #include "lowlevel/ttime.h"
 #include "protocol/uri.h"

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.53 2003/10/24 21:19:14 pasky Exp $ */
+/* $Id: session.h,v 1.54 2003/10/30 17:01:42 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -6,7 +6,7 @@
 /* We need to declare these first :/. Damn cross-dependencies. */
 struct session;
 
-#include "document/cache.h"
+#include "cache/cache.h"
 #include "document/html/frames.h"
 #include "document/options.h"
 #include "terminal/terminal.h"

@@ -14,7 +14,7 @@
  *
  *  (c) 2003 Laurent MONIN (aka Zas)
  * Feel free to do whatever you want with that code. */
-/* $Id: fastfind.c,v 1.1 2003/06/13 16:59:32 zas Exp $ */
+/* $Id: fastfind.c,v 1.2 2003/06/13 17:48:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,24 +32,7 @@
 
 
 #if 0
-/* Keep this one if there is more than 512 keywords in a list
- * it eats more memory. */
-struct ff_elt {
-	unsigned int e:1; /* End leaf -> p is significant */
-	unsigned int c:1; /* Compressed */
-	unsigned int p:12; /* Index in pointers (4096) */
-	unsigned int l:18; /* Index in lines (262144 - 1) */
-};
-
-struct ff_elt_c {
-	unsigned int e:1; /* End leaf -> p is significant */
-	unsigned int c:1; /* Compressed */
-	unsigned int p:12; /* Index in pointers */
-	unsigned int l:18; /* Index in lines */
-	unsigned char ch;
-};
-#else
-/* Use only 32 bits per element, but has low limits. */
+/* Use only 32 bits per element, but has very low limits. */
 struct ff_elt {
 	unsigned int e:1; /* End leaf -> p is significant */
 	unsigned int c:1; /* Compressed */
@@ -64,6 +47,24 @@ struct ff_elt_c {
 	unsigned int p:9; /* Index in pointers */
 	unsigned int l:14; /* Index in lines */
 	unsigned int ch:7; /* char when compressed. */
+};
+#else
+/* Keep this one if there is more than 512 keywords in a list
+ * it eats a bit more memory.
+ * ELinks needs this one. */
+struct ff_elt {
+	unsigned int e:1; /* End leaf -> p is significant */
+	unsigned int c:1; /* Compressed */
+	unsigned int p:12; /* Index in pointers (4096) */
+	unsigned int l:18; /* Index in lines (262144 - 1) */
+};
+
+struct ff_elt_c {
+	unsigned int e:1; /* End leaf -> p is significant */
+	unsigned int c:1; /* Compressed */
+	unsigned int p:12; /* Index in pointers */
+	unsigned int l:18; /* Index in lines */
+	unsigned char ch;
 };
 #endif
 
@@ -211,12 +212,12 @@ fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void),
 
 			for (j = 0; j < ff_info->uniq_chars_count; j++) {
 				if (ff_info->case_sensitive) {
-					if (ff_info->uniq_chars[j] == upcase(p->key[i])) {
+					if (ff_info->uniq_chars[j] == p->key[i]) {
 						found = 1;
 						break;
 					}
 				} else {
-					if (ff_info->uniq_chars[j] == p->key[i]) {
+					if (ff_info->uniq_chars[j] == upcase(p->key[i])) {
 						found = 1;
 						break;
 					}

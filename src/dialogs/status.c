@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.23 2003/12/04 09:27:19 jonas Exp $ */
+/* $Id: status.c,v 1.24 2003/12/10 04:47:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,6 +134,9 @@ update_status(void)
 	int show_title_bar = get_opt_int("ui.show_title_bar");
 	int show_status_bar = get_opt_int("ui.show_status_bar");
 	int show_tabs_bar = get_opt_int("ui.tabs.show_bar");
+#ifdef USE_LEDS
+	int show_leds = get_opt_int("ui.leds.enable");
+#endif
 	int set_window_title = get_opt_bool("ui.window_title");
 	struct session *ses;
 	int tabs = 1;
@@ -168,6 +171,12 @@ update_status(void)
 			render_document_frames(ses);
 			dirty = 1;
 		}
+#if USE_LEDS
+		if (status->show_leds != show_leds) {
+			status->show_leds = show_leds;
+			dirty = 1;
+		}
+#endif
 
 		status->set_window_title = set_window_title;
 
@@ -412,6 +421,28 @@ display_window_title(struct session *ses, struct terminal *term)
 	}
 }
 
+#ifdef USE_LEDS
+static inline void
+display_leds(struct session *ses, struct session_status *status)
+{
+	if (ses->doc_view && ses->doc_view->document
+	    && ses->doc_view->document->url) {
+		struct cache_entry *cache_entry =
+			find_in_cache(ses->doc_view->document->url);
+
+		if (cache_entry) {
+			status->ssl_led->value = (cache_entry->ssl_info)
+					    ? 'S' : '-';
+		} else {
+			/* FIXME: We should do this thing better. */
+			status->ssl_led->value = '?';
+		}
+	}
+
+	draw_leds(ses);
+#endif
+}
+
 /* Print statusbar and titlebar, set terminal title. */
 void
 print_screen_status(struct session *ses)
@@ -430,6 +461,10 @@ print_screen_status(struct session *ses)
 
 		if (status->show_status_bar)
 			display_status_bar(ses, term, tabs_count);
+#ifdef USE_LEDS
+		if (status->show_leds)
+			display_leds(ses, status);
+#endif
 	}
 
 	if (status->show_tabs_bar) {
@@ -437,22 +472,4 @@ print_screen_status(struct session *ses)
 	}
 
 	redraw_from_window(ses->tab);
-
-#ifdef USE_LEDS
-	if (ses->doc_view && ses->doc_view->document
-	    && ses->doc_view->document->url) {
-		struct cache_entry *cache_entry =
-			find_in_cache(ses->doc_view->document->url);
-
-		if (cache_entry) {
-			status->ssl_led->value = (cache_entry->ssl_info)
-					    ? 'S' : '-';
-		} else {
-			/* FIXME: We should do this thing better. */
-			status->ssl_led->value = '?';
-		}
-	}
-
-	draw_leds(ses);
-#endif
 }

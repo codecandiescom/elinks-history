@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.80 2004/02/09 11:13:47 jonas Exp $ */
+/* $Id: inphist.c,v 1.81 2004/02/09 11:33:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,6 +52,7 @@ tab_compl(struct terminal *term, unsigned char *item, struct dialog_data *dlg_da
 void
 do_tab_compl(struct dialog_data *dlg_data, struct list_head *history)
 {
+	struct terminal *term = dlg_data->win->term;
 	struct widget_data *widget_data = selected_widget(dlg_data);
 	int cdata_len = strlen(widget_data->cdata);
 	int n = 0;
@@ -69,17 +70,10 @@ do_tab_compl(struct dialog_data *dlg_data, struct list_head *history)
 		n++;
 	}
 
-	if (n) {
-		struct terminal *term = dlg_data->win->term;
-
-		if (n == 1) {
-			tab_compl(term, items->data, dlg_data);
-			mem_free(items);
-			return;
-		}
-
+	if (n > 1) {
 		do_menu_selected(term, items, dlg_data, n - 1, 0);
 	} else {
+		if (n == 1) tab_compl(term, items->data, dlg_data);
 		mem_free(items);
 	}
 }

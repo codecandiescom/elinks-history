@@ -1,95 +1,45 @@
-#!/bin/bash
+#!/bin/sh
 
-# $Id: find_unused_translations.sh,v 1.1 2002/12/13 22:00:58 zas Exp $
+# $Id: find_unused_translations.sh,v 1.2 2002/12/14 11:42:15 zas Exp $
 
-# This script searchs for unused entries in ELinks translation files
-# It then generates 3 files per .lng file
-# .lng.unused contains unused entries
-# .lng.new contains original file without unused entries
-# .lng.patch is a patch to _remove_ unused entries from original file
+# This script lists unused translations and, if given the argument 'patch',
+# generates <language>.lng.patch for each translation file to remove them.
 
-#List all files where we found an entry (slower) ?
-full=
+echo 'Finding unused translations...'
 
-#Generate a diff patch ?
-genpatch=1
-
-#Warning for newbies
-if [ "$1" != "quiet" ]; then
-echo '!!!Slow dangereous VIRUS script!!!'
-echo
-echo "1] Do you know what you're about to do ?"
-echo "   Yes) press ENTER"
-echo "   No ) press CTRL+C"
-echo
-read
-echo "2] Are you an ELinks developper or a translator or something ?"
-echo "   Yes) press ENTER"
-echo "   No ) press CTRL+C"
-echo
-read
-echo "3] Did you understand the two previous questions ?"
-echo "   Yes) press ENTER and use quiet option next time."
-echo "   No ) press CTRL+C"
-echo
-read
+LIST=$(find ../src -name '*.[ch]' -not -name 'lang_defs.h')
+if [ -z "$LIST" ]
+then
+	echo 'No source code found!' >&2
+	exit 1
 fi
 
-echo "Starting..." >&2
+trap 'rm -f translations_used translations_unused' 0
 
-#Find all source files
-LIST=`find ../src \( -name '*.c' -o -name '*.h' \) -not -name 'lang_defs.h'`;
-if [ ! "$LIST" ]; then exit 1; fi
+# The sed/grep combination is ugly, but we must be careful of multiple
+# translations on the same line.
+sed -e 's/\(\<T_[0-9a-zA-Z_]\+\>\)/\
+\1\
+/g' ${LIST} | grep '^T_[0-9a-zA-Z_]\+$' | sort -u > translations_used
 
-#Find translations
-TRANS=`cat english.lng | cut -d ',' -f1 | sort -u`
-if [ ! "$TRANS" ]; then exit 1; fi
+# I'd use a variable instead of a file, but newlines would not be preserved.
+< english.lng cut -d, -f1 | sort -u |
+	comm -23 - translations_used > translations_unused
 
-#Search if translation is used somewhere or not
-A=$(
-for i in $TRANS; do
-	echo "Checking for $i" >&2
-	found=0;
-	for j in $LIST; do
-		if [ "`fgrep $i $j`" ]; then
-			found=1;
-			echo " Found in $j" >&2
-			if [ ! "$full"]; then
-				break;
-			fi
-		fi;
-	done ;
-	if [ $found -eq 0 ]; then
-		echo "$i";
-		echo " NOT FOUND" >&2
-	fi;
-	echo >&2
-done)
+if ! grep . translations_unused 2>&1 >/dev/null
+then
+	echo 'No unused translations found.'
+	exit
+fi
 
-echo >&2
+echo 'Unused translations: ' >&2
+< translations_unused sed -e 's/^/        /' >&2
 
-#Create a grep expression with not found entries
-B=$(echo $A | sed 's/ \+$//; s/ /\\|/g')
-if [ ! "$B" ]; then exit 1; fi
-
-echo "Greping with $B" >&2
-
-for i in *.lng; do
-	echo " Generating $i.unused ..." >&2
-	grep "$B" $i > $i.unused
-	echo " Generating $i.new ..." >&2
-	grep -v "$B" $i > $i.new
-	if [ "$genpatch" ]; then
-		echo " Generating $i.patch ..." >&2
-		diff -u $i $i.new > $i.patch
-	fi
+[ "$1" = 'patch' ] && for lang in *.lng
+do
+	echo Generating ${lang}.patch ...
+	grep -vwF "$(cat translations_unused)" ${lang} |
+		diff -u ${lang} - > ${lang}.patch
 done
 
-echo >&2
-echo "Unfound entries list: " >&2
-echo $A | tr ' ' '\n' >&2
-echo >&2
-echo "All done." >&2
-
-echo >&2
-echo "Tip of the day: rm -f *.lng.unused *.lng.patch *.lng.new" >&2
+echo 'Done.'

@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.16 2003/08/02 18:10:32 jonas Exp $ */
+/* $Id: formhist.c,v 1.17 2003/08/02 18:20:40 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -29,6 +29,7 @@
 
 static INIT_LIST_HEAD(form_history);
 
+static int form_history_dirty;
 static int loaded = 0;
 
 static void
@@ -61,10 +62,55 @@ init_form_history_item(unsigned char *url)
 	return item;
 }
 
+static void
+write_form_history(void)
+{
+	struct form_history_item *item;
+	struct secure_save_info *ssi;
+	unsigned char *file;
+
+	if (!form_history_dirty) return;
+
+	file = straconcat(elinks_home, "formhist", NULL);
+	if (!file) return;
+
+	ssi = secure_open(file, 0177);
+	mem_free(file);
+	if (!ssi) return;
+
+	/* Write the list to formhist file */
+	foreach (item, form_history) {
+		struct submitted_value *sv;
+
+		secure_fprintf(ssi, "%s\n", item->url);
+		foreachback (sv, item->submit) {
+			unsigned char *encvalue = "";
+
+			/* Obfuscate the password. If we do
+			 * $ cat ~/.elinks/password we don't want
+			 * someone behind our back to read our password */
+			if (sv->value) {
+				encvalue = base64_encode(sv->value);
+				if (!encvalue) continue;
+			}
+
+			secure_fprintf(ssi, "%s\t%s\n", sv->name, encvalue);
+
+			if (*encvalue) mem_free(encvalue);
+		}
+
+		secure_fputc(ssi, '\n');
+	}
+
+	secure_close(ssi);
+}
+
 void
 done_form_history(void)
 {
 	struct form_history_item *item;
+
+	write_form_history();
 
 	foreach(item, form_history)
 		done_form_history_item(item);
@@ -205,20 +251,10 @@ form_already_saved(unsigned char *url, struct list_head *submit)
  * (form data is url+submitted_value(s))
  * returns 1 on success
  *         0 on failure */
-static int
+static void
 add_form_history_item(struct form_history_item *item)
 {
-	struct form_history_item *tmpform;
 	struct submitted_value *sv;
-	struct secure_save_info *ssi;
-	unsigned char *file;
-
-	file = straconcat(elinks_home, "formhist", NULL);
-	if (!file) goto fail;
-
-	ssi = secure_open(file, 0177);
-	mem_free(file);
-	if (!ssi) goto fail;
 
 	/* We're going to save just <INPUT TYPE="text"> and
 	 * <INPUT TYPE="password"> so purge anything else from @item->submit. */
@@ -235,33 +271,7 @@ add_form_history_item(struct form_history_item *item)
 	}
 
 	add_to_list(form_history, item);
-
-	/* Write the list to formhist file */
-	foreach (tmpform, form_history) {
-		secure_fprintf(ssi, "%s\n", tmpform->url);
-		foreachback (sv, tmpform->submit) {
-			unsigned char *encvalue = "";
-
-			/* Obfuscate the password. If we do
-			 * $ cat ~/.elinks/password we don't want
-			 * someone behind our back to read our password */
-			if (sv->value) {
-				encvalue = base64_encode(sv->value);
-				if (!encvalue) return 0;
-			}
-			secure_fprintf(ssi, "%s\t%s\n", sv->name, encvalue);
-
-			if (*encvalue) mem_free(encvalue);
-		}
-		secure_fputc(ssi, '\n');
-	}
-
-	secure_close(ssi);
-	return 1;
-
-fail:
-	done_form_history_item(item);
-	return 0;
+	form_history_dirty = 1;
 }
 
 struct list_head *

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.79 2003/05/02 14:55:05 zas Exp $ */
+/* $Id: parser.c,v 1.80 2003/05/02 22:16:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -610,11 +610,11 @@ get_width(unsigned char *a, unsigned char *n, int trunc)
 
 #if 0
 int form_num;
-struct a_form form = { 0, NULL, 0 };
+struct form form = { 0, NULL, 0 };
 int g_ctrl_num;
 #endif
 
-struct a_form form = { NULL, NULL, 0, 0 };
+struct form form = { NULL, NULL, 0, 0 };
 
 unsigned char *last_form_tag;
 unsigned char *last_form_attr;
@@ -1308,7 +1308,7 @@ html_dd(unsigned char *a)
 }
 
 static void
-get_html_form(unsigned char *a, struct a_form *form)
+get_html_form(unsigned char *a, struct form *form)
 {
 	unsigned char *al;
 
@@ -1407,7 +1407,7 @@ end_parse:
 		last_input_tag = i;
 		get_html_form(la, &form);
 	} else {
-		memset(&form, 0, sizeof(struct a_form));
+		memset(&form, 0, sizeof(struct form));
 	}
 }
 

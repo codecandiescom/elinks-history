@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.34 2003/05/02 14:55:06 zas Exp $ */
+/* $Id: view.c,v 1.35 2003/05/02 22:16:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,7 +106,7 @@ clear_formatted(struct f_data *scr)
 		free_frameset_desc(scr->frame_desc);
 	}
 	for (n = 0; n < scr->nlinks; n++) {
-		struct a_link *l = &scr->links[n];
+		struct link *l = &scr->links[n];
 
 		if (l->where) mem_free(l->where);
 		if (l->target) mem_free(l->target);
@@ -192,7 +192,7 @@ find_tag(struct f_data *f, unsigned char *name)
 }
 
 static int
-comp_links(struct a_link *l1, struct a_link *l2)
+comp_links(struct link *l1, struct link *l2)
 {
 	return l1->num - l2->num;
 }
@@ -204,14 +204,14 @@ sort_links(struct f_data *f)
 
 	if (!f->nlinks) return;
 
-	qsort(f->links, f->nlinks, sizeof(struct a_link),
+	qsort(f->links, f->nlinks, sizeof(struct link),
 	      (void *) comp_links);
 
 	if (!f->y) return;
 
-	f->lines1 = mem_calloc(f->y, sizeof(struct a_link *));
+	f->lines1 = mem_calloc(f->y, sizeof(struct link *));
 	if (!f->lines1) return;
-	f->lines2 = mem_calloc(f->y, sizeof(struct a_link *));
+	f->lines2 = mem_calloc(f->y, sizeof(struct link *));
 	if (!f->lines2) {
 		mem_free(f->lines1);
 		return;
@@ -219,7 +219,7 @@ sort_links(struct f_data *f)
 
 	for (i = 0; i < f->nlinks; i++) {
 		int p, q, j;
-		struct a_link *link = &f->links[i];
+		struct link *link = &f->links[i];
 
 		if (!link->n) {
 			if (link->where) mem_free(link->where);
@@ -229,7 +229,7 @@ sort_links(struct f_data *f)
 			if (link->pos) mem_free(link->pos);
 			if (link->name) mem_free(link->name);
 			memmove(link, link + 1,
-				(f->nlinks - i - 1) * sizeof(struct a_link));
+				(f->nlinks - i - 1) * sizeof(struct link));
 			f->nlinks--;
 			i--;
 			continue;
@@ -343,7 +343,7 @@ _area_cursor(struct form_control *frm, struct form_state *fs)
 static void
 draw_link(struct terminal *t, struct f_data_c *scr, int l)
 {
-	struct a_link *link = &scr->f_data->links[l];
+	struct link *link = &scr->f_data->links[l];
 	int xp = scr->xp;
 	int yp = scr->yp;
 	int xw = scr->xw;
@@ -611,11 +611,11 @@ draw_current_link(struct terminal *t, struct f_data_c *scr)
 	draw_searched(t, scr);
 }
 
-static struct a_link *
+static struct link *
 get_first_link(struct f_data_c *f)
 {
 	int i;
-	struct a_link *l = f->f_data->links + f->f_data->nlinks;
+	struct link *l = f->f_data->links + f->f_data->nlinks;
 
 	if (!f->f_data->lines1) return NULL;
 
@@ -627,11 +627,11 @@ get_first_link(struct f_data_c *f)
 	return l;
 }
 
-static struct a_link *
+static struct link *
 get_last_link(struct f_data_c *f)
 {
 	int i;
-	struct a_link *l = NULL;
+	struct link *l = NULL;
 
 	if (!f->f_data->lines2) return NULL;
 
@@ -739,7 +739,7 @@ find_form_state(struct f_data_c *f, struct form_control *frm)
 }
 
 static void
-draw_form_entry(struct terminal *t, struct f_data_c *f, struct a_link *l)
+draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 {
 	int xp = f->xp;
 	int yp = f->yp;
@@ -845,8 +845,8 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct a_link *l)
 static void
 draw_forms(struct terminal *t, struct f_data_c *f)
 {
-	struct a_link *l1 = get_first_link(f);
-	struct a_link *l2 = get_last_link(f);
+	struct link *l1 = get_first_link(f);
+	struct link *l2 = get_last_link(f);
 
 	if (!l1 || !l2) {
 		if (l1 || l2)
@@ -1050,7 +1050,7 @@ draw_formatted(struct session *ses)
 }
 
 static int
-in_viewx(struct f_data_c *f, struct a_link *l)
+in_viewx(struct f_data_c *f, struct link *l)
 {
 	int i;
 
@@ -1063,7 +1063,7 @@ in_viewx(struct f_data_c *f, struct a_link *l)
 }
 
 static int
-in_viewy(struct f_data_c *f, struct a_link *l)
+in_viewy(struct f_data_c *f, struct link *l)
 {
 	int i;
 
@@ -1076,7 +1076,7 @@ in_viewy(struct f_data_c *f, struct a_link *l)
 }
 
 static inline int
-in_view(struct f_data_c *f, struct a_link *l)
+in_view(struct f_data_c *f, struct link *l)
 {
 	return in_viewy(f, l) && in_viewx(f, l);
 }
@@ -1090,8 +1090,8 @@ c_in_view(struct f_data_c *f)
 
 static int
 next_in_view(struct f_data_c *f, int p, int d,
-	     int (*fn)(struct f_data_c *, struct a_link *),
-	     void (*cntr)(struct f_data_c *, struct a_link *))
+	     int (*fn)(struct f_data_c *, struct link *),
+	     void (*cntr)(struct f_data_c *, struct link *))
 {
 	int p1 = f->f_data->nlinks - 1;
 	int p2 = 0;
@@ -1119,7 +1119,7 @@ next_in_view(struct f_data_c *f, int p, int d,
 }
 
 void
-set_pos_x(struct f_data_c *f, struct a_link *l)
+set_pos_x(struct f_data_c *f, struct link *l)
 {
 	int i;
 	int xm = 0;
@@ -1139,7 +1139,7 @@ set_pos_x(struct f_data_c *f, struct a_link *l)
 }
 
 void
-set_pos_y(struct f_data_c *f, struct a_link *l)
+set_pos_y(struct f_data_c *f, struct link *l)
 {
 	int i;
 	int ym = 0;
@@ -1160,8 +1160,8 @@ find_link(struct f_data_c *f, int p, int s)
 { /* p=1 - top, p=-1 - bottom, s=0 - pgdn, s=1 - down */
 	int y;
 	int l;
-	struct a_link *link;
-	struct a_link **line = (p == -1) ? f->f_data->lines2 : f->f_data->lines1;
+	struct link *link;
+	struct link **line = (p == -1) ? f->f_data->lines2 : f->f_data->lines1;
 
 	if (!line) goto nolink;
 
@@ -1738,7 +1738,7 @@ ff:
 
 static unsigned char *
 get_link_url(struct session *ses, struct f_data_c *f,
-	     struct a_link *l)
+	     struct link *l)
 {
 	if (l->type == L_LINK) {
 		if (!l->where) return stracpy(l->where_img);
@@ -1787,7 +1787,7 @@ submit_form_do(struct terminal *term, void *xxx, struct session *ses,
 	       int _reload)
 {
 	struct f_data_c *fd = current_frame(ses);
-	struct a_link *link;
+	struct link *link;
 
 	if (fd->vs->current_link == -1) return 1;
 	link = &fd->f_data->links[fd->vs->current_link];
@@ -1810,7 +1810,7 @@ submit_form_reload(struct terminal *term, void *xxx, struct session *ses)
 static int
 enter(struct session *ses, struct f_data_c *fd, int a)
 {
-	struct a_link *link;
+	struct link *link;
 
 	if (fd->vs->current_link == -1) return 1;
 	link = &fd->f_data->links[fd->vs->current_link];
@@ -1896,7 +1896,7 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 {
 	int item = (int)pitem;
 	struct f_data_c *f = current_frame(ses);
-	struct a_link *l;
+	struct link *l;
 	struct form_state *fs;
 
 	if (!f || f->vs->current_link == -1) return;
@@ -1927,7 +1927,7 @@ int
 get_current_state(struct session *ses)
 {
 	struct f_data_c *f = current_frame(ses);
-	struct a_link *l;
+	struct link *l;
 	struct form_state *fs;
 
 	if (!f || f->vs->current_link == -1) return -1;
@@ -1959,13 +1959,13 @@ int textarea_editor = 0;
 
 void
 textarea_edit(int op, struct terminal *term_, struct form_control *form_,
-	      struct form_state *fs_, struct f_data_c *f_, struct a_link *l_)
+	      struct form_state *fs_, struct f_data_c *f_, struct link *l_)
 {
 	static int form_maxlength;
 	static struct form_state *fs;
 	static struct terminal *term;
 	static struct f_data_c *f;
-	static struct a_link *l;
+	static struct link *l;
 	static char *fn = NULL;
 
 	if (op == 0 && !term_->master) {
@@ -2069,7 +2069,7 @@ close:
 
 
 static int
-field_op(struct session *ses, struct f_data_c *f, struct a_link *l,
+field_op(struct session *ses, struct f_data_c *f, struct link *l,
 	 struct event *ev, int rep)
 {
 	struct form_control *frm = l->form;
@@ -2380,7 +2380,7 @@ find_next_link_in_search(struct f_data_c *f, int d)
 {
 	struct point *pt = NULL;
 	int len;
-	struct a_link *link;
+	struct link *link;
 
 	if (d == -2 || d == 2) {
 		d /= 2;
@@ -2485,12 +2485,12 @@ rep_ev(struct session *ses, struct f_data_c *fd,
 	while (i--) f(ses, fd, a);
 }
 
-static struct a_link *
+static struct link *
 choose_mouse_link(struct f_data_c *f, struct event *ev)
 {
-	struct a_link *l1 = f->f_data->links + f->f_data->nlinks;
-	struct a_link *l2 = f->f_data->links;
-	struct a_link *l;
+	struct link *l1 = f->f_data->links + f->f_data->nlinks;
+	struct link *l2 = f->f_data->links;
+	struct link *l;
 	int i;
 
 	if (!f->f_data->nlinks
@@ -2529,7 +2529,7 @@ jump_to_link_number(struct session *ses, struct f_data_c *fd, int n)
 static void
 goto_link_number_do(struct session *ses, struct f_data_c *fd, int n)
 {
-	struct a_link *link = &fd->f_data->links[n];
+	struct link *link = &fd->f_data->links[n];
 
 	jump_to_link_number(ses, fd, n);
 
@@ -2567,7 +2567,7 @@ try_document_key(struct session *ses, struct f_data_c *fd,
 	 * key we test.. */
 
 	for (i = 0; i < fd->f_data->nlinks; i++) {
-		struct a_link *link = &fd->f_data->links[i];
+		struct link *link = &fd->f_data->links[i];
 
 		if (x == link->accesskey) {
 			if (passed != i && i <= fd->vs->current_link) {
@@ -2743,7 +2743,7 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 		}
 
 	} else if (ev->ev == EV_MOUSE) {
-		struct a_link *link = choose_mouse_link(fd, ev);
+		struct link *link = choose_mouse_link(fd, ev);
 
 		if ((ev->b & BM_BUTT) >= B_WHEEL_UP) {
 			if ((ev->b & BM_ACT) != B_DOWN) {
@@ -3142,7 +3142,7 @@ send_enter_reload(struct terminal *term, void *xxx, struct session *ses)
 void
 frm_download(struct session *ses, struct f_data_c *fd, int resume)
 {
-	struct a_link *link;
+	struct link *link;
 	int l = 0;
 
 	if (fd->vs->current_link == -1) return;
@@ -3411,7 +3411,7 @@ void
 link_menu(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct f_data_c *f = current_frame(ses);
-	struct a_link *link;
+	struct link *link;
 	struct menu_item *mi = new_menu(FREE_LIST);
 	int l = 0;
 
@@ -3503,7 +3503,7 @@ print_current_link_title_do(struct f_data_c *fd, struct terminal *term)
 {
 	if (fd && !fd->f_data->frame && fd->vs->current_link != -1
 	    && fd->vs->current_link < fd->f_data->nlinks) {
-		struct a_link *link = &fd->f_data->links[fd->vs->current_link];
+		struct link *link = &fd->f_data->links[fd->vs->current_link];
 
 		if (link->title) return stracpy(link->title);
 	}
@@ -3515,7 +3515,7 @@ print_current_link_title_do(struct f_data_c *fd, struct terminal *term)
 unsigned char *
 print_current_link_do(struct f_data_c *fd, struct terminal *term)
 {
-	struct a_link *link;
+	struct link *link;
 
 	if (!fd || fd->f_data->frame || fd->vs->current_link == -1
 	    || fd->vs->current_link >= fd->f_data->nlinks) {

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.68 2003/05/02 21:25:43 zas Exp $ */
+/* $Id: renderer.c,v 1.69 2003/05/02 22:16:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -278,7 +278,7 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 	xpand_lines(part, yt);
 
 	for (nlink = last_link_to_move; nlink < part->data->nlinks; nlink++) {
-		struct a_link *link = &part->data->links[nlink];
+		struct link *link = &part->data->links[nlink];
 		int i;
 
 		for (i = 0; i < link->n; i++) {
@@ -306,7 +306,7 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 			if (link->target) mem_free(link->target);
 			if (link->where_img) mem_free(link->where_img);
 			if (link->pos) mem_free(link->pos);
-			memmove(link, link + 1, (part->data->nlinks - nlink - 1) * sizeof(struct a_link));
+			memmove(link, link + 1, (part->data->nlinks - nlink - 1) * sizeof(struct link));
 			part->data->nlinks --;
 			nlink--;
 		}
@@ -565,21 +565,21 @@ align_line(struct part *part, int y, int last)
 		shift_chars(part, y, shift);
 }
 
-static struct a_link *
+static struct link *
 new_link(struct f_data *f)
 {
 	if (!f) return NULL;
 
 	if (!(f->nlinks & (ALLOC_GR - 1))) {
-		struct a_link *l = mem_realloc(f->links,
+		struct link *l = mem_realloc(f->links,
 					     (f->nlinks + ALLOC_GR)
-					     * sizeof(struct a_link));
+					     * sizeof(struct link));
 
 		if (!l) return NULL;
 		f->links = l;
 	}
 
-	memset(&f->links[f->nlinks], 0, sizeof(struct a_link));
+	memset(&f->links[f->nlinks], 0, sizeof(struct link));
 
 	return &f->links[f->nlinks++];
 }
@@ -688,7 +688,7 @@ put_chars(struct part *part, unsigned char *c, int l)
 	static int fg_cache;
 	int bg, fg;
 	int i;
-	struct a_link *link;
+	struct link *link;
 	struct point *pt;
 
 	while (par_format.align != AL_NO && part->cx == -1 && l && *c == ' ') {

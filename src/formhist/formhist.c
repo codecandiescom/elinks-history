@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.55 2003/11/05 00:40:20 fabio Exp $ */
+/* $Id: formhist.c,v 1.56 2003/11/05 00:45:30 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -379,7 +379,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 		form, 3,
 		N_("Yes"), remember_form, B_ENTER,
 		N_("No"), free_form, B_ESC,
-		"Never for this site", never_for_this_site, NULL);
+		N_("Never for this site"), never_for_this_site, NULL);
 
 	return;
 

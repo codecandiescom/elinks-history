@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.196 2005/03/05 22:14:31 zas Exp $ */
+/* $Id: cookies.c,v 1.197 2005/04/04 12:15:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -343,7 +343,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 		unsigned char *date = parse_header_param(str, "expires");
 
 		if (date) {
-			time_T expires = parse_date(date); /* Convert date to seconds. */
+			time_T expires = parse_date(&date, NULL, 0, 1); /* Convert date to seconds. */
 
 			mem_free(date);
 

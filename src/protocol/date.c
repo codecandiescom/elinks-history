@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.20 2005/04/01 16:54:23 jonas Exp $ */
+/* $Id: date.c,v 1.21 2005/04/04 12:15:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,26 +231,31 @@ my_timegm(struct tm *tm)
 
 
 time_T
-parse_date(const unsigned char *date)
+parse_date(unsigned char **date_pos, unsigned char *end,
+	   int update_pos, int skip_week_day)
 {
-#define skip_time_sep(date) \
+#define skip_time_sep(date, end) \
 	do { \
 		const unsigned char *start = (date); \
-		while (*(date) == ' ' || *(date) == '-') \
+		while ((!(end) || (date) < (end)) \
+			&& (*(date) == ' ' || *(date) == '-')) \
 			(date)++; \
 		if (date == start) return 0; \
 	} while (0)
 
 	struct tm tm;
+	const unsigned char *date = (const unsigned char *) *date_pos;
 
 	if (!date) return 0;
 
-	/* Skip day-of-week */
+	if (skip_week_day) {
+		/* Skip day-of-week */
+		for (; (!end || date < end) && *date != ' '; date++)
+			if (!*date) return 0;
 
-	for (; *date != ' '; date++)
-		if (!*date) return 0;
-
-	while (*date == ' ') date++;
+		/* As pasky said who cares if we allow '-'s here? */
+		skip_time_sep(date, end);
+	}
 
 	if (isdigit(*date)) {
 		/* RFC 1036 / RFC 1123 */
@@ -258,59 +263,62 @@ parse_date(const unsigned char *date)
 		/* Eat day */
 
 		/* date++; */
-		tm.tm_mday = parse_day(&date, NULL);
+		tm.tm_mday = parse_day(&date, end);
 		if (tm.tm_mday > 31) return 0;
 
-		skip_time_sep(date);
+		skip_time_sep(date, end);
 
 		/* Eat month */
 
-		tm.tm_mon = parse_month(&date, NULL);
+		tm.tm_mon = parse_month(&date, end);
 		if (tm.tm_mon < 0) return 0;
 
-		skip_time_sep(date);
+		skip_time_sep(date, end);
 
 		/* Eat year */
 
-		tm.tm_year = parse_year(&date, NULL);
+		tm.tm_year = parse_year(&date, end);
 		if (tm.tm_year < 0) return 0;
 
-		skip_time_sep(date);
+		skip_time_sep(date, end);
 
 		/* Eat time */
 
-		if (!parse_time(&date, &tm, NULL)) return 0;
+		if (!parse_time(&date, &tm, end)) return 0;
 
 	} else {
 		/* ANSI C's asctime() format */
 
 		/* Eat month */
 
-		tm.tm_mon = parse_month(&date, NULL);
+		tm.tm_mon = parse_month(&date, end);
 		if (tm.tm_mon < 0) return 0;
 
 		/* I know, we shouldn't allow '-', but who cares ;). --pasky */
-		skip_time_sep(date);
+		skip_time_sep(date, end);
 
 		/* Eat day */
 
-		tm.tm_mday = parse_day(&date, NULL);
+		tm.tm_mday = parse_day(&date, end);
 		if (tm.tm_mday > 31) return 0;
 
-		skip_time_sep(date);
+		skip_time_sep(date, end);
 
 		/* Eat time */
 
-		if (!parse_time(&date, &tm, NULL)) return 0;
+		if (!parse_time(&date, &tm, end)) return 0;
 
-		skip_time_sep(date);
+		skip_time_sep(date, end);
 
 		/* Eat year */
 
-		tm.tm_year = parse_year(&date, NULL);
+		tm.tm_year = parse_year(&date, end);
 		if (tm.tm_year < 0) return 0;
 	}
 #undef skip_time_sep
+
+	if (update_pos)
+		*date_pos = (unsigned char *) date;
 
 	return (time_T) my_timegm(&tm);
 }

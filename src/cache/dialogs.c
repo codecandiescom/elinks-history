@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.56 2004/04/07 14:09:51 jonas Exp $ */
+/* $Id: dialogs.c,v 1.57 2004/04/07 22:24:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,6 +61,11 @@ get_cache_entry_info(struct listbox_item *item, struct terminal *term,
 	add_to_string(&msg, _("URL", term));
 	add_to_string(&msg, ": ");
 	add_uri_to_string(&msg, cached->uri, ~(URI_PASSWORD | URI_POST));
+
+	if (cached->proxy_uri != cached->uri) {
+		add_format_to_string(&msg, "\n%s: %s", _("Proxy URL", term),
+						struri(cached->proxy_uri));
+	}
 
 	if (cached->redirect) {
 		add_format_to_string(&msg, "\n%s: %s", _("Redirect", term),

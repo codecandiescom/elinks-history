@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2003-12-24 02:23+0100\n"
-"PO-Revision-Date: 2003-12-24 23:04+0100\n"
+"PO-Revision-Date: 2003-12-24 23:22+0100\n"
 "Last-Translator: Varga Balazs <vinnui@ent.hu>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -359,7 +359,7 @@ msgstr "Kódolás"
 
 #: src/cache/dialogs.c:95
 msgid "Flags"
-msgstr ""
+msgstr "Flag-ek"
 
 #: src/cache/dialogs.c:98 src/dialogs/document.c:98
 msgid "incomplete"
@@ -1890,7 +1890,7 @@ msgstr ""
 
 #: src/config/options.inc:238
 msgid "Typeahead error handling"
-msgstr ""
+msgstr "Bevitelkiegészítés hibakezelése"
 
 #: src/config/options.inc:240
 msgid ""
@@ -1899,6 +1899,10 @@ msgid ""
 "1 means beep the terminal\n"
 "2 means pop up message box"
 msgstr ""
+"Mi történjen, mikor a bevitelkiegészítés nem talál kiegészíthetõ linket:\n"
+"0 - semmi \n"
+"1 - a terminál adjon hangjelzést\n"
+"2 - ugorjon be egy üzenetablak"
 
 #: src/config/options.inc:245
 msgid "Use tabindex"
@@ -4678,7 +4682,7 @@ msgstr "Francia"
 
 #: src/intl/gettext/libintl.c:38
 msgid "Galician"
-msgstr ""
+msgstr "Gall"
 
 #: src/intl/gettext/libintl.c:39
 msgid "German"
@@ -5186,6 +5190,9 @@ msgid ""
 "%c in the string means the current URL\n"
 "%% in the string means '%'"
 msgstr ""
+"Egyszerû URI csere.\n"
+"%c a szövegben az aktuális URL-t jelenti\n"
+"%% a szövegben '%' jelet helyettesít"
 
 #: src/protocol/rewrite/rewrite.c:68
 msgid "Smart Prefixes"
@@ -5203,6 +5210,11 @@ msgid ""
 "%0,%1,...,%9 means argument 0, 1, ..., 9\n"
 "%% in the string means '%'"
 msgstr ""
+"Intelligens URI csere.\n"
+"%c a szövegben az aktuális URL-t jelenti\n"
+"%s a szövegben az egész argumentumot helyettesíti\n"
+"%0,%1,...,%9 sorban a 0, 1, ..., 9-dik argumentum\n"
+"%% a karakterláncban '%' jelet helyettesít"
 
 #. name:
 #: src/protocol/rewrite/rewrite.c:336

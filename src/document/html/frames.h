@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.35 2003/12/01 14:40:08 pasky Exp $ */
+/* $Id: frames.h,v 1.36 2004/01/22 17:46:57 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -41,5 +41,8 @@ add_frameset_entry(struct frameset_desc *parent,
 		   unsigned char *name, unsigned char *url);
 
 void format_frames(struct session *ses, struct frameset_desc *fsd, struct document_options *op, int depth);
+
+void parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char,
+		   int **new_values, int *new_values_count);
 
 #endif

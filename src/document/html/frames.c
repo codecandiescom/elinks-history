@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.48 2004/01/01 18:21:56 zas Exp $ */
+/* $Id: frames.c,v 1.49 2004/01/22 17:46:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,4 +241,215 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 		}
 		o.y += o.height + 1;
 	}
+}
+
+
+/* Frame width computation tools */
+
+/* Returns 0 on error. */
+static int
+distribute_rows_or_cols(int *val_, int max_value, int *values, int values_count)
+{
+	register int i;
+	int divisor = 0;
+	int tmp_val;
+	int val = *val_;
+
+	for (i = 0; i < values_count; i++)
+		if (values[i] < 1)
+			values[i] = 1;
+	val -= max_value;
+
+	for (i = 0; i < values_count; i++)
+		divisor += values[i];
+	assert(divisor);
+
+	tmp_val = val;
+	for (i = 0; i < values_count; i++) {
+		int tmp;
+
+		/* SIGH! gcc 2.7.2.* has an optimizer bug! */
+		do_not_optimize_here_gcc_2_7(&divisor);
+		tmp = values[i] * (divisor - tmp_val) / divisor;
+		val -= values[i] - tmp;
+		values[i] = tmp;
+	}
+
+	while (val) {
+		int flag = 0;
+
+		for (i = 0; i < values_count; i++) {
+			if (val < 0) values[i]++, val++, flag = 1;
+			if (val > 0 && values[i] > 1) values[i]--, val--, flag = 1;
+			if (!val) break;
+		}
+		if (!flag) break;
+	}
+
+	*val_ = val;
+	return 1;
+}
+
+/* Returns 0 on error. */
+static int
+distribute_rows_or_cols_that_left(int *val_, int max_value, int *values, int values_count)
+{
+	register int i;
+	int val = *val_;
+	int *tmp_values;
+	int divisor = 0;
+	int tmp_val;
+
+	tmp_values = fmem_alloc(values_count * sizeof(int));
+	if (!tmp_values) return 0;
+	memcpy(tmp_values, values, values_count * sizeof(int));
+
+	for (i = 0; i < values_count; i++)
+		if (values[i] < 1)
+			values[i] = 1;
+	val = max_value - val;
+
+	for (i = 0; i < values_count; i++)
+		if (tmp_values[i] < 0)
+			divisor += -tmp_values[i];
+	assert(divisor);
+
+	tmp_val = val;
+	for (i = 0; i < values_count; i++)
+		if (tmp_values[i] < 0) {
+			int tmp = (-tmp_values[i] * tmp_val / divisor);
+
+			values[i] += tmp;
+			val -= tmp;
+		}
+	assertm(val >= 0, "distribute_rows_or_cols_that_left: val < 0");
+	if_assert_failed val = 0;
+
+	for (i = 0; i < values_count; i++)
+		if (tmp_values[i] < 0 && val)
+			values[i]++, val--;
+
+	assertm(val <= 0, "distribute_rows_or_cols_that_left: val > 0");
+	if_assert_failed val = 0;
+
+	fmem_free(tmp_values);
+
+	*val_ = val;
+	return 1;
+}
+
+/* Returns 0 on error. */
+static int
+extract_rows_or_cols_values(unsigned char *str, int max_value, int pixels_per_char,
+			    int **new_values, int *new_values_count)
+{
+	unsigned char *tmp_str;
+	int *values = NULL;
+	int values_count = 0;
+
+	while (1) {
+		int *tmp_values;
+		unsigned long number;
+		int val = -1;	/* Wildcard */
+
+		while (isspace(*str)) str++;
+
+		/* Extract number. */
+		errno = 0;
+		number = strtoul(str, (char **)&str, 10);
+		if (errno) return 0;
+
+		/* @number is an ulong, but @val is int,
+		 * so check if @number is in a reasonable
+		 * range to prevent bad things. */
+		if (number <= 0xffff) {
+			if (*str == '%')	/* Percentage */
+				val = int_min((int)number, 100) * max_value / 100;
+			else if (*str != '*')	/* Pixels */
+				val = (number + (pixels_per_char - 1) / 2) / pixels_per_char;
+			else if (number)	/* Fraction, marked by negative value. */
+				val = -number;
+		}
+
+		/* Save value. */
+		tmp_values = mem_realloc(values, (values_count + 1) * sizeof(int));
+		if (!tmp_values) return 0;
+
+		values = tmp_values;
+		values[values_count++] = val;
+
+		/* Check for next field if any. */
+		tmp_str = strchr(str, ',');
+		if (!tmp_str) break;	/* It was the last field. */
+
+		str = tmp_str + 1;
+	}
+
+	*new_values = values;
+	*new_values_count = values_count;
+
+	return 1;
+}
+
+/* Parse rows and cols attribute values and calculate appropriated values for display.
+ * It handles things like:
+ * <frameset cols="140,260,160">			values in pixels
+ * <frameset cols="1*,2*,3*"> 				values in fractions
+ * <frameset cols="320,*">				wildcard
+ * <frameset cols="33%,33%,33%" rows="33%,33%,33%"> 	values in percentage
+ * */
+void
+parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char,
+		   int **new_values, int *new_values_count)
+{
+	int val, ret;
+	int *values;
+	int values_count;
+	register int i;
+
+	*new_values_count = 0;
+
+	ret = extract_rows_or_cols_values(str, max_value, pixels_per_char,
+					  &values, &values_count);
+	if (!ret) return;
+
+	/* Here begins distribution between rows or cols. */
+
+	val = 2 * values_count - 1;
+	for (i = 0; i < values_count; i++)
+		if (values[i] > 0)
+			val += values[i] - 1;
+
+	if (val >= max_value) {
+		ret = distribute_rows_or_cols(&val, max_value, values, values_count);
+	} else {
+		int neg = 0;
+
+		for (i = 0; i < values_count; i++)
+			if (values[i] < 0)
+				neg = 1;
+
+		if (neg)
+			ret = distribute_rows_or_cols_that_left(&val, max_value, values, values_count);
+		else
+			ret = distribute_rows_or_cols(&val, max_value, values, values_count);
+	}
+
+	if (!ret) return;
+
+	for (i = 0; i < values_count; i++)
+		if (!values[i]) {
+			register int j;
+			int maxval = 0;
+			int maxpos = 0;
+
+			for (j = 0; j < values_count; j++)
+				if (values[j] > maxval)
+					maxval = values[j], maxpos = j;
+			if (maxval)
+				values[i] = 1, values[maxpos]--;
+		}
+
+	*new_values = values;
+	*new_values_count = values_count;
 }

@@ -1,26 +1,15 @@
-/* $Id: renderer.h,v 1.51 2003/10/30 14:28:00 zas Exp $ */
+/* $Id: renderer.h,v 1.52 2003/10/31 12:42:42 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
 
-#include "intl/charsets.h"
+#include "cache/cache.h"
 #include "document/document.h"
-#include "document/html/frames.h"
 #include "terminal/draw.h"
-#include "lowlevel/ttime.h"
-#include "util/color.h"
-#include "util/lists.h"
-/* We need this included later, otherwise it will miss some our
- * declarations. */
-/* #include "vs.h" */
 
-
-struct view_state;
-struct document_options;
-void cached_format_html(struct view_state *, struct document_view *, struct document_options *);
-
-struct session;
-void html_interpret(struct session *);
+/* TODO: Document render backends */
+void
+render_html_document(struct document *document, struct cache_entry *ce);
 
 /* Interface with tables.c */
 

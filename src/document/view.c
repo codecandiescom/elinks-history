@@ -1,14 +1,17 @@
 /* Document view */
-/* $Id: view.c,v 1.118 2003/10/31 01:59:39 jonas Exp $ */
+/* $Id: view.c,v 1.119 2003/10/31 12:42:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include "elinks.h"
+#include "main.h"
 
 #include "document/document.h"
 #include "document/html/frames.h"
+#include "document/html/renderer.h"
+#include "sched/session.h"
 #include "terminal/terminal.h"
 #include "terminal/tab.h"
 #include "terminal/window.h"
@@ -17,6 +20,7 @@
 #include "viewer/text/link.h"
 #include "viewer/text/form.h"
 #include "viewer/text/search.h"
+#include "viewer/text/view.h"
 #include "viewer/text/vs.h"
 
 
@@ -214,4 +218,122 @@ draw_document_view(struct document_view *doc_view, struct terminal *t, int activ
 	if (active) draw_current_link(t, doc_view);
 	if (has_search_word(doc_view))
 		doc_view->last_x = doc_view->last_y = -1;
+}
+
+void
+cached_format_html(struct view_state *vs, struct document_view *document_view,
+		   struct document_options *options)
+{
+	unsigned char *name;
+	struct document *document;
+	struct cache_entry *cache_entry = NULL;
+
+	assert(vs && document_view && options);
+	if_assert_failed return;
+
+	name = document_view->name;
+	document_view->name = NULL;
+	done_document_view(document_view);
+
+	document_view->name = name;
+	document_view->link_bg = NULL;
+	document_view->link_bg_n = 0;
+
+	document_view->vs = vs;
+	document_view->last_x = document_view->last_y = -1;
+	document_view->document = NULL;
+
+	if (!find_in_cache(vs->url, &cache_entry) || !cache_entry) {
+		internal("document %s to format not found", vs->url);
+		return;
+	}
+
+	document = get_cached_document(vs->url, options, cache_entry->id_tag);
+	if (!document) {
+		cache_entry->refcount++;
+		shrink_memory(0);
+
+		document = init_document(vs->url, options);
+		if (!document) {
+			cache_entry->refcount--;
+			return;
+		}
+
+		render_html_document(document, cache_entry);
+	}
+
+	document_view->document = document;
+	document_view->width = document->options.width;
+	document_view->height = document->options.height;
+	document_view->x = document->options.x;
+	document_view->y = document->options.y;
+}
+
+
+void
+html_interpret(struct session *ses)
+{
+	struct document_options o;
+	struct document_view *doc_view;
+	struct document_view *current_doc_view = NULL;
+	struct view_state *l = NULL;
+
+	if (!ses->doc_view) {
+		ses->doc_view = mem_calloc(1, sizeof(struct document_view));
+		if (!ses->doc_view) return;
+		ses->doc_view->search_word = &ses->search_word;
+	}
+
+	if (have_location(ses)) l = &cur_loc(ses)->vs;
+
+	init_document_options(&o);
+
+	/* XXX: Sets 0.yw and 0.xw so keep after init_document_options(). */
+	init_bars_status(ses, NULL, &o);
+
+	o.color_mode = get_opt_int_tree(ses->tab->term->spec, "colors");
+	if (!get_opt_int_tree(ses->tab->term->spec, "underline"))
+		o.color_flags |= COLOR_ENHANCE_UNDERLINE;
+
+	o.cp = get_opt_int_tree(ses->tab->term->spec, "charset");
+
+	if (l) {
+		if (l->plain < 0) l->plain = 0;
+		o.plain = l->plain;
+	} else {
+		o.plain = 1;
+	}
+
+	foreach (doc_view, ses->scrn_frames) doc_view->used = 0;
+
+	if (l) cached_format_html(l, ses->doc_view, &o);
+
+	if (document_has_frames(ses->doc_view->document)) {
+		current_doc_view = current_frame(ses);
+		format_frames(ses, ses->doc_view->document->frame_desc, &o, 0);
+	}
+
+	foreach (doc_view, ses->scrn_frames) {
+		struct document_view *prev_doc_view = doc_view->prev;
+
+		if (doc_view->used) continue;
+
+		done_document_view(doc_view);
+		del_from_list(doc_view);
+		mem_free(doc_view);
+		doc_view = prev_doc_view;
+	}
+
+	if (current_doc_view) {
+		int n = 0;
+
+		foreach (doc_view, ses->scrn_frames) {
+			if (document_has_frames(doc_view->document)) continue;
+			if (doc_view == current_doc_view) {
+				cur_loc(ses)->vs.current_link = n;
+				break;
+			}
+			n++;
+		}
+	}
 }

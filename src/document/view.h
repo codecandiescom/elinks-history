@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.12 2003/10/31 01:59:39 jonas Exp $ */
+/* $Id: view.h,v 1.13 2003/10/31 12:42:42 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_VIEW_H
 #define EL__DOCUMENT_VIEW_H
@@ -6,6 +6,7 @@
 #include "document/document.h"
 #include "document/options.h"
 #include "terminal/draw.h"
+#include "terminal/terminal.h"
 
 struct view_state;
 
@@ -37,5 +38,13 @@ void done_document_view(struct document_view *doc_view);
 
 /* Puts the formatted document on the given terminal's screen. */
 void draw_document_view(struct document_view *doc_view, struct terminal *term, int active);
+
+struct view_state;
+struct session;
+
+void cached_format_html(struct view_state *, struct document_view *, struct document_options *);
+
+/* This handled document frames. */
+void html_interpret(struct session *);
 
 #endif

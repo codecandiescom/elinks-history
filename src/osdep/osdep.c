@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.132 2004/06/27 17:14:39 pasky Exp $ */
+/* $Id: osdep.c,v 1.133 2004/06/27 17:19:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -434,7 +434,8 @@ get_window_title(void)
 
 	return ret;
 #else
-	return NULL;
+	/* At least reset the window title to a blank one. */
+	return stracpy("");
 #endif
 }
 

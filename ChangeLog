@@ -1,3 +1,49 @@
+Fri Mar 15 17:28:32 2002  Petr Baudis <pasky@ji.cz>:
+
+	* links.h, url.c, view.c:
+	
+	strip password from displayed urls; i hope i didn't forget
+	anything; idea by Stephane Chazelas <stephane.chazelas@free.fr>
+
+Fri Mar 15 13:45:28 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html_r.c:
+	
+	some tidyup of move_links(), apparently ;)
+
+Thu Mar 14 22:14:21 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html_r.c, html_tbl.c, links.h:
+	
+	xxpand -> expand
+
+Thu Mar 14 21:39:34 2002  Petr Baudis <pasky@ji.cz>:
+
+	* default.c, language.inc, intl/brazilian_portuguese.lng,
+	intl/bulgarian.lng, intl/catalan.lng, intl/czech.lng,
+	intl/dutch.lng, intl/english.lng, intl/estonian.lng,
+	intl/finnish.lng, intl/french.lng, intl/galician.lng,
+	intl/german.lng, intl/greek.lng, intl/hungarian.lng,
+	intl/icelandic.lng, intl/indonesian.lng, intl/italian.lng,
+	intl/lithuanian.lng, intl/polish.lng, intl/romanian.lng,
+	intl/slovak.lng, intl/spanish.lng, intl/swedish.lng,
+	intl/turkish.lng:
+	
+	copyright nonsenses, more links -> elinks, removed 'lynx-like'
+
+Thu Mar 14 21:02:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* charsets.c:
+	
+	removed some unused structures and functions (by mikulas, from
+	0.97pre6)
+
+Thu Mar 14 21:00:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* http.c:
+	
+	spring tidyup of http_send_header()
+
 Thu Mar 14 20:40:18 2002  Petr Baudis <pasky@ji.cz>:
 
 	* session.c:

@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.50 2004/04/16 10:02:06 zas Exp $ */
+/* $Id: group.c,v 1.51 2004/04/23 20:44:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,6 @@
 #include "terminal/draw.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
-#include "util/math.h"
 
 static inline int
 base_group_width(struct widget_data *widget_data)

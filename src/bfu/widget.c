@@ -1,5 +1,5 @@
 /* Common widget functions. */
-/* $Id: widget.c,v 1.27 2004/04/16 10:02:06 zas Exp $ */
+/* $Id: widget.c,v 1.28 2004/04/23 20:44:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,7 +15,6 @@
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "util/error.h"
-#include "util/math.h"
 
 
 void

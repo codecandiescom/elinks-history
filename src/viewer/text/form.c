@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.92 2004/04/23 18:44:00 jonas Exp $ */
+/* $Id: form.c,v 1.93 2004/04/23 20:44:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,7 +36,6 @@
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/file.h"
-#include "util/math.h"
 #include "util/memory.h"
 #include "util/string.h"
 #include "viewer/text/form.h"

@@ -1,5 +1,5 @@
 /* Event handling functions */
-/* $Id: event.c,v 1.19 2004/04/19 15:56:49 zas Exp $ */
+/* $Id: event.c,v 1.20 2004/04/23 20:44:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,7 +10,6 @@
 #include "sched/event.h"
 #include "util/error.h"
 #include "util/hash.h"
-#include "util/math.h"
 #include "util/memory.h"
 #include "util/snprintf.h"
 #include "util/string.h"

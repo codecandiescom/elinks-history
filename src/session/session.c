@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.387 2004/04/23 19:42:00 pasky Exp $ */
+/* $Id: session.c,v 1.388 2004/04/23 20:44:29 pasky Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -49,7 +49,6 @@
 #include "terminal/window.h"
 #include "util/conv.h"
 #include "util/error.h"
-#include "util/math.h"
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/object.h"

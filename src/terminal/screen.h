@@ -1,9 +1,8 @@
-/* $Id: screen.h,v 1.21 2004/04/16 09:44:13 zas Exp $ */
+/* $Id: screen.h,v 1.22 2004/04/23 20:44:30 pasky Exp $ */
 
 #ifndef EL__TERMINAL_SCREEN_H
 #define EL__TERMINAL_SCREEN_H
 
-#include "util/math.h"
 
 struct screen_char;
 struct terminal;

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.304 2004/04/17 16:26:26 jonas Exp $ */
+/* $Id: menu.c,v 1.305 2004/04/23 20:44:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,6 @@
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"
-#include "util/math.h"
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"

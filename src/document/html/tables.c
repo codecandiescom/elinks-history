@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.156 2004/04/19 15:56:47 zas Exp $ */
+/* $Id: tables.c,v 1.157 2004/04/23 20:44:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,6 @@
 #include "util/color.h"
 #include "util/conv.h"
 #include "util/error.h"
-#include "util/math.h"
 #include "util/memory.h"
 #include "util/string.h"
 

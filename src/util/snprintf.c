@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.24 2004/04/16 10:02:07 zas Exp $ */
+/* $Id: snprintf.c,v 1.25 2004/04/23 20:44:30 pasky Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -79,7 +79,6 @@
 
 #include "elinks.h"
 
-#include "util/math.h"
 #include "util/snprintf.h"
 
 

@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.46 2004/04/16 10:02:06 zas Exp $ */
+/* $Id: download.c,v 1.47 2004/04/23 20:44:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,6 @@
 #include "util/color.h"
 #include "util/conv.h"
 #include "util/error.h"
-#include "util/math.h"
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/object.h"

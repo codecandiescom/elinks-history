@@ -1,5 +1,5 @@
 /* Provide stub function getifaddrs(). */
-/* $Id: getifaddrs.c,v 1.4 2004/04/23 14:25:46 jonas Exp $ */
+/* $Id: getifaddrs.c,v 1.5 2004/04/23 20:44:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,7 +79,6 @@
 
 #include "osdep/osdep.h"
 #include "osdep/getifaddrs.h"
-#include "util/math.h"
 
 static int
 getifaddrs2(struct ifaddrs **ifap,

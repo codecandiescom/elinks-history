@@ -1,7 +1,11 @@
-/* $Id: math.h,v 1.2 2004/04/23 20:39:30 pasky Exp $ */
+/* $Id: math.h,v 1.3 2004/04/23 20:44:30 pasky Exp $ */
 
 #ifndef EL__UTIL_MATH_H
 #define EL__UTIL_MATH_H
+
+
+/* It's evil to include this directly, elinks.h includes it for you
+ * at the right time. */
 
 
 /* These macros will evaluate twice their arguments.

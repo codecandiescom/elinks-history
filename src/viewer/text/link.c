@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.161 2004/04/19 15:56:51 zas Exp $ */
+/* $Id: link.c,v 1.162 2004/04/23 20:44:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,6 @@
 #include "terminal/terminal.h"
 #include "util/conv.h"
 #include "util/error.h"
-#include "util/math.h"
 #include "util/memory.h"
 #include "util/object.h"
 #include "util/string.h"

@@ -1,5 +1,5 @@
 /* A pretty generic scanner */
-/* $Id: scanner.c,v 1.6 2004/04/16 10:02:07 zas Exp $ */
+/* $Id: scanner.c,v 1.7 2004/04/23 20:44:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,7 +11,6 @@
 #include "elinks.h"
 
 #include "util/error.h"
-#include "util/math.h"
 #include "util/scanner.h"
 #include "util/string.h"
 

@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.25 2004/04/18 14:24:46 jonas Exp $ */
+/* $Id: listmenu.c,v 1.26 2004/04/23 20:44:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,6 @@
 #include "sched/session.h"
 #include "util/conv.h"
 #include "util/error.h"
-#include "util/math.h"
 #include "util/string.h"
 #include "viewer/text/link.h" /* get_current_state() */
 

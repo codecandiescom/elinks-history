@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.285 2004/04/22 21:32:45 zas Exp $ */
+/* $Id: http.c,v 1.286 2004/04/23 20:44:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,7 +43,6 @@
 #include "terminal/terminal.h"
 #include "util/base64.h"
 #include "util/conv.h"
-#include "util/math.h"
 #include "util/memory.h"
 #include "util/string.h"
 

@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.86 2004/04/17 02:39:52 jonas Exp $ */
+/* $Id: text.c,v 1.87 2004/04/23 20:44:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,6 @@
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
-#include "util/math.h"
 
 #define is_unsplitable(pos) (*(pos) && *(pos) != '\n' && !isspace(*(pos)))
 

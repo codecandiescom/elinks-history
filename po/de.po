@@ -421,7 +421,7 @@ msgstr "Host nicht gefunden"
 
 #: src/config/cmdline.c:161
 msgid "Resolver error"
-msgstr ""
+msgstr "Fehler bei der Names-Auflösung"
 
 #: src/config/cmdline.c:183
 #, c-format
@@ -1551,7 +1551,7 @@ msgstr "Asynchrones DNS"
 
 #: src/config/options.inc:78
 msgid "Use asynchronous DNS resolver?"
-msgstr ""
+msgstr "Asynchrone DNS-Namens-Auflösung benutzen?"
 
 #: src/config/options.inc:80
 msgid "Maximum connections"
@@ -3357,11 +3357,11 @@ msgstr "Farbe von Text in Textfeldern von Dialogen."
 
 #: src/config/options.inc:1050
 msgid "Meter"
-msgstr ""
+msgstr "Zähler"
 
 #: src/config/options.inc:1052
 msgid "Dialog meter colors."
-msgstr ""
+msgstr "Farben von Zählern in Dialogen."
 
 #: src/config/options.inc:1054
 msgid "Shadow"
@@ -4773,7 +4773,7 @@ msgstr "Italienisch"
 
 #: src/intl/gettext/libintl.c:45
 msgid "Leet"
-msgstr ""
+msgstr "Leet"
 
 #: src/intl/gettext/libintl.c:46
 msgid "Lithuanian"
@@ -5665,9 +5665,8 @@ msgstr "Geben Sie einen Ausdruck ein:"
 
 #. name:
 #: src/scripting/scripting.c:34
-#, fuzzy
 msgid "Scripting"
-msgstr "Beschreibung"
+msgstr "Skripte"
 
 #: src/ssl/ssl.c:73 src/ssl/ssl.c:158
 msgid "Verify certificates"

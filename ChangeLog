@@ -1,3 +1,149 @@
+Sun Apr 11 21:11:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/conf.c:
+
+	write_config_file(): Final cleanup.  
+
+Sun Apr 11 20:46:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: conf.c, dialogs.c, dialogs.h:
+
+	Rename write_config_error() -> write_config_dialog().  
+
+Sun Apr 11 20:44:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: dialogs.c, dialogs.h:
+
+	Merge write_config_success() into write_config_error().  
+
+Sun Apr 11 20:41:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: conf.c, dialogs.c, dialogs.h:
+
+	Move write config dialog message composing.  
+
+Sun Apr 11 20:13:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: conf.c, dialogs.c, dialogs.h:
+
+	Avoid allocating args to msg_text() for the write_config_* dialogs.
+	Also fixes potential leak when term was NULL for successfull writes.  
+
+Sun Apr 11 17:24:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cookies/cookies.c, viewer/text/form.c, sched/download.c:
+
+	Avoid allocating args to msg_text().  
+
+Sun Apr 11 17:23:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, mime/dialogs.c, protocol/user.c:
+
+	Free args to msg_text() instead of adding them to getml().  
+
+Sun Apr 11 16:10:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	download_error_dialog(): Decrease indentation.  
+
+Sun Apr 11 16:08:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	download_error_dialog(): With msg_text() there is no need to
+	stracpy() stuff.  
+
+Sun Apr 11 15:47:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Remove useless test.  
+
+Sun Apr 11 15:32:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/protocol.c, protocol/protocol.h, protocol/uri.c,
+	sched/connection.c, sched/task.c:
+
+	Introduce an unknown_protocol_backend that will pop up an unknown
+	protocol dialog as the external handler.  
+
+Sun Apr 11 14:38:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	continue_download_do(): Fix access of free()d memory.  
+
+Sun Apr 11 14:35:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	continue_download_do(): Remove useless file_download cleanup. We
+	only ever go there if i is NULL.  
+
+Sun Apr 11 14:34:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	continue_download_do(): Move tq initialization up so it can be used
+	to shorten lines in the whole function.  
+
+Sun Apr 11 14:28:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	common_download_do(): Cleanup and remove goto usage by extracting
+	members from and freeing cmdw_hop early.  
+
+Sun Apr 11 14:22:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Cleanup and remove double check of resume to get last_pos.  
+
+Sun Apr 11 14:18:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Unify file_download initialization.  
+
+Sun Apr 11 12:43:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	save_as(): Cleanup error handling.  
+
+Sun Apr 11 12:42:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	common_download_do(): Cleanup error handling.  
+
+Sun Apr 11 03:03:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/exmode.c:
+
+	Don't allow exmode when anonymous.  
+
+Sun Apr 11 00:59:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, protocol/auth/dialogs.c:
+
+	Fix bug 392 (badly formatted HTTP auth dialog) properly.  
+
+Sun Apr 11 00:40:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Fix bug 390 caused by incompatibility in session info after support
+	for multiple URIs on the commandline was added. This is done by
+	introducing some basic session magic data that should make it
+	possible in the future to detect what version the client is using
+	and decode the session info appropriate. With this patch a new
+	ELinks will not be able to pass URIs when connecting to an old
+	ELinks however it will work the other way around. It is not perfect
+	but I see no other clean way to fix this bug.  
+
 Fri Apr  9 16:42:09 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/main.c:

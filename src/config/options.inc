@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.177 2005/01/03 02:04:34 jonas Exp $ */
+/* $Id: options.inc,v 1.178 2005/01/03 04:02:38 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1162,7 +1162,7 @@ static struct option_info config_options_info[] = {
 		N_("The URI to load either at startup time when no URI was given\n"
 		"on the command line or when requested by the goto-url-home action.\n"
 		"Set to \"\" if the environment variable WWW_HOME should be used\n"
-		"used as homepage URI instead.")),
+		"as homepage URI instead.")),
 
 #ifdef HAVE_STRFTIME
 	INIT_OPT_STRING("ui", N_("Date format"),

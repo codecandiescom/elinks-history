@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.105 2004/06/27 18:34:30 pasky Exp $ */
+/* $Id: renderer.c,v 1.106 2004/07/04 13:23:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,8 +140,7 @@ check_link_word(struct document *document, unsigned char *uri, int length,
 		&& (c) != '>'	\
 		&& (c) != '('	\
 		&& (c) != ')'	\
-		&& (c) != '\''	\
-		&& (c) != '"')
+		&& !isquote(c))
 
 static inline int
 get_uri_length(unsigned char *line, int length)

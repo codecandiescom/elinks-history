@@ -1,7 +1,9 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.28 2004/05/21 11:39:54 jonas Exp $
+## $Id: Makefile.am,v 1.29 2004/05/21 11:46:04 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
+
+authobj = auth/auth.o auth/dialogs.o
 
 if CONFIG_FINGER
 fingerobj = finger.o
@@ -31,6 +33,7 @@ noinst_LIBRARIES = libprotocol.a
 
 EXTRA_libprotocol_a_SOURCES = finger.c finger.h
 libprotocol_a_LIBADD = \
+ $(authobj) \
  $(fingerobj) \
  $(ftpobj) \
  $(httpobj) \

@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.58 2004/12/17 23:55:56 pasky Exp $ */
+/* $Id: forms.c,v 1.59 2004/12/18 00:27:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 #include "document/html/parser/parse.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
+#include "document/forms.h"
 #include "intl/charsets.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
@@ -29,7 +30,6 @@
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"
-#include "viewer/text/form.h"
 
 /* Unsafe macros */
 #include "document/html/internal.h"

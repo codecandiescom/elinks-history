@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.86 2004/11/14 03:23:54 jonas Exp $ */
+/* $Id: document.c,v 1.87 2004/12/18 00:27:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "cache/cache.h"
 #include "config/options.h"
 #include "document/document.h"
+#include "document/forms.h"
 #include "document/html/frames.h"
 #include "document/html/parser.h"
 #include "document/html/parser/parse.h"
@@ -29,7 +30,6 @@
 #include "util/memory.h"
 #include "util/object.h"
 #include "util/string.h"
-#include "viewer/text/form.h"
 #include "viewer/text/link.h"
 
 

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.302 2004/12/17 22:59:01 jonas Exp $ */
+/* $Id: link.c,v 1.303 2004/12/18 00:27:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "dialogs/menu.h"
 #include "dialogs/status.h"
 #include "document/document.h"
+#include "document/forms.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "document/options.h"

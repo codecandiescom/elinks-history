@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.37 2004/11/19 16:26:11 zas Exp $ */
+/* $Id: dialogs.c,v 1.38 2004/12/18 00:27:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 #include "util/memory.h"
 #include "util/object.h"
 #include "util/string.h"
+#include "viewer/text/form.h"
 
 
 static void

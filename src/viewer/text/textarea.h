@@ -1,4 +1,4 @@
-/* $Id: textarea.h,v 1.27 2004/11/22 13:27:42 zas Exp $ */
+/* $Id: textarea.h,v 1.28 2004/12/18 00:27:54 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_TEXTAREA_H
 #define EL__VIEWER_TEXT_TEXTAREA_H
@@ -8,6 +8,7 @@
 #include "viewer/text/form.h"
 
 struct document_view;
+struct form_control;
 struct link;
 struct session;
 struct terminal;

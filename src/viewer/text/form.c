@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.255 2004/12/17 08:53:09 zas Exp $ */
+/* $Id: form.c,v 1.256 2004/12/18 00:27:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,7 @@
 #include "config/kbdbind.h"
 #include "dialogs/menu.h"
 #include "document/document.h"
+#include "document/forms.h"
 #include "document/html/parser.h"
 #include "document/view.h"
 #include "intl/gettext/libintl.h"
@@ -187,30 +188,6 @@ init_form_state(struct form_control *fc, struct form_state *fs)
 	}
 }
 
-void
-done_form_control(struct form_control *fc)
-{
-	int i;
-
-	assert(fc);
-	if_assert_failed return;
-
-	mem_free_if(fc->action);
-	mem_free_if(fc->target);
-	mem_free_if(fc->name);
-	mem_free_if(fc->alt);
-	mem_free_if(fc->default_value);
-	mem_free_if(fc->formname);
-
-	for (i = 0; i < fc->nvalues; i++) {
-		mem_free_if(fc->values[i]);
-		mem_free_if(fc->labels[i]);
-	}
-
-	mem_free_if(fc->values);
-	mem_free_if(fc->labels);
-	if (fc->menu) free_menu(fc->menu);
-}
 
 struct form_state *
 find_form_state(struct document_view *doc_view, struct form_control *fc)
@@ -403,28 +380,6 @@ draw_forms(struct terminal *term, struct document_view *doc_view)
 		draw_form_entry(term, doc_view, l1);
 
 	} while (l1++ < l2);
-}
-
-
-int
-has_form_submit(struct document *document, struct form_control *fc)
-{
-	struct form_control *fc2;
-	int found = 0;
-
-	assert(document && fc);
-	if_assert_failed return 0;
-
-	foreach (fc2, document->forms) {
-		if (fc2->form_num != fc->form_num) continue;
-		found = 1;
-		if (fc2->type == FC_SUBMIT || fc2->type == FC_IMAGE)
-			break;
-	}
-
-	assertm(found, "form is not on list");
-	/* Return path :-). */
-	return found;
 }
 
 

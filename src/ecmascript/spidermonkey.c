@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.109 2004/12/17 23:15:11 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.110 2004/12/18 00:27:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,7 @@
 #include "dialogs/status.h"
 #include "document/html/frames.h"
 #include "document/document.h"
+#include "document/forms.h"
 #include "document/view.h"
 #include "ecmascript/ecmascript.h"
 #include "ecmascript/spidermonkey.h"

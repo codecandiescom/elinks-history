@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.158 2003/07/15 12:52:34 jonas Exp $ */
+/* $Id: view.c,v 1.159 2003/07/15 20:18:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,7 +151,7 @@ destroy_formatted(struct document *scr)
 }
 
 void
-detach_formatted(struct f_data_c *scr)
+detach_formatted(struct document_view *scr)
 {
 	assert(scr);
 	if_assert_failed return;
@@ -285,7 +285,7 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 }
 
 void
-draw_doc(struct terminal *t, struct f_data_c *scr, int active)
+draw_doc(struct terminal *t, struct document_view *scr, int active)
 {
 	struct view_state *vs;
 	int xp, yp;
@@ -362,7 +362,7 @@ draw_doc(struct terminal *t, struct f_data_c *scr, int active)
 static void
 draw_frames(struct session *ses)
 {
-	struct f_data_c *f, *cf;
+	struct document_view *f, *cf;
 	int *l;
 	int n, i, d, more;
 
@@ -416,7 +416,7 @@ draw_formatted(struct session *ses)
 }
 
 static void
-page_down(struct session *ses, struct f_data_c *f, int a)
+page_down(struct session *ses, struct document_view *f, int a)
 {
 	int newpos;
 
@@ -433,7 +433,7 @@ page_down(struct session *ses, struct f_data_c *f, int a)
 }
 
 static void
-page_up(struct session *ses, struct f_data_c *f, int a)
+page_up(struct session *ses, struct document_view *f, int a)
 {
 	assert(ses && f && f->vs);
 	if_assert_failed return;
@@ -445,7 +445,7 @@ page_up(struct session *ses, struct f_data_c *f, int a)
 
 
 void
-down(struct session *ses, struct f_data_c *fd, int a)
+down(struct session *ses, struct document_view *fd, int a)
 {
 	int current_link;
 
@@ -474,7 +474,7 @@ down(struct session *ses, struct f_data_c *fd, int a)
 }
 
 static void
-up(struct session *ses, struct f_data_c *fd, int a)
+up(struct session *ses, struct document_view *fd, int a)
 {
 	int current_link;
 
@@ -506,7 +506,7 @@ up(struct session *ses, struct f_data_c *fd, int a)
 #define scroll scroll_dirty_workaround_for_name_clash_with_libraries_on_macos
 
 static void
-scroll(struct session *ses, struct f_data_c *f, int a)
+scroll(struct session *ses, struct document_view *f, int a)
 {
 	assert(ses && f && f->vs && f->document);
 	if_assert_failed return;
@@ -522,7 +522,7 @@ scroll(struct session *ses, struct f_data_c *f, int a)
 }
 
 static void
-hscroll(struct session *ses, struct f_data_c *f, int a)
+hscroll(struct session *ses, struct document_view *f, int a)
 {
 	assert(ses && f && f->vs && f->document);
 	if_assert_failed return;
@@ -537,7 +537,7 @@ hscroll(struct session *ses, struct f_data_c *f, int a)
 }
 
 static void
-home(struct session *ses, struct f_data_c *f, int a)
+home(struct session *ses, struct document_view *f, int a)
 {
 	assert(ses && f && f->vs);
 	if_assert_failed return;
@@ -547,7 +547,7 @@ home(struct session *ses, struct f_data_c *f, int a)
 }
 
 static void
-x_end(struct session *ses, struct f_data_c *f, int a)
+x_end(struct session *ses, struct document_view *f, int a)
 {
 	assert(ses && f && f->vs && f->document);
 	if_assert_failed return;
@@ -572,7 +572,7 @@ decrement_fc_refcount(struct document *f)
 
 
 void
-set_frame(struct session *ses, struct f_data_c *f, int a)
+set_frame(struct session *ses, struct document_view *f, int a)
 {
 	assert(ses && ses->screen && f && f->vs);
 	if_assert_failed return;
@@ -583,7 +583,7 @@ set_frame(struct session *ses, struct f_data_c *f, int a)
 
 
 void
-toggle(struct session *ses, struct f_data_c *f, int a)
+toggle(struct session *ses, struct document_view *f, int a)
 {
 	assert(ses && f && ses->tab && ses->tab->term);
 	if_assert_failed return;
@@ -600,8 +600,8 @@ toggle(struct session *ses, struct f_data_c *f, int a)
 
 
 static inline void
-rep_ev(struct session *ses, struct f_data_c *fd,
-       void (*f)(struct session *, struct f_data_c *, int),
+rep_ev(struct session *ses, struct document_view *fd,
+       void (*f)(struct session *, struct document_view *, int),
        int a)
 {
 	register int i;
@@ -614,10 +614,10 @@ rep_ev(struct session *ses, struct f_data_c *fd,
 }
 
 
-void frm_download(struct session *, struct f_data_c *, int resume);
+void frm_download(struct session *, struct document_view *, int resume);
 
 static int
-frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
+frame_ev(struct session *ses, struct document_view *fd, struct event *ev)
 {
 	int x = 1;
 
@@ -836,10 +836,10 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 	return x;
 }
 
-struct f_data_c *
+struct document_view *
 current_frame(struct session *ses)
 {
-	struct f_data_c *fd = NULL;
+	struct document_view *fd = NULL;
 	int i;
 
 	assert(ses);
@@ -851,7 +851,7 @@ current_frame(struct session *ses)
 		if (fd->document && fd->document->frame) continue;
 		if (!i--) return fd;
 	}
-	fd = cur_loc(ses)->vs.f;
+	fd = cur_loc(ses)->vs.view;
 	/* The fd test probably only hides bugs in history handling. --pasky */
 	if (/*fd &&*/ fd->document && fd->document->frame) return NULL;
 	return fd;
@@ -860,7 +860,7 @@ current_frame(struct session *ses)
 static int
 send_to_frame(struct session *ses, struct event *ev)
 {
-	struct f_data_c *fd;
+	struct document_view *fd;
 	int r;
 
 	assert(ses && ses->tab && ses->tab->term && ev);
@@ -881,10 +881,10 @@ send_to_frame(struct session *ses, struct event *ev)
 
 void
 do_for_frame(struct session *ses,
-	     void (*f)(struct session *, struct f_data_c *, int),
+	     void (*f)(struct session *, struct document_view *, int),
 	     int a)
 {
-	struct f_data_c *fd;
+	struct document_view *fd;
 
 	assert(ses && f);
 	if_assert_failed return;
@@ -899,7 +899,7 @@ static void
 do_mouse_event(struct session *ses, struct event *ev)
 {
 	struct event evv;
-	struct f_data_c *fdd, *fd; /* !!! FIXME: frames */
+	struct document_view *fdd, *fd; /* !!! FIXME: frames */
 	struct document_options *o;
 
 	assert(ses && ev);
@@ -939,7 +939,7 @@ void send_open_in_new_xterm(struct terminal *, void (*)(struct terminal *, unsig
 void
 send_event(struct session *ses, struct event *ev)
 {
-	struct f_data_c *fd;
+	struct document_view *fd;
 
 	assert(ses && ev);
 	if_assert_failed return;
@@ -1214,7 +1214,7 @@ send_enter_reload(struct terminal *term, void *xxx, struct session *ses)
 }
 
 void
-frm_download(struct session *ses, struct f_data_c *fd, int resume)
+frm_download(struct session *ses, struct document_view *fd, int resume)
 {
 	struct link *link;
 
@@ -1251,7 +1251,7 @@ static void
 send_download_do(struct terminal *term, void *xxx, struct session *ses,
 		enum dl_type dlt)
 {
-	struct f_data_c *fd;
+	struct document_view *fd;
 
 	assert(term && ses);
 	if_assert_failed return;
@@ -1324,7 +1324,7 @@ send_open_in_new_xterm(struct terminal *term,
 		       void (*open_window)(struct terminal *term, unsigned char *, unsigned char *),
 		       struct session *ses)
 {
-	struct f_data_c *fd;
+	struct document_view *fd;
 
 	assert(term && open_window && ses);
 	if_assert_failed return;
@@ -1399,7 +1399,7 @@ open_in_new_window(struct terminal *term,
 void
 save_url(struct session *ses, unsigned char *url)
 {
-	struct f_data_c *fd;
+	struct document_view *fd;
 	unsigned char *u;
 
 	assert(ses && ses->tab && ses->tab->term && url);
@@ -1433,7 +1433,7 @@ save_url(struct session *ses, unsigned char *url)
 void
 send_image(struct terminal *term, void *xxx, struct session *ses)
 {
-	struct f_data_c *fd;
+	struct document_view *fd;
 	unsigned char *u;
 
 	assert(term && ses);
@@ -1461,7 +1461,7 @@ save_as(struct terminal *term, void *xxx, struct session *ses)
 	if (ses->dn_url) mem_free(ses->dn_url);
 	ses->dn_url = stracpy(l->vs.url);
 	if (ses->dn_url) {
-		struct f_data_c *fd = current_frame(ses);
+		struct document_view *fd = current_frame(ses);
 
 		assert(fd && fd->document && fd->document->url);
 		if_assert_failed return;
@@ -1494,7 +1494,7 @@ save_formatted_finish(struct terminal *term, int h, void *data, int resume)
 static void
 save_formatted(struct session *ses, unsigned char *file)
 {
-	struct f_data_c *fd;
+	struct document_view *fd;
 
 	assert(ses && ses->tab && ses->tab->term && file);
 	if_assert_failed return;
@@ -1509,7 +1509,7 @@ save_formatted(struct session *ses, unsigned char *file)
 void
 menu_save_formatted(struct terminal *term, void *xxx, struct session *ses)
 {
-	struct f_data_c *fd;
+	struct document_view *fd;
 
 	assert(term && ses);
 	if_assert_failed return;
@@ -1524,7 +1524,7 @@ menu_save_formatted(struct terminal *term, void *xxx, struct session *ses)
 
 /* Print page's title and numbering at window top. */
 static unsigned char *
-print_current_titlex(struct f_data_c *fd, int w)
+print_current_titlex(struct document_view *fd, int w)
 {
 	int ml = 0, pl = 0;
 	unsigned char *m;
@@ -1583,7 +1583,7 @@ end:
 unsigned char *
 print_current_title(struct session *ses)
 {
-	struct f_data_c *fd;
+	struct document_view *fd;
 
 	assert(ses && ses->tab && ses->tab->term);
 	if_assert_failed return NULL;

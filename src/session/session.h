@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.37 2003/07/04 02:16:35 jonas Exp $ */
+/* $Id: session.h,v 1.38 2003/07/15 20:18:09 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -103,8 +103,8 @@ struct session {
 	int reloadlevel;
 	int redirect_cnt;
 
-	struct f_data_c *screen;
-	struct list_head scrn_frames; /* -> struct f_data_c */
+	struct document_view *screen;
+	struct list_head scrn_frames; /* -> struct document_view */
 
 	unsigned char *dn_url;
 
@@ -194,7 +194,7 @@ void doc_end_load(struct download *, struct session *);
 
 void abort_loading(struct session *, int);
 void reload(struct session *, enum cache_mode);
-void load_frames(struct session *, struct f_data_c *);
+void load_frames(struct session *, struct document_view *);
 
 struct frame *ses_find_frame(struct session *, unsigned char *);
 struct frame *ses_change_frame_url(struct session *, unsigned char *, unsigned char *);

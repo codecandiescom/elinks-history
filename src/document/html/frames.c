@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.5 2003/07/15 12:52:32 jonas Exp $ */
+/* $Id: frames.c,v 1.6 2003/07/15 20:18:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,9 +92,9 @@ create_frame(struct frame_param *fp)
 }
 
 static void
-add_frame_to_list(struct session *ses, struct f_data_c *fd)
+add_frame_to_list(struct session *ses, struct document_view *fd)
 {
-	struct f_data_c *f;
+	struct document_view *f;
 
 	assert(ses && fd);
 	if_assert_failed return;
@@ -109,11 +109,11 @@ add_frame_to_list(struct session *ses, struct f_data_c *fd)
 	add_to_list_bottom(ses->scrn_frames, fd);
 }
 
-static struct f_data_c *
+static struct document_view *
 find_fd(struct session *ses, unsigned char *name,
 	int depth, int x, int y)
 {
-	struct f_data_c *fd;
+	struct document_view *fd;
 
 	assert(ses && name);
 	if_assert_failed return NULL;
@@ -126,7 +126,7 @@ find_fd(struct session *ses, unsigned char *name,
 		}
 	}
 
-	fd = mem_calloc(1, sizeof(struct f_data_c));
+	fd = mem_calloc(1, sizeof(struct document_view));
 	if (!fd) return NULL;
 
 	fd->used = 1;
@@ -146,13 +146,13 @@ find_fd(struct session *ses, unsigned char *name,
 	return fd;
 }
 
-struct f_data_c *
+struct document_view *
 format_frame(struct session *ses, unsigned char *name,
 	     struct document_options *o, int depth)
 {
 	struct cache_entry *ce;
 	struct view_state *vs;
-	struct f_data_c *fd;
+	struct document_view *fd;
 	struct frame *fr;
 
 	assert(ses && name && o);
@@ -204,7 +204,7 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 
 		o.xp = op->xp;
 		for (i = 0; i < fsd->x; i++) {
-			struct f_data_c *fdc;
+			struct document_view *fdc;
 
 			o.xw = fsd->f[n].xw;
 			o.yw = fsd->f[n].yw;

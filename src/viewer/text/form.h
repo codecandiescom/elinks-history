@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.3 2003/07/15 12:52:34 jonas Exp $ */
+/* $Id: form.h,v 1.4 2003/07/15 20:18:10 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -24,16 +24,16 @@ struct submitted_value {
 	int position;
 };
 
-unsigned char *get_form_url(struct session *, struct f_data_c *,
+unsigned char *get_form_url(struct session *, struct document_view *,
 			    struct form_control *);
 
 void fixup_select_state(struct form_control *fc, struct form_state *fs);
-struct form_state *find_form_state(struct f_data_c *f, struct form_control *frm);
+struct form_state *find_form_state(struct document_view *f, struct form_control *frm);
 
-int field_op(struct session *ses, struct f_data_c *f, struct link *l, struct event *ev, int rep);
+int field_op(struct session *ses, struct document_view *f, struct link *l, struct event *ev, int rep);
 
-void draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l);
-void draw_forms(struct terminal *t, struct f_data_c *f);
+void draw_form_entry(struct terminal *t, struct document_view *f, struct link *l);
+void draw_forms(struct terminal *t, struct document_view *f);
 
 int has_form_submit(struct document *f, struct form_control *frm);
 

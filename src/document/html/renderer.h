@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.29 2003/07/15 12:52:32 jonas Exp $ */
+/* $Id: renderer.h,v 1.30 2003/07/15 20:18:08 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -82,7 +82,7 @@ struct link {
 	unsigned sel_color;
 };
 
-/* For struct f_data_c */
+/* For struct document_view */
 struct link_bg {
 	int x, y;
 	unsigned c;
@@ -108,7 +108,7 @@ void count_format_cache(void);
 void delete_unused_format_cache_entries(void);
 void format_cache_reactivate(struct document *);
 
-void cached_format_html(struct view_state *, struct f_data_c *, struct document_options *);
+void cached_format_html(struct view_state *, struct document_view *, struct document_options *);
 void html_interpret(struct session *);
 
 void destroy_fc(struct form_control *);

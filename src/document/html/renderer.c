@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.169 2003/07/15 12:52:32 jonas Exp $ */
+/* $Id: renderer.c,v 1.170 2003/07/15 20:18:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1726,7 +1726,7 @@ format_cache_reactivate(struct document *ce)
 }
 
 void
-cached_format_html(struct view_state *vs, struct f_data_c *screen,
+cached_format_html(struct view_state *vs, struct document_view *screen,
 		   struct document_options *opt)
 {
 	unsigned char *n;
@@ -1743,7 +1743,7 @@ cached_format_html(struct view_state *vs, struct f_data_c *screen,
 	screen->name = n;
 	screen->link_bg = NULL;
 	screen->link_bg_n = 0;
-	vs->f = screen;
+	vs->view = screen;
 
 	screen->vs = vs;
 	screen->xl = screen->yl = -1;
@@ -1835,12 +1835,12 @@ void
 html_interpret(struct session *ses)
 {
 	struct document_options o;
-	struct f_data_c *fd;
-	struct f_data_c *cf = NULL;
+	struct document_view *fd;
+	struct document_view *cf = NULL;
 	struct view_state *l = NULL;
 
 	if (!ses->screen) {
-		ses->screen = mem_calloc(1, sizeof(struct f_data_c));
+		ses->screen = mem_calloc(1, sizeof(struct document_view));
 		if (!ses->screen) return;
 		ses->screen->search_word = &ses->search_word;
 	}
@@ -1878,7 +1878,7 @@ html_interpret(struct session *ses)
 	}
 
 	foreach (fd, ses->scrn_frames) if (!fd->used) {
-		struct f_data_c *fdp = fd->prev;
+		struct document_view *fdp = fd->prev;
 
 		detach_formatted(fd);
 		del_from_list(fd);

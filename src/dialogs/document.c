@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.48 2003/07/15 12:52:32 jonas Exp $ */
+/* $Id: document.c,v 1.49 2003/07/15 20:18:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ nowhere_box(struct terminal *term, unsigned char *title)
 /* Location info. message box. */
 static void
 loc_msg(struct terminal *term, struct location *location,
-	struct f_data_c *frame)
+	struct document_view *frame)
 {
 #ifdef GLOBHIST
 	struct global_history_item *historyitem;
@@ -123,13 +123,13 @@ loc_msg(struct terminal *term, struct location *location,
 		add_chr_to_str(&str, &strl, '\n');
 		add_to_str(&str, &strl, _("Codepage", term));
 		add_to_str(&str, &strl, ": ");
-		add_to_str(&str, &strl, get_cp_name(location->vs.f->document->cp));
+		add_to_str(&str, &strl, get_cp_name(location->vs.view->document->cp));
 
-		if (location->vs.f->document->cp_status == CP_STATUS_ASSUMED) {
+		if (location->vs.view->document->cp_status == CP_STATUS_ASSUMED) {
 			add_to_str(&str, &strl, " (");
 			add_to_str(&str, &strl, _("assumed", term));
 			add_chr_to_str(&str, &strl, ')');
-		} else if (location->vs.f->document->cp_status == CP_STATUS_IGNORED) {
+		} else if (location->vs.view->document->cp_status == CP_STATUS_IGNORED) {
 			add_to_str(&str, &strl, " (");
 			add_to_str(&str, &strl, _("ignoring server setting", term));
 			add_chr_to_str(&str, &strl, ')');

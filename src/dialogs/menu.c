@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.120 2003/07/14 19:51:30 jonas Exp $ */
+/* $Id: menu.c,v 1.121 2003/07/15 20:18:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,7 +78,7 @@ menu_url_shortcut(struct terminal *term, void *d, struct session *ses)
 
 static inline void
 menu_for_frame(struct terminal *term,
-	       void (*f)(struct session *, struct f_data_c *, int),
+	       void (*f)(struct session *, struct document_view *, int),
 	       struct session *ses)
 {
 	if (!have_location(ses)) return;
@@ -675,7 +675,7 @@ query_file(struct session *ses, unsigned char *url,
 static struct input_history search_history = { 0, {D_LIST_HEAD(search_history.items)} };
 
 void
-search_back_dlg(struct session *ses, struct f_data_c *f, int a)
+search_back_dlg(struct session *ses, struct document_view *f, int a)
 {
 	input_field(ses->tab->term, NULL, 1,
 		    N_("Search backward"), N_("Search for text"),
@@ -686,7 +686,7 @@ search_back_dlg(struct session *ses, struct f_data_c *f, int a)
 }
 
 void
-search_dlg(struct session *ses, struct f_data_c *f, int a)
+search_dlg(struct session *ses, struct document_view *f, int a)
 {
 	input_field(ses->tab->term, NULL, 1,
 		    N_("Search"), N_("Search for text"),

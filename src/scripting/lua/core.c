@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.57 2003/07/15 16:52:55 jonas Exp $ */
+/* $Id: core.c,v 1.58 2003/07/15 20:18:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,7 +94,7 @@ l_current_url(LS)
 static int
 l_current_link(LS)
 {
-	struct f_data_c *fd = current_frame(lua_ses);
+	struct document_view *fd = current_frame(lua_ses);
 
 	if (fd && fd->vs->current_link != -1) {
 		struct link *l = &fd->document->links[fd->vs->current_link];
@@ -112,7 +112,7 @@ l_current_link(LS)
 static int
 l_current_title(LS)
 {
-	struct f_data_c *fd = current_frame(lua_ses);
+	struct document_view *fd = current_frame(lua_ses);
 
 	if (fd && fd->document->title)
 		lua_pushstring(S, fd->document->title);
@@ -144,7 +144,7 @@ l_current_document_formatted(LS)
 {
 	extern unsigned char frame_dumb[];
 	int width, old_width = 0;
-	struct f_data_c *f;
+	struct document_view *f;
 	struct document *fd;
 	int x, y;
 	unsigned char *buf;

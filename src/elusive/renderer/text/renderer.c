@@ -1,5 +1,5 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.20 2003/07/15 12:52:33 jonas Exp $ */
+/* $Id: renderer.c,v 1.21 2003/07/15 20:18:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,7 +134,7 @@ static void
 render_box(struct renderer_state *state, struct layout_box *box)
 {
 	struct text_renderer_state *rstate = state->data;
-	struct f_data_c *console_frame_data = state->output;
+	struct document_view *console_frame_data = state->output;
 	struct document *frame_data = console_frame_data->document;
 	int y = frame_data->y;
 	struct layout_box *leaf_box;
@@ -198,7 +198,7 @@ static void
 text_init(struct renderer_state *state)
 {
 	struct document_options *document_options = state->input;
-	struct f_data_c *console_frame_data;
+	struct document_view *console_frame_data;
 
 	state->data = mem_calloc(1, sizeof(struct text_renderer_state));
 	if (!state->data) return;
@@ -206,7 +206,7 @@ text_init(struct renderer_state *state)
 	state->layouter_state = elusive_layouter_init(state->layouter,
 							state->parser);
 
-	state->output = mem_calloc(1, sizeof(struct f_data_c));
+	state->output = mem_calloc(1, sizeof(struct document_view));
 	if (!state->output) return;
 	console_frame_data = state->output;
 
@@ -234,7 +234,7 @@ text_render(struct renderer_state *state, unsigned char **str, int *len)
 static void
 text_done(struct renderer_state *state)
 {
-	struct f_data_c *console_frame_data = state->output;
+	struct document_view *console_frame_data = state->output;
 	struct document *frame_data = console_frame_data->document;
 	int i;
 

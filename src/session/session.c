@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.119 2003/07/15 12:52:33 jonas Exp $ */
+/* $Id: session.c,v 1.120 2003/07/15 20:18:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -418,8 +418,8 @@ ses_forward(struct session *ses)
 
 		l = cur_loc(ses);
 		foreach (frm, l->frames)
-			frm->vs.f = NULL;
-		l->vs.f = NULL;
+			frm->vs.view = NULL;
+		l->vs.view = NULL;
 	}
 
 	if (ses->search_word) {
@@ -742,10 +742,10 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 
 		url = stracpy(frm->vs.url);
 		if (!url
-		    || (frm->vs.f && frm->vs.f->document
-		    && frm->vs.f->document->frame)) {
+		    || (frm->vs.view && frm->vs.view->document
+		    && frm->vs.view->document->frame)) {
 			/* del_from_list(frm); */
-			request_frameset(ses, frm->vs.f->document->frame_desc);
+			request_frameset(ses, frm->vs.view->document->frame_desc);
 #if 0
 			destroy_vs(&frm->vs);
 			mem_free(frm->name);
@@ -814,7 +814,7 @@ request_frameset(struct session *ses, struct frameset_desc *fd)
 }
 
 inline void
-load_frames(struct session *ses, struct f_data_c *fd)
+load_frames(struct session *ses, struct document_view *fd)
 {
 	struct document *ff = fd->document;
 
@@ -1057,7 +1057,7 @@ process_file_requests(struct session *ses)
 {
 	static int stop_recursion = 0;
 	struct file_to_load *ftl;
-	struct f_data_c *fd = current_frame(ses);
+	struct document_view *fd = current_frame(ses);
 	int more = 1;
 
 	if (stop_recursion) return;
@@ -1311,7 +1311,7 @@ abort_loading(struct session *ses, int interrupt)
 static void
 destroy_session(struct session *ses)
 {
-	struct f_data_c *fdc;
+	struct document_view *fdc;
 
 	if (!ses) return;
 
@@ -1371,7 +1371,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 	if (have_location(ses)) {
 		struct location *l = cur_loc(ses);
 		struct file_to_load *ftl;
-		struct f_data_c *fd = current_frame(ses);
+		struct document_view *fd = current_frame(ses);
 
 		l->download.data = ses;
 		l->download.end = (void *)doc_end_load;
@@ -1411,7 +1411,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 	unsigned char *u;
 	unsigned char *pos;
 	protocol_external_handler *fn;
-	struct f_data_c *fd;
+	struct document_view *fd;
 
 	fn = get_protocol_external_handler(url);
 	if (fn) {
@@ -1557,7 +1557,7 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 		if (strcasecmp(frm->name, name)) continue;
 
 		if (url_len > strlen(frm->vs.url)) {
-			struct f_data_c *fd;
+			struct document_view *fd;
 			struct frame *nf = frm;
 
 			nf = mem_realloc(frm, sizeof(struct frame)
@@ -1668,7 +1668,7 @@ get_current_url(struct session *ses, unsigned char *str, size_t str_size)
 unsigned char *
 get_current_title(struct session *ses, unsigned char *str, size_t str_size)
 {
-	struct f_data_c *fd = current_frame(ses);
+	struct document_view *fd = current_frame(ses);
 
 	/* Ensure that the title is defined */
 	if (fd && fd->document->title)
@@ -1708,7 +1708,7 @@ get_current_link_name(struct session *ses, unsigned char *str, size_t str_size)
 struct link *
 get_current_link(struct session *ses)
 {
-	struct f_data_c *fd = current_frame(ses); /* What the hell is an 'fd'? */
+	struct document_view *fd = current_frame(ses); /* What the hell is an 'fd'? */
 
 	if (fd && fd->vs->current_link != -1) {
 		struct link *l = &fd->document->links[fd->vs->current_link];

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.10 2003/07/15 17:48:58 zas Exp $ */
+/* $Id: link.c,v 1.11 2003/07/15 20:18:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@
 
 
 void
-set_link(struct f_data_c *f)
+set_link(struct document_view *f)
 {
 	assert(f);
 	if_assert_failed return;
@@ -115,7 +115,7 @@ sort_links(struct document *f)
 
 
 static void
-draw_link(struct terminal *t, struct f_data_c *scr, int l)
+draw_link(struct terminal *t, struct document_view *scr, int l)
 {
 	struct link *link;
 	struct view_state *vs;
@@ -207,7 +207,7 @@ draw_link(struct terminal *t, struct f_data_c *scr, int l)
 
 
 void
-free_link(struct f_data_c *scr)
+free_link(struct document_view *scr)
 {
 	assert(scr);
 	if_assert_failed return;
@@ -218,7 +218,7 @@ free_link(struct f_data_c *scr)
 
 
 void
-clear_link(struct terminal *t, struct f_data_c *scr)
+clear_link(struct terminal *t, struct document_view *scr)
 {
 	assert(t && scr);
 	if_assert_failed return;
@@ -235,7 +235,7 @@ clear_link(struct terminal *t, struct f_data_c *scr)
 
 
 void
-draw_current_link(struct terminal *t, struct f_data_c *scr)
+draw_current_link(struct terminal *t, struct document_view *scr)
 {
 	assert(t && scr && scr->vs);
 	if_assert_failed return;
@@ -246,7 +246,7 @@ draw_current_link(struct terminal *t, struct f_data_c *scr)
 
 
 struct link *
-get_first_link(struct f_data_c *f)
+get_first_link(struct document_view *f)
 {
 	struct link *l;
 	register int i;
@@ -268,7 +268,7 @@ get_first_link(struct f_data_c *f)
 }
 
 struct link *
-get_last_link(struct f_data_c *f)
+get_last_link(struct document_view *f)
 {
 	struct link *l = NULL;
 	register int i;
@@ -286,7 +286,7 @@ get_last_link(struct f_data_c *f)
 
 
 static int
-in_viewx(struct f_data_c *f, struct link *l)
+in_viewx(struct document_view *f, struct link *l)
 {
 	register int i;
 
@@ -302,7 +302,7 @@ in_viewx(struct f_data_c *f, struct link *l)
 }
 
 int
-in_viewy(struct f_data_c *f, struct link *l)
+in_viewy(struct document_view *f, struct link *l)
 {
 	register int i;
 
@@ -318,7 +318,7 @@ in_viewy(struct f_data_c *f, struct link *l)
 }
 
 int
-in_view(struct f_data_c *f, struct link *l)
+in_view(struct document_view *f, struct link *l)
 {
 	assert(f && l);
 	if_assert_failed return 0;
@@ -326,7 +326,7 @@ in_view(struct f_data_c *f, struct link *l)
 }
 
 int
-c_in_view(struct f_data_c *f)
+c_in_view(struct document_view *f)
 {
 	assert(f && f->vs);
 	if_assert_failed return 0;
@@ -335,9 +335,9 @@ c_in_view(struct f_data_c *f)
 }
 
 int
-next_in_view(struct f_data_c *f, int p, int d,
-	     int (*fn)(struct f_data_c *, struct link *),
-	     void (*cntr)(struct f_data_c *, struct link *))
+next_in_view(struct document_view *f, int p, int d,
+	     int (*fn)(struct document_view *, struct link *),
+	     void (*cntr)(struct document_view *, struct link *))
 {
 	int p1, p2 = 0;
 	int y, yl;
@@ -370,7 +370,7 @@ next_in_view(struct f_data_c *f, int p, int d,
 
 
 void
-set_pos_x(struct f_data_c *f, struct link *l)
+set_pos_x(struct document_view *f, struct link *l)
 {
 	int xm = 0;
 	int xl = MAXINT;
@@ -393,7 +393,7 @@ set_pos_x(struct f_data_c *f, struct link *l)
 }
 
 void
-set_pos_y(struct f_data_c *f, struct link *l)
+set_pos_y(struct document_view *f, struct link *l)
 {
 	int ym = 0;
 	int yl;
@@ -415,7 +415,7 @@ set_pos_y(struct f_data_c *f, struct link *l)
 
 
 void
-find_link(struct f_data_c *f, int p, int s)
+find_link(struct document_view *f, int p, int s)
 { /* p=1 - top, p=-1 - bottom, s=0 - pgdn, s=1 - down */
 	struct link **line;
 	struct link *link;
@@ -466,7 +466,7 @@ nolink:
 
 
 unsigned char *
-get_link_url(struct session *ses, struct f_data_c *f,
+get_link_url(struct session *ses, struct document_view *f,
 	     struct link *l)
 {
 	assert(ses && f && l);
@@ -521,7 +521,7 @@ goto_link(unsigned char *url, unsigned char *target, struct session *ses,
 
 
 int
-enter(struct session *ses, struct f_data_c *fd, int a)
+enter(struct session *ses, struct document_view *fd, int a)
 {
 	struct link *link;
 
@@ -592,7 +592,7 @@ void
 selected_item(struct terminal *term, void *pitem, struct session *ses)
 {
 	int item = (int) pitem;
-	struct f_data_c *f;
+	struct document_view *f;
 	struct link *l;
 	struct form_state *fs;
 
@@ -631,7 +631,7 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 int
 get_current_state(struct session *ses)
 {
-	struct f_data_c *f;
+	struct document_view *f;
 	struct link *l;
 	struct form_state *fs;
 
@@ -651,7 +651,7 @@ get_current_state(struct session *ses)
 
 
 struct link *
-choose_mouse_link(struct f_data_c *f, struct event *ev)
+choose_mouse_link(struct document_view *f, struct event *ev)
 {
 	struct link *l1, *l2, *l;
 	register int i;
@@ -688,7 +688,7 @@ choose_mouse_link(struct f_data_c *f, struct event *ev)
 
 /* This is backend of the backend goto_link_number_do() below ;)). */
 void
-jump_to_link_number(struct session *ses, struct f_data_c *fd, int n)
+jump_to_link_number(struct session *ses, struct document_view *fd, int n)
 {
 	assert(ses && fd && fd->vs);
 	if_assert_failed return;
@@ -700,7 +700,7 @@ jump_to_link_number(struct session *ses, struct f_data_c *fd, int n)
 
 /* This is common backend for goto_link_number() and try_document_key(). */
 static void
-goto_link_number_do(struct session *ses, struct f_data_c *fd, int n)
+goto_link_number_do(struct session *ses, struct document_view *fd, int n)
 {
 	struct link *link;
 
@@ -719,7 +719,7 @@ goto_link_number_do(struct session *ses, struct f_data_c *fd, int n)
 void
 goto_link_number(struct session *ses, unsigned char *num)
 {
-	struct f_data_c *fd;
+	struct document_view *fd;
 
 	assert(ses && num);
 	if_assert_failed return;
@@ -731,7 +731,7 @@ goto_link_number(struct session *ses, unsigned char *num)
 
 /* See if this document is interested in the key user pressed. */
 int
-try_document_key(struct session *ses, struct f_data_c *fd,
+try_document_key(struct session *ses, struct document_view *fd,
 		 struct event *ev)
 {
 	long x;
@@ -779,7 +779,7 @@ try_document_key(struct session *ses, struct f_data_c *fd,
 void
 link_menu(struct terminal *term, void *xxx, struct session *ses)
 {
-	struct f_data_c *fd;
+	struct document_view *fd;
 	struct link *link;
 	struct menu_item *mi;
 	int l = 0;
@@ -878,7 +878,7 @@ end:
 
 /* Return current link's title. Pretty trivial. */
 unsigned char *
-print_current_link_title_do(struct f_data_c *fd, struct terminal *term)
+print_current_link_title_do(struct document_view *fd, struct terminal *term)
 {
 	struct link *link;
 
@@ -899,7 +899,7 @@ print_current_link_title_do(struct f_data_c *fd, struct terminal *term)
 
 
 unsigned char *
-print_current_link_do(struct f_data_c *fd, struct terminal *term)
+print_current_link_do(struct document_view *fd, struct terminal *term)
 {
 	struct link *link;
 
@@ -1061,7 +1061,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 unsigned char *
 print_current_link(struct session *ses)
 {
-	struct f_data_c *fd;
+	struct document_view *fd;
 
 	assert(ses && ses->tab && ses->tab->term);
 	if_assert_failed return NULL;

@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.8 2003/07/15 12:52:34 jonas Exp $ */
+/* $Id: vs.c,v 1.9 2003/07/15 20:18:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,11 +67,11 @@ copy_vs(struct view_state *dst, struct view_state *src)
 		}
 	}
 
-	dst->f = NULL;
+	dst->view = NULL;
 }
 
 void
-check_vs(struct f_data_c *f)
+check_vs(struct document_view *f)
 {
 	struct view_state *vs = f->vs;
 
@@ -92,7 +92,7 @@ void
 next_frame(struct session *ses, int p)
 {
 	struct view_state *vs;
-	struct f_data_c *fd;
+	struct document_view *fd;
 	int n;
 
 	if (!have_location(ses)

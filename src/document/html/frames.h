@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.2 2003/07/15 12:52:32 jonas Exp $ */
+/* $Id: frames.h,v 1.3 2003/07/15 20:18:08 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -84,8 +84,8 @@ struct document {
 
 #include "viewer/text/vs.h"
 
-struct f_data_c {
-	LIST_HEAD(struct f_data_c);
+struct document_view {
+	LIST_HEAD(struct document_view);
 
 	unsigned char *name;
 	unsigned char **search_word;
@@ -100,7 +100,6 @@ struct f_data_c {
 	int xl, yl; /* last pos of window */
 	int depth;
 	int used;
-
 };
 
 struct frameset_param {
@@ -117,7 +116,7 @@ struct frame_param {
 
 struct frameset_desc *create_frameset(struct document *doc, struct frameset_param *fp);
 void create_frame(struct frame_param *fp);
-struct f_data_c *format_frame(struct session *ses, unsigned char *name, struct document_options *o, int depth);
+struct document_view *format_frame(struct session *ses, unsigned char *name, struct document_options *o, int depth);
 void format_frames(struct session *ses, struct frameset_desc *fsd, struct document_options *op, int depth);
 
 #endif

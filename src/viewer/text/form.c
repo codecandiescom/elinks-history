@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.6 2003/07/15 12:52:34 jonas Exp $ */
+/* $Id: form.c,v 1.7 2003/07/15 20:18:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,7 +113,7 @@ init_ctrl(struct form_control *frm, struct form_state *fs)
 }
 
 struct form_state *
-find_form_state(struct f_data_c *f, struct form_control *frm)
+find_form_state(struct document_view *f, struct form_control *frm)
 {
 	struct view_state *vs;
 	struct form_state *fs;
@@ -156,7 +156,7 @@ find_form_state(struct f_data_c *f, struct form_control *frm)
 }
 
 void
-draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
+draw_form_entry(struct terminal *t, struct document_view *f, struct link *l)
 {
 	struct form_state *fs;
 	struct form_control *frm;
@@ -252,7 +252,7 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 }
 
 void
-draw_forms(struct terminal *t, struct f_data_c *f)
+draw_forms(struct terminal *t, struct document_view *f)
 {
 	struct link *l1, *l2;
 
@@ -310,7 +310,7 @@ free_succesful_controls(struct list_head *submit)
 }
 
 static void
-get_succesful_controls(struct f_data_c *f, struct form_control *fc,
+get_succesful_controls(struct document_view *f, struct form_control *fc,
 		       struct list_head *subm)
 {
 	struct form_control *frm;
@@ -630,7 +630,7 @@ encode_error:
 }
 
 static void
-reset_form(struct f_data_c *f, int form_num)
+reset_form(struct document_view *f, int form_num)
 {
 	struct form_control *frm;
 
@@ -645,7 +645,7 @@ reset_form(struct f_data_c *f, int form_num)
 }
 
 unsigned char *
-get_form_url(struct session *ses, struct f_data_c *f,
+get_form_url(struct session *ses, struct document_view *f,
 	     struct form_control *frm)
 {
 	struct list_head submit;
@@ -735,7 +735,7 @@ static int
 submit_form_do(struct terminal *term, void *xxx, struct session *ses,
 	       int do_reload)
 {
-	struct f_data_c *fd;
+	struct document_view *fd;
 	struct link *link;
 
 	assert(term && ses);
@@ -768,7 +768,7 @@ submit_form_reload(struct terminal *term, void *xxx, struct session *ses)
 
 
 int
-field_op(struct session *ses, struct f_data_c *f, struct link *l,
+field_op(struct session *ses, struct document_view *f, struct link *l,
 	 struct event *ev, int rep)
 {
 	struct form_control *frm;

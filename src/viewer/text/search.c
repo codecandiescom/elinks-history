@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.7 2003/07/15 12:52:34 jonas Exp $ */
+/* $Id: search.c,v 1.8 2003/07/15 20:18:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -299,7 +299,7 @@ srch_failed:
 }
 
 static void
-get_searched(struct f_data_c *scr, struct point **pt, int *pl)
+get_searched(struct document_view *scr, struct point **pt, int *pl)
 {
 	struct point *points = NULL;
 	struct search *s1, *s2;
@@ -378,7 +378,7 @@ ret:
 
 /* Highlighting of searched strings. */
 void
-draw_searched(struct terminal *term, struct f_data_c *scr)
+draw_searched(struct terminal *term, struct document_view *scr)
 {
 	struct point *pt = NULL;
 	int color = 0;
@@ -415,7 +415,7 @@ draw_searched(struct terminal *term, struct f_data_c *scr)
 static void
 search_for_do(struct session *ses, unsigned char *str, int direction)
 {
-	struct f_data_c *f;
+	struct document_view *f;
 
 	assert(ses && str);
 	if_assert_failed return;
@@ -488,7 +488,7 @@ point_intersect(struct point *p1, int l1, struct point *p2, int l2)
 }
 
 static int
-find_next_link_in_search(struct f_data_c *f, int d)
+find_next_link_in_search(struct document_view *f, int d)
 {
 	struct point *pt = NULL;
 	struct link *link;
@@ -517,7 +517,7 @@ find_next_link_in_search(struct f_data_c *f, int d)
 }
 
 void
-find_next(struct session *ses, struct f_data_c *f, int a)
+find_next(struct session *ses, struct document_view *f, int a)
 {
 	int p, min, max, c = 0;
 
@@ -589,7 +589,7 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 }
 
 void
-find_next_back(struct session *ses, struct f_data_c *f, int a)
+find_next_back(struct session *ses, struct document_view *f, int a)
 {
 	assert(ses && f);
 	if_assert_failed return;

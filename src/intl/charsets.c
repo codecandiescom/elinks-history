@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.45 2003/07/20 23:25:28 pasky Exp $ */
+/* $Id: charsets.c,v 1.46 2003/07/20 23:35:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -586,14 +586,7 @@ xx:
 		if (chars[pp] < 128 && chars[pp] != '&') {
 putc:
 			buffer[bp++] = chars[pp++];
-			if (!(bp & (ALLOC_GR - 1))) {
-				b = mem_realloc(buffer, bp + ALLOC_GR);
-				if (b)
-					buffer = b;
-				else
-					bp--;
-			}
-			continue;
+			goto flush;
 		}
 
 		if (chars[pp] != '&') {
@@ -650,18 +643,14 @@ decode:
 
 		if (!e[1]) {
 			buffer[bp++] = e[0];
-			if (!(bp & (ALLOC_GR - 1))) {
-				b = mem_realloc(buffer, bp + ALLOC_GR);
-				if (b)
-					buffer = b;
-				else
-					bp--;
-			}
-			continue;
+flush:
+			e = "";
+			goto flush1;
 		}
 
 		while (*e) {
 			buffer[bp++] = *(e++);
+flush1:
 			if (!(bp & (ALLOC_GR - 1))) {
 				b = mem_realloc(buffer, bp + ALLOC_GR);
 				if (b)

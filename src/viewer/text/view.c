@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.326 2004/01/01 15:54:39 jonas Exp $ */
+/* $Id: view.c,v 1.327 2004/01/05 04:54:31 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -314,7 +314,7 @@ draw_formatted(struct session *ses, int rerender)
 		return;
 
 	if (!ses->doc_view || !ses->doc_view->document) {
-		/*internal("document not formatted");*/
+		/*INTERNAL("document not formatted");*/
 		draw_area(ses->tab->term, 0, 1, ses->tab->term->width,
 			  ses->tab->term->height - 2, ' ', 0, NULL);
 		return;

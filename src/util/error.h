@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.40 2004/01/01 16:34:42 jonas Exp $ */
+/* $Id: error.h,v 1.41 2004/01/05 04:54:32 miciah Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -15,14 +15,14 @@
 extern int errline;
 extern unsigned char *errfile;
 
-/* @debug(format_string) is used for printing of debugging information. It
+/* @DBG(format_string) is used for printing of debugging information. It
  * should not be used anywhere in the official codebase (although it is often
  * lying there commented out, as it may get handy). */
 #undef DBG
 #define DBG errfile = __FILE__, errline = __LINE__, elinks_debug
 void elinks_debug(unsigned char *fmt, ...);
 
-/* @wdebug(format_string) is used for printing of debugging information, akin
+/* @WDBG(format_string) is used for printing of debugging information, akin
  * to DBG(). However, it sleep(1)s, therefore being useful when it is going
  * to be overdrawn or so. It should not be used anywhere in the official
  * codebase (although it is often lying there commented out, as it may get
@@ -31,14 +31,14 @@ void elinks_debug(unsigned char *fmt, ...);
 #define WDBG errfile = __FILE__, errline = __LINE__, elinks_wdebug
 void elinks_wdebug(unsigned char *fmt, ...);
 
-/* @error(format_string) is used to report non-fatal errors during the ELinks
+/* @ERROR(format_string) is used to report non-fatal errors during the ELinks
  * run. It tries to (not that agressively) draw user's attention to the error,
  * but never dumps core or so. */
 #undef ERROR
 #define ERROR errfile = __FILE__, errline = __LINE__, elinks_error
 void elinks_error(unsigned char *fmt, ...);
 
-/* @internal(format_string) is used to report fatal errors during the ELinks
+/* @INTERNAL(format_string) is used to report fatal errors during the ELinks
  * run. It tries to draw user's attention to the error and dumps core if ELinks
  * is running in the DEBUG mode. */
 #undef INTERNAL

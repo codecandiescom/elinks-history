@@ -2795,7 +2795,7 @@ msgstr ""
 
 #: src/config/options.c:2201 src/config/options.c:2597
 msgid "Status bar"
-msgstr ""
+msgstr "Status bjælke"
 
 #: src/config/options.c:2203 src/config/options.c:2599
 msgid "Status bar colors."
@@ -2810,9 +2810,8 @@ msgid "Generic status bar colors."
 msgstr ""
 
 #: src/config/options.c:2217 src/config/options.c:2613
-#, fuzzy
 msgid "Status bar text"
-msgstr "Søg efter tekst"
+msgstr "Status bjælke tekst"
 
 #: src/config/options.c:2219 src/config/options.c:2615
 msgid "Status bar text colors."
@@ -2835,9 +2834,8 @@ msgid "Unselected tab colors."
 msgstr "Farver for inaktiv faneblad."
 
 #: src/config/options.c:2246
-#, fuzzy
 msgid "Loading tab"
-msgstr "henter"
+msgstr "Henter fanebladets indhold"
 
 #: src/config/options.c:2248
 msgid "Tab colors for tabs that are loading in the background."

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.87 2004/07/28 13:12:06 jonas Exp $ */
+/* $Id: kbd.c,v 1.88 2004/07/28 13:17:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -633,6 +633,8 @@ static struct key os2xtd[256] = {
 #include <ctype.h>	/* isprint() isspace() */
 #endif
 
+/* Returns length of the escape sequence or -1 if the caller needs to set up
+ * the ESC delay timer. */
 static int
 decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 {
@@ -640,7 +642,7 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 			int v;
 			int el;
 
-			if (itrm->qlen < 3) goto ret;
+			if (itrm->qlen < 3) return -1;
 
 			get_esc_code(itrm->kqueue, itrm->qlen, &c, &v, &el);
 #ifdef DEBUG_ITRM_QUEUE
@@ -654,13 +656,13 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 					ev->x = KBD_F1 + itrm->kqueue[3] - 'A';
 					el = 4;
 				} else {
-					goto ret;
+					return -1;
 				}
 
 			}
 
 			else switch (c) {
-				case 0: goto ret;
+				case 0: return -1;
 				case 'A': ev->x = KBD_UP; break;
 				case 'B': ev->x = KBD_DOWN; break;
 				case 'C': ev->x = KBD_RIGHT; break;
@@ -731,12 +733,14 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 					static int xterm_button = -1;
 					struct term_event_mouse *mouse = &ev->info.mouse;
 
-					if (itrm->qlen - el < 3) goto ret;
+					if (itrm->qlen - el < 3)
+						return -1;
+
 					if (v == 5) {
 						if (xterm_button == -1)
 							xterm_button = 0;
 						if (itrm->qlen - el < 5)
-							goto ret;
+							return -1;
 
 						ev->x = (unsigned char)(itrm->kqueue[el+1]) - ' ' - 1
 						       + ((int)((unsigned char)(itrm->kqueue[el+2]) - ' ' - 1) << 7);
@@ -802,8 +806,6 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 			}
 
 	return el;
-ret:
-	return -1;
 }
 
 /* I feeeeeel the neeeed ... to rewrite this ... --pasky */

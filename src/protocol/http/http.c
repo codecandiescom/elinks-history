@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.235 2004/02/20 14:42:00 jonas Exp $ */
+/* $Id: http.c,v 1.236 2004/02/20 15:19:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,7 +23,6 @@
 
 #include "config/options.h"
 #include "cookies/cookies.h"
-#include "dialogs/menu.h"
 #include "cache/cache.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
@@ -32,6 +31,7 @@
 #include "osdep/ascii.h"
 #include "osdep/osdep.h"
 #include "protocol/auth/auth.h"
+#include "protocol/auth/dialogs.h"
 #include "protocol/http/codes.h"
 #include "protocol/http/header.h"
 #include "protocol/http/http.h"

@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.15 2003/05/10 00:27:59 zas Exp $ */
+/* $Id: conv.c,v 1.16 2003/05/10 01:29:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,46 +19,12 @@
 #include "util/string.h"
 
 
-/* Return 0 if it went ok, 1 if it doesn't fit there. */
-int
-snprint(unsigned char *str, int len, unsigned num)
-{
-	int threshold = 1;
-
-	while (threshold <= num / 10) threshold *= 10;
-
-	while (len-- > 0 && threshold) {
-		*str = num / threshold + '0';
-		str++;
-
-		num %= threshold;
-		threshold /= 10;
-	}
-
-	*str = '\0';
-	return !!threshold;
-}
-
-int
-snzprint(unsigned char *str, int len, int num)
-{
-	if (len > 1 && num < 0) {
-		*str = '-';
-		str++;
-
-		num = -num;
-		len--;
-	}
-
-	return snprint(str, len, num);
-}
-
 /* TODO: Move it to string.c. --Zas */
 int
 add_num_to_str(unsigned char **str, int *len, long num)
 {
 	int ret;
-	unsigned char t[64];
+	unsigned char t[32];
 	int tlen = 0;
 
 	ret = longcat(&t, &tlen, num, sizeof(t) - 1, 0);
@@ -80,25 +46,41 @@ add_num_to_str(unsigned char **str, int *len, long num)
 	return ret;
 }
 
-
-void
-add_knum_to_str(unsigned char **str, int *len, int num)
+int
+add_knum_to_str(unsigned char **str, int *len, long num)
 {
-	unsigned char buf[13];
+	int ret;
+	unsigned char t[32];
+	int tlen = 0;
 
 	if (num && (num / (1024 * 1024)) * (1024 * 1024) == num) {
-		snzprint(buf, sizeof(buf) - 1, num / (1024 * 1024));
-		strcat(buf, "M");
-
+		ret = longcat(&t, &tlen, num / (1024 * 1024), sizeof(t) - 2, 0);
+		t[tlen++] = 'M';
+		t[tlen] = '\0';
 	} else if (num && (num / 1024) * 1024 == num) {
-		snzprint(buf, sizeof(buf) - 1, num / 1024);
-		strcat(buf, "k");
-
+		ret = longcat(&t, &tlen, num / 1024, sizeof(t) - 2, 0);
+		t[tlen++] = 'k';
+		t[tlen] = '\0';
 	} else {
-		snzprint(buf, sizeof(buf), num);
+		ret = longcat(&t, &tlen, num, sizeof(t) - 1, 0);
 	}
 
-	add_to_str(str, len, buf);
+	if (ret < 2 && tlen) {
+		if ((*len & ~(ALLOC_GR - 1))
+		    != ((*len + tlen) & ~(ALLOC_GR - 1))) {
+		   	unsigned char *p = mem_realloc(*str,
+					               (*len + tlen + ALLOC_GR)
+				 		       & ~(ALLOC_GR - 1));
+
+	   		if (!p) return 2;
+	   		*str = p;
+		}
+
+		memcpy(*str + *len, t, tlen + 1);
+		*len += tlen;
+	}
+
+	return ret;
 }
 
 long

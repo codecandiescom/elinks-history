@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.28 2003/05/10 00:27:59 zas Exp $ */
+/* $Id: string.h,v 1.29 2003/05/10 01:29:08 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -78,6 +78,10 @@ isA(unsigned char c)
 		|| (c >= '0' && c <= '9')
 		|| c == '_' || c == '-';
 }
+
+/* XXX: Compatibility only. Remove these at some time. --Zas */
+#define snprint(str, len, num) ulongcat(str, NULL, num, len, 0);
+#define snzprint(str, len, num) longcat(str, NULL, num, len, 0);
 
 
 /*** Our libc... */

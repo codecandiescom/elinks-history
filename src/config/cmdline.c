@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.52 2004/04/15 02:24:00 jonas Exp $ */
+/* $Id: cmdline.c,v 1.53 2004/04/15 08:28:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,6 +33,9 @@
 #include "util/lists.h"
 #include "util/memory.h"
 #include "util/string.h"
+
+/* Hack to handle URL extraction for -remote commands */
+static unsigned char *remote_url;
 
 static int
 _parse_options(int argc, unsigned char *argv[], struct option *opt, struct list_head *url_list)
@@ -85,6 +88,10 @@ unknown_option:
 						ERROR(gettext("Cannot parse option %s: %s"), argv[-1], err);
 
 					return 1;
+				} else if (remote_url) {
+					add_to_string_list(url_list, remote_url, -1);
+					mem_free(remote_url);
+					remote_url = NULL;
 				}
 			} else {
 				goto unknown_option;
@@ -174,6 +181,94 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 	fflush(stdout);
 
 	return "";
+}
+
+static unsigned char *
+remote_cmd(struct option *o, unsigned char ***argv, int *argc)
+{
+	unsigned char *command, *arg, *argend = NULL;
+	int len;
+
+	if (*argc < 1) return gettext("Parameter expected");
+
+	command = *(*argv);
+
+	for (len = 0; isalpha(command[len]); len++)
+		/* m33p */;
+
+	arg = strchr(&command[len], '(');
+	if (arg) {
+		arg++;
+		skip_whitespace(arg);
+
+		argend = strchr(arg, ')');
+	}
+
+	if (!argend) {
+		/* Just open any passed URLs in new tabs */
+		remote_session_flags |= SES_REMOTE_NEW_TAB;
+		return NULL;
+	}
+
+	for (argend--; arg < argend && isspace(*argend); argend--)
+		/* m33p */;
+
+	if (!strlcasecmp(command, len, "openURL", 7)) {
+		unsigned char *comma = memchr(arg, ',', argend - arg);
+
+		if (arg == argend) {
+			/* Prompt for a URL with a dialog box */
+			remote_session_flags |= SES_REMOTE_PROMPT_URL;
+
+		} else if (comma) {
+			unsigned char *where = comma + 1;
+
+			for (comma--; arg < comma && isspace(*comma); comma--)
+				/* m33p */;
+
+			skip_whitespace(where);
+			len = argend - where + 1;
+
+			if (!strlcasecmp(where, len, "new-window", 10)) {
+				remote_session_flags |= SES_REMOTE_NEW_WINDOW;
+
+			} else if (!strlcasecmp(where, len, "new-tab", 7)) {
+				remote_session_flags |= SES_REMOTE_NEW_TAB;
+
+			} else {
+				return gettext("Command not supported");
+			}
+
+			remote_url = memacpy(arg, comma - arg + 1);
+
+		} else {
+			remote_session_flags |= SES_REMOTE_CURRENT_TAB;
+			remote_url = memacpy(arg, argend - arg + 1);
+		}
+
+	} else if (!strlcasecmp(command, len, "mailto", 6)) {
+		/* Ehh .. start porting mutt code! */
+		return gettext("Command not supported");
+
+	} else if (!strlcasecmp(command, len, "xfeDoCommand", 12)) {
+		len = argend - arg + 1;
+
+		if (!strlcasecmp(arg, len, "openBrowser", 11)) {
+			remote_session_flags = SES_REMOTE_NEW_WINDOW;
+		} else {
+			return gettext("Command not supported");
+		}
+
+	} else if (!strlcasecmp(command, len, "ping", 4)) {
+		get_opt_bool_tree(cmdline_options, "ping") = 1;
+
+	} else {
+		return gettext("Command not supported");
+	}
+
+	(*argv)++; (*argc)--;	/* Consume next argument */
+
+	return NULL;
 }
 
 static unsigned char *
@@ -550,9 +645,11 @@ struct option_info cmdline_options_info[] = {
 		"ping", 0, 0,
 		N_("Checks if ELinks is currently running by trying to connect the interlink socket.")),
 
-	INIT_OPT_BOOL("", N_("Open URLs in an already running ELinks"),
-		"remote-session", 0, 0,
-		N_("Connect to an already running instance if any and open URLs.")),
+	INIT_OPT_COMMAND("", N_("Control an already running ELinks"),
+		"remote", 0, remote_cmd,
+		N_("Mozilla compliant support for controlling an already running instance\n"
+		"of ELinks by openning URLs and tabs:\n"
+		"  -remote 'openURL(http://elinks.or.cz)'")),
 
 	INIT_OPT_INT("", N_("Connect to session ring with given ID"),
 		"session-ring", 0, 0, MAXINT, 0,

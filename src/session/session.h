@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.117 2004/04/15 02:24:01 jonas Exp $ */
+/* $Id: session.h,v 1.118 2004/04/15 08:28:28 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -23,8 +23,15 @@ struct window;
 struct initial_session_info {
 	/* The session whose state to copy, -1 is none. */
 	int base_session;
+
 	/* Whether to open URLs in the master using -remote */
-	int remote;
+	enum remote_session_flags {
+		SES_REMOTE_NEW_TAB = 1,
+		SES_REMOTE_NEW_WINDOW = 3,
+		SES_REMOTE_CURRENT_TAB = 4,
+		SES_REMOTE_PROMPT_URL = 8,
+	} remote;
+
 	/* The URL we should load immediatelly. */
 	struct list_head url_list;
 };
@@ -169,6 +176,7 @@ struct session {
 };
 
 extern struct list_head sessions; /* -> struct session */
+extern enum remote_session_flags remote_session_flags;
 
 /* This returns a pointer to the current location inside of the given session.
  * That's nice for encapsulation and alrady paid out once ;-). */

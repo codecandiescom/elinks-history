@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.368 2004/04/15 02:39:44 jonas Exp $ */
+/* $Id: session.c,v 1.369 2004/04/15 08:28:28 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -73,6 +73,7 @@ struct file_to_load {
 
 INIT_LIST_HEAD(sessions);
 
+enum remote_session_flags remote_session_flags;
 static int session_id = 1;
 
 
@@ -646,8 +647,7 @@ copy_session(struct session *old, struct session *new)
 struct string *
 create_session_info(struct string *info, int cp, struct list_head *url_list)
 {
-	int remote = get_opt_bool_tree(cmdline_options, "remote-session");
-	int numbers[3] = { cp, SESSION_MAGIC(1, 0), remote };
+	int numbers[3] = { cp, SESSION_MAGIC(1, 0), remote_session_flags };
 	unsigned char *number_chars = (unsigned char *) numbers;
 
 	if (init_string(info)
@@ -781,7 +781,10 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 		/* If processing session info from a -remote instance we just
 		 * want to hook up with the master. */
 		if (info->remote && s->tab->term->master) {
-			ses = s;
+			struct window *tab = get_current_tab(s->tab->term);
+
+			assert(tab);
+			ses = tab->data;
 			break;
 
 		} else if (s->id == info->base_session) {
@@ -791,7 +794,7 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 	}
 
 	if (!list_empty(info->url_list)) {
-		int first = !info->remote;
+		int first = !info->remote || (info->remote & SES_REMOTE_CURRENT_TAB);
 		struct string_list_item *str;
 
 		foreach (str, info->url_list) {
@@ -800,6 +803,8 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 
 			if (!url) continue;
 
+			/* TODO: Handle open in new window if the
+			 * SES_REMOTE_NEW_WINDOW remote flag is set */
 			if (first) {
 				/* Open first url. */
 				goto_url_with_hook(ses, url);
@@ -812,13 +817,20 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 		}
 
 	} else if (info->remote) {
-		/* FIXME: This is not perfect. Doing multiple -remote with no
-		 * URLs will make the goto dialogs inaccessible. Maybe we
-		 * should not support this kind of thing or make the window
-		 * focus detecting code more intelligent. --jonas */
-		open_url_in_new_tab(ses, NULL, 0);
-		/* We can't create new window in EV_INIT handler! */
-		register_bottom_half(dialog_goto_url_open, ses);
+		/* TODO: SES_REMOTE_NEW_WINDOW */
+		if (info->remote & SES_REMOTE_NEW_TAB) {
+			/* FIXME: This is not perfect. Doing multiple -remote
+			 * with no URLs will make the goto dialogs
+			 * inaccessible. Maybe we should not support this kind
+			 * of thing or make the window focus detecting code
+			 * more intelligent. --jonas */
+			open_url_in_new_tab(ses, NULL, 0);
+		}
+
+		if (info->remote & SES_REMOTE_PROMPT_URL) {
+			/* We can't create new window in EV_INIT handler! */
+			register_bottom_half(dialog_goto_url_open, ses);
+		}
 
 #ifdef CONFIG_BOOKMARKS
 	} else if (!first_use

@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.35 2003/10/30 17:01:39 pasky Exp $ */
+/* $Id: select.c,v 1.36 2003/11/11 15:31:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,8 +93,6 @@ select_info(int type)
 		case INFO_TIMERS:
 			foreach (ce, timers) i++;
 			return i;
-		default:
-			internal("select_info: bad request");
 	}
 
 	return 0;

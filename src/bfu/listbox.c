@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.108 2003/11/09 13:33:37 pasky Exp $ */
+/* $Id: listbox.c,v 1.109 2003/11/11 15:33:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -625,9 +625,6 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		case EV_MOUSE:
 		case EV_ABORT:
 			break;
-
-		default:
-			internal("Unknown event received: %d", ev->ev);
 	}
 
 	return EVENT_NOT_PROCESSED;

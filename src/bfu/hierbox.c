@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.58 2003/11/11 06:28:52 miciah Exp $ */
+/* $Id: hierbox.c,v 1.59 2003/11/11 15:35:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,9 +154,6 @@ display_dlg:
 			mem_free(box);
 			break;
 		}
-
-		default:
-			internal("Unknown event received: %d", ev->ev);
 	}
 
 	return EVENT_NOT_PROCESSED;

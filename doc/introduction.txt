@@ -62,18 +62,68 @@ example the key-combo: "<Alt>-v i" will open the document info dialog
 accessible from the View sub menu in the Main menu.
 
 
-Note: This is still a work in progress and from here on an below everything is
-marked TODO!
-
-
 The Managers
 ~~~~~~~~~~~~
 
 The managers let you control the state of subsystems, such as cookies and the
-global history.
+global history. They are accessible from the Tools or Setup submenu in the
+Main Menu. The managers consists of an area showing a hierarchy of boxes and
+buttons at the bottom. Below a view of the cookie manager is shown.
 
-List boxes and buttons.
++----------------------------- Cookie manager ------------------------------+
+|                                                                           |
+|  [-]- bugzilla.elinks.or.cz                                               |
+|   |    |-- BUGLIST                                                        |
+|   |    `-- LASTORDER                                                      |
+|  [+]- kerneltrap.org                                                      |
+|  [+]-*dictionary.reference.com                                            |
+|  [+]-*bjork.com                                                           |
+|  [-]- www.google.com                                                      |
+|        `-- PREF                                                           |
+|                                                                           |
+|                                                                           |
+|                                                                           |
+|                                                                           |
+|  [ Info ]  [ Add ]  [ Edit ]  [ Delete ]  [ Clear ]  [ Save ]  [ Close ]  |
++---------------------------------------------------------------------------+
 
+The hierarchic boxes are either folders or leafs. Folder boxes are displayed
+with a "[-]" or "[+]" before the name telling whether the folder is currently
+open or closed. Leaf boxes are displayed indented compared to the folder they
+are nested in. In the cookie manager example above "bugzilla.elinks.or.cz" is
+a folder box and "BUGLIST" is a leaf box.
+
+Boxes can be "marked", which makes it possible to select a group of boxes and
+perform an action on them, such as deleting all marked boxes. If any box has
+been marked the currently selected box is ignored when performing the action.
+Marked boxes are displayed with an asterics ('*') prefixing the name.
+
+The buttons make it possible to perform actions either on selected or marked
+boxes or on all boxes in the manager. Buttons named "Clear" and "Save" are
+performed on all boxes; "Clear" will delete all boxes and "Save" will update
+the runtime state file associated with the manager in the ~/.elinks/
+directory. Most buttons presses will query you before completing the action.
+
+At any time both the currently selected box and button are highlighted. The
+same goes for marked boxes. Most manager dialogs also maintains the state, so
+that when you reopen the manager later it will have the same box selected and
+the same folders opened or closed.
+
+The basic default controls for managers are the following:
+
+	Up/Down		Select the box above/below.
+	'*'		Toggle marking of a box.
+	Space		Open and close folders.
+	Left/Right	Select the button to the left/right.
+	Enter		Press the currently selected button.
+	Esc		Close the manager dialog.
+
+Some managers also supports searching, either by pressing the "[ Search ]"
+button or by pressing '/'. By searching the empty string all hidden boxes from
+the previous search will be shown again.
+
+Note: This is still a work in progress and from here on an below everything is
+marked TODO!
 
 Navigation
 ~~~~~~~~~~
@@ -113,4 +163,4 @@ Hints and Odd Features
 
  - Numerical action prefixes. Example 3<Down> jumps down three links.
 
-$Id: introduction.txt,v 1.3 2004/12/23 02:21:38 jonas Exp $
+$Id: introduction.txt,v 1.4 2004/12/25 14:29:24 jonas Exp $

@@ -1,5 +1,5 @@
 /* Ruby interface (scripting engine) */
-/* $Id: core.c,v 1.7 2005/01/20 18:31:43 jonas Exp $ */
+/* $Id: core.c,v 1.8 2005/01/21 14:05:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,21 +137,24 @@ erb_report_error(struct session *ses, int error)
 static VALUE
 erb_module_message(VALUE self, VALUE str)
 {
-	unsigned char *buff, *p;
-
-	if (list_empty(terminals))
-		return Qnil;
+	unsigned char *message, *line_end;
 
 	str = rb_obj_as_string(str);
-	buff = memacpy(RSTRING(str)->ptr, RSTRING(str)->len);
-	if (!buff) return Qnil;
+	message = memacpy(RSTRING(str)->ptr, RSTRING(str)->len);
+	if (!message) return Qnil;
 
-	p = strchr(buff, '\n');
-	if (p) *p = '\0';
+	line_end = strchr(message, '\n');
+	if (line_end) *line_end = '\0';
+
+	if (list_empty(terminals)) {
+		usrerror("[Ruby] %s", message);
+		mem_free(message);
+		return Qnil;
+	}
 
 	msg_box(terminals.next, NULL, MSGBOX_NO_TEXT_INTL | MSGBOX_FREE_TEXT,
 		N_("Ruby Message"), ALIGN_LEFT,
-		buff,
+		message,
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 

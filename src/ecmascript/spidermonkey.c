@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.121 2004/12/19 02:04:17 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.122 2004/12/19 11:26:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1161,7 +1161,9 @@ static const JSFunctionSpec forms_funcs[] = {
 	{ NULL }
 };
 
-enum forms_prop { JSP_FORMS_LENGTH };
+/* INTs from 0 up are equivalent to item(INT), so we have to stuff length out
+ * of the way. */
+enum forms_prop { JSP_FORMS_LENGTH = -1 };
 static const JSPropertySpec forms_props[] = {
 	{ "length",	JSP_FORMS_LENGTH,	JSPROP_ENUMERATE | JSPROP_READONLY},
 	{ NULL }
@@ -1203,10 +1205,12 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			counter++;
 
 		P_INT(counter);
+		DBG("*counter%d*",counter);
 		break;
 	}
 	default:
-		INTERNAL("Invalid ID %d in forms_get_property().", JSVAL_TO_INT(id));
+		/* Array index. */
+		forms_item(ctx, obj, 1, &id, vp);
 		goto bye;
 	}
 

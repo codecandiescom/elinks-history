@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.93 2004/12/17 13:32:09 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.94 2004/12/17 13:48:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -286,8 +286,11 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		/* TODO: It will be a major PITA to implement this properly.
 		 * Well, perhaps not so much if we introduce reference tracking
 		 * for (struct session)? Still... --pasky */
-		p.boolean = 0; prop_type = JSPT_BOOLEAN; break;
-	case JSP_WIN_SELF: p.object = obj; prop_type = JSPT_OBJECT; break;
+		p.boolean = 0; prop_type = JSPT_BOOLEAN;
+		break;
+	case JSP_WIN_SELF:
+		p.object = obj; prop_type = JSPT_OBJECT;
+		break;
 	case JSP_WIN_PARENT:
 		/* XXX: It would be nice if the following worked, yes.
 		 * The problem is that we get called at the point where

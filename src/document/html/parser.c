@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.346 2004/01/18 15:07:51 zas Exp $ */
+/* $Id: parser.c,v 1.347 2004/01/18 15:12:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2257,6 +2257,14 @@ html_frame(unsigned char *a)
 	mem_free(url);
 }
 
+/* Parse rows and cols attribute values and calculate appropriated values for display.
+ * It handles things like:
+ * <frameset cols="140,260,160">			values in pixels
+ * <frameset cols="1*,2*,3*"> 				values in fractions
+ * <frameset cols="320,*">				wildcard
+ * <frameset cols="33%,33%,33%" rows="33%,33%,33%"> 	values in percentage
+ * */
+/* TODO: split it. --Zas */
 static void
 parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int **new_values, int *new_values_count)
 {
@@ -2270,6 +2278,8 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int *
 
 new_ch:
 	while (isspace(*str)) str++;
+
+	/* Extract number. */
 	errno = 0;
 	number = strtoul(str, (char **)&str, 10);
 	if (errno) {
@@ -2278,24 +2288,36 @@ new_ch:
 	}
 
 	val = number;
-	if (*str == '%') val = val * max_value / 100;
-	else if (*str != '*') val = (val + (pixels_per_char - 1) / 2) / pixels_per_char;
-	else if (!val) val = -1;
-	else val = -val;
+	if (*str == '%')	/* Percentage */
+		val = val * max_value / 100;
+	else if (*str != '*')	/* Pixels */
+		val = (val + (pixels_per_char - 1) / 2) / pixels_per_char;
+	else if (!val)		/* wildcard */
+		val = -1;
+	else			/* Fraction, marked by negative value. */
+		val = -val;
 
+	/* Save value. */
 	tmp_values = mem_realloc(values, (values_count + 1) * sizeof(int));
 	if (tmp_values) (values = tmp_values)[values_count++] = val;
 	else {
 		*new_values_count = 0;
 		return;
 	}
+
+	/* Check for next field if any. */
 	tmp_str = strchr(str, ',');
 	if (tmp_str) {
 		str = tmp_str + 1;
 		goto new_ch;
 	}
+
 	*new_values = values;
 	*new_values_count = values_count;
+	
+	/* Here begins distribution between rows or cols.
+	 * Be warn, this is Mikulas's black magic ;) */
+
 	val = 2 * values_count - 1;
 	for (i = 0; i < values_count; i++) if (values[i] > 0) val += values[i] - 1;
 

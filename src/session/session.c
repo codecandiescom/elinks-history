@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.432 2004/06/10 13:51:05 jonas Exp $ */
+/* $Id: session.c,v 1.433 2004/06/10 14:10:25 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -571,8 +571,10 @@ setup_first_session(struct session *ses)
 	}
 }
 
+static struct session *process_session_info(struct session *ses, struct initial_session_info *info);
+
 static struct session *
-create_session(struct window *tab)
+create_session(struct window *tab, struct initial_session_info *session_info)
 {
 	struct session *ses = mem_calloc(1, sizeof(struct session));
 
@@ -598,7 +600,7 @@ create_session(struct window *tab)
 
 	add_to_list(sessions, ses);
 
-	return ses;
+	return process_session_info(ses, session_info);
 }
 
 static inline void
@@ -745,13 +747,13 @@ dialog_goto_url_open(void *data)
 	dialog_goto_url((struct session *) data, NULL);
 }
 
-static int
+static struct session *
 process_session_info(struct session *ses, struct initial_session_info *info)
 {
 	enum term_env_type term_env = 0;
 	struct session *s;
 
-	if (!info) return -1;
+	if (!info) return NULL;
 
 	/* This is the only place where s->id comes into game - we're comparing
 	 * it to possibly supplied -base-session here, and clone the session
@@ -859,10 +861,9 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 	{
 		/* If it is a remote session we return non zero so that the
 		 * terminal of the remote session will be destroyed ASAP. */
-		int remote = info->remote;
-
+		if (info->remote) ses = NULL;
 		free_session_info(info);
-		return remote;
+		return ses;
 	}
 }
 
@@ -996,8 +997,8 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 			if (!list_empty(sessions)) update_status();
 			break;
 		case EV_INIT:
-			ses = tab->data = create_session(tab);
-			if (!ses || process_session_info(ses, (struct initial_session_info *) ev->b)) {
+			ses = tab->data = create_session(tab, (struct initial_session_info *) ev->b);
+			if (!ses) {
 				register_bottom_half((void (*)(void *)) destroy_terminal, tab->term);
 				return;
 			}

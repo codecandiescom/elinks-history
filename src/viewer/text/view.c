@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.654 2004/11/12 17:33:19 zas Exp $ */
+/* $Id: view.c,v 1.655 2004/11/12 21:32:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -275,7 +275,8 @@ vertical_scroll(struct session *ses, struct document_view *doc_view, int steps)
 
 	doc_view->vs->y = y;
 
-	if (current_link_is_visible(doc_view)) return FRAME_EVENT_OK;
+	if (current_link_is_visible(doc_view))
+		return FRAME_EVENT_REFRESH;
 
 	if (steps > 0)
 		find_link_page_down(doc_view);
@@ -300,7 +301,8 @@ horizontal_scroll(struct session *ses, struct document_view *doc_view, int steps
 
 	doc_view->vs->x = x;
 
-	if (current_link_is_visible(doc_view)) return FRAME_EVENT_OK;
+	if (current_link_is_visible(doc_view))
+		return FRAME_EVENT_REFRESH;
 
 	find_link_page_down(doc_view);
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.490 2004/06/19 17:11:36 jonas Exp $ */
+/* $Id: view.c,v 1.491 2004/06/19 17:58:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,6 +39,7 @@
 #include "terminal/draw.h"
 #include "terminal/kbd.h"
 #include "terminal/mouse.h"
+#include "terminal/screen.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
@@ -198,8 +199,14 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 	if (box->width < 2 || box->height < 2) return;
 
 	if (active) {
-		set_cursor(term, box->x + box->width - 1, box->y + box->height - 1, 1);
-		set_window_ptr(ses->tab, box->x, box->y);
+		/* When redrawing the document after things like link menu we
+		 * have to reset the cursor routing state. */
+		if (ses->navigate_mode == NAVIGATE_CURSOR_ROUTING) {
+			set_cursor(term, ses->tab->x, ses->tab->y, 0);
+		} else {
+			set_cursor(term, box->x + box->width - 1, box->y + box->height - 1, 1);
+			set_window_ptr(ses->tab, box->x, box->y);
+		}
 	}
 
 	if (doc_view->document->height)
@@ -219,7 +226,8 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 		return;
 	}
 
-	check_vs(doc_view);
+	if (ses->navigate_mode == NAVIGATE_LINKWISE)
+		check_vs(doc_view);
 
 	if (!vs->did_fragment) {
 		unsigned char *tag = vs->uri->fragment;
@@ -275,7 +283,11 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 
 	while (vs->y >= doc_view->document->height) vs->y -= box->height;
 	int_lower_bound(&vs->y, 0);
-	if (vy != vs->y) vy = vs->y, check_vs(doc_view);
+	if (vy != vs->y) {
+		vy = vs->y;
+		if (ses->navigate_mode == NAVIGATE_LINKWISE)
+			check_vs(doc_view);
+	}
 	for (y = int_max(vy, 0);
 	     y < int_min(doc_view->document->height, box->height + vy);
 	     y++) {
@@ -365,6 +377,8 @@ move_down(struct session *ses, struct document_view *doc_view, int type)
 	assert(ses && doc_view && doc_view->vs);
 	if_assert_failed return;
 
+	ses->navigate_mode = NAVIGATE_LINKWISE;
+
 	newpos = doc_view->vs->y + doc_view->box.height;
 	if (newpos < doc_view->document->height)
 		doc_view->vs->y = newpos;
@@ -416,6 +430,8 @@ down(struct session *ses, struct document_view *doc_view)
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
+	ses->navigate_mode = NAVIGATE_LINKWISE;
+
 	current_link = doc_view->vs->current_link;
 
 	if (current_link == doc_view->document->nlinks - 1) {
@@ -446,6 +462,8 @@ up(struct session *ses, struct document_view *doc_view)
 
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
+
+	ses->navigate_mode = NAVIGATE_LINKWISE;
 
 	current_link = doc_view->vs->current_link;
 
@@ -479,6 +497,8 @@ vertical_scroll(struct session *ses, struct document_view *doc_view, int steps)
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
+	ses->navigate_mode = NAVIGATE_LINKWISE;
+
 	y = doc_view->vs->y + steps;
 	if (steps > 0) {
 		/* DOWN */
@@ -510,6 +530,8 @@ horizontal_scroll(struct session *ses, struct document_view *doc_view, int steps
 
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
+
+	ses->navigate_mode = NAVIGATE_LINKWISE;
 
 	x = doc_view->vs->x + steps;
 	int_bounds(&x, 0, doc_view->document->width - 1);
@@ -606,6 +628,8 @@ home(struct session *ses, struct document_view *doc_view)
 	assert(ses && doc_view && doc_view->vs);
 	if_assert_failed return;
 
+	ses->navigate_mode = NAVIGATE_LINKWISE;
+
 	doc_view->vs->y = doc_view->vs->x = 0;
 	find_link_page_down(doc_view);
 }
@@ -617,6 +641,8 @@ x_end(struct session *ses, struct document_view *doc_view)
 
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
+
+	ses->navigate_mode = NAVIGATE_LINKWISE;
 
 	max_height = doc_view->document->height - doc_view->box.height;
 	doc_view->vs->x = 0;
@@ -632,6 +658,7 @@ set_frame(struct session *ses, struct document_view *doc_view, int xxxx)
 
 	if (doc_view == ses->doc_view) return;
 	goto_uri(ses, doc_view->vs->uri);
+	ses->navigate_mode = NAVIGATE_LINKWISE;
 }
 
 
@@ -682,6 +709,87 @@ rep_ev(struct session *ses, struct document_view *doc_view,
 	while (i--) f(ses, doc_view);
 
 }
+
+
+/* Move cursor @y and @x steps */
+static enum frame_event_status
+move_cursor(struct session *ses, struct document_view *doc_view, int y, int x)
+{
+	struct terminal *term = ses->tab->term;
+	struct box *box = &doc_view->box;
+	struct link *link;
+
+	/* If we are already routing the cursor it should be already in a sane
+	 * position. */
+	if (ses->navigate_mode == NAVIGATE_CURSOR_ROUTING) {
+		x += ses->tab->x;
+		y += ses->tab->y;
+
+	} else {
+		/* Now if block_cursor option is enabled we cannot use the
+		 * current cursor position so either use position of current
+		 * link or fall back to upper left corner. */
+		link = get_current_link(doc_view);
+		if (link) {
+			x += link->points->x - doc_view->vs->x + box->x;
+			y += link->points->y - doc_view->vs->y + box->y;
+		} else {
+			x += ses->tab->x;
+			y += ses->tab->y;
+		}
+	}
+
+	/* If cursor was moved outside the document view scroll it, but only
+	 * within the document canvas */
+	if (!is_in_box(box, x, y)) {
+		int vs_x = doc_view->vs->x, vs_y = doc_view->vs->y;
+
+		if (y < box->y) {
+			vertical_scroll(ses, doc_view, -1);
+
+		} else if (y >= box->y + box->height
+			   && y + doc_view->vs->y < doc_view->document->height) {
+			vertical_scroll(ses, doc_view, 1);
+
+		} else if (x < box->x) {
+			horizontal_scroll(ses, doc_view, -1);
+
+		} else if (x >= box->x + box->width
+			   && x + doc_view->vs->x < doc_view->document->width) {
+			horizontal_scroll(ses, doc_view, 1);
+		}
+
+		/* If the view was not scrolled there's nothing more to do */
+		if (vs_x == doc_view->vs->x && vs_y == doc_view->vs->y)
+			return FRAME_EVENT_OK;
+	}
+
+	/* Restrict the cursor position within the current view */
+	int_bounds(&x, box->x, box->x + box->width - 1);
+	int_bounds(&y, box->y, box->y + box->height - 1);
+
+	/* Scrolling could have changed the navigation mode */
+	ses->navigate_mode = NAVIGATE_CURSOR_ROUTING;
+
+	link = choose_mouse_link(doc_view, x - box->x, y - box->y);
+	if (link)
+		doc_view->vs->current_link = link - doc_view->document->links;
+	else
+		doc_view->vs->current_link = -1;
+
+	/* Set the unblockable cursor position and update the window pointer so
+	 * stuff like the link menu will be drawn relative to the cursor. */
+	set_cursor(term, x, y, 0);
+	set_window_ptr(ses->tab, x, y);
+
+	return FRAME_EVENT_REFRESH;
+}
+
+#define move_cursor_up(ses, view)	move_cursor(ses, view, -1, 0)
+#define move_cursor_down(ses, view)	move_cursor(ses, view, 1, 0)
+#define move_cursor_left(ses, view)	move_cursor(ses, view, 0, -1)
+#define move_cursor_right(ses, view)	move_cursor(ses, view, 0, 1)
+
 
 static int
 try_jump_to_link_number(struct session *ses, struct document_view *doc_view)
@@ -771,6 +879,19 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 		case ACT_MAIN_SCROLL_UP: scroll_up(ses, doc_view); break;
 		case ACT_MAIN_SCROLL_LEFT: rep_ev(ses, doc_view, scroll_left); break;
 		case ACT_MAIN_SCROLL_RIGHT: rep_ev(ses, doc_view, scroll_right); break;
+
+		case ACT_MAIN_MOVE_CURSOR_UP:
+			status = move_cursor_up(ses, doc_view);
+			break;
+		case ACT_MAIN_MOVE_CURSOR_DOWN:
+			status = move_cursor_down(ses, doc_view);
+			break;
+		case ACT_MAIN_MOVE_CURSOR_LEFT:
+			status = move_cursor_left(ses, doc_view);
+			break;
+		case ACT_MAIN_MOVE_CURSOR_RIGHT:
+			status = move_cursor_right(ses, doc_view);
+			break;
 
 		case ACT_MAIN_COPY_CLIPBOARD: {
 			/* This looks bogus. Why print_current_link()

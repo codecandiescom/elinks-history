@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.155 2004/06/19 13:57:30 jonas Exp $ */
+/* $Id: session.h,v 1.156 2004/06/19 17:58:37 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -96,6 +96,11 @@ enum insert_mode {
 	INSERT_MODE_OFF,
 };
 
+enum navigate_mode {
+	NAVIGATE_LINKWISE,
+	NAVIGATE_CURSOR_ROUTING,
+};
+
 /* This is one of the building stones of ELinks architecture --- this structure
  * carries information about the specific ELinks session. Each tab (thus, at
  * least one per terminal, in the normal case) has own session. Session
@@ -152,6 +157,8 @@ struct session {
 	 * input field. When enabled it is possible to switch insertion on and
 	 * off using ACT_EDIT_ENTER and *_CANCEL. */
 	enum insert_mode insert_mode;
+
+	enum navigate_mode navigate_mode;
 
 	unsigned char *search_word;
 	unsigned char *last_search_word;

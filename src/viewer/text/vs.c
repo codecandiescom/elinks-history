@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.38 2004/06/13 22:37:56 zas Exp $ */
+/* $Id: vs.c,v 1.39 2004/06/19 17:58:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,6 +98,8 @@ next_frame(struct session *ses, int p)
 	if (!have_location(ses)
 	    || (ses->doc_view && !document_has_frames(ses->doc_view->document)))
 		return;
+
+	ses->navigate_mode = NAVIGATE_LINKWISE;
 
 	vs = &cur_loc(ses)->vs;
 

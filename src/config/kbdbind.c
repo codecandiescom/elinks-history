@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.218 2004/06/15 01:28:38 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.219 2004/06/19 17:58:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -483,6 +483,10 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "mark-goto", ACT_MAIN_MARK_GOTO, DACT(N_("Go at a specified mark")) },
 	{ "mark-set", ACT_MAIN_MARK_SET, DACT(N_("Set a mark")) },
 	{ "menu", ACT_MAIN_MENU, DACT(N_("Activate the menu")) },
+	{ "move-cursor-down", ACT_MAIN_MOVE_CURSOR_DOWN, DACT(N_("Move cursor down")) },
+	{ "move-cursor-left", ACT_MAIN_MOVE_CURSOR_LEFT, DACT(N_("Move cursor left")) },
+	{ "move-cursor-right", ACT_MAIN_MOVE_CURSOR_RIGHT, DACT(N_("Move cursor right")) },
+	{ "move-cursor-up", ACT_MAIN_MOVE_CURSOR_UP, DACT(N_("Move cursor up")) },
 	{ "next-frame", ACT_MAIN_NEXT_FRAME, DACT(N_("Move to the next frame")) },
 	{ "open-link-in-new-tab", ACT_MAIN_OPEN_LINK_IN_NEW_TAB, DACT(N_("Open the current link in a new tab")) },
 	{ "open-link-in-new-tab-in-background", ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND, DACT(N_("Open the current link a new tab in background")) },

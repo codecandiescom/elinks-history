@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.117 2003/11/19 02:09:18 jonas Exp $ */
+/* $Id: dialogs.c,v 1.118 2003/11/19 17:22:10 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -375,29 +375,29 @@ listbox_delete_bookmark(struct terminal *term, struct listbox_data *box)
 	if (bm) object_lock(bm);
 
 	if (!bm)
-	msg_box(term, getml(hop, NULL), 0,
-		N_("Delete bookmark"), AL_CENTER,
-		N_("Delete marked bookmarks?"),
-		hop, 2,
-		N_("Yes"), really_del_bookmark, B_ENTER,
-		N_("No"), cancel_del_bookmark, B_ESC);
+		msg_box(term, getml(hop, NULL), 0,
+			N_("Delete bookmark"), AL_CENTER,
+			N_("Delete marked bookmarks?"),
+			hop, 2,
+			N_("Yes"), really_del_bookmark, B_ENTER,
+			N_("No"), cancel_del_bookmark, B_ESC);
 	else if (bm->box_item->type == BI_FOLDER)
-	msg_box(term, getml(hop, NULL), MSGBOX_FREE_TEXT,
-		N_("Delete bookmark"), AL_CENTER,
-		msg_text(term, N_("Delete content of folder \"%s\"?"),
-			bm->title),
-		hop, 2,
-		N_("Yes"), really_del_bookmark, B_ENTER,
-		N_("No"), cancel_del_bookmark, B_ESC);
+		msg_box(term, getml(hop, NULL), MSGBOX_FREE_TEXT,
+			N_("Delete bookmark"), AL_CENTER,
+			msg_text(term, N_("Delete content of folder \"%s\"?"),
+				 bm->title),
+			hop, 2,
+			N_("Yes"), really_del_bookmark, B_ENTER,
+			N_("No"), cancel_del_bookmark, B_ESC);
 	else
-	msg_box(term, getml(hop, NULL), MSGBOX_FREE_TEXT,
-		N_("Delete bookmark"), AL_CENTER,
-		msg_text(term, N_("Delete bookmark \"%s\"?\n\n"
-			"URL: \"%s\""),
-			bm->title, bm->url),
-		hop, 2,
-		N_("Yes"), really_del_bookmark, B_ENTER,
-		N_("No"), cancel_del_bookmark, B_ESC);
+		msg_box(term, getml(hop, NULL), MSGBOX_FREE_TEXT,
+			N_("Delete bookmark"), AL_CENTER,
+			msg_text(term, N_("Delete bookmark \"%s\"?\n\n"
+				"URL: \"%s\""),
+				bm->title, bm->url),
+			hop, 2,
+			N_("Yes"), really_del_bookmark, B_ENTER,
+			N_("No"), cancel_del_bookmark, B_ESC);
 
 	return;
 }

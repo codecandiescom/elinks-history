@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.23 2003/09/27 12:01:15 jonas Exp $ */
+/* $Id: options.c,v 1.24 2003/09/27 12:50:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,11 +15,6 @@
 #include "util/color.h"
 #include "util/string.h"
 
-
-/* Some compilers, like SunOS4 cc, don't have offsetof in <stddef.h>.  */
-#ifndef offsetof
-#define offsetof(type,ident) ((size_t)&(((type*)0)->ident))
-#endif
 
 struct document_options *d_opt;
 

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.109 2002/10/12 22:50:22 pasky Exp $ */
+/* $Id: options.c,v 1.110 2002/10/13 12:11:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1056,6 +1056,11 @@ register_options()
 		"Default user interface color settings.");
 
 
+	/* ========================================================== */
+	/* ============= BORING PART (colors) START ================= */
+	/* ========================================================== */
+
+
 	add_opt_tree("ui.colors",
 		"color", 0,
 		"Color settings for color terminal.");
@@ -1628,6 +1633,10 @@ register_options()
 		"Default background color.");
 
 
+	/* ========================================================== */
+	/* ============= BORING PART (colors) END =================== */
+	/* ========================================================== */
+
 
 	add_opt_tree("ui",
 		"timer", 0,
@@ -1683,6 +1692,23 @@ register_options()
 		"being ran in some windowing environment.");
 
 
+
+	/* You can disagree about the default value here - the original
+	 * behaviour up to 20021013 (during pre18.CVS) was 1, but when I added
+	 * this option, I also realized that it's a good idea to change this.
+	 * The problem is that when you change behaviour of some option in
+	 * future, it will affect *everyone* (like the User Agent Problem),
+	 * otherwise it will only affect those who actually changed it. --pasky
+	 */
+	/* This will stay 1 until we will have new user interface for
+	 * configuration. */
+	add_opt_int("",
+		"config_saving_style", 0, 0, 2, 1,
+		"Determines what happens when you let ELinks to save options:\n"
+		"0 is only values of current options are altered\n"
+		"1 is values of current options are altered and missing options\n"
+		"     are added at the end of the file\n"
+		"2 is the configuration file is rewritten from scratch");
 
 	add_opt_bool("",
 		"secure_file_saving", 0, 1,

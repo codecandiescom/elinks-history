@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.52 2002/08/06 22:54:17 pasky Exp $ */
+/* $Id: conf.c,v 1.53 2002/10/13 12:11:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -575,16 +575,43 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	unsigned char *tmpstr;
 	int tmplen;
 	int origlen;
+	int savestyle = get_opt_int("config_saving_style");
 
-	if (load_config_file(prefix, name, options, &str, &len) || !*str) {
+	/* Scaring. */
+	if (savestyle == 2 || (savestyle < 2
+				&& (load_config_file(prefix, name, options,
+						     &str, &len)
+				    || !*str))) {
+		unsigned char headings[3][1024] = {
+			"## This is ELinks configuration file. You can edit it manually," NEWLINE
+			"## if you wish so; this file is edited by ELinks when you save" NEWLINE
+			"## options through UI, however only option values will be altered" NEWLINE
+			"## and all your formatting, own comments etc will be kept as-is." NEWLINE,
+
+			"## This is ELinks configuration file. You can edit it manually," NEWLINE
+			"## if you wish so; this file is edited by ELinks when you save" NEWLINE
+			"## options through UI, however only option values will be altered" NEWLINE
+			"## and missing options will be added at the end of file; if option" NEWLINE
+			"## is not written in this file, but in some file included from it," NEWLINE
+			"## it is NOT counted as missing. Note that all your formatting," NEWLINE
+			"## own comments and so on will be kept as-is." NEWLINE,
+
+			"## This is ELinks configuration file. You can edit it manually," NEWLINE
+			"## if you wish so, but keep in mind that this file is overwritten" NEWLINE
+			"## by ELinks when you save options through UI and you are out of" NEWLINE
+			"## luck with your formatting and own comments then, so beware." NEWLINE,
+		};
+
+		add_to_str(&str, &len, headings[savestyle]);
 		add_to_str(&str, &len,
-			   "## This is ELinks configuration file. You can edit it manually," NEWLINE
-			   "## if you wish so; this file is edited by ELinks when you save" NEWLINE
-			   "## options through UI, however only option values will be altered" NEWLINE
-			   "## and missing options will be added at the end of file; if option" NEWLINE
-			   "## is not written in this file, but in some file included from it," NEWLINE
-			   "## it is NOT counted as missing." NEWLINE);
+			"##" NEWLINE
+			"## Obviously, if you don't like what ELinks is going to do with" NEWLINE
+			"## this file, you can change it by altering the config_saving_style" NEWLINE
+			"## option. Come on, aren't we friendly guys after all?" NEWLINE);
 	}
+
+	if (savestyle == 0)
+		goto get_me_out;
 
 	tmpstr = init_str(); tmplen = 0;
 	add_to_str(&tmpstr, &tmplen, NEWLINE NEWLINE NEWLINE);
@@ -609,6 +636,7 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	if (tmplen > origlen) add_bytes_to_str(&str, &len, tmpstr, tmplen);
 	mem_free(tmpstr);
 
+get_me_out:
 	unmark_options_tree(options);
 
 	return str;

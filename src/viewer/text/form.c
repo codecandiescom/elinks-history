@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.181 2004/06/16 07:15:50 miciah Exp $ */
+/* $Id: form.c,v 1.182 2004/06/16 09:15:57 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1044,11 +1044,11 @@ field_op(struct session *ses, struct document_view *doc_view,
 	enum frame_event_status status = FRAME_EVENT_REFRESH;
 
 	assert(ses && doc_view && link && ev);
-	if_assert_failed return FRAME_EVENT_IGNORED;
+	if_assert_failed return FRAME_EVENT_OK;
 
 	frm = link->form_control;
 	assertm(frm, "link has no form control");
-	if_assert_failed return FRAME_EVENT_IGNORED;
+	if_assert_failed return FRAME_EVENT_OK;
 
 	if (frm->ro == 2 || ev->ev != EV_KBD)
 		return FRAME_EVENT_IGNORED;
@@ -1064,7 +1064,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 	}
 
 	fs = find_form_state(doc_view, frm);
-	if (!fs || !fs->value) return FRAME_EVENT_IGNORED;
+	if (!fs || !fs->value) return FRAME_EVENT_OK;
 
 	switch (action) {
 		case ACT_EDIT_LEFT:
@@ -1076,7 +1076,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 		case ACT_EDIT_HOME:
 			if (frm->type == FC_TEXTAREA) {
 				if (textarea_op_home(fs, frm, rep)) {
-					status = FRAME_EVENT_IGNORED;
+					status = FRAME_EVENT_OK;
 					break;
 				}
 			} else {
@@ -1084,19 +1084,21 @@ field_op(struct session *ses, struct document_view *doc_view,
 			}
 			break;
 		case ACT_EDIT_UP:
-			if (frm->type != FC_TEXTAREA
-			    || textarea_op_up(fs, frm, rep))
+			if (frm->type != FC_TEXTAREA)
 				status = FRAME_EVENT_IGNORED;
+			else if (textarea_op_up(fs, frm, rep))
+				status = FRAME_EVENT_OK;
 			break;
 		case ACT_EDIT_DOWN:
-			if (frm->type != FC_TEXTAREA
-			    || textarea_op_down(fs, frm, rep))
+			if (frm->type != FC_TEXTAREA)
 				status = FRAME_EVENT_IGNORED;
+			else if (textarea_op_down(fs, frm, rep))
+				status = FRAME_EVENT_OK;
 			break;
 		case ACT_EDIT_END:
 			if (frm->type == FC_TEXTAREA) {
 				if (textarea_op_end(fs, frm, rep)) {
-					status = FRAME_EVENT_IGNORED;
+					status = FRAME_EVENT_OK;
 					break;
 				}
 			} else {
@@ -1106,7 +1108,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 		case ACT_EDIT_BEGINNING_OF_BUFFER:
 			if (frm->type == FC_TEXTAREA) {
 				if (textarea_op_bob(fs, frm, rep)) {
-					status = FRAME_EVENT_IGNORED;
+					status = FRAME_EVENT_OK;
 					break;
 				}
 			} else {
@@ -1116,7 +1118,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 		case ACT_EDIT_END_OF_BUFFER:
 			if (frm->type == FC_TEXTAREA) {
 				if (textarea_op_eob(fs, frm, rep)) {
-					status = FRAME_EVENT_IGNORED;
+					status = FRAME_EVENT_OK;
 					break;
 				}
 			} else {
@@ -1124,11 +1126,14 @@ field_op(struct session *ses, struct document_view *doc_view,
 			}
 			break;
 		case ACT_EDIT_EDIT:
-			if (frm->type == FC_TEXTAREA && !frm->ro)
+			if (frm->ro)
+				status = FRAME_EVENT_IGNORED;
+			else if (frm->type == FC_TEXTAREA && !frm->ro)
 			  	textarea_edit(0, ses->tab->term, frm, fs, doc_view, link);
 			break;
 		case ACT_EDIT_COPY_CLIPBOARD:
 			set_clipboard_text(fs->value);
+			status = FRAME_EVENT_OK;
 			break;
 		case ACT_EDIT_CUT_CLIPBOARD:
 			set_clipboard_text(fs->value);
@@ -1154,13 +1159,21 @@ field_op(struct session *ses, struct document_view *doc_view,
 			mem_free(text);
 			break;
 		case ACT_EDIT_ENTER:
-			if (frm->type != FC_TEXTAREA
-			    || textarea_op_enter(fs, frm, rep))
+			if (frm->type != FC_TEXTAREA)
 				status = FRAME_EVENT_IGNORED;
+			else if (textarea_op_enter(fs, frm, rep))
+				status = FRAME_EVENT_OK;
 			break;
 		case ACT_EDIT_BACKSPACE:
-			if (frm->ro || !fs->state)
+			if (frm->ro) {
+				status = FRAME_EVENT_IGNORED;
 				break;
+			}
+
+			if (!fs->state) {
+				status = FRAME_EVENT_OK;
+				break;
+			}
 
 			length = strlen(fs->value + fs->state) + 1;
 			text = fs->value + fs->state;
@@ -1169,18 +1182,31 @@ field_op(struct session *ses, struct document_view *doc_view,
 			fs->state--;
 			break;
 		case ACT_EDIT_DELETE:
-			if (frm->ro) break;
+			if (frm->ro) {
+				status = FRAME_EVENT_IGNORED;
+				break;
+			}
 
 			length = strlen(fs->value);
-			if (fs->state >= length) break;
+			if (fs->state >= length) {
+				status = FRAME_EVENT_OK;
+				break;
+			}
 
 			text = fs->value + fs->state;
 
 			memmove(text, text + 1, length - fs->state);
 			break;
 		case ACT_EDIT_KILL_TO_BOL:
-			if (frm->ro || fs->state <= 0)
+			if (frm->ro) {
+				status = FRAME_EVENT_IGNORED;
 				break;
+			}
+
+			if (fs->state <= 0) {
+				status = FRAME_EVENT_OK;
+				break;
+			}
 
 			/* TODO: Make this memrchr(), and introduce stub for
 			 * that function into util/string.*. --pasky */
@@ -1198,8 +1224,15 @@ field_op(struct session *ses, struct document_view *doc_view,
 			fs->state = (int) (text - fs->value);
 			break;
 		case ACT_EDIT_KILL_TO_EOL:
-			if (frm->ro || !fs->value[fs->state])
+			if (frm->ro) {
+				status = FRAME_EVENT_IGNORED;
 				break;
+			}
+
+			if (!fs->value[fs->state]) {
+				status = FRAME_EVENT_OK;
+				break;
+			}
 
 			text = strchr(fs->value + fs->state, ASCII_LF);
 			if (!text) {
@@ -1220,7 +1253,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 
 		case ACT_EDIT_REDRAW:
 			redraw_terminal_cls(ses->tab->term);
-			status = FRAME_EVENT_IGNORED;
+			status = FRAME_EVENT_OK;
 			break;
 
 		default:
@@ -1233,12 +1266,15 @@ field_op(struct session *ses, struct document_view *doc_view,
 
 			length = strlen(fs->value);
 			if (length >= frm->maxlength) {
-				status = FRAME_EVENT_IGNORED;
+				status = FRAME_EVENT_OK;
 				break;
 			}
 
 			text = mem_realloc(fs->value, length + 2);
-			if (!text) break;
+			if (!text) {
+				status = FRAME_EVENT_OK;
+				break;
+			}
 
 			fs->value = text;
 

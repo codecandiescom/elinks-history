@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.61 2004/06/14 19:29:12 jonas Exp $ */
+/* $Id: textarea.c,v 1.62 2004/06/16 09:15:57 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -618,7 +618,8 @@ set_textarea(struct session *ses, struct document_view *doc_view, int kbd)
 	if (link && link->type == LINK_AREA) {
 		struct term_event ev = INIT_TERM_EVENT(EV_KBD, kbd, 0, 0);
 
-		if (field_op(ses, doc_view, link, &ev, 1)) {
+		if (field_op(ses, doc_view, link, &ev, 1)
+		    == FRAME_EVENT_REFRESH) {
 			struct terminal *term = ses->tab->term;
 
 			/* FIXME: I am unsure if this is needed. We get here

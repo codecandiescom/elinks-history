@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.61 2005/03/27 11:30:52 pasky Exp $
+# $Id: hooks.pl,v 1.62 2005/03/27 12:11:55 pasky Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -148,7 +148,7 @@ I<redneck>, I<jive>, I<cockney>, I<fudd>, I<bork>, I<moron>, I<piglatin>, or I<h
 
 #######################################################################
 
-my %search_prefixes = (
+my %search_prefixes;
 
 =over 4
 
@@ -163,106 +163,120 @@ B<g> or B<google>
 
 =cut
 
-	'^(g|google)(| .*)$' => 'google',
+$search_prefixes{'^(g|google)(| .*)$'} = 'google';
 
 =item Yahoo
 
 B<y> or B<yahoo>
 
 =cut
-	'^(y|yahoo)(| .*)$' => 'yahoo',
+
+$search_prefixes{'^(y|yahoo)(| .*)$'} = 'yahoo';
 
 =item Ask Jeeves
 
 B<ask> or B<jeeves>
 
 =cut
-	'^(ask|jeeves)(| .*)$' => 'ask jeeves',
+
+$search_prefixes{'^(ask|jeeves)(| .*)$'} = 'ask jeeves';
 
 =item Amazon/A9
 
 B<a9>
 
 =cut
-	'^a9(| .*)$' => 'a9',
+
+$search_prefixes{'^a9(| .*)$'} = 'a9';
 
 =item Altavista
 
 B<av> or B<altavista>
 
 =cut
-	'^(av|altavista)(| .*)$' => 'altavista',
+
+$search_prefixes{'^(av|altavista)(| .*)$'} = 'altavista';
 
 =item Microsoft
 
 B<msn> or B<microsoft>
 
 =cut
-	'^(msn|microsoft)(| .*)$' => 'msn',
+
+$search_prefixes{'^(msn|microsoft)(| .*)$'} = 'msn';
 
 =item dmoz
 
 B<dmoz>, B<odp>, B<mozilla>
 
 =cut
-	'^(dmoz|odp|mozilla)(| .*)$' => 'dmoz',
+
+$search_prefixes{'^(dmoz|odp|mozilla)(| .*)$'} = 'dmoz';
 
 =item Dogpile
 
 B<dp> or B<dogpile>
 
 =cut
-	'^(dp|dogpile)(| .*)$' => 'dogpile',
+
+$search_prefixes{'^(dp|dogpile)(| .*)$'} = 'dogpile';
 
 =item Mamma
 
 B<ma> or B<mamma>
 
 =cut
-	'^(ma|mamma)(| .*)$' => 'mamma',
+
+$search_prefixes{'^(ma|mamma)(| .*)$'} = 'mamma';
 
 =item Webcrawler
 
 B<wc> or B<webcrawler>
 
 =cut
-	'^(wc|webcrawler)(| .*)$' => 'webcrawler',
+
+$search_prefixes{'^(wc|webcrawler)(| .*)$'} = 'webcrawler';
 
 =item Netscape
 
 B<ns> or B<netscape>
 
 =cut
-	'^(ns|netscape)(| .*)$' => 'netscape',
+
+$search_prefixes{'^(ns|netscape)(| .*)$'} = 'netscape';
 
 =item Lycos
 
 B<ly> or B<lycos>
 
 =cut
-	'^(ly|lycos)(| .*)$' => 'lycos',
+
+$search_prefixes{'^(ly|lycos)(| .*)$'} = 'lycos';
 
 =item Hotbot
 
 B<hb> or B<hotbot>
 
 =cut
-	'^(hb|hotbot)(| .*)$' => 'hotbot',
+
+$search_prefixes{'^(hb|hotbot)(| .*)$'} = 'hotbot';
 
 =item Excite
 
 B<ex> or B<excite>
 
 =cut
-	'^(ex|excite)(| .*)$' => 'excite',
+
+$search_prefixes{'^(ex|excite)(| .*)$'} = 'excite';
 
 =item Elgoog
 
 B<eg>, B<elgoog>, B<hcraes>, B<dnif>, B<bew>, B<og>
 
 =cut
-	'^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$' => 'elgoog',
-);
+
+$search_prefixes{'^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$'} = 'elgoog';
+
 
 #######################################################################
 
@@ -274,7 +288,7 @@ B<eg>, B<elgoog>, B<hcraes>, B<dnif>, B<bew>, B<og>
 
 =cut
 
-my %news_prefixes = (
+my %news_prefixes;
 
 =over 4
 
@@ -287,106 +301,106 @@ B<n>, B<news>
 B<bbc>
 
 =cut
-	'^bbc(| .*)$' => 'bbc',
+$news_prefixes{'^bbc(| .*)$'} = 'bbc';
 
 =item MSNBC
 
 B<msnbc>
 
 =cut
-	'^msnbc(| .*)$' => 'msnbc',
+$news_prefixes{'^msnbc(| .*)$'} = 'msnbc';
 
 =item Cable News Network
 
 B<cnn>
 
 =cut
-	'^cnn(| .*)$' => 'cnn',
+$news_prefixes{'^cnn(| .*)$'} = 'cnn';
 
 =item FOXNews
 
 B<fox>
 
 =cut
-	'^fox(| .*)$' => 'fox',
+$news_prefixes{'^fox(| .*)$'} = 'fox';
 
 =item Google News
 
 B<gn>
 
 =cut
-	'^gn(| .*)$' => 'google',
+$news_prefixes{'^gn(| .*)$'} = 'google';
 
 =item Yahoo News
 
 B<yn>
 
 =cut
-	'^yn(| .*)$' => 'yahoo',
+$news_prefixes{'^yn(| .*)$'} = 'yahoo';
 
 =item Reuters
 
 B<rs> or B<reuters>
 
 =cut
-	'^(reuters|rs)(| .*)$' => 'reuters',
+$news_prefixes{'^(reuters|rs)(| .*)$'} = 'reuters';
 
 =item Electronic Frontier Foundation
 
 B<eff>
 
 =cut
-	'^eff(| .*)$' => 'eff',
+$news_prefixes{'^eff(| .*)$'} = 'eff';
 
 =item Wired
 
 B<wd> or B<wired>
 
 =cut
-	'^(wired|wd)(| .*)$' => 'wired',
+$news_prefixes{'^(wired|wd)(| .*)$'} = 'wired';
 
 =item Slashdot
 
 B</.> or B<sd> or B<slashdot>
 
 =cut
-	'^(\/\.|slashdot|sd)(| .*)$' => 'slashdot',
+$news_prefixes{'^(\/\.|slashdot|sd)(| .*)$'} = 'slashdot';
 
 =item NewsForge
 
 B<nf> or B<newsforge>
 
 =cut
-	'^(newsforge|nf)(| .*)$' => 'newsforge',
+$news_prefixes{'^(newsforge|nf)(| .*)$'} = 'newsforge';
 
 =item U.S.News & World Report
 
 B<us> or B<usnews>
 
 =cut
-	'^(us|usnews)(| .*)$' => 'usnews',
+$news_prefixes{'^(us|usnews)(| .*)$'} = 'usnews';
 
 =item New Scientist
 
 B<newsci> or B<nsci>
 
 =cut
-	'^(nsci|newsci)(| .*)$' => 'newsci',
+$news_prefixes{'^(nsci|newsci)(| .*)$'} = 'newsci';
 
 =item Discover Magazine
 
 B<dm>
 
 =cut
-	'^dm(| .*)$' => 'discover',
+$news_prefixes{'^dm(| .*)$'} = 'discover';
 
 =item Scientific American
 
 B<sa> or B<sciam>
 
 =cut
-	'^(sa|sciam)(| .*)$' => 'sciam',
-);
+$news_prefixes{'^(sa|sciam)(| .*)$'} = 'sciam';
+
 
 #######################################################################
 
@@ -398,7 +412,7 @@ B<sa> or B<sciam>
 =cut
 
 # Some of those are handled specially and not in this hash.
-my %locator_prefixes = (
+my %locator_prefixes;
 
 =over 4
 
@@ -407,7 +421,7 @@ my %locator_prefixes = (
 B<imdb>, B<movie>, or B<flick>
 
 =cut
-	'^(imdb|movie|flick)(| .*)$' => 'imdb',
+$locator_prefixes{'^(imdb|movie|flick)(| .*)$'} = 'imdb';
 
 =item US zip code search
 
@@ -444,56 +458,56 @@ B<w> or B<weather>
 B<stock>, B<ticker>, or B<quote>
 
 =cut
-	'^(stock|ticker|quote)(| .*)$' => 'stock',
+$locator_prefixes{'^(stock|ticker|quote)(| .*)$'} = 'stock';
 
 =item Snopes
 
 B<ul>, B<urban>, or B<legend>
 
 =cut
-	'^(urban|legend|ul)(| .*)$' => 'bs',
+$locator_prefixes{'^(urban|legend|ul)(| .*)$'} = 'bs';
 
 =item Torrent search / ISOHunt
 
 B<bt>, B<torrent>, or B<bittorrent>
 
 =cut
-	'^(bittorrent|torrent|bt)(| .*)$' => 'torrent',
+$locator_prefixes{'^(bittorrent|torrent|bt)(| .*)$'} = 'torrent';
 
 =item Wayback Machine
 
 B<ia>, B<ar>, B<arc>, or B<archive> (current url or specified)
 
 =cut
-	'^(archive|arc|ar|ia)(| .*)$' => 'archive',
+$locator_prefixes{'^(archive|arc|ar|ia)(| .*)$'} = 'archive';
 
 =item Freshmeat
 
 B<fm> or B<freshmeat>
 
 =cut
-	'^(freshmeat|fm)(| .*)$' => 'freshmeat',
+$locator_prefixes{'^(freshmeat|fm)(| .*)$'} = 'freshmeat';
 
 =item SourceForge
 
 B<sf> or B<sourceforge>
 
 =cut
-	'^(sourceforge|sf)(| .*)$' => 'sourceforge',
+$locator_prefixes{'^(sourceforge|sf)(| .*)$'} = 'sourceforge';
 
 =item Savannah
 
 B<sv> or B<savannah>
 
 =cut
-	'^(savannah|sv)(| .*)$' => 'savannah',
+$locator_prefixes{'^(savannah|sv)(| .*)$'} = 'savannah';
 
 =item Gna!
 
 B<gna>
 
 =cut
-	'^gna(| .*)$' => 'gna',
+$locator_prefixes{'^gna(| .*)$'} = 'gna';
 
 =item Netcraft Uptime Survey
 
@@ -506,22 +520,22 @@ B<whatis> or B<uptime> (current url or specified)
 Wanted, B<dead> or B<alive>!
 
 =cut
-	'^(alive|dead)(| .*)$' => 'dead',
+$locator_prefixes{'^(alive|dead)(| .*)$'} = 'dead';
 
 =item Google Library / Project Gutenberg
 
 B<book> or B<read>
 
 =cut
-	'^(book|read)(| .*)$' => 'book',
+$locator_prefixes{'^(book|read)(| .*)$'} = 'book';
 
 =item Internet Public Library
 
 B<ipl>
 
 =cut
-	'^ipl(| .*)$' => 'ipl',
-);
+$locator_prefixes{'^ipl(| .*)$'} = 'ipl';
+
 
 #######################################################################
 

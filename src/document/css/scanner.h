@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.10 2004/01/18 17:09:57 jonas Exp $ */
+/* $Id: scanner.h,v 1.11 2004/01/18 17:12:54 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -35,6 +35,13 @@ struct css_token {
 	int length;
 };
 
+#define get_css_token_end(token) &(token)->string[(token)->length]
+
+/* Compare the string of @token with @string */
+#define css_token_contains(token, str, len) \
+	((token) && !strlcasecmp((token)->string, (token)->length, str, len))
+
+
 /* The number of tokens in the scanners token table:
  * At best it should be big enough to contain properties with space separated
  * values and function calls with up to 3 variables like rgb(). At worst it
@@ -59,9 +66,15 @@ struct css_scanner {
 	struct css_token table[CSS_SCANNER_TOKENS];
 };
 
+/* Initializes the scanner. */
+void init_css_scanner(struct css_scanner *scanner, unsigned char *string);
+
 /* Fills the scanner with tokens. Already scanned tokens that has not been
  * requested remains and are moved to the start of the scanners token table. */
 void scan_css_tokens(struct css_scanner *scanner);
+
+#define css_scanner_has_tokens(scanner) \
+	((scanner)->tokens > 0 && (scanner)->current <= (scanner)->tokens)
 
 /* Define if you want a talking scanner */
 /* #define CSS_SCANNER_DEBUG */
@@ -84,17 +97,5 @@ struct css_token *skip_css_tokens_(struct css_scanner *scanner, enum css_token_t
 /* Checking of the next token type */
 int check_next_css_token(struct css_scanner *scanner, enum css_token_type type);
 
-
-#define get_css_token_end(token) &(token)->string[(token)->length]
-
-/* Compare the string of @token with @string */
-#define css_token_contains(token, str, len) \
-	((token) && !strlcasecmp((token)->string, (token)->length, str, len))
-
-#define css_scanner_has_tokens(scanner) \
-	((scanner)->tokens > 0 && (scanner)->current <= (scanner)->tokens)
-
-/* Initializes the scanner. */
-void init_css_scanner(struct css_scanner *scanner, unsigned char *string);
 
 #endif

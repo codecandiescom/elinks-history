@@ -1,4 +1,4 @@
-/* $Id: button.h,v 1.24 2004/06/22 06:46:15 miciah Exp $ */
+/* $Id: button.h,v 1.25 2004/07/02 15:43:30 zas Exp $ */
 
 #ifndef EL__BFU_BUTTON_H
 #define EL__BFU_BUTTON_H
@@ -12,17 +12,16 @@ struct terminal;
 #define B_ENTER		1
 #define B_ESC		2
 
-#define add_dlg_button_do(dlg, key, handler, text_, data_, done_, done_data_)	\
+#define add_dlg_button_do(dlg, key, handler, text_, data_, done_, done_data_)\
 	do {								\
-		int n = (dlg)->widgets_size;				\
-		(dlg)->widgets[n].type = WIDGET_BUTTON;			\
-		(dlg)->widgets[n].info.button.flags = (key);		\
-		(dlg)->widgets[n].info.button.done = (void (*)(void *)) (done_); \
-		(dlg)->widgets[n].info.button.done_data = (done_data_);	\
-		(dlg)->widgets[n].fn = (handler);			\
-		(dlg)->widgets[n].text = (text_);			\
-		(dlg)->widgets[n].udata = (data_);			\
-		(dlg)->widgets_size++;					\
+		struct widget *widget = &(dlg)->widgets[(dlg)->widgets_size++];\
+		widget->type = WIDGET_BUTTON;				\
+		widget->info.button.flags = (key);			\
+		widget->info.button.done = (void (*)(void *)) (done_);	\
+		widget->info.button.done_data = (done_data_);		\
+		widget->fn = (handler);					\
+		widget->text = (text_);					\
+		widget->udata = (data_);				\
 	} while (0)
 
 #define add_dlg_ok_button(dlg, key, text, done, data)	\

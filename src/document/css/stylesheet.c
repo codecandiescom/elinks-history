@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.24 2004/04/16 16:32:49 zas Exp $ */
+/* $Id: stylesheet.c,v 1.25 2004/09/17 22:58:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,14 +26,14 @@
 
 
 struct css_selector *
-find_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
+find_css_selector_by_element(struct css_stylesheet *css, unsigned char *element, int elementlen)
 {
 	struct css_selector *selector;
 
-	assert(css && name);
+	assert(css && element);
 
 	foreach (selector, css->selectors) {
-		if (!strlcasecmp(name, namelen, selector->element, -1))
+		if (!strlcasecmp(element, elementlen, selector->element, -1))
 			return selector;
 	}
 
@@ -73,7 +73,7 @@ get_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
 	struct css_selector *selector = NULL;
 
 	if (css && name && namelen) {
-		selector = find_css_selector(css, name, namelen);
+		selector = find_css_selector_by_element(css, name, namelen);
 		if (selector)
 			return selector;
 	}

@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.20 2004/06/23 10:53:54 jonas Exp $ */
+/* $Id: stylesheet.h,v 1.21 2004/09/17 22:58:39 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -86,10 +86,10 @@ void done_css_stylesheet(struct css_stylesheet *css);
 struct css_selector *
 get_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen);
 
-/* Looks up the selector with the name @name and length @namelen in the
+/* Looks up the selector of the element @element and length @elementlen in the
  * stylesheet @css. */
 struct css_selector *
-find_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen);
+find_css_selector_by_element(struct css_stylesheet *css, unsigned char *element, int elementlen);
 
 /* Initialize the selector structure. This is a rather low-level function from
  * your POV. */

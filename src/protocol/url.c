@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.14 2002/04/20 19:28:48 pasky Exp $ */
+/* $Id: url.c,v 1.15 2002/04/20 19:55:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -475,6 +475,7 @@ unsigned char *join_urls(unsigned char *base, unsigned char *rel)
 	unsigned char *p, *n, *path;
 	int l;
 	int lo = !casecmp(base, "file://", 7);
+	int add_slash = 0;
 
 	/* See RFC 1808 */
 
@@ -526,10 +527,16 @@ prx:
 		internal("bad base url");
 		return NULL;
 	}
-	
-	if (*path && !dsep(*path)) {
-		/* I'm not sure about this, I think I would like some
-		 * explanation. --pasky */
+
+	/* debug("%s :: %s :: %s", base, rel, path); */
+
+	/* Either is path blank, but we've slash char before, or path is not
+	 * blank, but doesn't start by a slash (if we'd just stay along with
+	 * dsep(path[-1]) w/o all the surrounding crap, it should be enough,
+	 * but I'm not sure and I don't want to break anything --pasky). */	
+	if ((!*path && dsep(path[-1])) || (*path && !dsep(*path))) {
+		/* We skip first char of URL ('/') in parse_url() (ARGH). This
+		 * is reason of all this bug-bearing magic.. */
 		path--;
 	}
 	
@@ -537,6 +544,14 @@ prx:
 		char *path_end;
 
 		/* The URL is relative. */
+
+		if (!*path) {
+			/* There's no path in the URL, but we're going to add
+			 * something there, and the something doesn't start by
+			 * a slash. So we need to insert a slash after the base
+			 * URL. Clever, eh? ;) */
+			add_slash = 1;
+		}
 		
 		for (path_end = path; *path_end; path_end++) {
 			if (end_of_dir(*path_end)) break;
@@ -548,13 +563,15 @@ prx:
 		}
 	}
 	
-	n = mem_alloc(path - base + strlen(rel) + 1);
+	n = mem_alloc(path - base + strlen(rel) + add_slash + 1);
 	if (!n) return NULL;
 	
 	memcpy(n, base, path - base);
-	strcpy(n + (path - base), rel);
+	if (add_slash) { n[path - base] = '/'; }
+	strcpy(n + (path - base) + add_slash, rel);
 	
 	translate_directories(n);
+	/* debug("%s :: %s :: %s :: %s", base, rel, path, n); */
 	return n;
 }
 

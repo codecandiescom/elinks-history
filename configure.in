@@ -720,7 +720,7 @@ dnl DocBook tools configuration
 dnl ===================================================================
 
 dnl TODO Take user input for which program to use
-AC_CHECK_PROGS(DOCTOOL, [docbook2html db2html jw xmlto], [], [$PATH])
+AC_CHECK_PROGS(DOCTOOL, [xmlto docbook2html db2html jw], [], [$PATH])
 
 if test -n "$ac_cv_prog_DOCTOOL"; then
 	AC_MSG_CHECKING(for how doctools should be called)

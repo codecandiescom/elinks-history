@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.81 2004/09/24 19:54:22 pasky Exp $ */
+/* $Id: renderer.c,v 1.82 2004/09/24 20:05:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,11 +74,12 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 				return;
 			}
 		}
+		/* Ok, so that's current. We want the new ones. */
+		doc_current = doc_current->next;
 	}
 
 	assert(doc_current);
-	for (doc_current = doc_current->next;
-	     doc_current != (struct string_list_item *) doc_snippets;
+	for (; doc_current != (struct string_list_item *) doc_snippets;
 	     doc_current = doc_current->next) {
 		add_to_string_list(queued_snippets, doc_current->string.source,
 		                   doc_current->string.length);

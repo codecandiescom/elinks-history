@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.130 2003/10/02 16:25:54 zas Exp $ */
+/* $Id: main.c,v 1.131 2003/10/05 20:13:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,6 +71,7 @@
 #include "util/memory.h"
 #include "util/version.h"
 #include "viewer/dump/dump.h"
+#include "viewer/text/search.h"
 
 int terminate = 0;
 enum retval retval = RET_OK;
@@ -174,6 +175,7 @@ init(void)
 	init_global_history();
 #endif
 	load_url_history();
+	load_search_history();
 #ifdef COOKIES
 	init_cookies();
 #endif
@@ -240,6 +242,7 @@ terminate_all_subsystems(void)
 		trigger_event_name("quit");
 #endif
 		save_url_history();
+		save_search_history();
 #ifdef GLOBHIST
 		finalize_global_history();
 #endif

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.34 2003/10/05 20:07:56 pasky Exp $ */
+/* $Id: search.c,v 1.35 2003/10/05 20:14:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1075,4 +1075,17 @@ search_dlg(struct session *ses, struct document_view *f, int a)
 		    MAX_STR_LEN, "", 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) search_for,
 		    NULL);
+}
+
+void
+load_search_history(void)
+{
+	load_input_history(&search_history, "searchhist");
+}
+
+/* TODO: Keep dirty state of the search history. */
+void
+save_search_history(void)
+{
+	save_input_history(&search_history, "searchhist");
 }

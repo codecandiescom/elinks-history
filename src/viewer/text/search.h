@@ -1,4 +1,4 @@
-/* $Id: search.h,v 1.5 2003/10/04 22:21:35 pasky Exp $ */
+/* $Id: search.h,v 1.6 2003/10/05 20:14:00 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_SEARCH_H
 #define EL__VIEWER_TEXT_SEARCH_H
@@ -18,5 +18,8 @@ extern struct input_history search_history;
 
 void search_dlg(struct session *ses, struct document_view *f, int a);
 void search_back_dlg(struct session *ses, struct document_view *f, int a);
+
+void load_search_history(void);
+void save_search_history(void);
 
 #endif

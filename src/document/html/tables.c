@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.168 2004/05/16 12:57:47 zas Exp $ */
+/* $Id: tables.c,v 1.169 2004/05/16 13:03:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,7 +96,7 @@ struct table_column {
 
 /* TODO: rename fields. --Zas */
 struct table {
-	struct part *p;
+	struct part *part;
 	struct table_cell *cells;
 	struct table_column *columns;
 	unsigned char *fragment_id;
@@ -804,8 +804,8 @@ format_cell(struct table *table, int column, int row,
 	struct table_cell *cell = CELL(table, column, row);
 
 	if (document) {
-		x += table->p->box.x;
-		y += table->p->box.y;
+		x += table->part->box.x;
+		y += table->part->box.y;
 	}
 
 	return format_html_part(cell->start, cell->end, cell->align,
@@ -860,7 +860,7 @@ check_cell_widths(struct table *t)
 static inline void
 get_cell_widths(struct table *t)
 {
-	int nl = t->p->link_num;
+	int nl = t->part->link_num;
 	register int i, j;
 
 	if (!global_doc_opts->table_order)
@@ -1379,7 +1379,7 @@ static void
 display_complicated_table(struct table *t, int x, int y, int *yy)
 {
 	register int i, j;
-	struct document *document = t->p->document;
+	struct document *document = t->part->document;
 	int xp, yp;
 	int expand_cols = (global_doc_opts && global_doc_opts->table_expand_cols);
 	color_t default_bgcolor = par_format.bgcolor;
@@ -1388,7 +1388,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 	get_table_frames(t, &table_frames);
 
 	if (t->fragment_id)
-		add_fragment_identifier(t->p, t->fragment_id);
+		add_fragment_identifier(t->part, t->fragment_id);
 
 	xp = x + table_frames.left;
 	for (i = 0; i < t->x; i++) {
@@ -1401,9 +1401,9 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 			int row;
 
 			par_format.bgcolor = default_bgcolor;
-			for (row = t->p->cy; row < yp + rows_height + table_frames.top; row++) {
-				expand_lines(t->p, row);
-				expand_line(t->p, row, x - 1);
+			for (row = t->part->cy; row < yp + rows_height + table_frames.top; row++) {
+				expand_lines(t->part, row);
+				expand_line(t->part, row, x - 1);
 			}
 
 			if (cell->start) {
@@ -1432,8 +1432,8 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 					 * and broken. */
 					par_format.bgcolor = t->bgcolor;
 					for (s = yp; s < yp + yw; s++) {
-						expand_lines(t->p, s);
-						expand_line(t->p, s, xp - 1);
+						expand_lines(t->part, s);
+						expand_line(t->part, s, xp - 1);
 					}
 				}
 
@@ -1459,8 +1459,8 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 					int yt;
 
 					for (yt = 0; yt < p->box.height; yt++) {
-						expand_lines(t->p, yp + yt);
-						expand_line(t->p, yp + yt, xp + t->columns_width[i]);
+						expand_lines(t->part, yp + yt);
+						expand_line(t->part, yp + yt, xp + t->columns_width[i]);
 					}
 
 					if (cell->fragment_id)
@@ -1535,7 +1535,7 @@ draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
 	    +  9 * int_max(left,   0)
 	    + 27 * int_max(bottom, 0);
 
-	draw_frame_hchars(table->p, x, y, 1, border_chars[pos], bgcolor, fgcolor);
+	draw_frame_hchars(table->part, x, y, 1, border_chars[pos], bgcolor, fgcolor);
 }
 
 static inline void
@@ -1550,7 +1550,8 @@ draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
 
  	if (pos < 0 || table->columns_width[i] <= 0) return;
 
- 	draw_frame_hchars(table->p, x, y, table->columns_width[i], hltable[pos], bgcolor, fgcolor);
+ 	draw_frame_hchars(table->part, x, y, table->columns_width[i], hltable[pos],
+			  bgcolor, fgcolor);
 }
 
 static inline void
@@ -1565,7 +1566,8 @@ draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
 
  	if (pos < 0 || table->rows_height[j] <= 0) return;
 
- 	draw_frame_vchars(table->p, x, y, table->rows_height[j], vltable[pos], bgcolor, fgcolor);
+ 	draw_frame_vchars(table->part, x, y, table->rows_height[j], vltable[pos],
+			  bgcolor, fgcolor);
 }
 
 static void
@@ -1831,7 +1833,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	state = init_html_parser_state(ELEMENT_DONT_KILL, AL_LEFT, 0, 0);
 
-	t->p = p;
+	t->part = p;
 	t->border = border;
 	t->bordercolor = bordercolor;
 	t->cellpadding = cellpadding;

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.92 2004/05/29 13:33:29 jonas Exp $ */
+/* $Id: task.c,v 1.93 2004/05/29 13:36:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,7 +141,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 			confirm_submit = 0;
 
 		} else if (get_validated_cache_entry(uri, cache_mode)) {
-			    confirm_submit = 0;
+			confirm_submit = 0;
 		}
 	}
 

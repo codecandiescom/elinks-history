@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.223 2003/08/26 23:23:02 jonas Exp $ */
+/* $Id: renderer.c,v 1.224 2003/08/26 23:35:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -412,11 +412,7 @@ copy_chars(struct part *part, int x, int y, int xl, struct screen_char *d)
 	    || xpand_line(part, y, x + xl - 1))
 		return;
 
-	for (; xl; xl--, x++, d++) {
-		POS(x, y).attr = d->attr;
-		POS(x, y).color = d->color;
-		POS(x, y).data = d->data;
-	}
+	memcpy(&POS(x, y), d, xl * sizeof(struct screen_char));
 }
 
 static inline void

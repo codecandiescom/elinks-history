@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.56 2005/03/03 16:18:26 zas Exp $ */
+/* $Id: select.c,v 1.57 2005/03/03 17:05:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -270,6 +270,21 @@ set_handlers(int fd, void (*read_func)(void *), void (*write_func)(void *),
 	}
 }
 
+static int
+get_next_timer_time(struct timeval *tv)
+{
+	if (!list_empty(timers)) {
+		ttime tt = ((struct timer *) &timers)->next->interval + 1;
+
+		if (tt < 0) tt = 0;
+		tv->tv_sec = tt / 1000;
+		tv->tv_usec = (tt % 1000) * 1000;
+
+		return 1;
+	}
+
+	return 0;
+}
 
 void
 select_loop(void (*init)(void))
@@ -289,28 +304,21 @@ select_loop(void (*init)(void))
 	check_bottom_halves();
 
 	while (!terminate) {
-		int n, i;
+		int n, i, has_timer;
 		struct timeval tv;
-		struct timeval *tm = NULL;
 
 		check_signals();
 		check_timers();
 		redraw_all_terminals();
 
-		if (!list_empty(timers)) {
-			ttime tt = ((struct timer *) &timers)->next->interval + 1;
-			if (tt < 0) tt = 0;
-			tv.tv_sec = tt / 1000;
-			tv.tv_usec = (tt % 1000) * 1000;
-			tm = &tv;
-		}
+		has_timer = get_next_timer_time(&tv);
 
 		memcpy(&x_read, &w_read, sizeof(fd_set));
 		memcpy(&x_write, &w_write, sizeof(fd_set));
 		memcpy(&x_error, &w_error, sizeof(fd_set));
 
 		if (terminate) break;
-		if (!w_max && list_empty(timers)) break;
+		if (!w_max && !has_timer) break;
 		critical_section = 1;
 
 		if (check_signals()) {
@@ -333,7 +341,7 @@ select_loop(void (*init)(void))
 			fflush(stdout);
 		}
 #endif
-		n = select(w_max, &x_read, &x_write, &x_error, tm);
+		n = select(w_max, &x_read, &x_write, &x_error, has_timer ? &tv : NULL);
 		if (n < 0) {
 			critical_section = 0;
 			uninstall_alarm();

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.39 2003/07/11 17:25:21 jonas Exp $ */
+/* $Id: auth.c,v 1.40 2003/07/11 19:20:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,13 +117,13 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
  *	ADD_AUTH_EXIST	if exact entry already exists or is in blocked state
  *	ADD_AUTH_NEW	if entry was added
  *	ADD_AUTH_ERROR	on error. */
-enum add_auth_code
+struct http_auth_basic *
 add_auth_entry(struct uri *uri, unsigned char *realm)
 {
 	struct http_auth_basic *entry;
 	unsigned char *newurl = get_uri_string(uri);
 
-	if (!newurl) return ADD_AUTH_ERROR;
+	if (!newurl) return NULL;
 
 	/* Is host/realm already known ? */
 	entry = find_auth_entry(newurl, realm);
@@ -131,12 +131,12 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 		mem_free(newurl);
 
 		assert(entry->uid && entry->passwd);
-		if_assert_failed { return ADD_AUTH_ERROR; }
+		if_assert_failed { return NULL; }
 
 		/* Found an entry. */
 		if (entry->blocked == 1) {
 			/* Waiting for user/pass in dialog. */
-			return ADD_AUTH_EXIST;
+			return NULL;
 		}
 
 		/* In order to use an existing entry it has to match exactly.
@@ -153,7 +153,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 				entry->realm = stracpy(realm);
 				if (!entry->realm) {
 					del_auth_entry(entry);
-					return ADD_AUTH_ERROR;
+					return NULL;
 				}
 			} else {
 				entry->realm = NULL;
@@ -173,14 +173,14 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 		}
 
 		/* If all was matched exactly we have an existing entry. */
-		if (entry->valid) return ADD_AUTH_EXIST;
+		if (entry->valid) return entry;
 
 	} else {
 		/* Create a new entry. */
 		entry = init_auth_entry(newurl, realm, uri);
 		if (!entry) {
 			mem_free(newurl);
-			return ADD_AUTH_ERROR;
+			return NULL;
 		}
 
 		add_to_list(http_auth_basic_list, entry);
@@ -189,7 +189,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 	entry->valid = (*entry->uid && *entry->passwd);
 
 	/* Return whether entry was added with user/pass from url. */
-	return (entry->valid ? ADD_AUTH_NONE : ADD_AUTH_NEW);
+	return entry;
 }
 
 #undef min
@@ -239,7 +239,13 @@ again:
 		if ((entry && !entry->valid && entry->uid && entry->passwd
 		    && (strcmp(user, entry->uid) || strcmp(pass, entry->passwd)))
 		   || !entry) {
-			if (add_auth_entry(uri, NULL) == ADD_AUTH_NONE) {
+			/* The entry does not correspond to any existing one which
+			 * means that the current @entry will be updated
+			 * with the user and password from the uri when it is
+			 * readding. */
+			entry = add_auth_entry(uri, NULL);
+
+			if (entry && entry->valid) {
 				/* An entry was re-created, we free user/pass
 				 * before retry to prevent infinite loop. */
 				if (user) {

@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.32 2003/09/25 15:25:32 jonas Exp $ */
+/* $Id: hooks.c,v 1.33 2003/09/25 15:48:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,8 +34,7 @@ script_hook_goto_url(va_list ap)
 	unsigned char **new_url = va_arg(ap, unsigned char **);
 	struct session *ses = va_arg(ap, struct session *);
 	unsigned char *url = va_arg(ap, unsigned char *);
-	unsigned char *value;
-	int err;
+	int status;
 
 	lua_getglobal(L, "goto_url_hook");
 	if (lua_isnil(L, -1)) {
@@ -54,22 +53,24 @@ script_hook_goto_url(va_list ap)
 
 	if (prepare_lua(ses)) return str_event_code(new_url, NULL);
 
-	err = lua_call(L, 2, 1);
+	status = lua_call(L, 2, 1);
 	finish_lua();
-	if (err) return str_event_code(new_url, NULL);
+	if (status) return EHS_NEXT;
 
 	if (lua_isstring(L, -1)) {
-		value = stracpy((unsigned char *) lua_tostring(L, -1));
-	} else if (!lua_isnil(L, -1)) {
-		alert_lua_error("goto_url_hook must return a string or nil");
-		value = url;
+		*new_url = stracpy((unsigned char *) lua_tostring(L, -1));
+		status = EHS_LAST;
+	} else if (lua_isnil(L, -1)) {
+		*new_url = NULL;
+		status = EHS_LAST;
 	} else {
-		value = NULL;
+		alert_lua_error("goto_url_hook must return a string or nil");
+		status = EHS_NEXT;
 	}
 
 	lua_pop(L, 1);
 
-	return str_event_code(new_url, value);
+	return status;
 }
 
 static enum evhook_status
@@ -79,7 +80,7 @@ script_hook_follow_url(va_list ap)
 	unsigned char **new_url = va_arg(ap, unsigned char **);
 	struct session *ses = va_arg(ap, struct session *);
 	unsigned char *url = va_arg(ap, unsigned char *);
-	unsigned char *value = NULL;
+	int status;
 
 	lua_getglobal(L, "follow_url_hook");
 	if (lua_isnil(L, -1)) {
@@ -90,24 +91,26 @@ script_hook_follow_url(va_list ap)
 
 	lua_pushstring(L, url);
 
-	if (!prepare_lua(ses)) {
-		int err = lua_call(L, 1, 1);
+	if (prepare_lua(ses)) return str_event_code(new_url, NULL);
 
-		finish_lua();
-		if (err) return str_event_code(new_url, url);
+	status = lua_call(L, 1, 1);
+	finish_lua();
+	if (status) return EHS_NEXT;
 
-		if (lua_isstring(L, -1)) {
-			value = stracpy((unsigned char *) lua_tostring(L, -1));
-		} else if (!lua_isnil(L, -1)) {
-			alert_lua_error("follow_url_hook must return a string or nil");
-		} else {
-			value = url;
-		}
-
-		lua_pop(L, 1);
+	if (lua_isstring(L, -1)) {
+		*new_url = stracpy((unsigned char *) lua_tostring(L, -1));
+		status = EHS_LAST;
+	} else if (lua_isnil(L, -1)) {
+		*new_url = NULL;
+		status = EHS_LAST;
+	} else {
+		alert_lua_error("follow_url_hook must return a string or nil");
+		status = EHS_NEXT;
 	}
 
-	return str_event_code(new_url, value);
+	lua_pop(L, 1);
+
+	return status;
 }
 
 static enum evhook_status

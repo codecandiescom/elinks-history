@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.5 2002/12/11 14:39:09 pasky Exp $ */
+/* $Id: xbel.c,v 1.6 2002/12/11 20:44:48 pasky Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -54,6 +54,7 @@ static unsigned char *get_attribute_value(struct attributes *attr,
 	
 
 static void read_bookmarks_xbel(FILE *f);
+static unsigned char * filename_bookmarks_xbel(int writing);
 static int xbeltree_to_bookmarks_list(struct tree_node *root,
 				      struct bookmark *current_parent);
 static void write_bookmarks_list(struct secure_save_info *ssi,
@@ -91,7 +92,8 @@ read_bookmarks_xbel(FILE *f)
 
 	p = XML_ParserCreate(NULL);
 	if (!p) {
-		fprintf(stderr, "Error in XML_ParserCreate()\n\007");
+		fprintf(stderr, "read_bookmarks_xbel(): "
+				"Error in XML_ParserCreate()\n\007");
 		sleep(1);
 		return;
 	}
@@ -105,7 +107,11 @@ read_bookmarks_xbel(FILE *f)
 				
 		len = fread(in_buffer, 1, BUFSIZ, f);
 		if (ferror(f)) {
-			fprintf(stderr, "\n\007");
+			fprintf(stderr, "read_bookmarks_xbel(): "
+					"Error reading %s\n\007",
+					filename_bookmarks_xbel(0));
+			
+			free_xbeltree(root_node);
 			sleep(1);
 			return;
 		}
@@ -113,9 +119,13 @@ read_bookmarks_xbel(FILE *f)
 		done = feof(f);
 
 		if (!XML_Parse(p, in_buffer, len, done)) {
-			fprintf(stderr, "Parse error at line %d:\n%s\n\007",
+			fprintf(stderr, "read_bookmarks_xbel(): "
+					"Parse error in %s at line %d:\n%s\n\007",
+					filename_bookmarks_xbel(0),
 					XML_GetCurrentLineNumber(p),
 					XML_ErrorString(XML_GetErrorCode(p)));
+			
+			free_xbeltree(root_node);
 			sleep(1);
 			return;
 		}
@@ -139,7 +149,7 @@ write_bookmarks_xbel(struct secure_save_info *ssi, struct list_head *bookmarks)
 		"Bookmark Exchange Language 1.0//EN//XML\"\n"
 		"		       "
 		"\"http://www.python.org/topics/xml/dtds/xbel-1.0.dtd\">\n\n"
-		"<xbel>\n");
+		"<xbel>\n\n\n");
 	
 	
 	write_bookmarks_list(ssi, bookmarks, 0);
@@ -167,24 +177,15 @@ indentation(struct secure_save_info *ssi, int num)
  *       if you pay enough attention you can smell the unmistakable
  *       odor of doom coming from it. --fabio */
 static void
-print_xml_entities(struct secure_save_info *ssi, const char *str)
+print_xml_entities(struct secure_save_info *ssi, const unsigned char *str)
 {
-#ifdef HAVE_ISALNUM
-#define accept_char(x) (isalnum((x)) || (x) == '-' || (x) == '_' \
-				     || (x) == ' ' || (x) == '.' \
-				     || (x) == ':' || (x) == ';' \
-				     || (x) == '/' || (x) == '(' \
-				     || (x) == ')' || (x) == '}' \
-				     || (x) == '{' || (x) == '%' \
-				     || (x) == '+')
-#else /* HAVE_ISALNUM */
 #define accept_char(x) (isA((x)) || (x) == ' ' || (x) == '.' \
 				 || (x) == ':' || (x) == ';' \
 				 || (x) == '/' || (x) == '(' \
 				 || (x) == ')' || (x) == '}' \
 				 || (x) == '{' || (x) == '%' \
 				 || (x) == '+')
-#endif /* HAVE_ISALNUM */
+
 	for (; *str; str++) {
 		if (accept_char(*str))
 			secure_fprintf(ssi, "%c", *str);
@@ -311,8 +312,8 @@ delete_whites(char *s)
 
 	r[c] = '\0';
 
-	/* XXX This should never return NULL, right? --fabio */
-	r = mem_realloc(r, strlen(r + 1));
+	/* XXX This should never return NULL, right? wrong! --fabio */
+	/* r = mem_realloc(r, strlen(r + 1)); */
 
 	return r;
 		

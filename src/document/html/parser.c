@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.59 2002/12/14 17:44:17 zas Exp $ */
+/* $Id: parser.c,v 1.60 2002/12/14 17:57:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -223,7 +223,7 @@ ea:
 
 #undef add_chr
 
-static unsigned char *
+static inline unsigned char *
 get_url_val(unsigned char *e, unsigned char *name)
 {
 	unsigned char *val;
@@ -445,7 +445,7 @@ static int putsp;
 
 static int was_br;
 
-static void
+static inline void
 ln_break(int n, void (*line_break)(void *), void *f)
 {
 	if (!n || html_top.invisible) return;
@@ -643,42 +643,42 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 	kill_html_stack_item(&html_top);
 }
 
-static void
+static inline void
 html_span(unsigned char *a)
 {
 }
 
-static void
+static inline void
 html_bold(unsigned char *a)
 {
 	format.attr |= AT_BOLD;
 }
 
-static void
+static inline void
 html_italic(unsigned char *a)
 {
 	format.attr |= AT_ITALIC;
 }
 
-static void
+static inline void
 html_underline(unsigned char *a)
 {
 	format.attr |= AT_UNDERLINE;
 }
 
-static void
+static inline void
 html_fixed(unsigned char *a)
 {
        format.attr |= AT_FIXED;
 }
 
-static void
+static inline void
 html_subscript(unsigned char *a)
 {
        format.attr |= AT_SUBSCRIPT;
 }
 
-static void
+static inline void
 html_superscript(unsigned char *a)
 {
        format.attr |= AT_SUPERSCRIPT;
@@ -920,7 +920,7 @@ html_img(unsigned char *a)
 	/*put_chrs(" ", 1, put_chars_f, ff);*/
 }
 
-static void
+static inline void
 html_body(unsigned char *a)
 {
 	get_color(a, "text", &format.fg);
@@ -930,19 +930,19 @@ html_body(unsigned char *a)
 	get_bgcolor(a, &par_format.bgcolor);
 }
 
-static void
+static inline void
 html_skip(unsigned char *a)
 {
 	html_top.invisible = html_top.dontkill = 1;
 }
 
-static void
+static inline void
 html_title(unsigned char *a)
 {
 	html_top.invisible = html_top.dontkill = 1;
 }
 
-static void
+static inline void
 html_center(unsigned char *a)
 {
 	par_format.align = AL_CENTER;
@@ -966,7 +966,7 @@ html_linebrk(unsigned char *a)
 	}
 }
 
-static void
+static inline void
 html_br(unsigned char *a)
 {
 	html_linebrk(a);
@@ -974,13 +974,13 @@ html_br(unsigned char *a)
 	was_br = 1;
 }
 
-static void
+static inline void
 html_form(unsigned char *a)
 {
 	was_br = 1;
 }
 
-static void
+static inline void
 html_p(unsigned char *a)
 {
 	if (par_format.leftmargin < margin) par_format.leftmargin = margin;
@@ -989,14 +989,14 @@ html_p(unsigned char *a)
 	html_linebrk(a);
 }
 
-static void
+static inline void
 html_address(unsigned char *a)
 {
 	par_format.leftmargin += 1;
 	par_format.align = AL_LEFT;
 }
 
-static void
+static inline void
 html_blockquote(unsigned char *a)
 {
 	par_format.leftmargin += 2;
@@ -1031,37 +1031,37 @@ html_h(int h, unsigned char *a)
 	}
 }
 
-static void
+static inline void
 html_h2(unsigned char *a)
 {
 	html_h(2, a);
 }
 
-static void
+static inline void
 html_h3(unsigned char *a)
 {
 	html_h(3, a);
 }
 
-static void
+static inline void
 html_h4(unsigned char *a)
 {
 	html_h(4, a);
 }
 
-static void
+static inline void
 html_h5(unsigned char *a)
 {
 	html_h(5, a);
 }
 
-static void
+static inline void
 html_h6(unsigned char *a)
 {
 	html_h(6, a);
 }
 
-static void
+static inline void
 html_pre(unsigned char *a)
 {
 	par_format.align = AL_NO;
@@ -1096,7 +1096,7 @@ html_hr(unsigned char *a)
 	kill_html_stack_item(&html_top);
 }
 
-static void
+static inline void
 html_table(unsigned char *a)
 {
 	par_format.leftmargin = margin;
@@ -1106,13 +1106,13 @@ html_table(unsigned char *a)
 	format.attr = 0;
 }
 
-static void
+static inline void
 html_tr(unsigned char *a)
 {
 	html_linebrk(a);
 }
 
-static void
+static inline void
 html_th(unsigned char *a)
 {
 	/*html_linebrk(a);*/
@@ -1121,7 +1121,7 @@ html_th(unsigned char *a)
 	put_chrs(" ", 1, put_chars_f, ff);
 }
 
-static void
+static inline void
 html_td(unsigned char *a)
 {
 	/*html_linebrk(a);*/
@@ -1744,7 +1744,7 @@ new_menu_item(unsigned char *name, int data, int fullname)
 	if (!name) menu_stack_size--;
 }
 
-static void
+static inline void
 init_menu()
 {
 	menu_stack_size = 0;
@@ -1766,7 +1766,7 @@ free_menu(struct menu_item *m) /* Grrr. Recursion */
 	mem_free(m);
 }
 
-static struct menu_item *
+static inline struct menu_item *
 detach_menu()
 {
 	struct menu_item *i = NULL;
@@ -1776,7 +1776,7 @@ detach_menu()
 	return i;
 }
 
-static void
+static inline void
 destroy_menu()
 {
 	if (menu_stack) free_menu(menu_stack[0]);
@@ -2023,7 +2023,7 @@ end_parse:
 
 
 
-static void
+static inline void
 html_textarea(unsigned char *a)
 {
 	internal("This should be never called");
@@ -2140,7 +2140,7 @@ html_iframe(unsigned char *a)
 	mem_free(url);
 }
 
-static void
+static inline void
 html_noframes(unsigned char *a)
 {
 	if (d_opt->frames) html_skip(a);
@@ -2538,7 +2538,7 @@ process_head(unsigned char *head)
 }
 
 
-static int
+static inline int
 compar(const void *a, const void *b)
 {
 	return strcasecmp(((struct element_info *) a)->name, ((struct element_info *) b)->name);

@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre1.CVS\n"
-"POT-Creation-Date: 2003-07-03 10:51+0200\n"
+"POT-Creation-Date: 2003-07-05 09:48+0200\n"
 "PO-Revision-Date: 2003-06-20 16:45+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: |=|4x0rs Un173\n"
@@ -38,9 +38,9 @@ msgstr "|\\|u|V|B3R 3><P3(73|) 1N |=i3|D"
 #: src/sched/download.c:1244 src/sched/session.c:354
 #: src/scripting/lua/core.c:437 src/scripting/lua/core.c:580
 #: src/scripting/lua/core.c:804 src/viewer/text/form.c:614
-#: src/viewer/text/search.c:345 src/viewer/text/search.c:394
+#: src/viewer/text/search.c:524 src/viewer/text/search.c:573
 #: src/viewer/text/textarea.c:264 src/viewer/text/view.c:705
-#: src/viewer/text/view.c:1428
+#: src/viewer/text/view.c:1429
 msgid "Cancel"
 msgstr "(4N(3|"
 
@@ -89,9 +89,9 @@ msgstr "f0|D4R |\\|4|V|3"
 #: src/bookmarks/dialogs.c:171 src/config/dialogs.c:129
 #: src/config/dialogs.c:140 src/config/dialogs.c:325 src/config/dialogs.c:408
 #: src/config/dialogs.c:478 src/config/dialogs.c:662 src/config/dialogs.c:739
-#: src/dialogs/auth.c:187 src/dialogs/document.c:53 src/dialogs/document.c:208
-#: src/dialogs/document.c:231 src/dialogs/document.c:281
-#: src/dialogs/document.c:293 src/dialogs/edit.c:166 src/dialogs/info.c:48
+#: src/dialogs/auth.c:187 src/dialogs/document.c:53 src/dialogs/document.c:206
+#: src/dialogs/document.c:229 src/dialogs/document.c:279
+#: src/dialogs/document.c:291 src/dialogs/edit.c:166 src/dialogs/info.c:48
 #: src/dialogs/info.c:75 src/dialogs/info.c:95 src/dialogs/info.c:122
 #: src/dialogs/info.c:186 src/dialogs/info.c:206 src/dialogs/menu.c:623
 #: src/dialogs/menu.c:634 src/dialogs/menu.c:663 src/dialogs/menu.c:681
@@ -201,8 +201,8 @@ msgid "Add"
 msgstr "4|)|)"
 
 #: src/bookmarks/dialogs.c:651 src/dialogs/menu.c:691
-#: src/globhist/dialogs.c:480 src/viewer/text/search.c:342
-#: src/viewer/text/search.c:390
+#: src/globhist/dialogs.c:480 src/viewer/text/search.c:521
+#: src/viewer/text/search.c:569
 msgid "Search"
 msgstr "534R(H"
 
@@ -255,7 +255,7 @@ msgid "Unable to write to config file %s: %s"
 msgstr "Unable to VV|2173 70 config f1|3 %s: %s"
 
 #: src/config/dialogs.c:119 src/config/dialogs.c:132 src/config/dialogs.c:516
-#: src/dialogs/document.c:50 src/dialogs/document.c:205
+#: src/dialogs/document.c:50 src/dialogs/document.c:203
 #: src/globhist/dialogs.c:411 src/globhist/dialogs.c:470
 msgid "Info"
 msgstr "1Nf0"
@@ -2741,7 +2741,7 @@ msgid "Dialog text colors."
 msgstr "Dialog 73><7 (0|_0Rs."
 
 #: src/config/options.c:1975 src/config/options.c:2343
-#: src/viewer/text/link.c:957
+#: src/viewer/text/link.c:959
 msgid "Checkbox"
 msgstr "Checkbox"
 
@@ -2774,7 +2774,7 @@ msgid "Dialog selected button colors."
 msgstr "Dialog 53|3(73|) 8u770|\\| (0|_0Rs."
 
 #: src/config/options.c:2023 src/config/options.c:2391
-#: src/viewer/text/link.c:963
+#: src/viewer/text/link.c:965
 msgid "Text field"
 msgstr "73><7 |=13|d"
 
@@ -3469,7 +3469,7 @@ msgstr "Authentication required for %s at %s"
 msgid "HTTP Authentication"
 msgstr "HTTP Authentication"
 
-#: src/dialogs/document.c:51 src/dialogs/document.c:229
+#: src/dialogs/document.c:51 src/dialogs/document.c:227
 msgid "You are nowhere!"
 msgstr "You are |\\|0where!"
 
@@ -3486,52 +3486,52 @@ msgstr "incomplete"
 msgid "assumed"
 msgstr "455U|V|3d"
 
-#: src/dialogs/document.c:124
+#: src/dialogs/document.c:122
 msgid "ignoring server setting"
 msgstr "ig|\\|0ring 53|2\\/3R 537ting"
 
-#: src/dialogs/document.c:131
+#: src/dialogs/document.c:129
 msgid "Server"
 msgstr "53|2\\/3R"
 
-#: src/dialogs/document.c:139
+#: src/dialogs/document.c:137
 msgid "SSL Cipher"
 msgstr "SSL Cipher"
 
-#: src/dialogs/document.c:145
+#: src/dialogs/document.c:143
 msgid "Encoding"
 msgstr "Encoding"
 
-#: src/dialogs/document.c:153
+#: src/dialogs/document.c:151
 msgid "Date"
 msgstr "Date"
 
-#: src/dialogs/document.c:161
+#: src/dialogs/document.c:159
 msgid "Last modified"
 msgstr "Last modified"
 
-#: src/dialogs/document.c:170
+#: src/dialogs/document.c:168
 msgid "Last visit time"
 msgstr "Last visit 71|V|3"
 
-#: src/dialogs/document.c:179
+#: src/dialogs/document.c:177
 msgid "Unknown"
 msgstr "U|\\||<N0VVn"
 
-#: src/dialogs/document.c:188
+#: src/dialogs/document.c:186
 msgid "Link"
 msgstr "|1N|<"
 
-#: src/dialogs/document.c:197
+#: src/dialogs/document.c:195
 msgid "Link title"
 msgstr "|1N|< 717|3"
 
-#: src/dialogs/document.c:228 src/dialogs/document.c:278
-#: src/dialogs/document.c:290
+#: src/dialogs/document.c:226 src/dialogs/document.c:276
+#: src/dialogs/document.c:288
 msgid "Header info"
 msgstr "|-|34|)3R 1|\\|f0"
 
-#: src/dialogs/document.c:291
+#: src/dialogs/document.c:289
 msgid "No header info."
 msgstr "|\\|0 |-|34|)3R 1|\\|f0."
 
@@ -4654,123 +4654,123 @@ msgstr "3RR0R while |o057ing f0|2|V|"
 msgid "Could not get file %s: %s"
 msgstr "(0VL|) |\\|07 get f1|3 %s: %s"
 
-#: src/viewer/text/link.c:768
+#: src/viewer/text/link.c:770
 msgid "Display ~usemap"
 msgstr "Display |_|53map"
 
-#: src/viewer/text/link.c:773
+#: src/viewer/text/link.c:775
 msgid "~Follow link"
 msgstr "f0110VV |1N|<"
 
-#: src/viewer/text/link.c:776
+#: src/viewer/text/link.c:778
 msgid "Follow link and r~eload"
 msgstr "f0110VV |1N|< and |23|04|)"
 
-#: src/viewer/text/link.c:780
+#: src/viewer/text/link.c:782
 msgid "Open in new ~window"
 msgstr "0p3N in |\\|u \\/\\/1N|)0VV"
 
-#: src/viewer/text/link.c:786
+#: src/viewer/text/link.c:788
 msgid "~Download link"
 msgstr "|)0VVN|04|) |1N|<"
 
-#: src/viewer/text/link.c:790
+#: src/viewer/text/link.c:792
 msgid "~Add link to bookmarks"
 msgstr "4|)|) |1N|< 70 800|<|V|4R|<5"
 
-#: src/viewer/text/link.c:802 src/viewer/text/link.c:925
+#: src/viewer/text/link.c:804 src/viewer/text/link.c:927
 msgid "~Reset form"
 msgstr "Re537 f0|2|V|"
 
-#: src/viewer/text/link.c:807
+#: src/viewer/text/link.c:809
 msgid "~Submit form"
 msgstr "5U8|\\/|17 f0|2|V|"
 
-#: src/viewer/text/link.c:810
+#: src/viewer/text/link.c:812
 msgid "Submit form and rel~oad"
 msgstr "5U8|V|17 f0|2|V| and |23|04|)"
 
-#: src/viewer/text/link.c:814
+#: src/viewer/text/link.c:816
 msgid "Submit form and open in new ~window"
 msgstr "5U8|V|17 f0|2|V| and 0p3N in |\\|u \\/\\/1N|)0VV"
 
-#: src/viewer/text/link.c:820
+#: src/viewer/text/link.c:822
 msgid "Submit form and ~download"
 msgstr "5U8|\\/|17 f0|2|V| and |)0VVN|04|)"
 
-#: src/viewer/text/link.c:827
+#: src/viewer/text/link.c:829
 msgid "V~iew image"
 msgstr "View 1|V|463"
 
-#: src/viewer/text/link.c:830
+#: src/viewer/text/link.c:832
 msgid "Download ima~ge"
 msgstr "|)0VVN|04|) 1|V|493"
 
-#: src/viewer/text/link.c:836
+#: src/viewer/text/link.c:838
 msgid "No link selected"
 msgstr "|\\|0 |1N|< 53|3(73|)"
 
-#: src/viewer/text/link.c:886
+#: src/viewer/text/link.c:888
 msgid "Image"
 msgstr "1|V|463"
 
-#: src/viewer/text/link.c:904
+#: src/viewer/text/link.c:906
 msgid "Usemap"
 msgstr "|_|53map"
 
-#: src/viewer/text/link.c:933
+#: src/viewer/text/link.c:935
 msgid "Submit form to"
 msgstr "5U8|\\/|17 f0|2|V| 70"
 
-#: src/viewer/text/link.c:935
+#: src/viewer/text/link.c:937
 msgid "Post form to"
 msgstr "|o057 f0|2|V| 70"
 
-#: src/viewer/text/link.c:954
+#: src/viewer/text/link.c:956
 msgid "Radio button"
 msgstr "Radio 8u770|\\|"
 
-#: src/viewer/text/link.c:960
+#: src/viewer/text/link.c:962
 msgid "Select field"
 msgstr "53|3(7 |=13|d"
 
-#: src/viewer/text/link.c:966
+#: src/viewer/text/link.c:968
 msgid "Text area"
 msgstr "73><7 area"
 
-#: src/viewer/text/link.c:969
+#: src/viewer/text/link.c:971
 msgid "File upload"
 msgstr "f1|3 upload"
 
-#: src/viewer/text/link.c:972
+#: src/viewer/text/link.c:974
 msgid "Password field"
 msgstr "|o455VV0R|) |=13|d"
 
-#: src/viewer/text/link.c:981
+#: src/viewer/text/link.c:983
 msgid "name"
 msgstr "|\\|4|V|3"
 
-#: src/viewer/text/link.c:991
+#: src/viewer/text/link.c:993
 msgid "value"
 msgstr "\\/4|U3"
 
-#: src/viewer/text/link.c:1002
+#: src/viewer/text/link.c:1004
 msgid "hit ENTER to"
 msgstr "|-|17 3N73|2 70"
 
-#: src/viewer/text/link.c:1005
+#: src/viewer/text/link.c:1007
 msgid "submit to"
 msgstr "5U8|\\/|17 70"
 
-#: src/viewer/text/link.c:1007
+#: src/viewer/text/link.c:1009
 msgid "post to"
 msgstr "|o057 70"
 
-#: src/viewer/text/search.c:343
+#: src/viewer/text/search.c:522
 msgid "No previous search"
 msgstr "|\\|0 |oR3\\/10U5 534R(H"
 
-#: src/viewer/text/search.c:391
+#: src/viewer/text/search.c:570
 #, c-format
 msgid "Search string '%s' not found"
 msgstr "534R(H 57r1|\\|6 '%s' |\\|07 f0u|\\|d"
@@ -4787,10 +4787,10 @@ msgstr "60 70 |1N|<"
 msgid "Enter link number"
 msgstr "3|\\|73R |1N|< |\\|U|V|83R"
 
-#: src/viewer/text/view.c:1425
+#: src/viewer/text/view.c:1426
 msgid "Save error"
 msgstr "54\\/3 3RR0R"
 
-#: src/viewer/text/view.c:1426
+#: src/viewer/text/view.c:1427
 msgid "Error writing to file"
 msgstr "3RR0R VV|2171n9 70 f1|3"

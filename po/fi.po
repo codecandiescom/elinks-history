@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-07-03 10:51+0200\n"
+"POT-Creation-Date: 2003-07-05 09:48+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Karvinen Ilkka <ik@iki.fi>\n"
 "Language-Team: Finnish <translation-team-fi@lists.sourceforge.net>\n"
@@ -39,9 +39,9 @@ msgstr "Kent‰ss‰ on oltava numero"
 #: src/sched/download.c:1244 src/sched/session.c:354
 #: src/scripting/lua/core.c:437 src/scripting/lua/core.c:580
 #: src/scripting/lua/core.c:804 src/viewer/text/form.c:614
-#: src/viewer/text/search.c:345 src/viewer/text/search.c:394
+#: src/viewer/text/search.c:524 src/viewer/text/search.c:573
 #: src/viewer/text/textarea.c:264 src/viewer/text/view.c:705
-#: src/viewer/text/view.c:1428
+#: src/viewer/text/view.c:1429
 msgid "Cancel"
 msgstr "Keskeyt‰"
 
@@ -88,9 +88,9 @@ msgstr ""
 #: src/bookmarks/dialogs.c:171 src/config/dialogs.c:129
 #: src/config/dialogs.c:140 src/config/dialogs.c:325 src/config/dialogs.c:408
 #: src/config/dialogs.c:478 src/config/dialogs.c:662 src/config/dialogs.c:739
-#: src/dialogs/auth.c:187 src/dialogs/document.c:53 src/dialogs/document.c:208
-#: src/dialogs/document.c:231 src/dialogs/document.c:281
-#: src/dialogs/document.c:293 src/dialogs/edit.c:166 src/dialogs/info.c:48
+#: src/dialogs/auth.c:187 src/dialogs/document.c:53 src/dialogs/document.c:206
+#: src/dialogs/document.c:229 src/dialogs/document.c:279
+#: src/dialogs/document.c:291 src/dialogs/edit.c:166 src/dialogs/info.c:48
 #: src/dialogs/info.c:75 src/dialogs/info.c:95 src/dialogs/info.c:122
 #: src/dialogs/info.c:186 src/dialogs/info.c:206 src/dialogs/menu.c:623
 #: src/dialogs/menu.c:634 src/dialogs/menu.c:663 src/dialogs/menu.c:681
@@ -190,8 +190,8 @@ msgid "Add"
 msgstr "Lis‰‰"
 
 #: src/bookmarks/dialogs.c:651 src/dialogs/menu.c:691
-#: src/globhist/dialogs.c:480 src/viewer/text/search.c:342
-#: src/viewer/text/search.c:390
+#: src/globhist/dialogs.c:480 src/viewer/text/search.c:521
+#: src/viewer/text/search.c:569
 msgid "Search"
 msgstr "Etsi"
 
@@ -246,7 +246,7 @@ msgid "Unable to write to config file %s: %s"
 msgstr "Asetustiedoston kirjoitus ei onnistu"
 
 #: src/config/dialogs.c:119 src/config/dialogs.c:132 src/config/dialogs.c:516
-#: src/dialogs/document.c:50 src/dialogs/document.c:205
+#: src/dialogs/document.c:50 src/dialogs/document.c:203
 #: src/globhist/dialogs.c:411 src/globhist/dialogs.c:470
 msgid "Info"
 msgstr "Tieto"
@@ -2564,7 +2564,7 @@ msgid "Dialog text colors."
 msgstr ""
 
 #: src/config/options.c:1975 src/config/options.c:2343
-#: src/viewer/text/link.c:957
+#: src/viewer/text/link.c:959
 msgid "Checkbox"
 msgstr "Valintalaatikko"
 
@@ -2598,7 +2598,7 @@ msgid "Dialog selected button colors."
 msgstr ""
 
 #: src/config/options.c:2023 src/config/options.c:2391
-#: src/viewer/text/link.c:963
+#: src/viewer/text/link.c:965
 msgid "Text field"
 msgstr "Tekstikentt‰"
 
@@ -3236,7 +3236,7 @@ msgstr "Kirjoita k‰tt‰j‰nimi"
 msgid "HTTP Authentication"
 msgstr ""
 
-#: src/dialogs/document.c:51 src/dialogs/document.c:229
+#: src/dialogs/document.c:51 src/dialogs/document.c:227
 msgid "You are nowhere!"
 msgstr "Et ole miss‰‰n!"
 
@@ -3253,53 +3253,53 @@ msgstr "ep‰t‰ydellinen"
 msgid "assumed"
 msgstr "oletettu"
 
-#: src/dialogs/document.c:124
+#: src/dialogs/document.c:122
 msgid "ignoring server setting"
 msgstr "hylk‰‰ palvelinasetukset"
 
-#: src/dialogs/document.c:131
+#: src/dialogs/document.c:129
 msgid "Server"
 msgstr "Palvelin"
 
-#: src/dialogs/document.c:139
+#: src/dialogs/document.c:137
 msgid "SSL Cipher"
 msgstr ""
 
-#: src/dialogs/document.c:145
+#: src/dialogs/document.c:143
 msgid "Encoding"
 msgstr ""
 
-#: src/dialogs/document.c:153
+#: src/dialogs/document.c:151
 msgid "Date"
 msgstr "P‰iv‰ys"
 
-#: src/dialogs/document.c:161
+#: src/dialogs/document.c:159
 msgid "Last modified"
 msgstr "Viimeksi muokattu"
 
-#: src/dialogs/document.c:170
+#: src/dialogs/document.c:168
 msgid "Last visit time"
 msgstr ""
 
-#: src/dialogs/document.c:179
+#: src/dialogs/document.c:177
 msgid "Unknown"
 msgstr ""
 
-#: src/dialogs/document.c:188
+#: src/dialogs/document.c:186
 #, fuzzy
 msgid "Link"
 msgstr "~Linkki"
 
-#: src/dialogs/document.c:197
+#: src/dialogs/document.c:195
 msgid "Link title"
 msgstr ""
 
-#: src/dialogs/document.c:228 src/dialogs/document.c:278
-#: src/dialogs/document.c:290
+#: src/dialogs/document.c:226 src/dialogs/document.c:276
+#: src/dialogs/document.c:288
 msgid "Header info"
 msgstr "Otsikkotieto"
 
-#: src/dialogs/document.c:291
+#: src/dialogs/document.c:289
 msgid "No header info."
 msgstr ""
 
@@ -4381,123 +4381,123 @@ msgstr "Virhe kaavaketta l‰hetett‰ess‰"
 msgid "Could not get file %s: %s"
 msgstr "Tiedoston haku ep‰onnistui"
 
-#: src/viewer/text/link.c:768
+#: src/viewer/text/link.c:770
 msgid "Display ~usemap"
 msgstr "N‰yt‰ kartta"
 
-#: src/viewer/text/link.c:773
+#: src/viewer/text/link.c:775
 msgid "~Follow link"
 msgstr "Seuraa linkki‰"
 
-#: src/viewer/text/link.c:776
+#: src/viewer/text/link.c:778
 msgid "Follow link and r~eload"
 msgstr ""
 
-#: src/viewer/text/link.c:780
+#: src/viewer/text/link.c:782
 msgid "Open in new ~window"
 msgstr "Avaa uuteen ikkunaan"
 
-#: src/viewer/text/link.c:786
+#: src/viewer/text/link.c:788
 msgid "~Download link"
 msgstr "Lataa linkki"
 
-#: src/viewer/text/link.c:790
+#: src/viewer/text/link.c:792
 msgid "~Add link to bookmarks"
 msgstr ""
 
-#: src/viewer/text/link.c:802 src/viewer/text/link.c:925
+#: src/viewer/text/link.c:804 src/viewer/text/link.c:927
 msgid "~Reset form"
 msgstr "Tyhjenn‰ kaavake"
 
-#: src/viewer/text/link.c:807
+#: src/viewer/text/link.c:809
 msgid "~Submit form"
 msgstr "L‰het‰ kaavake"
 
-#: src/viewer/text/link.c:810
+#: src/viewer/text/link.c:812
 msgid "Submit form and rel~oad"
 msgstr ""
 
-#: src/viewer/text/link.c:814
+#: src/viewer/text/link.c:816
 msgid "Submit form and open in new ~window"
 msgstr "L‰het‰ kaavake ja avaa uudessa ikkunassa"
 
-#: src/viewer/text/link.c:820
+#: src/viewer/text/link.c:822
 msgid "Submit form and ~download"
 msgstr "L‰het‰ kaavake ja lataa"
 
-#: src/viewer/text/link.c:827
+#: src/viewer/text/link.c:829
 msgid "V~iew image"
 msgstr "N‰yt‰ kuva"
 
-#: src/viewer/text/link.c:830
+#: src/viewer/text/link.c:832
 msgid "Download ima~ge"
 msgstr "Lataa kuva"
 
-#: src/viewer/text/link.c:836
+#: src/viewer/text/link.c:838
 msgid "No link selected"
 msgstr "Ei linkki‰"
 
-#: src/viewer/text/link.c:886
+#: src/viewer/text/link.c:888
 msgid "Image"
 msgstr "Kuva"
 
-#: src/viewer/text/link.c:904
+#: src/viewer/text/link.c:906
 msgid "Usemap"
 msgstr "Kartta"
 
-#: src/viewer/text/link.c:933
+#: src/viewer/text/link.c:935
 msgid "Submit form to"
 msgstr "Hyv‰ksy kaavake:"
 
-#: src/viewer/text/link.c:935
+#: src/viewer/text/link.c:937
 msgid "Post form to"
 msgstr "L‰het‰ kaavake:"
 
-#: src/viewer/text/link.c:954
+#: src/viewer/text/link.c:956
 msgid "Radio button"
 msgstr "Radion‰pp‰in"
 
-#: src/viewer/text/link.c:960
+#: src/viewer/text/link.c:962
 msgid "Select field"
 msgstr "Valitse kentt‰"
 
-#: src/viewer/text/link.c:966
+#: src/viewer/text/link.c:968
 msgid "Text area"
 msgstr "Tekstialue"
 
-#: src/viewer/text/link.c:969
+#: src/viewer/text/link.c:971
 msgid "File upload"
 msgstr "Tiedoston l‰hetys"
 
-#: src/viewer/text/link.c:972
+#: src/viewer/text/link.c:974
 msgid "Password field"
 msgstr "Salasanakentt‰"
 
-#: src/viewer/text/link.c:981
+#: src/viewer/text/link.c:983
 msgid "name"
 msgstr "nimi"
 
-#: src/viewer/text/link.c:991
+#: src/viewer/text/link.c:993
 msgid "value"
 msgstr "arvo"
 
-#: src/viewer/text/link.c:1002
+#: src/viewer/text/link.c:1004
 msgid "hit ENTER to"
 msgstr "paina rivinvaihtoa"
 
-#: src/viewer/text/link.c:1005
+#: src/viewer/text/link.c:1007
 msgid "submit to"
 msgstr "hyv‰ksy"
 
-#: src/viewer/text/link.c:1007
+#: src/viewer/text/link.c:1009
 msgid "post to"
 msgstr "l‰het‰"
 
-#: src/viewer/text/search.c:343
+#: src/viewer/text/search.c:522
 msgid "No previous search"
 msgstr "Ei aikaisempaa hakua"
 
-#: src/viewer/text/search.c:391
+#: src/viewer/text/search.c:570
 #, fuzzy, c-format
 msgid "Search string '%s' not found"
 msgstr "Hakumerkkijonoa ei lˆytynyt"
@@ -4514,11 +4514,11 @@ msgstr "Valitse linkki"
 msgid "Enter link number"
 msgstr "Valitse linkkinumero"
 
-#: src/viewer/text/view.c:1425
+#: src/viewer/text/view.c:1426
 msgid "Save error"
 msgstr "Talletusvirhe"
 
-#: src/viewer/text/view.c:1426
+#: src/viewer/text/view.c:1427
 msgid "Error writing to file"
 msgstr "Virhe tiedostoon kirjoittaessa"
 

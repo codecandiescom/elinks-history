@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-07-03 10:51+0200\n"
+"POT-Creation-Date: 2003-07-05 09:48+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Armon Red <armon@islandia.is>\n"
 "Language-Team: Icelandic <kde-isl@mmedia.is>\n"
@@ -39,9 +39,9 @@ msgstr "Búist við tölu á reit"
 #: src/sched/download.c:1244 src/sched/session.c:354
 #: src/scripting/lua/core.c:437 src/scripting/lua/core.c:580
 #: src/scripting/lua/core.c:804 src/viewer/text/form.c:614
-#: src/viewer/text/search.c:345 src/viewer/text/search.c:394
+#: src/viewer/text/search.c:524 src/viewer/text/search.c:573
 #: src/viewer/text/textarea.c:264 src/viewer/text/view.c:705
-#: src/viewer/text/view.c:1428
+#: src/viewer/text/view.c:1429
 msgid "Cancel"
 msgstr "Hætta við"
 
@@ -88,9 +88,9 @@ msgstr ""
 #: src/bookmarks/dialogs.c:171 src/config/dialogs.c:129
 #: src/config/dialogs.c:140 src/config/dialogs.c:325 src/config/dialogs.c:408
 #: src/config/dialogs.c:478 src/config/dialogs.c:662 src/config/dialogs.c:739
-#: src/dialogs/auth.c:187 src/dialogs/document.c:53 src/dialogs/document.c:208
-#: src/dialogs/document.c:231 src/dialogs/document.c:281
-#: src/dialogs/document.c:293 src/dialogs/edit.c:166 src/dialogs/info.c:48
+#: src/dialogs/auth.c:187 src/dialogs/document.c:53 src/dialogs/document.c:206
+#: src/dialogs/document.c:229 src/dialogs/document.c:279
+#: src/dialogs/document.c:291 src/dialogs/edit.c:166 src/dialogs/info.c:48
 #: src/dialogs/info.c:75 src/dialogs/info.c:95 src/dialogs/info.c:122
 #: src/dialogs/info.c:186 src/dialogs/info.c:206 src/dialogs/menu.c:623
 #: src/dialogs/menu.c:634 src/dialogs/menu.c:663 src/dialogs/menu.c:681
@@ -190,8 +190,8 @@ msgid "Add"
 msgstr "Bæta við"
 
 #: src/bookmarks/dialogs.c:651 src/dialogs/menu.c:691
-#: src/globhist/dialogs.c:480 src/viewer/text/search.c:342
-#: src/viewer/text/search.c:390
+#: src/globhist/dialogs.c:480 src/viewer/text/search.c:521
+#: src/viewer/text/search.c:569
 msgid "Search"
 msgstr "Leita"
 
@@ -246,7 +246,7 @@ msgid "Unable to write to config file %s: %s"
 msgstr "Villa við ritun uppsetningarskrár"
 
 #: src/config/dialogs.c:119 src/config/dialogs.c:132 src/config/dialogs.c:516
-#: src/dialogs/document.c:50 src/dialogs/document.c:205
+#: src/dialogs/document.c:50 src/dialogs/document.c:203
 #: src/globhist/dialogs.c:411 src/globhist/dialogs.c:470
 msgid "Info"
 msgstr "Upplýsingar"
@@ -2563,7 +2563,7 @@ msgid "Dialog text colors."
 msgstr ""
 
 #: src/config/options.c:1975 src/config/options.c:2343
-#: src/viewer/text/link.c:957
+#: src/viewer/text/link.c:959
 msgid "Checkbox"
 msgstr "Fjölvalshnappur"
 
@@ -2597,7 +2597,7 @@ msgid "Dialog selected button colors."
 msgstr ""
 
 #: src/config/options.c:2023 src/config/options.c:2391
-#: src/viewer/text/link.c:963
+#: src/viewer/text/link.c:965
 msgid "Text field"
 msgstr "Textareitur"
 
@@ -3235,7 +3235,7 @@ msgstr ""
 msgid "HTTP Authentication"
 msgstr ""
 
-#: src/dialogs/document.c:51 src/dialogs/document.c:229
+#: src/dialogs/document.c:51 src/dialogs/document.c:227
 msgid "You are nowhere!"
 msgstr "Þú ert hvergi!"
 
@@ -3252,53 +3252,53 @@ msgstr "óklárað"
 msgid "assumed"
 msgstr "gert ráð fyrir"
 
-#: src/dialogs/document.c:124
+#: src/dialogs/document.c:122
 msgid "ignoring server setting"
 msgstr "hunsa stillingar miðlara"
 
-#: src/dialogs/document.c:131
+#: src/dialogs/document.c:129
 msgid "Server"
 msgstr "Miðlari"
 
-#: src/dialogs/document.c:139
+#: src/dialogs/document.c:137
 msgid "SSL Cipher"
 msgstr ""
 
-#: src/dialogs/document.c:145
+#: src/dialogs/document.c:143
 msgid "Encoding"
 msgstr ""
 
-#: src/dialogs/document.c:153
+#: src/dialogs/document.c:151
 msgid "Date"
 msgstr "Dagsetning"
 
-#: src/dialogs/document.c:161
+#: src/dialogs/document.c:159
 msgid "Last modified"
 msgstr "Seinast breytt"
 
-#: src/dialogs/document.c:170
+#: src/dialogs/document.c:168
 msgid "Last visit time"
 msgstr ""
 
-#: src/dialogs/document.c:179
+#: src/dialogs/document.c:177
 msgid "Unknown"
 msgstr ""
 
-#: src/dialogs/document.c:188
+#: src/dialogs/document.c:186
 #, fuzzy
 msgid "Link"
 msgstr "~Tenglar"
 
-#: src/dialogs/document.c:197
+#: src/dialogs/document.c:195
 msgid "Link title"
 msgstr ""
 
-#: src/dialogs/document.c:228 src/dialogs/document.c:278
-#: src/dialogs/document.c:290
+#: src/dialogs/document.c:226 src/dialogs/document.c:276
+#: src/dialogs/document.c:288
 msgid "Header info"
 msgstr ""
 
-#: src/dialogs/document.c:291
+#: src/dialogs/document.c:289
 msgid "No header info."
 msgstr ""
 
@@ -4379,123 +4379,123 @@ msgstr "Villa við póstun forms"
 msgid "Could not get file %s: %s"
 msgstr "Gat ekki sótt skrá"
 
-#: src/viewer/text/link.c:768
+#: src/viewer/text/link.c:770
 msgid "Display ~usemap"
 msgstr "Sýna notk~unarkort"
 
-#: src/viewer/text/link.c:773
+#: src/viewer/text/link.c:775
 msgid "~Follow link"
 msgstr "~Elta slóð"
 
-#: src/viewer/text/link.c:776
+#: src/viewer/text/link.c:778
 msgid "Follow link and r~eload"
 msgstr ""
 
-#: src/viewer/text/link.c:780
+#: src/viewer/text/link.c:782
 msgid "Open in new ~window"
 msgstr "Opna í nýjum glugga"
 
-#: src/viewer/text/link.c:786
+#: src/viewer/text/link.c:788
 msgid "~Download link"
 msgstr "Hlaða niður ~tengil"
 
-#: src/viewer/text/link.c:790
+#: src/viewer/text/link.c:792
 msgid "~Add link to bookmarks"
 msgstr ""
 
-#: src/viewer/text/link.c:802 src/viewer/text/link.c:925
+#: src/viewer/text/link.c:804 src/viewer/text/link.c:927
 msgid "~Reset form"
 msgstr "H~reinsa form"
 
-#: src/viewer/text/link.c:807
+#: src/viewer/text/link.c:809
 msgid "~Submit form"
 msgstr "Senda form"
 
-#: src/viewer/text/link.c:810
+#: src/viewer/text/link.c:812
 msgid "Submit form and rel~oad"
 msgstr ""
 
-#: src/viewer/text/link.c:814
+#: src/viewer/text/link.c:816
 msgid "Submit form and open in new ~window"
 msgstr "Senda form og opna nýjan glugga"
 
-#: src/viewer/text/link.c:820
+#: src/viewer/text/link.c:822
 msgid "Submit form and ~download"
 msgstr "Sen~da form og hlaða niður"
 
-#: src/viewer/text/link.c:827
+#: src/viewer/text/link.c:829
 msgid "V~iew image"
 msgstr "~Skoða mynd"
 
-#: src/viewer/text/link.c:830
+#: src/viewer/text/link.c:832
 msgid "Download ima~ge"
 msgstr "Hlaða niður ~mynd"
 
-#: src/viewer/text/link.c:836
+#: src/viewer/text/link.c:838
 msgid "No link selected"
 msgstr "Enginn tengill valinn"
 
-#: src/viewer/text/link.c:886
+#: src/viewer/text/link.c:888
 msgid "Image"
 msgstr "Mynd"
 
-#: src/viewer/text/link.c:904
+#: src/viewer/text/link.c:906
 msgid "Usemap"
 msgstr "Notkunarkort"
 
-#: src/viewer/text/link.c:933
+#: src/viewer/text/link.c:935
 msgid "Submit form to"
 msgstr "Senda form til"
 
-#: src/viewer/text/link.c:935
+#: src/viewer/text/link.c:937
 msgid "Post form to"
 msgstr "Senda form til"
 
-#: src/viewer/text/link.c:954
+#: src/viewer/text/link.c:956
 msgid "Radio button"
 msgstr "Einvalshnappur"
 
-#: src/viewer/text/link.c:960
+#: src/viewer/text/link.c:962
 msgid "Select field"
 msgstr "Einvalsreitur"
 
-#: src/viewer/text/link.c:966
+#: src/viewer/text/link.c:968
 msgid "Text area"
 msgstr "Textasvæði"
 
-#: src/viewer/text/link.c:969
+#: src/viewer/text/link.c:971
 msgid "File upload"
 msgstr "Upphlöðun skráar"
 
-#: src/viewer/text/link.c:972
+#: src/viewer/text/link.c:974
 msgid "Password field"
 msgstr "Lykilorðareitur"
 
-#: src/viewer/text/link.c:981
+#: src/viewer/text/link.c:983
 msgid "name"
 msgstr "nafn"
 
-#: src/viewer/text/link.c:991
+#: src/viewer/text/link.c:993
 msgid "value"
 msgstr "gildi"
 
-#: src/viewer/text/link.c:1002
+#: src/viewer/text/link.c:1004
 msgid "hit ENTER to"
 msgstr "ýttu á ENTER til að"
 
-#: src/viewer/text/link.c:1005
+#: src/viewer/text/link.c:1007
 msgid "submit to"
 msgstr "senda til"
 
-#: src/viewer/text/link.c:1007
+#: src/viewer/text/link.c:1009
 msgid "post to"
 msgstr "senda til"
 
-#: src/viewer/text/search.c:343
+#: src/viewer/text/search.c:522
 msgid "No previous search"
 msgstr "Engin fyrri leit"
 
-#: src/viewer/text/search.c:391
+#: src/viewer/text/search.c:570
 #, fuzzy, c-format
 msgid "Search string '%s' not found"
 msgstr "Leitarstrengur ekki fundinn"
@@ -4512,11 +4512,11 @@ msgstr "Opna tengil"
 msgid "Enter link number"
 msgstr "Innsetning tenglanúmer"
 
-#: src/viewer/text/view.c:1425
+#: src/viewer/text/view.c:1426
 msgid "Save error"
 msgstr "Vistunarvilla"
 
-#: src/viewer/text/view.c:1426
+#: src/viewer/text/view.c:1427
 msgid "Error writing to file"
 msgstr "Villa við ritun skráar"
 

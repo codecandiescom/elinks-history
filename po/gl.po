@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-07-03 10:51+0200\n"
+"POT-Creation-Date: 2003-07-05 09:48+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Alberto García <berto@gpul.org>\n"
 "Language-Team: Galician <gpul-traduccion@ceu.fi.udc.es>\n"
@@ -39,9 +39,9 @@ msgstr "Agardábase un número no campo"
 #: src/sched/download.c:1244 src/sched/session.c:354
 #: src/scripting/lua/core.c:437 src/scripting/lua/core.c:580
 #: src/scripting/lua/core.c:804 src/viewer/text/form.c:614
-#: src/viewer/text/search.c:345 src/viewer/text/search.c:394
+#: src/viewer/text/search.c:524 src/viewer/text/search.c:573
 #: src/viewer/text/textarea.c:264 src/viewer/text/view.c:705
-#: src/viewer/text/view.c:1428
+#: src/viewer/text/view.c:1429
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -88,9 +88,9 @@ msgstr ""
 #: src/bookmarks/dialogs.c:171 src/config/dialogs.c:129
 #: src/config/dialogs.c:140 src/config/dialogs.c:325 src/config/dialogs.c:408
 #: src/config/dialogs.c:478 src/config/dialogs.c:662 src/config/dialogs.c:739
-#: src/dialogs/auth.c:187 src/dialogs/document.c:53 src/dialogs/document.c:208
-#: src/dialogs/document.c:231 src/dialogs/document.c:281
-#: src/dialogs/document.c:293 src/dialogs/edit.c:166 src/dialogs/info.c:48
+#: src/dialogs/auth.c:187 src/dialogs/document.c:53 src/dialogs/document.c:206
+#: src/dialogs/document.c:229 src/dialogs/document.c:279
+#: src/dialogs/document.c:291 src/dialogs/edit.c:166 src/dialogs/info.c:48
 #: src/dialogs/info.c:75 src/dialogs/info.c:95 src/dialogs/info.c:122
 #: src/dialogs/info.c:186 src/dialogs/info.c:206 src/dialogs/menu.c:623
 #: src/dialogs/menu.c:634 src/dialogs/menu.c:663 src/dialogs/menu.c:681
@@ -190,8 +190,8 @@ msgid "Add"
 msgstr "Engadir"
 
 #: src/bookmarks/dialogs.c:651 src/dialogs/menu.c:691
-#: src/globhist/dialogs.c:480 src/viewer/text/search.c:342
-#: src/viewer/text/search.c:390
+#: src/globhist/dialogs.c:480 src/viewer/text/search.c:521
+#: src/viewer/text/search.c:569
 msgid "Search"
 msgstr "Buscar"
 
@@ -246,7 +246,7 @@ msgid "Unable to write to config file %s: %s"
 msgstr "Non se puido escribir no ficheiro de configuración"
 
 #: src/config/dialogs.c:119 src/config/dialogs.c:132 src/config/dialogs.c:516
-#: src/dialogs/document.c:50 src/dialogs/document.c:205
+#: src/dialogs/document.c:50 src/dialogs/document.c:203
 #: src/globhist/dialogs.c:411 src/globhist/dialogs.c:470
 msgid "Info"
 msgstr "Información"
@@ -2563,7 +2563,7 @@ msgid "Dialog text colors."
 msgstr ""
 
 #: src/config/options.c:1975 src/config/options.c:2343
-#: src/viewer/text/link.c:957
+#: src/viewer/text/link.c:959
 msgid "Checkbox"
 msgstr "Caixa de selección"
 
@@ -2597,7 +2597,7 @@ msgid "Dialog selected button colors."
 msgstr ""
 
 #: src/config/options.c:2023 src/config/options.c:2391
-#: src/viewer/text/link.c:963
+#: src/viewer/text/link.c:965
 msgid "Text field"
 msgstr "Campo de texto"
 
@@ -3235,7 +3235,7 @@ msgstr "Introduza o nome de usuario para "
 msgid "HTTP Authentication"
 msgstr ""
 
-#: src/dialogs/document.c:51 src/dialogs/document.c:229
+#: src/dialogs/document.c:51 src/dialogs/document.c:227
 msgid "You are nowhere!"
 msgstr "¡Vostede non está en ningunha parte!"
 
@@ -3252,53 +3252,53 @@ msgstr "incompleto"
 msgid "assumed"
 msgstr "asumido"
 
-#: src/dialogs/document.c:124
+#: src/dialogs/document.c:122
 msgid "ignoring server setting"
 msgstr "ignorando configuración do servidor"
 
-#: src/dialogs/document.c:131
+#: src/dialogs/document.c:129
 msgid "Server"
 msgstr "Servidor"
 
-#: src/dialogs/document.c:139
+#: src/dialogs/document.c:137
 msgid "SSL Cipher"
 msgstr ""
 
-#: src/dialogs/document.c:145
+#: src/dialogs/document.c:143
 msgid "Encoding"
 msgstr ""
 
-#: src/dialogs/document.c:153
+#: src/dialogs/document.c:151
 msgid "Date"
 msgstr "Data"
 
-#: src/dialogs/document.c:161
+#: src/dialogs/document.c:159
 msgid "Last modified"
 msgstr "Ultima modificación"
 
-#: src/dialogs/document.c:170
+#: src/dialogs/document.c:168
 msgid "Last visit time"
 msgstr ""
 
-#: src/dialogs/document.c:179
+#: src/dialogs/document.c:177
 msgid "Unknown"
 msgstr ""
 
-#: src/dialogs/document.c:188
+#: src/dialogs/document.c:186
 #, fuzzy
 msgid "Link"
 msgstr "~Ligazón"
 
-#: src/dialogs/document.c:197
+#: src/dialogs/document.c:195
 msgid "Link title"
 msgstr ""
 
-#: src/dialogs/document.c:228 src/dialogs/document.c:278
-#: src/dialogs/document.c:290
+#: src/dialogs/document.c:226 src/dialogs/document.c:276
+#: src/dialogs/document.c:288
 msgid "Header info"
 msgstr "Información das cabeceiras"
 
-#: src/dialogs/document.c:291
+#: src/dialogs/document.c:289
 msgid "No header info."
 msgstr ""
 
@@ -4381,123 +4381,123 @@ msgstr "Erro durante o envío do formulario"
 msgid "Could not get file %s: %s"
 msgstr "Non se puido obter o ficheiro"
 
-#: src/viewer/text/link.c:768
+#: src/viewer/text/link.c:770
 msgid "Display ~usemap"
 msgstr "Mostrar ~Usemap"
 
-#: src/viewer/text/link.c:773
+#: src/viewer/text/link.c:775
 msgid "~Follow link"
 msgstr "~Seguir ligazón"
 
-#: src/viewer/text/link.c:776
+#: src/viewer/text/link.c:778
 msgid "Follow link and r~eload"
 msgstr ""
 
-#: src/viewer/text/link.c:780
+#: src/viewer/text/link.c:782
 msgid "Open in new ~window"
 msgstr "Abrir en nova fiestra"
 
-#: src/viewer/text/link.c:786
+#: src/viewer/text/link.c:788
 msgid "~Download link"
 msgstr "Descargar ~ligazón"
 
-#: src/viewer/text/link.c:790
+#: src/viewer/text/link.c:792
 msgid "~Add link to bookmarks"
 msgstr ""
 
-#: src/viewer/text/link.c:802 src/viewer/text/link.c:925
+#: src/viewer/text/link.c:804 src/viewer/text/link.c:927
 msgid "~Reset form"
 msgstr "~Restablecer formulario"
 
-#: src/viewer/text/link.c:807
+#: src/viewer/text/link.c:809
 msgid "~Submit form"
 msgstr "Enviar formulario"
 
-#: src/viewer/text/link.c:810
+#: src/viewer/text/link.c:812
 msgid "Submit form and rel~oad"
 msgstr ""
 
-#: src/viewer/text/link.c:814
+#: src/viewer/text/link.c:816
 msgid "Submit form and open in new ~window"
 msgstr "Enviar formulario e abrir nunha fiestra nova"
 
-#: src/viewer/text/link.c:820
+#: src/viewer/text/link.c:822
 msgid "Submit form and ~download"
 msgstr "Enviar formulario e ~descargar"
 
-#: src/viewer/text/link.c:827
+#: src/viewer/text/link.c:829
 msgid "V~iew image"
 msgstr "~Ver imaxe"
 
-#: src/viewer/text/link.c:830
+#: src/viewer/text/link.c:832
 msgid "Download ima~ge"
 msgstr "Descargar ~imaxe"
 
-#: src/viewer/text/link.c:836
+#: src/viewer/text/link.c:838
 msgid "No link selected"
 msgstr "Non hai ningunha ligazón seleccionada"
 
-#: src/viewer/text/link.c:886
+#: src/viewer/text/link.c:888
 msgid "Image"
 msgstr "Imaxe"
 
-#: src/viewer/text/link.c:904
+#: src/viewer/text/link.c:906
 msgid "Usemap"
 msgstr "Usemap"
 
-#: src/viewer/text/link.c:933
+#: src/viewer/text/link.c:935
 msgid "Submit form to"
 msgstr "Enviar formulario a"
 
-#: src/viewer/text/link.c:935
+#: src/viewer/text/link.c:937
 msgid "Post form to"
 msgstr "Enviar (por Post) formulario a"
 
-#: src/viewer/text/link.c:954
+#: src/viewer/text/link.c:956
 msgid "Radio button"
 msgstr "Botón radial"
 
-#: src/viewer/text/link.c:960
+#: src/viewer/text/link.c:962
 msgid "Select field"
 msgstr "Campo de selección"
 
-#: src/viewer/text/link.c:966
+#: src/viewer/text/link.c:968
 msgid "Text area"
 msgstr "Area de texto"
 
-#: src/viewer/text/link.c:969
+#: src/viewer/text/link.c:971
 msgid "File upload"
 msgstr "Enviar ficheiro"
 
-#: src/viewer/text/link.c:972
+#: src/viewer/text/link.c:974
 msgid "Password field"
 msgstr "Campo de contrasinal"
 
-#: src/viewer/text/link.c:981
+#: src/viewer/text/link.c:983
 msgid "name"
 msgstr "nome"
 
-#: src/viewer/text/link.c:991
+#: src/viewer/text/link.c:993
 msgid "value"
 msgstr "valor"
 
-#: src/viewer/text/link.c:1002
+#: src/viewer/text/link.c:1004
 msgid "hit ENTER to"
 msgstr "pulse ENTER para"
 
-#: src/viewer/text/link.c:1005
+#: src/viewer/text/link.c:1007
 msgid "submit to"
 msgstr "enviar a"
 
-#: src/viewer/text/link.c:1007
+#: src/viewer/text/link.c:1009
 msgid "post to"
 msgstr "enviar (por Post) a"
 
-#: src/viewer/text/search.c:343
+#: src/viewer/text/search.c:522
 msgid "No previous search"
 msgstr "Non hai búsqueda anterior"
 
-#: src/viewer/text/search.c:391
+#: src/viewer/text/search.c:570
 #, fuzzy, c-format
 msgid "Search string '%s' not found"
 msgstr "Non se atopou a cadea de búsqueda"
@@ -4514,11 +4514,11 @@ msgstr "Ir a ligazón"
 msgid "Enter link number"
 msgstr "Introduce nº de ligazón"
 
-#: src/viewer/text/view.c:1425
+#: src/viewer/text/view.c:1426
 msgid "Save error"
 msgstr "Erro ó gardar"
 
-#: src/viewer/text/view.c:1426
+#: src/viewer/text/view.c:1427
 msgid "Error writing to file"
 msgstr "Erro escribindo a ficheiro"
 

@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.13 2004/09/26 17:15:25 jonas Exp $ */
+/* $Id: renderer.c,v 1.14 2004/09/26 17:21:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -541,6 +541,8 @@ render_dom_node_source(struct dom_navigator *navigator, struct dom_node *node, v
 
 	assert(node && renderer && renderer->document);
 
+	/* TODO: For (atleast) text, CDATA section and comment nodes check
+	 * for URIs ala document->options.plain_display_links */
 	render_dom_node_text(renderer, &renderer->styles[node->type], node);
 
 	return node;

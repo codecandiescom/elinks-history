@@ -471,6 +471,60 @@ AC_SUBST(GUILE_CFLAGS)
 if test "$cf_result"; then AC_MSG_RESULT($cf_result); fi
 
 dnl ===================================================================
+dnl Check for Perl
+dnl ===================================================================
+enable_perl="no";
+
+AC_ARG_WITH(perl, [  --with-perl             enable Perl support],
+            [
+if test "$withval" = yes; then
+	withval="";
+	enable_perl=yes;
+	cat <<EOF
+***********************************************************************
+The Perl support is incomplete and not so well integrated to ELinks
+yet. That means, ie., that you have no Perl console and there might
+not be all the necessary hooks. Also, the Perl interface is not too
+well tested (success stories heartily welcomed!).
+***********************************************************************
+EOF
+fi
+	    ])
+
+
+
+AC_MSG_CHECKING([for Perl])
+
+cf_result=no
+
+CFLAGS_X="$CFLAGS"
+CPPFLAGS_X="$CPPFLAGS"
+LIBS_X="$LIBS"
+
+if test "$enable_perl" = "yes"; then
+	PERL_LIBS="`perl -MExtUtils::Embed -e ldopts`"
+	PERL_CFLAGS="`perl -MExtUtils::Embed -e ccopts`"
+	LIBS="$PERL_LIBS $LIBS"
+	CFLAGS="$CFLAGS $PERL_CFLAGS"
+	CPPFLAGS="$CPPFLAGS $PERL_CFLAGS"
+	cf_result="yes";
+fi
+
+if test "$cf_result" != "yes"; then
+	CFLAGS="$CFLAGS_X"
+	CPPFLAGS="$CPPFLAGS_X"
+	LIBS="$LIBS_X"
+else
+	AC_DEFINE(HAVE_PERL)
+	AC_DEFINE(HAVE_SCRIPTING)
+fi
+
+AC_SUBST(PERL_LIBS)
+AC_SUBST(PERL_CFLAGS)
+
+if test "$cf_result"; then AC_MSG_RESULT($cf_result); fi
+
+dnl ===================================================================
 dnl Check for Lua, optional even if installed.
 dnl ===================================================================
 
@@ -951,6 +1005,7 @@ AC_OUTPUT([ \
  src/scripting/Makefile \
  src/scripting/guile/Makefile \
  src/scripting/lua/Makefile \
+ src/scripting/perl/Makefile \
  src/ssl/Makefile \
  src/terminal/Makefile \
  src/util/Makefile \

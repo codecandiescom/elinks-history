@@ -42,6 +42,9 @@
 /* Define to 1 if we should use Guile */
 #undef HAVE_GUILE
 
+/* Define to 1 if we should use Perl */
+#undef HAVE_PERL
+
 /* Define to 1 if we should use Lua */
 #undef HAVE_LUA
 

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.44 2003/06/02 16:04:42 pasky Exp $ */
+/* $Id: string.c,v 1.45 2003/06/02 16:07:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -453,8 +453,9 @@ elinks_mempcpy(void *dest, const void *src, size_t n)
 #endif
 
 
-/* String comparison functions */
+/* Misc. utility string functions. */
 
+/* Compare two strings, handling correctly s1 or s2 being NULL. */
 int
 xstrcmp(unsigned char *s1, unsigned char *s2)
 {
@@ -479,7 +480,6 @@ safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 
 	return dst;
 }
-
 
 /* Trim starting and ending chars from a string.
  * Pointer to the string is passed.

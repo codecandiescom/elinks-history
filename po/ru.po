@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-20 00:14+0100\n"
+"POT-Creation-Date: 2004-12-23 03:23+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Dmitry M. Klimov <dmk@gtrk.kmtn.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -2381,7 +2381,6 @@ msgstr ""
 msgid "Wrap-around links cycling"
 msgstr ""
 
-#. 0
 #: src/config/options.inc:342
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
@@ -5002,8 +5001,6 @@ msgstr "Переключить HTML/текст"
 msgid "Form history manager"
 msgstr "Мало памяти"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:37
 msgid "Show forms history dialog"
 msgstr ""
@@ -5135,7 +5132,7 @@ msgid ""
 msgstr ""
 
 #. name:
-#: src/globhist/globhist.c:391
+#: src/globhist/globhist.c:422
 #, fuzzy
 msgid "Global History"
 msgstr "Работа с историей"
@@ -6888,91 +6885,91 @@ msgstr "передать по адресу"
 msgid "press %s to post to"
 msgstr ""
 
-#: src/viewer/text/link.c:1128
+#: src/viewer/text/link.c:1127
 msgid "Display ~usemap"
 msgstr "Отобразить карту"
 
-#: src/viewer/text/link.c:1131
+#: src/viewer/text/link.c:1130
 msgid "~Follow link"
 msgstr "Следовать ссылке"
 
-#: src/viewer/text/link.c:1133
+#: src/viewer/text/link.c:1132
 msgid "Follow link and r~eload"
 msgstr "Следовать ссылке и перезагрузить"
 
-#: src/viewer/text/link.c:1137
+#: src/viewer/text/link.c:1136
 msgid "Open in new ~window"
 msgstr "Открыть в новом окне"
 
-#: src/viewer/text/link.c:1139
+#: src/viewer/text/link.c:1138
 #, fuzzy
 msgid "Open in new ~tab"
 msgstr "Открыть в новом окне"
 
-#: src/viewer/text/link.c:1141
+#: src/viewer/text/link.c:1140
 #, fuzzy
 msgid "Open in new tab in ~background"
 msgstr "В фоне"
 
-#: src/viewer/text/link.c:1146
+#: src/viewer/text/link.c:1145
 msgid "~Download link"
 msgstr "Скачать по ссылке"
 
-#: src/viewer/text/link.c:1149
+#: src/viewer/text/link.c:1148
 msgid "~Add link to bookmarks"
 msgstr "Добавить ссылку в закладки"
 
-#: src/viewer/text/link.c:1161 src/viewer/text/link.c:1196
+#: src/viewer/text/link.c:1160 src/viewer/text/link.c:1195
 msgid "~Reset form"
 msgstr "Очистка формы"
 
-#: src/viewer/text/link.c:1173
+#: src/viewer/text/link.c:1172
 msgid "Open in ~external editor"
 msgstr ""
 
-#: src/viewer/text/link.c:1179
+#: src/viewer/text/link.c:1178
 msgid "~Submit form"
 msgstr "Послать форму"
 
-#: src/viewer/text/link.c:1180
+#: src/viewer/text/link.c:1179
 msgid "Submit form and rel~oad"
 msgstr "Послать форму и перезагрузить"
 
-#: src/viewer/text/link.c:1184
+#: src/viewer/text/link.c:1183
 msgid "Submit form and open in new ~window"
 msgstr "Послать форму и открыть в новом окне"
 
-#: src/viewer/text/link.c:1186
+#: src/viewer/text/link.c:1185
 #, fuzzy
 msgid "Submit form and open in new ~tab"
 msgstr "Послать форму и открыть в новом окне"
 
-#: src/viewer/text/link.c:1189
+#: src/viewer/text/link.c:1188
 #, fuzzy
 msgid "Submit form and open in new tab in ~background"
 msgstr "Послать форму и открыть в новом окне"
 
-#: src/viewer/text/link.c:1194
+#: src/viewer/text/link.c:1193
 msgid "Submit form and ~download"
 msgstr "Послать форму и скачать"
 
-#: src/viewer/text/link.c:1201
+#: src/viewer/text/link.c:1200
 msgid "V~iew image"
 msgstr "Просмотреть изображение"
 
-#: src/viewer/text/link.c:1203
+#: src/viewer/text/link.c:1202
 msgid "Download ima~ge"
 msgstr "Скачать изображение"
 
-#: src/viewer/text/link.c:1211
+#: src/viewer/text/link.c:1210
 msgid "No link selected"
 msgstr "Нет выбранных ссылок"
 
-#: src/viewer/text/link.c:1263
+#: src/viewer/text/link.c:1262
 msgid "Image"
 msgstr "Рисунок"
 
-#: src/viewer/text/link.c:1268
+#: src/viewer/text/link.c:1267
 msgid "Usemap"
 msgstr "Карта ссылок"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-20 00:14+0100\n"
+"POT-Creation-Date: 2004-12-23 03:23+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Simos Xenitellis <simos@hellug.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -2373,7 +2373,6 @@ msgstr ""
 msgid "Wrap-around links cycling"
 msgstr ""
 
-#. 0
 #: src/config/options.inc:342
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
@@ -4988,8 +4987,6 @@ msgstr "Ενναλαγή HTML/απλό"
 msgid "Form history manager"
 msgstr "Η μνήμη εξαντλήθηκε"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:37
 msgid "Show forms history dialog"
 msgstr ""
@@ -5119,7 +5116,7 @@ msgid ""
 msgstr ""
 
 #. name:
-#: src/globhist/globhist.c:391
+#: src/globhist/globhist.c:422
 #, fuzzy
 msgid "Global History"
 msgstr "Δεν υπάρχει ιστορικό"
@@ -6871,91 +6868,91 @@ msgstr "στείλετε σε"
 msgid "press %s to post to"
 msgstr ""
 
-#: src/viewer/text/link.c:1128
+#: src/viewer/text/link.c:1127
 msgid "Display ~usemap"
 msgstr "Εμφάνιση δομής USEMAP"
 
-#: src/viewer/text/link.c:1131
+#: src/viewer/text/link.c:1130
 msgid "~Follow link"
 msgstr "Ακολούθηση συνδέσμου"
 
-#: src/viewer/text/link.c:1133
+#: src/viewer/text/link.c:1132
 msgid "Follow link and r~eload"
 msgstr ""
 
-#: src/viewer/text/link.c:1137
+#: src/viewer/text/link.c:1136
 msgid "Open in new ~window"
 msgstr "Άνοιγμα σε νέο παράθυρο"
 
-#: src/viewer/text/link.c:1139
+#: src/viewer/text/link.c:1138
 #, fuzzy
 msgid "Open in new ~tab"
 msgstr "Άνοιγμα σε νέο παράθυρο"
 
-#: src/viewer/text/link.c:1141
+#: src/viewer/text/link.c:1140
 #, fuzzy
 msgid "Open in new tab in ~background"
 msgstr "Παρασκήνιο"
 
-#: src/viewer/text/link.c:1146
+#: src/viewer/text/link.c:1145
 msgid "~Download link"
 msgstr "Μεταφόρτωση συνδέσμου"
 
-#: src/viewer/text/link.c:1149
+#: src/viewer/text/link.c:1148
 msgid "~Add link to bookmarks"
 msgstr ""
 
-#: src/viewer/text/link.c:1161 src/viewer/text/link.c:1196
+#: src/viewer/text/link.c:1160 src/viewer/text/link.c:1195
 msgid "~Reset form"
 msgstr "Αρχικοποίηση φόρμας"
 
-#: src/viewer/text/link.c:1173
+#: src/viewer/text/link.c:1172
 msgid "Open in ~external editor"
 msgstr ""
 
-#: src/viewer/text/link.c:1179
+#: src/viewer/text/link.c:1178
 msgid "~Submit form"
 msgstr "Αποστολή φόρμας"
 
-#: src/viewer/text/link.c:1180
+#: src/viewer/text/link.c:1179
 msgid "Submit form and rel~oad"
 msgstr ""
 
-#: src/viewer/text/link.c:1184
+#: src/viewer/text/link.c:1183
 msgid "Submit form and open in new ~window"
 msgstr "Αποστολή φόρμας και άνοιγμα σε νέο παράθυρο"
 
-#: src/viewer/text/link.c:1186
+#: src/viewer/text/link.c:1185
 #, fuzzy
 msgid "Submit form and open in new ~tab"
 msgstr "Αποστολή φόρμας και άνοιγμα σε νέο παράθυρο"
 
-#: src/viewer/text/link.c:1189
+#: src/viewer/text/link.c:1188
 #, fuzzy
 msgid "Submit form and open in new tab in ~background"
 msgstr "Αποστολή φόρμας και άνοιγμα σε νέο παράθυρο"
 
-#: src/viewer/text/link.c:1194
+#: src/viewer/text/link.c:1193
 msgid "Submit form and ~download"
 msgstr "Αποστολή φόρμας και μεταφόρτωση"
 
-#: src/viewer/text/link.c:1201
+#: src/viewer/text/link.c:1200
 msgid "V~iew image"
 msgstr "Εμφάνιση εικόνας"
 
-#: src/viewer/text/link.c:1203
+#: src/viewer/text/link.c:1202
 msgid "Download ima~ge"
 msgstr "Μεταφόρτωση εικόνας"
 
-#: src/viewer/text/link.c:1211
+#: src/viewer/text/link.c:1210
 msgid "No link selected"
 msgstr "Δεν επιλέχθηκε σύνδεσμος"
 
-#: src/viewer/text/link.c:1263
+#: src/viewer/text/link.c:1262
 msgid "Image"
 msgstr "Εικόνα"
 
-#: src/viewer/text/link.c:1268
+#: src/viewer/text/link.c:1267
 msgid "Usemap"
 msgstr "USEMAP"
 

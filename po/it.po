@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-20 00:14+0100\n"
+"POT-Creation-Date: 2004-12-23 03:23+0100\n"
 "PO-Revision-Date: 2003-07-21 00:32+0200\n"
 "Last-Translator: Fabio Bonelli <fabiobonelli@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -2471,7 +2471,6 @@ msgstr ""
 msgid "Wrap-around links cycling"
 msgstr "Cicla i collegamenti (ultimo->primo)"
 
-#. 0
 #: src/config/options.inc:342
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
@@ -5217,8 +5216,6 @@ msgstr "Abilita/Disabilita salvataggio"
 msgid "Form history manager"
 msgstr "Gestore storico form"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:37
 msgid "Show forms history dialog"
 msgstr "Mostra la finestra di dialogo dello storico dei form"
@@ -5356,7 +5353,7 @@ msgstr ""
 "1 è titoli delle pagine"
 
 #. name:
-#: src/globhist/globhist.c:391
+#: src/globhist/globhist.c:422
 msgid "Global History"
 msgstr "Storico"
 
@@ -7258,89 +7255,89 @@ msgstr "sottometti a"
 msgid "press %s to post to"
 msgstr ""
 
-#: src/viewer/text/link.c:1128
+#: src/viewer/text/link.c:1127
 msgid "Display ~usemap"
 msgstr "Visualizza ~usemap"
 
-#: src/viewer/text/link.c:1131
+#: src/viewer/text/link.c:1130
 msgid "~Follow link"
 msgstr "Segui collegamento"
 
-#: src/viewer/text/link.c:1133
+#: src/viewer/text/link.c:1132
 msgid "Follow link and r~eload"
 msgstr "Segui collegamento ~e ricarica"
 
-#: src/viewer/text/link.c:1137
+#: src/viewer/text/link.c:1136
 msgid "Open in new ~window"
 msgstr "Apri in una nuova finestra"
 
-#: src/viewer/text/link.c:1139
+#: src/viewer/text/link.c:1138
 msgid "Open in new ~tab"
 msgstr "Apri in una nuova ~scheda"
 
-#: src/viewer/text/link.c:1141
+#: src/viewer/text/link.c:1140
 msgid "Open in new tab in ~background"
 msgstr "Apri in una nuova scheda in ~background"
 
-#: src/viewer/text/link.c:1146
+#: src/viewer/text/link.c:1145
 msgid "~Download link"
 msgstr "Scarica collegamento "
 
-#: src/viewer/text/link.c:1149
+#: src/viewer/text/link.c:1148
 msgid "~Add link to bookmarks"
 msgstr "~Aggiungi collegamento ai segnalibri"
 
-#: src/viewer/text/link.c:1161 src/viewer/text/link.c:1196
+#: src/viewer/text/link.c:1160 src/viewer/text/link.c:1195
 msgid "~Reset form"
 msgstr "~Cancella fo~rm"
 
-#: src/viewer/text/link.c:1173
+#: src/viewer/text/link.c:1172
 msgid "Open in ~external editor"
 msgstr "Apri con editor ~esterno"
 
-#: src/viewer/text/link.c:1179
+#: src/viewer/text/link.c:1178
 msgid "~Submit form"
 msgstr "Invia form"
 
-#: src/viewer/text/link.c:1180
+#: src/viewer/text/link.c:1179
 msgid "Submit form and rel~oad"
 msgstr "Invia form e ricarica"
 
-#: src/viewer/text/link.c:1184
+#: src/viewer/text/link.c:1183
 msgid "Submit form and open in new ~window"
 msgstr "Invia form e apri in una nuova finestra"
 
-#: src/viewer/text/link.c:1186
+#: src/viewer/text/link.c:1185
 #, fuzzy
 msgid "Submit form and open in new ~tab"
 msgstr "Invia form e apri in una nuova finestra"
 
-#: src/viewer/text/link.c:1189
+#: src/viewer/text/link.c:1188
 #, fuzzy
 msgid "Submit form and open in new tab in ~background"
 msgstr "Invia form e apri in una nuova finestra"
 
-#: src/viewer/text/link.c:1194
+#: src/viewer/text/link.c:1193
 msgid "Submit form and ~download"
 msgstr "Invia form e scarica"
 
-#: src/viewer/text/link.c:1201
+#: src/viewer/text/link.c:1200
 msgid "V~iew image"
 msgstr "V~isualizza immagine"
 
-#: src/viewer/text/link.c:1203
+#: src/viewer/text/link.c:1202
 msgid "Download ima~ge"
 msgstr "Scarica imma~gine"
 
-#: src/viewer/text/link.c:1211
+#: src/viewer/text/link.c:1210
 msgid "No link selected"
 msgstr "Nessun collegamento selezionato"
 
-#: src/viewer/text/link.c:1263
+#: src/viewer/text/link.c:1262
 msgid "Image"
 msgstr "Immagine"
 
-#: src/viewer/text/link.c:1268
+#: src/viewer/text/link.c:1267
 msgid "Usemap"
 msgstr "Usemap"
 

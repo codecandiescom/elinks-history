@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-20 00:14+0100\n"
+"POT-Creation-Date: 2004-12-23 03:23+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Dmitry Pinchukov <dpinch@mail.ru>\n"
 "Language-Team: Ukrainian <translation-team-uk@lists.sourceforge.net>\n"
@@ -2399,7 +2399,6 @@ msgstr ""
 msgid "Wrap-around links cycling"
 msgstr ""
 
-#. 0
 #: src/config/options.inc:342
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
@@ -5047,8 +5046,6 @@ msgstr "Перемикнути в╕дображення"
 msgid "Form history manager"
 msgstr "В╕дкрити ╕стор╕ю"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:37
 msgid "Show forms history dialog"
 msgstr ""
@@ -5186,7 +5183,7 @@ msgid ""
 msgstr ""
 
 #. name:
-#: src/globhist/globhist.c:391
+#: src/globhist/globhist.c:422
 #, fuzzy
 msgid "Global History"
 msgstr "Керування ╕стор╕╓ю"
@@ -6947,91 +6944,91 @@ msgstr "передати за адресою"
 msgid "press %s to post to"
 msgstr ""
 
-#: src/viewer/text/link.c:1128
+#: src/viewer/text/link.c:1127
 msgid "Display ~usemap"
 msgstr "В╕добразити мапу"
 
-#: src/viewer/text/link.c:1131
+#: src/viewer/text/link.c:1130
 msgid "~Follow link"
 msgstr "Йти за посиланням"
 
-#: src/viewer/text/link.c:1133
+#: src/viewer/text/link.c:1132
 msgid "Follow link and r~eload"
 msgstr "Йти за посиланням та перезавантажити"
 
-#: src/viewer/text/link.c:1137
+#: src/viewer/text/link.c:1136
 msgid "Open in new ~window"
 msgstr "В╕дкрити в новому в╕кн╕"
 
-#: src/viewer/text/link.c:1139
+#: src/viewer/text/link.c:1138
 #, fuzzy
 msgid "Open in new ~tab"
 msgstr "В╕дкрити в новому в╕кн╕"
 
-#: src/viewer/text/link.c:1141
+#: src/viewer/text/link.c:1140
 #, fuzzy
 msgid "Open in new tab in ~background"
 msgstr "На тл╕"
 
-#: src/viewer/text/link.c:1146
+#: src/viewer/text/link.c:1145
 msgid "~Download link"
 msgstr "Завантажити за посиланням"
 
-#: src/viewer/text/link.c:1149
+#: src/viewer/text/link.c:1148
 msgid "~Add link to bookmarks"
 msgstr "Додати посилання до закладок"
 
-#: src/viewer/text/link.c:1161 src/viewer/text/link.c:1196
+#: src/viewer/text/link.c:1160 src/viewer/text/link.c:1195
 msgid "~Reset form"
 msgstr "Очистити форму"
 
-#: src/viewer/text/link.c:1173
+#: src/viewer/text/link.c:1172
 msgid "Open in ~external editor"
 msgstr ""
 
-#: src/viewer/text/link.c:1179
+#: src/viewer/text/link.c:1178
 msgid "~Submit form"
 msgstr "В╕д╕слати форму"
 
-#: src/viewer/text/link.c:1180
+#: src/viewer/text/link.c:1179
 msgid "Submit form and rel~oad"
 msgstr "В╕д╕слати форму та перезавантажити"
 
-#: src/viewer/text/link.c:1184
+#: src/viewer/text/link.c:1183
 msgid "Submit form and open in new ~window"
 msgstr "В╕д╕слати форму та в╕дкрити в новому в╕кн╕"
 
-#: src/viewer/text/link.c:1186
+#: src/viewer/text/link.c:1185
 #, fuzzy
 msgid "Submit form and open in new ~tab"
 msgstr "В╕д╕слати форму та в╕дкрити в новому в╕кн╕"
 
-#: src/viewer/text/link.c:1189
+#: src/viewer/text/link.c:1188
 #, fuzzy
 msgid "Submit form and open in new tab in ~background"
 msgstr "В╕д╕слати форму та в╕дкрити в новому в╕кн╕"
 
-#: src/viewer/text/link.c:1194
+#: src/viewer/text/link.c:1193
 msgid "Submit form and ~download"
 msgstr "В╕д╕слати форму та завантижити"
 
-#: src/viewer/text/link.c:1201
+#: src/viewer/text/link.c:1200
 msgid "V~iew image"
 msgstr "Подивитись зображення"
 
-#: src/viewer/text/link.c:1203
+#: src/viewer/text/link.c:1202
 msgid "Download ima~ge"
 msgstr "Завантижити зображення"
 
-#: src/viewer/text/link.c:1211
+#: src/viewer/text/link.c:1210
 msgid "No link selected"
 msgstr "Нема╓ вибраних посилань"
 
-#: src/viewer/text/link.c:1263
+#: src/viewer/text/link.c:1262
 msgid "Image"
 msgstr "Зображення"
 
-#: src/viewer/text/link.c:1268
+#: src/viewer/text/link.c:1267
 msgid "Usemap"
 msgstr "Мапа посилань"
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-20 00:14+0100\n"
+"POT-Creation-Date: 2004-12-23 03:23+0100\n"
 "PO-Revision-Date: 2004-07-18 15:57+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
@@ -2421,7 +2421,6 @@ msgstr ""
 msgid "Wrap-around links cycling"
 msgstr "Zacyklené pøecházení mezi odkazy"
 
-#. 0
 #: src/config/options.inc:342
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
@@ -5132,8 +5131,6 @@ msgstr "Pøepnout ukládání"
 msgid "Form history manager"
 msgstr "Správce formuláøové historie"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:37
 msgid "Show forms history dialog"
 msgstr "Zobrazování dialogu pro zapamatování formuláøe"
@@ -5266,7 +5263,7 @@ msgstr ""
 "1 znamená titulky stránek"
 
 #. name:
-#: src/globhist/globhist.c:391
+#: src/globhist/globhist.c:422
 msgid "Global History"
 msgstr "Globální historie"
 
@@ -7162,87 +7159,87 @@ msgstr "bylo posláno na"
 msgid "press %s to post to"
 msgstr ""
 
-#: src/viewer/text/link.c:1128
+#: src/viewer/text/link.c:1127
 msgid "Display ~usemap"
 msgstr "Zobrazit map~u"
 
-#: src/viewer/text/link.c:1131
+#: src/viewer/text/link.c:1130
 msgid "~Follow link"
 msgstr "~Otevøít link"
 
-#: src/viewer/text/link.c:1133
+#: src/viewer/text/link.c:1132
 msgid "Follow link and r~eload"
 msgstr "Otevøít link a obnovit cílovou stránku"
 
-#: src/viewer/text/link.c:1137
+#: src/viewer/text/link.c:1136
 msgid "Open in new ~window"
 msgstr "Otevøít v ~novém oknì"
 
-#: src/viewer/text/link.c:1139
+#: src/viewer/text/link.c:1138
 msgid "Open in new ~tab"
 msgstr "Otevøít v novém ~tabu"
 
-#: src/viewer/text/link.c:1141
+#: src/viewer/text/link.c:1140
 msgid "Open in new tab in ~background"
 msgstr "Otevøít v novém tabu na ~pozadí"
 
-#: src/viewer/text/link.c:1146
+#: src/viewer/text/link.c:1145
 msgid "~Download link"
 msgstr "~Stáhnout link"
 
-#: src/viewer/text/link.c:1149
+#: src/viewer/text/link.c:1148
 msgid "~Add link to bookmarks"
 msgstr "Pøidat link do bookm~arkù"
 
-#: src/viewer/text/link.c:1161 src/viewer/text/link.c:1196
+#: src/viewer/text/link.c:1160 src/viewer/text/link.c:1195
 msgid "~Reset form"
 msgstr "~Vygumovat formuláø"
 
-#: src/viewer/text/link.c:1173
+#: src/viewer/text/link.c:1172
 msgid "Open in ~external editor"
 msgstr "Otevøít v ~externím editoru"
 
-#: src/viewer/text/link.c:1179
+#: src/viewer/text/link.c:1178
 msgid "~Submit form"
 msgstr "Odeslat formuláø"
 
-#: src/viewer/text/link.c:1180
+#: src/viewer/text/link.c:1179
 msgid "Submit form and rel~oad"
 msgstr "Odeslat formuláø a obnovit výslednou stránku"
 
-#: src/viewer/text/link.c:1184
+#: src/viewer/text/link.c:1183
 msgid "Submit form and open in new ~window"
 msgstr "Poslat formuláø a otevøít v ~novém oknì"
 
-#: src/viewer/text/link.c:1186
+#: src/viewer/text/link.c:1185
 msgid "Submit form and open in new ~tab"
 msgstr "Poslat formuláø a otevøít v novém ~tabu"
 
-#: src/viewer/text/link.c:1189
+#: src/viewer/text/link.c:1188
 msgid "Submit form and open in new tab in ~background"
 msgstr "Poslat formuláø a otevøít v novém tabu na ~pozadí"
 
-#: src/viewer/text/link.c:1194
+#: src/viewer/text/link.c:1193
 msgid "Submit form and ~download"
 msgstr "Poslat formuláø a ~stáhnout"
 
-#: src/viewer/text/link.c:1201
+#: src/viewer/text/link.c:1200
 msgid "V~iew image"
 msgstr "Zobraz~it obrázek"
 
-#: src/viewer/text/link.c:1203
+#: src/viewer/text/link.c:1202
 msgid "Download ima~ge"
 msgstr "Stáhnout o~brázek"
 
-#: src/viewer/text/link.c:1211
+#: src/viewer/text/link.c:1210
 msgid "No link selected"
 msgstr "®ádný link"
 
-#: src/viewer/text/link.c:1263
+#: src/viewer/text/link.c:1262
 msgid "Image"
 msgstr "Obrázek"
 
-#: src/viewer/text/link.c:1268
+#: src/viewer/text/link.c:1267
 msgid "Usemap"
 msgstr "Mapa obrázkù"
 

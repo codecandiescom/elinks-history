@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre1.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-20 00:14+0100\n"
+"POT-Creation-Date: 2004-12-23 03:23+0100\n"
 "PO-Revision-Date: 2003-10-20 18:36+0200\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: |=|4x0rs Un173\n"
@@ -2475,7 +2475,6 @@ msgstr ""
 msgid "Wrap-around links cycling"
 msgstr "Wrap-around |1N|<s cycling"
 
-#. 0
 #: src/config/options.inc:342
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
@@ -5200,8 +5199,6 @@ msgstr "709913 display"
 msgid "Form history manager"
 msgstr "0p3N |-|1570r`/ |\\/|4N493|2"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:37
 msgid "Show forms history dialog"
 msgstr ""
@@ -5339,7 +5336,7 @@ msgstr ""
 "1 is page titles"
 
 #. name:
-#: src/globhist/globhist.c:391
+#: src/globhist/globhist.c:422
 msgid "Global History"
 msgstr "Global |-|1570r`/"
 
@@ -7220,89 +7217,89 @@ msgstr "5U8|\\/|17 70"
 msgid "press %s to post to"
 msgstr ""
 
-#: src/viewer/text/link.c:1128
+#: src/viewer/text/link.c:1127
 msgid "Display ~usemap"
 msgstr "Display |_|53map"
 
-#: src/viewer/text/link.c:1131
+#: src/viewer/text/link.c:1130
 msgid "~Follow link"
 msgstr "f0110VV |1N|<"
 
-#: src/viewer/text/link.c:1133
+#: src/viewer/text/link.c:1132
 msgid "Follow link and r~eload"
 msgstr "f0110VV |1N|< and |23|04|)"
 
-#: src/viewer/text/link.c:1137
+#: src/viewer/text/link.c:1136
 msgid "Open in new ~window"
 msgstr "0p3N in |\\|u \\/\\/1N|)0VV"
 
-#: src/viewer/text/link.c:1139
+#: src/viewer/text/link.c:1138
 msgid "Open in new ~tab"
 msgstr "0p3N in |\\|u 7ab"
 
-#: src/viewer/text/link.c:1141
+#: src/viewer/text/link.c:1140
 msgid "Open in new tab in ~background"
 msgstr "0p3N in |\\|u 7ab in 84(|<6R0Un|)"
 
-#: src/viewer/text/link.c:1146
+#: src/viewer/text/link.c:1145
 msgid "~Download link"
 msgstr "|)0VVN|04|) |1N|<"
 
-#: src/viewer/text/link.c:1149
+#: src/viewer/text/link.c:1148
 msgid "~Add link to bookmarks"
 msgstr "4|)|) |1N|< 70 800|<|V|4R|<5"
 
-#: src/viewer/text/link.c:1161 src/viewer/text/link.c:1196
+#: src/viewer/text/link.c:1160 src/viewer/text/link.c:1195
 msgid "~Reset form"
 msgstr "Re537 f0|2|V|"
 
-#: src/viewer/text/link.c:1173
+#: src/viewer/text/link.c:1172
 msgid "Open in ~external editor"
 msgstr ""
 
-#: src/viewer/text/link.c:1179
+#: src/viewer/text/link.c:1178
 msgid "~Submit form"
 msgstr "5U8|\\/|17 f0|2|V|"
 
-#: src/viewer/text/link.c:1180
+#: src/viewer/text/link.c:1179
 msgid "Submit form and rel~oad"
 msgstr "5U8|V|17 f0|2|V| and |23|04|)"
 
-#: src/viewer/text/link.c:1184
+#: src/viewer/text/link.c:1183
 msgid "Submit form and open in new ~window"
 msgstr "5U8|V|17 f0|2|V| and 0p3N in |\\|u \\/\\/1N|)0VV"
 
-#: src/viewer/text/link.c:1186
+#: src/viewer/text/link.c:1185
 #, fuzzy
 msgid "Submit form and open in new ~tab"
 msgstr "5U8|V|17 f0|2|V| and 0p3N in |\\|u \\/\\/1N|)0VV"
 
-#: src/viewer/text/link.c:1189
+#: src/viewer/text/link.c:1188
 #, fuzzy
 msgid "Submit form and open in new tab in ~background"
 msgstr "5U8|V|17 f0|2|V| and 0p3N in |\\|u \\/\\/1N|)0VV"
 
-#: src/viewer/text/link.c:1194
+#: src/viewer/text/link.c:1193
 msgid "Submit form and ~download"
 msgstr "5U8|\\/|17 f0|2|V| and |)0VVN|04|)"
 
-#: src/viewer/text/link.c:1201
+#: src/viewer/text/link.c:1200
 msgid "V~iew image"
 msgstr "View 1|V|463"
 
-#: src/viewer/text/link.c:1203
+#: src/viewer/text/link.c:1202
 msgid "Download ima~ge"
 msgstr "|)0VVN|04|) 1|V|493"
 
-#: src/viewer/text/link.c:1211
+#: src/viewer/text/link.c:1210
 msgid "No link selected"
 msgstr "|\\|0 |1N|< 53|3(73|)"
 
-#: src/viewer/text/link.c:1263
+#: src/viewer/text/link.c:1262
 msgid "Image"
 msgstr "1|V|463"
 
-#: src/viewer/text/link.c:1268
+#: src/viewer/text/link.c:1267
 msgid "Usemap"
 msgstr "|_|53map"
 

@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.36 2004/01/19 17:03:49 jonas Exp $ */
+/* $Id: apply.c,v 1.37 2004/01/19 17:05:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,7 +119,9 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 		css_appliers[property->type](element, property);
 	}
 
+	/* Only free non selector properties */
 	while (!list_empty(props)) {
+		assert(code);
 		property = props.next;
 		del_from_list(property);
 		mem_free(property);

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.98 2004/12/17 14:06:39 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.99 2004/12/17 14:10:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -403,10 +403,7 @@ window_alert(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval
 {
 	struct view_state *vs = JS_GetPrivate(ctx, obj);
 	union jsval_union v;
-	enum prop_type prop_type;
-	union prop_union p;
-
-	prop_type = JSPT_UNDEF;
+	VALUE_TO_JSVAL_START;
 
 	if (argc != 1)
 		goto bye;
@@ -449,12 +446,10 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 	union jsval_union v;
 	unsigned char *url;
 	struct uri *uri;
-	enum prop_type prop_type;
-	union prop_union p;
 	static time_t ratelimit_start;
 	static int ratelimit_count;
-
-	prop_type = JSPT_UNDEF;
+	VALUE_TO_JSVAL_START;
+	
 	if (argc < 1) goto bye;
 
 	/* Ratelimit window opening. Recursive window.open() is very nice.
@@ -766,13 +761,10 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct document *document = doc_view->document;
 	struct form_control *fc;
 	union jsval_union v;
-	enum prop_type prop_type;
-	union prop_union p;
 	int counter = 0;
 	int index;
-
-	prop_type = JSPT_UNDEF;
-
+	VALUE_TO_JSVAL_START;
+	
 	if (argc != 1)
 		goto bye;
 
@@ -802,10 +794,7 @@ forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *r
 	struct document *document = doc_view->document;
 	struct form_control *fc;
 	union jsval_union v;
-	enum prop_type prop_type;
-	union prop_union p;
-
-	prop_type = JSPT_UNDEF;
+	VALUE_TO_JSVAL_START;
 
 	if (argc != 1)
 		goto bye;

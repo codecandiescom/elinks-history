@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.281 2004/08/15 07:32:50 miciah Exp $ */
+/* $Id: search.c,v 1.282 2004/08/15 07:38:23 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1237,6 +1237,7 @@ text_typeahead_handler(struct input_line *line, int action)
 	struct document_view *doc_view = current_frame(ses);
 	int direction = ((unsigned char *) line->data)[0] == '/' ? 1 : -1;
 	int report_errors = action == -1;
+	enum find_error error;
 
 	assertm(doc_view, "document not formatted");
 	if_assert_failed return INPUT_LINE_CANCEL;
@@ -1272,12 +1273,18 @@ text_typeahead_handler(struct input_line *line, int action)
 		/* Fall thru */
 
 		default:
+			error = search_for_do(ses, buffer, direction, 0);
+
+			if (error == FIND_ERROR_REGEX)
+				break;
+
+			if (report_errors)
+				print_find_error(ses, error);
+
 			/* We need to check |*buffer| here because
 			 * the input-line code will call this handler
 			 * even after it handles a back-space press. */
-			if (search_for_do(ses, buffer, direction,
-					  report_errors)
-			    != FIND_ERROR_NONE && *buffer)
+			if (error != FIND_ERROR_NONE && *buffer)
 				return INPUT_LINE_REWIND;
 	}
 

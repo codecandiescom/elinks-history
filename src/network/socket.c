@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.116 2004/12/29 21:30:47 zas Exp $ */
+/* $Id: socket.c,v 1.117 2005/02/05 04:15:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -460,7 +460,11 @@ dns_found(void *data, int state)
 				break; /* success */
 		}
 
-		if (errno == EALREADY || errno == EINPROGRESS) {
+		if (errno == EALREADY
+#ifdef EWOULDBLOCK
+		    || errno == EWOULDBLOCK
+#endif
+		    || errno == EINPROGRESS) {
 			/* It will take some more time... */
 			set_handlers(sock, NULL, connected, dns_exception, conn);
 			set_connection_state(conn, S_CONN);

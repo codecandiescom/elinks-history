@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.344 2004/07/01 17:59:30 jonas Exp $ */
+/* $Id: tables.c,v 1.345 2004/07/01 18:12:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -902,7 +902,7 @@ get_frame_pos(int a, int a_size, int b, int b_size)
 
 static inline void
 draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
-		 int col, int row, color_t bgcolor, color_t fgcolor)
+		 int col, int row)
 {
 	/* TODO: Use /BORDER._.* / macros ! --pasky */
 	static unsigned char const border_chars[81] = {
@@ -933,12 +933,13 @@ draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
 	    +  9 * int_max(left,   0)
 	    + 27 * int_max(bottom, 0);
 
-	draw_frame_hchars(table->part, x, y, 1, border_chars[pos], bgcolor, fgcolor);
+	draw_frame_hchars(table->part, x, y, 1, border_chars[pos],
+			  par_format.bgcolor, table->bordercolor);
 }
 
 static inline void
 draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
-		 int col, int row, color_t bgcolor, color_t fgcolor)
+		 int col, int row)
 {
 	static unsigned char const hltable[] = { ' ', BORDER_SHLINE, BORDER_DHLINE };
 	int pos = H_FRAME_POSITION(table, col, row);
@@ -949,12 +950,12 @@ draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
 	if (pos < 0 || table->cols_widths[col] <= 0) return;
 
 	draw_frame_hchars(table->part, x, y, table->cols_widths[col], hltable[pos],
-			  bgcolor, fgcolor);
+			  par_format.bgcolor, table->bordercolor);
 }
 
 static inline void
 draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
-		 int col, int row, color_t bgcolor, color_t fgcolor)
+		 int col, int row)
 {
 	static unsigned char const vltable[] = { ' ', BORDER_SVLINE, BORDER_DVLINE };
 	int pos = V_FRAME_POSITION(table, col, row);
@@ -965,7 +966,7 @@ draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
 	if (pos < 0 || table->rows_heights[row] <= 0) return;
 
 	draw_frame_vchars(table->part, x, y, table->rows_heights[row], vltable[pos],
-			  bgcolor, fgcolor);
+			  par_format.bgcolor, table->bordercolor);
 }
 
 static inline int
@@ -1060,25 +1061,20 @@ draw_table_frames(struct table *table, int indent, int y)
 					w = get_vline_width(table, col);
 
 				if (w >= 0) {
-					draw_frame_point(table, frame, cx, cy, col, row,
-							 par_format.bgcolor, table->bordercolor);
+					draw_frame_point(table, frame, cx, cy, col, row);
 					if (row < table->rows)
-						draw_frame_vline(table, frame, cx, cy + 1, col, row,
-								 par_format.bgcolor, table->bordercolor);
+						draw_frame_vline(table, frame, cx, cy + 1, col, row);
 					cx++;
 				}
 
-				draw_frame_hline(table, frame, cx, cy, col, row,
-						 par_format.bgcolor, table->bordercolor);
+				draw_frame_hline(table, frame, cx, cy, col, row);
 				cx += table->cols_widths[col];
 			}
 
 			if (table_frames.right) {
-				draw_frame_point(table, frame, cx, cy, col, row,
-						 par_format.bgcolor, table->bordercolor);
+				draw_frame_point(table, frame, cx, cy, col, row);
 				if (row < table->rows)
-					draw_frame_vline(table, frame, cx, cy + 1, col, row,
-							 par_format.bgcolor, table->bordercolor);
+					draw_frame_vline(table, frame, cx, cy + 1, col, row);
 				cx++;
 			}
 
@@ -1089,8 +1085,7 @@ draw_table_frames(struct table *table, int indent, int y)
 				if ((col > 0 && col < table->cols && has_vline_width(table, col))
 				    || (col == 0 && table_frames.left)
 				    || (col == table->cols && table_frames.right)) {
-					draw_frame_vline(table, frame, cx, cy, col, row,
-							 par_format.bgcolor, table->bordercolor);
+					draw_frame_vline(table, frame, cx, cy, col, row);
 					cx++;
 				}
 				if (col < table->cols) cx += table->cols_widths[col];

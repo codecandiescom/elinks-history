@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.171 2004/12/30 20:09:46 jonas Exp $ */
+/* $Id: options.inc,v 1.172 2004/12/30 20:28:12 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -584,15 +584,15 @@ static struct option_info config_options_info[] = {
 	INIT_OPT_INT("document.download", N_("Prevent overwriting"),
 		"overwrite", 0, 0, 2, 2,
 		N_("Prevent overwriting the local files:\n"
-		"0 is files will silently be overwritten.\n"
-		"1 is add a suffix .{number} (for example '.1') to the name.\n"
-		"2 is ask the user.")),
+		"0 is files will silently be overwritten\n"
+		"1 is add a suffix .{number} (for example '.1') to the name\n"
+		"2 is ask the user")),
 
 	INIT_OPT_INT("document.download", N_("Notify download completion by bell"),
 		"notify_bell", 0, 0, 2, 0,
 		N_("Audio notification when download is completed:\n"
-		"0 is never.\n"
-		"1 is when background notification is active.\n"
+		"0 is never\n"
+		"1 is when background notification is active\n"
 		"2 is always")),
 
 
@@ -619,7 +619,7 @@ static struct option_info config_options_info[] = {
 
 	INIT_OPT_INT("document.dump", N_("Width"),
 		"width", 0, 1, 65536, DEFAULT_TERMINAL_WIDTH,
-		N_("Width of screen in characters when dumping a HTML document.")),
+		N_("Width of screen in characters when dumping documents.")),
 
 
 
@@ -629,7 +629,7 @@ static struct option_info config_options_info[] = {
 
 	INIT_OPT_BOOL("document.history", N_("Keep unhistory"),
 		"keep_unhistory", 0, 1,
-		N_("Keep unhistory (\"forward history\")?")),
+		N_("Keep unhistory (\"forward history\").")),
 
 
 	INIT_OPT_TREE("document", N_("HTML rendering"),

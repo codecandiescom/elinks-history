@@ -1,4 +1,4 @@
-/* $Id: property.h,v 1.11 2004/01/18 14:43:03 pasky Exp $ */
+/* $Id: property.h,v 1.12 2004/01/18 14:53:43 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PROPERTY_H
 #define EL__DOCUMENT_CSS_PROPERTY_H
@@ -56,6 +56,12 @@ struct css_property {
 
 /* The {struct css_property_info} describes what values the properties can
  * have and what internal type they have. */
+
+struct css_property_info;
+typedef int (*css_property_value_parser)(struct css_property_info *propinfo,
+					 union css_property_value *value,
+					 unsigned char **string);
+
 struct css_property_info {
 	unsigned char *name;
 	enum css_property_type type;
@@ -64,6 +70,20 @@ struct css_property_info {
 	 * css_property.value. Many properties can share the same valtype.
 	 * The value is basically output of the value parser. */
 	enum css_property_value_type value_type;
+
+	/* This is the property value parser, processing the written form of a
+	 * property value. Its job is to take the value string (or scanner's
+	 * token list in the future) and transform it to a @value form
+	 * according to the property's @value_type. Although some properties
+	 * can share a parser, it is expected that most properties will either
+	 * use a custom one or use a generic parser with property-specific
+	 * backend specified in @parser_data. */
+	css_property_value_parser parser;
+
+	/* In case you use a generic @parser, it can be useful to still give
+	 * it some specific data. You can do so through @parser_data. The
+	 * content is @parser-specific. */
+	void *parser_data;
 };
 
 /* This table contains info about all the known CSS properties. */

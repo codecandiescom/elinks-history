@@ -13,7 +13,7 @@ ELinks-now:
 * modal text-input form-fields editing (disabled by default)
 * manual cookies creating and editing
 * typeahead text searching (press '#/')
-* PERL scripting back-end (experimental)
+* Perl scripting back-end (experimental)
 * build-time configurability and feature documentation through features.conf
 * Mozilla-compatible -remote option (http://www.mozilla.org/unix/remote.html)
 * support for specifying IP family as protocol postfix (i.e. http4 or ftp6)
@@ -27,6 +27,7 @@ ELinks-now:
 * -default-keys command line option to ignore user-defined keybindings
 * -confdir option renamed to -config-dir
 * -conffile option renamed to -config-file
+* enhanced documentation
 
 ELinks-0.9.2:
 

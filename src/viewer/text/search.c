@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.274 2004/08/13 21:28:06 jonas Exp $ */
+/* $Id: search.c,v 1.275 2004/08/14 15:21:27 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -718,11 +718,14 @@ static enum find_error find_next_do(struct session *ses,
 				    struct document_view *doc_view,
 				    int direction);
 
+static void print_find_error(struct session *ses, enum find_error find_error);
+
 static void
 search_for_do(struct session *ses, unsigned char *str, int direction,
 	      int report_errors)
 {
 	struct document_view *doc_view;
+	enum find_error error;
 
 	assert(ses && str);
 	if_assert_failed return;
@@ -744,10 +747,11 @@ search_for_do(struct session *ses, unsigned char *str, int direction,
 	if (!ses->last_search_word) return;
 
 	ses->search_direction = direction;
+
+	error = find_next_do(ses, doc_view, 1);
+
 	if (report_errors)
-		find_next(ses, doc_view, 1);
-	else
-		find_next_do(ses, doc_view, 1);
+		print_find_error(ses, error);
 }
 
 static void

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.185 2004/10/08 13:06:13 zas Exp $ */
+/* $Id: cache.c,v 1.186 2004/10/14 19:00:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -307,8 +307,6 @@ remove_overlaps(struct cache_entry *cached, struct fragment *f, int *trunc)
 	}
 }
 
-/* Add fragment to cache. Returns -1 upon error, 1 if cache entry was enlarged,
- * 0 if only old data were overwritten. Maybe. And maybe not. */
 /* Note that this function is maybe overcommented, but I'm certainly not
  * unhappy from that. */
 int

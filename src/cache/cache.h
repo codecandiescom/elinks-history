@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.91 2004/10/14 18:50:37 jonas Exp $ */
+/* $Id: cache.h,v 1.92 2004/10/14 19:00:56 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -86,7 +86,14 @@ struct cache_entry *get_cache_entry(struct uri *uri);
  * usable. Returns NULL if the @cache_mode suggests to reload it again. */
 struct cache_entry *get_validated_cache_entry(struct uri *uri, enum cache_mode cache_mode);
 
-int add_fragment(struct cache_entry *, int, unsigned char *, int);
+/* Add a fragment to the @cached object at the given @offset containing @length
+ * bytes from the @data pointer. */
+/* Returns -1 upon error,
+ *	    1 if cache entry was enlarged,
+ *	    0 if only old data were overwritten. */
+int add_fragment(struct cache_entry *cached, int offset,
+		 unsigned char *data, int length);
+
 void defrag_entry(struct cache_entry *);
 void truncate_entry(struct cache_entry *, int, int);
 void free_entry_to(struct cache_entry *, int);

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.67 2005/03/04 18:33:24 zas Exp $ */
+/* $Id: leds.c,v 1.68 2005/03/06 12:53:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -269,7 +269,7 @@ menu_leds_info(struct terminal *term, void *xxx, void *xxxx)
 			" |||`--- A JavaScript pop-up window was blocked\n"
 			" ||`---- A JavaScript error has occured\n"
 			" |`----- The state of insert mode for text-input form-fields\n"
-			" |       'I' means modeless, 'i' means insert mode is on\n"
+			" |       'i' means modeless, 'I' means insert mode is on\n"
 			" `------ Whether an SSL connection was used\n"
 			"\n"
 			"'-' generally indicates that the LED is off.")),

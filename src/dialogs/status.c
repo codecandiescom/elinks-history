@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.96 2004/12/30 23:50:39 jonas Exp $ */
+/* $Id: status.c,v 1.97 2005/03/06 12:53:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -552,10 +552,10 @@ display_leds(struct session *ses, struct session_status *status)
 	}
 
 	if (ses->insert_mode == INSERT_MODE_LESS) {
-		status->insert_mode_led->value = 'I';
+		status->insert_mode_led->value = 'i';
 	} else {
 		unsigned char value = ses->insert_mode == INSERT_MODE_ON
-				    ? 'i' : '-';
+				    ? 'I' : '-';
 		status->insert_mode_led->value = value;
 	}
 

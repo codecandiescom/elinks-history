@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.209 2004/06/13 17:58:53 zas Exp $ */
+/* $Id: link.c,v 1.210 2004/06/13 18:08:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -355,38 +355,40 @@ current_link_is_visible(struct document_view *doc_view)
 }
 
 int
-next_in_view(struct document_view *doc_view, int p, int d,
+next_in_view(struct document_view *doc_view, int current, int direction,
 	     int (*fn)(struct document_view *, struct link *),
 	     void (*cntr)(struct document_view *, struct link *))
 {
-	int p1, p2 = 0;
+	struct document *document;
+	int start, end = 0;
 	int y, height;
 
 	assert(doc_view && doc_view->document && doc_view->vs && fn);
 	if_assert_failed return 0;
 
-	p1 = doc_view->document->nlinks - 1;
+	document = doc_view->document;
+	start = document->nlinks - 1;
 	height = doc_view->vs->y + doc_view->box.height;
 
 	for (y = int_max(0, doc_view->vs->y);
-	     y < int_min(height, doc_view->document->height);
+	     y < int_min(height, document->height);
 	     y++) {
-		if (doc_view->document->lines1[y])
-			int_upper_bound(&p1, doc_view->document->lines1[y]
-					     - doc_view->document->links);
+		if (document->lines1[y])
+			int_upper_bound(&start, document->lines1[y]
+					       - document->links);
 
 		if (doc_view->document->lines2[y])
-			int_lower_bound(&p2, doc_view->document->lines2[y]
-					     - doc_view->document->links);
+			int_lower_bound(&end, document->lines2[y]
+					     - document->links);
 	}
 
-	while (p >= p1 && p <= p2) {
-		if (fn(doc_view, &doc_view->document->links[p])) {
-			doc_view->vs->current_link = p;
-			if (cntr) cntr(doc_view, &doc_view->document->links[p]);
+	while (current >= start && current <= end) {
+		if (fn(doc_view, &document->links[current])) {
+			doc_view->vs->current_link = current;
+			if (cntr) cntr(doc_view, &document->links[current]);
 			return 1;
 		}
-		p += d;
+		current += direction;
 	}
 
 	doc_view->vs->current_link = -1;

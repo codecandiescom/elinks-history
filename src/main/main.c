@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.183 2004/04/14 05:12:03 jonas Exp $ */
+/* $Id: main.c,v 1.184 2004/04/14 05:25:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,7 +73,7 @@ static int init_b = 0;
 void
 init(void)
 {
-	int ret;
+	int ret, fd = -1;
 
 	INIT_LIST_HEAD(url_list);
 
@@ -142,42 +142,23 @@ init(void)
 
 	/* If there's no -no-connect option, check if there's no other ELinks
 	 * running. If we found any, open socket and act as a slave for it. */
-	while (!get_opt_bool_tree(cmdline_options, "no-connect")
-		&& !get_opt_bool_tree(cmdline_options, "dump")
-		&& !get_opt_bool_tree(cmdline_options, "source")) {
-		void *info;
-		int len;
-		int fd = af_unix_open();
 
-		if (fd == -1) break;
+	if (get_opt_bool_tree(cmdline_options, "no-connect")
+	    || get_opt_bool_tree(cmdline_options, "dump")
+	    || get_opt_bool_tree(cmdline_options, "source")
+	    || (fd = af_unix_open()) == -1) {
 
-		close_terminal_pipes();
+		load_config();
+		/* Parse commandline options again, in order to override any config
+		 * file options. */
+		parse_options(ac - 1, av + 1, NULL);
 
-		info = create_session_info(get_opt_int_tree(cmdline_options,
-							    "base-session"),
-					   &url_list, &len);
-		if (!info) goto fatal_error;
-
-		handle_trm(get_input_handle(), get_output_handle(),
-			   fd, fd, get_ctl_handle(), info, len);
-
-		/* OK, this is race condition, but it must be so; GPM
-		 * installs it's own buggy TSTP handler. */
-		handle_basic_signals(NULL);
-		mem_free(info);
-		goto end;
+		init_b = 1;
+		init_modules(builtin_modules);
+		init_timer();
+		load_url_history();
+		init_search_history();
 	}
-
-	load_config();
-	/* Parse commandline options again, in order to override any config
-	 * file options. */
-	parse_options(ac - 1, av + 1, NULL);
-
-	init_b = 1;
-	init_modules(builtin_modules);
-	init_timer();
-	load_url_history();
-	init_search_history();
 
 	if (get_opt_int_tree(cmdline_options, "dump") ||
 	    get_opt_int_tree(cmdline_options, "source")) {
@@ -194,6 +175,19 @@ init(void)
 						 &url_list, &len);
 
 		if (!info) goto fatal_error;
+
+		if (fd != -1) {
+			close_terminal_pipes();
+
+			handle_trm(get_input_handle(), get_output_handle(),
+				   fd, fd, get_ctl_handle(), info, len);
+
+			/* OK, this is race condition, but it must be so; GPM
+			 * installs it's own buggy TSTP handler. */
+			handle_basic_signals(NULL);
+			mem_free(info);
+			goto end;
+		}
 
 		attached = attach_terminal(get_input_handle(),
 					   get_output_handle(),

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.19 2003/07/10 02:46:50 jonas Exp $ */
+/* $Id: auth.c,v 1.20 2003/07/10 02:51:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,9 +98,12 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 	return match;
 }
 
-/* Add a Basic Auth entry if needed. Returns -1 on error, 0 if entry do not
- * exists and user/pass are in url, 1 if exact entry already exists or is
- * in blocked state, 2 if entry was added. */
+/* Add a Basic Auth entry if needed. */
+/* Returns:
+ *	ADD_AUTH_NONE	if entry do not exists and user/pass are in url
+ *	ADD_AUTH_EXIST	if exact entry already exists or is in blocked state
+ *	ADD_AUTH_NEW	if entry was added
+ *	ADD_AUIH_ERROR	on error. */
 enum add_auth_code
 add_auth_entry(unsigned char *url, unsigned char *realm)
 {

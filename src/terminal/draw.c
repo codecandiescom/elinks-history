@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.31 2003/07/31 01:09:06 jonas Exp $ */
+/* $Id: draw.c,v 1.32 2003/07/31 14:42:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,21 +174,21 @@ void
 draw_frame(struct terminal *t, int x, int y, int xw, int yw,
 	   unsigned c, int w)
 {
-	static enum frame_char p1[] = {
-		FRAMES_ULCORNER,
-		FRAMES_URCORNER,
-		FRAMES_DLCORNER,
-		FRAMES_DRCORNER,
-		FRAMES_VLINE,
-		FRAMES_HLINE,
+	static enum border_char p1[] = {
+		BORDER_SULCORNER,
+		BORDER_SURCORNER,
+		BORDER_SDLCORNER,
+		BORDER_SDRCORNER,
+		BORDER_SVLINE,
+		BORDER_SHLINE,
 	};
-	static enum frame_char p2[] = {
-		FRAMED_ULCORNER,
-		FRAMED_URCORNER,
-		FRAMED_DLCORNER,
-		FRAMED_DRCORNER,
-		FRAMED_VLINE,
-		FRAMED_HLINE,
+	static enum border_char p2[] = {
+		BORDER_DULCORNER,
+		BORDER_DURCORNER,
+		BORDER_DDLCORNER,
+		BORDER_DDRCORNER,
+		BORDER_DVLINE,
+		BORDER_DHLINE,
 	};
 	enum frame_char *p = (w > 1) ? p2 : p1;
 	int xt = x + xw - 1;
@@ -197,18 +197,17 @@ draw_frame(struct terminal *t, int x, int y, int xw, int yw,
 	int x1 = x + 1;
 	int ywt = yw - 2;
 	int xwt = xw - 2;
-	int cp4 = c + p[4];
-	int cp5 = c + p[5];
+	unsigned char color = get_screen_char_attr(c);
 
-	set_border_char(t, x, y, (unsigned char) p[0], get_screen_char_attr(c));
-	set_border_char(t, xt, y, (unsigned char) p[1], get_screen_char_attr(c));
-	set_border_char(t, x, yt, (unsigned char) p[2], get_screen_char_attr(c));
-	set_border_char(t, xt, yt, (unsigned char) p[3], get_screen_char_attr(c));
+	set_border_char(t, x, y, (unsigned char) p[0], color);
+	set_border_char(t, xt, y, (unsigned char) p[1], color);
+	set_border_char(t, x, yt, (unsigned char) p[2], color);
+	set_border_char(t, xt, yt, (unsigned char) p[3], color);
 
-	fill_area(t, x, y1, 1, ywt, cp4);
-	fill_area(t, xt, y1, 1, ywt, cp4);
-	fill_area(t, x1, y, xwt, 1, cp5);
-	fill_area(t, x1, yt, xwt, 1, cp5);
+	fill_border_area(t, x, y1, 1, ywt, p[4], color);
+	fill_border_area(t, xt, y1, 1, ywt, p[4], color);
+	fill_border_area(t, x1, y, xwt, 1, p[5], color);
+	fill_border_area(t, x1, yt, xwt, 1, p[5], color);
 }
 
 void

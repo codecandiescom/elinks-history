@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.80 2003/10/24 23:59:58 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.81 2003/10/25 00:04:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -300,6 +300,8 @@ init_bookmarks(void)
 
 		NULL_OPTION_INFO
 	};
+
+	register_option_info(bookmark_options_info, config_options);
 
 	read_bookmarks();
 }

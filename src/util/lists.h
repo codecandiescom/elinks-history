@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.6 2003/04/24 08:32:34 zas Exp $ */
+/* $Id: lists.h,v 1.7 2003/04/26 09:01:49 zas Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -139,16 +139,20 @@ do { \
 
 #define del_from_list(x) \
 do { \
-	if ((x)->magic1 != LISTMAGIC || (x)->magic2 != LISTMAGIC) listmagicerror("del_from_list"); \
+	if ((x)->magic1 != LISTMAGIC || (x)->magic2 != LISTMAGIC) \
+		listmagicerror("del_from_list"); \
 	do_not_optimize_here(x); \
 	((struct list_head *) (x)->next)->prev = (x)->prev; \
 	((struct list_head *) (x)->prev)->next = (x)->next; \
+	(x)->prev = (void *) ~LISTMAGIC; \
+	(x)->next = (void *)((unsigned int) __LINE__); \
 	do_not_optimize_here(x); \
 } while (0)
 
 #define add_at_pos(p,x) \
 do { \
-	if ((p)->magic1 != LISTMAGIC || (p)->magic2 != LISTMAGIC) listmagicerror("add_at_pos"); \
+	if ((p)->magic1 != LISTMAGIC || (p)->magic2 != LISTMAGIC) \
+		listmagicerror("add_at_pos"); \
 	do_not_optimize_here(p); \
 	(x)->next = (p)->next; \
 	(x)->prev = (p); \
@@ -196,6 +200,7 @@ do { \
 		struct list_head *a__ = (l).next; \
 		del_from_list(a__); \
 		mem_free(a__); \
+		a__ = NULL; \
 	} \
 	do_not_optimize_here(&l); \
 } while (0)

@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.62 2004/08/16 00:34:37 jonas Exp $ */
+/* $Id: mime.c,v 1.63 2004/08/16 01:05:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -213,20 +213,12 @@ get_content_type(struct cache_entry *cached)
 {
 	struct uri *uri = get_cache_uri(cached);
 	unsigned char *extension, *ctype;
+	enum stream_encoding encoding = ENCODING_NONE;
 
 	debug_get_content_type_params(cached);
 
 	if (cached->content_type)
 		return cached->content_type;
-
-	/* If there's one in header, it's simple.. */
-	if (cached->head) {
-		ctype = get_cache_header_content_type(cached);
-		if (ctype && *ctype) {
-			cached->content_type = ctype;
-			return ctype;
-		}
-	}
 
 	/* We can't use the extension string we are getting below, because we
 	 * want to support also things like "ps.gz" - that'd never work, as we
@@ -234,6 +226,26 @@ get_content_type(struct cache_entry *cached)
 	/* Guess type accordingly to the extension */
 	extension = uri ? get_extension_from_uri(uri) : NULL;
 	debug_extension(extension);
+
+#if defined(CONFIG_GZIP) || defined(CONFIG_BZIP)
+	/* The @encoding variable controls when we check for the content
+	 * type in the cache header and there is really only a reason for
+	 * doing this if decoding is an option. */
+	if (extension)
+		encoding = guess_encoding(extension);
+#endif
+
+	/* If the URI have no sign of being encoded and there's one in header,
+	 * it's simple.. */
+	if (cached->head && encoding == ENCODING_NONE) {
+		ctype = get_cache_header_content_type(cached);
+		if (ctype && *ctype) {
+			mem_free_if(extension);
+			cached->content_type = ctype;
+			return ctype;
+		}
+	}
+
 	if (extension) {
 		ctype = get_extension_content_type(extension);
 		mem_free(extension);
@@ -242,6 +254,21 @@ get_content_type(struct cache_entry *cached)
 			return ctype;
 		}
 	}
+
+#if defined(CONFIG_GZIP) || defined(CONFIG_BZIP)
+	/* If there is any sign that the content is encoded we only
+	 * trust information from the server if we didn't guess the
+	 * content type from the extension. This way .gz files with
+	 * "Content-Type: application/x-gzip" header entries won't
+	 * complicate things for stuff like .html.gz documents. */
+	if (cached->head && encoding != ENCODING_NONE) {
+		ctype = get_cache_header_content_type(cached);
+		if (ctype && *ctype) {
+			cached->content_type = ctype;
+			return ctype;
+		}
+	}
+#endif
 
 	debug_ctype(get_default_mime_type());
 

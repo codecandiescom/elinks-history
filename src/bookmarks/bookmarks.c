@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.127 2004/06/17 10:02:20 zas Exp $ */
+/* $Id: bookmarks.c,v 1.128 2004/07/02 09:51:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@
 INIT_LIST_HEAD(bookmarks);
 
 /* Set to 1, if bookmarks have changed. */
-int bookmarks_dirty = 0;
+static int bookmarks_dirty = 0;
 
 static struct hash *bookmark_cache = NULL;
 
@@ -126,7 +126,7 @@ void
 write_bookmarks(void)
 {
 	if (get_cmd_opt_int("anonymous")) {
-		bookmarks_dirty = 0;
+		bookmarks_unset_dirty();
 		return;
 	}
 	bookmarks_write(&bookmarks);
@@ -136,6 +136,24 @@ write_bookmarks(void)
 
 
 /* Bookmarks manipulation */
+
+void
+bookmarks_set_dirty(void)
+{
+	bookmarks_dirty = 1;
+}
+
+void
+bookmarks_unset_dirty(void)
+{
+	bookmarks_dirty = 0;
+}
+
+int
+bookmarks_are_dirty(void)
+{
+	return (bookmarks_dirty == 1);
+}
 
 #define check_bookmark_cache(url) (bookmark_cache && (url) && *(url))
 
@@ -162,7 +180,7 @@ delete_bookmark(struct bookmark *bm)
 	}
 
 	del_from_list(bm);
-	bookmarks_dirty = 1;
+	bookmarks_set_dirty();
 
 	/* Now wipe the bookmark */
 	done_listbox_item(&bookmark_browser, bm->box_item);
@@ -251,7 +269,7 @@ add_bookmark(struct bookmark *root, int place, unsigned char *title,
 		else
 			add_to_list(bookmarks, bm);
 	}
-	bookmarks_dirty = 1;
+	bookmarks_set_dirty();
 
 	/* Setup box_item */
 	/* Note that item_free is left at zero */
@@ -342,7 +360,7 @@ update_bookmark(struct bookmark *bm, unsigned char *title,
 		bm->url = url2;
 	}
 
-	bookmarks_dirty = 1;
+	bookmarks_set_dirty();
 
 	return 1;
 }

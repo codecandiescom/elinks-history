@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.164 2004/06/22 06:46:16 miciah Exp $ */
+/* $Id: dialogs.c,v 1.165 2004/07/02 09:51:20 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -371,7 +371,7 @@ push_move_button(struct dialog_data *dlg_data,
 	 * after bm_dest. */
 	do_move_bookmark(dest, destb, desti, &bookmarks, box);
 
-	bookmarks_dirty = 1;
+	bookmarks_set_dirty();
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
@@ -413,6 +413,7 @@ bookmark_manager(struct session *ses)
 	/* Reset momorized search criterias */
 	mem_free_set(&bm_last_searched_name, NULL);
 	mem_free_set(&bm_last_searched_url, NULL);
+	bookmark_browser.expansion_callback = bookmarks_set_dirty;
 	hierbox_browser(&bookmark_browser, ses);
 }
 

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.170 2004/06/28 11:07:10 jonas Exp $ */
+/* $Id: hierbox.c,v 1.171 2004/07/02 09:51:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,6 +150,7 @@ test_search(struct listbox_item *item, void *data_, int *offset)
 static int
 hierbox_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 {
+	struct hierbox_browser *browser = dlg_data->dlg->udata2;
 	struct widget_data *widget_data = dlg_data->widgets_data;
 	struct widget *widget = widget_data->widget;
 	struct listbox_data *box;
@@ -213,12 +214,8 @@ hierbox_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 
 	}
 
-#ifdef CONFIG_BOOKMARKS
-	/* FIXME - move from here to bookmarks/dialogs.c! */
-	/* We should probably call provided callback function, notifying the
-	 * user of expansion change. --pasky */
-	bookmarks_dirty = 1;
-#endif
+	if (browser->expansion_callback)
+		browser->expansion_callback();
 
 	display_dlg_item(dlg_data, dlg_data->widgets_data, 1);
 

@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.45 2004/04/16 16:35:39 zas Exp $ */
+/* $Id: connect.c,v 1.46 2004/04/23 13:55:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,7 +202,7 @@ ssl_connect(struct connection *conn, int sock)
 
 
 #elif defined(HAVE_GNUTLS)
-	gnutls_transport_set_ptr(*((ssl_t *) conn->ssl), sock);
+	gnutls_transport_set_ptr(*((ssl_t *) conn->ssl), (gnutls_transport_ptr) sock);
 #endif
 
 #ifdef HAVE_OPENSSL

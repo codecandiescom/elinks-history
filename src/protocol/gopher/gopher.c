@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.11 2004/08/19 14:11:23 jonas Exp $ */
+/* $Id: gopher.c,v 1.12 2004/09/12 20:59:59 miciah Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -96,7 +96,7 @@ struct gopher_entity_info {
  * - GOPHER_FILE has "text/plain" but really it can be anything including
  *   images so rely on the MIME system being able to determine it by looking at
  *   the extension.
- * - GOPHER_IMAGE and GOPHER_PLUS_IMAGE which Lynx assigns "image/gif" buf it
+ * - GOPHER_IMAGE and GOPHER_PLUS_IMAGE which Lynx assigns "image/gif" but it
  *   really can be anything.
  * - GOPHER_BINARY can for example be a tar ball so using
  *   "application/octet-stream" is a bad idea.

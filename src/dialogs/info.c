@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.77 2003/11/15 16:23:45 pasky Exp $ */
+/* $Id: info.c,v 1.78 2003/11/17 18:00:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,68 +137,6 @@ res_inf(struct terminal *term, void *d, struct session *ses)
 		N_("OK"), NULL, B_ENTER | B_ESC);
 
 	refresh_init(r, term, ses, d, res_inf);
-}
-
-void
-cache_inf(struct terminal *term, void *d, struct session *ses)
-{
-	struct string info;
-	struct refresh *r;
-	struct cache_entry *ce, *cache;
-	unsigned int count = 0;
-	int truncated = 0;
-
-	r = mem_alloc(sizeof(struct refresh));
-	if (!r)	return;
-
-	if (!init_string(&info)) {
-		mem_free(r);
-		return;
-	}
-
-	cache = (struct cache_entry *) cache_info(INFO_LIST);
-	foreach (ce, *cache) {
-		if (count++ < term->height - 10) { /* 10 seems a kool value. --Zas */
-			add_char_to_string(&info, '\n');
-#ifdef DEBUG
-			if (ce->incomplete)
-				add_char_to_string(&info, '*');
-			else /* number of references */
-				add_long_to_string(&info, get_cache_entry_refcount(ce));
-			add_char_to_string(&info, ' ');
-#endif
-			/* FIXME: What to do with long urls ? they wrap for now
-			 * but if one is very long then no other is displayed. */
-			add_uri_to_string(&info, &ce->uri, ~URI_POST);
-
-#ifdef DEBUG
-			/* size */
-			add_char_to_string(&info, ' ');
-			add_knum_to_string(&info, ce->data_size);
-#endif
-		} else if (!truncated) truncated = count;
-	}
-
-	if (!count) {
-		add_char_to_string(&info, '\n');
-		add_to_string(&info, _("No entry.", term));
-	} else if (truncated) {
-		unsigned char buf[256];
-
-		add_char_to_string(&info, '\n');
-
-		snprintf(buf, 64, _("%ld more entries.", term),
-			count - truncated + 1);
-		add_to_string(&info, buf);
-	}
-
-	msg_box(term, getml(info.source, NULL), MSGBOX_FREE_TEXT,
-		N_("Cache info"), AL_LEFT,
-		msg_text(term, N_("Cache content: %s"), info.source),
-		r, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
-
-	refresh_init(r, term, ses, d, cache_inf);
 }
 
 #ifdef LEAK_DEBUG

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.27 2002/07/04 21:19:45 pasky Exp $ */
+/* $Id: download.c,v 1.28 2002/07/05 18:24:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -967,8 +967,9 @@ ses_chktype(struct session *ses, struct status **stat, struct cache_entry *ce)
 {
 	struct option *assoc;
 	int r = 0;
-	unsigned char *ct = get_content_type(ce->head, ce->url);
+	unsigned char *ct;
 
+	ct = get_content_type(ce->head, ce->url);
 	if (!ct) goto end;
 
 	if (!strcasecmp(ct, "text/html")) goto free_ct;

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.14 2002/07/05 01:29:09 pasky Exp $ */
+/* $Id: cache.c,v 1.15 2002/07/05 18:24:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,13 +100,11 @@ get_cache_entry(unsigned char *url, struct cache_entry **f)
 	if (!e) return -1;
 	memset(e, 0, sizeof(struct cache_entry));
 
-	e->url = mem_alloc(strlen(url) + 1);
+	e->url = stracpy(url);
 	if (!e->url) {
 		mem_free(e);
 		return -1;
 	}
-
-	strcpy(e->url, url);
 	e->length = 0;
 	e->incomplete = 1;
 	e->data_size = 0;

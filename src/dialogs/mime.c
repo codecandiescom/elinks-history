@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.19 2003/04/30 16:59:38 zas Exp $ */
+/* $Id: mime.c,v 1.20 2003/04/30 17:13:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -323,7 +323,7 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 
 		if (translated2 && optptr2) {
 			add_to_menu(&mi, translated,
-				    optptr2, MENU_FUNC fn, translated2, 0);
+				    *optptr2 ? optptr2 : NULL, MENU_FUNC fn, translated2, 0);
 		} else {
 			if (optptr2) mem_free(optptr2);
 			if (translated2) mem_free(translated2);

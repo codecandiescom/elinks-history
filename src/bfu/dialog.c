@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.78 2003/11/09 11:22:54 jonas Exp $ */
+/* $Id: dialog.c,v 1.79 2003/11/09 11:40:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -379,12 +379,19 @@ clear_dialog(struct dialog_data *dlg_data, struct widget_data *unused)
 
 static inline void
 layout_widgets(struct terminal *term, struct widget_data *wdata, int widgets,
-	       int x, int *y, int w, int *rw)
+	       int x, int *y, int w, int h, int *rw)
 {
+	/* TODO: Do something if (*y) gets > height. */
 	for (; widgets > 0; widgets--, wdata++) {
 		switch (wdata->widget->type) {
 		case WIDGET_FIELD:
 			dlg_format_field(term, wdata, x, y, w, rw, AL_LEFT);
+			(*y)++;
+			break;
+
+		case WIDGET_LISTBOX:
+			(*y)++;
+			dlg_format_box(term, wdata, x, y, w, h, rw, AL_LEFT);
 			(*y)++;
 			break;
 
@@ -406,11 +413,12 @@ generic_dialog_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int w = dialog_max_width(term);
+	int height = term->height;
 	int rw = 0;
 	int y = -1, x = 0;
 
 	layout_widgets(NULL, dlg_data->widgets_data, dlg_data->n,
-		       x, &y, w, &rw);
+		       x, &y, w, height, &rw);
 
 	/* Update the width to respond to the required minimum width */
 	if (dlg_data->dlg->align != AL_NONE) w = rw;
@@ -421,7 +429,7 @@ generic_dialog_layouter(struct dialog_data *dlg_data)
 	x = dlg_data->x + DIALOG_LB;
 
 	layout_widgets(term, dlg_data->widgets_data, dlg_data->n,
-		       x, &y, w, NULL);
+		       x, &y, w, height, NULL);
 }
 
 void

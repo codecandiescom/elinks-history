@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.49 2003/11/09 03:39:38 jonas Exp $ */
+/* $Id: hierbox.c,v 1.50 2003/11/09 11:40:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,34 +137,6 @@ display_dlg:
 	return EVENT_NOT_PROCESSED;
 }
 
-static void
-hierbox_browser_layouter(struct dialog_data *dlg_data)
-{
-	struct terminal *term = dlg_data->win->term;
-	int w = dialog_max_width(term);
-	int y = 0, x = 0;
-	int n = dlg_data->n - 1;
-
-	/* We want it to have the maximal width possible so don't calculate
-	 * @rw. */
-
-	dlg_format_box(term, dlg_data->widgets_data, x, &y, w, NULL, AL_LEFT);
-	y++;
-	dlg_format_buttons(NULL, dlg_data->widgets_data + 1, n, x,
-			   &y, w, NULL, AL_CENTER);
-
-	draw_dialog(dlg_data, w, y, AL_CENTER);
-
-	/* +1 to add blankline between top and top of box */
-	y = dlg_data->y + DIALOG_TB + 1;
-	x = dlg_data->x + DIALOG_LB;
-
-	dlg_format_box(term, dlg_data->widgets_data, x, &y, w, NULL, AL_LEFT);
-	y++;
-	dlg_format_buttons(term, dlg_data->widgets_data + 1, n,
-			   dlg_data->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
-}
-
 struct dialog_data *
 hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 		struct listbox_data *listbox_data, void *udata,
@@ -183,7 +155,8 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 	}
 
 	dlg->title = _(title, term);
-	dlg->layouter = hierbox_browser_layouter;
+	dlg->layouter = generic_dialog_layouter;
+	dlg->align = AL_NONE;
 	dlg->handle_event = hierbox_dialog_event_handler;
 	dlg->udata = udata;
 

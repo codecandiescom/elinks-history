@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.104 2003/11/08 21:25:24 jonas Exp $ */
+/* $Id: listbox.c,v 1.105 2003/11/09 11:40:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,13 +23,11 @@
 
 /* Layout for generic boxes */
 void
-dlg_format_box(struct terminal *term,
-	       struct widget_data *widget_data, int x, int *y, int w, int *rw,
+dlg_format_box(struct terminal *term, struct widget_data *widget_data,
+	       int x, int *y, int w, int max_height, int *rw,
 	       enum format_align align)
 {
-	int min, optimal_h, max_height;
-
-	assert(term);
+	int min, optimal_h;
 
 	widget_data->x = x;
 	widget_data->y = *y;
@@ -43,8 +41,6 @@ dlg_format_box(struct terminal *term,
 	/* (*y) += widget_data->widget->gid; */
 
 	/* This is only weird heuristic, it could scale well I hope. */
-	max_height = term->height;
-
 	optimal_h = max_height * 2 / 3 - 2 * DIALOG_TB - 8;
 	min = get_opt_int("ui.dialogs.listbox_min_height");
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.341 2004/01/07 18:52:59 jonas Exp $ */
+/* $Id: view.c,v 1.342 2004/01/07 19:08:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1392,16 +1392,7 @@ save_formatted(void *data, unsigned char *file)
 }
 
 void
-menu_save_formatted(struct terminal *term, void *xxx, struct session *ses)
+save_formatted_dlg(struct session *ses, struct document_view *doc_view, int a)
 {
-	struct document_view *doc_view;
-
-	assert(term && ses);
-	if_assert_failed return;
-	if (!have_location(ses)) return;
-	doc_view = current_frame(ses);
-	assert(doc_view && doc_view->vs);
-	if_assert_failed return;
-
 	query_file(ses, doc_view->vs->url, ses, save_formatted, NULL, 1);
 }

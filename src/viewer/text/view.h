@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.36 2004/01/07 01:57:17 jonas Exp $ */
+/* $Id: view.h,v 1.37 2004/01/07 19:08:36 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -55,6 +55,6 @@ open_in_new_window(struct terminal *term,
 			    struct session *ses),
 		   struct session *ses);
 
-void menu_save_formatted(struct terminal *, void *, struct session *);
+void save_formatted_dlg(struct session *ses, struct document_view *doc_view, int a);
 
 #endif

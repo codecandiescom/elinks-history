@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.12 2004/01/07 17:02:10 jonas Exp $ */
+/* $Id: action.c,v 1.13 2004/01/07 19:08:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,7 +227,7 @@ do_action(struct session *ses, enum keyact action, int verbose)
 
 		case ACT_SAVE_FORMATTED:
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
-				menu_save_formatted(ses->tab->term, NULL, ses);
+				do_frame_action(ses, save_formatted_dlg);
 			break;
 
 		case ACT_SAVE_URL_AS:

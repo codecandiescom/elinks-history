@@ -163,6 +163,9 @@ Flemming Frandsen <ff@partyticket.net>
 	accesskey,tabindex support
 	Referred as 'ff' or 'FF' in the code
 
+Frédéric L. W. Meunier <0@pervalidus.tk>
+	Minor documentation updates
+
 Fuzzy European King <james@place.org>
 	Fixed lua stack overflow
 
@@ -450,4 +453,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.134 2003/09/28 18:22:41 jonas Exp $
+$Id: AUTHORS,v 1.135 2003/10/05 14:07:10 pasky Exp $

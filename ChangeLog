@@ -1,3 +1,123 @@
+Sun Jan 19 20:25:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/elusive/parser/css/: atrule.h, parser.h, ruleset.h,
+	scanner.h, state.h:
+
+	The basic structure of the CSS parser.  
+
+Sun Jan 19 20:03:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lua/core.c:
+
+	Fixed tiny but fatal bug in lua causing non-working pipe_read()
+	(kinda problem, yes ;). Patch by witekfl.  
+
+Sun Jan 19 18:29:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/elusive/parser/css/: README, TODO:
+
+	The first glimpse of the CSS parser ...  
+
+Sun Jan 19 18:25:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/elusive/parser/: parser.h, html/parser.c:
+
+	HTML state parsers now returns enum pstate_code.  Unneeded
+	PSTATE_RECOVER removed.  
+
+Sun Jan 19 18:00:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/elusive/parser/: stack.c, stack.h:
+
+	Possibility for optimizing parsers by reusing parser states through 
+	state_stack_repush(). Basicly it just resets the state on top of the
+	stack.  Equal to state_stack_pop() followed by state_stack_push().  
+
+Sun Jan 19 17:51:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/elusive/parser/: parser.h, html/parser.c:
+
+	Generic return type for state parsers added to improve readability.  
+	HTML parser updated to use it.  
+
+Sun Jan 19 14:43:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/dns.c:
+
+	Tiny cleanup.  
+
+Sun Jan 19 14:42:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/renderer/text/renderer.c:
+
+	Oops. Fool me.  
+
+Sun Jan 19 14:36:10 2003  Laurent Monin <zas@norz.org>:
+
+	* src/elusive/renderer/text/renderer.c:
+
+	Compilation fix : missing include.  
+
+Sun Jan 19 14:28:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/renderer/text/renderer.c:
+
+	Compilation fix. Jonas refusing to commit anything to CVS ;-).  
+
+Sun Jan 19 14:24:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, src/sched/sched.c:
+
+	Fixes for extracting of proxy addresses from the variables - ignore
+	/^protocol:\/\// and /\/.*$/. Patch by Alexey Tourbin
+	<at@turbinal.org> and me.  
+
+Sun Jan 19 14:13:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/options.c, protocol/user.c:
+
+	Introduced %d modifier for protocol.user.* options, which is
+	substitued by the path part of the URL. Based on Jupp's suggestion.  
+
+Sun Jan 19 14:07:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/url.c:
+
+	check_protocol() paranoia 
+
+Sun Jan 19 13:53:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Introduced -default-mime-type commandline option, aliasing
+	document.download.default_mime_type.  
+
+Sun Jan 19 08:33:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	Fixed highlighting again. Thanks, Witold.  
+
+Sat Jan 18 23:36:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/elinks.vim:
+
+	New keywords added. Reported by Doug Kearns
+	<djkea2@mugca.its.monash.edu.au>.  
+
+Sat Jan 18 23:35:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	Fixed highlighting.  
+
+Sat Jan 18 23:27:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	Use frame symbols instead of ascii art in the hiearchic listboxes.
+	Based on patch by witekfl.  
+
 Sat Jan 18 23:05:21 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: bfu/menu.c, lowlevel/terminal.c, lowlevel/terminal.h,

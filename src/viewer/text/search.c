@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.32 2003/10/05 16:36:44 kuser Exp $ */
+/* $Id: search.c,v 1.33 2003/10/05 19:53:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,9 +15,13 @@
 
 #include "elinks.h"
 
+#include "bfu/button.h"
+#include "bfu/checkbox.h"
 #include "bfu/inpfield.h"
+#include "bfu/inphist.h"
 #include "bfu/msgbox.h"
 #include "bfu/style.h"
+#include "bfu/text.h"
 #include "intl/gettext/libintl.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
@@ -824,12 +828,231 @@ find_next_back(struct session *ses, struct document_view *f, int a)
 }
 
 
+
 struct input_history search_history = { 0, {D_LIST_HEAD(search_history.items)} };
+
+/* The dialog functions are clones of input_field() ones. Gross code
+ * duplication. */
+/* TODO: This is just hacked input_field(), containing a lot of generic crap
+ * etc. The useless cruft should be blasted out. And it's quite ugly anyway,
+ * a nice cleanup target ;-). --pasky */
+
+static unsigned char *radio_labels[] = {
+	N_("Normal search"),
+	N_("Regexp search"),
+	N_("Extended regexp search"),
+	NULL
+};
+
+struct search_dlg_hop {
+	void *data;
+	int whether_regex;
+};
+
+static int
+search_dlg_cancel(struct dialog_data *dlg, struct widget_data *di)
+{
+	void (*fn)(void *) = di->item->udata;
+	struct search_dlg_hop *hop = dlg->dlg->udata2;
+	void *data = hop->data;
+
+	if (fn) fn(data);
+	cancel_dialog(dlg, di);
+
+	return 0;
+}
+
+static int
+search_dlg_ok(struct dialog_data *dlg, struct widget_data *di)
+{
+	void (*fn)(void *, unsigned char *) = di->item->udata;
+	struct search_dlg_hop *hop = dlg->dlg->udata2;
+	void *data = hop->data;
+	unsigned char *text = dlg->items->cdata;
+
+	update_dialog_data(dlg, di);
+
+	{
+		struct option *o = get_opt_rec(config_options,
+					       "document.browse.search.regex");
+
+		if (*((int *) o->ptr) != hop->whether_regex) {
+			*((int *) o->ptr) = hop->whether_regex;
+			o->flags |= OPT_TOUCHED;
+		}
+	}
+
+	if (check_dialog(dlg)) return 1;
+
+	add_to_input_history(dlg->dlg->items->history, text, 1);
+
+	if (fn) fn(data, text);
+	ok_dialog(dlg, di);
+	return 0;
+}
+
+void
+search_dlg_fn(struct dialog_data *dlg)
+{
+	struct terminal *term = dlg->win->term;
+	int max = 0, min = 0;
+	int w, rw;
+	int y = -1;
+	struct color_pair *text_color = get_bfu_color(term, "dialog.text");
+
+	text_width(term, dlg->dlg->udata, &min, &max);
+	checkboxes_width(term, 1, radio_labels, &min, &max);
+	buttons_width(term, dlg->items + 4, 2, &min, &max);
+
+	if (max < dlg->dlg->items->dlen) max = dlg->dlg->items->dlen;
+
+	w = term->x * 9 / 10 - 2 * DIALOG_LB;
+	if (w > max) w = max;
+	if (w < min) w = min;
+
+	rw = 0; /* !!! FIXME: input field */
+	dlg_format_text(NULL, term, dlg->dlg->udata, 0, &y, w, &rw,
+			text_color, AL_LEFT);
+	dlg_format_field(NULL, term, dlg->items, 0, &y, w, &rw,
+			 AL_LEFT);
+
+	y++;
+	dlg_format_checkboxes(NULL, term, 1, dlg->items + 1, 3, 0, &y, w, &rw,
+			      radio_labels);
+
+	y++;
+	dlg_format_buttons(NULL, term, dlg->items + 4, 2, 0, &y, w, &rw,
+			   AL_CENTER);
+
+	w = rw;
+	dlg->xw = rw + 2 * DIALOG_LB;
+	dlg->yw = y + 2 * DIALOG_TB;
+	center_dlg(dlg);
+
+	draw_dlg(dlg);
+
+	y = dlg->y + DIALOG_TB;
+	dlg_format_text(term, term, dlg->dlg->udata, dlg->x + DIALOG_LB,
+			&y, w, NULL, text_color, AL_LEFT);
+	dlg_format_field(term, term, dlg->items, dlg->x + DIALOG_LB,
+			 &y, w, NULL, AL_LEFT);
+
+	y++;
+	dlg_format_checkboxes(term, term, 1, dlg->items + 1, 3,
+			      dlg->x + DIALOG_LB, &y, w, NULL,
+			      radio_labels);
+
+	y++;
+	dlg_format_buttons(term, term, dlg->items + 4, 2, dlg->x + DIALOG_LB,
+			   &y, w, NULL, AL_CENTER);
+}
+
+/* XXX: @data is ignored. */
+void
+search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
+	    unsigned char *title,
+	    unsigned char *text,
+	    unsigned char *okbutton,
+	    unsigned char *cancelbutton,
+	    void *data, struct input_history *history, int l,
+	    unsigned char *def, int min, int max,
+	    int (*check)(struct dialog_data *, struct widget_data *),
+	    void (*fn)(void *, unsigned char *),
+	    void (*cancelfn)(void *))
+{
+	struct dialog *dlg;
+	unsigned char *field;
+	struct search_dlg_hop *hop;
+
+	if (intl) {
+		title = _(title, term);
+		text = _(text, term);
+		okbutton = _(okbutton, term);
+		cancelbutton = _(cancelbutton, term);
+	}
+
+	hop = mem_calloc(1, sizeof(struct search_dlg_hop));
+	if (!hop) return;
+	hop->whether_regex = get_opt_int("document.browse.search.regex");
+	hop->data = data;
+
+#define SIZEOF_DIALOG (sizeof(struct dialog) + 4 * sizeof(struct widget))
+
+	dlg = mem_calloc(1, SIZEOF_DIALOG + l);
+	if (!dlg) {
+		mem_free(hop);
+		return;
+	}
+
+	field = (unsigned char *) dlg + SIZEOF_DIALOG;
+	*field = 0;
+
+#undef SIZEOF_DIALOG
+
+	if (def) {
+		int defsize = strlen(def) + 1;
+
+		memcpy(field, def, (defsize > l) ? l - 1 : defsize);
+	}
+
+	dlg->title = title;
+	dlg->fn = search_dlg_fn;
+	dlg->udata = text;
+	dlg->udata2 = hop;
+
+	add_to_ml(&ml, hop, NULL);
+
+	dlg->items[0].type = D_FIELD;
+	dlg->items[0].gid = min;
+	dlg->items[0].gnum = max;
+	dlg->items[0].fn = check;
+	dlg->items[0].history = history;
+	dlg->items[0].dlen = l;
+	dlg->items[0].data = field;
+
+	dlg->items[1].type = D_CHECKBOX;	
+	dlg->items[1].gid = 1;
+	dlg->items[1].gnum = 0;
+	dlg->items[1].dlen = sizeof(int);
+	dlg->items[1].data = (unsigned char *) &hop->whether_regex;
+
+	dlg->items[2].type = D_CHECKBOX;	
+	dlg->items[2].gid = 1;
+	dlg->items[2].gnum = 1;
+	dlg->items[2].dlen = sizeof(int);
+	dlg->items[2].data = (unsigned char *) &hop->whether_regex;
+
+	dlg->items[3].type = D_CHECKBOX;	
+	dlg->items[3].gid = 1;
+	dlg->items[3].gnum = 2;
+	dlg->items[3].dlen = sizeof(int);
+	dlg->items[3].data = (unsigned char *) &hop->whether_regex;
+
+	dlg->items[4].type = D_BUTTON;
+	dlg->items[4].gid = B_ENTER;
+	dlg->items[4].fn = search_dlg_ok;
+	dlg->items[4].dlen = 0;
+	dlg->items[4].text = okbutton;
+	dlg->items[4].udata = fn;
+
+	dlg->items[5].type = D_BUTTON;
+	dlg->items[5].gid = B_ESC;
+	dlg->items[5].fn = search_dlg_cancel;
+	dlg->items[5].dlen = 0;
+	dlg->items[5].text = cancelbutton;
+	dlg->items[5].udata = cancelfn;
+
+	dlg->items[6].type = D_END;
+
+	add_to_ml(&ml, dlg, NULL);
+	do_dialog(term, dlg, ml);
+}
+
 
 void
 search_back_dlg(struct session *ses, struct document_view *f, int a)
 {
-	input_field(ses->tab->term, NULL, 1,
+	search_dlg_do(ses->tab->term, NULL, 1,
 		    N_("Search backward"), N_("Search for text"),
 		    N_("OK"), N_("Cancel"), ses, &search_history,
 		    MAX_STR_LEN, "", 0, 0, NULL,
@@ -840,7 +1063,7 @@ search_back_dlg(struct session *ses, struct document_view *f, int a)
 void
 search_dlg(struct session *ses, struct document_view *f, int a)
 {
-	input_field(ses->tab->term, NULL, 1,
+	search_dlg_do(ses->tab->term, NULL, 1,
 		    N_("Search"), N_("Search for text"),
 		    N_("OK"), N_("Cancel"), ses, &search_history,
 		    MAX_STR_LEN, "", 0, 0, NULL,

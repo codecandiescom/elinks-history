@@ -1,3 +1,132 @@
+Wed May 14 21:08:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	We sometimes memmove() 0 bytes, fixed. An internal error detection
+	was added to prevent a similar issue.  
+
+Wed May 14 20:58:05 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	We sometimes memmove() 0 bytes, fixed.  
+
+Wed May 14 17:20:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/conv.c:
+
+	Reintroduced sanity paranoid checks into ulongcat().  
+
+Wed May 14 16:59:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/lists.h:
+
+	Gdb-friendly lists debugging....  
+
+Wed May 14 16:34:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/error.c:
+
+	Always force segfault on bad list magic detection.  
+
+Wed May 14 15:11:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/conv.c:
+
+	ulongcat() comment updates (stylistic fix and added comment about
+	purpose and supposed usage).  
+
+Wed May 14 15:03:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/conv.c:
+
+	Initialize pos at declaration time.  
+
+Wed May 14 13:08:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/conv.c:
+
+	Clarified the return value description for ulongcat().  
+
+Wed May 14 13:06:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/conv.c:
+
+	Again moved start initialization to declaration.  
+
+Wed May 14 13:06:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/conv.c:
+
+	Comments tidyup and reduction to a useful rate.  
+
+Wed May 14 12:48:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/conv.c:
+
+	Fixed return value if truncated.  
+
+Wed May 14 12:43:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/conv.c:
+
+	Fully tested ulongcat() version. Optimizations are welcomed, but
+	take care.  
+
+Wed May 14 12:00:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/conv.c:
+
+	Changed return value of elinks_ulongcat(): now it returns -1 on
+	error, 0 if ok and desired ideal width if truncated. Also some
+	possible wrong value being returned at edge cases (reported by zas)
+	should be fixed. Let's see ;).  
+
+Wed May 14 11:49:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/conv.c:
+
+	Directly initialize start.  
+
+Wed May 14 11:47:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/conv.c:
+
+	With non-zero slen initial value, the resulting slen value was
+	wrong, this should fix that. Pointed out, explained etc by zas.  
+
+Wed May 14 11:43:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/conv.c:
+
+	Do more paranoical pos value checks. Let's go the safe way ;-). Does
+	not change the functionality.  
+
+Tue May 13 23:57:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/session.c, viewer/text/view.c:
+
+	Removed use of d_opt in context of init_bars_status(), it was
+	completely wrong (it frequently points to some crap and should not
+	exist altogether anyway; resulted in random shooting into memory).
+	Now NULL is passed instead and code was added inside of
+	init_bars_status() to try to retrieve the document_options from
+	ses->screen->f_data in that case. Fixes bug 96.  
+
+Tue May 13 22:53:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inpfield.c:
+
+	Huge reorganization of one-char identifier, resulting in something 5
+	times larger, as usual. (Compilation fix.) Thanks, zas.  
+
+Tue May 13 22:37:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/inpfield.c, bfu/inphist.c, config/urlhist.c:
+
+	Tidyup and minor reindentations, attempting to clear out some
+	probably buggy code.  
+
 Tue May 13 15:48:04 2003  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/tables.c:

@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.9 2002/11/15 16:47:55 zas Exp $ */
+/* $Id: hash.c,v 1.10 2002/11/29 22:18:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,7 +88,7 @@ add_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen,
 	return item;
 }
 
-struct hash_item *
+inline struct hash_item *
 get_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen)
 {
 	struct hash_item *item;

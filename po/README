@@ -3,12 +3,14 @@
 1. Adding a new language:
 =========================
 
-First make the po template file
+Assuming you have downloaded the distributed source tarball, unpacked it and
+changed directory to the root directory of the unpacked source tarball first
+make the po template file:
 
 	$ cd po/
 	$ make elinks.pot
 
-Use this to the as the basis for you translation
+Use the elinks.pot template file as the basis for you translation:
 
 	$ cp elinks.pot <your language code>.po
 
@@ -17,13 +19,17 @@ Then follow the instructions in the 'Updating .po files' section below.
 1.1 Integrating a new language file:
 ------------------------------------
 
-When you are done editing it you need to integrate it as part of ELinks
+When you are done editing the .po file you need to integrate it as part of
+ELinks. If you don't feel comfortable editing the ELinks C-language source code
+don't hesitate to get a developer to do it for you.
+
+First change directory to the root directory of the unpacked source tarball:
 
 	$ cd ../
 
 Add your language code to the ALL_LINGUAS string in configure.in (keep the
 alphabetic order ;). To make the change take effect you have to rebuild all
-Makefiles
+Makefiles:
 
 	$ ./autogen.sh
 	$ ./configure
@@ -34,7 +40,7 @@ translation file for errors and fix any warnings you get.
 Next thing is to add it to the Setup->Language menu. This is done by adding an
 entry in the language array in src/intl/gettext/libintl.c, and should not
 require any C coding skills, just copy an already existing entry and edit the
-name of your language (in English) so you end up with something like
+name of your language (in English) so you end up with something like:
 
 	struct language languages[] = {
 		{"System", "system"},
@@ -75,7 +81,7 @@ you can then make use of your updates.
 2.2 The basics of updating:
 ---------------------------
 
-Each string that needs to translation will look like this
+Each string that needs to translation will look like this:
 
 	#: src/dialogs/info.c:184
 	#, fuzzy, c-format
@@ -143,5 +149,5 @@ current status of each language file. Be proud if your language file rank higher
 or the same as the French one.
 
 
-$Id: README,v 1.3 2004/01/07 18:26:55 jonas Exp $
+$Id: README,v 1.4 2004/11/13 20:10:35 jonas Exp $
 vim: textwidth=80

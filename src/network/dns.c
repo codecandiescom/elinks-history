@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.24 2003/04/16 12:43:30 zas Exp $ */
+/* $Id: dns.c,v 1.25 2003/04/16 21:14:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,6 +56,9 @@ struct dnsquery {
 	void (*xfn)(struct dnsquery *, int);
 	int h;
 	struct dnsquery **s;
+	/* addr and addrno lifespan exceeds life of this structure, the caller
+	 * holds memory being pointed upon be these functions. Thus, when
+	 * free()ing, *always* set pointer to NULL ! */
 	struct sockaddr_storage **addr; /* addr of pointer to array of addresses */
 	int *addrno; /* array len / sizeof(sockaddr_storage) */
 	char name[1];
@@ -308,7 +311,10 @@ end_dns_lookup(struct dnsquery *q, int res)
 #endif
 
 	if (!q->fn || !q->addr) {
-		if (q->addr && *q->addr) mem_free(*q->addr);
+		if (q->addr && *q->addr) {
+			mem_free(*q->addr);
+			*q->addr = NULL; /* This may not be so pointless. */
+		}
 		mem_free(q);
 		return;
 	}

@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.11 2004/01/26 06:04:43 jonas Exp $ */
+/* $Id: exmode.c,v 1.12 2004/01/26 06:07:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,6 +105,7 @@ exmode_exec(struct exmode_data *data)
 	}
 }
 
+
 static void
 exmode_layouter(struct dialog_data *dlg_data)
 {
@@ -121,7 +122,6 @@ exmode_layouter(struct dialog_data *dlg_data)
 static int
 exmode_handle_event(struct dialog_data *dlg_data, struct term_event *ev)
 {
-	struct window *win = dlg_data->win;
 	struct exmode_data *data = dlg_data->dlg->udata;
 
 	switch (ev->ev) {
@@ -139,7 +139,7 @@ exmode_handle_event(struct dialog_data *dlg_data, struct term_event *ev)
 					exmode_exec(data);
 					/* Falling */
 				case ACT_EDIT_CANCEL:
-					delete_window(win);
+					cancel_dialog(dlg_data, NULL);
 					break;
 				default:
 					return EVENT_NOT_PROCESSED;

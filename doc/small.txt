@@ -1,0 +1,42 @@
+Tips to obtain a very small static elinks binary suitable for mini distributions:
+
+Use dietlibc (http://www.fefe.de/dietlibc/) or similar stuff (uClibc, ...):
+export CC='diet gcc'
+
+Use compilers flags to optimize for size:
+export CFLAGS='-Os -s -fno-inline'
+
+Disable some compile-time options:
+./configure --disable-ipv6 --disable-backtrace --disable-nls --enable-fastmem \
+--without-zlib --without-bzlib --without-xbel --without-lua --without-gnutls \
+--without-openssl --without-x --enable-small
+
+You can disable bookmarks, globhist and more too if you want too.
+
+Notes:
+--disable-backtrace disables internal backtrace code
+--disable-nls disables i18n support
+--enable-fastmem disables internal malloc() debugging, and use alloca() whereever possible.
+--enable-small forces to remove some text descriptions in options and keybind stuff (regain 30Kb)
+
+Dependencies over external libs must be removed using related configure options.
+--without-zlib		removes libz dependancy (compression)
+--without-bzlib		removes libbz2 dependancy (compression)
+--without-xbel		removes libxml dependancy (xbel bookmarks support)
+--without-lua		removes liblua dependancy (lua scripting)
+--without-gnutls	removes libtls dependancy (ssl support)
+--without-openssl	removes libssl dependancy (ssl support)
+--without-x 		removes libx11 dependancy (setting terminal title)
+
+With these, using gcc 3.2, dietlibc 0.23 and elinks 0.5pre7 from cvs,
+i obtain a small static binary with following features:
+Standard, Fastmem, No Backtrace, Bookmarks, Cookies, Global History, Mailcap, Mimetypes files, Forms memory
+
+and a size of:
+-rwxr-xr-x    1 zas      zas        453412 2003-10-19 12:50 src/elinks
+
+Not so bad :)
+
+
+
+/* $Id: small.txt,v 1.1 2003/10/19 11:08:54 zas Exp $ */

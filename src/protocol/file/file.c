@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.59 2003/06/22 17:32:44 jonas Exp $ */
+/* $Id: file.c,v 1.60 2003/06/23 00:08:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -275,6 +275,214 @@ comp_de(struct dirs *d1, struct dirs *d2)
 	return strcmp(d1->f, d2->f);
 }
 
+struct file_info {
+	unsigned char *head;
+	unsigned char *fragment;
+	int fragmentlen;
+};
+
+/* Generates a HTML page listing the content of @directory with the path
+ * @filename. */
+/* Returns a connection state. S_OK if all is well. */
+static int
+list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
+{
+	struct dirs *dir = NULL;
+	int dirl = 0;
+	int i;
+	struct dirent *de;
+	unsigned char dircolor[8];
+	int colorize_dir = get_opt_int("document.browse.links.color_dirs");
+	int show_hidden_files = get_opt_bool("protocol.file.show_hidden_files");
+	unsigned char *fragment;
+	int fragmentlen;
+
+	if (colorize_dir) {
+		color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"),
+			(unsigned char *) &dircolor);
+	}
+
+	last_uid = -1;
+	last_gid = -1;
+	fragment = init_str();
+	fragmentlen = 0;
+
+	if (!fragment) return S_OUT_OF_MEM;
+
+	add_to_str(&fragment, &fragmentlen, "<html>\n<head><title>");
+	add_htmlesc_str(&fragment, &fragmentlen, filename, strlen(filename));
+	add_to_str(&fragment, &fragmentlen, "</title></head>\n<body>\n<h2>Directory ");
+	{
+		unsigned char *pslash, *slash = filename - 1;
+
+		while (pslash = ++slash, slash = strchr(slash, '/')) {
+			if (slash == filename) {
+				add_chr_to_str(&fragment, &fragmentlen, '/');
+				continue;
+			}
+
+			slash[0] = 0;
+			add_to_str(&fragment, &fragmentlen, "<a href=\"");
+			/* FIXME: htmlesc? At least we should escape quotes. --pasky */
+			add_to_str(&fragment, &fragmentlen, filename);
+			add_chr_to_str(&fragment, &fragmentlen, '/');
+			add_to_str(&fragment, &fragmentlen, "\">");
+			add_htmlesc_str(&fragment, &fragmentlen, pslash, strlen(pslash));
+			add_to_str(&fragment, &fragmentlen, "</a>");
+			add_chr_to_str(&fragment, &fragmentlen, '/');
+			slash[0] = '/';
+		}
+	}
+	add_to_str(&fragment, &fragmentlen, "</h2>\n<pre>");
+
+	while ((de = readdir(directory))) {
+		struct stat st, *stp;
+		unsigned char **p;
+		int l;
+		struct dirs *nd;
+		unsigned char *n;
+
+		/* Always show "..", always hide ".", others like ".x" are shown if
+		 * show_hidden_files = 1 */
+		if (de->d_name[0] == '.' && !(de->d_name[1] == '.' && de->d_name[2] == '\0'))
+			if (!show_hidden_files || de->d_name[1] == '\0') continue;
+
+		nd = mem_realloc(dir, (dirl + 1) * sizeof(struct dirs));
+		if (!nd) continue;
+
+		dir = nd;
+		dir[dirl].f = stracpy(de->d_name);
+		if (!dir[dirl].f) continue;
+
+		p = &dir[dirl++].s;
+		*p = init_str();
+		if (!*p) continue;
+
+		l = 0;
+		n = stracpy(filename);
+		if (!n) continue;
+
+		add_to_strn(&n, de->d_name);
+#ifdef FS_UNIX_SOFTLINKS
+		if (lstat(n, &st))
+#else
+			if (stat(n, &st))
+#endif
+				stp = NULL;
+			else
+				stp = &st;
+
+		mem_free(n);
+		stat_mode(p, &l, stp);
+		stat_links(p, &l, stp);
+		stat_user(p, &l, stp, 0);
+		stat_user(p, &l, stp, 1);
+		stat_size(p, &l, stp);
+		stat_date(p, &l, stp);
+	}
+
+	if (dirl) qsort(dir, dirl, sizeof(struct dirs),
+		(int(*)(const void *, const void *))comp_de);
+
+	for (i = 0; i < dirl; i++) {
+		unsigned char *lnk = NULL;
+
+#ifdef FS_UNIX_SOFTLINKS
+		if (dir[i].s[0] == 'l') {
+
+			unsigned char *buf = NULL;
+			int size = 0;
+			int rl = -1;
+			unsigned char *n = init_str();
+			int nl = 0;
+
+			if (!n) continue;
+			add_to_str(&n, &nl, filename);
+			add_htmlesc_str(&n, &nl,
+				dir[i].f, strlen(dir[i].f));
+			do {
+				if (buf) mem_free(buf);
+				size += ALLOC_GR;
+				buf = mem_alloc(size);
+				if (!buf) break;
+				rl = readlink(n, buf, size);
+			} while (rl == size);
+
+			mem_free(n);
+			if (buf) {
+				if (rl != -1) {
+					buf[rl] = '\0';
+
+					lnk = buf;
+				} else {
+					mem_free(buf);
+				}
+			}
+		}
+#endif
+		/* add_to_str(&fragment, &fragmentlen, "   "); */
+		add_htmlesc_str(&fragment, &fragmentlen,
+			dir[i].s, strlen(dir[i].s));
+		add_to_str(&fragment, &fragmentlen, "<a href=\"");
+		add_htmlesc_str(&fragment, &fragmentlen,
+			dir[i].f, strlen(dir[i].f));
+		if (dir[i].s[0] == 'd') {
+			add_chr_to_str(&fragment, &fragmentlen, '/');
+		} else if (lnk) {
+			struct stat st;
+			unsigned char *n = init_str();
+			int nl = 0;
+
+			if (n) {
+				add_to_str(&n, &nl, filename);
+				add_htmlesc_str(&n, &nl,
+					dir[i].f, strlen(dir[i].f));
+				if (!stat(n, &st) && S_ISDIR(st.st_mode))
+					add_chr_to_str(&fragment, &fragmentlen, '/');
+				mem_free(n);
+			}
+		}
+		add_to_str(&fragment, &fragmentlen, "\">");
+
+		if (dir[i].s[0] == 'd' && colorize_dir) {
+			/* The <b> is here for the case when we've
+			 * use_document_colors off. */
+			add_to_str(&fragment, &fragmentlen, "<font color=\"");
+			add_to_str(&fragment, &fragmentlen, dircolor);
+			add_to_str(&fragment, &fragmentlen, "\"><b>");
+		}
+
+		add_htmlesc_str(&fragment, &fragmentlen,
+			dir[i].f, strlen(dir[i].f));
+
+		if (dir[i].s[0] == 'd' && colorize_dir) {
+			add_to_str(&fragment, &fragmentlen, "</b></font>");
+		}
+
+		add_to_str(&fragment, &fragmentlen, "</a>");
+		if (lnk) {
+			add_to_str(&fragment, &fragmentlen, " -> ");
+			add_htmlesc_str(&fragment, &fragmentlen, lnk, strlen(lnk));
+			mem_free(lnk);
+		}
+
+		add_chr_to_str(&fragment, &fragmentlen, '\n');
+	}
+
+	for (i = 0; i < dirl; i++) {
+		if (dir[i].s) mem_free(dir[i].s);
+		if (dir[i].f) mem_free(dir[i].f);
+	}
+	mem_free(dir);
+
+	add_to_str(&fragment, &fragmentlen, "</pre>\n<hr>\n</body>\n</html>\n");
+
+	info->fragment = fragment;
+	info->fragmentlen = fragmentlen;
+	info->head = stracpy("\r\nContent-Type: text/html\r\n");
+	return S_OK;
+}
+
 /* FIXME: Many return values aren't checked. And we should split it.
  * --Zas */
 void
@@ -287,6 +495,7 @@ file_func(struct connection *c)
 	int fragmentlen;
 	DIR *d;
 	int filenamelen;
+	struct file_info *info;
 
 	if (get_opt_int_tree(&cmdline_options, "anonymous")) {
 		abort_conn_with_state(c, S_BAD_URL);
@@ -301,23 +510,13 @@ file_func(struct connection *c)
 
 	d = opendir(filename);
 	if (d) {
-		struct dirs *dir = NULL;
-		int dirl = 0;
-		int i;
-		struct dirent *de;
-		unsigned char dircolor[8];
-		int colorize_dir = get_opt_int("document.browse.links.color_dirs");
-		int show_hidden_files = get_opt_bool("protocol.file.show_hidden_files");
-
-		if (colorize_dir) {
-			color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"),
-				(unsigned char *) &dircolor);
-		}
+		int state;
 
 		if (filename[0] && !dir_sep(filename[filenamelen - 1])) {
+			mem_free(filename);
+			closedir(d);
+
 			if (get_cache_entry(c->url, &e)) {
-				mem_free(filename);
-				closedir(d);
 				abort_conn_with_state(c, S_OUT_OF_MEM);
 				return;
 			}
@@ -327,196 +526,32 @@ file_func(struct connection *c)
 			if (e->redirect) mem_free(e->redirect);
 			e->redirect_get = 1;
 			e->redirect = straconcat(c->url, "/", NULL);
-			mem_free(filename);
-			closedir(d);
 
 			goto end;
 		}
 
-		last_uid = -1;
-		last_gid = -1;
-		fragment = init_str();
-		fragmentlen = 0;
-
-		if (!fragment) {
+		info = mem_alloc(sizeof(struct file_info));
+		if (!info) {
 			mem_free(filename);
 			closedir(d);
 			abort_conn_with_state(c, S_OUT_OF_MEM);
 			return;
 		}
 
-		add_to_str(&fragment, &fragmentlen, "<html>\n<head><title>");
-		add_htmlesc_str(&fragment, &fragmentlen, filename, strlen(filename));
-		add_to_str(&fragment, &fragmentlen, "</title></head>\n<body>\n<h2>Directory ");
-		{
-			unsigned char *pslash, *slash = filename - 1;
-
-			while (pslash = ++slash, slash = strchr(slash, '/')) {
-				if (slash == filename) {
-					add_chr_to_str(&fragment, &fragmentlen, '/');
-					continue;
-				}
-
-				slash[0] = 0;
-				add_to_str(&fragment, &fragmentlen, "<a href=\"");
-				/* FIXME: htmlesc? At least we should escape quotes. --pasky */
-				add_to_str(&fragment, &fragmentlen, filename);
-				add_chr_to_str(&fragment, &fragmentlen, '/');
-				add_to_str(&fragment, &fragmentlen, "\">");
-				add_htmlesc_str(&fragment, &fragmentlen, pslash, strlen(pslash));
-				add_to_str(&fragment, &fragmentlen, "</a>");
-				add_chr_to_str(&fragment, &fragmentlen, '/');
-				slash[0] = '/';
-			}
-		}
-		add_to_str(&fragment, &fragmentlen, "</h2>\n<pre>");
-
-		while ((de = readdir(d))) {
-			struct stat st, *stp;
-			unsigned char **p;
-			int l;
-			struct dirs *nd;
-			unsigned char *n;
-
-			/* Always show "..", always hide ".", others like ".x" are shown if
-			 * show_hidden_files = 1 */
-			if (de->d_name[0] == '.' && !(de->d_name[1] == '.' && de->d_name[2] == '\0'))
-				if (!show_hidden_files || de->d_name[1] == '\0') continue;
-
-			nd = mem_realloc(dir, (dirl + 1) * sizeof(struct dirs));
-			if (!nd) continue;
-
-			dir = nd;
-			dir[dirl].f = stracpy(de->d_name);
-			if (!dir[dirl].f) continue;
-
-			p = &dir[dirl++].s;
-			*p = init_str();
-			if (!*p) continue;
-
-			l = 0;
-			n = stracpy(filename);
-			if (!n) continue;
-
-			add_to_strn(&n, de->d_name);
-#ifdef FS_UNIX_SOFTLINKS
-			if (lstat(n, &st))
-#else
-			if (stat(n, &st))
-#endif
-				stp = NULL;
-			else
-				stp = &st;
-
-			mem_free(n);
-			stat_mode(p, &l, stp);
-			stat_links(p, &l, stp);
-			stat_user(p, &l, stp, 0);
-			stat_user(p, &l, stp, 1);
-			stat_size(p, &l, stp);
-			stat_date(p, &l, stp);
-		}
-
+		state = list_directory(d, filename, info);
 		closedir(d);
-
-		if (dirl) qsort(dir, dirl, sizeof(struct dirs),
-				(int(*)(const void *, const void *))comp_de);
-
-		for (i = 0; i < dirl; i++) {
-			unsigned char *lnk = NULL;
-
-#ifdef FS_UNIX_SOFTLINKS
-			if (dir[i].s[0] == 'l') {
-
-				unsigned char *buf = NULL;
-				int size = 0;
-				int rl = -1;
-				unsigned char *n = init_str();
-				int nl = 0;
-
-				if (!n) continue;
-				add_to_str(&n, &nl, filename);
-				add_htmlesc_str(&n, &nl,
-						dir[i].f, strlen(dir[i].f));
-				do {
-					if (buf) mem_free(buf);
-					size += ALLOC_GR;
-					buf = mem_alloc(size);
-					if (!buf) break;
-					rl = readlink(n, buf, size);
-				} while (rl == size);
-
-				mem_free(n);
-				if (buf) {
-					if (rl != -1) {
-						buf[rl] = '\0';
-
-						lnk = buf;
-					} else {
-						mem_free(buf);
-					}
-				}
-			}
-#endif
-			/* add_to_str(&fragment, &fragmentlen, "   "); */
-			add_htmlesc_str(&fragment, &fragmentlen,
-					dir[i].s, strlen(dir[i].s));
-			add_to_str(&fragment, &fragmentlen, "<a href=\"");
-			add_htmlesc_str(&fragment, &fragmentlen,
-					dir[i].f, strlen(dir[i].f));
-			if (dir[i].s[0] == 'd') {
-				add_chr_to_str(&fragment, &fragmentlen, '/');
-			} else if (lnk) {
-				struct stat st;
-				unsigned char *n = init_str();
-				int nl = 0;
-
-				if (n) {
-					add_to_str(&n, &nl, filename);
-					add_htmlesc_str(&n, &nl,
-							dir[i].f, strlen(dir[i].f));
-					if (!stat(n, &st) && S_ISDIR(st.st_mode))
-						add_chr_to_str(&fragment, &fragmentlen, '/');
-					mem_free(n);
-				}
-			}
-			add_to_str(&fragment, &fragmentlen, "\">");
-
-			if (dir[i].s[0] == 'd' && colorize_dir) {
-				/* The <b> is here for the case when we've
-				 * use_document_colors off. */
-				add_to_str(&fragment, &fragmentlen, "<font color=\"");
-				add_to_str(&fragment, &fragmentlen, dircolor);
-				add_to_str(&fragment, &fragmentlen, "\"><b>");
-			}
-
-			add_htmlesc_str(&fragment, &fragmentlen,
-					dir[i].f, strlen(dir[i].f));
-
-			if (dir[i].s[0] == 'd' && colorize_dir) {
-				add_to_str(&fragment, &fragmentlen, "</b></font>");
-			}
-
-			add_to_str(&fragment, &fragmentlen, "</a>");
-			if (lnk) {
-				add_to_str(&fragment, &fragmentlen, " -> ");
-				add_htmlesc_str(&fragment, &fragmentlen, lnk, strlen(lnk));
-				mem_free(lnk);
-			}
-
-			add_chr_to_str(&fragment, &fragmentlen, '\n');
-		}
-
 		mem_free(filename);
-		for (i = 0; i < dirl; i++) {
-			if (dir[i].s) mem_free(dir[i].s);
-		       	if (dir[i].f) mem_free(dir[i].f);
+
+		if (state != S_OK) {
+			mem_free(info);
+			abort_conn_with_state(c, state);
+			return;
 		}
-		mem_free(dir);
 
-		add_to_str(&fragment, &fragmentlen, "</pre>\n<hr>\n</body>\n</html>\n");
-		head = stracpy("\r\nContent-Type: text/html\r\n");
-
+		fragment = info->fragment;
+		fragmentlen = info->fragmentlen;
+		head = info->head;
+		mem_free(info);
 	} else {
 		struct stream_encoded *stream;
 		int readlen;

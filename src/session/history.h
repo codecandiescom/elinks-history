@@ -1,4 +1,4 @@
-/* $Id: history.h,v 1.17 2003/10/24 20:57:05 pasky Exp $ */
+/* $Id: history.h,v 1.18 2003/10/24 21:00:59 pasky Exp $ */
 
 #ifndef EL__SCHED_HISTORY_H
 #define EL__SCHED_HISTORY_H
@@ -46,6 +46,14 @@ del_from_history(struct ses_history *history, struct location *loc)
 }
 
 
+/* Note that this function is dangerous, and its results are sort of
+ * unpredictable. If the document is cached and is permitted to be fetched from
+ * the cache, the effect of this function is immediate and you end up with the
+ * new location being cur_loc(). BUT if the cache entry cannot be used, the
+ * effect is delayed to the next main loop iteration, as the TASK_HISTORY
+ * session task (ses_history_move()) is executed not now but in the bottom-half
+ * handler. So, you MUST NOT depend on cur_loc() having an arbitrary value
+ * after call to this function (or the regents go_(un)back(), of course). */
 void go_history(struct session *ses, struct location *loc);
 
 static inline void

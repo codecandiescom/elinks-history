@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.46 2004/05/25 06:46:11 jonas Exp $ */
+/* $Id: view.h,v 1.47 2004/05/25 06:54:39 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -36,7 +36,6 @@ void save_as(struct session *ses, struct document_view *doc_view, int magic);
 /* Various event emitters and link menu handlers. */
 
 void send_event(struct session *, struct term_event *);
-void send_enter(struct terminal *term, void *xxx, struct session *ses);
 
 void save_formatted_dlg(struct session *ses, struct document_view *doc_view, int a);
 void view_image(struct session *ses, struct document_view *doc_view, int a);

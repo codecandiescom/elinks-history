@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.223 2004/05/23 17:13:34 jonas Exp $ */
+/* $Id: search.c,v 1.224 2004/05/25 06:54:39 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1090,7 +1090,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			break;
 
  		case ACT_EDIT_ENTER:
-			send_enter(ses->tab->term, NULL, ses);
+			goto_current_link(ses, doc_view, 0);
 			return TYPEAHEAD_ESCAPE;
 
 		default:
@@ -1122,7 +1122,7 @@ text_typeahead_handler(struct input_line *line, int action)
 
 	switch (action) {
 		case ACT_EDIT_ENTER:
-			send_enter(ses->tab->term, NULL, ses);
+			goto_current_link(ses, doc_view, 0);
 			return INPUT_LINE_CANCEL;
 
 		case ACT_EDIT_PREVIOUS_ITEM:

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.417 2004/05/25 06:46:11 jonas Exp $ */
+/* $Id: view.c,v 1.418 2004/05/25 06:54:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -995,16 +995,6 @@ quit:
 x:
 	/* ses may disappear ie. in close_tab() */
 	if (ses) ses->kbdprefix.rep = 0;
-}
-
-void
-send_enter(struct terminal *term, void *xxx, struct session *ses)
-{
-	struct term_event ev = INIT_TERM_EVENT(EV_KBD, KBD_ENTER, 0, 0);
-
-	assert(ses);
-	if_assert_failed return;
-	send_event(ses, &ev);
 }
 
 void

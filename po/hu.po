@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-11 19:11+0200\n"
+"POT-Creation-Date: 2004-09-21 23:13+0200\n"
 "PO-Revision-Date: 2004-06-14 11:59+0200\n"
 "Last-Translator: Balazs Varga\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -52,15 +52,15 @@ msgstr "A mappa kinyitásához nyomd meg a Space billentyût."
 #: src/protocol/auth/dialogs.c:92 src/protocol/protocol.c:219
 #: src/protocol/user.c:206 src/sched/download.c:231 src/sched/download.c:327
 #: src/sched/download.c:367 src/sched/download.c:506 src/sched/download.c:600
-#: src/sched/error.c:42 src/sched/session.c:240 src/sched/session.c:644
-#: src/sched/session.c:668 src/sched/session.c:685
+#: src/sched/error.c:42 src/sched/session.c:241 src/sched/session.c:645
+#: src/sched/session.c:669 src/sched/session.c:686
 #: src/scripting/lua/core.c:400 src/scripting/lua/core.c:482
 #: src/scripting/lua/core.c:598 src/scripting/lua/core.c:722
-#: src/viewer/text/draw.c:66 src/viewer/text/form.c:840
+#: src/viewer/text/draw.c:66 src/viewer/text/form.c:841
 #: src/viewer/text/search.c:949 src/viewer/text/search.c:1010
 #: src/viewer/text/search.c:1398 src/viewer/text/search.c:1511
 #: src/viewer/text/textarea.c:363 src/viewer/text/textarea.c:372
-#: src/viewer/text/view.c:579 src/viewer/text/view.c:1178
+#: src/viewer/text/view.c:580 src/viewer/text/view.c:1187
 msgid "OK"
 msgstr "OK"
 
@@ -99,14 +99,14 @@ msgstr "A kijelölt bejegyzések törlése?"
 #: src/bfu/hierbox.c:739 src/bfu/hierbox.c:775 src/bfu/hierbox.c:796
 #: src/bfu/hierbox.c:867 src/config/dialogs.c:819 src/dialogs/menu.c:125
 #: src/formhist/formhist.c:454 src/mime/dialogs.c:75 src/sched/task.c:184
-#: src/terminal/tab.c:194 src/terminal/tab.c:230
+#: src/terminal/tab.c:196 src/terminal/tab.c:232
 msgid "Yes"
 msgstr "Igen"
 
 #: src/bfu/hierbox.c:740 src/bfu/hierbox.c:776 src/bfu/hierbox.c:797
 #: src/bfu/hierbox.c:868 src/config/dialogs.c:820 src/dialogs/menu.c:126
 #: src/formhist/formhist.c:455 src/mime/dialogs.c:76 src/sched/task.c:185
-#: src/terminal/tab.c:195 src/terminal/tab.c:231
+#: src/terminal/tab.c:197 src/terminal/tab.c:233
 msgid "No"
 msgstr "Nem"
 
@@ -174,7 +174,7 @@ msgstr "Név"
 #: src/sched/download.c:1013 src/sched/download.c:1033
 #: src/sched/download.c:1045 src/scripting/lua/core.c:401
 #: src/scripting/lua/core.c:483 src/scripting/lua/core.c:722
-#: src/viewer/text/search.c:1512 src/viewer/text/view.c:579
+#: src/viewer/text/search.c:1512 src/viewer/text/view.c:580
 msgid "Cancel"
 msgstr "Mégsem"
 
@@ -208,7 +208,7 @@ msgid "Digital clock in the status bar."
 msgstr "Digitális óra a státuszsorban."
 
 #: src/bfu/leds.c:79 src/bfu/leds.c:85 src/bfu/leds.c:105
-#: src/config/options.inc:1252 src/config/options.inc:1259
+#: src/config/options.inc:1300 src/config/options.inc:1307
 #: src/globhist/globhist.c:65 src/mime/backend/mailcap.c:94
 #: src/mime/backend/mimetypes.c:52 src/ssl/ssl.c:81
 msgid "Enable"
@@ -266,7 +266,7 @@ msgstr ""
 msgid "LED indicators"
 msgstr "LED állapotjelzõk"
 
-#: src/bfu/menu.c:746
+#: src/bfu/menu.c:736
 msgid "Search menu/"
 msgstr "Keresés menü"
 
@@ -345,7 +345,7 @@ msgstr ""
 "1 - XBEL univerzális XML könyvjelzõ formátum (nemzetközi karaktereket nem "
 "támogat!) (LETILTVA)"
 
-#: src/bookmarks/dialogs.c:81 src/config/options.inc:1121
+#: src/bookmarks/dialogs.c:81 src/config/options.inc:1169
 #: src/dialogs/document.c:81 src/globhist/dialogs.c:72
 msgid "Title"
 msgstr "Cím"
@@ -503,7 +503,7 @@ msgstr "Proxy URL"
 msgid "Redirect"
 msgstr "Átirányítás"
 
-#: src/cache/dialogs.c:90 src/config/options.inc:406 src/dialogs/document.c:92
+#: src/cache/dialogs.c:90 src/config/options.inc:454 src/dialogs/document.c:92
 msgid "Size"
 msgstr "Méret"
 
@@ -543,7 +543,7 @@ msgstr "érvénytelen"
 msgid "ID"
 msgstr "Azonosító"
 
-#: src/cache/dialogs.c:130 src/config/options.inc:533
+#: src/cache/dialogs.c:130 src/config/options.inc:581
 msgid "Header"
 msgstr "Fejléc"
 
@@ -742,7 +742,8 @@ msgstr "Az ismeretlen dokumentumok alapértelmezett MIME típusa."
 
 #: src/config/cmdline.c:639
 msgid "Ignore user-defined keybindings"
-msgstr "A felhasználó által definiált billentyûkombinációk figyelmen kívül hagyása"
+msgstr ""
+"A felhasználó által definiált billentyûkombinációk figyelmen kívül hagyása"
 
 #: src/config/cmdline.c:641
 msgid ""
@@ -895,7 +896,8 @@ msgid ""
 "Note that this really affects only -dump, nothing else."
 msgstr ""
 "Ne számozza a linkeket (és csináljon link listát az oldal végére)\n"
-"a -dump opcióval kiírt fájlban. Megjegyzés: Ez az opció csak a -dump által\n mentett fájlokra vonatkozik."
+"a -dump opcióval kiírt fájlban. Megjegyzés: Ez az opció csak a -dump által\n"
+" mentett fájlokra vonatkozik."
 
 #: src/config/cmdline.c:715
 msgid "Control an already running ELinks"
@@ -931,7 +933,8 @@ msgstr ""
 
 #: src/config/cmdline.c:731
 msgid "Connect to session ring with given ID"
-msgstr "Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
+msgstr ""
+"Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
 
 #: src/config/cmdline.c:733
 msgid ""
@@ -1145,7 +1148,7 @@ msgid "Description"
 msgstr "Leírás"
 
 #: src/config/dialogs.c:336 src/protocol/protocol.c:213
-#: src/sched/session.c:237 src/viewer/text/textarea.c:360
+#: src/sched/session.c:238 src/viewer/text/textarea.c:360
 #: src/viewer/text/textarea.c:369
 msgid "Error"
 msgstr "Hiba"
@@ -1179,7 +1182,7 @@ msgid "Keystroke"
 msgstr "Billentyûkombináció"
 
 #: src/config/dialogs.c:688 src/config/dialogs.c:885
-#: src/config/options.inc:1271
+#: src/config/options.inc:1319
 msgid "Action"
 msgstr "Esemény"
 
@@ -1350,7 +1353,8 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:456
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr ""
+"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:457
 msgid "Go to the homepage"
@@ -1612,7 +1616,7 @@ msgstr "Ûrlap elküldése"
 msgid "Submit form and reload"
 msgstr "Ûrlap elküldése, és az oldal újratöltése"
 
-#: src/config/kbdbind.c:526 src/terminal/tab.c:191 src/terminal/tab.c:227
+#: src/config/kbdbind.c:526 src/terminal/tab.c:193 src/terminal/tab.c:229
 msgid "Close tab"
 msgstr "Böngészõfül bezárása"
 
@@ -1952,46 +1956,91 @@ msgstr "Idötúllépés adatfogadás közben"
 msgid "Receive timeout (in seconds)."
 msgstr "Idötúllépési érték vételkor (másodpercben)"
 
-#: src/config/options.inc:97
+#: src/config/options.inc:98 src/config/options.inc:108
+msgid "Try IPv4 when connecting"
+msgstr ""
+
+#: src/config/options.inc:100
+msgid ""
+"Whether to try to connect to a host over IPv4.\n"
+"Note that if connection.try_ipv6 is enabled too,\n"
+"it takes precedence. And better do not touch this\n"
+"at all unless you are sure what are you doing.\n"
+"Note that you can also force a given protocol\n"
+"to be used on a per-connection basis by using an URL\n"
+"in the style of i.e. http4://elinks.or.cz/."
+msgstr ""
+
+#: src/config/options.inc:110
+msgid ""
+"Whether to try to connect to a host over IPv4.\n"
+"Do not touch this option.\n"
+"Note that you can also force a given protocol\n"
+"to be used on a per-connection basis by using an URL\n"
+"in the style of i.e. http4://elinks.or.cz/."
+msgstr ""
+
+#: src/config/options.inc:118 src/config/options.inc:125
+msgid "Try IPv6 when connecting"
+msgstr ""
+
+#: src/config/options.inc:120
+msgid ""
+"Whether to try to connect to a host over IPv6.\n"
+"Note that you can also force a given protocol\n"
+"to be used on a per-connection basis by using an URL\n"
+"in the style of i.e. http6://elinks.or.cz/."
+msgstr ""
+
+#: src/config/options.inc:127
+msgid ""
+"Whether to try to connect to a host over IPv6 (DISABLED).\n"
+"Note that you could have also forced a given protocol\n"
+"to be used on a per-connection basis by using an URL\n"
+"in the style of i.e. http6://elinks.or.cz/."
+msgstr ""
+
+#: src/config/options.inc:133
 msgid "Timeout for non-restartable connections"
 msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
-#: src/config/options.inc:99
+#: src/config/options.inc:135
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr ""
+"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
-#: src/config/options.inc:105
+#: src/config/options.inc:141
 msgid "Document"
 msgstr "Dokumentum"
 
-#: src/config/options.inc:107
+#: src/config/options.inc:143
 msgid "Document options."
 msgstr "Dokumentum beállítások."
 
-#: src/config/options.inc:109
+#: src/config/options.inc:145
 msgid "Browsing"
 msgstr "Böngészés"
 
-#: src/config/options.inc:111
+#: src/config/options.inc:147
 msgid "Document browsing options (mainly interactivity)."
 msgstr "Dokumentum böngészési beállítások (fõként interaktivitás)."
 
-#: src/config/options.inc:114
+#: src/config/options.inc:150
 msgid "Accesskeys"
 msgstr "\"Accesskey\" attribútum kezelése"
 
-#: src/config/options.inc:116
+#: src/config/options.inc:152
 msgid ""
 "Options for handling of the accesskey attribute of the active\n"
 "HTML elements."
 msgstr "Az aktív HTML elemek \"accesskey\" attribútumának kezelése."
 
-#: src/config/options.inc:119
+#: src/config/options.inc:155
 msgid "Automatic links following"
 msgstr "Automatikus link követés"
 
-#: src/config/options.inc:121
+#: src/config/options.inc:157
 msgid ""
 "Automatically follow a link or submit a form if appropriate\n"
 "accesskey is pressed - this is the standard behaviour, but it's\n"
@@ -2001,11 +2050,11 @@ msgstr ""
 "tartozó accesskey lett lenyomva. Ez az alapértelmezett üzemmód, \n"
 "de veszélyes lehet."
 
-#: src/config/options.inc:125
+#: src/config/options.inc:161
 msgid "Accesskey priority"
 msgstr "\"Accesskey\" prioritás"
 
-#: src/config/options.inc:127
+#: src/config/options.inc:163
 msgid ""
 "Priority of 'accesskey' HTML attribute:\n"
 "0 is first try all normal bindings; if it fails, check accesskey\n"
@@ -2018,45 +2067,45 @@ msgstr ""
 "1 - csak a keret billentyûhozzárendelései, aztán az accesskey\n"
 "2 - az accesskey az elsõdleges (veszélyes lehet)"
 
-#: src/config/options.inc:133
+#: src/config/options.inc:169
 msgid "Forms"
 msgstr "Ürlapok"
 
-#: src/config/options.inc:135
+#: src/config/options.inc:171
 msgid "Options for handling of the forms interaction."
 msgstr "Az ûrlapok kezelésével kapcsolatos beállítások."
 
-#: src/config/options.inc:137
+#: src/config/options.inc:173
 msgid "Submit form automatically"
 msgstr "Az ûrlap automatikus elküldése"
 
-#: src/config/options.inc:139
+#: src/config/options.inc:175
 msgid ""
 "Automagically submit a form when enter is pressed with a text\n"
 "field selected."
 msgstr "Az ûrlap automatikus elküldése ha szövegmezõn entert nyomunk."
 
-#: src/config/options.inc:142
+#: src/config/options.inc:178
 msgid "Confirm submission"
 msgstr "A küldés megerõsítése"
 
-#: src/config/options.inc:144
+#: src/config/options.inc:180
 msgid "Ask for confirmation when submitting a form."
 msgstr "Ûrlap elküldése elõtt kérjen megerõsítést."
 
-#: src/config/options.inc:146
+#: src/config/options.inc:182
 msgid "Default form input size"
 msgstr ""
 
-#: src/config/options.inc:148
+#: src/config/options.inc:184
 msgid "Default form input size if none is specified."
 msgstr ""
 
-#: src/config/options.inc:150
+#: src/config/options.inc:186
 msgid "Insert mode"
 msgstr "Beszúrás üzemmód"
 
-#: src/config/options.inc:152
+#: src/config/options.inc:188
 msgid ""
 "The setting for this option affects how key presses are handled\n"
 "when one selects a text-input form-field. When enabled, one must\n"
@@ -2073,19 +2122,19 @@ msgstr ""
 "amiket például az oldal lapozására szeretnénk használni.\n"
 "Ha le van tiltva, akkor minden bevitel a szövegmezõbe kerül."
 
-#: src/config/options.inc:160
+#: src/config/options.inc:196
 msgid "Images"
 msgstr "Képek"
 
-#: src/config/options.inc:162
+#: src/config/options.inc:198
 msgid "Options for handling of images."
 msgstr "Képkezelési beállítások."
 
-#: src/config/options.inc:164
+#: src/config/options.inc:200
 msgid "Display style for image links"
 msgstr "A képek linkjeinek megjelenítési stílusa"
 
-#: src/config/options.inc:166
+#: src/config/options.inc:202
 msgid ""
 "Display [target filename] instead of [IMG] as visible image tags:\n"
 "-1    means always display just [IMG]\n"
@@ -2099,11 +2148,11 @@ msgstr ""
 "1-500 jelenjen meg a cél fájlnév ennyi karakter hosszúságban;\n"
 "       hogyha ennél hosszabb, akkor a közepébe csillag kerül"
 
-#: src/config/options.inc:172
+#: src/config/options.inc:208
 msgid "Image links tagging"
 msgstr "A képek linkjeinek jelölése"
 
-#: src/config/options.inc:174
+#: src/config/options.inc:210
 msgid ""
 "When to enclose image links:\n"
 "0 means never\n"
@@ -2115,27 +2164,27 @@ msgstr ""
 "1 - soha, ha alt vagy title tag van megadva hozzá\n"
 "2 - mindig"
 
-#: src/config/options.inc:179
+#: src/config/options.inc:215
 msgid "Image link prefix"
 msgstr "A képek linkjeinek felirata (elõtag)"
 
-#: src/config/options.inc:181
+#: src/config/options.inc:217
 msgid "Prefix string to use to mark image links."
 msgstr "Szöveg ami a képek linkjeinek megjelölésére szolgál."
 
-#: src/config/options.inc:183
+#: src/config/options.inc:219
 msgid "Image link suffix"
 msgstr "A képek linkjeinek felirata (utótag)"
 
-#: src/config/options.inc:185
+#: src/config/options.inc:221
 msgid "Suffix string to use to mark image links."
 msgstr "Szöveg ami a képek linkjeinek megjelölésére szolgál."
 
-#: src/config/options.inc:187
+#: src/config/options.inc:223
 msgid "Display links to images w/o alt"
 msgstr "Az alt tag nélküli képekre mutató linkek megjelenítése"
 
-#: src/config/options.inc:189
+#: src/config/options.inc:225
 msgid ""
 "Display links to images without an alt attribute. If this option\n"
 "is off, these images are completely invisible."
@@ -2143,11 +2192,11 @@ msgstr ""
 "Az alt tag nélküli képekre mutató linkek megjelenítése. Ha ez\n"
 "a beállítás ki van kapcsolva, ezek a képek teljesen láthatatlanok."
 
-#: src/config/options.inc:192
+#: src/config/options.inc:228
 msgid "Display links to images"
 msgstr "A képekre mutató linkek megjelenítése"
 
-#: src/config/options.inc:194
+#: src/config/options.inc:230
 msgid ""
 "Display links to any images in the document, regardless of them\n"
 "having an alt attribute or not. If this option is off, the alt\n"
@@ -2159,37 +2208,37 @@ msgstr ""
 "az alt tag tartalma jelenik meg, de csak normál szövegként,\n"
 "és nem kiválasztható linkként."
 
-#: src/config/options.inc:200
+#: src/config/options.inc:236
 msgid "Links"
 msgstr "Linkek"
 
-#: src/config/options.inc:202
+#: src/config/options.inc:238
 msgid "Options for handling of links to other documents."
 msgstr "Más dokumentumokra mutató linkek kezelése."
 
-#: src/config/options.inc:204
+#: src/config/options.inc:240
 msgid "Active link"
 msgstr "Aktív linkek"
 
-#: src/config/options.inc:206
+#: src/config/options.inc:242
 msgid "Options for the active link."
 msgstr "Az aktív linkek beállításai."
 
-#: src/config/options.inc:208
+#: src/config/options.inc:244
 msgid "Colors"
 msgstr "Színek"
 
-#: src/config/options.inc:210
+#: src/config/options.inc:246
 msgid "Active link colors."
 msgstr "Aktív link színei."
 
-#: src/config/options.inc:212 src/config/options.inc:436
-#: src/config/options.inc:1015
+#: src/config/options.inc:248 src/config/options.inc:484
+#: src/config/options.inc:1063
 msgid "Background color"
 msgstr "Háttérszín"
 
-#: src/config/options.inc:214 src/config/options.inc:438
-#: src/config/options.inc:1016
+#: src/config/options.inc:250 src/config/options.inc:486
+#: src/config/options.inc:1064
 msgid "Default background color."
 msgstr "Alapértelmezett háttérszín."
 
@@ -2201,79 +2250,81 @@ msgstr "Alapértelmezett háttérszín."
 #. *	on it.
 #. The colors and mono tree should be similar but with different default
 #. * values of course so always use the macros below.
-#: src/config/options.inc:216 src/config/options.inc:432
-#: src/config/options.inc:1013
+#: src/config/options.inc:252 src/config/options.inc:480
+#: src/config/options.inc:1061
 msgid "Text color"
 msgstr "Szövegszín"
 
-#: src/config/options.inc:218 src/config/options.inc:434
-#: src/config/options.inc:1014
+#: src/config/options.inc:254 src/config/options.inc:482
+#: src/config/options.inc:1062
 msgid "Default text color."
 msgstr "Alapértelmezett szövegszín."
 
-#: src/config/options.inc:220
+#: src/config/options.inc:256
 msgid "Enable color"
 msgstr "Színek engedélyezése"
 
-#: src/config/options.inc:222
+#: src/config/options.inc:258
 msgid ""
 "Enable use of the active link background and text color\n"
 "settings instead of the link colors from the document."
 msgstr ""
 
-#: src/config/options.inc:225
+#: src/config/options.inc:261
 msgid "Bold"
 msgstr "Félkövér"
 
-#: src/config/options.inc:227
+#: src/config/options.inc:263
 msgid "Make the active link text bold."
 msgstr "Az aktív link legyen félkövér."
 
-#: src/config/options.inc:229
+#: src/config/options.inc:265
 msgid "Invert colors"
 msgstr "Színek invertálása"
 
-#: src/config/options.inc:231
+#: src/config/options.inc:267
 msgid "Invert the fore- and background color so the link stands out."
-msgstr "Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
+msgstr ""
+"Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
 
-#: src/config/options.inc:234 src/dialogs/options.c:173
+#: src/config/options.inc:270 src/dialogs/options.c:173
 msgid "Underline"
 msgstr "Aláhúzás"
 
-#: src/config/options.inc:236
+#: src/config/options.inc:272
 msgid "Underline the active link."
 msgstr "Az aktív link aláhúzása."
 
-#: src/config/options.inc:239
+#: src/config/options.inc:275
 msgid "Directory highlighting"
 msgstr "Alkönyvtárak kiemelése"
 
-#: src/config/options.inc:241
+#: src/config/options.inc:277
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr "Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
+msgstr ""
+"Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
 
-#: src/config/options.inc:243
+#: src/config/options.inc:279
 msgid "Number links"
 msgstr "Linkek száma"
 
-#: src/config/options.inc:245
+#: src/config/options.inc:281
 msgid "Display numbers next to the links."
 msgstr "Számok megjelenításe a linek mellett."
 
-#: src/config/options.inc:254
+#: src/config/options.inc:290
 msgid "Use tabindex"
 msgstr "A \"tabindex\" attribútum használata"
 
-#: src/config/options.inc:256
+#: src/config/options.inc:292
 msgid "Whether to navigate links using tabindex."
 msgstr "A linkek közötti mozgás a \"tabindex\" attribútum figyelembevételével."
 
-#: src/config/options.inc:258
+#: src/config/options.inc:294
 msgid "Number keys select links"
 msgstr "A számbillentyûk kiválasztják a linkeket"
 
-#: src/config/options.inc:260
+#: src/config/options.inc:296
 msgid ""
 "Number keys select links rather than specify command prefixes. This\n"
 "is a tristate:\n"
@@ -2289,30 +2340,31 @@ msgstr ""
 
 #. TODO - this is somehow implemented by ff, but disabled
 #. * for now as it doesn't work.
-#: src/config/options.inc:268
+#: src/config/options.inc:304
 msgid "Wrap-around links cycling"
 msgstr "Linkek kiválasztása"
 
 #. 0
-#: src/config/options.inc:270
+#: src/config/options.inc:306
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
-msgstr "Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
+msgstr ""
+"Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
 
-#: src/config/options.inc:274
+#: src/config/options.inc:310
 msgid "Scrolling"
 msgstr "Görgetés"
 
-#: src/config/options.inc:276
+#: src/config/options.inc:312
 msgid "Scrolling options."
 msgstr "Görgetési beállítások."
 
-#: src/config/options.inc:278
+#: src/config/options.inc:314
 msgid "Horizontal step"
 msgstr "Vízszintes lépés"
 
-#: src/config/options.inc:280
+#: src/config/options.inc:316
 msgid ""
 "Number of columns to scroll when a key bound to scroll-left or scroll-\n"
 "right is pressed and no prefix was given."
@@ -2320,21 +2372,21 @@ msgstr ""
 "Ennyi sort görget balra vagy jobbra ha egy görgetésre szolgáló\n"
 "billentyûkombinációt prefix nélkül használunk."
 
-#: src/config/options.inc:283
+#: src/config/options.inc:319
 msgid "Margin"
 msgstr "Margó"
 
-#: src/config/options.inc:285
+#: src/config/options.inc:321
 msgid ""
 "Size of the virtual margin - when you click inside of that margin,\n"
 "document scrolls in that direction."
 msgstr "A margó mérete, amire kattintva lapozni lehet a megfelelõ irányba."
 
-#: src/config/options.inc:288
+#: src/config/options.inc:324
 msgid "Vertical step"
 msgstr "Függõleges lépésköz"
 
-#: src/config/options.inc:290
+#: src/config/options.inc:326
 msgid ""
 "Number of lines to scroll when a key bound to scroll-up or scroll-\n"
 "down is pressed and no prefix was given."
@@ -2342,29 +2394,30 @@ msgstr ""
 "Ennyi sort görget felfelé vagy lefelé ha egy görgetésre szolgáló\n"
 "billentyûkombinációt prefix nélkül használunk."
 
-#: src/config/options.inc:294
+#: src/config/options.inc:330
 msgid "Searching"
 msgstr "Keresés"
 
-#: src/config/options.inc:296
+#: src/config/options.inc:332
 msgid "Options for searching."
 msgstr "Keresési beállítások."
 
-#: src/config/options.inc:298
+#: src/config/options.inc:334
 msgid "Case sensitivity"
 msgstr "Kis/nagybetû érzékenység"
 
-#: src/config/options.inc:300
+#: src/config/options.inc:336
 msgid ""
 "Whether the search should match the document text while maintaining\n"
 "case sensitivity."
-msgstr "A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
+msgstr ""
+"A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
 
-#: src/config/options.inc:304 src/config/options.inc:311
+#: src/config/options.inc:340 src/config/options.inc:347
 msgid "Regular expressions"
 msgstr "Reguláris kifejezés"
 
-#: src/config/options.inc:306
+#: src/config/options.inc:342
 msgid ""
 "Enable searching with regular expressions.\n"
 "0 for plain text searching.\n"
@@ -2376,7 +2429,7 @@ msgstr ""
 "1 - egyszerû reguláris kifejezések.\n"
 "2 - kiterjesztett reguláris kifejezések."
 
-#: src/config/options.inc:313
+#: src/config/options.inc:349
 msgid ""
 "Enable searching with regular expressions.\n"
 "0 for plain text searching.\n"
@@ -2388,11 +2441,11 @@ msgstr ""
 "1 - egyszerû reguláris kifejezések. (LETILTVA)\n"
 "2 - kiterjesztett reguláris kifejezések. (LETILTVA)"
 
-#: src/config/options.inc:319
+#: src/config/options.inc:355
 msgid "Show search hit top or bottom dialogs"
 msgstr "A keresés dialógusablakai"
 
-#: src/config/options.inc:321
+#: src/config/options.inc:357
 msgid ""
 "Whether to show a dialog when the search hits top or bottom of the\n"
 "document."
@@ -2400,19 +2453,19 @@ msgstr ""
 "Mutasson-e dialógusablakot ha a keresés elérte a dokumentum alját\n"
 "vagy tetejét."
 
-#: src/config/options.inc:324
+#: src/config/options.inc:360
 msgid "Wraparound"
 msgstr ""
 
-#: src/config/options.inc:326
+#: src/config/options.inc:362
 msgid "Wrap around when searching. Currently only used for typeahead."
 msgstr ""
 
-#: src/config/options.inc:328
+#: src/config/options.inc:364
 msgid "Show not found"
 msgstr "Ha nincs találat"
 
-#: src/config/options.inc:330
+#: src/config/options.inc:366
 msgid ""
 "How to handle errors when nothing is matched.\n"
 "Currently only used for typeahead:\n"
@@ -2426,19 +2479,19 @@ msgstr ""
 "1 - a terminál adjon hangjelzést\n"
 "2 - ugorjon be egy üzenetablak"
 
-#: src/config/options.inc:337
+#: src/config/options.inc:373
 msgid "Horizontal text margin"
 msgstr "Vízszintes margó"
 
-#: src/config/options.inc:339
+#: src/config/options.inc:375
 msgid "Horizontal text margin."
 msgstr "Vízszintes margó."
 
-#: src/config/options.inc:341
+#: src/config/options.inc:377
 msgid "Document meta refresh"
 msgstr "Meta refresh tag-ek kezelése"
 
-#: src/config/options.inc:343
+#: src/config/options.inc:379
 msgid ""
 "Automatically follow document-specified refresh directives ('<meta>\n"
 "refresh' tags). Web-page authors use these to instruct the browser\n"
@@ -2455,11 +2508,11 @@ msgstr ""
 "Használd a document.browse.minimum_refresh_time opciót a\n"
 "frissítés minimális idejének megadásához (másodperc)."
 
-#: src/config/options.inc:350
+#: src/config/options.inc:386
 msgid "Document meta refresh minimum time"
 msgstr "Az oldalak automatikus frissítési idejének minimuma"
 
-#: src/config/options.inc:352
+#: src/config/options.inc:388
 msgid ""
 "The minimum number of milliseconds that should pass before\n"
 "refreshing. If set to zero the document refresh time is used\n"
@@ -2470,28 +2523,28 @@ msgstr ""
 "frissítéséig. A nulla érték azt jelenti, hogy az oldal által meghatárott\n"
 "érték legyen érvényes."
 
-#: src/config/options.inc:357
+#: src/config/options.inc:393
 msgid "Tables navigation order"
 msgstr "Táblázatban való navigálás sorrendje"
 
-#: src/config/options.inc:359
+#: src/config/options.inc:395
 msgid "Move by columns in table, instead of rows."
 msgstr "Mozgatás oszlopok helyett sorok szerint."
 
 #. Keep options in alphabetical order.
-#: src/config/options.inc:365
+#: src/config/options.inc:401
 msgid "Cache"
 msgstr "Gyorsítótár"
 
-#: src/config/options.inc:367
+#: src/config/options.inc:403
 msgid "Cache options."
 msgstr "Gyorsítótár beállítások."
 
-#: src/config/options.inc:369
+#: src/config/options.inc:405
 msgid "Cache information about redirects"
 msgstr "Az átirányítási információk gyorsítótárazása"
 
-#: src/config/options.inc:371
+#: src/config/options.inc:407
 msgid ""
 "Cache even redirects sent by server (usually thru HTTP by a 302\n"
 "HTTP code and a Location header). This was the original behaviour\n"
@@ -2512,11 +2565,12 @@ msgid ""
 "asking the server."
 msgstr ""
 
-#: src/config/options.inc:389
+#: src/config/options.inc:425
 msgid "Ignore cache-control info from server"
-msgstr "A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
+msgstr ""
+"A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
 
-#: src/config/options.inc:391
+#: src/config/options.inc:427
 msgid ""
 "Ignore Cache-Control and Pragma server headers.\n"
 "When set, the document is cached even with 'Cache-Control: no-cache'."
@@ -2526,47 +2580,60 @@ msgstr ""
 "Ha be van állítva, a dokumentum gyorsítótárazásra kerül, akkor is ha\n"
 "'Cache-Control: no-cache' van megadva."
 
-#: src/config/options.inc:394
+#: src/config/options.inc:430
 msgid "Formatted documents"
 msgstr "Formázott dokumentumok"
 
-#: src/config/options.inc:396
+#: src/config/options.inc:432
 msgid "Format cache options."
 msgstr "Formázó gyorsítótár beállítások."
 
-#: src/config/options.inc:398
+#: src/config/options.inc:434
 msgid "Number"
 msgstr "Szám"
 
-#: src/config/options.inc:400
-msgid "Number of cached formatted pages."
-msgstr "A gyorsítótárazott formázott dokumentumok száma."
+#: src/config/options.inc:436
+msgid ""
+"Number of cached formatted pages. Do not get too generous\n"
+"here, 'formatted' means that all the accompanying structures\n"
+"are kept in memory so that you get the cached document\n"
+"immediatelly, but these structures may take a lot - 2x the\n"
+"size of the HTML source is probably not unusual, but it can\n"
+"be even more if the document consists of a lot of short lines\n"
+"(padded right, if possible) and links and not much other markup.\n"
+"So if you set this to 256 and then you don't like your ELinks\n"
+"eating 90M, don't come complaining to us. ;-)\n"
+"Also note that the format cache itself is not counted to the\n"
+"memory cache size, but the HTML source of the formatted documents\n"
+"is always cached, even if it is over the memory cache size\n"
+"threshold. (Then of course no other documents can be cached.)"
+msgstr ""
 
-#: src/config/options.inc:402
+#: src/config/options.inc:450
 msgid "Memory cache"
 msgstr "Gyorsító memória"
 
-#: src/config/options.inc:404
+#: src/config/options.inc:452
 msgid "Memory cache options."
 msgstr "Gyorsító memória beállításai."
 
-#: src/config/options.inc:408
+#: src/config/options.inc:456
 msgid "Memory cache size (in bytes)."
 msgstr "Gyorsítómemória mérete (byte-ban)"
 
-#: src/config/options.inc:412
+#: src/config/options.inc:460
 msgid "Charset"
 msgstr "Karakterkészlet"
 
-#: src/config/options.inc:414
+#: src/config/options.inc:462
 msgid "Charset options."
 msgstr "Karakterkészlet beállítások."
 
-#: src/config/options.inc:416
+#: src/config/options.inc:464
 msgid "Default codepage"
 msgstr "Alapértelmezett kódlap"
 
-#: src/config/options.inc:418
+#: src/config/options.inc:466
 msgid ""
 "Default document codepage. 'System' stands for\n"
 "a codepage determined by a selected locale."
@@ -2574,59 +2641,59 @@ msgstr ""
 "Alapértelmezett kódlap a dokumentumok számára. A 'System'\n"
 "érték esetén az operációs rendszer nyelvi beállítása lesz mérvadó."
 
-#: src/config/options.inc:421
+#: src/config/options.inc:469
 msgid "Ignore charset info from server"
 msgstr "A szervertõl kapott karakterkészlet figyelmen kívül hagyása"
 
-#: src/config/options.inc:423
+#: src/config/options.inc:471
 msgid "Ignore charset info sent by server."
 msgstr "A szerver által küldött karakterkészlet figyelmen kívül hagyása."
 
-#: src/config/options.inc:427
+#: src/config/options.inc:475
 msgid "Default color settings"
 msgstr "Alapértelmezett színbeállítások"
 
-#: src/config/options.inc:429
+#: src/config/options.inc:477
 msgid "Default document color settings."
 msgstr "A dokumentum alapértelmezett színbeállításai."
 
-#: src/config/options.inc:440
+#: src/config/options.inc:488
 msgid "Link color"
 msgstr "A linkek színe"
 
-#: src/config/options.inc:442
+#: src/config/options.inc:490
 msgid "Default link color."
 msgstr "Alapértelmezett link szín."
 
-#: src/config/options.inc:444
+#: src/config/options.inc:492
 msgid "Visited-link color"
 msgstr "Látogatott link színe"
 
-#: src/config/options.inc:446
+#: src/config/options.inc:494
 msgid "Default visited link color."
 msgstr "Alapértelmezett látogatott link szín."
 
-#: src/config/options.inc:448
+#: src/config/options.inc:496
 msgid "Image-link color"
 msgstr "Képek linkjeinek színe"
 
-#: src/config/options.inc:450
+#: src/config/options.inc:498
 msgid "Default image link color."
 msgstr "A képeknél megjelenõ linkek alapértelmezett színe."
 
-#: src/config/options.inc:452
+#: src/config/options.inc:500
 msgid "Bookmarked-link color"
 msgstr "A köny link színe"
 
-#: src/config/options.inc:454
+#: src/config/options.inc:502
 msgid "Default bookmarked link color."
 msgstr "A könyvjelzõbe felvett linkek alapértelmezett színe."
 
-#: src/config/options.inc:456
+#: src/config/options.inc:504
 msgid "Directory color"
 msgstr "Könyvtárak színe"
 
-#: src/config/options.inc:458
+#: src/config/options.inc:506
 msgid ""
 "Default directory color.\n"
 "See document.browse.links.color_dirs option."
@@ -2634,29 +2701,29 @@ msgstr ""
 "Alapértelmezett könyvtár szín.\n"
 "Lásd a document.browse.links.color_dirs opciót."
 
-#: src/config/options.inc:461
+#: src/config/options.inc:509
 msgid "Allow dark colors on black background"
 msgstr "Fekete háttéren mutassa a sötét színeket"
 
-#: src/config/options.inc:463
+#: src/config/options.inc:511
 msgid "Allow dark colors on black background."
 msgstr "Fekete háttéren mutassa a sötét színeket."
 
-#: src/config/options.inc:465
+#: src/config/options.inc:513
 msgid "Ensure contrast"
 msgstr "A kontraszt biztosítása"
 
-#: src/config/options.inc:467
+#: src/config/options.inc:515
 msgid "Makes sure that the back- and foreground color is never equal."
 msgstr "A háttérszín és a betûszín sose legyen egyforma."
 
 #. If you change this please also change ACT_DOCUMENT_COLORS action
 #. * handling.
-#: src/config/options.inc:472
+#: src/config/options.inc:520
 msgid "Use document-specified colors"
 msgstr "A dokumentum által elõírt színek használata"
 
-#: src/config/options.inc:474
+#: src/config/options.inc:522
 msgid ""
 "Use colors specified in document:\n"
 "0 is use always the default settings\n"
@@ -2680,27 +2747,27 @@ msgstr ""
 "    az áttetszõség beállítás hatástalan lesz."
 
 #. Keep options in alphabetical order.
-#: src/config/options.inc:491
+#: src/config/options.inc:539
 msgid "Downloading"
 msgstr "Letöltés"
 
-#: src/config/options.inc:493
+#: src/config/options.inc:541
 msgid "Options regarding files downloading and handling."
 msgstr "A fáljok letöltésével és kezelésével kapcsolatos beállítások."
 
-#: src/config/options.inc:499
+#: src/config/options.inc:547
 msgid "Default download directory"
 msgstr "Alapértelmezett letöltési könyvtár"
 
-#: src/config/options.inc:501
+#: src/config/options.inc:549
 msgid "Default download directory."
 msgstr "Alapértelmezett letöltési könyvtár."
 
-#: src/config/options.inc:503
+#: src/config/options.inc:551
 msgid "Set original time"
 msgstr "Az eredeti idõbélyeg beállítása"
 
-#: src/config/options.inc:505
+#: src/config/options.inc:553
 msgid ""
 "Set the timestamp of each downloaded file to the timestamp\n"
 "stored on the server."
@@ -2709,11 +2776,11 @@ msgstr ""
 "letöltött fálj számára."
 
 #. Does automatic resuming make sense as an option?
-#: src/config/options.inc:509
+#: src/config/options.inc:557
 msgid "Prevent overwriting"
 msgstr "Fájl felülírás megakadályozása"
 
-#: src/config/options.inc:511
+#: src/config/options.inc:559
 msgid ""
 "Prevent overwriting the local files:\n"
 "0 is files will silently be overwritten.\n"
@@ -2725,11 +2792,11 @@ msgstr ""
 "1 - hozzáad egy szöveget a fálj végére (pl '.1').\n"
 "2 - rákérdez."
 
-#: src/config/options.inc:516
+#: src/config/options.inc:564
 msgid "Notify download completion by bell"
 msgstr "Letöltés befejezésének jelzése"
 
-#: src/config/options.inc:518
+#: src/config/options.inc:566
 msgid ""
 "Audio notification when download is completed:\n"
 "0 is never.\n"
@@ -2741,131 +2808,131 @@ msgstr ""
 "1 - ha a háttérben töltõdik.\n"
 "2 - mindig."
 
-#: src/config/options.inc:524
+#: src/config/options.inc:572
 msgid "Dump output"
 msgstr "Formázott dokumentum kiírása"
 
-#: src/config/options.inc:526
+#: src/config/options.inc:574
 msgid "Dump output options."
 msgstr "Formázott dokumentum kiírásának beállításai."
 
-#: src/config/options.inc:528 src/config/options.inc:982
+#: src/config/options.inc:576 src/config/options.inc:1030
 #: src/config/opttypes.c:365 src/dialogs/document.c:99
 msgid "Codepage"
 msgstr "Kódlap"
 
-#: src/config/options.inc:530
+#: src/config/options.inc:578
 msgid ""
 "Codepage used in dump output. 'System' stands for\n"
 "a codepage determined by a selected locale."
 msgstr ""
 
-#: src/config/options.inc:535
+#: src/config/options.inc:583
 #, c-format
 msgid "Header string used in dumps. %u is substituted by URL."
 msgstr ""
 
-#: src/config/options.inc:537
+#: src/config/options.inc:585
 msgid "Footer"
 msgstr "Lábléc"
 
-#: src/config/options.inc:539
+#: src/config/options.inc:587
 #, c-format
 msgid "Footer string used in dumps. %u is substituted by URL."
 msgstr ""
 
-#: src/config/options.inc:541
+#: src/config/options.inc:589
 msgid "Separator"
 msgstr "Elválasztó"
 
-#: src/config/options.inc:543
+#: src/config/options.inc:591
 msgid "String which separates two dumps."
 msgstr ""
 
-#: src/config/options.inc:545
+#: src/config/options.inc:593
 msgid "Width"
 msgstr "Szélesség"
 
-#: src/config/options.inc:547
+#: src/config/options.inc:595
 msgid "Width of screen in characters when dumping a HTML document."
 msgstr ""
 "A képernyõ szélessége karakterekben, amire a HTML dokumentumot\n"
 "formázni kell."
 
-#: src/config/options.inc:551
+#: src/config/options.inc:599
 msgid "History"
 msgstr "Látogatott oldalak"
 
-#: src/config/options.inc:553
+#: src/config/options.inc:601
 msgid "History options."
 msgstr "Látogatott oldalak beállításai."
 
-#: src/config/options.inc:555
+#: src/config/options.inc:603
 msgid "Keep unhistory"
 msgstr "Visszalépések megõrzése"
 
-#: src/config/options.inc:557
+#: src/config/options.inc:605
 msgid "Keep unhistory (\"forward history\")?"
 msgstr ""
 "Visszalépések megõrzése (a látogatott lapok fordított\n"
 "sorrendû listája) ?"
 
-#: src/config/options.inc:560
+#: src/config/options.inc:608
 msgid "HTML rendering"
 msgstr "HTML megjelenítés"
 
-#: src/config/options.inc:562
+#: src/config/options.inc:610
 msgid "Options concerning the display of HTML pages."
 msgstr "A HTML megjelenítésre vonatkozó beállítások."
 
-#: src/config/options.inc:564
+#: src/config/options.inc:612
 msgid "Display frames"
 msgstr "Keretek megjelenítése"
 
-#: src/config/options.inc:566
+#: src/config/options.inc:614
 msgid "Display frames."
 msgstr "Keretek megjelenítése."
 
-#: src/config/options.inc:568
+#: src/config/options.inc:616
 msgid "Display tables"
 msgstr "Táblázatok megjelenítése"
 
-#: src/config/options.inc:570
+#: src/config/options.inc:618
 msgid "Display tables."
 msgstr "Táblázatok megjelenítése."
 
 #. FIXME: obsolete, how to alias them correctly ? --jonas
-#: src/config/options.inc:573
+#: src/config/options.inc:621
 msgid "Expand table columns"
 msgstr "A táblázat oszlopainak kibontása"
 
-#: src/config/options.inc:575
+#: src/config/options.inc:623
 msgid ""
 "This option is no longer in effect. It is obsoleted by changes\n"
 "to always expand table columns."
 msgstr ""
 
-#: src/config/options.inc:578
+#: src/config/options.inc:626
 msgid "Display subscripts"
 msgstr "Alsó indexek megjelenítése"
 
-#: src/config/options.inc:580
+#: src/config/options.inc:628
 msgid "Display subscripts (as [thing])."
 msgstr "Alsó indexek megjelenítése (mint pl.: [szöveg])."
 
-#: src/config/options.inc:582
+#: src/config/options.inc:630
 msgid "Display superscripts"
 msgstr "Felsõindexek megjelenítése"
 
-#: src/config/options.inc:584
+#: src/config/options.inc:632
 msgid "Display superscripts (as ^thing)."
 msgstr "Felsõindexek megjelenítése (^ jelöléssel)."
 
-#: src/config/options.inc:586
+#: src/config/options.inc:634
 msgid "Rendering of html link element"
 msgstr "A HTML linkek megjelenítése"
 
-#: src/config/options.inc:588
+#: src/config/options.inc:636
 msgid ""
 "Html link rendering verbosity:\n"
 "0 is nothing\n"
@@ -2883,19 +2950,19 @@ msgstr ""
 "4 - ezen felül még típus is\n"
 "5 - minden"
 
-#: src/config/options.inc:596
+#: src/config/options.inc:644
 msgid "Underline links"
 msgstr "Linkek aláhúzása"
 
-#: src/config/options.inc:598
+#: src/config/options.inc:646
 msgid "Underline links."
 msgstr "Linkek aláhúzása."
 
-#: src/config/options.inc:600
+#: src/config/options.inc:648
 msgid "Wrap non breaking space"
 msgstr "Az \"nbsp\"-t tartalmazó sorok kezelése"
 
-#: src/config/options.inc:602
+#: src/config/options.inc:650
 msgid ""
 "If set do not honour non breaking space (the nbsp entity)\n"
 "but allow to wrap the text. This can help keeping the width\n"
@@ -2907,39 +2974,39 @@ msgstr ""
 "Ezáltal lecsökken a dokumentum szélessége, és kevesebb oldalirányú lapozás\n"
 "szükséges az olvasásához."
 
-#: src/config/options.inc:607
+#: src/config/options.inc:655
 msgid "Plain rendering"
 msgstr "Normál szöveg megjelenítése"
 
-#: src/config/options.inc:609
+#: src/config/options.inc:657
 msgid "Options concerning the display of plain text pages."
 msgstr "Normál szöveget tartalmazó oldalak megjelenítésének beállításai."
 
-#: src/config/options.inc:611
+#: src/config/options.inc:659
 msgid "Display URIs"
 msgstr "URI-k megjelenítése"
 
-#: src/config/options.inc:613
+#: src/config/options.inc:661
 msgid "Display URIs in the document as links."
 msgstr "Az URI-k megjelenítése a dokumentumban link-ként."
 
-#: src/config/options.inc:615
+#: src/config/options.inc:663
 msgid "Compress empty lines"
 msgstr "Az üres sorok tömörítése"
 
-#: src/config/options.inc:617
+#: src/config/options.inc:665
 msgid "Compress successive empty lines to only one in displayed text."
 msgstr "Az egymást követõ üres sorok megjelenítése egy sorként."
 
-#: src/config/options.inc:620
+#: src/config/options.inc:668
 msgid "URI passing"
 msgstr "URI átadás"
 
-#: src/config/options.inc:622
+#: src/config/options.inc:670
 msgid "Rules for passing URIs to external commands."
 msgstr "A külsõ programoknak átadott URI-kkal kapcsolatos szabályok."
 
-#: src/config/options.inc:626
+#: src/config/options.inc:674
 msgid ""
 "A rule for passing URI to an external command.\n"
 "The format is:\n"
@@ -2952,19 +3019,19 @@ msgstr ""
 "%% a szövegben '%' jelet helyettesít"
 
 #. Keep options in alphabetical order.
-#: src/config/options.inc:635
+#: src/config/options.inc:683
 msgid "Information files"
 msgstr "Információs fájlok"
 
-#: src/config/options.inc:637
+#: src/config/options.inc:685
 msgid "Options for information files in ~/.elinks."
 msgstr "A ~/.elinks információs fájljainak beállításai."
 
-#: src/config/options.inc:639
+#: src/config/options.inc:687
 msgid "Save interval"
 msgstr "Mentés idõköze"
 
-#: src/config/options.inc:641
+#: src/config/options.inc:689
 msgid ""
 "Interval at which to trigger information files in ~/.elinks\n"
 "to be saved to disk if they has changed (seconds; 0 to disable)"
@@ -2973,11 +3040,11 @@ msgstr ""
 "változtak\n"
 "(másodpercekben, 0 - letiltás)"
 
-#: src/config/options.inc:644
+#: src/config/options.inc:692
 msgid "Use secure file saving"
 msgstr "Biztonságos fájlmentés használata"
 
-#: src/config/options.inc:646
+#: src/config/options.inc:694
 msgid ""
 "First write data to unique temporary file, then rename this file\n"
 "upon successfully finishing this. Note that this relates only to\n"
@@ -2999,35 +3066,35 @@ msgstr ""
 "a funkciónak a megbízhatóságát."
 
 #. Keep options in alphabetical order.
-#: src/config/options.inc:659
+#: src/config/options.inc:707
 msgid "Protocols"
 msgstr "Protokollok"
 
-#: src/config/options.inc:661
+#: src/config/options.inc:709
 msgid "Protocol specific options."
 msgstr "Protokoll beállítások."
 
-#: src/config/options.inc:663
+#: src/config/options.inc:711
 msgid "HTTP"
 msgstr "HTTP"
 
-#: src/config/options.inc:665
+#: src/config/options.inc:713
 msgid "HTTP-specific options."
 msgstr "HTTP-vel kapcsolatos beállítások."
 
-#: src/config/options.inc:668
+#: src/config/options.inc:716
 msgid "Server bug workarounds"
 msgstr "Szerver oldali hibák kiküszöbölése"
 
-#: src/config/options.inc:670
+#: src/config/options.inc:718
 msgid "Server-side HTTP bugs workarounds."
 msgstr "Szerver oldali HTTP hibák kiküszöbölése."
 
-#: src/config/options.inc:672
+#: src/config/options.inc:720
 msgid "Do not send Accept-Charset"
 msgstr "Nincs \"Accept-Charset\" küldés"
 
-#: src/config/options.inc:674
+#: src/config/options.inc:722
 msgid ""
 "The Accept-Charset header is quite long and sending it can trigger\n"
 "bugs in some rarely found servers."
@@ -3035,19 +3102,19 @@ msgstr ""
 "Az \"Accept-Charset\" fejléc elég hosszú, és a küldése néhány\n"
 "ritkábban használt szerverben hibás mûködést eredményezhet."
 
-#: src/config/options.inc:677
+#: src/config/options.inc:725
 msgid "Allow blacklisting"
 msgstr "Feketelista endedélyezése"
 
-#: src/config/options.inc:679
+#: src/config/options.inc:727
 msgid "Allow blacklisting of buggy servers."
 msgstr "A hibásan mûködõ szerverek felvétele a feketelistára."
 
-#: src/config/options.inc:681
+#: src/config/options.inc:729
 msgid "Broken 302 redirects"
 msgstr "Hibás 302 átirányítások"
 
-#: src/config/options.inc:683
+#: src/config/options.inc:731
 msgid ""
 "Broken 302 redirect (violates RFC but compatible with Netscape).\n"
 "This is a problem for a lot of web discussion boards and the like.\n"
@@ -3057,37 +3124,37 @@ msgstr ""
 "a Netscape-el). Ha furcsa viselkedés esetén érdemes kisérletezni\n"
 "ezzel a beállítással."
 
-#: src/config/options.inc:687
+#: src/config/options.inc:735
 msgid "No keepalive after POST requests"
 msgstr "Keepalive tiltása POST request után"
 
-#: src/config/options.inc:689
+#: src/config/options.inc:737
 msgid "Disable keepalive connection after POST request."
 msgstr "Keepalive kapcsolat tiltása POST request után."
 
-#: src/config/options.inc:691
+#: src/config/options.inc:739
 msgid "Use HTTP/1.0"
 msgstr "HTTP/1.0 használata"
 
-#: src/config/options.inc:693
+#: src/config/options.inc:741
 msgid "Use HTTP/1.0 protocol instead of HTTP/1.1."
 msgstr "HTTP/1.0 használata HTTP/1.1 helyett."
 
-#: src/config/options.inc:695 src/config/options.inc:775
-#: src/config/options.inc:789
+#: src/config/options.inc:743 src/config/options.inc:823
+#: src/config/options.inc:837
 msgid "Proxy configuration"
 msgstr "Proxy beállítás"
 
-#: src/config/options.inc:697
+#: src/config/options.inc:745
 msgid "HTTP proxy configuration."
 msgstr "HTTP proxy beállítás."
 
-#: src/config/options.inc:699 src/config/options.inc:779
-#: src/config/options.inc:793
+#: src/config/options.inc:747 src/config/options.inc:827
+#: src/config/options.inc:841
 msgid "Host and port-number"
 msgstr "Host és port"
 
-#: src/config/options.inc:701
+#: src/config/options.inc:749
 msgid ""
 "Host and port-number (host:port) of the HTTP proxy, or blank.\n"
 "If it's blank, HTTP_PROXY environment variable is checked as well."
@@ -3096,27 +3163,27 @@ msgstr ""
 "Ha üres, akkor a HTTP_PROXY környezeti változó is ellenõrzésre\n"
 "kerül."
 
-#: src/config/options.inc:704
+#: src/config/options.inc:752
 msgid "Username"
 msgstr "Felhasználónév"
 
-#: src/config/options.inc:706
+#: src/config/options.inc:754
 msgid "Proxy authentication username."
 msgstr "Felhasználónév proxy autentikációhoz."
 
-#: src/config/options.inc:708 src/protocol/auth/dialogs.c:89
+#: src/config/options.inc:756 src/protocol/auth/dialogs.c:89
 msgid "Password"
 msgstr "Jelszó"
 
-#: src/config/options.inc:710
+#: src/config/options.inc:758
 msgid "Proxy authentication password."
 msgstr "Jelszó proxy autentikációhoz."
 
-#: src/config/options.inc:713
+#: src/config/options.inc:761
 msgid "Referer sending"
 msgstr "Referer küldés"
 
-#: src/config/options.inc:715
+#: src/config/options.inc:763
 msgid ""
 "HTTP referer sending options. HTTP referer is a special header\n"
 "sent in the HTTP requests, which is supposed to contain the previous\n"
@@ -3133,11 +3200,11 @@ msgstr ""
 "Sajnos ez nem túl pozitív a magánszférára, és rosszul elkészített\n"
 "oldalaknál biztonsági veszélyt is jelenthet."
 
-#: src/config/options.inc:722
+#: src/config/options.inc:770
 msgid "Policy"
 msgstr "Elõvigyázatosság"
 
-#: src/config/options.inc:725
+#: src/config/options.inc:773
 msgid ""
 "Mode of sending HTTP referer:\n"
 "0 is send no referer\n"
@@ -3151,27 +3218,27 @@ msgstr ""
 "2 - egy fixen beállított hamis referer küldése\n"
 "3 - az elõzõ URL küldése refererként (korrekt, de nem biztonságos)\n"
 
-#: src/config/options.inc:731
+#: src/config/options.inc:779
 msgid "Fake referer URL"
 msgstr "Hamis referer URL"
 
-#: src/config/options.inc:733
+#: src/config/options.inc:781
 msgid "Fake referer to be sent when policy is 2."
 msgstr "A hamis referer ami a 2-es beállításkor kerül küldésre."
 
-#: src/config/options.inc:736
+#: src/config/options.inc:784
 msgid "Send Accept-Language header"
 msgstr "Accept-Language fejléc küldése"
 
-#: src/config/options.inc:738
+#: src/config/options.inc:786
 msgid "Send Accept-Language header."
 msgstr "\"Accept-Language\" fejléc küldése."
 
-#: src/config/options.inc:740
+#: src/config/options.inc:788
 msgid "Use UI language as Accept-Language"
 msgstr "A felhasználói felület nyelvének használata Accept-Language fejlécként"
 
-#: src/config/options.inc:742
+#: src/config/options.inc:790
 msgid ""
 "Request localised versions of documents from web-servers (using the\n"
 "Accept-Language header) using the language you have configured for\n"
@@ -3184,11 +3251,11 @@ msgstr ""
 "Ez egy potenciális biztonsági hiba, mert a webmasterek tudomást szereznek\n"
 "a nyelvi beállításaidról."
 
-#: src/config/options.inc:747
+#: src/config/options.inc:795
 msgid "Activate HTTP TRACE debugging"
 msgstr "A HTTP TRACE hibakeresés bekapcsolása"
 
-#: src/config/options.inc:749
+#: src/config/options.inc:797
 msgid ""
 "If active, all HTTP requests are sent with TRACE as their method\n"
 "rather than GET or POST. This is useful for debugging of both ELinks\n"
@@ -3203,11 +3270,11 @@ msgstr ""
 "szerveren van engedélyezve ez a funkció."
 
 #. OSNews.com is supposed to be relying on the textmode token, at least.
-#: src/config/options.inc:756
+#: src/config/options.inc:804
 msgid "User-agent identification"
 msgstr "User Agent beállítása"
 
-#: src/config/options.inc:758
+#: src/config/options.inc:806
 msgid ""
 "Change the User Agent ID. That means identification string, which\n"
 "is sent to HTTP server when a document is requested. The 'textmode'\n"
@@ -3233,19 +3300,19 @@ msgstr ""
 "vissza\n"
 "Ha nem akarsz User Agent fejlécet küldeni, irj ide \" \"-t."
 
-#: src/config/options.inc:771
+#: src/config/options.inc:819
 msgid "HTTPS"
 msgstr "HTTPS"
 
-#: src/config/options.inc:773
+#: src/config/options.inc:821
 msgid "HTTPS-specific options."
 msgstr "HTTPS-el kapcsolatos beállítások."
 
-#: src/config/options.inc:777
+#: src/config/options.inc:825
 msgid "HTTPS proxy configuration."
 msgstr "HTTPS proxy beállítás."
 
-#: src/config/options.inc:781
+#: src/config/options.inc:829
 msgid ""
 "Host and port-number (host:port) of the HTTPS CONNECT proxy, or blank.\n"
 "If it's blank, HTTPS_PROXY environment variable is checked as well."
@@ -3255,19 +3322,19 @@ msgstr ""
 "Ha üres, akkor a HTTPS_PROXY környezeti változó is ellenõrzésre\n"
 "kerül."
 
-#: src/config/options.inc:785
+#: src/config/options.inc:833
 msgid "FTP"
 msgstr "FTP"
 
-#: src/config/options.inc:787
+#: src/config/options.inc:835
 msgid "FTP specific options."
 msgstr "FTP specifikus beállítások."
 
-#: src/config/options.inc:791
+#: src/config/options.inc:839
 msgid "FTP proxy configuration."
 msgstr "FTP proxy beállítás."
 
-#: src/config/options.inc:795
+#: src/config/options.inc:843
 msgid ""
 "Host and port-number (host:port) of the FTP proxy, or blank.\n"
 "If it's blank, FTP_PROXY environment variable is checked as well."
@@ -3275,31 +3342,31 @@ msgstr ""
 "Az FTP proxy paraméterei (host:port). Ha üresen hagyod, akkor az\n"
 "FTP_PROXY környezeti változó is megvizsgálásra kerül."
 
-#: src/config/options.inc:798
+#: src/config/options.inc:846
 msgid "Anonymous password"
 msgstr "Anonymus jelszava"
 
-#: src/config/options.inc:800
+#: src/config/options.inc:848
 msgid "FTP anonymous password to be sent."
 msgstr "FTP anonymus jelszó."
 
-#: src/config/options.inc:802
+#: src/config/options.inc:850
 msgid "Use passive mode (IPv4)"
 msgstr "Passzív mód használata (IPv4)"
 
-#: src/config/options.inc:804
+#: src/config/options.inc:852
 msgid "Use PASV instead of PORT (passive vs active mode, IPv4 only)."
 msgstr "PASV használata PORT helyett (passzív/aktív mód, csak IPv4-nél)."
 
-#: src/config/options.inc:806 src/config/options.inc:810
+#: src/config/options.inc:854 src/config/options.inc:858
 msgid "Use passive mode (IPv6)"
 msgstr "Passzív mód használata (IPv6)"
 
-#: src/config/options.inc:808
+#: src/config/options.inc:856
 msgid "Use EPSV instead of EPRT (passive vs active mode, IPv6 only)."
 msgstr "EPSV használata EPRT helyett (passzív/aktív mód, csak IPv6-nél)."
 
-#: src/config/options.inc:812
+#: src/config/options.inc:860
 msgid ""
 "Use EPSV instead of EPRT (passive vs active mode, IPv6 only).\n"
 "Works only with IPv6 enabled, so nothing interesting for you."
@@ -3307,61 +3374,62 @@ msgstr ""
 "EPSV használata EPRT helyett (passzív/aktív mód, csak IPv6-nél).\n"
 "Csak IPv6 engedélyezése mellett mûködik."
 
-#: src/config/options.inc:818
+#: src/config/options.inc:866
 msgid "Local files"
 msgstr "Helyi fájlok"
 
-#: src/config/options.inc:820
+#: src/config/options.inc:868
 msgid "Options specific to local browsing."
 msgstr "Lokális böngészéssel kapcsolatos beállítások."
 
-#: src/config/options.inc:823 src/config/options.inc:835
+#: src/config/options.inc:871 src/config/options.inc:883
 msgid "Local CGI"
 msgstr "Helyi CGI"
 
-#: src/config/options.inc:825
+#: src/config/options.inc:873
 msgid "Local CGI specific options."
 msgstr "Helyi CGI-vel kapcsolatos beállítások."
 
-#: src/config/options.inc:827 src/config/options.inc:839
+#: src/config/options.inc:875 src/config/options.inc:887
 #: src/cookies/dialogs.c:102 src/mime/backend/mailcap.c:98
 #: src/mime/backend/mimetypes.c:56
 msgid "Path"
 msgstr "Útvonal"
 
-#: src/config/options.inc:829
+#: src/config/options.inc:877
 msgid "Colon separated list of directories, where CGI scripts are stored."
 msgstr ""
 "A CGI scriptek tárolására használt könyvtárak felsorolása, kettõsponttal "
 "elválasztva."
 
-#: src/config/options.inc:831 src/config/options.inc:843
+#: src/config/options.inc:879 src/config/options.inc:891
 msgid "Allow local CGI"
 msgstr "Helyi CGI engedélyezése"
 
-#: src/config/options.inc:833
+#: src/config/options.inc:881
 msgid "Whether to execute local CGI scripts."
 msgstr "A helyi CGI scriptek futtatásának engedélyezése."
 
-#: src/config/options.inc:837
+#: src/config/options.inc:885
 msgid "Local CGI specific options. (DISABLED)"
 msgstr "Helyi CGI-vel kapcsolatos beállítások. (LETILTVA)"
 
-#: src/config/options.inc:841
-msgid "Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
+#: src/config/options.inc:889
+msgid ""
+"Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
 msgstr ""
 "A CGI scriptek tárolására használt könyvtárak felsorolása, kettõsponttal "
 "elválasztva. (LETILTVA)"
 
-#: src/config/options.inc:845
+#: src/config/options.inc:893
 msgid "Whether to execute local CGI scripts. (DISABLED)"
 msgstr "A helyi CGI scriptek futtatásának engedélyezése. (LETILTVA)"
 
-#: src/config/options.inc:848
+#: src/config/options.inc:896
 msgid "Allow reading special files"
 msgstr "Nem reguláris fáljok olvasása"
 
-#: src/config/options.inc:850
+#: src/config/options.inc:898
 msgid ""
 "Allow reading from non-regular files? (DANGEROUS - reading\n"
 "/dev/urandom or /dev/zero can ruin your day!)"
@@ -3370,11 +3438,11 @@ msgstr ""
 "(VESZÉLYES - pl a /dev/urandom vagy /dev/zero olvasása nem várt\n"
 "következményekkel járhat!)"
 
-#: src/config/options.inc:853
+#: src/config/options.inc:901
 msgid "Show hidden files in directory listing"
 msgstr "Rejtett fáljok megjelenítése"
 
-#: src/config/options.inc:855
+#: src/config/options.inc:903
 msgid ""
 "Show hidden files in directory listing ?\n"
 "If set to false, files with name starting with a dot will be\n"
@@ -3384,11 +3452,11 @@ msgstr ""
 "Ha ki van kapcsolva, akkor a ponttal kezdõdõ nevû fáljok nem jelennek\n"
 "meg a lokális könyvtárlistákban."
 
-#: src/config/options.inc:859
+#: src/config/options.inc:907
 msgid "Try encoding extensions"
 msgstr "Típusfüggõ fájlnévkiterjesztések használata"
 
-#: src/config/options.inc:861
+#: src/config/options.inc:909
 msgid ""
 "When set, if we can't open a file named 'filename', we'll try\n"
 "to open 'filename' with some encoding extension appended\n"
@@ -3398,11 +3466,11 @@ msgstr ""
 "'filename' névvel, akkor a típusának megfelelõ kiterjesztéssel (pl.\n"
 "'filename.gz) is megkiséreljük megnyitni."
 
-#: src/config/options.inc:865
+#: src/config/options.inc:913
 msgid "User protocols"
 msgstr "Felhasználói protokollok"
 
-#: src/config/options.inc:867
+#: src/config/options.inc:915
 msgid ""
 "User protocols. Options in this tree specify external\n"
 "handlers for the appropriate protocols. Ie.\n"
@@ -3412,7 +3480,7 @@ msgstr ""
 "programokat rendelnek a megfelelõ protokollokhoz.\n"
 "pl: protocol.user.mailto.unix."
 
-#: src/config/options.inc:878
+#: src/config/options.inc:926
 msgid ""
 "Handler (external program) for this protocol. Name the\n"
 "options in this tree after your system (ie. unix, unix-xwin)."
@@ -3420,7 +3488,7 @@ msgstr ""
 "Kezelõprogram (külsõ program) ehhez a protokollhoz.\n"
 "Határozd meg az opciót a rendszered alapján (pl. unix, unix-xwin)."
 
-#: src/config/options.inc:883
+#: src/config/options.inc:931
 msgid ""
 "Handler (external program) for this protocol and system.\n"
 "%f in the string means file name to include form data from\n"
@@ -3438,11 +3506,11 @@ msgstr ""
 "%s a szövegben subject-et jelent (?subject=<this>)\n"
 "%u a szövegben az egész URL-t jelenti"
 
-#: src/config/options.inc:911
+#: src/config/options.inc:959
 msgid "No-proxy domains"
 msgstr "Proxy tiltása bizonyos domain-ekhez"
 
-#: src/config/options.inc:913
+#: src/config/options.inc:961
 msgid ""
 "Comma separated list of domains for which the proxy (HTTP/FTP)\n"
 "should be disabled. Optionally, a port can be specified for some\n"
@@ -3455,25 +3523,25 @@ msgstr ""
 "NO_PROXY környezeti változó kerül feldolgozásra."
 
 #. Keep options in alphabetical order.
-#: src/config/options.inc:922
+#: src/config/options.inc:970
 msgid "Terminals"
 msgstr "Terminálok"
 
-#: src/config/options.inc:924
+#: src/config/options.inc:972
 msgid "Terminal options."
 msgstr "Terminál beállítások."
 
-#: src/config/options.inc:928
+#: src/config/options.inc:976
 msgid "Options specific to this terminal type (according to $TERM value)."
 msgstr ""
 "Beállítások ehhez a termináltípushoz (a $TERM környezeti\n"
 "változó alapján)"
 
-#: src/config/options.inc:930
+#: src/config/options.inc:978
 msgid "Border type"
 msgstr "Keret típusa"
 
-#: src/config/options.inc:932
+#: src/config/options.inc:980
 msgid ""
 "Terminal type; matters mostly only when drawing frames and\n"
 "dialog box borders:\n"
@@ -3490,11 +3558,11 @@ msgstr ""
 "2 - Linux, dupla keretek és egyéb finomságok\n"
 "3 - KOI-8 4 - FreeBSD"
 
-#: src/config/options.inc:940
+#: src/config/options.inc:988
 msgid "Switch fonts for line drawing"
 msgstr "Keretek rajzolása külön betûtípussal"
 
-#: src/config/options.inc:942
+#: src/config/options.inc:990
 msgid ""
 "Switch fonts when drawing lines, enabling both local characters\n"
 "and lines working at the same time. Makes sense only with linux\n"
@@ -3504,11 +3572,11 @@ msgstr ""
 "és a keretek is mûködnek egyidõben. Csak Linux terminál esetén\n"
 "van értelme a beállításnak."
 
-#: src/config/options.inc:946
+#: src/config/options.inc:994
 msgid "I/O in UTF8"
 msgstr "I/O mûveletek UTF-8 szerint"
 
-#: src/config/options.inc:948
+#: src/config/options.inc:996
 msgid ""
 "Enable I/O in UTF8 for Unicode terminals. Note that currently,\n"
 "only the subset of UTF8 according to terminal codepage is used."
@@ -3517,11 +3585,11 @@ msgstr ""
 "terminálok számára. Megjegyzés: jelenleg csak az UTF8 egy része\n"
 "mûködik."
 
-#: src/config/options.inc:951 src/dialogs/options.c:170
+#: src/config/options.inc:999 src/dialogs/options.c:170
 msgid "Restrict frames in cp850/852"
 msgstr "Keretek korlátozása cp850/852 alatt"
 
-#: src/config/options.inc:953
+#: src/config/options.inc:1001
 msgid ""
 "Restrict the characters used when drawing lines. Makes sense\n"
 "only with linux terminals using the cp850/852 character sets."
@@ -3529,11 +3597,11 @@ msgstr ""
 "Korlátozza a keretrajzoló karakterek használatát. Csak Linux\n"
 "terminálok és 850/852 kódlap esetén van értelme állítani."
 
-#: src/config/options.inc:956
+#: src/config/options.inc:1004
 msgid "Block cursor"
 msgstr "Tömb kurzor"
 
-#: src/config/options.inc:958
+#: src/config/options.inc:1006
 msgid ""
 "Move cursor to bottom right corner when done drawing.\n"
 "This is particularly useful when we have a block cursor,\n"
@@ -3543,11 +3611,11 @@ msgstr ""
 "Hasznos ha tömb kurzor van beállítva, így az inverz szöveg korrektül\n"
 "jelenik meg."
 
-#: src/config/options.inc:962
+#: src/config/options.inc:1010
 msgid "Color mode"
 msgstr "Szín üzemmód"
 
-#: src/config/options.inc:964
+#: src/config/options.inc:1012
 msgid ""
 "The color mode controls what colors are used and how they are\n"
 "output to the terminal. The color modes are:\n"
@@ -3561,11 +3629,11 @@ msgstr ""
 "1 - 16 színû üzemmód, szabványos ANSI színekkel\n"
 "2 - 256 színû üzemmód, xterm256 szükséges hozzá\n"
 
-#: src/config/options.inc:970
+#: src/config/options.inc:1018
 msgid "Enable transparency"
 msgstr "Áttetszõség engedélyezése"
 
-#: src/config/options.inc:972
+#: src/config/options.inc:1020
 msgid ""
 "If we should not set the background to black. This is particularly\n"
 "useful when we have a terminal (typically in some windowing\n"
@@ -3578,15 +3646,15 @@ msgstr ""
 "az ELinksben is látható lesz ez a háttérkép. Akkor van értelme, ha a\n"
 "színek engedélyezve vannak."
 
-#: src/config/options.inc:978
+#: src/config/options.inc:1026
 msgid "Use underline"
 msgstr "Aláhúzás használata"
 
-#: src/config/options.inc:980
+#: src/config/options.inc:1028
 msgid "If we should use underline or enhance the color instead."
 msgstr "Jelenítsünk meg aláhúzást, vagy használjunk színt helyette?"
 
-#: src/config/options.inc:984
+#: src/config/options.inc:1032
 msgid ""
 "Codepage of charset used for displaying content on terminal.\n"
 "'System' stands for a codepage determined by a selected locale."
@@ -3598,316 +3666,316 @@ msgstr ""
 "kerül használatra."
 
 #. Keep options in alphabetical order.
-#: src/config/options.inc:991
+#: src/config/options.inc:1039
 msgid "User interface"
 msgstr "Felhasználói felület"
 
-#: src/config/options.inc:993
+#: src/config/options.inc:1041
 msgid "User interface options."
 msgstr "A felhasználói felület beállításai."
 
-#: src/config/options.inc:997
+#: src/config/options.inc:1045
 msgid "Color settings"
 msgstr "Színbeállítások"
 
-#: src/config/options.inc:999
+#: src/config/options.inc:1047
 msgid "Default user interface color settings."
 msgstr "A felhasználói felület színbeállításai."
 
-#: src/config/options.inc:1026
+#: src/config/options.inc:1074
 msgid "Color terminals"
 msgstr "Színes terminálok"
 
-#: src/config/options.inc:1028
+#: src/config/options.inc:1076
 msgid "Color settings for color terminal."
 msgstr "Színbeállítások színes terminálok számára."
 
-#: src/config/options.inc:1030
+#: src/config/options.inc:1078
 msgid "Non-color terminals"
 msgstr "Nem színes terminálok"
 
-#: src/config/options.inc:1032
+#: src/config/options.inc:1080
 msgid "Color settings for non-color terminal."
 msgstr "Színbeállítások nem színes terminálok esetén."
 
 #. FIXME: obsolete, how to alias them correctly ? --Zas
-#: src/config/options.inc:1035
+#: src/config/options.inc:1083
 msgid "Main menu bar"
 msgstr "Menü címsora"
 
-#: src/config/options.inc:1037
+#: src/config/options.inc:1085
 msgid "Main menu bar colors."
 msgstr "Menü címsorának színei."
 
-#: src/config/options.inc:1039
+#: src/config/options.inc:1087
 msgid "Unselected main menu bar item"
 msgstr "Fõmenü sorában lévõ elem"
 
-#: src/config/options.inc:1041
+#: src/config/options.inc:1089
 msgid "Unselected main menu bar item colors."
 msgstr "Fõmenü sorában lévõ elem színei."
 
-#: src/config/options.inc:1043
+#: src/config/options.inc:1091
 msgid "Selected main menu bar item"
 msgstr "Fõmenü sorában lévõ kiválasztott elem"
 
-#: src/config/options.inc:1045
+#: src/config/options.inc:1093
 msgid "Selected main menu bar item colors."
 msgstr "Fõmenü sorában lévõ kiválasztott elem színei."
 
-#: src/config/options.inc:1047 src/config/options.inc:1076
+#: src/config/options.inc:1095 src/config/options.inc:1124
 msgid "Hotkey"
 msgstr "Gyorsbillentyû"
 
-#: src/config/options.inc:1049
+#: src/config/options.inc:1097
 msgid "Main menu hotkey colors."
 msgstr "Fõmenü gyorsbillentyûinek színei."
 
-#: src/config/options.inc:1051 src/config/options.inc:1080
+#: src/config/options.inc:1099 src/config/options.inc:1128
 msgid "Unselected hotkey"
 msgstr "Gyorsbillentyû"
 
-#: src/config/options.inc:1053
+#: src/config/options.inc:1101
 msgid "Main menu unselected hotkey colors."
 msgstr "Fõmenü gyorsbillentyûinek színei."
 
-#: src/config/options.inc:1055 src/config/options.inc:1084
+#: src/config/options.inc:1103 src/config/options.inc:1132
 msgid "Selected hotkey"
 msgstr "Kiválasztott gyorsbillentyû"
 
-#: src/config/options.inc:1057
+#: src/config/options.inc:1105
 msgid "Main menu selected hotkey colors."
 msgstr "Fõmenü kiválasztott gyorsbillentyûinek színei."
 
-#: src/config/options.inc:1060
+#: src/config/options.inc:1108
 msgid "Menu bar"
 msgstr "Menüsor"
 
-#: src/config/options.inc:1062
+#: src/config/options.inc:1110
 msgid "Menu bar colors."
 msgstr "A menüsor színei."
 
-#: src/config/options.inc:1064
+#: src/config/options.inc:1112
 msgid "Unselected menu item"
 msgstr "Menüpont"
 
-#: src/config/options.inc:1066
+#: src/config/options.inc:1114
 msgid "Unselected menu item colors."
 msgstr "A menüpontok színei."
 
-#: src/config/options.inc:1068
+#: src/config/options.inc:1116
 msgid "Selected menu item"
 msgstr "Kiválasztott menüpont"
 
-#: src/config/options.inc:1070
+#: src/config/options.inc:1118
 msgid "Selected menu item colors."
 msgstr "Kiválasztott menüpontok színei."
 
-#: src/config/options.inc:1072
+#: src/config/options.inc:1120
 msgid "Marked menu item"
 msgstr "Kiválasztott menüpont"
 
-#: src/config/options.inc:1074
+#: src/config/options.inc:1122
 msgid "Marked menu item colors."
 msgstr "Kiválasztott menüpontok színei."
 
-#: src/config/options.inc:1078
+#: src/config/options.inc:1126
 msgid "Menu item hotkey colors."
 msgstr "Menüpont gyorsbillentyûinek színe."
 
-#: src/config/options.inc:1082
+#: src/config/options.inc:1130
 msgid "Menu item unselected hotkey colors."
 msgstr "Menüpont gyorsbillentyûjének színe."
 
-#: src/config/options.inc:1086
+#: src/config/options.inc:1134
 msgid "Menu item selected hotkey colors."
 msgstr "Menüpont kiválasztott gyorsbillentyûjének színei."
 
-#: src/config/options.inc:1088
+#: src/config/options.inc:1136
 msgid "Menu frame"
 msgstr "Menü keret"
 
-#: src/config/options.inc:1090
+#: src/config/options.inc:1138
 msgid "Menu frame colors."
 msgstr "Menü keret színei."
 
-#: src/config/options.inc:1093
+#: src/config/options.inc:1141
 msgid "Dialog"
 msgstr "Dialógusablak"
 
-#: src/config/options.inc:1095
+#: src/config/options.inc:1143
 msgid "Dialog colors."
 msgstr "A dialógusablak színei."
 
-#: src/config/options.inc:1105
+#: src/config/options.inc:1153
 msgid "Generic"
 msgstr "Általános"
 
-#: src/config/options.inc:1107
+#: src/config/options.inc:1155
 msgid "Generic dialog colors."
 msgstr "Általános dialógusablak színei."
 
-#: src/config/options.inc:1109
+#: src/config/options.inc:1157
 msgid "Frame"
 msgstr "Keret"
 
-#: src/config/options.inc:1111
+#: src/config/options.inc:1159
 msgid "Dialog frame colors."
 msgstr "Dialógusablak kereteinek színe."
 
-#: src/config/options.inc:1113
+#: src/config/options.inc:1161
 msgid "Scrollbar"
 msgstr "Görgetõsáv"
 
-#: src/config/options.inc:1115
+#: src/config/options.inc:1163
 msgid "Scrollbar colors."
 msgstr "Görgetõsáv színei."
 
-#: src/config/options.inc:1117
+#: src/config/options.inc:1165
 msgid "Scrollbar selected"
 msgstr "Kiválasztott görgetõsáv"
 
-#: src/config/options.inc:1119
+#: src/config/options.inc:1167
 msgid "Scrollbar selected colors."
 msgstr "Kiválasztott görgetõsáv színei."
 
-#: src/config/options.inc:1123
+#: src/config/options.inc:1171
 msgid "Dialog title colors."
 msgstr "Dialógusablak címének színei."
 
-#: src/config/options.inc:1125
+#: src/config/options.inc:1173
 msgid "Text"
 msgstr "Szöveg"
 
-#: src/config/options.inc:1127
+#: src/config/options.inc:1175
 msgid "Dialog text colors."
 msgstr "Dialógusablak szövegének a színei."
 
-#: src/config/options.inc:1129 src/viewer/text/form.c:1403
+#: src/config/options.inc:1177 src/viewer/text/form.c:1405
 msgid "Checkbox"
 msgstr "Jelölönégyzet"
 
-#: src/config/options.inc:1131
+#: src/config/options.inc:1179
 msgid "Dialog checkbox colors."
 msgstr "Dialógusablak jelölönégyzetének színei."
 
-#: src/config/options.inc:1133
+#: src/config/options.inc:1181
 msgid "Checkbox label"
 msgstr "Jelölönégyzet címkéje"
 
-#: src/config/options.inc:1135
+#: src/config/options.inc:1183
 msgid "Dialog checkbox label colors."
 msgstr "Jelölönégyzet címkéjenek a színei."
 
-#: src/config/options.inc:1137
+#: src/config/options.inc:1185
 msgid "Button"
 msgstr "Nyomógomb"
 
-#: src/config/options.inc:1139
+#: src/config/options.inc:1187
 msgid "Dialog button colors."
 msgstr "Dialógusablak nyomógombjának a színei."
 
-#: src/config/options.inc:1141
+#: src/config/options.inc:1189
 msgid "Selected button"
 msgstr "Kiválasztott gomb"
 
-#: src/config/options.inc:1143
+#: src/config/options.inc:1191
 msgid "Dialog selected button colors."
 msgstr "Dialógusablak kiválasztott nyomógombjainak a színei."
 
-#: src/config/options.inc:1145 src/viewer/text/form.c:1407
+#: src/config/options.inc:1193 src/viewer/text/form.c:1409
 msgid "Text field"
 msgstr "Szöveg mezö"
 
-#: src/config/options.inc:1147
+#: src/config/options.inc:1195
 msgid "Dialog text field colors."
 msgstr "Dialógusablak szövegmezõjének színei."
 
-#: src/config/options.inc:1149
+#: src/config/options.inc:1197
 msgid "Text field text"
 msgstr "Szövegmezõ szöveg"
 
-#: src/config/options.inc:1151
+#: src/config/options.inc:1199
 msgid "Dialog field text colors."
 msgstr "Dialógusablak szövegmezõjének színei."
 
-#: src/config/options.inc:1153
+#: src/config/options.inc:1201
 msgid "Meter"
 msgstr "Jelzõcsík"
 
-#: src/config/options.inc:1155
+#: src/config/options.inc:1203
 msgid "Dialog meter colors."
 msgstr "Dialógusablak jelzõcsíkjának színei."
 
-#: src/config/options.inc:1157
+#: src/config/options.inc:1205
 msgid "Shadow"
 msgstr "Árnyék"
 
-#: src/config/options.inc:1159
+#: src/config/options.inc:1207
 msgid "Dialog shadow colors (see ui.shadows option)."
 msgstr "A dialógusablakok árnyékának színei (lásd: ui.shadows opció)."
 
-#: src/config/options.inc:1161
+#: src/config/options.inc:1209
 msgid "Title bar"
 msgstr "Címsor"
 
-#: src/config/options.inc:1163
+#: src/config/options.inc:1211
 msgid "Title bar colors."
 msgstr "Címsor színei."
 
-#: src/config/options.inc:1165
+#: src/config/options.inc:1213
 msgid "Generic title bar"
 msgstr "Általános címsor"
 
-#: src/config/options.inc:1167
+#: src/config/options.inc:1215
 msgid "Generic title bar colors."
 msgstr "Általános címsor színei."
 
-#: src/config/options.inc:1169
+#: src/config/options.inc:1217
 msgid "Title bar text"
 msgstr "Címsor szövege"
 
-#: src/config/options.inc:1171
+#: src/config/options.inc:1219
 msgid "Title bar text colors."
 msgstr "Címsor szövegének színei."
 
-#: src/config/options.inc:1174
+#: src/config/options.inc:1222
 msgid "Status bar"
 msgstr "Állapotsor"
 
-#: src/config/options.inc:1176
+#: src/config/options.inc:1224
 msgid "Status bar colors."
 msgstr "Állapotsor színei."
 
-#: src/config/options.inc:1178
+#: src/config/options.inc:1226
 msgid "Generic status bar"
 msgstr "Általános állapotsor"
 
-#: src/config/options.inc:1180
+#: src/config/options.inc:1228
 msgid "Generic status bar colors."
 msgstr "Általános állapotsor színei."
 
-#: src/config/options.inc:1182
+#: src/config/options.inc:1230
 msgid "Status bar text"
 msgstr "Állapotsor szöveg"
 
-#: src/config/options.inc:1184
+#: src/config/options.inc:1232
 msgid "Status bar text colors."
 msgstr "Állapotsor szöveg színei."
 
-#: src/config/options.inc:1187
+#: src/config/options.inc:1235
 msgid "Tabs bar"
 msgstr "Fülek sora"
 
-#: src/config/options.inc:1189
+#: src/config/options.inc:1237
 msgid "Tabs bar colors."
 msgstr "Fülek sorának színei."
 
-#: src/config/options.inc:1191
+#: src/config/options.inc:1239
 msgid "Unvisited tab"
 msgstr "Új oldalt tartalmazó fül"
 
-#: src/config/options.inc:1193
+#: src/config/options.inc:1241
 msgid ""
 "Tab colors for tabs that have not been\n"
 "selected since they completed loading."
@@ -3915,43 +3983,43 @@ msgstr ""
 "Azoknak a füleknek a színei, amelyek letöltöttek egy új lapot,\n"
 "de azóta még nem lettek kiválasztva."
 
-#: src/config/options.inc:1196
+#: src/config/options.inc:1244
 msgid "Unselected tab"
 msgstr "Fülek"
 
-#: src/config/options.inc:1198
+#: src/config/options.inc:1246
 msgid "Unselected tab colors."
 msgstr "Fülek színei."
 
-#: src/config/options.inc:1200
+#: src/config/options.inc:1248
 msgid "Loading tab"
 msgstr "Letöltés közben lévõ fül"
 
-#: src/config/options.inc:1202
+#: src/config/options.inc:1250
 msgid "Tab colors for tabs that are loading in the background."
 msgstr "Letöltés közben lévõ fül színei."
 
-#: src/config/options.inc:1204
+#: src/config/options.inc:1252
 msgid "Selected tab"
 msgstr "Kiválasztott fül"
 
-#: src/config/options.inc:1206
+#: src/config/options.inc:1254
 msgid "Selected tab colors."
 msgstr "Kiválasztott fül színei."
 
-#: src/config/options.inc:1208
+#: src/config/options.inc:1256
 msgid "Tab separator"
 msgstr "Fül elválasztó"
 
-#: src/config/options.inc:1210
+#: src/config/options.inc:1258
 msgid "Tab separator colors."
 msgstr "Fülekek elválasztó részének színei."
 
-#: src/config/options.inc:1213
+#: src/config/options.inc:1261
 msgid "Searched strings"
 msgstr "A keresett szövegek"
 
-#: src/config/options.inc:1215
+#: src/config/options.inc:1263
 msgid "Searched string highlight colors."
 msgstr "A keresett szövegek kiemelési színei."
 
@@ -3959,19 +4027,19 @@ msgstr "A keresett szövegek kiemelési színei."
 #. ============= BORING PART (colors) END ===================
 #. ==========================================================
 #. Keep options in alphabetical order.
-#: src/config/options.inc:1224
+#: src/config/options.inc:1272
 msgid "Dialog settings"
 msgstr "Dialógusablak beállítások"
 
-#: src/config/options.inc:1226
+#: src/config/options.inc:1274
 msgid "Dialogs-specific appearance and behaviour settings."
 msgstr "Dialógusablakok megjelenése és viselkedése."
 
-#: src/config/options.inc:1229
+#: src/config/options.inc:1277
 msgid "Minimal height of listbox widget"
 msgstr "A listák minimális magassága"
 
-#: src/config/options.inc:1231
+#: src/config/options.inc:1279
 msgid ""
 "Minimal height of the listbox widget (used e.g. for bookmarks\n"
 "or global history)."
@@ -3979,11 +4047,11 @@ msgstr ""
 "A listák minimális magassága (mint pl. a könyvjelzõk ablakban, vagy\n"
 "a látogatott lapok listájánál)."
 
-#: src/config/options.inc:1234
+#: src/config/options.inc:1282
 msgid "Drop shadows"
 msgstr "Árnyékok"
 
-#: src/config/options.inc:1236
+#: src/config/options.inc:1284
 msgid ""
 "Make dialogs drop shadows (the shadows are solid, you can\n"
 "adjust their color by ui.colors.*.dialog.shadow). You may\n"
@@ -3993,11 +4061,11 @@ msgstr ""
 "a színüket a ui.colors.*.dialog.shadow-nál tudod állítani). Ha kedved van,\n"
 "állítsd a keretek szélességét a setup.h-ban."
 
-#: src/config/options.inc:1240
+#: src/config/options.inc:1288
 msgid "Underline hotkeys"
 msgstr "A menükben lévõ gyorsbillentyûk aláhúzása"
 
-#: src/config/options.inc:1242
+#: src/config/options.inc:1290
 msgid ""
 "Whether to underline hotkeys in menus to make them more\n"
 "visible. Requires the underlining is enabled for the terminal."
@@ -4005,17 +4073,17 @@ msgstr ""
 "A menükben lévõ gyorsbillentyûk aláhúzása, így azok jobban\n"
 "látszanak. A használt terminálnak támogatnia kell az aláhúzást."
 
-#: src/config/options.inc:1246
+#: src/config/options.inc:1294
 msgid "Timer options"
 msgstr "Idõzítõ beállítások"
 
-#: src/config/options.inc:1248
+#: src/config/options.inc:1296
 msgid ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
 msgstr "Idõzített esemény bizonyos felhasználói inaktivitás után."
 
-#: src/config/options.inc:1254
+#: src/config/options.inc:1302
 msgid ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
@@ -4027,7 +4095,7 @@ msgstr ""
 "1 - legyen idõzítõ, de ne mutassa az állapotát\n"
 "2 - legyen idõzítõ, és mutassa az állapotát a LED-ek mellett"
 
-#: src/config/options.inc:1261
+#: src/config/options.inc:1309
 msgid ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
@@ -4039,31 +4107,31 @@ msgstr ""
 "1 - legyen idõzítõ, de ne mutassa az állapotát\n"
 "2 - legyen idõzítõ, és mutassa az állapotát a LED-ek mellett (LETILTVA)"
 
-#: src/config/options.inc:1267
+#: src/config/options.inc:1315
 msgid "Duration"
 msgstr "Idõtartam"
 
-#: src/config/options.inc:1269
+#: src/config/options.inc:1317
 msgid "Inactivity timeout. One day should be enough for just everyone (TM)."
 msgstr "Inaktivitási idõ."
 
-#: src/config/options.inc:1273
+#: src/config/options.inc:1321
 msgid "Key-binding action to be triggered when timer reaches zero."
 msgstr "Esemény ami a megadott idõben bekövetkezik."
 
-#: src/config/options.inc:1276
+#: src/config/options.inc:1324
 msgid "Window tabs"
 msgstr "Fülek"
 
-#: src/config/options.inc:1278
+#: src/config/options.inc:1326
 msgid "Window tabs settings."
 msgstr "Fülek beállításai."
 
-#: src/config/options.inc:1280
+#: src/config/options.inc:1328
 msgid "Display tabs bar"
 msgstr "A fülek megjelenítése"
 
-#: src/config/options.inc:1282
+#: src/config/options.inc:1330
 msgid ""
 "Show tabs bar on the screen:\n"
 "0 means never.\n"
@@ -4075,29 +4143,29 @@ msgstr ""
 "1 - csak ha kettõ vagy több fül van.\n"
 "2 - mindig."
 
-#: src/config/options.inc:1287
+#: src/config/options.inc:1335
 msgid "Wrap-around tabs cycling"
 msgstr "Fülek lapozása körbe"
 
-#: src/config/options.inc:1289
+#: src/config/options.inc:1337
 msgid ""
 "When moving right from the last tab, jump at the first one, and\n"
 "vice versa."
 msgstr "Ha az utolsó fülön tovább lapozunk, ugorjon az elsõre, és fordítva."
 
-#: src/config/options.inc:1292
+#: src/config/options.inc:1340
 msgid "Confirm tab closing"
 msgstr "Fül bezárásának megerõsítése"
 
-#: src/config/options.inc:1294
+#: src/config/options.inc:1342
 msgid "When closing a tab show confirmation dialog."
 msgstr "Fül bezárását megerõsítõ dialógusablak megnyitása."
 
-#: src/config/options.inc:1298 src/config/opttypes.c:366
+#: src/config/options.inc:1346 src/config/opttypes.c:366
 msgid "Language"
 msgstr "Nyelv"
 
-#: src/config/options.inc:1300
+#: src/config/options.inc:1348
 msgid ""
 "Language of user interface. 'System' means that the language will\n"
 "be extracted from the environment dynamically."
@@ -4105,27 +4173,27 @@ msgstr ""
 "A felhasználói felület nyelve. A \"system\" azt jelenti, hogy a\n"
 "nyelvbeállítás az operációs rendszer beállításnak megfelelõen történik."
 
-#: src/config/options.inc:1303
+#: src/config/options.inc:1351
 msgid "Display status bar"
 msgstr "Állapotsor megjelenítése"
 
-#: src/config/options.inc:1305
+#: src/config/options.inc:1353
 msgid "Show status bar on the screen."
 msgstr "Állapotsor megjelenítése a képernyõn."
 
-#: src/config/options.inc:1307
+#: src/config/options.inc:1355
 msgid "Display title bar"
 msgstr "Címsor megjelenítése"
 
-#: src/config/options.inc:1309
+#: src/config/options.inc:1357
 msgid "Show title bar on the screen."
 msgstr "Címsor megjelenítése a képernyõn."
 
-#: src/config/options.inc:1311
+#: src/config/options.inc:1359
 msgid "Display goto dialog in new tabs"
 msgstr "Jelenítse meg az URL beviteli ablakot új fülek megnyitásakor"
 
-#: src/config/options.inc:1313
+#: src/config/options.inc:1361
 msgid ""
 "Pop up goto dialog in newly created tabs when there's no homepage\n"
 "set. This means also showing goto dialog on startup."
@@ -4134,11 +4202,11 @@ msgstr ""
 "a címbeviteli mezõ. Ha ez be van kapcsolva, akkor programindítás után is\n"
 "felugrik a címbeviteli dialógusablak."
 
-#: src/config/options.inc:1316
+#: src/config/options.inc:1364
 msgid "Show a message box when file is saved successfully"
 msgstr "Üzenetablak megjelenítése sikeres állománymentéskor"
 
-#: src/config/options.inc:1318
+#: src/config/options.inc:1366
 msgid ""
 "When you pressed a [ Save ] button in some manager, this option\n"
 "will make sure that a box confirming success of the operation will\n"
@@ -4147,19 +4215,19 @@ msgstr ""
 "Jelenítsen meg üzenetablakot, ha valamelyik ablakban az állomány mentés\n"
 "sikeres volt."
 
-#: src/config/options.inc:1323
+#: src/config/options.inc:1371
 msgid "Sessions"
 msgstr "Munkafolyamatok"
 
-#: src/config/options.inc:1325
+#: src/config/options.inc:1373
 msgid "Sessions settings."
 msgstr "A munkafolyamatok beállításai."
 
-#: src/config/options.inc:1327
+#: src/config/options.inc:1375
 msgid "Auto save session"
 msgstr "A munkafolyamat automatikus mentése"
 
-#: src/config/options.inc:1329
+#: src/config/options.inc:1377
 msgid ""
 "Automatically save the session when quitting.\n"
 "This feature requires bookmark support."
@@ -4167,11 +4235,11 @@ msgstr ""
 "Kilépéskor automatikusan mentse a munkafolyamatot.\n"
 "Ehhez a funkcióhoz könyvjelzõtámogatás szukséges."
 
-#: src/config/options.inc:1332
+#: src/config/options.inc:1380
 msgid "Auto restore session"
 msgstr "A munkafolyamat automatikus visszaállítása"
 
-#: src/config/options.inc:1334
+#: src/config/options.inc:1382
 msgid ""
 "Automatically restore the session at start.\n"
 "This feature requires bookmark support."
@@ -4179,13 +4247,13 @@ msgstr ""
 "A munkafolyamat automatikus visszaállítása indításkor.\n"
 "Ehhez a funkcióhoz könyvjelzõtámogatás szükséges."
 
-#: src/config/options.inc:1337
+#: src/config/options.inc:1385
 msgid "Auto save and restore session folder name"
 msgstr ""
 "Az automatikus munkafolyamat mentés és visszaállítás könyvjelzõmappájának a "
 "neve"
 
-#: src/config/options.inc:1339
+#: src/config/options.inc:1387
 msgid ""
 "Name of the bookmarks folder used for auto saving and restoring session.\n"
 "The name has to be unique. Any folders with the same name will be deleted.\n"
@@ -4197,11 +4265,11 @@ msgstr ""
 "olyan könyvtár ami ilyen néven létezik, felülíródik.\n"
 "Csak könyvjelzõtámogatásnál van értelme."
 
-#: src/config/options.inc:1343
+#: src/config/options.inc:1391
 msgid "Homepage URI"
 msgstr "Honlap URI"
 
-#: src/config/options.inc:1345
+#: src/config/options.inc:1393
 msgid ""
 "The URI to load either at startup time when no URI was given\n"
 "on the command line or when requested by the goto-url-home action.\n"
@@ -4212,21 +4280,21 @@ msgstr ""
 "parancssorban, vagy a goto-url-home-al. Ha a beállítás értéke \"\" ,\n"
 "akkor a WWW_HOME környezeti változó értéke kerül használatra."
 
-#: src/config/options.inc:1351
+#: src/config/options.inc:1399
 msgid "Date format"
 msgstr "Dátumformátum"
 
-#: src/config/options.inc:1353
+#: src/config/options.inc:1401
 msgid "Date format to use in dialogs. See strftime(3)."
 msgstr ""
 "A dialógusablakokban használt dátumformátum. Lásd az\n"
 "strftime(3) man oldalt."
 
-#: src/config/options.inc:1356
+#: src/config/options.inc:1404
 msgid "Set window title"
 msgstr "Ablakfejléc címének beállítása"
 
-#: src/config/options.inc:1358
+#: src/config/options.inc:1406
 msgid ""
 "Set the window title when running in a windowing environment\n"
 "in an xterm-like terminal. This way the document's title is\n"
@@ -4678,7 +4746,17 @@ msgstr ""
 msgid "Resources"
 msgstr "Erõforrások"
 
-#: src/dialogs/info.c:188
+#: src/dialogs/info.c:190
+#, fuzzy, c-format
+msgid ""
+"Allocated      : %ld bytes\n"
+"Truly allocated: %ld bytes (x%0.2f)\n"
+"Cache size     : %ld bytes\n"
+msgstr ""
+"Lefoglalva            : %ld byte\n"
+"Ténylegesen lefoglalva: %ld byte (x%0.2f)"
+
+#: src/dialogs/info.c:194
 #, c-format
 msgid ""
 "Allocated      : %ld bytes\n"
@@ -4687,7 +4765,7 @@ msgstr ""
 "Lefoglalva            : %ld byte\n"
 "Ténylegesen lefoglalva: %ld byte (x%0.2f)"
 
-#: src/dialogs/info.c:197
+#: src/dialogs/info.c:209
 msgid "Memory info"
 msgstr "Memória információ"
 
@@ -5181,7 +5259,7 @@ msgid "No document"
 msgstr "Nincs dokumentum"
 
 #. name:
-#: src/document/css/css.c:29 src/document/css/css.c:157
+#: src/document/css/css.c:29 src/document/css/css.c:158
 msgid "Cascading Style Sheets"
 msgstr "CSS stíluslapok (Cascading Style Sheets)"
 
@@ -5562,7 +5640,8 @@ msgstr "Ukrán"
 
 #: src/lowlevel/home.c:121
 #, c-format
-msgid "Commandline options -config-dir set to %s, but could not create directory %s."
+msgid ""
+"Commandline options -config-dir set to %s, but could not create directory %s."
 msgstr ""
 "Parancssori opciók -konfig könyvtár %s, de nem lehet létrehozni a %s "
 "könyvtárat."
@@ -6040,11 +6119,11 @@ msgid ""
 "  server administrator if you believe that this error should not occur.\n"
 msgstr ""
 
-#: src/protocol/nntp.old/codes.c:124 src/protocol/nntp/codes.c:124
+#: src/protocol/nntp/codes.c:124
 msgid "NNTP error"
 msgstr "NNTP hiba"
 
-#: src/protocol/nntp.old/codes.c:126 src/protocol/nntp/codes.c:126
+#: src/protocol/nntp/codes.c:126
 #, c-format
 msgid ""
 "An error occurred while fetching the document you\n"
@@ -6057,35 +6136,34 @@ msgstr ""
 "\n"
 "Hibaüzenet: %s"
 
-#: src/protocol/nntp.old/codes.c:132 src/protocol/nntp/codes.c:132
+#: src/protocol/nntp/codes.c:132
 msgid "Ok"
 msgstr "Ok"
 
 #. name:
-#: src/protocol/nntp.old/nntp.c:33 src/protocol/nntp.old/nntp.c:66
 #: src/protocol/nntp/nntp.c:33 src/protocol/nntp/nntp.c:66
 msgid "NNTP"
 msgstr "NNTP"
 
-#: src/protocol/nntp.old/nntp.c:35 src/protocol/nntp/nntp.c:35
+#: src/protocol/nntp/nntp.c:35
 msgid "NNTP and news specific options."
 msgstr "NNTP és news specifikus beállítások."
 
-#: src/protocol/nntp.old/nntp.c:37 src/protocol/nntp/nntp.c:37
+#: src/protocol/nntp/nntp.c:37
 msgid "Default news server"
 msgstr "Alapértelmezett news kiszolgáló"
 
-#: src/protocol/nntp.old/nntp.c:39 src/protocol/nntp/nntp.c:39
+#: src/protocol/nntp/nntp.c:39
 msgid ""
 "Used when resolving news: URIs. If set to the empty string\n"
 "the value of the NNTPSERVER environment variable will be used."
 msgstr ""
 
-#: src/protocol/nntp.old/nntp.c:42 src/protocol/nntp/nntp.c:42
+#: src/protocol/nntp/nntp.c:42
 msgid "Message header entries"
 msgstr ""
 
-#: src/protocol/nntp.old/nntp.c:44 src/protocol/nntp/nntp.c:44
+#: src/protocol/nntp/nntp.c:44
 msgid ""
 "Comma separated list of which entries in the article header\n"
 "to show. E.g. 'Subject' and 'From'.\n"
@@ -6505,11 +6583,11 @@ msgstr "A CSO telefonkönyv protokoll nem támogatott."
 msgid "Unknown error"
 msgstr "Ismeretlen hiba"
 
-#: src/sched/session.c:632 src/sched/session.c:652 src/sched/task.c:181
+#: src/sched/session.c:633 src/sched/session.c:653 src/sched/task.c:181
 msgid "Warning"
 msgstr "Figyelem"
 
-#: src/sched/session.c:633
+#: src/sched/session.c:634
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -6525,7 +6603,7 @@ msgstr ""
 "ezt a beállítást \" \"-re, egyébként töröld ezt a sort a konfigurációs "
 "állományból! Ha kitörlöd, korrekt alapbeállítás lép életbe."
 
-#: src/sched/session.c:653
+#: src/sched/session.c:654
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -6543,11 +6621,11 @@ msgstr ""
 "konfigurációs állomány. Ajánlatos a config.saving_style opciót 3-as\n"
 "értékre állítani ahhoz hogy megfelelõ mûködést érjünk el."
 
-#: src/sched/session.c:680
+#: src/sched/session.c:681
 msgid "Welcome"
 msgstr "Üdvözlünk"
 
-#: src/sched/session.c:681
+#: src/sched/session.c:682
 msgid ""
 "Welcome to ELinks!\n"
 "\n"
@@ -6664,21 +6742,21 @@ msgstr "SSL"
 msgid "SSL options."
 msgstr "SSL beállítások"
 
-#: src/terminal/event.c:70
+#: src/terminal/event.c:71
 #, c-format
 msgid "Bad terminal size: %d, %d"
 msgstr "Hibás terminál méret: %d, %d"
 
-#: src/terminal/event.c:153
+#: src/terminal/event.c:154
 msgid "Warning: terminal name contains illicit chars."
 msgstr "Figyelem:a terminál neve tiltott karaktereket tartalmaz."
 
-#: src/terminal/event.c:287
+#: src/terminal/event.c:310
 #, c-format
 msgid "Bad event %d"
 msgstr "Hibas esemény: %d"
 
-#: src/terminal/event.c:327
+#: src/terminal/event.c:350
 #, c-format
 msgid "Could not read event: %d (%s)"
 msgstr "Nem lehet olvasni az eseményt: %d (%s)"
@@ -6687,11 +6765,11 @@ msgstr "Nem lehet olvasni az eseményt: %d (%s)"
 msgid "Too many bytes read from the itrm!"
 msgstr "Túl sok byte érkezett az itrm után!"
 
-#: src/terminal/tab.c:192
+#: src/terminal/tab.c:194
 msgid "Do you really want to close the current tab?"
 msgstr "Biztos, hogy bezárod az aktuális fület?"
 
-#: src/terminal/tab.c:228
+#: src/terminal/tab.c:230
 msgid "Do you really want to close all except the current tab?"
 msgstr "Tényleg be szeretnéd zárni az összes fület az aktuális kivételével?"
 
@@ -6723,75 +6801,75 @@ msgstr "Hiányzó töredék"
 msgid "The requested fragment \"#%s\" doesn't exist."
 msgstr "A kért töredék \"#%s\" nem létezik."
 
-#: src/viewer/text/form.c:836
+#: src/viewer/text/form.c:837
 msgid "Error while posting form"
 msgstr "Hiba az ûrlap elküldése közben"
 
-#: src/viewer/text/form.c:837
+#: src/viewer/text/form.c:838
 #, c-format
 msgid "Could not get file %s: %s"
 msgstr "Nem fogadható a fájl %s: %s"
 
-#: src/viewer/text/form.c:1390
+#: src/viewer/text/form.c:1392
 msgid "Reset form"
 msgstr "Ûrlap törlése"
 
-#: src/viewer/text/form.c:1398
+#: src/viewer/text/form.c:1400
 msgid "Submit form to"
 msgstr "Ûrlap elfogadása"
 
-#: src/viewer/text/form.c:1399
+#: src/viewer/text/form.c:1401
 msgid "Post form to"
 msgstr "Ûrlap elküldése"
 
-#: src/viewer/text/form.c:1401
+#: src/viewer/text/form.c:1403
 msgid "Radio button"
 msgstr "Radio gomb"
 
-#: src/viewer/text/form.c:1405
+#: src/viewer/text/form.c:1407
 msgid "Select field"
 msgstr "Mezõ kiválasztása"
 
-#: src/viewer/text/form.c:1409
+#: src/viewer/text/form.c:1411
 msgid "Text area"
 msgstr "Szöveg terület"
 
-#: src/viewer/text/form.c:1411
+#: src/viewer/text/form.c:1413
 msgid "File upload"
 msgstr "Fájl feltöltése"
 
-#: src/viewer/text/form.c:1413
+#: src/viewer/text/form.c:1415
 msgid "Password field"
 msgstr "Jelszó mezõ"
 
-#: src/viewer/text/form.c:1451
+#: src/viewer/text/form.c:1453
 msgid "name"
 msgstr "név"
 
-#: src/viewer/text/form.c:1460
+#: src/viewer/text/form.c:1462
 msgid "value"
 msgstr "érték"
 
-#: src/viewer/text/form.c:1468
+#: src/viewer/text/form.c:1470
 msgid "read only"
 msgstr "csak olvasható"
 
-#: src/viewer/text/form.c:1479
+#: src/viewer/text/form.c:1481
 #, c-format
 msgid "press %s to navigate"
 msgstr "nyomj %s billentyût a navigáláshoz"
 
-#: src/viewer/text/form.c:1481
+#: src/viewer/text/form.c:1483
 #, c-format
 msgid "press %s to edit"
 msgstr "nyomj %s billentyût a szerkesztéshez"
 
-#: src/viewer/text/form.c:1503
+#: src/viewer/text/form.c:1505
 #, c-format
 msgid "press %s to submit to"
 msgstr "nyomj %s-t a továbbításhoz"
 
-#: src/viewer/text/form.c:1505
+#: src/viewer/text/form.c:1507
 #, c-format
 msgid "press %s to post to"
 msgstr "nyomj %s billentyût a küldéshez"
@@ -6946,19 +7024,21 @@ msgstr "Nem indíthatsz külsõ programot anonymus módban."
 msgid "You can do this only on the master terminal"
 msgstr "Ez csak a fõterminálon mûködik"
 
-#: src/viewer/text/view.c:578
+#: src/viewer/text/view.c:579
 msgid "Go to link"
 msgstr "Ugrás linkre"
 
-#: src/viewer/text/view.c:578
+#: src/viewer/text/view.c:579
 msgid "Enter link number"
 msgstr "Ird be a link számát"
 
-#: src/viewer/text/view.c:1175
+#: src/viewer/text/view.c:1184
 msgid "Save error"
 msgstr "Mentési hiba"
 
-#: src/viewer/text/view.c:1176
+#: src/viewer/text/view.c:1185
 msgid "Error writing to file"
 msgstr "Hiba a fájl irása közben"
 
+#~ msgid "Number of cached formatted pages."
+#~ msgstr "A gyorsítótárazott formázott dokumentumok száma."

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-21 18:59+0200\n"
+"POT-Creation-Date: 2004-09-21 23:13+0200\n"
 "PO-Revision-Date: 2004-09-21 19:30+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -272,6 +272,18 @@ msgstr "Wska¼niki LED"
 #: src/bfu/menu.c:736
 msgid "Search menu/"
 msgstr "Menu wyszukiwania/"
+
+#: src/bfu/msgline.c:168 src/util/formatter.c:87
+msgid "Is the current link bookmarked"
+msgstr "Czy bie¿±cy odno¶nik jest dodany do zak³adek"
+
+#: src/bfu/msgline.c:169 src/util/formatter.c:88
+msgid "Is the current location bookmarked"
+msgstr "Czy bie¿±ca lokacja jest dodana do zak³adek"
+
+#: src/bfu/msgline.c:170 src/util/formatter.c:89
+msgid "Is the current link is the history"
+msgstr "Czy bie¿±cy odno¶nik jest histori±"
 
 #: src/bookmarks/backend/xbel.c:98
 msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()"
@@ -5407,7 +5419,7 @@ msgid "No document"
 msgstr "Brak dokumentu"
 
 #. name:
-#: src/document/css/css.c:29 src/document/css/css.c:157
+#: src/document/css/css.c:29 src/document/css/css.c:158
 msgid "Cascading Style Sheets"
 msgstr "Kaskadowe szablony stylów CSS"
 
@@ -5532,8 +5544,6 @@ msgstr "Prze³±cz zapisywanie"
 msgid "Form history manager"
 msgstr "Menad¿er historii formularzy"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:34
 msgid "Show forms history dialog"
 msgstr "Poka¿ okno dialogowe historii formularzy"
@@ -6006,6 +6016,7 @@ msgstr "System konfiguracyjny"
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
+#. name:
 #: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:126
 #: src/mime/backend/mailcap.c:685
 msgid "Mailcap"
@@ -7261,15 +7272,6 @@ msgstr "B³±d zapisu do pliku"
 
 #~ msgid "Number of cached formatted pages."
 #~ msgstr "Ilo¶æ sformatowanych dokumentów."
-
-#~ msgid "Is the current link bookmarked"
-#~ msgstr "Czy bie¿±cy odno¶nik jest dodany do zak³adek"
-
-#~ msgid "Is the current location bookmarked"
-#~ msgstr "Czy bie¿±ca lokacja jest dodana do zak³adek"
-
-#~ msgid "Is the current link is the history"
-#~ msgstr "Czy bie¿±cy odno¶nik jest histori±"
 
 #~ msgid "Sorry, but bookmark's folder \"%s\" cannot be deleted."
 #~ msgstr "Przykro mi, ale folder zak³adek \"%s\" nie mo¿e byæ usuniêty."

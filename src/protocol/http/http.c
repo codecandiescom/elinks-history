@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.166 2003/07/08 02:25:40 jonas Exp $ */
+/* $Id: http.c,v 1.167 2003/07/08 12:39:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1134,7 +1134,7 @@ again:
 #ifdef COOKIES
 	ch = head;
 	while ((cookie = parse_http_header(ch, "Set-Cookie", &ch))) {
-		set_cookie(NULL, uri->protocol, cookie);
+		set_cookie(NULL, uri, cookie);
 		mem_free(cookie);
 	}
 #endif

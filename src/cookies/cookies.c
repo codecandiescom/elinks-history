@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.58 2003/07/08 01:24:26 jonas Exp $ */
+/* $Id: cookies.c,v 1.59 2003/07/08 12:39:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,14 +95,13 @@ free_cookie(struct cookie *c)
 
 
 static int
-check_domain_security(unsigned char *server, unsigned char *domain)
+check_domain_security(unsigned char *domain, unsigned char *server, int server_len)
 {
-	int i, j, domain_len, server_len;
+	int i, j, domain_len;
 	int need_dots;
 
 	if (domain[0] == '.') domain++;
 	domain_len = strlen(domain);
-	server_len = strlen(server);
 
 	if (domain_len > server_len) return 0;
 
@@ -161,12 +160,13 @@ check_domain_security(unsigned char *server, unsigned char *domain)
 }
 
 int
-set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
+set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 {
 	unsigned char *server, *document, *date, *secure;
 	struct cookie *cookie;
 	struct c_server *cs;
 	struct cookie_str cstr;
+	unsigned char *url = uri->protocol;
 
 	if (get_opt_int("cookies.accept_policy") == COOKIES_ACCEPT_NONE)
 		return 0;
@@ -210,6 +210,7 @@ free_cookie_name:
 	}
 	cookie->server = stracpy(server);
 	if (!cookie->server) {
+free_cookie_value:
 		mem_free(cookie->value);
 		goto free_cookie_name;
 	}
@@ -240,7 +241,12 @@ free_cookie_name:
 	if (!cookie->path) {
 		unsigned char *path_end;
 
-		cookie->path = stracpy("/"); /* FIXME: untested return value. */
+		cookie->path = stracpy("/");
+		if (!cookie->path) {
+free_cookie_server:
+			mem_free(cookie->server);
+			goto free_cookie_value;
+		}
 		add_to_strn(&cookie->path, document);
 
 		for (path_end = cookie->path; *path_end; path_end++) {
@@ -273,7 +279,11 @@ free_cookie_name:
 
 	cookie->domain = parse_http_header_param(str, "domain");
 	if (!cookie->domain)
-		cookie->domain = stracpy(server); /* FIXME: untested return value. */
+		cookie->domain = stracpy(server);
+		if (!cookie->domain) {
+			mem_free(cookie->path);
+			goto free_cookie_server;
+		}
 	if (cookie->domain[0] == '.')
 		memmove(cookie->domain, cookie->domain + 1,
 			strlen(cookie->domain));
@@ -292,7 +302,7 @@ free_cookie_name:
 	      cookie->expires, cookie->secure);
 #endif
 
-	if (!check_domain_security(server, cookie->domain)) {
+	if (!check_domain_security(cookie->domain, server, strlen(server))) {
 #ifdef COOKIES_DEBUG
 		debug("Domain security violated.");
 #endif

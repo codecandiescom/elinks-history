@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.317 2004/01/01 23:36:44 zas Exp $ */
+/* $Id: parser.c,v 1.318 2004/01/02 12:42:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3342,7 +3342,7 @@ ng:;
 							if (e->type != ELEMENT_KILLABLE) break;
 							if (!strlcasecmp(e->name, e->namelen, name, namelen)) break;
 						}
-						if (!strlcasecmp(e->name, e->namelen, name, namelen)) {
+						if (e->name && !strlcasecmp(e->name, e->namelen, name, namelen)) {
 							while (e->prev != (void *)&html_stack) kill_html_stack_item(e->prev);
 
 							if (e->type != ELEMENT_IMMORTAL)
@@ -3377,7 +3377,8 @@ ng:;
 				/*debug_stack();*/
 				foreach (e, html_stack) {
 					if (e->linebreak && !ei->linebreak) xxx = 1;
-					if (strlcasecmp(e->name, e->namelen, name, namelen)) {
+					if (!e->name
+					    || strlcasecmp(e->name, e->namelen, name, namelen)) {
 						if (e->type != ELEMENT_KILLABLE)
 							break;
 						else

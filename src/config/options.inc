@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.47 2003/12/24 13:39:21 jonas Exp $ */
+/* $Id: options.inc,v 1.48 2003/12/24 22:06:30 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1839,13 +1839,6 @@ struct option_info config_options_info[] = {
 		N_("Language of user interface. System means that the language will\n"
 		"be extracted from the environment dynamically.")),
 
-	/* Compatibility alias: added by pasky at 2002-12-01, 0.4pre20.CVS.
-	 * Estimated due time: 2003-02-01 */
-	INIT_OPT_ALIAS("ui", NULL,
-		"shadows", 0, "ui.dialogs.shadows",
-		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use the ui.dialog.shadows option instead.")),
-
 	INIT_OPT_BOOL("ui", N_("Display status bar"),
 		"show_status_bar", 0, 1,
 		N_("Show status bar on the screen.")),
@@ -1866,13 +1859,6 @@ struct option_info config_options_info[] = {
 		"shown on the window titlebar.")),
 
 
-
-	/* Compatibility alias: added by pasky at 2002-12-10, 0.4pre24.CVS.
-	 * Estimated due time: 2003-02-10 */
-	INIT_OPT_ALIAS("", NULL,
-		"config_saving_style", 0, "config.saving_style",
-		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use the config.saving_style option instead.")),
 
 	INIT_OPT_BOOL("", N_("Use secure file saving"),
 		"secure_file_saving", 0, 1,

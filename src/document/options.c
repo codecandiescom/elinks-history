@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.22 2003/09/27 11:40:08 jonas Exp $ */
+/* $Id: options.c,v 1.23 2003/09/27 12:01:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,10 +26,7 @@ struct document_options *d_opt;
 void
 init_document_options(struct document_options *doo)
 {
-#if 0
-	/* TODO: Find out why this does not work. --jonas */
 	memset(doo, 0, sizeof(struct document_options));
-#endif
 
 	doo->assume_cp = get_opt_int("document.codepage.assume");
 	doo->hard_assume = get_opt_int("document.codepage.force_assumed");

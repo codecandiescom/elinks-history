@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.37 2003/09/27 11:40:09 jonas Exp $ */
+/* $Id: dump.c,v 1.38 2003/09/27 12:01:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,7 +106,6 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 	vs = mem_alloc(sizeof(struct view_state) + strlen(ce->url));
 	if (!vs) return 1;
 
-	memset(&o, 0, sizeof(struct document_options));
 	memset(vs, 0, sizeof(struct view_state));
 	memset(&formatted, 0, sizeof(struct document_view));
 

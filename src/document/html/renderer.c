@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.278 2003/09/27 11:40:08 jonas Exp $ */
+/* $Id: renderer.c,v 1.279 2003/09/27 12:01:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1635,6 +1635,7 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 	}
 
 	foreach (document, format_cache) {
+		debug("%s =? %s", document->url, vs->url);
 		if (strcmp(document->url, vs->url)
 		    || compare_opt(&document->opt, options))
 			continue;
@@ -1714,9 +1715,10 @@ html_interpret(struct session *ses)
 
 	if (have_location(ses)) l = &cur_loc(ses)->vs;
 
-	init_bars_status(ses, NULL, &o);
-
 	init_document_options(&o);
+
+	/* XXX: Sets 0.yw and 0.xw so keep after init_document_options(). */
+	init_bars_status(ses, NULL, &o);
 
 	o.col = get_opt_bool_tree(ses->tab->term->spec, "colors");
 	o.cp = get_opt_int_tree(ses->tab->term->spec, "charset");

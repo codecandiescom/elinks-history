@@ -86,43 +86,43 @@ void debug_msg(unsigned char *m, ...)
 void *debug_mem_alloc(unsigned char *file, int line, size_t size)
 {
 	void *p;
-#ifdef LEAK_DEBUG
 	struct alloc_header *ah;
-#endif
+	
 	if (!size) return DUMMY;
-#ifdef LEAK_DEBUG
+	
 	mem_amount += size;
 	size += L_D_S;
-#endif
+	
 	if (!(p = xmalloc(size))) {
 		error("ERROR: out of memory (malloc returned NULL)\n");
 		return NULL;
 	}
-#ifdef LEAK_DEBUG
+	
 	ah = p;
 	p = (char *)p + L_D_S;
+	
 	ah->size = size - L_D_S;
 #ifdef LEAK_DEBUG_LIST
 	ah->file = file;
 	ah->line = line;
 	ah->comment = NULL;
+	
 	add_to_list(memory_list, ah);
 #endif
-#endif
+	
 	return p;
 }
 
 void debug_mem_free(unsigned char *file, int line, void *p)
 {
-#ifdef LEAK_DEBUG
 	struct alloc_header *ah;
-#endif
+	
 	if (p == DUMMY) return;
 	if (!p) {
 		errfile = file, errline = line, int_error("mem_free(NULL)");
 		return;
 	}
-#ifdef LEAK_DEBUG
+	
 	p = (char *)p - L_D_S;
 	ah = p;
 #ifdef LEAK_DEBUG_LIST
@@ -130,15 +130,13 @@ void debug_mem_free(unsigned char *file, int line, void *p)
 	if (ah->comment) free(ah->comment);
 #endif
 	mem_amount -= ah->size;
-#endif
 	xfree(p);
 }
 
 void *debug_mem_realloc(unsigned char *file, int line, void *p, size_t size)
 {
-#ifdef LEAK_DEBUG
 	struct alloc_header *ah;
-#endif
+	
 	if (p == DUMMY) return debug_mem_alloc(file, line, size);
 	if (!p) {
 		errfile = file, errline = line, int_error("mem_realloc(NULL, %d)", size);
@@ -152,14 +150,13 @@ void *debug_mem_realloc(unsigned char *file, int line, void *p, size_t size)
 		error("ERROR: out of memory (realloc returned NULL)\n");
 		return NULL;
 	}
-#ifdef LEAK_DEBUG
+	
 	ah = p;
 	mem_amount += size - ah->size;
 	ah->size = size;
 #ifdef LEAK_DEBUG_LIST
 	ah->prev->next = ah;
 	ah->next->prev = ah;
-#endif
 #endif
 	return (char *)p + L_D_S;
 }
@@ -168,6 +165,7 @@ void set_mem_comment(void *p, unsigned char *c, int l)
 {
 #ifdef LEAK_DEBUG_LIST
 	struct alloc_header *ah = (struct alloc_header *)((char *)p - L_D_S);
+
 	if (ah->comment) free(ah->comment);
 	if ((ah->comment = malloc(l + 1))) memcpy(ah->comment, c, l), ah->comment[l] = 0;
 #endif

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.116 2003/12/21 00:30:15 jonas Exp $ */
+/* $Id: dialog.c,v 1.117 2003/12/21 00:40:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -239,7 +239,7 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 				break;
 
 			/* Can we select? */
-			if ((ev->x == KBD_ENTER || ev->x == ' ')
+			if (action == ACT_ENTER
 			    && widget_data->widget->ops->select) {
 				widget_data->widget->ops->select(widget_data, dlg_data);
 				break;
@@ -257,7 +257,7 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 			}
 
 			/* Submit button. */
-			if (ev->x == KBD_ENTER
+			if (action == ACT_ENTER
 			    && (widget_is_textfield(widget_data)
 				|| ev->y == KBD_CTRL || ev->y == KBD_ALT)) {
 				for (i = 0; i < dlg_data->n; i++)

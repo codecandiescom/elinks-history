@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.72 2003/10/02 10:46:22 kuser Exp $ */
+/* $Id: core.c,v 1.73 2003/10/02 11:09:12 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,6 +274,31 @@ l_enable_systems_functions(LS)
 	lua_register(S, "tmpname", l_tmpname);
 
 	return 0;
+}
+
+/*
+ * Helper to run Lua functions bound to keystrokes.
+ */
+
+static enum evhook_status
+run_lua_func(va_list ap, void *data)
+{
+	struct session *ses = va_arg(ap, struct session *);
+	int func_ref = (int)data;
+	int err;
+
+	if (func_ref == LUA_NOREF) {
+		alert_lua_error("key bound to nothing (internal error)");
+		return EHS_NEXT;
+	}
+
+	lua_getref(L, func_ref);
+	if (prepare_lua(ses)) return EHS_NEXT;
+	err = lua_call(L, 0, 2);
+	finish_lua();
+	if (!err) handle_standard_lua_returns("keyboard function");
+
+	return EHS_NEXT;
 }
 
 static int
@@ -833,32 +858,6 @@ void
 free_lua_console_history(void)
 {
 	free_list(lua_console_history.items);
-}
-
-
-/*
- * Helper to run Lua functions bound to keystrokes.
- */
-
-enum evhook_status
-run_lua_func(va_list ap, void *data)
-{
-	struct session *ses = va_arg(ap, struct session *);
-	int func_ref = (int)data;
-	int err;
-
-	if (func_ref == LUA_NOREF) {
-		alert_lua_error("key bound to nothing (internal error)");
-		return EHS_NEXT;
-	}
-
-	lua_getref(L, func_ref);
-	if (prepare_lua(ses)) return EHS_NEXT;
-	err = lua_call(L, 0, 2);
-	finish_lua();
-	if (!err) handle_standard_lua_returns("keyboard function");
-
-	return EHS_NEXT;
 }
 
 

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.277 2004/08/14 15:26:26 miciah Exp $ */
+/* $Id: search.c,v 1.278 2004/08/15 06:49:08 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -206,6 +206,8 @@ get_search_data(struct document *document)
 	sort_srch(document);
 }
 
+/* Returns -1 on assertion failure, 1 if s1 and s2 are not found,
+ * and 0 if they are found. */
 static int
 get_range(struct document *document, int y, int height, int l,
 	  struct search **s1, struct search **s2)
@@ -224,7 +226,7 @@ get_range(struct document *document, int y, int height, int l,
 		if (document->slines2[i] && (!*s2 || document->slines2[i] > *s2))
 			*s2 = document->slines2[i];
 	}
-	if (!*s1 || !*s2) return -1;
+	if (!*s1 || !*s2) return 1;
 
 	*s1 -= l;
 
@@ -235,7 +237,7 @@ get_range(struct document *document, int y, int height, int l,
 	if (*s1 > *s2)
 		*s1 = *s2 = NULL;
 	if (!*s1 || !*s2)
-		return -1;
+		return 1;
 
 	return 0;
 }

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.42 2002/12/18 11:35:05 zas Exp $ */
+/* $Id: cookies.c,v 1.43 2002/12/18 11:55:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,7 @@
 
 #include "elinks.h"
 
-#define COOKIES_DEBUG
+/* #define COOKIES_DEBUG */
 
 #include "cookies/cookies.h"
 #include "cookies/parser.h"

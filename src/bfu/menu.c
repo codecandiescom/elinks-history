@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.19 2002/11/29 18:25:51 zas Exp $ */
+/* $Id: menu.c,v 1.20 2002/11/29 20:28:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,15 +177,10 @@ scroll_menu(struct menu *menu, int d)
 
 	menu->selected += d;
 
-	/* Proven as utterly annoying in menus taller than the screen height,
-	 * thus disabled after a year of suffering. When you'll want this
-	 * [configurable, by default off], tell me. --pasky */
-#ifdef MENU_WRAPAROUND
-	if (menu->ni) {
+	if (menu->ni && get_opt_bool("ui.menu_scroll_wraparound")) {
 		menu->selected %= menu->ni;
 		if (menu->selected < 0) menu->selected += menu->ni;
 	}
-#endif
 
 	while (1) {
 		if (c++ > menu->ni) {

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.613 2004/10/10 03:47:31 miciah Exp $ */
+/* $Id: view.c,v 1.614 2004/10/10 03:51:04 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -705,24 +705,21 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 		return FRAME_EVENT_REFRESH;
 	}
 
-	switch (kbd_action(KEYMAP_MAIN, ev, NULL)) {
-		default:
-			if (isdigit(get_kbd_key(ev))) {
-				status = frame_ev_kbd_number(ses, doc_view,
-							     ev);
+	if (isdigit(get_kbd_key(ev))) {
+		status = frame_ev_kbd_number(ses, doc_view,
+					     ev);
 
-				if (status != FRAME_EVENT_IGNORED)
-					return status;
-			}
+		if (status != FRAME_EVENT_IGNORED)
+			return status;
+	}
 
-			if (get_opt_int("document.browse.accesskey.priority") == 1
-			    && try_document_key(ses, doc_view, ev)) {
-				/* The document ate the key! */
-				status = FRAME_EVENT_REFRESH;
+	if (get_opt_int("document.browse.accesskey.priority") == 1
+	    && try_document_key(ses, doc_view, ev)) {
+		/* The document ate the key! */
+		status = FRAME_EVENT_REFRESH;
 
-			} else {
-				status = FRAME_EVENT_IGNORED;
-			}
+	} else {
+		status = FRAME_EVENT_IGNORED;
 	}
 
 	if (status != FRAME_EVENT_IGNORED)

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.228 2003/11/14 02:06:29 miciah Exp $ */
+/* $Id: session.c,v 1.229 2003/11/14 02:28:42 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1500,11 +1500,11 @@ static void
 print_unknown_protocol_dialog(struct session *ses)
 {
 	msg_box(ses->tab->term, NULL, 0,
-		N_("Error", ses->tab->term), AL_CENTER,
+		N_("Error"), AL_CENTER,
 		N_("This URL contains a protocol not yet known by ELinks.\n"
 		   "You can configure an external handler for it through options system."),
 		ses, 1,
-		N_("OK", ses->tab->term), NULL, B_ENTER | B_ESC);
+		N_("OK"), NULL, B_ENTER | B_ESC);
 }
 
 static void

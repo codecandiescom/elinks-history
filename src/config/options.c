@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.189 2003/01/26 19:48:56 pasky Exp $ */
+/* $Id: options.c,v 1.190 2003/01/26 23:02:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1341,14 +1341,6 @@ register_options()
 		"mime", 0,
 		N_("MIME-related options (handlers of various MIME types)."));
 
-	add_opt_bool("protocol.http", "Activate HTTP TRACE debugging",
-		"trace", 0, 0,
-		"If active, all HTTP requests are sent with TRACE as their method\n"
-		"rather than GET or POST. This is useful for debugging of both ELinks\n"
-		"and various server-side scripts --- the server only returns the client's\n"
-		"request back to the client verbatim. Note that this type of request may\n"
-		"not be enabled on all servers.");
-
 
 	add_opt_tree("mime", N_("MIME type associations"),
 		"type", OPT_AUTOCREATE,
@@ -1485,6 +1477,14 @@ register_options()
 		"Accept-Language header) using the language you have configured for\n"
 		"ELinks' user-interface. Note that some see this as a potential security\n"
 		"risk because it tells web-masters about your preference in language."));
+
+	add_opt_bool("protocol.http", N_("Activate HTTP TRACE debugging"),
+		"trace", 0, 0,
+		N_("If active, all HTTP requests are sent with TRACE as their method\n"
+		"rather than GET or POST. This is useful for debugging of both ELinks\n"
+		"and various server-side scripts --- the server only returns the client's\n"
+		"request back to the client verbatim. Note that this type of request may\n"
+		"not be enabled on all servers."));
 
 	add_opt_string("protocol.http", N_("User-agent identification"),
 		"user_agent", 0, "ELinks (%v; %s; %t)",

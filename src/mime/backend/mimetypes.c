@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.17 2003/10/03 12:50:48 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.18 2003/10/03 13:22:25 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -199,13 +199,10 @@ mimetypes_change_hook(struct session *ses, struct option *current,
 	if (!strncasecmp(changed->name, "path", 4)) {
 		/* Brute forcing reload! */
 		done_mimetypes();
-		init_mimetypes_map();
 	} else if (!strncasecmp(changed->name, "enable", 6)) {
 		int enable = *((int *) changed->ptr);
 
-		if (enable && !mimetypes_map)
-			init_mimetypes_map();
-		else if (!enable && mimetypes_map)
+		if (!enable && mimetypes_map)
 			done_mimetypes();
 	}
 

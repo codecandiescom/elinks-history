@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.5 2002/03/26 17:19:08 pasky Exp $ */
+/* $Id: af_unix.c,v 1.6 2002/03/26 17:21:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,14 @@
 #include <sys/types.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
+
+/* struct timeval */
+#ifdef HAVE_SYS_TIME_H
+#include <sys/time.h>
+#endif
+#ifdef HAVE_TIME_H
+#include <time.h>
 #endif
 
 /* Blame BSD for position of this includes. */

@@ -1,4 +1,4 @@
-/* $Id: screen.h,v 1.18 2003/10/17 15:08:28 jonas Exp $ */
+/* $Id: screen.h,v 1.19 2003/10/17 15:20:30 jonas Exp $ */
 
 #ifndef EL__TERMINAL_SCREEN_H
 #define EL__TERMINAL_SCREEN_H
@@ -17,8 +17,8 @@ struct terminal_screen {
 	int cx, cy;
 	int lcx, lcy;
 
-	/* We are sure that @screen and the physical screen are out of sync
-	 * in the given range of lines. */
+	/* The range of line numbers that are out of sync with the physical
+	 * screen. @dirty_from > @dirty_to means not dirty. */
 	int dirty_from, dirty_to;
 };
 

@@ -596,9 +596,11 @@ Display frames.
 Display tables.
 .TP
 \f3document.html.expand_table_columns\f2 [0|1]\f1 (default: 0)
-Enable to make table rendering expand table columns
-so cells are more correctly vertical aligned with respect
-to colors. Still a bit experimental.
+Enable to make table rendering expand table columns so cells
+are more correctly vertically aligned with respect to the background
+colors, but less correctly vertically aligned with respect to the
+overall layout. Only useful if you also have
+document.colors.use_document_colors set to 2. Experimental.
 .TP
 \f3document.html.display_subs\f2 [0|1]\f1 (default: 1)
 Display subscripts (as [thing]).

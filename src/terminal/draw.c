@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.103 2004/08/06 08:38:10 zas Exp $ */
+/* $Id: draw.c,v 1.104 2004/08/06 08:40:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,16 +214,13 @@ draw_box(struct terminal *term, struct box *box,
 	struct screen_char *line, *pos, *end;
 	int width, height;
 
-	assert(term && term->screen && term->screen->image);
-	if_assert_failed return;
-	check_range(term, box->x, box->y);
+	line = get_char(term, box->x, box->y);
+	if (!line) return;
 
 	height = int_min(box->height, term->height - box->y);
 	width = int_min(box->width, term->width - box->x);
 
 	if (height <= 0 || width <= 0) return;
-
-	line = &term->screen->image[box->x + term->width * box->y];
 
 	/* Compose off the ending screen position in the areas first line. */
 	end = &line[width - 1];

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.147 2004/12/23 21:50:50 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.148 2004/12/24 23:13:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,9 +317,11 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		obj = try_resolve_frame(doc_view, v.string);
 		/* TODO: Try other lookups (mainly element lookup) until
 		 * something yields data. */
-		if (!obj) return JS_TRUE;
-		set_prop_object(&prop, obj);
-		goto convert;
+		if (obj) {
+			set_prop_object(&prop, obj);
+			value_to_jsval(ctx, vp, &prop);
+		}
+		return JS_TRUE;
 	} else if (!JSVAL_IS_INT(id))
 		return JS_TRUE;
 
@@ -407,7 +409,6 @@ found_parent:
 		return JS_TRUE;
 	}
 
-convert:
 	value_to_jsval(ctx, vp, &prop);
 	return JS_TRUE;
 }
@@ -1199,7 +1200,8 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			} else {
 				set_prop_undef(&prop);
 			}
-			goto convert;
+			value_to_jsval(ctx, vp, &prop);
+			break;
 		}
 		return JS_TRUE;
 	} else if (!JSVAL_IS_INT(id))
@@ -1276,7 +1278,6 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		return JS_TRUE;
 	}
 
-convert:
 	value_to_jsval(ctx, vp, &prop);
 	return JS_TRUE;
 }
@@ -1589,7 +1590,8 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 				strncpy(cookiestr, cookies->source, 1024);
 				done_string(cookies);
 				set_prop_string(&prop, cookiestr);
-				goto convert;
+				value_to_jsval(ctx, vp, &prop);
+				return JS_TRUE;
 			}
 		}
 #endif
@@ -1598,7 +1600,8 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 				continue;
 
 			set_prop_object(&prop, get_form_object(ctx, obj, find_form_view(doc_view, form)));
-			goto convert;
+			value_to_jsval(ctx, vp, &prop);
+			break;
 		}
 		return JS_TRUE;
 	} else if (!JSVAL_IS_INT(id))
@@ -1638,7 +1641,6 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		return JS_TRUE;
 	}
 
-convert:
 	value_to_jsval(ctx, vp, &prop);
 	return JS_TRUE;
 }

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.83 2002/12/26 12:20:17 pasky Exp $ */
+/* $Id: http.c,v 1.84 2002/12/26 12:26:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -720,7 +720,7 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 				/* We assume that this is because full pipe. */
 				/* FIXME: We should probably handle errors as
 				 * well. --pasky */
-				ret = 4096; /* pipe capacity */
+				ret = PIPE_BUF;
 			}
 		}
 		/* finishing could be changed above ;) */
@@ -734,7 +734,7 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 			 * displaying feeling better? --pasky */
 			ret = 65536;
 		}
-		if (ret < 4096) {
+		if (ret < PIPE_BUF) {
 			/* Not enough data, try in next round. */
 			return output;
 		}

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.62 2003/05/20 21:33:41 zas Exp $ */
+/* $Id: url.c,v 1.63 2003/05/20 21:47:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,7 +221,7 @@ parse_url(unsigned char *url, int *prlen,
 	if (host || holen) { /* Only enter if needed. */
 #ifdef IPV6
 		if (rbracket) {
-			unsigned char hostbuf[NI_MAXHOST];
+			static unsigned char hostbuf[NI_MAXHOST];
 			int addrlen = rbracket - lbracket - 1;
 
 			/* Check for valid length.

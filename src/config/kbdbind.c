@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.237 2004/06/27 09:45:24 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.238 2004/06/27 09:49:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -929,30 +929,25 @@ keybinding_is_default(struct keybinding *kb)
 	return 0;
 }
 
-static inline void
-add_keymap_default_keybindings(enum keymap keymap, struct default_kb *defaults)
-{
-	struct default_kb *kb;
-
-	for (kb = defaults; kb->key; kb++) {
-		struct keybinding *keybinding;
-
-		keybinding = add_keybinding(keymap, kb->action,
-					    kb->key, kb->meta, EVENT_NONE);
-		keybinding->flags |= KBDB_DEFAULT;
-	}
-}
-
 static void
 add_default_keybindings(void)
 {
 	/* Maybe we shouldn't delete old keybindings. But on the other side, we
 	 * can't trust clueless users what they'll push into sources modifying
 	 * defaults, can we? ;)) */
+	enum keymap keymap;
 
-	add_keymap_default_keybindings(KM_MAIN, default_main_keymap);
-	add_keymap_default_keybindings(KM_EDIT, default_edit_keymap);
-	add_keymap_default_keybindings(KM_MENU, default_menu_keymap);
+	for (keymap = 0; keymap < KM_MAX; keymap++) {
+		struct default_kb *kb;
+
+		for (kb = default_keybindings[keymap]; kb->key; kb++) {
+			struct keybinding *keybinding;
+
+			keybinding = add_keybinding(keymap, kb->action, kb->key,
+						    kb->meta, EVENT_NONE);
+			keybinding->flags |= KBDB_DEFAULT;
+		}
+	}
 }
 
 

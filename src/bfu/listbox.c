@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.93 2003/10/25 11:39:19 zas Exp $ */
+/* $Id: listbox.c,v 1.94 2003/10/25 16:06:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,7 +168,7 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 				item_cache(item);
 			}
 
-			if (!croot && (void *) cnext == box->items) {
+			if (!croot && (!cnext || (void *) cnext == box->items)) {
 				/* Last item in the root list, quit.. */
 				stop = 1;
 				if (cragsman) {

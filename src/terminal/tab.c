@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.50 2004/02/26 16:12:36 jonas Exp $ */
+/* $Id: tab.c,v 1.51 2004/02/26 23:47:10 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,7 +101,7 @@ get_tab_number_by_xpos(struct terminal *term, int xpos)
 
 	foreachback_tab (win, term->windows) {
 		if (xpos >= win->xpos
-		    && xpos < win->xpos + win->width - 1)
+		    && xpos < win->xpos + win->width)
 			return num;
 		num++;
 	}

@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.36 2003/06/18 08:51:25 zas Exp $ */
+/* $Id: af_unix.c,v 1.37 2003/06/18 10:49:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,7 +81,7 @@ static int s_unix_fd = -1;
 static int
 get_address(void)
 {
-	struct sockaddr_un *addr;
+	struct sockaddr_un *addr = NULL;
 	unsigned char *path;
 	int pathl = 0;
 
@@ -91,31 +91,46 @@ get_address(void)
 	if (!path) return -1;
 
 	add_to_str(&path, &pathl, elinks_home);
+	add_to_str(&path, &pathl, ELINKS_SOCK_NAME);
+	add_num_to_str(&path, &pathl, get_opt_int_tree(&cmdline_options, "session-ring"));
 
-	addr = mem_calloc(1, sizeof(struct sockaddr_un) + pathl + 1);
-	if (!addr) {
-		mem_free(path);
-		return -1;
+	/* Linux defines that as:
+	 * #define UNIX_PATH_MAX   108
+	 * struct sockaddr_un {
+	 *	sa_family_t sun_family;
+	 *	char sun_path[UNIX_PATH_MAX];
+	 * };
+	 *
+	 * UNIX_PATH_MAX is not defined on all systems, so we'll use sizeof().
+	 */
+
+	if (pathl >= sizeof(addr->sun_path)) {
+		internal("Socket path name '%s' is too long: %d >= %d",
+			 path, pathl, sizeof(addr->sun_path));
+		goto free_and_error;
 	}
 
-	s_unix_accept = mem_alloc(sizeof(struct sockaddr_un) + pathl + 1);
-	if (!s_unix_accept) {
-		mem_free(addr);
-		mem_free(path);
-		return -1;
-	}
+	addr = mem_calloc(1, sizeof(struct sockaddr_un));
+	if (!addr) goto free_and_error;
+
+	s_unix_accept = mem_alloc(sizeof(struct sockaddr_un));
+	if (!s_unix_accept) goto free_and_error;
+
+	memcpy(addr->sun_path, path, pathl); /* ending '\0' is done by calloc() */
+	mem_free(path);
 
 	addr->sun_family = AF_UNIX;
 
-	add_to_str(&path, &pathl, ELINKS_SOCK_NAME);
-	add_num_to_str(&path, &pathl, get_opt_int_tree(&cmdline_options, "session-ring"));
-	strcpy(addr->sun_path, path);
-	mem_free(path);
-
 	s_unix = (struct sockaddr *) addr;
-	s_unix_l = (char *) &addr->sun_path - (char *) addr + strlen(addr->sun_path) + 1;
+	s_unix_l = (char *) &addr->sun_path - (char *) addr + strlen(addr->sun_path);
 
 	return AF_UNIX;
+
+free_and_error:
+	mem_free(path);
+	if (addr) mem_free(addr);
+
+	return -1;
 }
 
 static void
@@ -233,8 +248,9 @@ again:
 #endif
 
 		if (connect(s_unix_fd, s_unix, s_unix_l) < 0) {
-			error(gettext("connect() failed: %d (%s)"),
-			      errno, (unsigned char *) strerror(errno));
+			if (errno != ECONNREFUSED)
+				error(gettext("connect() failed: %d (%s)"),
+				      errno, (unsigned char *) strerror(errno));
 
 			if (++attempts < MAX_BIND_TRIES) {
 				/* XXX: What's wrong with sleep(1) ?? --Zas */

@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.41 2003/10/17 13:05:53 jonas Exp $ */
+/* $Id: dump.c,v 1.42 2003/10/24 16:50:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,6 +215,39 @@ terminate:
 	if (real_url) mem_free(real_url);
 }
 
+/* Using this function in dump_to_file() is unfortunately slightly slower than
+ * the current code.  However having this here instead of in the scripting
+ * backends is better. */
+struct string *
+add_document_to_string(struct string *string, struct document *document)
+{
+	int y;
+
+	assert(string && document);
+	if_assert_failed return NULL;
+
+	for (y = 0; y < document->y; y++) {
+		struct screen_char *pos = document->data[y].d;
+		int x;
+ 
+		for (x = 0; x < document->data[y].l; x++) {
+			unsigned char data = pos->data;
+			unsigned int frame = (pos->attr & SCREEN_ATTR_FRAME);
+ 
+			if (data < ' ' || data == ASCII_DEL) {
+				data = ' ';
+			} else if (frame && data >= 176 && data < 224) {
+				data = frame_dumb[data - 176];
+ 			}
+ 
+			add_char_to_string(string, data);
+ 		}
+
+		add_char_to_string(string, '\n');
+ 	}
+
+	return string;
+}
 
 int
 dump_to_file(struct document *document, int fd)

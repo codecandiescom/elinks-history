@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.81 2003/10/19 11:31:16 zas Exp $ */
+/* $Id: core.c,v 1.82 2003/10/24 16:50:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,6 +43,7 @@
 #include "util/color.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "viewer/dump/dump.h"
 #include "viewer/text/view.h"
 #include "viewer/text/vs.h"
 
@@ -158,27 +159,7 @@ l_current_document_formatted(LS)
 	}
 
 	if (init_string(&buffer)) {
-		extern unsigned char frame_dumb[];
-		struct document *document = doc_view->document;
-		int x, y;
-
-		for (y = 0; y < document->y; y++) for (x = 0; x <= document->data[y].l; x++) {
-			unsigned char c;
-
-			if (x == document->data[y].l) {
-				c = '\n';
-			} else {
-				unsigned char attr = document->data[y].d[x].attr;
-
-				c = document->data[y].d[x].data;
-				if (c == 1) c += ' ' - 1;
-
-				if ((attr & SCREEN_ATTR_FRAME)
-				    && c >= 176 && c < 224)
-					c = frame_dumb[c - 176];
-			}
-			add_char_to_string(&buffer, c);
-		}
+		add_document_to_string(&buffer, doc_view->document);
 		lua_pushlstring(S, buffer.source, buffer.length);
 		done_string(&buffer);
 	}

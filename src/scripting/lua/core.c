@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.79 2003/10/17 13:04:29 jonas Exp $ */
+/* $Id: core.c,v 1.80 2003/10/17 13:50:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,28 +96,24 @@ l_current_url(LS)
 static int
 l_current_link(LS)
 {
-	struct document_view *fd = current_frame(lua_ses);
+	struct link *link = get_current_link(lua_ses);
 
-	if (fd && fd->vs->current_link != -1) {
-		struct link *l = &fd->document->links[fd->vs->current_link];
-
-		if (l->type == L_LINK) {
-			lua_pushstring(S, l->where);
-			return 1;
-		}
+	if (link) {
+		lua_pushstring(S, link->where);
+	} else {
+		lua_pushnil(S);
 	}
 
-	lua_pushnil(S);
 	return 1;
 }
 
 static int
 l_current_title(LS)
 {
-	struct document_view *fd = current_frame(lua_ses);
+	struct document_view *doc_view = current_frame(lua_ses);
 
-	if (fd && fd->document->title) {
-		lua_pushstring(S, fd->document->title);
+	if (doc_view && doc_view->document->title) {
+		lua_pushstring(S, doc_view->document->title);
 		return 1;
 	}
 
@@ -147,7 +143,7 @@ l_current_document(LS)
 static int
 l_current_document_formatted(LS)
 {
-	struct document_view *f;
+	struct document_view *doc_view;
 	struct string buffer;
 	int width, old_width = 0;
 
@@ -155,7 +151,7 @@ l_current_document_formatted(LS)
 	else if (!lua_isnumber(S, 1)) goto lua_error;
 	else if ((width = lua_tonumber(S, 1)) <= 0) goto lua_error;
 
-	if (!lua_ses || !(f = current_frame(lua_ses))) goto lua_error;
+	if (!lua_ses || !(doc_view = current_frame(lua_ses))) goto lua_error;
 	if (width > 0) {
 		old_width = lua_ses->tab->term->x, lua_ses->tab->term->x = width;
 		html_interpret(lua_ses);
@@ -163,7 +159,7 @@ l_current_document_formatted(LS)
 
 	if (init_string(&buffer)) {
 		extern unsigned char frame_dumb[];
-		struct document *document = f->document;
+		struct document *document = doc_view->document;
 		int x, y;
 
 		for (y = 0; y < document->y; y++) for (x = 0; x <= document->data[y].l; x++) {

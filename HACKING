@@ -1,6 +1,6 @@
-Welcome, mere mortal, to realm of evil unindented code, heaps of
-one or two-letter variables, seas of gotos accompanied with 30-letters labels
-in czech language with absolutely no mean, welcome to the realm of ELinks code!
+Welcome, mere mortal, to the realm of evil unindented code, heaps of one or
+two-letter variables, seas of gotos accompanied with 30-letters labels in czech
+language with absolutely no meaning, welcome to the realm of ELinks code!
 
 [We're going to extend this file slowly, basing on daily practice ;]
 
@@ -14,76 +14,77 @@ Motto: I didn't expect someone to look at the source, so it's unreadable.
 ~~~~~~~~~~~~~~~~~
 
 Each UI output should use language files in order to be able to translate the
-messages to desired language. Those language files reside in intl/ subdir, and
-each time when you add/remove something from there, thou shall call ./synclang
-script, so that the change will propagate from english.lng to all other
-language files and lang_defs.h && language.inc files will be generated
+messages to a desired language.  Those language files reside in intl/ subdir,
+and each time when you add/remove something from there, thou shall call the
+./synclang script, so that the changes will propagate from english.lng to all
+other language files and lang_defs.h && language.inc files will be generated
 automagically. Thou shall NEVER modify those two files manually, or thou wilt
-be cursed for the rest of your life and all patches of thee will be trampled
-in.
-Please read intl/README file before any action.
+be cursed for the rest of your life and all patches from thee will be trampled
+on.
+
+Please read the intl/README file before taking any action.
 
 
 2, ELinks philosophy
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
 
-ELinks is based on the philosophy of asynchronity. That means, you pass callback
-to each function, and when the requested task will be finished sometime in the
+ELinks is based on the philosophy of asynchronism.  That means, you pass a
+callback to each function, and when the requested task finishes sometime in the
 unclear future, the callback will be called in order to notify you that you can
 go on.
 
 When you use multiple elinks instances at once, normally only one of them is a
-'master', and the rest of them are just kinda dumb terminals. So if you want to
-test some new feature, you have to start elinks with '-no-connect' parameter,
-otherwise it will just connect to actually running elinks and you won't see your
-new great feature you just added in such a big pain.
+'master', and the rest of them are just kinda dumb terminals.  So if you want
+to test some new feature, you have to start elinks with the '-no-connect'
+parameter, otherwise it will just connect to an already running elinks and you
+won't see your great new feature that you just added with such much pain.
 
-There are two basic structures in ELinks. Connection and session - their names
-should be self-descriptive. Only note that connection may or may not have
-session attached. I.e. if you will type some URL, start loading it and then
-press ACT_BACK (KEY_LEFT), connection will lose its session. So you should
-never prepend that it has one.
+There are two basic structures in ELinks.  Connection and session - their names
+should be self-descriptive.  Only note that connections may or may not have
+sessions attached.  I.e. if you type some URL, then start loading it and then
+press ACT_BACK (KEY_LEFT), the connection will lose its session.  So you should
+never pretend that it has one.
 
-UI just plainly needs rewrite as it's extremely ugly ;-). Cut'n'paste from some
-existing code and modify appropriately, if you want one :).
+The UI plainly needs a rewrite as it's extremely ugly ;-).  Cut'n'paste from
+some existing code and modify appropriately, if you want one :).
 
 Some common used functions (i.e. malloc() or free()) have their own clones
 inside ELinks and you should use them (i.e. mem_alloc() or mem_free()) instead.
 See links.h for list of them ;-).
 
-If you want to have anything else documented here, write description and send
+If you want to have anything else documented here, write a description and send
 us a patch.
 
 
 2.1, HTML parser
 ~~~~~~~~~~~~~~~~
 
-The following was found in mailing list archive - Mikulas wrote it:
+The following was found in the mailing list archive - Mikulas wrote it:
 
-The entry of parser is parse_html. This function gets html to parse (pointers
-html and eof) and functions it should call when it wants to produce output
-(put_chars, line_break, init, special). f is pointer that is passed to that
-functions, head is HTTP header (for refresh). The function uses stack (struct
-list_head html_stack; it is set up by the caller of parse_html), places
-formatting info on it, and calls output functions. put_chars to write text,
-line_break for new line, init (currently unused), special (tags, forms,
-etc...). These functions read the parameters from stack (struct html_element)
-and do actual rendering.  (some times ago, some people wanted to use the parser
-for graphics browser, so I wrote it so that it could produce graphics output
-just by replacing the output functions)
+The entry of the parser is parse_html.  This function gets an html source to
+parse (pointers html and eof) and the functions it should call when it wants to
+produce output (put_chars, line_break, init, special).  f is a pointer that is
+passed to that function, head is the HTTP header (for refresh).  The function
+uses a stack (struct list_head html_stack; it is set up by the caller of
+parse_html), places formatting info into it, and calls output functions.
+put_chars to write text, line_break for new line, init (currently unused),
+special (tags, forms, etc...).  These functions read the parameters from the
+stack (struct html_element) and do the actual rendering (some while ago, people
+wanted to use the parser for a graphics browser, so I wrote it so that it could
+produce graphics output by replacing the output functions).
 
-Html renderer is in html_r.c. html_interpret formats the whole screen. It calls
-cached_format_html which formats one document (frame) or returns directly
-formatted document from cache. cached_format_html then calls format_html, which
-sets up rendering and calls format_html_part.  format_html_part is used for
-formatting the whole document or formatting parts of tables. It calls
-parse_html.
+Html renderer is in html_r.c.  html_interpret formats the whole screen.  It
+calls cached_format_html which formats one document (frame) or returns directly
+a formatted document from the cache.  cached_format_html then calls
+format_html, which sets up rendering and calls format_html_part.
+format_html_part is used for formatting the whole document or formatting parts
+of tables. It calls parse_html.
 
 The rendering functions put_chars_conv, line_break, html_special receive struct
-part * from the parser. They render the text or calculate size of text (in case
-of tables). struct part has pointer to struct f_data - a stucture that holds
-actually formatted data. If the pointer is NULL, rendering functions only
-calculate size.
+part * from the parser.  They render the text or calculate the size of the text
+(in case of tables).  struct part has a pointer to struct f_data - a stucture
+that holds the actual formatted data.  If the pointer is NULL, rendering
+functions only calculate size.
 
 
 2.2, Lua support
@@ -100,7 +101,7 @@ code to run some Lua code, run it, then translate the return values to
 something meaningful to the C code.  They are really simple, but I had to put
 in some cruft.
 
-For example, the code implementing the Go To URL dialog box hook :-
+For example, the code implementing the Go To URL dialog box hook :
 
   void goto_url_with_hook(struct session *ses, unsigned char *url)
   {
@@ -143,8 +144,8 @@ Quick description of what it does:
     `goto_url_hook' takes two parameters, the new URL and the current URL, so
     we push them on.
 
-[3] Some stuff to prepare for running Lua.  This is in case for example the Lua
-    function contains bugs, we want to trap some of that.  It's supposed to
+[3] Some stuff to prepare for running Lua.  This is in case, for example, the
+    Lua function contains bugs, we want to trap some of that.  It's supposed to
     enable a mechanism where ^C will break out of infinite loops and such, but
     that's not working so good.
 
@@ -154,16 +155,16 @@ Quick description of what it does:
 
 [6] Look at the return value of goto_url_hook and do something appropriate.
 
-[If you want to know the lua_* functions, you're gonna have to read the Lua API
-manual]
+[ If you want to know the lua_* functions, you're going to have to read the
+  Lua API manual ]
 
 
 That's basically all the Links-Lua stuff is, a bunch of hooks that pass
 arguments to some arbitrary Lua code, then read in return values and interpret
-it.  But it works because Lua is a programming language, and that enables you
+them.  But it works because Lua is a programming language, and that enables you
 to do what you would from C, as long as you stick to the C<->Lua interface.
 
-The code to allow binding Lua code to a keypress is slightly different to the
+The code to allow binding Lua code to a keypress is slightly different then the
 hooks, but not much.  Instead of branching off to some C code when a key is
 pressed, we branch off to some Lua code.
 
@@ -172,32 +173,33 @@ pressed, we branch off to some Lua code.
 3, Coding style
 ~~~~~~~~~~~~~~~
 
-Mikulas once told that 'it was hard to code, so it should be hard to read' -
-and he drove by this when he has been writing links. However, we do NOT drive
-by this rule anymore ;-). We strongly welcome cleanup patches and you have 99%
-proximity they will be applied, if they will be correct.
+Mikulas once said that 'it was hard to code, so it should be hard to read' -
+and he drove by this when he was writing links.  However, we do NOT drive by
+this rule anymore ;-).  We strongly welcome cleanup patches and you have 99%
+chance that they will be applied, if they are correct.
 
-Variable names should be descriptive. Well, in worst case We'll accept 'i' for
-index, but if possible don't do even this :). You should try to declare them on
-the lowest level possible, so their declaration and initialization will be near
-their usage and you will also prevent reuse of one variable for two completely
-different things. Yes, that's another thing you shouldn't do. If reasonable,
-initialize variables during their declaration and don't group too much
-variables in one line. ALWAYS make blank line after declaration part.
+Variable names should be descriptive.  Well, in worst case we'll accept 'i' for
+index, but if possible don't do even this :).  You should try to declare them
+on the lowest level possible, so their declaration and initialization will be
+near their usage and you will also prevent reuse of one variable for two
+completely different things.  Yes, that's another thing you shouldn't do.  If
+reasonable, initialize variables during their declaration and don't group too
+many variables in one line.  ALWAYS make a blank line after the declaration
+part.
 
-And don't specify variable names in prototypes - just types of variables, who's
-interested in the function, he'll probably want to look at the code anyway. And
-prefix all local functions with 'static'.
+And don't specify variable names in the prototypes - just types of variables.
+Anyone who's interested in the function will probably want to look at the code
+anyway.  And be sure to prefix all local functions with 'static'.
 
-Indent shift width is 8, that means one tab.
+Indent shift width is 8 characters, that means one tab character.
 
-{ should be in same line as condition near for, if, while, switch etc, but on
-separate line near function header in function definition.
+'{' should be on the same line as conditions near for, if, while, switch etc,
+but on separate lines near function headers in function definitions.
 
-Please _USE_ one tab instead of 8 spaces! It's making things easier.
+Please _USE_ one tab instead of 8 spaces!  It makes things easier.
 
-Always make spaces around '=', after ',', and - if reasonable - around other
-operators as well. You shouldn't make assigments in conditionals, so do:
+Always place spaces around '=', after ',' and - if reasonable - around other
+operators as well.  You shouldn't make assigments in conditionals, so do:
 
 foo = mem_alloc(1234);
 if (!foo) panic("aaaaaaaaaaaaaaaaaaaarrrrrrggggggggg");
@@ -206,15 +208,15 @@ instead of
 
 if (!(foo = mem_alloc(1234))) panic("aaaaaaaaaaaaaaarrrrrrrggggggg");
 
-(note that thou shalt ALWAYS test for success of everything - we are supposed
-to handle even our own death elegantly)
+(note that thou shalt ALWAYS test for success on everything - we are supposed
+to handle our own death elegantly as well)
 
-Use blank lines frequently to separate chunks of code. And use magic "/*" and
+Use blank lines frequently to separate chunks of code.  And use magic "/*" and
 "*/" to give others an idea about what it does and about possible pitfalls.
 
 Keep in mind that if there's an object and verb in the comment (and it is, in
-most cases), it is a sentence, so it has to start with capital letter and end
-with a fullstop ;-). If you want to share your opinion or investigations, you
+most cases), it is a sentence, so it has to start with a capital letter and end
+with a fullstop ;-).  If you want to share your opinion or investigations, you
 should sign yourself, i.e. /* TODO: Move this far away! --pasky */
 
 Comments should be written in _ENGLISH_ only.
@@ -240,7 +242,7 @@ If you describe a structure, make either:
         char *name; /* name of the tag */
         void (*func)(unsigned char *); /* function hopefully handling the
                                         * content of the tag */
-        int linebreak; /* need for break of a line? */
+        int linebreak; /* needed for break of a line? */
 
 or
 
@@ -251,8 +253,8 @@ or
         /* Do we need to break a line? */
         int linebreak;
 
-Same if you comment the code. If the comment is /* then do it now! */, place it
-on the same line as the command, if it's
+Same if you comment the code.  If the comment is /* then do it now! */,
+place it on the same line as the command, if it's
 /* We have to parse this crap now, as it is going to be freed in free_crap() */
 place it on the preceding line.
 
@@ -260,8 +262,8 @@ More about style:
 ----------------
 
 Note: We use short variables names and stupid examples here, do not take that
-      as a guideline for _REAL_ coding. Always use descriptive variables names
-      and do not write stupid code ;).
+      as a guideline for _REAL_ coding.  Always use descriptive variables
+      names and do not write stupid code ;).
 
 * General style is:
 
@@ -288,16 +290,19 @@ func(int a, int b)
 
 * You should observe the following rules:
 
-- Always have a blank line before function declaration or comment.
+- Always have a blank line before a function declaration or comment.
 
-- Please add a comment about what this function does.
+- Please add a comment about what the function does.
 
-- Function's type must be on first line while function's name is on second
-  line.
+- A function's type must be on first line while the function's name is on
+  the second line.
 
-- If parameters list exceeds 80 columns then wrap them after comma to the next
-  line and align them using tabs and/or spaces with the first parameter.
-	use
+- If the parameters list exceeds 80 columns then wrap them after a comma to
+  the next line and align them using tabs and/or spaces with the first
+  parameter.
+
+	Use:
+
 		int
 		func(int p1, int p2, int p3,
 		     struct very_long_name_for_a_structure *s,
@@ -308,74 +313,86 @@ func(int a, int b)
 			...
 		}
 
-- Start of function's body should be alone on first column.
+- The start of a function's body should be alone on the first column.
 
 - Always have a blank line after declarations.
 
 - Always have spaces around operators.
-	use
+
+	Use:
 		c = a * b - (a + b);
-	instead of
+
+	Instead of:
 		c=a*b-(a+b);
 
-- Keep affectation outside condition tests.
-	use
+- Keep affectation outside of conditional tests.
+
+	Use:
 		c = a;
 		if (c == b) {...
-	instead of
+
+	Instead of:
 		if ((c = a) == b) {...
 
 - Never use spaces with ().
-	use
+
+	Use:
 		if (a) ...
-	instead of
+
+	Instead of:
 		if ( a ) ...
 
 - Indent.
-	use
+
+	Use:
 		foreach(a, b)
 			if (a == c)
 				...
 			else
 				...
-	instead of
+	Instead of:
 		foreach(a, b) if (a == c) ...  else ...
 
-- If you have chain of if () { .. } else if () { .. } else { .. } with longer
-  statements, you could insert blank line before each else line.
+- If you have a chain of if () { .. } else if () { .. } else { .. } with
+  longer statements, you can insert a blank line before each else line.
 
-- Label names should start on first column and with a blank line before it.
-	use
+- Label names should start on the first column and with have a blank line
+  before it.
+
+	Use:
 			some_code(aaa);
 
 		label:
 			some_other_code(bbb);
-	instead of
+
+	Instead of:
 			some_code(aaa);
 			label:
 			some_other_code(bbb);
 
 - Wrap conditions on spaces before operators like && or ||.
-	use
+
+	Use:
 		if (some_very_long_thing1 == some_very_long_thing2
 		    && (test1 == test2
 			|| some_very_long_thing3 == some_very_long_thing4)) {
 			....
 		}
 
-- Please take care of useless spaces or tabs at end of line. Vim has a syntax
+- Please remove useless spaces or tabs at the end of lines.  Vim has a syntax
   file called "Whitespace (add)" ...
 
-- If you see code in ELinks that doesn't follow these rules, fix it or tell us.
+- If you see code in ELinks that doesn't follow these rules, fix it or tell
+  us about it.
 
 - There are obviously exceptions to these rules, but don't make a rule from
-  your exception and be prepared to defend your exception anytime ;).
+  your exception and be prepared to defend your exception at anytime ;).
 
 
 4, Patches
 ~~~~~~~~~~
 
-Please send unified patches only. Recommended way is:
+Please send unified patches only.  Recommended way is:
 
 cp -a elinks/ elinks+mysuperfeature/
 cd elinks+mysuperfeature/
@@ -390,13 +407,14 @@ diff -ru elinks/ elinks+mysuperfeature/ >elinks-mysuperfeature.patch
 Please manually remove any bloat like changes in ./configure, whitespace
 changes etc ;-).
 
-We also accept output from "cvs diff -u" :). Statement about bloat removing
-applies.
+We also accept output from "cvs diff -u" :).  The statement about bloat
+removing above still applies.
 
-Since ELinks 0.4pre11, a memory debugger can be enabled using --enable-debug
-configure script option. It may help to find memleaks and more...
+Since ELinks 0.4pre11, a memory debugger can be enabled using the
+--enable-debug configure script option.  It may help to find memleaks and
+more...
 
 
 Happy hacking!
 
-$Id: HACKING,v 1.14 2002/09/08 18:07:03 zas Exp $
+$Id: HACKING,v 1.15 2002/09/13 20:50:14 pasky Exp $

@@ -1269,9 +1269,13 @@ void html_input(unsigned char *a)
 
 void html_select(unsigned char *a)
 {
-	char *al;
+	/* Note I haven't seen this code in use, do_html_select() seems to take
+	 * care of bussiness. --FF */
+	
+	char *al = get_attr_val(a, "name");
+	
+	if (!al) return;
 	html_tabindex(a);
-	if (!(al = get_attr_val(a, "name"))) return;
 	html_top.dontkill = 1;
 	format.select = al;
 	format.select_disabled = 2 * has_attr(a, "disabled");
@@ -1484,8 +1488,10 @@ int do_html_select(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	unsigned char **val, **lbls;
 	int order, preselect, group;
 	int i, mw;
+	
 	if (has_attr(attr, "multiple")) return 1;
 	find_form_for_input(attr);
+	html_tabindex(attr);
 	lbl = NULL;
 	val = DUMMY;
 	order = 0, group = 0, preselect = -1;

@@ -135,6 +135,7 @@ AC_CHECK_FUNCS(popen uname access chmod alarm timegm)
 AC_CHECK_FUNCS(strcasecmp strncasecmp strcasestr strstr strchr strrchr)
 AC_CHECK_FUNCS(strstr memmove bcopy stpcpy strdup)
 AC_CHECK_FUNCS(isalnum)
+AC_CHECK_FUNCS(snprintf vsnprintf asprintf vasprintf)
 
 AC_HAVE_FUNCS(cygwin_conv_to_full_win32_path)
 
@@ -142,6 +143,44 @@ dnl These aren't probably needed now, as they are commented in links.h.
 dnl I've no idea about their historical background, but I keep them here
 dnl just in the case they will help later. --pasky
 AC_CHECK_FUNCS(getpid setpgid getpgid setpgrp getpgrp)
+
+AC_CACHE_CHECK([for __va_copy],el_cv_HAVE_VA_COPY,[
+AC_TRY_LINK([#include <stdarg.h>
+va_list ap1,ap2;], [__va_copy(ap1,ap2);],
+el_cv_HAVE_VA_COPY=yes,el_cv_HAVE_VA_COPY=no)])
+if test x"$el_cv_HAVE_VA_COPY" = x"yes"; then
+    AC_DEFINE(HAVE_VA_COPY)
+fi
+
+AC_CACHE_CHECK([for C99 vsnprintf],el_cv_HAVE_C99_VSNPRINTF,[
+AC_TRY_RUN([
+#include <sys/types.h>
+#include <stdarg.h>
+void foo(const char *format, ...) {
+       va_list ap;
+       int len;
+       char buf[5];
+
+       va_start(ap, format);
+       len = vsnprintf(buf, 0, format, ap);
+       va_end(ap);
+       if (len != 5) exit(1);
+
+       va_start(ap, format);
+       len = vsnprintf(0, 0, format, ap);
+       va_end(ap);
+       if (len != 5) exit(1);
+
+       if (snprintf(buf, 3, "hello") != 5 || strcmp(buf, "he") != 0) exit(1);
+
+       exit(0);
+}
+main() { foo("hello"); }
+],
+el_cv_HAVE_C99_VSNPRINTF=yes,el_cv_HAVE_C99_VSNPRINTF=no,el_cv_HAVE_C99_VSNPRINTF=cross)])
+if test x"$el_cv_HAVE_C99_VSNPRINTF" = x"yes"; then
+    AC_DEFINE(HAVE_C99_VSNPRINTF)
+fi
 
 dnl ===================================================================
 dnl Checks for libraries.

@@ -12,6 +12,12 @@
 /* Define to 1 if we have uint32_t */
 #undef HAVE_UINT32_T
 
+/* Define to 1 if we have __va_copy() */
+#undef HAVE_VA_COPY
+
+/* Define to 1 if we have C99 compliant vsnprintf() */
+#undef HAVE_C99_VSNPRINTF
+
 /* Define to 1 if we have _beginthread() */
 #undef HAVE_BEGINTHREAD
 

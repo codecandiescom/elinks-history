@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.63 2003/11/24 17:35:48 fabio Exp $ */
+/* $Id: formhist.c,v 1.64 2003/11/24 23:11:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,8 +43,51 @@ static struct option_info forms_history_options[] = {
 
 INIT_LIST_HEAD(saved_forms);
 
+struct form_type_name {
+	enum form_type num;
+	unsigned char *name;
+};
+
+struct form_type_name form_type2name[] = {
+	{ FC_TEXT, "text" },
+	{ FC_PASSWORD, "password" },
+	{ FC_FILE, "file" },
+	{ FC_TEXTAREA, "textarea" },
+	{ FC_CHECKBOX, "checkbox" },
+	{ FC_RADIO,"radio" },
+	{ FC_SELECT, "select" },
+	{ FC_SUBMIT, "submit" },
+	{ FC_IMAGE, "image" },
+	{ FC_HIDDEN, "hidden" },
+};
+
+static inline int
+str2form_type(unsigned char *s)
+{
+	register int n;
+
+	for (n = 0; (sizeof(form_type2name)/sizeof(struct form_type_name)) - 1; n++) {
+		if (!strcmp(form_type2name[n].name, s)) return form_type2name[n].num;
+	}
+
+	return -1;
+};
+
+static inline unsigned char *
+form_type2str(enum form_type num)
+{
+	register int n;
+
+	for (n = 0; (sizeof(form_type2name)/sizeof(struct form_type_name)) - 1; n++) {
+		if (form_type2name[n].num == num) return form_type2name[n].name;
+	}
+
+	return NULL;
+};
+
+
 static struct submitted_value *
-new_submitted_value(unsigned char *name, unsigned char *value, int type)
+new_submitted_value(unsigned char *name, unsigned char *value, enum form_type type)
 {
 	struct submitted_value *sv;
 
@@ -136,36 +179,65 @@ load_saved_forms(void)
 	while (safe_fgets(tmp, MAX_STR_LEN, f)) {
 		if (tmp[0] == '\n' && !tmp[1]) continue;
 
+		/* URL */
 		tmp[strlen(tmp) - 1] = '\0';
 
 		form = new_form(tmp);
 		if (!form) continue;
 
+		/* Fields type, name, value */
 		while (safe_fgets(tmp, MAX_STR_LEN, f)) {
 			struct submitted_value *sv;
-			unsigned char *name, *value, *p;
+			unsigned char *type, *name, *value, *p;
 			unsigned char *enc_value;
-			int is_pass = 0;
+			enum form_type ftype;
+			int ret;
 
 			if (tmp[0] == '\n' && !tmp[1]) break;
 
-			name = tmp;
-			p = strchr(name, '\t');
+			/* Type */
+			type = tmp;
+			p = strchr(type, '\t');
 			if (!p) goto fail;
 			*p = '\0';
 
+			/* Name */
+			name = ++p;
+			p = strchr(name, '\t');
+			if (!p) {
+				/* Compatibility with previous file formats.
+				 * REMOVE AT SOME TIME --Zas */
+				value = name;
+				name = type;
+
+				if (*name == '*') {
+					name++;
+					type = "password";
+				} else {
+					type = "text";
+				}
+
+				goto cont;
+			}
+			*p = '\0';
+
+			/* Value */
 			value = ++p;
-			p = strchr(p, '\n');
-			if (p) *p = '\0';
+cont:
+			p = strchr(value, '\n');
+			if (!p) goto fail;
+			*p = '\0';
+
+			ret = str2form_type(type);
+			if (ret == -1) goto fail;
+			ftype = ret;
 
 			enc_value = *value ? base64_decode(value)
 					   : stracpy(value);
 			if (!enc_value) goto fail;
 
-			if (*name == '*') { is_pass = 1; name++; }
 			sv = new_submitted_value(name, enc_value,
-						 is_pass ? FC_PASSWORD
-							 : FC_TEXT);
+						 ftype);
 
 			mem_free(enc_value);
 			if (!sv) goto fail;
@@ -209,34 +281,24 @@ save_saved_forms(void)
 		secure_fprintf(ssi, "%s\n", form->url);
 
 		foreach (sv, *form->submit) {
-			/* Obfuscate the password. If we do
-			 * $ cat ~/.elinks/formhist
-			 * we don't want someone behind our back to read our
-			 * password (androids don't count). */
+			unsigned char *encvalue;
+
 			if (sv->value && *sv->value) {
-				unsigned char *encvalue =
-						base64_encode(sv->value);
-
-				if (!encvalue) return 0;
-				secure_fprintf(ssi, "%s%s\t%s\n",
-					       /* Mark the line containing the
-						* password with '*', otherwise
-						* we can't tell which is the
-						* password when we'll load from
-						* file. */
-					       sv->type == FC_PASSWORD ? "*"
-								       : "",
-					       sv->name, encvalue);
-
-				mem_free(encvalue);
+				/* Obfuscate the value. If we do
+				 * $ cat ~/.elinks/formhist
+				 * we don't want someone behind our back to read our
+				 * password (androids don't count). */
+				encvalue = base64_encode(sv->value);
 			} else {
-				secure_fprintf(ssi, "%s\t\n", sv->name);
-				secure_fprintf(ssi, "%s%s\t\n",
-					       /* Ditto, see above. */
-					       sv->type == FC_PASSWORD ? "*"
-								       : "",
-					       sv->name);
+				encvalue = stracpy("");
 			}
+
+			if (!encvalue) return 0;
+			/* Format is : type[TAB]name[TAB]value[CR] */
+			secure_fprintf(ssi, "%s\t%s\t%s\n", form_type2str(sv->type),
+				       sv->name, encvalue);
+
+			mem_free(encvalue);
 		}
 
 		secure_fputc(ssi, '\n');

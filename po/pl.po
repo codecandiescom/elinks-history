@@ -7,7 +7,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: ELinks 0.5pre11.CVS\n"
+"Project-Id-Version: ELinks 0.5pre12.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-12-16 20:57+0100\n"
 "PO-Revision-Date: 2003-12-13 13:00+0200\n"
@@ -204,9 +204,8 @@ msgid "No title"
 msgstr "Bez tytu³u"
 
 #: src/bookmarks/backend/xbel.c:392
-#, fuzzy
 msgid "No URL"
-msgstr "Przejd¼ do URL-a"
+msgstr "Brak URL-a"
 
 #
 #. name:
@@ -938,7 +937,7 @@ msgstr "Szukaj tekstu wstecz"
 
 #: src/config/kbdbind.c:452
 msgid "Search link text by typing ahead"
-msgstr ""
+msgstr "Szukaj odno¶nika wpisuj±c pojedyncze znaki"
 
 #: src/config/kbdbind.c:453 src/terminal/tab.c:187
 msgid "Close tab"
@@ -1645,16 +1644,19 @@ msgid "Display numbers next to the links."
 msgstr "Czy wy¶wietlaæ liczby z prawej strony odno¶ników?"
 
 #: src/config/options.inc:233
+#, fuzzy
 msgid "Wraparound typeahead"
-msgstr ""
+msgstr "Zawijanie szukania z wyprzedzeniem"
 
 #: src/config/options.inc:235
+#, fuzzy
 msgid "Wrap around when searching for the next link matching a typeahead."
-msgstr ""
+msgstr "Zawiñ je¶li szukanie nastêpnego odno¶nika jest zgodne\n"
+"z szukaniem z wyprzedzeniem."
 
 #: src/config/options.inc:237
 msgid "Typeahead error handling"
-msgstr ""
+msgstr "Obs³uga b³êdów szukania z wyprzedzeniem"
 
 #: src/config/options.inc:239
 msgid ""
@@ -1663,6 +1665,11 @@ msgid ""
 "1 means beep the terminal\n"
 "2 means pop up message box"
 msgstr ""
+"W jaki sposób obs³ugiwaæ b³êdy, gdy szukanie z wyprzedzeniem nie natrafi\n"
+"na ¿aden odno¶nik:\n"
+"0 - nie robiæ nic\n"
+"1 - u¿yæ dzwonka\n"
+"2 - wy¶wietliæ okienko dialogowe\n"
 
 #: src/config/options.inc:244
 msgid "Use tabindex"
@@ -4657,7 +4664,7 @@ msgstr "pozosta³y czas"
 #: src/dialogs/status.c:203
 #, c-format
 msgid "Typeahead: %s (-> %s)"
-msgstr ""
+msgstr "Szukanie z wyprzedzeniem: %s (-> %s)"
 
 #: src/dialogs/status.c:295
 msgid "Untitled"
@@ -5855,14 +5862,13 @@ msgid "Search string '%s' not found"
 msgstr "Nie znaleziono wyra¿enia '%s'"
 
 #: src/viewer/text/search.c:999
-#, fuzzy
 msgid "Typeahead"
-msgstr "Typ"
+msgstr "Szukanie z wyprzedzeniem"
 
 #: src/viewer/text/search.c:1000
 #, c-format
 msgid "Could not find a link with the text '%s'."
-msgstr ""
+msgstr "Nie mo¿na znale¼æ odno¶nika z tekstem '%s'."
 
 #: src/viewer/text/search.c:1147
 msgid "Normal search"

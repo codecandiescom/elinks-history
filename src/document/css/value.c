@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.43 2004/01/22 22:17:36 pasky Exp $ */
+/* $Id: value.c,v 1.44 2004/01/22 22:18:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -240,6 +240,8 @@ css_parse_text_decoration_value(struct css_property_info *propinfo,
 
 	if (token->type != CSS_TOKEN_IDENT) return 0;
 
+	/* TODO: It is possible to have multiple values here,
+	 * 'background'-style. --pasky */
 	if (css_token_contains(token, "underline")) {
 		value->font_attribute.add |= AT_UNDERLINE;
 

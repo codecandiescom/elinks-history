@@ -172,6 +172,7 @@ void cache_inf(struct terminal *term, void *d, struct session *ses)
 
 #ifdef DEBUG
 
+/* FIXME! The refresh here is buggy, thus the whole funct is disabled for now. */
 void list_cache(struct terminal *term, void *d, struct session *ses)
 {
 	unsigned char *a;
@@ -198,7 +199,6 @@ void list_cache(struct terminal *term, void *d, struct session *ses)
 	msg_box(term, getml(a, NULL), TEXT(T_CACHE_INFO), AL_LEFT | AL_EXTD_TEXT, TEXT(T_CACHE_CONTENT), a, NULL, r, 1, TEXT(T_OK), end_refresh, B_ENTER | B_ESC);
 	r->win = term->windows.next;
 	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *))refresh, r);
-	/* !!! the refresh here is buggy */
 }
 
 #endif
@@ -257,6 +257,9 @@ void memory_info(struct terminal *term, void *d, struct session *ses)
 	((struct dialog_data *)r->win->data)->dlg->abort = refresh_abort;
 	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *))refresh, r);
 }
+
+#undef MSG_W
+#undef MSG_BUF
 
 #endif
 

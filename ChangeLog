@@ -1,3 +1,64 @@
+Mon May 19 14:12:29 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: Makefile.am, main.c, version.c, version.h, dialogs/info.c,
+	util/error.c:
+
+	version.{c,h} were introduced. Info box uses now a function to
+	retrieve version, and backtrace or core dump now print some version
+	information too. Some calls to fprintf() were replaced by fputs().
+	Feel free to improve, it is not perfect yet.  
+
+Mon May 19 13:23:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/info.c:
+
+	Gettextization of some strings (like "ELinks" or "gzip") was
+	removed, spaces are now outside gettextized strings.  
+
+Mon May 19 13:21:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/gettext/libintl.h:
+
+	term == NULL case is now handled. It will help later ;).  
+
+Mon May 19 08:46:47 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/http/http.c:
+
+	s/(?<=encoding\.c)onn// to fix a tiny error by pasky in a comment 
+	("Renamed 'c' identifier to 'conn'", 2003/05/18 16:05:18) 
+
+Sun May 18 23:37:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Revert the reverted non-bug fix. If table cache was not initialized
+	there is no need to search an entry in it.  
+
+Sun May 18 23:14:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	ADD wasn't properly undef'd after the cleanup.  
+
+Sun May 18 23:09:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Fixed a bug which came through the last zas' cleanup.  
+
+Sun May 18 23:05:34 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Ooops ;).  
+
+Sun May 18 23:00:48 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Many minor cleanups, optim, and some comments.  
+
 Sun May 18 16:30:43 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/dialogs/document.c:

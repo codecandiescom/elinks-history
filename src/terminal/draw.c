@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.92 2004/07/29 15:47:45 zas Exp $ */
+/* $Id: draw.c,v 1.93 2004/07/29 15:56:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -256,9 +256,9 @@ draw_box(struct terminal *term, struct box *box,
 
 	/* Now make @end point to the last line */
 	/* For the rest of the area use the first area line. */
-	for (pos = line + term->width, height -= 1;
-	     height;
-	     height--, pos += term->width) {
+	pos = line;
+	while (--height) {
+		pos += term->width;
 		copy_screen_chars(pos, line, width);
 	}
 

@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.61 2004/04/03 17:40:53 jonas Exp $ */
+/* $Id: document.c,v 1.62 2004/04/04 04:44:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,8 +76,8 @@ free_frameset_desc(struct frameset_desc *frameset_desc)
 			free_frameset_desc(frame_desc->subframe);
 		if (frame_desc->name)
 			mem_free(frame_desc->name);
-		if (frame_desc->url)
-			mem_free(frame_desc->url);
+		if (frame_desc->uri)
+			done_uri(frame_desc->uri);
 	}
 
 	mem_free(frameset_desc);

@@ -1,10 +1,11 @@
-/* $Id: frames.h,v 1.36 2004/01/22 17:46:57 pasky Exp $ */
+/* $Id: frames.h,v 1.37 2004/04/04 04:44:48 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
 
 struct document_options;
 struct session;
+struct uri;
 
 struct frameset_desc;
 
@@ -12,7 +13,7 @@ struct frame_desc {
 	struct frameset_desc *subframe;
 
 	unsigned char *name;
-	unsigned char *url;
+	struct uri *uri;
 
 	int line;
 	int width, height;

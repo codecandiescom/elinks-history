@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.220 2003/11/12 00:52:21 jonas Exp $ */
+/* $Id: session.c,v 1.221 2003/11/12 01:07:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1496,9 +1496,10 @@ static void
 really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
 		  enum task_type task, enum cache_mode cache_mode)
 {
-	unsigned char *u;
+	unsigned char *u, *referrer;
 	unsigned char *pos;
 	protocol_external_handler *fn;
+	struct document_view *doc_view;
 
 	fn = get_protocol_external_handler(url);
 	if (fn) {
@@ -1534,7 +1535,12 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 	}
 
 	abort_loading(ses, 0);
-	set_referrer(ses, NULL);
+
+	doc_view = current_frame(ses);
+	referrer = (doc_view && doc_view->document)
+		? doc_view->document->url : NULL;
+
+	set_referrer(ses, referrer);
 
 	ses_goto(ses, u, target, NULL,
 		 PRI_MAIN, cache_mode, task,

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.21 2003/10/30 01:08:24 zas Exp $ */
+/* $Id: textarea.c,v 1.22 2003/10/30 12:04:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,8 +144,8 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 	assertm(frm, "link %d has no form", (int)(l - doc_view->document->links));
 	if_assert_failed return;
 
-	xp = doc_view->xp;
-	yp = doc_view->yp;
+	xp = doc_view->x;
+	yp = doc_view->y;
 	xw = doc_view->width;
 	yw = doc_view->height;
 	vx = doc_view->vs->x;

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.91 2003/10/30 01:25:15 jonas Exp $ */
+/* $Id: link.c,v 1.92 2003/10/30 12:04:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,18 +215,18 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 
 	set_term_color(template, &colors, color_flags, doc_opts->color_mode);
 
-	xmax = doc_view->xp + doc_view->width;
-	ymax = doc_view->yp + doc_view->height;
-	xpos = doc_view->xp - doc_view->vs->x;
-	ypos = doc_view->yp - doc_view->vs->y;
+	xmax = doc_view->x + doc_view->width;
+	ymax = doc_view->y + doc_view->height;
+	xpos = doc_view->x - doc_view->vs->x;
+	ypos = doc_view->y - doc_view->vs->y;
 
 	for (i = 0; i < link->n; i++) {
 		int x = link->pos[i].x + xpos;
 		int y = link->pos[i].y + ypos;
 		struct screen_char *co;
 
-		if (!(x >= doc_view->xp
-		      && y >= doc_view->yp
+		if (!(x >= doc_view->x
+		      && y >= doc_view->y
 		      && x < xmax && y < ymax)) {
 			doc_view->link_bg[i].x = -1;
 			doc_view->link_bg[i].y = -1;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.242 2003/10/30 11:41:17 zas Exp $ */
+/* $Id: view.c,v 1.243 2003/10/30 12:04:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,8 +187,8 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 	assert(t && doc_view);
 	if_assert_failed return;
 
-	xp = doc_view->xp;
-	yp = doc_view->yp;
+	xp = doc_view->x;
+	yp = doc_view->y;
 	width = doc_view->width;
 	height = doc_view->height;
 
@@ -901,8 +901,8 @@ r:
 
 ok:
 	memcpy(&evv, ev, sizeof(struct term_event));
-	evv.x -= doc_view->xp;
-	evv.y -= doc_view->yp;
+	evv.x -= doc_view->x;
+	evv.y -= doc_view->y;
 	send_to_frame(ses, &evv);
 }
 #endif /* USE_MOUSE */

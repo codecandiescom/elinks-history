@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.87 2003/10/30 01:08:24 zas Exp $ */
+/* $Id: search.c,v 1.88 2003/10/30 12:04:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -458,8 +458,8 @@ get_searched_plain(struct document_view *doc_view, struct point **pt, int *pl,
 			     : lowered_string(*doc_view->search_word, l);
 	if (!txt) return;
 
-	xp = doc_view->xp;
-	yp = doc_view->yp;
+	xp = doc_view->x;
+	yp = doc_view->y;
 	xx = xp + doc_view->width;
 	yy = yp + doc_view->height;
 	xpv= xp - doc_view->vs->x;
@@ -563,8 +563,8 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 		goto ret;
 	}
 
-	xp = doc_view->xp;
-	yp = doc_view->yp;
+	xp = doc_view->x;
+	yp = doc_view->y;
 	xx = xp + doc_view->width;
 	yy = yp + doc_view->height;
 	xpv= xp - doc_view->vs->x;
@@ -664,8 +664,8 @@ draw_searched(struct terminal *term, struct document_view *doc_view)
 	if (len) {
 		register int i;
 		struct color_pair *color = get_bfu_color(term, "searched");
-		int xoffset = doc_view->xp - doc_view->vs->x;
-		int yoffset = doc_view->yp - doc_view->vs->y;
+		int xoffset = doc_view->x - doc_view->vs->x;
+		int yoffset = doc_view->y - doc_view->vs->y;
 
 		for (i = 0; i < len; i++) {
 			int x = pt[i].x + xoffset;

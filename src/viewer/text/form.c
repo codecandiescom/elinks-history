@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.52 2003/10/30 01:25:15 jonas Exp $ */
+/* $Id: form.c,v 1.53 2003/10/30 12:04:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,8 +200,8 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 	fs = find_form_state(doc_view, frm);
 	if (!fs) return;
 
-	xp = doc_view->xp;
-	yp = doc_view->yp;
+	xp = doc_view->x;
+	yp = doc_view->y;
 	width = doc_view->width;
 	height = doc_view->height;
 	vs = doc_view->vs;

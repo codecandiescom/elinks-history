@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.180 2004/06/20 10:06:16 zas Exp $ */
+/* $Id: tables.c,v 1.181 2004/06/20 21:08:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -663,14 +663,12 @@ qwe:
 		x = 0;
 	}
 
-nc:
-	cell = new_cell(table, x, y);
-	if (!cell) goto see;
+	for (;;x++) {
+		cell = new_cell(table, x, y);
+		if (!cell) goto see;
 
-	if (cell->is_used) {
+		if (!cell->is_used) break;
 		if (cell->colspan == -1) goto see;
-		x++;
-		goto nc;
 	}
 
 	p = 1;

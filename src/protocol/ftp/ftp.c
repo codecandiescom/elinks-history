@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.155 2004/07/23 19:57:30 zas Exp $ */
+/* $Id: ftp.c,v 1.156 2004/07/23 20:02:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1066,16 +1066,9 @@ ftp_process_dirlist(struct cache_entry *cached, int *pos,
 }
 
 static void
-got_something_from_data_connection(struct connection *conn)
+ftp_data_accept(struct connection *conn)
 {
 	struct ftp_connection_info *c_i = conn->info;
-	unsigned char dircolor[8];
-	int colorize_dir = 0;
-	int len;
-
-	/* XXX: This probably belongs rather to connect.c ? */
-
-	set_connection_timeout(conn);
 
 	if (!c_i->has_data) {
 		int newsock;
@@ -1102,8 +1095,22 @@ got_something_from_data_connection(struct connection *conn)
 		set_handlers(newsock,
 			     (void (*)(void *)) got_something_from_data_connection,
 			     NULL, NULL, conn);
-		return;
 	}
+}
+
+static void
+got_something_from_data_connection(struct connection *conn)
+{
+	struct ftp_connection_info *c_i = conn->info;
+	unsigned char dircolor[8];
+	int colorize_dir = 0;
+	int len;
+
+	/* XXX: This probably belongs rather to connect.c ? */
+
+	set_connection_timeout(conn);
+
+	ftp_data_accept(conn);
 
 	if (!conn->cached) conn->cached = get_cache_entry(conn->uri);
 	if (!conn->cached) {

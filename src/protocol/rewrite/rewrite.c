@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.15 2004/01/26 04:10:54 jonas Exp $ */
+/* $Id: rewrite.c,v 1.16 2004/01/26 06:20:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,7 +208,7 @@ encode_uri_string_len(struct string *s, unsigned char *a, int alen)
 
 #define MAX_URI_ARGS 10
 
-static unsigned char *
+unsigned char *
 rewrite_uri(unsigned char *url, unsigned char *current_url, unsigned char *arg)
 {
 	struct string n = NULL_STRING;
@@ -283,9 +283,11 @@ rewrite_uri(unsigned char *url, unsigned char *current_url, unsigned char *arg)
 	return n.source;
 }
 
-static unsigned char *
-get_uri_rewrite_prefix(enum uri_rewrite_option tree, unsigned char *url)
+unsigned char *
+get_uri_rewrite_prefix(enum uri_rewrite_type type, unsigned char *url)
 {
+	enum uri_rewrite_option tree = type == URI_REWRITE_DUMB
+			? URI_REWRITE_DUMB_TREE : URI_REWRITE_SMART_TREE;
 	struct option *prefix_tree = get_prefix_tree(tree);
 	struct option *opt = get_opt_rec_real(prefix_tree, url);
 	unsigned char *exp = opt ? opt->value.string : NULL;
@@ -306,13 +308,13 @@ goto_url_hook(va_list ap, void *data)
 		unsigned char bucket = *argstart;
 
 		*argstart = '\0';
-		uu = get_uri_rewrite_prefix(URI_REWRITE_SMART_TREE, *url);
+		uu = get_uri_rewrite_prefix(URI_REWRITE_SMART, *url);
 		*argstart = bucket;
 		arg = argstart + 1;
 	}
 
 	if (get_dumb_enable() && !uu && !*argstart)
-		uu = get_uri_rewrite_prefix(URI_REWRITE_DUMB_TREE, *url);
+		uu = get_uri_rewrite_prefix(URI_REWRITE_DUMB, *url);
 
 
 	if (uu) {

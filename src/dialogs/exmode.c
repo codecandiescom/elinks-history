@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.12 2004/01/26 06:07:28 jonas Exp $ */
+/* $Id: exmode.c,v 1.13 2004/01/26 06:20:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "config/kbdbind.h"
 #include "dialogs/exmode.h"
 #include "intl/gettext/libintl.h"
+#include "protocol/rewrite/rewrite.h"
 #include "sched/action.h"
 #include "sched/session.h"
 #include "sched/task.h"
@@ -74,9 +75,36 @@ exmode_action_handler(struct session *ses, unsigned char *command,
 	return 0;
 }
 
+#ifdef CONFIG_URI_REWRITE
+static int
+exmode_uri_rewrite_handler(struct session *ses, unsigned char *command,
+			   unsigned char *args)
+{
+	unsigned char *url = NULL;
+
+	if (*args) {
+		url = get_uri_rewrite_prefix(URI_REWRITE_SMART, command);
+	}
+
+	if (!url && !*args)
+		url = get_uri_rewrite_prefix(URI_REWRITE_DUMB, command);
+
+	if (!url) return 0;
+
+	url = rewrite_uri(url, cur_loc(ses)->vs.url, args);
+	if (url) {
+		goto_url(ses, url);
+		mem_free(url);
+	}
+	return !!url;
+}
+#endif
 
 static exmode_handler exmode_handlers[] = {
 	exmode_action_handler,
+#ifdef CONFIG_URI_REWRITE
+	exmode_uri_rewrite_handler,
+#endif
 	NULL,
 };
 

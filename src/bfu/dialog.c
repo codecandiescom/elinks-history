@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.179 2004/11/19 16:29:23 zas Exp $ */
+/* $Id: dialog.c,v 1.180 2004/11/19 16:33:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,12 +25,6 @@
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"
-
-#include "bfu/button.h"
-#include "bfu/checkbox.h"
-#include "bfu/inpfield.h"
-#include "bfu/listbox.h"
-#include "bfu/text.h"
 
 
 static window_handler dialog_func;

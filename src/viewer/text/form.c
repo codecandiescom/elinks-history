@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.122 2004/06/09 22:36:45 zas Exp $ */
+/* $Id: form.c,v 1.123 2004/06/09 22:42:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -434,40 +434,40 @@ fi_rep:
 }
 
 static void
-sort_submitted_values(struct list_head *subm)
+sort_submitted_values(struct list_head *list)
 {
-	int ch;
+	int changed;
 
 	do {
-		struct submitted_value *sub, *nx;
+		struct submitted_value *sub, *next;
 
-		ch = 0;
-		foreach (sub, *subm) if (sub->next != (void *)subm)
+		changed = 0;
+		foreach (sub, *list) if (sub->next != (void *)list)
 			if (sub->next->position < sub->position) {
-				nx = sub->next;
+				next = sub->next;
 				del_from_list(sub);
-				add_at_pos(nx, sub);
-				sub = nx;
-				ch = 1;
+				add_at_pos(next, sub);
+				sub = next;
+				changed = 1;
 			}
-		foreachback (sub, *subm) if (sub->next != (void *)subm)
+		foreachback (sub, *list) if (sub->next != (void *)list)
 			if (sub->next->position < sub->position) {
-				nx = sub->next;
+				next = sub->next;
 				del_from_list(sub);
-				add_at_pos(nx, sub);
-				sub = nx;
-				ch = 1;
+				add_at_pos(next, sub);
+				sub = next;
+				changed = 1;
 			}
-	} while (ch);
+	} while (changed);
 }
 
 static void
 get_succesful_controls(struct document_view *doc_view, struct form_control *fc,
-		       struct list_head *subm)
+		       struct list_head *list)
 {
 	struct form_control *frm;
 
-	assert(doc_view && doc_view->document && fc && subm);
+	assert(doc_view && doc_view->document && fc && list);
 	if_assert_failed return;
 
 	foreach (frm, doc_view->document->forms) {
@@ -480,11 +480,11 @@ get_succesful_controls(struct document_view *doc_view, struct form_control *fc,
 
 			if (!fs) continue;
 
-			add_submitted_value_to_list(frm, fs, subm);
+			add_submitted_value_to_list(frm, fs, list);
 		}
 	}
 
-	sort_submitted_values(subm);
+	sort_submitted_values(list);
 }
 
 static void

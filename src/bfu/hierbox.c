@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.153 2004/05/25 04:13:40 jonas Exp $ */
+/* $Id: hierbox.c,v 1.154 2004/05/25 04:48:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,6 @@
 #include "config/kbdbind.h"
 #include "dialogs/download.h"
 #include "intl/gettext/libintl.h"
-#include "protocol/uri.h"
 #include "sched/task.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
@@ -494,40 +493,24 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 
 /* Goto action */
 
-static struct uri *
-get_listbox_uri(struct terminal *term, struct listbox_data *box,
-	        struct listbox_item *item)
-{
-	unsigned char *string = box->ops->get_info(item, term, LISTBOX_URI);
-	struct uri *uri = NULL;
-
-	if (string) {
-		uri = get_uri(string, -1);
-		mem_free(string);
-	}
-
-	return uri;
-}
-
 static void
 recursively_goto_listbox(struct session *ses, struct terminal *term,
 			 struct listbox_item *root, struct listbox_data *box)
 {
 	struct listbox_item *item;
+	unsigned char *uri;
 
 	foreach (item, root->child) {
-		struct uri *uri;
-
 		if (item->type == BI_FOLDER) {
 			recursively_goto_listbox(ses, term, item, box);
 			continue;
 		}
 
-		uri = get_listbox_uri(term, box, item);
+		uri = box->ops->get_info(item, term, LISTBOX_URI);
 		if (!uri) continue;
 
 		open_url_in_new_tab(ses, uri, 1);
-		done_uri(uri);
+		mem_free(uri);
 	}
 }
 
@@ -539,18 +522,18 @@ goto_marked(struct listbox_item *item, void *data_, int *offset)
 	if (item->marked) {
 		struct session *ses = context->dlg_data->dlg->udata;
 		struct listbox_data *box = context->box;
-		struct uri *uri;
+		unsigned char *uri;
 
 		if (item->type == BI_FOLDER) {
 			recursively_goto_listbox(ses, ses->tab->term, item, box);
 			return 0;
 		}
 
-		uri = get_listbox_uri(ses->tab->term, box, item);
+		uri = box->ops->get_info(item, ses->tab->term, LISTBOX_URI);
 		if (!uri) return 0;
 
 		open_url_in_new_tab(ses, uri, 1);
-		done_uri(uri);
+		mem_free(uri);
 	}
 
 	return 0;

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.118 2004/05/25 04:13:40 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.119 2004/05/25 04:48:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -375,8 +375,6 @@ open_bookmark_folder(struct session *ses, unsigned char *foldername)
 	if (!folder) return;
 
 	foreachback (bookmark, folder->child) {
-		struct uri *uri;
-
 		if (bookmark->box_item->type == BI_FOLDER
 		    || !*bookmark->url)
 			continue;
@@ -388,10 +386,6 @@ open_bookmark_folder(struct session *ses, unsigned char *foldername)
 			continue;
 		}
 
-		uri = get_uri(bookmark->url, -1);
-		if (uri) {
-			open_url_in_new_tab(ses, uri, 1);
-			done_uri(uri);
-		}
+		open_url_in_new_tab(ses, bookmark->url, 1);
 	}
 }

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.491 2004/08/20 15:51:59 jonas Exp $ */
+/* $Id: renderer.c,v 1.492 2004/08/21 21:38:13 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1062,7 +1062,8 @@ process_link(struct part *part, enum link_state link_state,
 			chars += x_offset;
 		}
 
-		link = new_link(part->document, part->link_num, chars, charslen);
+		link = new_link(part->document, part->link_num,
+				chars, charslen);
 		if (!link) return;
 	}
 

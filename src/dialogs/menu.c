@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.169 2003/10/24 14:10:56 pasky Exp $ */
+/* $Id: menu.c,v 1.170 2003/10/24 17:05:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,31 +173,17 @@ flush_caches(struct terminal *term, void *d, void *e)
 static void
 go_backwards(struct terminal *term, struct location *target, struct session *ses)
 {
-	struct location *cur = cur_loc(ses);
-
 	abort_loading(ses, 0);
 
-	/* XXX: We should have the original document as the current
-	 * location in go_back(), as it calls a lot of cleanup stuff
-	 * which assumes cur_loc() really returns the current document
-	 * BEFORE move. */
 	go_back(ses, target);
-	if (cur_loc(ses) == cur) ses->history.current = target->next;
 }
 
 static void
 go_unbackwards(struct terminal *term, struct location *target, struct session *ses)
 {
-	struct location *cur = cur_loc(ses);
-
 	abort_loading(ses, 0);
 
-	/* XXX: We should have the original document as the current
-	 * location in go_unback(), as it calls a lot of cleanup stuff
-	 * which assumes cur_loc() really returns the current document
-	 * BEFORE move. */
 	go_unback(ses, target);
-	if (cur_loc(ses) == cur) ses->history.current = target->prev;
 }
 
 static struct menu_item no_hist_menu[] = {

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.49 2003/10/23 22:20:10 pasky Exp $ */
+/* $Id: session.h,v 1.50 2003/10/24 17:05:28 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -111,7 +111,9 @@ struct session {
 	/* The current action-in-progress selector */
 
 	enum task_type task;
+	/* TODO: union --pasky */
 	unsigned char *task_target_frame;
+	struct location *task_target_location;
 
 
 	/* The current browsing state */
@@ -177,8 +179,8 @@ void goto_url_with_hook(struct session *, unsigned char *);
 void goto_imgmap(struct session *, unsigned char *, unsigned char *, unsigned char *);
 
 void ses_forward(struct session *);
-void ses_goto(struct session *, unsigned char *, unsigned char *, int,
-	      enum cache_mode, enum task_type, unsigned char *,
+void ses_goto(struct session *, unsigned char *, unsigned char *, struct location *,
+	      int, enum cache_mode, enum task_type, unsigned char *,
 	      void (*)(struct download *, struct session *), int);
 
 void end_load(struct download *, struct session *);

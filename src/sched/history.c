@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.41 2003/10/24 00:50:22 pasky Exp $ */
+/* $Id: history.c,v 1.42 2003/10/24 17:05:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,7 +74,7 @@ ses_leave_location(struct session *ses, int dir)
 		ses->search_word = NULL;
 	}
 
-	if (!have_location(ses))
+	if (!have_location(ses) || !ses->task_target_location)
 		return 0;
 
 	return 1;
@@ -90,9 +90,10 @@ ses_back(struct session *ses)
 
 	/* This is the current location. */
 
-	loc = cur_loc(ses);
-	if (loc->prev == (struct location *) &ses->history.history) return;
-	ses->history.current = ses->history.current->prev;
+	if (ses->task_target_location
+	    == (struct location *) &ses->history.history)
+		return;
+	ses->history.current = ses->task_target_location;
 
 	/* This was the previous location (where we came back now). */
 
@@ -116,9 +117,10 @@ ses_unback(struct session *ses)
 
 	/* This is the current location. */
 
-	loc = cur_loc(ses);
-	if (loc->next == (struct location *) &ses->history.history) return;
-	ses->history.current = ses->history.current->next;
+	if (ses->task_target_location
+	    == (struct location *) &ses->history.history)
+		return;
+	ses->history.current = ses->task_target_location;
 
 	/* This will be the next location (where we came back now). */
 
@@ -176,8 +178,9 @@ go_back(struct session *ses, struct location *loc)
 	url = memacpy(loc->vs.url, loc->vs.url_len);
 	if (!url) return;
 
-	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, TASK_BACK, NULL,
-		 end_load, 0);
+	ses_goto(ses, url, NULL, loc,
+		 PRI_MAIN, NC_ALWAYS_CACHE, TASK_BACK,
+		 NULL, end_load, 0);
 }
 
 void
@@ -191,6 +194,7 @@ go_unback(struct session *ses, struct location *loc)
 	url = memacpy(loc->vs.url, loc->vs.url_len);
 	if (!url) return;
 
-	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, TASK_UNBACK, NULL,
-		 end_load, 1);
+	ses_goto(ses, url, NULL, loc,
+		 PRI_MAIN, NC_ALWAYS_CACHE, TASK_UNBACK,
+		 NULL, end_load, 0);
 }

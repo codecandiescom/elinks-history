@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.181 2003/10/23 22:27:18 pasky Exp $ */
+/* $Id: session.c,v 1.182 2003/10/24 17:05:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -554,7 +554,8 @@ struct task {
 	int pri;
 	enum cache_mode cache_mode;
 	enum task_type type;
-	unsigned char *target;
+	unsigned char *target_frame;
+	struct location *target_location;
 	unsigned char *pos;
 	void (*fn)(struct download *, struct session *);
 };
@@ -573,7 +574,8 @@ post_yes(struct task *task)
 	ses->loading.data = task->ses;
 	ses->loading_url = stracpy(task->url);
 	ses->task = task->type;
-	ses->task_target_frame = task->target;
+	ses->task_target_frame = task->target_frame;
+	ses->task_target_location = task->target_location;
 
 	load_url(ses->loading_url, ses->ref_url,
 		 &ses->loading, task->pri, task->cache_mode, -1);
@@ -586,7 +588,8 @@ post_no(struct task *task)
 }
 
 void
-ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
+ses_goto(struct session *ses, unsigned char *url, unsigned char *target_frame,
+	 struct location *target_location,
 	 int pri, enum cache_mode cache_mode, enum task_type task_type,
 	 unsigned char *pos,
 	 void (*fn)(struct download *, struct session *),
@@ -618,7 +621,8 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 		ses->loading.data = ses;
 		ses->loading_url = url;
 		ses->task = task_type;
-		ses->task_target_frame = target;
+		ses->task_target_frame = target_frame;
+		ses->task_target_location = target_location;
 
 		load_url(url, ses->ref_url, &ses->loading, pri, cache_mode, -1);
 
@@ -630,7 +634,8 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 	task->pri = pri;
 	task->cache_mode = cache_mode;
 	task->type = task_type;
-	task->target = target;
+	task->target_frame = target_frame;
+	task->target_location = target_location;
 	task->pos = pos;
 	task->fn = fn;
 
@@ -716,19 +721,22 @@ do_move(struct session *ses, struct download **stat)
 					    ? stracpy(ses->goto_position)
 					    : NULL;
 
-			ses_goto(ses, u, ses->task_target_frame, PRI_MAIN,
-				 NC_CACHE, task, gp, end_load, 1);
+			ses_goto(ses, u, ses->task_target_frame, NULL,
+				 PRI_MAIN, NC_CACHE, task,
+				 gp, end_load, 1);
 			if (gp) mem_free(gp);
 			return 2;
 			}
 		case TASK_BACK:
 		case TASK_UNBACK:
-			ses_goto(ses, u, NULL, PRI_MAIN, NC_CACHE,
-				 TASK_RELOAD, NULL, end_load, 1);
+			ses_goto(ses, u, NULL, ses->task_target_location,
+				 PRI_MAIN, NC_CACHE, TASK_RELOAD,
+				 NULL, end_load, 1);
 			return 2;
 		case TASK_RELOAD:
-			ses_goto(ses, u, NULL, PRI_MAIN, ses->reloadlevel,
-				 TASK_RELOAD, NULL, end_load, 1);
+			ses_goto(ses, u, NULL, NULL,
+				 PRI_MAIN, ses->reloadlevel, TASK_RELOAD,
+				 NULL, end_load, 1);
 			return 2;
 		default:
 			break;
@@ -1521,7 +1529,9 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 	if (doc_view && doc_view->document && doc_view->document->url)
 		ses->ref_url = stracpy(doc_view->document->url);
 
-	ses_goto(ses, u, target, PRI_MAIN, cache_mode, task, pos, end_load, 0);
+	ses_goto(ses, u, target, NULL,
+		 PRI_MAIN, cache_mode, task,
+		 pos, end_load, 0);
 
 	/* abort_loading(ses); */
 

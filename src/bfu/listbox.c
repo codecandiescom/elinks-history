@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.74 2003/05/04 19:30:47 pasky Exp $ */
+/* $Id: listbox.c,v 1.75 2003/06/26 22:09:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -343,8 +343,6 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 	} else {
 		color = get_bfu_color(data->term, "menu.normal");
 	}
-
-	/* TODO: Use graphics chars for lines if available. --pasky */
 
 	for (d = 0; d < depth - 1; d++) {
 		struct listbox_item *root = item;

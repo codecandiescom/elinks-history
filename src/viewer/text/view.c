@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.288 2003/12/05 05:18:16 fabio Exp $ */
+/* $Id: view.c,v 1.289 2003/12/05 05:41:40 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -820,8 +820,11 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 				print_screen_status(ses);
 				redraw_from_window(ses->tab);
 
-				if ((ev->b & BM_BUTT) < B_MIDDLE)
+				if ((ev->b & BM_BUTT) ==  B_LEFT)
 					x = enter(ses, doc_view, 0);
+				else if ((ev->b & BM_BUTT) ==  B_MIDDLE)
+					open_in_new_tab_in_background(ses->tab->term,
+								      1, ses);
 				else
 					link_menu(ses->tab->term, NULL, ses);
 			}

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.37 2004/09/25 15:30:57 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.38 2004/09/25 15:40:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -405,6 +405,8 @@ location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		JSVAL_REQUIRE(vp, STRING);
 		new_abs_url = join_urls(doc_view->document->uri,
 		                        trim_chars(v.string, ' ', 0));
+		if (!new_abs_url)
+			break;
 		new_uri = get_uri(new_abs_url, 0);
 		mem_free(new_abs_url);
 		if (!new_uri)

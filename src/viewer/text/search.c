@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.236 2004/06/08 16:21:23 zas Exp $ */
+/* $Id: search.c,v 1.237 2004/06/11 03:03:46 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -953,13 +953,15 @@ typeahead_error(struct session *ses, unsigned char *typeahead)
  * current_link in the view, the link to start searching from @i and the
  * direction to search (1 is forward, -1 is back). */
 static inline int
-search_link_text(struct document *document, int current_link, int i,
+search_link_text(struct document_view *doc_view, int current_link, int i,
 		 unsigned char *text, int direction, int *offset)
 {
+	struct document *document = doc_view->document;
 	int upper_link, lower_link;
 	int case_sensitive = get_opt_bool("document.browse.search.case");
 	int wraparound = get_opt_bool("document.browse.search.wraparound");
 	int textlen = strlen(text);
+	int first_match = -1;
 
 	assert(textlen && direction && offset);
 
@@ -988,8 +990,16 @@ search_link_text(struct document *document, int current_link, int i,
 		/* Did the text match? */
 		matchpos = match_link_text(match, text);
 		if (matchpos) {
-			*offset = matchpos - match;
-			return i;
+			/* Prefer links in the current view but save the first
+			 * matching link in case we have to scroll. */
+			if (in_view(doc_view, link)) {
+				*offset = matchpos - match;
+				return i;
+
+			} else if (first_match == -1) {
+				*offset = matchpos - match;
+				first_match = i;
+			}
 		}
 
 		if (!wraparound) continue;
@@ -1022,7 +1032,7 @@ search_link_text(struct document *document, int current_link, int i,
 
 #undef match_link_text
 
-	return -1;
+	return first_match;
 }
 
 /* The typeahead input line takes up one of the viewed lines so we
@@ -1087,7 +1097,6 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 {
 	int current = int_max(doc_view->vs->current_link, 0);
 	int direction, i = current;
-	struct document *document = doc_view->document;
 
 	switch (action) {
 		case ACT_EDIT_PREVIOUS_ITEM:
@@ -1120,7 +1129,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			direction = 1;
 	}
 
-	i = search_link_text(document, current, i, text, direction, offset);
+	i = search_link_text(doc_view, current, i, text, direction, offset);
 	if (i < 0) return TYPEAHEAD_STOP;
 
 	assert(i >= 0 && i < doc_view->document->nlinks);

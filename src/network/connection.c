@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.49 2003/07/03 22:43:00 jonas Exp $ */
+/* $Id: connection.c,v 1.50 2003/07/03 22:49:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,19 +136,19 @@ connection_disappeared(struct connection *c)
 }
 
 static struct host_connection *
-is_host_on_list(struct connection *c)
+get_host_connection(struct connection *c)
 {
-	unsigned char *ho = get_host_name(c->url);
-	struct host_connection *h;
+	unsigned char *host = get_host_name(c->url);
+	struct host_connection *host_connection;
 
-	if (!ho) return NULL;
-	foreach (h, host_connections)
-		if (!strcmp(h->host, ho)) {
-			mem_free(ho);
-			return h;
+	if (!host) return NULL;
+	foreach (host_connection, host_connections)
+		if (!strcmp(host_connection->host, host)) {
+			mem_free(host);
+			return host_connection;
 		}
 
-	mem_free(ho);
+	mem_free(host);
 	return NULL;
 }
 
@@ -333,7 +333,7 @@ free_connection_data(struct connection *c)
 	assertm(active_connections >= 0, "active connections underflow");
 
 	if (c->state != S_WAIT) {
-		struct host_connection *h = is_host_on_list(c);
+		struct host_connection *h = get_host_connection(c);
 
 		assertm(h, "suspending connection that is not on the list "
 			"(state %d)", c->state);
@@ -565,7 +565,7 @@ run_connection(struct connection *c)
 		return;
 	}
 
-	hc = is_host_on_list(c);
+	hc = get_host_connection(c);
 	if (!hc) {
 		hc = mem_calloc(1, sizeof(struct host_connection));
 		if (!hc) {
@@ -657,7 +657,7 @@ check_queue_bugs(void)
 static inline int
 try_connection(struct connection *c, int max_conns_to_host, int max_conns)
 {
-	struct host_connection *hc = is_host_on_list(c);
+	struct host_connection *hc = get_host_connection(c);
 
 	if (hc && hc->conn >= max_conns_to_host)
 		return try_to_suspend_connection(c, hc->host) ? 0 : -1;

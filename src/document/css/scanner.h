@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.45 2004/01/21 17:05:36 jonas Exp $ */
+/* $Id: scanner.h,v 1.46 2004/01/22 19:32:37 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -97,8 +97,8 @@ enum css_token_type {
  * of tokens: char and non-char tokens. Char tokens contains only one char and
  * simply have their char value as type. They are tokens having special control
  * meaning in the CSS code, like ':', ';', '{', '}' and '*'. Non char tokens
- * contains one or more chars and contains stuff like digit or indentifier
- * string. */
+ * has one or more chars and contain stuff like number or indentifier strings.
+ * */
 struct css_token {
 	/* The type the token */
 	enum css_token_type type;

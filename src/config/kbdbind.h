@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.40 2003/05/08 21:44:48 zas Exp $ */
+/* $Id: kbdbind.h,v 1.41 2003/07/07 20:13:25 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -90,7 +90,8 @@ enum keyact {
 	ACT_UNBACK,
 	ACT_UP,
 	ACT_VIEW_IMAGE,
-	ACT_ZOOM_FRAME
+	ACT_ZOOM_FRAME,
+	KEYACTS,
 };
 
 enum kbdbind_flags {

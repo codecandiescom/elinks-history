@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.73 2003/06/15 22:44:13 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.74 2003/07/07 20:13:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@
 INIT_LIST_HEAD(kbdbind_box_items);
 INIT_LIST_HEAD(kbdbind_boxes);
 
-static struct listbox_item *keyact_box_items[ACT_ZOOM_FRAME + 1];
+static struct listbox_item *keyact_box_items[KEYACTS];
 static struct list_head keymaps[KM_MAX];
 
 static int read_action(unsigned char *);

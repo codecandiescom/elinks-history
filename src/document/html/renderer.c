@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.105 2003/06/16 14:45:01 zas Exp $ */
+/* $Id: renderer.c,v 1.106 2003/06/16 14:50:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -384,6 +384,7 @@ del_chars(struct part *part, int x, int y)
 }
 
 #define overlap(x) ((x).width - (x).rightmargin > 0 ? (x).width - (x).rightmargin : 0)
+
 /* FIXME: Understand it and comment it ...
  * Previous code was kept in #if 0/#endif, see below. */
 static int
@@ -450,96 +451,6 @@ split:
 
 	}
 }
-
-
-#if 0
-/* TODO: optimization and verification needed there. --Zas */
-static int
-split_line(struct part *part)
-{
-	int i;
-
-#if 0
-	if (!part->data) goto r;
-	printf("split: %d,%d   , %d,%d,%d\n",part->cx,part->cy,par_format.rightmargin,par_format.leftmargin,part->cx);
-#endif
-
-	for (i = overlap(par_format); i >= par_format.leftmargin; i--)
-		if (i < part->spaces_len && part->spaces[i])
-			goto split;
-
-#if 0
-	for (i = part->cx - 1; i > overlap(par_format) && i > par_format.leftmargin; i--)
-#endif
-
-	for (i = par_format.leftmargin; i < part->cx ; i++)
-		if (i < part->spaces_len && part->spaces[i])
-			goto split;
-
-#if 0
-	for (i = overlap(par_format); i >= par_format.leftmargin; i--)
-		if ((POS(i, part->cy) & 0xff) == ' ')
-			goto split;
-	for (i = part->cx - 1; i > overlap(par_format) && i > par_format.leftmargin; i--)
-		if ((POS(i, part->cy) & 0xff) == ' ')
-			goto split;
-#endif
-
-	if (part->cx + par_format.rightmargin > part->x)
-		part->x = part->cx + par_format.rightmargin;
-
-#if 0
-	if (part->y < part->cy + 1) part->y = part->cy + 1;
-	part->cy++; part->cx = -1;
-	memset(part->spaces, 0, part->spaces_len);
-	if (part->data) xpand_lines(part, part->cy + 1);
-	line_break(part);
-#endif
-
-	return 0;
-
-split:
-	if (i + par_format.rightmargin > part->x)
-		part->x = i + par_format.rightmargin;
-	if (part->data) {
-#ifdef DEBUG
-		if ((POS(i, part->cy) & 0xff) != ' ')
-			internal("bad split: %c", (char)POS(i, part->cy));
-#endif
-		move_chars(part, i+1, part->cy, par_format.leftmargin, part->cy+1);
-		del_chars(part, i, part->cy);
-	}
-
-	/* FYI, witekfl has an optimization of this pending in my patch queue.
-	 * I want to review it since it's kinda arcane and error here would
-	 * probably mean some quite interesting random bugs. --pasky */
-
-	if (part->spaces_len - i - 1 > 0) {
-		/* 0 is possible and i'm paranoic ... --Zas */
-		memmove(part->spaces, part->spaces + i + 1,
-			part->spaces_len - i - 1);
-	}
-
-	memset(part->spaces + part->spaces_len - i - 1, 0, i + 1);
-
-	if (part->spaces_len - par_format.leftmargin > 0)
-		memmove(part->spaces + par_format.leftmargin, part->spaces,
-			part->spaces_len - par_format.leftmargin);
-	else	/* Should not occcur. --Zas */
-		internal("part->spaces_len - par_format.leftmargin == %d",
-			 part->spaces_len - par_format.leftmargin);
-
-	part->cx -= i - par_format.leftmargin + 1;
-	part->cy++;
-
-	/*return 1 + (part->cx == par_format.leftmargin);*/
-
-	if (part->cx == par_format.leftmargin) part->cx = -1;
-	if (part->y < part->cy + (part->cx != -1)) part->y = part->cy + (part->cx != -1);
-
-	return 1 + (part->cx == -1);
-}
-#endif
 
 /* This function is very rare exemplary of clean and beautyful code here.
  * Please handle with care. --pasky */

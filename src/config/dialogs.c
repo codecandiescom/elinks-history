@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.88 2003/10/29 17:17:35 jonas Exp $ */
+/* $Id: dialogs.c,v 1.89 2003/10/30 00:11:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -499,14 +499,12 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	add_dlg_button(dlg, n, B_ENTER, push_info_button, _("Info", term), ses);
 	add_dlg_button(dlg, n, B_ENTER, push_edit_button, _("Edit", term), ses);
 	add_dlg_button(dlg, n, B_ENTER, push_add_button, _("Add", term), ses);
-	add_dlg_button(dlg, n, B_ENTER, push_edit_button, _("Edit", term), ses);
 	add_dlg_button(dlg, n, B_ENTER, push_del_button, _("Delete", term), ses);
 	add_dlg_button(dlg, n, B_ENTER, push_save_button, _("Save", term), ses);
 	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
+	add_dlg_listbox(dlg, n, 12, option_dlg_box_build());
 
 	assert(n == OP_WIDGETS_COUNT);
-
-	add_dlg_listbox(dlg, n, 12, option_dlg_box_build());
 
 	dlg->widgets_size = n;
 

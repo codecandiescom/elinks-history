@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.149 2004/08/19 08:12:52 miciah Exp $ */
+/* $Id: renderer.c,v 1.150 2004/08/19 08:52:00 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -249,8 +249,18 @@ add_document_line(struct plain_renderer *renderer,
 
 			expanded += tab_width;
 		} else if (line_char == ASCII_BS) {
+#if 0
+		This does not work: Suppose we have seventeen spaces
+		followed by a back-space; that will call for sixteen
+		bytes of memory, but we will print seventeen spaces
+		before we hit the back-space -- overflow!
+
+			/* Don't count the character
+			 * that the back-space character will delete */
 			if (expanded + line_pos)
 				expanded--;
+#endif
+			/* Don't count the back-space character */
 			expanded--;
 		}
 	}

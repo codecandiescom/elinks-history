@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.457 2004/07/10 13:31:16 jonas Exp $ */
+/* $Id: options.c,v 1.458 2004/07/13 19:49:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -477,7 +477,7 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
  * completely filled (struct option *) have long name and functions which take
  * only option specs have short name. */
 
-void
+static void
 delete_option_do(struct option *option, int recursive)
 {
 	if (option->next) del_from_list(option);

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.108 2003/06/29 12:52:12 zas Exp $ */
+/* $Id: session.c,v 1.109 2003/06/29 15:51:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -689,17 +689,22 @@ b:
 		kill_timer(ses->display_timer);
 	       	ses->display_timer = -1;
 	}
-	if (ses->task == TASK_FORWARD) {
-		if (ses_chktype(ses, stat, ce)) {
-			free_task(ses);
-			reload(ses, NC_CACHE);
-			return 2;
-		}
+
+	switch (ses->task) {
+		case TASK_FORWARD:
+			if (ses_chktype(ses, stat, ce)) {
+				free_task(ses);
+				reload(ses, NC_CACHE);
+				return 2;
+			}
+			break;
+		case TASK_IMGMAP: ses_imgmap(ses); break;
+		case TASK_BACK  : ses_back(ses); break;
+		case TASK_UNBACK: ses_unback(ses); break;
+		case TASK_RELOAD: ses_back(ses), ses_forward(ses); break;
+		default: break;
 	}
-	if (ses->task == TASK_IMGMAP) ses_imgmap(ses);
-	if (ses->task == TASK_BACK) ses_back(ses);
-	if (ses->task == TASK_UNBACK) ses_unback(ses);
-	if (ses->task == TASK_RELOAD) ses_back(ses), ses_forward(ses);
+
 	if ((*stat)->state >= 0) {
 		*stat = &cur_loc(ses)->stat;
 		change_connection(&ses->loading, *stat, PRI_MAIN, 0);

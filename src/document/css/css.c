@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.22 2004/01/23 20:00:57 jonas Exp $ */
+/* $Id: css.c,v 1.23 2004/01/23 20:08:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,10 +130,36 @@ import_css(struct css_stylesheet *css, unsigned char *url)
 }
 
 
+static void
+import_default_css(void)
+{
+	unsigned char *url = get_opt_str("document.css.stylesheet");
+	unsigned char *home_url = NULL;
+
+	if (!*url) {
+		if (!list_empty(default_stylesheet.selectors))
+			done_css_stylesheet(&default_stylesheet);
+		return;
+	}
+
+	if (*url != '/' && elinks_home) {
+		home_url = straconcat(elinks_home, url, NULL);
+		if (!home_url) return;
+		url = home_url;
+	}
+
+	import_css(&default_stylesheet, url);
+	if (home_url) mem_free(home_url);
+}
+
 static int
 change_hook_css(struct session *ses, struct option *current, struct option *changed)
 {
+	if (!strcmp(changed->name, "stylesheet"))
+		import_default_css();
+
 	draw_formatted(ses, 1);
+
 	return 0;
 }
 
@@ -144,20 +170,9 @@ init_css(struct module *module)
 		{ "document.css",		change_hook_css },
 		{ NULL,				NULL },
 	};
-	unsigned char *url = get_opt_str("document.css.stylesheet");
-	unsigned char *home_url = NULL;
 
 	register_change_hooks(css_change_hooks);
-	if (!*url) return;
-
-	if (*url != '/' && elinks_home) {
-		home_url = straconcat(elinks_home, url, NULL);
-		if (!home_url) return;
-		url = home_url;
-	}
-
-	import_css(&default_stylesheet, url);
-	if (home_url) mem_free(home_url);
+	import_default_css();
 }
 
 void

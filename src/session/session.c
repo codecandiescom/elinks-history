@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.539 2004/07/26 22:07:15 zas Exp $ */
+/* $Id: session.c,v 1.540 2004/07/26 22:09:43 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -108,18 +108,19 @@ get_session_info(int id)
 {
 	struct session_info *info;
 
-	foreach (info, session_info)
-		if (info->id == id) {
-			struct session *ses;
+	foreach (info, session_info) {
+		struct session *ses;
 
-			/* Make sure the info->ses session is still with us. */
-			foreach (ses, sessions)
-				if (ses == info->ses)
-					return info;
+		if (info->id != id) continue;
 
-			info->ses = NULL;
-			return info;
-		}
+		/* Make sure the info->ses session is still with us. */
+		foreach (ses, sessions)
+			if (ses == info->ses)
+				return info;
+
+		info->ses = NULL;
+		return info;
+	}
 
 	return NULL;
 }

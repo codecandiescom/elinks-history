@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.25 2003/08/22 10:38:50 zas Exp $ */
+/* $Id: formhist.c,v 1.26 2003/08/22 15:07:47 zas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -33,7 +33,7 @@ static int loaded = 0;
 static int
 load_saved_forms(void)
 {
-	struct formsmem_data *form;
+	struct formhist_data *form;
 	unsigned char tmp[MAX_STR_LEN];
        	unsigned char *file;
 	FILE *f;
@@ -50,7 +50,7 @@ load_saved_forms(void)
 
 		tmp[strlen(tmp) - 1] = '\0';
 
-		form = mem_alloc(sizeof(struct formsmem_data));
+		form = mem_alloc(sizeof(struct formhist_data));
 		if (!form) return 0;
 
 		form->submit = mem_alloc(sizeof(struct list_head));
@@ -119,7 +119,7 @@ fail:
 unsigned char *
 get_form_history_value(unsigned char *url, unsigned char *name)
 {
-	struct formsmem_data *form;
+	struct formhist_data *form;
 
 	if (!loaded && !load_saved_forms()) return NULL;
 
@@ -143,7 +143,7 @@ get_form_history_value(unsigned char *url, unsigned char *name)
 int
 form_already_saved(unsigned char *url, struct list_head *submit)
 {
-	struct formsmem_data *form;
+	struct formhist_data *form;
 
 	if (!loaded && !load_saved_forms()) return 0;
 
@@ -179,20 +179,20 @@ form_already_saved(unsigned char *url, struct list_head *submit)
  * returns 1 on success
  *         0 on failure */
 int
-remember_form(struct formsmem_data *fmem_data)
+remember_form(struct formhist_data *form1)
 {
-	struct formsmem_data *form, *tmpform;
+	struct formhist_data *form, *tmpform;
 	struct submitted_value *sv;
 	struct secure_save_info *ssi;
 	unsigned char *file;
 
-	form = mem_calloc(1, sizeof(struct formsmem_data));
+	form = mem_calloc(1, sizeof(struct formhist_data));
 	if (!form) return 0;
 
 	form->submit = mem_alloc(sizeof(struct list_head));
 	if (!form->submit) goto fail;
 
-	form->url = stracpy(fmem_data->url);
+	form->url = stracpy(form1->url);
 	if (!form->url) goto fail;
 
 	init_list(*form);
@@ -207,7 +207,7 @@ remember_form(struct formsmem_data *fmem_data)
 
 	/* We're going to save just <INPUT TYPE="text"> and
 	 * <INPUT TYPE="password"> */
-	foreach (sv, *fmem_data->submit) {
+	foreach (sv, *form1->submit) {
 		if ((sv->type == FC_TEXT) || (sv->type == FC_PASSWORD)) {
 			struct submitted_value *sv2;
 
@@ -257,7 +257,7 @@ remember_form(struct formsmem_data *fmem_data)
 
 	secure_close(ssi);
 
-	free_form(fmem_data);
+	free_form(form1);
 	return 1;
 
 fail:
@@ -266,17 +266,17 @@ fail:
 }
 
 void
-free_form_in_list(struct formsmem_data *form)
+free_form_in_list(struct formhist_data *form)
 {
 	struct submitted_value *sv;
 
 	if (form->url) mem_free(form->url);
 
-	foreachback (sv, *form->submit) {
-		if (sv->name) mem_free(sv->name);
-		if (sv->value) mem_free(sv->value);
-	}
 	if (form->submit) {
+		foreachback (sv, *form->submit) {
+			if (sv->name) mem_free(sv->name);
+			if (sv->value) mem_free(sv->value);
+		}
 		free_list(*form->submit);
 		mem_free(form->submit);
 	}
@@ -285,7 +285,7 @@ free_form_in_list(struct formsmem_data *form)
 void
 done_form_history(void)
 {
-	struct formsmem_data *form;
+	struct formhist_data *form;
 
 	foreach(form, saved_forms)
 		free_form_in_list(form);
@@ -294,7 +294,7 @@ done_form_history(void)
 }
 
 void
-free_form(struct formsmem_data *form)
+free_form(struct formhist_data *form)
 {
 	free_form_in_list(form);
 	mem_free(form);
@@ -304,7 +304,7 @@ struct list_head *
 memorize_form(struct session *ses, struct list_head *submit,
 	      struct form_control *frm)
 {
-	struct formsmem_data *fm_data;
+	struct formhist_data *form;
 	struct list_head *sb;
 	struct submitted_value *sv;
 	int save = 0;
@@ -318,28 +318,27 @@ memorize_form(struct session *ses, struct list_head *submit,
 
 	if (!save || form_already_saved(frm->action, submit)) return NULL;
 
-	fm_data = mem_alloc(sizeof(struct formsmem_data));
-	if (!fm_data) return NULL;
+	form = mem_alloc(sizeof(struct formhist_data));
+	if (!form) return NULL;
 
-	fm_data->submit = mem_alloc(sizeof(struct list_head));
-	if (!fm_data->submit) {
-		mem_free(fm_data);
+	form->submit = mem_alloc(sizeof(struct list_head));
+	if (!form->submit) {
+		mem_free(form);
 		return NULL;
 	}
-
-	init_list(*fm_data->submit);
+	init_list(*form->submit);
 
 	/* Set up a new list_head, as @submit will be destroyed as soon as
 	 * get_form_url() returns */
-	sb = fm_data->submit;
+	sb = form->submit;
 	sb->next = submit->next;
 	sb->prev = submit->prev;
 	((struct submitted_value *) sb->next)->prev = (struct submitted_value *) sb;
 	((struct submitted_value *) sb->prev)->next = (struct submitted_value *) sb;
 
-	fm_data->url = stracpy(frm->action);
-	if (!fm_data->url) {
-		mem_free(fm_data);
+	form->url = stracpy(frm->action);
+	if (!form->url) {
+		free_form(form);
 		return NULL;
 	}
 
@@ -349,7 +348,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 			"Please note that passwords will be stored "
 			"obscured (i.e. unencrypted) in a file on your disk.\n\n"
 			"If you are using a valuable password answer NO."),
-		fm_data, 2,
+		form, 2,
 		N_("Yes"), remember_form, B_ENTER,
 		N_("No"), free_form, NULL);
 

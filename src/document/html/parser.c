@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.234 2003/10/29 22:18:31 jonas Exp $ */
+/* $Id: parser.c,v 1.235 2003/10/29 22:35:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -473,7 +473,7 @@ void *ff;
 void (*put_chars_f)(void *, unsigned char *, int);
 void (*line_break_f)(void *);
 void (*init_f)(void *);
-void *(*special_f)(void *, int, ...);
+void *(*special_f)(void *, enum html_special_type, ...);
 
 static unsigned char *eoff;
 static unsigned char *eofff;
@@ -3045,7 +3045,7 @@ parse_html(unsigned char *html, unsigned char *eof,
 	   void (*put_chars)(void *, unsigned char *, int),
 	   void (*line_break)(void *),
 	   void (*init)(void *),
-	   void *(*special)(void *, int, ...),
+	   void *(*special)(void *, enum html_special_type, ...),
 	   void *f, unsigned char *head)
 {
 	/*unsigned char *start = html;*/

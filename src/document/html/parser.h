@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.41 2003/10/29 22:18:31 jonas Exp $ */
+/* $Id: parser.h,v 1.42 2003/10/29 22:35:51 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -100,43 +100,6 @@ struct html_element {
 	struct frameset_desc *frameset;
 };
 
-extern struct list_head html_stack;
-
-#define format (((struct html_element *) html_stack.next)->attr)
-#define par_format (((struct html_element *) html_stack.next)->parattr)
-#define html_top (*(struct html_element *) html_stack.next)
-
-/* extern void *ff; */
-extern void (*put_chars_f)(void *, unsigned char *, int);
-extern void (*line_break_f)(void *);
-extern void (*init_f)(void *);
-extern void *(*special_f)(void *, int, ...);
-
-int parse_element(unsigned char *, unsigned char *, unsigned char **, int *, unsigned char **, unsigned char **);
-
-unsigned char *get_attr_val(unsigned char *, unsigned char *);
-int has_attr(unsigned char *, unsigned char *);
-int get_num(unsigned char *, unsigned char *);
-int get_width(unsigned char *, unsigned char *, int);
-/* int get_color(unsigned char *, unsigned char *, color_t *); */
-int get_bgcolor(unsigned char *, color_t *);
-
-void html_stack_dup(void);
-void kill_html_stack_item(struct html_element *);
-unsigned char *skip_comment(unsigned char *, unsigned char *);
-
-struct menu_item;
-
-int get_image_map(unsigned char *, unsigned char *, unsigned char *, unsigned char *a, struct menu_item **, struct memory_list **, unsigned char *, unsigned char *, int, int, int);
-
-void
-parse_html(unsigned char *html, unsigned char *eof,
-	   void (*put_chars)(void *, unsigned char *, int),
-	   void (*line_break)(void *),
-	   void (*init)(void *),
-	   void *(*special)(void *, int, ...),
-	   void *f, unsigned char *head);
-
 enum html_special_type {
 	SP_TAG,
 	SP_CONTROL,
@@ -149,23 +112,65 @@ enum html_special_type {
 	SP_COLOR_LINK_LINES,
 };
 
+/* Interface for both the renderer and the table handling */
 
-void free_menu(struct menu_item *);
+extern struct list_head html_stack;
 
-struct session;
-void do_select_submenu(struct terminal *, struct menu_item *, struct session *);
+#define format (((struct html_element *) html_stack.next)->attr)
+#define par_format (((struct html_element *) html_stack.next)->parattr)
+#define html_top (*(struct html_element *) html_stack.next)
 
-/* This releases the tags fastfind cache, if being in use. */
-void free_tags_lookup(void);
-/* This initializes the tags cache used by fastfind. */
-void init_tags_lookup(void);
+void
+parse_html(unsigned char *html, unsigned char *eof,
+	   void (*put_chars)(void *, unsigned char *, int),
+	   void (*line_break)(void *),
+	   void (*init)(void *),
+	   void *(*special)(void *, enum html_special_type, ...),
+	   void *f, unsigned char *head);
+
+/* Interface for the renderer */
 
 void
 init_html_parser(unsigned char *url, struct document_options *options,
 		 unsigned char *start, unsigned char *end,
 		 struct string *head, struct string *title);
+
 void done_html_parser(void);
 struct html_element *init_html_parser_state(int align, int margin, int width);
 void done_html_parser_state(struct html_element *element);
+
+/* Interface for the table handling */
+
+extern void (*put_chars_f)(void *, unsigned char *, int);
+extern void (*line_break_f)(void *);
+extern void (*init_f)(void *);
+extern void *(*special_f)(void *, enum html_special_type, ...);
+
+int parse_element(unsigned char *, unsigned char *, unsigned char **, int *, unsigned char **, unsigned char **);
+
+unsigned char *get_attr_val(unsigned char *, unsigned char *);
+int has_attr(unsigned char *, unsigned char *);
+int get_num(unsigned char *, unsigned char *);
+int get_width(unsigned char *, unsigned char *, int);
+int get_bgcolor(unsigned char *, color_t *);
+
+void html_stack_dup(void);
+void kill_html_stack_item(struct html_element *);
+unsigned char *skip_comment(unsigned char *, unsigned char *);
+
+/* Interface for the viewer */
+
+struct session;
+struct menu_item;
+
+void do_select_submenu(struct terminal *, struct menu_item *, struct session *);
+void free_menu(struct menu_item *);
+
+int get_image_map(unsigned char *, unsigned char *, unsigned char *, unsigned char *a, struct menu_item **, struct memory_list **, unsigned char *, unsigned char *, int, int, int);
+
+/* Lifecycle functions for the tags fastfind cache, if being in use. */
+
+void free_tags_lookup(void);
+void init_tags_lookup(void);
 
 #endif

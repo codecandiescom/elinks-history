@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.333 2003/10/29 21:58:29 jonas Exp $ */
+/* $Id: renderer.c,v 1.334 2003/10/29 22:35:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1185,7 +1185,7 @@ do_format(char *start, char *end, struct part *part, unsigned char *head)
 		   (void (*)(void *, unsigned char *, int)) put_chars_conv,
 		   (void (*)(void *)) line_break,
 		   (void (*)(void *)) html_init,
-		   (void *(*)(void *, int, ...)) html_special,
+		   (void *(*)(void *, enum html_special_type, ...)) html_special,
 		   part, head);
 }
 

@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.79 2005/04/02 00:52:19 rrowan Exp $
+# $Id: hooks.pl,v 1.80 2005/04/02 05:41:03 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -595,14 +595,14 @@ sub goto_url_hook
 	my $current_url = shift;
 
 	# "bugmenot" (no blood today, thank you)
-	if ($url =~ '^bugmenot$' && $current_url)
+	if ($url eq 'bugmenot' && $current_url)
 	{
 		($current_url) = $current_url =~ /^.*:\/\/(.*)/;
 		return 'http://bugmenot.com/view.php?url=' . $current_url;
 	}
 
 	# Random URL generator
-	if ($url =~ '^bored$' || $url =~ '^random$')
+	if ($url eq 'bored' or $url eq 'random')
 	{
 		my $word; # You can say *that* again...
 		srand();
@@ -652,7 +652,6 @@ sub goto_url_hook
 		next unless $url =~ /$prefix/;
 		return location($locator_prefixes{$prefix}, $search, $current_url);
 	}
-
 	if ($url =~ '^(zip|usps)(| .*)$'
 		or $url =~ '^ip(| .*)$'
 		or $url =~ '^whois(| .*)$'
@@ -672,7 +671,6 @@ sub goto_url_hook
 		my $locator_weather        = 'http://weather.noaa.gov';
 		my $locator_whatis         = 'http://uptime.netcraft.com';
 			$locator_whatis        = 'http://uptime.netcraft.com/up/graph/?host=' . $domain if $domain;
-
 		if ($thingy)
 		{
 			$locator_zip           = 'http://zip4.usps.com/zip4/zip_responseA.jsp?zipcode=' . $thingy;
@@ -767,7 +765,6 @@ sub goto_url_hook
 			$url =~ s/ portugese/ pt/i;
 			$url =~ s/ russian/ ru/i;
 			$url =~ s/ spanish/ es/i;
-
 			my ($from_language, $to_language) = $url =~ /^[a-z]* (.*) (.*)$/;
 			($current_url) = $current_url =~ /^.*:\/\/(.*)/;
 			$url = 'http://babelfish.altavista.com/babelfish/urltrurl?lp='
@@ -1056,7 +1053,8 @@ sub proxy_for_hook
 Prevents proxy usage for local files and C<http://localhost>.
 
 =cut
-	if ($url =~ '^(file://|(http://|)(localhost|127\.0\.0\.1)(/|:|$))') {
+	if ($url =~ '^(file://|(http://|)(localhost|127\.0\.0\.1)(/|:|$))')
+	{
 		return "";
 	}
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.576 2004/07/30 10:38:58 jonas Exp $ */
+/* $Id: view.c,v 1.577 2004/07/31 10:50:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -961,7 +961,7 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 	if (ses->status.show_tabs_bar) bars++;
 	if (ses->status.show_status_bar) bars++;
 
-	if (ev->info.mouse.y == ses->tab->term->height - bars
+	if (mouse->y == ses->tab->term->height - bars
 	    && check_mouse_action(ev, B_DOWN)) {
 		int tab = get_tab_number_by_xpos(ses->tab->term, mouse->x);
 

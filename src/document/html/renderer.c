@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.183 2003/07/28 22:12:54 zas Exp $ */
+/* $Id: renderer.c,v 1.184 2003/07/29 22:55:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,28 +131,31 @@ realloc_line(struct part *p, int y, int x)
 {
 	int i;
 	int newsize = ALIGN(x + 1);
+	struct line *line;
 
 	assert(p && p->document);
 	if_assert_failed return 0;
 
-	if (newsize >= ALIGN(p->document->data[y].l)
-	    && (!p->document->data[y].d || p->document->data[y].dsize < newsize)) {
+	line = &p->document->data[y];
+
+	if (newsize >= ALIGN(line->l)
+	    && (!line->d || line->dsize < newsize)) {
 		chr *l;
 
-		l = mem_realloc(p->document->data[y].d, newsize * sizeof(chr));
+		l = mem_realloc(line->d, newsize * sizeof(chr));
 		if (!l)	return -1;
 
-		p->document->data[y].d = l;
-		p->document->data[y].dsize = newsize;
+		line->d = l;
+		line->dsize = newsize;
 	}
 
 	p->document->data[y].c = find_nearest_color(&par_format.bgcolor, 8);
 
-	for (i = p->document->data[y].l; i <= x; i++) {
-		p->document->data[y].d[i] = (p->document->data[y].c << 11) | ' ';
+	for (i = line->l; i <= x; i++) {
+		line->d[i] = (line->c << 11) | ' ';
 	}
 
-	p->document->data[y].l = i;
+	line->l = i;
 
 	return 0;
 }

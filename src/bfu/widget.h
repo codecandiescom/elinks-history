@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.46 2003/12/01 15:19:53 pasky Exp $ */
+/* $Id: widget.h,v 1.47 2003/12/01 15:23:00 pasky Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -9,6 +9,7 @@
 struct dialog_data;
 struct input_history;
 struct input_history_entry;
+struct term_event;
 
 struct widget_data;
 

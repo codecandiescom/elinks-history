@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.169 2004/11/10 12:16:41 zas Exp $ */
+/* $Id: cookies.c,v 1.170 2004/11/10 12:25:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -266,7 +266,7 @@ static void accept_cookie_dialog(struct session *ses, void *data);
 void
 set_cookie(struct uri *uri, unsigned char *str)
 {
-	unsigned char *secure;
+	unsigned char *secure, *path;
 	struct cookie *cookie;
 	struct cookie_str cstr;
 	int max_age;
@@ -350,18 +350,18 @@ set_cookie(struct uri *uri, unsigned char *str)
 		}
 	}
 
-	cookie->path = parse_header_param(str, "path");
-	if (!cookie->path) {
+	path = parse_header_param(str, "path");
+	if (!path) {
 		unsigned char *path_end;
 
-		cookie->path = get_uri_string(uri, URI_PATH);
-		if (!cookie->path) {
+		path = get_uri_string(uri, URI_PATH);
+		if (!path) {
 			free_cookie(cookie);
 			return;
 		}
 
-		for (path_end = cookie->path + strlen(cookie->path) - 1;
-		     path_end >= cookie->path; path_end--) {
+		for (path_end = path + strlen(path) - 1;
+		     path_end >= path; path_end--) {
 			if (*path_end == '/') {
 				path_end[1] = '\0';
 				break;
@@ -369,17 +369,17 @@ set_cookie(struct uri *uri, unsigned char *str)
 		}
 
 	} else {
-		if (!cookie->path[0]
-		    || cookie->path[strlen(cookie->path) - 1] != '/')
-			add_to_strn(&cookie->path, "/");
+		if (!path[0]
+		    || path[strlen(path) - 1] != '/')
+			add_to_strn(&path, "/");
 
-		if (cookie->path[0] != '/') {
-			add_to_strn(&cookie->path, "x");
-			memmove(cookie->path + 1, cookie->path,
-				strlen(cookie->path) - 1);
-			cookie->path[0] = '/';
+		if (path[0] != '/') {
+			add_to_strn(&path, "x");
+			memmove(path + 1, path, strlen(path) - 1);
+			path[0] = '/';
 		}
 	}
+	cookie->path = path;
 
 	if (cookie->domain[0] == '.')
 		memmove(cookie->domain, cookie->domain + 1,

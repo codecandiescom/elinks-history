@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.219 2004/07/16 18:46:57 jonas Exp $ */
+/* $Id: main.c,v 1.220 2004/08/14 06:57:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -237,6 +237,17 @@ terminate_all_subsystems(void)
 	destroy_all_terminals();
 	check_bottom_halves();
 	free_all_itrms();
+
+	/* When aborting all connections also keep-alive connections are
+	 * aborted. A (normal) connection will be started for any keep-alive
+	 * connection that needs to send a command to the server before
+	 * aborting. This means we need to abort_all_connections() twice.
+	 *
+	 * It forces a some what unclean connection tear-down since at most the
+	 * shutdown routine will be able to send one command. But else it would
+	 * take too long time to terminate. */
+	abort_all_connections();
+	check_bottom_halves();
 	abort_all_connections();
 
 	if (init_b) {

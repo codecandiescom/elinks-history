@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.197 2004/08/04 19:16:41 zas Exp $ */
+/* $Id: connection.c,v 1.198 2004/08/14 06:57:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,6 +43,9 @@ struct keepalive_connection {
 	 * keepalive connection so only rely on the protocol, user, password,
 	 * host and port part. */
 	struct uri *uri;
+
+	/* Function called when the keepalive has timed out or is deleted */
+	void (*done)(struct connection *);
 
 	ttime timeout;
 	ttime add_time;
@@ -422,10 +425,54 @@ done_connection(struct connection *conn)
 	check_queue_bugs();
 }
 
+static inline void add_to_queue(struct connection *conn);
+
+/* Returns zero if no callback was done and the keepalive connection should be
+ * deleted or non-zero if the keepalive connection should not be deleted. */
+static int
+do_keepalive_connection_callback(struct keepalive_connection *keep_conn)
+{
+	struct uri *proxied_uri = get_proxied_uri(keep_conn->uri);
+	struct uri *proxy_uri   = get_proxy_uri(keep_conn->uri);
+
+	if (proxied_uri && proxy_uri) {
+		struct connection *conn;
+
+		conn = init_connection(proxy_uri, proxied_uri, NULL, 0,
+				       CACHE_MODE_NEVER, PRI_CANCEL);
+
+		if (conn) {
+			void (*done)(struct connection *) = keep_conn->done;
+
+			add_to_queue(conn);
+
+			/* Get the keepalive info and let it clean up */
+			if (!has_keepalive_connection(conn)
+			    || !add_host_connection(conn)) {
+				free_connection_data(conn);
+				done_connection(conn);
+				return 0;
+			}
+
+			active_connections++;
+			conn->running = 1;
+			done(conn);
+			return 1;
+		}
+	}
+
+	if (proxied_uri) done_uri(proxied_uri);
+	if (proxy_uri) done_uri(proxy_uri);
+
+	return 0;
+}
 
 static inline void
 done_keepalive_connection(struct keepalive_connection *keep_conn)
 {
+	if (keep_conn->done && do_keepalive_connection_callback(keep_conn))
+		return;
+
 	del_from_list(keep_conn);
 	if (keep_conn->socket != -1) close(keep_conn->socket);
 	done_uri(keep_conn->uri);
@@ -433,7 +480,8 @@ done_keepalive_connection(struct keepalive_connection *keep_conn)
 }
 
 static struct keepalive_connection *
-init_keepalive_connection(struct connection *conn, ttime timeout)
+init_keepalive_connection(struct connection *conn, ttime timeout,
+			  void (*done)(struct connection *))
 {
 	struct keepalive_connection *keep_conn;
 	struct uri *uri = conn->uri;
@@ -445,6 +493,7 @@ init_keepalive_connection(struct connection *conn, ttime timeout)
 	if (!keep_conn) return NULL;
 
 	keep_conn->uri = get_uri_reference(uri);
+	keep_conn->done = done;
 	keep_conn->pf = conn->pf;
 	keep_conn->socket = conn->socket.fd;
 	keep_conn->timeout = timeout;
@@ -477,29 +526,39 @@ has_keepalive_connection(struct connection *conn)
 	conn->socket.fd = keep_conn->socket;
 	conn->pf = keep_conn->pf;
 
-	/* Mark that the socket should not be closed */
+	/* Mark that the socket should not be closed and the callback should be
+	 * ignored. */
 	keep_conn->socket = -1;
+	keep_conn->done = NULL;
 	done_keepalive_connection(keep_conn);
 
 	return 1;
 }
 
 void
-add_keepalive_connection(struct connection *conn, ttime timeout)
+add_keepalive_connection(struct connection *conn, ttime timeout,
+			 void (*done)(struct connection *))
 {
 	struct keepalive_connection *keep_conn;
 
-	free_connection_data(conn);
 	assertm(conn->socket.fd != -1, "keepalive connection not connected");
 	if_assert_failed goto done;
 
-	keep_conn = init_keepalive_connection(conn, timeout);
-	if (keep_conn)
+	keep_conn = init_keepalive_connection(conn, timeout, done);
+	if (keep_conn) {
 		add_to_list(keepalive_connections, keep_conn);
-	else
+
+	} else if (done) {
+		/* It will take just a little more time */
+		done(conn);
+		return;
+
+	} else {
 		close(conn->socket.fd);
+	}
 
 done:
+	free_connection_data(conn);
 	done_connection(conn);
 	register_bottom_half((void (*)(void *)) check_queue, NULL);
 }

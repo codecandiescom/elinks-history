@@ -1,5 +1,5 @@
 /* Open in new window handling */
-/* $Id: newwin.c,v 1.13 2004/04/17 01:37:37 jonas Exp $ */
+/* $Id: newwin.c,v 1.14 2004/04/17 01:52:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,7 @@
 #include "util/string.h"
 
 
-static struct open_in_new oinw[] = {
+static struct open_in_new open_in_new[] = {
 	{ ENV_XWIN,	DEFAULT_XTERM_CMD,	    N_("~Xterm") },
 	{ ENV_TWIN,	DEFAULT_TWTERM_CMD,	    N_("T~wterm") },
 	{ ENV_SCREEN,	DEFAULT_SCREEN_CMD,	    N_("~Screen") },
@@ -35,8 +35,9 @@ static struct open_in_new oinw[] = {
 	{ 0, NULL, NULL }
 };
 
-#define foreach_oinw(i, term_env) \
-	for ((i) = 0; oinw[(i)].env; (i)++) if (((term_env) & oinw[(i)].env))
+#define foreach_open_in_new(i, term_env) \
+	for ((i) = 0; open_in_new[(i)].env; (i)++) \
+		if (((term_env) & open_in_new[(i)].env))
 
 struct open_in_new *
 get_open_in_new(struct terminal *term)
@@ -48,8 +49,8 @@ get_open_in_new(struct terminal *term)
 
 	if (!oin) return NULL;
 
-	foreach_oinw (i, term->environment)
-		memcpy(&oin[noin++], &oinw[i], sizeof(struct open_in_new));
+	foreach_open_in_new (i, term->environment)
+		memcpy(&oin[noin++], &open_in_new[i], sizeof(struct open_in_new));
 
 	return oin;
 }
@@ -64,7 +65,7 @@ can_open_in_new(struct terminal *term)
 {
 	int i, possibilities = 0;
 
-	foreach_oinw (i, term->environment)
+	foreach_open_in_new (i, term->environment)
 		possibilities++;
 
 	return possibilities;
@@ -77,8 +78,8 @@ open_new_window(struct terminal *term, unsigned char *exe_name,
 	unsigned char *command = NULL;
 	int i;
 
-	foreach_oinw (i, environment)
-		command = oinw[i].command;
+	foreach_open_in_new (i, environment)
+		command = open_in_new[i].command;
 
 	assert(command);
 

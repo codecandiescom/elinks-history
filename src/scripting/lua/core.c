@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.58 2003/07/15 20:18:10 jonas Exp $ */
+/* $Id: core.c,v 1.59 2003/07/21 05:04:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,8 +147,7 @@ l_current_document_formatted(LS)
 	struct document_view *f;
 	struct document *fd;
 	int x, y;
-	unsigned char *buf;
-	int l = 0;
+	struct string buffer;
 
 	if (lua_gettop(S) == 0) width = -1;
 	else if (!lua_isnumber(S, 1)) goto lua_error;
@@ -160,22 +159,23 @@ l_current_document_formatted(LS)
 		html_interpret(lua_ses);
 	}
 	fd = f->document;
-	buf = init_str();
-	for (y = 0; y < fd->y; y++) for (x = 0; x <= fd->data[y].l; x++) {
-		int c;
+	if (init_string(&buffer)) {
+		for (y = 0; y < fd->y; y++) for (x = 0; x <= fd->data[y].l; x++) {
+			int c;
 
-		if (x == fd->data[y].l) {
-			c = '\n';
-		} else {
-			c = fd->data[y].d[x];
-			if ((c & 0xff) == 1) c += ' ' - 1;
-			if ((c >> 15) && (c & 0xff) >= 176 && (c & 0xff) < 224)
-				c = frame_dumb[(c & 0xff) - 176];
+			if (x == fd->data[y].l) {
+				c = '\n';
+			} else {
+				c = fd->data[y].d[x];
+				if ((c & 0xff) == 1) c += ' ' - 1;
+				if ((c >> 15) && (c & 0xff) >= 176 && (c & 0xff) < 224)
+					c = frame_dumb[(c & 0xff) - 176];
+			}
+			add_char_to_string(&buffer, c);
 		}
-		add_chr_to_str(&buf, &l, c);
+		lua_pushlstring(S, buffer.source, buffer.length);
+		done_string(&buffer);
 	}
-	lua_pushlstring(S, buf, l);
-	mem_free(buf);
 	if (width > 0) {
 		lua_ses->tab->term->x = old_width;
 		html_interpret(lua_ses);

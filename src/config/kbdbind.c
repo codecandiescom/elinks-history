@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.160 2004/01/13 14:13:15 zas Exp $ */
+/* $Id: kbdbind.c,v 1.161 2004/01/13 15:37:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -528,7 +528,7 @@ init_action_listboxes(void)
 		struct listbox_item *box_item;
 		int i;
 
-		if (act->num == ACT_SCRIPTING_FUNCTION)
+		if (act->num == ACT_SCRIPTING_FUNCTION || act->num == ACT_NONE)
 			continue;
 
 		box_item = mem_calloc(1, sizeof(struct listbox_item));

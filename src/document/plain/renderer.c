@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.120 2004/08/17 04:54:24 miciah Exp $ */
+/* $Id: renderer.c,v 1.121 2004/08/17 06:43:39 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,6 +163,25 @@ get_uri_length(unsigned char *line, int length)
 	return uri_end;
 }
 
+static int
+print_document_link(struct document *document, int lineno, unsigned char *line,
+		    int line_pos, int width, int expanded)
+{
+	int pos = int_max(0, line_pos - 1);
+	unsigned char *start = &line[pos];
+	int len = get_uri_length(start,
+				 width - pos);
+	int x = pos + expanded;
+
+	if (len && check_link_word(document,
+				   start,
+				   len, x,
+				   lineno))
+		return line_pos + len;
+
+	return 0;
+}
+
 static inline int
 add_document_line(struct plain_renderer *renderer,
 		  unsigned char *line, int line_width)
@@ -299,18 +318,12 @@ add_document_line(struct plain_renderer *renderer,
 
 				if (is_alpha_char && was_alpha_char
 				    && line_pos > last_link_end) {
-					int pos = int_max(0, line_pos - 1);
-					unsigned char *start = &line[pos];
-					int len = get_uri_length(start,
-								 width - pos);
-					int x = pos + expanded;
-
-					if (len && check_link_word(document,
-								   start,
-								   len, x,
-								   lineno))
-						last_link_end = line_pos + len;
-
+					last_link_end =
+						print_document_link(document,
+								lineno, line,
+								line_pos,
+								width,
+								expanded);
 				} else {
 					was_alpha_char = is_alpha_char;
 				}

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.97 2003/06/11 16:42:12 pasky Exp $ */
+/* $Id: session.c,v 1.98 2003/06/11 22:49:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1303,7 +1303,9 @@ destroy_session(struct session *ses)
 		detach_formatted(fdc);
 
 	free_list(ses->scrn_frames);
+
 	destroy_history(ses);
+	if (ses->location) destroy_location(ses->location);
 
 	if (ses->loading_url) mem_free(ses->loading_url);
 	if (ses->display_timer != -1) kill_timer(ses->display_timer);

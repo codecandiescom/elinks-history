@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.79 2004/11/19 17:14:56 zas Exp $ */
+/* $Id: widget.h,v 1.80 2004/11/19 17:19:05 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -73,8 +73,6 @@ struct widget_data {
 void display_widget_focused(struct dialog_data *, struct widget_data *);
 /* Display widget unselected. */
 void display_widget_unfocused(struct dialog_data *, struct widget_data *);
-
-void dlg_set_history(struct widget_data *);
 
 static inline int
 widget_is_focusable(struct widget_data *widget_data)

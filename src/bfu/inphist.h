@@ -1,4 +1,4 @@
-/* $Id: inphist.h,v 1.17 2004/02/09 02:59:33 jonas Exp $ */
+/* $Id: inphist.h,v 1.18 2004/11/19 17:19:05 zas Exp $ */
 
 #ifndef EL__BFU_INPHIST_H
 #define EL__BFU_INPHIST_H
@@ -53,5 +53,7 @@ int load_input_history(struct input_history *history, unsigned char *filename);
 /* Write history list to @filebane in elinks home. It returns a value different
  * from 0 in case of failure, 0 on success. */
 int save_input_history(struct input_history *history, unsigned char *filename);
+
+void dlg_set_history(struct widget_data *);
 
 #endif

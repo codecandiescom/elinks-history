@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.88 2004/07/22 02:16:59 pasky Exp $ */
+/* $Id: inphist.c,v 1.89 2004/11/19 17:19:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,4 +274,24 @@ save_input_history(struct input_history *history, unsigned char *filename)
 	if (!ssi->err) history->dirty = 0;
 
 	return secure_close(ssi);
+}
+
+void
+dlg_set_history(struct widget_data *widget_data)
+{
+	assert(widget_has_history(widget_data));
+	assert(widget_data->widget->datalen > 0);
+
+	if ((void *) widget_data->info.field.cur_hist != &widget_data->info.field.history) {
+		unsigned char *s = widget_data->info.field.cur_hist->data;
+
+		widget_data->info.field.cpos = int_min(strlen(s), widget_data->widget->datalen - 1);
+		if (widget_data->info.field.cpos)
+			memcpy(widget_data->cdata, s, widget_data->info.field.cpos);
+	} else {
+		widget_data->info.field.cpos = 0;
+	}
+
+	widget_data->cdata[widget_data->info.field.cpos] = 0;
+	widget_data->info.field.vpos = int_max(0, widget_data->info.field.cpos - widget_data->box.width);
 }

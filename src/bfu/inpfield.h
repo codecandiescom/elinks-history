@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.29 2004/01/29 07:15:33 jonas Exp $ */
+/* $Id: inpfield.h,v 1.30 2004/01/29 07:18:25 jonas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -66,11 +66,12 @@ typedef enum input_line_code (*input_line_handler)(struct input_line *line, int 
 struct input_line {
 	struct session *ses;
 	input_line_handler handler;
+	void *data;
 	unsigned char buffer[INPUT_LINE_BUFFER_SIZE];
 };
 
 void
-input_field_line(struct session *ses, unsigned char *prompt,
+input_field_line(struct session *ses, unsigned char *prompt, void *data,
 		 struct input_history *history, input_line_handler handler);
 
 #endif

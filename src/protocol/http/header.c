@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.20 2003/11/29 13:06:22 pasky Exp $ */
+/* $Id: header.c,v 1.21 2003/11/29 13:08:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,6 @@ cont:
  * will return allocated string containing "iso-8859-1".
  * It supposes that separator is ';' and ignore first element in the
  * list. (ie. '1' is ignored in "1; URL=xxx") */
-/* FIXME: rename it, any idea ? --Zas */
 unsigned char *
 parse_http_header_param(unsigned char *str, unsigned char *name)
 {

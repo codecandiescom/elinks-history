@@ -1,5 +1,5 @@
 /* Locations handling */
-/* $Id: location.c,v 1.3 2003/06/12 18:40:39 pasky Exp $ */
+/* $Id: location.c,v 1.4 2003/06/15 14:05:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 
 #include "elinks.h"
 
+#include "sched/history.h"
 #include "sched/location.h"
 #include "sched/session.h"
 #include "util/memory.h"
@@ -50,4 +51,24 @@ destroy_location(struct location *loc)
 	free_list(loc->frames);
 	destroy_vs(&loc->vs);
 	mem_free(loc);
+}
+
+void
+set_session_location(struct session *ses, struct location *loc, int direction)
+{
+	assert(!ses->location);
+
+	add_to_history(ses, loc);
+#if 0
+	if (have_location(ses)) {
+		if (direction < 0)
+			add_to_history(ses, ses->location);
+		else
+			add_to_unhistory(ses, ses->location);
+	}
+
+	/* Just to be sure not to have any loose ends */
+	init_list(*loc);
+	ses->location = loc;
+#endif
 }

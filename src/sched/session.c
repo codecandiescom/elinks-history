@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.100 2003/06/15 13:59:36 jonas Exp $ */
+/* $Id: session.c,v 1.101 2003/06/15 14:05:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -430,7 +430,7 @@ x:
 			return;
 		}
 		copy_location(l, cur_loc(ses));
-		add_to_history(ses, l);
+		set_session_location(ses, l, 1);
 		frm = ses_change_frame_url(ses, ses->task_target,
 					   ses->loading_url);
 
@@ -456,7 +456,7 @@ x:
 	} else {
 		init_list(l->frames);
 		init_vs(&l->vs, ses->loading_url);
-		add_to_history(ses, l);
+		set_session_location(ses, l, 1);
 
 		if (ses->goto_position) {
 			l->vs.goto_position = ses->goto_position;

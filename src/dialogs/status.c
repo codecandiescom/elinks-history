@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.69 2004/05/14 08:49:07 zas Exp $ */
+/* $Id: status.c,v 1.70 2004/06/13 00:24:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -204,10 +204,12 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 	struct box box;
 
 	if (stat) {
+		struct document_view *doc_view = current_frame(ses);
+
 		/* Show S_INTERRUPTED message *once* but then show links
 		 * again as usual. */
-		if (current_frame(ses)) {
-			int ncl = current_frame(ses)->vs->current_link;
+		if (doc_view) {
+			int ncl = doc_view->vs->current_link;
 
 			if (stat->state == S_INTERRUPTED
 				&& ncl != last_current_link)
@@ -215,7 +217,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 			last_current_link = ncl;
 
 			if (stat->state == S_OK)
-				msg = print_current_link(ses);
+				msg = get_current_link_info(ses, doc_view);
 		}
 
 		if (!msg) {

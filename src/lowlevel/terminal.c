@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.49 2003/05/02 16:08:03 zas Exp $ */
+/* $Id: terminal.c,v 1.50 2003/05/02 20:24:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -401,12 +401,12 @@ switch_to_tab(struct terminal *term, int num)
 		if (get_opt_bool("ui.cycle_tabs_bar"))
 			num = 0;
 		else
-			num--;
+			num = num_tabs - 1;
 	}
 
 	if (num < 0) {
 		if (get_opt_bool("ui.cycle_tabs_bar"))
-			num = num_tabs;
+			num = num_tabs - 1 ;
 		else
 			num = 0;
 	}
@@ -419,7 +419,7 @@ switch_to_tab(struct terminal *term, int num)
 void
 close_tab(struct terminal *term)
 {
-	if(number_of_tabs(term) < 2)
+	if (number_of_tabs(term) < 2)
 		return;
 
 	delete_window(get_root_window(term));

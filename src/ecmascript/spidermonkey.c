@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.92 2004/12/17 13:26:40 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.93 2004/12/17 13:32:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -912,9 +912,13 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			break;
 		}
 		break;
-	case JSP_DOC_TITLE: p.string = document->title; prop_type = JSPT_STRING; break;
-	case JSP_DOC_URL: p.string = get_uri_string(document->uri, URI_ORIGINAL); prop_type = JSPT_ASTRING; break;
-
+	case JSP_DOC_TITLE:
+		p.string = document->title; prop_type = JSPT_STRING;
+		break;
+	case JSP_DOC_URL:
+		p.string = get_uri_string(document->uri, URI_ORIGINAL);
+		prop_type = JSPT_ASTRING;
+		break;
 	default:
 		INTERNAL("Invalid ID %d in document_get_property().", JSVAL_TO_INT(id));
 		goto bye;
@@ -1028,7 +1032,9 @@ location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
-	case JSP_LOC_HREF: p.string = get_uri_string(vs->uri, URI_ORIGINAL); prop_type = JSPT_ASTRING; break;
+	case JSP_LOC_HREF:
+		p.string = get_uri_string(vs->uri, URI_ORIGINAL); prop_type = JSPT_ASTRING;
+		break;
 	default:
 		INTERNAL("Invalid ID %d in location_get_property().", JSVAL_TO_INT(id));
 		goto bye;
@@ -1168,9 +1174,15 @@ unibar_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	            ? status->force_show_##bar##_bar \
 	            : status->show_##bar##_bar
 		switch (*bar) {
-			case 's': unibar_fetch(status); break;
-			case 't': unibar_fetch(title); break;
-			default: p.boolean = 0; break;
+		case 's':
+			unibar_fetch(status);
+			break;
+		case 't':
+			unibar_fetch(title);
+			break;
+		default:
+			p.boolean = 0;
+			break;
 		}
 		prop_type = JSPT_BOOLEAN;
 #undef unibar_fetch

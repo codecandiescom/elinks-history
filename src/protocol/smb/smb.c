@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.29 2004/01/01 10:04:04 jonas Exp $ */
+/* $Id: smb.c,v 1.30 2004/01/01 13:54:14 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -29,6 +29,8 @@
 
 #include "elinks.h"
 
+#ifdef CONFIG_SMB
+
 #include "lowlevel/connect.h"
 #include "lowlevel/select.h"
 #include "osdep/osdep.h"
@@ -37,8 +39,6 @@
 #include "util/memory.h"
 #include "util/snprintf.h"
 #include "util/string.h"
-
-#ifdef CONFIG_SMB
 
 /* XXX: Nice cleanup target --pasky */
 /* FIXME: we rely on smbclient output which may change in future,

@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.72 2004/01/04 15:05:37 jonas Exp $ */
+/* $Id: inphist.c,v 1.73 2004/01/04 23:40:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,19 +61,16 @@ do_tab_compl(struct terminal *term, struct list_head *history,
 	int cdata_len = strlen(widget_data->cdata);
 	int n = 0;
 	struct input_history_entry *entry;
-	struct menu_item *items = NULL;
+	struct menu_item *items = new_menu(FREE_LIST | NO_INTL);
+
+	if (!items) return;
 
 	foreach (entry, *history) {
 		if (strncmp(widget_data->cdata, entry->data, cdata_len))
 			continue;
 
-		if (!realloc_menu_items(&items, n)) {
-			if (items) mem_free(items);
-			return;
-		}
-
-		SET_MENU_ITEM(&items[n], entry->data, NULL, ACT_NONE, tab_compl,
-			      entry->data, FREE_LIST | NO_INTL, HKS_SHOW, 0);
+		add_to_menu(&items, entry->data, NULL, ACT_NONE,
+			    (menu_func) tab_compl, entry->data, 0);
 		n++;
 	}
 
@@ -84,7 +81,6 @@ do_tab_compl(struct terminal *term, struct list_head *history,
 			return;
 		}
 
-		memset(&items[n], 0, sizeof(struct menu_item));
 		do_menu_selected(term, items, win, n - 1, 0);
 	}
 }

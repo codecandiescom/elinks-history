@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.140 2004/07/30 10:27:26 zas Exp $ */
+/* $Id: dump.c,v 1.141 2004/07/30 10:41:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -398,7 +398,7 @@ fail:
 		return -1;
 	}
 
-	if (document->nlinks) {
+	if (document->nlinks && !get_cmd_opt_bool("no-references")) {
 		int x;
 		unsigned char *header = "\nReferences\n\n   Visible links\n";
 		int headlen = strlen(header);

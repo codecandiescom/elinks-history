@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.16 2002/06/17 07:42:31 pasky Exp $ */
+/* $Id: dns.c,v 1.17 2002/09/09 12:55:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,7 +158,7 @@ void lookup_fn(void *data, int h)
 	 * and it's supposed to be just a flash talk, so it shouldn't matter.
 	 * And it would be incredibly more complicated and messy (and mainly
 	 * useless) to do this in non-blocking way. */
-	fcntl(h, F_SETFL, ~O_NONBLOCK & fcntl(h, F_GETFL));
+	if (set_blocking_fd(h) < 0) /* FIXME: handle error here */;
 
 	write(h, &addrno, sizeof(int));
 
@@ -193,7 +193,7 @@ void end_real_lookup(void *data)
 	 * and it's supposed to be just a flash talk, so it shouldn't matter.
 	 * And it would be incredibly more complicated and messy (and mainly
 	 * useless) to do this in non-blocking way. */
-	fcntl(query->h, F_SETFL, ~O_NONBLOCK & fcntl(query->h, F_GETFL));
+	if (set_blocking_fd(query->h) < 0) /* FIXME: handle error here */;
 
 	if (read(query->h, query->addrno, sizeof(int)) != sizeof(int))
 		goto done;

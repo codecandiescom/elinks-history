@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.53 2002/09/07 10:01:53 zas Exp $ */
+/* $Id: main.c,v 1.54 2002/09/09 12:55:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,8 +220,8 @@ attach_terminal(int in, int out, int ctl, void *info, int len)
 {
 	struct terminal *term;
 
-	fcntl(terminal_pipe[0], F_SETFL, O_NONBLOCK);
-	fcntl(terminal_pipe[1], F_SETFL, O_NONBLOCK);
+	if (set_nonblocking_fd(terminal_pipe[0]) < 0) return -1;
+	if (set_nonblocking_fd(terminal_pipe[1]) < 0) return -1;
 	handle_trm(in, out, out, terminal_pipe[1], ctl, info, len);
 
 	mem_free(info);

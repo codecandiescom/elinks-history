@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.45 2002/09/09 12:29:12 zas Exp $ */
+/* $Id: http.c,v 1.46 2002/09/09 12:55:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -662,9 +662,9 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 	}
 
 	if (conn->stream_pipes[0] == -1) {
-		c_pipe(conn->stream_pipes);
-		fcntl(conn->stream_pipes[0], F_SETFL, O_NONBLOCK | fcntl(conn->stream_pipes[0], F_GETFL));
-		fcntl(conn->stream_pipes[1], F_SETFL, O_NONBLOCK | fcntl(conn->stream_pipes[1], F_GETFL));
+		if (c_pipe(conn->stream_pipes) < 0) return NULL;
+		if (set_nonblocking_fd(conn->stream_pipes[0]) < 0) return NULL;
+		if (set_nonblocking_fd(conn->stream_pipes[1]) < 0) return NULL;
 	}
 
 	*new_len = 0;

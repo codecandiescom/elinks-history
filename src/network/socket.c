@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.22 2002/07/05 11:16:01 pasky Exp $ */
+/* $Id: socket.c,v 1.23 2002/09/09 12:55:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,7 +165,8 @@ error:
 
 	/* Set it non-blocking */
 
-	fcntl(sock, F_SETFL, O_NONBLOCK);
+	if (set_nonblocking_fd(sock) < 0)
+		goto error;
 
 	/* Bind it to some port */
 
@@ -233,7 +234,7 @@ void dns_found(void *data, int state)
 		if (sock == -1) continue;
 
 		*c_i->sock = sock;
-		fcntl(sock, F_SETFL, O_NONBLOCK);
+		if (set_nonblocking_fd(sock) < 0) /* FIXME: handle error here */;
 
 #ifdef IPV6
 		addr.sin6_port = htons(c_i->port);

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.26 2002/09/09 12:36:45 zas Exp $ */
+/* $Id: osdep.c,v 1.27 2002/09/09 12:55:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1057,8 +1057,8 @@ start_thread(void (*fn)(void *, int), void *ptr, int l)
 	struct tdata *t;
 
 	if (c_pipe(p) < 0) return -1;
-	fcntl(p[0], F_SETFL, O_NONBLOCK);
-	fcntl(p[1], F_SETFL, O_NONBLOCK);
+	if (set_nonblocking_fd(p[0]) < 0) return -1;
+	if (set_nonblocking_fd(p[1]) < 0) return -1;
 
 	t = malloc(sizeof(struct tdata) + l);
 	if (!t) return -1;
@@ -1330,8 +1330,9 @@ start_thread(void (*fn)(void *, int), void *ptr, int l)
 	int f;
 
 	if (c_pipe(p) < 0) return -1;
-	fcntl(p[0], F_SETFL, O_NONBLOCK);
-	fcntl(p[1], F_SETFL, O_NONBLOCK);
+	if (set_nonblocking_fd(p[0]) < 0) return -1;
+	if (set_nonblocking_fd(p[1]) < 0) return -1;
+
 	/*if (!(t = malloc(sizeof(struct tdata) + l))) return -1;
 	t->fn = fn;
 	t->h = p[1];
@@ -1393,8 +1394,8 @@ start_thread(void (*fn)(void *, int), void *ptr, int l)
 	int f;
 
 	if (c_pipe(p) < 0) return -1;
-	fcntl(p[0], F_SETFL, O_NONBLOCK);
-	fcntl(p[1], F_SETFL, O_NONBLOCK);
+	if (set_nonblocking_fd(p[0]) < 0) return -1;
+	if (set_nonblocking_fd(p[1]) < 0) return -1;
 
 	t = malloc(sizeof(struct tdata) + l);
 	if (!t) return -1;
@@ -1421,8 +1422,8 @@ start_thread(void (*fn)(void *, int), void *ptr, int l)
 	int f;
 
 	if (c_pipe(p) < 0) return -1;
-	fcntl(p[0], F_SETFL, O_NONBLOCK);
-	fcntl(p[1], F_SETFL, O_NONBLOCK);
+	if (set_nonblocking_fd(p[0]) < 0) return -1;
+	if (set_nonblocking_fd(p[1]) < 0) return -1;
 
 	f = fork();
 	if (!f) {

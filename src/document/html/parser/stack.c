@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.6 2004/04/23 23:14:48 pasky Exp $ */
+/* $Id: stack.c,v 1.7 2004/04/23 23:16:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,25 +156,28 @@ kill_html_stack_until(int ls, ...)
 		va_start(arg, ls);
 		while (1) {
 			unsigned char *s = va_arg(arg, unsigned char *);
+			int slen;
 
 			if (!s) break;
-			if (!*s) {
-				sk++;
-			} else {
-				int slen = strlen(s);
 
-				if (!strlcasecmp(e->name, e->namelen, s, slen)) {
-					if (!sk) {
-						if (e->type < ELEMENT_KILLABLE) break;
-						va_end(arg);
-						goto killll;
-					} else if (sk == 1) {
-						va_end(arg);
-						goto killl;
-					} else {
-						break;
-					}
-				}
+			slen = strlen(s);
+			if (!slen) {
+				sk++;
+				continue;
+			}
+
+			if (strlcasecmp(e->name, e->namelen, s, slen))
+				continue;
+
+			if (!sk) {
+				if (e->type < ELEMENT_KILLABLE) break;
+				va_end(arg);
+				goto killll;
+			} else if (sk == 1) {
+				va_end(arg);
+				goto killl;
+			} else {
+				break;
 			}
 		}
 		va_end(arg);

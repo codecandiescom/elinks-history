@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.174 2004/01/29 07:21:23 jonas Exp $ */
+/* $Id: search.c,v 1.175 2004/01/29 07:49:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,7 +39,15 @@
 #include "viewer/text/view.h"
 #include "viewer/text/vs.h"
 
+
 #define SEARCH_HISTORY_FILENAME		"searchhist"
+
+static struct input_history search_history = {
+	/* items: */	{ D_LIST_HEAD(search_history.entries) },
+	/* size: */	0,
+	/* dirty: */	0,
+	/* nosave: */	0,
+};
 
 
 /* FIXME: Add comments!! --Zas */
@@ -1110,9 +1118,30 @@ link_typeahead_handler(struct input_line *line, int action)
 	if (!*buffer) return INPUT_LINE_PROCEED;
 
 	/* Hack time .. should we change mode? */
-	if (*buffer == '/') {
-		search_typeahead(ses, NULL, 1);
-		return INPUT_LINE_CANCEL;
+	if (!line->data) {
+		switch (*buffer) {
+			case '#':
+				line->data = "#";
+				break;
+
+			case '/':
+				line->prompt = line->data = "/";
+				line->handler = text_typeahead_handler;
+				break;
+
+			default:
+				break;
+		}
+
+		/* Should we reboot the input line .. (inefficient but easy) */
+		if (line->data) {
+			struct input_history *history = *line->prompt != '#'
+						      ? &search_history : NULL;
+
+			input_field_line(ses, line->prompt, line->data, history,
+					 line->handler);
+			return INPUT_LINE_CANCEL;
+		}
 	}
 
 	switch (do_typeahead(ses, doc_view, buffer, action)) {
@@ -1130,22 +1159,10 @@ link_typeahead_handler(struct input_line *line, int action)
 	}
 }
 
-static struct input_history search_history = {
-	/* items: */	{ D_LIST_HEAD(search_history.entries) },
-	/* size: */	0,
-	/* dirty: */	0,
-	/* nosave: */	0,
-};
-
 void
 search_typeahead(struct session *ses, struct document_view *doc_view, int a)
 {
-	struct input_history *history = a ? &search_history : NULL;
-	unsigned char *prompt = a ? "/" : "#";
-	input_line_handler handler = a ? text_typeahead_handler
-				       : link_typeahead_handler;
-
-	input_field_line(ses, prompt, NULL, history, handler);
+	input_field_line(ses, "#", NULL, NULL, link_typeahead_handler);
 	if (!a) draw_formatted(ses, 0);
 }
 

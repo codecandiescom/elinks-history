@@ -1,3 +1,93 @@
+Sat Nov 30 22:42:35 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/inpfield.c,
+	bfu/listbox.c, bfu/menu.c, document/view.c:
+
+	Full mouse wheel support in all dialogs. Treat mouse wheel
+	specially, don't impose generic button actions on it. Also fixes the
+	wheel-on-link bug reported by yanek.  
+
+Sat Nov 30 21:59:10 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/menu.c, document/history.c, document/location.c,
+	document/location.h:
+
+	Fixed weird (un)history reordering reported by Jose and Peter Wang.  
+
+Sat Nov 30 20:42:21 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	...and similiar bug in unhistory.  
+
+Sat Nov 30 20:41:38 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Reverted to the old behaviour, don't list the first item in the
+	history menu. Fixed minor bug possible under out of memory
+	condition.  
+
+Sat Nov 30 20:33:40 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/globhist/dialogs.c:
+
+	Make globhist dialog as wide as possible, similiarly to the
+	bookmarks dialog.  
+
+Sat Nov 30 18:10:29 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/listbox.c, document/view.c, lowlevel/kbd.c,
+	lowlevel/kbd.h:
+
+	Mouse wheel support. Brr... unfortunately, in rxvt the wheel up is
+	somehow less sensitive, but we can't do much with that :-(.  
+
+Sat Nov 30 11:36:11 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/ukrainian.lng, src/intl/language.inc:
+
+	Ukrainian translation update by Dmitry.  
+
+Sat Nov 30 11:35:44 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/slovak.lng, src/intl/language.inc:
+
+	Slovak translation update by Peter Samek.  
+
+Sat Nov 30 10:39:16 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/french.lng, src/intl/language.inc:
+
+	French translation updated.  
+
+Sat Nov 30 03:12:10 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Fixed error in default hooks.lua, patch by Jonas.  
+
+Sat Nov 30 02:18:11 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile.am:
+
+	Removed LUA from EXTRA_DIST.. enables make dist to work. Will move
+	0.4pre20 tag here.  
+
+Sat Nov 30 02:16:57 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: conf.c, options.c, options.h:
+
+	tree_config_string() -> smart_config_string(), mvoed from conf.c to
+	options.c, generalized, configfile-specific parts moved to static
+	smart_config_string_output_fn() left in conf.c.  
+
+Sat Nov 30 01:22:12 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.4pre20.CVS 
+
 Sat Nov 30 01:21:23 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

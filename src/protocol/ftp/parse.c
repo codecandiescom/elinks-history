@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.25 2005/03/29 01:16:20 jonas Exp $ */
+/* $Id: parse.c,v 1.26 2005/03/29 02:44:45 jonas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -313,7 +313,7 @@ parse_ftp_unix_response(struct ftp_file_info *info, unsigned char *src, int len)
 			if (!isdigit (*src))
 				break;
 
-			mtime.tm_year = parse_ftp_number(&src, pos, 0, LONG_MAX);
+			mtime.tm_year = parse_year((const unsigned char **) &src, pos);
 
 			/* If we have a number x, it's a year. If we have x:y,
 			 * it's hours and minutes. */
@@ -415,9 +415,6 @@ parse_ftp_unix_response(struct ftp_file_info *info, unsigned char *src, int len)
 				if (mtime.tm_mon > now->tm_mon)
 					mtime.tm_year--;
 			}
-
-			if (mtime.tm_year >= 1900)
-				mtime.tm_year -= 1900;
 
 			info->mtime = mktime(&mtime); /* store the time-stamp */
 			info->local_time_zone = 1;
@@ -542,7 +539,7 @@ parse_ftp_vms_response(struct ftp_file_info *info, unsigned char *src, int len)
 		mtime.tm_mon = 0;
 
 	pos++;
-	mtime.tm_year = parse_ftp_number(&pos, end, 0, LONG_MAX) - 1900;
+	mtime.tm_year = parse_year((const unsigned char **) &pos, end);
 
 	skip_space_end(pos, end);
 	if (pos >= end) return NULL;

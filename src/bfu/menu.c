@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.133 2003/12/26 10:19:10 zas Exp $ */
+/* $Id: menu.c,v 1.134 2003/12/26 10:49:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,6 +233,73 @@ scroll_menu(struct menu *menu, int d)
 }
 
 static inline void
+draw_menu_left_text(struct terminal *term, unsigned char *text, int len,
+		    int x, int y, int width, struct color_pair *color)
+{
+	int xbase;
+
+	if (len < 0) len = strlen(text);
+	if (!len) return;
+
+	xbase = x + 1;
+	int_upper_bound(&len, width - 2);
+
+	for (x = 0; len; x++, len--)
+		draw_char(term, xbase + x, y, text[x], 0, color);
+}
+
+
+/* FIXME: Negative value for len means hotkey position here... */
+static inline void
+draw_menu_left_text_hk(struct terminal *term, unsigned char *text, int len,
+		       int x, int y, int width, struct color_pair *color,
+		       int selected)
+{
+	struct color_pair *hk_color = get_bfu_color(term, "menu.hotkey.normal");
+	struct color_pair *hk_color_sel = get_bfu_color(term, "menu.hotkey.selected");
+	unsigned char c;
+	int xbase = x + 1;
+	int hk = 0;
+#ifdef DEBUG
+	/* For redundant hotkeys highlighting. */
+	int double_hk = 0;
+
+	if (len < 0) len = -len, double_hk = 1;
+#endif
+
+	if (!len) return;
+
+	if (selected) {
+		struct color_pair *tmp = hk_color;
+
+		hk_color = hk_color_sel;
+		hk_color_sel = tmp;
+	}
+
+	for (x = 0;
+	     x < width - 2
+	     && (c = text[x]);
+	     x++) {
+		if (!hk && len && x == len - 1) {
+			hk = 1;
+			continue;
+		}
+
+		if (hk == 1) {
+#ifdef DEBUG
+			draw_char(term, xbase + x - 1, y, c, 0,
+				  (double_hk ? hk_color_sel : hk_color));
+#else
+			draw_char(term, xbase + x - 1, y, c, 0, hk_color);
+#endif
+			hk = 2;
+		} else {
+			draw_char(term, xbase + x - !!hk, y, c, 0, color);
+		}
+	}
+}
+
+static inline void
 draw_menu_right_text(struct terminal *term, unsigned char *text, int len,
 		     int x, int y, int width, struct color_pair *color)
 {
@@ -257,8 +324,6 @@ display_menu(struct terminal *term, struct menu *menu)
 	struct color_pair *normal_color = get_bfu_color(term, "menu.normal");
 	struct color_pair *selected_color = get_bfu_color(term, "menu.selected");
 	struct color_pair *frame_color = get_bfu_color(term, "menu.frame");
-	struct color_pair *hotkey_color = get_bfu_color(term, "menu.hotkey.normal");
-	struct color_pair *selected_hotkey_color = get_bfu_color(term, "menu.hotkey.selected");
 	int mx = menu->x + 1;
 	int mwidth = menu->width - 2;
 	int my = menu->y + 1;
@@ -272,7 +337,7 @@ display_menu(struct terminal *term, struct menu *menu)
 	     p < menu->ni && p < menu->view + mheight;
 	     p++, y++) {
 		struct color_pair *color = normal_color;
-		struct color_pair *hkcolor = hotkey_color;
+
 #ifdef DEBUG
 		/* Sanity check. */
 		if (mi_is_end_of_menu(menu->items[p]))
@@ -282,7 +347,6 @@ display_menu(struct terminal *term, struct menu *menu)
 		if (p == menu->selected) {
 			/* This entry is selected. */
 			color = selected_color;
-			hkcolor = selected_hotkey_color;
 
 			set_cursor(term, mx, y, 1);
 			set_window_ptr(menu->win, menu->x + menu->width, y);
@@ -301,9 +365,6 @@ display_menu(struct terminal *term, struct menu *menu)
 					 BORDER_SLTEE, frame_color);
 
 		} else {
-			unsigned char c;
-			int x;
-
 			if (mi_has_left_text(menu->items[p])) {
 				int l = menu->items[p].hotkey_pos;
 				unsigned char *text = menu->items[p].text;
@@ -315,48 +376,14 @@ display_menu(struct terminal *term, struct menu *menu)
 					l = 0;
 
 				if (l) {
-					int xbase = mx + 1;
-					/* There's an hotkey so handle it. */
-					int hk = 0;
-#ifdef DEBUG
-					/* For redundant hotkeys highlighting. */
-					int double_hk = 0;
-
-					if (l < 0) l = -l, double_hk = 1;
-#endif
-					for (x = 0;
-					     x < mwidth - 2
-					     && (c = text[x]);
-					     x++) {
-						if (!hk && l
-						    && x == l - 1) {
-							hk = 1;
-							continue;
-						}
-
-						if (hk == 1) {
-#ifdef DEBUG
-							draw_char(term, xbase + x - 1, y, c, 0,
-								  (double_hk ? selected_hotkey_color : hkcolor));
-#else
-							draw_char(term, xbase + x - 1, y, c, 0, hkcolor);
-#endif
-							hk = 2;
-						} else {
-							draw_char(term, xbase + x - !!hk, y, c, 0, color);
-						}
-					}
+					draw_menu_left_text_hk(term, text, l,
+							       mx, y, mwidth, color,
+							       (p == menu->selected));
 
 				} else {
-					int xbase = mx + 1;
-
-					/* No hotkey, just left text. */
-					for (x = 0;
-				     	     x < mwidth - 2
-				     	     && (c = text[x]);
-				     	     x++)
-						draw_char(term, xbase + x, y, c, 0, color);
-				}
+					draw_menu_left_text(term, text, -1,
+							    mx, y, mwidth, color);
+		  		}
 			}
 
 			if (mi_is_submenu(menu->items[p])) {

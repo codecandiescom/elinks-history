@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.328 2004/10/19 05:08:17 miciah Exp $ */
+/* $Id: download.c,v 1.329 2004/10/19 23:38:24 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -942,38 +942,9 @@ tp_open(struct type_query *type_query)
 
 
 static void
-download_show_header_callback(struct download *download, struct session *ses)
-{
-	if (!is_in_result_state(download->state))
-		return;
-
-	if (download->state != S_OK) {
-		print_error_dialog(ses, download->state, download->pri);
-		mem_free(download);
-		return;
-	}
-
-	cached_header_dialog(ses, download->cached);
-
-	mem_free(download);
-}
-
-static void
 tp_show_header(struct type_query *type_query)
 {
-	struct session *ses = type_query->ses;
-	struct download *download = mem_alloc(sizeof(struct download));
-
-	if (!download) {
-		change_connection(&type_query->download, NULL, PRI_CANCEL, 1);
-		done_type_query(type_query);
-	}
-
-	download->callback = (void (*)(struct download *, void *))
-				     download_show_header_callback;
-	download->data = ses;
-
-	change_connection(&type_query->download, download, PRI_DOWNLOAD, 0);
+	cached_header_dialog(type_query->ses, type_query->cached);
 
 	done_type_query(type_query);
 }

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.122 2003/05/18 16:26:54 pasky Exp $ */
+/* $Id: http.c,v 1.123 2003/05/18 16:27:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1053,7 +1053,7 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 #ifdef COOKIES
 	unsigned char *cookie, *ch;
 #endif
-	int a, h;
+	int a, h = 200;
 	struct http_version version;
 	unsigned char *d;
 	struct http_connection_info *info;

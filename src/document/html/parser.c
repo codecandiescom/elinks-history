@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.18 2002/05/01 12:47:07 pasky Exp $ */
+/* $Id: parser.c,v 1.19 2002/05/01 19:34:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -946,24 +946,7 @@ void html_dd(unsigned char *a)
 void get_html_form(unsigned char *a, struct form *form)
 {
 	unsigned char *al;
-	unsigned char *ch;
-	if ((al = get_attr_val(a, "action"))) {
-		char *all = al;
-		while (all[0] == ' ') all++;
-		while (all[0] && all[strlen(all) - 1] == ' ') all[strlen(all) - 1] = 0;
-		form->action = join_urls(format.href_base, all);
-		mem_free(al);
-	} else {
-		form->action = stracpy(format.href_base);
-		if ((ch = strchr(form->action, POST_CHAR))) *ch = 0;
-		/* I believe this is invalid behaviour. --pasky */
-		/* if ((ch = strchr(form->action, '?'))) *ch = 0; */
-	}
-	if ((al = get_target(a))) {
-		form->target = al;
-	} else {
-		form->target = stracpy(format.target_base);
-	}
+
 	form->method = FM_GET;
 	if ((al = get_attr_val(a, "method"))) {
 		if (!strcasecmp(al, "post")) {
@@ -977,6 +960,36 @@ void get_html_form(unsigned char *a, struct form *form)
 		}
 		mem_free(al);
 	}
+
+	if ((al = get_attr_val(a, "action"))) {
+		char *all = al;
+
+		while (all[0] == ' ') all++;
+		while (all[0] && all[strlen(all) - 1] == ' ') all[strlen(all) - 1] = 0;
+		form->action = join_urls(format.href_base, all);
+		mem_free(al);
+	} else {
+		unsigned char *ch;
+
+		form->action = stracpy(format.href_base);
+
+		ch = strchr(form->action, POST_CHAR);
+		if (ch) *ch = 0;
+
+		/* We have to do following for GET method, because we would end
+		 * up with two '?' otherwise. */
+		if (form->method == FM_GET) {
+			ch = strchr(form->action, '?');
+			if (ch) *ch = 0;
+		}
+	}
+
+	if ((al = get_target(a))) {
+		form->target = al;
+	} else {
+		form->target = stracpy(format.target_base);
+	}
+
 	form->num = a - startf;
 }
 

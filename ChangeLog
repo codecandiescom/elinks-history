@@ -1,3 +1,15 @@
+Wed Jul 24 09:39:35 2002  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	Startup dialogs bug was added.  
+
+Wed Jul 24 08:54:33 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/session.c:
+
+	Minor optimization.  
+
 Tue Jul 23 14:17:29 2002  Laurent Monin <zas@norz.org>:
 
 	* intl/german.lng, src/intl/language.inc:

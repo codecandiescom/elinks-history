@@ -733,8 +733,7 @@ msgstr "Az ismeretlen dokumentumok alapértelmezett MIME típusa."
 
 #: src/config/cmdline.c:639
 msgid "Ignore user-defined keybindings"
-msgstr ""
-"A felhasználó által definiált billentyûkombinációk figyelmen kívül hagyása"
+msgstr "A felhasználó által definiált billentyûkombinációk figyelmen kívül hagyása"
 
 #: src/config/cmdline.c:641
 msgid ""
@@ -924,8 +923,7 @@ msgstr ""
 
 #: src/config/cmdline.c:731
 msgid "Connect to session ring with given ID"
-msgstr ""
-"Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
+msgstr "Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
 
 #: src/config/cmdline.c:733
 msgid ""
@@ -993,7 +991,7 @@ msgstr ""
 
 #: src/config/cmdline.c:768
 msgid "Print version information and exit"
-msgstr "Veriószám kiírása, es kilépés"
+msgstr "Veriószám kiírása, és kilépés"
 
 #: src/config/cmdline.c:770
 msgid "Print ELinks version information and exit."
@@ -1344,8 +1342,7 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:456
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
-"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:457
 msgid "Go to the homepage"
@@ -1949,7 +1946,7 @@ msgstr "Idötúllépési érték vételkor (másodpercben)"
 
 #: src/config/options.inc:98 src/config/options.inc:108
 msgid "Try IPv4 when connecting"
-msgstr ""
+msgstr "Kapcsolódás IPv4 protokollal"
 
 #: src/config/options.inc:100
 msgid ""
@@ -1961,6 +1958,12 @@ msgid ""
 "to be used on a per-connection basis by using an URL\n"
 "in the style of i.e. http4://elinks.or.cz/."
 msgstr ""
+"Az IPv4 protokoll használata a kapcsolódáshoz.\n"
+"Ha a connection.try_ipv6 opció is engedélyezett, ez\n"
+"a beállítás elsõbbséget élvez. Ne állítsd amíg pontosan\n"
+"nem tudod mire való. Megjegyzés: a kapcsolódáshoz\n"
+"használt protokoll típusát az URL-ben is elõ lehet írni\n"
+"mint pl.: http4://elinks.or.cz/"
 
 #: src/config/options.inc:110
 msgid ""
@@ -1970,10 +1973,15 @@ msgid ""
 "to be used on a per-connection basis by using an URL\n"
 "in the style of i.e. http4://elinks.or.cz/."
 msgstr ""
+"Az IPv4 protokoll használata a kapcsolódáshoz.\n"
+"Ne állítsd amíg pontosan nem tudod mire való.\n"
+"Megjegyzés: a kapcsolódáshoz használt protokoll\n"
+"típusát az URL-ben is elõ lehet írni mint pl.:\n"
+"http4://elinks.or.cz/"
 
 #: src/config/options.inc:118 src/config/options.inc:125
 msgid "Try IPv6 when connecting"
-msgstr ""
+msgstr "Kapcsolódás IPv6 protokollal"
 
 #: src/config/options.inc:120
 msgid ""
@@ -1982,6 +1990,10 @@ msgid ""
 "to be used on a per-connection basis by using an URL\n"
 "in the style of i.e. http6://elinks.or.cz/."
 msgstr ""
+"Az IPv6 protokoll használata a kapcsolódáshoz.\n"
+"Megjegyzés: a kapcsolódáshoz használt protokoll\n"
+"típusát az URL-ben is elõ lehet írni mint pl.:\n"
+"http6://elinks.or.cz/"
 
 #: src/config/options.inc:127
 msgid ""
@@ -1990,6 +2002,11 @@ msgid ""
 "to be used on a per-connection basis by using an URL\n"
 "in the style of i.e. http6://elinks.or.cz/."
 msgstr ""
+"Az IPv6 protokoll használata a kapcsolódáshoz.\n"
+"(LETILTVA)\n"
+"Megjegyzés: a kapcsolódáshoz használt protokoll\n"
+"típusát az URL-ben is elõ lehet írni mint pl.:\n"
+"http6://elinks.or.cz/"
 
 #: src/config/options.inc:133
 msgid "Timeout for non-restartable connections"
@@ -1997,8 +2014,7 @@ msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
 #: src/config/options.inc:135
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr ""
-"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:141
@@ -2283,8 +2299,7 @@ msgstr "Színek invertálása"
 
 #: src/config/options.inc:271
 msgid "Invert the fore- and background color so the link stands out."
-msgstr ""
-"Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
+msgstr "Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
 
 #: src/config/options.inc:274 src/dialogs/options.c:173
 msgid "Underline"
@@ -2300,8 +2315,7 @@ msgstr "Alkönyvtárak kiemelése"
 
 #: src/config/options.inc:281
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr ""
-"Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
+msgstr "Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
 
 #: src/config/options.inc:283
 msgid "Number links"
@@ -2348,8 +2362,7 @@ msgstr "Linkek kiválasztása"
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
-msgstr ""
-"Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
+msgstr "Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.inc:314
 msgid "Scrolling"
@@ -2409,8 +2422,7 @@ msgstr "Kis/nagybetû érzékenység"
 msgid ""
 "Whether the search should match the document text while maintaining\n"
 "case sensitivity."
-msgstr ""
-"A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
+msgstr "A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
 
 #: src/config/options.inc:344 src/config/options.inc:351
 msgid "Regular expressions"
@@ -2566,8 +2578,7 @@ msgstr ""
 
 #: src/config/options.inc:429
 msgid "Ignore cache-control info from server"
-msgstr ""
-"A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
+msgstr "A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
 
 #: src/config/options.inc:431
 msgid ""
@@ -3414,8 +3425,7 @@ msgid "Local CGI specific options. (DISABLED)"
 msgstr "Helyi CGI-vel kapcsolatos beállítások. (LETILTVA)"
 
 #: src/config/options.inc:893
-msgid ""
-"Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
+msgid "Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
 msgstr ""
 "A CGI scriptek tárolására használt könyvtárak felsorolása, kettõsponttal "
 "elválasztva. (LETILTVA)"
@@ -4746,14 +4756,15 @@ msgid "Resources"
 msgstr "Erõforrások"
 
 #: src/dialogs/info.c:190
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Allocated      : %ld bytes\n"
 "Truly allocated: %ld bytes (x%0.2f)\n"
 "Cache size     : %ld bytes\n"
 msgstr ""
 "Lefoglalva            : %ld byte\n"
-"Ténylegesen lefoglalva: %ld byte (x%0.2f)"
+"Ténylegesen lefoglalva: %ld byte (x%0.2f)\n"
+"Gyorsítótár mérete    : %ld byte\n"
 
 #: src/dialogs/info.c:194
 #, c-format
@@ -4918,7 +4929,7 @@ msgstr "Elõzõ k~eresése"
 
 #: src/dialogs/menu.c:388
 msgid "T~ypeahead search"
-msgstr ""
+msgstr "Keresés ~gépelés közben"
 
 #: src/dialogs/menu.c:390
 msgid "Toggle ~html/plain"
@@ -4977,14 +4988,12 @@ msgid "ELinks C~vsWeb"
 msgstr "Elinks CVSWeb honlap"
 
 #: src/dialogs/menu.c:417
-#, fuzzy
 msgid "ELinks Cvs ~History"
-msgstr "Elinks CVSWeb honlap"
+msgstr "Elinks CVS honlap"
 
 #: src/dialogs/menu.c:418
-#, fuzzy
 msgid "ELinks ~LXR"
-msgstr "Elinks CVSWeb honlap"
+msgstr "Elinks ~LXR"
 
 #: src/dialogs/menu.c:421
 msgid "~Copying"
@@ -5310,34 +5319,32 @@ msgstr ""
 
 #. name:
 #: src/ecmascript/ecmascript.c:44 src/ecmascript/ecmascript.c:171
-#, fuzzy
 msgid "ECMAScript"
-msgstr "Automatizálás"
+msgstr "ECMAScript"
 
 #: src/ecmascript/ecmascript.c:46
-#, fuzzy
 msgid "ECMAScript options."
-msgstr "Görgetési beállítások."
+msgstr "ECMAScript beállítások."
 
 #: src/ecmascript/ecmascript.c:50
 msgid "Whether to run those scripts inside of documents."
-msgstr ""
+msgstr "Fussanak-e a dokumentumba ágyazott szkriptek."
 
 #: src/ecmascript/ecmascript.c:52
 msgid "Script error reporting"
-msgstr ""
+msgstr "Szkriptek hibajelentése"
 
 #: src/ecmascript/ecmascript.c:54
 msgid "Open a message box when a script reports an error."
-msgstr ""
+msgstr "Ablak megnyitása ha egy szkriptben hiba található."
 
 #: src/ecmascript/spidermonkey.c:370
 msgid "JavaScript Alert"
-msgstr ""
+msgstr "JavaScript figyelmeztetés"
 
 #: src/ecmascript/spidermonkey.c:826
 msgid "JavaScript Error"
-msgstr ""
+msgstr "JavaScript hiba"
 
 #: src/ecmascript/spidermonkey.c:829
 #, c-format
@@ -5349,6 +5356,12 @@ msgid ""
 "%s\n"
 ".%*s^%*s."
 msgstr ""
+"Az oldalba ágyazott szkriptben a következõ hiba van:\n"
+"\n"
+"%s\n"
+"\n"
+"%s\n"
+".%*s^%*s."
 
 #: src/ecmascript/spidermonkey.c:837
 #, c-format
@@ -5357,10 +5370,13 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Az oldalba ágyazott szkriptben a következõ hiba van:\n"
+"\n"
+"%s"
 
 #: src/ecmascript/spidermonkey.c:854
 msgid "JavaScript Emergency"
-msgstr ""
+msgstr "JavaScript hiba (Emergency)"
 
 #: src/ecmascript/spidermonkey.c:855
 msgid ""
@@ -5368,6 +5384,10 @@ msgid ""
 "seconds in line. This probably means there is a bug in the script and it "
 "could have halted the whole ELinks. The script execution was interrupted."
 msgstr ""
+"A dokumentumba ágyazott szkript már 5 másodperce\n"
+"folyamatosan fut. Ez nagy valószínûséggel arra utal\n"
+"hibás, és lefagyaszthatja az Elinks böngészõt. A\n"
+"szkript futása megszakítva."
 
 #: src/formhist/dialogs.c:71
 msgid "Forms are never saved for this URL."
@@ -5710,8 +5730,7 @@ msgstr "Ukrán"
 
 #: src/lowlevel/home.c:121
 #, c-format
-msgid ""
-"Commandline options -config-dir set to %s, but could not create directory %s."
+msgid "Commandline options -config-dir set to %s, but could not create directory %s."
 msgstr ""
 "Parancssori opciók -konfig könyvtár %s, de nem lehet létrehozni a %s "
 "könyvtárat."
@@ -5727,46 +5746,50 @@ msgid ""
 "$HOME variable set correctly and if you have write permission to your home "
 "directory."
 msgstr ""
+"Nem található az Elinks beállításainak könyvtára, vagy\n"
+"nem hozható létre. Ellenõrizd hogy a $HOME környezeti\n"
+"változó helyesen van-e beállítva, és hogy a könyvtárra\n"
+"van-e írási jogod."
 
 #: src/lowlevel/interlink.c:336
 #, c-format
 msgid "accept() failed: %d (%s)"
-msgstr ""
+msgstr "accept() hiba: %d (%s)"
 
 #: src/lowlevel/interlink.c:376 src/lowlevel/interlink.c:437
 #, c-format
 msgid "socket() failed: %d (%s)"
-msgstr ""
+msgstr "socket() hiba: %d (%s)"
 
 #: src/lowlevel/interlink.c:385
 #, c-format
 msgid "bind() failed: %d (%s)"
-msgstr ""
+msgstr "bind() hiba: %d (%s)"
 
 #: src/lowlevel/interlink.c:405
 #, c-format
 msgid "listen() failed: %d (%s)"
-msgstr ""
+msgstr "listen() hiba: %d (%s)"
 
 #: src/lowlevel/interlink.c:450
 #, c-format
 msgid "connect() failed: %d (%s)"
-msgstr ""
+msgstr "connect() hiba: %d (%s)"
 
 #: src/lowlevel/select.c:339
 #, c-format
 msgid "select() failed: %d (%s)"
-msgstr ""
+msgstr "select() hiba: %d (%s)"
 
 #. Infinite loop prevention.
 #: src/lowlevel/select.c:342
 #, c-format
 msgid "%d select() failures."
-msgstr ""
+msgstr "%d select() hibák."
 
 #: src/main.c:127
 msgid "Cannot create a pipe for internal communication."
-msgstr ""
+msgstr "Nem lehet pipeot létrehozni a belsõ kommunikáció számára."
 
 #: src/main.c:180
 msgid "No running ELinks found."
@@ -5963,7 +5986,7 @@ msgstr ""
 #: src/mime/backend/mailcap.c:368
 #, c-format
 msgid "Badly formated mailcap entry for type %s in \"%s\" line %d"
-msgstr ""
+msgstr "Hibás formátumú mailcap bejegyzés a %s típushoz, itt: \"%s\" ebben a sorban: %d"
 
 #. name:
 #: src/mime/backend/mimetypes.c:46 src/mime/backend/mimetypes.c:285
@@ -6041,7 +6064,7 @@ msgstr ""
 #: src/modules/version.c:81
 #, c-format
 msgid "Built on %s %s"
-msgstr ""
+msgstr "Fordítva  %s %s"
 
 #: src/modules/version.c:85
 msgid "Text WWW browser"
@@ -6050,7 +6073,7 @@ msgstr "Szöveges WWW böngészõ"
 #: src/modules/version.c:88
 #, c-format
 msgid " (built on %s %s)"
-msgstr ""
+msgstr " (fordítva %s %s)"
 
 #: src/modules/version.c:95
 msgid "Features:"
@@ -7110,5 +7133,3 @@ msgstr "Mentési hiba"
 msgid "Error writing to file"
 msgstr "Hiba a fájl irása közben"
 
-#~ msgid "Number of cached formatted pages."
-#~ msgstr "A gyorsítótárazott formázott dokumentumok száma."

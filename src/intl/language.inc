@@ -2474,7 +2474,7 @@ struct translation translation_czech [] = {
   {T_ACCEPT_UI_LANGUAGE, "Pou¾ít jazyk u¾ivatelského rozhraní jako preferovaný jazyk stránek"},
   {T_SSL_CIPHER, "SSL ¹ifra"},
   {T_ENCODING, "Kódování"},
-  {T_BOOKMARK_USED, NULL},
+  {T_BOOKMARK_USED, "Sorry, ale s tímto bookmarkem právì pracuje nìco jiného."},
   {0, NULL}
 };
 

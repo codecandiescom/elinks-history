@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.111 2003/06/12 18:43:28 pasky Exp $ */
+/* $Id: menu.c,v 1.112 2003/06/15 13:59:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,7 +173,7 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 
 	/* Move all intermediate items to unhistory... */
 
-	while (steps-- > 1) {
+	while (steps-- > 0) {
 		struct location *loc = ses->history.next;
 
 		if (!have_location(ses)) return;
@@ -184,36 +184,26 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 		loc = loc->next;
 		if ((void *) loc == &ses->history) return;
 
-		del_from_list(loc);
-		add_to_list(ses->unhistory, loc);
+		go_back(ses);
 	}
-
-	/* ..and now go back in history by one as usual. */
-
-	go_back(ses);
 }
 
 static void
 go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 {
-	int steps = (int) psteps;
+	int steps = (int) psteps + 1;
 
 	abort_loading(ses, 0);
 
 	/* Move all intermediate items to history... */
 
-	while (steps--) {
+	while (steps-- > 0) {
 	    	struct location *loc = ses->unhistory.next;
 
 		if ((void *) loc == &ses->unhistory) return;
 
-		del_from_list(loc);
-		add_to_list(ses->history, loc);
+		go_unback(ses);
 	}
-
-	/* ..and now go unback in unhistory by one as usual. */
-
-	go_unback(ses);
 }
 
 static struct menu_item no_hist_menu[] = {

@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.39 2004/06/14 01:27:22 jonas Exp $ */
+/* $Id: terminal.h,v 1.40 2004/06/28 10:50:08 jonas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -7,6 +7,9 @@
 #include "intl/charsets.h"
 #include "terminal/event.h"
 #include "util/lists.h"
+
+struct option;
+struct terminal_screen;
 
 
 /* The terminal type, meaningful for frames (lines) drawing. */
@@ -38,10 +41,6 @@ enum term_env_type {
 	/* Microsoft Windows cmdline thing. */
 	ENV_WIN32 = 64,
 };
-
-/* Lives in terminal/window.h and terminal/screen.h . */
-struct window;
-struct terminal_screen;
 
 /* This is one of the axis of ELinks' user interaction. {struct terminal}
  * defines the terminal ELinks is running on --- each ELinks instance has

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.153 2004/04/07 12:50:38 jonas Exp $ */
+/* $Id: uri.c,v 1.154 2004/04/07 13:04:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -367,6 +367,8 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 	src = path;
 	dest = path;
 
+	/* This loop mangles the URI string by removing directory elevators and
+	 * other cruft. Example: /.././etc////..//usr -> /usr/ */
 	while (*dest) {
 		/* If the following pieces are the LAST parts of URL, we remove
 		 * them as well. See RFC 1808 for details. */
@@ -411,11 +413,8 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 		}
 
 		/* We don't want access memory past the NUL char. */
-		*dest = *src;
-		if (*dest) {
-			dest++;
-			src++;
-		}
+		*dest = *src++;
+		if (*dest) dest++;
 	}
 
 	return uristring;

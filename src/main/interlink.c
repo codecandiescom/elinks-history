@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.4 2002/03/26 17:16:43 pasky Exp $ */
+/* $Id: interlink.c,v 1.5 2002/03/26 17:19:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,14 +7,14 @@
 
 #include <errno.h>
 #include <string.h>
-#include <sys/socket.h>
 #include <sys/types.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 
-/* Blame BSD for position of this include. */
+/* Blame BSD for position of this includes. */
 #include <netinet/in.h>
+#include <sys/socket.h>
 
 #include <links.h>
 

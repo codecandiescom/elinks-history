@@ -12,7 +12,7 @@ EL_SAVE_FLAGS
 
 AC_ARG_ENABLE(ruby,
 	[  --enable-ruby           enable Ruby support],
-	[enable_ruby="yes"],
+	[if test "$enableval" != no; then enable_ruby="yes"; fi
 	[enable_ruby="no"])
 
 AC_MSG_RESULT($enable_ruby)

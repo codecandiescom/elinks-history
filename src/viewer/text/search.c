@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.233 2004/06/04 07:40:11 jonas Exp $ */
+/* $Id: search.c,v 1.234 2004/06/08 16:12:35 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -242,17 +242,17 @@ get_range(struct document *document, int y, int yw, int l,
 
 /* Returns an allocated string which is a lowered copy of passed one. */
 static unsigned char *
-lowered_string(unsigned char *s, register int len)
+lowered_string(unsigned char *text, register int textlen)
 {
 	unsigned char *ret;
 
-	if (len < 0) len = strlen(s);
+	if (textlen < 0) textlen = strlen(text);
 
-	ret = mem_calloc(1, len + 1);
-	if (ret && len) {
+	ret = mem_calloc(1, textlen + 1);
+	if (ret && textlen) {
 		do {
-			ret[len] = tolower(s[len]);
-		} while (len--);
+			ret[textlen] = tolower(text[textlen]);
+		} while (textlen--);
 	}
 
 	return ret;
@@ -261,7 +261,8 @@ lowered_string(unsigned char *s, register int len)
 #ifdef HAVE_REGEX_H
 static int
 is_in_range_regex(struct document *document, int y, int yy,
-		  unsigned char *text, int l, int *min, int *max,
+		  unsigned char *text, int textlen,
+		  int *min, int *max,
 		  struct search *s1, struct search *s2)
 {
 	unsigned char *doc;
@@ -291,7 +292,7 @@ is_in_range_regex(struct document *document, int y, int yy,
 		return 0;
 	}
 
-	doclen = s2 - s1 + l;
+	doclen = s2 - s1 + textlen;
 	if (!doclen) {
 		regfree(&regex);
 		return 0;
@@ -324,16 +325,16 @@ find_next:
 
 	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, regexec_flags)) {
 		regexec_flags = REG_NOTBOL;
-		l = regmatch.rm_eo - regmatch.rm_so;
+		textlen = regmatch.rm_eo - regmatch.rm_so;
 		s1 += regmatch.rm_so;
 		doctmp += regmatch.rm_so;
 
-		if (s1[l].y < y || s1[l].y >= yy)
+		if (s1[textlen].y < y || s1[textlen].y >= yy)
 			goto next;
 
 		found = 1;
 
-		for (i = 0; i < l; i++) {
+		for (i = 0; i < textlen; i++) {
 			if (!s1[i].n) continue;
 
 			int_upper_bound(min, s1[i].x);
@@ -341,8 +342,8 @@ find_next:
 		}
 
 next:
-		doctmp += int_max(l, 1);
-		s1 += int_max(l, 1);
+		doctmp += int_max(textlen, 1);
+		s1 += int_max(textlen, 1);
 	}
 
 	doc[pos] = save_c;
@@ -358,14 +359,15 @@ next:
 
 static int
 is_in_range_plain(struct document *document, int y, int yy,
-		  unsigned char *text, int l, int *min, int *max,
+		  unsigned char *text, int textlen,
+		  int *min, int *max,
 		  struct search *s1, struct search *s2)
 {
 	unsigned char *txt;
 	int found = 0;
 	int case_sensitive = get_opt_int("document.browse.search.case");
 
-	txt = case_sensitive ? stracpy(text) : lowered_string(text, l);
+	txt = case_sensitive ? stracpy(text) : lowered_string(text, textlen);
 	if (!txt) return 0;
 
 	/* TODO: This is a great candidate for nice optimizations. Fresh CS
@@ -384,7 +386,7 @@ srch_failed:
 			continue;
 		}
 
-		for (i = 1; i < l; i++)
+		for (i = 1; i < textlen; i++)
 			if (maybe_tolower(s1[i].c) != txt[i])
 				goto srch_failed;
 
@@ -393,7 +395,7 @@ srch_failed:
 
 		found = 1;
 
-		for (i = 0; i < l; i++) {
+		for (i = 0; i < textlen; i++) {
 			if (!s1[i].n) continue;
 
 			int_upper_bound(min, s1[i].x);
@@ -413,22 +415,24 @@ is_in_range(struct document *document, int y, int yw,
 	    unsigned char *text, int *min, int *max)
 {
 	struct search *s1, *s2;
-	int l;
+	int textlen;
 
 	assert(document && text && min && max);
 	if_assert_failed return 0;
 
 	*min = MAXINT, *max = 0;
-	l = strlen(text);
+	textlen = strlen(text);
 
-	if (get_range(document, y, yw, l, &s1, &s2))
+	if (get_range(document, y, yw, textlen, &s1, &s2))
 		return 0;
 
 #ifdef HAVE_REGEX_H
 	if (get_opt_int("document.browse.search.regex"))
-		return is_in_range_regex(document, y, y + yw, text, l, min, max, s1, s2);
+		return is_in_range_regex(document, y, y + yw, text, textlen,
+					 min, max, s1, s2);
 #endif
-	return is_in_range_plain(document, y, y + yw, text, l, min, max, s1, s2);
+	return is_in_range_plain(document, y, y + yw, text, textlen,
+				 min, max, s1, s2);
 }
 
 #define realloc_points(pts, size) \

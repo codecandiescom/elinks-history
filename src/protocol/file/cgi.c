@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.71 2004/07/24 06:48:52 miciah Exp $ */
+/* $Id: cgi.c,v 1.72 2004/08/01 20:08:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,7 @@ close_pipe_and_read(struct connection *conn)
 	close(conn->cgi_pipes[1]), conn->cgi_pipes[1] = -1;
 	set_connection_state(conn, S_SENT);
 	set_connection_timeout(conn);
-	read_from_socket(conn, conn->socket, rb, http_got_header);
+	read_from_socket(conn, &conn->socket, rb, http_got_header);
 }
 
 static void
@@ -91,7 +91,9 @@ send_post_data(struct connection *conn)
 		add_bytes_to_string(&data, buffer, n);
 
 	set_connection_timeout(conn);
-	write_to_socket(conn, conn->cgi_pipes[1], data.source, data.length, close_pipe_and_read);
+	/* XXX: Could we use data_socket? --jonas */
+	write_to_socket(conn, (struct connection_socket *) /* lalala */ &conn->cgi_pipes[1],
+			data.source, data.length, close_pipe_and_read);
 	done_string(&data);
 	set_connection_state(conn, S_SENT);
 #undef POST_BUFFER_SIZE
@@ -363,7 +365,7 @@ execute_cgi(struct connection *conn)
 		close(pipe_read[1]); close(pipe_write[0]);
 		conn->cgi_pipes[0] = pipe_read[0];
 		conn->cgi_pipes[1] = pipe_write[1];
-		conn->socket = conn->cgi_pipes[0];
+		conn->socket.fd = conn->cgi_pipes[0];
 
 		send_request(conn);
 		return 0;

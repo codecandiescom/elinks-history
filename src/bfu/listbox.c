@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.102 2003/11/08 00:17:17 zas Exp $ */
+/* $Id: listbox.c,v 1.103 2003/11/08 19:07:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -550,27 +550,6 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 
 	switch (ev->ev) {
 		case EV_KBD:
-			/* Catch change focus requests */
-			if (ev->x == KBD_RIGHT || (ev->x == KBD_TAB && !ev->y)) {
-				/* Move right */
-				display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
-				if (++dlg_data->selected >= n)
-					dlg_data->selected = 0;
-				display_dlg_item(dlg_data, selected_widget(dlg_data), 1);
-
-				return EVENT_PROCESSED;
-			}
-
-			if (ev->x == KBD_LEFT || (ev->x == KBD_TAB && ev->y)) {
-				/* Move left */
-				display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
-				if (--dlg_data->selected < 0)
-					dlg_data->selected = n - 1;
-				display_dlg_item(dlg_data, selected_widget(dlg_data), 1);
-
-				return EVENT_PROCESSED;
-			}
-
 			/* Moving the box */
 			if (ev->x == KBD_DOWN
 			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'N')) {

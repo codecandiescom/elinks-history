@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.73 2003/11/08 18:44:53 jonas Exp $ */
+/* $Id: dialog.c,v 1.74 2003/11/08 19:07:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,14 +150,20 @@ init_widget(struct dialog_data *dlg_data, struct term_event *ev, int i)
 static inline void
 cycle_widget_focus(struct dialog_data *dlg_data, int direction)
 {
+	int prev_selected = dlg_data->selected;
+
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
 
-	dlg_data->selected += direction;
+	do {
+		dlg_data->selected += direction;
 
-	if (dlg_data->selected >= dlg_data->n)
-		dlg_data->selected = 0;
-	else if (dlg_data->selected < 0)
-		dlg_data->selected = dlg_data->n - 1;
+		if (dlg_data->selected >= dlg_data->n)
+			dlg_data->selected = 0;
+		else if (dlg_data->selected < 0)
+			dlg_data->selected = dlg_data->n - 1;
+		else if (dlg_data->selected == prev_selected)
+			break;
+	} while (!widget_is_focusable(selected_widget(dlg_data)));
 
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 1);
 	redraw_from_window(dlg_data->win);

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.8 2003/12/01 20:31:07 jonas Exp $ */
+/* $Id: status.c,v 1.9 2003/12/01 20:44:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -282,6 +282,65 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 		tab->width = actual_tab_width;
 		xpos += actual_tab_width;
 	}
+}
+
+/* Print page's title and numbering at window top. */
+static unsigned char *
+print_current_title(struct session *ses)
+{
+	struct document_view *doc_view;
+	struct document *document;
+	struct string title;
+	unsigned char buf[80];
+	int buflen = 0;
+	int width;
+
+	assert(ses && ses->tab && ses->tab->term);
+	if_assert_failed return NULL;
+
+	doc_view = current_frame(ses);
+
+	assert(doc_view && doc_view->document);
+	if_assert_failed return NULL;
+
+	if (!init_string(&title)) return NULL;
+
+	document = doc_view->document;
+	width = ses->tab->term->width;
+
+	/* Set up the document page info string: '(' %page '/' %pages ')' */
+	if (doc_view->height < document->height) {
+		int pos = doc_view->vs->y + doc_view->height;
+		int page = 1;
+		int pages = doc_view->height
+			    ? (document->height + doc_view->height - 1) / doc_view->height
+			    : 1;
+
+		/* Check if at the end else calculate the page. */
+		if (pos >= document->height) {
+			page = pages;
+		} else if (doc_view->height) {
+			page = int_min((pos - doc_view->height / 2) / doc_view->height + 1,
+				       pages);
+		}
+
+		buflen = snprintf(buf, sizeof(buf), " (%d/%d)", page, pages);
+		if (buflen < 0) buflen = 0;
+	}
+
+	if (doc_view->document->title) {
+		add_to_string(&title, doc_view->document->title);
+
+		if (title.length + buflen > width - 4) {
+			title.length = int_max(width - 4 - buflen, 0);
+			add_to_string(&title, "...");
+		}
+	}
+
+	if (buflen > 0)
+		add_bytes_to_string(&title, buf, buflen);
+
+	return title.source;
 }
 
 /* Print statusbar and titlebar, set terminal title. */

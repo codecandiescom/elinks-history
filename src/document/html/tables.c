@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.6 2002/03/26 15:12:42 pasky Exp $ */
+/* $Id: tables.c,v 1.7 2002/03/26 15:20:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1285,164 +1285,286 @@ void check_table_widths(struct table *t)
 			return;
 		}
 	}
+
 	mem_free(w);
 }
 #endif
 
+
+
+/*  get_table_heights() */
 void get_table_heights(struct table *t)
 {
 	int s, ns;
 	int i, j;
+
 	for (j = 0; j < t->y; j++) {
 		for (i = 0; i < t->x; i++) {
 			struct table_cell *cell = CELL(t, i, j);
 			struct part *p;
 			int xw = 0, sp;
+
 			if (!cell->used || cell->spanned) continue;
+
 			for (sp = 0; sp < cell->colspan; sp++) {
 				xw += t->w_c[i + sp];
-				if (sp < cell->colspan - 1) xw += get_vline_width(t, i + sp + 1) >= 0;
+				if (sp < cell->colspan - 1
+				    && get_vline_width(t, i + sp + 1) >= 0)
+					xw++;
 			}
-			if (!(p = format_html_part(cell->start, cell->end, cell->align, t->cellpd, xw, NULL, 2, 2, NULL, cell->link_num))) return;
+
+			p = format_html_part(cell->start, cell->end,
+					     cell->align, t->cellpd, xw, NULL,
+					     2, 2, NULL, cell->link_num);
+			if (!p) return;
+
 			cell->height = p->y;
-				/*debug("%d, %d.",xw, cell->height);*/
+			/* debug("%d, %d.",xw, cell->height); */
 			mem_free(p);
 		}
 	}
+
 	s = 1;
+
 	do {
 		ns = MAXINT;
 		for (j = 0; j < t->y; j++) {
 			for (i = 0; i < t->x; i++) {
 				struct table_cell *cell = CELL(t, i, j);
+
 				if (!cell->used || cell->spanned) continue;
+
 				if (cell->rowspan == s) {
 					int k, p = 0;
-					for (k = 1; k < s; k++) p += get_hline_width(t, j + k) >= 0;
-					dst_width(t->r_heights + j, s, cell->height - p, NULL);
-				} else if (cell->rowspan > s && cell->rowspan < ns) ns = cell->rowspan;
+
+					for (k = 1; k < s; k++)
+						if (get_hline_width(t, j + k) >= 0)
+							p++;
+
+					dst_width(t->r_heights + j, s,
+						  cell->height - p, NULL);
+
+				} else if (cell->rowspan > s &&
+					   cell->rowspan < ns) {
+					ns = cell->rowspan;
+				}
+
 			}
 		}
 	} while ((s = ns) != MAXINT);
+
 	t->rh = (!!(t->frame & F_ABOVE) + !!(t->frame & F_BELOW)) * !!t->border;
+
 	for (j = 0; j < t->y; j++) {
 		t->rh += t->r_heights[j];
-		if (j) t->rh += get_hline_width(t, j) >= 0;
+		if (j && get_hline_width(t, j) >= 0)
+			t->rh++;
 	}
 }
 
+
+/* display_complicated_table() */
 void display_complicated_table(struct table *t, int x, int y, int *yy)
 {
 	int i, j;
 	struct f_data *f = t->p->data;
-	int yp, xp = x + ((t->frame & F_LHS) && t->border);
+	int yp;
+	int xp = x + ((t->frame & F_LHS) && t->border);
+
 	for (i = 0; i < t->x; i++) {
 		yp = y + ((t->frame & F_ABOVE) && t->border);
 		for (j = 0; j < t->y; j++) {
 			struct table_cell *cell = CELL(t, i, j);
+
 			if (cell->start) {
 				int yt;
 				struct part *p = NULL;
 				int xw = 0, yw = 0, s;
+
 				for (s = 0; s < cell->colspan; s++) {
 					xw += t->w_c[i + s];
-					if (s < cell->colspan - 1) xw += get_vline_width(t, i + s + 1) >= 0;
+					if (s < cell->colspan - 1
+					    && get_vline_width(t, i + s + 1) >= 0)
+						xw++;
 				}
+
 				for (s = 0; s < cell->rowspan; s++) {
 					yw += t->r_heights[j + s];
-					if (s < cell->rowspan - 1) yw += get_hline_width(t, j + s + 1) >= 0;
+					if (s < cell->rowspan - 1
+					    && get_hline_width(t, j + s + 1) >= 0)
+						yw++;
 				}
+
 				html_stack_dup();
 				html_top.dontkill = 1;
+
 				if (cell->b) format.attr |= AT_BOLD;
-				memcpy(&format.bg, &cell->bgcolor, sizeof(struct rgb));
-				memcpy(&par_format.bgcolor, &cell->bgcolor, sizeof(struct rgb));
-				p = format_html_part(cell->start, cell->end, cell->align, t->cellpd, xw, f, t->p->xp + xp, t->p->yp + yp + (cell->valign != VAL_MIDDLE && cell->valign != VAL_BOTTOM ? 0 : (yw - cell->height) / (cell->valign == VAL_MIDDLE ? 2 : 1)), NULL, cell->link_num);
+
+				memcpy(&format.bg, &cell->bgcolor,
+				       sizeof(struct rgb));
+				memcpy(&par_format.bgcolor, &cell->bgcolor,
+				       sizeof(struct rgb));
+ 				{
+					int tmpy = t->p->yp + yp;
+
+					if (cell->valign == VAL_MIDDLE)
+						tmpy += (yw - cell->height)/2;
+					if (cell->valign == VAL_BOTTOM)
+						tmpy += (yw - cell->height);
+
+				   	p = format_html_part(cell->start,
+							     cell->end,
+							     cell->align,
+							     t->cellpd, xw, f,
+							     t->p->xp + xp,
+							     tmpy, NULL,
+							     cell->link_num);
+				}
+
 				cell->xpos = xp;
 				cell->ypos = yp;
 				cell->xw = xw;
 				cell->yw = yw;
+
 				for (yt = 0; yt < p->y; yt++) {
 					expand_lines(t->p, yp + yt);
 					expand_line(t->p, yp + yt, xp + t->w_c[i]);
 				}
+
 				kill_html_stack_item(&html_top);
 				mem_free(p);
 			}
+
 			cell->xpos = xp;
 			cell->ypos = yp;
 			cell->xw = t->w_c[i];
 			yp += t->r_heights[j];
-			if (j < t->y - 1) yp += (get_hline_width(t, j + 1) >= 0);
+
+			if (j < t->y - 1 &&
+			    get_hline_width(t, j + 1) >= 0)
+				yp++;
 		}
-		if (i < t->x - 1) xp += t->w_c[i] + (get_vline_width(t, i + 1) >= 0);
+		if (i < t->x - 1) {
+			xp += t->w_c[i];
+			if (get_vline_width(t, j + 1) >= 0)
+				xp++;
+		}
 	}
+
 	yp = y;
 	for (j = 0; j < t->y; j++) {
 		yp += t->r_heights[j];
-		if (j < t->y - 1) yp += (get_hline_width(t, j + 1) >= 0);
+		if (j < t->y - 1
+		    && get_hline_width(t, j + 1) >= 0)
+			yp ++;
 	}
 	*yy = yp + (!!(t->frame & F_ABOVE) + !!(t->frame & F_BELOW)) * !!t->border;
 }
 
+
+
+
 /* !!! FIXME: background */
-#define draw_frame_point(xx, yy, ii, jj)	\
-if (H_LINE_X((ii-1), (jj)) >= 0 || H_LINE_X((ii), (jj)) >= 0 || V_LINE_X((ii), (jj-1)) >= 0 || V_LINE_X((ii), (jj)) >= 0) xset_hchar(t->p, (xx), (yy), frame_table[V_LINE((ii),(jj)-1)+3*H_LINE((ii),(jj))+9*H_LINE((ii)-1,(jj))+27*V_LINE((ii),(jj))] | ATTR_FRAME)
+#define draw_frame_point(xx, yy, ii, jj) \
+if (H_LINE_X((ii-1), (jj)) >= 0 || H_LINE_X((ii), (jj)) >= 0 || \
+    V_LINE_X((ii), (jj-1)) >= 0 || V_LINE_X((ii), (jj)) >= 0) \
+	xset_hchar(t->p, (xx), (yy), frame_table[V_LINE((ii), (jj)-1)+ \
+						 3*H_LINE((ii), (jj))+ \
+						 9*H_LINE((ii)-1, (jj))+ \
+						 27*V_LINE((ii),(jj))] \
+				     | ATTR_FRAME)
 
-#define draw_frame_hline(xx, yy, ll, ii, jj)	\
-if (H_LINE_X((ii), (jj)) >= 0) xset_hchars(t->p, (xx), (yy), (ll), hline_table[H_LINE((ii), (jj))] | ATTR_FRAME)
 
-#define draw_frame_vline(xx, yy, ll, ii, jj)	\
-{						\
-	int qq;					\
-	if (V_LINE_X((ii), (jj)) >= 0) for (qq = 0; qq < (ll); qq++) xset_hchar(t->p, (xx), (yy) + qq, vline_table[V_LINE((ii), (jj))] | ATTR_FRAME); }
+#define draw_frame_hline(xx, yy, ll, ii, jj) \
+if (H_LINE_X((ii), (jj)) >= 0) \
+	xset_hchars(t->p, (xx), (yy), (ll),\
+		    hline_table[H_LINE((ii), (jj))] | ATTR_FRAME)
 
+
+#define draw_frame_vline(xx, yy, ll, ii, jj) \
+{ \
+	int qq; \
+	if (V_LINE_X((ii), (jj)) >= 0) \
+		for (qq = 0; qq < (ll); qq++) \
+			xset_hchar(t->p, (xx), (yy) + qq, \
+				   vline_table[V_LINE((ii), (jj))] \
+				   | ATTR_FRAME); \
+}
+
+
+/* display_table_frames() */
 void display_table_frames(struct table *t, int x, int y)
 {
 	signed char *fh, *fv;
 	int i, j;
 	int cx, cy;
-	if (!(fh = mem_alloc((t->x + 2) * (t->y + 1)))) return;
+
+	fh = mem_alloc((t->x + 2) * (t->y + 1));
+	if (!fh) return;
 	memset(fh, -1, (t->x + 2) * (t->y + 1));
-	if (!(fv = mem_alloc((t->x + 1) * (t->y + 2)))) {
+
+	fv = mem_alloc((t->x + 1) * (t->y + 2));
+	if (!fv) {
 		mem_free(fh);
 		return;
 	}
 	memset(fv, -1, (t->x + 1) * (t->y + 2));
+
 #ifndef DEBUG
 #define H_LINE_X(xx, yy) fh[(xx) + 1 + (t->x + 2) * (yy)]
 #define V_LINE_X(xx, yy) fv[(yy) + 1 + (t->y + 2) * (xx)]
 #else
-#define H_LINE_X(xx, yy) (*(xx < -1 || xx > t->x + 1 || yy < 0 || yy > t->y ? (signed char *)NULL : &fh[(xx) + 1 + (t->x + 2) * (yy)]))
-#define V_LINE_X(xx, yy) (*(xx < 0 || xx > t->x || yy < -1 || yy > t->y + 1 ? (signed char *)NULL : &fv[(yy) + 1 + (t->y + 2) * (xx)]))
+#define H_LINE_X(xx, yy) (*(xx < -1 || xx > t->x + 1 || yy < 0 || yy > t->y ? \
+		   	(signed char *) NULL : &fh[(xx) + 1 + (t->x + 2) * (yy)]))
+#define V_LINE_X(xx, yy) (*(xx < 0 || xx > t->x || yy < -1 || yy > t->y + 1 ? \
+			(signed char *) NULL : &fv[(yy) + 1 + (t->y + 2) * (xx)]))
 #endif
+
 #define H_LINE(xx, yy) (H_LINE_X((xx), (yy)) == -1 ? 0 : H_LINE_X((xx), (yy)))
 #define V_LINE(xx, yy) (V_LINE_X((xx), (yy)) == -1 ? 0 : V_LINE_X((xx), (yy)))
+
 	for (j = 0; j < t->y; j++) for (i = 0; i < t->x; i++) {
 		int x, y;
 		int xsp, ysp;
 		struct table_cell *cell = CELL(t, i, j);
+
 		if (!cell->used || cell->spanned) continue;
 		if ((xsp = cell->colspan) == 0) xsp = t->x - i;
 		if ((ysp = cell->rowspan) == 0) ysp = t->y - j;
-		if (t->rules != R_NONE && t->rules != R_COLS) for (x = 0; x < xsp; x++) {H_LINE_X(i + x, j) = t->cellsp; H_LINE_X(i + x, j + ysp) = t->cellsp;}
-		if (t->rules != R_NONE && t->rules != R_ROWS) for (y = 0; y < ysp; y++) {V_LINE_X(i, j + y) = t->cellsp; V_LINE_X(i + xsp, j + y) = t->cellsp;}
+
+		if (t->rules != R_NONE && t->rules != R_COLS)
+			for (x = 0; x < xsp; x++) {
+				H_LINE_X(i + x, j) = t->cellsp;
+				H_LINE_X(i + x, j + ysp) = t->cellsp;
+			}
+
+		if (t->rules != R_NONE && t->rules != R_ROWS)
+			for (y = 0; y < ysp; y++) {
+				V_LINE_X(i, j + y) = t->cellsp;
+				V_LINE_X(i + xsp, j + y) = t->cellsp;
+			}
 	}
+
 	if (t->rules == R_GROUPS) {
 		for (i = 1; i < t->x; i++) {
 			if (/*i < t->xc &&*/ t->xcols[i]) continue;
 			for (j = 0; j < t->y; j++) V_LINE_X(i, j) = 0;
 		}
 		for (j = 1; j < t->y; j++) {
-			for (i = 0; i < t->x; i++) if (CELL(t, i, j)->group) goto c;
-			for (i = 0; i < t->x; i++) H_LINE_X(i, j) = 0;
-			c:;
+			for (i = 0; i < t->x; i++)
+				if (CELL(t, i, j)->group)
+					goto cont;
+			for (i = 0; i < t->x; i++)
+				H_LINE_X(i, j) = 0;
+cont:;
 		}
 	}
+
 	for (i = 0; i < t->x; i++) {
 		H_LINE_X(i, 0) = t->border * !!(t->frame & F_ABOVE);
 		H_LINE_X(i, t->y) = t->border * !!(t->frame & F_BELOW);
 	}
+
 	for (j = 0; j < t->y; j++) {
 		V_LINE_X(0, j) = t->border * !!(t->frame & F_LHS);
 		V_LINE_X(t->x, j) = t->border * !!(t->frame & F_RHS);

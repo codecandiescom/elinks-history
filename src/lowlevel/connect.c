@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.93 2004/08/02 22:13:24 jonas Exp $ */
+/* $Id: connect.c,v 1.94 2004/08/02 22:43:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,7 +73,7 @@ close_socket(struct connection *conn, struct connection_socket *socket)
 {
 	if (socket->fd == -1) return;
 #ifdef CONFIG_SSL
-	if (conn && conn->socket.ssl /* FIXME: Assuming ssl handle */) ssl_close(conn);
+	if (conn && socket->ssl) ssl_close(conn, socket);
 #endif
 	close(socket->fd);
 	set_handlers(socket->fd, NULL, NULL, NULL, NULL);

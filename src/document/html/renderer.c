@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.216 2003/08/23 18:24:44 jonas Exp $ */
+/* $Id: renderer.c,v 1.217 2003/08/24 02:54:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -928,15 +928,13 @@ process_link:
 		link->where_img = last_image ? stracpy(last_image) : NULL;
 
 		if (link->type != L_FIELD && link->type != L_AREA) {
-			bg = find_nearest_color(format.clink, 8);
-			fg = find_nearest_color(format.bg, 8);
+			link->color.background = format.clink;
+			link->color.foreground = format.bg;
 		} else {
-			fg = find_nearest_color(format.fg, 8);
-			bg = find_nearest_color(format.bg, 8);
+			link->color.foreground = format.fg;
+			link->color.background = format.bg;
 		}
-		fg = fg_color(fg, bg);
 
-		link->sel_color = ((fg & 8) << 3) | (fg & 7) | (bg << 3);
 		link->n = 0;
 set_link:
 		pt = mem_realloc(link->pos,

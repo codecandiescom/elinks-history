@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.38 2003/08/23 16:53:39 jonas Exp $ */
+/* $Id: renderer.h,v 1.39 2003/08/24 02:54:38 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -10,6 +10,7 @@
 #include "terminal/screen.h"
 #include "lowlevel/ttime.h"
 #include "sched/session.h"
+#include "util/color.h"
 #include "util/lists.h"
 /* We need this included later, otherwise it will miss some our
  * declarations. */
@@ -80,7 +81,7 @@ struct link {
 	int n;
 	int num;
 
-	unsigned sel_color;
+	struct color_pair color;
 };
 
 /* For struct document_view */

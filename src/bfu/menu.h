@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.15 2003/05/04 17:25:51 pasky Exp $ */
+/* $Id: menu.h,v 1.16 2003/05/07 10:49:31 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -44,12 +44,16 @@ enum item_free {
 struct menu_item {
 	unsigned char *text;
 	unsigned char *rtext; /* FIXME: Use real keybindings. */
-	void (*func)(struct terminal *, void *, void *);
+
 	void *data;
+
+	void (*func)(struct terminal *, void *, void *);
+
 	int in_m;
-	enum item_free item_free;
 	int hotkey_pos;
 	int ignore_hotkey;
+
+	enum item_free item_free;
 };
 
 

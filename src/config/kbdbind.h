@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.67 2003/12/27 12:14:40 zas Exp $ */
+/* $Id: kbdbind.h,v 1.68 2003/12/27 13:55:46 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -103,6 +103,7 @@ enum keyact {
 	ACT_SEARCH_TYPEAHEAD,
 	ACT_SELECT,
 	ACT_TAB_CLOSE,
+	ACT_TAB_MENU,
 	ACT_TAB_NEXT,
 	ACT_TAB_PREV,
 	ACT_TOGGLE_DISPLAY_IMAGES,

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.314 2003/12/27 12:14:40 zas Exp $ */
+/* $Id: view.c,v 1.315 2003/12/27 13:55:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1198,6 +1198,18 @@ quit:
 				close_tab(ses->tab->term, ses);
 				ses = NULL; /* Disappeared in EV_ABORT handler. */
 				goto x;
+			case ACT_TAB_MENU:
+			{
+				struct window *tab = get_current_tab(ses->tab->term);
+
+				if (ses->status.show_tabs_bar)
+					set_window_ptr(tab, tab->xpos, tab->term->height - 2);
+				else
+					set_window_ptr(tab, 0, 0);
+
+				tab_menu(ses->tab->term, tab, tab->data);
+				goto x;
+			}
 			case ACT_TAB_NEXT:
 				switch_to_next_tab(ses->tab->term);
 				goto x;

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.129 2003/12/27 12:14:40 zas Exp $ */
+/* $Id: kbdbind.c,v 1.130 2003/12/27 13:55:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -462,6 +462,7 @@ static struct strtonum action_table[] = {
 	{ "search-typeahead", ACT_SEARCH_TYPEAHEAD, DACT(N_("Search link text by typing ahead")) },
 	{ "select", ACT_SELECT, DACT(N_("Select current highlighted item")) },
 	{ "tab-close", ACT_TAB_CLOSE, DACT(N_("Close tab")) },
+	{ "tab-menu", ACT_TAB_MENU, DACT(N_("Open the tab menu")) },
 	{ "tab-next", ACT_TAB_NEXT, DACT(N_("Next tab")) },
 	{ "tab-prev", ACT_TAB_PREV,DACT( N_("Previous tab")) },
 	{ "toggle-display-images", ACT_TOGGLE_DISPLAY_IMAGES, DACT(N_("Toggle displaying of links to images")) },
@@ -730,6 +731,7 @@ static struct default_kb default_main_keymap[] = {
 	{ 'b',		 0,		ACT_PAGE_UP },
 	{ 'c',		 0,		ACT_TAB_CLOSE },
 	{ 'd',		 0,		ACT_DOWNLOAD },
+	{ 'e',		 0,		ACT_TAB_MENU },
 	{ 'f',		 0,		ACT_ZOOM_FRAME },
 	{ 'g',		 0,		ACT_GOTO_URL },
 	{ 'h',		 0,		ACT_HISTORY_MANAGER },

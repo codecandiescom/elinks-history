@@ -1,5 +1,5 @@
 /* Event handling functions */
-/* $Id: event.c,v 1.17 2004/04/17 02:39:52 jonas Exp $ */
+/* $Id: event.c,v 1.18 2004/04/17 03:07:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,7 +67,7 @@ static struct hash *event_hash = NULL;
 #define EVENT_GRANULARITY 0x07
 
 #define realloc_events(ptr, size) \
-	mem_align_alloc(ptr, (size), (size), struct event, EVENT_GRANULARITY)
+	mem_align_alloc(ptr, (size), (size) + 1, struct event, EVENT_GRANULARITY)
 
 static inline int
 invalid_event_id(register int id)

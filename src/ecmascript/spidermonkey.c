@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.114 2004/12/18 15:13:03 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.115 2004/12/18 20:31:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,9 @@
 #include "terminal/terminal.h"
 #include "util/conv.h"
 #include "util/string.h"
+#include "viewer/text/draw.h"
 #include "viewer/text/form.h"
+#include "viewer/text/link.h"
 #include "viewer/text/vs.h"
 
 
@@ -513,6 +515,365 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 }
 
 
+static JSObject *get_form_object(JSContext *ctx, JSObject *jsdoc, struct form *form);
+
+/* Accordingly to the JS specs, each input type should own object. That'd be a
+ * huge PITA though, however DOM comes to the rescue and defines just a single
+ * HTMLInputElement. The difference could be spotted only by some clever tricky
+ * JS code, but I hope it doesn't matter anywhere. --pasky */
+
+static JSBool input_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
+static JSBool input_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
+
+static const JSClass input_class = {
+	"input", /* here, we unleash ourselves */
+	JSCLASS_HAS_PRIVATE,
+	JS_PropertyStub, JS_PropertyStub,
+	input_get_property, input_set_property,
+	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
+};
+
+enum input_prop {
+	JSP_INPUT_ACCESSKEY,
+	JSP_INPUT_ALT,
+	JSP_INPUT_CHECKED,
+	JSP_INPUT_DEFAULT_CHECKED,
+	JSP_INPUT_DEFAULT_VALUE,
+	JSP_INPUT_DISABLED,
+	JSP_INPUT_FORM,
+	JSP_INPUT_MAX_LENGTH,
+	JSP_INPUT_NAME,
+	JSP_INPUT_READONLY,
+	JSP_INPUT_SIZE,
+	JSP_INPUT_SRC,
+	JSP_INPUT_TABINDEX,
+	JSP_INPUT_TYPE,
+	JSP_INPUT_VALUE
+};
+
+/* XXX: Some of those are marked readonly just because we can't change them
+ * safely now. Changing default* values would affect all open instances of the
+ * document, leading to a potential security risk. Changing size and type would
+ * require re-rendering the document (TODO), tabindex would require renumbering
+ * of all links and whatnot. --pasky */
+static const JSPropertySpec input_props[] = {
+	{ "accessKey",	JSP_INPUT_ACCESSKEY,	JSPROP_ENUMERATE },
+	{ "alt",	JSP_INPUT_ALT,		JSPROP_ENUMERATE },
+	{ "checked",	JSP_INPUT_CHECKED,	JSPROP_ENUMERATE },
+	{ "defaultChecked",JSP_INPUT_DEFAULT_CHECKED,JSPROP_ENUMERATE },
+	{ "defaultValue",JSP_INPUT_DEFAULT_VALUE,JSPROP_ENUMERATE },
+	{ "disabled",	JSP_INPUT_DISABLED,	JSPROP_ENUMERATE },
+	{ "form",	JSP_INPUT_FORM,		JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "max_length",	JSP_INPUT_MAX_LENGTH,	JSPROP_ENUMERATE },
+	{ "name",	JSP_INPUT_NAME,		JSPROP_ENUMERATE },
+	{ "readonly",	JSP_INPUT_READONLY,	JSPROP_ENUMERATE },
+	{ "size",	JSP_INPUT_SIZE,		JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "src",	JSP_INPUT_SRC,		JSPROP_ENUMERATE },
+	{ "tabindex",	JSP_INPUT_TABINDEX,	JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "type",	JSP_INPUT_TYPE,		JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "value",	JSP_INPUT_VALUE,	JSPROP_ENUMERATE },
+	{ NULL }
+};
+
+static JSBool input_blur(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
+static JSBool input_click(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
+static JSBool input_focus(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
+static JSBool input_select(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
+
+static const JSFunctionSpec input_funcs[] = {
+	{ "blur",	input_blur,	0 },
+	{ "click",	input_click,	0 },
+	{ "focus",	input_focus,	0 },
+	{ "select",	input_select,	0 },
+	{ NULL }
+};
+
+static JSBool
+input_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
+{
+	JSObject *parent_form = JS_GetParent(ctx, obj);
+	JSObject *parent_doc = JS_GetParent(ctx, parent_form);
+	JSObject *parent_win = JS_GetParent(ctx, parent_doc);
+	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
+	struct document_view *doc_view = vs->doc_view;
+	struct document *document = doc_view->document;
+	struct form_control *fc = JS_GetPrivate(ctx, obj);
+	struct form_state *fs = find_form_state(doc_view, fc);
+	int linknum;
+	struct link *link = NULL;
+	VALUE_TO_JSVAL_START;
+
+	assert(fc);
+	assert(fc->form && fs);
+
+	linknum = get_form_control_link(document, fc);
+	/* Hiddens have no link. */
+	if (linknum >= 0) link = &document->links[linknum];
+
+	if (!JSVAL_IS_INT(id))
+		goto bye;
+
+	switch (JSVAL_TO_INT(id)) {
+	case JSP_INPUT_ACCESSKEY:
+	{
+		struct string keystr;
+
+		if (!link) {
+			P_UNDEF();
+			break;
+		}
+		init_string(&keystr);
+		make_keystroke(&keystr, link->accesskey, 0, 0);
+		P_STRING(keystr.source);
+		done_string(&keystr);
+		break;
+	}
+	case JSP_INPUT_ALT:
+		P_STRING(fc->alt);
+		break;
+	case JSP_INPUT_CHECKED:
+		P_BOOLEAN(fs->state);
+		break;
+	case JSP_INPUT_DEFAULT_CHECKED:
+		P_BOOLEAN(fc->default_state);
+		break;
+	case JSP_INPUT_DEFAULT_VALUE:
+		P_STRING(fc->default_value);
+		break;
+	case JSP_INPUT_DISABLED:
+		/* FIXME: <input readonly disabled> --pasky */
+		P_BOOLEAN(fc->mode == FORM_MODE_DISABLED);
+		break;
+	case JSP_INPUT_FORM:
+		P_OBJECT(parent_form);
+		break;
+	case JSP_INPUT_MAX_LENGTH:
+		P_INT(fc->maxlength);
+		break;
+	case JSP_INPUT_NAME:
+		P_STRING(fc->name);
+		break;
+	case JSP_INPUT_READONLY:
+		/* FIXME: <input readonly disabled> --pasky */
+		P_BOOLEAN(fc->mode == FORM_MODE_READONLY);
+		break;
+	case JSP_INPUT_SIZE:
+		P_INT(fc->size);
+		break;
+	case JSP_INPUT_SRC:
+		if (link && link->where_img)
+			P_STRING(link->where_img);
+		else
+			P_UNDEF();
+		break;
+	case JSP_INPUT_TABINDEX:
+		if (link)
+			/* FIXME: This is WRONG. --pasky */
+			P_INT(link->number);
+		else
+			P_UNDEF();
+		break;
+	case JSP_INPUT_TYPE:
+		switch (fc->type) {
+		case FC_TEXT: P_STRING("text"); break;
+		case FC_PASSWORD: P_STRING("password"); break;
+		case FC_FILE: P_STRING("file"); break;
+		case FC_CHECKBOX: P_STRING("checkbox"); break;
+		case FC_RADIO: P_STRING("radio"); break;
+		case FC_SUBMIT: P_STRING("submit"); break;
+		case FC_IMAGE: P_STRING("image"); break;
+		case FC_RESET: P_STRING("reset"); break;
+		case FC_BUTTON: P_STRING("button"); break;
+		case FC_HIDDEN: P_STRING("hidden"); break;
+		default: INTERNAL("input_get_property() upon a non-input item."); break;
+		}
+		break;
+	case JSP_INPUT_VALUE:
+		P_STRING(fs->value);
+		break;
+
+	default:
+		INTERNAL("Invalid ID %d in input_get_property().", JSVAL_TO_INT(id));
+		goto bye;
+	}
+
+	VALUE_TO_JSVAL_END(vp);
+}
+
+static JSBool
+input_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
+{
+	JSObject *parent_form = JS_GetParent(ctx, obj);
+	JSObject *parent_doc = JS_GetParent(ctx, parent_form);
+	JSObject *parent_win = JS_GetParent(ctx, parent_doc);
+	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
+	struct document_view *doc_view = vs->doc_view;
+	struct document *document = doc_view->document;
+	struct form_control *fc = JS_GetPrivate(ctx, obj);
+	struct form_state *fs = find_form_state(doc_view, fc);
+	int linknum;
+	struct link *link = NULL;
+	JSVAL_TO_VALUE_START;
+
+	assert(fc);
+	assert(fc->form && fs);
+
+	linknum = get_form_control_link(document, fc);
+	/* Hiddens have no link. */
+	if (linknum >= 0) link = &document->links[linknum];
+
+	if (!JSVAL_IS_INT(id))
+		goto bye;
+
+	switch (JSVAL_TO_INT(id)) {
+	case JSP_INPUT_ACCESSKEY:
+		JSVAL_REQUIRE(vp, STRING);
+		if (link) link->accesskey = read_key(v.string);
+		break;
+	case JSP_INPUT_ALT:
+		JSVAL_REQUIRE(vp, STRING);
+		mem_free_set(fc->alt, stracpy(v.string));
+		break;
+	case JSP_INPUT_CHECKED:
+		JSVAL_REQUIRE(vp, BOOLEAN);
+		fs->state = v.boolean;
+		break;
+	case JSP_INPUT_DISABLED:
+		/* FIXME: <input readonly disabled> --pasky */
+		JSVAL_REQUIRE(vp, BOOLEAN);
+		fc->mode = (v.boolean ? FORM_MODE_DISABLED
+		                      : fc->mode == FORM_MODE_READONLY ? FORM_MODE_READONLY
+		                                                       : FORM_MODE_NORMAL);
+		break;
+	case JSP_INPUT_MAX_LENGTH:
+		JSVAL_REQUIRE(vp, STRING);
+		fc->maxlength = atol(v.string);
+		break;
+	case JSP_INPUT_NAME:
+		JSVAL_REQUIRE(vp, STRING);
+		mem_free_set(fc->name, stracpy(v.string));
+		break;
+	case JSP_INPUT_READONLY:
+		/* FIXME: <input readonly disabled> --pasky */
+		JSVAL_REQUIRE(vp, BOOLEAN);
+		fc->mode = (v.boolean ? FORM_MODE_READONLY
+		                      : fc->mode == FORM_MODE_DISABLED ? FORM_MODE_DISABLED
+		                                                       : FORM_MODE_NORMAL);
+		break;
+	case JSP_INPUT_SRC:
+		if (link) {
+			JSVAL_REQUIRE(vp, STRING);
+			mem_free_set(link->where_img, stracpy(v.string));
+		}
+		break;
+	case JSP_INPUT_VALUE:
+		JSVAL_REQUIRE(vp, BOOLEAN);
+		mem_free_set(fs->value, stracpy(v.string));
+		break;
+
+	default:
+		INTERNAL("Invalid ID %d in input_set_property().", JSVAL_TO_INT(id));
+		goto bye;
+	}
+
+	JSVAL_TO_VALUE_END;
+}
+
+static JSBool
+input_blur(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
+{
+	/* We are a text-mode browser and there *always* has to be something
+	 * selected.  So we do nothing for now. (That was easy.) */
+	return JS_TRUE;
+}
+
+static JSBool
+input_click(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
+{
+	JSObject *parent_form = JS_GetParent(ctx, obj);
+	JSObject *parent_doc = JS_GetParent(ctx, parent_form);
+	JSObject *parent_win = JS_GetParent(ctx, parent_doc);
+	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
+	struct document_view *doc_view = vs->doc_view;
+	struct document *document = doc_view->document;
+	struct session *ses = doc_view->session;
+	struct form_control *fc = JS_GetPrivate(ctx, obj);
+	int linknum;
+	VALUE_TO_JSVAL_START;
+
+	P_BOOLEAN(0);
+
+	assert(fc);
+
+	linknum = get_form_control_link(document, fc);
+	/* Hiddens have no link. */
+	if (linknum < 0)
+		goto bye;
+
+	/* Restore old current_link afterwards? */
+	jump_to_link_number(ses, doc_view, linknum);
+	if (enter(ses, doc_view, 0) == FRAME_EVENT_REFRESH)
+		refresh_view(ses, doc_view, 0);
+	else
+		print_screen_status(ses);
+
+	VALUE_TO_JSVAL_END(rval);
+}
+
+static JSBool
+input_focus(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
+{
+	JSObject *parent_form = JS_GetParent(ctx, obj);
+	JSObject *parent_doc = JS_GetParent(ctx, parent_form);
+	JSObject *parent_win = JS_GetParent(ctx, parent_doc);
+	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
+	struct document_view *doc_view = vs->doc_view;
+	struct document *document = doc_view->document;
+	struct session *ses = doc_view->session;
+	struct form_control *fc = JS_GetPrivate(ctx, obj);
+	int linknum;
+	VALUE_TO_JSVAL_START;
+
+	P_BOOLEAN(0);
+
+	assert(fc);
+
+	linknum = get_form_control_link(document, fc);
+	/* Hiddens have no link. */
+	if (linknum < 0)
+		goto bye;
+
+	jump_to_link_number(ses, doc_view, linknum);
+
+	VALUE_TO_JSVAL_END(rval);
+}
+
+static JSBool
+input_select(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
+{
+	/* We support no text selecting yet.  So we do nothing for now.
+	 * (That was easy, too.) */
+	return JS_TRUE;
+}
+
+static JSObject *
+get_input_object(JSContext *ctx, JSObject *jsform, struct form_control *fc)
+{
+	if (!fc->ecmascript_obj) {
+		/* jsform ('form') is input's parent */
+		/* FIXME: That is NOT correct since the real containing element
+		 * should be its parent, but gimme DOM first. --pasky */
+		JSObject *jsinput = JS_NewObject(ctx, (JSClass *) &input_class, NULL, jsinput);
+
+		JS_DefineFunctions(ctx, jsinput, (JSFunctionSpec *)&input_funcs);
+		JS_SetPrivate(ctx, jsinput, fc);
+		fc->ecmascript_obj = jsinput;
+	}
+	return fc->ecmascript_obj;
+}
+
+
+
 static JSBool form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
 static JSBool form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
 
@@ -558,7 +919,47 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 	assert(form);
 
-	if (!JSVAL_IS_INT(id))
+	if (JSVAL_IS_STRING(id)) {
+		struct form_control *fc;
+		JSVAL_TO_VALUE_START;
+
+		JSVAL_REQUIRE(&id, STRING);
+		foreach (fc, form->items) {
+			JSObject *fcobj = NULL;
+
+			if (!fc->name || strcasecmp(v.string, fc->name))
+				continue;
+
+			switch (fc->type) {
+				case FC_TEXT:
+				case FC_PASSWORD:
+				case FC_FILE:
+				case FC_CHECKBOX:
+				case FC_RADIO:
+				case FC_SUBMIT:
+				case FC_IMAGE:
+				case FC_RESET:
+				case FC_BUTTON:
+				case FC_HIDDEN:
+					fcobj = get_input_object(ctx, obj, fc);
+					break;
+
+				case FC_TEXTAREA:
+				case FC_SELECT:
+					/* TODO */
+					P_UNDEF();
+					goto bye;
+
+				default:
+					INTERNAL("Weird fc->type %d", fc->type);
+					goto bye;
+			}
+
+			P_OBJECT(fcobj);
+			goto convert;
+		}
+		goto bye;
+	} else if (!JSVAL_IS_INT(id))
 		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
@@ -571,13 +972,13 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		case FORM_METHOD_GET:
 		case FORM_METHOD_POST:
 			P_STRING("application/x-www-form-urlencoded");
-			goto end;
+			break;
 		case FORM_METHOD_POST_MP:
 			P_STRING("multipart/form-data");
-			goto end;
+			break;
 		case FORM_METHOD_POST_TEXT_PLAIN:
 			P_STRING("text/plain");
-			goto end;
+			break;
 		}
 		break;
 
@@ -585,13 +986,13 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		switch (form->method) {
 		case FORM_METHOD_GET:
 			P_STRING("GET");
-			goto end;
+			break;
 
 		case FORM_METHOD_POST:
 		case FORM_METHOD_POST_MP:
 		case FORM_METHOD_POST_TEXT_PLAIN:
 			P_STRING("POST");
-			goto end;
+			break;
 		}
 		break;
 
@@ -608,7 +1009,7 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		goto bye;
 	}
 
-end:
+convert:
 	VALUE_TO_JSVAL_END(vp);
 }
 
@@ -707,6 +1108,22 @@ form_submit(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	VALUE_TO_JSVAL_END(rval);
 }
 
+static JSObject *
+get_form_object(JSContext *ctx, JSObject *jsdoc, struct form *form)
+{
+	if (!form->ecmascript_obj) {
+		/* jsdoc ('document') is form's parent */
+		/* FIXME: That is NOT correct since the real containing element
+		 * should be its parent, but gimme DOM first. --pasky */
+		JSObject *jsform = JS_NewObject(ctx, (JSClass *) &form_class, NULL, jsdoc);
+
+		JS_DefineFunctions(ctx, jsform, (JSFunctionSpec *)&form_funcs);
+		JS_SetPrivate(ctx, jsform, form);
+		form->ecmascript_obj = jsform;
+	}
+	return form->ecmascript_obj;
+}
+
 
 static JSBool forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
 
@@ -732,20 +1149,6 @@ static const JSPropertySpec forms_props[] = {
 	{ "length",	JSP_FORMS_LENGTH,	JSPROP_ENUMERATE | JSPROP_READONLY},
 	{ NULL }
 };
-
-static JSObject *
-get_form_object(JSContext *ctx, JSObject *jsdoc, struct form *form)
-{
-	if (!form->ecmascript_obj) {
-		/* jsdoc ('document') is form's parent */
-		JSObject *jsform = JS_NewObject(ctx, (JSClass *) &form_class, NULL, jsdoc);
-
-		JS_DefineFunctions(ctx, jsform, (JSFunctionSpec *)&form_funcs);
-		JS_SetPrivate(ctx, jsform, form);
-		form->ecmascript_obj = jsform;
-	}
-	return form->ecmascript_obj;
-}
 
 static JSBool
 forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)

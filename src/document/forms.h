@@ -1,4 +1,4 @@
-/* $Id: forms.h,v 1.3 2004/12/18 15:13:02 pasky Exp $ */
+/* $Id: forms.h,v 1.4 2004/12/18 20:31:58 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_FORMS_H
 #define EL__DOCUMENT_FORMS_H
@@ -89,12 +89,22 @@ struct form_control {
 	unsigned char **values;
 	unsigned char **labels;
 	struct menu_item *menu;
+
+#ifdef CONFIG_ECMASCRIPT
+	/* This holds the ECMAScript object attached to this structure. It can
+	 * be NULL since the object is created on-demand at the first time some
+	 * ECMAScript code accesses it. It is freed automatically by the
+	 * garbage-collecting code when the ECMAScript context is over (usually
+	 * when the document is destroyed). */
+	void *ecmascript_obj;
+#endif
 };
 
 struct form *init_form(void);
 void done_form(struct form *form);
 int has_form_submit(struct form *form);
 
+int get_form_control_link(struct document *document, struct form_control *fc);
 void done_form_control(struct form_control *fc);
 
 #endif

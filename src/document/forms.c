@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: forms.c,v 1.5 2004/12/18 15:54:20 jonas Exp $ */
+/* $Id: forms.c,v 1.6 2004/12/18 20:31:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 #include "elinks.h"
 
 #include "bfu/listmenu.h"
+#include "document/document.h"
 #include "document/forms.h"
 #include "util/error.h"
 #include "util/lists.h"
@@ -64,6 +65,19 @@ has_form_submit(struct form *form)
 	return 0;
 }
 
+
+int
+get_form_control_link(struct document *document, struct form_control *fc)
+{
+	int link;
+
+	for (link = 0; link < document->nlinks; link++)
+		if (fc == get_link_form_control(&document->links[link]))
+			return link;
+
+	assertm(0, "Form control has no link.");
+	return -1;
+}
 
 void
 done_form_control(struct form_control *fc)

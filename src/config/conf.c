@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.114 2004/01/01 07:03:49 miciah Exp $ */
+/* $Id: conf.c,v 1.115 2004/01/04 15:41:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -676,7 +676,7 @@ static int
 write_config_file(unsigned char *prefix, unsigned char *name,
 		  struct option *options, struct terminal *term)
 {
-	int ret = 0;
+	int ret = -1;
 	struct secure_save_info *ssi;
 	unsigned char *config_file;
 	unsigned char *cfg_str = create_config_string(prefix, name, options);
@@ -748,16 +748,16 @@ free_cfg_str:
 	return ret;
 }
 
-static void
+static int
 write_config_to(unsigned char *file, struct option *tree,
 		struct terminal *term)
 {
-	write_config_file(elinks_home, file, tree, term);
+	return write_config_file(elinks_home, file, tree, term);
 }
 
-void
+int
 write_config(struct terminal *term)
 {
-	write_config_to(get_opt_str_tree(cmdline_options, "conffile"),
-			config_options, term);
+	return write_config_to(get_opt_str_tree(cmdline_options, "conffile"),
+			       config_options, term);
 }

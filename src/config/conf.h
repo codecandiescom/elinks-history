@@ -1,4 +1,4 @@
-/* $Id: conf.h,v 1.11 2003/07/21 05:47:43 jonas Exp $ */
+/* $Id: conf.h,v 1.12 2004/01/04 15:41:15 zas Exp $ */
 
 #ifndef EL__CONFIG_CONF_H
 #define EL__CONFIG_CONF_H
@@ -9,6 +9,6 @@
 void load_config(void);
 void parse_config_file(struct option *options, unsigned char *name,
 		       unsigned char *file, struct string *mirror);
-void write_config(struct terminal *);
+int write_config(struct terminal *);
 
 #endif

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.143 2004/01/04 15:04:40 zas Exp $ */
+/* $Id: dialogs.c,v 1.144 2004/01/04 15:41:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,8 +38,8 @@ write_config_error(struct terminal *term, struct memory_list *ml,
 		   unsigned char *config_file, unsigned char *strerr)
 {
 	msg_box(term, ml, MSGBOX_FREE_TEXT,
-		N_("Config error"), AL_CENTER,
-		msg_text(term, N_("Unable to write to config file %s: %s"),
+		N_("Write config error"), AL_CENTER,
+		msg_text(term, N_("Unable to write to config file %s.\n%s"),
 			config_file, strerr),
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
@@ -387,7 +387,16 @@ static int
 push_save_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
-	write_config(dlg_data->win->term);
+	struct terminal *term = dlg_data->win->term;
+	int ret = write_config(dlg_data->win->term);
+
+	if (!ret)
+		msg_box(term, NULL, 0,
+			N_("Save options"), AL_CENTER,
+			N_("Options were successfully saved to file."),
+			NULL, 1,
+			N_("OK"), NULL, B_ESC | B_ENTER);
+
 	return 0;
 }
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.137 2004/01/01 15:50:29 jonas Exp $ */
+/* $Id: options.c,v 1.138 2004/01/04 15:41:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #include "bfu/group.h"
 #include "bfu/inpfield.h"
 #include "bfu/menu.h"
+#include "bfu/msgbox.h"
 #include "bfu/text.h"
 #include "config/conf.h"
 #include "config/options.h"
@@ -131,8 +132,19 @@ push_ok_button(struct dialog_data *dlg_data, struct widget_data *button)
 static int
 push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
+	struct terminal *term = dlg_data->win->term;
+	int ret;
+	
 	push_ok_button(dlg_data, button);
-	write_config(dlg_data->win->term);
+	ret = write_config(term);
+	
+	if (!ret)
+		msg_box(term, NULL, 0,
+			N_("Save terminal options"), AL_CENTER,
+			N_("Terminal options were successfully saved to file."),
+			NULL, 1,
+			N_("OK"), NULL, B_ESC | B_ENTER);
+
 	return 0;
 }
 

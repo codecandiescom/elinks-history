@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.140 2004/08/19 07:29:02 miciah Exp $ */
+/* $Id: renderer.c,v 1.141 2004/08/19 07:30:34 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -306,7 +306,7 @@ add_document_line(struct plain_renderer *renderer,
 				continue;
 			}
 
-			expanded -= 2; /* Don't count the backspace character 
+			expanded -= 2; /* Don't count the backspace character
 				        * or the deleted character
 				        * when returning the line's width
 				        * or when expanding tabs */

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.168 2004/06/15 01:28:38 jonas Exp $ */
+/* $Id: form.c,v 1.169 2004/06/15 01:48:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1038,6 +1038,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 	struct terminal *term = ses->tab->term;
 	struct form_control *frm;
 	struct form_state *fs;
+	enum edit_action action;
 	unsigned char *text;
 	int length;
 	int x = 1;
@@ -1052,10 +1053,18 @@ field_op(struct session *ses, struct document_view *doc_view,
 	if (frm->ro == 2 || ev->ev != EV_KBD)
 		return 0;
 
+	action = kbd_action(KM_EDIT, ev, NULL);
+	if (ses->insert_mode == INSERT_MODE_OFF) {
+		if (action == ACT_EDIT_ENTER)
+			ses->insert_mode = INSERT_MODE_ON;
+
+		return ses->insert_mode != INSERT_MODE_OFF;
+	}
+
 	fs = find_form_state(doc_view, frm);
 	if (!fs || !fs->value) return 0;
 
-	switch (kbd_action(KM_EDIT, ev, NULL)) {
+	switch (action) {
 		case ACT_EDIT_LEFT:
 			fs->state = int_max(fs->state - 1, 0);
 			break;
@@ -1202,6 +1211,11 @@ field_op(struct session *ses, struct document_view *doc_view,
 			memmove(fs->value + fs->state, text, strlen(text) + 1);
 			break;
 
+		case ACT_EDIT_CANCEL:
+			if (ses->insert_mode == INSERT_MODE_ON)
+				ses->insert_mode = INSERT_MODE_OFF;
+			break;
+
 		case ACT_EDIT_REDRAW:
 			redraw_terminal_cls(term);
 			x = 0;
@@ -1313,6 +1327,24 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 	case FC_TEXT:
 	case FC_PASSWORD:
 	case FC_FILE:
+	case FC_TEXTAREA:
+		/* Should we add info about entering insert mode or add info
+		 * about submitting the form? */
+		if (ses->insert_mode == INSERT_MODE_OFF) {
+			key = get_keystroke(ACT_EDIT_ENTER, KM_EDIT);
+
+			if (!key) break;
+
+			add_to_string(&str, " (");
+			add_format_to_string(&str, _("press %s to enter insert mode", term), key);
+			add_char_to_string(&str, ')');
+			mem_free(key);
+			break;
+		}
+
+		if (fc->type == FC_TEXTAREA)
+			break;
+
 		if (!fc->action || !has_form_submit(doc_view->document, fc))
 			break;
 

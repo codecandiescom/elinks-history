@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.446 2004/05/31 03:27:06 jonas Exp $ */
+/* $Id: options.c,v 1.447 2004/06/15 01:48:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -808,6 +808,8 @@ change_hook_html(struct session *ses, struct option *current, struct option *cha
 	draw_formatted(ses, 1);
 	load_frames(ses, ses->doc_view);
 	process_file_requests(ses);
+	/* Solely for the document.browse.forms.insert_mode option */
+	update_status();
 	print_screen_status(ses);
 	return 0;
 }

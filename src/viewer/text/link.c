@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.224 2004/06/15 00:12:52 jonas Exp $ */
+/* $Id: link.c,v 1.225 2004/06/15 01:48:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,7 +88,7 @@ get_link_cursor_offset(struct document_view *doc_view, struct link *link)
 }
 
 static inline struct screen_char *
-init_link_drawing(struct document_view *doc_view, struct link *link)
+init_link_drawing(struct document_view *doc_view, struct link *link, int invert)
 {
 	struct document_options *doc_opts;
 	struct screen_char *template;
@@ -129,7 +129,7 @@ init_link_drawing(struct document_view *doc_view, struct link *link)
 		colors.foreground = doc_opts->active_link_fg;
 		colors.background = doc_opts->active_link_bg;
 
-	} else if (doc_opts->invert_active_link && !link_is_textinput(link)) {
+	} else if (doc_opts->invert_active_link && invert) {
 		colors.foreground = link->color.background;
 		colors.background = link->color.foreground;
 
@@ -162,7 +162,8 @@ draw_current_link(struct session *ses, struct document_view *doc_view)
 	link = get_current_link(doc_view);
 	if (!link) return;
 
-	template = init_link_drawing(doc_view, link);
+	i = !link_is_textinput(link) || ses->insert_mode == INSERT_MODE_OFF;
+	template = init_link_drawing(doc_view, link, i);
 	if (!template) return;
 
 	xpos = doc_view->box.x - doc_view->vs->x;

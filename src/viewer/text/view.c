@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.464 2004/06/15 00:12:52 jonas Exp $ */
+/* $Id: view.c,v 1.465 2004/06/15 01:48:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -908,6 +908,10 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 	} else {
 		status = FRAME_EVENT_IGNORED;
 	}
+
+	if (ses->insert_mode == INSERT_MODE_ON
+	    && link != get_current_link(doc_view))
+		ses->insert_mode = INSERT_MODE_OFF;
 
 	ses->kbdprefix.rep = 0;
 	return status;

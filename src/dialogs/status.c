@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.70 2004/06/13 00:24:02 jonas Exp $ */
+/* $Id: status.c,v 1.71 2004/06/15 01:48:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,6 +143,7 @@ update_status(void)
 	int show_leds = get_opt_int("ui.leds.enable");
 #endif
 	int set_window_title = get_opt_bool("ui.window_title");
+	int insert_mode = get_opt_bool("document.browse.forms.insert_mode");
 	struct session *ses;
 	int tabs = 1;
 	struct terminal *term = NULL;
@@ -184,6 +185,12 @@ update_status(void)
 #endif
 
 		status->set_window_title = set_window_title;
+
+		/* This more belongs to the current browsing state but ... */
+		if (!insert_mode)
+			ses->insert_mode = INSERT_MODE_LESS;
+		else if (ses->insert_mode == INSERT_MODE_LESS)
+			ses->insert_mode = INSERT_MODE_OFF;
 
 		if (!dirty) continue;
 
@@ -484,6 +491,14 @@ display_leds(struct session *ses, struct session_status *status)
 			/* FIXME: We should do this thing better. */
 			status->ssl_led->value = '?';
 		}
+	}
+
+	if (ses->insert_mode == INSERT_MODE_LESS) {
+		status->insert_mode_led->value = 'I';
+	} else {
+		unsigned char value = ses->insert_mode == INSERT_MODE_ON
+				    ? 'i' : '-';
+		status->insert_mode_led->value = value;
 	}
 
 	draw_leds(ses);

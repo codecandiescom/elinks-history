@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.152 2004/06/13 17:42:00 jonas Exp $ */
+/* $Id: session.h,v 1.153 2004/06/15 01:48:09 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -83,6 +83,7 @@ struct session_status {
 	unsigned int show_leds:1;
 	struct led_panel leds;
 	struct led *ssl_led;
+	struct led *insert_mode_led;
 #endif
 	/* Has the tab been visited yet. */
 	unsigned int visited:1;
@@ -137,6 +138,17 @@ struct session {
 	struct kbdprefix kbdprefix;
 	int exit_query;
 	int display_timer;
+
+	/* The text input form insert mode. It is a tristate controlled by the
+	 * boolean document.browse.forms.insert_mode option. When disabled we
+	 * use mode less insertion and we always insert stuff into the text
+	 * input field. When enabled it is possible to switch insertion on and
+	 * off using ACT_EDIT_ENTER and *_CANCEL. */
+	enum {
+		INSERT_MODE_LESS,
+		INSERT_MODE_ON,
+		INSERT_MODE_OFF,
+	} insert_mode;
 
 	unsigned char *search_word;
 	unsigned char *last_search_word;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.520 2004/06/14 22:03:42 jonas Exp $ */
+/* $Id: session.c,v 1.521 2004/06/15 01:48:09 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -755,6 +755,7 @@ init_session(struct session *base_session, struct terminal *term,
 #ifdef CONFIG_LEDS
 	init_led_panel(&ses->status.leds);
 	ses->status.ssl_led = register_led(ses, 0);
+	ses->status.insert_mode_led = register_led(ses, 1);
 #endif
 
 	/* Only do the setup for the first tab */

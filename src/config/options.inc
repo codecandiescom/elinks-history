@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.116 2004/06/14 13:09:17 miciah Exp $ */
+/* $Id: options.inc,v 1.117 2004/06/15 01:48:09 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -146,6 +146,16 @@ struct option_info config_options_info[] = {
 	INIT_OPT_INT("document.browse.forms", N_("Default form input size"),
 		"input_size", 0, 3, 300, HTML_DEFAULT_INPUT_SIZE,
 		N_("Default form input size if none is specified.")),
+
+	INIT_OPT_BOOL("document.browse.forms", N_("Insert mode"),
+		"insert_mode", 0, 0,
+		N_("Insert mode control how to pressed keys will be handled when\n"
+		"the current link is a text input form field. When enabled it is\n"
+		"necessary to first 'enter' the form field to edit it. This will\n"
+		"make it easier to scroll pages without text input form field\n"
+		"getting in the way and capturing the pressing of the scroll key.\n"
+		"When disabled all keys pressed will be inserted into the current\n"
+		"chosen form text field.")),
 
 
 	INIT_OPT_TREE("document.browse", N_("Images"),

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.193 2003/11/28 01:51:27 pasky Exp $ */
+/* $Id: download.c,v 1.194 2003/11/28 02:24:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,7 +231,10 @@ download_data_store(struct download *download, struct file_download *file_downlo
 {
 	struct terminal *term = get_download_ses(file_download)->tab->term;
 
-	if (download->state >= 0) return;
+	if (download->state >= 0) {
+		file_download->dirty = 1;
+		return;
+	}
 
 	if (download->state != S_OK) {
 		unsigned char *errmsg = get_err_msg(download->state, term);
@@ -331,6 +334,8 @@ download_data(struct download *download, struct file_download *file_download)
 
 		file_download->url = u;
 		file_download->download.state = S_WAIT_REDIR;
+
+		file_download->dirty = 1;
 
 		load_url(file_download->url, get_cache_uri(ce), &file_download->download,
 			 PRI_DOWNLOAD, CACHE_MODE_NORMAL,

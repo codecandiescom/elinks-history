@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.30 2003/11/27 21:51:57 jonas Exp $ */
+/* $Id: dialog.h,v 1.31 2003/11/28 02:24:25 jonas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -29,12 +29,14 @@ struct dialog_layout {
 };
 
 enum dlg_refresh_code {
-	/* The dialog should be refreshed again */
+	/* The dialog should be redrawn and refreshed again */
 	REFRESH_DIALOG,
 	/* The dialog should be canceled */
 	REFRESH_CANCEL,
-	/* The dialog should not be refreshed or canceled */
+	/* The dialog should not be redrawn but refreshed again */
 	REFRESH_NONE,
+	/* The dialog should not be redrawn or refreshed again */
+	REFRESH_STOP,
 };
 
 typedef enum dlg_refresh_code (*dialog_refresh_handler)(struct dialog_data *, void *);

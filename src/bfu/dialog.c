@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.100 2003/11/28 01:40:50 pasky Exp $ */
+/* $Id: dialog.c,v 1.101 2003/11/28 02:24:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -514,20 +514,19 @@ do_refresh_dialog(struct dialog_data *dlg_data)
 
 	refresh_code = refresh->handler(dlg_data, refresh->data);
 
-	if (refresh_code == REFRESH_CANCEL) {
+	if (refresh_code == REFRESH_CANCEL
+	    || refresh_code == REFRESH_STOP) {
 		refresh->timer = -1;
-		cancel_dialog(dlg_data, NULL);
+		if (refresh_code == REFRESH_CANCEL)
+			cancel_dialog(dlg_data, NULL);
 		return;
 	}
 
 	/* We want dialog_has_refresh() to be true while drawing
 	 * so we can not set the timer to -1. */
-	dlg_data->dlg->layouter(dlg_data);
-	redraw_dialog(dlg_data);
-
-	if (refresh_code == REFRESH_NONE) {
-		refresh->timer = -1;
-		return;
+	if (refresh_code == REFRESH_DIALOG) {
+		dlg_data->dlg->layouter(dlg_data);
+		redraw_dialog(dlg_data);
 	}
 
 	refresh->timer = install_timer(RESOURCE_INFO_REFRESH,

@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.6 2003/11/28 02:18:33 pasky Exp $ */
+/* $Id: download.c,v 1.7 2003/11/28 02:24:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -273,12 +273,15 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 
 	mem_free(url);
 	done_string(&msg);
+	file_download->dirty = 0;
 }
 
 static enum dlg_refresh_code
 download_refresh_handler(struct dialog_data *dlg_data, void *data)
 {
-	return REFRESH_DIALOG;
+	struct file_download *file_download = data;
+
+	return file_download->dirty ? REFRESH_DIALOG : REFRESH_NONE;
 }
 
 void
@@ -370,7 +373,7 @@ static enum dlg_refresh_code
 refresh_file_download(struct dialog_data *dlg_data, void *data)
 {
 	/* Always refresh (until we keep finished downloads) */
-	return are_there_downloads() ? REFRESH_DIALOG : REFRESH_NONE;
+	return are_there_downloads() ? REFRESH_DIALOG : REFRESH_STOP;
 }
 
 static void

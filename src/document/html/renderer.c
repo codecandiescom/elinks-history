@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.248 2003/09/09 19:07:01 jonas Exp $ */
+/* $Id: renderer.c,v 1.249 2003/09/09 19:45:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -319,7 +319,7 @@ xset_vchars(struct part *part, int x, int y, int yl,
 
 static inline void
 set_hline(struct part *part, int x, int y, unsigned char *chars,
-	  int charslen, unsigned char color, enum screen_char_attr attr)
+	  int charslen, struct screen_char *schar)
 {
 	assert(part);
 	if_assert_failed return;
@@ -334,9 +334,8 @@ set_hline(struct part *part, int x, int y, unsigned char *chars,
 
 		for (; charslen > 0; charslen--, x++, chars++) {
 			part->spaces[x] = (*chars == ' ');
-			POS(x, y).color = color;
-			POS(x, y).attr = attr;
-			POS(x, y).data = *chars;
+			schar->data = *chars;
+			copy_screen_chars(&POS(x, y), schar, 1);
 		}
 	} else {
 		for (; charslen > 0; charslen--, x++, chars++) {
@@ -743,80 +742,73 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 	}
 }
 
-static inline void
-put_chars_format_change(struct part *part, unsigned char *color,
-			enum screen_char_attr *attr)
+/* Returns bolean indicating wether a format change was made. */
+static inline struct screen_char *
+get_format_screen_char(struct part *part)
 {
 	static struct text_attrib_beginning ta_cache = { -1, 0x0, 0x0 };
 	static struct screen_char schar_cache;
-	struct color_pair colors;
 
-	if (!memcmp(&ta_cache, &format, sizeof(struct text_attrib_beginning))) {
-		*color = schar_cache.color;
-		*attr = schar_cache.attr;
-		return;
-	}
+	if (memcmp(&ta_cache, &format, sizeof(struct text_attrib_beginning))) {
+		struct color_pair colors = INIT_COLOR_PAIR(format.bg, format.fg);
 
-	colors.background = format.bg;
-	colors.foreground = format.fg;
-
-	schar_cache.attr = 0;
-	if (format.attr) {
-		if (format.attr & AT_UNDERLINE) {
-			schar_cache.attr |= SCREEN_ATTR_UNDERLINE;
-		}
-
-		if (format.attr & AT_BOLD) {
-			schar_cache.attr |= SCREEN_ATTR_BOLD;
-		}
-
-		if (format.attr & AT_ITALIC) {
-			schar_cache.attr |= SCREEN_ATTR_ITALIC;
-		}
-
-		if (format.attr & AT_GRAPHICS) {
-			schar_cache.attr |= SCREEN_ATTR_FRAME;
-		}
-	}
-
-	memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
-	set_term_color(&schar_cache, &colors, COLOR_DEFAULT);
-
-	*color = schar_cache.color;
-	*attr = schar_cache.attr;
-
-	/* FIXME:
-	 * This doesn't work correctly with <a href="foo">123<sup>456</sup>789</a> */
-	if (d_opt->display_subs) {
-		static int sub = 0;
-
-		if (format.attr & AT_SUBSCRIPT) {
-			if (!sub) {
-				sub = 1;
-				put_chars(part, "[", 1);
+		schar_cache.attr = 0;
+		if (format.attr) {
+			if (format.attr & AT_UNDERLINE) {
+				schar_cache.attr |= SCREEN_ATTR_UNDERLINE;
 			}
-		} else {
-			if (sub) {
-				put_chars(part, "]", 1);
-				sub = 0;
+
+			if (format.attr & AT_BOLD) {
+				schar_cache.attr |= SCREEN_ATTR_BOLD;
+			}
+
+			if (format.attr & AT_ITALIC) {
+				schar_cache.attr |= SCREEN_ATTR_ITALIC;
+			}
+
+			if (format.attr & AT_GRAPHICS) {
+				schar_cache.attr |= SCREEN_ATTR_FRAME;
 			}
 		}
-	}
 
-	if (d_opt->display_sups) {
-		static int super = 0;
+		memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
+		set_term_color(&schar_cache, &colors, COLOR_DEFAULT);
 
-		if (format.attr & AT_SUPERSCRIPT) {
-			if (!super) {
-				super = 1;
-				put_chars(part, "^", 1);
+		/* FIXME:
+		 * This doesn't work correctly with <a href="foo">123<sup>456</sup>789</a> */
+		if (d_opt->display_subs) {
+			static int sub = 0;
+
+			if (format.attr & AT_SUBSCRIPT) {
+				if (!sub) {
+					sub = 1;
+					put_chars(part, "[", 1);
+				}
+			} else {
+				if (sub) {
+					put_chars(part, "]", 1);
+					sub = 0;
+				}
 			}
-		} else {
-			if (super) {
-				super = 0;
+		}
+
+		if (d_opt->display_sups) {
+			static int super = 0;
+
+			if (format.attr & AT_SUPERSCRIPT) {
+				if (!super) {
+					super = 1;
+					put_chars(part, "^", 1);
+				}
+			} else {
+				if (super) {
+					super = 0;
+				}
 			}
 		}
 	}
+
+	return &schar_cache;
 }
 
 static inline void
@@ -956,8 +948,7 @@ process_link(struct part *part, unsigned char *chars, int charslen)
 void
 put_chars(struct part *part, unsigned char *chars, int charslen)
 {
-	unsigned char color;
-	enum screen_char_attr attr = 0;
+	struct screen_char *schar;
 
 	assert(part);
 	if_assert_failed return;
@@ -976,13 +967,14 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	if (chars[0] != ' ' || (chars[1] && chars[1] != ' ')) {
 		last_tag_for_newline = (void *)&part->document->tags;
 	}
+
 	if (part->cx == -1) part->cx = par_format.leftmargin;
 
 	if (last_link || last_image || last_form || format.link
 	    || format.image || format.form)
 		process_link(part, chars, charslen);
 
-	put_chars_format_change(part, &color, &attr);
+	schar = get_format_screen_char(part);
 
 	if (part->cx == par_format.leftmargin && *chars == ' '
 	    && par_format.align != AL_NONE) {
@@ -997,7 +989,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	if (nowrap && part->cx + charslen > overlap(par_format))
 		return;
 
-	set_hline(part, part->cx, part->cy, chars, charslen, color, attr);
+	set_hline(part, part->cx, part->cy, chars, charslen, schar);
 	part->cx += charslen;
 	nobreak = 0;
 

@@ -1,9 +1,7 @@
-/* $Id: main.h,v 1.13 2003/06/14 20:02:34 pasky Exp $ */
+/* $Id: main.h,v 1.14 2003/07/25 13:07:13 pasky Exp $ */
 
 #ifndef EL__MAIN_H
 #define EL__MAIN_H
-
-#include "terminal/terminal.h"
 
 enum retval {
 	RET_OK,

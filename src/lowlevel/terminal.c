@@ -1,5 +1,5 @@
-/* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.23 2002/08/27 03:00:08 pasky Exp $ */
+/* Terminal interface - low-level displaying implementation. */
+/* $Id: terminal.c,v 1.24 2002/09/11 15:10:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,6 @@
 
 /* TODO: We must use termcap/terminfo if available! --pasky */
 
-/* hard_write() */
 int
 hard_write(int fd, unsigned char *p, int l)
 {
@@ -53,8 +52,8 @@ hard_write(int fd, unsigned char *p, int l)
 	return t;
 }
 
-/* hard_read() */
-int hard_read(int fd, unsigned char *p, int l)
+int
+hard_read(int fd, unsigned char *p, int l)
 {
 	int r = 1;
 	int t = 0;
@@ -82,9 +81,8 @@ int hard_read(int fd, unsigned char *p, int l)
 	return t;
 }
 
-
-/* get_cwd() */
-unsigned char *get_cwd()
+unsigned char *
+get_cwd()
 {
 	int bufsize = 128;
 	unsigned char *buf;
@@ -103,8 +101,8 @@ unsigned char *get_cwd()
 	return NULL;
 }
 
-/* set_cwd() */
-void set_cwd(unsigned char *path)
+void
+set_cwd(unsigned char *path)
 {
 	if (path) while (chdir(path) && errno == EINTR);
 }
@@ -112,9 +110,8 @@ void set_cwd(unsigned char *path)
 
 struct list_head terminals = {&terminals, &terminals};
 
-
-/* alloc_term_screen() */
-void alloc_term_screen(struct terminal *term, int x, int y)
+void
+alloc_term_screen(struct terminal *term, int x, int y)
 {
 	unsigned *s;
 	unsigned *t;
@@ -140,15 +137,15 @@ void destroy_terminal(struct terminal *);
 void check_if_no_terminal();
 
 
-/* clear_terminal() */
-void clear_terminal(struct terminal *term)
+void
+clear_terminal(struct terminal *term)
 {
 	fill_area(term, 0, 0, term->x, term->y, ' ');
 	set_cursor(term, 0, 0, 0, 0);
 }
 
-/* redraw_terminal_ev() */
-void redraw_terminal_ev(struct terminal *term, int e)
+void
+redraw_terminal_ev(struct terminal *term, int e)
 {
 	struct window *win;
 	struct event ev = {0, 0, 0, 0};
@@ -165,20 +162,20 @@ void redraw_terminal_ev(struct terminal *term, int e)
 	term->redrawing = 0;
 }
 
-/* redraw_terminal() */
-void redraw_terminal(struct terminal *term)
+void
+redraw_terminal(struct terminal *term)
 {
 	redraw_terminal_ev(term, EV_REDRAW);
 }
 
-/* redraw_terminal_all() */
-void redraw_terminal_all(struct terminal *term)
+void
+redraw_terminal_all(struct terminal *term)
 {
 	redraw_terminal_ev(term, EV_RESIZE);
 }
 
-/* erase_screen() */
-void erase_screen(struct terminal *term)
+void
+erase_screen(struct terminal *term)
 {
 	if (!term->master || !is_blocked()) {
 		if (term->master) want_draw();
@@ -187,16 +184,16 @@ void erase_screen(struct terminal *term)
 	}
 }
 
-/* redraw_terminal_cls() */
-void redraw_terminal_cls(struct terminal *term)
+void
+redraw_terminal_cls(struct terminal *term)
 {
 	erase_screen(term);
 	alloc_term_screen(term, term->x, term->y);
 	redraw_terminal_all(term);
 }
 
-/* cls_redraw_all_terminals() */
-void cls_redraw_all_terminals()
+void
+cls_redraw_all_terminals()
 {
 	struct terminal *term;
 
@@ -204,8 +201,8 @@ void cls_redraw_all_terminals()
 		redraw_terminal_cls(term);
 }
 
-/* redraw_from_window() */
-void redraw_from_window(struct window *win)
+void
+redraw_from_window(struct window *win)
 {
 	struct terminal *term = win->term;
 	struct window *end = (void *)&term->windows;
@@ -222,8 +219,8 @@ void redraw_from_window(struct window *win)
 	term->redrawing = 0;
 }
 
-/* redraw_below_window() */
-void redraw_below_window(struct window *win)
+void
+redraw_below_window(struct window *win)
 {
 	int tr;
 	struct terminal *term = win->term;
@@ -241,10 +238,10 @@ void redraw_below_window(struct window *win)
 	term->redrawing = tr;
 }
 
-/* add_window_at_pos() */
-void add_window_at_pos(struct terminal *term,
-		       void (*handler)(struct window *, struct event *, int),
-		       void *data, struct window *at)
+void
+add_window_at_pos(struct terminal *term,
+		  void (*handler)(struct window *, struct event *, int),
+		  void *data, struct window *at)
 {
 	struct event ev = {EV_INIT, 0, 0, 0};
 	struct window *win;
@@ -266,17 +263,17 @@ void add_window_at_pos(struct terminal *term,
 	win->handler(win, &ev, 0);
 }
 
-/* add_window() */
-void add_window(struct terminal *term,
-		void (*handler)(struct window *, struct event *, int),
-		void *data)
+void
+add_window(struct terminal *term,
+	   void (*handler)(struct window *, struct event *, int),
+	   void *data)
 {
 	add_window_at_pos(term, handler, data,
 			  (struct window *) &term->windows);
 }
 
-/* delete_window() */
-void delete_window(struct window *win)
+void
+delete_window(struct window *win)
 {
 	struct event ev = {EV_ABORT, 0, 0, 0};
 
@@ -287,8 +284,8 @@ void delete_window(struct window *win)
 	mem_free(win);
 }
 
-/* delete_window_ev() */
-void delete_window_ev(struct window *win, struct event *ev)
+void
+delete_window_ev(struct window *win, struct event *ev)
 {
 	struct window *w = win->next;
 
@@ -297,15 +294,15 @@ void delete_window_ev(struct window *win, struct event *ev)
 	if (ev && w && w->next != w) w->handler(w, ev, 1);
 }
 
-/* set_window_ptr() */
-void set_window_ptr(struct window *win, int x, int y)
+void
+set_window_ptr(struct window *win, int x, int y)
 {
 	win->xp = x;
 	win->yp = y;
 }
 
-/* get_parent_ptr() */
-void get_parent_ptr(struct window *win, int *x, int *y)
+void
+get_parent_ptr(struct window *win, int *x, int *y)
 {
 	if ((void *)win->next != &win->term->windows) {
 		*x = win->next->xp;
@@ -316,8 +313,8 @@ void get_parent_ptr(struct window *win, int *x, int *y)
 	}
 }
 
-/* get_root_window() */
-struct window *get_root_window(struct terminal *term)
+struct window *
+get_root_window(struct terminal *term)
 {
 	if (list_empty(term->windows)) {
 		internal("terminal has no windows");
@@ -335,8 +332,8 @@ struct ewd {
 };
 
 
-/* empty_window_handler() */
-void empty_window_handler(struct window *win, struct event *ev, int fwd)
+void
+empty_window_handler(struct window *win, struct event *ev, int fwd)
 {
 	struct window *n;
 	struct ewd *ewd = win->data;
@@ -369,8 +366,8 @@ void empty_window_handler(struct window *win, struct event *ev, int fwd)
 	if (n->next != n) n->handler(n, ev, fwd);
 }
 
-/* add_empty_window() */
-void add_empty_window(struct terminal *term, void (*fn)(void *), void *data)
+void
+add_empty_window(struct terminal *term, void (*fn)(void *), void *data)
 {
 	struct ewd *ewd = mem_alloc(sizeof(struct ewd));
 
@@ -381,12 +378,9 @@ void add_empty_window(struct terminal *term, void (*fn)(void *), void *data)
 	add_window(term, empty_window_handler, ewd);
 }
 
-
-
-/* init_term() */
-struct terminal *init_term(int fdin, int fdout,
-			   void (*root_window)(struct window *, struct event *,
-					       int))
+struct terminal *
+init_term(int fdin, int fdout,
+	  void (*root_window)(struct window *, struct event *, int))
 {
 	struct window *win;
 	struct terminal *term = mem_alloc(sizeof (struct terminal));
@@ -449,7 +443,8 @@ term_send_event(struct terminal *term, struct event *ev)
 							  ev, 0);
 }
 
-static inline void term_send_ucs(struct terminal *term, struct event *ev, unicode_val u)
+static inline void
+term_send_ucs(struct terminal *term, struct event *ev, unicode_val u)
 {
 	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
 	unsigned char *recoded;
@@ -464,8 +459,8 @@ static inline void term_send_ucs(struct terminal *term, struct event *ev, unicod
 	}
 }
 
-/* in_term() */
-void in_term(struct terminal *term)
+void
+in_term(struct terminal *term)
 {
 	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
 	struct event *ev;
@@ -577,7 +572,7 @@ send_redraw:
 		{
 			extern int startup_goto_dialog_paint;
 			extern struct session *startup_goto_dialog_ses;
-			
+
 			if (startup_goto_dialog_paint) {
 				dialog_goto_url(startup_goto_dialog_ses, "");
 				startup_goto_dialog_paint = 0;
@@ -644,9 +639,8 @@ mm:
 	goto test_queue;
 }
 
-
-/* getcompcode() */
-inline int getcompcode(int c)
+inline int
+getcompcode(int c)
 {
 	return (c<<1 | (c&4)>>2) & 7;
 }
@@ -655,7 +649,7 @@ inline int getcompcode(int c)
 unsigned char frame_dumb[48] =	"   ||||++||++++++--|-+||++--|-+----++++++++     ";
 unsigned char frame_vt100[48] =	"aaaxuuukkuxkjjjkmvwtqnttmlvwtqnvvwwmmllnnjla    ";
 
-/* For UTF8 I/O */ 
+/* For UTF8 I/O */
 unsigned char frame_vt100_u[48] = {
 	177, 177, 177, 179, 180, 180, 180, 191,
 	191, 180, 179, 191, 217, 217, 217, 191,
@@ -781,9 +775,8 @@ print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 	else add_chr_to_str(a, l, '.');
 }
 
-
-/* redraw_all_terminals() */
-void redraw_all_terminals()
+void
+redraw_all_terminals()
 {
 	struct terminal *term;
 
@@ -791,9 +784,8 @@ void redraw_all_terminals()
 		redraw_screen(term);
 }
 
-
-/* redraw_screen() */
-void redraw_screen(struct terminal *term)
+void
+redraw_screen(struct terminal *term)
 {
 	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
 	int x, y, p = 0;
@@ -888,9 +880,8 @@ void redraw_screen(struct terminal *term)
 	term->dirty = 0;
 }
 
-
-/* destroy_terminal() */
-void destroy_terminal(struct terminal *term)
+void
+destroy_terminal(struct terminal *term)
 {
 	while ((term->windows.next) != &term->windows)
 		delete_window(term->windows.next);
@@ -927,9 +918,8 @@ void destroy_terminal(struct terminal *term)
 	check_if_no_terminal();
 }
 
-
-/* destroy_all_terminals() */
-void destroy_all_terminals()
+void
+destroy_all_terminals()
 {
 	struct terminal *term;
 
@@ -937,27 +927,24 @@ void destroy_all_terminals()
 		destroy_terminal(term);
 }
 
-
-/* check_if_no_terminal() */
-void check_if_no_terminal()
+void
+check_if_no_terminal()
 {
 	if (list_empty(terminals)) {
 		terminate = 1;
 	}
 }
 
-
-/* set_char() */
-void set_char(struct terminal *t, int x, int y, unsigned c)
+void
+set_char(struct terminal *t, int x, int y, unsigned c)
 {
 	t->dirty = 1;
 	if (x >= 0 && x < t->x && y >= 0 && y < t->y)
 		t->screen[x + t->x * y] = c;
 }
 
-
-/* get_char() */
-unsigned get_char(struct terminal *t, int x, int y)
+unsigned
+get_char(struct terminal *t, int x, int y)
 {
 	if (x >= t->x) x = t->x - 1;
 	if (x < 0) x = 0;
@@ -967,9 +954,8 @@ unsigned get_char(struct terminal *t, int x, int y)
 	return t->screen[x + t->x * y];
 }
 
-
-/* set_color() */
-void set_color(struct terminal *t, int x, int y, unsigned c)
+void
+set_color(struct terminal *t, int x, int y, unsigned c)
 {
 	t->dirty = 1;
 	if (x >= 0 && x < t->x && y >= 0 && y < t->y) {
@@ -979,9 +965,8 @@ void set_color(struct terminal *t, int x, int y, unsigned c)
 	}
 }
 
-
-/* set_only_char() */
-void set_only_char(struct terminal *t, int x, int y, unsigned c)
+void
+set_only_char(struct terminal *t, int x, int y, unsigned c)
 {
 	t->dirty = 1;
 	if (x >= 0 && x < t->x && y >= 0 && y < t->y) {
@@ -991,9 +976,8 @@ void set_only_char(struct terminal *t, int x, int y, unsigned c)
 	}
 }
 
-
-/* set_line() */
-void set_line(struct terminal *t, int x, int y, int l, chr *line)
+void
+set_line(struct terminal *t, int x, int y, int l, chr *line)
 {
 	int i = (x >= 0) ? 0 : -x;
 	int end = (x + l <= t->x) ? l : t->x - x;
@@ -1004,9 +988,8 @@ void set_line(struct terminal *t, int x, int y, int l, chr *line)
 		t->screen[x + i + t->x * y] = line[i];
 }
 
-
-/* set_line_color() */
-void set_line_color(struct terminal *t, int x, int y, int l, unsigned c)
+void
+set_line_color(struct terminal *t, int x, int y, int l, unsigned c)
 {
 	int i = (x >= 0) ? 0 : -x;
 	int end = (x + l <= t->x) ? l : t->x - x;
@@ -1020,9 +1003,8 @@ void set_line_color(struct terminal *t, int x, int y, int l, unsigned c)
 	}
 }
 
-
-/* fill_area() */
-void fill_area(struct terminal *t, int x, int y, int xw, int yw, unsigned c)
+void
+fill_area(struct terminal *t, int x, int y, int xw, int yw, unsigned c)
 {
 	int j = (y >= 0) ? 0 : -y;
 
@@ -1040,9 +1022,9 @@ int p1[] = { 218, 191, 192, 217, 179, 196 };
 int p2[] = { 201, 187, 200, 188, 186, 205 };
 
 
-/* draw_frame() */
-void draw_frame(struct terminal *t, int x, int y, int xw, int yw,
-		unsigned c, int w)
+void
+draw_frame(struct terminal *t, int x, int y, int xw, int yw,
+	   unsigned c, int w)
 {
 	int *p = w > 1 ? p2 : p1;
 
@@ -1057,9 +1039,8 @@ void draw_frame(struct terminal *t, int x, int y, int xw, int yw,
 	fill_area(t, x+1, y+yw-1, xw-2, 1, c+p[5]);
 }
 
-
-/* print_text() */
-void print_text(struct terminal *t, int x, int y, int l,
+void
+print_text(struct terminal *t, int x, int y, int l,
 		unsigned char *text, unsigned c)
 {
 	for (; l-- && *text; text++, x++) set_char(t, x, y, *text + c);
@@ -1068,7 +1049,8 @@ void print_text(struct terminal *t, int x, int y, int l,
 
 /* (altx,alty) is alternative location, when block_cursor terminal option is
  * set. It is usually bottom right corner of the screen. */
-void set_cursor(struct terminal *term, int x, int y, int altx, int alty)
+void
+set_cursor(struct terminal *term, int x, int y, int altx, int alty)
 {
 	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
 
@@ -1085,9 +1067,8 @@ void set_cursor(struct terminal *term, int x, int y, int altx, int alty)
 	term->cy = y;
 }
 
-
-/* exec_thread() */
-void exec_thread(unsigned char *path, int p)
+void
+exec_thread(unsigned char *path, int p)
 {
 	int plen = strlen(path + 1) + 2;
 
@@ -1099,9 +1080,8 @@ void exec_thread(unsigned char *path, int p)
 	if (path[plen]) unlink(path + plen);
 }
 
-
-/* close_handle() */
-void close_handle(void *p)
+void
+close_handle(void *p)
 {
 	int h = (int)p;
 
@@ -1109,9 +1089,8 @@ void close_handle(void *p)
 	set_handlers(h, NULL, NULL, NULL, NULL);
 }
 
-
-/* unblock_terminal() */
-void unblock_terminal(struct terminal *term)
+void
+unblock_terminal(struct terminal *term)
 {
 	close_handle((void *)term->blocked);
 	term->blocked = -1;
@@ -1123,10 +1102,9 @@ void unblock_terminal(struct terminal *term)
 		textarea_edit(1, NULL, NULL, NULL, NULL, NULL);
 }
 
-
-/* exec_on_terminal() */
-void exec_on_terminal(struct terminal *term, unsigned char *path,
-		      unsigned char *delete, int fg)
+void
+exec_on_terminal(struct terminal *term, unsigned char *path,
+		 unsigned char *delete, int fg)
 {
 	int plen;
 	int dlen = strlen(delete);
@@ -1208,10 +1186,9 @@ void exec_on_terminal(struct terminal *term, unsigned char *path,
 	}
 }
 
-
-/* do_terminal_function() */
-void do_terminal_function(struct terminal *term, unsigned char code,
-			  unsigned char *data)
+void
+do_terminal_function(struct terminal *term, unsigned char code,
+		     unsigned char *data)
 {
 	unsigned char *x_data = mem_alloc(strlen(data) + 2);
 
@@ -1222,9 +1199,8 @@ void do_terminal_function(struct terminal *term, unsigned char code,
 	mem_free(x_data);
 }
 
-
-/* set_terminal_title() */
-void set_terminal_title(struct terminal *term, unsigned char *title)
+void
+set_terminal_title(struct terminal *term, unsigned char *title)
 {
 	if (term->title && !strcmp(title, term->title)) return;
 	if (term->title) mem_free(term->title);

@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.35 2004/01/29 13:08:29 jonas Exp $ */
+/* $Id: feature.h,v 1.36 2004/01/29 13:10:37 jonas Exp $ */
 
 #ifndef EL__DOTDOT_FEATURE_H
 #define EL__DOTDOT_FEATURE_H
@@ -48,7 +48,7 @@
  *
  * Default: disabled */
 
- #define CONFIG_LEDS 
+/* #define CONFIG_LEDS */
 
 
 /*** Bookmarks
@@ -219,7 +219,7 @@
  *
  * Default: disabled */
 
- #define CONFIG_256_COLORS 
+/* #define CONFIG_256_COLORS */
 
 
 /*** Backtrace Printing
@@ -320,7 +320,7 @@
 
 #ifdef HAVE_SETENV
 /* Uncomment the following line if you want to enable this: */
- #define CONFIG_CGI 
+/* #define CONFIG_CGI */
 #endif
 
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.479 2004/07/08 15:39:47 jonas Exp $ */
+/* $Id: renderer.c,v 1.480 2004/07/13 10:31:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1574,32 +1574,34 @@ render_html_document(struct cache_entry *cached, struct document *document)
 	done_string(&title);
 
 	part = format_html_part(start, end, par_format.align,
-			      par_format.leftmargin, document->options.box.width, document,
-			      0, 0, head.source, 1);
+			        par_format.leftmargin,
+				document->options.box.width, document,
+			        0, 0, head.source, 1);
+	done_string(&head);
 	mem_free_if(part);
 
-	done_string(&head);
-
-	document->width = 0;
-
-	for (i = document->height - 1; i >= 0; i--) {
+	/* Drop empty allocated lines at end of document if any
+	 * and adjust document height. */
+	for (i = document->height - 1; i >= 0 ; i--) {
 		if (!document->data[i].length) {
 			mem_free_if(document->data[i].chars);
 			document->height--;
 		} else break;
 	}
 
+	/* Calculate document width. */
+	document->width = 0;
 	for (i = 0; i < document->height; i++)
-		document->width = int_max(document->width, document->data[i].length);
+		int_lower_bound(&document->width, document->data[i].length);
 
-	/* FIXME: This needs more tuning since if we are centering stuff it
-	 * does not work. */
 #if 1
 	document->options.needs_width = 1;
 #else
+	/* FIXME: This needs more tuning since if we are centering stuff it
+	 * does not work. */
 	document->options.needs_width =
-				(document->width + document->options.margin
-				 >= document->options.width);
+				(document->width + (document->options.margin
+				 >= document->options.width));
 #endif
 
 	document->bgcolor = par_format.bgcolor;

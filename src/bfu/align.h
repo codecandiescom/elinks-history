@@ -1,4 +1,4 @@
-/* $Id: align.h,v 1.6 2002/12/14 10:07:38 pasky Exp $ */
+/* $Id: align.h,v 1.7 2002/12/14 11:33:49 zas Exp $ */
 
 #ifndef EL__BFU_ALIGN_H
 #define EL__BFU_ALIGN_H
@@ -22,7 +22,7 @@ enum format_align {
 #include "lowlevel/terminal.h"
 #include "util/string.h"
 
-#define COL(x)	((x)*0x100)
+#define COL(x)	((x)<<8)
 
 static inline int
 get_bfu_color(struct terminal *term, unsigned char *color_class)
@@ -39,13 +39,16 @@ get_bfu_color(struct terminal *term, unsigned char *color_class)
 	opt_tree = term->spec;
 
 	colors = get_opt_bool_tree(opt_tree, "colors");
-	opt = straconcat("ui.colors.", colors ? "color" : "mono", ".", color_class, NULL);
+	opt = straconcat("ui.colors.", colors ? "color" : "mono", ".",
+			 color_class, NULL);
 	if (!opt) return 0;
 	opt_tree = get_opt_rec(&root_options, opt);
 	mem_free(opt);
 	if (!opt_tree) return 0;
 
-	if (!nofg) fg = find_nearest_color(get_opt_ptr_tree(opt_tree, "text"), 16);
+	if (!nofg)
+		fg = find_nearest_color(get_opt_ptr_tree(opt_tree, "text"), 16);
+
 	bg = find_nearest_color(get_opt_ptr_tree(opt_tree, "background"), 8);
 	/* XXX: Call fg_color() ? --pasky */
 

@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.110 2004/07/23 16:47:26 zas Exp $ */
+/* $Id: dialogs.c,v 1.111 2004/11/14 15:49:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@
 static void
 auth_ok(struct dialog *dlg)
 {
-	struct http_auth_basic *entry = dlg->udata2;
+	struct auth_entry *entry = dlg->udata2;
 
 	entry->blocked = 0;
 	entry->valid = auth_entry_has_userinfo(entry);
@@ -42,20 +42,20 @@ auth_ok(struct dialog *dlg)
 }
 
 static void
-auth_cancel(struct http_auth_basic *entry)
+auth_cancel(struct auth_entry *entry)
 {
 	entry->blocked = 0;
 	del_auth_entry(entry);
 }
 
-/* TODO: Take http_auth_basic from data. --jonas */
+/* TODO: Take auth_entry from data. --jonas */
 void
 do_auth_dialog(struct session *ses, void *data)
 {
 	struct dialog *dlg;
 	struct dialog_data *dlg_data;
 	struct terminal *term = ses->tab->term;
-	struct http_auth_basic *a = get_invalid_auth_entry();
+	struct auth_entry *a = get_invalid_auth_entry();
 	unsigned char sticker[MAX_STR_LEN], *text;
 
 	if (!a || a->blocked) return;
@@ -103,89 +103,89 @@ do_auth_dialog(struct session *ses, void *data)
 
 
 static void
-lock_http_auth_basic(struct listbox_item *item)
+lock_auth_entry(struct listbox_item *item)
 {
-	object_lock((struct http_auth_basic *) item->udata);
+	object_lock((struct auth_entry *) item->udata);
 }
 
 static void
-unlock_http_auth_basic(struct listbox_item *item)
+unlock_auth_entry(struct listbox_item *item)
 {
-	object_unlock((struct http_auth_basic *) item->udata);
+	object_unlock((struct auth_entry *) item->udata);
 }
 
 static int
-is_http_auth_basic_used(struct listbox_item *item)
+is_auth_entry_used(struct listbox_item *item)
 {
-	return is_object_used((struct http_auth_basic *) item->udata);
+	return is_object_used((struct auth_entry *) item->udata);
 }
 
 static unsigned char *
-get_http_auth_basic_text(struct listbox_item *item, struct terminal *term)
+get_auth_entry_text(struct listbox_item *item, struct terminal *term)
 {
-	struct http_auth_basic *http_auth_basic = item->udata;
+	struct auth_entry *auth_entry = item->udata;
 
-	return get_uri_string(http_auth_basic->uri, URI_HTTP_AUTH);
+	return get_uri_string(auth_entry->uri, URI_HTTP_AUTH);
 }
 
 static unsigned char *
-get_http_auth_basic_info(struct listbox_item *item, struct terminal *term)
+get_auth_entry_info(struct listbox_item *item, struct terminal *term)
 {
-	struct http_auth_basic *http_auth_basic = item->udata;
+	struct auth_entry *auth_entry = item->udata;
 	struct string info;
 
 	if (item->type == BI_FOLDER) return NULL;
 	if (!init_string(&info)) return NULL;
 
 	add_format_to_string(&info, "%s: ", _("URL", term));
-	add_uri_to_string(&info, http_auth_basic->uri, URI_HTTP_AUTH);
+	add_uri_to_string(&info, auth_entry->uri, URI_HTTP_AUTH);
 	add_format_to_string(&info, "\n%s: ", _("Realm", term));
 	{
-		int len = strlen(http_auth_basic->realm);
+		int len = strlen(auth_entry->realm);
 		int maxlen = 512; /* Max. number of chars displayed for realm. */
 
 		if (len < maxlen)
-			add_bytes_to_string(&info, http_auth_basic->realm, len);
+			add_bytes_to_string(&info, auth_entry->realm, len);
 		else {
-			add_bytes_to_string(&info, http_auth_basic->realm, maxlen);
+			add_bytes_to_string(&info, auth_entry->realm, maxlen);
 			add_to_string(&info, "...");
 		}
 	}
 
 	add_format_to_string(&info, "\n%s: %s\n", _("State", term),
-		http_auth_basic->valid ? _("valid", term) : _("invalid", term));
+		auth_entry->valid ? _("valid", term) : _("invalid", term));
 
 	return info.source;
 }
 
 static struct uri *
-get_http_auth_basic_uri(struct listbox_item *item)
+get_auth_entry_uri(struct listbox_item *item)
 {
-	struct http_auth_basic *http_auth_basic = item->udata;
+	struct auth_entry *auth_entry = item->udata;
 
-	return get_composed_uri(http_auth_basic->uri, URI_HTTP_AUTH);
+	return get_composed_uri(auth_entry->uri, URI_HTTP_AUTH);
 }
 
 static struct listbox_item *
-get_http_auth_basic_root(struct listbox_item *box_item)
+get_auth_entry_root(struct listbox_item *box_item)
 {
 	return NULL;
 }
 
 static int
-can_delete_http_auth_basic(struct listbox_item *item)
+can_delete_auth_entry(struct listbox_item *item)
 {
 	return 1;
 }
 
 static void
-delete_http_auth_basic(struct listbox_item *item, int last)
+delete_auth_entry(struct listbox_item *item, int last)
 {
-	struct http_auth_basic *http_auth_basic = item->udata;
+	struct auth_entry *auth_entry = item->udata;
 
-	assert(!is_object_used(http_auth_basic));
+	assert(!is_object_used(auth_entry));
 
-	del_auth_entry(http_auth_basic);
+	del_auth_entry(auth_entry);
 }
 
 static struct listbox_ops_messages http_auth_messages = {
@@ -216,16 +216,16 @@ static struct listbox_ops_messages http_auth_messages = {
 };
 
 static struct listbox_ops auth_listbox_ops = {
-	lock_http_auth_basic,
-	unlock_http_auth_basic,
-	is_http_auth_basic_used,
-	get_http_auth_basic_text,
-	get_http_auth_basic_info,
-	get_http_auth_basic_uri,
-	get_http_auth_basic_root,
+	lock_auth_entry,
+	unlock_auth_entry,
+	is_auth_entry_used,
+	get_auth_entry_text,
+	get_auth_entry_info,
+	get_auth_entry_uri,
+	get_auth_entry_root,
 	NULL,
-	can_delete_http_auth_basic,
-	delete_http_auth_basic,
+	can_delete_auth_entry,
+	delete_auth_entry,
 	NULL,
 	&http_auth_messages,
 };

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.92 2004/11/14 15:39:01 jonas Exp $ */
+/* $Id: auth.c,v 1.93 2004/11/14 15:49:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,22 +26,22 @@
 #define DEBUG_HTTP_AUTH
 #endif
 
-static INIT_LIST_HEAD(http_auth_basic_list);
+static INIT_LIST_HEAD(auth_entry_list);
 
 
 /* Find if url/realm is in auth list. If a matching url is found, but realm is
  * NULL, it returns the first record found. If realm isn't NULL, it returns
  * the first record that matches exactly (url and realm) if any. */
-struct http_auth_basic *
+struct auth_entry *
 find_auth_entry(struct uri *uri, unsigned char *realm)
 {
-	struct http_auth_basic *match = NULL, *entry;
+	struct auth_entry *match = NULL, *entry;
 
 #ifdef DEBUG_HTTP_AUTH
 	DBG("find_auth_entry: url=%s realm=%s", url, realm);
 #endif
 
-	foreach (entry, http_auth_basic_list) {
+	foreach (entry, auth_entry_list) {
 		if (!compare_uri(entry->uri, uri, URI_HTTP_AUTH))
 			continue;
 
@@ -68,7 +68,7 @@ find_auth_entry(struct uri *uri, unsigned char *realm)
 }
 
 static void
-set_auth_user(struct http_auth_basic *entry, struct uri *uri)
+set_auth_user(struct auth_entry *entry, struct uri *uri)
 {
 	int userlen = int_min(uri->userlen, HTTP_AUTH_USER_MAXLEN - 1);
 
@@ -79,7 +79,7 @@ set_auth_user(struct http_auth_basic *entry, struct uri *uri)
 }
 
 static void
-set_auth_password(struct http_auth_basic *entry, struct uri *uri)
+set_auth_password(struct auth_entry *entry, struct uri *uri)
 {
 	int passwordlen = int_min(uri->passwordlen, HTTP_AUTH_PASSWORD_MAXLEN - 1);
 
@@ -89,16 +89,16 @@ set_auth_password(struct http_auth_basic *entry, struct uri *uri)
 	entry->password[passwordlen] = '\0';
 }
 
-static struct http_auth_basic *
+static struct auth_entry *
 init_auth_entry(struct uri *uri, unsigned char *realm)
 {
-	struct http_auth_basic *entry;
+	struct auth_entry *entry;
 
 #ifdef DEBUG_HTTP_AUTH
 	DBG("init_auth_entry: auth_url=%s realm=%s uri=%p", auth_url, realm, uri);
 #endif
 
-	entry = mem_calloc(1, sizeof(struct http_auth_basic));
+	entry = mem_calloc(1, sizeof(struct auth_entry));
 	if (!entry) return NULL;
 
 	entry->uri = get_uri_reference(uri);
@@ -125,11 +125,11 @@ init_auth_entry(struct uri *uri, unsigned char *realm)
 /* Add a Basic Auth entry if needed. */
 /* Returns the new entry or updates an existing one. Sets the @valid member if
  * updating is required so it can be tested if the user should be queried. */
-struct http_auth_basic *
+struct auth_entry *
 add_auth_entry(struct uri *uri, unsigned char *realm, unsigned char *nonce,
 	unsigned char *opaque, unsigned int digest)
 {
-	struct http_auth_basic *entry;
+	struct auth_entry *entry;
 
 #ifdef DEBUG_HTTP_AUTH
 	DBG("add_auth_entry: newurl=%s realm=%s uri=%p", newurl, realm, uri);
@@ -192,7 +192,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm, unsigned char *nonce,
 		/* Create a new entry. */
 		entry = init_auth_entry(uri, realm);
 		if (!entry) return NULL;
-		add_to_list(http_auth_basic_list, entry);
+		add_to_list(auth_entry_list, entry);
 		if (nonce) {
 			entry->nonce = stracpy(nonce);
 			if (!entry->nonce) {
@@ -223,10 +223,10 @@ add_auth_entry(struct uri *uri, unsigned char *realm, unsigned char *nonce,
  * updated (but not if user/pass is set in dialog). */
 /* It returns a base 64 encoded user + pass suitable to use in Authorization
  * header, or NULL on failure. */
-struct http_auth_basic *
+struct auth_entry *
 find_auth(struct uri *uri)
 {
-	struct http_auth_basic *entry = NULL;
+	struct auth_entry *entry = NULL;
 
 #ifdef DEBUG_HTTP_AUTH
 	DBG("find_auth: newurl=%s uri=%p", newurl, uri);
@@ -263,7 +263,7 @@ find_auth(struct uri *uri)
 
 /* Delete an entry from auth list. */
 void
-del_auth_entry(struct http_auth_basic *entry)
+del_auth_entry(struct auth_entry *entry)
 {
 #ifdef DEBUG_HTTP_AUTH
 	DBG("del_auth_entry: url=%s realm=%s user=%p",
@@ -289,22 +289,22 @@ free_auth(void)
 	DBG("free_auth");
 #endif
 
-	while (!list_empty(http_auth_basic_list))
-		del_auth_entry(http_auth_basic_list.next);
+	while (!list_empty(auth_entry_list))
+		del_auth_entry(auth_entry_list.next);
 
 	free_list(questions_queue);
 }
 
-struct http_auth_basic *
+struct auth_entry *
 get_invalid_auth_entry(void)
 {
-	struct http_auth_basic *entry;
+	struct auth_entry *entry;
 
 #ifdef DEBUG_HTTP_AUTH
 	DBG("get_invalid_auth_entry");
 #endif
 
-	foreach (entry, http_auth_basic_list)
+	foreach (entry, auth_entry_list)
 		if (!entry->valid)
 			return entry;
 

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.179 2004/11/14 11:02:16 witekfl Exp $ */
+/* $Id: ftp.c,v 1.180 2004/11/14 15:49:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -311,7 +311,7 @@ send_cmd(struct connection *conn, struct string *cmd, void *callback, int state)
 
 /* Check if this auth token really belongs to this URI. */
 static int
-auth_user_matching_uri(struct http_auth_basic *auth, struct uri *uri)
+auth_user_matching_uri(struct auth_entry *auth, struct uri *uri)
 {
 	if (!uri->userlen) /* Noone said it doesn't. */
 		return 1;
@@ -348,7 +348,7 @@ static void
 ftp_login(struct connection *conn)
 {
 	struct string cmd;
-	struct http_auth_basic* auth;
+	struct auth_entry* auth;
 
 	auth = find_auth_entry(conn->uri, NULL);
 
@@ -457,7 +457,7 @@ static void
 ftp_pass(struct connection *conn)
 {
 	struct string cmd;
-	struct http_auth_basic *auth;
+	struct auth_entry *auth;
 
 	auth = find_auth_entry(conn->uri, NULL);
 

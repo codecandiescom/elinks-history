@@ -1,4 +1,4 @@
-/* $Id: auth.h,v 1.25 2004/11/14 15:43:25 jonas Exp $ */
+/* $Id: auth.h,v 1.26 2004/11/14 15:49:05 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_AUTH_AUTH_H
 #define EL__PROTOCOL_AUTH_AUTH_H
@@ -9,8 +9,8 @@
 
 struct listbox_item;
 
-struct http_auth_basic {
-	LIST_HEAD(struct http_auth_basic);
+struct auth_entry {
+	LIST_HEAD(struct auth_entry);
 
 	struct uri *uri;
 	unsigned char *realm;
@@ -30,12 +30,12 @@ struct http_auth_basic {
 #define auth_entry_has_userinfo(_entry_) \
 	(*(_entry_)->user || *(_entry_)->password)
 
-struct http_auth_basic *find_auth(struct uri *);
-struct http_auth_basic *find_auth_entry(struct uri *uri, unsigned char *realm);
-struct http_auth_basic *add_auth_entry(struct uri *, unsigned char *,
+struct auth_entry *find_auth(struct uri *);
+struct auth_entry *find_auth_entry(struct uri *uri, unsigned char *realm);
+struct auth_entry *add_auth_entry(struct uri *, unsigned char *,
 	unsigned char *, unsigned char *, unsigned int);
-void del_auth_entry(struct http_auth_basic *);
+void del_auth_entry(struct auth_entry *);
 void free_auth(void);
-struct http_auth_basic *get_invalid_auth_entry(void);
+struct auth_entry *get_invalid_auth_entry(void);
 
 #endif

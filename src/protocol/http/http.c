@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.357 2004/11/14 15:39:01 jonas Exp $ */
+/* $Id: http.c,v 1.358 2004/11/14 15:49:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -305,7 +305,7 @@ http_send_header(struct connection *conn)
 	int trace = get_opt_bool("protocol.http.trace");
 	struct string header;
 	unsigned char *post_data = NULL;
-	struct http_auth_basic *entry;
+	struct auth_entry *entry;
 	struct uri *uri = conn->proxied_uri; /* Set to the real uri */
 	unsigned char *optstr;
 	int use_connect, talking_to_proxy;

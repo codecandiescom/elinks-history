@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.226 2004/06/27 08:30:36 zas Exp $ */
+/* $Id: tables.c,v 1.227 2004/06/27 08:32:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -953,18 +953,18 @@ again:
 static inline int
 get_vline_width(struct table *table, int col)
 {
-	int w = 0;
+	int width = 0;
 
 	if (!col) return -1;
 
 	if (table->rules == TABLE_RULE_COLS || table->rules == TABLE_RULE_ALL)
-		w = table->cellspacing;
+		width = table->cellspacing;
 	else if (table->rules == TABLE_RULE_GROUPS)
-		w = (col < table->columns_count && table->columns[col].group);
+		width = (col < table->columns_count && table->columns[col].group);
 
-	if (!w && table->cellpadding) w = -1;
+	if (!width && table->cellpadding) width = -1;
 
-	return w;
+	return width;
 }
 
 static int

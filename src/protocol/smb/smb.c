@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.10 2003/12/09 08:44:21 zas Exp $ */
+/* $Id: smb.c,v 1.11 2003/12/09 08:56:18 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -106,6 +106,19 @@ smb_read_text(struct connection *conn, int sock)
 	si->textlen += r;
 }
 
+/* Return 0 if @conn->cache was set. */
+static int
+smb_get_cache(struct connection *conn)
+{
+	if (conn->cache) return 0;
+
+	conn->cache = get_cache_entry(struri(conn->uri));
+	if (conn->cache) return 0;
+
+	abort_conn_with_state(conn, S_OUT_OF_MEM);
+	return -1;
+}
+
 static void
 smb_got_data(struct connection *conn)
 {
@@ -123,11 +136,7 @@ smb_got_data(struct connection *conn)
 
 	set_connection_state(conn, S_TRANS);
 
-	/* FIXME: code redundancy. */
-	if (!conn->cache && !(conn->cache = get_cache_entry(struri(conn->uri)))) {
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
-		return;
-	}
+	if (smb_get_cache(conn)) return;
 
 	conn->received += r;
 	if (add_fragment(conn->cache, conn->from, buffer, r) == 1)
@@ -149,11 +158,7 @@ end_smb_connection(struct connection *conn)
 {
 	struct smb_connection_info *si = conn->info;
 
-	/* FIXME: code redundancy. */
-	if (!conn->cache && !(conn->cache = get_cache_entry(struri(conn->uri)))) {
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
-		return;
-	}
+	if (smb_get_cache(conn)) return;
 
 	if (conn->from) {
 		truncate_entry(conn->cache, conn->from, 1);
@@ -165,11 +170,11 @@ end_smb_connection(struct connection *conn)
 		si->text[si->textlen++] = '\n';
 	si->text[si->textlen] = '\0';
 
+	/* FIXME: what to do if conn->uri.datalen is zero ? --Zas */
 	if ((strstr(si->text, "NT_STATUS_FILE_IS_A_DIRECTORY")
 	     || strstr(si->text, "NT_STATUS_ACCESS_DENIED")
 	     || strstr(si->text, "ERRbadfile"))
 	    && *struri(conn->uri)
-	    && conn->uri.datalen
 	    && conn->uri.data[conn->uri.datalen - 1] != '/'
 	    && conn->uri.data[conn->uri.datalen - 1] != '\\') {
 		if (conn->cache->redirect) mem_free(conn->cache->redirect);
@@ -419,11 +424,7 @@ smb_func(struct connection *conn)
 		dir = p + 1;
 
 	} else if (conn->uri.datalen) {
-		/* FIXME: code redundancy. */
-		if (!conn->cache && !(conn->cache = get_cache_entry(struri(conn->uri)))) {
-			abort_conn_with_state(conn, S_OUT_OF_MEM);
-			return;
-		}
+		if (smb_get_cache(conn)) return;
 
 		if (conn->cache->redirect) mem_free(conn->cache->redirect);
 		conn->cache->redirect = stracpy(struri(conn->uri));

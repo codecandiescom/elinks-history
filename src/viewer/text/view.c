@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.554 2004/07/15 15:54:21 jonas Exp $ */
+/* $Id: view.c,v 1.555 2004/07/20 21:52:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -957,41 +957,39 @@ quit:
 			goto x;
 		}
 
-		switch (action) {
-			case ACT_MAIN_SCRIPTING_FUNCTION:
+		if (action == ACT_MAIN_SCRIPTING_FUNCTION) {
 #ifdef CONFIG_SCRIPTING
-				trigger_event(func_ref, ses);
+			trigger_event(func_ref, ses);
 #endif
-				break;
+			return;
+		}
 
-			default:
-				if (ev->x == KBD_CTRL_C) goto quit;
-				if (ev->y & KBD_ALT) {
-					struct window *m;
+		if (ev->x == KBD_CTRL_C) goto quit;
+		if (ev->y & KBD_ALT) {
+			struct window *m;
 
-					ev->y &= ~KBD_ALT;
-					activate_bfu_technology(ses, -1);
-					m = ses->tab->term->windows.next;
-					m->handler(m, ev, 0);
-					if (ses->tab->term->windows.next == m) {
-						delete_window(m);
+			ev->y &= ~KBD_ALT;
+			activate_bfu_technology(ses, -1);
+			m = ses->tab->term->windows.next;
+			m->handler(m, ev, 0);
+			if (ses->tab->term->windows.next == m) {
+				delete_window(m);
 
-					} else if (doc_view
-						   && get_opt_int("document"
-								  ".browse"
-								  ".accesskey"
-								  ".priority")
-						    <= 0
-						   && try_document_key(ses,
-							   doc_view, ev)) {
-						/* The document ate the key! */
-						refresh_view(ses, doc_view, 0);
-						return;
-					} else {
-						goto x;
-					}
-					ev->y |= ~KBD_ALT;
-				}
+			} else if (doc_view
+				   && get_opt_int("document"
+						  ".browse"
+						  ".accesskey"
+						  ".priority")
+				    <= 0
+				   && try_document_key(ses,
+					   doc_view, ev)) {
+				/* The document ate the key! */
+				refresh_view(ses, doc_view, 0);
+				return;
+			} else {
+				goto x;
+			}
+			ev->y |= ~KBD_ALT;
 		}
 	}
 #ifdef CONFIG_MOUSE

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.87 2003/09/16 23:17:46 jonas Exp $ */
+/* $Id: tables.c,v 1.88 2003/09/25 20:13:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1473,12 +1473,12 @@ draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
 {
  	static unsigned char hltable[] = { ' ', BORDER_SHLINE, BORDER_DHLINE };
  	int pos = H_FRAME_POSITION(table, i, j);
- 
+
  	assertm(pos < 3, "Horizontal table position out of bound [%d]", pos);
 	if_assert_failed return;
- 
+
  	if (pos < 0 || table->w_c[i] <= 0) return;
- 
+
  	xset_hchars(table->p, x, y, table->w_c[i], hltable[pos]);
 }
 
@@ -1488,12 +1488,12 @@ draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
 {
  	static unsigned char vltable[] = { ' ', BORDER_SVLINE, BORDER_DVLINE };
  	int pos = V_FRAME_POSITION(table, i, j);
- 
+
  	assertm(pos < 3, "Vertical table position out of bound [%d]", pos);
 	if_assert_failed return;
- 
+
  	if (pos < 0 || table->r_heights[j] <= 0) return;
- 
+
  	xset_vchars(table->p, x, y, table->r_heights[j], vltable[pos]);
 }
 
@@ -1506,11 +1506,11 @@ display_table_frames(struct table *t, int x, int y)
   	int fa = 0, fb = 0, fl = 0, fr = 0;
   	int fh_size = (t->x + 2) * (t->y + 1);
   	int fv_size = (t->x + 1) * (t->y + 2);
-  
+
  	frame[0] = fmem_alloc(fh_size + fv_size);
  	if (!frame[0]) return;
  	memset(frame[0], -1, fh_size + fv_size);
- 
+
  	frame[1] = &frame[0][fh_size];
 
 	if (t->rules == R_NONE) goto cont2;

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.36 2003/09/25 19:26:56 zas Exp $ */
+/* $Id: dialogs.c,v 1.37 2003/09/25 20:13:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,7 +100,7 @@ history_dialog_event_handler(struct dialog_data *dlg, struct term_event *ev)
 {
 	switch (ev->ev) {
 		case EV_KBD:
-#define DITEM (dlg->items[HISTORY_BOX_IND])			
+#define DITEM (dlg->items[HISTORY_BOX_IND])
 			if (DITEM.item->ops->kbd)
 				return DITEM.item->ops->kbd(&DITEM, dlg, ev);
 			break;

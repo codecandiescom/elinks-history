@@ -280,6 +280,14 @@ void http_send_header(struct connection *c)
 	if(!strcmp(user_agent, "")) {
                 add_to_str(&hdr, &l, "User-Agent: Elinks (" VERSION_STRING "; ");
                 add_to_str(&hdr, &l, system_name);
+		if (!list_empty(terminals)) {
+			struct terminal *term = terminals.prev;
+			
+			add_to_str(&hdr, &l, "; ");
+			add_num_to_str(&hdr, &l, term->x);
+			add_to_str(&hdr, &l, "x");
+			add_num_to_str(&hdr, &l, term->y);
+		}
                 add_to_str(&hdr, &l, ")\r\n");
         } else {
                 add_to_str(&hdr, &l, "User-Agent: ");

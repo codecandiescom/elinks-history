@@ -1047,6 +1047,7 @@ struct term_spec {
 #define ATTR_FRAME	0x8000
 
 extern struct list_head term_specs;
+extern struct list_head terminals;
 
 int hard_write(int, unsigned char *, int);
 int hard_read(int, unsigned char *, int);

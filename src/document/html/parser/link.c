@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.19 2004/07/14 02:28:57 jonas Exp $ */
+/* $Id: link.c,v 1.20 2004/07/15 06:22:30 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,7 +128,7 @@ get_image_text(unsigned char *attr)
 				break;
 			}
 
-		if (start > src) len = strcspn(start, "?");
+		len -= start - src;
 
 		if (max_len && len > max_real_len) {
 			int max_part_len = max_real_len / 2;

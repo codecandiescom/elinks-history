@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.50 2003/10/28 01:42:22 pasky Exp $ */
+/* $Id: conv.c,v 1.51 2004/01/03 15:07:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 
 #include "elinks.h"
 
+#include "intl/charsets.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/string.h"
@@ -430,3 +431,25 @@ month2num(const unsigned char *month)
 	}
 }
 
+/* This function drops control chars, nbsp char and limit the number of consecutive
+ * space chars to one. It modifies its argument. */
+void
+clr_spaces(unsigned char *str)
+{
+	unsigned char *s;
+	unsigned char *dest = str;
+
+	assert(str);
+
+	for (s = str; *s; s++)
+		if (*s < ' ' || *s == NBSP_CHAR) *s = ' ';
+
+	for (s = str; *s; s++) {
+		if (*s == ' ' && (dest == str || s[1] == ' ' || !s[1]))
+			continue;
+
+		*dest++ = *s;
+	}
+
+	*dest = '\0';
+}

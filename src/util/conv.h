@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.25 2003/12/01 13:56:41 pasky Exp $ */
+/* $Id: conv.h,v 1.26 2004/01/03 15:07:43 zas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -149,5 +149,9 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
 
 	return s;
 }
+
+/* This function drops control chars, nbsp char and limit the number of consecutive
+ * space chars to one. It modifies its argument. */
+void clr_spaces(unsigned char *str);
 
 #endif

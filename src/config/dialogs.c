@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.149 2004/01/08 15:25:18 zas Exp $ */
+/* $Id: dialogs.c,v 1.150 2004/01/09 09:42:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,7 @@ write_config_success(struct terminal *term, struct memory_list *ml,
 			config_file),
 		NULL, 2,
 		N_("OK"), NULL, B_ENTER | B_ESC,
-		N_("Do not show anymore"), toggle_success_msgbox, B_ENTER);
+		N_("Do not show anymore"), toggle_success_msgbox, 0);
 }
 
 

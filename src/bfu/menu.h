@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.27 2003/09/28 13:43:55 jonas Exp $ */
+/* $Id: menu.h,v 1.28 2003/11/05 10:34:51 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -116,7 +116,7 @@ struct menu {
 	int view;
 	int x, y;
 	int xp, yp;
-        int xw, yw;
+        int width, height;
 	int hotkeys;
 #ifdef ENABLE_NLS
 	int lang;

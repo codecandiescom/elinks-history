@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.117 2003/10/30 15:50:53 zas Exp $ */
+/* $Id: menu.c,v 1.118 2003/11/05 10:34:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,8 +177,8 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	int_upper_bound(&mx, width);
 	int_upper_bound(&my, height);
 
-	menu->xw = mx;
-	menu->yw = my;
+	menu->width = mx;
+	menu->height = my;
 
 	menu->x = menu->xp;
 	menu->y = menu->yp;
@@ -191,7 +191,7 @@ static void
 scroll_menu(struct menu *menu, int d)
 {
 	int c = 0;
-	int w = menu->yw - 2;
+	int w = menu->height - 2;
 	int scr_i = int_min((w - 1) / 2, SCROLL_ITEMS);
 
 	int_lower_bound(&scr_i, 0);
@@ -233,13 +233,13 @@ display_menu(struct terminal *term, struct menu *menu)
 	struct color_pair *hotkey_color = get_bfu_color(term, "menu.hotkey.normal");
 	struct color_pair *selected_hotkey_color = get_bfu_color(term, "menu.hotkey.selected");
 	int mx = menu->x + 1;
-	int mxw = menu->xw - 2;
+	int mxw = menu->width - 2;
 	int my = menu->y + 1;
-	int myw = menu->yw - 2;
+	int myw = menu->height - 2;
 	int p, s;
 
 	draw_area(term,	mx, my, mxw, myw, ' ', 0, normal_color);
-	draw_border(term, menu->x, menu->y, menu->xw, menu->yw, frame_color, 1);
+	draw_border(term, menu->x, menu->y, menu->width, menu->height, frame_color, 1);
 
 	for (p = menu->view, s = my;
 	     p < menu->ni && p < menu->view + myw;
@@ -259,7 +259,7 @@ display_menu(struct terminal *term, struct menu *menu)
 			hkcolor = selected_hotkey_color;
 
 			set_cursor(term, mx, s, 1);
-			set_window_ptr(menu->win, menu->x + menu->xw, s);
+			set_window_ptr(menu->win, menu->x + menu->width, s);
 			draw_area(term, mx, s, mxw, 1, ' ', 0, color);
 		}
 
@@ -396,8 +396,10 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 					return;
 			}
 
-			if (ev->x < menu->x || ev->x >= menu->x + menu->xw
-			    || ev->y < menu->y || ev->y >= menu->y + menu->yw) {
+			if (ev->x < menu->x
+			    || ev->x >= menu->x + menu->width
+			    || ev->y < menu->y
+			    || ev->y >= menu->y + menu->height) {
 				if ((ev->b & BM_ACT) == B_DOWN) {
 					delete_window_ev(win, NULL);
 
@@ -420,18 +422,18 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 						m1 = w1->data;
 
 						if (ev->x > m1->x
-						    && ev->x < m1->x + m1->xw - 1
+						    && ev->x < m1->x + m1->width - 1
 						    && ev->y > m1->y
-						    && ev->y < m1->y + m1->yw - 1)
+						    && ev->y < m1->y + m1->height - 1)
 							delete_window_ev(win, ev);
 					}
 				}
 
 			} else {
 				if (ev->x >=  menu->x
-				    && ev->x < menu->x + menu->xw
+				    && ev->x < menu->x + menu->width
 				    && ev->y >=  menu->y + 1
-				    && ev->y < menu->y + menu->yw - 1) {
+				    && ev->y < menu->y + menu->height - 1) {
 					int sel = ev->y - menu->y - 1 + menu->view;
 
 					if (sel >= 0 && sel < menu->ni

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.33 2003/07/10 23:05:21 jonas Exp $ */
+/* $Id: auth.c,v 1.34 2003/07/11 03:47:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,6 +60,8 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 	return match;
 }
 
+#define min(x, y) ((x) < (y) ? (x) : (y))
+
 static struct http_auth_basic *
 init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 {
@@ -78,8 +80,6 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 			return NULL;
 		}
 	}
-
-#define min(x, y) ((x) < (y) ? (x) : (y))
 
 	/* Copy user and pass info passed url if any else NULL terminate. */
 
@@ -101,8 +101,6 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 	}
 	safe_strncpy(entry->passwd, uri->password,
 		     min(uri->passwordlen + 1, MAX_UID_LEN));
-
-#undef min
 
 	entry->valid = (*entry->uid && *entry->passwd);
 
@@ -126,30 +124,55 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 	/* Is host/realm already known ? */
 	entry = find_auth_entry(newurl, realm);
 	if (entry) {
+		mem_free(newurl);
+
 		/* Found an entry. */
 		if (entry->blocked == 1) {
 			/* Waiting for user/pass in dialog. */
-			mem_free(newurl);
 			return ADD_AUTH_EXIST;
 		}
 
-		/* If we have user/pass info then check if identical to
-		 * those in entry. */
-		if (entry->valid
-		    && ((uri->userlen || uri->passwordlen) && entry->uid && entry->passwd)
-		    && ((!realm && !entry->realm) || (realm && entry->realm && !strcmp(realm, entry->realm)))
-		    && strlen(entry->uid) == uri->userlen
-		    && strlen(entry->passwd) == uri->passwordlen
-		    && !strncmp(uri->user, entry->uid, uri->userlen)
-		    && !strncmp(uri->password, entry->passwd, uri->passwordlen)) {
-			/* Same host/realm/pass/user. */
-			mem_free(newurl);
-			return ADD_AUTH_EXIST;
+		/* In order to use an existing entry it has to match exactly.
+		 * This is done step by step. If something isn't equal the
+		 * entry is updated and temporarily marked as invalid. When
+		 * we first has reached */
+
+		/* If only one realm is defined or they don't compare. */
+		if ((!!realm ^ !!entry->realm)
+		    || (realm && entry->realm && strcmp(realm, entry->realm))) {
+			entry->valid = 0;
+			if (entry->realm) mem_free(entry->realm);
+			if (realm) {
+				entry->realm = stracpy(realm);
+				if (!entry->realm) {
+					del_auth_entry(entry);
+					return ADD_AUTH_ERROR;
+				}
+			} else {
+				entry->realm = NULL;
+			}
 		}
 
-		/* Delete entry and re-create it... */
-		/* FIXME: Could be better... */
-		del_auth_entry(entry);
+		if (!entry->valid || strlen(entry->uid) != uri->userlen
+		    || strncmp(entry->uid, uri->user, uri->userlen)) {
+			entry->valid = 0;
+			safe_strncpy(entry->uid, uri->user,
+				     min(uri->userlen + 1, MAX_UID_LEN));
+		}
+
+		if (!entry->valid || strlen(entry->passwd) != uri->passwordlen
+		    || strncmp(entry->passwd, uri->password, uri->passwordlen)) {
+			entry->valid = 0;
+			safe_strncpy(entry->passwd, uri->password,
+				     min(uri->passwordlen + 1, MAX_UID_LEN));
+		}
+
+		if (entry->valid) return ADD_AUTH_EXIST;
+
+		entry->valid = (*entry->uid && *entry->passwd);
+
+		/* Return whether entry was added with user/pass from url. */
+		return (entry->uid || entry->passwd) ? ADD_AUTH_NONE : ADD_AUTH_NEW;
 	}
 
 	/* Create a new entry. */
@@ -164,6 +187,8 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 	/* Return whether entry was added with user/pass from url. */
 	return (entry->uid || entry->passwd) ? ADD_AUTH_NONE : ADD_AUTH_NEW;
 }
+
+#undef min
 
 /* Find an entry in auth list by url. If url contains user/pass information
  * and entry does not exist then entry is created.

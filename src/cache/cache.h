@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.50 2003/11/15 16:18:17 pasky Exp $ */
+/* $Id: cache.h,v 1.51 2003/11/15 16:25:23 pasky Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -68,7 +68,7 @@ struct cache_entry {
 #define ce_sanity_check(ce) do { assert(ce); assertm((ce)->refcount >= 0, "Cache entry lock underflow."); } while (0)
 
 #define get_cache_entry_refcount(ce) ((ce)->refcount)
-#define is_cache_entry_locked(ce) (!!(ce)->refcount)
+#define is_cache_entry_used(ce) (!!(ce)->refcount)
 #define cache_entry_lock(ce) do { ce_sanity_check(ce); (ce)->refcount++; ce_lock_debug(ce, "+1"); } while (0)
 #define cache_entry_unlock(ce) do { (ce)->refcount--; ce_lock_debug(ce, "-1"); ce_sanity_check(ce);} while (0)
 

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.92 2003/11/15 15:47:13 jonas Exp $ */
+/* $Id: cache.c,v 1.93 2003/11/15 16:25:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,7 +78,7 @@ cache_info(int type)
 			foreach (ce, cache) i++;
 			return i;
 		case INFO_LOCKED:
-			foreach (ce, cache) i += is_cache_entry_locked(ce);
+			foreach (ce, cache) i += is_cache_entry_used(ce);
 			return i;
 		case INFO_LOADING:
 			foreach (ce, cache) i += is_entry_used(ce);
@@ -451,7 +451,7 @@ delete_entry_content(struct cache_entry *ce)
 void
 delete_cache_entry(struct cache_entry *ce)
 {
-	assertm(!is_cache_entry_locked(ce), "deleting locked cache entry");
+	assertm(!is_cache_entry_used(ce), "deleting locked cache entry");
 	assertm(!is_entry_used(ce), "deleting loading cache entry");
 
 	delete_entry_content(ce);
@@ -512,7 +512,7 @@ garbage_collection(int whole)
 	foreach (ce, cache) {
 		old_cache_size += ce->data_size;
 
-		if (!is_cache_entry_locked(ce) && !is_entry_used(ce))
+		if (!is_cache_entry_used(ce) && !is_entry_used(ce))
 			continue;
 
 		new_cache_size -= ce->data_size;
@@ -541,7 +541,7 @@ garbage_collection(int whole)
 			goto shrinked_enough;
 
 		/* Skip used cache entries. */
-		if (is_cache_entry_locked(ce) || is_entry_used(ce)) {
+		if (is_cache_entry_used(ce) || is_entry_used(ce)) {
 #ifdef DEBUG_CACHE
 			obstacle_entry = 1;
 #endif

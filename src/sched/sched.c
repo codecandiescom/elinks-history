@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.28 2003/07/02 02:17:29 jonas Exp $ */
+/* $Id: sched.c,v 1.29 2003/07/02 12:05:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,39 +87,41 @@ getpri(struct connection *c)
 
 	for (i = 0; i < N_PRI; i++)
 		if (c->pri[i])
-			return i;
+			break;
 
-	internal("connection has no owner");
+	assertm(i != N_PRI, "connection has no owner");
 
-	return N_PRI;
+	return i;
 }
 
 long
 connect_info(int type)
 {
-	int i = 0;
+	long info = 0;
 	struct connection *ce;
 	struct k_conn *cee;
 
 	switch (type) {
 		case CI_FILES:
-			foreach (ce, queue) i++;
-			return i;
+			foreach (ce, queue) info++;
+			break;
 		case CI_CONNECTING:
-			foreach (ce, queue) i += ce->state > S_WAIT && ce->state < S_TRANS;
-			return i;
+			foreach (ce, queue)
+				info += ce->state > S_WAIT && ce->state < S_TRANS;
+			break;
 		case CI_TRANSFER:
-			foreach (ce, queue) i += ce->state == S_TRANS;
-			return i;
+			foreach (ce, queue) info += ce->state == S_TRANS;
+			break;
 		case CI_KEEP:
-			foreach (cee, keepalive_connections) i++;
-			return i;
+			foreach (cee, keepalive_connections) info++;
+			break;
 		case CI_LIST:
-			return (long) &queue;
+			info = (long) &queue;
+			break;
 		default:
 			internal("connect_info: bad request");
 	}
-	return 0;
+	return info;
 }
 
 static inline int
@@ -141,12 +143,13 @@ is_host_on_list(struct connection *c)
 	struct h_conn *h;
 
 	if (!ho) return NULL;
-	foreach (h, host_connections) if (!strcmp(h->host, ho)) {
-		mem_free(ho);
-		return h;
-	}
-	mem_free(ho);
+	foreach (h, host_connections)
+		if (!strcmp(h->host, ho)) {
+			mem_free(ho);
+			return h;
+		}
 
+	mem_free(ho);
 	return NULL;
 }
 
@@ -211,11 +214,9 @@ setcstate(struct connection *c, int state)
 				return;
 		}
 
-	} else {
-		if (prg->timer != -1) {
-			kill_timer(prg->timer);
-			prg->timer = -1;
-		}
+	} else if (prg->timer != -1) {
+		kill_timer(prg->timer);
+		prg->timer = -1;
 	}
 
 	foreach (stat, c->statuss) {
@@ -842,10 +843,9 @@ static unsigned char *
 get_proxy(unsigned char *url)
 {
 #ifdef HAVE_SCRIPTING
-	unsigned char *tmp, *ret;
+	unsigned char *tmp = script_hook_get_proxy(url);
+	unsigned char *ret = get_proxy_worker(url, tmp);
 
-	tmp = script_hook_get_proxy(url);
-	ret = get_proxy_worker(url, tmp);
 	if (tmp) mem_free(tmp);
 	return ret;
 #else
@@ -1141,7 +1141,7 @@ set_timeout(struct connection *c)
 void
 abort_all_connections(void)
 {
-	while (queue.next != &queue) {
+	while (!list_empty(queue)) {
 		setcstate(queue.next, S_INTERRUPTED);
 		abort_connection(queue.next);
 	}

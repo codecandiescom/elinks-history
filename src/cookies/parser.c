@@ -1,5 +1,5 @@
 /* Cookies name-value pairs parser  */
-/* $Id: parser.c,v 1.5 2002/06/22 21:20:52 pasky Exp $ */
+/* $Id: parser.c,v 1.6 2002/08/06 00:07:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,6 +73,12 @@ parse_cookie_str(struct cookie_str *cstr)
 			/* The NEXT char is ending it! */
 			cstr->val_end = pos + 1;
 		}
+	}
+
+	if (*pos == ';' && last_was_eq && !cstr->val_start) {
+		/* Empty value */
+		cstr->val_start = pos;
+		cstr->val_end = pos;
 	}
 
 	if (cstr->str == cstr->nam_end

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.138 2004/08/19 07:24:13 miciah Exp $ */
+/* $Id: renderer.c,v 1.139 2004/08/19 07:27:09 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -286,7 +286,8 @@ add_document_line(struct plain_renderer *renderer,
 			}
 
 			prev_char = line[line_pos - 1];
-			next_char = line[line_pos + 1];
+			next_char = (line_pos + 1 < width) ? line[line_pos + 1]
+							   : '\0';
 
 			pos--;  /* Backspace */
 

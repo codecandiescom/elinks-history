@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.16 2003/10/30 15:50:55 zas Exp $ */
+/* $Id: event.c,v 1.17 2003/11/21 22:23:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,8 +54,7 @@ term_send_ucs(struct terminal *term, struct term_event *ev, unicode_val u)
 {
 	unsigned char *recoded;
 
-	if (u == 0xA0) u = ' ';
-	recoded = u2cp(u, get_opt_int_tree(term->spec, "charset"));
+	recoded = u2cp_no_nbsp(u, get_opt_int_tree(term->spec, "charset"));
 	if (!recoded) recoded = "*";
 	while (*recoded) {
 		ev->x = *recoded;

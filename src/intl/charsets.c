@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.70 2003/11/21 10:22:20 zas Exp $ */
+/* $Id: charsets.c,v 1.71 2003/11/21 22:23:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,21 +129,21 @@ unicode_val strange_chars[32] = {
 };
 
 unsigned char *
-u2cp(unicode_val u, int to)
+u2cp_(unicode_val u, int to, int no_nbsp_hack)
 {
 	register int j;
 	int s;
 
 	if (u < 128) return strings[u];
 	/* To mark non breaking spaces, we use a special char NBSP_CHAR. */
-	if (u == 0xa0) return NBSP_CHAR_STRING;
+	if (u == 0xa0) return no_nbsp_hack ? " " : NBSP_CHAR_STRING;
 	if (u == 0xad) return "";
 
 	if (u < 0xa0) {
 		if (!strange_chars[u - 0x80])
 			return NULL;
 
-		return u2cp(strange_chars[u - 0x80], to);
+		return u2cp_(strange_chars[u - 0x80], to, no_nbsp_hack);
 	}
 	for (j = 0; codepages[to].table[j].c; j++)
 		if (codepages[to].table[j].u == u)

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.80 2004/10/21 20:54:22 pasky Exp $ */
+/* $Id: document.h,v 1.81 2004/12/17 23:20:00 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -130,9 +130,9 @@ struct document {
 
 	struct document_options options;
 
-	struct list_head forms;
-	struct list_head tags;
-	struct list_head nodes;
+	struct list_head forms; /* -> struct form_control */
+	struct list_head tags; /* -> struct tag */
+	struct list_head nodes; /* -> struct node */
 
 #ifdef CONFIG_ECMASCRIPT
 	/* ECMAScript snippets to be executed during loading the document into

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.28 2002/08/31 00:27:54 pasky Exp $ */
+/* $Id: dialogs.c,v 1.29 2002/09/10 20:20:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,6 +53,7 @@ bookmark_dlg_box_build()
 	if (!box) return NULL;
 
 	memset(box, 0, sizeof(struct listbox_data));
+	box->order = 1;
 	box->items = &bookmark_box_items;
 	add_to_list(bookmark_boxes, box);
 
@@ -345,13 +346,16 @@ really_del_bookmark(void *vhop)
 
 	/* Please. Don't. Reindent. This. Ask. Why. --pasky */
 
+	/* Remember that we have to take the reverse direction here in
+	 * traverse(), as we have different sort order than usual. */
+
 	if (box->sel && box->sel->udata == hop->bm) {
 		struct bookmark *bm = (struct bookmark *) box->sel->udata;
 
-		box->sel = traverse_listbox_items_list(bm->box_item, -1,
+		box->sel = traverse_listbox_items_list(bm->box_item, 1,
 				1, NULL, NULL);
 		if (bm->box_item == box->sel)
-			box->sel = traverse_listbox_items_list(bm->box_item, 1,
+			box->sel = traverse_listbox_items_list(bm->box_item, -1,
 					1, NULL, NULL);
 		if (bm->box_item == box->sel)
 			box->sel = NULL;
@@ -360,10 +364,10 @@ really_del_bookmark(void *vhop)
 	if (box->top && box->top->udata == hop->bm) {
 		struct bookmark *bm = (struct bookmark *) box->top->udata;
 
-		box->top = traverse_listbox_items_list(bm->box_item, 1,
+		box->top = traverse_listbox_items_list(bm->box_item, -1,
 				1, NULL, NULL);
 		if (bm->box_item == box->top)
-			box->top = traverse_listbox_items_list(bm->box_item, -1,
+			box->top = traverse_listbox_items_list(bm->box_item, 1,
 					1, NULL, NULL);
 		if (bm->box_item == box->top)
 			box->top = NULL;
@@ -526,7 +530,13 @@ bookmark_add_add(struct dialog *d)
 	bm = add_bookmark(d->items[0].data, d->items[1].data);
 	foreach (box, *bm->box_item->box) {
 		box->sel = bm->box_item;
-		box->top = bm->box_item; /* XXX: BLEARGH! */
+
+		/* FIXME: This is *BAD*, we should find some way how to extend
+		 * the chain of references to gid of the box to this struct
+		 * dialog *, so that we can update the box->top properly by the
+		 * traverse(). --pasky */
+
+		box->top = bm->box_item;
 	}
 
 #ifdef BOOKMARKS_RESAVE
@@ -539,7 +549,7 @@ bookmark_add_add(struct dialog *d)
 void
 bookmark_search_do(struct dialog *d)
 {
-	struct listbox_item *item = bookmark_box_items.next;
+	struct listbox_item *item = bookmark_box_items.prev;
 	struct listbox_data *box;
 
 	if (!bookmark_simple_search(d->items[1].data, d->items[0].data)) return;

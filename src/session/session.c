@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.22 2003/05/03 23:11:30 zas Exp $ */
+/* $Id: session.c,v 1.23 2003/05/03 23:26:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,7 +215,6 @@ print_screen_status(struct session *ses)
 	struct status *stat = NULL;
 	unsigned char *msg = NULL;
 	int tabs_count = 0;
-	int visible_tabs;
 	int show_title_bar = get_opt_int("ui.show_title_bar");
 	int show_status_bar = get_opt_int("ui.show_status_bar");
 	int show_tab_bar = get_opt_int("ui.tabs.show_bar");
@@ -244,7 +243,7 @@ print_screen_status(struct session *ses)
 	}
 
 	tabs_count = number_of_tabs(term);
-	visible_tabs = (show_tab_bar > 0) && !(show_tab_bar == 1 && tabs_count < 2);
+	ses->visible_tab_bar = (show_tab_bar > 0) && !(show_tab_bar == 1 && tabs_count < 2);
 
 	if (show_status_bar) {
 		static int last_current_link;
@@ -267,13 +266,14 @@ print_screen_status(struct session *ses)
 		if (msg) {
 			int tab_info_len = 0;
 
-			if (!visible_tabs && tabs_count > 1) {
+			if (!ses->visible_tab_bar && tabs_count > 1) {
 				unsigned char tab_info[64];
 
 				snprintf(tab_info, 64, "[%d] ", term->current_tab + 1);
 				tab_info_len = strlen(tab_info);
 				print_text(term, 0, term->y - 1, tab_info_len,
-				   tab_info, get_bfu_color(term, "status.status-text"));
+				   	   tab_info,
+					   get_bfu_color(term, "status.status-text"));
 			}
 			print_text(term, 0 + tab_info_len, term->y - 1, strlen(msg),
 				   msg, get_bfu_color(term, "status.status-text"));
@@ -282,7 +282,7 @@ print_screen_status(struct session *ses)
 		}
 	}
 
-	if (visible_tabs) {
+	if (ses->visible_tab_bar) {
 		int tab_width = term->x / tabs_count;
 		int tab;
 		int msglen;

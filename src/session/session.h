@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.5 2003/05/02 22:16:19 zas Exp $ */
+/* $Id: session.h,v 1.6 2003/05/03 23:26:43 zas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -81,6 +81,7 @@ struct session {
 	unsigned char *last_search_word;
 	int search_direction;
 	int exit_query;
+	int visible_tab_bar;
 };
 
 extern struct list_head sessions;

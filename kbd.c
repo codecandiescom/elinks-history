@@ -494,31 +494,13 @@ int process_queue(struct itrm *itrm)
 		if (itrm->kqueue[1] == '[' || itrm->kqueue[1] == 'O') {
 			char c;
 			int v;
-			
-#if 0
-			/* This is the original code - not sure the new one
-			 * won't break anything (it was replaced by FF, as he
-			 * reported that F1-F6 wasn't working properly
-			 * everywhere). --pasky */
-			if (get_esc_code(itrm->kqueue, itrm->qlen, &c, &v, &el)) {
-				if (itrm->qlen < 4 || itrm->kqueue[2] != '[') goto ret;
-				if (itrm->kqueue[2] != '[') goto ret;
-				if (itrm->kqueue[3] < 'A' || itrm->kqueue[3] > 'L') goto ret;
-				ev.x = KBD_F1 + itrm->kqueue[3] - 'A';
-				el = 4;
-			}
-#else
-
-			/* FIXME: It appears that this code is buggy as well,
-			 * though in a different way - F1-F5 is still not
-			 * working. --pasky */
 
 			get_esc_code(itrm->kqueue, itrm->qlen, &c, &v, &el);
 
 			if (itrm->kqueue[2] == '[') {
-				if (itrm->qlen > 4
-				    && itrm->kqueue[3] > 'A'
-				    && itrm->kqueue[3] < 'L') {
+				if (itrm->qlen >= 4
+				    && itrm->kqueue[3] >= 'A'
+				    && itrm->kqueue[3] <= 'L') {
 					ev.x = KBD_F1 + itrm->kqueue[3] - 'A';
 					el = 4;
 				} else {
@@ -526,7 +508,6 @@ int process_queue(struct itrm *itrm)
 				}
 			
 			}
-#endif
 			
 			else switch (c) {
 				case 'A': ev.x = KBD_UP; break;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.10 2002/03/22 18:57:21 pasky Exp $ */
+/* $Id: parser.c,v 1.11 2002/03/27 21:52:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -885,6 +885,7 @@ void html_li(unsigned char *a)
 		par_format.list_number = 0;
 		html_top.next->parattr.list_number++;
 	}
+	putsp = -1;
 	line_breax = 2;
 }
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.10 2002/03/25 22:03:14 pasky Exp $ */
+/* $Id: renderer.c,v 1.11 2002/03/27 21:52:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -647,7 +647,7 @@ static void justify_line(struct part *part, int y)
 	/* Realign line */
 
 	if (spaces > 1) {
-		int insert = 1; //overlap(par_format) - len;
+		int insert = overlap(par_format) - len;
 		int prev_end = 0;
 		int word;
 

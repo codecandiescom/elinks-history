@@ -1,4 +1,4 @@
-/* $Id: listmenu.h,v 1.1 2004/01/03 15:08:47 zas Exp $ */
+/* $Id: listmenu.h,v 1.2 2004/01/03 16:04:42 zas Exp $ */
 
 #ifndef EL__BFU_LISTMENU_H
 #define EL__BFU_LISTMENU_H
@@ -19,5 +19,6 @@ void new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fu
 struct menu_item *detach_menu(struct list_menu *menu);
 void menu_labels(struct menu_item *m, unsigned char *base, unsigned char **lbls);
 void do_select_submenu(struct terminal *term, struct menu_item *menu, struct session *ses);
+void free_menu(struct menu_item *m);
 
 #endif /* EL__BFU_LISTMENU_H */

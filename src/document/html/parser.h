@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.54 2003/12/27 01:26:20 miciah Exp $ */
+/* $Id: parser.h,v 1.55 2004/01/03 16:04:42 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -175,9 +175,6 @@ void add_fragment_identifier(void *part, unsigned char *attr);
 unsigned char *skip_comment(unsigned char *, unsigned char *);
 
 /* Interface for the viewer */
-
-void do_select_submenu(struct terminal *, struct menu_item *, struct session *);
-void free_menu(struct menu_item *);
 
 int get_image_map(unsigned char *, unsigned char *, unsigned char *, unsigned char *a, struct menu_item **, struct memory_list **, unsigned char *, unsigned char *, int, int, int);
 

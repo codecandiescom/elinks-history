@@ -1,8 +1,7 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.5 2003/06/04 18:01:24 jonas Exp $ */
+/* $Id: mailcap.c,v 1.6 2003/06/05 13:06:55 jonas Exp $ */
 
-/*
- * This file contains various functions for implementing a fair subset of
+/* This file contains various functions for implementing a fair subset of
  * rfc1524.
  *
  * The rfc1524 defines a format for the Multimedia Mail Configuration, which is
@@ -15,8 +14,7 @@
  *
  * This file was hijacked from the Mutt project <URL:http://www.mutt.org>
  * (version 1.4) on Saturday the 7th December 2002. It has been heavily
- * elinksified.
- */
+ * elinksified. */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,17 +58,15 @@ static int mailcap_map_entries = 0;
 static struct hash *mailcap_map = NULL;
 
 
+/* Clear memory to make freeing it safer laterand we get
+ * needsterminal and copiousoutput inialized for free. */
 static inline struct mailcap_entry *
 mailcap_new_entry(void)
 {
-	/*
-	 * Clear memory to make freeing it safer laterand we get
-	 * needsterminal and copiousoutput inialized for free.
-	 */
 	return mem_calloc(1, sizeof(struct mailcap_entry));
 }
 
-static void
+static inline void
 free_mailcap_entry(struct mailcap_entry *entry)
 {
 	if (!entry) return;
@@ -82,8 +78,7 @@ free_mailcap_entry(struct mailcap_entry *entry)
 }
 
 
-/*
- * The command semantics include the following:
+/* The command semantics include the following:
  *
  * %s		is the filename that contains the mail body data
  * %t		is the content type, like text/plain
@@ -97,8 +92,7 @@ free_mailcap_entry(struct mailcap_entry *entry)
  * %n		is the integer number of sub-parts in the multipart
  * %F		is "content-type filename" repeated for each sub-part
  *
- * ELinks supports just % in mime types which is equivalent to %s.
- */
+ * ELinks supports just % in mime types which is equivalent to %s. */
 
 /* FIXME: this function is potentially subject to overflow.
  * y < sizeof(buffer) test is not sufficient, the copious output part
@@ -163,10 +157,22 @@ convert_command(unsigned char *command, int copiousoutput)
 	return memacpy(buffer, y);
 }
 
-/*
- * Returns a NULL terminated rfc 1524 field, while modifying <next> to point
- * to the next field.
- */
+
+/* Parsing of a rfc1524 mailcap file */
+/* The format is:
+ *
+ *	base/type; command; extradefs
+ *
+ * type can be * for matching all base with no /type is an implicit
+ * wild command contains a %s for the filename to pass, default to pipe on
+ * stdin extradefs are of the form:
+ *
+ *	def1="definition"; def2="define \;";
+ *
+ * line wraps with a \ at the end of the line, # for comments. */
+
+/* Returns a NULL terminated rfc 1524 field, while modifying <next> to point
+ * to the next field. */
 static unsigned char *
 get_field(unsigned char **next)
 {
@@ -200,12 +206,10 @@ get_field(unsigned char **next)
 	return field;
 }
 
-/*
- * Parses specific fields (ex: the '=TestCommand' part of 'test=TestCommand').
+/* Parses specific fields (ex: the '=TestCommand' part of 'test=TestCommand').
  * Expects that <field> is pointing right after the specifier (ex: 'test'
  * above). Allocates and returns a NULL terminated token, or NULL if parsing
- * fails.
- */
+ * fails. */
 
 static unsigned char *
 get_field_text(unsigned char *field,
@@ -231,20 +235,8 @@ get_field_text(unsigned char *field,
 	return NULL;
 }
 
-/*
- * rfc1524 mailcap file is of the format:
- *
- *	base/type; command; extradefs
- *
- * type can be * for matching all base with no /type is an implicit
- * wild command contains a %s for the filename to pass, default to pipe on
- * stdin extradefs are of the form:
- *
- *	def1="definition"; def2="define \;";
- *
- * line wraps with a \ at the end of the line, # for comments.
- */
-
+/* Parses hole mailcap files line by line adding entries to the map
+ * assigning them the given @priority */
 static void
 parse_mailcap_file(unsigned char *filename, unsigned int priority)
 {
@@ -369,18 +361,13 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 }
 
 
-/*
- * When initializing mailcap subsystem we read, parse and build a hash mapping
+/* When initializing mailcap subsystem we read, parse and build a hash mapping
  * content type to handlers. Map is build from a list of mailcap files.
  *
  * The rfc1524 specifies that a path of mailcap files should be used.
- * - First we check to see if the user supplied any in protocol.mailcap.path
- * - Then we check the MAILCAP environment variable.
- * - Finally fall back to reasonable defaults like say
- *
- * 	~/mailcap:/etc/mailcap
- *
- *   Users own file take precedence.
+ *	o First we check to see if the user supplied any in mime.mailcap.path
+ *	o Then we check the MAILCAP environment variable.
+ *	o Finally fall back to reasonable default
  */
 
 static void
@@ -415,7 +402,6 @@ done_mailcap()
 		struct hash_item *item;
 		int i;
 
-		/* We do not free key here. */
 		foreach_hash_item(item, *mailcap_map, i)
 			if (item->value) {
 				struct mailcap_entry *entry = item->value;
@@ -471,10 +457,8 @@ check_entries(struct mailcap_entry * entry, unsigned char *filename)
 	/* Use the list of entries to find a final match */
 	while (entry) {
 		if (entry->testcommand) {
-			/*
-			 * This routine executes the given test command to
-			 * determine if this is the right match.
-			 */
+			/* This routine executes the given test command to
+			 * determine if this is the right match. */
 
 			/* Use filename as marker to wether test should run */
 			if (!entry->testneedsfile && !filename) filename = "";
@@ -501,8 +485,7 @@ check_entries(struct mailcap_entry * entry, unsigned char *filename)
 	return NULL;
 }
 
-/*
- * Attempts to find the given type in the mailcap association map.  On success,
+/* Attempts to find the given type in the mailcap association map.  On success,
  * this returns the associated command, else NULL.  Type is a string with
  * syntax '<base>/<type>' (ex: 'text/plain')
  *
@@ -511,8 +494,7 @@ check_entries(struct mailcap_entry * entry, unsigned char *filename)
  * entries are checked/tested.
  *
  * The lookup support testing on files. If no file is given (NULL) any tests
- * that needs a file will be taken as failed.
- */
+ * that needs a file will be taken as failed. */
 
 static struct mime_handler *
 get_mime_handler_mailcap(unsigned char *type, int options)

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.130 2004/08/17 07:40:45 miciah Exp $ */
+/* $Id: renderer.c,v 1.131 2004/08/17 07:47:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,6 +234,7 @@ add_document_line(struct plain_renderer *renderer,
 	int line_pos;
 	int backspaces = 0;
 	int last_link_end;
+	int was_alpha_char = 1; /* to match start of line too. */
 
 	line = convert_string(renderer->convert_table, line, width, CSM_NONE, &width);
 	if (!line) return 0;
@@ -264,7 +265,6 @@ add_document_line(struct plain_renderer *renderer,
 
 	expanded = backspaces = last_link_end = 0;
 	for (line_pos = 0; line_pos < width; line_pos++) {
-		int was_alpha_char = 1; /* to match start of line too. */
 		unsigned char line_char = line[line_pos];
 
 		if (line_char == ASCII_TAB) {

@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.24 2003/12/01 13:55:41 pasky Exp $ */
+/* $Id: conv.h,v 1.25 2003/12/01 13:56:41 pasky Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -129,6 +129,8 @@ unsigned char *decode_shell_safe_url(unsigned char *);
 /* Return 0 if starting with jan, 11 for dec, -1 for failure.
  * @month must be a lowercased string. */
 int month2num(const unsigned char *month);
+
+#include <string.h>
 
 /* Trim starting and ending chars equal to @c in string @s.
  * If @len != NULL, it stores new string length in pointed integer.

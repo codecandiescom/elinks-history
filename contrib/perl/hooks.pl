@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.30 2005/03/26 14:21:28 pasky Exp $
+# $Id: hooks.pl,v 1.31 2005/03/26 14:33:09 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -144,9 +144,19 @@ sub goto_url_hook
 		return $url;
 	}
 
+
 	# Search engines
-	if ($url =~ '^(search|find|www|web|s|f|go)(| .*)$'
-	    or $url =~ '^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$'
+
+	my ($search) = $url =~ /^[a-z0-9]* (.*)/;
+
+	if ($url =~ /^(search|find|www|web|s|f|go)(| .*)$/) {
+		return search(loadrc('search'), $search);
+	}
+	if ($url =~ s/("|\'|')(.+)$/$2/) {
+		return search(loadrc('search'), $url);
+	}
+
+	if ($url =~ '^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$'
 	    or $url =~ '^(g|google)(| .*)$'
 	    or $url =~ '^(y|yahoo)(| .*)$'
 	    or $url =~ '^(ask|jeeves)(| .*)$'
@@ -160,12 +170,8 @@ sub goto_url_hook
 	    or $url =~ '^(ns|netscape)(| .*)$'
 	    or $url =~ '^(ly|lycos)(| .*)$'
 	    or $url =~ '^(hb|hotbot)(| .*)$'
-	    or $url =~ '^(ex|excite)(| .*)$'
-	    or $url =~ '^("|\'|`).+$') {
+	    or $url =~ '^(ex|excite)(| .*)$') {
 		my $engine = $url;
-		my ($search) = $url =~ /^[a-z0-9]* (.*)/;
-
-		$url = search(loadrc("search"), $search);
 		$url = search("elgoog",         $search) if ($engine =~ '^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$');
 		$url = search("google",         $search) if ($engine =~ '^(g|google)(| .*)$');
 		$url = search("yahoo",          $search) if ($engine =~ '^(y|yahoo)(| .*)$');
@@ -181,9 +187,9 @@ sub goto_url_hook
 		$url = search("lycos",          $search) if ($engine =~ '^(ly|lycos)(| .*)$');
 		$url = search("hotbot",         $search) if ($engine =~ '^(hb|hotbot)(| .*)$');
 		$url = search("excite",         $search) if ($engine =~ '^(ex|excite)(| .*)$');
-		$url = search(loadrc("search"), $engine) if ($engine =~ '^("|\'|`)');
 		return $url;
 	}
+
 
 	# Google Groups (DejaNews)
 	if ($url =~ '^(deja|gg|groups|gr|nntp|usenet|nn)(| .*)$') {

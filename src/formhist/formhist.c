@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.35 2003/09/02 13:32:56 zas Exp $ */
+/* $Id: formhist.c,v 1.36 2003/09/02 13:55:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,8 +65,6 @@ free_form_in_list(struct formhist_data *form)
 {
 	struct submitted_value *sv;
 
-	if (form->url) mem_free(form->url);
-
 	foreachback (sv, form->submit)
 		free_submitted_value(sv);
 }
@@ -75,13 +73,12 @@ static struct formhist_data *
 new_form(unsigned char *url)
 {
 	struct formhist_data *form;
+	int url_size = strlen(url) + 1;
 
-	form = mem_calloc(1, sizeof(struct formhist_data));
+	form = mem_calloc(1, sizeof(struct formhist_data) + strlen(url) + 1);
 	if (!form) return NULL;
 
-	form->url = stracpy(url);
-	if (!form->url) { mem_free(form); return NULL; }
-
+	memcpy(form->url, url, url_size);
 	init_list(*form);
 	init_list(form->submit);
 

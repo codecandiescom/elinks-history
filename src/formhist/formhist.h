@@ -1,4 +1,4 @@
-/* $Id: formhist.h,v 1.16 2003/09/02 13:32:55 zas Exp $ */
+/* $Id: formhist.h,v 1.17 2003/09/02 13:55:01 zas Exp $ */
 
 #ifndef EL__FORMHIST_FORMHIST_H
 #define EL__FORMHIST_FORMHIST_H
@@ -11,8 +11,8 @@ struct formhist_data {
 	/* List of submitted_values for this form */
 	struct list_head submit;
 
-	/* <action> URI for this form */
-	unsigned char *url;
+	/* <action> URI for this form. Must be at end of struct. */
+	unsigned char url[1];
 };
 
 /* Look up @name form of @url document in the form history. Returns the saved

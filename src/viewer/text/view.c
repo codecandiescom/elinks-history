@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.673 2005/01/08 03:17:49 miciah Exp $ */
+/* $Id: view.c,v 1.674 2005/01/08 04:08:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -526,16 +526,18 @@ move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 		int max_width = doc_view->document->width - doc_view->vs->x;
 
 		if (y < box->y) {
-			status = vertical_scroll(ses, doc_view, -1);
+			status = vertical_scroll(ses, doc_view, y - box->y);
 
 		} else if (y >= box->y + box->height && y <= max_height) {
-			status = vertical_scroll(ses, doc_view, 1);
+			status = vertical_scroll(ses, doc_view,
+						 y - (box->y + box->height));
 
 		} else if (x < box->x) {
-			status = horizontal_scroll(ses, doc_view, -1);
+			status = horizontal_scroll(ses, doc_view, x - box->x);
 
 		} else if (x >= box->x + box->width && x <= max_width) {
-			status = horizontal_scroll(ses, doc_view, 1);
+			status = horizontal_scroll(ses, doc_view,
+						   x - (box->x + box->width));
 		}
 
 		/* If the view was not scrolled there's nothing more to do */

@@ -116,9 +116,10 @@ dnl ===================================================================
 AC_PROG_GCC_TRADITIONAL
 AC_FUNC_MEMCMP
 AC_FUNC_STRFTIME
-AC_CHECK_FUNCS(alarm cfmakeraw chmod gethostbyaddr herror strcasestr strncasecmp timegm)
-AC_CHECK_FUNCS(popen uname access)
-AC_CHECK_FUNCS(strchr strrchr index rindex strstr strerror memmove bcopy stpcpy)
+AC_CHECK_FUNCS(cfmakeraw gethostbyaddr herror strerror)
+AC_CHECK_FUNCS(popen uname access chmod alarm timegm)
+AC_CHECK_FUNCS(strcasecmp strncasecmp strcasestr strstr strchr strrchr)
+AC_CHECK_FUNCS(strstr memmove bcopy stpcpy)
 AC_CHECK_FUNCS(isalnum)
 
 AC_HAVE_FUNCS(cygwin_conv_to_full_win32_path)

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.20 2002/12/08 17:54:10 zas Exp $ */
+/* $Id: string.c,v 1.21 2003/01/20 13:38:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -308,6 +308,20 @@ xstrcmp(unsigned char *s1, unsigned char *s2)
 	if (!s2) return 1;
 	return strcmp(s1, s2);
 }
+
+#ifndef HAVE_STRCASECMP
+int
+strcasecmp(unsigned char *c1, unsigned char *c2, int len)
+{
+	int i;
+
+	for (; *c1 && *c2; c1++, c2++)
+		if (upcase(c1[i]) != upcase(c2[i]))
+			return 1;
+
+	return 0;
+}
+#endif /* !HAVE_STRCASECMP */
 
 #ifndef HAVE_STRNCASECMP
 int

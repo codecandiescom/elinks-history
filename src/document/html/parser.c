@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.531 2005/04/01 22:45:58 zas Exp $ */
+/* $Id: parser.c,v 1.532 2005/04/03 18:21:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -998,10 +998,12 @@ html_dd(unsigned char *a)
 {
 	kill_html_stack_until(0, "", "DL", NULL);
 
-	par_format.leftmargin = par_format.dd_margin
-				+ (html_context.table_level ? 3 : 8);
-	if (!html_context.table_level)
+	par_format.leftmargin = par_format.dd_margin + 3;
+
+	if (!html_context.table_level) {
+		par_format.leftmargin += 5;
 		int_upper_bound(&par_format.leftmargin, par_format.width / 2);
+	}
 	par_format.align = ALIGN_LEFT;
 }
 

@@ -1,3 +1,20 @@
+Sat Mar 16 00:37:05 2002  Petr Baudis <pasky@ji.cz>:
+
+	* BUGS:
+	
+	removed one obsoleted bug
+
+Sat Mar 16 00:35:04 2002  Petr Baudis <pasky@ji.cz>:
+
+	* af_unix.c, bfu.c, bookmarks.c, cache.c, charsets.c, connect.c,
+	cookies.c, default.c, dns.c, error.c, file.c, finger.c, ftp.c,
+	html.c, html_r.c, html_tbl.c, http.c, https.c, kbd.c, kbdbind.c,
+	language.c, links.h, lua.c, mailto.c, main.c, menu.c, os_dep.c,
+	os_dep.h, os_depx.h, sched.c, select.c, session.c, setup.h,
+	terminal.c, types.c, url.c, view.c:
+	
+	Added Id tag to source files, due to popular demand ;)
+
 Sat Mar 16 00:23:26 2002  Petr Baudis <pasky@ji.cz>:
 
 	* af_unix.c, bfu.c, bookmarks.c, cache.c, charsets.c, connect.c,

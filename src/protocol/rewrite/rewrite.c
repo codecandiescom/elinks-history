@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.27 2004/06/12 15:46:36 jonas Exp $ */
+/* $Id: rewrite.c,v 1.28 2004/06/15 02:17:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,6 +92,7 @@ static struct option_info uri_rewrite_options[] = {
 	INIT_OPT_DUMB_PREFIX("bug", ELINKS_BUGS_URL),
 
 	INIT_OPT_DUMB_PREFIX("arc", "http://web.archive.org/web/*/%c"),
+	INIT_OPT_DUMB_PREFIX("cia", "http://cia.navi.cx/"),
 	INIT_OPT_DUMB_PREFIX("b", "http://babelfish.altavista.com/babelfish/tr"),
 	INIT_OPT_DUMB_PREFIX("d", "http://www.dict.org"),
 	INIT_OPT_DUMB_PREFIX("g", "http://www.google.com/"),

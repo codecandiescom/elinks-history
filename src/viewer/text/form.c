@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.235 2004/07/24 02:08:35 pasky Exp $ */
+/* $Id: form.c,v 1.236 2004/07/24 05:12:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1248,8 +1248,8 @@ field_op(struct session *ses, struct document_view *doc_view,
 			/* Set status to ok if either it is not possible to
 			 * submit the form or the posting fails. */
 			/* FIXME: We should maybe have ACT_EDIT_ENTER_RELOAD */
-			if (!(!has_form_submit(doc_view->document, fc)
-			      || get_opt_int("document.browse.forms.auto_submit"))
+			if ((has_form_submit(doc_view->document, fc)
+			      && !get_opt_int("document.browse.forms.auto_submit"))
 			    || goto_current_link(ses, doc_view, 0))
 				status = FRAME_EVENT_OK;
 			break;

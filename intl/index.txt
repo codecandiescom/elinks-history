@@ -12,6 +12,7 @@ german
 greek
 hungarian
 icelandic
+indonesian
 italian
 lithuanian
 polish

@@ -164,6 +164,9 @@ Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
 	Maintains and makes official releases.
 	http://artax.karlin.mff.cuni.cz/~mikulas/vyplody/links/
 
+Muhamad Faizal <faizal@mfaizal.net>
+	Indonesian translation
+
 Nalin Dahyabhai <nalin@redhat.com>
 	Fixed occasional destroying of read buffer on Alpha
 
@@ -254,4 +257,4 @@ zas@norz.org
 	Bookmarks hacking
 	Misc minor improvements
 
-$Id: AUTHORS,v 1.30 2002/03/03 23:33:41 pasky Exp $
+$Id: AUTHORS,v 1.31 2002/03/03 23:43:48 pasky Exp $

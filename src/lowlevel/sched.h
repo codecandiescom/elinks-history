@@ -1,4 +1,4 @@
-/* $Id: sched.h,v 1.16 2002/09/12 12:38:00 zas Exp $ */
+/* $Id: sched.h,v 1.17 2002/09/12 14:24:03 zas Exp $ */
 
 #ifndef EL__LOWLEVEL_SCHED_H
 #define EL__LOWLEVEL_SCHED_H
@@ -81,6 +81,8 @@ struct connection {
 	enum stream_encoding content_encoding;
 	struct stream_encoded *stream;
 	int stream_pipes[2];
+
+	void *read_func;
 };
 
 #define S_WAIT		0

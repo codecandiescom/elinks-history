@@ -18,6 +18,7 @@ set -e
 case "$1" in
     remove)
 	update-alternatives --quiet --remove links /usr/bin/elinks
+	update-alternatives --quiet --remove www-browser /usr/bin/elinks
         ;;
     upgrade|failed-upgrade|deconfigure)
         ;;

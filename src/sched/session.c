@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.121 2003/07/17 08:56:32 zas Exp $ */
+/* $Id: session.c,v 1.122 2003/07/21 10:39:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -703,11 +703,20 @@ b:
 				return 2;
 			}
 			break;
-		case TASK_IMGMAP: ses_imgmap(ses); break;
-		case TASK_BACK  : ses_back(ses); break;
-		case TASK_UNBACK: ses_unback(ses); break;
-		case TASK_RELOAD: ses_back(ses), ses_forward(ses); break;
-		default: break;
+		case TASK_IMGMAP:
+			ses_imgmap(ses);
+			break;
+		case TASK_BACK  :
+			ses_back(ses);
+			break;
+		case TASK_UNBACK:
+			ses_unback(ses);
+			break;
+		case TASK_RELOAD:
+			ses_back(ses), ses_forward(ses);
+			break;
+		default:
+			break;
 	}
 
 	if ((*stat)->state >= 0) {

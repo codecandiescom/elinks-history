@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<!-- $Id: book.xml,v 1.1 2003/06/10 21:39:55 jonas Exp $ -->
+<!-- $Id: book.xml,v 1.2 2003/06/10 23:45:44 jonas Exp $ -->
 
 <!DOCTYPE book SYSTEM "elinksbook.dtd">
 
 <book id="index" lang="en">
 <?dbhtml filename="index.html"?>
 
-<bookinfo><title> The ELinks Manual </title>
+<bookinfo><title> The ELinks Book </title>
 
-<subtitle> ELinkers Guide to Text Mode Browsing - Version &version; </subtitle>
+<subtitle> Browsing the Web In 2D - Version &version; </subtitle>
 
 <edition> ELinks &elinks-version; (Skyrider) </edition>
 <releaseinfo>Version &version;</releaseinfo>
-<pubdate>$Date: 2003/06/10 21:39:55 $</pubdate>
-<orgname>ELinks</orgname>
+<pubdate>$Date: 2003/06/10 23:45:44 $</pubdate>
+<orgname><ulink url="http://elinks.or.cz">ELinks</ulink></orgname>
 
 <copyright>
 	<year>2002</year>
@@ -61,7 +61,7 @@
 &features-mailcap;
 &features-bookmarks;
 
-&config-options;
+<!-- &config-options; Should be autobuild and not in CVS -->
 &info-authors;
 
 </book>

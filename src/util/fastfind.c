@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.35 2003/06/15 12:20:11 zas Exp $ */
+/* $Id: fastfind.c,v 1.36 2003/06/15 12:36:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,12 +85,12 @@
 /* Adequate for ELinks tags search. */
 
 #define POINTER_INDEX_BITS	9	/* 512 */
-#define TRAMPOLINE_INDEX_BITS	14	/* 16384 */
+#define LEAFSET_INDEX_BITS	14	/* 16384 */
 #define COMP_CHAR_INDEX_BITS	7	/* 128	*/
 
 #define ff_node ff_node_c /* Both are 32 bits long. */
 
-#if (POINTER_INDEX_BITS + TRAMPOLINE_INDEX_BITS + \
+#if (POINTER_INDEX_BITS + LEAFSET_INDEX_BITS + \
      COMP_CHAR_INDEX_BITS + END_LEAF_BITS + \
      COMPRESSED_BITS) > 32
 #error Over 32 bits in struct ff_node !!
@@ -105,10 +105,10 @@
 /* This will make struct ff_node_c use 64 bits. */
 
 #define POINTER_INDEX_BITS	12
-#define TRAMPOLINE_INDEX_BITS	18
+#define LEAFSET_INDEX_BITS	18
 #define COMP_CHAR_INDEX_BITS	8
 
-#if (POINTER_INDEX_BITS + TRAMPOLINE_INDEX_BITS + \
+#if (POINTER_INDEX_BITS + LEAFSET_INDEX_BITS + \
      + END_LEAF_BITS + COMPRESSED_BITS) > 32
 #error Over 32 bits in struct ff_node !!
 #endif
@@ -124,14 +124,14 @@ struct ff_node {
 	unsigned int p:POINTER_INDEX_BITS;
 
 	/* Index in leafsets */
-	unsigned int l:LINE_INDEX_BITS;
+	unsigned int l:LEAFSET_INDEX_BITS;
 };
 
 #endif /* USE_32_BITS */
 
 
 #define FF_MAX_KEYS  (1  << POINTER_INDEX_BITS)
-#define FF_MAX_TLINES ((1 << TRAMPOLINE_INDEX_BITS) - 1)
+#define FF_MAX_LEAFSETS ((1 << LEAFSET_INDEX_BITS) - 1)
 #define FF_MAX_CHARS (1  << COMP_CHAR_INDEX_BITS)
 
 
@@ -139,7 +139,7 @@ struct ff_node_c {
 	unsigned int e:END_LEAF_BITS;
 	unsigned int c:COMPRESSED_BITS;
 	unsigned int p:POINTER_INDEX_BITS;
-	unsigned int l:TRAMPOLINE_INDEX_BITS;
+	unsigned int l:LEAFSET_INDEX_BITS;
 
 	/* Index of char when compressed. */
 	unsigned int ch:COMP_CHAR_INDEX_BITS;
@@ -258,7 +258,7 @@ alloc_leafset(struct fastfind_info *info)
 	struct ff_node **leafsets;
 	struct ff_node *leafset;
 
-	assert(info->leafsets_count < FF_MAX_TLINES);
+	assert(info->leafsets_count < FF_MAX_LEAFSETS);
 
 	/* info->leafsets[0] is never used since l=0 marks no leaf
 	 * in struct ff_node. That's the reason of that + 2. */
@@ -528,7 +528,7 @@ fastfind_terminate(struct fastfind_info *info)
 	fprintf(stderr, "Min_key_len : %d\n", info->min_key_len);
 	fprintf(stderr, "Max_key_len : %d\n", info->max_key_len);
 	fprintf(stderr, "Entries     : %d/%d max.\n", info->pointers_count, FF_MAX_KEYS);
-	fprintf(stderr, "FFtlines    : %d/%d max.\n", info->leafsets_count, FF_MAX_TLINES);
+	fprintf(stderr, "FFleafsets  : %d/%d max.\n", info->leafsets_count, FF_MAX_LEAFSETS);
 	fprintf(stderr, "Memory usage: %lu bytes (cost per entry = %0.2f bytes)\n",
 		info->memory_usage, (double) info->memory_usage / info->pointers_count);
 	fprintf(stderr, "Struct node : %d bytes (normal) , %d bytes (compressed)\n",

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.271 2004/09/12 03:52:15 miciah Exp $ */
+/* $Id: menu.c,v 1.272 2004/09/12 03:54:09 miciah Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -426,17 +426,15 @@ display_menu(struct terminal *term, struct menu *menu)
 	struct color_pair *normal_color = get_bfu_color(term, "menu.normal");
 	struct color_pair *selected_color = get_bfu_color(term, "menu.selected");
 	struct color_pair *frame_color = get_bfu_color(term, "menu.frame");
-	struct box box, nbox;
+	struct box nbox;
 	int p;
 	int menu_height;
 
-	set_box(&box,
+	set_box(&nbox,
 		menu->box.x + MENU_BORDER_SIZE,
 		menu->box.y + MENU_BORDER_SIZE,
 		int_max(0, menu->box.width - MENU_BORDER_SIZE * 2),
 		int_max(0, menu->box.height - MENU_BORDER_SIZE * 2));
-
-	copy_box(&nbox, &box);
 
 	draw_box(term, &nbox, ' ', 0, normal_color);
 	draw_border(term, &nbox, frame_color, 1);

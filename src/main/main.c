@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.191 2004/04/14 06:08:08 jonas Exp $ */
+/* $Id: main.c,v 1.192 2004/04/14 06:30:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,7 +191,7 @@ init(void)
 
 		/* OK, this is race condition, but it must be so; GPM installs
 		 * it's own buggy TSTP handler. */
-		if (fd != -1 || term) handle_basic_signals(term);
+		if (!terminate) handle_basic_signals(term);
 		if (info) mem_free(info);
 	}
 

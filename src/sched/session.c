@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.112 2003/07/02 22:07:50 zas Exp $ */
+/* $Id: session.c,v 1.113 2003/07/03 00:05:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -209,9 +209,9 @@ print_screen_status(struct session *ses)
 			
 				if (stat->state == S_OK)
 					msg = print_current_link(ses);
-				if (!msg)
-					msg = get_stat_msg(stat, term);
 			}
+			if (!msg)
+				msg = get_stat_msg(stat, term);
 		}
 
 		fill_area(term, 0, term->y - 1, term->x, 1,

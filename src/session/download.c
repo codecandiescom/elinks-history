@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.312 2004/08/19 09:30:44 miciah Exp $ */
+/* $Id: download.c,v 1.313 2004/08/19 09:35:58 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,25 +72,6 @@ are_there_downloads(void)
 			return 1;
 
 	return 0;
-}
-
-
-static struct session *
-get_download_ses(struct file_download *file_download)
-{
-	struct session *ses;
-
-	if (list_empty(sessions)) return NULL;
-
-	foreach (ses, sessions)
-		if (ses == file_download->ses)
-			return ses;
-
-	foreach (ses, sessions)
-		if (ses->tab->term == file_download->term)
-			return ses;
-
-	return sessions.next;
 }
 
 
@@ -223,7 +204,7 @@ static void
 download_error_dialog(struct file_download *file_download, int saved_errno)
 {
 	unsigned char *emsg = (unsigned char *) strerror(saved_errno);
-	struct session *ses = get_download_ses(file_download);
+	struct session *ses = file_download->ses;
 
 	if (!ses) return;
 
@@ -304,7 +285,7 @@ abort_download_and_beep(struct file_download *file_download, struct terminal *te
 static void
 download_data_store(struct download *download, struct file_download *file_download)
 {
-	struct session *ses = get_download_ses(file_download);
+	struct session *ses = file_download->ses;
 	struct terminal *term;
 
 	if (!ses) {

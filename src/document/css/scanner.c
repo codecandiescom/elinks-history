@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.60 2004/01/21 00:38:25 jonas Exp $ */
+/* $Id: scanner.c,v 1.61 2004/01/21 01:00:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,7 +260,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 /* Fills the scanner with tokens. Already scanned tokens that has not been
  * requested remains and are moved to the start of the scanners token table. */
 /* Returns the current token or NULL if there are none. */
-static struct css_token *
+struct css_token *
 scan_css_tokens(struct css_scanner *scanner)
 {
 	struct css_token *table = scanner->table;
@@ -339,16 +339,6 @@ get_css_token_(struct css_scanner *scanner)
 
 	return css_scanner_has_tokens(scanner)
 		? scanner->current : NULL;
-}
-
-struct css_token *
-get_next_css_token_(struct css_scanner *scanner)
-{
-	scanner->current++;
-
-	/* Do a scanning if we do not have also have access to next token */
-	return (scanner->current + 1 >= scanner->table + scanner->tokens)
-		? scan_css_tokens(scanner) : get_css_token_(scanner);
 }
 
 struct css_token *

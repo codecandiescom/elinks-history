@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.208 2004/06/13 17:55:39 zas Exp $ */
+/* $Id: link.c,v 1.209 2004/06/13 17:58:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -360,16 +360,17 @@ next_in_view(struct document_view *doc_view, int p, int d,
 	     void (*cntr)(struct document_view *, struct link *))
 {
 	int p1, p2 = 0;
-	int y, yl;
+	int y, height;
 
 	assert(doc_view && doc_view->document && doc_view->vs && fn);
 	if_assert_failed return 0;
 
 	p1 = doc_view->document->nlinks - 1;
-	yl = doc_view->vs->y + doc_view->box.height;
-	int_upper_bound(&yl, doc_view->document->height);
+	height = doc_view->vs->y + doc_view->box.height;
 
-	for (y = int_max(0, doc_view->vs->y); y < yl; y++) {
+	for (y = int_max(0, doc_view->vs->y);
+	     y < int_min(height, doc_view->document->height);
+	     y++) {
 		if (doc_view->document->lines1[y])
 			int_upper_bound(&p1, doc_view->document->lines1[y]
 					     - doc_view->document->links);

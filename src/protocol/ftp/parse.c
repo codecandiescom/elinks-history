@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.10 2005/03/27 14:51:31 jonas Exp $ */
+/* $Id: parse.c,v 1.11 2005/03/27 14:53:11 jonas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -645,8 +645,6 @@ parse_ftp_winnt_response(struct ftp_file_info *info, unsigned char *src, int len
 struct ftp_file_info *
 parse_ftp_file_info(struct ftp_file_info *info, unsigned char *src, int len)
 {
-	struct ftpparse ftpparse_info;
-
 	switch (*src) {
 	case '+':
 		return parse_ftp_eplf_response(info, src, len);
@@ -668,43 +666,5 @@ parse_ftp_file_info(struct ftp_file_info *info, unsigned char *src, int len)
 			return parse_ftp_winnt_response(info, src, len);
 	}
 
-	memset(&ftpparse_info, 0, sizeof(ftpparse_info));
-
-	if (!ftpparse(&ftpparse_info, src, len))
-		return NULL;
-
-	if (ftpparse_info.flagtrycwd) {
-		if (ftpparse_info.flagtryretr)
-			info->type = FTP_FILE_SYMLINK;
-		else
-			info->type = FTP_FILE_DIRECTORY;
-	} else {
-		info->type = FTP_FILE_PLAINFILE;
-	}
-
-	if (ftpparse_info.perm && ftpparse_info.permlen) {
-		unsigned char *perm = ftpparse_info.perm;
-		int permlen = ftpparse_info.permlen;
-
-		if (ftpparse_info.vms)
-			info->permissions = parse_ftp_vms_permissions(perm, permlen);
-		else
-			info->permissions = parse_ftp_unix_permissions(perm, permlen);
-	}	
-
-	if (ftpparse_info.sizetype != FTPPARSE_SIZE_UNKNOWN)
-		info->size = ftpparse_info.size;
-
-	if (ftpparse_info.mtime > 0) {
-		info->mtime = ftpparse_info.mtime;
-		info->local_time_zone = (FTPPARSE_MTIME_LOCAL == ftpparse_info.mtimetype);
-	}
-
-	info->name.source = ftpparse_info.name;
-	info->name.length = ftpparse_info.namelen;
-
-	info->symlink.source = ftpparse_info.symlink;
-	info->symlink.length = ftpparse_info.symlinklen;
-
-	return info;
+	return parse_ftp_unix_response(info, src, len);
 }

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.182 2004/04/13 18:38:40 jonas Exp $ */
+/* $Id: main.c,v 1.183 2004/04/14 05:12:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,7 +73,6 @@ static int init_b = 0;
 void
 init(void)
 {
-	int no_connect = 0;
 	int ret;
 
 	INIT_LIST_HEAD(url_list);
@@ -125,7 +124,7 @@ init(void)
 	 * could be dangerous when not using the dump viewer. --jonas */
 	if (!isatty(STDIN_FILENO)) {
 		add_to_string_list(&url_list, "file:///dev/stdin", 17);
-		no_connect = 1;
+		get_opt_bool_tree(cmdline_options, "no-connect") = 1;
 	}
 
 	/* If called for outputting to a pipe without -dump or -source
@@ -143,7 +142,7 @@ init(void)
 
 	/* If there's no -no-connect option, check if there's no other ELinks
 	 * running. If we found any, open socket and act as a slave for it. */
-	while (!no_connect && !get_opt_bool_tree(cmdline_options, "no-connect")
+	while (!get_opt_bool_tree(cmdline_options, "no-connect")
 		&& !get_opt_bool_tree(cmdline_options, "dump")
 		&& !get_opt_bool_tree(cmdline_options, "source")) {
 		void *info;

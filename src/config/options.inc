@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.179 2005/01/03 13:39:02 jonas Exp $ */
+/* $Id: options.inc,v 1.180 2005/01/03 23:29:47 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -746,7 +746,7 @@ static struct option_info config_options_info[] = {
 		"and lines working at the same time. Makes sense only with linux\n"
 		"terminal.")),
 
-	INIT_OPT_BOOL("terminal._template_", N_("UTF-8 I/0"),
+	INIT_OPT_BOOL("terminal._template_", N_("UTF-8 I/O"),
 		"utf_8_io", 0, 0,
 		N_("Enable I/O in UTF8 for Unicode terminals. Note that currently,\n"
 		"only the subset of UTF8 according to terminal codepage is used.")),

@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.27 2004/10/20 11:09:34 zas Exp $ */
+/* $Id: table.c,v 1.28 2004/10/22 10:16:41 zas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -86,14 +86,14 @@ get_align(unsigned char *attr, int *a)
 {
 	unsigned char *al = get_attr_val(attr, "align");
 
-	if (al) {
-		if (!(strcasecmp(al, "left"))) *a = ALIGN_LEFT;
-		else if (!(strcasecmp(al, "right"))) *a = ALIGN_RIGHT;
-		else if (!(strcasecmp(al, "center"))) *a = ALIGN_CENTER;
-		else if (!(strcasecmp(al, "justify"))) *a = ALIGN_JUSTIFY;
-		else if (!(strcasecmp(al, "char"))) *a = ALIGN_RIGHT; /* NOT IMPLEMENTED */
-		mem_free(al);
-	}
+	if (!al) return;
+
+	if (!(strcasecmp(al, "left"))) *a = ALIGN_LEFT;
+	else if (!(strcasecmp(al, "right"))) *a = ALIGN_RIGHT;
+	else if (!(strcasecmp(al, "center"))) *a = ALIGN_CENTER;
+	else if (!(strcasecmp(al, "justify"))) *a = ALIGN_JUSTIFY;
+	else if (!(strcasecmp(al, "char"))) *a = ALIGN_RIGHT; /* NOT IMPLEMENTED */
+	mem_free(al);
 }
 
 static void
@@ -101,13 +101,13 @@ get_valign(unsigned char *attr, int *a)
 {
 	unsigned char *al = get_attr_val(attr, "valign");
 
-	if (al) {
-		if (!(strcasecmp(al, "top"))) *a = VALIGN_TOP;
-		else if (!(strcasecmp(al, "middle"))) *a = VALIGN_MIDDLE;
-		else if (!(strcasecmp(al, "bottom"))) *a = VALIGN_BOTTOM;
-		else if (!(strcasecmp(al, "baseline"))) *a = VALIGN_BASELINE; /* NOT IMPLEMENTED */
-		mem_free(al);
-	}
+	if (!al) return;
+
+	if (!(strcasecmp(al, "top"))) *a = VALIGN_TOP;
+	else if (!(strcasecmp(al, "middle"))) *a = VALIGN_MIDDLE;
+	else if (!(strcasecmp(al, "bottom"))) *a = VALIGN_BOTTOM;
+	else if (!(strcasecmp(al, "baseline"))) *a = VALIGN_BASELINE; /* NOT IMPLEMENTED */
+	mem_free(al);
 }
 
 static void

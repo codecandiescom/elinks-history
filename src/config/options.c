@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.107 2002/10/12 15:04:34 pasky Exp $ */
+/* $Id: options.c,v 1.108 2002/10/12 22:03:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -342,7 +342,10 @@ unsigned char *lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 		struct sockaddr_in6 addr = *((struct sockaddr_in6 *) &((struct sockaddr_storage *) addrs)[i]);
 		unsigned char p[INET6_ADDRSTRLEN];
 
-		if (! inet_ntop(addr.sin6_family, &addr.sin6_addr, p, INET6_ADDRSTRLEN))
+		if (! inet_ntop(addr.sin6_family,
+				(addr.sin6_family == AF_INET6 ? (void *) &addr.sin6_addr
+							      : (void *) &((struct sockaddr_in *) &addr)->sin_addr),
+				p, INET6_ADDRSTRLEN))
 			printf("Resolver error.");
 		else
 			printf("%s\n", p);

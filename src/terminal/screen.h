@@ -1,4 +1,4 @@
-/* $Id: screen.h,v 1.6 2003/07/28 08:51:13 jonas Exp $ */
+/* $Id: screen.h,v 1.7 2003/07/28 09:05:26 jonas Exp $ */
 
 #ifndef EL__TERMINAL_SCREEN_H
 #define EL__TERMINAL_SCREEN_H
@@ -24,10 +24,16 @@ struct terminal_screen {
 	/* The previous screen's image, used for optimizing actual drawing. */
 	struct screen_char *last_image;
 
+
 	/* The current and the previous cursor positions. */
 	int cx, cy;
 	int lcx, lcy;
+
+	/* We are sure that @screen and the physical screen are out of sync. */
+	unsigned int dirty:1;
 };
+
+#define set_screen_dirty(s) do { (s)->dirty = 1; } while (0)
 
 void alloc_screen(struct terminal *term, int x, int y);
 void done_screen(struct terminal_screen *screen);

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.129 2003/07/24 15:33:33 pasky Exp $ */
+/* $Id: session.c,v 1.130 2003/07/28 09:05:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,6 +38,7 @@
 #include "scripting/guile/hooks.h"
 #include "scripting/lua/hooks.h"
 #include "terminal/draw.h"
+#include "terminal/screen.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
@@ -142,17 +143,17 @@ init_bars_status(struct session *ses, int *tabs_count, struct document_options *
 
 	if (prev_title_bar != ses->visible_title_bar) {
 		prev_title_bar = ses->visible_title_bar;
-		ses->tab->term->dirty = 1;
+		set_screen_dirty(ses->tab->term->screen);
 	}
 
 	if (prev_status_bar != ses->visible_status_bar) {
 		prev_status_bar = ses->visible_status_bar;
-		ses->tab->term->dirty = 1;
+		set_screen_dirty(ses->tab->term->screen);
 	}
 
 	if (prev_tabs_bar != ses->visible_tabs_bar) {
 		prev_tabs_bar = ses->visible_tabs_bar;
-		ses->tab->term->dirty = 1;
+		set_screen_dirty(ses->tab->term->screen);
 	}
 
 	if (doo) {

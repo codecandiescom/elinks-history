@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.33 2003/07/28 08:51:13 jonas Exp $ */
+/* $Id: screen.c,v 1.34 2003/07/28 09:05:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,7 @@ alloc_screen(struct terminal *term, int x, int y)
 
 	term->x = x;
 	term->y = y;
-	term->dirty = 1;
+	screen->dirty = 1;
 }
 
 /* TODO: We must use termcap/terminfo if available! --pasky */
@@ -297,8 +297,8 @@ redraw_screen(struct terminal *term)
  	register struct screen_char *pos;
  	register struct screen_char *prev_pos;
 
-	if (!term->dirty
-	    || !term->screen
+	if (!screen
+	    || !screen->dirty
 	    || (term->master && is_blocked())
 	    || !init_string(&image)) return;
 
@@ -365,7 +365,7 @@ redraw_screen(struct terminal *term)
 	if (image.length && term->master) done_draw();
 
 	memcpy(screen->last_image, screen->image, term->x * term->y * sizeof(struct screen_char));
-	term->dirty = 0;
+	screen->dirty = 0;
 }
 
 void

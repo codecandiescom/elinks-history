@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.19 2003/07/28 08:51:13 jonas Exp $ */
+/* $Id: draw.c,v 1.20 2003/07/28 09:05:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,7 +23,7 @@ set_char(struct terminal *t, int x, int y, unsigned c)
 
 	t->screen->image[position].data = get_screen_char_data(c);
 	t->screen->image[position].attr = get_screen_char_attr(c);
-	t->dirty = 1;
+	t->screen->dirty = 1;
 }
 
 unsigned
@@ -44,7 +44,7 @@ set_color(struct terminal *t, int x, int y, unsigned c)
 	if_assert_failed { return; }
 
 	t->screen->image[position].attr = (t->screen->image[position].attr & 0x80) | (get_screen_char_attr(c) & ~0x80);
-	t->dirty = 1;
+	t->screen->dirty = 1;
 }
 
 void
@@ -56,7 +56,7 @@ set_only_char(struct terminal *t, int x, int y, unsigned c)
 	if_assert_failed { return; }
 
 	t->screen->image[position].data = get_screen_char_data(c);
-	t->dirty = 1;
+	t->screen->dirty = 1;
 }
 
 /* Updates a line in the terms screen. */
@@ -82,7 +82,7 @@ set_line(struct terminal *t, int x, int y, int l, chr *line)
 		t->screen->image[position].data = get_screen_char_data(line[i]);
 		t->screen->image[position].attr = get_screen_char_attr(line[i]);
 	}
-	t->dirty = 1;
+	t->screen->dirty = 1;
 }
 
 #if 0
@@ -129,7 +129,7 @@ fill_area(struct terminal *t, int x, int y, int xw, int yw, unsigned c)
 			t->screen->image[position].attr = get_screen_char_attr(c);
 		}
 	}
-	t->dirty = 1;
+	t->screen->dirty = 1;
 }
 
 void
@@ -189,7 +189,7 @@ print_text(struct terminal *t, int x, int y, int l,
 		t->screen->image[position].data = get_screen_char_data((*text + c));
 		t->screen->image[position].attr = get_screen_char_attr((*text + c));
 	}
-	t->dirty = 1;
+	t->screen->dirty = 1;
 }
 
 
@@ -209,7 +209,7 @@ set_cursor(struct terminal *term, int x, int y, int blockable)
 	if (screen->cx != x || screen->cy != y) {
 		screen->cx = x;
 		screen->cy = y;
-		term->dirty = 1;
+		screen->dirty = 1;
 	}
 }
 

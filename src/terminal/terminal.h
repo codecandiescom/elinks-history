@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.22 2003/07/28 08:51:13 jonas Exp $ */
+/* $Id: terminal.h,v 1.23 2003/07/28 09:05:26 jonas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -101,9 +101,6 @@ struct terminal {
 	int fdin, fdout;
 
 	int x, y;
-
-	/* We are sure that @screen and the physical screen are out of sync. */
-	int dirty;
 
 	/* Indicates whether we are currently in the process of redrawing the
 	 * stuff being displayed on the terminal. It is typically used to

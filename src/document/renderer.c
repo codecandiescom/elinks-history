@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.93 2004/09/27 09:31:43 pasky Exp $ */
+/* $Id: renderer.c,v 1.94 2004/09/27 09:32:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,10 +42,10 @@ static void sort_links(struct document *document);
 
 #ifdef CONFIG_ECMASCRIPT
 static void
-process_snippets(struct ecmascript_interpreter *interpreter,
-                 struct list_head *doc_snippets,
-                 struct list_head *queued_snippets,
-                 struct string_list_item **current)
+add_snippets(struct ecmascript_interpreter *interpreter,
+             struct list_head *doc_snippets,
+             struct list_head *queued_snippets,
+             struct string_list_item **current)
 {
 	struct string_list_item *doc_current = NULL;
 	struct string_list_item *queue_end = queued_snippets->prev;
@@ -78,7 +78,7 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 
 			assert(iterator != (struct string_list_item *) queued_snippets);
 			if (doc_current == (struct string_list_item *) doc_snippets) {
-				INTERNAL("process_snippets(): doc_snippets shorter than queued_snippets!");
+				INTERNAL("add_snippets(): doc_snippets shorter than queued_snippets!");
 				return;
 			}
 		}
@@ -212,13 +212,13 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	}
 #ifdef CONFIG_ECMASCRIPT
 	assert(vs->ecmascript);
-	/* Passing of the onload_snippets pointers gives process_snippets()
+	/* Passing of the onload_snippets pointers gives add_snippets()
 	 * some feeling of universality, shall we ever get any other snippets
 	 * (?). */
-	process_snippets(vs->ecmascript,
-	                 &document->onload_snippets,
-	                 &vs->ecmascript->onload_snippets,
-	                 &vs->ecmascript->current_onload_snippet);
+	add_snippets(vs->ecmascript,
+	             &document->onload_snippets,
+	             &vs->ecmascript->onload_snippets,
+	             &vs->ecmascript->current_onload_snippet);
 #endif
 
 	/* If we do not care about the height and width of the document

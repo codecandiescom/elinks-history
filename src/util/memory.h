@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.19 2004/04/16 16:27:01 zas Exp $ */
+/* $Id: memory.h,v 1.20 2004/04/17 01:13:15 zas Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -136,9 +136,14 @@ mem_align_alloc__(
 	mem_align_alloc__((void **)ptr, old, new, objsize, mask)
 #endif
 
-#define mem_free_if(x) do { register void *p = (x); if (p) mem_free(p); } while (0)
-
 /* XXX: way to improve ? */
 #define mem_free_set_if(x, v) do { register void *p = (x); if (p) mem_free(p); (x) = (v); } while (0)
+
+#ifdef LEAK_DEBUG
+#define mem_free_if(x) mem_free_set_if(x, NULL)
+#else
+#define mem_free_if(x) do { register void *p = (x); if (p) mem_free(p); } while (0)
+#endif
+
 
 #endif

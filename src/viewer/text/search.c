@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.163 2004/01/28 07:30:57 jonas Exp $ */
+/* $Id: search.c,v 1.164 2004/01/28 07:32:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -969,17 +969,14 @@ static enum typeahead_code
 do_typeahead(struct session *ses, struct document_view *doc_view,
 	     unsigned char *typeahead, int action)
 {
-	int current_link = doc_view->vs->current_link;
+	int current_link = int_max(doc_view->vs->current_link, 0);
 	int charpos = strlen(typeahead);
 	/* The link interval in which we are currently searching */
 	int upper_link, lower_link;
-	int direction, case_sensitive, i;
+	int direction, case_sensitive, i = current_link;
 
 	/* If there is nothing to match with don't start searching */
 	if (!charpos) return TYPEAHEAD_MATCHED;
-
-	if (current_link == -1) current_link = 0;
-	i = current_link;
 
 	switch (action) {
 		case ACT_EDIT_BACKSPACE:

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.297 2004/06/28 11:07:11 jonas Exp $ */
+/* $Id: download.c,v 1.298 2004/07/13 19:44:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -236,7 +236,7 @@ download_error_dialog(struct file_download *file_download, int saved_errno)
 		N_("OK"), NULL, B_ENTER | B_ESC);
 }
 
-int
+static int
 write_cache_entry_to_file(struct cache_entry *cached, struct file_download *file_download)
 {
 	struct fragment *frag;

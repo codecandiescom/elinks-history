@@ -1,4 +1,4 @@
-/* $Id: language.h,v 1.9 2003/01/03 00:40:24 pasky Exp $ */
+/* $Id: language.h,v 1.10 2003/01/03 01:02:16 pasky Exp $ */
 
 #ifndef EL__LANGUAGE_H
 #define EL__LANGUAGE_H
@@ -14,7 +14,6 @@ extern int current_language;
 void init_trans();
 void shutdown_trans();
 unsigned char *get_text_translation(unsigned char *, struct terminal *);
-unsigned char *get_english_translation(unsigned char *);
 void set_language(int);
 int n_languages();
 unsigned char *language_name(int);

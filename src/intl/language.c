@@ -1,5 +1,5 @@
 /* Support for multiple languages */
-/* $Id: language.c,v 1.14 2002/12/07 20:05:55 pasky Exp $ */
+/* $Id: language.c,v 1.15 2003/01/03 01:02:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,15 +111,6 @@ tr:
 	}
 
 	return trn;
-}
-
-unsigned char *
-get_english_translation(unsigned char *text)
-{
-	if (text < dummyarray || text > dummyarray + T__N_TEXTS)
-		return text;
-
-	return translation_english[text - dummyarray].name;
 }
 
 int

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.246 2004/10/29 20:07:08 jonas Exp $ */
+/* $Id: form.c,v 1.247 2004/11/07 09:25:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -850,22 +850,18 @@ encode_error:
 static void
 encode_newlines(struct string *string, unsigned char *data)
 {
-	unsigned char buffer[4];
-
-	memset(buffer, 0, sizeof(buffer));
-
 	for (; *data; data++) {
 		if (*data == '\n' || *data == '\r') {
+			unsigned char buffer[3];
+
 			/* Hex it. */
 			buffer[0] = '%';
 			buffer[1] = hx((((int) *data) & 0xF0) >> 4);
 			buffer[2] = hx(((int) *data) & 0xF);
+			add_bytes_to_string(string, buffer, 3);
 		} else {
-			buffer[0] = *data;
-			buffer[1] = 0;
+			add_char_to_string(string, *data);
 		}
-
-		add_to_string(string, buffer);
 	}
 }
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.341 2004/04/01 16:19:19 jonas Exp $ */
+/* $Id: session.c,v 1.342 2004/04/01 16:21:15 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -189,8 +189,7 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 		 * condition should never happen. It's apparently what Mikulas
 		 * thought, at least. I'll review this more carefully when I
 		 * will understand this stuff better ;-). --pasky */
-		if (frame->vs.view && frame->vs.view->document
-		    && frame->vs.view->document->frame_desc)) {
+		if (frame->vs.view && document_has_frams(frame->vs.view->document)) {
 			request_frameset(ses, frame->vs.view->document->frame_desc);
 			return;
 		}

@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.21 2002/12/30 02:56:12 pasky Exp $ */
+/* $Id: parser.c,v 1.22 2002/12/30 12:44:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,6 +39,10 @@ struct html_parser_state {
 	enum state_code state;
 
 	union {
+		/* HPT_PLAIN */
+		struct {
+			unsigned char *start;
+		} text;
 		/* HPT_TAG, HPT_TAG_NAME, HPT_TAG_COMMENT */
 		struct {
 			unsigned char *tagname;
@@ -179,40 +183,36 @@ plain_parse(struct parser_state *state, unsigned char **str, int *len)
 	unsigned char *html = *str;
 	int html_len = *len;
 
-	/* TODO: Don't create zero-length text nodes, if the pass will be at
-	 * the first char. */
-
-	/* If we can't append ourselves to the current node, make up a new
-	 * one for ourselves. */
-	if (state->current->special != NODE_SPEC_TEXT ||
-	    state->current->str + state->current->strlen != html) {
-		spawn_syntree_node(state);
-
-		state->current->special = NODE_SPEC_TEXT;
-		state->current->str = html;
-	}
-
 	while (html_len) {
 		if (*html == '&') {
-			state->current->strlen += *len - html_len;
-
 			pstate = html_state_push(state, HPT_ENTITY);
 			*str = html, *len = html_len;
 			return 0;
 		}
 
 		if (*html == '<') {
-			state->current->strlen += *len - html_len;
-
 			pstate = html_state_push(state, HPT_TAG);
 			*str = html, *len = html_len;
 			return 0;
 		}
 
+		/* If we can't append ourselves to the current node, make up a
+		 * new one for ourselves. We attempt to append only in the
+		 * first pass - we can't do it sooner because we would spawn a
+		 * lot of zero-length fragments. */
+		if (html_len == *len &&
+		    (state->current->special != NODE_SPEC_TEXT ||
+		     state->current->str + state->current->strlen != html)) {
+			spawn_syntree_node(state);
+
+			state->current->special = NODE_SPEC_TEXT;
+			state->current->str = html;
+		}
+
+		state->current->strlen++;
 		html++, html_len--;
 	}
 
-	state->current->strlen += *len;
 	*str = html, *len = html_len;
 	return 1;
 }

@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.40 2004/08/14 23:19:01 jonas Exp $ */
+/* $Id: secsave.c,v 1.41 2004/12/16 15:56:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,7 +95,7 @@ secure_open(unsigned char *file_name, mode_t mask)
 		goto end;
 	}
 
-	ssi->secure_save = get_opt_int("infofiles.secure_save");
+	ssi->secure_save = get_opt_bool("infofiles.secure_save");
 
 	ssi->file_name = stracpy(file_name);
 	if (!ssi->file_name) {

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.590 2004/12/14 01:55:03 miciah Exp $ */
+/* $Id: session.c,v 1.591 2004/12/16 15:56:54 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -789,7 +789,7 @@ setup_session(struct session *ses, struct uri *uri, struct session *base)
 		goto_uri(ses, uri);
 
 	} else if (!goto_url_home(ses)) {
-		if (get_opt_int("ui.startup_goto_dialog")) {
+		if (get_opt_bool("ui.startup_goto_dialog")) {
 			dialog_goto_url_open(ses);
 		}
 	}

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.262 2004/06/26 23:03:25 pasky Exp $ */
+/* $Id: link.c,v 1.263 2004/06/26 23:03:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -489,7 +489,7 @@ get_link_y_intersect(struct link *link, int x, int min_y, int max_y)
 }
 
 int
-next_in_dir(struct document_view *doc_view, int current, int dir_x, int dir_y)
+next_link_in_dir(struct document_view *doc_view, int current, int dir_x, int dir_y)
 {
 	struct document *document;
 	struct view_state *vs;

@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.17 2004/07/15 15:35:42 jonas Exp $ */
+/* $Id: window.c,v 1.18 2004/07/15 15:38:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,7 @@ add_window_at_pos(struct terminal *term,
 	win->handler = handler;
 	win->data = data; /* freed later in delete_window() */
 	win->term = term;
-	win->type = WT_NORMAL;
+	win->type = WINDOW_NORMAL;
 	add_at_pos(at, win);
 	win->handler(win, &ev, 0);
 }

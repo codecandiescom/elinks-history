@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.69 2004/06/28 11:07:11 jonas Exp $ */
+/* $Id: tab.c,v 1.70 2004/07/15 15:38:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,7 @@ init_tab(struct terminal *term, void *data,
 	win->handler = handler;
 	win->term = term;
 	win->data = data;
-	win->type = WT_TAB;
+	win->type = WINDOW_TAB;
 	win->resize = 1;
 
 	add_to_list(term->windows, win);

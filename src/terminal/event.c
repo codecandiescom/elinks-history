@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.68 2004/07/15 15:35:42 jonas Exp $ */
+/* $Id: event.c,v 1.69 2004/07/15 15:38:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,7 +111,7 @@ term_send_event(struct terminal *term, struct term_event *ev)
 		/* We need to send event to correct tab, not to the first one. --karpov */
 		/* ...if we want to send it to a tab at all. --pasky */
 		win = term->windows.next;
-		if (win->type == WT_TAB) {
+		if (win->type == WINDOW_TAB) {
 			win = get_current_tab(term);
 			assertm(win, "No tab to send the event to!");
 			if_assert_failed return;

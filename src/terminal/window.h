@@ -1,4 +1,4 @@
-/* $Id: window.h,v 1.8 2004/05/30 15:27:36 jonas Exp $ */
+/* $Id: window.h,v 1.9 2004/07/15 15:38:22 jonas Exp $ */
 
 #ifndef EL__TERMINAL_WINDOW_H
 #define EL__TERMINAL_WINDOW_H
@@ -12,13 +12,13 @@ enum window_type {
 	/* Normal windows: */
 	/* Used for things like dialogs. The default type when adding windows
 	 * with add_window(). */
-	WT_NORMAL,
+	WINDOW_NORMAL,
 
 	/* Tab windows: */
 	/* Tabs are a separate session and has separate history, current
 	 * document and action-in-progress .. basically a separate browsing
 	 * state. */
-	WT_TAB,
+	WINDOW_TAB,
 };
 
 struct window {

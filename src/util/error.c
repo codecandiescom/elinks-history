@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.58 2003/06/08 12:55:20 pasky Exp $ */
+/* $Id: error.c,v 1.59 2003/06/08 14:06:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,8 @@
 #include "util/string.h"
 #include "util/version.h"
 
+
+#ifdef DEBUG
 void
 force_dump(void)
 {
@@ -33,12 +35,15 @@ force_dump(void)
 	fflush(stderr);
 	raise(SIGSEGV);
 }
+#endif
+
 
 void
 do_not_optimize_here(void *p)
 {
 	/* stop GCC optimization - avoid bugs in it */
 }
+
 
 static void
 er(int bell, unsigned char *fmt, va_list params)

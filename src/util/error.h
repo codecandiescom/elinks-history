@@ -1,9 +1,14 @@
-/* $Id: error.h,v 1.21 2003/06/08 13:59:09 pasky Exp $ */
+/* $Id: error.h,v 1.22 2003/06/08 14:06:30 pasky Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
 
+
+/* This will print some fancy message, version string and possibly do something
+ * else useful. Then, it will dump core. */
+#ifdef DEBUG
 void force_dump(void);
+#endif
 
 
 /* This function does nothing, except making compiler not to optimize certains

@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.24 2003/10/04 18:31:44 jonas Exp $ */
+/* $Id: color.h,v 1.25 2003/10/17 15:46:06 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -16,8 +16,13 @@
 
 #define TERM_COLOR_MASK	0x07
 
-#define TERM_COLOR_FOREGROUND(color) (color & TERM_COLOR_MASK)
-#define TERM_COLOR_BACKGROUND(color) ((color >> 4) & TERM_COLOR_MASK)
+#ifdef USE_256_COLORS
+#define TERM_COLOR_FOREGROUND(color) ((color)[0])
+#define TERM_COLOR_BACKGROUND(color) ((color)[1])
+#else
+#define TERM_COLOR_FOREGROUND(color) ((color)[0] & TERM_COLOR_MASK)
+#define TERM_COLOR_BACKGROUND(color) (((color)[0] >> 4) & TERM_COLOR_MASK)
+#endif
 
 /* Controls what color ranges to use when setting the terminal color. */
 /* TODO: Make this rather some bitwise color_flags so we can also pass info

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.107 2003/10/17 15:13:36 jonas Exp $ */
+/* $Id: screen.c,v 1.108 2003/10/17 15:46:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -319,10 +319,14 @@ struct screen_state {
 
 #ifdef USE_256_COLORS
 #define compare_color(a, b)	(!memcmp((a), (b), 2))
+#define compare_bg_color(a, b)	((a)[1] == (b)[1])
+#define compare_fg_color(a, b)	((a)[0] == (b)[0])
 #define copy_color(a, b)	memcpy((a), (b), 2)
 #else
 #define compare_color(a, b)	((a)[0] == (b)[0])
 #define copy_color(a, b)	((a)[0] = (b)[0])
+#define compare_bg_color(a, b)	(TERM_COLOR_BACKGROUND(a) == TERM_COLOR_BACKGROUND(b))
+#define compare_fg_color(a, b)	(TERM_COLOR_FOREGROUND(a) == TERM_COLOR_FOREGROUND(b))
 #endif
 
 #define use_utf8_io(driver)	((driver)->charsets[0] != -1)
@@ -373,10 +377,9 @@ add_char16(struct string *screen, struct screen_driver *driver,
 
 		if (driver->color_mode == COLOR_MODE_16) {
 			static unsigned char code[6] = ";30;40";
-			unsigned char color = ch->color[0];
-			unsigned char bgcolor = TERM_COLOR_BACKGROUND(color);
+			unsigned char bgcolor = TERM_COLOR_BACKGROUND(ch->color);
 
-			code[2] = '0' + TERM_COLOR_FOREGROUND(color);
+			code[2] = '0' + TERM_COLOR_FOREGROUND(ch->color);
 
 			if (!driver->trans || bgcolor != 0) {
 				code[5] = '0' + bgcolor;
@@ -526,9 +529,10 @@ add_char256(struct string *screen, struct screen_driver *driver,
 		register int x = 0;						\
 										\
 		for (; x < (term_)->x; x++, current++, pos++) {			\
-			if (compare_color(pos->color, current->color)) {	\
+			if (compare_bg_color(pos->color, current->color)) {	\
 				/* No update for exact match. */		\
-				if (pos->data == current->data			\
+				if (compare_fg_color(pos->color, current->color)\
+				    && pos->data == current->data		\
 				    && pos->attr == current->attr)		\
 					continue;				\
 										\

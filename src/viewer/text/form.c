@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.176 2004/06/15 22:18:18 jonas Exp $ */
+/* $Id: form.c,v 1.177 2004/06/15 22:54:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

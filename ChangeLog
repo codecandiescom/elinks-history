@@ -1,3 +1,30 @@
+Tue Nov 30 17:47:11 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: inpfield.c, inpfield.h:
+
+	Fix bug related to input field label display, introduced by me few
+	days ago, spotted by Miciah. Drop @float_label field in favor of a
+	more general @flags field, using new enum inpfield_flags.
+	add_dlg_field_float2() was added. add_dlg_field_do() was cleaned up
+	(and indentation was fixed as well).  
+
+Tue Nov 30 06:30:24 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/menu.c:
+
+	menu_search_handler: Rather than setting |menu->selected| directly, 
+	use scroll_menu, which properly updates |menu->first|.  Now the menu
+	is scrolled and redrawn properly to show the matched item.  
+
+Tue Nov 30 06:15:23 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/menu.c:
+
+	menu_search_handler: Begin searching with the selected item, unless 
+	the user pressed previous-item or next-item. Now, as long as the
+	pattern matches the selected item, it will not jump between items as
+	the user enters the pattern.  
+
 Mon Nov 29 17:31:06 2004  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/inpfield.c:

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.151 2004/04/02 17:45:28 jonas Exp $ */
+/* $Id: file.c,v 1.152 2004/04/02 23:30:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -621,7 +621,7 @@ read_encoded_file(unsigned char *filename, int filenamelen, struct string *page)
 static void
 file_func(struct connection *connection)
 {
-	unsigned char *redirect = NULL;
+	int redirect_directory = 0;
 	unsigned char filename[MAX_STR_LEN];
 	int filenamelen = connection->uri->datalen;
 	DIR *directory;
@@ -655,7 +655,7 @@ file_func(struct connection *connection)
 		 * function properly the directory url must end with a
 		 * directory separator. */
 		if (filename[0] && !dir_sep(filename[filenamelen - 1])) {
-			redirect = straconcat(struri(connection->uri), "/", NULL);
+			redirect_directory = 1;
 			state = S_OK;
 		} else {
 			state = list_directory(directory, filename, &page);
@@ -676,15 +676,12 @@ file_func(struct connection *connection)
 		 * file reading or directory listing worked out ok. */
 		cache = get_cache_entry(connection->uri);
 		if (!cache) {
-			if (!redirect) done_string(&page);
+			if (!redirect_directory) done_string(&page);
 			state = S_OUT_OF_MEM;
 
-		} else if (redirect) {
-			/* Setup redirect to directory with '/' appended */
-			if (cache->redirect) mem_free(cache->redirect);
-			cache->redirect_get = 1;
-			cache->redirect = redirect;
-			cache->incomplete = 0;
+		} else if (redirect_directory) {
+			if (!redirect_cache_to_directory(cache, connection->uri))
+				state = S_OUT_OF_MEM;
 			connection->cache = cache;
 
 		} else {

@@ -270,41 +270,44 @@ void http_send_header(struct connection *c)
 
 	switch (referer)
 	{
+		case REFERER_NONE:
+			/* oh well */
+			break;
+			
 		case REFERER_FAKE:
-		add_to_str(&hdr, &l, "Referer: ");
-		add_to_str(&hdr, &l, fake_referer);
-		add_to_str(&hdr, &l, "\r\n");
-		break;
+			add_to_str(&hdr, &l, "Referer: ");
+			add_to_str(&hdr, &l, fake_referer);
+			add_to_str(&hdr, &l, "\r\n");
+			break;
 
 		case REFERER_TRUE:
-		if (c->prev_url && c->prev_url[0])
-		{
-		  unsigned char *etk;
-		  add_to_str(&hdr, &l, "Referer: ");
-		  if ((etk = strchr(c->prev_url, '\1'))) /* braindead ;-) */
-		    add_bytes_to_str(&hdr, &l, c->prev_url, etk - c->prev_url);
-		  else
-		    add_to_str(&hdr, &l, c->prev_url);
-		  add_to_str(&hdr, &l, "\r\n");
-	        }
-		break;
-		
+			if (c->prev_url && c->prev_url[0]) {
+				unsigned char *etk;
+				add_to_str(&hdr, &l, "Referer: ");
+				if ((etk = strchr(c->prev_url, '\1'))) /* braindead ;-) */
+					add_bytes_to_str(&hdr, &l, c->prev_url, etk - c->prev_url);
+				else
+					add_to_str(&hdr, &l, c->prev_url);
+				add_to_str(&hdr, &l, "\r\n");
+			}
+			break;
+
 		case REFERER_SAME_URL:
-		add_to_str(&hdr, &l, "Referer: http://");
-		if ((h = get_host_name(host))) {
-			add_to_str(&hdr, &l, h);
-			mem_free(h);
-			if ((h = get_port_str(host))) {
-				add_to_str(&hdr, &l, ":");
+			add_to_str(&hdr, &l, "Referer: http://");
+			if ((h = get_host_name(host))) {
 				add_to_str(&hdr, &l, h);
 				mem_free(h);
+				if ((h = get_port_str(host))) {
+					add_to_str(&hdr, &l, ":");
+					add_to_str(&hdr, &l, h);
+					mem_free(h);
+				}
 			}
-		}
-		if (upcase(c->url[0]) != 'P') add_to_str(&hdr, &l, "/");
-		if (!post) add_to_str(&hdr, &l, u);
-		else add_bytes_to_str(&hdr, &l, u, post - u - 1);
-		add_to_str(&hdr, &l, "\r\n");
-		break;
+			if (upcase(c->url[0]) != 'P') add_to_str(&hdr, &l, "/");
+			if (!post) add_to_str(&hdr, &l, u);
+			else add_bytes_to_str(&hdr, &l, u, post - u - 1);
+			add_to_str(&hdr, &l, "\r\n");
+			break;
 	}
 
 	add_to_str(&hdr, &l, "Accept: */*\r\n");

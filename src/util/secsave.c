@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.33 2004/02/09 09:29:24 zas Exp $ */
+/* $Id: secsave.c,v 1.34 2004/02/11 11:22:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -223,14 +223,28 @@ secure_close(struct secure_save_info *ssi)
 	 * fclose() (which call fflush() again, but the first one is needed since
 	 * it doesn't make much sense to flush kernel buffers and then libc buffers,
 	 * while closing file releases file descriptor we need to call fsync(). */
+#if defined(HAVE_FFLUSH) || defined(HAVE_FSYNC)
+	if (ssi->secure_save) {
+		int fail = 0;
 
-	if (ssi->secure_save && (fflush(ssi->fp) == EOF || fsync(fileno(ssi->fp)))) {
-		ret = errno;
-		secsave_errno = SS_ERR_OTHER;
+#ifdef HAVE_FFLUSH
+		fail = (fflush(ssi->fp) == EOF);
+#endif
 
-		fclose(ssi->fp); /* Close file, ignore errors. */
-		goto free;
+#ifdef HAVE_FSYNC
+		if (!fail)
+			fail = fsync(fileno(ssi->fp));
+#endif
+
+		if (fail) {
+			ret = errno;
+			secsave_errno = SS_ERR_OTHER;
+
+			fclose(ssi->fp); /* Close file, ignore errors. */
+			goto free;
+		}
 	}
+#endif
 
 	/* Close file. */
 	if (fclose(ssi->fp) == EOF) {

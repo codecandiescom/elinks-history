@@ -163,6 +163,7 @@ AC_CHECK_FUNCS(isalnum)
 AC_CHECK_FUNCS(snprintf vsnprintf asprintf vasprintf)
 AC_CHECK_FUNCS(getuid geteuid)
 AC_CHECK_FUNCS(getifaddrs)
+AC_CHECK_FUNCS(fflush fsync)
 
 AC_HAVE_FUNCS(cygwin_conv_to_full_win32_path)
 

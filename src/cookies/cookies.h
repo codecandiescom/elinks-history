@@ -1,4 +1,4 @@
-/* $Id: cookies.h,v 1.14 2003/11/17 22:22:36 jonas Exp $ */
+/* $Id: cookies.h,v 1.15 2003/11/19 01:55:15 jonas Exp $ */
 
 #ifndef EL__COOKIES_COOKIES_H
 #define EL__COOKIES_COOKIES_H
@@ -37,8 +37,5 @@ void load_cookies(void);
 void save_cookies(void);
 
 extern struct module cookies_module;
-extern struct list_head cookie_box_items; /* struct listbox_item */
-extern struct list_head cookie_boxes; /* struct listbox_data */
-
 
 #endif

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.97 2003/11/19 01:45:06 jonas Exp $ */
+/* $Id: cookies.c,v 1.98 2003/11/19 01:55:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,8 +50,6 @@ static unsigned int cookie_id = 0;
 
 static INIT_LIST_HEAD(cookies);
 static INIT_LIST_HEAD(cookie_queries);
-INIT_LIST_HEAD(cookie_box_items);
-INIT_LIST_HEAD(cookie_boxes);
 
 struct c_domain {
 	LIST_HEAD(struct c_domain);

@@ -123,6 +123,14 @@ if test "x${ac_cv_cpp_variadic_macros}" != "xno"; then
 	AC_DEFINE(HAVE_VARIADIC_MACROS, 1, Support for variadic macros)
 fi
 
+dnl Check for -rdynamic
+AC_MSG_CHECKING([for -rdynamic])
+LDFLAGS_X="$LDFLAGS"
+LDFLAGS="$LDFLAGS -rdynamic"
+AC_TRY_LINK([], [], have_rdynamic=yes, have_rdynamic=no)
+test "$have_rdynamic" = no && LDFLAGS="$LDFLAGS_X"
+AC_MSG_RESULT($have_rdynamic)
+
 dnl ===================================================================
 dnl Checks for library functions.
 dnl ===================================================================

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.263 2003/09/10 18:43:01 jonas Exp $ */
+/* $Id: renderer.c,v 1.264 2003/09/10 19:15:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,6 +85,8 @@ static INIT_LIST_HEAD(format_cache);
 void line_break(struct part *);
 void put_chars(struct part *, unsigned char *, int);
 
+#define X(x)	(part->xp + (x))
+#define Y(y)	(part->yp + (y))
 
 #define LINES_GRANULARITY	0x7F
 #define LINE_GRANULARITY	0x0F
@@ -118,10 +120,13 @@ realloc_line(struct document *document, int y, int x)
 	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
 	struct screen_char schar = INIT_SCREEN_CHAR(' ', 0, 0);
 
-	assert(document);
-	if_assert_failed return 0;
+	if (realloc_lines(document, y))
+		return -1;
 
 	line = &document->data[y];
+
+	if (x < line->l)
+		return 0;
 
 	if (!ALIGN_LINE(&line->d, line->l, x + 1))
 		return -1;
@@ -143,31 +148,16 @@ expand_lines(struct part *part, int y)
 	assert(part && part->document);
 	if_assert_failed return -1;
 
-	return realloc_lines(part->document, part->y + y);
-}
-
-static inline int
-xpand_line(struct part *p, int y, int x)
-{
-	assert(p && p->document && p->document->data);
-	if_assert_failed return 0;
-
-	x += p->xp;
-	y += p->yp;
-
-	assertm(y < p->document->y, "line does not exist");
-	if_assert_failed return 0;
-
-	if (x < p->document->data[y].l)
-		return 0;
-
-	return realloc_line(p->document, y, x);
+	return realloc_lines(part->document, Y(y));
 }
 
 int
 expand_line(struct part *part, int y, int x)
 {
-	return xpand_line(part, y, x);
+	assert(part && part->document);
+	if_assert_failed return -1;
+
+	return realloc_line(part->document, Y(y), X(x));
 }
 
 static inline int
@@ -193,8 +183,6 @@ xpand_spaces(struct part *p, int l)
 }
 
 
-#define X(x)		(part->xp + (x))
-#define Y(y)		(part->yp + (y))
 #define LINE(y)		part->document->data[Y(y)]
 #define POS(x, y)	LINE(y).d[X(x)]
 #define LEN(y)		int_max(LINE(y).l - part->xp, 0)
@@ -209,8 +197,7 @@ set_hchars(struct part *part, int x, int y, int xl,
 	assert(part && part->document);
 	if_assert_failed return;
 
-	if (realloc_lines(part->document, part->yp + y)
-	    || xpand_line(part, y, x + xl - 1))
+	if (realloc_line(part->document, Y(y), X(x) + xl - 1))
 		return;
 
 	assert(part->document->data);
@@ -242,8 +229,7 @@ xset_hchar(struct part *part, int x, int y,
 	assert(part && part->document);
 	if_assert_failed return;
 
-	if (realloc_lines(part->document, part->yp + y)
-	    || xpand_line(part, y, x))
+	if (realloc_line(part->document, Y(y), X(x)))
 		return;
 
 	assert(part->document->data);
@@ -271,16 +257,11 @@ xset_vchars(struct part *part, int x, int y, int yl,
 	assert(part && part->document);
 	if_assert_failed return;
 
-	if (realloc_lines(part->document, part->yp + y + yl - 1))
-		return;
-
-	assert(part->document->data);
-	if_assert_failed return;
-
 	set_term_color(&schar, &colors, COLOR_DEFAULT);
 
 	for (; yl; yl--, y++) {
-	    	if (xpand_line(part, y, x)) return;
+	    	if (realloc_line(part->document, Y(y), X(x)))
+			return;
 
 		copy_screen_chars(&POS(x, y), &schar, 1);
 	}
@@ -368,8 +349,7 @@ set_hline(struct part *part, unsigned char *chars, int charslen)
 		return;
 
 	if (part->document) {
-		if (realloc_lines(part->document, part->y + y)
-		    || xpand_line(part, y, x + charslen - 1))
+		if (realloc_line(part->document, Y(y), X(x) + charslen))
 			return;
 
 		for (; charslen > 0; charslen--, x++, chars++) {
@@ -394,7 +374,7 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 	assert(part && part->document);
 	if_assert_failed return;
 
-	if (realloc_lines(part->document, part->yp + yt))
+	if (realloc_lines(part->document, Y(yt)))
 		return;
 
 	for (; nlink < part->document->nlinks; nlink++) {
@@ -451,8 +431,7 @@ copy_chars(struct part *part, int x, int y, int xl, struct screen_char *d)
 	assert(xl > 0 && part && part->document && part->document->data);
 	if_assert_failed return;
 
-	if (realloc_lines(part->document, part->y + y)
-	    || xpand_line(part, y, x + xl - 1))
+	if (realloc_line(part->document, Y(y), X(x) + xl))
 		return;
 
 	copy_screen_chars(&POS(x, y), d, xl);

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.235 2004/06/08 13:54:52 jonas Exp $ */
+/* $Id: uri.c,v 1.236 2004/06/08 16:10:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,6 +78,32 @@ end_with_known_tld(unsigned char *s, int slen)
 	return -1;
 }
 
+static int
+check_uri_file(unsigned char *name)
+{
+	/* Check POST_CHAR etc ... */
+	unsigned char *chars = "\001#?";
+
+	if (file_exists(name))
+		return strlen(name);
+
+	for (; *chars; chars++) {
+		unsigned char *pos = strchr(name, *chars);
+		int namelen = -1;
+
+		if (!pos) continue;
+
+		*pos = 0;
+		if (file_exists(name))
+			namelen = strlen(name);
+		*pos = *chars;
+
+		if (namelen >= 0) return namelen;
+	}
+
+	return -1;
+}
+
 static inline int
 get_protocol_length(const unsigned char *url)
 {
@@ -133,9 +159,22 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	else if (known && get_protocol_need_slashes(uri->protocol))
 		return URI_ERRNO_NO_SLASHES;
 
-	if (!known || get_protocol_free_syntax(uri->protocol)) {
+	if (!known) {
 		uri->data = prefix_end;
 		uri->datalen = strlen(prefix_end);
+		return URI_ERRNO_OK;
+
+	} else if (uri->protocol == PROTOCOL_FILE) {
+		uri->data = prefix_end;
+		uri->datalen = check_uri_file(prefix_end);
+
+		if (uri->datalen < 0)
+			uri->datalen = strlen(prefix_end);
+		else if (uri->data[uri->datalen] == '#') {
+			uri->fragment = uri->data + uri->datalen + 1;
+			uri->fragmentlen = strlen(uri->fragment);
+		}
+
 		return URI_ERRNO_OK;
 	}
 
@@ -775,9 +814,7 @@ find_uri_protocol(unsigned char *newurl)
 
 	/* First see if it is a file so filenames that look like hostnames
 	 * won't confuse us below. */
-	/* TODO: Try to strip first '#'-fragment and then '?'-query part
-	 * and improve handling of file:// URIs. */
-	if (file_exists(newurl)) return PROTOCOL_FILE;
+	if (check_uri_file(newurl) >= 0) return PROTOCOL_FILE;
 
 	/* Yes, it would be simpler to make test for IPv6 address first,
 	 * but it would result in confusing mix of ifdefs ;-). */

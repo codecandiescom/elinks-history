@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.23 2003/12/22 02:53:28 pasky Exp $ */
+/* $Id: cmdline.c,v 1.24 2003/12/22 03:01:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -439,7 +439,7 @@ struct option_info cmdline_options_info[] = {
 		"conffile", 0, "elinks.conf",
 		N_("Name of the file with configuration, from which and to\n"
 		"which all the configuration shall be written. It should be\n"
-		"relative to confdir."),
+		"relative to confdir.")),
 
 	INIT_OPT_ALIAS("", N_("MIME type to assume for documents"),
 		"default-mime-type", 0, "mime.default_type",

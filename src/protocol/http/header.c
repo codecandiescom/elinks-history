@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.6 2002/06/18 19:36:01 zas Exp $ */
+/* $Id: header.c,v 1.7 2002/06/18 19:52:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,9 +14,12 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-unsigned char *parse_http_header(unsigned char *head, unsigned char *item, unsigned char **ptr)
+unsigned char *
+parse_http_header(unsigned char *head, unsigned char *item,
+		  unsigned char **ptr)
 {
 	unsigned char *i, *f, *g, *h;
+
 	if (!head) return NULL;
 	h = NULL;
 	for (f = head; *f; f++) {
@@ -30,7 +33,8 @@ unsigned char *parse_http_header(unsigned char *head, unsigned char *item, unsig
 			for (g = ++f; *g >= ' '; g++);
 			while (g > f && g[-1] == ' ') g--;
 			if (h) mem_free(h);
-			if ((h = mem_alloc(g - f + 1))) {
+			h = mem_alloc(g - f + 1);
+			if (h) {
 				memcpy(h, f, g - f);
 				h[g - f] = 0;
 				if (ptr) {
@@ -40,19 +44,23 @@ unsigned char *parse_http_header(unsigned char *head, unsigned char *item, unsig
 				return h;
 			}
 		}
-		cont:;
+
+cont:;
 		f--;
 	}
 	return h;
 }
 
-unsigned char *parse_http_header_param(unsigned char *x, unsigned char *e)
+unsigned char *
+parse_http_header_param(unsigned char *x, unsigned char *e)
 {
 	int le = strlen(e);
 	int lp;
 	unsigned char *y = x;
-	a:
-	if (!(y = strchr(y, ';'))) return NULL;
+
+a:
+	y = strchr(y, ';');
+	if (!y) return NULL;
 	while (*y && (*y == ';' || *y <= ' ')) y++;
 	if (strlen(y) < le) return NULL;
 	if (casecmp(y, e, le)) goto a;
@@ -66,10 +74,12 @@ unsigned char *parse_http_header_param(unsigned char *x, unsigned char *e)
 
 /* Parse string param="value", return value as new string or NULL if any
  * error. */
-unsigned char *get_http_header_param(unsigned char *e, unsigned char *name)
+unsigned char *
+get_http_header_param(unsigned char *e, unsigned char *name)
 {
 	unsigned char *n, *start;
 	int i = 0;
+
 again:
 	while (*e && upcase(*e++) != upcase(*name));
 	if (!*e) return NULL;
@@ -84,6 +94,7 @@ again:
 	if (!IS_QUOTE(*e)) while (*e && !WHITECHAR(*e)) e++;
 	else {
 		char uu = *e++;
+
 		start++;
 		while (*e != uu) {
 			if (!*e) return NULL;
@@ -95,12 +106,14 @@ again:
 	while (start < e && *(e - 1) == ' ') e--;
 	if (start == e) return NULL;
 
-	if (!(n = mem_alloc(e - start + 1))) return NULL;
+	n = mem_alloc(e - start + 1);
+	if (!n) return NULL;
 	while (start < e) {
 		if (*start < ' ') n[i] = '.';
 		else n[i] = *start;
 		i++; start++;
 	}
 	n[i] = 0;
+
 	return n;
 }

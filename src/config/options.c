@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.145 2002/12/11 13:18:14 pasky Exp $ */
+/* $Id: options.c,v 1.146 2002/12/11 14:48:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -673,6 +673,14 @@ register_options()
 	add_opt_tree("",
 		"config", 0,
 		"Configuration handling options.");
+
+	add_opt_int("config",
+		"comments", 0, 0, 3, 3,
+		"Amount of comments automatically written to the config file:\n"
+		"0 is no comments are written\n"
+		"1 is only the \"blurb\" (name+type) is written\n"
+		"2 is only the description is written\n"
+		"3 is full comments are written");
 
 	add_opt_int("config",
 		"indentation", 0, 0, 16, 2,

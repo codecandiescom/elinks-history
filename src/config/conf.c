@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.64 2002/12/10 23:13:52 pasky Exp $ */
+/* $Id: conf.c,v 1.65 2002/12/11 14:48:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -438,6 +438,8 @@ load_config()
 
 
 static int indentation = 2;
+/* 0 -> none, 1 -> only option full name+type, 2 -> only desc, 3 -> both */
+static int comments = 3;
 
 static void
 smart_config_output_fn(unsigned char **str, int *len, struct option *option,
@@ -451,6 +453,7 @@ smart_config_output_fn(unsigned char **str, int *len, struct option *option,
 
 	switch (action) {
 		case 0:
+			if (!(comments & 1)) break;
 			for (i = 0; i < depth * indentation; i++)
 				add_chr_to_str(str, len, ' ');
 
@@ -466,6 +469,8 @@ smart_config_output_fn(unsigned char **str, int *len, struct option *option,
 			break;
 
 		case 1:
+			if (!(comments & 2)) break;
+
 			if (!option->desc || !do_print_comment)
 				break;
 
@@ -563,6 +568,7 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 		goto get_me_out;
 
 	indentation = get_opt_int("config.indentation");
+	comments = get_opt_int("config.comments");
 
 	tmpstr = init_str(); tmplen = 0;
 	add_to_str(&tmpstr, &tmplen, NEWLINE NEWLINE NEWLINE);

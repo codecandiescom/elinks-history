@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.48 2004/04/26 03:37:47 jonas Exp $ */
+/* $Id: leds.c,v 1.49 2004/05/14 11:39:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,7 +113,7 @@ static struct option_info led_options[] = {
 
 #define get_opt_leds(which)		led_options[(which)].option.value
 #define get_leds_clock_enable()		get_opt_leds(LEDS_CLOCK_ENABLE).number
-#define get_leds_clock_format()		get_opt_leds(LEDS_CLOCK_ENABLE).string
+#define get_leds_clock_format()		get_opt_leds(LEDS_CLOCK_FORMAT).string
 #define get_leds_panel_enable()		get_opt_leds(LEDS_PANEL_ENABLE).number
 
 void

@@ -55,12 +55,12 @@ ELinks-0.4.0:
 * file/http gzip/bzip2 decompression support
 * downloads resuming support
 * mailcap support
-* hiearchic bookmarks support, XBEL bookmarks support
+* hierarchic bookmarks support, XBEL bookmarks support
 * source layout was dramatically reorganized
 * relocated ELinks configuration files, changed format (if you are upgrading
   from Links or older ELinks version, read INSTALL file to see how to convert
   your old config files!!!)
-* options are now in tree hiearchy and are configurable generically
+* options are now in tree hierarchy and are configurable generically
 * keybindings can be configured from the user interface
 * colorful user interface
 * tiny useless LED-like indicators support
@@ -91,7 +91,7 @@ Links-0.96-pb2:
 
 * cookies expiration, saving and resaving
 * do NOT strip everything after ? in form action
-* http referer, true http referer
+* http referrer, true http referrer
 * limited textarea external editor support
 * partial fix of &#13;
 * enhanced manual page

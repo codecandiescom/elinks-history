@@ -25,7 +25,7 @@ He wants to keep Links with a relatively closed feature set and merge only new
 features which he himself needs.  It has advantages that the tree is very narrow
 and the code is small and contains very little bloat.  ELinks, on the contrary,
 aims to provide a full-featured web browser, superior to both lynx and w3m and
-with the possibilities of Konqueror and similiar browsers. However, to prevent
+with the possibilities of Konqueror and similar browsers. However, to prevent
 drastic bloating of the code, the development is driven in the course of
 modularization and separation of add-on modules (like cookies, bookmarks, ssl,
 lua etc).
@@ -41,6 +41,6 @@ If you want to request features or report bugs, use the mailing list as
 mentioned above, bugzilla at bugzilla.elinks.or.cz or come and see us on
 irc.freenode.net #elinks.
 
-$Id: README,v 1.21 2003/12/24 12:16:33 jonas Exp $
+$Id: README,v 1.22 2004/05/06 00:14:36 jonas Exp $
 
 vim: textwidth=80

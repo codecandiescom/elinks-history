@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.145 2003/07/02 23:49:25 pasky Exp $ */
+/* $Id: view.c,v 1.146 2003/07/02 23:56:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -621,8 +621,28 @@ find_form_state(struct f_data_c *f, struct form_control *frm)
 
 static void
 draw_textarea(struct terminal *t, struct form_state *fs,
-	      struct form_control *frm, struct link *l)
+	      struct f_data_c *f, struct link *l)
 {
+	struct line_info *ln, *lnx;
+	int sl, ye;
+	register int i, x, y = 0;
+	struct form_control *frm;
+	int xp, yp;
+	int xw, yw;
+	int vx, vy;
+
+	assert(t && f && f->f_data && l);
+	frm = l->form;
+	assertm(frm, "link %d has no form", (int)(l - f->f_data->links));
+
+	xp = f->xp;
+	yp = f->yp;
+	xw = f->xw;
+	yw = f->yw;
+	vx = f->vs->view_posx;
+	vy = f->vs->view_pos;
+
+
 	if (!l->n) return;
 	area_cursor(frm, fs);
 	lnx = format_text(fs->value, frm->cols, !!frm->wrap);
@@ -693,9 +713,8 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 	vy = vs->view_pos;
 
 	switch (frm->type) {
-		struct line_info *ln, *lnx;
 		unsigned char *s;
-		int sl, ye;
+		int sl;
 		register int i, x, y;
 
 		case FC_TEXT:
@@ -727,7 +746,7 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 			}
 			break;
 		case FC_TEXTAREA:
-			draw_textarea(t, fs, frm, l);
+			draw_textarea(t, fs, f, l);
 			break;
 		case FC_CHECKBOX:
 		case FC_RADIO:

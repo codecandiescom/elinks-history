@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.166 2005/01/22 13:54:57 jonas Exp $ */
+/* $Id: session.h,v 1.167 2005/03/02 16:37:50 zas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -68,8 +68,10 @@ enum task_type {
 struct session_task {
 	enum task_type type;
 	/* TODO: union --pasky */
-	unsigned char *target_frame;
-	struct location *target_location;
+	struct {
+		unsigned char *frame;
+		struct location *location;
+	} target;
 };
 
 struct session_status {

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.601 2005/03/02 14:30:05 zas Exp $ */
+/* $Id: session.c,v 1.602 2005/03/02 16:37:50 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -584,13 +584,13 @@ file_loading_callback(struct download *download, struct file_to_load *ftl)
 	if (ftl->cached && !ftl->cached->redirect_get && download->pri != PRI_CSS) {
 		struct session *ses = ftl->ses;
 		struct uri *loading_uri = ses->loading_uri;
-		unsigned char *target_frame = ses->task.target_frame;
+		unsigned char *target_frame = ses->task.target.frame;
 
 		ses->loading_uri = ftl->uri;
-		ses->task.target_frame = ftl->target_frame;
+		ses->task.target.frame = ftl->target_frame;
 		setup_download_handler(ses, &ftl->download, ftl->cached, 1);
 		ses->loading_uri = loading_uri;
-		ses->task.target_frame = target_frame;
+		ses->task.target.frame = target_frame;
 	}
 
 	doc_loading_callback(download, ftl->ses);

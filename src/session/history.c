@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.82 2004/06/25 09:54:46 jonas Exp $ */
+/* $Id: history.c,v 1.83 2005/03/02 16:37:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,16 +95,16 @@ ses_history_move(struct session *ses)
 
 	/* Does it make sense? */
 
-	if (!have_location(ses) || !ses->task.target_location)
+	if (!have_location(ses) || !ses->task.target.location)
 		return;
 
-	if (ses->task.target_location
+	if (ses->task.target.location
 	    == (struct location *) &ses->history.history)
 		return;
 
 	/* Move. */
 
-	ses->history.current = ses->task.target_location;
+	ses->history.current = ses->task.target.location;
 
 	loc = cur_loc(ses);
 

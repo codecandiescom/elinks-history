@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.347 2005/03/02 14:30:05 zas Exp $ */
+/* $Id: download.c,v 1.348 2005/03/02 16:37:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -889,7 +889,7 @@ init_type_query(struct session *ses, struct download *download,
 
 	type_query->uri = get_uri_reference(ses->loading_uri);
 	type_query->ses = ses;
-	type_query->target_frame = null_or_stracpy(ses->task.target_frame);
+	type_query->target_frame = null_or_stracpy(ses->task.target.frame);
 
 	type_query->cached = cached;
 	object_lock(type_query->cached);
@@ -965,14 +965,14 @@ tp_display(struct type_query *type_query)
 	struct view_state *vs;
 	struct session *ses = type_query->ses;
 	struct uri *loading_uri = ses->loading_uri;
-	unsigned char *target_frame = ses->task.target_frame;
+	unsigned char *target_frame = ses->task.target.frame;
 
 	ses->loading_uri = type_query->uri;
-	ses->task.target_frame = type_query->target_frame;
+	ses->task.target.frame = type_query->target_frame;
 	vs = ses_forward(ses, type_query->frame);
 	if (vs) vs->plain = 1;
 	ses->loading_uri = loading_uri;
-	ses->task.target_frame = target_frame;
+	ses->task.target.frame = target_frame;
 
 	if (!type_query->frame) {
 		struct download *old = &type_query->download;

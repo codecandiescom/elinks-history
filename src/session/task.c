@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.157 2005/03/02 16:31:03 zas Exp $ */
+/* $Id: task.c,v 1.158 2005/03/02 16:37:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,8 +75,8 @@ post_yes(struct task *task)
 
 	/* TODO: memcpy(). --Zas */
 	ses->task.type = task->session_task.type;
-	ses->task.target_frame = task->session_task.target_frame;
-	ses->task.target_location = task->session_task.target_location;
+	ses->task.target.frame = task->session_task.target.frame;
+	ses->task.target.location = task->session_task.target.location;
 
 	load_uri(ses->loading_uri, ses->referrer, &ses->loading,
 		 PRI_MAIN, task->cache_mode, -1);
@@ -208,8 +208,8 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 		ses->loading_uri = get_uri_reference(uri);
 
 		ses->task.type = task_type;
-		ses->task.target_frame = target_frame;
-		ses->task.target_location = target_location;
+		ses->task.target.frame = target_frame;
+		ses->task.target.location = target_location;
 
 		load_uri(ses->loading_uri, ses->referrer, &ses->loading,
 			 PRI_MAIN, cache_mode, -1);
@@ -224,8 +224,8 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	task->uri = get_uri_reference(uri);
 	task->cache_mode = cache_mode;
 	task->session_task.type = task_type;
-	task->session_task.target_frame = target_frame;
-	task->session_task.target_location = target_location;
+	task->session_task.target.frame = target_frame;
+	task->session_task.target.location = target_location;
 
 	if (malicious_uri) {
 		unsigned char *host = memacpy(uri->host, uri->hostlen);
@@ -298,7 +298,7 @@ x:
 		copy_struct(&loc->download, &ses->loading);
 	}
 
-	if (ses->task.target_frame && *ses->task.target_frame) {
+	if (ses->task.target.frame && *ses->task.target.frame) {
 		struct frame *frame;
 
 		assertm(have_location(ses), "no location yet");
@@ -309,13 +309,13 @@ x:
 			add_to_history(&ses->history, loc);
 		}
 
-		frame = ses_find_frame(ses, ses->task.target_frame);
+		frame = ses_find_frame(ses, ses->task.target.frame);
 		if (!frame) {
 			if (!loaded_in_frame) {
 				del_from_history(&ses->history, loc);
 				destroy_location(loc);
 			}
-			ses->task.target_frame = NULL;
+			ses->task.target.frame = NULL;
 			goto x;
 		}
 
@@ -379,7 +379,7 @@ ses_imgmap(struct session *ses)
 
 	if (get_image_map(cached->head, fragment->data,
 			  fragment->data + fragment->length,
-			  &menu, &ml, ses->loading_uri, ses->task.target_frame,
+			  &menu, &ml, ses->loading_uri, ses->task.target.frame,
 			  get_opt_codepage_tree(ses->tab->term->spec, "charset"),
 			  get_opt_codepage("document.codepage.assume"),
 			  get_opt_bool("document.codepage.force_assumed")))
@@ -434,11 +434,11 @@ do_redirect(struct session *ses, struct download **download_p, struct cache_entr
 	}
 	/* Fall through. */
 	case TASK_IMGMAP:
-		ses_goto(ses, cached->redirect, ses->task.target_frame, NULL,
+		ses_goto(ses, cached->redirect, ses->task.target.frame, NULL,
 			 CACHE_MODE_NORMAL, task, 1);
 		return DO_MOVE_DONE;
 	case TASK_HISTORY:
-		ses_goto(ses, cached->redirect, NULL, ses->task.target_location,
+		ses_goto(ses, cached->redirect, NULL, ses->task.target.location,
 			 CACHE_MODE_NORMAL, TASK_RELOAD, 1);
 		return DO_MOVE_DONE;
 	case TASK_RELOAD:
@@ -498,7 +498,7 @@ do_move(struct session *ses, struct download **download_p)
 			ses_history_move(ses);
 			break;
 		case TASK_RELOAD:
-			ses->task.target_location = cur_loc(ses)->prev;
+			ses->task.target.location = cur_loc(ses)->prev;
 			ses_history_move(ses);
 			ses_forward(ses, 0);
 			break;

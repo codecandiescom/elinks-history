@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.5 2004/04/29 13:30:00 zas Exp $ */
+/* $Id: forms.c,v 1.6 2004/05/01 19:16:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,12 +102,7 @@ get_html_form(unsigned char *a, struct form *form)
 	}
 
 	al = get_target(a);
-	if (al) {
-		form->target = al;
-	} else {
-		form->target = stracpy(format.target_base);
-	}
-
+	form->target = al ? al : stracpy(format.target_base);
 	form->num = a - startf;
 }
 
@@ -120,7 +115,7 @@ find_form_for_input(unsigned char *i)
 	int namelen;
 
 	done_form();
-	
+
 	if (!special_f(ff, SP_USED, NULL)) return;
 
 	if (last_input_tag && i <= last_input_tag && i > last_form_tag) {
@@ -177,7 +172,7 @@ html_button(unsigned char *a)
 	al = get_attr_val(a, "type");
 	if (!al) {
 		fc->type = FC_SUBMIT;
-		goto xxx;
+		goto no_type_attr;
 	}
 
 	if (!strcasecmp(al, "submit")) fc->type = FC_SUBMIT;
@@ -202,7 +197,7 @@ html_button(unsigned char *a)
 	}
 	mem_free(al);
 
-xxx:
+no_type_attr:
 	fc->form_num = last_form_tag - startf;
 	fc->ctrl_num = a - last_form_tag;
 	fc->position = a - startf;
@@ -244,7 +239,7 @@ html_input(unsigned char *a)
 	al = get_attr_val(a, "type");
 	if (!al) {
 		fc->type = FC_TEXT;
-		goto xxx;
+		goto no_type_attr;
 	}
 	if (!strcasecmp(al, "text")) fc->type = FC_TEXT;
 	else if (!strcasecmp(al, "password")) fc->type = FC_PASSWORD;
@@ -271,7 +266,7 @@ html_input(unsigned char *a)
 	} else fc->type = FC_TEXT;
 	mem_free(al);
 
-xxx:
+no_type_attr:
 	fc->form_num = last_form_tag - startf;
 	fc->ctrl_num = a - last_form_tag;
 	fc->position = a - startf;
@@ -392,41 +387,41 @@ html_option(unsigned char *a)
 
 		for (p = a - 1; *p != '<'; p--);
 
-		if (!init_string(&str)) goto x;
+		if (!init_string(&str)) goto end_parse;
 		if (parse_element(p, eoff, NULL, NULL, NULL, &p)) {
 			INTERNAL("parse element failed");
 			val = str.source;
-			goto x;
+			goto end_parse;
 		}
 
-rrrr:
+se:
 		while (p < eoff && isspace(*p)) p++;
 		while (p < eoff && !isspace(*p) && *p != '<') {
 
-pppp:
+sp:
 			add_char_to_string(&str, *p), p++;
 		}
 
 		r = p;
-		val = str.source; /* Has to be before the possible 'goto x' */
+		val = str.source; /* Has to be before the possible 'goto end_parse' */
 
 		while (r < eoff && isspace(*r)) r++;
-		if (r >= eoff) goto x;
+		if (r >= eoff) goto end_parse;
 		if (r - 2 <= eoff && (r[1] == '!' || r[1] == '?')) {
 			p = skip_comment(r, eoff);
-			goto rrrr;
+			goto se;
 		}
-		if (parse_element(r, eoff, &name, &namelen, NULL, &p)) goto pppp;
+		if (parse_element(r, eoff, &name, &namelen, NULL, &p)) goto sp;
 		if (strlcasecmp(name, namelen, "OPTION", 6)
 		    && strlcasecmp(name, namelen, "/OPTION", 7)
 		    && strlcasecmp(name, namelen, "SELECT", 6)
 		    && strlcasecmp(name, namelen, "/SELECT", 7)
 		    && strlcasecmp(name, namelen, "OPTGROUP", 8)
 		    && strlcasecmp(name, namelen, "/OPTGROUP", 9))
-			goto rrrr;
+			goto se;
 	}
 
-x:
+end_parse:
 	fc->form_num = last_form_tag - startf;
 	fc->ctrl_num = a - last_form_tag;
 	fc->position = a - startf;
@@ -436,8 +431,7 @@ x:
 	fc->name = null_or_stracpy(format.select);
 	fc->default_value = val;
 	fc->default_state = has_attr(a, "selected");
-	fc->ro = format.select_disabled;
-	if (has_attr(a, "disabled")) fc->ro = 2;
+	fc->ro = has_attr(a, "disabled") ? 2 : format.select_disabled;
 	put_chrs(" ", 1, put_chars_f, ff);
 	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;

@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.8 2002/06/17 07:42:32 pasky Exp $ */
+/* $Id: hash.c,v 1.9 2002/11/15 16:47:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,14 +105,14 @@ get_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen)
 
 #undef magic
 
+/* If key and/or value were dynamically allocated, think about freeing them.
+ * This function doesn't do that. */
 void
 del_hash_item(struct hash *hash, struct hash_item *item)
 {
 	if (!item) return;
 
 	del_from_list(item);
-	mem_free(item->key);
-	if (item->value) mem_free(item->value);
 	mem_free(item);
 }
 

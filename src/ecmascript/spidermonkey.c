@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.108 2004/12/17 23:14:24 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.109 2004/12/17 23:15:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -524,19 +524,19 @@ static const JSClass form_class = {
 };
 
 enum form_prop {
-	JSP_FORM_CONTROL_ACTION,
-	JSP_FORM_CONTROL_ENCODING,
-	JSP_FORM_CONTROL_METHOD,
-	JSP_FORM_CONTROL_NAME,
-	JSP_FORM_CONTROL_TARGET
+	JSP_FORM_ACTION,
+	JSP_FORM_ENCODING,
+	JSP_FORM_METHOD,
+	JSP_FORM_NAME,
+	JSP_FORM_TARGET
 };
 
 static const JSPropertySpec form_props[] = {
-	{ "action",	JSP_FORM_CONTROL_ACTION,	JSPROP_ENUMERATE },
-	{ "encoding",	JSP_FORM_CONTROL_ENCODING,	JSPROP_ENUMERATE },
-	{ "method",	JSP_FORM_CONTROL_METHOD,	JSPROP_ENUMERATE },
-	{ "name",	JSP_FORM_CONTROL_NAME,		JSPROP_ENUMERATE },
-	{ "target",	JSP_FORM_CONTROL_TARGET,	JSPROP_ENUMERATE },
+	{ "action",	JSP_FORM_ACTION,	JSPROP_ENUMERATE },
+	{ "encoding",	JSP_FORM_ENCODING,	JSPROP_ENUMERATE },
+	{ "method",	JSP_FORM_METHOD,	JSPROP_ENUMERATE },
+	{ "name",	JSP_FORM_NAME,		JSPROP_ENUMERATE },
+	{ "target",	JSP_FORM_TARGET,	JSPROP_ENUMERATE },
 	{ NULL }
 };
 
@@ -561,11 +561,11 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
-	case JSP_FORM_CONTROL_ACTION:
+	case JSP_FORM_ACTION:
 		P_STRING(fc->action);
 		break;
 
-	case JSP_FORM_CONTROL_ENCODING:
+	case JSP_FORM_ENCODING:
 		switch (fc->method) {
 		case FORM_METHOD_GET:
 		case FORM_METHOD_POST:
@@ -580,7 +580,7 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		}
 		break;
 
-	case JSP_FORM_CONTROL_METHOD:
+	case JSP_FORM_METHOD:
 		switch (fc->method) {
 		case FORM_METHOD_GET:
 			P_STRING("GET");
@@ -594,11 +594,11 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		}
 		break;
 
-	case JSP_FORM_CONTROL_NAME:
+	case JSP_FORM_NAME:
 		P_STRING(fc->name);
 		break;
 
-	case JSP_FORM_CONTROL_TARGET:
+	case JSP_FORM_TARGET:
 		P_STRING(fc->target);
 		break;
 
@@ -623,12 +623,12 @@ form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
-	case JSP_FORM_CONTROL_ACTION:
+	case JSP_FORM_ACTION:
 		JSVAL_REQUIRE(vp, STRING);
 		mem_free_set(fc->action, stracpy(v.string));
 		break;
 
-	case JSP_FORM_CONTROL_ENCODING:
+	case JSP_FORM_ENCODING:
 		JSVAL_REQUIRE(vp, STRING);
 		if (!strcasecmp(v.string, "application/x-www-form-urlencoded")) {
 			fc->method = fc->method == FORM_METHOD_GET ? FORM_METHOD_GET
@@ -640,7 +640,7 @@ form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		}
 		break;
 
-	case JSP_FORM_CONTROL_METHOD:
+	case JSP_FORM_METHOD:
 		JSVAL_REQUIRE(vp, STRING);
 		if (!strcasecmp(v.string, "GET")) {
 			fc->method = FORM_METHOD_GET;
@@ -649,12 +649,12 @@ form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		}
 		break;
 
-	case JSP_FORM_CONTROL_NAME:
+	case JSP_FORM_NAME:
 		JSVAL_REQUIRE(vp, STRING);
 		mem_free_set(fc->name, stracpy(v.string));
 		break;
 
-	case JSP_FORM_CONTROL_TARGET:
+	case JSP_FORM_TARGET:
 		JSVAL_REQUIRE(vp, STRING);
 		mem_free_set(fc->target, stracpy(v.string));
 		break;

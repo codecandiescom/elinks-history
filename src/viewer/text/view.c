@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.107 2003/06/28 09:52:30 zas Exp $ */
+/* $Id: view.c,v 1.108 2003/07/01 14:12:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1560,8 +1560,11 @@ encode_controls(struct list_head *l, unsigned char **data, int *len,
 	}
 }
 
+
+
 #define BL	32
 
+/* FIXME: shouldn't we encode data at send time (in http.c) ? --Zas */
 static void
 encode_multipart(struct session *ses, struct list_head *l,
 		 unsigned char **data, int *len,
@@ -1569,17 +1572,16 @@ encode_multipart(struct session *ses, struct list_head *l,
 {
 	int *nbp, *bound_ptrs = NULL;
 	int nbound_ptrs = 0;
-	unsigned char *m1, *m2;
 	struct submitted_value *sv;
-	int i, j;
+	int i;
 	int flg = 0;
-	char *p;
-	struct conv_table *convert_table = get_translation_table(cp_from, cp_to);
+	struct conv_table *convert_table = NULL;
+
+	*data = init_str();
+	if (!*data) return;
 
 	memset(bound, 'x', BL);
 	*len = 0;
-	*data = init_str();
-	if (!*data) return;
 
 	foreach (sv, *l) {
 
@@ -1598,46 +1600,22 @@ xx:
 		add_to_str(data, len, "\r\nContent-Disposition: form-data; name=\"");
 		add_to_str(data, len, sv->name);
 		if (sv->type == FC_FILE) {
-			add_to_str(data, len, "\"; filename=\"");
-			add_to_str(data, len, strip_file_name(sv->value));
-				/* It sends bad data if the file name contains ", but
-				   Netscape does the same */
-				/* FIXME: is this a reason ? --Zas */
-		}
-		add_to_str(data, len, "\"\r\n\r\n");
-		if (sv->type != FC_FILE) {
-			struct document_options o;
-
-			memset(&o, 0, sizeof(o));
-			o.plain = 1;
-			d_opt = &o;
-
-			/* Convert back to original encoding (see
-			 * html_form_control() for the original recoding). */
-			if (sv->type == FC_TEXT || sv->type == FC_PASSWORD ||
-			    sv->type == FC_TEXTAREA) {
-				p = convert_string(convert_table, sv->value,
-						   strlen(sv->value));
-			} else {
-				p = stracpy(sv->value);
-			}
-
-			if (p) {
-				add_to_str(data, len, p);
-				mem_free(p);
-			}
-		} else {
 #define F_BUFLEN 1024
 			int fh, rd;
 			unsigned char buffer[F_BUFLEN];
 
-			/*if (!check_file_name(sv->value)) {
-				err = "File access forbidden";
-				goto error;
-			}*/
+			add_to_str(data, len, "\"; filename=\"");
+			add_to_str(data, len, strip_file_name(sv->value));
+			/* It sends bad data if the file name contains ", but
+			   Netscape does the same */
+			/* FIXME: is this a reason ? --Zas */
+			add_to_str(data, len, "\"\r\n\r\n");
+
 			if (*sv->value) {
 				if (get_opt_int_tree(&cmdline_options, "anonymous"))
 					goto encode_error;
+
+				/* FIXME: DO NOT COPY FILE IN MEMORY !! --Zas */
 				fh = open(sv->value, O_RDONLY);
 				if (fh == -1) goto encode_error;
 				set_bin(fh);
@@ -1649,34 +1627,74 @@ xx:
 				close(fh);
 			}
 #undef F_BUFLEN
+		} else {
+			struct document_options o;
+
+			add_to_str(data, len, "\"\r\n\r\n");
+
+			memset(&o, 0, sizeof(o));
+			o.plain = 1;
+			d_opt = &o;
+
+			/* Convert back to original encoding (see
+			 * html_form_control() for the original recoding). */
+			if (sv->type == FC_TEXT || sv->type == FC_PASSWORD ||
+			    sv->type == FC_TEXTAREA) {
+				unsigned char *p;
+
+				if (!convert_table)
+				       	convert_table = get_translation_table(cp_from,
+									      cp_to);
+
+				p = convert_string(convert_table, sv->value,
+						   strlen(sv->value));
+				if (p) {
+					add_to_str(data, len, p);
+					mem_free(p);
+				}
+			} else {
+				add_to_str(data, len, sv->value);
+			}
 		}
+
 		add_to_str(data, len, "\r\n");
 	}
+
 	if (!flg) {
 		flg = 1;
 		goto bnd;
 	}
+
 	add_to_str(data, len, "--\r\n");
 	memset(bound, '0', BL);
 
 again:
 	for (i = 0; i <= *len - BL; i++) {
+		int j;
+
 		for (j = 0; j < BL; j++) if ((*data)[i + j] != bound[j]) goto nb;
 		for (j = BL - 1; j >= 0; j--)
 			if (bound[j]++ >= '9') bound[j] = '0';
 			else goto again;
-		internal("Counld not assing boundary");
+		internal("Could not assing boundary");
 
 nb:;
 	}
-	for (i = 0; i < nbound_ptrs; i++) memcpy(*data + bound_ptrs[i], bound, BL);
+
+	for (i = 0; i < nbound_ptrs; i++)
+		memcpy(*data + bound_ptrs[i], bound, BL);
+
 	mem_free(bound_ptrs);
 	return;
 
 encode_error:
 	mem_free(bound_ptrs);
-	mem_free(*data);
-	*data = NULL;
+	mem_free(*data), *data = NULL;
+
+	{
+	unsigned char *m1, *m2;
+
+	/* XXX: This error message should move elsewhere. --Zas */
 	m1 = stracpy(sv->value);
 	if (!m1) return;
 	m2 = stracpy((unsigned char *) strerror(errno));
@@ -1686,6 +1704,7 @@ encode_error:
 			 m1, m2),
 		ses, 1,
 		N_("Cancel"), NULL, B_ENTER | B_ESC);
+	}
 }
 
 static void

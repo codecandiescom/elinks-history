@@ -1,3 +1,360 @@
+Mon Jul 21 22:01:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/file.c:
+
+	[String util restructuring] 
+
+Mon Jul 21 21:48:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/interlink.c:
+
+	[String util restructuring] 
+
+Mon Jul 21 18:34:00 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: protocol/uri.c, util/string.h:
+
+	A string magic failure was fixed. INIT_STRING(s,l) macro was
+	introduced (better name ?).  
+
+Mon Jul 21 18:01:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/form.c:
+
+	More paranoid fs->state test and removed the useless second one from
+	ACT_KILL_TO_BOL handler in field_op().  
+
+Mon Jul 21 18:00:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/form.c:
+
+	Minor tidyup of ACT_KILL_TO_BOL handler in field_op().  
+
+Mon Jul 21 17:58:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/form.c:
+
+	Removed memrchr() usage introduced in 1.8 and sticked a TODO
+	instead. It was never used anyway and needs a proper stub if
+	supposed to be used.  
+
+Mon Jul 21 17:37:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/mime/mime.c:
+
+	Tidyup of check_encoding_type(), mainly fixed bad indentation
+	introduced in 1.24. Bad Miciah! ;-) 
+
+Mon Jul 21 16:24:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/user.c, util/conv.c, util/conv.h:
+
+	Introduce add_shell_safe_to_string() and use it in subs_cmd().  
+
+Mon Jul 21 16:22:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Temp. fix for first string magic catch. Thanks zas. :) 
+
+Mon Jul 21 16:22:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/: string.c, string.h:
+
+	Rename: (set|check)_magic -> (set|check)_string_magic.  
+
+Mon Jul 21 15:52:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Didn't I patch this? Test uri->hostlen instead of uri->host.  
+
+Mon Jul 21 14:18:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/conf.c, config/options.c, util/string.c,
+	util/string.h:
+
+	Magic check for struct string. Some changes related to this
+	implementation, especially string initialization with NULL_STRING.
+	Currently string debug is enabled by default in --enable-debug. This
+	should catch operations on badly initialized struct string.  
+
+Mon Jul 21 13:26:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Test returned value of init_string().  
+
+Mon Jul 21 10:39:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	switch tidyup.  
+
+Mon Jul 21 10:17:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/charsets.c:
+
+	Minor tidyup.  
+
+Mon Jul 21 09:17:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Do not mix preallocated strings with not preallocated ones. Reported
+	by Miciah, fix by me.  
+
+Mon Jul 21 06:52:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	[String util restructuring] (132 add_to_str() remains) 
+
+Mon Jul 21 06:19:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/mime.c:
+
+	[String util restructuring] Last one for now which should also fix
+	unfortunate too soon removal of option name (de|en)coders.  
+
+Mon Jul 21 06:14:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/mime.c:
+
+	[String util restructuring] (1) We joggle two strings. An
+	un+/encoded. Use the unencoded to 'cache' @fcp so it can be free()d
+	making cleaning up easier and no goto required.  
+
+Mon Jul 21 06:05:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: opttypes.c, opttypes.h:
+
+	[String util restructuring] option_type_info->write now takes a
+	struct string. s/add_quoted_to_str/add_optstring_to_string/ using
+	quoted encode adder as backend. Makes src/config/ work again.  
+
+Mon Jul 21 05:58:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.c, options.h:
+
+	[String util restructuring] Even though the { "", 0 } initialization
+	is potentially bad, this has to be.  
+
+Mon Jul 21 05:55:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.c, options.h:
+
+	Remove option name encoders. Old users now use add_optname_...  
+
+Mon Jul 21 05:52:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	[String util restructuring] I am getting the feeling that
+	make_keystroke is not the best name.  
+
+Mon Jul 21 05:49:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/dialogs.c:
+
+	[String util restructuring] 
+
+Mon Jul 21 05:47:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: conf.c, conf.h:
+
+	[String util restructuring] The next few patches in src/config/
+	depends on each other. This one is big sorry.  
+
+Mon Jul 21 05:22:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	[String util restructuring] 
+
+Mon Jul 21 05:20:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/document.c:
+
+	[String util restructuring] *Yawn* maybe we should add some macro to
+	pep things up a bit.  
+
+Mon Jul 21 05:16:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/info.c:
+
+	[String util restructuring] Use for cache info msg box assembling.  
+
+Mon Jul 21 05:12:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/default.c:
+
+	[String util restructuring] Yay we get to use the new
+	add_optname_... and hopefully also a bit smarter handling of dot
+	adding. Unidentified Patch Object: remove unused rmdots() ... my
+	excuse: I have 1200 lines to sync and don't care 'bout these 9 so
+	pasky please be in a good mood when you read this one. ;) 
+
+Mon Jul 21 05:04:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/core.c:
+
+	[String util restructuring] Please excuse the indentation but before
+	we didn't even test if the initialization was good and now we do.  
+
+Mon Jul 21 04:59:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/: cookies.c, cookies.h:
+
+	[String util restructuring] Last patch depends on this one since
+	@header is a string struct.  
+
+Mon Jul 21 04:57:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	[String util restructuring] Also make the defined add_*_string()
+	take string struct. TODO: they should go in favour of generic
+	add_uri_(components|parts)_to_string() that can also be used as
+	backend by get_uri_string().  
+
+Mon Jul 21 04:51:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	[String util restructuring] A little strangeness in
+	encode_uri_string() which hopefully will be improved by a possible
+	introduction of add_encoded_uri_string() later.  
+
+Mon Jul 21 04:38:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Test uri->hostlen not uri->host.  
+
+Mon Jul 21 04:30:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp.c:
+
+	[String util restructuring] Don't panic. A bit preparing mixed in
+	this patch mainly the macros for adding const strings to the
+	fragment. Also some more test before adding. Could maybe use format
+	string some places to improve readability.  
+
+Mon Jul 21 04:14:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/user.c:
+
+	[String util restructuring] 
+
+Mon Jul 21 04:11:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/finger.c:
+
+	[String util restructuring] Use in the request sending.  
+
+Mon Jul 21 04:09:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	[String util restructuring] First usage. Abandon file_data struct
+	for string struct and make stat_* also take string.  
+
+Mon Jul 21 04:00:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/: conv.c, conv.h, string.c, string.h:
+
+	Introduce the new restructured string util.  
+
+Mon Jul 21 00:21:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Trivial @q optimization at parse_frame_widths().  
+
+Mon Jul 21 00:17:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Partially reverted html_h() changes in zas' 1.146, restored proper
+	encapsulation of the @h parameter.  
+
+Mon Jul 21 00:03:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	convert_string() synced w/ put_chars_conv() : put_chars_conv() now
+	uses convert_string() as its backend. Finally got rid of this
+	particularily annoying code duplication. Pasky is da master! 
+
+Sun Jul 20 23:56:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	convert_string() syncing w/ put_chars_conv() : Use dynamically
+	allocated @buffer inside of put_chars_conv(), and call put_chars()
+	only once at the very end. (XXX: Memory hit?) Also slight
+	optimization (exit right after dummy put_chars() if charslen is
+	zero).  
+
+Sun Jul 20 23:43:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/charsets.c:
+
+	convert_string() syncing w/ put_chars_conv() : Moved @b to local
+	scope in convert_string().  
+
+Sun Jul 20 23:42:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/html/renderer.c, intl/charsets.c:
+
+	convert_string() syncing w/ put_chars_conv() : @pp -> @charspos at
+	the both sides.  
+
+Sun Jul 20 23:41:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/html/renderer.c, intl/charsets.c:
+
+	convert_string() syncing w/ put_chars_conv() : @bp -> @bufferpos at
+	the both sides.  
+
+Sun Jul 20 23:35:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/charsets.c:
+
+	convert_string() syncing w/ put_chars_conv() : Left the @buffer
+	reallocation code only at one place, using the same path to reach it
+	as in put_chars_conv(). The diffs are nicely sync'd up already ;-).  
+
+Sun Jul 20 23:25:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/html/renderer.c, intl/charsets.c:
+
+	convert_string() syncing w/ put_chars_conv() : Double-side tidyup.  
+
+Sun Jul 20 23:16:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/charsets.c:
+
+	convert_string() syncing w/ put_chars_conv() : @ct ->
+	@convert_table, @c -> @chars, @l -> @charslen.  
+
+Sun Jul 20 23:12:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/html/renderer.c, intl/charsets.c:
+
+	Fix the bug 213 side-bug: don't eat the character terminating entity
+	string if it's not valid entity terminator (';'). Some comment
+	sticked around about how buggy this piece of code is.  
+
+Sun Jul 20 22:36:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/it.po:
+
+	Italian translation update by Fabio. Ufff. Postponing mail for over
+	a month doesn't pay off, says my hour spent by resolving 80
+	conflicts ;-). At least I learned a little Italian :^).  
+
 Sun Jul 20 21:19:45 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* contrib/elinks.spec.in:

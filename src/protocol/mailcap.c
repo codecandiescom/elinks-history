@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.2 2002/12/10 21:22:13 pasky Exp $ */
+/* $Id: mailcap.c,v 1.3 2002/12/10 21:24:11 pasky Exp $ */
 
 /*
  * This file contains various functions for implementing a fair subset of
@@ -496,7 +496,7 @@ convert2option(struct mailcap_entry *entry, unsigned char *type)
 	if (!association) return NULL;
 
 	init_list(*association);
-	association->name     = stracpy("");
+	association->name     = stracpy("mailcap");
 	association->box_item = NULL;
 	association->type     = OPT_TREE;
 	association->ptr      = init_options_tree();

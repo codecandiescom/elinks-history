@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.356 2004/01/18 15:59:04 zas Exp $ */
+/* $Id: parser.c,v 1.357 2004/01/18 16:08:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2259,7 +2259,8 @@ html_frame(unsigned char *a)
 
 #define foreach_values(i) for (i = 0; i < values_count; i++)
 
-void
+/* Returns 0 on error. */
+int
 distribute_rows_or_cols(int *val_, int max_value, int *values, int values_count)
 {
 	register int i;
@@ -2296,6 +2297,48 @@ distribute_rows_or_cols(int *val_, int max_value, int *values, int values_count)
 	}
 
 	*val_ = val;
+	return 0;
+}
+
+/* Returns 0 on error. */
+int
+distribute_rows_or_cols_that_left(int *val_, int max_value, int *values, int values_count)
+{
+	register int i;
+	int val = *val_;
+	int *tmp_values;
+	int divisor = 0;
+	int tmp_val;
+
+	tmp_values = fmem_alloc(values_count * sizeof(int));
+	if (!tmp_values) return 0;
+	memcpy(tmp_values, values, values_count * sizeof(int));
+		
+	foreach_values(i) if (values[i] < 1) values[i] = 1;
+	val = max_value - val;
+	
+	foreach_values(i) if (tmp_values[i] < 0) divisor += -tmp_values[i];
+	assert(divisor);
+		
+	tmp_val = val;
+	foreach_values(i) if (tmp_values[i] < 0) {
+		int tmp = (-tmp_values[i] * tmp_val / divisor);
+			
+		values[i] += tmp;
+		val -= tmp;
+	}
+	assertm(val >= 0, "distribute_rows_or_cols_that_left: val < 0");
+	if_assert_failed val = 0;
+		
+	foreach_values(i) if (tmp_values[i] < 0 && val) values[i]++, val--;
+		
+	assertm(val <= 0, "distribute_rows_or_cols_that_left: val > 0");
+	if_assert_failed val = 0;
+		
+	fmem_free(tmp_values);
+
+	*val_ = val;
+	return 1;
 }
 
 /* Parse rows and cols attribute values and calculate appropriated values for display.
@@ -2374,39 +2417,7 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int *
 		if (!neg) {
 			distribute_rows_or_cols(&val, max_value, values, values_count);
 		} else {
-			int *tmp_values;
-			int divisor = 0;
-			int tmp_val;
-
-			tmp_values = fmem_alloc(values_count * sizeof(int));
-			if (!tmp_values) {
-				*new_values_count = 0;
-				return;
-			}
-			memcpy(tmp_values, values, values_count * sizeof(int));
-		
-			foreach_values(i) if (values[i] < 1) values[i] = 1;
-			val = max_value - val;
-	
-			foreach_values(i) if (tmp_values[i] < 0) divisor += -tmp_values[i];
-			assert(divisor);
-		
-			tmp_val = val;
-			foreach_values(i) if (tmp_values[i] < 0) {
-				int tmp = (-tmp_values[i] * tmp_val / divisor);
-			
-				values[i] += tmp;
-				val -= tmp;
-			}
-			assertm(val >= 0, "parse_frame_widths: val < 0");
-			if_assert_failed val = 0;
-		
-			foreach_values(i) if (tmp_values[i] < 0 && val) values[i]++, val--;
-		
-			assertm(val <= 0, "parse_frame_widths: val > 0");
-			if_assert_failed val = 0;
-		
-			fmem_free(tmp_values);
+			distribute_rows_or_cols_that_left(&val, max_value, values, values_count);
 		}
 	}
 

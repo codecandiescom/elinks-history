@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.51 2004/12/17 23:43:22 pasky Exp $ */
+/* $Id: forms.c,v 1.52 2004/12/17 23:44:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,7 +119,7 @@ get_html_form(unsigned char *a, struct form *form)
 }
 
 static void
-find_form_for_input(unsigned char *i)
+find_form_for_input(unsigned char *stop_pos)
 {
 	unsigned char *pos, *tag_start_pos, *name, *attr;
 	unsigned char *last_form_start = NULL;
@@ -131,27 +131,29 @@ find_form_for_input(unsigned char *i)
 	if (!html_context.special_f(html_context.part, SP_USED, NULL))
 		return;
 
-	if (html_context.last_input_tag && i <= html_context.last_input_tag
-	    && i > html_context.last_form_tag) {
+	if (html_context.last_input_tag
+	    && stop_pos <= html_context.last_input_tag
+	    && stop_pos > html_context.last_form_tag) {
 		get_html_form(html_context.last_form_attr, &form);
 		return;
 	}
-	if (html_context.last_input_tag && i > html_context.last_input_tag)
+	if (html_context.last_input_tag
+	    && stop_pos > html_context.last_input_tag)
 		pos = html_context.last_form_tag;
 	else
 		pos = html_context.startf;
 
 se:
-	while (pos < i && *pos != '<') {
+	while (pos < stop_pos && *pos != '<') {
 		pos++;
 	}
-	if (pos >= i) goto end_parse;
-	if (pos + 2 < i && (pos[1] == '!' || pos[1] == '?')) {
-		pos = skip_comment(pos, i);
+	if (pos >= stop_pos) goto end_parse;
+	if (pos + 2 < stop_pos && (pos[1] == '!' || pos[1] == '?')) {
+		pos = skip_comment(pos, stop_pos);
 		goto se;
 	}
 	tag_start_pos = pos;
-	if (parse_element(tag_start_pos, i, &name, &namelen, &attr, &pos)) {
+	if (parse_element(tag_start_pos, stop_pos, &name, &namelen, &attr, &pos)) {
 		pos++; /* Kill the opening bracket. */
 		goto se;
 	}
@@ -166,7 +168,7 @@ end_parse:
 	if (last_form_start && last_form_attr) {
 		html_context.last_form_tag = last_form_start;
 		html_context.last_form_attr = last_form_attr;
-		html_context.last_input_tag = i;
+		html_context.last_input_tag = stop_pos;
 		get_html_form(last_form_attr, &form);
 	} else {
 		memset(&form, 0, sizeof(struct form));

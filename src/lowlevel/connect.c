@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.51 2003/11/11 21:47:50 zas Exp $ */
+/* $Id: connect.c,v 1.52 2003/12/07 11:17:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -268,7 +268,7 @@ dns_found(void *data, int state)
 	int trno = c_i->triedno;
 
 	if (state < 0) {
-		retry_conn_with_state(conn, S_NO_DNS);
+		abort_conn_with_state(conn, S_NO_DNS);
 		return;
 	}
 

@@ -1,3 +1,200 @@
+Wed Jun  4 22:02:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/msgbox.c:
+
+	A potential memleak (when !dlg) was fixed. Reported by fabiob.  
+
+Wed Jun  4 21:47:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/elinks.vim:
+
+	tab-* actions added .. and actions was reordered 
+
+Wed Jun  4 20:05:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/conf.c, config/dialogs.c, config/dialogs.h,
+	util/secsave.c, util/secsave.h:
+
+	Secsave error display was improved, now an internal message _and_ a
+	strerror message are possible. Dialog refresh was fixed.  
+
+Wed Jun  4 19:34:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Indentation cleanups to use tabs if possible in --enable section 
+
+Wed Jun  4 19:26:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/: mime.c, mime.h, backend/common.c, backend/common.h:
+
+	Cleanups correcting #include order, updating comments and parameter
+	names for prototypes to be more guiding.  
+
+Wed Jun  4 19:08:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/secsave.c:
+
+	Trivial fix of cut'n'paste error reported by Zardoz.  
+
+Wed Jun  4 19:04:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/: Makefile.am, backend/Makefile.am, backend/common.c,
+	backend/mimetypes.c, backend/mimetypes.h:
+
+	This adds support for mime.types files. Inspired once again by Mutt
+	and also existing mailcap support.  
+
+Wed Jun  4 18:39:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/: common.c, common.h:
+
+	Added get_extension_from_url() which should be moved to
+	protocol/url.? ASAP Now mime/ should compile again. Sorry for the
+	inconvenience.  
+
+Wed Jun  4 18:05:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	Make get_content_type() use get_extension_from_url() introduced in 
+	http://bugzilla.elinks.or.cz/attachment.cgi?id=68&action=view 
+
+Wed Jun  4 18:01:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/: common.c, common.h, mailcap.c:
+
+	Introduce utility function to walk through a PATH style string and
+	use it in the mailcap backend.  
+
+Wed Jun  4 17:20:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/mime.c:
+
+	Dir was separator not correctly handled when extracting url
+	extension, under cygwin it was taking \ as a dir separator even in
+	ie. http URLs. Fixes bug 191, patch by Jonas.  
+
+Wed Jun  4 17:15:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: secsave.c, secsave.h:
+
+	enum secsave_errno_set -> enum secsave_errno 
+
+Wed Jun  4 17:14:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/conf.c, util/secsave.c, util/secsave.h:
+
+	Fixed stupid namespace clash of secsave_errno_set enum and useless
+	forcing of values on the enum members.  
+
+Wed Jun  4 17:10:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Captialization fix, reduced regression caused by unknown error used
+	instead of Secure open failed.  
+
+Wed Jun  4 17:05:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/conf.c, util/secsave.c, util/secsave.h:
+
+	Errors handling in secsave was slightly modified, now an explicit
+	message is printed when file saving is disabled by option (ie.
+	-no-connect).  
+
+Wed Jun  4 16:55:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/default.c:
+
+	Statification of get_content_type_default().  
+
+Wed Jun  4 16:27:24 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/: conf.c, dialogs.c, dialogs.h:
+
+	write_config_error() now takes an error string as parameter instead
+	of an error code. It removes that 2222 ret code from it, and will
+	ease things (ie. when error reason will be set by secure_open(), to
+	have correct messages when trying to save conf in -no-connect mode).  
+
+Wed Jun  4 15:46:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/charsets.c:
+
+	Make no_str static instead of being dynamic. Also statify the symbol
+	(not used anywhere outside of charsets.c). This should fix bug 115.
+	Patch by Witek (and me).  
+
+Wed Jun  4 13:32:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Make ELinks compile using gcc version 3.3 with -O2 and -Werror
+	(closes: #189) 
+
+Wed Jun  4 10:26:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: viewer/text/view.c, dialogs/info.c:
+
+	add_to_str() -> add_chr_to_str().  
+
+Wed Jun  4 10:23:10 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/session.c, ssl/ssl.c:
+
+	add_to_str() -> add_chr_to_str().  
+
+Wed Jun  4 10:17:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: finger.c, ftp.c:
+
+	add_to_str() -> add_chr_to_str().  
+
+Wed Jun  4 10:10:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: http/http.c, file.c:
+
+	add_to_str() -> add_chr_to_str().  
+
+Wed Jun  4 10:06:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/document.c, lowlevel/sysname.c:
+
+	add_to_str() -> add_chr_to_str().  
+
+Wed Jun  4 10:02:42 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/kbdbind.c:
+
+	add_to_str() -> add_chr_to_str().  
+
+Wed Jun  4 09:59:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, cookies/cookies.c:
+
+	add_to_str() -> add_chr_to_str().  
+
+Wed Jun  4 09:49:20 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/conf.c:
+
+	add_to_str() -> add_chr_to_str().  
+
+Wed Jun  4 08:56:58 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	add_to_str() calls were replaced with less expensive
+	add_chr_to_str() calls if applicable.  
+
+Tue Jun  3 23:20:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/: common.c, mailcap.c, mailcap.h:
+
+	Only define backend symbols when they are required. Idea by
+	kuser@...  
+
 Tue Jun  3 20:23:35 2003  Laurent Monin <zas@norz.org>:
 
 	* src/util/string.c:

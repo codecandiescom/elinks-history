@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.66 2004/05/26 16:22:08 jonas Exp $ */
+/* $Id: document.c,v 1.67 2004/06/07 16:18:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,14 +37,13 @@ static INIT_LIST_HEAD(format_cache);
 static int format_cache_entries = 0;
 
 struct document *
-init_document(struct uri *uri, struct cache_entry *cached,
-	      struct document_options *options)
+init_document(struct cache_entry *cached, struct document_options *options)
 {
 	struct document *document = mem_calloc(1, sizeof(struct document));
 
 	if (!document) return NULL;
 
-	document->uri = get_uri_reference(uri);
+	document->uri = get_uri_reference(cached->uri);
 
 	object_lock(cached);
 	document->id_tag = cached->id_tag;
@@ -172,17 +171,16 @@ release_document(struct document *document)
 /* Formatted document cache management */
 
 struct document *
-get_cached_document(struct uri *uri, struct document_options *options,
-		    unsigned int id)
+get_cached_document(struct cache_entry *cached, struct document_options *options)
 {
 	struct document *document;
 
 	foreach (document, format_cache) {
-		if (document->uri != uri
+		if (!compare_uri(document->uri, cached->uri, 0)
 		    || compare_opt(&document->options, options))
 			continue;
 
-		if (id != document->id_tag) {
+		if (cached->id_tag != document->id_tag) {
 			if (!is_object_used(document)) {
 				document = document->prev;
 				done_document(document->next);

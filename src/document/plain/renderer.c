@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.163 2004/12/20 11:50:51 miciah Exp $ */
+/* $Id: renderer.c,v 1.164 2004/12/20 11:55:21 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,7 +108,7 @@ add_document_link(struct document *document, unsigned char *uri, int length,
 }
 
 /* Searches a word to find an email adress or an URI to add as a link. */
-static inline int
+static inline struct link *
 check_link_word(struct document *document, unsigned char *uri, int length,
 		int x, int y)
 {
@@ -116,9 +116,10 @@ check_link_word(struct document *document, unsigned char *uri, int length,
 	unsigned char *where = NULL;
 	unsigned char *mailto = memchr(uri, '@', length);
 	int keep = uri[length];
+	struct link *new_link;
 
 	assert(document);
-	if_assert_failed return 0;
+	if_assert_failed return NULL;
 
 	uri[length] = 0;
 
@@ -133,14 +134,16 @@ check_link_word(struct document *document, unsigned char *uri, int length,
 
 	uri[length] = keep;
 
-	if (!where) return 0;
+	if (!where) return NULL;
 
-	if (!add_document_link(document, where, length, x, y)) {
+	new_link = add_document_link(document, where, length, x, y);
+
+	if (!new_link);
 		mem_free(where);
-		return 0;
+		return NULL;
 	}
 
-	return length;
+	return new_link;
 }
 
 #define url_char(c) (		\

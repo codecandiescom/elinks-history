@@ -23,14 +23,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "elinks.h"
+
 #include "intl/gettext/libintl.h"
 #include "intl/gettext/gettextP.h"
 #include "util/string.h"
-
-/* Some compilers, like SunOS4 cc, don't have offsetof in <stddef.h>.  */
-#ifndef offsetof
-#define offsetof(type,ident) ((size_t)&(((type*)0)->ident))
-#endif
 
 /* Contains the default location of the message catalogs.  */
 extern const unsigned char _nl_default_dirname__[];

@@ -69,11 +69,6 @@ extern int errno;
 #define alignof(TYPE) \
     ((int) &((struct { unsigned char dummy1; TYPE dummy2; } *) 0)->dummy2)
 
-/* Some compilers, like SunOS4 cc, don't have offsetof in <stddef.h>.  */
-#ifndef offsetof
-#define offsetof(type, ident) ((size_t) &(((type *) 0)->ident))
-#endif
-
 /* Amount to increase buffer size by in each try.  */
 #define PATH_INCR 32
 

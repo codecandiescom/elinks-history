@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.78 2003/04/24 08:23:39 zas Exp $ */
+/* $Id: menu.c,v 1.79 2003/04/29 17:11:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -272,9 +272,9 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 	}
 
 	if (n <= 1)
-		do_menu(term, no_hist_menu, ses);
+		do_menu(term, no_hist_menu, ses, 0);
 	else
-		do_menu(term, mi, ses);
+		do_menu(term, mi, ses, 0);
 }
 
 static void
@@ -304,9 +304,9 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 	}
 
 	if (!n)
-		do_menu(term, no_hist_menu, ses);
+		do_menu(term, no_hist_menu, ses, 0);
 	else
-		do_menu(term, mi, ses);
+		do_menu(term, mi, ses, 0);
 }
 
 
@@ -342,9 +342,9 @@ downloads_menu(struct terminal *term, void *ddd, struct session *ses)
 	}
 
 	if (!n)
-		do_menu(term, no_downloads_menu, ses);
+		do_menu(term, no_downloads_menu, ses, 0);
 	else
-		do_menu(term, mi, ses);
+		do_menu(term, mi, ses, 0);
 }
 
 
@@ -458,6 +458,8 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 		e->data = send_open_new_xterm;
 		e->in_m = o - 1;
 		e->item_free = FREE_NOTHING;
+		e->hotkey_pos = 0;
+		e->ignore_hotkey = 0;
 		e++;
 	}
 
@@ -479,6 +481,8 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 		e->data = NULL;
 		e->in_m = 0;
 		e->item_free = FREE_NOTHING;
+		e->hotkey_pos = 0;
+		e->ignore_hotkey = 0;
 		e++;
 		x = 0;
 	}
@@ -490,6 +494,8 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 		e->data = NULL;
 		e->in_m = 0;
 		e->item_free = FREE_NOTHING;
+		e->hotkey_pos = 0;
+		e->ignore_hotkey = 0;
 		e++;
 		x = 0;
 	}
@@ -499,7 +505,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	for (f = file_menu; f < e; f++) f->item_free = FREE_LIST;
 
-	do_menu(term, file_menu, ses);
+	do_menu(term, file_menu, ses, 1);
 }
 
 static struct menu_item view_menu[] = {
@@ -579,18 +585,18 @@ static void
 do_view_menu(struct terminal *term, void *xxx, struct session *ses)
 {
 	if (!get_opt_int_tree(&cmdline_options, "anonymous"))
-		do_menu(term, view_menu, ses);
+		do_menu(term, view_menu, ses, 1);
 	else
-		do_menu(term, view_menu_anon, ses);
+		do_menu(term, view_menu_anon, ses, 1);
 }
 
 static void
 do_setup_menu(struct terminal *term, void *xxx, struct session *ses)
 {
 	if (!get_opt_int_tree(&cmdline_options, "anonymous"))
-		do_menu(term, setup_menu, ses);
+		do_menu(term, setup_menu, ses, 1);
 	else
-		do_menu(term, setup_menu_anon, ses);
+		do_menu(term, setup_menu_anon, ses, 1);
 }
 
 static struct menu_item main_menu[] = {

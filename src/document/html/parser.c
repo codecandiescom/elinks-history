@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.75 2003/04/29 07:49:37 zas Exp $ */
+/* $Id: parser.c,v 1.76 2003/04/29 17:11:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1852,7 +1852,7 @@ do_select_submenu(struct terminal *term, struct menu_item *menu,
 	sel = 0;
 
 found:
-	do_menu_selected(term, menu, ses, sel);
+	do_menu_selected(term, menu, ses, sel, 0);
 }
 
 static int

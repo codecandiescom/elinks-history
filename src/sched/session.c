@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.3 2003/04/24 08:23:40 zas Exp $ */
+/* $Id: session.c,v 1.4 2003/04/29 17:11:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -468,7 +468,7 @@ ses_imgmap(struct session *ses)
 		return;
 
 	add_empty_window(ses->term, (void (*)(void *))freeml, ml);
-	do_menu(ses->term, menu, ses);
+	do_menu(ses->term, menu, ses, 0);
 }
 
 void

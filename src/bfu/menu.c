@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.31 2003/04/29 07:59:21 zas Exp $ */
+/* $Id: menu.c,v 1.32 2003/04/29 17:11:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,68 +42,58 @@ struct mainmenu {
 };
 
 /* Global variables */
-unsigned char m_bar = 0;
+unsigned char m_bar = 1;
 
 /* Prototypes */
 static void menu_func(struct window *, struct event *, int);
 static void mainmenu_func(struct window *, struct event *, int);
 
-
-/* FIXME: This is terribly slow and ineffective. Cache the hotkeys! --pasky */
 static int
-is_hotkey(struct menu_item *item, unsigned char hotkey, struct terminal *term)
+count_items(struct menu_item *items)
 {
-	unsigned char *occur = _(item->text, term);
-	int tilde = 0;
+	int i;
 
-	/* Just in case... ;-) */
-	if (hotkey == '~') return 0;
+	for (i = 0; items[i].text; i++);
 
-	hotkey = upcase(hotkey);
+	return i;
+}
 
-	while (*occur) {
-		if (*occur == '~') {
-			tilde = 1;
-			occur++;
-			continue;
-		}
-		if (!tilde) {
-			occur++;
-			continue;
-		}
-		if (upcase(*occur) != hotkey) {
-			tilde = 0;
-			occur++;
-			continue;
-		}
-		return 1;
+/* Return position (starting at 1) of the first tilde in text,
+ * or 0 if not found. */
+static inline int
+find_tilde_pos(unsigned char *text)
+{
+	if (text && *text) {
+		unsigned char *p = strchr(text, '~');
+
+		if (p) return (int)(p - text) + 1;
 	}
 
 	return 0;
 }
 
-/* FIXME: This is terribly slow and ineffective. Cache the tildeless string!
- * --pasky */
-static unsigned char *
-strip_tilde(unsigned char *text)
+static void
+init_hotkeys(struct terminal *term, struct menu_item *items, int ni, int hotkeys)
 {
-	int len = strlen(text);
-	int pos = 0, pos2 = 0;
-	unsigned char *text2 = mem_calloc(1, len + 1);
+	int i;
 
-	if (!text2) return NULL;
-	while (pos < len) {
-		if (text[pos] == '~') {
-			pos++;
-			continue;
+	for (i = 0; i < ni; i++)
+		if (!hotkeys) {
+		       items[i].hotkey_pos = 0;
+		       items[i].ignore_hotkey = 1;
+		} else if (items[i].ignore_hotkey != 2 && !items[i].hotkey_pos) {
+			items[i].hotkey_pos = find_tilde_pos(_(items[i].text, term));
+			items[i].ignore_hotkey = 2; /* cached */
+			fprintf(stderr, "%d %d %s\n", items[i].hotkey_pos, items[i].ignore_hotkey, _(items[i].text, term));
 		}
-		text2[pos2] = text[pos];
-		pos++, pos2++;
-	}
-	text2[pos2] = 0;
-	return text2;
 }
 
+static inline int
+is_hotkey(struct menu_item *item, unsigned char hotkey, struct terminal *term)
+{
+	return (item->hotkey_pos
+		&& (_(item->text, term)[item->hotkey_pos] == hotkey));
+}
 
 static void
 free_menu_items(struct menu_item *items)
@@ -120,7 +110,6 @@ free_menu_items(struct menu_item *items)
 
 	for (i = 0; items[i].text; i++) {
 		if (items[i].item_free & FREE_TEXT && items[i].text) mem_free(items[i].text);
-		if (items[i].item_free & FREE_RTEXT && items[i].rtext) mem_free(items[i].rtext);
 		if (items[i].item_free & FREE_DATA && items[i].data) mem_free(items[i].data);
 	}
 
@@ -129,7 +118,7 @@ free_menu_items(struct menu_item *items)
 
 void
 do_menu_selected(struct terminal *term, struct menu_item *items,
-		 void *data, int selected)
+		 void *data, int selected, int hotkeys)
 {
 	struct menu *menu;
 
@@ -139,6 +128,8 @@ do_menu_selected(struct terminal *term, struct menu_item *items,
 		menu->view = 0;
 		menu->items = items;
 		menu->data = data;
+		menu->ni = count_items(items);
+		init_hotkeys(term, items, menu->ni, hotkeys);
 		add_window(term, menu_func, menu);
 	} else if (items->item_free & ~(1<<8)) {
 		free_menu_items(items);
@@ -146,9 +137,9 @@ do_menu_selected(struct terminal *term, struct menu_item *items,
 }
 
 void
-do_menu(struct terminal *term, struct menu_item *items, void *data)
+do_menu(struct terminal *term, struct menu_item *items, void *data, int hotkeys)
 {
-	do_menu_selected(term, items, data, 0);
+	do_menu_selected(term, items, data, 0, hotkeys);
 }
 
 static void
@@ -195,21 +186,16 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	int mx = 4;
 	int my;
 
-	for (my = 0; menu->items[my].text; my++) {
-		unsigned char *tmptext;
-		int s;
-
-		tmptext = strip_tilde(_(menu->items[my].text, term));
-
-		s = strlen(tmptext) + strlen(_(menu->items[my].rtext, term))
-			+ 4;
+	for (my = 0; my < menu->ni; my++) {
+		int s = strlen(_(menu->items[my].text, term))
+			- (menu->items[my].hotkey_pos ? 1 : 0)
+			+ strlen(_(menu->items[my].rtext, term))
+			+ 4 + 1;
 
 		if (_(menu->items[my].rtext, term)[0] != 0)
-			s += MENU_HOTKEY_SPACE;
+                        s += MENU_HOTKEY_SPACE;
 
 		if (s > mx) mx = s;
-
-		mem_free(tmptext);
 	}
 
 	menu->ni = my;
@@ -294,7 +280,6 @@ display_menu(struct terminal *term, struct menu *menu)
 	for (p = menu->view, s = menu->y + 1;
 	     p < menu->ni && p < menu->view + menu->yw - 2;
 	     p++, s++) {
-		unsigned char *tmptext = strip_tilde(_(menu->items[p].text, term));
 		int h = 0;
 		int co = menu_normal_color;
 
@@ -305,33 +290,51 @@ display_menu(struct terminal *term, struct menu *menu)
 
 		if (h) {
 			set_cursor(term, menu->x + 1, s, term->x - 1, term->y - 1);
-			set_window_ptr(menu->win, menu->x+menu->xw, s);
+			set_window_ptr(menu->win, menu->x + menu->xw, s);
 			fill_area(term, menu->x + 1, s, menu->xw - 2, 1, co);
 		}
 
-		if (menu->items[p].rtext != M_BAR || (tmptext && tmptext[0])) {
+		if (menu->items[p].rtext != M_BAR
+		    || (_(menu->items[p].text, term) && _(menu->items[p].text, term)[0])) {
 			unsigned char c;
-			int l = strlen(_(menu->items[p].rtext, term));
+			int l = menu->items[p].hotkey_pos;
 			int x;
 
-			for (x = l - 1;
-			     (x >= 0) && (menu->xw - 4 >= l - x) &&
-			     (c = _(menu->items[p].rtext, term)[x]);
-			     x--) {
-				set_char(term, menu->x + menu->xw - 2 - l + x, s, c | co);
-			}
+			if (l) {
+				int hk = 0;
 
-			for (x = 0; (x < menu->xw - 4) &&
-			            (c = tmptext[x]); x++) {
-				int ch = co;
-
-				if (!h && is_hotkey(&menu->items[p], c, term)) {
-					h = 1;
-					ch = menu_hotkey_color;
+				for (x = 0;
+				     x < menu->xw - 4 && (c = _(menu->items[p].text, term)[x]);
+				     x++) {
+					if (!hk && menu->items[p].hotkey_pos
+					    && x == menu->items[p].hotkey_pos - 1) {
+						hk = 1;
+						continue;
+					}
+					if (hk == 1) {
+						set_char(term, menu->x + x - 1 + 2, s, menu_hotkey_color | c);
+						hk = 2;
+					} else {
+						set_char(term, menu->x + x - (hk ? 1 : 0) + 2, s, c | co);
+					}
 				}
 
-				set_char(term, menu->x + x + 2, s, ch | c);
+			} else {
+				for (x = 0;
+			            x < menu->xw - 4 && (c = _(menu->items[p].text, term)[x]);
+				    x++)
+					set_char(term, menu->x + x + 2, s, c | co);
 			}
+
+			l = strlen(_(menu->items[p].rtext, term));
+
+			for (x = l - 1;
+                             (x >= 0) && (menu->xw - 4 >= l - x) &&
+                             (c = _(menu->items[p].rtext, term)[x]);
+                             x--) {
+                                set_char(term, menu->x + menu->xw - 2 - l + x, s, c | co);
+                        }
+
 
 		} else {
 			set_char(term, menu->x, s,
@@ -343,8 +346,6 @@ display_menu(struct terminal *term, struct menu *menu)
 			set_char(term, menu->x + menu->xw - 1, s,
 				 menu_frame_color | FRAMES_LTEE);
 		}
-
-		mem_free(tmptext);
 	}
 
 	redraw_from_window(menu->win);
@@ -606,12 +607,14 @@ do_mainmenu(struct terminal *term, struct menu_item *items,
 {
 	struct mainmenu *menu;
 
-	menu = mem_alloc(sizeof(struct mainmenu));
+	menu = mem_calloc(1, sizeof(struct mainmenu));
 	if (!menu) return;
 
 	menu->selected = (sel == -1 ? 0 : sel);
 	menu->items = items;
 	menu->data = data;
+	menu->ni = count_items(items);
+	init_hotkeys(term, items, menu->ni, 1);
 	add_window(term, mainmenu_func, menu);
 
 	if (sel != -1) {
@@ -632,12 +635,16 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 	int mainmenu_hotkey_color = get_bfu_color(term, "mainmenu.hotkey");
 
 	fill_area(term, 0, 0, term->x, 1, mainmenu_normal_color | ' ');
-	for (i = 0; menu->items[i].text; i++) {
+
+	for (i = 0; i < menu->ni; i++) {
 		int s = 0;
 		int j;
 		int co;
+		int hk = 0;
 		unsigned char c;
-		unsigned char *tmptext = strip_tilde(_(menu->items[i].text, term));
+		unsigned char *tmptext = _(menu->items[i].text, term);
+		int tmptextlen = strlen(tmptext)
+			         - (menu->items[i].hotkey_pos ? 1 : 0);
 
 		if (i == menu->selected) {
 			s = 1;
@@ -648,7 +655,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 
 		if (s) {
 			fill_area(term, p, 0, 2, 1, co);
-			fill_area(term, p+strlen(tmptext)+2, 0, 2, 1, co);
+			fill_area(term, p + tmptextlen + 2, 0, 2, 1, co);
 			menu->sp = p;
 			set_cursor(term, p, 0, term->x - 1, term->y - 1);
 			set_window_ptr(menu->win, p, 1);
@@ -657,21 +664,23 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		p += 2;
 
 		for (j = 0; (c = tmptext[j]); j++, p++) {
-			if (!s && is_hotkey(&menu->items[i], c, term)) {
-				s = 1;
+			if (!hk && menu->items[i].hotkey_pos
+			    && j == menu->items[i].hotkey_pos - 1) {
+				hk = 1;
+				p--;
+				continue;
+			}
+			if (hk == 1) {
 				set_char(term, p, 0, mainmenu_hotkey_color | c);
+				hk = 2;
 			} else {
-				set_char(term, p, 0,
-					 co | c);
+				set_char(term, p, 0, co | c);
 			}
 		}
 
 		p += 2;
-
-		mem_free(tmptext);
 	}
 
-	menu->ni = i;
 	redraw_from_window(menu->win);
 }
 
@@ -724,12 +733,11 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 
 				for (i = 0; i < menu->ni; i++) {
 					int o = p;
-					unsigned char *tmptext;
 
-					tmptext = strip_tilde(
-						    _(menu->items[i].text,
-						    win->term));
-					p += strlen(tmptext) + 4;
+					p += strlen(_(menu->items[i].text,
+						    win->term)) + 4
+						    - (menu->items[i].hotkey_pos
+						       ? 1 : 0);
 
 					if (ev->x >= o && ev->x < p) {
 						menu->selected = i;
@@ -743,10 +751,8 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 								win->term,
 								menu);
 						}
-						mem_free(tmptext);
 						break;
 					}
-					mem_free(tmptext);
 				}
 			}
 			break;
@@ -840,4 +846,6 @@ add_to_menu(struct menu_item **mi, unsigned char *text,
 	mii[n].func = func;
 	mii[n].data = data;
 	mii[n].in_m = in_m;
+	mii[n].hotkey_pos = 0;
+	mii[n].ignore_hotkey = 1;
 }

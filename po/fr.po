@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-19 01:37+0100\n"
-"PO-Revision-Date: 2005-03-19 01:38+0100\n"
+"POT-Creation-Date: 2005-03-20 12:44+0100\n"
+"PO-Revision-Date: 2005-03-20 12:45+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -35,8 +35,8 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/bfu/hierbox.c:447 src/bfu/hierbox.c:458 src/bfu/hierbox.c:643
 #: src/bfu/hierbox.c:950 src/bfu/hierbox.c:979 src/bfu/inpfield.c:67
 #: src/bfu/inpfield.c:78 src/bfu/inpfield.c:98 src/bfu/leds.c:277
-#: src/bfu/msgbox.c:175 src/bookmarks/dialogs.c:278
-#: src/bookmarks/dialogs.c:683 src/config/dialogs.c:56
+#: src/bfu/msgbox.c:175 src/bookmarks/dialogs.c:276
+#: src/bookmarks/dialogs.c:659 src/config/dialogs.c:56
 #: src/config/dialogs.c:101 src/config/dialogs.c:338 src/config/dialogs.c:407
 #: src/config/dialogs.c:437 src/config/dialogs.c:475 src/config/dialogs.c:495
 #: src/config/dialogs.c:846 src/config/dialogs.c:865 src/config/dialogs.c:907
@@ -166,8 +166,8 @@ msgstr "Chaîne recherchée '%s' introuvable"
 msgid "Name"
 msgstr "Nom"
 
-#: src/bfu/hierbox.c:979 src/bookmarks/dialogs.c:278
-#: src/bookmarks/dialogs.c:683 src/config/dialogs.c:408
+#: src/bfu/hierbox.c:979 src/bookmarks/dialogs.c:276
+#: src/bookmarks/dialogs.c:659 src/config/dialogs.c:408
 #: src/config/dialogs.c:495 src/config/dialogs.c:907 src/cookies/dialogs.c:357
 #: src/dialogs/edit.c:102 src/dialogs/edit.c:105 src/dialogs/menu.c:97
 #: src/dialogs/menu.c:523 src/dialogs/menu.c:574 src/dialogs/options.c:205
@@ -302,16 +302,16 @@ msgstr ""
 "Erreur lors du parcours de signets XBEL dans %s ligne %d colonne %d:\n"
 "%s"
 
-#: src/bookmarks/backend/xbel.c:388 src/bookmarks/backend/xbel.c:409
+#: src/bookmarks/backend/xbel.c:392 src/bookmarks/backend/xbel.c:413
 msgid "No title"
 msgstr "Sans titre"
 
-#: src/bookmarks/backend/xbel.c:394
+#: src/bookmarks/backend/xbel.c:398
 msgid "No URL"
 msgstr "Aucune URL"
 
 #. name:
-#: src/bookmarks/bookmarks.c:48 src/bookmarks/bookmarks.c:158
+#: src/bookmarks/bookmarks.c:48 src/bookmarks/bookmarks.c:165
 msgid "Bookmarks"
 msgstr "Signets"
 
@@ -347,10 +347,27 @@ msgstr ""
 "  (PAS DE SUPPORT DES CARACTERES NATIONAUX!) (DÉSACTIVÉ)"
 
 #: src/bookmarks/bookmarks.c:67
+msgid "Save folder state"
+msgstr "Sauver l'état des dossiers"
+
+#: src/bookmarks/bookmarks.c:69
+msgid ""
+"When saving bookmarks also store whether folders are\n"
+"expanded or not, so the look of the bookmark dialog is\n"
+"kept across ELinks sessions. If disabled all folders will\n"
+"appear unexpanded next time ELinks is run."
+msgstr ""
+"Lors de la sauvegarde des signets, l'état des dossiers est\n"
+"préservé (ouverts ou non) ainsi l'apparence du gestionnaire\n"
+"de signets est conservée entre les sessions d'ELinks.\n"
+"Si cette option est désactivée, tous les dossiers apparaitront\n"
+"fermés lors du prochain démarrage d'ELinks."
+
+#: src/bookmarks/bookmarks.c:74
 msgid "Periodic snapshotting"
 msgstr "Instantané périodique"
 
-#: src/bookmarks/bookmarks.c:69
+#: src/bookmarks/bookmarks.c:76
 msgid ""
 "Automatically save a snapshot of all tabs periodically.\n"
 "This will periodically bookmark the tabs of each terminal in a separate "
@@ -424,87 +441,87 @@ msgstr "Effacer tous les signets"
 msgid "Do you really want to remove all bookmarks?"
 msgstr "Êtes-vous sûr de vouloir effacer tous les signets ?"
 
-#: src/bookmarks/dialogs.c:277
+#: src/bookmarks/dialogs.c:275
 msgid "Add folder"
 msgstr "Créer dossier"
 
-#: src/bookmarks/dialogs.c:277
+#: src/bookmarks/dialogs.c:275
 msgid "Folder name"
 msgstr "Nom du dossier"
 
-#: src/bookmarks/dialogs.c:322 src/scripting/lua/core.c:387
+#: src/bookmarks/dialogs.c:331 src/scripting/lua/core.c:387
 msgid "Edit bookmark"
 msgstr "Modifier un signet"
 
-#: src/bookmarks/dialogs.c:458
+#: src/bookmarks/dialogs.c:467
 msgid "~Goto"
 msgstr "A~ller à"
 
-#: src/bookmarks/dialogs.c:459
+#: src/bookmarks/dialogs.c:468
 msgid "~Edit"
 msgstr "~Modifier"
 
-#: src/bookmarks/dialogs.c:460 src/dialogs/menu.c:446
+#: src/bookmarks/dialogs.c:469 src/dialogs/menu.c:446
 msgid "~Delete"
 msgstr "~Supprimer"
 
-#: src/bookmarks/dialogs.c:461 src/dialogs/menu.c:444
+#: src/bookmarks/dialogs.c:470 src/dialogs/menu.c:444
 msgid "~Add"
 msgstr "~Ajouter"
 
-#: src/bookmarks/dialogs.c:462
+#: src/bookmarks/dialogs.c:471
 msgid "Add se~parator"
 msgstr "Sé~parateur"
 
-#: src/bookmarks/dialogs.c:463
+#: src/bookmarks/dialogs.c:472
 msgid "Add ~folder"
 msgstr "C~réer dossier"
 
-#: src/bookmarks/dialogs.c:464
+#: src/bookmarks/dialogs.c:473
 msgid "~Move"
 msgstr "~Déplacer"
 
-#: src/bookmarks/dialogs.c:465 src/dialogs/menu.c:397
+#: src/bookmarks/dialogs.c:474 src/dialogs/menu.c:397
 msgid "~Search"
 msgstr "~Chercher"
 
 #. This one is too dangerous, so just let user delete
 #. * the bookmarks file if needed. --Zas
-#: src/bookmarks/dialogs.c:469 src/cookies/dialogs.c:425
+#: src/bookmarks/dialogs.c:478 src/cookies/dialogs.c:425
 #: src/dialogs/download.c:478 src/dialogs/edit.c:99 src/formhist/dialogs.c:215
 #: src/globhist/dialogs.c:232 src/protocol/auth/dialogs.c:256
 msgid "Clear"
 msgstr "Effacer"
 
 #. TODO: Would this be useful? --jonas
-#: src/bookmarks/dialogs.c:472 src/config/dialogs.c:520
+#: src/bookmarks/dialogs.c:481 src/config/dialogs.c:520
 #: src/config/dialogs.c:944 src/cookies/dialogs.c:426
 #: src/dialogs/options.c:204 src/formhist/dialogs.c:216
 #: src/globhist/dialogs.c:235 src/sched/download.c:1118
 msgid "Save"
 msgstr "Enregistrer"
 
-#: src/bookmarks/dialogs.c:478
+#: src/bookmarks/dialogs.c:487
 msgid "Bookmark manager"
 msgstr "Gestionnaire de signets"
 
-#: src/bookmarks/dialogs.c:629
+#: src/bookmarks/dialogs.c:605
 msgid "Search bookmarks"
 msgstr "Recherche parmi les signets"
 
-#: src/bookmarks/dialogs.c:643
+#: src/bookmarks/dialogs.c:619
 msgid "Add bookmark"
 msgstr "Ajouter un signet"
 
-#: src/bookmarks/dialogs.c:674
+#: src/bookmarks/dialogs.c:650
 msgid "Saved session"
 msgstr "Session sauvée"
 
-#: src/bookmarks/dialogs.c:682
+#: src/bookmarks/dialogs.c:658
 msgid "Bookmark tabs"
 msgstr "Signets pour les onglets"
 
-#: src/bookmarks/dialogs.c:682
+#: src/bookmarks/dialogs.c:658
 msgid "Enter folder name"
 msgstr "Entrez un nom de dossier"
 

@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.81 2004/11/21 14:53:30 zas Exp $ */
+/* $Id: edit.c,v 1.82 2005/01/03 21:08:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,9 @@
 #include "util/color.h"
 #include "util/memory.h"
 #include "util/string.h"
+
+
+/* TODO: Move to bfu/. It has no bussiness to do in dialogs/. --pasky */
 
 
 static t_handler_event_status

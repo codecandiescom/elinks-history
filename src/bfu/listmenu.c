@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.13 2004/04/17 14:35:24 jonas Exp $ */
+/* $Id: listmenu.c,v 1.14 2004/04/17 14:37:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #include "sched/session.h"
 #include "util/conv.h"
 #include "util/error.h"
+#include "util/math.h"
 #include "util/string.h"
 #include "viewer/text/link.h" /* get_current_state() */
 
@@ -46,14 +47,12 @@ do_select_submenu(struct terminal *term, struct menu_item *menu,
 	int sel = 0;
 
 	foreach_menu_item (m, menu) {
-		sel++;
-		if (menu_contains(m, def))
-			goto found;
+		if (menu_contains(m, def)) {
+			sel = m - menu;
+			break;
+		}
 	}
 
-	sel = 0;
-
-found:
 	do_menu_selected(term, menu, ses, sel, 0);
 }
 

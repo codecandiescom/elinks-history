@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.56 2004/06/23 20:16:03 pasky Exp $ */
+/* $Id: hooks.c,v 1.57 2004/07/15 15:44:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,13 +27,13 @@ script_hook_goto_url(va_list ap, void *data)
 	struct session *ses = va_arg(ap, struct session *);
 	int err;
 
-	if (*url == NULL) return EHS_NEXT;
+	if (*url == NULL) return EVENT_HOOK_STATUS_NEXT;
 
 	lua_getglobal(L, "goto_url_hook");
 	if (lua_isnil(L, -1)) {
 		/* The function is not defined */
 		lua_pop(L, 1);
-		return EHS_NEXT;
+		return EVENT_HOOK_STATUS_NEXT;
 	}
 
 	lua_pushstring(L, *url);
@@ -44,11 +44,11 @@ script_hook_goto_url(va_list ap, void *data)
 		lua_pushstring(L, struri(cur_loc(ses)->vs.uri));
 	}
 
-	if (prepare_lua(ses)) return EHS_NEXT;
+	if (prepare_lua(ses)) return EVENT_HOOK_STATUS_NEXT;
 
 	err = lua_call(L, 2, 1);
 	finish_lua();
-	if (err) return EHS_NEXT;
+	if (err) return EVENT_HOOK_STATUS_NEXT;
 
 	if (lua_isstring(L, -1)) {
 		unsigned char *new_url;
@@ -66,7 +66,7 @@ script_hook_goto_url(va_list ap, void *data)
 
 	lua_pop(L, 1);
 
-	return EHS_NEXT;
+	return EVENT_HOOK_STATUS_NEXT;
 }
 
 static enum evhook_status
@@ -77,22 +77,22 @@ script_hook_follow_url(va_list ap, void *data)
 	struct session *ses = va_arg(ap, struct session *);
 	int err;
 
-	if (*url == NULL) return EHS_NEXT;
+	if (*url == NULL) return EVENT_HOOK_STATUS_NEXT;
 
 	lua_getglobal(L, "follow_url_hook");
 	if (lua_isnil(L, -1)) {
 		/* The function is not defined */
 		lua_pop(L, 1);
-		return EHS_NEXT;
+		return EVENT_HOOK_STATUS_NEXT;
 	}
 
 	lua_pushstring(L, *url);
 
-	if (prepare_lua(ses)) return EHS_NEXT;
+	if (prepare_lua(ses)) return EVENT_HOOK_STATUS_NEXT;
 
 	err = lua_call(L, 1, 1);
 	finish_lua();
-	if (err) return EHS_NEXT;
+	if (err) return EVENT_HOOK_STATUS_NEXT;
 
 	if (lua_isstring(L, -1)) {
 		unsigned char *new_url;
@@ -110,7 +110,7 @@ script_hook_follow_url(va_list ap, void *data)
 
 	lua_pop(L, 1);
 
-	return EHS_NEXT;
+	return EVENT_HOOK_STATUS_NEXT;
 }
 
 static enum evhook_status
@@ -123,23 +123,23 @@ script_hook_pre_format_html(va_list ap, void *data)
 	unsigned char *url = va_arg(ap, unsigned char *);
 	int err;
 
-	if (*html == NULL || *html_len == 0) return EHS_NEXT;
+	if (*html == NULL || *html_len == 0) return EVENT_HOOK_STATUS_NEXT;
 
 	lua_getglobal(L, "pre_format_html_hook");
 	if (lua_isnil(L, -1)) {
 		/* The function is not defined */
 		lua_pop(L, 1);
-		return EHS_NEXT;
+		return EVENT_HOOK_STATUS_NEXT;
 	}
 
 	lua_pushstring(L, url);
 	lua_pushlstring(L, *html, *html_len);
 
-	if (prepare_lua(ses)) return EHS_NEXT;
+	if (prepare_lua(ses)) return EVENT_HOOK_STATUS_NEXT;
 
 	err = lua_call(L, 2, 1);
 	finish_lua();
-	if (err) return EHS_NEXT;
+	if (err) return EVENT_HOOK_STATUS_NEXT;
 
 	if (lua_isstring(L, -1)) {
 		*html_len = lua_strlen(L, -1);
@@ -150,7 +150,7 @@ script_hook_pre_format_html(va_list ap, void *data)
 
 	lua_pop(L, 1);
 
-	return EHS_NEXT;
+	return EVENT_HOOK_STATUS_NEXT;
 }
 
 /* The Lua function can return:
@@ -165,21 +165,21 @@ script_hook_get_proxy(va_list ap, void *data)
 	unsigned char *url = va_arg(ap, unsigned char *);
 	int err;
 
-	if (*new_proxy_url == NULL) return EHS_NEXT;
+	if (*new_proxy_url == NULL) return EVENT_HOOK_STATUS_NEXT;
 
 	lua_getglobal(L, "proxy_for_hook");
 	if (lua_isnil(L, -1)) {
 		/* The function is not defined */
 		lua_pop(L, 1);
-		return EHS_NEXT;
+		return EVENT_HOOK_STATUS_NEXT;
 	}
 
 	lua_pushstring(L, url);
-	if (prepare_lua(NULL)) return EHS_NEXT;
+	if (prepare_lua(NULL)) return EVENT_HOOK_STATUS_NEXT;
 
 	err = lua_call(L, 1, 1);
 	finish_lua();
-	if (err) return EHS_NEXT;
+	if (err) return EVENT_HOOK_STATUS_NEXT;
 
 	if (lua_isstring(L, -1)) {
 		*new_proxy_url = stracpy((unsigned char *) lua_tostring(L, -1));
@@ -191,7 +191,7 @@ script_hook_get_proxy(va_list ap, void *data)
 
 	lua_pop(L, 1);
 
-	return EHS_NEXT;
+	return EVENT_HOOK_STATUS_NEXT;
 }
 
 static enum evhook_status
@@ -202,7 +202,7 @@ script_hook_quit(va_list ap, void *data)
 		finish_lua();
 	}
 
-	return EHS_NEXT;
+	return EVENT_HOOK_STATUS_NEXT;
 }
 
 struct event_hook_info lua_scripting_hooks[] = {

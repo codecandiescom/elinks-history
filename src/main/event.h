@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.11 2003/10/26 13:13:42 jonas Exp $ */
+/* $Id: event.h,v 1.12 2004/07/15 15:44:05 jonas Exp $ */
 
 #ifndef EL__SCHED_EVENT_H
 #define EL__SCHED_EVENT_H
@@ -10,15 +10,15 @@
 
 /* This enum is returned by each event hook and determines whether we should
  * go on in the chain or finish the event processing. You want to always
- * return EHS_NEXT. */
-/* More about EHS_LAST - it means the event will get stuck on YOU and won't
- * ever get to any other hooks queued behind you. This is usually not what you
- * want. When I have plugin doing X with some document being loaded, and then
- * script doing Y with it and finally some internal gadget doing some final
- * touching of the document (say, colors normalization or so, I'm pulling this
- * off my head), you definitively want all of them to happen, no matter if they
- * are all successful or all unsuccessful or part of them successful. The only
- * exceptions I can think of are:
+ * return EVENT_HOOK_STATUS_NEXT. */
+/* More about EVENT_HOOK_STATUS_LAST - it means the event will get stuck on YOU
+ * and won't ever get to any other hooks queued behind you. This is usually not
+ * what you want. When I have plugin doing X with some document being loaded,
+ * and then script doing Y with it and finally some internal gadget doing some
+ * final touching of the document (say, colors normalization or so, I'm pulling
+ * this off my head), you definitively want all of them to happen, no matter if
+ * they are all successful or all unsuccessful or part of them successful. The
+ * only exceptions I can think of are:
  *
  * * I really messed something up. Ie. I somehow managed to destroy the
  * document I got on input, but at least I know I did. Others don't and they
@@ -36,8 +36,8 @@
  *
  * --pasky */
 enum evhook_status {
-	EHS_NEXT,
-	EHS_LAST,
+	EVENT_HOOK_STATUS_NEXT,
+	EVENT_HOOK_STATUS_LAST,
 };
 
 /* The event hook prototype. Abide. */

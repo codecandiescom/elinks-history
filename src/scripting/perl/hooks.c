@@ -1,5 +1,5 @@
 /* Perl scripting hooks */
-/* $Id: hooks.c,v 1.13 2004/06/23 20:16:03 pasky Exp $ */
+/* $Id: hooks.c,v 1.14 2004/07/15 15:44:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,7 @@ script_hook_goto_url(va_list ap, void *data)
 	if (my_perl && *url)
 		do_script_hook_goto_url(ses, url);
 
-	return EHS_NEXT;
+	return EVENT_HOOK_STATUS_NEXT;
 }
 
 static inline void
@@ -117,7 +117,7 @@ script_hook_follow_url(va_list ap, void *data)
 	if (my_perl && *url)
 		do_script_hook_follow_url(url);
 
-	return EHS_NEXT;
+	return EVENT_HOOK_STATUS_NEXT;
 }
 
 static inline void
@@ -164,7 +164,7 @@ script_hook_pre_format_html(va_list ap, void *data)
 	if (my_perl && ses && url && *html && *html_len)
 		do_script_hook_pre_format_html(url, html, html_len);
 
-	return EHS_NEXT;
+	return EVENT_HOOK_STATUS_NEXT;
 }
 
 static inline void

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.163 2004/07/13 16:28:22 jonas Exp $ */
+/* $Id: core.c,v 1.164 2004/07/15 15:44:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -280,16 +280,16 @@ run_lua_func(va_list ap, void *data)
 
 	if (func_ref == LUA_NOREF) {
 		alert_lua_error("key bound to nothing (internal error)");
-		return EHS_NEXT;
+		return EVENT_HOOK_STATUS_NEXT;
 	}
 
 	lua_getref(L, func_ref);
-	if (prepare_lua(ses)) return EHS_NEXT;
+	if (prepare_lua(ses)) return EVENT_HOOK_STATUS_NEXT;
 	err = lua_call(L, 0, 2);
 	finish_lua();
 	if (!err) handle_standard_lua_returns("keyboard function");
 
-	return EHS_NEXT;
+	return EVENT_HOOK_STATUS_NEXT;
 }
 
 static int
@@ -715,14 +715,14 @@ dialog_lua_console(va_list ap, void *data)
 	struct session *ses = va_arg(ap, struct session *);
 
 	if (get_cmd_opt_int("anonymous"))
-		return EHS_NEXT;
+		return EVENT_HOOK_STATUS_NEXT;
 
 	input_field(ses->tab->term, NULL, 1,
 		    N_("Lua Console"), N_("Enter expression"),
 		    N_("OK"), N_("Cancel"), ses, &lua_console_history,
 		    MAX_STR_LEN, "", 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) lua_console, NULL);
-	return EHS_NEXT;
+	return EVENT_HOOK_STATUS_NEXT;
 }
 
 static void
@@ -735,7 +735,7 @@ enum evhook_status
 free_lua_console_history(va_list ap, void *data)
 {
 	free_lua_console_history_entries();
-	return EHS_NEXT;
+	return EVENT_HOOK_STATUS_NEXT;
 }
 
 

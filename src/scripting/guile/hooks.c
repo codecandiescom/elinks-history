@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.28 2004/06/22 23:11:19 pasky Exp $ */
+/* $Id: hooks.c,v 1.29 2004/07/15 15:44:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,10 +61,10 @@ script_hook_goto_url(va_list ap, void *data)
 
 	evhook_use_params(url && ses);
 
-	if (*url == NULL || !*url[0]) return EHS_NEXT;
+	if (*url == NULL || !*url[0]) return EVENT_HOOK_STATUS_NEXT;
 
 	proc = get_guile_hook("%goto-url-hook");
-	if (SCM_FALSEP(proc)) return EHS_NEXT;
+	if (SCM_FALSEP(proc)) return EVENT_HOOK_STATUS_NEXT;
 
 	x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(*url));
 
@@ -80,7 +80,7 @@ script_hook_goto_url(va_list ap, void *data)
 		(*url)[0] = 0;
 	}
 
-	return EHS_NEXT;
+	return EVENT_HOOK_STATUS_NEXT;
 }
 
 static enum evhook_status
@@ -93,10 +93,10 @@ script_hook_follow_url(va_list ap, void *data)
 
 	evhook_use_params(url && ses);
 
-	if (*url == NULL || !*url[0]) return EHS_NEXT;
+	if (*url == NULL || !*url[0]) return EVENT_HOOK_STATUS_NEXT;
 
 	proc = get_guile_hook("%follow-url-hook");
-	if (SCM_FALSEP(proc)) return EHS_NEXT;
+	if (SCM_FALSEP(proc)) return EVENT_HOOK_STATUS_NEXT;
 
 	x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(*url));
 
@@ -113,7 +113,7 @@ script_hook_follow_url(va_list ap, void *data)
 		(*url)[0] = 0;
 	}
 
-	return EHS_NEXT;
+	return EVENT_HOOK_STATUS_NEXT;
 }
 
 static enum evhook_status
@@ -128,20 +128,20 @@ script_hook_pre_format_html(va_list ap, void *data)
 
 	evhook_use_params(html && html_len && ses && url);
 
-	if (*html == NULL || *html_len == 0) return EHS_NEXT;
+	if (*html == NULL || *html_len == 0) return EVENT_HOOK_STATUS_NEXT;
 
 	proc = get_guile_hook("%pre-format-html-hook");
-	if (SCM_FALSEP(proc)) return EHS_NEXT;
+	if (SCM_FALSEP(proc)) return EVENT_HOOK_STATUS_NEXT;
 
 	x = scm_call_2(SCM_VARIABLE_REF(proc), scm_makfrom0str(url),
 		       scm_mem2string(*html, *html_len));
 
-	if (!SCM_STRINGP(x)) return EHS_NEXT;
+	if (!SCM_STRINGP(x)) return EVENT_HOOK_STATUS_NEXT;
 
 	*html_len = SCM_STRING_LENGTH(x);
 	*html = memacpy(SCM_STRING_UCHARS(x), *html_len);
 
-	return EHS_NEXT;
+	return EVENT_HOOK_STATUS_NEXT;
 }
 
 /* The Guile function can return:
@@ -156,7 +156,7 @@ script_hook_get_proxy(va_list ap, void *data)
 	SCM proc = get_guile_hook("%get-proxy-hook");
 	SCM x;
 
-	if (SCM_FALSEP(proc)) return EHS_NEXT;
+	if (SCM_FALSEP(proc)) return EVENT_HOOK_STATUS_NEXT;
 
 	x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(url));
 
@@ -168,7 +168,7 @@ script_hook_get_proxy(va_list ap, void *data)
 		*retval = NULL;
 	}
 
-	return EHS_NEXT;
+	return EVENT_HOOK_STATUS_NEXT;
 }
 
 static enum evhook_status
@@ -176,11 +176,11 @@ script_hook_quit(va_list ap, void *data)
 {
 	SCM proc = get_guile_hook("%quit-hook");
 
-	if (SCM_FALSEP(proc)) return EHS_NEXT;
+	if (SCM_FALSEP(proc)) return EVENT_HOOK_STATUS_NEXT;
 
 	scm_call_0(SCM_VARIABLE_REF(proc));
 
-	return EHS_NEXT;
+	return EVENT_HOOK_STATUS_NEXT;
 }
 
 struct event_hook_info guile_scripting_hooks[] = {

@@ -1,5 +1,5 @@
 /* Event handling functions */
-/* $Id: event.c,v 1.21 2004/06/25 10:52:31 zas Exp $ */
+/* $Id: event.c,v 1.22 2004/07/15 15:44:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,7 +167,7 @@ trigger_event_va(int id, va_list ap_init)
 		ret = ev_handler->callback(ap, ev_handler->data);
 		va_end(ap);
 
-		if (ret == EHS_LAST) return;
+		if (ret == EVENT_HOOK_STATUS_LAST) return;
 	}
 }
 

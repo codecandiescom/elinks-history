@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.90 2004/06/12 17:19:39 jonas Exp $ */
+/* $Id: document.c,v 1.91 2004/06/12 17:29:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,10 +51,12 @@ nowhere_box(struct terminal *term, unsigned char *title)
 }
 
 /* Location info. message box. */
-static void
-loc_msg(struct terminal *term, struct location *location,
-	struct document_view *doc_view)
+void
+document_info_dialog(struct session *ses)
 {
+	struct terminal *term = ses->tab->term;
+	struct location *location = cur_loc(ses);
+	struct document_view *doc_view;
 	struct cache_entry *cached;
 	struct string msg;
 
@@ -62,6 +64,8 @@ loc_msg(struct terminal *term, struct location *location,
 		nowhere_box(term, NULL);
 		return;
 	}
+
+	doc_view = current_frame(ses);
 
 	if (!init_string(&msg)) return;
 
@@ -222,18 +226,9 @@ loc_msg(struct terminal *term, struct location *location,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 }
 
-void
-state_msg(struct session *ses)
-{
-	if (!have_location(ses))
-		loc_msg(ses->tab->term, NULL, NULL);
-	else
-		loc_msg(ses->tab->term, cur_loc(ses), current_frame(ses));
-}
-
 /* Headers info. message box. */
 void
-head_msg(struct session *ses)
+protocol_header_dialog(struct session *ses)
 {
 	struct cache_entry *cached;
 

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.72 2004/06/09 21:42:19 zas Exp $ */
+/* $Id: action.c,v 1.73 2004/06/12 17:29:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,7 +183,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_DOCUMENT_INFO:
-			state_msg(ses);
+			document_info_dialog(ses);
 			break;
 
 		case ACT_MAIN_DOWNLOAD:
@@ -254,7 +254,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_HEADER_INFO:
-			head_msg(ses);
+			protocol_header_dialog(ses);
 			break;
 
 		case ACT_MAIN_HISTORY_MANAGER:

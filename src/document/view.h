@@ -1,11 +1,11 @@
-/* $Id: view.h,v 1.15 2003/10/31 22:37:17 pasky Exp $ */
+/* $Id: view.h,v 1.16 2003/11/18 21:40:46 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_VIEW_H
 #define EL__DOCUMENT_VIEW_H
 
 #include "document/document.h"
-#include "document/options.h"
 #include "terminal/draw.h"
+#include "util/lists.h"
 
 struct view_state;
 

@@ -1,10 +1,9 @@
-/* $Id: document.h,v 1.33 2003/11/17 18:39:15 jonas Exp $ */
+/* $Id: document.h,v 1.34 2003/11/18 21:40:46 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
 
 #include "document/options.h"
-#include "document/refresh.h"
 #include "terminal/draw.h"
 #include "util/color.h"
 #include "util/lists.h"
@@ -53,6 +52,8 @@ struct point {
 	int x, y;
 };
 
+struct form_control
+
 struct link {
 	long accesskey;
 
@@ -81,6 +82,8 @@ struct search {
 
 /* TODO: Move here? --jonas */
 struct frameset_desc;
+
+struct document_refresh;
 
 struct document {
 	LIST_HEAD(struct document);

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.257 2003/11/08 05:04:40 miciah Exp $ */
+/* $Id: view.c,v 1.258 2003/11/08 05:09:24 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -670,6 +670,10 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 						    current_frame(ses),
 						    ses->kbdprefix.rep_num
 							- 1);
+
+				draw_doc(ses->tab->term, doc_view, 1);
+				print_screen_status(ses);
+				redraw_from_window(ses->tab);
 		}
 
 		switch (kbd_action(KM_MAIN, ev, NULL)) {
@@ -695,8 +699,8 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 
 			case ACT_HOME: rep_ev(ses, doc_view, home, 0); break;
 			case ACT_END:  rep_ev(ses, doc_view, x_end, 0); break;
-			case ACT_ENTER: x = enter(ses, doc_view, 0); if (x == 2 && ses->kbdprefix.rep) x = 1; break;
-			case ACT_ENTER_RELOAD: x = enter(ses, doc_view, 1); if (x == 2 && ses->kbdprefix.rep) x = 1; break;
+			case ACT_ENTER: x = enter(ses, doc_view, 0); break;
+			case ACT_ENTER_RELOAD: x = enter(ses, doc_view, 1); break;
 			case ACT_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, doc_view, 0); break;
 			case ACT_RESUME_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, doc_view, 1); break;
 			case ACT_SEARCH: search_dlg(ses, doc_view, 0); break;
@@ -707,7 +711,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			case ACT_VIEW_IMAGE: send_image(ses->tab->term, NULL, ses); break;
 			case ACT_DOWNLOAD_IMAGE: send_download_image(ses->tab->term, NULL, ses); break;
 			case ACT_LINK_MENU: link_menu(ses->tab->term, NULL, ses); break;
-			case ACT_JUMP_TO_LINK: break;
+			case ACT_JUMP_TO_LINK: x = 2; break;
 			default:
 				if (ev->x >= '1' && ev->x <= '9' && !ev->y) {
 					/* FIXME: This probably doesn't work

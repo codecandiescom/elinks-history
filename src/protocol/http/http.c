@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.237 2004/02/20 16:01:44 jonas Exp $ */
+/* $Id: http.c,v 1.238 2004/02/27 10:46:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1020,7 +1020,7 @@ get_header(struct read_buffer *rb)
 
 	/* XXX: We will have to do some guess about whether an HTTP header is
 	 * coming or not, in order to support HTTP/0.9 reply correctly. This
-	 * means a little code duplcation with get_http_code(). --pasky */
+	 * means a little code duplication with get_http_code(). --pasky */
 	if (rb->len > 4 && strncasecmp(rb->data, "HTTP/", 5))
 		return -2;
 
@@ -1098,7 +1098,6 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 again:
 	a = get_header(rb);
 	if (a == -1) {
-http_error:
 		abort_conn_with_state(conn, S_HTTP_ERROR);
 		return;
 	}
@@ -1110,7 +1109,8 @@ http_error:
 	if (a == -2) a = 0;
 	if ((a && get_http_code(rb->data, &h, &version))
 	    || h == 101) {
-		goto http_error;
+		abort_conn_with_state(conn, S_HTTP_ERROR);
+		return;
 	}
 
 	/* When no header, HTTP/0.9 document. That's always text/html,
@@ -1129,12 +1129,16 @@ http_error:
 		return;
 	}
 
-	if ((d = parse_http_header(head, "Status", NULL))) {
+	d = parse_http_header(head, "Status", NULL);
+	if (d) {
 		int h2 = atoi(d);
 
 		mem_free(d);
 		if (h2 >= 100 && h2 < 600) h = h2;
-		if (h == 101) goto http_error;
+		if (h == 101) {
+			abort_conn_with_state(conn, S_HTTP_ERROR);
+			return;
+		}
 	}
 
 #ifdef CONFIG_COOKIES
@@ -1201,9 +1205,8 @@ http_error:
 		if ((d = parse_http_header(conn->cache->head, "Cache-Control", NULL))
 		    || (d = parse_http_header(conn->cache->head, "Pragma", NULL)))
 		{
-			if (strstr(d, "no-cache")) {
+			if (strstr(d, "no-cache"))
 				conn->cache->cache_mode = CACHE_MODE_NEVER;
-			}
 			mem_free(d);
 		}
 	}

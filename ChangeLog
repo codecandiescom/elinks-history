@@ -1,3 +1,381 @@
+Sat Nov 29 23:01:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	@separater -> @separator in get_stat_msg().  
+
+Sat Nov 29 21:58:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Let's not use capital letters in the middle of sentence in
+	get_stat_msg().  
+
+Sat Nov 29 21:55:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/download.c, sched/error.c, sched/error.h,
+	sched/session.c, sched/session.h:
+
+	Move get_stat_msg() back home. Requested by pasky.  
+
+Sat Nov 29 21:40:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	Finally fixed the auto-file://-assuming. Now also absolute paths
+	will work.  
+
+Sat Nov 29 21:37:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/download.c:
+
+	Make the download progress meter look like "[  7%  ]". It uses less
+	space and looks spiffy too.  
+
+Sat Nov 29 21:20:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	Fixed ./elinks bla.html usage, broken by changes in file:// URI
+	semantics changes.  
+
+Sat Nov 29 20:55:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/download.c:
+
+	Disable abort and delete file button in the download manager. The
+	locking causing assertion failures.  
+
+Sat Nov 29 20:39:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/download.c:
+
+	Show download meter in the download manager.  
+
+Sat Nov 29 19:16:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/dialog.c:
+
+	Calculate x and y after layouting.  
+
+Sat Nov 29 19:09:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/download.c, sched/download.c, sched/download.h:
+
+	Do not use dialog refreshing for the download dialog but control it
+	the old way.  
+
+Sat Nov 29 19:03:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: dialog.c, dialog.h:
+
+	Expose redraw_dialog() and make it control the calling of the
+	layouter bassed on boolean argument.  
+
+Sat Nov 29 18:33:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/download.c:
+
+	Use get_stat_msg() for the download dialog.  
+
+Sat Nov 29 18:32:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: error.c, error.h, session.c:
+
+	Make even the state message separater configurable.  
+
+Sat Nov 29 18:18:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/error.c:
+
+	Oops fix floating point exception. >:) 
+
+Sat Nov 29 18:07:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: error.c, error.h, session.c:
+
+	Make the caller control the 'wide terminal' heuristics.  
+
+Sat Nov 29 17:50:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	For URL 'file://', go to the current directory.  
+
+Sat Nov 29 17:49:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/error.c:
+
+	Show elapsed time info in the status message and change the 'wide
+	terminal' heuristics.  
+
+Sat Nov 29 17:45:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	Fixed handling of absolute paths in transform_file_url().  
+
+Sat Nov 29 17:37:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/error.c:
+
+	Inform that the speed is infact the speed.  
+
+Sat Nov 29 17:31:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/error.c:
+
+	get_stat_msg(): If the terminal is wide enough use longer names for
+	values.  
+
+Sat Nov 29 17:12:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/error.c:
+
+	get_stat_msg(): Use macros for the calculations.  
+
+Sat Nov 29 16:58:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Remove useless global_doc_opts declaration.  
+
+Sat Nov 29 16:56:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: error.c, error.h, session.c:
+
+	get_stat_msg() was moved to sched/error.* 
+
+Sat Nov 29 16:46:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	get_stat_msg(): Decrease indentation by moving get_err_msg() up
+	front.  
+
+Sat Nov 29 16:12:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/header.c:
+
+	parse_http_header(): Use memacpy and improve comment.  
+
+Sat Nov 29 16:02:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/header.c:
+
+	parse_http_header(): Fix off by one error eating non whitespace
+	chars.  
+
+Sat Nov 29 13:37:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/header.c:
+
+	Compilation fix.  
+
+Sat Nov 29 13:14:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/header.c:
+
+	@h -> @value, @g -> @valend in parse_http_header().  
+
+Sat Nov 29 13:13:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/header.c:
+
+	Swapped @h and @g declaration in parse_http_header().  
+
+Sat Nov 29 13:13:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/header.c:
+
+	Described a little the value part parsing in parse_http_header().  
+
+Sat Nov 29 13:10:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/header.c:
+
+	@i -> @itempos in parse_http_header().  
+
+Sat Nov 29 13:09:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/header.c:
+
+	Minor simplifications in parse_http_header().  
+
+Sat Nov 29 13:08:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/header.c:
+
+	No need to rename parse_http_header_param().  
+
+Sat Nov 29 13:06:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/header.c:
+
+	Comment a bit what's going on in parse_http_header().  
+
+Sat Nov 29 13:02:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/header.c:
+
+	Localized @i even more in parse_http_header().  
+
+Sat Nov 29 13:01:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/header.c:
+
+	@f -> @pos in parse_http_header().  
+
+Sat Nov 29 13:00:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/header.c:
+
+	Minor tidyup of parse_http_header().  
+
+Sat Nov 29 13:00:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/header.c:
+
+	Localized @h in parse_http_header().  
+
+Sat Nov 29 12:59:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/header.c:
+
+	Simplification of @h handling in parse_http_header().  
+
+Sat Nov 29 12:59:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/header.c:
+
+	Localized @i, @g in parse_http_header().  
+
+Sat Nov 29 06:01:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Fix previous patch not handling lines being lower than max height.  
+
+Sat Nov 29 05:40:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Simplify bounds checking and handle more keyboard actions.  
+
+Sat Nov 29 05:21:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Always ensure that the maximum number of lines are available.  
+
+Sat Nov 29 04:31:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/text.c, config/options.inc:
+
+	Make real scroll bar for scrollable text. Not perfect yet (the
+	scroll bar steps are not that smooth).  
+
+Sat Nov 29 02:40:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Only make room for top and bottom space and one button line.  
+
+Sat Nov 29 02:38:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Use text scrollable for hierbox item info.  
+
+Sat Nov 29 02:26:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Fix some issues with resizing and add set cursor to (trivially) show
+	that the text is selected.  
+
+Sat Nov 29 02:13:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/widget.h:
+
+	Cleanup widget_is_focusable() by creating text_is_scrollable()
+	macro.  
+
+Sat Nov 29 01:46:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/msgbox.c, bfu/msgbox.h, bfu/text.c,
+	bfu/text.h, bfu/widget.h, dialogs/info.c:
+
+	Readd scrollable text widgets. Basicly it is the first version but
+	with a few flaws fixed. Stuff like correct trimming so we do not
+	draw an extra new line and forcing the dialog to be the width of the
+	longest line.  
+
+Sat Nov 29 01:06:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, viewer/text/view.c:
+
+	Introduced download-manager action, by default bound to 'D'.  
+
+Sat Nov 29 00:53:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/file.c:
+
+	Make it clear that the file URI we work on is pre-chewed by
+	transform_file_url().  
+
+Sat Nov 29 00:49:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	transform_file_url(): @cwdlen localized to the if() body inserting
+	cwd.  
+
+Sat Nov 29 00:48:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	Keep the conventions - transform_file_uri() -> transform_file_url() 
+
+Sat Nov 29 00:47:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	transform_file_uri() was cleaned up, goto converted to if() body.  
+
+Sat Nov 29 00:45:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	Zas' piggy comment sanitization in transform_file_uri().  
+
+Sat Nov 29 00:44:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	insert_wd() -> transform_file_uri(), added function description.  
+
+Sat Nov 29 00:40:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	Changed file URL sanitization in insert_wd(). Now, it is more
+	standard-compilant, respecting the host part of URI, modulo few
+	practical extensions to help maintain backwards compatibility (disk
+	in host part for dosfs and '.' in host part denoting the current
+	working directory). However, this notation is NOT
+	backwards-compatible per se. It shouldn't hurt pretty much anything
+	though, I believe. Note that even non-localhost hostname is assumed
+	to express the local system, although that may well not be the case
+	:/.  
+
+Sat Nov 29 00:16:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	insert_wd() cleanup - shift @url so that we don't work with big
+	offsets later.  
+
 Fri Nov 28 20:53:13 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/bfu/: dialog.c, dialog.h, listbox.c:

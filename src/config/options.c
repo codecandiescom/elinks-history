@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.375 2003/10/25 15:22:44 pasky Exp $ */
+/* $Id: options.c,v 1.376 2003/10/25 16:05:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -522,6 +522,7 @@ init_options(void)
 
 	config_options = add_opt_tree_tree(&options_root, "", "",
 					 "config", OPT_LISTBOX | OPT_SORT, "");
+	config_options->box_item->visible = 0;
 	register_options(config_options_info, config_options);
 
 	register_autocreated_options();

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.325 2004/08/03 10:41:05 jonas Exp $ */
+/* $Id: http.c,v 1.326 2004/08/14 06:19:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1107,6 +1107,9 @@ again:
 	/* When no header, HTTP/0.9 document. That's always text/html,
 	 * according to
 	 * http://www.w3.org/Protocols/HTTP/AsImplemented.html. */
+	/* FIXME: This usage of fake protocol headers for setting up the
+	 * content type has been obsoleted by the @content_type member of
+	 * {struct cache_entry}. */
 	head = (a ? memacpy(rb->data, a)
 		  : stracpy("\r\nContent-Type: text/html\r\n"));
 	if (!head) {
@@ -1127,6 +1130,7 @@ again:
 		mem_free(d);
 		if (h2 >= 100 && h2 < 600) h = h2;
 		if (h == 101) {
+			mem_free(head);
 			abort_conn_with_state(conn, S_HTTP_ERROR);
 			return;
 		}

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.14 2002/11/29 16:26:13 zas Exp $ */
+/* $Id: string.c,v 1.15 2002/11/29 20:59:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,7 @@ debug_copy_string(unsigned char *f, int l, unsigned char **dst,
 		return NULL;
 	}
 
-	*dst = mem_alloc(strlen(src) + 1);
+	*dst = debug_mem_alloc(strlen(src) + 1);
 	if (*dst) strcpy(*dst, src);
 
 	return *dst;
@@ -90,7 +90,9 @@ memacpy(unsigned char *src, int len)
 {
 	unsigned char *m;
 
+#ifdef DEBUG
 	if (len < 0) { warn("memacpy len < 0"); len = 0; }
+#endif
 
 	m = mem_alloc(len + 1);
 	if (!m) return NULL;
@@ -104,7 +106,12 @@ memacpy(unsigned char *src, int len)
 inline unsigned char *
 stracpy(unsigned char *src)
 {
-	if (!src) { warn("stracpy src=NULL"); return NULL; }
+	if (!src) {
+#ifdef DEBUG
+		warn("stracpy src=NULL");
+#endif
+		return NULL;
+	}
 
 	return memacpy(src, strlen(src));
 }
@@ -113,7 +120,9 @@ unsigned char *
 copy_string(unsigned char **dst, unsigned char *src)
 {
 	if (!src) {
+#ifdef DEBUG
 		warn("copy_string src=NULL");
+#endif
 		*dst = NULL;
 		return NULL;
 	}
@@ -131,8 +140,10 @@ add_to_strn(unsigned char **s, unsigned char *a)
 {
 	unsigned char *p;
 
+#ifdef DEBUG
 	if (!*s) { fatal("add_to_strn *s=NULL"); return; }
 	if (!a) { fatal("add_to_strn a=NULL"); return; }
+#endif
 
 	p = mem_realloc(*s, strlen(*s) + strlen(a) + 1);
 
@@ -162,7 +173,12 @@ straconcat(unsigned char *str, ...)
 	unsigned char *s;
 	unsigned int len;
 
-	if (!str) { fatal("straconcat str=NULL"); return NULL; }
+	if (!str) {
+#ifdef DEBUG
+		fatal("straconcat str=NULL");
+#endif
+		return NULL;
+	}
 
 	s = stracpy(str);
 	if (!s) return NULL;
@@ -215,13 +231,15 @@ init_str()
 }
 #endif
 
-void
+inline void
 add_to_str(unsigned char **s, int *l, unsigned char *a)
 {
 	int ll;
 
+#ifdef DEBUG
 	if (!*s) { fatal("add_to_str *s=NULL"); return; }
 	if (!a) { fatal("add_to_str a=NULL"); return; }
+#endif
 	if (!*a) return;
 
 	ll = strlen(a);
@@ -238,12 +256,14 @@ add_to_str(unsigned char **s, int *l, unsigned char *a)
    	*l += ll;
 }
 
-void
+inline void
 add_bytes_to_str(unsigned char **s, int *l, unsigned char *a, int ll)
 {
+#ifdef DEBUG
 	if (!*s) { fatal("add_bytes_to_str *s=NULL"); return; }
 	if (!a) { fatal("add_bytes_to_str a=NULL"); return; }
 	if (ll < 0) { fatal("add_bytes_to_str ll < 0"); return; }
+#endif
 	if (!ll) return;
 
 	if ((*l & ~(ALLOC_GR - 1)) != ((*l + ll) & ~(ALLOC_GR - 1))) {
@@ -259,11 +279,13 @@ add_bytes_to_str(unsigned char **s, int *l, unsigned char *a, int ll)
    	(*s)[*l] = 0;
 }
 
-void
+inline void
 add_chr_to_str(unsigned char **s, int *l, unsigned char a)
 {
+#ifdef DEBUG
 	if (!*s) { fatal("add_chr_to_str *s=NULL"); return; }
 	if (!a) { warn("add_chr_to_str a=0"); }
+#endif
 
 	if ((*l & (ALLOC_GR - 1)) == ALLOC_GR - 1) {
 		unsigned char *p = mem_realloc(*s, (*l + 1 + ALLOC_GR)
@@ -332,9 +354,11 @@ strcasestr(unsigned char *haystack, unsigned char *needle)
 unsigned char *
 safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 {
+#ifdef DEBUG
 	if (!dst) { fatal("safe_strncpy dst=NULL"); return NULL; }
 	if (!src) { fatal("safe_strncpy src=NULL"); return NULL; }
 	if (dst_size <= 0) { fatal("safe_strncpy dst_size <= 0"); return NULL; }
+#endif
 
 	strncpy(dst, src, dst_size);
 	dst[dst_size - 1] = 0;
@@ -388,8 +412,8 @@ strstr(char *s, char *p)
  * Note that bcopy() has the order of the source and destination
  * arguments reversed.
  * From http://www.unixpapa.com/incnote/string.html */
-/* XXX: Perhaps not the better place for it. --Zas */
-char *
+/* XXX: Perhaps not the best place for it. --Zas */
+inline char *
 memmove(char *dst, char *src, int n)
 {
 	if (src > dst)

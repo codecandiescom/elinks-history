@@ -7519,8 +7519,8 @@ struct translation translation_italian [] = {
   {T_HK_ELINKS_HOME, "E"},
   {T_ADD_FOLDER, "Aggiungi cartella"},
   {T_FOLDER_NAME, "Nome cartella"},
-  {T_MOVE, NULL},
-  {T_AFTER_RESUME, NULL},
+  {T_MOVE, "Sposta"},
+  {T_AFTER_RESUME, "dopo il resume"},
   {0, NULL}
 };
 

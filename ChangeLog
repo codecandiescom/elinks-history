@@ -1,3 +1,30 @@
+Mon Jan 21 17:44:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* autocommit.sh:
+	
+	*plop*
+
+Mon Jan 21 17:44:04 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
+	configure.in, stamp-h.in:
+	
+	Fix broken BSD including system ;-) sockaddr_storage and
+	sockaddr_in6 weren't detected correctly during configure Thanks to
+	Ashram for bug report
+
+Sun Jan 20 15:27:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/: README, hpux-pipe.diff:
+	
+	Fix for HPUX by Stephane Chazelas
+
+Sat Jan 19 16:57:43 2002  Petr Baudis <pasky@ji.cz>:
+
+	* connect.c:
+	
+	*cough*
+
 Fri Jan 18 08:53:54 2002  Petr Baudis <pasky@ji.cz>:
 
 	* url.c, AUTHORS:

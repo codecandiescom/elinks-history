@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.370 2004/01/20 04:37:45 miciah Exp $ */
+/* $Id: parser.c,v 1.371 2004/01/20 07:05:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2663,17 +2663,25 @@ struct lt_default_name {
 };
 
 /* TODO: i18n */
+/* XXX: Keep the (really really ;) default name first */
 static struct lt_default_name lt_names[] = {
 	{ LT_START, "start" },
+	{ LT_START, "top" },
+	{ LT_START, "home" },
 	{ LT_PARENT, "parent" },
+	{ LT_PARENT, "up" },
 	{ LT_NEXT, "next" },
 	{ LT_PREV, "previous" },
+	{ LT_PREV, "prev" },
 	{ LT_CONTENTS, "contents" },
+	{ LT_CONTENTS, "toc" },
 	{ LT_INDEX, "index" },
 	{ LT_GLOSSARY, "glossary" },
 	{ LT_CHAPTER, "chapter" },
 	{ LT_SECTION, "section" },
 	{ LT_SUBSECTION, "subsection" },
+	{ LT_SUBSECTION, "child" },
+	{ LT_SUBSECTION, "sibling" },
 	{ LT_APPENDIX, "appendix" },
 	{ LT_HELP, "help" },
 	{ LT_SEARCH, "search" },
@@ -2685,6 +2693,8 @@ static struct lt_default_name lt_names[] = {
 	{ LT_ALTERNATE, "alternate" },
 	{ LT_COPYRIGHT, "copyright" },
 	{ LT_AUTHOR, "author" },
+	{ LT_AUTHOR, "made" },
+	{ LT_AUTHOR, "owner" },
 	{ LT_ICON, "icon" },
 	{ LT_UNKNOWN, NULL }
 };
@@ -2726,6 +2736,8 @@ html_link_clear(struct hlink *link)
 static int
 html_link_parse(unsigned char *a, struct hlink *link)
 {
+	int i;
+
 	assert(a && link);
 	memset(link, 0, sizeof(struct hlink));
 
@@ -2748,51 +2760,17 @@ html_link_parse(unsigned char *a, struct hlink *link)
 	if (!link->name) return 1;
 
 	/* TODO: fastfind */
-	if (!strcasecmp(link->name, "start") ||
-	    !strcasecmp(link->name, "top") ||
-	    !strcasecmp(link->name, "home"))
-		link->type = LT_START;
-	else if (!strcasecmp(link->name, "parent") ||
-		 !strcasecmp(link->name, "up"))
-		link->type = LT_PARENT;
-	else if (!strcasecmp(link->name, "next"))
-		link->type = LT_NEXT;
-	else if (!strcasecmp(link->name, "prev") ||
-		 !strcasecmp(link->name, "previous"))
-		link->type = LT_PREV;
-	else if (!strcasecmp(link->name, "contents") ||
-		 !strcasecmp(link->name, "toc"))
-		link->type = LT_CONTENTS;
-	else if (!strcasecmp(link->name, "index"))
-		link->type = LT_INDEX;
-	else if (!strcasecmp(link->name, "glossary"))
-		link->type = LT_GLOSSARY;
-	else if (!strcasecmp(link->name, "chapter"))
-		link->type = LT_CHAPTER;
-	else if (!strcasecmp(link->name, "section"))
-		link->type = LT_SECTION;
-	else if (!strcasecmp(link->name, "subsection") ||
-		 !strcasecmp(link->name, "child") ||
-		 !strcasecmp(link->name, "sibling"))
-		link->type = LT_SUBSECTION;
-	else if (!strcasecmp(link->name, "appendix"))
-		link->type = LT_APPENDIX;
-	else if (!strcasecmp(link->name, "help"))
-		link->type = LT_HELP;
-	else if (!strcasecmp(link->name, "search"))
-		link->type = LT_SEARCH;
-	else if (!strcasecmp(link->name, "bookmark"))
-		link->type = LT_BOOKMARK;
-	else if (!strcasecmp(link->name, "copyright"))
-		link->type = LT_COPYRIGHT;
-	else if (!strcasecmp(link->name, "author") ||
-		 !strcasecmp(link->name, "made") ||
-		 !strcasecmp(link->name, "owner"))
-		link->type = LT_AUTHOR;
-	else if (strcasestr(link->name, "icon") ||
-		 (link->content_type && strcasestr(link->content_type, "icon")))
+	for (i = 0; lt_names[i].str; i++)
+		if (!strcasecmp(link->name, lt_names[i].str)) {
+			link->type = lt_names[i].type;
+			return 1;
+		}
+
+	if (strcasestr(link->name, "icon") ||
+	   (link->content_type && strcasestr(link->content_type, "icon"))) {
 		link->type = LT_ICON;
-	else if (strcasestr(link->name, "alternate")) {
+
+	} else if (strcasestr(link->name, "alternate")) {
 		link->type = LT_ALTERNATE;
 		if (link->lang)
 			link->type = LT_ALTERNATE_LANG;
@@ -2801,9 +2779,9 @@ html_link_parse(unsigned char *a, struct hlink *link)
 			link->type = LT_ALTERNATE_STYLESHEET;
 		else if (link->media)
 			link->type = LT_ALTERNATE_MEDIA;
-	} else if (!strcasecmp(link->name, "stylesheet") ||
-		   (link->content_type && strcasestr(link->content_type, "css")))
+	} else if (link->content_type && strcasestr(link->content_type, "css")) {
 		link->type = LT_STYLESHEET;
+	}
 
 	return 1;
 }

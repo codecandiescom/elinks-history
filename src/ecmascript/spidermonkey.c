@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.175 2004/12/27 10:31:37 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.176 2004/12/27 10:37:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,14 +106,6 @@ set_prop_undef(struct jsval_property *prop)
 }
 
 static void
-set_prop_object(struct jsval_property *prop, JSObject *object)
-{
-	set_prop_magic(prop);
-	prop->value.object = object;
-	prop->type = JSPT_OBJECT;
-}
-
-static void
 set_prop_boolean(struct jsval_property *prop, int boolean)
 {
 	set_prop_magic(prop);
@@ -138,6 +130,13 @@ set_prop_astring(struct jsval_property *prop, unsigned char *string)
 }
 
 #if 0 /* not used. */
+static void
+set_prop_object(struct jsval_property *prop, JSObject *object)
+{
+	set_prop_magic(prop);
+	prop->value.object = object;
+	prop->type = JSPT_OBJECT;
+}
 
 static void
 set_prop_int(struct jsval_property *prop, int number)
@@ -206,14 +205,12 @@ string_to_jsval(JSContext *ctx, jsval *vp, unsigned char *string)
 	}
 }
 
-/* Unused for now.
 static void
 astring_to_jsval(JSContext *ctx, jsval *vp, unsigned char *string)
 {
 	string_to_jsval(ctx, vp, string);
-	mem_free(string);
+	mem_free_if(string);
 }
-*/
 
 static void
 int_to_jsval(JSContext *ctx, jsval *vp, int number)
@@ -1543,9 +1540,6 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct document_view *doc_view = vs->doc_view;
 	struct document *document = doc_view->document;
 	struct session *ses = doc_view->session;
-	struct jsval_property prop;
-
-	set_prop_undef(&prop);
 
 	if (JSVAL_IS_STRING(id)) {
 		struct form *form;
@@ -1560,8 +1554,8 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 				strncpy(cookiestr, cookies->source, 1024);
 				done_string(cookies);
-				set_prop_string(&prop, cookiestr);
-				value_to_jsval(ctx, vp, &prop);
+
+				string_to_jsval(ctx, vp, cookiestr);
 				return JS_TRUE;
 			}
 		}
@@ -1570,8 +1564,7 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			if (!form->name || strcasecmp(string, form->name))
 				continue;
 
-			set_prop_object(&prop, get_form_object(ctx, obj, find_form_view(doc_view, form)));
-			value_to_jsval(ctx, vp, &prop);
+			object_to_jsval(ctx, vp, get_form_object(ctx, obj, find_form_view(doc_view, form)));
 			break;
 		}
 		return JS_TRUE;
@@ -1580,41 +1573,43 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	if (!JSVAL_IS_INT(id))
 		return JS_TRUE;
 
+	undef_to_jsval(ctx, vp);
+
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_DOC_REF:
 		switch (get_opt_int("protocol.http.referer.policy")) {
 		case REFERER_NONE:
 			/* oh well */
+			undef_to_jsval(ctx, vp);
 			break;
 
 		case REFERER_FAKE:
-			set_prop_string(&prop, get_opt_str("protocol.http.referer.fake"));
+			string_to_jsval(ctx, vp, get_opt_str("protocol.http.referer.fake"));
 			break;
 
 		case REFERER_TRUE:
 			/* XXX: Encode as in add_url_to_httset_prop_string(&prop, ) ? --pasky */
 			if (ses->referrer) {
-				set_prop_astring(&prop, get_uri_string(ses->referrer, URI_HTTP_REFERRER));
+				astring_to_jsval(ctx, vp, get_uri_string(ses->referrer, URI_HTTP_REFERRER));
 			}
 			break;
 
 		case REFERER_SAME_URL:
-			set_prop_astring(&prop, get_uri_string(document->uri, URI_HTTP_REFERRER));
+			astring_to_jsval(ctx, vp, get_uri_string(document->uri, URI_HTTP_REFERRER));
 			break;
 		}
 		break;
 	case JSP_DOC_TITLE:
-		set_prop_string(&prop, document->title);
+		string_to_jsval(ctx, vp, document->title);
 		break;
 	case JSP_DOC_URL:
-		set_prop_astring(&prop, get_uri_string(document->uri, URI_ORIGINAL));
+		astring_to_jsval(ctx, vp, get_uri_string(document->uri, URI_ORIGINAL));
 		break;
 	default:
 		INTERNAL("Invalid ID %d in document_get_property().", JSVAL_TO_INT(id));
-		return JS_TRUE;
+		break;
 	}
 
-	value_to_jsval(ctx, vp, &prop);
 	return JS_TRUE;
 }
 

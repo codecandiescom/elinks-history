@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.32 2003/07/17 08:56:32 zas Exp $ */
+/* $Id: dump.c,v 1.33 2003/07/29 17:41:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,17 +233,24 @@ dump_to_file(struct document *formatted, int fd)
 
 	for (y = 0; y < formatted->y; y++) {
 		for (x = 0; x <= formatted->data[y].l; x++) {
-			int c;
+			unsigned char c;
 
 			if (x == formatted->data[y].l) {
 				c = '\n';
 			} else {
-				c = formatted->data[y].d[x];
-				if ((c & 0xff) == 1) c += ' ' - 1;
-				if ((c >> 15) && (c & 0xff) >= 176
-				    && (c & 0xff) < 224)
-					c = frame_dumb[(c & 0xff) - 176];
+				unsigned char attr;
+
+				attr = get_screen_char_attr(formatted->data[y].d[x]);
+				c = get_screen_char_data(formatted->data[y].d[x]);
+
+				if (c == 1)
+					c += ' ' - 1;
+
+				if ((attr & SCREEN_ATTR_FRAME)
+				    && c >= 176 && c < 224)
+					c = frame_dumb[c - 176];
 			}
+
 			buf[bptr++] = c;
 			if (bptr >= D_BUF) {
 				if (hard_write(fd, buf, bptr) != bptr)

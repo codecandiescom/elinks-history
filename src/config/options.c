@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.54 2002/06/21 13:35:08 pasky Exp $ */
+/* $Id: options.c,v 1.55 2002/06/21 13:51:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -628,6 +628,20 @@ register_options()
 
 
 	add_opt_tree("document",
+		"codepage", 0,
+		"Charset options.");
+
+	add_opt_codepage("document.codepage",
+		"assume", 0, get_cp_index("ISO-8859-1"),
+		"Default document codepage.");
+
+	add_opt_bool("document.codepage",
+		"force_assumed", 0, 0,
+		"Ignore charset info sent by server.");
+
+
+
+	add_opt_tree("document",
 		"colors", 0,
 		"Default color settings.");
 
@@ -719,15 +733,6 @@ register_options()
 		"display_tables", 0, 1,
 		"Display tables.");
 
-
-
-	add_opt_codepage("document",
-		"assume_codepage", 0, get_cp_index("ISO-8859-1"),
-		"Default document codepage.");
-
-	add_opt_bool("document",
-		"force_assume_codepage", 0, 0,
-		"Ignore charset info sent by server.");
 
 
 

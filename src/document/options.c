@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.4 2002/06/16 23:13:16 pasky Exp $ */
+/* $Id: options.c,v 1.5 2002/06/21 13:51:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,8 +21,8 @@ struct document_options *d_opt;
 void
 mk_document_options(struct document_options *doo)
 {
-	doo->assume_cp = get_opt_int("document.assume_codepage");
-	doo->hard_assume = get_opt_int("document.force_assume_codepage");
+	doo->assume_cp = get_opt_int("document.codepage.assume");
+	doo->hard_assume = get_opt_int("document.codepage.force_assumed");
 	doo->use_document_colours = get_opt_int("document.colors.use_document_colors");
 	doo->avoid_dark_on_black = get_opt_int("document.colors.avoid_dark_on_black");
 	doo->tables = get_opt_int("document.html.display_tables");

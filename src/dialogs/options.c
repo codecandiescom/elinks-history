@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.18 2002/06/21 13:35:09 pasky Exp $ */
+/* $Id: options.c,v 1.19 2002/06/21 13:51:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -837,11 +837,11 @@ menu_html_options(struct terminal *term, void *xxx, struct session *ses)
 	d->items[6].gid = 0;
 	d->items[6].fn = dlg_assume_cp;
 	d->items[6].text = TEXT(T_DEFAULT_CODEPAGE);
-	d->items[6].data = (unsigned char *) get_opt_ptr("document.assume_codepage");
+	d->items[6].data = (unsigned char *) get_opt_ptr("document.codepage.assume");
 	d->items[6].dlen = sizeof(int);
 
 	d->items[7].type = D_CHECKBOX;
-	d->items[7].data = (unsigned char *) get_opt_ptr("document.force_assume_codepage");
+	d->items[7].data = (unsigned char *) get_opt_ptr("document.codepage.force_assumed");
 	d->items[7].dlen = sizeof(int);
 
 	d->items[8].type = D_CHECKBOX;

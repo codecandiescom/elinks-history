@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.42 2002/06/17 07:42:30 pasky Exp $ */
+/* $Id: session.c,v 1.43 2002/06/21 13:51:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -439,8 +439,8 @@ ses_imgmap(struct session *ses)
 			  ses->goto_position, &menu, &ml,
 			  ses->imgmap_href_base, ses->imgmap_target_base,
 			  get_opt_int_tree(opt_tree, "charset"),
-			  get_opt_int("document.assume_codepage"),
-			  get_opt_int("document.force_assume_codepage")))
+			  get_opt_int("document.codepage.assume"),
+			  get_opt_int("document.codepage.force_assumed")))
 		return;
 
 	add_empty_window(ses->term, (void (*)(void *))freeml, ml);

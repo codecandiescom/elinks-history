@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.19 2003/07/27 21:22:54 jonas Exp $ */
+/* $Id: terminal.h,v 1.20 2003/07/27 21:28:25 jonas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -49,8 +49,6 @@ struct window;
 struct screen_char {
 	unsigned char data;
 	unsigned char attr;
-	unsigned char pad1;
-	unsigned char pad2;
 };
 
 /* This is one of the axis of ELinks' user interaction. {struct terminal}

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.155 2004/01/07 14:44:14 jonas Exp $ */
+/* $Id: menu.c,v 1.156 2004/01/09 09:26:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,7 +62,7 @@ free_menu_items(struct menu_item *items)
 
 	if (!items) return;
 
-	/* Note that item_free & FREE_DATA applies only when menu is aborted;
+	/* Note that flags & FREE_DATA applies only when menu is aborted;
 	 * it is zeroed when some menu field is selected. */
 
 	for (i = 0; !mi_is_end_of_menu(items[i]); i++) {

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.78 2002/09/23 10:23:27 pasky Exp $ */
+/* $Id: view.c,v 1.79 2002/09/23 10:24:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2617,13 +2617,7 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 	} else if (ev->ev == EV_MOUSE) {
 		struct link *link = choose_mouse_link(fd, ev);
 
-		if ((ev->b & BM_BUTT) >= B_WHEEL_UP) {
-			if ((ev->b & BM_BUTT) == B_WHEEL_UP)
-				rep_ev(ses, fd, scroll, -2);
-			else if ((ev->b & BM_BUTT) == B_WHEEL_DOWN)
-				rep_ev(ses, fd, scroll, 2);
-
-		} else if (link) {
+		if (link) {
 			x = 1;
 			fd->vs->current_link = link - fd->f_data->links;
 

@@ -1,4 +1,4 @@
-/* $Id: kbd.h,v 1.2 2002/09/23 10:23:27 pasky Exp $ */
+/* $Id: kbd.h,v 1.3 2002/09/23 10:24:31 pasky Exp $ */
 
 #ifndef EL__KBD_H
 #define EL__KBD_H
@@ -7,12 +7,10 @@
 #define B_LEFT		0
 #define B_MIDDLE	1
 #define B_RIGHT		2
-#define B_WHEEL_UP	3
-#define B_WHEEL_DOWN	4
-#define BM_ACT		24
+#define BM_ACT		12
 #define B_DOWN		0
-#define B_UP		8
-#define B_DRAG		16
+#define B_UP		4
+#define B_DRAG		8
 
 #define KBD_ENTER	0x100
 #define KBD_BS		0x101

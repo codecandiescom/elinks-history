@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.21 2003/11/04 23:10:11 pasky Exp $ */
+/* $Id: document.c,v 1.22 2003/11/04 23:12:13 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -195,10 +195,10 @@ shrink_format_cache(int whole)
 		if (!whole) {
 			struct cache_entry *ce = NULL;
 
-			/* If we are not purging the whole format cache delete
-			 * until we are below maximum number of entries. */
+			/* If we are not purging the whole format cache, stop
+			 * once we are below the maximum number of entries. */
 			if (format_cache_entries <= format_cache_size)
-				continue;
+				break;
 
 			/* Keep unreferenced documents that are in sync with
 			 * the (resource) cache entry. */

@@ -94,10 +94,12 @@ int parse_url(unsigned char *url, int *prlen,
 	protocol = check_protocol(url, prefix_end - url);
 	if (protocol == -1) return -1;
 
+	prefix_end++; /* ':' */
+
 	/* Skip slashes */
 	
-	if (prefix_end[1] == '/' && prefix_end[2] == '/') {
-		prefix_end += 3;
+	if (prefix_end[0] == '/' && prefix_end[1] == '/') {
+		prefix_end += 2;
 	} else {
 		if (protocols[protocol].need_slashes) return -1;
 	}

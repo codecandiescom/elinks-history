@@ -1,5 +1,5 @@
 /* CSS micro-engine */
-/* $Id: apply.c,v 1.16 2004/01/17 15:32:33 pasky Exp $ */
+/* $Id: apply.c,v 1.17 2004/01/17 15:40:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,9 +18,6 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-
-/* TODO: Move this to document/css/ when it'll be big enough or
- * non-HTML-specific. --pasky */
 
 /* TODO: A way to disable CSS completely, PLUS a way to stop various property
  * groups from taking effect. (Ie. way to turn out effect of 'display: none'

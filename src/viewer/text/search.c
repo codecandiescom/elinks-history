@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.190 2004/02/03 20:04:37 jonas Exp $ */
+/* $Id: search.c,v 1.191 2004/02/03 20:12:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -726,9 +726,9 @@ search_for_do(struct session *ses, unsigned char *str, int direction)
 
 	if (!*str) return;
 
-	ses->search_word = stracpy(str);
-	if (!ses->search_word) return;
-
+	/* We only set the last search word because we don.t want find_next()
+	 * to try to find next link in search before the search data has been
+	 * initialized. find_next() will set ses->search_word for us. */
 	ses->last_search_word = stracpy(str);
 	if (!ses->last_search_word) {
 		mem_free(ses->search_word);
@@ -737,7 +737,7 @@ search_for_do(struct session *ses, unsigned char *str, int direction)
 	}
 
 	ses->search_direction = direction;
-	find_next(ses, doc_view, 1);
+	find_next(ses, doc_view, 0);
 }
 
 
@@ -847,8 +847,8 @@ find_next(struct session *ses, struct document_view *doc_view, int a)
 	p = doc_view->vs->y;
 	step = ses->search_direction * doc_view->height;
 
-	if (!a && ses->search_word) {
-		if (!(find_next_link_in_search(doc_view, ses->search_direction))) return;
+	if (ses->search_word) {
+		if (!find_next_link_in_search(doc_view, ses->search_direction)) return;
 		p += step;
 	}
 

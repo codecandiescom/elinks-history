@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.373 2004/04/16 16:35:19 zas Exp $ */
+/* $Id: session.c,v 1.374 2004/04/17 01:10:39 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -771,7 +771,7 @@ get_homepage_url(void)
 static int
 process_session_info(struct session *ses, struct initial_session_info *info)
 {
-	void (*open_window)(struct terminal *term, unsigned char *, unsigned char *) = NULL;
+	enum term_env_type term_env = 0;
 	struct session *s;
 
 	if (!info) return -1;
@@ -786,16 +786,8 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 		if (info->remote && s->tab->term->master) {
 			struct window *tab = get_current_tab(s->tab->term);
 
-			/* Let's hope the master can open windows ;) */
-			if (info->remote & SES_REMOTE_NEW_WINDOW) {
-				struct open_in_new *windows;
-
-				windows = get_open_in_new(s->tab->term);
-				if (windows) {
-					open_window = windows->fn;
-					mem_free(windows);
-				}
-			}
+			if (can_open_in_new(s->tab->term))
+				term_env = s->tab->term->environment;
 
 			assert(tab);
 			ses = tab->data;
@@ -822,9 +814,12 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 				goto_url_with_hook(ses, url);
 				first = 0;
 
-			} else if (open_window) {
-				/* Open next ones in windoze. */
-				open_url_in_new_window(ses, url, open_window);
+			} else if (info->remote & SES_REMOTE_NEW_WINDOW) {
+				/* FIXME: Else it is quite rude because we just
+				 * take the first possibility and should maybe
+				 * make it possible to specify new-screen etc
+				 * via -remote "openURL(..., new-*)" --jonas */
+				open_url_in_new_window(ses, url, term_env);
 
 			} else {
 				/* Open next ones. */
@@ -848,8 +843,9 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 				register_bottom_half(dialog_goto_url_open, ses);
 			}
 
-		} else if (info->remote & SES_REMOTE_NEW_WINDOW && open_window) {
-			open_url_in_new_window(ses, NULL, open_window);
+		} else if (info->remote & SES_REMOTE_NEW_WINDOW) {
+			/* FIXME: See the url list loop */
+			open_url_in_new_window(ses, NULL, term_env);
 		}
 
 #ifdef CONFIG_BOOKMARKS

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.301 2004/04/16 10:02:06 zas Exp $ */
+/* $Id: menu.c,v 1.302 2004/04/17 01:10:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -514,11 +514,11 @@ init_session_info_string(struct string *parameters, struct session *ses)
 
 void
 open_url_in_new_window(struct session *ses, unsigned char *url,
-			void (*open_window)(struct terminal *, unsigned char *, unsigned char *))
+		       enum term_env_type env)
 {
 	struct string parameters;
 
-	assert(open_window && ses);
+	assert(env && ses);
 	if_assert_failed return;
 
 	if (!init_session_info_string(&parameters, ses)) return;
@@ -527,21 +527,20 @@ open_url_in_new_window(struct session *ses, unsigned char *url,
 	 * the new ELinks instance requests it. --jonas */
 	if (url) add_encoded_shell_safe_url(&parameters, url);
 
-	open_window(ses->tab->term, path_to_exe, parameters.source);
+	open_new_window(ses->tab->term, path_to_exe, env, parameters.source);
 	done_string(&parameters);
 }
 
 /* open a link in a new xterm */
 void
-send_open_in_new_window(struct terminal *term,
-		       void (*open_window)(struct terminal *term, unsigned char *, unsigned char *),
+send_open_in_new_window(struct terminal *term, enum term_env_type env,
 		       struct session *ses)
 {
 	struct document_view *doc_view;
 	struct link *link;
 	unsigned char *url;
 
-	assert(term && open_window && ses);
+	assert(term && env && ses);
 	if_assert_failed return;
 	doc_view = current_frame(ses);
 	assert(doc_view && doc_view->vs && doc_view->document);
@@ -553,23 +552,22 @@ send_open_in_new_window(struct terminal *term,
 	url = get_link_url(ses, doc_view, link);
 	if (!url) return;
 
-	open_url_in_new_window(ses, url, open_window);
+	open_url_in_new_window(ses, url, env);
 	mem_free(url);
 }
 
 void
-send_open_new_window(struct terminal *term,
-		    void (*open_window)(struct terminal *, unsigned char *, unsigned char *),
+send_open_new_window(struct terminal *term, enum term_env_type env,
 		    struct session *ses)
 {
-	open_url_in_new_window(ses, NULL, open_window);
+	open_url_in_new_window(ses, NULL, env);
 }
 
 
 void
 open_in_new_window(struct terminal *term,
 		   void (*xxx)(struct terminal *,
-			       void (*)(struct terminal *, unsigned char *, unsigned char *),
+			       enum term_env_type,
 			       struct session *ses),
 		   struct session *ses)
 {
@@ -582,7 +580,7 @@ open_in_new_window(struct terminal *term,
 	oin = get_open_in_new(term);
 	if (!oin) return;
 	if (!oin[1].text) {
-		xxx(term, oin[0].fn, ses);
+		xxx(term, oin[0].env, ses);
 		mem_free(oin);
 		return;
 	}
@@ -593,7 +591,7 @@ open_in_new_window(struct terminal *term,
 		return;
 	}
 	for (oi = oin; oi->text; oi++)
-		add_to_menu(&mi, oi->text, NULL, ACT_MAIN_NONE, (menu_func) xxx, oi->fn, 0);
+		add_to_menu(&mi, oi->text, NULL, ACT_MAIN_NONE, (menu_func) xxx, (void *) oi->env, 0);
 	mem_free(oin);
 	do_menu(term, mi, ses, 1);
 }

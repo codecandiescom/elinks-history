@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.33 2003/07/03 10:59:27 jonas Exp $ */
+/* $Id: select.c,v 1.34 2003/08/01 14:42:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,18 +200,17 @@ kill_timer(int id)
 		k++;
 	}
 
-	if (!k) internal("trying to kill nonexisting timer");
-	if (k >= 2) internal("more timers with same id");
+	assertm(k, "trying to kill nonexisting timer");
+	assertm(k < 2, "more timers with same id");
 }
 
 void *
 get_handler(int fd, int tp)
 {
-	if (fd < 0 || fd >= FD_SETSIZE) {
-		internal("get_handler: handle %d >= FD_SETSIZE %d", fd,
-			 FD_SETSIZE);
-		return NULL;
-	}
+	assertm(fd >= 0 && fd < FD_SETSIZE,
+		"get_handler: handle %d >= FD_SETSIZE %d",
+		fd, FD_SETSIZE);
+	if_assert_failed return NULL;
 
 	switch (tp) {
 		case H_READ:	return threads[fd].read_func;
@@ -228,11 +227,10 @@ void
 set_handlers(int fd, void (*read_func)(void *), void (*write_func)(void *),
 	     void (*error_func)(void *), void *data)
 {
-	if (fd < 0 || fd >= FD_SETSIZE) {
-		internal("set_handlers: handle %d >= FD_SETSIZE %d", fd,
-			 FD_SETSIZE);
-		return;
-	}
+	assertm(fd >= 0 && fd < FD_SETSIZE,
+		"set_handlers: handle %d >= FD_SETSIZE %d",
+		fd, FD_SETSIZE);
+	if_assert_failed return;
 
 	threads[fd].read_func = read_func;
 	threads[fd].write_func = write_func;

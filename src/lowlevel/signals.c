@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.7 2003/06/08 22:11:47 pasky Exp $ */
+/* $Id: signals.c,v 1.8 2003/08/01 14:44:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -252,10 +252,8 @@ install_signal_handler(int sig, void (*fn)(void *), void *data, int critical)
 {
 	struct sigaction sa;
 
-	if (sig >= NUM_SIGNALS || sig < 0) {
-		internal("bad signal number: %d", sig);
-		return;
-	}
+	assertm(sig >= 0 && sig < NUM_SIGNALS, "bad signal number: %d", sig);
+	if_assert_failed return;
 
 	memset(&sa, 0, sizeof(sa));
 	if (!fn)

@@ -105,3 +105,6 @@
 
 /* Define to 1 if we should support mouse */
 #undef USE_MOUSE
+
+/* Define to 1 if we should support 256 colors in xterm256 */
+#undef USE_256_COLORS

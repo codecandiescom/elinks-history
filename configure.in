@@ -837,6 +837,9 @@ AC_ARG_ENABLE(fastmem, [  --enable-fastmem        enable direct use of system al
 AC_ARG_ENABLE(own-libc, [  --enable-own-libc       Force use of internal functions instead of those of system libc],
 	      [if test "$enableval" = yes; then AC_DEFINE(USE_OWN_LIBC) fi])
 
+AC_ARG_ENABLE(256-colors, [  --enable-256-colors     Add support for using 256 colors, requires capable Xterm],
+	      [if test "$enableval" = yes; then AC_DEFINE(USE_256_COLORS) fi])
+
 
 dnl == EMX hack
 

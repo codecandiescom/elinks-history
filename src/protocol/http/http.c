@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.375 2004/12/19 02:27:33 miciah Exp $ */
+/* $Id: http.c,v 1.376 2004/12/19 02:32:01 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,6 +49,8 @@
 
 
 static struct auth_entry proxy_auth;
+
+static unsigned char *accept_charset = NULL;
 
 
 struct option_info http_options[] = {
@@ -445,7 +447,6 @@ static void http_get_header(struct connection *);
 static void
 http_send_header(struct connection *conn)
 {
-	static unsigned char *accept_charset = NULL;
 	struct http_connection_info *info;
 	int trace = get_opt_bool("protocol.http.trace");
 	struct string header;

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.116 2003/07/20 20:19:52 pasky Exp $ */
+/* $Id: file.c,v 1.117 2003/07/20 20:23:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -345,12 +345,13 @@ file_visible(unsigned char *name, int show_hidden_files)
 	if (name[1] == '\0')
 		return 0;
 
-	/* Always show "..", others like ".x" are shown if show_hidden_files
-	 * == 1. */
-	if (!show_hidden_files && strcmp(name, ".."))
-		return 0;
+	/* Always show the ".." directory. */
+	if (name[1] == '.' && name[2] == '\0')
+		return 1;
 
-	return 1;
+	/* Others like ".x" or "..foo" are shown if show_hidden_files
+	 * == 1. */
+	return show_hidden_files;
 }
 
 /* First information such as permissions is gathered for each directory entry.

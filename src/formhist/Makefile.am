@@ -1,12 +1,9 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.2 2003/11/24 16:23:39 jonas Exp $
+## $Id: Makefile.am,v 1.3 2004/02/05 16:46:25 zas Exp $
 
 include $(top_srcdir)/Makefile.base
 
 noinst_LIBRARIES = libformhist.a
-
-libformhist_a_LIBADD = \
- formhist.o
 
 libformhist_a_SOURCES = \
  dialogs.c \

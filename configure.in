@@ -113,6 +113,35 @@ if test "$cf_result" = no; then
 fi
 
 dnl ===================================================================
+dnl Checks for zlib, optional even if installed.
+dnl ===================================================================
+AC_ARG_WITH(zlib, [  --without-zlib          disable zlib support],
+	[ if test "$withval" = no; then disable_zlib=yes; fi])
+AC_MSG_CHECKING([for zlib support])
+
+if test -z "$disable_zlib"; then
+	AC_CHECK_LIB(z, inflate)
+	AC_CHECK_HEADERS(zlib.h, cf_result=yes, cf_result=no)
+else
+	AC_MSG_RESULT(no)
+fi
+
+
+dnl ===================================================================
+dnl Checks for bzlib, optional even if installed.
+dnl ===================================================================
+AC_ARG_WITH(bzlib, [  --without-bzlib         disable bzlib support],
+	[ if test "$withval" = no; then disable_bzlib=yes; fi])
+AC_MSG_CHECKING([for bzlib support])
+
+if test -z "$disable_bzlib"; then
+	AC_CHECK_LIB(bz2, BZ2_bzDecompress)
+	AC_CHECK_HEADERS(bzlib.h, cf_result=yes, cf_result=no)
+else
+	AC_MSG_RESULT(no)
+fi
+
+dnl ===================================================================
 dnl Checks for OS/2
 dnl ===================================================================
 

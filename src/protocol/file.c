@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.13 2002/05/08 13:59:08 pasky Exp $ */
+/* $Id: file.c,v 1.14 2002/05/08 17:18:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,6 +40,7 @@
 #include "document/cache.h"
 #include "lowlevel/sched.h"
 #include "protocol/file.h"
+#include "util/compress.h"
 #include "util/conv.h"
 
 #define FILE_DIR_COLOR   "yellow"
@@ -580,6 +581,8 @@ dir:
 		}
 		close(h);
 		fl = stt.st_size;
+		/* See FIXMEs near try_decompress() for details. */
+		/* file = try_decompress(file, fl, &fl); */
 		head = stracpy("");
 	}
 	

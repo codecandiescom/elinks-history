@@ -303,6 +303,7 @@ Unai Uribarri <unai@telecable.es>
 
 Witold Filipczyk <juandon@poczta.onet.pl>
 	HTTP code hacking
+	Decompression (zlib/bzlib) support
 
 Wojtek Bojdo/l <wojboj@lp.net.pl>
 	Updated Polish localization
@@ -314,4 +315,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.56 2002/04/26 17:26:46 pasky Exp $
+$Id: AUTHORS,v 1.57 2002/05/08 17:18:36 pasky Exp $

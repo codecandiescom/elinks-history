@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.79 2003/07/31 16:56:11 jonas Exp $ */
+/* $Id: listbox.c,v 1.80 2003/07/31 17:29:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -436,7 +436,7 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 
 	fill_area(term, listbox_item_data->x, listbox_item_data->y,
 		  listbox_item_data->l, listbox_item_data->h, ' ',
-		  COL(get_bfu_color(term, "menu.normal")));
+		  get_bfu_color(term, "menu.normal"));
 
 
 	/* We want to have these visible if possible. */

@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.36 2003/07/31 16:56:16 jonas Exp $ */
+/* $Id: draw.c,v 1.37 2003/07/31 17:29:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,16 +84,17 @@ get_char(struct terminal *term, int x, int y)
 }
 
 void
-set_color(struct terminal *term, int x, int y, unsigned c)
+set_color(struct terminal *term, int x, int y, unsigned char color)
 {
 	struct terminal_screen *screen = term->screen;
 	int position = x + term->x * y;
+	unsigned char attr = color & ~SCREEN_ATTR_FRAME;
 
 	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 	if_assert_failed { return; }
 
-	c = get_screen_char_attr(c) & ~SCREEN_ATTR_FRAME;
-	screen->image[position].attr = c | (screen->image[position].attr & SCREEN_ATTR_FRAME);
+	attr |= (screen->image[position].attr & SCREEN_ATTR_FRAME);
+	screen->image[position].attr = attr;
 	screen->dirty = 1;
 }
 
@@ -139,7 +140,7 @@ set_line(struct terminal *term, int x, int y, int l, struct screen_char *line)
 
 void
 fill_area(struct terminal *term, int x, int y, int xw, int yw,
-	  unsigned char data, unsigned c)
+	  unsigned char data, unsigned char attr)
 {
 	struct terminal_screen *screen = term->screen;
 	int starty = (y >= 0) ? 0 : -y;
@@ -148,7 +149,6 @@ fill_area(struct terminal *term, int x, int y, int xw, int yw,
 	int endx = (xw < term->x - x) ? xw : term->x - x;
 	int offset_base = x + term->x * y;
 	register int j;
-	unsigned char attr = get_screen_char_attr(c);
 
 	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 	if_assert_failed { return; }

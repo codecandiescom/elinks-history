@@ -1,4 +1,4 @@
-/* $Id: align.h,v 1.22 2003/07/31 16:56:11 jonas Exp $ */
+/* $Id: align.h,v 1.23 2003/07/31 17:29:00 jonas Exp $ */
 
 #ifndef EL__BFU_ALIGN_H
 #define EL__BFU_ALIGN_H
@@ -20,15 +20,13 @@ enum format_align {
 #include "util/error.h"
 #include "util/string.h"
 
-#define COL(x)	((x)<<8)
-
 /* FIXME: A bit ... */
 static inline unsigned char
 get_bfu_color(struct terminal *term, unsigned char *color_class)
 {
 	struct option *opt;
-	int fg;
-	int bg;
+	unsigned char fg;
+	unsigned char bg;
 	int nofg;
 
 	assert(color_class && *color_class);

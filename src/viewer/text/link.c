@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.30 2003/07/31 16:56:16 jonas Exp $ */
+/* $Id: link.c,v 1.31 2003/07/31 17:29:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -203,7 +203,7 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 			set_window_ptr(get_current_tab(t), x, y);
 		}
 
-		set_color(t, x, y, /*((link->sel_color << 3) | (co >> 11 & 7)) << 8*/ link->sel_color << 8);
+		set_color(t, x, y, /*((link->sel_color << 3) | (co >> 11 & 7)) << 8*/ link->sel_color);
 	}
 }
 

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.88 2003/07/31 16:56:15 jonas Exp $ */
+/* $Id: download.c,v 1.89 2003/07/31 17:29:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -361,7 +361,7 @@ download_window_function(struct dialog_data *dlg)
 		set_only_char(term, x, y, '[');
 		set_only_char(term, x + w - qwidth, y, ']');
 		fill_area(term, x + 1, y, barprogress,
-			  1, ' ', COL(get_bfu_color(term, "dialog.meter")));
+			  1, ' ', get_bfu_color(term, "dialog.meter"));
 		print_text(term, x + w - qlen + 1, y, qlen, q, dialog_text_color);
 		y++;
 	}

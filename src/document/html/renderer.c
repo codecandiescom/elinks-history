@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.190 2003/07/30 16:14:36 jonas Exp $ */
+/* $Id: renderer.c,v 1.191 2003/07/31 17:29:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,18 +238,6 @@ xpand_spaces(struct part *p, int l)
 #define X(x) (part->xp + (x))
 #define Y(y) (part->yp + (y))
 
-#define set_position_attr(xpos, ypos, value) \
-	do { POS(x, y).attr = get_screen_char_attr(value); } while (0)
-
-#define set_position_data(xpos, ypos, value) \
-	do { POS(x, y).data = get_screen_char_data(value); } while (0)
-
-#define set_position(xpos, ypos, value) \
-	do { \
-		set_position_attr(x, y, value); \
-		set_position_data(x, y, value); \
-	} while (0)
-
 static inline void
 set_hchar(struct part *part, int x, int y, unsigned char data, unsigned char attr)
 {
@@ -302,7 +290,7 @@ xset_hchars(struct part *part, int x, int y, int xl,
 
 static inline void
 set_hline(struct part *part, int x, int y,
-	  unsigned char *chars, int charslen, unsigned attr)
+	  unsigned char *chars, int charslen, unsigned char attr)
 {
 	assert(part);
 	if_assert_failed return;
@@ -319,8 +307,8 @@ set_hline(struct part *part, int x, int y,
 	for (; charslen > 0; charslen--, x++, chars++) {
 		part->spaces[x] = (*chars == ' ');
 		if (part->document && part->document->data) {
-			set_position_attr(x, y, attr);
-			set_position_data(x, y, *chars);
+			POS(x, y).attr = attr;
+			POS(x, y).data = *chars;
 		}
 	}
 }
@@ -795,7 +783,7 @@ end_format_change:
 		return;
 
 	set_hline(part, part->cx, part->cy, chars, charslen,
-		  (((fg&0x08)<<3) | (bg<<3) | (fg&0x07)) << 8);
+		  (((fg&0x08)<<3) | (bg<<3) | (fg&0x07)));
 	part->cx += charslen;
 	nobreak = 0;
 
@@ -1557,7 +1545,7 @@ format_html(struct cache_entry *ce, struct document *screen)
 	if (form.action) mem_free(form.action), form.action = NULL;
 	if (form.target) mem_free(form.target), form.target = NULL;
 
-	screen->bg = find_nearest_color(&par_format.bgcolor, 8) << 11;
+	screen->bg = find_nearest_color(&par_format.bgcolor, 8) << 3;
 
 	kill_html_stack_item(html_stack.next);
 

@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.24 2003/07/29 15:39:18 jonas Exp $ */
+/* $Id: colors.c,v 1.25 2003/07/31 17:29:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -394,17 +394,18 @@ color_distance(struct rgb *c1, struct rgb *c2)
 	       2 * (c1->b - c2->b) * (c1->b - c2->b);
 }
 
-int
+unsigned char
 find_nearest_color(struct rgb *rgb, int l)
 {
 #define RGB_HASH_SIZE 4096
 #define HASH_RGB(rgb, l) ((((rgb)->r << 3) + ((rgb)->g << 2) + (rgb)->b + (l)) & (RGB_HASH_SIZE - 1))
 
-	int min_dist, dist, color, i;
+	int min_dist, dist, i;
 	static struct rgb_cache_entry rgb_fgcache[RGB_HASH_SIZE];
 	/*static struct rgb_cache_entry rgb_bgcache[RGB_HASH_SIZE];*/
 	struct rgb_cache_entry *rgb_cache = /*l == 8 ? rgb_bgcache :*/ rgb_fgcache;
 	static int cache_init = 0;
+	unsigned char color;
 	int h;
 
 	/* We don't ever care about colors while dumping stuff. */

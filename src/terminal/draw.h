@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.15 2003/07/31 16:56:16 jonas Exp $ */
+/* $Id: draw.h,v 1.16 2003/07/31 17:29:01 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -8,10 +8,6 @@
 
 #define ATTR_FRAME 		0x8000
 #define SCREEN_ATTR_FRAME	0x80
-
-#define get_screen_char_data(x)	((unsigned char) ((x) & 0xff))
-#define get_screen_char_attr(x)	((unsigned char) ((x) >> 8))
-#define encode_screen_char(x)	((unsigned) (x).data + ((x).attr << 8))
 
 /* Linux frame symbols table (it's magically converted to other terminals when
  * needed). */
@@ -74,15 +70,15 @@ void set_char(struct terminal *, int, int, unsigned char, unsigned char);
 void set_border_char(struct terminal *term, int x, int y, enum border_char border, unsigned char color);
 void set_xchar(struct terminal *, int x, int y, enum frame_cross_direction);
 struct screen_char *get_char(struct terminal *, int, int);
-void set_color(struct terminal *, int, int, unsigned);
+void set_color(struct terminal *, int, int, unsigned char);
 void set_only_char(struct terminal *, int, int, unsigned char);
 void set_line(struct terminal *, int, int, int, struct screen_char *);
-void fill_area(struct terminal *, int, int, int, int, unsigned char, unsigned);
+void fill_area(struct terminal *, int, int, int, int, unsigned char, unsigned char);
 void draw_frame(struct terminal *, int, int, int, int, unsigned char, int);
 void print_text(struct terminal *, int, int, int, unsigned char *, unsigned char);
 
 #define fill_border_area(t, x, y, xw, yw, d, c) do { \
-		fill_area(t, x, y, xw, yw, d, (c | SCREEN_ATTR_FRAME) << 8); \
+		fill_area(t, x, y, xw, yw, d, c | SCREEN_ATTR_FRAME); \
 	} while (0)
 
 /* Updates the terminals cursor position. When @blockable is set the

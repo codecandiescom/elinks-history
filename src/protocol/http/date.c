@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.15 2003/09/21 12:24:43 zas Exp $ */
+/* $Id: date.c,v 1.16 2003/09/21 12:29:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,36 +95,35 @@ parse_month(const unsigned char *date)
 			if (date[2] == 'n') return 5; /* Jun */
 			if (date[2] == 'l') return 6; /* Jul */
 		}
-		break;
+		return -1;
 	case 'M': /* Mar, May */
-		if (date[1] != 'a') break;
-		if (date[2] == 'r') return 2; /* Mar */
-		if (date[2] == 'y') return 4; /* May */
-		break;
+		if (date[1] == 'a') {
+			if (date[2] == 'r') return 2; /* Mar */
+			if (date[2] == 'y') return 4; /* May */
+		}
+		return -1;
 	case 'A': /* Apr, Aug */
 		if (date[1] == 'p' && date[2] == 'r') return 3; /* Apr */
 		if (date[1] == 'u' && date[2] == 'g') return 7; /* Aug */
-		break;
+		return -1;
 	case 'S':
 		if (date[1] == 'e' && date[2] == 'p') return 8; /* Sep */
-		break;
+		return -1;
 	case 'O':
 		if (date[1] == 'c' && date[2] == 't') return 9; /* Oct */
-		break;
+		return -1;
 	case 'N':
 		if (date[1] == 'o' && date[2] == 'v') return 10; /* Nov */
-		break;
+		return -1;
 	case 'D':
 		if (date[1] == 'e' && date[2] == 'c') return 11; /* Dec */
-		break;
+		return -1;
 	case 'F':
 		if (date[1] == 'e' && date[2] == 'b') return 1; /* Feb */
-		break;
+		return -1;
 	default:
-		break;
+		return -1;
 	}
-
-	return -1;
 }
 
 /* Return day number. */

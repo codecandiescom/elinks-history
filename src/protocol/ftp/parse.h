@@ -1,5 +1,5 @@
 /* FTP directory parsing */
-/* $Id: parse.h,v 1.3 2005/04/05 12:37:32 jonas Exp $ */
+/* $Id: parse.h,v 1.4 2005/04/05 12:42:53 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_FTP_PARSE_H
 #define EL__PROTOCOL_FTP_PARSE_H
@@ -39,7 +39,7 @@ struct ftp_file_info {
 struct ftp_file_info *
 parse_ftp_file_info(struct ftp_file_info *info, unsigned char *src, int len);
 
-/* Define to feed debug ftp responses into the parser. Then point ELinks to an
+/* Define to feed debug FTP responses into the parser. Then point ELinks to an
  * FTP server to run the tests. */
 /*#define DEBUG_FTP_PARSER*/
 

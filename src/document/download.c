@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.18 2002/06/17 07:42:30 pasky Exp $ */
+/* $Id: download.c,v 1.19 2002/06/20 10:11:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -841,8 +841,9 @@ tp_display(struct session *ses)
 
 void
 type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
-	   struct assoc *a)
+	   struct option *assoc)
 {
+	struct list_head *a = (struct list_head *) assoc ? assoc->ptr : NULL;
 	unsigned char *m1;
 
 	if (ses->tq_prog) {
@@ -851,11 +852,11 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 	}
 
 	if (a) {
-		ses->tq_prog = stracpy(a->prog);
-		ses->tq_prog_flags = a->block;
+		ses->tq_prog = stracpy(get_opt_str_tree(a, "program"));
+		ses->tq_prog_flags = get_opt_bool_tree(a, "block");
 	}
 
-	if (a && !a->ask) {
+	if (a && !get_opt_bool_tree(a, "ask")) {
 		tp_open(ses);
 		return;
 	}
@@ -885,9 +886,11 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 	} else {
 		unsigned char *m2;
 
+#if 0
 		if (a->label)
 			m2 = stracpy(a->label);
 		else
+#endif
 			m2 = stracpy("");
 
 		if (!m2) {
@@ -924,7 +927,7 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 int
 ses_chktype(struct session *ses, struct status **stat, struct cache_entry *ce)
 {
-	struct assoc *a;
+	struct option *assoc;
 	int r = 0;
 	unsigned char *ct = get_content_type(ce->head, ce->url);
 
@@ -935,8 +938,8 @@ ses_chktype(struct session *ses, struct status **stat, struct cache_entry *ce)
 	r = 1;
 	if (!strcasecmp(ct, "text/plain")) goto free_ct;
 
-	a = get_type_assoc(ses->term, ct);
-	if (!a && strlen(ct) >= 4 && !casecmp(ct, "text", 4)) goto free_ct;
+	assoc = get_type_assoc(ses->term, ct);
+	if (!assoc && strlen(ct) >= 4 && !casecmp(ct, "text", 4)) goto free_ct;
 
 	if (ses->tq_url)
 		internal("Type query to %s already in progress.", ses->tq_url);
@@ -950,7 +953,7 @@ ses_chktype(struct session *ses, struct status **stat, struct cache_entry *ce)
 	if (ses->tq_goto_position) mem_free(ses->tq_goto_position);
 
 	ses->tq_goto_position = stracpy(ses->goto_position);
-	type_query(ses, ce, ct, a);
+	type_query(ses, ce, ct, assoc);
 	mem_free(ct);
 
 	return 1;

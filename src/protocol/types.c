@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.29 2002/06/17 16:07:02 pasky Exp $ */
+/* $Id: types.c,v 1.30 2002/06/20 10:11:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,12 +21,6 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-struct list_head mailto_prog = { &mailto_prog, &mailto_prog };
-struct list_head telnet_prog = { &telnet_prog, &telnet_prog };
-struct list_head tn3270_prog = { &tn3270_prog, &tn3270_prog };
-
-struct list_head assoc = { &assoc, &assoc };
-
 
 struct option *
 get_real_opt(unsigned char *base, unsigned char *id)
@@ -43,108 +37,14 @@ get_real_opt(unsigned char *base, unsigned char *id)
 }
 
 
-tcount
-get_assoc_cnt()
-{
-	static tcount assoc_cnt = 0;
-
-	if (!++assoc_cnt) assoc_cnt = 1;
-	return assoc_cnt;
-}
-
-
-void
-delete_association(struct assoc *del)
-{
-	del_from_list(del);
-	mem_free(del->label);
-	mem_free(del->ct);
-	mem_free(del->prog);
-	mem_free(del);
-}
-
-
-/* Comma-separated list managing functions. */
-/* TODO: Move to util/. --pasky */
-int
-is_in_list_iterate(unsigned char *list, unsigned char *str, int l,
-		   int (*cmp)(unsigned char *, unsigned char *,
-			      unsigned char *, int))
-{
-	unsigned char *tok_sep, *tok_end;
-
-	if (!l) return 0;
-
-	while (1) {
-		/* Skip leading whitespaces */
-		while (*list && *list <= ' ') list++;
-		if (!*list) return 0;
-
-		/* Move to token end */
-		for (tok_sep = list;
-		     *tok_sep && *tok_sep != ',';
-		     tok_sep++);
-
-		/* Move back to token start */
-		for (tok_end = tok_sep - 1;
-		     tok_end >= list && *tok_end <= ' ';
-		     tok_end--);
-		tok_end++;
-
-		/* Compare the token */
-		if (cmp(list, tok_end, str, l))
-			return 1;
-
-		/* Jump to next token */
-		list = tok_sep;
-		if (*list == ',') list++; /* It can be \0 as well. */
-	}
-}
-
-
-int
-is_in_list_cmp(unsigned char *start, unsigned char *end,
-	       unsigned char *str, int l)
-{
-	return (end - start == l && !casecmp(str, start, l));
-}
-
-
-int
-is_in_list(unsigned char *list, unsigned char *str, int l)
-{
-	return is_in_list_iterate(list, str, l, is_in_list_cmp);
-}
-
-
-int
-is_in_list_rear_cmp(unsigned char *start, unsigned char *end,
-		    unsigned char *str, int l)
-{
-	int l2 = end - start;
-
-	/* XXX: The '.' cmp is hack for extensions. That means this compare
-	 * function is not generally usable :(. But then again, who else than
-	 * extensions department would want to use it? */
-	return (l > l2 && (*start != '.' && str[l - l2 - 1] == '.')
-		&& !casecmp(str + l - l2, start, l2));
-}
-
-
-int
-is_in_list_rear(unsigned char *list, unsigned char *str, int l)
-{
-	return is_in_list_iterate(list, str, l, is_in_list_rear_cmp);
-}
 
 
 /* Guess content type of the document. */
 unsigned char *
 get_content_type(unsigned char *head, unsigned char *url)
 {
-	struct assoc *a;
-	unsigned char *pos, *extension, *exxt;
-	int ext_len, el, url_len;
+	unsigned char *pos, *extension;
+	int ext_len, url_len;
 
 	/* If there's one in header, it's simple.. */
 
@@ -208,17 +108,19 @@ get_content_type(unsigned char *head, unsigned char *url)
 
 	/* Try to make application/x-extension from it */
 
-	exxt = init_str();
-	el = 0;
-	add_to_str(&exxt, &el, "application/x-");
-	if (extension) add_bytes_to_str(&exxt, &el, extension, ext_len);
+	{
+		unsigned char *ext_type = init_str();
+		int el = 0;
 
-	foreach(a, assoc) {
-		if (is_in_list(a->ct, exxt, el))
-			return exxt;
+		add_to_str(&ext_type, &el, "application/x-");
+		if (extension)
+			add_bytes_to_str(&ext_type, &el, extension, ext_len);
+
+		if (get_type_assoc(NULL, ext_type))
+			return ext_type;
+
+		mem_free(ext_type);
 	}
-
-	mem_free(exxt);
 
 	/* Fallback.. use some hardwired default */
 
@@ -226,32 +128,66 @@ get_content_type(unsigned char *head, unsigned char *url)
 }
 
 
-struct assoc *
+
+
+unsigned char *
+get_system_str(int xwin)
+{
+	unsigned char *system_str;
+
+	system_str = stracpy(SYSTEM_STR);
+	if (!system_str) return NULL;
+
+	if (xwin) add_to_strn(&system_str, "-xwin");
+
+	return system_str;
+}
+
+unsigned char *
+get_type_assoc_name(unsigned char *type, int xwin)
+{
+	unsigned char *class, *id;
+	unsigned char *name;
+	unsigned char *system_str;
+
+	class = stracpy(type);
+	if (!class) { return NULL; }
+
+	id = strchr(class, '/');
+	if (!id) { mem_free(class); return NULL; }
+
+	*(id++) = '\0';
+
+	system_str = get_system_str(xwin);
+	if (!system_str) { mem_free(class); return NULL; }
+
+	name = straconcat("mime.association", ".", class, ".", id, ".",
+			  system_str, NULL);
+	mem_free(system_str);
+	mem_free(class);
+
+	return name;
+}
+
+/* Return tree containing options specific to this type. */
+struct option *
 get_type_assoc(struct terminal *term, unsigned char *type)
 {
-	struct assoc *a;
+	struct option *opt_tree;
+	unsigned char *name;
+	int xwin = term ? term->environment & ENV_XWIN : 0;
 
-	foreach(a, assoc)
-		if (a->system == SYSTEM_ID
-		    && (term->environment & ENV_XWIN ? a->xwin : a->cons)
-		    && is_in_list(a->ct, type, strlen(type))) return a;
+	name = get_type_assoc_name(type, xwin);
+	if (!name) return NULL;
 
-	return NULL;
+	opt_tree = get_opt_rec_real(root_options, name);
+
+	mem_free(name);
+
+	return opt_tree;
 }
 
 
-void
-free_types()
-{
-	struct assoc *a;
-
-	foreach(a, assoc) {
-		mem_free(a->ct);
-		mem_free(a->prog);
-		mem_free(a->label);
-	}
-	free_list(assoc);
-}
 
 
 unsigned char *ct_msg[] = {
@@ -260,10 +196,6 @@ unsigned char *ct_msg[] = {
 	TEXT(T_PROGRAM__IS_REPLACED_WITH_FILE_NAME),
 #ifdef ASSOC_BLOCK
 	TEXT(T_BLOCK_TERMINAL_WHILE_PROGRAM_RUNNING),
-#endif
-#ifdef ASSOC_CONS_XWIN
-	TEXT(T_RUN_ON_TERMINAL),
-	TEXT(T_RUN_IN_XWINDOW),
 #endif
 	TEXT(T_ASK_BEFORE_OPENING),
 };
@@ -280,9 +212,6 @@ add_ct_fn(struct dialog_data *dlg)
 
 #ifdef ASSOC_BLOCK
 	p++;
-#endif
-#ifdef ASSOC_CONS_XWIN
-	p += 2;
 #endif
 
 	max_text_width(term, ct_msg[0], &max);
@@ -385,116 +314,94 @@ add_ct_fn(struct dialog_data *dlg)
 }
 
 
-void
-update_assoc(struct assoc *new)
-{
-	struct assoc *repl;
-
-	if (!new->label[0] || !new->ct[0] || !new->prog[0]) return;
-
-	if (new->cnt) {
-		foreach(repl, assoc) {
-			if (repl->cnt == new->cnt) {
-				mem_free(repl->label);
-				mem_free(repl->ct);
-				mem_free(repl->prog);
-				goto replace;
-			}
-		}
-
-		return;
-	}
-
-	new->cnt = get_assoc_cnt();
-
-	repl = mem_alloc(sizeof(struct assoc));
-	if (!repl) return;
-	add_to_list(assoc, repl);
-
-replace:
-	repl->label = stracpy(new->label);
-	repl->ct = stracpy(new->ct);
-	repl->prog = stracpy(new->prog);
-	repl->block = new->block;
-	repl->cons = new->cons;
-	repl->xwin = new->xwin;
-	repl->ask = new->ask;
-	repl->system = new->system;
-	repl->cnt = new->cnt;
-}
-
 
 void
 really_del_ct(void *fcp)
 {
-	int fc = (int)fcp;
-	struct assoc *del;
+	struct option *opt;
 
-	foreach(del, assoc)
-		if (del->cnt == fc)
-			goto ok;
-
-	return;
-
-ok:
-	delete_association(del);
+	if (!fcp) return;
+	opt = get_opt_rec_real(root_options, (unsigned char *) fcp);
+	if (opt) delete_option(opt);
+	mem_free(fcp);
 }
 
 
 void
 menu_del_ct(struct terminal *term, void *fcp, void *xxx2)
 {
+	struct option *del;
+	unsigned char *ct = (unsigned char *) fcp;
 	unsigned char *str;
 	int strl;
-	int fc = (int)fcp;
-	struct assoc *del;
 
-	foreach(del, assoc)
-		if (del->cnt == fc)
-			goto ok;
+	del = get_type_assoc(term, ct);
+	if (!del) return;
 
-	return;
-
-ok:
 	str = init_str();
 	if (!str) return;
 	strl = 0;
-	add_to_str(&str, &strl, del->ct);
+
+	add_to_str(&str, &strl, ct);
 	add_to_str(&str, &strl, " -> ");
-	add_to_str(&str, &strl, del->prog);
+	add_to_str(&str, &strl, get_opt_str_tree(del->ptr, "program"));
 
 	msg_box(term, getml(str, NULL),
 		TEXT(T_DELETE_ASSOCIATION), AL_CENTER | AL_EXTD_TEXT,
 		TEXT(T_DELETE_ASSOCIATION), ": ", str, "?", NULL,
-		fcp, 2,
+		get_type_assoc_name(ct, term->environment & ENV_XWIN), 2,
 		TEXT(T_YES), really_del_ct, B_ENTER,
 		TEXT(T_NO), NULL, B_ESC);
 }
 
 
+#if 0
+
+struct assoc {
+	unsigned char *name;
+	unsigned char *prog;
+	int block;
+	int ask;
+};
+
+void
+really_add_ct(void *fcp)
+{
+	struct assoc *assoc = (struct assoc *) fcp;
+	struct option *add = get_opt_rec_real(assoc->name);
+
+	really_del_ct(assoc->name); /* ..or rename ;) */
+
+	safe_strncpy(get_opt_str_tree(add, "program"), assoc->prog,
+		     MAX_STR_LEN);
+	get_opt_int_tree(add, "block") = assoc->block;
+	get_opt_int_tree(add, "ask") = assoc->ask;
+
+	mem_free(assoc->prog);
+	mem_free(assoc->name);
+	mem_free(assoc);
+}
+
 void
 menu_add_ct(struct terminal *term, void *fcp, void *xxx2)
 {
 	int p;
-	int fc = (int)fcp;
-	struct assoc *new, *from;
-	unsigned char *label;
+	unsigned char *assoc_name = "";
+	struct option *opt = NULL;
+	struct assoc *new;
 	unsigned char *ct;
 	unsigned char *prog;
 	struct dialog *d;
 
-	if (fc) {
-		foreach(from, assoc)
-			if (from->cnt == fc)
-				goto ok;
+	if (fcp) {
+		assoc_name = get_type_assoc_name((unsigned char *) fcp,
+						 term->environment & ENV_XWIN);
 
-		return;
+		opt = get_opt_real_
 	}
-	from = NULL;
 
-ok:
 #define DIALOG_MEMSIZE sizeof(struct dialog) + 10 * sizeof(struct dialog_item) \
-		       + sizeof(struct assoc) + 3 * MAX_STR_LEN
+		       + sizeof(struct assoc) + 2 * MAX_STR_LEN
 
 	d = mem_alloc(DIALOG_MEMSIZE);
 	if (!d) return;
@@ -547,22 +454,12 @@ ok:
 
 #ifdef ASSOC_BLOCK
 	d->items[p].type = D_CHECKBOX;
-	d->items[p].data = (unsigned char *)&new->block;
-	d->items[p++].dlen = sizeof(int);
-#endif
-
-#ifdef ASSOC_CONS_XWIN
-	d->items[p].type = D_CHECKBOX;
-	d->items[p].data = (unsigned char *)&new->cons;
-	d->items[p++].dlen = sizeof(int);
-
-	d->items[p].type = D_CHECKBOX;
-	d->items[p].data = (unsigned char *)&new->xwin;
+	d->items[p].data = (unsigned char *) &new->block;
 	d->items[p++].dlen = sizeof(int);
 #endif
 
 	d->items[p].type = D_CHECKBOX;
-	d->items[p].data = (unsigned char *)&new->ask;
+	d->items[p].data = (unsigned char *) &new->ask;
 	d->items[p++].dlen = sizeof(int);
 
 	d->items[p].type = D_BUTTON;
@@ -579,6 +476,8 @@ ok:
 	do_dialog(term, d, getml(d, NULL));
 }
 
+#endif
+
 struct menu_item mi_no_assoc[] = {
 	{TEXT(T_NO_ASSOCIATIONS), "", M_BAR, NULL, NULL, 0, 0},
 	{NULL, NULL, 0, NULL, NULL, 0, 0}
@@ -588,20 +487,42 @@ struct menu_item mi_no_assoc[] = {
 void
 menu_list_assoc(struct terminal *term, void *fn, void *xxx)
 {
-	struct assoc *a;
+	struct list_head *class_tree;
+	struct option *opt;
 	struct menu_item *mi = NULL;
-	int n = 0;
+	
+	class_tree = (struct list_head *) get_opt_ptr("mime.association");
+	foreachback (opt, *class_tree) {
+		struct option *class_opt = opt;
+		struct list_head *id_tree;
 
-	foreachback(a, assoc) {
-		if (a->system == SYSTEM_ID) {
+		if (!strcmp(opt->name, "_template_")) continue;
+		
+		id_tree = (struct list_head *) opt->ptr;
+
+		foreachback (opt, *class_tree) {
+			unsigned char *system_str;
+			unsigned char *ct;
+
+			if (!strcmp(opt->name, "_template_")) continue;
+
+			system_str = get_system_str(term->environment & ENV_XWIN);
+			if (!system_str) continue;
+			opt = get_opt_rec_real((struct list_head *) opt->ptr,
+					       system_str);
+			mem_free(system_str);
+			if (!opt) continue;
+
+			ct = straconcat(class_opt->name, "/", opt->name, NULL);
+			if (!ct) continue;
+
 			if (!mi) {
 				mi = new_menu(7);
 			       	if (!mi) return;
 			}
 
-			add_to_menu(&mi, stracpy(a->label), stracpy(a->ct),
-				    "", MENU_FUNC fn, (void *)a->cnt, 0);
-			n++;
+			add_to_menu(&mi, ct, "",
+				    "", MENU_FUNC fn, (void *) ct, 0);
 		}
 	}
 
@@ -610,6 +531,8 @@ menu_list_assoc(struct terminal *term, void *fn, void *xxx)
 	else
 		do_menu(term, mi, xxx);
 }
+
+
 
 
 unsigned char *ext_msg[] = {
@@ -821,7 +744,6 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 	struct list_head *opt_tree;
 	struct option *opt;
 	struct menu_item *mi = NULL;
-	int n = 0;
 	
 	opt_tree = (struct list_head *) get_opt_ptr("mime.extension");
 
@@ -834,7 +756,6 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 		add_to_menu(&mi, stracpy(opt->name),
 			    stracpy((unsigned char *) opt->ptr),
 			    "", MENU_FUNC fn, opt->name, 0);
-		n++;
 	}
 
 	if (!mi)
@@ -842,6 +763,8 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 	else
 		do_menu(term, mi, xxx);
 }
+
+
 
 
 unsigned char *

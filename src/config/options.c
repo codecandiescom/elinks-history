@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.51 2002/06/17 16:07:02 pasky Exp $ */
+/* $Id: options.c,v 1.52 2002/06/20 10:11:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -735,6 +735,39 @@ register_options()
 	add_opt_tree("",
 		"mime", 0,
 		"MIME-related options.");
+
+
+	/* Basically, it will look like mime.association.text.plain.unix-xwin.program = "blah" */
+	/* TODO: Make it possible to alias some MIME-types. */
+
+	add_opt_tree("mime",
+		"association", OPT_AUTOCREATE,
+		"Action<->MIME-type association.");
+
+	add_opt_tree("mime.association",
+		"_template_", OPT_AUTOCREATE,
+		"Action description matching this MIME-type class.");
+
+	add_opt_tree("mime.association._template_",
+		"_template_", OPT_AUTOCREATE,
+		"Action description matching this MIME-type name.");
+
+	add_opt_tree("mime.association._template_._template_",
+		"_template_", OPT_AUTOCREATE,
+		"System-specific action description matching this MIME-type.");
+
+	add_opt_bool("mime.association._template_._template_._template_",
+		"ask", 0, 1,
+		"Ask before opening.");
+
+	add_opt_bool("mime.association._template_._template_._template_",
+		"block", 0, 1,
+		"Block the terminal when the handler is running.");
+
+	add_opt_string("mime.association._template_._template_._template_",
+		"program", 0, "",
+		"Handler for this MIME-type.");
+
 
 	add_opt_tree("mime",
 		"extension", OPT_AUTOCREATE,

@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.27 2003/06/15 11:06:20 pasky Exp $ */
+/* $Id: fastfind.c,v 1.28 2003/06/15 11:09:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -456,7 +456,7 @@ void
 fastfind_index_compress(struct fastfind_info *info)
 {
 	assert(info);
-	fastfind_node_compress(info->root_trampoline, info)
+	fastfind_node_compress(info->root_trampoline, info);
 }
 
 void *

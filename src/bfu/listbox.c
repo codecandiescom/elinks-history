@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.19 2002/08/29 16:28:09 pasky Exp $ */
+/* $Id: listbox.c,v 1.20 2002/08/29 17:20:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,7 +65,9 @@ dlg_format_box(struct terminal *term, struct terminal *t2,
  */
 
 /* Traverse through the hiearchic tree in specified direction by N items,
- * optionally calling user function for each of the items visited. */
+ * optionally calling user function for each of the items visited (basically,
+ * each of the items we move _through_, that means from the input item to the
+ * item _before_ the output item). */
 /* From the box structure, we should use only 'items' here. */
 struct listbox_item *
 traverse_listbox_items_list(struct listbox_item *item, int offset,
@@ -137,7 +139,6 @@ next:
 		/* Hmm.. sometimes I need this place ;-). --pasky */
 	}
 
-	/* if (fn) fn (item, d); */
 	return item;
 }
 
@@ -145,7 +146,6 @@ struct box_context {
 	struct terminal *term;
 	struct widget_data *listbox_item_data;
 	struct listbox_data *box;
-	struct listbox_item *new_top;
 	int dist;
 	int offset;
 };
@@ -156,20 +156,25 @@ box_sel_move_do(struct listbox_item *item, void *data_)
 {
 	struct box_context *data = data_;
 
+	if (item == data->box->top)
+		data->box->sel_offset = 0; /* assure resync */
+
 	if (data->dist > 0) {
-		if (data->box->sel_offset <
-		    data->listbox_item_data->item->gid) {
+		if (data->box->sel_offset
+		    < data->listbox_item_data->item->gid - 1) {
 			data->box->sel_offset++;
 		} else {
-			data->new_top =
-				traverse_listbox_items_list(data->new_top, 1,
+			data->box->top =
+				traverse_listbox_items_list(data->box->top, 1,
 							    NULL, NULL);
 		}
 	} else if (data->dist < 0) {
 		if (data->box->sel_offset > 0) {
 			data->box->sel_offset--;
 		} else {
-			data->new_top = item;
+			data->box->top = 
+				traverse_listbox_items_list(data->box->top, -1,
+							    NULL, NULL);
 		}
 	}
 }
@@ -190,14 +195,17 @@ box_sel_move(struct widget_data *listbox_item_data, int dist)
 
 	data = mem_alloc(sizeof(struct box_context));
 	data->box = box;
-	data->new_top = box->top;
 	data->listbox_item_data = listbox_item_data;
 	data->dist = dist;
 
-	box->sel = traverse_listbox_items_list(box->sel, dist,
-					       box_sel_move_do, data);
+	if (traverse_listbox_items_list(box->sel, dist, NULL, NULL)
+	    != box->sel) {
+		/* XXX: This is ugly, yes; but we don't want to call the
+		 * callback if we won't move on at all. */
+		box->sel = traverse_listbox_items_list(box->sel, dist,
+						       box_sel_move_do, data);
+	}
 
-	box->top = data->new_top;
 	mem_free(data);
 }
 

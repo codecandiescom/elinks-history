@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.37 2003/05/09 18:18:57 zas Exp $ */
+/* $Id: info.c,v 1.38 2003/05/10 22:50:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -243,11 +243,25 @@ cache_inf(struct terminal *term, void *d, struct session *ses)
 	}
 
 	cache = (struct cache_entry *) cache_info(CI_LIST);
-	add_chr_to_str(&a, &l, ':');
 	foreach(ce, *cache) {
 		if (count++ < term->y - 10) { /* 10 seems a kool value. --Zas */
 			add_chr_to_str(&a, &l, '\n');
+#ifdef DEBUG
+			if (ce->incomplete)
+				add_chr_to_str(&a, &l, '*');
+			else /* number of references */
+				add_num_to_str(&a, &l, ce->refcount);
+			add_chr_to_str(&a, &l, ' ');
+#endif
+			/* FIXME: What to do with long urls ? they wrap for now
+			 * but if one is very long then no other is displayed. */
 			add_to_str(&a, &l, ce->url);
+
+#ifdef DEBUG
+			/* size */
+			add_chr_to_str(&a, &l, ' ');
+			add_knum_to_str(&a, &l, ce->data_size);
+#endif
 		} else if (!truncated) truncated = count;
 	}
 
@@ -255,18 +269,15 @@ cache_inf(struct terminal *term, void *d, struct session *ses)
 		add_chr_to_str(&a, &l, '\n');
 		add_to_str(&a, &l, N_("No entry."));
 	} else if (truncated) {
-		unsigned char t[20];
-
-		ulongcat(&t, NULL, count - truncated, sizeof(t) - 1, 0);
 		add_to_str(&a, &l, "\n... (");
-		add_to_str(&a, &l, t);
+		add_num_to_str(&a, &l, count - truncated + 1);
 		add_to_str(&a, &l, ") ");
 	        add_to_str(&a, &l, N_("more entries."));
 	}
 
 	msg_box(term, getml(a, NULL),
 		N_("Cache info"), AL_LEFT | AL_EXTD_TEXT,
-		N_("Cache content"), a, NULL,
+		N_("Cache content"), ":", a, NULL,
 		r, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 

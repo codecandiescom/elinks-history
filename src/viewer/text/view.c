@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.533 2004/06/26 03:14:49 miciah Exp $ */
+/* $Id: view.c,v 1.534 2004/06/26 03:17:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -508,7 +508,9 @@ frame_ev_kbd_number(struct session *ses, struct document_view *doc_view,
 			ses->kbdprefix.repeat_count = 0;
 
 		return FRAME_EVENT_OK;
-	} else if (ev->x >= '1' && !ev->y) {
+	}
+
+	if (ev->x >= '1' && !ev->y) {
 		int nlinks = document->nlinks, length;
 		unsigned char d[2] = { ev->x, 0 };
 

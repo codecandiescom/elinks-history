@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.236 2005/03/21 09:06:41 jonas Exp $ */
+/* $Id: main.c,v 1.237 2005/03/21 09:09:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,12 +73,8 @@ check_stdio(struct list_head *url_list)
 {
 	/* Should the document be read from stdin? */
 	if (!isatty(STDIN_FILENO)) {
-		/* Only start reading from stdin if no URL was given on the
-		 * command line. */
-		if (url_list && list_empty(*url_list)) {
-			get_opt_bool("protocol.file.allow_special_files") = 1;
+		if (url_list)
 			add_to_string_list(url_list, "file:///dev/stdin", 17);
-		}
 		get_cmd_opt_bool("no-connect") = 1;
 	}
 

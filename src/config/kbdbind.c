@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.27 2002/07/01 15:07:53 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.28 2002/07/01 16:21:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,15 +128,27 @@ struct strtonum {
 };
 
 static long
-strtonum(struct strtonum *table, char *s)
+strtonum(struct strtonum *table, char *str)
 {
-	struct strtonum *p;
+	struct strtonum *rec;
 
-	for (p = table; p->str; p++)
-		if (!strcmp(p->str, s))
-			return p->num;
+	for (rec = table; rec->str; rec++)
+		if (!strcmp(rec->str, str))
+			return rec->num;
 
 	return -1;
+}
+
+static unsigned char *
+numtostr(struct strtonum *table, long num)
+{
+	struct strtonum *rec;
+
+	for (rec = table; rec->str; rec++)
+		if (num == rec->num)
+			return rec->str;
+
+	return NULL;
 }
 
 
@@ -152,6 +164,12 @@ read_keymap(unsigned char *keymap)
 {
 
 	return strtonum(keymap_table, keymap);
+}
+
+static unsigned char *
+write_keymap(enum keymap keymap)
+{
+	return numtostr(keymap_table, keymap);
 }
 
 
@@ -191,6 +209,22 @@ read_key(unsigned char *key)
 	return (strlen(key) == 1) ? *key : strtonum(key_table, key);
 }
 
+static unsigned char *
+write_key(long key)
+{
+	static unsigned char dirty[3];
+	unsigned char *bin = numtostr(key_table, key);
+
+	dirty[0] = (unsigned char) key;
+	if (key == '\\')
+		dirty[1] = '\\', dirty[2] = '\0';
+	else
+		dirty[1] = '\0';
+	
+	return bin ? bin : dirty;
+}
+
+
 static int
 parse_keystroke(unsigned char *s, long *key, long *meta)
 {
@@ -208,6 +242,19 @@ parse_keystroke(unsigned char *s, long *key, long *meta)
 
 	*key = read_key(s);
 	return (*key < 0) ? -1 : 0;
+}
+
+static void
+make_keystroke(unsigned char **str, int *len, long key, long meta)
+{
+	if (meta & KBD_SHIFT)
+		add_to_str(str, len, "Shift-");
+	if (meta & KBD_CTRL)
+		add_to_str(str, len, "Ctrl-");
+	if (meta & KBD_ALT)
+		add_to_str(str, len, "Alt-");
+
+	add_to_str(str, len, write_key(key));
 }
 
 
@@ -285,6 +332,13 @@ read_action(unsigned char *action)
 	return strtonum(action_table, action);
 }
 
+static unsigned char *
+write_action(int action)
+{
+
+	return numtostr(action_table, action);
+}
+
 
 /*
  * Config file readers.
@@ -307,6 +361,33 @@ bind_do(unsigned char *keymap, unsigned char *keystroke, unsigned char *action)
 
 	add_keybinding(keymap_, action_, key_, meta_, LUA_NOREF);
 	return 0;
+}
+
+void
+bind_config_string(unsigned char **file, int *len)
+{
+	enum keymap keymap;
+	struct keybinding *keybinding;
+
+	for (keymap = 0; keymap < KM_MAX; keymap++)
+		foreach(keybinding, keymaps[keymap]) {
+			unsigned char *keymap_str = write_keymap(keymap);
+			unsigned char *action_str =
+				write_action(keybinding->action);
+
+			if (!keymap_str || !action_str || action_str[0] == ' ')
+				continue;
+
+			add_to_str(file, len, "bind \"");
+			add_to_str(file, len, keymap_str);
+			add_to_str(file, len, "\" \"");
+			make_keystroke(file, len, keybinding->key,
+				       keybinding->meta);
+			add_to_str(file, len, "\" = \"");
+			add_to_str(file, len, action_str);
+			add_to_str(file, len, "\"");
+			add_to_str(file, len, NEWLINE);
+		}
 }
 
 

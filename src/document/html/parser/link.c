@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.49 2004/12/10 17:51:32 zas Exp $ */
+/* $Id: link.c,v 1.50 2004/12/10 18:00:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -300,32 +300,29 @@ html_img(unsigned char *a)
 			}
 		}
 
-		/* ??? */
 		if (!get_opt_bool("document.browse.images.show_any_as_links")) {
-			ismap = 0;
-			goto show_label;
+			put_image_label(a, label);
+
+		} else {
+			if (src) {
+				format.image = join_urls(html_context.base_href, src);
+			}
+
+			format.title = get_attr_val(a, "title");
+
+			if (ismap) {
+				unsigned char *new_link;
+
+				html_stack_dup(ELEMENT_KILLABLE);
+				new_link = straconcat(format.link, "?0,0", NULL);
+				if (new_link)
+					mem_free_set(&format.link, new_link);
+			}
+
+			put_image_label(a, label);
+
+			if (ismap) kill_html_stack_item(&html_top);
 		}
-
-		if (src) {
-			format.image = join_urls(html_context.base_href, src);
-		}
-
-		format.title = get_attr_val(a, "title");
-
-		if (ismap) {
-			unsigned char *new_link;
-
-			html_stack_dup(ELEMENT_KILLABLE);
-			new_link = straconcat(format.link, "?0,0", NULL);
-			if (new_link)
-				mem_free_set(&format.link, new_link);
-		}
-show_label:
-		put_image_label(a, label);
-
-		if (ismap) kill_html_stack_item(&html_top);
-		/* Anything below must take care of properly handling the
-		 * show_any_as_links variable being off! */
 	}
 
 	/* XXX: are these needed ? --Zas */

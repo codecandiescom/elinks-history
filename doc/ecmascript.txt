@@ -18,8 +18,15 @@ is actively developed and ought to work.
 
 		Ok, so how to get the ECMAScript support working?
 
-You need to get (and install) SpiderMonkey and then recompile your ELinks (if
-you installed SM properly, ELinks should autodetect it during the configure
+Note that this procedure enables you to install SpiderMonkey, but in such a way
+that it might not work with anything else but ELinks. It is unlikely that
+anything else is ever going to use SpiderMonkey on your system, but if you want
+to take the safe way, get SM and follow the instructions in src/README.html
+instead. You will probably need to do some checkouting of bits of Mozilla CVS
+tree and so, have fun.
+
+So, you need to get (and install) SpiderMonkey and then recompile your ELinks
+(if you installed SM properly, ELinks should autodetect it during the configure
 phase) and you are ready to fly.
 
 To get SpiderMonkey source, go at ftp://ftp.mozilla.org/pub/mozilla.org/js/

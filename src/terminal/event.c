@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.11 2003/09/25 19:45:49 zas Exp $ */
+/* $Id: event.c,v 1.12 2003/09/28 00:13:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -198,8 +198,10 @@ send_redraw:
 	}
 
 	if (ev->ev == EV_MOUSE) {
+#ifdef USE_MOUSE
 		reset_timer();
 		term_send_event(term, ev);
+#endif
 	} else if (ev->ev == EV_KBD) {
 		reset_timer();
 

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.89 2003/09/25 19:17:33 zas Exp $ */
+/* $Id: listbox.c,v 1.90 2003/09/28 00:13:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -477,6 +477,7 @@ static int
 mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 	      struct term_event *ev)
 {
+#ifdef USE_MOUSE
 	struct listbox_data *box = (struct listbox_data *) di->item->data;
 
 	if (!list_empty(*box->items)) {
@@ -526,11 +527,9 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 			return EVENT_PROCESSED;
 		}
 	}
-#if 0
-	else if (ev->b & BM_DRAG) {
-		debug("drag");
-	}
-#endif
+
+#endif /* USE_MOUSE */
+
 	return EVENT_NOT_PROCESSED;
 }
 

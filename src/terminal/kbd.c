@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.30 2003/09/25 19:45:49 zas Exp $ */
+/* $Id: kbd.c,v 1.31 2003/09/28 00:13:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -172,9 +172,10 @@ send_init_sequence(int h, int flags)
 	if (flags & USE_ALTSCREEN) {
 		write_sequence(h, INIT_ALT_SCREEN_SEQ);
 	}
-
+#ifdef USE_MOUSE
 	write_sequence(h, INIT_TWIN_MOUSE_SEQ);
 	write_sequence(h, INIT_XWIN_MOUSE_SEQ);
+#endif
 }
 
 #define DONE_CLS_SEQ		"\033[2J"	/* Erase in Display, Clear All */
@@ -188,20 +189,13 @@ send_done_sequence(int h, int flags)
 {
 	write_sequence(h, DONE_CLS_SEQ);
 
-#if 0
-	if (flags & USE_TWIN_MOUSE) {
-		write_sequence(h, DONE_TWIN_MOUSE_SEQ);
-	} else {
-		write_sequence(h, DONE_XWIN_MOUSE_SEQ);
-	}
-#endif
-
+#ifdef USE_MOUSE
 	/* This is a hack to make xterm + alternate screen working,
 	 * if we send only DONE_XWIN_MOUSE_SEQ, mouse is not totally
 	 * released it seems, in rxvt and xterm... --Zas */
 	write_sequence(h, DONE_TWIN_MOUSE_SEQ);
 	write_sequence(h, DONE_XWIN_MOUSE_SEQ);
-
+#endif
 
 	/* Switch from alternate screen. */
 	if (flags & USE_ALTSCREEN) {
@@ -451,7 +445,6 @@ resize_terminal_x(unsigned char *text)
 	resize_window(atoi(text), atoi(ys));
 	resize_terminal();
 }
-
 
 void
 dispatch_special(unsigned char *text)
@@ -708,8 +701,6 @@ static struct key os2xtd[256] = {
 /* 256 */
 };
 
-static int xterm_button = -1;
-
 /* I feeeeeel the neeeed ... to rewrite this ... --pasky */
 /* Just Do it ! --Zas */
 
@@ -782,8 +773,12 @@ process_queue(struct itrm *itrm)
 					} break;
 
 				case 'R': resize_terminal(); break;
+				case 'M':
+#ifdef USE_MOUSE
+				{
+					static int xterm_button = -1;
 
-				case 'M': if (itrm->qlen - el < 3) goto ret;
+					if (itrm->qlen - el < 3) goto ret;
 					if (v == 5) {
 						if (xterm_button == -1)
 							xterm_button = 0;
@@ -847,7 +842,9 @@ process_queue(struct itrm *itrm)
 						el += 3;
 					}
 					ev.ev = EV_MOUSE;
-					break;
+				}
+#endif /* USE_MOUSE */
+				break;
 			}
 
 		} else {

@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.15 2003/09/04 12:31:09 pasky Exp $ */
+/* $Id: version.c,v 1.16 2003/09/28 00:13:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,7 +97,10 @@ get_dyn_full_version(struct terminal *term, int more)
 		"bzip2", ", ",
 #endif
 #ifdef FORMS_MEMORY
-		_("Forms memory", term),
+		_("Forms memory", term), ", ",
+#endif
+#ifndef USE_MOUSE
+		_("No mouse", term),
 #endif
 		NULL
 	);

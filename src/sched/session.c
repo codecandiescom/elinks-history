@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.160 2003/09/25 19:37:05 zas Exp $ */
+/* $Id: session.c,v 1.161 2003/09/28 00:13:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1126,7 +1126,7 @@ process_file_requests(struct session *ses)
 
 			ftl->req_sent = 1;
 			load_url(ftl->url, (fd && fd->document) ? fd->document->url
-							      : NULL,
+							        : NULL,
 				 &ftl->stat, ftl->pri, NC_CACHE, -1);
 			more = 1;
 		}

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.86 2003/09/25 19:54:39 zas Exp $ */
+/* $Id: os_dep.c,v 1.87 2003/09/28 00:13:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1143,7 +1143,7 @@ input_thread(void *p)
 }
 #endif /* #ifdef HAVE_READ_KBD */
 
-#if defined(HAVE_MOUOPEN) && !defined(USE_GPM)
+#if defined(HAVE_MOUOPEN) && !defined(USE_GPM) && defined(USE_MOUSE)
 
 #define USING_OS2_MOUSE
 
@@ -1600,7 +1600,7 @@ cfmakeraw(struct termios *t)
 }
 #endif
 
-#ifdef USE_GPM
+#if defined(USE_GPM) && defined(USE_MOUSE)
 
 struct gpm_mouse_spec {
 	int h;

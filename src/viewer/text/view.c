@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.207 2003/09/27 13:47:28 jonas Exp $ */
+/* $Id: view.c,v 1.208 2003/09/28 00:13:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -783,7 +783,7 @@ frame_ev(struct session *ses, struct document_view *fd, struct term_event *ev)
 					x = 0;
 				}
 		}
-
+#ifdef USE_MOUSE
 	} else if (ev->ev == EV_MOUSE) {
 		struct link *link = choose_mouse_link(fd, ev);
 
@@ -837,7 +837,7 @@ frame_ev(struct session *ses, struct document_view *fd, struct term_event *ev)
 				rep_ev(ses, fd, hscroll, 8);
 			}
 		}
-
+#endif /* USE_MOUSE */
 	} else {
 		x = 0;
 	}
@@ -892,6 +892,7 @@ send_to_frame(struct session *ses, struct term_event *ev)
 	return r;
 }
 
+#ifdef USE_MOUSE
 static void
 do_mouse_event(struct session *ses, struct term_event *ev,
 	       struct document_view *fd)
@@ -928,6 +929,7 @@ ok:
 	evv.y -= fd->yp;
 	send_to_frame(ses, &evv);
 }
+#endif /* USE_MOUSE */
 
 void send_open_in_new_xterm(struct terminal *, void (*)(struct terminal *, unsigned char *, unsigned char *), struct session *);
 
@@ -1156,7 +1158,7 @@ quit:
 			return;
 		}
 	}
-
+#ifdef USE_MOUSE
 	if (ev->ev == EV_MOUSE) {
 		int bars;
 		int nb_tabs;
@@ -1185,7 +1187,7 @@ quit:
 		}
 		if (fd) do_mouse_event(ses, ev, fd);
 	}
-
+#endif /* USE_MOUSE */
 	return;
 
 x:

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.98 2003/09/27 15:17:34 zas Exp $ */
+/* $Id: menu.c,v 1.99 2003/09/28 00:13:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -350,7 +350,6 @@ display_menu(struct terminal *term, struct menu *menu)
 static void
 menu_func(struct window *win, struct term_event *ev, int fwd)
 {
-	struct window *w1;
 	struct menu *menu = win->data;
 	int s = 0;
 
@@ -368,6 +367,7 @@ menu_func(struct window *win, struct term_event *ev, int fwd)
 			break;
 
 		case EV_MOUSE:
+#ifdef USE_MOUSE
 			switch (ev->b & BM_BUTT) {
 				/* XXX: We return here directly because we
 				 * would just break this switch instead of the
@@ -396,6 +396,8 @@ menu_func(struct window *win, struct term_event *ev, int fwd)
 					delete_window_ev(win, ev);
 
 				else {
+					struct window *w1;
+
 					for (w1 = win;
 					     (void *)w1 != &win->term->windows;
 					     w1 = w1->next) {
@@ -438,7 +440,7 @@ menu_func(struct window *win, struct term_event *ev, int fwd)
 					}
 				}
 			}
-
+#endif /* USE_MOUSE */
 			break;
 
 		case EV_KBD:
@@ -721,6 +723,7 @@ mainmenu_func(struct window *win, struct term_event *ev, int fwd)
 			break;
 
 		case EV_MOUSE:
+#ifdef USE_MOUSE
 			if ((ev->b & BM_BUTT) >= B_WHEEL_UP)
 				break;
 
@@ -754,6 +757,7 @@ mainmenu_func(struct window *win, struct term_event *ev, int fwd)
 					break;
 				}
 			}
+#endif /* USE_MOUSE */
 			break;
 
 		case EV_KBD:

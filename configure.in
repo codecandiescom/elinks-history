@@ -823,6 +823,10 @@ AC_ARG_ENABLE(mimetypes, [  --disable-mimetypes     disable /etc/mime.types supp
 	      [if test "$enableval" = yes; then AC_DEFINE(MIMETYPES) fi],
 	      AC_DEFINE(MIMETYPES))
 
+AC_ARG_ENABLE(mouse, [  --disable-mouse         disable mouse support],
+	      [if test "$enableval" = yes; then AC_DEFINE(USE_MOUSE) fi],
+	      AC_DEFINE(USE_MOUSE))
+
 AC_ARG_ENABLE(formsmemory, [  --disable-formsmemory   disable login manager for HTML forms],
               [if test "$enableval" = yes; then AC_DEFINE(FORMS_MEMORY) fi],
              AC_DEFINE(FORMS_MEMORY))

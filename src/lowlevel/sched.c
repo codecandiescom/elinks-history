@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.20 2002/05/04 08:23:40 pasky Exp $ */
+/* $Id: sched.c,v 1.21 2002/05/04 08:30:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -803,7 +803,7 @@ unsigned char *get_proxy(unsigned char *url)
 
 /* load_url() */
 int load_url(unsigned char *url, unsigned char *prev_url,
-	     struct status *stat, int pri, int cache_mode)
+	     struct status *stat, int pri, enum cache_mode cache_mode)
 {
 	struct cache_entry *e = NULL;
 	struct connection *c;

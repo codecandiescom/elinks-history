@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.8 2002/03/29 10:36:56 pasky Exp $ */
+/* $Id: session.h,v 1.9 2002/05/04 08:30:19 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_SESSION_H
 #define EL__DOCUMENT_SESSION_H
@@ -109,15 +109,15 @@ void goto_url(struct session *, unsigned char *);
 void goto_imgmap(struct session *, unsigned char *, unsigned char *, unsigned char *);
 
 void ses_forward(struct session *);
-void ses_goto(struct session *, unsigned char *, unsigned char *, int, int,
-	      enum session_wtd, unsigned char *, void (*)(struct status *,
-		      struct session *), int);
+void ses_goto(struct session *, unsigned char *, unsigned char *, int,
+	      enum cache_mode, enum session_wtd, unsigned char *,
+	      void (*)(struct status *, struct session *), int);
 
 void end_load(struct status *, struct session *);
 void doc_end_load(struct status *, struct session *);
 
 void abort_loading(struct session *);
-void reload(struct session*, int);
+void reload(struct session *, enum cache_mode);
 void load_frames(struct session *, struct f_data_c *);
 
 struct frame *ses_find_frame(struct session *, unsigned char *);

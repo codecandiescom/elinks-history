@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.26 2002/05/04 08:23:39 pasky Exp $ */
+/* $Id: session.c,v 1.27 2002/05/04 08:30:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -352,7 +352,7 @@ struct wtd_data {
 	struct session *ses;
 	unsigned char *url;
 	int pri;
-	int cache;
+	enum cache_mode cache_mode;
 	int wtd;
 	unsigned char *target;
 	unsigned char *pos;
@@ -369,7 +369,7 @@ void post_yes(struct wtd_data *w)
 	w->ses->loading_url = stracpy(w->url);
 	w->ses->wtd = w->wtd;
 	w->ses->wtd_target = w->target;
-	load_url(w->ses->loading_url, w->ses->ref_url, &w->ses->loading, w->pri, w->cache);
+	load_url(w->ses->loading_url, w->ses->ref_url, &w->ses->loading, w->pri, w->cache_mode);
 }
 
 void post_no(struct wtd_data *w)
@@ -385,7 +385,8 @@ void post_cancel(struct wtd_data *w)
 
 void
 ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
-	 int pri, int cache, enum session_wtd wtd, unsigned char *pos,
+	 int pri, enum cache_mode cache_mode, enum session_wtd wtd,
+	 unsigned char *pos,
 	 void (*fn)(struct status *, struct session *),
 	 int redir)
 {
@@ -394,7 +395,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 	struct cache_entry *e;
 
 	if (!wtd_data || !form_submit_confirm || !strchr(url, POST_CHAR)
-	    || (cache == NC_ALWAYS_CACHE && find_in_cache(url, &e)
+	    || (cache_mode == NC_ALWAYS_CACHE && find_in_cache(url, &e)
 		&& !e->incomplete)) {
 
 		if (wtd_data) mem_free(wtd_data);
@@ -408,7 +409,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 		ses->wtd = wtd;
 		ses->wtd_target = target;
 
-		load_url(url, ses->ref_url, &ses->loading, pri, cache);
+		load_url(url, ses->ref_url, &ses->loading, pri, cache_mode);
 
 		return;
 	}
@@ -416,7 +417,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 	wtd_data->ses = ses;
 	wtd_data->url = url;
 	wtd_data->pri = pri;
-	wtd_data->cache = cache;
+	wtd_data->cache_mode = cache_mode;
 	wtd_data->wtd = wtd;
 	wtd_data->target = target;
 	wtd_data->pos = pos;
@@ -941,7 +942,7 @@ void destroy_all_sessions()
 	/*while (!list_empty(sessions)) destroy_session(sessions.next);*/
 }
 
-void reload(struct session *ses, int cache_mode)
+void reload(struct session *ses, enum cache_mode cache_mode)
 {
 	struct location *l;
 	struct f_data_c *fd = current_frame(ses);

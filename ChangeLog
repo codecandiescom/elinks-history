@@ -1,8 +1,148 @@
+Mon Apr  5 17:41:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	http_send_header(): Don't modify the URI. Should hopefully fix bug
+	with webmail posting that rely on getting content-type header. part
+	3.  
+
+Mon Apr  5 17:38:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	http_send_header(): Don't modify the URI. Should hopefully fix bug
+	with webmail posting that rely on getting content-type header. part
+	2 
+
+Mon Apr  5 17:35:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	http_send_header(): Don't modify the URI. Should hopefully fix bug
+	with webmail posting that rely on getting content-type header.  
+
+Mon Apr  5 16:58:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/uri.h, sched/connection.c:
+
+	Disallow NULL args to get_uri_reference().  
+
+Mon Apr  5 16:06:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	init_connection(): Assert that proxied_uri is not PROTOCOL_PROXY.  
+
+Mon Apr  5 10:02:40 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Apr  5 05:35:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Shorten code by returning uristring from translate_directories().  
+
+Mon Apr  5 05:31:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	join_urls(): Use uri_errno switch.  
+
+Mon Apr  5 05:22:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	A few assertions.  
+
+Mon Apr  5 05:18:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Try to optimize away some of the calls to parse_uri() by making it
+	possible to hand an already parse URI to translate_directories().  
+
+Mon Apr  5 05:06:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Pass uri struct to translate_file_url().  
+
+Mon Apr  5 04:57:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Cleanup translate_file_url() by using insert_in_uri().  
+
+Mon Apr  5 04:44:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Move up insert_in_uri().  
+
+Mon Apr  5 04:33:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Cleanup transform_file_url() calling.  
+
+Mon Apr  5 04:27:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	All that inlining is no good.  
+
+Mon Apr  5 03:33:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Scary stuff. Complete (eek!) rewrite (Eek!) of translate_url()
+	(EEK!). It now goto-loops (ehm since using a while loop would indent
+	things too much? ;) a parse_uri() call + switch (the returned
+	uri_errno) saving the previous uri_errno to check that progress is
+	actually being made. The core part of translate_url() that figures
+	out how to handle URIs without protocols is only changed to make use
+	of new allocation scheme. Lots of duplicate code is removed and now
+	even I can understanding what it does.  
+
+Mon Apr  5 01:17:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/protocol.c, protocol/uri.c, protocol/uri.h,
+	protocol/user.c, util/conv.h:
+
+	Add support for case insensitive protocol and hostnames in the URI
+	cache. It should be pretty cheap meaning no additional allocation
+	needed. The basic idea is to ``prepare'' all URI strings before they
+	are handed to get_uri().  
+	
+	It abuses that all URI composing ends up in translate_directories()
+	which already mangles the string and now also lowercases the
+	protocol and hostname part of the URI. The remaining part is that
+	get_protocol() has been changed to use case insensitive comparing
+	against known protocol names and get_user_program() will do an
+	option lookup using the lowercased protocol name.  Strings handed to
+	get_uri() is sanity checked before the URI is returned.  
+
+Sun Apr  4 22:30:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/plain/renderer.c, protocol/uri.c, protocol/uri.h:
+
+	Make parse_uri() return new uri_errno that will hopefully make
+	translate_url() more efficient by pinpointing the error.  
+
 Sun Apr  4 22:00:28 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/uri.c:
 
 	object_nolock() cached URIs.  
+
+Sun Apr  4 22:00:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/dump/dump.c:
+
+	Fix bad URI reference taking in -dump redirects. Thanks to lindi-.  
 
 Sun Apr  4 22:00:04 2004  Jonas Fonseca <fonseca@diku.dk>:
 

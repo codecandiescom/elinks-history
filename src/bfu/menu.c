@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.284 2004/11/19 17:46:05 zas Exp $ */
+/* $Id: menu.c,v 1.285 2004/11/30 06:15:23 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -704,10 +704,12 @@ menu_search_handler(struct input_line *line, int action)
 		return INPUT_LINE_CANCEL;
 
 	case ACT_EDIT_PREVIOUS_ITEM:
+		pos--;
 		direction = -1;
 		break;
 
 	case ACT_EDIT_NEXT_ITEM:
+		pos++;
 	default:
 		direction = 1;
 	}
@@ -715,9 +717,9 @@ menu_search_handler(struct input_line *line, int action)
 	/* If there is nothing to match with don't start searching */
 	if (!*buffer) return INPUT_LINE_PROCEED;
 
-	pos = (pos + direction) % menu->size;
+	pos %= menu->size;
 
-	while (pos != menu->selected) {
+	do {
 		struct menu_item *item = &menu->items[pos];
 
 		if (search_menu_item(item, buffer, term)) {
@@ -730,7 +732,7 @@ menu_search_handler(struct input_line *line, int action)
 
 		if (pos == menu->size) pos = 0;
 		else if (pos < 0) pos = menu->size - 1;
-	}
+	} while (pos != menu->selected);
 
 	return INPUT_LINE_CANCEL;
 }

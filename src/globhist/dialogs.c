@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.31 2003/07/09 23:03:09 jonas Exp $ */
+/* $Id: dialogs.c,v 1.32 2003/07/23 00:11:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,18 +151,21 @@ push_search_button(struct dialog_data *dlg, struct widget_data *di)
 	return 0;
 }
 
+static int toggle_display = -1;
+
 static int
 push_toggle_display_button(struct dialog_data *dlg, struct widget_data *di)
 {
 	struct global_history_item *item;
-	int *display_type;
 
-	display_type = &get_opt_int("document.history.global.display_type");
-	*display_type = !*display_type;
+	if (toggle_display < 0)
+		toggle_display = get_opt_int("document.history.global.display_type");
+	else
+		toggle_display = !toggle_display;
 
 	foreach (item, global_history.items) {
 		struct listbox_item *b2;
-		unsigned char *text = *display_type ? item->title : item->url;
+		unsigned char *text = toggle_display ? item->title : item->url;
 
 		if (!*text) text = item->url;
 

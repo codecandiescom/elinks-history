@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.50 2004/03/26 17:56:53 zas Exp $ */
+/* $Id: kbd.c,v 1.51 2004/03/26 18:05:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -491,7 +491,7 @@ qwerty:
 	return;
 
 has_nul_byte:
-	safe_hard_write(itrm->std_out, buf, i);
+	if (i) safe_hard_write(itrm->std_out, buf, i);
 
 	i++;
 	assert(OUT_BUF_SIZE - i > 0);

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.278 2003/11/18 09:48:38 kuser Exp $ */
+/* $Id: parser.c,v 1.279 2003/11/18 10:37:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,34 +76,28 @@ parse_element(register unsigned char *e, unsigned char *eof,
 	      unsigned char **name, int *namelen,
 	      unsigned char **attr, unsigned char **end)
 {
-#define next_char() if (++e == eof) goto parse_error
-
-	unsigned char saved_eof_char;
+#define next_char() if (++e == eof) return -1;
 
 	assert(e && eof);
 	if (e >= eof || *e != '<') return -1;
-
-	saved_eof_char = *eof;
-	*eof = '\0';
 
 	next_char();
 	if (name) *name = e;
 
 	if (*e == '/') next_char();
-	if (!isA(*e)) goto parse_error;
+	if (!isA(*e)) return -1;
 
 	while (isA(*e)) next_char();
 
-	if (!WHITECHAR(*e) && !end_of_tag(*e) && *e != '/'
-	    && *e != ':')
-		goto parse_error;
+	if (!WHITECHAR(*e) && !end_of_tag(*e) && *e != '/' && *e != ':')
+		return -1;
 
 	if (name && namelen) *namelen = e - *name;
 
 	while ((WHITECHAR(*e) || *e == '/' || *e == ':')) next_char();
 
 	/* Skip bad attribute */
-	while (*e && !atchr(*e) && !end_of_tag(*e) && !WHITECHAR(*e)) next_char();
+	while (!atchr(*e) && !end_of_tag(*e) && !WHITECHAR(*e)) next_char();
 
 	if (attr) *attr = e;
 
@@ -111,19 +105,16 @@ next_attr:
 	while (WHITECHAR(*e)) next_char();
 
 	/* Skip bad attribute */
-	while (*e && !atchr(*e) && !end_of_tag(*e) && !WHITECHAR(*e)) next_char();
+	while (!atchr(*e) && !end_of_tag(*e) && !WHITECHAR(*e)) next_char();
 
 	if (end_of_tag(*e)) goto end;
 
 	while (atchr(*e)) next_char();
 	while (WHITECHAR(*e)) next_char();
-	while (!*e && e < eof) next_char();
 
-	if (*e != '=') {
-		if (end_of_tag(*e)) goto end;
-		goto next_attr;
-	}
+	if (*e == '=') goto next_attr;
 
+	if (end_of_tag(*e)) goto end;
 	next_char();
 
 	while (WHITECHAR(*e)) next_char();
@@ -133,12 +124,11 @@ next_attr:
 
 quoted_value:
 		next_char();
-		while (*e != quote && *e >= ' ') next_char();
-		if (*e != quote) goto parse_error;
+		while (*e != quote) next_char();
 		next_char();
-		if (*e == quote) goto quoted_value;
+		goto quoted_value;
 	} else {
-		while (*e && !WHITECHAR(*e) && !end_of_tag(*e)) next_char();
+		while (!WHITECHAR(*e) && !end_of_tag(*e)) next_char();
 	}
 
 	while (WHITECHAR(*e)) next_char();
@@ -148,12 +138,7 @@ quoted_value:
 end:
 	if (end) *end = e + (*e == '>');
 
-	*eof = saved_eof_char;
 	return 0;
-
-parse_error:
-	*eof = saved_eof_char;
-	return -1;
 }
 
 #define realloc_chrs(x, l) \

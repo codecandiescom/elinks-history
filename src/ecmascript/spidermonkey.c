@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.90 2004/12/17 13:22:33 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.91 2004/12/17 13:24:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1419,7 +1419,6 @@ spidermonkey_eval_stringback(struct ecmascript_interpreter *interpreter,
 	JSContext *ctx;
 	jsval rval;
 	union jsval_union v;
-	unsigned char *ret = NULL;
 
 	assert(interpreter);
 	ctx = interpreter->backend_data;
@@ -1435,8 +1434,7 @@ spidermonkey_eval_stringback(struct ecmascript_interpreter *interpreter,
 	}
 
 	JSVAL_REQUIRE(&rval, STRING);
-	if (v.string) {
-		ret = stracpy(v.string);
-	}
-	return ret;
+	if (!v.string) return NULL;
+
+	return stracpy(v.string);
 }

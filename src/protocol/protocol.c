@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.33 2004/01/01 15:16:01 jonas Exp $ */
+/* $Id: protocol.c,v 1.34 2004/04/02 18:58:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,9 +90,19 @@ static struct protocol_backend lua_protocol_backend = {
 
 
 enum protocol
-check_protocol(unsigned char *name, int namelen)
+known_protocol(unsigned char *url, unsigned char **end_)
 {
+	unsigned char *end = get_protocol_end(url);
 	int protocol;
+	unsigned char *name;
+	int namelen;
+
+	if (end_) *end_ = end;
+
+	if (!end) return PROTOCOL_INVALID; /* No valid protocol scheme. */
+
+	name	= url;
+	namelen	= end - url;
 
 	/* First check if this isn't some custom (protocol.user) protocol. It
 	 * has higher precedence than builtin handlers. */
@@ -159,16 +169,4 @@ get_protocol_external_handler(enum protocol protocol)
 	assert(VALID_PROTOCOL(protocol));
 	if_assert_failed return NULL;
 	return protocol_backends[protocol]->external_handler;
-}
-
-enum protocol
-known_protocol(unsigned char *url, unsigned char **end_)
-{
-	unsigned char *end = get_protocol_end(url);
-
-	if (end_) *end_ = end;
-
-	if (!end) return PROTOCOL_INVALID; /* No valid protocol scheme. */
-
-	return check_protocol(url, end - url);
 }

@@ -1,3 +1,36 @@
+Fri Jan 24 15:55:09 2003  Laurent Monin <zas@norz.org>:
+
+	* po/be.po, po/bg.po, po/ca.po, po/cs.po, po/da.po, po/de.po,
+	po/el.po, po/es.po, po/et.po, po/fi.po, po/fr.po, po/gl.po,
+	po/hr.po, po/hu.po, po/id.po, po/is.po, po/it.po, po/lt.po,
+	po/nl.po, po/no.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ro.po,
+	po/ru.po, po/sk.po, po/sv.po, po/tr.po, po/uk.po, src/setup.h,
+	src/dialogs/menu.c:
+
+	An Help menu shortcut was added: LUA Reference manual, appears only
+	when LUA support is compiled-in.  
+
+Fri Jan 24 14:01:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/layouter/syntree/layouter.c:
+
+	pdata -> lstate 
+
+Fri Jan 24 11:54:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/layouter/syntree/layouter.c:
+
+	Transformed a nice recursion over syntax tree to a particularily
+	ugly single-level loop. This means support for layouting resuming.  
+
+Thu Jan 23 23:15:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Oops! Quite a fatal bug which managed to somehow sneak along my
+	sight for a *long* time. The resuming sometimes happenned...
+	automagically, when the file already existed. Reported by Jose.  
+
 Thu Jan 23 19:03:29 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/sched/download.c:

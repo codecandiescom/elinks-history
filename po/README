@@ -106,6 +106,17 @@ it in the code instead.
 The string following 'msgstr' is the translated string.
 TODO: write about the meaning of % fragments.
 
+Some translations may become obsolete due to code modifications, these will be
+marked by #~ prefix, and moved at end of file. Keeping them may be a good thing
+since a modification can be reversed later and then gettext tools will reuse
+these special lines at resync time.
+If, at some time, you think some of these lines will never be reused, feel free
+to delete them to reduce file size.
+
+IMPORTANT: if you changed strings in the code, or if you're using a cvs version
+of ELinks, take care of synchronization between code and po files. Before any
+change to a po file, run make update-po from po/.
+SPECIAL NOTE FOR PASKY: before any release, run make update-po ;=)
 
 2.3 Making the updates part of ELinks:
 --------------------------------------
@@ -126,5 +137,5 @@ current status of each language file. Be proud if your language file rank higher
 or the same as the French one.
 
 
-$Id: README,v 1.1 2003/06/26 16:24:10 jonas Exp $
+$Id: README,v 1.2 2003/06/26 21:50:04 zas Exp $
 vim: textwidth=80

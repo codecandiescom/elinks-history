@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.419 2004/05/29 13:54:17 jonas Exp $ */
+/* $Id: view.c,v 1.420 2004/05/29 14:03:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,13 +210,24 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 	vs = doc_view->vs;
 	if (vs->goto_position) {
 		vy = find_tag(doc_view->document, vs->goto_position);
-		if (vy != -1) {
+		if (vy == -1) {
+			msg_box(term, NULL, MSGBOX_FREE_TEXT,
+				N_("Missing fragment"), AL_CENTER,
+				msg_text(term, N_("The requested fragment "
+					"\"#%s\" doesn't exist."),
+					vs->goto_position),
+				NULL, 1,
+				N_("OK"), NULL, B_ENTER | B_ESC);
+		} else {
 			int_bounds(&vy, 0, doc_view->document->height - 1);
 			vs->y = vy;
 			set_link(doc_view);
-			mem_free(vs->goto_position);
-			vs->goto_position = NULL;
 		}
+
+		mem_free(vs->goto_position);
+		vs->goto_position = NULL;
+
+		if (vy == -1) return;
 	}
 	vx = vs->x;
 	vy = vs->y;

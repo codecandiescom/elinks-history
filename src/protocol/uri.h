@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.141 2004/08/03 09:37:25 jonas Exp $ */
+/* $Id: uri.h,v 1.142 2004/08/28 14:23:24 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -43,13 +43,13 @@ struct uri {
 
 	/* @protocollen should only be usable if @protocol is either
 	 * PROTOCOL_USER or an uri string should be composed. */
-	int protocollen:16;
-	int userlen:16;
-	int passwordlen:16;
-	int hostlen:16;
-	int portlen:8;
-	int datalen:16;
-	int fragmentlen:16;
+	unsigned int protocollen:16;
+	unsigned int userlen:16;
+	unsigned int passwordlen:16;
+	unsigned int hostlen:16;
+	unsigned int portlen:8;
+	unsigned int datalen:16;
+	unsigned int fragmentlen:16;
 
 	/* Flags */
 	unsigned int ipv6:1;	/* URI contains IPv6 host */

@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.60 2003/06/08 14:11:19 pasky Exp $ */
+/* $Id: error.c,v 1.61 2003/06/08 22:12:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,7 +65,7 @@ elinks_error(unsigned char *fmt, ...)
 
 	va_start(params, fmt);
 
-	size = snprintf(errbuf, maxsize, "\033[1mERROR\033[0m at %s:%d: ",
+	size = snprintf(errbuf, maxsize, "ERROR at %s:%d: ",
 			errfile, errline);
 	if (size < maxsize) {
 		strcat(errbuf, fmt);

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.235 2004/06/08 16:14:02 zas Exp $ */
+/* $Id: search.c,v 1.236 2004/06/08 16:21:23 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -207,7 +207,7 @@ get_search_data(struct document *document)
 }
 
 static int
-get_range(struct document *document, int y, int yw, int l,
+get_range(struct document *document, int y, int height, int l,
 	  struct search **s1, struct search **s2)
 {
 	register int i;
@@ -218,7 +218,7 @@ get_range(struct document *document, int y, int yw, int l,
 	*s1 = *s2 = NULL;
 	int_lower_bound(&y, 0);
 
-	for (i = y; i < y + yw && i < document->height; i++) {
+	for (i = y; i < y + height && i < document->height; i++) {
 		if (document->slines1[i] && (!*s1 || document->slines1[i] < *s1))
 			*s1 = document->slines1[i];
 		if (document->slines2[i] && (!*s2 || document->slines2[i] > *s2))
@@ -242,11 +242,12 @@ get_range(struct document *document, int y, int yw, int l,
 
 #ifdef HAVE_REGEX_H
 static int
-is_in_range_regex(struct document *document, int y, int yy,
+is_in_range_regex(struct document *document, int y, int height,
 		  unsigned char *text, int textlen,
 		  int *min, int *max,
 		  struct search *s1, struct search *s2)
 {
+	int yy = y + height;
 	unsigned char *doc;
 	unsigned char *doctmp;
 	int doclen;
@@ -358,11 +359,12 @@ lowered_string(unsigned char *text, register int textlen)
 }
 
 static int
-is_in_range_plain(struct document *document, int y, int yy,
+is_in_range_plain(struct document *document, int y, int height,
 		  unsigned char *text, int textlen,
 		  int *min, int *max,
 		  struct search *s1, struct search *s2)
 {
+	int yy = y + height;
 	unsigned char *txt;
 	int found = 0;
 	int case_sensitive = get_opt_int("document.browse.search.case");
@@ -411,7 +413,7 @@ srch_failed:
 }
 
 static int
-is_in_range(struct document *document, int y, int yw,
+is_in_range(struct document *document, int y, int height,
 	    unsigned char *text, int *min, int *max)
 {
 	struct search *s1, *s2;
@@ -423,15 +425,15 @@ is_in_range(struct document *document, int y, int yw,
 	*min = MAXINT, *max = 0;
 	textlen = strlen(text);
 
-	if (get_range(document, y, yw, textlen, &s1, &s2))
+	if (get_range(document, y, height, textlen, &s1, &s2))
 		return 0;
 
 #ifdef HAVE_REGEX_H
 	if (get_opt_int("document.browse.search.regex"))
-		return is_in_range_regex(document, y, y + yw, text, textlen,
+		return is_in_range_regex(document, y, height, text, textlen,
 					 min, max, s1, s2);
 #endif
-	return is_in_range_plain(document, y, y + yw, text, textlen,
+	return is_in_range_plain(document, y, height, text, textlen,
 				 min, max, s1, s2);
 }
 

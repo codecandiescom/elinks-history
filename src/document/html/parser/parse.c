@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.46 2004/06/21 14:19:21 miciah Exp $ */
+/* $Id: parse.c,v 1.47 2004/06/21 14:24:19 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -325,7 +325,7 @@ get_width(unsigned char *a, unsigned char *name, int limit_it)
 
 #undef WIDTH_PIXELS2CHARS
 
-	if (width < 0) width = 0;
+	int_lower_bound(&width, 0);
 
 	return width;
 }

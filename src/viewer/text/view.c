@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.571 2004/07/30 10:17:38 jonas Exp $ */
+/* $Id: view.c,v 1.572 2004/07/30 10:26:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -935,6 +935,61 @@ do_mouse_event(struct session *ses, struct term_event *ev,
 	evv.info.mouse.y -= doc_view->box.y;
 	return send_to_frame(ses, &evv);
 }
+
+static int
+send_mouse_event(struct session *ses, struct document_view *doc_view,
+		 struct term_event *ev)
+{
+	struct term_event_mouse *mouse = &ev->info.mouse;
+	int bars;
+
+	if (mouse->y == 0
+	    && check_mouse_action(ev, B_DOWN)
+	    && !check_mouse_wheel(ev)) {
+		struct window *m;
+
+		activate_bfu_technology(ses, -1);
+		m = ses->tab->term->windows.next;
+		m->handler(m, ev, 0);
+		goto x;
+	}
+
+	bars = 0;
+	if (ses->status.show_tabs_bar) bars++;
+	if (ses->status.show_status_bar) bars++;
+
+	if (ev->info.mouse.y == ses->tab->term->height - bars
+	    && check_mouse_action(ev, B_DOWN)) {
+		int tab = get_tab_number_by_xpos(ses->tab->term, mouse->x);
+
+		if (check_mouse_button(ev, B_WHEEL_UP)) {
+			switch_to_prev_tab(ses->tab->term);
+
+		} else if (check_mouse_button(ev, B_WHEEL_DOWN)) {
+			switch_to_next_tab(ses->tab->term);
+
+		} else if (tab != -1) {
+			switch_to_tab(ses->tab->term, tab, -1);
+
+			if (check_mouse_button(ev, B_RIGHT)) {
+				struct window *tab = get_current_tab(ses->tab->term);
+
+				tab_menu(tab->data, mouse->x, mouse->y, 1);
+			}
+		}
+
+		goto x;
+	}
+
+	if (!do_mouse_event(ses, ev, doc_view)
+	    && check_mouse_button(ev, B_RIGHT)) {
+		tab_menu(ses, mouse->x, mouse->y, 0);
+	}
+
+	return 0;
+x:
+	return 1;
+}
 #endif /* CONFIG_MOUSE */
 
 void
@@ -1003,51 +1058,8 @@ quit:
 	}
 #ifdef CONFIG_MOUSE
 	if (ev->ev == EVENT_MOUSE) {
-		struct term_event_mouse *mouse = &ev->info.mouse;
-		int bars;
-
-		if (mouse->y == 0
-		    && check_mouse_action(ev, B_DOWN)
-		    && !check_mouse_wheel(ev)) {
-			struct window *m;
-
-			activate_bfu_technology(ses, -1);
-			m = ses->tab->term->windows.next;
-			m->handler(m, ev, 0);
+		if (send_mouse_event(ses, doc_view, ev))
 			goto x;
-		}
-
-		bars = 0;
-		if (ses->status.show_tabs_bar) bars++;
-		if (ses->status.show_status_bar) bars++;
-
-		if (ev->info.mouse.y == ses->tab->term->height - bars
-		    && check_mouse_action(ev, B_DOWN)) {
-			int tab = get_tab_number_by_xpos(ses->tab->term, mouse->x);
-
-			if (check_mouse_button(ev, B_WHEEL_UP)) {
-				switch_to_prev_tab(ses->tab->term);
-
-			} else if (check_mouse_button(ev, B_WHEEL_DOWN)) {
-				switch_to_next_tab(ses->tab->term);
-
-			} else if (tab != -1) {
-				switch_to_tab(ses->tab->term, tab, -1);
-
-				if (check_mouse_button(ev, B_RIGHT)) {
-					struct window *tab = get_current_tab(ses->tab->term);
-
-					tab_menu(tab->data, mouse->x, mouse->y, 1);
-				}
-			}
-
-			goto x;
-		}
-
-		if (!do_mouse_event(ses, ev, doc_view)
-		    && check_mouse_button(ev, B_RIGHT)) {
-			tab_menu(ses, mouse->x, mouse->y, 0);
-		}
 	}
 #endif /* CONFIG_MOUSE */
 	return;

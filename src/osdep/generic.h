@@ -1,7 +1,7 @@
-/* $Id: generic.h,v 1.10 2003/10/27 02:49:02 pasky Exp $ */
+/* $Id: generic.h,v 1.11 2003/10/27 02:52:16 pasky Exp $ */
 
-#ifndef EL__OS_DEPX_H
-#define EL__OS_DEPX_H
+#ifndef EL__OSDEP_GENERIC_H
+#define EL__OSDEP_GENERIC_H
 
 #ifdef HAVE_LIMITS_H
 #include <limits.h> /* may contain PIPE_BUF definition on some systems */

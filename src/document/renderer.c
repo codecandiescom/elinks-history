@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.42 2004/04/03 14:13:47 jonas Exp $ */
+/* $Id: renderer.c,v 1.43 2004/04/09 03:10:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,7 +83,7 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 
 		sort_links(document);
 		if (!document->title)
-			document->title = get_uri_string(document->uri, ~URI_POST);
+			document->title = get_uri_string(document->uri, URI_PUBLIC);
 	}
 
 	doc_view->document = document;

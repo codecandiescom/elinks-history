@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.63 2004/04/03 14:32:15 jonas Exp $ */
+/* $Id: cgi.c,v 1.64 2004/04/09 03:10:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -195,7 +195,7 @@ set_vars(struct connection *conn, unsigned char *script)
 
 		case REFERER_SAME_URL:
 			{
-				char *url = get_uri_string(conn->uri, ~URI_POST);
+				char *url = get_uri_string(conn->uri, URI_PUBLIC);
 
 				setenv("HTTP_REFERER", url, 1);
 				mem_free(url);

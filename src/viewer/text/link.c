@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.154 2004/03/03 18:14:43 jonas Exp $ */
+/* $Id: link.c,v 1.155 2004/04/09 03:10:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -962,8 +962,7 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 		}
 
 		/* Add the uri with password and post info stripped */
-		add_string_uri_to_string(&str, uristring,
-					 ~(URI_PASSWORD | URI_POST));
+		add_string_uri_to_string(&str, uristring, URI_PUBLIC);
 		return str.source;
 	}
 
@@ -986,8 +985,7 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 		add_char_to_string(&str, ' ');
 
 		/* Add the uri with password and post info stripped */
-		add_string_uri_to_string(&str, link->form->action,
-					 ~(URI_PASSWORD | URI_POST));
+		add_string_uri_to_string(&str, link->form->action, URI_PUBLIC);
 		return str.source;
 	}
 
@@ -1053,8 +1051,7 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 			add_char_to_string(&str, ' ');
 
 			/* Add the uri with password and post info stripped */
-			add_string_uri_to_string(&str, link->form->action,
-						 ~(URI_PASSWORD | URI_POST));
+			add_string_uri_to_string(&str, link->form->action, URI_PUBLIC);
 		}
 
 		return str.source;

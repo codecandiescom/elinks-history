@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.254 2004/04/08 13:05:46 jonas Exp $ */
+/* $Id: download.c,v 1.255 2004/04/09 03:10:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -273,7 +273,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 
 		if (!errmsg) goto abort;
 
-		url = get_uri_string(file_download->uri, ~URI_POST);
+		url = get_uri_string(file_download->uri, URI_PUBLIC);
 
 		if (!url) goto abort;
 
@@ -299,7 +299,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 	}
 
 	if (file_download->notify) {
-		unsigned char *url = get_uri_string(file_download->uri, ~URI_POST);
+		unsigned char *url = get_uri_string(file_download->uri, URI_PUBLIC);
 
 		/* This is apparently a little racy. Deleting the box item will
 		 * update the download browser _after_ the notification dialog

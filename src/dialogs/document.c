@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.84 2004/04/03 14:13:47 jonas Exp $ */
+/* $Id: document.c,v 1.85 2004/04/09 03:10:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,7 @@ loc_msg(struct terminal *term, struct location *location,
 	add_to_string(&msg, ": ");
 
 	/* Add the uri with password and post info stripped */
-	add_uri_to_string(&msg, location->vs.uri, ~(URI_PASSWORD | URI_POST));
+	add_uri_to_string(&msg, location->vs.uri, URI_PUBLIC);
 
 	/* We don't preserve this in url. */
 	if (location->vs.goto_position) {

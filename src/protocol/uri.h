@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.92 2004/04/09 03:05:02 jonas Exp $ */
+/* $Id: uri.h,v 1.93 2004/04/09 03:10:26 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -89,6 +89,11 @@ enum uri_component {
 	URI_DEFAULT_PORT	= (1 << 5),
 	URI_DATA		= (1 << 6),
 	URI_POST		= (1 << 7),
+
+	/* Some predefined classes for formatting of URIs */
+
+	/* Used for public display either in dialogs or sent over the Net */
+	URI_PUBLIC	 = ~(URI_PASSWORD | URI_DEFAULT_PORT | URI_POST),
 };
 
 

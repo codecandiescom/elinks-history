@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.43 2004/04/08 02:52:52 jonas Exp $ */
+/* $Id: download.c,v 1.44 2004/04/09 03:10:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,7 +174,7 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 
 	if (!msg) return;
 
-	url = get_uri_string(file_download->uri, ~URI_POST);
+	url = get_uri_string(file_download->uri, URI_PUBLIC);
 	if (!url) {
 		mem_free(msg);
 		return;
@@ -295,7 +295,7 @@ get_file_download_info(struct listbox_item *item, struct terminal *term,
 	struct file_download *file_download = item->udata;
 
 	return (listbox_info == LISTBOX_URI)
-		? get_uri_string(file_download->uri, ~URI_POST) : NULL;
+		? get_uri_string(file_download->uri, URI_PUBLIC) : NULL;
 }
 
 static int

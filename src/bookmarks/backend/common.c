@@ -1,5 +1,5 @@
 /* Internal bookmarks support - file format backends multiplexing */
-/* $Id: common.c,v 1.20 2004/11/19 16:42:35 zas Exp $ */
+/* $Id: common.c,v 1.21 2005/03/30 12:42:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,9 @@
 
 /* Note that the numbering is static, that means that you have to provide at
  * least dummy NULL handlers even when no support is compiled in. */
-
+/* XXX: keep original order since we use bookmarks.file_format option value
+ * as index. So it means you should add any new backend just before the
+ * ending NULL. */
 static struct bookmarks_backend *bookmarks_backends[] = {
 	&default_bookmarks_backend,
 #ifdef CONFIG_XBEL_BOOKMARKS
@@ -42,15 +44,16 @@ static struct bookmarks_backend *bookmarks_backends[] = {
 void
 bookmarks_read(void)
 {
-	int backend = get_opt_int("bookmarks.file_format");
+	int backend_num = get_opt_int("bookmarks.file_format");
+	struct bookmarks_backend *backend = bookmarks_backends[backend_num];
 	unsigned char *file_name;
 	FILE *f;
 
-	if (!bookmarks_backends[backend]
-	    || !bookmarks_backends[backend]->read
-	    || !bookmarks_backends[backend]->filename) return;
+	if (!backend
+	    || !backend->read
+	    || !backend->filename) return;
 
-	file_name = bookmarks_backends[backend]->filename(0);
+	file_name = backend->filename(0);
 	if (!file_name) return;
 	if (elinks_home) {
 		file_name = straconcat(elinks_home, file_name, NULL);
@@ -61,7 +64,7 @@ bookmarks_read(void)
 	if (elinks_home) mem_free(file_name);
 	if (!f) return;
 
-	bookmarks_backends[backend]->read(f);
+	backend->read(f);
 
 	fclose(f);
 	bookmarks_unset_dirty();
@@ -70,20 +73,21 @@ bookmarks_read(void)
 void
 bookmarks_write(struct list_head *bookmarks_list)
 {
-	int backend = get_opt_int("bookmarks.file_format");
+	int backend_num = get_opt_int("bookmarks.file_format");
+	struct bookmarks_backend *backend = bookmarks_backends[backend_num];
 	struct secure_save_info *ssi;
 	unsigned char *file_name;
 
 	if (!bookmarks_are_dirty()) return;
-	if (!bookmarks_backends[backend]
-	    || !bookmarks_backends[backend]->write
+	if (!backend
+	    || !backend->write
 	    || !elinks_home
-	    || !bookmarks_backends[backend]->filename) return;
+	    || !backend->filename) return;
 
 	/* We do this two-passes because we want backend to possibly decide to
 	 * return NULL if it's not suitable to save the bookmarks (otherwise
 	 * they would be just truncated to zero by secure_open()). */
-	file_name = bookmarks_backends[backend]->filename(1);
+	file_name = backend->filename(1);
 	if (!file_name) return;
 	file_name = straconcat(elinks_home, file_name, NULL);
 	if (!file_name) return;
@@ -92,7 +96,7 @@ bookmarks_write(struct list_head *bookmarks_list)
 	mem_free(file_name);
 	if (!ssi) return;
 
-	bookmarks_backends[backend]->write(ssi, bookmarks_list);
+	backend->write(ssi, bookmarks_list);
 
 	if (!secure_close(ssi)) bookmarks_unset_dirty();
 }

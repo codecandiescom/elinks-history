@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.20 2003/06/08 13:21:41 jonas Exp $ */
+/* $Id: memdebug.c,v 1.21 2003/06/08 22:17:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -249,7 +249,7 @@ patience(unsigned char *file, int line, unsigned char *of)
 #ifdef CRASH_IF_ALLOC_MAXTRIES
 	errfile = file;
 	errline = line;
-	int_error("Out of memory (%s returned NULL) after %d tries,"
+	elinks_internal("Out of memory (%s returned NULL) after %d tries,"
 		" I give up. See ya on the other side.",
 		of, alloc_try);
 #else

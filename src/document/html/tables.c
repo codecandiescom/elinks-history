@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.48 2003/06/30 23:20:31 zas Exp $ */
+/* $Id: tables.c,v 1.49 2003/06/30 23:23:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,11 +169,13 @@ get_c_width(unsigned char *attr, int *w, int sh)
 	unsigned char *al = get_attr_val(attr, "width");
 
 	if (al) {
-		if (*al && al[strlen(al) - 1] == '*') {
+		int len = strlen(al);
+
+		if (len && al[len - 1] == '*') {
 			unsigned char *en;
 			int n;
 
-			al[strlen(al) - 1] = 0;
+			al[len - 1] = '\0';
 			errno = 0;
 			n = strtoul(al, (char **)&en, 10);
 			if (!errno && n >= 0 && !*en) *w = W_REL - n;

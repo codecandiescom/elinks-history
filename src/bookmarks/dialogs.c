@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.216 2005/03/30 10:11:32 zas Exp $ */
+/* $Id: dialogs.c,v 1.217 2005/03/30 10:21:37 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -557,6 +557,23 @@ test_search(struct listbox_item *item, void *data_, int *offset) {
 	return 0;
 }
 
+static int
+memorize_last_searched_bookmark(struct bookmark_search_ctx *ctx)
+{
+	/* Memorize last searched title */
+	mem_free_set(&bm_last_searched_title, stracpy(ctx->title));
+	if (!bm_last_searched_title) return 0;
+
+	/* Memorize last searched url */
+	mem_free_set(&bm_last_searched_url, stracpy(ctx->url));
+	if (!bm_last_searched_url) {
+		mem_free(bm_last_searched_title);
+		return 0;
+	}
+
+	return 1;
+}
+
 /* Search bookmarks */
 static void
 bookmark_search_do(void *data)
@@ -575,16 +592,8 @@ bookmark_search_do(void *data)
 	if (!ctx.title || !ctx.url)
 		return;
 
-	/* Memorize last searched title */
-	mem_free_set(&bm_last_searched_title, stracpy(ctx.title));
-	if (!bm_last_searched_title) return;
-
-	/* Memorize last searched url */
-	mem_free_set(&bm_last_searched_url, stracpy(ctx.url));
-	if (!bm_last_searched_url) {
-		mem_free(bm_last_searched_title);
+	if (!memorize_last_searched_bookmark(&ctx))
 		return;
-	}
 
 	dlg_data = (struct dialog_data *) dlg->udata;
 	box = get_dlg_listbox_data(dlg_data);

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.30 2003/01/19 20:03:23 pasky Exp $ */
+/* $Id: core.c,v 1.31 2003/04/18 07:44:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,6 +35,7 @@
 #include "lowlevel/select.h"
 #include "lowlevel/terminal.h"
 #include "lua/core.h"
+#include "protocol/url.h"
 #include "sched/history.h"
 #include "sched/location.h"
 #include "sched/session.h"
@@ -74,8 +75,19 @@ l_current_url(LS)
 {
 	struct view_state *vs;
 
-	if (have_location(ses) && (vs = ses ? &cur_loc(ses)->vs : 0))
-		lua_pushstring(S, vs->url);
+	if (have_location(ses) && (vs = ses ? &cur_loc(ses)->vs : 0)) {
+		unsigned char *url = stracpy(vs->url);
+
+		if (url) {
+			unsigned char *postchar = strchr(url, POST_CHAR);
+
+			if (postchar) *postchar = '\0';
+
+			lua_pushstring(S, url);
+
+			mem_free(url);
+		}
+	}
 	else
 		lua_pushnil(S);
 

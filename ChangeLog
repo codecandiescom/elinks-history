@@ -1,3 +1,83 @@
+Wed Apr 21 13:48:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	strlcmp_device(): @n is useless so removed, @d was introduced to
+	prevent double calculation of difference.  
+
+Wed Apr 21 13:27:15 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile.am:
+
+	Remove configure-do relict from EXTRA_DIST. It looks like this was
+	breaking -current tarballs build for some three months... :( 
+
+Wed Apr 21 09:21:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/perl/core.c:
+
+	Minor cleanup.  
+
+Wed Apr 21 09:07:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/perl/core.c:
+
+	Let preprocessor do the job: snprintf() is useless to concatenate
+	constant strings.  
+
+Wed Apr 21 08:59:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/perl/core.c:
+
+	Fix usage of PERL_SYS_INIT3() and PERL_SYS_TERM() macros, prevent
+	unused variables warnings, cleanup + comments.  
+
+Wed Apr 21 01:10:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	mainmenu_mouse_handler(): Specialize loop to only care if the item
+	has left text.  
+
+Wed Apr 21 00:42:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	mainmenu_mouse_handler(): fubar'ed patch that rewrites the menu item
+	loop moving testing of whether mouse button was pressed so we should
+	scroll out of the loop. Comments should hopefully make it more
+	clear.  
+
+Wed Apr 21 00:21:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	mainmenu_mouse_handler(): Use foreach_menu_item.  
+
+Wed Apr 21 00:00:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	mainmenu_mouse_handler(): Decrease indentation.  
+
+Tue Apr 20 23:54:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	Use minor hacked scroll_menu() for mainmenus.  
+
+Tue Apr 20 23:32:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	Menu drawing cleanups.  
+
+Tue Apr 20 23:23:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	draw_menu_left_text(): Use draw_text().  
+
 Tue Apr 20 17:02:49 2004  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/renderer.c:

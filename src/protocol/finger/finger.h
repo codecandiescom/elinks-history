@@ -1,7 +1,7 @@
-/* $Id: finger.h,v 1.1 2004/10/12 15:28:12 zas Exp $ */
+/* $Id: finger.h,v 1.2 2005/02/25 18:40:24 jonas Exp $ */
 
-#ifndef EL__PROTOCOL_FINGER_H
-#define EL__PROTOCOL_FINGER_H
+#ifndef EL__PROTOCOL_FINGER_FINGER_H
+#define EL__PROTOCOL_FINGER_FINGER_H
 
 #include "modules/module.h"
 #include "protocol/protocol.h"

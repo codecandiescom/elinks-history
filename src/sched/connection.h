@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.65 2004/04/24 12:21:01 jonas Exp $ */
+/* $Id: connection.h,v 1.66 2004/05/09 23:33:14 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -88,6 +88,10 @@ enum connection_state {
 	S_NO_SSL		= -10401,
 
 	S_NO_JAVASCRIPT		= -10500,
+
+	S_NO_FINGER		= -10600,
+
+	S_NO_SMB		= -10700,
 };
 
 struct remaining_info {

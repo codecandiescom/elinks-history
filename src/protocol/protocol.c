@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.49 2004/05/07 18:14:47 jonas Exp $ */
+/* $Id: protocol.c,v 1.50 2004/05/09 23:33:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,6 +137,16 @@ generic_external_protocol_handler(struct session *ses, struct uri *uri)
 #ifndef CONFIG_SSL
 	case PROTOCOL_HTTPS:
 		state = S_NO_SSL;
+		break;
+#endif
+#ifndef CONFIG_FINGER
+	case PROTOCOL_FINGER:
+		state = S_NO_FINGER;
+		break;
+#endif
+#ifndef CONFIG_SMB
+	case PROTOCOL_SMB:
+		state = S_NO_SMB;
 		break;
 #endif
 	default:

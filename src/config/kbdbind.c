@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.9 2002/05/05 14:52:53 zas Exp $ */
+/* $Id: kbdbind.c,v 1.10 2002/05/05 16:19:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,24 +36,33 @@ struct keybinding {
 
 static struct list_head keymaps[KM_MAX];
 
-static void delete_keybinding(enum keymap km, long x, long y)
+static void
+delete_keybinding(enum keymap km, long x, long y)
 {
 	struct keybinding *kb;
-	foreach(kb, keymaps[km]) if (kb->x == x && kb->y == y) {
+
+	foreach(kb, keymaps[km]) {
+		if (kb->x == x && kb->y == y) {
 #ifdef HAVE_LUA
-		if (kb->func_ref != LUA_NOREF) lua_unref(lua_state, kb->func_ref);
+			if (kb->func_ref != LUA_NOREF)
+				lua_unref(lua_state, kb->func_ref);
 #endif
-		del_from_list(kb);
-		mem_free(kb);
-		break;
+			del_from_list(kb);
+			mem_free(kb);
+			break;
+		}
 	}
 }
 
-static void add_keybinding(enum keymap km, int act, long x, long y, int func_ref)
+static void
+add_keybinding(enum keymap km, int act, long x, long y, int func_ref)
 {
 	struct keybinding *kb;
+
 	delete_keybinding(km, x, y);
-	if ((kb = mem_alloc(sizeof(struct keybinding)))) {
+
+	kb = mem_alloc(sizeof(struct keybinding));
+	if (kb) {
 		kb->act = act;
 		kb->x = x;
 		kb->y = y;
@@ -62,28 +71,42 @@ static void add_keybinding(enum keymap km, int act, long x, long y, int func_ref
 	}
 }
 
-void init_keymaps()
+void
+init_keymaps()
 {
     	enum keymap i;
-	for (i = 0; i < KM_MAX; i++) init_list(keymaps[i]);
+
+	for (i = 0; i < KM_MAX; i++)
+		init_list(keymaps[i]);
+
 	add_default_keybindings();
 }
 
-void free_keymaps()
+void
+free_keymaps()
 {
 	enum keymap i;
-	for (i = 0; i < KM_MAX; i++) free_list(keymaps[i]);
+
+	for (i = 0; i < KM_MAX; i++)
+		free_list(keymaps[i]);
 }
 
-int kbd_action(enum keymap kmap, struct event *ev, int *func_ref)
+int
+kbd_action(enum keymap kmap, struct event *ev, int *func_ref)
 {
 	struct keybinding *kb;
-	if (ev->ev == EV_KBD) foreach(kb, keymaps[kmap])
-		if (ev->x == kb->x && ev->y == kb->y) {
-			if (kb->act == ACT_LUA_FUNCTION && func_ref)
-				*func_ref = kb->func_ref;
-			return kb->act;
+
+	if (ev->ev == EV_KBD) {
+		foreach(kb, keymaps[kmap]) {
+			if (ev->x == kb->x && ev->y == kb->y) {
+				if (kb->act == ACT_LUA_FUNCTION && func_ref)
+					*func_ref = kb->func_ref;
+
+				return kb->act;
+			}
 		}
+	}
+
 	return -1;
 }
 
@@ -96,15 +119,20 @@ struct strtonum {
 	long num;
 };
 
-static long strtonum(struct strtonum *table, char *s)
+static long
+strtonum(struct strtonum *table, char *s)
 {
 	struct strtonum *p;
+
 	for (p = table; p->str; p++)
-		if (!strcmp(p->str, s)) return p->num;
+		if (!strcmp(p->str, s))
+			return p->num;
+
 	return -1;
 }
 
-static int parse_keymap(unsigned char *s)
+static int
+parse_keymap(unsigned char *s)
 {
 	struct strtonum table[] = {
 		{ "main", KM_MAIN },
@@ -112,10 +140,12 @@ static int parse_keymap(unsigned char *s)
 		{ "menu", KM_MENU },
 		{ NULL, 0 }
 	};
+
 	return strtonum(table, s);
 }
 
-long parse_key(unsigned char *s)
+long
+parse_key(unsigned char *s)
 {
 	struct strtonum table[] = {
 		{ "Enter", KBD_ENTER },
@@ -150,89 +180,101 @@ long parse_key(unsigned char *s)
 	return (strlen(s) == 1) ? *s : strtonum(table, s);
 }
 
-static int parse_keystroke(unsigned char *s, long *x, long *y)
+static int
+parse_keystroke(unsigned char *s, long *x, long *y)
 {
 	*y = 0;
-	if (!strncmp(s, "Shift-", 6)) *y |= KBD_SHIFT, s += 6;
-	else if (!strncmp(s, "Ctrl-", 5)) *y |= KBD_CTRL, s += 5;
-	else if (!strncmp(s, "Alt-", 4)) *y |= KBD_ALT, s += 4;
-	return ((*x = parse_key(s)) < 0) ? -1 : 0;
+	if (!strncmp(s, "Shift-", 6)) {
+		*y |= KBD_SHIFT;
+		s += 6;
+	} else if (!strncmp(s, "Ctrl-", 5)) {
+		*y |= KBD_CTRL;
+		s += 5;
+	} else if (!strncmp(s, "Alt-", 4)) {
+		*y |= KBD_ALT;
+		s += 4;
+	}
+
+	*x = parse_key(s);
+	return (*x < 0) ? -1 : 0;
 }
 
-static int parse_act(unsigned char *s)
+static int
+parse_act(unsigned char *s)
 {
-	int i;
 	/* Please keep this table in alphabetical order, and in sync with
 	 * the ACT_* constants in kbdbind.h.  */
-	unsigned char *table[] = {
-		"add-bookmark",
-		"auto-complete",
-		"back",
-		"backspace",
-		"bookmark-manager",
-		"cookies-load",
-		"copy-clipboard",
-		"cut-clipboard",
-		"delete",
-		"document-info",
-		"down",
-		"download",
-		"edit",
-		"end",
-		"enter",
-		"enter-reload",
-		"file-menu",
-		"find-next",
-		"find-next-back",
-		"goto-url",
-		"goto-url-current",
-		"goto-url-current-link",
-		"header-info",
-		"history-manager",
-		"home",
-		"kill-to-bol",
-		"kill-to-eol",
-		"left",
-		"link-menu",
-		"lua-console",
-		" *lua-function*", /* internal use only */
-		"menu",
-		"next-frame",
-		"open-new-window",
-		"open-link-in-new-window",
-		"page-down",
-		"page-up",
-		"paste-clipboard",
-		"previous-frame",
-		"quit",
-		"really-quit",
-		"reload",
-		"right",
-		"scroll-down",
-		"scroll-left",
-		"scroll-right",
-		"scroll-up",
-		"search",
-		"search-back",
-		"toggle-display-images",
-		"toggle-display-tables",
-		"toggle-html-plain",
-		"unback",
-		"up",
-		"view-image",
-		"zoom-frame",
-		NULL
+	struct strtonum table[] = {
+		{ "add-bookmark", ACT_ADD_BOOKMARK },
+		{ "auto-complete", ACT_AUTO_COMPLETE },
+		{ "back", ACT_BACK },
+		{ "backspace", ACT_BACKSPACE },
+		{ "bookmark-manager", ACT_BOOKMARK_MANAGER },
+		{ "cookies-load", ACT_COOKIES_LOAD },
+		{ "copy-clipboard", ACT_COPY_CLIPBOARD },
+		{ "cut-clipboard", ACT_CUT_CLIPBOARD },
+		{ "delete", ACT_DELETE },
+		{ "document-info", ACT_DOCUMENT_INFO },
+		{ "down", ACT_DOWN },
+		{ "download", ACT_DOWNLOAD },
+		{ "edit", ACT_EDIT },
+		{ "end", ACT_END },
+		{ "enter", ACT_ENTER },
+		{ "enter-reload", ACT_ENTER_RELOAD },
+		{ "file-menu", ACT_FILE_MENU },
+		{ "find-next", ACT_FIND_NEXT },
+		{ "find-next-back", ACT_FIND_NEXT_BACK },
+		{ "goto-url", ACT_GOTO_URL },
+		{ "goto-url-current", ACT_GOTO_URL_CURRENT },
+		{ "goto-url-current-link", ACT_GOTO_URL_CURRENT_LINK },
+		{ "header-info", ACT_HEADER_INFO },
+		{ "history-manager", ACT_HISTORY_MANAGER },
+		{ "home", ACT_HOME },
+		{ "kill-to-bol", ACT_KILL_TO_BOL },
+		{ "kill-to-eol", ACT_KILL_TO_EOL },
+		{ "left", ACT_LEFT },
+		{ "link-menu", ACT_LINK_MENU },
+		{ "lua-console", ACT_LUA_CONSOLE },
+		{ " *lua-function*", ACT_LUA_FUNCTION }, /* internal use only */
+		{ "menu", ACT_MENU },
+		{ "next-frame", ACT_NEXT_FRAME },
+		{ "open-new-window", ACT_OPEN_NEW_WINDOW },
+		{ "open-link-in-new-window", ACT_OPEN_LINK_IN_NEW_WINDOW },
+		{ "page-down", ACT_PAGE_DOWN },
+		{ "page-up", ACT_PAGE_UP },
+		{ "paste-clipboard", ACT_PASTE_CLIPBOARD },
+		{ "previous-frame", ACT_PREVIOUS_FRAME },
+		{ "quit", ACT_QUIT },
+		{ "really-quit", ACT_REALLY_QUIT },
+		{ "reload", ACT_RELOAD },
+		{ "right", ACT_RIGHT },
+		{ "scroll-down", ACT_SCROLL_DOWN },
+		{ "scroll-left", ACT_SCROLL_LEFT },
+		{ "scroll-right", ACT_SCROLL_RIGHT },
+		{ "scroll-up", ACT_SCROLL_UP },
+		{ "search", ACT_SEARCH },
+		{ "search-back", ACT_SEARCH_BACK },
+		{ "toggle-display-images", ACT_TOGGLE_DISPLAY_IMAGES },
+		{ "toggle-display-tables", ACT_TOGGLE_DISPLAY_TABLES },
+		{ "toggle-html-plain", ACT_TOGGLE_HTML_PLAIN },
+		{ "unback", ACT_UNBACK },
+		{ "up", ACT_UP },
+		{ "view-image", ACT_VIEW_IMAGE },
+		{ "zoom-frame", ACT_ZOOM_FRAME },
+		{ NULL, 0 }
 	};
-	for (i = 0; table[i]; i++) if (!strcmp(table[i], s)) return i;
-	return -1;
+
+	return strtonum(table, s);
 }
+
 
 /*
  * Config file readers.
  */
 
 /* bind KEYMAP KEYSTROKE ACTION */
-unsigned char *bind_rd(struct option *o, unsigned char *line)
+unsigned char *
+bind_rd(struct option *o, unsigned char *line)
 {
 	unsigned char *err = NULL;
 	unsigned char *ckmap;
@@ -260,11 +302,13 @@ unsigned char *bind_rd(struct option *o, unsigned char *line)
 	if (cact) mem_free(cact);
 	if (ckey) mem_free(ckey);
 	if (ckmap) mem_free(ckmap);
+
 	return err;
 }
 
 /* unbind KEYMAP KEYSTROKE */
-unsigned char *unbind_rd(struct option *o, unsigned char *line)
+unsigned char *
+unbind_rd(struct option *o, unsigned char *line)
 {
 	unsigned char *err = NULL;
 	unsigned char *ckmap;
@@ -285,6 +329,7 @@ unsigned char *unbind_rd(struct option *o, unsigned char *line)
 
 	if (ckey) mem_free(ckey);
 	if (ckmap) mem_free(ckmap);
+
 	return err;
 }
 
@@ -293,14 +338,15 @@ unsigned char *unbind_rd(struct option *o, unsigned char *line)
  */
 
 #ifdef HAVE_LUA
-unsigned char *bind_lua_func(unsigned char *ckmap, unsigned char *ckey, int func_ref)
+unsigned char *
+bind_lua_func(unsigned char *ckmap, unsigned char *ckey, int func_ref)
 {
 	unsigned char *err = NULL;
-	int kmap;
 	long x, y;
 	int act;
+	int kmap = parse_keymap(ckmap);
 
-	if ((kmap = parse_keymap(ckmap)) < 0)
+	if (kmap < 0)
 		err = "Unrecognised keymap";
 	else if (parse_keystroke(ckey, &x, &y) < 0)
 		err = "Error parsing keystroke";
@@ -429,10 +475,17 @@ static struct default_kb default_menu_keymap[] = {
 	{ 0, 0, 0}
 };
 
-static void add_default_keybindings()
+static void
+add_default_keybindings()
 {
 	struct default_kb *kb;
-	for (kb = default_main_keymap; kb->x; kb++) add_keybinding(KM_MAIN, kb->act, kb->x, kb->y, LUA_NOREF);
-    	for (kb = default_edit_keymap; kb->x; kb++) add_keybinding(KM_EDIT, kb->act, kb->x, kb->y, LUA_NOREF);
-    	for (kb = default_menu_keymap; kb->x; kb++) add_keybinding(KM_MENU, kb->act, kb->x, kb->y, LUA_NOREF);
+
+	for (kb = default_main_keymap; kb->x; kb++)
+		add_keybinding(KM_MAIN, kb->act, kb->x, kb->y, LUA_NOREF);
+
+	for (kb = default_edit_keymap; kb->x; kb++)
+		add_keybinding(KM_EDIT, kb->act, kb->x, kb->y, LUA_NOREF);
+
+	for (kb = default_menu_keymap; kb->x; kb++)
+		add_keybinding(KM_MENU, kb->act, kb->x, kb->y, LUA_NOREF);
 }

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.39 2003/12/01 19:49:11 jonas Exp $ */
+/* $Id: kbd.c,v 1.40 2003/12/09 22:59:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -449,6 +449,8 @@ dispatch_special(unsigned char *text)
 {
 	switch (text[0]) {
 		case TERM_FN_TITLE:
+			if (ditrm && !ditrm->orig_title)
+				ditrm->orig_title = get_window_title();
 			set_window_title(text + 1);
 			break;
 		case TERM_FN_RESIZE:
@@ -528,8 +530,6 @@ ex:
 	}
 
 	if (!*path.source) {
-		if (delete.source[0] == TERM_FN_TITLE)
-	               itrm->orig_title = get_window_title();
 		dispatch_special(delete.source);
 			
 	} else {

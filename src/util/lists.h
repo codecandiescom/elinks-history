@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.21 2003/05/24 21:15:47 pasky Exp $ */
+/* $Id: lists.h,v 1.22 2003/05/24 21:32:25 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -22,6 +22,12 @@
 #ifndef LISTDEBUG
 
 #define list_magic_set(x) /* no magic */
+
+
+#define list_magic_correct(x) (1)
+#define list_magic_check(x, where) /* no magic */
+#define list_magic_chkbool(x, where) (1)
+
 
 struct list_head {
 	void *next;
@@ -122,14 +128,29 @@ do { \
 #define LISTMAGIC1 ((void *) 0xdadababa)
 #define LISTMAGIC2 ((void *) 0xd0d0b0b0)
 
+
 #define list_magic_set(x) \
 do { \
 	(x).magic1 = LISTMAGIC1; \
 	(x).magic2 = LISTMAGIC2; \
 } while (0)
 
+
+/* Backend for list_magic_check() and list_magic_chkbool(). */
+#define list_magic_correct(x) ((x).magic1 == LISTMAGIC1 && (x).magic2 == LISTMAGIC2)
+
+#define list_magic_check(x, where) \
+do { \
+	if (!list_magic_correct(*(x))) \
+		list_magic_error(where, x); \
+} while (0)
+
+#define list_magic_chkbool(x, where) (list_magic_correct(x) || (list_magic_error(where, x), 1))
+
+
 /* I hope #xyz is ANSI C ;-). Or.. oh well, it's just debug :^). --pasky */
 #define list_magic_error(where,what) list_magic_error_(where, #what, __FILE__, __LINE__)
+
 
 struct list_head {
 	void *magic1;
@@ -154,14 +175,11 @@ do { \
 } while (0)
 
 
-#define list_empty(x) \
-	((((x).magic1 == LISTMAGIC1 && (x).magic2 == LISTMAGIC2) \
-	  || (list_magic_error("list_empty", x), 1)) && (x).next == &(x))
+#define list_empty(x) (list_magic_chkbool(x, "list_empty") && (x).next == &(x))
 
 #define del_from_list(x) \
 do { \
-	if ((x)->magic1 != LISTMAGIC1 || (x)->magic2 != LISTMAGIC2) \
-		list_magic_error("del_from_list", x); \
+	list_magic_check(x, "del_from_list"); \
 	do_not_optimize_here(x); \
 	((struct list_head *) (x)->next)->prev = (x)->prev; \
 	((struct list_head *) (x)->prev)->next = (x)->next; \
@@ -174,8 +192,7 @@ do { \
 
 #define add_at_pos(p,x) \
 do { \
-	if ((p)->magic1 != LISTMAGIC1 || (p)->magic2 != LISTMAGIC2) \
-		list_magic_error("add_at_pos", p); \
+	list_magic_check(p, "add_at_pos"); \
 	list_magic_set(*(x)); \
 	do_not_optimize_here(p); \
 	(x)->next = (p)->next; \
@@ -220,8 +237,7 @@ do { \
 
 #define free_list(l) \
 do { \
-	if ((l).magic1 != LISTMAGIC1 || (l).magic2 != LISTMAGIC2) \
-		list_magic_error("free_list", &l); \
+	list_magic_check(&(l), "free_list"); \
 	do_not_optimize_here(&l); \
 	while ((l).next != &(l)) { \
 		struct list_head *a__ = (l).next; \

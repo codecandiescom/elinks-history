@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.246 2004/07/15 15:54:20 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.247 2004/07/20 00:14:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -441,7 +441,6 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "copy-clipboard", ACT_MAIN_COPY_CLIPBOARD, DACT(N_("Copy text to clipboard")) },
 	{ "document-info", ACT_MAIN_DOCUMENT_INFO, DACT(N_("Show information about the current page")) },
 	{ "download-manager", ACT_MAIN_DOWNLOAD_MANAGER, DACT(N_("Open download manager")) },
-	{ "edit", ACT_MAIN_EDIT, DACT(N_("Begin editing")) }, /* FIXME */
 	{ "exmode", ACT_MAIN_EXMODE, DACT(N_("Enter ex-mode (command line)")) },
 	{ "file-menu", ACT_MAIN_FILE_MENU, DACT(N_("Open the File menu")) },
 	{ "find-next", ACT_MAIN_FIND_NEXT, DACT(N_("Find the next occurrence of the current search text")) },
@@ -555,7 +554,7 @@ static struct strtonum edit_action_table[EDIT_ACTIONS + 1] = {
 	{ "cut-clipboard", ACT_EDIT_CUT_CLIPBOARD, DACT(N_("Delete text from clipboard")) },
 	{ "delete", ACT_EDIT_DELETE, DACT(N_("Delete character under cursor")) },
 	{ "down", ACT_EDIT_DOWN, DACT(N_("Move cursor downwards")) },
-	{ "edit", ACT_EDIT_EDIT, DACT(N_("Begin editing")) }, /* FIXME */
+	{ "edit", ACT_EDIT_EDIT, DACT(N_("Open in external editor")) }, /* FIXME */
 	{ "end", ACT_EDIT_END, DACT(N_("Go to the end of the page/line")) },
 	{ "end-of-buffer", ACT_EDIT_END_OF_BUFFER, DACT(N_("Go to the last line of the buffer")) },
 	{ "enter", ACT_EDIT_ENTER, DACT(N_("Follow the current link")) },

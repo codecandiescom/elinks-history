@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.279 2004/07/16 07:00:07 miciah Exp $ */
+/* $Id: link.c,v 1.280 2004/07/20 00:14:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1082,8 +1082,16 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 		case FC_TEXTAREA:
 			if (!form_field_is_readonly(fc)) {
-				add_to_menu(&mi, N_("Open in ~external editor"), NULL, ACT_MAIN_EDIT,
-					    (menu_func) menu_textarea_edit, NULL, 0);
+				struct string keystroke;
+
+				if (init_string(&keystroke))
+					add_keystroke_to_string(&keystroke,
+								ACT_EDIT_EDIT,
+								KEYMAP_EDIT);
+
+				add_to_menu(&mi, N_("Open in ~external editor"),
+					    keystroke.source, ACT_MAIN_NONE,
+					    (menu_func) menu_textarea_edit, NULL, FREE_RTEXT);
 			}
 			/* Fall through */
 		default:

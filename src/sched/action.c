@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.89 2004/07/15 15:54:20 jonas Exp $ */
+/* $Id: action.c,v 1.90 2004/07/20 00:14:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -498,7 +498,6 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			do_frame_action(ses, set_frame, 0);
 			break;
 
-		case ACT_MAIN_EDIT:
 		case ACT_MAIN_JUMP_TO_LINK:
 		case ACT_MAIN_MARK_SET:
 		case ACT_MAIN_MARK_GOTO:

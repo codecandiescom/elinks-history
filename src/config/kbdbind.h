@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.129 2004/07/15 15:54:20 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.130 2004/07/20 00:14:41 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -45,7 +45,6 @@ enum main_action {
 	ACT_MAIN_COPY_CLIPBOARD,
 	ACT_MAIN_DOCUMENT_INFO,
 	ACT_MAIN_DOWNLOAD_MANAGER,
-	ACT_MAIN_EDIT,
 	ACT_MAIN_EXMODE,
 	ACT_MAIN_FILE_MENU,
 	ACT_MAIN_FIND_NEXT,

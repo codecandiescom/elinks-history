@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.197 2004/06/12 19:24:55 jonas Exp $ */
+/* $Id: link.c,v 1.198 2004/06/13 00:06:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -842,7 +842,7 @@ end:
 
 /* Return current link's title. Pretty trivial. */
 unsigned char *
-print_current_link_title_do(struct document_view *doc_view, struct terminal *term)
+get_current_link_title(struct document_view *doc_view, struct terminal *term)
 {
 	struct link *link;
 
@@ -858,7 +858,7 @@ print_current_link_title_do(struct document_view *doc_view, struct terminal *ter
 }
 
 unsigned char *
-print_current_link_do(struct document_view *doc_view, struct terminal *term)
+get_current_link_info(struct document_view *doc_view, struct terminal *term)
 {
 	struct link *link;
 
@@ -909,5 +909,5 @@ print_current_link(struct session *ses)
 	assert(doc_view);
 	if_assert_failed return NULL;
 
-	return print_current_link_do(doc_view, ses->tab->term);
+	return get_link_info(doc_view, ses->tab->term);
 }

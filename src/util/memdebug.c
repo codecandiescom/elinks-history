@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.2 2002/06/17 11:42:13 pasky Exp $ */
+/* $Id: memdebug.c,v 1.3 2002/06/17 21:10:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,17 +101,41 @@ long mem_amount = 0;
 
 struct list_head memory_list = { &memory_list, &memory_list };
 
+
+#if defined(CHECK_AH_SANITY)
+static void
+dump_info(struct alloc_header *ah, unsigned char *info,
+	  unsigned char *file, int line, unsigned char *type)
+{
+	fprintf(stderr, "%p", PTR_AH2BASE(ah)); fflush(stderr);
+	/* In some extreme cases, we may core here, as 'ah' can no longer point
+	 * to valid memory area (esp. when used in debug_mem_free()). */
+	fprintf(stderr, ":%d", ah->size);
+
+	if (type && *type) fprintf(stderr, " \033[1m%s\033[0m", type);
+
+	if (info && *info) fprintf(stderr, " %s", info);
+
+	fprintf(stderr, " @ ");
+
+	if (file && (strcmp(file, ah->file) || line != ah->line))
+		fprintf(stderr, "%s:%d, ", file, line);
+
+	fprintf(stderr, "alloc'd at %s:%d", ah->file, ah->line);
+	if (ah->comment) fprintf(stderr, " [%s]", ah->comment);
+
+	fprintf(stderr, "\n");
+}
+#endif
+
 #ifdef CHECK_AH_SANITY
 static int
-bad_ah_sanity(struct alloc_header *ah, unsigned char *comment)
+bad_ah_sanity(struct alloc_header *ah, unsigned char *info,
+	      unsigned char *file, int line)
 {
 	if (!ah) return 1;
 	if (ah->magic != AH_SANITY_MAGIC) {
-		if (comment && *comment) fprintf(stderr, "%s ", comment);
-		fprintf(stderr, "%p:%d @ %s:%d magic:%08x != %08x @ %p",
-				PTR_AH2BASE(ah),
-				ah->size, ah->file, ah->line, ah->magic,
-				AH_SANITY_MAGIC, ah);
+		dump_info(ah, info, file, line, "bad alloc_header block");
 		return 1;
 	}
 
@@ -122,7 +146,6 @@ bad_ah_sanity(struct alloc_header *ah, unsigned char *comment)
 void
 check_memory_leaks()
 {
-	int comma = 0;
 	struct alloc_header *ah;
 
 	if (!mem_amount) {
@@ -133,19 +156,13 @@ check_memory_leaks()
 	fprintf(stderr, "\n\033[1mMemory leak by %ld bytes\033[0m\n",
 		mem_amount);
 
-	fprintf(stderr, "\nList of blocks: ");
+	fprintf(stderr, "List of blocks:\n");
 	foreach (ah, memory_list) {
 #ifdef CHECK_AH_SANITY
-		if (bad_ah_sanity(ah, "Skipped")) continue;
+		if (bad_ah_sanity(ah, "Skipped", NULL, 0)) continue;
 #endif
-		fprintf(stderr, "%s%p:%d @ %s:%d", comma ? ", ": "",
-			PTR_AH2BASE(ah),
-			ah->size, ah->file, ah->line);
-		comma = 1;
-		if (ah->comment)
-			fprintf(stderr, ":\"%s\"", ah->comment);
+		dump_info(ah, NULL, NULL, 0, NULL);
 	}
-	fprintf(stderr, "\n");
 
 	force_dump();
 }
@@ -250,19 +267,12 @@ debug_mem_free(unsigned char *file, int line, void *ptr)
 
 	if (!ok) {
 		/* This will get optimized out when not CHECK_INVALID_FREE. */
-
-		fprintf(stderr, "%p:", PTR_AH2BASE(ah)); fflush(stderr);
-		/* We may core here if really really bad luck. */
-		fprintf(stderr, "%d @ %s:%d", ah->size, ah->file, ah->line);
-
-		errfile = file;
-		errline = line;
-		error("ERROR: invalid address passed to free().");
+		dump_info(ah, "free()", file, line, "invalid address");
 		return;
 	}
 
 #ifdef CHECK_AH_SANITY
-	if (bad_ah_sanity(ah, "free()")) force_dump();
+	if (bad_ah_sanity(ah, "free()", file, line)) force_dump();
 #endif
 
 	if (ah->comment)
@@ -303,7 +313,7 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 	ah = PTR_BASE2AH(ptr);
 
 #ifdef CHECK_AH_SANITY
-	if (bad_ah_sanity(ah, "realloc()")) force_dump();
+	if (bad_ah_sanity(ah, "realloc()", file, line)) force_dump();
 #endif
 
 	/* We compare oldsize to new size, and if equal we just return ptr
@@ -328,6 +338,9 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 #ifdef CHECK_AH_SANITY
 	ah->magic = AH_SANITY_MAGIC;
 #endif
+	ah->file = file;
+	ah->line = line;
+
 	ah->prev->next = ah;
 	ah->next->prev = ah;
 

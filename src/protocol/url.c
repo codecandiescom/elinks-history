@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.89 2003/07/14 18:43:39 jonas Exp $ */
+/* $Id: url.c,v 1.90 2003/07/14 18:48:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -315,6 +315,7 @@ translate_url(unsigned char *url, unsigned char *cwd)
 {
 	unsigned char *ch;
 	unsigned char *newurl;
+	struct uri uri;
 
 	/* Strip starting spaces */
 	while (*url == ' ') url++;
@@ -323,13 +324,7 @@ translate_url(unsigned char *url, unsigned char *cwd)
 	if (!strncasecmp("proxy://", url, 8)) goto proxy;
 
 	/* Ordinary parse */
-	if (!parse_url(url, NULL,
-		       NULL, NULL,
-		       NULL, NULL,
-		       NULL, NULL,
-		       NULL, NULL,
-		       NULL, NULL,
-		       NULL)) {
+	if (parse_uri(&uri, url)) {
 		newurl = stracpy(url);
 		if (newurl) {
 			insert_wd(&newurl, cwd);
@@ -342,13 +337,7 @@ translate_url(unsigned char *url, unsigned char *cwd)
 	/* Try to add slash to end */
 	if (strstr(url, "//") && (newurl = stracpy(url))) {
 		add_to_strn(&newurl, "/");
-		if (!parse_url(newurl, NULL,
-			       NULL, NULL,
-			       NULL, NULL,
-			       NULL, NULL,
-			       NULL, NULL,
-			       NULL, NULL,
-			       NULL)) {
+		if (parse_uri(&uri, newurl)) {
 			insert_wd(&newurl, cwd);
 			translate_directories(newurl);
 
@@ -436,13 +425,7 @@ http:				prefix = "http://";
 		add_to_strn(&newurl, url);
 		if (not_file && !strchr(url, '/')) add_to_strn(&newurl, "/");
 
-		if (!parse_url(newurl, NULL,
-			       NULL, NULL,
-			       NULL, NULL,
-			       NULL, NULL,
-			       NULL, NULL,
-			       NULL, NULL,
-			       NULL)) {
+		if (parse_uri(&uri, newurl)) {
 			insert_wd(&newurl, cwd);
 			translate_directories(newurl);
 
@@ -460,13 +443,7 @@ http:				prefix = "http://";
 	if (strncmp(ch + 1, "//", 2)) {
 		add_to_strn(&newurl, "//");
 		add_to_strn(&newurl, ch + 1);
-		if (!parse_url(newurl, NULL,
-			       NULL, NULL,
-			       NULL, NULL,
-			       NULL, NULL,
-			       NULL, NULL,
-			       NULL, NULL,
-			       NULL)) {
+		if (!parse_uri(&uri, newurl)) {
 			insert_wd(&newurl, cwd);
 			translate_directories(newurl);
 
@@ -476,13 +453,7 @@ http:				prefix = "http://";
 
 	/* ..and with slash */
 	add_to_strn(&newurl, "/");
-	if (!parse_url(newurl, NULL,
-		       NULL, NULL,
-		       NULL, NULL,
-		       NULL, NULL,
-		       NULL, NULL,
-		       NULL, NULL,
-		       NULL)) {
+	if (parse_uri(&uri, newurl)) {
 		insert_wd(&newurl, cwd);
 		translate_directories(newurl);
 

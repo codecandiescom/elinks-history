@@ -1,10 +1,11 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.26 2003/12/13 00:32:42 jonas Exp $ */
+/* $Id: status.c,v 1.27 2003/12/18 13:47:58 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <math.h>
 #include <string.h>
 
 #include "elinks.h"
@@ -264,6 +265,9 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 	int tab_width = int_max(1, term->width / tabs_count);
 	int tab_total_width = tab_width * tabs_count;
 	int tab_remain_width = int_max(0, term->width - tab_total_width);
+	int tab_add = (rint((double) tab_remain_width / tabs_count))
+		      ? rint((double) tab_remain_width / tabs_count)
+		      : 1;
 	int tab_num;
 	int ypos = term->height - (status->show_status_bar ? 2 : 1);
 	int xpos = 0;
@@ -278,11 +282,8 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 
 		/* Adjust tab size to use full term width. */
 		if (tab_remain_width) {
-			actual_tab_width++;
-			tab_remain_width--;
-			if (tab_num == tabs_count - 1) {
-				actual_tab_width += tab_remain_width;
-			}
+			actual_tab_width += tab_add;
+			tab_remain_width -= tab_add;
 		}
 
 		doc_view = tab->data ? current_frame(tab->data) : NULL;
@@ -325,7 +326,7 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 		draw_text(term, xpos, ypos, msg, msglen, 0, color);
 		tab->xpos = xpos;
 		tab->width = actual_tab_width;
-		xpos += actual_tab_width;
+		xpos += actual_tab_width - 1;
 	}
 }
 

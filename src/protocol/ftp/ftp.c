@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.106 2003/10/17 22:45:52 zas Exp $ */
+/* $Id: ftp.c,v 1.107 2003/10/17 22:57:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1072,7 +1072,6 @@ got_something_from_data_connection(struct connection *conn)
 	unsigned char dircolor[8];
 	int colorize_dir = 0;
 	int len;
-	int url_len;
 
 	/* XXX: This probably belongs rather to connect.c ? */
 
@@ -1108,7 +1107,6 @@ conn_error:
 	}
 
 	url = struri(conn->uri);
-	url_len = strlen(url);
 
 	if (!conn->cache && get_cache_entry(url, &conn->cache)) {
 out_of_mem:
@@ -1129,6 +1127,7 @@ out_of_mem:
 		unsigned char *path = conn->uri.data;
 		int pathlen = conn->uri.datalen;
 		struct string string;
+		int url_len = strlen(url);
 
 		if (!path) {
 			abort_conn_with_state(conn, S_FTP_ERROR);
@@ -1152,10 +1151,9 @@ out_of_mem:
 		ADD_STRING();
 		ADD_CONST("</title></head>\n<body>\n<h2>FTP directory ");
 		ADD_STRING();
+		ADD_CONST("</h2>\n<pre>");
 
 		done_string(&string);
-
-		ADD_CONST("</h2>\n<pre>");
 
 		if (pathlen) {
 			struct ftpparse ftp_info;
@@ -1191,8 +1189,7 @@ out_of_mem:
 	len = read(conn->sock2, c_i->ftp_buffer + c_i->buf_pos,
 		   FTP_BUF_SIZE - c_i->buf_pos);
 
-	if (len < 0)
-		goto conn_error;
+	if (len < 0) goto conn_error;
 
 	if (len > 0) {
 		if (!c_i->dir) {
@@ -1235,8 +1232,6 @@ out_of_mem:
 
 	if (c_i->dir) ADD_CONST("</pre>\n<hr>\n</body>\n</html>");
 
-#undef ADD_CONST
-
 	set_handlers(conn->sock2, NULL, NULL, NULL, NULL);
 	close_socket(NULL, &conn->sock2);
 
@@ -1255,11 +1250,9 @@ ftp_end_request(struct connection *conn, enum connection_state state)
 {
 	set_connection_state(conn, state);
 
-	if (conn->state == S_OK) {
-		if (conn->cache) {
-			truncate_entry(conn->cache, conn->from, 1);
-			conn->cache->incomplete = 0;
-		}
+	if (conn->state == S_OK && conn->cache) {
+		truncate_entry(conn->cache, conn->from, 1);
+		conn->cache->incomplete = 0;
 	}
 
 	add_keepalive_connection(conn, FTP_KEEPALIVE_TIMEOUT);

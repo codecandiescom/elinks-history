@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.134 2003/10/25 16:38:42 jonas Exp $ */
+/* $Id: main.c,v 1.135 2003/10/25 18:57:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,7 +178,6 @@ init(void)
 #ifdef COOKIES
 	init_cookies();
 #endif
-	init_mime();
 	init_ssl();
 #ifdef HAVE_SCRIPTING
 	init_scripting();
@@ -234,7 +233,6 @@ terminate_all_subsystems(void)
 	free_all_itrms();
 	abort_all_connections();
 	done_ssl();
-	done_mime();
 
 	if (init_b) {
 #ifdef HAVE_SCRIPTING

@@ -330,7 +330,6 @@ AC_OUTPUT([ \
  src/osdep/Makefile \
  src/protocol/Makefile \
  src/protocol/http/Makefile \
- src/ssl/Makefile \
  src/util/Makefile \
 ])
 

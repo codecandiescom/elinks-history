@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.27 2004/05/07 08:45:35 zas Exp $ */
+/* $Id: parse.c,v 1.28 2004/05/07 08:49:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,12 +129,8 @@ end:
 		(s)[(l)++] = (c);					\
 	} while (0)
 
-/* Parses html element attributes. */
-/* - e is attr pointer previously get from parse_element,
- * DON'T PASS HERE ANY OTHER VALUE!!!
- * - name is searched attribute */
-/* Returns allocated string containing the attribute, or NULL on unsuccess. */
-static inline unsigned char *
+
+unsigned char *
 get_attr_value(register unsigned char *e, unsigned char *name,
 	       enum html_attr_flags flags)
 {

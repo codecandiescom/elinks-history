@@ -1,9 +1,11 @@
-/* $Id: parse.h,v 1.5 2004/05/07 08:45:35 zas Exp $ */
+/* $Id: parse.h,v 1.6 2004/05/07 08:49:31 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_PARSE_H
 #define EL__DOCUMENT_HTML_PARSER_PARSE_H
 
 struct string;
+
+/* Interface for both the renderer and the table handling */
 
 /* Flags for get_attr_value(). */
 enum html_attr_flags {
@@ -25,7 +27,13 @@ enum html_attr_flags {
 	HTML_ATTR_NO_CONV = 4,
 };
 
-/* Interface for both the renderer and the table handling */
+/* Parses html element attributes.
+ * - e is attr pointer previously get from parse_element,
+ * DON'T PASS HERE ANY OTHER VALUE!!!
+ * - name is searched attribute
+ *
+ * Returns allocated string containing the attribute, or NULL on unsuccess. */
+unsigned char *get_attr_value(register unsigned char *e, unsigned char *name, enum html_attr_flags flags);
 
 void parse_html(unsigned char *html, unsigned char *eof, void *f, unsigned char *head);
 

@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.11 2003/06/26 23:49:00 jonas Exp $ */
+/* $Id: protocol.h,v 1.12 2003/06/27 00:16:59 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -21,6 +21,7 @@ enum protocol {
 	PROTOCOL_USER,
 };
 
+/* Besides the session an external handler also takes the url as an argument */
 typedef void (protocol_handler)(struct connection *);
 typedef void (protocol_external_handler)(struct session *, unsigned char *);
 
@@ -34,18 +35,18 @@ struct protocol_backend {
 	int need_slash_after_host;
 };
 
-enum protocol check_protocol(unsigned char *p, int l);
+/* Accessors for the protocol backends. */
 
-protocol_handler *get_protocol_handler(unsigned char *);
-protocol_external_handler *get_protocol_external_handler(unsigned char *);
-
-/* Accessors for protocol backends. */
 int get_protocol_port(enum protocol protocol);
 int get_protocol_free_syntax(enum protocol protocol);
 int get_protocol_need_slashes(enum protocol protocol);
 int get_protocol_need_slash_after_host(enum protocol protocol);
 
-int get_prot_info(unsigned char *prot, int *port, protocol_handler **handler,
-		  protocol_external_handler **external_handler);
+protocol_handler *get_protocol_handler(unsigned char *url);
+protocol_external_handler *get_protocol_external_handler(unsigned char *url);
+
+/* Resolves the given protocol @name to a known protocol or PROTOCOL_UNKOWN */
+/* User defined protocols (configurable via protocol.user) takes precedence. */
+enum protocol check_protocol(unsigned char *name, int namelen);
 
 #endif

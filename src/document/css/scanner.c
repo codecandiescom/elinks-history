@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.12 2004/01/18 22:48:04 jonas Exp $ */
+/* $Id: scanner.c,v 1.13 2004/01/18 23:54:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -256,7 +256,7 @@ init_css_scan_table(void)
 
 	/* This should contain mostly used char tokens like ':' and maybe a few
 	 * garbage chars that people might put in their css code */
-	for (chars = "({});:"; *chars; chars++) {
+	for (chars = "({});:,"; *chars; chars++) {
 		css_scan_table[*chars] |= CSS_CHAR_TOKEN;
 	}
 }

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.47 2002/11/12 21:30:02 pasky Exp $ */
+/* $Id: download.c,v 1.48 2002/11/12 21:57:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -223,7 +223,7 @@ download_window_function(struct dialog_data *dlg)
 			add_xnum_to_str(&m, &l, stat->prg->size);
 			add_to_str(&m, &l, " ");
 		}
-		if (stat->prg->start) {
+		if (stat->prg->start > 0) {
 			add_to_str(&m, &l, "(");
 			add_xnum_to_str(&m, &l, stat->prg->pos
 						- stat->prg->start);

@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.18 2003/10/18 20:27:25 pasky Exp $ */
+/* $Id: tab.c,v 1.19 2003/10/18 21:21:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,8 +169,7 @@ close_tab(struct terminal *term)
 
 
 static void
-do_open_in_new_tab(struct terminal *term, unsigned char *exe_name,
-	           unsigned char *param, int in_background)
+do_open_in_new_tab(struct terminal *term, unsigned char *param, int in_background)
 {
 	struct window *tab;
 	struct initial_session_info *info;
@@ -205,7 +204,7 @@ void
 open_in_new_tab(struct terminal *term, unsigned char *exe_name,
                 unsigned char *param)
 {
-	do_open_in_new_tab(term, exe_name, param, 0);
+	do_open_in_new_tab(term, param, 0);
 }
 
 void
@@ -213,5 +212,5 @@ open_in_new_tab_in_background(struct terminal *term,
 			      unsigned char *exe_name,
                 	      unsigned char *param)
 {
-	do_open_in_new_tab(term, exe_name, param, 1);
+	do_open_in_new_tab(term, param, 1);
 }

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.7 2002/03/18 20:12:29 pasky Exp $ */
+/* $Id: socket.c,v 1.8 2002/03/18 20:28:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,17 +60,6 @@ void log_data(unsigned char *data, int len)
 #else
 #define log_data(x, y)
 #endif
-
-struct conn_info {
-	/* Note that we MUST start with addr - free_connection_info() relies on it */
-	/* TODO: Remove this hack when we will have .h for each .c */
-	struct sockaddr *addr; /* array of addresses */
-	int addrno; /* array len / sizeof(sockaddr) */
-	int triedno; /* index of last tried address */
-	int port;
-	int *sock;
-	void (*func)(struct connection *);
-};
 
 void dns_found(/* struct connection */ void *, int);
 
@@ -379,14 +368,6 @@ void connected(void *data)
 	mem_free(c_i->addr);
 	mem_free(c_i);
 }
-
-struct write_buffer {
-	int sock;
-	int len;
-	int pos;
-	void (*done)(struct connection *);
-	unsigned char data[1];
-};
 
 void write_select(struct connection *c)
 {

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.142 2004/03/21 15:58:51 jonas Exp $ */
+/* $Id: connection.c,v 1.143 2004/03/21 23:55:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,7 +221,7 @@ check_queue_bugs(void)
 
 
 static struct connection *
-init_connection(unsigned char *url, unsigned char *ref_url, int start,
+init_connection(unsigned char *url, struct uri *referrer, int start,
 		enum cache_mode cache_mode, enum connection_priority priority)
 {
 	struct connection *conn = mem_calloc(1, sizeof(struct connection));
@@ -239,8 +239,10 @@ init_connection(unsigned char *url, unsigned char *ref_url, int start,
 		return NULL;
 	}
 
+	if (referrer) object_lock(referrer);
+
 	conn->id = connection_id++;
-	conn->ref_url = ref_url;
+	conn->referrer = referrer;
 	conn->pri[priority] =  1;
 	conn->cache_mode = cache_mode;
 	conn->socket = conn->data_socket = -1;
@@ -412,6 +414,7 @@ done_connection(struct connection *conn)
 {
 	del_from_list(conn);
 	send_connection_info(conn);
+	if (conn->referrer) done_uri(conn->referrer);
 	done_uri(conn->uri);
 	mem_free(conn);
 	check_queue_bugs();
@@ -759,7 +762,7 @@ again2:
 }
 
 int
-load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
+load_url(unsigned char *url, struct uri *referrer, struct download *download,
 	 enum connection_priority pri, enum cache_mode cache_mode, int start)
 {
 	struct cache_entry *ce = NULL;
@@ -848,7 +851,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 		return 0;
 	}
 
-	conn = init_connection(u, ref_url, start, cache_mode, pri);
+	conn = init_connection(u, referrer, start, cache_mode, pri);
 	mem_free(u);
 	if (!conn) {
 		if (download) {

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.314 2004/03/21 23:26:17 jonas Exp $ */
+/* $Id: session.c,v 1.315 2004/03/21 23:55:19 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -544,14 +544,14 @@ process_file_requests(struct session *ses)
 	while (more) {
 		more = 0;
 		foreach (ftl, ses->more_files) {
-			unsigned char *referer = NULL;
+			struct uri *referer = NULL;
 
 			if (ftl->req_sent)
 				continue;
 
 			ftl->req_sent = 1;
 			if (doc_view && doc_view->document)
-				referer = struri(doc_view->document->uri);
+				referer = doc_view->document->uri;
 
 			load_url(struri(ftl->uri), referer,
 				 &ftl->stat, ftl->pri, CACHE_MODE_NORMAL, -1);
@@ -906,16 +906,16 @@ reload(struct session *ses, enum cache_mode cache_mode)
 
 		l->download.data = ses;
 		l->download.end = (void *)doc_end_load;
-		load_url(l->vs.url, ses->ref_url, &l->download, PRI_MAIN, cache_mode, -1);
+		load_url(l->vs.url, ses->referrer, &l->download, PRI_MAIN, cache_mode, -1);
 		foreach (ftl, ses->more_files) {
-			unsigned char *referer = NULL;
+			struct uri *referer = NULL;
 
 			if (ftl->req_sent && ftl->stat.state >= 0) continue;
 			ftl->stat.data = ftl;
 			ftl->stat.end = (void *)file_end_load;
 
 			if (doc_view && doc_view->document)
-				referer = struri(doc_view->document->uri);
+				referer = doc_view->document->uri;
 
 			load_url(struri(ftl->uri), referer,
 				 &ftl->stat, ftl->pri, cache_mode, -1);
@@ -1012,13 +1012,14 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 void
 set_session_referrer(struct session *ses, struct uri *referrer)
 {
-	if (ses->ref_url) mem_free(ses->ref_url);
+	if (ses->referrer) done_uri(ses->referrer);
 
 	/* Don't set referrer for file protocol */
 	if (referrer && referrer->protocol != PROTOCOL_FILE) {
-		ses->ref_url = stracpy(struri(referrer));
+		object_lock(referrer);
+		ses->referrer = referrer;
 	} else {
-		ses->ref_url = NULL;
+		ses->referrer = NULL;
 	}
 }
 

@@ -1,3 +1,100 @@
+Wed Jul  3 23:40:49 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: document/download.c, osdep/os_dep.c, osdep/os_dep.h,
+	osdep/os_depx.h:
+
+	Introduced open_prealloc(); prevents fragmentation of downloaded
+	files on OS/2 (by mikulas, from 0.98).  
+
+Wed Jul  3 23:25:43 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	Ok ok, I give up. Enable -Werror only when --enable-debug.  
+
+Wed Jul  3 23:23:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/lists.h:
+
+	Fixed a C aliasing bug in list operations (by mikulas, from 0.98).  
+
+Wed Jul  3 23:15:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/renderer.c:
+
+	Fixed one possible (untested) crash in renderer (by mikulas, from
+	0.98).  
+
+Wed Jul  3 23:10:37 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/parser.c:
+
+	Eat newlines in URL when reading it from HTML (by mikulas, from
+	0.98).  
+
+Wed Jul  3 23:03:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/terminal.h:
+
+	Smaller MAX_CWD_LEN (larger value may cause pipe problems), also
+	raised MAX_TERM_LEN (by mikulas, from 0.98).  
+
+Wed Jul  3 22:58:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* INSTALL:
+
+	Added legal notice about linking ELinks with OpenSSL, as suggested
+	by Victor Khimenko <khim@sch57.msk.ru>.  
+
+Wed Jul  3 22:50:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/osdep/os_dep.c:
+
+	Close input fd in separate thread upon its startup.  
+
+Wed Jul  3 22:39:18 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/url.c:
+
+	Added new domain names to our braindead http URL recognition table
+	;p (by mikulas, from 0.98).  
+
+Wed Jul  3 22:29:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	protocol.http.bugs.broken_302_redirect enabled by default (by
+	mikulas, from 0.98).  
+
+Wed Jul  3 22:26:04 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/croatian.lng, intl/norwegian.lng, src/intl/language.inc:
+
+	Hmh.. forgot to resync the languages :(.  
+
+Wed Jul  3 22:19:42 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/index.txt, intl/norwegian.lng, src/intl/lang_defs.h,
+	src/intl/language.inc, AUTHORS:
+
+	Norwegian translation by Simen Graaten <simeng@slarkware.com> (from
+	0.98).  
+
+Wed Jul  3 22:18:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, intl/croatian.lng, intl/index.txt, src/intl/lang_defs.h,
+	src/intl/language.inc:
+
+	Croatian translation by Denis Lackovic <delacko@fly.srk.fer.hr>
+	(from 0.98).  
+
+Wed Jul  3 22:13:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, intl/catalan.lng, src/intl/language.inc:
+
+	Catalan translation update by Carles Sadurní Anguita <isard@ctv.es>
+	(from 0.98).  
+
 Wed Jul  3 22:05:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.153 2004/12/27 00:02:12 jonas Exp $ */
+/* $Id: screen.c,v 1.154 2004/12/27 10:34:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -295,7 +295,7 @@ get_screen_driver(struct terminal *term)
 
 	foreach (driver, active_screen_drivers) {
 		if (driver->type != type) continue;
-		if (strlcmp(driver->name, -1, name, len)) continue;
+		if (memcmp(driver->name, name, len + 1)) continue;
 
 		/* Some simple probably useless MRU ;) */
 		if (driver != active_screen_drivers.next) {

@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.30 2004/01/01 15:47:25 jonas Exp $ */
+/* $Id: feature.h,v 1.31 2004/01/01 15:50:29 jonas Exp $ */
 
 #ifndef EL__DOTDOT_FEATURE_H
 #define EL__DOTDOT_FEATURE_H
@@ -219,7 +219,7 @@
  *
  * Default: disabled */
 
-/* #define USE_256_COLORS */
+/* #define CONFIG_256_COLORS */
 
 
 /*** Backtrace Printing

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.136 2003/12/27 14:59:43 zas Exp $ */
+/* $Id: options.c,v 1.137 2004/01/01 15:50:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,7 +136,7 @@ push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 	return 0;
 }
 
-#ifdef USE_256_COLORS
+#ifdef CONFIG_256_COLORS
 #define TERMOPT_WIDGETS_COUNT 19
 #else
 #define TERMOPT_WIDGETS_COUNT 18
@@ -176,7 +176,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	add_dlg_text(dlg, _("Color mode:", term), AL_LEFT, 1);
 	add_dlg_radio(dlg, _("No colors (mono)", term), 2, COLOR_MODE_MONO, values[TERM_OPT_COLORS]);
 	add_dlg_radio(dlg, _("16 colors", term), 2, COLOR_MODE_16, values[TERM_OPT_COLORS]);
-#ifdef USE_256_COLORS
+#ifdef CONFIG_256_COLORS
 	add_dlg_radio(dlg, _("256 colors", term), 2, COLOR_MODE_256, values[TERM_OPT_COLORS]);
 #endif
 

@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.29 2003/12/01 14:24:20 pasky Exp $ */
+/* $Id: color.h,v 1.30 2004/01/01 15:50:29 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -16,7 +16,7 @@ struct screen_char;
 
 #define TERM_COLOR_MASK	0x07
 
-#ifdef USE_256_COLORS
+#ifdef CONFIG_256_COLORS
 #define TERM_COLOR_FOREGROUND(color) ((color)[0])
 #define TERM_COLOR_BACKGROUND(color) ((color)[1])
 #else

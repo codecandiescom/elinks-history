@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.124 2003/12/29 07:34:28 jonas Exp $ */
+/* $Id: screen.c,v 1.125 2004/01/01 15:50:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -354,7 +354,7 @@ struct screen_state {
 	unsigned char color[2];
 };
 
-#ifdef USE_256_COLORS
+#ifdef CONFIG_256_COLORS
 #define compare_color(a, b)	(!memcmp((a), (b), 2))
 #define copy_color(a, b)	memcpy((a), (b), 2)
 #else
@@ -456,7 +456,7 @@ add_char16(struct string *screen, struct screen_driver *driver,
 	add_char_data(screen, driver, ch->data, border);
 }
 
-#ifdef USE_256_COLORS
+#ifdef CONFIG_256_COLORS
 static struct string color256_seqs[] = {
 	/* foreground: */	TERM_STRING("\033[0;38;5;%dm"),
 	/* background: */	TERM_STRING("\033[48;5;%dm"),
@@ -626,7 +626,7 @@ redraw_screen(struct terminal *term)
 		return;
 
 	case COLOR_MODE_256:
-#ifdef USE_256_COLORS
+#ifdef CONFIG_256_COLORS
 		add_chars(&image, term, driver, &state, add_char256);
 		break;
 #endif

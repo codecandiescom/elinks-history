@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.70 2003/12/21 14:56:56 zas Exp $ */
+/* $Id: color.c,v 1.71 2004/01/01 15:50:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,7 +105,7 @@ static struct color_mode_info color_mode_16 = {
 	}
 };
 
-#ifdef USE_256_COLORS
+#ifdef CONFIG_256_COLORS
 static struct color_mode_info color_mode_256 = {
 	palette256,
 	{
@@ -118,7 +118,7 @@ static struct color_mode_info color_mode_256 = {
 static struct color_mode_info *color_modes[] = {
 	/* COLOR_MODE_MONO */	&color_mode_16,
 	/* COLOR_MODE_16 */	&color_mode_16,
-#ifdef USE_256_COLORS
+#ifdef CONFIG_256_COLORS
 	/* COLOR_MODE_256 */	&color_mode_256,
 #else
 	/* When 256 color mode is not compiled in the user can still have
@@ -224,7 +224,7 @@ set_term_color16(struct screen_char *schar, enum color_flags flags,
 		schar->attr |= SCREEN_ATTR_STANDOUT;
 	}
 
-#ifdef USE_256_COLORS
+#ifdef CONFIG_256_COLORS
 	/* With 256 color support we use memcmp() when comparing color in
 	 * terminal/screen.c:add_char*() so we need to clear this byte. */
 	TERM_COLOR_FOREGROUND(schar->color) = (fg & TERM_COLOR_MASK);
@@ -296,7 +296,7 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 		break;
 
 	case COLOR_MODE_256:
-#ifdef USE_256_COLORS
+#ifdef CONFIG_256_COLORS
 		/* Adjusts the foreground color to be more visible. */
 		/* TODO: Be smarter! Here we just choose either black or white
 		 * ANSI color to make sure the color is visible. Pasky

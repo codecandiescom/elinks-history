@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.467 2004/12/16 15:13:30 zas Exp $ */
+/* $Id: options.c,v 1.468 2004/12/16 15:19:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -639,19 +639,19 @@ register_autocreated_options(void)
 {
 	/* TODO: Use table-driven initialization. --jonas */
 	get_opt_int("terminal.linux.type") = 2;
-	get_opt_bool("terminal.linux.colors") = 1;
+	get_opt_int("terminal.linux.colors") = 1;
 	get_opt_bool("terminal.linux.m11_hack") = 1;
 	get_opt_int("terminal.vt100.type") = 1;
 	get_opt_int("terminal.vt110.type") = 1;
 	get_opt_int("terminal.xterm.type") = 1;
-	get_opt_int("terminal.xterm.underline") = 1;
+	get_opt_bool("terminal.xterm.underline") = 1;
 	get_opt_int("terminal.xterm-color.type") = 1;
 	get_opt_int("terminal.xterm-color.colors") = COLOR_MODE_16;
-	get_opt_int("terminal.xterm-color.underline") = 1;
+	get_opt_bool("terminal.xterm-color.underline") = 1;
 #ifdef CONFIG_256_COLORS
 	get_opt_int("terminal.xterm-256color.type") = 1;
 	get_opt_int("terminal.xterm-256color.colors") = COLOR_MODE_256;
-	get_opt_int("terminal.xterm-256color.underline") = 1;
+	get_opt_bool("terminal.xterm-256color.underline") = 1;
 #endif
 }
 

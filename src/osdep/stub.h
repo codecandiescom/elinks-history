@@ -1,7 +1,7 @@
-/* $Id: stub.h,v 1.3 2003/11/11 12:42:16 jonas Exp $ */
+/* $Id: stub.h,v 1.4 2004/02/19 14:30:41 pasky Exp $ */
 
-#ifndef EL__UTIL_STUB_H
-#define EL__UTIL_STUB_H
+#ifndef EL__OSDEP_STUB_H
+#define EL__OSDEP_STUB_H
 
 #include <string.h>
 #if 0

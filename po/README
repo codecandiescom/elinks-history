@@ -107,7 +107,7 @@ control hints:
 
 The string following 'msgid' are the original untranslated string. It is used to
 get the translated one so: DO NEVER CHANGE IT. If you spot an error in it change
-it in the code instead.
+it in the code instead and resync your .po files using make update-po.
 
 The string following 'msgstr' is the translated string.
 TODO: write about the meaning of % fragments.
@@ -125,10 +125,21 @@ these special lines at resync time.
 If, at some time, you think some of these lines will never be reused, feel free
 to delete them to reduce file size.
 
+A special msgid at top of file contains some useful info, you may update it as
+well, especially Last-Translator and PO-Revision-Date fields.
+
 IMPORTANT: if you changed strings in the code, or if you're using a cvs version
-of ELinks, take care of synchronization between code and po files. Before any
-change to a po file, run make update-po from po/.
-SPECIAL NOTE FOR PASKY: before any release, run make update-po ;=)
+of ELinks, take care of synchronization between code and po files.
+Before any change to a po file, you must synchronize it with code.
+To update only one file you may use: cd po/ ; make update-po PO=<lang>.po
+where <lang> has to be replaced by ie. fr, de, da, cs...
+To update all .po files, just use: cd po/ ; make update-po
+
+SPECIAL NOTE FOR ELINKS MAINTAINERS: before any release, run make update-po ;=)
+
+TIP: a shell script named gen_translations_stats.sh let you know current state
+of all translations.
+
 
 2.3 Making the updates part of ELinks:
 --------------------------------------
@@ -149,5 +160,5 @@ current status of each language file. Be proud if your language file rank higher
 or the same as the French one.
 
 
-$Id: README,v 1.5 2004/12/24 13:54:24 jonas Exp $
+$Id: README,v 1.6 2004/12/29 16:35:05 zas Exp $
 vim: textwidth=80

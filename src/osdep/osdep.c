@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.74 2003/06/14 23:42:46 zas Exp $ */
+/* $Id: osdep.c,v 1.75 2003/06/15 12:59:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1908,8 +1908,8 @@ struct {
 	void (*fn)(struct terminal *term, unsigned char *, unsigned char *);
 	unsigned char *text;
 } oinw[] = {
-	{ENV_CONSOLE, open_in_new_tab_in_background, N_("T~ab in background")},
 	{ENV_CONSOLE, open_in_new_tab, N_("~Tab")},
+	{ENV_CONSOLE, open_in_new_tab_in_background, N_("T~ab in background")},
 	{ENV_XWIN, open_in_new_xterm, N_("~Xterm")},
 	{ENV_TWIN, open_in_new_twterm, N_("T~wterm")},
 	{ENV_SCREEN, open_in_new_screen, N_("~Screen")},

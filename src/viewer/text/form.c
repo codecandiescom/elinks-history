@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.252 2004/12/02 16:34:02 zas Exp $ */
+/* $Id: form.c,v 1.253 2004/12/16 15:42:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -976,7 +976,7 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 
 	get_successful_controls(doc_view, fc, &submit);
 
-	cp_from = get_opt_int_tree(ses->tab->term->spec, "charset");
+	cp_from = get_opt_codepage_tree(ses->tab->term->spec, "charset");
 	cp_to = doc_view->document->cp;
 	switch (fc->method) {
 	case FORM_METHOD_GET:

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.139 2004/11/22 13:27:41 zas Exp $ */
+/* $Id: task.c,v 1.140 2004/12/16 15:42:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,7 +132,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 			referrer_incomplete = (cached && cached->incomplete);
 		}
 
-		if (!get_opt_int("document.browse.forms.confirm_submit")
+		if (!get_opt_bool("document.browse.forms.confirm_submit")
 		    && !referrer_incomplete) {
 			confirm_submit = 0;
 

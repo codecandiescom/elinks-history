@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.55 2003/07/21 16:22:00 jonas Exp $ */
+/* $Id: string.c,v 1.56 2003/07/21 23:01:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -523,6 +523,7 @@ init_string(struct string *string)
 	if (!string->source) return NULL;
 
 	*string->source = 0;
+
 	set_string_magic(string);
 
 	return string;
@@ -533,12 +534,13 @@ done_string(struct string *string)
 {
 	assert(string);
 	if_assert_failed { return; }
-
 	check_string_magic(string);
+
 	if (string->source) {
 		mem_free(string->source);
 		string->source = NULL;
 	}
+	string->length = 0;
 }
 
 #define mask(x)	((x) & ~(ALLOC_GR - 1))

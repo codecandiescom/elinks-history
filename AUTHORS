@@ -424,7 +424,7 @@ Uwe Hermann <uh1763@bingo-ev.de>
 Unai Uribarri <unai@telecable.es>
 	History
 
-Varga Balázs <vinnui@broadband.hu>
+Varga Balázs <vinnui@ent.hu>
 	Hungarian translation updates
 
 Wiktor Grebla <greblus@poczta.onet.pl>
@@ -454,4 +454,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.138 2003/10/07 20:17:45 pasky Exp $
+$Id: AUTHORS,v 1.139 2003/10/07 20:30:47 pasky Exp $

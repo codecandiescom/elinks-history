@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.42 2005/03/26 19:08:33 pasky Exp $
+# $Id: hooks.pl,v 1.43 2005/03/26 21:42:36 rrowan Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -214,7 +214,7 @@ sub goto_url_hook
 	if ($url =~ /^(search|find|www|web|s|f|go)(| .*)$/) {
 		return search(loadrc('search'), $search);
 	}
-	if ($url =~ s/("|\'|')(.+)$/$2/) {
+	if ($url =~ s/^("|\'|')(.+)$/$2/) {
 		return search(loadrc('search'), $url);
 	}
 

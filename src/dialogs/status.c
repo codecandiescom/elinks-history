@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.73 2004/06/21 14:21:56 jonas Exp $ */
+/* $Id: status.c,v 1.74 2004/06/21 14:40:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,7 +227,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 				if (get_current_link(doc_view)) {
 					msg = get_current_link_info(ses, doc_view);
 				} else if (ses->navigate_mode == NAVIGATE_CURSOR_ROUTING) {
-					msg = msg_text(term, "Cursor position: %dx%d",
+					msg = msg_text(term, N_("Cursor position: %dx%d"),
 							ses->tab->x + 1, ses->tab->y + 1);
 				}
 			}

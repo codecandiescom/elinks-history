@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.384 2004/04/04 02:31:22 jonas Exp $ */
+/* $Id: view.c,v 1.385 2004/04/04 02:34:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1090,19 +1090,19 @@ send_open_new_window(struct terminal *term,
 		    void (*open_window)(struct terminal *, unsigned char *, unsigned char *),
 		    struct session *ses)
 {
-	struct string dn_url;
+	struct string parameters;
 
 	assert(term && open_window && ses);
 	if_assert_failed return;
 
-	if (!init_string(&dn_url)) return;
+	if (!init_string(&parameters)) return;
 
-	add_to_string(&dn_url, "-base-session ");
-	add_long_to_string(&dn_url, ses->id);
-	add_session_ring_to_string(&dn_url);
+	add_to_string(&parameters, "-base-session ");
+	add_long_to_string(&parameters, ses->id);
+	add_session_ring_to_string(&parameters);
 
-	open_window(term, path_to_exe, dn_url.source);
-	done_string(&dn_url);
+	open_window(term, path_to_exe, parameters.source);
+	done_string(&parameters);
 }
 
 void

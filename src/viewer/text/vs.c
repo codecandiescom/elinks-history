@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.9 2003/07/15 20:18:11 jonas Exp $ */
+/* $Id: vs.c,v 1.10 2003/08/23 18:24:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,14 +97,14 @@ next_frame(struct session *ses, int p)
 
 	if (!have_location(ses)
 	    || (ses->screen && ses->screen->document
-		&& !ses->screen->document->frame))
+		&& !ses->screen->document->frame_desc))
 		return;
 
 	vs = &cur_loc(ses)->vs;
 
 	n = 0;
 	foreach (fd, ses->scrn_frames) {
-		if (!(fd->document && fd->document->frame))
+		if (!(fd->document && fd->document->frame_desc))
 			n++;
 	}
 

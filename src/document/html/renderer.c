@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.215 2003/08/23 18:18:09 jonas Exp $ */
+/* $Id: renderer.c,v 1.216 2003/08/23 18:24:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1563,8 +1563,6 @@ format_html(struct cache_entry *ce, struct document *screen)
 
 	sort_links(screen);
 
-	if (screen->frame_desc) screen->frame = 1;
-
 #if 0 /* debug purpose */
 	{
 		FILE *f = fopen("forms", "a");
@@ -1785,7 +1783,7 @@ html_interpret(struct session *ses)
 
 	if (l) cached_format_html(l, ses->screen, &o);
 
-	if (ses->screen->document && ses->screen->document->frame) {
+	if (ses->screen->document && ses->screen->document->frame_desc) {
 		cf = current_frame(ses);
 		format_frames(ses, ses->screen->document->frame_desc, &o, 0);
 	}
@@ -1803,7 +1801,7 @@ html_interpret(struct session *ses)
 		int n = 0;
 
 		foreach (fd, ses->scrn_frames) {
-			if (fd->document && fd->document->frame) continue;
+			if (fd->document && fd->document->frame_desc) continue;
 			if (fd == cf) {
 				cur_loc(ses)->vs.current_link = n;
 				break;

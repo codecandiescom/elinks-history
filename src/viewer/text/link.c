@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.38 2003/08/23 18:15:23 jonas Exp $ */
+/* $Id: link.c,v 1.39 2003/08/23 18:24:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -906,7 +906,7 @@ print_current_link_title_do(struct document_view *fd, struct terminal *term)
 	assert(term && fd && fd->document && fd->vs);
 	if_assert_failed return NULL;
 
-	if (fd->document->frame || fd->vs->current_link == -1
+	if (fd->document->frame_desc || fd->vs->current_link == -1
 	    || fd->vs->current_link >= fd->document->nlinks)
 		return NULL;
 
@@ -927,7 +927,7 @@ print_current_link_do(struct document_view *fd, struct terminal *term)
 	assert(term && fd && fd->document && fd->vs);
 	if_assert_failed return NULL;
 
-	if (fd->document->frame || fd->vs->current_link == -1
+	if (fd->document->frame_desc || fd->vs->current_link == -1
 	    || fd->vs->current_link >= fd->document->nlinks) {
 		return NULL;
 	}

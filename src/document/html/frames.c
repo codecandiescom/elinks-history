@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.10 2003/08/23 16:33:21 jonas Exp $ */
+/* $Id: frames.c,v 1.11 2003/08/23 18:24:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,7 +219,7 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 				format_frames(ses, fsd->f[n].subframe, &o, depth + 1);
 			else if (fsd->f[n].name) {
 				fdc = format_frame(ses, fsd->f[n].name, &o, depth);
-				if (fdc && fdc->document && fdc->document->frame)
+				if (fdc && fdc->document && fdc->document->frame_desc)
 					format_frames(ses, fdc->document->frame_desc,
 						      &o, depth + 1);
 			}

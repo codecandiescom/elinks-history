@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.138 2003/08/23 16:44:42 jonas Exp $ */
+/* $Id: session.c,v 1.139 2003/08/23 18:24:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -747,7 +747,7 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 		url = stracpy(frm->vs.url);
 		if (!url
 		    || (frm->vs.view && frm->vs.view->document
-		    && frm->vs.view->document->frame)) {
+		    && frm->vs.view->document->frame_desc)) {
 			/* del_from_list(frm); */
 			request_frameset(ses, frm->vs.view->document->frame_desc);
 #if 0
@@ -822,7 +822,7 @@ load_frames(struct session *ses, struct document_view *fd)
 {
 	struct document *ff = fd->document;
 
-	if (!ff || !ff->frame) return;
+	if (!ff || !ff->frame_desc) return;
 	request_frameset(ses, ff->frame_desc);
 }
 

@@ -376,6 +376,9 @@ Unai Uribarri <unai@telecable.es>
 Varga Balázs <vinnui@broadband.hu>
 	Hungarian translation updates
 
+William Yodlowsky <wyodlows@andromeda.rutgers.edu>
+	OpenSSL fixes
+
 Witold Filipczyk <witekfl@poczta.onet.pl>
 	HTTP code hacking
 	Original decompression (zlib/bzlib) support
@@ -392,4 +395,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.93 2002/10/12 15:49:24 pasky Exp $
+$Id: AUTHORS,v 1.94 2002/10/12 16:27:15 pasky Exp $

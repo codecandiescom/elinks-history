@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.17 2002/10/12 16:25:43 pasky Exp $ */
+/* $Id: ssl.c,v 1.18 2002/10/12 16:28:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,9 +8,14 @@
 #ifdef HAVE_SSL
 #ifdef HAVE_OPENSSL
 #include <openssl/ssl.h>
+#include <openssl/rand.h>
 #elif defined(HAVE_GNUTLS)
 #include <gnutls/gnutls.h>
 #endif
+#endif
+
+#ifdef HAVE_LIMITS_H
+#include <limits.h>
 #endif
 
 #include "links.h"
@@ -19,6 +24,10 @@
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/string.h"
+
+#ifndef PATH_MAX
+#define	PATH_MAX	256 /* according to my /usr/include/bits/posix1_lim.h */
+#endif
 
 
 /* FIXME: As you can see, SSL is currently implemented in very, erm,
@@ -39,6 +48,18 @@ init_ssl()
 {
 #ifdef HAVE_SSL
 #ifdef HAVE_OPENSSL
+	unsigned char f_randfile[PATH_MAX];
+
+	/* In a nutshell, on OS's without a /dev/urandom, the OpenSSL library
+	 * cannot initialize the PRNG and so every attempt to use SSL fails.
+	 * It's actually an OpenSSL FAQ, and according to them, it's up to the
+	 * application coders to seed the RNG. -- William Yodlowsky */
+	if (RAND_egd(RAND_file_name(f_randfile, sizeof(f_randfile))) < 0) {
+		/* Not an EGD, so read and write to it */
+		if (RAND_load_file(f_randfile, -1))
+			RAND_write_file(f_randfile);
+	}
+
 	SSLeay_add_ssl_algorithms();
 	context = SSL_CTX_new(SSLv23_client_method());
 	SSL_CTX_set_options(context, SSL_OP_ALL);

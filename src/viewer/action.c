@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.117 2004/11/12 21:52:48 zas Exp $ */
+/* $Id: action.c,v 1.118 2004/11/12 22:01:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,20 +137,20 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_ADD_BOOKMARK:
 #ifdef CONFIG_BOOKMARKS
-			if (!anonymous)
-				launch_bm_add_doc_dialog(term, NULL, ses);
+			if (anonymous) break;
+			launch_bm_add_doc_dialog(term, NULL, ses);
 #endif
 			break;
 		case ACT_MAIN_ADD_BOOKMARK_LINK:
 #ifdef CONFIG_BOOKMARKS
-			if (!anonymous)
-				launch_bm_add_link_dialog(term, NULL, ses);
+			if (anonymous) break;
+			launch_bm_add_link_dialog(term, NULL, ses);
 #endif
 			break;
 		case ACT_MAIN_ADD_BOOKMARK_TABS:
 #ifdef CONFIG_BOOKMARKS
-			if (!anonymous)
-				bookmark_terminal_tabs_dialog(term);
+			if (anonymous) break;
+			bookmark_terminal_tabs_dialog(term);
 #endif
 			break;
 
@@ -178,9 +178,8 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_COOKIES_LOAD:
 #ifdef CONFIG_COOKIES
-			if (!anonymous
-			    && get_opt_int("cookies.save"))
-				load_cookies();
+			if (anonymous || !get_opt_int("cookies.save")) break;
+			load_cookies();
 #endif
 			break;
 
@@ -195,19 +194,17 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_LINK_DOWNLOAD:
-			if (!has_vs) break;
-			if (!anonymous)
-				status = do_frame_action(ses, doc_view,
-							 download_link,
-							 action, 1);
+			if (!has_vs || anonymous) break;
+			status = do_frame_action(ses, doc_view,
+						 download_link,
+						 action, 1);
 			break;
 
 		case ACT_MAIN_LINK_DOWNLOAD_IMAGE:
-			if (!has_vs) break;
-			if (!anonymous)
-				status = do_frame_action(ses, doc_view,
-							 download_link,
-							 action, 1);
+			if (!has_vs || anonymous) break;
+			status = do_frame_action(ses, doc_view,
+						 download_link,
+						 action, 1);
 			break;
 
 		case ACT_MAIN_DOWNLOAD_MANAGER:
@@ -284,8 +281,8 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_KEYBINDING_MANAGER:
-			if (!anonymous)
-				keybinding_manager(ses);
+			if (anonymous) break;
+			keybinding_manager(ses);
 			break;
 
 		case ACT_MAIN_KILL_BACKGROUNDED_CONNECTIONS:
@@ -330,8 +327,8 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW:
 			/* FIXME: Use do_frame_action(). --jonas */
-			if (!has_vs
-			    || !try_jump_to_link_number(ses, doc_view)
+			if (!has_vs) break;
+			if (!try_jump_to_link_number(ses, doc_view)
 			    || doc_view->vs->current_link == -1)
 				break;
 			open_in_new_window(term, send_open_in_new_window, ses);
@@ -350,13 +347,13 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_OPEN_OS_SHELL:
-			if (!anonymous)
-				exec_shell(term);
+			if (anonymous) break;
+			exec_shell(term);
 			break;
 
 		case ACT_MAIN_OPTIONS_MANAGER:
-			if (!anonymous)
-				options_manager(ses);
+			if (anonymous) break;
+			options_manager(ses);
 			break;
 
 		case ACT_MAIN_LINK_EXTERNAL_COMMAND:
@@ -416,36 +413,33 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_LINK_DOWNLOAD_RESUME:
-			if (!has_vs) break;
-			if (!anonymous)
-				status = do_frame_action(ses, doc_view,
-							 download_link,
-							 action, 1);
+			if (!has_vs || anonymous) break;
+			status = do_frame_action(ses, doc_view,
+						 download_link,
+						 action, 1);
 			break;
 
 		case ACT_MAIN_SAVE_AS:
-			if (!has_vs) break;
-			if (!anonymous)
-				status = do_frame_action(ses, doc_view,
-							 save_as, 0, 0);
+			if (!has_vs || anonymous) break;
+			status = do_frame_action(ses, doc_view,
+						 save_as, 0, 0);
 			break;
 
 		case ACT_MAIN_SAVE_FORMATTED:
-			if (!has_vs) break;
-			if (!anonymous)
-				status = do_frame_action(ses, doc_view,
-							 save_formatted_dlg,
-							 0, 0);
+			if (!has_vs || anonymous) break;
+			status = do_frame_action(ses, doc_view,
+						 save_formatted_dlg,
+						 0, 0);
 			break;
 
 		case ACT_MAIN_SAVE_URL_AS:
-			if (!anonymous)
-				save_url_as(ses);
+			if (anonymous) break;
+			save_url_as(ses);
 			break;
 
 		case ACT_MAIN_SAVE_OPTIONS:
-			if (!anonymous)
-				write_config(term);
+			if (anonymous) break;
+			write_config(term);
 			break;
 
 		case ACT_MAIN_SEARCH:

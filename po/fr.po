@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-06 00:13+0100\n"
-"PO-Revision-Date: 2005-01-06 00:15+0100\n"
+"POT-Creation-Date: 2005-01-09 09:23+0100\n"
+"PO-Revision-Date: 2005-01-09 09:26+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -58,8 +58,8 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/viewer/text/form.c:857 src/viewer/text/search.c:953
 #: src/viewer/text/search.c:1014 src/viewer/text/search.c:1459
 #: src/viewer/text/search.c:1570 src/viewer/text/textarea.c:366
-#: src/viewer/text/textarea.c:375 src/viewer/text/view.c:731
-#: src/viewer/text/view.c:1284
+#: src/viewer/text/textarea.c:375 src/viewer/text/view.c:730
+#: src/viewer/text/view.c:1283
 msgid "OK"
 msgstr "OK"
 
@@ -176,7 +176,7 @@ msgstr "Nom"
 #: src/sched/download.c:1053 src/sched/download.c:1066
 #: src/scripting/lua/core.c:396 src/scripting/lua/core.c:477
 #: src/scripting/lua/core.c:717 src/viewer/text/search.c:1571
-#: src/viewer/text/view.c:731
+#: src/viewer/text/view.c:730
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -2923,7 +2923,7 @@ msgid "Ensure contrast"
 msgstr "Garantir le contraste"
 
 #: src/config/options.inc:552
-msgid "Makes sure that the back- and foreground color is never equal."
+msgid "Makes sure that the back- and foreground color are never equal."
 msgstr "Forcer l'utilisation de couleurs différentes pour le fond et le texte."
 
 #. If you change this please also change ACT_MAIN_DOCUMENT_COLORS action
@@ -3565,7 +3565,7 @@ msgid "Scrollbar colors."
 msgstr "Couleurs de la barre de défilement."
 
 #: src/config/options.inc:926
-msgid "Scrollbar selected"
+msgid "Selected scrollbar"
 msgstr "Barre de défilement sélectionnée"
 
 #: src/config/options.inc:928
@@ -7130,8 +7130,8 @@ msgstr "Erreur lors de l'envoi du formulaire"
 
 #: src/viewer/text/form.c:854
 #, c-format
-msgid "Could not get file %s: %s"
-msgstr "Impossible d'obtenir le fichier %s: %s"
+msgid "Could not load file %s: %s"
+msgstr "Impossible de charger le fichier %s: %s"
 
 #: src/viewer/text/form.c:1427
 msgid "Reset form"
@@ -7201,87 +7201,87 @@ msgstr "pressez %s pour soumettre à %s"
 msgid "press %s to post to %s"
 msgstr "pressez %s pour poster à %s"
 
-#: src/viewer/text/link.c:1127
+#: src/viewer/text/link.c:1140
 msgid "Display ~usemap"
 msgstr "Afficher ~usemap"
 
-#: src/viewer/text/link.c:1130
+#: src/viewer/text/link.c:1143
 msgid "~Follow link"
 msgstr "~Suivre le lien"
 
-#: src/viewer/text/link.c:1132
+#: src/viewer/text/link.c:1145
 msgid "Follow link and r~eload"
 msgstr "Suivre le lien et ~recharger"
 
-#: src/viewer/text/link.c:1136
+#: src/viewer/text/link.c:1149
 msgid "Open in new ~window"
 msgstr "Ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:1138
+#: src/viewer/text/link.c:1151
 msgid "Open in new ~tab"
 msgstr "Ouvrir dans un nouvel ongle~t"
 
-#: src/viewer/text/link.c:1140
+#: src/viewer/text/link.c:1153
 msgid "Open in new tab in ~background"
 msgstr "Ouvrir dans un nouvel onglet en arrière-~plan"
 
-#: src/viewer/text/link.c:1145
+#: src/viewer/text/link.c:1158
 msgid "~Download link"
 msgstr "~Enregistrer le lien"
 
-#: src/viewer/text/link.c:1148
+#: src/viewer/text/link.c:1161
 msgid "~Add link to bookmarks"
 msgstr "~Ajouter ce lien aux signets"
 
-#: src/viewer/text/link.c:1160 src/viewer/text/link.c:1195
+#: src/viewer/text/link.c:1173 src/viewer/text/link.c:1208
 msgid "~Reset form"
 msgstr "Remettre à ~zéro le formulaire"
 
-#: src/viewer/text/link.c:1172
+#: src/viewer/text/link.c:1185
 msgid "Open in ~external editor"
 msgstr "Ouvrir dans un ~éditeur externe"
 
-#: src/viewer/text/link.c:1178
+#: src/viewer/text/link.c:1191
 msgid "~Submit form"
 msgstr "~Envoyer le formulaire"
 
-#: src/viewer/text/link.c:1179
+#: src/viewer/text/link.c:1192
 msgid "Submit form and rel~oad"
 msgstr "Envoyer le formulaire et ~recharger"
 
-#: src/viewer/text/link.c:1183
+#: src/viewer/text/link.c:1196
 msgid "Submit form and open in new ~window"
 msgstr "Envoyer le formulaire et ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:1185
+#: src/viewer/text/link.c:1198
 msgid "Submit form and open in new ~tab"
 msgstr "Envoyer le formulaire et ouvrir un ~onglet"
 
-#: src/viewer/text/link.c:1188
+#: src/viewer/text/link.c:1201
 msgid "Submit form and open in new tab in ~background"
 msgstr "Envoyer le formulaire et ouvrir un onglet en ~arrière-plan"
 
-#: src/viewer/text/link.c:1193
+#: src/viewer/text/link.c:1206
 msgid "Submit form and ~download"
 msgstr "Envoyer le formulaire et ~télécharger"
 
-#: src/viewer/text/link.c:1200
+#: src/viewer/text/link.c:1213
 msgid "V~iew image"
 msgstr "~Voir l'image"
 
-#: src/viewer/text/link.c:1202
+#: src/viewer/text/link.c:1215
 msgid "Download ima~ge"
 msgstr "Enregistrer l'~image"
 
-#: src/viewer/text/link.c:1210
+#: src/viewer/text/link.c:1223
 msgid "No link selected"
 msgstr "Aucun lien sélectionné"
 
-#: src/viewer/text/link.c:1262
+#: src/viewer/text/link.c:1275
 msgid "Image"
 msgstr "Image"
 
-#: src/viewer/text/link.c:1267
+#: src/viewer/text/link.c:1280
 msgid "Usemap"
 msgstr "Usemap"
 
@@ -7356,18 +7356,18 @@ msgstr "Vous ne pouvez utiliser un éditeur externe en mode anonyme."
 msgid "You can do this only on the master terminal"
 msgstr "Vous ne pouvez faire ça que dans le terminal maître"
 
-#: src/viewer/text/view.c:730
+#: src/viewer/text/view.c:729
 msgid "Go to link"
 msgstr "Aller au lien"
 
-#: src/viewer/text/view.c:730
+#: src/viewer/text/view.c:729
 msgid "Enter link number"
 msgstr "Entrez un numéro de lien"
 
-#: src/viewer/text/view.c:1281
+#: src/viewer/text/view.c:1280
 msgid "Save error"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/viewer/text/view.c:1282
+#: src/viewer/text/view.c:1281
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"

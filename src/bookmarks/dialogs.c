@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.133 2003/11/23 17:33:04 jonas Exp $ */
+/* $Id: dialogs.c,v 1.134 2003/11/23 18:49:04 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -98,13 +98,6 @@ static struct listbox_ops bookmarks_listbox_ops = {
 	is_bookmark_used,
 	get_bookmark_info,
 	done_bookmark_item,
-};
-
-struct hierbox_browser bookmark_browser = {
-	{ D_LIST_HEAD(bookmark_browser.boxes) },
-	&bookmark_box_items,
-	{ D_LIST_HEAD(bookmark_browser.dialogs) },
-	&bookmarks_listbox_ops,
 };
 
 /****************************************************************************
@@ -370,6 +363,32 @@ push_move_button(struct dialog_data *dlg_data,
 #define	BOOKMARK_MANAGER_BUTTONS	7
 #define	BOOKMARK_MANAGER_ADDSIZE	(sizeof(struct bookmark) + 2 * MAX_STR_LEN)
 
+static struct hierbox_browser_button bookmark_buttons[] = {
+	{ N_("Goto"),		push_hierbox_goto_button	},
+	{ N_("Edit"),		push_edit_button		},
+	{ N_("Delete"),		push_hierbox_delete_button	},
+	{ N_("Move"),		push_move_button		},
+	{ N_("Add folder"),	push_add_folder_button		},
+	{ N_("Add"),		push_add_button			},
+	{ N_("Search"),		push_search_button		},
+#if 0
+	/* TODO: Would this be useful? --jonas */
+	{ N_("Save"),		push_save_button		},
+#endif
+
+	END_HIERBOX_BROWSER_BUTTONS,
+};
+
+struct hierbox_browser bookmark_browser = {
+	N_("Bookmark manager"),
+	bookmark_buttons,
+
+	{ D_LIST_HEAD(bookmark_browser.boxes) },
+	&bookmark_box_items,
+	{ D_LIST_HEAD(bookmark_browser.dialogs) },
+	&bookmarks_listbox_ops,
+};
+
 /* Builds the "Bookmark manager" dialog */
 void
 menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
@@ -385,16 +404,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 		bm_last_searched_url = NULL;
 	}
 
-	hierbox_browser(term, N_("Bookmark manager"),
-			BOOKMARK_MANAGER_ADDSIZE, &bookmark_browser, ses,
-			BOOKMARK_MANAGER_BUTTONS,
-			N_("Goto"), push_hierbox_goto_button,
-			N_("Edit"), push_edit_button,
-			N_("Delete"), push_hierbox_delete_button,
-			N_("Move"), push_move_button,
-			N_("Add folder"), push_add_folder_button,
-			N_("Add"), push_add_button,
-			N_("Search"), push_search_button);
+	hierbox_browser(&bookmark_browser, ses, BOOKMARK_MANAGER_ADDSIZE);
 }
 
 

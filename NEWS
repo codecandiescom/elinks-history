@@ -8,7 +8,7 @@ ELinks-0.4pre:
 * support for tabindex,accesskey,title attribute
 * source layout was dramatically reorganized
 * FTP works now even with servers not requiring/supporting PASS command and
-servers not able to proccess more commands at once (Novell, MS IIS, ..)
+  servers not able to proccess more commands at once (Novell, MS IIS, ..)
 * Global history support (+vlink support)
 * show URL being visited in xterm title bar
 * make some modules (cookies,bookmarks,globhistm,,) optional at compile time
@@ -27,6 +27,8 @@ servers not able to proccess more commands at once (Novell, MS IIS, ..)
 * options are now in tree hiearchy
 * performance improvements (especially when rendering tables)
 * unambiguous completion support
+* colorful user interface support
+* GNUTSL support paralel to the OpenSSL support (due to license issues)
 * extensive memory debugging support
 
 ELinks-0.3.0:

@@ -1,7 +1,7 @@
-/* $Id: menu.h,v 1.1 2002/03/17 14:39:12 pasky Exp $ */
+/* $Id: menu.h,v 1.2 2002/03/18 22:12:32 pasky Exp $ */
 
-#ifndef EL__MENU_H
-#define EL__MENU_H
+#ifndef EL__DIALOG_MENU_H
+#define EL__DIALOG_MENU_H
 
 #include <document/session.h>
 #include <document/html/renderer.h>

@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.1 2002/03/17 11:29:12 pasky Exp $ */
+/* $Id: error.h,v 1.2 2002/03/18 22:12:33 pasky Exp $ */
 
 #ifndef EL__ERROR_H
 #define EL__ERROR_H
@@ -21,7 +21,6 @@ void int_error(unsigned char *, ...);
 /* TODO: Another file? */
 
 extern long mem_amount;
-extern long last_mem_amount;
 
 void *debug_mem_alloc(unsigned char *, int, size_t);
 void debug_mem_free(unsigned char *, int, void *);

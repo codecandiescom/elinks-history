@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.4 2002/03/18 06:33:13 pasky Exp $ */
+/* $Id: error.c,v 1.5 2002/03/18 22:12:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,7 +121,6 @@ void debug_msg(unsigned char *m, ...)
 #ifdef LEAK_DEBUG
 
 long mem_amount = 0;
-long last_mem_amount = -1;
 
 #ifdef LEAK_DEBUG_LIST
 struct list_head memory_list = { &memory_list, &memory_list };

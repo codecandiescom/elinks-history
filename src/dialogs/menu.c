@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.4 2002/03/18 11:34:03 pasky Exp $ */
+/* $Id: menu.c,v 1.5 2002/03/18 22:12:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,10 +20,10 @@
 
 #include <main.h>
 #include <bfu/bfu.h>
+#include <dialogs/info.h>
 #include <dialogs/menu.h>
 #include <bookmarks/bookmarks.h>
 #include <config/default.h>
-#include <document/cache.h>
 #include <document/options.h>
 #include <document/session.h>
 #include <document/view.h>
@@ -37,55 +37,9 @@
 #include <lua/lua.h>
 #include <protocol/types.h>
 #include <protocol/url.h>
-#ifdef LEAK_DEBUG
-#include <util/error.h>
-#endif
 #include <util/memlist.h>
 
-void menu_about(struct terminal *term, void *d, struct session *ses)
-{
-	unsigned char *s = stracpy(_(TEXT(T_LINKS__LYNX_LIKE), term));
-	/* XXX this is very dodgy and displays wrong when in the middle
-	 * of a transfer */
-	add_to_strn(&s, "\n\n");
-	add_to_strn(&s, _(TEXT(T_FEATURES), term));
-	add_to_strn(&s, ":"
-			" Default"
-#ifdef HAVE_SSL
-			" SSL"
-#endif
-#ifdef HAVE_LUA
-			" Lua"
-#endif
-#ifdef IPV6
-			" IPv6"
-#endif
-	);
-	msg_box(term, NULL,
-		TEXT(T_ABOUT), AL_CENTER,
-		s,
-		NULL, 1,
-		TEXT(T_OK), NULL, B_ENTER | B_ESC);
-	mem_free(s);
-}
 
-void menu_keys(struct terminal *term, void *d, struct session *ses)
-{
-	msg_box(term, NULL,
-		TEXT(T_KEYS), AL_LEFT,
-		TEXT(T_KEYS_DESC),
-		NULL, 1,
-		TEXT(T_OK), NULL, B_ENTER | B_ESC);
-}
-
-void menu_copying(struct terminal *term, void *d, struct session *ses)
-{
-	msg_box(term, NULL,
-		TEXT(T_COPYING), AL_CENTER,
-		TEXT(T_COPYING_DESC),
-		NULL, 1,
-		TEXT(T_OK), NULL, B_ENTER | B_ESC);
-}
 
 void menu_manual(struct terminal *term, void *d, struct session *ses)
 {
@@ -155,228 +109,6 @@ void exit_prog(struct terminal *term, void *d, struct session *ses)
 	really_exit_prog(ses);
 }
 
-struct refresh {
-	struct terminal *term;
-	struct window *win;
-	struct session *ses;
-	void (*fn)(struct terminal *term, void *d, struct session *ses);
-	void *data;
-	int timer;
-};
-
-void refresh(struct refresh *r)
-{
-	struct refresh rr;
-	r->timer = -1;
-	memcpy(&rr, r, sizeof(struct refresh));
-	delete_window(r->win);
-	rr.fn(rr.term, rr.data, rr.ses);
-}
-
-void end_refresh(struct refresh *r)
-{
-	if (r->timer != -1) kill_timer(r->timer);
-	mem_free(r);
-}
-
-void refresh_abort(struct dialog_data *dlg)
-{
-	end_refresh(dlg->dlg->udata2);
-}
-
-void cache_inf(struct terminal *term, void *d, struct session *ses)
-{
-	unsigned char *a1, *a2, *a3, *a4, *a5, *a6, *a7, *a8, *a9, *a10, *a11, *a12, *a13, *a14, *a15, *a16;
-	int l = 0;
-	struct refresh *r;
-
-	r = mem_alloc(sizeof(struct refresh));
-	if (!r)	return;
-
-	r->term = term;
-	r->win = NULL;
-	r->ses = ses;
-	r->fn = cache_inf;
-	r->data = d;
-	r->timer = -1;
-
-	l = 0; a1 = init_str(); add_to_str(&a1, &l, ": ");
-				add_num_to_str(&a1, &l, select_info(CI_FILES)); add_to_str(&a1, &l, " ");
-	l = 0; a2 = init_str(); add_to_str(&a2, &l, ", ");
-				add_num_to_str(&a2, &l, select_info(CI_TIMERS)); add_to_str(&a2, &l, " ");
-	l = 0; a3 = init_str(); add_to_str(&a3, &l, ".\n");
-
-	l = 0; a4 = init_str(); add_to_str(&a4, &l, ": ");
-				add_num_to_str(&a4, &l, connect_info(CI_FILES)); add_to_str(&a4, &l, " ");
-	l = 0; a5 = init_str(); add_to_str(&a5, &l, ", ");
-				add_num_to_str(&a5, &l, connect_info(CI_CONNECTING)); add_to_str(&a5, &l, " ");
-	l = 0; a6 = init_str(); add_to_str(&a6, &l, ", ");
-				add_num_to_str(&a6, &l, connect_info(CI_TRANSFER)); add_to_str(&a6, &l, " ");
-	l = 0; a7 = init_str(); add_to_str(&a7, &l, ", ");
-				add_num_to_str(&a7, &l, connect_info(CI_KEEP)); add_to_str(&a7, &l, " ");
-	l = 0; a8 = init_str(); add_to_str(&a8, &l, ".\n");
-
-	l = 0; a9 = init_str(); add_to_str(&a9, &l, ": ");
-				add_num_to_str(&a9, &l, cache_info(CI_BYTES)); add_to_str(&a9, &l, " ");
-	l = 0; a10 =init_str(); add_to_str(&a10, &l, ", ");
-				add_num_to_str(&a10, &l, cache_info(CI_FILES)); add_to_str(&a10, &l, " ");
-	l = 0; a11 =init_str(); add_to_str(&a11, &l, ", ");
-				add_num_to_str(&a11, &l, cache_info(CI_LOCKED)); add_to_str(&a11, &l, " ");
-	l = 0; a12 =init_str(); add_to_str(&a12, &l, ", ");
-				add_num_to_str(&a12, &l, cache_info(CI_LOADING)); add_to_str(&a12, &l, " ");
-	l = 0; a13 =init_str(); add_to_str(&a13, &l, ".\n");
-
-	l = 0; a14 =init_str(); add_to_str(&a14, &l, ": ");
-				add_num_to_str(&a14, &l, formatted_info(CI_FILES)); add_to_str(&a14, &l, " ");
-	l = 0; a15 =init_str(); add_to_str(&a15, &l, ", ");
-				add_num_to_str(&a15, &l, formatted_info(CI_LOCKED)); add_to_str(&a15, &l, " ");
-	l = 0; a16 =init_str(); add_to_str(&a16, &l, ".");
-
-	msg_box(term, getml(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, NULL),
-		TEXT(T_RESOURCES), AL_LEFT | AL_EXTD_TEXT,
-		TEXT(T_RESOURCES), a1,
-		TEXT(T_HANDLES), a2,
-		TEXT(T_TIMERS), a3,
-		TEXT(T_CONNECTIONS), a4,
-		TEXT(T_cONNECTIONS), a5,
-		TEXT(T_CONNECTING), a6,
-		TEXT(T_tRANSFERRING), a7,
-		TEXT(T_KEEPALIVE), a8,
-		TEXT(T_MEMORY_CACHE), a9,
-		TEXT(T_BYTES), a10,
-		TEXT(T_FILES), a11,
-		TEXT(T_LOCKED), a12,
-		TEXT(T_LOADING), a13,
-		TEXT(T_FORMATTED_DOCUMENT_CACHE), a14,
-		TEXT(T_DOCUMENTS), a15,
-		TEXT(T_LOCKED), a16, NULL,
-		r, 1,
-		TEXT(T_OK), NULL, B_ENTER | B_ESC);
-
-	r->win = term->windows.next;
-	((struct dialog_data *) r->win->data)->dlg->abort = refresh_abort;
-	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *)) refresh, r);
-}
-
-/* FIXME! The refresh here is buggy, thus the whole funct is disabled for now. */
-void list_cache(struct terminal *term, void *d, struct session *ses)
-{
-	unsigned char *a;
-	int l = 0;
-	struct refresh *r;
-	struct cache_entry *ce, *cache;
-
-	r = mem_alloc(sizeof(struct refresh));
-	if (!r)	return;
-
-	a = init_str();
-
-	r->term = term;
-	r->win = NULL;
-	r->ses = ses;
-	r->fn = list_cache;
-	r->data = d;
-	r->timer = -1;
-
-	cache = (struct cache_entry *) cache_info(CI_LIST);
-	add_to_str(&a, &l, ":");
-	foreach(ce, *cache) {
-		add_to_str(&a, &l, "\n");
-		add_to_str(&a, &l, ce->url);
-	}
-
-	msg_box(term, getml(a, NULL),
-		TEXT(T_CACHE_INFO), AL_LEFT | AL_EXTD_TEXT,
-		TEXT(T_CACHE_CONTENT), a, NULL,
-		r, 1,
-		TEXT(T_OK), NULL, B_ENTER | B_ESC);
-
-	r->win = term->windows.next;
-	((struct dialog_data *) r->win->data)->dlg->abort = refresh_abort;
-	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *)) refresh, r);
-}
-
-#ifdef LEAK_DEBUG
-
-void memory_cld(struct terminal *term, void *d)
-{
-	last_mem_amount = mem_amount;
-}
-
-#define MSG_BUF	2000
-#define MSG_W	100
-
-void memory_info(struct terminal *term, void *d, struct session *ses)
-{
-	char message[MSG_BUF];
-	char *p;
-	struct refresh *r;
-
-	r = mem_alloc(sizeof(struct refresh));
-	if (!r) return;
-
-	r->term = term;
-	r->win = NULL;
-	r->ses = ses;
-	r->fn = memory_info;
-	r->data = d;
-	r->timer = -1;
-
-	p = message;
-	sprintf(p, "%ld %s", mem_amount, _(TEXT(T_MEMORY_ALLOCATED), term));
-	p += strlen(p);
-
-	if (last_mem_amount != -1) {
-		sprintf(p, ", %s %ld, %s %ld", _(TEXT(T_LAST), term),
-			last_mem_amount, _(TEXT(T_DIFFERENCE), term),
-			mem_amount - last_mem_amount);
-		p += strlen(p);
-	}
-
-	sprintf(p, ".");
-	p += strlen(p);
-
-#if 0 && defined(MAX_LIST_SIZE)
-	if (last_mem_amount != -1) {
-		long i, j;
-		int l = 0;
-		for (i = 0; i < MAX_LIST_SIZE; i++) if (memory_list[i].p && memory_list[i].p != last_memory_list[i].p) {
-			for (j = 0; j < MAX_LIST_SIZE; j++) if (last_memory_list[j].p == memory_list[i].p) goto b;
-			if (!l) p += sprintf(p, "\n%s: ", _(TEXT(T_NEW_ADDRESSES), term)), l = 1;
-			else p += sprintf(p, ", ");
-			p += sprintf(p, "#%p of %d at %s:%d", memory_list[i].p, (int)memory_list[i].size, memory_list[i].file, memory_list[i].line);
-			if (p - message >= MSG_BUF - MSG_W) {
-				p += sprintf(p, "..");
-				break;
-			}
-			b:;
-		}
-		if (!l) p += sprintf(p, "\n%s", _(TEXT(T_NO_NEW_ADDRESSES), term));
-		p += sprintf(p, ".");
-	}
-#endif
-
-	p = stracpy(message);
-	if (!p) {
-		mem_free(r);
-		return;
-	}
-
-	msg_box(term, getml(p, NULL),
-		TEXT(T_MEMORY_INFO), AL_CENTER,
-		p,
-		r, 1,
-		TEXT(T_OK), NULL, B_ENTER | B_ESC);
-
-	r->win = term->windows.next;
-	((struct dialog_data *) r->win->data)->dlg->abort = refresh_abort;
-	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *)) refresh, r);
-}
-
-#undef MSG_W
-#undef MSG_BUF
-
-#endif
 
 void flush_caches(struct terminal *term, void *d, void *e)
 {
@@ -1263,10 +995,10 @@ struct menu_item file_menu22[] = {
 	{"", "", M_BAR, NULL, NULL, 0, 0},
 	{TEXT(T_KILL_BACKGROUND_CONNECTIONS), "", TEXT(T_HK_KILL_BACKGROUND_CONNECTIONS), MENU_FUNC menu_kill_background_connections, (void *)0, 0, 0},
 	{TEXT(T_FLUSH_ALL_CACHES), "", TEXT(T_HK_FLUSH_ALL_CACHES), MENU_FUNC flush_caches, (void *)0, 0, 0},
-	{TEXT(T_RESOURCE_INFO), "", TEXT(T_HK_RESOURCE_INFO), MENU_FUNC cache_inf, (void *)0, 0, 0},
-	{TEXT(T_CACHE_INFO), "", TEXT(T_HK_CACHE_INFO), MENU_FUNC list_cache, (void *)0, 0, 0},
+	{TEXT(T_RESOURCE_INFO), "", TEXT(T_HK_RESOURCE_INFO), MENU_FUNC res_inf, (void *)0, 0, 0},
+	{TEXT(T_CACHE_INFO), "", TEXT(T_HK_CACHE_INFO), MENU_FUNC cache_inf, (void *)0, 0, 0},
 #ifdef LEAK_DEBUG
-	{TEXT(T_MEMORY_INFO), "", TEXT(T_HK_MEMORY_INFO), MENU_FUNC memory_info, (void *)0, 0, 0},
+	{TEXT(T_MEMORY_INFO), "", TEXT(T_HK_MEMORY_INFO), MENU_FUNC memory_inf, (void *)0, 0, 0},
 	{"", "", M_BAR, NULL, NULL, 0, 0},
 #endif
 };

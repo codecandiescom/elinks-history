@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.562 2004/07/23 02:57:26 miciah Exp $ */
+/* $Id: view.c,v 1.563 2004/07/28 10:43:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -971,7 +971,7 @@ quit:
 		}
 
 		if (ev->x == KBD_CTRL_C) goto quit;
-		if (ev->y & KBD_ALT) {
+		if (get_kbd_modifier(ev) & KBD_ALT) {
 			struct window *m;
 
 			ev->y &= ~KBD_ALT;

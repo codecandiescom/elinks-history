@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.16 2004/07/28 10:19:12 jonas Exp $ */
+/* $Id: event.h,v 1.17 2004/07/28 10:43:37 jonas Exp $ */
 
 #ifndef EL__TERMINAL_EVENT_H
 #define EL__TERMINAL_EVENT_H
@@ -73,5 +73,8 @@ void in_term(struct terminal *);
 
 #define check_kbd_textinput_key(event)	((event)->x >= ' ' && (event)->x < 256 && !(event->y)) 
 #define check_kbd_label_key(event)	((event)->x > ' ' && (event)->x < 256) 
+
+#define get_kbd_modifier(event)		((event)->y) 
+#define check_kbd_modifier(event, key)	(get_kbd_modifier(event) == (key))
 
 #endif /* EL__TERMINAL_EVENT_H */

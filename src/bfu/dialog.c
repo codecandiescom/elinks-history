@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.151 2004/07/27 17:34:19 jonas Exp $ */
+/* $Id: dialog.c,v 1.152 2004/07/28 10:43:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -263,7 +263,8 @@ dialog_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 	/* Submit button. */
 	if (action == ACT_MENU_ENTER
 	    && (widget_is_textfield(widget_data)
-		|| ev->y == KBD_CTRL || ev->y == KBD_ALT)) {
+		|| check_kbd_modifier(ev, KBD_CTRL)
+		|| check_kbd_modifier(ev, KBD_ALT))) {
 		int i;
 
 		for (i = 0; i < dlg_data->n; i++) {

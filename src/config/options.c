@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.34 2002/05/25 13:46:03 pasky Exp $ */
+/* $Id: options.c,v 1.35 2002/05/25 19:18:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -716,7 +716,7 @@ register_options()
 
 
 	add_opt_tree("protocol",
-		"files", OPT_CFGFILE,
+		"file", OPT_CFGFILE,
 		"Options specific for local browsing.");
 
 	add_opt_bool("protocol.file",

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.197 2003/09/09 10:11:55 zas Exp $ */
+/* $Id: parser.c,v 1.198 2003/09/09 10:52:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,10 @@ parse_element(register unsigned char *e, unsigned char *eof,
 	if (e >= eof || !isA(*e)) goto parse_error;
 
 	while (isA(*e)) e++;
-	if (e >= eof || (!WHITECHAR(*e) && *e != '>' && *e != '<' && *e != '/' && *e != ':')) goto parse_error;
+	if (e >= eof
+	    || (!WHITECHAR(*e) && *e != '>' && *e != '<' && *e != '/'
+		&& *e != ':'))
+		goto parse_error;
 
 	if (name && namelen) *namelen = e - *name;
 
@@ -84,7 +87,7 @@ parse_element(register unsigned char *e, unsigned char *eof,
 
 	if (attr) *attr = e;
 
-nextattr:
+next_attr:
 	while (WHITECHAR(*e)) e++;
 	if (e >= eof || (!atchr(*e) && *e != '>' && *e != '<')) goto parse_error;
 
@@ -94,7 +97,11 @@ nextattr:
 	while (WHITECHAR(*e)) e++;
 	if (e >= eof) goto parse_error;
 
-	if (*e != '=') goto endattr;
+	if (*e != '=') {
+		if (*e == '>' || *e == '<') goto end;
+		goto next_attr;
+	}
+
 	e++;
 
 	while (WHITECHAR(*e)) e++;
@@ -118,8 +125,7 @@ quoted_value:
 	while (WHITECHAR(*e)) e++;
 	if (e >= eof) goto parse_error;
 
-endattr:
-	if (*e != '>' && *e != '<') goto nextattr;
+	if (*e != '>' && *e != '<') goto next_attr;
 
 end:
 	if (end) *end = e + (*e == '>');

@@ -1,3 +1,69 @@
+Sat May 10 20:06:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/snprintf.c:
+
+	Cleanup, elinksification, comments.  
+
+Sat May 10 12:59:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/tab.c:
+
+	When closing tab, move to the _previous_ tab, not the next one.
+	Fixes bug 35.  
+
+Sat May 10 12:00:17 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	A bug entry was removed. Thanks to Witekfl :) 
+
+Sat May 10 11:55:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Tags were badly interpreted in plain documents. This is now fixed.
+	Patch by Witold Filipczyk.  
+
+Sat May 10 11:36:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Titles in link tags are now honoured. It helps to get significant
+	bookmarks titles. Patch by Hugo Haas and me.  
+
+Sat May 10 11:33:05 2003  Laurent Monin <zas@norz.org>:
+
+	* AUTHORS:
+
+	Hugo Haas was added to AUTHORS document.  
+
+Sat May 10 04:07:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Added default irc protocol handlers.  
+
+Sat May 10 02:18:15 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	A minor bug (term title and html<>souce) was added.  
+
+Sat May 10 01:29:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/: conv.c, conv.h, string.h:
+
+	add_knum_to_str() was rewritten. snprint() and snzprinf() are now
+	macros using [u]longcat(), these were moved to string.h.  
+
+Sat May 10 00:27:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/: conv.c, conv.h, string.c, string.h:
+
+	ulongcat(), longcat(), add_num_to_str() now returns int instead of
+	void. add_num_to_str() was totally rewritten. Performance made a
+	jump.  
+
 Fri May  9 22:06:01 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/.vimrc:

@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.13 2004/06/29 03:25:18 jonas Exp $ */
+/* $Id: table.c,v 1.14 2004/06/29 04:06:26 jonas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -212,6 +212,9 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real)
 
 	table->align = par_format.align;
 	get_align(attr, &table->align);
+
+	table->bgcolor = par_format.bgcolor;
+	get_bgcolor(attr, &table->bgcolor);
 }
 
 
@@ -458,15 +461,14 @@ skip_table(unsigned char *html, unsigned char *eof)
 }
 
 struct table *
-parse_table(unsigned char *html, unsigned char *eof,
-	    unsigned char **end, color_t bgcolor,
+parse_table(unsigned char *html, unsigned char *eof, unsigned char **end,
 	    unsigned char *attr, int sh)
 {
 	struct table *table;
 	struct table_cell *cell;
 	unsigned char *t_name, *t_attr, *en;
 	unsigned char *l_fragment_id = NULL;
-	color_t last_bgcolor = bgcolor;
+	color_t last_bgcolor;
 	int t_namelen;
 	int in_cell = 0;
 	int l_al = ALIGN_LEFT;
@@ -483,9 +485,8 @@ parse_table(unsigned char *html, unsigned char *eof,
 	table = new_table();
 	if (!table) return NULL;
 
-	table->bgcolor = bgcolor;
-
 	parse_table_attributes(table, attr, sh);
+	last_bgcolor = table->bgcolor;
 
 se:
 	en = html;
@@ -611,7 +612,7 @@ see:
 		if (group) group--;
 		l_al = ALIGN_LEFT;
 		l_val = VALIGN_MIDDLE;
-		last_bgcolor = bgcolor;
+		last_bgcolor = table->bgcolor;
 		get_align(t_attr, &l_al);
 		get_valign(t_attr, &l_val);
 		get_bgcolor(t_attr, &last_bgcolor);

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.280 2004/06/29 03:48:36 jonas Exp $ */
+/* $Id: tables.c,v 1.281 2004/06/29 04:06:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1080,14 +1080,12 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	struct table *table;
 	struct node *node, *new_node;
 	struct html_element *state;
-	color_t bgcolor = par_format.bgcolor;
 	int x;
 	int margins;
 
 	html_context.table_level++;
-	get_bgcolor(attr, &bgcolor);
 
-	table = parse_table(html, eof, end, bgcolor, attr, (part->document || part->box.x));
+	table = parse_table(html, eof, end, attr, (part->document || part->box.x));
 	if (!table) goto ret0;
 
 	table->part = part;

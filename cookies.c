@@ -402,7 +402,7 @@ void save_cookies() {
 	
 	foreach (c, cookies) {
 		if (c->expires && ! cookie_expired(c))
-			fprintf(fp, "%s %s %s %s %s %d %d\n", c->name, c->value,
+			fprintf(fp, "%s %s %s %s %s %ld %d\n", c->name, c->value,
 			    c->server?c->server:(unsigned char *)"", c->path?c->path:(unsigned char *)"",
 			    c->domain?c->domain:(unsigned char *)"", c->expires, c->secure);
 

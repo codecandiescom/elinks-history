@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.496 2004/09/24 13:07:23 pasky Exp $ */
+/* $Id: parser.c,v 1.497 2004/09/24 18:50:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -411,6 +411,7 @@ do_html_script(unsigned char *a, unsigned char *html, unsigned char *eof, unsign
 	 * CSS property display: none processing. */
 	/* TODO: Charsets for external scripts. */
 	unsigned char *type, *src;
+	int in_comment = 0;
 
 	html_skip(a);
 	
@@ -440,6 +441,7 @@ not_processed:
 	/* First position to the real script start. */
 	while (html < eof && *html <= ' ') html++;
 	if (eof - html > 4 && !strncmp(html, "<!--", 4)) {
+		in_comment = 1;
 		/* We either skip to the end of line or to -->. */
 		for (; *html != '\n' && *html != '\r'; html++) {
 			if (eof - html >= 3 && !strncmp(html, "-->", 3)) {
@@ -451,6 +453,7 @@ not_processed:
 				 * less tolerant to broken pages, if there are
 				 * any like this. */
 				html += 3;
+				in_comment = 0;
 				break;
 			}
 		}
@@ -458,13 +461,30 @@ not_processed:
 
 	*end = html;
 
-	/* Now look ahead for the script end. */
+	/* Now look ahead for the script end. The <script> contents is raw
+	 * CDATA, so we just look for the ending tag and need not care for
+	 * any quote marks counting etc - YET, we are more tolerant and permit
+	 * </script> stuff inside of the script if the whole <script> element
+	 * contents is wrapped in a comment. See i.e. Mozilla bug 26857 for fun
+	 * reading regarding this. */
 	for (; *end < eof; (*end)++) {
 		unsigned char *name;
 		int namelen;
 
 		if (**end != '<')
 			continue;
+		if (in_comment) {
+			/* TODO: If we ever get some standards-quirk mode
+			 * distinction, this should be disabled in the
+			 * standards mode (and we should just look for CDATA
+			 * end, which is "</"). --pasky */
+			if (strlcmp(*end + 1, *end - eof - 1, "-->", 3))
+				continue;
+			in_comment = 0;
+			/* XXX: Scan for another comment? That's admittelly
+			 * already stretching things a little bit to an
+			 * extreme ;-). */
+		}
 		/* We want to land before the closing element, that's why we
 		 * don't pass @end also as the appropriate parse_element()
 		 * argument. */

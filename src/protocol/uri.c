@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.297 2004/11/10 21:53:04 jonas Exp $ */
+/* $Id: uri.c,v 1.298 2004/11/10 23:49:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -968,6 +968,9 @@ find_uri_protocol(unsigned char *newurl)
 	return PROTOCOL_FILE;
 }
 
+
+#define MAX_TRANSLATION_ATTEMPTS	32
+
 /* Returns an URI string that can be used internally. Adding protocol prefix,
  * missing slashes etc. */
 static unsigned char *
@@ -976,6 +979,7 @@ translate_url(unsigned char *url, unsigned char *cwd)
 	unsigned char *newurl;
 	struct uri uri;
 	enum uri_errno uri_errno, prev_errno = URI_ERRNO_EMPTY;
+	int retries = 0;
 
 	/* Strip starting spaces */
 	while (*url == ' ') url++;
@@ -991,7 +995,11 @@ parse_uri:
 	uri_errno = parse_uri(&uri, newurl);
 
 	/* Bail out if the same error occurs twice */
-	if (uri_errno == prev_errno) {
+	if (uri_errno == prev_errno || retries++ > MAX_TRANSLATION_ATTEMPTS) {
+		if (retries > MAX_TRANSLATION_ATTEMPTS) {
+			ERROR("Maximum number of parsing attempts exceeded "
+			      "for %s.", url);
+		}
 		mem_free(newurl);
 		return NULL;
 	}

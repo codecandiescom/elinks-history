@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.102 2004/10/09 23:00:33 miciah Exp $ */
+/* $Id: action.c,v 1.103 2004/10/10 00:43:33 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,9 +123,10 @@ goto_url_action(struct session *ses,
 /* This could gradually become some multiplexor / switch noodle containing
  * most if not all default handling of actions (for the main mapping) that
  * frame_ev() and/or send_event() could use as a backend. */
-enum main_action
+enum frame_event_status
 do_action(struct session *ses, enum main_action action, int verbose)
 {
+	enum frame_event_status status = FRAME_EVENT_OK;
 	struct terminal *term = ses->tab->term;
 	struct document_view *doc_view = current_frame(ses);
 
@@ -465,6 +466,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_TAB_CLOSE:
 			close_tab(term, ses);
+			status = FRAME_EVENT_SESSION_DESTROYED;
 			break;
 
 		case ACT_MAIN_TAB_CLOSE_ALL_BUT_CURRENT:
@@ -625,8 +627,8 @@ do_action(struct session *ses, enum main_action action, int verbose)
 					 write_action(KEYMAP_MAIN, action));
 			}
 
-			return ACT_MAIN_NONE;
+			status = FRAME_EVENT_IGNORED;
 	}
 
-	return action;
+	return status;
 }

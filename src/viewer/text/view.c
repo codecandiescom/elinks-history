@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.605 2004/10/09 23:57:01 miciah Exp $ */
+/* $Id: view.c,v 1.606 2004/10/10 00:43:33 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -984,13 +984,14 @@ quit:
 			action = ACT_MAIN_REALLY_QUIT;
 	}
 
-	if (do_action(ses, action, 0) == action) {
-		/* Did the session disappear in some EVENT_ABORT handler? */
-		if (action == ACT_MAIN_TAB_CLOSE
-		    || action == ACT_MAIN_TAB_CLOSE_ALL_BUT_CURRENT)
+	switch (do_action(ses, action, 0)) {
+		case FRAME_EVENT_SESSION_DESTROYED:
 			return NULL;
-
-		return ses;
+		case FRAME_EVENT_IGNORED:
+			break;
+		case FRAME_EVENT_OK:
+		case FRAME_EVENT_REFRESH:
+			return ses;
 	}
 
 	if (action == ACT_MAIN_SCRIPTING_FUNCTION) {

@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.62 2004/10/09 23:00:33 miciah Exp $ */
+/* $Id: view.h,v 1.63 2004/10/10 00:43:33 miciah Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -15,6 +15,8 @@ enum frame_event_status {
 	FRAME_EVENT_REFRESH,
 	/* The event was handled, and the screen should _not_ be redrawn */
 	FRAME_EVENT_OK,
+	/* The event was handled, and the current session was destroyed */
+	FRAME_EVENT_SESSION_DESTROYED,
 };
 
 /* Releases the document view's resources. But doesn't free() the @view. */

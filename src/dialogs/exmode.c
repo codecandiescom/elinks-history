@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.49 2004/07/15 15:54:20 jonas Exp $ */
+/* $Id: exmode.c,v 1.50 2004/10/10 00:43:33 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,7 +52,7 @@ exmode_action_handler(struct session *ses, unsigned char *command,
 	if (action == ACT_MAIN_QUIT) action = ACT_MAIN_REALLY_QUIT;
 
 	if (!*args)
-		return do_action(ses, action, 0) == action;
+		return do_action(ses, action, 0, NULL) != FRAME_EVENT_IGNORED;
 
 	switch (action) {
 		case ACT_MAIN_GOTO_URL:

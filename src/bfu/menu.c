@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.66 2003/05/07 23:18:46 zas Exp $ */
+/* $Id: menu.c,v 1.67 2003/05/08 00:37:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,6 +178,7 @@ is_hotkey(struct menu_item *item, unsigned char hotkey, struct terminal *term)
 		&& (upcase(text[item->hotkey_pos]) == upcase(hotkey)));
 #endif
 }
+
 
 static void
 free_menu_items(struct menu_item *items)
@@ -472,6 +473,31 @@ display_menu(struct terminal *term, struct menu *menu)
 	redraw_from_window(menu->win);
 }
 
+/* Search if first letter of an entry in menu matches the key (caseless comp.).
+ * It searchs in all entries, from selected entry to bottom and then from top
+ * to selected entry. */
+static inline void
+check_not_so_hot_keys(struct menu *menu, unsigned char key, struct terminal *term)
+{
+	unsigned char evx = upcase(key);
+	unsigned char *text;
+	int i = menu->selected + 1;
+
+	while (1) {
+		if (i == menu->ni) i = 0;
+		text = menu->items[i].text;
+
+		if (text && upcase(text[0]) == evx) {
+			menu->selected = i;
+			scroll_menu(menu, 0);
+			break;
+		}
+
+		i++;
+		if (i == menu->selected) break;
+	}
+}
+
 static void
 menu_func(struct window *win, struct event *ev, int fwd)
 {
@@ -692,19 +718,7 @@ menu_func(struct window *win, struct event *ev, int fwd)
 					if (s != 0)
 						break;
 
-					for (i = 0; i < menu->ni; i++) {
-						if (!menu->items[i].text ||
-						    (upcase(menu->items[i].text[0])
-						     != upcase(ev->x)))
-							continue;
-						if (upcase(menu->items[menu->selected].text[0])
-						    	== upcase(ev->x)
-						    && menu->selected >= i)
-							continue;
-						menu->selected = i;
-						scroll_menu(menu, 0);
-						break;
-					}
+					check_not_so_hot_keys(menu, ev->x, win->term);
 
 					break;
 				}

@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.95 2004/04/11 00:59:19 jonas Exp $ */
+/* $Id: dialogs.c,v 1.96 2004/04/13 16:17:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,17 +50,8 @@ do_auth_dialog(struct session *ses, void *data)
 	struct terminal *term = ses->tab->term;
 	struct http_auth_basic *a = get_invalid_auth_entry();
 	unsigned char sticker[MAX_STR_LEN], *text;
-	unsigned char *dlg_login, *dlg_pass;
 
 	if (!a || a->blocked) return;
-
-	dlg_login = straconcat(_("Login", term), ": ", NULL);
-	if (!dlg_login) return;
-	dlg_pass = straconcat(_("Password", term), ": ", NULL);
-	if (!dlg_pass) {
-		mem_free(dlg_login);
-		return;
-	}
 
 	snprintf(sticker, sizeof(sticker),
 		 _("Authentication required for %s at %s", term),
@@ -68,11 +59,7 @@ do_auth_dialog(struct session *ses, void *data)
 
 #define AUTH_WIDGETS_COUNT 5
 	dlg = calloc_dialog(AUTH_WIDGETS_COUNT, strlen(sticker) + 1);
-	if (!dlg) {
-		mem_free(dlg_login);
-		mem_free(dlg_pass);
-		return;
-	}
+	if (!dlg) return;
 
 	a->blocked = 1;
 
@@ -86,9 +73,9 @@ do_auth_dialog(struct session *ses, void *data)
 	dlg->udata2 = a;
 
 	add_dlg_text(dlg, text, AL_LEFT, 0);
-	add_dlg_field(dlg, dlg_login, 0, 0, NULL, HTTP_AUTH_USER_MAXLEN, a->user, NULL);
+	add_dlg_field(dlg, _("Login", term), 0, 0, NULL, HTTP_AUTH_USER_MAXLEN, a->user, NULL);
 	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
-	add_dlg_field_pass(dlg, dlg_pass, 0, 0, NULL, HTTP_AUTH_PASSWORD_MAXLEN, a->password);
+	add_dlg_field_pass(dlg, _("Password", term), 0, 0, NULL, HTTP_AUTH_PASSWORD_MAXLEN, a->password);
 	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
 
 	add_dlg_ok_button(dlg, B_ENTER, _("OK", term), auth_ok, dlg);
@@ -96,7 +83,7 @@ do_auth_dialog(struct session *ses, void *data)
 
 	add_dlg_end(dlg, AUTH_WIDGETS_COUNT);
 
-	dlg_data = do_dialog(term, dlg, getml(dlg, dlg_login, dlg_pass, NULL));
+	dlg_data = do_dialog(term, dlg, getml(dlg, NULL));
 	/* When there's some username, but no password, automagically jump at
 	 * the password. */
 	if (dlg_data && a->user[0] && !a->password[0])

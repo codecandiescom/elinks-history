@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.130 2004/04/12 22:49:14 jonas Exp $ */
+/* $Id: inpfield.c,v 1.131 2004/04/13 16:17:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,8 +107,8 @@ dlg_format_field(struct terminal *term,
 		/* FIXME: Is 5 chars for input field enough? --jonas */
 		if (label_width < w - 5) {
 			(*y)--;
-			w -= label_width;
-			x += label_width;
+			w -= label_width + 2;
+			x += label_width + 2;
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.228 2003/12/23 23:51:56 pasky Exp $ */
+/* $Id: http.c,v 1.229 2003/12/24 00:30:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1368,6 +1368,9 @@ http_error:
 		file_encoding = extension ? guess_encoding(extension) : ENCODING_NONE;
 		if (extension) mem_free(extension);
 
+		/* If the content is encoded, we want to preserve the encoding
+		 * if it is implied by the extension, so that saving the URI
+		 * will leave the saved file with the correct encoding. */
 #ifdef HAVE_ZLIB_H
 		if ((!strcasecmp(d, "gzip") || !strcasecmp(d, "x-gzip"))
 		    && file_encoding != ENCODING_GZIP)

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.173 2003/07/28 09:59:20 jonas Exp $ */
+/* $Id: view.c,v 1.174 2003/07/28 20:20:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,12 +212,13 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 				if (j == fsd->y - 1)
 					set_xchar(t, x, y + wwy + 1, FRAME_X_UP);
 			} else if (j) {
-				set_xchar(t, x, y, FRAME_X_RIGHT);
+				if (x >= 0)
+					set_xchar(t, x, y, FRAME_X_RIGHT);
 			}
 
 			if (j) {
 				fill_area(t, x + 1, y, wwx, 1, FRAMES_HLINE);
-				if (i == fsd->x - 1)
+				if (i == fsd->x - 1 && x + wwx + 1 < t->x)
 					set_xchar(t, x + wwx + 1, y, FRAME_X_LEFT);
 			} else if (i) {
 				set_xchar(t, x, y, FRAME_X_DOWN);

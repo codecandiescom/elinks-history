@@ -86,3 +86,6 @@
 
 /* Enable direct use of system allocation functions */
 #undef FASTMEM
+
+/* Force use of internal functions instead of those of system libc */
+#undef USE_LIBC

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.25 2002/09/04 15:43:22 zas Exp $ */
+/* $Id: file.c,v 1.26 2002/09/09 15:58:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,7 +200,7 @@ void
 stat_size(unsigned char **p, int *l, struct stat *stp)
 {
 	unsigned char size[64];
-	
+
 	if (!stp) {
 		add_to_str(p, l, "         ");
 	} else {
@@ -233,7 +233,7 @@ stat_date(unsigned char **p, int *l, struct stat *stp)
 		fmt = "%b %e  %Y";
 	else
 		fmt = "%b %e %H:%M";
-	
+
 #ifdef HAVE_STRFTIME
 	wr = strftime(str, 13, fmt, when_local);
 #else
@@ -256,7 +256,7 @@ get_filenamepart_from_url(unsigned char *url, unsigned char **name,
 {
 	unsigned char *start, *end, *filename;
 	int len;
-		
+
 	for (start = url;
 	     *start && *start != 1 && *start != ':';
 	     start++);
@@ -332,11 +332,11 @@ file_func(struct connection *c)
 	struct stat stt;
 	int namelen;
 	int saved_errno;
-	unsigned char dircolor[8];	
+	unsigned char dircolor[8];
 	int colorize_dir = get_opt_int("document.browse.links.color_dirs");
 
 	if (colorize_dir) {
-		color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"), 
+		color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"),
 				(unsigned char *) &dircolor);
 	}
 
@@ -344,7 +344,7 @@ file_func(struct connection *c)
 		abort_conn_with_state(c, S_BAD_URL);
 		return;
 	}
-	
+
 	get_filenamepart_from_url(c->url, &name, &namelen);
 	if (!name) {
 		abort_conn_with_state(c, S_OUT_OF_MEM);
@@ -362,7 +362,7 @@ file_func(struct connection *c)
 		abort_conn_with_state(c, -saved_errno);
 		return;
 	}
-	
+
 	set_bin(h);
 	if (fstat(h, &stt)) {
 		saved_errno = errno;
@@ -371,7 +371,7 @@ file_func(struct connection *c)
 		abort_conn_with_state(c, -saved_errno);
 		return;
 	}
-	
+
 	if (S_ISDIR(stt.st_mode)) {
 		struct dirs *dir;
 		int dirl;
@@ -382,9 +382,8 @@ file_func(struct connection *c)
 
 
 		close(h);
+
 dir:
-
-
 		dir = DUMMY;
 		dirl = 0;
 
@@ -406,7 +405,7 @@ dir:
 
 			goto end;
 		}
-		
+
 		last_uid = -1;
 		last_gid = -1;
 		file = init_str();
@@ -426,15 +425,15 @@ dir:
 			unsigned char *n;
 
 			if (!strcmp(de->d_name, ".")) continue;
-			
+
 			nd = mem_realloc(dir, (dirl + 1) * sizeof(struct dirs));
 			if (!nd) continue;
-			
+
 			dir = nd;
 			dir[dirl].f = stracpy(de->d_name);
-			
+
 			*(p = &dir[dirl++].s) = init_str();
-			
+
 			l = 0;
 			n = stracpy(name);
 			add_to_strn(&n, de->d_name);
@@ -455,15 +454,15 @@ dir:
 			stat_size(p, &l, stp);
 			stat_date(p, &l, stp);
 		}
-		
+
 		closedir(d);
-		
+
 		if (dirl) qsort(dir, dirl, sizeof(struct dirs),
 				(int(*)(const void *, const void *))comp_de);
-		
+
 		for (i = 0; i < dirl; i++) {
 			unsigned char *lnk = NULL;
-			
+
 #ifdef FS_UNIX_SOFTLINKS
 			if (dir[i].s[0] == 'l') {
 
@@ -518,7 +517,7 @@ dir:
 				mem_free(n);
 			}
 			add_to_str(&file, &fl, "\">");
-			
+
 			if (dir[i].s[0] == 'd' && colorize_dir) {
 				/* The <b> is here for the case when we've
 				 * use_document_colors off. */
@@ -526,34 +525,34 @@ dir:
 				add_to_str(&file, &fl, dircolor);
 				add_to_str(&file, &fl, "\"><b>");
 			}
-			
+
 			add_htmlesc_str(&file, &fl,
 					dir[i].f, strlen(dir[i].f));
 
 			if (dir[i].s[0] == 'd' && colorize_dir) {
 				add_to_str(&file, &fl, "</b></font>");
 			}
-			
+
 			add_to_str(&file, &fl, "</a>");
 			if (lnk) {
 				add_to_str(&file, &fl, " -> ");
 				add_htmlesc_str(&file, &fl, lnk, strlen(lnk));
 				mem_free(lnk);
 			}
-		
+
 			add_to_str(&file, &fl, "\n");
 		}
-		
+
 		mem_free(name);
 		for (i = 0; i < dirl; i++) {
 			mem_free(dir[i].s);
 		       	mem_free(dir[i].f);
 		}
 		mem_free(dir);
-		
+
 		add_to_str(&file, &fl, "</pre>\n<hr>\n</body>\n</html>\n");
 		head = stracpy("\r\nContent-Type: text/html\r\n");
-	
+
 	} else if (!S_ISREG(stt.st_mode)) {
 		const int bufsize = 4096;
 		int offset = 0;
@@ -594,7 +593,7 @@ dir:
 	} else {
 		struct stream_encoded *stream;
 		enum stream_encoding encoding = guess_encoding(name);
-	
+
 		mem_free(name);
 
 		/* We read with granularity of stt.st_size - this does best
@@ -652,13 +651,13 @@ dir:
 
 		head = stracpy("");
 	}
-	
+
 	if (get_cache_entry(c->url, &e)) {
 		mem_free(file);
 		abort_conn_with_state(c, S_OUT_OF_MEM);
 		return;
 	}
-	
+
 	if (e->head) mem_free(e->head);
 	e->head = head;
 	c->cache = e;

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.76 2004/09/14 20:58:51 witekfl Exp $ */
+/* $Id: cgi.c,v 1.77 2004/09/15 09:12:44 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,7 +190,7 @@ set_vars(struct connection *conn, unsigned char *script)
 
 		case REFERER_TRUE:
 			/* XXX: Encode as in add_url_to_http_string() ? --pasky */
-			setenv("HTTP_REFERER", struri(conn->referrer), 1);
+			if (conn->referrer) setenv("HTTP_REFERER", struri(conn->referrer), 1);
 			break;
 
 		case REFERER_SAME_URL:

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.179 2004/01/24 23:14:24 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.180 2004/01/24 23:25:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,7 +123,7 @@ free_keybinding(struct keybinding *kb)
 }
 
 int
-keybinding_exists(enum keymap km, long key, long meta, enum action *action)
+keybinding_exists(enum keymap km, long key, long meta, int *action)
 {
 	struct keybinding *kb;
 
@@ -211,7 +211,7 @@ struct keybinding *
 kbd_nm_lookup(enum keymap kmap, unsigned char *name, int *func_ref)
 {
 	struct keybinding *kb;
-	enum action act = read_action(kmap, name);
+	int act = read_action(kmap, name);
 
 	if (act < 0) return NULL;
 
@@ -229,7 +229,7 @@ kbd_nm_lookup(enum keymap kmap, unsigned char *name, int *func_ref)
 }
 
 struct keybinding *
-kbd_act_lookup(enum keymap map, enum action action)
+kbd_act_lookup(enum keymap map, int action)
 {
 	struct keybinding *kb;
 
@@ -390,7 +390,7 @@ make_keystroke(struct string *str, long key, long meta, int escape)
 }
 
 void
-add_keystroke_to_string(struct string *string, enum action action,
+add_keystroke_to_string(struct string *string, int action,
 			enum keymap map)
 {
 	struct keybinding *kb = kbd_act_lookup(map, action);
@@ -400,7 +400,7 @@ add_keystroke_to_string(struct string *string, enum action action,
 }
 
 void
-add_actions_to_string(struct string *string, enum action *actions,
+add_actions_to_string(struct string *string, int *actions,
 		      enum keymap map, struct terminal *term)
 {
 	int i;

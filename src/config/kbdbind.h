@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.92 2004/01/24 23:14:24 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.93 2004/01/24 23:25:06 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -145,7 +145,7 @@ enum kbdbind_flags {
 struct keybinding {
 	LIST_HEAD(struct keybinding);
 	enum keymap keymap;
-	enum action action;
+	int action;
 	long key;
 	long meta;
 	int func_ref;
@@ -158,7 +158,7 @@ void init_keymaps(void);
 void free_keymaps(void);
 
 struct keybinding *add_keybinding(enum keymap km, int action, long key, long meta, int func_ref);
-int keybinding_exists(enum keymap km, long key, long meta, enum action *action);
+int keybinding_exists(enum keymap km, long key, long meta, int *action);
 void delete_keybinding(enum keymap km, long key, long meta);
 void free_keybinding(struct keybinding *);
 
@@ -183,9 +183,9 @@ void bind_config_string(struct string *);
 unsigned char *bind_scripting_func(unsigned char *, unsigned char *, int);
 #endif
 
-void add_keystroke_to_string(struct string *string, enum action action, enum keymap map);
+void add_keystroke_to_string(struct string *string, int action, enum keymap map);
 
-void add_actions_to_string(struct string *string, enum action *actions,
+void add_actions_to_string(struct string *string, int *actions,
 			   enum keymap map, struct terminal *term);
 
 #endif

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.85 2003/06/07 14:37:17 pasky Exp $ */
+/* $Id: session.c,v 1.86 2003/06/07 14:40:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -593,7 +593,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 	msg_box(ses->tab->term, getml(m2, wtd_data, wtd_data->url, wtd_data->pos,
 				 NULL), MSGBOX_EXTD_TEXT,
 		N_("Warning"), AL_CENTER,
-		msg_text(term, m1, m2),
+		msg_text(ses->tab->term, m1, m2),
 		wtd_data, 2,
 		N_("Yes"), post_yes, B_ENTER,
 		N_("No"), post_no, B_ESC);

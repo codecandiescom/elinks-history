@@ -1,5 +1,5 @@
 /* Blacklist manager */
-/* $Id: blacklist.c,v 1.13 2003/07/24 13:05:12 zas Exp $ */
+/* $Id: blacklist.c,v 1.14 2003/07/25 12:32:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,7 @@ add_blacklist_entry(unsigned char *host, int hostlen, enum blacklist_flags flags
 	if_assert_failed return;
 
 	foreach (b, blacklist) {
-		if (strlcasecmp(b->host, -1, host, hostlen)) continue;
+		if (strncasecmp(b->host, host, hostlen)) continue;
 
 		b->flags |= flags;
 		return;
@@ -56,7 +56,7 @@ del_blacklist_entry(unsigned char *host, int hostlen, enum blacklist_flags flags
 	if_assert_failed return;
 
 	foreach (b, blacklist) {
-		if (strlcasecmp(b->host, -1, host, hostlen)) continue;
+		if (strncasecmp(b->host, host, hostlen)) continue;
 
 		b->flags &= ~flags;
 		if (!b->flags) {
@@ -76,7 +76,7 @@ get_blacklist_flags(unsigned char *host, int hostlen)
 	if_assert_failed return 0;
 
 	foreach (b, blacklist)
-		if (!strlcasecmp(b->host, -1, host, hostlen))
+		if (!strncasecmp(b->host, host, hostlen))
 			return b->flags;
 	return 0;
 }

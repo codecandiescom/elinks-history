@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.38 2004/02/04 23:13:57 pasky Exp $ */
+/* $Id: exmode.c,v 1.39 2004/02/05 12:52:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,20 +22,20 @@
 #include "config/options.h"
 #include "dialogs/exmode.h"
 #include "intl/gettext/libintl.h"
-#include "protocol/rewrite/rewrite.h"
 #include "sched/action.h"
 #include "sched/session.h"
 #include "sched/task.h"
-#include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
 
+
 /* The Ex-mode commandline is that blue-yellow thing which appears at the
  * bottom of the screen when you press ':' and lets you enter various commands
  * (just like in vi), especially actions, events (where they make sense) and
  * config-file commands. */
+
 
 struct input_history exmode_history = {
 	/* items: */	{ D_LIST_HEAD(exmode_history.entries) },
@@ -84,77 +84,9 @@ exmode_confcmd_handler(struct session *ses, unsigned char *command,
 	return err;
 }
 
-#ifdef CONFIG_URI_REWRITE
-static int
-exmode_uri_rewrite_handler(struct session *ses, unsigned char *command,
-			   unsigned char *args)
-{
-	enum { CURRENT_TAB, NEW_TAB, BACKGROUNDED_TAB } open_mode = CURRENT_TAB;
-	unsigned char *url = NULL;
-	unsigned char *last_arg;
-	unsigned char saved_arg = 0;
-
-	/* Look for opening control chars */
-	if (*args) {
-		last_arg = args + strlen(args) - 1;
-	} else {
-		/* Check for control char in the command */
-		last_arg = command + strlen(command) - 1;
-	}
-
-	/* TODO: Maybe some '<' and '>' prefixes to control where the tab is
-	 * opened .. and if anyone have better ideas for control chars here
-	 * please change them. --jonas */
-	switch (*last_arg) {
-		case '&':
-			open_mode = BACKGROUNDED_TAB;
-			break;
-		case '+':
-			open_mode = NEW_TAB;
-			break;
-		default:
-			break;
-	}
-
-	/* Remove the control char */
-	if (open_mode != CURRENT_TAB) {
-		saved_arg = *last_arg;
-		*last_arg = 0;
-	}
-
-	if (*args) {
-		url = get_uri_rewrite_prefix(URI_REWRITE_SMART, command);
-	}
-
-	if (!url && !*args)
-		url = get_uri_rewrite_prefix(URI_REWRITE_DUMB, command);
-
-	/* Restore control char */
-	if (saved_arg) *last_arg = saved_arg;
-
-	if (!url) return 0;
-
-	url = rewrite_uri(url, cur_loc(ses)->vs.url, args);
-	if (url) {
-		if (open_mode == CURRENT_TAB) {
-			goto_url(ses, url);
-		} else {
-			int in_background = open_mode == BACKGROUNDED_TAB;
-
-			open_url_in_new_tab(ses, url, in_background);
-		}
-		mem_free(url);
-	}
-	return !!url;
-}
-#endif
-
 static exmode_handler exmode_handlers[] = {
 	exmode_action_handler,
 	exmode_confcmd_handler,
-#ifdef CONFIG_URI_REWRITE
-	exmode_uri_rewrite_handler,
-#endif
 	NULL,
 };
 

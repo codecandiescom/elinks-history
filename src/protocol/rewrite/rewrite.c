@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.16 2004/01/26 06:20:51 jonas Exp $ */
+/* $Id: rewrite.c,v 1.17 2004/02/05 12:52:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,12 @@
 #include "sched/location.h"
 #include "sched/session.h"
 #include "util/string.h"
+
+
+enum uri_rewrite_type {
+	URI_REWRITE_DUMB,
+	URI_REWRITE_SMART,
+};
 
 
 /* TODO: An event hook for follow-url might also feel at home here. --jonas */
@@ -208,7 +214,7 @@ encode_uri_string_len(struct string *s, unsigned char *a, int alen)
 
 #define MAX_URI_ARGS 10
 
-unsigned char *
+static unsigned char *
 rewrite_uri(unsigned char *url, unsigned char *current_url, unsigned char *arg)
 {
 	struct string n = NULL_STRING;
@@ -283,7 +289,7 @@ rewrite_uri(unsigned char *url, unsigned char *current_url, unsigned char *arg)
 	return n.source;
 }
 
-unsigned char *
+static unsigned char *
 get_uri_rewrite_prefix(enum uri_rewrite_type type, unsigned char *url)
 {
 	enum uri_rewrite_option tree = type == URI_REWRITE_DUMB

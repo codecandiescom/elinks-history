@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.118 2003/07/20 20:33:14 pasky Exp $ */
+/* $Id: file.c,v 1.119 2003/07/21 04:09:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,20 +48,11 @@
 #include "util/string.h"
 
 
-/* Structure used to pass around the data that will end up being added to the
- * cache entry. */
-struct file_data {
-	unsigned char *head;
-	unsigned char *fragment;
-	int fragmentlen;
-};
-
-
 /* Directory listing */
 /* The stat_* functions set the various attributes for directory entries. */
 
 static inline void
-stat_type(unsigned char **p, int *l, struct stat *stp)
+stat_type(struct string *string, struct stat *stp)
 {
 	unsigned char c = '?';
 
@@ -87,11 +78,12 @@ stat_type(unsigned char **p, int *l, struct stat *stp)
 		else if (S_ISNWK(stp->st_mode)) c = 'n';
 #endif
 	}
-	add_chr_to_str(p, l, c);
+
+	add_char_to_string(string, c);
 }
 
 static inline void
-stat_mode(unsigned char **p, int *l, struct stat *stp)
+stat_mode(struct string *string, struct stat *stp)
 {
 #ifdef FS_UNIX_RIGHTS
 	unsigned char rwx[10] = "---------";
@@ -122,36 +114,36 @@ stat_mode(unsigned char **p, int *l, struct stat *stp)
 			rwx[8] = (mode & S_IXOTH) ? 't' : 'T';
 #endif
 	}
-	add_to_str(p, l, rwx);
+	add_to_string(string, rwx);
 #endif
-	add_chr_to_str(p, l, ' ');
+	add_char_to_string(string, ' ');
 }
 
 static inline void
-stat_links(unsigned char **p, int *l, struct stat *stp)
+stat_links(struct string *string, struct stat *stp)
 {
 #ifdef FS_UNIX_HARDLINKS
 	if (!stp) {
-		add_to_str(p, l, "    ");
+		add_to_string(string, "    ");
 	} else {
 		unsigned char lnk[64];
 
 		ulongcat(lnk, NULL, stp->st_nlink, 3, ' ');
-		add_to_str(p, l, lnk);
-		add_chr_to_str(p, l, ' ');
+		add_to_string(string, lnk);
+		add_char_to_string(string, ' ');
 	}
 #endif
 }
 
 static inline void
-stat_user(unsigned char **p, int *l, struct stat *stp)
+stat_user(struct string *string, struct stat *stp)
 {
 #ifdef FS_UNIX_USERS
 	static unsigned char last_user[64];
 	static int last_uid = -1;
 
 	if (!stp) {
-		add_to_str(p, l, "         ");
+		add_to_string(string, "         ");
 		return;
 	}
 
@@ -167,20 +159,20 @@ stat_user(unsigned char **p, int *l, struct stat *stp)
 		last_uid = stp->st_uid;
 	}
 
-	add_to_str(p, l, last_user);
-	add_chr_to_str(p, l, ' ');
+	add_to_string(string, last_user);
+	add_char_to_string(string, ' ');
 #endif
 }
 
 static inline void
-stat_group(unsigned char **p, int *l, struct stat *stp)
+stat_group(struct string *string, struct stat *stp)
 {
 #ifdef FS_UNIX_USERS
 	static unsigned char last_group[64];
 	static int last_gid = -1;
 
 	if (!stp) {
-		add_to_str(p, l, "         ");
+		add_to_string(string, "         ");
 		return;
 	}
 
@@ -196,27 +188,27 @@ stat_group(unsigned char **p, int *l, struct stat *stp)
 		last_gid = stp->st_gid;
 	}
 
-	add_to_str(p, l, last_group);
-	add_chr_to_str(p, l, ' ');
+	add_to_string(string, last_group);
+	add_char_to_string(string, ' ');
 #endif
 }
 
 static inline void
-stat_size(unsigned char **p, int *l, struct stat *stp)
+stat_size(struct string *string, struct stat *stp)
 {
 	if (!stp) {
-		add_to_str(p, l, "         ");
+		add_to_string(string, "         ");
 	} else {
 		unsigned char size[9];
 
 		ulongcat(size, NULL, stp->st_size, 8, ' ');
-		add_to_str(p, l, size);
-		add_chr_to_str(p, l, ' ');
+		add_to_string(string, size);
+		add_char_to_string(string, ' ');
 	}
 }
 
 static inline void
-stat_date(unsigned char **p, int *l, struct stat *stp)
+stat_date(struct string *string, struct stat *stp)
 {
 #ifdef HAVE_STRFTIME
 	if (stp) {
@@ -237,12 +229,12 @@ stat_date(unsigned char **p, int *l, struct stat *stp)
 
 		while (wr < sizeof(str) - 1) str[wr++] = ' ';
 		str[sizeof(str) - 1] = '\0';
-		add_to_str(p, l, str);
-		add_chr_to_str(p, l, ' ');
+		add_to_string(string, str);
+		add_char_to_string(string, ' ');
 		return;
 	}
 #endif
-	add_to_str(p, l, "             ");
+	add_to_string(string, "             ");
 }
 
 
@@ -268,27 +260,24 @@ compare_dir_entries(struct directory_entry *d1, struct directory_entry *d2)
 /* Based on the @entry attributes and file-/dir-/linkname is added to the @data
  * fragment. */
 static inline void
-add_dir_entry(struct directory_entry *entry, struct file_data *data,
+add_dir_entry(struct directory_entry *entry, struct string *page,
 	      int pathlen, unsigned char *dircolor)
 {
 	unsigned char *lnk = NULL;
-	unsigned char *htmlname = init_str();
-	unsigned char *fragment = data->fragment;
-	int fragmentlen = data->fragmentlen;
-	int htmlnamelen = 0;
+	struct string htmlname;
 
-	if (!htmlname) return;
-	add_htmlesc_str(&htmlname, &htmlnamelen,
-			entry->name + pathlen, strlen(entry->name) - pathlen);
+	if (!init_string(&htmlname)) return;
 
-	/* add_to_str(&fragment, &fragmentlen, "   "); */
-	add_htmlesc_str(&fragment, &fragmentlen,
-			entry->attrib, strlen(entry->attrib));
-	add_to_str(&fragment, &fragmentlen, "<a href=\"");
-	add_to_str(&fragment, &fragmentlen, htmlname);
+	add_html_to_string(&htmlname, entry->name + pathlen,
+			   strlen(entry->name) - pathlen);
+
+	/* add_to_string(&fragment, &fragmentlen, "   "); */
+	add_html_to_string(page, entry->attrib, strlen(entry->attrib));
+	add_to_string(page, "<a href=\"");
+	add_to_string(page, htmlname.source);
 
 	if (entry->attrib[0] == 'd') {
-		add_chr_to_str(&fragment, &fragmentlen, '/');
+		add_char_to_string(page, '/');
 
 #ifdef FS_UNIX_SOFTLINKS
 	} else if (entry->attrib[0] == 'l') {
@@ -302,36 +291,31 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 		}
 
 		if (!stat(entry->name, &st) && S_ISDIR(st.st_mode))
-			add_chr_to_str(&fragment, &fragmentlen, '/');
+			add_char_to_string(page, '/');
 #endif
 	}
 
-	add_to_str(&fragment, &fragmentlen, "\">");
+	add_to_string(page, "\">");
 
 	if (entry->attrib[0] == 'd' && *dircolor) {
 		/* The <b> is for the case when use_document_colors is off. */
-		add_to_str(&fragment, &fragmentlen, "<font color=\"");
-		add_to_str(&fragment, &fragmentlen, dircolor);
-		add_to_str(&fragment, &fragmentlen, "\"><b>");
+		string_concat(page, "<font color=\"", dircolor, "\"><b>", NULL);
 	}
 
-	add_to_str(&fragment, &fragmentlen, htmlname);
-	mem_free(htmlname);
+	add_to_string(page, htmlname.source);
+	done_string(&htmlname);
 
 	if (entry->attrib[0] == 'd' && *dircolor) {
-		add_to_str(&fragment, &fragmentlen, "</b></font>");
+		add_to_string(page, "</b></font>");
 	}
 
-	add_to_str(&fragment, &fragmentlen, "</a>");
+	add_to_string(page, "</a>");
 	if (lnk) {
-		add_htmlesc_str(&fragment, &fragmentlen, lnk, strlen(lnk));
+		add_html_to_string(page, lnk, strlen(lnk));
 		mem_free(lnk);
 	}
 
-	add_chr_to_str(&fragment, &fragmentlen, '\n');
-
-	data->fragment = fragment;
-	data->fragmentlen = fragmentlen;
+	add_char_to_string(page, '\n');
 }
 
 /* This function decides whether a file should be shown in directory listing or
@@ -360,7 +344,7 @@ file_visible(unsigned char *name, int show_hidden_files)
  * All entries are then sorted and finally the sorted entries are added to the
  * @data->fragment one by one. */
 static inline void
-add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
+add_dir_entries(DIR *directory, unsigned char *dirpath, struct string *page)
 {
 	struct directory_entry *entries = NULL;
 	int size = 0;
@@ -380,8 +364,7 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 		struct stat st, *stp;
 		struct directory_entry *new_entries;
 		unsigned char *name;
-		unsigned char *attrib;
-		int attriblen;
+		struct string attrib;
 
 		if (!file_visible(entry->d_name, show_hidden_files))
 			continue;
@@ -397,8 +380,7 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 		name = straconcat(dirpath, entry->d_name, NULL);
 		if (!name) continue;
 
-		attrib = init_str();
-		if (!attrib) {
+		if (!init_string(&attrib)) {
 			mem_free(name);
 			continue;
 		}
@@ -409,17 +391,16 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 		stp = (stat(name, &st)) ? NULL : &st;
 #endif
 
-		attriblen = 0;
-		stat_type(&attrib, &attriblen, stp);
-		stat_mode(&attrib, &attriblen, stp);
-		stat_links(&attrib, &attriblen, stp);
-		stat_user(&attrib, &attriblen, stp);
-		stat_group(&attrib, &attriblen, stp);
-		stat_size(&attrib, &attriblen, stp);
-		stat_date(&attrib, &attriblen, stp);
+		stat_type(&attrib, stp);
+		stat_mode(&attrib, stp);
+		stat_links(&attrib, stp);
+		stat_user(&attrib, stp);
+		stat_group(&attrib, stp);
+		stat_size(&attrib, stp);
+		stat_date(&attrib, stp);
 
 		entries[size].name = name;
-		entries[size].attrib = attrib;
+		entries[size].attrib = attrib.source;
 		size++;
 	}
 
@@ -431,7 +412,7 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 		      (int(*)(const void *, const void *))compare_dir_entries);
 
 		for (i = 0; i < size; i++) {
-			add_dir_entry(&entries[i], data, dirpathlen, dircolor);
+			add_dir_entry(&entries[i], page, dirpathlen, dircolor);
 			mem_free(entries[i].attrib);
 			mem_free(entries[i].name);
 		}
@@ -445,41 +426,33 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
  * @dirpath. */
 /* Returns a connection state. S_OK if all is well. */
 static inline enum connection_state
-list_directory(DIR *directory, unsigned char *dirpath, struct file_data *data)
+list_directory(DIR *directory, unsigned char *dirpath, struct string *page)
 {
-	unsigned char *fragment = init_str();
-	int fragmentlen = 0;
 	unsigned char *slash = dirpath;
 	unsigned char *pslash = ++slash;
 
-	if (!fragment) return S_OUT_OF_MEM;
+	if (!init_string(page)) return S_OUT_OF_MEM;
 
-	add_to_str(&fragment, &fragmentlen, "<html>\n<head><title>");
-	add_htmlesc_str(&fragment, &fragmentlen, dirpath, strlen(dirpath));
-	add_to_str(&fragment, &fragmentlen, "</title></head>\n<body>\n<h2>Directory /");
+	add_to_string(page, "<html>\n<head><title>");
+	add_html_to_string(page, dirpath, strlen(dirpath));
+	add_to_string(page, "</title></head>\n<body>\n<h2>Directory /");
 
 	/* Make the directory path with links to each subdir. */
 	while ((slash = strchr(slash, '/'))) {
 		*slash = 0;
-		add_to_str(&fragment, &fragmentlen, "<a href=\"");
+		add_to_string(page, "<a href=\"");
 		/* FIXME: htmlesc? At least we should escape quotes. --pasky */
-		add_to_str(&fragment, &fragmentlen, dirpath);
-		add_to_str(&fragment, &fragmentlen, "/\">");
-		add_htmlesc_str(&fragment, &fragmentlen, pslash, strlen(pslash));
-		add_to_str(&fragment, &fragmentlen, "</a>/");
+		add_to_string(page, dirpath);
+		add_to_string(page, "/\">");
+		add_html_to_string(page, pslash, strlen(pslash));
+		add_to_string(page, "</a>/");
 		*slash = '/';
 		pslash = ++slash;
 	}
-	add_to_str(&fragment, &fragmentlen, "</h2>\n<pre>");
 
-	data->fragment = fragment;
-	data->fragmentlen = fragmentlen;
-
-	add_dir_entries(directory, dirpath, data);
-
-	add_to_str(&data->fragment, &data->fragmentlen, "</pre>\n<hr>\n</body>\n</html>\n");
-
-	data->head = stracpy("\r\nContent-Type: text/html\r\n");
+	add_to_string(page, "</h2>\n<pre>");
+	add_dir_entries(directory, dirpath, page);
+	add_to_string(page, "</pre>\n<hr>\n</body>\n</html>\n");
 	return S_OK;
 }
 
@@ -524,7 +497,7 @@ try_encoding_extensions(unsigned char *filename, int filenamelen, int *fd)
 /* Reads the file from @stream in chunks of size @readsize. */
 /* Returns a connection state. S_OK if all is well. */
 static inline enum connection_state
-read_file(struct stream_encoded *stream, int readsize, struct file_data *data)
+read_file(struct stream_encoded *stream, int readsize, struct string *page)
 {
 	/* + 1 is there because of bug in Linux. Read returns -EACCES when
 	 * reading 0 bytes to invalid address */
@@ -575,9 +548,8 @@ read_file(struct stream_encoded *stream, int readsize, struct file_data *data)
 
 	fragment[fragmentlen] = '\0'; /* NULL-terminate just in case */
 
-	data->fragment = fragment;
-	data->fragmentlen = fragmentlen;
-	data->head = stracpy("");
+	page->source = fragment;
+	page->length = fragmentlen;
 	return S_OK;
 }
 
@@ -595,8 +567,9 @@ file_func(struct connection *connection)
 	unsigned char filename[MAX_STR_LEN];
 	int filenamelen = connection->uri.datalen;
 	DIR *directory;
-	struct file_data data;
+	struct string page;
 	enum connection_state state;
+	unsigned char *head = NULL;
 
 	if (get_opt_int_tree(cmdline_options, "anonymous")
 	    || filenamelen > MAX_STR_LEN - 1 || filenamelen <= 0) {
@@ -615,7 +588,8 @@ file_func(struct connection *connection)
 			redirect = straconcat(connection->uri.protocol, "/", NULL);
 			state = S_OK;
 		} else {
-			state = list_directory(directory, filename, &data);
+			state = list_directory(directory, filename, &page);
+			head = "\r\nContent-Type: text/html\r\n";
 		}
 
 		closedir(directory);
@@ -660,8 +634,9 @@ file_func(struct connection *connection)
 			state = S_OUT_OF_MEM;
 
 		} else {
-			state = read_file(stream, stt.st_size, &data);
+			state = read_file(stream, stt.st_size, &page);
 			close_encoded(stream);
+			head = "";
 		}
 
 		close(fd);
@@ -673,7 +648,7 @@ file_func(struct connection *connection)
 		/* Try to add fragment data to the connection cache if either
 		 * file reading or directory listing worked out ok. */
 		if (get_cache_entry(connection->uri.protocol, &cache)) {
-			mem_free(data.fragment);
+			done_string(&page);
 			state = S_OUT_OF_MEM;
 
 		} else if (redirect) {
@@ -685,15 +660,22 @@ file_func(struct connection *connection)
 			connection->cache = cache;
 
 		} else {
+			assert(head);
+			if_assert_failed {
+				done_string(&page);
+				abort_conn_with_state(connection, S_INTERNAL);
+				return;
+			}
+
 			/* Setup file read or directory listing for viewing. */
 			if (cache->head) mem_free(cache->head);
-			cache->head = data.head;
+			cache->head = stracpy(head);
 			cache->incomplete = 0;
 			connection->cache = cache;
 
-			add_fragment(cache, 0, data.fragment, data.fragmentlen);
-			truncate_entry(cache, data.fragmentlen, 1);
-			mem_free(data.fragment);
+			add_fragment(cache, 0, page.source, page.length);
+			truncate_entry(cache, page.length, 1);
+			done_string(&page);
 		}
 	}
 

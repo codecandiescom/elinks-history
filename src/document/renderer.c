@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.74 2004/09/24 00:03:35 pasky Exp $ */
+/* $Id: renderer.c,v 1.75 2004/09/24 00:07:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,9 +159,12 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	}
 
 	document = get_cached_document(cached, options);
-	if (!document) {
+	if (document) {
+		doc_view->document = document;
+	} else {
 		document = init_document(cached, options);
 		if (!document) return;
+		doc_view->document = document;
 
 		shrink_memory(0);
 
@@ -189,8 +192,6 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 
 		document->css_magic = get_document_css_magic(document);
 	}
-
-	doc_view->document = document;
 
 	/* If we do not care about the height and width of the document
 	 * just use the setup values. */

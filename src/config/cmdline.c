@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.33 2004/01/16 18:21:05 zas Exp $ */
+/* $Id: cmdline.c,v 1.34 2004/01/16 20:08:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,20 +27,13 @@
 #include "intl/gettext/libintl.h"
 #include "lowlevel/dns.h"
 #include "sched/session.h"
+#include "util/lists.h"
 #include "util/memory.h"
 
-static struct list_head *
-_parse_options(int argc, unsigned char *argv[], struct option *opt, int first)
+static unsigned char *
+_parse_options(int argc, unsigned char *argv[], struct option *opt, struct list_head *url_list)
 {
-	struct list_head *urls = NULL;
-
-	if (first) {
-		urls = mem_alloc(sizeof(struct list_head));
-		if (urls)
-			init_list(*urls);
-		else
-			first = 0;
-	}
+	unsigned char *location = NULL;
 
 	while (argc) {
 		argv++, argc--;
@@ -95,23 +88,25 @@ unknown_option:
 				goto unknown_option;
 			}
 
-		} else if (first) {
+		} else if (url_list) {
 			struct url_list *url = mem_alloc(sizeof(struct url_list));
 
 			if (url) {
 				url->url = argv[-1];
-				add_to_list_end(*urls, url);
+				add_to_list_end(*url_list, url);
 			}
+
+			if (!location) location = argv[-1];
 		}
 	}
 
-	return urls;
+	return empty_string_or_(location);
 }
 
-struct list_head *
-parse_options(int argc, unsigned char *argv[], int first)
+unsigned char *
+parse_options(int argc, unsigned char *argv[], struct list_head *url_list)
 {
-	return _parse_options(argc, argv, cmdline_options, first);
+	return _parse_options(argc, argv, cmdline_options, url_list);
 }
 
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.169 2005/01/15 18:16:26 miciah Exp $ */
+/* $Id: options.c,v 1.170 2005/01/28 19:00:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,10 +127,12 @@ push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 }
 
 #ifdef CONFIG_256_COLORS
-#define TERMOPT_WIDGETS_COUNT 19
+#define TERMOPT_WIDGETS_COUNT 20
 #else
-#define TERMOPT_WIDGETS_COUNT 18
+#define TERMOPT_WIDGETS_COUNT 19
 #endif
+
+#define TERM_OPTION_VALUE_SIZE (sizeof(union option_value) * TERM_OPTIONS)
 
 void
 terminal_options(struct terminal *term, void *xxx, struct session *ses)
@@ -138,8 +140,30 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	struct dialog *dlg;
 	union option_value *values;
 	int anonymous = get_cmd_opt_bool("anonymous");
+	unsigned char help_text[MAX_STR_LEN], *text;
+	size_t help_textlen;
+	size_t add_size = TERM_OPTION_VALUE_SIZE;
 
-	dlg = calloc_dialog(TERMOPT_WIDGETS_COUNT, sizeof(union option_value) * TERM_OPTIONS);
+	snprintf(help_text, sizeof(help_text) - 3 /* 2 '\n' + 1 '\0' */,
+		 _("The environmental variable TERM is set to '%s'.\n"
+		"\n"
+		"ELinks maintains separate sets of values for these options\n"
+		"and chooses the appropriate set based on the value of TERM.\n"
+		"This allows you to configure the settings appropriately for\n"
+		"each terminal in which you run ELinks.", term),
+		 term->spec->name);
+
+	help_textlen = strlen(help_text);
+
+	/* Two newlines are needed to get a blank line between the help text and
+	 * the first group of widgets. */
+	help_text[help_textlen++] = '\n';
+	help_text[help_textlen++] = '\n';
+	help_text[help_textlen++] = '\0';
+
+	add_size += help_textlen;
+
+	dlg = calloc_dialog(TERMOPT_WIDGETS_COUNT, add_size);
 	if (!dlg) return;
 
 	values = (union option_value *) get_dialog_offset(dlg, TERMOPT_WIDGETS_COUNT);
@@ -149,6 +173,10 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	dlg->layouter = generic_dialog_layouter;
 	dlg->layout.padding_top = 1;
 	dlg->udata = values;
+
+	text = ((unsigned char *) values) + TERM_OPTION_VALUE_SIZE;
+	memcpy(text, help_text, help_textlen);
+	add_dlg_text(dlg, text, ALIGN_LEFT, 1);
 
 	add_dlg_text(dlg, _("Frame handling:", term), ALIGN_LEFT, 1);
 	add_dlg_radio(dlg, _("No frames", term), 1, TERM_DUMB, values[TERM_OPT_TYPE]);

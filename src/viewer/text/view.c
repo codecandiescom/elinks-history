@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.102 2003/06/11 15:29:23 pasky Exp $ */
+/* $Id: view.c,v 1.103 2003/06/11 16:53:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3230,7 +3230,6 @@ frm_download(struct session *ses, struct f_data_c *fd, int resume)
 	ses->dn_url = get_link_url(ses, fd, link);
 	if (ses->dn_url) {
 		if (!strncasecmp(ses->dn_url, "MAP@", 4)) {
-no_mem:
 			mem_free(ses->dn_url);
 			ses->dn_url = NULL;
 			return;

@@ -5,8 +5,8 @@ When you change any text, run ./get-intl. It will generate header files from
 the language files and place it inside src/intl/.
 
 Menu hotkeys are also translated via this interface. You can specify more
-hotkeys. When using normal letters as hotkeys, always use upper case. When using
-some characters above 128, specify both upper and lower letters.
+hotkeys. Please try to have a hotkey for each menu item. Hotkey is denoted by
+a tilde (~) preceding the given character.
 
 ===
 
@@ -27,7 +27,6 @@ another language, see src/intl/language.c, comment near language_iso639_code(),
 for details)
 * translate all the texts (T_<something>) to your language, don't mangle
 * small and capital letters
-* change the hotkeys (T_HK_<something>) to hotkey you want
 * vi index.txt
 * add your language (only the name without the .lng suffix) to
 * index.txt on single line
@@ -61,6 +60,6 @@ Run ./synclang
 
 ===
 
-$Id: README,v 1.9 2002/12/16 15:07:31 zas Exp $
+$Id: README,v 1.10 2003/01/02 05:25:12 pasky Exp $
 
 vim: textwidth=80

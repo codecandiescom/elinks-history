@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.11 2002/12/18 16:25:09 zas Exp $ */
+/* $Id: inphist.c,v 1.12 2003/01/02 05:25:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,6 @@ do_tab_compl(struct terminal *term, struct list_head *history,
 
 		items[n].text = hi->d;
 		items[n].rtext = "";
-		items[n].hotkey = "";
 		items[n].func = (void(*)(struct terminal *, void *, void *))tab_compl;
 		items[n].rtext = "";
 		items[n].data = hi->d;

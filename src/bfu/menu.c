@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.25 2003/01/01 20:36:08 pasky Exp $ */
+/* $Id: menu.c,v 1.26 2003/01/02 05:25:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,6 +49,62 @@ static void menu_func(struct window *, struct event *, int);
 static void mainmenu_func(struct window *, struct event *, int);
 
 
+/* FIXME: This is terribly slow and ineffective. Cache the hotkeys! --pasky */
+static int
+is_hotkey(struct menu_item *item, unsigned char hotkey, struct terminal *term)
+{
+	unsigned char *occur = GT(item->text, term);
+	int tilde = 0;
+
+	/* Just in case... ;-) */
+	if (hotkey == '~') return 0;
+
+	hotkey = upcase(hotkey);
+
+	while (*occur) {
+		if (*occur == '~') {
+			tilde = 1;
+			occur++;
+			continue;
+		}
+		if (!tilde) {
+			occur++;
+			continue;
+		}
+		if (upcase(*occur) != hotkey) {
+			tilde = 0;
+			occur++;
+			continue;
+		}
+		return 1;
+	}
+
+	return 0;
+}
+
+/* FIXME: This is terribly slow and ineffective. Cache the tildeless string!
+ * --pasky */
+static unsigned char *
+strip_tilde(unsigned char *text)
+{
+	int len = strlen(text);
+	int pos = 0, pos2 = 0;
+	unsigned char *text2 = mem_calloc(1, len + 1);
+
+	if (!text2) return NULL;
+	while (pos < len) {
+		if (text[pos] == '~') {
+			pos++;
+			continue;
+		}
+		text2[pos2] = text[pos];
+		pos++, pos2++;
+	}
+	text2[pos2] = 0;
+	return text2;
+}
+
+
 static void
 free_menu_items(struct menu_item *items)
 {
@@ -84,7 +140,7 @@ do_menu_selected(struct terminal *term, struct menu_item *items,
 		menu->items = items;
 		menu->data = data;
 		add_window(term, menu_func, menu);
-	} else if (items->item_free) {
+	} else if (items->item_free & ~(1<<8)) {
 		free_menu_items(items);
 	}
 }
@@ -107,7 +163,7 @@ select_menu(struct terminal *term, struct menu *menu)
 
 	if (menu->selected < 0 ||
 	    menu->selected >= menu->ni ||
-	    it->hotkey == M_BAR)
+	    it->rtext == M_BAR)
 		return;
 
 	if (!it->in_m) {
@@ -140,15 +196,20 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	int my;
 
 	for (my = 0; menu->items[my].text; my++) {
+		unsigned char *tmptext;
 		int s;
 
-		s = strlen(GT(menu->items[my].text, term)) +
-		    strlen(GT(menu->items[my].rtext, term)) + 4;
+		tmptext = strip_tilde(GT(menu->items[my].text, term));
+
+		s = strlen(tmptext) + strlen(GT(menu->items[my].rtext, term))
+			+ 4;
 
 		if (GT(menu->items[my].rtext, term)[0] != 0)
 			s += MENU_HOTKEY_SPACE;
 
 		if (s > mx) mx = s;
+
+		mem_free(tmptext);
 	}
 
 	menu->ni = my;
@@ -199,7 +260,7 @@ scroll_menu(struct menu *menu, int d)
 		if (menu->selected >= menu->ni) menu->selected = 0;
 #endif
 
-		if (menu->ni && menu->items[menu->selected].hotkey != M_BAR)
+		if (menu->ni && menu->items[menu->selected].rtext != M_BAR)
 			break;
 
 		menu->selected += d;
@@ -233,7 +294,7 @@ display_menu(struct terminal *term, struct menu *menu)
 	for (p = menu->view, s = menu->y + 1;
 	     p < menu->ni && p < menu->view + menu->yw - 2;
 	     p++, s++) {
-		unsigned char *tmptext = GT(menu->items[p].text, term);
+		unsigned char *tmptext = strip_tilde(GT(menu->items[p].text, term));
 		int h = 0;
 		int co = menu_normal_color;
 
@@ -248,7 +309,7 @@ display_menu(struct terminal *term, struct menu *menu)
 			fill_area(term, menu->x + 1, s, menu->xw - 2, 1, co);
 		}
 
-		if (menu->items[p].hotkey != M_BAR || (tmptext && tmptext[0])) {
+		if (menu->items[p].rtext != M_BAR || (tmptext && tmptext[0])) {
 			unsigned char c;
 			int l = strlen(GT(menu->items[p].rtext, term));
 			int x;
@@ -264,9 +325,7 @@ display_menu(struct terminal *term, struct menu *menu)
 			            (c = tmptext[x]); x++) {
 				int ch = co;
 
-				if (!h
-				    && strchr(GT(menu->items[p].hotkey, term),
-					      upcase(c))) {
+				if (!h && is_hotkey(&menu->items[p], c, term)) {
 					h = 1;
 					ch = menu_hotkey_color;
 				}
@@ -283,6 +342,8 @@ display_menu(struct terminal *term, struct menu *menu)
 			set_char(term, menu->x + menu->xw - 1, s,
 				 menu_frame_color | ATTR_FRAME | 0xb4);
 		}
+
+		mem_free(tmptext);
 	}
 
 	redraw_from_window(menu->win);
@@ -366,7 +427,7 @@ menu_func(struct window *win, struct event *ev, int fwd)
 					int s = ev->y - menu->y - 1 + menu->view;
 
 					if (s >= 0 && s < menu->ni &&
-					    menu->items[s].hotkey != M_BAR) {
+					    menu->items[s].rtext != M_BAR) {
 
 						menu->selected = s;
 						scroll_menu(menu, 0);
@@ -423,7 +484,7 @@ menu_func(struct window *win, struct event *ev, int fwd)
 					int step = -1;
 
 					for (; i >= 0; i--) {
-						if (menu->items[i].hotkey == M_BAR) {
+						if (menu->items[i].rtext == M_BAR) {
 							found = 1;
 							break;
 						}
@@ -452,7 +513,7 @@ menu_func(struct window *win, struct event *ev, int fwd)
 					int step = 1;
 
 					for (;i < menu->ni; i++) {
-						if (menu->items[i].hotkey == M_BAR) {
+						if (menu->items[i].rtext == M_BAR) {
 							found = 1;
 							break;
 						}
@@ -495,8 +556,7 @@ menu_func(struct window *win, struct event *ev, int fwd)
 						int i;
 
 						for (i = 0; i < menu->ni; i++) {
-							if (strchr(GT(menu->items[i].hotkey, win->term),
-								   upcase(ev->x))) {
+							if (is_hotkey(&menu->items[i], ev->x, win->term)) {
 								menu->selected = i;
 								scroll_menu(menu, 0);
 								s = 1;
@@ -532,7 +592,7 @@ break2:
 			break;
 
 		case EV_ABORT:
-			if (menu->items->item_free)
+			if (menu->items->item_free & ~(1<<8))
 				free_menu_items(menu->items);
 
 			break;
@@ -576,7 +636,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		int j;
 		int co;
 		unsigned char c;
-		unsigned char *tmptext = GT(menu->items[i].text, term);
+		unsigned char *tmptext = strip_tilde(GT(menu->items[i].text, term));
 
 		if (i == menu->selected) {
 			s = 1;
@@ -596,8 +656,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		p += 2;
 
 		for (j = 0; (c = tmptext[j]); j++, p++) {
-			if (!s && strchr(GT(menu->items[i].hotkey, term),
-					 upcase(c))) {
+			if (!s && is_hotkey(&menu->items[i], c, term)) {
 				s = 1;
 				set_char(term, p, 0, mainmenu_hotkey_color | c);
 			} else {
@@ -607,6 +666,8 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		}
 
 		p += 2;
+
+		mem_free(tmptext);
 	}
 
 	menu->ni = i;
@@ -619,7 +680,7 @@ select_mainmenu(struct terminal *term, struct mainmenu *menu)
 	struct menu_item *it = &menu->items[menu->selected];
 
 	if (menu->selected < 0 || menu->selected >= menu->ni
-	    || it->hotkey == M_BAR)
+	    || it->rtext == M_BAR)
 		return;
 
 	if (!it->in_m) {
@@ -664,8 +725,9 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 					int o = p;
 					unsigned char *tmptext;
 
-					tmptext = GT(menu->items[i].text,
-						    win->term);
+					tmptext = strip_tilde(
+						    GT(menu->items[i].text,
+						    win->term));
 					p += strlen(tmptext) + 4;
 
 					if (ev->x >= o && ev->x < p) {
@@ -680,8 +742,10 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 								win->term,
 								menu);
 						}
+						mem_free(tmptext);
 						break;
 					}
+					mem_free(tmptext);
 				}
 			}
 			break;
@@ -720,9 +784,7 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 
 				s = 1;
 				for (i = 0; i < menu->ni; i++)
-					if (strchr(GT(menu->items[i].hotkey,
-						     win->term),
-						   upcase(ev->x))) {
+					if (is_hotkey(&menu->items[i], ev->x, win->term)) {
 						menu->selected = i;
 						s = 2;
 					}
@@ -758,7 +820,7 @@ new_menu(enum item_free item_free)
 
 void
 add_to_menu(struct menu_item **mi, unsigned char *text,
-	    unsigned char *rtext, unsigned char *hotkey,
+	    unsigned char *rtext,
 	    void (*func)(struct terminal *, void *, void *),
 	    void *data, int in_m)
 {
@@ -774,7 +836,6 @@ add_to_menu(struct menu_item **mi, unsigned char *text,
 	memcpy(mii + n + 1, mii + n, sizeof(struct menu_item));
 	mii[n].text = text;
 	mii[n].rtext = rtext;
-	mii[n].hotkey = hotkey;
 	mii[n].func = func;
 	mii[n].data = data;
 	mii[n].in_m = in_m;

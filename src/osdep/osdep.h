@@ -1,4 +1,4 @@
-/* $Id: osdep.h,v 1.8 2002/09/19 15:49:15 pasky Exp $ */
+/* $Id: osdep.h,v 1.9 2003/01/02 05:25:15 pasky Exp $ */
 
 #ifndef EL__OS_DEP_H
 #define EL__OS_DEP_H
@@ -157,7 +157,6 @@ struct terminal;
 
 struct open_in_new {
 	unsigned char *text;
-	unsigned char *hk;
 	void (*fn)(struct terminal *term, unsigned char *, unsigned char *);
 };
 

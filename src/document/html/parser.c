@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.65 2003/01/01 18:19:52 pasky Exp $ */
+/* $Id: parser.c,v 1.66 2003/01/02 05:25:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1730,11 +1730,10 @@ new_menu_item(unsigned char *name, int data, int fullname)
 		}
 		item->text = name;
 		item->rtext = data == -1 ? ">" : "";
-		item->hotkey = fullname ? "\000\001" : "\000\000"; /* dirty */
 		item->func = data == -1 ? MENU_FUNC do_select_submenu : MENU_FUNC selected_item;
 		item->data = data == -1 ? nmenu : (void *)data;
 		item->in_m = data == -1 ? 1 : 0;
-		item->item_free = FREE_NOTHING;
+		item->item_free = FREE_NOTHING | (fullname << 8); /* XXX: DIRTY! */
 		item++;
 		memset(item, 0, sizeof(struct menu_item));
 		/*item->text = "";*/
@@ -1805,7 +1804,7 @@ menu_labels(struct menu_item *m, unsigned char *base, unsigned char **lbls)
 				mem_free(bs);
 			}
 		} else {
-			bs = stracpy(m->hotkey[1] ? (unsigned char *)"" : base);
+			bs = stracpy((m->item_free & (1<<8)) ? (unsigned char *)"" : base);
 			if (bs) add_to_strn(&bs, m->text);
 			lbls[(int)m->data] = bs;
 		}
@@ -3030,7 +3029,6 @@ look_for_tag:
 		memset(&nm[nmenu], 0, 2 * sizeof(struct menu_item));
 		nm[nmenu].text = label;
 		nm[nmenu].rtext = "";
-		nm[nmenu].hotkey = "";
 		nm[nmenu].func = MENU_FUNC map_selected;
 		nm[nmenu].data = ld;
 		nm[++nmenu].text = NULL;

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.46 2002/12/20 23:31:48 pasky Exp $ */
+/* $Id: options.c,v 1.47 2003/01/02 05:25:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,7 +53,7 @@ charset_list(struct terminal *term, void *xxx, struct session *ses)
 	if (!mi) return;
 	for (i = 0; (n = get_cp_name(i)); i++) {
 		if (is_cp_special(i)) continue;
-		add_to_menu(&mi, get_cp_name(i), "", "",
+		add_to_menu(&mi, get_cp_name(i), "",
 			    MENU_FUNC display_codepage, (void *)i, 0);
 	}
 	sel = get_opt_int_tree(term->spec, "charset");
@@ -289,7 +289,7 @@ menu_language_list(struct terminal *term, void *xxx, struct session *ses)
 	if (!mi) return;
 	for (i = 0; i < n_languages(); i++) {
 		n = language_name(i);
-		add_to_menu(&mi, n, "", "",
+		add_to_menu(&mi, n, "",
 			    MENU_FUNC menu_set_language, (void *)i, 0);
 	}
 	sel = current_language;

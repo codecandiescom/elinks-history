@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.7 2002/08/11 18:25:48 pasky Exp $ */
+/* $Id: menu.h,v 1.8 2003/01/02 05:25:14 pasky Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -23,8 +23,7 @@ enum item_free {
 
 struct menu_item {
 	unsigned char *text;
-	unsigned char *rtext;
-	unsigned char *hotkey; /* TODO: keybindings ?!?! */
+	unsigned char *rtext; /* FIXME: Keybindings...? */
 	void (*func)(struct terminal *, void *, void *);
 	void *data;
 	int in_m;
@@ -33,7 +32,7 @@ struct menu_item {
 
 
 struct menu_item *new_menu(enum item_free);
-void add_to_menu(struct menu_item **, unsigned char *, unsigned char *, unsigned char *, MENU_FUNC_TYPE, void *, int);
+void add_to_menu(struct menu_item **, unsigned char *, unsigned char *, MENU_FUNC_TYPE, void *, int);
 void do_menu(struct terminal *, struct menu_item *, void *);
 void do_menu_selected(struct terminal *, struct menu_item *, void *, int);
 void do_mainmenu(struct terminal *, struct menu_item *, void *, int);

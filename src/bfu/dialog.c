@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.185 2004/11/22 07:28:49 miciah Exp $ */
+/* $Id: dialog.c,v 1.186 2004/11/22 11:29:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@ do_dialog(struct terminal *term, struct dialog *dlg,
 	return dlg_data;
 }
 
-static inline void cycle_widget_focus(struct dialog_data *dlg_data, int direction);
+static void cycle_widget_focus(struct dialog_data *dlg_data, int direction);
 
 static void
 update_all_widgets(struct dialog_data *dlg_data)
@@ -128,7 +128,7 @@ static struct widget_ops *widget_type_to_ops[] = {
 	&text_ops,
 };
 
-static inline struct widget_data *
+static struct widget_data *
 init_widget(struct dialog_data *dlg_data, int i)
 {
 	struct widget_data *widget_data = &dlg_data->widgets_data[i];
@@ -184,7 +184,7 @@ select_widget_by_id(struct dialog_data *dlg_data, int i)
 	return widget_data;
 }
 
-static inline void
+static void
 cycle_widget_focus(struct dialog_data *dlg_data, int direction)
 {
 	int prev_selected = dlg_data->selected_widget_id;
@@ -475,7 +475,7 @@ clear_dialog(struct dialog_data *dlg_data, struct widget_data *xxx)
 }
 
 
-static inline void
+static void
 format_widgets(struct terminal *term, struct dialog_data *dlg_data,
 	       int x, int *y, int w, int h, int *rw)
 {

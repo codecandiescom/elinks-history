@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.38 2004/07/13 16:54:37 zas Exp $ */
+/* $Id: forms.c,v 1.39 2004/07/15 15:24:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,19 +65,19 @@ get_html_form(unsigned char *a, struct form *form)
 {
 	unsigned char *al;
 
-	form->method = FM_GET;
+	form->method = FORM_METHOD_GET;
 
 	al = get_attr_val(a, "method");
 	if (al) {
 		if (!strcasecmp(al, "post")) {
 			unsigned char *enctype = get_attr_val(a, "enctype");
 
-			form->method = FM_POST;
+			form->method = FORM_METHOD_POST;
 			if (enctype) {
 				if (!strcasecmp(enctype, "multipart/form-data"))
-					form->method = FM_POST_MP;
+					form->method = FORM_METHOD_POST_MP;
 				if (!strcasecmp(enctype, "text/plain"))
-					form->method = FM_POST_TEXT_PLAIN;
+					form->method = FORM_METHOD_POST_TEXT_PLAIN;
 				mem_free(enctype);
 			}
 		}
@@ -93,7 +93,7 @@ get_html_form(unsigned char *a, struct form *form)
 
 		/* We have to do following for GET method, because we would end
 		 * up with two '?' otherwise. */
-		if (form->method == FM_GET)
+		if (form->method == FORM_METHOD_GET)
 			components = URI_FORM_GET;
 
 		form->action = get_uri_string(format.href_base, components);
@@ -104,7 +104,7 @@ get_html_form(unsigned char *a, struct form *form)
 		/* GET method URIs should not have '?' unless it is a file://
 		 * URI where the '?' is part of the filename. */
 		assert(!form->action
-			|| form->method != FM_GET
+			|| form->method != FORM_METHOD_GET
 			|| format.href_base->protocol == PROTOCOL_FILE
 			|| !strchr(form->action, '?'));
 	}

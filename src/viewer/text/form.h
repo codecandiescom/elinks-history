@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.36 2004/06/18 13:55:45 jonas Exp $ */
+/* $Id: form.h,v 1.37 2004/07/15 15:24:06 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -14,10 +14,10 @@ struct term_event;
 struct terminal;
 
 enum form_method {
-	FM_GET,
-	FM_POST,
-	FM_POST_MP,
-	FM_POST_TEXT_PLAIN,
+	FORM_METHOD_GET,
+	FORM_METHOD_POST,
+	FORM_METHOD_POST_MP,
+	FORM_METHOD_POST_TEXT_PLAIN,
 };
 
 enum form_type {

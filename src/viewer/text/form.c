@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.225 2004/07/15 15:20:07 jonas Exp $ */
+/* $Id: form.c,v 1.226 2004/07/15 15:24:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,7 +129,7 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 	link = get_current_link(doc_view);
 	if (!link || link->type != LINK_SELECT) return;
 
-	fc = get_link_form_control(link);;
+	fc = get_link_form_control(link);
 	fs = find_form_state(doc_view, fc);
 	if (fs) {
 		if (item >= 0 && item < fc->nvalues) {
@@ -958,16 +958,16 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 	cp_from = get_opt_int_tree(ses->tab->term->spec, "charset");
 	cp_to = doc_view->document->cp;
 	switch (fc->method) {
-	case FM_GET:
-	case FM_POST:
+	case FORM_METHOD_GET:
+	case FORM_METHOD_POST:
 		encode_controls(&submit, &data, cp_from, cp_to);
 		break;
 
-	case FM_POST_MP:
+	case FORM_METHOD_POST_MP:
 		encode_multipart(ses, &submit, &data, &boundary, cp_from, cp_to);
 		break;
 
-	case FM_POST_TEXT_PLAIN:
+	case FORM_METHOD_POST_TEXT_PLAIN:
 		encode_text_plain(&submit, &data, cp_from, cp_to);
 	}
 
@@ -990,7 +990,7 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 	}
 
 	switch (fc->method) {
-	case FM_GET:
+	case FORM_METHOD_GET:
 	{
 		unsigned char *pos = strchr(fc->action, '#');
 
@@ -1010,9 +1010,9 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 		if (pos) add_to_string(&go, pos);
 		break;
 	}
-	case FM_POST:
-	case FM_POST_MP:
-	case FM_POST_TEXT_PLAIN:
+	case FORM_METHOD_POST:
+	case FORM_METHOD_POST_MP:
+	case FORM_METHOD_POST_TEXT_PLAIN:
 	{
 		/* Note that we end content type here by a simple '\n',
 		 * replaced later by correct '\r\n' in http_send_header(). */
@@ -1020,10 +1020,10 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 
 		add_to_string(&go, fc->action);
 		add_char_to_string(&go, POST_CHAR);
-		if (fc->method == FM_POST) {
+		if (fc->method == FORM_METHOD_POST) {
 			add_to_string(&go, "application/x-www-form-urlencoded\n");
 
-		} else if (fc->method == FM_POST_TEXT_PLAIN) {
+		} else if (fc->method == FORM_METHOD_POST_TEXT_PLAIN) {
 			/* Dunno about this one but we don't want the full
 			 * hextcat thingy. --jonas */
 			add_to_string(&go, "text/plain\n");
@@ -1335,7 +1335,7 @@ get_form_label(struct form_control *fc)
 	case FC_IMAGE:
 		if (!fc->action) return NULL;
 
-		if (fc->method == FM_GET)
+		if (fc->method == FORM_METHOD_GET)
 			return N_("Submit form to");
 		return N_("Post form to");
 	case FC_RADIO:
@@ -1438,7 +1438,7 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 		key = get_keystroke(ACT_EDIT_ENTER, KM_EDIT);
 		if (!key) break;
 
-		if (fc->method == FM_GET)
+		if (fc->method == FORM_METHOD_GET)
 			label = N_("press %s to submit to");
 		else
 			label = N_("press %s to post to");

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.153 2004/06/26 14:36:56 jonas Exp $ */
+/* $Id: cookies.c,v 1.154 2004/06/26 19:17:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,10 +126,22 @@ static struct option_info cookies_options[] = {
 struct c_server *
 get_cookie_server(unsigned char *host, int hostlen)
 {
+	struct c_server *sort_spot = NULL;
 	struct c_server *cs;
 
 	foreach (cs, c_servers) {
-		if (strlcasecmp(cs->host, -1, host, hostlen))
+		/* XXX: We must count with cases like "x.co" vs "x.co.uk"
+		 * below! */
+		int cslen = strlen(cs->host);
+		int cmp = strncasecmp(cs->host, host, hostlen);
+
+		if (!sort_spot && (cmp > 0 || (cmp == 0 && cslen > hostlen))) {
+			/* This is the first @cs with name greater than @host,
+			 * our dream sort spot! */
+			sort_spot = cs->prev;
+		}
+
+		if (cmp || cslen != hostlen)
 			continue;
 
 		object_lock(cs);
@@ -145,7 +157,20 @@ get_cookie_server(unsigned char *host, int hostlen)
 	cs->box_item = add_listbox_folder(&cookie_browser, NULL, cs);
 
 	object_lock(cs);
-	add_to_list(c_servers, cs);
+
+	if (!sort_spot) {
+		/* No sort spot found, therefore this sorts at the end. */
+		add_to_list_end(c_servers, cs);
+		del_from_list(cs->box_item);
+		add_to_list_end(cookie_browser.root.child, cs->box_item);
+	} else {
+		/* Sort spot found, sort after it. */
+		add_at_pos(sort_spot, cs);
+		if (sort_spot != (struct c_server *) &c_servers) {
+			del_from_list(cs->box_item);
+			add_at_pos(sort_spot->box_item, cs->box_item);
+		} /* else we are already at the top anyway. */
+	}
 
 	return cs;
 }

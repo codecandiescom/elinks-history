@@ -1,4 +1,4 @@
-/* $Id: date.h,v 1.7 2005/03/29 02:59:34 jonas Exp $ */
+/* $Id: date.h,v 1.8 2005/03/29 03:07:43 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_DATE_H
 #define EL__PROTOCOL_DATE_H
@@ -11,7 +11,7 @@ int parse_year(const unsigned char **date, unsigned char *end);
 
 /* Return 0 for January, 11 for december, -1 for failure. Updates buf pointer on
  * success. */
-int parse_month(const unsigned char **buf);
+int parse_month(const unsigned char **buf, unsigned char *end);
 
 /* Expects HH:MM[:SS] or HH:MM[P|A]M, with HH <= 23, MM <= 59, SS <= 59.
  * Updates tm, updates time on success and returns 0 on failure, otherwise 1. */

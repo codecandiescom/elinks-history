@@ -1,3 +1,24 @@
+Wed Sep 11 21:04:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, lowlevel/sched.c,
+	lowlevel/sched.h, protocol/ftp.c:
+
+	Support for EPRT FTP command => FTP over IPv6 is now supported.  
+
+Wed Sep 11 18:37:33 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/: memdebug.h, string.c, string.h:
+
+	Better handling of LEAK_DEBUG option, headers were cleaned,
+	performance improvement when DEBUG is disabled. init_str_x() was
+	renamed debug_init_str().  
+
+Wed Sep 11 17:26:15 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	0.4pre17.CVS 
+
 Wed Sep 11 16:31:30 2002  Laurent Monin <zas@norz.org>:
 
 	* src/lowlevel/terminal.h:

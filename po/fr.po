@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2004-01-13 09:34+0100\n"
+"POT-Creation-Date: 2004-01-14 18:53+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -273,8 +273,8 @@ msgstr "Nom du dossier"
 #: src/dialogs/menu.c:442 src/dialogs/menu.c:473 src/dialogs/options.c:195
 #: src/dialogs/options.c:266 src/mime/dialogs.c:160
 #: src/protocol/auth/dialogs.c:78 src/sched/download.c:485
-#: src/sched/download.c:984 src/sched/download.c:993 src/sched/download.c:1013
-#: src/sched/download.c:1025 src/scripting/lua/core.c:402
+#: src/sched/download.c:989 src/sched/download.c:998 src/sched/download.c:1018
+#: src/sched/download.c:1030 src/scripting/lua/core.c:402
 #: src/scripting/lua/core.c:483 src/scripting/lua/core.c:720
 #: src/viewer/text/search.c:1239 src/viewer/text/search.c:1250
 #: src/viewer/text/view.c:707
@@ -320,8 +320,8 @@ msgstr "Chercher"
 #: src/bookmarks/dialogs.c:384 src/config/dialogs.c:427
 #: src/config/dialogs.c:635 src/cookies/dialogs.c:157
 #: src/dialogs/options.c:194 src/formhist/dialogs.c:169
-#: src/globhist/dialogs.c:192 src/sched/download.c:982
-#: src/sched/download.c:1011
+#: src/globhist/dialogs.c:192 src/sched/download.c:987
+#: src/sched/download.c:1016
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -1022,201 +1022,201 @@ msgid "Menu mapping"
 msgstr "Menu"
 
 #: src/config/kbdbind.c:392
+msgid "Do nothing"
+msgstr "Ne rien faire"
+
+#: src/config/kbdbind.c:393
 msgid "Abort connection"
 msgstr "Interrompre la connexion"
 
-#: src/config/kbdbind.c:393
+#: src/config/kbdbind.c:394
 msgid "Add a new bookmark"
 msgstr "Ajouter un nouveau signet"
 
-#: src/config/kbdbind.c:394
+#: src/config/kbdbind.c:395
 msgid "Add a new bookmark using current link"
 msgstr "Ajouter un nouveau signet pour le lien courant"
 
-#: src/config/kbdbind.c:395
+#: src/config/kbdbind.c:396
 msgid "Bookmark all open tabs"
 msgstr "Signets pour tous les onglets ouverts"
 
-#: src/config/kbdbind.c:396
+#: src/config/kbdbind.c:397
 msgid "Attempt to auto-complete the input"
 msgstr "Compléter automatiquement l'entrée si possible"
 
-#: src/config/kbdbind.c:397
+#: src/config/kbdbind.c:398
 msgid "Attempt to unambiguously auto-complete the input"
 msgstr "Compléter automatiquement et sans ambiguité l'entrée si possible"
 
-#: src/config/kbdbind.c:398
+#: src/config/kbdbind.c:399
 msgid "Return to the previous document in history"
 msgstr "Retourner au document précédent de l'historique"
 
-#: src/config/kbdbind.c:399
+#: src/config/kbdbind.c:400
 msgid "Delete character in front of the cursor"
 msgstr "Supprimer le caractère devant le curseur"
 
-#: src/config/kbdbind.c:400
+#: src/config/kbdbind.c:401
 msgid "Go to the first line of the buffer"
 msgstr "Aller à la première ligne du buffer"
 
-#: src/config/kbdbind.c:401
+#: src/config/kbdbind.c:402
 msgid "Open bookmark manager"
 msgstr "Ouvrir le gestionnaire de signets"
 
-#: src/config/kbdbind.c:402
+#: src/config/kbdbind.c:403
 msgid "Open cache manager"
 msgstr "Ouvrir le gestionnaire de cache"
 
-#: src/config/kbdbind.c:403
+#: src/config/kbdbind.c:404
 msgid "Free unused cache entries"
 msgstr "Libérer les entrées inutilisées du cache"
 
-#: src/config/kbdbind.c:404
+#: src/config/kbdbind.c:405
 msgid "Cancel current state"
 msgstr "Annuler l'état courant"
 
-#: src/config/kbdbind.c:405
+#: src/config/kbdbind.c:406
 msgid "Open cookie manager"
 msgstr "Ouvrir le gestionnaire de cookies"
 
-#: src/config/kbdbind.c:406
+#: src/config/kbdbind.c:407
 msgid "Reload cookies file"
 msgstr "Recharger le fichier de cookies"
 
-#: src/config/kbdbind.c:407
+#: src/config/kbdbind.c:408
 msgid "Copy text to clipboard"
 msgstr "Copier le texte vers le tampon"
 
-#: src/config/kbdbind.c:408
+#: src/config/kbdbind.c:409
 msgid "Delete text from clipboard"
 msgstr "Effacer le texte du tampon"
 
-#: src/config/kbdbind.c:409
+#: src/config/kbdbind.c:410
 msgid "Delete character under cursor"
 msgstr "Supprimer le caractère sous le curseur"
 
-#: src/config/kbdbind.c:410
+#: src/config/kbdbind.c:411
 msgid "Show information about the current page"
 msgstr "Informations concernant la page courante"
 
-#: src/config/kbdbind.c:411
+#: src/config/kbdbind.c:412
 msgid "Move cursor downwards"
 msgstr "Déplacer le curseur vers le bas"
 
-#: src/config/kbdbind.c:412
+#: src/config/kbdbind.c:413
 msgid "Download the current link"
 msgstr "Télécharger le lien courant"
 
-#: src/config/kbdbind.c:413
+#: src/config/kbdbind.c:414
 msgid "Download the current image"
 msgstr "Télécharger l'image courante"
 
-#: src/config/kbdbind.c:414
+#: src/config/kbdbind.c:415
 msgid "Open download manager"
 msgstr "Ouvrir le gestionnaire de téléchargements"
 
-#: src/config/kbdbind.c:415
+#: src/config/kbdbind.c:416
 msgid "Begin editing"
 msgstr "Débuter l'édition"
 
 #. FIXME
-#: src/config/kbdbind.c:416
+#: src/config/kbdbind.c:417
 msgid "Go to the end of the page/line"
 msgstr "Aller à la fin de la page/ligne"
 
-#: src/config/kbdbind.c:417
+#: src/config/kbdbind.c:418
 msgid "Go to the last line of the buffer"
 msgstr "Aller à la dernière ligne du buffer"
 
-#: src/config/kbdbind.c:418
+#: src/config/kbdbind.c:419
 msgid "Follow the current link"
 msgstr "Suivre le lien courant"
 
-#: src/config/kbdbind.c:419
+#: src/config/kbdbind.c:420
 msgid "Follow the current link, forcing reload of the target"
 msgstr "Suivre le lien courant et rafraîchir la cible"
 
-#: src/config/kbdbind.c:420
+#: src/config/kbdbind.c:421
 msgid "Expand item"
 msgstr "Déployer l'item"
 
-#: src/config/kbdbind.c:421
+#: src/config/kbdbind.c:422
 msgid "Open the File menu"
 msgstr "Ouvrir le menu Fichier"
 
-#: src/config/kbdbind.c:422
+#: src/config/kbdbind.c:423
 msgid "Find the next occurrence of the current search text"
 msgstr "Occurence suivante du texte recherché"
 
-#: src/config/kbdbind.c:423
+#: src/config/kbdbind.c:424
 msgid "Find the previous occurrence of the current search text"
 msgstr "Occurence précédente du texte recherché"
 
-#: src/config/kbdbind.c:424
+#: src/config/kbdbind.c:425
 msgid "Forget authentication credentials"
 msgstr "Oublier les informations d'authentification"
 
-#: src/config/kbdbind.c:425
+#: src/config/kbdbind.c:426
 msgid "Open form history manager"
 msgstr "Ouvrir le gestionnaire de formulaires"
 
-#: src/config/kbdbind.c:426
+#: src/config/kbdbind.c:427
 msgid "Open \"Go to URL\" dialog box"
 msgstr "Ouvrir le dialogue \"Atteindre l'URL\""
 
-#: src/config/kbdbind.c:427
+#: src/config/kbdbind.c:428
 msgid "Open \"Go to URL\" dialog box containing the current URL"
 msgstr "Ouvrir le dialogue \"Atteindre l'URL\" avec l'URL courante"
 
-#: src/config/kbdbind.c:428
+#: src/config/kbdbind.c:429
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
 msgstr "Ouvrir le dialogue \"Atteindre l'URL\" avec l'URL du lien courant"
 
-#: src/config/kbdbind.c:429
+#: src/config/kbdbind.c:430
 msgid "Go to the homepage"
 msgstr "Aller à la page d'accueil"
 
-#: src/config/kbdbind.c:430
+#: src/config/kbdbind.c:431
 msgid "Show information about the current page HTTP headers"
 msgstr "Informations sur les entêtes HTTP"
 
-#: src/config/kbdbind.c:431
+#: src/config/kbdbind.c:432
 msgid "Open history manager"
 msgstr "Ouvrir le gestionnaire d'historique"
 
-#: src/config/kbdbind.c:432
+#: src/config/kbdbind.c:433
 msgid "Go to the start of the page/line"
 msgstr "Aller au début de la page/ligne"
 
-#: src/config/kbdbind.c:433
+#: src/config/kbdbind.c:434
 msgid "Jump to link"
 msgstr "Sauter au lien"
 
-#: src/config/kbdbind.c:434
+#: src/config/kbdbind.c:435
 msgid "Open keybinding manager"
 msgstr "Ouvrir le gestionnaire d'associations de touches"
 
-#: src/config/kbdbind.c:435
+#: src/config/kbdbind.c:436
 msgid "Kill all backgrounded connections"
 msgstr "Tuer les connexions en arrière-plan"
 
-#: src/config/kbdbind.c:436
+#: src/config/kbdbind.c:437
 msgid "Delete to beginning of line"
 msgstr "Supprimer jusqu'au début de la ligne"
 
-#: src/config/kbdbind.c:437
+#: src/config/kbdbind.c:438
 msgid "Delete to end of line"
 msgstr "Supprimer jusqu'à la fin de la ligne"
 
-#: src/config/kbdbind.c:438
+#: src/config/kbdbind.c:439
 msgid "Move the cursor left"
 msgstr "Déplacer le curseur vers la gauche"
 
-#: src/config/kbdbind.c:439
+#: src/config/kbdbind.c:440
 msgid "Open the link context menu"
 msgstr "Ouvrir le menu contextuel du lien"
-
-#: src/config/kbdbind.c:440
-msgid "Do nothing"
-msgstr "Ne fait rien"
 
 #: src/config/kbdbind.c:442
 msgid "Open a Lua console"
@@ -5368,30 +5368,30 @@ msgstr ""
 "Impossible de créer le fichier '%s':\n"
 "%s"
 
-#: src/sched/download.c:976 src/sched/download.c:987
+#: src/sched/download.c:981 src/sched/download.c:992
 msgid "Unknown type"
 msgstr "Type inconnu"
 
-#: src/sched/download.c:977
+#: src/sched/download.c:982
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr "Voulez-vous sauvegarder le fichier '%s' (type: %s) ou l'afficher?"
 
-#: src/sched/download.c:983 src/sched/download.c:992 src/sched/download.c:1012
-#: src/sched/download.c:1024
+#: src/sched/download.c:988 src/sched/download.c:997 src/sched/download.c:1017
+#: src/sched/download.c:1029
 msgid "Display"
 msgstr "Afficher"
 
-#: src/sched/download.c:988
+#: src/sched/download.c:993
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr "Voulez-vous afficher le fichier '%s' (type: %s)?"
 
-#: src/sched/download.c:1003 src/sched/download.c:1016
+#: src/sched/download.c:1008 src/sched/download.c:1021
 msgid "What to do?"
 msgstr "Que faire ?"
 
-#: src/sched/download.c:1004
+#: src/sched/download.c:1009
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -5400,11 +5400,11 @@ msgstr ""
 "Voulez-vous ouvrir le fichier '%s' (type: %s%s%s)\n"
 "avec '%s', l'enregistrer ou l'afficher ?"
 
-#: src/sched/download.c:1010 src/sched/download.c:1023
+#: src/sched/download.c:1015 src/sched/download.c:1028
 msgid "Open"
 msgstr "Ouvrir"
 
-#: src/sched/download.c:1017
+#: src/sched/download.c:1022
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.207 2003/11/30 06:42:48 witekfl Exp $ */
+/* $Id: http.c,v 1.208 2003/12/02 16:00:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1161,7 +1161,7 @@ again:
 		http_end_request(conn, S_OK);
 		return;
 	}
-	if (h == 301 || h == 302 || h == 303) {
+	if (h == 301 || h == 302 || h == 303 || h == 307) {
 		d = parse_http_header(conn->cache->head, "Location", NULL);
 		if (d) {
 			if (conn->cache->redirect) mem_free(conn->cache->redirect);

@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.57 2004/12/17 23:52:20 pasky Exp $ */
+/* $Id: forms.c,v 1.58 2004/12/17 23:55:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,8 +40,6 @@ struct form {
 	unsigned char *name;
 	unsigned char *target;
 	enum form_method method;
-	/* FIXME: This field is currently unused, why ? --Zas */
-	/* int num; */
 };
 
 static struct form form;
@@ -113,9 +111,6 @@ get_html_form(unsigned char *a, struct form *form)
 
 	al = get_target(a);
 	form->target = al ? al : stracpy(html_context.base_target);
-
-	/* This field is currently unused, why ? --Zas */
-	/* form->num = a - startf; */
 }
 
 /* This function will look for the last <form> tag preceding @stop_pos and

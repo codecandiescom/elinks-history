@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.38 2004/04/05 01:17:20 jonas Exp $ */
+/* $Id: protocol.c,v 1.39 2004/04/11 15:32:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,6 +33,23 @@
 static struct protocol_backend dummyjs_protocol_backend;
 static struct protocol_backend lua_protocol_backend;
 
+static void
+unknown_protocol_func(struct session *ses, struct uri *uri)
+{
+	print_error_dialog(ses, S_UNKNOWN_PROTOCOL, PRI_CANCEL);
+}
+
+static struct protocol_backend unknown_protocol_backend = {
+	/* name: */			NULL,
+	/* port: */			0,
+	/* handler: */			NULL,
+	/* external_handler: */		unknown_protocol_func,
+	/* free_syntax: */		0,
+	/* need_slashes: */		0,
+	/* need_slash_after_host: */	0,
+};
+
+
 static struct protocol_backend *protocol_backends[] = {
 	/* PROTOCOL_FILE */	&file_protocol_backend,
 	/* PROTOCOL_FINGER */	&finger_protocol_backend,
@@ -42,14 +59,14 @@ static struct protocol_backend *protocol_backends[] = {
 #ifdef CONFIG_SMB
 	/* PROTOCOL_SMB */	&smb_protocol_backend,
 #else
-	/* PROTOCOL_SMB */	NULL,
+	/* PROTOCOL_SMB */	&unknown_protocol_backend,
 #endif
 	/* PROTOCOL_JAVASCRIPT */	&dummyjs_protocol_backend,
 	/* PROTOCOL_LUA */	&lua_protocol_backend,
 	/* PROTOCOL_PROXY */	&proxy_protocol_backend,
 
 	/* Keep these two last! */
-	/* PROTOCOL_UNKNOWN */	NULL,
+	/* PROTOCOL_UNKNOWN */	&unknown_protocol_backend,
 
 	/* Internal protocol for mapping to protocol.user.* handlers. Placed
 	 * last because it's checked first and else should be ignored. */
@@ -99,8 +116,7 @@ get_protocol(unsigned char *name, int namelen)
 
 	/* Abuse that we iterate until protocol is PROTOCOL_UNKNOWN */
 	for (protocol = 0; protocol < PROTOCOL_UNKNOWN; protocol++) {
-		unsigned char *pname = protocol_backends[protocol]
-				     ? protocol_backends[protocol]->name : NULL;
+		unsigned char *pname = protocol_backends[protocol]->name;
 
 		if (pname && !strlcasecmp(pname, -1, name, namelen))
 			break;

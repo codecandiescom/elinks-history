@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.161 2004/04/08 14:14:22 jonas Exp $ */
+/* $Id: connection.c,v 1.162 2004/04/11 15:32:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -821,8 +821,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 
 	if (!proxy_uri
 	    || !proxied_uri
-	    || (VALID_PROTOCOL(proxy_uri->protocol)
-		&& get_protocol_need_slash_after_host(proxy_uri->protocol)
+	    || (get_protocol_need_slash_after_host(proxy_uri->protocol)
 		&& !proxy_uri->hostlen)) {
 
 		if (download) {

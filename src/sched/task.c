@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.70 2004/04/09 04:37:08 jonas Exp $ */
+/* $Id: task.c,v 1.71 2004/04/11 15:32:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -437,12 +437,9 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	struct uri *uri = get_translated_uri(url, ses->tab->term->cwd, &pos);
 	protocol_external_handler *external_handler;
 
-	if (!uri || uri->protocol == PROTOCOL_UNKNOWN) {
-		int state = (uri == NULL ? S_BAD_URL : S_UNKNOWN_PROTOCOL);
-
-		if (uri) done_uri(uri);
+	if (!uri) {
 		if (pos) mem_free(pos);
-		print_error_dialog(ses, state, PRI_CANCEL);
+		print_error_dialog(ses, S_BAD_URL, PRI_CANCEL);
 		return;
 	}
 

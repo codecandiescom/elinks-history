@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.179 2004/04/09 03:39:05 jonas Exp $ */
+/* $Id: uri.c,v 1.180 2004/04/11 15:32:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,8 +219,6 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 int
 get_uri_port(struct uri *uri)
 {
-	assert(VALID_PROTOCOL(uri->protocol));
-
 	if (uri->port && uri->portlen) {
 		unsigned char *end = uri->port;
 		int port = strtol(uri->port, (char **) &end, 10);

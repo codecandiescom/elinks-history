@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.97 2004/12/29 17:24:44 jonas Exp $ */
+/* $Id: formhist.c,v 1.98 2005/01/03 13:38:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -449,7 +449,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 
 	msg_box(ses->tab->term, NULL, 0,
 		N_("Form history"), ALIGN_CENTER,
-		N_("Should I remember this login?\n\n"
+		N_("Should this login be remembered?\n\n"
 		"Please note that the password will be stored "
 		"obscured (but unencrypted) in a file on your disk.\n\n"
 		"If you are using a valuable password, answer NO."),

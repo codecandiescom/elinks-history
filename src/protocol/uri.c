@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.206 2004/05/29 18:14:03 jonas Exp $ */
+/* $Id: uri.c,v 1.207 2004/05/29 18:28:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,6 +35,13 @@ end_of_dir(unsigned char c)
 {
 	return c == POST_CHAR || c == '#' || c == ';' || c == '?';
 }
+
+static inline int
+is_uri_dir_sep(struct uri *uri, unsigned char pos)
+{
+	return (uri->protocol == PROTOCOL_FILE ? dir_sep(pos) : pos == '/');
+}
+
 
 int
 end_with_known_tld(unsigned char *s, int slen)
@@ -350,8 +357,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
 		assertm(wants(URI_PATH) == components,
 			"URI_PATH should be used alone %d", components);
 
-		if ((uri->protocol == PROTOCOL_FILE && !dir_sep(*uri->data))
-		    || *uri->data != '/') {
+		if (is_uri_dir_sep(uri, *uri->data)) {
 			/* FIXME: Add correct separator */
 			add_char_to_string(string, '/');
 		}
@@ -414,8 +420,6 @@ add_string_uri_to_string(struct string *string, unsigned char *uristring,
 }
 
 
-#define dsep(x) (lo ? dir_sep(x) : (x) == '/')
-
 #define normalize_uri_reparse(uri, str)	normalize_uri(uri, str, 1)
 #define normalize_uri_noparse(uri)	normalize_uri(uri, struri(uri), 0)
 
@@ -424,7 +428,7 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 {
 	unsigned char *parse_string = uristring;
 	unsigned char *src, *dest, *path;
-	int lo, need_slash = 0;
+	int need_slash = 0;
 
 	/* We need to get the real (proxied) URI but lowercase relevant URI
 	 * parts along the way. */
@@ -444,9 +448,6 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 		parse = 1;
 		parse_string = uri->data;
 	} while (uri->protocol == PROTOCOL_PROXY);
-
-	/* dsep() *hint* *hint* */
-	lo = (uri->protocol == PROTOCOL_FILE);
 
 	if (uri->protocol != PROTOCOL_UNKNOWN)
 		need_slash = get_protocol_need_slash_after_host(uri->protocol);
@@ -468,16 +469,17 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 			break;
 		}
 
-		if (!dsep(src[0])) {
+		if (!is_uri_dir_sep(uri, src[0])) {
 			/* This is to reduce indentation */
 
 		} else if (src[1] == '.') {
-			if (!src[2] || dsep(src[2])) {
+			if (!src[2] || is_uri_dir_sep(uri, src[2])) {
 				/* /./ - strip that.. */
 				src += 2;
 				continue;
 
-			} else if (src[2] == '.' && (!src[3] || dsep(src[3]))) {
+			} else if (src[2] == '.'
+				   && (!src[3] || is_uri_dir_sep(uri, src[3]))) {
 				/* /../ - strip that and preceding element. */
 
 				/* First back out the last incrementation of
@@ -489,14 +491,14 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 				 * so we decrement before any testing. */
 				while (dest > path) {
 					dest--;
-					if (dsep(*dest)) break;
+					if (is_uri_dir_sep(uri, *dest)) break;
 				}
 
 				src += 3;
 				continue;
 			}
 
-		} else if (dsep(src[1])) {
+		} else if (is_uri_dir_sep(uri, src[1])) {
 			/* // - ignore first '/'. */
 			src += 1;
 			continue;
@@ -572,7 +574,6 @@ unsigned char *
 join_urls(unsigned char *base, unsigned char *rel)
 {
 	unsigned char *p, *n, *path;
-	int lo = !strncasecmp(base, "file://", 7); /* dsep() *hint* *hint* */
 	int add_slash = 0;
 	struct uri uri;
 	int tmp;
@@ -629,17 +630,18 @@ prx:
 
 	/* Either is path blank, but we've slash char before, or path is not
 	 * blank, but doesn't start by a slash (if we'd just stay along with
-	 * dsep(path[-1]) w/o all the surrounding crap, it should be enough,
-	 * but I'm not sure and I don't want to break anything --pasky). */
+	 * is_uri_dir_sep(&uri, path[-1]) w/o all the surrounding crap, it
+	 * should be enough, but I'm not sure and I don't want to break
+	 * anything --pasky). */
 	/* We skip first char of URL ('/') in parse_url() (ARGH). This
 	 * is reason of all this bug-bearing magic.. */
 	if (*path) {
-		if (!dsep(*path)) path--;
+		if (!is_uri_dir_sep(&uri, *path)) path--;
 	} else {
-		if (dsep(path[-1])) path--;
+		if (is_uri_dir_sep(&uri, path[-1])) path--;
 	}
 
-	if (!dsep(rel[0])) {
+	if (!is_uri_dir_sep(&uri, rel[0])) {
 		unsigned char *path_end;
 
 		/* The URL is relative. */
@@ -658,7 +660,7 @@ prx:
 			 * above the last '/' in the URL; later, we'll copy the
 			 * URL only _TO_ this point, and anything after last
 			 * slash will be substituted by 'rel'. */
-			if (dsep(*path_end)) path = path_end + 1;
+			if (is_uri_dir_sep(&uri, *path_end)) path = path_end + 1;
 		}
 	}
 
@@ -893,10 +895,8 @@ add_uri_filename_to_string(struct string *string, struct uri *uri)
 {
 	unsigned char *filename = get_content_filename(uri);
 	unsigned char *pos;
-	int lo = (uri->protocol == PROTOCOL_FILE);
 
 	assert(uri->data);
-	/* dsep() *hint* *hint* */
 
 	if (filename) {
 		add_shell_safe_to_string(string, filename, strlen(filename));
@@ -906,7 +906,7 @@ add_uri_filename_to_string(struct string *string, struct uri *uri)
 	}
 
 	for (pos = filename = uri->data; *pos && !end_of_dir(*pos); pos++)
-		if (dsep(*pos))
+		if (is_uri_dir_sep(uri, *pos))
 			filename = pos + 1;
 
 	return add_bytes_to_string(string, filename, pos - filename);
@@ -915,7 +915,6 @@ add_uri_filename_to_string(struct string *string, struct uri *uri)
 unsigned char *
 get_extension_from_uri(struct uri *uri)
 {
-	int lo = uri->protocol == PROTOCOL_FILE; /* dsep() *hint* *hint* */
 	unsigned char *extension = NULL;
 	int afterslash = 1;
 	unsigned char *pos = uri->data;
@@ -925,7 +924,7 @@ get_extension_from_uri(struct uri *uri)
 	for (; *pos && !end_of_dir(*pos); pos++) {
 		if (!afterslash && !extension && *pos == '.') {
 			extension = pos + 1;
-		} else if (dsep(*pos)) {
+		} else if (is_uri_dir_sep(uri, *pos)) {
 			extension = NULL;
 			afterslash = 1;
 		} else {
@@ -938,8 +937,6 @@ get_extension_from_uri(struct uri *uri)
 
 	return NULL;
 }
-
-#undef dsep
 
 /* URI encoding, escaping unallowed characters. */
 static inline int

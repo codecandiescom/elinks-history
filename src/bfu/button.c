@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.88 2005/03/20 17:40:35 zas Exp $ */
+/* $Id: button.c,v 1.89 2005/03/21 11:20:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,6 +60,9 @@ add_dlg_button_do(struct dialog *dlg, unsigned char *text, int flags,
 			widget->info.button.textlen--;
 		}
 	}
+
+	widget->width  = widget->info.button.textlen + BUTTON_LR_LEN;
+	widget->height = 1;
 }
 
 static void

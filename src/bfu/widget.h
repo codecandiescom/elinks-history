@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.94 2005/03/05 20:50:34 zas Exp $ */
+/* $Id: widget.h,v 1.95 2005/03/21 11:20:31 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -50,6 +50,11 @@ struct widget {
 	} info;
 
 	enum widget_type type;
+
+	int width;	/* Display width of the widget in characters. */
+	int height;	/* Display height of the widget in characters. */
+	
+	/* TODO: padding top, right, bottom, left. --Zas */
 };
 
 struct widget_data {

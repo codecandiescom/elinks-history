@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.65 2004/12/28 13:10:10 zas Exp $ */
+/* $Id: group.c,v 1.66 2005/03/21 11:20:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,25 +17,13 @@
 #include "terminal/terminal.h"
 #include "util/color.h"
 
-static inline int
-base_group_width(struct widget_data *widget_data)
-{
-	if (widget_data->widget->type == WIDGET_CHECKBOX)
-		return 4;
-
-	if (widget_data->widget->type == WIDGET_BUTTON)
-		return strlen(widget_data->widget->text) + 5;
-
-	return widget_data->widget->datalen + 1;
-}
-
 void
 dlg_format_group(struct terminal *term,
 		 struct widget_data *widget_data,
 		 int n, int x, int *y, int w, int *rw)
 {
 	int nx = 0;
-	int base = base_group_width(widget_data);
+	int base = widget_data->widget->width ? widget_data->widget->width + 1 : 0; /* FIXME */
 	struct color_pair *color = get_bfu_color(term, "dialog.text");
 
 	assert(n > 0);

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.414 2003/12/03 00:46:29 miciah Exp $ */
+/* $Id: options.c,v 1.415 2003/12/04 18:20:42 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -669,14 +669,18 @@ smart_config_string(struct string *str, int print_comment, int i18n,
 		/* For config file, we ignore do_print_comment everywhere
 		 * except 1, but sometimes we want to skip the option totally.
 		 */
-		fn(str, option, path, depth, option->type == OPT_TREE ? print_comment : do_print_comment, 0, i18n);
+		fn(str, option, path, depth,
+		   option->type == OPT_TREE ? print_comment
+					    : do_print_comment,
+		   0, i18n);
 
 		fn(str, option, path, depth, do_print_comment, 1, i18n);
 
 		/* And the option itself */
 
 		if (option_types[option->type].write) {
-			fn(str, option, path, depth, do_print_comment, 2, i18n);
+			fn(str, option, path, depth,
+			   do_print_comment, 2, i18n);
 
 		} else if (option->type == OPT_TREE) {
 			struct string newpath;
@@ -871,7 +875,7 @@ print_full_help(struct option *tree, unsigned char *path)
 			{
 				unsigned char *name;
 
-				name = get_color_name(option->value.color); 
+				name = get_color_name(option->value.color);
 				if (name) {
 					printf(gettext("(default: %s)"), name);
 					mem_free(name);

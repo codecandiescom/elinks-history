@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.25 2003/11/26 23:49:46 jonas Exp $ */
+/* $Id: dialogs.c,v 1.26 2003/12/04 18:20:42 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,7 +76,7 @@ get_cookie_info(struct listbox_item *item, struct terminal *term,
 		"Value: %s\n"
 		"Domain: %s\n"
 		"Expires: %s\n"
-		"Secure: %s", term), 
+		"Secure: %s", term),
 		cookie->server, cookie->name, cookie->value,
 		cookie->domain,
 		expires ? expires : _("unknown",  term),

@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.63 2004/10/27 16:38:10 zas Exp $ */
+/* $Id: fastfind.c,v 1.64 2004/10/27 16:45:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -474,7 +474,7 @@ return_error:
 
 #undef ifcase
 
-void
+static void
 fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
 {
 	int cnt = 0;

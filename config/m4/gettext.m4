@@ -10,6 +10,10 @@
 
 # serial 10
 
+dnl Note that we always use own gettext implementation, even if we found
+dnl working system one. We have some own modifications in our implementation
+dnl and we rely on them.
+
 dnl Usage: AM_WITH_NLS([TOOLSYMBOL], [NEEDSYMBOL], [LIBDIR]).
 dnl If TOOLSYMBOL is specified and is 'use-libtool', then a libtool library
 dnl    $(top_builddir)/intl/libintl.la will be created (shared and/or static,
@@ -57,10 +61,13 @@ AC_DEFUN([AM_WITH_NLS],
         [Define to 1 if translation of program messages to the user's native language
    is requested.])
       AC_MSG_CHECKING([whether included gettext is requested])
-      AC_ARG_WITH(included-gettext,
-        [  --with-included-gettext use the GNU gettext library included here],
-        nls_cv_force_use_gnu_gettext=$withval,
-        nls_cv_force_use_gnu_gettext=no)
+
+dnl      AC_ARG_WITH(included-gettext,
+dnl        [  --with-included-gettext use the GNU gettext library included here],
+dnl        nls_cv_force_use_gnu_gettext=$withval,
+dnl        nls_cv_force_use_gnu_gettext=no)
+      nls_cv_force_use_gnu_gettext=yes
+
       AC_MSG_RESULT($nls_cv_force_use_gnu_gettext)
 
       nls_cv_use_gnu_gettext="$nls_cv_force_use_gnu_gettext"

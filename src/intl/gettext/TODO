@@ -2,9 +2,6 @@
 
 * Maybe some portability fixes...?
 
-* Before doing anything of further TODO items, force to always use our gettext,
-  never the system one.
-
 * Use terminal-specific language.
 
 * Use our own charset routines instead of iconv.

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.48 2004/12/10 17:44:44 zas Exp $ */
+/* $Id: link.c,v 1.49 2004/12/10 17:51:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -199,6 +199,22 @@ get_image_label(unsigned char *label)
 	return formatted_label;
 }
 
+static void
+put_image_label(unsigned char *a, unsigned char *label)
+{
+	color_t fg;
+
+	/* This is not 100% appropriate for <img>, but well, accepting
+	 * accesskey and tabindex near <img> is just our little
+	 * extension to the standard. After all, it makes sense. */
+	html_focusable(a);
+
+	fg = format.fg;
+	format.fg = get_opt_color("document.colors.image");
+	put_chrs(label, strlen(label), html_context.put_chars_f, html_context.part);
+	format.fg = fg;
+}
+
 void
 html_img(unsigned char *a)
 {
@@ -271,7 +287,6 @@ html_img(unsigned char *a)
 
 	if (label) {
 		int img_link_tag = get_opt_int("document.browse.images.image_link_tagging");
-		color_t fg;
 
 		/* Add brackets or prefix/suffix defined by options. */
 		if (img_link_tag && (img_link_tag == 2 || add_brackets)) {
@@ -306,15 +321,8 @@ html_img(unsigned char *a)
 				mem_free_set(&format.link, new_link);
 		}
 show_label:
-		/* This is not 100% appropriate for <img>, but well, accepting
-		 * accesskey and tabindex near <img> is just our little
-		 * extension to the standard. After all, it makes sense. */
-		html_focusable(a);
+		put_image_label(a, label);
 
-		fg = format.fg;
-		format.fg = get_opt_color("document.colors.image");
-		put_chrs(label, strlen(label), html_context.put_chars_f, html_context.part);
-		format.fg = fg;
 		if (ismap) kill_html_stack_item(&html_top);
 		/* Anything below must take care of properly handling the
 		 * show_any_as_links variable being off! */

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.155 2004/09/23 10:28:47 zas Exp $ */
+/* $Id: renderer.c,v 1.156 2004/09/30 18:27:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -275,7 +275,7 @@ add_document_line(struct plain_renderer *renderer,
 		unsigned char line_char = line[line_pos];
 		unsigned char next_char, prev_char;
 
-		prev_char = line[line_pos - 1];
+		prev_char = line_pos > 0 ? line[line_pos - 1] : '\0';
 		next_char = (line_pos + 1 < width) ? line[line_pos + 1]
 						   : '\0';
 

@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.20 2003/05/12 20:43:04 pasky Exp $ */
+/* $Id: conv.c,v 1.21 2003/05/12 20:43:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,6 +171,7 @@ add_num_to_str(unsigned char **str, int *len, long num)
 	if (ret == 2 || !tlen) return ret;
 
 	add_bytes_to_str(str, len, t, tlen);
+
 	return ret;
 }
 
@@ -195,18 +196,7 @@ add_knum_to_str(unsigned char **str, int *len, long num)
 
 	if (ret == 2 || !tlen) return ret;
 
-	if ((*len & ~(ALLOC_GR - 1))
-	    != ((*len + tlen) & ~(ALLOC_GR - 1))) {
-	   	unsigned char *p = mem_realloc(*str,
-				               (*len + tlen + ALLOC_GR)
-			 		       & ~(ALLOC_GR - 1));
-
-   		if (!p) return 2;
-   		*str = p;
-	}
-
-	memcpy(*str + *len, t, tlen + 1);
-	*len += tlen;
+	add_bytes_to_str(str, len, t, tlen);
 
 	return ret;
 }

@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.37 2004/06/17 10:02:22 zas Exp $ */
+/* $Id: secsave.c,v 1.38 2004/07/22 02:02:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,8 +24,8 @@
 #include "util/string.h"
 
 
-/* If secure_file_saving is set:
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/* If infofiles.secure_save is set:
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *
  * A call to secure_open("/home/me/.elinks/filename", mask) will open a file
  * named "filename.tmp_XXXXXX" in /home/me/.elinks/ and return a pointer to a
@@ -48,8 +48,8 @@
  * replaced by a regular file. If destination file isn't a regular file,
  * then secsave is disabled for that file.
  *
- * If secure_file_saving is unset:
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * If infofiles.secure_save is unset:
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *
  * No temporary file is created, "filename" is truncated, all operations are
  * done on it, no rename nor flush occur, symlinks are preserved.
@@ -92,7 +92,7 @@ secure_open(unsigned char *file_name, mode_t mask)
 		goto end;
 	}
 
-	ssi->secure_save = get_opt_int("secure_file_saving");
+	ssi->secure_save = get_opt_int("infofiles.secure_save");
 
 	ssi->file_name = stracpy(file_name);
 	if (!ssi->file_name) {

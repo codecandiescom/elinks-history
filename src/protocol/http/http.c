@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.264 2004/04/04 05:22:59 jonas Exp $ */
+/* $Id: http.c,v 1.265 2004/04/04 17:31:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -299,25 +299,6 @@ proxy_func(struct connection *conn)
 
 static void http_get_header(struct connection *);
 
-static void
-add_uri_host_to_string(struct string *header, struct uri *uri)
-{
-#ifdef IPV6
-	if (memchr(uri->host, ':', uri->hostlen)) {
-		/* IPv6 address */
-		add_char_to_string(header, '[');
-		add_bytes_to_string(header, uri->host, uri->hostlen);
-		add_char_to_string(header, ']');
-	} else
-#endif
-		add_bytes_to_string(header, uri->host, uri->hostlen);
-
-	if (uri->portlen) {
-		add_char_to_string(header, ':');
-		add_bytes_to_string(header, uri->port, uri->portlen);
-	}
-}
-
 #define IS_PROXY_URI(x) ((x)->protocol == PROTOCOL_PROXY)
 
 static void
@@ -379,7 +360,7 @@ http_send_header(struct connection *conn)
 	}
 
 	if (use_connect) {
-		add_uri_host_to_string(&header, uri);
+		add_uri_to_string(&header, uri, URI_HOST | URI_PORT);
 		if (!uri->port) {
 			add_char_to_string(&header, ':');
 			add_long_to_string(&header, get_protocol_port(uri->protocol));
@@ -399,7 +380,7 @@ http_send_header(struct connection *conn)
 	add_to_string(&header, "\r\n");
 
 	add_to_string(&header, "Host: ");
-	add_uri_host_to_string(&header, uri);
+	add_uri_to_string(&header, uri, URI_HOST | URI_PORT);
 	add_to_string(&header, "\r\n");
 
 	optstr = get_opt_str("protocol.http.proxy.user");
@@ -470,10 +451,7 @@ http_send_header(struct connection *conn)
 
 		case REFERER_SAME_URL:
 			add_to_string(&header, "Referer: ");
-
-			/* FIXME: IPv6. */
-			add_to_string(&header, "http://");
-			add_uri_host_to_string(&header, uri);
+			add_uri_to_string(&header, uri, URI_PROTOCOL | URI_HOST | URI_PORT);
 
 			if (!IS_PROXY_URI(conn->uri)
 			    || header.source[header.length - 1] != '/')

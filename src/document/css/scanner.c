@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.52 2004/01/20 17:49:41 jonas Exp $ */
+/* $Id: scanner.c,v 1.53 2004/01/20 18:25:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -376,50 +376,68 @@ check_next_css_token(struct css_scanner *scanner, enum css_token_type type)
 
 /* Initializers */
 
+struct scan_table_info {
+	enum { SCAN_RANGE, SCAN_STRING, SCAN_END } type;
+	union scan_table_data {
+		struct { unsigned char *source; int align; } string;
+		struct { int start, end; } range;
+	} data;
+	int bits;
+};
+
+#define SCAN_TABLE_INFO(type, data1, data2, bits) \
+	{ (type), { { (unsigned char *) (data1), (data2) } }, (bits) }
+
+#define SCAN_TABLE_RANGE(from, to, bits) SCAN_TABLE_INFO(SCAN_RANGE, from, to, bits)
+#define SCAN_TABLE_STRING(str, bits)	 SCAN_TABLE_INFO(SCAN_STRING, str, 0, bits)
+#define SCAN_TABLE_END			 SCAN_TABLE_INFO(SCAN_END, 0, 0, 0)
+
+static struct scan_table_info css_scan_table_info[] = {
+	SCAN_TABLE_RANGE(161, 255, CSS_CHAR_NON_ASCII | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+	SCAN_TABLE_RANGE('0', '9', CSS_CHAR_DIGIT | CSS_CHAR_HEX_DIGIT | CSS_CHAR_IDENT),
+	SCAN_TABLE_RANGE('a', 'z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+	SCAN_TABLE_RANGE('A', 'Z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+	SCAN_TABLE_RANGE('a', 'f', CSS_CHAR_HEX_DIGIT),
+	SCAN_TABLE_RANGE('A', 'F', CSS_CHAR_HEX_DIGIT),
+
+	SCAN_TABLE_STRING(" \f\n\r\t\v", CSS_CHAR_WHITESPACE),
+	SCAN_TABLE_STRING("\f\n\r",	 CSS_CHAR_NEWLINE),
+	SCAN_TABLE_STRING("-",		 CSS_CHAR_IDENT),
+	/* Unicode escape (that we do not handle yet) + other special chars */
+	SCAN_TABLE_STRING("\\_",	 CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+	/* This should contain mostly used char tokens like ':' and maybe a few
+	 * garbage chars that people might put in their CSS code */
+	SCAN_TABLE_STRING("({});:,",	 CSS_CHAR_TOKEN),
+
+	SCAN_TABLE_END,
+};
+
 /* Initiate bitmaps */
 static void
 init_css_scan_table(void)
 {
-	unsigned char *chars;
-	int index;
+	struct scan_table_info *info = css_scan_table_info;
+	int i;
 
-	memset(css_scan_table, 0, sizeof(css_scan_table));
+	for (i = 0; info[i].type != SCAN_END; i++) {
+		union scan_table_data *data = &info[i].data;
 
-	/* Unicode escape (that we do not handle yet) + other special chars */
-	css_scan_table['\\'] = CSS_CHAR_IDENT | CSS_CHAR_IDENT_START;
-	css_scan_table['_'] |= CSS_CHAR_IDENT | CSS_CHAR_IDENT_START;
-	css_scan_table['-'] |= CSS_CHAR_IDENT;
+		if (info[i].type == SCAN_RANGE) {
+			int index = data->range.start;
 
-	/* Whitespace chars */
-	css_scan_table[' ']  |= CSS_CHAR_WHITESPACE;
-	css_scan_table['\t'] |= CSS_CHAR_WHITESPACE;
-	css_scan_table['\v'] |= CSS_CHAR_WHITESPACE;
-	css_scan_table['\r'] |= CSS_CHAR_WHITESPACE | CSS_CHAR_NEWLINE;
-	css_scan_table['\n'] |= CSS_CHAR_WHITESPACE | CSS_CHAR_NEWLINE;
-	css_scan_table['\f'] |= CSS_CHAR_WHITESPACE | CSS_CHAR_NEWLINE;
+			assert(index <= data->range.end);
 
-	for (index = 161; index <= 255; index++) {
-		css_scan_table[index] |= CSS_CHAR_NON_ASCII | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START;
-	}
+			for (; index <= data->range.end; index++)
+				css_scan_table[index] |= info[i].bits;
 
-	for (index = '0'; index <= '9'; index++) {
-		css_scan_table[index] |= CSS_CHAR_DIGIT | CSS_CHAR_HEX_DIGIT | CSS_CHAR_IDENT;
-	}
+		} else {
+			unsigned char *string = info[i].data.string.source;
 
-	for (index = 'A'; index <= 'Z'; index++) {
-		if ((index >= 'A') && (index <= 'F')) {
-			css_scan_table[index]	   |= CSS_CHAR_HEX_DIGIT;
-			css_scan_table[index + 32] |= CSS_CHAR_HEX_DIGIT;
+			assert(info[i].type == SCAN_STRING);
+
+			for (; *string; string++)
+				css_scan_table[*string] |= info[i].bits;
 		}
-
-		css_scan_table[index]	   |= CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START;
-		css_scan_table[index + 32] |= CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START;
-	}
-
-	/* This should contain mostly used char tokens like ':' and maybe a few
-	 * garbage chars that people might put in their css code */
-	for (chars = "({});:,"; *chars; chars++) {
-		css_scan_table[*chars] |= CSS_CHAR_TOKEN;
 	}
 }
 

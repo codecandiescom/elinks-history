@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.166 2004/01/28 07:39:51 jonas Exp $ */
+/* $Id: search.c,v 1.167 2004/01/28 07:53:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -939,7 +939,7 @@ enum typeahead_code {
 	TYPEAHEAD_ESCAPE,
 };
 
-static enum typeahead_code
+static void
 typeahead_error(struct session *ses, unsigned char *typeahead)
 {
 	switch (get_opt_int("document.browse.search.show_not_found")) {
@@ -959,8 +959,6 @@ typeahead_error(struct session *ses, unsigned char *typeahead)
 		default:
 			break;
 	}
-
-	return TYPEAHEAD_STOP;
 }
 
 /* Link typeahead */
@@ -981,7 +979,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			i--;
 			if (i < 0) {
 				if (!get_opt_bool("document.browse.search.wraparound"))
-					return typeahead_error(ses, typeahead);
+					return TYPEAHEAD_STOP;
 
 				i = doc_view->document->nlinks - 1;
 			}
@@ -993,7 +991,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			i++;
 			if (i >= doc_view->document->nlinks) {
 				if (!get_opt_bool("document.browse.search.wraparound"))
-					return typeahead_error(ses, typeahead);
+					return TYPEAHEAD_STOP;
 
 				i = 0;
 			}
@@ -1064,14 +1062,13 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 
 #undef case_compare_chars
 
-	return typeahead_error(ses, typeahead);
+	return TYPEAHEAD_STOP;
 }
 
 static int
 typeahead_input_handler(struct session *ses, int action, unsigned char *buffer)
 {
 	struct document_view *doc_view = current_frame(ses);
-	enum typeahead_code code;
 
 	assertm(doc_view, "document not formatted");
 	if_assert_failed return 0;
@@ -1079,13 +1076,19 @@ typeahead_input_handler(struct session *ses, int action, unsigned char *buffer)
 	/* If there is nothing to match with don't start searching */
 	if (!*buffer) return 0;
 
-	code = do_typeahead(ses, doc_view, buffer, action);
-	if (code == TYPEAHEAD_MATCHED) {
-		draw_formatted(ses, 0);
-		return 0;
-	}
+	switch (do_typeahead(ses, doc_view, buffer, action)) {
+		case TYPEAHEAD_MATCHED:
+			draw_formatted(ses, 0);
+			return 0;
 
-	return 1;
+		case TYPEAHEAD_STOP:
+			typeahead_error(ses, buffer);
+			/* Falling */
+
+		case TYPEAHEAD_ESCAPE:
+		default:
+			return 1;
+	}
 }
 
 void

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.111 2004/01/28 07:28:03 jonas Exp $ */
+/* $Id: inpfield.c,v 1.112 2004/01/28 07:53:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -502,6 +502,7 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 	if (ev->ev != EV_KBD) return EVENT_NOT_PROCESSED;
 
 	action = kbd_action(KM_EDIT, ev, NULL);
+	/* Handle some basic actions such as quiting for empty buffers */
 	switch (action) {
 		case ACT_EDIT_BACKSPACE:
 		case ACT_EDIT_ENTER:

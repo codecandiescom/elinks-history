@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.23 2002/04/02 22:29:46 pasky Exp $ */
+/* $Id: view.c,v 1.24 2002/04/06 22:10:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
+#include <time.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -36,6 +37,7 @@
 #include <document/download.h>
 #include <document/dump.h>
 #include <document/history.h>
+#include <document/globhist.h>
 #include <document/location.h>
 #include <document/options.h>
 #include <document/session.h>
@@ -3015,6 +3017,7 @@ unsigned char *print_current_title(struct session *ses)
 void loc_msg(struct terminal *term, struct location *location,
 	     struct f_data_c *frame)
 {
+	struct global_history_item *historyitem;
 	struct cache_entry *ce;
 	unsigned char *a;
 	unsigned char *url;
@@ -3053,6 +3056,25 @@ void loc_msg(struct terminal *term, struct location *location,
 		add_to_str(&str, &strl, location->vs.url);
 	}
 #endif
+
+	add_to_str(&str, &strl, "\n");
+
+	add_to_str(&str, &strl, _(TEXT(T_TITLE), term));
+	add_to_str(&str, &strl, ": ");
+	add_to_str(&str, &strl, frame->f_data->title);
+	add_to_str(&str, &strl, "\n");
+
+	add_to_str(&str, &strl, _(TEXT(T_LAST_VISIT_TIME), term));
+	add_to_str(&str, &strl, ": ");
+	historyitem = get_global_history_item(location->vs.url, NULL, 0);
+	if (historyitem) {
+		/* Stupid ctime() adds a newline, and we don't want that, so we
+		 * use add_bytes_to_str. -- Miciah */
+		a = ctime(&historyitem->last_visit);
+		add_bytes_to_str(&str, &strl, a, strlen(a) - 1);
+	} else {
+		add_to_str(&str, &strl, _(TEXT(T_UNKNOWN), term));
+	}
 
 	if (!get_cache_entry(location->vs.url, &ce)) {
 		add_to_str(&str, &strl, "\n");

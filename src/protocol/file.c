@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.8 2002/04/27 21:21:20 pasky Exp $ */
+/* $Id: file.c,v 1.9 2002/04/28 10:55:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -437,9 +437,10 @@ dir:
 				unsigned char *buf = NULL;
 				int size = 0;
 				int r = -1;
-				unsigned char *n = stracpy(name);
-				int nl = strlen(n);
+				unsigned char *n = init_str();
+				int nl = 0;
 
+				add_to_str(&n, &nl, name);
 				add_htmlesc_str(&n, &nl,
 						dir[i].f, strlen(dir[i].f));
 				do {
@@ -460,7 +461,7 @@ dir:
 				}
 			}
 #endif
-			/*add_to_str(&file, &fl, "   ");*/
+			/* add_to_str(&file, &fl, "   "); */
 			add_htmlesc_str(&file, &fl,
 					dir[i].s, strlen(dir[i].s));
 			add_to_str(&file, &fl, "<a href=\"");
@@ -470,9 +471,10 @@ dir:
 				add_to_str(&file, &fl, "/");
 			} else if (lnk) {
 				struct stat st;
-				unsigned char *n = stracpy(name);
-				int nl = strlen(n);
+				unsigned char *n = init_str();
+				int nl = 0;
 
+				add_to_str(&n, &nl, name);
 				add_htmlesc_str(&n, &nl,
 						dir[i].f, strlen(dir[i].f));
 				if (!stat(n, &st))

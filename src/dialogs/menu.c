@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.358 2004/07/20 00:35:16 jonas Exp $ */
+/* $Id: menu.c,v 1.359 2004/07/20 01:11:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,7 +169,7 @@ name__(struct terminal *term, void *ddd, struct session *ses) 		\
 		unsigned char *url; 					\
  									\
 		if (!mi) { 						\
-			mi = new_menu(FREE_LIST | FREE_TEXT); 		\
+			mi = new_menu(FREE_LIST | FREE_TEXT | NO_INTL);	\
 			if (!mi) return; 				\
 		} 							\
  									\
@@ -177,7 +177,7 @@ name__(struct terminal *term, void *ddd, struct session *ses) 		\
 		if (url) { 						\
 			add_to_menu(&mi, url, NULL, ACT_MAIN_NONE, 	\
 				    (menu_func) go_historywards,	\
-			    	    (void *) loc, NO_INTL); 		\
+			    	    (void *) loc, 0);			\
 		} 							\
 	} 								\
 loop_done: 								\
@@ -755,7 +755,7 @@ pass_uri_to_command(struct session *ses, struct document_view *doc_view, int xxx
 	uri = get_link_uri(ses, doc_view, link);
 	if (!uri) return;
 
-	items = new_menu(FREE_LIST | FREE_TEXT | FREE_DATA);
+	items = new_menu(FREE_LIST | FREE_TEXT | FREE_DATA | NO_INTL);
 	if (!items) {
 		done_uri(uri);
 		return;

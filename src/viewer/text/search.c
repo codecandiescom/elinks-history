@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.45 2003/10/07 11:59:28 pasky Exp $ */
+/* $Id: search.c,v 1.46 2003/10/07 12:04:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -848,7 +848,11 @@ find_next(struct session *ses, struct document_view *f, int a)
 		}
 		p += step;
 		if (p > f->document->y) {
-			/* TODO: A notice for user? --pasky */
+			msg_box(ses->tab->term, NULL, 0,
+				N_("Search"), AL_CENTER,
+				N_("Search hit bottom, continuing at top."),
+				NULL, 1,
+				N_("OK"), NULL, B_ENTER | B_ESC);
 			p = 0;
 		}
 		if (p < 0) {

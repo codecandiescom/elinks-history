@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.66 2005/03/27 12:39:14 pasky Exp $
+# $Id: hooks.pl,v 1.67 2005/03/27 12:43:01 pasky Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -1033,11 +1033,25 @@ Prevents Proxy usage for local files and C<http://localhost>.
 =cut
 
 
-################################################################################
-### quit_hook ##################################################################
+
+=head1 ON-QUIT ACTIONS
+
+The Perl hooks can also perform various actions at the time of ELinks quit.
+This can be various things like retouching the just saved "information files",
+or doing some fun stuff.
+
+=over 4
+
+=cut
+
 sub quit_hook
 {
-	# Collapse XBEL bookmark folders (obsoleted by bookmarks.folder_state)
+=item Collapse XBEL Folders
+
+Collapses XBEL bookmark folders. This is obsoleted by
+I<bookmarks.folder_state>.
+
+=cut
 	my $bookmarkfile = $ENV{'HOME'} . '/.elinks/bookmarks.xbel';
 	if (-f $bookmarkfile and loadrc('collapse') eq 'yes')
 	{
@@ -1054,7 +1068,11 @@ sub quit_hook
 		close BOOKMARKS;
 	}
 
-	# Words of wisdom from ELinks the Sage
+=item Words of Wisdom
+
+Quip few words of wisdom from ELinks the Sage. Prints a fortune. ;-)
+
+=cut
 	if (loadrc('fortune') eq 'fortune')
 	{
 		system('echo ""; fortune -sa 2>/dev/null');
@@ -1087,6 +1105,11 @@ sub quit_hook
 	close COOKIES;
 	print "\n", $fortune;
 }
+
+=back
+
+=cut
+
 
 
 ################################################################################

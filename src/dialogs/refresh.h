@@ -1,4 +1,4 @@
-/* $Id: refresh.h,v 1.2 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: refresh.h,v 1.3 2002/06/11 15:32:16 pasky Exp $ */
 
 #ifndef EL__DIALOGS_REFRESH_H
 #define EL__DIALOGS_REFRESH_H
@@ -20,4 +20,4 @@ struct refresh {
 void refresh_init(struct refresh *r, struct terminal *term,
 		  struct session *ses, void *data, refresh_handler fn);
 
-#endif;
+#endif

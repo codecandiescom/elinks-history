@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.106 2003/06/16 14:50:11 pasky Exp $ */
+/* $Id: renderer.c,v 1.107 2003/06/16 14:51:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -385,12 +385,10 @@ del_chars(struct part *part, int x, int y)
 
 #define overlap(x) ((x).width - (x).rightmargin > 0 ? (x).width - (x).rightmargin : 0)
 
-/* FIXME: Understand it and comment it ...
- * Previous code was kept in #if 0/#endif, see below. */
 static int
 split_line(struct part *part)
 {
-	register int i; /* What is i ? */
+	register int i;
 	register int tmp;
 
 	for (i = overlap(par_format); i >= par_format.leftmargin; i--)
@@ -405,7 +403,7 @@ split_line(struct part *part)
 	if (tmp > part->x)
 		part->x = tmp;
 
-	return 0; /* XXX: What does this mean ? */
+	return 0;
 
 split:
 	tmp = i + par_format.rightmargin;
@@ -436,18 +434,16 @@ split:
 	else	/* Should not occcur. --Zas */
 		internal("part->spl - par_format.leftmargin == %d", tmp);
 
-	/* Following should be equivalent to old code (see below)
-	 * please verify and simplify if possible. */
 	part->cy++;
 
 	if (part->cx == i) {
 		part->cx = -1;
 		if (part->y < part->cy) part->y = part->cy;
-		return 2; /* XXX: mean ? */
+		return 2;
 	} else {
 		part->cx -= i - par_format.leftmargin;
 		if (part->y < part->cy + 1) part->y = part->cy + 1;
-		return 1; /* XXX: mean ? */
+		return 1;
 
 	}
 }

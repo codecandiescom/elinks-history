@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.64 2003/11/18 23:49:00 pasky Exp $ */
+/* $Id: inphist.c,v 1.65 2003/11/18 23:53:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,7 +104,6 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 	 * position are varying in other matches. Zero means that no max has
 	 * been set yet. */
 	int longest_common_match = 0;
-	int match_len = base_len;
 	unsigned char *match = widget_data->cdata;
 	struct input_history_entry *entry;
 
@@ -129,15 +128,17 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 		/* By now, @cur_len oscillates between @base_len and
 		 * @longest_common_match. */
 
-		if (cur_len < match_len)
-			longest_common_match = cur_len;
+		if (cur_len >= longest_common_match)
+			continue;
+
+		/* We found the next shortest common match. */
+		longest_common_match = cur_len;
 		match = entry->data;
-		match_len = !*matchpos ? strlen(entry->data) : cur_len;
 	}
 
 	if (match == widget_data->cdata) return;
 
-	tab_compl_n(term, match, match_len, win);
+	tab_compl_n(term, match, longest_common_match, win);
 }
 
 

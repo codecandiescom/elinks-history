@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.40 2003/05/12 21:59:48 pasky Exp $ */
+/* $Id: info.c,v 1.41 2003/05/15 23:37:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -292,25 +292,29 @@ cache_inf(struct terminal *term, void *d, struct session *ses)
 void
 memory_inf(struct terminal *term, void *d, struct session *ses)
 {
-	char message[2048];
 	struct refresh *r;
-	char *amessage;
+	char *fmttext;
+	unsigned int message_size;
+	char *message;
+
+	fmttext = _("%ld bytes of memory allocated.", term);
+	if (!*fmttext) return;
 
 	r = mem_alloc(sizeof(struct refresh));
 	if (!r) return;
 
-	snprintf(message, sizeof(message),
-		 _("%ld bytes of memory allocated.", term));
-
-	amessage = stracpy(message);
-	if (!amessage) {
+	message_size = strlen(fmttext) + 40; /* sufficient ;) */
+	message = mem_alloc(message_size);
+	if (!message) {
 		mem_free(r);
 		return;
 	}
 
-	msg_box(term, getml(amessage, NULL),
+	snprintf(message, message_size, fmttext, mem_amount);
+
+	msg_box(term, getml(message, NULL),
 		N_("Memory info"), AL_CENTER,
-		amessage,
+		message,
 		r, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 

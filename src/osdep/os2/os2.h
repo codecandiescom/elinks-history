@@ -1,0 +1,39 @@
+/* $Id: os2.h,v 1.1 2003/10/27 02:37:53 pasky Exp $ */
+
+#ifndef EL__OSDEP_OS2_H
+#define EL__OSDEP_OS2_H
+
+#ifdef OS2
+
+static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
+/*#define NO_ASYNC_LOOKUP*/
+#define SYSTEM_ID SYS_OS2
+#define SYSTEM_NAME "OS/2"
+#define SYSTEM_STR "os2"
+#define DEFAULT_SHELL "cmd.exe"
+#define GETSHELL getenv("COMSPEC")
+#define NO_FG_EXEC
+#define DOS_FS
+#define NO_FILE_SECURITY
+#define NO_FORK_ON_EXIT
+#define ASSOC_CONS_XWIN
+
+#ifdef __EMX__
+#define strcasecmp stricmp
+#define strncasecmp strnicmp
+#ifndef HAVE_STRCASECMP
+#define HAVE_STRCASECMP
+#endif
+#ifndef HAVE_STRNCASECMP
+#define HAVE_STRNCASECMP
+#endif
+#define read _read
+#define write _write
+#ifdef O_SIZE
+#define USE_OPEN_PREALLOC
+#endif
+#endif
+
+#endif
+
+#endif

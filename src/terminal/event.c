@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.43 2004/06/13 03:13:54 jonas Exp $ */
+/* $Id: event.c,v 1.44 2004/06/13 03:21:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,7 +274,7 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 	}
 
 	/* For EV_INIT we read a liitle more */
-	if (info) return sizeof(struct term_event) + info->length;
+	if (info) return sizeof(struct terminal_info) + info->length;
 	return sizeof(struct term_event);
 }
 
@@ -313,10 +313,8 @@ test_queue:
 	if (term->qlen < sizeof(struct term_event)) return;
 	ev = (struct term_event *)iq;
 
-	r = sizeof(struct term_event);
-
-	if (!handle_interlink_event(term, ev))
-		return;
+	r = handle_interlink_event(term, ev);
+	if (!r) return;
 	/* redraw_screen(term); */
 
 	if (term->qlen == r) {

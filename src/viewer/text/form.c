@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.174 2004/06/15 21:58:28 jonas Exp $ */
+/* $Id: form.c,v 1.175 2004/06/15 22:12:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1268,19 +1268,11 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 	case FC_HIDDEN:
 		if (!fc->action) return NULL;
 
-		if (!init_string(&str)) return NULL;
-
 		if (fc->method == FM_GET)
 			label = N_("Submit form to");
 		else
 			label = N_("Post form to");
-
-		add_to_string(&str, _(label, term));
-		add_char_to_string(&str, ' ');
-
-		/* Add the uri with password and post info stripped */
-		add_string_uri_to_string(&str, fc->action, URI_PUBLIC);
-		return str.source;
+		break;
 	case FC_RADIO:
 		label = N_("Radio button"); break;
 	case FC_CHECKBOX:
@@ -1301,12 +1293,7 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 
 	add_to_string(&str, _(label, term));
 
-	if (link->type != LINK_CHECKBOX
-	    && link->type != LINK_SELECT
-	    && !link_is_textinput(link))
-		return str.source;
-
-	if (fc->name && fc->name[0]) {
+	if (link->type != LINK_BUTTON && fc->name && fc->name[0]) {
 		add_to_string(&str, ", ");
 		add_to_string(&str, _("name", term));
 		add_char_to_string(&str, ' ');
@@ -1365,6 +1352,15 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 		/* Add the uri with password and post info stripped */
 		add_string_uri_to_string(&str, fc->action, URI_PUBLIC);
 		add_char_to_string(&str, ')');
+		break;
+
+	case FC_SUBMIT:
+	case FC_IMAGE:
+	case FC_HIDDEN:
+		add_char_to_string(&str, ' ');
+
+		/* Add the uri with password and post info stripped */
+		add_string_uri_to_string(&str, fc->action, URI_PUBLIC);
 		break;
 
 	default:

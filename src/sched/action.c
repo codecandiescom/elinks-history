@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.85 2004/07/15 07:38:14 miciah Exp $ */
+/* $Id: action.c,v 1.86 2004/07/15 08:03:05 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -433,11 +433,11 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			assert(ses->tab == get_current_tab(term));
 
 			if (ses->status.show_tabs_bar)
-				set_window_ptr(ses->tab, ses->tab->xpos, term->height - 2);
+				tab_menu(term, ses, ses->tab->xpos,
+					 term->height - 2);
 			else
-				set_window_ptr(ses->tab, 0, 0);
+				tab_menu(term, ses, 0, 0);
 
-			tab_menu(term, ses);
 			break;
 
 		case ACT_MAIN_TAB_PREV:

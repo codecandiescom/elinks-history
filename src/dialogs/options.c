@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.1 2002/04/02 21:50:37 pasky Exp $ */
+/* $Id: options.c,v 1.2 2002/04/11 16:16:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,6 +185,7 @@ unsigned char *http_labels[] = {
 	TEXT(T_REFERER_TRUE),
 	TEXT(T_FAKE_REFERER),
 	TEXT(T_USER_AGENT),
+	NULL
 };
 
 void
@@ -654,7 +655,8 @@ cache_refresh(void *xxx)
 
 unsigned char *cache_texts[] = {
 	TEXT(T_MEMORY_CACHE_SIZE__KB),
-	TEXT(T_NUMBER_OF_FORMATTED_DOCUMENTS)
+	TEXT(T_NUMBER_OF_FORMATTED_DOCUMENTS),
+	NULL
 };
 
 void

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.306 2005/01/05 16:25:32 jonas Exp $ */
+/* $Id: search.c,v 1.307 2005/01/15 18:16:26 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1508,7 +1508,7 @@ search_dlg_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	void *data = hop->data;
 	unsigned char *text = dlg_data->widgets_data->cdata;
 
-	update_dialog_data(dlg_data, widget_data);
+	update_dialog_data(dlg_data);
 
 	commit_option_values(resolvers, config_options,
 			     hop->values, SEARCH_OPTIONS);

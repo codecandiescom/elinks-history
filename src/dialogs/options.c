@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.168 2005/01/05 14:37:44 jonas Exp $ */
+/* $Id: options.c,v 1.169 2005/01/15 18:16:26 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,7 +102,7 @@ push_ok_button(struct dialog_data *dlg_data, struct widget_data *button)
 	struct terminal *term = dlg_data->win->term;
 	union option_value *values = dlg_data->dlg->udata;
 
-	update_dialog_data(dlg_data, button);
+	update_dialog_data(dlg_data);
 
 	if (commit_option_values(resolvers, term->spec, values, TERM_OPTIONS)) {
 		/* TODO: The change hook thing should be handled by the

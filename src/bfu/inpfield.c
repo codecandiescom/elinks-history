@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.192 2005/01/01 17:38:38 jonas Exp $ */
+/* $Id: inpfield.c,v 1.193 2005/01/15 18:15:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -627,7 +627,7 @@ input_line_event_handler(struct dialog_data *dlg_data)
 		return EVENT_NOT_PROCESSED;
 	}
 
-	update_dialog_data(dlg_data, widget_data);
+	update_dialog_data(dlg_data);
 
 send_action_to_handler:
 	/* Then pass it on to the specialized handler */
@@ -644,7 +644,7 @@ cancel_input_line:
 			strlen(widget_data->cdata) - widget_data->info.field.cpos + 1);
 		widget_data->info.field.cpos--;
 
-		update_dialog_data(dlg_data, widget_data);
+		update_dialog_data(dlg_data);
 
 		goto send_action_to_handler;
 

@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.52 2004/11/22 07:28:49 miciah Exp $ */
+/* $Id: dialog.h,v 1.53 2005/01/15 18:15:18 miciah Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -123,7 +123,7 @@ t_handler_event_status ok_dialog(struct dialog_data *, struct widget_data *);
 t_handler_event_status cancel_dialog(struct dialog_data *, struct widget_data *);
 t_handler_event_status clear_dialog(struct dialog_data *, struct widget_data *);
 int check_dialog(struct dialog_data *);
-int update_dialog_data(struct dialog_data *, struct widget_data *);
+int update_dialog_data(struct dialog_data *);
 void generic_dialog_layouter(struct dialog_data *dlg_data);
 void refresh_dialog(struct dialog_data *, dialog_refresh_handler handler, void *data);
 

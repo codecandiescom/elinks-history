@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.376 2004/04/20 15:31:40 jonas Exp $ */
+/* $Id: session.c,v 1.377 2004/04/20 15:53:49 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -376,16 +376,6 @@ doc_end_load(struct download *stat, struct session *ses)
 		if (ses->display_timer != -1) {
 			kill_timer(ses->display_timer);
 			ses->display_timer = -1;
-		}
-
-		if (stat->pri == PRI_CSS && stat->state == S_OK) {
-			/* Ugly hack to force complete rerendering of the
-			 * document so it is not simply fetched from the
-			 * document cache. Apparently it doesn't work for
-			 * frames. When images etc. will be supported we will
-			 * probably need some more sane way to update the
-			 * document. --jonas */
-			ses->doc_view->document->id_tag = -1;
 		}
 
 		draw_formatted(ses, 1);

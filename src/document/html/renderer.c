@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.330 2003/10/29 21:27:12 jonas Exp $ */
+/* $Id: renderer.c,v 1.331 2003/10/29 21:40:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1363,7 +1363,7 @@ end:
 }
 
 static void
-push_base_format(unsigned char *url, struct document_options *options)
+init_html_parser(unsigned char *url, struct document_options *options)
 {
 	struct html_element *e;
 
@@ -1415,6 +1415,13 @@ push_base_format(unsigned char *url, struct document_options *options)
 	html_top.options = NULL;
 	html_top.linebreak = 1;
 	html_top.dontkill = 1;
+
+	table_level = 0;
+	g_ctrl_num = 0;
+	last_form_tag = NULL;
+	last_form_attr = NULL;
+	last_input_tag = NULL;
+
 }
 
 struct conv_table *
@@ -1519,13 +1526,7 @@ format_html(struct cache_entry *ce, struct document *document)
 	d_opt->plain = i;
 	done_string(&title);
 
-	push_base_format(url, &document->options);
-
-	table_level = 0;
-	g_ctrl_num = 0;
-	last_form_tag = NULL;
-	last_form_attr = NULL;
-	last_input_tag = NULL;
+	init_html_parser(url, &document->options);
 
 	rp = format_html_part(start, end, par_format.align,
 			      par_format.leftmargin, document->options.xw, document,

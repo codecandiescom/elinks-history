@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.38 2004/04/02 23:30:31 jonas Exp $ */
+/* $Id: smb.c,v 1.39 2004/04/03 01:22:47 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -186,7 +186,7 @@ end_smb_connection(struct connection *conn)
 	    && conn->uri->datalen
 	    && conn->uri->data[conn->uri->datalen - 1] != '/'
 	    && conn->uri->data[conn->uri->datalen - 1] != '\\') {
-		redirect_cache_to_directory(conn->cache, conn->uri);
+		redirect_cache(conn->cache, "/", 1, 0);
 
 	} else {
 		unsigned char *line_start, *line_end, *line_end2;
@@ -435,7 +435,7 @@ smb_func(struct connection *conn)
 	} else if (conn->uri->datalen) {
 		if (smb_get_cache(conn)) return;
 
-		redirect_cache_to_directory(conn->cache, conn->uri);
+		redirect_cache(conn->cache, "/", 1, 0);
 		abort_conn_with_state(conn, S_OK);
 		return;
 

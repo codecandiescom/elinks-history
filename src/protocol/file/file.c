@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.154 2004/04/02 23:38:16 jonas Exp $ */
+/* $Id: file.c,v 1.155 2004/04/03 01:22:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -621,7 +621,7 @@ read_encoded_file(unsigned char *filename, int filenamelen, struct string *page)
 static void
 file_func(struct connection *connection)
 {
-	int redirect_directory = 0;
+	unsigned char *redirect_location = NULL;
 	unsigned char filename[MAX_STR_LEN];
 	int filenamelen = connection->uri->datalen;
 	DIR *directory;
@@ -655,7 +655,7 @@ file_func(struct connection *connection)
 		 * function properly the directory url must end with a
 		 * directory separator. */
 		if (filename[0] && !dir_sep(filename[filenamelen - 1])) {
-			redirect_directory = 1;
+			redirect_location = "/";
 			state = S_OK;
 		} else {
 			state = list_directory(directory, filename, &page);
@@ -675,11 +675,11 @@ file_func(struct connection *connection)
 		 * file reading or directory listing worked out ok. */
 		cache = connection->cache = get_cache_entry(connection->uri);
 		if (!connection->cache) {
-			if (!redirect_directory) done_string(&page);
+			if (!redirect_location) done_string(&page);
 			state = S_OUT_OF_MEM;
 
-		} else if (redirect_directory) {
-			if (!redirect_cache_to_directory(cache, connection->uri))
+		} else if (redirect_location) {
+			if (!redirect_cache(cache, redirect_location, 1, 0))
 				state = S_OUT_OF_MEM;
 
 		} else {

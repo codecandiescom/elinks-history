@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.121 2004/04/02 23:30:31 jonas Exp $ */
+/* $Id: cache.c,v 1.122 2004/04/03 01:22:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -515,13 +515,14 @@ get_cache_redirect_uri(struct cache_entry *entry, struct uri *base)
 }
 
 int
-redirect_cache_to_directory(struct cache_entry *cache, struct uri *uri)
+redirect_cache(struct cache_entry *cache, unsigned char *location,
+	       int get, int incomplete)
 {
 	if (cache->redirect) mem_free(cache->redirect);
 
-	cache->redirect = straconcat(struri(uri), "/", NULL);
-	cache->redirect_get = 1;
-	cache->incomplete = 0;
+	cache->redirect = straconcat(struri(cache->uri), location, NULL);
+	cache->redirect_get = get;
+	if (incomplete >= 0) cache->incomplete = incomplete;
 
 	return !!cache->redirect;
 }

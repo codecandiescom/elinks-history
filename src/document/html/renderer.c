@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.282 2003/09/28 21:11:57 jonas Exp $ */
+/* $Id: renderer.c,v 1.283 2003/09/28 23:32:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -777,7 +777,7 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 
 	buffer = convert_string(convert_table, chars, charslen, CSM_DEFAULT);
 	if (buffer) {
-		if(*buffer) put_chars(part, buffer, strlen(buffer));
+		if (*buffer) put_chars(part, buffer, strlen(buffer));
 		mem_free(buffer);
 	}
 }

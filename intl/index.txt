@@ -1,6 +1,7 @@
 english
 brazilian_portuguese
 bulgarian
+catalan
 czech
 estonian
 french

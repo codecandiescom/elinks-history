@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.143 2004/12/19 16:06:25 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.144 2004/12/19 16:43:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1519,7 +1519,11 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			struct string *cookies = send_cookies(vs->uri);
 
 			if (cookies) {
-				P_STRING(cookies->source);
+				static unsigned char cookiestr[1024];
+
+				strncpy(cookiestr, cookies->source, 1024);
+				done_string(cookies);
+				P_STRING(cookiestr);
 				goto convert;
 			}
 		}

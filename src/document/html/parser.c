@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.84 2003/05/04 19:30:49 pasky Exp $ */
+/* $Id: parser.c,v 1.85 2003/05/06 16:47:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,8 +181,8 @@ a:
 				if (a) mem_free(a);
 				return NULL;
 			}
-			if (!f && *e != 13) {
-				if (*e != 9 && *e != 10)
+			if (!f && *e != ASCII_CR) {
+				if (*e != ASCII_TAB && *e != ASCII_LF)
 					add_chr(a, l, *e);
 				else if (!get_attr_val_eat_nl)
 					add_chr(a, l, ' ');
@@ -2653,19 +2653,21 @@ put_sp:
 
 		if (par_format.align == AL_NO) {
 			putsp = 0;
-			if (*html == 9) {
+			if (*html == ASCII_TAB) {
 				put_chrs(lt, html - lt, put_chars, f);
 				put_chrs("        ", 8 - (position % 8), put_chars, f);
 				html++;
 				goto set_lt;
-			} else if (*html == 13 || *html == 10) {
+			} else if (*html == ASCII_CR || *html == ASCII_LF) {
 				put_chrs(lt, html - lt, put_chars, f);
 
 next_break:
-				if (*html == 13 && html < eof-1 && html[1] == 10) html++;
+				if (*html == ASCII_CR && html < eof - 1
+				    && html[1] == ASCII_LF)
+					html++;
 				ln_break(1, line_break, f);
 				html++;
-				if (*html == 13 || *html == 10) {
+				if (*html == ASCII_CR || *html == ASCII_LF) {
 					line_breax = 0;
 					goto next_break;
 				}

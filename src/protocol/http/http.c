@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.105 2003/05/04 17:25:55 pasky Exp $ */
+/* $Id: http.c,v 1.106 2003/05/06 16:47:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -794,11 +794,11 @@ is_line_in_buffer(struct read_buffer *rb)
 	int l;
 
 	for (l = 0; l < rb->len; l++) {
-		if (rb->data[l] == 10) return l + 1;
-		if (l < rb->len - 1 && rb->data[l] == 13
-		    && rb->data[l + 1] == 10)
+		if (rb->data[l] == ASCII_LF) return l + 1;
+		if (l < rb->len - 1 && rb->data[l] == ASCII_CR
+		    && rb->data[l + 1] == ASCII_LF)
 			return l + 2;
-		if (l == rb->len - 1 && rb->data[l] == 13) return 0;
+		if (l == rb->len - 1 && rb->data[l] == ASCII_CR) return 0;
 		if (rb->data[l] < ' ') return -1;
 	}
 	return 0;
@@ -946,9 +946,9 @@ next_chunk:
 				if (rb->data[0] == 10) {
 					kill_buffer_data(rb, 1);
 				} else {
-					if (rb->data[0] != 13
+					if (rb->data[0] != ASCII_CR
 					    || (rb->len >= 2
-						&& rb->data[1] != 10)) {
+						&& rb->data[1] != ASCII_LF)) {
 						abort_conn_with_state(conn, S_HTTP_ERROR);
 						return;
 					}
@@ -974,13 +974,13 @@ get_header(struct read_buffer *rb)
 	for (i = 0; i < rb->len; i++) {
 		unsigned char a = rb->data[i];
 
-		if (/*a < ' ' && a != 10 && a != 13*/!a) return -1;
-		if (i < rb->len - 1 && a == 10 && rb->data[i + 1] == 10) return i + 2;
-		if (i < rb->len - 3 && a == 13) {
-			if (rb->data[i + 1] == 13) continue;
-			if (rb->data[i + 1] != 10) return -1;
-			if (rb->data[i + 2] == 13) {
-				if (rb->data[i + 3] != 10) return -1;
+		if (!a) return -1;
+		if (i < rb->len - 1 && a == ASCII_LF && rb->data[i + 1] == ASCII_LF) return i + 2;
+		if (i < rb->len - 3 && a == ASCII_CR) {
+			if (rb->data[i + 1] == ASCII_CR) continue;
+			if (rb->data[i + 1] != ASCII_LF) return -1;
+			if (rb->data[i + 2] == ASCII_CR) {
+				if (rb->data[i + 3] != ASCII_LF) return -1;
 				return i + 4;
 			}
 		}

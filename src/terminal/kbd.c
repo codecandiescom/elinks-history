@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.6 2003/05/05 14:40:29 zas Exp $ */
+/* $Id: kbd.c,v 1.7 2003/05/06 16:47:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -885,11 +885,11 @@ l2:
 	if (ev.x == 5) ev.x = KBD_END;
 	if (ev.x == 6) ev.x = KBD_PAGE_DOWN;
 #endif
-	if (ev.x == 8) ev.x = KBD_BS;
-	if (ev.x == 9) ev.x = KBD_TAB;
-	if (ev.x == 10) ev.x = KBD_ENTER, ev.y = KBD_CTRL;
-	if (ev.x == 13) ev.x = KBD_ENTER;
-	if (ev.x == 127) ev.x = KBD_BS;
+	if (ev.x == ASCII_BS) ev.x = KBD_BS;
+	if (ev.x == ASCII_TAB) ev.x = KBD_TAB;
+	if (ev.x == ASCII_LF) ev.x = KBD_ENTER, ev.y = KBD_CTRL;
+	if (ev.x == ASCII_CR) ev.x = KBD_ENTER;
+	if (ev.x == ASCII_DEL) ev.x = KBD_BS;
 	if (ev.x < ' ') {
 		ev.x += 'A' - 1;
 		ev.y = KBD_CTRL;

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.5 2003/05/04 20:08:09 pasky Exp $ */
+/* $Id: screen.c,v 1.6 2003/05/06 16:47:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,7 +128,7 @@ print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 		if (*attrib & 0100) add_to_str(a, l, ";1");
 		add_chr_to_str(a, l, 'm');
 	}
-	if (c >= ' ' && c != 127/* && c != 155*/) {
+	if (c >= ' ' && c != ASCII_DEL /* && c != 155*/) {
 		int charset = opt_cache->charset;
 		int type = opt_cache->type;
 

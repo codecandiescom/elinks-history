@@ -1,8 +1,17 @@
-/* $Id: os_dep.h,v 1.11 2003/05/03 17:11:49 pasky Exp $ */
+/* $Id: os_dep.h,v 1.12 2003/05/06 16:47:44 zas Exp $ */
 
 #ifndef EL__OS_DEP_H
 #define EL__OS_DEP_H
 
+
+/* Some common ascii codes. */
+#define ASCII_BS 8
+#define ASCII_TAB 9
+#define ASCII_LF 10
+#define ASCII_CR 13
+#define ASCII_DEL 127
+
+/* System-type identifier */
 #define SYS_UNIX	1
 #define SYS_OS2		2
 #define SYS_WIN32	3

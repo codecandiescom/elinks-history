@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.20 2003/05/03 21:43:27 pasky Exp $ */
+/* $Id: string.h,v 1.21 2003/05/06 16:47:44 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -48,7 +48,7 @@ int xstrcmp(unsigned char *, unsigned char *);
 unsigned char *safe_strncpy(unsigned char *, const unsigned char *, size_t);
 unsigned char *trim_chars(unsigned char *, unsigned char, int *);
 
-#define WHITECHAR(x) ((x) == ' ' || ((x) >= 9 && (x) <= 13))
+#define WHITECHAR(x) ((x) == ' ' || ((x) >= ASCII_TAB && (x) <= ASCII_CR))
 #define IS_QUOTE(x) ((x) == '"' || (x) == '\'')
 
 static inline int
@@ -87,7 +87,7 @@ isA(unsigned char c)
 /** strchr() */
 
 #ifndef HAVE_STRCHR
-#ifdef HAVE_INDEX /* for old BSD systems. */
+#ifdef HAVE_INDEX /* for old ASCII_BSD systems. */
 
 #undef strchr
 #define strchr(a, b) index(a, b)

@@ -7,7 +7,7 @@
 #
 # Spec file format from < http://www.rpm.org/RPM-HOWTO/build.html >
 #
-# $Id: elinks.spec.in,v 1.4 2002/12/19 15:35:45 pasky Exp $
+# $Id: elinks.spec.in,v 1.5 2003/01/26 19:23:19 pasky Exp $
 
 Summary: Enhanced version of Links (Lynx-like text WWW browser)
 Name: elinks
@@ -18,8 +18,8 @@ Copyright: GPL
 Vendor: ELinks project <pasky@ucw.cz>
 #Packager: Petr Baudis <pasky@ucw.cz>
 Group: Applications/Internet
-Source: http://elinks.pld.org.pl/download/%{name}-%{version}.tar.bz2
-URL: http://elinks.pld.org.pl/
+Source: http://elinks.or.cz/download/%{name}-%{version}.tar.bz2
+URL: http://elinks.or.cz/
 BuildRoot: /tmp/%{name}-%{version}-root
 
 %description
@@ -52,6 +52,9 @@ rm -rf $RPM_BUILD_ROOT
 
 # date +"%a %b %d %Y"
 %changelog
+* Sun Jan 26 2003 Petr Baudis <pasky@ucw.cz>
+- elinks.pld.org.pl -> elinks.or.cz, based on Bennett's suggestion
+
 * Thu Dec 19 2002 Bennett Todd <bet@rahul.net>
 - wildcarded the above doc and manpage specifications, and tagged the man
   pages as docs

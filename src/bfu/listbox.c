@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.67 2003/05/02 22:39:14 pasky Exp $ */
+/* $Id: listbox.c,v 1.68 2003/05/02 23:17:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,13 +113,26 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 		offset = 1;
 
 	while (offset && !stop) {
-		if (fn && (!follow_visible || item->visible)) {
-			struct listbox_item *prev = item->prev;
-			struct listbox_item *next = item->next;
-			int deleted = fn(item, d, &offset);
+		/* We need to cache these. Or what will happen if something
+		 * will free us item too early? However, we rely on item
+		 * being at least NULL in that case. */
+		/* There must be no orphaned listbox_items. No free()d roots
+		 * and no dangling children. */
+#define	item_cache(item) \
+	do { \
+		croot = item->root; cprev = item->cprev; cnext = item->cnext; \
+	while (0)
+		struct listbox_item *croot;
+		struct listbox_item *cprev;
+		struct listbox_item *cnext;
 
-			if (deleted) {
-				item = (offset >= 0 ? prev : next);
+		item_cache(item);
+
+		if (fn && (!follow_visible || item->visible)) {
+			if (fn(item, d, &offset)) {
+				/* We was free()d! Let's try to carry on w/ the
+				 * cached coordinates. */
+				item = NULL;
 			}
 			if (!offset) {
 				infinite = 0; /* safety (matches) */
@@ -136,35 +149,41 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 
 			if (!infinite) offset--;
 
-			if (!list_empty(item->child) && item->expanded
+			if (item && !list_empty(item->child) && item->expanded
 			    && (!follow_visible || item->visible)) {
 				/* Descend to children. */
 				item = item->child.next;
+				item_cache(item);
 				goto done_down;
 			}
 
-			while (item->root
-			       && (void *) item->next == &item->root->child) {
+			while (croot
+			       && (void *) cnext == &croot->child) {
 				/* Last item in a non-root list, climb to your
 				 * root. */
 				if (!cragsman) cragsman = item;
-				item = item->root;
+				item = croot;
+				item_cache(item);
 			}
 
-			if (!item->root && (void *) item->next == box->items) {
+			if (!croot && (void *) cnext == box->items) {
 				/* Last item in the root list, quit.. */
 				stop = 1;
 				if (cragsman) {
 					/* ..and fall back where we were. */
 					item = cragsman;
+					item_cache(item);
 				}
 			}
 
 			/* We're not at the end of anything, go on. */
-			if (!stop) item = item->next;
+			if (!stop) {
+				item = cnext;
+				item_cache(item);
+			}
 
 done_down:
-			if (follow_visible && !item->visible) {
+			if (!item || (follow_visible && !item->visible)) {
 				offset++;
 			} else {
 				visible_item = item;
@@ -175,15 +194,16 @@ done_down:
 
 			if (!infinite) offset++;
 
-			if (item->root
-			    && (void *) item->prev == &item->root->child) {
+			if (croot
+			    && (void *) cprev == &croot->child) {
 				/* First item in a non-root list, climb to your
 				 * root. */
-				item = item->root;
+				item = croot;
+				item_cache(item);
 				levmove = 1;
 			}
 
-			if (!item->root && (void *) item->prev == box->items) {
+			if (!croot && (void *) cprev == box->items) {
 				/* First item in the root list, quit. */
 				stop = 1;
 				levmove = 1;
@@ -191,23 +211,29 @@ done_down:
 
 			/* We're not at the start of anything, go on. */
 			if (!levmove) {
-				if (!stop) item = item->prev;
+				if (!stop) {
+					item = cprev;
+					item_cache(item);
+				}
 
-				while (!list_empty(item->child) && item->expanded
+				while (item && !list_empty(item->child)
+					&& item->expanded
 					&& (!follow_visible || item->visible)) {
 					/* Descend to children. */
 					item = item->child.prev;
+					item_cache(item);
 				}
 			} else {
 				levmove = 0;
 			}
 
-			if (follow_visible && !item->visible) {
+			if (!item || (follow_visible && !item->visible)) {
 				offset--;
 			} else {
 				visible_item = item;
 			}
 		}
+#undef item_cache
 	}
 
 	return visible_item;

@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.53 2004/06/08 10:54:17 jonas Exp $ */
+/* $Id: hooks.c,v 1.54 2004/06/22 06:46:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -182,7 +182,7 @@ script_hook_get_proxy(va_list ap, void *data)
 	if (err) return EHS_NEXT;
 
 	if (lua_isstring(L, -1)) {
-		*new_proxy_url = stracpy((unsigned char *)lua_tostring(L, -1));
+		*new_proxy_url = stracpy((unsigned char *) lua_tostring(L, -1));
 	} else if (lua_isnil(L, -1)) {
 		*new_proxy_url = NULL;
 	} else {

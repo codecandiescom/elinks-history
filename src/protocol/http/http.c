@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.292 2004/06/20 21:19:29 jonas Exp $ */
+/* $Id: http.c,v 1.293 2004/06/22 06:46:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -868,7 +868,7 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 
 				if (l != -1) {
 					errno = 0;
-					n = strtol(rb->data, (char **)&de, 16);
+					n = strtol(rb->data, (char **) &de, 16);
 					if (errno || !*de) {
 						abort_conn_with_state(conn, S_HTTP_ERROR);
 						return;
@@ -1244,7 +1244,7 @@ again:
 		int l;
 
 		errno = 0;
-		l = strtol(d, (char **)&ep, 10);
+		l = strtol(d, (char **) &ep, 10);
 
 		if (!errno && !*ep && l >= 0) {
 			if (!info->close || POST_HTTP_1_0(version))

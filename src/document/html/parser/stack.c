@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.12 2004/06/20 21:19:29 jonas Exp $ */
+/* $Id: stack.c,v 1.13 2004/06/22 06:46:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,7 +77,7 @@ kill_html_stack_item(struct html_element *e)
 {
 	assert(e);
 	if_assert_failed return;
-	assertm((void *)e != &html_stack, "trying to free bad html element");
+	assertm((void *) e != &html_stack, "trying to free bad html element");
 	if_assert_failed return;
 	assertm(e->type != ELEMENT_IMMORTAL, "trying to kill unkillable element");
 	if_assert_failed return;
@@ -105,7 +105,7 @@ html_stack_dup(enum html_element_type type)
 	struct html_element *e;
 	struct html_element *ep = html_stack.next;
 
-	assertm(ep && (void *)ep != &html_stack, "html stack empty");
+	assertm(ep && (void *) ep != &html_stack, "html stack empty");
 	if_assert_failed return;
 
 	e = mem_alloc(sizeof(struct html_element));
@@ -203,7 +203,7 @@ kill_html_stack_until(int ls, ...)
 
 killll:
 	l = 0;
-	while ((void *)e != &html_stack) {
+	while ((void *) e != &html_stack) {
 		if (ls && e == html_stack.next)
 			break;
 

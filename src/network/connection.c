@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.178 2004/06/07 16:26:00 jonas Exp $ */
+/* $Id: connection.c,v 1.179 2004/06/22 06:46:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -390,7 +390,7 @@ send_connection_info(struct connection *conn)
 	enum connection_state state = conn->state;
 	struct download *download = conn->downloads.next;
 
-	while ((void *)download != &conn->downloads) {
+	while ((void *) download != &conn->downloads) {
 		download->cached = conn->cached;
 		download = download->next;
 		if (download->prev->end)
@@ -491,7 +491,7 @@ add_keepalive_connection(struct connection *conn, ttime timeout)
 
 done:
 	done_connection(conn);
-	register_bottom_half((void (*)(void *))check_queue, NULL);
+	register_bottom_half((void (*)(void *)) check_queue, NULL);
 }
 
 static void
@@ -567,7 +567,7 @@ sort_queue(void)
 
 		swp = 0;
 		foreach (conn, queue) {
-			if ((void *)conn->next == &queue) break;
+			if ((void *) conn->next == &queue) break;
 
 			if (get_priority(conn->next) < get_priority(conn)) {
 				struct connection *c = conn->next;
@@ -628,7 +628,7 @@ retry_connection(struct connection *conn)
 	if (conn->uri->post || !max_tries || ++conn->tries >= max_tries) {
 		/*send_connection_info(conn);*/
 		done_connection(conn);
-		register_bottom_half((void (*)(void *))check_queue, NULL);
+		register_bottom_half((void (*)(void *)) check_queue, NULL);
 	} else {
 		conn->prev_error = conn->state;
 		run_connection(conn);
@@ -641,7 +641,7 @@ abort_connection(struct connection *conn)
 	if (conn->running) interrupt_connection(conn);
 	/* send_connection_info(conn); */
 	done_connection(conn);
-	register_bottom_half((void (*)(void *))check_queue, NULL);
+	register_bottom_half((void (*)(void *)) check_queue, NULL);
 }
 
 /* Set certain state on a connection and then abort the connection. */
@@ -705,12 +705,12 @@ again:
 	check_queue_bugs();
 	check_keepalive_connections();
 
-	while (conn != (struct connection *)&queue) {
+	while (conn != (struct connection *) &queue) {
 		struct connection *c;
 		enum connection_priority pri = get_priority(conn);
 
 		/* No way to reduce code redundancy here ? --Zas */
-		for (c = conn; c != (struct connection *)&queue && get_priority(c) == pri;) {
+		for (c = conn; c != (struct connection *) &queue && get_priority(c) == pri;) {
 			struct connection *cc = c;
 
 			c = c->next;
@@ -719,7 +719,7 @@ again:
 				goto again;
 		}
 
-		for (c = conn; c != (struct connection *)&queue && get_priority(c) == pri;) {
+		for (c = conn; c != (struct connection *) &queue && get_priority(c) == pri;) {
 			struct connection *cc = c;
 
 			c = c->next;
@@ -822,7 +822,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 			del_from_list(conn);
 			conn->pri[pri]++;
 			add_to_queue(conn);
-			register_bottom_half((void (*)(void *))check_queue, NULL);
+			register_bottom_half((void (*)(void *)) check_queue, NULL);
 		} else {
 			conn->pri[pri]++;
 		}
@@ -865,7 +865,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 
 	check_queue_bugs();
 
-	register_bottom_half((void (*)(void *))check_queue, NULL);
+	register_bottom_half((void (*)(void *)) check_queue, NULL);
 	return 0;
 }
 
@@ -918,7 +918,7 @@ change_connection(struct download *old, struct download *new,
 	sort_queue();
 	check_queue_bugs();
 
-	register_bottom_half((void (*)(void *))check_queue, NULL);
+	register_bottom_half((void (*)(void *)) check_queue, NULL);
 }
 
 /* This will remove 'pos' bytes from the start of the cache for the specified
@@ -1005,7 +1005,7 @@ set_connection_timeout(struct connection *conn)
 	conn->timer = install_timer((conn->unrestartable
 				     ? get_opt_int("connection.unrestartable_receive_timeout")
 				     : get_opt_int("connection.receive_timeout"))
-				    * 500, (void (*)(void *))connection_timeout_1, conn);
+				    * 500, (void (*)(void *)) connection_timeout_1, conn);
 }
 
 

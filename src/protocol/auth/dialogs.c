@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.101 2004/06/13 13:57:06 jonas Exp $ */
+/* $Id: dialogs.c,v 1.102 2004/06/22 06:46:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,19 +105,19 @@ do_auth_dialog(struct session *ses, void *data)
 static void
 lock_http_auth_basic(struct listbox_item *item)
 {
-	object_lock((struct http_auth_basic *)item->udata);
+	object_lock((struct http_auth_basic *) item->udata);
 }
 
 static void
 unlock_http_auth_basic(struct listbox_item *item)
 {
-	object_unlock((struct http_auth_basic *)item->udata);
+	object_unlock((struct http_auth_basic *) item->udata);
 }
 
 static int
 is_http_auth_basic_used(struct listbox_item *item)
 {
-	return is_object_used((struct http_auth_basic *)item->udata);
+	return is_object_used((struct http_auth_basic *) item->udata);
 }
 
 static unsigned char *

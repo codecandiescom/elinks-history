@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.182 2004/06/20 21:19:29 jonas Exp $ */
+/* $Id: tables.c,v 1.183 2004/06/22 06:46:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,7 +197,7 @@ get_column_width(unsigned char *attr, int *width, int sh)
 
 		al[len - 1] = '\0';
 		errno = 0;
-		n = strtoul(al, (char **)&en, 10);
+		n = strtoul(al, (char **) &en, 10);
 		if (!errno && n >= 0 && !*en)
 			*width = WIDTH_RELATIVE - n;
 	} else {

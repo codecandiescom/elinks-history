@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.59 2004/06/20 21:19:30 jonas Exp $ */
+/* $Id: event.c,v 1.60 2004/06/22 06:46:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -300,7 +300,7 @@ in_term(struct terminal *term)
 	term->qfreespace -= r;
 
 	while (term->qlen >= sizeof(struct term_event)) {
-		struct term_event *ev = (struct term_event *)iq;
+		struct term_event *ev = (struct term_event *) iq;
 		int event_size = handle_interlink_event(term, ev);
 
 		/* If the event was not handled save the bytes in the queue for

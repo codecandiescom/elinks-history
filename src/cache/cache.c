@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.159 2004/06/21 07:03:20 jonas Exp $ */
+/* $Id: cache.c,v 1.160 2004/06/22 06:46:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -415,7 +415,7 @@ truncate_entry(struct cache_entry *cached, int off, int final)
 		if (size <= 0) {
 
 del:
-			while ((void *)f != &cached->frag) {
+			while ((void *) f != &cached->frag) {
 				struct fragment *tmp = f->next;
 
 				enlarge_entry(cached, -f->length);

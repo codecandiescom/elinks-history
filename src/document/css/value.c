@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.50 2004/04/23 20:44:28 pasky Exp $ */
+/* $Id: value.c,v 1.51 2004/06/22 06:46:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@ css_parse_color_value(struct css_property_info *propinfo,
 				return 0;
 
 			/* Parse the digit */
-			part = strtol(token->string, (char **)&nstring, 10);
+			part = strtol(token->string, (char **) &nstring, 10);
 			if (token->string == nstring)
 				return 0;
 

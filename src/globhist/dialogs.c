@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.115 2004/06/14 00:53:47 jonas Exp $ */
+/* $Id: dialogs.c,v 1.116 2004/06/22 06:46:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,17 +32,17 @@
 
 static void lock_globhist_item(struct listbox_item *item)
 {
-	object_lock((struct global_history_item *)item->udata);
+	object_lock((struct global_history_item *) item->udata);
 }
 
 static void unlock_globhist_item(struct listbox_item *item)
 {
-	object_unlock((struct global_history_item *)item->udata);
+	object_unlock((struct global_history_item *) item->udata);
 }
 
 static int is_globhist_item_used(struct listbox_item *item)
 {
-	return is_object_used((struct global_history_item *)item->udata);
+	return is_object_used((struct global_history_item *) item->udata);
 }
 
 static unsigned char *

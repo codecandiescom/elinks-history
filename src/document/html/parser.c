@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.440 2004/06/22 00:50:51 pasky Exp $ */
+/* $Id: parser.c,v 1.441 2004/06/22 06:46:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -346,7 +346,7 @@ html_font(unsigned char *a)
 		else if (*al == '-') p = -1, nn++;
 
 		errno = 0;
-		s = strtoul(nn, (char **)&end, 10);
+		s = strtoul(nn, (char **) &end, 10);
 		if (!errno && *nn && !*end) {
 			if (s > 7) s = 7;
 			if (!p) format.fontsize = s;

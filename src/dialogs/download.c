@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.53 2004/06/08 19:33:51 jonas Exp $ */
+/* $Id: download.c,v 1.54 2004/06/22 06:46:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -276,19 +276,19 @@ display_download(struct terminal *term, struct file_download *file_download,
 static void
 lock_file_download(struct listbox_item *item)
 {
-	object_lock((struct file_download *)item->udata);
+	object_lock((struct file_download *) item->udata);
 }
 
 static void
 unlock_file_download(struct listbox_item *item)
 {
-	object_unlock((struct file_download *)item->udata);
+	object_unlock((struct file_download *) item->udata);
 }
 
 static int
 is_file_download_used(struct listbox_item *item)
 {
-	return is_object_used((struct file_download *)item->udata);
+	return is_object_used((struct file_download *) item->udata);
 }
 
 static unsigned char *

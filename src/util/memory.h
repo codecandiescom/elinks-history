@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.26 2004/04/29 23:02:42 jonas Exp $ */
+/* $Id: memory.h,v 1.27 2004/06/22 06:46:18 miciah Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -121,7 +121,7 @@ mem_align_alloc__(
 #endif
 		if (!data) return NULL;
 
-		*ptr = (void *)data;
+		*ptr = (void *) data;
 		memset(&data[oldsize], 0, newsize - oldsize);
 	}
 
@@ -130,10 +130,10 @@ mem_align_alloc__(
 
 #ifdef LEAK_DEBUG
 #define mem_align_alloc(ptr, old, new, obj, mask) \
-	mem_align_alloc__(__FILE__, __LINE__, (void **)ptr, old, new, sizeof(obj), mask)
+	mem_align_alloc__(__FILE__, __LINE__, (void **) ptr, old, new, sizeof(obj), mask)
 #else
 #define mem_align_alloc(ptr, old, new, obj, mask) \
-	mem_align_alloc__((void **)ptr, old, new, sizeof(obj), mask)
+	mem_align_alloc__((void **) ptr, old, new, sizeof(obj), mask)
 #endif
 
 
@@ -141,7 +141,7 @@ mem_align_alloc__(
 /* TODO: Think about making what they do more obvious in their identifier, they
  * could be obfuscating their users a little for the newcomers otherwise. */
 
-#define mem_free_set(x, v) do { register void **p = (void **)(x); if (*p) mem_free(*p); *p = (void *)(v); } while (0)
+#define mem_free_set(x, v) do { register void **p = (void **) (x); if (*p) mem_free(*p); *p = (void *) (v); } while (0)
 #define mem_free_if(x) do { register void *p = (x); if (p) mem_free(p); } while (0)
 
 #if 0

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.57 2004/06/14 00:53:47 jonas Exp $ */
+/* $Id: dialogs.c,v 1.58 2004/06/22 06:46:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,18 +38,18 @@ static void
 lock_cookie(struct listbox_item *item)
 {
 	if (item->type == BI_LEAF)
-		object_lock((struct cookie *)item->udata);
+		object_lock((struct cookie *) item->udata);
 	else
-		object_lock((struct c_server *)item->udata);
+		object_lock((struct c_server *) item->udata);
 }
 
 static void
 unlock_cookie(struct listbox_item *item)
 {
 	if (item->type == BI_LEAF)
-		object_unlock((struct cookie *)item->udata);
+		object_unlock((struct cookie *) item->udata);
 	else
-		object_unlock((struct c_server *)item->udata);
+		object_unlock((struct c_server *) item->udata);
 }
 
 static int
@@ -59,13 +59,13 @@ is_cookie_used(struct listbox_item *item)
 		struct listbox_item *root = item;
 
 		foreach (item, root->child)
-			if (is_object_used((struct cookie *)item->udata))
+			if (is_object_used((struct cookie *) item->udata))
 				return 1;
 
 		return 0;
 	}
 
-	return is_object_used((struct cookie *)item->udata);
+	return is_object_used((struct cookie *) item->udata);
 }
 
 static unsigned char *
@@ -193,7 +193,7 @@ set_cookie_expires(struct dialog_data *dlg_data, struct widget_data *widget_data
 	if (!value || !cookie) return 1;
 
 	errno = 0;
-	number = strtol(value, (char **)&end, 10);
+	number = strtol(value, (char **) &end, 10);
 	if (errno || *end || number < 0) return 1;
 
 	cookie->expires = (ttime) number;
@@ -211,7 +211,7 @@ set_cookie_secure(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	if (!value || !cookie) return 1;
 
 	errno = 0;
-	number = strtol(value, (char **)&end, 10);
+	number = strtol(value, (char **) &end, 10);
 	if (errno || *end) return 1;
 
 	cookie->secure = (number != 0);

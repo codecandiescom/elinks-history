@@ -1,4 +1,4 @@
-/* $Id: button.h,v 1.23 2003/12/01 15:19:53 pasky Exp $ */
+/* $Id: button.h,v 1.24 2004/06/22 06:46:15 miciah Exp $ */
 
 #ifndef EL__BFU_BUTTON_H
 #define EL__BFU_BUTTON_H
@@ -17,7 +17,7 @@ struct terminal;
 		int n = (dlg)->widgets_size;				\
 		(dlg)->widgets[n].type = WIDGET_BUTTON;			\
 		(dlg)->widgets[n].info.button.flags = (key);		\
-		(dlg)->widgets[n].info.button.done = (void (*)(void *))(done_); \
+		(dlg)->widgets[n].info.button.done = (void (*)(void *)) (done_); \
 		(dlg)->widgets[n].info.button.done_data = (done_data_);	\
 		(dlg)->widgets[n].fn = (handler);			\
 		(dlg)->widgets[n].text = (text_);			\

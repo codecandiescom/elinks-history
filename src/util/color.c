@@ -1,5 +1,5 @@
 /* Color parser */
-/* $Id: color.c,v 1.16 2004/04/29 23:02:42 jonas Exp $ */
+/* $Id: color.c,v 1.17 2004/06/22 06:46:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,7 +101,7 @@ decode_color(unsigned char *str, int slen, color_t *color)
 		}
 
 		errno = 0;
-		string_color = strtoul(str, (char **)&end, 16);
+		string_color = strtoul(str, (char **) &end, 16);
 		if (!errno && (end == str + 6)) {
 			*color = string_color;
 			return 0;

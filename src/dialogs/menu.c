@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.336 2004/06/20 21:02:39 jonas Exp $ */
+/* $Id: menu.c,v 1.337 2004/06/22 06:46:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,7 +101,7 @@ save_url_as(struct session *ses)
 void
 really_exit_prog(struct session *ses)
 {
-	register_bottom_half((void (*)(void *))destroy_terminal, ses->tab->term);
+	register_bottom_half((void (*)(void *)) destroy_terminal, ses->tab->term);
 }
 
 static inline void

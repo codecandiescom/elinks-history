@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.211 2004/06/22 04:54:45 miciah Exp $ */
+/* $Id: form.c,v 1.212 2004/06/22 06:46:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -509,7 +509,7 @@ sort_submitted_values(struct list_head *list)
 		struct submitted_value *sub, *next;
 
 		changed = 0;
-		foreach (sub, *list) if (sub->next != (void *)list)
+		foreach (sub, *list) if (sub->next != (void *) list)
 			if (sub->next->position < sub->position) {
 				next = sub->next;
 				del_from_list(sub);
@@ -517,7 +517,7 @@ sort_submitted_values(struct list_head *list)
 				sub = next;
 				changed = 1;
 			}
-		foreachback (sub, *list) if (sub->next != (void *)list)
+		foreachback (sub, *list) if (sub->next != (void *) list)
 			if (sub->next->position < sub->position) {
 				next = sub->next;
 				del_from_list(sub);

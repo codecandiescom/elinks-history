@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.523 2004/06/17 10:02:22 zas Exp $ */
+/* $Id: session.c,v 1.524 2004/06/22 06:46:18 miciah Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -161,7 +161,7 @@ add_session_info(struct session *ses, struct uri *uri)
 	info->id = session_info_id++;
 	/* I don't know what a reasonable start up time for a new instance is
 	 * but it won't hurt to have a few seconds atleast. --jonas */
-	info->timer = install_timer(10000, (void (*)(void *))session_info_timeout,
+	info->timer = install_timer(10000, (void (*)(void *)) session_info_timeout,
 					   (void *) info->id);
 	info->ses = ses;
 	if (uri) info->uri = get_uri_reference(uri);
@@ -388,7 +388,7 @@ display_timer(struct session *ses)
 
 	t = (get_time() - t) * DISPLAY_TIME;
 	if (t < DISPLAY_TIME_MIN) t = DISPLAY_TIME_MIN;
-	ses->display_timer = install_timer(t, (void (*)(void *))display_timer,
+	ses->display_timer = install_timer(t, (void (*)(void *)) display_timer,
 					   ses);
 
 	load_frames(ses, ses->doc_view);
@@ -1033,7 +1033,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 		struct document_view *doc_view = current_frame(ses);
 
 		l->download.data = ses;
-		l->download.end = (void *)doc_end_load;
+		l->download.end = (void *) doc_end_load;
 		load_uri(l->vs.uri, ses->referrer, &l->download, PRI_MAIN, cache_mode, -1);
 		foreach (ftl, ses->more_files) {
 			struct uri *referer = NULL;
@@ -1042,7 +1042,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 				continue;
 
 			ftl->stat.data = ftl;
-			ftl->stat.end = (void *)file_end_load;
+			ftl->stat.end = (void *) file_end_load;
 
 			if (doc_view && doc_view->document)
 				referer = doc_view->document->uri;

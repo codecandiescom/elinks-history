@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.73 2004/06/07 23:38:54 jonas Exp $ */
+/* $Id: frames.c,v 1.74 2004/06/22 06:46:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -358,7 +358,7 @@ extract_rows_or_cols_values(unsigned char *str, int max_value, int pixels_per_ch
 		/* Some platforms (FreeBSD) set errno when the first char is
 		 * not a digit others (GNU/Linux) don't so ignore errno. */
 		/* Extract number. */
-		number = strtoul(str, (char **)&end, 10);
+		number = strtoul(str, (char **) &end, 10);
 		if (end == str) {
 			number = 0;
 		} else {

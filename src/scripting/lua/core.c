@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.158 2004/06/22 05:02:37 miciah Exp $ */
+/* $Id: core.c,v 1.159 2004/06/22 06:46:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,7 +231,7 @@ static int
 l_execute(LS)
 {
 	if (lua_isstring(S, 1)) {
-		exec_on_terminal(lua_ses->tab->term, (unsigned char *)lua_tostring(S, 1), "", 0);
+		exec_on_terminal(lua_ses->tab->term, (unsigned char *) lua_tostring(S, 1), "", 0);
 		lua_pushnumber(S, 0);
 		return 1;
 	}
@@ -312,12 +312,12 @@ l_bind_key(LS)
 	ref = lua_ref(S, 1);
 	add_format_to_string(&event_name, "lua-run-func %i", ref);
 	event_id = register_event(event_name.source);
-	event_id = register_event_hook(event_id, run_lua_func, 0, (void *)ref);
+	event_id = register_event_hook(event_id, run_lua_func, 0, (void *) ref);
 	done_string(&event_name);
 	if (event_id == EVENT_NONE) goto lua_error;
 
-	err = bind_scripting_func((unsigned char *)lua_tostring(S, 1),
-			    (unsigned char *)lua_tostring(S, 2), event_id);
+	err = bind_scripting_func((unsigned char *) lua_tostring(S, 1),
+			    (unsigned char *) lua_tostring(S, 2), event_id);
 	if (err) {
 		lua_unref(S, ref);
 		alert_lua_error2("error in bind_key: ", err);
@@ -380,11 +380,11 @@ l_edit_bookmark_dialog(LS)
 
 	data = (struct lua_dlg_data *) get_dialog_offset(dlg, L_EDIT_BMK_WIDGETS_COUNT);
 	data->state = S;
-	safe_strncpy(data->cat, (unsigned char *)lua_tostring(S, 1),
+	safe_strncpy(data->cat, (unsigned char *) lua_tostring(S, 1),
 		     MAX_STR_LEN-1);
-	safe_strncpy(data->name, (unsigned char *)lua_tostring(S, 2),
+	safe_strncpy(data->name, (unsigned char *) lua_tostring(S, 2),
 		     MAX_STR_LEN-1);
-	safe_strncpy(data->url, (unsigned char *)lua_tostring(S, 3),
+	safe_strncpy(data->url, (unsigned char *) lua_tostring(S, 3),
 		     MAX_STR_LEN-1);
 	lua_pushvalue(S, 4);
 	data->func_ref = lua_ref(S, 1);
@@ -464,7 +464,7 @@ l_xdialog(LS)
 	data->nfields = nfields;
 	for (i = 0; i < nfields; i++)
 		safe_strncpy(data->fields[i],
-			     (unsigned char *)lua_tostring(S, i+1),
+			     (unsigned char *) lua_tostring(S, i+1),
 			     MAX_STR_LEN-1);
 	lua_pushvalue(S, nargs);
 	data->func_ref = lua_ref(S, 1);
@@ -538,7 +538,8 @@ init_lua(struct module *module)
 
 	lua_dostring(L, "function set_elinks_home(s) elinks_home = s end");
 	lua_getglobal(L, "set_elinks_home");
-	lua_pushstring(L, elinks_home ? elinks_home : (unsigned char *)CONFDIR);
+	lua_pushstring(L, elinks_home ? elinks_home
+				      : (unsigned char *) CONFDIR);
 	lua_call(L, 1, 0);
 
 	do_hooks_file(L, CONFDIR, LUA_HOOKS_FILENAME);
@@ -571,7 +572,7 @@ prepare_lua(struct session *ses)
 	lua_ses = ses;
 	errterm = lua_ses ? lua_ses->tab->term : NULL;
 	/* XXX this uses the wrong term, I think */
-	install_signal_handler(SIGINT, (void (*)(void *))handle_sigint, NULL, 1);
+	install_signal_handler(SIGINT, (void (*)(void *)) handle_sigint, NULL, 1);
 
 	return sigsetjmp(errjmp, 1);
 }
@@ -580,7 +581,7 @@ void
 finish_lua(void)
 {
 	/* XXX should save previous handler instead of assuming this one */
-	install_signal_handler(SIGINT, (void (*)(void *))sig_ctrl_c, errterm, 0);
+	install_signal_handler(SIGINT, (void (*)(void *)) sig_ctrl_c, errterm, 0);
 }
 
 
@@ -640,7 +641,7 @@ handle_ret_eval(struct session *ses)
 static void
 handle_ret_run(struct session *ses)
 {
-	unsigned char *cmd = (unsigned char *)lua_tostring(L, -1);
+	unsigned char *cmd = (unsigned char *) lua_tostring(L, -1);
 
 	if (cmd) {
 		exec_on_terminal(ses->tab->term, cmd, "", 1);
@@ -653,7 +654,7 @@ handle_ret_run(struct session *ses)
 static void
 handle_ret_goto_url(struct session *ses)
 {
-	unsigned char *url = (unsigned char *)lua_tostring(L, -1);
+	unsigned char *url = (unsigned char *) lua_tostring(L, -1);
 
 	if (url) {
 		goto_url(ses, url);

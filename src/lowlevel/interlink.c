@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.73 2004/06/17 10:02:21 zas Exp $ */
+/* $Id: interlink.c,v 1.74 2004/06/22 06:46:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -291,7 +291,7 @@ setsock_reuse_addr(int fd)
 	int reuse_addr = 1;
 
 	setsockopt(fd, SOL_SOCKET, SO_REUSEADDR,
-		   (void *)&reuse_addr, sizeof(int));
+		   (void *) &reuse_addr, sizeof(int));
 }
 #else
 #define setsock_reuse_addr(fd)

@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.30 2004/06/13 00:30:42 jonas Exp $ */
+/* $Id: listmenu.c,v 1.31 2004/06/22 06:46:15 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,7 +174,8 @@ menu_labels(struct menu_item *items, unsigned char *base, unsigned char **lbls)
 	unsigned char *bs;
 
 	foreach_menu_item (item, items) {
-		bs = (item->flags & MENU_FULLNAME) ? (unsigned char *)"" : base;
+		bs = (item->flags & MENU_FULLNAME) ? (unsigned char *) ""
+						   : base;
 		bs = straconcat(bs, item->text, NULL);
 		if (!bs) continue;
 

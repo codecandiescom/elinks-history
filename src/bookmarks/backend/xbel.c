@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.41 2004/05/02 13:07:02 jonas Exp $ */
+/* $Id: xbel.c,v 1.42 2004/06/22 06:46:16 miciah Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -200,7 +200,7 @@ print_xml_entities(struct secure_save_info *ssi, const unsigned char *str)
 				unsigned char *s = u2cp_no_nbsp(*str, cp);
 
 				print_xml_entities(ssi, s ? s
-							  : (unsigned char *)"");
+							  : (unsigned char *) "");
 			}
 		}
 	}
@@ -275,7 +275,7 @@ on_element_open(void *data, const char *name, const char **attr)
 
 	current_node = node;
 
-	current_node->name = stracpy((unsigned char *)name);
+	current_node->name = stracpy((unsigned char *) name);
 	if (!current_node->name) {
 		mem_free(current_node);
 		return;
@@ -519,7 +519,7 @@ free_node(struct tree_node *node)
 		foreachback (attribute, *node->attrs)
 			mem_free_if(attribute->name);
 
-		free_list(*(struct list_head *)node->attrs); /* Don't free list during traversal */
+		free_list(*(struct list_head *) node->attrs); /* Don't free list during traversal */
 		mem_free(node->attrs);
 	}
 

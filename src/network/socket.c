@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.77 2004/06/22 00:59:33 pasky Exp $ */
+/* $Id: socket.c,v 1.78 2004/06/22 06:46:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -204,7 +204,7 @@ sock_error:
 #if defined(IP_TOS) && defined(IPTOS_THROUGHPUT)
 	{
 		int on = IPTOS_THROUGHPUT;
-		setsockopt(sock, IPPROTO_IP, IP_TOS, (char *)&on, sizeof(int));
+		setsockopt(sock, IPPROTO_IP, IP_TOS, (char *) &on, sizeof(int));
 	}
 #endif
 
@@ -263,7 +263,7 @@ sock_error:
 #if defined(IP_TOS) && defined(IPTOS_THROUGHPUT)
 	{
 		int on = IPTOS_THROUGHPUT;
-		setsockopt(sock, IPPROTO_IP, IP_TOS, (char *)&on, sizeof(int));
+		setsockopt(sock, IPPROTO_IP, IP_TOS, (char *) &on, sizeof(int));
 	}
 #endif
 
@@ -363,7 +363,7 @@ dns_found(void *data, int state)
 
 	for (i = c_i->triedno + 1; i < c_i->addrno; i++) {
 #ifdef CONFIG_IPV6
-		struct sockaddr_in6 addr = *((struct sockaddr_in6 *)&c_i->addr[i]);
+		struct sockaddr_in6 addr = *((struct sockaddr_in6 *) &c_i->addr[i]);
 #else
 		struct sockaddr_in addr = *((struct sockaddr_in *) &c_i->addr[i]);
 #endif
@@ -589,7 +589,7 @@ write_to_socket(struct connection *conn, int s, unsigned char *data,
 	wb->done = write_func;
 	memcpy(wb->data, data, len);
 	mem_free_set(&conn->buffer, wb);
-	set_handlers(s, NULL, (void *)write_select, (void *)exception, conn);
+	set_handlers(s, NULL, (void *) write_select, (void *) exception, conn);
 }
 
 #define RD_ALLOC_GR (2<<11) /* 4096 */
@@ -681,7 +681,7 @@ read_from_socket(struct connection *conn, int s, struct read_buffer *buf,
 	if (conn->buffer && buf != conn->buffer)
 		mem_free(conn->buffer);
 	conn->buffer = buf;
-	set_handlers(s, (void *)read_select, NULL, (void *)exception, conn);
+	set_handlers(s, (void *) read_select, NULL, (void *) exception, conn);
 }
 
 void

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.87 2004/05/21 11:21:02 jonas Exp $ */
+/* $Id: charsets.c,v 1.88 2004/06/22 06:46:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -557,7 +557,7 @@ end:
 		/* Sort entries by hit order. */
 		if (nb_entity_cache[slen] > 1)
 			qsort(&entity_cache[slen][0], nb_entity_cache[slen],
-			      sizeof(struct entity_cache), (void *)hits_cmp);
+			      sizeof(struct entity_cache), (void *) hits_cmp);
 
 #ifdef DEBUG_ENTITY_CACHE
 	{

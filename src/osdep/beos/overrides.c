@@ -1,5 +1,5 @@
 /* BeOS system-specific routines emulating POSIX. */
-/* $Id: overrides.c,v 1.1 2003/10/27 23:46:55 pasky Exp $ */
+/* $Id: overrides.c,v 1.2 2004/06/22 06:46:17 miciah Exp $ */
 
 /* Note that this file is currently unmaintained and basically dead. Noone
  * cares about BeOS support, apparently. This file may yet survive for some
@@ -99,7 +99,7 @@ int
 be_bind(int s, struct sockaddr *sa, int sal)
 {
 #if 0
-	struct sockaddr_in *sin = (struct sockaddr_in *)sa;
+	struct sockaddr_in *sin = (struct sockaddr_in *) sa;
 
 	if (!sin->sin_port) {
 		int i;
@@ -141,7 +141,7 @@ again:
 	sa1.sin_family = AF_INET;
 	sa1.sin_port = 0;
 	sa1.sin_addr.s_addr = INADDR_ANY;
-	if (be_bind(s1, (struct sockaddr *)&sa1, sizeof(sa1))) {
+	if (be_bind(s1, (struct sockaddr *) &sa1, sizeof(sa1))) {
 		/*perror("bind");*/
 
 clo:
@@ -153,16 +153,16 @@ clo:
 		/*perror("listen");*/
 		goto clo;
 	}
-	if (be_connect(s2, (struct sockaddr *)&sa1, sizeof(sa1))) {
+	if (be_connect(s2, (struct sockaddr *) &sa1, sizeof(sa1))) {
 		/*perror("connect");*/
 		goto clo;
 	}
 	l = sizeof(sa2);
-	if ((s3 = be_accept(s1, (struct sockaddr *)&sa2, &l)) < 0) {
+	if ((s3 = be_accept(s1, (struct sockaddr *) &sa2, &l)) < 0) {
 		/*perror("accept");*/
 		goto clo;
 	}
-	be_getsockname(s3, (struct sockaddr *)&sa1, &l);
+	be_getsockname(s3, (struct sockaddr *) &sa1, &l);
 	if (sa1.sin_addr.s_addr != sa2.sin_addr.s_addr) {
 		be_close(s3);
 		goto clo;
@@ -214,7 +214,7 @@ int
 be_getsockopt(int s, int level, int optname, void *optval, int *optlen)
 {
 	if (optname == SO_ERROR && *optlen >= sizeof(int)) {
-		*(int *)optval = 0;
+		*(int *) optval = 0;
 		*optlen = sizeof(int);
 		return 0;
 	}

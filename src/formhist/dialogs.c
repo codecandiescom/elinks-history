@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.27 2004/06/14 00:53:47 jonas Exp $ */
+/* $Id: dialogs.c,v 1.28 2004/06/22 06:46:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,19 +31,19 @@
 static void
 lock_formhist_data(struct listbox_item *item)
 {
-	object_lock((struct formhist_data *)item->udata);
+	object_lock((struct formhist_data *) item->udata);
 }
 
 static void
 unlock_formhist_data(struct listbox_item *item)
 {
-	object_unlock((struct formhist_data *)item->udata);
+	object_unlock((struct formhist_data *) item->udata);
 }
 
 static int
 is_formhist_data_used(struct listbox_item *item)
 {
-	return is_object_used((struct formhist_data *)item->udata);
+	return is_object_used((struct formhist_data *) item->udata);
 }
 
 static unsigned char *

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.49 2004/06/21 17:11:14 pasky Exp $ */
+/* $Id: parse.c,v 1.50 2004/06/22 06:46:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,7 +242,7 @@ get_num(unsigned char *a, unsigned char *name)
 		long num;
 
 		errno = 0;
-		num = strtol(al, (char **)&end, 10);
+		num = strtol(al, (char **) &end, 10);
 		if (!errno && !*end && num >= 0 && num <= MAXINT)
 			result = (int) num;
 
@@ -291,7 +291,7 @@ get_width(unsigned char *a, unsigned char *name, int limited)
 
 	/* Convert to number if possible. */
 	errno = 0;
-	width = strtoul((char *)str, (char **)&end, 10);
+	width = strtoul((char *) str, (char **) &end, 10);
 	mem_free(value);
 	if (errno || *end) return -1; /* Not a valid number. */
 

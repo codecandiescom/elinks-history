@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.72 2004/06/19 12:58:02 jonas Exp $ */
+/* $Id: terminal.c,v 1.73 2004/06/22 06:46:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,10 +180,10 @@ close_handle(void *h)
 static void
 unblock_terminal(struct terminal *term)
 {
-	close_handle((void *)term->blocked);
+	close_handle((void *) term->blocked);
 	term->blocked = -1;
 	set_handlers(term->fdin, (void (*)(void *)) in_term, NULL,
-		     (void (*)(void *))destroy_terminal, term);
+		     (void (*)(void *)) destroy_terminal, term);
 	unblock_itrm(term->fdin);
 	redraw_terminal_cls(term);
 	if (textarea_editor)	/* XXX */

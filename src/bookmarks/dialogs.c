@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.163 2004/06/14 00:53:47 jonas Exp $ */
+/* $Id: dialogs.c,v 1.164 2004/06/22 06:46:16 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -46,19 +46,19 @@ unsigned char *bm_last_searched_url = NULL;
 static void
 lock_bookmark(struct listbox_item *item)
 {
-	object_lock((struct bookmark *)item->udata);
+	object_lock((struct bookmark *) item->udata);
 }
 
 static void
 unlock_bookmark(struct listbox_item *item)
 {
-	object_unlock((struct bookmark *)item->udata);
+	object_unlock((struct bookmark *) item->udata);
 }
 
 static int
 is_bookmark_used(struct listbox_item *item)
 {
-	return is_object_used((struct bookmark *)item->udata);
+	return is_object_used((struct bookmark *) item->udata);
 }
 
 static unsigned char *

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.138 2004/06/12 15:43:37 jonas Exp $ */
+/* $Id: ftp.c,v 1.139 2004/06/22 06:46:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -767,7 +767,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 			{
 				int on = IPTOS_THROUGHPUT;
 
-				setsockopt(fd, IPPROTO_IP, IP_TOS, (char *)&on, sizeof(int));
+				setsockopt(fd, IPPROTO_IP, IP_TOS, (char *) &on, sizeof(int));
 			}
 #endif
 
@@ -788,7 +788,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 			{
 				int on = IPTOS_THROUGHPUT;
 
-				setsockopt(fd, IPPROTO_IP, IP_TOS, (char *)&on, sizeof(int));
+				setsockopt(fd, IPPROTO_IP, IP_TOS, (char *) &on, sizeof(int));
 			}
 #endif
 

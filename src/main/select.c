@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.45 2004/04/23 19:26:46 pasky Exp $ */
+/* $Id: select.c,v 1.46 2004/06/22 06:46:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -296,7 +296,7 @@ select_loop(void (*init)(void))
 		redraw_all_terminals();
 
 		if (!list_empty(timers)) {
-			ttime tt = ((struct timer *)&timers)->next->interval + 1;
+			ttime tt = ((struct timer *) &timers)->next->interval + 1;
 			if (tt < 0) tt = 0;
 			tv.tv_sec = tt / 1000;
 			tv.tv_usec = (tt % 1000) * 1000;

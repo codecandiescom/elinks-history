@@ -1,5 +1,5 @@
 /* BeOS system-specific routines. */
-/* $Id: beos.c,v 1.15 2004/04/17 01:30:30 jonas Exp $ */
+/* $Id: beos.c,v 1.16 2004/06/22 06:46:17 miciah Exp $ */
 
 /* Note that this file is currently unmaintained and basically dead. Noone
  * cares about BeOS support, apparently. This file may yet survive for some
@@ -143,7 +143,7 @@ start_thread(void (*fn)(void *, int), void *ptr, int l)
 	t->fn = fn;
 	t->h = p[1];
 	memcpy(t->data, ptr, l);
-	if (start_thr((void (*)(void *))bgt, t, "elinks_thread") < 0) {
+	if (start_thr((void (*)(void *)) bgt, t, "elinks_thread") < 0) {
 		close(p[0]);
 		close(p[1]);
 		mem_free(t);

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.115 2004/06/11 13:04:46 jonas Exp $ */
+/* $Id: task.c,v 1.116 2004/06/22 06:46:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -264,7 +264,7 @@ ses_imgmap(struct session *ses)
 
 	defrag_entry(cached);
 	fr = cached->frag.next;
-	if ((void *)fr == &cached->frag) return;
+	if ((void *) fr == &cached->frag) return;
 
 	if (get_image_map(cached->head, fr->data, fr->data + fr->length,
 			  &menu, &ml, ses->loading_uri, ses->task.target_frame,
@@ -273,7 +273,7 @@ ses_imgmap(struct session *ses)
 			  get_opt_int("document.codepage.force_assumed")))
 		return;
 
-	add_empty_window(ses->tab->term, (void (*)(void *))freeml, ml);
+	add_empty_window(ses->tab->term, (void (*)(void *)) freeml, ml);
 	do_menu(ses->tab->term, menu, ses, 0);
 }
 

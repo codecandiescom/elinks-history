@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.449 2004/06/16 14:24:16 jonas Exp $ */
+/* $Id: renderer.c,v 1.450 2004/06/22 06:46:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1053,7 +1053,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	}
 
 	if (chars[0] != ' ' || (charslen > 1 && chars[1] != ' ')) {
-		last_tag_for_newline = (void *)&part->document->tags;
+		last_tag_for_newline = (void *) &part->document->tags;
 	}
 
 	int_lower_bound(&part->box.height, part->cy + 1);
@@ -1140,7 +1140,7 @@ line_break(struct part *part)
 	if (part->cx > 0) align_line(part, part->cy, 1);
 
 	for (t = last_tag_for_newline;
-	     t && (void *)t != &part->document->tags;
+	     t && (void *) t != &part->document->tags;
 	     t = t->prev) {
 		t->x = X(0);
 		t->y = Y(part->cy + 1);
@@ -1237,7 +1237,7 @@ html_special(struct part *part, enum html_special_type c, ...)
 			return convert_table;
 		case SP_USED:
 			va_end(l);
-			return (void *)!!document;
+			return (void *) !!document;
 		case SP_FRAMESET:
 		{
 			struct frameset_param *fsp = va_arg(l, struct frameset_param *);
@@ -1344,13 +1344,13 @@ format_html_part(unsigned char *start, unsigned char *end,
 		key.xs = xs;
 		key.link_num = link_num;
 
-		item = get_hash_item(table_cache, (unsigned char *)&key,
+		item = get_hash_item(table_cache, (unsigned char *) &key,
 				     sizeof(struct table_cache_entry_key));
 		if (item) { /* We found it in cache, so just copy and return. */
 			part = mem_alloc(sizeof(struct part));
 			if (part)  {
 				memcpy(part,
-				       &((struct table_cache_entry *)item->value)->part,
+				       &((struct table_cache_entry *) item->value)->part,
 			       	       sizeof(struct part));
 
 				return part;
@@ -1372,8 +1372,8 @@ format_html_part(unsigned char *start, unsigned char *end,
 		}
 
 		last_link_to_move = document->nlinks;
-		last_tag_to_move = (void *)&document->tags;
-		last_tag_for_newline = (void *)&document->tags;
+		last_tag_to_move = (void *) &document->tags;
+		last_tag_for_newline = (void *) &document->tags;
 	} else {
 		last_link_to_move = 0;
 		last_tag_to_move = NULL;
@@ -1441,7 +1441,7 @@ ret:
 		tce->key.link_num = link_num;
 		memcpy(&tce->part, part, sizeof(struct part));
 
-		if (!add_hash_item(table_cache, (unsigned char *)&tce->key,
+		if (!add_hash_item(table_cache, (unsigned char *) &tce->key,
 				   sizeof(struct table_cache_entry_key), tce)) {
 			mem_free(tce);
 		} else {

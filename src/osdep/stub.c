@@ -1,5 +1,5 @@
 /* Libc stub functions */
-/* $Id: stub.c,v 1.11 2004/06/18 15:04:31 jonas Exp $ */
+/* $Id: stub.c,v 1.12 2004/06/22 06:46:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,7 +28,7 @@ inline int
 elinks_strcasecmp(const char *s1, const char *s2)
 {
 	while ((*s1 != '\0')
-		 && (upcase(*(char *)s1) == upcase(*(char *)s2)))
+		 && (upcase(*(char *) s1) == upcase(*(char *) s2)))
 	{
 		s1++;
 		s2++;
@@ -46,7 +46,7 @@ elinks_strncasecmp(const char *s1, const char *s2, size_t len)
 		return 0;
 
 	while ((len-- != 0)
-	       && (upcase(*(char *)s1) == upcase(*(char *)s2)))
+	       && (upcase(*(char *) s1) == upcase(*(char *) s2)))
 	{
 		if (len == 0 || *s1 == '\0' || *s2 == '\0')
 			return 0;
@@ -72,7 +72,7 @@ elinks_strcasestr(const char *haystack, const char *needle)
 
 	for (i = haystack_length - needle_length + 1; i; i--) {
 		if (!strncasecmp(haystack, needle, needle_length))
-			return (char *)haystack;
+			return (char *) haystack;
 		haystack++;
 	}
 
@@ -119,14 +119,14 @@ elinks_strstr(const char *s, const char *p)
 {
 	char *sp, *pp;
 
-	for (sp = (char *)s, pp = (char *)p; *sp && *pp; )
+	for (sp = (char *) s, pp = (char *) p; *sp && *pp; )
 	{
 		if (*sp == *pp) {
 			sp++;
 			pp++;
 		} else {
 			sp = sp - (pp - p) + 1;
-			pp = (char *)p;
+			pp = (char *) p;
 		}
 	}
 	return (*pp ? NULL : sp - (pp - p));

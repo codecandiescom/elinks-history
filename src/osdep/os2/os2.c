@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.18 2004/06/14 08:02:29 zas Exp $ */
+/* $Id: os2.c,v 1.19 2004/06/22 06:46:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,7 +102,7 @@ handle_terminal_resize(int fd, void (*fn)())
 	if (!winch_thread_running) {
 		if (c_pipe(winch_pipe) < 0) return;
 		winch_thread_running = 1;
-		_beginthread((void (*)(void *))winch_thread, NULL, 0x32000, NULL);
+		_beginthread((void (*)(void *)) winch_thread, NULL, 0x32000, NULL);
 	}
 	set_handlers(winch_pipe[0], winch, NULL, NULL, fn);
 }
@@ -522,7 +522,7 @@ mouse_thread(void *p)
 			ev.b = (status & BM_BUTT) | B_UP;
 			status = -1;
 		}
-		if (hard_write(oms->p[1], (unsigned char *)&ev, sizeof(struct term_event)) != sizeof(struct term_event)) break;
+		if (hard_write(oms->p[1], (unsigned char *) &ev, sizeof(struct term_event)) != sizeof(struct term_event)) break;
 	}
 #ifdef HAVE_SYS_FMUTEX_H
 	_fmutex_request(&mouse_mutex, _FMR_IGNINT);
@@ -580,8 +580,8 @@ handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
 		free(oms);
 		return NULL;
 	}
-	_beginthread(mouse_thread, NULL, 0x10000, (void *)oms);
-	set_handlers(oms->p[0], (void (*)(void *))mouse_handle, NULL, NULL, oms);
+	_beginthread(mouse_thread, NULL, 0x10000, (void *) oms);
+	set_handlers(oms->p[0], (void (*)(void *)) mouse_handle, NULL, NULL, oms);
 
 	return oms;
 }
@@ -694,7 +694,7 @@ start_thread(void (*fn)(void *, int), void *ptr, int l)
 	t->fn = fn;
 	t->h = p[1];
 	memcpy(t->data, ptr, l);
-	if (_beginthread((void (*)(void *))bgt, NULL, 65536, t) == -1) {
+	if (_beginthread((void (*)(void *)) bgt, NULL, 65536, t) == -1) {
 		close(p[0]);
 		close(p[1]);
 		mem_free(t);
@@ -754,7 +754,7 @@ get_input_handle(void)
 	if (c_pipe(fd) < 0) return 0;
 	ti = fd[0];
 	tp = fd[1];
-	_beginthread(input_thread, NULL, 0x10000, (void *)tp);
+	_beginthread(input_thread, NULL, 0x10000, (void *) tp);
 	return fd[0];
 }
 

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.215 2004/06/20 15:25:07 pasky Exp $ */
+/* $Id: main.c,v 1.216 2004/06/22 06:46:15 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -293,7 +293,7 @@ main(int argc, char *argv[])
 
 	path_to_exe = argv[0];
 	ac = argc;
-	av = (unsigned char **)argv;
+	av = (unsigned char **) argv;
 
 	select_loop(init);
 	terminate_all_subsystems();

@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.70 2004/06/14 00:53:47 jonas Exp $ */
+/* $Id: dialogs.c,v 1.71 2004/06/22 06:46:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,19 +31,19 @@
 static void
 lock_cache_entry(struct listbox_item *item)
 {
-	object_lock((struct cache_entry *)item->udata);
+	object_lock((struct cache_entry *) item->udata);
 }
 
 static void
 unlock_cache_entry(struct listbox_item *item)
 {
-	object_unlock((struct cache_entry *)item->udata);
+	object_unlock((struct cache_entry *) item->udata);
 }
 
 static int
 is_cache_entry_used(struct listbox_item *item)
 {
-	return is_object_used((struct cache_entry *)item->udata);
+	return is_object_used((struct cache_entry *) item->udata);
 }
 
 static unsigned char *

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.75 2004/06/19 12:14:46 jonas Exp $ */
+/* $Id: kbd.c,v 1.76 2004/06/22 06:46:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,7 +127,7 @@ queue_event(struct itrm *itrm, unsigned char *data, int len)
 		w = safe_write(itrm->sock_out, data, len);
 		if (w <= 0 && HPUX_PIPE) {
 			/* free_trm(itrm); */
-			register_bottom_half((void (*)(void *))free_trm, itrm);
+			register_bottom_half((void (*)(void *)) free_trm, itrm);
 			return;
 		}
 	}
@@ -159,7 +159,7 @@ kbd_ctrl_c(void)
 	struct term_event ev = INIT_TERM_EVENT(EV_KBD, KBD_CTRL_C, 0, 0);
 
 	if (ditrm)
-		queue_event(ditrm, (unsigned char *)&ev, sizeof(struct term_event));
+		queue_event(ditrm, (unsigned char *) &ev, sizeof(struct term_event));
 }
 
 #define write_sequence(fd, seq) \
@@ -226,7 +226,7 @@ resize_terminal(void)
 	if (get_terminal_size(ditrm->std_out, &width, &height)) return;
 	ev.x = width;
 	ev.y = height;
-	queue_event(ditrm, (char *)&ev, sizeof(struct term_event));
+	queue_event(ditrm, (char *) &ev, sizeof(struct term_event));
 }
 
 
@@ -316,8 +316,8 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 		mem_free(ts);
 	}
 
-	queue_event(itrm, (char *)&info, sizeof(struct terminal_info));
-	queue_event(itrm, (char *)init_string, init_len);
+	queue_event(itrm, (char *) &info, sizeof(struct terminal_info));
+	queue_event(itrm, (char *) init_string, init_len);
 	send_init_sequence(std_out, itrm->altscreen);
 
 	itrm->mouse_h = handle_mouse(0, (void (*)(void *, unsigned char *, int)) queue_event, itrm);
@@ -591,7 +591,7 @@ kbd_timeout(struct itrm *itrm)
 	assertm(itrm->qlen, "timeout on empty queue");
 	if_assert_failed return;
 
-	queue_event(itrm, (char *)&ev, sizeof(struct term_event));
+	queue_event(itrm, (char *) &ev, sizeof(struct term_event));
 
 	if (--itrm->qlen)
 		memmove(itrm->kqueue, itrm->kqueue + 1, itrm->qlen);
@@ -877,19 +877,19 @@ l1:
 	itrm->qlen -= el;
 
 	if (ev.x != -1)
-		queue_event(itrm, (char *)&ev, sizeof(struct term_event));
+		queue_event(itrm, (char *) &ev, sizeof(struct term_event));
 
 	if (itrm->qlen)
 		memmove(itrm->kqueue, itrm->kqueue + el, itrm->qlen);
 
 end:
 	if (itrm->qlen < IN_BUF_SIZE)
-		set_handlers(itrm->std_in, (void (*)(void *))in_kbd, NULL,
-			     (void (*)(void *))free_trm, itrm);
+		set_handlers(itrm->std_in, (void (*)(void *)) in_kbd, NULL,
+			     (void (*)(void *)) free_trm, itrm);
 	return el;
 
 ret:
-	itrm->timer = install_timer(ESC_TIMEOUT, (void (*)(void *))kbd_timeout,
+	itrm->timer = install_timer(ESC_TIMEOUT, (void (*)(void *)) kbd_timeout,
 				    itrm);
 
 	return 0;

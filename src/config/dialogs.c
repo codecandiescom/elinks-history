@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.178 2004/06/17 07:06:11 miciah Exp $ */
+/* $Id: dialogs.c,v 1.179 2004/06/22 06:46:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,19 +119,19 @@ write_config_dialog(struct terminal *term, unsigned char *config_file,
 static void
 lock_option(struct listbox_item *item)
 {
-	object_lock((struct option *)item->udata);
+	object_lock((struct option *) item->udata);
 }
 
 static void
 unlock_option(struct listbox_item *item)
 {
-	object_unlock((struct option *)item->udata);
+	object_unlock((struct option *) item->udata);
 }
 
 static int
 is_option_used(struct listbox_item *item)
 {
-	return is_object_used((struct option *)item->udata);
+	return is_object_used((struct option *) item->udata);
 }
 
 static unsigned char *
@@ -500,21 +500,21 @@ static void
 lock_keybinding(struct listbox_item *item)
 {
 	if (item->depth == 2)
-		object_lock((struct keybinding *)item->udata);
+		object_lock((struct keybinding *) item->udata);
 }
 
 static void
 unlock_keybinding(struct listbox_item *item)
 {
 	if (item->depth == 2)
-		object_unlock((struct keybinding *)item->udata);
+		object_unlock((struct keybinding *) item->udata);
 }
 
 static int
 is_keybinding_used(struct listbox_item *item)
 {
 	if (item->depth == 2) return 0;
-	return is_object_used((struct keybinding *)item->udata);
+	return is_object_used((struct keybinding *) item->udata);
 }
 
 static unsigned char *

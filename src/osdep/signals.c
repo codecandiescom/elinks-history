@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.23 2004/06/12 18:51:21 zas Exp $ */
+/* $Id: signals.c,v 1.24 2004/06/22 06:46:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,7 @@ sig_intr(struct terminal *term)
 	if (!term)
 		terminate = 1;
 	else
-		register_bottom_half((void (*)(void *))destroy_terminal, term);
+		register_bottom_half((void (*)(void *)) destroy_terminal, term);
 }
 
 void
@@ -119,23 +119,23 @@ sig_segv(struct terminal *term)
 void
 handle_basic_signals(struct terminal *term)
 {
-	install_signal_handler(SIGHUP, (void (*)(void *))sig_intr, term, 0);
-	install_signal_handler(SIGINT, (void (*)(void *))sig_ctrl_c, term, 0);
-	install_signal_handler(SIGTERM, (void (*)(void *))sig_terminate, term, 0);
+	install_signal_handler(SIGHUP, (void (*)(void *)) sig_intr, term, 0);
+	install_signal_handler(SIGINT, (void (*)(void *)) sig_ctrl_c, term, 0);
+	install_signal_handler(SIGTERM, (void (*)(void *)) sig_terminate, term, 0);
 #ifdef SIGTSTP
-	install_signal_handler(SIGTSTP, (void (*)(void *))sig_tstp, term, 0);
+	install_signal_handler(SIGTSTP, (void (*)(void *)) sig_tstp, term, 0);
 #endif
 #ifdef SIGTTIN
-	install_signal_handler(SIGTTIN, (void (*)(void *))sig_tstp, term, 0);
+	install_signal_handler(SIGTTIN, (void (*)(void *)) sig_tstp, term, 0);
 #endif
 #ifdef SIGTTOU
-	install_signal_handler(SIGTTOU, (void (*)(void *))sig_ign, term, 0);
+	install_signal_handler(SIGTTOU, (void (*)(void *)) sig_ign, term, 0);
 #endif
 #ifdef SIGCONT
-	install_signal_handler(SIGCONT, (void (*)(void *))sig_cont, term, 0);
+	install_signal_handler(SIGCONT, (void (*)(void *)) sig_cont, term, 0);
 #endif
 #ifdef CONFIG_BACKTRACE
-	install_signal_handler(SIGSEGV, (void (*)(void *))sig_segv, term, 1);
+	install_signal_handler(SIGSEGV, (void (*)(void *)) sig_segv, term, 1);
 #endif
 }
 

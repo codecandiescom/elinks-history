@@ -474,7 +474,8 @@ AC_ARG_ENABLE(leds, [  --enable-leds           enable the LED-like indicators su
               [if test "$enableval" = yes; then AC_DEFINE(USE_LEDS) fi])
 
 AC_ARG_ENABLE(ui_colors, [  --disable-ui-colors     disable colors in ELinks user interface],
-              [if test "$enableval" = yes; then AC_DEFINE(COLOR_UI) fi])
+              [if test "$enableval" = yes; then AC_DEFINE(COLOR_UI) fi]),
+	      AC_DEFINE(COLOR_UI))
 
 AC_ARG_ENABLE(bookmarks, [  --disable-bookmarks     disable internal bookmarks manager],
               [if test "$enableval" = yes; then AC_DEFINE(BOOKMARKS) fi],

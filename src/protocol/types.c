@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.39 2002/07/04 21:19:45 pasky Exp $ */
+/* $Id: types.c,v 1.40 2002/07/05 18:23:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,40 +71,20 @@ get_content_type(unsigned char *head, unsigned char *url)
 		}
 	}
 
-	/* Get extension */
-
-	extension = NULL;
-	ext_len = 0;
-
-	for (pos = url; *pos && !end_of_dir(*pos); pos++) {
-		if (*pos == '.') {
-			extension = pos + 1;
-		} else if (dir_sep(*pos)) {
-			extension = NULL;
-		}
-	}
-
-	if (extension) {
-		while (extension[ext_len]
-		       && !dir_sep(extension[ext_len])
-		       && !end_of_dir(extension[ext_len])) {
-			ext_len++;
-		}
-	}
-
-	/* We can't use the extension string we got just now, because we want
-	 * to support also things like "ps.gz" - that'd never work, as we would
-	 * always compare only to "gz". */
+	/* We can't use the extension string we are getting below, because we
+	 * want to support also things like "ps.gz" - that'd never work, as we
+	 * would always compare only to "gz". */
 
 	/* Guess type accordingly to the extension */
 
 	url_len = strlen(url);
 
+	/* TODO: This is superfluous, isn't it? --pasky */
 	if ((!casecmp(url + url_len - 4, ".htm", 3)) ||
 	    (!casecmp(url + url_len - 5, ".html", 4)))
 		return stracpy("text/html");
 
-	if (extension) {
+	{
 		struct option *opt_tree = get_opt_rec_real(root_options,
 							   "mime.extension");
 		struct option *opt;
@@ -130,15 +110,35 @@ get_content_type(unsigned char *head, unsigned char *url)
 		}
 	}
 
+	/* Get extension */
+
+	extension = NULL;
+	ext_len = 0;
+
+	for (pos = url; *pos && !end_of_dir(*pos); pos++) {
+		if (*pos == '.') {
+			extension = pos + 1;
+		} else if (dir_sep(*pos)) {
+			extension = NULL;
+		}
+	}
+
+	if (extension) {
+		while (extension[ext_len]
+		       && !dir_sep(extension[ext_len])
+		       && !end_of_dir(extension[ext_len])) {
+			ext_len++;
+		}
+	}
+
 	/* Try to make application/x-extension from it */
 
-	{
+	if (extension) {
 		unsigned char *ext_type = init_str();
 		int el = 0;
 
 		add_to_str(&ext_type, &el, "application/x-");
-		if (extension)
-			add_bytes_to_str(&ext_type, &el, extension, ext_len);
+		add_bytes_to_str(&ext_type, &el, extension, ext_len);
 
 		if (get_mime_type_handler(NULL, ext_type))
 			return ext_type;

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.173 2003/07/20 23:25:27 pasky Exp $ */
+/* $Id: renderer.c,v 1.174 2003/07/20 23:41:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -693,7 +693,7 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 #define CH_BUF	256
 
 	static char buffer[CH_BUF];
-	int bp = 0;
+	int bufferpos = 0;
 	int pp = 0;
 
 	/* FIXME: Code redundancy with convert_string() in charsets.c. --Zas */
@@ -717,8 +717,8 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 
 		if (chars[pp] < 128 && chars[pp] != '&') {
 putc:
-			buffer[bp++] = chars[pp++];
-			if (bp < CH_BUF) continue;
+			buffer[bufferpos++] = chars[pp++];
+			if (bufferpos < CH_BUF) continue;
 			goto flush;
 		}
 
@@ -775,25 +775,25 @@ decode:
 		if (!e[0]) continue;
 
 		if (!e[1]) {
-			buffer[bp++] = e[0];
-			if (bp < CH_BUF) continue;
+			buffer[bufferpos++] = e[0];
+			if (bufferpos < CH_BUF) continue;
 flush:
 			e = "";
 			goto flush1;
 		}
 
 		while (*e) {
-			buffer[bp++] = *(e++);
-			if (bp < CH_BUF) continue;
+			buffer[bufferpos++] = *(e++);
+			if (bufferpos < CH_BUF) continue;
 flush1:
-			put_chars(part, buffer, bp);
-			bp = 0;
+			put_chars(part, buffer, bufferpos);
+			bufferpos = 0;
 		}
 	}
 
 	/* Say bye */
 
-	if (bp) put_chars(part, buffer, bp);
+	if (bufferpos) put_chars(part, buffer, bufferpos);
 
 #undef CH_BUF
 }

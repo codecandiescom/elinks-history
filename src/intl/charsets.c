@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.46 2003/07/20 23:35:56 pasky Exp $ */
+/* $Id: charsets.c,v 1.47 2003/07/20 23:41:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -558,7 +558,7 @@ convert_string(struct conv_table *convert_table, unsigned char *chars, int chars
 {
 	unsigned char *buffer;
 	unsigned char *b;
-	int bp = 0;
+	int bufferpos = 0;
 	int pp = 0;
 
 	/* FIXME: Code redundancy with put_chars_conv() in renderer.c. --Zas */
@@ -585,7 +585,7 @@ xx:
 
 		if (chars[pp] < 128 && chars[pp] != '&') {
 putc:
-			buffer[bp++] = chars[pp++];
+			buffer[bufferpos++] = chars[pp++];
 			goto flush;
 		}
 
@@ -642,28 +642,28 @@ decode:
 		if (!e[0]) continue;
 
 		if (!e[1]) {
-			buffer[bp++] = e[0];
+			buffer[bufferpos++] = e[0];
 flush:
 			e = "";
 			goto flush1;
 		}
 
 		while (*e) {
-			buffer[bp++] = *(e++);
+			buffer[bufferpos++] = *(e++);
 flush1:
-			if (!(bp & (ALLOC_GR - 1))) {
-				b = mem_realloc(buffer, bp + ALLOC_GR);
+			if (!(bufferpos & (ALLOC_GR - 1))) {
+				b = mem_realloc(buffer, bufferpos + ALLOC_GR);
 				if (b)
 					buffer = b;
 				else
-					bp--;
+					bufferpos--;
 			}
 		}
 	}
 
 	/* Say bye */
 
-	buffer[bp] = 0;
+	buffer[bufferpos] = 0;
 	return buffer;
 }
 

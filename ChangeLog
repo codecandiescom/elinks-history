@@ -1,3 +1,1590 @@
+Tue May  6 23:10:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* BUGS:
+
+	Ad frame bugs, s/plain-text/non-HTML/ as it happens for images etc
+	as well. I'm sorry, Witek ;-).  
+
+Tue May  6 23:09:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* BUGS, TODO:
+
+	Removed some bugs fixed (and todo items implemented) by witekfl.  
+
+Tue May  6 23:08:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* BUGS:
+
+	Keep the text wrapped at 80th column.  
+
+Tue May  6 23:07:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* BUGS:
+
+	More accurate description of the ^Z bug.  
+
+Tue May  6 22:39:28 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	Another entry was blasted by Witold.  
+
+Tue May  6 22:36:24 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	The newline displayed before a list is superfluous when that list is
+	nested under another list. Minor optimizations. Patch by Witold
+	Filipczyk and me.  
+
+Tue May  6 22:36:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Expand single ~ correctly in the URL. Patch by witekfl.  
+
+Tue May  6 22:34:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/lua/hooks.lua.in:
+
+	System functions (like getenv()) are enabled in global config.lua,
+	so execute it first and _then_ set home_dir. Patch by witekfl.  
+
+Tue May  6 22:00:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/sched.c:
+
+	check_queue() function was optimized, options are now cached.
+	try_connection() wins two parameters.  
+
+Tue May  6 21:48:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/sched.c:
+
+	Minor optimizations and cleanup: in calloc() we trust (II).  
+
+Tue May  6 21:45:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Reformatted goto_link() and fixed it so that it returns correct
+	value now.  
+
+Tue May  6 20:28:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/terminal.c:
+
+	In calloc we trust.  
+
+Tue May  6 20:28:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/terminal.c:
+
+	Reverted whitespace 'fix'.  
+
+Tue May  6 20:25:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/draw.c:
+
+	Reverted end removal. First optimizing for speed, now
+	disoptimizing... I don't understand zas ;-).  
+
+Tue May  6 20:16:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Partially reverted zas' 'cleanups'.  
+
+Tue May  6 19:54:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/default.c:
+
+	Last part of mime system. Should be buildable now.  
+
+Tue May  6 18:53:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/: .cvsignore, .vimrc:
+
+	How could I forget. More fairies.  
+
+Tue May  6 18:39:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Code redundancy was reduced.  
+
+Tue May  6 18:25:29 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: osdep/os_dep.h, terminal/kbd.c:
+
+	octal 033 was renamed ASCII_ESC.  
+
+Tue May  6 17:24:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/: mime.c, mime.h, backend/common.c, backend/common.h,
+	backend/default.h, backend/mailcap.c, backend/mailcap.h:
+
+	First part of the restructuring of mime handling. It has been
+	modelled after the bookmark handling. This is not yet integrated
+	with the build system.  
+
+Tue May  6 17:16:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/mime/Makefile.am, src/mime/backend/Makefile.am:
+
+	Adding mime/ to build system.  
+
+Tue May  6 16:47:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/parser.c, osdep/os_dep.h,
+	protocol/ftpparse.c, protocol/http/http.c, terminal/kbd.c,
+	terminal/screen.c, util/string.h:
+
+	Hard-coded ascii char (8,9,10,13,127) were renamed to macros
+	ASCII_BS, ASCII_TAB ,ASCII_LF,ASCII_CR,ASCII_DEL.  
+
+Tue May  6 16:44:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/: .cvsignore, .vimrc:
+
+	Stuff from fairyland 
+
+Tue May  6 15:32:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/window.c:
+
+	Reversion of zas's patches is not that easy :) Compilation bug
+	fixed.  
+
+Tue May  6 15:30:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/dialog.c:
+
+	Reverted part of previous cleanup, removed obsolete FIXME and some
+	more pasky-style cleanups ;-).  
+
+Tue May  6 15:20:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/window.c:
+
+	Reverted cleanups.  
+
+Tue May  6 14:58:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inphist.c:
+
+	Reverted part of the previous cleanup.  
+
+Tue May  6 14:55:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Reverted cleanup.  
+
+Tue May  6 14:52:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/session.c, viewer/text/view.c:
+
+	Reverted cleanup.  
+
+Tue May  6 14:49:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/hardio.c:
+
+	Reverted the cleanup, the original form is slightly faster and IMHO
+	equally clean.  
+
+Tue May  6 14:24:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inphist.c:
+
+	Minor cleanup.  
+
+Tue May  6 14:18:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inpfield.c:
+
+	Inline + minor optim.  
+
+Tue May  6 14:11:05 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: group.c, group.h:
+
+	Cleanup, minor optim., staticification.  
+
+Tue May  6 13:34:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Minor cleanup + optim.  
+
+Tue May  6 12:10:02 2003  Laurent Monin <zas@norz.org>:
+
+	* doc/hacking.txt:
+
+	More info about --enable-debug.  
+
+Tue May  6 11:33:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inpfield.c:
+
+	Minor optimizations.  
+
+Tue May  6 11:16:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Window title is now handled properly regarding tabs. Bad title when
+	swapping tabs during document loading and window title flickering
+	are now fixed.  
+
+Tue May  6 10:10:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Minor cleanup.  
+
+Tue May  6 10:03:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Minor cleanup.  
+
+Tue May  6 09:56:10 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Optimization of goto_link() by Miciah and me.  
+
+Tue May  6 09:00:44 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	One fresh bug was added.  
+
+Tue May  6 08:38:09 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	Minor update.  
+
+Tue May  6 08:35:02 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	Last entry was modified.  
+
+Tue May  6 08:27:27 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	One entry was added. Thanks to Zas ;).  
+
+Tue May  6 08:04:35 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	One entry have disappear. Thanks to Witold.  
+
+Tue May  6 08:02:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Printing of title of plain text document containing text enclosed in
+	<TITLE></TITLE> tags was fixed. Patch by Witold Filipczyk.  
+
+Mon May  5 23:32:25 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	One entry was removed. Thanks to Jonas.  
+
+Mon May  5 23:27:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/session.c, viewer/text/view.c:
+
+	Tabs and backgrounded loading bug was fixed. Patch by Jonas Fonseca.  
+
+Mon May  5 23:13:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Major cleanup.  
+
+Mon May  5 22:36:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Minor cleanup.  
+
+Mon May  5 22:18:50 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/session.c, viewer/text/view.c:
+
+	Some silly things were trashed. Idea by Miciah and Pasky. Well, now,
+	i must find a hole in the ground and stay hiddenin it until the end
+	of the time...  
+
+Mon May  5 21:55:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/: terminal.h, window.c:
+
+	Cleanup and optimizations.  
+
+Mon May  5 16:04:56 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	An entry about tabs/document loading issue was added.  
+
+Mon May  5 16:00:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/tab.c:
+
+	A test for num_tabs was added. Safer.  
+
+Mon May  5 15:40:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: terminal/tab.c, terminal/tab.h, viewer/text/view.c:
+
+	Number of tabs can now be passed to switch_tab(), it prevents some
+	useless calculations.  
+
+Mon May  5 14:40:29 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Minor cleanup + optim.  
+
+Mon May  5 14:19:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/hardio.c:
+
+	Minor cleanup.  
+
+Mon May  5 14:08:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/tab.h:
+
+	Minor cleanup (2) ;) 
+
+Mon May  5 14:06:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/tab.h:
+
+	Minor cleanup.  
+
+Mon May  5 13:43:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/renderer.c, sched/session.c, sched/session.h,
+	viewer/text/view.c:
+
+	A function init_bars_status() was introduced. It updates information
+	about bars visibility. Not yet perfect but a step...  
+
+Mon May  5 10:33:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/terminal.c:
+
+	Optimizations and cleanups: strcpy() -> memcpy(), whitespaces fixes,
+	some comments were added.  
+
+Mon May  5 09:37:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	Optimization: some "end" useless variables were removed.  
+
+Mon May  5 09:27:21 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	Optimization: some useless mathematical calculations were removed.
+	Temporary variables names are badly choosen. Feel free to find
+	better ones.  
+
+Mon May  5 09:17:26 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	Optimization: some useless mathematical calculations were removed.  
+
+Sun May  4 21:53:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.c:
+
+	Use fprintf instead of printf in execinfo non-trouble
+	dump_backtrace().  
+
+Sun May  4 21:52:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/main.c:
+
+	Reformatted the pre-backtrace rant.  
+
+Sun May  4 21:45:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: main.c, util/error.c, util/error.h:
+
+	Couple of compilation fixes and gcchappying, thanks to zas.  
+
+Sun May  4 21:43:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Fixed indentation in ./configure --help. Sorry.  
+
+Sun May  4 21:38:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Formatting fixes. *sigh* those ELinks developers...  
+
+Sun May  4 21:37:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	--enable-libc -> --enable-own-libc 
+
+Sun May  4 21:36:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* acconfig.h, configure.in, src/main.c, src/util/error.c,
+	src/util/error.h:
+
+	(Untested) support for dumping of backtrace upon segfault. Only
+	glibc supported for now (I don't know of any other possibilities,
+	however if you know about one, it should be pretty trivial to write
+	a patch).  
+
+Sun May  4 21:23:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	One ses->term -> ses->tab->term got missed for some reason. Fixed.  
+
+Sun May  4 21:11:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Fixed variable names conflict, reported by zas.  
+
+Sun May  4 20:54:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Nasty tricky download.c, tsk tsk\! ->term -> ->tab->term, thanks to
+	zas.  
+
+Sun May  4 20:50:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/session.c, sched/session.h, viewer/text/view.c:
+
+	Attempt to make mouse and bars gentle with us.  
+
+Sun May  4 20:44:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: osdep/os_dep.c, sched/session.c:
+
+	Renamed some variable names from win to tab. Added comment about
+	brokenness of tabwin_func().  
+
+Sun May  4 20:42:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/auth.c, dialogs/document.c, dialogs/menu.c,
+	document/html/renderer.c, lua/core.c, protocol/url.c,
+	protocol/user.c, sched/download.c, sched/session.c,
+	sched/session.h, viewer/text/view.c:
+
+	Removed redundant term field from the struct session.  
+
+Sun May  4 20:39:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/session.c, sched/session.h, viewer/text/view.c:
+
+	Renamed win to tab in struct session.  
+
+Sun May  4 20:37:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/: tab.c, terminal.c:
+
+	Blasted off the term 'root window', use 'tab' instead.  
+
+Sun May  4 20:35:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: terminal/tab.c, terminal/tab.h, terminal/terminal.c,
+	viewer/text/view.c:
+
+	get_root_window() -> get_current_tab() 
+
+Sun May  4 20:33:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/: tab.c, terminal.c, window.h:
+
+	WT_ROOT -> WT_TAB 
+
+Sun May  4 20:29:52 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/tab.c:
+
+	Use redraw_terminal() instead of redraw_terminal_cls(), it reduces
+	flickering when swapping tabs. Reported and fixed by Pasky.  
+
+Sun May  4 20:13:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/terminal.c:
+
+	Readded util/conv.h, thanks, zas.  
+
+Sun May  4 20:10:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/tab.c:
+
+	Oops, include own .h\! Thanks, zas.  
+
+Sun May  4 20:08:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/screen.c:
+
+	Fix missing is_blocked(), reported by zas.  
+
+Sun May  4 20:06:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: osdep/os_dep.c, sched/session.c, terminal/Makefile.am,
+	terminal/tab.c, terminal/tab.h, terminal/terminal.c,
+	terminal/terminal.h, terminal/window.c, viewer/text/view.c:
+
+	Moved tab-related functions from terminal.* to tab.*.  
+
+Sun May  4 19:54:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/dialog.c, bfu/dialog.h, bfu/inpfield.c, bfu/inphist.c,
+	bfu/inphist.h, bfu/menu.c, dialogs/refresh.h, sched/download.h,
+	sched/session.c, sched/session.h, terminal/Makefile.am,
+	terminal/terminal.c, terminal/terminal.h, terminal/window.c,
+	terminal/window.h, viewer/text/view.c:
+
+	Moved window-related functions (except tabs) from terminal.* to
+	window.*.  
+
+Sun May  4 19:40:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/terminal.h:
+
+	Removed duplicate typedef.  
+
+Sun May  4 19:39:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/: draw.h, terminal.h:
+
+	Moved ATTR_FRAME from terminal.h to draw.h.  
+
+Sun May  4 19:38:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/screen.c:
+
+	Minor reindentation.  
+
+Sun May  4 19:38:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/: screen.c, screen.h, terminal.c:
+
+	Moved erase_screen() from terminal.c to screen.*.  
+
+Sun May  4 19:36:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/: draw.c, draw.h, terminal.c:
+
+	Moved clear_terminal() from terminal.c to draw.*.  
+
+Sun May  4 19:30:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/dialog.c, bfu/group.c,
+	bfu/inpfield.c, bfu/leds.c, bfu/listbox.c, bfu/menu.c, bfu/text.c,
+	document/html/parser.c, document/html/renderer.c,
+	document/html/renderer.h, document/html/tables.c,
+	elusive/renderer/text/renderer.c, sched/download.c,
+	sched/session.c, terminal/Makefile.am, terminal/draw.c,
+	terminal/draw.h, terminal/terminal.c, terminal/terminal.h,
+	viewer/text/view.c:
+
+	Moved (virtual) screen drawing functions from terminal.* to draw.*.  
+
+Sun May  4 19:19:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/: screen.c, terminal.c:
+
+	Moved the terminfo TODO from terminal.c to screen.c 
+
+Sun May  4 19:11:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/download.c, terminal/Makefile.am, terminal/screen.c,
+	terminal/screen.h, terminal/terminal.c, terminal/terminal.h:
+
+	Moved some screen output routines from terminal.* to screen.*.  
+
+Sun May  4 19:09:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Sequence length cache thing is now fixed.  
+
+Sun May  4 18:57:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/Makefile.am:
+
+	Distribute my rants.  
+
+Sun May  4 18:57:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/TODO:
+
+	Some general blah blah.  
+
+Sun May  4 18:49:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/terminal.h:
+
+	Trashed piece of some old junk.  
+
+Sun May  4 18:11:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Sequence codes length is now cached. Please review.  
+
+Sun May  4 18:09:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/dump/dump.c:
+
+	Compilation fix: missing header.  
+
+Sun May  4 17:51:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/: Makefile.am, hardio.c, hardio.h, kbd.c,
+	terminal.c, terminal.h:
+
+	Moved hard_(read|write) from terminal.* to hardio.*.  
+
+Sun May  4 17:50:54 2003  Laurent Monin <zas@norz.org>:
+
+	* po/.cvsignore, src/.cvsignore, src/intl/gettext/.cvsignore:
+
+	More files are now ignored by cvs.  
+
+Sun May  4 17:45:58 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	An hotkey conflict in contextual menu was fixed.  
+
+Sun May  4 17:36:49 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	The fix for a potential bug in menu scrolling code was reversed.
+	Ancient code was ok, this patch causes the mouse click to have a
+	strange behavior in menus.  
+
+Sun May  4 17:26:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/: kbd.h, terminal.h:
+
+	Updated anti-reinclude defines.  
+
+Sun May  4 17:23:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: lowlevel/Makefile.am, lowlevel/kbd.c, lowlevel/kbd.h,
+	lowlevel/terminal.c, lowlevel/terminal.h, terminal/Makefile.am,
+	terminal/kbd.c, terminal/kbd.h, terminal/terminal.c,
+	terminal/terminal.h, main.c, main.h, bfu/align.h, bfu/button.c,
+	bfu/button.h, bfu/checkbox.c, bfu/checkbox.h, bfu/dialog.c,
+	bfu/dialog.h, bfu/group.c, bfu/group.h, bfu/inpfield.c,
+	bfu/inpfield.h, bfu/inphist.c, bfu/inphist.h, bfu/leds.c,
+	bfu/leds.h, bfu/listbox.c, bfu/listbox.h, bfu/menu.c, bfu/menu.h,
+	bfu/msgbox.c, bfu/msgbox.h, bfu/text.c, bfu/text.h, bfu/widget.c,
+	bfu/widget.h, bookmarks/dialogs.c, bookmarks/dialogs.h,
+	config/conf.c, config/conf.h, config/dialogs.c, config/dialogs.h,
+	config/kbdbind.c, config/kbdbind.h, cookies/cookies.c,
+	cookies/cookies.h, dialogs/auth.c, dialogs/document.c,
+	dialogs/edit.c, dialogs/edit.h, dialogs/hierbox.c,
+	dialogs/hierbox.h, dialogs/info.c, dialogs/info.h, dialogs/menu.c,
+	dialogs/menu.h, dialogs/mime.c, dialogs/mime.h, dialogs/options.c,
+	dialogs/options.h, dialogs/refresh.c, dialogs/refresh.h,
+	document/html/parser.c, document/html/renderer.h,
+	globhist/dialogs.c, globhist/dialogs.h, intl/gettext/libintl.h,
+	lowlevel/af_unix.c, lowlevel/select.c, lowlevel/timer.c,
+	lua/core.c, osdep/os_dep.c, protocol/mime.c, protocol/mime.h,
+	protocol/user.c, protocol/user.h, protocol/http/http.c,
+	sched/download.c, sched/download.h, sched/session.c,
+	sched/session.h, terminal/kbd.c, terminal/terminal.c,
+	viewer/dump/dump.c, viewer/text/view.c, viewer/text/view.h:
+
+	Moved lowlevel/(kbd|terminal).* to terminal/.  
+
+Sun May  4 17:21:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/Makefile.am, src/terminal/Makefile.am:
+
+	Added src/terminal/ to the build system.  
+
+Sun May  4 17:21:09 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	A potential bug in menu scrolling cpde was fixed. Reported by Sergey
+	Karpov.  
+
+Sun May  4 17:13:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/: .cvsignore, .vimrc:
+
+	Fairies.  
+
+Sun May  4 17:11:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/: terminal.c, terminal.h:
+
+	Changed get_root_window() to a #define in terminal.h.  
+
+Sun May  4 17:11:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/terminal.c:
+
+	Paranoia test whether get_root_window() returned something.  
+
+Sun May  4 16:58:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: main.c, lowlevel/af_unix.c, sched/session.c,
+	sched/session.h:
+
+	win_func() -> tabwin_func() 
+
+Sun May  4 16:52:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: lowlevel/terminal.c, lowlevel/terminal.h, osdep/os_dep.c,
+	sched/session.c:
+
+	Introduced init_tab(), moved root window callocation and basic
+	initialization from init_term() and open_in_new_tab() to there.  
+
+Sun May  4 16:27:26 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Terminal title update is now done properly. An useless variable was
+	removed. Reported by Petr Baudis aka pasky.  
+
+Sun May  4 16:25:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_dep.c:
+
+	Use mem_calloc() when allocating window. Proper allocation error
+	handling.  
+
+Sun May  4 14:50:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: lowlevel/terminal.c, lowlevel/terminal.h, osdep/os_dep.c:
+
+	Enumerated win->type. Reformatted get_tab_number() and
+	get_tab_by_number(), minor optimization of get_tab_number().  
+
+Sun May  4 14:47:44 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	An hotkey conflict was solved in french translation.  
+
+Sun May  4 14:42:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Hotkeys conflict causes all concerned hotkeys to be highlighted in
+	menu.  
+
+Sun May  4 14:18:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Hotkey debugging feature is now case-insensitive ;) 
+
+Sun May  4 14:08:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Hotkeys debugging feature: when --enable-debug is used, hotkeys used
+	more than once in a menu are highlighted.  
+
+Sun May  4 11:03:55 2003  Laurent Monin <zas@norz.org>:
+
+	* po/gen_translations_stats.sh:
+
+	An helper script was added. It generates translation statistics
+	(percentage). Improvements are welcomed.  
+
+Sun May  4 10:06:28 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.po files were resynced. French translation was updated.  
+
+Sun May  4 01:45:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: session.c, session.h:
+
+	A potential segfault and a memleak were fixed. Minor optimizations.  
+
+Sun May  4 01:21:50 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Code reorganization, minor optimizations, and calls to
+	set_terminal_title() are only done when needed.  
+
+Sun May  4 00:17:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Tab bar didn't appear when opening a new tab on an empty window, it
+	should be fixed. Please test. Reported by Pasky on #elinks, fix by
+	Zas.  
+
+Sat May  3 23:43:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* BUGS, TODO:
+
+	Update status info. Very minor updates.  
+
+Sat May  3 23:26:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/renderer.c, sched/session.c, sched/session.h:
+
+	Calculation of usable screen for renderer with one or more visible
+	bars is now fixed (i hope). Please test ;) 
+
+Sat May  3 23:11:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	A tab number is now printed in status bar, if there are some tabs
+	but show_tabs_bar is set to 0. It appears as [1] for tab 1, [2] ...  
+
+Sat May  3 22:46:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c, BUGS:
+
+	Menu accelerators are now case-insensitive.  
+
+Sat May  3 22:42:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/terminal.c:
+
+	del_from_list(term) before mem_free()ing it upon allocation failure.
+	Reported by Miciah.  
+
+Sat May  3 22:34:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Minor fix. Screen height calculation was wrong, and it still need to
+	be tested, with one, two or three bars...  
+
+Sat May  3 22:28:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO:
+
+	Removed proxy-info-from-environment goal, already done.  
+
+Sat May  3 22:25:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO:
+
+	Reorganized TODO file, created several categories where the stuff is
+	grouped now.  
+
+Sat May  3 21:59:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* BUGS, TODO:
+
+	Changed format of the TODO/BUGS items. Hopefully more readable now.  
+
+Sat May  3 21:55:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* BUGS:
+
+	Removed some obsolete items.  
+
+Sat May  3 21:54:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO:
+
+	Moved around certain items.  
+
+Sat May  3 21:44:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bookmarks/backend/xbel.c, config/options.c,
+	config/opttypes.c, dialogs/mime.c, sched/session.c:
+
+	Removed superfluous includes, patch by Jonas.  
+
+Sat May  3 21:43:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.h:
+
+	Reorganized the strchr/index ifdefs a little, patch by Jonas.  
+
+Sat May  3 21:42:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Removed superfluous save possibility from some type query
+	msg_box()es, patch by Jonas.  
+
+Sat May  3 21:00:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/terminal.c:
+
+	The cc is too detailist.  
+
+Sat May  3 20:56:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Revert m_bar from 1 to 0, should fix some unused empty spots at the
+	right side of some menus. Reported by zas.  
+
+Sat May  3 20:42:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/: terminal.c, terminal.h:
+
+	Unexport and statify add_window_at_pos(), noone uses it anyway.  
+
+Sat May  3 20:41:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/terminal.c:
+
+	Allocate windows w/ mem_calloc(). Very minor reorganization in
+	init_term().  
+
+Sat May  3 20:38:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/main.c:
+
+	Oops.  
+
+Sat May  3 20:26:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/terminal.c:
+
+	Whitespace consistency.  
+
+Sat May  3 19:49:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/kbd.c:
+
+	Use mem_calloc() when allocating itrm.  
+
+Sat May  3 19:44:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/main.c:
+
+	Reindentation.  
+
+Sat May  3 19:40:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_dep.c:
+
+	Poor code lament inserted. url is now NULL by default. Whitespace
+	consistency is also important.  
+
+Sat May  3 19:35:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Reindentation. Don't show any windows etc if session allocation
+	failed.  
+
+Sat May  3 19:32:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Actually translate the "Untitled" tab title.  
+
+Sat May  3 19:29:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Fixed one possible off-by-one visual overflow when showing tabs.  
+
+Sat May  3 19:27:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/align.h:
+
+	Removed the xget_bfu_color() hack.  
+
+Sat May  3 19:26:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/options.c, document/html/renderer.c,
+	lowlevel/terminal.c, sched/session.c:
+
+	ui.tabs_bar -> ui.tabs, ui.tabs_bar.show -> ui.tabs.show_bar,
+	ui.tabs_bar.cycle -> ui.tabs.wraparound, moved tabs bar color
+	settings to proper place, moved ui.tabs to proper place.  
+
+Sat May  3 19:09:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Removed a bogus redundant add() call and restored the proper
+	alphabetical order.  
+
+Sat May  3 19:05:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Compute certain stuff just once.  
+
+Sat May  3 18:14:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_dep.c:
+
+	Oops, negated a condition.  
+
+Sat May  3 17:17:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Blah.  
+
+Sat May  3 17:13:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Hopefully fixed the stroked unselectable items bug.  
+
+Sat May  3 17:11:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: osdep/os_dep.c, osdep/os_dep.h, viewer/text/view.c,
+	viewer/text/view.h:
+
+	Moved can_open_in_new() from viewer/text/view.* to osdep/os_dep.*.  
+
+Sat May  3 17:07:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_dep.c:
+
+	Open in new tab is available in all &ENV_CONSOLE environments now.  
+
+Sat May  3 17:05:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_dep.c:
+
+	This changes the get_open_in_new() environment matching to a more
+	natural behaviour. Now, we make sure that at least one of the
+	environment bits is in the oinw[i].env of our choice rather than all
+	the oinw[i].env bits are set in the environment bitmask (that made
+	it ie. impossible to introduce multi-env oinw items).  
+
+Sat May  3 17:02:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_dep.c:
+
+	Reindenation.  
+
+Sat May  3 17:01:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: lowlevel/kbd.c, osdep/os_dep.c:
+
+	Some ad hoc environment bitmask setting moved from handle_itrm() to
+	get_common_env(), value returned from whose is used and contemplated
+	in get_system_env(). xwin -> env in handle_itrm() and use just the
+	value got by get_system_env(). ENV_CONSOLE is now always set (for
+	now and all the foreseeable future).  
+
+Sat May  3 17:00:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/terminal.h:
+
+	Describe the enum term_env_type.  
+
+Sat May  3 16:33:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: lowlevel/terminal.h, osdep/os_dep.c:
+
+	Introduced ENV_CONSOLE, which means the default text environment.
+	Now term->environment == 0 is illegal. This enables bitmasking for
+	ENV_CONSOLE, which will be very soon useful ;-).  
+
+Sat May  3 15:24:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* BUGS, src/viewer/text/view.c:
+
+	Don't show 'Add link to bookmarks' in the Link menu in anonymous
+	mode. Reported by Miciah (?).  
+
+Sat May  3 15:21:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.h:
+
+	Don't be too enthusiastic when using own 'libc', it makes no sense
+	to just use index() instead of strchr(). Also don't use bcopy() for
+	memmove(), but the real implementation. Motion impulse by Jonas.  
+
+Sat May  3 12:12:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Fixed gcc3's warning and indentation. Patch by witekfl.  
+
+Sat May  3 10:54:03 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS, TODO:
+
+	TODO and BUGS big updates by Miciah.  
+
+Sat May  3 03:01:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Change default of document.colors.use_document_colors to 2, that is
+	use even document-specific background. Let's hope this will get more
+	attention (and bugfixes) to this feature.  
+
+Sat May  3 02:58:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	But... but... zas should at least commit smaller bits and say what
+	is he actually changing in particular. ;-) Refixed hotkeys displaing
+	in open window menu.  
+
+Sat May  3 02:49:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/lists.h:
+
+	Removed that weird free_list() NULLifying. When you think about it,
+	it maks no sense at all anyway. And it didn't work ;-).  
+
+Sat May  3 02:43:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/menu.c, viewer/text/view.c:
+
+	submenu_indicator -> m_submenu 
+
+Sat May  3 02:42:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/terminal.c:
+
+	Inlined few functions. Cleaned up term_send_event().  
+
+Sat May  3 02:38:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/terminal.c:
+
+	Added space.  
+
+Sat May  3 02:37:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/terminal.c:
+
+	Blah, compilation fix.  
+
+Sat May  3 02:36:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Oops, compilation fix.  
+
+Sat May  3 02:36:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/terminal.c:
+
+	Whitespaces added.  
+
+Sat May  3 02:33:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Use term_send_event() instead of own crafted code.  
+
+Sat May  3 02:31:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Fixed unsigned vs signed issue.  
+
+Sat May  3 02:29:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Bunch of compilation fixes.  
+
+Sat May  3 02:27:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Tidyup.  
+
+Sat May  3 02:25:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/lists.h:
+
+	Cast properly.  
+
+Sat May  3 02:18:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	[POLL] Shouldn't zas take more care about what he actually commits
+	alongside the changes he intends to commit? ;-) 
+
+Sat May  3 02:12:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Added email addy to our phantom.  
+
+Sat May  3 01:55:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/terminal.c:
+
+	Spurious whitespace elliminated.  
+
+Sat May  3 01:53:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Heavy reindation and a little bit of tidyup.  
+
+Sat May  3 01:48:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Whitespace fix.  
+
+Sat May  3 01:38:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/lists.h:
+
+	*sigh* ... put back my fix for free_list(). Either do it correctly
+	or don't do it at all, hm? 
+
+Sat May  3 01:30:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Reverted (the most of) bogus 'cleanups'.  
+
+Sat May  3 01:16:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Reindentation & stuff.  
+
+Sat May  3 01:11:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Whitespace fixes.  
+
+Sat May  3 01:07:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/inphist.c, bfu/menu.c, bfu/menu.h, dialogs/menu.c,
+	dialogs/mime.c, dialogs/options.c, document/html/parser.c,
+	viewer/text/view.c:
+
+	M_BAR was re-added, reverted menu item's rtext usage changes. I'm
+	almost sure I broke something ;-).  
+
+Sat May  3 00:41:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/menu.h, dialogs/menu.c, document/html/parser.c,
+	viewer/text/view.c:
+
+	SUBMENU_INDICATOR -> M_SUBMENU 
+
+Sat May  3 00:12:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	Fixed missing bracked. This will be a long night.  
+
+Sat May  3 00:09:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	Compressed cache declaration.  
+
+Sat May  3 00:07:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	Oops, compilation fix. Reported by zas.  
+
+Sat May  3 00:04:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/menu.c, config/kbdbind.c, config/kbdbind.h,
+	lowlevel/terminal.c, lowlevel/terminal.h, osdep/os_dep.c,
+	sched/session.c, viewer/text/view.c:
+
+	Whitespaces cleanup by Jonas.  
+
+Fri May  2 23:59:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/renderer.c, sched/session.c:
+
+	True full screen, bars are handled cirrectly in screen size respect,
+	but reloading of document may be necessary. Try to play with options
+	that enable/disable main menu, status bar, tabs bar.  
+
+Fri May  2 23:48:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.h:
+
+	Reverted the keybindings-use FIXME removal. Apparently it still
+	applies.  
+
+Fri May  2 23:34:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Something terrible must've happenned. Reindented to correct style.  
+
+Fri May  2 23:19:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	Slightly moved now-harmless misplaced condition.  
+
+Fri May  2 23:17:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	Fixed corner cases bugs in witekfl's marked items deletion patch.
+	Now we traverse to the next item correctly, not blindly cycling in
+	the frame of one level (which can be deadly).  
+
+Fri May  2 22:39:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/listbox.c, bookmarks/dialogs.c, globhist/dialogs.c:
+
+	ofs -> offset change reverted, the purpose of the original change is
+	unknown, undocumented and so on.. you've no chance, infiltrator
+	witekfl \! ;-)) 
+
+Fri May  2 22:25:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Fixed whitespace inconsistency.  
+
+Fri May  2 22:20:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	abrt -> stop. sts -> status.  
+
+Fri May  2 22:20:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Keep the namespace clean. _reload -> do_reload.  
+
+Fri May  2 22:16:18 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/parser.c, document/html/parser.h,
+	document/html/renderer.c, document/html/renderer.h, lua/core.c,
+	sched/session.c, sched/session.h, viewer/text/view.c,
+	viewer/text/view.h:
+
+	Stupid patch i made was reversed. Sorry for the inconvenience ;) 
+
+Fri May  2 21:59:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/ftp.c:
+
+	If display_dir_entry() failed, return the error value it threw on
+	us, not behave like there was no error at all.  
+
+Fri May  2 21:58:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_dep.c:
+
+	Reverted not exactly style-clean change.  
+
+Fri May  2 21:43:44 2003  Laurent Monin <zas@norz.org>:
+
+	* AUTHORS:
+
+	Original authors of the tab browsing patch were added. But who is
+	John ? 
+
+Fri May  2 21:25:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/align.h, config/options.c, document/html/renderer.c,
+	lowlevel/terminal.c, sched/session.c:
+
+	Color configuration was added for the tabs bar. An attempt to group
+	tabs bar options under the same tree was done, please give your
+	opinion. Little hack of get_bfu_color(). Minor fixes.  
+
+Fri May  2 20:24:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/terminal.c:
+
+	The cycle tab segfault is now fixed. Thanks to Jonas Fonseca.  
+
+Fri May  2 16:33:00 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.po files were resynced. French translation was updated.  
+
+Fri May  2 16:08:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, lowlevel/terminal.c:
+
+	Cycle tabs is now possible through ui.cycle_tabs_bar option.  
+
+Fri May  2 15:41:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, document/html/renderer.c,
+	sched/session.c:
+
+	show_tabs_bar option was added. It defaults to 1 which is show tabs
+	bar only if there are 2 or more visible tabs. Feel free to improve
+	;) 
+
+Fri May  2 14:55:05 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/parser.c, document/html/parser.h,
+	document/html/renderer.c, document/html/renderer.h, lua/core.c,
+	sched/session.c, sched/session.h, viewer/text/view.c,
+	viewer/text/view.h:
+
+	Some stupid changes were reverted (frm->form and lnk->link thing).
+	Sorry ;). And struct link -> struct a_link rename happenned, just to
+	be surely reverted promptly by zas :^). --pasky 
+
+Fri May  2 14:37:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/lists.h:
+
+	Fix a bug in free_list(), temporary fix ;) 
+
+Fri May  2 14:22:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/renderer/text/renderer.c:
+
+	Try to resolve more nicely the leftpad vs leftpad clash.  
+
+Fri May  2 14:13:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/charsets.c:
+
+	Use more fantasy in naming of parameters ;-).  
+
+Fri May  2 14:09:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Attempt to clarify that o.plain setting enigmatic code even more.
+	How many more rewrites will it need? ;-) 
+
+Fri May  2 13:53:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/lists.h:
+
+	Fixed free_list() ->next NULLifying.  
+
+Fri May  2 13:50:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Whitespace fix.  
+
+Fri May  2 13:44:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: error.c, error.h, lists.h:
+
+	Show affected expression when list_magic_error() occurs.  
+
+Fri May  2 13:31:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/hash.c:
+
+	hashmagic -> HASH_MAGIC 
+
+Fri May  2 13:26:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/lists.h:
+
+	Removed some redundant bits.  
+
+Fri May  2 13:00:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/lists.h:
+
+	Minor reformatting.  
+
+Fri May  2 12:10:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: error.c, error.h, lists.h:
+
+	listmagicerror -> list_magic_error, minor cleanup and invalid
+	pointers resistance. Keep the namespace clean: _listmagicerror ->
+	list_magic_error_.  
+
+Fri May  2 11:15:09 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/menu.c, config/kbdbind.c, config/kbdbind.h,
+	document/html/renderer.c, lowlevel/terminal.c, lowlevel/terminal.h,
+	osdep/os_dep.c, sched/session.c, sched/session.h,
+	viewer/text/view.c:
+
+	Tabbed browsing support :). Patch by Sergey Karpov and me.  
+
+Fri May  2 08:26:35 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	A note about a bug was removed, elinks_str[n]casecmp() functions
+	were buggy.  
+
+Fri May  2 08:25:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/download.c, sched/session.c, util/string.c,
+	util/string.h, viewer/dump/dump.c, viewer/text/view.c:
+
+	Minor compilation issues were fixed (with --enable-libc).
+	elinks_strcasecmp() and elinks_strncasecmp() were fixed.  
+
+Thu May  1 23:45:08 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	A comment about --enable-libc and rendering issue was added...
+	Should be fixed soon.  
+
+Thu May  1 23:39:45 2003  Laurent Monin <zas@norz.org>:
+
+	* acconfig.h, configure.in:
+
+	Configure option --enable-libc was added. It forces the use of
+	internal functions instead of system ones if they exist.  
+
+Thu May  1 23:21:29 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/: string.c, string.h:
+
+	USE_LIBC was added. Many changes to permit debugging of replacement
+	functions on a system that have some of these. It reveals a bug...  
+
 Thu May  1 17:09:13 2003  Laurent Monin <zas@norz.org>:
 
 	* src/viewer/text/view.c:

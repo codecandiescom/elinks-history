@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.47 2004/09/04 11:19:11 jonas Exp $ */
+/* $Id: select.c,v 1.48 2004/10/14 12:49:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -391,26 +391,33 @@ select_loop(void (*init)(void))
 	}
 }
 
-int
-can_read(int fd)
+static int
+can_read_or_write(int fd, int write)
 {
-	fd_set fds;
 	struct timeval tv = {0, 0};
+	fd_set fds;
+	fd_set *rfds = NULL;
+	fd_set *wfds = NULL;
 
 	FD_ZERO(&fds);
 	FD_SET(fd, &fds);
 
-	return select(fd + 1, &fds, NULL, NULL, &tv);
+	if (write)
+		wfds = &fds;
+	else
+		rfds = &fds;
+
+	return select(fd + 1, rfds, wfds, NULL, &tv);
+}
+
+int
+can_read(int fd)
+{
+	return can_read_or_write(fd, 0);
 }
 
 int
 can_write(int fd)
 {
-	fd_set fds;
-	struct timeval tv = {0, 0};
-
-	FD_ZERO(&fds);
-	FD_SET(fd, &fds);
-
-	return select(fd + 1, NULL, &fds, NULL, &tv);
+	return can_read_or_write(fd, 1);
 }

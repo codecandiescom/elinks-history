@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.42 2004/01/20 02:30:56 jonas Exp $ */
+/* $Id: scanner.c,v 1.43 2004/01/20 02:37:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,6 +83,10 @@ get_number_identifier(unsigned char *ident, int length)
 	return CSS_TOKEN_DIMENSION;
 }
 
+
+/* TODO: CSS_TOKEN_COMMENT and CSS_TOKEN_HASH. Last one conflicts a bit with
+ * hex color token. Color should have precedens and the selector parser will
+ * just have to treat CSS_TOKEN_HASH and CSS_TOKEN_HEX_COLOR alike. */
 static inline void
 scan_css_token(struct css_scanner *scanner, struct css_token *token)
 {
@@ -172,6 +176,11 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			type = CSS_TOKEN_NAME;
 
 		} else if (*string == '(') {
+			/* TODO: Currently we only handle rgb() functions which
+			 * means all other functions are retrieved part by
+			 * part. For url() it means the URI arg is skipped in
+			 * small bits which is stupid. If the funtion is
+			 * unknown skip to next ), ; or }. --jonas */
 			type = CSS_TOKEN_FUNCTION;
 			string++;
 

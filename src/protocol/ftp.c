@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.34 2002/09/12 14:40:37 zas Exp $ */
+/* $Id: ftp.c,v 1.35 2002/09/12 14:46:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,7 @@ static void ftp_pass_info(struct connection *, struct read_buffer *);
 static void ftp_retr_file(struct connection *, struct read_buffer *);
 static void ftp_got_final_response(struct connection *, struct read_buffer *);
 static void got_something_from_data_connection(struct connection *);
-static void ftp_end_request(struct connection *);
+static void ftp_end_request(struct connection *, int);
 static struct ftp_connection_info *add_file_cmd_to_str(struct connection *);
 
 
@@ -754,8 +754,7 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (c_i->conn_state == 2) {
-		setcstate(conn, S_OK);
-		ftp_end_request(conn);
+		ftp_end_request(conn, S_OK);
 	} else {
 		c_i->conn_state = 1;
 		if (conn->state != S_TRANS)
@@ -1015,8 +1014,7 @@ out_of_mem:
 	close_socket(NULL, &conn->sock2);
 
 	if (c_i->conn_state == 1) {
-		setcstate(conn, S_OK);
-		ftp_end_request(conn);
+		ftp_end_request(conn, S_OK);
 	} else {
 		c_i->conn_state = 2;
 		setcstate(conn, S_TRANS);
@@ -1026,8 +1024,10 @@ out_of_mem:
 }
 
 static void
-ftp_end_request(struct connection *conn)
+ftp_end_request(struct connection *conn, int state)
 {
+	setcstate(conn, state);
+	
 	if (conn->state == S_OK) {
 		if (conn->cache) {
 			truncate_entry(conn->cache, conn->from, 1);

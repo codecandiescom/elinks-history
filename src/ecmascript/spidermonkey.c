@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.63 2004/10/22 18:47:24 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.64 2004/10/22 18:49:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -922,8 +922,12 @@ error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 			 strlen(report->linebuf) - (report->tokenptr - report->linebuf) - 1, " ")
 		:
 		msg_text(term, N_("A script embedded in the current "
-		         "document raised the following exception: "
+		         "document raised the following%s%s%s%s: "
 		         "\n\n%s"),
+		         JSREPORT_IS_STRICT(report->flags) ? " strict" : "",
+		         JSREPORT_IS_EXCEPTION(report->flags) ? " exception" : "",
+		         JSREPORT_IS_WARNING(report->flags) ? " warning" : "",
+		         !report->flags ? " error" : "",
 		         message)
 		,
 		NULL, 1,

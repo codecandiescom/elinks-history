@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-10-06 00:44+0200\n"
+"POT-Creation-Date: 2003-10-06 20:43+0200\n"
 "PO-Revision-Date: 2003-07-21 00:32+0200\n"
 "Last-Translator: Fabio Bonelli <fabiobonelli@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -26,26 +26,31 @@ msgstr "Atteso numero nel campo"
 #: src/bfu/inpfield.c:46 src/bfu/inpfield.c:55 src/bfu/inpfield.c:75
 #: src/bookmarks/dialogs.c:168 src/bookmarks/dialogs.c:270
 #: src/bookmarks/dialogs.c:280 src/config/dialogs.c:44
-#: src/config/dialogs.c:192 src/config/dialogs.c:325 src/config/dialogs.c:357
-#: src/config/dialogs.c:392 src/config/dialogs.c:404 src/config/dialogs.c:459
-#: src/config/dialogs.c:475 src/config/dialogs.c:609 src/config/dialogs.c:631
-#: src/config/dialogs.c:658 src/config/dialogs.c:722 src/config/dialogs.c:736
-#: src/dialogs/auth.c:165 src/dialogs/edit.c:173 src/dialogs/menu.c:576
-#: src/dialogs/menu.c:587 src/dialogs/menu.c:613 src/dialogs/mime.c:255
-#: src/dialogs/options.c:263 src/dialogs/options.c:361
-#: src/globhist/dialogs.c:246 src/protocol/protocol.c:60
+#: src/config/dialogs.c:129 src/config/dialogs.c:140 src/config/dialogs.c:192
+#: src/config/dialogs.c:321 src/config/dialogs.c:357 src/config/dialogs.c:392
+#: src/config/dialogs.c:404 src/config/dialogs.c:459 src/config/dialogs.c:474
+#: src/config/dialogs.c:609 src/config/dialogs.c:631 src/config/dialogs.c:658
+#: src/config/dialogs.c:722 src/config/dialogs.c:735 src/dialogs/auth.c:161
+#: src/dialogs/document.c:47 src/dialogs/document.c:208
+#: src/dialogs/document.c:277 src/dialogs/document.c:289
+#: src/dialogs/edit.c:164 src/dialogs/info.c:48 src/dialogs/info.c:75
+#: src/dialogs/info.c:95 src/dialogs/info.c:122 src/dialogs/info.c:184
+#: src/dialogs/info.c:204 src/dialogs/menu.c:576 src/dialogs/menu.c:587
+#: src/dialogs/menu.c:613 src/dialogs/mime.c:251 src/dialogs/options.c:261
+#: src/dialogs/options.c:356 src/globhist/dialogs.c:246
+#: src/globhist/dialogs.c:425 src/protocol/protocol.c:60
 #: src/protocol/user.c:156 src/protocol/user.c:172 src/sched/download.c:513
-#: src/sched/download.c:595 src/sched/download.c:758 src/sched/download.c:842
-#: src/sched/download.c:1236 src/sched/download.c:1245
-#: src/sched/download.c:1272 src/sched/download.c:1284
-#: src/scripting/lua/core.c:482 src/scripting/lua/core.c:625
-#: src/scripting/lua/core.c:850 src/viewer/text/form.c:667
-#: src/viewer/text/search.c:790 src/viewer/text/search.c:829
-#: src/viewer/text/search.c:1071 src/viewer/text/search.c:1082
-#: src/viewer/text/textarea.c:269 src/viewer/text/view.c:745
-#: src/viewer/text/view.c:1463
-msgid "Cancel"
-msgstr "Annulla"
+#: src/sched/download.c:595 src/sched/download.c:620 src/sched/download.c:842
+#: src/sched/error.c:40 src/sched/session.c:392 src/sched/session.c:1175
+#: src/sched/session.c:1192 src/sched/session.c:1216
+#: src/scripting/lua/core.c:478 src/scripting/lua/core.c:620
+#: src/scripting/lua/core.c:729 src/scripting/lua/core.c:850
+#: src/viewer/text/form.c:667 src/viewer/text/search.c:790
+#: src/viewer/text/search.c:829 src/viewer/text/search.c:1071
+#: src/viewer/text/search.c:1082 src/viewer/text/textarea.c:269
+#: src/viewer/text/view.c:745 src/viewer/text/view.c:1463
+msgid "OK"
+msgstr "OK"
 
 #: src/bfu/inpfield.c:53
 msgid "Number out of range"
@@ -89,24 +94,19 @@ msgstr "Aggiungi cartella"
 msgid "Folder name"
 msgstr "Nome cartella"
 
-#: src/bookmarks/dialogs.c:168 src/config/dialogs.c:129
-#: src/config/dialogs.c:140 src/config/dialogs.c:321 src/config/dialogs.c:404
-#: src/config/dialogs.c:474 src/config/dialogs.c:658 src/config/dialogs.c:735
-#: src/dialogs/auth.c:161 src/dialogs/document.c:47 src/dialogs/document.c:208
-#: src/dialogs/document.c:277 src/dialogs/document.c:289
-#: src/dialogs/edit.c:164 src/dialogs/info.c:48 src/dialogs/info.c:75
-#: src/dialogs/info.c:95 src/dialogs/info.c:122 src/dialogs/info.c:184
-#: src/dialogs/info.c:204 src/dialogs/menu.c:576 src/dialogs/menu.c:587
-#: src/dialogs/menu.c:613 src/dialogs/mime.c:251 src/dialogs/options.c:261
-#: src/dialogs/options.c:356 src/globhist/dialogs.c:425
-#: src/sched/download.c:620 src/sched/error.c:40 src/sched/session.c:392
-#: src/sched/session.c:1175 src/sched/session.c:1192 src/sched/session.c:1216
-#: src/scripting/lua/core.c:478 src/scripting/lua/core.c:620
-#: src/scripting/lua/core.c:729 src/scripting/lua/core.c:850
+#: src/bookmarks/dialogs.c:168 src/config/dialogs.c:325
+#: src/config/dialogs.c:404 src/config/dialogs.c:475 src/config/dialogs.c:658
+#: src/config/dialogs.c:736 src/dialogs/auth.c:165 src/dialogs/edit.c:173
+#: src/dialogs/menu.c:576 src/dialogs/menu.c:587 src/dialogs/menu.c:613
+#: src/dialogs/mime.c:255 src/dialogs/options.c:263 src/dialogs/options.c:361
+#: src/sched/download.c:758 src/sched/download.c:1236
+#: src/sched/download.c:1245 src/sched/download.c:1272
+#: src/sched/download.c:1284 src/scripting/lua/core.c:482
+#: src/scripting/lua/core.c:625 src/scripting/lua/core.c:850
 #: src/viewer/text/search.c:1071 src/viewer/text/search.c:1082
 #: src/viewer/text/view.c:745
-msgid "OK"
-msgstr "OK"
+msgid "Cancel"
+msgstr "Annulla"
 
 #: src/bookmarks/dialogs.c:236 src/scripting/lua/core.c:462
 msgid "Edit bookmark"
@@ -539,7 +539,7 @@ msgstr "Apri la finestra di dialogo \"Vai a\""
 
 #: src/config/kbdbind.c:392
 msgid "Open \"Go to URL\" dialog box containing the current URL"
-msgstr "Apri la finestra di dialogo \"Apri URL\" contenente l'url corrente"
+msgstr "Apri la finestra di dialogo \"Apri URL\" contenente l'URL corrente"
 
 #: src/config/kbdbind.c:393
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
@@ -2179,9 +2179,10 @@ msgid "Mimetypes files"
 msgstr "File tipo mime"
 
 #: src/config/options.c:1537
+#, fuzzy
 msgid ""
 "Options for the support of mimetypes files. Mimetypes files\n"
-"can be used to find the content type of an url by looking at the\n"
+"can be used to find the content type of an URL by looking at the\n"
 "extension of the file name."
 msgstr ""
 "Opzioni per il supporto di file tipi MIME. I file tipi MIME\n"
@@ -2526,8 +2527,8 @@ msgid ""
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 "Gestore (programma esterno) per questo protocollo. Chiama\n"
-"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, "
-"unix-xwin)."
+"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, unix-"
+"xwin)."
 
 #: src/config/options.c:1727
 msgid ""
@@ -3209,9 +3210,8 @@ msgid ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
 msgstr ""
-"Azioni temporizzate dopo un certo intervallo di inattività "
-"dell'utente.Qualcuno lo può trovare persino utile, anche se puoi non "
-"crederci."
+"Azioni temporizzate dopo un certo intervallo di inattività dell'utente."
+"Qualcuno lo può trovare persino utile, anche se puoi non crederci."
 
 #: src/config/options.c:2668
 msgid ""
@@ -3618,8 +3618,8 @@ msgid ""
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
-"Impostare a 1 per modificare i file runtime di stato (bookmark, storico, "
-"...)\n"
+"Impostare a 1 per modificare i file runtime di stato (bookmark, "
+"storico, ...)\n"
 "anche quando si usano -no-connect o -session-ring; non ha effetto\n"
 "se non è usato in connessione con una di queste opzioni."
 
@@ -3784,6 +3784,7 @@ msgid "Keys"
 msgstr "Tasti"
 
 #: src/dialogs/info.c:57
+#, fuzzy
 msgid ""
 "ESC      display menu\n"
 "^C, q    quit\n"
@@ -3792,8 +3793,8 @@ msgid ""
 "up, down select link\n"
 "->       follow link\n"
 "<-       go back\n"
-"g        go to url\n"
-"G        go to url based on current url\n"
+"g        go to URL\n"
+"G        go to URL based on current URL\n"
 "/        search\n"
 "?        search back\n"
 "n        find next\n"
@@ -4315,7 +4316,8 @@ msgstr ""
 #: src/lowlevel/home.c:126
 #, c-format
 msgid "ELINKS_CONFDIR set to %s, but could not create directory %s."
-msgstr "ELINKS_CONFDIR impostata a %s, ma la impossibile creare la directory %s."
+msgstr ""
+"ELINKS_CONFDIR impostata a %s, ma la impossibile creare la directory %s."
 
 #: src/lowlevel/home.c:150
 msgid ""
@@ -4731,18 +4733,18 @@ msgid "No document"
 msgstr "Nessun documento"
 
 #: src/sched/session.c:638
-#, c-format
-msgid "Do you want to follow redirect and post form data to url %s?"
+#, fuzzy, c-format
+msgid "Do you want to follow redirect and post form data to URL %s?"
 msgstr "Vuoi seguire la redirezione e spedire di dati all'URL %s?"
 
 #: src/sched/session.c:641
-#, c-format
-msgid "Do you want to post form data to url %s?"
+#, fuzzy, c-format
+msgid "Do you want to post form data to URL %s?"
 msgstr "Vuoi spedire i dati all'URL %s?"
 
 #: src/sched/session.c:643
-#, c-format
-msgid "Do you want to repost form data to url %s?"
+#, fuzzy, c-format
+msgid "Do you want to repost form data to URL %s?"
 msgstr "Vuoi rispedire i dati all'URL %s"
 
 #: src/sched/session.c:649 src/sched/session.c:1180 src/sched/session.c:1200
@@ -4789,9 +4791,9 @@ msgid ""
 "saved to the configuration file, instead of just all the options. This "
 "simplifies our situation greatly when we see that some option has "
 "inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of "
-"config.saving_style option to 3 in order to get the \"right\" behaviour. "
-"Apologies for any inconvience caused."
+"a subtle way. Thus, we recommend you to change the value of config."
+"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
+"for any inconvience caused."
 msgstr ""
 "Hai l'opzione config.saving_style impostata a un valore obsoleto. Gli "
 "algoritmi di salvataggio della configurazione di ELinks sono stati cambiati "
@@ -4799,9 +4801,9 @@ msgstr ""
 "sono salvate nel file di configurazione, invece di tutte quante. Questo "
 "semplifica molto la situazione quando vediamo che delle opzioni hanno un "
 "valore predefinito inappropriato o abbiamo bisogno di cambiarne la "
-"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione "
-"config.saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le "
-"mie scuse per qualsiasi inconveniente causato."
+"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione config."
+"saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le mie "
+"scuse per qualsiasi inconveniente causato."
 
 #: src/sched/session.c:1680
 msgid "Unknown event."

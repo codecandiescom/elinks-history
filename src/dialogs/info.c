@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.59 2003/07/21 05:16:48 jonas Exp $ */
+/* $Id: info.c,v 1.60 2003/10/06 18:49:57 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,8 +61,8 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 		   "up, down select link\n"
 		   "->       follow link\n"
 		   "<-       go back\n"
-		   "g        go to url\n"
-		   "G        go to url based on current url\n"
+		   "g        go to URL\n"
+		   "G        go to URL based on current URL\n"
 		   "/        search\n"
 		   "?        search back\n"
 		   "n        find next\n"

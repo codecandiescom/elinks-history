@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.170 2003/10/05 22:42:08 zas Exp $ */
+/* $Id: session.c,v 1.171 2003/10/06 18:49:57 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -636,11 +636,11 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 
 	if (redir) {
 		m1 = N_("Do you want to follow redirect and post form data "
-			"to url %s?");
+			"to URL %s?");
 	} else if (task_type == TASK_FORWARD) {
-		m1 = N_("Do you want to post form data to url %s?");
+		m1 = N_("Do you want to post form data to URL %s?");
 	} else {
-		m1 = N_("Do you want to repost form data to url %s?");
+		m1 = N_("Do you want to repost form data to URL %s?");
 	}
 
 	m2 = memacpy(url, post_char_pos - url);

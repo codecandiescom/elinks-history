@@ -1,3 +1,664 @@
+Sat Nov  8 22:36:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/dialogs.c, config/dialogs.c, globhist/dialogs.c:
+
+	Cleanup manager widgets number macros.  
+
+Sat Nov  8 22:23:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/dialogs.c, config/dialogs.c, dialogs/hierbox.c,
+	dialogs/hierbox.h:
+
+	Provide generic hierbox dialog abort handler.  
+
+Sat Nov  8 21:25:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/listbox.c, bfu/listbox.h,
+	bookmarks/dialogs.c, config/dialogs.c, dialogs/hierbox.c,
+	globhist/dialogs.c:
+
+	Move listbox widget to be the first widget. Use macros to get the
+	listbox_data. This will allow for various generalizations.  
+
+Sat Nov  8 19:07:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: dialog.c, listbox.c, widget.h:
+
+	cycle_widget_focus(): Handle unfocusable widgets like
+	WIDGET_LISTBOX.  
+
+Sat Nov  8 18:44:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/dialog.c:
+
+	cycle_widget_focus() in cycle_widget_focus() 
+
+Sat Nov  8 16:58:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Low limit for tab_width is 1, it prevents a segfault when resizing
+	term with tabs displayed.  
+
+Sat Nov  8 16:32:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: cache/cache.h, document/document.h:
+
+	Always check locks sanity. Previously it was enabled by
+	DEBUG_DOCUMENT/CACHE_LOCKS.  
+
+Sat Nov  8 16:28:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/document.h:
+
+	Ooops, i forgot to disable document locks debugging. Sorry.  
+
+Sat Nov  8 16:24:29 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: cache/cache.h, document/document.h:
+
+	Comment about locks usage.  
+
+Sat Nov  8 16:20:24 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/document.c, document/document.h,
+	viewer/text/link.c:
+
+	Field refcount of struct document was renamed locks. Macros are
+	wrapping locks handling and enable a debug mode for document locks.  
+
+Sat Nov  8 13:11:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/cache/cache.h:
+
+	Improved debugging output.  
+
+Sat Nov  8 13:03:50 2003  Laurent Monin <zas@norz.org>:
+
+	* src/cache/: cache.c, cache.h:
+
+	Cache entries locks debugging was added.  
+
+Sat Nov  8 12:48:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: cache/cache.h, document/document.c,
+	document/html/renderer.c, sched/download.c, sched/session.c:
+
+	cache_entry_lock_inc() -> cache_entry_lock(), cache_entry_lock_dec()
+	-> cache_entry_unlock() 
+
+Sat Nov  8 12:47:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.h:
+
+	Nothing uses cache_entry_unlock().  
+
+Sat Nov  8 12:34:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: cache/cache.c, cache/cache.h, dialogs/info.c,
+	document/document.c, document/html/renderer.c, sched/connection.c,
+	sched/download.c, sched/session.c:
+
+	Field refcount of struct cache_entry was renamed locks. Macros are
+	provided to manipulate locks of a cache entry. Code was updated to
+	reflect that change. It will ease debug and trace concerning cache
+	entries handling.  
+
+Sat Nov  8 12:13:05 2003  Laurent Monin <zas@norz.org>:
+
+	* src/cache/cache.c:
+
+	More debug info at gc start. Simplify DEBUG_CACHE (de)activation.  
+
+Sat Nov  8 12:02:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/cache/cache.c:
+
+	Assertion about cache_size was moved to enlarge_entry() which is now
+	used in delete_entry_content(). One assertion about entry data size
+	was added. Minor change in debug cache output macro.  
+
+Sat Nov  8 05:51:27 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/osdep/osdep.c:
+
+	Add support for GNU Screen's clipboard.  
+
+Sat Nov  8 05:23:39 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/globhist/dialogs.c:
+
+	Add a 'Bookmark' button to the global history dialogue box, using
+	the new launch_bm_add_dialog() function. Has ugly stuff; will pasky
+	revert it? 
+
+Sat Nov  8 05:21:14 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/: dialogs.c, dialogs.h:
+
+	Add launch_bm_add_dialog(), to launch an 'Add bookmark' dialogue box
+	for the given URL and title. Use it as the backend for
+	launch_bm_add_doc_dialog() and launch_bm_add_link_dialog().  
+
+Sat Nov  8 05:17:40 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/dialogs.h:
+
+	Reformat, add parameter names, and expand comments.  
+
+Sat Nov  8 05:09:24 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Refresh after open-link-in-new-(tab(|-in-background)|window). Call
+	me blunt...  
+
+Sat Nov  8 05:04:40 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Explain the meanings of the various possible values for @x in
+	frame_ev().  
+
+Sat Nov  8 05:00:50 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: dialogs/edit.c, globhist/dialogs.c:
+
+	Whitespace.  
+
+Sat Nov  8 02:37:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	defrag_entry(): @overlay loop control cases were swapped until now.
+	The one who did the original cleanup of this function did a *realy*
+	BAD job. Looks like zas is to be blamed.  
+
+Sat Nov  8 02:29:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	defrag_entry(): @h -> @frag 
+
+Sat Nov  8 02:27:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	defrag_entry(): @l -> @new_frag_len 
+
+Sat Nov  8 02:25:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	defrag_entry(): @nf -> @new_frag 
+
+Sat Nov  8 02:25:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	defrag_entry(): @g -> @adj_frag 
+
+Sat Nov  8 02:23:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	defrag_entry(): Reverse @overlay sign, IMHO it's more logical now.  
+
+Sat Nov  8 02:22:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	Fixed defrag_entry(), fundamentally broken by some older cleanup
+	patch.  
+
+Sat Nov  8 02:13:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	defrag_entry(): @f -> @first_frag 
+
+Sat Nov  8 02:10:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	Rename resize_entry() back to enlarge_entry(). Rationale:
+	resize_entry() gives no hint about direction to which the value is
+	added, in fact it rather hints that the second argument is a new
+	size as is. And nothing is bad on enlarging to negative ;-).  
+
+Sat Nov  8 02:06:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.h:
+
+	Described garbage_collection().  
+
+Sat Nov  8 02:03:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	garbage_collection() cleanup: Moved @entry to an inner scope.  
+
+Sat Nov  8 02:01:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	garbage_collection() cleanup: Reindentation.  
+
+Sat Nov  8 01:59:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	garbage_collection() cleanup: Whitespace here, whitespace there...  
+
+Sat Nov  8 01:58:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	garbage_collection() cleanup: Label g -> shrinked_enough.  
+
+Sat Nov  8 01:56:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	garbage_collection() cleanup: Commented the execution flow and
+	individual scanning passes.  
+
+Sat Nov  8 01:41:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	garbage_collection() cleanup: Debug/assert prints consistency, make
+	them actually print out some useful stuff, reformatting.  
+
+Sat Nov  8 01:36:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	garbage_collection() cleanup: @(old_)opt_cache_memory_size ->
+	@(old_)opt_cache_size 
+
+Sat Nov  8 01:35:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	garbage_collection() cleanup: @opt_cache_gc_size -> @gc_cache_size 
+
+Sat Nov  8 01:33:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	garbage_collection() cleanup: Declarations minor reorder and most of
+	the variables described.  
+
+Sat Nov  8 01:14:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	garbage_collection() cleanup: @ccs -> @old_cache_size 
+
+Sat Nov  8 01:12:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	garbage_collection() cleanup: @no -> @obstacle_entry 
+
+Sat Nov  8 01:09:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	garbage_collection() cleanup: ncs -> new_cache_size, newncs ->
+	newer_cache_size 
+
+Sat Nov  8 01:06:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/: cache.c, cache.h:
+
+	cache_entry.tgc -> cache_entry.gc_target 
+
+Sat Nov  8 00:56:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Restore bound of search dialog like in the previous input field
+	patch.  
+
+Sat Nov  8 00:49:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inpfield.c:
+
+	Try to fix so it is more like the behaviour when <widget>_width()
+	functions was used.  
+
+Sat Nov  8 00:17:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/listbox.c:
+
+	A negative value caused a segfault, value is now ensured to be >= 0.  
+
+Sat Nov  8 00:13:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/dialogs.c:
+
+	Allocate name and type info for the edit option dialog in one go.  
+
+Fri Nov  7 23:59:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/core.c:
+
+	A batch of compile errors with the help of zas.  
+
+Fri Nov  7 23:51:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, config/dialogs.c:
+
+	Generalize feature to put label and input field on the same line
+	when align is AL_NONE.  
+
+Fri Nov  7 23:27:08 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Another update.  
+
+Fri Nov  7 23:19:31 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
+Fri Nov  7 23:14:06 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/uri.c:
+
+	Disabled replacing '+' by ' ' in decode_uri_string.  Local files
+	like index_linux+.html were badly decoded.  
+
+Fri Nov  7 22:36:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/core.c:
+
+	Update to use input field labels.  
+
+Fri Nov  7 22:27:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Fix assertion. Spotted by Miciah.  
+
+Fri Nov  7 22:20:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: viewer/text/search.c, dialogs/options.c, config/dialogs.c,
+	dialogs/auth.c, dialogs/edit.c, dialogs/mime.c:
+
+	Update to use input field label.  
+
+Fri Nov  7 22:20:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: inpfield.c, inpfield.h:
+
+	Integrate input field label as part of the widget.  
+
+Fri Nov  7 21:23:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, config/dialogs.c:
+
+	Now that all input field dialogs that should have maximum width are
+	handled explicit in the layouters lets remove the maximizer in
+	dlg_format_field().  
+
+Fri Nov  7 21:04:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/edit.c:
+
+	We always want max width for edit dialogs so no need to maintain
+	@rw.  
+
+Fri Nov  7 20:56:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inpfield.c:
+
+	We always want max width for input field dialogs so no need to
+	maintain @rw.  
+
+Fri Nov  7 20:52:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	We always want max width for search dialogs so no need to maintain
+	@rw.  
+
+Fri Nov  7 18:45:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: button.c, button.h, checkbox.c, checkbox.h, group.c,
+	group.h, text.c, text.h:
+
+	Remove unneeded <widget>_width() functions.  
+
+Fri Nov  7 18:40:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/core.c:
+
+	No need to call <widget>_width() when we have this wonderful hack
+	for calculating the dialog width.  
+
+Fri Nov  7 18:32:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Rename: w -> max_width, remove TODO.  
+
+Fri Nov  7 18:27:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	split_line(): Simplify the loop.  
+
+Fri Nov  7 17:26:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/text.c:
+
+	@tx -> @next_split 
+
+Fri Nov  7 17:24:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/text.c:
+
+	assertm() -> assert() 
+
+Fri Nov  7 16:39:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	No need to use x and line_x positions.  
+
+Fri Nov  7 16:22:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Rename: w -> dlg_width, rw -> real_width.  
+
+Fri Nov  7 16:20:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Oops it was not that cheap. ;) 
+
+Fri Nov  7 16:17:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Handle AL_RIGHT .. yeah it is bloat but it is cheap bloat.  
+
+Fri Nov  7 16:14:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Don't calculate shift if we are not drawing.  
+
+Fri Nov  7 16:10:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Use for loop.  
+
+Fri Nov  7 16:00:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Move line splitting to split_line().  
+
+Fri Nov  7 15:59:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Prefer to use line_width over split.  
+
+Fri Nov  7 15:50:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Minor cleanup.  
+
+Fri Nov  7 15:45:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Also assert the line_width value.  
+
+Fri Nov  7 15:39:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Establish some basic sanity checking.  
+
+Fri Nov  7 15:28:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Roll back to pre 1.24 state. We are gonna take this one i slow mo'.
+	;) 
+
+Fri Nov  7 15:04:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Removed the potential TODO of moving html_frameset() to frames.c.
+	This is just parsing the HTML tag, thus correct to have in parser.  
+
+Fri Nov  7 15:02:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation updated.  
+
+Fri Nov  7 14:42:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Trim url when have the real width so we show as much of the url as
+	possible.  
+
+Fri Nov  7 14:36:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Oops minor fix for last patch.  
+
+Fri Nov  7 14:35:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	In dlg_format_<widget>() we trust ... so don't call <widget>_width()
+	also.  
+
+Fri Nov  7 14:32:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Pass real width arg to dlg_format_<widget>.  
+
+Fri Nov  7 14:21:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Cleanup download url trimming to only allocate needed string.  
+
+Fri Nov  7 13:55:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, dialogs/auth.c, globhist/dialogs.c:
+
+	do_dialog() can return NULL so we better check before using it. Fix
+	potential leak by freeml().  
+
+Fri Nov  7 13:45:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/dialogs.c:
+
+	In dlg_format_<widget>() we trust ... so don't call <widget>_width()
+	also.  
+
+Fri Nov  7 13:32:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/group.c, bfu/inpfield.c, dialogs/auth.c,
+	dialogs/edit.c, dialogs/hierbox.c, dialogs/options.c,
+	viewer/text/search.c:
+
+	In dlg_format_<widget>() we trust ... so don't call <widget>_width()
+	also.  
+
+Fri Nov  7 11:45:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/msgbox.c:
+
+	In dlg_format_<widget> we trust ... so don't call <widget>_width()
+	also.  
+
+Fri Nov  7 00:39:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/mime.c:
+
+	I don't really see the point of using the dialog <widget>_width()
+	functions. a) it makes us calculate width 3 times, b) with
+	reasonable initialized dialog width we do not need to bound the
+	width. A whole tree patch doing this for all dialog layouter will
+	save us 120 lines of code that only seems to slow us down.  
+
+Fri Nov  7 00:35:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: dialog.h, text.c:
+
+	Bahh the upper bound can be lower than the lower bound in
+	int_bound() which caused the dialog width to become 0 and thus
+	triggered an assertion failure.  
+
+Thu Nov  6 23:49:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/cache/cache.c:
+
+	Fix a typo introduced in rev 1.41. It may affect bug 264. Witold
+	please check.  
+
+Thu Nov  6 23:46:14 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation updated.  
+
+Thu Nov  6 23:38:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: dialog.h, text.c:
+
+	Fix infinite loop under tiny dimensions.  
+
+Thu Nov  6 23:28:06 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt_BR.po, pt.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po were resynced and french translation was updated.  
+
 Thu Nov  6 22:45:40 2003  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/parser.c:

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.25 2003/05/24 13:38:02 pasky Exp $ */
+/* $Id: terminal.c,v 1.26 2003/05/24 13:52:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -332,7 +332,12 @@ send_redraw:
 			 * is registering a bottom-half handler which will open
 			 * additional windows.
 			 * --pasky */
-			if (!inactive_tab(win))
+			/* We want to propagate EV_RESIZE even to inactive
+			 * tabs! Nothing wrong will get drawn (in the final
+			 * result) as the active tab is always the first one,
+			 * thus will be drawn last here. Thanks, Witek!
+			 * --pasky */
+			if (!inactive_tab(win) || ev->ev == EV_RESIZE)
 				win->handler(win, ev, 0);
 		}
 		term->redrawing = 0;

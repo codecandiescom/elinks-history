@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.11 2002/03/27 21:52:22 pasky Exp $ */
+/* $Id: renderer.c,v 1.12 2002/03/27 23:39:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1222,23 +1222,30 @@ void * html_special(struct part *part, enum html_special_type c, ...)
 		case SP_TAG:
 			t = va_arg(l, unsigned char *);
 			html_tag(part->data, t, X(part->cx), Y(part->cy));
+			va_end(l);
 			break;
 		case SP_CONTROL:
 			fc = va_arg(l, struct form_control *);
 			html_form_control(part, fc);
+			va_end(l);
 			break;
 		case SP_TABLE:
+			va_end(l);
 			return convert_table;
 		case SP_USED:
+			va_end(l);
 			return (void *)!!part->data;
 		case SP_FRAMESET:
 			fsp = va_arg(l, struct frameset_param *);
+			va_end(l);
 			return create_frameset(part->data, fsp);
 		case SP_FRAME:
 			fp = va_arg(l, struct frame_param *);
+			va_end(l);
 			create_frame(fp);
 			break;
 		default:
+			va_end(l);
 			internal("html_special: unknown code %d", c);
 	}
 

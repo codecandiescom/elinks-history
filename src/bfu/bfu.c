@@ -1,5 +1,5 @@
 /* This routines are the bones of user interface. */
-/* $Id: bfu.c,v 1.11 2002/03/22 18:57:19 pasky Exp $ */
+/* $Id: bfu.c,v 1.12 2002/03/27 23:39:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,6 @@
 #include <bfu/bfu.h>
 #include <bfu/menu.h>
 #include <config/kbdbind.h>
-//#include <document/html/parser.h>
 #include <intl/language.h>
 #include <lowlevel/kbd.h>
 #include <lowlevel/terminal.h>
@@ -1244,7 +1243,10 @@ void msg_box(struct terminal *term, struct memory_list *ml,
 			info_n++;
 			info = mem_realloc(info, info_n
 						 * sizeof(unsigned char *));
-			if (!info) return;
+			if (!info) {
+				va_end(ap);
+				return;
+			}
 
 			info[info_n - 1] = text;
 		}
@@ -1256,9 +1258,10 @@ void msg_box(struct terminal *term, struct memory_list *ml,
 
 		info_n = 2;
 		info_ = mem_realloc(info, info_n
-					 * sizeof(unsigned char *));
+					  * sizeof(unsigned char *));
 		if (!info_) {
 			free(info);
+			va_end(ap);
 			return;
 	   	}
 
@@ -1276,6 +1279,7 @@ void msg_box(struct terminal *term, struct memory_list *ml,
 	dlg = mem_alloc(SIZEOF_DIALOG);
 	if (!dlg) {
 		mem_free(info);
+		va_end(ap);
 		return;
 	}
 	memset(dlg, 0, SIZEOF_DIALOG);
@@ -1311,6 +1315,8 @@ void msg_box(struct terminal *term, struct memory_list *ml,
 		dlg->items[button].text = label;
 		dlg->items[button].udata = fn;
 	}
+
+	va_end(ap);
 
 	dlg->items[button].type = D_END;
 	add_to_ml(&ml, dlg, info, NULL);

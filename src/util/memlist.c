@@ -1,5 +1,5 @@
 /* This routines represent handling of struct memory_list. */
-/* $Id: memlist.c,v 1.1 2002/03/18 06:33:13 pasky Exp $ */
+/* $Id: memlist.c,v 1.2 2002/03/27 23:39:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,15 +32,20 @@ struct memory_list *getml(void *p, ...)
 	}
 
 	ml = mem_alloc(sizeof(struct memory_list) + i * sizeof(void *));
-	if (!ml) return NULL;
+	if (!ml) {
+		va_end(ap);
+		return NULL;
+	}
 
 	ml->n = i;
+	va_end(ap);
 
 	va_start(ap, p);
 	for (i = 0, q = p; q; i++) {
 		ml->p[i] = q;
 		q = va_arg(ap, void *);
 	}
+	va_end(ap);
 
 	return ml;
 }
@@ -61,6 +66,7 @@ void add_to_ml(struct memory_list **ml, ...)
 
 	va_start(ap, ml);
 	while ((q = va_arg(ap, void *))) n++;
+	va_end(ap);
 
 	nml = mem_realloc(*ml, sizeof(struct memory_list) + (n + (*ml)->n) * sizeof(void *));
 	if (!nml)
@@ -68,6 +74,7 @@ void add_to_ml(struct memory_list **ml, ...)
 
 	va_start(ap, ml);
 	while ((q = va_arg(ap, void *))) nml->p[nml->n++] = q;
+	va_end(ap);
 
 	*ml = nml;
 }

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.12 2002/03/27 23:05:52 pasky Exp $ */
+/* $Id: parser.c,v 1.13 2002/03/27 23:39:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -368,10 +368,13 @@ void kill_until(int ls, ...)
 {
 	int l;
 	struct html_element *e = &html_top;
+	
 	if (ls) e = e->next;
+	
 	while ((void *)e != &html_stack) {
 		int sk = 0;
 		va_list arg;
+		
 		va_start(arg, ls);
 		while (1) {
 			char *s = va_arg(arg, char *);
@@ -381,22 +384,26 @@ void kill_until(int ls, ...)
 			} else if (e->namelen == strlen(s) && !casecmp(e->name, s, strlen(s))) {
 				if (!sk) {
 					if (e->dontkill) break;
+					va_end(arg);
 					goto killll;
 				} else if (sk == 1) {
+					va_end(arg);
 					goto killl;
 				} else {
 					break;
 				}
 			}
 		}
+		va_end(arg);
 		if (e->dontkill || (e->namelen == 5 && !casecmp(e->name, "TABLE", 5))) break;
 		if (e->namelen == 2 && upcase(e->name[0]) == 'T' && (upcase(e->name[1]) == 'D' || upcase(e->name[1]) == 'H' || upcase(e->name[1]) == 'R')) break;
 		e = e->next;
 	}
 	return;
-	killl:
+	
+killl:
 	e = e->prev;
-	killll:
+killll:
 	l = 0;
 	while ((void *)e != &html_stack) {
 		if (ls && e == html_stack.next) break;

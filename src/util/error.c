@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.7 2002/03/25 17:18:09 pasky Exp $ */
+/* $Id: error.c,v 1.8 2002/03/27 23:39:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,8 +88,10 @@ void er(int b, unsigned char *m, va_list l)
 void error(unsigned char *m, ...)
 {
 	va_list l;
+	
 	va_start(l, m);
 	er(1, m, l);
+	va_end(l);
 }
 
 int errline;
@@ -100,20 +102,24 @@ unsigned char errbuf[4096];
 void int_error(unsigned char *m, ...)
 {
 	va_list l;
+	
 	va_start(l, m);
 	sprintf(errbuf, "\033[1mINTERNAL ERROR\033[0m at %s:%d: ", errfile, errline);
 	strcat(errbuf, m);
 	er(1, errbuf, l);
+	va_end(l);
 	force_dump();
 }
 
 void debug_msg(unsigned char *m, ...)
 {
 	va_list l;
+	
 	va_start(l, m);
 	sprintf(errbuf, "DEBUG MESSAGE at %s:%d: ", errfile, errline);
 	strcat(errbuf, m);
 	er(0, errbuf, l);
+	va_end(l);
 }
 
 

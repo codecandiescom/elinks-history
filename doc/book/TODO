@@ -26,6 +26,8 @@ Suggestions for sections or chapter:
 
 * Overview/introduction to essential managers
 
+	* Compile time configuration
+
 * FAQ ?
 
 * Tips/cheats ;)
@@ -34,4 +36,4 @@ Suggestions for sections or chapter:
 	Mainly to inform users about lack of security. SSL Certificate
 	verification come to mind.
 
-$Id: TODO,v 1.1 2002/12/28 19:49:20 jonas Exp $
+$Id: TODO,v 1.2 2002/12/29 10:53:33 jonas Exp $

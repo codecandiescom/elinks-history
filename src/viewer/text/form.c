@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.34 2003/09/01 13:14:41 zas Exp $ */
+/* $Id: form.c,v 1.35 2003/09/02 13:37:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -688,7 +688,6 @@ get_form_url(struct session *ses, struct document_view *f,
 	     struct form_control *frm)
 {
 	struct list_head submit;
-	struct list_head *sb = NULL;
 	struct string data;
 	struct string go;
 	unsigned char bound[BL];
@@ -720,7 +719,7 @@ get_form_url(struct session *ses, struct document_view *f,
 	}
 
 #ifdef FORMS_MEMORY
-	sb = memorize_form(ses, &submit, frm);
+	memorize_form(ses, &submit, frm);
 #endif
 
 	if (!init_string(&go)) return NULL;
@@ -764,9 +763,7 @@ get_form_url(struct session *ses, struct document_view *f,
 
 	done_string(&data);
 
-	/* If (sb) we free that stuff in done_form_history_item() instead
-	 * (msg_box's handler associated with "No") */
-	if (!sb) free_succesful_controls(&submit);
+	free_succesful_controls(&submit);
 
 	return go.source;
 }

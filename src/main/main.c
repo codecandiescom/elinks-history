@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.121 2003/09/03 12:20:47 zas Exp $ */
+/* $Id: main.c,v 1.122 2003/09/03 21:17:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,6 +65,7 @@
 #include "scripting/lua/hooks.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
+#include "terminal/screen.h"
 #include "util/blacklist.h"
 #include "util/color.h"
 #include "util/error.h"
@@ -282,6 +283,7 @@ terminate_all_subsystems(void)
 #ifdef USE_LEDS
 	done_leds();
 #endif
+	done_screen_drivers();
 	done_bfu_colors();
 	done_timer();
 	done_options();

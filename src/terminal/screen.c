@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.67 2003/09/02 20:27:00 jonas Exp $ */
+/* $Id: screen.c,v 1.68 2003/09/03 21:17:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,6 +77,8 @@ static struct frame_seq vt100_frame_seqs[] = {
 
 /* TODO: We should provide some generic mechanism for options caching. */
 struct screen_driver {
+	LIST_HEAD(struct screen_driver);
+
 	enum term_mode_type type;
 
 	/* Charsets when doing UTF8 I/O. */
@@ -94,9 +96,12 @@ struct screen_driver {
 	unsigned int colors:1;
 	unsigned int trans:1;
 	unsigned int underline:1;
+
+	unsigned char name[1]; /* XXX: Keep last! */
 };
 
 static struct screen_driver dumb_screen_driver = {
+				NULL_LIST_HEAD,
 	/* type: */		TERM_DUMB,
 	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
 	/* frame: */		frame_dumb,
@@ -107,6 +112,7 @@ static struct screen_driver dumb_screen_driver = {
 };
 
 static struct screen_driver vt100_screen_driver = {
+				NULL_LIST_HEAD,
 	/* type: */		TERM_VT100,
 	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
 	/* frame: */		frame_vt100,	/* No UTF8 I/O */
@@ -117,6 +123,7 @@ static struct screen_driver vt100_screen_driver = {
 };
 
 static struct screen_driver linux_screen_driver = {
+				NULL_LIST_HEAD,
 	/* type: */		TERM_LINUX,
 	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
 	/* frame: */		NULL,		/* No restrict_852 */
@@ -127,6 +134,7 @@ static struct screen_driver linux_screen_driver = {
 };
 
 static struct screen_driver koi8_screen_driver = {
+				NULL_LIST_HEAD,
 	/* type: */		TERM_KOI8,
 	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
 	/* frame: */		frame_koi,
@@ -144,41 +152,40 @@ static struct screen_driver *screen_drivers[] = {
 	/* TERM_KOI8: */	&koi8_screen_driver,
 };
 
-static inline void
-init_screen_driver(struct screen_driver *driver, struct terminal *term)
+static INIT_LIST_HEAD(active_screen_drivers);
+
+static void
+update_screen_driver(struct screen_driver *driver, struct option *term_spec)
 {
-	int utf8_io = get_opt_bool_tree(term->spec, "utf_8_io");
-	enum term_mode_type type = get_opt_int_tree(term->spec, "type");
+	int utf8_io = get_opt_bool_tree(term_spec, "utf_8_io");
 
-	memcpy(driver, screen_drivers[type], sizeof(struct screen_driver));
-
-	driver->colors = get_opt_bool_tree(term->spec, "colors");
-	driver->trans = get_opt_bool_tree(term->spec, "transparency");
-	driver->underline = get_opt_bool_tree(term->spec, "underline");
+	driver->colors = get_opt_bool_tree(term_spec, "colors");
+	driver->trans = get_opt_bool_tree(term_spec, "transparency");
+	driver->underline = get_opt_bool_tree(term_spec, "underline");
 
 	if (utf8_io) {
-		driver->charsets[0] = get_opt_int_tree(term->spec, "charset");
+		driver->charsets[0] = get_opt_int_tree(term_spec, "charset");
 	}
 
-	if (type == TERM_LINUX) {
-		if (get_opt_bool_tree(term->spec, "restrict_852")) {
+	if (driver->type == TERM_LINUX) {
+		if (get_opt_bool_tree(term_spec, "restrict_852")) {
 			driver->frame = frame_restrict;
 		}
 
 		if (utf8_io) {
 			driver->charsets[1] = get_cp_index("cp437");
 
-		} else if (get_opt_bool_tree(term->spec, "m11_hack")) {
+		} else if (get_opt_bool_tree(term_spec, "m11_hack")) {
 			driver->frame_seqs = m11_hack_frame_seqs;
 		}
 
-	} else if (type == TERM_VT100) {
+	} else if (driver->type == TERM_VT100) {
 		if (utf8_io) {
 			driver->frame = frame_vt100_u;
 			driver->charsets[1] = get_cp_index("cp437");
 		}
 
-	} else if (type == TERM_KOI8) {
+	} else if (driver->type == TERM_KOI8) {
 		if (utf8_io) {
 			driver->charsets[1] = get_cp_index("koi8-r");
 		}
@@ -188,6 +195,55 @@ init_screen_driver(struct screen_driver *driver, struct terminal *term)
 		}
 	}
 }
+
+static inline struct screen_driver *
+add_screen_driver(enum term_mode_type type, struct terminal *term, int env_len)
+{
+	struct screen_driver *driver;
+
+	driver = mem_alloc(sizeof(struct screen_driver) + env_len + 1);
+	if (!driver) return NULL;
+
+	memcpy(driver, screen_drivers[type], sizeof(struct screen_driver));
+	memcpy(driver->name, term->term, env_len + 1);
+
+	add_to_list(active_screen_drivers, driver);
+
+	update_screen_driver(driver, term->spec);
+
+	return driver;
+}
+
+static inline struct screen_driver *
+get_screen_driver(struct terminal *term)
+{
+	enum term_mode_type type = get_opt_int_tree(term->spec, "type");
+	int env_len = strlen(term->term); 
+	struct screen_driver *driver;
+
+	/* On startup redraw_screen() is called before is fully initialized
+	 * so wait until we get a ``running'' terminal. */
+	if (env_len == 0) return NULL;
+
+	/* TODO: LRU? ;) */
+	foreach (driver, active_screen_drivers) {
+		if (driver->type == type
+		    && !memcmp(driver->name, term->term, env_len)) {
+			/* TODO: Update via option change_hooks. */
+			update_screen_driver(driver, term->spec);
+			return driver;
+		}
+	}
+
+	return add_screen_driver(type, term, env_len);
+}
+
+void
+done_screen_drivers(void)
+{
+	free_list(active_screen_drivers);
+}
+
 
 struct screen_state {
 	unsigned char color;
@@ -353,7 +409,7 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 void
 redraw_screen(struct terminal *term)
 {
-	struct screen_driver driver;
+	struct screen_driver *driver = get_screen_driver(term);
 	struct string image;
 	register int y = 0;
 	int prev_y = -1;
@@ -363,12 +419,11 @@ redraw_screen(struct terminal *term)
  	register struct screen_char *pos;
  	register struct screen_char *prev_pos;
 
-	if (!screen
+	if (!driver
+	    || !screen
 	    || !screen->dirty
 	    || (term->master && is_blocked())
 	    || !init_string(&image)) return;
-
- 	init_screen_driver(&driver, term);
 
 	current = screen->last_image;
  	pos = screen->image;
@@ -398,19 +453,19 @@ redraw_screen(struct terminal *term)
 			}
 
 			for (; prev_pos <= pos ; prev_pos++)
-				print_char(&image, &driver, prev_pos, &state);
+				print_char(&image, driver, prev_pos, &state);
 		}
 	}
 
 	if (image.length) {
-		if (driver.colors)
+		if (driver->colors)
 			add_bytes_to_string(&image, "\033[37;40m", 8);
 
 		add_bytes_to_string(&image, "\033[0m", 4);
 
 		/* If we ended in border state end the frame mode. */
-		if (state.border && driver.frame_seqs) {
-			struct frame_seq *seq = &driver.frame_seqs[0];
+		if (state.border && driver->frame_seqs) {
+			struct frame_seq *seq = &driver->frame_seqs[0];
 
 			add_bytes_to_string(&image, seq->src, seq->len);
 		}

@@ -1,4 +1,4 @@
-/* $Id: screen.h,v 1.14 2003/08/01 22:19:33 jonas Exp $ */
+/* $Id: screen.h,v 1.15 2003/09/03 21:17:24 jonas Exp $ */
 
 #ifndef EL__TERMINAL_SCREEN_H
 #define EL__TERMINAL_SCREEN_H
@@ -42,5 +42,8 @@ void erase_screen(struct terminal *term);
 
 /* Meeep! */
 void beep_terminal(struct terminal *term);
+
+/* Release private screen drawing utilities. */
+void done_screen_drivers(void);
 
 #endif

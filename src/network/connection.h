@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.17 2003/07/03 03:10:11 jonas Exp $ */
+/* $Id: connection.h,v 1.18 2003/07/03 10:01:02 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -182,13 +182,18 @@ void abort_connection(struct connection *);
 void abort_conn_with_state(struct connection *, int);
 void retry_conn_with_state(struct connection *, int);
 
-int load_url(unsigned char *, unsigned char *, struct status *, int, enum cache_mode, int start);
-
 void change_connection(struct status *, struct status *, int, int);
 void detach_connection(struct status *, int);
 void abort_all_connections(void);
 void abort_background_connections(void);
 
 void set_timeout(struct connection *);
+
+/* Initiates a connection to get the given @url. */
+/* Note that stat's data _MUST_ be struct download * if start > 0! Yes, that
+ * should be probably something else than data, but... ;-) */
+/* Returns 0 on success and -1 on failure. */
+int load_url(unsigned char *url, unsigned char *ref_url, struct status *stat,
+	     int pri, enum cache_mode cache_mode, int start);
 
 #endif

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.35 2003/07/03 01:26:22 jonas Exp $ */
+/* $Id: connection.c,v 1.36 2003/07/03 10:01:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -855,8 +855,6 @@ get_proxy(unsigned char *url)
 #endif
 }
 
-/* Note that stat's data _MUST_ be struct download * if start > 0! Yes, that
- * should be probably something else than data, but... ;-) */
 int
 load_url(unsigned char *url, unsigned char *ref_url,
 	 struct status *stat, int pri, enum cache_mode cache_mode, int start)

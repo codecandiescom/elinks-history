@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.139 2004/01/03 13:59:37 jonas Exp $ */
+/* $Id: hierbox.c,v 1.140 2004/01/04 14:11:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,7 +98,7 @@ add_listbox_items(struct hierbox_browser *browser, void *data, int noempty,
 	va_end(ap);
 
 	item = do_add_listbox_item(root, text, data, 0, BI_LEAF);
-  
+
 	update_hierbox_browser(browser);
 
 	return item;
@@ -437,7 +437,17 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 	struct listbox_context *context;
 	unsigned char *msg;
 
-	if (!box->sel || !box->sel->udata) return 0;
+	if (!box->sel) return 0;
+
+	if (!box->sel->udata) {
+		msg_box(term, NULL, 0,
+		N_("Info"), AL_CENTER,
+		_("Press space to expand this folder.", term),
+		NULL, 1,
+		N_("OK"), NULL, B_ESC | B_ENTER);
+
+		return 0;
+	}
 
 	assert(box->ops);
 

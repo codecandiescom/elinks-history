@@ -1,3 +1,16 @@
+Fri Mar 19 16:10:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile.base:
+
+	Polished and fixed grammar.  
+
+Fri Mar 19 08:45:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/frames.c:
+
+	Fix non portable use of strtoul() that caused frames not to be
+	rendered. Reported by Daniel E. Macks <dmacks@netspace.org> 
+
 Wed Mar 17 09:08:22 2004  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/menu.c:

@@ -1,3 +1,49 @@
+Fri Dec 12 23:01:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Fri Dec 12 14:36:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/string.c:
+
+	done_string(): Also clear the string magic.  
+
+Fri Dec 12 14:24:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/parser.c, util/string.c, util/string.h:
+
+	Remove copy_string().  
+
+Fri Dec 12 14:05:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/events.txt, src/scripting/guile/hooks.c,
+	src/scripting/lua/hooks.c:
+
+	Fix goto-url event (part II).  
+
+Fri Dec 12 08:24:26 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Dec 12 07:19:56 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/sched/session.c:
+
+	Avoid overlapping dialogs upon first start up.  
+
+Fri Dec 12 06:30:57 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation fixes.  
+
 Thu Dec 11 12:03:30 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/smb/smb.c:

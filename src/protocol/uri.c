@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.287 2004/10/17 16:41:07 jonas Exp $ */
+/* $Id: uri.c,v 1.288 2004/10/17 17:17:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,7 +136,6 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 #ifdef CONFIG_IPV6
 	unsigned char *lbracket, *rbracket;
 #endif
-	int known;
 
 	assertm(uristring, "No uri to parse.");
 	memset(uri, 0, sizeof(struct uri));
@@ -153,7 +152,6 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 
 	/* Figure out whether the protocol is known */
 	uri->protocol = get_protocol(struri(uri), uri->protocollen);
-	known = (uri->protocol != PROTOCOL_UNKNOWN);
 
 	prefix_end = uristring + uri->protocollen; /* ':' */
 
@@ -175,11 +173,11 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 
 		prefix_end += 2;
 
-	} else if (known && get_protocol_need_slashes(uri->protocol)) {
+	} else if (get_protocol_need_slashes(uri->protocol)) {
 		return URI_ERRNO_NO_SLASHES;
 	}
 
-	if (!known || get_protocol_free_syntax(uri->protocol)) {
+	if (get_protocol_free_syntax(uri->protocol)) {
 		uri->data = prefix_end;
 		uri->datalen = strlen(prefix_end);
 		return URI_ERRNO_OK;

@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.48 2003/08/23 16:44:42 jonas Exp $ */
+/* $Id: auth.c,v 1.49 2003/08/28 17:01:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 #include "terminal/terminal.h"
 #include "util/color.h"
 #include "util/memory.h"
+#include "util/snprintf.h"
 
 
 static void

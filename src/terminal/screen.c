@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.70 2003/09/03 22:34:59 jonas Exp $ */
+/* $Id: screen.c,v 1.71 2003/09/06 15:44:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -267,12 +267,6 @@ struct screen_state {
 	unsigned char underline;
 };
 
-/* When determining wether to use negative image we make the most significant
- * be least significant. */
-#define CMPCODE(c) (((c) << 1 | (c) >> 2) & TERM_COLOR_MASK)
-#define use_negative_image(c) \
-	(CMPCODE(TERM_COLOR_FOREGROUND(c)) < CMPCODE(TERM_COLOR_BACKGROUND(c)))
-
 #define use_utf8_io(driver) ((driver)->charsets[0] != -1)
 
 /* Time critical section. */
@@ -350,7 +344,7 @@ print_char(struct string *screen, struct screen_driver *driver,
 			} else {
 				length = 6;
 			}
-	 	} else if (use_negative_image(color)) {
+	 	} else if (ch->attr & SCREEN_ATTR_STANDOUT) {
 			/* Flip the fore- and background colors for highlighing
 			 * purposes. */
 			code[3] = ';';
@@ -366,6 +360,7 @@ print_char(struct string *screen, struct screen_driver *driver,
 		}
 
 		/* Check if the char should be rendered bold. */
+		/* TODO: Don't use @color but @attr here. */
 		if (color & SCREEN_ATTR_BOLD) {
 			code[length++] = ';';
 			code[length++] = '1';

@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.28 2003/09/05 02:01:36 jonas Exp $ */
+/* $Id: draw.h,v 1.29 2003/09/06 15:44:39 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -12,6 +12,7 @@ enum screen_char_attr {
 	SCREEN_ATTR_BOLD	= 0x08,
 	SCREEN_ATTR_ITALIC	= 0x10,
 	SCREEN_ATTR_UNDERLINE	= 0x20,
+	SCREEN_ATTR_STANDOUT	= 0x40,
 	SCREEN_ATTR_FRAME	= 0x80,
 };
 

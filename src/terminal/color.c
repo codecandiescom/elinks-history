@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.28 2003/09/06 15:29:53 jonas Exp $ */
+/* $Id: color.c,v 1.29 2003/09/06 15:44:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,6 +205,11 @@ static unsigned char fg_color[16][8] = {
  * dumping stuff. */
 extern int dump_pos;
 
+/* When determining wether to use negative image we make the most significant
+ * be least significant. */
+#define CMPCODE(c) (((c) << 1 | (c) >> 2) & TERM_COLOR_MASK)
+#define use_inverse(bg, fg) CMPCODE(TERM_COLOR_FOREGROUND(fg)) < CMPCODE(bg)
+
 /* Terminal color encoding: */
 /* Below color pairs are encoded to terminal colors. Both the terminal fore-
  * and background color are a number between 0 and 7. They are stored in an
@@ -246,6 +251,10 @@ get_term_color8(struct color_pair *pair, int bglevel, int fglevel,
 		if (attr && (fg & SCREEN_ATTR_BOLD)) {
 			*attr |= SCREEN_ATTR_BOLD;
 		}
+	}
+
+	if (attr && use_inverse(bg, fg)) {
+		*attr |= SCREEN_ATTR_STANDOUT;
 	}
 
 	return (bg << 4 | fg);

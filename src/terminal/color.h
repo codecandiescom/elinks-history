@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.10 2003/09/06 15:29:53 jonas Exp $ */
+/* $Id: color.h,v 1.11 2003/09/06 15:44:39 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -13,7 +13,7 @@
 
 /* Mixes the color pair and attributes to a terminal text color. */
 /* If @allow_dark_on_black is non zero the foreground color will be adjusted.
- * Modifies @attr adding possible boldness. */
+ * Modifies @attr adding stuff like boldness. */
 unsigned char get_term_color8(struct color_pair *pair, int bglevel, int fglevel,
 			      enum screen_char_attr *attr);
 

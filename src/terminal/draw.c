@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.38 2003/07/31 17:41:33 jonas Exp $ */
+/* $Id: draw.c,v 1.39 2003/07/31 21:35:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,23 +13,22 @@
 #include "terminal/terminal.h"
 
 
-/* Somewhere in the dialog code hides a few bugs that will result in
- * assertion failures. Therefore draw_assert() is will just return
- * for now. */
-#define draw_assert(x) if (!(x)) return
+#define out_of_range(term, x, y) ((x) < 0 || (x) >= (term)->x || (y) < 0 || (y) >= (term)->y)
 
 void
 set_char(struct terminal *term, int x, int y,
 	 unsigned char data, unsigned char attr)
 {
-	struct terminal_screen *screen = term->screen;
-	int position = x + term->x * y;
+	int position;
 
-	draw_assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
+	assert(term && term->screen);
+	if_assert_failed return;
+	if (out_of_range(term, x, y)) return;
 
-	screen->image[position].data = data;
-	screen->image[position].attr = attr;
-	screen->dirty = 1;
+	position = x + term->x * y;
+	term->screen->image[position].data = data;
+	term->screen->image[position].attr = attr;
+	term->screen->dirty = 1;
 }
 
 unsigned char frame_trans[2][4] = {{0xb3, 0xc3, 0xb4, 0xc5}, {0xc4, 0xc2, 0xc1, 0xc5}};
@@ -37,11 +36,12 @@ unsigned char frame_trans[2][4] = {{0xb3, 0xc3, 0xb4, 0xc5}, {0xc4, 0xc2, 0xc1, 
 void
 set_xchar(struct terminal *term, int x, int y, enum frame_cross_direction dir)
 {
-	unsigned int d;
 	struct screen_char *screen_char;
+	unsigned int d;
 
-	draw_assert(term);
-	draw_assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
+	assert(term && term->screen);
+	if_assert_failed return;
+	if (out_of_range(term, x, y)) return;
 
 	screen_char = get_char(term, x, y);
 	if (!(screen_char->attr & SCREEN_ATTR_FRAME)) return;
@@ -59,26 +59,29 @@ void
 set_border_char(struct terminal *term, int x, int y,
 	        enum border_char border, unsigned char color)
 {
-	struct terminal_screen *screen = term->screen;
-	int position = x + term->x * y;
+	int position;
 
-	draw_assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
+	assert(term && term->screen && term->screen->image);
+	if_assert_failed return;
+	if (out_of_range(term, x, y)) return;
 
 	/* This should probably go.  */
 	if (!color)
 		color = get_char(term, x, y)->attr;
 
-	screen->image[position].data = (unsigned char) border;
-	screen->image[position].attr = (color | SCREEN_ATTR_FRAME);
-	screen->dirty = 1;
+	position = x + term->x * y;
+	term->screen->image[position].data = (unsigned char) border;
+	term->screen->image[position].attr = (color | SCREEN_ATTR_FRAME);
+	term->screen->dirty = 1;
 }
 
 
 struct screen_char *
 get_char(struct terminal *term, int x, int y)
 {
-	if (!(x >= 0 && x < term->x && y >= 0 && y < term->y))
-		return 0;
+	assert(term && term->screen && term->screen->image);
+	if_assert_failed return 0;
+	if (out_of_range(term, x, y)) return 0;
 
 	return &term->screen->image[x + term->x * y];
 }
@@ -86,27 +89,28 @@ get_char(struct terminal *term, int x, int y)
 void
 set_color(struct terminal *term, int x, int y, unsigned char color)
 {
-	struct terminal_screen *screen = term->screen;
-	int position = x + term->x * y;
 	unsigned char attr = color & ~SCREEN_ATTR_FRAME;
+	int position;
 
-	draw_assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
+	assert(term && term->screen && term->screen->image);
+	if_assert_failed return;
+	if (out_of_range(term, x, y)) return;
 
-	attr |= (screen->image[position].attr & SCREEN_ATTR_FRAME);
-	screen->image[position].attr = attr;
-	screen->dirty = 1;
+	position = x + term->x * y;
+	attr |= (term->screen->image[position].attr & SCREEN_ATTR_FRAME);
+	term->screen->image[position].attr = attr;
+	term->screen->dirty = 1;
 }
 
 void
 set_only_char(struct terminal *term, int x, int y, unsigned char data)
 {
-	struct terminal_screen *screen = term->screen;
-	int position = x + term->x * y;
+	assert(term && term->screen && term->screen->image);
+	if_assert_failed return;
+	if (out_of_range(term, x, y)) return;
 
-	draw_assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
-
-	screen->image[position].data = data;
-	screen->dirty = 1;
+	term->screen->image[x + term->x * y].data = data;
+	term->screen->dirty = 1;
 }
 
 /* Updates a line in the terms screen. */
@@ -114,56 +118,62 @@ set_only_char(struct terminal *term, int x, int y, unsigned char data)
 void
 set_line(struct terminal *term, int x, int y, int l, struct screen_char *line)
 {
-	struct terminal_screen *screen = term->screen;
-	int end = (l <= term->x - x) ? l : term->x - x;
-	register int offset = x + term->x * y;
+	int position, end;
 	register int i;
 
-	draw_assert(line);
-	draw_assert(l >= 0 && l <= term->x && x >= 0 && x < term->x && y >= 0 && y < term->y);
+	assert(term && term->screen && term->screen->image && line);
+	if_assert_failed return;
+	if (out_of_range(term, x, y)) return;
 
+	end = (l <= term->x - x) ? l : term->x - x;
 	if (end == 0) return;
 
+	position = x + term->x * y;
 	for (i = 0; i < end; i++) {
-		int position = i + offset;
+		int pos = i + position;
 
-		screen->image[position].data = line[i].data;
-		screen->image[position].attr = line[i].attr;
+		term->screen->image[pos].data = line[i].data;
+		term->screen->image[pos].attr = line[i].attr;
 	}
-	screen->dirty = 1;
+	term->screen->dirty = 1;
 }
 
 void
 fill_area(struct terminal *term, int x, int y, int xw, int yw,
 	  unsigned char data, unsigned char attr)
 {
-	struct terminal_screen *screen = term->screen;
+	int position;
 	int starty = (y >= 0) ? 0 : -y;
 	int startx = (x >= 0) ? 0 : -x;
-	int endy = (yw < term->y - y) ? yw : term->y - y;
-	int endx = (xw < term->x - x) ? xw : term->x - x;
-	int offset_base = x + term->x * y;
+	int endx, endy;
 	register int j;
 
-	draw_assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
+	assert(term && term->screen && term->screen->image);
+	if_assert_failed return;
+	if (out_of_range(term, x, y)) return;
+
+	endx = (xw < term->x - x) ? xw : term->x - x;
+	endy = (yw < term->y - y) ? yw : term->y - y;
+
+	position = x + term->x * y;
 
 	for (j = starty; j < endy; j++) {
-		register int offset = offset_base + term->x * j;
-		register int position = startx + offset;
+		register int offset = position + term->x * j;
+		register int i;
 
 		/* No, we can't use memset() here :(. It's int, not char. */
 		/* TODO: Make screen two arrays actually. Enables various
 		 * optimalizations, consumes nearly same memory. --pasky */
-		for (; position < endx + offset; position++) {
-			screen->image[position].data = data;
-			screen->image[position].attr = attr;
+		for (i = startx + offset; i < endx + offset; i++) {
+			term->screen->image[i].data = data;
+			term->screen->image[i].attr = attr;
 		}
 	}
-	screen->dirty = 1;
+	term->screen->dirty = 1;
 }
 
 void
-draw_frame(struct terminal *t, int x, int y, int xw, int yw,
+draw_frame(struct terminal *term, int x, int y, int xw, int yw,
 	   unsigned char color, int w)
 {
 	static enum border_char p1[] = {
@@ -190,52 +200,54 @@ draw_frame(struct terminal *t, int x, int y, int xw, int yw,
 	int ywt = yw - 2;
 	int xwt = xw - 2;
 
-	set_border_char(t, x, y, p[0], color);
-	set_border_char(t, xt, y, p[1], color);
-	set_border_char(t, x, yt, p[2], color);
-	set_border_char(t, xt, yt, p[3], color);
+	set_border_char(term, x, y, p[0], color);
+	set_border_char(term, xt, y, p[1], color);
+	set_border_char(term, x, yt, p[2], color);
+	set_border_char(term, xt, yt, p[3], color);
 
-	fill_border_area(t, x, y1, 1, ywt, p[4], color);
-	fill_border_area(t, xt, y1, 1, ywt, p[4], color);
-	fill_border_area(t, x1, y, xwt, 1, p[5], color);
-	fill_border_area(t, x1, yt, xwt, 1, p[5], color);
+	fill_border_area(term, x, y1, 1, ywt, p[4], color);
+	fill_border_area(term, xt, y1, 1, ywt, p[4], color);
+	fill_border_area(term, x1, y, xwt, 1, p[5], color);
+	fill_border_area(term, x1, yt, xwt, 1, p[5], color);
 }
 
 void
 print_text(struct terminal *term, int x, int y, int l,
 	   unsigned char *text, unsigned char color)
 {
-	struct terminal_screen *screen = term->screen;
-	int end = (l <= term->x - x) ? l : term->x - x;
-	int position = x + term->x * y;
+	int position, end;
 
-	draw_assert(text && l >= 0);
-	draw_assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
+	assert(term  && term->screen && term->screen->image && text && l >= 0);
+	if_assert_failed return;
+	if (out_of_range(term, x, y)) return;
+
+	end = (l <= term->x - x) ? l : term->x - x;
+	position = x + term->x * y;
 
 	for (end += position; position < end && *text; text++, position++) {
-		screen->image[position].data = *text;
-		screen->image[position].attr = color;
+		term->screen->image[position].data = *text;
+		term->screen->image[position].attr = color;
 	}
-	screen->dirty = 1;
+	term->screen->dirty = 1;
 }
 
 
 void
 set_cursor(struct terminal *term, int x, int y, int blockable)
 {
-	struct terminal_screen *screen = term->screen;
-
-	draw_assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
+	assert(term  && term->screen);
+	if_assert_failed return;
+	if (out_of_range(term, x, y)) return;
 
 	if (blockable && get_opt_bool_tree(term->spec, "block_cursor")) {
 		x = term->x - 1;
 		y = term->y - 1;
 	}
 
-	if (screen->cx != x || screen->cy != y) {
-		screen->cx = x;
-		screen->cy = y;
-		screen->dirty = 1;
+	if (term->screen->cx != x || term->screen->cy != y) {
+		term->screen->cx = x;
+		term->screen->cy = y;
+		term->screen->dirty = 1;
 	}
 }
 

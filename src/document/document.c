@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.32 2003/11/19 18:15:49 zas Exp $ */
+/* $Id: document.c,v 1.33 2003/11/28 00:39:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,6 +132,11 @@ done_document(struct document *document)
 	if (document->search) mem_free(document->search);
 	if (document->slines1) mem_free(document->slines1);
 	if (document->slines2) mem_free(document->slines2);
+
+	/* Blast off global document option pointer if we are the `owner'
+	 * so we don't have a dangling pointer. */
+	if (global_doc_opts == &document->options)
+		global_doc_opts = NULL;
 
 	del_from_list(document);
 	mem_free(document);

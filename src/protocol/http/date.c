@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.19 2003/09/22 14:22:36 zas Exp $ */
+/* $Id: date.c,v 1.20 2003/09/23 14:19:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,7 +145,7 @@ my_timegm(struct tm *tm)
 	/* Okay, the next part of the code is somehow problematic. Now, we use
 	 * own code for calculating the number of seconds from 1.1.1970,
 	 * brought here by SC from w3m. I don't like it a lot, but it's 100%
-	 * portable, it's faster and it's shorter. */
+	 * portable, it's faster and it's shorter. --pasky */
 #if 0
 #ifdef HAVE_TIMEGM
 	t = timegm(tm);

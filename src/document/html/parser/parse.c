@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.69 2004/06/25 13:30:34 zas Exp $ */
+/* $Id: parse.c,v 1.70 2004/06/25 14:58:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -730,7 +730,7 @@ ng:;
 		}
 
 		prev_html = html;
-		html = process_element(name, namelen, endingtag, html, prev_html, eof, attr, f);
+		html = process_element(name, namelen, endingtag, end, prev_html, eof, attr, f);
 	}
 
 	if (noupdate) put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);

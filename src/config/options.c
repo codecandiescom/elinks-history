@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.86 2002/08/26 23:40:19 pasky Exp $ */
+/* $Id: options.c,v 1.87 2002/08/27 00:34:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -931,8 +931,8 @@ register_options()
 		"Terminal type; matters mostly only when drawing frames and\n"
 		"dialog box borders:\n"
 		"0 is dumb terminal type, ASCII art\n"
-		"1 is Linux, you get double frames and other goodies\n"
-		"2 is VT100, simple but portable\n"
+		"1 is VT100, simple but portable\n"
+		"2 is Linux, you get double frames and other goodies\n"
 		"3 is KOI-8");
 
 	add_opt_bool("terminal._template_",

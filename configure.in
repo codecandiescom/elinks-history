@@ -66,12 +66,13 @@ dnl ===================================================================
 
 AC_PROG_GCC_TRADITIONAL
 AC_FUNC_MEMCMP
-AC_TYPE_SIGNAL
 AC_FUNC_STRFTIME
-AC_FUNC_VPRINTF
-AC_HAVE_FUNCS(gettimeofday mkdir select alarm chmod)
-AC_HAVE_FUNCS(strcspn strerror strstr strtol strtoul alarm chmod)
-AC_HAVE_FUNCS(getpid setpgid getpgid setpgrp getpgrp)
+AC_CHECK_FUNCS(alarm chmod timegm herror cfmakeraw)
+
+dnl These aren't probably needed now, as they are commented in links.h.
+dnl I've no idea about their historical background, but I keep them here
+dnl just in the case they will help later. --pasky
+AC_CHECK_FUNCS(getpid setpgid getpgid setpgrp getpgrp)
 
 dnl ===================================================================
 dnl Checks for libraries.
@@ -100,10 +101,6 @@ if test "$cf_result" = no; then
 		test -z "`echo $LIBS | grep -- -lsocket`" && LIBS="$LIBS -lsocket"
 	fi
 fi
-
-AC_CHECK_FUNC(herror, AC_DEFINE(HAVE_HERROR))
-
-AC_CHECK_FUNC(cfmakeraw, AC_DEFINE(HAVE_CFMAKERAW))
 
 dnl ===================================================================
 dnl Checks for OS/2
@@ -183,14 +180,11 @@ AC_TRY_COMPILE([#include<sys/socket.h>
                [int x = sizeof(struct sockaddr_in6);],
                have_sa_in6=yes, have_sa_in6=no)
 AC_MSG_RESULT($have_sa_in6)
-test "$have_sa_in6" = yes && AC_DEFINE(HAVE_SA_IN6)
 
 AC_CHECK_FUNC(getaddrinfo, have_gai=yes, have_gai=no)
-test "$have_gai" = yes && AC_DEFINE(HAVE_GAI)
 if test "$have_gai" != yes; then
   AC_CHECK_LIB(inet6, getaddrinfo, have_gai=yes, have_gai=no)
   if test "$have_gai" = yes; then
-    AC_DEFINE(HAVE_GAI)
     LIBS="$LIBS -linet6"
   fi
 fi

@@ -1,71 +1,37 @@
 
 @BOTTOM@
-
-/* Define to 1 if NLS is requested.  */
-#undef ENABLE_NLS
-
-/* Define as 1 if you have catgets and don't want to use GNU gettext.  */
-#undef HAVE_CATGETS
-
-/* Define as 1 if you have gettext and don't want to use GNU gettext.  */
-#undef HAVE_GETTEXT
-
-/* Define if your locale.h file contains LC_MESSAGES.  */
-#undef HAVE_LC_MESSAGES
-
-/* Define to 1 if you have the stpcpy function.  */
-#undef HAVE_STPCPY
-
-/* */
+/* Define to 1 if we have typeof */
 #undef HAVE_TYPEOF
 
-/* */
+/* Define to 1 if we have long long */
 #undef HAVE_LONG_LONG
 
-/* */
-#undef HAVE_CHMOD
-
-/* */
-#undef HAVE_ALARM
-
-/* */
-#undef HAVE_CFMAKERAW
-
-/* */
-#undef HAVE_HERROR
-
-/* */
+/* Define to 1 if we have _beginthread() */
 #undef HAVE_BEGINTHREAD
 
-/* */
+/* Define to 1 if we have MouOpen() */
 #undef HAVE_MOUOPEN
 
-/* */
+/* Define to 1 if we have _read_kbd() */
 #undef HAVE_READ_KBD
 
-/* */
+/* Define to 1 if we have clone() */
 #undef HAVE_CLONE
 
-/* */
+/* Define to 1 if we should use pthreads */
 #undef HAVE_PTHREADS
 
-/* */
+/* Define to 1 if we should use Lua */
 #undef HAVE_LUA
 
-/* */
+/* Define to 1 if we should use SSL */
 #undef HAVE_SSL
 
-/* */
+/* Define to 1 if we have sockaddr_storage */
 #undef HAVE_SA_STORAGE
 
-/* */
-#undef HAVE_SA_IN6
-
-/* */
-#undef HAVE_GAI
-
-/* */
+/* Define to 1 if we should include IPv6 support */
 #undef IPV6
 
-/* */
+/* Define to 1 if we have XFree under OS/2 */
 #undef X2

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.11 2003/07/25 13:23:51 pasky Exp $ */
+/* $Id: screen.c,v 1.12 2003/07/25 14:01:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@
 
 
 void
-alloc_term_screen(struct terminal *term, int x, int y)
+alloc_screen(struct terminal *term, int x, int y)
 {
 	unsigned *s;
 	unsigned *t;

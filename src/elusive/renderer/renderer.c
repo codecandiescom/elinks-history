@@ -1,5 +1,5 @@
 /* Renderer frontend */
-/* $Id: renderer.c,v 1.3 2002/12/31 01:48:40 pasky Exp $ */
+/* $Id: renderer.c,v 1.4 2003/01/01 14:32:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,8 @@ struct renderer_backend *renderer_backends[] = {
 struct renderer_state *
 elusive_renderer_init(enum renderer_backend_type renderer,
 			enum layouter_backend_type layouter,
-			enum parser_backend_type parser)
+			enum parser_backend_type parser,
+			void *input)
 {
 	struct renderer_state *state;
 
@@ -36,6 +37,7 @@ elusive_renderer_init(enum renderer_backend_type renderer,
 	state->renderer = renderer;
 	state->layouter = layouter;
 	state->parser = parser;
+	state->input = input;
 
 	if (renderer_backends[state->renderer] &&
 	    renderer_backends[state->renderer]->init)

@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.1 2002/12/31 01:37:00 pasky Exp $ */
+/* $Id: renderer.h,v 1.2 2003/01/01 14:32:07 pasky Exp $ */
 
 #ifndef EL__USIVE_RENDERER_RENDERER_H
 #define EL__USIVE_RENDERER_RENDERER_H
@@ -25,9 +25,15 @@ struct renderer_state {
 	enum renderer_backend_type renderer;
 	void *data;
 
+	/* This pointer should contain data from the viewer (typically
+	 * specifications of the terminal). The data format is specified in
+	 * interface (header file) of each renderer. */
+	void *input;
+
 	/* This pointer should contain data for the viewer (typically set of
 	 * objects in form ready for direct displaying, array of forms and
-	 * links, and so on). */
+	 * links, and so on). The data format is specified in interface
+	 * (header file) of each renderer. */
 	void *output;
 
 	enum parser_backend_type parser;
@@ -48,7 +54,8 @@ struct renderer_backend {
 struct renderer_state *
 elusive_renderer_init(enum renderer_backend_type renderer,
 			enum layouter_backend_type layouter,
-			enum parser_backend_type parser);
+			enum parser_backend_type parser,
+			void *input);
 
 /* Render the supplied snippet of source, in the context of state (thus also
  * previously parser source snippets). The str will usually end up pointing at

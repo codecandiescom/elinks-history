@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.477 2004/06/16 09:15:58 miciah Exp $ */
+/* $Id: view.c,v 1.478 2004/06/16 10:18:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -673,7 +673,7 @@ toggle_wrap_text(struct session *ses, struct document_view *doc_view, int a)
 	draw_formatted(ses, 1);
 }
 
-static inline void
+static void
 rep_ev(struct session *ses, struct document_view *doc_view,
        void (*f)(struct session *, struct document_view *))
 {
@@ -691,7 +691,7 @@ rep_ev(struct session *ses, struct document_view *doc_view,
 
 }
 
-int
+static int
 try_jump_to_link_number(struct session *ses, struct document_view *doc_view)
 {
 	int link_number = ses->kbdprefix.repeat_count - 1;

@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.89 2004/09/14 23:09:28 pasky Exp $ */
+/* $Id: cache.h,v 1.90 2004/10/14 18:32:32 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -64,11 +64,6 @@ struct cache_entry {
 	enum cache_mode cache_mode;	/* Reload condition */
 };
 
-/* Cache entries lists */
-
-#define get_cache_uri(cache_entry) \
-	((cache_entry)->valid ? (cache_entry)->uri : NULL)
-
 struct fragment {
 	LIST_HEAD(struct fragment);
 
@@ -78,7 +73,8 @@ struct fragment {
 	unsigned char data[1]; /* Must be last */
 };
 
-long cache_info(int);
+#define get_cache_uri(cache_entry) \
+	((cache_entry)->valid ? (cache_entry)->uri : NULL)
 
 /* Searches the cache for an entry matching the URI. Returns NULL if no one
  * matches. */
@@ -115,5 +111,9 @@ redirect_cache(struct cache_entry *cached, unsigned char *location,
  * entries which are bigger than the cache size limit set by user. For @zero
  * being one, remove all unused cache entries. */
 void garbage_collection(int whole);
+
+/* Used by the resource and memory info dialogs for getting information about
+ * the cache. */
+long cache_info(int);
 
 #endif

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.56 2002/12/02 14:55:26 zas Exp $ */
+/* $Id: sched.c,v 1.57 2002/12/03 19:31:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -273,10 +273,10 @@ is_host_on_keepalive_list(struct connection *c)
 	struct k_conn *h;
 
 	if (!ph) return NULL;
-	
+
 	po = get_port(c->url);
 	if (po == -1) return NULL;
-	
+
 	ho = get_host_and_pass(c->url, 1);
 	if (!ho) return NULL;
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.37 2002/11/29 19:32:19 zas Exp $ */
+/* $Id: options.c,v 1.38 2002/12/03 19:31:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -683,7 +683,7 @@ net_programs(struct terminal *term, void *xxx, void *yyy)
 
 	system_str = get_system_str(term->environment & ENV_XWIN);
 	if (!system_str) return;
-	
+
 	d = mem_calloc(1, sizeof(struct dialog) + 6 * sizeof(struct widget));
 	if (!d) return;
 

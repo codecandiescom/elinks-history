@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.52 2002/12/01 19:34:32 zas Exp $ */
+/* $Id: download.c,v 1.53 2002/12/03 19:31:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -607,7 +607,7 @@ create_download_file(struct terminal *term, unsigned char *fi, int safe, int res
 		/* The tilde will be expanded by get_unique_name() */
 		file = get_unique_name(file);
 	}
-	
+
 	if (!file) return -1;
 
 	h = open(file, O_CREAT | O_WRONLY | (sf && !resume ? O_EXCL : 0),
@@ -663,7 +663,7 @@ get_temp_name(unsigned char *url)
 	unsigned char *nm = tempnam(NULL, "links");
 
 	if (!nm) return NULL;
-	
+
 	name = init_str();
 	if (!name) {
 		mem_free(nm);

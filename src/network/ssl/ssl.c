@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.19 2002/12/02 16:41:23 zas Exp $ */
+/* $Id: ssl.c,v 1.20 2002/12/03 19:31:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,9 +114,9 @@ get_ssl(void)
 	 * structure itself.. --pasky */
 	int ret;
 	GNUTLS_STATE *state = mem_alloc(sizeof(GNUTLS_STATE));
-	
+
 	if (!state) return NULL;
-	
+
 	ret = gnutls_init(state, GNUTLS_CLIENT);
 
 	if (ret < 0) {

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.49 2002/12/03 00:14:52 pasky Exp $ */
+/* $Id: parser.c,v 1.50 2002/12/03 19:31:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1744,9 +1744,9 @@ void
 free_menu(struct menu_item *m) /* Grrr. Recursion */
 {
 	struct menu_item *mm;
-	
-	if (!m) return; /* XXX: Who knows... need to be verified */ 
-	
+
+	if (!m) return; /* XXX: Who knows... need to be verified */
+
 	for (mm = m; mm->text; mm++) {
 		if (mm->text) mem_free(mm->text);
 		if (mm->func == MENU_FUNC do_select_submenu) free_menu(mm->data);
@@ -2391,7 +2391,7 @@ html_link(unsigned char *a)
 		mem_free(url);
 		return;
 	}
-	
+
 	/* Ignore few annoying links.. */
 	if (strcasecmp(name, "STYLESHEET") &&
 	    strcasecmp(name, "made") &&
@@ -2795,7 +2795,7 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	struct conv_table *ct;
 
 	if (!hd) return -1;
-	
+
 	if (head) add_to_str(&hd, &hdl, head);
 	scan_http_equiv(pos, eof, &hd, &hdl, NULL);
 	ct = get_convert_table(hd, to, def, NULL, NULL, hdef);
@@ -2931,7 +2931,7 @@ look_for_tag:
 		if (label) mem_free(label);
 		goto look_for_link;
 	}
-	
+
 	ld = mem_alloc(sizeof(struct link_def));
 	if (!ld) {
 		if (label) mem_free(label);

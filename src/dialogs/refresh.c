@@ -1,5 +1,5 @@
 /* Periodic refresh of dialogs */
-/* $Id: refresh.c,v 1.5 2002/07/04 21:19:45 pasky Exp $ */
+/* $Id: refresh.c,v 1.6 2002/12/03 19:31:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@
 void refresh(struct refresh *r)
 {
 	struct refresh rr;
-	
+
 	r->timer = -1;
 	memcpy(&rr, r, sizeof(struct refresh));
 	delete_window(r->win);

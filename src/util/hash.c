@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.11 2002/11/29 22:53:20 pasky Exp $ */
+/* $Id: hash.c,v 1.12 2002/12/03 19:31:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ free_hash(struct hash *hash)
 
 	for (i = 0; i < hash_size(hash->width); i++)
 		free_list(hash->hash[i]);
-	
+
 	mem_free(hash->hash);
 	mem_free(hash);
 }
@@ -76,7 +76,7 @@ add_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen,
 	struct hash_item *item = mem_alloc(sizeof(struct hash_item));
 
 	if (!item) return NULL;
-	
+
 	hashval = hash->func(key, keylen, magic) & hash_mask(hash->width);
 
 	item->key = key;

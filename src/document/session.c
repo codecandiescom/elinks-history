@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.71 2002/12/01 19:53:10 zas Exp $ */
+/* $Id: session.c,v 1.72 2002/12/03 19:31:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1118,7 +1118,7 @@ encode_url(unsigned char *url)
 	int l = 0;
 
 	if (!u) return NULL;
-	
+
 	for (; *url; url++) {
 		if (is_safe_in_shell(*url))
 			add_chr_to_str(&u, &l, *url);
@@ -1143,7 +1143,7 @@ decode_url(unsigned char *url)
 	size_t url_len = strlen(url);
 
 	if (!u) return NULL;
-	
+
 	for (; *url; url++, url_len--) {
 		if (url_len < 4 || url[0] != '=' || unhx(url[1]) == -1
 		    || unhx(url[2]) == -1 || url[3] != '=')
@@ -1628,7 +1628,7 @@ get_current_link_name(struct session *ses, unsigned char *str, size_t str_size)
 	l = get_current_link(ses);
 
 	if (l) return safe_strncpy(str, l->name, str_size);
-		
+
 	return NULL;
 }
 
@@ -1640,12 +1640,12 @@ get_current_link(struct session *ses)
 
 	/* What the hell is an 'fd'? */
 	fd = (struct f_data_c *)current_frame(ses);
-	
+
 	if (fd && fd->vs->current_link != -1) {
 		l = &fd->f_data->links[fd->vs->current_link];
 		/* Only return a link */
 		if (l->type == L_LINK) return l;
 	}
-	
+
 	return NULL;
 }

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.37 2002/11/29 19:23:19 zas Exp $ */
+/* $Id: cookies.c,v 1.38 2002/12/03 19:31:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,7 +181,7 @@ set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 
 	server = get_host_name(url);
 	if (!server) {
-free_cookie:		
+free_cookie:
 		mem_free(cookie);
 		return 0;
 	}
@@ -191,7 +191,7 @@ free_server:
 		mem_free(server);
 		goto free_cookie;
 	}
-	
+
 	/* Fill main fields */
 
 	cookie->name = memacpy(str, cstr.nam_end - str);
@@ -205,13 +205,13 @@ free_document:
 free_cookie_name:
 		mem_free(cookie->name);
 		goto free_document;
-	}		
+	}
 	cookie->server = stracpy(server);
 	if (!cookie->server) {
 		mem_free(cookie->value);
 		goto free_cookie_name;
 	}
-	
+
 	/* Get expiration date */
 
 	date = parse_http_header_param(str, "expires");
@@ -492,7 +492,7 @@ send_cookies(unsigned char **s, int *l, unsigned char *url)
 	struct cookie *c, *d;
 	unsigned char *server = get_host_name(url);
 	unsigned char *data;
-	
+
 	if (!server) return;
 	data = get_url_data(url);
 	if (!data) {

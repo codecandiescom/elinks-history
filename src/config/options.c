@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.128 2002/12/01 17:36:24 pasky Exp $ */
+/* $Id: options.c,v 1.129 2002/12/03 19:31:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,7 @@ get_opt_rec(struct list_head *tree, unsigned char *name_)
 	unsigned char *sep;
 
 	if (!aname) return NULL;
-	
+
 	/* We iteratively call get_opt_rec() each for path_elemets-1, getting
 	 * appropriate tree for it and then resolving [path_elemets]. */
 	if ((sep = strrchr(name, '.'))) {
@@ -373,7 +373,7 @@ smart_config_string(unsigned char **str, int *len, int print_comment,
 		 * except 1, but sometimes we want to skip the option totally.
 		 */
 		fn(str, len, option, path, depth, option->type == OPT_TREE ? print_comment : do_print_comment, 0);
-		
+
 		fn(str, len, option, path, depth, do_print_comment, 1);
 
 		/* And the option itself */
@@ -749,7 +749,7 @@ register_options()
 		"ignore_cache_control", 0, 1,
 		"Ignore Cache-Control and Pragma server headers.\n"
 		"When set, the document is cached even with 'Cache-Control: no-cache'.");
-	
+
 	add_opt_tree("document.cache",
 		"format", 0,
 		"Format cache options.");

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.72 2002/12/02 15:50:17 zas Exp $ */
+/* $Id: http.c,v 1.73 2002/12/03 19:31:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,7 +123,7 @@ add_url_to_http_str(unsigned char **hdr, int *l, unsigned char *url_data,
 	}
 
 	if (!eurl) return;
-	
+
 	p = p1 = eurl;
 	while (*(p += strcspn(p, " \t\r\n"))) {
 		*p = 0;
@@ -400,7 +400,7 @@ http_send_header(struct connection *c)
 		}
 		ustr = subst_user_agent(optstr, VERSION_STRING, system_name,
 					ts);
-                
+
 		if (ustr) {
 			add_to_str(&hdr, &l, ustr);
 			mem_free(ustr);
@@ -1119,7 +1119,7 @@ again:
 
 				errno = 0;
 			       	f = strtol(d + 6, NULL, 10);
-				
+
 				if (!errno && f >= 0) c->from = f;
 			}
 		}
@@ -1169,7 +1169,7 @@ again:
 	if (d) {
 		unsigned char *ep;
 		int l;
-	       
+
 		errno = 0;
 		l = strtol(d, (char **)&ep, 10);
 

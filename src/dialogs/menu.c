@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.53 2002/11/30 21:59:10 pasky Exp $ */
+/* $Id: menu.c,v 1.54 2002/12/03 19:31:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -309,7 +309,7 @@ downloads_menu(struct terminal *term, void *ddd, struct session *ses)
 		if (url) {
 			pc = strchr(url, POST_CHAR);
 			if (pc) *pc = '\0';
-			
+
 			add_to_menu(&mi, url, "", "", MENU_FUNC display_download,
 			    	    d, 0);
 			n++;
@@ -404,7 +404,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	int o;
 	struct menu_item *file_menu, *e, *f;
 	int anonymous = get_opt_int_tree(cmdline_options, "anonymous");
-	
+
 	file_menu = mem_alloc(sizeof(file_menu11) + sizeof(file_menu12)
 			      + sizeof(file_menu21) + sizeof(file_menu22)
 			      + sizeof(file_menu3)

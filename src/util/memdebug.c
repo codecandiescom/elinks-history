@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.14 2002/11/29 21:01:09 pasky Exp $ */
+/* $Id: memdebug.c,v 1.15 2002/12/03 19:31:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -282,7 +282,7 @@ debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 	size_t size = eltcount * eltsize;
 
 	if (!size) return NULL;
-		
+
 	/* FIXME: Unfortunately, we can't pass eltsize through to calloc()
 	 * itself, because we add bloat like alloc_header to it, which is
 	 * difficult to be measured in eltsize. Maybe we should round it up to

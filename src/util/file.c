@@ -1,5 +1,5 @@
-/* File utilities */ 
-/* $Id: file.c,v 1.2 2002/12/02 16:44:03 zas Exp $ */
+/* File utilities */
+/* $Id: file.c,v 1.3 2002/12/03 19:31:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,7 @@
 #include <sys/stat.h> /* OS/2 needs this after sys/types.h */
 #endif
 #ifdef HAVE_UNISTD_H
-#include <unistd.h> 
+#include <unistd.h>
 #endif
 
 #include "links.h"
@@ -49,7 +49,7 @@ expand_tilde(unsigned char *fi)
 			if (file) {
 				add_to_str(&file, &fl, home);
 				add_to_str(&file, &fl, fi + 1);
-			} 
+			}
 		}
 	}
 

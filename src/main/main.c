@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.61 2002/11/13 21:11:50 pasky Exp $ */
+/* $Id: main.c,v 1.62 2002/12/03 19:31:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,7 +87,7 @@ sig_intr(struct terminal *t)
 
 	if (!t)
 		terminate = 1;
-	else 
+	else
 		exit_prog(t, NULL, NULL);
 }
 
@@ -259,9 +259,9 @@ init()
 	int len;
 	unsigned char *u;
 
-#ifdef HAVE_LOCALE_H	
+#ifdef HAVE_LOCALE_H
 	setlocale(LC_ALL, "");
-#endif	
+#endif
 	init_options();
 	init_trans();
 	set_sigcld();

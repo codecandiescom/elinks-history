@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.16 2002/11/30 22:42:35 pasky Exp $ */
+/* $Id: inpfield.c,v 1.17 2002/12/03 19:31:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,10 +31,10 @@ check_number(struct dialog_data *dlg, struct widget_data *di)
 {
 	unsigned char *end;
 	long l;
-       
+
 	errno = 0;
 	l = strtol(di->cdata, (char **)&end, 10);
-	
+
 	if (errno || !*di->cdata || *end) {
 		msg_box(dlg->win->term, NULL,
 			TEXT(T_BAD_NUMBER), AL_CENTER,

@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.12 2002/12/02 14:43:11 zas Exp $ */
+/* $Id: home.c,v 1.13 2002/12/03 19:31:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,8 +34,8 @@ get_home(int *new)
 	unsigned char *home = envhome ? stracpy(envhome) : NULL;
 	unsigned char *envconfdir = getenv("ELINKS_CONFDIR");
 	unsigned char *config_dir = envconfdir ? stracpy(envconfdir) : NULL;
-	
-	
+
+
 	/* TODO: We want to use commandline option instead of environment
 	 * variable, especially one with so common name. */
 

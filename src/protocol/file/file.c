@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.31 2002/12/02 16:31:51 zas Exp $ */
+/* $Id: file.c,v 1.32 2002/12/03 19:31:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -482,7 +482,7 @@ dir:
 			dir = nd;
 			dir[dirl].f = stracpy(de->d_name);
 			if (!dir[dirl].f) continue;
-				
+
 			p = &dir[dirl++].s;
 			*p = init_str();
 			if (!*p) continue;
@@ -563,7 +563,7 @@ dir:
 				struct stat st;
 				unsigned char *n = init_str();
 				int nl = 0;
-				
+
 				if (n) {
 					add_to_str(&n, &nl, name);
 					add_htmlesc_str(&n, &nl,

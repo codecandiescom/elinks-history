@@ -1,5 +1,5 @@
 /* Locations handling */
-/* $Id: location.c,v 1.10 2002/12/01 19:44:00 zas Exp $ */
+/* $Id: location.c,v 1.11 2002/12/03 19:31:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@ copy_location(struct location *dst, struct location *src)
 			if (!nf->name) {
 				mem_free(nf);
 				return;
-			}				
+			}
 			nf->redirect_cnt = 0;
 			copy_vs(&nf->vs, &f->vs);
 			add_to_list(dst->frames, nf);

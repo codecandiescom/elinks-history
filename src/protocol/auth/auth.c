@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.8 2002/11/25 13:49:04 zas Exp $ */
+/* $Id: auth.c,v 1.9 2002/12/03 19:31:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,9 +30,9 @@ get_auth_url(unsigned char *url)
         unsigned char *host = get_host_name(url);
         unsigned char *port = get_port_str(url);
         unsigned char *newurl = NULL;
-	
+
 	if (!protocol || !*protocol || !host || !*host) goto end;
-	
+
         newurl = straconcat(protocol, "://", host, NULL);
         if (!newurl) goto end;
 

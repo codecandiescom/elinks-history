@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.21 2002/12/01 19:21:18 zas Exp $ */
+/* $Id: tables.c,v 1.22 2002/12/03 19:31:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1411,7 +1411,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 				cell->ypos = yp;
 				cell->xw = xw;
 				cell->yw = yw;
-				
+
 				if (p) {
 					for (yt = 0; yt < p->y; yt++) {
 						expand_lines(t->p, yp + yt);

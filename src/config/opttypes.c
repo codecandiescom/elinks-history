@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.27 2002/11/29 19:16:16 zas Exp $ */
+/* $Id: opttypes.c,v 1.28 2002/12/03 19:31:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,7 +202,7 @@ num_rd(struct option *opt, unsigned char **file)
 	long *value = mem_alloc(sizeof(long));
 
 	if (!value) return NULL;
-	
+
 	/* We don't want to move file if (commandline), but strtolx() second
 	 * parameter must not be NULL. */
 	*value = strtolx(*file, &end);
@@ -266,7 +266,7 @@ str_rd(struct option *opt, unsigned char **file)
 	int str2l = 0;
 
 	if (!str2) return NULL;
-	
+
 	/* We're getting used in some parser functions in conf.c as well, and
 	 * that's w/ opt == NULL; so don't rely on opt to point anywhere. */
 	if (!commandline && *str != '"') { mem_free(str2); return NULL; }
@@ -318,9 +318,9 @@ str_wr(struct option *o, unsigned char **s, int *l)
 	if (strlen(o->ptr) >= o->max) {
 		unsigned char *s1 = init_str();
 		int l1 = 0;
-		
+
 		if (!s1) return;
-		
+
 		add_bytes_to_str(&s1, &l1, o->ptr, o->max - 1);
 		add_quoted_to_str(s, l, s1);
 		mem_free(s1);
@@ -399,7 +399,7 @@ color_wr(struct option *opt, unsigned char **str, int *len)
 {
 	struct rgb *color = (struct rgb *) opt->ptr;
 	unsigned char *strcolor = get_color_name(color);
-	
+
 	if (!strcolor) {
 		strcolor = (unsigned char *) mem_alloc(8 * sizeof(unsigned char));
 		if (!strcolor) return;
@@ -408,7 +408,7 @@ color_wr(struct option *opt, unsigned char **str, int *len)
 
 	add_quoted_to_str(str, len, strcolor);
 
-	mem_free(strcolor);	
+	mem_free(strcolor);
 }
 
 void *

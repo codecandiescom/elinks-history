@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.34 2002/12/02 15:41:11 zas Exp $ */
+/* $Id: os_dep.c,v 1.35 2002/12/03 19:31:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,7 +64,7 @@ set_nonblocking_fd(int fd)
 #else
 	return fcntl(fd, F_SETFL, flags | O_NDELAY);
 #endif
-	
+
 #elif defined(FIONBIO)
 	int flag = 1;
 
@@ -88,7 +88,7 @@ set_blocking_fd(int fd)
 #else
 	return fcntl(fd, F_SETFL, flags & ~O_NDELAY);
 #endif
-	
+
 #elif defined(FIONBIO)
 	int flag = 0;
 
@@ -1485,8 +1485,8 @@ start_thread(void (*fn)(void *, int), void *ptr, int l)
 		fn(ptr, p[1]);
 		write(p[1], "x", 1);
 		close(p[1]);
-		/* We use _exit() here instead of exit(), see 
-		 * http://www.erlenstar.demon.co.uk/unix/faq_2.html#SEC6 for 
+		/* We use _exit() here instead of exit(), see
+		 * http://www.erlenstar.demon.co.uk/unix/faq_2.html#SEC6 for
 		 * reasons. Fixed by Sven Neumann <sven@convergence.de>. */
 		_exit(0);
 	}
@@ -1686,7 +1686,7 @@ unhandle_mouse(void *h)
 	struct gpm_mouse_spec *gms = h;
 
 	if (!gms) return;
-	
+
 	set_handlers(gms->h, NULL, NULL, NULL, NULL);
 	Gpm_Close();
 	mem_free(gms);

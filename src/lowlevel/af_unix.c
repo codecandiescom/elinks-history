@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.20 2002/12/02 14:41:11 pasky Exp $ */
+/* $Id: af_unix.c,v 1.21 2002/12/03 19:31:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,7 +157,7 @@ int bind_to_af_unix()
 	int reuse_addr = 1;
 	int attempts = 0;
 	int af;
-	
+
 	af = get_address();
 	if (af == -1) return -1;
 

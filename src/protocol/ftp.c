@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.73 2002/11/25 14:24:49 zas Exp $ */
+/* $Id: ftp.c,v 1.74 2002/12/03 19:31:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,21 +104,21 @@ static int parse_psv_resp(unsigned char *data, int *n, int max_value)
 {
 	unsigned char *p = data;
 	int i = 5;
-	
+
 	memset(n, 0, 6 * sizeof(int));
 
 	if (*p < ' ') return 0;
 
 	/* Find the end. */
 	while (*p >= ' ') p++;
-		
+
 	/* Ignore non-numeric ending chars. */
        	while (p != data && (*p < '0' || *p > '9')) p--;
 	if (p == data) return 0;
-		
+
 	while (i >= 0) {
 		int x = 1;
-		
+
 		/* Parse one number. */
 		while (p != data && *p >= '0' && *p <= '9') {
 			n[i] += (*p - '0') * x;
@@ -158,10 +158,10 @@ again:
 			if (sa && response == 227) { /* PASV response parsing. */
 				struct sockaddr_in *s = (struct sockaddr_in *) sa;
 				int n[6];
-				
+
 				if (parse_psv_resp(num_end, (int *) &n, 255) != 6)
 					return -1;
-				
+
 				memset(s, 0, sizeof(struct sockaddr_in));
 				s->sin_family = AF_INET;
 				s->sin_addr.s_addr = htonl((n[0] << 24) + (n[1] << 16) + (n[2] << 8) + n[3]);
@@ -174,7 +174,7 @@ again:
 				struct sockaddr_in6 *s = (struct sockaddr_in6 *) sa;
 				int sal = sizeof(struct sockaddr_in6);
 				int n[6];
-				
+
 				if (parse_psv_resp(num_end, (int *) &n, 65535) != 1) {
 					return -1;
 				}
@@ -731,7 +731,7 @@ next:
 
 	if (strncasecmp(&data[pos], "byte", 4))
 		return -1;
-	
+
 	errno = 0;
 	file_len = strtol(&data[pos_file_len], NULL, 10);
 	if (errno) return -1;
@@ -845,7 +845,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 								"please. And "
 								"expect segfault"
 								" right now.");
-						
+
 						/* FIXME: there's a problem here
 						 * sometimes down->handle == 0
 						 */
@@ -856,7 +856,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 								conn, -errno);
 							return;
 						}
-						
+
 						down->last_pos = conn->from;
 					}
 					conn->prg.start = conn->from;
@@ -1009,7 +1009,7 @@ display_dir_entry(struct cache_entry *c_e, int *pos, int *tries,
 	else
 		add_to_str(&str, &strl, "-        ");
 	add_to_str(&str, &strl, " ");
-	
+
 
 	if (ftp_info->mtime) {
 		if (ftp_info->mtime == -1)
@@ -1113,7 +1113,7 @@ got_something_from_data_connection(struct connection *conn)
 	struct ftp_connection_info *c_i = conn->info;
 	int len;
 	unsigned char dircolor[8];
-	int colorize_dir = 0; 
+	int colorize_dir = 0;
 
 	/* XXX: This probably belongs rather to connect.c ? */
 
@@ -1173,7 +1173,7 @@ out_of_mem:
 		unsigned char *postchar;
 		unsigned char *str;
 		int strl = 0;
-		
+
 		url_data = stracpy(get_url_data(conn->url));
 		if (!url_data) goto out_of_mem;
 
@@ -1182,21 +1182,21 @@ out_of_mem:
 			mem_free(url_data);
 			goto out_of_mem;
 		}
-		
+
 		postchar = strchr(url_data, POST_CHAR);
 		if (postchar) *postchar = 0;
 
 		if (*url_data)
-			add_htmlesc_str(&str, &strl, url_data, strlen(url_data));		
-		
+			add_htmlesc_str(&str, &strl, url_data, strlen(url_data));
+
 		mem_free(url_data);
-		
+
 		A(ftp_dirlist_head);
 		A(str);
 		A(ftp_dirlist_head2);
 		A(str);
 		A(ftp_dirlist_head3);
-		
+
 		if (*str) {
 			struct ftpparse ftp_info;
 

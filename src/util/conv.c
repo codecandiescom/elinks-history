@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.12 2002/12/02 23:40:11 zas Exp $ */
+/* $Id: conv.c,v 1.13 2002/12/03 19:31:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,7 +88,7 @@ strtolx(unsigned char *str, unsigned char **end)
 {
 	long num;
 	unsigned char postfix;
-	
+
 	errno = 0;
 	num = strtol(str, (char **) end, 10);
 	if (errno) return 0;

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.19 2002/12/02 14:43:01 pasky Exp $ */
+/* $Id: charsets.c,v 1.20 2002/12/03 19:31:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,7 +90,7 @@ new_translation_table(struct conv_table *p)
 
 	if (!no_str) no_str = stracpy("*");
 	if (!no_str) return;
-	
+
 	for (i = 0; i < 256; i++)
 		if (p[i].t)
 			free_translation_table(p[i].u.tbl);

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.55 2002/11/30 02:16:57 pasky Exp $ */
+/* $Id: conf.c,v 1.56 2002/12/03 19:31:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,23 +33,23 @@
 
 
 /* Config file has only very simple grammar:
- * 
+ *
  * /set *option *= *value/
  * /bind *keymap *keystroke *= *action/
  * /include *file/
  * /#.*$/
- * 
+ *
  * Where option consists from any number of categories separated by dots and
  * name of the option itself. Both category and option name consists from
  * [a-zA-Z0-9_-*] - using uppercase letters is not recommended, though. '*' is
  * reserved and is used only as escape character in place of '.' originally in
  * option name.
- * 
+ *
  * Value can consist from:
  * - number (it will be converted to int/long)
  * - enum (like on, off; true, fake, last_url; etc ;) - in planning state yet
  * - string - "blah blah" (keymap, keystroke and action and file looks like that too)
- * 
+ *
  * "set" command is parsed first, and then type-specific function is called,
  * with option as one parameter and value as a second. Usually it just assigns
  * value to an option, but sometimes you may want to first create the option
@@ -202,7 +202,7 @@ parse_bind(struct list_head *opt_tree, unsigned char **file, int *line,
 		mem_free(keymap);
 		return ERROR_VALUE;
 	}
-	
+
 	if (str) {
 		bind_act(str, len, keymap, keystroke);
 	} else {
@@ -225,7 +225,7 @@ parse_include(struct list_head *opt_tree, unsigned char **file, int *line,
 	int dumblen = 0;
 
 	if (!dumbstr) return ERROR_NOMEM;
-	
+
 	*file = skip_white(*file, line);
 	if (!*file) return ERROR_PARSE;
 
@@ -517,7 +517,7 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	int savestyle = get_opt_int("config_saving_style");
 
 	if (!str) return NULL;
-	
+
 	/* Scaring. */
 	if (savestyle == 2 || (savestyle < 2
 				&& (load_config_file(prefix, name, options,
@@ -596,10 +596,10 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 	cfg_str = create_config_string(prefix, name, options);
 
 	if (!cfg_str) return -1;
-	
+
 	config_file = straconcat(prefix, "/", name, NULL);
 	if (!config_file) goto free_cfg_str;
-	
+
 	ssi = secure_open(config_file, 0177);
 	if (!ssi) goto free_config_file;
 
@@ -617,7 +617,7 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 
 free_config_file:
 	mem_free(config_file);
-	
+
 free_cfg_str:
 	mem_free(cfg_str);
 

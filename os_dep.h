@@ -114,3 +114,6 @@ int be_getsockopt(int, int, int, void *, int *);
 #define THREAD_SAFE_LOOKUP
 #endif
 
+#if defined(HAVE_SA_STORAGE) && defined(HAVE_GAI)
+#define	IPV6
+#endif

@@ -42,7 +42,7 @@ int do_real_lookup(unsigned char *name, struct sockaddr **addrs, int *addrno)
 	for (i = 0; hostent->h_addr_list[i] != NULL; i++);
 
 	*addrno = i;
-	*addrs = mem_alloc(i * sizeof(struct sockaddr));
+	*addrs = mem_alloc(i * sizeof(struct sockaddr_storage));
 
 	for (i = 0; hostent->h_addr_list[i] != NULL; i++) {
 		struct sockaddr_in *addr = (struct sockaddr_in *) *addrs;
@@ -76,10 +76,10 @@ void lookup_fn(void *data, int h)
 		do {
 			int w;
 
-			w = write(h, &addrs[i] + done, sizeof(struct sockaddr) - done);
+			w = write(h, &addrs[i] + done, sizeof(struct sockaddr_storage) - done);
 			if (w < 0) return;
 			done += w;
-		} while (done < sizeof(struct sockaddr));
+		} while (done < sizeof(struct sockaddr_storage));
 	}
 }
 
@@ -103,7 +103,7 @@ void end_real_lookup(void *data)
 	if (read(query->h, query->addrno, sizeof(int)) != sizeof(int))
 		goto done;
 
-	*query->addr = mem_alloc((*query->addrno + 1) * sizeof(struct sockaddr));
+	*query->addr = mem_alloc((*query->addrno + 1) * sizeof(struct sockaddr_storage));
 
 	for (i = 0; i < *query->addrno; i++) {
 		int done = 0;
@@ -111,10 +111,10 @@ void end_real_lookup(void *data)
 		do {
 			int r;
 
-			r = read(query->h, &(*query->addr)[i] + done, sizeof(struct sockaddr) - done);
+			r = read(query->h, &(*query->addr)[i] + done, sizeof(struct sockaddr_storage) - done);
 			if (r < 0) goto done;
 			done += r;
-		} while (done < sizeof(struct sockaddr));
+		} while (done < sizeof(struct sockaddr_storage));
 	}
 
 	res = 0;
@@ -224,10 +224,10 @@ void end_dns_lookup(struct dnsquery *q, int res)
 		if (res < 0) {
 			/* q->addr(no) is pointer to something already allocated */
 
-			*q->addr = mem_alloc(sizeof(struct sockaddr) * dnsentry->addrno);
+			*q->addr = mem_alloc(sizeof(struct sockaddr_storage) * dnsentry->addrno);
 			if (!*q->addr) goto done;
 			
-			memcpy(*q->addr, dnsentry->addr, sizeof(struct sockaddr) * dnsentry->addrno);
+			memcpy(*q->addr, dnsentry->addr, sizeof(struct sockaddr_storage) * dnsentry->addrno);
 			
 			*q->addrno = dnsentry->addrno;
 			
@@ -247,10 +247,10 @@ void end_dns_lookup(struct dnsquery *q, int res)
 	if (dnsentry) {
 		strcpy(dnsentry->name, q->name);
 
-		dnsentry->addr = mem_alloc(sizeof(struct sockaddr) * *q->addrno);
+		dnsentry->addr = mem_alloc(sizeof(struct sockaddr_storage) * *q->addrno);
 		if (!dnsentry->addr) goto done;
 		
-		memcpy(dnsentry->addr, *q->addr, sizeof(struct sockaddr) * *q->addrno);
+		memcpy(dnsentry->addr, *q->addr, sizeof(struct sockaddr_storage) * *q->addrno);
 		
 		dnsentry->addrno = *q->addrno;
 		
@@ -304,8 +304,8 @@ int find_host(unsigned char *name, struct sockaddr **addr, int *addrno,
 		if (dnsentry->get_time + DNS_TIMEOUT < get_time())
 			goto timeout;
 		
-		*addr = mem_alloc(sizeof(struct sockaddr) * dnsentry->addrno);
-		memcpy(*addr, dnsentry->addr, sizeof(struct sockaddr) * dnsentry->addrno);
+		*addr = mem_alloc(sizeof(struct sockaddr_storage) * dnsentry->addrno);
+		memcpy(*addr, dnsentry->addr, sizeof(struct sockaddr_storage) * dnsentry->addrno);
 		*addrno = dnsentry->addrno;
 		fn(data, 0);
 		return 0;

@@ -559,6 +559,10 @@ void set_sigcld();
 
 /* dns.c */
 
+#ifndef HAVE_SA_STORAGE
+#define sockaddr_storage sockaddr
+#endif
+
 int do_real_lookup(unsigned char *, struct sockaddr **, int *);
 void shrink_dns_cache(int);
 int find_host(unsigned char *, struct sockaddr **, int *, void **, void (*)(void *, int), void *);

@@ -1,3 +1,9 @@
+Wed Feb 19 17:26:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Fixed yet another crash in textarea editor code. Stupid.  
+
 Mon Feb 10 18:47:13 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* THANKS:

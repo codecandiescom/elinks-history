@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.27 2003/11/12 15:52:52 zas Exp $ */
+/* $Id: protocol.c,v 1.28 2003/11/13 13:17:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,7 +108,7 @@ check_protocol(unsigned char *name, int namelen)
 int
 get_protocol_port(enum protocol protocol)
 {
-	assert(protocol != PROTOCOL_UNKNOWN);
+	assert(VALID_PROTOCOL(protocol));
 	if_assert_failed return 0;
 	return protocol_backends[protocol]->port;
 }
@@ -116,7 +116,7 @@ get_protocol_port(enum protocol protocol)
 int
 get_protocol_free_syntax(enum protocol protocol)
 {
-	assert(protocol != PROTOCOL_UNKNOWN);
+	assert(VALID_PROTOCOL(protocol));
 	if_assert_failed return 0;
 	return protocol_backends[protocol]->free_syntax;
 }
@@ -124,7 +124,7 @@ get_protocol_free_syntax(enum protocol protocol)
 int
 get_protocol_need_slashes(enum protocol protocol)
 {
-	assert(protocol != PROTOCOL_UNKNOWN);
+	assert(VALID_PROTOCOL(protocol));
 	if_assert_failed return 0;
 	return protocol_backends[protocol]->need_slashes;
 }
@@ -132,7 +132,7 @@ get_protocol_need_slashes(enum protocol protocol)
 int
 get_protocol_need_slash_after_host(enum protocol protocol)
 {
-	assert(protocol != PROTOCOL_UNKNOWN);
+	assert(VALID_PROTOCOL(protocol));
 	if_assert_failed return 0;
 	return protocol_backends[protocol]->need_slash_after_host;
 }
@@ -140,22 +140,27 @@ get_protocol_need_slash_after_host(enum protocol protocol)
 protocol_handler *
 get_protocol_handler(enum protocol protocol)
 {
-	assert(protocol != PROTOCOL_UNKNOWN);
+	assert(VALID_PROTOCOL(protocol));
 	if_assert_failed return NULL;
 	return protocol_backends[protocol]->handler;
 }
 
 protocol_external_handler *
-get_protocol_external_handler(unsigned char *url)
+get_protocol_external_handler(enum protocol protocol)
 {
-	enum protocol protocol;
+	assert(VALID_PROTOCOL(protocol));
+	if_assert_failed return NULL;
+	return protocol_backends[protocol]->external_handler;
+}
+
+enum protocol
+known_protocol(unsigned char *url, unsigned char **end_)
+{
 	unsigned char *end = get_protocol_end(url);
 
-	if (!end) return NULL; /* No valid protocol scheme. */
+	if (end_) *end_ = end;
 
-	protocol = check_protocol(url, end - url);
-	if (protocol != PROTOCOL_UNKNOWN)
-		return protocol_backends[protocol]->external_handler;
+	if (!end) return PROTOCOL_INVALID; /* No valid protocol scheme. */
 
-	return NULL;
+	return check_protocol(url, end - url);
 }

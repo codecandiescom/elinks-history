@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.225 2003/11/12 09:19:25 zas Exp $ */
+/* $Id: session.c,v 1.226 2003/11/13 13:17:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -676,10 +676,14 @@ static int
 do_move(struct session *ses, struct download **stat)
 {
 	struct cache_entry *ce;
+	enum protocol protocol;
 
 	assert(stat && *stat);
 	assertm(ses->loading_url, "no ses->loading_url");
 	if_assert_failed return 0;
+
+	protocol = known_protocol(ses->loading_url, NULL);
+	if (protocol == PROTOCOL_UNKNOWN) return 0;
 
 	if (ses->task == TASK_IMGMAP && (*stat)->state >= 0)
 		return 0;
@@ -721,7 +725,7 @@ do_move(struct session *ses, struct download **stat)
 		{
 			protocol_external_handler *fn;
 
-			fn = get_protocol_external_handler(u);
+			fn = get_protocol_external_handler(protocol);
 			if (fn) {
 				fn(ses, u);
 				mem_free(u);
@@ -1500,17 +1504,36 @@ ses_load_notify(struct download *stat, struct session *ses)
 #endif
 
 static void
+print_unknown_protocol_dialog(struct session *ses)
+{
+	msg_box(ses->tab->term, NULL, MSGBOX_NO_INTL,
+		_("Error", ses->tab->term), AL_CENTER,
+		N_("This URL contains a protocol not yet known by ELinks.\n"
+		   "You can configure an external handler for it through options system."),
+		ses, 1,
+		_("OK", ses->tab->term), NULL, B_ENTER | B_ESC);
+}
+
+static void
 do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	      enum task_type task, enum cache_mode cache_mode, int do_referrer)
 {
 	unsigned char *u, *referrer = NULL;
 	unsigned char *pos;
 	protocol_external_handler *fn;
+	enum protocol protocol = known_protocol(url, NULL);
 
-	fn = get_protocol_external_handler(url);
-	if (fn) {
-		fn(ses, url);
+	if (protocol == PROTOCOL_UNKNOWN) {
+		print_unknown_protocol_dialog(ses);
 		return;
+	}
+
+	if (protocol != PROTOCOL_INVALID) {
+		fn = get_protocol_external_handler(protocol);
+		if (fn) {
+			fn(ses, url);
+			return;
+		}
 	}
 
 	ses->reloadlevel = cache_mode;

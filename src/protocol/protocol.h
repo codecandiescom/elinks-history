@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.17 2003/07/25 16:57:24 jonas Exp $ */
+/* $Id: protocol.h,v 1.18 2003/11/13 13:17:27 zas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -7,6 +7,7 @@
 #include "sched/session.h"
 
 enum protocol {
+	PROTOCOL_INVALID = -1,
 	PROTOCOL_FILE,
 	PROTOCOL_FINGER,
 	PROTOCOL_FTP,
@@ -20,6 +21,8 @@ enum protocol {
 	PROTOCOL_UNKNOWN,
 	PROTOCOL_USER,
 };
+
+#define VALID_PROTOCOL(p) ((p) != PROTOCOL_INVALID && (p) != PROTOCOL_UNKNOWN)
 
 /* Besides the session an external handler also takes the url as an argument */
 typedef void (protocol_handler)(struct connection *);
@@ -43,7 +46,9 @@ int get_protocol_need_slashes(enum protocol protocol);
 int get_protocol_need_slash_after_host(enum protocol protocol);
 
 protocol_handler *get_protocol_handler(enum protocol protocol);
-protocol_external_handler *get_protocol_external_handler(unsigned char *url);
+protocol_external_handler *get_protocol_external_handler(enum protocol protocol);
+
+enum protocol known_protocol(unsigned char *url, unsigned char **end);
 
 /* Resolves the given protocol @name to a known protocol or PROTOCOL_UNKOWN */
 /* User defined protocols (configurable via protocol.user) takes precedence. */

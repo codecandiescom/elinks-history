@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.52 2003/11/12 15:52:52 zas Exp $ */
+/* $Id: uri.c,v 1.53 2003/11/13 13:17:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,6 +76,8 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 #ifdef IPV6
 	unsigned char *lbracket, *rbracket;
 #endif
+	enum protocol protocol;
+	int known;
 
 	assertm(uristring, "No uri to parse.");
 	memset(uri, 0, sizeof(struct uri));
@@ -85,17 +87,15 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	if (!*uristring) return 0;
 	uri->protocol_str = uristring;
 
-	/* Isolate prefix */
+	/* Check if protocol is known, and retrieve prefix_end. */
+	protocol = known_protocol(uristring, &prefix_end);
+	if (protocol == PROTOCOL_INVALID) return 0;
 
-	prefix_end = get_protocol_end(uristring);
-	if (!prefix_end) return 0;
-
+	known = (protocol != PROTOCOL_UNKNOWN);
 	uri->protocollen = prefix_end - uristring;
 
-	/* Get protocol */
-
-	uri->protocol = check_protocol(uristring, uri->protocollen);
-	if (uri->protocol == PROTOCOL_UNKNOWN) return 0;
+	/* Set protocol */
+	uri->protocol = protocol;
 
 	prefix_end++; /* ':' */
 
@@ -103,10 +103,10 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 
 	if (prefix_end[0] == '/' && prefix_end[1] == '/')
 		prefix_end += 2;
-	else if (get_protocol_need_slashes(uri->protocol))
+	else if (known && get_protocol_need_slashes(uri->protocol))
 		return 0;
 
-	if (get_protocol_free_syntax(uri->protocol)) {
+	if (!known || get_protocol_free_syntax(uri->protocol)) {
 		uri->data = prefix_end;
 		uri->datalen = strlen(prefix_end);
 		return 1;
@@ -153,7 +153,8 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 #endif
 		host_end = prefix_end + strcspn(prefix_end, ":/?");
 
-	if (!*host_end && get_protocol_need_slash_after_host(uri->protocol))
+	if (known && !*host_end
+	    && get_protocol_need_slash_after_host(uri->protocol))
 		return 0;
 
 #ifdef IPV6
@@ -216,7 +217,7 @@ get_uri_port(struct uri *uri)
 		if (!errno && n > 0) port = n;
 	}
 
-	if (port == -1) {
+	if (port == -1 && uri->protocol != PROTOCOL_UNKNOWN) {
 		port = get_protocol_port(uri->protocol);
 	}
 
@@ -230,10 +231,12 @@ struct string *
 add_uri_to_string(struct string *string, struct uri *uri,
 		  enum uri_component components)
 {
- 	assert(uri->protocol_str && uri->protocollen);
+	int known = (uri->protocol != PROTOCOL_UNKNOWN);
+
+	assert(uri->protocol_str && uri->protocollen);
 	if_assert_failed { return NULL; }
 
- 	if (get_protocol_free_syntax(uri->protocol)) {
+ 	if (!known || get_protocol_free_syntax(uri->protocol)) {
  		/* Custom or unknown or free-syntax protocol;
  		 * keep the URI untouched. */
 		add_to_string(string, struri(*uri));
@@ -310,7 +313,9 @@ get_uri_string(struct uri *uri, enum uri_component components)
 {
 	struct string string;
 
-	if (!init_string(&string) || !add_uri_to_string(&string, uri, components))
+	if (!init_string(&string)) return NULL;
+
+	if (!add_uri_to_string(&string, uri, components))
 		return NULL;
 
 	return string.source;

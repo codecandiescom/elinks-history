@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.54 2003/11/10 20:53:22 jonas Exp $ */
+/* $Id: dump.c,v 1.55 2003/11/13 13:17:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,7 @@
 #include "lowlevel/select.h"
 #include "osdep/ascii.h"
 #include "osdep/osdep.h"
+#include "protocol/protocol.h"
 #include "protocol/uri.h"
 #include "sched/error.h"
 #include "sched/connection.h"
@@ -207,6 +208,7 @@ dump_start(unsigned char *url)
 
 	if (!real_url) real_url = stracpy(url);
 	if (!real_url
+	    || known_protocol(real_url, NULL) == PROTOCOL_UNKNOWN
 	    || load_url(real_url, NULL, &dump_download, PRI_MAIN, 0, -1)) {
 terminate:
 		terminate = 1;

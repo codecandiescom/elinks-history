@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.83 2003/06/24 00:35:43 jonas Exp $ */
+/* $Id: file.c,v 1.84 2003/06/24 01:19:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -294,17 +294,22 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 	      unsigned char *path, unsigned char *dircolor)
 {
 	unsigned char *lnk = NULL;
+	unsigned char *htmlname = init_str();
 	unsigned char *name = entry->name;
 	int namelen = strlen(name);
 	unsigned char *attrib = entry->attrib;
 	int attriblen = strlen(attrib);
 	unsigned char *fragment = data->fragment;
 	int fragmentlen = data->fragmentlen;
+	int htmlnamelen = 0;
+
+	if (!htmlname) return;
+	add_htmlesc_str(&htmlname, &htmlnamelen, entry->name, namelen);
 
 	/* add_to_str(&fragment, &fragmentlen, "   "); */
 	add_htmlesc_str(&fragment, &fragmentlen, attrib, attriblen);
 	add_to_str(&fragment, &fragmentlen, "<a href=\"");
-	add_htmlesc_str(&fragment, &fragmentlen, name, namelen);
+	add_to_str(&fragment, &fragmentlen, htmlname);
 
 	if (attrib[0] == 'd') {
 		add_chr_to_str(&fragment, &fragmentlen, '/');
@@ -314,14 +319,10 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 		unsigned char *buf = NULL;
 		int bufsize = 0;
 		int rl = -1;
-		unsigned char *n = init_str();
-		int nl = 0;
+		unsigned char *n = straconcat(path, htmlname, NULL);
 		struct stat st;
 
 		if (!n) return;
-
-		add_to_str(&n, &nl, path);
-		add_htmlesc_str(&n, &nl, name, namelen);
 
 		if (!stat(n, &st) && S_ISDIR(st.st_mode))
 			add_chr_to_str(&fragment, &fragmentlen, '/');
@@ -356,7 +357,8 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 		add_to_str(&fragment, &fragmentlen, "\"><b>");
 	}
 
-	add_htmlesc_str(&fragment, &fragmentlen, name, namelen);
+	add_to_str(&fragment, &fragmentlen, htmlname);
+	mem_free(htmlname);
 
 	if (attrib[0] == 'd' && *dircolor) {
 		add_to_str(&fragment, &fragmentlen, "</b></font>");

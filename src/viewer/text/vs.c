@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.44 2004/09/26 12:13:08 pasky Exp $ */
+/* $Id: vs.c,v 1.45 2004/09/26 12:17:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,6 +59,9 @@ copy_vs(struct view_state *dst, struct view_state *src)
 
 	/* We do not copy ecmascript stuff around since it's specific for
 	 * a single location, offsprings (followups and so) nedd their own. */
+	dst->ecmascript = NULL;
+	/* If we ever get to render this vs, give it an interpreter. */
+	dst->ecmascript_fragile = 1;
 
 	dst->uri = get_uri_reference(src->uri);
 	/* Redo fragment if there is one? */

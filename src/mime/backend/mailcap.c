@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.46 2003/10/03 11:44:50 jonas Exp $ */
+/* $Id: mailcap.c,v 1.47 2003/10/03 11:51:19 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -551,8 +551,8 @@ check_entries(struct mailcap_hash_item *item)
  * The lookup supports testing on files. If no file is given (NULL) any tests
  * that need a file will be taken as failed. */
 
-static struct mime_handler *
-get_mime_handler_mailcap(unsigned char *type, int options)
+static struct mailcap_entry *
+get_mailcap_entry(unsigned char *type)
 {
 	struct mailcap_entry *entry;
 	struct hash_item *item;
@@ -593,30 +593,34 @@ get_mime_handler_mailcap(unsigned char *type, int options)
 			entry = wildcard;
 	}
 
-	if (entry) {
-		struct mime_handler *handler;
-		unsigned char *program;
+	return entry;
+}
 
-		program = format_command(entry->command, type,
-					 entry->copiousoutput);
-		if (!program) return NULL;
+static struct mime_handler *
+get_mime_handler_mailcap(unsigned char *type, int options)
+{
+	struct mailcap_entry *entry = get_mailcap_entry(type);
+	struct mime_handler *handler;
+	unsigned char *program;
 
-		handler = mem_alloc(sizeof(struct mime_handler));
-		if (!handler) {
-			mem_free(program);
-			return NULL;
-		}
+	if (!entry) return NULL;
 
-		handler->block = (entry->needsterminal || entry->copiousoutput);
-		handler->ask = get_opt_bool_tree(mailcap_tree, "ask");
-		handler->program = program;
-		handler->description = entry->description;
-		handler->backend_name = BACKEND_NAME;
+	program = format_command(entry->command, type, entry->copiousoutput);
+	if (!program) return NULL;
 
-		return handler;
+	handler = mem_alloc(sizeof(struct mime_handler));
+	if (!handler) {
+		mem_free(program);
+		return NULL;
 	}
 
-	return NULL;
+	handler->block = (entry->needsterminal || entry->copiousoutput);
+	handler->ask = get_opt_bool_tree(mailcap_tree, "ask");
+	handler->program = program;
+	handler->description = entry->description;
+	handler->backend_name = BACKEND_NAME;
+
+	return handler;
 }
 
 

@@ -135,7 +135,8 @@ msgid ""
 msgstr ""
 "Desværre, dette bogmærke er allerede i brug.\n"
 "\n"
-"Title: \"%s\"URL: \"%s\""
+"Title: \"%s\"\n"
+"URL: \"%s\""
 
 #: src/bookmarks/dialogs.c:412
 msgid "Delete marked bookmarks?"
@@ -481,7 +482,6 @@ msgid "Delete character under cursor"
 msgstr "Slet tegn under markør"
 
 #: src/config/kbdbind.c:382
-#, fuzzy
 msgid "Show information about the current page"
 msgstr "Vis information om nuværende side"
 
@@ -501,10 +501,9 @@ msgstr "Hent det nuværende billede"
 msgid "Begin editing"
 msgstr "Begynd redigering"
 
-#. FIXME
 #: src/config/kbdbind.c:387
 msgid "Go to the end of the page/line"
-msgstr "Gå til enden af siden/linjen"
+msgstr "Flut markøren til enden af siden/linjen"
 
 #: src/config/kbdbind.c:388
 msgid "Follow the current link"
@@ -547,9 +546,8 @@ msgid "Go to the homepage"
 msgstr "Gå til hjemmesiden"
 
 #: src/config/kbdbind.c:398
-#, fuzzy
 msgid "Show information about the current page HTTP headers"
-msgstr "Vis information om den nuværende side"
+msgstr "Vis information om den nuværende sides HTTP header"
 
 #: src/config/kbdbind.c:399
 msgid "Open history manager"
@@ -786,9 +784,9 @@ msgid "    %s%s%s %s (default: %s)"
 msgstr "    %s%s%s %s (standardværdi: %s)"
 
 #: src/config/options.c:674
-#, fuzzy, c-format
+#, c-format
 msgid "    %s%s%s %s (default: #%06x)"
-msgstr "    %s%s%s %s (standardværdi: %d)"
+msgstr "    %s%s%s %s (standardværdi: %06x)"
 
 #: src/config/options.c:792
 msgid "Configuration options:\n"
@@ -1009,9 +1007,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1019
-#, fuzzy
 msgid "Maximum age"
-msgstr "Maksimal antal forbindelser"
+msgstr "Maksimal alder"
 
 #: src/config/options.c:1021
 msgid ""
@@ -1300,9 +1297,8 @@ msgid "Cache options."
 msgstr "Cacheindstillinger."
 
 #: src/config/options.c:1182
-#, fuzzy
 msgid "Cache information about redirects"
-msgstr "Cacheinformationer om omstillinger"
+msgstr "Cacheinformation om omstillinger"
 
 #: src/config/options.c:1184
 msgid ""
@@ -1380,9 +1376,8 @@ msgid "Default codepage"
 msgstr ""
 
 #: src/config/options.c:1231
-#, fuzzy
 msgid "Default document codepage."
-msgstr "Cache for behandlede dokumenter"
+msgstr "Standard dokument kode-side (codepage)"
 
 #: src/config/options.c:1233
 msgid "Ignore charset info from server"
@@ -1615,9 +1610,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1314
-#, fuzzy
 msgid "Notify download completion by bell"
-msgstr "Filoverførsel fuldendt"
+msgstr "Gør opmærksom på fuldendt filoverførsel med \"bell\""
 
 #: src/config/options.c:1316
 msgid ""
@@ -1722,7 +1716,7 @@ msgstr "HTML visning"
 
 #: src/config/options.c:1374
 msgid "Options concerning the display of HTML pages."
-msgstr ""
+msgstr "Indstillinger for visning a HTML sider"
 
 #: src/config/options.c:1377
 msgid "Display frames"
@@ -1741,26 +1735,24 @@ msgid "Display tables."
 msgstr "Vis tabeller."
 
 #: src/config/options.c:1385
-#, fuzzy
 msgid "Display subscripts"
-msgstr "Vis ~usemap"
+msgstr "Vis matematisk indeks (<sub> tag)"
 
 #: src/config/options.c:1387
 msgid "Display subscripts (as [thing])."
-msgstr ""
+msgstr "Vis matematisk indeks (<sub> tag) som [indeks]"
 
 #: src/config/options.c:1389
-#, fuzzy
 msgid "Display superscripts"
-msgstr "Vis ~usemap"
+msgstr "Vis matematisk overskrift (<sup> tag)"
 
 #: src/config/options.c:1391
 msgid "Display superscripts (as ^thing)."
-msgstr ""
+msgstr "Vis matematisk overskrift (<sup> tag) som ^overskrift"
 
 #: src/config/options.c:1393
 msgid "Rendering of html link element"
-msgstr ""
+msgstr "Visning af HTML lænker"
 
 #: src/config/options.c:1395
 msgid ""
@@ -2031,9 +2023,8 @@ msgid "HTTP proxy configuration."
 msgstr ""
 
 #: src/config/options.c:1561 src/config/options.c:1631
-#, fuzzy
 msgid "Host and port-number"
-msgstr "Ugyldigt nummer"
+msgstr "Vært og portnummer"
 
 #: src/config/options.c:1563
 msgid ""
@@ -2042,23 +2033,20 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1566
-#, fuzzy
 msgid "Username"
-msgstr "Navn"
+msgstr "Brugernavn"
 
 #: src/config/options.c:1568
-#, fuzzy
 msgid "Proxy authentication username."
-msgstr "HTTP verificering"
+msgstr "Proxy verificerings brugernavn."
 
 #: src/config/options.c:1570 src/dialogs/auth.c:36
 msgid "Password"
 msgstr "Adgangskode"
 
 #: src/config/options.c:1572
-#, fuzzy
 msgid "Proxy authentication password."
-msgstr "HTTP verificering"
+msgstr "Proxy verificerings adgangskode."
 
 #: src/config/options.c:1575
 #, fuzzy

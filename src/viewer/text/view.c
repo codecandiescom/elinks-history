@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.651 2004/11/12 17:19:10 zas Exp $ */
+/* $Id: view.c,v 1.652 2004/11/12 17:24:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -483,6 +483,7 @@ toggle_wrap_text(struct session *ses, struct document_view *doc_view, int xxxx)
 static enum frame_event_status
 move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 {
+	enum frame_event_status status = FRAME_EVENT_REFRESH;
 	struct terminal *term = ses->tab->term;
 	struct box *box = &doc_view->box;
 	struct link *link;
@@ -490,27 +491,25 @@ move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 	/* If cursor was moved outside the document view scroll it, but only
 	 * within the document canvas */
 	if (!is_in_box(box, x, y)) {
-		int vs_x = doc_view->vs->x, vs_y = doc_view->vs->y;
 		int max_height = doc_view->document->height - doc_view->vs->y;
 		int max_width = doc_view->document->width - doc_view->vs->x;
 
-		/* TODO: status = vertical_scroll() ... --Zas */
 		if (y < box->y) {
-			vertical_scroll(ses, doc_view, -1);
+			status = vertical_scroll(ses, doc_view, -1);
 
 		} else if (y >= box->y + box->height && y <= max_height) {
-			vertical_scroll(ses, doc_view, 1);
+			status = vertical_scroll(ses, doc_view, 1);
 
 		} else if (x < box->x) {
-			horizontal_scroll(ses, doc_view, -1);
+			status = horizontal_scroll(ses, doc_view, -1);
 
 		} else if (x >= box->x + box->width && x <= max_width) {
-			horizontal_scroll(ses, doc_view, 1);
+			status = horizontal_scroll(ses, doc_view, 1);
 		}
 
 		/* If the view was not scrolled there's nothing more to do */
-		if (vs_x == doc_view->vs->x && vs_y == doc_view->vs->y)
-			return FRAME_EVENT_OK;
+		if (status != FRAME_EVENT_REFRESH)
+			return status;
 
 		/* Restrict the cursor position within the current view */
 		int_bounds(&x, box->x, box->x + box->width - 1);
@@ -532,7 +531,7 @@ move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 	set_cursor(term, x, y, 0);
 	set_window_ptr(ses->tab, x, y);
 
-	return FRAME_EVENT_REFRESH;
+	return status;
 }
 
 enum frame_event_status

@@ -280,27 +280,22 @@ msgstr ""
 "## grafica e la formattazione e i commenti verranno quindi persi.\n"
 
 #: src/config/conf.c:620
-#, fuzzy
 msgid ""
 "## Obviously, if you don't like what ELinks is going to do with\n"
 "## this file, you can change it by altering the config.saving_style\n"
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
-"##\n"
 "## Ovviamente, se non ti piace quello che ELinks farà di questo file,\n"
-"## puoi cambiare il comportamento modificando l'opzione config."
-"saving_style.\n"
+"## puoi cambiare il comportamento modificando l'opzione config.saving_style.\n"
 "## Dai, siamo dei bravi ragazzi dopo tutto.\n"
 
 #: src/config/conf.c:635
-#, fuzzy
 msgid "Automatically saved options\n"
-msgstr "# Opzioni salvate automaticamente\n"
+msgstr "Opzioni salvate automaticamente\n"
 
 #: src/config/conf.c:649
-#, fuzzy
 msgid "Automatically saved keybindings\n"
-msgstr "# Associazioni di tasti salvate automaticamente\n"
+msgstr "Associazioni di tasti salvate automaticamente\n"
 
 #: src/config/conf.c:691
 msgid "File saving disabled by option"
@@ -482,8 +477,8 @@ msgstr ""
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
-"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap \"%"
-"s\")?"
+"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap "
+"\"%s\")?"
 
 #: src/config/dialogs.c:762
 msgid "Keybinding manager"
@@ -997,7 +992,7 @@ msgstr ""
 
 #: src/config/options.c:938
 msgid "Comments localization"
-msgstr ""
+msgstr "Localizzazione dei commenti"
 
 #: src/config/options.c:940
 msgid ""
@@ -1008,6 +1003,12 @@ msgid ""
 "terminal where you saved the file, but it should be generally\n"
 "considered unpredictable."
 msgstr ""
+"Se impostato a 1, i commenti nel file di configurazione saranno\n"
+"tradotti nella lingua usata dall'interfaccia grafica. Nota che se\n"
+"si hanno lingue diverse in terminali diversi, la lingua usata\n"
+"nel file di configurazione PUÒ essere la stessa usata nel terminale\n"
+"in cui si è salvato il file, ma generalmente dovrebbe essere\n"
+"generalmente considerato non prevedibile."
 
 #: src/config/options.c:948
 msgid "Saving style warnings"
@@ -2776,8 +2777,8 @@ msgid ""
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 "Gestore (programma esterno) per questo protocollo. Chiama\n"
-"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, unix-"
-"xwin)."
+"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, "
+"unix-xwin)."
 
 #: src/config/options.c:1825
 msgid ""
@@ -2945,7 +2946,6 @@ msgid "Color mode"
 msgstr "Modalità colore"
 
 #: src/config/options.c:1919
-#, fuzzy
 msgid ""
 "The color mode controls what colors are used and how they are\n"
 "output to the terminal. The color modes are:\n"
@@ -2957,7 +2957,7 @@ msgstr ""
 "mandati al terminale. Le modalità a colori sono:\n"
 "0 è modalità mono, usa solo due colori\n"
 "1 è modalità 16 colori, usa i comuni colori ANSI\n"
-"2 è modalità 256 colori, richiede l'uso di xterm256\n"
+"2 è modalità 256 colori, richiede l'uso di xterm-256color\n"
 
 #: src/config/options.c:1925
 msgid "Enable transparency"
@@ -3475,8 +3475,9 @@ msgid ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
 msgstr ""
-"Azioni temporizzate dopo un certo intervallo di inattività dell'utente."
-"Qualcuno lo può trovare persino utile, anche se puoi non crederci."
+"Azioni temporizzate dopo un certo intervallo di inattività "
+"dell'utente.Qualcuno lo può trovare persino utile, anche se puoi non "
+"crederci."
 
 #: src/config/options.c:2800
 msgid ""
@@ -3884,8 +3885,8 @@ msgid ""
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
-"Impostare a 1 per modificare i file runtime di stato (bookmark, "
-"storico, ...)\n"
+"Impostare a 1 per modificare i file runtime di stato (bookmark, storico, "
+"...)\n"
 "anche quando si usano -no-connect o -session-ring; non ha effetto\n"
 "se non è usato in connessione con una di queste opzioni."
 
@@ -5056,9 +5057,9 @@ msgid ""
 "saved to the configuration file, instead of just all the options. This "
 "simplifies our situation greatly when we see that some option has "
 "inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of config."
-"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
-"for any inconvience caused."
+"a subtle way. Thus, we recommend you to change the value of "
+"config.saving_style option to 3 in order to get the \"right\" behaviour. "
+"Apologies for any inconvience caused."
 msgstr ""
 "Hai l'opzione config.saving_style impostata a un valore obsoleto. Gli "
 "algoritmi di salvataggio della configurazione di ELinks sono stati cambiati "
@@ -5066,9 +5067,9 @@ msgstr ""
 "sono salvate nel file di configurazione, invece di tutte quante. Questo "
 "semplifica molto la situazione quando vediamo che delle opzioni hanno un "
 "valore predefinito inappropriato o abbiamo bisogno di cambiarne la "
-"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione config."
-"saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le mie "
-"scuse per qualsiasi inconveniente causato."
+"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione "
+"config.saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le "
+"mie scuse per qualsiasi inconveniente causato."
 
 #: src/sched/session.c:1687
 msgid "Unknown event."

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.279 2003/12/11 10:27:20 pasky Exp $ */
+/* $Id: session.c,v 1.280 2003/12/12 07:19:56 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -550,6 +550,13 @@ create_basic_session(struct window *tab)
 	return ses;
 }
 
+static void
+dialog_goto_url_open_first(void *data)
+{
+	dialog_goto_url((struct session *) data, NULL);
+	first_use = 0;
+}
+
 static struct session *
 create_session(struct window *tab)
 {
@@ -559,14 +566,13 @@ create_session(struct window *tab)
 	if (!ses) return NULL;
 
 	if (first_use) {
-		first_use = 0;
 		msg_box(term, NULL, 0,
 			N_("Welcome"), AL_CENTER,
 			N_("Welcome to ELinks!\n\n"
 			"Press ESC for menu. Documentation is available in "
 			"Help menu."),
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
+			ses, 1,
+			N_("OK"), dialog_goto_url_open_first, B_ENTER | B_ESC);
 	}
 
 	if (!*get_opt_str("protocol.http.user_agent")) {
@@ -712,7 +718,8 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 		if (!h || !*h)
 			h = WWW_HOME_URL;
 		if (!h || !*h) {
-			if (get_opt_int("ui.startup_goto_dialog")) {
+			if (get_opt_int("ui.startup_goto_dialog")
+			    && !first_use) {
 				/* We can't create new window in EV_INIT
 				 * handler! */
 				register_bottom_half(dialog_goto_url_open, ses);

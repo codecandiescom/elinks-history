@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.116 2003/12/05 20:49:07 zas Exp $ */
+/* $Id: link.c,v 1.117 2003/12/05 21:19:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -506,8 +506,9 @@ find_link(struct document_view *doc_view, int p, int s)
 {
 	/* p=1 - top, p=-1 - bottom, s=0 - pgdn, s=1 - down */
 	struct link **line;
-	struct link *link;
-	int y, l;
+	struct link *link = NULL;
+	int link_pos;
+	int y, ymin, ymax;
 
 	assert(doc_view && doc_view->document && doc_view->vs);
 	if_assert_failed return;
@@ -526,25 +527,24 @@ find_link(struct document_view *doc_view, int p, int s)
 		if (y >= doc_view->document->height) goto nolink;
 	}
 
-	link = NULL;
+	ymin = int_max(0, doc_view->vs->y);
+	ymax = int_min(doc_view->document->height,
+		       doc_view->vs->y + doc_view->document->options.height);
 	do {
 		if (line[y]
 		    && (!link || (p > 0 ? line[y] < link : line[y] > link)))
 			link = line[y];
 		y += p;
-	} while (!(y < 0
-		   || y < doc_view->vs->y
-		   || y >= doc_view->vs->y + doc_view->document->options.height
-		   || y >= doc_view->document->height));
+	} while (y >= ymin && y < ymax);
 
 	if (!link) goto nolink;
-	l = link - doc_view->document->links;
 
+	link_pos = link - doc_view->document->links;
 	if (s == 0) {
-		next_in_view(doc_view, l, p, in_view, NULL);
+		next_in_view(doc_view, link_pos, p, in_view, NULL);
 		return;
 	}
-	doc_view->vs->current_link = l;
+	doc_view->vs->current_link = link_pos;
 	set_pos_x(doc_view, link);
 	return;
 

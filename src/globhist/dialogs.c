@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.88 2003/11/23 17:33:04 jonas Exp $ */
+/* $Id: dialogs.c,v 1.89 2003/11/23 18:52:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,13 +81,6 @@ static struct listbox_ops gh_listbox_ops = {
 	is_globhist_item_used,
 	get_globhist_item_info,
 	done_globhist_item,
-};
-
-struct hierbox_browser globhist_browser = {
-	{ D_LIST_HEAD(globhist_browser.boxes) },
-	&gh_box_items,
-	{ D_LIST_HEAD(globhist_browser.dialogs) },
-	&gh_listbox_ops,
 };
 
 
@@ -174,6 +167,34 @@ push_bookmark_button(struct dialog_data *dlg_data,
 
 #define GLOBHIST_MANAGER_ADDSIZE	(sizeof(struct global_history_item) + 2 * MAX_STR_LEN)
 
+static struct hierbox_browser_button globhist_buttons[] = {
+	{ N_("Goto"),		push_hierbox_goto_button	},
+	{ N_("Info"),		push_hierbox_info_button	},
+#ifdef BOOKMARKS
+	{ N_("Bookmark"),	push_bookmark_button		},
+#endif
+	{ N_("Delete"),		push_hierbox_delete_button	},
+	{ N_("Search"),		push_search_button		},
+	{ N_("Toggle display"),	push_toggle_display_button	},
+	{ N_("Clear"),		push_hierbox_clear_button	},
+#if 0
+	/* TODO: Would this be useful? --jonas */
+	{ N_("Save"),		push_save_button		},
+#endif
+
+	END_HIERBOX_BROWSER_BUTTONS,
+};
+
+struct hierbox_browser globhist_browser = {
+	N_("Global history manager"),
+	globhist_buttons,
+
+	{ D_LIST_HEAD(globhist_browser.boxes) },
+	&gh_box_items,
+	{ D_LIST_HEAD(globhist_browser.dialogs) },
+	&gh_listbox_ops,
+};
+
 void
 menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 {
@@ -187,18 +208,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 		gh_last_searched_url = NULL;
 	}
 
-	hierbox_browser(term, N_("Global history"),
-			GLOBHIST_MANAGER_ADDSIZE, &globhist_browser, ses,
-			GLOBHIST_MANAGER_BUTTONS,
-			N_("Goto"), push_hierbox_goto_button,
-			N_("Info"), push_hierbox_info_button,
-#ifdef BOOKMARKS
-			N_("Bookmark"), push_bookmark_button,
-#endif
-			N_("Delete"), push_hierbox_delete_button,
-			N_("Search"), push_search_button,
-			N_("Toggle display"), push_toggle_display_button,
-			N_("Clear"), push_hierbox_clear_button);
+	hierbox_browser(&globhist_browser, ses , GLOBHIST_MANAGER_ADDSIZE);
 }
 
 #endif /* GLOBHIST */

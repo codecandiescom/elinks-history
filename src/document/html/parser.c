@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.399 2004/04/23 22:01:05 pasky Exp $ */
+/* $Id: parser.c,v 1.400 2004/04/23 22:04:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -588,7 +588,7 @@ kill_until(int ls, ...)
 
 				if (!strlcasecmp(e->name, e->namelen, s, slen)) {
 					if (!sk) {
-						if (e->type != ELEMENT_KILLABLE) break;
+						if (e->type < ELEMENT_KILLABLE) break;
 						va_end(arg);
 						goto killll;
 					} else if (sk == 1) {
@@ -602,7 +602,7 @@ kill_until(int ls, ...)
 		}
 		va_end(arg);
 
-		if (e->type != ELEMENT_KILLABLE
+		if (e->type < ELEMENT_KILLABLE
 		    || (!strlcasecmp(e->name, e->namelen, "TABLE", 5)))
 			break;
 
@@ -3131,18 +3131,18 @@ ng:;
 
 						if (ei->nopair == 2) {
 							foreach (e, html_stack) {
-								if (e->type != ELEMENT_KILLABLE) break;
+								if (e->type < ELEMENT_KILLABLE) break;
 								if (e->linebreak || !ei->linebreak) break;
 							}
 						} else foreach (e, html_stack) {
 							if (e->linebreak && !ei->linebreak) break;
-							if (e->type != ELEMENT_KILLABLE) break;
+							if (e->type < ELEMENT_KILLABLE) break;
 							if (!strlcasecmp(e->name, e->namelen, name, namelen)) break;
 						}
 						if (!strlcasecmp(e->name, e->namelen, name, namelen)) {
 							while (e->prev != (void *)&html_stack) kill_html_stack_item(e->prev);
 
-							if (e->type != ELEMENT_IMMORTAL)
+							if (e->type > ELEMENT_IMMORTAL)
 								kill_html_stack_item(e);
 						}
 					}
@@ -3199,7 +3199,7 @@ ng:;
 				foreach (e, html_stack) {
 					if (e->linebreak && !ei->linebreak) xxx = 1;
 					if (strlcasecmp(e->name, e->namelen, name, namelen)) {
-						if (e->type != ELEMENT_KILLABLE)
+						if (e->type < ELEMENT_KILLABLE)
 							break;
 						else
 							continue;
@@ -3575,7 +3575,7 @@ init_html_parser_state(enum html_element_type type, int align, int margin, int w
 
 	par_format.align = align;
 
-	if (type == ELEMENT_IMMORTAL) {
+	if (type <= ELEMENT_IMMORTAL) {
 		par_format.leftmargin = margin;
 		par_format.rightmargin = margin;
 		par_format.width = width;

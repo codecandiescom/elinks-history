@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.133 2004/04/03 14:51:53 jonas Exp $ */
+/* $Id: cache.c,v 1.134 2004/04/03 14:54:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,10 +84,12 @@ cache_info(int type)
 			foreach (cached, cache_entries) i++;
 			return i;
 		case INFO_LOCKED:
-			foreach (cached, cache_entries) i += is_object_used(cached);
+			foreach (cached, cache_entries)
+				i += is_object_used(cached);
 			return i;
 		case INFO_LOADING:
-			foreach (cached, cache_entries) i += is_entry_used(cached);
+			foreach (cached, cache_entries)
+				i += is_entry_used(cached);
 			return i;
 		case INFO_LIST:
 			return (long) &cache_entries;
@@ -159,7 +161,8 @@ static inline void
 enlarge_entry(struct cache_entry *cached, int size)
 {
 	cached->data_size += size;
-	assertm(cached->data_size >= 0, "cache entry data_size underflow: %ld", cached->data_size);
+	assertm(cached->data_size >= 0,
+		"cache entry data_size underflow: %ld", cached->data_size);
 	if_assert_failed { cached->data_size = 0; }
 
 	cache_size += size;

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.163 2003/07/08 01:24:26 jonas Exp $ */
+/* $Id: http.c,v 1.164 2003/07/08 01:52:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -345,7 +345,6 @@ add_uri_host_to_str(unsigned char **hdr, int *l, struct uri *uri)
 }
 
 #define IS_PROXY_URI(x) ((x).protocollen == 5 && !strncasecmp("proxy", (x).protocol, 5))
-#define GET_REAL_URI(x) (IS_PROXY_URI((x)) ? (x).data : (x).protocol)
 
 static void
 http_send_header(struct connection *conn)
@@ -1068,17 +1067,34 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 	int a, h = 200;
 	struct http_version version;
 	unsigned char *d;
-	struct http_connection_info *info;
-	unsigned char *host = GET_REAL_URI(conn->uri);
+	struct http_connection_info *info = conn->info;
+	struct uri real_uri;
+	struct uri *uri;
 
 	set_connection_timeout(conn);
-	info = conn->info;
+
+	/* Setup the real uri. */
+	if (IS_PROXY_URI(conn->uri) && conn->uri.data) {
+		uri = &real_uri;
+		uri->protocol = conn->uri.data;
+		if (!parse_uri(uri))
+			uri = NULL;
+
+	} else {
+		uri = &conn->uri;
+	}
+
+	/* Sanity check for a host */
+	assert(uri && uri->host);
+	if_assert_failed {
+		abort_conn_with_state(conn, S_BAD_URL);
+		return;
+	}
 
 	if (rb->close == 2) {
-		unsigned char *hstr;
-
-		if (!conn->tries && (hstr = get_host_name(host))) {
-			int len = strlen(hstr);
+		if (!conn->tries) {
+			unsigned char *hstr = uri->host;
+			int len = uri->hostlen;
 
 			if (info->bl_flags & BL_NO_CHARSET) {
 				del_blacklist_entry(hstr, len, BL_NO_CHARSET);
@@ -1086,7 +1102,6 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 				add_blacklist_entry(hstr, len, BL_NO_CHARSET);
 				conn->tries = -1;
 			}
-			mem_free(hstr);
 		}
 		retry_conn_with_state(conn, S_CANT_READ);
 		return;
@@ -1111,27 +1126,17 @@ again:
 		return;
 	}
 
-	if (a) {
-		head = mem_alloc(a + 1);
-		if (!head) {
-out_of_mem:
-			abort_conn_with_state(conn, S_OUT_OF_MEM);
-			return;
-		}
-		memcpy(head, rb->data, a);
-		head[a] = 0;
-	} else {
-		/* No header, HTTP/0.9 document. That's always text/html,
-		 * according to
-		 * http://www.w3.org/Protocols/HTTP/AsImplemented.html. */
-
-		head = stracpy("\r\n");
-		if (!head) goto out_of_mem;
-
-		add_to_strn(&head, "Content-Type: text/html\r\n");
+	/* When no header, HTTP/0.9 document. That's always text/html,
+	 * according to
+	 * http://www.w3.org/Protocols/HTTP/AsImplemented.html. */
+	head = (a ? memacpy(rb->data, a)
+		  : stracpy("\r\nContent-Type: text/html\r\n"));
+	if (!head) {
+		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		return;
 	}
 
-	if (check_http_server_bugs(host, conn->info, head)) {
+	if (check_http_server_bugs(uri->protocol, conn->info, head)) {
 		mem_free(head);
 		retry_conn_with_state(conn, S_RESTART);
 		return;
@@ -1140,9 +1145,7 @@ out_of_mem:
 #ifdef COOKIES
 	ch = head;
 	while ((cookie = parse_http_header(ch, "Set-Cookie", &ch))) {
-		unsigned char *hstr = GET_REAL_URI(conn->uri);
-
-		set_cookie(NULL, hstr, cookie);
+		set_cookie(NULL, uri->protocol, cookie);
 		mem_free(cookie);
 	}
 #endif
@@ -1208,7 +1211,7 @@ out_of_mem:
 				unsigned char *realm = get_http_header_param(d, "realm");
 
 				if (realm) {
-					if (add_auth_entry(host, realm) > 0) {
+					if (add_auth_entry(uri->protocol, realm) > 0) {
 						add_questions_entry(do_auth_dialog);
 					}
 					mem_free(realm);

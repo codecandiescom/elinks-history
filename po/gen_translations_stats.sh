@@ -12,10 +12,11 @@ for i in *.po; do
 	| sed 's/^\([0-9]\+ \)[^0-9]*\([0-9]\+ \)\?[^0-9]*\([0-9]\+ \)\?[^0-9]*$/\1\2\3/g' \
 	| awk '{ \
 		tot = $1 + $2 + $3; \
-		printf "%s %.02f%% (%d/%d untranslated)\n",\
-		"'"$i"'", $1*100/tot, $2+$3, tot}' ;
+		if (tot != 0) \
+			printf "%8s %.02f%% (%3d/%3d untranslated)\n",\
+			"'"$i"'", $1*100/tot, $2+$3, tot}' ;
 done | sort -r -n -k2
 
 echo
 
-# $Id: gen_translations_stats.sh,v 1.1 2003/05/04 11:03:55 zas Exp $ #
+# $Id: gen_translations_stats.sh,v 1.2 2003/05/21 18:07:39 jonas Exp $ #

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.91 2004/12/17 13:24:02 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.92 2004/12/17 13:26:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,25 +145,14 @@ jsval_to_value(JSContext *ctx, jsval *vp, JSType type, union jsval_union *var)
 
 	if (JS_ConvertValue(ctx, *vp, type, &val) == JS_FALSE) {
 		switch (type) {
-			case JSTYPE_BOOLEAN: var->boolean = JS_FALSE; break;
-			case JSTYPE_NUMBER: var->number = NULL; break;
-			case JSTYPE_STRING: var->string = NULL; break;
-			case JSTYPE_VOID:
-			case JSTYPE_OBJECT:
-			case JSTYPE_FUNCTION:
-			case JSTYPE_LIMIT:
-			default:
-				INTERNAL("Invalid type %d in jsval_to_value()", type);
-				break;
-		}
-		return;
-	}
-
-	switch (type) {
-		case JSTYPE_BOOLEAN: var->boolean = JSVAL_TO_BOOLEAN(val); break;
-		case JSTYPE_NUMBER: var->number = JSVAL_TO_DOUBLE(val); break;
+		case JSTYPE_BOOLEAN:
+			var->boolean = JS_FALSE;
+			break;
+		case JSTYPE_NUMBER:
+			var->number = NULL;
+			break;
 		case JSTYPE_STRING:
-			var->string = JS_GetStringBytes(JS_ValueToString(ctx, val));
+			var->string = NULL;
 			break;
 		case JSTYPE_VOID:
 		case JSTYPE_OBJECT:
@@ -172,6 +161,27 @@ jsval_to_value(JSContext *ctx, jsval *vp, JSType type, union jsval_union *var)
 		default:
 			INTERNAL("Invalid type %d in jsval_to_value()", type);
 			break;
+		}
+		return;
+	}
+
+	switch (type) {
+	case JSTYPE_BOOLEAN:
+		var->boolean = JSVAL_TO_BOOLEAN(val);
+		break;
+	case JSTYPE_NUMBER:
+		var->number = JSVAL_TO_DOUBLE(val);
+		break;
+	case JSTYPE_STRING:
+		var->string = JS_GetStringBytes(JS_ValueToString(ctx, val));
+		break;
+	case JSTYPE_VOID:
+	case JSTYPE_OBJECT:
+	case JSTYPE_FUNCTION:
+	case JSTYPE_LIMIT:
+	default:
+		INTERNAL("Invalid type %d in jsval_to_value()", type);
+		break;
 	}
 }
 

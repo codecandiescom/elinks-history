@@ -1,5 +1,5 @@
 .\" Process this file with groff -man -Tascii linkskeys.5
-.TH LINKSKEYS 5 "Apr, 2002"
+.TH LINKSKEYS 5 "May, 2002"
 
 
 .SH NAME
@@ -146,6 +146,10 @@ Show the current page header information.
 .TP
 .B home
 Go to the start of the page.
+
+.TP
+.B link-menu
+Activate the contextual link menu.
 
 .TP
 .B lua-console
@@ -411,6 +415,8 @@ bind menu PageUp        page-up
 bind menu Ctrl-B        page-up
 
 # ELinks only
+bind main l             link-menu
+bind main L             link-menu
 bind main u             unback
 bind main U             unback
 bind main Ctrl-K        cookies-load
@@ -437,7 +443,7 @@ Per-user configuration file, loaded after site-wide configuration.
 This manual page was finally written by Peter Wang (one and a half
 years after writing the binding code), using excerpts by David
 Mediavilla.  You can thank Petr Baudis for the subtle requests for
-documentation..
+documentation. Updated by Zas.
 
 
 .SH "SEE ALSO"

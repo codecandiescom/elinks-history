@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.169 2004/04/07 19:44:35 jonas Exp $ */
+/* $Id: uri.c,v 1.170 2004/04/07 19:53:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -611,17 +611,6 @@ find_uri_protocol(unsigned char *newurl)
 	unsigned char *ch;
 
 	if (file_exists(newurl)) return PROTOCOL_FILE;
-#if 0
-	/* This (not_file thing) is a bad assumption since @prefix is
-	 * not changed which again causes any URI that is not
-	 * recognized as being some other protocol to fallback to
-	 * file:///. Changing the @prefix is also not good since it
-	 * gives the error message "Bad URI syntax".  Leaving it like
-	 * this will give a "No such file or directory" error. */
-	else {
-		not_file = 1;
-	}
-#endif
 
 	/* Yes, it would be simpler to make test for IPv6 address first,
 	 * but it would result in confusing mix of ifdefs ;-). */
@@ -677,6 +666,8 @@ find_uri_protocol(unsigned char *newurl)
 		}
 	}
 
+	/* We default to file:// URI because that will give
+	 * a "No such file or directory" error. */
 	return PROTOCOL_FILE;
 }
 

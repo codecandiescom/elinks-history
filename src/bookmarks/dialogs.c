@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.212 2005/03/30 09:55:40 zas Exp $ */
+/* $Id: dialogs.c,v 1.213 2005/03/30 09:59:42 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -528,8 +528,8 @@ bookmark_add_add(void *data)
  * rapid search of an already existing bookmark. --Zas */
 
 struct bookmark_search_ctx {
-	unsigned char *search_url;
-	unsigned char *search_title;
+	unsigned char *url;
+	unsigned char *title;
 	int found;
 	int offset;
 };
@@ -545,12 +545,10 @@ test_search(struct listbox_item *item, void *data_, int *offset) {
 	} else {
 		struct bookmark *bm = item->udata;
 
-		assert(ctx->search_title && ctx->search_url);
+		assert(ctx->title && ctx->url);
 
-		ctx->found = ((*ctx->search_title
-			       && strcasestr(bm->title, ctx->search_title))
-			      || (*ctx->search_url
-				  && strcasestr(bm->url, ctx->search_url)));
+		ctx->found = (*ctx->title && strcasestr(bm->title, ctx->title))
+			     || (*ctx->url && strcasestr(bm->url, ctx->url));
 
 		if (ctx->found) *offset = 0;
 	}
@@ -564,8 +562,8 @@ static void
 bookmark_search_do(void *data)
 {
 	struct dialog *dlg = data;
-	unsigned char *search_title = dlg->widgets[0].data;
-	unsigned char *search_url = dlg->widgets[1].data;
+	unsigned char *title = dlg->widgets[0].data;
+	unsigned char *url = dlg->widgets[1].data;
 	struct bookmark_search_ctx ctx = NULL_BOOKMARK_SEARCH_CTX;
 	struct listbox_data *box;
 	struct dialog_data *dlg_data;
@@ -573,22 +571,22 @@ bookmark_search_do(void *data)
 	assertm(dlg->udata, "Bookmark search with NULL udata in dialog");
 	if_assert_failed return;
 
-	if (!search_title || !search_url)
+	if (!title || !url)
 		return;
 
 	/* Memorize last searched title */
-	mem_free_set(&bm_last_searched_name, stracpy(search_title));
+	mem_free_set(&bm_last_searched_name, stracpy(title));
 	if (!bm_last_searched_name) return;
 
 	/* Memorize last searched url */
-	mem_free_set(&bm_last_searched_url, stracpy(search_url));
+	mem_free_set(&bm_last_searched_url, stracpy(url));
 	if (!bm_last_searched_url) {
 		mem_free(bm_last_searched_name);
 		return;
 	}
 
-	ctx.search_url = search_url;
-	ctx.search_title = search_title;
+	ctx.url = url;
+	ctx.title = title;
 
 	dlg_data = (struct dialog_data *) dlg->udata;
 	box = get_dlg_listbox_data(dlg_data);

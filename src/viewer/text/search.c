@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.27 2003/10/04 22:21:35 pasky Exp $ */
+/* $Id: search.c,v 1.28 2003/10/04 22:31:31 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -310,7 +310,7 @@ is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
 		doctmp += regmatch.rm_so;
 
 		if (s1[l].y < y || s1[l].y >= yy)
-			break;
+			goto next;
 
 		found = 1;
 
@@ -321,6 +321,7 @@ is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
 			int_lower_bound(max, s1[i].x + s1[i].n);
 		}
 
+next:
 		if (matches_may_overlap) {
 			doctmp++;
 			s1++;

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.53 2003/07/04 00:25:36 jonas Exp $ */
+/* $Id: connection.c,v 1.54 2003/07/04 00:46:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,6 +78,9 @@ static void check_keepalive_connections(void);
 static void check_queue_bugs(void);
 #endif
 
+/* See connection_state description. */
+#define is_in_result_state(cstate)	(cstate < 0)
+#define is_in_progress_state(cstate)	(cstate >= 0)
 
 static /* inline */ enum connection_priority
 get_priority(struct connection *c)
@@ -196,7 +199,7 @@ set_connection_state(struct connection *c, enum connection_state state)
 	struct status *stat;
 	struct remaining_info *prg = &c->prg;
 
-	if (c->state < 0 && state >= 0)
+	if (is_in_result_state(c->state) && is_in_progress_state(state))
 		c->prev_error = c->state;
 
 	c->state = state;
@@ -228,7 +231,7 @@ set_connection_state(struct connection *c, enum connection_state state)
 		stat->prev_error = c->prev_error;
 	}
 
-	if (state >= 0) send_connection_info(c);
+	if (is_in_progress_state(state)) send_connection_info(c);
 }
 
 static void
@@ -302,7 +305,7 @@ send_connection_info(struct connection *c)
 		stat = stat->next;
 		if (stat->prev->end)
 			stat->prev->end(stat->prev, stat->prev->data);
-		if (state >= 0 && connection_disappeared(c))
+		if (is_in_progress_state(state) && connection_disappeared(c))
 			return;
 	}
 }
@@ -695,7 +698,7 @@ again:
 			struct connection *dd = d;
 
 			d = d->next;
-			if (!dd->state && get_keepalive_connection(dd)
+			if (dd->state == S_WAIT && get_keepalive_connection(dd)
 			    && try_connection(dd, max_conns_to_host, max_conns))
 				goto again;
 		}
@@ -704,7 +707,7 @@ again:
 			struct connection *dd = d;
 
 			d = d->next;
-			if (!dd->state
+			if (dd->state == S_WAIT
 			    && try_connection(dd, max_conns_to_host, max_conns))
 				goto again;
 		}
@@ -958,7 +961,7 @@ change_connection(struct status *oldstat, struct status *newstat,
 
 	assertm(oldstat, "change_connection: oldstat == NULL");
 
-	if (oldstat->state < 0) {
+	if (is_in_result_state(oldstat->state)) {
 		if (newstat) {
 			newstat->ce = oldstat->ce;
 			newstat->state = oldstat->state;
@@ -1010,7 +1013,7 @@ detach_connection(struct status *stat, int pos)
 {
 	struct connection *conn;
 
-	if (stat->state < 0) return;
+	if (is_in_result_state(stat->state)) return;
 
 	conn = stat->c;
 	if (!conn->detached) {

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.218 2003/12/07 11:34:05 pasky Exp $ */
+/* $Id: http.c,v 1.219 2003/12/07 20:49:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1148,6 +1148,11 @@ http_error:
 		http_end_request(conn, S_OK, 1);
 		return;
 	}
+	if (h == 204) {
+		mem_free(head);
+		http_end_request(conn, S_OK, 0);
+		return;
+	}
 
 	conn->cache = get_cache_entry(struri(conn->uri));
 	if (!conn->cache) {
@@ -1176,10 +1181,6 @@ http_error:
 	}
 #endif
 
-	if (h == 204) {
-		http_end_request(conn, S_OK, 0);
-		return;
-	}
 	if (h == 301 || h == 302 || h == 303 || h == 307) {
 		d = parse_http_header(conn->cache->head, "Location", NULL);
 		if (d) {

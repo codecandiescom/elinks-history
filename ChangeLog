@@ -1,3 +1,313 @@
+Fri Dec 17 22:59:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, document/renderer.c, protocol/uri.c,
+	protocol/uri.h, protocol/gopher/gopher.c, sched/download.c,
+	viewer/text/link.c:
+
+	Introduce decode_uri_{string_,}for_display() which removes
+	non-printable and control chars from decoded URIs, even when the
+	decoded URI is going to be used for a filename. Fixes bug 573.  
+
+Fri Dec 17 22:45:05 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	The right fix for the bugzilla crash. forms' parent is document, but
+	the vs is private of window, document's parent.  
+
+Fri Dec 17 22:40:38 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cookies/: cookies.c, cookies.h:
+
+	Unexport get_cookie_server().  
+
+Fri Dec 17 21:54:31 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/events.txt, src/bookmarks/bookmarks.c,
+	src/bookmarks/dialogs.c, src/config/options.inc:
+
+	Introduce periodic snapshotting of all tabs in all terminals.  
+	
+	Add the events bookmark-delete, bookmark-move, and bookmark-update.  
+	
+	Auto-sort the ui.sessions as the bookmarks module is now adding an
+	option thereunder.  
+	
+	Add the new routines and event hooks to perform the snapshotting.  
+
+Fri Dec 17 20:26:11 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Do not use the trailing underscores lightly. property__ ->
+	jsval_property.  
+
+Fri Dec 17 20:24:38 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Reverted relevant part of 1.98, moving initializations back to the
+	declaration part and thus fighting the evil clutter ;-).  
+
+Fri Dec 17 16:19:08 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	document.browse.search.case is boolean.  
+
+Fri Dec 17 15:59:01 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Dec 17 15:52:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Reformat JavaScript Emergency message, and fix a memleak
+	(MSGBOX_FREE_TEXT needed).  
+
+Fri Dec 17 15:48:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Use a struct for property, and make union anonymous.  
+
+Fri Dec 17 15:25:53 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Introduce P_UNDEF() macro, and drop prop_type = JSPT_UNDEF. Note
+	that VALUE_TO_JSVAL_START always call it.  
+
+Fri Dec 17 15:00:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Add macros to set @p and use them.  
+
+Fri Dec 17 14:37:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	error_reporter(): attempt to make things readable.  
+
+Fri Dec 17 14:10:14 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	If we go for macros, then use them.  
+
+Fri Dec 17 14:06:39 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Make @doc_view, @ses more local. Minor typo fix.  
+
+Fri Dec 17 13:59:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Drop temporary variable and minor typo fix.  
+
+Fri Dec 17 13:58:06 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Put spaces around = operator.  
+
+Fri Dec 17 13:56:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Make @doc_view declaration more local.  
+
+Fri Dec 17 13:48:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Tidy up.  
+
+Fri Dec 17 13:32:09 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Reduce indentation level and tidy up.  
+
+Fri Dec 17 13:26:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Reduce indentation level and tidy up.  
+
+Fri Dec 17 13:24:02 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Drop useless temporary variable.  
+
+Fri Dec 17 13:22:33 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Tidy up.  
+
+Fri Dec 17 13:19:51 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/: spidermonkey.c, spidermonkey.c:
+
+	Drop useless {}.  
+
+Fri Dec 17 11:09:34 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	JSVAL_TO_VALUE_START macro declares some variables, so stick it to
+	declaration block.  
+
+Fri Dec 17 11:05:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	VALUE_TO_JSVAL_START macro declares some variables, so stick it to
+	declaration block.  
+
+Fri Dec 17 11:02:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Only get document if needed, it fixes crash when accessing bugzilla.
+	Pasky, please review.  
+
+Fri Dec 17 08:53:09 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	document.browse.forms.auto_submit option is boolean.  
+
+Fri Dec 17 08:48:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: form.c, link.c:
+
+	document.browse.accesskey.display option is boolean.  
+
+Fri Dec 17 05:06:26 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/link.c:
+
+	Describe init_link_drawing, draw_current_link, and clear_link.  
+
+Fri Dec 17 04:40:51 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/view.h:
+
+	Guess at the purpose of struct link_bg *link_bg and int link_bg_n in
+	struct document_view.  
+
+Fri Dec 17 03:21:17 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	s/non accessible/inaccessible/ 
+
+Fri Dec 17 03:19:35 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Never add inaccessible links, regardless of whether we are numbering
+	them.  
+
+Fri Dec 17 01:33:54 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Stop searching a document when the first zero-length match is found.  
+	This avoids long freezes while ELinks finds and highlights every
+	zero-length match on the page, which can take a while.  
+
+Fri Dec 17 01:22:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/hierbox.c:
+
+	When the generic hierbox search handler finds no matches, mark all
+	items visible.  
+	
+	This fixes bug 567: 'all listbox items made invisible when result of
+	search is not found' 
+
+Fri Dec 17 01:11:07 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Oh these compilers...  
+
+Fri Dec 17 00:49:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Extensive cleanup of the 'form' object methods.  
+
+Fri Dec 17 00:46:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Treat option as boolean.  
+
+Fri Dec 17 00:39:27 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Extensive cleanup of the 'forms' object methods.  
+
+Fri Dec 17 00:25:13 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Internally, call the object 'form' instead of 'form_control' in our
+	symbol names. Less confusing, I think.  
+
+Fri Dec 17 00:21:56 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Trivial reindentation.  
+
+Fri Dec 17 00:20:49 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Factored out form_control class instance generation to
+	get_form_control_object(), and made the object to have the 'forms'
+	object as its parent.  
+
+Fri Dec 17 00:05:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Cleanup parts of document_get_property() relevant to forms. Also,
+	document.forms is not generated under each property lookup as a new
+	object anymore, but initialized single time by JS_InitClass(). I
+	hope it actually works.  
+
+Thu Dec 16 23:53:05 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Try to un-mess the code again by logically reordering the forms code
+	added by witekfl.  
+
+Thu Dec 16 23:48:42 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/renderer.c, ecmascript/ecmascript.h:
+
+	Introduce ecmascript_interpreter.onload_snippets_owner containing
+	document id of the final document structure the snippets come from -
+	and if that changed from before when about to process snippets,
+	reset the state and process them from scratch. Fixes bug 516 where
+	the current document got reloaded in another tab and then some
+	smart*** pressed ^L to redraw it in the current one.  
+
 Thu Dec 16 23:10:41 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/cache/cache.c:

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.108 2004/09/28 22:41:12 pasky Exp $ */
+/* $Id: renderer.c,v 1.109 2004/09/28 23:14:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,7 +185,29 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	doc_view->vs = vs;
 	doc_view->last_x = doc_view->last_y = -1;
 
+#if 0
+	/* This is a nice idea, but doesn't always work: in particular when
+	 * there's a frame name conflict. You loaded something to the vs'
+	 * frame, but later something tried to get loaded to a frame with
+	 * the same name and we got back this frame again, so we are now
+	 * overriding the original document with a cuckoo. This assert()ion
+	 * should be re-enabled when we start to get this right (which is
+	 * very complex, but someone should rewrite the frames support
+	 * anyway). --pasky */
 	assert(!vs->doc_view);
+#else
+	if (vs->doc_view) {
+		/* It will be still detached, no worries - hopefully it still
+		 * resides in ses->scrn_frames. */
+		assert(vs->doc_view->vs == vs);
+		vs->doc_view->used = 0; /* A bit risky, but... */
+		vs->doc_view->vs = NULL;
+		vs->doc_view = NULL;
+#ifdef CONFIG_ECMASCRIPT
+		vs->ecmascript_fragile = 1; /* And is this good? ;-) */
+#endif
+	}
+#endif
 	vs->doc_view = doc_view;
 
 #ifdef CONFIG_ECMASCRIPT

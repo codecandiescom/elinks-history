@@ -6,6 +6,9 @@ czech language with absoltely no mean, welcome to the realm of elinks code!
 
 Don't take this file as a law. I may or may not be right in these issues.
 
+Motto: I didn't expect someone to look at the source, so it's unreadable.
+       --Mikulas
+
 
 1, Language files
 ~~~~~~~~~~~~~~~~~
@@ -49,6 +52,36 @@ See links.h for list of them ;-).
 
 If you want to have anything else documented here, write description and send
 me a patch.
+
+2.1, HTML parser
+~~~~~~~~~~~~~~~~
+
+I found the following in mailing list archive - Mikulas wrote it:
+
+The entry of parser is parse_html. This function gets html to parse (pointers
+html and eof) and functions it should call when it wants to produce output
+(put_chars, line_break, init, special). f is pointer that is passed to that
+functions, head is HTTP header (for refresh). The function uses stack (struct
+list_head html_stack; it is set up by the caller of parse_html), places
+formatting info on it, and calls output functions. put_chars to write text,
+line_break for new line, init (currently unused), special (tags, forms,
+etc...). These functions read the parameters from stack (struct html_element)
+and do actual rendering.  (some times ago, some people wanted to use the parser
+for graphics browser, so I wrote it so that it could produce graphics output
+just by replacing the output functions)
+
+Html renderer is in html_r.c. html_interpret formats the whole screen. It calls
+cached_format_html which formats one document (frame) or returns directly
+formatted document from cache. cached_format_html then calls format_html, which
+sets up rendering and calls format_html_part.  format_html_part is used for
+formatting the whole document or formatting parts of tables. It calls
+parse_html.
+
+The rendering functions put_chars_conv, line_break, html_special receive struct
+part * from the parser. They render the text or calculate size of text (in case
+of tables). struct part has pointer to struct f_data - a stucture that holds
+actually formatted data. If the pointer is NULL, rendering functions only
+calculate size.
 
 
 3, Coding style

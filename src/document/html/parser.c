@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.132 2003/06/15 10:43:16 zas Exp $ */
+/* $Id: parser.c,v 1.133 2003/06/15 10:55:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2681,7 +2681,7 @@ compar(const void *a, const void *b)
 
 #else
 
-static struct fastfind_info *ff_info_tags = NULL;
+static struct fastfind_info *ff_info_tags;
 static struct element_info *internal_pointer;
 
 /* Reset internal list pointer */

@@ -274,7 +274,7 @@ Michal Politowski <mpol@charybda.icm.edu.pl>
 	Fixed saving of old xterm title in some odd cases
 		(like multi-gnome-terminal)
 
-Miciah Dashiel <theweirdo@subdimension.com>
+Miciah Dashiel Butler Masters <miciah@myrealbox.com>
 	Document-specific colors usage switch possibility
 	Global history
 	Unambiguous autocompletion
@@ -436,4 +436,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.122 2003/05/10 11:33:05 zas Exp $
+$Id: AUTHORS,v 1.123 2003/05/11 18:34:26 miciah Exp $

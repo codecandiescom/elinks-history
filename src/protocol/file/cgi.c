@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.28 2003/12/05 18:12:53 pasky Exp $ */
+/* $Id: cgi.c,v 1.29 2003/12/05 18:14:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,6 +200,9 @@ set_vars(struct connection *conn, unsigned char *script)
 
 	/* We do not set HTTP_ACCEPT_ENCODING. Yeah, let's let the CGI script
 	 * gzip the stuff so that the CPU doesn't at least sit idle. */
+
+	setenv("HTTP_ACCEPT_LANGUAGE",
+		get_opt_str("protocol.http.accept_language"), 1);
 
 	return 0;
 }

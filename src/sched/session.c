@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.597 2005/02/23 21:52:08 jonas Exp $ */
+/* $Id: session.c,v 1.598 2005/02/27 22:56:00 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -573,7 +573,7 @@ doc_loading_callback(struct download *download, struct session *ses)
 static void
 file_loading_callback(struct download *download, struct file_to_load *ftl)
 {
-	if (ftl->download.cached) {
+	if (ftl->download.cached && ftl->cached != ftl->download.cached) {
 		if (ftl->cached) object_unlock(ftl->cached);
 		ftl->cached = ftl->download.cached;
 		object_lock(ftl->cached);

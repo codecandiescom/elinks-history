@@ -1,5 +1,5 @@
 /* Some ELinks' auxiliary routines (ELinks<->gettext support) */
-/* $Id: libintl.c,v 1.3 2003/01/03 02:28:56 pasky Exp $ */
+/* $Id: libintl.c,v 1.4 2003/01/03 04:24:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 #include "elinks.h"
 
 #include "intl/gettext/libintl.h"
+#include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
 
@@ -28,7 +29,7 @@ struct language languages[] = {
 	{ "Bulgarian", "bg" },
 	{ "Catalan", "ca" },
 	{ "Croatian", "hr" },
-	{ "Czech", "cz" },
+	{ "Czech", "cs" },
 	{ "Danish", "da" },
 	{ "Dutch", "nl" },
 	{ "Estonian", "et" },
@@ -150,6 +151,9 @@ int current_language = 0;
 void
 set_language(int language)
 {
+	static unsigned char LANGUAGE[256];
+	unsigned char *_;
+
 	if (!system_language) {
 		unsigned char *l;
 
@@ -176,7 +180,11 @@ set_language(int language)
 	if (!language)
 		language = system_language;
 
-	setenv("LANGUAGE", language_to_iso639(language), 1);
+	strcpy(LANGUAGE, language_to_iso639(language));
+	_ = strchr(LANGUAGE, '-');
+	if (_) *_ = '_';
+	
+	setenv("LANGUAGE", LANGUAGE, 1);
 
 	/* Propagate the change to gettext. From the info manual. */
 	{

@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.16 2003/08/23 16:33:20 jonas Exp $ */
+/* $Id: options.c,v 1.17 2003/09/04 18:14:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ compare_opt(struct document_options *o1, struct document_options *o2)
 	    o1->default_bg == o2->default_bg &&
 	    o1->default_link == o2->default_link &&
 	    o1->default_vlink == o2->default_vlink &&
-	    strcasecmp(o1->framename, o2->framename)) return 0;
+	    !strcasecmp(o1->framename, o2->framename)) return 0;
 	return 1;
 }
 

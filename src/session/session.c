@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.305 2004/02/20 14:42:00 jonas Exp $ */
+/* $Id: session.c,v 1.306 2004/03/03 17:27:15 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1100,7 +1100,7 @@ get_current_title(struct session *ses, unsigned char *str, size_t str_size)
 unsigned char *
 get_current_link_url(struct session *ses, unsigned char *str, size_t str_size)
 {
-	struct link *l = get_current_link(ses);
+	struct link *l = get_current_session_link(ses);
 
 	if (l) return safe_strncpy(str, l->where ? l->where : l->where_img,
 				   str_size);
@@ -1114,7 +1114,7 @@ get_current_link_url(struct session *ses, unsigned char *str, size_t str_size)
 unsigned char *
 get_current_link_name(struct session *ses, unsigned char *str, size_t str_size)
 {
-	struct link *link = get_current_link(ses);
+	struct link *link = get_current_session_link(ses);
 	unsigned char *where, *name = NULL;
 
 	if (!link) return NULL;
@@ -1149,7 +1149,7 @@ get_current_link_in_view(struct document_view *doc_view)
 }
 
 struct link *
-get_current_link(struct session *ses)
+get_current_session_link(struct session *ses)
 {
 	return get_current_link_in_view(current_frame(ses));
 }

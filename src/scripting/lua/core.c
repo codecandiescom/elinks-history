@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.140 2004/02/06 22:41:05 jonas Exp $ */
+/* $Id: core.c,v 1.141 2004/03/03 17:27:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,7 +100,7 @@ l_current_url(LS)
 static int
 l_current_link(LS)
 {
-	struct link *link = get_current_link(lua_ses);
+	struct link *link = get_current_session_link(lua_ses);
 
 	if (link) {
 		lua_pushstring(S, link->where);

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.125 2004/06/19 12:46:23 jonas Exp $ */
+/* $Id: textarea.c,v 1.126 2004/06/19 12:58:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -319,8 +319,8 @@ read_textarea_file(unsigned char *filename, int maxlength)
 }
 
 void
-textarea_edit(int op, struct terminal *term_, struct form_control *fc_,
-	      struct form_state *fs_, struct document_view *doc_view_, struct link *link_)
+textarea_edit(int op, struct terminal *term_, struct form_state *fs_,
+	      struct document_view *doc_view_, struct link *link_)
 {
 	static int fc_maxlength;
 	static struct form_state *fs;
@@ -352,10 +352,12 @@ textarea_edit(int op, struct terminal *term_, struct form_control *fc_,
 		goto free_and_return;
 	}
 
-	if (fc_) fc_maxlength = fc_->maxlength;
 	if (fs_) fs = fs_;
 	if (doc_view_) doc_view = doc_view_;
-	if (link_) link = link_;
+	if (link_) {
+		link = link_;
+		fc_maxlength = link_->form_control->maxlength;
+	}
 	if (term_) term = term_;
 
 	if (op == 0 && !textarea_editor) {
@@ -417,7 +419,6 @@ menu_textarea_edit(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct document_view *doc_view;
 	struct link *link;
-	struct form_control *fc;
 	struct form_state *fs;
 
 	assert(term && ses);
@@ -431,16 +432,13 @@ menu_textarea_edit(struct terminal *term, void *xxx, struct session *ses)
 	link = get_current_link(doc_view);
 	if (!link) return 1;
 
-	fc = link->form_control;
-	assert(fc && fc->type == FC_TEXTAREA);
-
 	if (form_field_is_readonly(link->form_control))
 		return 1;
 
-	fs = find_form_state(doc_view, fc);
+	fs = find_form_state(doc_view, link->form_control);
 	if (!fs) return 1;
 
-	textarea_edit(0, term, fc, fs, doc_view, link);
+	textarea_edit(0, term, fs, doc_view, link);
 	return 2;
 }
 

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.71 2004/06/17 10:02:22 zas Exp $ */
+/* $Id: terminal.c,v 1.72 2004/06/19 12:58:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,7 +187,7 @@ unblock_terminal(struct terminal *term)
 	unblock_itrm(term->fdin);
 	redraw_terminal_cls(term);
 	if (textarea_editor)	/* XXX */
-		textarea_edit(1, NULL, NULL, NULL, NULL, NULL);
+		textarea_edit(1, NULL, NULL, NULL, NULL);
 }
 
 void

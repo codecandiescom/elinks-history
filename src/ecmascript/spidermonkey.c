@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.4 2004/09/22 22:14:36 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.5 2004/09/22 22:31:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,7 +147,9 @@ jsval_to_value(JSContext *ctx, jsval *vp, JSType type, void *var)
 static const JSClass global_class = {
 	"Compilation scope",
 	JSCLASS_HAS_PRIVATE,
-	JSCLASS_NO_OPTIONAL_MEMBERS
+	JS_addPropertyStub, JS_delPropertyStub,
+	JS_getPropertyStub, JS_setPropertyStub,
+	JS_enumerateStub, js_resolveStub, js_convertStub, js_finalizeStub
 };
 
 
@@ -157,8 +159,9 @@ static JSBool document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsv
 static const JSClass document_class = {
 	"document",
 	JSCLASS_HAS_PRIVATE,
-	NULL, NULL, document_get_property, document_set_property,
-	NULL, NULL, NULL, NULL
+	JS_addPropertyStub, JS_delPropertyStub,
+	document_get_property, document_set_property,
+	JS_enumerateStub, js_resolveStub, js_convertStub, js_finalizeStub
 };
 
 enum document_prop { JSP_DOC_TITLE, JSP_DOC_URL };

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.74 2003/11/29 17:50:51 pasky Exp $ */
+/* $Id: uri.c,v 1.75 2003/11/29 21:20:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -654,7 +654,7 @@ proxy:
 #else
 	if (*ch != ':' || url[strcspn(url, "/@")] == '@') {
 #endif
-		unsigned char *prefix = "file://";
+		unsigned char *prefix = "file://./";
 		int not_file = 0;
 
 		/* Yes, it would be simpler to make test for IPv6 address first,

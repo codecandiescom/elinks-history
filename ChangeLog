@@ -1,3 +1,431 @@
+Sat Jun 12 19:43:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	get_form_info(): Tidyup.  
+
+Sat Jun 12 19:29:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	get_form_info(): Outdent last part.  
+
+Sat Jun 12 19:28:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	get_form_info(): Cleanup. Unify use of local variables.  
+
+Sat Jun 12 19:24:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, form.h, link.c:
+
+	Split form stuff in print_current_link_do() out into
+	get_form_info().  
+
+Sat Jun 12 19:23:19 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/menu.c, document/document.h:
+
+	Trim trailing spaces.  
+
+Sat Jun 12 19:14:20 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	Drop extra whitelines.  
+
+Sat Jun 12 19:07:48 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	print_current_link_do(): code cleanup.  
+
+Sat Jun 12 18:51:21 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/signals.c, lowlevel/signals.h, viewer/text/form.c,
+	viewer/text/link.c, viewer/text/link.h, viewer/text/textarea.c,
+	viewer/text/textarea.h, viewer/text/view.c:
+
+	@t -> @term.  
+
+Sat Jun 12 18:43:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/lua/core.c:
+
+	Drop redundant sig_ctrl_c() prototype.  
+
+Sat Jun 12 18:06:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	Make field_op_do() static.  
+
+Sat Jun 12 18:05:53 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/session.c, viewer/dump/dump.c, viewer/text/form.c,
+	viewer/text/link.c, viewer/text/link.h, viewer/text/textarea.c,
+	viewer/text/textarea.h:
+
+	@l -> @link.  
+
+Sat Jun 12 17:55:38 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: document/document.h, document/html/renderer.c,
+	viewer/text/form.c, viewer/text/link.c, viewer/text/textarea.c:
+
+	struct link: @form -> @form_control.  
+
+Sat Jun 12 17:42:57 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/renderer.c:
+
+	Drop dead code.  
+
+Sat Jun 12 17:39:56 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/: document.h, renderer.c, html/renderer.c:
+
+	struct link: @num -> @number.  
+
+Sat Jun 12 17:29:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/document.c, dialogs/document.h, sched/action.c:
+
+	Merge loc_msg() and state_msg() into document_info_dialog(). Rename
+	head_msg() to protocol_header_dialog().  
+
+Sat Jun 12 17:28:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: document/docdata.h, document/document.c,
+	document/document.h, document/renderer.c, document/html/renderer.c,
+	document/plain/renderer.c, viewer/text/form.c, viewer/text/link.c,
+	viewer/text/search.c, viewer/text/textarea.c:
+
+	struct link: @n -> @npoints, @pos -> @points.  
+
+Sat Jun 12 17:19:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/document.c:
+
+	loc_msg(): Use find_in_cache() instead of get_cache_entry(). We
+	don't want to create a new entry but only look at existing one.
+	Spotted by pasky.  
+
+Sat Jun 12 16:59:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.h:
+
+	Remove fc_len member of struct submitted_value.  
+
+Sat Jun 12 16:31:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.h:
+
+	Normalize function declarations.  
+
+Sat Jun 12 16:29:05 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	field_op(): use struct terminal *term to shorten lines.  
+
+Sat Jun 12 16:27:39 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	field_op(): code simplification.  
+
+Sat Jun 12 16:26:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	field_op(): @frm -> @fc, this name is more common among code for
+	struct form_control pointer.  
+
+Sat Jun 12 16:23:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	field_op(): @l -> @link.  
+
+Sat Jun 12 16:06:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/bookmarks.c, sched/session.c:
+
+	get_current_url(): Also try ses->loading_uri so that slow loading
+	pages (like bz) will show up earlier when pressing 'G'.  
+
+Sat Jun 12 15:55:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.c:
+
+	redirect_cache(): Use get_uri_string() when doing the fake '/'
+	redirects. It is safer and I can trim away some of that confusing
+	comment I wrote once.  
+
+Sat Jun 12 15:46:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	rewrite_uri(): Use add_uri_to_string() when adding current URI.  
+
+Sat Jun 12 15:43:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/ftp.c:
+
+	... and free the URI string too.  
+
+Sat Jun 12 15:43:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Use get_uri_string() instead of accessing URI directly. It will also
+	make sure that password is not shown on the screen.  
+
+Sat Jun 12 15:34:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/dialogs.c:
+
+	Use add_uri_to_string().  
+
+Sat Jun 12 15:26:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Tidyup.  
+
+Sat Jun 12 15:25:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Merge init_session_info_string() into open_uri_in_new_window().  
+
+Sat Jun 12 15:19:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/: conv.c, conv.h:
+
+	Remove now unused add_encoded_shell_safe_url() and
+	decode_shell_safe_url().  
+
+Sat Jun 12 15:16:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, dialogs/menu.c, sched/session.c, sched/session.h:
+
+	Introduce session_info struct that is basicly like the old
+	initial_session_info struct but is only used for openning instances
+	in new windows. The new instance connects and the base_session id is
+	used to look up saved session info from which we can initialize. The
+	id member of struct session can then be removed. More can be removed
+	but that will happen in later patch.  
+
+Sat Jun 12 15:03:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.h:
+
+	Remove initial_session_info struct declaration.  
+
+Sat Jun 12 15:02:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.h:
+
+	Cleanup #include.  
+
+Sat Jun 12 12:33:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): Cleanup.  
+
+Sat Jun 12 12:24:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): Cleanup the loop. Comment on why warning
+	about bad URL syntax is not needed.  
+
+Sat Jun 12 12:14:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	in_term(): This little hack is needed to make sure that the terminal
+	is initialized and ready to draw on.  
+
+Sat Jun 12 11:54:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Hmm.  
+
+Sat Jun 12 11:45:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): Cleanup init_session() calling for multiple
+	loops. Just break out if allocation fails.  
+
+Sat Jun 12 11:35:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): base_session -> ses. It made the code too
+	readable and we can't have that.  
+
+Sat Jun 12 11:30:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	init_remote_session(): Make it even more evil by making it mangle
+	reference to remote flags.  
+
+Sat Jun 12 11:24:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: session.c, session.h:
+
+	decode_session_info(): Return int. Much simpler with term not being
+	destroyed anymore.  
+
+Sat Jun 12 11:19:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, terminal/event.c:
+
+	Move the destroy_terminal() back to in_term()'s EV_INIT handler. It
+	is the only thing really using it since decode_session() will be
+	called for all terminal creation. Besides it fixes -remote support
+	;) 
+
+Sat Jun 12 11:00:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): Don't break if next NUL char is not found so
+	ELinks' using the old format can connect again.  
+
+Sat Jun 12 01:17:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	join_urls(): Reduce code duplication by doing allocation and URI
+	normalization if length is set to something meaningful. It means
+	'//' branch will also call normalization but we shouldn't trust the
+	web authors in the first place.  
+
+Sat Jun 12 01:10:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	join_urls(): Also use memacpy() for '//' joining instead of the
+	get_uri_string() beast.  
+
+Sat Jun 12 01:07:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	join_urls(): Comments and breathing room.  
+
+Sat Jun 12 01:01:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	join_urls(): tmp -> length, n -> uristring 
+
+Sat Jun 12 00:55:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Simplify the URI normalization interface a bit.  
+
+Sat Jun 12 00:50:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	join_urls(): Make better use of fragment and post member when
+	joining '?' relative URI.  
+
+Sat Jun 12 00:43:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	join_urls(): Make better use of fragment and post member when
+	joining '#' relative URI.  
+
+Sat Jun 12 00:35:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	join_urls(): Check return value of get_uri_string().  
+
+Sat Jun 12 00:16:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	URI_FORM_GET should not have URI_FRAGMENT flag set since query was
+	removed before and fragment part is after query part.  
+
+Sat Jun 12 00:14:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	get_no_post_url_length(): Remove.  
+
+Sat Jun 12 00:12:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/parser/forms.c, protocol/uri.h:
+
+	Be smarter by using get_uri_string() when initializing form->action.  
+
+Sat Jun 12 00:09:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Allow URI_PATH to be used with other URI components.  
+
+Fri Jun 11 23:48:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/dialogs.c, protocol/uri.c, protocol/uri.h:
+
+	Generalize adding of '(POST DATA)' for strings returned by
+	get_uri_string(..., URI_PUBLIC); Don't know it might be helpful for
+	some but should maybe be disabled for non debug builds.  
+
+Fri Jun 11 23:24:46 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Jun 11 23:16:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Fix broken session setup. setup_first_session() now returns bool
+	whether to also call setup_session().  
+
+Fri Jun 11 23:05:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	setup_first_session(): Move the juicy stuff last.  
+
+Fri Jun 11 23:05:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	tabwin_func(): Don't break on EV_INIT we want those main menu and
+	status bar drawn on the screen.  
+
+Fri Jun 11 23:03:48 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/forms.c:
+
+	Drop commented out dead code.  
+
+Fri Jun 11 23:03:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	Introduce init_boundary().  
+
 Fri Jun 11 21:58:05 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/viewer/text/form.c:

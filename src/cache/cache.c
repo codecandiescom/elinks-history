@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.38 2003/07/14 19:51:31 jonas Exp $ */
+/* $Id: cache.c,v 1.39 2003/07/24 14:41:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -396,10 +396,9 @@ delete_entry_content(struct cache_entry *e)
 	e->incomplete = 1;
 
 	cache_size -= e->data_size;
-	if (cache_size < 0) {
-		internal("cache_size underflow: %ld", cache_size);
-		cache_size = 0;
-	}
+	assertm(cache_size >= 0, "cache_size underflow: %ld", cache_size);
+	if_assert_failed { cache_size = 0; }
+
 	e->data_size = 0;
 
 	if (e->last_modified) {
@@ -416,10 +415,8 @@ delete_entry_content(struct cache_entry *e)
 void
 delete_cache_entry(struct cache_entry *e)
 {
-	if (e->refcount) internal("deleting locked cache entry");
-#ifdef DEBUG
-	if (is_entry_used(e)) internal("deleting loading cache entry");
-#endif
+	assertm(!e->refcount, "deleting locked cache entry");
+	assertm(!is_entry_used(e), "deleting loading cache entry");
 
 	delete_entry_content(e);
 	del_from_list(e);
@@ -449,18 +446,17 @@ garbage_collection(int u)
 	foreach (e, cache) {
 		if (e->refcount || is_entry_used(e)) {
 			ncs -= e->data_size;
-			if (ncs < 0) {
-				internal("cache_size underflow: %ld", ncs);
-				ncs = 0;
-			}
+
+			assertm(ncs >= 0, "cache_size underflow: %ld", ncs);
+			if_assert_failed { ncs = 0; }
 		}
+
 		ccs += e->data_size;
 	}
 
-	if (ccs != cache_size) {
-		internal("cache size badly computed: %ld != %ld", cache_size, ccs);
-	       	cache_size = ccs;
-	}
+	assertm(ccs == cache_size, "cache_size badly computed: %ld != %ld",
+		cache_size, ccs);
+	if_assert_failed { cache_size = ccs; }
 
 	if (!u && ncs <= opt_cache_memory_size) return;
 
@@ -474,14 +470,13 @@ garbage_collection(int u)
 		}
 		e->tgc = 1;
 		ncs -= e->data_size;
-		if (ncs < 0) {
-			internal("cache_size underflow: %ld", ncs);
-			ncs = 0;
-		}
+
+		assertm(ncs >= 0, "cache_size underflow: %ld", ncs);
+		if_assert_failed { ncs = 0; }
 	}
-	if (/*!no &&*/ ncs)
-		internal("cache_size(%ld) is larger than size of all objects(%ld)",
-			 cache_size, cache_size - ncs);
+
+	assertm(ncs == 0, "cache_size overflow: %ld", ncs);
+	if_assert_failed { ncs = 0; }
 
 g:
 	e = e->next;

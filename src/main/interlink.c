@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.41 2003/06/18 19:44:49 zas Exp $ */
+/* $Id: interlink.c,v 1.42 2003/06/18 20:05:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,22 +79,36 @@ static int s_unix_fd = -1;
 
 #ifdef USE_AF_UNIX
 
+/* Compute socket file path and allocate space for it.
+ * It returns 0 on error (in this case, there's no need
+ * to free anything).
+ * It returns 1 on success. */
+static int
+get_sun_path(unsigned char **sun_path, int *sun_path_len)
+{
+	if (!elinks_home) return 0;
+
+	*sun_path = init_str();
+	if (!*sun_path) return 0;
+
+	*sun_path_len = 0;
+
+	add_to_str(sun_path, sun_path_len, elinks_home);
+	add_to_str(sun_path, sun_path_len, ELINKS_SOCK_NAME);
+	add_num_to_str(sun_path, sun_path_len, get_opt_int_tree(&cmdline_options, "session-ring"));
+
+	return 1;
+}
+
 static int
 get_address(struct sockaddr **s_addr, int *s_addr_len)
 {
 	struct sockaddr_un *addr = NULL;
-	unsigned char *path;
-	int pathl = 0;
 	int sun_path_freespace;
+	unsigned char *path;
+	int pathl;
 
-	if (!elinks_home) return -1;
-
-	path = init_str();
-	if (!path) return -1;
-
-	add_to_str(&path, &pathl, elinks_home);
-	add_to_str(&path, &pathl, ELINKS_SOCK_NAME);
-	add_num_to_str(&path, &pathl, get_opt_int_tree(&cmdline_options, "session-ring"));
+	if (!get_sun_path(&path, &pathl)) return -1;
 
 	/* Linux defines that as:
 	 * #define UNIX_PATH_MAX   108

@@ -12,19 +12,19 @@ ELinks-now:
 * modal text-input form-fields editing (disabled by default) 
 * manual cookies creating and editing support
 * typeahead text searching (press '#/')
-* Perl scripting extensions (experimental)
-* configurability and feature documentation through features.conf
-* Mozilla-compliant -remote option (http://www.mozilla.org/unix/remote.html)
-* internationalized domain name support via libidn (RFC 3490)
-* data protocol support (RFC 2397)
+* PERL scripting back-end (experimental)
+* build-time configurability and feature documentation through features.conf
+* Mozilla-compatible -remote option (http://www.mozilla.org/unix/remote.html)
+* support for internationalized domain names via libidn (RFC 3490)
+* support for the data URI scheme (RFC 2397)
 * gopher protocol support (RFC 1436)
 * NNTP protocol support (RFC 977 and 2980) (experimental)
 * build system fine-tuned to use automake conditionals
-* -localhost option to only permit local connections
+* -localhost option to block connections to remote hosts
 * -verbose option to control messages printed at startup
 * -default-keys command line option to ignore user-defined keybindings
-* -config-dir replaces -confdir option
-* -config-file replaces -conffile option
+* -confdir option renamed to -config-dir
+* -conffile option renamed to -config-file
 
 ELinks-0.9.0:
 

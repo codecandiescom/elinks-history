@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.59 2005/03/03 17:13:26 zas Exp $ */
+/* $Id: select.c,v 1.60 2005/03/03 17:16:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,24 +73,34 @@ static fd_set x_error;
 
 static int w_max;
 
+static int
+count_timers(void)
+{
+	struct timer *timer;
+	int i = 0;
+
+	foreach (timer, timers) i++;
+
+	return i;
+}
 
 long
 select_info(int type)
 {
-	int i = 0, j;
-	struct timer *timer;
-
 	switch (type) {
 		case INFO_FILES:
+		{
+			int i = 0, j;
+
 			for (j = 0; j < FD_SETSIZE; j++)
 				if (threads[j].read_func
 				    || threads[j].write_func
 				    || threads[j].error_func)
 					i++;
 			return i;
+		}
 		case INFO_TIMERS:
-			foreach (timer, timers) i++;
-			return i;
+			return count_timers();
 	}
 
 	return 0;

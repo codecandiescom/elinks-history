@@ -928,7 +928,9 @@ int created_home = 0;
 
 int no_connect = 0;
 int base_session = 0;
+
 int dmp = 0;
+int dump_width = 80;
 
 int async_lookup = 1;
 int download_utime = 0;
@@ -1066,6 +1068,11 @@ struct option links_options[] = {
 	 	D_DUMP, 0, NULL,
 		"Write a plain-text version of the given HTML document to\n"
 		"stdout." },
+	 
+	{	"dump-width", "dump_width",
+		gen_cmd, num_rd, num_wr,
+	 	40, 512, &dump_width,
+	 	"Size of screen in characters, when dumping a HTML document." },
 	 
 	{	"format-cache-size", "format_cache_size",
 		gen_cmd, num_rd, num_wr,

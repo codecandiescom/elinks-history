@@ -2076,6 +2076,7 @@ extern int base_session;
 #define D_DUMP		1
 #define D_SOURCE	2
 extern int dmp;
+extern int dump_width;
 
 extern int async_lookup;
 extern int download_utime;

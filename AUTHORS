@@ -85,6 +85,9 @@ Dmitry M. Klimov <dmk@gtrk.kmtn.ru>
 Dmitry Pinchukov <dpinch@mail.ru>
 	Ukrainian translation
 
+Edwin Groothuis <edwin@mavetju.org>
+	Dump-width option
+
 Evan Hughes <hughes@lab43.org>
 	Bookmarks
 
@@ -257,4 +260,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	Bookmarks hacking
 	Misc minor improvements
 
-$Id: AUTHORS,v 1.32 2002/03/04 22:09:07 pasky Exp $
+$Id: AUTHORS,v 1.33 2002/03/05 11:49:33 pasky Exp $

@@ -199,7 +199,7 @@ void end_dump(struct status *stat, void *p)
 		memset(&fd, 0, sizeof(struct f_data_c));
 		o.xp = 0;
 		o.yp = 1;
-		o.xw = 80;
+		o.xw = dump_width;
 		o.yw = 25;
 		o.col = 0;
 		o.cp = 0;

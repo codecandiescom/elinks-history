@@ -1,3 +1,325 @@
+Sat Nov 22 22:05:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/dialogs.c, cache/dialogs.c, globhist/dialogs.c:
+
+	Use the goto button for bookmark and globhist browsers .. and eh add
+	a goto button to the cache manager although it might not be too
+	useful we need lots of shiny buttons, right? ;) 
+
+Sat Nov 22 22:02:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.c, hierbox.h:
+
+	Add generic hierbox goto button handler.  
+
+Sat Nov 22 21:42:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/listbox.h, bookmarks/dialogs.c,
+	cache/dialogs.c, cookies/dialogs.c, globhist/dialogs.c:
+
+	Add support for various info requests like URI (usable for generic
+	goto button) or full info.  
+
+Sat Nov 22 20:49:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Merge info and delete button finalizers into
+	done_hierbox_action_info().  
+
+Sat Nov 22 20:47:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/leds.c:
+
+	Restore behavior when ui.timer.enable == 2 that was broken by the
+	introduction of the leds enable option.  
+
+Sat Nov 22 20:39:28 2003  Laurent Monin <zas@norz.org>:
+
+	* po/be.po, src/bfu/hierbox.c, po/bg.po, po/ca.po, po/cs.po,
+	po/da.po, po/de.po, po/el.po, po/es.po, po/et.po, po/fi.po,
+	po/fr.po, po/gl.po, po/hr.po, po/hu.po, po/id.po, po/is.po,
+	po/it.po, po/leet.po, po/lt.po, po/nl.po, po/no.po, po/pl.po,
+	po/pt_BR.po, po/pt.po, po/ro.po, po/ru.po, po/sk.po, po/sv.po,
+	po/tr.po, po/uk.po:
+
+	Missing space fix. .po files were resynced.  
+
+Sat Nov 22 20:25:55 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sat Nov 22 19:19:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/timer.c:
+
+	Set interactivity countdown timer to -1 after killing it. Fixes an
+	assertion failure triggered when enabling/disabling it.  
+
+Sat Nov 22 19:07:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/leds.c:
+
+	Add option to control enabling of leds at runtime. It is only used
+	in the led code so there is still a bit of overhead. Proposed fix
+	for bug 287.  
+
+Sat Nov 22 17:05:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/bookmarks.c, config/opttypes.c:
+
+	Use add_to_list_end() instead of add_at_pos().  
+
+Sat Nov 22 17:04:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Fix some locking issues.  
+
+Sat Nov 22 16:50:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/backend/common.c:
+
+	Remove useless #undef.  
+
+Sat Nov 22 16:48:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Make init_hierbox_action_info() static.  
+
+Sat Nov 22 16:28:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/dialogs.c:
+
+	We now require the info button text before locking the object so no
+	need to subtract one to the refcount.  
+
+Sat Nov 22 16:22:55 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sat Nov 22 16:18:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/dialogs.c:
+
+	Use generic info button handler.  
+
+Sat Nov 22 16:17:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/dialogs.c:
+
+	Add delete button to cache manager.  
+
+Sat Nov 22 16:16:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/dialogs.c:
+
+	Implement all the listbox_ops for cache_entries.  
+
+Sat Nov 22 16:10:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/dialogs.c:
+
+	Merge get_cookie_info() and get_cookie_item_info().  
+
+Sat Nov 22 16:10:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Not "Delete item <name>" but just "Delete <name>" 
+
+Sat Nov 22 15:50:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cookies/dialogs.c, globhist/dialogs.c:
+
+	Use generic clear button for cookie and globhist browser.  
+
+Sat Nov 22 15:43:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.c, hierbox.h:
+
+	Add generic hierbox clear button handler.  
+
+Sat Nov 22 15:38:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/dialogs.c:
+
+	Fix wrong button numbers.  
+
+Sat Nov 22 15:09:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Make init_hierbox_action_info() take traverse_listbox_items_list()
+	function instead of integer.  
+
+Sat Nov 22 14:38:27 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/sched/: download.c, session.c:
+
+	Hopefully fixed all issues related with rendering plain documents in
+	frames.  
+
+Sat Nov 22 14:26:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/dialogs.c:
+
+	Expand the get_info() string to include all history item info and
+	use hierbox info button handler.  
+
+Sat Nov 22 14:19:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, cookies/dialogs.c:
+
+	Provide generalized hierbox info button handler and use it for the
+	cookie browser.  
+
+Sat Nov 22 14:08:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	More action info generalization. get_hierbox_delete_info() renamed
+	to init_hierbox_action_info() and now takes @scan_marked arg.  
+
+Sat Nov 22 14:02:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.c, hierbox.h:
+
+	Cleanup moving delete_hierbox_item_info to c file and renaming it
+	hierbox_action_info since it can be used for implementing other
+	button actions too.  
+
+Sat Nov 22 13:54:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/: cookies.c, cookies.h, dialogs.c:
+
+	Add support for deleting cookies in the cookie manager.  
+
+Sat Nov 22 13:45:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/dialogs.c:
+
+	Make global history use the new (listbox item deletion) interface.  
+
+Sat Nov 22 13:45:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/dialogs.c:
+
+	Make bookmarks use the new interface.  
+
+Sat Nov 22 13:44:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: listbox.c, listbox.h:
+
+	Remove @del function from the listbox_ops. It has been replaced.  
+
+Sat Nov 22 13:42:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.c, hierbox.h:
+
+	Provide generic interface for deleting items in a hierbox_browser.  
+
+Sat Nov 22 12:28:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/listbox.h, bookmarks/dialogs.c, globhist/dialogs.c:
+
+	Ideally the hierbox deletion helpers should handle any dialog stuff
+	so no need to pass a term.  
+
+Sat Nov 22 12:06:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/listbox.h, bookmarks/dialogs.c, globhist/dialogs.c:
+
+	Also add item finalizer to listbox_ops.  
+
+Sat Nov 22 11:55:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/listbox.h, bookmarks/dialogs.c, globhist/dialogs.c:
+
+	Add object refcount utility and an info retriever to the
+	listbox_ops.  
+
+Sat Nov 22 10:25:46 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/sched/download.c:
+
+	Zas, please test! 
+
+Sat Nov 22 03:04:20 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/hierbox.c:
+
+	In done_browser_box, do not check whether box_data->sel and
+	box_data->top are NULL before comparing them to @box_item: @box_item
+	has already been asserted to be non-NULL, and besides, nothing
+	horrible will come from passing replace_box_item a NULL pointer.  
+
+Sat Nov 22 02:40:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, bookmarks/dialogs.c,
+	globhist/dialogs.c:
+
+	Generalize hierbox delete info setup using
+	get_hierbox_delete_info().  
+
+Sat Nov 22 02:30:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.h, bookmarks/dialogs.c:
+
+	Use generic delete structure for bookmark browser.  
+
+Sat Nov 22 02:28:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/dialogs.c:
+
+	Small fix for last patch. Also check if the selected item has an
+	object attached.  
+
+Sat Nov 22 02:16:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.h, globhist/dialogs.c:
+
+	Create a generic hierbox delete info structure.  
+
+Sat Nov 22 01:48:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, bookmarks/dialogs.c,
+	globhist/dialogs.c:
+
+	Provide a generic hierbox delete button handler.  
+
+Sat Nov 22 01:27:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Move browser item visibility setup to the event handler.  
+
+Fri Nov 21 23:38:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	add_opt(): Pass the real option when initializing the listbox_item
+	since all needed members has already been setup.  
+
+Fri Nov 21 23:17:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/dump/dump.c:
+
+	The check for NBSP_CHAR in the dump viewer should now be unneeded
+	with the last patch.  
+
+Fri Nov 21 23:15:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Wipe out the NBSP_CHAR encoding in the HTML renderer when we have
+	registered it in the space list.  
+
 Fri Nov 21 23:07:28 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/config/dialogs.h:

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.128 2004/02/04 13:57:56 pasky Exp $ */
+/* $Id: conf.c,v 1.129 2004/02/04 13:58:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -348,7 +348,7 @@ parse_config_command(struct option *options, unsigned char *file, int *line,
 
 
 			file += cmdlen;
-			err = handler->handler(options, &file, &line, m2);
+			err = handler->handler(options, &file, line, m2);
 			if (!err && mirror && m2) {
 				add_string_to_string(mirror, m2);
 			}

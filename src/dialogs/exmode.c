@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.35 2004/02/04 13:57:56 pasky Exp $ */
+/* $Id: exmode.c,v 1.37 2004/02/04 13:59:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,9 @@
 #include "bfu/inphist.h"
 #include "bfu/style.h"
 #include "bfu/widget.h"
+#include "config/conf.h"
 #include "config/kbdbind.h"
+#include "config/options.h"
 #include "dialogs/exmode.h"
 #include "intl/gettext/libintl.h"
 #include "protocol/rewrite/rewrite.h"
@@ -78,7 +80,7 @@ exmode_confcmd_handler(struct session *ses, unsigned char *command,
 	/* Undo the arguments separation. */
 	if (*args) *(--args) = ' ';
 
-	err = parse_config_command(options, command, &dummyline, NULL);
+	err = parse_config_command(config_options, command, &dummyline, NULL);
 	return err;
 }
 

@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.68 2005/03/27 12:44:26 pasky Exp $
+# $Id: hooks.pl,v 1.69 2005/03/27 13:02:39 pasky Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -63,6 +63,12 @@ and does not contain the default values:
 	# weather: weather underground, google, yahoo, cnn, accuweather,
 	#          ask jeeves
 
+I<Developer's usage>: The function I<loadrc()> takes a preference name as its
+single argument and returns either empty string if it is not specified,
+I<yes> for a true value (even if specified like I<sure> or I<why not>),
+I<no> for a false value (even if like I<nah>, I<off> or I<0>),
+or the lowercased preference value (like I<cnn> for C<weather: CNN>).
+
 =cut
 
 
@@ -109,6 +115,12 @@ sub loadrc($)
 Here you can find summary of all the available rewrites of what you type into
 the Goto URL box. They are similar in spirit to the builtin URI rewrites, but
 more flexible and immensely more powerful.
+
+I<Developer's usage>: The function I<goto_url_hook> is called when the hook
+is triggered, taking the target URI and current URI as its two arguments. It
+returns the final target URI.
+
+These are the default rewrite rules:
 
 =head2 Misc. shortcuts
 
@@ -855,6 +867,12 @@ These rewrites happen everytime ELinks is about to follow an URL and load it.
 So this is even by an order of magnitude more powerful than the Goto URL
 rewrites.
 
+I<Developer's usage>: The function I<follow_url_hook> is called when the hook
+is triggered, taking the target URI as its only argument. It returns the final
+target URI.
+
+These are the default rewrite rules:
+
 =over 4
 
 =cut
@@ -923,6 +941,12 @@ rendered document.
 Note well that these rules are applied B<only> before the final rendering, not
 before the gradual rerenderings which happen when only part of the document is
 available yet.
+
+I<Developer's usage>: The function I<pre_format_html_hook> is called when the hook
+is triggered, taking the document's URI and the HTML source as its two arguments.
+It returns the rewritten HTML code.
+
+These are the default rewrite rules:
 
 =over 4
 
@@ -1008,6 +1032,12 @@ certain Intranet servers but you need to use it in order to get to the
 Internet, or if you want to use some anonymizer for access to certain naughty
 sites.
 
+I<Developer's usage>: The function I<proxy_for_hook> is called when the hook
+is triggered, taking the target URI as its only argument. It returns the proxy
+URI, empty string to use no proxy or I<undef> to use the default proxy URI.
+
+These are the default proxy rules:
+
 =over 4
 
 =cut
@@ -1039,6 +1069,11 @@ Prevents Proxy usage for local files and C<http://localhost>.
 The Perl hooks can also perform various actions at the time of ELinks quit.
 This can be various things like retouching the just saved "information files",
 or doing some fun stuff.
+
+I<Developer's usage>: The function I<quit_hook> is called when the hook
+is triggered, taking no arguments and returning anything.
+
+These are the default actions:
 
 =over 4
 

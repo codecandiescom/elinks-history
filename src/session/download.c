@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.214 2004/01/15 05:01:00 miciah Exp $ */
+/* $Id: download.c,v 1.215 2004/02/07 10:58:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -292,6 +292,16 @@ download_data_store(struct download *download, struct file_download *file_downlo
 
 	if (file_download->notify) {
 		unsigned char *url = get_no_post_url(file_download->url, NULL);
+
+		/* This is apparently a little racy. Deleting the box item will
+		 * update the download browser _after_ the notification dialog
+		 * has been drawn whereby it will be hidden. This should make
+		 * the download browser update before launcing any
+		 * notification. */
+		if (file_download->box_item) {
+			done_listbox_item(&download_browser, file_download->box_item);
+			file_download->box_item = NULL;
+		}
 
 		if (url) {
 			msg_box(term, getml(url, NULL), MSGBOX_FREE_TEXT,

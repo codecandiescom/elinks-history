@@ -1,4 +1,4 @@
-/* $Id: location.h,v 1.3 2003/06/11 22:36:16 pasky Exp $ */
+/* $Id: location.h,v 1.4 2003/06/12 18:40:39 pasky Exp $ */
 
 #ifndef EL__SCHED_LOCATION_H
 #define EL__SCHED_LOCATION_H
@@ -9,11 +9,6 @@
 
 struct location {
 	LIST_HEAD(struct location);
-
-	/* In order to move stuff around properly when going back by multiple
-	 * steps, we need this temporary pointer to pass the proper unhistory
-	 * slot by. */
-	struct location *unhist_jump;
 
 	struct list_head frames;
 	struct status stat;

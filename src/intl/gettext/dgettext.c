@@ -19,8 +19,6 @@
 #include "config.h"
 #endif
 
-#include <locale.h>
-
 #include "intl/gettext/gettextP.h"
 #include "intl/gettext/libintl.h"
 

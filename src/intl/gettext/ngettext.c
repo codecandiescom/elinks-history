@@ -20,7 +20,6 @@
 #endif
 
 #include <stdlib.h>		/* Just for NULL.  */
-#include <locale.h>
 
 #include "intl/gettext/gettextP.h"
 #include "intl/gettext/libintl.h"

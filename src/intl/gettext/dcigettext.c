@@ -54,8 +54,6 @@ extern int errno;
 #include <unistd.h>
 #endif
 
-#include <locale.h>
-
 #if defined HAVE_SYS_PARAM_H
 #include <sys/param.h>
 #endif

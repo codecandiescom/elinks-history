@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.380 2004/12/19 02:51:22 miciah Exp $ */
+/* $Id: http.c,v 1.381 2004/12/19 04:46:21 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -223,7 +223,7 @@ init_accept_charset()
 	/* Do not use mem_alloc() here. */
 	accept_charset = malloc(ac.length + 1);
 	if (accept_charset) {
-		strcpy(accept_charset, ac.source);
+		memcpy(accept_charset, ac.source, ac.length + 1);
 	} else {
 		accept_charset = "";
 	}

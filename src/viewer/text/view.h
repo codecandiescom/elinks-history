@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.33 2003/10/31 22:37:18 pasky Exp $ */
+/* $Id: view.h,v 1.34 2003/11/18 21:52:06 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -15,7 +15,7 @@ void detach_formatted(struct document_view *doc_view);
 /* Puts the formatted document on the given terminal's screen. */
 void draw_doc(struct terminal *t, struct document_view *doc_view, int active);
 
-void draw_formatted(struct session *);
+void draw_formatted(struct session *ses, int rerender);
 
 void set_frame(struct session *, struct document_view *doc_view, int);
 struct document_view *current_frame(struct session *);

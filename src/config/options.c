@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.401 2003/11/15 15:20:25 jonas Exp $ */
+/* $Id: options.c,v 1.402 2003/11/18 21:52:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1039,7 +1039,7 @@ change_hook_connection(struct session *ses, struct option *current, struct optio
 static int
 change_hook_html(struct session *ses, struct option *current, struct option *changed)
 {
-	draw_formatted(ses);
+	draw_formatted(ses, 1);
 	load_frames(ses, ses->doc_view);
 	process_file_requests(ses);
 	print_screen_status(ses);

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.242 2003/11/17 18:39:15 jonas Exp $ */
+/* $Id: session.c,v 1.243 2003/11/18 21:52:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -929,7 +929,7 @@ void
 display_timer(struct session *ses)
 {
 	ttime t = get_time();
-	draw_formatted(ses);
+	draw_formatted(ses, 1);
 
 	t = (get_time() - t) * DISPLAY_TIME;
 	if (t < DISPLAY_TIME_MIN) t = DISPLAY_TIME_MIN;
@@ -1051,7 +1051,7 @@ doc_end_load(struct download *stat, struct session *ses)
 			ses->display_timer = -1;
 		}
 
-		draw_formatted(ses);
+		draw_formatted(ses, 1);
 
 		if (get_opt_bool_tree(cmdline_options, "auto-submit")) {
 			if (!list_empty(ses->doc_view->document->forms)) {
@@ -1756,14 +1756,14 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 			/* fall-through */
 		case EV_RESIZE:
 			if (!ses) break;
-			draw_formatted(ses);
+			draw_formatted(ses, 1);
 			load_frames(ses, ses->doc_view);
 			process_file_requests(ses);
 			print_screen_status(ses);
 			break;
 		case EV_REDRAW:
 			if (!ses) break;
-			draw_formatted(ses);
+			draw_formatted(ses, 0);
 			print_screen_status(ses);
 			break;
 		case EV_KBD:

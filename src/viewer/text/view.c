@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.269 2003/11/18 20:54:17 pasky Exp $ */
+/* $Id: view.c,v 1.270 2003/11/18 21:52:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -295,12 +295,12 @@ draw_frames(struct session *ses)
 }
 
 void
-draw_formatted(struct session *ses)
+draw_formatted(struct session *ses, int rerender)
 {
 	assert(ses && ses->tab);
 	if_assert_failed return;
 
-	render_document_frames(ses);
+	if (rerender) render_document_frames(ses);
 
 	if (ses->tab != get_current_tab(ses->tab->term))
 		return;
@@ -488,7 +488,7 @@ toggle_plain_html(struct session *ses, struct document_view *doc_view, int a)
 	}
 
 	doc_view->vs->plain = !doc_view->vs->plain;
-	draw_formatted(ses);
+	draw_formatted(ses, 1);
 }
 
 void
@@ -506,7 +506,7 @@ toggle_images(struct session *ses, struct document_view *doc_view, int a)
 	get_opt_int("document.browse.images.show_as_links") =
 		!get_opt_int("document.browse.images.show_as_links");
 
-	draw_formatted(ses);
+	draw_formatted(ses, 1);
 }
 
 void
@@ -524,7 +524,7 @@ toggle_link_numbering(struct session *ses, struct document_view *doc_view, int a
 	get_opt_int("document.browse.links.numbering") =
 		!get_opt_int("document.browse.links.numbering");
 
-	draw_formatted(ses);
+	draw_formatted(ses, 1);
 }
 
 void
@@ -546,7 +546,7 @@ toggle_document_colors(struct session *ses, struct document_view *doc_view, int 
 			(mode + 1 <= 2) ? mode + 1 : 0;
 	}
 
-	draw_formatted(ses);
+	draw_formatted(ses, 1);
 }
 
 
@@ -870,7 +870,7 @@ r:
 	o = &current_doc_view->document->options;
 	if (ev->x >= o->x && ev->x < o->x + o->width &&
 	    ev->y >= o->y && ev->y < o->y + o->height) {
-		draw_formatted(ses);
+		draw_formatted(ses, 0);
 		doc_view = current_doc_view;
 		goto ok;
 	}
@@ -908,14 +908,14 @@ send_event(struct session *ses, struct term_event *ev)
 				goto x;
 			case ACT_NEXT_FRAME:
 				next_frame(ses, 1);
-				draw_formatted(ses);
+				draw_formatted(ses, 0);
 				/*draw_frames(ses);
 				  print_screen_status(ses);
 				  redraw_from_window(ses->tab);*/
 				goto x;
 			case ACT_PREVIOUS_FRAME:
 				next_frame(ses, -1);
-				draw_formatted(ses);
+				draw_formatted(ses, 0);
 				goto x;
 			case ACT_BACK:
 				go_back(ses);
@@ -1047,7 +1047,7 @@ quit:
 			case ACT_TOGGLE_DISPLAY_TABLES:
 				get_opt_int("document.html.display_tables") =
 					!get_opt_int("document.html.display_tables");
-				draw_formatted(ses);
+				draw_formatted(ses, 1);
 				goto x;
 			case ACT_TOGGLE_HTML_PLAIN:
 				toggle_plain_html(ses, ses->doc_view, 0);

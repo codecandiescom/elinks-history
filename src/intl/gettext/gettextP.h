@@ -21,6 +21,8 @@
 
 #include <stddef.h>		/* Get size_t.  */
 
+#include "util/string.h"	/* Get possible stubs.  */
+
 #ifdef _LIBC
 # include "../iconv/gconv_int.h"
 #else

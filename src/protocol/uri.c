@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.171 2004/04/07 19:58:24 jonas Exp $ */
+/* $Id: uri.c,v 1.172 2004/04/07 20:01:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -610,6 +610,8 @@ find_uri_protocol(unsigned char *newurl)
 {
 	unsigned char *ch;
 
+	/* First see if it is a file so filenames that look like hostnames
+	 * won't confuse us below. */
 	if (file_exists(newurl)) return PROTOCOL_FILE;
 
 	/* Yes, it would be simpler to make test for IPv6 address first,
@@ -651,12 +653,7 @@ find_uri_protocol(unsigned char *newurl)
 		if (!*ipscan || *ipscan == ':' || *ipscan == '/')
 			return PROTOCOL_HTTP;
 
-		/* FIXME: Following is completely braindead.
-		 * TODO: Remove it. We should rather first try file:// and
-		 * then http://, if failed. But this will require wider
-		 * modifications. :| --pasky */
-
-		/* It's two-letter TLD? */
+		/* It's two-letter or known TLD? */
 		if (host_end - domain == 2
 		    || end_with_known_tld(domain, host_end - domain) >= 0)
 			return PROTOCOL_HTTP;

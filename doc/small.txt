@@ -41,6 +41,13 @@ same flags.
 
 Not so bad :)
 
+Next you can use an executable compressor like UPX
+(http://upx.sourceforge.net/), it gives very good results:
+Example using a diet elinks binary:
+-rwxr-xr-x   1 zas      users      463164 Oct 20 10:52 src/elinks
+upx --best ./src/elinks
+-rwxr-xr-x   1 zas      users      208700 Oct 20 10:52 src/elinks
 
+Whow ! 200kb :)
 
-/* $Id: small.txt,v 1.4 2003/10/20 08:49:27 zas Exp $ */
+/* $Id: small.txt,v 1.5 2003/10/20 08:59:05 zas Exp $ */

@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.47 2003/05/08 23:03:08 zas Exp $ */
+/* $Id: error.c,v 1.48 2003/05/14 16:34:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,9 +27,7 @@ list_magic_error_(unsigned char *where, unsigned char *what, unsigned char *file
 	fprintf(stderr, "%s:%d", file, line);
 	fprintf(stderr, " %s %s: bad list magic\n", where, what);
 	fflush(stderr);
-#ifdef LISTDEBUGFATAL
 	raise(SIGSEGV);
-#endif
 }
 
 void

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.192 2005/02/20 19:52:18 witekfl Exp $ */
+/* $Id: spidermonkey.c,v 1.193 2005/02/20 20:07:24 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1585,9 +1585,8 @@ history_back(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval
 	struct session *ses = doc_view->session;
 
 	go_back(ses);
-	string_to_jsval(ctx, rval, "");
 
-	return JS_TRUE;
+	return 2;
 }
 
 
@@ -2152,13 +2151,17 @@ spidermonkey_eval_boolback(struct ecmascript_interpreter *interpreter,
 {
 	JSContext *ctx;
 	jsval rval;
+	int ret;
 
 	assert(interpreter);
 	ctx = interpreter->backend_data;
 	setup_safeguard(interpreter, ctx);
-	if (JS_EvaluateScript(ctx, JS_GetGlobalObject(ctx),
-			      code->source, code->length, "", 0, &rval)
-	    == JS_FALSE) {
+	ret = JS_EvaluateScript(ctx, JS_GetGlobalObject(ctx),
+			  code->source, code->length, "", 0, &rval);
+	if (ret == 2) {
+		return 0;
+	};		
+	if (ret == JS_FALSE) {
 		return -1;
 	}
 	if (JSVAL_IS_VOID(rval)) {

@@ -12,9 +12,9 @@ Known bugs:
 + Frames don't work if there's more frames with same name. Turn them off in such
   case.
 
-+ When a frame's src is a plain-text file, that file is rendered as HTML.
++ When a frame's src is a non-HTML file, that file is rendered as HTML.
 
-+ In a frameset, following a link to a plain-text file breaks out of the frames.
++ In a frameset, following a link to a non-HTML file breaks out of the frames.
 
 - Loading a page in a frame does not add that page to the global history.
 
@@ -49,4 +49,4 @@ Known bugs:
 Key: - nothing done + work in progress * almost fixed
      (reflects only what is already committed to CVS)
 
-$Id: BUGS,v 1.54 2003/05/06 23:09:51 pasky Exp $
+$Id: BUGS,v 1.55 2003/05/06 23:10:45 pasky Exp $

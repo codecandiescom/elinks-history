@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.426 2004/06/01 06:18:19 miciah Exp $ */
+/* $Id: view.c,v 1.427 2004/06/01 06:19:21 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -805,6 +805,8 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			if (ev->x >= doc_view->box.width - scrollmargin * 2) {
 				rep_ev(ses, doc_view, hscroll, 8);
 			}
+		} else {
+			x = 0;
 		}
 #endif /* CONFIG_MOUSE */
 	} else {

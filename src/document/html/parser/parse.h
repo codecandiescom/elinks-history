@@ -1,10 +1,29 @@
-/* $Id: parse.h,v 1.3 2004/05/06 23:50:05 zas Exp $ */
+/* $Id: parse.h,v 1.4 2004/05/07 08:42:47 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_PARSE_H
 #define EL__DOCUMENT_HTML_PARSER_PARSE_H
 
 struct string;
 
+/* Flags for get_attr_val_(). */
+enum html_attr_flags {
+	HTML_ATTR_NONE = 0,
+
+	/* If HTML_ATTR_TEST is set then we only test for existence of
+	 * an attribute of that @name. In that mode it returns NULL if
+	 * attribute was not found, and a pointer to start of the attribute
+	 * if it was found. */
+	HTML_ATTR_TEST = 1,
+
+	/* If HTML_ATTR_EAT_NL is not set, newline and tabs chars are
+	 * replaced by spaces in returned value, else these chars are
+	 * skipped. */
+	HTML_ATTR_EAT_NL = 2,
+
+	/* If HTML_ATTR_NO_CONV is set, then convert_string() is not called
+	 * on value. */
+	HTML_ATTR_NO_CONV = 4,
+};
 
 /* Interface for both the renderer and the table handling */
 

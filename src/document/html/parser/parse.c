@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.25 2004/05/06 23:50:05 zas Exp $ */
+/* $Id: parse.c,v 1.26 2004/05/07 08:42:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,15 +133,10 @@ end:
 /* - e is attr pointer previously get from parse_element,
  * DON'T PASS HERE ANY OTHER VALUE!!!
  * - name is searched attribute */
-/* Returns allocated string containing the attribute, or NULL on unsuccess.
- * If @test_only is different from zero then we only test for existence of
- * an attribute of that @name. In that mode it returns NULL if attribute
- * was not found, and a pointer to start of the attribute if it was found.
- * If @eat_nl is zero, newline and tabs chars are replaced by spaces
- * in returned value, else these chars are skipped. */
+/* Returns allocated string containing the attribute, or NULL on unsuccess. */
 static inline unsigned char *
-get_attr_val_(register unsigned char *e, unsigned char *name, int test_only,
-	      int eat_nl)
+get_attr_val_(register unsigned char *e, unsigned char *name,
+	      enum html_attr_flags flags)
 {
 	unsigned char *n;
 	unsigned char *name_start;
@@ -158,7 +153,7 @@ next_attr:
 	while (atchr(*n) && atchr(*e) && upcase(*e) == upcase(*n)) e++, n++;
 	found = !*n && !atchr(*e);
 
-	if (found && test_only) return name_start;
+	if (found && (flags & HTML_ATTR_TEST)) return name_start;
 
 	while (atchr(*e)) e++;
 	while (isspace(*e)) e++;
@@ -185,7 +180,7 @@ parse_quoted_value:
 				if (!*e) goto parse_error;
 				if (*e != ASCII_TAB && *e != ASCII_LF)
 					add_chr(attr, attrlen, *e);
-				else if (!eat_nl)
+				else if (!(flags & HTML_ATTR_EAT_NL))
 					add_chr(attr, attrlen, ' ');
 			}
 			e++;
@@ -199,7 +194,8 @@ found_endattr:
 		add_chr(attr, attrlen, '\0');
 		attrlen--;
 
-		if (memchr(attr, '&', attrlen)) {
+		if (!(flags & HTML_ATTR_NO_CONV)
+		    && memchr(attr, '&', attrlen)) {
 			unsigned char *saved_attr = attr;
 
 			attr = convert_string(NULL, saved_attr, attrlen, CSM_QUERY);
@@ -238,19 +234,19 @@ parse_error:
 unsigned char *
 get_attr_val(register unsigned char *e, unsigned char *name)
 {
-	return get_attr_val_(e, name, 0, 0);
+	return get_attr_val_(e, name, HTML_ATTR_NONE);
 }
 
 unsigned char *
 get_url_val(unsigned char *e, unsigned char *name)
 {
-	return get_attr_val_(e, name, 0, 1);
+	return get_attr_val_(e, name, HTML_ATTR_EAT_NL);
 }
 
 int
 has_attr(unsigned char *e, unsigned char *name)
 {
-	return !!get_attr_val_(e, name, 1, 0);
+	return !!get_attr_val_(e, name, HTML_ATTR_TEST);
 }
 
 

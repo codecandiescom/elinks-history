@@ -1,3 +1,91 @@
+Thu Nov 18 22:25:48 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/util/snprintf.c:
+
+	Our official native English speaker forgot to use the subjunctive
+	mood.  Any intelligent native English speakers care to check this? 
+
+Thu Nov 18 21:39:33 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/dialog.c, bfu/dialog.h,
+	bfu/inpfield.c, bfu/widget.h, protocol/auth/dialogs.c:
+
+	Struct dialog_data "selected" field was renamed
+	"selected_widget_id".  Code related to it was moved to dialog.{c,h]
+	only with the help of new select_widget(), select_widget_by_id(),
+	update_all_widgets().  Code redundancy was reduced.  
+
+Thu Nov 18 17:59:32 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/osdep/stub.h:
+
+	Included ctype.h in stub.h.  
+
+Thu Nov 18 17:58:26 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation was updated.  
+
+Thu Nov 18 17:30:49 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/auth/auth.c:
+
+	Use mem_free_set() for leak fix.  
+
+Thu Nov 18 17:23:09 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/auth/auth.c:
+
+	Possible(?) memleak avoided.  
+
+Thu Nov 18 09:06:41 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Nov 18 08:15:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/button.c, config/options.inc:
+
+	Make it possible to also underline button shortcuts. Along with zas'
+	button shortcut coloring this should pretty much fix bug 329.  
+
+Thu Nov 18 00:52:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: dialog.c, dialog.h, hierbox.c, inpfield.c, listbox.c,
+	text.c, widget.h:
+
+	Use new term_event of struct dlg_data, and drop last parameter of
+	widget kbd() functions.  
+
+Thu Nov 18 00:31:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, checkbox.c, dialog.c, inpfield.c, listbox.c,
+	text.c, widget.h:
+
+	Use new term_event of struct dlg_data, and drop last parameter of
+	widget mouse() functions.  
+
+Thu Nov 18 00:23:48 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: checkbox.c, dialog.c, dialog.h, inpfield.c, listbox.c,
+	widget.h:
+
+	Make struct term_event * a new field of struct dlg_data, and do not
+	pass it anymore to all widget init() functions.  
+
+Thu Nov 18 00:11:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/dialog.c, bfu/dialog.h,
+	bfu/hierbox.c, bfu/inpfield.c, bfu/listbox.c, bfu/text.c,
+	bfu/widget.c, bfu/widget.h, bookmarks/dialogs.c:
+
+	Explode display_dlg_item() to new display_widget_focused() and
+	display_widget_unfocused(), dropping last parameter in favor of a
+	new struct dlg_data field named focus_selected_widget.  
+
 Wed Nov 17 23:05:18 2004  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/inpfield.c:

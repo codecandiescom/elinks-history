@@ -152,13 +152,14 @@ int attach_terminal(int in, int out, int ctl, void *info, int len)
 
 struct status dump_stat;
 int dump_pos;
+int dump_redir_count = 0;
 
 void end_dump(struct status *stat, void *p)
 {
 	struct cache_entry *ce = stat->ce;
 	int oh = get_output_handle();
 	if (oh == -1) return;
-	if (ce && ce->redirect) {
+	if (ce && ce->redirect && dump_redir_count++ < MAX_REDIRECTS) {
 		unsigned char *u, *p;
 		if (stat->state >= 0) change_connection(stat, NULL, PRI_CANCEL);
 		u = join_urls(ce->url, ce->redirect);

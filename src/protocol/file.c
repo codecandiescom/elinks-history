@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.75 2003/06/23 21:53:40 jonas Exp $ */
+/* $Id: file.c,v 1.76 2003/06/23 22:41:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -289,10 +289,10 @@ struct file_info {
 static int
 list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 {
-	struct directory_entry *dir = NULL;
-	int dirl = 0;
+	struct directory_entry *entries = NULL;
+	int size = 0;
 	int i;
-	struct dirent *de;
+	struct dirent *entry;
 	unsigned char dircolor[8];
 	int colorize_dir = get_opt_int("document.browse.links.color_dirs");
 	int show_hidden_files = get_opt_bool("protocol.file.show_hidden_files");
@@ -332,44 +332,47 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 	}
 	add_to_str(&fragment, &fragmentlen, "</h2>\n<pre>");
 
-	while ((de = readdir(directory))) {
+	while ((entry = readdir(directory))) {
 		struct stat st, *stp;
 		unsigned char **p;
 		int l;
-		struct directory_entry *nd;
-		unsigned char *n;
+		struct directory_entry *new_entries;
+		unsigned char *name;
 
 		/* Always show "..", always hide ".", others like ".x" are shown if
 		 * show_hidden_files = 1 */
-		if (de->d_name[0] == '.' && !(de->d_name[1] == '.' && de->d_name[2] == '\0'))
-			if (!show_hidden_files || de->d_name[1] == '\0') continue;
+		if (entry->d_name[0] == '.' &&
+		    !(entry->d_name[1] == '.' && entry->d_name[2] == '\0')) {
+			if (!show_hidden_files || entry->d_name[1] == '\0')
+				continue;
+		}
 
-		nd = mem_realloc(dir, (dirl + 1) * sizeof(struct directory_entry));
-		if (!nd) continue;
+		new_entries = mem_realloc(entries, (size + 1) *
+					  sizeof(struct directory_entry));
+		if (!new_entries) continue;
+		entries = new_entries;
 
-		dir = nd;
-		dir[dirl].name = stracpy(de->d_name);
-		if (!dir[dirl].name) continue;
+		entries[size].name = stracpy(entry->d_name);
+		if (!entries[size].name) continue;
 
-		p = &dir[dirl++].attrib;
+		p = &entries[size++].attrib;
 		*p = init_str();
 		if (!*p) continue;
 
-		l = 0;
-		n = stracpy(filename);
-		if (!n) continue;
+		name = straconcat(filename, entry->d_name, NULL);
+		if (!name) continue;
 
-		add_to_strn(&n, de->d_name);
 #ifdef FS_UNIX_SOFTLINKS
-		if (lstat(n, &st))
+		if (lstat(name, &st))
 #else
-			if (stat(n, &st))
+		if (stat(name, &st))
 #endif
-				stp = NULL;
-			else
-				stp = &st;
+			stp = NULL;
+		else
+			stp = &st;
 
-		mem_free(n);
+		mem_free(name);
+		l = 0;
 		stat_mode(p, &l, stp);
 		stat_links(p, &l, stp);
 		stat_user(p, &l, stp, 0);
@@ -378,31 +381,36 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 		stat_date(p, &l, stp);
 	}
 
-	if (dirl) qsort(dir, dirl, sizeof(struct directory_entry),
-		(int(*)(const void *, const void *))comp_de);
+	if (size) {
+		qsort(entries, size, sizeof(struct directory_entry),
+		      (int(*)(const void *, const void *))comp_de);
+	}
 
-	for (i = 0; i < dirl; i++) {
+	for (i = 0; i < size; i++) {
 		unsigned char *lnk = NULL;
+		unsigned char *name = entries[i].name;
+		int namelen = strlen(name);
+		unsigned char *attrib = entries[i].attrib;
+		int attriblen = strlen(attrib);
 
 #ifdef FS_UNIX_SOFTLINKS
-		if (dir[i].attrib[0] == 'l') {
+		if (attrib[0] == 'l') {
 			unsigned char *buf = NULL;
-			int size = 0;
+			int bufsize = 0;
 			int rl = -1;
 			unsigned char *n = init_str();
 			int nl = 0;
 
 			if (!n) continue;
 			add_to_str(&n, &nl, filename);
-			add_htmlesc_str(&n, &nl,
-				dir[i].name, strlen(dir[i].name));
+			add_htmlesc_str(&n, &nl, name, namelen);
 			do {
 				if (buf) mem_free(buf);
-				size += ALLOC_GR;
-				buf = mem_alloc(size);
+				bufsize += ALLOC_GR;
+				buf = mem_alloc(bufsize);
 				if (!buf) break;
-				rl = readlink(n, buf, size);
-			} while (rl == size);
+				rl = readlink(n, buf, bufsize);
+			} while (rl == bufsize);
 
 			mem_free(n);
 			if (buf) {
@@ -417,12 +425,10 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 		}
 #endif
 		/* add_to_str(&fragment, &fragmentlen, "   "); */
-		add_htmlesc_str(&fragment, &fragmentlen,
-			dir[i].attrib, strlen(dir[i].attrib));
+		add_htmlesc_str(&fragment, &fragmentlen, attrib, attriblen);
 		add_to_str(&fragment, &fragmentlen, "<a href=\"");
-		add_htmlesc_str(&fragment, &fragmentlen,
-			dir[i].name, strlen(dir[i].name));
-		if (dir[i].attrib[0] == 'd') {
+		add_htmlesc_str(&fragment, &fragmentlen, name, namelen);
+		if (attrib[0] == 'd') {
 			add_chr_to_str(&fragment, &fragmentlen, '/');
 		} else if (lnk) {
 			struct stat st;
@@ -431,8 +437,7 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 
 			if (n) {
 				add_to_str(&n, &nl, filename);
-				add_htmlesc_str(&n, &nl,
-					dir[i].name, strlen(dir[i].name));
+				add_htmlesc_str(&n, &nl, name, namelen);
 				if (!stat(n, &st) && S_ISDIR(st.st_mode))
 					add_chr_to_str(&fragment, &fragmentlen, '/');
 				mem_free(n);
@@ -440,7 +445,7 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 		}
 		add_to_str(&fragment, &fragmentlen, "\">");
 
-		if (dir[i].attrib[0] == 'd' && colorize_dir) {
+		if (attrib[0] == 'd' && colorize_dir) {
 			/* The <b> is here for the case when we've
 			 * use_document_colors off. */
 			add_to_str(&fragment, &fragmentlen, "<font color=\"");
@@ -448,10 +453,9 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 			add_to_str(&fragment, &fragmentlen, "\"><b>");
 		}
 
-		add_htmlesc_str(&fragment, &fragmentlen,
-			dir[i].name, strlen(dir[i].name));
+		add_htmlesc_str(&fragment, &fragmentlen, name, namelen);
 
-		if (dir[i].attrib[0] == 'd' && colorize_dir) {
+		if (attrib[0] == 'd' && colorize_dir) {
 			add_to_str(&fragment, &fragmentlen, "</b></font>");
 		}
 
@@ -465,11 +469,11 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 		add_chr_to_str(&fragment, &fragmentlen, '\n');
 	}
 
-	for (i = 0; i < dirl; i++) {
-		if (dir[i].attrib) mem_free(dir[i].attrib);
-		if (dir[i].name) mem_free(dir[i].name);
+	for (i = 0; i < size; i++) {
+		if (entries[i].attrib) mem_free(entries[i].attrib);
+		if (entries[i].name) mem_free(entries[i].name);
 	}
-	mem_free(dir);
+	mem_free(entries);
 
 	add_to_str(&fragment, &fragmentlen, "</pre>\n<hr>\n</body>\n</html>\n");
 

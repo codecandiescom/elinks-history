@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.17 2005/03/28 22:23:01 zas Exp $ */
+/* $Id: parse.c,v 1.18 2005/03/28 22:26:29 zas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -292,7 +292,8 @@ parse_ftp_unix_response(struct ftp_file_info *info, unsigned char *src, int len)
 			 * rare. */
 
 #define check_trailing_char(string, trailchar) \
-	((string)->source[(string)->length - 1] == (trailchar))
+	((string)->length > 0 \
+	 && (string)->source[(string)->length - 1] == (trailchar))
 
 			switch (info->type) {
 			case FTP_FILE_DIRECTORY:

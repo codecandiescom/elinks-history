@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.31 2003/11/22 16:18:43 jonas Exp $ */
+/* $Id: dialogs.c,v 1.32 2003/11/22 16:28:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,9 +98,7 @@ get_cache_entry_info(struct listbox_item *item, struct terminal *term)
 	}
 
 #ifdef DEBUG
-	/* Show refcount - 1 because we have the entry locked now. */
-	add_format_to_string(&msg, "\n%s: %d", "Refcount",
-						ce->refcount - 1);
+	add_format_to_string(&msg, "\n%s: %d", "Refcount", ce->refcount);
 	add_format_to_string(&msg, "\n%s: %d", _("ID tag", term),
 						ce->id_tag);
 

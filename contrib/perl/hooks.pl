@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.65 2005/03/27 12:29:38 pasky Exp $
+# $Id: hooks.pl,v 1.66 2005/03/27 12:39:14 pasky Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -999,19 +999,38 @@ Rewrites some evil characters to entities and vice versa.
 =cut
 
 
-################################################################################
-### proxy_for_hook #############################################################
+
+=head1 SMART PROXY USAGE
+
+The Perl hooks are asked whether to use a proxy for a given URI (or what proxy
+to actually use). You can use it e.g. if you don't want to use a proxy for
+certain Intranet servers but you need to use it in order to get to the
+Internet, or if you want to use some anonymizer for access to certain naughty
+sites.
+
+=over 4
+
+=cut
+
 sub proxy_for_hook
 {
 	my $url = shift;
 
-	# no proxy for local files
+=item No proxy for local files
+
+Prevents Proxy usage for local files and C<http://localhost>.
+
+=cut
 	if ($url =~ '^(file://|(http://|)(localhost|127\.0\.0\.1)(/|:|$))') {
 		return "";
 	}
 
 	return;
 }
+
+=back
+
+=cut
 
 
 ################################################################################

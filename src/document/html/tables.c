@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.259 2004/06/29 01:54:42 jonas Exp $ */
+/* $Id: tables.c,v 1.260 2004/06/29 02:09:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1000,6 +1000,12 @@ get_bordercolor(unsigned char *a, color_t *rgb)
 }
 
 static void
+parse_table_attributes(struct table *table, unsigned char *attr)
+{
+	get_bordercolor(attr, &table->bordercolor);
+}
+
+static void
 format_bad_table_html(struct table *table)
 {
 	int i;
@@ -1132,7 +1138,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	table->part = part;
 	table->border = border;
 
-	get_bordercolor(attr, &table->bordercolor);
+	parse_table_attributes(table, attr);
 
 	table->cellpadding = cellpadding;
 	table->vcellpadding = vcellpadding;

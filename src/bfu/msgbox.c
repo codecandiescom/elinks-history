@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.33 2003/06/07 12:08:23 pasky Exp $ */
+/* $Id: msgbox.c,v 1.34 2003/06/07 12:13:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,14 +30,8 @@ msg_box_fn(struct dialog_data *dlg)
 	int w, rw;
 	int y = 0;
 	unsigned char **ptr;
-	unsigned char *text = init_str();
-	int textl = 0;
+	unsigned char *text = dlg->dlg->udata;
 	int dialog_text_color = get_bfu_color(term, "dialog.text");
-
-	if (!text) return;
-
-	for (ptr = dlg->dlg->udata; *ptr; ptr++)
-		add_to_str(&text, &textl, _(*ptr, term));
 
 	max_text_width(term, text, &max);
 	min_text_width(term, text, &min);
@@ -72,8 +66,6 @@ msg_box_fn(struct dialog_data *dlg)
 	y++;
 	dlg_format_buttons(term, term, dlg->items, dlg->n, dlg->x + DIALOG_LB,
 			   &y, w, NULL, AL_CENTER);
-
-	mem_free(text);
 }
 
 static int
@@ -93,7 +85,6 @@ msg_box(struct terminal *term, struct memory_list *ml,
 	unsigned char *title, enum format_align align,
 	unsigned char *text, void *udata, int buttons, ...)
 {
-	unsigned char **info = NULL;
 	struct dialog *dlg;
 	va_list ap;
 	int button;
@@ -104,18 +95,6 @@ msg_box(struct terminal *term, struct memory_list *ml,
 	/* Use the align string to determine whether @text should be free()d */
 	if (align & AL_EXTD_TEXT)
 		add_one_to_ml(&ml, text);
-
-	/* What's up with this hack? Allocate a pointer to a pointer ;) */
-	info = mem_alloc(2 * sizeof(unsigned char *));
-	if (!info) {
-		freeml(ml);
-		return;
-	}
-
-	info[0] = text;
-	info[1] = NULL;
-
-	add_one_to_ml(&ml, info);
 
 	dlg = mem_calloc(1, sizeof(struct dialog) +
 			    (buttons + 1) * sizeof(struct widget));
@@ -128,7 +107,7 @@ msg_box(struct terminal *term, struct memory_list *ml,
 
 	dlg->title = title;
 	dlg->fn = msg_box_fn;
-	dlg->udata = info;
+	dlg->udata = text;
 	dlg->udata2 = udata;
 	dlg->align = align;
 

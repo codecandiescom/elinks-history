@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.25 2004/11/22 16:52:58 jonas Exp $ */
+/* $Id: digest.c,v 1.26 2004/11/22 17:04:24 jonas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -31,23 +31,23 @@
 
 typedef unsigned char md5_hex_digest[MD5_HEX_DIGEST_LENGTH + 1];
 
-/* taken from RFC 2617 */
+/* Hexes a binary md5 digest. Taken from RFC 2617 */
 static void
-convert_hex(unsigned char bin[MD5_DIGEST_LENGTH + 1], md5_hex_digest hex)
+convert_to_md5_hex_digest(unsigned char bin[MD5_DIGEST_LENGTH + 1], md5_hex_digest hex)
 {
 	int i;
 
 	for (i = 0; i < MD5_DIGEST_LENGTH; i++) {
 		int j = i * 2;
 
-		hex[j]   = hx(bin[i] >> 4 & 0xf);
-		hex[++j] = hx(bin[i] & 0xf);
+		hex[j]   = hx(bin[i] >> 4 & 0xF);
+		hex[j+1] = hx(bin[i] & 0xF);
 	}
 
 	hex[MD5_HEX_DIGEST_LENGTH] = '\0';
 }
 
-/* Creates a random cnonce that is also a hexed md5 digest. */
+/* Initializes a random cnonce that is also a hexed md5 digest. */
 static void
 init_cnonce_digest(md5_hex_digest cnonce)
 {
@@ -59,10 +59,10 @@ init_cnonce_digest(md5_hex_digest cnonce)
 	random = rand();
 	MD5((const unsigned char *) &random, sizeof(int), md5);
 
-	convert_hex(md5, cnonce);
+	convert_to_md5_hex_digest(md5, cnonce);
 }
 
-/* Creates what RFC 2617 refers to as H(A1) by digesting and hexing the
+/* Initializes what RFC 2617 refers to as H(A1) by digesting and hexing the
  * credentials: <user> ':' <realm> ':' <password> */
 /* FIXME: Support for further digesting: H(A1) ':' <nonce> ':' <cnonce> if
  * the server requests algorithm = "MD5-sess". */
@@ -80,11 +80,11 @@ init_credential_digest(md5_hex_digest ha1, struct auth_entry *entry)
 	MD5_Update(&MD5Ctx, entry->password, strlen(entry->password));
 	MD5_Final(skey, &MD5Ctx);
 
-	convert_hex(skey, ha1);
+	convert_to_md5_hex_digest(skey, ha1);
 }
 
-/* Creates what RFC 2617 refers to as H(A2) by digesting and hexing the method
- * and requested URI path. */
+/* Initializes what RFC 2617 refers to as H(A2) by digesting and hexing the
+ * method and requested URI path. */
 /* FIXME: Support for more HTTP access methods (POST). */
 /* FIXME: Support for by appending ':' H(entity body) if qop = "auti-int". The
  * H(entity-body) is the hash of the entity body, not the message body - it is
@@ -104,7 +104,7 @@ init_uri_method_digest(md5_hex_digest uri_method, struct uri *uri)
 	MD5_Update(&MD5Ctx, uri->data, uri->datalen);
 	MD5_Final(ha2, &MD5Ctx);
 
-	convert_hex(ha2, uri_method);
+	convert_to_md5_hex_digest(ha2, uri_method);
 }
 
 /* Calculates the value of the response parameter in the Digest header entry. */
@@ -137,7 +137,7 @@ init_response_digest(md5_hex_digest response, struct auth_entry *entry,
 	MD5_Update(&MD5Ctx, Ha2_hex, 32);
 	MD5_Final(Ha2, &MD5Ctx);
 
-	convert_hex(Ha2, response);
+	convert_to_md5_hex_digest(Ha2, response);
 }
 
 

@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.21 2003/12/21 00:30:15 jonas Exp $ */
+/* $Id: event.c,v 1.22 2003/12/21 12:40:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,11 +205,14 @@ test_queue:
 		reset_timer();
 		term_send_event(term, ev);
 #endif
+
 	} else if (ev->ev == EV_KBD) {
 		reset_timer();
 
 		if (ev->x == KBD_CTRL_C)
-			((struct window *) &term->windows)->prev->handler(term->windows.prev, ev, 0);
+			((struct window *) &term->windows)->prev->handler
+				(term->windows.prev, ev, 0);
+
 		else {
 			int utf8_io = -1;
 
@@ -223,22 +226,28 @@ test_queue:
 					if (! --term->utf_8.len) {
 						unicode_val u = term->utf_8.ucs;
 
-						if (u < term->utf_8.min) u = UCS_NO_CHAR;
+						if (u < term->utf_8.min)
+							u = UCS_NO_CHAR;
 						term_send_ucs(term, ev, u);
 					}
 					goto mm;
+
 				} else {
 					term->utf_8.len = 0;
 					term_send_ucs(term, ev, UCS_NO_CHAR);
 				}
 			}
+
 			if (ev->x < 0x80 || ev->x > 0xFF
 			    || (utf8_io == -1
 				? !get_opt_bool_tree(term->spec, "utf_8_io")
 				: !utf8_io)) {
+
 				term_send_event(term, ev);
 				goto mm;
-			} else if ((ev->x & 0xC0) == 0xC0 && (ev->x & 0xFE) != 0xFE) {
+
+			} else if ((ev->x & 0xC0) == 0xC0
+				   && (ev->x & 0xFE) != 0xFE) {
 				register unsigned int mask, cov = 0x80;
 				int len = 0;
 
@@ -251,8 +260,9 @@ test_queue:
 				term->utf_8.ucs = ev->x & (mask - 1);
 				goto mm;
 			}
+
 			term_send_ucs(term, ev, UCS_NO_CHAR);
-		};
+		}
 	}
 
 	if (ev->ev == EV_ABORT) {
@@ -260,6 +270,7 @@ test_queue:
 		return;
 	}
 	/* redraw_screen(term); */
+
 mm:
 	if (term->qlen == r) {
 		term->qlen = 0;

@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.1 2004/01/24 02:05:46 jonas Exp $ */
+/* $Id: stylesheet.h,v 1.2 2004/01/24 02:53:10 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -40,6 +40,10 @@ struct css_selector {
 struct css_stylesheet {
 	struct list_head selectors;
 };
+
+/* Returns a new freshly made selector adding it to the given stylesheet or NULL. */
+struct css_selector *
+init_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen);
 
 /* Releases all the content of the stylesheet. */
 void done_css_stylesheet(struct css_stylesheet *css);

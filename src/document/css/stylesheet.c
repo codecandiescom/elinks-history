@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.1 2004/01/24 02:05:46 jonas Exp $ */
+/* $Id: stylesheet.c,v 1.2 2004/01/24 02:53:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,27 @@ get_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
 	}
 
 	return NULL;
+}
+
+struct css_selector *
+init_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
+{
+	struct css_selector *selector;
+
+	selector = mem_calloc(1, sizeof(struct css_selector));
+	if (!selector) return NULL;
+
+	init_list(selector->properties);
+
+	selector->element = memacpy(name, namelen);
+	if (!selector->element) {
+		mem_free(selector);
+		return NULL;
+	}
+
+	add_to_list(css->selectors, selector);
+
+	return selector;
 }
 
 void

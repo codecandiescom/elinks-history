@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.57 2004/05/24 17:23:58 jonas Exp $ */
+/* $Id: kbd.c,v 1.58 2004/05/24 17:29:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -246,34 +246,11 @@ setraw(int fd, struct termios *p)
 	return 0;
 }
 
-static int
-queue_ts(struct itrm *itrm, unsigned char *ts, int ts_len, int max_len)
-{
-	if (ts_len >= max_len) {
-		queue_event(itrm, ts, max_len);
-	} else {
-		unsigned char *mm;
-		int ll = max_len - ts_len;
-
-		queue_event(itrm, ts, ts_len);
-
-		mm = mem_calloc(1, ll);
-		if (!mm) {
-			free_trm(itrm);
-			return -1;
-		}
-
-		queue_event(itrm, mm, ll);
-		mem_free(mm);
-	}
-	return 0;
-}
-
 void
 handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	   void *init_string, int init_len)
 {
-	unsigned char buffer[MAX_TERM_LEN];
+	unsigned char buffer[MAX(MAX_TERM_LEN, MAX_CWD_LEN)];
 	int x = 0, y = 0, i;
 	struct itrm *itrm;
 	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 80, 24, 0);
@@ -324,20 +301,14 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	if (env & (ENV_SCREEN | ENV_XWIN))
 		itrm->flags |= USE_ALTSCREEN;
 
+	memset(buffer, 0, sizeof(buffer));
 	ts = get_cwd();
-	if (!ts) {
-		ts = stracpy("");
-		if (!ts) goto end;
-	}
-
-	if (queue_ts(itrm, ts, strlen(ts), MAX_CWD_LEN)) {
+	if (ts) {
+		memcpy(buffer, ts, int_min(strlen(ts), sizeof(buffer)));
 		mem_free(ts);
-		return;
 	}
+	queue_event(itrm, buffer, MAX_CWD_LEN);
 
-	mem_free(ts);
-
-end:
 	queue_event(itrm, (char *)&env, sizeof(int));
 	queue_event(itrm, (char *)&init_len, sizeof(int));
 	queue_event(itrm, (char *)init_string, init_len);

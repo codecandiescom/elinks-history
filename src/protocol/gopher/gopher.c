@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.14 2004/09/12 22:03:21 miciah Exp $ */
+/* $Id: gopher.c,v 1.15 2004/09/12 23:34:20 miciah Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -160,7 +160,7 @@ struct gopher_connection_info {
 /* The % hex escapes are converted. Otherwise, the string is copied. */
 static void
 add_uri_decoded(struct string *command, unsigned char *string, int length,
-	       int replace_plus)
+		int replace_plus)
 {
 	int oldlen = command->length;
 
@@ -329,7 +329,7 @@ end_gopher_connection(struct connection *conn, enum connection_state state)
 
 static void
 add_gopher_link(struct string *buffer, const unsigned char *text,
-		   const unsigned char *addr)
+		const unsigned char *addr)
 {
 	add_format_to_string(buffer, "<a href=\"%s\">%s</a>",
 			     addr, text);

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.110 2003/06/08 16:24:41 zas Exp $ */
+/* $Id: parser.c,v 1.111 2003/06/08 17:41:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,6 +60,10 @@ atchr(unsigned char c)
  * - end points to first character behind the html element */
 /* It returns -1 when it failed (returned values in pointers are invalid) and
  * 0 for success. */
+#define TAG_END(e)  ((e)[0] == '>')
+#define TAG_END_XML(e) ((e)[0] == '/' && (e)[1] == '>')
+#define TAG_START(e)  ((e)[0] == '<')
+#define TAG_DELIM(e) (TAG_END(e) || TAG_END_XML(e) || TAG_START(e))
 int
 parse_element(register unsigned char *e, unsigned char *eof,
 	      unsigned char **name, int *namelen,
@@ -77,23 +81,22 @@ parse_element(register unsigned char *e, unsigned char *eof,
 	if (!isA(*e)) goto end_1;
 
 	while (isA(*e)) e++;
-	if ((!WHITECHAR(*e) && *e != '>' && *e != '<' && *e != '/' && *e != ':')) goto end_1;
+	if ((!WHITECHAR(*e) && !TAG_DELIM(e) && *e != '/' && *e != ':')) goto end_1;
 
 	if (name && namelen) *namelen = e - *name;
 
 	while (WHITECHAR(*e) || *e == '/' || *e == ':') e++;
-	if ((!atchr(*e) && *e != '>' && *e != '<')) goto end_1;
+	if (!atchr(*e) && !TAG_DELIM(e)) goto end_1;
 
 	if (attr) *attr = e;
 
 nextattr:
 	while (WHITECHAR(*e)) e++;
-	if (*e == '>' || *e == '<') goto end;
+	if (TAG_DELIM(e)) goto end;
 	if (!atchr(*e)) goto end_1;
 
 	while (atchr(*e)) e++;
 	while (WHITECHAR(*e)) e++;
-
 	if (*e != '=') goto endattr;
 	e++;
 
@@ -109,20 +112,20 @@ quoted_value:
 		e++;
 		if (*e == quote) goto quoted_value;
 	} else {
-		while (*e && !WHITECHAR(*e) && *e != '>' && *e != '<') e++;
+		while (*e && !WHITECHAR(*e) && !TAG_DELIM(e)) e++;
 	}
-
 	while (WHITECHAR(*e)) e++;
 
 endattr:
 	if (!*e) goto end_1;
-	if (*e != '>' && *e != '<') goto nextattr;
-
+	if (!TAG_DELIM(e)) goto nextattr;
 end:
-	if (end) *end = e + (*e == '>');
+	if (TAG_END_XML(e)) e++;
+	if (end) *end = e + TAG_END(e);
 	*eof = tmp;
 	return 0;
 end_1:
+	if (TAG_END_XML(e)) e++;
 	*eof = tmp;
 	return -1;
 }
@@ -154,23 +157,26 @@ get_attr_val(register unsigned char *e, unsigned char *name)
 	unsigned char *n;
 	unsigned char *a = NULL;
 	int l = 0;
-	int f;
+	int found = 0;
 
 aa:
 	while (WHITECHAR(*e)) e++;
-	if (*e == '>' || *e == '<') return NULL;
+	if (TAG_DELIM(e)) {
+		if (TAG_END_XML(e)) e++;
+		return NULL;
+	}
 	n = name;
 
 	while (*n && upcase(*e) == upcase(*n)) e++, n++;
-	f = *n;
-	while (atchr(*e)) f = 1, e++;
+	found = !*n;
+	while (atchr(*e)) found = 0, e++;
 	while (WHITECHAR(*e)) e++;
 	if (*e != '=') goto ea;
 	e++;
 	while (WHITECHAR(*e)) e++;
 	if (!IS_QUOTE(*e)) {
-		while (!WHITECHAR(*e) && *e != '>' && *e != '<') {
-			if (!f) add_chr(a, l, *e);
+		while (!WHITECHAR(*e) && !(TAG_DELIM(e))) {
+			if (found) add_chr(a, l, *e);
 			e++;
 		}
 	} else {
@@ -183,7 +189,7 @@ a:
 				if (a) mem_free(a);
 				return NULL;
 			}
-			if (!f && *e != ASCII_CR) {
+			if (found && *e != ASCII_CR) {
 				if (*e != ASCII_TAB && *e != ASCII_LF)
 					add_chr(a, l, *e);
 				else if (!get_attr_val_eat_nl)
@@ -193,13 +199,13 @@ a:
 		}
 		e++;
 		if (*e == quote) {
-			if (!f) add_chr(a, l, *e);
+			if (found) add_chr(a, l, *e);
 			goto a;
 		}
 	}
 
 ea:
-	if (!f) {
+	if (found) {
 		add_chr(a, l, 0);
 		if (strchr(a, '&')) {
 			unsigned char *aa = a;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.424 2004/06/01 05:31:46 miciah Exp $ */
+/* $Id: view.c,v 1.425 2004/06/01 05:55:59 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -770,6 +770,8 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 
 			if (!link_is_textinput(link)
 			    && check_mouse_action(ev, B_UP)) {
+
+				x = 2;
 
 				draw_doc(ses, doc_view, 1);
 				print_screen_status(ses);

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.44 2003/11/08 22:23:33 jonas Exp $ */
+/* $Id: hierbox.c,v 1.45 2003/11/08 23:46:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,4 +168,59 @@ hierbox_browser_layouter(struct dialog_data *dlg_data)
 	y++;
 	dlg_format_buttons(term, dlg_data->widgets_data + 1, n,
 			   dlg_data->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
+}
+
+struct dialog_data *
+hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
+		struct listbox_data *listbox_data, void *udata,
+		size_t buttons, ...)
+{
+	struct dialog *dlg;
+	va_list ap;
+
+	if (!listbox_data) return NULL;
+
+	/* Create the dialog */
+	dlg = calloc_dialog(buttons + 2, add_size);
+	if (!dlg) {
+		mem_free(listbox_data);
+		return NULL;
+	}
+
+	dlg->title = _(title, term);
+	dlg->layouter = hierbox_browser_layouter;
+	dlg->handle_event = hierbox_dialog_event_handler;
+	dlg->abort = hierbox_dialog_abort_handler;
+	dlg->udata = udata;
+
+	add_dlg_listbox(dlg, 12, listbox_data);
+
+	va_start(ap, buttons);
+
+	while (dlg->widgets_size < buttons + 1) {
+		unsigned char *label;
+		int (*handler)(struct dialog_data *, struct widget_data *);
+		void *data;
+		int key;
+
+		label = va_arg(ap, unsigned char *);
+		handler = va_arg(ap, void *);
+		key = va_arg(ap, int);
+		data = va_arg(ap, void *);
+
+		if (!label) {
+			/* Skip this button. */
+			buttons--;
+			continue;
+		}
+
+		add_dlg_button(dlg, key, handler, _(label, term), data);
+	}
+
+	va_end(ap);
+
+	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
+	add_dlg_end(dlg, buttons + 2);
+
+	return do_dialog(term, dlg, getml(dlg, NULL));
 }

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.109 2003/11/08 22:36:24 jonas Exp $ */
+/* $Id: dialogs.c,v 1.110 2003/11/08 23:46:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -432,36 +432,21 @@ push_save_button(struct dialog_data *dlg_data,
 	return 0;
 }
 
-#define	OPTION_WIDGETS	7
+#define	OPTION_MANAGER_BUTTONS	5
+#define	OPTION_MANAGER_ADDSIZE	(sizeof(struct option) + 2 * MAX_STR_LEN)
 
 /* Builds the "Options manager" dialog */
 void
 menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 {
-	struct dialog *dlg;
-
-	/* Create the dialog */
-	dlg = calloc_dialog(OPTION_WIDGETS, sizeof(struct option) + 2 * MAX_STR_LEN);
-	if (!dlg) return;
-
-	dlg->title = _("Options manager", term);
-	dlg->layouter = hierbox_browser_layouter;
-	dlg->handle_event = hierbox_dialog_event_handler;
-	dlg->abort = hierbox_dialog_abort_handler;
-	dlg->udata = ses;
-
-	add_dlg_listbox(dlg, 12, option_dlg_box_build());
-
-	add_dlg_button(dlg, B_ENTER, push_info_button, _("Info", term), ses);
-	add_dlg_button(dlg, B_ENTER, push_edit_button, _("Edit", term), ses);
-	add_dlg_button(dlg, B_ENTER, push_add_button, _("Add", term), ses);
-	add_dlg_button(dlg, B_ENTER, push_del_button, _("Delete", term), ses);
-	add_dlg_button(dlg, B_ENTER, push_save_button, _("Save", term), ses);
-	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
-
-	add_dlg_end(dlg, OPTION_WIDGETS);
-
-	do_dialog(term, dlg, getml(dlg, NULL));
+	hierbox_browser(term, N_("Option manager"),
+			OPTION_MANAGER_ADDSIZE, option_dlg_box_build(), ses,
+			OPTION_MANAGER_BUTTONS,
+			N_("Info"), push_info_button, B_ENTER, ses,
+			N_("Edit"), push_edit_button, B_ENTER, ses,
+			N_("Add"), push_add_button, B_ENTER, ses,
+			N_("Delete"), push_del_button, B_ENTER, ses,
+			N_("Save"), push_save_button, B_ENTER, ses);
 }
 
 
@@ -646,33 +631,18 @@ push_kbdbind_save_button(struct dialog_data *dlg_data,
 	return 0;
 }
 
-#define	KEYBINDING_WIDGETS	6
+#define	KEYBINDING_MANAGER_BUTTONS	4
+#define KEYBINDING_MANAGER_ADDSIZE	(sizeof(struct option) + 2 * MAX_STR_LEN)
 
 /* Builds the "Keybinding manager" dialog */
 void
 menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 {
-	struct dialog *dlg;
-
-	/* Create the dialog */
-	dlg = calloc_dialog(KEYBINDING_WIDGETS, sizeof(struct option) + 2 * MAX_STR_LEN);
-	if (!dlg) return;
-
-	dlg->title = _("Keybinding manager", term);
-	dlg->layouter = hierbox_browser_layouter;
-	dlg->handle_event = hierbox_dialog_event_handler;
-	dlg->abort = hierbox_dialog_abort_handler;
-	dlg->udata = ses;
-
-	add_dlg_listbox(dlg, 12, kbdbind_dlg_box_build());
-
-	add_dlg_button(dlg, B_ENTER, push_kbdbind_add_button, _("Add", term), ses);
-	add_dlg_button(dlg, B_ENTER, push_kbdbind_del_button, _("Delete", term), ses);
-	add_dlg_button(dlg, B_ENTER, push_kbdbind_toggle_display_button, _("Toggle display", term), ses);
-	add_dlg_button(dlg, B_ENTER, push_kbdbind_save_button, _("Save", term), ses);
-	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
-
-	add_dlg_end(dlg, KEYBINDING_WIDGETS);
-
-	do_dialog(term, dlg, getml(dlg, NULL));
+	hierbox_browser(term, N_("Keybinding manager"),
+			KEYBINDING_MANAGER_ADDSIZE, kbdbind_dlg_box_build(), ses,
+			KEYBINDING_MANAGER_BUTTONS,
+			N_("Add"), push_kbdbind_add_button, B_ENTER, ses,
+			N_("Delete"), push_kbdbind_del_button, B_ENTER, ses,
+			N_("Toggle display"), push_kbdbind_toggle_display_button, B_ENTER, ses,
+			N_("Save"), push_kbdbind_save_button, B_ENTER, ses);
 }

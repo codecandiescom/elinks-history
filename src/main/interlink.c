@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.76 2004/07/17 22:21:42 zas Exp $ */
+/* $Id: interlink.c,v 1.77 2004/07/17 22:27:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -464,11 +464,7 @@ again:
 	return s_info_connect.fd;
 
 free_and_error:
-	if (s_info_connect.addr) {
-		mem_free(s_info_connect.addr);
-		s_info_connect.addr = NULL;
-	}
-
+	mem_free_set(&s_info_connect.addr, NULL);
 	return -1;
 }
 

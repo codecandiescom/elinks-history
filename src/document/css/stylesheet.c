@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.15 2004/01/27 00:49:27 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.16 2004/01/27 00:52:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,13 @@
 #include "util/lists.h"
 #include "util/memory.h"
 #include "util/string.h"
+
+
+/* You can find some mysterious functions commented out here. I planned to use
+ * them for various smart things (well they all report to
+ * merge_css_stylesheets()), but it turns out it makes no sense to merge
+ * stylesheets now (and maybe it won't in the future neither...). But maybe you
+ * will find them useful at some time, so... Dunno. --pasky */
 
 
 struct css_selector *
@@ -76,6 +83,7 @@ get_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
 	return NULL;
 }
 
+#if 0
 static struct css_selector *
 copy_css_selector(struct css_stylesheet *css, struct css_selector *orig)
 {
@@ -118,6 +126,7 @@ clone_css_selector(struct css_stylesheet *css, struct css_selector *orig)
 
 	return copy;
 }
+#endif
 
 void
 merge_css_selectors(struct css_selector *sel1, struct css_selector *sel2)
@@ -181,6 +190,7 @@ mirror_css_stylesheet(struct css_stylesheet *css1,struct css_stylesheet *css2)
 	}
 }
 
+#if 0
 struct css_stylesheet *
 clone_css_stylesheet(struct css_stylesheet *orig)
 {
@@ -218,6 +228,7 @@ merge_css_stylesheets(struct css_stylesheet *css1,
 		}
 	}
 }
+#endif
 
 void
 done_css_stylesheet(struct css_stylesheet *css)

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.35 2004/01/22 18:27:06 jonas Exp $ */
+/* $Id: parser.c,v 1.36 2004/01/22 18:34:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,6 +89,22 @@ ride_on:
 #define skip_css_block(scanner) \
 	if (skip_css_tokens(scanner, '{')) skip_css_tokens(scanner, '}');
 
+
+/* Atrules grammer:
+ *
+ * media_types:
+ *	  <empty>
+ *	| <ident>
+ *	| media_types ',' <ident>
+ *
+ * atrule:
+ * 	  '@charset' <string> ';'
+ *	| '@import' <string> media_types ';'
+ *	| '@import' <uri> media_types ';'
+ *	| '@media' media_types '{' ruleset* '}'
+ *	| '@page' <ident>? [':' <ident>]? '{' properties '}'
+ *	| '@font-face' '{' properties '}'
+ */
 static void
 css_parse_atrule(struct css_stylesheet *css, struct css_scanner *scanner)
 {
@@ -126,6 +142,14 @@ css_parse_atrule(struct css_stylesheet *css, struct css_scanner *scanner)
 	}
 }
 
+/* Ruleset grammar:
+ *
+ * ruleset:
+ *	  selector [ ',' selector ]* '{' properties '}'
+ *
+ * TODO: selector can currently only be simple element names and we don't even
+ * handle comma separated list of selectors yet.
+ */
 static void
 css_parse_ruleset(struct css_stylesheet *css, struct css_scanner *scanner)
 {

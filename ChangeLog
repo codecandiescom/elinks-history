@@ -1,3 +1,196 @@
+Sun May 30 21:49:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Also assert URI_PATH and URI_FILENAME cases.  
+
+Sun May 30 19:56:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/link.c:
+
+	Only color the actual link text. Handling <a ...><img ..>other
+	text</a> correctly would be messy. Reported by Miciah.  
+
+Sun May 30 19:25:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/dialogs.c:
+
+	Fix a few globhist listbox item text things.  
+
+Sun May 30 18:52:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/dialogs.c:
+
+	Introduce check_keystroke() to improve error handling.  
+
+Sun May 30 18:50:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Move code from get_succesful_controls() to
+	add_submitted_value_to_list().  
+
+Sun May 30 18:25:51 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	draw_form_entry(): @t -> @term, @l -> @link, cache box->(x|y) -
+	vs->(x|y), cleanup.  
+
+Sun May 30 18:12:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/dialogs.c:
+
+	Remove cookie->box_item->root->text updating that obviously didn.t
+	work and has been made obsolete by get_info(..., LISTBOX_TEXT).  
+
+Sun May 30 18:06:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: dialogs.c, options.c:
+
+	A few option manager related fixes. Don't translate anymore in
+	display_listbox_item(). We do that in get_info() method. And then
+	don't rely on listbox_item->text being set.  
+
+Sun May 30 18:02:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Minor code simplification in find_form_state().  
+
+Sun May 30 18:01:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/dialogs.c:
+
+	Remove draw_cache_entry_item() and handle it using the get_info()
+	op. Still we adding '(POST DATA)' at the end. Should we do that for
+	the other get_info() handlers? 
+
+Sun May 30 17:56:54 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Tidy up.  
+
+Sun May 30 17:51:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/listbox.c, bfu/listbox.h, bookmarks/dialogs.c,
+	cache/dialogs.c, config/dialogs.c, cookies/dialogs.c,
+	dialogs/download.c, formhist/dialogs.c, globhist/dialogs.c,
+	protocol/auth/dialogs.c:
+
+	Introduce LISTBOX_TEXT flag for the get_info() function. This will
+	lead us to abandon listbox_item->text in the long run but for now
+	keybinding dialog needs it. It should fix garbage text shown as the
+	cookie folder name (reported by Miciah and me) and also more
+	genericly remove post data from globhist manager reported by zas.  
+
+Sun May 30 17:21:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/dialogs.c, cache/dialogs.c, config/dialogs.c,
+	cookies/dialogs.c, dialogs/download.c, formhist/dialogs.c,
+	globhist/dialogs.c, protocol/auth/dialogs.c:
+
+	switch the listbox_ops->get_info() functions.  
+
+Sun May 30 17:10:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/dialogs.c:
+
+	Wtf get_uri_string(.., ~0); Hey man we have them URI_* things for a
+	reason. Use URI_ORIGINAL instead.  
+
+Sun May 30 16:11:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/auth.c:
+
+	Fix patch dated Fri May 21 12:22:14, auth.c (1.80 -> 1.81) and
+	http.c (1.289 -> 1.290). Only add auth dialog to question queue if
+	we have realm.  
+
+Sun May 30 15:27:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, terminal/window.h:
+
+	Fix bug 176 (Performance waste when resizing w/ multiple tabs open)
+	so we schedule resizing and don't redrawing if tabwin_func() is not
+	called for the current tab.  
+
+Sun May 30 13:18:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/file.c:
+
+	Recalculate the filename length after the URI decoding. This should
+	not have been removed in (1.167 -> 1.168).  
+
+Sun May 30 12:42:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, mime/mime.c, mime/mime.h, protocol/uri.c,
+	protocol/uri.h, sched/download.c:
+
+	Move add_uri_filename_to_string() to mime/ and rename to
+	add_mime_...  
+
+Sun May 30 12:39:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Merge stuff from add_uri_filename_to_string() into the URI component
+	framework. Use URI_FILENAME to get it.  
+
+Sun May 30 12:01:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	set_cookie(): Doh. Stupid error. Reported by Stephen Stocker.  
+
+Sun May 30 10:12:26 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun May 30 03:11:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, sched/action.c:
+
+	Rename the tab-move-* actions to tab-move-{left,right} inspired by
+	bug 131. Altho' I can get the tab moving to work anymore. :( 
+
+Sun May 30 02:46:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/bookmarks.c, bookmarks/bookmarks.h,
+	config/options.inc, document/html/parser/link.c:
+
+	Add support for coloring bookmarks URIs. It could be quite expensive
+	for some people but it's easy to make it optional but adding option
+	and extending the check_bookmark_cache() macro to check the option.
+	Bookmarks are checked before globhist because bookmarks are more
+	'important'. Note that CSS support seems to override any bookmark
+	link colors. Again the bookmark color is not cached in
+	document_options. Finally a small fix in html_a() adding a dummy if
+	(0) so that when neither globhist nor bookmarks are enabled the
+	ending 'else' won't get mixed up with the previous if-else
+	construct.  
+
+Sun May 30 01:49:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, document/html/parser/link.c:
+
+	Display image links with a distinct colour. Default is
+	darkolivegreen but please change it if it is too annoying ;-). Also
+	note this is a quick hack. 5 lines. So don't expect any
+	document_options caching of the values which btw seems to be normal
+	behaviour for image options.  
+
+Sun May 30 00:57:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	normalize_uri(): Unfold the ending '/.' and '/..' cases and handle
+	them specialized. Before they stripped also the '/' causing
+	unnecessary redirects.  
+
 Sat May 29 19:44:27 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/uri.c:

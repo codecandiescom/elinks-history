@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.320 2003/12/28 02:16:14 zas Exp $ */
+/* $Id: view.c,v 1.321 2003/12/30 16:38:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -380,8 +380,9 @@ down(struct session *ses, struct document_view *doc_view, int a)
 			/* FIXME: This needs further work, we should call
 			 * page_down() and set_textarea() under some conditions
 			 * as well. --pasky */
+			return;
 		}
-		return;
+		current_link = -1;
 	}
 
 	if (current_link == -1
@@ -410,8 +411,9 @@ up(struct session *ses, struct document_view *doc_view, int a)
 			/* FIXME: This needs further work, we should call
 			 * page_down() and set_textarea() under some conditions
 			 * as well. --pasky */
+			return;
 		}
-		return;
+		current_link = -1;
 	}
 
 	if (current_link == -1

@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.18 2003/09/21 13:00:12 zas Exp $ */
+/* $Id: date.c,v 1.19 2003/09/22 14:22:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,7 +74,7 @@ parse_year(const unsigned char **date_p)
 }
 
 /* Return 0 for January, 11 for december, -1 for failure. */
-static int
+static inline int
 parse_month(const unsigned char *buf)
 {
 	unsigned char month[3];
@@ -83,7 +83,7 @@ parse_month(const unsigned char *buf)
 	month[1] = buf[1]|32;
 	month[2] = buf[2]|32;
 
-	return month2num(buf);
+	return month2num(month);
 }
 
 

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.110 2003/06/12 18:41:27 pasky Exp $ */
+/* $Id: menu.c,v 1.111 2003/06/12 18:43:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,8 +190,7 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 
 	/* ..and now go back in history by one as usual. */
 
-	if (steps >= 0) /* => psteps >= 1 */
-		go_back(ses);
+	go_back(ses);
 }
 
 static void

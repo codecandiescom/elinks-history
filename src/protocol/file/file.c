@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.117 2003/07/20 20:23:03 pasky Exp $ */
+/* $Id: file.c,v 1.118 2003/07/20 20:33:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,7 +159,8 @@ stat_user(unsigned char **p, int *l, struct stat *stp)
 		struct passwd *pwd = getpwuid(stp->st_uid);
 
 		if (!pwd || !pwd->pw_name)
-			ulongcat(last_user, NULL, stp->st_uid, 8, 0);
+			/* ulongcat() can't pad from right. */
+			sprintf(last_user, "%-8d", stp->st_uid);
 		else
 			sprintf(last_user, "%-8.8s", pwd->pw_name);
 
@@ -187,7 +188,8 @@ stat_group(unsigned char **p, int *l, struct stat *stp)
 		struct group *grp = getgrgid(stp->st_gid);
 
 		if (!grp || !grp->gr_name)
-			ulongcat(last_group, NULL, stp->st_gid, 8, 0);
+			/* ulongcat() can't pad from right. */
+			sprintf(last_group, "%-8d", stp->st_gid);
 		else
 			sprintf(last_group, "%-8.8s", grp->gr_name);
 

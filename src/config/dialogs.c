@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.187 2004/07/14 14:33:46 jonas Exp $ */
+/* $Id: dialogs.c,v 1.188 2004/07/14 14:52:15 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -671,7 +671,17 @@ get_keybinding_info(struct listbox_item *item, struct terminal *term)
 static struct listbox_item *
 get_keybinding_root(struct listbox_item *item)
 {
-	return item->root;
+	/* .. at the bottom */
+	if (item->depth == 0) return NULL;
+
+	if (item->depth == 1) {
+		return item->root;
+
+	} else {
+		struct keybinding *kb = item->udata;
+
+		return get_keybinding_action_box_item(kb->keymap, kb->action);
+	}
 }
 
 static enum listbox_match

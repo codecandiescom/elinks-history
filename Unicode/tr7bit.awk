@@ -1,4 +1,17 @@
 #!/bin/awk -f
+
+function join(array, start, sep, end, result, i)
+{
+	if (sep == "")
+		sep = " "
+	else if (sep == SUBSEP) # magic value
+		sep = ""
+	result = array[start]
+	for (i = start + 1; i <= end; i++)
+		result = result sep array[i]
+	return result
+}
+
 function hex2dec(xx) {
 	nn = 0;
 	while (xx != "") {
@@ -14,7 +27,8 @@ function hex2dec(xx) {
 		
 /^U/{
 	gsub("\\\\", "\\\\");
-	printf("0x%s\n", substr($0, 3));
+	split(substr($0, 3), z, ":")
+	printf("0x%08x:%s\n", hex2dec(z[1]), join(z, 2, ":"));
 }
 /^0x[0-9a-fA-F]*[	 ]/{
 	c = hex2dec(substr($1, 3));
@@ -27,9 +41,9 @@ function hex2dec(xx) {
 			p1 = hex2dec(substr($i, 3));
 			p2 = p1;
 		}
-		for (p = p1; p <= p2; p++) printf("0x%04x:%c\n", p, c);
+		for (p = p1; p <= p2; p++) printf("0x%08x:%c\n", p, c);
 	}
 }
 BEGIN{
-	printf("0x00a0:\\001\n0x00ad:\n");
+	printf("0x000000a0:\\001\n0x000000ad:\n");
 }

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.608 2005/03/04 18:33:24 zas Exp $ */
+/* $Id: session.c,v 1.609 2005/03/05 21:11:03 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -625,7 +625,7 @@ request_additional_file(struct session *ses, unsigned char *name, struct uri *ur
 
 	ftl->uri = get_uri_reference(uri);
 	ftl->target_frame = stracpy(name);
-	ftl->download.callback = (download_callback *) file_loading_callback;
+	ftl->download.callback = (download_callback_T *) file_loading_callback;
 	ftl->download.data = ftl;
 	ftl->pri = pri;
 	ftl->ses = ses;
@@ -1117,7 +1117,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 		 * when reloading HTTP auth document after the user has entered
 		 * credentials. */
 		loc->download.data = ses;
-		loc->download.callback = (download_callback *) doc_loading_callback;
+		loc->download.callback = (download_callback_T *) doc_loading_callback;
 
 		load_uri(loc->vs.uri, ses->referrer, &loc->download, PRI_MAIN, cache_mode, -1);
 
@@ -1126,7 +1126,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 				continue;
 
 			ftl->download.data = ftl;
-			ftl->download.callback = (download_callback *) file_loading_callback;
+			ftl->download.callback = (download_callback_T *) file_loading_callback;
 
 			load_additional_file(ftl, doc_view, cache_mode);
 		}

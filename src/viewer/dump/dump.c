@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.154 2005/03/02 18:00:27 zas Exp $ */
+/* $Id: dump.c,v 1.155 2005/03/05 21:11:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -257,7 +257,7 @@ dump_start(unsigned char *url)
 		goto terminate;
 	}
 
-	dump_download.callback = (download_callback *) dump_loading_callback;
+	dump_download.callback = (download_callback_T *) dump_loading_callback;
 	dump_pos = 0;
 
 	if (load_uri(uri, NULL, &dump_download, PRI_MAIN, 0, -1)) {

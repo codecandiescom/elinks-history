@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.91 2005/03/04 17:36:29 zas Exp $ */
+/* $Id: connection.h,v 1.92 2005/03/05 21:11:03 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -203,7 +203,7 @@ struct connection {
 
 struct download;
 
-typedef void (download_callback)(struct download *, void *);
+typedef void (download_callback_T)(struct download *, void *);
 
 struct download {
 	/* XXX: order matters there, there's some hard initialization in
@@ -215,7 +215,7 @@ struct download {
 	/* The callback is called when connection gets into a progress state,
 	 * after it's over (in a result state), and also periodically after
 	 * the download starts receiving some data. */
-	download_callback *callback;
+	download_callback_T *callback;
 	void *data;
 	struct progress *progress;
 

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.150 2004/12/19 01:47:17 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.151 2005/01/03 00:26:59 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -256,6 +256,24 @@ delete_folder_by_name(unsigned char *foldername)
 	}
 }
 
+static void
+add_bookmark_item_to_bookmarks(struct bookmark *bm, struct bookmark *root, int place)
+{
+	/* Actually add it */
+	if (place) {
+		if (root)
+			add_to_list_end(root->child, bm);
+		else
+			add_to_list_end(bookmarks, bm);
+	} else {
+		if (root)
+			add_to_list(root->child, bm);
+		else
+			add_to_list(bookmarks, bm);
+	}
+	bookmarks_set_dirty();
+}
+
 /* Adds a bookmark to the bookmark list. Place 0 means top, place 1 means
  * bottom. NULL or "" @url means it is a bookmark folder. */
 struct bookmark *
@@ -287,19 +305,7 @@ add_bookmark(struct bookmark *root, int place, unsigned char *title,
 
 	object_nolock(bm, "bookmark");
 
-	/* Actually add it */
-	if (place) {
-		if (root)
-			add_to_list_end(root->child, bm);
-		else
-			add_to_list_end(bookmarks, bm);
-	} else {
-		if (root)
-			add_to_list(root->child, bm);
-		else
-			add_to_list(bookmarks, bm);
-	}
-	bookmarks_set_dirty();
+	add_bookmark_item_to_bookmarks(bm, root, place);
 
 	/* Setup box_item */
 	/* Note that item_free is left at zero */

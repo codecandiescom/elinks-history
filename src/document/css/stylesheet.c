@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.27 2004/09/17 23:03:49 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.28 2004/09/19 20:34:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@ find_css_selector_by_element(struct css_stylesheet *css, unsigned char *element,
 	assert(css && element);
 
 	foreach (selector, css->selectors) {
-		if (!strlcasecmp(element, elementlen, selector->element, -1))
+		if (!strlcasecmp(element, elementlen, selector->name, -1))
 			return selector;
 	}
 
@@ -55,8 +55,8 @@ init_css_selector(struct css_stylesheet *css,
 	if (element) {
 		if (elementlen < 0)
 			elementlen = strlen(element);
-		selector->element = memacpy(element, elementlen);
-		if (!selector->element) {
+		selector->name = memacpy(element, elementlen);
+		if (!selector->name) {
 			mem_free(selector);
 			return NULL;
 		}
@@ -96,13 +96,9 @@ copy_css_selector(struct css_stylesheet *css, struct css_selector *orig)
 
 	assert(css && orig);
 
-	copy = init_css_selector(css, orig->element, strlen(orig->element));
+	copy = init_css_selector(css, orig->name, strlen(orig->name));
 	if (!copy)
 		return NULL;
-
-	if (orig->id) copy->id = stracpy(orig->id);
-	if (orig->class) copy->class = stracpy(orig->class);
-	if (orig->pseudo) copy->pseudo = stracpy(orig->pseudo);
 
 	return copy;
 }
@@ -167,10 +163,7 @@ done_css_selector(struct css_selector *selector)
 {
 	if (selector->next) del_from_list(selector);
 	free_list(selector->properties);
-	mem_free_if(selector->element);
-	mem_free_if(selector->id);
-	mem_free_if(selector->class);
-	mem_free_if(selector->pseudo);
+	mem_free_if(selector->name);
 	mem_free(selector);
 }
 
@@ -227,8 +220,8 @@ merge_css_stylesheets(struct css_stylesheet *css1,
 	foreach (selector, css2->selectors) {
 		struct css_selector *origsel;
 
-		origsel = find_css_selector_by_element(css1, selector->element,
-					             strlen(selector->element));
+		origsel = find_css_selector_by_element(css1, selector->name,
+					             strlen(selector->name));
 		if (!origsel) {
 			clone_css_selector(css1, selector);
 		} else {

@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.22 2004/09/17 23:03:49 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.23 2004/09/19 20:34:33 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -30,18 +30,21 @@
 
 /* The {struct css_selector} is used for mapping elements (or nodes) in the
  * document structure to properties. */
-/* For now we only handle really ``flat'' stylesheets. No complicated selectors
- * only good clean element ones. */
-/* TODO: Form the selectors to trees, both in-element and pan-element. --pasky */
+/* For now we only handle really ``flat'' stylesheets and no complicated
+ * selectors, only good clean element ones - CST_ELEMENT. */
+/* TODO: Form the selectors to trees, both in-element and pan-element, according
+ * to les plans grands sketched in the README. --pasky */
 struct css_selector {
 	LIST_HEAD(struct css_selector);
 
-	unsigned char *element;
+	enum css_selector_type {
+		CST_ELEMENT,
+		CST_ID,
+		CST_CLASS,
+		CST_PSEUDO,
+	} type;
 
-	/* May be NULL */
-	unsigned char *id;
-	unsigned char *class;
-	unsigned char *pseudo;
+	unsigned char *name;
 
 	struct list_head properties;
 };
@@ -61,7 +64,8 @@ struct css_stylesheet {
 	 * possibility to have some import data as well. --jonas */
 	css_stylesheet_importer import;
 
-	/* The list of selectors. */
+	/* The list of basic element selectors (which can then possess some
+	 * tree inside). */
 	struct list_head selectors; /* -> struct css_selector */
 
 	/* How deeply nested are we. Limited by MAX_REDIRECTS. */

@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.37 2004/07/01 21:28:14 jonas Exp $ */
+/* $Id: forms.c,v 1.38 2004/07/13 16:54:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -466,9 +466,9 @@ static struct list_menu lnk_menu;
 
 int
 do_html_select(unsigned char *attr, unsigned char *html,
-	       unsigned char *eof, unsigned char **end, void *f)
+	       unsigned char *eof, unsigned char **end, struct part *part)
 {
-	struct conv_table *ct = html_context.special_f(f, SP_TABLE, NULL);
+	struct conv_table *ct = html_context.special_f(part, SP_TABLE, NULL);
 	struct form_control *fc;
 	struct string lbl = NULL_STRING;
 	unsigned char **values = NULL;
@@ -604,7 +604,7 @@ end_parse:
 	fc->labels = labels;
 
 	menu_labels(fc->menu, "", labels);
-	put_chrs("[", 1, html_context.put_chars_f, f);
+	put_chrs("[", 1, html_context.put_chars_f, part);
 	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
 	format.attr |= AT_BOLD;
@@ -616,10 +616,10 @@ end_parse:
 	}
 
 	for (i = 0; i < max_width; i++)
-		put_chrs("_", 1, html_context.put_chars_f, f);
+		put_chrs("_", 1, html_context.put_chars_f, part);
 
 	kill_html_stack_item(&html_top);
-	put_chrs("]", 1, html_context.put_chars_f, f);
+	put_chrs("]", 1, html_context.put_chars_f, part);
 	html_context.special_f(html_context.part, SP_CONTROL, fc);
 
 	return 0;
@@ -633,7 +633,7 @@ html_textarea(unsigned char *a)
 
 void
 do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
-		 unsigned char **end, void *f)
+		 unsigned char **end, struct part *part)
 {
 	struct form_control *fc;
 	unsigned char *p, *t_name, *wrap_attr;
@@ -716,8 +716,8 @@ pp:
 	fc->maxlength = get_num(attr, "maxlength");
 	if (fc->maxlength == -1) fc->maxlength = INT_MAX;
 
-	if (rows > 1) ln_break(1, html_context.line_break_f, f);
-	else put_chrs(" ", 1, html_context.put_chars_f, f);
+	if (rows > 1) ln_break(1, html_context.line_break_f, part);
+	else put_chrs(" ", 1, html_context.put_chars_f, part);
 
 	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
@@ -727,15 +727,15 @@ pp:
 		int j;
 
 		for (j = 0; j < cols; j++)
-			put_chrs("_", 1, html_context.put_chars_f, f);
+			put_chrs("_", 1, html_context.put_chars_f, part);
 		if (i < rows - 1)
-			ln_break(1, html_context.line_break_f, f);
+			ln_break(1, html_context.line_break_f, part);
 	}
 
 	kill_html_stack_item(&html_top);
 	if (rows > 1)
-		ln_break(1, html_context.line_break_f, f);
+		ln_break(1, html_context.line_break_f, part);
 	else
-		put_chrs(" ", 1, html_context.put_chars_f, f);
-	html_context.special_f(f, SP_CONTROL, fc);
+		put_chrs(" ", 1, html_context.put_chars_f, part);
+	html_context.special_f(part, SP_CONTROL, fc);
 }

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.480 2004/07/12 18:25:41 jonas Exp $ */
+/* $Id: parser.c,v 1.482 2004/07/13 16:54:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,12 +157,12 @@ struct html_context html_context = {
 
 
 void
-ln_break(int n, void (*line_break)(void *), void *f)
+ln_break(int n, void (*line_break)(struct part *), struct part *part)
 {
 	if (!n || html_top.invisible) return;
 	while (n > html_context.line_breax) {
 		html_context.line_breax++;
-		line_break(f);
+		line_break(part);
 	}
 	html_context.position = 0;
 	html_context.putsp = -1;
@@ -170,7 +170,7 @@ ln_break(int n, void (*line_break)(void *), void *f)
 
 void
 put_chrs(unsigned char *start, int len,
-	 void (*put_chars)(void *, unsigned char *, int), void *f)
+	 void (*put_chars)(struct part *, unsigned char *, int), struct part *part)
 {
 	if (html_is_preformatted())
 		html_context.putsp = 0;
@@ -179,7 +179,7 @@ put_chrs(unsigned char *start, int len,
 		return;
 
 	if (html_context.putsp == 1) {
-		put_chars(f, " ", 1);
+		put_chars(part, " ", 1);
 		html_context.position++;
 		html_context.putsp = -1;
 	}
@@ -201,7 +201,7 @@ put_chrs(unsigned char *start, int len,
 		html_context.putsp = -1;
 	html_context.was_br = 0;
 
-	put_chars(f, start, len);
+	put_chars(part, start, len);
 
 	html_context.position += len;
 	html_context.line_breax = 0;
@@ -221,7 +221,7 @@ set_fragment_identifier(unsigned char *attr_name, unsigned char *attr)
 }
 
 void
-add_fragment_identifier(void *part, unsigned char *attr)
+add_fragment_identifier(struct part *part, unsigned char *attr)
 {
 	html_context.special_f(part, SP_TAG, attr);
 }
@@ -574,7 +574,7 @@ html_hr(unsigned char *a)
 	par_format.leftmargin = par_format.rightmargin = html_context.margin;
 
 	i = get_width(a, "width", 1);
-	if (i == -1) i = par_format.width - (html_context.margin - 2) * 2;
+	if (i == -1) i = get_html_max_width();
 	format.attr = AT_GRAPHICS;
 	html_context.special_f(html_context.part, SP_NOWRAP, 1);
 	while (i-- > 0) {
@@ -1290,9 +1290,9 @@ void
 init_html_parser(struct uri *uri, struct document_options *options,
 		 unsigned char *start, unsigned char *end,
 		 struct string *head, struct string *title,
-		 void (*put_chars)(void *, unsigned char *, int),
-		 void (*line_break)(void *),
-		 void *(*special)(void *, enum html_special_type, ...))
+		 void (*put_chars)(struct part *, unsigned char *, int),
+		 void (*line_break)(struct part *),
+		 void *(*special)(struct part *, enum html_special_type, ...))
 {
 	struct html_element *e;
 

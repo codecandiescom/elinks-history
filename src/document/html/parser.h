@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.66 2004/06/30 16:56:41 zas Exp $ */
+/* $Id: parser.h,v 1.67 2004/07/13 16:54:37 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -12,6 +12,7 @@ struct form_control;
 struct frameset_desc;
 struct memory_list;
 struct menu_item;
+struct part;
 struct session;
 struct string;
 struct terminal;
@@ -145,9 +146,9 @@ void
 init_html_parser(struct uri *uri, struct document_options *options,
 		 unsigned char *start, unsigned char *end,
 		 struct string *head, struct string *title,
-		 void (*put_chars)(void *, unsigned char *, int),
-		 void (*line_break)(void *),
-		 void *(*special)(void *, enum html_special_type, ...));
+		 void (*put_chars)(struct part *, unsigned char *, int),
+		 void (*line_break)(struct part *),
+		 void *(*special)(struct part *, enum html_special_type, ...));
 
 void done_html_parser(void);
 struct html_element *init_html_parser_state(enum html_element_type type, int align, int margin, int width);
@@ -157,7 +158,7 @@ void done_html_parser_state(struct html_element *element);
 
 int get_bgcolor(unsigned char *, color_t *);
 void set_fragment_identifier(unsigned char *attr_name, unsigned char *attr);
-void add_fragment_identifier(void *part, unsigned char *attr);
+void add_fragment_identifier(struct part *, unsigned char *attr);
 
 /* Interface for the viewer */
 
@@ -168,6 +169,6 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 
 /* For html/parser/forms.c,link.c,parse.c,stack.c */
 
-void ln_break(int n, void (*line_break)(void *), void *f);
+void ln_break(int n, void (*line_break)(struct part *), struct part *part);
 
 #endif

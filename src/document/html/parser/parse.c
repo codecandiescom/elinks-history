@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.80 2004/07/12 18:16:31 jonas Exp $ */
+/* $Id: parse.c,v 1.81 2004/07/13 16:54:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -563,11 +563,11 @@ free_tags_lookup(void)
 
 static unsigned char *process_element(unsigned char *name, int namelen, int endingtag,
                 unsigned char *html, unsigned char *prev_html,
-                unsigned char *eof, unsigned char *attr, void *f);
+                unsigned char *eof, unsigned char *attr, struct part *part);
 
 void
 parse_html(unsigned char *html, unsigned char *eof,
-	   void *f, unsigned char *head)
+	   struct part *part, unsigned char *head)
 {
 	unsigned char *base_pos = html;
 	int noupdate = 0;
@@ -577,7 +577,7 @@ parse_html(unsigned char *html, unsigned char *eof,
 	html_context.position = 0;
 	html_context.was_br = 0;
 	html_context.was_li = 0;
-	html_context.part = f;
+	html_context.part = part;
 	html_context.eoff = eof;
 	if (head) process_head(head);
 
@@ -588,7 +588,7 @@ main_loop:
 		int dotcounter = 0;
 
 		if (!noupdate) {
-			html_context.part = f;
+			html_context.part = part;
 			html_context.eoff = eof;
 			base_pos = html;
 		} else {
@@ -602,7 +602,7 @@ main_loop:
 				h++;
 			if (h + 1 < eof && h[0] == '<' && h[1] == '/') {
 				if (!parse_element(h, eof, &name, &namelen, &attr, &end)) {
-					put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
+					put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
 					base_pos = html = h;
 					html_context.putsp = 1;
 					goto element;
@@ -617,10 +617,10 @@ main_loop:
 					noupdate = 1;
 					continue;
 				}
-				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
+				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
 			} else {
-				put_chrs(base_pos, html - base_pos - 1, html_context.put_chars_f, f);
-				put_chrs(" ", 1, html_context.put_chars_f, f);
+				put_chrs(base_pos, html - base_pos - 1, html_context.put_chars_f, part);
+				put_chrs(" ", 1, html_context.put_chars_f, part);
 			}
 
 skip_w:
@@ -632,20 +632,20 @@ skip_w:
 		if (html_is_preformatted()) {
 			html_context.putsp = 0;
 			if (*html == ASCII_TAB) {
-				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
+				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
 				put_chrs("        ", 8 - (html_context.position % 8),
-					 html_context.put_chars_f, f);
+					 html_context.put_chars_f, part);
 				html++;
 				continue;
 
 			} else if (*html == ASCII_CR || *html == ASCII_LF) {
-				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
+				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
 
 next_break:
 				if (*html == ASCII_CR && html < eof - 1
 				    && html[1] == ASCII_LF)
 					html++;
-				ln_break(1, html_context.line_break_f, f);
+				ln_break(1, html_context.line_break_f, part);
 				html++;
 				if (*html == ASCII_CR || *html == ASCII_LF) {
 					html_context.line_breax = 0;
@@ -670,8 +670,8 @@ next_break:
 				}
 
 				if (newlines) {
-					put_chrs(base_pos, length, html_context.put_chars_f, f);
-					ln_break(newlines, html_context.line_break_f, f);
+					put_chrs(base_pos, length, html_context.put_chars_f, part);
+					ln_break(newlines, html_context.line_break_f, part);
 					continue;
 				}
 			}
@@ -679,7 +679,7 @@ next_break:
 
 		while (*html < ' ') {
 			if (html - base_pos)
-				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
+				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
 
 			dotcounter++;
 			base_pos = ++html;
@@ -688,7 +688,7 @@ next_break:
 
 				if (dots) {
 					memset(dots, '.', dotcounter);
-					put_chrs(dots, dotcounter, html_context.put_chars_f, f);
+					put_chrs(dots, dotcounter, html_context.put_chars_f, part);
 					fmem_free(dots);
 				}
 				goto main_loop;
@@ -697,7 +697,7 @@ next_break:
 
 		if (html + 2 <= eof && html[0] == '<' && (html[1] == '!' || html[1] == '?')
 		    && !html_context.was_xmp) {
-			put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
+			put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
 			html = skip_comment(html, eof);
 			continue;
 		}
@@ -711,8 +711,8 @@ next_break:
 element:
 		endingtag = *name == '/'; name += endingtag; namelen -= endingtag;
 		if (!endingtag && html_context.putsp == 1 && !html_top.invisible)
-			put_chrs(" ", 1, html_context.put_chars_f, f);
-		put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
+			put_chrs(" ", 1, html_context.put_chars_f, part);
+		put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
 		if (!html_is_preformatted() && !endingtag && !html_context.putsp) {
 			unsigned char *ee = end;
 			unsigned char *nm;
@@ -721,17 +721,17 @@ element:
 				if (*nm == '/')
 					goto ng;
 			if (ee < eof && isspace(*ee)) {
-				put_chrs(" ", 1, html_context.put_chars_f, f);
+				put_chrs(" ", 1, html_context.put_chars_f, part);
 			}
 ng:;
 		}
 
 		prev_html = html;
-		html = process_element(name, namelen, endingtag, end, prev_html, eof, attr, f);
+		html = process_element(name, namelen, endingtag, end, prev_html, eof, attr, part);
 	}
 
-	if (noupdate) put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
-	ln_break(1, html_context.line_break_f, f);
+	if (noupdate) put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
+	ln_break(1, html_context.line_break_f, part);
 	html_context.putsp = -1;
 	html_context.position = 0;
 	html_context.was_br = 0;
@@ -741,23 +741,23 @@ static unsigned char *
 start_element(struct element_info *ei,
               unsigned char *name, int namelen, int endingtag,
               unsigned char *html, unsigned char *prev_html,
-              unsigned char *eof, unsigned char *attr, void *f)
+              unsigned char *eof, unsigned char *attr, struct part *part)
 {
 	unsigned char *a;
 	struct par_attrib old_format;
 	int restore_format;
 
 	if (html_context.was_xmp) {
-		put_chrs("<", 1, html_context.put_chars_f, f);
+		put_chrs("<", 1, html_context.put_chars_f, part);
 		html = prev_html + 1;
 		return html;
 	}
 
-	ln_break(ei->linebreak, html_context.line_break_f, f);
+	ln_break(ei->linebreak, html_context.line_break_f, part);
 
 	a = get_attr_val(attr, "id");
 	if (a) {
-		html_context.special_f(f, SP_TAG, a);
+		html_context.special_f(part, SP_TAG, a);
 		mem_free(a);
 	}
 
@@ -774,16 +774,16 @@ start_element(struct element_info *ei,
 
 	if (ei->func == html_table && global_doc_opts->tables
 	    && html_context.table_level < HTML_MAX_TABLE_LEVEL) {
-		format_table(attr, html, eof, &html, f);
-		ln_break(2, html_context.line_break_f, f);
+		format_table(attr, html, eof, &html, part);
+		ln_break(2, html_context.line_break_f, part);
 		return html;
 	}
 	if (ei->func == html_select) {
-		if (!do_html_select(attr, html, eof, &html, f))
+		if (!do_html_select(attr, html, eof, &html, part))
 			return html;
 	}
 	if (ei->func == html_textarea) {
-		do_html_textarea(attr, html, eof, &html, f);
+		do_html_textarea(attr, html, eof, &html, part);
 		return html;
 	}
 #ifdef CONFIG_CSS
@@ -854,7 +854,7 @@ static unsigned char *
 end_element(struct element_info *ei,
             unsigned char *name, int namelen, int endingtag,
             unsigned char *html, unsigned char *prev_html,
-            unsigned char *eof, unsigned char *attr, void *f)
+            unsigned char *eof, unsigned char *attr, struct part *part)
 {
 	struct html_element *e, *elt;
 	int lnb = 0;
@@ -888,7 +888,7 @@ end_element(struct element_info *ei,
 		     elt = elt->prev)
 			if (elt->linebreak > lnb)
 				lnb = elt->linebreak;
-		ln_break(lnb, html_context.line_break_f, f);
+		ln_break(lnb, html_context.line_break_f, part);
 		while (e->prev != (void *) &html_context.stack)
 			kill_html_stack_item(e->prev);
 		kill_html_stack_item(e);
@@ -902,7 +902,7 @@ end_element(struct element_info *ei,
 static unsigned char *
 process_element(unsigned char *name, int namelen, int endingtag,
                 unsigned char *html, unsigned char *prev_html,
-                unsigned char *eof, unsigned char *attr, void *f)
+                unsigned char *eof, unsigned char *attr, struct part *part)
 
 {
 	struct element_info *ei;
@@ -925,9 +925,9 @@ process_element(unsigned char *name, int namelen, int endingtag,
 	if (!ei) return html;
 
 	if (!endingtag) {
-		return start_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, f);
+		return start_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, part);
 	} else {
-		return end_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, f);
+		return end_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, part);
 	}
 }
 

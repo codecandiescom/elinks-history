@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.35 2004/07/12 18:16:31 jonas Exp $ */
+/* $Id: internal.h,v 1.36 2004/07/13 16:54:37 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -10,7 +10,7 @@
 /* For parser/parse.c: */
 
 void process_head(unsigned char *head);
-void put_chrs(unsigned char *start, int len, void (*put_chars)(void *, unsigned char *, int), void *f);
+void put_chrs(unsigned char *start, int len, void (*put_chars)(struct part *, unsigned char *, int), struct part *part);
 
 struct html_context {
 #ifdef CONFIG_CSS
@@ -83,7 +83,7 @@ struct html_context {
 	 * html/parser/link.c
 	 * html/parser/parse.c
 	 * html/parser.c */
-	void (*put_chars_f)(void *, unsigned char *, int);
+	void (*put_chars_f)(struct part *, unsigned char *, int);
 
 	/* For:
 	 * html/parser/forms.c
@@ -91,13 +91,13 @@ struct html_context {
 	 * html/parser/parse.c
 	 * html/parser/stack.c
 	 * html/parser.c */
-	void (*line_break_f)(void *);
+	void (*line_break_f)(struct part *);
 
 	/* For:
 	 * html/parser/forms.c
 	 * html/parser/parse.c
 	 * html/parser.c */
-	void *(*special_f)(void *, enum html_special_type, ...);
+	void *(*special_f)(struct part *, enum html_special_type, ...);
 };
 
 #define format (((struct html_element *) html_context.stack.next)->attr)

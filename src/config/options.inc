@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.173 2004/12/30 20:39:27 jonas Exp $ */
+/* $Id: options.inc,v 1.174 2005/01/02 12:54:24 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -654,7 +654,7 @@ static struct option_info config_options_info[] = {
 
 	INIT_OPT_INT("document.html", N_("Rendering of html link element"),
 		"link_display", 0, 0, 5, 2,
-		N_("What to render from links in the HTML header:\n"
+		N_("How to render <link> tags from the HTML header:\n"
 		"0 is nothing\n"
 		"1 is title\n"
 		"2 is name in addition\n"

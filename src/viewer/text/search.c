@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.258 2004/07/16 12:27:18 jonas Exp $ */
+/* $Id: search.c,v 1.259 2004/07/16 18:50:58 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1426,15 +1426,30 @@ search_dlg(struct session *ses, struct document_view *doc_view, int direction)
 		      search_function);
 }
 
+static enum evhook_status
+search_history_write_hook(va_list ap, void *data)
+{
+	save_input_history(&search_history, SEARCH_HISTORY_FILENAME);
+	return EVENT_HOOK_STATUS_NEXT;
+}
+
+struct event_hook_info search_history_hooks[] = {
+	{ "periodic-saving", search_history_write_hook, NULL },
+
+	NULL_EVENT_HOOK_INFO,
+};
+
 void
 init_search_history(void)
 {
 	load_input_history(&search_history, SEARCH_HISTORY_FILENAME);
+	register_event_hooks(search_history_hooks);
 }
 
 void
 done_search_history(void)
 {
+	unregister_event_hooks(search_history_hooks);
 	save_input_history(&search_history, SEARCH_HISTORY_FILENAME);
 	free_list(search_history.entries);
 }

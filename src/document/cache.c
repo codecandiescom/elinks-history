@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.17 2002/07/09 20:16:27 pasky Exp $ */
+/* $Id: cache.c,v 1.18 2002/07/09 20:28:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,8 +135,8 @@ int get_cache_data(struct cache_entry *e, unsigned char **d, int *l)
 
 #define CACHE_PAD(x) (((x) | 0x3fff) + 1)
 
-/* Add fragment to cache. Returns -1 upon error, 0 when nothing was added (?),
- * 1 otherwise. */
+/* Add fragment to cache. Returns -1 upon error, 1 if cache entry was enlarged,
+ * 0 if only old data were overwritten. Maybe. And maybe not. */
 /* Note that this function is maybe overcommented, but I'm certainly not
  * unhappy from that. */
 int
@@ -170,13 +170,13 @@ add_fragment(struct cache_entry *e, int offset,
 		if (end_offset > f_end_offset) {
 			/* Overlap - we end further than original fragment. */
 
+			ret = 1; /* !!! FIXME */
+
 			/* Is intersected area same? Truncate it if not, dunno
 			 * why though :). */
 			if (memcmp(f->data + offset - f->offset, data,
 				   f_end_offset - offset))
 				trunc = 1;
-
-			ret = 1; /* !!! FIXME */
 
 			if (end_offset - f->offset <= f->real_length) {
 				/* We fit here, so let's enlarge it by delta of

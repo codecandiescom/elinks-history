@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.268 2003/12/02 19:58:00 jonas Exp $ */
+/* $Id: session.c,v 1.269 2003/12/02 23:48:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1025,13 +1025,9 @@ create_session(struct window *tab)
 static inline void
 copy_session(struct session *old, struct session *new)
 {
-	unsigned char *url;
-
 	if (!have_location(old)) return;
 
-	url = get_no_post_url(cur_loc(old)->vs.url, NULL);
-	goto_url(new, url);
-	mem_free(url);
+	goto_url(new, cur_loc(old)->vs.url);
 }
 
 void *

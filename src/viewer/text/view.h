@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.11 2003/07/03 00:07:03 pasky Exp $ */
+/* $Id: view.h,v 1.12 2003/07/03 00:09:44 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -8,7 +8,7 @@
 #include "terminal/terminal.h"
 #include "sched/session.h"
 
-#include "util/list.h" /* LIST_HEAD */
+#include "util/lists.h" /* LIST_HEAD */
 
 struct submitted_value {
 	LIST_HEAD(struct submitted_value);

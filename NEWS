@@ -8,6 +8,7 @@ ELinks-now:
 * tabs moving
 * exmode CLI support
 * cursor routing (aka w3m style navigation)
+* directional links navigation
 * manual cookies creating and editing support
 * typeahead text searching (press '#/' sequence)
 * experimental Perl scripting extensions

@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.18 2004/06/22 00:59:33 pasky Exp $ */
+/* $Id: connect.h,v 1.19 2004/07/22 17:15:09 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -21,6 +21,8 @@ struct conn_info {
 };
 
 struct read_buffer {
+	/* A routine called *each time new data comes in*, therefore
+	 * usually many times, not only when all the data arrives. */
 	void (*done)(struct connection *, struct read_buffer *);
 
 	int sock;

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.82 2004/07/12 13:43:44 zas Exp $ */
+/* $Id: connect.c,v 1.83 2004/07/22 17:15:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -493,6 +493,8 @@ connected(void *data)
 }
 
 struct write_buffer {
+	/* A routine called when all the data is sent (therefore this is
+	 * _different_ from read_buffer.done !). */
 	void (*done)(struct connection *);
 
 	int sock;

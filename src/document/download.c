@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.63 2002/12/24 00:23:51 jonas Exp $ */
+/* $Id: download.c,v 1.64 2002/12/26 03:06:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,7 @@
 struct list_head downloads = {&downloads, &downloads};
 
 
-inline int
+int
 are_there_downloads()
 {
 	struct download *down;
@@ -70,7 +70,7 @@ are_there_downloads()
 }
 
 
-static inline struct session *
+static struct session *
 get_download_ses(struct download *down)
 {
 	struct session *ses;
@@ -111,7 +111,7 @@ abort_download(struct download *down)
 }
 
 
-static inline void
+static void
 kill_downloads_to_file(unsigned char *file)
 {
 	struct download *down;
@@ -125,7 +125,7 @@ kill_downloads_to_file(unsigned char *file)
 }
 
 
-inline void
+void
 abort_all_downloads()
 {
 	while (!list_empty(downloads))
@@ -133,7 +133,7 @@ abort_all_downloads()
 }
 
 
-inline void
+void
 destroy_downloads(struct session *ses)
 {
 	struct download *d;
@@ -147,14 +147,14 @@ destroy_downloads(struct session *ses)
 }
 
 
-static inline void
+static void
 undisplay_download(struct download *down)
 {
 	if (down->win) delete_window(down->win);
 }
 
 
-static inline int
+static int
 dlg_set_notify(struct dialog_data *dlg, struct widget_data *di)
 {
 	struct download *down = dlg->dlg->udata;
@@ -164,7 +164,7 @@ dlg_set_notify(struct dialog_data *dlg, struct widget_data *di)
 	return 0;
 }
 
-static inline int
+static int
 dlg_abort_download(struct dialog_data *dlg, struct widget_data *di)
 {
 	register_bottom_half((void (*)(void *)) abort_download,
@@ -173,7 +173,7 @@ dlg_abort_download(struct dialog_data *dlg, struct widget_data *di)
 }
 
 
-static inline int
+static int
 dlg_undisplay_download(struct dialog_data *dlg, struct widget_data *di)
 {
 	register_bottom_half((void (*)(void *)) undisplay_download,
@@ -182,7 +182,7 @@ dlg_undisplay_download(struct dialog_data *dlg, struct widget_data *di)
 }
 
 
-static inline void
+static void
 download_abort_function(struct dialog_data *dlg)
 {
 	struct download *down = dlg->dlg->udata;
@@ -781,13 +781,13 @@ error:
 	}
 }
 
-inline void
+void
 start_download(struct session *ses, unsigned char *file)
 {
 	common_download(ses, file, 0);
 }
 
-inline void
+void
 resume_download(struct session *ses, unsigned char *file)
 {
 	common_download(ses, file, 1);
@@ -894,7 +894,7 @@ tp_save(struct session *ses)
 }
 
 
-inline void
+void
 tp_open(struct session *ses)
 {
 	continue_download(ses, "");

@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.15 2002/12/16 22:56:35 zas Exp $ */
+/* $Id: history.c,v 1.16 2002/12/26 03:06:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,21 +42,21 @@ free_history(struct list_head *history)
 }
 
 
-inline void
+void
 create_history(struct session *ses)
 {
 	init_list(ses->history);
 	init_list(ses->unhistory);
 }
 
-inline void
+void
 destroy_history(struct session *ses)
 {
 	free_history(&ses->history);
 	free_history(&ses->unhistory);
 }
 
-inline void
+void
 clean_unhistory(struct session *ses)
 {
 	if (get_opt_int("document.history.keep_unhistory")) return;

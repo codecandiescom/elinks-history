@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.56 2002/12/22 09:47:19 pasky Exp $ */
+/* $Id: renderer.c,v 1.57 2002/12/26 03:06:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -264,7 +264,7 @@ set_hline(struct part *part, int x, int y,int xl,
 	}
 }
 
-static inline void
+static void
 move_links(struct part *part, int xf, int yf, int xt, int yt)
 {
 	struct tag *tag;
@@ -965,7 +965,7 @@ end:
 	memset(part->spaces, 0, part->spl);
 }
 
-static inline void
+static void
 html_init(struct part *part)
 {
 	/* !!! FIXME: background */

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.81 2002/12/18 16:30:37 pasky Exp $ */
+/* $Id: session.c,v 1.82 2002/12/26 03:06:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,7 @@ struct file_to_load *request_additional_loading_file(struct session *,
 						     unsigned char *,
 						     struct status *, int);
 
-inline void
+void
 free_strerror_buf()
 {
 	free_list(strerror_buf);
@@ -471,7 +471,7 @@ ses_imgmap(struct session *ses)
 	do_menu(ses->term, menu, ses);
 }
 
-inline void
+void
 map_selected(struct terminal *term, struct link_def *ld, struct session *ses)
 {
 	goto_url_frame(ses, ld->link, ld->target);
@@ -510,7 +510,7 @@ post_yes(struct wtd_data *w)
 		 w->pri, w->cache_mode, -1);
 }
 
-static inline void
+static void
 post_no(struct wtd_data *w)
 {
 	/* Ok, no test needed, see ses_goto() */
@@ -518,7 +518,7 @@ post_no(struct wtd_data *w)
 	post_yes(w);
 }
 
-static inline void
+static void
 post_cancel(struct wtd_data *w)
 {
 	reload(w->ses, NC_CACHE);
@@ -1315,7 +1315,7 @@ destroy_session(struct session *ses)
 	/*mem_free(ses);*/
 }
 
-inline void
+void
 destroy_all_sessions()
 {
 	/*while (!list_empty(sessions)) destroy_session(sessions.next);*/

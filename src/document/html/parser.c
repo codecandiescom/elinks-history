@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.63 2002/12/22 00:04:59 pasky Exp $ */
+/* $Id: parser.c,v 1.64 2002/12/26 03:06:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -645,42 +645,42 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 	kill_html_stack_item(&html_top);
 }
 
-static inline void
+static void
 html_span(unsigned char *a)
 {
 }
 
-static inline void
+static void
 html_bold(unsigned char *a)
 {
 	format.attr |= AT_BOLD;
 }
 
-static inline void
+static void
 html_italic(unsigned char *a)
 {
 	format.attr |= AT_ITALIC;
 }
 
-static inline void
+static void
 html_underline(unsigned char *a)
 {
 	format.attr |= AT_UNDERLINE;
 }
 
-static inline void
+static void
 html_fixed(unsigned char *a)
 {
        format.attr |= AT_FIXED;
 }
 
-static inline void
+static void
 html_subscript(unsigned char *a)
 {
        format.attr |= AT_SUBSCRIPT;
 }
 
-static inline void
+static void
 html_superscript(unsigned char *a)
 {
        format.attr |= AT_SUPERSCRIPT;
@@ -922,7 +922,7 @@ html_img(unsigned char *a)
 	/*put_chrs(" ", 1, put_chars_f, ff);*/
 }
 
-static inline void
+static void
 html_body(unsigned char *a)
 {
 	get_color(a, "text", &format.fg);
@@ -937,19 +937,19 @@ html_body(unsigned char *a)
 	}
 }
 
-static inline void
+static void
 html_skip(unsigned char *a)
 {
 	html_top.invisible = html_top.dontkill = 1;
 }
 
-static inline void
+static void
 html_title(unsigned char *a)
 {
 	html_top.invisible = html_top.dontkill = 1;
 }
 
-static inline void
+static void
 html_center(unsigned char *a)
 {
 	par_format.align = AL_CENTER;
@@ -973,7 +973,7 @@ html_linebrk(unsigned char *a)
 	}
 }
 
-static inline void
+static void
 html_br(unsigned char *a)
 {
 	html_linebrk(a);
@@ -981,13 +981,13 @@ html_br(unsigned char *a)
 	was_br = 1;
 }
 
-static inline void
+static void
 html_form(unsigned char *a)
 {
 	was_br = 1;
 }
 
-static inline void
+static void
 html_p(unsigned char *a)
 {
 	if (par_format.leftmargin < margin) par_format.leftmargin = margin;
@@ -996,14 +996,14 @@ html_p(unsigned char *a)
 	html_linebrk(a);
 }
 
-static inline void
+static void
 html_address(unsigned char *a)
 {
 	par_format.leftmargin += 1;
 	par_format.align = AL_LEFT;
 }
 
-static inline void
+static void
 html_blockquote(unsigned char *a)
 {
 	par_format.leftmargin += 2;
@@ -1038,37 +1038,37 @@ html_h(int h, unsigned char *a)
 	}
 }
 
-static inline void
+static void
 html_h2(unsigned char *a)
 {
 	html_h(2, a);
 }
 
-static inline void
+static void
 html_h3(unsigned char *a)
 {
 	html_h(3, a);
 }
 
-static inline void
+static void
 html_h4(unsigned char *a)
 {
 	html_h(4, a);
 }
 
-static inline void
+static void
 html_h5(unsigned char *a)
 {
 	html_h(5, a);
 }
 
-static inline void
+static void
 html_h6(unsigned char *a)
 {
 	html_h(6, a);
 }
 
-static inline void
+static void
 html_pre(unsigned char *a)
 {
 	par_format.align = AL_NO;
@@ -1103,7 +1103,7 @@ html_hr(unsigned char *a)
 	kill_html_stack_item(&html_top);
 }
 
-static inline void
+static void
 html_table(unsigned char *a)
 {
 	par_format.leftmargin = margin;
@@ -1113,13 +1113,13 @@ html_table(unsigned char *a)
 	format.attr = 0;
 }
 
-static inline void
+static void
 html_tr(unsigned char *a)
 {
 	html_linebrk(a);
 }
 
-static inline void
+static void
 html_th(unsigned char *a)
 {
 	/*html_linebrk(a);*/
@@ -1128,7 +1128,7 @@ html_th(unsigned char *a)
 	put_chrs(" ", 1, put_chars_f, ff);
 }
 
-static inline void
+static void
 html_td(unsigned char *a)
 {
 	/*html_linebrk(a);*/
@@ -2030,7 +2030,7 @@ end_parse:
 
 
 
-static inline void
+static void
 html_textarea(unsigned char *a)
 {
 	internal("This should be never called");
@@ -2147,7 +2147,7 @@ html_iframe(unsigned char *a)
 	mem_free(url);
 }
 
-static inline void
+static void
 html_noframes(unsigned char *a)
 {
 	if (d_opt->frames) html_skip(a);
@@ -2545,7 +2545,7 @@ process_head(unsigned char *head)
 }
 
 
-static inline int
+static int
 compar(const void *a, const void *b)
 {
 	return strcasecmp(((struct element_info *) a)->name, ((struct element_info *) b)->name);

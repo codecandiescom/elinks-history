@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.114 2002/12/24 00:05:23 pasky Exp $ */
+/* $Id: view.c,v 1.115 2002/12/26 03:06:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,7 +190,7 @@ find_tag(struct f_data *f, unsigned char *name)
 	return -1;
 }
 
-static inline int
+static int
 comp_links(struct link *l1, struct link *l2)
 {
 	return l1->num - l2->num;
@@ -1237,7 +1237,7 @@ hscroll(struct session *ses, struct f_data_c *f, int a)
 	/* !!! FIXME: check right margin */
 }
 
-static inline void
+static void
 home(struct session *ses, struct f_data_c *f, int a)
 {
 	f->vs->view_pos = f->vs->view_posx = 0;
@@ -1268,7 +1268,7 @@ has_form_submit(struct f_data *f, struct form_control *form)
 	return 0;
 }
 
-static inline void
+static void
 decrement_fc_refcount(struct f_data *f)
 {
 	if (!--f->refcount) format_cache_entries++;
@@ -3021,7 +3021,7 @@ x:
 	ses->kbdprefix.rep = 0;
 }
 
-static inline void
+static void
 send_enter(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct event ev = { EV_KBD, KBD_ENTER, 0, 0 };
@@ -3029,7 +3029,7 @@ send_enter(struct terminal *term, void *xxx, struct session *ses)
 	send_event(ses, &ev);
 }
 
-static inline void
+static void
 send_enter_reload(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct event ev = { EV_KBD, KBD_ENTER, KBD_CTRL, 0 };

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.26 2002/12/22 09:47:19 pasky Exp $ */
+/* $Id: tables.c,v 1.27 2002/12/26 03:06:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -306,7 +306,7 @@ ret:
 	return CELL(t, x, y);
 }
 
-static inline void
+static void
 new_columns(struct table *t, int span, int width, int align,
 	    int valign, int group)
 {

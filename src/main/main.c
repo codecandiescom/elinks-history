@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.104 2003/06/15 22:44:13 pasky Exp $ */
+/* $Id: main.c,v 1.105 2003/06/15 23:03:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,8 +49,7 @@
 #include "lowlevel/sysname.h"
 #include "lowlevel/timer.h"
 #include "main.h"
-#include "protocol/mailcap.h"
-#include "protocol/mime.h"
+#include "mime/mime.h"
 #include "protocol/http/auth.h"
 #include "sched/download.h"
 #include "sched/error.h"
@@ -174,9 +173,7 @@ init(void)
 #ifdef COOKIES
 	init_cookies();
 #endif
-#ifdef MAILCAP
-	mailcap_init();
-#endif
+	init_mime();
 	init_ssl();
 #ifdef HAVE_LUA
     	init_lua();
@@ -234,6 +231,7 @@ terminate_all_subsystems(void)
 	free_all_itrms();
 	abort_all_connections();
 	done_ssl();
+	done_mime();
 
 	if (init_b) {
 #ifdef HAVE_SCRIPTING
@@ -248,9 +246,6 @@ terminate_all_subsystems(void)
 #endif
 #ifdef COOKIES
 		cleanup_cookies();
-#endif
-#ifdef MAILCAP
-		mailcap_exit();
 #endif
 #ifdef HAVE_LUA
 		cleanup_lua();

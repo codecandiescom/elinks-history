@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.5 2004/01/17 19:40:27 pasky Exp $ */
+/* $Id: value.c,v 1.6 2004/01/17 19:43:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,12 +100,12 @@ css_parse_font_attribute_value(union css_decl_value *value,
 	/* This is triggered with a lot of various properties, basically
 	 * everything just touching font_attribute. */
 
-	skip_whitespace(*string);
 	if (!strlcasecmp(*string, -1, "bold", 4)) {
 		(*string) += 4;
 		value->font_attribute |= AT_BOLD;
 		return 1;
 	}
+
 	if (!strlcasecmp(*string, -1, "italic", 6) ||
 	    !strlcasecmp(*string, -1, "oblique", 7)) {
 		(*string) += 6 + (**string == 'o');

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.77 2003/09/15 21:14:03 jonas Exp $ */
+/* $Id: tables.c,v 1.78 2003/09/15 21:23:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1471,26 +1471,28 @@ static inline void
 draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
 		 int i, int j)
 {
-	static unsigned char hline_table[3] = { 0x20, 0xc4, 0xcd };
-
-	if (H_LINE_X(table, i, j) >= 0) {
-		xset_hchars(table->p, x, y, table->w_c[i],
-			    hline_table[H_LINE(table, i, j)],
-			    par_format.bgcolor, SCREEN_ATTR_FRAME);
-	}
+ 	static unsigned char hltable[] = { ' ', BORDER_SHLINE, BORDER_DHLINE };
+ 	int pos = H_LINE_X(table, i, j);
+ 
+ 	assertm(pos < 3, "Horizontal table position out of bound [%d]", pos);
+ 
+ 	if (pos < 0 || table->w_c[i] <= 0) return;
+ 
+ 	xset_hchars(table->p, x, y, table->w_c[i], hltable[pos], par_format.bgcolor, SCREEN_ATTR_FRAME);
 }
 
 static inline void
 draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
 		 int i, int j)
 {
-	static unsigned char vline_table[3] = { 0x20, 0xb3, 0xba };
-
-	if (V_LINE_X(table, i, j) >= 0) {
-		xset_vchars(table->p, x, y, table->r_heights[j],
-			    vline_table[V_LINE(table, i, j)],
-			    par_format.bgcolor, SCREEN_ATTR_FRAME);
-	}
+ 	static unsigned char vltable[] = { ' ', BORDER_SVLINE, BORDER_DVLINE };
+ 	int pos = V_LINE_X(table, i, j);
+ 
+ 	assertm(pos < 3, "Vertical table position out of bound [%d]", pos);
+ 
+ 	if (pos < 0 || table->r_heights[j] <= 0) return;
+ 
+ 	xset_vchars(table->p, x, y, table->r_heights[j], vltable[pos], par_format.bgcolor, SCREEN_ATTR_FRAME);
 }
 
 static void

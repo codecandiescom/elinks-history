@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.32 2003/10/27 23:09:28 pasky Exp $ */
+/* $Id: ssl.c,v 1.33 2003/10/27 23:14:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,12 +30,6 @@
 #include "util/error.h"
 #include "util/string.h"
 
-
-#ifdef HAVE_OPENSSL
-#define	ssl_t	SSL
-#elif defined(HAVE_GNUTLS)
-#define	ssl_t	GNUTLS_STATE
-#endif
 
 #ifndef PATH_MAX
 #define	PATH_MAX	256 /* according to my /usr/include/bits/posix1_lim.h */

@@ -2089,6 +2089,7 @@ typedef enum {
 extern cookies_accept_t cookies_accept;
 extern int cookies_save;
 extern int cookies_resave;
+extern int cookies_paranoid_security;
 
 extern int async_lookup;
 extern int download_utime;

@@ -936,6 +936,7 @@ int dump_width = 80;
 cookies_accept_t cookies_accept = COOKIES_ACCEPT_ALL;
 int cookies_save = 1;
 int cookies_resave = 1;
+int cookies_paranoid_security = 0;
 
 int async_lookup = 1;
 int download_utime = 0;
@@ -1043,7 +1044,14 @@ struct option links_options[] = {
 		"Mode of accepting cookies:\n"
 		"0 is accept no cookies\n"
 		"1 is ask for confirmation before accepting cookie (UNIMPLEMENTED)\n"
-		"2 is accept all cookies"},
+		"2 is accept all cookies" },
+
+	{	"cookies-paranoid-security", "cookies_paranoid_security",
+	       	gen_cmd, num_rd, num_wr,
+		0, 1, &cookies_paranoid_security,
+		"When enabled, we'll require three dots in cookies domain for all\n"
+		"non-international domains (instead of just two dots). Please see\n"
+		"code (cookies.c:check_domain_security()) for further description" },
 
 	{	"cookies-save", "cookies_save",
 	       	gen_cmd, num_rd, num_wr,

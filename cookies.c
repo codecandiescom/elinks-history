@@ -48,25 +48,61 @@ void free_cookie(struct cookie *c)
 	if (c->domain) mem_free(c->domain);
 }
 
-int check_domain_security(unsigned char *server, unsigned char *domain)
+static int check_domain_security(unsigned char *server, unsigned char *domain)
 {
-	int i, j, dl, nd;
+	int i, j, domain_len;
+	int need_dots;
+
 	if (domain[0] == '.') domain++;
-	dl = strlen(domain);
-	if (dl > strlen(server)) return 1;
-	for (i = strlen(server) - dl, j = 0; server[i]; i++, j++)
-		if (upcase(server[i]) != upcase(domain[j])) return 1;
-	nd = 2;
-	if (dl > 4 && domain[dl - 4] == '.') {
-		unsigned char *tld[] = { "com", "edu", "net", "org", "gov", "mil", "int", NULL };
-		for (i = 0; tld[i]; i++) if (!casecmp(tld[i], &domain[dl - 3], 3)) {
-			nd = 1;
-			break;
+	domain_len = strlen(domain);
+	
+	if (domain_len > strlen(server))
+		return 0;
+
+	/* Match domain and server.. */
+	
+	for (i = strlen(server) - domain_len, j = 0; server[i]; i++, j++)
+		if (upcase(server[i]) != upcase(domain[j]))
+			return 0;
+
+	/* Also test if domain is secure enough.. */
+	
+	need_dots = 1;
+	
+	if (cookies_paranoid_security) {
+		/* This is somewhat controversial attempt (by the way violating
+		 * RFC) to increase cookies security in national domains done
+		 * by Mikulas. As it breaks a lot of sites, I decided to make
+		 * this optional and off by default. I also don't think this
+		 * improves security considerably, as it's SITE'S fault and
+		 * also no other browser probably does it. --pasky */
+		/* Mikulas' comment: Some countries have generic 2-nd level
+		 * domains (like .com.pl, .co.uk ...) and it would be very bad
+		 * if someone set cookies for these genegic domains.  Imagine
+		 * for example that server http://brutalporn.com.pl sets cookie
+		 * Set-Cookie: user_is=perverse_pig; domain=.com.pl -- then
+		 * this cookies would be sent to all commercial servers in
+		 * Poland. */
+		need_dots = 2;
+		if (domain_len > 4 && domain[domain_len - 4] == '.') {
+			unsigned char *tld[] = { "com", "edu", "net", "org",
+						 "gov", "mil", "int", NULL };
+						 
+			for (i = 0; tld[i]; i++) {
+				if (!casecmp(tld[i], &domain[domain_len - 3], 3)) {
+					need_dots = 1;
+					break;
+				}
+			}
 		}
 	}
-	for (i = 0; domain[i]; i++) if (domain[i] == '.') if (!--nd) break;
-	if (nd > 0) return 1;
-	return 0;
+	
+	for (i = 0; domain[i]; i++)
+		if (domain[i] == '.' && !--need_dots)
+			break;
+	
+	if (need_dots > 0) return 0;
+	return 1;
 }
 
 int set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
@@ -205,7 +241,7 @@ int set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 	      cookie->expires, cookie->secure);
 #endif
 	
-	if (check_domain_security(server, cookie->domain)) {
+	if (!check_domain_security(server, cookie->domain)) {
 #ifdef COOKIES_DEBUG
 		debug("Domain security violated.");
 #endif

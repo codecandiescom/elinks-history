@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.28 2003/06/04 19:08:05 jonas Exp $ */
+/* $Id: secsave.c,v 1.29 2003/06/04 20:05:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,7 +110,7 @@ secure_open(unsigned char *file_name, mode_t mask)
 		if (errno != ENOENT) {
 			/* lstat() error. */
 			ssi->err = errno;
-			secsave_errno = SS_ERR_OTHER;
+			secsave_errno = SS_ERR_STAT;
 			goto free_file_name;
 		}
 	} else {
@@ -122,7 +122,7 @@ secure_open(unsigned char *file_name, mode_t mask)
 			/* XXX: access() do not work with setuid programs. */
 			if (access(ssi->file_name, R_OK | W_OK) < 0) {
 				ssi->err = errno;
-				secsave_errno = SS_ERR_OTHER;
+				secsave_errno = SS_ERR_ACCESS;
 				goto free_file_name;
 			}
 #else
@@ -136,7 +136,7 @@ secure_open(unsigned char *file_name, mode_t mask)
 				fclose(f1);
 			} else {
 				ssi->err = errno;
-				secsave_errno = SS_ERR_OTHER;
+				secsave_errno = SS_ERR_OPEN_READ;
 				goto free_file_name;
 			}
 #endif
@@ -154,17 +154,21 @@ secure_open(unsigned char *file_name, mode_t mask)
 		unsigned char *randname = straconcat(ssi->file_name,
 						     ".tmp_XXXXXX", NULL);
 
-		if (!randname) goto free_file_name;
+		if (!randname) {
+			secsave_errno = SS_ERR_OUT_OF_MEM;
+			goto free_file_name;
+		}
 
 		fd = mkstemp(randname);
 		if (fd == -1) {
+			secsave_errno = SS_ERR_MKSTEMP;
 			mem_free(randname);
 			goto free_file_name;
 		}
 
 		ssi->fp = fdopen(fd, "w");
 		if (!ssi->fp) {
-			secsave_errno = SS_ERR_OTHER;
+			secsave_errno = SS_ERR_OPEN_WRITE;
 			ssi->err = errno;
 			mem_free(randname);
 			goto free_file_name;
@@ -175,7 +179,7 @@ secure_open(unsigned char *file_name, mode_t mask)
 		/* No need to create a temporary file here. */
 		ssi->fp = fopen(ssi->file_name, "w");
 		if (!ssi->fp) {
-			secsave_errno = SS_ERR_OTHER;
+			secsave_errno = SS_ERR_OPEN_WRITE;
 			ssi->err = errno;
 			goto free_file_name;
 		}
@@ -231,7 +235,7 @@ secure_close(struct secure_save_info *ssi)
 			 * more..).  */
 			if (rename(ssi->tmp_file_name, ssi->file_name) == -1) {
 				ret = errno;
-				secsave_errno = SS_ERR_OTHER;
+				secsave_errno = SS_ERR_RENAME;
 			} else {
 				/* Return 0 if file is successfully written. */
 				ret = 0;

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.81 2003/06/04 17:14:36 pasky Exp $ */
+/* $Id: conf.c,v 1.82 2003/06/04 20:05:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -662,16 +662,35 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 	}
 
 	if (term && (secsave_errno != SS_ERR_NONE || ret)) {
-		unsigned char *strerr = _("Secure open failed", term);
+		unsigned char *errmsg = NULL;
+		unsigned char *strerr;
 
-		if (secsave_errno == SS_ERR_DISABLED)
-			strerr = _("File saving disabled by option", term);
-		else if (secsave_errno == SS_ERR_OUT_OF_MEM)
-			strerr = _("Out of memory", term);
-		else if (secsave_errno == SS_ERR_OTHER && ret)
-			strerr = (unsigned char *) strerror(ret);
+		switch (secsave_errno) {
+			case SS_ERR_DISABLED:
+				strerr = _("File saving disabled by option", term);
+				break;
+			case SS_ERR_OUT_OF_MEM:
+				strerr = _("Out of memory", term);
+				break;
+			case SS_ERR_OPEN_WRITE:
+				strerr = _("Cannot write the file", term);
+				break;
+			default:
+				strerr = _("Secure open failed", term);
+				break;
+		}
 
-		write_config_error(term, config_file, strerr);
+		if (ret > 0) errmsg = straconcat(strerr, " (", strerror(ret), ")", NULL);
+
+		if (errmsg) {
+			write_config_error(term, getml(config_file, errmsg, NULL),
+					   config_file, errmsg);
+		} else {
+			write_config_error(term, getml(config_file, NULL),
+					   config_file, strerr);
+		}
+
+		goto free_cfg_str;
 	}
 
 	mem_free(config_file);

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.41 2003/06/04 16:27:24 zas Exp $ */
+/* $Id: dialogs.c,v 1.42 2003/06/04 20:05:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,9 +32,10 @@
 
 
 void
-write_config_error(struct terminal *term, unsigned char *config_file, unsigned char *strerr)
+write_config_error(struct terminal *term, struct memory_list *ml,
+		   unsigned char *config_file, unsigned char *strerr)
 {
-	msg_box(term, NULL,
+	msg_box(term, ml,
 		N_("Config error"), AL_CENTER | AL_EXTD_TEXT,
 		N_("Unable to write to config file"), "\n",
 		config_file, ": ", strerr, NULL,

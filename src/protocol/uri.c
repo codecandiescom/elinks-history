@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.293 2004/11/10 19:57:05 jonas Exp $ */
+/* $Id: uri.c,v 1.294 2004/11/10 20:00:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1067,7 +1067,7 @@ parse_uri:
 		while (*from == '/') from++;
 
 		assert(to < from);
-		memmove(to, from, strlen(from));
+		memmove(to, from, strlen(from) + 1);
 		goto parse_uri;
 	}
 	case URI_ERRNO_NO_SLASHES:
@@ -1094,7 +1094,7 @@ parse_uri:
 		       && uri.string < uri.port
 		       && uri.port[-1] == ':');
 
-		memmove(uri.port - 1, uri.port, strlen(uri.port));
+		memmove(uri.port - 1, uri.port, strlen(uri.port) + 1);
 		goto parse_uri;
 
 	case URI_ERRNO_NO_HOST_SLASH:

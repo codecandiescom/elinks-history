@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.75 2003/09/15 21:11:41 jonas Exp $ */
+/* $Id: tables.c,v 1.76 2003/09/15 21:13:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1441,17 +1441,17 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 
 
 #ifndef DEBUG
-#define H_LINE_X(term, xx, yy) frame[0][(xx) + 1 + ((term)->x + 2) * (yy)]
-#define V_LINE_X(term, xx, yy) frame[1][(yy) + 1 + ((term)->y + 2) * (xx)]
+#define H_LINE_X(table, xx, yy) frame[0][(xx) + 1 + ((table)->x + 2) * (yy)]
+#define V_LINE_X(table, xx, yy) frame[1][(yy) + 1 + ((table)->y + 2) * (xx)]
 #else
-#define H_LINE_X(term, xx, yy) (*(xx < -1 || xx > (term)->x + 1 || yy < 0 || yy > (term)->y ? \
-		   	(signed char *) NULL : &frame[0][(xx) + 1 + ((term)->x + 2) * (yy)]))
-#define V_LINE_X(term, xx, yy) (*(xx < 0 || xx > (term)->x || yy < -1 || yy > (term)->y + 1 ? \
-			(signed char *) NULL : &frame[1][(yy) + 1 + ((term)->y + 2) * (xx)]))
+#define H_LINE_X(table, xx, yy) (*(xx < -1 || xx > (table)->x + 1 || yy < 0 || yy > (table)->y ? \
+		   	(signed char *) NULL : &frame[0][(xx) + 1 + ((table)->x + 2) * (yy)]))
+#define V_LINE_X(table, xx, yy) (*(xx < 0 || xx > (table)->x || yy < -1 || yy > (table)->y + 1 ? \
+			(signed char *) NULL : &frame[1][(yy) + 1 + ((table)->y + 2) * (xx)]))
 #endif
 
-#define H_LINE(term, xx, yy) int_max(H_LINE_X(term, (xx), (yy)), 0)
-#define V_LINE(term, xx, yy) int_max(V_LINE_X(term, (xx), (yy)), 0)
+#define H_LINE(table, xx, yy) int_max(H_LINE_X(table, (xx), (yy)), 0)
+#define V_LINE(table, xx, yy) int_max(V_LINE_X(table, (xx), (yy)), 0)
 
 static inline void
 draw_frame_point(struct table *table, signed char *frame[2], int x, int y,

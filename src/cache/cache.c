@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.43 2003/10/02 14:04:25 zas Exp $ */
+/* $Id: cache.c,v 1.44 2003/10/02 14:36:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,12 +19,36 @@
 #include "util/string.h"
 #include "util/types.h"
 
-
 static INIT_LIST_HEAD(cache);
-
 static long cache_size;
-
 static int cache_count = 0;
+
+
+/* Define to enable cache debugging features (redirect stderr to a file). */
+/* #define DEBUG_CACHE */
+
+#ifdef DEBUG_CACHE
+static void
+dump_frag(struct fragment *f)
+{
+	fprintf(stderr, " %p: offset=%d length=%d real_length=%d\n", f, f->offset, f->length,
+		f->real_length);
+}
+
+static void
+dump_all_frag(struct cache_entry *e, const unsigned char *comment, int line)
+{
+	struct fragment *f;
+
+	fprintf(stderr, "%s @%d (%s)\n", comment, line, e->url);
+	foreach (f, e->frag)
+		dump_frag(f);
+}
+
+#define dump_frags(e, c) dump_all_frag(e, c, __LINE__)
+#else
+#define dump_frags(e, c)
+#endif /* DEBUG_CACHE */
 
 
 static int
@@ -262,6 +286,8 @@ ff:;
 
 	if (trunc) truncate_entry(e, offset + length, 0);
 
+	dump_frags(e, "add_fragment");
+
 	return ret;
 }
 
@@ -295,15 +321,7 @@ defrag_entry(struct cache_entry *e)
 	if (!n) return;
 	n->length = l;
 	n->real_length = l;
-#if 0
-	{
-		struct fragment *f;
-		foreach (f, e->frag)
-			fprintf(stderr, "%d, %d, %d\n", f->offset, f->length,
-					f->real_length);
-		debug("d1-");
-	}
-#endif
+
 	for (l = 0, h = f; h != g; h = h->next) {
 		memcpy(n->data + l, h->data, h->length);
 		l += h->length;
@@ -313,14 +331,8 @@ defrag_entry(struct cache_entry *e)
 		mem_free(x);
 	}
 	add_to_list(e->frag, n);
-#if 0
-	{
-		foreach (f, e->frag)
-			fprintf(stderr, "%d, %d, %d\n", f->offset, f->length,
-					f->real_length);
-		debug("d-");
-	}
-#endif
+
+	dump_frags(e, "defrag_entry");
 }
 
 void
@@ -346,6 +358,7 @@ del:
 				mem_free(f);
 				f = g;
 			}
+			dump_frags(e, "truncate_entry");
 			return;
 		}
 
@@ -507,7 +520,8 @@ g:
 		if (f->prev->tgc)
 			delete_cache_entry(f->prev);
 	}
-#if 0
+
+#ifdef DEBUG_CACHE
 	if (!no && cache_size > opt_cache_gc_size) {
 		internal("garbage collection doesn't work, cache size %ld",
 			 cache_size);

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.146 2003/12/27 12:44:13 jonas Exp $ */
+/* $Id: dialogs.c,v 1.147 2003/12/27 17:31:36 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -578,6 +578,38 @@ launch_bm_add_link_dialog(struct terminal *term,
 	launch_bm_add_dialog(term, parent, ses,
 			     get_current_link_name(ses, title, MAX_STR_LEN),
 			     get_current_link_url(ses, url, MAX_STR_LEN));
+}
+
+void
+menu_bookmark_terminal_tabs(struct terminal *term, void *d, struct session *ses)
+{
+	unsigned char buffer[MAX_STR_LEN];
+	unsigned char *template = _("Saved session", term);
+	int length = strlen(template);
+
+	if (length + 4 >= MAX_STR_LEN) return;
+
+	memcpy(buffer, template, length + 1);
+
+#ifdef HAVE_STRFTIME
+	{
+		ttime when_time = time(NULL);
+		struct tm *when_local = localtime(&when_time);
+		unsigned char *timepos = buffer + length + 3;
+		int timelength = sizeof(buffer) - length - 4;
+		int wr;
+
+		wr = strftime(timepos, timelength, "%b %e %H:%M", when_local);
+		if (wr > 0) memcpy(buffer + length, " - ", 3);
+	}
+#endif
+
+	input_field(ses->tab->term, NULL, 1,
+		    N_("Bookmark tabs"), N_("Enter folder name"),
+		    N_("OK"), N_("Cancel"), ses->tab->term, NULL,
+		    MAX_STR_LEN, buffer, 0, 0, NULL,
+		    (void (*)(void *, unsigned char *)) bookmark_terminal_tabs,
+		    NULL);
 }
 
 #endif

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.240 2003/12/27 15:46:26 zas Exp $ */
+/* $Id: menu.c,v 1.241 2003/12/27 17:31:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -345,8 +345,13 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 		    (menu_func) menu_close_tab, NULL, 0);
 
 	if (tabs > 1) {
-		add_to_menu(&menu, N_("C~lose all tabs but the current"), "", ACT_TAB_CLOSE_ALL_BUT_CURRENT,
+		add_to_menu(&menu, N_("C~lose all tabs but the current"), "",
+			    ACT_TAB_CLOSE_ALL_BUT_CURRENT,
 			    (menu_func) close_all_tabs_but_current, d, 0);
+#ifdef BOOKMARKS
+		add_to_menu(&menu, N_("~Bookmark all tabs"), "", ACT_ADD_BOOKMARK_TABS,
+			    (menu_func) menu_bookmark_terminal_tabs, NULL, 0);
+#endif
 	}
 
 	/* Adjust the menu position taking the menu frame into account */

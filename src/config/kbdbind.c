@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.135 2003/12/27 16:11:22 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.136 2003/12/27 17:31:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -395,6 +395,7 @@ static struct strtonum action_table[] = {
 	{ "abort-connection", ACT_ABORT_CONNECTION, DACT(N_("Abort connection")) },
 	{ "add-bookmark", ACT_ADD_BOOKMARK, DACT(N_("Add a new bookmark")) },
 	{ "add-bookmark-link", ACT_ADD_BOOKMARK_LINK, DACT(N_("Add a new bookmark using current link")) },
+	{ "add-bookmark-tabs", ACT_ADD_BOOKMARK_TABS, DACT(N_("Bookmark all open tabs")) },
 	{ "auto-complete", ACT_AUTO_COMPLETE, DACT(N_("Attempt to auto-complete the input")) },
 	{ "auto-complete-unambiguous", ACT_AUTO_COMPLETE_UNAMBIGUOUS, DACT(N_("Attempt to unambiguously auto-complete the input")) },
 	{ "back", ACT_BACK, DACT(N_("Return to the previous document in history")) },

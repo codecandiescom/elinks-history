@@ -4,7 +4,7 @@
  * (receive/expiration). */
 #define COOKIES_RESAVE	1
 
-/* #define COOKIES_DEBUG */
+#define COOKIES_DEBUG
 
 #define ACCEPT_NONE	0
 #define ACCEPT_ASK	1 /* TODO */
@@ -83,27 +83,51 @@ int set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 {
 	struct cookie *cookie;
 	struct c_server *cs;
-	unsigned char *val_end, *nam_end;
 	unsigned char *server, *document, *date, *secure;
-
-	/* NAME=VALUE; expires=DATE; path=PATH; domain=DOMAIN_NAME; secure */
+	unsigned char *pos, *nam_end = NULL, *val_start = NULL, *val_end = NULL;
+	int last_was_eq = 0, last_was_ws = 0;
 	
 	if (accept_cookies == ACCEPT_NONE)
 		return 0;
 
-	/* Seek for ; after VALUE */
-	
-	for (val_end = str; *val_end != ';' && *val_end; val_end++)
-		if (WHITECHAR(*val_end))
-			return 0;
+#ifdef COOKIES_DEBUG
+	debug("set_cookie -> (%s) %s", url, str);
+#endif
 
-	/* Seek for = between NAME and VALUE */
+	/* /NAME *= *VALUE *;/ */
 	
-	for (nam_end = str; *nam_end != '='; nam_end++)
-		if (!*nam_end || nam_end >= val_end)
-			return 0;
+	for (pos = str; *pos != ';' && *pos; pos++) {
+		if (!last_was_ws)
+			val_end = pos;
+
+		if (*pos == '=') {
+			/* End of name reached */
+			if (!nam_end) nam_end = pos;
+			last_was_eq = 1;
+			
+		} else if (WHITECHAR(*pos)) {
+			if (!nam_end) {
+				/* Just after name - end of name reached */
+				nam_end = pos;
+			}
+			last_was_ws = 1;
+			
+		} else if (last_was_eq) {
+			/* Start of value reached */
+			val_start = pos;
+			last_was_eq = 0;
+			last_was_ws = 0;
+			
+		} else {
+			if (last_was_ws) {
+				/* Non-whitespace after whitespace and not just
+				 * after '=' - error */
+				return 0;
+			}
+		}
+	}
 	
-	if (str == nam_end || nam_end + 1 == val_end)
+	if (str == nam_end || !nam_end || !val_start || !val_end)
 		return 0;
 	
 	cookie = mem_alloc(sizeof(struct cookie));
@@ -116,7 +140,7 @@ int set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 	/* Fill main fields */
 	
 	cookie->name = memacpy(str, nam_end - str);
-	cookie->value = memacpy(nam_end + 1, val_end - nam_end - 1);
+	cookie->value = memacpy(val_start, val_end - val_start);
 	cookie->server = stracpy(server);
 
 	/* Get expiration date */

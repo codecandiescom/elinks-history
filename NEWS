@@ -48,7 +48,7 @@ ELinks-0.4.0:
 * keybindings can be configured from the user interface
 * colorful user interface
 * tiny useless LED-like indicators support
-* GNUTLS support paralel to the OpenSSL support (fixes some license issues)
+* GNUTLS support parallel to the OpenSSL support (fixes some license issues)
 * extensive memory debugging support
 
 ELinks-0.3.0:

@@ -3327,7 +3327,7 @@ msgstr ""
 
 #: src/config/options.inc:1820
 msgid "Restrict to anonymous mode"
-msgstr "Limitati alla modalità anonima"
+msgstr "Si limita alla modalità anonima"
 
 #: src/config/options.inc:1822
 msgid ""
@@ -3351,7 +3351,7 @@ msgstr "Sottometti il primo form che incontri."
 
 #: src/config/options.inc:1831
 msgid "Clone session with given ID"
-msgstr "Clonare la sessione con l'ID dato"
+msgstr "Clona la sessione con l'ID dato"
 
 #: src/config/options.inc:1833
 msgid ""
@@ -3387,7 +3387,7 @@ msgstr "Tipo MIME predefinito da assumere per documenti di tipo sconosciuto."
 
 #: src/config/options.inc:1847
 msgid "Write formatted version of given URL to stdout"
-msgstr "Scrivi la versione formattata dell'URL dato sullo stdout"
+msgstr "Scrive la versione formattata dell'URL dato sullo stdout"
 
 #: src/config/options.inc:1849
 msgid ""
@@ -3423,7 +3423,7 @@ msgstr ""
 #. lynx compatibility
 #: src/config/options.inc:1866
 msgid "Assume the file is HTML"
-msgstr "Assumi che il file sia HTML"
+msgstr "Assume che il file sia HTML"
 
 #: src/config/options.inc:1868
 msgid ""
@@ -3435,19 +3435,19 @@ msgstr ""
 
 #: src/config/options.inc:1877
 msgid "Print usage help and exit"
-msgstr "Stampa l'aiuto sull'uso e esce"
+msgstr "Stampa l'aiuto sull'uso ed esce"
 
 #: src/config/options.inc:1879
 msgid "Print usage help and exit."
-msgstr "Stampa l'aiuto sull'uso e esce."
+msgstr "Stampa l'aiuto sull'uso ed esce."
 
 #: src/config/options.inc:1881
 msgid "Print detailed usage help and exit"
-msgstr "Stampa l'aiuto dettagliato sull'uso e esce"
+msgstr "Stampa l'aiuto dettagliato sull'uso ed esce"
 
 #: src/config/options.inc:1883
 msgid "Print detailed usage help and exit."
-msgstr "Stampa l'aiuto dettagliato sull'uso e esce."
+msgstr "Stampa l'aiuto dettagliato sull'uso ed esce."
 
 #: src/config/options.inc:1885
 msgid "Print help for configuration options"
@@ -3542,7 +3542,7 @@ msgstr "Scrive il sorgente del documento HTML sullo stdout."
 
 #: src/config/options.inc:1925
 msgid "Read document from stdin"
-msgstr "Leggi documento da stdin"
+msgstr "Legge documento da stdin"
 
 #: src/config/options.inc:1927
 msgid ""
@@ -3576,11 +3576,11 @@ msgstr ""
 
 #: src/config/options.inc:1939
 msgid "Print version information and exit"
-msgstr "Stampa informazioni sulla versione e esce"
+msgstr "Stampa informazioni sulla versione ed esce"
 
 #: src/config/options.inc:1941
 msgid "Print ELinks version information and exit."
-msgstr "Mostra la versione di ELinks e esce."
+msgstr "Mostra la versione di ELinks ed esce."
 
 #: src/config/opttypes.c:54
 msgid "Read error"

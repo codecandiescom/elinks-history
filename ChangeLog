@@ -1,3 +1,263 @@
+Wed Jul 14 22:08:30 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	menu_url_shortcut(): @d -> @url.  
+
+Wed Jul 14 22:00:03 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	open_in_new_window(): @xxx -> @func.  
+
+Wed Jul 14 21:54:13 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/options.c:
+
+	charset_list(): cleanup, do not call get_cp_name() twice.  
+
+Wed Jul 14 21:37:11 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/hardio.c:
+
+	Assert p && l >= 0 for safety.  
+
+Wed Jul 14 21:32:08 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/hardio.c:
+
+	Reduce number of tests in hard_read()/hard_write(), declare @r,@w in
+	loops.  
+
+Wed Jul 14 21:27:16 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/hardio.c:
+
+	Code simplification in hard_write() and hard_read().  
+
+Wed Jul 14 20:04:24 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cookies/dialogs.c:
+
+	In delete_cookie, rename foreachsafe's temporary variable from
+	|from| to |next|.  
+
+Wed Jul 14 19:28:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/conf.c:
+
+	Move code to write_config() and drop write_config_to().  
+
+Wed Jul 14 19:15:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/globhist/globhist.c:
+
+	Only mark globhist as clean if secure_close() succeeds.  
+
+Wed Jul 14 18:21:17 2004  Laurent Monin <zas@norz.org>:
+
+	* src/globhist/globhist.c:
+
+	Move anonymous test to write_global_history(), and timers funcs,
+	drop elinks_home test from callers.  
+
+Wed Jul 14 18:13:49 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	Handle add_bookmark() possible failure in bookmarks/dialogs.c.  
+
+Wed Jul 14 18:08:48 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/: bookmarks.c, backend/default.c:
+
+	Fix add_bookmark() stupid bug introduced in bookmarks.c (1.133 ->
+	1.134), and handle add_bookmark() failure in
+	read_bookmarks_default().  
+
+Wed Jul 14 17:44:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/bookmarks.c, globhist/globhist.c, util/conv.c,
+	util/conv.h:
+
+	Move sanitize_(title|url)() to conv.{c,h} and use them for globhist
+	too. Sanitization now occurs in add_(bookmark|globhist_item)() on
+	title and url copies, cleaner.  
+
+Wed Jul 14 17:21:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/text.c:
+
+	Drop redundant @term test, get_bfu_color() does the job.  
+
+Wed Jul 14 15:14:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.c, hierbox.h, listbox.h:
+
+	Remove listbox_item->root.  
+
+Wed Jul 14 15:12:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/dialogs.c:
+
+	push_kbdbind_add_button(): Cleanup usage of listbox_item->root.  
+
+Wed Jul 14 15:02:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/dialogs.c:
+
+	Hack up a way to resolve keymap box items from action strtonum by
+	checking that the pointer is within a table range range.  
+
+Wed Jul 14 14:52:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/dialogs.c:
+
+	get_keybinding_root(): Now only action boxes uses item->root.  
+
+Wed Jul 14 14:33:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: dialogs.c, dialogs.h, kbdbind.c:
+
+	Move keybinding listbox init/done functionality to dialog code. Had
+	to move init/free keymap functions.  
+
+Wed Jul 14 14:20:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: dialogs.c, dialogs.h, kbdbind.c, kbdbind.h:
+
+	Cleanup keybinding text toggling. Only the dialog code needs to know
+	about it.  
+
+Wed Jul 14 14:17:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	{init,free}_action_listboxes() -> {init,done}_keybinding_listboxes() 
+
+Wed Jul 14 14:13:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Introduce get_keybinding_action_box_item().  
+
+Wed Jul 14 14:02:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Oops this little change slipped into the get_root() introducing
+	patch. Harmless 
+
+Wed Jul 14 14:00:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: dialogs.c, options.c, options.h, opttypes.c:
+
+	Add root member to struct option. Use it for implementing correct
+	listbox get_root() op. Sanitize change_hook crawling by using
+	option->root instead of option->root->udata. More (autocreate)
+	option code can probably also be cleaned up to use option->root.  
+
+Wed Jul 14 13:51:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/listbox.c, bfu/listbox.h,
+	bookmarks/bookmarks.c, bookmarks/dialogs.c, cache/dialogs.c,
+	config/dialogs.c, config/kbdbind.c, cookies/dialogs.c,
+	dialogs/download.c, formhist/dialogs.c, globhist/dialogs.c,
+	protocol/auth/dialogs.c:
+
+	Introduce listbox_ops->get_root(). The listbox_item->root member is
+	still there and some implementations simply return item->root for
+	now. Non hierarchic listbox browser just return NULL.  
+
+Wed Jul 14 12:02:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/listbox.h, cookies/dialogs.c:
+
+	Make listbox_ops->delete() also delete nested listboxes. Bookmarks
+	and option deletion alreay does it so just make cookie ops do it.
+	Fixes access to free()d memory because do_delete_item() deleted
+	childs before the parent and the cookie code would automagically
+	remove the cookie_server.  
+
+Wed Jul 14 09:44:07 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Jul 14 02:28:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/link.c:
+
+	html_img(): Split out image from src='<text>' setup.  
+
+Wed Jul 14 02:06:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/link.c:
+
+	html_applet(): Cleanup.  
+
+Wed Jul 14 01:22:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Drop the type casting now that zas has made the part known to HTML
+	parser.  
+
+Wed Jul 14 00:58:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Update description of ui.sessions.auto_save_foldername to mention
+	uniqueness.  
+
+Wed Jul 14 00:45:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Doh them last minute changes. Fix last patch to currently detect
+	bookmark folders.  
+
+Wed Jul 14 00:44:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Only delete matching bookmark folders when saving the auto session
+	but then delete _all_ matches.  
+
+Wed Jul 14 00:31:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/bookmarks.c, bookmarks/bookmarks.h,
+	terminal/terminal.c:
+
+	Introduce bookmark_auto_save_tabs() that wraps
+	bookmark_terminal_tabs().  
+
+Wed Jul 14 00:24:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	send_connection_info(): Use foreachsafe().  
+
+Wed Jul 14 00:24:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/lists.h:
+
+	Introduce foreachsafe() list iterator and use it for free_list().  
+
+Wed Jul 14 00:03:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/lists.h:
+
+	Introduce list_typeof() macro to wrap typeof(). With a little extra
+	type casting code dublication was decreased.  
+
+Tue Jul 13 22:11:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/bookmarks.c:
+
+	delete_bookmark(): Cleanup the infanticide.  
+
 Tue Jul 13 21:22:25 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/bookmarks/dialogs.c:

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.161 2003/11/13 22:38:15 pasky Exp $ */
+/* $Id: download.c,v 1.162 2003/11/13 22:39:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -470,32 +470,32 @@ write_cache_entry_to_file(struct cache_entry *ce, struct file_download *file_dow
 
 	foreach (frag, ce->frag) {
 		int remain = file_download->last_pos - frag->offset;
+		int *h = &file_download->handle;
+		int w;
 
-		if (remain >= 0 && frag->length > remain) {
-			int *h = &file_download->handle;
-			int w;
+		if (remain < 0 || frag->length <= remain)
+			continue;
 
 #ifdef USE_OPEN_PREALLOC
-			if (!file_download->last_pos
-			    && (!file_download->stat.prg
-				|| file_download->stat.prg->size > 0)) {
-				close(*h);
-				*h = open_prealloc(file_download->file,
-						   O_CREAT|O_WRONLY|O_TRUNC,
-						   0666,
-						   file_download->stat.prg
-						   ? file_download->stat.prg->size
-						   : ce->length);
-				if (*h == -1) goto write_error;
-				set_bin(*h);
-			}
+		if (!file_download->last_pos
+		    && (!file_download->stat.prg
+			|| file_download->stat.prg->size > 0)) {
+			close(*h);
+			*h = open_prealloc(file_download->file,
+					   O_CREAT|O_WRONLY|O_TRUNC,
+					   0666,
+					   file_download->stat.prg
+					   ? file_download->stat.prg->size
+					   : ce->length);
+			if (*h == -1) goto write_error;
+			set_bin(*h);
+		}
 #endif
 
-			w = safe_write(*h, frag->data + remain, frag->length - remain);
-			if (w == -1) goto write_error;
+		w = safe_write(*h, frag->data + remain, frag->length - remain);
+		if (w == -1) goto write_error;
 
-			file_download->last_pos += w;
-		}
+		file_download->last_pos += w;
 	}
 
 	return 1;

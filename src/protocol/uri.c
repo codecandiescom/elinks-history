@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.33 2003/07/23 02:10:09 jonas Exp $ */
+/* $Id: uri.c,v 1.34 2003/07/23 14:49:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,7 +274,7 @@ get_uri_string(struct uri *uri, enum uri_component components)
 {
 	struct string string;
 
-	if (!init_string(&string) && !add_uri_to_string(&string, uri, components))
+	if (!init_string(&string) || !add_uri_to_string(&string, uri, components))
 		return NULL;
 
 	return string.source;

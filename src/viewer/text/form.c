@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.169 2004/06/15 01:48:10 jonas Exp $ */
+/* $Id: form.c,v 1.170 2004/06/15 02:10:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1352,17 +1352,18 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 		if (!key) break;
 
 		if (fc->method == FM_GET)
-			label = N_("hit %s to submit to");
+			label = N_("press %s to submit to");
 		else
-			label = N_("hit %s to post to");
+			label = N_("press %s to post to");
 
-		add_to_string(&str, ", ");
+		add_to_string(&str, " (");
 		add_format_to_string(&str, _(label, term), key);
 		add_char_to_string(&str, ' ');
 		mem_free(key);
 
 		/* Add the uri with password and post info stripped */
 		add_string_uri_to_string(&str, fc->action, URI_PUBLIC);
+		add_char_to_string(&str, ')');
 		break;
 
 	default:

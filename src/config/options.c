@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.438 2004/03/09 12:24:35 jonas Exp $ */
+/* $Id: options.c,v 1.439 2004/04/08 13:17:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -266,6 +266,8 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 
 	assertm(tree, "Missing option tree for '%s'", path);
 	if (!tree->value.tree) return;
+
+	object_nolock(option, "option");
 
 	if (option->box_item && option->name && !strcmp(option->name, "_template_"))
 		option->box_item->visible = get_opt_int("config.show_template");

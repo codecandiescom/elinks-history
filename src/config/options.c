@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.291 2003/10/15 10:55:57 zas Exp $ */
+/* $Id: options.c,v 1.292 2003/10/15 19:39:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1857,7 +1857,7 @@ register_options(void)
 		"sense only when colors are enabled."));
 
 	add_opt_bool("terminal._template_", N_("Use underline"),
-		"underline", 0, 1,
+		"underline", 0, 0,
 		N_("If we should use underline or enhance the color instead."));
 
 	add_opt_codepage("terminal._template_", N_("Codepage"),
@@ -2926,8 +2926,10 @@ register_options(void)
 	get_opt_int("terminal.vt100.type") = 1;
 	get_opt_int("terminal.vt110.type") = 1;
 	get_opt_int("terminal.xterm.type") = 1;
+	get_opt_int("terminal.xterm.underline") = 1;
 	get_opt_int("terminal.xterm-color.type") = 1;
 	get_opt_bool("terminal.xterm-color.colors") = 1;
+	get_opt_int("terminal.xterm-color.underline") = 1;
 
 	strcpy(get_opt_str("mime.extension.gif"), "image/gif");
 	strcpy(get_opt_str("mime.extension.jpg"), "image/jpeg");

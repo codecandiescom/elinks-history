@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.439 2004/06/20 21:19:29 jonas Exp $ */
+/* $Id: parser.c,v 1.440 2004/06/22 00:50:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -931,6 +931,10 @@ free_and_return:
 	mem_free(rows);
 }
 
+
+
+
+
 void
 process_head(unsigned char *head)
 {
@@ -958,6 +962,9 @@ process_head(unsigned char *head)
 		mem_free(refresh);
 	}
 }
+
+
+
 
 static int
 look_for_map(unsigned char **pos, unsigned char *eof, struct uri *uri)
@@ -1180,6 +1187,7 @@ look_for_link(unsigned char **pos, unsigned char *eof, struct menu_item **menu,
 	return 1;
 }
 
+
 int
 get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	      struct menu_item **menu, struct memory_list **ml, struct uri *uri,
@@ -1218,6 +1226,9 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	return 0;
 }
 
+
+
+
 struct html_element *
 init_html_parser_state(enum html_element_type type, int align, int margin, int width)
 {
@@ -1240,6 +1251,8 @@ init_html_parser_state(enum html_element_type type, int align, int margin, int w
 
 	return element;
 }
+
+
 
 void
 done_html_parser_state(struct html_element *element)

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.231 2004/04/01 02:48:53 jonas Exp $ */
+/* $Id: download.c,v 1.232 2004/04/01 02:59:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -349,7 +349,7 @@ download_data(struct download *download, struct file_download *file_download)
 		if (download->state >= 0)
 			change_connection(&file_download->download, NULL, PRI_CANCEL, 0);
 
-		u = get_cache_redirect_uri(ce, struri(file_download->uri));
+		u = get_cache_redirect_uri(ce, file_download->uri);
 		if (!u) break;
 
 		uri = get_uri(u);

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.36 2004/04/01 02:48:53 jonas Exp $ */
+/* $Id: task.c,v 1.37 2004/04/01 02:59:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -327,7 +327,7 @@ do_move(struct session *ses, struct download **stat)
 		if (task == TASK_HISTORY && !have_location(ses))
 			goto b;
 
-		u = get_cache_redirect_uri(ce, struri(ses->loading_uri));
+		u = get_cache_redirect_uri(ce, ses->loading_uri);
 		if (!u) goto b;
 
 		protocol = known_protocol(u, NULL);

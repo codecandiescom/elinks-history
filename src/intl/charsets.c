@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.83 2004/05/04 01:08:47 jonas Exp $ */
+/* $Id: charsets.c,v 1.84 2004/05/06 14:39:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,7 +42,6 @@ struct codepage_desc {
 #include "uni_7b.inc"
 #include "entity.inc"
 
-#define CODEPAGES (sizeof(codepages) / sizeof(codepages[0]))
 
 static char *strings[256] = {
 	"\000", "\001", "\002", "\003", "\004", "\005", "\006", "\007",
@@ -783,7 +782,7 @@ get_cp_index(unsigned char *name)
 
 	codepage = fastfind_search(name, strlen(name), ff_info_charsets);
 	if (codepage) {
-		assert(codepages <= codepage && codepage < codepages + CODEPAGES);
+		assert(codepages <= codepage && codepage < codepages + N_CODEPAGES);
 		return codepage - codepages;
 
 	} else if (syscp) {

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.472 2004/06/11 00:44:58 jonas Exp $ */
+/* $Id: session.c,v 1.473 2004/06/11 00:47:19 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -785,7 +785,7 @@ init_remote_session(struct session *ses, enum remote_session_flags remote,
 #define SESSION_MAGIC(major, minor) -(((major) << 8) + (minor))
 
 struct string *
-create_session_info(struct string *info, int cp, struct list_head *url_list)
+encode_session_info(struct string *info, int cp, struct list_head *url_list)
 {
 	int numbers[3] = { cp, SESSION_MAGIC(1, 0), remote_session_flags };
 	unsigned char *number_chars = (unsigned char *) numbers;

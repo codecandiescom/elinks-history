@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.152 2004/04/07 12:46:56 jonas Exp $ */
+/* $Id: uri.c,v 1.153 2004/04/07 12:50:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -367,9 +367,15 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 	src = path;
 	dest = path;
 
-	while (*dest && !end_of_dir(src[0])) {
+	while (*dest) {
 		/* If the following pieces are the LAST parts of URL, we remove
 		 * them as well. See RFC 1808 for details. */
+
+		if (end_of_dir(src[0])) {
+			/* URL data contains no more path. */
+			memmove(dest, src, strlen(src) + 1);
+			break;
+		}
 
 		if (!dsep(src[0])) {
 			/* This is to reduce indentation */
@@ -410,11 +416,6 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 			dest++;
 			src++;
 		}
-	}
-
-	if (*dest && end_of_dir(src[0])) {
-		/* URL data contains no more path. */
-		memmove(dest, src, strlen(src) + 1);
 	}
 
 	return uristring;

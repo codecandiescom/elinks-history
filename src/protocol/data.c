@@ -1,5 +1,5 @@
 /* The "data" URI protocol implementation (RFC 2397) */
-/* $Id: data.c,v 1.4 2004/08/23 02:50:32 jonas Exp $ */
+/* $Id: data.c,v 1.5 2004/08/23 02:52:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@
 #define	DEFAULT_DATA_MEDIATYPE	"text/plain;charset=US-ASCII"
 
 #define data_has_mediatype(header, headerlen) \
-	((headerlen) > 3 && memchr(header, '/', headerlen))
+	((headerlen) >= 3 && memchr(header, '/', headerlen))
 
 #define data_has_base64_attribute(typelen, endstr) \
 	((typelen) >= sizeof(";base64") - 1 \

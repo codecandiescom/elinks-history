@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.213 2005/03/30 12:54:46 zas Exp $ */
+/* $Id: ftp.c,v 1.214 2005/04/01 16:18:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>	/* For converting permissions to strings */
 #include <sys/types.h>
 #ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
@@ -1040,18 +1041,26 @@ display_dir_entry(struct cache_entry *cached, int *pos, int *tries,
 	if (ftp_info->permissions) {
 		int p = ftp_info->permissions;
 
-		if (p&0400) permissions[0] = 'r';
-		if (p&0200) permissions[1] = 'w';
-		if (p&0100) permissions[2] = 'x';
-		if (p&0040) permissions[3] = 'r';
-		if (p&0020) permissions[4] = 'w';
-		if (p&0010) permissions[5] = 'x';
-		if (p&0004) permissions[6] = 'r';
-		if (p&0002) permissions[7] = 'w';
-		if (p&0001) permissions[8] = 'x';
-		if (p&01000) permissions[8] = (p&0001 ? 't' : 'T');
-		if (p&02000) permissions[5] = (p&0010 ? 's' : 'S');
-		if (p&04000) permissions[2] = (p&0100 ? 's' : 'S');
+#define FTP_PERM(perms, buffer, flag, index, id) \
+	if ((perms) & (flag)) (buffer)[(index)] = (id);
+
+		FTP_PERM(p, permissions, S_IRUSR, 0, 'r');
+		FTP_PERM(p, permissions, S_IWUSR, 1, 'w');
+		FTP_PERM(p, permissions, S_IXUSR, 2, 'x');
+		FTP_PERM(p, permissions, S_ISUID, 2, (p & S_IXUSR ? 's' : 'S'));
+
+		FTP_PERM(p, permissions, S_IRGRP, 3, 'r');
+		FTP_PERM(p, permissions, S_IWGRP, 4, 'w');
+		FTP_PERM(p, permissions, S_IXGRP, 5, 'x');
+		FTP_PERM(p, permissions, S_ISGID, 5, (p & S_IXGRP ? 's' : 'S'));
+
+		FTP_PERM(p, permissions, S_IROTH, 6, 'r');
+		FTP_PERM(p, permissions, S_IWOTH, 7, 'w');
+		FTP_PERM(p, permissions, S_IXOTH, 8, 'x');
+		FTP_PERM(p, permissions, S_ISVTX, 8, (p & 0001 ? 't' : 'T'));
+
+#undef FTP_PERM
+
 	}
 
 	add_to_string(&string, permissions);

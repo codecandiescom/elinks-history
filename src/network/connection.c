@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.43 2003/07/03 21:04:45 jonas Exp $ */
+/* $Id: connection.c,v 1.44 2003/07/03 21:22:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,7 +81,7 @@ static void check_queue_bugs(void);
 
 
 static /* inline */ enum connection_priority
-getpri(struct connection *c)
+get_priority(struct connection *c)
 {
 	enum connection_priority priority;
 
@@ -471,10 +471,10 @@ static inline void
 add_to_queue(struct connection *c)
 {
 	struct connection *cc;
-	enum connection_priority priority = getpri(c);
+	enum connection_priority priority = get_priority(c);
 
 	foreach (cc, queue)
-		if (getpri(cc) > priority)
+		if (get_priority(cc) > priority)
 			break;
 
 	add_at_pos(cc->prev, c);
@@ -489,14 +489,14 @@ sort_queue(void)
 	do {
 		swp = 0;
 		foreach (c, queue) {
-			if ((void *)c->next != &queue) {
-				if (getpri(c->next) < getpri(c)) {
-					struct connection *n = c->next;
+			if ((void *)c->next == &queue) break;
 
-					del_from_list(c);
-					add_at_pos(n, c);
-					swp = 1;
-				}
+			if (get_priority(c->next) < get_priority(c)) {
+				struct connection *n = c->next;
+
+				del_from_list(c);
+				add_at_pos(n, c);
+				swp = 1;
 			}
 		}
 	} while (swp);
@@ -526,13 +526,13 @@ suspend_connection(struct connection *c)
 static int
 try_to_suspend_connection(struct connection *c, unsigned char *ho)
 {
-	enum connection_priority priority = getpri(c);
+	enum connection_priority priority = get_priority(c);
 	struct connection *d;
 
 	foreachback (d, queue) {
-		if (getpri(d) <= priority) return -1;
+		if (get_priority(d) <= priority) return -1;
 		if (d->state == S_WAIT) continue;
-		if (d->unrestartable == 2 && getpri(d) < PRI_CANCEL) continue;
+		if (d->unrestartable == 2 && get_priority(d) < PRI_CANCEL) continue;
 		if (ho) {
 			unsigned char *h = get_host_name(d->url);
 
@@ -644,7 +644,7 @@ check_queue_bugs(void)
 again:
 	cc = 0;
 	foreach (d, queue) {
-		enum connection_priority priority = getpri(d);
+		enum connection_priority priority = get_priority(d);
 
 		cc += d->running;
 		if (priority < prev_priority) {
@@ -708,10 +708,10 @@ again:
 
 	while (c != (struct connection *)&queue) {
 		struct connection *d;
-		enum connection_priority cp = getpri(c);
+		enum connection_priority cp = get_priority(c);
 
 		/* No way to reduce code redundancy here ? --Zas */
-		for (d = c; d != (struct connection *)&queue && getpri(d) == cp;) {
+		for (d = c; d != (struct connection *)&queue && get_priority(d) == cp;) {
 			struct connection *dd = d;
 
 			d = d->next;
@@ -720,7 +720,7 @@ again:
 				goto again;
 		}
 
-		for (d = c; d != (struct connection *)&queue && getpri(d) == cp;) {
+		for (d = c; d != (struct connection *)&queue && get_priority(d) == cp;) {
 			struct connection *dd = d;
 
 			d = d->next;
@@ -733,7 +733,7 @@ again:
 
 again2:
 	foreachback (c, queue) {
-		if (getpri(c) < PRI_CANCEL) break;
+		if (get_priority(c) < PRI_CANCEL) break;
 		if (c->state == S_WAIT) {
 			set_connection_state(c, S_INTERRUPTED);
 			del_connection(c);
@@ -911,7 +911,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct status *stat,
 
 		mem_free(u);
 
-		if (getpri(c) > pri) {
+		if (get_priority(c) > pri) {
 			del_from_list(c);
 			c->pri[pri]++;
 			add_to_queue(c);
@@ -1151,7 +1151,7 @@ abort_background_connections(void)
 				return;
 		}
 
-		if (getpri(c) >= PRI_CANCEL)
+		if (get_priority(c) >= PRI_CANCEL)
 			abort_conn_with_state(c, S_INTERRUPTED);
 		else
 			i++;

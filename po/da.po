@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-12-29 23:37+0100\n"
-"PO-Revision-Date: 2004-12-30 00:27+0100"
+"PO-Revision-Date: 2004-12-30 01:03+0100"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -687,6 +687,10 @@ msgid ""
 "If the path does not begin with a '/' it is assumed to be\n"
 "relative to your HOME directory."
 msgstr ""
+"Stien til den mappe som ELinks vil læse og skrive sine\n"
+"konfigurations og kørselstidstilstandsfiler i stedet for\n"
+"~/.elinks. Hvis stien ikke begynder med '/' antages den\n"
+"at være relativ til din HOME hjemmemappe."
 
 #: src/config/cmdline.c:633
 msgid "Name of configuration file"
@@ -959,6 +963,11 @@ msgid ""
 "\t1 means show serious errors and warnings\n"
 "\t2 means show all messages"
 msgstr ""
+"Verbositetsniveauet kontrollere hvilke beskeder som vises ved opstart og\n"
+"under kørslen:\n"
+"\t0 betyder vis kun kritiske fejl\n"
+"\t1 betyder vis kritiske fejl og advarsler\n"
+"\t1 betyder vis alle beskeder"
 
 #: src/config/cmdline.c:780
 msgid "Print version information and exit"
@@ -1017,11 +1026,11 @@ msgstr "Konfigurationsskrivningsucces"
 #: src/config/dialogs.c:53
 #, c-format
 msgid "Options were saved successfully to config file %s."
-msgstr ""
+msgstr "Indstillinger blev skrevet til konfigurationsfilen %s."
 
 #: src/config/dialogs.c:57
 msgid "Do not show anymore"
-msgstr ""
+msgstr "Hvis ikke denne besked igen"
 
 #: src/config/dialogs.c:63
 msgid "Cannot read the file"
@@ -1078,7 +1087,7 @@ msgstr "ændret"
 
 #: src/config/dialogs.c:172
 msgid "(expand by pressing space)"
-msgstr ""
+msgstr "(udvid ved at trykke mellemrum)"
 
 #: src/config/dialogs.c:175 src/config/dialogs.c:381
 msgid "N/A"
@@ -1100,6 +1109,9 @@ msgid ""
 "\n"
 "This value has been changed since you last saved your configuration."
 msgstr ""
+"\n"
+"\n"
+"Denne indstilling er blevet ændret siden du sidst gemte din konfiguration."
 
 #: src/config/dialogs.c:206 src/config/dialogs.c:212 src/config/dialogs.c:379
 msgid "Description"
@@ -1151,7 +1163,7 @@ msgstr "Tasteoversigt"
 
 #: src/config/dialogs.c:822
 msgid "Keystroke already used"
-msgstr ""
+msgstr "Tastekombinationen er allerede i brug"
 
 #: src/config/dialogs.c:823
 #, c-format
@@ -1159,6 +1171,8 @@ msgid ""
 "The keystroke \"%s\" is currently used for \"%s\".\n"
 "Are you sure you want to replace it?"
 msgstr ""
+"Tastekombinationen \"%s\" bruges allerede af \"%s\".\n"
+"Vil du virkelig udskifte den?"
 
 #: src/config/dialogs.c:847 src/config/dialogs.c:866 src/config/dialogs.c:907
 msgid "Add keybinding"
@@ -1261,7 +1275,7 @@ msgstr "Åbn filoverførselshåndtering"
 
 #: src/config/kbdbind.c:445
 msgid "Enter ex-mode (command line)"
-msgstr ""
+msgstr "Skift til ex-mode kommandolinje"
 
 #: src/config/kbdbind.c:446
 msgid "Open the File menu"
@@ -1285,7 +1299,7 @@ msgstr "Åbn formularhistorikhåndtering"
 
 #: src/config/kbdbind.c:451
 msgid "Pass URI of current frame to external command"
-msgstr ""
+msgstr "Videregiv URI fra den nuværende ramme til ekstern program"
 
 #: src/config/kbdbind.c:452
 msgid "Maximize the current frame"
@@ -1357,7 +1371,7 @@ msgstr "Forsøg at genoptage hentning af den nuværende henvisning"
 
 #: src/config/kbdbind.c:469
 msgid "Pass URI of current link to external command"
-msgstr ""
+msgstr "Videregiv URI fra den nuværende henvisning til ekstern program"
 
 #: src/config/kbdbind.c:470 src/config/kbdbind.c:562 src/config/kbdbind.c:586
 msgid "Follow the current link"
@@ -1381,7 +1395,7 @@ msgstr "Åbn en lua-konsol (Deaktiveret)"
 
 #: src/config/kbdbind.c:478
 msgid "Go at a specified mark"
-msgstr ""
+msgstr "Hop til det specificerede mærke"
 
 #: src/config/kbdbind.c:479
 msgid "Set a mark"
@@ -1501,7 +1515,7 @@ msgstr "Genoptegn den nuværende side"
 
 #: src/config/kbdbind.c:508
 msgid "Reset form items to their initial values"
-msgstr ""
+msgstr "Nulstil formularelementer til deres oprindelige værdier"
 
 #: src/config/kbdbind.c:509
 msgid "Show information about the currently used resources"
@@ -1509,11 +1523,11 @@ msgstr "Vis information om de nuværende brugte resourcer"
 
 #: src/config/kbdbind.c:510
 msgid "Save the current document in source form"
-msgstr ""
+msgstr "Gem det nuværende dokument i klartekst form"
 
 #: src/config/kbdbind.c:511
 msgid "Save the current document in formatted form"
-msgstr ""
+msgstr "Gem det nuværende dokument i optegnet form"
 
 #: src/config/kbdbind.c:512
 msgid "Save options"
@@ -1581,7 +1595,7 @@ msgstr "Luk alle faneblad undtagen den nuværende"
 
 #: src/config/kbdbind.c:529
 msgid "Pass URI of current tab to external command"
-msgstr ""
+msgstr "Videregiv URI fra det nuværende faneblad til ekstern program"
 
 #: src/config/kbdbind.c:530
 msgid "Open the tab menu"
@@ -6080,6 +6094,8 @@ msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', save it or display it?"
 msgstr ""
+"Ønsker du at åbne filen '%s' (type: %s%s%s)\n"
+"med programmet '%s', gemme den eller vise den?"
 
 #: src/sched/download.c:1049 src/sched/download.c:1063
 msgid "Open"
@@ -6091,6 +6107,8 @@ msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', or display it?"
 msgstr ""
+"Ønsker du at åbne filen '%s' (type: %s%s%s)\n"
+"med programmet '%s' eller vise den?"
 
 #: src/sched/error.c:31
 msgid "Waiting in queue"
@@ -6170,13 +6188,15 @@ msgstr "Kan ikke aflæse sokkeltilstand"
 
 #: src/sched/error.c:55
 msgid "Only local connections are permitted"
-msgstr ""
+msgstr "Kun lokale forbindelser er tilladt"
 
 #: src/sched/error.c:57
 msgid ""
 "Error while decoding file. This might be caused\n"
 "by the encoded file being corrupt."
 msgstr ""
+"Fejl ved afkodning af fil. Dette betyder eventuelt\n"
+"at den indkodede fil er korrupt."
 
 #: src/sched/error.c:60
 msgid ""
@@ -6184,6 +6204,9 @@ msgid ""
 "You can configure an external handler for it through\n"
 "the options system."
 msgstr ""
+"Denne URL benytter en protokol som ikke er kendt af ELinks.\n"
+"Du kan konfigurere et eksterne program til at håndtere den\n"
+"gennem indstillingssystemet."
 
 #: src/sched/error.c:64
 msgid ""
@@ -6192,6 +6215,10 @@ msgid ""
 "programs for handling it. Downloading URLs using external\n"
 "programs is not supported."
 msgstr ""
+"Denne URL benytter en protokol som ikke er kendt af ELinks\n"
+"hvilket betyder at ELinks er afhængig af eksterne programmer\n"
+"for at håndtere den. Filoverførelser som bruger eksterne\n"
+"programmer understøttes ikke."
 
 #: src/sched/error.c:69
 msgid "Bad HTTP response"
@@ -6199,7 +6226,7 @@ msgstr "Fejl i HTTP-svar"
 
 #: src/sched/error.c:70
 msgid "HTTP 100 (???)"
-msgstr ""
+msgstr "HTTP 100 (???)"
 
 #: src/sched/error.c:71
 msgid "No content"
@@ -6215,7 +6242,7 @@ msgstr "Fejl ved åbning af fil"
 
 #: src/sched/error.c:75
 msgid "CGI script not in CGI path"
-msgstr ""
+msgstr "CGI-skript er ikke i CGI stien"
 
 #: src/sched/error.c:78
 msgid "Bad FTP response"
@@ -6263,10 +6290,14 @@ msgid ""
 "been configured. Either set the option protocol.nntp.server\n"
 "or set the NNTPSERVER environment variable."
 msgstr ""
+"Håndtering af news: URI er ikke mulig da ingen nyhedsserver\n"
+"er blevet konfigureret. Sæt enten en brugbar nyhedsserver via\n"
+"indstillingen protocol.nntp.server eller via miljøvariablen\n"
+"NNTPSERVER."
 
 #: src/sched/error.c:102
 msgid "The CSO phone-book protocol is not supported."
-msgstr ""
+msgstr "CSO telefonbogsprotokollen understøttes ikke."
 
 #: src/sched/error.c:126
 msgid "Unknown error"
@@ -6324,6 +6355,11 @@ msgid ""
 "\n"
 "Do you want to go to URL %s?"
 msgstr ""
+"Den URL som du er ved at følge er muligvis ondskabsfuldt konstrueret\n"
+"med henblik på at forvirre dig. Ved at følge URLen vil du forbinde\n"
+"til serveren \"%s\" som brugeren \"%s\".\n"
+"\n"
+"Vil du følge URLen %s?"
 
 #: src/sched/task.c:249
 #, c-format
@@ -6336,6 +6372,8 @@ msgid ""
 "The form data you are about to post might be incomplete.\n"
 "Do you want to post to URL %s?"
 msgstr ""
+"Det formulardata som du er ved at indsende er muligvis ufuldstændig.\n"
+"Vil du indsende til URLen %s?"
 
 #: src/sched/task.c:257
 #, c-format

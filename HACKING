@@ -123,7 +123,7 @@ or
         int linebreak;
 
 Same if you comment the code. If the comment is /* then do it now! */, place it
-on the same line as the command, if it's
+on the same line as the command, if it's 
 /* We have to parse this crap now, as it is going to be freed in free_crap() */
 place it on the preceding line.
 

@@ -1,3 +1,109 @@
+Fri May 16 21:57:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/lists.h:
+
+	An additional magic check was added to free_list() macro.  
+
+Fri May 16 21:25:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.h:
+
+	Ooops, a field added for test pruposes was removed.  
+
+Fri May 16 21:20:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.h:
+
+	Reverted struct fields reordering, it causes bug 101. There's
+	something very weird there. Fields order dependencies are very bad
+	thind [tm].  
+
+Fri May 16 19:42:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: setup.h, dialogs/menu.c:
+
+	Help menu was reordered and modified. Lua documentation link was
+	removed (it'll appear on documentation page). Two new links will
+	appear in debug mode, one to cvsweb and the other to bugzilla. A
+	macro is used as helper for this kind of menu entry. Cvsweb url is
+	not definitive.  
+
+Fri May 16 19:13:05 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/vs.c:
+
+	A useless test was removed.  
+
+Fri May 16 19:06:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/vs.c:
+
+	In memset() we trust.  
+
+Fri May 16 19:05:24 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Reverted last patch, space for NUL byte is in struct view_state.
+	Thanks to Pasky.  
+
+Fri May 16 17:47:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO:
+
+	Reorganization, now it's almost the final new look, except the
+	to-go-bugzilla bugs.  
+
+Fri May 16 17:42:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO:
+
+	Removed stuff insterted to bugzilla or fixed. Very minor updates.  
+
+Fri May 16 10:01:48 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Allocated space was not enough to store ending NUL char of url
+	string, please recheck.  
+
+Thu May 15 23:37:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/info.c:
+
+	Pasky reverted a patch i made, result is buggy, well, as usual, so
+	whats changed ? Bug disappears and cleanup. Please pasky dont revert
+	it :) 
+
+Thu May 15 23:02:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/html/parser.c, viewer/text/view.c:
+
+	Support for wrap=hard introduced (supporting few aliases as well),
+	fixes bug 38. Patch by Witek and me.  
+
+Thu May 15 22:42:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	A bug workaround was removed. Last patch about textarea renders it
+	useless and it causes some issues. Textarea navigation seems to work
+	well now. Thanks to witekfl.  
+
+Thu May 15 22:40:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/: parser.c, renderer.c:
+
+	Parse <head> contents even when viewing page source, closes bug 40.
+	Patch by Witek and me.  
+
+Thu May 15 22:28:19 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Rows limits were badly calculated in textarea code. Minor cleanup.
+	Patch by witekfl and me.  
+
 Thu May 15 21:43:38 2003  Laurent Monin <zas@norz.org>:
 
 	* src/sched/download.c:

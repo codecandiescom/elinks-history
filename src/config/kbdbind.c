@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.186 2004/01/25 10:19:49 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.187 2004/01/25 12:03:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -315,6 +315,7 @@ write_keymap(enum keymap keymap)
 
 static struct strtonum key_table[] = {
 	{ "Enter", KBD_ENTER },
+	{ "Space", ' ' },
 	{ "Backspace", KBD_BS },
 	{ "Tab", KBD_TAB },
 	{ "Escape", KBD_ESC },
@@ -387,8 +388,6 @@ make_keystroke(struct string *str, long key, long meta, int escape)
 		*key_string = (unsigned char) key;
 		if (key == '\\' && escape)
 			key_string--;
-		else if (key == ' ' && !escape)
-			key_string = "<space>";
 	}
 
 	add_to_string(str, key_string);

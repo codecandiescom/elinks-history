@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.429 2004/06/10 13:23:32 jonas Exp $ */
+/* $Id: session.c,v 1.430 2004/06/10 13:35:40 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -506,7 +506,7 @@ process_file_requests(struct session *ses)
 	stop_recursion = 0;
 }
 
-struct session *
+static struct session *
 create_basic_session(struct window *tab)
 {
 	struct session *ses = mem_calloc(1, sizeof(struct session));

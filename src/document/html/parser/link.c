@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.34 2004/12/03 17:12:33 zas Exp $ */
+/* $Id: link.c,v 1.35 2004/12/05 21:41:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,15 +114,7 @@ get_image_text(unsigned char *attr)
 
 	max_len = get_opt_int("document.browse.images.file_tags");
 
-#if 0
-	/* This should be maybe whole terminal width? */
-	max_real_len = par_format.width * max_len / 100;
-#else
-	/* It didn't work well and I'm too lazy to code that;
-	 * absolute values will have to be enough for now ;).
-	 * --pasky */
 	max_real_len = max_len;
-#endif
 
 	if ((!max_len || max_real_len > 0) && src) {
 		int len = strcspn(src, "?");
@@ -165,6 +157,14 @@ truncate_title(unsigned char *title)
 {
 	unsigned char *text;
 	int max_len = get_opt_int("document.browse.images.file_tags");
+
+#if 0
+	/* This should be maybe whole terminal width? */
+	max_real_len = par_format.width * max_len / 100;
+	/* It didn't work well and I'm too lazy to code that;
+	 * absolute values will have to be enough for now ;).
+	 * --pasky */
+#endif
 
 	if (max_len >= 0 && title) {
 		int len = strlen(title);

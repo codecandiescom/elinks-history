@@ -1,5 +1,5 @@
 /* A pretty generic scanner */
-/* $Id: scanner.c,v 1.8 2004/05/04 01:10:11 jonas Exp $ */
+/* $Id: scanner.c,v 1.9 2004/05/08 01:18:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@ int
 map_scanner_string(struct scanner *scanner,
 		   unsigned char *ident, unsigned char *end, int base_type)
 {
-	struct scanner_string_mapping *mappings = scanner->info->mappings;
+	const struct scanner_string_mapping *mappings = scanner->info->mappings;
 	int length = end - ident;
 
 	for (; mappings->name; mappings++) {
@@ -122,12 +122,12 @@ get_scanner_token_debug(struct scanner *scanner)
 static inline void
 init_scanner_info(struct scanner_info *scanner_info)
 {
-	struct scan_table_info *info = scanner_info->scan_table_info;
+	const struct scan_table_info *info = scanner_info->scan_table_info;
 	int *scan_table = scanner_info->scan_table;
 	int i;
 
 	for (i = 0; info[i].type != SCAN_END; i++) {
-		union scan_table_data *data = &info[i].data;
+		const union scan_table_data *data = &info[i].data;
 
 		if (info[i].type == SCAN_RANGE) {
 			int index = *data->range.start;

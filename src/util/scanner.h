@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.10 2004/05/04 01:10:11 jonas Exp $ */
+/* $Id: scanner.h,v 1.11 2004/05/08 01:18:36 jonas Exp $ */
 
 #ifndef EL__UTIL_SCANNER_H
 #define EL__UTIL_SCANNER_H
@@ -64,10 +64,10 @@ struct scanner;
 
 struct scanner_info {
 	/* Table containing how to map strings to token types */
-	struct scanner_string_mapping *mappings;
+	const struct scanner_string_mapping *mappings;
 
 	/* Information for how to initialize the scanner table */
-	struct scan_table_info *scan_table_info;
+	const struct scan_table_info *scan_table_info;
 
 	/* Fills the scanner with tokens. Already scanned tokens which have not
 	 * been requested remain and are moved to the start of the scanners

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.124 2004/05/04 01:10:10 jonas Exp $ */
+/* $Id: scanner.c,v 1.125 2004/05/08 01:18:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@ enum css_char_group {
 	CSS_CHAR_WHITESPACE	= (1 << 10),
 };
 
-static struct scan_table_info css_scan_table_info[] = {
+static const struct scan_table_info css_scan_table_info[] = {
 	SCAN_TABLE_RANGE("0", '9', CSS_CHAR_DIGIT | CSS_CHAR_HEX_DIGIT | CSS_CHAR_IDENT),
 	SCAN_TABLE_RANGE("A", 'F', CSS_CHAR_HEX_DIGIT),
 	SCAN_TABLE_RANGE("A", 'Z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
@@ -55,7 +55,7 @@ static struct scan_table_info css_scan_table_info[] = {
 	SCAN_TABLE_END,
 };
 
-static struct scanner_string_mapping css_string_mappings[] = {
+static const struct scanner_string_mapping css_string_mappings[] = {
 	{ "Hz",		CSS_TOKEN_FREQUENCY,	CSS_TOKEN_DIMENSION },
 	{ "cm",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
 	{ "deg",	CSS_TOKEN_ANGLE,	CSS_TOKEN_DIMENSION },

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.580 2004/08/15 08:23:10 miciah Exp $ */
+/* $Id: view.c,v 1.581 2004/08/15 09:53:22 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -765,7 +765,8 @@ frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_
 		doc_view->vs->current_link = link - doc_view->document->links;
 
 		if (!link_is_textinput(link)
-		    && check_mouse_action(ev, B_UP)) {
+		    && (check_mouse_action(ev, B_UP)
+			|| check_mouse_action(ev, B_DOWN))) {
 
 			status = FRAME_EVENT_OK;
 

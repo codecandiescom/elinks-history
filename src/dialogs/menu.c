@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.269 2004/01/07 14:47:17 jonas Exp $ */
+/* $Id: menu.c,v 1.270 2004/01/07 15:23:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -269,12 +269,12 @@ do_submenu(struct terminal *term, void *menu, struct session *ses)
 
 
 static struct menu_item file_menu11[] = {
-	INIT_MENU_ITEM(N_("Open new ~tab"), NULL, ACT_OPEN_NEW_TAB, NULL, NULL, 0),
-	INIT_MENU_ITEM(N_("Open new tab in backgroun~d"), NULL, ACT_OPEN_NEW_TAB_IN_BACKGROUND, NULL, NULL, 0),
-	INIT_MENU_ITEM(N_("~Go to URL"), NULL, ACT_GOTO_URL, NULL, NULL, 0),
-	INIT_MENU_ITEM(N_("Go ~back"), NULL, ACT_BACK, NULL, NULL, 0),
-	INIT_MENU_ITEM(N_("Go ~forward"), NULL, ACT_UNBACK, NULL, NULL, 0),
-	INIT_MENU_ITEM(N_("~Reload"), NULL, ACT_RELOAD, NULL, NULL, 0),
+	INIT_MENU_ACTION(N_("Open new ~tab"), ACT_OPEN_NEW_TAB),
+	INIT_MENU_ACTION(N_("Open new tab in backgroun~d"), ACT_OPEN_NEW_TAB_IN_BACKGROUND),
+	INIT_MENU_ACTION(N_("~Go to URL"), ACT_GOTO_URL),
+	INIT_MENU_ACTION(N_("Go ~back"), ACT_BACK),
+	INIT_MENU_ACTION(N_("Go ~forward"), ACT_UNBACK),
+	INIT_MENU_ACTION(N_("~Reload"),	ACT_RELOAD),
 	INIT_MENU_ITEM(N_("~History"), NULL, ACT_NONE, history_menu, NULL, SUBMENU),
 	INIT_MENU_ITEM(N_("~Unhistory"), NULL, ACT_NONE, unhistory_menu, NULL, SUBMENU),
 };
@@ -286,14 +286,14 @@ static struct menu_item file_menu21[] = {
 	INIT_MENU_ITEM(N_("Sa~ve formatted document"), NULL, ACT_SAVE_FORMATTED,
 			menu_save_formatted, NULL, 0),
 #ifdef CONFIG_BOOKMARKS
-	INIT_MENU_ITEM(N_("Bookm~ark document"), NULL, ACT_ADD_BOOKMARK, NULL, NULL, 0),
+	INIT_MENU_ACTION(N_("Bookm~ark document"), ACT_ADD_BOOKMARK),
 #endif
 };
 
 static struct menu_item file_menu22[] = {
 	BAR_MENU_ITEM,
-	INIT_MENU_ITEM(N_("~Kill background connections"), NULL, ACT_KILL_BACKGROUNDED_CONNECTIONS, NULL, NULL, 0),
-	INIT_MENU_ITEM(N_("Flush all ~caches"), NULL, ACT_CACHE_MINIMIZE, NULL, NULL, 0),
+	INIT_MENU_ACTION(N_("~Kill background connections"), ACT_KILL_BACKGROUNDED_CONNECTIONS),
+	INIT_MENU_ACTION(N_("Flush all ~caches"), ACT_CACHE_MINIMIZE),
 	INIT_MENU_ITEM(N_("Resource ~info"), NULL, ACT_NONE, res_inf, NULL, 0),
 #ifdef LEAK_DEBUG
 	INIT_MENU_ITEM(N_("~Memory info"), NULL, ACT_NONE, memory_inf, NULL, 0),
@@ -371,17 +371,17 @@ static struct menu_item view_menu[] = {
 	INIT_MENU_ITEM(N_("Find ~previous"), NULL, ACT_FIND_NEXT_BACK, menu_for_frame, (void *)find_next_back, 0),
 	INIT_MENU_ITEM(N_("T~ypeahead search"), NULL, ACT_SEARCH_TYPEAHEAD, menu_for_frame, (void *)search_typeahead, 0),
 	BAR_MENU_ITEM,
-	INIT_MENU_ITEM(N_("Toggle ~html/plain"), NULL, ACT_TOGGLE_HTML_PLAIN, NULL, NULL, 0),
-	INIT_MENU_ITEM(N_("Toggle i~mages"), NULL, ACT_TOGGLE_DISPLAY_IMAGES, NULL, NULL, 0),
-	INIT_MENU_ITEM(N_("Toggle ~link numbering"), NULL, ACT_TOGGLE_NUMBERED_LINKS, NULL, NULL, 0),
-	INIT_MENU_ITEM(N_("Toggle ~document colors"), NULL, ACT_TOGGLE_DOCUMENT_COLORS, NULL, NULL, 0),
-	INIT_MENU_ITEM(N_("Document ~info"), NULL, ACT_DOCUMENT_INFO, NULL, NULL, 0),
-	INIT_MENU_ITEM(N_("H~eader info"), NULL, ACT_HEADER_INFO, NULL, NULL, 0),
+	INIT_MENU_ACTION(N_("Toggle ~html/plain"), ACT_TOGGLE_HTML_PLAIN),
+	INIT_MENU_ACTION(N_("Toggle i~mages"), ACT_TOGGLE_DISPLAY_IMAGES),
+	INIT_MENU_ACTION(N_("Toggle ~link numbering"), ACT_TOGGLE_NUMBERED_LINKS),
+	INIT_MENU_ACTION(N_("Toggle ~document colors"), ACT_TOGGLE_DOCUMENT_COLORS),
+	INIT_MENU_ACTION(N_("Document ~info"), ACT_DOCUMENT_INFO),
+	INIT_MENU_ACTION(N_("H~eader info"), ACT_HEADER_INFO),
 	INIT_MENU_ITEM(N_("Frame at ~full-screen"), NULL, ACT_ZOOM_FRAME, menu_for_frame, (void *)set_frame, 0),
 	BAR_MENU_ITEM,
-	INIT_MENU_ITEM(N_("Nex~t tab"), NULL, ACT_TAB_NEXT, NULL, NULL, 0),
-	INIT_MENU_ITEM(N_("Pre~v tab"), NULL, ACT_TAB_PREV, NULL, NULL, 0),
-	INIT_MENU_ITEM(N_("~Close tab"), NULL, ACT_TAB_CLOSE, NULL, NULL, 0),
+	INIT_MENU_ACTION(N_("Nex~t tab"), ACT_TAB_NEXT),
+	INIT_MENU_ACTION(N_("Pre~v tab"), ACT_TAB_PREV),
+	INIT_MENU_ACTION(N_("~Close tab"), ACT_TAB_CLOSE),
 	NULL_MENU_ITEM
 };
 
@@ -417,8 +417,8 @@ static struct menu_item setup_menu[] = {
 	INIT_MENU_ITEM(N_("~Terminal options"), NULL, ACT_SHOW_TERM_OPTIONS, terminal_options, NULL, 0),
 	INIT_MENU_ITEM(N_("File ~extensions"), NULL, ACT_NONE, do_submenu, ext_menu, SUBMENU),
 	BAR_MENU_ITEM,
-	INIT_MENU_ITEM(N_("~Options manager"), NULL, ACT_OPTIONS_MANAGER, NULL, NULL, 0),
-	INIT_MENU_ITEM(N_("~Keybinding manager"), NULL, ACT_KEYBINDING_MANAGER, NULL, NULL, 0),
+	INIT_MENU_ACTION(N_("~Options manager"), ACT_OPTIONS_MANAGER),
+	INIT_MENU_ACTION(N_("~Keybinding manager"), ACT_KEYBINDING_MANAGER),
 	INIT_MENU_ITEM(N_("~Save options"), NULL, ACT_SAVE_OPTIONS, write_config, NULL, 0),
 	NULL_MENU_ITEM
 };
@@ -432,18 +432,18 @@ static struct menu_item setup_menu_anon[] = {
 
 static struct menu_item tools_menu[] = {
 #ifdef CONFIG_GLOBHIST
-	INIT_MENU_ITEM(N_("Global ~history"), NULL, ACT_HISTORY_MANAGER, NULL, NULL, 0),
+	INIT_MENU_ACTION(N_("Global ~history"), ACT_HISTORY_MANAGER),
 #endif
 #ifdef CONFIG_BOOKMARKS
-	INIT_MENU_ITEM(N_("~Bookmarks"), NULL, ACT_BOOKMARK_MANAGER, NULL, NULL, 0),
+	INIT_MENU_ACTION(N_("~Bookmarks"), ACT_BOOKMARK_MANAGER),
 #endif
-	INIT_MENU_ITEM(N_("~Cache"), NULL, ACT_CACHE_MANAGER, NULL, NULL, 0),
-	INIT_MENU_ITEM(N_("~Downloads"), NULL, ACT_DOWNLOAD_MANAGER, NULL, NULL, 0),
+	INIT_MENU_ACTION(N_("~Cache"), ACT_CACHE_MANAGER),
+	INIT_MENU_ACTION(N_("~Downloads"), ACT_DOWNLOAD_MANAGER),
 #ifdef CONFIG_COOKIES
-	INIT_MENU_ITEM(N_("Coo~kies"), NULL, ACT_COOKIE_MANAGER, NULL, NULL, 0),
+	INIT_MENU_ACTION(N_("Coo~kies"), ACT_COOKIE_MANAGER),
 #endif
 #ifdef CONFIG_FORMHIST
-	INIT_MENU_ITEM(N_("~Form history"), NULL, ACT_FORMHIST_MANAGER, NULL, NULL, 0),
+	INIT_MENU_ACTION(N_("~Form history"), ACT_FORMHIST_MANAGER),
 #endif
 	NULL_MENU_ITEM
 };

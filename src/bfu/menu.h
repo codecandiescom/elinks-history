@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.45 2004/01/07 14:47:17 jonas Exp $ */
+/* $Id: menu.h,v 1.46 2004/01/07 15:23:16 jonas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -97,6 +97,9 @@ struct menu_item {
 	HKS_SHOW,							\
 	0								\
 }
+
+#define INIT_MENU_ACTION(text, action)					\
+	INIT_MENU_ITEM(text, NULL, action, NULL, NULL, 0)
 
 #define NULL_MENU_ITEM							\
 	INIT_MENU_ITEM(NULL, NULL, ACT_NONE, NULL, NULL, 0)

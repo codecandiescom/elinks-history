@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.223 2004/06/14 19:58:31 jonas Exp $ */
+/* $Id: link.c,v 1.224 2004/06/15 00:12:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,8 +144,9 @@ init_link_drawing(struct document_view *doc_view, struct link *link)
 }
 
 void
-draw_current_link(struct terminal *term, struct document_view *doc_view)
+draw_current_link(struct session *ses, struct document_view *doc_view)
 {
+	struct terminal *term = ses->tab->term;
 	struct screen_char *template;
 	struct link *link;
 	int cursor_offset;

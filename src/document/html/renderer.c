@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.108 2003/06/16 15:00:30 pasky Exp $ */
+/* $Id: renderer.c,v 1.109 2003/06/16 15:01:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -419,12 +419,14 @@ split:
 		del_chars(part, i, part->cy);
 	}
 
-	tmp = part->spaces_len - i - 1;
+	i++; /* Since we were using (i + 1) only later... */
+
+	tmp = part->spaces_len - i;
 	if (tmp > 0) /* 0 is possible and i'm paranoiac ... --Zas */
-		memmove(part->spaces, part->spaces + i + 1, tmp);
+		memmove(part->spaces, part->spaces + i, tmp);
 
 	/* XXX: is this correct ??? tmp <= 0 case ? --Zas */
-	memset(part->spaces + tmp, 0, i + 1);
+	memset(part->spaces + tmp, 0, i);
 
 	tmp = part->spaces_len - par_format.leftmargin;
 	if (tmp > 0)
@@ -434,14 +436,15 @@ split:
 
 	part->cy++;
 
-	if (part->cx == i + 1) {
+	if (part->cx == i) {
 		part->cx = -1;
 		if (part->y < part->cy) part->y = part->cy;
 		return 2;
 	} else {
-		part->cx -= i - par_format.leftmargin + 1;
+		part->cx -= i - par_format.leftmargin;
 		if (part->y < part->cy + 1) part->y = part->cy + 1;
 		return 1;
+
 	}
 }
 

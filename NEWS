@@ -1,6 +1,6 @@
 See ChangeLog for recent changes, bugfixes and new features.
 
-ELinks-0.4pre:
+ELinks-0.4.0:
 
 * merged HTTP_AUTH
 * basic proxy auth support
@@ -24,6 +24,7 @@ ELinks-0.4pre:
   from Links or older ELinks version, read INSTALL file to see how to convert
   your old config files!!!)
 * options are now in tree hiearchy and are configurable generically
+* keybindings can be configured from the user interface
 * colorful user interface
 * tiny useless LED-like indicators support
 * GNUTLS support paralel to the OpenSSL support (fixes some license issues)

@@ -1,9 +1,5 @@
 TODO list for ELinks (sorted approximatelly by priority):
 
-	User interface for keys rebinding (URGENT)
-
-	User interface for user protocol and MIME types (URGENT)
-
 	Speed optimalizations
 
 	Some rules for sane handling of texinfo documentation
@@ -79,4 +75,4 @@ optionally.
 	Write some more documentation.. docs, a lot of docs!
 
 
-$Id: TODO,v 1.36 2002/12/11 22:14:55 pasky Exp $
+$Id: TODO,v 1.37 2002/12/17 21:45:42 pasky Exp $

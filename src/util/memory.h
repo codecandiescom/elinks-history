@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.23 2004/04/17 11:34:35 pasky Exp $ */
+/* $Id: memory.h,v 1.24 2004/04/17 11:36:15 pasky Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -135,6 +135,11 @@ mem_align_alloc__(
 #define mem_align_alloc(ptr, old, new, obj, mask) \
 	mem_align_alloc__((void **)ptr, old, new, sizeof(obj), mask)
 #endif
+
+
+/* Maybe-free macros */
+/* TODO: Think about making what they do more obvious in their identifier, they
+ * could be obfuscating their users a little for the newcomers otherwise. */
 
 /* XXX: way to improve ? */
 #define mem_free_set_if(x, v) do { register void *p = (x); if (p) mem_free(p); (x) = (v); } while (0)

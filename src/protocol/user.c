@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.76 2004/12/19 12:25:58 jonas Exp $ */
+/* $Id: user.c,v 1.77 2004/12/29 18:29:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,7 +82,7 @@ static struct option_info user_protocol_options[] = {
 };
 
 struct module user_protocol_module = struct_module(
-	/* name: */		N_("User"),
+	/* name: */		N_("User protocols"),
 	/* options: */		user_protocol_options,
 	/* hooks: */		NULL,
 	/* submodules: */	NULL,

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.18 2003/06/06 17:37:39 jonas Exp $ */
+/* $Id: mailcap.c,v 1.19 2003/06/06 19:04:13 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -33,7 +33,6 @@
 #include "mime/backend/mailcap.h"
 #include "mime/mime.h"
 #include "osdep/os_dep.h"		/* For exe() */
-#include "sched/download.h"		/* For subst_file() */
 #include "util/file.h"
 #include "util/hash.h"
 #include "util/lists.h"
@@ -42,20 +41,38 @@
 #define BACKEND_NAME	"mailcap"
 
 struct mailcap_hash_item {
+	/* The content type of all @entries */
 	unsigned char *type;
-	struct list_head entries;
+
+	/* The entries associated with the type */
+	struct list_head entries; /* -> struct mailcap_entry */
 };
 
 struct mailcap_entry {
 	LIST_HEAD(struct mailcap_entry);
 
-	unsigned char *command;		/* Ready for ses->tq_prog ;) */
-	unsigned char *testcommand;	/* To verify if command qualifies */
-	unsigned char *description;	/* Used as name for the handler */
-	int needsterminal;		/* Assigned to "block" */
-	int copiousoutput;		/* If "| ${PAGER}" should be added */
-	int testneedsfile;		/* If testing requires a filename */
-	unsigned int priority;		/* Increased for each sourced file */
+	/* The 'raw' unformatted (view)command from the mailcap files. */
+	unsigned char *command;
+
+	/* To verify if command qualifies. Cannot contain %s formats. */
+	unsigned char *testcommand;
+
+	/* Used to inform the user of the type or handler. */
+	unsigned char *description;
+
+	/* Wether the program "blocks" the term. */
+	int needsterminal;
+
+	int testneedsfile;
+
+	/* If "| ${PAGER}" should be added. It would of course be better to
+	 * pipe the output into a buffer and let ELinks display it but this
+	 * will have to do for now. */
+	int copiousoutput;
+
+	/* Used to determine between an exact match and a wildtype match. Lower
+	 * is better. Increased for each sourced file. */
+	unsigned int priority;
 };
 
 /* State variables */
@@ -310,8 +327,8 @@ init_mailcap(void)
 	unsigned char *path;
 	unsigned int priority = 0;
 
-	if(!get_opt_bool("mime.mailcap.enable"))
-		return; /* and leave mailcap_map = NULL */
+	if(!get_opt_bool("mime.mailcap.enable") || mailcap_map)
+		return;
 
 	mailcap_map = init_hash(8, &strhash);
 	if (!mailcap_map)
@@ -414,10 +431,6 @@ format_command(unsigned char *command, unsigned char *type, int copiousoutput)
 	}
 
 	if (copiousoutput) {
-		/* Here we handle copiousoutput flag by appending $PAGER.
-		 * It would of course be better to pipe the output into a
-		 * buffer and let elinks display it but this will have to do
-		 * for now. */
 		unsigned char *pager = getenv("PAGER");
 
 		if (!pager && file_exists(DEFAULT_PAGER_PATH)) {
@@ -483,21 +496,20 @@ check_entries(struct mailcap_hash_item *item)
 static struct mime_handler *
 get_mime_handler_mailcap(unsigned char *type, int options)
 {
-	struct mailcap_entry *entry = NULL;
+	struct mailcap_entry *entry;
 	struct hash_item *item;
 
 	/* Check if mailcap support is disabled */
-	if(!get_opt_bool("mime.mailcap.enable")) return NULL;
+	if(!get_opt_bool("mime.mailcap.enable"))
+		return NULL;
 
-	/* If the map was not initialized do it now. */
-	if (!mailcap_map) init_mailcap();
+	if (!mailcap_map)
+		init_mailcap();
 
-	/* First the given type is looked up. */
 	item = get_hash_item(mailcap_map, type, strlen(type));
 
 	/* Check list of entries */
-	if (item && item->value)
-		entry = check_entries(item->value);
+	entry = (item && item->value) ? check_entries(item->value) : NULL;
 
 	if (!entry || get_opt_bool("mime.mailcap.prioritize")) {
 		/* The type lookup has either failed or we need to check

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.18 2003/01/05 16:48:16 pasky Exp $ */
+/* $Id: user.c,v 1.19 2003/01/19 14:13:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@ get_prog(struct terminal *term, unsigned char *progid)
 
 static unsigned char *
 subst_cmd(unsigned char *cmd, unsigned char *url, unsigned char *host,
-	  unsigned char *port, unsigned char *subj)
+	  unsigned char *port, unsigned char *dir, unsigned char *subj)
 {
 	unsigned char *n = init_str();
 	int l = 0;
@@ -71,6 +71,9 @@ subst_cmd(unsigned char *cmd, unsigned char *url, unsigned char *host,
 				case 'p':
 					if (port) add_to_str(&n, &l, port);
 					break;
+				case 'd':
+					if (dir) add_to_str(&n, &l, dir);
+					break;
 				case 's':
 					if (subj) add_to_str(&n, &l, subj);
 					break;
@@ -88,7 +91,8 @@ subst_cmd(unsigned char *cmd, unsigned char *url, unsigned char *host,
 /* TODO: Merge with user_func() ? --pasky */
 static void
 prog_func(struct terminal *term, unsigned char *url, unsigned char *proto,
-	  unsigned char *host, unsigned char *port, unsigned char *subj)
+	  unsigned char *host, unsigned char *port, unsigned char *dir,
+	  unsigned char *subj)
 {
 	unsigned char *cmd;
 	unsigned char *prog = get_prog(term, proto);
@@ -104,7 +108,7 @@ prog_func(struct terminal *term, unsigned char *url, unsigned char *proto,
 		return;
 	}
 
-	cmd = subst_cmd(prog, url, host, port, subj);
+	cmd = subst_cmd(prog, url, host, port, dir, subj);
 	if (cmd) {
 		exec_on_terminal(term, cmd, "", 1);
 		mem_free(cmd);
@@ -116,7 +120,7 @@ void
 user_func(struct session *ses, unsigned char *url)
 {
 	unsigned char *urldata;
-	unsigned char *proto, *host, *port, *subj = NULL;
+	unsigned char *proto, *host, *port, *dir, *subj = NULL;
 
 	/* I know this may be NULL and I don't care. --pasky */
 	proto = get_protocol_name(url);
@@ -135,6 +139,9 @@ user_func(struct session *ses, unsigned char *url)
 
 	port = get_port_str(url);
 	if (port && *port) check_shell_security(&port);
+
+	dir = get_url_data(url);
+	if (dir && *dir) check_shell_security(&dir);
 
 	urldata = get_url_data(url);
 	if (urldata) {
@@ -166,7 +173,7 @@ user_func(struct session *ses, unsigned char *url)
 		}
 	}
 
-	prog_func(ses->term, url, proto, host, port, subj);
+	prog_func(ses->term, url, proto, host, port, dir, subj);
 
 	if (urldata) mem_free(urldata);
 

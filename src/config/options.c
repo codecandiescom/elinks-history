@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.185 2003/01/19 13:53:32 pasky Exp $ */
+/* $Id: options.c,v 1.186 2003/01/19 14:13:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1557,6 +1557,7 @@ register_options()
 		N_("Handler (external program) for this protocol and system.\n"
 		"%h in the string means hostname (or email address)\n"
 		"%p in the string means port\n"
+		"%d in the string means path (everything after the port)\n"
 		"%s in the string means subject (?subject=<this>)\n"
 		"%u in the string means the whole URL"));
 

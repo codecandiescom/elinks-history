@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.205 2005/01/19 11:19:22 zas Exp $ */
+/* $Id: dialogs.c,v 1.206 2005/01/19 11:22:10 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -180,8 +180,6 @@ get_option_info(struct listbox_item *item, struct terminal *term)
 		mem_free(type);
 	}
 
-	desc = _(option->desc  ? option->desc : (unsigned char *) "N/A", term);
-
 	if (option_types[option->type].write) {
 		unsigned char *range;
 		struct string value;
@@ -211,6 +209,7 @@ get_option_info(struct listbox_item *item, struct terminal *term)
 
 	}
 
+	desc = _(option->desc  ? option->desc : (unsigned char *) "N/A", term);
 	if (*desc)
 		add_format_to_string(&info, "\n\n%s:\n%s", _("Description", term), desc);
 

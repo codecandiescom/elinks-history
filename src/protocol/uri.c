@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.23 2003/07/21 15:52:36 jonas Exp $ */
+/* $Id: uri.c,v 1.24 2003/07/21 18:34:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -192,12 +192,12 @@ get_uri_string(struct uri *uri, enum uri_component components)
 	struct string string;
  	enum protocol protocol = check_protocol(uri->protocol,
  						uri->protocollen);
- 
+
  	assert(uri->protocol && uri->protocollen);
 	if_assert_failed { return NULL; }
 
 	if (!init_string(&string)) return NULL;
- 
+
  	if (protocol == PROTOCOL_UNKNOWN
  	    || get_protocol_free_syntax(protocol)) {
  		/* Custom or unknown or free-syntax protocol;
@@ -206,32 +206,32 @@ get_uri_string(struct uri *uri, enum uri_component components)
 
 		return string.source;
  	}
- 
+
 #define wants(x) (components & (x))
- 
+
  	if (wants(URI_PROTOCOL)) {
 		add_bytes_to_string(&string, uri->protocol, uri->protocollen);
 		add_char_to_string(&string, ':');
  		if (get_protocol_need_slashes(protocol))
 			add_to_string(&string, "//");
  	}
- 
+
  	if (wants(URI_USER) && uri->userlen) {
 		add_bytes_to_string(&string, uri->user, uri->userlen);
- 
+
  		if (wants(URI_PASSWORD) && uri->passwordlen) {
 			add_char_to_string(&string, ':');
 			add_bytes_to_string(&string, uri->password,
  						     uri->passwordlen);
  		}
- 
+
 		add_char_to_string(&string, '@');
  	}
- 
+
  	if (wants(URI_HOST) && uri->hostlen) {
 #ifdef IPV6
  		int brackets = !!memchr(uri->host, ':', uri->hostlen);
- 
+
 		if (brackets) add_char_to_string(&string, '[');
 #endif
 		add_bytes_to_string(&string, uri->host, uri->hostlen);
@@ -239,7 +239,7 @@ get_uri_string(struct uri *uri, enum uri_component components)
 		if (brackets) add_char_to_string(&string, ']');
 #endif
  	}
- 
+
  	if (wants(URI_PORT)) {
  		if (uri->portlen) {
 			add_char_to_string(&string, ':');
@@ -754,10 +754,8 @@ void
 encode_uri_string(unsigned char *name, unsigned char **data, int *len)
 {
 	unsigned char n[4];
-	struct string string;
+	struct string string = INIT_STRING(*data, *len);
 
-	string.source = *data;
-	string.length = *len;
 	n[0] = '%';
 	n[3] = '\0';
 

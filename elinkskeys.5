@@ -7,15 +7,13 @@ elinkskeys \- ELinks WWW browser key bindings
 
 
 .SH SYNOPSIS
-.B ~/.elinks/user.cfg
+.B ~/.elinks/elinks.conf
 
 
 .SH DESCRIPTION
 Key bindings for 
 .I elinks
-should be placed in a file called \fB~/.elinks/user.cfg\fP.  This file
-will be read from but not written to, so you may put comments in
-there.
+should be placed in a file called \fB~/.elinks/elinks.conf\fP.
 
 Key binding statements are of the form:
 .IP
@@ -324,7 +322,7 @@ keymap is used for navigating menus.
 .SH DEFAULT BINDINGS
 
 The default bindings are shown below.  Any bindings in
-.I user.cfg
+.I elinks.conf
 will override these.  This list is given as an example, and may not be
 up to date.
 
@@ -430,11 +428,11 @@ bind main ,             lua-console
 .SH FILES
 
 .TR
-.B /etc/elinks/elinks.cfg
+.B /etc/elinks/elinks.conf
 Site-wide configuration file.
 
 .TR
-.B ~/.elinks/user.cfg
+.B ~/.elinks/elinks.conf
 Per-user configuration file, loaded after site-wide configuration.
 
 

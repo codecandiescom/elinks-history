@@ -1,9 +1,9 @@
 #!/usr/bin/perl -w
-# mailcap to elinks.cfg converter (aka quick hack)
+# mailcap to elinks.conf converter (aka quick hack)
 # version 1.00 by <grin@tolna.net>
 # Released under GPLv2 or later
 #
-# Usage: mailcap-convert.pl /etc/mailcap >> ~/.elinks/elinks.cfg
+# Usage: mailcap-convert.pl /etc/mailcap >> ~/.elinks/elinks.conf
 #
 
 print "association \"-=BEGIN DEBIAN CONVERT=-\" \"\" \"\" 23 1\n";

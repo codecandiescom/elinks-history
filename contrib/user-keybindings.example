@@ -1,4 +1,4 @@
-# Template for a user.cfg file
+# Template for a elinks.conf file
 #
 # This file was contributed by David Mediavilla
 # <r96x6a79yki40001@sneakemail.com>. Note that it's not up-to-date now, as
@@ -10,9 +10,7 @@
 #
 # Simple HOWTO for keybinding by Peter Wang:
 #
-# Create a `user.cfg' file wherever your `elinks.cfg' usually goes.
-# This file will be read by Links but not written, so feel free to put
-# in comments.
+# Create a `elinks.conf' file wherever your `elinks.conf' usually goes.
 # 
 # Binding is done with a statement like so:
 #
@@ -93,7 +91,7 @@
 #bind main ' '	page-down
 # 
 # DME: I understand this as space bar but I don't know how
-# to symbolize spacebar in user.cfg
+# to symbolize spacebar in elinks.conf
 # 
 #bind main Ctrl-F	page-down
 #bind main PageUp	page-up

@@ -1,5 +1,5 @@
 /* Config file and commandline proccessing */
-/* $Id: conf.c,v 1.15 2002/05/20 14:50:24 pasky Exp $ */
+/* $Id: conf.c,v 1.16 2002/05/20 15:28:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -302,9 +302,8 @@ load_config_file(unsigned char *prefix, unsigned char *name)
 void
 load_config()
 {
-	load_config_file("/etc/elinks/", "elinks.cfg");
-	load_config_file(elinks_home, "elinks.cfg");
-	load_config_file(elinks_home, "user.cfg");
+	load_config_file("/etc/elinks/", "elinks.conf");
+	load_config_file(elinks_home, "elinks.conf");
 }
 
 
@@ -379,5 +378,5 @@ free_cfg_str:
 void
 write_config(struct terminal *term)
 {
-	write_config_file(elinks_home, "elinks.cfg", root_options, term);
+	write_config_file(elinks_home, "elinks.conf", root_options, term);
 }

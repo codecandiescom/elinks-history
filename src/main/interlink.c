@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.78 2004/07/17 22:28:43 zas Exp $ */
+/* $Id: interlink.c,v 1.79 2004/07/17 22:53:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -431,33 +431,31 @@ connect_to_af_unix(void)
 
 	if (af == -1) goto free_and_error;
 
-again:
-	s_info_connect.fd = socket(af, SOCK_STREAM, 0);
-	if (s_info_connect.fd == -1) {
-		ERROR(G_("socket() failed: %d (%s)"),
-		      errno, (unsigned char *) strerror(errno));
-		goto free_and_error;
-	}
+	while (attempts++ < MAX_CONNECT_TRIES) {
+		int saved_errno;
 
-	if (connect(s_info_connect.fd, s_info_connect.addr,
-		    s_info_connect.size) < 0) {
-		if (errno != ECONNREFUSED && errno != ENOENT)
-			ERROR(G_("connect() failed: %d (%s)"),
+		s_info_connect.fd = socket(af, SOCK_STREAM, 0);
+		if (s_info_connect.fd == -1) {
+			ERROR(G_("socket() failed: %d (%s)"),
 			      errno, (unsigned char *) strerror(errno));
-
-		if (++attempts <= MAX_CONNECT_TRIES) {
-			elinks_usleep(CONNECT_TRIES_DELAY * attempts);
-			close(s_info_connect.fd);
-
-			goto again;
+			goto free_and_error;
 		}
 
-		close(s_info_connect.fd); s_info_connect.fd = -1;
+		if (!connect(s_info_connect.fd, s_info_connect.addr,
+			     s_info_connect.size))
+			return s_info_connect.fd;
 
-		goto free_and_error;
+		saved_errno = errno;
+		close(s_info_connect.fd);
+
+		if (saved_errno != ECONNREFUSED && saved_errno != ENOENT) {
+			ERROR(G_("connect() failed: %d (%s)"),
+			      saved_errno, (unsigned char *) strerror(saved_errno));
+			goto free_and_error;
+		}
+
+		elinks_usleep(CONNECT_TRIES_DELAY * attempts);
 	}
-
-	return s_info_connect.fd;
 
 free_and_error:
 	mem_free_set(&s_info_connect.addr, NULL);

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.15 2002/07/04 01:07:13 pasky Exp $ */
+/* $Id: info.c,v 1.16 2002/07/06 09:07:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,6 +47,11 @@ void menu_about(struct terminal *term, void *d, struct session *ses)
 #endif
 #ifdef HAVE_SSL
 			" SSL"
+#ifdef HAVE_OPENSSL
+			"(OpenSSL)"
+#elif defined(HAVE_GNUTLS)
+			"(GNUTLS)"
+#endif
 #endif
 #ifdef HAVE_LUA
 			" Lua"

@@ -1,3 +1,10 @@
+Wed May 15 08:56:03 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Bookmarks are resaved only when modified. Patch by Fabio Bonelli and
+	Zas.  
+
 Mon May 13 06:26:23 2002  Laurent Monin <zas@norz.org>:
 
 	* intl/french.lng, src/intl/language.inc:

@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.19 2003/06/20 18:20:51 pasky Exp $ */
+/* $Id: encoding.c,v 1.20 2003/06/20 18:54:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,11 +68,8 @@ static unsigned char *
 dummy_decode(struct stream_encoded *stream, unsigned char *data, int len,
 	     int *new_len)
 {
-	unsigned char *new_data = mem_calloc(1, len);
-
-	*new_len = len;
 	memcpy(new_data, data, len);
-	return new_data;
+	return data;
 }
 
 static void
@@ -118,11 +115,8 @@ static unsigned char *
 gzip_decode(struct stream_encoded *stream, unsigned char *data, int len,
 	    int *new_len)
 {
-	unsigned char *new_data = mem_calloc(1, len);
-
 	*new_len = len;
-	memcpy(new_data, data, len);
-	return new_data;
+	return data;
 }
 
 static void
@@ -205,11 +199,8 @@ static unsigned char *
 bzip2_decode(struct stream_encoded *stream, unsigned char *data, int len,
 	     int *new_len)
 {
-	unsigned char *new_data = mem_calloc(1, len);
-
 	*new_len = len;
-	memcpy(new_data, data, len);
-	return new_data;
+	return data;
 }
 
 static void

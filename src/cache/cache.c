@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.79 2003/11/08 02:25:07 pasky Exp $ */
+/* $Id: cache.c,v 1.80 2003/11/08 02:25:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -294,7 +294,7 @@ ff:;
 void
 defrag_entry(struct cache_entry *ce)
 {
-	struct fragment *first_frag, *adj_frag, *h, *nf;
+	struct fragment *first_frag, *adj_frag, *h, *new_frag;
 	int l;
 
 	if (list_empty(ce->frag)) return;
@@ -320,15 +320,15 @@ defrag_entry(struct cache_entry *ce)
 		l += h->length;
 
 	/* One byte is reserved for data in struct fragment. */
-	nf = mem_calloc(1, FRAGSIZE(l));
-	if (!nf) return;
-	nf->length = l;
-	nf->real_length = l;
+	new_frag = mem_calloc(1, FRAGSIZE(l));
+	if (!new_frag) return;
+	new_frag->length = l;
+	new_frag->real_length = l;
 
 	for (l = 0, h = first_frag; h != adj_frag; h = h->next) {
 		struct fragment *tmp = h;
 
-		memcpy(nf->data + l, h->data, h->length);
+		memcpy(new_frag->data + l, h->data, h->length);
 		l += h->length;
 
 		h = h->prev;
@@ -336,7 +336,7 @@ defrag_entry(struct cache_entry *ce)
 		mem_free(tmp);
 	}
 
-	add_to_list(ce->frag, nf);
+	add_to_list(ce->frag, new_frag);
 
 	dump_frags(ce, "defrag_entry");
 }

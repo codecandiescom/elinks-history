@@ -506,13 +506,20 @@ else
 fi
 
 dnl ===================================================================
+dnl Check for Ruby, optional even if installed.
+dnl ===================================================================
+
+EL_CONFIG_RUBY
+
+dnl ===================================================================
 dnl Setup global scripting
 dnl ===================================================================
 
-EL_CONFIG_DEPENDS(CONFIG_SCRIPTING, [CONFIG_GUILE CONFIG_LUA CONFIG_PERL], [Scripting])
+EL_CONFIG_DEPENDS(CONFIG_SCRIPTING, [CONFIG_GUILE CONFIG_LUA CONFIG_PERL CONFIG_RUBY], [Scripting])
 AM_CONDITIONAL(CONFIG_GUILE, test "$CONFIG_GUILE" = yes)
 AM_CONDITIONAL(CONFIG_LUA, test "$CONFIG_LUA" = yes)
 AM_CONDITIONAL(CONFIG_PERL, test "$CONFIG_PERL" = yes)
+AM_CONDITIONAL(CONFIG_RUBY, test "$CONFIG_RUBY" = yes)
 AM_CONDITIONAL(CONFIG_SCRIPTING, test "$CONFIG_SCRIPTING" = yes)
 
 
@@ -1103,6 +1110,7 @@ AC_OUTPUT([ \
  src/scripting/guile/Makefile \
  src/scripting/lua/Makefile \
  src/scripting/perl/Makefile \
+ src/scripting/ruby/Makefile \
  src/ssl/Makefile \
  src/terminal/Makefile \
  src/util/Makefile \

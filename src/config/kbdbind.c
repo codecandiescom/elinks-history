@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.191 2004/01/25 13:53:56 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.192 2004/01/25 14:03:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,8 +43,9 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 	struct keybinding *kb;
 	struct listbox_item *box_item;
 	struct string keystroke;
+	int is_default;
 
-	delete_keybinding(km, key, meta);
+	is_default = delete_keybinding(km, key, meta) == 2;
 
 	kb = mem_alloc(sizeof(struct keybinding));
 	if (!kb) return NULL;
@@ -54,7 +55,7 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 	kb->key = key;
 	kb->meta = meta;
 	kb->func_ref = func_ref;
-	kb->flags = 0;
+	kb->flags = is_default * KBDB_DEFAULT;
 	add_to_list(keymaps[km], kb);
 
 	if (action == ACT_MAIN_NONE) {
@@ -141,18 +142,28 @@ keybinding_exists(enum keymap km, long key, long meta, int *action)
 	return 0;
 }
 
-static void
+static int
 delete_keybinding(enum keymap km, long key, long meta)
 {
 	struct keybinding *kb;
 
 	foreach (kb, keymaps[km]) {
+		int was_default = 0;
+
 		if (kb->key != key || kb->meta != meta)
 			continue;
 
+		if (kb->flags & KBDB_DEFAULT) {
+			kb->flags &= ~KBDB_DEFAULT;
+			was_default = 1;
+		}
+
 		free_keybinding(kb);
-		break;
+
+		return 1 + was_default;
 	}
+
+	return 0;
 }
 
 

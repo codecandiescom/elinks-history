@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.6 2002/07/09 17:30:05 pasky Exp $ */
+/* $Id: leds.c,v 1.7 2002/07/23 09:34:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@
 /* Current leds allocation:
  * 1 - unused, reserved for ELinks internal use
  * 2 - unused, reserved for ELinks internal use
- * 3 - unsued, reserved for Lua
+ * 3 - unused, reserved for Lua
  * 4 - unused, reserved for Lua
  * 5 - unused */
 

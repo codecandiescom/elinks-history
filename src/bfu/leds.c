@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.31 2003/11/17 16:59:18 pasky Exp $ */
+/* $Id: leds.c,v 1.32 2003/11/17 17:00:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,9 +44,6 @@
  * way someone can just get any struct led and add/subscribe appropriate struct
  * led for his control; however, I bet on programmers' responsibility rather,
  * and hope that everyone will abide the "rules". */
-
-/* TODO: In order for this to have some real value, this should be per-session,
- * not global. Then we could even use it for something ;-). --pasky */
 
 static int timer_duration_backup = 0;
 

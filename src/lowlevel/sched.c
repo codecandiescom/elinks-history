@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.38 2002/07/05 18:25:41 pasky Exp $ */
+/* $Id: sched.c,v 1.39 2002/07/05 18:57:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -996,7 +996,7 @@ change_connection(struct status *oldstat, struct status *newstat,
 }
 
 /* This will remove 'pos' bytes from the start of the cache for the specified
- * connection. */
+ * connection, if the cached object is already too big. */
 void
 detach_connection(struct status *stat, int pos)
 {
@@ -1015,8 +1015,8 @@ detach_connection(struct status *stat, int pos)
 		total_len = (conn->est_length == -1) ? conn->from
 						     : conn->est_length;
 
-		if (total_len < get_opt_long("document.cache.memory.size")
-				* MAX_CACHED_OBJECT) {
+		if (total_len < (get_opt_long("document.cache.memory.size")
+				 * MAX_CACHED_OBJECT_PERCENT / 100)) {
 			/* This whole thing will fit to the memory anyway, so
 			 * there's no problem in detaching the connection. */
 			return;

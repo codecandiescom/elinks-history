@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.15 2002/07/05 18:24:29 pasky Exp $ */
+/* $Id: cache.c,v 1.16 2002/07/05 18:57:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -417,7 +417,7 @@ garbage_collection(int u)
 	if (!u && ncs <= get_opt_long("document.cache.memory.size")) return;
 
 	for (e = cache.prev; (void *)e != &cache; e = e->prev) {
-		if (!u && ncs <= get_opt_long("document.cache.memory.size") * MEMORY_CACHE_GC_PERCENT)
+		if (!u && ncs <= get_opt_long("document.cache.memory.size") * MEMORY_CACHE_GC_PERCENT / 100)
 			goto g;
 		if (e->refcount || is_entry_used(e)) {
 			no = 1;
@@ -441,7 +441,7 @@ g:
 
 	if (!u) {
 		for (f = e; (void *)f != &cache; f = f->next) {
-			if (ncs + f->data_size <= get_opt_long("document.cache.memory.size") * MEMORY_CACHE_GC_PERCENT) {
+			if (ncs + f->data_size <= get_opt_long("document.cache.memory.size") * MEMORY_CACHE_GC_PERCENT / 100) {
 				ncs += f->data_size;
 				f->tgc = 0;
 			}
@@ -454,7 +454,7 @@ g:
 			delete_cache_entry(f->prev);
 	}
 #if 0
-	if (!no && cache_size > get_opt_long("document.cache.memory.size") * MEMORY_CACHE_GC_PERCENT) {
+	if (!no && cache_size > get_opt_long("document.cache.memory.size") * MEMORY_CACHE_GC_PERCENT / 100) {
 		internal("garbage collection doesn't work, cache size %ld", cache_size);
 	}
 #endif

@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.27 2003/10/17 18:46:44 jonas Exp $ */
+/* $Id: color.h,v 1.28 2003/10/18 00:09:25 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -33,8 +33,8 @@ enum color_flags {
 	 * Useful for terminals that doesn't support these attributes.  */
 	COLOR_ENHANCE_UNDERLINE = 2,
 
-	/* Adjust the forground color to be more readable for example by
-	 * increasing the contrast. */
+	/* Adjust the forground color to be more readable by increasing the
+	 * contrast. */
 	COLOR_INCREASE_CONTRAST = 4,
 
 	/* Adjust the contrast if the back- and foregroundcolor is equal. */

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.248 2004/07/19 16:43:00 zas Exp $ */
+/* $Id: menu.c,v 1.249 2004/07/19 21:01:26 zas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -128,7 +128,7 @@ select_menu_item(struct terminal *term, struct menu_item *it, void *data)
 	void *it_data = it->data;
 	enum main_action action = it->action;
 
-	if (mi_is_unselectable(*it)) return;
+	if (!mi_is_selectable(*it)) return;
 
 	if (!mi_is_submenu(*it)) {
 		/* Don't free data! */
@@ -482,7 +482,7 @@ display_menu(struct terminal *term, struct menu *menu)
 				if (mi_text_translate(menu->items[p]))
 					text = _(text, term);
 
-				if (mi_is_unselectable(menu->items[p]))
+				if (!mi_is_selectable(menu->items[p]))
 					l = 0;
 
 				if (l) {

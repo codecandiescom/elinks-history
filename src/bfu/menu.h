@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.63 2004/05/14 08:49:07 zas Exp $ */
+/* $Id: menu.h,v 1.64 2004/07/19 21:01:26 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -30,10 +30,9 @@ enum menu_item_flags {
 #define FREE_ANY (FREE_LIST|FREE_TEXT|FREE_RTEXT|FREE_DATA)
 
 /*
- * Unselectable menu item
+ * Selectable menu item.
  */
-#define mi_is_unselectable(mi) ((mi).flags & NO_SELECT)
-#define mi_is_selectable(mi) (!mi_is_unselectable(mi))
+#define mi_is_selectable(mi) (!((mi).flags & NO_SELECT))
 
 /*
  * Menu item has left text.
@@ -48,7 +47,7 @@ enum menu_item_flags {
 /*
  * Horizontal bar
  */
-#define mi_is_horizontal_bar(mi) (mi_is_unselectable(mi) && (mi).text && !(mi).text[0])
+#define mi_is_horizontal_bar(mi) (!mi_is_selectable(mi) && (mi).text && !(mi).text[0])
 
 /*
  * Submenu item

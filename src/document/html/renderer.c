@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.55 2002/12/22 00:05:49 pasky Exp $ */
+/* $Id: renderer.c,v 1.56 2002/12/22 09:47:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,11 +140,12 @@ realloc_line(struct part *p, int y, int x)
 		p->data->data[y].dsize = newsize;
 	}
 
+	p->data->data[y].c = find_nearest_color(&par_format.bgcolor, 8);
+
 	for (i = p->data->data[y].l; i <= x; i++) {
 		p->data->data[y].d[i] = (p->data->data[y].c << 11) | ' ';
 	}
 
-	p->data->data[y].c = find_nearest_color(&par_format.bgcolor, 8);
 	p->data->data[y].l = i;
 
 	return 0;
@@ -226,7 +227,6 @@ set_hchar(struct part *part, int x, int y, unsigned c)
 {
 	if (xpand_lines(part, y)) return;
 	if (xpand_line(part, y, x)) return;
-	c |= find_nearest_color(&par_format.bgcolor, 8) << 11; /* XXX: for easy table borders */
 	POS(x, y) = c;
 }
 
@@ -235,7 +235,6 @@ set_hchars(struct part *part, int x, int y, int xl, unsigned c)
 {
 	if (xpand_lines(part, y)) return;
 	if (xpand_line(part, y, x + xl - 1)) return;
-	c |= find_nearest_color(&par_format.bgcolor, 8) << 11; /* XXX: for easy table borders */
 	for (; xl; xl--, x++) POS(x, y) = c;
 }
 
@@ -358,7 +357,17 @@ shift_chars(struct part *part, int y, int shift)
 	if (!a) return;
 
 	memcpy(a, &POS(0, y), len * sizeof(chr));
-	set_hchars(part, 0, y, shift, /*(part->data->data[y].c << 11) |*/ ' ');
+	/* XXX: This is broken fundamentally and it gives us those color stains
+	 * all over spanning from the colorful table cells. We asume that the
+	 * whole line is one-colored here, but we should take definitively more
+	 * care. But this looks like a fundamental design flaw and it'd require
+	 * us to rewrite big parts of code, I fear (but maybe I'm mistaken and
+	 * you need to just turn one bit somewhere in the code!)... Note that
+	 * using find_nearest_color(par_format.bgcolor, 8) doesn't work here, I
+	 * already got that idea; results in even more stains since we probably
+	 * shift chars even on surrounding lines when realigning tables
+	 * maniacally. --pasky */
+	set_hchars(part, 0, y, shift, (part->data->data[y].c << 11) | ' ');
 	copy_chars(part, shift, y, len, a);
 	mem_free(a);
 
@@ -494,8 +503,9 @@ justify_line(struct part *part, int y)
 		int prev_end = 0;
 		int word;
 
+		/* See shift_chars() about why this is broken. */
 		set_hchars(part, 0, y, overlap(par_format),
-			   /*(part->data->data[y].c << 11) |*/ ' ');
+			   (part->data->data[y].c << 11) | ' ');
 
 		for (word = 0; word < spaces; word++) {
 			/* We have to increase line length by 'insert' num. of

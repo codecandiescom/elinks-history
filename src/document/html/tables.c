@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.25 2002/12/17 23:09:39 pasky Exp $ */
+/* $Id: tables.c,v 1.26 2002/12/22 09:47:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1460,13 +1460,15 @@ if (H_LINE_X((ii-1), (jj)) >= 0 || H_LINE_X((ii), (jj)) >= 0 || \
 						 3*H_LINE((ii), (jj))+ \
 						 9*H_LINE((ii)-1, (jj))+ \
 						 27*V_LINE((ii),(jj))] \
-				     | ATTR_FRAME)
+				     | ATTR_FRAME \
+				     | find_nearest_color(&par_format.bgcolor, 8) << 11)
 
 
 #define draw_frame_hline(xx, yy, ll, ii, jj) \
 if (H_LINE_X((ii), (jj)) >= 0) \
 	xset_hchars(t->p, (xx), (yy), (ll),\
-		    hline_table[H_LINE((ii), (jj))] | ATTR_FRAME)
+		    hline_table[H_LINE((ii), (jj))] | ATTR_FRAME \
+		    | find_nearest_color(&par_format.bgcolor, 8) << 11)
 
 
 #define draw_frame_vline(xx, yy, ll, ii, jj) \
@@ -1476,7 +1478,8 @@ if (H_LINE_X((ii), (jj)) >= 0) \
 		for (qq = 0; qq < (ll); qq++) \
 			xset_hchar(t->p, (xx), (yy) + qq, \
 				   vline_table[V_LINE((ii), (jj))] \
-				   | ATTR_FRAME); \
+				   | ATTR_FRAME \
+				   | find_nearest_color(&par_format.bgcolor, 8) << 11); \
 }
 
 

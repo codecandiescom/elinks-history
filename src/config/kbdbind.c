@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.106 2003/11/29 01:06:19 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.107 2003/12/02 18:38:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -820,16 +820,18 @@ add_default_keybindings(void)
 
 void
 add_keyactions_to_string(struct string *string, enum keyact *actions,
-			 struct terminal *term)
+			 enum keymap map, struct terminal *term)
 {
 	int i;
 
+	add_format_to_string(string, "%s:\n", _(numtodesc(keymap_table, map), term));
+
 	for (i = 0; actions[i] != ACT_NONE; i++) {
-		struct keybinding *kb = kbd_act_lookup(KM_MAIN, actions[i]);
+		struct keybinding *kb = kbd_act_lookup(map, actions[i]);
 		int keystrokelen = string->length;
 		unsigned char *desc = numtodesc(action_table, actions[i]);
 
-		assert(kb);
+		if (!kb) continue;
 
 		add_char_to_string(string, '\n');
 		make_keystroke(string, kb->key, kb->meta, 0);

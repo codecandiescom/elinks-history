@@ -251,6 +251,120 @@ on the same line as the command, if it's
 /* We have to parse this crap now, as it is going to be freed in free_crap() */
 place it on the preceding line.
 
+More about style:
+----------------
+
+Note: We use short variables names and stupid examples here, do not take that
+      as a guideline for _REAL_ coding. Always use descriptive variables names
+      and do not write stupid code ;).
+
+* General style is:
+
+[blank line]
+/* This is a comment about that function */
+int
+func(int a, int b)
+{
+	int c;
+
+	c = a * b;
+	if (c) {
+		int d;
+
+		...
+	} else {
+		int e;
+
+		...
+	}
+
+	return (c * d);
+}
+
+* You should observe the following rules:
+
+- Always have a blank line before function declaration or comment.
+
+- Please add a comment about what this function does.
+
+- Function's type must be on first line while function's name is on second
+  line.
+
+- If parameters list exceeds 80 columns then wrap them after comma to the next
+  line and align them using tabs and/or spaces with the first parameter.
+	use
+		int
+		func(int p1, int p2, int p3,
+		     struct very_long_name_for_a_structure *s,
+		     unsigned long last_parameter)
+		{
+			int v;
+
+			...
+		}
+
+- Start of function's body should be alone on first column.
+
+- Always have a blank line after declarations.
+
+- Always have spaces around operators.
+	use
+		c = a * b - (a + b);
+	instead of
+		c=a*b-(a+b);
+
+- Keep affectation outside condition tests.
+	use
+		c = a;
+		if (c == b) {...
+	instead of
+		if ((c = a) == b) {...
+
+- Never use spaces with ().
+	use
+		if (a) ...
+	instead of
+		if ( a ) ...
+
+- Indent.
+	use
+		foreach(a, b)
+			if (a == c)
+				...
+			else
+				...
+	instead of
+		foreach(a, b) if (a == c) ...  else ...
+
+- If you have chain of if () { .. } else if () { .. } else { .. } with longer
+  statements, you could insert blank line before each else line.
+
+- Label names should start on first column and with a blank line before it.
+	use
+			some_code(aaa);
+
+		label:
+			some_other_code(bbb);
+	instead of
+			some_code(aaa);
+			label:
+			some_other_code(bbb);
+
+- Wrap conditions on spaces before operators like && or ||.
+	use
+		if (some_very_long_thing1 == some_very_long_thing2
+		    && (test1 == test2
+			|| some_very_long_thing3 == some_very_long_thing4)) {
+			....
+		}
+
+- Please take care of useless spaces or tabs at end of line.
+
+- If you see code in ELinks that doesn't follow these rules, fix it or tell us.
+
+- There are obviously exceptions to these rules, but don't make a rule from
+  your exception and be prepared to defend your exception anytime ;).
+
 
 4, Patches
 ~~~~~~~~~~
@@ -272,4 +386,4 @@ applies.
 
 Happy hacking!
 
-$Id: HACKING,v 1.12 2002/03/16 21:02:48 pasky Exp $
+$Id: HACKING,v 1.13 2002/06/12 14:33:44 zas Exp $

@@ -153,6 +153,22 @@ sub pre_format_html_hook
 		return $html;
 	}
 
+	# yes, I heard you the first time
+	if ($url =~ 'google\.com')
+	{
+		$html =~ s/Teep: In must broosers yuoo cun joost heet zee retoorn key insteed ooff cleecking oon zee seerch boottun\. Bork bork bork!//;
+		$html =~ s/Tip:<\/font> Save time by hitting the return key instead of clicking on "search"/<\/font>/;
+		return $html;
+	}
+
+	# SourceForge ad smasher
+	if ($url =~ 'sourceforge\.net')
+	{
+		$html =~ s/<!-- AD POSITION \d+ -->.*?<!-- END AD POSITION \d+ -->//smg;
+		$html =~ s/<b>&nbsp\;&nbsp\;&nbsp\;Site Sponsors<\/b>//g;
+		return $html;
+	}
+
 	return $html;
 }
 

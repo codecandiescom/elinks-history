@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.35 2004/12/21 01:53:19 pasky Exp $ */
+/* $Id: table.c,v 1.36 2005/01/01 16:37:09 jonas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -390,28 +390,39 @@ new_cell(struct table *table, int dest_col, int dest_row)
 		return CELL(table, dest_col, dest_row);
 
 	while (1) {
-		struct table new_table;
+		struct table new;
+		int limit;
 
 		if (dest_col < table->real_cols && dest_row < table->real_rows) {
 			expand_cells(table, dest_col, dest_row);
 			return CELL(table, dest_col, dest_row);
 		}
 
-		new_table.real_cols = smart_raise(dest_col + 1, table->real_cols, sizeof(struct table_cell), SMART_RAISE_LIMIT/2 /* assume square distribution of cols/rows */);
-		if (!new_table.real_cols) return NULL;
-		new_table.real_rows = smart_raise(dest_row + 1, table->real_rows, sizeof(struct table_cell), MAX(SMART_RAISE_LIMIT - sizeof(struct table_cell) * new_table.real_cols, SMART_RAISE_LIMIT/2));
-		if (!new_table.real_rows) return NULL;
+		new.real_cols = smart_raise(dest_col + 1, table->real_cols,
+					    sizeof(struct table_cell),
+					    /* assume square distribution of
+					     * cols/rows */
+					    SMART_RAISE_LIMIT / 2);
+		if (!new.real_cols) return NULL;
 
-		new_table.cells = mem_calloc(new_table.real_cols * new_table.real_rows,
-					     sizeof(struct table_cell));
-		if (!new_table.cells) return NULL;
+		limit = SMART_RAISE_LIMIT
+		      - sizeof(struct table_cell) * new.real_cols;
+		limit = MAX(limit, SMART_RAISE_LIMIT/2);
 
-		copy_table(table, &new_table);
+		new.real_rows = smart_raise(dest_row + 1, table->real_rows,
+					    sizeof(struct table_cell), limit);
+		if (!new.real_rows) return NULL;
+
+		new.cells = mem_calloc(new.real_cols * new.real_rows,
+				       sizeof(struct table_cell));
+		if (!new.cells) return NULL;
+
+		copy_table(table, &new);
 
 		mem_free(table->cells);
-		table->cells = new_table.cells;
-		table->real_cols = new_table.real_cols;
-		table->real_rows = new_table.real_rows;
+		table->cells	 = new.cells;
+		table->real_cols = new.real_cols;
+		table->real_rows = new.real_rows;
 	}
 }
 
@@ -423,7 +434,8 @@ new_columns(struct table *table, int span, int width, int align,
 		int n = table->real_columns_count;
 		struct table_column *new_columns;
 
-		n = smart_raise(table->columns_count + span, n, sizeof(struct table_column), SMART_RAISE_LIMIT);
+		n = smart_raise(table->columns_count + span, n,
+				sizeof(struct table_column), SMART_RAISE_LIMIT);
 		if (!n) return;
 
 		new_columns = mem_realloc(table->columns, n * sizeof(struct table_column));

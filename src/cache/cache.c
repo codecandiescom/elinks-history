@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.80 2003/11/08 02:25:41 pasky Exp $ */
+/* $Id: cache.c,v 1.81 2003/11/08 02:27:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -295,7 +295,7 @@ void
 defrag_entry(struct cache_entry *ce)
 {
 	struct fragment *first_frag, *adj_frag, *h, *new_frag;
-	int l;
+	int new_frag_len;
 
 	if (list_empty(ce->frag)) return;
 	first_frag = ce->frag.next;
@@ -316,20 +316,20 @@ defrag_entry(struct cache_entry *ce)
 
 	if (adj_frag == first_frag->next) return;
 
-	for (l = 0, h = first_frag; h != adj_frag; h = h->next)
-		l += h->length;
+	for (new_frag_len = 0, h = first_frag; h != adj_frag; h = h->next)
+		new_frag_len += h->length;
 
 	/* One byte is reserved for data in struct fragment. */
-	new_frag = mem_calloc(1, FRAGSIZE(l));
+	new_frag = mem_calloc(1, FRAGSIZE(new_frag_len));
 	if (!new_frag) return;
-	new_frag->length = l;
-	new_frag->real_length = l;
+	new_frag->length = new_frag_len;
+	new_frag->real_length = new_frag_len;
 
-	for (l = 0, h = first_frag; h != adj_frag; h = h->next) {
+	for (new_frag_len = 0, h = first_frag; h != adj_frag; h = h->next) {
 		struct fragment *tmp = h;
 
-		memcpy(new_frag->data + l, h->data, h->length);
-		l += h->length;
+		memcpy(new_frag->data + new_frag_len, h->data, h->length);
+		new_frag_len += h->length;
 
 		h = h->prev;
 		del_from_list(tmp);

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.83 2003/05/15 22:40:55 pasky Exp $ */
+/* $Id: renderer.c,v 1.84 2003/05/18 23:00:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -703,6 +703,7 @@ put_chars(struct part *part, unsigned char *c, int l)
 	int i;
 	struct link *link;
 	struct point *pt;
+	int tmp; /* used for temporary results. */
 
 	while (par_format.align != AL_NO && part->cx == -1 && l && *c == ' ') {
 		c++;
@@ -761,11 +762,11 @@ end_format_change:
 		}
 	}
 
-#define TMP	part->xa - (c[l - 1] == ' ' && par_format.align != AL_NO) \
-		+ par_format.leftmargin + par_format.rightmargin
 	part->xa += l;
-	if (TMP > part->xmax) part->xmax = TMP;
-#undef TMP
+	tmp = part->xa - (c[l - 1] == ' ' && par_format.align != AL_NO)
+	      + par_format.leftmargin + par_format.rightmargin;
+
+	if (tmp > part->xmax) part->xmax = tmp;
 
 	return;
 
@@ -777,7 +778,11 @@ process_link:
 	    && format.form == last_form) {
 		if (!part->data) goto x;
 		link = &part->data->links[part->data->nlinks - 1];
-		if (!part->data->nlinks) {
+		if (!part->data->nlinks) { /* if this is occur,
+					      then link = &part->data->links[-1];
+					      it seems strange to me,
+					      shouldn't we move that test before previous
+					      line ? --Zas */
 			internal("no link");
 			goto no_l;
 		}
@@ -799,14 +804,17 @@ x:;
 			unsigned char *ft = format.target;
 			unsigned char *fi = format.image;
 			struct form_control *ff = format.form;
+			int slen = 0;
 
 			format.link = format.target = format.image = NULL;
 			format.form = NULL;
-			s[0] = '[';
-			snzprint(s + 1, 62, part->link_num);
-			strcat(s, "]");
 
-			put_chars(part, s, strlen(s));
+			s[slen++] = '[';
+			ulongcat(s + 1, &slen, part->link_num, sizeof(s) - 3, 0);
+			s[slen++] = ']';
+			s[slen] = '\0';
+
+			put_chars(part, s, slen);
 
 			if (ff && ff->type == FC_TEXTAREA) line_break(part);
 			if (part->cx == -1) part->cx = par_format.leftmargin;
@@ -907,6 +915,8 @@ format_change:
 	fg_cache = fg;
 	bg_cache = bg;
 
+	/* FIXME:
+	 * This doesn't work correctly with <a href="foo">123<sup>456</sup>789</a> */
 	if (d_opt->display_subs) {
 		if (format.attr & AT_SUBSCRIPT) {
 			if (!sub) {
@@ -958,8 +968,8 @@ line_break(struct part *part)
 	/* move_links(part, part->cx, part->cy, 0, part->cy + 1); */
 	xpand_lines(part, part->cy + 1);
 	if (part->cx > par_format.leftmargin && LEN(part->cy) > part->cx - 1
-	    && (POS(part->cx-1, part->cy) & 0xff) == ' ') {
-		del_chars(part, part->cx-1, part->cy);
+	    && (POS(part->cx - 1, part->cy) & 0xff) == ' ') {
+		del_chars(part, part->cx - 1, part->cy);
 	   	part->cx--;
 	}
 
@@ -1177,7 +1187,7 @@ free_table_cache()
 		int i;
 
 		/* We do not free key here. */
-		foreach_hash_item(item, *table_cache, i)
+		foreach_hash_item (item, *table_cache, i)
 			if (item->value)
 				mem_free(item->value);
 
@@ -1205,10 +1215,9 @@ format_html_part(unsigned char *start, unsigned char *end,
 	struct table_cache_entry *tce;
 
 	/* Hash creation if needed. */
-	if (!table_cache)
+	if (!table_cache) {
 		table_cache = init_hash(8, &strhash);
-
-	if (!data && table_cache) {
+	} else if (!data) {
 		/* Search for cached entry. */
 		struct table_cache_entry_key key;
 		struct hash_item *item;
@@ -1229,16 +1238,15 @@ format_html_part(unsigned char *start, unsigned char *end,
 				     sizeof(struct table_cache_entry_key));
 		if (item) { /* We found it in cache, so just copy and return. */
 			part = mem_alloc(sizeof(struct part));
-			if (!part) goto uncached;
-			memcpy(part,
-			       &((struct table_cache_entry *)item->value)->part,
-			       sizeof(struct part));
+			if (part)  {
+				memcpy(part,
+				       &((struct table_cache_entry *)item->value)->part,
+			       	       sizeof(struct part));
 
-			return part;
+				return part;
+			}
 		}
 	}
-
-uncached:
 
 	if (ys < 0) {
 		internal("format_html_part: ys == %d", ys);
@@ -1255,11 +1263,16 @@ uncached:
 			add_to_list(data->nodes, n);
 		}
 		/*sdbg(data);*/
+
+		last_link_to_move = data->nlinks;
+		last_tag_to_move = (void *)&data->tags;
+		last_tag_for_newline = (void *)&data->tags;
+	} else {
+		last_link_to_move = 0;
+		last_tag_to_move = NULL;
+		last_tag_for_newline = NULL;
 	}
 
-	last_link_to_move = data ? data->nlinks : 0;
-	last_tag_to_move = data ? (void *)&data->tags : NULL;
-	last_tag_for_newline = data ? (void *)&data->tags: NULL;
 	margin = m;
 	empty_format = !data;
 
@@ -1277,11 +1290,12 @@ uncached:
 	part->data = data;
 	part->xp = xs;
 	part->yp = ys;
+	part->cx = -1;
+	part->cy = 0;
 	part->link_num = link_num;
-
 	init_list(part->uf);
-	html_stack_dup();
 
+	html_stack_dup();
 	e = &html_top;
 	html_top.dontkill = 2;
 	html_top.namelen = 0;
@@ -1293,8 +1307,6 @@ uncached:
 	par_format.list_level = 0;
 	par_format.list_number = 0;
 	par_format.dd_margin = 0;
-	part->cx = -1;
-	part->cy = 0;
 
 	do_format(start, end, part, head);
 
@@ -1400,9 +1412,16 @@ push_base_format(unsigned char *url, struct document_options *opt)
 	format.href_base = stracpy(url);
 	format.target_base = opt->framename ? stracpy(opt->framename) : NULL;
 
-	par_format.align = opt->plain ? AL_NO : AL_LEFT;
-	par_format.leftmargin = opt->plain ? 0 : opt->margin;
-	par_format.rightmargin = opt->plain ? 0 : opt->margin;
+	if (opt->plain) {
+		par_format.align = AL_NO;
+		par_format.leftmargin = 0;
+		par_format.rightmargin = 0;
+	} else {
+		par_format.align = AL_LEFT;
+		par_format.leftmargin = opt->margin;
+		par_format.rightmargin = opt->margin;
+	}
+
 	par_format.width = opt->xw;
 	par_format.list_level = par_format.list_number = 0;
 	par_format.dd_margin = opt->margin;
@@ -1550,7 +1569,8 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 
 	if (screen->frame_desc) screen->frame = 1;
 
-#if 0
+#if 0 /* debug purpose */
+	{
 		FILE *f = fopen("forms", "a");
 		struct form_control *form;
 		unsigned char *qq;
@@ -1564,6 +1584,7 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 		for (qq = start; qq < end; qq++) fprintf(f, "%c", *qq);
 		fprintf(f,"----------\n\n");
 		fclose(f);
+	}
 #endif
 }
 
@@ -1600,7 +1621,7 @@ count_format_cache()
 	struct f_data *ce;
 
 	format_cache_entries = 0;
-	foreach(ce, format_cache)
+	foreach (ce, format_cache)
 		if (!ce->refcount)
 			format_cache_entries++;
 }
@@ -1610,7 +1631,7 @@ delete_unused_format_cache_entries()
 {
 	struct f_data *ce;
 
-	foreach(ce, format_cache) {
+	foreach (ce, format_cache) {
 		struct cache_entry *cee = NULL;
 
 		if (!ce->refcount) {
@@ -1660,7 +1681,7 @@ cached_format_html(struct view_state *vs, struct f_data_c *screen,
 		return;
 	}
 
-	foreach(ce, format_cache) {
+	foreach (ce, format_cache) {
 		if (strcmp(ce->url, vs->url)
 		    || compare_opt(&ce->opt, opt))
 			continue;
@@ -1741,7 +1762,7 @@ add_frame_to_list(struct session *ses, struct f_data_c *fd)
 {
 	struct f_data_c *f;
 
-	foreach(f, ses->scrn_frames) {
+	foreach (f, ses->scrn_frames) {
 		if (f->yp > fd->yp || (f->yp == fd->yp && f->xp > fd->xp)) {
 			add_at_pos(f->prev, fd);
 			return;
@@ -1757,7 +1778,7 @@ find_fd(struct session *ses, unsigned char *name,
 {
 	struct f_data_c *fd;
 
-	foreachback(fd, ses->scrn_frames) {
+	foreachback (fd, ses->scrn_frames) {
 		if (!fd->used && !strcasecmp(fd->name, name)) {
 			fd->used = 1;
 			fd->depth = depth;
@@ -1904,7 +1925,7 @@ html_interpret(struct session *ses)
 
 	o.framename = "";
 
-	foreach(fd, ses->scrn_frames) fd->used = 0;
+	foreach (fd, ses->scrn_frames) fd->used = 0;
 
 	cached_format_html(l, ses->screen, &o);
 
@@ -1913,7 +1934,7 @@ html_interpret(struct session *ses)
 		format_frames(ses, ses->screen->f_data->frame_desc, &o, 0);
 	}
 
-	foreach(fd, ses->scrn_frames) if (!fd->used) {
+	foreach (fd, ses->scrn_frames) if (!fd->used) {
 		struct f_data_c *fdp = fd->prev;
 
 		detach_formatted(fd);
@@ -1925,7 +1946,7 @@ html_interpret(struct session *ses)
 	if (cf) {
 		int n = 0;
 
-		foreach(fd, ses->scrn_frames) {
+		foreach (fd, ses->scrn_frames) {
 			if (fd->f_data && fd->f_data->frame) continue;
 			if (fd == cf) {
 				cur_loc(ses)->vs.current_link = n;
@@ -1936,8 +1957,6 @@ html_interpret(struct session *ses)
 	}
 }
 
-
-#define SRCH_ALLOC_GR	0x10000
 
 static inline void
 add_srch_chr(struct f_data *f, unsigned char c, int x, int y, int nn)
@@ -1953,6 +1972,7 @@ add_srch_chr(struct f_data *f, unsigned char c, int x, int y, int nn)
 }
 
 #if 0
+/* Debugging code, please keep it. */
 void
 sdbg(struct f_data *f)
 {
@@ -2027,7 +2047,7 @@ get_srch(struct f_data *f)
 	int cnt = 0;
 	int cc = !f->search;
 
-	foreachback(n, f->nodes) {
+	foreachback (n, f->nodes) {
 		int x, y;
 		int xm = n->x + n->xw;
 		int ym = n->y + n->yw;
@@ -2036,7 +2056,7 @@ get_srch(struct f_data *f)
 		printf("%d %d - %d %d\n", n->x, n->y, xm, ym);
 		fflush(stdout);
 #endif
-#define _A(cr, nn) if (!cc) add_srch_chr(f, (cr), x, y, (nn)); else cnt++;
+#define ADD(cr, nn) if (!cc) add_srch_chr(f, (cr), x, y, (nn)); else cnt++;
 
 		for (y = n->y; y < ym && y < f->y; y++) {
 			int ns = 1;
@@ -2048,34 +2068,40 @@ get_srch(struct f_data *f)
 				if (c == ' ' && ns) continue;
 
 				if (ns) {
-					_A(c, 1);
+					ADD(c, 1);
 					ns = 0;
 					continue;
 				}
 
 				if (c != ' ') {
-					_A(c, 1);
+					ADD(c, 1);
 				} else {
 					int xx;
+					int found = 0;
 
-					for (xx = x + 1; xx < xm && xx < f->data[y].l; xx++)
-						if ((unsigned char) f->data[y].d[xx] >= ' ')
-							goto cont;
+					for (xx = x + 1;
+					     xx < xm && xx < f->data[y].l;
+					     xx++) {
+						if ((unsigned char) f->data[y].d[xx] >= ' ') {
+							found = 1;
+							break;
+						}
+					}
 
-					xx = x;
-
-cont:
-					_A(' ', xx - x);
-
-					if (xx == x) break;
-					x = xx - 1;
+					if (found) {
+						ADD(' ', xx - x);
+						x = xx - 1;
+					} else {
+						ADD(' ', 0);
+						break;
+					}
 				}
 
 			}
 
-			_A(' ', 0);
+			ADD(' ', 0);
 		}
-#undef _A
+#undef A
 
 	}
 

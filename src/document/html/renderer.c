@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.456 2004/06/23 15:09:25 zas Exp $ */
+/* $Id: renderer.c,v 1.457 2004/06/23 15:14:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,7 +82,7 @@ struct table_cache_entry {
 struct renderer_context {
 	int table_cache_entries;
 	struct hash *table_cache;
-	
+
 	int last_link_to_move;
 	struct tag *last_tag_to_move;
 	struct tag *last_tag_for_newline;
@@ -220,7 +220,8 @@ clear_hchars(struct part *part, int x, int y, int xl)
 /* Allocates the required chars on the given line and returns the char at
  * position (x, y) ready to be used as a template char.  */
 static inline struct screen_char *
-get_frame_char(struct part *part, int x, int y, unsigned char data, color_t bgcolor, color_t fgcolor)
+get_frame_char(struct part *part, int x, int y, unsigned char data,
+	       color_t bgcolor, color_t fgcolor)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(bgcolor, fgcolor);
 	struct screen_char *template;
@@ -249,13 +250,15 @@ get_frame_char(struct part *part, int x, int y, unsigned char data, color_t bgco
 }
 
 void
-draw_frame_hchars(struct part *part, int x, int y, int xl, unsigned char data, color_t bgcolor, color_t fgcolor)
+draw_frame_hchars(struct part *part, int x, int y, int xl, unsigned char data,
+		  color_t bgcolor, color_t fgcolor)
 {
-	struct screen_char *template = get_frame_char(part, x + xl - 1, y, data, bgcolor, fgcolor);
+	struct screen_char *template;
 
 	assert(xl > 0);
 	if_assert_failed return;
 
+	template = get_frame_char(part, x + xl - 1, y, data, bgcolor, fgcolor);
 	if (!template) return;
 
 	/* The template char is the last we need to draw so only decrease @xl. */
@@ -265,9 +268,11 @@ draw_frame_hchars(struct part *part, int x, int y, int xl, unsigned char data, c
 }
 
 void
-draw_frame_vchars(struct part *part, int x, int y, int yl, unsigned char data, color_t bgcolor, color_t fgcolor)
+draw_frame_vchars(struct part *part, int x, int y, int yl, unsigned char data,
+		  color_t bgcolor, color_t fgcolor)
 {
-	struct screen_char *template = get_frame_char(part, x, y, data, bgcolor, fgcolor);
+	struct screen_char *template = get_frame_char(part, x, y, data,
+						      bgcolor, fgcolor);
 
 	if (!template) return;
 

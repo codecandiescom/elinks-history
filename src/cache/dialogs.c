@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.3 2003/11/17 18:17:58 pasky Exp $ */
+/* $Id: dialogs.c,v 1.4 2003/11/17 18:20:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,8 +114,8 @@ push_info_button(struct dialog_data *dlg_data,
 
 	add_format_to_string(&msg, "\n%s: %s", _("Last modified time", term),
 						ce->last_modified);
-
-	add_format_to_string(&msg, "\n%s: %d", _("Size", term), ce->data_size);
+	add_format_to_string(&msg, "\n%s: %d", _("Size", term), ce->length);
+	add_format_to_string(&msg, "\n%s: %d", _("Loaded size", term), ce->data_size);
 	
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Info"), AL_LEFT,

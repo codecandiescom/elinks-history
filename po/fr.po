@@ -4265,7 +4265,7 @@ msgstr "Bascule numérotation ~liens"
 
 #: src/dialogs/menu.c:516
 msgid "Toggle ~document colors"
-msgstr "Bascule couleurs du document"
+msgstr "Bascule c~ouleurs du document"
 
 #: src/dialogs/menu.c:517
 msgid "Document ~info"

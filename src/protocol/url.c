@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.60 2003/05/19 23:10:59 zas Exp $ */
+/* $Id: url.c,v 1.61 2003/05/20 17:56:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,11 +214,8 @@ parse_url(unsigned char *url, int *prlen,
 	if (lbracket && rbracket) {
 		int addrlen = rbracket - lbracket - 1;
 
-		hostbuf[0] = '\0'; /* empty string */
-		if (addrlen > 0 && addrlen < sizeof(hostbuf)) {
-			memcpy(hostbuf, lbracket + 1, addrlen);
-			hostbuf[addrlen] = '\0';
-		}
+		/* Don't forget the trailing space! ;-) --pasky */
+		safe_strncpy(hostbuf, lbracker + 1, addrlen + 1);
 
 		if (host) *host = hostbuf;
 		if (holen) *holen = addrlen;

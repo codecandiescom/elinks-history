@@ -61,14 +61,8 @@ AC_CHECK_HEADERS(stdint.h inttypes.h)
 AC_CHECK_HEADERS(locale.h)
 
 dnl ===================================================================
-dnl Checks for typedefs, structures, and compiler characteristics.
+dnl Macros for various checks. (TODO: Move to m4/)
 dnl ===================================================================
-
-AC_C_CONST
-AC_C_INLINE
-AC_TYPE_SIZE_T
-AC_HEADER_TIME
-AC_STRUCT_TM
 
 dnl AC_CHECK_SPECIAL_TYPE(type, define, include sys types, code)
 AC_DEFUN([EL_CHECK_SPECIAL_TYPE],
@@ -90,6 +84,35 @@ AC_DEFUN([EL_CHECK_SPECIAL_TYPE],
 	$2=no)
 	AC_MSG_RESULT([$]$2)
 ])
+
+
+dnl Save and restore the current build flags
+
+AC_DEFUN([EL_SAVE_FLAGS],
+[
+	CFLAGS_X="$CFLAGS";
+	CPPFLAGS_X="$CPPFLAGS";
+	LDFLAGS_X="$LDFLAGS";
+	LIBS_X="$LIBS";
+])
+
+AC_DEFUN([EL_RESTORE_FLAGS],
+[
+	CFLAGS="$CFLAGS_X";
+	CPPFLAGS="$CPPFLAGS_X";
+	LDFLAGS="$LDFLAGS_X";
+	LIBS="$LIBS_X";
+])
+
+dnl ===================================================================
+dnl Checks for typedefs, structures, and compiler characteristics.
+dnl ===================================================================
+
+AC_C_CONST
+AC_C_INLINE
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+AC_STRUCT_TM
 
 EL_CHECK_SPECIAL_TYPE(typeof, HAVE_TYPEOF, 0, [int a; typeof(a) b;])
 EL_CHECK_SPECIAL_TYPE(long long, HAVE_LONG_LONG, 0, [unsigned long long a;])
@@ -227,28 +250,6 @@ if test "$cf_result" = no; then
 		test -z "`echo $LIBS | grep -- -lsocket`" && LIBS="$LIBS -lsocket"
 	fi
 fi
-
-dnl ===================================================================
-dnl Save and restore the current build flags
-dnl ===================================================================
-
-dnl TODO: Move to m4/
-
-AC_DEFUN([EL_SAVE_FLAGS],
-[
-	CFLAGS_X="$CFLAGS";
-	CPPFLAGS_X="$CPPFLAGS";
-	LDFLAGS_X="$LDFLAGS";
-	LIBS_X="$LIBS";
-])
-
-AC_DEFUN([EL_RESTORE_FLAGS],
-[
-	CFLAGS="$CFLAGS_X";
-	CPPFLAGS="$CPPFLAGS_X";
-	LDFLAGS="$LDFLAGS_X";
-	LIBS="$LIBS_X";
-])
 
 dnl ===================================================================
 dnl Checks for a libraries, optional even if installed.

@@ -1,3 +1,50 @@
+Sun Jun  9 20:14:36 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, config/conf.c, config/options.c, config/options.h,
+	config/opttypes.c, dialogs/options.c, document/session.c,
+	document/view.c, document/html/renderer.c, intl/language.c,
+	lowlevel/terminal.c, lowlevel/terminal.h:
+
+	Enabled terminal options saving - they are now saved as
+	"terminal.<TERM>.flag"; removed struct term_spec. Bugfixes in
+	OPT_AUTOCREATE support; #template# is now _template_. option->name
+	is now dynamically allocated.  
+
+Sun Jun  9 16:09:55 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/http/http.c:
+
+	Another gcc-2.96 stupidity fixed, thanks to Dmitry :).  
+
+Sun Jun  9 15:38:02 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/connect.c:
+
+	Fixed possible warning reported by Dmitry..? 
+
+Sun Jun  9 14:53:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: conf.c, kbdbind.c, options.c, options.h, opttypes.c,
+	opttypes.h:
+
+	Support for OPT_AUTOCREATE. Introduced dup handler for option types
+	and function copy_option(). Fixed warnings in config/kbdbind.c
+	(reported by Dmitry). Disabled some obsolete soon-to-be-replaced
+	types finally.  
+
+Sun Jun  9 11:09:33 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/french.lng, src/intl/language.inc:
+
+	French translation was updated.  
+
+Sun Jun  9 10:59:01 2002  Laurent Monin <zas@norz.org>:
+
+	* src/main.c:
+
+	Memory allocated for table cache is now freed in
+	terminate_all_subsystems();before exiting if needed.  
+
 Sat Jun  8 11:44:13 2002  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/renderer.c:

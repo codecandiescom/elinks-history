@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.143 2004/03/28 17:48:47 zas Exp $ */
+/* $Id: tables.c,v 1.144 2004/03/28 17:58:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1372,15 +1372,26 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 	register int i, j;
 	struct document *document = t->p->document;
 	int yp;
-	int xp = x + (t->border && (t->frame & TABLE_FRAME_LHS));
+	int xp = x;
 	int expand_cols = (global_doc_opts && global_doc_opts->table_expand_cols);
 	color_t default_bgcolor = par_format.bgcolor;
+	int top_frame = 0;
+	int bottom_frame = 0;
+	int left_frame = 0;
+
+	if (t->border) {
+		top_frame = !!(t->frame & TABLE_FRAME_ABOVE);
+		bottom_frame = !!(t->frame & TABLE_FRAME_BELOW);
+		left_frame = !!(t->frame & TABLE_FRAME_LHS);
+	}
 
 	if (t->fragment_id)
 		add_fragment_identifier(t->p, t->fragment_id);
 
+	xp += left_frame;
+
 	for (i = 0; i < t->x; i++) {
-		yp = y + (t->border && (t->frame & TABLE_FRAME_ABOVE));
+		yp = y + top_frame;
 
 		for (j = 0; j < t->y; j++) {
 			struct table_cell *cell = CELL(t, i, j);
@@ -1389,7 +1400,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 			int row;
 
 			par_format.bgcolor = default_bgcolor;
-			for (row = t->p->cy; row < yp + rows_height + (t->border && (t->frame & TABLE_FRAME_ABOVE)); row++) {
+			for (row = t->p->cy; row < yp + rows_height + top_frame; row++) {
 				expand_lines(t->p, row);
 				expand_line(t->p, row, x - 1);
 			}
@@ -1475,11 +1486,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 		      (j < t->y - 1 && get_hline_width(t, j + 1) >= 0);
 	}
 
-	*yy = yp;
-	if (t->border) {
-		if (t->frame & TABLE_FRAME_ABOVE) (*yy)++;
-		if (t->frame & TABLE_FRAME_BELOW) (*yy)++;
-	}
+	*yy = yp + top_frame + bottom_frame;
 }
 
 

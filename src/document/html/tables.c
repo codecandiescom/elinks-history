@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.161 2004/05/10 12:56:14 zas Exp $ */
+/* $Id: tables.c,v 1.162 2004/05/11 14:45:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,7 +115,8 @@ struct table {
 	int frame, rules, width, wf;
 	int rw;
 	int min_t, max_t;
-	int columns_count, rc;
+	int columns_count;
+	int real_columns_count;	/* Number of columns really allocated. */
 	int xc;
 	int rh;
 	int link_num;
@@ -222,7 +223,7 @@ new_table(void)
 		return NULL;
 	}
 
-	t->rc = INIT_X;
+	t->real_columns_count = INIT_X;
 
 	t->columns = mem_calloc(INIT_X, sizeof(struct table_column));
 	if (!t->columns) {
@@ -356,8 +357,8 @@ static void
 new_columns(struct table *t, int span, int width, int align,
 	    int valign, int group)
 {
-	if (t->columns_count + span > t->rc) {
-		int n = t->rc;
+	if (t->columns_count + span > t->real_columns_count) {
+		int n = t->real_columns_count;
 		struct table_column *new_columns;
 
 		while (t->columns_count + span > n) if (!(n <<= 1)) return;
@@ -365,7 +366,7 @@ new_columns(struct table *t, int span, int width, int align,
 		new_columns = mem_realloc(t->columns, n * sizeof(struct table_column));
 		if (!new_columns) return;
 
-		t->rc = n;
+		t->real_columns_count = n;
 		t->columns = new_columns;
 	}
 

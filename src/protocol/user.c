@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.42 2003/07/17 08:56:32 zas Exp $ */
+/* $Id: user.c,v 1.43 2003/07/21 04:14:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,23 +26,24 @@ get_user_program(struct terminal *term, unsigned char *progid, int progidlen)
 	struct option *opt;
 	unsigned char *system_str =
 		get_system_str(term ? term->environment & ENV_XWIN : 0);
-	unsigned char *name;
-	int namelen = 0;
+	struct string name;
 
 	if (!system_str) return NULL;
 
-	name = init_str();
-	if (!name) return NULL;
+	if (!init_string(&name)) {
+		mem_free(system_str);
+		return NULL;
+	}
 
-	add_to_str(&name, &namelen, "protocol.user.");
-	add_bytes_to_str(&name, &namelen, progid, progidlen);
-	add_chr_to_str(&name, &namelen, '.');
-	add_to_str(&name, &namelen, system_str);
+	add_to_string(&name, "protocol.user.");
+	add_bytes_to_string(&name, progid, progidlen);
+	add_char_to_string(&name, '.');
+	add_to_string(&name, system_str);
 	mem_free(system_str);
 
-	opt = get_opt_rec_real(config_options, name);
+	opt = get_opt_rec_real(config_options, name.source);
 
-	mem_free(name);
+	done_string(&name);
 	return (unsigned char *) (opt ? opt->ptr : NULL);
 }
 
@@ -51,46 +52,49 @@ static unsigned char *
 subst_cmd(unsigned char *cmd, unsigned char *url, unsigned char *host,
 	  unsigned char *port, unsigned char *dir, unsigned char *subj)
 {
-	unsigned char *n = init_str();
-	int l = 0;
+	struct string string;
 
-	if (!n) return NULL;
+	if (!init_string(&string)) return NULL;
 
 	while (*cmd) {
 		int p;
 
 		for (p = 0; cmd[p] && cmd[p] != '%'; p++);
 
-		add_bytes_to_str(&n, &l, cmd, p);
+		add_bytes_to_string(&string, cmd, p);
 		cmd += p;
 
 		if (*cmd == '%') {
 			cmd++;
 			switch (*cmd) {
 				case 'u':
-					add_to_str(&n, &l, url);
+					add_to_string(&string, url);
 					break;
 				case 'h':
-					if (host) add_to_str(&n, &l, host);
+					if (host)
+						add_to_string(&string, host);
 					break;
 				case 'p':
-					if (port) add_to_str(&n, &l, port);
+					if (port)
+						add_to_string(&string, port);
 					break;
 				case 'd':
-					if (dir) add_to_str(&n, &l, dir);
+					if (dir)
+						add_to_string(&string, dir);
 					break;
 				case 's':
-					if (subj) add_to_str(&n, &l, subj);
+					if (subj)
+						add_to_string(&string, subj);
 					break;
 				default:
-					add_bytes_to_str(&n, &l, cmd - 1, 2);
+					add_bytes_to_string(&string, cmd - 1, 2);
 					break;
 			}
 			if (*cmd) cmd++;
 		}
 	}
 
-	return n;
+	return string.source;
 }
 
 /* Stay silent about complete RFC 2368 support or do it yourself! ;-).

@@ -1,3 +1,57 @@
+Wed Oct  2 15:29:55 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Cosmetical changes.  
+
+Wed Oct  2 15:25:48 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	An useless line was removed.  
+
+Wed Oct  2 15:12:36 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	sscanf() call was dropped.  
+
+Wed Oct  2 14:07:31 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	One more step to EPSV support, still not fully tested.  
+
+Wed Oct  2 10:08:45 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Some unused variables were removed.  
+
+Wed Oct  2 08:52:06 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Some comments were added.  
+
+Wed Oct  2 08:48:17 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: ftpparse.c, ftpparse.h:
+
+	Tidyup. Char type was replaced by unsigned char type.  
+
+Wed Oct  2 08:46:43 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Some code concerning EPSV support was added. Thanks to Witold.  
+
+Wed Oct  2 07:29:44 2002  Laurent Monin <zas@norz.org>:
+
+	* AUTHORS:
+
+	Fullname for Arun ;) 
+
 Tue Oct  1 17:11:46 2002  Laurent Monin <zas@norz.org>:
 
 	* src/protocol/ftpparse.c:

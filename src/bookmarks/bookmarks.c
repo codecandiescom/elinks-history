@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.56 2002/11/29 09:36:56 zas Exp $ */
+/* $Id: bookmarks.c,v 1.57 2002/11/29 09:48:03 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -375,21 +375,28 @@ write_bookmarks_do(struct secure_save_info *ssi, struct list_head *bookmarks)
 	struct bookmark *bm;
 
 	foreach (bm, *bookmarks) {
+		unsigned char *p;
 		int i;
-		unsigned char *p = stracpy(bm->title);
+		int bad = 0;
 
-		if (!p) break;
-
+		p = bm->title;
 		for (i = strlen(p) - 1; i >= 0; i--)
 			if (p[i] < ' ')
 				p[i] = ' ';
-		secure_fprintf(ssi, "%s\t%s\t%d\t", p, bm->url, bm->box_item->depth);
+
+		p = bm->url;
+		for (i = strlen(p) - 1; i >= 0; i--)
+			if (p[i] < ' ')
+				bad = 1; /* Incorrect url, skip it. */
+
+		if (bad) continue;
+
+		secure_fprintf(ssi, "%s\t%s\t%d\t", bm->title, bm->url, bm->box_item->depth);
 		if (bm->box_item->type == BI_FOLDER)
 			secure_fputc(ssi, 'F');
 		if (bm->box_item->expanded)
 			secure_fputc(ssi, 'E');
 		secure_fputc(ssi, '\n');
-		mem_free(p);
 		if (ssi->err) break;
 
 		if (!list_empty(bm->child))

@@ -238,6 +238,27 @@ if test "$cf_result" = no; then
 	fi
 fi
 
+dnl ===================================================================
+dnl Save and restore the current build flags
+dnl ===================================================================
+
+dnl TODO: Move to m4/
+
+AC_DEFUN([AC_SAVE_FLAGS],
+[
+	CFLAGS_X="$CFLAGS";
+	CPPFLAGS_X="$CPPFLAGS";
+	LDFLAGS_X="$LDFLAGS";
+	LIBS_X="$LIBS"
+])
+
+AC_DEFUN([AC_RESTORE_FLAGS],
+[
+	CFLAGS="$CFLAGS_X";
+	CPPFLAGS="$CPPFLAGS_X";
+	LDFLAGS="$LDFLAGS_X";
+	LIBS="$LIBS_X"
+])
 
 dnl ===================================================================
 dnl Checks for gpm, optional even if installed.
@@ -250,9 +271,7 @@ AC_MSG_CHECKING([for gpm support])
 if test "$withval" = yes; then withval=""; fi
 
 if test -z "$disable_gpm"; then
-	CFLAGS_X="$CFLAGS";
-	LDFLAGS_X="$LDFLAGS";
-	CPPFLAGS_X="$CPPFLAGS";
+	AC_SAVE_FLAGS
 	if test -d "$withval"; then
 		CFLAGS="$CFLAGS -I$withval/include";
 		CPPFLAGS="$CPPFLAGS -I$withval/include";
@@ -265,9 +284,7 @@ if test -z "$disable_gpm"; then
 	fi
 
 	if test "$cf_result" != yes; then
-		CFLAGS="$CFLAGS_X";
-		CPPFLAGS="$CPPFLAGS_X";
-		LDFLAGS="$LDFLAGS_X";
+		AC_RESTORE_FLAGS
 	fi
 else
 	AC_MSG_RESULT(no)
@@ -284,9 +301,7 @@ AC_MSG_CHECKING([for zlib support])
 if test "$withval" = yes; then withval=""; fi
 
 if test -z "$disable_zlib"; then
-	CFLAGS_X="$CFLAGS";
-	CPPFLAGS_X="$CPPFLAGS";
-	LDFLAGS_X="$LDFLAGS";
+	AC_SAVE_FLAGS
 	if test -d "$withval"; then
 		CFLAGS="$CFLAGS -I$withval/include";
 		CPPFLAGS="$CPPFLAGS -I$withval/include";
@@ -299,9 +314,7 @@ if test -z "$disable_zlib"; then
 	fi
 
 	if test "$cf_result" != yes; then
-		CFLAGS="$CFLAGS_X";
-		CPPFLAGS="$CPPFLAGS_X";
-		LDFLAGS="$LDFLAGS_X";
+		AC_RESTORE_FLAGS
 	fi
 else
 	AC_MSG_RESULT(no)
@@ -319,9 +332,7 @@ AC_MSG_CHECKING([for bzlib support])
 if test "$withval" = yes; then withval=""; fi
 
 if test -z "$disable_bzlib"; then
-	CFLAGS_X="$CFLAGS";
-	CPPFLAGS_X="$CPPFLAGS";
-	LDFLAGS_X="$LDFLAGS";
+	AC_SAVE_FLAGS
 	if test -d "$withval"; then
 		CFLAGS="$CFLAGS -I$withval/include";
 		CPPFLAGS="$CPPFLAGS -I$withval/include";
@@ -334,9 +345,7 @@ if test -z "$disable_bzlib"; then
 	fi
 
 	if test "$cf_result" != yes; then
-		CFLAGS="$CFLAGS_X";
-		CPPFLAGS="$CPPFLAGS_X";
-		LDFLAGS="$LDFLAGS_X";
+		AC_RESTORE_FLAGS
 	fi
 else
 	AC_MSG_RESULT(no)
@@ -359,7 +368,7 @@ dnl ===================================================================
 
 AC_MSG_CHECKING([for OS/2 threads])
 
-CFLAGS_X="$CFLAGS"
+AC_SAVE_FLAGS
 CFLAGS="$CFLAGS -Zmt"
 
 AC_TRY_LINK([#include <stdlib.h>],
@@ -369,7 +378,7 @@ AC_MSG_RESULT($cf_result)
 if test "$cf_result" = yes; then
 	AC_DEFINE(HAVE_BEGINTHREAD)
 else
-	CFLAGS="$CFLAGS_X"
+	AC_RESTORE_FLAGS
 fi
 
 AC_CHECK_FUNC(MouOpen, AC_DEFINE(HAVE_MOUOPEN))
@@ -377,8 +386,7 @@ AC_CHECK_FUNC(_read_kbd, AC_DEFINE(HAVE_READ_KBD))
 
 AC_MSG_CHECKING([for XFree for OS/2])
 
-CFLAGS_X="$CFLAGS"
-LIBS_X="$LIBS"
+AC_SAVE_FLAGS
 
 cf_result=no
 
@@ -397,8 +405,7 @@ if test -n "$X11ROOT"; then
 fi
 
 if test "$cf_result" != yes; then
-	CFLAGS="$CFLAGS_X"
-	LIBS="$LIBS_X"
+	AC_RESTORE_FLAGS
 else
 	AC_DEFINE(X2)
 fi
@@ -437,9 +444,7 @@ AC_MSG_CHECKING([for Guile])
 
 cf_result=no
 
-CFLAGS_X="$CFLAGS"
-CPPFLAGS_X="$CPPFLAGS"
-LIBS_X="$LIBS"
+AC_SAVE_FLAGS
 
 if test "$enable_guile" = "yes"; then
 	## Based on the GUILE_FLAGS macro.
@@ -458,9 +463,7 @@ if test "$enable_guile" = "yes"; then
 fi
 
 if test "$cf_result" != "yes"; then
-	CFLAGS="$CFLAGS_X"
-	CPPFLAGS="$CPPFLAGS_X"
-	LIBS="$LIBS_X"
+	AC_RESTORE_FLAGS
 else
 	AC_DEFINE(HAVE_GUILE)
 	AC_DEFINE(HAVE_SCRIPTING)
@@ -498,9 +501,7 @@ AC_MSG_CHECKING([for Perl])
 
 cf_result=no
 
-CFLAGS_X="$CFLAGS"
-CPPFLAGS_X="$CPPFLAGS"
-LIBS_X="$LIBS"
+AC_SAVE_FLAGS
 
 if test "$enable_perl" = "yes"; then
 	PERL_LIBS="`perl -MExtUtils::Embed -e ldopts`"
@@ -512,9 +513,7 @@ if test "$enable_perl" = "yes"; then
 fi
 
 if test "$cf_result" != "yes"; then
-	CFLAGS="$CFLAGS_X"
-	CPPFLAGS="$CPPFLAGS_X"
-	LIBS="$LIBS_X"
+	AC_RESTORE_FLAGS
 else
 	AC_DEFINE(HAVE_PERL)
 	AC_DEFINE(HAVE_SCRIPTING)
@@ -538,9 +537,7 @@ AC_MSG_CHECKING([for Lua])
 
 if test "$withval" = yes; then withval=""; fi
 
-CFLAGS_X="$CFLAGS"
-CPPFLAGS_X="$CPPFLAGS"
-LIBS_X="$LIBS"
+AC_SAVE_FLAGS
 cf_result=no
 
 if test -z "$disable_lua"; then
@@ -583,9 +580,7 @@ fi
 AC_MSG_RESULT($cf_result)
 
 if test "$cf_result" != yes; then
-	CFLAGS="$CFLAGS_X"
-	CPPFLAGS="$CPPFLAGS_X"
-	LIBS="$LIBS_X"
+	AC_RESTORE_FLAGS
 else
 	AC_DEFINE(HAVE_LUA)
 	AC_DEFINE(HAVE_SCRIPTING)
@@ -630,9 +625,7 @@ dnl ---- OpenSSL
 
 AC_MSG_CHECKING([for OpenSSL])
 
-CFLAGS_X="$CFLAGS"
-CPPFLAGS_X="$CPPFLAGS"
-LIBS_X="$LIBS"
+AC_SAVE_FLAGS
 cf_result="no"
 
 if test "$disable_openssl" = yes; then
@@ -675,9 +668,7 @@ else
 		if test "$withval" = yes; then
 			AC_MSG_ERROR("OpenSSL not found")
 		fi
-	        CFLAGS="$CFLAGS_X"
-	        CPPFLAGS="$CPPFLAGS_X"
-        	LIBS="$LIBS_X"
+		AC_RESTORE_FLAGS
 	else
 		AC_DEFINE(HAVE_OPENSSL)
 		AC_DEFINE(HAVE_SSL)
@@ -693,9 +684,7 @@ dnl it looks ugly then.
 if test "$cf_result" = yes; then
 	cf_result="not used"
 else
-	CFLAGS_X="$CFLAGS"
-	CPPFLAGS_X="$CPPFLAGS"
-	LIBS_X="$LIBS"
+	AC_SAVE_FLAGS
 	cf_result="no"
 
 	if test -z "$disable_gnutls"; then
@@ -737,9 +726,7 @@ else
 				AC_MSG_CHECKING([for GNU TLS])
 				AC_MSG_ERROR("GNUTLS not found")
 			fi
-			CFLAGS="$CFLAGS_X"
-			CPPFLAGS="$CPPFLAGS_X"
-			LIBS="$LIBS_X"
+			AC_RESTORE_FLAGS
 		else
 			AC_DEFINE(HAVE_GNUTLS)
 			AC_DEFINE(HAVE_SSL)

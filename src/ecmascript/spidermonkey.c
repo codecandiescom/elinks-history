@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.38 2004/09/25 15:40:21 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.39 2004/09/25 17:38:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,7 +73,7 @@ union prop_union {
 	union prop_union p; \
  \
 	/* Prevent "Unused variable" warnings. */ \
-	if (!JSVAL_IS_INT(id) || (p.string = NULL)) \
+	if ((p.string = NULL)) \
 		goto bye;
 
 #define VALUE_TO_JSVAL_END(vp) \
@@ -123,7 +123,7 @@ union jsval_union {
 	union jsval_union v; \
  \
 	/* Prevent "Unused variable" warnings. */ \
-	if (!JSVAL_IS_INT(id) || (v.string = NULL)) \
+	if ((v.string = NULL)) \
 		goto bye;
 
 #define JSVAL_REQUIRE(vp, type) \
@@ -186,7 +186,7 @@ static const JSClass window_class = {
 enum window_prop {
 	JSP_WIN_CLOSED,
 	JSP_WIN_DOC,
-	JSP_WIN_LOC,
+	/* JSP_WIN_LOC, */
 	JSP_WIN_MBAR,
 	JSP_WIN_SELF,
 	JSP_WIN_SBAR,
@@ -195,7 +195,12 @@ enum window_prop {
 static const JSPropertySpec window_props[] = {
 	{ "closed",	JSP_WIN_CLOSED,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "document",	JSP_WIN_DOC,	JSPROP_ENUMERATE | JSPROP_READONLY },
-	{ "location",	JSP_WIN_LOC,	JSPROP_ENUMERATE | JSPROP_READONLY },
+	/* "location" is special because we need to simulate "location.href"
+	 * when the code is asking directly for "location". We do not register
+	 * it as a "known" property since that was yielding strange bugs
+	 * (SpiderMonkey was still asking us about the "location" string after
+	 * assigning to it once), instead we do just a little string
+	 * comparing. */
 	{ "menubar",	JSP_WIN_MBAR,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "self",	JSP_WIN_SELF,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "statusbar",	JSP_WIN_SBAR,	JSPROP_ENUMERATE | JSPROP_READONLY },
@@ -210,6 +215,11 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct document_view *doc_view = JS_GetPrivate(ctx, obj);
 
 	VALUE_TO_JSVAL_START;
+	/* No need for special location measurements - when location is
+	 * then evaluated in string context, toString() is called which
+	 * we overrode for that class below, so everything's fine. */
+	if (!JSVAL_IS_INT(id))
+		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_WIN_CLOSED:
@@ -241,19 +251,29 @@ static JSBool
 window_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	JSVAL_TO_VALUE_START;
+	if (JSVAL_IS_STRING(id)) {
+		JSVAL_REQUIRE(&id, STRING);
+		if (!strcmp(v.string, "location")) {
+			jsval location;
+			JSObject *locobj;
+
+			if (!JS_GetProperty(ctx, obj, "location", &location)) {
+				goto bye;
+			}
+			locobj = JSVAL_TO_OBJECT(location);
+			if (!locobj) {
+				INTERNAL("Asking for window's location yielded "
+				         "NULL object.");
+				goto bye;
+			}
+			location_set_property(ctx, locobj,
+					      /* JSP_LOC_HREF */ 0, vp);
+		}
+		goto bye;
+	} else if (!JSVAL_IS_INT(id))
+		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
-	case JSP_WIN_LOC:
-	{
-		jsval location;
-
-		if (!JS_GetProperty(ctx, obj, "location", &location)) {
-			break;
-		}
-		location_set_property(ctx, JSVAL_TO_OBJECT(location),
-		                      /* JSP_LOC_HREF */ 0, vp);
-		break;
-	}
 	default:
 		INTERNAL("Invalid ID %d in window_set_property().", JSVAL_TO_INT(id));
 		goto bye;
@@ -320,6 +340,8 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct document *document = doc_view->document;
 
 	VALUE_TO_JSVAL_START;
+	if (!JSVAL_IS_INT(id))
+		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_DOC_TITLE: p.string = document->title; prop_type = JSPT_STRING; break;
@@ -340,6 +362,8 @@ document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct document *document = doc_view->document;
 
 	JSVAL_TO_VALUE_START;
+	if (!JSVAL_IS_INT(id))
+		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_DOC_TITLE:
@@ -377,6 +401,8 @@ location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct view_state *vs = &cur_loc(doc_view->session)->vs;
 
 	VALUE_TO_JSVAL_START;
+	if (!JSVAL_IS_INT(id))
+		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_LOC_HREF: p.string = get_uri_string(vs->uri, URI_ORIGINAL); prop_type = JSPT_ASTRING; break;
@@ -395,6 +421,8 @@ location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct document_view *doc_view = JS_GetPrivate(ctx, parent);
 
 	JSVAL_TO_VALUE_START;
+	if (!JSVAL_IS_INT(id))
+		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_LOC_HREF:
@@ -469,6 +497,8 @@ unibar_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	unsigned char *bar = JS_GetPrivate(ctx, obj);
 
 	VALUE_TO_JSVAL_START;
+	if (!JSVAL_IS_INT(id))
+		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_UNIBAR_VISIBLE:
@@ -501,6 +531,8 @@ unibar_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	unsigned char *bar = JS_GetPrivate(ctx, obj);
 
 	JSVAL_TO_VALUE_START;
+	if (!JSVAL_IS_INT(id))
+		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_UNIBAR_VISIBLE:

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.96 2004/12/21 07:24:36 miciah Exp $ */
+/* $Id: globhist.c,v 1.97 2004/12/21 07:26:17 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -106,15 +106,21 @@ remove_item_from_global_history(struct global_history_item *history_item)
 	}
 }
 
+static void
+done_global_history_item(struct global_history_item *history_item)
+{
+	done_listbox_item(&globhist_browser, history_item->box_item);
+	mem_free(history_item->title);
+	mem_free(history_item->url);
+	mem_free(history_item);
+}
+
 void
 delete_global_history_item(struct global_history_item *history_item)
 {
 	remove_item_from_global_history(history_item);
 
-	done_listbox_item(&globhist_browser, history_item->box_item);
-	mem_free(history_item->title);
-	mem_free(history_item->url);
-	mem_free(history_item);
+	done_global_history_item(history_item);
 }
 
 /* Search global history for item matching url. */

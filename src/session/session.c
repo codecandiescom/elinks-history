@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.446 2004/06/10 16:59:01 jonas Exp $ */
+/* $Id: session.c,v 1.447 2004/06/10 17:02:21 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -695,7 +695,6 @@ decode_session_info(struct terminal *term, int len, const int *data)
 {
 	struct initial_session_info *info;
 	struct session *base_session;
-	struct uri_list uri_list;
 	enum remote_session_flags remote = 0;
 	struct uri *current_uri, *uri;
 	unsigned char *str;
@@ -756,7 +755,6 @@ decode_session_info(struct terminal *term, int len, const int *data)
 	if (!info) return NULL;
 
 	str = (unsigned char *) data;
-	memset(&uri_list, 0, sizeof(struct uri_list));
 
 	/* Extract multiple (possible) NUL terminated URIs */
 	while (len > 0) {
@@ -771,7 +769,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		mem_free_if(decoded);
 
 		if (uri) {
-			add_to_uri_list(&uri_list, uri);
+			add_to_uri_list(&info->uri_list, uri);
 			done_uri(uri);
 		}
 
@@ -779,7 +777,6 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		str  = end + 1;
 	}
 
-	memcpy(&info->uri_list, &uri_list, sizeof(struct uri_list));
 	return info;
 }
 

@@ -19,6 +19,10 @@
 #include "config.h"
 #endif
 
+#ifdef HAVE_LOCALE_H
+#include <locale.h>
+#endif
+
 #include <stdlib.h>		/* Just for NULL.  */
 
 #include "gettextP.h"

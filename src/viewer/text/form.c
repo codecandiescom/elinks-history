@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.72 2003/12/25 12:10:37 pasky Exp $ */
+/* $Id: form.c,v 1.73 2003/12/25 12:11:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -838,7 +838,7 @@ submit_form_reload(struct terminal *term, void *xxx, struct session *ses)
 
 
 int
-field_op_do(struct session *ses, struct document_view *doc_view,
+field_op_do(struct terminal *term, struct document_view *doc_view,
 	    struct form_control *frm, struct form_state *fs, struct link *l,
 	    struct term_event *ev, int rep)
 {
@@ -893,7 +893,7 @@ field_op_do(struct session *ses, struct document_view *doc_view,
 			break;
 		case ACT_EDIT:
 			if (frm->type == FC_TEXTAREA && !frm->ro)
-			  	textarea_edit(0, ses->tab->term, frm, fs, doc_view, l);
+			  	textarea_edit(0, term, frm, fs, doc_view, l);
 			break;
 		case ACT_COPY_CLIPBOARD:
 			set_clipboard_text(fs->value);
@@ -992,7 +992,7 @@ field_op_do(struct session *ses, struct document_view *doc_view,
 			break;
 
 		case ACT_REDRAW:
-			redraw_terminal_cls(ses->tab->term);
+			redraw_terminal_cls(term);
 			x = 0;
 			break;
 
@@ -1035,7 +1035,7 @@ field_op(struct session *ses, struct document_view *doc_view, struct link *l,
 	if (!fs || !fs->value) return 0;
 
 	if (ev->ev == EV_KBD) {
-		x = field_op_do(ses, doc_view, frm, fs, l, ev, rep);
+		x = field_op_do(ses->tab->term, doc_view, frm, fs, l, ev, rep);
 	} else {
 		x = 0;
 	}

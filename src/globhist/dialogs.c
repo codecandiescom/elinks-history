@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.74 2003/11/21 01:13:27 jonas Exp $ */
+/* $Id: dialogs.c,v 1.75 2003/11/22 01:48:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,7 +169,7 @@ really_delete_global_history_item(void *vhop)
 		traverse_listbox_items_list(gh_box_items.next, 0, 0,
 						delete_marked, ctx);
 	}
- }
+}
 
 static void
 cancel_delete_globhist_item(void *vhop)
@@ -233,18 +233,6 @@ listbox_delete_historyitem(struct terminal *term, struct listbox_data *box)
 			N_("No"), cancel_delete_globhist_item, B_ESC);
 
 	return;
-}
-
-
-static int
-push_delete_button(struct dialog_data *dlg_data,
-		   struct widget_data *some_useless_delete_button)
-{
-	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
-	struct terminal *term = dlg_data->win->term;
-
-	listbox_delete_historyitem(term, box);
-	return 0;
 }
 
 
@@ -363,7 +351,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 #ifdef BOOKMARKS
 			N_("Bookmark"), push_bookmark_button, B_ENTER, NULL,
 #endif
-			N_("Delete"), push_delete_button, B_ENTER, NULL,
+			N_("Delete"), push_hierbox_delete_button, B_ENTER, NULL,
 			N_("Search"), push_search_button, B_ENTER, NULL,
 			N_("Toggle display"), push_toggle_display_button, B_ENTER, ses,
 			N_("Clear"), push_clear_button, B_ENTER, NULL);

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.122 2003/11/21 16:15:06 jonas Exp $ */
+/* $Id: dialogs.c,v 1.123 2003/11/22 01:48:50 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -364,18 +364,6 @@ listbox_delete_bookmark(struct terminal *term, struct listbox_data *box)
 	return;
 }
 
-/* Callback for the "delete" button in the bookmark manager */
-static int
-push_delete_button(struct dialog_data *dlg_data,
-		   struct widget_data *some_useless_delete_button)
-{
-	struct terminal *term = dlg_data->win->term;
-	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
-
-	listbox_delete_bookmark(term, box);
-	return 0;
-}
-
 
 /**** MOVE ***********************************************************/
 
@@ -526,7 +514,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 			BOOKMARK_MANAGER_BUTTONS,
 			N_("Goto"), push_goto_button, B_ENTER, ses,
 			N_("Edit"), push_edit_button, B_ENTER, ses,
-			N_("Delete"), push_delete_button, B_ENTER, NULL,
+			N_("Delete"), push_hierbox_delete_button, B_ENTER, NULL,
 			N_("Move"), push_move_button, B_ENTER, NULL,
 			N_("Add folder"), push_add_folder_button, B_ENTER, NULL,
 			N_("Add"), push_add_button, B_ENTER, NULL,

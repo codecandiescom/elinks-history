@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.76 2003/11/22 01:27:04 jonas Exp $ */
+/* $Id: hierbox.c,v 1.77 2003/11/22 01:48:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -300,4 +300,16 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 	add_dlg_end(dlg, buttons + 2);
 
 	return do_dialog(term, dlg, getml(dlg, NULL));
+}
+
+int
+push_hierbox_delete_button(struct dialog_data *dlg_data,
+			   struct widget_data *button)
+{
+	struct terminal *term = dlg_data->win->term;
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
+
+	assert(box->ops->del);
+	box->ops->del(term, box);
+	return 0;
 }

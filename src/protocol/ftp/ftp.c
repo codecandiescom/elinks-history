@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.25 2002/09/04 16:02:52 zas Exp $ */
+/* $Id: ftp.c,v 1.26 2002/09/04 16:43:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,7 +127,7 @@ ok:
 }
 
 
-/* Initialize or continue ftp connection */
+/* Initialize or continue ftp connection. */
 void
 ftp_func(struct connection *conn)
 {
@@ -149,7 +149,7 @@ ftp_func(struct connection *conn)
 }
 
 
-/* Send USER command */
+/* Send USER command. */
 void
 ftp_login(struct connection *conn)
 {
@@ -179,7 +179,7 @@ ftp_login(struct connection *conn)
 }
 
 
-/* Get connection response */
+/* Get connection response. */
 void
 ftp_logged(struct connection *conn)
 {
@@ -190,7 +190,7 @@ ftp_logged(struct connection *conn)
 }
 
 
-/* Parse connection response */
+/* Parse connection response. */
 void
 ftp_got_info(struct connection *conn, struct read_buffer *rb)
 {
@@ -222,7 +222,7 @@ ftp_got_info(struct connection *conn, struct read_buffer *rb)
 }
 
 
-/* Parse USER response and send PASS command if needed */
+/* Parse USER response and send PASS command if needed. */
 void
 ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
 {
@@ -297,7 +297,7 @@ ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
 }
 
 
-/* Get PASS command response */
+/* Get PASS command response. */
 void
 ftp_sent_passwd(struct connection *conn)
 {
@@ -308,7 +308,7 @@ ftp_sent_passwd(struct connection *conn)
 }
 
 
-/* Parse PASS command response */
+/* Parse PASS command response. */
 void
 ftp_pass_info(struct connection *conn, struct read_buffer *rb)
 {
@@ -393,7 +393,7 @@ add_file_cmd_to_str(struct connection *conn)
 	unsigned char *data;
 	unsigned char *data_end;
 	unsigned char pc[6];
-	int pasv_sock;
+	int data_sock;
 	struct ftp_connection_info *c_i;
 	unsigned char *str;
 	int strl = 0;
@@ -413,10 +413,10 @@ add_file_cmd_to_str(struct connection *conn)
 		return NULL;
 	}
 
-	pasv_sock = get_pasv_socket(conn, conn->sock1, pc);
-	if (pasv_sock < 0)
+	data_sock = get_pasv_socket(conn, conn->sock1, pc);
+	if (data_sock < 0)
 		return NULL;
-	conn->sock2 = pasv_sock;
+	conn->sock2 = data_sock;
 
 	data = get_url_data(conn->url);
 	if (!data) {
@@ -480,14 +480,16 @@ add_file_cmd_to_str(struct connection *conn)
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return NULL;
 	}
+	
 	strcpy(c_i->cmd_buffer, str);
 	mem_free(str);
 	conn->info = c_i;
+	
 	return c_i;
 }
 
 
-/* Send commands to retrieve file or dir */
+/* Send commands to retrieve file or directory. */
 void
 ftp_send_retr_req(struct connection *conn, int state)
 {
@@ -537,6 +539,50 @@ ftp_retr_1(struct connection *conn)
 
 	if (!rb) return;
 	read_from_socket(conn, conn->sock1, rb, ftp_retr_file);
+}
+
+/* Parse RETR response and return file size or -1 on error. */
+long int get_filesize_from_RETR(unsigned char *data, int data_len)
+{
+	long int file_len;
+	int pos, pos_file_len = 0;
+
+	/* Getting file size from text response.. */
+	/* 150 Opening BINARY mode data connection for hello-1.0-1.1.diff.gz (16452 bytes). */
+
+	for (pos = 0; pos < data_len && data[pos] != 10; pos++)
+		if (data[pos] == '(')
+			pos_file_len = pos;
+
+	if (!pos_file_len || pos_file_len == data_len - 1)
+		return -1;
+
+	pos_file_len++;
+	if (data[pos_file_len] < '0' || data[pos_file_len] > '9')
+		return -1;
+
+	for (pos = pos_file_len; pos < data_len; pos++)
+		if (data[pos] < '0' || data[pos] > '9')
+			goto next;
+	
+	return -1;
+
+next:
+	for (; pos < data_len; pos++)
+		if (data[pos] != ' ')
+			break;
+
+	if (pos + 4 > data_len)
+		return -1;
+
+	if (casecmp(&data[pos], "byte", 4))
+		return -1;
+
+	file_len = strtol(&data[pos_file_len], NULL, 10);
+
+	if (errno == ERANGE) return -1;
+
+	return file_len;
 }
 
 
@@ -607,48 +653,17 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (response >= 100 && response < 200) {
-		/* We only need to parse response after RETR */
-		if (!c_i->dir) {
-			int file_len;
-			unsigned char *data = rb->data;
-			int pos, pos_file_len = 0;
+		/* We only need to parse response after RETR to
+		 * get filesize if needed. */
+		if (!c_i->dir && !conn->from) {
+			long int file_len = 
+				get_filesize_from_RETR(rb->data, rb->len);
 
-			/* Getting file size from text response.. */
-			/* 150 Opening BINARY mode data connection for hello-1.0-1.1.diff.gz (16452 bytes). */
-
-			for (pos = 0; pos < rb->len && data[pos] != 10; pos++)
-				if (data[pos] == '(')
-					pos_file_len = pos;
-
-			if (!pos_file_len || pos_file_len == rb->len - 1)
-				goto nol;
-
-			pos_file_len++;
-			if (data[pos_file_len] < '0' || data[pos_file_len] > '9')
-				goto nol;
-
-			for (pos = pos_file_len; pos < rb->len; pos++)
-				if (data[pos] < '0' || data[pos] > '9')
-					goto quak;
-			goto nol;
-
-quak:
-			for (; pos < rb->len; pos++)
-				if (data[pos] != ' ')
-					break;
-
-			if (pos + 4 > rb->len)
-				goto nol;
-
-			if (casecmp(&data[pos], "byte", 4))
-				goto nol;
-
-			file_len = strtol(&data[pos_file_len], NULL, 10);
-			if (file_len && !conn->from) {
-				/* FIXME: ..when downloads resuming implemented.. */
+			if (file_len > 0) {
+				/* FIXME: ..when downloads resuming
+				 * implemented.. */
 				conn->est_length = file_len;
 			}
-nol: ;
 		}
 	}
 
@@ -725,7 +740,7 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 }
 
 
-/* List a directory in html format */
+/* List a directory in html format. */
 int
 ftp_process_dirlist(struct cache_entry *c_e, int *pos, int *dpos,
 		    unsigned char *buffer, int buflen, int last,
@@ -748,7 +763,7 @@ ftp_process_dirlist(struct cache_entry *c_e, int *pos, int *dpos,
 		int strl;
 		int newline = 0;
 
-		/* Newline quest */
+		/* Newline quest. */
 
 		for (bufp = 0; bufp < bufl; bufp++) {
 			if (buf[bufp] == '\n') {
@@ -766,7 +781,7 @@ ftp_process_dirlist(struct cache_entry *c_e, int *pos, int *dpos,
 			ret += bufp;
 		}
 		
-		/* Process line whose end we've already found */
+		/* Process line whose end we've already found. */
 
 		str = init_str();
 		if (!str) return -1;
@@ -783,7 +798,7 @@ direntry:
 					break;
 
 			if (symlinkpos > bufp - strlen(" -> ")) {
-				/* It's not a symlink */
+				/* It's not a symlink. */
 				symlinkpos = bufp;
 			}
 

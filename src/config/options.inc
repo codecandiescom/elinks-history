@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.168 2004/12/29 18:14:41 jonas Exp $ */
+/* $Id: options.inc,v 1.169 2004/12/29 22:35:54 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -735,7 +735,7 @@ static struct option_info config_options_info[] = {
 		"_template_", 0,
 		N_("Options specific to this terminal type (according to $TERM value).")),
 
-	INIT_OPT_INT("terminal._template_", N_("Border type"),
+	INIT_OPT_INT("terminal._template_", N_("Type"),
 		"type", 0, 0, 4, 0,
 		N_("Terminal type; matters mostly only when drawing frames and\n"
 		"dialog box borders:\n"
@@ -751,7 +751,7 @@ static struct option_info config_options_info[] = {
 		"and lines working at the same time. Makes sense only with linux\n"
 		"terminal.")),
 
-	INIT_OPT_BOOL("terminal._template_", N_("I/O in UTF8"),
+	INIT_OPT_BOOL("terminal._template_", N_("UTF-8 I/0"),
 		"utf_8_io", 0, 0,
 		N_("Enable I/O in UTF8 for Unicode terminals. Note that currently,\n"
 		"only the subset of UTF8 according to terminal codepage is used.")),
@@ -775,7 +775,7 @@ static struct option_info config_options_info[] = {
 		"1 is 16 color mode, uses the common ANSI colors\n"
 		"2 is 256 color mode, uses XTerm RGB codes")),
 
-	INIT_OPT_BOOL("terminal._template_", N_("Enable transparency"),
+	INIT_OPT_BOOL("terminal._template_", N_("Transparency"),
 		"transparency", 0, 1,
 		N_("If we should not set the background to black. This is particularly\n"
 		"useful when we have a terminal (typically in some windowing\n"
@@ -783,7 +783,7 @@ static struct option_info config_options_info[] = {
 		"it will be visible in ELinks as well. Note that this option makes\n"
 		"sense only when colors are enabled.")),
 
-	INIT_OPT_BOOL("terminal._template_", N_("Use underline"),
+	INIT_OPT_BOOL("terminal._template_", N_("Underline"),
 		"underline", 0, 0,
 		N_("If we should use underline or enhance the color instead.")),
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.164 2004/12/28 13:24:13 zas Exp $ */
+/* $Id: options.c,v 1.165 2004/12/29 22:35:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,9 +163,9 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	add_dlg_radio(dlg, _("256 colors", term), 2, COLOR_MODE_256, values[TERM_OPT_COLORS]);
 #endif
 
-	add_dlg_checkbox(dlg, _("Use ^[[11m", term), values[TERM_OPT_M11_HACK]);
+	add_dlg_checkbox(dlg, _("Switch fonts for line drawing", term), values[TERM_OPT_M11_HACK]);
 	add_dlg_checkbox(dlg, _("Restrict frames in cp850/852", term), values[TERM_OPT_RESTRICT_852]);
-	add_dlg_checkbox(dlg, _("Block the cursor", term), values[TERM_OPT_BLOCK_CURSOR]);
+	add_dlg_checkbox(dlg, _("Block cursor", term), values[TERM_OPT_BLOCK_CURSOR]);
 	add_dlg_checkbox(dlg, _("Transparency", term), values[TERM_OPT_TRANSPARENCY]);
 	add_dlg_checkbox(dlg, _("Underline", term), values[TERM_OPT_UNDERLINE]);
 	add_dlg_checkbox(dlg, _("UTF-8 I/O", term), values[TERM_OPT_UTF_8_IO]);

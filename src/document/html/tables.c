@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.169 2004/05/16 13:03:59 zas Exp $ */
+/* $Id: tables.c,v 1.170 2004/05/16 13:08:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -817,25 +817,25 @@ static inline void
 get_cell_width(unsigned char *start, unsigned char *end, int cellpadding, int w,
 	       int a, int *min, int *max, int n_link, int *n_links)
 {
-	struct part *p;
+	struct part *part;
 
 	if (min) *min = -1;
 	if (max) *max = -1;
 	if (n_links) *n_links = n_link;
 
-	p = format_html_part(start, end, AL_LEFT, cellpadding, w, NULL, !!a, !!a,
-			     NULL, n_link);
-	if (!p) return;
+	part = format_html_part(start, end, AL_LEFT, cellpadding, w, NULL, !!a,
+			        !!a, NULL, n_link);
+	if (!part) return;
 
-	if (min) *min = p->box.width;
-	if (max) *max = p->max_width;
-	if (n_links) *n_links = p->link_num;
+	if (min) *min = part->box.width;
+	if (max) *max = part->max_width;
+	if (n_links) *n_links = part->link_num;
 
 	if (min && max) {
 		assertm(*min <= *max, "get_cell_width: %d > %d", *min, *max);
 	}
 
-	mem_free(p);
+	mem_free(part);
 }
 
 static inline void
@@ -1315,7 +1315,7 @@ get_table_heights(struct table *t)
 	for (j = 0; j < t->y; j++) {
 		for (i = 0; i < t->x; i++) {
 			struct table_cell *cell = CELL(t, i, j);
-			struct part *p;
+			struct part *part;
 			int xw = 0, sp;
 
 			if (!cell->is_used || cell->is_spanned) continue;
@@ -1326,12 +1326,12 @@ get_table_heights(struct table *t)
 				       get_vline_width(t, i + sp + 1) >= 0);
 			}
 
-			p = format_cell(t, i, j, NULL, 2, 2, xw);
-			if (!p) return;
+			part = format_cell(t, i, j, NULL, 2, 2, xw);
+			if (!part) return;
 
-			cell->height = p->box.height;
+			cell->height = part->box.height;
 			/* DBG("%d, %d.",xw, cell->height); */
-			mem_free(p);
+			mem_free(part);
 		}
 	}
 
@@ -1407,7 +1407,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 			}
 
 			if (cell->start) {
-				struct part *p = NULL;
+				struct part *part = NULL;
 				int xw = 0;
 				int yw = 0;
 				register int s;
@@ -1452,21 +1452,21 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 					else if (cell->valign == VALIGN_BOTTOM)
 						tmpy += (yw - cell->height);
 
-				   	p = format_cell(t, i, j, document, xp, tmpy, xw);
+				   	part = format_cell(t, i, j, document, xp, tmpy, xw);
 				}
 
-				if (p) {
+				if (part) {
 					int yt;
 
-					for (yt = 0; yt < p->box.height; yt++) {
+					for (yt = 0; yt < part->box.height; yt++) {
 						expand_lines(t->part, yp + yt);
 						expand_line(t->part, yp + yt, xp + t->columns_width[i]);
 					}
 
 					if (cell->fragment_id)
-						add_fragment_identifier(p, cell->fragment_id);
+						add_fragment_identifier(part, cell->fragment_id);
 
-					mem_free(p);
+					mem_free(part);
 				}
 
 				done_html_parser_state(state);

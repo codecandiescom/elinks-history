@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.186 2003/10/24 20:51:41 pasky Exp $ */
+/* $Id: session.c,v 1.187 2003/10/24 22:25:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -508,6 +508,11 @@ x:
 			ses->goto_position = NULL;
 		}
 	}
+
+	/* This is another "branch" in the browsing, so throw away the current
+	 * unhistory, we are venturing in another direction! */
+	if (ses->task == TASK_FORWARD)
+		clean_unhistory(&ses->history);
 }
 
 static void

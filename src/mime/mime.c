@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.2 2003/05/07 18:19:50 jonas Exp $ */
+/* $Id: mime.c,v 1.3 2003/05/16 22:29:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,9 +34,9 @@ done_mime()
 unsigned char *
 get_content_type(unsigned char *head, unsigned char *url)
 {
-	unsigned char *pos, *extension;
+	unsigned char *pos;
+	unsigned char *extension;
 	unsigned char *content_type;
-	int ext_len;
 
 	/* If there's one in header, it's simple.. */
 
@@ -51,7 +51,7 @@ get_content_type(unsigned char *head, unsigned char *url)
 			if (s) *s = '\0';
 
 			slen = strlen(content_type);
-			while (slen && content_type[slen - 1] <= ' ') {
+			while (slen && content_type[--slen - 1] <= ' ') {
 				content_type[--slen] = '\0';
 			}
 
@@ -69,8 +69,8 @@ get_content_type(unsigned char *head, unsigned char *url)
 	/* Get extension */
 
 	extension = NULL;
-	ext_len = 0;
 
+	/* Hmmm, well, can we do better there ? --Zas */
 	for (pos = url; *pos && !end_of_dir(*pos); pos++) {
 		if (*pos == '.') {
 			extension = pos + 1;
@@ -80,28 +80,27 @@ get_content_type(unsigned char *head, unsigned char *url)
 	}
 
 	if (extension) {
+		unsigned char *ext_type = init_str();
+		int el = 0;
+		int ext_len = 0;
+
+		if (!ext_type) return NULL; /* Bad thing. */
+
 		while (extension[ext_len]
 		       && !dir_sep(extension[ext_len])
 		       && !end_of_dir(extension[ext_len])) {
 			ext_len++;
 		}
-	}
 
-	/* Try to make application/x-extension from it */
+		/* Try to make application/x-extension from it */
 
-	if (extension) {
-		unsigned char *ext_type = init_str();
-		int el = 0;
+		add_to_str(&ext_type, &el, "application/x-");
+		add_bytes_to_str(&ext_type, &el, extension, ext_len);
 
-		if (ext_type) {
-			add_to_str(&ext_type, &el, "application/x-");
-			add_bytes_to_str(&ext_type, &el, extension, ext_len);
+		if (get_mime_type_handler(NULL, ext_type))
+			return ext_type;
 
-			if (get_mime_type_handler(NULL, ext_type))
-				return ext_type;
-
-			mem_free(ext_type);
-		}
+		mem_free(ext_type);
 	}
 
 	/* Fallback.. use some hardwired default */

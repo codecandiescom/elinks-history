@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.45 2003/05/06 14:52:12 pasky Exp $ */
+/* $Id: session.c,v 1.46 2003/05/06 20:16:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1300,20 +1300,19 @@ unsigned char *
 decode_url(unsigned char *url)
 {
 	unsigned char *u = init_str();
+	int l = 0;
+	size_t url_len = strlen(url);
 
-	if (u) {
-		int l = 0;
-		size_t url_len = strlen(url);
+	if (!u) return NULL;
 
-		for (; *url; url++, url_len--) {
-			if (url_len < 4 || url[0] != '=' || unhx(url[1]) == -1
-			    || unhx(url[2]) == -1 || url[3] != '=') {
-				add_chr_to_str(&u, &l, *url);
-			} else {
-				add_chr_to_str(&u, &l, (unhx(url[1]) << 4) + unhx(url[2]));
-			       	url += 3;
-				url_len -= 3;
-			}
+	for (; *url; url++, url_len--) {
+		if (url_len < 4 || url[0] != '=' || unhx(url[1]) == -1
+		    || unhx(url[2]) == -1 || url[3] != '=') {
+			add_chr_to_str(&u, &l, *url);
+		} else {
+			add_chr_to_str(&u, &l, (unhx(url[1]) << 4) + unhx(url[2]));
+		       	url += 3;
+			url_len -= 3;
 		}
 	}
 
@@ -1467,7 +1466,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 		l->stat.data = ses;
 		l->stat.end = (void *)doc_end_load;
 		load_url(l->vs.url, ses->ref_url, &l->stat, PRI_MAIN, cache_mode, -1);
-		foreach(ftl, ses->more_files) {
+		foreach (ftl, ses->more_files) {
 			if (ftl->req_sent && ftl->stat.state >= 0) continue;
 			ftl->stat.data = ftl;
 			ftl->stat.end = (void *)file_end_load;
@@ -1618,17 +1617,17 @@ goto_imgmap(struct session *ses, unsigned char *url, unsigned char *href,
 struct frame *
 ses_find_frame(struct session *ses, unsigned char *name)
 {
-	if (have_location(ses)) {
-		struct location *l = cur_loc(ses);
-		struct frame *frm;
+	struct location *l = cur_loc(ses);
+	struct frame *frm;
 
-		foreachback(frm, l->frames)
-			if (!strcasecmp(frm->name, name))
-				return frm;
+	if (!have_location(ses)) {
+		internal("ses_request_frame: no location yet");
+		return NULL;
 	}
-#ifdef DEBUG
-	else internal("ses_request_frame: no location yet");
-#endif
+
+	foreachback(frm, l->frames)
+		if (!strcasecmp(frm->name, name))
+			return frm;
 
 	return NULL;
 }
@@ -1637,36 +1636,39 @@ struct frame *
 ses_change_frame_url(struct session *ses, unsigned char *name,
 		     unsigned char *url)
 {
-	if (have_location(ses)) {
-		struct frame *frm;
-		size_t url_len = strlen(url);
-		struct location *l = cur_loc(ses);
+	struct location *l = cur_loc(ses);
+	struct frame *frm;
+	size_t url_len = strlen(url);
 
-		foreachback(frm, l->frames) if (!strcasecmp(frm->name, name)) {
-			if (url_len > strlen(frm->vs.url)) {
-				struct f_data_c *fd;
-				struct frame *nf = frm;
-
-				nf = mem_realloc(frm, sizeof(struct frame)
-					      + url_len + 1);
-				if (!nf) return NULL;
-
-				nf->prev->next = nf->next->prev = nf;
-
-				foreach(fd, ses->scrn_frames)
-					if (fd->vs == &frm->vs)
-						fd->vs = &nf->vs;
-
-				frm = nf;
-			}
-			memcpy(frm->vs.url, url, url_len + 1);
-
-			return frm;
-		}
+	if (!have_location(ses)) {
+		internal("ses_change_frame_url: no location yet");
+		return NULL;
 	}
-#ifdef DEBUG
-	else internal("ses_change_frame_url: no location yet");
-#endif
+
+	foreachback(frm, l->frames) {
+		if (strcasecmp(frm->name, name)) continue;
+
+		if (url_len > strlen(frm->vs.url)) {
+			struct f_data_c *fd;
+			struct frame *nf = frm;
+
+			nf = mem_realloc(frm, sizeof(struct frame)
+				      + url_len + 1);
+			if (!nf) return NULL;
+
+			nf->prev->next = nf->next->prev = nf;
+
+			foreach(fd, ses->scrn_frames)
+				if (fd->vs == &frm->vs)
+					fd->vs = &nf->vs;
+
+			frm = nf;
+		}
+		memcpy(frm->vs.url, url, url_len + 1);
+
+		return frm;
+	}
+
 	return NULL;
 
 }
@@ -1722,32 +1724,32 @@ tabwin_func(struct window *tab, struct event *ev, int fw)
 unsigned char *
 get_current_url(struct session *ses, unsigned char *str, size_t str_size)
 {
-	if (have_location(ses)) { /* Looking at something */
-		unsigned char *here = cur_loc(ses)->vs.url;
+	unsigned char *here, *end_of_url;
+	size_t url_len = 0;
 
-		if (here) {
-			size_t url_len = 0;
-			unsigned char *end_of_url = strchr(here, POST_CHAR); /* Find the length of the url */
+	/* Not looking at anything */
+	if (!have_location(ses))
+		return NULL;
 
-			if (end_of_url) {
-				url_len = (size_t)(end_of_url - here);
-			} else {
-				url_len = strlen(here);
-			}
+	here = cur_loc(ses)->vs.url;
 
-			/* Ensure that the url size is not greater than
-			 * str_size. We can't just happily
-			 * strncpy(str, here, str_size)
-			 * because we have to stop at POST_CHAR, not only at
-			 * NULL. */
-			if (url_len >= str_size)
-					url_len = str_size - 1;
-
-			return safe_strncpy(str, here, url_len + 1);
-		}
+	/* Find the length of the url */
+	end_of_url = strchr(here, POST_CHAR);
+	if (end_of_url) {
+		url_len = (size_t) (end_of_url - here);
+	} else {
+		url_len = strlen(here);
 	}
 
-	return NULL;
+	/* Ensure that the url size is not greater than
+	 * str_size. We can't just happily
+	 * strncpy(str, here, str_size)
+	 * because we have to stop at POST_CHAR, not only at
+	 * NULL. */
+	if (url_len >= str_size)
+			url_len = str_size - 1;
+
+	return safe_strncpy(str, here, url_len + 1);
 }
 
 

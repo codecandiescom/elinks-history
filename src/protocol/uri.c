@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.44 2003/09/02 16:20:24 zas Exp $ */
+/* $Id: uri.c,v 1.45 2003/09/02 19:47:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -396,6 +396,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 	int lo = !strncasecmp(base, "file://", 7); /* dsep() *hint* *hint* */
 	int add_slash = 0;
 	struct uri uri;
+	int tmp;
 
 	/* See RFC 1808 */
 	/* TODO: Support for ';' ? (see the RFC) --pasky */
@@ -468,10 +469,12 @@ prx:
 	 * blank, but doesn't start by a slash (if we'd just stay along with
 	 * dsep(path[-1]) w/o all the surrounding crap, it should be enough,
 	 * but I'm not sure and I don't want to break anything --pasky). */
-	if ((!*path && dsep(path[-1])) || (*path && !dsep(*path))) {
-		/* We skip first char of URL ('/') in parse_url() (ARGH). This
-		 * is reason of all this bug-bearing magic.. */
-		path--;
+	/* We skip first char of URL ('/') in parse_url() (ARGH). This
+	 * is reason of all this bug-bearing magic.. */
+	if (*path) {
+		if (!dsep(*path)) path--;
+	} else {
+		if (dsep(path[-1])) path--;
 	}
 
 	if (!dsep(rel[0])) {
@@ -497,12 +500,13 @@ prx:
 		}
 	}
 
-	n = mem_alloc(path - base + strlen(rel) + add_slash + 1);
+	tmp = path - base;
+	n = mem_alloc(tmp + strlen(rel) + add_slash + 1);
 	if (!n) return NULL;
 
-	memcpy(n, base, path - base);
-	if (add_slash) n[path - base] = '/';
-	strcpy(n + (path - base) + add_slash, rel);
+	memcpy(n, base, tmp);
+	if (add_slash) n[tmp] = '/';
+	strcpy(n + tmp + add_slash, rel);
 
 	translate_directories(n);
 	return n;

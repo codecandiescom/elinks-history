@@ -1,9 +1,9 @@
-/* $Id: sysinfo.h,v 1.2 2003/10/28 00:23:54 pasky Exp $ */
+/* $Id: sysinfo.h,v 1.3 2004/08/14 23:29:36 jonas Exp $ */
 
 #ifndef EL__OSDEP_WIN32_SYSINFO_H
 #define EL__OSDEP_WIN32_SYSINFO_H
 
-#ifdef WIN32
+#ifdef CONFIG_WIN32
 
 static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 /*#define NO_ASYNC_LOOKUP*/

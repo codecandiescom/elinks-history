@@ -1,13 +1,11 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.15 2004/07/30 22:22:43 jonas Exp $ */
+/* $Id: win32.c,v 1.16 2004/08/14 23:29:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include "osdep/system.h"
-
-#ifdef WIN32
 
 #include <windows.h>
 #include <signal.h>
@@ -226,5 +224,3 @@ get_system_env(void)
 {
 	return get_common_env() | ENV_WIN32;
 }
-
-#endif

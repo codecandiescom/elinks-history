@@ -1,9 +1,9 @@
-/* $Id: win32.h,v 1.4 2003/10/28 00:17:50 pasky Exp $ */
+/* $Id: win32.h,v 1.5 2004/08/14 23:29:36 jonas Exp $ */
 
 #ifndef EL__OSDEP_WIN32_WIN32_H
 #define EL__OSDEP_WIN32_WIN32_H
 
-#ifdef WIN32
+#ifdef CONFIG_WIN32
 
 struct terminal;
 

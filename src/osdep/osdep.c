@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.148 2004/08/14 23:23:46 jonas Exp $ */
+/* $Id: osdep.c,v 1.149 2004/08/14 23:29:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -224,7 +224,7 @@ c_pipe(int *fd)
 	return pipe(fd);
 }
 
-#elif defined(CONFIG_OS2) || defined(WIN32)
+#elif defined(CONFIG_OS2) || defined(CONFIG_WIN32)
 
 void
 set_bin(int fd)
@@ -270,7 +270,7 @@ is_gnuscreen(void)
 }
 
 
-#if defined(CONFIG_UNIX) || defined(WIN32)
+#if defined(CONFIG_UNIX) || defined(CONFIG_WIN32)
 
 int
 is_xterm(void)
@@ -313,7 +313,7 @@ unsigned int resize_count = 0;
 
 #ifndef CONFIG_OS2
 
-#if !(defined(CONFIG_BEOS) && defined(HAVE_SETPGID)) && !defined(WIN32)
+#if !(defined(CONFIG_BEOS) && defined(HAVE_SETPGID)) && !defined(CONFIG_WIN32)
 
 int
 exe(unsigned char *path)
@@ -604,7 +604,7 @@ get_ctl_handle()
 
 
 #if !defined(CONFIG_BEOS) && !(defined(HAVE_BEGINTHREAD) && defined(HAVE_READ_KBD)) \
-	&& !defined(WIN32)
+	&& !defined(CONFIG_WIN32)
 
 int
 get_input_handle(void)

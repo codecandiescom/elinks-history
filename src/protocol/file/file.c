@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.115 2003/07/20 20:18:10 pasky Exp $ */
+/* $Id: file.c,v 1.116 2003/07/20 20:19:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -337,15 +337,16 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 static inline int
 file_visible(unsigned char *name, int show_hidden_files)
 {
-	/* Always show "..", always hide ".", others like ".x" are shown if
-	 * show_hidden_files == 1. */
-
+	/* Always show everything not beginning with a dot. */
 	if (name[0] != '.')
 		return 1;
 
+	/* Always hide the "." directory. */
 	if (name[1] == '\0')
 		return 0;
 
+	/* Always show "..", others like ".x" are shown if show_hidden_files
+	 * == 1. */
 	if (!show_hidden_files && strcmp(name, ".."))
 		return 0;
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.126 2003/11/24 01:22:20 jonas Exp $ */
+/* $Id: dialogs.c,v 1.127 2003/11/25 00:34:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,7 @@
 #include "util/error.h"
 #include "util/lists.h"
 #include "util/memory.h"
+#include "util/object.h"
 
 
 void
@@ -50,62 +51,86 @@ write_config_error(struct terminal *term, struct memory_list *ml,
   Option manager stuff.
 ****************************************************************************/
 
-static void
-done_info_button(void *vhop)
-{
-#if 0
-	struct option *option = vhop;
+/* Implementation of the listbox operations */
 
-#endif
+static void
+lock_option(struct listbox_item *item)
+{
+	object_lock((struct option *)item->udata);
+}
+
+static void
+unlock_option(struct listbox_item *item)
+{
+	object_unlock((struct option *)item->udata);
 }
 
 static int
-push_info_button(struct dialog_data *dlg_data,
-		struct widget_data *some_useless_info_button)
+is_option_used(struct listbox_item *item)
 {
-	struct terminal *term = dlg_data->win->term;
-	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
-	struct option *option;
+	return is_object_used((struct option *)item->udata);
+}
 
-	/* Show history item info */
-	if (!box->sel || !box->sel->udata) return 0;
-	option = box->sel->udata;
+static unsigned char *
+get_option_info(struct listbox_item *item, struct terminal *term,
+		  enum listbox_info listbox_info)
+{
+	struct option *option = item->udata;
+	unsigned char *desc, *type;
+	struct string info;
+
+	if (listbox_info == LISTBOX_URI) return NULL;
+
+	if (!init_string(&info)) return NULL;
+
+	type = _(option_types[option->type].name, term);
+	desc = _(option->desc  ? option->desc : (unsigned char *) "N/A", term);
 
 	if (option_types[option->type].write) {
 		struct string value;
 
-		if (!init_string(&value)) return 0;
+		if (!init_string(&value)) {
+			done_string(&info);
+			return NULL;
+		}
 
 		option_types[option->type].write(option, &value);
 
-		msg_box(term, getml(value.source, NULL), MSGBOX_FREE_TEXT,
-			N_("Info"), AL_LEFT,
-			msg_text(term, N_("Name: %s\n"
+		add_format_to_string(&info, _("Name: %s\n"
 				"Type: %s\n"
 				"Value: %s\n\n"
-				"Description:\n%s"),
-				option->name, _(option_types[option->type].name, term),
-				value.source, _(option->desc ? option->desc
-						      : (unsigned char *) "N/A",
-					 term)),
-			option, 1,
-			N_("OK"), done_info_button, B_ESC | B_ENTER);
+				"Description:\n%s", term),
+				option->name, type, value.source, desc);
+		done_string(&value);
 	} else {
-		msg_box(term, NULL, MSGBOX_FREE_TEXT,
-			N_("Info"), AL_LEFT,
-			msg_text(term, N_("Name: %s\n"
+		add_format_to_string(&info, _("Name: %s\n"
 				"Type: %s\n\n"
-				"Description:\n%s"),
-				option->name, _(option_types[option->type].name, term),
-				_(option->desc  ? option->desc
-						: (unsigned char *) "N/A", term)),
-			option, 1,
-			N_("OK"), done_info_button, B_ESC | B_ENTER);
+				"Description:\n%s", term),
+				option->name, type, desc);
 	}
 
-	return 0;
+	return info.source;
 }
 
+static void
+done_option_item(struct listbox_item *item, int last)
+{
+	struct option *option = item->udata;
+
+	assert(!is_object_used(option));
+
+	delete_option(option);
+}
+
+static struct listbox_ops options_listbox_ops = {
+	lock_option,
+	unlock_option,
+	is_option_used,
+	get_option_info,
+	done_option_item,
+};
+
+/* Button handlers */
 
 static int
 check_valid_option(struct dialog_data *dlg_data, struct widget_data *widget_data)
@@ -353,11 +378,11 @@ push_save_button(struct dialog_data *dlg_data,
 #define	OPTION_MANAGER_BUTTONS	5
 
 static struct hierbox_browser_button option_buttons[] = {
-	{ N_("Info"),		push_info_button	},
-	{ N_("Edit"),		push_edit_button	},
-	{ N_("Add"),		push_add_button		},
-	{ N_("Delete"),		push_del_button		},
-	{ N_("Save"),		push_save_button	},
+	{ N_("Info"),		push_hierbox_info_button	},
+	{ N_("Edit"),		push_edit_button		},
+	{ N_("Add"),		push_add_button			},
+	{ N_("Delete"),		push_del_button			},
+	{ N_("Save"),		push_save_button		},
 };
 
 struct hierbox_browser option_browser = {
@@ -368,7 +393,7 @@ struct hierbox_browser option_browser = {
 	{ D_LIST_HEAD(option_browser.boxes) },
 	NULL,	/* Set in menu_options_manager() */
 	{ D_LIST_HEAD(option_browser.dialogs) },
-	NULL,
+	&options_listbox_ops,
 };
 
 /* Builds the "Options manager" dialog */

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.91 2003/11/21 01:13:26 jonas Exp $ */
+/* $Id: options.h,v 1.92 2003/11/25 00:34:09 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -122,6 +122,7 @@ struct option {
 	/* This is indeed maintained by bookmarks.c, not dialogs.c; much easier
 	 * and simpler. */
 	struct listbox_item *box_item;
+	int refcount;
 };
 
 #define INIT_OPTION(name, flags, type, min, max, value, desc, capt) \

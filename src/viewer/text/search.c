@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.21 2003/10/04 19:53:17 kuser Exp $ */
+/* $Id: search.c,v 1.22 2003/10/04 20:03:11 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -333,43 +333,25 @@ is_in_range(struct document *f, int y, int yw, unsigned char *text,
 	mem_align_alloc(pts, size, (size) + 1, sizeof(struct point), 0xFF)
 
 static void
-get_searched(struct document_view *scr, struct point **pt, int *pl)
+get_searched_plain(struct document_view *scr, struct point **pt, int *pl,
+		   int l, struct search *s1, struct search *s2)
 {
 	unsigned char *txt;
 	struct point *points = NULL;
-	struct search *s1, *s2;
 	int xp, yp;
-	int xw, yw;
-	int vx, vy;
 	int xx, yy;
 	int xpv, ypv;
-	int l;
 	int len = 0;
-
-	assert(scr && scr->vs && pt && pl);
-	if_assert_failed return;
-
-	if (!scr->search_word || !*scr->search_word || !(*scr->search_word)[0])
-		return;
-
-	get_search_data(scr->document);
-	l = strlen(*scr->search_word);
-	if (get_range(scr->document, scr->vs->view_pos, scr->yw, l, &s1, &s2))
-		goto ret;
 
 	txt = lowered_string(*scr->search_word, l);
 	if (!txt) return;
 
 	xp = scr->xp;
 	yp = scr->yp;
-	xw = scr->xw;
-	yw = scr->yw;
-	vx = scr->vs->view_posx;
-	vy = scr->vs->view_pos;
-	xx = xp + xw;
-	yy = yp + yw;
-	xpv= xp - vx;
-	ypv= yp - vy;
+	xx = xp + scr->xw;
+	yy = yp + scr->yw;
+	xpv= xp - scr->vs->view_posx;
+	ypv= yp - scr->vs->view_pos;
 
 	for (; s1 <= s2; s1++) {
 		register int i;
@@ -407,9 +389,32 @@ srch_failed:
 	}
 
 	mem_free(txt);
-ret:
 	*pt = points;
 	*pl = len;
+}
+
+static void
+get_searched(struct document_view *scr, struct point **pt, int *pl)
+{
+	struct search *s1, *s2;
+	int l;
+
+	assert(scr && scr->vs && pt && pl);
+	if_assert_failed return;
+
+	if (!scr->search_word || !*scr->search_word || !(*scr->search_word)[0])
+		return;
+
+	get_search_data(scr->document);
+	l = strlen(*scr->search_word);
+	if (get_range(scr->document, scr->vs->view_pos, scr->yw, l, &s1, &s2)) {
+		*pt = NULL;
+		*pl = 0;
+
+		return;
+	}
+
+	get_searched_plain(scr, pt, pl, l, s1, s2);
 }
 
 /* Highlighting of searched strings. */

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.109 2004/01/02 22:06:25 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.110 2004/01/09 09:27:58 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,8 +226,6 @@ add_bookmark(struct bookmark *root, int place, unsigned char *title,
 	object_nolock(bm);
 
 	/* Actually add it */
-	/* add_at_pos() is here to add it at the _end_ of the list,
-	 * not vice versa. */
 	if (place) {
 		if (root)
 			add_to_list_end(root->child, bm);

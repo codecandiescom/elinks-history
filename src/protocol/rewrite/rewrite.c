@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.35 2004/07/23 05:21:11 miciah Exp $ */
+/* $Id: rewrite.c,v 1.36 2004/09/04 12:34:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,6 +184,8 @@ static struct option_info uri_rewrite_options[] = {
 	INIT_OPT_SMART_PREFIX("whatis", "http://uptime.netcraft.com/up/graph/?host=%s"),
 	INIT_OPT_SMART_PREFIX("wiki", "http://www.wikipedia.org/w/wiki.phtml?search=%s"),
 	INIT_OPT_SMART_PREFIX("wn", "http://www.cogsci.princeton.edu/cgi-bin/webwn1.7.1?stage=1&word=%s"),
+	/* Search the Free Software Directory */
+	INIT_OPT_SMART_PREFIX("fsd", "http://directory.fsf.org/search/fsd-search.py?q=%s"),
 	/* rfc by number */
 	INIT_OPT_SMART_PREFIX("rfc", "http://www.rfc-editor.org/rfc/rfc%s.txt"),
 	/* rfc search */

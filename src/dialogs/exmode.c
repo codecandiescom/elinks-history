@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.29 2004/01/28 06:14:54 jonas Exp $ */
+/* $Id: exmode.c,v 1.30 2004/01/28 07:18:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,9 +175,6 @@ exmode_input_handler(struct session *ses, int action, unsigned char *buffer)
 			/* Falling */
 		case ACT_EDIT_CANCEL:
 			return 1;
-
-		case ACT_EDIT_BACKSPACE:
-			if (!*buffer) return 1;
 
 		default:
 			return 0;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.173 2003/07/22 13:46:33 zas Exp $ */
+/* $Id: parser.c,v 1.174 2003/07/22 15:01:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2754,7 +2754,9 @@ html_link(unsigned char *a)
 			add_to_string(&text, link.content_type);
 		}
 
-		if (link.type == LT_ALTERNATE_LANG && link.lang) {
+		if (link.lang && link.type == LT_ALTERNATE_LANG &&
+		    (link_display < 3 || (link.hreflang &&
+					  strcasecmp(link.hreflang, link.lang)))) {
 			add_to_string(&text, ", ");
 			add_to_string(&text, link.lang);
 		}

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.63 2003/11/09 03:12:07 jonas Exp $ */
+/* $Id: dialogs.c,v 1.64 2003/11/09 03:17:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,7 +77,6 @@ history_dialog_box_build(void)
 static void
 history_dialog_abort_handler(struct dialog_data *dlg_data)
 {
-	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct history_dialog_list_item *item;
 
 	foreach (item, history_dialog_list) {
@@ -87,9 +86,6 @@ history_dialog_abort_handler(struct dialog_data *dlg_data)
 			break;
 		}
 	}
-
-	del_from_list(box);
-	mem_free(box);
 }
 
 

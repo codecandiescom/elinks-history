@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.46 2003/11/09 00:19:41 jonas Exp $ */
+/* $Id: hierbox.c,v 1.47 2003/11/09 03:17:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,25 +119,22 @@ display_dlg:
 		case EV_RESIZE:
 		case EV_REDRAW:
 		case EV_MOUSE:
-		case EV_ABORT:
 			break;
+		case EV_ABORT:
+		{
+			/* Clean up after the dialog */
+			struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 
+			del_from_list(box);
+			/* Delete the box structure */
+			mem_free(box);
+			break;
+		}
 		default:
 			internal("Unknown event received: %d", ev->ev);
 	}
 
 	return EVENT_NOT_PROCESSED;
-}
-
-/* Cleans up after the option dialog */
-void
-hierbox_dialog_abort_handler(struct dialog_data *dlg_data)
-{
-	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
-
-	del_from_list(box);
-	/* Delete the box structure */
-	mem_free(box);
 }
 
 void
@@ -190,7 +187,6 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 	dlg->title = _(title, term);
 	dlg->layouter = hierbox_browser_layouter;
 	dlg->handle_event = hierbox_dialog_event_handler;
-	dlg->abort = hierbox_dialog_abort_handler;
 	dlg->udata = udata;
 
 	add_dlg_listbox(dlg, 12, listbox_data);

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.63 2003/12/28 02:36:25 zas Exp $ */
+/* $Id: options.inc,v 1.64 2003/12/28 02:39:02 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -894,9 +894,9 @@ struct option_info config_options_info[] = {
 	INIT_OPT_COLOR(subtree "." name, N_("Background color"), 	\
 		      "background", 0, bg, N_("Default background color."))
 
-#define INIT_OPT_COLORS(subtree, capt, name, bg, fg, desc)		\
-	DO_INIT_OPT_COLORS("ui.colors.color" subtree, capt, name, bg, fg, desc), \
-	INIT_OPT_TREE("ui.colors.mono" subtree, capt, name, 0, desc)
+#define INIT_OPT_COLORS(subtree, capt, name, cbg, cfg, mbg, mfg, desc)	\
+	DO_INIT_OPT_COLORS("ui.colors.color" subtree, capt, name, cbg, cfg, desc), \
+	DO_INIT_OPT_COLORS("ui.colors.mono" subtree, capt, name, mbg, mfg, desc)
 
 #define INIT_OPT_COLOR_TREE(subtree, capt, name, desc)			\
 	INIT_OPT_TREE("ui.colors.color" subtree, capt, name, 0, desc),	\
@@ -916,11 +916,11 @@ struct option_info config_options_info[] = {
 		N_("Main menu bar colors.")),
 
 	INIT_OPT_COLORS(".mainmenu", N_("Unselected main menu bar item"),
-		"normal", "white", "black",
+		"normal", "white", "black", "white", "black",
 		N_("Unselected main menu bar item colors.")),
 
 	INIT_OPT_COLORS(".mainmenu", N_("Selected main menu bar item"),
-		"selected", "black", "green",
+		"selected", "black", "green", "black", "gray",
 		N_("Selected main menu bar item colors.")),
 
 	INIT_OPT_COLOR_TREE(".mainmenu", N_("Hotkey"),
@@ -928,11 +928,11 @@ struct option_info config_options_info[] = {
 		N_("Main menu hotkey colors.")),
 
 	INIT_OPT_COLORS(".mainmenu.hotkey", N_("Unselected hotkey"),
-		"normal", "white", "darkred",
+		"normal", "white", "darkred", "white", "black",
 		N_("Main menu unselected hotkey colors.")),
 
 	INIT_OPT_COLORS(".mainmenu.hotkey", N_("Selected hotkey"),
-		"selected", "green", "darkred",
+		"selected", "green", "darkred", "white", "black",
 		N_("Main menu selected hotkey colors.")),
 
 
@@ -941,15 +941,15 @@ struct option_info config_options_info[] = {
 		N_("Menu bar colors.")),
 
 	INIT_OPT_COLORS(".menu", N_("Unselected menu item"),
-		"normal", "white", "black",
+		"normal", "white", "black", "white", "black",
 		N_("Unselected menu item colors.")),
 
 	INIT_OPT_COLORS(".menu", N_("Selected menu item"),
-		"selected", "green", "black",
+		"selected", "green", "black", "black", "gray",
 		N_("Selected menu item colors.")),
 
 	INIT_OPT_COLORS(".menu", N_("Marked menu item"),
-		"marked", "white", "red",
+		"marked", "white", "red", "white", "gray",
 		N_("Marked menu item colors.")),
 
 	INIT_OPT_COLOR_TREE(".menu", N_("Hotkey"),
@@ -957,15 +957,15 @@ struct option_info config_options_info[] = {
 		N_("Menu item hotkey colors.")),
 
 	INIT_OPT_COLORS(".menu.hotkey", N_("Unselected hotkey"),
-		"normal", "white", "darkred",
+		"normal", "white", "darkred", "black", "gray",
 		N_("Menu item unselected hotkey colors.")),
 
 	INIT_OPT_COLORS(".menu.hotkey", N_("Selected hotkey"),
-		"selected", "green", "darkred",
+		"selected", "green", "darkred", "black", "gray",
 		N_("Menu item selected hotkey colors.")),
 
 	INIT_OPT_COLORS(".menu", N_("Menu frame"),
-		"frame", "white", "black",
+		"frame", "white", "black", "white", "black",
 		N_("Menu frame colors.")),
 
 
@@ -979,60 +979,66 @@ struct option_info config_options_info[] = {
 		N_("This option is deprecated and will be removed very soon.\n"
 		"Please use ui.colors.color.dialog.generic.background instead.")),
 
+	/* Compatibility alias: added by jonas at 2003-10-18, 0.5pre7.CVS. */
+	INIT_OPT_ALIAS("ui.colors.mono.dialog", NULL,
+		"background", 0, "ui.colors.mono.dialog.generic.background",
+		N_("This option is deprecated and will be removed very soon.\n"
+		"Please use ui.colors.mono.dialog.generic.background instead.")),
+
 	INIT_OPT_COLORS(".dialog", N_("Generic"),
-		"generic", "white", "black",
+		"generic", "white", "black", "white", "black",
 		N_("Generic dialog colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Frame"),
-		"frame", "white", "black",
+		"frame", "white", "black", "white", "black",
 		N_("Dialog frame colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Scrollbar"),
-		"scrollbar", "blue", "black",
+		"scrollbar", "blue", "black", "black", "white",
 		N_("Scrollbar colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Scrollbar selected"),
-		"scrollbar-selected", "green", "black",
+		"scrollbar-selected", "green", "black", "white", "black",
 		N_("Scrollbar selected colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Title"),
-		"title", "white", "darkred",
+		"title", "white", "darkred", "black", "gray",
 		N_("Dialog title colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Text"),
-		"text", "white", "black",
+		"text", "white", "black", "white", "black",
 		N_("Dialog text colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Checkbox"),
-		"checkbox", "white", "darkred",
+		"checkbox", "white", "darkred", "white", "black",
 		N_("Dialog checkbox colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Checkbox label"),
-		"checkbox-label", "white", "black",
+		"checkbox-label", "white", "black", "white", "black",
 		N_("Dialog checkbox label colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Button"),
-		"button", "blue", "white",
+		"button", "blue", "white", "white", "black",
 		N_("Dialog button colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Selected button"),
-		"button-selected", "green", "yellow",
+		"button-selected", "green", "yellow", "black", "white",
 		N_("Dialog selected button colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Text field"),
-		"field", "blue", "white",
+		"field", "blue", "white", "black", "gray",
 		N_("Dialog text field colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Text field text"),
-		"field-text", "blue", "yellow",
+		"field-text", "blue", "yellow", "black", "gray",
 		N_("Dialog field text colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Meter"),
-		"meter", "blue", "white",
+		"meter", "blue", "white", "black", "gray",
 		N_("Dialog meter colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Shadow"),
-		"shadow", "black", "black",
+		"shadow", "black", "black", "black", "black",
 		N_("Dialog shadow colors (see ui.shadows option).")),
 
 	INIT_OPT_COLOR_TREE("", N_("Title bar"),
@@ -1040,11 +1046,11 @@ struct option_info config_options_info[] = {
 		N_("Title bar colors.")),
 
 	INIT_OPT_COLORS(".title", N_("Generic title bar"),
-		"title-bar", "white", "black",
+		"title-bar", "white", "black", "black", "gray",
 		N_("Generic title bar colors.")),
 
 	INIT_OPT_COLORS(".title", N_("Title bar text"),
-		"title-text", "white", "black",
+		"title-text", "white", "black", "black", "gray",
 		N_("Title bar text colors.")),
 
 
@@ -1053,11 +1059,11 @@ struct option_info config_options_info[] = {
 		N_("Status bar colors.")),
 
 	INIT_OPT_COLORS(".status", N_("Generic status bar"),
-		"status-bar", "white", "black",
+		"status-bar", "white", "black", "black", "gray",
 		N_("Generic status bar colors.")),
 
 	INIT_OPT_COLORS(".status", N_("Status bar text"),
-		"status-text", "white", "black",
+		"status-text", "white", "black", "white", "black",
 		N_("Status bar text colors.")),
 
 
@@ -1066,333 +1072,30 @@ struct option_info config_options_info[] = {
 		N_("Tabs bar colors.")),
 
 	INIT_OPT_COLORS(".tabs", N_("Unvisited tab"),
-		"unvisited", "white", "green",
+		"unvisited", "white", "green", "white", "gray",
 		N_("Tab colors for tabs that have not completed or has not been\n"
 		   "selected since they completed loading.")),
 
 	INIT_OPT_COLORS(".tabs", N_("Unselected tab"),
-		"normal", "white", "black",
+		"normal", "white", "black", "white", "black",
 		N_("Unselected tab colors.")),
 
 	INIT_OPT_COLORS(".tabs", N_("Loading tab"),
-		"loading", "white", "darkred",
+		"loading", "white", "darkred", "white", "gray",
 		N_("Tab colors for tabs that are loading in the background.")),
 
 	INIT_OPT_COLORS(".tabs", N_("Selected tab"),
-		"selected", "green", "black",
+		"selected", "green", "black", "black", "gray",
 		N_("Selected tab colors.")),
 
 	INIT_OPT_COLORS(".tabs", N_("Tab separator"),
-		"separator", "white", "brown",
+		"separator", "white", "brown", "white", "gray",
 		N_("Tab separator colors.")),
 
 
 	INIT_OPT_COLORS("", N_("Searched strings"),
-		"searched", "lime", "black",
+		"searched", "lime", "black", "white", "black",
 		N_("Searched string highlight colors.")),
-
-
-
-
-	/* FIXME: obsolete. --Zas */
-
-	INIT_OPT_COLOR("ui.colors.mono.mainmenu.normal", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.mainmenu.normal", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.mainmenu.selected", N_("Text color"),
-		"text", 0, "gray",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.mainmenu.selected", N_("Background color"),
-		"background", 0, "black",
-		N_("Default background color.")),
-
-
-
-	INIT_OPT_COLOR("ui.colors.mono.mainmenu.hotkey.normal", N_("Text color"),
-		"text", 0, "black",
-		N_("Main menu unselected hotkey default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.mainmenu.hotkey.normal", N_("Background color"),
-		"background", 0, "white",
-		N_("Main menu unselected hotkey default background color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.mainmenu.hotkey.selected", N_("Text color"),
-		"text", 0, "black",
-		N_("Main menu selected hotkey default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.mainmenu.hotkey.selected", N_("Background color"),
-		"background", 0, "white",
-		N_("Main menu selected hotkey default background color.")),
-
-
-
-	INIT_OPT_COLOR("ui.colors.mono.menu.normal", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.menu.normal", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.menu.selected", N_("Text color"),
-		"text", 0, "gray",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.menu.selected", N_("Background color"),
-		"background", 0, "black",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.menu.marked", N_("Text color"),
-		"text", 0, "gray",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.menu.marked", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.menu.hotkey.normal", N_("Text color"),
-		"text", 0, "gray",
-		N_("Menu unselected hotkey default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.menu.hotkey.normal", N_("Background color"),
-		"background", 0, "black",
-		N_("Menu unselected hotkey default background color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.menu.hotkey.selected", N_("Text color"),
-		"text", 0, "gray",
-		N_("Menu selected hotkey default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.menu.hotkey.selected", N_("Background color"),
-		"background", 0, "black",
-		N_("Menu selected hotkey default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.menu.frame", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.menu.frame", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-
-
-	/* Compatibility alias: added by jonas at 2003-10-18, 0.5pre7.CVS. */
-	INIT_OPT_ALIAS("ui.colors.mono.dialog", NULL,
-		"background", 0, "ui.colors.mono.dialog.generic.background",
-		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use ui.colors.mono.dialog.generic.background instead.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.generic", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.generic", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.frame", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.frame", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.scrollbar", N_("Text color"),
-		"text", 0, "white",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.scrollbar", N_("Background color"),
-		"background", 0, "black",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.scrollbar-selected", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.scrollbar-selected", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.title", N_("Text color"),
-		"text", 0, "gray",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.title", N_("Background color"),
-		"background", 0, "black",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.text", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.text", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.checkbox", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.checkbox", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.checkbox-label", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.checkbox-label", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.button", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.button", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.button-selected", N_("Text color"),
-		"text", 0, "white",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.button-selected", N_("Background color"),
-		"background", 0, "black",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.field", N_("Text color"),
-		"text", 0, "gray",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.field", N_("Background color"),
-		"background", 0, "black",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.field-text", N_("Text color"),
-		"text", 0, "gray",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.field-text", N_("Background color"),
-		"background", 0, "black",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.meter", N_("Text color"),
-		"text", 0, "gray",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.meter", N_("Background color"),
-		"background", 0, "black",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.shadow", N_("Background color"),
-		"background", 0, "black",
-		N_("Default background color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.dialog.shadow", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-
-
-	INIT_OPT_COLOR("ui.colors.mono.title.title-bar", N_("Text color"),
-		"text", 0, "gray",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.title.title-bar", N_("Background color"),
-		"background", 0, "black",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.title.title-text", N_("Text color"),
-		"text", 0, "gray",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.title.title-text", N_("Background color"),
-		"background", 0, "black",
-		N_("Default background color.")),
-
-
-
-	INIT_OPT_COLOR("ui.colors.mono.status.status-bar", N_("Text color"),
-		"text", 0, "gray",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.status.status-bar", N_("Background color"),
-		"background", 0, "black",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.status.status-text", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.status.status-text", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-
-
-	INIT_OPT_COLOR("ui.colors.mono.tabs.normal", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.tabs.normal", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.tabs.selected", N_("Text color"),
-		"text", 0, "gray",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.tabs.selected", N_("Background color"),
-		"background", 0, "black",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.tabs.separator", N_("Text color"),
-		"text", 0, "gray",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.tabs.separator", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-
-	INIT_OPT_COLOR("ui.colors.mono.searched", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.mono.searched", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
 
 
 	/* ========================================================== */

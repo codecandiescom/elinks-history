@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.181 2005/03/23 13:40:34 zas Exp $ */
+/* $Id: core.c,v 1.182 2005/03/23 14:16:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -711,11 +711,11 @@ dialog_lua_console(va_list ap, void *data)
 	if (get_cmd_opt_bool("anonymous"))
 		return EVENT_HOOK_STATUS_NEXT;
 
-	input_field(ses->tab->term, NULL, 1,
-		    N_("Lua Console"), N_("Enter expression"),
-		    N_("OK"), N_("Cancel"), ses, &lua_console_history,
-		    MAX_STR_LEN, "", 0, 0, NULL,
-		    (void (*)(void *, unsigned char *)) lua_console, NULL);
+	input_dialog(ses->tab->term, NULL,
+		     N_("Lua Console"), N_("Enter expression"),
+		     ses, &lua_console_history,
+		     MAX_STR_LEN, "", 0, 0, NULL,
+		     (void (*)(void *, unsigned char *)) lua_console, NULL);
 	return EVENT_HOOK_STATUS_NEXT;
 }
 

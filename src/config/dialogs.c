@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.212 2005/03/23 14:00:54 zas Exp $ */
+/* $Id: dialogs.c,v 1.213 2005/03/23 14:16:13 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -483,10 +483,11 @@ invalid_option:
 			goto invalid_option;
 	}
 
-	input_field(term, NULL, 1, N_("Add option"), N_("Name"),
-		N_("OK"), N_("Cancel"), option, NULL,
-		MAX_STR_LEN, "", 0, 0, check_nonempty,
-		add_option_to_tree, NULL);
+	input_dialog(term, NULL, N_("Add option"), N_("Name"),
+		     option, NULL,
+		     MAX_STR_LEN, "", 0, 0, check_nonempty,
+		     add_option_to_tree, NULL);
+	
 	return EVENT_PROCESSED;
 }
 
@@ -891,11 +892,11 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 			write_action(hop->keymap, hop->action),
 			write_keymap(hop->keymap));
 
-	input_field(term, getml(hop, text, NULL), 1,
-		N_("Add keybinding"), text,
-		N_("OK"), N_("Cancel"), hop, NULL,
-		MAX_STR_LEN, "", 0, 0, check_keystroke,
-		really_add_keybinding, NULL);
+	input_dialog(term, getml(hop, text, NULL),
+		     N_("Add keybinding"), text,
+		     hop, NULL,
+		     MAX_STR_LEN, "", 0, 0, check_keystroke,
+		     really_add_keybinding, NULL);
 
 	return EVENT_PROCESSED;
 }

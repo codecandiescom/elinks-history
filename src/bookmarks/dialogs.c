@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.205 2005/03/19 17:49:40 zas Exp $ */
+/* $Id: dialogs.c,v 1.206 2005/03/23 14:16:13 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -271,12 +271,12 @@ do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
 static widget_handler_status_T
 push_add_folder_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
-	input_field(dlg_data->win->term, NULL, 1,
-		    N_("Add folder"), N_("Folder name"),
-		    N_("OK"), N_("Cancel"), dlg_data, NULL,
-		    MAX_STR_LEN, NULL, 0, 0, NULL,
-		    (void (*)(void *, unsigned char *)) do_add_folder,
-		    NULL);
+	input_dialog(dlg_data->win->term, NULL,
+		     N_("Add folder"), N_("Folder name"),
+		     dlg_data, NULL,
+		     MAX_STR_LEN, NULL, 0, 0, NULL,
+		     (void (*)(void *, unsigned char *)) do_add_folder,
+		     NULL);
 	return EVENT_PROCESSED;
 }
 
@@ -654,12 +654,12 @@ bookmark_terminal_tabs_dialog(struct terminal *term)
 	add_date_to_string(&string, get_opt_str("ui.date_format"), NULL);
 #endif
 
-	input_field(term, NULL, 1,
-		    N_("Bookmark tabs"), N_("Enter folder name"),
-		    N_("OK"), N_("Cancel"), term, NULL,
-		    MAX_STR_LEN, string.source, 0, 0, NULL,
-		    (void (*)(void *, unsigned char *)) bookmark_terminal_tabs,
-		    NULL);
+	input_dialog(term, NULL,
+		     N_("Bookmark tabs"), N_("Enter folder name"),
+		     term, NULL,
+		     MAX_STR_LEN, string.source, 0, 0, NULL,
+		     (void (*)(void *, unsigned char *)) bookmark_terminal_tabs,
+		     NULL);
 
 	done_string(&string);
 }

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.390 2005/03/05 20:31:11 zas Exp $ */
+/* $Id: menu.c,v 1.391 2005/03/23 14:16:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,12 +92,12 @@ save_url(struct session *ses, unsigned char *url)
 void
 save_url_as(struct session *ses)
 {
-	input_field(ses->tab->term, NULL, 1,
-		    N_("Save URL"), N_("Enter URL"),
-		    N_("OK"), N_("Cancel"), ses, &goto_url_history,
-		    MAX_STR_LEN, "", 0, 0, NULL,
-		    (void (*)(void *, unsigned char *)) save_url,
-		    NULL);
+	input_dialog(ses->tab->term, NULL,
+		     N_("Save URL"), N_("Enter URL"),
+		     ses, &goto_url_history,
+		     MAX_STR_LEN, "", 0, 0, NULL,
+		     (void (*)(void *, unsigned char *)) save_url,
+		     NULL);
 }
 
 void
@@ -518,12 +518,12 @@ activate_bfu_technology(struct session *ses, int item)
 void
 dialog_goto_url(struct session *ses, unsigned char *url)
 {
-	input_field(ses->tab->term, NULL, 1,
-		    N_("Go to URL"), N_("Enter URL"),
-		    N_("OK"), N_("Cancel"), ses, &goto_url_history,
-		    MAX_STR_LEN, url, 0, 0, NULL,
-		    (void (*)(void *, unsigned char *)) goto_url_with_hook,
-		    NULL);
+	input_dialog(ses->tab->term, NULL,
+		     N_("Go to URL"), N_("Enter URL"),
+		     ses, &goto_url_history,
+		     MAX_STR_LEN, url, 0, 0, NULL,
+		     (void (*)(void *, unsigned char *)) goto_url_with_hook,
+		     NULL);
 }
 
 
@@ -569,12 +569,12 @@ query_file(struct session *ses, struct uri *uri, void *data,
 	decode_uri_string_for_display(&def);
 
 	if (interactive) {
-		input_field(ses->tab->term, NULL, 1,
-			    N_("Download"), N_("Save to file"),
-			    N_("OK"),  N_("Cancel"), data, &file_history,
-			    MAX_STR_LEN, def.source, 0, 0, check_nonempty,
-			    (void (*)(void *, unsigned char *)) std,
-			    (void (*)(void *)) cancel);
+		input_dialog(ses->tab->term, NULL,
+			     N_("Download"), N_("Save to file"),
+			     data, &file_history,
+			     MAX_STR_LEN, def.source, 0, 0, check_nonempty,
+			     (void (*)(void *, unsigned char *)) std,
+			     (void (*)(void *)) cancel);
 	} else {
 		std(data, def.source);
 	}

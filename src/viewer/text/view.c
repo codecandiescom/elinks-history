@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.684 2005/03/23 13:40:34 zas Exp $ */
+/* $Id: view.c,v 1.685 2005/03/23 14:16:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -725,11 +725,11 @@ try_prefix_key(struct session *ses, struct document_view *doc_view,
 		for (length = 1; nlinks; nlinks /= 10)
 			length++;
 
-		input_field(ses->tab->term, NULL, 1,
-			    N_("Go to link"), N_("Enter link number"),
-			    N_("OK"), N_("Cancel"), ses, NULL,
-			    length, d, 1, document->nlinks, check_number,
-			    (void (*)(void *, unsigned char *)) goto_link_number, NULL);
+		input_dialog(ses->tab->term, NULL,
+			     N_("Go to link"), N_("Enter link number"),
+			     ses, NULL,
+			     length, d, 1, document->nlinks, check_number,
+			     (void (*)(void *, unsigned char *)) goto_link_number, NULL);
 
 		return FRAME_EVENT_OK;
 	}

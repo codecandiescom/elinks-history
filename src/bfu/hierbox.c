@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.207 2005/03/23 11:19:13 zas Exp $ */
+/* $Id: hierbox.c,v 1.208 2005/03/23 14:16:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -967,10 +967,10 @@ push_hierbox_search_button(struct dialog_data *dlg_data,
 
 	assert(box->ops->match);
 
-	input_field(term, NULL, 1, N_("Search"), N_("Name"),
-		N_("OK"), N_("Cancel"), dlg_data, NULL,
-		MAX_STR_LEN, "", 0, 0, NULL,
-		search_hierbox_browser, NULL);
+	input_dialog(term, NULL, N_("Search"), N_("Name"),
+		     dlg_data, NULL,
+		     MAX_STR_LEN, "", 0, 0, NULL,
+		     search_hierbox_browser, NULL);
 
 	return EVENT_PROCESSED;
 }

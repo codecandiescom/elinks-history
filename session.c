@@ -1185,7 +1185,7 @@ void doc_end_load(struct status *stat, struct session *ses)
 		struct fragment *fr;
 		unsigned char *s;
 		int len;
-		if (!stat->ce->done_pre_format_html_hook) {
+		if (stat->ce && !stat->ce->done_pre_format_html_hook) {
 			defrag_entry(stat->ce);
 			fr = stat->ce->frag.next;
 			len = fr->length;

@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.12 2003/08/28 19:24:45 pasky Exp $ */
+/* $Id: frames.c,v 1.13 2003/09/08 12:32:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,7 +205,7 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 
 	memcpy(&o, op, sizeof(struct document_options));
 
-	if (o.margin) o.margin = 1;
+	o.margin = !!o.margin;
 
 	n = 0;
 	for (j = 0; j < fsd->y; j++) {
@@ -213,15 +213,17 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 
 		o.xp = op->xp;
 		for (i = 0; i < fsd->x; i++) {
-			struct document_view *fdc;
+			struct frame_desc *f = &fsd->f[n];
 
-			o.xw = fsd->f[n].xw;
-			o.yw = fsd->f[n].yw;
-			o.framename = fsd->f[n].name;
-			if (fsd->f[n].subframe)
-				format_frames(ses, fsd->f[n].subframe, &o, depth + 1);
-			else if (fsd->f[n].name) {
-				fdc = format_frame(ses, fsd->f[n].name, &o, depth);
+			o.xw = f->xw;
+			o.yw = f->yw;
+			o.framename = f->name;
+			if (f->subframe)
+				format_frames(ses, f->subframe, &o, depth + 1);
+			else if (f->name) {
+				struct document_view *fdc;
+
+				fdc = format_frame(ses, f->name, &o, depth);
 				if (fdc && fdc->document && fdc->document->frame_desc)
 					format_frames(ses, fdc->document->frame_desc,
 						      &o, depth + 1);

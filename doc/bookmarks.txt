@@ -73,7 +73,7 @@ playground clean. Then, just fill substring of what you are looking for, and
 the bookmarks will be filtered so that only the matching ones are shown.
 (Actually, currently it will not be filtered but the cursor will only jump
 to the first matching bookmark below the current cursor position - and it
-will NOT wrap around. The exact behaviour changes time by time and wasn't
+will NOT wrap around. The exact behaviour changes time by time and hasn't been
 stabilized yet.)
 
 
@@ -205,4 +205,4 @@ simplified rather sooner than later.
 
 
 
-$Id: bookmarks.txt,v 1.8 2005/01/03 05:47:31 miciah Exp $
+$Id: bookmarks.txt,v 1.9 2005/01/03 05:49:18 miciah Exp $

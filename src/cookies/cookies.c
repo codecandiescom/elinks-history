@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.78 2003/08/25 12:04:17 zas Exp $ */
+/* $Id: cookies.c,v 1.79 2003/09/22 15:06:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -352,6 +352,7 @@ accept_cookie(struct cookie *c)
 {
 	struct c_domain *cd;
 	struct cookie *d, *e;
+	int domain_len;
 
 	foreach (d, cookies) {
 		if (strcasecmp(d->name, c->name)
@@ -369,10 +370,12 @@ accept_cookie(struct cookie *c)
 		if (!strcasecmp(cd->domain, c->domain))
 			return;
 
-	cd = mem_alloc(sizeof(struct c_domain) + strlen(c->domain) + 1);
+	domain_len = strlen(c->domain);
+	/* One byte is reserved for domain in struct c_domain. */
+	cd = mem_alloc(sizeof(struct c_domain) + domain_len);
 	if (!cd) return;
 
-	strcpy(cd->domain, c->domain);
+	memcpy(cd->domain, c->domain, domain_len + 1);
 	add_to_list(c_domains, cd);
 
 	if (get_opt_int("cookies.save") && get_opt_int("cookies.resave"))
@@ -437,6 +440,7 @@ cookie_default(void *idp, int a)
 {
 	struct c_server *s;
 	struct cookie *c = find_cookie_id(idp);
+	int server_len;
 
 	if (!c) return;
 
@@ -444,9 +448,11 @@ cookie_default(void *idp, int a)
 		if (!strcasecmp(s->server, c->server))
 			goto found;
 
-	s = mem_alloc(sizeof(struct c_server) + strlen(c->server) + 1);
+	server_len = strlen(c->server);
+	/* One byte is reserved for server in struct c_server. */
+	s = mem_alloc(sizeof(struct c_server) + server_len);
 	if (s) {
-		strcpy(s->server, c->server);
+		memcpy(s->server, c->server, server_len + 1);
 		add_to_list(c_servers, s);
 found:
 		s->accept = a;

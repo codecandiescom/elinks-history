@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.34 2004/01/29 07:18:26 jonas Exp $ */
+/* $Id: exmode.c,v 1.35 2004/02/04 13:57:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,6 +64,22 @@ exmode_action_handler(struct session *ses, unsigned char *command,
 			break;
 	}
 	return 0;
+}
+
+static int
+exmode_confcmd_handler(struct session *ses, unsigned char *command,
+			unsigned char *args)
+{
+	int dummyline = 0;
+	enum parse_error err;
+
+	assert(ses && command && args);
+
+	/* Undo the arguments separation. */
+	if (*args) *(--args) = ' ';
+
+	err = parse_config_command(options, command, &dummyline, NULL);
+	return err;
 }
 
 #ifdef CONFIG_URI_REWRITE
@@ -133,6 +149,7 @@ exmode_uri_rewrite_handler(struct session *ses, unsigned char *command,
 
 static exmode_handler exmode_handlers[] = {
 	exmode_action_handler,
+	exmode_confcmd_handler,
 #ifdef CONFIG_URI_REWRITE
 	exmode_uri_rewrite_handler,
 #endif

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.127 2004/02/04 13:27:36 pasky Exp $ */
+/* $Id: conf.c,v 1.128 2004/02/04 13:57:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,15 +79,6 @@ skip_white(unsigned char *start, int *line)
 
 	return start;
 }
-
-enum parse_error {
-	ERROR_NONE,
-	ERROR_PARSE,
-	ERROR_COMMAND,
-	ERROR_OPTION,
-	ERROR_VALUE,
-	ERROR_NOMEM,
-};
 
 /* Parse a command. Returns error code. */
 /* If dynamic string credentials are supplied, we will mirror the command at
@@ -333,7 +324,7 @@ static struct parse_handler parse_handlers[] = {
 };
 
 
-static enum parse_error
+enum parse_error
 parse_config_command(struct option *options, unsigned char *file, int *line,
 		     struct string *mirror)
 {

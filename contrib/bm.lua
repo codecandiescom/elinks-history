@@ -1,5 +1,5 @@
 -- Bookmark system for Links-Lua.
--- $Id: bm.lua,v 1.1 2001/12/28 17:25:34 pasky Exp $
+-- $Id: bm.lua,v 1.2 2002/01/29 08:58:18 pasky Exp $
 
 -----------------------------------------------------------------------
 --  User options
@@ -106,8 +106,13 @@ end
 
 -- Write bookmarks to disk.
 function bm_save_bookmarks (filename)
+    if bm_dont_save then return end
+
     function esc (str)
-	return gsub (gsub (str, '\\', '\\\\'), '"', '\\"')
+	return gsub (str, "([^-%w \t_@#:/'().])",
+		     function (s)
+			return format ("\\%03d", strbyte (s))
+		     end)
     end
 
     if not filename then filename = bm_bookmark_file end
@@ -137,8 +142,10 @@ function bm_load_bookmarks (filename)
     if type (tmp) == 'table' then
 	bm_bookmarks = tmp
 	bm_sort_bookmarks ()
+	bm_dont_save = nil
     else
 	_ALERT ("Error loading "..filename)
+	bm_dont_save = 1
     end
 end
 

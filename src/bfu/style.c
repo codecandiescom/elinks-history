@@ -1,5 +1,5 @@
 /* BFU display helpers. */
-/* $Id: style.c,v 1.7 2003/08/24 13:55:54 jonas Exp $ */
+/* $Id: style.c,v 1.8 2003/08/24 13:57:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,7 @@ get_bfu_color(struct terminal *term, unsigned char *stylename)
 		bfu_colors = init_hash(8, &strhash);
 		if (!bfu_colors) return NULL;
 
-		color_term = get_opt_bool_tree(term->spec, "colors");
+		color_mode = get_opt_bool_tree(term->spec, "colors");
 
 	} else if (get_opt_bool_tree(term->spec, "colors") != color_mode) {
 		int i;
@@ -65,7 +65,7 @@ get_bfu_color(struct terminal *term, unsigned char *stylename)
 		struct option *opt;
 
 		/* Construct the color entry. */
-		opt = get_opt_rec_real(config_options, color_term
+		opt = get_opt_rec_real(config_options, color_mode
 				       ? "ui.colors.color" : "ui.colors.mono");
 		if (!opt) return NULL;
 

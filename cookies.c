@@ -13,8 +13,8 @@ struct cookie {
 	struct cookie *prev;
 	unsigned char *name, *value;
 	unsigned char *server;
-	unsigned char *expires;
 	unsigned char *path, *domain;
+	time_t expires; /* zero means undefined */
 	int secure;
 	int id;
 };
@@ -46,7 +46,6 @@ void free_cookie(struct cookie *c)
 	mem_free(c->name);
 	mem_free(c->value);
 	if (c->server) mem_free(c->server);
-	if (c->expires) mem_free(c->expires);
 	if (c->path) mem_free(c->path);
 	if (c->domain) mem_free(c->domain);
 }
@@ -76,7 +75,7 @@ int set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 {
 	struct cookie *cookie;
 	struct c_server *cs;
-	unsigned char *p, *q, *s, *server, *document;
+	unsigned char *p, *q, *s, *server, *date, *document;
 	if (accept_cookies == ACCEPT_NONE) return 0;
 	for (p = str; *p != ';' && *p; p++) if (WHITECHAR(*p)) return 0;
 	for (q = str; *q != '='; q++) if (!*q || q >= p) return 0;
@@ -87,7 +86,13 @@ int set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 	cookie->name = memacpy(str, q - str);
 	cookie->value = memacpy(q + 1, p - q - 1);
 	cookie->server = stracpy(server);
-	cookie->expires = parse_header_param(str, "expires");
+	date = parse_header_param(str, "expires");
+	if (date) {
+		cookie->expires = parse_http_date(date);
+		if (! cookie->expires) cookie->expires++; /* no harm and we can use zero then */
+		mem_free(date);
+	} else
+		cookie->expires = 0;
 	if (!(cookie->path = parse_header_param(str, "path"))) {
 		unsigned char *w;
 		cookie->path = stracpy("/");
@@ -234,7 +239,7 @@ int is_path_prefix(unsigned char *d, unsigned char *s)
 
 int cookie_expired(struct cookie *c)
 {
-	return 0;	/* !!! FIXME */
+  	return (c->expires && c->expires < time(NULL));
 }
 
 void send_cookies(unsigned char **s, int *l, unsigned char *url)

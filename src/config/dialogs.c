@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.129 2003/11/25 01:12:29 jonas Exp $ */
+/* $Id: dialogs.c,v 1.130 2003/11/25 10:09:13 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,9 +115,13 @@ get_option_info(struct listbox_item *item, struct terminal *term,
 static int
 can_delete_option(struct listbox_item *item)
 {
-	struct option *option = item->udata;
+	if (item->root) {
+		struct option *parent_option = item->root->udata;
 
-	return item->root && !(option->flags & OPT_AUTOCREATE);
+		return parent_option->flags & OPT_AUTOCREATE;
+	}
+
+	return 0;
 }
 
 static void

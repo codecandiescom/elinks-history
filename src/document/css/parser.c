@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.100 2004/09/19 22:25:47 pasky Exp $ */
+/* $Id: parser.c,v 1.101 2004/09/19 22:30:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -240,31 +240,12 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		token = get_next_scanner_token(scanner);
 		if (!token) return;
 
-		/* Let's see if we will get anything else of this. */
+		/* End of selector? */
 
-		switch (token->type) {
-			/* id */
-			case CSS_TOKEN_HASH:
-			case CSS_TOKEN_HEX_COLOR:
-				skip_css_tokens(scanner, ',');
-				continue;
-
-			/* class */
-			case '.':
-			/* pseudo */
-			case ':':
-				skip_css_tokens(scanner, ',');
-				continue;
-
-			case ',':
-			case '{':
-				/* These are the only ones we are currently
-				 * interested in. */
-				break;
-
-			default:
-				skip_css_tokens(scanner, ',');
-				continue;
+		if (!(token->type == ',' || token->type == '{')) {
+			/* Not yet! */
+			skip_css_tokens(scanner, ',');
+			continue;
 		}
 
 		/* Check if we have already encountered the selector */

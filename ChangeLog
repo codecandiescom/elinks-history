@@ -1,3 +1,11 @@
+Tue Mar  2 17:06:15 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: Makefile.am, main.c, main.h, scripting/Makefile.am,
+	scripting/scripting.c:
+
+	Support for Perl scripting. Scripts are read from file 'hooks.pl'.  
+	Example hooks.pl will be available later.  
+
 Mon Mar  1 19:17:51 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/: config/options.inc, intl/charsets.c:

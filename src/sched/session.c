@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.17 2003/05/03 19:26:03 pasky Exp $ */
+/* $Id: session.c,v 1.18 2003/05/03 19:29:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -293,7 +293,7 @@ print_screen_status(struct session *ses)
 				msg = N_("Untitled");
 
 			msglen = strlen(msg);
-			if (msglen > tab_width)
+			if (msglen >= tab_width)
 				msglen = tab_width - 1;
 
 			fill_area(term, tab * tab_width, ypos, tab_width, 1,

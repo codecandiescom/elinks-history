@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.49 2003/12/28 01:06:12 zas Exp $ */
+/* $Id: renderer.c,v 1.50 2003/12/28 02:55:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,7 +227,7 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 
 	for (lineno = 0; length > 0; lineno++) {
 		unsigned char *xsource;
-		int width, added;
+		int width, added, only_spaces = 1, spaces = 0;
 		int step = 0;
 
 		/* End of line detection.
@@ -238,12 +238,19 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 			if (source[width + step] == ASCII_LF)
 				step++;
 			if (step) break;
+
+			if (only_spaces) {
+				if (isspace(source[width]))
+					spaces++;
+				else
+					only_spaces = 0;
+			}
 		}
 
-		if (compress && step && !width) {
+		if (compress && step && only_spaces) {
 			if (was_empty_line) {
-				length -= step;
-				source += step;
+				length -= step + spaces;
+				source += step + spaces;
 				lineno--;
 				continue;
 			}

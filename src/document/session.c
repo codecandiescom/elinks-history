@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.77 2002/12/07 20:05:54 pasky Exp $ */
+/* $Id: session.c,v 1.78 2002/12/11 21:54:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1091,6 +1091,31 @@ create_session(struct window *win)
 			"any inconvience caused.",
 			NULL, 1,
 			TEXT(T_OK), NULL, B_ENTER | B_ESC);
+	}
+
+	if (!get_opt_bool("config.saving_style_w")) {
+		get_opt_bool("config.saving_style_w") = 1;
+		get_opt_rec(&root_options, "config.saving_style_w")->flags |= OPT_TOUCHED;
+		if (get_opt_int("config.saving_style") != 3) {
+			msg_box(term, NULL,
+				TEXT(T_WARNING), AL_CENTER,
+				"You have option config.saving_style set to "
+				"a de facto obsolete value. The configuration "
+				"saving algorithms of ELinks were changed from "
+				"the last time you upgraded ELinks. Now, only "
+				"those options which you actually changed are "
+				"saved to the configruation file, instead of "
+				"just all the options. This simplifies our "
+				"situation greatly when we see that some option "
+				"has inappropriate default value or we need to "
+				"change semantic of some option in a subtle way. "
+				"Thus, we recommend you to change the value of "
+				"config.saving_style option to 3 in order to get "
+				"the \"right\" behaviour. Apologies for any "
+				"inconvience caused.",
+				NULL, 1,
+				TEXT(T_OK), NULL, B_ENTER | B_ESC);
+		}
 	}
 
 	return ses;

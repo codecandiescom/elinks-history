@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.67 2002/12/11 14:52:57 pasky Exp $ */
+/* $Id: conf.c,v 1.68 2002/12/11 21:54:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -440,6 +440,7 @@ load_config()
 static int indentation = 2;
 /* 0 -> none, 1 -> only option full name+type, 2 -> only desc, 3 -> both */
 static int comments = 3;
+static int touching = 0;
 
 static void
 smart_config_output_fn(unsigned char **str, int *len, struct option *option,
@@ -449,6 +450,9 @@ smart_config_output_fn(unsigned char **str, int *len, struct option *option,
 	int i, j, l;
 
 	if (!option_types[option->type].write)
+		return;
+
+	if (touching && !(option->flags & OPT_TOUCHED))
 		return;
 
 	switch (action) {
@@ -530,6 +534,13 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	int savestyle = get_opt_int("config.saving_style");
 
 	if (!str) return NULL;
+
+	if (savestyle == 3) {
+		touching = 1;
+		savestyle = 1;
+	} else {
+		touching = 0;
+	}
 
 	/* Scaring. */
 	if (savestyle == 2 || (savestyle < 2

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.147 2002/12/11 20:28:31 pasky Exp $ */
+/* $Id: options.c,v 1.148 2002/12/11 21:54:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -435,10 +435,6 @@ smart_config_string(unsigned char **str, int *len, int print_comment,
 		    && !check_nonempty_tree((struct list_head *) option->ptr))
 			continue;
 
-		/* TODO: We should maybe clear the touched flag only when really
-		 * saving the stuff...? --pasky */
-		option->flags &= ~OPT_TOUCHED;
-
 		/* We won't pop out the description when we're in autocreate
 		 * category and not template. It'd be boring flood of
 		 * repetitive comments otherwise ;). */
@@ -497,6 +493,10 @@ smart_config_string(unsigned char **str, int *len, int print_comment,
 
 			fn(str, len, option, path, depth, pc, 3);
 		}
+
+		/* TODO: We should maybe clear the touched flag only when really
+		 * saving the stuff...? --pasky */
+		option->flags &= ~OPT_TOUCHED;
 	}
 }
 
@@ -724,22 +724,21 @@ register_options()
 		"file. Zero means that no indentation is performed at all\n"
 		"when saving the configuration to a file.");
 
-	/* You can disagree about the default value here - the original
-	 * behaviour up to 20021013 (during pre18.CVS) was 1, but when I added
-	 * this option, I also realized that it's a good idea to change this.
-	 * The problem is that when you change behaviour of some option in
-	 * future, it will affect *everyone* (like the User Agent Problem),
-	 * otherwise it will only affect those who actually changed it. --pasky
-	 */
-	/* This will stay 1 until we will have new user interface for
-	 * configuration. */
 	add_opt_int("config",
-		"saving_style", 0, 0, 2, 1,
+		"saving_style", 0, 0, 3, 3,
 		"Determines what happens when you let ELinks to save options:\n"
 		"0 is only values of current options are altered\n"
 		"1 is values of current options are altered and missing options\n"
 		"     are added at the end of the file\n"
-		"2 is the configuration file is rewritten from scratch");
+		"2 is the configuration file is rewritten from scratch\n"
+		"3 is values of current options are altered and missing options\n"
+		"     CHANGED during this ELinks session are added at the end of\n"
+		"     the file");
+
+	add_opt_bool("config",
+		"saving_style_w", 0, 0,
+		"This is internal option used when displaying warning about\n"
+		"obsolete config.saving_style. You shouldn't touch it.");
 
 
 	add_opt_tree("",

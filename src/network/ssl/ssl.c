@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.27 2003/10/27 21:43:37 jonas Exp $ */
+/* $Id: ssl.c,v 1.28 2003/10/27 21:46:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,7 +230,8 @@ free_ssl(ssl_t *ssl)
 
 
 unsigned char *
-get_ssl_cipher_str(ssl_t *ssl) {
+get_ssl_cipher_str(ssl_t *ssl)
+{
 	struct string str = NULL_STRING;
 #ifdef HAVE_SSL
 

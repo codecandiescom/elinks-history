@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.22 2004/01/08 01:26:51 jonas Exp $ */
+/* $Id: action.c,v 1.23 2004/01/08 01:34:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -406,7 +406,7 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			break;
 
 		case ACT_VIEW_IMAGE:
-			send_image(term, NULL, ses);
+			do_frame_action(ses, view_image);
 			break;
 
 		case ACT_ZOOM_FRAME:

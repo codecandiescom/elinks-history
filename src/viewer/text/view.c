@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.345 2004/01/08 01:26:51 jonas Exp $ */
+/* $Id: view.c,v 1.346 2004/01/08 01:34:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1229,21 +1229,15 @@ save_url(struct session *ses, unsigned char *url)
 }
 
 void
-send_image(struct terminal *term, void *xxx, struct session *ses)
+view_image(struct session *ses, struct document_view *doc_view, int a)
 {
-	struct document_view *doc_view;
-	unsigned char *u;
-
-	assert(term && ses);
-	if_assert_failed return;
-	doc_view = current_frame(ses);
-	assert(doc_view && doc_view->document && doc_view->vs);
-	if_assert_failed return;
+	struct link *link;
 
 	if (doc_view->vs->current_link == -1) return;
-	u = doc_view->document->links[doc_view->vs->current_link].where_img;
-	if (!u) return;
-	goto_url(ses, u);
+
+	link = &doc_view->document->links[doc_view->vs->current_link];
+	if (link->where_img)
+		goto_url(ses, link->where_img);
 }
 
 void

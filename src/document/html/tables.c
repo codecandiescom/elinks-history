@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.44 2003/06/30 21:47:35 zas Exp $ */
+/* $Id: tables.c,v 1.45 2003/06/30 22:22:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1457,8 +1457,9 @@ static void
 display_table_frames(struct table *t, int x, int y)
 {
 	signed char *fh, *fv;
-	int i, j;
+	register int i, j;
 	int cx, cy;
+	int fa = 0, fb = 0, fl = 0, fr = 0;
 
 	fh = fmem_alloc((t->x + 2) * (t->y + 1));
 	if (!fh) return;
@@ -1484,6 +1485,8 @@ display_table_frames(struct table *t, int x, int y)
 #define H_LINE(xx, yy) (H_LINE_X((xx), (yy)) == -1 ? 0 : H_LINE_X((xx), (yy)))
 #define V_LINE(xx, yy) (V_LINE_X((xx), (yy)) == -1 ? 0 : V_LINE_X((xx), (yy)))
 
+	if (t->rules == R_NONE) goto cont2;
+
 	for (j = 0; j < t->y; j++) for (i = 0; i < t->x; i++) {
 		int xsp, ysp;
 		struct table_cell *cell = CELL(t, i, j);
@@ -1494,8 +1497,8 @@ display_table_frames(struct table *t, int x, int y)
 		ysp = cell->rowspan;
 		if (!ysp) ysp = t->y - j;
 
-		if (t->rules != R_NONE && t->rules != R_COLS) {
-			int lx;
+		if (t->rules != R_COLS) {
+			register int lx;
 
 			for (lx = 0; lx < xsp; lx++) {
 				H_LINE_X(i + lx, j) = t->cellsp;
@@ -1503,8 +1506,8 @@ display_table_frames(struct table *t, int x, int y)
 			}
 		}
 
-		if (t->rules != R_NONE && t->rules != R_ROWS) {
-			int ly;
+		if (t->rules != R_ROWS) {
+			register int ly;
 
 			for (ly = 0; ly < ysp; ly++) {
 				V_LINE_X(i, j + ly) = t->cellsp;
@@ -1528,43 +1531,51 @@ cont:;
 		}
 	}
 
+cont2:
+	if (t->border) {
+		fa = !!(t->frame & F_ABOVE);
+		fb = !!(t->frame & F_BELOW);
+		fl = !!(t->frame & F_LHS);
+		fr = !!(t->frame & F_RHS);
+	}
+
 	for (i = 0; i < t->x; i++) {
-		H_LINE_X(i, 0) = t->border * !!(t->frame & F_ABOVE);
-		H_LINE_X(i, t->y) = t->border * !!(t->frame & F_BELOW);
+		H_LINE_X(i, 0) = fa;
+		H_LINE_X(i, t->y) = fb;
 	}
 
 	for (j = 0; j < t->y; j++) {
-		V_LINE_X(0, j) = t->border * !!(t->frame & F_LHS);
-		V_LINE_X(t->x, j) = t->border * !!(t->frame & F_RHS);
+		V_LINE_X(0, j) = fl;
+		V_LINE_X(t->x, j) = fr;
 	}
 
 	cy = y;
 	for (j = 0; j <= t->y; j++) {
 		cx = x;
 		if ((j > 0 && j < t->y && get_hline_width(t, j) >= 0)
-		    || (j == 0 && t->border && (t->frame & F_ABOVE))
-		    || (j == t->y && t->border && (t->frame & F_BELOW))) {
+		    || (j == 0 && fa)
+		    || (j == t->y && fb)) {
+			int w = fl ? t->border : -1;
 
 			for (i = 0; i < t->x; i++) {
-				int w;
-
-				if (i > 0) w = get_vline_width(t, i);
-				else w = t->border && (t->frame & F_LHS) ? t->border : -1;
+				if (i > 0)
+					w = get_vline_width(t, i);
 
 				if (w >= 0) {
 					draw_frame_point(cx, cy, i, j);
-					if (j < t->y) draw_frame_vline(cx, cy + 1, t->r_heights[j], i, j);
+					if (j < t->y)
+						draw_frame_vline(cx, cy + 1, t->r_heights[j], i, j);
 					cx++;
 				}
 
-				w = t->w_c[i];
-				draw_frame_hline(cx, cy, w, i, j);
-				cx += w;
+				draw_frame_hline(cx, cy, t->w_c[i], i, j);
+				cx += t->w_c[i];
 			}
 
-			if (t->border && (t->frame & F_RHS)) {
+			if (fr) {
 				draw_frame_point(cx, cy, i, j);
-				if (j < t->y) draw_frame_vline(cx, cy + 1, t->r_heights[j], i, j);
+				if (j < t->y)
+					draw_frame_vline(cx, cy + 1, t->r_heights[j], i, j);
 				cx++;
 			}
 
@@ -1573,8 +1584,8 @@ cont:;
 		} else if (j < t->y) {
 			for (i = 0; i <= t->x; i++) {
 				if ((i > 0 && i < t->x && get_vline_width(t, i) >= 0)
-				    || (i == 0 && t->border && (t->frame & F_LHS))
-				    || (i == t->x && t->border && (t->frame & F_RHS))) {
+				    || (i == 0 && fl)
+				    || (i == t->x && fr)) {
 					draw_frame_vline(cx, cy, t->r_heights[j], i, j);
 					cx++;
 				}

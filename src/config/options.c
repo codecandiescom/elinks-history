@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.262 2003/08/26 12:40:19 zas Exp $ */
+/* $Id: options.c,v 1.263 2003/08/28 19:31:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -538,6 +538,8 @@ static unsigned char *
 forcehtml_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
 	/* XXX: risk of buffer overflow ? --Zas */
+	/* Para-XXX: Man, having MAX_STR_LEN < 10 means asking for trouble
+	 * quite seriously anyway ;-). --pasky */
 	strcpy(get_opt_str("mime.default_type"), "text/html");
 	return NULL;
 }

@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.13 2004/01/28 00:04:52 jonas Exp $ */
+/* $Id: parser.h,v 1.14 2004/01/30 15:25:01 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PARSER_H
 #define EL__DOCUMENT_CSS_PARSER_H
@@ -21,6 +21,6 @@ void css_parse_properties(struct list_head *props, struct scanner *scanner);
 /* Parses the @string and adds any recognized selectors + properties to the
  * given stylesheet @css. If the selector is already in the stylesheet it
  * properties are added to the that selector. */
-void css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string);
+void css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string, unsigned char *end);
 
 #endif

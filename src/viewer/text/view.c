@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.611 2004/10/10 02:51:55 miciah Exp $ */
+/* $Id: view.c,v 1.612 2004/10/10 02:56:34 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -705,25 +705,6 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 	}
 
 	switch (kbd_action(KEYMAP_MAIN, ev, NULL)) {
-		case ACT_MAIN_JUMP_TO_LINK:
-			try_jump_to_link_number(ses, doc_view);
-			status = FRAME_EVENT_OK;
-			break;
-		case ACT_MAIN_MARK_SET:
-#ifdef CONFIG_MARKS
-			ses->kbdprefix.mark = KP_MARK_SET;
-#endif
-			status = FRAME_EVENT_OK;
-			break;
-		case ACT_MAIN_MARK_GOTO:
-#ifdef CONFIG_MARKS
-			/* TODO: Show promptly a menu (or even listbox?)
-			 * with all the marks. But the next letter must
-			 * still choose a mark directly! --pasky */
-			ses->kbdprefix.mark = KP_MARK_GOTO;
-#endif
-			status = FRAME_EVENT_OK;
-			break;
 		default:
 			if (isdigit(get_kbd_key(ev))) {
 				status = frame_ev_kbd_number(ses, doc_view,

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.106 2004/10/10 02:51:55 miciah Exp $ */
+/* $Id: action.c,v 1.107 2004/10/10 02:56:34 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -628,8 +628,27 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_JUMP_TO_LINK:
+			try_jump_to_link_number(ses, doc_view);
+			status = FRAME_EVENT_OK;
+			break;
+
 		case ACT_MAIN_MARK_SET:
+#ifdef CONFIG_MARKS
+			ses->kbdprefix.mark = KP_MARK_SET;
+#endif
+			status = FRAME_EVENT_OK;
+			break;
+
 		case ACT_MAIN_MARK_GOTO:
+#ifdef CONFIG_MARKS
+			/* TODO: Show promptly a menu (or even listbox?)
+			 * with all the marks. But the next letter must
+			 * still choose a mark directly! --pasky */
+			ses->kbdprefix.mark = KP_MARK_GOTO;
+#endif
+			status = FRAME_EVENT_OK;
+			break;
+
 		case ACT_MAIN_SCRIPTING_FUNCTION:
 		default:
 			if (verbose) {

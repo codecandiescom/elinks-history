@@ -1,4 +1,4 @@
-/* $Id: align.h,v 1.2 2002/08/07 02:56:58 pasky Exp $ */
+/* $Id: align.h,v 1.3 2002/11/29 18:16:43 zas Exp $ */
 
 #ifndef EL__BFU_ALIGN_H
 #define EL__BFU_ALIGN_H
@@ -40,6 +40,7 @@ get_bfu_color(struct terminal *term, unsigned char *color_class)
 
 	colors = get_opt_bool_tree(opt_tree, "colors");
 	opt = straconcat("ui.colors.", colors ? "color" : "mono", ".", color_class, NULL);
+	if (!opt) return 0;
 	opt_tree = (struct list_head *) get_opt_ptr(opt);
 	mem_free(opt);
 	if (!opt_tree) return 0;

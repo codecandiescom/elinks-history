@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.317 2003/10/20 08:37:08 zas Exp $ */
+/* $Id: options.c,v 1.318 2003/10/20 15:22:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -427,10 +427,10 @@ check_nonempty_tree(struct list_head *options)
 }
 
 void
-smart_config_string(struct string *str, int print_comment,
+smart_config_string(struct string *str, int print_comment, int i18n,
 		    struct list_head *options, unsigned char *path, int depth,
 		    void (*fn)(struct string *, struct option *,
-			       unsigned char *, int, int, int))
+			       unsigned char *, int, int, int, int))
 {
 	struct option *option;
 
@@ -474,14 +474,14 @@ smart_config_string(struct string *str, int print_comment,
 		/* For config file, we ignore do_print_comment everywhere
 		 * except 1, but sometimes we want to skip the option totally.
 		 */
-		fn(str, option, path, depth, option->type == OPT_TREE ? print_comment : do_print_comment, 0);
+		fn(str, option, path, depth, option->type == OPT_TREE ? print_comment : do_print_comment, 0, i18n);
 
-		fn(str, option, path, depth, do_print_comment, 1);
+		fn(str, option, path, depth, do_print_comment, 1, i18n);
 
 		/* And the option itself */
 
 		if (option_types[option->type].write) {
-			fn(str, option, path, depth, do_print_comment, 2);
+			fn(str, option, path, depth, do_print_comment, 2, i18n);
 
 		} else if (option->type == OPT_TREE) {
 			struct string newpath;
@@ -494,18 +494,18 @@ smart_config_string(struct string *str, int print_comment,
 			else if (pc == 1 && strcmp(option->name, "_template_"))
 				pc = 0;
 
-			fn(str, option, path, depth, /*pc*/1, 3);
+			fn(str, option, path, depth, /*pc*/1, 3, i18n);
 
 			if (path) {
 				add_to_string(&newpath, path);
 				add_char_to_string(&newpath, '.');
 			}
 			add_to_string(&newpath, option->name);
-			smart_config_string(str, pc, option->ptr,
+			smart_config_string(str, pc, i18n, option->ptr,
 					    newpath.source, depth + 1, fn);
 			done_string(&newpath);
 
-			fn(str, option, path, depth, /*pc*/1, 3);
+			fn(str, option, path, depth, /*pc*/1, 3, i18n);
 		}
 
 		/* TODO: We should maybe clear the touched flag only when really
@@ -934,7 +934,13 @@ register_options(void)
 		"3 is values of current options are altered and missing options\n"
 		"     CHANGED during this ELinks session are added at the end of\n"
 		"     the file"));
+	
+	add_opt_bool("config", N_("Comments localization"),
+		"i18n", 0, 0,
+		N_("If set to 1, comments in configuration file will be translated\n"
+		"to language used by UI."));
 
+	
 	add_opt_bool("config", N_("Saving style warnings"),
 		"saving_style_w", 0, 0,
 		N_("This is internal option used when displaying a warning about\n"

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.91 2003/10/20 11:46:37 zas Exp $ */
+/* $Id: conf.c,v 1.92 2003/10/20 15:22:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -468,10 +468,17 @@ static int indentation = 2;
 static int comments = 3;
 static int touching = 0;
 
+static inline unsigned char *
+conf_i18n(unsigned char *s, int i18n)
+{
+	if (i18n) return gettext(s);
+	return s;
+}
+
 static void
 smart_config_output_fn(struct string *string, struct option *option,
 		       unsigned char *path, int depth, int do_print_comment,
-		       int action)
+		       int action, int i18n)
 {
 	unsigned char *desc_i18n;
 	int i, l;
@@ -509,7 +516,7 @@ smart_config_output_fn(struct string *string, struct option *option,
 			if (!option->desc || !do_print_comment)
 				break;
 
-			desc_i18n = gettext(option->desc);
+			desc_i18n = conf_i18n(option->desc, i18n);
 			l = strlen(desc_i18n);
 
 			if (depth)
@@ -563,6 +570,7 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	struct string tmpstring;
 	int origlen;
 	int savestyle = get_opt_int("config.saving_style");
+	int i18n = get_opt_int("config.i18n");
 
 	if (!init_string(&config)) return NULL;
 
@@ -580,38 +588,40 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 		    || !config.length))) {
 		switch (savestyle) {
 		case 0:
-			add_to_string(&config, gettext(
+			add_to_string(&config, conf_i18n(N_(
 			"## This is ELinks configuration file. You can edit it manually,\n"
 			"## if you wish so; this file is edited by ELinks when you save\n"
 			"## options through UI, however only option values will be altered\n"
-			"## and all your formatting, own comments etc will be kept as-is.\n"));
+			"## and all your formatting, own comments etc will be kept as-is.\n"),
+			i18n));
 			break;
 		case 1:
-			add_to_string(&config, gettext(
+			add_to_string(&config, conf_i18n(N_(
 			"## This is ELinks configuration file. You can edit it manually,\n"
 			"## if you wish so; this file is edited by ELinks when you save\n"
 			"## options through UI, however only option values will be altered\n"
 			"## and missing options will be added at the end of file; if option\n"
 			"## is not written in this file, but in some file included from it,\n"
 			"## it is NOT counted as missing. Note that all your formatting,\n"
-			"## own comments and so on will be kept as-is.\n"));
+			"## own comments and so on will be kept as-is.\n"), i18n));
 			break;
 		case 2:
-			add_to_string(&config, gettext(
+			add_to_string(&config, conf_i18n(N_(
 			"## This is ELinks configuration file. You can edit it manually,\n"
 			"## if you wish so, but keep in mind that this file is overwritten\n"
 			"## by ELinks when you save options through UI and you are out of\n"
-			"## luck with your formatting and own comments then, so beware.\n"));
+			"## luck with your formatting and own comments then, so beware.\n"),
+			i18n));
 			break;
 		default:
 			break;
 		}
 
-		add_to_string(&config, gettext(
+		add_to_string(&config, conf_i18n(N_(
 			"##\n"
 			"## Obviously, if you don't like what ELinks is going to do with\n"
 			"## this file, you can change it by altering the config.saving_style\n"
-			"## option. Come on, aren't we friendly guys after all?\n"));
+			"## option. Come on, aren't we friendly guys after all?\n"), i18n));
 	}
 
 	if (savestyle == 0) goto get_me_out;
@@ -623,12 +633,12 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 
 	add_to_string(&tmpstring, NEWLINE NEWLINE NEWLINE);
 	add_to_string(&tmpstring, "#####################################" NEWLINE);
-	add_to_string(&tmpstring, gettext("# Automatically saved options\n"));
+	add_to_string(&tmpstring, conf_i18n(N_("# Automatically saved options\n"), i18n));
 	add_to_string(&tmpstring, "#" NEWLINE);
 	add_to_string(&tmpstring, NEWLINE);
 
 	origlen = tmpstring.length;
-	smart_config_string(&tmpstring, 2, options->ptr, NULL, 0, smart_config_output_fn);
+	smart_config_string(&tmpstring, 2, i18n, options->ptr, NULL, 0, smart_config_output_fn);
 	if (tmpstring.length > origlen)
 		add_bytes_to_string(&config, tmpstring.source, tmpstring.length);
 	done_string(&tmpstring);
@@ -637,7 +647,7 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 
 	add_to_string(&tmpstring, NEWLINE NEWLINE NEWLINE);
 	add_to_string(&tmpstring, "#####################################" NEWLINE);
-	add_to_string(&tmpstring, gettext("# Automatically saved keybindings\n"));
+	add_to_string(&tmpstring, conf_i18n(N_("# Automatically saved keybindings\n"), i18n));
 	add_to_string(&tmpstring, "#" NEWLINE);
 
 	origlen = tmpstring.length;

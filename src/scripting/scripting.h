@@ -1,4 +1,4 @@
-/* $Id: scripting.h,v 1.4 2003/09/23 18:44:54 jonas Exp $ */
+/* $Id: scripting.h,v 1.5 2003/09/23 20:30:43 jonas Exp $ */
 
 #ifndef EL__SCRIPTING_SCRIPTING_H
 #define EL__SCRIPTING_SCRIPTING_H
@@ -12,10 +12,14 @@ struct scripting_hook {
 	event_hook callback;
 };
 
-/* Plugs hooks into the event system. */
-/* XXX: Last entry of @hooks must have a NULL @name. */
-void register_scripting_hooks(struct scripting_hook *hooks);
-void unregister_scripting_hooks(struct scripting_hook *hooks);
+struct scripting_backend {
+	void (*init)(void);
+	void (*done)(void);
+
+	/* Hooks that should be plugged into the event system. */
+	/* XXX: Last entry of @hooks must have a NULL @name. */
+	struct scripting_hook *hooks;
+};
 
 void init_scripting(void);
 void done_scripting(void);

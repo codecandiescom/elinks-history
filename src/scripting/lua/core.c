@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.70 2003/09/23 14:17:28 pasky Exp $ */
+/* $Id: core.c,v 1.71 2003/09/23 20:30:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -618,7 +618,7 @@ do_hooks_file(LS, unsigned char *prefix, unsigned char *filename)
 	lua_settop(S, oldtop);
 }
 
-void
+static void
 init_lua(void)
 {
 	L = lua_open(0);
@@ -636,13 +636,11 @@ init_lua(void)
 	lua_register(L, "xdialog", l_xdialog);
 	do_hooks_file(L, CONFDIR, "hooks.lua");
 	if (elinks_home) do_hooks_file(L, elinks_home, "hooks.lua");
-	register_scripting_hooks(lua_scripting_hooks);
 }
 
-void
+static void
 cleanup_lua(void)
 {
-	unregister_scripting_hooks(lua_scripting_hooks);
 	lua_close(L);
 }
 
@@ -849,5 +847,11 @@ run_lua_func(struct session *ses, int func_ref)
 	if (!err) handle_standard_lua_returns("keyboard function");
 }
 
+
+struct scripting_backend lua_scripting_backend = {
+	/* init: */	init_lua,
+	/* done: */	cleanup_lua,
+	/* hooks: */	lua_scripting_hooks,
+};
 
 #endif

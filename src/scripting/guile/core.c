@@ -1,5 +1,5 @@
 /* Guile interface (scripting engine) */
-/* $Id: core.c,v 1.3 2003/09/23 00:47:19 jonas Exp $ */
+/* $Id: core.c,v 1.4 2003/09/23 20:30:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@
  * Init
  */
 
-void
+static void
 init_guile(void)
 {
 	SCM user_module;
@@ -82,15 +82,13 @@ init_guile(void)
 	path = straconcat(elinks_home, "user-hooks.scm", NULL);
 	scm_c_primitive_load_path(path);
 	mem_free(path);
-
-	register_scripting_hooks(guile_scripting_hooks);
 }
 
-void
-done_guile(void)
-{
-	unregister_scripting_hooks(guile_scripting_hooks);
-}
 
+struct scripting_backend lua_scripting_backend = {
+	/* init: */	init_guile,
+	/* done: */	NULL,
+	/* hooks: */	guile_scripting_hooks,
+};
 
 #endif /* HAVE_GUILE */

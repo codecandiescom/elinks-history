@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.215 2003/12/10 17:05:18 jonas Exp $ */
+/* $Id: menu.c,v 1.216 2003/12/10 19:02:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -372,7 +372,7 @@ static struct menu_item file_menu11[] = {
 								(void *) 0, 0),
 	INIT_MENU_ITEM(N_("~Go to URL"), "g", menu_goto_url, NULL, 0),
 	INIT_MENU_ITEM(N_("Go ~back"), "<-", menu_go_back, NULL, 0),
-	INIT_MENU_ITEM(N_("Go forward"), "<-", menu_go_unback, NULL, 0),
+	INIT_MENU_ITEM(N_("Go ~forward"), "->", menu_go_unback, NULL, 0),
 	INIT_MENU_ITEM(N_("~Reload"), "Ctrl-R", menu_reload, NULL, 0),
 	INIT_MENU_ITEM(N_("~History"), M_SUBMENU, history_menu, NULL, SUBMENU),
 	INIT_MENU_ITEM(N_("~Unhistory"), M_SUBMENU, unhistory_menu, NULL, SUBMENU),
@@ -382,7 +382,7 @@ static struct menu_item file_menu21[] = {
 	BAR_MENU_ITEM,
 	INIT_MENU_ITEM(N_("~Save as"), "", save_as, NULL, 0),
 	INIT_MENU_ITEM(N_("Save UR~L as"), "", menu_save_url_as, NULL, 0),
-	INIT_MENU_ITEM(N_("Save formatted ~document"), "", menu_save_formatted, NULL, 0),
+	INIT_MENU_ITEM(N_("Sa~ve formatted document"), "", menu_save_formatted, NULL, 0),
 #ifdef BOOKMARKS
 	INIT_MENU_ITEM(N_("Bookm~ark document"), "a", launch_bm_add_doc_dialog, NULL, 0),
 #endif

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.318 2003/10/20 15:22:32 zas Exp $ */
+/* $Id: options.c,v 1.319 2003/10/20 15:50:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -937,8 +937,12 @@ register_options(void)
 	
 	add_opt_bool("config", N_("Comments localization"),
 		"i18n", 0, 0,
-		N_("If set to 1, comments in configuration file will be translated\n"
-		"to language used by UI."));
+		N_("If set to 1, comments in the configuration file will be\n"
+		"translated to the language used by UI. Note that if you have\n"
+		"different language set in different terminals, the language\n"
+		"used in the configuration file MAY be the same as on the\n"
+		"terminal where you saved the file, but it should be generally\n"
+		"considered unpredicatble."));
 
 	
 	add_opt_bool("config", N_("Saving style warnings"),

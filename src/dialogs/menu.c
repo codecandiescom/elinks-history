@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.163 2003/10/24 00:29:25 pasky Exp $ */
+/* $Id: menu.c,v 1.164 2003/10/24 01:09:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,14 +181,10 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 	/* Move all intermediate items to unhistory. */
 
 	while (steps > 1
-	       && cur_loc(ses) != (struct location *) &ses->history.history.next) {
+	       && cur_loc(ses)->prev != (struct location *) &ses->history.history.next) {
 		ses->history.current = ses->history.current->prev;
 		steps--;
 	}
-
-	/* FIXME: If we've stop because of the sanity check for not hitting the
-	 * history begin, go_back() will do nothing. But this situation should
-	 * never happen anyway ;-). Same applies to unhistory. --pasky */
 
 	{
 		/* XXX: We should have the original document as the current
@@ -214,7 +210,7 @@ go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 	/* Move all intermediate items to history. */
 
 	while (steps > 1
-	       && cur_loc(ses) != (struct location *) &ses->history.history.prev) {
+	       && cur_loc(ses)->next != (struct location *) &ses->history.history.prev) {
 		ses->history.current = ses->history.current->next;
 		steps--;
 	}

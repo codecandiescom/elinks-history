@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.368 2004/09/27 18:15:42 jonas Exp $ */
+/* $Id: menu.c,v 1.369 2004/09/28 22:35:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -695,7 +695,7 @@ add_new_win_to_menu(struct menu_item **mi, unsigned char *text,
 	    || get_cmd_opt_bool("anonymous"))
 		return;
 
-	add_to_menu(mi, text, NULL, ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND,
+	add_to_menu(mi, text, NULL, ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW,
 		    (menu_func) open_in_new_window,
 		    send_open_in_new_window, c - 1 ? SUBMENU : 0);
 }

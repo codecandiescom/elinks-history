@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.15 2004/04/17 14:50:23 jonas Exp $ */
+/* $Id: listmenu.c,v 1.16 2004/04/17 14:54:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,4 +217,3 @@ add_select_item(struct list_menu *menu, struct string *string,
 		string->length = 0;
 	}
 }
-

@@ -1,3 +1,118 @@
+Sun Aug 31 19:14:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: color.c, screen.c:
+
+	Handling of underlining is now fully optional and hopefully with
+	minimal overhead [two tests in print_char()].  
+
+Sun Aug 31 17:28:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Draw underlines based on the terminal option.  
+
+Sun Aug 31 17:24:19 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced. French translation was updated.  
+
+Sun Aug 31 17:20:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: color.c, color.h, draw.h, screen.c:
+
+	Replace TERM_COLOR_BOLD with SCREEN_ATTR_BOLD.  
+
+Sun Aug 31 17:03:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/options.c:
+
+	Make terminal underline option appear in the terminal options
+	dialog.  
+
+Sun Aug 31 17:03:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Fix terminal restrict_852 description and add underline optinos.  
+
+Sun Aug 31 15:51:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: color.h, screen.c:
+
+	Cleanup the use negative image testing + only init @underline when
+	appropriate.  
+
+Sun Aug 31 13:07:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Fix color encoding comment.  
+
+Sun Aug 31 12:51:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Merge INT2RGB() into HASH_RGB() and use INIT_RGB() if we have to
+	calculate distance.  
+
+Sun Aug 31 12:48:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/color.h:
+
+	Generalization via macros.  
+
+Sun Aug 31 10:36:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	Use memacpy() in copy_string().  
+
+Sun Aug 31 10:30:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	xstrcmp() optimization.  
+
+Sun Aug 31 09:29:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/color.c:
+
+	Profiling and optimization of find_nearest_color(), measured
+	improvment is significative. Perhaps we can optimize a bit more by
+	merging INT2RGB() and HASH_RGB() in this functions.  
+
+Sun Aug 31 09:00:58 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	Code optimization in redraw_screen(), memcmp() call was removed,
+	tests were optimized in the 2 levels loop.  
+
+Sun Aug 31 00:40:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Completely rewrite the color encoding into one function. There's
+	still some dark corners that don't make sense to me maybe someone
+	can hit me with a cluebat? 
+
+Sun Aug 31 00:19:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	fg_color(): Transmorphed into just the foregroud color lookup table.
+	Comments updated.  
+
+Sun Aug 31 00:13:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: color.h, screen.c:
+
+	Add comments and #define for bold rendering.  
+
 Sat Aug 30 20:51:08 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/terminal/color.c:

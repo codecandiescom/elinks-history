@@ -1,5 +1,5 @@
 /* Parser HTML backend */
-/* $Id: parser.c,v 1.25 2002/12/31 10:32:41 pasky Exp $ */
+/* $Id: parser.c,v 1.26 2002/12/31 10:36:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,6 +96,8 @@ static struct syntree_node *
 spawn_syntree_node(struct parser_state *state)
 {
 	struct syntree_node *node = init_syntree_node();
+
+	if (!node) return NULL;
 
 	node->root = state->root;
 	if (state->root != state->current) {
@@ -365,6 +367,8 @@ tag_name_parse(struct parser_state *state, unsigned char **str, int *len)
 	}
 
 	while (html_len) {
+		int name_len;
+
 		if (isA(*html)) {
 			html++, html_len--;
 			continue;
@@ -372,9 +376,8 @@ tag_name_parse(struct parser_state *state, unsigned char **str, int *len)
 
 		pstate = html_state_pop(state);
 
-		if (*len - html_len) {
-			int name_len = *len - html_len;
-
+		name_len = *len - html_len;
+		if (name_len) {
 			/* Non-empty tag name. */
 			if (pstate->data.tag.type == '/') {
 				/* Closing tag */
@@ -443,14 +446,15 @@ tag_attr_parse(struct parser_state *state, unsigned char **str, int *len)
 	}
 
 	while (html_len) {
+		int name_len;
+
 		if (isA(*html)) {
 			html++, html_len--;
 			continue;
 		}
 
-		if (*len - html_len) {
-			int name_len = *len - html_len;
-
+		name_len = *len - html_len;
+		if (name_len) {
 			pstate->data.attr.attrname = *str;
 			pstate->data.attr.attrlen = name_len;
 			pstate = html_state_push(state, HPT_TAG_ATTR_VAL);

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.51 2003/06/22 12:13:30 zas Exp $ */
+/* $Id: file.c,v 1.52 2003/06/22 16:03:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -360,14 +360,6 @@ file_func(struct connection *c)
 		return;
 	}
 
-	if (encoding != ENCODING_NONE && !S_ISREG(stt.st_mode)) {
-		/* We only want to open regular encoded files. */
-		close(fd);
-		mem_free(name);
-		abort_conn_with_state(c, -saved_errno);
-		return;
-	}
-
 	if (S_ISDIR(stt.st_mode)) {
 		struct dirs *dir;
 		int dirl;
@@ -595,44 +587,6 @@ dir:
 		add_to_str(&file, &fl, "</pre>\n<hr>\n</body>\n</html>\n");
 		head = stracpy("\r\nContent-Type: text/html\r\n");
 
-	} else if (!S_ISREG(stt.st_mode)) {
-		const int bufsize = 4096;
-		int offset = 0;
-		int readlen;
-
-		mem_free(name);
-
-		if (!get_opt_int("protocol.file.allow_special_files")) {
-			close(fd);
-			abort_conn_with_state(c, S_FILE_TYPE);
-			return;
-		}
-
-		file = mem_alloc(bufsize + 1);
-		if (!file) {
-			close(fd);
-			abort_conn_with_state(c, S_OUT_OF_MEM);
-			return;
-		}
-
-		while ((readlen = read(fd, file + offset, bufsize)) > 0) {
-			offset += readlen;
-
-			file = mem_realloc(file, offset + bufsize + 1);
-			if (!file) {
-				close(fd);
-				abort_conn_with_state(c, S_OUT_OF_MEM);
-				return;
-			}
-		}
-
-		fl = offset;
-		file[fl] = '\0'; /* NULL-terminate just in case */
-
-		close(fd);
-
-		head = stracpy("");
-
 	} else {
 		struct stream_encoded *stream;
 		int readlen;
@@ -641,6 +595,20 @@ dir:
 			encoding = guess_encoding(name);
 
 		mem_free(name);
+
+		if (encoding != ENCODING_NONE && !S_ISREG(stt.st_mode)) {
+			/* We only want to open regular encoded files. */
+			close(fd);
+			abort_conn_with_state(c, -saved_errno);
+			return;
+		}
+
+		if (!S_ISREG(stt.st_mode) &&
+		    !get_opt_int("protocol.file.allow_special_files")) {
+			close(fd);
+			abort_conn_with_state(c, S_FILE_TYPE);
+			return;
+		}
 
 		/* We read with granularity of stt.st_size - this does best
 		 * job for uncompressed files, and doesn't hurt for compressed
@@ -693,8 +661,9 @@ dir:
 				return;
 			}
 		}
-		close_encoded(stream);
 
+		close_encoded(stream);
+		file[fl] = '\0'; /* NULL-terminate just in case */
 		head = stracpy("");
 	}
 

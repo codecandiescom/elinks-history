@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.157 2004/01/25 13:17:22 jonas Exp $ */
+/* $Id: dialogs.c,v 1.158 2004/03/05 17:58:53 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -192,7 +192,7 @@ delete_option_item(struct listbox_item *item, int last)
 
 	assert(!is_object_used(option));
 
-	delete_option(option);
+	mark_option_as_deleted(option);
 }
 
 static struct listbox_ops options_listbox_ops = {
@@ -368,7 +368,9 @@ static void
 add_option_to_tree(void *data, unsigned char *name)
 {
 	struct option *option = data;
+	struct option *old = get_opt_rec_real(option, name);
 
+	if (old && (old->flags & OPT_DELETED)) delete_option(old);
 	/* get_opt_rec() will do all the work for ourselves... ;-) */
 	get_opt_rec(option, name);
 	/* TODO: If the return value is NULL, we should pop up a msgbox. */

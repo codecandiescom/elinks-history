@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.54 2003/06/05 14:38:16 zas Exp $ */
+/* $Id: cookies.c,v 1.55 2003/06/07 22:50:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -338,20 +338,20 @@ accept_cookie(struct cookie *c)
 	struct c_domain *cd;
 	struct cookie *d, *e;
 
-	foreach(d, cookies) {
-		if (!strcasecmp(d->name, c->name)
-		    && !strcasecmp(d->domain, c->domain)) {
-			e = d;
-			d = d->prev;
-			del_from_list(e);
-			free_cookie(e);
-			mem_free(e);
-		}
+	foreach (d, cookies) {
+		if (strcasecmp(d->name, c->name)
+		    || strcasecmp(d->domain, c->domain))
+			continue;
+		e = d;
+		d = d->prev;
+		del_from_list(e);
+		free_cookie(e);
+		mem_free(e);
 	}
 
 	add_to_list(cookies, c);
 
-	foreach(cd, c_domains)
+	foreach (cd, c_domains)
 		if (!strcasecmp(cd->domain, c->domain))
 			return;
 
@@ -372,11 +372,11 @@ delete_cookie(struct cookie *c)
 	struct c_domain *cd;
 	struct cookie *d;
 
-	foreach(d, cookies)
+	foreach (d, cookies)
 		if (!strcasecmp(d->domain, c->domain))
 			goto end;
 
-	foreach(cd, c_domains) {
+	foreach (cd, c_domains) {
 	       	if (!strcasecmp(cd->domain, c->domain)) {
 			del_from_list(cd);
 			mem_free(cd);
@@ -400,7 +400,7 @@ cookie *find_cookie_id(void *idp)
 	int id = (int)idp;
 	struct cookie *c;
 
-	foreach(c, cookies)
+	foreach (c, cookies)
 		if (c->id == id)
 			return c;
 
@@ -427,7 +427,7 @@ cookie_default(void *idp, int a)
 
 	if (!c) return;
 
-	foreach(s, c_servers)
+	foreach (s, c_servers)
 		if (!strcasecmp(s->server, c->server))
 			goto found;
 
@@ -584,7 +584,7 @@ load_cookies() {
 	 * removed */
 	free_list(c_domains);
 
-	foreach(c, cookies)
+	foreach (c, cookies)
 		free_cookie(c);
 	free_list(cookies);
 

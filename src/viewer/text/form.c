@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.253 2004/12/16 15:42:58 zas Exp $ */
+/* $Id: form.c,v 1.254 2004/12/17 08:48:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1552,7 +1552,7 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 	}
 
 	if (link->accesskey
-	    && get_opt_int("document.browse.accesskey.display")) {
+	    && get_opt_bool("document.browse.accesskey.display")) {
 		add_to_string(&str, " (");
 		make_keystroke(&str, link->accesskey, 0, 0);
 		add_char_to_string(&str, ')');

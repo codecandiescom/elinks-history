@@ -2675,9 +2675,8 @@ msgstr ""
 "z inwersj± jest wy¶wietlany poprawnie."
 
 #: src/config/options.c:1786
-#, fuzzy
 msgid "Color mode"
-msgstr "Kolor"
+msgstr "Tryb kolorowy"
 
 #: src/config/options.c:1788
 msgid ""
@@ -2687,7 +2686,11 @@ msgid ""
 "1 is 16 color mode, uses the common ANSI colors\n"
 "2 is 256 color mode, requires that xterm256 is used\n"
 msgstr ""
-
+"Tryb kolorowy kontroluje, które kolory s± u¿ywane i w jaki sposób\n"
+"s± wy¶wietlane na terminalu. Mo¿liwe do u¿ycia tryby kolorowe to:\n"
+"0 - tryb monochromatyczny\n"
+"1 - tryb 16 kolorowy, u¿ywa standardowych kolorów ANSI\n"
+"2 - tryb 256 kolorowy, potrzebuje xterm256\n" 
 #
 #: src/config/options.c:1794
 msgid "Enable transparency"
@@ -4183,12 +4186,11 @@ msgstr "Ramki KOI8-R"
 
 #: src/dialogs/options.c:128
 msgid "No colors (mono)"
-msgstr ""
+msgstr "Brak kolorów (mono)"
 
 #: src/dialogs/options.c:129
-#, fuzzy
 msgid "16 colors"
-msgstr "U¿ycie kolorów"
+msgstr "16 kolorów"
 
 #: src/dialogs/options.c:130
 msgid "Use ^[[11m"
@@ -4884,9 +4886,8 @@ msgid "Forms memory"
 msgstr "Zapamiêtywanie formularzy"
 
 #: src/util/version.c:104
-#, fuzzy
 msgid "No mouse"
-msgstr "Brak dokumentu"
+msgstr "Brak myszy"
 
 #: src/viewer/dump/dump.c:76
 #, c-format
@@ -5055,6 +5056,3 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1462
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
-
-#~ msgid "If we should use colors."
-#~ msgstr "Czy powinno siê u¿ywaæ kolorów."

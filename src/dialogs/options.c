@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.83 2003/10/24 17:04:37 zas Exp $ */
+/* $Id: options.c,v 1.84 2003/10/24 22:33:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,7 +189,7 @@ terminal_options_fn(struct dialog_data *dlg_data)
 
 #define TERMOPT_WIDGET_SIZE (TERMOPT_WIDGETS * sizeof(struct widget))
 
-#define set_term_opt_checkbox(dlg, n, groupid, groupnum, dataz)		\
+#define set_dlg_checkbox(dlg, n, groupid, groupnum, dataz)		\
 	do {								\
 		(dlg)->items[n].type = D_CHECKBOX;			\
 		(dlg)->items[n].gid = (groupid);			\
@@ -199,7 +199,7 @@ terminal_options_fn(struct dialog_data *dlg_data)
 		(n)++;						\
 	} while (0)
 
-#define set_term_opt_button(dlg, n, key, handler, button_text)		\
+#define set_dlg_button(dlg, n, key, handler, button_text)		\
 	do {								\
 		(dlg)->items[n].type = D_BUTTON;			\
 		(dlg)->items[n].gid = (key);				\
@@ -240,27 +240,27 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	dlg->refresh = (void (*)(void *)) terminal_options_ok;
 	dlg->refresh_data = termopt_hop;
 
-	set_term_opt_checkbox(dlg, n, 1, TERM_DUMB, termopt_hop->type);
-	set_term_opt_checkbox(dlg, n, 1, TERM_VT100, termopt_hop->type);
-	set_term_opt_checkbox(dlg, n, 1, TERM_LINUX, termopt_hop->type);
-	set_term_opt_checkbox(dlg, n, 1, TERM_KOI8, termopt_hop->type);
+	set_dlg_checkbox(dlg, n, 1, TERM_DUMB, termopt_hop->type);
+	set_dlg_checkbox(dlg, n, 1, TERM_VT100, termopt_hop->type);
+	set_dlg_checkbox(dlg, n, 1, TERM_LINUX, termopt_hop->type);
+	set_dlg_checkbox(dlg, n, 1, TERM_KOI8, termopt_hop->type);
 
-	set_term_opt_checkbox(dlg, n, 2, COLOR_MODE_MONO, termopt_hop->colors);
-	set_term_opt_checkbox(dlg, n, 2, COLOR_MODE_16, termopt_hop->colors);
+	set_dlg_checkbox(dlg, n, 2, COLOR_MODE_MONO, termopt_hop->colors);
+	set_dlg_checkbox(dlg, n, 2, COLOR_MODE_16, termopt_hop->colors);
 #ifdef USE_256_COLORS
-	set_term_opt_checkbox(dlg, n, 2, COLOR_MODE_256, termopt_hop->colors);
+	set_dlg_checkbox(dlg, n, 2, COLOR_MODE_256, termopt_hop->colors);
 #endif
 
-	set_term_opt_checkbox(dlg, n, 0, 0, termopt_hop->m11_hack);
-	set_term_opt_checkbox(dlg, n, 0, 0, termopt_hop->restrict_852);
-	set_term_opt_checkbox(dlg, n, 0, 0, termopt_hop->block_cursor);
-	set_term_opt_checkbox(dlg, n, 0, 0, termopt_hop->trans);
-	set_term_opt_checkbox(dlg, n, 0, 0, termopt_hop->underline);
-	set_term_opt_checkbox(dlg, n, 0, 0, termopt_hop->utf_8_io);
+	set_dlg_checkbox(dlg, n, 0, 0, termopt_hop->m11_hack);
+	set_dlg_checkbox(dlg, n, 0, 0, termopt_hop->restrict_852);
+	set_dlg_checkbox(dlg, n, 0, 0, termopt_hop->block_cursor);
+	set_dlg_checkbox(dlg, n, 0, 0, termopt_hop->trans);
+	set_dlg_checkbox(dlg, n, 0, 0, termopt_hop->underline);
+	set_dlg_checkbox(dlg, n, 0, 0, termopt_hop->utf_8_io);
 
-	set_term_opt_button(dlg, n, B_ENTER, ok_dialog, _("OK", term));
-	set_term_opt_button(dlg, n, B_ENTER, terminal_options_save, _("Save", term));
-	set_term_opt_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term));
+	set_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term));
+	set_dlg_button(dlg, n, B_ENTER, terminal_options_save, _("Save", term));
+	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term));
 
 	assert(n == TERMOPT_WIDGETS);
 	dlg->items[n].type = D_END;

@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.23 2003/12/25 14:02:09 jonas Exp $ */
+/* $Id: download.c,v 1.24 2003/12/25 15:09:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -124,14 +124,13 @@ download_progress_bar(struct terminal *term,
 	}
 
 	/* Draw the progress meter part "[###    ]" */
-	draw_char_data(term, x, y, '[');
+	draw_text(term, x, y, "[", 1, 0, NULL);
 	draw_area(term, x + 1, y, barprogress, 1, ' ', 0, meter_color);
-	draw_char_data(term, x + width - 1, y, ']');
+	draw_text(term, x + width - 1, y, "]", 1, 0, NULL);
 
 	/* Draw the percentage centered in the progress meter */
-	for (x += (width - percent_len) / 2; percent_len > 0; percent_len--) {
-		draw_char_data(term, x + percent_len, y, percent[percent_len - 1]);
-	}
+	x += (width - percent_len) / 2;
+	draw_text(term, x, y, percent, percent_len, 0, NULL);
 }
 
 static void

@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.16 2003/11/19 01:45:04 jonas Exp $ */
+/* $Id: hierbox.h,v 1.17 2003/11/19 07:44:47 miciah Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -7,6 +7,7 @@
 #include "bfu/listbox.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
+#include "util/lists.h"
 
 struct hierbox_browser {
 	struct list_head *boxes;

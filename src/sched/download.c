@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.243 2004/04/03 13:28:14 jonas Exp $ */
+/* $Id: download.c,v 1.242 2004/04/03 13:27:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1047,12 +1047,12 @@ struct {
 };
 
 int
-ses_chktype(struct session *ses, struct download *loading, struct cache_entry *cache, int frame)
+ses_chktype(struct session *ses, struct download *loading, struct cache_entry *ce, int frame)
 {
 	struct mime_handler *handler;
 	struct view_state *vs;
 	struct tq *tq;
-	unsigned char *ctype = get_content_type(cache->head, get_cache_uri(cache));
+	unsigned char *ctype = get_content_type(ce->head, get_cache_uri(ce));
 	int plaintext = 1;
 	int ret = 0;
 	int xwin, i;
@@ -1090,7 +1090,7 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 	change_connection(loading, &tq->download, PRI_MAIN, 0);
 	loading->state = S_OK;
 
-	tq->ce = cache;
+	tq->ce = ce;
 	object_lock(tq->ce);
 
 	if (ses->goto_position) tq->goto_position = stracpy(ses->goto_position);

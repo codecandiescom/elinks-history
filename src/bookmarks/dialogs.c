@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.27 2002/08/30 23:38:37 pasky Exp $ */
+/* $Id: dialogs.c,v 1.28 2002/08/31 00:27:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -336,7 +336,6 @@ really_del_bookmark(void *vhop)
 			TEXT(T_BOOKMARK_USED),
 			NULL, 1,
 			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
-
 		return;
 	}
 

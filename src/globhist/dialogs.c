@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.4 2002/08/30 23:32:57 pasky Exp $ */
+/* $Id: dialogs.c,v 1.5 2002/08/31 00:27:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -277,6 +277,37 @@ push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 }
 
 
+struct delete_globhist_item_ctx {
+	struct global_history_item *history_item;
+	struct terminal *term;
+};
+
+static void
+di_delete_global_history_item(void *vhop)
+{
+	struct delete_globhist_item_ctx *ctx = vhop;
+
+	ctx->history_item->refcount--;
+	if (ctx->history_item->refcount > 0) {
+		msg_box(ctx->term, NULL,
+			TEXT(T_DELETE_HISTORY_ITEM), AL_CENTER,
+			TEXT(T_BOOKMARK_USED),
+			NULL, 1,
+			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+		return;
+	}
+
+	delete_global_history_item(ctx->history_item);
+}
+
+static void
+cancel_delete_globhist_item(void *vhop)
+{
+	struct delete_globhist_item_ctx *ctx = vhop;
+
+	ctx->history_item->refcount--;
+}
+
 static int
 push_delete_button(struct dialog_data *dlg,
 		   struct widget_data *some_useless_delete_button)
@@ -284,6 +315,7 @@ push_delete_button(struct dialog_data *dlg,
 	struct global_history_item *historyitem;
 	struct terminal *term = dlg->win->term;
 	struct listbox_data *box;
+	struct delete_globhist_item_ctx *ctx;
 
 	box = (struct listbox_data *)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
@@ -291,14 +323,19 @@ push_delete_button(struct dialog_data *dlg,
 	if (!box->sel) return 0;
 	historyitem = box->sel->udata;
 	if (!historyitem) return 0;
+	historyitem->refcount++;
 
-	msg_box(term, NULL,
+	ctx = mem_alloc(sizeof(struct delete_globhist_item_ctx));
+	ctx->history_item = historyitem;
+	ctx->term = term;
+
+	msg_box(term, getml(ctx, NULL),
 		TEXT(T_DELETE_HISTORY_ITEM), AL_CENTER | AL_EXTD_TEXT,
 		TEXT(T_DELETE_HISTORY_ITEM), " \"", historyitem->title, "\" ?\n\n",
 		TEXT(T_URL), ": \"", historyitem->url, "\"", NULL,
-		historyitem, 2,
-		TEXT(T_YES), delete_global_history_item, B_ENTER,
-		TEXT(T_NO), NULL, B_ESC);
+		ctx, 2,
+		TEXT(T_YES), di_delete_global_history_item, B_ENTER,
+		TEXT(T_NO), cancel_delete_globhist_item, B_ESC);
 
 	return 0;
 }
@@ -308,10 +345,11 @@ static void
 really_clear_history(struct listbox_data *box)
 {
 	while (global_history.n) {
+		if (((struct global_history_item *)
+		     global_history.items.prev)->refcount > 0)
+			break;
 		delete_global_history_item(global_history.items.prev);
 	}
-	box->sel = NULL;
-	box->top = NULL;
 }
 
 static int
@@ -334,6 +372,15 @@ push_clear_button(struct dialog_data *dlg,
 	return 0;
 }
 
+
+static void
+done_info_button(void *vhop)
+{
+	struct global_history_item *history_item = vhop;
+
+	history_item->refcount--;
+}
+
 static int
 push_info_button(struct dialog_data *dlg,
 		  struct widget_data *some_useless_info_button)
@@ -349,6 +396,7 @@ push_info_button(struct dialog_data *dlg,
 	if (!box->sel) return 0;
 	historyitem = box->sel->udata;
 	if (!historyitem) return 0;
+	historyitem->refcount++;
 
 	msg_box(term, NULL,
 		TEXT(T_INFO), AL_LEFT | AL_EXTD_TEXT,
@@ -356,7 +404,7 @@ push_info_button(struct dialog_data *dlg,
 		TEXT(T_URL), ": ", historyitem->url, "\n",
 		TEXT(T_LAST_VISIT_TIME), ": ", ctime(&historyitem->last_visit), NULL,
 		historyitem, 1,
-		TEXT(T_OK), NULL, B_ESC | B_ENTER);
+		TEXT(T_OK), done_info_button, B_ESC | B_ENTER);
 
 	return 0;
 }

@@ -1,4 +1,4 @@
-/* $Id: globhist.h,v 1.2 2002/08/30 22:55:28 pasky Exp $ */
+/* $Id: globhist.h,v 1.3 2002/08/31 00:27:54 pasky Exp $ */
 
 #ifndef EL__GLOBHIST_GLOBHIST_H
 #define EL__GLOBHIST_GLOBHIST_H
@@ -17,6 +17,7 @@ struct global_history_item {
 	time_t last_visit;
 	unsigned char *title;
 	unsigned char *url;
+	int refcount;
 
 	struct listbox_item *box_item;
 };

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.31 2003/11/18 21:35:43 kuser Exp $ */
+/* $Id: textarea.c,v 1.32 2003/11/19 05:15:20 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -443,6 +443,7 @@ textarea_op_down(struct form_state *fs, struct form_control *frm, int rep)
 			fs->state += ln[y+1].st - ln[y].st;
 			int_upper_bound(&fs->state, ln[y+1].en - fs->value);
 			if (!rep) goto yy;
+			y = 0;
 		} else {
 			y++;
 		}

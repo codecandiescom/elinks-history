@@ -1,3 +1,212 @@
+Fri Jul 23 20:09:22 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	ftp_data_accept(): reduce indentation level.  
+
+Fri Jul 23 20:07:26 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	got_something_from_data_connection(), ftp_data_accept(): fix last
+	patch, return on error.  
+
+Fri Jul 23 20:02:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Move code from got_something_from_data_connection() to new
+	ftp_data_accept().  
+
+Fri Jul 23 19:57:30 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	got_something_from_data_connection(): drop goto/label |conn_error|.  
+
+Fri Jul 23 16:47:26 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/auth/dialogs.c:
+
+	get_http_auth_basic_info(): limit displayed realm to a reasonable
+	length (512 chars).  
+
+Fri Jul 23 16:04:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/auth/auth.c:
+
+	Transform set_auth_user() and set_auth_password() macros to
+	functions. There is no reason to use macros here.  
+
+Fri Jul 23 15:52:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/about.c:
+
+	about_protocol_handler(): simplify code.  
+
+Fri Jul 23 15:49:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/about.c:
+
+	about_protocol_handler(): drop extra \r\n which was preventing
+	effective setting of content type.  
+
+Fri Jul 23 15:42:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Invert return codes 0 and 1 in read_*http_data(), 0 was already used
+	by get_header() to indicate more to read, so it looks more logical
+	now.  
+
+Fri Jul 23 15:30:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	read_http_data(): use a switch() for return value test.  
+
+Fri Jul 23 15:25:21 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Move code from read_http_data() to new read_normal_http_data(), and
+	use returned value, like for read_chunked_http_data().  
+
+Fri Jul 23 15:18:17 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	read_chunked_http_data(): make it return a value, used in
+	read_http_data(), it helps to simplify code.  
+
+Fri Jul 23 15:09:08 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Move code from read_http_data() to new read_chunked_http_data().  
+
+Fri Jul 23 14:57:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	subst_user_agent(): reduce indentation level.  
+
+Fri Jul 23 14:52:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	read_http_data(): drop two labels and associated gotos by moving
+	code to new functions named read_more_http_data() and
+	read_http_data_done().  
+
+Fri Jul 23 06:09:39 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/uri.h:
+
+	Forgotten piece of the last patch.  
+
+Fri Jul 23 05:21:11 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: protocol/uri.c, protocol/file/file.c,
+	protocol/rewrite/rewrite.c, viewer/text/form.c:
+
+	Add a new parameter |convert_slashes| to encode_uri_string to
+	indicate whether slashes should be converted along with other unsafe
+	characters to hexadecimal notation.  
+	
+	When prepending "file://" to the string to convert a path name to a
+	URI in encode_uri_string, also encode the path name.  
+	
+	Now, when a user provides on the command line or in the Go to URL
+	box a path with question marks, octothorpes, or other characters
+	considered unsafe, they will be encoded so that later on we do not
+	misinterpret part of the file name as a fragment identifier, query
+	part, or whatever.  
+	
+	This fixes bug 358: browsing local files fails if path contains
+	"%7E".  
+
+Fri Jul 23 03:48:31 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/renderer.c:
+
+	When setting a title for a document that doesn't specify one 
+	(e.g., HTML files without <title> and plain-text files), use the
+	file's path instead of the URI if it is a file: URI.  
+
+Fri Jul 23 02:57:26 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Fix a memory leak that came with my last patch.  
+
+Fri Jul 23 02:36:23 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Use get_current_link, get_link_uri, and get_uri_string instead of
+	using get_current_link_info, which drops any password in the URI,
+	adds a suffix if there is form post data, adds prefix if the link is 
+	an image or usemap, and decodes the string. Now copy-clipboard 
+	copies the real URI.  
+	
+	Remove Jonas' TODO comment.  
+
+Fri Jul 23 02:27:01 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In the ACT_MAIN_COPY_CLIPBOARD case for the switch in frame_ev_kbd, 
+	rename |current_link| to |uristring| and change its type from |char
+	*| to |unsigned char *|.  
+
+Fri Jul 23 02:24:37 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Add a missing #include "document/view.h".  
+
+Fri Jul 23 01:56:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/listmenu.c, bfu/listmenu.h,
+	document/html/parser/forms.c:
+
+	Post <select>ed values in correct charset (by Mikulas; from
+	1.00pre8).  
+
+Fri Jul 23 00:57:30 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/signals.c:
+
+	AIX compilation fix (by Mikulas; from 1.00pre6).  
+
+Fri Jul 23 00:51:04 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/smb.c:
+
+	Fix incorrect error handling in smb_read_data() (by Mikulas; from
+	1.00pre6).  
+
+Thu Jul 22 22:23:19 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	get_temp_name(): fix an error, @nm should be freed by free() not
+	mem_free().  
+
+Thu Jul 22 22:20:30 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/error.c:
+
+	Stick a comment about get_err_msg() return value.  
+
+Thu Jul 22 22:14:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	print_error_dialog(): get_err_msg() can not return NULL, drop
+	intermediate @t, and simplify code.  
+
 Thu Jul 22 22:07:14 2004  Laurent Monin <zas@norz.org>:
 
 	* src/sched/download.c:

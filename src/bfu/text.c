@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.65 2003/12/02 17:31:41 zas Exp $ */
+/* $Id: text.c,v 1.66 2003/12/03 17:16:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,7 +131,10 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 	widget_data->x = x;
 	widget_data->y = *y;
 	widget_data->h = max_height - 3;
-	if (widget_data->h < 0) widget_data->h = max_height;
+	if (widget_data->h < 0) {
+		widget_data->h = 0;
+		return;
+	}
 
 	/* Always reset @current if we do not need to scroll */
 	if (widget_data->h >= widget_data->info.text.lines)
@@ -208,7 +211,7 @@ display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int 
 	int height = widget_data->h;
 	int scale, current, step;
 
-	if (!text_is_scrollable(widget_data)) return;
+	if (!text_is_scrollable(widget_data) || height <= 0) return;
 
 	draw_area(win->term, x, y, 1, height, ' ', 0,
 		    get_bfu_color(win->term, "dialog.scrollbar"));

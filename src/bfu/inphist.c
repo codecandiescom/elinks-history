@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.20 2003/05/06 14:58:26 pasky Exp $ */
+/* $Id: inphist.c,v 1.21 2003/05/13 22:37:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ do_tab_compl(struct terminal *term, struct list_head *history,
 	struct input_history_item *hi;
 	struct menu_item *items = NULL, *i;
 
-	foreach(hi, *history) {
+	foreach (hi, *history) {
 		if (strncmp(cdata, hi->d, l)) continue;
 
 		if (!(n & (ALLOC_GR - 1))) {
@@ -138,16 +138,20 @@ remove_duplicate_from_history(struct input_history *historylist,
 
 	if (!historylist || !url || !*url) return;
 
-	foreach(historyitem, historylist->items) {
-		if (!strcmp(historyitem->d, url)) {
-			struct input_history_item *tmphistoryitem = historyitem;
+	foreach (historyitem, historylist->items) {
+		struct input_history_item *tmphistoryitem;
 
-			/* found a duplicate -> remove it from history list */
-			historyitem = historyitem->prev;
-			del_from_list(tmphistoryitem);
-			mem_free(tmphistoryitem);
-			historylist->n--;
-		}
+		if (strcmp(historyitem->d, url)) continue;
+
+		/* found a duplicate -> remove it from history list */
+
+		tmphistoryitem = historyitem;
+		historyitem = historyitem->prev;
+
+		del_from_list(tmphistoryitem);
+		mem_free(tmphistoryitem);
+
+		historylist->n--;
 	}
 }
 

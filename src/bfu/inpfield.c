@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.28 2003/05/06 14:18:56 zas Exp $ */
+/* $Id: inpfield.c,v 1.29 2003/05/13 22:37:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -248,6 +248,7 @@ display_field_do(struct widget_data *di, struct dialog_data *dlg, int sel,
 
 	fill_area(term, di->x, di->y, di->l, 1,
 			get_bfu_color(term, "dialog.field"));
+
 	{
 		int len = strlen(di->cdata + di->vpos);
 		int l = (len <= di->l) ? len : di->l;
@@ -261,6 +262,7 @@ display_field_do(struct widget_data *di, struct dialog_data *dlg, int sel,
 				  get_bfu_color(term, "dialog.field-text") | '*');
 		}
 	}
+
 	if (sel) {
 		int x = di->x + di->cpos - di->vpos;
 
@@ -286,17 +288,18 @@ init_field(struct widget_data *widget, struct dialog_data *dialog,
 	   struct event *ev)
 {
 	if (widget->item->history) {
-		struct input_history_item *j;
+		struct input_history_item *item;
 
-		foreach (j, widget->item->history->items) {
+		foreach (item, widget->item->history->items) {
 			int dsize = strlen(j->d) + 1;
-			struct input_history_item *hi =
-				mem_alloc(sizeof(struct input_history_item)
-					  + dsize);
-			if (hi) {
-				memcpy(hi->d, j->d, dsize);
-				add_to_list(widget->history, hi);
-			}
+			struct input_history_item *hi;
+
+			hi = mem_alloc(sizeof(struct input_history_item)
+					+ dsize);
+			if (!hi) continue;
+
+			memcpy(hi->d, item->d, dsize);
+			add_to_list(widget->history, hi);
 		}
 	}
 
@@ -388,8 +391,8 @@ kbd_field(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 		case ACT_BACKSPACE:
 			if (di->cpos) {
 				memmove(di->cdata + di->cpos - 1,
-						di->cdata + di->cpos,
-						strlen(di->cdata) - di->cpos + 1);
+					di->cdata + di->cpos,
+					strlen(di->cdata) - di->cpos + 1);
 				di->cpos--;
 			}
 			goto dsp_f;
@@ -398,10 +401,11 @@ kbd_field(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 			{
 				int cdata_len = strlen(di->cdata);
 
-				if (di->cpos < cdata_len)
-					memmove(di->cdata + di->cpos,
-							di->cdata + di->cpos + 1,
-							cdata_len - di->cpos + 1);
+				if (di->cpos >= cdata_len) goto dsp_f;
+
+				memmove(di->cdata + di->cpos,
+					di->cdata + di->cpos + 1,
+					cdata_len - di->cpos + 1);
 				goto dsp_f;
 			}
 
@@ -433,11 +437,11 @@ kbd_field(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 				/* Paste from clipboard */
 				unsigned char *clipboard = get_clipboard_text();
 
-				if (clipboard) {
-					safe_strncpy(di->cdata, clipboard, di->item->dlen);
-					di->cpos = strlen(di->cdata);
-					mem_free(clipboard);
-				}
+				if (!clipboard) goto dsp_f;
+
+				safe_strncpy(di->cdata, clipboard, di->item->dlen);
+				di->cpos = strlen(di->cdata);
+				mem_free(clipboard);
 				goto dsp_f;
 			}
 
@@ -453,12 +457,13 @@ kbd_field(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 			if (ev->x >= ' ' && ev->x < 0x100 && !ev->y) {
 				int cdata_len = strlen(di->cdata);
 
-				if (cdata_len < di->item->dlen - 1) {
-					memmove(di->cdata + di->cpos + 1,
-							di->cdata + di->cpos,
-							cdata_len - di->cpos + 1);
-					di->cdata[di->cpos++] = ev->x;
-				}
+				if (cdata_len >= di->item->dlen - 1)
+					goto dsp_f;
+
+				memmove(di->cdata + di->cpos + 1,
+					di->cdata + di->cpos,
+					cdata_len - di->cpos + 1);
+				di->cdata[di->cpos++] = ev->x;
 				goto dsp_f;
 			}
 	}

@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.20 2003/05/13 13:29:20 pasky Exp $ */
+/* $Id: urlhist.c,v 1.21 2003/05/13 22:37:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,7 +78,7 @@ save_url_history(void)
 	mem_free(history_file);
 	if (!ssi) return -1;
 
-	foreachback(historyitem, goto_url_history.items) {
+	foreachback (historyitem, goto_url_history.items) {
 		if (i++ > MAX_HISTORY_ITEMS) break;
 		secure_fputs(ssi, historyitem->d);
 		secure_fputc(ssi, '\n');

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.43 2004/12/08 18:23:12 zas Exp $ */
+/* $Id: link.c,v 1.44 2004/12/08 18:29:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,24 +184,25 @@ truncate_label(unsigned char *label, int max_len)
 	return new_label;
 }
 
-/* Returns possibly truncated title of image.
- * It returns IMG if no title or disabled by option.
+/* Returns an allocated string containing formatted @label
+ * or just IMG (depending on options).
+ * It may return NULL on allocation failure.
  */
 static unsigned char *
-truncate_title(unsigned char *title)
+get_image_label(unsigned char *label)
 {
-	unsigned char *text;
+	unsigned char *formatted_label;
 	int max_len = get_opt_int("document.browse.images.file_tags");
 
-	if (max_len < 0 || !title) {
-		mem_free_if(title);
+	if (max_len < 0 || !label) {
+		mem_free_if(label);
 		return stracpy("IMG");
 	}
 
-	text = truncate_label(title, max_len);
-	mem_free(title);
+	formatted_label = truncate_label(label, max_len);
+	mem_free(label);
 
-	return text;
+	return formatted_label;
 }
 
 void
@@ -260,9 +261,8 @@ html_img(unsigned char *a)
 		}
 	}
 
-	/* Truncate current label, actual result is
-	 * configured by option. */
-	if (al) al = truncate_title(al);
+	/* Get real label. */
+	if (al) al = get_image_label(al);
 
 	mem_free_set(&format.image, NULL);
 	mem_free_set(&format.title, NULL);

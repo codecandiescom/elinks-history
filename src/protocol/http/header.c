@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.27 2003/11/29 13:37:52 pasky Exp $ */
+/* $Id: header.c,v 1.28 2003/11/29 16:02:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,7 +47,7 @@ parse_http_header(unsigned char *head, unsigned char *item,
 			/* Strip leading whitespaces */
 			do pos++; while (pos[0] == ' ');
 			/* Find the end of line/string */
-			for (valend = ++pos; *valend >= ' '; valend++);
+			for (valend = pos; *valend >= ' '; valend++);
 			/* Strip trailing whitespaces */
 			while (valend > pos && valend[-1] == ' ') valend--;
 

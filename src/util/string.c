@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.80 2003/08/31 10:30:23 zas Exp $ */
+/* $Id: string.c,v 1.81 2003/08/31 10:36:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,8 +68,7 @@ debug_copy_string(unsigned char *f, int l, unsigned char **dst,
 	string_assert(f, l, src, "copy_string");
 	if_assert_failed { *dst = NULL; return NULL; }
 
-	*dst = debug_mem_alloc(f, l, strlen(src) + 1);
-	if (*dst) strcpy(*dst, src);
+	*dst =  debug_memacpy(f, l, src, strlen(src));
 
 	return *dst;
 }
@@ -108,8 +107,7 @@ copy_string(unsigned char **dst, unsigned char *src)
 	assertm(src, "[copy_string]");
 	if_assert_failed { *dst = NULL; return NULL; }
 
-	*dst = mem_alloc(strlen(src) + 1);
-	if (*dst) strcpy(*dst, src);
+	*dst = memacpy(src, strlen(src));
 
 	return *dst;
 }

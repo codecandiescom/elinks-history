@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.158 2004/10/08 21:54:45 witekfl Exp $ */
+/* $Id: renderer.c,v 1.159 2004/10/15 00:59:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,7 +228,7 @@ add_document_line(struct plain_renderer *renderer,
 	struct document *document = renderer->document;
 	struct screen_char *template = &renderer->template;
 	struct screen_char saved_renderer_template = *template;
-	struct screen_char *pos;
+	struct screen_char *pos, *startpos;
 	int lineno = renderer->lineno;
 	int expanded = 0;
 	int width = line_width;
@@ -269,7 +269,7 @@ add_document_line(struct plain_renderer *renderer,
 
 	assert(expanded >= 0);
 
-	pos = realloc_line(document, width + expanded, lineno);
+	startpos = pos = realloc_line(document, width + expanded, lineno);
 	if (!pos) {
 		mem_free(line);
 		return 0;
@@ -304,11 +304,13 @@ add_document_line(struct plain_renderer *renderer,
 		} else if (line_char == ASCII_BS) {
 			if (!(expanded + line_pos)) {
 				/* We've backspaced to the start of the line */
-				expanded--; /* Don't count it */
+				if (expanded > 0)
+					expanded--; /* Don't count it */
 				continue;
 			}
 
-			pos--;  /* Backspace */
+			if (pos > startpos)
+				pos--;  /* Backspace */
 
 			/* Handle x^H_ as _^Hx */
 			if (next_char == '_'
@@ -316,15 +318,19 @@ add_document_line(struct plain_renderer *renderer,
 						  * swapping two underscores */
 			{
 				/* x^H_ becomes _^Hx */
-				line[line_pos - 1] = next_char;
-				line[line_pos + 1] = prev_char;
+				if (line_pos - 1 >= 0)
+					line[line_pos - 1] = next_char;
+				if (line_pos + 1 < width)
+					line[line_pos + 1] = prev_char;
 
 				/* Go back and reparse the swapped characters */
-				line_pos -= 2;
+				if (line_pos - 2 >= 0)
+					line_pos -= 2;
 				continue;
 			}
 
-			expanded -= 2; /* Don't count the backspace character
+			if (expanded - 2 >= 0)
+				expanded -= 2; /* Don't count the backspace character
 				        * or the deleted character
 				        * when returning the line's width
 				        * or when expanding tabs */
@@ -333,6 +339,7 @@ add_document_line(struct plain_renderer *renderer,
 				/* Is _^H_ an underlined underscore
 				 * or an emboldened underscore? */
 
+				assert(pos - 1 >= startpos);
 				if (expanded + line_pos >= 0
 				    && (pos - 1)->attr) {
 					/* There is some preceding text,
@@ -470,6 +477,7 @@ add_document_lines(struct plain_renderer *renderer)
 				length -= step + spaces;
 				source += step + spaces;
 				renderer->lineno--;
+				assert(renderer->lineno >= 0);
 				continue;
 			}
 			was_empty_line = 1;

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.143 2004/12/14 17:01:49 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.144 2004/12/14 17:07:14 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,6 +184,22 @@ delete_bookmark(struct bookmark *bm)
 	mem_free(bm);
 }
 
+/* Deletes any bookmarks with no URLs (i.e., folders) and of which
+ * the title matches the given argument. */
+static void
+delete_folder_by_name(unsigned char *foldername)
+{
+	struct bookmark *bookmark, *next;
+
+	foreachsafe (bookmark, next, bookmarks) {
+		if (strcmp(bookmark->title, foldername)
+		    || (bookmark->url && *bookmark->url))
+			continue;
+
+		delete_bookmark(bookmark);
+	}
+}
+
 /* Adds a bookmark to the bookmark list. Place 0 means top, place 1 means
  * bottom. NULL or "" @url means it is a bookmark folder. */
 struct bookmark *
@@ -364,7 +380,6 @@ void
 bookmark_auto_save_tabs(struct terminal *term)
 {
 	unsigned char *foldername;
-	struct bookmark *bookmark, *next;
 
 	if (get_cmd_opt_bool("anonymous")
 	    || !get_opt_bool("ui.sessions.auto_save"))
@@ -375,13 +390,7 @@ bookmark_auto_save_tabs(struct terminal *term)
 
 	/* Ensure uniqueness of the auto save folder, so it is possible to
 	 * restore the (correct) session when starting up. */
-	foreachsafe (bookmark, next, bookmarks) {
-		if (strcmp(bookmark->title, foldername)
-		    || (bookmark->url && *bookmark->url))
-			continue;
-
-		delete_bookmark(bookmark);
-	}
+	delete_folder_by_name(foldername);
 
 	bookmark_terminal_tabs(term, foldername);
 }

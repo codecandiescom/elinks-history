@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.100 2003/10/02 23:36:38 jonas Exp $ */
+/* $Id: screen.c,v 1.101 2003/10/02 23:51:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -414,7 +414,7 @@ static struct string color256_seqs[] = {
 static inline void
 add_char_color(struct string *screen, struct string *seq, unsigned char color)
 {
-	unsigned char color_buf[4];
+	unsigned char color_buf[3];
 	unsigned char *color_pos;
 	int seq_pos, color_len;
 
@@ -450,13 +450,15 @@ add_char_color(struct string *screen, struct string *seq, unsigned char color)
 	}
 
 	color_buf[2] = '0' + color;
-	color_buf[3] = 0;
 
 	add_bytes_to_string(screen, color_pos, color_len);
 
 	seq_pos += 2; /* Skip "%d" */
 	add_bytes_to_string(screen, &seq->source[seq_pos], seq->length - seq_pos);
 }
+
+#define add_background_color(str, seq, chr) add_char_color(str, (seq)[1], (chr)->color[1])
+#define add_foreground_color(str, seq, chr) add_char_color(str, (seq)[0], (chr)->color[0])
 
 /* Time critical section. */
 static inline void
@@ -487,9 +489,9 @@ add_char256(struct string *screen, struct screen_driver *driver,
 	if (!compare_color(ch->color, state->color)) {
 		copy_color(state->color, ch->color);
 
-		add_char_color(screen, &color256_seqs[0], ch->color[0]);
+		add_foreground_color(screen, &color256_seqs, ch);
 		if (!driver->trans || ch->color[1] != 0) {
-			add_char_color(screen, &color256_seqs[1], ch->color[1]);
+			add_background_color(screen, &color256_seqs, ch);
 		}
 
 		if (ch->attr & SCREEN_ATTR_BOLD)

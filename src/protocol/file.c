@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.131 2003/11/16 03:19:47 jonas Exp $ */
+/* $Id: file.c,v 1.132 2003/11/26 13:00:39 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -485,7 +485,7 @@ try_encoding_extensions(unsigned char *filename, int filenamelen, int *fd)
 
 			if (extlen > maxlen) continue;
 
-			safe_strncpy(filenamepos, *ext, extlen + 1);
+			memcpy(filenamepos, *ext, extlen + 1);
 
 			/* We try with some extensions. */
 			*fd = open(filename, O_RDONLY | O_NOCTTY);

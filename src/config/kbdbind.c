@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.210 2004/05/29 15:36:39 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.211 2004/05/30 03:11:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -541,8 +541,8 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "tab-close", ACT_MAIN_TAB_CLOSE, DACT(N_("Close tab")) },
 	{ "tab-close-all-but-current", ACT_MAIN_TAB_CLOSE_ALL_BUT_CURRENT, DACT(N_("Close all tabs but the current one")) },
 	{ "tab-menu", ACT_MAIN_TAB_MENU, DACT(N_("Open the tab menu")) },
-	{ "tab-move", ACT_MAIN_TAB_MOVE, DACT(N_("Move the current tab one step ahead")) },
-	{ "tab-move-back", ACT_MAIN_TAB_MOVE_BACK, DACT(N_("Move the current tab one step back")) },
+	{ "tab-move-left", ACT_MAIN_TAB_MOVE_LEFT, DACT(N_("Move the current tab to the left")) },
+	{ "tab-move-right", ACT_MAIN_TAB_MOVE_RIGHT, DACT(N_("Move the current tab to the right")) },
 	{ "tab-next", ACT_MAIN_TAB_NEXT, DACT(N_("Next tab")) },
 	{ "tab-prev", ACT_MAIN_TAB_PREV,DACT( N_("Previous tab")) },
 	{ "toggle-display-images", ACT_MAIN_TOGGLE_DISPLAY_IMAGES, DACT(N_("Toggle displaying of links to images")) },
@@ -780,10 +780,10 @@ static struct default_kb default_main_keymap[] = {
 	{ '/',		 0,		ACT_MAIN_SEARCH },
 	{ ':',		 0,		ACT_MAIN_EXMODE },
 	{ '<',		 0,		ACT_MAIN_TAB_PREV },
-	{ '<',		 KBD_ALT,	ACT_MAIN_TAB_MOVE_BACK },
+	{ '<',		 KBD_ALT,	ACT_MAIN_TAB_MOVE_LEFT },
 	{ '=',		 0,		ACT_MAIN_DOCUMENT_INFO },
 	{ '>',		 0,		ACT_MAIN_TAB_NEXT },
-	{ '>',		 KBD_ALT,	ACT_MAIN_TAB_MOVE },
+	{ '>',		 KBD_ALT,	ACT_MAIN_TAB_MOVE_RIGHT },
 	{ '?',		 0,		ACT_MAIN_SEARCH_BACK },
 	{ 'A',		 0,		ACT_MAIN_ADD_BOOKMARK_LINK },
 	{ 'A',		 KBD_CTRL,	ACT_MAIN_HOME },

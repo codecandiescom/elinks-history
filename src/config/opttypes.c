@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.46 2003/01/02 23:59:52 pasky Exp $ */
+/* $Id: opttypes.c,v 1.47 2003/01/03 00:38:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -463,19 +463,19 @@ tree_dup(struct option *opt, struct option *template)
 
 
 struct option_type_info option_types[] = {
-	{ N_(T_TYPE_BOOLEAN), bool_cmd, num_rd, num_wr, int_dup, int_set, NULL, NULL, "[0|1]" },
-	{ N_(T_TYPE_INTEGER), gen_cmd, num_rd, num_wr, int_dup, int_set, NULL, NULL, "<num>" },
-	{ N_(T_TYPE_LONGINT), gen_cmd, num_rd, num_wr, long_dup, long_set, NULL, NULL, "<num>" },
-	{ N_(T_TYPE_STRING), gen_cmd, str_rd, str_wr, str_dup, str_set, NULL, NULL, "<str>" },
+	{ N_("Boolean"), bool_cmd, num_rd, num_wr, int_dup, int_set, NULL, NULL, "[0|1]" },
+	{ N_("Integer"), gen_cmd, num_rd, num_wr, int_dup, int_set, NULL, NULL, "<num>" },
+	{ N_("Longint"), gen_cmd, num_rd, num_wr, long_dup, long_set, NULL, NULL, "<num>" },
+	{ N_("String"), gen_cmd, str_rd, str_wr, str_dup, str_set, NULL, NULL, "<str>" },
 
-	{ N_(T_TYPE_CODEPAGE), gen_cmd, str_rd, cp_wr, int_dup, cp_set, NULL, NULL, "<codepage>" },
-	{ N_(T_TYPE_LANGUAGE), gen_cmd, str_rd, lang_wr, NULL, lang_set, NULL, NULL, "<language>" },
-	{ N_(T_TYPE_COLOR), gen_cmd, str_rd, color_wr, color_dup, color_set, NULL, NULL, "<color|#rrggbb>" },
+	{ N_("Codepage"), gen_cmd, str_rd, cp_wr, int_dup, cp_set, NULL, NULL, "<codepage>" },
+	{ N_("Language"), gen_cmd, str_rd, lang_wr, NULL, lang_set, NULL, NULL, "<language>" },
+	{ N_("Color"), gen_cmd, str_rd, color_wr, color_dup, color_set, NULL, NULL, "<color|#rrggbb>" },
 
-	{ N_(T_TYPE_SPECIAL), exec_cmd, NULL, NULL, NULL, NULL, NULL, NULL, "" },
+	{ N_("Special"), exec_cmd, NULL, NULL, NULL, NULL, NULL, NULL, "" },
 
-	{ N_(T_TYPE_ALIAS), redir_cmd, redir_rd, NULL, NULL, redir_set, redir_add, redir_remove, "" },
+	{ N_("Alias"), redir_cmd, redir_rd, NULL, NULL, redir_set, redir_add, redir_remove, "" },
 
 	/* tree */
-	{ N_(T_TYPE_FOLDER), NULL, NULL, NULL, tree_dup, NULL, NULL, NULL, "" },
+	{ N_("Folder"), NULL, NULL, NULL, tree_dup, NULL, NULL, NULL, "" },
 };

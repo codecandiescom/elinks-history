@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.89 2003/01/03 00:04:38 pasky Exp $ */
+/* $Id: session.c,v 1.90 2003/01/03 00:38:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,7 +94,7 @@ get_err_msg(int state)
 			if (msg_dsc[i].n == state)
 				return msg_dsc[i].msg;
 unknown_error:
-		return N_(T_UNKNOWN_ERROR);
+		return N_("Unknown error");
 	}
 
 	e = strerror(-state);
@@ -174,18 +174,18 @@ get_stat_msg(struct status *stat, struct terminal *term)
 		unsigned char *m = init_str();
 		int l = 0;
 
-		add_to_str(&m, &l, _(T_RECEIVED, term));
+		add_to_str(&m, &l, _("Received", term));
 		add_to_str(&m, &l, " ");
 		add_xnum_to_str(&m, &l, stat->prg->pos + stat->prg->start);
 		if (stat->prg->size >= 0) {
 			add_to_str(&m, &l, " ");
-			add_to_str(&m, &l, _(T_OF, term));
+			add_to_str(&m, &l, _("of", term));
 			add_to_str(&m, &l, " ");
 			add_xnum_to_str(&m, &l, stat->prg->size);
 		}
 		add_to_str(&m, &l, ", ");
 		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
-			add_to_str(&m, &l, _(T_AVG, term));
+			add_to_str(&m, &l, _("avg", term));
 			add_to_str(&m, &l, " ");
 		}
 		add_xnum_to_str(&m, &l, (longlong)stat->prg->loaded * 10
@@ -193,7 +193,7 @@ get_stat_msg(struct status *stat, struct terminal *term)
 		add_to_str(&m, &l, "/s");
 		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 			add_to_str(&m, &l, ", ");
-			add_to_str(&m, &l, _(T_CUR, term));
+			add_to_str(&m, &l, _("cur", term));
 			add_to_str(&m, &l, " "),
 			add_xnum_to_str(&m, &l, stat->prg->cur_loaded
 						/ (CURRENT_SPD_SEC
@@ -310,8 +310,8 @@ print_error_dialog(struct session *ses, struct status *stat,
 		title, AL_CENTER,
 		t,
 		ses, 1,
-		N_(T_CANCEL), NULL, B_ENTER | B_ESC /*,
-		_("Retry"), NULL, 0 */ /* !!! FIXME: retry */);
+		N_("Cancel"), NULL, B_ENTER | B_ESC /*,
+		N_("Retry"), NULL, 0 */ /* !!! TODO: retry */);
 }
 
 static void
@@ -566,22 +566,23 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 	wtd_data->fn = fn;
 
 	if (redir) {
-		m1 = N_(T_DO_YOU_WANT_TO_FOLLOW_REDIRECT_AND_POST_FORM_DATA_TO_URL);
+		m1 = N_("Do you want to follow redirect and post form data "
+			"to url");
 	} else if (wtd == WTD_FORWARD) {
-		m1 = N_(T_DO_YOU_WANT_TO_POST_FORM_DATA_TO_URL);
+		m1 = N_("Do you want to post form data to url");
 	} else {
-		m1 = N_(T_DO_YOU_WANT_TO_REPOST_FORM_DATA_TO_URL);
+		m1 = N_("Do you want to repost form data to url");
 	}
 
 	m2 = memacpy(url, (unsigned char *) strchr(url, POST_CHAR) - url);
 	msg_box(ses->term, getml(m2, wtd_data, wtd_data->url, wtd_data->pos,
 				 NULL),
-		N_(T_WARNING), AL_CENTER | AL_EXTD_TEXT,
+		N_("Warning"), AL_CENTER | AL_EXTD_TEXT,
 		m1, " ", m2, "?", NULL,
 		wtd_data, 3,
-		N_(T_YES), post_yes, B_ENTER,
-		N_(T_NO), post_no, 0,
-		N_(T_CANCEL), post_cancel, B_ESC);
+		N_("Yes"), post_yes, B_ENTER,
+		N_("No"), post_no, 0,
+		N_("Cancel"), post_cancel, B_ESC);
 }
 
 static int
@@ -852,7 +853,7 @@ end_load(struct status *stat, struct session *ses)
 		if (d == 1) doc_end_load(stat, ses);
 	}
 	if (stat->state < 0 && stat->state != S_OK && d != 2) {
-		print_error_dialog(ses, stat, N_(T_ERROR));
+		print_error_dialog(ses, stat, N_("Error"));
 	}
 	check_questions_queue(ses);
 	print_screen_status(ses);
@@ -913,7 +914,7 @@ doc_end_load(struct status *stat, struct session *ses)
 		load_frames(ses, ses->screen);
 		process_file_requests(ses);
 		if (stat->state != S_OK)
-			print_error_dialog(ses, stat, N_(T_ERROR));
+			print_error_dialog(ses, stat, N_("Error"));
 
 	} else if (ses->display_timer == -1) display_timer(ses);
 
@@ -1066,16 +1067,17 @@ create_session(struct window *win)
 	if (first_use) {
 		first_use = 0;
 		msg_box(term, NULL,
-			N_(T_WELCOME), AL_CENTER | AL_EXTD_TEXT,
-			N_(T_WELCOME_TO_LINKS), "\n\n",
-			N_(T_BASIC_HELP), NULL,
+			N_("Welcome"), AL_CENTER | AL_EXTD_TEXT,
+			N_("Welcome to ELinks!"), "\n\n",
+			N_("Press ESC for menu. Select Help->Manual in menu "
+			   "for user's manual."), NULL,
 			NULL, 1,
-			N_(T_OK), NULL, B_ENTER | B_ESC);
+			N_("OK"), NULL, B_ENTER | B_ESC);
 	}
 
 	if (!*get_opt_str("protocol.http.user_agent")) {
 		msg_box(term, NULL,
-			N_(T_WARNING), AL_CENTER,
+			N_("Warning"), AL_CENTER,
 			"You have empty string in protocol.http.user_agent - "
 			"this was a default value in the past, substituted by "
 			"default ELinks User-Agent string. However, currently "
@@ -1087,7 +1089,7 @@ create_session(struct window *win)
 			"that correct default setting will be used. Apologies for "
 			"any inconvience caused.",
 			NULL, 1,
-			N_(T_OK), NULL, B_ENTER | B_ESC);
+			N_("OK"), NULL, B_ENTER | B_ESC);
 	}
 
 	if (!get_opt_bool("config.saving_style_w")) {
@@ -1095,7 +1097,7 @@ create_session(struct window *win)
 		get_opt_rec(&root_options, "config.saving_style_w")->flags |= OPT_TOUCHED;
 		if (get_opt_int("config.saving_style") != 3) {
 			msg_box(term, NULL,
-				N_(T_WARNING), AL_CENTER,
+				N_("Warning"), AL_CENTER,
 				"You have option config.saving_style set to "
 				"a de facto obsolete value. The configuration "
 				"saving algorithms of ELinks were changed from "
@@ -1111,7 +1113,7 @@ create_session(struct window *win)
 				"the \"right\" behaviour. Apologies for any "
 				"inconvience caused.",
 				NULL, 1,
-				N_(T_OK), NULL, B_ENTER | B_ESC);
+				N_("OK"), NULL, B_ENTER | B_ESC);
 		}
 	}
 
@@ -1390,7 +1392,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 		struct status stat = { NULL, NULL, NULL, NULL, S_BAD_URL,
 				       PRI_CANCEL, 0, NULL, NULL };
 
-		print_error_dialog(ses, &stat, N_(T_ERROR));
+		print_error_dialog(ses, &stat, N_("Error"));
 		goto end;
 	}
 	pos = extract_position(u);

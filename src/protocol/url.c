@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.52 2003/01/02 23:59:54 pasky Exp $ */
+/* $Id: url.c,v 1.53 2003/01/03 00:38:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,10 +61,10 @@ static void
 dummyjs_func(struct session *ses, unsigned char *url)
 {
 	msg_box(ses->term, NULL,
-		N_(T_ERROR), AL_CENTER,
-		N_(T_JS_NOT_SUPPORTED),
+		N_("Error"), AL_CENTER,
+		N_("JavaScript is currently not supported."),
 		NULL, 1,
-		N_(T_CANCEL), NULL, B_ENTER | B_ESC);
+		N_("Cancel"), NULL, B_ENTER | B_ESC);
 }
 
 

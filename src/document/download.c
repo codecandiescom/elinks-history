@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.71 2003/01/03 00:04:38 pasky Exp $ */
+/* $Id: download.c,v 1.72 2003/01/03 00:38:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,13 +219,13 @@ download_window_function(struct dialog_data *dlg)
 		if (!m) return;
 
 		t = 1;
-		add_to_str(&m, &l, _(T_RECEIVED, term));
+		add_to_str(&m, &l, _("Received", term));
 		add_to_str(&m, &l, " ");
 		add_xnum_to_str(&m, &l, stat->prg->pos);
 
 		if (stat->prg->size >= 0) {
 			add_to_str(&m, &l, " ");
-			add_to_str(&m, &l, _(T_OF,term));
+			add_to_str(&m, &l, _("of",term));
 			add_to_str(&m, &l, " ");
 			add_xnum_to_str(&m, &l, stat->prg->size);
 			add_to_str(&m, &l, " ");
@@ -235,14 +235,14 @@ download_window_function(struct dialog_data *dlg)
 			add_xnum_to_str(&m, &l, stat->prg->pos
 						- stat->prg->start);
 			add_to_str(&m, &l, " ");
-			add_to_str(&m, &l, _(T_AFTER_RESUME, term));
+			add_to_str(&m, &l, _("after resume", term));
 			add_to_str(&m, &l, ")");
 		}
 		add_to_str(&m, &l, "\n");
 
 		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
-			add_to_str(&m, &l, _(T_AVERAGE_SPEED, term));
-		else add_to_str(&m, &l, _(T_SPEED, term));
+			add_to_str(&m, &l, _("Average speed", term));
+		else add_to_str(&m, &l, _("Speed", term));
 
 		add_to_str(&m, &l, " ");
 		add_xnum_to_str(&m, &l, (longlong) stat->prg->loaded * 10
@@ -251,7 +251,7 @@ download_window_function(struct dialog_data *dlg)
 
 		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 			add_to_str(&m, &l, ", ");
-			add_to_str(&m, &l, _(T_CURRENT_SPEED, term));
+			add_to_str(&m, &l, _("current speed", term));
 			add_to_str(&m, &l, " ");
 			add_xnum_to_str(&m, &l, stat->prg->cur_loaded
 						/ (CURRENT_SPD_SEC *
@@ -260,13 +260,13 @@ download_window_function(struct dialog_data *dlg)
 		}
 
 		add_to_str(&m, &l, "\n");
-		add_to_str(&m, &l, _(T_ELAPSED_TIME, term));
+		add_to_str(&m, &l, _("Elapsed time", term));
 		add_to_str(&m, &l, " ");
 		add_time_to_str(&m, &l, stat->prg->elapsed);
 
 		if (stat->prg->size >= 0 && stat->prg->loaded > 0) {
 			add_to_str(&m, &l, ", ");
-			add_to_str(&m, &l, _(T_ESTIMATED_TIME, term));
+			add_to_str(&m, &l, _("estimated time", term));
 			add_to_str(&m, &l, " ");
 #if 0
 			add_time_to_str(&m, &l, stat->prg->elapsed
@@ -385,7 +385,7 @@ found:
 
 	undisplay_download(down);
 	down->ses = ses;
-	dlg->title = N_(T_DOWNLOAD);
+	dlg->title = N_("Download");
 	dlg->fn = download_window_function;
 	dlg->abort = download_abort_function;
 	dlg->udata = down;
@@ -394,17 +394,17 @@ found:
 	dlg->items[0].type = D_BUTTON;
 	dlg->items[0].gid = B_ENTER | B_ESC;
 	dlg->items[0].fn = dlg_undisplay_download;
-	dlg->items[0].text = N_(T_BACKGROUND);
+	dlg->items[0].text = N_("Background");
 
 	dlg->items[1].type = D_BUTTON;
 	dlg->items[1].gid = B_ENTER | B_ESC;
 	dlg->items[1].fn = dlg_set_notify;
-	dlg->items[1].text = N_(T_BACKGROUND_NOTIFY);
+	dlg->items[1].text = N_("Background with notify");
 
 	dlg->items[2].type = D_BUTTON;
 	dlg->items[2].gid = 0;
 	dlg->items[2].fn = dlg_abort_download;
-	dlg->items[2].text = N_(T_ABORT);
+	dlg->items[2].text = N_("Abort");
 
 	dlg->items[3].type = D_END;
 
@@ -498,11 +498,11 @@ write_error:
 
 					if (msg && emsg) {
 						msg_box(get_download_ses(down)->term, getml(msg, emsg, NULL),
-							N_(T_DOWNLOAD_ERROR), AL_CENTER | AL_EXTD_TEXT,
-							N_(T_COULD_NOT_WRITE_TO_FILE),
+							N_("Download error"), AL_CENTER | AL_EXTD_TEXT,
+							N_("Could not create file"),
 							" ", msg, ": ", emsg, NULL,
 							NULL, 1,
-							N_(T_CANCEL), NULL, B_ENTER | B_ESC);
+							N_("Cancel"), NULL, B_ENTER | B_ESC);
 					} else {
 						if (msg) mem_free(msg);
 						if (emsg) mem_free(emsg);
@@ -531,11 +531,11 @@ end_store:
 					if (p) *p = '\0';
 
 					msg_box(get_download_ses(down)->term, getml(tt, NULL),
-						N_(T_DOWNLOAD_ERROR), AL_CENTER | AL_EXTD_TEXT,
-						N_(T_ERROR_DOWNLOADING), " ",
+						N_("Download error"), AL_CENTER | AL_EXTD_TEXT,
+						N_("Error downloading"), " ",
 						tt, ":\n\n", t, NULL,
 						get_download_ses(down), 1,
-						N_(T_CANCEL), NULL, B_ENTER | B_ESC /*,
+						N_("Cancel"), NULL, B_ENTER | B_ESC /*,
 						N_(T_RETRY), NULL, 0 */ /* FIXME: retry */);
 				}
 			}
@@ -557,10 +557,10 @@ end_store:
 					unsigned char *url = stracpy(down->url);
 
 					msg_box(get_download_ses(down)->term, getml(url, NULL),
-						N_(T_DOWNLOAD), AL_CENTER | AL_EXTD_TEXT,
-						N_(T_DOWNLOAD_COMPLETE), ":\n", url, NULL,
+						N_("Download"), AL_CENTER | AL_EXTD_TEXT,
+						N_("Download complete"), ":\n", url, NULL,
 						get_download_ses(down), 1,
-						N_(T_OK), NULL, B_ENTER | B_ESC);
+						N_("OK"), NULL, B_ENTER | B_ESC);
 				}
 
 				if (get_opt_int("document.download.notify_bell") + down->notify >= 2) {
@@ -633,11 +633,11 @@ create_download_file(struct terminal *term, unsigned char *fi,
 
 		if (msg && msge) {
 			msg_box(term, getml(msg, msge, NULL),
-				N_(T_DOWNLOAD_ERROR), AL_CENTER | AL_EXTD_TEXT,
-				N_(T_COULD_NOT_CREATE_FILE), " ", msg, ": ",
+				N_("Download error"), AL_CENTER | AL_EXTD_TEXT,
+				N_("Could not create file"), " ", msg, ": ",
 				msge, NULL,
 				NULL, 1,
-				N_(T_CANCEL), NULL, B_ENTER | B_ESC);
+				N_("Cancel"), NULL, B_ENTER | B_ESC);
 		} else {
 			if (msg) mem_free(msg);
 			if (msge) mem_free(msge);
@@ -970,21 +970,21 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 	if (!assoc) {
 		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
 			msg_box(ses->term, getml(content_type, NULL),
-				N_(T_UNKNOWN_TYPE), AL_CENTER | AL_EXTD_TEXT,
-				N_(T_CONTEN_TYPE_IS), " ", content_type, ".\n",
-				N_(T_DO_YOU_WANT_TO_SAVE_OR_DISLPAY_THIS_FILE), NULL,
+				N_("Unknown type"), AL_CENTER | AL_EXTD_TEXT,
+				N_("Content type is"), " ", content_type, ".\n",
+				N_("Do you want to save or display this file?"), NULL,
 				ses, 3,
-				N_(T_SAVE), tp_save, B_ENTER,
-				N_(T_DISPLAY), tp_display, 0,
-				N_(T_CANCEL), tp_cancel, B_ESC);
+				N_("Save"), tp_save, B_ENTER,
+				N_("Display"), tp_display, 0,
+				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
 			msg_box(ses->term, getml(content_type, NULL),
-				N_(T_UNKNOWN_TYPE), AL_CENTER | AL_EXTD_TEXT,
-				N_(T_CONTEN_TYPE_IS), " ", content_type, ".\n",
-				N_(T_DO_YOU_WANT_TO_SAVE_OR_DISLPAY_THIS_FILE), NULL,
+				N_("Unknown type"), AL_CENTER | AL_EXTD_TEXT,
+				N_("Content type is"), " ", content_type, ".\n",
+				N_("Do you want to save or display this file?"), NULL,
 				ses, 2,
-				N_(T_DISPLAY), tp_display, B_ENTER,
-				N_(T_CANCEL), tp_cancel, B_ESC);
+				N_("Display"), tp_display, B_ENTER,
+				N_("Cancel"), tp_cancel, B_ESC);
 		}
 	} else {
 		unsigned char *name = NULL;
@@ -1011,25 +1011,25 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 
 		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
 			msg_box(ses->term, getml(content_type, name, NULL),
-				N_(T_WHAT_TO_DO), AL_CENTER | AL_EXTD_TEXT,
-				N_(T_CONTEN_TYPE_IS), " ", content_type, ".\n",
-				N_(T_DO_YOU_WANT_TO_OPEN_FILE_WITH),
-				" ", name, ", ", N_(T_SAVE_IT_OR_DISPLAY_IT), NULL,
+				N_("What to do?"), AL_CENTER | AL_EXTD_TEXT,
+				N_("Content type is"), " ", content_type, ".\n",
+				N_("Do you want to open file with"),
+				" ", name, ", ", N_("save it or display it?"), NULL,
 				ses, 4,
-				N_(T_OPEN), tp_open, B_ENTER,
-				N_(T_SAVE), tp_save, 0,
-				N_(T_DISPLAY), tp_display, 0,
-				N_(T_CANCEL), tp_cancel, B_ESC);
+				N_("Open"), tp_open, B_ENTER,
+				N_("Save"), tp_save, 0,
+				N_("Display"), tp_display, 0,
+				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
 			msg_box(ses->term, getml(content_type, name, NULL),
-				N_(T_WHAT_TO_DO), AL_CENTER | AL_EXTD_TEXT,
-				N_(T_CONTEN_TYPE_IS), " ", content_type, ".\n",
-				N_(T_DO_YOU_WANT_TO_OPEN_FILE_WITH),
-				" ", name, ", ", N_(T_SAVE_IT_OR_DISPLAY_IT), NULL,
+				N_("What to do?"), AL_CENTER | AL_EXTD_TEXT,
+				N_("Content type is"), " ", content_type, ".\n",
+				N_("Do you want to open file with"),
+				" ", name, ", ", N_("save it or display it?"), NULL,
 				ses, 3,
-				N_(T_OPEN), tp_open, B_ENTER,
-				N_(T_DISPLAY), tp_display, 0,
-				N_(T_CANCEL), tp_cancel, B_ESC);
+				N_("Open"), tp_open, B_ENTER,
+				N_("Display"), tp_display, 0,
+				N_("Cancel"), tp_cancel, B_ESC);
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.14 2003/01/02 23:59:52 pasky Exp $ */
+/* $Id: mime.c,v 1.15 2003/01/03 00:38:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,8 +41,8 @@ get_real_opt(unsigned char *base, unsigned char *id)
 
 
 static unsigned char *ext_msg[] = {
-	N_(T_EXTENSION_S),
-	N_(T_CONTENT_TYPE),
+	N_("Extension(s)"),
+	N_("Content-Type"),
 };
 
 
@@ -157,11 +157,11 @@ menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 	add_to_str(&str, &strl, (unsigned char *) opt->ptr);
 
 	msg_box(term, getml(str, translated, NULL),
-		N_(T_DELETE_EXTENSION), AL_CENTER | AL_EXTD_TEXT,
-		N_(T_DELETE_EXTENSION), " ", str, "?", NULL,
+		N_("Delete extension"), AL_CENTER | AL_EXTD_TEXT,
+		N_("Delete extension"), " ", str, "?", NULL,
 		translated, 2,
-		N_(T_YES), really_del_ext, B_ENTER,
-		N_(T_NO), NULL, B_ESC);
+		N_("Yes"), really_del_ext, B_ENTER,
+		N_("No"), NULL, B_ESC);
 
 end:
 	if (fcp) mem_free(fcp);
@@ -244,7 +244,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 
 	if (translated) mem_free(translated);
 
-	d->title = N_(T_EXTENSION);
+	d->title = N_("Extension");
 	d->fn = add_ext_fn;
 	d->refresh = (void (*)(void *)) really_add_ext;
 	d->refresh_data = new;
@@ -262,11 +262,11 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
 	d->items[2].fn = ok_dialog;
-	d->items[2].text = N_(T_OK);
+	d->items[2].text = N_("OK");
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ESC;
-	d->items[3].text = N_(T_CANCEL);
+	d->items[3].text = N_("Cancel");
 	d->items[3].fn = cancel_dialog;
 
 	d->items[4].type = D_END;
@@ -278,7 +278,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 
 
 static struct menu_item mi_no_ext[] = {
-	{N_(T_NO_EXTENSIONS), M_BAR, NULL, NULL, 0, 0},
+	{N_("No extensions"), M_BAR, NULL, NULL, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 

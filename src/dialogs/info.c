@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.27 2003/01/03 00:04:38 pasky Exp $ */
+/* $Id: info.c,v 1.28 2003/01/03 00:38:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,10 +52,10 @@ void menu_about(struct terminal *term, void *d, struct session *ses)
 		")"
 #endif
 		"\n\n"
-		, _(T_LINKS__LYNX_LIKE, term),
+		, _("Text WWW browser", term),
 
 		"\n\n"
-		, _(T_FEATURES, term),
+		, _("Features", term),
 		": Default"
 #ifdef DEBUG
 		" Debug"
@@ -97,10 +97,10 @@ void menu_about(struct terminal *term, void *d, struct session *ses)
 
 	if (s) {
 		msg_box(term, getml(s, NULL),
-			N_(T_ABOUT), AL_CENTER,
+			N_("About"), AL_CENTER,
 			s,
 			NULL, 1,
-			N_(T_OK), NULL, B_ENTER | B_ESC);
+			N_("OK"), NULL, B_ENTER | B_ESC);
 	}
 }
 
@@ -108,19 +108,42 @@ void menu_about(struct terminal *term, void *d, struct session *ses)
 void menu_keys(struct terminal *term, void *d, struct session *ses)
 {
 	msg_box(term, NULL,
-		N_(T_KEYS), AL_LEFT,
-		N_(T_KEYS_DESC),
+		N_("Keys"), AL_LEFT,
+		N_("ESC      display menu\n"
+		   "^C, q    quit\n"
+		   "^P, ^N   scroll up, down\n"
+		   "[, ]     scroll left, right\n"
+		   "up, down select link\n"
+		   "->       follow link\n"
+		   "<-       go back\n"
+		   "g        go to url\n"
+		   "G        go to url based on current url\n"
+		   "/        search\n"
+		   "?        search back\n"
+		   "n        find next\n"
+		   "N        find previous\n"
+		   "=        document info\n"
+		   "|        header info\n"
+		   "\\        document source\n"
+		   "d        download"),
 		NULL, 1,
-		N_(T_OK), NULL, B_ENTER | B_ESC);
+		N_("OK"), NULL, B_ENTER | B_ESC);
 }
 
 void menu_copying(struct terminal *term, void *d, struct session *ses)
 {
 	msg_box(term, NULL,
-		N_(T_COPYING), AL_CENTER,
-		N_(T_COPYING_DESC),
+		N_("Copying"), AL_CENTER,
+		N_("ELinks " VERSION_STRING "\n\n"
+		   "(C) 1999 - 2002 Mikulas Patocka\n"
+		   "(C) 2001 - 2003 Petr Baudis\n\n"
+		   "This program is free software; you can redistribute it "
+		   "and/or modify it under the terms of the GNU General Public "
+		   "License as published by the Free Software Foundation; "
+		   "either version 2 of the License, or (at your option) any "
+		   "later version."),
 		NULL, 1,
-		N_(T_OK), NULL, B_ENTER | B_ESC);
+		N_("OK"), NULL, B_ENTER | B_ESC);
 }
 
 
@@ -163,25 +186,25 @@ void res_inf(struct terminal *term, void *d, struct session *ses)
 #undef create_str
 
 	msg_box(term, getml(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, NULL),
-		N_(T_RESOURCES), AL_LEFT | AL_EXTD_TEXT,
-		N_(T_RESOURCES), a1,
-		N_(T_HANDLES), a2,
-		N_(T_TIMERS), a3,
-		N_(T_CONNECTIONS), a4,
-		N_(T_cONNECTIONS), a5,
-		N_(T_CONNECTING), a6,
-		N_(T_tRANSFERRING), a7,
-		N_(T_KEEPALIVE), a8,
-		N_(T_MEMORY_CACHE), a9,
-		N_(T_BYTES), a10,
-		N_(T_FILES), a11,
-		N_(T_LOCKED), a12,
-		N_(T_LOADING), a13,
-		N_(T_FORMATTED_DOCUMENT_CACHE), a14,
-		N_(T_DOCUMENTS), a15,
-		N_(T_LOCKED), a16, NULL,
+		N_("Resources"), AL_LEFT | AL_EXTD_TEXT,
+		N_("Resources"), a1,
+		N_("handles"), a2,
+		N_("timers"), a3,
+		N_("Connections"), a4,
+		N_("connections"), a5,
+		N_("connecting"), a6,
+		N_("transferring"), a7,
+		N_("keepalive"), a8,
+		N_("Memory cache"), a9,
+		N_("bytes"), a10,
+		N_("files"), a11,
+		N_("locked"), a12,
+		N_("loading"), a13,
+		N_("Formatted document cache"), a14,
+		N_("documents"), a15,
+		N_("locked"), a16, NULL,
 		r, 1,
-		N_(T_OK), NULL, B_ENTER | B_ESC);
+		N_("OK"), NULL, B_ENTER | B_ESC);
 
 	refresh_init(r, term, ses, d, res_inf);
 }
@@ -210,10 +233,10 @@ void cache_inf(struct terminal *term, void *d, struct session *ses)
 	}
 
 	msg_box(term, getml(a, NULL),
-		N_(T_CACHE_INFO), AL_LEFT | AL_EXTD_TEXT,
-		N_(T_CACHE_CONTENT), a, NULL,
+		N_("Cache info"), AL_LEFT | AL_EXTD_TEXT,
+		N_("Cache content"), a, NULL,
 		r, 1,
-		N_(T_OK), NULL, B_ENTER | B_ESC);
+		N_("OK"), NULL, B_ENTER | B_ESC);
 
 	refresh_init(r, term, ses, d, cache_inf);
 }
@@ -230,7 +253,7 @@ void memory_inf(struct terminal *term, void *d, struct session *ses)
 	if (!r) return;
 
 	snprintf(message, sizeof(message), "%ld %s.",
-		 mem_amount, _(T_MEMORY_ALLOCATED, term));
+		 mem_amount, _("bytes of memory allocated", term));
 
 	p = stracpy(message);
 	if (!p) {
@@ -239,10 +262,10 @@ void memory_inf(struct terminal *term, void *d, struct session *ses)
 	}
 
 	msg_box(term, getml(p, NULL),
-		N_(T_MEMORY_INFO), AL_CENTER,
+		N_("Memory info"), AL_CENTER,
 		p,
 		r, 1,
-		N_(T_OK), NULL, B_ENTER | B_ESC);
+		N_("OK"), NULL, B_ENTER | B_ESC);
 
 	refresh_init(r, term, ses, d, memory_inf);
 }

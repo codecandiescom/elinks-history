@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.33 2003/01/03 00:04:38 pasky Exp $ */
+/* $Id: dialogs.c,v 1.34 2003/01/03 00:38:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,11 +35,11 @@ void
 write_config_error(struct terminal *term, unsigned char *config_file, int ret)
 {
 	msg_box(term, NULL,
-		N_(T_CONFIG_ERROR), AL_CENTER | AL_EXTD_TEXT,
-		N_(T_UNABLE_TO_WRITE_TO_CONFIG_FILE), "\n",
+		N_("Config error"), AL_CENTER | AL_EXTD_TEXT,
+		N_("Unable to write to config file"), "\n",
 		config_file, ": ", ret == 2222 ? "Secure open failed" : strerror(ret), NULL,
 		NULL, 1,
-		N_(T_CANCEL), NULL, B_ENTER | B_ESC);
+		N_("Cancel"), NULL, B_ENTER | B_ESC);
 }
 
 
@@ -115,21 +115,21 @@ push_info_button(struct dialog_data *dlg,
 		option_types[option->type].write(option, &value, &val_len);
 
 		msg_box(term, getml(value, NULL),
-			N_(T_INFO), AL_LEFT | AL_EXTD_TEXT,
-			N_(T_NNAME), ": ", option->name, "\n",
-			N_(T_TYPE), ": ", option_types[option->type].name, "\n",
-			N_(T_VALUE), ": ", value, "\n\n",
-			N_(T_DESCRIPTION), ": \n", option->desc, NULL,
+			N_("Info"), AL_LEFT | AL_EXTD_TEXT,
+			N_("Name"), ": ", option->name, "\n",
+			N_("Type"), ": ", option_types[option->type].name, "\n",
+			N_("value"), ": ", value, "\n\n",
+			N_("Description"), ": \n", option->desc, NULL,
 			option, 1,
-			N_(T_OK), done_info_button, B_ESC | B_ENTER);
+			N_("OK"), done_info_button, B_ESC | B_ENTER);
 	} else {
 		msg_box(term, NULL,
-			N_(T_INFO), AL_LEFT | AL_EXTD_TEXT,
-			N_(T_NNAME), ": ", option->name, "\n",
-			N_(T_TYPE), ": ", option_types[option->type].name, "\n\n",
-			N_(T_DESCRIPTION), ": \n", option->desc, NULL,
+			N_("Info"), AL_LEFT | AL_EXTD_TEXT,
+			N_("Name"), ": ", option->name, "\n",
+			N_("Type"), ": ", option_types[option->type].name, "\n\n",
+			N_("Description"), ": \n", option->desc, NULL,
 			option, 1,
-			N_(T_OK), done_info_button, B_ESC | B_ENTER);
+			N_("OK"), done_info_button, B_ESC | B_ENTER);
 	}
 
 	return 0;
@@ -178,10 +178,10 @@ check_valid_option(struct dialog_data *dlg, struct widget_data *di)
 	commandline = 0;
 
 	msg_box(term, NULL,
-		N_(T_ERROR), AL_LEFT,
-		N_(T_BAD_OPTION_VALUE),
+		N_("Error"), AL_LEFT,
+		N_("Bad option value."),
 		NULL, 1,
-		N_(T_CANCEL), NULL, B_ESC | B_ENTER);
+		N_("Cancel"), NULL, B_ESC | B_ENTER);
 	return 1;
 }
 
@@ -196,11 +196,11 @@ layout_edit_dialog(struct dialog_data *dlg)
 	struct option *option = dlg->dlg->udata;
 	unsigned char *name, *type, *value, *desc;
 
-	name = straconcat(_(T_NNAME, term), ": ", option->name, NULL);
-	type = straconcat(_(T_TYPE, term), ": ",
+	name = straconcat(_("Name", term), ": ", option->name, NULL);
+	type = straconcat(_("Type", term), ": ",
 			  _(option_types[option->type].name, term), NULL);
-	value= straconcat(_(T_VALUE, term), ": ", NULL);
-	desc = straconcat(_(T_DESCRIPTION, term), ": \n", option->desc,
+	value= straconcat(_("value", term), ": ", NULL);
+	desc = straconcat(_("Description", term), ": \n", option->desc,
 			  NULL);
 
 	if (name && type && value && desc)
@@ -298,7 +298,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 		return;
 	}
 
-	d->title = N_(T_EDIT);
+	d->title = N_("Edit");
 	d->fn = layout_edit_dialog;
 	d->udata = option;
 	d->udata2 = ses;
@@ -316,11 +316,11 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	d->items[1].type = D_BUTTON;
 	d->items[1].gid = B_ENTER;
 	d->items[1].fn = ok_dialog;
-	d->items[1].text = N_(T_OK);
+	d->items[1].text = N_("OK");
 
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ESC;
-	d->items[2].text = N_(T_CANCEL);
+	d->items[2].text = N_("Cancel");
 	d->items[2].fn = cancel_dialog;
 
 	d->items[EDIT_DIALOG_FIELDS_NB].type = D_END;
@@ -347,10 +347,12 @@ push_edit_button(struct dialog_data *dlg,
 	    !option_types[option->type].read ||
 	    !option_types[option->type].set) {
 		msg_box(term, NULL,
-			N_(T_EDIT), AL_LEFT,
-			N_(T_CANNOT_EDIT_OPTION),
+			N_("Edit"), AL_LEFT,
+			N_("This option cannot be edited. This means that "
+			   "this is some special option like a folder - try "
+			   "to press a space in order to see its contents."),
 			NULL, 1,
-			N_(T_CANCEL), NULL, B_ESC | B_ENTER);
+			N_("Cancel"), NULL, B_ESC | B_ENTER);
 		return 0;
 	}
 
@@ -382,10 +384,10 @@ push_add_button(struct dialog_data *dlg,
 
 invalid_option:
 		msg_box(term, NULL,
-			N_(T_ADD_OPTION), AL_CENTER,
-			N_(T_CANNOT_ADD_OPTION_HERE),
+			N_("Add option"), AL_CENTER,
+			N_("Cannot add an option here."),
 			NULL, 1,
-			N_(T_CANCEL), NULL, B_ESC | B_ENTER);
+			N_("Cancel"), NULL, B_ESC | B_ENTER);
 		return 0;
 	}
 
@@ -396,8 +398,8 @@ invalid_option:
 			goto invalid_option;
 	}
 
-	input_field(term, NULL, N_(T_ADD_OPTION), N_(T_NNAME),
-		N_(T_OK), N_(T_CANCEL), option, NULL,
+	input_field(term, NULL, N_("Add option"), N_("Name"),
+		N_("OK"), N_("Cancel"), option, NULL,
 		MAX_STR_LEN, "", 0, 0, NULL,
 		add_option_to_tree, NULL);
 	return 0;
@@ -449,10 +451,10 @@ push_del_button(struct dialog_data *dlg,
 
 invalid_option:
 		msg_box(term, NULL,
-			N_(T_DELETE_OPTION), AL_CENTER,
-			N_(T_CANNOT_DELETE_OPTION_HERE),
+			N_("Delete option"), AL_CENTER,
+			N_("Cannot delete this option."),
 			NULL, 1,
-			N_(T_CANCEL), NULL, B_ESC | B_ENTER);
+			N_("Cancel"), NULL, B_ESC | B_ENTER);
 		return 0;
 	}
 
@@ -463,11 +465,11 @@ invalid_option:
 	}
 
 	msg_box(term, NULL,
-		N_(T_DELETE_OPTION), AL_CENTER | AL_EXTD_TEXT,
-		N_(T_REALLY_DELETE_OPTION), " \"", option->name, "\" ?", NULL,
+		N_("Delete option"), AL_CENTER | AL_EXTD_TEXT,
+		N_("Really delete the option"), " \"", option->name, "\" ?", NULL,
 		option, 2,
-		N_(T_OK), really_delete_option, B_ENTER,
-		N_(T_CANCEL), NULL, B_ESC);
+		N_("OK"), really_delete_option, B_ENTER,
+		N_("Cancel"), NULL, B_ESC);
 
 	return 0;
 }
@@ -494,7 +496,7 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 			  + sizeof(struct option) + 2 * MAX_STR_LEN);
 	if (!d) return;
 
-	d->title = N_(T_OPTIONS_MANAGER);
+	d->title = N_("Options manager");
 	d->fn = layout_hierbox_browser;
 	d->handle_event = hierbox_dialog_event_handler;
 	d->abort = option_dialog_abort_handler;
@@ -504,36 +506,36 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	d->items[0].gid = B_ENTER;
 	d->items[0].fn = push_info_button;
 	d->items[0].udata = ses;
-	d->items[0].text = N_(T_INFO);
+	d->items[0].text = N_("Info");
 
 	d->items[1].type = D_BUTTON;
 	d->items[1].gid = B_ENTER;
 	d->items[1].fn = push_edit_button;
 	d->items[1].udata = ses;
-	d->items[1].text = N_(T_EDIT);
+	d->items[1].text = N_("Edit");
 
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
 	d->items[2].fn = push_add_button;
 	d->items[2].udata = ses;
-	d->items[2].text = N_(T_ADD);
+	d->items[2].text = N_("Add");
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ENTER;
 	d->items[3].fn = push_del_button;
 	d->items[3].udata = ses;
-	d->items[3].text = N_(T_DELETE);
+	d->items[3].text = N_("Delete");
 
 	d->items[4].type = D_BUTTON;
 	d->items[4].gid = B_ENTER;
 	d->items[4].fn = push_save_button;
 	d->items[4].udata = ses;
-	d->items[4].text = N_(T_SAVE);
+	d->items[4].text = N_("Save");
 
 	d->items[5].type = D_BUTTON;
 	d->items[5].gid = B_ESC;
 	d->items[5].fn = cancel_dialog;
-	d->items[5].text = N_(T_CLOSE);
+	d->items[5].text = N_("Close");
 
 	d->items[OP_BOX_IND].type = D_BOX;
 	d->items[OP_BOX_IND].gid = 12;
@@ -598,10 +600,10 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 	/* TODO: This should maybe rather happen in a validation function? */
 	if (parse_keystroke(keystroke, &key, &meta) < 0) {
 		msg_box(hop->term, NULL,
-			N_(T_ADD_KEYBINDING), AL_CENTER,
-			N_(T_INVALID_KEYSTROKE),
+			N_("Add keybinding"), AL_CENTER,
+			N_("Invalid keystroke."),
 			NULL, 1,
-			N_(T_CANCEL), NULL, B_ESC | B_ENTER);
+			N_("Cancel"), NULL, B_ESC | B_ENTER);
 		return;
 	}
 
@@ -620,10 +622,10 @@ push_kbdbind_add_button(struct dialog_data *dlg,
 
 	if (!item || !item->depth) {
 		msg_box(term, NULL,
-			N_(T_ADD_KEYBINDING), AL_CENTER,
-			N_(T_NEED_TO_SELECT_KEYMAP),
+			N_("Add keybinding"), AL_CENTER,
+			N_("Need to select a keymap."),
 			NULL, 1,
-			N_(T_CANCEL), NULL, B_ESC | B_ENTER);
+			N_("Cancel"), NULL, B_ESC | B_ENTER);
 		return 0;
 	}
 
@@ -636,17 +638,20 @@ push_kbdbind_add_button(struct dialog_data *dlg,
 	hop->keymap = (int) item->udata;
 	hop->action = (int) item->root->udata;
 
-	text = straconcat(_(T_ACTION, term), ": ", write_action(hop->action), "\n",
-			  _(T_KKEYMAP,term), ": ", write_keymap(hop->keymap), "\n",
-			  "\n", _(T_KEYSTROKE_HELP, term), "\n\n",
-			  _(T_KEYSTROKE, term), NULL);
+	text = straconcat(_("Action", term), ": ", write_action(hop->action), "\n",
+			  _("Keymap", term), ": ", write_keymap(hop->keymap), "\n",
+			  "\n", _("Keystroke should be written in the format: "
+				  "[Prefix-]Key\nPrefix: Shift, Ctrl, Alt\n"
+				  "Key: a,b,c,...,1,2,3,...,Space,Up,PageDown,"
+				  "Tab,Enter,Insert,F5,...", term), "\n\n",
+			  _("Keystroke", term), NULL);
 	if (!text) {
 		mem_free(hop);
 		return 0;
 	}
 
-	input_field(term, getml(text, hop, NULL), N_(T_ADD_KEYBINDING), text,
-		N_(T_OK), N_(T_CANCEL), hop, NULL,
+	input_field(term, getml(text, hop, NULL), N_("Add keybinding"), text,
+		N_("OK"), N_("Cancel"), hop, NULL,
 		MAX_STR_LEN, "", 0, 0, NULL,
 		really_add_keybinding, NULL);
 	return 0;
@@ -706,23 +711,24 @@ push_kbdbind_del_button(struct dialog_data *dlg,
 
 	if (!box->sel || box->sel->depth < 2) {
 		msg_box(term, NULL,
-			N_(T_DELETE_KEYBINDING), AL_CENTER,
-			N_(T_NOT_A_KEYBINDING),
+			N_("Delete keybinding"), AL_CENTER,
+			N_("This item is not a keybinding. Try to press a space"
+			   " in order to get to the keybinindings themselves."),
 			NULL, 1,
-			N_(T_CANCEL), NULL, B_ESC | B_ENTER);
+			N_("Cancel"), NULL, B_ESC | B_ENTER);
 		return 0;
 	}
 
 	keybinding = box->sel->udata;
 
 	msg_box(term, NULL,
-		N_(T_DELETE_KEYBINDING), AL_CENTER | AL_EXTD_TEXT,
-		N_(T_REALLY_DELETE_KEYBINDING), " \"", box->sel->text, "\" (",
-		N_(T_AACTION), " \"", write_action(keybinding->action), "\", ",
-		N_(T_KEYMAP), " \"", write_keymap(keybinding->keymap), "\") ?", NULL,
+		N_("Delete keybinding"), AL_CENTER | AL_EXTD_TEXT,
+		N_("Really delete the keybinding"), " \"", box->sel->text, "\" (",
+		N_("action"), " \"", write_action(keybinding->action), "\", ",
+		N_("keymap"), " \"", write_keymap(keybinding->keymap), "\") ?", NULL,
 		keybinding, 2,
-		N_(T_OK), really_delete_keybinding, B_ENTER,
-		N_(T_CANCEL), NULL, B_ESC);
+		N_("OK"), really_delete_keybinding, B_ENTER,
+		N_("Cancel"), NULL, B_ESC);
 
 	return 0;
 }
@@ -748,7 +754,7 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 			  + sizeof(struct option) + 2 * MAX_STR_LEN);
 	if (!d) return;
 
-	d->title = N_(T_KEYBINDING_MANAGER);
+	d->title = N_("Keybinding manager");
 	d->fn = layout_hierbox_browser;
 	d->handle_event = hierbox_dialog_event_handler;
 	d->abort = kbdbind_dialog_abort_handler;
@@ -758,30 +764,30 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 	d->items[0].gid = B_ENTER;
 	d->items[0].fn = push_kbdbind_add_button;
 	d->items[0].udata = ses;
-	d->items[0].text = N_(T_ADD);
+	d->items[0].text = N_("Add");
 
 	d->items[1].type = D_BUTTON;
 	d->items[1].gid = B_ENTER;
 	d->items[1].fn = push_kbdbind_del_button;
 	d->items[1].udata = ses;
-	d->items[1].text = N_(T_DELETE);
+	d->items[1].text = N_("Delete");
 
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
 	d->items[2].fn = push_kbdbind_toggle_display_button;
 	d->items[2].udata = ses;
-	d->items[2].text = N_(T_TOGGLE_DISPLAY);
+	d->items[2].text = N_("Toggle display");
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ENTER;
 	d->items[3].fn = push_kbdbind_save_button;
 	d->items[3].udata = ses;
-	d->items[3].text = N_(T_SAVE);
+	d->items[3].text = N_("Save");
 
 	d->items[4].type = D_BUTTON;
 	d->items[4].gid = B_ESC;
 	d->items[4].fn = cancel_dialog;
-	d->items[4].text = N_(T_CLOSE);
+	d->items[4].text = N_("Close");
 
 	d->items[KB_BOX_IND].type = D_BOX;
 	d->items[KB_BOX_IND].gid = 12;

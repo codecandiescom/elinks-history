@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.3 2003/01/02 23:59:54 pasky Exp $ */
+/* $Id: sched.c,v 1.4 2003/01/03 00:38:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,48 +56,48 @@ struct k_conn {
 
 /* Global variables */
 struct s_msg_dsc msg_dsc[] = {
-	{S_WAIT,		N_(T_WAITING_IN_QUEUE)},
-	{S_DNS,			N_(T_LOOKING_UP_HOST)},
-	{S_CONN,		N_(T_MAKING_CONNECTION)},
-	{S_SSL_NEG,		N_(T_SSL_NEGOTIATION)},
-	{S_SENT,		N_(T_REQUEST_SENT)},
-	{S_LOGIN,		N_(T_LOGGING_IN)},
-	{S_GETH,		N_(T_GETTING_HEADERS)},
-	{S_PROC,		N_(T_SERVER_IS_PROCESSING_REQUEST)},
-	{S_TRANS,		N_(T_TRANSFERRING)},
+	{S_WAIT,		N_("Waiting in queue")},
+	{S_DNS,			N_("Looking up host")},
+	{S_CONN,		N_("Making connection")},
+	{S_SSL_NEG,		N_("SSL negotiation")},
+	{S_SENT,		N_("Request sent")},
+	{S_LOGIN,		N_("Logging in")},
+	{S_GETH,		N_("Getting headers")},
+	{S_PROC,		N_("Server is processing request")},
+	{S_TRANS,		N_("Transferring")},
 
-	{S_WAIT_REDIR,		N_(T_WAITING_FOR_REDIRECT_CONFIRMATION)},
-	{S_OK,			N_(T_OK)},
-	{S_INTERRUPTED,		N_(T_INTERRUPTED)},
-	{S_EXCEPT,		N_(T_SOCKET_EXCEPTION)},
-	{S_INTERNAL,		N_(T_INTERNAL_ERROR)},
-	{S_OUT_OF_MEM,		N_(T_OUT_OF_MEMORY)},
-	{S_NO_DNS,		N_(T_HOST_NOT_FOUND)},
-	{S_CANT_WRITE,		N_(T_ERROR_WRITING_TO_SOCKET)},
-	{S_CANT_READ,		N_(T_ERROR_READING_FROM_SOCKET)},
-	{S_MODIFIED,		N_(T_DATA_MODIFIED)},
-	{S_BAD_URL,		N_(T_BAD_URL_SYNTAX)},
-	{S_TIMEOUT,		N_(T_RECEIVE_TIMEOUT)},
-	{S_RESTART,		N_(T_REQUEST_MUST_BE_RESTARTED)},
-	{S_STATE,		N_(T_CANT_GET_SOCKET_STATE)},
+	{S_WAIT_REDIR,		N_("Waiting for redirect confirmation")},
+	{S_OK,			N_("OK")},
+	{S_INTERRUPTED,		N_("Interrupted")},
+	{S_EXCEPT,		N_("Socket exception")},
+	{S_INTERNAL,		N_("Internal error")},
+	{S_OUT_OF_MEM,		N_("Out of memory")},
+	{S_NO_DNS,		N_("Host not found")},
+	{S_CANT_WRITE,		N_("Error writing to socket")},
+	{S_CANT_READ,		N_("Error reading from socket")},
+	{S_MODIFIED,		N_("Data modified")},
+	{S_BAD_URL,		N_("Bad URL syntax")},
+	{S_TIMEOUT,		N_("Receive timeout")},
+	{S_RESTART,		N_("Request must be restarted")},
+	{S_STATE,		N_("Can't get socket state")},
 
-	{S_HTTP_ERROR,		N_(T_BAD_HTTP_RESPONSE)},
-	{S_HTTP_100,		N_(T_HTTP_100)},
-	{S_HTTP_204,		N_(T_NO_CONTENT)},
+	{S_HTTP_ERROR,		N_("Bad HTTP response")},
+	{S_HTTP_100,		N_("HTTP 100 (\?\?\?)")},
+	{S_HTTP_204,		N_("No content")},
 
-	{S_FILE_TYPE,		N_(T_UNKNOWN_FILE_TYPE)},
-	{S_FILE_ERROR,		N_(T_ERROR_OPENING_FILE)},
+	{S_FILE_TYPE,		N_("Unknown file type")},
+	{S_FILE_ERROR,		N_("Error opening file")},
 
-	{S_FTP_ERROR,		N_(T_BAD_FTP_RESPONSE)},
-	{S_FTP_UNAVAIL,		N_(T_FTP_SERVICE_UNAVAILABLE)},
-	{S_FTP_LOGIN,		N_(T_BAD_FTP_LOGIN)},
-	{S_FTP_PORT,		N_(T_FTP_PORT_COMMAND_FAILED)},
-	{S_FTP_NO_FILE,		N_(T_FILE_NOT_FOUND)},
-	{S_FTP_FILE_ERROR,	N_(T_FTP_FILE_ERROR)},
+	{S_FTP_ERROR,		N_("Bad FTP response")},
+	{S_FTP_UNAVAIL,		N_("FTP service unavailable")},
+	{S_FTP_LOGIN,		N_("Bad FTP login")},
+	{S_FTP_PORT,		N_("FTP PORT command failed")},
+	{S_FTP_NO_FILE,		N_("File not found")},
+	{S_FTP_FILE_ERROR,	N_("FTP file error")},
 #ifdef HAVE_SSL
-	{S_SSL_ERROR,		N_(T_SSL_ERROR)},
+	{S_SSL_ERROR,		N_("SSL error")},
 #else
-	{S_NO_SSL,		N_(T_NO_SSL)},
+	{S_NO_SSL,		N_("This version of ELinks does not contain SSL/TSL support")},
 #endif
 	{0,			NULL}
 };

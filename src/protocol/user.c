@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.15 2003/01/02 23:59:54 pasky Exp $ */
+/* $Id: user.c,v 1.16 2003/01/03 00:38:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,10 +97,10 @@ prog_func(struct terminal *term, unsigned char *url, unsigned char *proto,
 		/* Shouldn't ever happen, but be paranoid. */
 		/* Happens when you're in X11 and you've no handler for it. */
 		msg_box(term, NULL,
-			N_(T_NO_PROGRAM), AL_CENTER | AL_EXTD_TEXT,
-			N_(T_NO_PROGRAM_SPECIFIED_FOR), " ", proto, ".", NULL,
+			N_("No program"), AL_CENTER | AL_EXTD_TEXT,
+			N_("No program specified for"), " ", proto, ".", NULL,
 			NULL, 1,
-			N_(T_CANCEL), NULL, B_ENTER | B_ESC);
+			N_("Cancel"), NULL, B_ENTER | B_ESC);
 		return;
 	}
 
@@ -125,10 +125,10 @@ user_func(struct session *ses, unsigned char *url)
 	if (!host) {
 		if (proto) mem_free(proto);
 		msg_box(ses->term, NULL,
-			N_(T_BAD_URL_SYNTAX), AL_CENTER,
-			N_(T_BAD_USER_URL),
+			N_("Bad URL syntax"), AL_CENTER,
+			N_("Bad user protocol URL"),
 			NULL, 1,
-			N_(T_CANCEL), NULL, B_ENTER | B_ESC);
+			N_("Cancel"), NULL, B_ENTER | B_ESC);
 		return;
 	}
 	if (*host) check_shell_security(&host);

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.72 2003/01/02 23:59:52 pasky Exp $ */
+/* $Id: menu.c,v 1.73 2003/01/03 00:38:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,13 +115,14 @@ query_exit(struct session *ses)
 {
 	ses->exit_query = 1;
 	msg_box(ses->term, NULL,
-		N_(T_EXIT_LINKS), AL_CENTER,
+		N_("Exit ELinks"), AL_CENTER,
 		(ses->term->next == ses->term->prev && are_there_downloads())
-		? N_(T_DO_YOU_REALLY_WANT_TO_EXIT_LINKS_AND_TERMINATE_ALL_DOWNLOADS)
-		: N_(T_DO_YOU_REALLY_WANT_TO_EXIT_LINKS),
+		? N_("Do you really want to exit ELinks "
+		     "(and terminate all downloads)?")
+		: N_("Do you really want to exit ELinks?"),
 		ses, 2,
-		N_(T_YES), (void (*)(void *)) really_exit_prog, B_ENTER,
-		N_(T_NO), (void (*)(void *)) dont_exit_prog, B_ESC);
+		N_("Yes"), (void (*)(void *)) really_exit_prog, B_ENTER,
+		N_("No"), (void (*)(void *)) dont_exit_prog, B_ESC);
 }
 
 void
@@ -222,7 +223,7 @@ go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 }
 
 static struct menu_item no_hist_menu[] = {
-	{N_(T_NO_HISTORY), M_BAR, NULL, NULL, 0, 0},
+	{N_("No history"), M_BAR, NULL, NULL, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
@@ -297,7 +298,7 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 
 
 static struct menu_item no_downloads_menu[] = {
-	{N_(T_NO_DOWNLOADS), M_BAR, NULL, NULL, 0, 0},
+	{N_("No downloads"), M_BAR, NULL, NULL, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
@@ -368,48 +369,48 @@ menu_kill_background_connections(struct terminal *term, void *xxx, void *yyy)
 }
 
 static struct menu_item file_menu11[] = {
-	{N_(T_MENU_GOTO_URL), "g", MENU_FUNC menu_goto_url, (void *)0, 0, 0},
-	{N_(T_GO_BACK), "<-", MENU_FUNC menu_go_back, (void *)0, 0, 0},
-	{N_(T_HISTORY), ">", MENU_FUNC history_menu, (void *)0, 1, 0},
-	{N_(T_UNHISTORY), ">", MENU_FUNC unhistory_menu, (void *)0, 1, 0},
-	{N_(T_RELOAD), "Ctrl-R", MENU_FUNC menu_reload, (void *)0, 0, 0},
+	{N_("~Go to URL"), "g", MENU_FUNC menu_goto_url, (void *)0, 0, 0},
+	{N_("Go ~back"), "<-", MENU_FUNC menu_go_back, (void *)0, 0, 0},
+	{N_("~History"), ">", MENU_FUNC history_menu, (void *)0, 1, 0},
+	{N_("Unhis~tory"), ">", MENU_FUNC unhistory_menu, (void *)0, 1, 0},
+	{N_("~Reload"), "Ctrl-R", MENU_FUNC menu_reload, (void *)0, 0, 0},
 };
 
 static struct menu_item file_menu12[] = {
 #ifdef GLOBHIST
-	{N_(T_MENU_GLOBAL_HISTORY), "h", MENU_FUNC menu_history_manager, (void *)0, 0, 0},
+	{N_("Global histor~y"), "h", MENU_FUNC menu_history_manager, (void *)0, 0, 0},
 #endif
 #ifdef BOOKMARKS
-	{N_(T_BOOKMARKS), "s", MENU_FUNC menu_bookmark_manager, (void *)0, 0, 0},
+	{N_("Bookmark~s"), "s", MENU_FUNC menu_bookmark_manager, (void *)0, 0, 0},
 #endif
 };
 
 static struct menu_item file_menu21[] = {
 	{"", M_BAR, NULL, NULL, 0, 0},
-	{N_(T_SAVE_AS), "", MENU_FUNC save_as, (void *)0, 0, 0},
-	{N_(T_SAVE_URL_AS), "", MENU_FUNC menu_save_url_as, (void *)0, 0, 0},
-	{N_(T_SAVE_FORMATTED_DOCUMENT), "", MENU_FUNC menu_save_formatted, (void *)0, 0, 0},
+	{N_("Sa~ve as"), "", MENU_FUNC save_as, (void *)0, 0, 0},
+	{N_("Save ~URL as"), "", MENU_FUNC menu_save_url_as, (void *)0, 0, 0},
+	{N_("Save formatted ~document"), "", MENU_FUNC menu_save_formatted, (void *)0, 0, 0},
 };
 
 static struct menu_item file_menu22[] = {
 	{"", M_BAR, NULL, NULL, 0, 0},
-	{N_(T_KILL_BACKGROUND_CONNECTIONS), "", MENU_FUNC menu_kill_background_connections, (void *)0, 0, 0},
-	{N_(T_FLUSH_ALL_CACHES), "", MENU_FUNC flush_caches, (void *)0, 0, 0},
-	{N_(T_RESOURCE_INFO), "", MENU_FUNC res_inf, (void *)0, 0, 0},
+	{N_("~Kill background connections"), "", MENU_FUNC menu_kill_background_connections, (void *)0, 0, 0},
+	{N_("~Flush all caches"), "", MENU_FUNC flush_caches, (void *)0, 0, 0},
+	{N_("Resource ~info"), "", MENU_FUNC res_inf, (void *)0, 0, 0},
 #if 0
 	/* This ought to be rewritten first, now it's too messy - try it with
 	 * a bit full cache. */
-	{N_(T_MENU_CACHE_INFO), "", MENU_FUNC cache_inf, (void *)0, 0, 0},
+	{N_("~Cache info"), "", MENU_FUNC cache_inf, (void *)0, 0, 0},
 #endif
 #ifdef LEAK_DEBUG
-	{N_(T_MENU_MEMORY_INFO), "", MENU_FUNC memory_inf, (void *)0, 0, 0},
+	{N_("~Memory info"), "", MENU_FUNC memory_inf, (void *)0, 0, 0},
 #endif
 	{"", M_BAR, NULL, NULL, 0, 0},
 };
 
 static struct menu_item file_menu3[] = {
 	{"", M_BAR, NULL, NULL, 0, 0},
-	{N_(T_EXIT), "q", MENU_FUNC exit_prog, (void *)0, 0, 0},
+	{N_("E~xit"), "q", MENU_FUNC exit_prog, (void *)0, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
@@ -438,7 +439,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	o = can_open_in_new(term);
 	if (o) {
-		e->text = N_(T_NEW_WINDOW);
+		e->text = N_("~New window");
 		e->rtext = o - 1 ? ">" : "";
 		e->func = MENU_FUNC open_in_new_window;
 		e->data = send_open_new_xterm;
@@ -455,11 +456,11 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	memcpy(e, file_menu22, sizeof(file_menu22));
 	e += sizeof(file_menu22) / sizeof(struct menu_item);
 	/*"", M_BAR, NULL, NULL, 0, 0,
-	N_(T_OS_SHELL), "", MENU_FUNC menu_shell, NULL, 0, 0,*/
+	N_("~OS shell"), "", MENU_FUNC menu_shell, NULL, 0, 0,*/
 
 	x = 1;
 	if (!anonymous && can_open_os_shell(term->environment)) {
-		e->text = N_(T_OS_SHELL);
+		e->text = N_("~OS shell");
 		e->rtext = "";
 		e->func = MENU_FUNC menu_shell;
 		e->data = NULL;
@@ -470,7 +471,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	}
 
 	if (can_resize_window(term->environment)) {
-		e->text = N_(T_RESIZE_TERMINAL);
+		e->text = N_("Resize ~terminal");
 		e->rtext = "";
 		e->func = MENU_FUNC dlg_resize_terminal;
 		e->data = NULL;
@@ -489,72 +490,72 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 }
 
 static struct menu_item view_menu[] = {
-	{N_(T_MENU_SEARCH), "/", MENU_FUNC menu_for_frame, (void *)search_dlg, 0, 0},
-	{N_(T_MENU_SEARCH_BACK), "?", MENU_FUNC menu_for_frame, (void *)search_back_dlg, 0, 0},
-	{N_(T_MENU_FIND_NEXT), "n", MENU_FUNC menu_for_frame, (void *)find_next, 0, 0},
-	{N_(T_MENU_FIND_PREVIOUS), "N", MENU_FUNC menu_for_frame, (void *)find_next_back, 0, 0},
+	{N_("~Search"), "/", MENU_FUNC menu_for_frame, (void *)search_dlg, 0, 0},
+	{N_("Search ~backward"), "?", MENU_FUNC menu_for_frame, (void *)search_back_dlg, 0, 0},
+	{N_("Find ~next"), "n", MENU_FUNC menu_for_frame, (void *)find_next, 0, 0},
+	{N_("Find ~previous"), "N", MENU_FUNC menu_for_frame, (void *)find_next_back, 0, 0},
 	{"", M_BAR, NULL, NULL, 0, 0},
-	{N_(T_TOGGLE_HTML_PLAIN), "\\", MENU_FUNC menu_toggle, NULL, 0, 0},
-	{N_(T_DOCUMENT_INFO), "=", MENU_FUNC menu_doc_info, NULL, 0, 0},
-	{N_(T_MENU_HEADER_INFO), "|", MENU_FUNC menu_header_info, NULL, 0, 0},
-	{N_(T_FRAME_AT_FULL_SCREEN), "f", MENU_FUNC menu_for_frame, (void *)set_frame, 0, 0},
+	{N_("Toggle ~html/plain"), "\\", MENU_FUNC menu_toggle, NULL, 0, 0},
+	{N_("Document ~info"), "=", MENU_FUNC menu_doc_info, NULL, 0, 0},
+	{N_("H~eader info"), "|", MENU_FUNC menu_header_info, NULL, 0, 0},
+	{N_("Frame at ~full-screen"), "f", MENU_FUNC menu_for_frame, (void *)set_frame, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
 static struct menu_item view_menu_anon[] = {
-	{N_(T_MENU_SEARCH), "/", MENU_FUNC menu_for_frame, (void *)search_dlg, 0, 0},
-	{N_(T_MENU_SEARCH_BACK), "?", MENU_FUNC menu_for_frame, (void *)search_back_dlg, 0, 0},
-	{N_(T_MENU_FIND_NEXT), "n", MENU_FUNC menu_for_frame, (void *)find_next, 0, 0},
-	{N_(T_MENU_FIND_PREVIOUS), "N", MENU_FUNC menu_for_frame, (void *)find_next_back, 0, 0},
+	{N_("~Search"), "/", MENU_FUNC menu_for_frame, (void *)search_dlg, 0, 0},
+	{N_("Search ~backward"), "?", MENU_FUNC menu_for_frame, (void *)search_back_dlg, 0, 0},
+	{N_("Find ~next"), "n", MENU_FUNC menu_for_frame, (void *)find_next, 0, 0},
+	{N_("Find ~previous"), "N", MENU_FUNC menu_for_frame, (void *)find_next_back, 0, 0},
 	{"", M_BAR, NULL, NULL, 0, 0},
-	{N_(T_TOGGLE_HTML_PLAIN), "\\", MENU_FUNC menu_toggle, NULL, 0, 0},
-	{N_(T_DOCUMENT_INFO), "=", MENU_FUNC menu_doc_info, NULL, 0, 0},
-	{N_(T_FRAME_AT_FULL_SCREEN), "f", MENU_FUNC menu_for_frame, (void *)set_frame, 0, 0},
+	{N_("Toggle ~html/plain"), "\\", MENU_FUNC menu_toggle, NULL, 0, 0},
+	{N_("Document ~info"), "=", MENU_FUNC menu_doc_info, NULL, 0, 0},
+	{N_("Frame at ~full-screen"), "f", MENU_FUNC menu_for_frame, (void *)set_frame, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
 static struct menu_item help_menu[] = {
-	{N_(T_MENU_ABOUT), "", MENU_FUNC menu_about, (void *)0, 0, 0},
-	{N_(T_MENU_KEYS), "", MENU_FUNC menu_keys, (void *)0, 0, 0},
-	{N_(T_MANUAL), "", MENU_FUNC menu_manual, (void *)0, 0, 0},
-	{N_(T_MENU_COPYING), "", MENU_FUNC menu_copying, (void *)0, 0, 0},
-	{N_(T_ELINKS_HOME), "", MENU_FUNC menu_elinks_home, (void *)0, 0, 0},
+	{N_("~About"), "", MENU_FUNC menu_about, (void *)0, 0, 0},
+	{N_("~Keys"), "", MENU_FUNC menu_keys, (void *)0, 0, 0},
+	{N_("User's ~manual"), "", MENU_FUNC menu_manual, (void *)0, 0, 0},
+	{N_("~Copying"), "", MENU_FUNC menu_copying, (void *)0, 0, 0},
+	{N_("~ELinks homepage"), "", MENU_FUNC menu_elinks_home, (void *)0, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
 #if 0
 static struct menu_item assoc_menu[] = {
-	{N_(T_MENU_ADD), "", MENU_FUNC menu_add_ct, NULL, 0, 0},
-	{N_(T_MODIFY), ">", MENU_FUNC menu_list_assoc, menu_add_ct, 1, 0},
-	{N_(T_MENU_DELETE), ">", MENU_FUNC menu_list_assoc, menu_del_ct, 1, 0},
+	{N_("~Add"), "", MENU_FUNC menu_add_ct, NULL, 0, 0},
+	{N_("~Modify"), ">", MENU_FUNC menu_list_assoc, menu_add_ct, 1, 0},
+	{N_("~Delete"), ">", MENU_FUNC menu_list_assoc, menu_del_ct, 1, 0},
 	{NULL, NULL, 0, NULL, NULL, 0, 0}
 };
 #endif
 
 static struct menu_item ext_menu[] = {
-	{N_(T_MENU_ADD), "", MENU_FUNC menu_add_ext, NULL, 0, 0},
-	{N_(T_MODIFY), ">", MENU_FUNC menu_list_ext, menu_add_ext, 1, 0},
-	{N_(T_MENU_DELETE), ">", MENU_FUNC menu_list_ext, menu_del_ext, 1, 0},
+	{N_("~Add"), "", MENU_FUNC menu_add_ext, NULL, 0, 0},
+	{N_("~Modify"), ">", MENU_FUNC menu_list_ext, menu_add_ext, 1, 0},
+	{N_("~Delete"), ">", MENU_FUNC menu_list_ext, menu_del_ext, 1, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
 static struct menu_item setup_menu[] = {
-	{N_(T_LANGUAGE), ">", MENU_FUNC menu_language_list, NULL, 1, 0},
-	{N_(T_CHARACTER_SET), ">", MENU_FUNC charset_list, (void *)1, 1, 0},
-	{N_(T_MENU_TERMINAL_OPTIONS), "", MENU_FUNC terminal_options, NULL, 0, 0},
-/*	{N_(T_ASSOCIATIONS), ">", MENU_FUNC do_menu, assoc_menu, 1, 0}, */
-	{N_(T_FILE_EXTENSIONS), ">", MENU_FUNC do_menu, ext_menu, 1, 0},
+	{N_("~Language"), ">", MENU_FUNC menu_language_list, NULL, 1, 0},
+	{N_("C~haracter set"), ">", MENU_FUNC charset_list, (void *)1, 1, 0},
+	{N_("~Terminal options"), "", MENU_FUNC terminal_options, NULL, 0, 0},
+/*	{N_("~Associations"), ">", MENU_FUNC do_menu, assoc_menu, 1, 0}, */
+	{N_("File ~extensions"), ">", MENU_FUNC do_menu, ext_menu, 1, 0},
 	{"", M_BAR, NULL, NULL, 0, 0},
-	{N_(T_MENU_OPTIONS_MANAGER), "o", MENU_FUNC menu_options_manager, NULL, 0, 0},
-	{N_(T_MENU_KEYBINDING_MANAGER), "k", MENU_FUNC menu_keybinding_manager, NULL, 0, 0},
-	{N_(T_SAVE_OPTIONS), "", MENU_FUNC write_config, NULL, 0, 0},
+	{N_("~Options manager"), "o", MENU_FUNC menu_options_manager, NULL, 0, 0},
+	{N_("~Keybinding manager"), "k", MENU_FUNC menu_keybinding_manager, NULL, 0, 0},
+	{N_("~Save options"), "", MENU_FUNC write_config, NULL, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
 static struct menu_item setup_menu_anon[] = {
-	{N_(T_LANGUAGE), ">", MENU_FUNC menu_language_list, NULL, 1, 0},
-	{N_(T_CHARACTER_SET), ">", MENU_FUNC charset_list, (void *)1, 1, 0},
-	{N_(T_MENU_TERMINAL_OPTIONS), "", MENU_FUNC terminal_options, NULL, 0, 0},
+	{N_("~Language"), ">", MENU_FUNC menu_language_list, NULL, 1, 0},
+	{N_("C~haracter set"), ">", MENU_FUNC charset_list, (void *)1, 1, 0},
+	{N_("~Terminal options"), "", MENU_FUNC terminal_options, NULL, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
@@ -577,12 +578,12 @@ do_setup_menu(struct terminal *term, void *xxx, struct session *ses)
 }
 
 static struct menu_item main_menu[] = {
-	{N_(T_FILE), "", MENU_FUNC do_file_menu, NULL, 1, 1},
-	{N_(T_VIEW), "", MENU_FUNC do_view_menu, NULL, 1, 1},
-	{N_(T_LINK), "", MENU_FUNC link_menu, NULL, 1, 1},
-	{N_(T_DOWNLOADS), "", MENU_FUNC downloads_menu, NULL, 1, 1},
-	{N_(T_SETUP), "", MENU_FUNC do_setup_menu, NULL, 1, 1},
-	{N_(T_HELP), "", MENU_FUNC do_menu, help_menu, 1, 1},
+	{N_("~File"), "", MENU_FUNC do_file_menu, NULL, 1, 1},
+	{N_("~View"), "", MENU_FUNC do_view_menu, NULL, 1, 1},
+	{N_("~Link"), "", MENU_FUNC link_menu, NULL, 1, 1},
+	{N_("~Downloads"), "", MENU_FUNC downloads_menu, NULL, 1, 1},
+	{N_("~Setup"), "", MENU_FUNC do_setup_menu, NULL, 1, 1},
+	{N_("~Help"), "", MENU_FUNC do_menu, help_menu, 1, 1},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
@@ -600,8 +601,8 @@ struct input_history goto_url_history = { 0, {&goto_url_history.items, &goto_url
 void
 dialog_goto_url(struct session *ses, char *url)
 {
-	input_field(ses->term, NULL, N_(T_GOTO_URL), N_(T_ENTER_URL),
-		    N_(T_OK), N_(T_CANCEL), ses, &goto_url_history,
+	input_field(ses->term, NULL, N_("Go to URL"), N_("Enter URL"),
+		    N_("OK"), N_("Cancel"), ses, &goto_url_history,
 		    MAX_STR_LEN, url, 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) goto_url_with_hook,
 		    NULL);
@@ -610,8 +611,8 @@ dialog_goto_url(struct session *ses, char *url)
 static void
 dialog_save_url(struct session *ses)
 {
-	input_field(ses->term, NULL, N_(T_SAVE_URL), N_(T_ENTER_URL),
-		    N_(T_OK), N_(T_CANCEL), ses, &goto_url_history,
+	input_field(ses->term, NULL, N_("Save URL"), N_("Enter URL"),
+		    N_("OK"), N_("Cancel"), ses, &goto_url_history,
 		    MAX_STR_LEN, "", 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) save_url,
 		    NULL);
@@ -639,8 +640,8 @@ query_file(struct session *ses, unsigned char *url,
 
 	if (interactive) {
 		input_field(ses->term, NULL,
-			    N_(T_DOWNLOAD), N_(T_SAVE_TO_FILE), N_(T_OK),
-			    N_(T_CANCEL),
+			    N_("Download"), N_("Save to file"), N_("OK"),
+			    N_("Cancel"),
 			    ses, &file_history, MAX_STR_LEN, def,
 			    0, 0, NULL,
 			    (void (*)(void *, unsigned char *)) std,
@@ -657,8 +658,8 @@ static struct input_history search_history = { 0, {&search_history.items, &searc
 void
 search_back_dlg(struct session *ses, struct f_data_c *f, int a)
 {
-	input_field(ses->term, NULL, N_(T_SEARCH_BACK), N_(T_SEARCH_FOR_TEXT),
-		    N_(T_OK), N_(T_CANCEL), ses, &search_history,
+	input_field(ses->term, NULL, N_("Search backward"), N_("Search for text"),
+		    N_("OK"), N_("Cancel"), ses, &search_history,
 		    MAX_STR_LEN, "", 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) search_for_back,
 		    NULL);
@@ -667,8 +668,8 @@ search_back_dlg(struct session *ses, struct f_data_c *f, int a)
 void
 search_dlg(struct session *ses, struct f_data_c *f, int a)
 {
-	input_field(ses->term, NULL, N_(T_SEARCH), N_(T_SEARCH_FOR_TEXT),
-		    N_(T_OK), N_(T_CANCEL), ses, &search_history,
+	input_field(ses->term, NULL, N_("Search"), N_("Search for text"),
+		    N_("OK"), N_("Cancel"), ses, &search_history,
 		    MAX_STR_LEN, "", 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) search_for,
 		    NULL);

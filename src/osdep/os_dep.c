@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.39 2003/01/02 23:59:53 pasky Exp $ */
+/* $Id: os_dep.c,v 1.40 2003/01/03 00:38:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1829,18 +1829,18 @@ struct {
 	void (*fn)(struct terminal *term, unsigned char *, unsigned char *);
 	unsigned char *text;
 } oinw[] = {
-	{ENV_XWIN, open_in_new_xterm, N_(T_XTERM)},
-	{ENV_TWIN, open_in_new_twterm, N_(T_TWTERM)},
-	{ENV_SCREEN, open_in_new_screen, N_(T_SCREEN)},
+	{ENV_XWIN, open_in_new_xterm, N_("~Xterm")},
+	{ENV_TWIN, open_in_new_twterm, N_("~Twterm")},
+	{ENV_SCREEN, open_in_new_screen, N_("~Screen")},
 #ifdef OS2
-	{ENV_OS2VIO, open_in_new_vio, N_(T_WINDOW)},
-	{ENV_OS2VIO, open_in_new_fullscreen, N_(T_FULL_SCREEN)},
+	{ENV_OS2VIO, open_in_new_vio, N_("~Window")},
+	{ENV_OS2VIO, open_in_new_fullscreen, N_("~Full screen")},
 #endif
 #ifdef WIN32
-	{ENV_WIN32, open_in_new_win32, N_(T_WINDOW)},
+	{ENV_WIN32, open_in_new_win32, N_("~Window")},
 #endif
 #ifdef BEOS
-	{ENV_BE, open_in_new_be, N_(T_BEOS_TERMINAL)},
+	{ENV_BE, open_in_new_be, N_("~BeOS terminal")},
 #endif
 	{0, NULL, NULL}
 };

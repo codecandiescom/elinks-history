@@ -1,7 +1,7 @@
-/* $Id: file.h,v 1.5 2003/06/26 20:04:39 jonas Exp $ */
+/* $Id: file.h,v 1.6 2003/11/26 22:16:34 pasky Exp $ */
 
-#ifndef EL__PROTOCOL_FILE_H
-#define EL__PROTOCOL_FILE_H
+#ifndef EL__PROTOCOL_FILE_FILE_H
+#define EL__PROTOCOL_FILE_FILE_H
 
 #include "protocol/protocol.h"
 

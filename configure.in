@@ -974,6 +974,7 @@ AC_OUTPUT([ \
  src/osdep/unix/Makefile \
  src/osdep/win32/Makefile \
  src/protocol/Makefile \
+ src/protocol/file/Makefile \
  src/protocol/ftp/Makefile \
  src/protocol/http/Makefile \
  src/sched/Makefile \

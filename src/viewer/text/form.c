@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.7 2003/07/15 20:18:10 jonas Exp $ */
+/* $Id: form.c,v 1.8 2003/07/15 22:15:56 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "intl/gettext/libintl.h"
+#include "osdep/os_dep.h" /* ASCII_* */
 #include "protocol/uri.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
@@ -873,14 +874,51 @@ field_op(struct session *ses, struct document_view *f, struct link *l,
 						strlen(fs->value + fs->state));
 				break;
 			case ACT_KILL_TO_BOL:
-				if (!frm->ro)
-					memmove(fs->value, fs->value + fs->state,
-						strlen(fs->value + fs->state) + 1);
-				fs->state = 0;
+				if (!frm->ro && fs->state) {
+					unsigned char *prev;
+#if HAVE_MEMRCHR
+					/* Is this correct? -- Miciah */
+					prev = memrchr(fs->value, ASCII_LF,
+						       fs->state - 1);
+#else
+					for (prev = fs->value + fs->state - 1;
+					     prev > fs->value
+						&& *prev != ASCII_LF;
+					     --prev)
+						;
+#endif
+
+					if (prev > fs->value
+					    && fs->state
+					    && fs->value[fs->state - 1]
+						    != ASCII_LF)
+						++prev;
+					memmove(prev,
+						fs->value + fs->state,
+						strlen(fs->value + fs->state)
+						 + 1);
+					fs->state = (int) (prev - fs->value);
+				}
 				break;
 		    	case ACT_KILL_TO_EOL:
-				fs->value[fs->state] = 0;
-				break;
+				if (!frm->ro && fs->value[fs->state]) {
+					unsigned char *rest;
+
+					rest = strchr(fs->value + fs->state,
+						      ASCII_LF);
+
+					if (!rest) {
+						fs->value[fs->state] = '\0';
+						break;
+					}
+
+					if (fs->value[fs->state] == ASCII_LF)
+						++rest;
+
+					memmove(fs->value + fs->state, rest,
+						strlen(rest) + 1);
+				}
+ 				break;
 			default:
 				if (!ev->y && (ev->x >= 32 && ev->x < 256)) {
 					int value_len = strlen(fs->value);

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.182 2004/11/10 22:41:39 zas Exp $ */
+/* $Id: cookies.c,v 1.183 2004/11/11 19:02:26 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -448,9 +448,9 @@ accept_cookie(struct cookie *cookie)
 	 * (so if you don't notice that 100ms with your 100 cookies, that's
 	 * not an argument). --pasky */
 	if (!cookies_nosave) {
-		struct cookie *c;
+		struct cookie *c, *next;
 
-		foreach (c, cookies) {
+		foreachsafe (c, next, cookies) {
 			if (strcasecmp(c->name, cookie->name)
 			    || strcasecmp(c->domain, cookie->domain))
 				continue;
@@ -646,7 +646,7 @@ struct string *
 send_cookies(struct uri *uri)
 {
 	struct c_domain *cd;
-	struct cookie *c;
+	struct cookie *c, *next;
 	unsigned char *path = NULL;
 	static struct string header;
 
@@ -663,7 +663,7 @@ send_cookies(struct uri *uri)
 
 	init_string(&header);
 
-	foreach (c, cookies) {
+	foreachsafe (c, next, cookies) {
 		if (!is_in_domain(c->domain, uri->host, uri->hostlen)
 		    || !is_path_prefix(c->path, path))
 			continue;

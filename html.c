@@ -149,7 +149,7 @@ struct {
 	{5,	"v"},
 	{4,	"iv"},
 	{1,	"i"},
-{	{0,	NULL}
+	{0,	NULL}
 };
 
 void roman(char *p, unsigned n)

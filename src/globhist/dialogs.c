@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.43 2003/10/24 23:31:10 pasky Exp $ */
+/* $Id: dialogs.c,v 1.44 2003/10/24 23:36:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -476,10 +476,8 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
 
 	assert(n == HISTORY_BOX_IND);
-	dlg->items[n].type = D_BOX;
-	dlg->items[n].gid = 12;
-	dlg->items[n].data = (void *) history_dialog_box_build();
-	n++;
+
+	set_dlg_listbox(dlg, n, 12, history_dialog_box_build());
 
 	set_dlg_end(dlg, n);
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.78 2003/10/24 23:31:10 pasky Exp $ */
+/* $Id: dialogs.c,v 1.79 2003/10/24 23:36:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -511,10 +511,7 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	assert(n == OP_BOX_IND);
 
-	dlg->items[n].type = D_BOX;
-	dlg->items[n].gid = 12;
-	dlg->items[n].data = (void *) option_dlg_box_build();
-	n++;
+	set_dlg_listbox(dlg, n, 12, option_dlg_box_build());
 
 	set_dlg_end(dlg, n);
 
@@ -749,10 +746,7 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	assert(n == KB_BOX_IND);
 
-	dlg->items[n].type = D_BOX;
-	dlg->items[n].gid = 12;
-	dlg->items[n].data = (void *) kbdbind_dlg_box_build();
-	n++;
+	set_dlg_listbox(dlg, n, 12, kbdbind_dlg_box_build());
 
 	set_dlg_end(dlg, n);
 

@@ -46,13 +46,13 @@ Go and submit the first form you'll stumble upon.
 ID of session (ELinks instance) which we want to clone.
 This is internal ELinks option, you don't want to use it.
 .TP
-\fB-confdir <str> (default: "") \fR
+\fB-config-dir <str> (default: "") \fR
 Set the config dir to the given path. ELinks will read
 its config files and writes to it. If the path begins with
 a '/' its used as an absolute path. Else it is assumed to
 be relative to your \fBHOME\fR dir.
 .TP
-\fB-conffile <str> (default: "elinks.conf")\fR
+\fB-config-file <str> (default: "elinks.conf")\fR
 Name of the file with configuration, from which and to
 which all the configuration shall be written. It should be
 relative to confdir.
@@ -117,13 +117,6 @@ are written to the disk when this option is used. See also
 .TP
 \fB-source [0|1] (default: 0) \fR
 Write the given HTML document in source form to stdout.
-.TP
-\fB-stdin [0|1] (default: 0) \fR
-Open stdin as an HTML document - this is fully equivalent to:
--eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin
-Use whichever suits you more ;-). Note that reading document from
-stdin WORKS ONLY WHEN YOU USE -dump OR -source!! (I would like to
-know why you would use -source -stdin, though ;-)
 .TP
 \fB-touch-files [0|1] (default: 0) \fR
 Set to 1 to have runtime state files (bookmarks, history, ...)

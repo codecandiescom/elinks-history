@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.16 2004/01/26 07:00:13 jonas Exp $ */
+/* $Id: exmode.c,v 1.17 2004/01/26 08:05:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,14 +150,13 @@ static exmode_handler exmode_handlers[] = {
 };
 
 static void
-exmode_exec(struct exmode_data *data)
+exmode_exec(struct exmode_data *data, struct session *ses)
 {
 	/* First look it up as action, then try it as an event (but the event
 	 * part should be thought out somehow yet, I s'pose... let's leave it
 	 * off for now). Then try to evaluate it as configfile command. Then at
 	 * least pop up an error. */
-	struct session *ses = data->dlg_data->dlg->udata2;
-	unsigned char *command = data->dlg_data->widgets_data->cdata;
+	unsigned char *command = data->buffer;
 	unsigned char *args = command;
 	int i;
 
@@ -194,6 +193,7 @@ static int
 exmode_handle_event(struct dialog_data *dlg_data, struct term_event *ev)
 {
 	struct exmode_data *data = dlg_data->dlg->udata;
+	struct session *ses = dlg_data->dlg->udata2;
 
 	switch (ev->ev) {
 		case EV_INIT:
@@ -205,9 +205,11 @@ exmode_handle_event(struct dialog_data *dlg_data, struct term_event *ev)
 			break;
 
 		case EV_KBD:
+			update_dialog_data(dlg_data, NULL);
+
 			switch (kbd_action(KM_EDIT, ev, NULL)) {
 				case ACT_EDIT_ENTER:
-					exmode_exec(data);
+					exmode_exec(data, ses);
 					/* Falling */
 				case ACT_EDIT_CANCEL:
 					cancel_dialog(dlg_data, NULL);

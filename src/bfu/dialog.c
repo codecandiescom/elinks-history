@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.158 2004/11/17 01:01:59 zas Exp $ */
+/* $Id: dialog.c,v 1.159 2004/11/17 01:04:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,27 +230,26 @@ static void
 dialog_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 {
 	struct widget_data *widget_data = selected_widget(dlg_data);
+	struct widget_ops *ops = widget_data->widget->ops;
 	/* XXX: KEYMAP_EDIT ? --pasky */
 	enum menu_action action = kbd_action(KEYMAP_MENU, ev, NULL);
 
 	/* First let the widget try out. */
-	if (widget_data->widget->ops->kbd
-	    && widget_data->widget->ops->kbd(widget_data, dlg_data, ev)
-	       == EVENT_PROCESSED)
+	if (ops->kbd && ops->kbd(widget_data, dlg_data, ev) == EVENT_PROCESSED)
 		return;
 
 	/* Can we select? */
 	if (action == ACT_MENU_SELECT) {
-		if (widget_data->widget->ops->select) {
-			widget_data->widget->ops->select(widget_data, dlg_data);
+		if (ops->select) {
+			ops->select(widget_data, dlg_data);
 			return;
 		}
 	}
 
 	/* Submit button. */
 	if (action == ACT_MENU_ENTER) {
-		if (widget_data->widget->ops->select) {
-			widget_data->widget->ops->select(widget_data, dlg_data);
+		if (ops->select) {
+			ops->select(widget_data, dlg_data);
 			return;
 		}
 

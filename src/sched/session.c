@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.300 2004/01/25 01:20:51 jonas Exp $ */
+/* $Id: session.c,v 1.301 2004/01/25 07:31:28 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -898,7 +898,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 				referer = doc_view->document->url;
 
 			load_url(ftl->url, referer,
-				 &ftl->stat, PRI_FRAME, cache_mode, -1);
+				 &ftl->stat, ftl->pri, cache_mode, -1);
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.126 2003/06/13 17:04:39 zas Exp $ */
+/* $Id: parser.c,v 1.127 2003/06/14 13:16:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,8 +80,14 @@ parse_element(register unsigned char *e, unsigned char *eof,
 	saved_eof_char = *eof;
 	*eof = '\0';
 
+	if (TAG_END(e)) goto end;
 	if (*e == '/') e++;
-	if (!isA(*e)) goto parse_error;
+
+	if (!isA(*e)) {
+		if (WHITECHAR(*e)) goto parse_error;
+		while (*e && !TAG_START(e)) e++;
+		goto end;
+	}
 
 	while (isA(*e)) e++;
 	if ((!WHITECHAR(*e) && !TAG_DELIM(e) && *e != ':')) goto parse_error;

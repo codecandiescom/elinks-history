@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.65 2002/12/10 20:58:46 pasky Exp $ */
+/* $Id: main.c,v 1.66 2002/12/18 00:38:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,10 +70,11 @@
 
 enum retval retval = RET_OK;
 
+
+/* TODO: Move that stuff to signals.{c,h} ? --Zas */
 void unhandle_basic_signals(struct terminal *);
 
-
-void
+static void
 sig_terminate(struct terminal *t)
 {
 	unhandle_basic_signals(t);
@@ -81,7 +82,7 @@ sig_terminate(struct terminal *t)
 	retval = RET_SIGNAL;
 }
 
-void
+static void
 sig_intr(struct terminal *t)
 {
 	unhandle_basic_signals(t);
@@ -98,12 +99,12 @@ sig_ctrl_c(struct terminal *t)
 	if (!is_blocked()) kbd_ctrl_c();
 }
 
-void
+static inline void
 sig_ign(void *x)
 {
 }
 
-void
+static void
 sig_tstp(struct terminal *t)
 {
 #ifdef SIGSTOP
@@ -121,7 +122,7 @@ sig_tstp(struct terminal *t)
 #endif
 }
 
-void
+static void
 sig_cont(struct terminal *t)
 {
 	if (!unblock_itrm(0)) {
@@ -133,7 +134,7 @@ sig_cont(struct terminal *t)
 }
 
 
-void
+static void
 handle_basic_signals(struct terminal *term)
 {
 	install_signal_handler(SIGHUP, (void (*)(void *))sig_intr, term, 0);
@@ -217,9 +218,9 @@ unhandle_basic_signals(struct terminal *term)
 
 /* TODO: I'd like to have this rather somewhere in lowlevel/. --pasky */
 
-int terminal_pipe[2];
+static int terminal_pipe[2];
 
-int
+static int
 attach_terminal(int in, int out, int ctl, void *info, int len)
 {
 	struct terminal *term;
@@ -246,13 +247,14 @@ attach_terminal(int in, int out, int ctl, void *info, int len)
 }
 
 
-int ac;
-unsigned char **av;
 unsigned char *path_to_exe;
-int init_b = 0;
+
+static int ac;
+static unsigned char **av;
+static int init_b = 0;
 
 
-void
+static void
 init()
 {
 	int uh;
@@ -380,7 +382,7 @@ fatal_error:
 }
 
 
-void
+static inline void
 terminate_all_subsystems()
 {
 	af_unix_close();

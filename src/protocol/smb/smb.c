@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.21 2003/12/09 13:51:20 pasky Exp $ */
+/* $Id: smb.c,v 1.22 2003/12/09 13:58:06 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -65,12 +65,12 @@ static void end_smb_connection(struct connection *conn);
 #define READ_SIZE	4096
 
 static int
-smb_read_data(struct connection *conn, int sock, unsigned char *dst, ssize_t len)
+smb_read_data(struct connection *conn, int sock, unsigned char *dst)
 {
 	int r;
 	struct smb_connection_info *si = conn->info;
 
-	r = read(sock, dst, len);
+	r = read(sock, dst, READ_SIZE);
 	if (r == -1) {
 		retry_conn_with_state(conn, -errno);
 		return -1;
@@ -88,6 +88,8 @@ smb_read_data(struct connection *conn, int sock, unsigned char *dst, ssize_t len
 	return r;
 }
 
+#undef READ_SIZE
+
 static void
 smb_read_text(struct connection *conn, int sock)
 {
@@ -102,7 +104,7 @@ smb_read_text(struct connection *conn, int sock)
 	}
 	conn->info = si;
 
-	r = smb_read_data(conn, sock, si->text + si->textlen, READ_SIZE);
+	r = smb_read_data(conn, sock, si->text + si->textlen);
 	if (r <= 0) return;
 
 	if (!conn->from) set_connection_state(conn, S_GETH);
@@ -121,7 +123,7 @@ smb_got_data(struct connection *conn)
 		return;
 	}
 
-	r = smb_read_data(conn, conn->data_socket, buffer, READ_SIZE);
+	r = smb_read_data(conn, conn->data_socket, buffer);
 	if (r <= 0) return;
 
 	set_connection_state(conn, S_TRANS);
@@ -133,8 +135,6 @@ smb_got_data(struct connection *conn)
 		conn->tries = 0;
 	conn->from += r;
 }
-
-#undef READ_SIZE
 
 static void
 smb_got_text(struct connection *conn)

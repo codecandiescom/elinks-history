@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.271 2003/11/19 17:59:19 zas Exp $ */
+/* $Id: view.c,v 1.272 2003/11/19 18:15:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -252,7 +252,7 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 
 		if (en - st <= 0) continue;
 		draw_line(t, xp + st - vx, yp + y - vy, en - st,
-			  &doc_view->document->data[y].d[st]);
+			  &doc_view->document->data[y].chars[st]);
 	}
 	draw_forms(t, doc_view);
 	if (active) draw_current_link(t, doc_view);

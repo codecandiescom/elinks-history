@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.387 2003/11/19 17:59:18 zas Exp $ */
+/* $Id: renderer.c,v 1.388 2003/11/19 18:15:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,16 +112,16 @@ realloc_line(struct document *document, int y, int x)
 	if (x < line->length)
 		return 0;
 
-	if (!ALIGN_LINE(&line->d, line->length, x + 1))
+	if (!ALIGN_LINE(&line->chars, line->length, x + 1))
 		return -1;
 
 	/* Make a template of the last char using that align alloc clears the
 	 * other members. */
-	end = &line->d[x];
+	end = &line->chars[x];
 	end->data = ' ';
 	set_term_color(end, &colors, 0, document->options.color_mode);
 
-	for (pos = &line->d[line->length]; pos < end; pos++) {
+	for (pos = &line->chars[line->length]; pos < end; pos++) {
 		copy_screen_chars(pos, end, 1);
 	}
 
@@ -164,7 +164,7 @@ realloc_spaces(struct part *part, int length)
 
 
 #define LINE(y_)	part->document->data[Y(y_)]
-#define POS(x_, y_)	LINE(y_).d[X(x_)]
+#define POS(x_, y_)	LINE(y_).chars[X(x_)]
 #define LEN(y_)		int_max(LINE(y_).length - part->x, 0)
 
 
@@ -1108,7 +1108,7 @@ color_link_lines(struct document *document)
 		int x;
 
 		for (x = 0; x < document->data[y].length; x++) {
-			struct screen_char *schar = &document->data[y].d[x];
+			struct screen_char *schar = &document->data[y].chars[x];
 
 			set_term_color(schar, &colors, color_flags, color_mode);
 
@@ -1485,7 +1485,8 @@ render_html_document(struct cache_entry *ce, struct document *document)
 
 	for (i = document->height - 1; i >= 0; i--) {
 		if (!document->data[i].length) {
-			if (document->data[i].d) mem_free(document->data[i].d);
+			if (document->data[i].chars)
+				mem_free(document->data[i].chars);
 			document->height--;
 		} else break;
 	}

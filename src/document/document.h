@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.36 2003/11/19 17:59:18 zas Exp $ */
+/* $Id: document.h,v 1.37 2003/11/19 18:15:49 zas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -25,7 +25,7 @@ struct node {
 
 
 struct line {
-	struct screen_char *d;
+	struct screen_char *chars;
 	int length;
 };
 

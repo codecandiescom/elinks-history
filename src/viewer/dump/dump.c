@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.61 2003/11/19 17:59:19 zas Exp $ */
+/* $Id: dump.c,v 1.62 2003/11/19 18:15:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,7 +231,7 @@ add_document_to_string(struct string *string, struct document *document)
 	if_assert_failed return NULL;
 
 	for (y = 0; y < document->height; y++) {
-		struct screen_char *pos = document->data[y].d;
+		struct screen_char *pos = document->data[y].chars;
 		int x;
 
 		for (x = 0; x < document->data[y].length; x++) {
@@ -271,9 +271,9 @@ dump_to_file(struct document *document, int fd)
 			if (x == document->data[y].length) {
 				c = '\n';
 			} else {
-				unsigned char attr = document->data[y].d[x].attr;
+				unsigned char attr = document->data[y].chars[x].attr;
 
-				c = document->data[y].d[x].data;
+				c = document->data[y].chars[x].data;
 
 				if (c == 1)
 					c += ' ' - 1;

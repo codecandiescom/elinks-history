@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.195 2005/03/09 17:56:12 zas Exp $ */
+/* $Id: ftp.c,v 1.196 2005/03/09 18:24:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -605,13 +605,15 @@ add_file_cmd_to_str(struct connection *conn)
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return NULL;
 	}
-	conn->info = c_i;
 
 	if (!init_string(&command)) {
 		mem_free(c_i);
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return NULL;
 	}
+
+	conn->info = c_i;
+
 #ifdef CONFIG_IPV6
 	memset(&data_addr, 0, sizeof(data_addr));
 #endif

@@ -1,3 +1,125 @@
+Fri Jan 23 22:31:05 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Less confusing comment.  
+
+Fri Jan 23 22:25:37 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/README:
+
+	English fixes, little more applier info.  
+
+Fri Jan 23 22:13:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/css.h:
+
+	Prototypes instead of #inculdes.  
+
+Fri Jan 23 20:59:43 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Jan 23 20:26:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/css.c:
+
+	Fix segfault when document.css.stylesheet couldn't be loaded. Always
+	empty the default stylesheet before reloading.  
+
+Fri Jan 23 20:12:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Fix comment eating so we do the @string testing inside first if ().  
+
+Fri Jan 23 20:08:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/css.c:
+
+	Make it possible to reimport default stylesheet. You still need to
+	^R because css imports are async.  
+
+Fri Jan 23 20:00:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, config/options.inc, document/css/css.c:
+
+	Move CSS options and change hook to module definitions.  
+
+Fri Jan 23 19:27:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, document/Makefile.am,
+	document/css/Makefile.am, document/css/apply.c, document/css/css.c,
+	document/css/css.h, modules/module.c:
+
+	Add support for a default stylesheet from which to get info about
+	HTML layout. It is still a bit buggy. E.g. don't set
+	document.css.stylesheet to a file that doesn't exist. ;) 
+
+Fri Jan 23 19:24:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Move main module initialization back. No initializer should use
+	options.  
+
+Fri Jan 23 19:18:18 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	get_attr_val() was slightly modified to be more efficient. It was
+	renamed to get_attr_val_() which takes two new parameters
+	@test_only, used by has_attr() and @eat_nl used by get_url_val(). In
+	test_only mode, it just test for attribute existence, so it dont
+	allocate any memory for value, nor it does useless parsing or string
+	conversion. Global variable @get_attr_val_eat_nl is gone.  
+
+Fri Jan 23 18:50:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Init main modules after the option system has been booted so
+	initializers can access options ;).  
+
+Fri Jan 23 17:46:41 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Jan 23 17:33:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Assume sizeof(void *) == sizeof(long).  
+
+Fri Jan 23 09:37:42 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
+Fri Jan 23 06:26:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Introduce char group of other token start chars so we can bail out
+	eailer if the token is garbage.  
+
+Thu Jan 22 23:48:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	If we don't use smart checking there is no need for a smart value.  
+
+Thu Jan 22 23:29:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Add support for URI rewriting from the command line.  
+
 Thu Jan 22 22:55:44 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/css/scanner.c:

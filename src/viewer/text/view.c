@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.420 2004/05/29 14:03:15 jonas Exp $ */
+/* $Id: view.c,v 1.421 2004/05/29 16:15:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -674,6 +674,10 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			case ACT_MAIN_DOWN: rep_ev(ses, doc_view, down, 0); break;
 			case ACT_MAIN_UP: rep_ev(ses, doc_view, up, 0); break;
 			case ACT_MAIN_COPY_CLIPBOARD: {
+				/* This looks bogus. Why print_current_link()
+				 * it adds all kins of stuff that is not part
+				 * of the current link. I'd propose to use
+				 * get_link_uri() or something. --jonas */
 				char *current_link = print_current_link(ses);
 
 				if (current_link) {

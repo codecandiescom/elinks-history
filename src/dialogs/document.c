@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.87 2004/05/21 11:39:54 jonas Exp $ */
+/* $Id: document.c,v 1.88 2004/05/29 16:15:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,10 +173,9 @@ loc_msg(struct terminal *term, struct location *location,
 #endif
 
 	if (doc_view) {
-		unsigned char *a;
+		unsigned char *a = print_current_link_do(doc_view, term);
 
 		add_char_to_string(&msg, '\n');
-		a = print_current_link_do(doc_view, term);
 		if (a) {
 			add_format_to_string(&msg, "\n%s: %s",
 					     _("Link", term), a);

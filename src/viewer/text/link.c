@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.183 2004/05/29 15:36:39 jonas Exp $ */
+/* $Id: link.c,v 1.184 2004/05/29 16:15:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -951,6 +951,7 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 
 		/* Add the uri with password and post info stripped */
 		add_string_uri_to_string(&str, uristring, URI_PUBLIC);
+		decode_uri_string(str.source);
 		return str.source;
 	}
 

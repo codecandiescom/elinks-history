@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.189 2004/01/25 13:17:22 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.190 2004/01/25 13:52:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,7 +141,7 @@ keybinding_exists(enum keymap km, long key, long meta, int *action)
 	return 0;
 }
 
-void
+static void
 delete_keybinding(enum keymap km, long key, long meta)
 {
 	struct keybinding *kb;

@@ -1,5 +1,5 @@
 /* Layouter frontend */
-/* $Id: layouter.c,v 1.3 2002/12/30 18:15:09 pasky Exp $ */
+/* $Id: layouter.c,v 1.4 2002/12/31 01:25:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,10 +15,11 @@
 #include "util/memory.h"
 
 
+#include "elusive/layouter/syntree/layouter.h"
+
 struct layouter_backend *layouter_backends[] = {
 	NULL,
-	NULL,
-	NULL,
+	&syntree_layouter_backend,
 };
 
 

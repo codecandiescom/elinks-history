@@ -1,7 +1,8 @@
 #!/bin/tcsh
 # Completions for Elinks.
 # Contributed by Jonas Fonseca <fonseca@diku.dk>.
-# $Id: completion.tcsh,v 1.3 2002/05/19 19:34:56 pasky Exp $
+# Note that this file is now totally out of date.
+# $Id: completion.tcsh,v 1.4 2003/06/21 13:25:02 jonas Exp $
 
 set elinksoptions = \
 	(accesskey-enter accesskey-priority allow-special-files		\

@@ -19,9 +19,9 @@ Files not listed here have description included in their header.
 	shouldn't adversely affect web pages.  Two spaces will only appear
 	where the HTML contains them.
 
-* elinks[.-]vim* - Jonas Fonesca <fonesca@diku.dk>
+* elinks[.-]vim* - Jonas Fonseca <fonseca@diku.dk>
 	Syntax file for vim so that elinks.conf is highlighted nicely, and
 	patch for $VIMRUNTIME/filetype.vim so that elinks.conf is properly
 	detected and the elinks syntax is associated to it.
 
-$Id: README,v 1.10 2002/09/16 12:57:32 pasky Exp $
+$Id: README,v 1.11 2003/06/21 13:25:02 jonas Exp $

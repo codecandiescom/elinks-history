@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.40 2003/04/30 21:06:38 zas Exp $ */
+/* $Id: menu.c,v 1.41 2003/04/30 21:30:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,32 +131,31 @@ is_hotkey(struct menu_item *item, unsigned char hotkey, struct terminal *term)
 static void
 free_menu_items(struct menu_item *items)
 {
-	int i;
+	if (items) {
+		int i;
 
-	if (!items) {
-		internal("items == NULL");
-		return;
+		/* Note that item_free & FREE_DATA applies only when menu is aborted;
+		 * it is zeroed when some menu field is selected. */
+
+		for (i = 0; items[i].text; i++) {
+			if (items[i].item_free & FREE_TEXT && items[i].text)
+				mem_free(items[i].text);
+			if (items[i].item_free & FREE_RTEXT && items[i].rtext)
+				mem_free(items[i].rtext);
+			if (items[i].item_free & FREE_DATA && items[i].data)
+				mem_free(items[i].data);
+		}
+
+		mem_free(items);
 	}
-
-	/* Note that item_free & FREE_DATA applies only when menu is aborted;
-	 * it is zeroed when some menu field is selected. */
-
-	for (i = 0; items[i].text; i++) {
-		if (items[i].item_free & FREE_TEXT && items[i].text) mem_free(items[i].text);
-		if (items[i].item_free & FREE_RTEXT && items[i].rtext) mem_free(items[i].rtext);
-		if (items[i].item_free & FREE_DATA && items[i].data) mem_free(items[i].data);
-	}
-
-	mem_free(items);
 }
 
 void
 do_menu_selected(struct terminal *term, struct menu_item *items,
 		 void *data, int selected, int hotkeys)
 {
-	struct menu *menu;
+	struct menu *menu = mem_alloc(sizeof(struct menu));
 
-	menu = mem_alloc(sizeof(struct menu));
 	if (menu) {
 		menu->selected = selected;
 		menu->view = 0;
@@ -333,17 +332,13 @@ display_menu(struct terminal *term, struct menu *menu)
 	for (p = menu->view, s = menu->y + 1;
 	     p < menu->ni && p < menu->view + menu->yw - 2;
 	     p++, s++) {
-		int h = 0;
 		int co = menu_normal_color;
 		int hkco = menu_hotkey_color;
 
 		if (p == menu->selected) {
-			h = 1;
 			co = menu_selected_color;
 			hkco = menu_selected_hotkey_color;
-		}
 
-		if (h) {
 			set_cursor(term, menu->x + 1, s, term->x - 1, term->y - 1);
 			set_window_ptr(menu->win, menu->x + menu->xw, s);
 			fill_area(term, menu->x + 1, s, menu->xw - 2, 1, co);
@@ -379,9 +374,9 @@ display_menu(struct terminal *term, struct menu *menu)
 
 			} else {
 				for (x = 0;
-			            x < menu->xw - 4
-				    && (c = _(menu->items[p].text, term)[x]);
-				    x++)
+			             x < menu->xw - 4
+				     && (c = _(menu->items[p].text, term)[x]);
+				     x++)
 					set_char(term, menu->x + x + 2, s, c | co);
 			}
 
@@ -648,7 +643,7 @@ menu_func(struct window *win, struct event *ev, int fwd)
 
 			display_menu(win->term, menu);
 			if (s || ev->x == KBD_ENTER || ev->x == ' ') {
-				enter:
+enter:
 				select_menu(win->term, menu);
 			}
 
@@ -667,9 +662,8 @@ void
 do_mainmenu(struct terminal *term, struct menu_item *items,
 	    void *data, int sel)
 {
-	struct mainmenu *menu;
+	struct mainmenu *menu = mem_calloc(1, sizeof(struct mainmenu));
 
-	menu = mem_calloc(1, sizeof(struct mainmenu));
 	if (!menu) return;
 
 	menu->selected = (sel == -1 ? 0 : sel);
@@ -703,23 +697,20 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 	fill_area(term, 0, 0, term->x, 1, mainmenu_normal_color | ' ');
 
 	for (i = 0; i < menu->ni; i++) {
-		int s = 0;
 		int j;
 		int co = mainmenu_normal_color;
 		int hkco = mainmenu_hotkey_color;
 		int hk = 0;
 		unsigned char c;
 		unsigned char *tmptext = _(menu->items[i].text, term);
-		int tmptextlen = strlen(tmptext)
-			         - (menu->items[i].hotkey_pos ? 1 : 0);
 
 		if (i == menu->selected) {
-			s = 1;
+			int tmptextlen = strlen(tmptext)
+			         	 - (menu->items[i].hotkey_pos ? 1 : 0);
+
 			co = mainmenu_selected_color;
 			hkco = mainmenu_selected_hotkey_color;
-		}
 
-		if (s) {
 			fill_area(term, p, 0, 2, 1, co);
 			fill_area(term, p + tmptextlen + 2, 0, 2, 1, co);
 			menu->sp = p;
@@ -884,9 +875,8 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 struct menu_item *
 new_menu(enum item_free item_free)
 {
-	struct menu_item *mi;
+	struct menu_item *mi = mem_calloc(1, sizeof(struct menu_item));
 
-	mi = mem_calloc(1, sizeof(struct menu_item));
 	if (mi) mi->item_free = item_free;
 
 	return mi;

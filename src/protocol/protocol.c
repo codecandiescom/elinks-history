@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.82 2004/10/17 17:17:09 jonas Exp $ */
+/* $Id: protocol.c,v 1.83 2004/10/19 19:23:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,7 +117,7 @@ get_protocol(unsigned char *name, int namelen)
 			if (pnamelen == namelen)
 				return protocol;
 
-			/* If the current protocol name is longer that the
+			/* If the current protocol name is longer than the
 			 * protocol name being searched for move @end else move
 			 * @start. */
 			compare = pnamelen > namelen ? 1 : -1;

@@ -1,9 +1,10 @@
-/* $Id: leds.h,v 1.7 2003/08/29 21:03:49 pasky Exp $ */
+/* $Id: leds.h,v 1.8 2003/08/30 00:27:48 jonas Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
 
 #include "terminal/terminal.h"
+#include "util/color.h"
 
 /* TODO: Variable count! */
 #define LEDS_COUNT	5
@@ -21,10 +22,9 @@ struct led {
 	int number;
 	unsigned char value;
 
-	/* Use find_nearest_color() to set up color. Note that you should
-	 * use color only as additional indication, as the terminal can be
-	 * monochrome. */
-	int color;
+	/* The led's foreground color. Note that you should use color only as
+	 * additional indication, as the terminal can be monochrome. */
+	color_t fgcolor;
 
 	/* Private data. */
 	int __used;

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.85 2003/08/29 15:08:34 zas Exp $ */
+/* $Id: listbox.c,v 1.86 2003/09/01 12:35:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -486,18 +486,21 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 		if (!box->sel) box->sel = box->top;
 	}
 
-	if ((ev->b & BM_ACT) == B_DOWN)
+	if ((ev->b & BM_ACT) == B_DOWN) {
+		struct widget_data *dlg_item = &dlg->items[dlg->n - 1];
+
 		switch (ev->b & BM_BUTT) {
 			case B_WHEEL_DOWN:
-				box_sel_move(&dlg->items[dlg->n - 1], 1);
-				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
+				box_sel_move(dlg_item, 1);
+				display_dlg_item(dlg, dlg_item, 1);
 				return EVENT_PROCESSED;
 
 			case B_WHEEL_UP:
-				box_sel_move(&dlg->items[dlg->n - 1], -1);
-				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
+				box_sel_move(dlg_item, -1);
+				display_dlg_item(dlg, dlg_item, 1);
 				return EVENT_PROCESSED;
 		}
+	}
 
 	if ((ev->b & BM_ACT) == B_UP) {
 		if ((ev->b & BM_BUTT) < B_WHEEL_UP &&
@@ -536,6 +539,9 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 static int
 kbd_listbox(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 {
+	int n = dlg->n - 1;
+	struct widget_data *dlg_item = &dlg->items[n];
+
 	/* Not a pure listbox, but you're not supposed to use this outside of
 	 * the listbox browser anyway, so what.. */
 	/* We rely ie. on the fact that listbox is the last item of the dialog
@@ -548,7 +554,7 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 			if (ev->x == KBD_RIGHT || (ev->x == KBD_TAB && !ev->y)) {
 				/* Move right */
 				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
-				if (++dlg->selected >= dlg->n - 1)
+				if (++dlg->selected >= n)
 					dlg->selected = 0;
 				display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
 
@@ -559,7 +565,7 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 				/* Move left */
 				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
 				if (--dlg->selected < 0)
-					dlg->selected = dlg->n - 2;
+					dlg->selected = n - 1;
 				display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
 
 				return EVENT_PROCESSED;
@@ -567,45 +573,45 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 
 			/* Moving the box */
 			if (ev->x == KBD_DOWN) {
-				box_sel_move(&dlg->items[dlg->n - 1], 1);
-				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
+				box_sel_move(dlg_item, 1);
+				display_dlg_item(dlg, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (ev->x == KBD_UP) {
-				box_sel_move(&dlg->items[dlg->n - 1], -1);
-				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
+				box_sel_move(dlg_item, -1);
+				display_dlg_item(dlg, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (ev->x == KBD_PAGE_DOWN) {
-				box_sel_move(&dlg->items[dlg->n - 1],
-					     dlg->items[dlg->n - 1].h / 2);
-				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
+				box_sel_move(dlg_item,
+					     dlg_item->h / 2);
+				display_dlg_item(dlg, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (ev->x == KBD_PAGE_UP) {
-				box_sel_move(&dlg->items[dlg->n - 1],
-					     -dlg->items[dlg->n - 1].h / 2);
-				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
+				box_sel_move(dlg_item,
+					     -dlg_item->h / 2);
+				display_dlg_item(dlg, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (ev->x == KBD_HOME) {
-				box_sel_move(&dlg->items[dlg->n - 1], -MAXINT);
-				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
+				box_sel_move(dlg_item, -MAXINT);
+				display_dlg_item(dlg, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (ev->x == KBD_END) {
-				box_sel_move(&dlg->items[dlg->n - 1], MAXINT);
-				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
+				box_sel_move(dlg_item, MAXINT);
+				display_dlg_item(dlg, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
@@ -613,12 +619,12 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 			if (ev->x == KBD_INS || ev->x == '*') {
 				struct listbox_data *box;
 
-				box = (struct listbox_data *) dlg->items[dlg->n - 1].item->data;
+				box = (struct listbox_data *) dlg_item->item->data;
 				if (box->sel) {
 					box->sel->marked = !box->sel->marked;
-					box_sel_move(&dlg->items[dlg->n - 1], 1);
+					box_sel_move(dlg_item, 1);
 				}
-				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
+				display_dlg_item(dlg, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
@@ -626,7 +632,7 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 			if (ev->x == KBD_DEL) {
 				struct listbox_data *box;
 
-				box = (struct listbox_data *) dlg->items[dlg->n - 1].item->data;
+				box = (struct listbox_data *) dlg_item->item->data;
 				if (box->ops && box->ops->del)
 					box->ops->del(dlg->win->term, box);
 

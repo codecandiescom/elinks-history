@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.34 2002/12/07 22:47:41 pasky Exp $ */
+/* $Id: opttypes.c,v 1.35 2002/12/07 23:06:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,20 +241,20 @@ num_wr(struct option *o, unsigned char **s, int *l)
 }
 
 void *
-int_dup(struct option *opt)
+int_dup(struct option *opt, struct option *template)
 {
 	int *new = mem_alloc(sizeof(int));
 
-	if (new) memcpy(new, opt->ptr, sizeof(int));
+	if (new) memcpy(new, template->ptr, sizeof(int));
 	return new;
 }
 
 void *
-long_dup(struct option *opt)
+long_dup(struct option *opt, struct option *template)
 {
 	long *new = mem_alloc(sizeof(long));
 
-	if (new) memcpy(new, opt->ptr, sizeof(long));
+	if (new) memcpy(new, template->ptr, sizeof(long));
 	return new;
 }
 
@@ -336,11 +336,11 @@ str_wr(struct option *o, unsigned char **s, int *l)
 }
 
 void *
-str_dup(struct option *opt)
+str_dup(struct option *opt, struct option *template)
 {
 	unsigned char *new = mem_alloc(MAX_STR_LEN);
 
-	if (new) safe_strncpy(new, opt->ptr, MAX_STR_LEN);
+	if (new) safe_strncpy(new, template->ptr, MAX_STR_LEN);
 	return new;
 }
 
@@ -418,19 +418,19 @@ color_wr(struct option *opt, unsigned char **str, int *len)
 }
 
 void *
-color_dup(struct option *opt)
+color_dup(struct option *opt, struct option *template)
 {
 	struct rgb *new = mem_alloc(sizeof(struct rgb));
 
-	if (new) memcpy(new, opt->ptr, sizeof(struct rgb));
+	if (new) memcpy(new, template->ptr, sizeof(struct rgb));
 	return new;
 }
 
 void *
-tree_dup(struct option *opt)
+tree_dup(struct option *opt, struct option *template)
 {
 	struct list_head *new = mem_alloc(sizeof(struct list_head));
-	struct list_head *tree = (struct list_head *) opt->ptr;
+	struct list_head *tree = (struct list_head *) template->ptr;
 	struct option *option;
 
 	if (!new) return NULL;
@@ -444,7 +444,7 @@ tree_dup(struct option *opt)
 
 		if (!new_opt->box_item) continue;
 
-		if (opt->box_item) {
+		if (template->box_item) {
 			add_at_pos((struct listbox_item *)
 					opt->box_item->child.prev,
 					new_opt->box_item);

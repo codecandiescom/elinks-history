@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.136 2002/12/07 20:05:52 pasky Exp $ */
+/* $Id: options.c,v 1.137 2002/12/07 23:06:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -326,7 +326,7 @@ copy_option(struct option *template)
 	}
 
 	option->ptr = option_types[template->type].dup
-			? option_types[template->type].dup(template)
+			? option_types[template->type].dup(option, template)
 			: template->ptr;
 
 	return option;

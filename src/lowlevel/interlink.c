@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.48 2003/06/19 22:38:12 zas Exp $ */
+/* $Id: interlink.c,v 1.49 2003/06/20 08:09:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -218,18 +218,28 @@ unlink_unix(struct sockaddr *s_addr)
 
 /* FIXME: IPv6 support. */
 
+#ifndef IPPORT_USERRESERVED
+#define IPPORT_USERRESERVED	5000
+#endif
+
 static int
 get_address(struct s_addr_info *info)
 {
 	struct sockaddr_in *sin;
+	unsigned short port;
 
 	assert(info);
+
+	/* Each ring is bind to ELINKS_PORT + ring number. */
+	port = ELINKS_PORT + get_opt_int_tree(&cmdline_options, "session-ring");
+	if (port < IPPORT_USERRESERVED || port > 65535)
+		return -1; /* Just in case of... */
 
 	sin = mem_calloc(1, sizeof(struct sockaddr_in));
 	if (!sin) return -1;
 
 	sin->sin_family = AF_INET;
-	sin->sin_port = htons(ELINKS_PORT);
+	sin->sin_port = htons(port);
 	sin->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 
 	info->addr = (struct sockaddr *) sin;
@@ -412,8 +422,6 @@ again:
 		goto free_and_error;
 	}
 
-	mem_free(s_info_connect.addr), s_info_connect.addr = NULL;
-
 	return s_info_connect.fd;
 
 free_and_error:
@@ -428,33 +436,37 @@ free_and_error:
 void
 af_unix_close(void)
 {
-	if (s_info_listen.fd != -1) {
-		close(s_info_listen.fd);
-		s_info_listen.fd = -1;
-	}
-
+	/* We test for addr != NULL since
+	 * if it was not allocated then fd is not
+	 * initialized and we don't want to close
+	 * fd 0 ;). --Zas */
 	if (s_info_listen.addr) {
+		if (s_info_listen.fd != -1) {
+			close(s_info_listen.fd);
+			s_info_listen.fd = -1;
+		}
+
 		unlink_unix(s_info_listen.addr);
 		mem_free(s_info_listen.addr);
 		s_info_listen.addr = NULL;
 	}
 
-	if (s_info_connect.fd != -1) {
-		close(s_info_connect.fd);
-		s_info_connect.fd = -1;
-	}
-
 	if (s_info_connect.addr) {
+		if (s_info_connect.fd != -1) {
+			close(s_info_connect.fd);
+			s_info_connect.fd = -1;
+		}
+
 		mem_free(s_info_connect.addr);
 		s_info_connect.addr = NULL;
 	}
 
-	if (s_info_accept.fd != -1) {
-		close(s_info_accept.fd);
-		s_info_accept.fd = -1;
-	}
-
 	if (s_info_accept.addr) {
+		if (s_info_accept.fd != -1) {
+			close(s_info_accept.fd);
+			s_info_accept.fd = -1;
+		}
+
 		mem_free(s_info_accept.addr);
 		s_info_accept.addr = NULL;
 	}

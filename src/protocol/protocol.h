@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.25 2004/05/02 13:30:15 jonas Exp $ */
+/* $Id: protocol.h,v 1.26 2004/05/07 01:46:09 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -41,6 +41,8 @@ struct protocol_backend {
 	unsigned int need_slashes:1;
 	unsigned int need_slash_after_host:1;
 };
+
+extern struct protocol_backend unknown_protocol_backend;
 
 /* Accessors for the protocol backends. */
 

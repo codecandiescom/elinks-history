@@ -1,3 +1,179 @@
+Wed Nov 17 23:05:18 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inpfield.c:
+
+	Revert chunk of last patch that was wrongly committed. Sorry.  
+
+Wed Nov 17 23:02:07 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.c, bfu/inpfield.c, config/options.inc:
+
+	Show button shortcut (first letter of label) using specific colors
+	configurable through dialog.button-shortcut-selected,
+	dialog.button-shortcut color options.  
+
+Wed Nov 17 22:16:56 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inpfield.c:
+
+	display_field_do() now return t_handler_event_status.  
+
+Wed Nov 17 22:13:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, checkbox.c, inpfield.c, listbox.c, text.c,
+	widget.c, widget.h:
+
+	struct widget_ops display: struct widget_data *, struct dialog_data
+	* -> struct dialog_data *, struct widget_data *.  
+
+Wed Nov 17 22:07:16 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: checkbox.c, dialog.c, inpfield.c, listbox.c, widget.h:
+
+	struct widget_ops init: struct widget_data *, struct dialog_data *
+	-> struct dialog_data *, struct widget_data *.  
+
+Wed Nov 17 22:03:48 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, checkbox.c, dialog.c, inpfield.c, listbox.c,
+	text.c, widget.h:
+
+	struct widget_ops mouse: struct widget_data *, struct dialog_data *
+	-> struct dialog_data *, struct widget_data *.  
+
+Wed Nov 17 21:59:46 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: dialog.c, hierbox.c, inpfield.c, listbox.c, text.c,
+	widget.h:
+
+	struct widget_ops kbd: struct widget_data *, struct dialog_data * ->
+	struct dialog_data *, struct widget_data *.  
+
+Wed Nov 17 21:53:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, checkbox.c, dialog.c, widget.h:
+
+	Invert parameters position for select in struct widget_ops, goal is
+	to uniformize order of params in most functions ->
+	dlg_data,widget_data instead of widget_data,dlg_data.  
+
+Wed Nov 17 21:09:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: protocol/auth/dialogs.c, protocol/auth/digest.c,
+	sched/session.c, viewer/text/search.c:
+
+	Trim trailing whitespaces.  
+
+Wed Nov 17 21:04:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Revert witekfl patch: string.h must be included before elinks.h
+	(isdigit issue), it breaks linking.  
+
+Wed Nov 17 19:12:02 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: cookies/dialogs.c, dialogs/download.c, dialogs/edit.c,
+	dialogs/options.c, formhist/dialogs.c, globhist/dialogs.c,
+	viewer/text/search.c:
+
+	Use t_handler_event_status.  
+
+Wed Nov 17 19:09:36 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/http/http.c:
+
+	Attempt to handle multiple WWW-Authenticate header field. For
+	example Outlook Web interface use it.  
+
+Wed Nov 17 19:08:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/dialog.c, bfu/hierbox.c,
+	bfu/hierbox.h, bfu/inpfield.c, bfu/inpfield.h, bfu/listbox.c,
+	bfu/text.c, bookmarks/dialogs.c, config/dialogs.c:
+
+	Use t_handler_event_status.  
+
+Wed Nov 17 19:07:28 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: dialog.h, widget.h:
+
+	Introduce t_handler_event_status type and change handlers to return
+	it (EVENT_PROCESSED/EVENT_NOT_PROCESSED.  
+
+Wed Nov 17 19:05:28 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/viewer/text/view.c:
+
+	string.h must be included before elinks.h (isdigit issue).  
+
+Wed Nov 17 19:04:01 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/osdep/stub.c:
+
+	Missing includes.  
+
+Wed Nov 17 01:24:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	dialog_ev_kbd(): call kbd_action() after ops->kbd test.  
+
+Wed Nov 17 01:23:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Optimize select_button_by_key() loop by calling
+	toupper(get_kbd_key(ev)) once outside the loop.  
+
+Wed Nov 17 01:20:39 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Use temporary variables to shorten lines.  
+
+Wed Nov 17 01:17:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Convert action related code from dialog_ev_kbd() to switch().  
+
+Wed Nov 17 01:12:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Move code from dialog_ev_kbd() to new select_button_by_key().  
+
+Wed Nov 17 01:07:17 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Reduce code redundancy by introducing select_button_by_flag().  
+
+Wed Nov 17 01:04:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Use temporary variable to shorten lines.  
+
+Wed Nov 17 01:01:59 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Split code per action.  
+
+Wed Nov 17 00:58:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Check for first letter in button text after checking for action.  
+
+Wed Nov 17 00:54:12 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Check for first letter in button text after checking for action.  
+
 Tue Nov 16 10:32:25 2004  Laurent Monin <zas@norz.org>:
 
 	* src/globhist/globhist.c:

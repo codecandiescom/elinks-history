@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.94 2004/09/19 17:21:26 pasky Exp $ */
+/* $Id: parser.c,v 1.95 2004/09/19 17:24:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,13 +170,11 @@ struct selector_pkg {
 	struct css_selector *selector;
 };
 
-/* Selector grammar:
+/* Our selector grammar:
  *
  * selector:
- *	  (element_name id? class? pseudo_class?)+
- *	  | '#' ('.' class)? (':' pseudo_class)?
- *	  | '.' class (':' pseudo_class)?
- *	  | ':' pseudo_class
+ *	  element_name? ('#' id)? ('.' class)? (':' pseudo_class)? \
+ *		  (' ' selector)?
  *
  * TODO: selector can currently only be simple element names, and element
  * chains are not supported yet.

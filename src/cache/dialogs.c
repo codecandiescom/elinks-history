@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.8 2003/11/17 18:25:56 pasky Exp $ */
+/* $Id: dialogs.c,v 1.9 2003/11/17 18:28:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,6 +129,11 @@ push_info_button(struct dialog_data *dlg_data,
 	add_char_to_string(&msg, ' ');
 	if (!ce->valid) add_to_string(&msg, _("invalid", term));
 	add_char_to_string(&msg, '\n');
+
+#ifdef DEBUG
+	add_format_to_string(&msg, "\n%s: %d", _("Refcount", term), ce->refcount);
+	add_format_to_string(&msg, "\n%s: %s", _("Header", term), ce->head);
+#endif
 	
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Info"), AL_LEFT,

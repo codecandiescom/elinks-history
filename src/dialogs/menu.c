@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.225 2003/12/26 12:55:11 zas Exp $ */
+/* $Id: menu.c,v 1.226 2003/12/26 13:08:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -432,7 +432,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	e = file_menu;
 	o = can_open_in_new(term);
 	if (o) {
-		SET_MENU_ITEM(e, N_("~New window"), NULL, ACT_NONE,
+		SET_MENU_ITEM(e, N_("~New window"), NULL, ACT_OPEN_NEW_WINDOW,
 			      (menu_func) open_in_new_window, send_open_new_window,
 			      (o - 1) ? SUBMENU : 0, 0, HKS_SHOW);
 		e++;

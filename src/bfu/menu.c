@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.139 2003/12/26 12:55:10 zas Exp $ */
+/* $Id: menu.c,v 1.140 2003/12/26 13:08:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,6 +166,17 @@ count_menu_size(struct terminal *term, struct menu *menu)
 		if (mi_is_submenu(menu->items[my])) {
 			s += MENU_HOTKEY_SPACE + m_submenu_len;
 
+		} else if (menu->items[my].action != ACT_NONE) {
+			struct string keystroke;
+
+			if (init_string(&keystroke)) {
+				add_keystroke_to_string(&keystroke,
+							menu->items[my].action,
+							KM_MAIN);
+				s += MENU_HOTKEY_SPACE + keystroke.length;
+				done_string(&keystroke);
+			}
+			
 		} else if (mi_has_right_text(menu->items[my])) {
 			unsigned char *rtext = menu->items[my].rtext;
 
@@ -389,6 +400,18 @@ display_menu(struct terminal *term, struct menu *menu)
 			if (mi_is_submenu(menu->items[p])) {
 				draw_menu_right_text(term, m_submenu, m_submenu_len,
 						     menu->x, y, mwidth, color);
+			} else if (menu->items[p].action != ACT_NONE) {
+				struct string keystroke;
+
+				if (init_string(&keystroke)) {
+					add_keystroke_to_string(&keystroke,
+								menu->items[p].action,
+								KM_MAIN);
+					draw_menu_right_text(term, keystroke.source,
+							     keystroke.length,
+							     menu->x, y, mwidth, color);
+					done_string(&keystroke);
+				}
 
 			} else if (mi_has_right_text(menu->items[p])) {
 				unsigned char *rtext = menu->items[p].rtext;

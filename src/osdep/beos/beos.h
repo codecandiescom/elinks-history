@@ -1,7 +1,7 @@
-/* $Id: beos.h,v 1.5 2003/10/27 23:40:24 pasky Exp $ */
+/* $Id: beos.h,v 1.6 2003/10/27 23:42:32 pasky Exp $ */
 
-#ifndef EL__OSDEP_BEOS_H
-#define EL__OSDEP_BEOS_H
+#ifndef EL__OSDEP_BEOS_BEOS_H
+#define EL__OSDEP_BEOS_BEOS_H
 
 #ifdef BEOS
 

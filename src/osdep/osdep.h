@@ -1,9 +1,9 @@
-/* $Id: osdep.h,v 1.33 2003/10/27 23:40:24 pasky Exp $ */
+/* $Id: osdep.h,v 1.34 2003/10/27 23:42:31 pasky Exp $ */
 
 #ifndef EL__OSDEP_OSDEP_H
 #define EL__OSDEP_OSDEP_H
 
-#include "osdep/beos.h"
+#include "osdep/beos/beos.h"
 #include "osdep/os2.h"
 #include "osdep/riscos.h"
 #include "osdep/unix.h"

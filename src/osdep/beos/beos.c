@@ -1,5 +1,5 @@
 /* BeOS system-specific routines. */
-/* $Id: beos.c,v 1.12 2003/10/27 03:18:56 pasky Exp $ */
+/* $Id: beos.c,v 1.13 2003/10/27 23:42:32 pasky Exp $ */
 
 /* Note that this file is currently unmaintained and basically dead. Noone
  * cares about BeOS support, apparently. This file may yet survive for some
@@ -27,6 +27,7 @@
 
 #include "elinks.h"
 
+#include "osdep/beos/beos.h"
 #include "terminal/terminal.h"
 #include "util/lists.h"
 

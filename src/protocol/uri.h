@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.143 2004/09/14 19:49:00 pasky Exp $ */
+/* $Id: uri.h,v 1.144 2004/09/14 20:23:25 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -157,7 +157,9 @@ enum uri_component {
 	/* Used for HTTP CONNECT method info */
 	URI_HTTP_CONNECT	= URI_HOST | URI_PORT | URI_DEFAULT_PORT,
 
-	/* Used for getting the host of a DNS query */
+	/* Used for getting the host of a DNS query. As a hidden bonus we get
+	 * IPv6 hostnames without the brackets because we don't ask for
+	 * URI_PORT. */
 	URI_DNS_HOST		= URI_HOST | URI_IDN,
 
 	/* Used for adding the unproxied URI and encode it using IDN to string */

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.276 2004/09/14 19:49:00 pasky Exp $ */
+/* $Id: uri.c,v 1.277 2004/09/14 20:23:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -407,7 +407,13 @@ add_uri_to_string(struct string *string, struct uri *uri,
 		int add_host = 1;
 
 #ifdef CONFIG_IPV6
-		if (uri->ipv6) add_char_to_string(string, '[');
+		/* Rationale for wants(URI_PORT): The [notation] was invented
+		 * so that you can have an IPv6 addy and a port together. So
+		 * we want to use it when that happens, otherwise we need not
+		 * bother (that happens only when we want it for DNS anyway).
+		 * I insist on an implied elegancy of this way, but YMMV. ;-)
+		 * --pasky */
+		if (uri->ipv6 && wants(URI_PORT)) add_char_to_string(string, '[');
 #endif
 #ifdef CONFIG_IDN
 		/* Support for the GNU International Domain Name library.
@@ -437,11 +443,11 @@ add_uri_to_string(struct string *string, struct uri *uri,
 		}
 
 #endif
-		if (add_host) 
+		if (add_host)
 			add_bytes_to_string(string, uri->host, uri->hostlen);
 
 #ifdef CONFIG_IPV6
-		if (uri->ipv6) add_char_to_string(string, ']');
+		if (uri->ipv6 && wants(URI_PORT)) add_char_to_string(string, ']');
 #endif
  	}
 
@@ -1036,7 +1042,7 @@ parse_uri:
 	{
 		int offset = uri.port
 			   ? uri.port + uri.portlen - struri(&uri)
-			   : uri.host + uri.hostlen - struri(&uri);
+			   : uri.host + uri.hostlen - struri(&uri) + uri.ipv6 /* ']' */;
 
 		assertm(uri.host, "uri.host not set after no host slash error");
 		insert_in_string(&newurl, offset, "/", 1);

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.74 2003/12/21 14:13:20 zas Exp $ */
+/* $Id: mailcap.c,v 1.75 2003/12/31 08:50:40 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -42,8 +42,6 @@
 #include "util/lists.h"
 #include "util/memory.h"
 #include "util/string.h"
-
-#define BACKEND_NAME	"mailcap"
 
 struct mailcap_hash_item {
 	/* The entries associated with the type */
@@ -681,6 +679,7 @@ get_mime_handler_mailcap(unsigned char *type, int options)
 	struct mailcap_entry *entry;
 	struct mime_handler *handler;
 	unsigned char *program;
+	int block;
 
 	if (!get_mailcap_enable()
 	    || (!mailcap_map && !init_mailcap_map()))
@@ -692,17 +691,11 @@ get_mime_handler_mailcap(unsigned char *type, int options)
 	program = format_command(entry->command, type, entry->copiousoutput);
 	if (!program) return NULL;
 
-	handler = mem_calloc(1, sizeof(struct mime_handler));
-	if (!handler) {
-		mem_free(program);
-		return NULL;
-	}
-
-	handler->block = (entry->needsterminal || entry->copiousoutput);
-	handler->ask = get_mailcap_ask();
-	handler->program = program;
-	handler->description = entry->description;
-	handler->backend_name = BACKEND_NAME;
+	block = (entry->needsterminal || entry->copiousoutput);
+	handler = init_mime_handler(program, entry->description,
+				    mailcap_mime_module.name,
+				    get_mailcap_ask(), block);
+	mem_free(program);
 
 	return handler;
 }

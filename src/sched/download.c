@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.208 2003/12/26 23:53:25 zas Exp $ */
+/* $Id: download.c,v 1.209 2003/12/31 08:50:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -994,14 +994,7 @@ type_query(struct tq *tq, unsigned char *ct, struct mime_handler *handler)
 		}
 	} else {
 		unsigned char *description = handler->description;
-		unsigned char *desc_sep;
-
-		if (description) {
-			desc_sep = "; ";
-		} else {
-			desc_sep = "";
-			description = "";
-		}
+		unsigned char *desc_sep = (*description) ? "; " : "";
 
 		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 			/* TODO: Improve the dialog to let the user correct the
@@ -1097,10 +1090,7 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 
 do_not_follow:
 	mem_free(ctype);
-	if (handler) {
-		mem_free(handler->program);
-		mem_free(handler);
-	}
+	if (handler) mem_free(handler);
 
 	return ret;
 

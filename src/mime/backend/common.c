@@ -1,5 +1,5 @@
 /* MIME handling backends multiplexing */
-/* $Id: common.c,v 1.17 2003/12/01 18:06:04 pasky Exp $ */
+/* $Id: common.c,v 1.18 2003/12/31 08:50:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,4 +98,24 @@ get_next_path_filename(unsigned char **path_ptr, unsigned char separator)
 	}
 
 	return filename;
+}
+
+struct mime_handler *
+init_mime_handler(unsigned char *program, unsigned char *description,
+		  unsigned char *backend_name, int ask, int block)
+{
+	int programlen = strlen(program);
+	struct mime_handler *handler;
+
+	handler = mem_calloc(1, sizeof(struct mime_handler) + programlen);
+	if (!handler) return NULL;
+
+	memcpy(handler->program, program, programlen);
+
+	handler->description = empty_string_or_(description);
+	handler->backend_name = backend_name;
+	handler->block = block;
+	handler->ask = ask;
+
+	return handler;
 }

@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.18 2003/10/25 19:16:17 jonas Exp $ */
+/* $Id: common.h,v 1.19 2003/12/31 08:50:39 jonas Exp $ */
 
 #ifndef EL__MIME_BACKEND_COMMON_H
 #define EL__MIME_BACKEND_COMMON_H
@@ -27,5 +27,9 @@ get_mime_handler_backends(unsigned char *content_type, int have_x);
  * with the general unix PATH style strings. */
 unsigned char *
 get_next_path_filename(unsigned char **path_ptr, unsigned char separator);
+
+struct mime_handler *
+init_mime_handler(unsigned char *program, unsigned char *description,
+		  unsigned char *backend_name, int ask, int block);
 
 #endif

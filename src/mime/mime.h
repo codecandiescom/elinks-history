@@ -1,4 +1,4 @@
-/* $Id: mime.h,v 1.8 2003/10/25 19:10:18 jonas Exp $ */
+/* $Id: mime.h,v 1.9 2003/12/31 08:50:39 jonas Exp $ */
 
 #ifndef EL__MIME_MIME_H
 #define EL__MIME_MIME_H
@@ -7,11 +7,11 @@
 #include "modules/module.h"
 
 struct mime_handler {
-	unsigned char *program;
 	unsigned char *description;
 	unsigned char *backend_name;
 	unsigned int ask:1;
 	unsigned int block:1;
+	unsigned char program[1]; /* XXX: Keep last! */
 };
 
 extern struct module mime_module;

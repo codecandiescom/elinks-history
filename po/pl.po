@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre7.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-11-22 21:26+0100\n"
-"PO-Revision-Date: 2003-11-20 05:30+0200\n"
+"PO-Revision-Date: 2003-11-23 07:30+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -59,43 +59,36 @@ msgid "OK"
 msgstr "OK"
 
 #: src/bfu/hierbox.c:425
-#, fuzzy
 msgid "Deleting used folder"
-msgstr "Folder szablonów opcji"
+msgstr "Usuwanie u¿ywanego foldera"
 
 #: src/bfu/hierbox.c:426
-#, fuzzy, c-format
+#,  c-format
 msgid "Sorry, but the folder \"%s\" is being used by something else."
-msgstr ""
-"Przykro mi, ale ta zak³adka jest ju¿ u¿ywana.\n"
-"\n"
-"Tytu³: \"%s\""
+msgstr "Przykro mi, ale folder \"%s\" jest u¿ywany przez co¶ innego."
 
 #: src/bfu/hierbox.c:438
-#, fuzzy
 msgid "Deleting used item"
-msgstr "Usuñ pozycjê historii"
+msgstr "Usuwanie u¿ywanych elementów"
 
 #: src/bfu/hierbox.c:439
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sorry, but the item \"%s\" is being used by something else.\n"
 "\n"
 "%s"
 msgstr ""
-"Przykro mi, ale ta zak³adka jest ju¿ u¿ywana.\n"
+"Przykro mi, ale element \"%s\" jest u¿ywany przez co¶ innego.\n"
 "\n"
-"Tytu³: \"%s\""
+"%s"
 
 #: src/bfu/hierbox.c:536
-#, fuzzy
 msgid "Delete marked items"
-msgstr "Czy usun±æ zaznaczone elementy historii?"
+msgstr "Usuwanie zaznaczonych elementów"
 
 #: src/bfu/hierbox.c:537
-#, fuzzy
 msgid "Delete marked items?"
-msgstr "Czy usun±æ zaznaczone elementy historii?"
+msgstr "Czy usun±æ zaznaczone elementy?"
 
 #: src/bfu/hierbox.c:539 src/bfu/hierbox.c:551 src/bfu/hierbox.c:565
 #: src/bfu/hierbox.c:618 src/dialogs/menu.c:151 src/dialogs/mime.c:86
@@ -110,40 +103,36 @@ msgid "No"
 msgstr "Nie"
 
 #: src/bfu/hierbox.c:547
-#, fuzzy
 msgid "Delete folder"
-msgstr "Usuñ zak³adkê"
+msgstr "Usuñ folder"
 
 #: src/bfu/hierbox.c:548
-#, fuzzy, c-format
+#, c-format
 msgid "Delete the folder \"%s\" and its content?"
-msgstr "Czy skasowaæ zawarto¶æ folderu \"%s\"?"
+msgstr "Czy skasowaæ folder \"%s\" i jego zawarto¶æ?"
 
 #: src/bfu/hierbox.c:560
-#, fuzzy
 msgid "Delete item"
-msgstr "Usuñ pozycjê historii"
+msgstr "Usuwanie pozycji"
 
 #: src/bfu/hierbox.c:561
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Delete \"%s\"?\n"
 "\n"
 "%s"
 msgstr ""
-"Czy usun±æ zak³adkê \"%s\"?\n"
+"Czy usun±æ \"%s\"?\n"
 "\n"
-"URL: \"%s\""
+"%s"
 
 #: src/bfu/hierbox.c:615
-#, fuzzy
 msgid "Clear all items"
-msgstr "Wyczy¶æ historiê globaln±"
+msgstr "Skasowanie wszystkich pozycji"
 
 #: src/bfu/hierbox.c:616
-#, fuzzy
 msgid "Do you really want to remove all items?"
-msgstr "Czy na pewno chcesz wyj¶æ z ELinksa?"
+msgstr "Czy na pewno chcesz skasowaæ wszystkie pozycje?"
 
 #: src/bfu/inpfield.c:44 src/bfu/inpfield.c:53
 msgid "Bad number"
@@ -167,13 +156,12 @@ msgstr "Musisz wpisaæ jakie¶ wyra¿enie"
 
 #: src/bfu/leds.c:64
 msgid "LEDs"
-msgstr ""
+msgstr "LEDy"
 
 #
 #: src/bfu/leds.c:66
-#, fuzzy
 msgid "LEDs options."
-msgstr "Ustawienia SSL."
+msgstr "Ustawienia LEDów."
 
 #
 #. XXX: Disable global history if -anonymous is given?
@@ -185,9 +173,8 @@ msgstr "W³±cz"
 
 #
 #: src/bfu/leds.c:70
-#, fuzzy
 msgid "Enable LEDs."
-msgstr "W³±cz"
+msgstr "W³±cz LEDy."
 
 #. name:
 #: src/bfu/leds.c:237
@@ -256,7 +243,7 @@ msgstr ""
 #: src/bookmarks/dialogs.c:72
 #, c-format
 msgid "URL: \"%s\""
-msgstr ""
+msgstr "URL: \"%s\""
 
 #: src/bookmarks/dialogs.c:185 src/bookmarks/dialogs.c:414
 msgid "Add folder"
@@ -630,7 +617,7 @@ msgstr ""
 "Skrót klawiszowy powinien byæ zapisany w nastêpuj±cym formacie: "
 "[Przedrostek-]Klawisz\n"
 "Przedrostek: Shift, Ctrl, Alt\n"
-"Klawisz: a,b,c,...,1,2,3,...,Spacja,Up,PageDown,Tab,Enter,Insert,F5,..."
+"Klawisz: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 
 #: src/config/dialogs.c:452
 msgid "Keystroke"
@@ -710,9 +697,8 @@ msgid "Open cache manager"
 msgstr "Otwórz menad¿era pamiêci podrêcznej"
 
 #: src/config/kbdbind.c:388
-#, fuzzy
 msgid "Open cookie manager"
-msgstr "Otwórz menad¿era pamiêci podrêcznej"
+msgstr "Otwórz menad¿era ciasteczek"
 
 #: src/config/kbdbind.c:389
 msgid "Reload cookies file"
@@ -4145,9 +4131,8 @@ msgid "~Cache"
 msgstr "Pamiêæ podrê~czna"
 
 #: src/dialogs/menu.c:334
-#, fuzzy
 msgid "Coo~kies"
-msgstr "Ciasteczka"
+msgstr "Ciastecz~ka"
 
 #: src/dialogs/menu.c:340
 msgid "Sa~ve as"
@@ -4162,13 +4147,12 @@ msgid "Save formatted ~document"
 msgstr "Zapisz sformatowany ~dokument"
 
 #: src/dialogs/menu.c:347
-#, fuzzy
 msgid "Ki~ll background connections"
 msgstr "~Przerwij wszystkie po³±czenia w tle"
 
 #: src/dialogs/menu.c:348
 msgid "~Flush all caches"
-msgstr "Wyczy¶æ ~ca³± pamiêæ podrêczn±"
+msgstr "Wyczy¶æ ca³± pamiêæ pod~rêczn±"
 
 #: src/dialogs/menu.c:349
 msgid "Resource i~nfo"
@@ -5633,41 +5617,3 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1416
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
-
-#~ msgid ""
-#~ "Sorry, but this bookmark is already being used by something right now.\n"
-#~ "\n"
-#~ "Title: \"%s\"\n"
-#~ "URL: \"%s\""
-#~ msgstr ""
-#~ "Przykro mi, ale ta zak³adka jest ju¿ u¿ywana.\n"
-#~ "\n"
-#~ "Tytu³: \"%s\"\n"
-#~ "URL: \"%s\""
-
-#~ msgid "Delete marked bookmarks?"
-#~ msgstr "Czy skasowaæ zaznaczone zak³adki?"
-
-#~ msgid ""
-#~ "Sorry, but this history entry is already being used by something right "
-#~ "now.\n"
-#~ "\n"
-#~ "Title: \"%s\"\n"
-#~ "URL: \"%s\"\n"
-#~ msgstr ""
-#~ "Przykro mi, ale ta pozycja historii jest obecnie u¿ywana.\n"
-#~ "\n"
-#~ "Tytu³: \"%s\"\n"
-#~ "URL: \"%s\"\n"
-
-#~ msgid ""
-#~ "Delete history item \"%s\"?\n"
-#~ "\n"
-#~ "URL: \"%s\""
-#~ msgstr ""
-#~ "Czy skasowaæ element historii \"%s\"?\n"
-#~ "\n"
-#~ "URL: \"%s\""
-
-#~ msgid "Clear global history?"
-#~ msgstr "Czy wyczy¶ciæ historiê globaln±?"

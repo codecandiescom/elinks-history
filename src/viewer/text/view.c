@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.525 2004/06/26 02:22:09 miciah Exp $ */
+/* $Id: view.c,v 1.526 2004/06/26 02:26:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -632,9 +632,6 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 
 				return FRAME_EVENT_OK;
 			} else if (ev->x >= '1' && ev->x <= '9' && !ev->y) {
-				/* FIXME: This probably doesn't work
-				 * together with the keybinding...? */
-
 				struct document *document = doc_view->document;
 				int nlinks = document->nlinks, length;
 				unsigned char d[2] = { ev->x, 0 };

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.4 2002/03/18 20:52:32 pasky Exp $ */
+/* $Id: http.c,v 1.5 2002/03/27 22:45:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,18 +37,36 @@ struct http_connection_info {
 
 static int get_http_code(unsigned char *head, int *code, int *version)
 {
-	while (head[0] == ' ') head++;
-	if (upcase(head[0]) != 'H' || upcase(head[1]) != 'T' || upcase(head[2]) != 'T' ||
-	    upcase(head[3]) != 'P') return -1;
-	if (head[4] == '/' && head[5] >= '0' && head[5] <= '9'
-	 && head[6] == '.' && head[7] >= '0' && head[7] <= '9' && head[8] <= ' ') {
+	/* \s* */
+	while (head[0] == ' ')
+		head++;
+
+	/* HTTP */
+	if (upcase(head[0]) != 'H' || upcase(head[1]) != 'T' ||
+	    upcase(head[2]) != 'T' || upcase(head[3]) != 'P')
+		return -1;
+
+	/* /\d\.\d\s */
+	if (head[4] == '/' && head[5] >= '0' && head[5] <= '9' &&
+	    head[6] == '.' && head[7] >= '0' && head[7] <= '9' &&
+	    head[8] <= ' ') {
 		*version = (head[5] - '0') * 10 + head[7] - '0';
-	} else *version = 0;
+	} else {
+		*version = 0;
+	}
+	
+	/* \s+ */
 	for (head += 4; *head > ' '; head++);
-	if (*head++ != ' ') return -1;
-	if (head[0] < '1' || head [0] > '9' || head[1] < '0' || head[1] > '9' ||
-	    head[2] < '0' || head [2] > '9') return -1;
-	*code = (head[0]-'0')*100 + (head[1]-'0')*10 + head[2]-'0';
+	if (*head++ != ' ')
+		return -1;
+	
+	/* \d\d\d */
+	if (head[0] < '1' || head[0] > '9' ||
+	    head[1] < '0' || head[1] > '9' ||
+	    head[2] < '0' || head[2] > '9')
+		return -1;
+	*code = (head[0] - '0') * 100 + (head[1] - '0') * 10 + head[2] - '0';
+	
 	return 0;
 }
 
@@ -105,24 +123,31 @@ void http_end_request(struct connection *c)
 #endif
 	&& (!http_bugs.bug_post_no_keepalive || !strchr(c->url, POST_CHAR))) {
 		add_keepalive_socket(c, HTTP_KEEPALIVE_TIMEOUT);
-	} else abort_connection(c);
+	} else {
+		abort_connection(c);
+	}
 }
 
 void http_send_header(struct connection *);
 
 void http_func(struct connection *c)
 {
-	/*setcstate(c, S_CONN);*/
+	/* setcstate(c, S_CONN); */
 	set_timeout(c);
+	
 	if (get_keepalive_socket(c)) {
-		int p;
-		if ((p = get_port(c->url)) == -1) {
+		int p = get_port(c->url);
+		
+		if (p == -1) {
 			setcstate(c, S_INTERNAL);
 			abort_connection(c);
 			return;
 		}
+		
 		make_connection(c, p, &c->sock1, http_send_header);
-	} else http_send_header(c);
+	} else {
+		http_send_header(c);
+	}
 }
 
 void proxy_func(struct connection *c)
@@ -196,10 +221,39 @@ void http_send_header(struct connection *c)
 		return;
 	}
 
-	if (!post) {
-		add_to_str(&hdr, &l, url_data);
-	} else {
-		add_bytes_to_str(&hdr, &l, url_data, post - url_data - 1);
+	{
+		/* This block substitues spaces in URL by %20s. This is
+		 * certainly not the right place where to do it, but now the
+		 * behaviour is at least improved compared to what we had
+		 * before. We should probably encode all URLs as early as
+		 * possible, and possibly decode them back in protocol
+		 * backends. --pasky */
+		
+		/* Nop, this doesn't stand for EuroURL, but Encoded URL. */
+		unsigned char *eurl;
+		
+		if (!post) {
+			eurl = stracpy(url_data);
+		} else {
+			eurl = memacpy(url_data, post - url_data - 1);
+		}
+		
+		/* XXX: This is pretty ugly and ineffective (read as slow). */
+		while (strchr(eurl, ' ')) {
+			unsigned char *space = strchr(eurl, ' ');
+			unsigned char *neurl = mem_alloc(strlen(eurl) + 3);
+			
+			if (!neurl) break;
+			memcpy(neurl, eurl, space - eurl);
+			neurl[space - eurl] = 0;
+			strcat(neurl, "%20");
+			strcat(neurl, space + 1);
+			mem_free(eurl);
+			eurl = neurl;
+		}
+		
+		add_to_str(&hdr, &l, eurl);
+		mem_free(eurl);
 	}
 
 	if (http10) {

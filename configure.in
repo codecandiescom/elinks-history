@@ -359,7 +359,7 @@ else
 				CFLAGS="$CFLAGS_X -I$ssldir/include"
 				if test "$CC" == "gcc"; then
 					# I'm not sure about compatibility here. --pasky
-					LDFLAGS="$LDFLAGS -R$ssldir/lib"
+					LIBS="$LIBS -R$ssldir/lib"
 				fi
 			else
 				LIBS="-lssl -lcrypto $LIBS_X"

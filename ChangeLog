@@ -1,3 +1,14 @@
+Fri Sep 10 16:13:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Back out 1.580 -> 1.581. It is only part of the intended change.
+	FIXME added to lure possible developers to do the remaining work.
+	This should make it up for Sergeys patch posted today
+	<Pine.LNX.4.61.0409101611300.1601@tigris.sai.msu.ru> and fix bug
+	493. Plus it should bring us one step closer to release usable
+	1.0pre0.  
+
 Thu Sep  9 10:13:13 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/intl/charsets.c:

@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formsmem.c,v 1.3 2003/08/01 19:24:29 jonas Exp $ */
+/* $Id: formsmem.c,v 1.4 2003/08/01 19:34:47 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -52,14 +52,8 @@ load_saved_forms(void)
 		form = mem_alloc(sizeof(struct formsmem_data));
 		if (!form) return 0;
 
-		form->submit = mem_alloc(sizeof(struct list_head));
-		if (!form->submit) {
-			mem_free(form);
-			return 0;
-		}
-
 		init_list(*form);
-		init_list(*form->submit);
+		init_list(form->submit);
 		form->url = stracpy(tmp);
 		if (!form->url) goto fail;
 
@@ -86,7 +80,7 @@ load_saved_forms(void)
 				goto fail;
 			}
 
-			add_to_list_bottom(*form->submit, sv);
+			add_to_list_bottom(form->submit, sv);
 		}
 
 		add_to_list_bottom(saved_forms, form);
@@ -118,7 +112,7 @@ get_saved_control_value(unsigned char *url, unsigned char *name)
 	foreach (form, saved_forms) {
 		if (strcmp(form->url, url)) continue;
 
-		foreach (sv, *form->submit)
+		foreach (sv, form->submit)
 			if (!strcmp(sv->name, name))
 				return sv->value;
 	}
@@ -141,12 +135,12 @@ form_already_saved(unsigned char *url, struct list_head *submit)
 	foreach (form, saved_forms) {
 		if (strcmp(form->url, url)) continue;
 
-		savedsv = (struct submitted_value *) form->submit->next;
+		savedsv = (struct submitted_value *) form->submit.next;
 		foreachback (sv, *submit) {
 			if (sv->type != FC_TEXT && sv->type != FC_PASSWORD)
 				continue;
 
-			if (savedsv == (struct submitted_value *) form->submit)
+			if (savedsv == (struct submitted_value *) form->submit.next)
 				break;
 
 			if (strcmp(sv->name, savedsv->name) ||
@@ -156,7 +150,7 @@ form_already_saved(unsigned char *url, struct list_head *submit)
 		}
 
 		if ((sv == (struct submitted_value *) submit)
-		     && (savedsv == (struct submitted_value *) form->submit)) {
+		     && (savedsv == (struct submitted_value *) form->submit.next)) {
 			return 1;
 		}
 	}
@@ -178,14 +172,8 @@ remember_form(struct formsmem_data *fmem_data)
 	form = mem_calloc(1, sizeof(struct formsmem_data));
 	if (!form) return 0;
 
-	form->submit = mem_alloc(sizeof(struct list_head));
-	if (!form->submit) {
-		mem_free(form);
-		return 0;
-	}
-
 	init_list(*form);
-	init_list(*form->submit);
+	init_list(form->submit);
 	form->url = stracpy(fmem_data->url);
 	if (!form->url) goto fail;
 
@@ -199,7 +187,7 @@ remember_form(struct formsmem_data *fmem_data)
 
 	/* We're going to save just <INPUT TYPE="text"> and
 	 * <INPUT TYPE="password"> */
-	foreach (sv, *fmem_data->submit)
+	foreach (sv, fmem_data->submit)
 		if ((sv->type == FC_TEXT) || (sv->type == FC_PASSWORD)) {
 			struct submitted_value *sv2;
 
@@ -219,7 +207,7 @@ remember_form(struct formsmem_data *fmem_data)
 				goto fail;
 			}
 
-			add_to_list_bottom(*form->submit, sv2);
+			add_to_list_bottom(form->submit, sv2);
 		}
 
 	add_to_list(saved_forms, form);
@@ -227,7 +215,7 @@ remember_form(struct formsmem_data *fmem_data)
 	/* Write the list to password file */
 	foreach (tmpform, saved_forms) {
 		secure_fprintf(ssi, "%s\n", tmpform->url);
-		foreachback (sv, *tmpform->submit) {
+		foreachback (sv, tmpform->submit) {
 			unsigned char *encvalue = "";
 
 			/* Obfuscate the password. If we do
@@ -268,15 +256,14 @@ free_form(struct formsmem_data *form)
 {
 	if (form->url) mem_free(form->url);
 
-	while (!list_empty(*form->submit)) {
-		struct submitted_value *sv = form->submit->next;
+	while (!list_empty(form->submit)) {
+		struct submitted_value *sv = form->submit.next;
 
 		if (sv->name) mem_free(sv->name);
 		if (sv->value) mem_free(sv->value);
 		mem_free(sv);
 	}
 
-        if (form->submit) mem_free(form->submit);
         mem_free(form);
 }
 

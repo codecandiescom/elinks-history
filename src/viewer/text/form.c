@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.22 2003/08/01 18:55:57 zas Exp $ */
+/* $Id: form.c,v 1.23 2003/08/01 19:35:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -682,14 +682,9 @@ memorize_form(struct session *ses, struct list_head *submit,
 	fm_data = mem_alloc(sizeof(struct formsmem_data));
 	if (!fm_data) goto fail;
 
-	sb = mem_alloc(sizeof(struct list_head));
-	if (!sb) {
-		mem_free(fm_data);
-		goto fail;
-	}
-
 	/* Set up a new list_head, as @submit will be destroyed as soon as
 	 * get_form_url() returns */
+	sb = &fm_data->submit;
 	sb->next = submit->next;
 	sb->prev = submit->prev;
 	((struct submitted_value *) sb->next)->prev = (struct submitted_value *) sb;
@@ -698,11 +693,8 @@ memorize_form(struct session *ses, struct list_head *submit,
 	fm_data->url = stracpy(frm->action);
 	if (!fm_data->url) {
 		mem_free(fm_data);
-		mem_free(sb);
 		goto fail;
 	}
-
-	fm_data->submit = sb;
 
 	msg_box(ses->tab->term, NULL, 0,
 		N_("Form memory"), AL_CENTER,

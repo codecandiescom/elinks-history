@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formsmem.h,v 1.2 2003/08/01 18:14:49 jonas Exp $ */
+/* $Id: formsmem.h,v 1.3 2003/08/01 19:35:21 jonas Exp $ */
 
 #ifndef EL__FORMSMEM_FORMSMEM_H
 #define EL__FORMSMEM_FORMSMEM_H
@@ -10,9 +10,9 @@ struct formsmem_data {
 	LIST_HEAD(struct formsmem_data);
 
 	/* List of submitted_values for this form */
-	struct list_head *submit;
+	struct list_head submit;
 
-	/* <action> URI for this form */
+	/* <action> URI for this form. Keep last! */
 	unsigned char *url;
 };
 

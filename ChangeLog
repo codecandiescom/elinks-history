@@ -1,3 +1,107 @@
+Thu Nov 20 21:27:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/dump/dump.c:
+
+	A weird line was reintroduced to prevent ^A chars to be printed in
+	dumps (reported by zardoz).  
+
+Thu Nov 20 16:17:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/globhist.c:
+
+	Access globhist enable option value directly.  
+
+Thu Nov 20 16:09:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Use the bookmark title as the listbox text.  
+
+Thu Nov 20 14:27:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.c, hierbox.h:
+
+	Prospone the dialog list setup to the event handler.  
+
+Thu Nov 20 13:07:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Use temporary variable to avoid funny wrapping.  
+
+Thu Nov 20 12:37:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.h:
+
+	Update hierbox_browser() argument comment.  
+
+Thu Nov 20 12:33:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.c, hierbox.h:
+
+	Move struct hierbox_dialog_list_item to c file.  
+
+Thu Nov 20 09:46:32 2003  Laurent Monin <zas@norz.org>:
+
+	* po/pl.po:
+
+	Compilation fix.  
+
+Thu Nov 20 04:21:23 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
+Thu Nov 20 02:51:03 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cache/dialogs.c:
+
+	In menu_cache_manager, ignore the return value of hierbox_browser
+	and eliminate the @dlg_data variable.  
+
+Thu Nov 20 02:49:55 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cache/dialogs.c:
+
+	Complete Jonas Fonseca's previous change: Generalize visibility
+	setup.  
+
+Thu Nov 20 02:14:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Update the option browser in add_opt_rec() _when_ the box item has
+	been actually added.  
+
+Thu Nov 20 01:14:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, bookmarks/bookmarks.c,
+	bookmarks/dialogs.c, bookmarks/dialogs.h, cache/cache.c,
+	config/dialogs.c, config/dialogs.h, config/kbdbind.c,
+	config/options.c, cookies/cookies.c, globhist/globhist.c:
+
+	Use standard done_browser_box() function so hierbox browser dialogs
+	are updated when deleting items.  
+
+Wed Nov 19 23:52:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	A goto was nuked. Instead use switch breaking.  
+
+Wed Nov 19 23:46:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	It seems the bookmarks are already marked dirty the relevant places.  
+
+Wed Nov 19 23:44:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Decrease indentation level.  
+
 Wed Nov 19 18:38:45 2003  Laurent Monin <zas@norz.org>:
 
 	* src/viewer/dump/dump.c:

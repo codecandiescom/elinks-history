@@ -1,4 +1,4 @@
-/* $Id: button.h,v 1.39 2005/03/19 00:37:21 zas Exp $ */
+/* $Id: button.h,v 1.40 2005/03/23 10:57:56 zas Exp $ */
 
 #ifndef EL__BFU_BUTTON_H
 #define EL__BFU_BUTTON_H
@@ -27,6 +27,19 @@ struct widget_info_button {
 #define B_ENTER		1
 #define B_ESC		2
 
+/* Define to find buttons without keyboard accelerator. */
+/* #define DEBUG_BUTTON_HOTKEY */
+
+
+#ifdef DEBUG_BUTTON_HOTKEY
+void add_dlg_button_do(unsigned char *file, int line, struct dialog *dlg, unsigned char *text, int flags, widget_handler_T *handler, void *data, done_handler_T *done, void *done_data);
+#define add_dlg_ok_button(dlg, text, flags, done, data)	\
+	add_dlg_button_do(__FILE__, __LINE__, dlg, text, flags, ok_dialog, NULL, done, data)
+
+#define add_dlg_button(dlg, text, flags, handler, data)	\
+	add_dlg_button_do(__FILE__, __LINE__, dlg, text, flags, handler, data, NULL, NULL)
+
+#else
 void add_dlg_button_do(struct dialog *dlg, unsigned char *text, int flags, widget_handler_T *handler, void *data, done_handler_T *done, void *done_data);
 
 #define add_dlg_ok_button(dlg, text, flags, done, data)	\
@@ -34,6 +47,7 @@ void add_dlg_button_do(struct dialog *dlg, unsigned char *text, int flags, widge
 
 #define add_dlg_button(dlg, text, flags, handler, data)	\
 	add_dlg_button_do(dlg, text, flags, handler, data, NULL, NULL)
+#endif
 
 extern struct widget_ops button_ops;
 void dlg_format_buttons(struct terminal *, struct widget_data *, int, int, int *, int, int *, enum format_align);

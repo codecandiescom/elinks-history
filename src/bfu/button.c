@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.91 2005/03/22 15:18:43 zas Exp $ */
+/* $Id: button.c,v 1.92 2005/03/23 10:57:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,10 +32,18 @@
 
 #define BUTTON_LR_LEN (BUTTON_LEFT_LEN + BUTTON_RIGHT_LEN)
 
+#ifdef DEBUG_BUTTON_HOTKEY
+void
+add_dlg_button_do(unsigned char *file, int line,
+		  struct dialog *dlg, unsigned char *text, int flags,
+		  widget_handler_T *handler, void *data,
+		  done_handler_T *done, void *done_data)
+#else
 void
 add_dlg_button_do(struct dialog *dlg, unsigned char *text, int flags,
 		  widget_handler_T *handler, void *data,
 		  done_handler_T *done, void *done_data)
+#endif
 {
 	int textlen = strlen(text);
 	struct widget *widget = &dlg->widgets[dlg->number_of_widgets++];
@@ -59,6 +67,11 @@ add_dlg_button_do(struct dialog *dlg, unsigned char *text, int flags,
 			widget->info.button.hotkey_pos = pos - text;
 			widget->info.button.textlen--;
 		}
+#ifdef DEBUG_BUTTON_HOTKEY
+		else {
+			DBG("%s:%d missing keyboard accelerator in \"%s\".", file, line, text);
+		}
+#endif
 	}
 }
 

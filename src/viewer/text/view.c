@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.615 2004/10/10 03:56:21 miciah Exp $ */
+/* $Id: view.c,v 1.616 2004/10/10 04:02:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -669,7 +669,7 @@ frame_ev_kbd_number(struct session *ses, struct document_view *doc_view,
 static enum frame_event_status
 frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_event *ev)
 {
-	enum frame_event_status status = FRAME_EVENT_REFRESH;
+	enum frame_event_status status = FRAME_EVENT_IGNORED;
 
 #ifdef CONFIG_MARKS
 	if (ses->kbdprefix.mark != KP_MARK_NOTHING) {
@@ -719,8 +719,6 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 		status = FRAME_EVENT_REFRESH;
 		ses->kbdprefix.repeat_count = 0;
 
-	} else {
-		status = FRAME_EVENT_IGNORED;
 	}
 
 	return status;

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.247 2004/11/07 09:25:50 zas Exp $ */
+/* $Id: form.c,v 1.248 2004/11/08 02:12:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -752,7 +752,7 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 			/* FIXME: We should follow RFCs 1522, 1867,
 			 * 2047 (updated by rfc 2231), to provide correct support
 			 * for non-ASCII and special characters in values. --Zas */
-			add_to_string(data, "\"\r\n");
+			add_char_to_string(data, '"');
 
 			/* Add a Content-Type header if the type is configured */
 			extension = strrchr(sv->value, '.');
@@ -760,13 +760,14 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 				unsigned char *type = get_extension_content_type(extension);
 
 				if (type) {
+					add_crlf_to_string(data);
 					add_to_string(data, "Content-Type: ");
 					add_to_string(data, type);
-					add_crlf_to_string(data);
 					mem_free(type);
 				}
 			}
 
+			add_crlf_to_string(data);
 			add_crlf_to_string(data);
 
 			if (*sv->value) {
@@ -798,7 +799,8 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 			}
 #undef F_BUFLEN
 		} else {
-			add_to_string(data, "\r\n\r\n");
+			add_crlf_to_string(data);
+			add_crlf_to_string(data);
 
 			/* Convert back to original encoding (see
 			 * html_form_control() for the original recoding). */

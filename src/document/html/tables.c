@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.42 2003/06/30 21:00:28 zas Exp $ */
+/* $Id: tables.c,v 1.43 2003/06/30 21:17:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1249,8 +1249,8 @@ end:
 static void
 get_table_heights(struct table *t)
 {
-	int s, ns;
-	int i, j;
+	int s = 1;
+	register int i, j;
 
 	for (j = 0; j < t->y; j++) {
 		for (i = 0; i < t->x; i++) {
@@ -1261,10 +1261,9 @@ get_table_heights(struct table *t)
 			if (!cell->used || cell->spanned) continue;
 
 			for (sp = 0; sp < cell->colspan; sp++) {
-				xw += t->w_c[i + sp];
-				if (sp < cell->colspan - 1
-				    && get_vline_width(t, i + sp + 1) >= 0)
-					xw++;
+				xw += t->w_c[i + sp] +
+				      (sp < cell->colspan - 1 &&
+				       get_vline_width(t, i + sp + 1) >= 0);
 			}
 
 			p = format_html_part(cell->start, cell->end,
@@ -1278,10 +1277,9 @@ get_table_heights(struct table *t)
 		}
 	}
 
-	s = 1;
-
 	do {
-		ns = MAXINT;
+		int ns = MAXINT;
+
 		for (j = 0; j < t->y; j++) {
 			for (i = 0; i < t->x; i++) {
 				struct table_cell *cell = CELL(t, i, j);
@@ -1292,8 +1290,7 @@ get_table_heights(struct table *t)
 					int k, p = 0;
 
 					for (k = 1; k < s; k++)
-						if (get_hline_width(t, j + k) >= 0)
-							p++;
+						p += (get_hline_width(t, j + k) >= 0);
 
 					dst_width(t->r_heights + j, s,
 						  cell->height - p, NULL);
@@ -1305,14 +1302,18 @@ get_table_heights(struct table *t)
 
 			}
 		}
-	} while ((s = ns) != MAXINT);
+		s = ns;
+	} while (s != MAXINT);
 
-	t->rh = (!!(t->frame & F_ABOVE) + !!(t->frame & F_BELOW)) * !!t->border;
+	t->rh = 0;
+	if (t->border) {
+		if (t->frame & F_ABOVE) t->rh++;
+		if (t->frame & F_BELOW) t->rh++;
+	}
 
 	for (j = 0; j < t->y; j++) {
-		t->rh += t->r_heights[j];
-		if (j && get_hline_width(t, j) >= 0)
-			t->rh++;
+		t->rh += t->r_heights[j] +
+			 (j && get_hline_width(t, j) >= 0);
 	}
 }
 

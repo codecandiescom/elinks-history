@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.86 2003/05/18 23:09:31 pasky Exp $ */
+/* $Id: renderer.c,v 1.87 2003/05/18 23:14:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2103,7 +2103,7 @@ get_srch(struct f_data *f)
 
 			ADD(' ', 0);
 		}
-#undef A
+#undef ADD
 
 	}
 

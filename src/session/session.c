@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.291 2004/01/08 09:53:07 zas Exp $ */
+/* $Id: session.c,v 1.292 2004/01/08 14:59:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -710,18 +710,12 @@ dialog_goto_url_open(void *data)
 unsigned char *
 get_homepage_url(void)
 {
-	unsigned char *h = NULL;
+	unsigned char *homepage = get_opt_str("ui.sessions.homepage");
 
-	if (!get_opt_bool("ui.sessions.ignore_www_home"))
-		h = getenv("WWW_HOME");
+	if (!*homepage) homepage = getenv("WWW_HOME");
+	if (!homepage || !*homepage) homepage = WWW_HOME_URL;
 
-	if (!h || !*h)
-		h = get_opt_str("ui.sessions.homepage_url");
-
-	if (h && *h)
-		return h;
-
-	return NULL;
+	return homepage;
 }
 
 static int

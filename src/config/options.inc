@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.80 2004/01/08 09:53:06 zas Exp $ */
+/* $Id: options.inc,v 1.81 2004/01/08 14:57:56 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1246,17 +1246,12 @@ struct option_info config_options_info[] = {
 		N_("Name of the bookmarks folder used for auto saving and restoring session.\n"
 		"This only makes sense with bookmark support.")),
 
-	INIT_OPT_STRING("ui.sessions", N_("Homepage URL"),
-		"homepage_url", 0, WWW_HOME_URL,
-		N_("ELinks will load document at this URL, either at start "
-		" or by user request.\n"
-		"If environnement variable WWW_HOME is available, it will be "
-		"used as homepage URL instead of this option value.\n"
-		"You can control this behavior using ui.sessions.ignore_www_home.")),
-
-	INIT_OPT_BOOL("ui.sessions", N_("Ignore WWW_HOME as homepage"),
-		"ignore_www_home", 0, 0,
-		N_("Ignore WWW_HOME environnement variable when looking for homepage URL.")),
+	INIT_OPT_STRING("ui.sessions", N_("Homepage URI"),
+		"homepage", 0, WWW_HOME_URL,
+		N_("The URI to load either at startup time when no URI was given\n"
+		"on the command line or when requested by the goto-url-home action.\n"
+		"Set to \"\" if the environment variable WWW_HOME should be used\n"
+		"used as homepage URI instead.")),
 
 
 	INIT_OPT_BOOL("ui", N_("Set window title"),

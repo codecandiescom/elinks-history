@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.19 2003/07/27 20:20:13 jonas Exp $ */
+/* $Id: link.c,v 1.20 2003/07/27 22:48:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,6 +123,8 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 	int xw, yw;
 	int vx, vy;
 	int f = 0;
+	int i;
+	int q = 0;
 
 	assert(t && scr && scr->vs);
 	if_assert_failed return;
@@ -141,8 +143,6 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 	vy = vs->view_pos;
 
 	switch (link->type) {
-		int i;
-		int q;
 
 		case L_LINK:
 		case L_CHECKBOX:
@@ -150,58 +150,59 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 		case L_SELECT:
 		case L_FIELD:
 		case L_AREA:
-			q = 0;
-			if (link->type == L_FIELD) {
-				struct form_state *fs = find_form_state(scr, link->form);
-
-				if (fs) q = fs->state - fs->vpos;
-				/*else internal("link has no form control");*/
-			} else if (link->type == L_AREA) {
-				struct form_state *fs = find_form_state(scr, link->form);
-
-				if (fs) q = area_cursor(link->form, fs);
-				/*else internal("link has no form control");*/
-			}
-
-			scr->link_bg = mem_alloc(link->n * sizeof(struct link_bg));
-			if (!scr->link_bg) return;
-			scr->link_bg_n = link->n;
-
-			for (i = 0; i < link->n; i++) {
-				int x = link->pos[i].x + xp - vx;
-				int y = link->pos[i].y + yp - vy;
-
-				if (x >= xp && y >= yp && x < xp+xw && y < yp+yw) {
-					unsigned co = get_char(t, x, y);
-
-					if (scr->link_bg) {
-						scr->link_bg[i].x = x;
-						scr->link_bg[i].y = y;
-						scr->link_bg[i].c = co;
-					}
-					if (!f
-					    || (link->type == L_CHECKBOX && i == 1)
-					    || (link->type == L_BUTTON && i == 2)
-					    || ((link->type == L_FIELD ||
-						 link->type == L_AREA) && i == q)) {
-						int blockable = 0;
-
-						if (link->type != L_FIELD && link->type != L_AREA) {
-							if (((co >> 8) & 0x38) != (link->sel_color & 0x38)) {
-								blockable = 1;
-							}
-						}
-
-						set_cursor(t, x, y, blockable);
-						set_window_ptr(get_current_tab(t), x, y);
-						f = 1;
-					}
-					set_color(t, x, y, /*((link->sel_color << 3) | (co >> 11 & 7)) << 8*/ link->sel_color << 8);
-				} else scr->link_bg[i].x = scr->link_bg[i].y = scr->link_bg[i].c = -1;
-			}
 			break;
 		default:
 			internal("bad link type");
+			return;
+	}
+
+	if (link->type == L_FIELD) {
+		struct form_state *fs = find_form_state(scr, link->form);
+
+		if (fs) q = fs->state - fs->vpos;
+		/*else internal("link has no form control");*/
+	} else if (link->type == L_AREA) {
+		struct form_state *fs = find_form_state(scr, link->form);
+
+		if (fs) q = area_cursor(link->form, fs);
+		/*else internal("link has no form control");*/
+	}
+
+	scr->link_bg = mem_alloc(link->n * sizeof(struct link_bg));
+	if (!scr->link_bg) return;
+	scr->link_bg_n = link->n;
+
+	for (i = 0; i < link->n; i++) {
+		int x = link->pos[i].x + xp - vx;
+		int y = link->pos[i].y + yp - vy;
+
+		if (x >= xp && y >= yp && x < xp+xw && y < yp+yw) {
+			unsigned co = get_char(t, x, y);
+
+			if (scr->link_bg) {
+				scr->link_bg[i].x = x;
+				scr->link_bg[i].y = y;
+				scr->link_bg[i].c = co;
+			}
+			if (!f
+				|| (link->type == L_CHECKBOX && i == 1)
+				|| (link->type == L_BUTTON && i == 2)
+				|| ((link->type == L_FIELD ||
+						link->type == L_AREA) && i == q)) {
+				int blockable = 0;
+
+				if (link->type != L_FIELD && link->type != L_AREA) {
+					if (((co >> 8) & 0x38) != (link->sel_color & 0x38)) {
+						blockable = 1;
+					}
+				}
+
+				set_cursor(t, x, y, blockable);
+				set_window_ptr(get_current_tab(t), x, y);
+				f = 1;
+			}
+			set_color(t, x, y, /*((link->sel_color << 3) | (co >> 11 & 7)) << 8*/ link->sel_color << 8);
+		} else scr->link_bg[i].x = scr->link_bg[i].y = scr->link_bg[i].c = -1;
 	}
 }
 

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.191 2005/02/16 20:29:40 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.192 2005/02/20 19:52:18 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1581,9 +1581,11 @@ static JSBool
 history_back(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 {
 	struct ecmascript_interpreter *interpreter = JS_GetContextPrivate(ctx);
-	struct session *ses = interpreter->vs->doc_view->session;
+	struct document_view *doc_view = interpreter->vs->doc_view;
+	struct session *ses = doc_view->session;
 
 	go_back(ses);
+	string_to_jsval(ctx, rval, "");
 
 	return JS_TRUE;
 }

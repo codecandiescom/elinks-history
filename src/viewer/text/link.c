@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.250 2004/06/26 15:43:57 pasky Exp $ */
+/* $Id: link.c,v 1.251 2004/06/26 15:44:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -385,7 +385,8 @@ void
 get_visible_links_range(struct document_view *doc_view, int *first, int *last)
 {
 	struct document *document = doc_view->document;
-	int height = int_min(doc_view->vs->y + doc_view->box.height, document->height);
+	int height = int_min(doc_view->vs->y + doc_view->box.height,
+	                     document->height);
 	int y;
 
 	*first = document->nlinks - 1;

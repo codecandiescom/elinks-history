@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.29 2003/12/26 10:10:09 jonas Exp $ */
+/* $Id: download.c,v 1.30 2003/12/27 08:13:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,7 +139,7 @@ download_progress_bar(struct terminal *term, int x, int y, int width,
 		percent[percent_len++] = '%';
 
 		/* Draw the percentage centered in the progress meter */
-		x += (width - percent_len) / 2;
+		x += (1 + width - percent_len) / 2;
 
 		assert(percent_len <= width);
 		width = percent_len;

@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.14 2003/10/30 19:34:04 jonas Exp $ */
+/* $Id: document.c,v 1.15 2003/10/31 01:11:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,7 +166,9 @@ get_cached_document(unsigned char *uri, struct document_options *options, int id
 			continue;
 		}
 
-		format_cache_reactivate(document);
+		/* Reactivate */
+		del_from_list(document);
+		add_to_list(format_cache, document);
 
 		if (!document->refcount++) format_cache_entries--;
 
@@ -221,16 +223,6 @@ count_format_cache(void)
 	foreach (document, format_cache)
 		if (!document->refcount)
 			format_cache_entries++;
-}
-
-void
-format_cache_reactivate(struct document *document)
-{
-	assert(document);
-	if_assert_failed return;
-
-	del_from_list(document);
-	add_to_list(format_cache, document);
 }
 
 long

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.15 2003/10/30 19:29:23 jonas Exp $ */
+/* $Id: document.h,v 1.16 2003/10/31 01:11:44 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -158,6 +158,5 @@ long formatted_info(int);
 
 void shrink_format_cache(int);
 void count_format_cache(void);
-void format_cache_reactivate(struct document *);
 
 #endif

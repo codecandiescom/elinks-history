@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.8 2002/04/23 08:06:21 pasky Exp $
+## $Id: Makefile.am,v 1.9 2002/04/23 20:47:29 zas Exp $
 
 INCLUDES = \
  -I$(srcdir)/..
@@ -18,5 +18,6 @@ parsetst_SOURCES = \
  parsetst.c
 
 # I'm not sure about this.. --pasky
-parsetst_DEPENDENCIES = \
- ../util/libutil.a
+# Compilation failure when enabled. --Zas
+#parsetst_DEPENDENCIES = \
+# ../util/libutil.a

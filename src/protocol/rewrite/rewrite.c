@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.11 2003/12/21 21:41:38 jonas Exp $ */
+/* $Id: rewrite.c,v 1.12 2003/12/23 19:24:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ static struct option_info uri_rewrite_options[] = {
 		N_("Enable smart prefixes.")),
 
 	INIT_OPT_TREE("protocol.rewrite", N_("Dumb Prefixes"),
-		"dumb", OPT_AUTOCREATE,
+		"dumb", OPT_AUTOCREATE | OPT_SORT,
 		N_("Dumb prefixes.")),
 
 	INIT_OPT_STRING("protocol.rewrite.dumb", NULL,
@@ -66,7 +66,7 @@ static struct option_info uri_rewrite_options[] = {
 		"%% in the string means '%'")),
 
 	INIT_OPT_TREE("protocol.rewrite", N_("Smart Prefixes"),
-		"smart", OPT_AUTOCREATE,
+		"smart", OPT_AUTOCREATE | OPT_SORT,
 		N_("Smart prefixes.")),
 
 	/* TODO: In some rare occations current link URI and referrer might

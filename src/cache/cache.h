@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.39 2003/11/11 22:32:39 pasky Exp $ */
+/* $Id: cache.h,v 1.40 2003/11/12 00:10:33 zas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -10,7 +10,8 @@
  * value is most agressively cached, however the cache is most reluctant to
  * cache the one with highest value. */
 enum cache_mode {
-	CACHE_MODE_ALWAYS,
+	CACHE_MODE_INCREMENT = -1,
+	CACHE_MODE_ALWAYS = 0,
 	CACHE_MODE_NORMAL,
 	CACHE_MODE_CHECK_IF_MODIFIED,
 	CACHE_MODE_FORCE_RELOAD,

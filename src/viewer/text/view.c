@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.260 2003/11/10 20:53:22 jonas Exp $ */
+/* $Id: view.c,v 1.261 2003/11/12 00:10:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -925,7 +925,7 @@ send_event(struct session *ses, struct term_event *ev)
 				go_unback(ses);
 				goto x;
 			case ACT_RELOAD:
-				reload(ses, -1);
+				reload(ses, CACHE_MODE_INCREMENT);
 				goto x;
 			case ACT_ABORT_CONNECTION:
 				abort_loading(ses, 1);

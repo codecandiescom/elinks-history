@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.84 2003/11/10 00:32:36 jonas Exp $ */
+/* $Id: auth.c,v 1.85 2003/11/12 00:10:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,7 @@ auth_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 	entry->blocked = 0;
 	entry->valid = auth_entry_has_userinfo(entry);
-	reload(dlg_data->dlg->refresh_data, -1);
+	reload(dlg_data->dlg->refresh_data, CACHE_MODE_INCREMENT);
 	return ok_dialog(dlg_data, widget_data);
 }
 

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.182 2003/11/09 22:56:19 zas Exp $ */
+/* $Id: menu.c,v 1.183 2003/11/12 00:10:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,7 +120,7 @@ menu_go_back(struct terminal *term, void *d, struct session *ses)
 static inline void
 menu_reload(struct terminal *term, void *d, struct session *ses)
 {
-	reload(ses, -1);
+	reload(ses, CACHE_MODE_INCREMENT);
 }
 
 void

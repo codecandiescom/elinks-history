@@ -1,3 +1,23 @@
+Sun Aug  3 04:55:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c, renderer.h,
+	tables.c:
+
+	Last big nasty patch separating screen_char color and attr. Is this
+	a bad solution: In order for html_hr() to put out border_chars, an
+	extra argument for passing around the char attributes is missing so
+	I added it to put_ch*r*.  
+
+Sun Aug  3 03:44:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/menu.c, document/html/renderer.c, terminal/draw.c,
+	terminal/draw.h, terminal/screen.c, viewer/text/link.c,
+	viewer/text/view.c:
+
+	Another big nasty patch ;-P ... A stepping stone towards separating
+	color and attribute in struct screen_char ... which will make us
+	able to support more attributes like underline.  
+
 Sat Aug  2 20:20:43 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/util/string.c:

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.148 2004/12/24 23:13:02 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.149 2004/12/24 23:19:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -433,7 +433,9 @@ window_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			return JS_FALSE;
 		}
 		return JS_TRUE;
-	} else if (!JSVAL_IS_INT(id))
+	}
+
+	if (!JSVAL_IS_INT(id))
 		return JS_TRUE;
 
 	switch (JSVAL_TO_INT(id)) {
@@ -1013,7 +1015,9 @@ form_elements_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	if (JSVAL_IS_STRING(id)) {
 		form_elements_namedItem(ctx, obj, 1, &id, vp);
 		return JS_TRUE;
-	} else if (!JSVAL_IS_INT(id))
+	}
+
+	if (!JSVAL_IS_INT(id))
 		return JS_TRUE;
 
 	switch (JSVAL_TO_INT(id)) {
@@ -1204,7 +1208,9 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			break;
 		}
 		return JS_TRUE;
-	} else if (!JSVAL_IS_INT(id))
+	}
+
+	if (!JSVAL_IS_INT(id))
 		return JS_TRUE;
 
 	switch (JSVAL_TO_INT(id)) {
@@ -1448,7 +1454,9 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	if (JSVAL_IS_STRING(id)) {
 		forms_namedItem(ctx, obj, 1, &id, vp);
 		return JS_TRUE;
-	} else if (!JSVAL_IS_INT(id))
+	}
+
+	if (!JSVAL_IS_INT(id))
 		return JS_TRUE;
 
 	switch (JSVAL_TO_INT(id)) {
@@ -1604,7 +1612,9 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			break;
 		}
 		return JS_TRUE;
-	} else if (!JSVAL_IS_INT(id))
+	}
+
+	if (!JSVAL_IS_INT(id))
 		return JS_TRUE;
 
 	switch (JSVAL_TO_INT(id)) {
@@ -1666,7 +1676,9 @@ document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		}
 #endif
 		return JS_TRUE;
-	} else if (!JSVAL_IS_INT(id))
+	}
+
+	if (!JSVAL_IS_INT(id))
 		return JS_TRUE;
 
 	switch (JSVAL_TO_INT(id)) {

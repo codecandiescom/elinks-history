@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.54 2003/10/16 08:28:19 zas Exp $ */
+/* $Id: cache.c,v 1.55 2003/10/16 08:31:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -456,7 +456,7 @@ delete_cache_entry(struct cache_entry *e)
 void
 garbage_collection(int whole)
 {
-	struct cache_entry *e, *f;
+	struct cache_entry *e, *ce;
 	long ncs = cache_size;
 	long ccs = 0;
 	int no = 0;
@@ -517,20 +517,20 @@ g:
 	if ((void *) e == &cache) return;
 
 	if (!whole) {
-		for (f = e; (void *)f != &cache; f = f->next) {
-			long newncs = ncs + f->data_size;
+		for (ce = e; (void *)ce != &cache; ce = ce->next) {
+			long newncs = ncs + ce->data_size;
 
 			if (newncs <= opt_cache_gc_size) {
 				ncs = newncs;
-				f->tgc = 0;
+				ce->tgc = 0;
 			}
 		}
 	}
 
-	for (f = e; (void *)f != &cache;) {
-		f = f->next;
-		if (f->prev->tgc)
-			delete_cache_entry(f->prev);
+	for (ce = e; (void *)ce != &cache;) {
+		ce = ce->next;
+		if (ce->prev->tgc)
+			delete_cache_entry(ce->prev);
 	}
 
 	if ((whole || !no) && cache_size > opt_cache_gc_size) {

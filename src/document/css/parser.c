@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.29 2004/01/20 02:00:12 jonas Exp $ */
+/* $Id: parser.c,v 1.30 2004/01/20 05:11:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,9 +56,10 @@ css_parse_properties(struct list_head *props, unsigned char *string)
 			}
 		}
 
+		/* Skip property name and separator and check for expression */
 		if (!skip_css_tokens(&scanner, ':')) {
-			INTERNAL("I thought we already knew ':' was the next token");
-			goto ride_on;
+			assert(!css_scanner_has_tokens(&scanner));
+			break;
 		}
 
 		if (!property_info) {

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.6 2002/03/22 18:57:20 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.7 2002/03/30 20:48:47 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -65,7 +65,9 @@ void add_bookmark(const unsigned char *, const unsigned char *);
 
 
 /* Clears the bookmark list */
-void free_bookmarks() {
+void
+free_bookmarks()
+{
 	struct bookmark *bm;
 
 	foreach(bm, bookmarks) {
@@ -76,8 +78,11 @@ void free_bookmarks() {
 	free_list(bookmarks);
 }
 
+
 /* Does final cleanup and saving of bookmarks */
-void finalize_bookmarks() {
+void
+finalize_bookmarks()
+{
 	write_bookmarks();
 	free_bookmarks();
 	if (bm_last_searched_name) mem_free(bm_last_searched_name);
@@ -86,10 +91,13 @@ void finalize_bookmarks() {
 
 
 /* Loads the bookmarks from file */
-void read_bookmarks() {
-	unsigned char in_buffer[MAX_STR_LEN];
+void
+read_bookmarks()
+{
+	unsigned char in_buffer[MAX_STR_LEN]; /* read buffer */
 	unsigned char *file_name;
-	unsigned char *title, *url;	/* Pointers to the start of each field (in buffer)*/
+	unsigned char *title;	/* Pointer to the start of title in buffer */
+	unsigned char *url;	/* Pointer to the start of url in buffer */
 	FILE *f;
 
 	file_name = stracpy(links_home);
@@ -98,26 +106,31 @@ void read_bookmarks() {
 
 	f = fopen(file_name, "r");
 	mem_free(file_name);
-	if (f == NULL)
-		return;
+	if (!f)	return;
 
 	title = in_buffer;
 
+	/* FIXME: very long lines aren't handled !!! --Zas */
 	while (fgets(in_buffer, MAX_STR_LEN, f)) {
+		unsigned char *urlend;
+
 		url = strchr(in_buffer, '|');
-		if (url == NULL)
-			continue;
+		if (!url) continue;
 		*url = '\0';
 		url++;
-		if (strchr(url, '\n')) *( strchr(url, '\n') ) = '\0';
+		urlend = strchr(url, '\n');
+		if (urlend) *urlend = '\0';
 		add_bookmark(title, url);
 	}
 
 	fclose(f);
 }
 
+
 /* Saves the bookmarks to file */
-void write_bookmarks() {
+void
+write_bookmarks()
+{
 	struct bookmark *bm;
 	FILE *out;
 	unsigned char *file_name;
@@ -133,7 +146,10 @@ void write_bookmarks() {
 	foreachback(bm, bookmarks) {
 		unsigned char *p = stracpy(bm->title);
 		int i;
-		for (i = strlen(p) - 1; i >= 0; i--) if (p[i] < ' '|| p[i] == '|') p[i] = '*';
+
+		for (i = strlen(p) - 1; i >= 0; i--)
+			if (p[i] < ' '|| p[i] == '|')
+				p[i] = '*';
 		fputs(p,out);
 		fputc('|', out);
 		fputs(bm->url,out);
@@ -144,14 +160,17 @@ void write_bookmarks() {
 	fclose(out);
 }
 
+
 /* Gets a bookmark by id */
-struct bookmark *get_bookmark_by_id(bookmark_id id) {
+struct bookmark *
+get_bookmark_by_id(bookmark_id id)
+{
 	struct bookmark *bm;
 
 	if (id == BAD_BOOKMARK_ID)
 		return NULL;
 
-	foreach(bm, bookmarks) {
+	foreach (bm, bookmarks) {
 		if (id == bm->id)
 			return bm;
 	}
@@ -161,22 +180,26 @@ struct bookmark *get_bookmark_by_id(bookmark_id id) {
 
 
 /* Adds a bookmark to the bookmark list. Don't play with new_bm after you're
-	done. It would be impolite. */
-void add_bookmark(const unsigned char *title, const unsigned char *url) {
-	struct bookmark *bm;
-	int	title_size;	/* How much mem to allocate for the strings */
-	int url_size;
+ * done. It would be impolite. */
+void
+add_bookmark(const unsigned char *title, const unsigned char *url)
+{
+	struct bookmark *bm = mem_alloc(sizeof(struct bookmark));
 
-	title_size = strlen(title) + 1;
-	url_size = strlen(url) + 1;
+	if (!bm) return;
 
-	bm = mem_alloc(sizeof(struct bookmark));
+	bm->title = stracpy((unsigned char *) title);
+	if (!bm->title) {
+		free(bm);
+		return;
+	}
 
-	bm->title = mem_alloc( sizeof(unsigned char) * title_size );
-	bm->url = mem_alloc( sizeof(unsigned char) * url_size );
-
-	strcpy(bm->title, title);
-	strcpy(bm->url, url);
+	bm->url = stracpy((unsigned char *) url);
+	if (!bm->url) {
+		free(bm->title);
+		free(bm);
+		return;
+	}
 
 	bm->id = next_bookmark_id++;
 	bm->selected = 1;
@@ -190,12 +213,14 @@ void add_bookmark(const unsigned char *title, const unsigned char *url) {
  *
  * If the requested bookmark does not exist, return 0. Otherwise, return 1.
  *
- * If any of the fields are NULL, the value is left unchanged.
- */
-int bookmark_update(bookmark_id id, const unsigned char *title, const unsigned char *url) {
+ * If any of the fields are NULL, the value is left unchanged. */
+int
+bookmark_update(bookmark_id id, const unsigned char *title,
+		const unsigned char *url)
+{
 	struct bookmark *bm = get_bookmark_by_id(id);
 
-	if (bm == NULL) {
+	if (!bm) {
 		/* Does not exist. */
 		return 0;
 	}
@@ -213,6 +238,7 @@ int bookmark_update(bookmark_id id, const unsigned char *title, const unsigned c
 	return 1;
 }
 
+
 /* Searchs a substring either in title or url fields (ignoring
  * case).  If search_title and search_url are not empty, it selects bookmarks
  * matching the first OR the second.
@@ -221,12 +247,13 @@ int bookmark_update(bookmark_id id, const unsigned char *title, const unsigned c
  * (replacing OR by AND), but it would break a cool feature: when on a page,
  * opening search dialog will have fields corresponding to that page, so
  * pressing ok will find any bookmark with that title or url, permitting a
- * rapid search of an already existing bookmark. --Zas
- */
-int bookmark_simple_search(unsigned char *search_title, unsigned char *search_url) {
+ * rapid search of an already existing bookmark. --Zas */
+int
+bookmark_simple_search(unsigned char *search_title, unsigned char *search_url)
+{
 	struct bookmark *bm;
 
-	if (search_title == NULL || search_url == NULL) return 0;
+	if (!search_title || !search_url) return 0;
 
 	/* memorize title criteria */
 	if (bm_last_searched_name) mem_free(bm_last_searched_name);
@@ -245,94 +272,70 @@ int bookmark_simple_search(unsigned char *search_title, unsigned char *search_ur
 
 	foreach(bm, bookmarks) {
 		bm->selected = 0;
-		if ((search_title != NULL && *search_title
-		     && strcasestr(bm->title, search_title) != NULL) ||
-		    (search_url != NULL && *search_url
-		     && strcasestr(bm->url, search_url) != NULL))
+		if ((search_title && *search_title
+		     && strcasestr(bm->title, search_title)) ||
+		    (search_url && *search_url
+		     && strcasestr(bm->url, search_url)))
 			bm->selected = 1;
 	}
 	return 1;
 }
 
-/* Allocates and returns a bookmark */
-/* FIXME: This function is unused. --Zas */
-#if 0
-struct bookmark *create_bookmark(const unsigned char *title, const unsigned char *url) {
-	struct bookmark *new_bm = NULL;
-	int	title_size;	/* How much mem to allocate for the strings */
-	int url_size;
-
-	title_size = strlen(title) + 1;
-	url_size = strlen(url) + 1;
-
-	new_bm = mem_alloc(sizeof(struct bookmark));
-
-	new_bm->title = mem_alloc( sizeof(unsigned char) * title_size );
-	new_bm->url = mem_alloc( sizeof(unsigned char) * url_size );
-
-	strncpy(new_bm->title, title, title_size);
-	strncpy(new_bm->url, url, url_size);
-
-	return new_bm;
-}
-#endif
 
 /* Deletes a bookmark, given the id. Returns 0 on failure (no such bm), 1 on
-	success */
-int delete_bookmark_by_id(bookmark_id id) {
-	struct bookmark *bm;
+ * success */
+int
+delete_bookmark_by_id(bookmark_id id)
+{
+	struct bookmark *bm = get_bookmark_by_id(id);
 
-	bm = get_bookmark_by_id(id);
-
-	if (bm == NULL)
-		return 0;
+	if (!bm) return 0;
 
 	del_from_list(bm);
 
 	/* Now wipe the bookmark */
 	mem_free(bm->title);
 	mem_free(bm->url);
-
 	mem_free(bm);
 
 	return 1;
 }
 
-/****************************************************************************
-*
-* Bookmark manager stuff.
-*
-****************************************************************************/
+/****************************************************************************\
+ *
+ * Bookmark manager stuff.
+ *
+\****************************************************************************/
 
-void bookmark_edit_dialog(
-		struct terminal *,
-		unsigned char *,
-		const unsigned char *,
-		const unsigned char *,
-		struct session *,
-		struct dialog_data *,
-		void when_done(struct dialog *),
-		void *,
-		int
-);
+void bookmark_edit_dialog(struct terminal *, unsigned char *,
+			  const unsigned char *, const unsigned char *,
+			  struct session *, struct dialog_data *,
+			  void when_done(struct dialog *),
+			  void *, int);
 
 /* Gets the head of the bookmark list kept by the dialog (the one used for
-	display purposes */
-/* I really should use this somewhere...
-static inline *list_head bookmark_dlg_list_get(struct dialog) {
+ * display purposes */
+/* I really should use this somewhere... */
+#if 0
+static inline list_head *
+bookmark_dlg_list_get(struct dialog) {
 	return dialog->items[BM_BOX_IND].data;
 }
-*/
+#endif
 
 /* Clears the bookmark list from the bookmark_dialog */
-static inline void bookmark_dlg_list_clear(struct list_head *bm_list) {
+static inline void
+bookmark_dlg_list_clear(struct list_head *bm_list)
+{
 	free_list( *bm_list );
 }
 
+
 /* Updates the bookmark list for a dialog. Returns the number of bookmarks.
-	FIXME: Must be changed for hierarchical bookmarks.
-*/
-int bookmark_dlg_list_update(struct list_head *bm_list) {
+ * FIXME: Must be changed for hierarchical bookmarks. */
+int
+bookmark_dlg_list_update(struct list_head *bm_list)
+{
 	struct bookmark *bm;	/* Iterator over bm list */
 	struct box_item	*item;	/* New box item (one per displayed bookmark) */
 	unsigned char *text;
@@ -353,20 +356,25 @@ int bookmark_dlg_list_update(struct list_head *bm_list) {
 		item->data = (void *)(id = bm->id);
 
 		/* Note that free_i is left at zero */
+		/* XXX: ??? --Zas */
 
 		strcpy(text, bm->title);
 
 		add_to_list( *bm_list, item);
 		count++;
 	}
+
 	return count;
 }
 
 
-/* Creates the box display (holds everything EXCEPT the actual rendering data) */
-struct dlg_data_item_data_box *bookmark_dlg_box_build(struct dlg_data_item_data_box **box) {
+/* Creates the box display (holds everything EXCEPT the actual rendering
+ * data) */
+struct dlg_data_item_data_box *
+bookmark_dlg_box_build(struct dlg_data_item_data_box **box)
+{
 	/* Deleted in abort */
-	*box = mem_alloc( sizeof(struct dlg_data_item_data_box) );
+	*box = mem_alloc(sizeof(struct dlg_data_item_data_box));
 	if (!*box) return NULL;
 
 	memset(*box, 0, sizeof(struct dlg_data_item_data_box));
@@ -374,24 +382,23 @@ struct dlg_data_item_data_box *bookmark_dlg_box_build(struct dlg_data_item_data_
 	init_list((*box)->items);
 
 	(*box)->list_len = bookmark_dlg_list_update(&((*box)->items));
+
 	return *box;
 }
 
 /* Get the id of the currently selected bookmark */
-bookmark_id bookmark_dlg_box_id_get(struct dlg_data_item_data_box *box) {
+bookmark_id
+bookmark_dlg_box_id_get(struct dlg_data_item_data_box *box)
+{
 	struct box_item *citem;
-	int sel;
+	int sel = box->sel;
 
-	sel = box->sel;
-
-	if (sel == -1)
-		return BAD_BOOKMARK_ID;
+	if (sel == -1) return BAD_BOOKMARK_ID;
 
 	/* Sel is an index into the list of bookmarks. Therefore, we spin thru
-		until sel equals zero, and return the id at that point */
+	 * until sel equals zero, and return the id at that point. */
 	foreach(citem, box->items) {
-		if (sel == 0)
-			return (bookmark_id)(citem->data);
+		if (!sel) return (bookmark_id) citem->data;
 		sel--;
 	}
 
@@ -399,9 +406,10 @@ bookmark_id bookmark_dlg_box_id_get(struct dlg_data_item_data_box *box) {
 }
 
 
-
 /* Cleans up after the bookmark dialog */
-void bookmark_dialog_abort_handler(struct dialog_data *dlg) {
+void
+bookmark_dialog_abort_handler(struct dialog_data *dlg)
+{
 	struct dlg_data_item_data_box *box;
 
 	box = (struct dlg_data_item_data_box *)(dlg->dlg->items[BM_BOX_IND].data);
@@ -413,32 +421,37 @@ void bookmark_dialog_abort_handler(struct dialog_data *dlg) {
 	mem_free(box);
 }
 
-/* Handles events for a bookmark dialog */
-int bookmark_dialog_event_handler(struct dialog_data *dlg, struct event *ev) {
 
+/* Handles events for a bookmark dialog */
+int
+bookmark_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
+{
 	struct dialog_item_data *di;
 
 	switch (ev->ev) {
 		case EV_KBD:
 			di = &dlg->items[dlg->selected];
 			/* Catch change focus requests */
-			if (ev->x == KBD_RIGHT || (ev->x == KBD_TAB && !ev->y)) {
-				/* MP: dirty crap!!! this should be done in bfu.c */
+			/* MP: dirty crap!!! This should be done in bfu.c! */
+
+			if (ev->x == KBD_RIGHT
+			    || (ev->x == KBD_TAB && !ev->y)) {
 				/* Move right */
-                display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
+				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
 				if (++dlg->selected >= BM_BOX_IND)
 					dlg->selected = 0;
-                display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
+				display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (ev->x == KBD_LEFT || (ev->x == KBD_TAB && ev->y)) {
+			if (ev->x == KBD_LEFT
+			    || (ev->x == KBD_TAB && ev->y)) {
 				/* Move left */
-                display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
+				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
 				if (--dlg->selected < 0)
 					dlg->selected = BM_BOX_IND - 1;
-                display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
+				display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
 
 				return EVENT_PROCESSED;
 			}
@@ -459,14 +472,16 @@ int bookmark_dialog_event_handler(struct dialog_data *dlg, struct event *ev) {
 			}
 
 			if (ev->x == KBD_PAGE_DOWN) {
-				box_sel_move(&dlg->items[BM_BOX_IND], dlg->items[BM_BOX_IND].item->gid / 2);
+				box_sel_move(&dlg->items[BM_BOX_IND],
+					     dlg->items[BM_BOX_IND].item->gid / 2);
 				show_dlg_item_box(dlg, &dlg->items[BM_BOX_IND]);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (ev->x == KBD_PAGE_UP) {
-				box_sel_move(&dlg->items[BM_BOX_IND], (-1) * dlg->items[BM_BOX_IND].item->gid / 2);
+				box_sel_move(&dlg->items[BM_BOX_IND],
+					     -dlg->items[BM_BOX_IND].item->gid / 2);
 				show_dlg_item_box(dlg, &dlg->items[BM_BOX_IND]);
 
 				return EVENT_PROCESSED;
@@ -502,7 +517,9 @@ unsigned char *bookmark_dialog_msg[] = {
 
 
 /* Loads the selected bookmark */
-void menu_goto_bookmark(struct terminal *term, void *url, struct session *ses) {
+void
+menu_goto_bookmark(struct terminal *term, void *url, struct session *ses)
+{
 	goto_url(ses, (unsigned char*)url);
 }
 
@@ -512,28 +529,27 @@ void menu_goto_bookmark(struct terminal *term, void *url, struct session *ses) {
  * This returns a pointer to the url's data. Be gentle with it.
  *
  * Returns a NULL if the bookmark has no url, AND if the passed bookmark id is
- * invalid.
- */
-const unsigned char *bookmark_get_url(bookmark_id id) {
+ * invalid. */
+const unsigned char *
+bookmark_get_url(bookmark_id id)
+{
 	struct bookmark *bm = get_bookmark_by_id(id);
 
-	if (bm == NULL) {
-		return NULL;
-	}
+	if (!bm) return NULL;
 
 	return bm->url;
 }
 
+
 /* Gets the name of the requested bookmark.
  *
- * See bookmark_get_url() for further comments.
- */
-const unsigned char *bookmark_get_name(bookmark_id id) {
+ * See bookmark_get_url() for further comments. */
+const unsigned char *
+bookmark_get_name(bookmark_id id)
+{
 	struct bookmark *bm = get_bookmark_by_id(id);
 
-	if (bm == NULL) {
-		return NULL;
-	}
+	if (!bm) return NULL;
 
 	return bm->title;
 }
@@ -541,37 +557,18 @@ const unsigned char *bookmark_get_name(bookmark_id id) {
 
 
 /* Goes to the called bookmark */
-void bookmark_goto(bookmark_id id, struct session *ses) {
-	struct bookmark *bm;
-	bm = get_bookmark_by_id(id);
-
-	if (bm)
-		goto_url(ses, bm->url);
-
-}
-
-/* Shows the bookmark list */
-/* Unused function for now. --Zas */
-#if 0
-void bookmark_menu(struct terminal *term, void *ddd, struct session *ses)
+void
+bookmark_goto(bookmark_id id, struct session *ses)
 {
-	struct bookmark *bm;
-	struct menu_item *mi;
+	struct bookmark *bm = get_bookmark_by_id(id);
 
-	if (!(mi = new_menu(3)))
-		return;
-
-	foreach(bm, bookmarks) {
-		add_to_menu(&mi, stracpy(bm->title), "", 0, MENU_FUNC menu_goto_bookmark, (void *)bm->url, 0);
-	}
-
-	do_menu(term, mi, ses);
+	if (bm) goto_url(ses, bm->url);
 }
-#endif
 
 
 /* Called to setup the bookmark dialog */
-void layout_bookmark_manager(struct dialog_data *dlg)
+void
+layout_bookmark_manager(struct dialog_data *dlg)
 {
 	int max = 0, min = 0;
 	int w, rw;
@@ -599,9 +596,11 @@ void layout_bookmark_manager(struct dialog_data *dlg)
 	w = rw = 50;
 
 	y += 1;	/* Blankline between top and top of box */
-	dlg_format_box(NULL, term, &dlg->items[BM_BOX_IND], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
+	dlg_format_box(NULL, term, &dlg->items[BM_BOX_IND], dlg->x + DIALOG_LB,
+		       &y, w, NULL, AL_LEFT);
 	y += 1;	/* Blankline between box and menu */
-	dlg_format_buttons(NULL, term, dlg->items, BM_BOX_IND, 0, &y, w, &rw, AL_CENTER);
+	dlg_format_buttons(NULL, term, dlg->items, BM_BOX_IND, 0,
+			   &y, w, &rw, AL_CENTER);
 	w = rw;
 	dlg->xw = w + 2 * DIALOG_LB;
 	dlg->yw = y + 2 * DIALOG_TB;
@@ -610,31 +609,46 @@ void layout_bookmark_manager(struct dialog_data *dlg)
 	y = dlg->y + DIALOG_TB;
 
 	y++;
-	dlg_format_box(term, term, &dlg->items[BM_BOX_IND], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
+	dlg_format_box(term, term, &dlg->items[BM_BOX_IND], dlg->x + DIALOG_LB,
+		       &y, w, NULL, AL_LEFT);
 	y++;
-	dlg_format_buttons(term, term, &dlg->items[0], BM_BOX_IND, dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
+	dlg_format_buttons(term, term, &dlg->items[0], BM_BOX_IND,
+			   dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
 }
 
 
-void launch_bm_add_doc_dialog(struct terminal *, struct dialog_data *, struct session *);
+void launch_bm_add_doc_dialog(struct terminal *, struct dialog_data *,
+			      struct session *);
+
 
 /* Callback for the "add" button in the bookmark manager */
-int push_add_button(struct dialog_data *dlg, struct dialog_item_data *di) {
-	launch_bm_add_doc_dialog(dlg->win->term, dlg, (struct session *) dlg->dlg->udata);
+int
+push_add_button(struct dialog_data *dlg, struct dialog_item_data *di)
+{
+	launch_bm_add_doc_dialog(dlg->win->term, dlg,
+				 (struct session *) dlg->dlg->udata);
 	return 0;
 }
 
-void launch_bm_search_doc_dialog(struct terminal *, struct dialog_data *, struct session *);
+
+void launch_bm_search_doc_dialog(struct terminal *, struct dialog_data *,
+				 struct session *);
+
 
 /* Callback for the "search" button in the bookmark manager */
-int push_search_button(struct dialog_data *dlg, struct dialog_item_data *di) {
-	launch_bm_search_doc_dialog(dlg->win->term, dlg, (struct session *) dlg->dlg->udata);
+int
+push_search_button(struct dialog_data *dlg, struct dialog_item_data *di)
+{
+	launch_bm_search_doc_dialog(dlg->win->term, dlg,
+				    (struct session *) dlg->dlg->udata);
 	return 0;
 }
 
 
 /* Called when the goto button is pushed */
-int push_goto_button(struct dialog_data *dlg, struct dialog_item_data *goto_btn) {
+int
+push_goto_button(struct dialog_data *dlg, struct dialog_item_data *goto_btn)
+{
 	bookmark_id id;
 	struct dlg_data_item_data_box *box;
 
@@ -644,6 +658,7 @@ int push_goto_button(struct dialog_data *dlg, struct dialog_item_data *goto_btn)
 	id = bookmark_dlg_box_id_get(box);
 	if (id != BAD_BOOKMARK_ID)
 		bookmark_goto(id, (struct session*)goto_btn->item->udata);
+
 	/* FIXME There really should be some feedback to the user here */
 
 	/* Close the bookmark dialog */
@@ -651,8 +666,10 @@ int push_goto_button(struct dialog_data *dlg, struct dialog_item_data *goto_btn)
 	return 0;
 }
 
+
 /* Called when an edit is complete. */
-void bookmark_edit_done(struct dialog *d) {
+void
+bookmark_edit_done(struct dialog *d) {
 	bookmark_id id = (bookmark_id)d->udata2;
 	struct dialog_data *parent;
 
@@ -662,15 +679,21 @@ void bookmark_edit_done(struct dialog *d) {
 
 	/* Tell the bookmark dialog to redraw */
 	if (parent)
-		bookmark_dlg_list_update(&(((struct dlg_data_item_data_box*)parent->dlg->items[BM_BOX_IND].data)->items));
+		bookmark_dlg_list_update(
+			&((struct dlg_data_item_data_box *)
+			  parent->dlg->items[BM_BOX_IND].data)->items);
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
 #endif
 }
 
+
 /* Called when the edit button is pushed */
-int push_edit_button(struct dialog_data *dlg, struct dialog_item_data *edit_btn) {
+int
+push_edit_button(struct dialog_data *dlg,
+		 struct dialog_item_data *edit_btn)
+{
 	bookmark_id id;
 	struct dlg_data_item_data_box *box;
 
@@ -691,7 +714,8 @@ int push_edit_button(struct dialog_data *dlg, struct dialog_item_data *edit_btn)
 }
 
 
-/* Used to carry extra info between the push_delete_button() and the really_del_bookmark_ */
+/* Used to carry extra info between the push_delete_button() and the
+ * really_del_bookmark() */
 struct push_del_button_hop_struct {
 	struct dialog *dlg;
 	struct dlg_data_item_data_box *box;
@@ -700,7 +724,9 @@ struct push_del_button_hop_struct {
 
 
 /* Called to _really_ delete a bookmark (a confirm in the delete dialog) */
-void really_del_bookmark(void *vhop) {
+void
+really_del_bookmark(void *vhop)
+{
 	struct push_del_button_hop_struct *hop;
 	int last;
 
@@ -709,10 +735,11 @@ void really_del_bookmark(void *vhop) {
 	if (!delete_bookmark_by_id(hop->id))
 		return;
 
-	last = bookmark_dlg_list_update(&(hop->box->items));
+	last = bookmark_dlg_list_update(&(hop->box->items)) - 1;
+
 	/* In case we deleted the last bookmark */
-	if (hop->box->sel >= (last - 1))
-		hop->box->sel = last - 1;
+	if (hop->box->sel >= last)
+		hop->box->sel = last;
 
 	/* Made in push_delete_button() */
 	/*mem_free(vhop);*/
@@ -724,7 +751,10 @@ void really_del_bookmark(void *vhop) {
 
 
 /* Callback for the "delete" button in the bookmark manager */
-int push_delete_button(struct dialog_data *dlg, struct dialog_item_data *some_useless_delete_button) {
+int
+push_delete_button(struct dialog_data *dlg,
+		   struct dialog_item_data *some_useless_delete_button)
+{
 	struct bookmark *bm;
 	struct push_del_button_hop_struct *hop;
 	struct terminal *term;
@@ -760,7 +790,8 @@ int push_delete_button(struct dialog_data *dlg, struct dialog_item_data *some_us
 
 
 /* Builds the "Bookmark manager" dialog */
-void menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
+void
+menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 #define BM_DIALOG_MEMSIZE (sizeof(struct dialog) \
 		           + (BM_BOX_IND + 2) * sizeof(struct dialog_item) \
@@ -793,7 +824,6 @@ void menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses
 	d->fn = layout_bookmark_manager;
 	d->handle_event = bookmark_dialog_event_handler;
 	d->abort = bookmark_dialog_abort_handler;
-/*	bookmark_build_dlg_list(d);*/	/* Where the currently displayed list goes */
 	d->udata = ses;
 
 	d->items[0].type = D_BUTTON;
@@ -828,23 +858,25 @@ void menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses
 	d->items[5].fn = cancel_dialog;
 	d->items[5].text = TEXT(T_CLOSE);
 
-	d->items[BM_BOX_IND].type = D_BOX; /* MP: D_BOX is nonsense. I tried to remove it, but didn't succeed. */
+	/* MP: D_BOX is nonsense. I tried to remove it, but didn't succeed. */
+	d->items[BM_BOX_IND].type = D_BOX;
 	d->items[BM_BOX_IND].gid = 12;
-	/* d->items[5].data = (void *) bookmark_dlg_box_build(); */ /* Where the currently displayed list goes */
+
 	bookmark_dlg_box_build((struct dlg_data_item_data_box **) &(d->items[BM_BOX_IND].data));
 
 	d->items[BM_BOX_IND + 1].type = D_END;
 	do_dialog(term, d, getml(d, NULL));
 }
 
-/****************************************************************************
-*
-* Bookmark add dialog
-*
-****************************************************************************/
+/****************************************************************************\
+ *
+ * Bookmark add dialog
+ *
+\****************************************************************************/
 
 /* Adds the bookmark */
-void bookmark_add_add(struct dialog *d)
+void
+bookmark_add_add(struct dialog *d)
 {
 	struct dialog_data *parent;
 
@@ -854,15 +886,19 @@ void bookmark_add_add(struct dialog *d)
 
 	/* Tell the bookmark dialog to redraw */
 	if (parent)
-		bookmark_dlg_list_update(&(((struct dlg_data_item_data_box *) parent->dlg->items[BM_BOX_IND].data)->items));
+		bookmark_dlg_list_update(
+			&((struct dlg_data_item_data_box *)
+			  parent->dlg->items[BM_BOX_IND].data)->items);
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
 #endif
 }
 
+
 /* Search bookmarks */
-void bookmark_search_do(struct dialog *d)
+void
+bookmark_search_do(struct dialog *d)
 {
 	struct dialog_data *parent;
 	int res;
@@ -871,36 +907,52 @@ void bookmark_search_do(struct dialog *d)
 
 	parent = d->udata;
 
+	/* XXX! How to split these long lines ??? --Zas */
 	/* Tell the bookmark dialog to redraw */
 	if (parent && res) {
-		((struct dlg_data_item_data_box *) parent->dlg->items[BM_BOX_IND].data)->box_top = 0;
-		((struct dlg_data_item_data_box *) parent->dlg->items[BM_BOX_IND].data)->sel = 0;
+		((struct dlg_data_item_data_box *)
+		 parent->dlg->items[BM_BOX_IND].data)->box_top = 0;
+		((struct dlg_data_item_data_box *)
+		 parent->dlg->items[BM_BOX_IND].data)->sel = 0;
 
-		bookmark_dlg_list_update(&(((struct dlg_data_item_data_box *) parent->dlg->items[BM_BOX_IND].data)->items));
+		bookmark_dlg_list_update(
+			&((struct dlg_data_item_data_box *)
+			  parent->dlg->items[BM_BOX_IND].data)->items);
 	}
 }
 
 
-void launch_bm_add_doc_dialog(struct terminal *term,struct dialog_data *parent,struct session *ses) {
-	bookmark_edit_dialog(term, TEXT(T_ADD_BOOKMARK), NULL, NULL, ses, parent, bookmark_add_add, NULL, 1);
+/* launch_bm_add_doc_dialog() */
+void
+launch_bm_add_doc_dialog(struct terminal *term,
+			 struct dialog_data *parent,
+			 struct session *ses)
+{
+	bookmark_edit_dialog(term, TEXT(T_ADD_BOOKMARK), NULL, NULL,
+			     ses, parent, bookmark_add_add, NULL, 1);
 }
 
-void launch_bm_search_doc_dialog(struct terminal *term,struct dialog_data *parent,struct session *ses) {
-	bookmark_edit_dialog(term, TEXT(T_SEARCH_BOOKMARK), bm_last_searched_name, bm_last_searched_url, ses, parent, bookmark_search_do, NULL, 0);
+
+/* launch_bm_search_doc_dialog() */
+void
+launch_bm_search_doc_dialog(struct terminal *term,
+			    struct dialog_data *parent,
+			    struct session *ses)
+{
+	bookmark_edit_dialog(term, TEXT(T_SEARCH_BOOKMARK),
+			     bm_last_searched_name, bm_last_searched_url,
+			     ses, parent, bookmark_search_do, NULL, 0);
 }
 
 
 /* Called to launch an add dialog on the current link */
-void launch_bm_add_link_dialog(struct terminal *term,struct dialog_data *parent,struct session *ses) {
+void
+launch_bm_add_link_dialog(struct terminal *term,
+			  struct dialog_data *parent,
+			  struct session *ses)
+{
 	unsigned char url[MAX_STR_LEN];
 
-	/* FIXME: Logic error -- if there is no current link,
-	 * get_current_link_url() will return NULL, which will cause
-	 * bookmark_add_dialog() to try and use the current document's url.
-	 * Instead, it should use "".
-	 */
-	/* XXX: It seems to work correctly, and there's no bookmark_add_dialog()
-	 * so previous comment may be removed. --Zas */
 	bookmark_edit_dialog(term, TEXT(T_ADD_BOOKMARK), NULL,
 			     get_current_link_url(ses, url, MAX_STR_LEN), ses,
 			     parent, bookmark_add_add, NULL, 1);
@@ -913,8 +965,10 @@ unsigned char *bm_add_msg[] = {
 	TEXT(T_URL),
 };
 
+
 /* Called to setup the add bookmark dialog */
-void layout_add_dialog(struct dialog_data *dlg)
+void
+layout_add_dialog(struct dialog_data *dlg)
 {
 	int max = 0, min = 0;
 	int w, rw;
@@ -938,25 +992,34 @@ void layout_add_dialog(struct dialog_data *dlg)
 
 	w = rw = 50;
 
-	dlg_format_text(NULL, term, bm_add_msg[0], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(NULL, term, bm_add_msg[0], 0, &y,
+			w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
 	y += 2;
-	dlg_format_text(NULL, term, bm_add_msg[1], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(NULL, term, bm_add_msg[1], 0, &y,
+			w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
 	y += 2;
-	dlg_format_buttons(NULL, term, dlg->items + 2, 2, 0, &y, w, &rw, AL_CENTER);
+	dlg_format_buttons(NULL, term, dlg->items + 2, 2, 0,
+			   &y, w, &rw, AL_CENTER);
 	w = rw;
 	dlg->xw = w + 2 * DIALOG_LB;
 	dlg->yw = y + 2 * DIALOG_TB;
 	center_dlg(dlg);
 	draw_dlg(dlg);
 	y = dlg->y + DIALOG_TB;
-	dlg_format_text(term, term, bm_add_msg[0], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
-	dlg_format_field(NULL, term, &dlg->items[0], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
+	dlg_format_text(term, term, bm_add_msg[0], dlg->x + DIALOG_LB,
+			&y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_field(NULL, term, &dlg->items[0], dlg->x + DIALOG_LB,
+			 &y, w, NULL, AL_LEFT);
 	y++;
-	dlg_format_text(term, term, bm_add_msg[1], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
-	dlg_format_field(term, term, &dlg->items[1], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
+	dlg_format_text(term, term, bm_add_msg[1], dlg->x + DIALOG_LB,
+			&y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_field(term, term, &dlg->items[1], dlg->x + DIALOG_LB,
+			 &y, w, NULL, AL_LEFT);
 	y++;
-	dlg_format_buttons(term, term, &dlg->items[2], 3, dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
+	dlg_format_buttons(term, term, &dlg->items[2], 3, dlg->x + DIALOG_LB,
+			   &y, w, NULL, AL_CENTER);
 }
+
 
 /* Edits a bookmark's fields.
  * If parent is defined, then that points to a dialog that should be sent
@@ -964,25 +1027,23 @@ void layout_add_dialog(struct dialog_data *dlg)
  *
  * If either of src_name or src_url are NULL, try to obtain the name and url
  * of the current document. If you want to create two null fields, pass in a
- * pointer to a zero length string ("").
-*/
-void bookmark_edit_dialog(
-		struct terminal *term /* Terminal to write on. */,
-		unsigned char *title /* Title of the dialog. */,
-		const unsigned char *src_name /* Pointer to name to use. (can be null)*/,
-		const unsigned char *src_url /* Url to use. (can be null) */,
-		struct session *ses,
-		struct dialog_data *parent /* The parent window launching this one. */,
-		void when_done(struct dialog *) /* Function to execute on 'ok'. */,
-		void *done_data /* Spare data to pass to when_done. Stored in udata2 */,
-		int dialog_type /* 1 edit/add or 0 search dialog */
-) {
+ * pointer to a zero length string (""). */
+void
+bookmark_edit_dialog(struct terminal *term, unsigned char *title,
+		     const unsigned char *src_name,
+		     const unsigned char *src_url,
+		     struct session *ses, struct dialog_data *parent,
+		     void when_done(struct dialog *),
+		     void *done_data,
+		     int dialog_type /* 1 edit/add or 0 search dialog */)
+{
 	/* Number of fields in edit dialog --Zas */
 #define BM_EDIT_DIALOG_FIELDS_NB 5
 
 	/* Memory needed by edit dialog --Zas */
 #define BM_EDIT_DIALOG_MEMSIZE (sizeof(struct dialog) + \
-		                + (BM_EDIT_DIALOG_FIELDS_NB + 1) * sizeof(struct dialog_item) \
+		                + (BM_EDIT_DIALOG_FIELDS_NB + 1) \
+				* sizeof(struct dialog_item) \
 				+ sizeof(struct extension) + 2 * MAX_STR_LEN )
 
 	unsigned char *name, *url;
@@ -1000,7 +1061,7 @@ void bookmark_edit_dialog(
 	url = name + MAX_STR_LEN;
 
 	/* Get the name */
-	if (src_name == NULL) {
+	if (!src_name) {
 		/* Unknown name. */
 		get_current_title(ses, name, MAX_STR_LEN);
 	} else {
@@ -1009,7 +1070,7 @@ void bookmark_edit_dialog(
 	}
 
 	/* Get the url */
-	if (src_url == NULL) {
+	if (!src_url) {
 		/* Unknown . */
 		get_current_url(ses, url, MAX_STR_LEN);
 	} else {

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.90 2003/07/09 18:29:29 pasky Exp $ */
+/* $Id: connection.c,v 1.91 2003/07/09 18:31:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -534,7 +534,7 @@ check_keepalive_connections(void)
 	}
 
 	for (; p > MAX_KEEPALIVE_CONNECTIONS; p--) {
-		assert(!list_empty(keepalive_connections));
+		assertm(!list_empty(keepalive_connections), "keepalive list empty");
 		if_assert_failed return;
 		done_keepalive_connection(keepalive_connections.prev);
 	}

@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.63 2003/10/19 11:31:17 zas Exp $ */
+/* $Id: color.c,v 1.64 2003/10/28 14:14:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,9 +238,12 @@ void
 set_term_color(struct screen_char *schar, struct color_pair *pair,
 	       enum color_flags flags, enum color_mode color_mode)
 {
-	struct color_mode_info *mode = color_modes[color_mode];
+	struct color_mode_info *mode;
 	enum palette_range palette_range = PALETTE_FULL;
 	unsigned char fg, bg;
+
+	assert(0 <= color_mode && color_mode < COLOR_MODES);
+	mode = color_modes[color_mode];
 
 	/* Options for the various color modes. */
 	switch (color_mode) {

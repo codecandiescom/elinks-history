@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.44 2003/09/05 17:55:43 zas Exp $ */
+/* $Id: formhist.c,v 1.45 2003/09/05 21:18:26 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,7 +134,8 @@ load_saved_forms(void)
 			p = strchr(p, '\n');
 			if (p) *p = '\0';
 
-			enc_value = base64_decode(value);
+			enc_value = *value ? base64_decode(value)
+					   : stracpy(value);
 			if (!enc_value) goto fail;
 
 			sv = new_submitted_value(name, enc_value);

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.128 2003/11/16 03:19:49 jonas Exp $ */
+/* $Id: core.c,v 1.129 2003/11/16 23:20:56 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,7 +130,7 @@ l_current_document(LS)
 
 		if (f && f->length) {
 			lua_pushlstring(S, f->data, f->length);
-			return 1i;
+			return 1;
 		}
 	}
 

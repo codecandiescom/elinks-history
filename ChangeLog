@@ -1,3 +1,9 @@
+Thu Mar  7 12:54:13 2002  Petr Baudis <pasky@ji.cz>:
+
+	* INSTALL, README, SITES:
+	
+	various updates and rewrites
+
 Thu Mar  7 07:50:07 2002  Petr Baudis <pasky@ji.cz>:
 
 	* menu.c:

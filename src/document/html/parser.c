@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.400 2004/04/23 22:04:17 pasky Exp $ */
+/* $Id: parser.c,v 1.401 2004/04/23 22:28:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2733,6 +2733,9 @@ free_and_return:
 	html_link_clear(&link);
 }
 
+
+
+
 struct element_info {
 	unsigned char *name;
 	void (*func)(unsigned char *);
@@ -2863,6 +2866,7 @@ process_head(unsigned char *head)
 	}
 }
 
+
 #ifndef USE_FASTFIND
 
 static int
@@ -2905,6 +2909,7 @@ tags_list_next(void)
 
 #endif /* USE_FASTFIND */
 
+
 void
 init_tags_lookup(void)
 {
@@ -2922,6 +2927,7 @@ free_tags_lookup(void)
 	fastfind_done(ff_info_tags);
 #endif
 }
+
 
 void
 parse_html(unsigned char *html, unsigned char *eof,
@@ -3229,6 +3235,9 @@ ng:;
 	/*line_breax = 1;*/
 	was_br = 0;
 }
+
+
+
 
 static int
 look_for_map(unsigned char **pos, unsigned char *eof, unsigned char *tag)
@@ -3565,6 +3574,8 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	return 0;
 }
 
+
+
 struct html_element *
 init_html_parser_state(enum html_element_type type, int align, int margin, int width)
 {
@@ -3609,6 +3620,8 @@ done_html_parser_state(struct html_element *element)
 	kill_html_stack_item(&html_top);
 
 }
+
+
 
 void
 init_html_parser(unsigned char *url, struct document_options *options,

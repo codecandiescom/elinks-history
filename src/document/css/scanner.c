@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.68 2004/01/21 04:44:29 jonas Exp $ */
+/* $Id: scanner.c,v 1.69 2004/01/21 05:05:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,47 +48,50 @@ enum css_char_group {
 struct css_identifier {
 	unsigned char *name;
 	enum css_token_type type;
+	enum css_token_type base_type;
 };
 
 static inline enum css_token_type
-get_css_identifier_type(unsigned char *ident, int length)
+get_css_identifier_type(unsigned char *ident, int length,
+			enum css_token_type base_type)
 {
 	static struct css_identifier identifiers2type[] = {
-		{ "Hz",   CSS_TOKEN_FREQUENCY },
-		{ "cm",	  CSS_TOKEN_LENGTH },
-		{ "deg",  CSS_TOKEN_ANGLE },
-		{ "em",   CSS_TOKEN_EM },
-		{ "ex",   CSS_TOKEN_EX },
-		{ "grad", CSS_TOKEN_ANGLE },
-		{ "in",   CSS_TOKEN_LENGTH },
-		{ "kHz",  CSS_TOKEN_FREQUENCY },
-		{ "mm",   CSS_TOKEN_LENGTH },
-		{ "mm",   CSS_TOKEN_LENGTH },
-		{ "ms",   CSS_TOKEN_TIME },
-		{ "pc",   CSS_TOKEN_LENGTH },
-		{ "pt",   CSS_TOKEN_LENGTH },
-		{ "px",   CSS_TOKEN_LENGTH },
-		{ "rad",  CSS_TOKEN_ANGLE },
-		{ "s",    CSS_TOKEN_TIME },
+		{ "Hz",		CSS_TOKEN_FREQUENCY,	CSS_TOKEN_DIMENSION },
+		{ "cm",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
+		{ "deg",	CSS_TOKEN_ANGLE,	CSS_TOKEN_DIMENSION },
+		{ "em",		CSS_TOKEN_EM,		CSS_TOKEN_DIMENSION },
+		{ "ex",		CSS_TOKEN_EX,		CSS_TOKEN_DIMENSION },
+		{ "grad",	CSS_TOKEN_ANGLE,	CSS_TOKEN_DIMENSION },
+		{ "in",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
+		{ "kHz",	CSS_TOKEN_FREQUENCY,	CSS_TOKEN_DIMENSION },
+		{ "mm",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
+		{ "mm",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
+		{ "ms",		CSS_TOKEN_TIME,		CSS_TOKEN_DIMENSION },
+		{ "pc",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
+		{ "pt",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
+		{ "px",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
+		{ "rad",	CSS_TOKEN_ANGLE,	CSS_TOKEN_DIMENSION },
+		{ "s",		CSS_TOKEN_TIME,		CSS_TOKEN_DIMENSION },
 
-		{ "charset",	CSS_TOKEN_CHARSET },
-		{ "font-face",	CSS_TOKEN_FONT_FACE },
-		{ "import",	CSS_TOKEN_IMPORT },
-		{ "media",	CSS_TOKEN_MEDIA },
-		{ "page",	CSS_TOKEN_PAGE },
+		{ "charset",	CSS_TOKEN_CHARSET,	CSS_TOKEN_AT_KEYWORD },
+		{ "font-face",	CSS_TOKEN_FONT_FACE,	CSS_TOKEN_AT_KEYWORD },
+		{ "import",	CSS_TOKEN_IMPORT,	CSS_TOKEN_AT_KEYWORD },
+		{ "media",	CSS_TOKEN_MEDIA,	CSS_TOKEN_AT_KEYWORD },
+		{ "page",	CSS_TOKEN_PAGE,		CSS_TOKEN_AT_KEYWORD },
 
-		{ NULL, CSS_TOKEN_NONE },
+		{ NULL, CSS_TOKEN_NONE, CSS_TOKEN_NONE },
 	};
 	int i;
 
 	for (i = 0; identifiers2type[i].name; i++) {
-		unsigned char *name = identifiers2type[i].name;
+		struct css_identifier *ident = &identifiers2type[i];
 
-		if (!strncasecmp(name, ident, length))
+		if (ident->base_type == base_type
+		    && !strncasecmp(name, ident, length))
 			return identifiers2type[i].type;
 	}
 
-	return CSS_TOKEN_DIMENSION;
+	return base_type;
 }
 
 
@@ -154,7 +157,8 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			unsigned char *ident = string;
 
 			scan_css(string, CSS_CHAR_IDENT);
-			type = get_css_identifier_type(ident, string - ident);
+			type = get_css_identifier_type(ident, string - ident,
+							CSS_TOKEN_DIMENSION);
 		}
 
 	} else if (first_char == '#') {
@@ -185,7 +189,8 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 
 			/* Scan both ident start and ident */
 			scan_css(string, CSS_CHAR_IDENT);
-			type = get_css_identifier_type(ident, string - ident);
+			type = get_css_identifier_type(ident, string - ident,
+						       CSS_TOKEN_AT_KEYWORD);
 		}
 
 	} else if (first_char == '!') {

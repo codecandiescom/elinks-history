@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.43 2003/11/07 18:45:39 jonas Exp $ */
+/* $Id: button.c,v 1.44 2003/12/01 15:23:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "terminal/draw.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
+#include "terminal/window.h"
 
 
 static void

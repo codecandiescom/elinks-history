@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.44 2004/01/17 01:43:15 jonas Exp $ */
+/* $Id: tab.c,v 1.45 2004/01/17 01:48:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -232,17 +232,16 @@ close_all_tabs_but_current(struct session *ses)
 }
 
 
-static void
-do_open_in_new_tab(struct terminal *term, struct session *ses,
-		   unsigned char *url, int in_background)
+void
+open_url_in_new_tab(struct session *ses, unsigned char *url, int in_background)
 {
 	struct window *tab;
 	struct initial_session_info *info;
 	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 0, 0, 0);
 
-	assert(term && ses);
+	assert(ses);
 
-	tab = init_tab(term, in_background);
+	tab = init_tab(ses->tab->term, in_background);
 	if (!tab) return;
 
 	info = mem_calloc(1, sizeof(struct initial_session_info));
@@ -277,11 +276,5 @@ get_tab_link_url(struct session *ses)
 void
 open_in_new_tab(struct session *ses, int link, int in_background)
 {
-	do_open_in_new_tab(ses->tab->term, ses, link ? get_tab_link_url(ses) : NULL, in_background);
-}
-
-void
-open_url_in_new_tab(struct session *ses, unsigned char *url, int in_background)
-{
-	do_open_in_new_tab(ses->tab->term, ses, url, in_background);
+	open_url_in_new_tab(ses, link ? get_tab_link_url(ses) : NULL, in_background);
 }

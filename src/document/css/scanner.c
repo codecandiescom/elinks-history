@@ -1,10 +1,11 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.62 2004/01/21 01:20:01 jonas Exp $ */
+/* $Id: scanner.c,v 1.63 2004/01/21 03:04:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <stdio.h>
 #include <string.h>
 
 #include "elinks.h"
@@ -324,13 +325,51 @@ scan_css_tokens(struct css_scanner *scanner)
 struct css_token *
 get_css_token_debug(struct css_scanner *scanner)
 {
-	if (css_scanner_has_tokens(scanner)) {
-		struct css_token *token = scanner->current;
+	unsigned char buffer[MAX_STR_LEN];
+	struct css_token *token = scanner->current;
+	struct css_token *table_end = scanner->table + scanner->tokens;
+	unsigned char *srcpos = token->string, *bufpos = buffer;
+	int src_lookahead = 50;
+	int token_lookahead = 4;
+	int srclen;
 
-		errfile = scanner->file, errline = scanner->line;
-		elinks_wdebug("<%s> %d %d [%s]", scanner->function, token->type,
-			      token->length, token->string);
+	if (!css_scanner_has_tokens(scanner)) return NULL;
+
+	memset(buffer, 0, MAX_STR_LEN);
+	for (; token_lookahead > 0 && token < table_end; token++, token_lookahead--) {
+		int buflen = MAX_STR_LEN - (bufpos - buffer);
+		int added = snprintf(bufpos, buflen, "[%.*s] ", token->length, token->string);
+
+		bufpos += added;
 	}
+
+	if (scanner->tokens > token_lookahead) {
+		memcpy(bufpos, "... ", 4);
+		bufpos += 4;
+	}
+
+	srclen = strlen(srcpos);
+	int_upper_bound(&src_lookahead, srclen);
+	*bufpos++ = '[';
+
+	/* Compress the lookahead string */
+	for (; src_lookahead > 0; src_lookahead--, srcpos++, bufpos++) {
+		if (*srcpos == '\n' || *srcpos == '\r' || *srcpos == '\t') {
+			*bufpos++ = '\\';
+			*bufpos = *srcpos == '\n' ? 'n'
+				: (*srcpos == '\r' ? 'r' : 't');
+		} else {
+			*bufpos = *srcpos;
+		}
+	}
+
+	if (srclen > src_lookahead)
+		memcpy(bufpos, "...]", 4);
+	else
+		memcpy(bufpos, "]", 2);
+
+	errfile = scanner->file, errline = scanner->line;
+	elinks_wdebug("%s", buffer);
 
 	/* Make sure we do not return CSS_TOKEN_NONE tokens */
 	assert(!css_scanner_has_tokens(scanner)

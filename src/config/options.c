@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.28 2002/05/19 19:34:57 pasky Exp $ */
+/* $Id: options.c,v 1.29 2002/05/21 18:54:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,7 +59,7 @@ get_opt_rec(struct hash *hash, unsigned char *_name)
 	while ((sep = strchr(name, '|'))) {
 		*sep = 0;
 
-		item = get_hash_item(hash, name);
+		item = get_hash_item(hash, name, strlen(name));
 		if (!item) {
 			mem_free(aname);
 			return NULL;
@@ -70,7 +70,7 @@ get_opt_rec(struct hash *hash, unsigned char *_name)
 		name = sep + 1;
 	}
 
-	item = get_hash_item(hash, name);
+	item = get_hash_item(hash, name, strlen(name));
 	mem_free(aname);
 	if (!item) return NULL;
 
@@ -110,7 +110,7 @@ add_opt_rec(struct hash *hash, unsigned char *path, struct option *option)
 		if (sep) *sep = 0;
 		else sep = name + strlen(name) - 1;
 
-		item = get_hash_item(hash, name);
+		item = get_hash_item(hash, name, strlen(name));
 		if (!item) {
 			mem_free(aname);
 			mem_free(aopt);
@@ -123,7 +123,7 @@ add_opt_rec(struct hash *hash, unsigned char *path, struct option *option)
 	}
 	mem_free(aname);
 
-	add_hash_item(hash, stracpy(option->name), aopt);
+	add_hash_item(hash, stracpy(option->name), strlen(option->name), aopt);
 }
 
 void
@@ -155,7 +155,7 @@ init_options_hash()
 {
 	/* 6 bits == 64 entries; I guess it's the best number for options
 	 * hash. --pasky */
-	struct hash *hash = init_hash(6);
+	struct hash *hash = init_hash(6, &strhash);
 
 	return hash;
 }

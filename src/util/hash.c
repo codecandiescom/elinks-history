@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.5 2002/05/19 15:01:12 pasky Exp $ */
+/* $Id: hash.c,v 1.6 2002/05/21 18:54:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,7 +23,7 @@
 #define hash_mask(n) (hash_size(n) - 1)
 
 struct hash *
-init_hash(int width)
+init_hash(int width, hash_func func)
 {
 	struct hash *hash = mem_alloc(sizeof(struct hash));
 	int i;
@@ -33,6 +33,7 @@ init_hash(int width)
 	}
 
 	hash->width = width;
+	hash->func = func;
 
 	hash->hash = mem_alloc(hash_size(width) * sizeof(struct list_head));
 	if (!hash->hash) {
@@ -67,23 +68,25 @@ free_hash(struct hash *hash)
 }
 
 
-hash_value mkhash(unsigned char *, int, hash_value);
-
 /* I've no much idea about what to set here.. I think it doesn't matter much
  * anyway.. ;) --pasky */
 #define magic 0xdeadbeef
 
+
 /* Returns hash_item if ok, NULL if error. */
 struct hash_item *
-add_hash_item(struct hash *hash, unsigned char *key, void *value)
+add_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen,
+	      void *value)
 {
+	hash_value hashval;
 	struct hash_item *item = mem_alloc(sizeof(struct hash_item));
-	hash_value hashval = mkhash(key, strlen(key), magic)
-			     & hash_mask(hash->width);
 
 	if (!item) return NULL;
+	
+	hashval = hash->func(key, keylen, magic) & hash_mask(hash->width);
 
 	item->key = key;
+	item->keylen = keylen;
 	item->value = value;
 
 	add_to_list(hash->hash[hashval], item);
@@ -92,19 +95,21 @@ add_hash_item(struct hash *hash, unsigned char *key, void *value)
 }
 
 struct hash_item *
-get_hash_item(struct hash *hash, unsigned char *key)
+get_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen)
 {
 	struct hash_item *item;
-	hash_value hashval = mkhash(key, strlen(key), magic)
+	hash_value hashval = hash->func(key, keylen, magic)
 			     & hash_mask(hash->width);
 
 	foreach (item, hash->hash[hashval]) {
-		if (!strcmp(key, item->key))
+		if (keylen == item->keylen && !memcmp(key, item->key, keylen))
 			return item;
 	}
 
 	return NULL;
 }
+
+#undef magic
 
 void
 del_hash_item(struct hash *hash, struct hash_item *item)
@@ -194,9 +199,9 @@ del_hash_item(struct hash *hash, struct hash_item *item)
 			+ ((hash_value)(k[(a)+3])<<24))
 
 hash_value
-mkhash(	register unsigned char *k, /* the key */
-	register int length, /* the length of the key */
-	register hash_value initval /* the previous hash, or an arbitrary value */)
+strhash(unsigned char *k, /* the key */
+	unsigned int length, /* the length of the key */
+	hash_value initval /* the previous hash, or an arbitrary value */)
 {
 	register int len;
 	register hash_value a, b, c;
@@ -242,3 +247,4 @@ mkhash(	register unsigned char *k, /* the key */
 
 #undef keycompute
 #undef mix
+#undef hash_mask

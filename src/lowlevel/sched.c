@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.60 2002/12/05 23:38:36 pasky Exp $ */
+/* $Id: sched.c,v 1.61 2002/12/06 14:17:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -983,6 +983,8 @@ load_url(unsigned char *url, unsigned char *prev_url,
 	c->pri[pri] = 1;
 	c->cache_mode = cache_mode;
 	c->sock1 = c->sock2 = -1;
+	c->content_encoding = ENCODING_NONE;
+	c->stream_pipes[0] = c->stream_pipes[1] = -1;
 	c->dnsquery = NULL;
 	c->conn_info = NULL;
 	c->info = NULL;

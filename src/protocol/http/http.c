@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.75 2002/12/05 23:38:36 pasky Exp $ */
+/* $Id: http.c,v 1.76 2002/12/06 14:17:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1230,8 +1230,6 @@ again:
 	}
 	if (info->length == -1 || (version < 11 && info->close)) rb->close = 1;
 
-	c->content_encoding = ENCODING_NONE;
-	c->stream_pipes[0] = c->stream_pipes[1] = -1;
 	d = parse_http_header(e->head, "Content-Type", NULL);
 	if (d) {
 		if (!strncmp(d, "text", 4)) {

@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.70 2004/08/02 23:37:48 jonas Exp $ */
+/* $Id: connect.c,v 1.71 2004/08/03 00:10:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,16 +189,16 @@ ssl_connect(struct connection *conn, struct connection_socket *socket)
 {
 	int ret;
 
-	assertm(conn->socket.ssl /* FIXME: Assuming ssl handle */, "No ssl handle");
+	assertm(socket->ssl, "No ssl handle");
 	if_assert_failed goto ssl_error;
 	if (conn->no_tsl)
 		ssl_set_no_tls(conn);
 
 #ifdef CONFIG_OPENSSL
-	SSL_set_fd(conn->socket.ssl /* FIXME: Assuming ssl handle */, socket->fd);
+	SSL_set_fd(socket->ssl, socket->fd);
 
 	if (get_opt_bool("connection.ssl.cert_verify"))
-		SSL_set_verify(conn->socket.ssl /* FIXME: Assuming ssl handle */, SSL_VERIFY_PEER
+		SSL_set_verify(socket->ssl, SSL_VERIFY_PEER
 					  | SSL_VERIFY_FAIL_IF_NO_PEER_CERT,
 				NULL);
 
@@ -213,7 +213,7 @@ ssl_connect(struct connection *conn, struct connection_socket *socket)
 		}
 
 		if (client_cert) {
-			SSL_CTX *ctx = ((SSL *)conn->socket.ssl /* FIXME: Assuming ssl handle */)->ctx;
+			SSL_CTX *ctx = ((SSL *)socket->ssl)->ctx;
 
 			SSL_CTX_use_certificate_chain_file(ctx, client_cert);
 			SSL_CTX_use_PrivateKey_file(ctx, client_cert,
@@ -222,7 +222,7 @@ ssl_connect(struct connection *conn, struct connection_socket *socket)
 	}
 
 #elif defined(CONFIG_GNUTLS)
-	gnutls_transport_set_ptr(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */),
+	gnutls_transport_set_ptr(*((ssl_t *) socket->ssl),
 				 (gnutls_transport_ptr) socket->fd);
 
 	/* TODO: Some certificates fuss. --pasky */
@@ -241,7 +241,7 @@ ssl_connect(struct connection *conn, struct connection_socket *socket)
 		case SSL_ERROR_NONE:
 #ifdef CONFIG_GNUTLS
 			if (get_opt_bool("connection.ssl.cert_verify"))
-				if (gnutls_certificate_verify_peers(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */)))
+				if (gnutls_certificate_verify_peers(*((ssl_t *) socket->ssl)))
 					goto ssl_error;
 #endif
 			break;

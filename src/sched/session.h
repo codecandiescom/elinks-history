@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.124 2004/04/24 11:41:26 jonas Exp $ */
+/* $Id: session.h,v 1.125 2004/05/13 00:19:44 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -53,10 +53,11 @@ struct frame {
 struct kbdprefix {
 	int rep;
 	int rep_num;
-
+#ifdef CONFIG_MARKS
 	/* If the previous key was a mark prefix, this describes what kind of
 	 * action are we supposed to do when we receive the next key. */
 	enum { KP_MARK_NOTHING, KP_MARK_SET, KP_MARK_GOTO } mark;
+#endif
 };
 
 struct session;

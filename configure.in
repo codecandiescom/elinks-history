@@ -943,6 +943,10 @@ EL_ARG_ENABLE(CONFIG_LEDS, leds, [LEDs],
 	      [  --enable-leds           enable LEDs support])
 AM_CONDITIONAL(CONFIG_LEDS, test "$CONFIG_LEDS" = yes)
 
+EL_ARG_ENABLE(CONFIG_MARKS, marks, [Marks],
+	      [  --disable-marks         disable document marks support])
+AM_CONDITIONAL(CONFIG_MARKS, test "$CONFIG_MARKS" = yes)
+
 
 EL_ARG_ENABLE(CONFIG_CSS, css, [Cascading Style Sheets],
 	      [  --disable-css           disable Cascading Style Sheet support])

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.405 2004/05/11 09:33:00 zas Exp $ */
+/* $Id: view.c,v 1.406 2004/05/13 00:19:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -547,6 +547,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 		return 1;
 
 	if (ev->ev == EV_KBD) {
+#ifdef CONFIG_MARKS
 		if (ses->kbdprefix.mark != KP_MARK_NOTHING) {
 			/* Marks */
 			unsigned char mark = ev->x;
@@ -585,6 +586,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			ses->kbdprefix.mark = KP_MARK_NOTHING;
 			return 1;
 		}
+#endif
 
 		if (ev->x >= '0' + !ses->kbdprefix.rep && ev->x <= '9'
 		    && (ev->y
@@ -670,14 +672,18 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			case ACT_MAIN_ENTER_RELOAD: x = enter(ses, doc_view, 1); break;
 			case ACT_MAIN_JUMP_TO_LINK: x = 2; break;
 			case ACT_MAIN_MARK_SET:
+#ifdef CONFIG_MAKRS
 				ses->kbdprefix.mark = KP_MARK_SET;
+#endif
 				x = 2;
 				break;
 			case ACT_MAIN_MARK_GOTO:
+#ifdef CONFIG_MARKS
 				/* TODO: Show promptly a menu (or even listbox?)
 				 * with all the marks. But the next letter must
 				 * still choose a mark directly! --pasky */
 				ses->kbdprefix.mark = KP_MARK_GOTO;
+#endif
 				x = 2;
 				break;
 			default:

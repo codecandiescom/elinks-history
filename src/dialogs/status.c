@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.79 2004/08/02 16:26:13 zas Exp $ */
+/* $Id: status.c,v 1.80 2004/08/15 08:23:09 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -211,7 +211,25 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 	int msglen;
 	struct box box;
 
-	if (stat) {
+	if (ses->kbdprefix.mark != KP_MARK_NOTHING) {
+		switch (ses->kbdprefix.mark) {
+			case KP_MARK_NOTHING:
+				assert(0);
+				break;
+
+			case KP_MARK_SET:
+				msg = msg_text(term, N_("Enter a mark to set"));
+				break;
+
+			case KP_MARK_GOTO:
+				msg = msg_text(term, N_("Enter a mark"
+							" to which to jump"));
+				break;
+		}
+	} else if (ses->kbdprefix.repeat_count) {
+		msg = msg_text(term, N_("Keyboard prefix: %d"),
+			       ses->kbdprefix.repeat_count);
+	} else if (stat) {
 		struct document_view *doc_view = current_frame(ses);
 
 		/* Show S_INTERRUPTED message *once* but then show links

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.579 2004/08/15 07:54:38 miciah Exp $ */
+/* $Id: view.c,v 1.580 2004/08/15 08:23:10 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -890,6 +890,8 @@ send_to_frame(struct session *ses, struct term_event *ev)
 
 	if (status == FRAME_EVENT_REFRESH)
 		refresh_view(ses, doc_view, 0);
+	else
+		print_screen_status(ses);
 
 	return status;
 }

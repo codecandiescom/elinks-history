@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.13 2003/10/26 15:19:32 zas Exp $ */
+/* $Id: inpfield.h,v 1.14 2003/10/26 15:47:24 zas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -10,14 +10,14 @@
 #include "terminal/terminal.h"
 #include "util/memlist.h"
 
-#define add_dlg_field_do(dlg, n, t, min_, max_, handler, len, field_, hist)	\
+#define add_dlg_field_do(dlg, n, t, min_, max_, handler, datalen_, data_, hist)	\
 	do {								\
 		(dlg)->widgets[n].type = (t);				\
 		(dlg)->widgets[n].info.field.min = (min_);		\
 		(dlg)->widgets[n].info.field.max = (max_);		\
 		(dlg)->widgets[n].fn = (handler);			\
-		(dlg)->widgets[n].dlen = (len);				\
-		(dlg)->widgets[n].data = (field_);			\
+		(dlg)->widgets[n].datalen = (datalen_);			\
+		(dlg)->widgets[n].data = (data_);			\
 		(dlg)->widgets[n].history = (hist);			\
 		(n)++;							\
 	} while (0)

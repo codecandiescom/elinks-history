@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.94 2003/10/26 14:02:35 jonas Exp $ */
+/* $Id: core.c,v 1.95 2003/10/26 15:47:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -583,7 +583,7 @@ l_xdialog(LS)
 
 	for (i = 0; i < nfields; i++) {
 		dlg->widgets[i].type = D_FIELD;
-		dlg->widgets[i].dlen = MAX_STR_LEN;
+		dlg->widgets[i].datalen = MAX_STR_LEN;
 		dlg->widgets[i].data = data->fields[i];
 	}
 

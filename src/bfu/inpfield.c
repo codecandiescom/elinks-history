@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.64 2003/10/26 15:37:45 zas Exp $ */
+/* $Id: inpfield.c,v 1.65 2003/10/26 15:47:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,8 +130,8 @@ input_field_fn(struct dialog_data *dlg_data)
 	text_width(term, dlg_data->dlg->udata, &min, &max);
 	buttons_width(term, dlg_data->widgets_data + 1, 2, &min, &max);
 
-	if (max < dlg_data->dlg->widgets->dlen)
-		max = dlg_data->dlg->widgets->dlen;
+	if (max < dlg_data->dlg->widgets->datalen)
+		max = dlg_data->dlg->widgets->datalen;
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	if (w > max) w = max;
@@ -426,7 +426,7 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 
 				if (!clipboard) goto dsp_f;
 
-				safe_strncpy(widget_data->cdata, clipboard, widget_data->widget->dlen);
+				safe_strncpy(widget_data->cdata, clipboard, widget_data->widget->datalen);
 				widget_data->info.field.cpos = strlen(widget_data->cdata);
 				mem_free(clipboard);
 				goto dsp_f;
@@ -444,7 +444,7 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			if (ev->x >= ' ' && ev->x < 0x100 && !ev->y) {
 				int cdata_len = strlen(widget_data->cdata);
 
-				if (cdata_len >= widget_data->widget->dlen - 1)
+				if (cdata_len >= widget_data->widget->datalen - 1)
 					goto dsp_f;
 
 				memmove(widget_data->cdata + widget_data->info.field.cpos + 1,

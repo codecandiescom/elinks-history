@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.62 2003/10/26 15:19:32 zas Exp $ */
+/* $Id: msgbox.c,v 1.63 2003/10/26 15:47:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,7 +137,7 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 		dlg->widgets[button].type = D_BUTTON;
 		dlg->widgets[button].info.button.flags = button_flags;
 		dlg->widgets[button].fn = msg_box_button;
-		dlg->widgets[button].dlen = 0;
+		dlg->widgets[button].datalen = 0;
 		dlg->widgets[button].text = label;
 		dlg->widgets[button].udata = fn;
 	}

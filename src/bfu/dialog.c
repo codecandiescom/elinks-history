@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.53 2003/10/26 15:37:45 zas Exp $ */
+/* $Id: dialog.c,v 1.54 2003/10/26 15:47:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,12 +125,12 @@ init_widget(struct dialog_data *dlg_data, struct term_event *ev, int i)
 	memset(widget_data, 0, sizeof(struct widget_data));
 	widget_data->widget = &dlg_data->dlg->widgets[i];
 
-	if (widget_data->widget->dlen) {
-		widget_data->cdata = mem_alloc(widget_data->widget->dlen);
+	if (widget_data->widget->datalen) {
+		widget_data->cdata = mem_alloc(widget_data->widget->datalen);
 		if (widget_data->cdata) {
 			memcpy(widget_data->cdata,
 			       widget_data->widget->data,
-			       widget_data->widget->dlen);
+			       widget_data->widget->datalen);
 		} else {
 			return NULL;
 		}
@@ -319,7 +319,7 @@ update_dialog_data(struct dialog_data *dlg_data, struct widget_data *widget_data
 	for (i = 0; i < dlg_data->n; i++)
 		memcpy(dlg_data->dlg->widgets[i].data,
 		       dlg_data->widgets_data[i].cdata,
-		       dlg_data->dlg->widgets[i].dlen);
+		       dlg_data->dlg->widgets[i].datalen);
 
 	return 0;
 }
@@ -348,7 +348,7 @@ clear_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 		if (dlg_data->dlg->widgets[i].type != D_FIELD &&
 		    dlg_data->dlg->widgets[i].type != D_FIELD_PASS)
 			continue;
-		memset(dlg_data->widgets_data[i].cdata, 0, dlg_data->dlg->widgets[i].dlen);
+		memset(dlg_data->widgets_data[i].cdata, 0, dlg_data->dlg->widgets[i].datalen);
 		dlg_data->widgets_data[i].info.field.cpos = 0;
 	}
 

@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.20 2003/10/26 15:37:45 zas Exp $ */
+/* $Id: widget.h,v 1.21 2003/10/26 15:47:25 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -63,7 +63,7 @@ struct widget {
 		} button;
 	} info;
 		
-	int dlen;
+	int datalen;
 
 	enum widget_type type;
 };

@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.20 2003/06/20 18:54:15 pasky Exp $ */
+/* $Id: encoding.c,v 1.21 2003/06/20 19:02:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,7 +68,7 @@ static unsigned char *
 dummy_decode(struct stream_encoded *stream, unsigned char *data, int len,
 	     int *new_len)
 {
-	memcpy(new_data, data, len);
+	*new_len = len;
 	return data;
 }
 

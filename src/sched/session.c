@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.205 2003/10/31 22:37:17 pasky Exp $ */
+/* $Id: session.c,v 1.206 2003/11/04 17:11:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -261,6 +261,7 @@ print_screen_status(struct session *ses)
 		struct color_pair *normal_color = get_bfu_color(term, "tabs.normal");
 		struct color_pair *selected_color = get_bfu_color(term, "tabs.selected");
 		struct color_pair *loading_color = get_bfu_color(term, "tabs.loading");
+		struct color_pair *tabsep_color = get_bfu_color(term, "tabs.separator");
 		int tab_width = term->width / tabs_count;
 		int tab_total_width = tab_width * tabs_count;
 		int tab_remain_width = int_max(0, term->width - tab_total_width);
@@ -301,7 +302,7 @@ print_screen_status(struct session *ses)
 				msglen = actual_tab_width - 1;
 
 			if (tab_num) {
-				draw_text(term, xpos, ypos, "|", 1, 0, normal_color);
+				draw_text(term, xpos, ypos, "|", 1, 0, tabsep_color);
 				xpos += 1;
 			}
 
@@ -865,7 +866,7 @@ request_frameset(struct session *ses, struct frameset_desc *frameset_desc)
 
 		for (; i < frameset_desc->n; i++) {
 			struct frame_desc *frame_desc = &frameset_desc->frame_desc[i];
-			
+
 			if (frame_desc->subframe) {
 				request_frameset(ses, frame_desc->subframe);
 			} else if (frame_desc->name) {

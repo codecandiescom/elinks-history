@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.23 2003/10/30 15:32:45 pasky Exp $ */
+/* $Id: options.inc,v 1.24 2003/11/04 17:11:57 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1250,6 +1250,18 @@ struct option_info config_options_info[] = {
 		"background", 0, "green",
 		N_("Default background color.")),
 
+	INIT_OPT_TREE("ui.colors.color.tabs", N_("Tab separator"),
+		"separator", 0,
+		N_("Tab separator colors.")),
+
+	INIT_OPT_COLOR("ui.colors.color.tabs.separator", N_("Text color"),
+		"text", 0, "green",
+		N_("Default text color.")),
+
+	INIT_OPT_COLOR("ui.colors.color.tabs.separator", N_("Background color"),
+		"background", 0, "white",
+		N_("Default background color.")),
+
 	INIT_OPT_TREE("ui.colors.color", N_("Searched strings"),
 		"searched", 0,
 		N_("Searched string highlight colors.")),
@@ -1646,6 +1658,18 @@ struct option_info config_options_info[] = {
 
 	INIT_OPT_COLOR("ui.colors.mono.tabs.selected", N_("Background color"),
 		"background", 0, "black",
+		N_("Default background color.")),
+
+	INIT_OPT_TREE("ui.colors.mono.tabs", N_("Tab separator"),
+		"separator", 0,
+		N_("Tab separator colors.")),
+
+	INIT_OPT_COLOR("ui.colors.mono.tabs.separator", N_("Text color"),
+		"text", 0, "gray",
+		N_("Default text color.")),
+
+	INIT_OPT_COLOR("ui.colors.mono.tabs.separator", N_("Background color"),
+		"background", 0, "white",
 		N_("Default background color.")),
 
 	INIT_OPT_TREE("ui.colors.mono", N_("Searched strings"),

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.37 2003/07/21 06:14:53 jonas Exp $ */
+/* $Id: mime.c,v 1.38 2003/07/21 06:19:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,40 +175,43 @@ static void
 really_add_ext(void *fcp)
 {
 	struct extension *ext = (struct extension *) fcp;
-	unsigned char *translated;
-	unsigned char *name;
+	struct string name;
 
-	if (!ext) return;
+	if (!ext || !init_string(&name)) return;
 
-	translated = encode_option_name(ext->ext);
-	if (!translated) return;
-
-	name = straconcat("mime.extension.", translated, NULL);
-	mem_free(translated);
-	if (!name) return;
+	add_to_string(&name, "mime.extension.");
+	add_optname_to_string(&name, ext->ext, strlen(ext->ext));
 
 	really_del_ext(ext->ext_orig); /* ..or rename ;) */
-	safe_strncpy(get_opt_str(name), ext->ct, MAX_STR_LEN);
-	mem_free(name);
+	safe_strncpy(get_opt_str(name.source), ext->ct, MAX_STR_LEN);
+	done_string(&name);
 }
 
 void
 menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 {
-	unsigned char *translated = fcp ? encode_option_name(fcp) : NULL;
 	struct option *opt;
 	struct extension *new;
 	unsigned char *ext;
 	unsigned char *ct;
 	unsigned char *ext_orig;
 	struct dialog *d;
+	struct string translated;
 
-	opt = translated ? get_real_opt("mime.extension", translated) : NULL;
+	if (fcp && init_string(&translated)
+	    && add_optname_to_string(&translated, fcp, strlen(fcp))) {
+		opt = get_real_opt("mime.extension", translated.source);
+	} else {
+		opt = NULL;
+	}
+
 	d = mem_calloc(1, sizeof(struct dialog) + 5 * sizeof(struct widget)
 			  + sizeof(struct extension) + 3 * MAX_STR_LEN);
 	if (!d) {
-		if (fcp) mem_free(fcp);
-		if (translated) mem_free(translated);
+		if (fcp) {
+			mem_free(fcp);
+			done_string(&translated);
+		}
 		return;
 	}
 
@@ -222,11 +225,11 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 					: (unsigned char *) "")
 		safe_strncpy(ext, no_null(fcp), MAX_STR_LEN);
 		safe_strncpy(ct, no_null(opt->ptr), MAX_STR_LEN);
-		safe_strncpy(ext_orig, no_null(translated), MAX_STR_LEN);
+		safe_strncpy(ext_orig, no_null(translated.source), MAX_STR_LEN);
 		#undef no_null
 	}
 
-	if (translated) mem_free(translated);
+	if (fcp) done_string(&translated);
 
 	d->title = _("Extension", term);
 	d->fn = add_ext_fn;
@@ -274,33 +277,37 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 	struct menu_item *mi = NULL;
 
 	foreachback (opt, *opt_tree) {
-		unsigned char *translated;
+		struct string translated;
 		unsigned char *translated2;
 		unsigned char *optptr2;
 
 		if (!strcmp(opt->name, "_template_")) continue;
 
-		translated = decode_option_name(opt->name);
-		if (!translated) continue;
+		if (!init_string(&translated)
+		    || !add_real_optname_to_string(&translated, opt->name,
+						   strlen(opt->name))) {
+			done_string(&translated);
+			continue;
+		}
 
 		if (!mi) {
 			mi = new_menu(FREE_LIST | FREE_TEXT | FREE_RTEXT | FREE_DATA);
 			if (!mi) {
-				mem_free(translated);
+				done_string(&translated);
 				return;
 			}
 		}
 
-		translated2 = stracpy(translated);
+		translated2 = memacpy(translated.source, translated.length);
 		optptr2 = stracpy(opt->ptr);
 
 		if (translated2 && optptr2) {
-			add_to_menu(&mi, translated, optptr2,
+			add_to_menu(&mi, translated.source, optptr2,
 				    MENU_FUNC fn, translated2, 0, 0);
 		} else {
 			if (optptr2) mem_free(optptr2);
 			if (translated2) mem_free(translated2);
-			mem_free(translated);
+			done_string(&translated);
 		}
 	}
 

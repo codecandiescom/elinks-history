@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.78 2004/06/22 06:46:17 miciah Exp $ */
+/* $Id: connect.c,v 1.79 2004/07/10 18:57:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -474,7 +474,6 @@ connected(void *data)
 {
 	struct connection *conn = (struct connection *) data;
 	struct conn_info *c_i = conn->conn_info;
-	void (*func)(struct connection *) = c_i ? c_i->func : NULL;
 	int err = 0;
 	int len = sizeof(int);
 
@@ -506,7 +505,11 @@ connected(void *data)
 #endif
 
 	conn->conn_info = NULL;
-	func(conn);
+	if (c_i && c_i->func) {
+		void (*func)(struct connection *) = c_i->func;
+
+		func(conn);
+	}
 	mem_free_if(c_i->addr);
 	mem_free(c_i);
 }

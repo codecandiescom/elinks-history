@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.553 2004/08/15 15:44:43 jonas Exp $ */
+/* $Id: session.c,v 1.554 2004/08/28 16:23:55 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -748,14 +748,28 @@ init_session(struct session *base_session, struct terminal *term,
 	ses->status.insert_mode_led = register_led(ses, 1);
 #endif
 
+	add_to_list(sessions, ses);
+
+	/* Update the status -- most importantly the info about whether to the
+	 * show the title, tab and status bar -- _before_ loading the URI so
+	 * the document cache is not filled with useless documents if the
+	 * content is already cached.
+	 *
+	 * For big document it reduces memory usage quite a bit because
+	 * (atleast that is my interpretation --jonas) the old document will
+	 * have a chance to be released before rendering a new one. A few
+	 * numbers when opening a new tab while viewing debians package list
+	 * for unstable:
+	 *
+	 * 9307 jonas     15   0 34252  30m 5088 S  0.0 12.2   0:03.63 elinks-old
+	 * 9305 jonas     15   0 17060  13m 5088 S  0.0  5.5   0:02.07 elinks-new
+	 */
+	update_status();
+
 	/* Only do the setup for the first tab */
 	if (!list_empty(sessions) || !setup_first_session(ses, uri)) {
 		setup_session(ses, uri, base_session);
 	}
-
-	add_to_list(sessions, ses);
-
-	update_status();
 
 	if (!in_background)
 		switch_to_tab(term, get_tab_number(ses->tab), -1);

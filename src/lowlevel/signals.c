@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.21 2004/03/26 17:55:50 zas Exp $ */
+/* $Id: signals.c,v 1.22 2004/04/14 02:35:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,14 +22,11 @@
 #include "elinks.h"
 
 #include "main.h"
-/* This does not deserve to survive. Gotta be moved... somewhere else.
- * 'nuff said. --pasky */
-#include "dialogs/menu.h"
-#include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
 #include "lowlevel/signals.h"
 #include "modules/version.h"
 #include "terminal/kbd.h"
+#include "terminal/terminal.h"
 #include "util/error.h"
 
 

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.85 2004/09/28 23:50:07 pasky Exp $ */
+/* $Id: status.c,v 1.86 2004/09/29 15:49:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -438,7 +438,7 @@ display_title_bar(struct session *ses, struct terminal *term)
 
 	/* Set up the document page info string: '(' %page '/' %pages ')' */
 	height = doc_view->box.height;
-	if (height < document->height) {
+	if (height < document->height && doc_view->vs) {
 		int pos = doc_view->vs->y + height;
 		int page = 1;
 		int pages = height ? (document->height + height - 1) / height : 1;

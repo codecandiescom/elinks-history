@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.91 2004/12/29 14:59:34 zas Exp $ */
+/* $Id: frames.c,v 1.92 2005/02/28 11:17:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,8 +81,8 @@ create_frameset(struct frameset_param *fp)
 	size = fp->x * fp->y;
 	/* size - 1 since one struct frame_desc is already reserved
 	 * in struct frameset_desc. */
-	fd = mem_calloc(1, sizeof(struct frameset_desc)
-			   + (size - 1) * sizeof(struct frame_desc));
+	fd = mem_calloc(1, sizeof(*fd)
+			   + (size - 1) * sizeof(fd->frame_desc[0]));
 	if (!fd) return NULL;
 
 	{
@@ -145,7 +145,7 @@ find_fd(struct session *ses, unsigned char *name,
 		return doc_view;
 	}
 
-	doc_view = mem_calloc(1, sizeof(struct document_view));
+	doc_view = mem_calloc(1, sizeof(*doc_view));
 	if (!doc_view) return NULL;
 
 	doc_view->used = 1;
@@ -348,9 +348,9 @@ distribute_rows_or_cols_that_left(int *val_, int max_value, int *values, int val
 	int divisor = 0;
 	int tmp_val;
 
-	tmp_values = fmem_alloc(values_count * sizeof(int));
+	tmp_values = fmem_alloc(values_count * sizeof(*tmp_values));
 	if (!tmp_values) return 0;
-	memcpy(tmp_values, values, values_count * sizeof(int));
+	memcpy(tmp_values, values, values_count * sizeof(*tmp_values));
 
 	for (i = 0; i < values_count; i++)
 		if (values[i] < 1)
@@ -426,7 +426,7 @@ extract_rows_or_cols_values(unsigned char *str, int max_value, int pixels_per_ch
 		}
 
 		/* Save value. */
-		tmp_values = mem_realloc(values, (values_count + 1) * sizeof(int));
+		tmp_values = mem_realloc(values, (values_count + 1) * sizeof(*tmp_values));
 		if (!tmp_values) return 0;
 
 		values = tmp_values;

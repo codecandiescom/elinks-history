@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.374 2005/01/12 02:35:21 jonas Exp $ */
+/* $Id: tables.c,v 1.375 2005/02/28 11:19:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,7 +45,7 @@ get_table_frames(struct table *table, struct table_frames *result)
 		result->left = !!(table->frame & TABLE_FRAME_LHS);
 		result->right = !!(table->frame & TABLE_FRAME_RHS);
 	} else {
-		memset(result, 0, sizeof(struct table_frames));
+		memset(result, 0, sizeof(*result));
 	}
 }
 
@@ -249,15 +249,15 @@ get_column_widths(struct table *table)
 {
 	int colspan;
 
-	if (!table->cols) return -1; /* prevents calloc(0, sizeof(int)) calls */
+	if (!table->cols) return -1; /* prevents calloc(0, ...) calls */
 
 	if (!table->min_cols_widths) {
-		table->min_cols_widths = mem_calloc(table->cols, sizeof(int));
+		table->min_cols_widths = mem_calloc(table->cols, sizeof(*table->min_cols_widths));
 		if (!table->min_cols_widths) return -1;
 	}
 
 	if (!table->max_cols_widths) {
-		table->max_cols_widths = mem_calloc(table->cols, sizeof(int));
+		table->max_cols_widths = mem_calloc(table->cols, sizeof(*table->max_cols_widths));
 		if (!table->max_cols_widths) {
 			mem_free_set(&table->min_cols_widths, NULL);
 			return -1;
@@ -265,7 +265,7 @@ get_column_widths(struct table *table)
 	}
 
 	if (!table->cols_widths) {
-		table->cols_widths = mem_calloc(table->cols, sizeof(int));
+		table->cols_widths = mem_calloc(table->cols, sizeof(*table->cols_widths));
 		if (!table->cols_widths) {
 			mem_free_set(&table->min_cols_widths, NULL);
 			mem_free_set(&table->max_cols_widths, NULL);
@@ -489,7 +489,7 @@ distribute_widths(struct table *table, int width)
 	for (col = 0; col < table->cols; col++)
 		int_lower_bound(&max_cols_width, table->max_cols_widths[col]);
 
-	cols_array_size = table->cols * sizeof(int);
+	cols_array_size = table->cols * sizeof(*table->cols_widths);
 	memcpy(table->cols_widths, table->min_cols_widths, cols_array_size);
 	table->real_width = width;
 
@@ -576,7 +576,7 @@ check_table_widths(struct table *table)
 	int colspan;
 	int width, new_width;
 	int max, max_index = 0; /* go away, warning! */
-	int *widths = mem_calloc(table->cols, sizeof(int));
+	int *widths = mem_calloc(table->cols, sizeof(*widths));
 
 	if (!widths) return;
 
@@ -1256,7 +1256,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	part->cy += table->real_height;
 	part->cx = -1;
 
-	new_node = mem_alloc(sizeof(struct node));
+	new_node = mem_alloc(sizeof(*new_node));
 	if (new_node) {
 		set_box(&new_node->box, node->box.x, part->box.y + part->cy,
 			node->box.width, 0);

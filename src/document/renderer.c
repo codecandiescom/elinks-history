@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.142 2005/02/25 17:05:04 jonas Exp $ */
+/* $Id: renderer.c,v 1.143 2005/02/28 11:16:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -399,7 +399,7 @@ render_document_frames(struct session *ses, int no_cache)
 	struct view_state *vs = NULL;
 
 	if (!ses->doc_view) {
-		ses->doc_view = mem_calloc(1, sizeof(struct document_view));
+		ses->doc_view = mem_calloc(1, sizeof(*ses->doc_view));
 		if (!ses->doc_view) return;
 		ses->doc_view->session = ses;
 		ses->doc_view->search_word = &ses->search_word;
@@ -489,14 +489,14 @@ sort_links(struct document *document)
 	assert(document->links);
 	if_assert_failed return;
 
-	qsort(document->links, document->nlinks, sizeof(struct link),
+	qsort(document->links, document->nlinks, sizeof(*document->links),
 	      (void *) comp_links);
 
 	if (!document->height) return;
 
-	document->lines1 = mem_calloc(document->height, sizeof(struct link *));
+	document->lines1 = mem_calloc(document->height, sizeof(*document->lines1));
 	if (!document->lines1) return;
-	document->lines2 = mem_calloc(document->height, sizeof(struct link *));
+	document->lines2 = mem_calloc(document->height, sizeof(*document->lines2));
 	if (!document->lines2) {
 		mem_free(document->lines1);
 		return;
@@ -509,7 +509,7 @@ sort_links(struct document *document)
 		if (!link->npoints) {
 			done_link_members(link);
 			memmove(link, link + 1,
-				(document->nlinks - i - 1) * sizeof(struct link));
+				(document->nlinks - i - 1) * sizeof(*link));
 			document->nlinks--;
 			i--;
 			continue;

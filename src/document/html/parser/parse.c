@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.108 2005/02/20 21:48:37 miciah Exp $ */
+/* $Id: parse.c,v 1.109 2005/02/28 11:20:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1002,7 +1002,7 @@ process_element(unsigned char *name, int namelen, int endingtag,
 		name[namelen] = '\0';
 
 		elem.name = name;
-		ei = bsearch(&elem, elements, NUMBER_OF_TAGS, sizeof(struct element_info), compar);
+		ei = bsearch(&elem, elements, NUMBER_OF_TAGS, sizeof(elem), compar);
 		name[namelen] = tmp;
 	}
 #else

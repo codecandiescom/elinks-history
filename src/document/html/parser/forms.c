@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.63 2005/01/30 23:42:34 jonas Exp $ */
+/* $Id: forms.c,v 1.64 2005/02/28 11:19:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,7 +120,7 @@ init_form_control(enum form_type type, unsigned char *attr)
 {
 	struct form_control *fc;
 
-	fc = mem_calloc(1, sizeof(struct form_control));
+	fc = mem_calloc(1, sizeof(*fc));
 	if (!fc) return NULL;
 
 	fc->type = type;

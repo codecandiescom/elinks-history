@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.140 2004/12/29 15:59:29 zas Exp $ */
+/* $Id: parser.c,v 1.141 2005/02/28 11:16:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,7 +74,7 @@ css_parse_properties(struct list_head *props, struct scanner *scanner)
 
 		/* We might be on track of something, cook up the struct. */
 
-		prop = mem_calloc(1, sizeof(struct css_property));
+		prop = mem_calloc(1, sizeof(*prop));
 		if (!prop) {
 			goto ride_on;
 		}
@@ -336,7 +336,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 					last_token.string, last_token.length);
 			if (!selector) continue;
 
-			pkg = mem_calloc(1, sizeof(struct selector_pkg));
+			pkg = mem_calloc(1, sizeof(*pkg));
 			if (!pkg) continue;
 			add_to_list(*selectors, pkg);
 			pkg->selector = selector;

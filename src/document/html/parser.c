@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.525 2005/02/25 16:55:26 jonas Exp $ */
+/* $Id: parser.c,v 1.526 2005/02/28 11:18:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1319,7 +1319,7 @@ look_for_link(unsigned char **pos, unsigned char *eof, struct menu_item **menu,
 		return 1;
 	}
 
-	ld = mem_alloc(sizeof(struct link_def));
+	ld = mem_alloc(sizeof(*ld));
 	if (!ld) {
 		mem_free_if(label);
 		mem_free(target);
@@ -1378,10 +1378,10 @@ look_for_link(unsigned char **pos, unsigned char *eof, struct menu_item **menu,
 		}
 	}
 
-	nm = mem_realloc(*menu, (nmenu + 2) * sizeof(struct menu_item));
+	nm = mem_realloc(*menu, (nmenu + 2) * sizeof(*nm));
 	if (nm) {
 		*menu = nm;
-		memset(&nm[nmenu], 0, 2 * sizeof(struct menu_item));
+		memset(&nm[nmenu], 0, 2 * sizeof(*nm));
 		nm[nmenu].text = label;
 		nm[nmenu].func = map_selected;
 		nm[nmenu].data = ld;
@@ -1409,7 +1409,7 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	ct = get_convert_table(hd.source, to, def, NULL, NULL, hdef);
 	done_string(&hd);
 
-	*menu = mem_calloc(1, sizeof(struct menu_item));
+	*menu = mem_calloc(1, sizeof(**menu));
 	if (!*menu) return -1;
 
 	while (look_for_map(&pos, eof, uri));
@@ -1507,7 +1507,7 @@ init_html_parser(struct uri *uri, struct document_options *options,
 
 	scan_http_equiv(start, end, head, title);
 
-	e = mem_calloc(1, sizeof(struct html_element));
+	e = mem_calloc(1, sizeof(*e));
 	if (!e) return;
 	add_to_list(html_context.stack, e);
 

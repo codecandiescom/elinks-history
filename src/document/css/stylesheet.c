@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.47 2004/12/30 11:35:00 zas Exp $ */
+/* $Id: stylesheet.c,v 1.48 2005/02/28 11:16:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@ init_css_selector(struct list_head *sels, enum css_selector_type type,
 {
 	struct css_selector *selector;
 
-	selector = mem_calloc(1, sizeof(struct css_selector));
+	selector = mem_calloc(1, sizeof(*selector));
 	if (!selector) return NULL;
 
 	selector->relation = CSR_ROOT; /* Default */
@@ -118,7 +118,7 @@ copy_css_selector(struct css_stylesheet *css, struct css_selector *orig)
 static void
 add_selector_property(struct css_selector *selector, struct css_property *prop)
 {
-	struct css_property *newprop = mem_alloc(sizeof(struct css_property));
+	struct css_property *newprop = mem_alloc(sizeof(*newprop));
 
 	if (newprop) {
 		copy_struct(newprop, prop);
@@ -217,7 +217,7 @@ init_css_stylesheet(css_stylesheet_importer importer)
 {
 	struct css_stylesheet *css;
 
-	css = mem_calloc(1, sizeof(struct css_stylesheet));
+	css = mem_calloc(1, sizeof(*css));
 	if (!css)
 		return NULL;
 	css->import = importer;

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.173 2005/02/25 17:05:04 jonas Exp $ */
+/* $Id: renderer.c,v 1.174 2005/02/28 11:20:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -417,7 +417,7 @@ init_template(struct screen_char *template, color_t background, color_t foregrou
 static struct node *
 add_node(struct plain_renderer *renderer, int x, int width, int height)
 {
-	struct node *node = mem_alloc(sizeof(struct node));
+	struct node *node = mem_alloc(sizeof(*node));
 
 	if (node) {
 		struct document *document = renderer->document;

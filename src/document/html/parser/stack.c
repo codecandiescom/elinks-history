@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.29 2004/12/29 14:51:49 zas Exp $ */
+/* $Id: stack.c,v 1.30 2005/02/28 11:20:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,7 +134,7 @@ html_stack_dup(enum html_element_type type)
 	assertm(ep && (void *) ep != &html_context.stack, "html stack empty");
 	if_assert_failed return;
 
-	e = mem_alloc(sizeof(struct html_element));
+	e = mem_alloc(sizeof(*e));
 	if (!e) return;
 
 	copy_struct(e, ep);

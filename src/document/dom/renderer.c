@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.17 2004/12/20 11:07:31 miciah Exp $ */
+/* $Id: renderer.c,v 1.18 2005/02/28 11:17:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,7 @@ init_dom_renderer(struct dom_renderer *renderer, struct document *document,
 	enum dom_node_type type;
 	struct css_stylesheet *css = &default_stylesheet;
 
-	memset(renderer, 0, sizeof(struct dom_renderer));
+	memset(renderer, 0, sizeof(*renderer));
 
 	renderer->document	= document;
 	renderer->convert_table = convert_table;
@@ -172,7 +172,7 @@ realloc_line(struct document *document, int x, int y)
 static struct node *
 add_search_node(struct dom_renderer *renderer, int width)
 {
-	struct node *node = mem_alloc(sizeof(struct node));
+	struct node *node = mem_alloc(sizeof(*node));
 
 	if (node) {
 		set_box(&node->box, renderer->canvas_x, renderer->canvas_y,

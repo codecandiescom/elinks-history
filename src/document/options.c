@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.58 2004/12/29 14:59:34 zas Exp $ */
+/* $Id: options.c,v 1.59 2005/02/28 11:15:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@ void
 init_document_options(struct document_options *doo)
 {
 	/* Ensure that any padding bytes are cleared. */
-	memset(doo, 0, sizeof(struct document_options));
+	memset(doo, 0, sizeof(*doo));
 
 	doo->assume_cp = get_opt_codepage("document.codepage.assume");
 	doo->hard_assume = get_opt_bool("document.codepage.force_assumed");

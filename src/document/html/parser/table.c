@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.36 2005/01/01 16:37:09 jonas Exp $ */
+/* $Id: table.c,v 1.37 2005/02/28 11:20:38 zas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -245,12 +245,12 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real)
 static struct table *
 new_table(void)
 {
-	struct table *table = mem_calloc(1, sizeof(struct table));
+	struct table *table = mem_calloc(1, sizeof(*table));
 
 	if (!table) return NULL;
 
 	table->cells = mem_calloc(INIT_REAL_COLS * INIT_REAL_ROWS,
-				  sizeof(struct table_cell));
+				  sizeof(*table->cells));
 	if (!table->cells) {
 		mem_free(table);
 		return NULL;
@@ -258,7 +258,7 @@ new_table(void)
 	table->real_cols = INIT_REAL_COLS;
 	table->real_rows = INIT_REAL_ROWS;
 
-	table->columns = mem_calloc(INIT_REAL_COLS, sizeof(struct table_column));
+	table->columns = mem_calloc(INIT_REAL_COLS, sizeof(*table->columns));
 	if (!table->columns) {
 		mem_free(table->cells);
 		mem_free(table);
@@ -351,7 +351,7 @@ static void
 copy_table(struct table *table_src, struct table *table_dst)
 {
 	int row;
-	int size = sizeof(struct table_cell) * table_src->cols;
+	int size = sizeof(*table_dst->cells) * table_src->cols;
 
 	if (!size) return;
 
@@ -399,22 +399,22 @@ new_cell(struct table *table, int dest_col, int dest_row)
 		}
 
 		new.real_cols = smart_raise(dest_col + 1, table->real_cols,
-					    sizeof(struct table_cell),
+					    sizeof(*new.cells),
 					    /* assume square distribution of
 					     * cols/rows */
 					    SMART_RAISE_LIMIT / 2);
 		if (!new.real_cols) return NULL;
 
 		limit = SMART_RAISE_LIMIT
-		      - sizeof(struct table_cell) * new.real_cols;
+		      - sizeof(*new.cells) * new.real_cols;
 		limit = MAX(limit, SMART_RAISE_LIMIT/2);
 
 		new.real_rows = smart_raise(dest_row + 1, table->real_rows,
-					    sizeof(struct table_cell), limit);
+					    sizeof(*new.cells), limit);
 		if (!new.real_rows) return NULL;
 
 		new.cells = mem_calloc(new.real_cols * new.real_rows,
-				       sizeof(struct table_cell));
+				       sizeof(*new.cells));
 		if (!new.cells) return NULL;
 
 		copy_table(table, &new);
@@ -435,10 +435,10 @@ new_columns(struct table *table, int span, int width, int align,
 		struct table_column *new_columns;
 
 		n = smart_raise(table->columns_count + span, n,
-				sizeof(struct table_column), SMART_RAISE_LIMIT);
+				sizeof(*new_columns), SMART_RAISE_LIMIT);
 		if (!n) return;
 
-		new_columns = mem_realloc(table->columns, n * sizeof(struct table_column));
+		new_columns = mem_realloc(table->columns, n * sizeof(*new_columns));
 		if (!new_columns) return;
 
 		table->real_columns_count = n;
@@ -464,11 +464,11 @@ set_td_width(struct table *table, int col, int width, int force)
 		int i;
 		int *new_cols_x;
 
-		n = smart_raise(col + 1, n, sizeof(int), SMART_RAISE_LIMIT);
+		n = smart_raise(col + 1, n, sizeof(*new_cols_x), SMART_RAISE_LIMIT);
 		if (!n && table->cols_x_count) return;
 		if (!n) n = col + 1;
 
-		new_cols_x = mem_realloc(table->cols_x, n * sizeof(int));
+		new_cols_x = mem_realloc(table->cols_x, n * sizeof(*new_cols_x));
 		if (!new_cols_x) return;
 
 		for (i = table->cols_x_count; i < n; i++)
@@ -816,7 +816,7 @@ see:
 	maxj = rowspan != -1 ? rowspan : rows;
 	/* Out of memory prevention, limit allocated memory to HTML_MAX_CELLS_MEMORY.
 	 * Not perfect but better than nothing. */
-	if (maxj * i > HTML_MAX_CELLS_MEMORY / sizeof(struct table_cell))
+	if (maxj * i > HTML_MAX_CELLS_MEMORY / sizeof(*cell))
 		goto abort;
 
 	for (j = 1; j < maxj; j++) {
@@ -835,7 +835,7 @@ see:
 
 				for (l = 0; l < k; l++)
 					memset(CELL(table, col + l, row + j), 0,
-					       sizeof(struct table_cell));
+					       sizeof(*span_cell));
 
 				rowspan = j;
 
@@ -870,7 +870,7 @@ scan_done:
 	}
 
 	if (table->rows) {
-		table->rows_heights = mem_calloc(table->rows, sizeof(int));
+		table->rows_heights = mem_calloc(table->rows, sizeof(*table->rows_heights));
 		if (!table->rows_heights)
 			goto abort;
 	} else {

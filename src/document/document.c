@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.90 2005/01/01 16:37:53 jonas Exp $ */
+/* $Id: document.c,v 1.91 2005/02/28 11:14:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,7 +39,7 @@ static INIT_LIST_HEAD(format_cache);
 struct document *
 init_document(struct cache_entry *cached, struct document_options *options)
 {
-	struct document *document = mem_calloc(1, sizeof(struct document));
+	struct document *document = mem_calloc(1, sizeof(*document));
 
 	if (!document) return NULL;
 

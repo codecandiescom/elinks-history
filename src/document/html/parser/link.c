@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.76 2004/12/29 15:43:31 zas Exp $ */
+/* $Id: link.c,v 1.77 2005/02/28 11:19:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -694,7 +694,7 @@ html_link_clear(struct hlink *link)
 	mem_free_if(link->lang);
 	mem_free_if(link->name);
 
-	memset(link, 0, sizeof(struct hlink));
+	memset(link, 0, sizeof(*link));
 }
 
 /* Parse a link and return results in @link.
@@ -705,7 +705,7 @@ html_link_parse(unsigned char *a, struct hlink *link)
 	int i;
 
 	assert(a && link);
-	memset(link, 0, sizeof(struct hlink));
+	memset(link, 0, sizeof(*link));
 
 	link->href = get_url_val(a, "href");
 	if (!link->href) return 0;

@@ -1,5 +1,5 @@
 /* SGML node handling */
-/* $Id: parser.c,v 1.7 2004/12/29 14:59:34 zas Exp $ */
+/* $Id: parser.c,v 1.8 2005/02/28 11:21:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -301,7 +301,7 @@ init_sgml_parser(struct sgml_parser *parser, struct document *document,
 	unsigned char *source = buffer->source;
 	unsigned char *end = source + buffer->length;
 
-	memset(parser, 0, sizeof(struct sgml_parser));
+	memset(parser, 0, sizeof(*parser));
 
 	init_scanner(&parser->scanner, &sgml_scanner_info, source, end);
 

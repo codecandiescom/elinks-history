@@ -1,5 +1,5 @@
 /* The DOM node handling */
-/* $Id: node.c,v 1.4 2004/10/13 15:34:47 zas Exp $ */
+/* $Id: node.c,v 1.5 2005/02/28 11:17:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,7 +74,7 @@ add_to_dom_node_list(struct dom_node_list **list_ptr,
 	} else if (position < list->size) {
 		/* Make room if we have to add the node in the middle of the list */
 		struct dom_node **offset = &list->entries[position];
-		size_t size = (list->size - position) * sizeof(struct dom_node *);
+		size_t size = (list->size - position) * sizeof(*offset);
 
 		memmove(offset + 1, offset, size);
 	}
@@ -205,9 +205,9 @@ init_dom_node_(unsigned char *file, int line,
 		unsigned char *string, uint16_t length)
 {
 #ifdef DEBUG_MEMLEAK
-	struct dom_node *node = debug_mem_calloc(file, line, 1, sizeof(struct dom_node));
+	struct dom_node *node = debug_mem_calloc(file, line, 1, sizeof(*node));
 #else
-	struct dom_node *node = mem_calloc(1, sizeof(struct dom_node));
+	struct dom_node *node = mem_calloc(1, sizeof(*node));
 #endif
 
 	if (!node) return NULL;

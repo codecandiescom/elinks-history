@@ -1,5 +1,5 @@
 /* The DOM tree navigation interface */
-/* $Id: navigator.c,v 1.7 2004/11/04 17:14:19 jonas Exp $ */
+/* $Id: navigator.c,v 1.8 2005/02/28 11:16:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,7 +52,7 @@ init_dom_navigator(struct dom_navigator *navigator, void *data,
 {
 	assert(navigator);
 
-	memset(navigator, 0, sizeof(struct dom_navigator));
+	memset(navigator, 0, sizeof(*navigator));
 
 	navigator->data        = data;
 	navigator->object_size = object_size;
@@ -69,7 +69,7 @@ done_dom_navigator(struct dom_navigator *navigator)
 	if (navigator->states) mem_free(navigator->states);
 	if (navigator->state_objects) mem_free(navigator->state_objects);
 
-	memset(navigator, 0, sizeof(struct dom_navigator));
+	memset(navigator, 0, sizeof(*navigator));
 }
 
 struct dom_node *
@@ -118,7 +118,7 @@ push_dom_node(struct dom_navigator *navigator, struct dom_node *node)
 
 		/* If the callback returned NULL pop the state immediately */
 		if (!node) {
-			memset(state, 0, sizeof(struct dom_navigator_state));
+			memset(state, 0, sizeof(*state));
 			navigator->depth--;
 			assert(navigator->depth >= 0);
 		}
@@ -153,7 +153,7 @@ do_pop_dom_node(struct dom_navigator *navigator, struct dom_navigator_state *par
 		memset(&navigator->state_objects[offset], 0, navigator->object_size);
 	}
 
-	memset(state, 0, sizeof(struct dom_navigator_state));
+	memset(state, 0, sizeof(*state));
 
 	return state == parent;
 }

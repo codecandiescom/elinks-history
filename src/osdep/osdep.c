@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.153 2004/11/25 23:24:09 miciah Exp $ */
+/* $Id: osdep.c,v 1.154 2004/11/25 23:50:15 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -355,7 +355,7 @@ set_clipboard_text(unsigned char *data)
 		if (!init_string(&str)) return;
 
 		add_to_string(&str, "screen -X register . ");
-		add_shell_quoted_to_string(&str, data);
+		add_shell_quoted_to_string(&str, data, strlen(data));
 
 		if (str.length) exe(str.source);
 		if (str.source) done_string(&str);

@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.69 2004/11/25 23:24:09 miciah Exp $ */
+/* $Id: conv.c,v 1.70 2004/11/25 23:50:15 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -303,10 +303,10 @@ add_quoted_to_string(struct string *string, unsigned char *src, int len)
 }
 
 struct string *
-add_shell_quoted_to_string(struct string *string, unsigned char *src)
+add_shell_quoted_to_string(struct string *string, unsigned char *src, int len)
 {
 	add_char_to_string(string, '\'');
-	for (; *src; ++src)
+	for (; len; len--, ++src)
 		if (*src == '\'')
 			add_to_string(string, "'\\''");
 		else

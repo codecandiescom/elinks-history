@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.115 2003/05/18 15:13:19 pasky Exp $ */
+/* $Id: http.c,v 1.116 2003/05/18 15:15:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -390,16 +390,11 @@ http_send_header(struct connection *c)
 
 	add_url_to_http_str(&hdr, &l, url_data, post);
 
-	if (info->sent_version.major == 0) {
-		add_to_str(&hdr, &l, "\r\n");
-		goto end;
-	} else {
-		add_to_str(&hdr, &l, " HTTP/");
-		add_num_to_str(&hdr, &l, info->sent_version.major);
-		add_chr_to_str(&hdr, &l, '.');
-		add_num_to_str(&hdr, &l, info->sent_version.minor);
-		add_to_str(&hdr, &l, "\r\n");
-	}
+	add_to_str(&hdr, &l, " HTTP/");
+	add_num_to_str(&hdr, &l, info->sent_version.major);
+	add_chr_to_str(&hdr, &l, '.');
+	add_num_to_str(&hdr, &l, info->sent_version.minor);
+	add_to_str(&hdr, &l, "\r\n");
 
 	host_data = get_host_name(host);
 
@@ -700,7 +695,6 @@ http_send_header(struct connection *c)
 		}
 	}
 
-end:
 	write_to_socket(c, c->sock1, hdr, l, http_get_header);
 	mem_free(hdr);
 

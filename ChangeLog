@@ -1,3 +1,9 @@
+Sun Feb 22 13:30:21 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
 Sat Feb 21 06:29:27 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/protocol/uri.c:

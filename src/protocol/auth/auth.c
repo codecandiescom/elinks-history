@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.86 2004/06/13 13:57:06 jonas Exp $ */
+/* $Id: auth.c,v 1.87 2004/07/23 16:04:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,21 +67,27 @@ find_auth_entry(struct uri *uri, unsigned char *realm)
 	return match;
 }
 
-#define set_auth_user(e, u) \
-	do { \
-		int userlen = int_min((u)->userlen, HTTP_AUTH_USER_MAXLEN - 1); \
-		if (userlen) \
-			memcpy((e)->user, (u)->user, userlen); \
-		(e)->user[userlen] = 0; \
-	} while (0)
+static void
+set_auth_user(struct http_auth_basic *entry, struct uri *uri)
+{
+	int userlen = int_min(uri->userlen, HTTP_AUTH_USER_MAXLEN - 1);
 
-#define set_auth_password(e, u) \
-	do { \
-		int passwordlen = int_min((u)->passwordlen, HTTP_AUTH_PASSWORD_MAXLEN - 1); \
-		if (passwordlen) \
-			memcpy((e)->password, (u)->password, passwordlen); \
-		(e)->password[passwordlen] = 0; \
-	} while (0)
+	if (userlen)
+		memcpy(entry->user, uri->user, userlen);
+
+	entry->user[userlen] = '\0';
+}
+
+static void
+set_auth_password(struct http_auth_basic *entry, struct uri *uri)
+{
+	int passwordlen = int_min(uri->passwordlen, HTTP_AUTH_PASSWORD_MAXLEN - 1);
+
+	if (passwordlen)
+		memcpy(entry->password, uri->password, passwordlen);
+
+	entry->password[passwordlen] = '\0';
+}
 
 static struct http_auth_basic *
 init_auth_entry(struct uri *uri, unsigned char *realm)

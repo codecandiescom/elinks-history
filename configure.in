@@ -212,6 +212,8 @@ dnl ===================================================================
 dnl Check for Lua, optional even if installed.
 dnl ===================================================================
 
+AC_CHECK_LIB(dl, dlopen) # OpenSSL and Lua frequently needs it
+
 dnl Do this the long way, as FreeBSD reportedly needs -L<dir> for
 dnl anything other than /usr/lib, and Lua is very often in /usr/local/lib.
 
@@ -255,8 +257,6 @@ dnl ===================================================================
 
 dnl For wiping SSL hooks..
 #ifdef HAVE_SSL
-
-AC_CHECK_LIB(dl, dlopen) # OpenSSL needs it?
 
 CFLAGS_X="$CFLAGS"
 LIBS_X="$LIBS"

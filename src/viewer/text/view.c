@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.454 2004/06/13 21:49:36 zas Exp $ */
+/* $Id: view.c,v 1.455 2004/06/13 22:02:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -517,14 +517,14 @@ scroll_mouse_down(struct session *ses, struct document_view *doc_view, int xxxx)
 #endif /* CONFIG_MOUSE */
 
 static void
-hscroll(struct session *ses, struct document_view *doc_view, int a)
+hscroll(struct session *ses, struct document_view *doc_view, int steps)
 {
 	int x;
 
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	x = doc_view->vs->x + a;
+	x = doc_view->vs->x + steps;
 	int_bounds(&x, 0, doc_view->document->width - 1);
 	if (x == doc_view->vs->x) return;
 
@@ -534,6 +534,47 @@ hscroll(struct session *ses, struct document_view *doc_view, int a)
 		find_link(doc_view, 1, 0);
 	/* !!! FIXME: check right margin */
 }
+
+/* TODO: "document.browse.hscroll_step" */
+static void
+scroll_left(struct session *ses, struct document_view *doc_view, int xxxx)
+{
+	int steps;
+
+	if (ses->kbdprefix.rep)
+		steps = 8;
+	else
+		steps = 1;
+
+	hscroll(ses, doc_view, -steps);
+}
+
+static void
+scroll_right(struct session *ses, struct document_view *doc_view, int xxxx)
+{
+	int steps;
+
+	if (ses->kbdprefix.rep)
+		steps = 8;
+	else
+		steps = 1;
+
+	hscroll(ses, doc_view, steps);
+}
+
+#ifdef CONFIG_MOUSE
+static void
+scroll_mouse_left(struct session *ses, struct document_view *doc_view, int xxxx)
+{
+	hscroll(ses, doc_view, -8);
+}
+
+static void
+scroll_mouse_right(struct session *ses, struct document_view *doc_view, int xxxx)
+{
+	hscroll(ses, doc_view, 8);
+}
+#endif /* CONFIG_MOUSE */
 
 static void
 home(struct session *ses, struct document_view *doc_view, int a)
@@ -736,8 +777,8 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			/* XXX: Code duplication of following for mouse */
 			case ACT_MAIN_SCROLL_UP: scroll_up(ses, doc_view, 0); break;
 			case ACT_MAIN_SCROLL_DOWN: scroll_down(ses, doc_view, 0); break;
-			case ACT_MAIN_SCROLL_LEFT: rep_ev(ses, doc_view, hscroll, -1 - 7 * !ses->kbdprefix.rep); break;
-			case ACT_MAIN_SCROLL_RIGHT: rep_ev(ses, doc_view, hscroll, 1 + 7 * !ses->kbdprefix.rep); break;
+			case ACT_MAIN_SCROLL_LEFT: rep_ev(ses, doc_view, scroll_left, 0); break;
+			case ACT_MAIN_SCROLL_RIGHT: rep_ev(ses, doc_view, scroll_right, 0); break;
 
 			case ACT_MAIN_HOME: rep_ev(ses, doc_view, home, 0); break;
 			case ACT_MAIN_END:  rep_ev(ses, doc_view, x_end, 0); break;
@@ -833,10 +874,10 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			}
 
 			if (ev->x < scrollmargin * 2) {
-				rep_ev(ses, doc_view, hscroll, -8);
+				rep_ev(ses, doc_view, scroll_mouse_left, 0);
 			}
 			if (ev->x >= doc_view->box.width - scrollmargin * 2) {
-				rep_ev(ses, doc_view, hscroll, 8);
+				rep_ev(ses, doc_view, scroll_mouse_right, 0);
 			}
 		} else {
 			status = FRAME_EVENT_IGNORED;

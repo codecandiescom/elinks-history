@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.2 2003/06/26 18:14:40 jonas Exp $ */
+/* $Id: protocol.c,v 1.3 2003/06/26 18:34:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,16 +27,6 @@
 
 
 static void dummyjs_func(struct session *, unsigned char *);
-
-struct protocol_backend {
-	unsigned char *prot;
-	int port;
-	void (*func)(struct connection *);
-	void (*nc_func)(struct session *, unsigned char *);
-	int free_syntax;
-	int need_slashes;
-	int need_slash_after_host;
-};
 
 static struct protocol_backend protocol_backends[] = {
 	{"custom", 0, NULL, user_func, 0, 0, 0}, /* protocol.user.* */ /* DO NOT MOVE! */
@@ -70,6 +60,8 @@ check_protocol(unsigned char *p, int l)
 
 	/* First check if this isn't some custom (protocol.user) protocol. It
 	 * has higher precedence than builtin handlers. */
+	/* FIXME: We have to get some terminal to pass along or else this is
+	 *	  pretty useless. */
 	p[l] = 0;
 	if (get_prog(NULL, p)) {
 		p[l] = ':';
@@ -78,8 +70,8 @@ check_protocol(unsigned char *p, int l)
 		return 0;
 	}
 
-	for (i = 0; protocol_backends[i].prot; i++)
-		if (!strcasecmp(protocol_backends[i].prot, p)) {
+	for (i = 0; protocol_backends[i].name; i++)
+		if (!strcasecmp(protocol_backends[i].name, p)) {
 			p[l] = ':';
 			return i;
 		}

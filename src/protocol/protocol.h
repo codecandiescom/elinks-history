@@ -1,10 +1,20 @@
-/* $Id: protocol.h,v 1.1 2003/06/26 17:02:28 jonas Exp $ */
+/* $Id: protocol.h,v 1.2 2003/06/26 18:34:38 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
 
 #include "sched/sched.h"
 #include "sched/session.h"
+
+struct protocol_backend {
+	unsigned char *name;
+	int port;
+	void (*func)(struct connection *);
+	void (*nc_func)(struct session *, unsigned char *);
+	int free_syntax;
+	int need_slashes;
+	int need_slash_after_host;
+};
 
 int check_protocol(unsigned char *p, int l);
 void (*get_protocol_handle(unsigned char *))(struct connection *);

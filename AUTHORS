@@ -157,6 +157,7 @@ Kaloian Doganov <kaloian@europe.com>
 Karel Kulhavy <clock@atrey.karlin.mff.cuni.cz>
 	Czech translation
 	Fixed compile incompatibility
+	One of Links authors; a lot of misc. features & code
 
 Karvinen Ilkka <ik@iki.fi>
 	Finnish translation
@@ -212,6 +213,7 @@ Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
 	Original links author
 	Maintains and makes official releases.
 	http://artax.karlin.mff.cuni.cz/~mikulas/vyplody/links/
+	One of Links authors; a lot of misc. features & code
 
 Muhamad Faizal <faizal@mfaizal.net>
 	Indonesian translation
@@ -256,6 +258,7 @@ Petr Cech <cech@atrey.karlin.mff.cuni.cz>
 Petr Kulhavy <brain@artax.karlin.mff.cuni.cz>
 	Czech translation
 	HTTP referer support
+	One of Links authors; a lot of misc. features & code
 
 Radovan Stas <radoone@skmi.science.upjs.sk>
 	Slovak translation
@@ -319,4 +322,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.59 2002/05/11 16:47:54 pasky Exp $
+$Id: AUTHORS,v 1.60 2002/05/17 20:13:19 pasky Exp $

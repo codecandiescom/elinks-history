@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.488 2004/08/16 01:02:12 jonas Exp $ */
+/* $Id: renderer.c,v 1.489 2004/08/20 14:22:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -483,7 +483,8 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 		if (tag->y == Y(yf)) {
 			matched = 1;
 			if (tag->x >= X(xf)) {
-				tag->y = Y(yt), tag->x += -xf + xt;
+				tag->y = Y(yt);
+				tag->x += -xf + xt;
 			}
 		}
 

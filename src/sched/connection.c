@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.165 2004/04/16 16:35:19 zas Exp $ */
+/* $Id: connection.c,v 1.166 2004/04/19 15:56:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -364,8 +364,8 @@ free_connection_data(struct connection *conn)
 		conn->conn_info = NULL;
 	}
 	
-	mem_free_set_if(conn->buffer, NULL);
-	mem_free_set_if(conn->info, NULL);
+	mem_free_set(&conn->buffer, NULL);
+	mem_free_set(&conn->info, NULL);
 	
 	if (conn->timer != -1) {
 		kill_timer(conn->timer);

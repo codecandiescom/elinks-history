@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.75 2004/04/19 14:39:40 zas Exp $ */
+/* $Id: task.c,v 1.76 2004/04/19 15:56:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,7 +39,7 @@ free_task(struct session *ses)
 	assertm(ses->task.type, "Session has no task");
 	if_assert_failed return;
 
-	mem_free_set_if(ses->goto_position, NULL);
+	mem_free_set(&ses->goto_position, NULL);
 	
 	if (ses->loading_uri) {
 		done_uri(ses->loading_uri);
@@ -130,7 +130,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 
 		mem_free_if(task);
 
-		mem_free_set_if(ses->goto_position, pos);
+		mem_free_set(&ses->goto_position, pos);
 
 		ses->loading.end = (void (*)(struct download *, void *)) fn;
 		ses->loading.data = ses;
@@ -184,7 +184,7 @@ ses_forward(struct session *ses, int loaded_in_frame)
 
 	if (!loaded_in_frame) {
 		free_files(ses);
-		mem_free_set_if(ses->search_word, NULL);
+		mem_free_set(&ses->search_word, NULL);
 	}
 
 x:
@@ -449,7 +449,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 		if (ses->loading_uri == uri) {
 			/* We're already loading the URL. */
 			done_uri(uri);
-			mem_free_set_if(ses->goto_position, pos);
+			mem_free_set(&ses->goto_position, pos);
 
 			return;
 		}
@@ -550,7 +550,7 @@ void
 goto_imgmap(struct session *ses, unsigned char *url, unsigned char *href,
 	    unsigned char *target)
 {
-	mem_free_set_if(ses->imgmap_href_base, href);
-	mem_free_set_if(ses->imgmap_target_base, target);
+	mem_free_set(&ses->imgmap_href_base, href);
+	mem_free_set(&ses->imgmap_target_base, target);
 	follow_url(ses, url, target, TASK_IMGMAP, CACHE_MODE_NORMAL, 1);
 }

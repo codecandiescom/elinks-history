@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.62 2004/04/19 14:39:40 zas Exp $ */
+/* $Id: status.c,v 1.63 2004/04/19 15:56:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -454,7 +454,7 @@ display_window_title(struct session *ses, struct terminal *term)
 	    || !status->last_title
 	    || strlen(status->last_title) != titlelen
 	    || memcmp(status->last_title, title, titlelen)) {
-		mem_free_set_if(status->last_title, title);
+		mem_free_set(&status->last_title, title);
 		set_terminal_title(term, title);
 		last_ses = ses;
 	} else {

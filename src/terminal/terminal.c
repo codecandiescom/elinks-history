@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.64 2004/04/19 14:39:40 zas Exp $ */
+/* $Id: terminal.c,v 1.65 2004/04/19 15:56:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -325,7 +325,7 @@ void
 set_terminal_title(struct terminal *term, unsigned char *title)
 {
 	if (term->title && !strcmp(title, term->title)) return;
-	mem_free_set_if(term->title, stracpy(title));
+	mem_free_set(&term->title, stracpy(title));
 	do_terminal_function(term, TERM_FN_TITLE, title);
 }
 

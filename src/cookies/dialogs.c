@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.42 2004/04/19 14:39:40 zas Exp $ */
+/* $Id: dialogs.c,v 1.43 2004/04/19 15:56:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,7 +154,7 @@ set_cookie_name(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	unsigned char *value = widget_data->cdata;
 
 	if (!value || !cookie) return 1;
-	mem_free_set_if(cookie->name, stracpy(value));
+	mem_free_set(&cookie->name, stracpy(value));
 
 	assert(cookie->box_item);
 	cookie->box_item->text = cookie->name;
@@ -168,7 +168,7 @@ set_cookie_value(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	unsigned char *value = widget_data->cdata;
 
 	if (!value || !cookie) return 1;
-	mem_free_set_if(cookie->value, stracpy(value));
+	mem_free_set(&cookie->value, stracpy(value));
 	return 0;
 }
 
@@ -179,7 +179,7 @@ set_cookie_domain(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	unsigned char *value = widget_data->cdata;
 
 	if (!value || !cookie) return 1;
-	mem_free_set_if(cookie->domain, stracpy(value));
+	mem_free_set(&cookie->domain, stracpy(value));
 	return 0;
 }
 

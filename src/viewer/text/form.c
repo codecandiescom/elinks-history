@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.89 2004/04/17 18:56:48 jonas Exp $ */
+/* $Id: form.c,v 1.90 2004/04/19 15:56:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,7 @@ fixup_select_state(struct form_control *fc, struct form_state *fs)
 
 	fs->state = 0;
 
-	mem_free_set_if(fs->value, stracpy(fc->nvalues
+	mem_free_set(&fs->value, stracpy(fc->nvalues
 					   ? fc->values[0]
 					   : (unsigned char *) ""));
 }
@@ -86,7 +86,7 @@ init_ctrl(struct form_control *frm, struct form_state *fs)
 	assert(frm && fs);
 	if_assert_failed return;
 
-	mem_free_set_if(fs->value, NULL);
+	mem_free_set(&fs->value, NULL);
 
 	switch (frm->type) {
 		case FC_TEXT:
@@ -304,7 +304,7 @@ draw_forms(struct terminal *t, struct document_view *doc_view)
 						       l1->form->name);
 
 			if (value)
-				mem_free_set_if(l1->form->default_value, stracpy(value));
+				mem_free_set(&l1->form->default_value, stracpy(value));
 		}
 #endif /* CONFIG_FORMHIST */
 		draw_form_entry(t, doc_view, l1);

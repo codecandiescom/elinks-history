@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.24 2004/04/17 11:36:15 pasky Exp $ */
+/* $Id: memory.h,v 1.25 2004/04/19 15:56:49 zas Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -141,13 +141,13 @@ mem_align_alloc__(
 /* TODO: Think about making what they do more obvious in their identifier, they
  * could be obfuscating their users a little for the newcomers otherwise. */
 
-/* XXX: way to improve ? */
-#define mem_free_set_if(x, v) do { register void *p = (x); if (p) mem_free(p); (x) = (v); } while (0)
+#define mem_free_set(x, v) do { register void **p = (void **)(x); if (*p) mem_free(*p); *p = (void *)(v); } while (0)
+#define mem_free_if(x) do { register void *p = (x); if (p) mem_free(p); } while (0)
 
-/* #define mem_free_if(x) do { register void *p = (x); if (p) mem_free(p); } while (0) */
-/* This helps to find bugs. Just take care to do it never or everytime,
- * otherwise it could hide bugs in debug mode or so. */
-#define mem_free_if(x) mem_free_set_if(x, NULL)
-
+#if 0
+/* This may help to find bugs. */
+#undef mem_free_if
+#define mem_free_if(x) mem_free_set(&x, NULL)
+#endif
 
 #endif

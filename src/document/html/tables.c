@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.155 2004/04/19 14:39:40 zas Exp $ */
+/* $Id: tables.c,v 1.156 2004/04/19 15:56:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -610,7 +610,7 @@ qwe:
 		get_align(t_attr, &l_al);
 		get_valign(t_attr, &l_val);
 		get_bgcolor(t_attr, &l_col);
-		mem_free_set_if(l_fragment_id, get_attr_val(t_attr, "id"));
+		mem_free_set(&l_fragment_id, get_attr_val(t_attr, "id"));
 		y++;
 		x = 0;
 		goto see;
@@ -981,7 +981,7 @@ get_column_widths(struct table *t)
 	if (!t->max_c) {
 		t->max_c = mem_calloc(t->x, sizeof(int));
 	   	if (!t->max_c) {
-			mem_free_set_if(t->min_c, NULL);
+			mem_free_set(&t->min_c, NULL);
 			return -1;
 		}
 	}
@@ -989,8 +989,8 @@ get_column_widths(struct table *t)
 	if (!t->columns_width) {
 		t->columns_width = mem_calloc(t->x, sizeof(int));
 		if (!t->columns_width) {
-			mem_free_set_if(t->min_c, NULL);
-			mem_free_set_if(t->max_c, NULL);
+			mem_free_set(&t->min_c, NULL);
+			mem_free_set(&t->max_c, NULL);
 			return -1;
 		}
 	}

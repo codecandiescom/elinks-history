@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.163 2004/04/19 14:39:40 zas Exp $ */
+/* $Id: file.c,v 1.164 2004/04/19 15:56:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -688,7 +688,7 @@ file_func(struct connection *connection)
 
 		} else {
 			/* Setup file read or directory listing for viewing. */
-			mem_free_set_if(cached->head, stracpy(head));
+			mem_free_set(&cached->head, stracpy(head));
 			cached->incomplete = 0;
 
 			add_fragment(cached, 0, page.source, page.length);

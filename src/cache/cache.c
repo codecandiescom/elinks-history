@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.138 2004/04/16 16:33:27 zas Exp $ */
+/* $Id: cache.c,v 1.139 2004/04/19 15:56:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -449,8 +449,8 @@ delete_entry_content(struct cache_entry *cached)
 	cached->length = 0;
 	cached->incomplete = 1;
 
-	mem_free_set_if(cached->last_modified, NULL);
-	mem_free_set_if(cached->etag, NULL);
+	mem_free_set(&cached->last_modified, NULL);
+	mem_free_set(&cached->etag, NULL);
 }
 
 void
@@ -504,7 +504,7 @@ redirect_cache(struct cache_entry *cached, unsigned char *location,
 		add_to_strn(&uristring, cached->uri->post - 1);
 	}
 
-	mem_free_set_if(cached->redirect, get_uri(uristring, -1));
+	mem_free_set(&cached->redirect, get_uri(uristring, -1));
 	cached->redirect_get = get;
 	if (incomplete >= 0) cached->incomplete = incomplete;
 

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.213 2004/04/17 02:39:53 jonas Exp $ */
+/* $Id: search.c,v 1.214 2004/04/19 15:56:51 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -715,8 +715,8 @@ search_for_do(struct session *ses, unsigned char *str, int direction)
 	assert(doc_view);
 	if_assert_failed return;
 
-	mem_free_set_if(ses->search_word, NULL);
-	mem_free_set_if(ses->last_search_word, NULL);
+	mem_free_set(&ses->search_word, NULL);
+	mem_free_set(&ses->last_search_word, NULL);
 	
 	if (!*str) return;
 

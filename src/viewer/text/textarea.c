@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.48 2004/04/17 02:39:53 jonas Exp $ */
+/* $Id: textarea.c,v 1.49 2004/04/19 15:56:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -365,7 +365,7 @@ close:
 	return;
 
 free_and_return:
-	mem_free_set_if(fn, NULL);
+	mem_free_set(&fn, NULL);
 	fs = NULL;
 }
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.392 2004/04/19 14:39:40 zas Exp $ */
+/* $Id: parser.c,v 1.393 2004/04/19 15:56:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -765,9 +765,9 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 	has_link_lines = 1;
 	html_stack_dup(ELEMENT_KILLABLE);
 	ln_break(1, line_break_f, ff);
-	mem_free_set_if(format.link, NULL);
-	mem_free_set_if(format.target, NULL);
-	mem_free_set_if(format.title, NULL);
+	mem_free_set(&format.link, NULL);
+	mem_free_set(&format.target, NULL);
+	mem_free_set(&format.title, NULL);
 	format.form = NULL;
 	put_chrs(prefix, strlen(prefix), put_chars_f, ff);
 	format.link = join_urls(format.href_base, link);
@@ -860,16 +860,16 @@ html_a(unsigned char *a)
 	if (href) {
 		unsigned char *target;
 
-		mem_free_set_if(format.link,
+		mem_free_set(&format.link,
 				join_urls(format.href_base, trim_chars(href, ' ', 0)));
 
 		mem_free(href);
 
 		target = get_target(a);
 		if (target) {
-			mem_free_set_if(format.target, target);
+			mem_free_set(&format.target, target);
 		} else {
-			mem_free_set_if(format.target, stracpy(format.target_base));
+			mem_free_set(&format.target, stracpy(format.target_base));
 		}
 #ifdef CONFIG_GLOBHIST
 		if (get_global_history_item(format.link))
@@ -878,7 +878,7 @@ html_a(unsigned char *a)
 #endif
 			format.fg = format.clink;
 
-		mem_free_set_if(format.title, get_attr_val(a, "title"));
+		mem_free_set(&format.title, get_attr_val(a, "title"));
 
 		html_focusable(a);
 
@@ -1015,8 +1015,8 @@ html_img(unsigned char *a)
 		}
 	}
 
-	mem_free_set_if(format.image, NULL);
-	mem_free_set_if(format.title, NULL);
+	mem_free_set(&format.image, NULL);
+	mem_free_set(&format.title, NULL);
 
 	if (al) {
 		int img_link_tag = get_opt_int("document.browse.images.image_link_tagging");
@@ -1069,8 +1069,8 @@ show_al:
 		/* Anything below must take care of properly handling the
 		 * show_any_as_links variable being off! */
 	}
-	mem_free_set_if(format.image, NULL);
-	mem_free_set_if(format.title, NULL);
+	mem_free_set(&format.image, NULL);
+	mem_free_set(&format.title, NULL);
 	mem_free_if(al);
 	if (usemap) kill_html_stack_item(&html_top);
 	/*put_chrs(" ", 1, put_chars_f, ff);*/
@@ -1281,7 +1281,7 @@ html_hr(unsigned char *a)
 	if (q >= 0 && q < 2) r = (unsigned char)BORDER_SHLINE;
 	html_stack_dup(ELEMENT_KILLABLE);
 	par_format.align = AL_CENTER;
-	mem_free_set_if(format.link, NULL);
+	mem_free_set(&format.link, NULL);
 	format.form = NULL;
 	html_linebrk(a);
 	if (par_format.align == AL_BLOCK) par_format.align = AL_CENTER;
@@ -1336,13 +1336,13 @@ html_base(unsigned char *a)
 	unsigned char *al = get_url_val(a, "href");
 
 	if (al) {
-		mem_free_set_if(format.href_base,
+		mem_free_set(&format.href_base,
 				join_urls(((struct html_element *)html_stack.prev)->attr.href_base, al));
 		mem_free(al);
 	}
 
 	al = get_target(a);
-	if (al) mem_free_set_if(format.target_base, al);
+	if (al) mem_free_set(&format.target_base, al);
 }
 
 static void
@@ -1765,7 +1765,7 @@ xxx:
 			put_chrs("(&nbsp;)", 8, put_chars_f, ff);
 			break;
 		case FC_IMAGE:
-			mem_free_set_if(format.image, NULL);
+			mem_free_set(&format.image, NULL);
 			if ((al = get_url_val(a, "src"))
 			    || (al = get_url_val(a, "dynsrc"))) {
 				format.image = join_urls(format.href_base, al);
@@ -3674,8 +3674,8 @@ done_html_parser(void)
 	if (global_doc_opts->css_enable)
 		done_css_stylesheet(&css_styles);
 
-	mem_free_set_if(form.action, NULL);
-	mem_free_set_if(form.target, NULL);
+	mem_free_set(&form.action, NULL);
+	mem_free_set(&form.target, NULL);
 
 	kill_html_stack_item(html_stack.next);
 

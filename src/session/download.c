@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.271 2004/04/16 16:35:19 zas Exp $ */
+/* $Id: download.c,v 1.272 2004/04/19 15:56:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -882,7 +882,7 @@ tp_cancel(void *data)
 static void
 tp_save(struct tq *tq)
 {
-	mem_free_set_if(tq->prog, NULL);
+	mem_free_set(&tq->prog, NULL);
 	query_file(tq->ses, tq->uri, tq, continue_download, tp_cancel, 1);
 }
 
@@ -937,7 +937,7 @@ type_query(struct tq *tq, unsigned char *ct, struct mime_handler *handler)
 {
 	struct string filename;
 
-	mem_free_set_if(tq->prog, NULL);
+	mem_free_set(&tq->prog, NULL);
 	
 	if (handler) {
 		tq->prog = stracpy(handler->program);

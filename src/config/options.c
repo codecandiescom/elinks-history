@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.441 2004/04/19 14:39:40 zas Exp $ */
+/* $Id: options.c,v 1.442 2004/04/19 15:56:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,7 +176,7 @@ get_opt_rec(struct option *tree, unsigned char *name_)
 			mem_free(aname);
 			return NULL;
 		}
-		mem_free_set_if(option->name, stracpy(name));
+		mem_free_set(&option->name, stracpy(name));
 		if (option->box_item) option->box_item->text = option->name;
 
 		add_opt_rec(tree, "", option);

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.69 2004/04/19 14:39:40 zas Exp $ */
+/* $Id: socket.c,v 1.70 2004/04/19 15:56:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -578,7 +578,7 @@ write_to_socket(struct connection *conn, int s, unsigned char *data,
 	wb->pos = 0;
 	wb->done = write_func;
 	memcpy(wb->data, data, len);
-	mem_free_set_if(conn->buffer, wb);
+	mem_free_set(&conn->buffer, wb);
 	set_handlers(s, NULL, (void *)write_select, (void *)exception, conn);
 }
 

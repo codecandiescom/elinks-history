@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.16 2003/12/02 14:42:35 pasky Exp $ */
+/* $Id: status.c,v 1.17 2003/12/02 14:49:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,6 +53,7 @@ get_stat_msg(struct download *stat, struct terminal *term,
 	     int wide, int full, unsigned char *separator)
 {
 	struct string msg;
+	int newlines = separator[strlen(separator) - 1] == '\n';
 
 	if (stat->state != S_TRANS || !(stat->prg->elapsed / 100)) {
 
@@ -80,9 +81,13 @@ get_stat_msg(struct download *stat, struct terminal *term,
 
 	if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 		add_to_string(&msg,
-			      _(wide ? N_("average speed") : N_("avg"), term));
+			      _(wide ? (newlines ? N_("Average speed")
+					         : N_("average speed"))
+				     : N_("avg"),
+				term));
 	} else {
-		add_to_string(&msg, _("speed", term));
+		add_to_string(&msg, _(newlines ? N_("Speed") : N_("speed"),
+					term));
 	}
 
 	add_char_to_string(&msg, ' ');
@@ -104,7 +109,8 @@ get_stat_msg(struct download *stat, struct terminal *term,
 
 	add_to_string(&msg, separator);
 
-	add_to_string(&msg, _("elapsed time", term));
+	add_to_string(&msg, _(newlines ? N_("Elapsed time") : N_("elapsed time"),
+				term));
 	add_char_to_string(&msg, ' ');
 	add_time_to_string(&msg, stat->prg->elapsed);
 

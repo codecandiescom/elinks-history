@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.170 2004/12/20 13:13:42 miciah Exp $ */
+/* $Id: renderer.c,v 1.171 2004/12/20 13:40:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -343,8 +343,8 @@ add_document_line(struct plain_renderer *renderer,
 				/* Is _^H_ an underlined underscore
 				 * or an emboldened underscore? */
 
-				assert(pos - 1 >= startpos);
 				if (expanded + line_pos >= 0
+				    && pos - 1 >= startpos
 				    && (pos - 1)->attr) {
 					/* There is some preceding text,
 					 * and it has an attribute; copy it */

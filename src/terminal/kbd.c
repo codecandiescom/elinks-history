@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.92 2004/07/28 13:29:15 jonas Exp $ */
+/* $Id: kbd.c,v 1.93 2004/07/28 13:37:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -635,6 +635,88 @@ static struct key os2xtd[256] = {
 #include <ctype.h>	/* isprint() isspace() */
 #endif
 
+#ifdef CONFIG_MOUSE
+/* Returns length of the escape sequence or -1 if the caller needs to set up
+ * the ESC delay timer. */
+static int
+decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
+				      int el, int v)
+{
+	static int xterm_button = -1;
+	struct term_event_mouse *mouse = &ev->info.mouse;
+
+	if (itrm->qlen - el < 3)
+		return -1;
+
+	if (v == 5) {
+		if (xterm_button == -1)
+			xterm_button = 0;
+		if (itrm->qlen - el < 5)
+			return -1;
+
+		ev->x = (unsigned char)(itrm->kqueue[el+1]) - ' ' - 1
+		       + ((int)((unsigned char)(itrm->kqueue[el+2]) - ' ' - 1) << 7);
+
+		if (ev->x & (1 << 13)) ev->x = 0; /* ev->x |= ~0 << 14; */
+
+		ev->y = (unsigned char)(itrm->kqueue[el+3]) - ' ' - 1
+		       + ((int)((unsigned char)(itrm->kqueue[el+4]) - ' ' - 1) << 7);
+
+		if (ev->y & (1 << 13)) ev->y = 0; /* ev->y |= ~0 << 14; */
+
+		switch ((itrm->kqueue[el] - ' ') ^ xterm_button) { /* Every event changes only one bit */
+		    case TW_BUTT_LEFT:   mouse->button = B_LEFT | ( (xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN ); break;
+		    case TW_BUTT_MIDDLE: mouse->button = B_MIDDLE | ( (xterm_button & TW_BUTT_MIDDLE) ? B_UP :  B_DOWN ); break;
+		    case TW_BUTT_RIGHT:  mouse->button = B_RIGHT | ( (xterm_button & TW_BUTT_RIGHT) ? B_UP : B_DOWN ); break;
+		    case 0: ev->info.mouse.button = B_DRAG;
+		    /* default : Twin protocol error */
+		}
+		xterm_button = itrm->kqueue[el] - ' ';
+		el += 5;
+	} else {
+		/* See terminal/mouse.h about details of the mouse reporting
+		 * protocol and {struct term_event_mouse->button} bitmask
+		 * structure. */
+		ev->x = itrm->kqueue[el+1] - ' ' - 1;
+		ev->y = itrm->kqueue[el+2] - ' ' - 1;
+
+		/* There are rumours arising from remnants of code dating to
+		 * the ancient Mikulas' times that bit 4 indicated B_DRAG.
+		 * However, I didn't find on what terminal it should be ever
+		 * supposed to work and it conflicts with wheels. So I removed
+		 * the last remnants of the code as well. --pasky */
+
+		mouse->button = (itrm->kqueue[el] & 7) | B_DOWN;
+		/* smartglasses1 - rxvt wheel: */
+		if (mouse->button == 3 && xterm_button != -1) {
+			mouse->button = xterm_button | B_UP;
+		}
+		/* xterm wheel: */
+		if ((itrm->kqueue[el] & 96) == 96) {
+			mouse->button = (itrm->kqueue[el] & 1) ? B_WHEEL_DOWN : B_WHEEL_UP;
+		}
+
+		xterm_button = -1;
+		/* XXX: Eterm/aterm uses rxvt-like reporting, but sends the
+		 * release sequence for wheel. rxvt itself sends only press
+		 * sequence. Since we can't reliably guess what we're talking
+		 * with from $TERM, we will rather support Eterm/aterm, as in
+		 * rxvt, at least each second wheel up move will work. */
+		if (check_mouse_action(ev, B_DOWN))
+#if 0
+			    && !(getenv("TERM") && strstr("rxvt", getenv("TERM"))
+				 && (ev->b & BM_BUTT) >= B_WHEEL_UP))
+#endif
+			xterm_button = get_mouse_button(ev);
+
+		el += 3;
+	}
+	ev->ev = EVENT_MOUSE;
+
+	return el;
+}
+#endif /* CONFIG_MOUSE */
+
 /* Returns length of the escape sequence or -1 if the caller needs to set up
  * the ESC delay timer. */
 static int
@@ -731,80 +813,9 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 	case 'R': resize_terminal(); break;
 	case 'M':
 #ifdef CONFIG_MOUSE
-	{
-		static int xterm_button = -1;
-		struct term_event_mouse *mouse = &ev->info.mouse;
-
-		if (itrm->qlen - el < 3)
-			return -1;
-
-		if (v == 5) {
-			if (xterm_button == -1)
-				xterm_button = 0;
-			if (itrm->qlen - el < 5)
-				return -1;
-
-			ev->x = (unsigned char)(itrm->kqueue[el+1]) - ' ' - 1
-			       + ((int)((unsigned char)(itrm->kqueue[el+2]) - ' ' - 1) << 7);
-
-			if (ev->x & (1 << 13)) ev->x = 0; /* ev->x |= ~0 << 14; */
-
-			ev->y = (unsigned char)(itrm->kqueue[el+3]) - ' ' - 1
-			       + ((int)((unsigned char)(itrm->kqueue[el+4]) - ' ' - 1) << 7);
-
-			if (ev->y & (1 << 13)) ev->y = 0; /* ev->y |= ~0 << 14; */
-
-			switch ((itrm->kqueue[el] - ' ') ^ xterm_button) { /* Every event changes only one bit */
-			    case TW_BUTT_LEFT:   mouse->button = B_LEFT | ( (xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN ); break;
-			    case TW_BUTT_MIDDLE: mouse->button = B_MIDDLE | ( (xterm_button & TW_BUTT_MIDDLE) ? B_UP :  B_DOWN ); break;
-			    case TW_BUTT_RIGHT:  mouse->button = B_RIGHT | ( (xterm_button & TW_BUTT_RIGHT) ? B_UP : B_DOWN ); break;
-			    case 0: ev->info.mouse.button = B_DRAG;
-			    /* default : Twin protocol error */
-			}
-			xterm_button = itrm->kqueue[el] - ' ';
-			el += 5;
-		} else {
-			/* See terminal/mouse.h about details of the mouse reporting
-			 * protocol and {struct term_event_mouse->button} bitmask
-			 * structure. */
-			ev->x = itrm->kqueue[el+1] - ' ' - 1;
-			ev->y = itrm->kqueue[el+2] - ' ' - 1;
-
-			/* There are rumours arising from remnants of code dating to
-			 * the ancient Mikulas' times that bit 4 indicated B_DRAG.
-			 * However, I didn't find on what terminal it should be ever
-			 * supposed to work and it conflicts with wheels. So I removed
-			 * the last remnants of the code as well. --pasky */
-
-			mouse->button = (itrm->kqueue[el] & 7) | B_DOWN;
-			/* smartglasses1 - rxvt wheel: */
-			if (mouse->button == 3 && xterm_button != -1) {
-				mouse->button = xterm_button | B_UP;
-			}
-			/* xterm wheel: */
-			if ((itrm->kqueue[el] & 96) == 96) {
-				mouse->button = (itrm->kqueue[el] & 1) ? B_WHEEL_DOWN : B_WHEEL_UP;
-			}
-
-			xterm_button = -1;
-			/* XXX: Eterm/aterm uses rxvt-like reporting, but sends the
-			 * release sequence for wheel. rxvt itself sends only press
-			 * sequence. Since we can't reliably guess what we're talking
-			 * with from $TERM, we will rather support Eterm/aterm, as in
-			 * rxvt, at least each second wheel up move will work. */
-			if (check_mouse_action(ev, B_DOWN))
-#if 0
-				    && !(getenv("TERM") && strstr("rxvt", getenv("TERM"))
-					 && (ev->b & BM_BUTT) >= B_WHEEL_UP))
-#endif
-				xterm_button = get_mouse_button(ev);
-
-			el += 3;
-		}
-		ev->ev = EVENT_MOUSE;
-	}
+		el = decode_terminal_mouse_escape_sequence(itrm, ev, el, v);
 #endif /* CONFIG_MOUSE */
-	break;
+		break;
 	}
 
 	return el;

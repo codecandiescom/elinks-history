@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.12 2002/04/27 21:21:20 pasky Exp $ */
+/* $Id: ftp.c,v 1.13 2002/04/28 17:17:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -338,6 +338,41 @@ void ftp_pass_info(struct connection *conn, struct read_buffer *rb)
 	ftp_send_retr_req(conn, S_GETH);
 }
 
+/* Construct PORT command. */
+static void
+add_portcmd_to_str(unsigned char **str, int *strl, unsigned char *pc)
+{
+	/* From RFC 959: DATA PORT (PORT)
+	 * 
+	 * The argument is a HOST-PORT specification for the data port
+	 * to be used in data connection.  There are defaults for both
+	 * the user and server data ports, and under normal
+	 * circumstances this command and its reply are not needed.  If
+	 * this command is used, the argument is the concatenation of a
+	 * 32-bit internet host address and a 16-bit TCP port address.
+	 * This address information is broken into 8-bit fields and the
+	 * value of each field is transmitted as a decimal number (in
+	 * character string representation).  The fields are separated
+	 * by commas.  A port command would be:
+	 * 
+	 *    PORT h1,h2,h3,h4,p1,p2
+	 * 
+	 * where h1 is the high order 8 bits of the internet host
+	 * address. */	
+	add_to_str(str, strl, "PORT ");
+	add_num_to_str(str, strl, pc[0]);
+	add_chr_to_str(str, strl, ',');
+	add_num_to_str(str, strl, pc[1]);
+	add_chr_to_str(str, strl, ',');
+	add_num_to_str(str, strl, pc[2]);
+	add_chr_to_str(str, strl, ',');
+	add_num_to_str(str, strl, pc[3]);
+	add_chr_to_str(str, strl, ',');
+	add_num_to_str(str, strl, pc[4]);
+	add_chr_to_str(str, strl, ',');
+	add_num_to_str(str, strl, pc[5]);
+	add_to_str(str, strl, "\r\n");
+}
 
 /* Create passive socket and add appropriate announcing commands to str. Then
  * go and retrieve appropriate object from server. */
@@ -391,25 +426,12 @@ struct ftp_connection_info *add_file_cmd_to_str(struct connection *conn)
 
 		add_to_str(&str, &strl, "TYPE A\r\n");
 
-		add_to_str(&str, &strl, "PORT ");
-
-		add_num_to_str(&str, &strl, pc[0]);
-		add_chr_to_str(&str, &strl, ',');
-		add_num_to_str(&str, &strl, pc[1]);
-		add_chr_to_str(&str, &strl, ',');
-		add_num_to_str(&str, &strl, pc[2]);
-		add_chr_to_str(&str, &strl, ',');
-		add_num_to_str(&str, &strl, pc[3]);
-		add_chr_to_str(&str, &strl, ',');
-		add_num_to_str(&str, &strl, pc[4]);
-		add_chr_to_str(&str, &strl, ',');
-		add_num_to_str(&str, &strl, pc[5]);
-		add_to_str(&str, &strl, "\r\n");
-
 		add_to_str(&str, &strl, "CWD /");
 		add_bytes_to_str(&str, &strl, data, data_end - data);
 		add_to_str(&str, &strl, "\r\n");
 
+		add_portcmd_to_str(&str, &strl, pc);
+		
 		add_to_str(&str, &strl, "LIST\r\n");
 
 		conn->from = 0;
@@ -422,20 +444,6 @@ struct ftp_connection_info *add_file_cmd_to_str(struct connection *conn)
 
 		add_to_str(&str, &strl, "TYPE I\r\n");
 
-		add_to_str(&str, &strl, "PORT ");
-		add_num_to_str(&str, &strl, pc[0]);
-		add_chr_to_str(&str, &strl, ',');
-		add_num_to_str(&str, &strl, pc[1]);
-		add_chr_to_str(&str, &strl, ',');
-		add_num_to_str(&str, &strl, pc[2]);
-		add_chr_to_str(&str, &strl, ',');
-		add_num_to_str(&str, &strl, pc[3]);
-		add_chr_to_str(&str, &strl, ',');
-		add_num_to_str(&str, &strl, pc[4]);
-		add_chr_to_str(&str, &strl, ',');
-		add_num_to_str(&str, &strl, pc[5]);
-		add_to_str(&str, &strl, "\r\n");
-
 		if (conn->from) {
 			add_to_str(&str, &strl, "REST ");
 			add_num_to_str(&str, &strl, conn->from);
@@ -444,6 +452,8 @@ struct ftp_connection_info *add_file_cmd_to_str(struct connection *conn)
 			c_i->rest_sent = 1;
 			c_i->pending_commands++;
 		}
+		
+		add_portcmd_to_str(&str, &strl, pc);
 
 		add_to_str(&str, &strl, "RETR /");
 		add_bytes_to_str(&str, &strl, data, data_end - data);
@@ -544,20 +554,20 @@ void ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 			case 1:	/* TYPE */
 				break;
 
-			case 2:	/* PORT */
-				if (response >= 400) {
-					abort_conn_with_state(conn, S_FTP_PORT);
-					return;
-				}
-				break;
-
-			case 3:	/* REST / CWD */
+			case 2:	/* REST / CWD */
 				if (response >= 400) {
 					if (c_i->dir) {
 						abort_conn_with_state(conn, S_FTP_NO_FILE);
 						return;
 					}
 					conn->from = 0;
+				}
+				break;
+				
+			case 3:	/* PORT */
+				if (response >= 400) {
+					abort_conn_with_state(conn, S_FTP_PORT);
+					return;
 				}
 				break;
 

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.170 2004/11/17 22:07:16 zas Exp $ */
+/* $Id: dialog.c,v 1.171 2004/11/18 00:11:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,9 +108,14 @@ redraw_dialog(struct dialog_data *dlg_data, int layout)
 		}
 	}
 
-	for (i = 0; i < dlg_data->n; i++)
-		display_dlg_item(dlg_data, &dlg_data->widgets_data[i],
-				 (i == dlg_data->selected));
+	for (i = 0; i < dlg_data->n; i++) {
+		struct widget_data *widget_data = &dlg_data->widgets_data[i];
+
+		if (i == dlg_data->selected)
+			display_widget_focused(dlg_data, widget_data);
+		else
+			display_widget_unfocused(dlg_data, widget_data);
+		}
 
 	redraw_from_window(dlg_data->win);
 }
@@ -121,9 +126,9 @@ select_dlg_item(struct dialog_data *dlg_data, int i)
 	struct widget_data *widget_data = &dlg_data->widgets_data[i];
 
 	if (dlg_data->selected != i) {
-		display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
-		display_dlg_item(dlg_data, widget_data, 1);
+		display_widget_unfocused(dlg_data, selected_widget(dlg_data));
 		dlg_data->selected = i;
+		display_widget_focused(dlg_data, widget_data);
 	}
 	if (widget_data->widget->ops->select)
 		widget_data->widget->ops->select(dlg_data, widget_data);
@@ -175,7 +180,7 @@ cycle_widget_focus(struct dialog_data *dlg_data, int direction)
 {
 	int prev_selected = dlg_data->selected;
 
-	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
+	display_widget_unfocused(dlg_data, selected_widget(dlg_data));
 
 	do {
 		dlg_data->selected += direction;
@@ -188,7 +193,7 @@ cycle_widget_focus(struct dialog_data *dlg_data, int direction)
 	} while (!widget_is_focusable(selected_widget(dlg_data))
 		 && dlg_data->selected != prev_selected);
 
-	display_dlg_item(dlg_data, selected_widget(dlg_data), 1);
+	display_widget_focused(dlg_data, selected_widget(dlg_data));
 	redraw_from_window(dlg_data->win);
 }
 

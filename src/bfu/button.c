@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.67 2004/11/17 23:02:07 zas Exp $ */
+/* $Id: button.c,v 1.68 2004/11/18 00:11:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,13 +94,14 @@ dlg_format_buttons(struct terminal *term,
 }
 
 static t_handler_event_status
-display_button(struct dialog_data *dlg_data, struct widget_data *widget_data, int sel)
+display_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *color, *shortcut_color;
 	struct box *pos = &widget_data->box;
 	int len = widget_data->box.width - BUTTON_LR_LEN;
 	int x = pos->x + BUTTON_LEFT_LEN;
+	int sel = dlg_data->focus_selected_widget;
 
 	if (sel) {
 		shortcut_color = get_bfu_color(term, "dialog.button-shortcut-selected");
@@ -137,9 +138,9 @@ mouse_button(struct dialog_data *dlg_data, struct widget_data *widget_data,
 	if (!check_mouse_position(ev, &widget_data->box))
 		return EVENT_NOT_PROCESSED;
 
-	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
+	display_widget_unfocused(dlg_data, selected_widget(dlg_data));
 	dlg_data->selected = widget_data - dlg_data->widgets_data;
-	display_dlg_item(dlg_data, widget_data, 1);
+	display_widget_focused(dlg_data, widget_data);
 
 	do_not_ignore_next_mouse_event(term);
 

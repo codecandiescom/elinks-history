@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.80 2004/11/17 22:13:43 zas Exp $ */
+/* $Id: checkbox.c,v 1.81 2004/11/18 00:11:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,13 +42,13 @@ dlg_format_checkbox(struct terminal *term,
 }
 
 static t_handler_event_status
-display_checkbox(struct dialog_data *dlg_data, struct widget_data *widget_data,
-		 int selected)
+display_checkbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *color;
 	unsigned char *text;
 	struct box *pos = &widget_data->box;
+	int selected = dlg_data->focus_selected_widget;
 
 	color = get_bfu_color(term, "dialog.checkbox");
 	if (!color) return EVENT_NOT_PROCESSED;
@@ -96,9 +96,9 @@ mouse_checkbox(struct dialog_data *dlg_data, struct widget_data *widget_data,
 	    || !check_mouse_position(ev, &widget_data->box))
 		return EVENT_NOT_PROCESSED;
 
-	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
+	display_widget_unfocused(dlg_data, selected_widget(dlg_data));
 	dlg_data->selected = widget_data - dlg_data->widgets_data;
-	display_dlg_item(dlg_data, widget_data, 1);
+	display_widget_focused(dlg_data, widget_data);
 
 	do_not_ignore_next_mouse_event(term);
 
@@ -139,12 +139,12 @@ select_checkbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 			*cdata = widget_data->widget->info.checkbox.gnum;
 			wdata->info.checkbox.checked = 0;
-			display_dlg_item(dlg_data, wdata, 0);
+			display_widget_unfocused(dlg_data, wdata);
 		}
 		widget_data->info.checkbox.checked = 1;
 	}
 
-	display_dlg_item(dlg_data, widget_data, 1);
+	display_widget_focused(dlg_data, widget_data);
 	return EVENT_PROCESSED;
 }
 

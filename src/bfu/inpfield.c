@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.172 2004/11/17 23:05:18 zas Exp $ */
+/* $Id: inpfield.c,v 1.173 2004/11/18 00:11:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -222,10 +222,11 @@ input_field(struct terminal *term, struct memory_list *ml, int intl,
 
 static t_handler_event_status
 display_field_do(struct dialog_data *dlg_data, struct widget_data *widget_data,
-		 int sel, int hide)
+		 int hide)
 {
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *color;
+	int sel = dlg_data->focus_selected_widget;
 
 	int_bounds(&widget_data->info.field.vpos,
 		   widget_data->info.field.cpos - widget_data->box.width + 1,
@@ -266,15 +267,15 @@ display_field_do(struct dialog_data *dlg_data, struct widget_data *widget_data,
 }
 
 static t_handler_event_status
-display_field(struct dialog_data *dlg_data, struct widget_data *widget_data, int sel)
+display_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
-	return display_field_do(dlg_data, widget_data, sel, 0);
+	return display_field_do(dlg_data, widget_data, 0);
 }
 
 static t_handler_event_status
-display_field_pass(struct dialog_data *dlg_data, struct widget_data *widget_data, int sel)
+display_field_pass(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
-	return display_field_do(dlg_data, widget_data, sel, 1);
+	return display_field_do(dlg_data, widget_data, 1);
 }
 
 static t_handler_event_status
@@ -336,11 +337,11 @@ mouse_field(struct dialog_data *dlg_data, struct widget_data *widget_data,
 				     + ev->info.mouse.x - widget_data->box.x;
 	int_upper_bound(&widget_data->info.field.cpos, strlen(widget_data->cdata));
 
-	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
+	display_widget_unfocused(dlg_data, selected_widget(dlg_data));
 	dlg_data->selected = widget_data - dlg_data->widgets_data;
 
 display_field:
-	display_dlg_item(dlg_data, widget_data, 1);
+	display_widget_focused(dlg_data, widget_data);
 	return EVENT_PROCESSED;
 }
 
@@ -488,7 +489,7 @@ kbd_field(struct dialog_data *dlg_data, struct widget_data *widget_data,
 	return EVENT_NOT_PROCESSED;
 
 display_field:
-	display_dlg_item(dlg_data, widget_data, 1);
+	display_widget_focused(dlg_data, widget_data);
 	redraw_from_window(dlg_data->win);
 	return EVENT_PROCESSED;
 }

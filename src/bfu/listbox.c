@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.172 2004/11/17 22:13:43 zas Exp $ */
+/* $Id: listbox.c,v 1.173 2004/11/18 00:11:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -429,8 +429,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 
 /* Displays a dialog box */
 static t_handler_event_status
-display_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data,
-		int sel)
+display_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box = get_listbox_widget_data(widget_data);
@@ -532,12 +531,12 @@ mouse_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data,
 		switch (get_mouse_button(ev)) {
 			case B_WHEEL_DOWN:
 				box_sel_move(dlg_item, 1);
-				display_dlg_item(dlg_data, dlg_item, 1);
+				display_widget_focused(dlg_data, dlg_item);
 				return EVENT_PROCESSED;
 
 			case B_WHEEL_UP:
 				box_sel_move(dlg_item, -1);
-				display_dlg_item(dlg_data, dlg_item, 1);
+				display_widget_focused(dlg_data, dlg_item);
 				return EVENT_PROCESSED;
 		}
 	}
@@ -563,7 +562,7 @@ mouse_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data,
 				box->sel->expanded = !box->sel->expanded;
 		}
 
-		display_dlg_item(dlg_data, widget_data, 1);
+		display_widget_focused(dlg_data, widget_data);
 
 		return EVENT_PROCESSED;
 	}
@@ -591,42 +590,42 @@ kbd_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data,
 			/* Moving the box */
 			if (action == ACT_MENU_DOWN) {
 				box_sel_move(dlg_item, 1);
-				display_dlg_item(dlg_data, dlg_item, 1);
+				display_widget_focused(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (action == ACT_MENU_UP) {
 				box_sel_move(dlg_item, -1);
-				display_dlg_item(dlg_data, dlg_item, 1);
+				display_widget_focused(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (action == ACT_MENU_PAGE_DOWN) {
 				box_sel_move(dlg_item, dlg_item->box.height / 2);
-				display_dlg_item(dlg_data, dlg_item, 1);
+				display_widget_focused(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (action == ACT_MENU_PAGE_UP) {
 				box_sel_move(dlg_item, -dlg_item->box.height / 2);
-				display_dlg_item(dlg_data, dlg_item, 1);
+				display_widget_focused(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (action == ACT_MENU_HOME) {
 				box_sel_move(dlg_item, -INT_MAX);
-				display_dlg_item(dlg_data, dlg_item, 1);
+				display_widget_focused(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (action == ACT_MENU_END) {
 				box_sel_move(dlg_item, INT_MAX);
-				display_dlg_item(dlg_data, dlg_item, 1);
+				display_widget_focused(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
@@ -639,7 +638,7 @@ kbd_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data,
 					box->sel->marked = !box->sel->marked;
 					box_sel_move(dlg_item, 1);
 				}
-				display_dlg_item(dlg_data, dlg_item, 1);
+				display_widget_focused(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}

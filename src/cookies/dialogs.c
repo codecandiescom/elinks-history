@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.7 2003/11/19 01:55:15 jonas Exp $ */
+/* $Id: dialogs.c,v 1.8 2003/11/19 02:09:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,14 +119,7 @@ push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 void
 menu_cookie_manager(struct terminal *term, void *fcp, struct session *ses)
 {
-	struct dialog_data *dlg_data;
-	struct listbox_item *litem;
-
-	foreach (litem, cookie_box_items) {
-		litem->visible = 1;
-	}
-
-	dlg_data = hierbox_browser(term, N_("Cookie manager"),
+	hierbox_browser(term, N_("Cookie manager"),
 			0, &cookie_browser, ses,
 			2,
 			N_("Info"), push_info_button, B_ENTER, ses,

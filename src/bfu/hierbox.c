@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.61 2003/11/19 01:45:04 jonas Exp $ */
+/* $Id: hierbox.c,v 1.62 2003/11/19 02:09:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -240,6 +240,11 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 	struct dialog_data *dlg_data;
 	struct dialog *dlg;
 	va_list ap;
+	struct listbox_item *litem;
+
+	foreach (litem, *browser->items) {
+		litem->visible = 1;
+	}
 
 	listbox_data = hierbox_browser_box_build(browser);
 	if (!listbox_data) return NULL;

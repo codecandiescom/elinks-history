@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.116 2003/11/19 01:45:04 jonas Exp $ */
+/* $Id: dialogs.c,v 1.117 2003/11/19 02:09:18 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -548,13 +548,6 @@ push_move_button(struct dialog_data *dlg_data,
 void
 menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 {
-	struct bookmark *new_bm;
-
-	/* Show all bookmarks */
-	foreach (new_bm, bookmarks) {
-		new_bm->box_item->visible = 1;
-	}
-
 	/* Reset momorized search criterias */
 	if (bm_last_searched_name) {
 		mem_free(bm_last_searched_name);

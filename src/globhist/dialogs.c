@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.70 2003/11/19 01:45:06 jonas Exp $ */
+/* $Id: dialogs.c,v 1.71 2003/11/19 02:09:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -371,13 +371,6 @@ push_bookmark_button(struct dialog_data *dlg_data,
 void
 menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 {
-	struct dialog_data *dlg_data;
-	struct global_history_item *litem;
-
-	foreach (litem, global_history.items) {
-		litem->box_item->visible = 1;
-	}
-
 	if (gh_last_searched_title) {
 		mem_free(gh_last_searched_title);
 		gh_last_searched_title = NULL;
@@ -388,7 +381,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 		gh_last_searched_url = NULL;
 	}
 
-	dlg_data = hierbox_browser(term, N_("Global history"),
+	hierbox_browser(term, N_("Global history"),
 			GLOBHIST_MANAGER_ADDSIZE, &globhist_browser, ses,
 			GLOBHIST_MANAGER_BUTTONS,
 			N_("Goto"), push_goto_button, B_ENTER, ses,

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.89 2003/11/22 20:39:28 zas Exp $ */
+/* $Id: hierbox.c,v 1.90 2003/11/22 20:49:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -372,15 +372,16 @@ init_hierbox_action_info(struct listbox_data *box, struct terminal *term,
 	return action_info;
 }
 
-/* Info action */
-
 static void
-push_ok_info_button(void *action_info_)
+done_hierbox_action_info(void *action_info_)
 {
 	struct hierbox_action_info *action_info = action_info_;
 
-	action_info->box->ops->unlock(action_info->item);
+	if (action_info->item)
+		action_info->box->ops->unlock(action_info->item);
 }
+
+/* Info action */
 
 int
 push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *button)
@@ -409,7 +410,7 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 		N_("Info"), AL_LEFT,
 		msg,
 		action_info, 1,
-		N_("OK"), push_ok_info_button, B_ESC | B_ENTER);
+		N_("OK"), done_hierbox_action_info, B_ESC | B_ENTER);
 
 	return 0;
 }
@@ -507,15 +508,6 @@ push_ok_delete_button(void *delete_info_)
 	do_delete_item(delete_info->item, delete_info, 1);
 }
 
-static void
-push_cancel_delete_button(void *delete_info_)
-{
-	struct hierbox_action_info *delete_info = delete_info_;
-
-	if (delete_info->item)
-		delete_info->box->ops->unlock(delete_info->item);
-}
-
 int
 push_hierbox_delete_button(struct dialog_data *dlg_data,
 			   struct widget_data *button)
@@ -537,7 +529,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 			N_("Delete marked items?"),
 			delete_info, 2,
 			N_("Yes"), push_ok_delete_button, B_ENTER,
-			N_("No"), push_cancel_delete_button, B_ESC);
+			N_("No"), done_hierbox_action_info, B_ESC);
 		return 0;
 	}
 
@@ -549,7 +541,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 				 delete_info->item->text),
 			delete_info, 2,
 			N_("Yes"), push_ok_delete_button, B_ENTER,
-			N_("No"), push_cancel_delete_button, B_ESC);
+			N_("No"), done_hierbox_action_info, B_ESC);
 	} else {
 		unsigned char *msg = box->ops->get_info(delete_info->item, term);
 
@@ -563,7 +555,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 				delete_info->item->text, msg),
 			delete_info, 2,
 			N_("Yes"), push_ok_delete_button, B_ENTER,
-			N_("No"), push_cancel_delete_button, B_ESC);
+			N_("No"), done_hierbox_action_info, B_ESC);
 	}
 
 	return 0;

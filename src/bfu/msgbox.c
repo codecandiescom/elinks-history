@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.28 2003/06/07 01:55:27 jonas Exp $ */
+/* $Id: msgbox.c,v 1.29 2003/06/07 08:16:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,15 +168,6 @@ msg_box(struct terminal *term, struct memory_list *ml,
 	do_dialog(term, dlg, ml);
 }
 
-/* Copied from util/snprint.c */
-#ifndef VA_COPY
-#ifdef HAVE_VA_COPY
-#define VA_COPY(dest, src) __va_copy(dest, src)
-#else
-#define VA_COPY(dest, src) (dest) = (src)
-#endif
-#endif
-
 unsigned char *
 msg_text(unsigned char *format, ...)
 {
@@ -190,15 +181,14 @@ msg_text(unsigned char *format, ...)
 
 	infolen = vsnprintf(NULL, 0, format, ap2);
 	info = mem_alloc(infolen + 1);
-	if (!info)
-		return NULL;
-
-	if (vsnprintf((char *)info, infolen + 1, format, ap) != infolen) {
-		mem_free(info);
-		info = NULL;
-	} else {
-		/* Wear safety boots */
-		info[infolen] = '\0';
+	if (info) {
+		if (vsnprintf((char *)info, infolen + 1, format, ap) != infolen) {
+			mem_free(info);
+			info = NULL;
+		} else {
+			/* Wear safety boots */
+			info[infolen] = '\0';
+		}
 	}
 
 	va_end(ap);

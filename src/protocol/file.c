@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.66 2003/06/23 02:43:19 jonas Exp $ */
+/* $Id: file.c,v 1.67 2003/06/23 02:55:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -579,7 +579,7 @@ read_file(struct stream_encoded *stream, int readsize, struct file_info *info)
 /* FIXME: Many return values aren't checked. And we should split it.
  * --Zas */
 void
-file_func(struct connection *c)
+file_func(struct connection *connection)
 {
 	struct cache_entry *e;
 	unsigned char *filename;
@@ -588,20 +588,20 @@ file_func(struct connection *c)
 	struct file_info *info;
 
 	if (get_opt_int_tree(&cmdline_options, "anonymous")) {
-		abort_conn_with_state(c, S_BAD_URL);
+		abort_conn_with_state(connection, S_BAD_URL);
 		return;
 	}
 
 	info = mem_alloc(sizeof(struct file_info));
 	if (!info) {
-		abort_conn_with_state(c, S_OUT_OF_MEM);
+		abort_conn_with_state(connection, S_OUT_OF_MEM);
 		return;
 	}
 
-	get_filenamepart_from_url(c->url, &filename, &filenamelen);
+	get_filenamepart_from_url(connection->url, &filename, &filenamelen);
 	if (!filename) {
 		mem_free(info);
-		abort_conn_with_state(c, S_OUT_OF_MEM);
+		abort_conn_with_state(connection, S_OUT_OF_MEM);
 		return;
 	}
 
@@ -614,16 +614,16 @@ file_func(struct connection *c)
 			mem_free(info);
 			closedir(d);
 
-			if (get_cache_entry(c->url, &e)) {
-				abort_conn_with_state(c, S_OUT_OF_MEM);
+			if (get_cache_entry(connection->url, &e)) {
+				abort_conn_with_state(connection, S_OUT_OF_MEM);
 				return;
 			}
 
-			c->cache = e;
+			connection->cache = e;
 
 			if (e->redirect) mem_free(e->redirect);
 			e->redirect_get = 1;
-			e->redirect = straconcat(c->url, "/", NULL);
+			e->redirect = straconcat(connection->url, "/", NULL);
 
 			goto end;
 		}
@@ -634,7 +634,7 @@ file_func(struct connection *c)
 
 		if (state != S_OK) {
 			mem_free(info);
-			abort_conn_with_state(c, state);
+			abort_conn_with_state(connection, state);
 			return;
 		}
 
@@ -656,7 +656,7 @@ file_func(struct connection *c)
 
 		if (fd == -1) {
 			mem_free(info);
-			abort_conn_with_state(c, -saved_errno);
+			abort_conn_with_state(connection, -saved_errno);
 			return;
 		}
 
@@ -675,7 +675,7 @@ file_func(struct connection *c)
 		if (state != S_OK) {
 			close(fd);
 			mem_free(info);
-			abort_conn_with_state(c, state);
+			abort_conn_with_state(connection, state);
 			return;
 		}
 
@@ -687,21 +687,21 @@ file_func(struct connection *c)
 
 		if (state != S_OK) {
 			mem_free(info);
-			abort_conn_with_state(c, state);
+			abort_conn_with_state(connection, state);
 			return;
 		}
 	}
 
-	if (get_cache_entry(c->url, &e)) {
+	if (get_cache_entry(connection->url, &e)) {
 		mem_free(info->fragment);
 		mem_free(info);
-		abort_conn_with_state(c, S_OUT_OF_MEM);
+		abort_conn_with_state(connection, S_OUT_OF_MEM);
 		return;
 	}
 
 	if (e->head) mem_free(e->head);
 	e->head = info->head;
-	c->cache = e;
+	connection->cache = e;
 	add_fragment(e, 0, info->fragment, info->fragmentlen);
 	truncate_entry(e, info->fragmentlen, 1);
 
@@ -709,6 +709,6 @@ file_func(struct connection *c)
 	mem_free(info);
 
 end:
-	c->cache->incomplete = 0;
-	abort_conn_with_state(c, S_OK);
+	connection->cache->incomplete = 0;
+	abort_conn_with_state(connection, S_OK);
 }

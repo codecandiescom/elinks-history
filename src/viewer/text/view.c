@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.469 2004/06/15 20:36:00 zas Exp $ */
+/* $Id: view.c,v 1.470 2004/06/15 22:04:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -691,6 +691,23 @@ rep_ev(struct session *ses, struct document_view *doc_view,
 
 }
 
+int
+try_jump_to_link_number(struct session *ses, struct document_view *doc_view)
+{
+	int link_number = ses->kbdprefix.repeat_count - 1;
+
+	if (link_number < 0) return 0;
+
+	ses->kbdprefix.repeat_count = 0;
+	if (link_number >= doc_view->document->nlinks)
+		return 1;
+
+	jump_to_link_number(ses, doc_view, link_number);
+	refresh_view(ses, doc_view, 0);
+
+	return 0;
+}
+
 static enum frame_event_status
 frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_event *ev)
 {
@@ -751,36 +768,6 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 	}
 
 	switch (kbd_action(KM_MAIN, ev, NULL)) {
-		case ACT_MAIN_COPY_CLIPBOARD:
-		case ACT_MAIN_ENTER:
-		case ACT_MAIN_ENTER_RELOAD:
-		case ACT_MAIN_DOWNLOAD:
-		case ACT_MAIN_RESUME_DOWNLOAD:
-		case ACT_MAIN_VIEW_IMAGE:
-		case ACT_MAIN_DOWNLOAD_IMAGE:
-		case ACT_MAIN_LINK_MENU:
-		case ACT_MAIN_JUMP_TO_LINK:
-		case ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW:
-		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB:
-		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
-			if (!ses->kbdprefix.repeat_count) break;
-
-			if (ses->kbdprefix.repeat_count
-			    > doc_view->document->nlinks) {
-				ses->kbdprefix.repeat_count = 0;
-				return FRAME_EVENT_OK;
-			}
-
-			jump_to_link_number(ses,
-					    current_frame(ses),
-					    ses->kbdprefix.repeat_count
-						- 1);
-
-			refresh_view(ses, doc_view, 0);
-
-	}
-
-	switch (kbd_action(KM_MAIN, ev, NULL)) {
 		case ACT_MAIN_PAGE_DOWN: rep_ev(ses, doc_view, page_down); break;
 		case ACT_MAIN_PAGE_UP: rep_ev(ses, doc_view, page_up); break;
 		case ACT_MAIN_DOWN: rep_ev(ses, doc_view, down); break;
@@ -790,7 +777,12 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 			 * it adds all kins of stuff that is not part
 			 * of the current link. I'd propose to use
 			 * get_link_uri() or something. --jonas */
-			char *current_link = get_current_link_info(ses, doc_view);
+			char *current_link;
+
+			if (try_jump_to_link_number(ses, doc_view))
+				return FRAME_EVENT_OK;
+
+			current_link = get_current_link_info(ses, doc_view);
 
 			if (current_link) {
 				set_clipboard_text(current_link);
@@ -807,9 +799,22 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 
 		case ACT_MAIN_HOME: rep_ev(ses, doc_view, home); break;
 		case ACT_MAIN_END:  rep_ev(ses, doc_view, x_end); break;
-		case ACT_MAIN_ENTER: status = enter(ses, doc_view, 0); break;
-		case ACT_MAIN_ENTER_RELOAD: status = enter(ses, doc_view, 1); break;
-		case ACT_MAIN_JUMP_TO_LINK: status = FRAME_EVENT_OK; break;
+		case ACT_MAIN_ENTER:
+			if (try_jump_to_link_number(ses, doc_view))
+				status = FRAME_EVENT_OK;
+			else
+				status = enter(ses, doc_view, 0);
+			break;
+		case ACT_MAIN_ENTER_RELOAD:
+			if (try_jump_to_link_number(ses, doc_view))
+				status = FRAME_EVENT_OK;
+			else
+				status = enter(ses, doc_view, 1);
+			break;
+		case ACT_MAIN_JUMP_TO_LINK:
+			try_jump_to_link_number(ses, doc_view);
+			status = FRAME_EVENT_OK;
+			break;
 		case ACT_MAIN_MARK_SET:
 #ifdef CONFIG_MARKS
 			ses->kbdprefix.mark = KP_MARK_SET;
@@ -825,6 +830,17 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 #endif
 			status = FRAME_EVENT_OK;
 			break;
+		case ACT_MAIN_DOWNLOAD:
+		case ACT_MAIN_RESUME_DOWNLOAD:
+		case ACT_MAIN_VIEW_IMAGE:
+		case ACT_MAIN_DOWNLOAD_IMAGE:
+		case ACT_MAIN_LINK_MENU:
+		case ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW:
+		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB:
+		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
+			if (try_jump_to_link_number(ses, doc_view))
+				status = FRAME_EVENT_OK;
+			/* fall through */
 		default:
 			if (ev->x >= '1' && ev->x <= '9' && !ev->y) {
 				/* FIXME: This probably doesn't work

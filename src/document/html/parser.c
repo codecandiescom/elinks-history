@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.296 2003/12/20 22:06:32 pasky Exp $ */
+/* $Id: parser.c,v 1.297 2003/12/21 11:32:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3215,12 +3215,13 @@ element:
 		inv = *name == '/'; name += inv; namelen -= inv;
 		if (!inv && putsp == 1 && !html_top.invisible) goto put_sp;
 		put_chrs(lt, html - lt, put_chars_f, f);
-		if (par_format.align != AL_NONE) if (!inv && !putsp) {
+		if (par_format.align != AL_NONE && !inv && !putsp) {
 			unsigned char *ee = end;
 			unsigned char *nm;
 
 			while (!parse_element(ee, eof, &nm, NULL, NULL, &ee))
-				if (*nm == '/') goto ng;
+				if (*nm == '/')
+					goto ng;
 			if (ee < eof && WHITECHAR(*ee)) {
 				/*putsp = -1;*/
 				put_chrs(" ", 1, put_chars_f, f);

@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.11 2003/06/08 18:47:01 jonas Exp $ */
+/* $Id: mime.c,v 1.12 2003/06/08 20:00:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,37 @@ void
 done_mime(void)
 {
 	done_mime_backends();
+}
+
+/* Trim the extension so only last .<extension> is used. */
+static inline unsigned char *
+try_extension_type(unsigned char *extension)
+{
+	struct mime_handler *handler;
+	unsigned char *trimmed = strrchr(extension, '.');
+	unsigned char *content_type;
+	int trimmedlen;
+
+	if (!trimmed)
+		return NULL;
+
+	trimmedlen = strlen(trimmed) + 1;
+	content_type = mem_alloc(14 + trimmedlen);
+	if (!content_type)
+		return NULL;
+
+	memcpy(content_type, "application/x-", 14);
+	safe_strncpy(content_type + 14, trimmed, trimmedlen);
+
+	handler = get_mime_type_handler(NULL, content_type);
+	if (handler) {
+		mem_free(handler->program);
+		mem_free(handler);
+		return content_type;
+	}
+
+	mem_free(content_type);
+	return NULL;
 }
 
 unsigned char *
@@ -62,30 +93,16 @@ get_content_type(unsigned char *head, unsigned char *url)
 	/* Guess type accordingly to the extension */
 	extension = get_extensionpart_from_url(url);
 	if (extension) {
-		int extlen;
-
 		content_type = get_content_type_backends(extension);
-		if (content_type) {
-			mem_free(extension);
-			return content_type;
-		}
 
-		extlen = strlen(extension);
-		content_type = mem_alloc(15 + extlen);
-		if (content_type) {
-			/* Try to make application/x-<extension> from it */
-			memcpy(content_type, "application/x-", 14);
-			safe_strncpy(content_type + 14, extension, extlen + 1);
-
-			if (get_mime_type_handler(NULL, content_type)) {
-				mem_free(extension);
-				return content_type;
-			}
-
-			mem_free(content_type);
-		}
+		/* Check if application/x-<extension> has any handlers. */
+		if (!content_type)
+			content_type = try_extension_type(extension);
 
 		mem_free(extension);
+
+		if (content_type)
+			return content_type;
 	}
 
 	/* Fallback.. use some hardwired default */

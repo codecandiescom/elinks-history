@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.11 2003/08/21 14:55:27 zas Exp $ */
+/* $Id: memory.h,v 1.12 2003/09/04 16:58:01 jonas Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -89,10 +89,9 @@ void *mem_realloc(void *, size_t);
 #define mem_gralloc(pointer, type, oldsize, newsize, gr)				\
 	if (grmask(oldsize, gr) != grmask(newsize, gr)) {				\
 		type *_tmp_ = (pointer);						\
-		_tmp_ = mem_realloc(_tmp_, grmask(newsize, gr) + (gr) * sizeof(type));	\
+		_tmp_ = mem_realloc(_tmp_, grmask((newsize) + (gr), gr) * sizeof(type));	\
 		if (!_tmp_) return NULL;						\
 		(pointer) = _tmp_;							\
 	}
-
 
 #endif

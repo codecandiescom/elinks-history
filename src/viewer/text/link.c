@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.294 2004/10/21 20:54:23 pasky Exp $ */
+/* $Id: link.c,v 1.295 2004/10/21 21:01:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1221,6 +1221,8 @@ get_current_link_info(struct session *ses, struct document_view *doc_view)
 
 	link = get_current_link(doc_view);
 	if (!link) return NULL;
+
+	/* TODO: Provide info about script event hooks too. --pasky */
 
 	if (link_is_form(link)) {
 		if (!get_link_form_control(link)) return NULL;

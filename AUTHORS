@@ -233,7 +233,8 @@ Karel Kulhavy <clock@atrey.karlin.mff.cuni.cz>
 Karsten Schölzel <kuser@gmx.de>
 	Event system chief engineer
 	Scripting subsystem hacking
-	Random minor fixes
+	Regex searches
+	Random hacking
 
 Karvinen Ilkka <ik@iki.fi>
 	Finnish translation
@@ -453,4 +454,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.135 2003/10/05 14:07:10 pasky Exp $
+$Id: AUTHORS,v 1.136 2003/10/05 15:49:26 pasky Exp $

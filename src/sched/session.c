@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.577 2004/10/23 08:04:03 pasky Exp $ */
+/* $Id: session.c,v 1.578 2004/11/10 22:09:10 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1020,24 +1020,30 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 		len -= urilength + 1;
 		str += urilength + 1;
 
-		/* The uristring is going through get_translated_uri() which
-		 * will try to make the URI saner. So I don't think poping up
-		 * bad syntax dialogs if !uri for non remote session doesn't
-		 * make much sense here. --jonas */
-		if (!uri) continue;
-
 		if (remote) {
+			if (!uri) continue;
+
 			init_remote_session(base_session, &remote, uri);
 
 		} else {
 			int backgrounded = !list_empty(term->windows);
+			int bad_url = !uri;
+			struct session *ses;
 
-			/* End loop if initialization fails */
-			if (!init_session(base_session, term, uri, backgrounded))
+			if (!uri)
+				uri = get_uri("about:blank", 0);
+
+			ses = init_session(base_session, term, uri, backgrounded);
+			if (!ses) {
+				/* End loop if initialization fails */
 				len = 0;
+			} else if (bad_url) {
+				print_error_dialog(ses, S_BAD_URL, PRI_MAIN);
+			}
+			
 		}
 
-		done_uri(uri);
+		if (uri) done_uri(uri);
 	}
 
 	/* If we only initialized remote sessions or didn't manage to add any

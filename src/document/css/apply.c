@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.63 2004/09/19 22:11:52 pasky Exp $ */
+/* $Id: apply.c,v 1.64 2004/09/20 08:29:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,28 +82,11 @@ static css_applier_t css_appliers[CSS_PT_LAST] = {
 	/* CSS_PT_WHITE_SPACE */	css_apply_font_attribute,
 };
 
-void
-css_apply(struct html_element *element, struct css_stylesheet *css)
+static void
+examine_element(struct css_selector *base, struct html_element *element)
 {
-	INIT_LIST_HEAD(props);
+	struct css_selector *altsel;
 	unsigned char *code;
-	struct css_property *property;
-	struct css_selector *selector, *altsel;
-
-	assert(element && element->options && css);
-
-	selector = init_css_selector(NULL, CST_ELEMENT, NULL, 0);
-	if (!selector)
-		return;
-
-	code = get_attr_val(element->options, "style");
-	if (code) {
-		struct scanner scanner;
-
-		init_scanner(&scanner, &css_scanner_info, code, NULL);
-		css_parse_properties(&selector->properties, &scanner);
-		mem_free(code);
-	}
 
 	altsel = find_css_base_selector(css, CST_ELEMENT,
 	                                element->name, element->namelen);
@@ -125,6 +108,32 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 
 	/* TODO: Somehow handle pseudo-classess. The caller will have to
 	 * tell us about those. --pasky */
+}
+
+void
+css_apply(struct html_element *element, struct css_stylesheet *css)
+{
+	INIT_LIST_HEAD(props);
+	unsigned char *code;
+	struct css_property *property;
+	struct css_selector *selector;
+
+	assert(element && element->options && css);
+
+	selector = init_css_selector(NULL, CST_ELEMENT, NULL, 0);
+	if (!selector)
+		return;
+
+	code = get_attr_val(element->options, "style");
+	if (code) {
+		struct scanner scanner;
+
+		init_scanner(&scanner, &css_scanner_info, code, NULL);
+		css_parse_properties(&selector->properties, &scanner);
+		mem_free(code);
+	}
+
+	examine_element(selector, element);
 
 	foreach (property, selector->properties) {
 		assert(property->type < CSS_PT_LAST);

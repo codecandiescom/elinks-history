@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.45 2002/11/29 16:26:13 zas Exp $ */
+/* $Id: parser.c,v 1.46 2002/11/29 19:06:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2532,6 +2532,7 @@ set_lt:
 		int namelen;
 		struct element_info *ei;
 		int inv;
+		int dotcounter = 0;
 
 		if (WHITECHAR(*html) && par_format.align != AL_NO) {
 			unsigned char *h = html;
@@ -2553,7 +2554,8 @@ set_lt:
 			html++;
 			if (!(pos + (html-lt-1))) goto skip_w; /* ??? */
 			if (*(html - 1) == ' ') {
-				if (html < eof && !WHITECHAR(*html)) continue;	/* BIG performance win; not sure if it doesn't cause any bug */
+				/* BIG performance win; not sure if it doesn't cause any bug */
+				if (html < eof && !WHITECHAR(*html)) continue;
 				put_chrs(lt, html - lt, put_chars, f);
 			} else {
 				put_chrs(lt, html - 1 - lt, put_chars, f);
@@ -2592,13 +2594,22 @@ next_break:
 			}
 		}
 
-		if (*html < ' ') {
+		while (*html < ' ') {
 			/*if (putsp == 1) goto put_sp;
 			putsp = 0;*/
-			put_chrs(lt, html - lt, put_chars, f);
-			put_chrs(".", 1, put_chars, f);
-			html++;
-			goto set_lt;
+			if (html - lt) put_chrs(lt, html - lt, put_chars, f);
+			dotcounter++;
+			html++; lt = html;
+			if (*html >= ' ' || WHITECHAR(*html) || html >= eof) {
+				unsigned char *dots = mem_alloc(dotcounter);
+
+				if (dots) {
+					memset(dots, '.', dotcounter);
+					put_chrs(dots, dotcounter, put_chars, f);
+					mem_free(dots);
+				}
+				goto set_lt;
+			}
 		}
 
 		if (html + 2 <= eof && html[0] == '<' && (html[1] == '!' || html[1] == '?') && !d_opt->plain) {

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.284 2004/10/07 02:54:50 jonas Exp $ */
+/* $Id: uri.c,v 1.285 2004/10/17 15:32:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -602,7 +602,7 @@ normalize_uri(struct uri *uri, unsigned char *uristring)
 	} while (uri->protocol == PROTOCOL_PROXY);
 
 	if (get_protocol_free_syntax(uri->protocol))
-		goto done;
+		return uristring;
 
 	if (uri->protocol != PROTOCOL_UNKNOWN)
 		need_slash = get_protocol_need_slash_after_host(uri->protocol);
@@ -677,7 +677,6 @@ normalize_uri(struct uri *uri, unsigned char *uristring)
 		if (*dest) dest++;
 	}
 
-done:
 	return uristring;
 }
 
@@ -1054,7 +1053,6 @@ parse_uri:
 		insert_in_string(&newurl, offset, "/", 1);
 		goto parse_uri;
 	}
-
 	case URI_ERRNO_INVALID_PROTOCOL:
 	{
 		/* No protocol name */

@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.37 2003/10/24 00:09:23 pasky Exp $ */
+/* $Id: history.c,v 1.38 2003/10/24 00:18:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,7 +138,7 @@ ses_unback(struct session *ses)
 /* Returns < 0 upon error, 0 if we should abort the movement and 1 if we should
  * proceed fearlessly. */
 static int
-go_away(struct session *ses, int dir)
+go_away(struct session *ses, struct location *loc, int dir)
 {
 	ses->reloadlevel = NC_CACHE;
 
@@ -149,10 +149,7 @@ go_away(struct session *ses, int dir)
 		return 0;
 	}
 
-	if (!have_location(ses)
-	    || ses->history.current
-		  == (dir == -1 ? ses->history.history->next
-				: ses->history.history->prev)) {
+	if (!have_location(ses) || loc == &ses->history.history) {
 		/* There's no history, at most only the current location. */
 		return 0;
 	}
@@ -168,15 +165,14 @@ go_away(struct session *ses, int dir)
 }
 
 void
-go_back(struct session *ses)
+go_back(struct session *ses, struct location *loc)
 {
 	unsigned char *url;
 	struct location *loc;
 
-	if (go_away(ses, -1) < 1)
+	if (go_away(ses, loc, -1) < 1)
 		return;
 
-	loc = cur_loc(ses)->prev;
 	url = memacpy(loc->vs.url, loc->vs.url_len);
 	if (!url) return;
 
@@ -185,15 +181,14 @@ go_back(struct session *ses)
 }
 
 void
-go_unback(struct session *ses)
+go_unback(struct session *ses, struct location *loc)
 {
 	unsigned char *url;
 	struct location *loc;
 
-	if (go_away(ses, 1) < 1)
+	if (go_away(ses, loc, 1) < 1)
 		return;
 
-	loc = cur_loc(ses)->next;
 	url = memacpy(loc->vs.url, loc->vs.url_len);
 	if (!url) return;
 

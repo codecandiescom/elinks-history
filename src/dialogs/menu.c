@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.158 2003/10/24 00:00:11 pasky Exp $ */
+/* $Id: menu.c,v 1.159 2003/10/24 00:18:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,7 +112,7 @@ menu_save_url_as(struct terminal *term, void *d, struct session *ses)
 static inline void
 menu_go_back(struct terminal *term, void *d, struct session *ses)
 {
-	go_back(ses);
+	go_back(ses, cur_loc(ses)->prev);
 }
 
 static inline void
@@ -187,7 +187,7 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 	/* FIXME: If we've stop because of the sanity check for not hitting the
 	 * history begin, go_back() will do nothing. But this situation should
 	 * never happen anyway ;-). Same applies to unhistory. --pasky */
-	go_back(ses);
+	go_back(ses, ses->history.current->prev);
 }
 
 static void
@@ -204,7 +204,7 @@ go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 		steps--;
 	}
 
-	go_unback(ses);
+	go_unback(ses, ses->history.current->next);
 }
 
 static struct menu_item no_hist_menu[] = {

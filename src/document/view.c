@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.101 2002/12/01 18:15:09 pasky Exp $ */
+/* $Id: view.c,v 1.102 2002/12/01 20:04:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,7 +118,7 @@ clear_formatted(struct f_data *scr)
 	if (scr->data) mem_free(scr->data);
 	if (scr->lines1) mem_free(scr->lines1);
 	if (scr->lines2) mem_free(scr->lines2);
-	mem_free(scr->opt.framename);
+	if (scr->opt.framename) mem_free(scr->opt.framename);
 	foreach(fc, scr->forms) {
 		destroy_fc(fc);
 	}
@@ -271,7 +271,7 @@ put:
 				struct line_info *_ln = mem_realloc(ln, (lnn + ALLOC_GR) * sizeof(struct line_info));
 
 				if (!_ln) {
-					mem_free(ln);
+					if (ln) mem_free(ln);
 					return NULL;
 				}
 				ln = _ln;
@@ -1511,8 +1511,10 @@ xx:
 				p = stracpy(sv->value);
 			}
 
-			add_to_str(data, len, p);
-			mem_free(p);
+			if (p) {
+				add_to_str(data, len, p);
+				mem_free(p);
+			}
 		} else {
 #define F_BUFLEN 1024
 			int fh, rd;
@@ -2055,7 +2057,7 @@ x:
 					ln = format_text(fs->value, form->cols, form->wrap);
 					if (!ln) break;
 
-					rep1:
+rep1:
 					for (y = 0; ln[y].st; y++) {
 						if (fs->value + fs->state >= ln[y].st &&
 						    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
@@ -2338,6 +2340,7 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 			return;
 		}
 		ses->search_word = stracpy(ses->last_search_word);
+		if (!ses->search_word) return;
 	}
 
 	get_search_data(f->f_data);

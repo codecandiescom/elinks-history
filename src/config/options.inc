@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.166 2004/12/19 12:25:58 jonas Exp $ */
+/* $Id: options.inc,v 1.167 2004/12/19 12:32:02 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -736,21 +736,6 @@ static struct option_info config_options_info[] = {
 		"Warning: some systems (ie. OS/2, Win32) require that destination\n"
 		"file doesn't exist when rename() is called, breaking atomicity,\n"
 		"and reducing reliability of this feature.")),
-
-	/* Keep options in alphabetical order. */
-
-
-
-	INIT_OPT_TREE("", N_("Protocols"),
-		"protocol", OPT_SORT,
-		N_("Protocol specific options.")),
-
-	INIT_OPT_STRING("protocol", N_("No-proxy domains"),
-		"no_proxy", 0, "",
-		N_("Comma separated list of domains for which the proxy (HTTP/FTP)\n"
-		"should be disabled. Optionally, a port can be specified for some\n"
-		"domains as well. If it's blank, NO_PROXY environment variable is\n"
-		"checked as well.")),
 
 	/* Keep options in alphabetical order. */
 

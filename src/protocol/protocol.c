@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.89 2004/12/19 12:25:58 jonas Exp $ */
+/* $Id: protocol.c,v 1.90 2004/12/19 12:32:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -247,6 +247,20 @@ get_protocol_external_handler(enum protocol protocol)
 }
 
 
+static struct option_info protocol_options[] = {
+	INIT_OPT_TREE("", N_("Protocols"),
+		"protocol", OPT_SORT,
+		N_("Protocol specific options.")),
+
+	INIT_OPT_STRING("protocol", N_("No-proxy domains"),
+		"no_proxy", 0, "",
+		N_("Comma separated list of domains for which the proxy (HTTP/FTP)\n"
+		"should be disabled. Optionally, a port can be specified for some\n"
+		"domains as well. If it's blank, NO_PROXY environment variable is\n"
+		"checked as well.")),
+
+	NULL_OPTION_INFO,
+};
 static struct module *protocol_submodules[] = {
 	&file_protocol_module,
 #ifdef CONFIG_FINGER
@@ -274,7 +288,7 @@ static struct module *protocol_submodules[] = {
 
 struct module protocol_module = struct_module(
 	/* name: */		N_("Protocol"),
-	/* options: */		NULL,
+	/* options: */		protocol_options,
 	/* hooks: */		NULL,
 	/* submodules: */	protocol_submodules,
 	/* data: */		NULL,

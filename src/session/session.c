@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.248 2003/11/21 04:57:22 witekfl Exp $ */
+/* $Id: session.c,v 1.249 2003/11/22 14:38:27 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1125,7 +1125,7 @@ file_end_load(struct download *stat, struct file_to_load *ftl)
 
 		ses->loading_url = ftl->url;
 		ses->task_target_frame = ftl->target_frame;
-		ses_chktype(ses, &ftl->stat, &stat, ftl->ce, 1);
+		ses_chktype(ses, &ftl->stat, NULL, ftl->ce, 1);
 		ses->loading_url = loading_url;
 		ses->task_target_frame = target_frame;
 	}

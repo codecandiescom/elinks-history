@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.181 2003/11/22 10:25:46 witekfl Exp $ */
+/* $Id: download.c,v 1.182 2003/11/22 14:38:27 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1328,7 +1328,8 @@ ses_chktype(struct session *ses, struct download *loading,
 	
 	tq->url = stracpy(ses->loading_url);
 	change_connection(loading, &tq->download, PRI_MAIN, 0);
-	*download = &tq->download;
+	if (download) *download = &tq->download;
+	if (frame) loading->state = S_OK;
 
 	tq->ce = ce;
 	object_lock(tq->ce);

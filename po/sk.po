@@ -54,7 +54,7 @@ msgid "OK"
 msgstr "OK"
 
 #: src/bfu/hierbox.c:437
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the item \"%s\" cannot be deleted."
 msgstr "Smola, ale polo¾ka \"%s\" nemô¾e by» vymazaná."
 
@@ -64,7 +64,7 @@ msgid "Sorry, but the item \"%s\" is being used by something else."
 msgstr "Smola, ale polo¾ku \"%s\" práve pou¾íva nieèo iné."
 
 #: src/bfu/hierbox.c:441
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the folder \"%s\" cannot be deleted."
 msgstr "Smola, ale zlo¾ka \"%s\" nemô¾e by» vymazaná."
 
@@ -123,7 +123,7 @@ msgstr ""
 
 #: src/bfu/hierbox.c:651
 msgid "Clear all items"
-msgstr ""
+msgstr "Vymaza» v¹etky polo¾ky"
 
 #: src/bfu/hierbox.c:652
 msgid "Do you really want to remove all items?"
@@ -151,11 +151,11 @@ msgstr "Prázdny re»azec je neprípustný!"
 
 #: src/bfu/leds.c:65
 msgid "LEDs"
-msgstr "LED-ky"
+msgstr "LED indikátory"
 
 #: src/bfu/leds.c:67
 msgid "LEDs (visual indicators) options."
-msgstr ""
+msgstr "Nastavenie LEDiek (vizuálnych identifikátorov)"
 
 #. XXX: Disable global history if -anonymous is given?
 #: src/bfu/leds.c:69 src/config/options.inc:1784 src/config/options.inc:1791
@@ -169,6 +169,8 @@ msgid ""
 "Enable LEDs.\n"
 "These visual indicators will inform you about various states."
 msgstr ""
+"Zapnú» LED.\n"
+"Tieto visuálne identifikátory mô¾u informova» o rôznych stavoch. "
 
 #. name:
 #: src/bfu/leds.c:240
@@ -486,7 +488,7 @@ msgstr "Nemô¾em zapísa» do konfiguraèného súboru %s: %s"
 
 #: src/config/dialogs.c:89
 msgid "(expand by pressing space)"
-msgstr ""
+msgstr "(rozbalí¹ stlaèením medzery)"
 
 #: src/config/dialogs.c:92 src/config/dialogs.c:244
 msgid "N/A"
@@ -715,9 +717,8 @@ msgid "Download the current image"
 msgstr "Stiahnu» aktuálny obrázok"
 
 #: src/config/kbdbind.c:396
-#, fuzzy
 msgid "Open download manager"
-msgstr "Otvori» správcu zálo¾iek"
+msgstr "Otvori» správcu s»ahovania"
 
 #: src/config/kbdbind.c:397
 msgid "Begin editing"
@@ -758,13 +759,11 @@ msgstr "Otvor» dialógové okno \"Choï na URL\""
 
 #: src/config/kbdbind.c:406
 msgid "Open \"Go to URL\" dialog box containing the current URL"
-msgstr ""
-"Otvori» dialógové okno \"Choï na URL\" obsahujúce URL aktuálneho dokumentu"
+msgstr "Otvori» dialóg \"Choï na URL\" obsahujúci aktuálne URL"
 
 #: src/config/kbdbind.c:407
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
-"Otvori» dialógové okno \"Choï na URL\" obsahujúce URL aktuálneho odkazu"
+msgstr "Otvori» dialóg \"Choï na URL\" obsahujúci URL aktuálneho odkazu"
 
 #: src/config/kbdbind.c:408
 msgid "Go to the homepage"
@@ -2327,18 +2326,16 @@ msgid ""
 msgstr ""
 
 #: src/config/options.inc:710
-#, fuzzy
 msgid "Local CGI"
-msgstr "Lokálne súbory"
+msgstr "Lokálne CGI skripty"
 
 #: src/config/options.inc:712
-#, fuzzy
 msgid "Local CGI specific options."
-msgstr "Vyhµada» zadaného hostiteµa."
+msgstr "Nastavenie spú¹»ania lokálnych CGI skriptov."
 
 #: src/config/options.inc:714
 msgid "Allow local CGI"
-msgstr ""
+msgstr "Povoli» lokálne CGI skripty"
 
 #: src/config/options.inc:716
 msgid "Whether to execute local CGI scripts."
@@ -2347,15 +2344,15 @@ msgstr ""
 #: src/config/options.inc:718 src/mime/backend/mailcap.c:102
 #: src/mime/backend/mimetypes.c:59
 msgid "Path"
-msgstr ""
+msgstr "Cesta"
 
 #: src/config/options.inc:720
 msgid "Colon separated list of directories, where CGI scripts are stored."
-msgstr ""
+msgstr "Zoznam adresárov (oddelených dvojbodkou), kde sú ulo¾ené CGI skripty."
 
 #: src/config/options.inc:722
 msgid "User protocols"
-msgstr ""
+msgstr "U¾ívateµské protokoly"
 
 #: src/config/options.inc:724
 msgid ""
@@ -2363,6 +2360,8 @@ msgid ""
 "handlers for the appropriate protocols. Ie.\n"
 "protocol.user.mailto.unix."
 msgstr ""
+"U¾ívateµské protokoly. Voµby v tomto strome ¹pecifikujú externé\n"
+"ovládaèe pre odpovedajúce protokoly. Napr. protocol.user.mailto.unix."
 
 #: src/config/options.inc:735
 msgid ""
@@ -2750,9 +2749,8 @@ msgid "Scrollbar colors."
 msgstr ""
 
 #: src/config/options.inc:1066 src/config/options.inc:1511
-#, fuzzy
 msgid "Scrollbar selected"
-msgstr "®iadny link"
+msgstr ""
 
 #: src/config/options.inc:1068 src/config/options.inc:1513
 msgid "Scrollbar selected colors."
@@ -3659,9 +3657,8 @@ msgstr "Ukonèi»"
 
 #. This requires more work to make locking work and query the user
 #: src/dialogs/download.c:250 src/dialogs/download.c:417
-#, fuzzy
 msgid "Abort and delete file"
-msgstr "Nemô¾em èíta» súbor"
+msgstr "Preru¹i» èinnos» a zmaza» súbor"
 
 #: src/dialogs/download.c:423
 msgid "Download manager"
@@ -4007,9 +4004,9 @@ msgid "Delete extension"
 msgstr "Zmaza» príponu"
 
 #: src/dialogs/mime.c:84
-#, fuzzy, c-format
+#, c-format
 msgid "Delete extension %s?"
-msgstr "Zmaza» príponu"
+msgstr "Zmaza» príponu %s?"
 
 #: src/dialogs/mime.c:153
 msgid "Extension"
@@ -4052,9 +4049,8 @@ msgid "KOI8-R frames"
 msgstr "Rámèeky KOI8-R"
 
 #: src/dialogs/options.c:175
-#, fuzzy
 msgid "Color mode:"
-msgstr "Farby"
+msgstr "Farebný mód:"
 
 #: src/dialogs/options.c:176
 msgid "No colors (mono)"
@@ -4104,9 +4100,8 @@ msgid "Average speed"
 msgstr "Priemerná rýchlos»"
 
 #: src/dialogs/status.c:85
-#, fuzzy
 msgid "average speed"
-msgstr "Priemerná rýchlos»"
+msgstr "priemerná rýchlos»"
 
 #: src/dialogs/status.c:86
 msgid "avg"
@@ -4117,9 +4112,8 @@ msgid "Speed"
 msgstr "Rýchlos»"
 
 #: src/dialogs/status.c:89
-#, fuzzy
 msgid "speed"
-msgstr "Rýchlos»"
+msgstr "rýchlos»"
 
 #: src/dialogs/status.c:100
 msgid "current speed"
@@ -4134,9 +4128,8 @@ msgid "Elapsed time"
 msgstr "Uplynulý èas"
 
 #: src/dialogs/status.c:112
-#, fuzzy
 msgid "elapsed time"
-msgstr "Uplynulý èas"
+msgstr "uplynulý èas"
 
 #: src/dialogs/status.c:119
 msgid "estimated time"
@@ -4226,14 +4219,12 @@ msgid "Global history manager"
 msgstr "Globálny správca histórie"
 
 #: src/globhist/globhist.c:70
-#, fuzzy
 msgid "Global history"
-msgstr "Správca histórie"
+msgstr "Globálna histórie"
 
 #: src/globhist/globhist.c:72
-#, fuzzy
 msgid "Global history options."
-msgstr "Správca histórie"
+msgstr "Nastavenie globálnej histórie."
 
 #: src/globhist/globhist.c:77
 msgid "Enable global history (\"history of all pages visited\")."
@@ -4248,9 +4239,8 @@ msgid "Maximum number of entries in the global history."
 msgstr ""
 
 #: src/globhist/globhist.c:83
-#, fuzzy
 msgid "Display style"
-msgstr "Zobrazi» map~u"
+msgstr "©týl zobrazenia"
 
 #: src/globhist/globhist.c:85
 msgid ""
@@ -4271,9 +4261,8 @@ msgstr ""
 
 #. name:
 #: src/globhist/globhist.c:497
-#, fuzzy
 msgid "Global History"
-msgstr "Správca histórie"
+msgstr "Globálna história"
 
 #: src/lowlevel/home.c:121
 #, c-format
@@ -4404,9 +4393,8 @@ msgid ""
 msgstr ""
 
 #: src/mime/backend/default.c:71
-#, fuzzy
 msgid "File extension associations"
-msgstr "~Prípony súborov"
+msgstr "Asociácie prípon súborov"
 
 #: src/mime/backend/default.c:73
 msgid "Extension <-> MIME type association."
@@ -5003,9 +4991,9 @@ msgid "Error while posting form"
 msgstr "Chyba pri vypisovaní formulára"
 
 #: src/viewer/text/form.c:654
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get file %s: %s"
-msgstr "Nemô¾em dosta» súbor"
+msgstr "Nemô¾em získa» súbor %s: %s"
 
 #: src/viewer/text/link.c:888
 msgid "Display ~usemap"

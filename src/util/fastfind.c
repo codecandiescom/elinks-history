@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.23 2003/06/14 22:07:15 pasky Exp $ */
+/* $Id: fastfind.c,v 1.24 2003/06/14 22:36:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,6 +32,38 @@
  *
  *  (c) 2003 Laurent MONIN (aka Zas)
  * Feel free to do whatever you want with that code. */
+
+
+/* These routines use a tree search. First, a big tree is composed from the
+ * keys on input. Then, when searching we just go through the tree. If we will
+ * end up on an 'ending' node, we've got it.
+ *
+ * Hm, okay. For keys { 'head', 'h1', 'body', 'bodyrock', 'bodyground' }, it
+ * would look like:
+ *
+ *             [root]
+ *          b          h
+ *          o        e   1
+ *          d        a
+ *          Y        D
+ *        g   r
+ *        r   o
+ *        o   c
+ *        u   K
+ *        D
+ *
+ * (the ending nodes are upcased just for this drawing, not in real)
+ *
+ * To optimize this for speed, leafs of nodes are organized in per-node arrays,
+ * indexed by symbol value of the key's next character. But to optimize that
+ * for memory, we first compose own alphabet consisting only from the chars we
+ * ever use in the key strings. @uniq_chars holds that alphabet and @idxtab is
+ * used to translate between it and ASCII.
+ *
+ * Tree building: O((L+M)*N)
+ * 			(L: mean key length, M: alphabet size,
+ * 			 N: number of items).
+ * String lookup: O(N) (N: string length). */
 
 
 /* Define it to generate statistics to stderr. */
@@ -147,6 +179,7 @@ struct fastfind_info {
 	unsigned char uniq_chars[FF_MAX_CHARS];
 };
 
+
 #ifdef FASTFIND_DEBUG
 
 #define meminc(x, size) (x)->memory_usage += (size)
@@ -170,6 +203,7 @@ struct fastfind_info {
 #define accif(x) if
 
 #endif
+
 
 static struct fastfind_info *
 init_fastfind(int case_sensitive)

@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.11 2003/11/26 21:52:27 jonas Exp $ */
+/* $Id: dialogs.c,v 1.12 2003/11/26 22:30:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,7 +139,7 @@ static struct hierbox_browser_button formhist_buttons[] = {
 	{ N_("Login"),		push_hierbox_goto_button,	1 },
 	{ N_("Info"),		push_hierbox_info_button,	1 },
 	{ N_("Delete"),		push_hierbox_delete_button,	1 },
-	{ N_("Toggle enable"),	push_toggle_dontsave_button,	0 },
+	{ N_("Toggle saving"),	push_toggle_dontsave_button,	0 },
 	{ N_("Clear"),		push_hierbox_clear_button,	1 },
 	{ N_("Save"),		push_save_button,		0 },
 };

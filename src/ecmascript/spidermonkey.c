@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.162 2004/12/25 20:42:45 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.163 2004/12/27 00:46:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -195,6 +195,25 @@ value_to_jsval(JSContext *ctx, jsval *vp, struct jsval_property *prop)
 	}
 }
 
+static void
+object_to_jsval(JSContext *ctx, jsval *vp, JSObject *object)
+{
+	*vp = OBJECT_TO_JSVAL(object);
+}
+
+static void
+boolean_to_jsval(JSContext *ctx, jsval *vp, int boolean)
+{
+	*vp = BOOLEAN_TO_JSVAL(boolean);
+}
+
+static void
+undef_to_jsval(JSContext *ctx, jsval *vp)
+{
+	*vp = JSVAL_NULL;
+}
+
+
 static int
 jsval_to_boolean(JSContext *ctx, jsval *vp)
 {
@@ -292,9 +311,6 @@ static JSBool
 window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	struct view_state *vs = JS_GetPrivate(ctx, obj);
-	struct jsval_property prop;
-
-	set_prop_undef(&prop);
 
 	/* No need for special window.location measurements - when
 	 * location is then evaluated in string context, toString()
@@ -308,8 +324,7 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		/* TODO: Try other lookups (mainly element lookup) until
 		 * something yields data. */
 		if (obj) {
-			set_prop_object(&prop, obj);
-			value_to_jsval(ctx, vp, &prop);
+			object_to_jsval(ctx, vp, obj);
 		}
 		return JS_TRUE;
 	}
@@ -322,10 +337,10 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		/* TODO: It will be a major PITA to implement this properly.
 		 * Well, perhaps not so much if we introduce reference tracking
 		 * for (struct session)? Still... --pasky */
-		set_prop_boolean(&prop, 0);
+		boolean_to_jsval(ctx, vp, 0);
 		break;
 	case JSP_WIN_SELF:
-		set_prop_object(&prop, obj);
+		object_to_jsval(ctx, vp, obj);
 		break;
 	case JSP_WIN_PARENT:
 		/* XXX: It would be nice if the following worked, yes.
@@ -358,6 +373,7 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 				goto found_parent;
 		}
 		INTERNAL("Cannot find frame %s parent.",doc_view->name);
+		undef_to_jsval(ctx, vp); /* Is this correct ? --Zas */
 		break;
 
 found_parent:
@@ -365,7 +381,7 @@ found_parent:
 		if (doc_view->vs.ecmascript_fragile)
 			ecmascript_reset_state(&doc_view->vs);
 		assert(doc_view->ecmascript);
-		set_prop_object(&prop, JS_GetGlobalObject(doc_view->ecmascript->backend_data));
+		object_to_jsval(ctx, vp, JS_GetGlobalObject(doc_view->ecmascript->backend_data));
 		break;
 	}
 #endif
@@ -378,7 +394,10 @@ found_parent:
 		assert(top_view && top_view->vs);
 		if (top_view->vs->ecmascript_fragile)
 			ecmascript_reset_state(top_view->vs);
-		if (!top_view->vs->ecmascript) break;
+		if (!top_view->vs->ecmascript) {
+			undef_to_jsval(ctx, vp); /* Is this correct ? --Zas */
+			break;
+		}
 		newjsframe = JS_GetGlobalObject(top_view->vs->ecmascript->backend_data);
 
 		/* Keep this unrolled this way. Will have to check document.domain
@@ -388,20 +407,20 @@ found_parent:
 		 * let the script walk thru. That'd mean moving the check to
 		 * other individual properties in this switch. */
 		if (compare_uri(vs->uri, top_view->vs->uri, URI_HOST))
-			set_prop_object(&prop, newjsframe);
+			object_to_jsval(ctx, vp, newjsframe);
 		else
 			/****X*X*X*** SECURITY VIOLATION! RED ALERT, SHIELDS UP! ***X*X*X****\
 			|* (Pasky was apparently looking at the Links2 JS code   .  ___ ^.^ *|
 			\* for too long.)                                        `.(,_,)\o/ */
-			set_prop_undef(&prop);
+			undef_to_jsval(ctx, vp);
 		break;
 	}
 	default:
 		INTERNAL("Invalid ID %d in window_get_property().", JSVAL_TO_INT(id));
-		return JS_TRUE;
+		undef_to_jsval(ctx, vp); /* XXX: needed on error ? --Zas */
+		break;
 	}
 
-	value_to_jsval(ctx, vp, &prop);
 	return JS_TRUE;
 }
 

@@ -1279,10 +1279,10 @@ void html_option(unsigned char *a)
 			internal("parse element failed");
 			goto x;
 		}
-		r:
+		rrrr:
 		while (p < eoff && WHITECHAR(*p)) p++;
 		while (p < eoff && !WHITECHAR(*p) && *p != '<') {
-			p:
+			pppp:
 			add_chr_to_str(&val, &l, *p), p++;
 		}
 		r = p;
@@ -1290,15 +1290,15 @@ void html_option(unsigned char *a)
 		if (r >= eoff) goto x;
 		if (r - 2 <= eoff && (r[1] == '!' || r[1] == '?')) {
 			p = skip_comment(r, eoff);
-			goto r;
+			goto rrrr;
 		}
-		if (parse_element(r, eoff, &name, &namelen, NULL, &p)) goto p;
+		if (parse_element(r, eoff, &name, &namelen, NULL, &p)) goto pppp;
 		if (!((namelen == 6 && !casecmp(name, "OPTION", 6)) ||
 		    (namelen == 7 && !casecmp(name, "/OPTION", 7)) ||
 		    (namelen == 6 && !casecmp(name, "SELECT", 6)) ||
 		    (namelen == 7 && !casecmp(name, "/SELECT", 7)) ||
 		    (namelen == 8 && !casecmp(name, "OPTGROUP", 8)) ||
-		    (namelen == 9 && !casecmp(name, "/OPTGROUP", 9)))) goto r;
+		    (namelen == 9 && !casecmp(name, "/OPTGROUP", 9)))) goto rrrr;
 	}
 	x:
 	fc->form_num = last_form_tag - startf;

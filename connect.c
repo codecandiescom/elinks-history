@@ -284,7 +284,7 @@ void connected(void *data)
 		if (errno > 0)
 			err = errno;
 		else
-			err = -S_STATE;
+			err = -(S_STATE);
 	}
 	
 	if (err > 0) {

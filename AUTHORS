@@ -111,6 +111,7 @@ Kaloian Doganov <kaloian@europe.com>
 
 Karel Kulhavy <clock@atrey.karlin.mff.cuni.cz>
 	Czech translation
+	Fixed compile incompatibility
 
 Lukasz Dobrek <dobrek@student.ifpan.edu.pl>
 	$CONFIG_DIR for config directory
@@ -235,4 +236,4 @@ zas@norz.org
 	Bookmarks hacking
 	Misc minor improvements
 
-$Id: AUTHORS,v 1.20 2002/01/29 22:10:22 pasky Exp $
+$Id: AUTHORS,v 1.21 2002/01/30 13:42:43 pasky Exp $

@@ -1672,10 +1672,10 @@ int field_op(struct session *ses, struct f_data_c *f, struct link *l, struct eve
 						int y;
 						for (y = 0; ln[y].st; y++) if (fs->value + fs->state >= ln[y].st && fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
 							fs->state = ln[y].en - fs->value;
-							goto y;
+							goto yyyy;
 						}
 						fs->state = strlen(fs->value);
-						y:
+						yyyy:
 						mem_free(ln);
 					}
 				} else fs->state = strlen(fs->value);

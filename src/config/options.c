@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.444 2004/05/26 13:00:47 jonas Exp $ */
+/* $Id: options.c,v 1.445 2004/05/30 18:06:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -369,7 +369,6 @@ init_option_listbox_item(struct option *option)
 
 	init_list(box->child);
 	box->visible = 1;
-	box->translated = 1;
 	box->text = option->capt ? option->capt : option->name;
 	box->udata = option;
 	box->type = (option->type == OPT_TREE) ? BI_FOLDER : BI_LEAF;

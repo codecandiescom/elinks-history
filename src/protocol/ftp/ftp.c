@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.137 2004/06/12 15:43:10 jonas Exp $ */
+/* $Id: ftp.c,v 1.138 2004/06/12 15:43:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1159,6 +1159,7 @@ out_of_mem:
 		}
 
 		add_html_to_string(&string, uristring, strlen(uristring));
+		mem_free(uristring);
 
 #define ADD_CONST(str) { \
 	add_fragment(conn->cached, conn->from, str, sizeof(str) - 1); \

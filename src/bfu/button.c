@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.49 2004/04/23 20:44:26 pasky Exp $ */
+/* $Id: button.c,v 1.50 2004/05/03 21:40:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,21 +17,37 @@
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 
+/* Vertical spacing between buttons. */
+#define BUTTON_VSPACING	1
+
+/* Horizontal spacing between buttons. */
+#define BUTTON_HSPACING	2
+
+/* Left and right text appearing around label of button.
+ * Currently a dialog button is displayed as [ LABEL ] */
+#define BUTTON_LEFT "[ "
+#define BUTTON_RIGHT " ]"
+#define BUTTON_LEFT_LEN (sizeof(BUTTON_LEFT) - 1)
+#define BUTTON_RIGHT_LEN (sizeof(BUTTON_RIGHT) - 1)
+
+#define BUTTON_LR_LEN (BUTTON_LEFT_LEN + BUTTON_RIGHT_LEN)
+
 static void
 buttons_width(struct widget_data *widget_data, int n,
 	      int *minwidth, int *maxwidth)
 {
-	int maxw = -2;
+	int maxw = -BUTTON_HSPACING;
 	register int i;
 
 	for (i = 0; i < n; i++) {
-		int minw = strlen((widget_data++)->widget->text) + 6;
+		int minw = strlen((widget_data++)->widget->text)
+			   + BUTTON_HSPACING + BUTTON_LR_LEN;
 
 		maxw += minw;
-		if (minwidth) *minwidth = int_max(*minwidth, minw);
+		if (minwidth) int_lower_bound(minwidth, minw);
 	}
 
-	if (maxwidth) *maxwidth = int_max(*maxwidth, maxw);
+	if (maxwidth) int_lower_bound(maxwidth, maxw);
 }
 
 void
@@ -64,16 +80,16 @@ dlg_format_buttons(struct terminal *term,
 			for (i = i1; i < i2; i++) {
 				widget_data[i].x = p;
 				widget_data[i].y = *y;
-				widget_data[i].w = strlen(widget_data[i].widget->text) + 4;
-				p += widget_data[i].w + 2;
+				widget_data[i].w = strlen(widget_data[i].widget->text)
+						   + BUTTON_LR_LEN;
+				p += widget_data[i].w + BUTTON_HSPACING;
 			}
 		}
 
-		*y += 2;
+		*y += BUTTON_VSPACING + 1 /* height of button */;
 		i1 = i2;
 	}
 }
-
 
 static void
 display_button(struct widget_data *widget_data, struct dialog_data *dlg_data, int sel)
@@ -81,15 +97,15 @@ display_button(struct widget_data *widget_data, struct dialog_data *dlg_data, in
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *color;
 	int len = strlen(widget_data->widget->text);
-	int x = widget_data->x + 2;
+	int x = widget_data->x + BUTTON_LEFT_LEN;
 
 	color = get_bfu_color(term, sel ? "dialog.button-selected"
 					: "dialog.button");
 	if (!color) return;
 
-	draw_text(term, widget_data->x, widget_data->y, "[ ", 2, 0, color);
+	draw_text(term, widget_data->x, widget_data->y, BUTTON_LEFT, BUTTON_LEFT_LEN, 0, color);
 	draw_text(term, x, widget_data->y, widget_data->widget->text, len, 0, color);
-	draw_text(term, x + len, widget_data->y, " ]", 2, 0, color);
+	draw_text(term, x + len, widget_data->y, BUTTON_RIGHT, BUTTON_RIGHT_LEN, 0, color);
 
 	if (sel) {
 		set_cursor(term, x, widget_data->y, 0);
@@ -101,7 +117,7 @@ static int
 mouse_button(struct widget_data *widget_data, struct dialog_data *dlg_data, struct term_event *ev)
 {
 	if (check_mouse_wheel(ev) || ev->y != widget_data->y || ev->x < widget_data->x
-	    || ev->x >= widget_data->x + strlen(widget_data->widget->text) + 4)
+	    || ev->x >= widget_data->x + strlen(widget_data->widget->text) + BUTTON_LR_LEN)
 		return EVENT_NOT_PROCESSED;
 
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.215 2003/12/06 09:48:47 pasky Exp $ */
+/* $Id: http.c,v 1.216 2003/12/06 09:52:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1117,9 +1117,9 @@ http_error:
 	if ((d = parse_http_header(ch, "Status", NULL))) {
 		int h2 = atoi(d);
 
+		mem_free(d);
 		if (h2 >= 100 && h2 < 600) h = h2;
 		if (h == 101) goto http_error;
-		mem_free(d);
 	}
 
 #ifdef COOKIES

@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.16 2004/01/01 03:16:53 pasky Exp $ */
+/* $Id: feature.h,v 1.17 2004/01/01 03:25:48 pasky Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -313,6 +313,21 @@
  * Default: disabled */
 
 /* #define ELINKS_LOCAL_CGI */
+
+
+/*** SMB Protocol Support
+ *
+ * ELinks supports browsing over the SMB protocol (URI 'smb' scheme), using
+ * smbclient program as the backend. Therefore, in order to have this enabled,
+ * you will need to install Samba (or at least just the smbclient part, if you
+ * can install it separately).
+ *
+ * Default: enabled if smbclient will be found */
+
+#ifdef ELINKS_SMB
+/* Uncomment the following line if you want to always have this disabled: */
+/* #undef ELINKS_SMB */
+#endif
 
 
 #endif

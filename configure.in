@@ -783,31 +783,9 @@ dnl ===================================================================
 dnl SMB protocol support.
 dnl ===================================================================
 
-hm_enabled_smb="yes"
-hm_forced_smb="no"
-
-AC_ARG_ENABLE(smb,
-              [  --disable-smb           disable support for the SMB protocol],
-	      [if test "$enableval" = yes; then
-                 hm_forced_smb="yes"
-               else
-                 hm_enabled_smb="no"
-               fi])
-
-AC_MSG_CHECKING(for SMB protocol support)
-
-if test "x$hm_enabled_smb" = "xyes"; then
-	AC_MSG_RESULT(enabled if smbclient will be found)
-	AC_CHECK_PROG(have_smbclient, smbclient, yes, no)
-	if test "$have_smbclient" = yes; then
-		AC_DEFINE(ELINKS_SMB)
-	else
-		if test "x$hm_forced_smb" = "xyes"; then
-			AC_MSG_WARN(smbclient not found in PATH, SMB browsing will not work!)
-		fi
-	fi
-else
-	AC_MSG_RESULT(disabled)
+AC_CHECK_PROG(have_smbclient, smbclient, yes, no)
+if test "$have_smbclient" = yes; then
+	AC_DEFINE(ELINKS_SMB)
 fi
 
 

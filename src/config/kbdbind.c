@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.96 2003/11/17 18:03:36 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.97 2003/11/17 18:06:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -684,7 +684,6 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_PAGE_DOWN, 'F', KBD_CTRL },
 	{ ACT_PAGE_UP, KBD_PAGE_UP, 0 },
 	{ ACT_PAGE_UP, 'b', 0 },
-	{ ACT_PAGE_UP, 'B', 0 },
 	{ ACT_PAGE_UP, 'B', KBD_CTRL },
 	{ ACT_DOWN, KBD_DOWN, 0 },
 	{ ACT_UP, KBD_UP, 0 },
@@ -709,29 +708,22 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_ENTER_RELOAD, 'x', 0 },
 	{ ACT_BACK, KBD_LEFT, 0 },
 	{ ACT_UNBACK, 'u', 0 },
-	{ ACT_UNBACK, 'U', 0 },
 	{ ACT_DOWNLOAD, 'd', 0 },
-	{ ACT_DOWNLOAD, 'D', 0 },
 	{ ACT_RESUME_DOWNLOAD, 'r', 0 },
-	{ ACT_RESUME_DOWNLOAD, 'R', 0 },
 	{ ACT_ABORT_CONNECTION, 'z', 0 },
 	{ ACT_SEARCH, '/', 0 },
 	{ ACT_SEARCH_BACK, '?', 0 },
 	{ ACT_FIND_NEXT, 'n', 0 },
 	{ ACT_FIND_NEXT_BACK, 'N', 0 },
 	{ ACT_ZOOM_FRAME, 'f', 0 },
-	{ ACT_ZOOM_FRAME, 'F', 0 },
 	{ ACT_RELOAD, 'R', KBD_CTRL },
 	{ ACT_GOTO_URL_CURRENT_LINK, 'E', 0},
 	{ ACT_GOTO_URL, 'g', 0 },
 	{ ACT_GOTO_URL_CURRENT, 'G', 0 },
-	{ ACT_GOTO_URL_HOME, 'H' },
 	{ ACT_GOTO_URL_HOME, 'm' },
-	{ ACT_GOTO_URL_HOME, 'M' },
 	{ ACT_ADD_BOOKMARK, 'a' },
 	{ ACT_ADD_BOOKMARK_LINK, 'A' },
 	{ ACT_BOOKMARK_MANAGER, 's' },
-	{ ACT_BOOKMARK_MANAGER, 'S' },
 	{ ACT_CACHE_MANAGER, 'C' },
 	{ ACT_HISTORY_MANAGER, 'h' },
 	{ ACT_OPTIONS_MANAGER, 'o' },

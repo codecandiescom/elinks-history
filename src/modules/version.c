@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.24 2003/10/30 02:15:14 jonas Exp $ */
+/* $Id: version.c,v 1.25 2003/12/31 13:32:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,7 @@ static void
 add_module_to_string(struct string *string, struct module *module,
 		     struct terminal *term)
 {
+	struct module *submodule;
 	int i;
 
 	if (module->name) add_to_string(string, _(module->name, term));
@@ -37,10 +38,9 @@ add_module_to_string(struct string *string, struct module *module,
 
 	add_to_string(string, " (");
 
-	for (i = 0; module->submodules[i]; i++) {
-		add_module_to_string(string, module->submodules[i], term);
-		if (module->submodules[i + 1])
-			add_to_string(string, ", ");
+	foreach_module (submodule, module->submodules, i) {
+		if (i > 0) add_to_string(string, ", ");
+		add_module_to_string(string, submodule, term);
 	}
 
 	add_to_string(string, ")");
@@ -50,12 +50,12 @@ static void
 add_modules_to_string(struct string *string, struct terminal *term)
 {
 	extern struct module *builtin_modules[];
+	struct module *module;
 	int i;
 
-	for (i = 0; builtin_modules[i]; i++) {
-		add_module_to_string(string, builtin_modules[i], term);
-		if (builtin_modules[i + 1])
-			add_to_string(string, ", ");
+	foreach_module (module, builtin_modules, i) {
+		if (i > 0) add_to_string(string, ", ");
+		add_module_to_string(string, module, term);
 	}
 }
 

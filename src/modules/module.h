@@ -1,4 +1,4 @@
-/* $Id: module.h,v 1.9 2003/10/26 14:14:47 jonas Exp $ */
+/* $Id: module.h,v 1.10 2003/12/31 13:32:12 jonas Exp $ */
 
 #ifndef EL__MODULES_MODULE_H
 #define EL__MODULES_MODULE_H
@@ -41,6 +41,28 @@ struct module {
 
 #define struct_module(name, options, hooks, submods, data, init, done) \
 	{ name, options, hooks, submods, data, init, done }
+
+#define foreach_module(module, modules, i)			\
+	for (i = 0, module = modules ? modules[i] : NULL;	\
+	     module;						\
+	     i++, module = modules[i])
+
+/* The module table has to be NULL terminates */
+static inline int
+sizeof_modules(struct module **modules)
+{
+	struct module *module;
+	int i;
+
+	foreach_module (module, modules, i) /* m33p */;
+
+	return i - 1;
+}
+
+#define foreachback_module(module, modules, i)			\
+	for (i = sizeof_modules(modules);			\
+	     i >= 0 && (module = modules[i]);			\
+	     i--)
 
 /* Interface for handling single modules */
 

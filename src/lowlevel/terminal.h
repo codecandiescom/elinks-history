@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.27 2003/05/03 17:00:52 pasky Exp $ */
+/* $Id: terminal.h,v 1.28 2003/05/03 20:42:09 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_TERMINAL_H
 #define EL__LOWLEVEL_TERMINAL_H
@@ -120,7 +120,6 @@ void cls_redraw_all_terminals();
 void redraw_from_window(struct window *);
 void redraw_below_window(struct window *);
 void add_window(struct terminal *, void (*)(struct window *, struct event *, int), void *);
-void add_window_at_pos(struct terminal *, void (*)(struct window *, struct event *, int), void *, struct window *);
 void delete_window(struct window *);
 void delete_window_ev(struct window *, struct event *ev);
 #define set_window_ptr(window, x, y) 	(window)->xp = (x), (window)->yp = (y)

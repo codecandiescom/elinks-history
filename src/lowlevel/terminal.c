@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.60 2003/05/03 20:41:37 pasky Exp $ */
+/* $Id: terminal.c,v 1.61 2003/05/03 20:42:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -250,7 +250,7 @@ redraw_below_window(struct window *win)
 	term->redrawing = tr;
 }
 
-void
+static void
 add_window_at_pos(struct terminal *term,
 		  void (*handler)(struct window *, struct event *, int),
 		  void *data, struct window *at)

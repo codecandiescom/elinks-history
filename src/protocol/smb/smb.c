@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.48 2004/06/18 13:40:24 zas Exp $ */
+/* $Id: smb.c,v 1.49 2004/06/18 16:02:55 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -201,7 +201,7 @@ end_smb_connection(struct connection *conn)
 		redirect_cache(conn->cached, "/", 1, 0);
 
 	} else {
-		unsigned char *line_start, *line_end, *line_end2;
+		unsigned char *line_start, *line_end;
 		struct string page;
 		enum {
 			SMB_TYPE_NONE,
@@ -210,6 +210,7 @@ end_smb_connection(struct connection *conn)
 			SMB_TYPE_WORKGROUP
 		} type = SMB_TYPE_NONE;
 		int pos = 0;
+		int stop = 0;
 
 		if (!init_string(&page)) {
 			abort_conn_with_state(conn, S_OUT_OF_MEM);
@@ -221,15 +222,21 @@ end_smb_connection(struct connection *conn)
 		add_to_string(&page, "</title></head><body><pre>");
 
 		line_start = si->text;
-		while ((line_end = strchr(line_start, '\n'))) {
-			unsigned char *line;
+		while (!stop && (line_end = strchr(line_start, '\n'))) {
+			unsigned char *line = line_start;
+			int line_len;
+			int start_offset = 0;
 
-			/* FIXME: Just look if '\r' is right in front of '\n'?
-			 * --pasky */
-			line_end2 = strchr(line_start, '\r');
-			if (!line_end2 || line_end2 > line_end)
-				line_end2 = line_end;
-			line = memacpy(line_start, line_end2 - line_start);
+			/* Handle \r\n case. Normally, do not occur on *nix. */
+			if (line_end > line_start && line_end[-1] == '\r')
+				 line_end--, start_offset++;
+
+			line_len = line_end - line_start;
+
+			/* Here we modify si->text content, this should not be
+			 * a problem as it is only used here. This prevents
+			 * allocation of memory for the line. */
+			*line_end = '\0';
 
 			/* And I got bored here with cleaning it up. --pasky */
 
@@ -284,7 +291,7 @@ print_next:
 					if (!strstr(lll, "Disk"))
 						goto print_as_is;
 
-					if (pos && pos < strlen(line)
+					if (pos && pos < line_len
 					    && isspace(*(llll = line + pos - 1))
 					    && llll > ll) {
 						while (llll > ll && isspace(*llll))
@@ -304,7 +311,7 @@ print_next:
 				}
 
 				case SMB_TYPE_WORKGROUP:
-					if (pos < strlen(line) && pos
+					if (pos < line_len && pos
 					    && isspace(line[pos - 1])
 					    && !isspace(line[pos])) {
 						ll = line + pos;
@@ -334,17 +341,18 @@ print_next:
 
 			} else if (si->list_type == SMB_LIST_DIR) {
 				if (strstr(line, "NT_STATUS")) {
-					line_end[1] = '\0';
+					/* Error, stop after message. */
+					stop = 1;
 					goto print_as_is;
 				}
 
-				if (line_end2 - line_start >= 5
+				if (line_end - line_start >= 5
 				    && line_start[0] == ' '
 				    && line_start[1] == ' '
 				    && line_start[2] != ' ') {
 					int dir = 0;
 					int may_be_dir = 0;
-					unsigned char *p = line_end2;
+					unsigned char *p = line_end;
 					unsigned char *url = line_start + 2;
 
 					/* smbclient list parser
@@ -448,13 +456,12 @@ print_next:
 
 			} else {
 print_as_is:
-				add_bytes_to_string(&page, line_start, line_end2 - line_start);
+				add_bytes_to_string(&page, line_start, line_len);
 			}
 
 			add_char_to_string(&page, '\n');
 ignored:
-			line_start = line_end + 1;
-			mem_free(line);
+			line_start = line_end + start_offset + 1;
 		}
 
 		add_to_string(&page, "</pre></body></html>");

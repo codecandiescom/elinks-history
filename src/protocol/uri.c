@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.112 2004/04/02 18:15:11 jonas Exp $ */
+/* $Id: uri.c,v 1.113 2004/04/02 22:05:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -826,20 +826,6 @@ extract_fragment(unsigned char *uri)
 	memmove(frag_start, post_start, strlen(post_start) + 1);
 
 	return fragment;
-}
-
-unsigned char *
-extract_proxy(unsigned char *uristring)
-{
-	unsigned char *proxy_end;
-
-	if (strlen(uristring) < 8 || strncasecmp(uristring, "proxy://", 8))
-		return uristring;
-
-	proxy_end = strchr(uristring + 8, '/');
-	if (!proxy_end) return uristring;
-
-	return proxy_end + 1;
 }
 
 struct string *

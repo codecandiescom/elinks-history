@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.74 2004/04/02 18:15:11 jonas Exp $ */
+/* $Id: uri.h,v 1.75 2004/04/02 22:05:00 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -149,7 +149,6 @@ unsigned char *get_extension_from_uri(struct uri *uri);
 unsigned char *join_urls(unsigned char *, unsigned char *);
 unsigned char *translate_url(unsigned char *, unsigned char *);
 unsigned char *extract_fragment(unsigned char *);
-unsigned char *extract_proxy(unsigned char *);
 
 /* Return position if end of string @s matches a known tld or -1 if not.
  * If @slen < 0, then string length will be obtained by a strlen() call,

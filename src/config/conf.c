@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.42 2002/07/01 18:00:48 pasky Exp $ */
+/* $Id: conf.c,v 1.43 2002/07/01 22:47:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,10 +86,16 @@ enum parse_error {
 };
 
 /* Parse a command. Returns error code. */
+/* If dynamic string credentials are supplied, we will mirror the command at
+ * the end of the string; however, we won't load the option value to the tree,
+ * and we will even write option value from the tree to the output string. We
+ * will only possibly set OPT_WATERMARK flag to the option (if enabled). */
 
 enum parse_error
-parse_set(struct list_head *opt_tree, unsigned char **file, int *line)
+parse_set(struct list_head *opt_tree, unsigned char **file, int *line,
+	  unsigned char **str, int *len)
 {
+	unsigned char *orig_pos = *file;
 	unsigned char *optname;
 	unsigned char bin;
 
@@ -113,10 +119,13 @@ parse_set(struct list_head *opt_tree, unsigned char **file, int *line)
 	*file = skip_white(*file, line);
 	if (!**file) { mem_free(optname); return ERROR_VALUE; }
 
+	/* Mirror what we already have */
+	if (str) add_bytes_to_str(str, len, orig_pos, *file - orig_pos);
+
 	/* Option value */
 	{
 		struct option *opt;
-		unsigned char *str;
+		unsigned char *val;
 
 		opt = get_opt_rec(opt_tree, optname);
 		mem_free(optname);
@@ -127,23 +136,28 @@ parse_set(struct list_head *opt_tree, unsigned char **file, int *line)
 		if (!option_types[opt->type].read)
 			return ERROR_VALUE;
 
-		str = option_types[opt->type].read(opt, file);
-		if (!str || !option_types[opt->type].set
-		    || !option_types[opt->type].set(opt, str)) {
-			if (str) mem_free(str);
+		val = option_types[opt->type].read(opt, file);
+		if (str) {
+			opt->flags |= OPT_WATERMARK;
+			option_types[opt->type].write(opt, str, len);
+		} else if (!val || !option_types[opt->type].set
+			   || !option_types[opt->type].set(opt, val)) {
+			if (val) mem_free(val);
 			return ERROR_VALUE;
 		}
-		mem_free(str);
+		if (val) mem_free(val);
 	}
 
 	return ERROR_NONE;
 }
 
 enum parse_error
-parse_bind(struct list_head *opt_tree, unsigned char **file, int *line)
+parse_bind(struct list_head *opt_tree, unsigned char **file, int *line,
+	   unsigned char **str, int *len)
 {
+	unsigned char *orig_pos = *file;
 	unsigned char *keymap, *keystroke, *action;
-	enum parse_error error;
+	enum parse_error error = ERROR_NONE;
 
 	*file = skip_white(*file, line);
 	if (!*file) return ERROR_PARSE;
@@ -183,17 +197,27 @@ parse_bind(struct list_head *opt_tree, unsigned char **file, int *line)
 		return ERROR_VALUE;
 	}
 
+	/* Mirror what we already have */
+	/* TODO: When implemented properly, this must be above action. */
+	if (str) add_bytes_to_str(str, len, orig_pos, *file - orig_pos);
+	
+	if (!str) /* TODO ;) */
 	error = bind_do(keymap, keystroke, action) ? ERROR_VALUE : ERROR_NONE;
 	mem_free(keymap); mem_free(keystroke); mem_free(action);
 	return error;
 }
 
-int load_config_file(unsigned char *, unsigned char *);
+int load_config_file(unsigned char *, unsigned char *, struct list_head *,
+		     unsigned char **, int *);
 
 enum parse_error
-parse_include(struct list_head *opt_tree, unsigned char **file, int *line)
+parse_include(struct list_head *opt_tree, unsigned char **file, int *line,
+	      unsigned char **str, int *len)
 {
+	unsigned char *orig_pos = *file;
 	unsigned char *fname;
+	unsigned char *dumbstr = init_str();
+	int dumblen = 0;
 
 	*file = skip_white(*file, line);
 	if (!*file) return ERROR_PARSE;
@@ -203,15 +227,20 @@ parse_include(struct list_head *opt_tree, unsigned char **file, int *line)
 	if (!fname)
 		return ERROR_VALUE;
 
+	/* Mirror what we already have */
+	if (str) add_bytes_to_str(str, len, orig_pos, *file - orig_pos);
+
 	/* XXX: We should try /etc/elinks/<file> when proceeding
 	 * /etc/elinks/<otherfile> ;). --pasky */
 	if (load_config_file(fname[0] == '/' ? (unsigned char *) ""
 					     : elinks_home,
-			     fname)) {
+			     fname, opt_tree, &dumbstr, &dumblen)) {
+		mem_free(dumbstr);
 		mem_free(fname);
 		return ERROR_VALUE;
 	}
 
+	mem_free(dumbstr);
 	mem_free(fname);
 	return ERROR_NONE;
 }
@@ -219,7 +248,9 @@ parse_include(struct list_head *opt_tree, unsigned char **file, int *line)
 
 struct parse_handler {
 	unsigned char *command;
-	enum parse_error (*handler)(struct list_head *opt_tree, unsigned char **file, int *line);
+	enum parse_error (*handler)(struct list_head *opt_tree,
+				    unsigned char **file, int *line,
+				    unsigned char **str, int *len);
 };
 
 struct parse_handler parse_handlers[] = {
@@ -231,8 +262,8 @@ struct parse_handler parse_handlers[] = {
 
 
 void
-parse_config_file(struct list_head *opt_tree, unsigned char *name,
-		  unsigned char *file)
+parse_config_file(struct list_head *options, unsigned char *name,
+		  unsigned char *file, unsigned char **str, int *len)
 {
 	int line = 1;
 	int error_occured = 0;
@@ -246,8 +277,13 @@ parse_config_file(struct list_head *opt_tree, unsigned char *name,
 	};
 
 	while (file && *file) {
+		unsigned char *orig_pos = file;
+
 		/* Skip all possible comments and whitespaces. */
 		file = skip_white(file, &line);
+
+		/* Mirror what we already have */
+		if (str) add_bytes_to_str(str, len, orig_pos, file - orig_pos);
 
 		/* Second chance to escape from the hell. */
 		if (!*file) break;
@@ -257,25 +293,36 @@ parse_config_file(struct list_head *opt_tree, unsigned char *name,
 
 			for (handler = parse_handlers; handler->command;
 			     handler++) {
-				int len = strlen(handler->command);
+				int cmdlen = strlen(handler->command);
 
-				if (!strncmp(file, handler->command, len)
-				    && WHITECHAR(file[len])) {
-					file += len;
-					error = handler->handler(opt_tree, &file, &line);
+				if (!strncmp(file, handler->command, cmdlen)
+				    && WHITECHAR(file[cmdlen])) {
+					/* Mirror what we already have */
+					if (str)
+						add_bytes_to_str(str, len,
+								 file, cmdlen);
+
+					file += cmdlen;
+					error = handler->handler(options,
+								 &file, &line,
+								 str, len);
 					goto test_end;
 				}
 			}
 		}
 
 		error = ERROR_COMMAND;
+		orig_pos = file;
 		/* Jump over this crap we can't understand. */
 		while (!WHITECHAR(*file) && *file != '#' && *file)
 			file++;
 
+		/* Mirror what we already have */
+		if (str) add_bytes_to_str(str, len, orig_pos, file - orig_pos);
+
 test_end:
 
-		if (error) {
+		if (!str && error) {
 			/* TODO: Make this a macro and report error directly
 			 * as it's stumbled upon; line info may not be accurate
 			 * anymore now (?). --pasky */
@@ -334,7 +381,8 @@ read_config_file(unsigned char *name)
 
 /* Return 0 on success. */
 int
-load_config_file(unsigned char *prefix, unsigned char *name)
+load_config_file(unsigned char *prefix, unsigned char *name,
+		 struct list_head *options, unsigned char **str, int *len)
 {
 	unsigned char *config_str, *config_file;
 
@@ -354,7 +402,7 @@ load_config_file(unsigned char *prefix, unsigned char *name)
 		}
 	}
 
-	parse_config_file(root_options, config_file, config_str);
+	parse_config_file(options, config_file, config_str, str, len);
 
 	mem_free(config_str);
 	mem_free(config_file);
@@ -365,10 +413,29 @@ load_config_file(unsigned char *prefix, unsigned char *name)
 void
 load_config()
 {
-	load_config_file("/etc/elinks/", "elinks.conf");
-	load_config_file(elinks_home, "elinks.conf");
+	load_config_file("/etc/elinks/", "elinks.conf",
+			 root_options, NULL, NULL);
+	load_config_file(elinks_home, "elinks.conf",
+			 root_options, NULL, NULL);
 }
 
+
+int
+check_nonempty_tree(struct list_head *options)
+{
+	struct option *opt;
+
+	foreach (opt, *options) {
+		if (opt->type == OPT_TREE) {
+			if (check_nonempty_tree((struct list_head *) opt->ptr))
+				return 1;
+		} else if (!(opt->flags & OPT_WATERMARK)) {
+			return 1;
+		}
+	}
+
+	return 0;
+}
 
 void
 tree_config_string(unsigned char **str, int *len, int print_comment,
@@ -380,7 +447,14 @@ tree_config_string(unsigned char **str, int *len, int print_comment,
 	foreachback (option, *options) {
 		int do_print_comment = 1;
 
-		if (option->flags & OPT_HIDDEN) continue;
+		if (option->flags & OPT_HIDDEN ||
+		    option->flags & OPT_WATERMARK)
+			continue;
+
+		/* Is there anything to be printed anyway? */
+		if (option->type == OPT_TREE
+		    && !check_nonempty_tree((struct list_head *) option->ptr))
+			continue;
 
 		/* Pop out the comment */
 
@@ -483,45 +557,64 @@ tree_config_string(unsigned char **str, int *len, int print_comment,
 	}
 }
 
-/* TODO: We want to get rid of user.cfg. Let's rewrite config file
- * non-destructively. */
 unsigned char *
-create_config_string(struct list_head *options)
+create_config_string(unsigned char *prefix, unsigned char *name,
+		     struct list_head *options)
 {
 	unsigned char *str = init_str();
 	int len = 0;
+	/* Don't write headers if nothing will be added anyway. */
+	unsigned char *tmpstr;
+	int tmplen;
+	int origlen;
 
-	add_to_str(&str, &len,
-		   "# This file is automatically generated by ELinks "
-		   "-- please DO NOT edit!!" NEWLINE NEWLINE);
+	if (load_config_file(prefix, name, options, &str, &len) || !*str) {
+		add_to_str(&str, &len,
+			   "## This is ELinks configuration file. You can edit it manually," NEWLINE
+			   "## if you wish so; this file is edited by ELinks when you save" NEWLINE
+			   "## options through UI, however only option values will be altered" NEWLINE
+			   "## and missing options will be added at the end of file; if option" NEWLINE
+			   "## is not written in this file, but in some file included from it," NEWLINE
+			   "## it is NOT counted as missing." NEWLINE);
+	}
 
-	add_to_str(&str, &len, NEWLINE NEWLINE NEWLINE);
-	add_to_str(&str, &len, "#####################################" NEWLINE);
-	add_to_str(&str, &len, "# Automatically saved options" NEWLINE);
-	add_to_str(&str, &len, "#" NEWLINE);
-	add_to_str(&str, &len, NEWLINE);
+	tmpstr = init_str(); tmplen = 0;
+	add_to_str(&tmpstr, &tmplen, NEWLINE NEWLINE NEWLINE);
+	add_to_str(&tmpstr, &tmplen, "#####################################" NEWLINE);
+	add_to_str(&tmpstr, &tmplen, "# Automatically saved options" NEWLINE);
+	add_to_str(&tmpstr, &tmplen, "#" NEWLINE);
+	add_to_str(&tmpstr, &tmplen, NEWLINE);
 
-	tree_config_string(&str, &len, 2, options, NULL, 0);
+	origlen = tmplen;
+	tree_config_string(&tmpstr, &tmplen, 2, options, NULL, 0);
+	if (tmplen > origlen) add_bytes_to_str(&str, &len, tmpstr, tmplen);
+	mem_free(tmpstr);
 
-	add_to_str(&str, &len, NEWLINE NEWLINE NEWLINE);
-	add_to_str(&str, &len, "#####################################" NEWLINE);
-	add_to_str(&str, &len, "# Automatically saved keybindings" NEWLINE);
-	add_to_str(&str, &len, "#" NEWLINE);
+	tmpstr = init_str(); tmplen = 0;
+	add_to_str(&tmpstr, &tmplen, NEWLINE NEWLINE NEWLINE);
+	add_to_str(&tmpstr, &tmplen, "#####################################" NEWLINE);
+	add_to_str(&tmpstr, &tmplen, "# Automatically saved keybindings" NEWLINE);
+	add_to_str(&tmpstr, &tmplen, "#" NEWLINE);
 
-	bind_config_string(&str, &len);
+	origlen = tmplen;
+	/* bind_config_string(&str, &len); */
+	if (tmplen > origlen) add_bytes_to_str(&str, &len, tmpstr, tmplen);
+	mem_free(tmpstr);
 
 	return str;
 }
 
 /* TODO: The error condition should be handled somewhere else. */
 int
-write_config_file(unsigned char *prefix, unsigned char *name, struct list_head *o,
-		  struct terminal *term)
+write_config_file(unsigned char *prefix, unsigned char *name,
+		  struct list_head *options, struct terminal *term)
 {
 	int ret = -1;
 	struct secure_save_info *ssi;
 	unsigned char *config_file;
-	unsigned char *cfg_str = create_config_string(o);
+	unsigned char *cfg_str;
+
+	cfg_str = create_config_string(prefix, name, options);
 
 	if (!cfg_str) return -1;
 	

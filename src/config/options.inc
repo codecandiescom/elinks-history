@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.11 2003/10/24 00:58:48 pasky Exp $ */
+/* $Id: options.inc,v 1.12 2003/10/24 00:59:29 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -580,7 +580,6 @@ struct option_info config_options_info[] = {
 		"history", 0,
 		N_("History options.")),
 
-#ifdef GLOBHIST
 	INIT_OPT_TREE("document.history", N_("Global history"),
 		"global", 0,
 		N_("Global history options.")),
@@ -604,7 +603,6 @@ struct option_info config_options_info[] = {
 		"write_interval", 0, 0, MAXINT, 300,
 		N_("Interval at which to write global history to disk if it\n"
 		"has changed (seconds; 0 to disable)")),
-#endif /* GLOBHIST */
 
 	INIT_OPT_BOOL("document.history", N_("Keep unhistory"),
 		"keep_unhistory", 0, 1,

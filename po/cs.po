@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-12-30 22:00+0100\n"
-"PO-Revision-Date: 2003-12-27 18:02+0100\n"
+"PO-Revision-Date: 2003-12-30 22:37+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -333,19 +333,16 @@ msgid "Add bookmark"
 msgstr "Pøidej bookmark"
 
 #: src/bookmarks/dialogs.c:587
-#, fuzzy
 msgid "Saved session"
-msgstr "Ulo¾it na~stavení"
+msgstr "Ulo¾ená sezení"
 
 #: src/bookmarks/dialogs.c:608
-#, fuzzy
 msgid "Bookmark tabs"
-msgstr "Bookmarky"
+msgstr "Bookmarknout taby"
 
 #: src/bookmarks/dialogs.c:608
-#, fuzzy
 msgid "Enter folder name"
-msgstr "Název slo¾ky"
+msgstr "Napi¹ název slo¾ky"
 
 #: src/cache/dialogs.c:65
 msgid "Redirect"
@@ -932,7 +929,7 @@ msgstr "Neznámá kombinace kláves."
 
 #: src/config/dialogs.c:441
 msgid "Keystroke already used"
-msgstr ""
+msgstr "Kombinace kláves je ji¾ pou¾ívána"
 
 #: src/config/dialogs.c:442
 #, c-format
@@ -940,6 +937,8 @@ msgid ""
 "The keystroke \"%s\" is currently used for \"%s\".\n"
 "Are you sure you want to replace it?"
 msgstr ""
+"Kombinace kláves \"%s\" je v souèasnosti pou¾ívána pro akci \"%s\".\n"
+"Opravdu ji chcete zmìnit?"
 
 #: src/config/dialogs.c:469
 msgid "Need to select a keymap."
@@ -1017,9 +1016,8 @@ msgid "Add a new bookmark using current link"
 msgstr "Bookmarknutí aktuálního odkazu"
 
 #: src/config/kbdbind.c:398
-#, fuzzy
 msgid "Bookmark all open tabs"
-msgstr "Nastavení bookmarkù."
+msgstr "Bookmarknout v¹echny otevøené taby"
 
 #: src/config/kbdbind.c:399
 msgid "Attempt to auto-complete the input"
@@ -2488,13 +2486,12 @@ msgstr ""
 "pøi jejich prohlí¾ení pou¾ít horizontální scrollování."
 
 #: src/config/options.inc:558
-#, fuzzy
 msgid "Default form input size"
-msgstr "Výchozí nastavení barev"
+msgstr "Výchozí velikost textového formuláøového políèka"
 
 #: src/config/options.inc:560
 msgid "Default form input size if none is specified."
-msgstr ""
+msgstr "Výchozí velikost textového políèka ve formuláøi, pokud není specifikována v dokumentu."
 
 #: src/config/options.inc:563
 msgid "Plain rendering"
@@ -3430,9 +3427,8 @@ msgid "Tabs bar colors."
 msgstr "Barvy li¹ty s taby."
 
 #: src/config/options.inc:1088
-#, fuzzy
 msgid "Unvisited tab"
-msgstr "Nevybraný tab"
+msgstr "Nenav¹tívený tab"
 
 #: src/config/options.inc:1090
 msgid ""
@@ -3519,15 +3515,16 @@ msgstr ""
 "budete také v setup.h chtít zú¾it okraje dialogových oken."
 
 #: src/config/options.inc:1137
-#, fuzzy
 msgid "Underline hotkeys"
-msgstr "Podtrhávat"
+msgstr "Podtrhávat horké klávesy"
 
 #: src/config/options.inc:1139
 msgid ""
 "Whether to underline hotkeys in menus to make them more\n"
 "visible. Requires the underlining is enabled for the terminal."
 msgstr ""
+"Urèuje, zdalipak podtrhávat v meòátkách horké klávesy, aby byly\n"
+"lépe vidìt. To ov¹em funguje pouze, pokud terminál podporuje podtrhávání."
 
 #: src/config/options.inc:1143
 msgid "Timer options"
@@ -3660,45 +3657,48 @@ msgstr ""
 "Pokud není nastavena domovská stránka, zobraz pøi startu okno \"Jít na\"."
 
 #: src/config/options.inc:1213
-#, fuzzy
 msgid "Sessions"
-msgstr "Pøípona(y)"
+msgstr "Sezení"
 
 #: src/config/options.inc:1215
-#, fuzzy
 msgid "Sessions settings."
-msgstr "Nastavení tabù."
+msgstr "Nastavení sezení."
 
 #: src/config/options.inc:1217
-#, fuzzy
 msgid "Auto save session"
-msgstr "Interval automatického ukládání"
+msgstr "Automaticky ukládat sezení"
 
 #: src/config/options.inc:1219
 msgid ""
 "Automatically save the session when quitting.\n"
 "This feature requires bookmark support."
 msgstr ""
+"Automaticky ukládat stav sezení pøi ukonèování ELinksu.\n"
+"K tomu je potøeba podpora bookmarkù."
 
 #: src/config/options.inc:1222
 msgid "Auto restore session"
-msgstr ""
+msgstr "Autmaticky obnovovat sezení"
 
 #: src/config/options.inc:1224
 msgid ""
 "Automatically restore the session at start.\n"
 "This feature requires bookmark support."
 msgstr ""
+"Automaticky obnovovat stav sezení pøi spou¹tìní ELinksu.\n"
+"K tomu je potøeba podpora bookmarkù."
 
 #: src/config/options.inc:1227
 msgid "Auto save and restore session folder name"
-msgstr ""
+msgstr "Jméno slo¾ky pro automatické ukládání a obnovování sezení"
 
 #: src/config/options.inc:1229
 msgid ""
 "Name of the bookmarks folder used for auto saving and restoring session.\n"
 "This only makes sense with bookmark support."
 msgstr ""
+"Jméno slo¾ky v bookmarcích, pou¾ívané pro automatické ukládání stavu sezení.\n"
+"K tomu je ov¹em potøeba podpora bookmarkù."
 
 #: src/config/options.inc:1233
 msgid "Set window title"
@@ -4520,7 +4520,7 @@ msgstr "uplynulý èas"
 
 #: src/dialogs/status.c:118
 msgid "ETT"
-msgstr ""
+msgstr "ETT"
 
 #: src/dialogs/status.c:126
 msgid "estimated time"
@@ -4528,7 +4528,7 @@ msgstr "pøedpokládaný èas"
 
 #: src/dialogs/status.c:127
 msgid "ETA"
-msgstr ""
+msgstr "ETA"
 
 #: src/dialogs/status.c:214 src/viewer/text/search.c:942
 msgid "Typeahead"
@@ -5743,9 +5743,8 @@ msgid "Do you really want to close the current tab?"
 msgstr "Chce¹ opravdu zavøít tento tab?"
 
 #: src/terminal/tab.c:226
-#, fuzzy
 msgid "Do you really want to close all except the current tab?"
-msgstr "Chce¹ opravdu zavøít tento tab?"
+msgstr "Chce¹ opravdu zavøít v¹echny taby kromì tohoto?"
 
 #: src/viewer/dump/dump.c:79
 #, c-format

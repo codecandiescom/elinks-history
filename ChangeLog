@@ -1,3 +1,42 @@
+Wed Mar 27 23:05:52 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/parser.c:
+	
+	Do not strip spaces from URL attribute of tags (by mikulas, from
+	0.97pre8).
+
+Wed Mar 27 22:45:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/http/http.c:
+	
+	When sending the URL, translate spaces to %20. This is definitively
+	not the best thing we can do, but it's sufficient solution as very
+	temporary one (by mikulas, from 0.97pre8). Minor code tidyups.
+
+Wed Mar 27 21:52:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/: parser.c, renderer.c:
+	
+	Prevent double newline when rendering lists: <li><p> xxx (by
+	mikulas, from 0.97pre8). Note that I include this only in order to
+	be sure we'll act right, as we've already
+	some-own-fix-which-i-cant-remember-now-:). Also re-enabled the
+	justify code, which was effectively disabled by mistake.
+
+Wed Mar 27 21:43:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/session.c:
+	
+	some more mem_free() stuff when we're out of memory
+
+Wed Mar 27 21:30:25 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: document/session.c, protocol/url.c, protocol/url.h,
+	util/Makefile.am, util/conv.c, util/conv.h:
+	
+	Moved hx() and unhx() to util/conv.c, fixed prototypes of
+	*_url_string() so that we now even compile
+
 Wed Mar 27 13:32:35 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: document/view.c, protocol/url.c, protocol/url.h:

@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.3 2003/12/07 01:57:13 jonas Exp $ */
+/* $Id: rewrite.c,v 1.4 2003/12/07 02:04:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,11 +97,9 @@ static struct option_info uri_rewrite_options[] = {
 static inline struct option *
 get_prefix_tree(enum uri_rewrite_option tree)
 {
-	struct option *option_tree = &get_opt_rewrite(tree);
-
 	assert(tree == URI_REWRITE_DUMB_TREE
 	       || tree == URI_REWRITE_SMART_TREE);
-	return option_tree;
+	return &get_opt_rewrite(tree);
 }
 
 static inline void
@@ -115,7 +113,7 @@ encode_uri_string_len(struct string *s, unsigned char *a, int alen)
 }
 
 static unsigned char *
-subst_url(unsigned char *url, unsigned char *current_url, unsigned char *arg)
+substitute_url(unsigned char *url, unsigned char *current_url, unsigned char *arg)
 {
 	struct string n = NULL_STRING;
 	unsigned char *args[10];
@@ -191,16 +189,11 @@ subst_url(unsigned char *url, unsigned char *current_url, unsigned char *arg)
 static unsigned char *
 get_prefix(enum uri_rewrite_option tree, unsigned char *url)
 {
-       unsigned char *exp;
-       struct option *opt = get_prefix_tree(tree);
+	struct option *prefix_tree = get_prefix_tree(tree);
+	struct option *opt = get_opt_rec_real(prefix_tree, url);
+	unsigned char *exp = opt ? opt->value.string : NULL;
 
-       opt = get_opt_rec_real(opt, url);
-
-       exp = opt ? opt->value.string : NULL;
-       if (exp && !strcmp(exp, ""))
-               exp = NULL;
-
-       return exp;
+	return (exp && *exp) ? exp : NULL;
 }
 
 static enum evhook_status
@@ -226,7 +219,7 @@ goto_url_hook(va_list ap, void *data)
 	}
 
 	if (uu) {
-		uu = subst_url(uu, cur_loc(ses)->vs.url, arg);
+		uu = substitute_url(uu, cur_loc(ses)->vs.url, arg);
 		if (uu) *url = uu;
 	}
 

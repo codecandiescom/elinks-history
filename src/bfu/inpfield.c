@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.189 2004/11/30 17:47:11 zas Exp $ */
+/* $Id: inpfield.c,v 1.190 2004/12/17 23:23:52 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -597,6 +597,14 @@ input_line_event_handler(struct dialog_data *dlg_data)
 		/* First let the input field do its business */
 		kbd_field(dlg_data, widget_data);
 		break;
+
+	case EVENT_MOUSE:
+		if (ev->info.mouse.y != dlg_data->win->y) {
+			delete_window_ev(dlg_data->win, ev);
+			return EVENT_PROCESSED;
+		}
+
+		return EVENT_NOT_PROCESSED;
 
 	case EVENT_REDRAW:
 		/* Try to catch the redraw event initiated by the history

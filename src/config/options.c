@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.127 2002/12/01 17:28:52 pasky Exp $ */
+/* $Id: options.c,v 1.128 2002/12/01 17:36:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2027,4 +2027,15 @@ register_options()
 	strcpy(get_opt_str("mime.extension.txt"), "text/plain");
 	strcpy(get_opt_str("mime.extension.htm"), "text/html");
 	strcpy(get_opt_str("mime.extension.html"), "text/html");
+
+	strcpy(get_opt_str("protocol.user.mailto.unix"), "mutt %h -s \"%s\"");
+	strcpy(get_opt_str("protocol.user.mailto.unix-xwin"), "mutt %h -s \"%s\"");
+	strcpy(get_opt_str("protocol.user.telnet.unix"), "telnet %h %p");
+	strcpy(get_opt_str("protocol.user.telnet.unix-xwin"), "mutt %h %p");
+	strcpy(get_opt_str("protocol.user.tn3270.unix"), "tn3270 %h %p");
+	strcpy(get_opt_str("protocol.user.tn3270.unix-xwin"), "tn3270 %h %p");
+	strcpy(get_opt_str("protocol.user.gopher.unix"), "lynx %u");
+	strcpy(get_opt_str("protocol.user.gopher.unix-xwin"), "lynx %u");
+	strcpy(get_opt_str("protocol.user.news.unix"), "lynx %u");
+	strcpy(get_opt_str("protocol.user.news.unix-xwin"), "lynx %u");
 }

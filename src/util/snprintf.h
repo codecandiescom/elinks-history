@@ -1,4 +1,4 @@
-/* $Id: snprintf.h,v 1.12 2003/08/29 23:06:01 pasky Exp $ */
+/* $Id: snprintf.h,v 1.13 2003/09/03 16:03:11 zas Exp $ */
 
 #ifndef EL__UTIL_SNPRINTF_H
 #define EL__UTIL_SNPRINTF_H
@@ -21,7 +21,6 @@
 #endif
 #endif
 
-
 #ifdef USE_OWN_LIBC
 #undef HAVE_VSNPRINTF
 #undef HAVE_C99_VSNPRINTF
@@ -32,6 +31,7 @@
 #else
 #include <stdio.h> /* The system's snprintf(). */
 #endif
+
 
 #if !defined(HAVE_VSNPRINTF) || !defined(HAVE_C99_VSNPRINTF)
 #undef vsnprintf
@@ -59,43 +59,36 @@ int elinks_asprintf(char **ptr, const char *fmt, ...);
 #endif
 
 
-#ifdef _GNU_SOURCE
-
 /* These are wrappers for (v)asprintf() which return the strings allocated by
  * ELinks' own memory allocation routines, thus it is usable in the context of
  * standard ELinks memory managment. Just use these if you mem_free() the
  * string later and use the original ones if you free() the string later. */
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE /* We want vasprintf() */
+#endif
 
 #include <stdlib.h>
 #include "util/string.h"
 
+int vasprintf(char **ptr, const char *fmt, va_list ap);
+
 static inline unsigned char *
 vasprintfa(const char *fmt, va_list ap) {
 	unsigned char *str1, *str2;
+	int size;
 
 	if (vasprintf((char **) &str1, fmt, ap) < 0)
 		return NULL;
 
-	str2 = stracpy(str1);
+	size = strlen(str1) + 1;
+	str2 = mem_alloc(size);
+	if (str2) memcpy(str2, str1, size);
 	free(str1);
 
 	return str2;
 }
 
-static inline unsigned char *
-asprintfa(const char *fmt, ...)
-{
-	unsigned char *str;
-	va_list ap;
-
-	va_start(ap, fmt);
-	str = vasprintfa(fmt, ap);
-	va_end(ap);
-
-	return str;
-}
-
-#endif
+unsigned char *asprintfa(const char *fmt, ...);
 
 
 #endif

@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.21 2003/06/20 17:29:36 pasky Exp $ */
+/* $Id: snprintf.c,v 1.22 2003/09/03 16:03:11 zas Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -862,7 +862,20 @@ elinks_asprintf(char **ptr, const char *format, ...)
 }
 #endif
 
+unsigned char *
+asprintfa(const char *fmt, ...)
+{
+	unsigned char *str;
+	va_list ap;
 
+	va_start(ap, fmt);
+	str = vasprintfa(fmt, ap);
+	va_end(ap);
+
+	return str;
+}
+
+/* Test program */
 #ifdef TEST_SNPRINTF
 
 #include <math.h>

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.81 2003/08/31 10:36:02 zas Exp $ */
+/* $Id: string.c,v 1.82 2003/09/03 16:03:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -252,7 +252,7 @@ elinks_strlcasecmp(const unsigned char *s1, size_t n1,
 /* TODO Currently most of the functions use add_bytes_to_string() as a backend
  *	instead we should optimize each function. */
 
-struct string *
+inline struct string *
 init_string(struct string *string)
 {
 	assertm(string, "[init_string]");
@@ -269,7 +269,7 @@ init_string(struct string *string)
 	return string;
 }
 
-void
+inline void
 done_string(struct string *string)
 {
 	assertm(string, "[done_string]");
@@ -281,33 +281,6 @@ done_string(struct string *string)
 		string->source = NULL;
 	}
 	string->length = 0;
-}
-
-
-/* General useful to check if @_string_ needs reallocation to fit @_length_. */
-#define realloc_string(_string_, _newlength_)				\
-	mem_gralloc((_string_)->source, unsigned char, (_string_)->length, _newlength_, ALLOC_GR)
-
-inline struct string *
-add_bytes_to_string(struct string *string, unsigned char *bytes, int length)
-{
-	int newlength;
-
-	assertm(string && bytes && length >= 0, "[add_bytes_to_string]");
-	if_assert_failed { return NULL; }
-
-	check_string_magic(string);
-
-	if (length == 0) return string;
-
-	newlength = string->length + length;
-	realloc_string(string, newlength);
-
-	memcpy(string->source + string->length, bytes, length);
-	string->source[newlength] = 0;
-	string->length = newlength;
-
-	return string;
 }
 
 inline struct string *
@@ -357,7 +330,7 @@ string_concat(struct string *string, ...)
 	return string;
 }
 
-struct string *
+inline struct string *
 add_char_to_string(struct string *string, unsigned char character)
 {
 	int newlength;
@@ -377,7 +350,7 @@ add_char_to_string(struct string *string, unsigned char character)
 	return string;
 }
 
-struct string *
+inline struct string *
 add_xchar_to_string(struct string *string, unsigned char character, int times)
 {
 	int newlength;

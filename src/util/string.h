@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.48 2003/08/29 11:13:14 jonas Exp $ */
+/* $Id: string.h,v 1.49 2003/09/03 16:03:11 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -8,6 +8,7 @@
 
 #include <string.h>
 
+#include "util/error.h"
 #include "util/memdebug.h"
 #include "util/memory.h"
 
@@ -143,9 +144,9 @@ struct string *init_string(struct string *string);
 /* Resets @string and free()s the @source member. */
 void done_string(struct string *string);
 
-inline struct string *add_bytes_to_string(struct string *string, unsigned char *bytes, int length);
-inline struct string *add_to_string(struct string *string, unsigned char *text);
-inline struct string *add_char_to_string(struct string *string, unsigned char character);
+
+struct string *add_to_string(struct string *string, unsigned char *text);
+struct string *add_char_to_string(struct string *string, unsigned char character);
 struct string *add_string_to_string(struct string *to, struct string *from);
 
 /* Adds each C string to @string until a terminating NULL is met. */
@@ -156,5 +157,32 @@ struct string *add_xchar_to_string(struct string *string, unsigned char characte
 
 /* Add printf-style format string to @string. */
 struct string *add_format_to_string(struct string *string, unsigned char *format, ...);
+
+
+#undef realloc_string
+#define realloc_string(_string_, _newlength_)				\
+	mem_gralloc((_string_)->source, unsigned char, (_string_)->length, _newlength_, ALLOC_GR)
+
+static inline struct string *
+add_bytes_to_string(struct string *string, unsigned char *bytes, int length)
+{
+	int newlength;
+
+	assertm(string && bytes && length >= 0, "[add_bytes_to_string]");
+	if_assert_failed { return NULL; }
+
+	check_string_magic(string);
+
+	if (length == 0) return string;
+
+	newlength = string->length + length;
+	realloc_string(string, newlength);
+
+	memcpy(string->source + string->length, bytes, length);
+	string->source[newlength] = 0;
+	string->length = newlength;
+
+	return string;
+}
 
 #endif /* EL__UTIL_STRING_H */

@@ -564,7 +564,7 @@ enable_gnutls=""
 AC_ARG_WITH(gnutls, [  --without-gnutls        disable GNUTLS SSL support],
 	    [if test "$with_gnutls" = no;  then disable_gnutls=yes; fi])
 AC_ARG_WITH(gnutls, [  --with-gnutls[[=prefix]]  enable GNUTLS SSL support],
-	    [enable_gnutls=yes;])
+	    [if test "$with_gnutls" = yes;  then enable_gnutls=yes; fi])
 gnutls_withval="$withval"
 
 if test "$enable_gnutls" = yes; then
@@ -584,7 +584,7 @@ CFLAGS_X="$CFLAGS"
 LIBS_X="$LIBS"
 cf_result="no"
 
-if test "$disable_openssl"; then
+if test "$disable_openssl" = yes; then
 	cf_result="not used"
 else
 	for ssldir in "$openssl_withval" "" /usr /usr/local/openssl \

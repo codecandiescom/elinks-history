@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.111 2003/10/24 11:21:19 zas Exp $ */
+/* $Id: ftp.c,v 1.112 2003/10/24 11:41:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1189,6 +1189,7 @@ out_of_mem:
 	len = safe_read(conn->data_socket, c_i->ftp_buffer + c_i->buf_pos,
 		        FTP_BUF_SIZE - c_i->buf_pos);
 	if (len < 0) goto conn_error;
+
 	if (len > 0) {
 		if (!c_i->dir) {
 			conn->received += len;

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.97 2003/10/24 11:41:15 pasky Exp $ */
+/* $Id: conf.c,v 1.98 2003/10/24 11:41:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -399,7 +399,7 @@ read_config_file(unsigned char *name)
 
 	while ((r = safe_read(fd, cfg_buffer, FILE_BUF)) > 0) {
 		int i;
-				
+	
 		/* Clear problems ;). */
 		for (i = 0; i < r; i++)
 			if (!cfg_buffer[i])

@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.13 2003/10/24 11:21:20 zas Exp $ */
+/* $Id: event.c,v 1.14 2003/10/24 11:41:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,7 @@ in_term(struct terminal *term)
 		if (r == -1 && errno != ECONNRESET)
 			error(_("Could not read event: %d (%s)", term),
 			      errno, (unsigned char *) strerror(errno));
-		
+	
 		destroy_terminal(term);
 		return;
 	}

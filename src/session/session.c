@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.404 2004/05/25 04:17:05 jonas Exp $ */
+/* $Id: session.c,v 1.405 2004/05/25 04:20:23 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -824,7 +824,7 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 				 * take the first possibility and should maybe
 				 * make it possible to specify new-screen etc
 				 * via -remote "openURL(..., new-*)" --jonas */
-				open_url_in_new_window(ses, struri(uri), term_env);
+				open_url_in_new_window(ses, uri, term_env);
 
 			} else {
 				/* Open next ones. */

@@ -745,6 +745,7 @@ AC_OUTPUT([ \
  src/protocol/http/Makefile \
  src/sched/Makefile \
  src/ssl/Makefile \
+ src/terminal/Makefile \
  src/util/Makefile \
  src/viewer/Makefile \
  src/viewer/dump/Makefile \

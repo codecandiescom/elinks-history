@@ -429,22 +429,25 @@ if test -z "$disable_lua"; then
 	for luadir in "$withval" "$withval" "" /usr /usr /usr/local /usr/local; do
 		if test "$cf_result" = no; then
 			if test "$xyz_piggyswitch" = "cow"; then
-				LIBS="-llua40 -llualib40 -lm $LIBS_X"
+				LUA_LIBS="-llua40 -llualib40 -lm"
 			else
-				LIBS="-llua -llualib -lm $LIBS_X"
+				LUA_LIBS="-llua -llualib -lm"
 			fi
 
 			if test ! -z "$luadir"; then
-				LIBS="-L$luadir/lib $LIBS"
+				LUA_LIBS="-L$luadir/lib $LUA_LIBS"
 				if test "$xyz_piggyswitch" = "cow"; then
-					CFLAGS="$CFLAGS_X -I$luadir/include -I$luadir/include/lua40"
+					LUA_CFLAGS="-I$luadir/include -I$luadir/include/lua40"
 					# The switch should be performed at the last occurence
 					xyz_piggyswitch=sheep
 				else
-					CFLAGS="$CFLAGS_X -I$luadir/include -I$luadir/include/lua"
+					LUA_CFLAGS="-I$luadir/include -I$luadir/include/lua"
 					xyz_piggyswitch=cow
 				fi
 			fi
+
+			LIBS="$LUA_LIBS $LIBS_X"
+			CFLAGS="$CFLAGS_X $LUA_CFLAGS"
 
 			AC_TRY_LINK([#include <lua.h>],
 				    [lua_open(0)],
@@ -460,6 +463,9 @@ else
 	AC_DEFINE(HAVE_LUA)
 	AC_DEFINE(HAVE_SCRIPTING)
 fi
+
+AC_SUBST(LUA_LIBS)
+AC_SUBST(LUA_CFLAGS)
 
 AC_MSG_RESULT($cf_result)
 

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.47 2003/10/11 13:15:37 zas Exp $ */
+/* $Id: uri.c,v 1.48 2003/11/07 23:14:06 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -826,12 +826,14 @@ decode_uri_string(unsigned char *src) {
 				}
 			}
 
+#if 0
 		} else if (c == '+') {
 			/* As the comment in encode_uri_string suggests, '+'
 			 * should only be decoded in the query part of a URI
 			 * (should that be 'URL'?). I'm not bold enough to
 			 * disable this code, tho. -- Miciah */
 			c = ' ';
+#endif
 		}
 
 		*dst++ = c;

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.21 2002/05/04 08:30:20 pasky Exp $ */
+/* $Id: sched.c,v 1.22 2002/05/05 12:36:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -700,15 +700,19 @@ again:
 		int q = getpri(d);
 
 		cc += d->running;
-		if (q < p) if (!ps) {
-			internal("queue is not sorted");
-			sort_queue();
-			ps = 1;
-			goto again;
+		if (q < p) {
+			if (!ps) {
+				internal("queue is not sorted");
+				sort_queue();
+				ps = 1;
+				goto again;
+			} else {
+				internal("queue is not sorted even after sort_queue!");
+				break;
+			}
 		} else {
-			internal("queue is not sorted even after sort_queue!");
-			break;
-		} else p = q;
+			p = q;
+		}
 
 		if (d->state < 0) {
 			internal("interrupted connection on queue (conn %s, state %d)",

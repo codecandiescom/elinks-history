@@ -1,10 +1,11 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.12 2002/12/07 20:05:54 pasky Exp $ */
+/* $Id: colors.c,v 1.13 2002/12/14 18:17:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,7 +22,7 @@ struct color_spec {
 
 extern int dump_pos;
 
-struct color_spec color_specs[] = {
+static struct color_spec color_specs[] = {
 	{"aliceblue",		0xF0F8FF},
 	{"antiquewhite",	0xFAEBD7},
 	{"aqua",		0x00FFFF},
@@ -184,10 +185,11 @@ decode_color(unsigned char *str, struct rgb *col)
 	}
 	str++;
 	if (strlen(str) == 6) {
-		char *end;
+		unsigned char *end;
 
-		ch = strtoul(str, &end, 16);
-		if (!*end) {
+		errno = 0;
+		ch = strtoul(str, (char **)&end, 16);
+		if (!errno && !*end) {
 found:
 			col->r = ch / 0x10000;
 			col->g = ch / 0x100 % 0x100;
@@ -226,7 +228,7 @@ color_to_string(struct rgb *color, unsigned char *str)
 
 #include "document/options.h"
 
-struct rgb palette[] = {
+static struct rgb palette[] = {
 #if 0
 	{0x00, 0x00, 0x00},
 	{0x80, 0x00, 0x00},
@@ -305,7 +307,7 @@ static inline int find_nearest_color(struct rgb *r, int l)
 }
 #endif
 
-static int
+static inline int
 color_distance(struct rgb *c1, struct rgb *c2)
 {
 	return 3 * (c1->r - c2->r) * (c1->r - c2->r) +

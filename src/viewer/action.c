@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.127 2004/11/14 00:15:14 jonas Exp $ */
+/* $Id: action.c,v 1.128 2004/11/25 22:19:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -690,6 +690,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 		case ACT_MAIN_SCRIPTING_FUNCTION:
 		case ACT_MAIN_NONE:
 		case MAIN_ACTIONS:
+		default:
 			if (verbose) {
 				INTERNAL("No action handling defined for '%s'.",
 					 write_action(KEYMAP_MAIN, action));

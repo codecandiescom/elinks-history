@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.79 2003/05/21 11:32:38 zas Exp $ */
+/* $Id: view.c,v 1.80 2003/05/25 09:35:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3315,7 +3315,7 @@ send_open_in_new_xterm(struct terminal *term,
 	/* FIXME: We can't do this because ses->dn_url isn't alloc'd by init_str(). --pasky */
 	/* if (ses->dn_url) add_session_ring_to_str(&ses->dn_url, &l); */
 	if (ses->dn_url) {
-		unsigned char *enc_url = encode_url(ses->dn_url);
+		unsigned char *enc_url = encode_shell_safe_url(ses->dn_url);
 
 		open_window(term, path_to_exe, enc_url);
 		mem_free(enc_url);

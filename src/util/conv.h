@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.9 2003/05/25 09:22:53 zas Exp $ */
+/* $Id: conv.h,v 1.10 2003/05/25 09:35:22 zas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -23,7 +23,6 @@ int add_num_to_str(unsigned char **str, int *len, long num);
 int add_knum_to_str(unsigned char **str, int *len, long num);
 void add_xnum_to_str(unsigned char **s, int *l, int n);
 void add_time_to_str(unsigned char **s, int *l, ttime t);
-
 void add_htmlesc_str(unsigned char **, int *, unsigned char *, int);
 
 
@@ -73,4 +72,7 @@ int elinks_longcat(unsigned char *s, unsigned int *slen, long number,
 #define snprint(str, len, num) ulongcat(str, NULL, num, len, 0);
 #define snzprint(str, len, num) longcat(str, NULL, num, len, 0);
 
+unsigned char *encode_shell_safe_url(unsigned char *);
+unsigned char *decode_shell_safe_url(unsigned char *);
+	
 #endif

@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.40 2003/05/25 09:22:53 zas Exp $ */
+/* $Id: conv.c,v 1.41 2003/05/25 09:35:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -301,4 +301,54 @@ add_htmlesc_str(unsigned char **str, int *strl,
 
 #undef accept_char
 
+}
+
+
+/* This is _NOT_ for what do you think it's for! We use this to make URL
+ * shell-safe, nothing more. */
+unsigned char *
+encode_shell_safe_url(unsigned char *url)
+{
+	unsigned char *u = init_str();
+	int l = 0;
+
+	if (!u) return NULL;
+
+	for (; *url; url++) {
+		if (is_safe_in_shell(*url))
+			add_chr_to_str(&u, &l, *url);
+		else {
+			add_chr_to_str(&u, &l, '=');
+			add_chr_to_str(&u, &l, hx(*url >> 4));
+		       	add_chr_to_str(&u, &l, hx(*url & 0xf));
+			add_chr_to_str(&u, &l, '=');
+		}
+	}
+
+	return u;
+}
+
+/* This is _NOT_ for what do you think it's for! We use this to recover from
+ * making URL shell-safe, nothing more. */
+unsigned char *
+decode_shell_safe_url(unsigned char *url)
+{
+	unsigned char *u = init_str();
+	int l = 0;
+	size_t url_len = strlen(url);
+
+	if (!u) return NULL;
+
+	for (; *url; url++, url_len--) {
+		if (url_len < 4 || url[0] != '=' || unhx(url[1]) == -1
+		    || unhx(url[2]) == -1 || url[3] != '=') {
+			add_chr_to_str(&u, &l, *url);
+		} else {
+			add_chr_to_str(&u, &l, (unhx(url[1]) << 4) + unhx(url[2]));
+		       	url += 3;
+			url_len -= 3;
+		}
+	}
+
+	return u;
 }

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.20 2003/05/25 09:22:53 zas Exp $ */
+/* $Id: session.h,v 1.21 2003/05/25 09:35:22 zas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -104,8 +104,6 @@ struct session {
 
 extern struct list_head sessions;
 
-unsigned char *encode_url(unsigned char *);
-unsigned char *decode_url(unsigned char *);
 
 void free_strerror_buf(void);
 unsigned char *get_err_msg(int);

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.67 2003/05/23 21:22:20 zas Exp $ */
+/* $Id: os_dep.c,v 1.68 2003/05/25 09:35:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1821,7 +1821,7 @@ open_in_new_tab(struct terminal *term, unsigned char *exe_name,
 	if (!strncmp(param, "-base-session ", 13)) {
 		info->base_session = atoi(param + strlen("-base-session "));
 	} else {
-		info->url = decode_url(param);
+		info->url = decode_shell_safe_url(param);
 	}
 
 	ev.b = (long) info;

@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.28 2003/06/22 15:44:46 jonas Exp $ */
+/* $Id: error.h,v 1.29 2003/07/06 20:28:43 pasky Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -39,13 +39,31 @@ void elinks_internal(unsigned char *fmt, ...);
 
 /* This is our smart assert(). It is basically equivalent to if (x) internal(),
  * but it generates a uniform message and mainly does not do the test if we are
- * supposed to be lightning fast. Use it, use it much! */
+ * supposed to be lightning fast. Use it, use it a lot! */
+
+/* To make recovery path possible (assertion failed may not mean end of the
+ * world, the execution goes on if we're outside of DEBUG and FASTMEM),
+ * @assert_failed is set to true if the last assert() failed, otherwise it's
+ * zero. Note that you must never change assert_failed value, sorry guys. */
+
+/* In-depth explanation: this restriction is here because in the FASTMEM mode,
+ * assert_failed is initially initialized to zero and then not ever touched
+ * anymore. So if you change it to non-zero failure, your all further recovery
+ * paths will get hit (and since developers usually don't test FASTMEM mode
+ * extensively...). So better don't mess with it, even if you would do that
+ * with awareness of this fact. We don't want to iterate over tens of spots all
+ * over the code when we chane one detail regarding FASTMEM operation. */
+
+extern int assert_failed;
 
 #undef assert
 #ifdef FASTMEM
 #define assert(x) /* We don't do anything in FASTMEM mode. */
 #else
-#define assert(x) do { if (!(x)) internal("assertion " #x " failed!"); } while (0)
+#define assert(x) \
+do { if ((assert_failed = !(x))) { \
+	internal("assertion " #x " failed!"); \
+} } while (0)
 #endif
 
 /* This is extended assert() version, it can print additional user-specified
@@ -60,7 +78,10 @@ void elinks_internal(unsigned char *fmt, ...);
 #ifdef FASTMEM
 #define assertm(x,m...) /* We don't do anything in FASTMEM mode. */
 #else
-#define assertm(x,m...) do { if (!(x)) internal("assertion " #x " failed: " m); } while (0)
+#define assertm(x,m...) \
+do { if ((assert_failed = !(x))) { \
+	internal("assertion " #x " failed: " m); \
+} } while (0)
 #endif
 #else /* HAVE_VARIADIC_MACROS */
 #ifdef FASTMEM
@@ -68,10 +89,12 @@ void elinks_internal(unsigned char *fmt, ...);
 #else
 #define assertm errfile = __FILE__, errline = __LINE__, elinks_assertm
 #endif
-/* This is not nice at all, and does not really work that nice as macros do.
+/* This is not nice at all, and does not really work that nice as macros do
  * But it is good to try to do at least _some_ assertm()ing even when the
  * variadic macros are not supported. */
-/* XXX: assertm() usage could generate warnings, so DEBUG (-Werror) and
+/* XXX: assertm() usage could generate warnings (we assume that the assert()ed
+ * expression is int (and that's completely fine, I do *NOT* want to see any
+ * stinking assert((int)pointer) ! ;-)), so DEBUG (-Werror) and
  * !HAVE_VARIADIC_MACROS won't play well together. Hrm. --pasky */
 #ifdef FASTMEM
 static inline

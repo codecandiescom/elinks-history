@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.135 2003/09/28 13:43:55 jonas Exp $ */
+/* $Id: menu.c,v 1.136 2003/10/02 12:47:15 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,10 +31,10 @@
 #include "protocol/uri.h"
 #include "sched/connection.h"
 #include "sched/download.h"
+#include "sched/event.h"
 #include "sched/history.h"
 #include "sched/location.h"
 #include "sched/session.h"
-#include "scripting/lua/core.h"
 #include "terminal/kbd.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
@@ -651,7 +651,7 @@ free_history_lists(void)
 	free_list(goto_url_history.items);
 	free_list(file_history.items);
 	free_list(search_history.items);
-#ifdef HAVE_LUA
-	free_lua_console_history();
+#ifdef HAVE_SCRIPTING
+	trigger_event(get_event_id("free-history"));
 #endif
 }

@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.41 2003/10/01 11:31:51 jonas Exp $ */
+/* $Id: hooks.c,v 1.42 2003/10/02 12:47:15 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,6 +200,7 @@ struct scripting_hook lua_scripting_hooks[] = {
 	{ "pre-format-html", script_hook_pre_format_html, NULL },
 	{ "get-proxy", script_hook_get_proxy, NULL },
 	{ "quit", script_hook_quit, NULL },
+	{ "free-history", free_lua_console_history, NULL },
 	NULL_SCRIPTING_HOOK,
 };
 

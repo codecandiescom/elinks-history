@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.56 2004/06/13 12:20:04 jonas Exp $ */
+/* $Id: event.c,v 1.57 2004/06/13 12:29:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,9 +163,10 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 
 		term->environment = info->system_env;
 
-		/* We need to make sure that it is possible to draw on before
-		 * decoding the session info so that handling of bad URL syntax
-		 * by openning msg_box() will be possible. */
+		/* We need to make sure that it is possible to draw on the
+		 * terminal screen before decoding the session info so that
+		 * handling of bad URL syntax by openning msg_box() will be
+		 * possible. */
 		term_send_event(term, ev);
 
 		/* Either the initialization of the first session failed or we

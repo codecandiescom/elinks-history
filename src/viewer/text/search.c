@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.229 2004/06/03 21:12:41 zas Exp $ */
+/* $Id: search.c,v 1.230 2004/06/04 07:29:53 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -242,20 +242,17 @@ get_range(struct document *document, int y, int yw, int l,
 
 /* Returns an allocated string which is a lowered copy of passed one. */
 static unsigned char *
-lowered_string(unsigned char *s, int l)
+lowered_string(unsigned char *s, register int len)
 {
 	unsigned char *ret;
-	int len = l;
 
 	if (len < 0) len = strlen(s);
 
 	ret = mem_calloc(1, len + 1);
 	if (ret && len) {
-		register int i = len;
-
 		do {
-			ret[i] = tolower(s[i]);
-		} while (i--);
+			ret[len] = tolower(s[len]);
+		} while (len--);
 	}
 
 	return ret;

@@ -1,4 +1,4 @@
-/* $Id: rectangle.h,v 1.2 2002/12/30 17:58:37 pasky Exp $ */
+/* $Id: rectangle.h,v 1.3 2002/12/31 00:30:58 pasky Exp $ */
 
 #ifndef EL__USIVE_LAYOUTER_RECTANGLE_H
 #define EL__USIVE_LAYOUTER_RECTANGLE_H
@@ -39,7 +39,7 @@ struct layout_rectangle {
 	struct layout_rectangle *prev;
 
 	struct layout_rectangle *root;
-	struct layout_rectangle leafs; /* -> struct layout_rectangle */
+	struct list_head leafs; /* -> struct layout_rectangle */
 
 	/* Points to the corresponding node of the base syntax tree. Note that
 	 * it's a perfectly valid situation that this is NULL! Theoretically,

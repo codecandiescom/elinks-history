@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.17 2003/04/14 15:35:18 zas Exp $ */
+/* $Id: view.c,v 1.18 2003/04/18 07:39:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2595,8 +2595,8 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 			}
 
 	     		/* XXX: Code duplication of following for mouse */
-			case ACT_SCROLL_UP: rep_ev(ses, fd, scroll, -1 - !ses->kbdprefix.rep); break;
-			case ACT_SCROLL_DOWN: rep_ev(ses, fd, scroll, 1 + !ses->kbdprefix.rep); break;
+			case ACT_SCROLL_UP: scroll(ses, fd, ses->kbdprefix.rep ? -ses->kbdprefix.rep_num : -get_opt_int("document.browse.scroll_step")); break;
+			case ACT_SCROLL_DOWN: scroll(ses, fd, ses->kbdprefix.rep ? ses->kbdprefix.rep_num : get_opt_int("document.browse.scroll_step")); break;
 			case ACT_SCROLL_LEFT: rep_ev(ses, fd, hscroll, -1 - 7 * !ses->kbdprefix.rep); break;
 			case ACT_SCROLL_RIGHT: rep_ev(ses, fd, hscroll, 1 + 7 * !ses->kbdprefix.rep); break;
 

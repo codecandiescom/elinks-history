@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.191 2003/04/16 21:16:27 pasky Exp $ */
+/* $Id: options.c,v 1.192 2003/04/18 07:38:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1121,6 +1121,11 @@ register_options()
 		"scroll_margin", 0, 0, 20, 3,
 		N_("Size of the virtual margin - when you click inside of that margin,\n"
 		"document scrolls in that direction."));
+
+	add_opt_int("document.browse", N_("Scroll step"),
+		"scroll_step", 0, 0, MAXINT, 2,
+		N_("Number of lines to scroll when a key bound to scroll-up or scroll-\n"
+		"down is pressed and no prefix was given."));
 
 	add_opt_bool("document.browse", N_("Tables navigation order"),
 		"table_move_order", 0, 0,

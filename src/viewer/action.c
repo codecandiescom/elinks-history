@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.122 2004/11/12 22:54:45 zas Exp $ */
+/* $Id: action.c,v 1.123 2004/11/13 13:09:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,6 +117,8 @@ goto_url_action(struct session *ses,
 /* This could gradually become some multiplexor / switch noodle containing
  * most if not all default handling of actions (for the main mapping) that
  * frame_ev() and/or send_event() could use as a backend. */
+/* Many execution paths may lead to this code so it needs to take appropriate
+ * precausions to stuff like doc_view and doc_view->vs being NULL. */
 enum frame_event_status
 do_action(struct session *ses, enum main_action action, int verbose)
 {

@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.41 2004/02/19 17:48:18 pasky Exp $ */
+/* $Id: dns.c,v 1.42 2004/02/19 20:43:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,7 +146,7 @@ lookup_fn(void *data, int h)
 {
 	unsigned char *name = (unsigned char *) data;
 	struct sockaddr_storage *addrs;
-	int addrno, i, w;
+	int addrno, i, w, done = 0;
 
 	if (do_real_lookup(name, &addrs, &addrno, 1) < 0) return;
 
@@ -156,11 +156,15 @@ lookup_fn(void *data, int h)
 	 * useless) to do this in non-blocking way. */
 	if (set_blocking_fd(h) < 0) return;
 
-	w = safe_write(h, &addrno, sizeof(int));
-	if (w != sizeof(int)) return;
+	do {
+		w = safe_write(h, &addrno + done, sizeof(int) - done);
+		if (w < 0) return;
+		done += w;
+	} while (done < sizeof(int));
+	assert(done == sizeof(int));
 
 	for (i = 0; i < addrno; i++) {
-		int done = 0;
+		done = 0;
 
 		do {
 			struct sockaddr_storage *addr = &addrs[i];
@@ -181,7 +185,7 @@ end_real_lookup(void *data)
 {
 	struct dnsquery *query = (struct dnsquery *) data;
 	int res = -1;
-	int i, r;
+	int i, r, done = 0;
 
 	if (!query->addr || !query->addrno) goto done;
 
@@ -193,14 +197,18 @@ end_real_lookup(void *data)
 	 * useless) to do this in non-blocking way. */
 	if (set_blocking_fd(query->h) < 0) goto done;
 
-	r = safe_read(query->h, query->addrno, sizeof(int));
-	if (r != sizeof(int)) goto done;
+	do {
+		r = safe_read(query->h, query->addrno + done, sizeof(int) - done);
+		if (r <= 0) goto done;
+		done += r;
+	} while (done < sizeof(int));
+	assert(done == sizeof(int));
 
 	*query->addr = mem_calloc(*query->addrno, sizeof(struct sockaddr_storage));
 	if (!*query->addr) goto done;
 
 	for (i = 0; i < *query->addrno; i++) {
-		int done = 0;
+		done = 0;
 
 		do {
 			struct sockaddr_storage *addr = &(*query->addr)[i];

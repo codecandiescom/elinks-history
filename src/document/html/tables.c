@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.47 2003/06/30 23:08:52 zas Exp $ */
+/* $Id: tables.c,v 1.48 2003/06/30 23:20:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1620,6 +1620,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	int i;
 	int bad_html_n;
 	int cpd_pass, cpd_width, cpd_last;
+	int margins;
 
 	table_level++;
 	memcpy(&bgcolor, &par_format.bgcolor, sizeof(struct rgb));
@@ -1732,15 +1733,19 @@ again:
 	if (get_column_widths(t)) goto ret2;
 
 	get_table_width(t);
+
+	margins = par_format.leftmargin + par_format.rightmargin;
 	if (!p->data && !p->xp) {
+		int tmp;
+
 		if (!wf && t->max_t > width) t->max_t = width;
 		if (t->max_t < t->min_t) t->max_t = t->min_t;
 
-		if (t->max_t + par_format.leftmargin + par_format.rightmargin > p->xmax)
-			p->xmax = t->max_t + par_format.leftmargin + par_format.rightmargin;
+		tmp = t->max_t + margins;
+		if (tmp > p->xmax) p->xmax = tmp;
 
-		if (t->min_t + par_format.leftmargin + par_format.rightmargin > p->x)
-			p->x = t->min_t + par_format.leftmargin + par_format.rightmargin;
+		tmp = t->min_t + margins;
+		if (tmp > p->x) p->x = tmp;
 
 		goto ret2;
 	}
@@ -1766,7 +1771,7 @@ again:
 		distribute_widths(t, width);
 
 	if (!p->data && p->xp == 1) {
-		int ww = t->rw + par_format.leftmargin + par_format.rightmargin;
+		int ww = t->rw + margins;
 
 		if (ww > par_format.width) ww = par_format.width;
 		if (ww < t->rw) ww = t->rw;
@@ -1783,7 +1788,6 @@ again:
 	{
 		int ww = par_format.width - t->rw;
 
-
 		x = par_format.leftmargin;
 		if (align == AL_CENTER)
 			x = (ww + par_format.leftmargin
@@ -1797,7 +1801,7 @@ again:
 	get_table_heights(t);
 
 	if (!p->data) {
-		int ww = t->rw + par_format.leftmargin + par_format.rightmargin;
+		int ww = t->rw + margins;
 
 		if (ww > p->x) p->x = ww;
 		p->cy += t->rh;
@@ -1817,7 +1821,6 @@ again:
 		nn->xw = n->xw;
 		add_to_list(p->data->nodes, nn);
 	}
-
 
 	if (p->cy + t->rh != cye)
 		internal("size does not match; 1:%d, 2:%d", p->cy + t->rh, cye);

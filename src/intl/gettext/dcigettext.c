@@ -35,7 +35,7 @@
 #pragma alloca
 #else
 #ifndef HAVE_ALLOCA
-unsigned char *alloca();
+void *alloca(size_t size);
 #endif
 #endif
 #endif

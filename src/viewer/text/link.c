@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.252 2004/06/26 16:52:54 pasky Exp $ */
+/* $Id: link.c,v 1.253 2004/06/26 21:29:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -433,6 +433,179 @@ next_in_view(struct document_view *doc_view, int current, int direction,
 
 	vs->current_link = -1;
 	return 0;
+}
+
+/* Get the bounding columns of @link at line @y (or all lines if @y == -1). */
+static void
+get_link_x_bounds(struct link *link, int y, int *min_x, int *max_x)
+{
+	int point;
+
+	if (min_x) *min_x = MAXINT;
+	if (max_x) *max_x = 0;
+
+	for (point = 0; point < link->npoints; point++) {
+		if (y >= 0 && link->points[0].y != y)
+			continue;
+		if (min_x) int_upper_bound(min_x, link->points[point].x);
+		if (max_x) int_lower_bound(max_x, link->points[point].x);
+	}
+}
+
+/* Check whether there is any point between @min_x and @max_x at the line @y
+ * in link @link. */
+static int
+get_link_x_intersect(struct link *link, int y, int min_x, int max_x)
+{
+	int point;
+
+	for (point = 0; point < link->npoints; point++) {
+		if (link->points[0].y != y)
+			continue;
+		if (link->points[0].x >= min_x && link->points[0].x <= max_x)
+			return link->points[0].x;
+	}
+
+	return 0;
+}
+
+/* Check whether there is any point between @min_y and @max_y in the column @x
+ * in link @link. */
+static int
+get_link_y_intersect(struct link *link, int x, int min_y, int max_y)
+{
+	int point;
+
+	for (point = 0; point < link->npoints; point++) {
+		if (link->points[0].x != x)
+			continue;
+		if (link->points[0].y >= min_y && link->points[0].y <= max_y)
+			return link->points[0].y;
+	}
+
+	return 0;
+}
+
+int
+next_in_dir(struct document_view *doc_view, int current, int dir_x, int dir_y)
+{
+	struct document *document;
+	struct view_state *vs;
+	struct link *link;
+	int min_x = MAXINT, max_x = 0;
+	int min_y, max_y;
+
+	assert(doc_view && doc_view->document && doc_view->vs);
+	if_assert_failed return 0;
+	assert(dir_x || dir_y);
+	if_assert_failed return 0;
+
+	document = doc_view->document;
+	vs = doc_view->vs;
+
+	link = &document->links[current];
+
+	/* Find the link's "bounding box" coordinates. */
+
+	get_link_x_bounds(link, -1, &min_x, &max_x);
+
+	min_y = link->points[0].y;
+	max_y = link->points[link->npoints - 1].y;
+
+	/* Now go from the bounding box edge in the appropriate
+	 * direction and find the nearest link. */
+
+	if (dir_y) {
+		/* Vertical movement */
+
+		/* The current line number */
+		int y = (dir_y > 0 ? max_y : min_y) + dir_y;
+		/* The bounding line numbers */
+		int top = int_max(0, doc_view->vs->y);
+		int bottom = int_min(doc_view->vs->y + doc_view->box.height,
+				     document->height);
+
+		for (; dir_y > 0 ? y <= bottom : y >= top; y += dir_y) {
+			/* @backup points to the nearest link from the left
+			 * to the desired position. */
+			struct link *backup = NULL;
+			int take_backup;
+
+			link = document->lines1[y];
+			if (!link) continue;
+
+			/* Go through all the links on line. */
+			while (link <= document->lines2[y]) {
+				int l_max_x;
+
+				/* XXX: This (I think) could be rewritten by
+				 * only using get_link_x_bounds() and avoiding
+				 * get_link_x_intersect(), but my mind is too
+				 * twisted to do that now. --pasky */
+
+				if (get_link_x_intersect(link, y,
+				                         min_x, max_x))
+					goto chose_link;
+
+				/* Consider taking a backup? */
+				get_link_x_bounds(link, y, NULL, &l_max_x);
+				take_backup = l_max_x < min_x;
+				if (take_backup || !backup)
+					backup = link;
+
+				link++;
+			}
+
+			if (backup) {
+				link = backup;
+				goto chose_link;
+			}
+		}
+
+	} else {
+		/* Horizontal movement */
+
+		/* The current column number */
+		int x = (dir_x > 0 ? max_x : min_x) + dir_x;
+		/* How many lines are already past their last link */
+		int last = 0;
+
+		while ((last < max_x - min_x) && (x += dir_x)) {
+			int y;
+
+			last = 0;
+
+			/* Go through all the lines */
+			for (y = min_y; y <= max_y; y++) {
+				link = document->lines1[y];
+				if (!link) continue;
+
+				/* Go through all the links on line. */
+				while (link <= document->lines2[y]) {
+					if (get_link_y_intersect(link, x,
+					                         min_y,
+					                         max_y))
+						goto chose_link;
+					link++;
+				}
+
+				/* Check if we already aren't past the last
+				 * link on this line. */
+				if (!get_link_x_intersect(document->lines2[y],
+				                          y, x, MAXINT))
+					last++;
+			}
+		}
+	}
+
+	vs->current_link = -1;
+	return 0;
+
+chose_link:
+	/* The link is in bounds, take it. */
+	vs->current_link = get_link_index(document, link);
+	set_pos_x(doc_view, link);
+	return 1;
 }
 
 void

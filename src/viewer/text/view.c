@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.535 2004/06/26 03:45:15 miciah Exp $ */
+/* $Id: view.c,v 1.536 2004/06/26 21:29:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,6 +187,39 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 
 #define move_link_next(ses, doc_view) move_link(ses, doc_view,  1, doc_view->document->nlinks - 1, 0)
 #define move_link_prev(ses, doc_view) move_link(ses, doc_view, -1, 0, doc_view->document->nlinks - 1)
+
+static inline void
+move_link_dir(struct session *ses, struct document_view *doc_view, int dir_x, int dir_y)
+{
+	int count;
+
+	assert(ses && doc_view && doc_view->vs && doc_view->document);
+	if_assert_failed return;
+
+	ses->navigate_mode = NAVIGATE_LINKWISE;
+	count = int_max(ses->kbdprefix.repeat_count, 1);
+
+	while (count--) {
+		int current_link = doc_view->vs->current_link;
+
+		if (next_in_dir(doc_view, current_link, dir_x, dir_y))
+			continue;
+
+		if (dir_y > 0)
+			move_down(ses, doc_view, 1);
+		else if (dir_y < 0)
+			move_up(ses, doc_view, 1);
+
+		if (dir_y && current_link != doc_view->vs->current_link) {
+			set_textarea(doc_view, -dir_y);
+		}
+	}
+}
+
+#define move_link_up(ses, doc_view) move_link_dir(ses, doc_view,  0, -1)
+#define move_link_down(ses, doc_view) move_link_dir(ses, doc_view,  0,  1)
+#define move_link_left(ses, doc_view) move_link_dir(ses, doc_view, -1,  0)
+#define move_link_right(ses, doc_view) move_link_dir(ses, doc_view,  1,  0)
 
 /* @steps > 0 -> down */
 static void
@@ -576,6 +609,10 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 		case ACT_MAIN_MOVE_PAGE_UP: move_page_up(ses, doc_view); break;
 		case ACT_MAIN_MOVE_LINK_NEXT: move_link_next(ses, doc_view); break;
 		case ACT_MAIN_MOVE_LINK_PREV: move_link_prev(ses, doc_view); break;
+		case ACT_MAIN_MOVE_LINK_UP: move_link_up(ses, doc_view); break;
+		case ACT_MAIN_MOVE_LINK_DOWN: move_link_down(ses, doc_view); break;
+		case ACT_MAIN_MOVE_LINK_LEFT: move_link_left(ses, doc_view); break;
+		case ACT_MAIN_MOVE_LINK_RIGHT: move_link_right(ses, doc_view); break;
 		case ACT_MAIN_MOVE_DOCUMENT_START: move_document_start(ses, doc_view); break;
 		case ACT_MAIN_MOVE_DOCUMENT_END: move_document_end(ses, doc_view); break;
 

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.234 2004/06/25 18:49:19 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.235 2004/06/26 21:29:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -518,8 +518,12 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "move-cursor-up", ACT_MAIN_MOVE_CURSOR_UP, DACT(N_("Move cursor up")) },
 	{ "move-document-end", ACT_MAIN_MOVE_DOCUMENT_END, DACT(N_("Move to the end of the document")) },
 	{ "move-document-start", ACT_MAIN_MOVE_DOCUMENT_START, DACT(N_("Move to the start of the document")) },
+	{ "move-link-down", ACT_MAIN_MOVE_LINK_DOWN, DACT(N_("Move one link down")) },
+	{ "move-link-left", ACT_MAIN_MOVE_LINK_LEFT, DACT(N_("Move one link left")) },
 	{ "move-link-next", ACT_MAIN_MOVE_LINK_NEXT, DACT(N_("Move to the next link")) },
 	{ "move-link-prev", ACT_MAIN_MOVE_LINK_PREV, DACT(N_("Move to the previous link")) },
+	{ "move-link-right", ACT_MAIN_MOVE_LINK_RIGHT, DACT(N_("Move one link right")) },
+	{ "move-link-up", ACT_MAIN_MOVE_LINK_UP, DACT(N_("Move one link up")) },
 	{ "move-page-down", ACT_MAIN_MOVE_PAGE_DOWN, DACT(N_("Move downwards by a page")) },
 	{ "move-page-up", ACT_MAIN_MOVE_PAGE_UP, DACT(N_("Move upwards by a page")) },
 	{ "open-link-in-new-tab", ACT_MAIN_OPEN_LINK_IN_NEW_TAB, DACT(N_("Open the current link in a new tab")) },

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.81 2004/06/23 12:29:22 jonas Exp $ */
+/* $Id: action.c,v 1.82 2004/06/26 21:29:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -504,6 +504,10 @@ do_action(struct session *ses, enum main_action action, int verbose)
 		case ACT_MAIN_MOVE_DOCUMENT_START:
 		case ACT_MAIN_MOVE_LINK_NEXT:
 		case ACT_MAIN_MOVE_LINK_PREV:
+		case ACT_MAIN_MOVE_LINK_UP:
+		case ACT_MAIN_MOVE_LINK_DOWN:
+		case ACT_MAIN_MOVE_LINK_LEFT:
+		case ACT_MAIN_MOVE_LINK_RIGHT:
 		case ACT_MAIN_MOVE_PAGE_DOWN:
 		case ACT_MAIN_MOVE_PAGE_UP:
 		case ACT_MAIN_SCRIPTING_FUNCTION:

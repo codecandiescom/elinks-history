@@ -3,9 +3,6 @@ Known bugs:
 - Tilde doesn't expand as it should when used in goto dialog, ~ -> /home and ~/
   -> current directory.
 
-- When a page displayed as plain-text includes '<title>' and '</title>', then
-  the enclosed text is displayed as the page's title.
-
 - Frames don't work if there's more frames with same name. Turn them off in such
   case.
 
@@ -53,4 +50,4 @@ Known bugs:
 Key: - nothing done + work in progress * almost fixed
      (reflects only what is already committed to CVS)
 
-$Id: BUGS,v 1.45 2003/05/05 23:32:25 zas Exp $
+$Id: BUGS,v 1.46 2003/05/06 08:04:35 zas Exp $

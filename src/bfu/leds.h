@@ -1,4 +1,4 @@
-/* $Id: leds.h,v 1.5 2003/05/07 14:17:22 pasky Exp $ */
+/* $Id: leds.h,v 1.6 2003/08/01 15:26:02 jonas Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
@@ -21,16 +21,17 @@ struct led {
 	int number;
 	unsigned char value;
 
-	/* Use COL() macro to set up color. Note that you shouldn't use color
-	 * only as additional indication, as the terminal can be monochrome. */
+	/* Use find_nearest_color() to set up color. Note that you shouldn't
+	 * use color only as additional indication, as the terminal can be
+	 * monochrome. */
 	int color;
 
 	/* Private data. */
 	int __used;
 };
 
-void init_leds();
-void done_leds();
+void init_leds(void);
+void done_leds(void);
 void draw_leds(struct terminal *);
 
 struct led *register_led(int);

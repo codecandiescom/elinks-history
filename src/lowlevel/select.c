@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.31 2003/06/08 22:11:47 pasky Exp $ */
+/* $Id: select.c,v 1.32 2003/06/20 07:41:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -278,6 +278,8 @@ set_handlers(int fd, void (*read_func)(void *), void (*write_func)(void *),
 void
 select_loop(void (*init)(void))
 {
+	int select_errors = 0;
+
 	clear_signal_mask_and_handlers();
 	FD_ZERO(&w_read);
 	FD_ZERO(&w_write);
@@ -337,12 +339,17 @@ select_loop(void (*init)(void))
 		if (n < 0) {
 			critical_section = 0;
 			uninstall_alarm();
-			if (errno != EINTR)
+			if (errno != EINTR) {
 				error(gettext("select() failed: %d (%s)"),
 				      errno, (unsigned char *) strerror(errno));
+				if (++select_errors > 10) /* Infinite loop prevention. */
+					internal(gettext("%d select() failures."),
+						 select_errors);
+			}
 			continue;
 		}
 
+		select_errors = 0;
 		critical_section = 0;
 		uninstall_alarm();
 		check_signals();

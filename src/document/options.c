@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.32 2003/10/18 23:42:09 jonas Exp $ */
+/* $Id: options.c,v 1.33 2003/10/28 12:47:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,6 +46,12 @@ init_document_options(struct document_options *doo)
 	doo->active_link_fg = get_opt_color("document.browse.links.active_link.colors.text");
 	doo->active_link_bg = get_opt_color("document.browse.links.active_link.colors.background");
 
+	if (!get_opt_bool("document.colors.allow_dark_on_black"))
+		doo->color_flags |= COLOR_INCREASE_CONTRAST;
+
+	if (get_opt_bool("document.colors.ensure_contrast"))
+		doo->color_flags |= COLOR_ENSURE_CONTRAST;
+
 	/* Boolean options. */
 
 	doo->underline_links = get_opt_bool("document.html.underline_links");
@@ -56,9 +62,6 @@ init_document_options(struct document_options *doo)
 	doo->invert_active_link = get_opt_bool("document.browse.links.active_link.invert");
 	doo->underline_active_link = get_opt_bool("document.browse.links.active_link.underline");
 	doo->bold_active_link = get_opt_bool("document.browse.links.active_link.bold");
-
-	doo->allow_dark_on_black = get_opt_bool("document.colors.allow_dark_on_black");
-	doo->ensure_contrast = get_opt_bool("document.colors.ensure_contrast");
 
 	doo->table_expand_cols = get_opt_bool("document.html.expand_table_columns");
 	doo->table_order = get_opt_bool("document.browse.table_move_order");

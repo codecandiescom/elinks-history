@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.24 2003/10/28 11:10:10 zas Exp $ */
+/* $Id: options.h,v 1.25 2003/10/28 12:47:19 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -29,6 +29,9 @@ struct document_options {
 	 * documents has to be rerendered. */
 	int xw, yw;
 
+	/* Color model/optimizations */
+	enum color_flags color_flags;
+
 	/* XXX: Keep boolean options grouped to save padding */
 	/* HTML stuff */
 	unsigned int tables:1;
@@ -37,11 +40,6 @@ struct document_options {
 	unsigned int frames:1;
 	unsigned int images:1;
 
-	/* Color model/optimizations */
-	/* TODO: Store the color_flags options in an enum variable. */
-	unsigned int allow_dark_on_black:1;
-	unsigned int ensure_contrast:1;
-	unsigned int underline:1;
 	unsigned int display_subs:1;
 	unsigned int display_sups:1;
 	unsigned int underline_links:1;

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.320 2003/10/26 23:29:37 jonas Exp $ */
+/* $Id: renderer.c,v 1.321 2003/10/28 12:47:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,7 +221,7 @@ get_frame_char(struct part *part, int x, int y, unsigned char data)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
 	struct screen_char *template;
-	static enum color_flags color_flags = 0;
+	static enum color_flags color_flags;
 	static enum color_mode color_mode;
 
 	assert(part && part->document && x >= 0 && y >= 0);
@@ -238,12 +238,7 @@ get_frame_char(struct part *part, int x, int y, unsigned char data)
 	template->attr = SCREEN_ATTR_FRAME;
 
 	color_mode = part->document->opt.color_mode;
-
-	if (!part->document->opt.allow_dark_on_black)
-		color_flags |= COLOR_INCREASE_CONTRAST;
-
-	if (part->document->opt.ensure_contrast)
-		color_flags |= COLOR_ENSURE_CONTRAST;
+	color_flags = part->document->opt.color_flags;
 
 	set_term_color(template, &colors, color_flags, color_mode);
 
@@ -296,16 +291,7 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 
 		if (d_opt) {
 			color_mode = d_opt->color_mode;
-			color_flags = 0;
-
-			if (!d_opt->underline)
-				color_flags |= COLOR_ENHANCE_UNDERLINE;
-
-			if (!d_opt->allow_dark_on_black)
-				color_flags |= COLOR_INCREASE_CONTRAST;
-
-			if (d_opt->ensure_contrast)
-				color_flags |= COLOR_ENSURE_CONTRAST;
+			color_flags = d_opt->color_flags;
 		}
 
 		schar_cache.attr = 0;
@@ -1105,17 +1091,8 @@ color_link_lines(struct document *document)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
 	enum color_mode color_mode = document->opt.color_mode;
-	enum color_flags color_flags = 0;
+	enum color_flags color_flags = document->opt.color_flags;
 	int y;
-
-	if (!document->opt.underline)
-		color_flags |= COLOR_ENHANCE_UNDERLINE;
-
-	if (!document->opt.allow_dark_on_black)
-		color_flags |= COLOR_INCREASE_CONTRAST;
-
-	if (document->opt.ensure_contrast)
-		color_flags |= COLOR_ENSURE_CONTRAST;
 
 	for (y = 0; y < document->y; y++) {
 		int x;
@@ -1809,7 +1786,9 @@ html_interpret(struct session *ses)
 	init_bars_status(ses, NULL, &o);
 
 	o.color_mode = get_opt_int_tree(ses->tab->term->spec, "colors");
-	o.underline = get_opt_int_tree(ses->tab->term->spec, "underline");
+	if (!get_opt_int_tree(ses->tab->term->spec, "underline"))
+		o.color_flags |= COLOR_ENHANCE_UNDERLINE;
+
 	o.cp = get_opt_int_tree(ses->tab->term->spec, "charset");
 
 	if (l) {

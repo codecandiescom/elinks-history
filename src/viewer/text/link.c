@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.84 2003/10/28 12:25:36 jonas Exp $ */
+/* $Id: link.c,v 1.85 2003/10/28 12:47:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,11 +191,7 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	 * use the options from the viewed document. */
 	doc_opts = (d_opt) ? d_opt : &doc_view->document->opt;
 
-	if (!doc_opts->allow_dark_on_black)
-		color_flags |= COLOR_INCREASE_CONTRAST;
-
-	if (doc_opts->ensure_contrast)
-		color_flags |= COLOR_ENSURE_CONTRAST;
+	color_flags = doc_opts->color_flags;
 
 	if (doc_opts->underline_active_link)
 		template->attr |= SCREEN_ATTR_UNDERLINE;

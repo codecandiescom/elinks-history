@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.361 2004/07/08 16:14:10 jonas Exp $ */
+/* $Id: tables.c,v 1.362 2004/07/08 16:22:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -777,7 +777,7 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 	struct part *part;
 	int width = 0;
 	int height = 0;
-	int s, tmpy = 0;
+	int s, tmpy = y;
 	struct html_element *state;
 
 	if (!cell->start) return;

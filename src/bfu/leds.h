@@ -1,4 +1,4 @@
-/* $Id: leds.h,v 1.13 2003/11/17 11:10:55 pasky Exp $ */
+/* $Id: leds.h,v 1.14 2003/12/27 12:27:49 pasky Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
@@ -23,10 +23,6 @@ struct session;
 struct led {
 	int number;
 	unsigned char value;
-
-	/* The led's foreground color. Note that you should use color only as
-	 * additional indication, as the terminal can be monochrome. */
-	color_t fgcolor;
 
 	/* Private data. */
 	int __used;

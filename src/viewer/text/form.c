@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.262 2004/12/19 01:15:21 pasky Exp $ */
+/* $Id: form.c,v 1.263 2004/12/19 16:03:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,21 +169,21 @@ init_form_state(struct form_control *fc, struct form_state *fs)
 			fs->state = 0;
 			fs->vpos = 0;
 			break;
-		case FC_CHECKBOX:
-		case FC_RADIO:
-			fs->state = fc->default_state;
-			break;
 		case FC_SELECT:
 			fs->value = stracpy(fc->default_value);
 			fs->state = fc->default_state;
 			fixup_select_state(fc, fs);
 			break;
+		case FC_CHECKBOX:
+		case FC_RADIO:
+			fs->state = fc->default_state;
+			/* Fall-through */
 		case FC_SUBMIT:
 		case FC_IMAGE:
 		case FC_RESET:
 		case FC_BUTTON:
 		case FC_HIDDEN:
-			/* Silence compiler warnings. */
+			fs->value = stracpy(fc->default_value);
 			break;
 	}
 }
@@ -484,7 +484,7 @@ add_submitted_value_to_list(struct form_control *fc,
 	case FC_HIDDEN:
 	case FC_RESET:
 	case FC_BUTTON:
-		sub = init_submitted_value(name, fc->default_value, type, fc,
+		sub = init_submitted_value(name, fs->value, type, fc,
 					   position);
 		if (sub) add_to_list(*list, sub);
 		break;
@@ -1496,7 +1496,7 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 		if (!fc->default_value || !fc->default_value[0])
 			break;
 
-		add_form_attr_to_string(&str, term, N_("value"), fc->default_value);
+		add_form_attr_to_string(&str, term, N_("value"), fs->value);
 		break;
 
 	case FC_TEXT:

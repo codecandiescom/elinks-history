@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.273 2003/11/16 15:25:06 jonas Exp $ */
+/* $Id: parser.c,v 1.274 2003/11/17 12:21:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,7 +85,7 @@ parse_element(register unsigned char *e, unsigned char *eof,
 	if (*e == '/') e++;
 	if (e >= eof || !isA(*e)) goto parse_error;
 
-	while (isA(*e)) e++;
+	while (isA(*e) && e < eof) e++;
 	if (e >= eof
 	    || (!WHITECHAR(*e) && *e != '>' && *e != '<' && *e != '/'
 		&& *e != ':'))
@@ -93,26 +93,26 @@ parse_element(register unsigned char *e, unsigned char *eof,
 
 	if (name && namelen) *namelen = e - *name;
 
-	while (WHITECHAR(*e) || *e == '/' || *e == ':') e++;
+	while ((WHITECHAR(*e) || *e == '/' || *e == ':') && e < eof) e++;
 	if (e >= eof) goto parse_error;
 
 	/* Skip bad attribute */
-	while (*e && !atchr(*e) && *e != '>' && *e != '<' && !WHITECHAR(*e)) e++;
+	while (*e && !atchr(*e) && *e != '>' && *e != '<' && !WHITECHAR(*e) && e < eof) e++;
 	if (e >= eof) goto parse_error;
 
 	if (attr) *attr = e;
 
 next_attr:
-	while (WHITECHAR(*e)) e++;
+	while (WHITECHAR(*e) && e < eof) e++;
 	if (e >= eof) goto parse_error;
 
 	/* Skip bad attribute */
-	while (*e && !atchr(*e) && *e != '>' && *e != '<' && !WHITECHAR(*e)) e++;
+	while (*e && !atchr(*e) && *e != '>' && *e != '<' && !WHITECHAR(*e) && e < eof) e++;
 	if (e >= eof) goto parse_error;
 	if (*e == '>' || *e == '<') goto end;
 
-	while (atchr(*e)) e++;
-	while (WHITECHAR(*e)) e++;
+	while (atchr(*e) && e < eof) e++;
+	while (WHITECHAR(*e) && e < eof) e++;
 	if (e >= eof) goto parse_error;
 
 	if (*e != '=') {
@@ -122,7 +122,7 @@ next_attr:
 
 	e++;
 
-	while (WHITECHAR(*e)) e++;
+	while (WHITECHAR(*e) && e < eof) e++;
 	if (e >= eof) goto parse_error;
 
 	if (IS_QUOTE(*e)) {
@@ -130,17 +130,17 @@ next_attr:
 
 quoted_value:
 		e++;
-		while (*e != quote && *e) e++;
+		while (*e != quote && *e && e < eof) e++;
 		if (e >= eof || *e < ' ') goto parse_error;
 		e++;
 		if (e >= eof) goto parse_error;
 		if (*e == quote) goto quoted_value;
 	} else {
-		while (*e && !WHITECHAR(*e) && *e != '>' && *e != '<') e++;
+		while (*e && !WHITECHAR(*e) && *e != '>' && *e != '<' && e < eof) e++;
 		if (e >= eof) goto parse_error;
 	}
 
-	while (WHITECHAR(*e)) e++;
+	while (WHITECHAR(*e) && e < eof) e++;
 	if (e >= eof) goto parse_error;
 
 	if (*e != '>' && *e != '<') goto next_attr;

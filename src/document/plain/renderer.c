@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.12 2003/11/14 02:49:55 jonas Exp $ */
+/* $Id: renderer.c,v 1.13 2003/11/14 03:04:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,30 +73,32 @@ add_document_link(struct document *document, unsigned char *uri, int length,
 	struct link *link;
 	struct uri test_uri;
 	int keep = uri[length];
+	unsigned char *mailto;
 
 	assert(document);
 	if_assert_failed return 0;
 
 	uri[length] = 0;
 
-	/* TODO: Handle email@adresses.to and maybe
-	 * <URL:...> too --jonas */
-	if (!parse_uri(&test_uri, uri)) {
+	if ((mailto = memchr(uri, '@', length)) && mailto - uri < length) {
+		mailto = straconcat("mailto:", uri, NULL);
+
+	} else if (!parse_uri(&test_uri, uri)) {
 		uri[length] = keep;
 		return 0;
 	}
 
 	uri[length] = keep;
 
-	if (!ALIGN_LINK(&document->links, document->nlinks, document->nlinks + 1))
+	if (!ALIGN_LINK(&document->links, document->nlinks, document->nlinks + 1)) {
+		if (mailto) mem_free(mailto);
 		return length;
+	}
 
 	link = &document->links[document->nlinks];
 
 	link->type = LINK_HYPERTEXT;
-	link->where = memacpy(uri, length);
-	link->target = memacpy(uri, length);
-	link->name = memacpy(uri, length);
+	link->where = mailto ? mailto : memacpy(uri, length);
 
 	link->color.background = document->options.default_bg;
 	link->color.foreground = document->options.default_vlink;

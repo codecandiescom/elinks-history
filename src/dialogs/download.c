@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.26 2003/12/26 08:23:04 jonas Exp $ */
+/* $Id: download.c,v 1.27 2003/12/26 08:46:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,20 +102,17 @@ download_abort_function(struct dialog_data *dlg_data)
 }
 
 static void
-download_progress_bar(struct terminal *term,
-	     	      int x, int y, int width,
-		      longlong current, longlong total)
+download_progress_bar(struct terminal *term, int x, int y, int width,
+		      unsigned char *text, longlong current, longlong total)
 {
 	/* FIXME: not yet perfect, pasky will improve it later. --Zas */
 	/* Note : values > 100% are theorically possible and were seen. */
-	unsigned char percent[] = "????"; /* Reduce or enlarge at will. */
-	unsigned int percent_len = 0;
 	int progress = (int) ((longlong) 100 * current / total);
 	struct color_pair *meter_color = get_bfu_color(term, "dialog.meter");
 	int barprogress;
 
 	/* Draw the progress meter part "[###    ]" */
-	if (width > 2) {
+	if (!text && width > 2) {
 		width -= 2;
 		draw_text(term, x++, y, "[", 1, 0, NULL);
 		draw_text(term, x + width, y, "]", 1, 0, NULL);
@@ -125,7 +122,12 @@ download_progress_bar(struct terminal *term,
 	draw_area(term, x, y, barprogress, 1, ' ', 0, meter_color);
 
 	/* On error, will print '?' only, should not occur. */
-	if (width > 1) {
+	if (text) {
+		width = int_min(width, strlen(text));
+
+	} else if (width > 1) {
+		static unsigned char percent[] = "????"; /* Reduce or enlarge at will. */
+		unsigned int percent_len = 0;
 		int max = int_min(sizeof(percent), width) - 1;
 
 		if (ulongcat(percent, &percent_len, progress, max, 0)) {
@@ -137,9 +139,13 @@ download_progress_bar(struct terminal *term,
 
 		/* Draw the percentage centered in the progress meter */
 		x += (width - percent_len) / 2;
+
+		assert(percent_len <= width);
+		width = percent_len;
+		text = percent;
 	}
 
-	draw_text(term, x, y, percent, percent_len, 0, NULL);
+	draw_text(term, x, y, text, width, 0, NULL);
 }
 
 static void
@@ -204,7 +210,7 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 
 	if (t && download->prg->size >= 0) {
 		y++;
-		download_progress_bar(term, x, y, w,
+		download_progress_bar(term, x, y, w, NULL,
 				      download->prg->pos,
 				      download->prg->size);
 		y++;
@@ -365,7 +371,7 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 
 	x += width - meter;
 
-	download_progress_bar(context->term, x, y, meter,
+	download_progress_bar(context->term, x, y, meter, NULL,
 			      download->prg->pos,
 			      download->prg->size);
 }

@@ -1,5 +1,5 @@
 /* The "data" URI protocol implementation (RFC 2397) */
-/* $Id: data.c,v 1.6 2004/09/13 11:17:54 jonas Exp $ */
+/* $Id: data.c,v 1.7 2004/09/13 15:27:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,8 +48,8 @@
  * The ";base64" extension is distinguishable from a content-type parameter by
  * the fact that it doesn't have a following "=" sign. */
 
-/* FIXME: Maybe some kind of redirecting to commen specialized data URI could
- * be useful so "data:,blah" and data:text/plain,blah" is redirected to the
+/* FIXME: Maybe some kind of redirecting to common specialized data URI could
+ * be useful so "data:,blah" and data:text/plain,blah" are redirected to the
  * most specialized "data:text/plain;charset=US-ASCII,blah". On the other hand
  * for small entries it doesn't matter. */
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.28 2003/05/04 16:52:49 pasky Exp $ */
+/* $Id: session.c,v 1.29 2003/05/04 16:58:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1625,7 +1625,7 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 }
 
 void
-win_func(struct window *win, struct event *ev, int fw)
+tabwin_func(struct window *win, struct event *ev, int fw)
 {
 	struct session *ses = win->data;
 

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.80 2003/05/03 20:38:05 pasky Exp $ */
+/* $Id: main.c,v 1.81 2003/05/04 16:58:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,7 +231,7 @@ attach_terminal(int in, int out, int ctl, void *info, int len)
 
 	mem_free(info);
 
-	term = init_term(terminal_pipe[0], out, win_func);
+	term = init_term(terminal_pipe[0], out, tabwin_func);
 	if (!term) {
 		close(terminal_pipe[0]);
 		close(terminal_pipe[1]);

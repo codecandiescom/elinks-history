@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.449 2004/06/21 12:01:49 jonas Exp $ */
+/* $Id: options.c,v 1.450 2004/06/23 08:16:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,7 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
-#include "viewer/text/view.h"
+#include "viewer/text/draw.h"
 
 
 /* TODO? In the past, covered by shadow and legends, remembered only by the

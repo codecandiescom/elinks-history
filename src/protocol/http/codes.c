@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.29 2004/04/29 23:02:42 jonas Exp $ */
+/* $Id: codes.c,v 1.30 2004/06/23 08:16:23 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -21,7 +21,7 @@
 #include "terminal/terminal.h"
 #include "terminal/window.h"
 #include "util/snprintf.h"
-#include "viewer/text/view.h"
+#include "viewer/text/draw.h"
 
 
 struct http_code {

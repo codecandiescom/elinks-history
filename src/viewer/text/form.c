@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.212 2004/06/22 06:46:18 miciah Exp $ */
+/* $Id: form.c,v 1.213 2004/06/23 08:16:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,6 +42,7 @@
 #include "util/file.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "viewer/text/draw.h"
 #include "viewer/text/form.h"
 #include "viewer/text/link.h"
 #include "viewer/text/textarea.h"

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.9 2004/05/13 00:19:44 jonas Exp $
+## $Id: Makefile.am,v 1.10 2004/06/23 08:16:23 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -13,6 +13,8 @@ EXTRA_libviewer_text_a_SOURCES = marks.c marks.h
 libviewer_text_a_LIBADD = $(marksobj)
 
 libviewer_text_a_SOURCES = \
+ draw.c \
+ draw.h \
  form.c \
  form.h \
  link.c \

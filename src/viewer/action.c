@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.79 2004/06/22 10:52:44 pasky Exp $ */
+/* $Id: action.c,v 1.80 2004/06/23 08:16:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,6 +39,7 @@
 #include "sched/event.h"
 #include "sched/session.h"
 #include "sched/task.h"
+#include "viewer/text/draw.h"
 #include "viewer/text/form.h"
 #include "viewer/text/link.h"
 #include "viewer/text/search.h"

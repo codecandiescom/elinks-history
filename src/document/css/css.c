@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.46 2004/05/29 19:17:02 jonas Exp $ */
+/* $Id: css.c,v 1.47 2004/06/23 08:16:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@
 #include "sched/connection.h"
 #include "util/error.h"
 #include "util/memory.h"
-#include "viewer/text/view.h"
+#include "viewer/text/draw.h"
 
 
 struct option_info css_options_info[] = {

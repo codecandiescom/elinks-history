@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.16 2002/04/23 07:48:19 pasky Exp $ */
+/* $Id: cookies.c,v 1.17 2002/04/23 08:06:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 /* #define COOKIES_DEBUG */
 
 #include <cookies/cookies.h>
+#include <cookies/parser.h>
 #include <config/default.h>
 #include <document/session.h>
 #include <lowlevel/terminal.h>
@@ -146,66 +147,6 @@ check_domain_security(unsigned char *server, unsigned char *domain)
 
 	if (need_dots > 0) return 0;
 	return 1;
-}
-
-
-struct cookie_str {
-	unsigned char *str;
-	unsigned char *nam_end, *val_start, *val_end;
-};
-
-/* Return cs on success, NULL on failure. */
-struct cookie_str *
-parse_cookie_str(struct cookie_str *cstr)
-{
-	unsigned char *pos;
-	int last_was_eq = 0;
-	int last_was_ws = 0;
-
-	cstr->nam_end = cstr->val_start = cstr->val_end = NULL;
-
-	/* /NAME *= *VALUE *;/ */
-
-	for (pos = cstr->str; *pos != ';' && *pos; pos++) {
-		if (!last_was_ws) {
-			/* The NEXT char is ending it! */
-			cstr->val_end = pos + 1;
-		}
-
-		if (*pos == '=') {
-			/* End of name reached */
-			if (!cstr->nam_end) {
-				cstr->nam_end = pos;
-				/* This inside the if is protection against
-				 * broken sites sending '=' inside values. */
-				last_was_eq = 1;
-			}
-
-		} else if (WHITECHAR(*pos)) {
-			if (!cstr->nam_end) {
-				/* Just after name - end of name reached */
-				cstr->nam_end = pos;
-			}
-			last_was_ws = 1;
-
-		} else if (last_was_eq) {
-			/* Start of value reached */
-			cstr->val_start = pos;
-			last_was_eq = 0;
-			last_was_ws = 0;
-
-		} else if (last_was_ws) {
-			/* Non-whitespace after whitespace and not just after
-			 * '=' - error */
-			return 0;
-		}
-	}
-
-	if (cstr->str == cstr->nam_end
-	    || !cstr->nam_end || !cstr->val_start || !cstr->val_end)
-		return NULL;
-
-	return cstr;
 }
 
 int

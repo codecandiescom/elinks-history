@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-11-04 20:39+0100\n"
+"POT-Creation-Date: 2003-11-05 01:47+0100\n"
 "PO-Revision-Date: 2003-11-05 00:17+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
@@ -191,7 +191,7 @@ msgstr "Smazat oznaèené bookmarky?"
 
 #: src/bookmarks/dialogs.c:411 src/bookmarks/dialogs.c:419
 #: src/bookmarks/dialogs.c:428 src/dialogs/menu.c:149 src/dialogs/mime.c:162
-#: src/formhist/formhist.c:351 src/globhist/dialogs.c:330
+#: src/formhist/formhist.c:380 src/globhist/dialogs.c:330
 #: src/globhist/dialogs.c:341 src/globhist/dialogs.c:387
 #: src/sched/session.c:663
 msgid "Yes"
@@ -199,7 +199,7 @@ msgstr "Ano"
 
 #: src/bookmarks/dialogs.c:412 src/bookmarks/dialogs.c:420
 #: src/bookmarks/dialogs.c:429 src/dialogs/menu.c:150 src/dialogs/mime.c:163
-#: src/formhist/formhist.c:352 src/globhist/dialogs.c:331
+#: src/formhist/formhist.c:381 src/globhist/dialogs.c:331
 #: src/globhist/dialogs.c:342 src/globhist/dialogs.c:388
 #: src/sched/session.c:664
 msgid "No"
@@ -3882,18 +3882,18 @@ msgid "Cache content: %s"
 msgstr "Obsah cache: %s"
 
 #: src/dialogs/info.c:214
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "\n"
 "\n"
-"internally allocated = %li KiB\n"
-"total program size = %li KiB\n"
-"resident set size = %li KiB\n"
-"shared pages = %li KiB\n"
-"text (code) = %li KiB\n"
-"data/stack = %li KiB\n"
-"library = %li KiB\n"
-"dirty pages  = %li KiB"
+"Internally allocated = %li KiB\n"
+"Total program size = %li KiB\n"
+"Resident set size = %li KiB\n"
+"Shared pages = %li KiB\n"
+"Text (code) = %li KiB\n"
+"Data/stack = %li KiB\n"
+"Libraries = %li KiB\n"
+"Dirty pages = %li KiB"
 msgstr ""
 "\n"
 "\n"
@@ -4278,11 +4278,11 @@ msgstr ""
 "nikoliv. Tato volba pouze potlaèuje dialog, ji¾ ulo¾ené pøihla¹ovací\n"
 "formuláøe jsou nadále pou¾ívány."
 
-#: src/formhist/formhist.c:345
+#: src/formhist/formhist.c:374
 msgid "Forms memory"
 msgstr "Formuláøová pamì»"
 
-#: src/formhist/formhist.c:346
+#: src/formhist/formhist.c:375
 msgid ""
 "Should I remember this login?\n"
 "\n"
@@ -4298,8 +4298,12 @@ msgstr ""
 "\n"
 "Pokud se jedná o dùle¾ité heslo, odpovìzte ne."
 
+#: src/formhist/formhist.c:382
+msgid "Never for this site"
+msgstr ""
+
 #. name:
-#: src/formhist/formhist.c:372
+#: src/formhist/formhist.c:402
 msgid "Forms History"
 msgstr "Formuláøová pamì»"
 

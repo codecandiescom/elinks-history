@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.11 2003/04/30 23:55:58 zas Exp $ */
+/* $Id: mailcap.c,v 1.12 2003/05/01 00:04:20 zas Exp $ */
 
 /*
  * This file contains various functions for implementing a fair subset of
@@ -617,7 +617,6 @@ mailcap_lookup(unsigned char *type, unsigned char *file)
 		/* Find length of basetype */
 		ptr = strchr(type, '/');
 		if (ptr) {
-			struct mailcap_entry *wildcard = NULL;
 			unsigned char *wildcardtype;
 			int wildcardlen;
 
@@ -634,12 +633,16 @@ mailcap_lookup(unsigned char *type, unsigned char *file)
 
 			mem_free(wildcardtype);
 
-			if (item && item->value)
+			if (item && item->value) {
+				struct mailcap_entry *wildcard;
+
 				wildcard = check_entries(item->value, file);
 
-			if (wildcard &&
-			    (!entry || (wildcard->priority < entry->priority)))
-				entry = wildcard;
+				if (wildcard &&
+			    	    (!entry ||
+				     (wildcard->priority < entry->priority)))
+					entry = wildcard;
+			}
 		}
 	}
 

@@ -823,6 +823,7 @@ AC_OUTPUT([ \
  contrib/lua/hooks.lua \
  doc/Makefile \
  doc/book/Makefile \
+ doc/book/manpages/Makefile \
  doc/man/Makefile \
  doc/man/man1/Makefile \
  doc/man/man1/elinks.1 \

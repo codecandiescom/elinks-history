@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.131 2004/08/17 07:47:41 miciah Exp $ */
+/* $Id: renderer.c,v 1.132 2004/08/17 07:54:31 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,7 +234,6 @@ add_document_line(struct plain_renderer *renderer,
 	int line_pos;
 	int backspaces = 0;
 	int last_link_end;
-	int was_alpha_char = 1; /* to match start of line too. */
 
 	line = convert_string(renderer->convert_table, line, width, CSM_NONE, &width);
 	if (!line) return 0;
@@ -279,9 +278,7 @@ add_document_line(struct plain_renderer *renderer,
 
 			*template = saved_renderer_template;
 
-			was_alpha_char = 0;
 		} else if (line_char == ASCII_BS) {
-			was_alpha_char = 0;
 
 			if (backspaces * 2 >= line_pos) {
 				/* We've backspaced to the start
@@ -349,31 +346,26 @@ add_document_line(struct plain_renderer *renderer,
 		} else {
 			int added_chars = 0;
 
-			if (document->options.plain_display_links) {
+			if (document->options.plain_display_links
+			    && line_pos + 1 < width) {
 				/* We only want to check for a URI
 				 * if there are at least two consecutive
 				 * alphabetic characters, or if
 				 * we are at the very start of the line.
 				 * It improves performance a bit. --Zas */
-				int is_alpha_char = isalpha(line_char);
-
-				if (is_alpha_char && was_alpha_char) {
-					int backup = !!line_pos;
-
+				if (isalpha(line_char)
+				    && isalpha(line[line_pos + 1])) {
 					added_chars = print_document_link(
 							renderer,
 							lineno, line,
-							line_pos - backup,
+							line_pos,
 							width, expanded,
-							pos - backup);
+							pos);
 
 					if (added_chars) {
-						added_chars -= backup;
 						line_pos += added_chars - 1;
 						pos += added_chars;
 					}
-				} else {
-					was_alpha_char = is_alpha_char;
 				}
 			}
 

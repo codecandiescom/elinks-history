@@ -234,9 +234,20 @@ if (!(foo = mem_alloc(1234))) panic("aaaaaaaaaaaaaaarrrrrrrggggggg");
 (note that thou shalt ALWAYS test for success on everything - we are supposed
 to die with honor if we are to die)
 
+One good point is regarding what language we actually code in. We use C89
+_exclusively_ (if we don't, we provide a fall-back way for survival in C89
+environment). ELinks is supposed to work on a large number of more or less
+weird and ancient systems and we are already used to C89 anyway. The most
+remarkable implication of no C99 are no C++ (//) comments and declarations
+at the start of block only.
+
+
+Comments:
+--------
+
 Use blank lines frequently to separate chunks of code.  And use magic "/*" and
 "*/" to give others an idea about what it does and about possible pitfalls.
-(Do not use //, as that is a feature of C++, not of ANSI C.)
+(Do not use //, as that is not a feature of ANSI C a.k.a. C89.)
 
 Keep in mind that if there's an object and verb in the comment (and it is, in
 most cases), it is a sentence, so it has to start with a capital letter and end
@@ -439,7 +450,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.27 2005/01/03 20:48:51 miciah Exp $ */
+	/* $Id: hacking.txt,v 1.28 2005/01/03 21:50:05 pasky Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -561,4 +572,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.27 2005/01/03 20:48:51 miciah Exp $
+$Id: hacking.txt,v 1.28 2005/01/03 21:50:05 pasky Exp $

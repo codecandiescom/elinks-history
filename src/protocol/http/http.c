@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.342 2004/10/09 12:28:53 witekfl Exp $ */
+/* $Id: http.c,v 1.343 2004/10/13 15:52:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -461,7 +461,7 @@ http_send_header(struct connection *conn)
 #if defined(CONFIG_GZIP) || defined(CONFIG_BZIP2)
 	add_to_string(&header, "Accept-Encoding: ");
 
-#if 0
+#ifndef BUG_517
 #ifdef CONFIG_BZIP2
 	add_to_string(&header, "bzip2");
 #endif
@@ -469,7 +469,7 @@ http_send_header(struct connection *conn)
 
 #ifdef CONFIG_GZIP
 
-#if 0
+#ifndef BUG_517
 #ifdef CONFIG_BZIP2
 	add_to_string(&header, ", ");
 #endif
@@ -1447,7 +1447,7 @@ again:
 		    && (!strcasecmp(d, "gzip") || !strcasecmp(d, "x-gzip")))
 		    	conn->content_encoding = ENCODING_GZIP;
 #endif
-#if 0
+#ifndef BUG_517
 #ifdef HAVE_BZLIB_H
 		if (file_encoding != ENCODING_BZIP2
 		    && (!strcasecmp(d, "bzip2") || !strcasecmp(d, "x-bzip2")))

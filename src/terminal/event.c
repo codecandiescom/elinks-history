@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.25 2004/01/01 15:54:38 jonas Exp $ */
+/* $Id: event.c,v 1.26 2004/04/14 21:38:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,17 +102,9 @@ test_queue:
 	ev = (struct term_event *)iq;
 	r = sizeof(struct term_event);
 
-	if (ev->ev != EV_INIT
-	    && ev->ev != EV_RESIZE
-	    && ev->ev != EV_REDRAW
-	    && ev->ev != EV_KBD
-	    && ev->ev != EV_MOUSE
-	    && ev->ev != EV_ABORT) {
-		ERROR(_("Bad event %d", term), ev->ev);
-		goto mm;
-	}
-
-	if (ev->ev == EV_INIT) {
+	switch (ev->ev) {
+	case EV_INIT:
+	{
 		int init_len;
 		int evterm_len = sizeof(struct term_event) + MAX_TERM_LEN;
 		int evtermcwd_len = evterm_len + MAX_CWD_LEN;
@@ -162,16 +154,18 @@ test_queue:
 		term->environment = *(int *)(iq + evtermcwd_len);
 		ev->b = (long) decode_session_info(iq + evtermcwd1int_len);
 		r = evtermcwd2int_len + init_len;
+		/* Fall through */
 	}
-
-	if (ev->ev == EV_REDRAW || ev->ev == EV_RESIZE || ev->ev == EV_INIT) {
+	case EV_REDRAW:
+	case EV_RESIZE:
+	{
 		struct window *win;
 
 send_redraw:
 		if (ev->x < 0 || ev->y < 0) {
 			ERROR(_("Bad terminal size: %d, %d", term),
 			      (int) ev->x, (int) ev->y);
-			goto mm;
+			break;
 		}
 
 		resize_screen(term, ev->x, ev->y);
@@ -199,15 +193,16 @@ send_redraw:
 					win->handler(win, ev, 0);
 		}
 		term->redrawing = 0;
+		break;
 	}
-
-	if (ev->ev == EV_MOUSE) {
+	case EV_MOUSE:
 #ifdef CONFIG_MOUSE
 		reset_timer();
 		term_send_event(term, ev);
 #endif
+		break;
 
-	} else if (ev->ev == EV_KBD) {
+	case EV_KBD:
 		reset_timer();
 
 		if (ev->y == KBD_CTRL && upcase(ev->x) == 'L') {
@@ -236,7 +231,7 @@ send_redraw:
 							u = UCS_NO_CHAR;
 						term_send_ucs(term, ev, u);
 					}
-					goto mm;
+					break;
 
 				} else {
 					term->utf_8.len = 0;
@@ -250,7 +245,7 @@ send_redraw:
 				: !utf8_io)) {
 
 				term_send_event(term, ev);
-				goto mm;
+				break;
 
 			} else if ((ev->x & 0xC0) == 0xC0
 				   && (ev->x & 0xFE) != 0xFE) {
@@ -264,20 +259,22 @@ send_redraw:
 				}
 				term->utf_8.len = len - 1;
 				term->utf_8.ucs = ev->x & (mask - 1);
-				goto mm;
+				break;
 			}
 
 			term_send_ucs(term, ev, UCS_NO_CHAR);
 		}
-	}
+		break;
 
-	if (ev->ev == EV_ABORT) {
+	case EV_ABORT:
 		destroy_terminal(term);
 		return;
+
+	default:
+		ERROR(_("Bad event %d", term), ev->ev);
 	}
 	/* redraw_screen(term); */
 
-mm:
 	if (term->qlen == r) {
 		term->qlen = 0;
 	} else {

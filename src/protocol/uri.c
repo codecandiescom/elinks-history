@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.248 2004/06/12 01:10:06 jonas Exp $ */
+/* $Id: uri.c,v 1.249 2004/06/12 01:17:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -710,7 +710,7 @@ join_urls(struct uri *base, unsigned char *rel)
 {
 	unsigned char *uristring, *path;
 	int add_slash = 0;
-	int length;
+	int length = 0;
 
 	/* See RFC 1808 */
 	/* TODO: Support for ';' ? (see the RFC) --pasky */
@@ -725,13 +725,6 @@ join_urls(struct uri *base, unsigned char *rel)
 			? base->fragment - struri(base) - 1
 			: get_real_uri_length(base);
 
-		uristring = memacpy(struri(base), length);
-		if (!uristring) return NULL;
-
-		add_to_strn(&uristring, rel);
-
-		return normalize_uri_reparse(uristring);
-
 	} else if (rel[0] == '?') {
 		/* Strip query, fragment and post part from the base URI and
 		 * append the query string in @rel. */
@@ -742,13 +735,6 @@ join_urls(struct uri *base, unsigned char *rel)
 		uristring = memchr(base->data, '?', base->datalen);
 		if (uristring) length = uristring - struri(base) - 1;
 
-		uristring = memacpy(struri(base), length);
-		if (!uristring) return NULL;
-
-		add_to_strn(&uristring, rel);
-
-		return normalize_uri_reparse(uristring);
-
 	} else if (rel[0] == '/' && rel[1] == '/') {
 		if (!get_protocol_need_slashes(base->protocol))
 			return NULL;
@@ -756,13 +742,16 @@ join_urls(struct uri *base, unsigned char *rel)
 		/* Get `<protocol>:' from the base URI and append the `//' part
 		 * from @rel. */
 		length = base->protocollen + 1;
+	}
 
+	/* If one of the tests above set @length to something useful */
+	if (length) {
 		uristring = memacpy(struri(base), length);
 		if (!uristring) return NULL;
 
 		add_to_strn(&uristring, rel);
 
-		return uristring;
+		return normalize_uri_reparse(uristring);
 	}
 
 	/* Check if there is some protocol name to go for */

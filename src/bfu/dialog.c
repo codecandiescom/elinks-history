@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.93 2003/11/10 22:31:15 miciah Exp $ */
+/* $Id: dialog.c,v 1.94 2003/11/11 14:16:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -389,6 +389,7 @@ format_widgets(struct terminal *term, struct dialog_data *dlg_data,
 	/* TODO: Do something if (*y) gets > height. */
 	for (; widgets > 0; widgets--, wdata++, (*y)++) {
 		switch (wdata->widget->type) {
+		case WIDGET_FIELD_PASS:
 		case WIDGET_FIELD:
 			dlg_format_field(term, wdata, x, y, w, rw, AL_LEFT);
 			break;

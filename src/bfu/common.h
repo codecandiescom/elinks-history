@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.4 2004/11/20 11:32:57 zas Exp $ */
+/* $Id: common.h,v 1.5 2004/11/21 13:23:58 zas Exp $ */
 
 #ifndef EL__BFU_COMMON_H
 #define EL__BFU_COMMON_H
@@ -13,7 +13,7 @@ typedef enum t_handler_event_status {
 } t_handler_event_status;
 
 /* Handler type for widgets. */
-typedef t_handler_event_status (*t_widget_handler)(struct dialog_data *, struct widget_data *);
+typedef t_handler_event_status (t_widget_handler)(struct dialog_data *, struct widget_data *);
 
 /* Type of widgets. */
 enum widget_type {

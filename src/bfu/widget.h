@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.83 2004/11/20 11:32:57 zas Exp $ */
+/* $Id: widget.h,v 1.84 2004/11/21 13:23:58 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -24,11 +24,11 @@ struct widget_data;
 
 struct widget_ops {
 	/* XXX: Order matters here. --Zas */
-	t_widget_handler display;
-	t_widget_handler init;
-	t_widget_handler mouse;
-	t_widget_handler kbd;
-	t_widget_handler select;
+	t_widget_handler *display;
+	t_widget_handler *init;
+	t_widget_handler *mouse;
+	t_widget_handler *kbd;
+	t_widget_handler *select;
 };
 
 
@@ -40,7 +40,7 @@ struct widget {
 
 	void *udata;
 
-	t_widget_handler fn;
+	t_widget_handler *fn;
 
 	union {
 		struct widget_info_checkbox checkbox;

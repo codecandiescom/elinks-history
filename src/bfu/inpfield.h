@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.46 2004/11/20 11:32:57 zas Exp $ */
+/* $Id: inpfield.h,v 1.47 2004/11/21 13:23:58 zas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -32,7 +32,7 @@ struct widget_data_info_field {
 
 void
 add_dlg_field_do(struct dialog *dlg, enum widget_type type, unsigned char *label,
-		 int min, int max, t_widget_handler handler,
+		 int min, int max, t_widget_handler *handler,
 		 int data_len, void *data,
 		 struct input_history *history, int float_);
 

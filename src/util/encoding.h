@@ -1,4 +1,4 @@
-/* $Id: encoding.h,v 1.1 2002/06/11 19:27:18 pasky Exp $ */
+/* $Id: encoding.h,v 1.2 2002/08/27 13:31:23 pasky Exp $ */
 
 #ifndef EL__UTIL_ENCODING_H
 #define EL__UTIL_ENCODING_H
@@ -8,6 +8,8 @@ enum stream_encoding {
 	ENCODING_GZIP,
 	ENCODING_BZIP2,
 };
+
+unsigned char *encoding_names[3];
 
 struct stream_encoded {
 	enum stream_encoding encoding;

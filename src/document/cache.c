@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.19 2002/08/06 10:07:18 pasky Exp $ */
+/* $Id: cache.c,v 1.20 2002/08/27 13:31:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -420,6 +420,7 @@ delete_cache_entry(struct cache_entry *e)
 	if (e->last_modified) mem_free(e->last_modified);
 	if (e->redirect) mem_free(e->redirect);
 	if (e->ssl_info) mem_free(e->ssl_info);
+	if (e->encoding_info) mem_free(e->encoding_info);
 
 	mem_free(e);
 }

@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.6 2002/07/05 01:29:09 pasky Exp $ */
+/* $Id: cache.h,v 1.7 2002/08/27 13:31:23 pasky Exp $ */
 
 #ifndef EL__CACHE_H
 #define EL__CACHE_H
@@ -22,6 +22,7 @@ struct cache_entry {
 	tcount count;
 	int refcount;
 	unsigned char *ssl_info;
+	unsigned char *encoding_info;
 #ifdef HAVE_SCRIPTING
 	int done_pre_format_html_hook;
 #endif

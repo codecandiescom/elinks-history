@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.3 2002/07/09 21:16:37 pasky Exp $ */
+/* $Id: encoding.c,v 1.4 2002/08/27 13:31:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,6 +200,12 @@ struct decoding_handlers *handlers[] = {
 #else
 	&dummy_handlers,
 #endif
+};
+
+unsigned char *encoding_names[] = {
+	"none",
+	"gzip",
+	"bzip2",
 };
 
 

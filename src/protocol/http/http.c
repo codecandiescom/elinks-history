@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.36 2002/08/12 01:30:19 pasky Exp $ */
+/* $Id: http.c,v 1.37 2002/08/27 13:31:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1044,6 +1044,10 @@ void http_got_header(struct connection *c, struct read_buffer *rb)
 		} else {
 			mem_free(d);
 		}
+	}
+	if (c->content_encoding != ENCODING_NONE) {
+		if (e->encoding_info) mem_free(e->encoding_info);
+		e->encoding_info = stracpy(encoding_names[c->content_encoding]);
 	}
 
 	read_http_data(c, rb);

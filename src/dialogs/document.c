@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.10 2002/07/05 01:29:09 pasky Exp $ */
+/* $Id: document.c,v 1.11 2002/08/27 13:31:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,6 +157,11 @@ loc_msg(struct terminal *term, struct location *location,
 			add_to_str(&str, &strl, "\n");
 			add_to_str(&str, &strl, "SSL cipher: ");
 			add_to_str(&str, &strl, ce->ssl_info);
+		}
+		if (ce->encoding_info) {
+			add_to_str(&str, &strl, "\n");
+			add_to_str(&str, &strl, "Encoding: ");
+			add_to_str(&str, &strl, ce->encoding_info);
 		}
 	}
 

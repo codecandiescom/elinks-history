@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.4 2002/12/07 20:05:57 pasky Exp $ */
+/* $Id: file.c,v 1.5 2002/12/09 13:00:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "elinks.h"
 
 #include "util/error.h"
+#include "util/file.h"
 #include "util/memory.h"
 #include "util/string.h"
 

@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.19 2003/10/26 15:19:32 zas Exp $ */
+/* $Id: widget.h,v 1.20 2003/10/26 15:37:45 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -47,18 +47,18 @@ struct widget {
 	int (*fn)(struct dialog_data *, struct widget_data *);
 
 	union {
-		struct checkbox_info {
+		struct {
 			int gid;
 			int gnum;
 		} checkbox;
-		struct field_info {
+		struct {
 			int min;
 			int max;
 		} field;
-		struct box_info {
+		struct {
 			int height;
 		} box;
-		struct button_info {
+		struct {
 			int flags;
 		} button;
 	} info;
@@ -78,8 +78,16 @@ struct widget_data {
 
 	int x, y;
 	int l, h;
-	int vpos, cpos;
-	int checked;
+	
+	union {
+		struct {
+			int vpos;
+			int cpos;
+		} field;
+		struct {
+			int checked;
+		} checkbox;
+	} info;
 };
 
 void display_dlg_item(struct dialog_data *, struct widget_data *, int);

@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.49 2003/10/26 15:19:32 zas Exp $ */
+/* $Id: checkbox.c,v 1.50 2003/10/26 15:37:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,7 +125,7 @@ display_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data, 
 	color = get_bfu_color(term, "dialog.checkbox");
 	if (!color) return;
 
-	if (widget_data->checked) {
+	if (widget_data->info.checkbox.checked) {
 		text = (!widget_data->widget->info.checkbox.gid) ? "[X]" : "(X)";
 	} else {
 		text = (!widget_data->widget->info.checkbox.gid) ? "[ ]" : "( )";
@@ -145,10 +145,10 @@ init_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 {
 	if (widget_data->widget->info.checkbox.gid) {
 		if (*((int *) widget_data->cdata) == widget_data->widget->info.checkbox.gnum)
-			widget_data->checked = 1;
+			widget_data->info.checkbox.checked = 1;
 	} else {
 		if (*((int *) widget_data->cdata))
-			widget_data->checked = 1;
+			widget_data->info.checkbox.checked = 1;
 	}
 }
 
@@ -171,7 +171,7 @@ static void
 select_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data)
 {
 	if (!widget_data->widget->info.checkbox.gid) {
-		widget_data->checked = *((int *) widget_data->cdata)
+		widget_data->info.checkbox.checked = *((int *) widget_data->cdata)
 			    = !*((int *) widget_data->cdata);
 	} else {
 		int i;
@@ -183,10 +183,10 @@ select_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data)
 				continue;
 
 			*((int *) dlg_data->widgets_data[i].cdata) = widget_data->widget->info.checkbox.gnum;
-			dlg_data->widgets_data[i].checked = 0;
+			dlg_data->widgets_data[i].info.checkbox.checked = 0;
 			display_dlg_item(dlg_data, &dlg_data->widgets_data[i], 0);
 		}
-		widget_data->checked = 1;
+		widget_data->info.checkbox.checked = 1;
 	}
 	display_dlg_item(dlg_data, widget_data, 1);
 }

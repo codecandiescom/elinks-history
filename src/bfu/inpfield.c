@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.63 2003/10/26 15:19:32 zas Exp $ */
+/* $Id: inpfield.c,v 1.64 2003/10/26 15:37:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,8 +227,10 @@ display_field_do(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *color;
 
-	int_bounds(&widget_data->vpos, widget_data->cpos - widget_data->l + 1, widget_data->cpos);
-	int_lower_bound(&widget_data->vpos, 0);
+	int_bounds(&widget_data->info.field.vpos,
+		   widget_data->info.field.cpos - widget_data->l + 1,
+		   widget_data->info.field.cpos);
+	int_lower_bound(&widget_data->info.field.vpos, 0);
 
 	color = get_bfu_color(term, "dialog.field");
 	if (color)
@@ -236,11 +238,12 @@ display_field_do(struct widget_data *widget_data, struct dialog_data *dlg_data,
 
 	color = get_bfu_color(term, "dialog.field-text");
 	if (color) {
-		int len = strlen(widget_data->cdata + widget_data->vpos);
+		int len = strlen(widget_data->cdata + widget_data->info.field.vpos);
 		int l = int_min(len, widget_data->l);
 
 		if (!hide) {
-			draw_text(term, widget_data->x, widget_data->y, widget_data->cdata + widget_data->vpos, l,
+			draw_text(term, widget_data->x, widget_data->y,
+				  widget_data->cdata + widget_data->info.field.vpos, l,
 				  0, color);
 		} else {
 			draw_area(term, widget_data->x, widget_data->y, l, 1, '*', 0, color);
@@ -248,7 +251,7 @@ display_field_do(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	}
 
 	if (sel) {
-		int x = widget_data->x + widget_data->cpos - widget_data->vpos;
+		int x = widget_data->x + widget_data->info.field.cpos - widget_data->info.field.vpos;
 
 		set_cursor(term, x, widget_data->y, 0);
 		set_window_ptr(dlg_data->win, widget_data->x, widget_data->y);
@@ -287,7 +290,7 @@ init_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		}
 	}
 
-	widget_data->cpos = strlen(widget_data->cdata);
+	widget_data->info.field.cpos = strlen(widget_data->cdata);
 }
 
 static int
@@ -318,8 +321,8 @@ mouse_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			return EVENT_PROCESSED;
 	}
 
-	widget_data->cpos = widget_data->vpos + ev->x - widget_data->x;
-	int_upper_bound(&widget_data->cpos, strlen(widget_data->cdata));
+	widget_data->info.field.cpos = widget_data->info.field.vpos + ev->x - widget_data->x;
+	int_upper_bound(&widget_data->info.field.cpos, strlen(widget_data->cdata));
 
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
 	dlg_data->selected = widget_data - dlg_data->widgets_data;
@@ -355,27 +358,29 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			break;
 
 		case ACT_RIGHT:
-			if (widget_data->cpos < strlen(widget_data->cdata)) widget_data->cpos++;
+			if (widget_data->info.field.cpos < strlen(widget_data->cdata))
+				widget_data->info.field.cpos++;
 			goto dsp_f;
 
 		case ACT_LEFT:
-			if (widget_data->cpos > 0) widget_data->cpos--;
+			if (widget_data->info.field.cpos > 0)
+				widget_data->info.field.cpos--;
 			goto dsp_f;
 
 		case ACT_HOME:
-			widget_data->cpos = 0;
+			widget_data->info.field.cpos = 0;
 			goto dsp_f;
 
 		case ACT_END:
-			widget_data->cpos = strlen(widget_data->cdata);
+			widget_data->info.field.cpos = strlen(widget_data->cdata);
 			goto dsp_f;
 
 		case ACT_BACKSPACE:
-			if (widget_data->cpos) {
-				memmove(widget_data->cdata + widget_data->cpos - 1,
-					widget_data->cdata + widget_data->cpos,
-					strlen(widget_data->cdata) - widget_data->cpos + 1);
-				widget_data->cpos--;
+			if (widget_data->info.field.cpos) {
+				memmove(widget_data->cdata + widget_data->info.field.cpos - 1,
+					widget_data->cdata + widget_data->info.field.cpos,
+					strlen(widget_data->cdata) - widget_data->info.field.cpos + 1);
+				widget_data->info.field.cpos--;
 			}
 			goto dsp_f;
 
@@ -383,23 +388,23 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			{
 				int cdata_len = strlen(widget_data->cdata);
 
-				if (widget_data->cpos >= cdata_len) goto dsp_f;
+				if (widget_data->info.field.cpos >= cdata_len) goto dsp_f;
 
-				memmove(widget_data->cdata + widget_data->cpos,
-					widget_data->cdata + widget_data->cpos + 1,
-					cdata_len - widget_data->cpos + 1);
+				memmove(widget_data->cdata + widget_data->info.field.cpos,
+					widget_data->cdata + widget_data->info.field.cpos + 1,
+					cdata_len - widget_data->info.field.cpos + 1);
 				goto dsp_f;
 			}
 
 		case ACT_KILL_TO_BOL:
 			memmove(widget_data->cdata,
-					widget_data->cdata + widget_data->cpos,
-					strlen(widget_data->cdata + widget_data->cpos) + 1);
-			widget_data->cpos = 0;
+					widget_data->cdata + widget_data->info.field.cpos,
+					strlen(widget_data->cdata + widget_data->info.field.cpos) + 1);
+			widget_data->info.field.cpos = 0;
 			goto dsp_f;
 
 		case ACT_KILL_TO_EOL:
-			widget_data->cdata[widget_data->cpos] = 0;
+			widget_data->cdata[widget_data->info.field.cpos] = 0;
 			goto dsp_f;
 
 		case ACT_COPY_CLIPBOARD:
@@ -411,7 +416,7 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			/* Cut to clipboard */
 			set_clipboard_text(widget_data->cdata);
 			widget_data->cdata[0] = 0;
-			widget_data->cpos = 0;
+			widget_data->info.field.cpos = 0;
 			goto dsp_f;
 
 		case ACT_PASTE_CLIPBOARD:
@@ -422,7 +427,7 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 				if (!clipboard) goto dsp_f;
 
 				safe_strncpy(widget_data->cdata, clipboard, widget_data->widget->dlen);
-				widget_data->cpos = strlen(widget_data->cdata);
+				widget_data->info.field.cpos = strlen(widget_data->cdata);
 				mem_free(clipboard);
 				goto dsp_f;
 			}
@@ -442,10 +447,10 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 				if (cdata_len >= widget_data->widget->dlen - 1)
 					goto dsp_f;
 
-				memmove(widget_data->cdata + widget_data->cpos + 1,
-					widget_data->cdata + widget_data->cpos,
-					cdata_len - widget_data->cpos + 1);
-				widget_data->cdata[widget_data->cpos++] = ev->x;
+				memmove(widget_data->cdata + widget_data->info.field.cpos + 1,
+					widget_data->cdata + widget_data->info.field.cpos,
+					cdata_len - widget_data->info.field.cpos + 1);
+				widget_data->cdata[widget_data->info.field.cpos++] = ev->x;
 				goto dsp_f;
 			}
 	}

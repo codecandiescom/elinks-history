@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.52 2003/10/26 15:19:32 zas Exp $ */
+/* $Id: dialog.c,v 1.53 2003/10/26 15:37:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -338,6 +338,7 @@ ok_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return cancel_dialog(dlg_data, widget_data);
 }
 
+/* FIXME: rename it. --Zas */
 int
 clear_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
@@ -348,7 +349,7 @@ clear_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 		    dlg_data->dlg->widgets[i].type != D_FIELD_PASS)
 			continue;
 		memset(dlg_data->widgets_data[i].cdata, 0, dlg_data->dlg->widgets[i].dlen);
-		dlg_data->widgets_data[i].cpos = 0;
+		dlg_data->widgets_data[i].info.field.cpos = 0;
 	}
 
 	redraw_dialog(dlg_data);

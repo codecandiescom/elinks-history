@@ -1,5 +1,5 @@
 /* Common widget functions. */
-/* $Id: widget.c,v 1.16 2003/10/26 14:04:09 zas Exp $ */
+/* $Id: widget.c,v 1.17 2003/10/26 15:37:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,12 +33,13 @@ dlg_set_history(struct widget_data *widget_data)
 	if ((void *) widget_data->cur_hist != &widget_data->history) {
 		unsigned char *s = widget_data->cur_hist->d;
 
-		widget_data->cpos = int_min(strlen(s), widget_data->widget->dlen - 1);
-		if (widget_data->cpos) memcpy(widget_data->cdata, s, widget_data->cpos);
+		widget_data->info.field.cpos = int_min(strlen(s), widget_data->widget->dlen - 1);
+		if (widget_data->info.field.cpos)
+			memcpy(widget_data->cdata, s, widget_data->info.field.cpos);
 	} else {
-		widget_data->cpos = 0;
+		widget_data->info.field.cpos = 0;
 	}
 
-	widget_data->cdata[widget_data->cpos] = 0;
-	widget_data->vpos = int_max(0, widget_data->cpos - widget_data->l);
+	widget_data->cdata[widget_data->info.field.cpos] = 0;
+	widget_data->info.field.vpos = int_max(0, widget_data->info.field.cpos - widget_data->l);
 }

@@ -83,8 +83,14 @@ void end_real_lookup(void *data)
 	*query->addr = mem_alloc((*query->addrno + 1) * sizeof(struct sockaddr));
 
 	for (i = 0; i < *query->addrno; i++) {
-		if (read(query->h, &(*query->addr)[i], sizeof(struct sockaddr)) != sizeof(struct sockaddr))
-			goto done;
+		int w = 0;
+
+		do {
+			int r;
+
+			r = read(query->h, &(*query->addr)[i] + w, sizeof(struct sockaddr) - w);
+			w += r;
+		} while (w < sizeof(struct sockaddr));
 	}
 
 	res = 0;

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.133 2003/11/26 22:16:34 pasky Exp $ */
+/* $Id: file.c,v 1.134 2003/11/29 00:53:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -584,6 +584,12 @@ file_func(struct connection *connection)
 		abort_conn_with_state(connection, S_BAD_URL);
 		return;
 	}
+
+	/* This function works on already simplified file-scheme URI pre-chewed
+	 * by transform_file_url(). By now, the function contains no hostname
+	 * part anymore, possibly relative path is converted to an absolute one
+	 * and uri.data is just the final path to file/dir we should try to
+	 * show. */
 
 	safe_strncpy(filename, connection->uri.data, filenamelen + 1);
 	decode_uri_string(filename);

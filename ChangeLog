@@ -1,9 +1,264 @@
-Wed Apr 21 13:48:00 2004  Laurent Monin <zas@norz.org>:
+Thu Apr 22 22:09:14 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/util/string.c:
+	* src/sched/session.c:
 
-	strlcmp_device(): @n is useless so removed, @d was introduced to
-	prevent double calculation of difference.  
+	More is_in_progress_state() usage.  
+
+Thu Apr 22 21:32:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Compile fix: done_pre_format_html_hook -> preformatted. Jonas forgot
+	this one... ;) 
+
+Thu Apr 22 21:14:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.c:
+
+	Fix last patch. Don't initialize cache_entry->preformatted to one.
+	;) 
+
+Thu Apr 22 21:12:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, sched/session.c:
+
+	cache_entry->done_pre_format_html_hook -> cache_entry->preformatted.
+	Now always a member since it is boolean and should be padded nicely
+	with the other of it's kind.  
+
+Thu Apr 22 21:04:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.h:
+
+	Try to describe struct cache_entry.  
+
+Thu Apr 22 21:02:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Tidyup.  
+
+Thu Apr 22 19:53:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Document the possible 'System' value of various codepage/charset
+	options.  
+
+Thu Apr 22 19:50:34 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/charsets.c:
+
+	get_cp_index(): @n -> @name 
+
+Thu Apr 22 19:50:01 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/charsets.c:
+
+	Fixed get_cp_index() so that it falls back to us-ascii when you
+	abuse it by using System charset while locale has some exotic
+	charset unknown to ELinks set.  
+
+Thu Apr 22 19:46:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/charsets.c:
+
+	Unroll the fastfind get_cp_index()'s return statement.  
+
+Thu Apr 22 19:40:05 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Sanitized a (boolean < 1) relict.  
+
+Thu Apr 22 19:38:58 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Tidyup.  
+
+Thu Apr 22 19:36:08 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Reverted zas' 1.239 (Fix: copy http_version structure contents not
+	structure pointer.). I'm probably stupid but I can't see any
+	pointers there and the old code is fine.  CCMAIL: zas@norz.org 
+
+Thu Apr 22 18:50:59 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/dump/dump.c:
+
+	More tidy. XXX comment also added.  
+
+Thu Apr 22 18:45:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.c:
+
+	Revert patch by Christian Haggstrom and add proper detection of
+	these internal directory redirects.  
+
+Thu Apr 22 18:14:14 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/dump/dump.c:
+
+	Tidyup.  
+
+Thu Apr 22 18:09:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/leds.c, config/options.inc:
+
+	Move the ui.clock options to the leds module.  
+
+Thu Apr 22 18:07:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.h:
+
+	Describe struct menu_item.  
+
+Thu Apr 22 18:05:50 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/leds.c:
+
+	Precompute a base X position for the clock.  
+
+Thu Apr 22 18:04:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Changed ui.clock.format default value to also contain the angle
+	brackets like all other statusbar items.  
+
+Thu Apr 22 18:02:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/leds.c, config/options.inc:
+
+	Options subtree rename: ui.timer.clock -> ui.clock. This has nothing
+	to do with the timer at all.  
+
+Thu Apr 22 17:48:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	display_status_bar(): Add FIXME regarding progress bar being drawn
+	on top of the digital clock.  
+
+Thu Apr 22 17:47:54 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/leds.c:
+
+	@l -> @timerlen 
+
+Thu Apr 22 17:46:12 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/leds.c:
+
+	Include <time.h> only when it's available and also try <sys/time.h>.
+	Should enhance portability. Somehow.  CCMAIL:
+	witekfl@poczta.gazeta.pl 
+
+Thu Apr 22 16:13:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/refresh.c, sched/download.c, sched/session.c,
+	sched/session.h:
+
+	ses->tq => ses->type_queries.  
+
+Thu Apr 22 16:10:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/refresh.c, sched/download.c, sched/download.h,
+	sched/session.c:
+
+	tq -> type_query, type_query() -> do_type_query().  
+
+Thu Apr 22 16:08:11 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	scan_http_equiv(): free memory as soon it is no more needed.  
+
+Thu Apr 22 16:06:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_element(): drop useless ().  
+
+Thu Apr 22 16:05:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	element_has_implicit_end(): minor optimization.  
+
+Thu Apr 22 16:00:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/refresh.c, sched/download.h, sched/session.h:
+
+	Move struct tq to more central header.  
+
+Thu Apr 22 15:44:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Fix <title /> handling so pasky can enjoy
+	http://cia.navi.cx/historical/first-24-hours.html 
+
+Thu Apr 22 15:03:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	done_tq(): Fix tq->download teardown by calling change_connection().  
+
+Thu Apr 22 12:51:30 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/document.c:
+
+	Make headers info dialog scrollable.  
+
+Thu Apr 22 12:39:46 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cache/cache.c:
+
+	Assert absence of POST_CHAR before appending post data, may be
+	useless.  
+
+Thu Apr 22 12:38:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cache/cache.c:
+
+	Bug fix proposed by Christian Haggstrom for issue related to POST +
+	Location: / was applied.  
+
+Wed Apr 21 22:43:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	destroy_session(): Use done_tq() when freeing ses->tq list.  
+
+Wed Apr 21 22:39:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: download.c, download.h:
+
+	tp_free() -> done_tq() to complete init/done interface. Maybe we
+	should s/tq/type_query/.  
+
+Wed Apr 21 22:35:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Move tq initialization to init_tq(). Removes goto and reduces the
+	ses_chktype() confusion.  
+
+Wed Apr 21 22:19:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: download.c, download.h:
+
+	Make subst_file() static.  
+
+Wed Apr 21 22:15:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	|V|4|{3 6070_U|21_}{0/\/\3 57471(.  
 
 Wed Apr 21 13:27:15 2004  Petr Baudis <pasky@ucw.cz>:
 

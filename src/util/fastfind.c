@@ -14,7 +14,7 @@
  *
  *  (c) 2003 Laurent MONIN (aka Zas)
  * Feel free to do whatever you want with that code. */
-/* $Id: fastfind.c,v 1.14 2003/06/14 10:32:36 zas Exp $ */
+/* $Id: fastfind.c,v 1.15 2003/06/14 10:36:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,11 @@
 #include "util/memdebug.h"
 #include "util/memory.h"
 
+
+/* Define it to generate statistics to stderr. */
+#if 0
+#define FASTFIND_DEBUG
+#endif
 
 #if 1
 /* Use only 32 bits per element, but has very low limits. */

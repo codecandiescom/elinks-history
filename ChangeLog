@@ -1,3 +1,127 @@
+Thu Jul  4 21:42:39 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/dialog.c:
+
+	Changed dialog.c description.  
+
+Thu Jul  4 21:19:44 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/Makefile.am, bfu/bfu.c, bfu/bfu.h, bfu/button.c,
+	bfu/button.h, bfu/checkbox.c, bfu/checkbox.h, bfu/dialog.c,
+	bfu/dialog.h, bfu/group.c, bfu/group.h, bfu/inpfield.c,
+	bfu/inpfield.h, bfu/inphist.c, bfu/listbox.c, bfu/listbox.h,
+	bfu/msgbox.c, bfu/widget.c, bookmarks/dialogs.c,
+	bookmarks/dialogs.h, dialogs/auth.c, dialogs/edit.c,
+	dialogs/edit.h, dialogs/globhist.c, dialogs/options.c,
+	dialogs/refresh.c, document/download.c, document/html/parser.h,
+	lua/core.c, protocol/types.c:
+
+	Moved bfu/bfu.* to bfu/dialog.*.  
+
+Thu Jul  4 21:04:45 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/: Makefile.am, bfu.h, widget.c, widget.h:
+
+	Moved widget-specific stuff from bfu/bfu.* to bfu/widget.*.  
+
+Thu Jul  4 19:22:12 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Fixed lua error when URL started by space.  
+
+Thu Jul  4 19:18:17 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/Makefile.am, bfu/bfu.c, bfu/bfu.h, bfu/listbox.c,
+	bfu/listbox.h, bookmarks/dialogs.c, dialogs/globhist.c:
+
+	Moved listbox widget from bfu/bfu.* to bfu/listbox.*.  
+
+Thu Jul  4 15:45:37 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: Makefile.am, bfu/Makefile.am, bfu/bfu.c, bfu/bfu.h,
+	bfu/button.c, bfu/button.h, bfu/checkbox.c, bfu/checkbox.h,
+	bfu/group.c, bfu/group.h, bfu/inpfield.c, bfu/inpfield.h,
+	bfu/inphist.c, bfu/inphist.h, bfu/msgbox.c, bfu/text.c, bfu/text.h,
+	bookmarks/dialogs.c, dialogs/auth.c, dialogs/edit.c,
+	dialogs/globhist.c, dialogs/menu.c, dialogs/options.c,
+	document/download.c, document/view.c, lua/core.c, protocol/types.c:
+
+	Forked widget specific files (bfu/button.*, bfu/checkbox.*,
+	bfu/group.*, bfu/inpfield.*, bfu/inphist.*, bfu/text.*) from
+	bfu/bfu.*.  
+
+Thu Jul  4 14:06:02 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/Makefile.am, bfu/bfu.c, bfu/bfu.h, bfu/msgbox.c,
+	config/urlhist.c, dialogs/menu.c, lua/core.c:
+
+	Moved input_history stuff from bfu/bfu.* to bfu/inphist.*.  
+
+Thu Jul  4 12:07:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/dialogs/menu.h:
+
+	Stale prototype removed.  
+
+Thu Jul  4 12:03:29 2002  Petr Baudis <pasky@ji.cz>:
+
+	* INSTALL:
+
+	They should just not distribute ELinks+OpenSSL binary..  
+
+Thu Jul  4 01:18:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/bfu.c, bfu/bfu.h, bfu/button.h, bfu/msgbox.c,
+	bookmarks/dialogs.c, dialogs/auth.c, dialogs/edit.c,
+	dialogs/globhist.c, dialogs/options.c, document/download.c,
+	lua/core.c, protocol/types.c:
+
+	dialog_item -> widget 
+
+Thu Jul  4 01:07:12 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/Makefile.am, bfu/bfu.c, bfu/bfu.h, bfu/button.h,
+	bfu/msgbox.c, bfu/msgbox.h, bookmarks/dialogs.c, config/conf.c,
+	dialogs/document.c, dialogs/globhist.c, dialogs/info.c,
+	dialogs/menu.c, dialogs/options.c, document/download.c,
+	document/session.c, document/view.c, lua/core.c, protocol/mailto.c,
+	protocol/types.c:
+
+	Moved msg_box() from bfu/bfu.* to bfu/msgbox.*.. forked also
+	bfu/button.h.  
+
+Thu Jul  4 00:28:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, document/view.c:
+
+	Introduced action save-formatted.  
+
+Thu Jul  4 00:26:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/dialogs/auth.c:
+
+	When there's already username known, place cursor directly to
+	password in authentication dialog.  
+
+Wed Jul  3 23:57:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* THANKS:
+
+	Thanks to various people.. :) 
+
+Wed Jul  3 23:54:18 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/bfu.c:
+
+	Enter pressed in field or password field submits the dialog as well.  
+
+Wed Jul  3 23:46:35 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/download.c:
+
+	Added missing semicolon ;).  
+
 Wed Jul  3 23:40:49 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: document/download.c, osdep/os_dep.c, osdep/os_dep.h,

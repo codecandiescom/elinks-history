@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.506 2004/06/20 21:02:40 jonas Exp $ */
+/* $Id: view.c,v 1.507 2004/06/21 09:47:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -727,7 +727,7 @@ move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 	/* Scrolling could have changed the navigation mode */
 	ses->navigate_mode = NAVIGATE_CURSOR_ROUTING;
 
-	link = choose_mouse_link(doc_view, x - box->x, y - box->y);
+	link = get_link_at_coordinates(doc_view, x - box->x, y - box->y);
 	if (link) {
 		doc_view->vs->current_link = link - doc_view->document->links;
 	} else {
@@ -950,7 +950,7 @@ static enum frame_event_status
 frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_event *ev)
 {
 	enum frame_event_status status = FRAME_EVENT_REFRESH;
-	struct link *link = choose_mouse_link(doc_view, ev->x, ev->y);
+	struct link *link = get_link_at_coordinates(doc_view, ev->x, ev->y);
 
 	if (check_mouse_wheel(ev)) {
 		if (!check_mouse_action(ev, B_DOWN)) {

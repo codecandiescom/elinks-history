@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.240 2004/06/20 21:19:30 jonas Exp $ */
+/* $Id: link.c,v 1.241 2004/06/21 09:47:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -673,7 +673,7 @@ enter(struct session *ses, struct document_view *doc_view, int do_reload)
 }
 
 struct link *
-choose_mouse_link(struct document_view *doc_view, int x, int y)
+get_link_at_coordinates(struct document_view *doc_view, int x, int y)
 {
 	struct link *l1, *l2, *link;
 	int mouse_x, mouse_y;

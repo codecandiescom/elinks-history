@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.18 2003/06/08 12:44:45 pasky Exp $ */
+/* $Id: error.h,v 1.19 2003/06/08 12:46:22 pasky Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -14,12 +14,12 @@ void do_not_optimize_here(void *);
 extern int errline;
 extern unsigned char *errfile;
 
-/* @internal(format_string) is used to report fatal errors during the ELinks
- * run. It tries to draw user's attention to the error and dumps core if ELinks
- * is running in the DEBUG mode. */
-#undef internal
-#define internal errfile = __FILE__, errline = __LINE__, elinks_internal
-void elinks_internal(unsigned char *, ...);
+/* @debug(format_string) is used for printing of debugging information. It
+ * should not be used anywhere in the official codebase (although it is often
+ * lying there commented out, as it may get handy). */
+#undef debug
+#define debug errfile = __FILE__, errline = __LINE__, elinks_debug
+void elinks_debug(unsigned char *, ...);
 
 /* @error(format_string) is used to report non-fatal errors during the ELinks
  * run. It tries to (not that agressively) draw user's attention to the error,
@@ -28,12 +28,12 @@ void elinks_internal(unsigned char *, ...);
 #define error errfile = __FILE__, errline = __LINE__, elinks_error
 void elinks_error(unsigned char *, ...);
 
-/* @debug(format_string) is used for printing of debugging information. It
- * should not be used anywhere in the official codebase (although it is often
- * lying there commented out, as it may get handy). */
-#undef debug
-#define debug errfile = __FILE__, errline = __LINE__, elinks_debug
-void elinks_debug(unsigned char *, ...);
+/* @internal(format_string) is used to report fatal errors during the ELinks
+ * run. It tries to draw user's attention to the error and dumps core if ELinks
+ * is running in the DEBUG mode. */
+#undef internal
+#define internal errfile = __FILE__, errline = __LINE__, elinks_internal
+void elinks_internal(unsigned char *, ...);
 
 
 /* This is our smart assert(). It is basically equivalent to if (x) internal(),

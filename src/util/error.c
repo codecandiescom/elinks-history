@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.56 2003/06/08 12:44:45 pasky Exp $ */
+/* $Id: error.c,v 1.57 2003/06/08 12:46:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,6 +62,26 @@ int errline;
 unsigned char *errfile;
 
 void
+elinks_debug(unsigned char *fmt, ...)
+{
+	unsigned char errbuf[4096];
+	int size;
+	int maxsize = sizeof(errbuf) - strlen(fmt);
+	va_list params;
+
+	va_start(params, fmt);
+
+	size = snprintf(errbuf, maxsize, "DEBUG MESSAGE at %s:%d: ",
+			errfile, errline);
+	if (size < maxsize) {
+		strcat(errbuf, fmt);
+		er(0, errbuf, params);
+	}
+
+	va_end(params);
+}
+
+void
 elinks_error(unsigned char *fmt, ...)
 {
 	unsigned char errbuf[4096];
@@ -102,26 +122,6 @@ elinks_internal(unsigned char *fmt, ...)
 #ifdef DEBUG
 	force_dump();
 #endif
-}
-
-void
-elinks_debug(unsigned char *fmt, ...)
-{
-	unsigned char errbuf[4096];
-	int size;
-	int maxsize = sizeof(errbuf) - strlen(fmt);
-	va_list params;
-
-	va_start(params, fmt);
-
-	size = snprintf(errbuf, maxsize, "DEBUG MESSAGE at %s:%d: ",
-			errfile, errline);
-	if (size < maxsize) {
-		strcat(errbuf, fmt);
-		er(0, errbuf, params);
-	}
-
-	va_end(params);
 }
 
 

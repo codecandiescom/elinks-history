@@ -1,16 +1,17 @@
-# Makefile til bogen, generer al data automatisk.. 
+## Process this file with automake to produce Makefile.in
+## $Id: Makefile.am,v 1.4 2002/12/30 17:01:03 jonas Exp $
 
-MANUAL	= $(OUTDIR)/elinks-manual
-OUTDIR	= generated
-TARGET	= manual.xml
+MANUAL	   = $(INSTALLDIR)/elinks-manual
+INSTALLDIR = generated
+TARGET	   = manual.xml
 
 alldocs: html html_tgz html_zip pdf ps txt
 
 outdir:
-	mkdir -p $(OUTDIR)
+	mkdir -p $(INSTALLDIR)
 
 clean:
-	rm -rf $(OUTDIR)
+	rm -rf $(INSTALLDIR)
 
 html: outdir
 	scripts/make-manual html $(TARGET) $(DOCTOOL)
@@ -35,4 +36,3 @@ ps: outdir
 txt: outdir
 	scripts/make-manual txt $(TARGET) $(DOCTOOL)
 	mv manual.txt $(MANUAL).txt
-

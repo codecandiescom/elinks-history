@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.23 2003/12/21 14:13:21 zas Exp $ */
+/* $Id: event.c,v 1.24 2003/12/23 11:11:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,6 +167,7 @@ test_queue:
 	if (ev->ev == EV_REDRAW || ev->ev == EV_RESIZE || ev->ev == EV_INIT) {
 		struct window *win;
 
+send_redraw:
 		if (ev->x < 0 || ev->y < 0) {
 			ERROR(_("Bad terminal size: %d, %d", term),
 			      (int) ev->x, (int) ev->y);
@@ -209,11 +210,16 @@ test_queue:
 	} else if (ev->ev == EV_KBD) {
 		reset_timer();
 
-		if (ev->x == KBD_CTRL_C)
+		if (ev->y == KBD_CTRL && upcase(ev->x) == 'L') {
+			ev->ev = EV_REDRAW;
+			ev->x = term->width;
+			ev->y = term->height;
+			goto send_redraw;
+		} else if (ev->x == KBD_CTRL_C) {
 			((struct window *) &term->windows)->prev->handler
 				(term->windows.prev, ev, 0);
 
-		else {
+		} else {
 			int utf8_io = -1;
 
 			if (term->utf_8.len) {

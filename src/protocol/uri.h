@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.12 2003/07/14 19:51:32 jonas Exp $ */
+/* $Id: uri.h,v 1.13 2003/07/19 22:29:07 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -28,6 +28,7 @@ struct uri {
 	unsigned char *post;
 };
 
+/* For use in get_uri_string(). */
 enum uri_component {
 	URI_PROTOCOL	= (1 << 0),
 	URI_USER	= (1 << 1),

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.14 2003/05/06 21:48:47 zas Exp $ */
+/* $Id: sched.c,v 1.15 2003/05/06 22:00:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -688,22 +688,6 @@ retry_conn_with_state(struct connection *conn, int state)
 	retry_connection(conn);
 }
 
-static int
-try_connection(struct connection *c)
-{
-	struct h_conn *hc = is_host_on_list(c);
-
-	if (hc && hc->conn >= get_opt_int("connection.max_connections_to_host"))
-		return try_to_suspend_connection(c, hc->host) ? 0 : -1;
-
-	if (active_connections >= get_opt_int("connection.max_connections"))
-		return try_to_suspend_connection(c, NULL) ? 0 : -1;
-
-	run_connection(c);
-	return 1;
-}
-
-
 #ifdef DEBUG
 static void
 check_queue_bugs()
@@ -748,11 +732,28 @@ again:
 }
 #endif
 
+static inline int
+try_connection(struct connection *c, int max_conns_to_host, int max_conns)
+{
+	struct h_conn *hc = is_host_on_list(c);
+
+	if (hc && hc->conn >= max_conns_to_host)
+		return try_to_suspend_connection(c, hc->host) ? 0 : -1;
+
+	if (active_connections >= max_conns)
+		return try_to_suspend_connection(c, NULL) ? 0 : -1;
+
+	run_connection(c);
+	return 1;
+}
+
 void
 check_queue()
 {
 	struct connection *c;
-
+	int max_conns_to_host = get_opt_int("connection.max_connections_to_host");
+	int max_conns = get_opt_int("connection.max_connections");
+	
 again:
 	c = queue.next;
 #ifdef DEBUG
@@ -764,19 +765,23 @@ again:
 		struct connection *d;
 		int cp = getpri(c);
 
+		/* No way to reduce code redundancy here ? --Zas */
 		for (d = c; d != (struct connection *)&queue && getpri(d) == cp;) {
 			struct connection *dd = d;
 
 			d = d->next;
 			if (!dd->state && is_host_on_keepalive_list(dd)
-			    && try_connection(dd)) goto again;
+			    && try_connection(dd, max_conns_to_host, max_conns))
+				goto again;
 		}
 
 		for (d = c; d != (struct connection *)&queue && getpri(d) == cp;) {
 			struct connection *dd = d;
 
 			d = d->next;
-			if (!dd->state && try_connection(dd)) goto again;
+			if (!dd->state
+			    && try_connection(dd, max_conns_to_host, max_conns))
+				goto again;
 		}
 		c = d;
 	}

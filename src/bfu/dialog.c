@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.6 2002/07/09 15:21:38 pasky Exp $ */
+/* $Id: dialog.c,v 1.7 2002/07/09 22:42:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,8 +135,7 @@ void dialog_func(struct window *win, struct event *ev, int fwd)
 						   &widget->history;
 
 				if (widget->item->ops->init)
-					widget->item->ops->init(widget, dlg,
-								ev, fwd);
+					widget->item->ops->init(widget, dlg, ev);
 			}
 			dlg->selected = 0;
 

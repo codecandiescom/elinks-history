@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.6 2002/07/09 15:21:38 pasky Exp $ */
+/* $Id: listbox.c,v 1.7 2002/07/09 22:42:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,7 +132,7 @@ display_listbox(struct widget_data *box_item_data, struct dialog_data *dlg,
 
 void
 init_listbox(struct widget_data *widget, struct dialog_data *dialog,
-	     struct event *ev, int fwd)
+	     struct event *ev)
 {
 	/* Freed in bookmark_dialog_abort_handler() */
 	widget->cdata = mem_alloc(sizeof(struct dlg_data_item_data_box));

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-09 02:05+0000\n"
+"POT-Creation-Date: 2005-02-11 22:37+0100\n"
 "PO-Revision-Date: 2005-02-09 06:20+0000\n"
 "Last-Translator: Balazs Varga <vinnui@ent.hu>\n"
 "Language-Team: Hungarian <none@li.org>\n"
@@ -26,7 +26,7 @@ msgstr "Bezárás"
 #: src/bfu/hierbox.c:444 src/bfu/hierbox.c:455 src/cache/dialogs.c:219
 #: src/config/dialogs.c:516 src/cookies/dialogs.c:421
 #: src/dialogs/document.c:44 src/dialogs/document.c:223
-#: src/dialogs/download.c:470 src/formhist/dialogs.c:212
+#: src/dialogs/download.c:476 src/formhist/dialogs.c:212
 #: src/globhist/dialogs.c:225 src/protocol/auth/dialogs.c:254
 msgid "Info"
 msgstr "Információ"
@@ -52,17 +52,19 @@ msgstr "A mappa kinyitásához nyomd meg a Space billentyût."
 #: src/ecmascript/spidermonkey.c:1963 src/formhist/dialogs.c:179
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
 #: src/protocol/nntp/codes.c:132 src/protocol/protocol.c:227
-#: src/protocol/user.c:268 src/sched/download.c:231 src/sched/download.c:327
-#: src/sched/download.c:368 src/sched/download.c:507 src/sched/download.c:601
+#: src/protocol/user.c:268 src/sched/download.c:229 src/sched/download.c:325
+#: src/sched/download.c:366 src/sched/download.c:505 src/sched/download.c:599
 #: src/sched/error.c:42 src/sched/session.c:239 src/sched/session.c:706
 #: src/sched/session.c:730 src/sched/session.c:747
 #: src/scripting/lua/core.c:395 src/scripting/lua/core.c:476
 #: src/scripting/lua/core.c:593 src/scripting/lua/core.c:717
-#: src/viewer/text/draw.c:67 src/viewer/text/form.c:857
-#: src/viewer/text/search.c:953 src/viewer/text/search.c:1014
-#: src/viewer/text/search.c:1459 src/viewer/text/search.c:1570
-#: src/viewer/text/textarea.c:366 src/viewer/text/textarea.c:375
-#: src/viewer/text/view.c:730 src/viewer/text/view.c:1283
+#: src/scripting/ruby/core.c:63 src/scripting/ruby/core.c:159
+#: src/scripting/ruby/core.c:215 src/viewer/text/draw.c:67
+#: src/viewer/text/form.c:857 src/viewer/text/search.c:953
+#: src/viewer/text/search.c:1014 src/viewer/text/search.c:1459
+#: src/viewer/text/search.c:1570 src/viewer/text/textarea.c:366
+#: src/viewer/text/textarea.c:375 src/viewer/text/view.c:730
+#: src/viewer/text/view.c:1283
 msgid "OK"
 msgstr "OK"
 
@@ -173,8 +175,8 @@ msgstr "Név"
 #: src/dialogs/edit.c:102 src/dialogs/edit.c:105 src/dialogs/menu.c:97
 #: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:205
 #: src/dialogs/options.c:283 src/mime/dialogs.c:131
-#: src/protocol/auth/dialogs.c:109 src/sched/download.c:551
-#: src/sched/download.c:1130 src/scripting/lua/core.c:396
+#: src/protocol/auth/dialogs.c:109 src/sched/download.c:549
+#: src/sched/download.c:1134 src/scripting/lua/core.c:396
 #: src/scripting/lua/core.c:477 src/scripting/lua/core.c:717
 #: src/viewer/text/search.c:1571 src/viewer/text/view.c:730
 msgid "Cancel"
@@ -467,7 +469,7 @@ msgid "Add"
 msgstr "Hozzáadás"
 
 #: src/bookmarks/dialogs.c:452 src/cookies/dialogs.c:425
-#: src/dialogs/download.c:476 src/dialogs/edit.c:99 src/formhist/dialogs.c:215
+#: src/dialogs/download.c:482 src/dialogs/edit.c:99 src/formhist/dialogs.c:215
 #: src/globhist/dialogs.c:232 src/protocol/auth/dialogs.c:256
 msgid "Clear"
 msgstr "Törlés"
@@ -476,7 +478,7 @@ msgstr "Törlés"
 #: src/bookmarks/dialogs.c:455 src/config/dialogs.c:521
 #: src/config/dialogs.c:946 src/cookies/dialogs.c:426
 #: src/dialogs/options.c:204 src/formhist/dialogs.c:216
-#: src/globhist/dialogs.c:235 src/sched/download.c:1114
+#: src/globhist/dialogs.c:235 src/sched/download.c:1118
 msgid "Save"
 msgstr "Mentés"
 
@@ -750,7 +752,8 @@ msgstr "Az ismeretlen dokumentumok alapértelmezett MIME típusa."
 
 #: src/config/cmdline.c:647
 msgid "Ignore user-defined keybindings"
-msgstr "A felhasználó által definiált billentyûkombinációk figyelmen kívül hagyása"
+msgstr ""
+"A felhasználó által definiált billentyûkombinációk figyelmen kívül hagyása"
 
 #: src/config/cmdline.c:649
 msgid ""
@@ -769,7 +772,8 @@ msgstr "A megadott URL formázott változatának kiírása stdout-ra"
 
 #: src/config/cmdline.c:655
 msgid "Print formatted plain-text versions of given URLs to stdout."
-msgstr "A megadott URL formázott normál szöveges változatának kiírása stdout-ra."
+msgstr ""
+"A megadott URL formázott normál szöveges változatának kiírása stdout-ra."
 
 #: src/config/cmdline.c:657
 msgid "Codepage to use with -dump"
@@ -952,7 +956,8 @@ msgstr ""
 
 #: src/config/cmdline.c:744
 msgid "Connect to session ring with given ID"
-msgstr "Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
+msgstr ""
+"Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
 
 #: src/config/cmdline.c:746
 msgid ""
@@ -1392,7 +1397,8 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:457
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr ""
+"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:458
 msgid "Go to the homepage"
@@ -2055,7 +2061,8 @@ msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
 #: src/config/options.inc:128
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr ""
+"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:134
@@ -2380,7 +2387,8 @@ msgstr "Színek invertálása"
 
 #: src/config/options.inc:285
 msgid "Invert the fore- and background color so the link stands out."
-msgstr "Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
+msgstr ""
+"Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
 
 #: src/config/options.inc:288 src/config/options.inc:792
 #: src/dialogs/options.c:199
@@ -2397,7 +2405,8 @@ msgstr "Alkönyvtárak kiemelése"
 
 #: src/config/options.inc:295
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr "Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
+msgstr ""
+"Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
 
 #: src/config/options.inc:297
 msgid "Number links"
@@ -2478,7 +2487,8 @@ msgstr "Linkek kiválasztása"
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
-msgstr "Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
+msgstr ""
+"Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.inc:344
 msgid "Scrolling"
@@ -2552,7 +2562,8 @@ msgstr "Kis/nagybetû érzékenység"
 msgid ""
 "Whether the search should match the document text while maintaining\n"
 "case sensitivity."
-msgstr "A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
+msgstr ""
+"A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
 
 #: src/config/options.inc:380
 msgid "Regular expressions"
@@ -2710,7 +2721,8 @@ msgstr ""
 
 #: src/config/options.inc:467
 msgid "Ignore cache-control info from server"
-msgstr "A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
+msgstr ""
+"A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
 
 #: src/config/options.inc:469
 msgid ""
@@ -2857,7 +2869,8 @@ msgstr "A kontraszt biztosítása"
 
 #: src/config/options.inc:557
 msgid "Makes sure that the back- and foreground color are never equal."
-msgstr "Gondoskodik róla, hogy a háttérszín és a betûszín sose legyen egyforma."
+msgstr ""
+"Gondoskodik róla, hogy a háttérszín és a betûszín sose legyen egyforma."
 
 #. If you change this please also change ACT_MAIN_DOCUMENT_COLORS action
 #. * handling.
@@ -4313,7 +4326,7 @@ msgstr "Belsõ fejléc infó."
 msgid "No header info."
 msgstr "Nincs fejléc infó."
 
-#: src/dialogs/download.c:253 src/dialogs/menu.c:570 src/sched/download.c:365
+#: src/dialogs/download.c:253 src/dialogs/menu.c:570 src/sched/download.c:363
 msgid "Download"
 msgstr "Letöltés"
 
@@ -4325,58 +4338,58 @@ msgstr "Háttérbe"
 msgid "Background with notify"
 msgstr "Háttérbe, figyelmeztetéssel"
 
-#: src/dialogs/download.c:262 src/dialogs/download.c:471
+#: src/dialogs/download.c:262 src/dialogs/download.c:477
 msgid "Abort"
 msgstr "Megszakítás"
 
 #. This requires more work to make locking work and query the user
-#: src/dialogs/download.c:263 src/dialogs/download.c:474
+#: src/dialogs/download.c:267 src/dialogs/download.c:480
 msgid "Abort and delete file"
 msgstr "Megszakítás, és a fájl törlése"
 
 #. cant_delete_item
-#: src/dialogs/download.c:402
+#: src/dialogs/download.c:408
 #, c-format
 msgid "Sorry, but download \"%s\" cannot be interrupted."
 msgstr "A \"%s\" letöltést nem lehet megszakítani."
 
 #. cant_delete_used_item
-#: src/dialogs/download.c:404
+#: src/dialogs/download.c:410
 #, c-format
 msgid "Sorry, but download \"%s\" is being used by something else."
 msgstr "A \"%s\" letöltést már valami használja."
 
 #. delete_marked_items_title
-#: src/dialogs/download.c:410
+#: src/dialogs/download.c:416
 msgid "Interrupt marked downloads"
 msgstr "A kijelölt letöltések megszakítása"
 
 #. delete_marked_items
-#: src/dialogs/download.c:412
+#: src/dialogs/download.c:418
 msgid "Interrupt marked downloads?"
 msgstr "Szakítsuk meg a kijelölt letöltéseket?"
 
 #. delete_item_title
-#: src/dialogs/download.c:418
+#: src/dialogs/download.c:424
 msgid "Interrupt download"
 msgstr "Letöltés megszakítása"
 
 #. delete_item
-#: src/dialogs/download.c:420
+#: src/dialogs/download.c:426
 msgid "Interrupt this download?"
 msgstr "Mgszakítsam a letöltést?"
 
 #. clear_all_items_title
-#: src/dialogs/download.c:422
+#: src/dialogs/download.c:428
 msgid "Interrupt all downloads"
 msgstr "Az összes letöltés megszakítása"
 
 #. clear_all_items_title
-#: src/dialogs/download.c:424
+#: src/dialogs/download.c:430
 msgid "Do you really want to interrupt all downloads?"
 msgstr "Biztos, hogy megszakítod az összes letöltést?"
 
-#: src/dialogs/download.c:481
+#: src/dialogs/download.c:487
 msgid "Download manager"
 msgstr "Letöltéskezelõ"
 
@@ -5039,7 +5052,8 @@ msgstr "Felugró ablakok szûrése"
 
 #: src/ecmascript/ecmascript.c:55
 msgid "Whether to disallow scripts to open new windows or tabs."
-msgstr "Engedélyezzük-e hogy a script-ek új ablakokat vagy füleket nyithassanak."
+msgstr ""
+"Engedélyezzük-e hogy a script-ek új ablakokat vagy füleket nyithassanak."
 
 #: src/ecmascript/spidermonkey.c:368
 msgid "JavaScript Alert"
@@ -5149,8 +5163,6 @@ msgstr "Mentés be/ki"
 msgid "Form history manager"
 msgstr "Ûrlapok listája"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:37
 msgid "Show form history dialog"
 msgstr "Mutassa az ûrlapok listáját"
@@ -5413,7 +5425,8 @@ msgstr "Ukrán"
 
 #: src/lowlevel/home.c:122
 #, c-format
-msgid "Commandline options -config-dir set to %s, but could not create directory %s."
+msgid ""
+"Commandline options -config-dir set to %s, but could not create directory %s."
 msgstr ""
 "Parancssori opciók -konfig könyvtár %s, de nem lehet létrehozni a %s "
 "könyvtárat."
@@ -5445,29 +5458,29 @@ msgstr "A %s hívása hibás volt: %d (%s)"
 msgid "%d select() failures."
 msgstr "%d select() hibák."
 
-#: src/main.c:144
+#: src/main.c:138
 msgid "Cannot create a pipe for internal communication."
 msgstr "Nem lehet pipeot létrehozni a belsõ kommunikáció számára."
 
-#: src/main.c:204
+#: src/main.c:198
 #, c-format
 msgid "URL expected after -%s"
 msgstr "URL-t kell megadni %s után"
 
-#: src/main.c:212
+#: src/main.c:206
 msgid "No running ELinks found."
 msgstr "Nem található futó ELinks."
 
 #. The remote session(s) can not be created
-#: src/main.c:219
+#: src/main.c:213
 msgid "No remote session to connect to."
 msgstr ""
 
-#: src/main.c:228
+#: src/main.c:222
 msgid "Unable to encode session info."
 msgstr ""
 
-#: src/main.c:245
+#: src/main.c:239
 msgid "Unable to attach_terminal()."
 msgstr "Sikertelen attach_terminal()."
 
@@ -6488,12 +6501,12 @@ msgstr "Nincs program"
 msgid "No program specified for protocol %s."
 msgstr "Nincs program beállitva ehhez a protokollhoz: %s."
 
-#: src/sched/download.c:227 src/sched/download.c:324 src/sched/download.c:503
-#: src/sched/download.c:597
+#: src/sched/download.c:225 src/sched/download.c:322 src/sched/download.c:501
+#: src/sched/download.c:595
 msgid "Download error"
 msgstr "Hiba a letöltésben"
 
-#: src/sched/download.c:228 src/sched/download.c:598
+#: src/sched/download.c:226 src/sched/download.c:596
 #, c-format
 msgid ""
 "Could not create file '%s':\n"
@@ -6502,7 +6515,7 @@ msgstr ""
 "Hiba a fájlba irás közben: '%s': \n"
 "%s"
 
-#: src/sched/download.c:325
+#: src/sched/download.c:323
 #, c-format
 msgid ""
 "Error downloading %s:\n"
@@ -6513,7 +6526,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/sched/download.c:366
+#: src/sched/download.c:364
 #, c-format
 msgid ""
 "Download complete:\n"
@@ -6522,16 +6535,16 @@ msgstr ""
 "A letöltés befejezödött:\n"
 "%s"
 
-#: src/sched/download.c:504
+#: src/sched/download.c:502
 #, c-format
 msgid "'%s' is a directory."
 msgstr "'%s' könytár."
 
-#: src/sched/download.c:540
+#: src/sched/download.c:538
 msgid "File exists"
 msgstr "A fájl létezik"
 
-#: src/sched/download.c:541
+#: src/sched/download.c:539
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -6546,50 +6559,50 @@ msgstr ""
 "Az alternatív fájlnév:\n"
 "%s"
 
-#: src/sched/download.c:548
+#: src/sched/download.c:546
 msgid "Save under the alternative name"
 msgstr "Mentés más néven"
 
-#: src/sched/download.c:549
+#: src/sched/download.c:547
 msgid "Overwrite the original file"
 msgstr "Az eredeti fájl felülírása"
 
-#: src/sched/download.c:550
+#: src/sched/download.c:548
 msgid "Resume download of the original file"
 msgstr "A letöltés folytatása"
 
-#: src/sched/download.c:1033
+#: src/sched/download.c:1037
 msgid "What to do?"
 msgstr "Mit tegyünk?"
 
-#: src/sched/download.c:1036
+#: src/sched/download.c:1040
 msgid "Unknown type"
 msgstr "Ismeretlen fájlformátum"
 
-#: src/sched/download.c:1053
+#: src/sched/download.c:1057
 #, c-format
 msgid "What would you like to do with the file '%s' (type: %s%s%s)?"
 msgstr "Mit tegyünk a '%s' fájllal? (típus: %s%s%s)?"
 
-#: src/sched/download.c:1083
+#: src/sched/download.c:1087
 #, no-c-format
 msgid "Program ('%' will be replaced by the filename)"
 msgstr "Program (a '%' jel helyére a fájlnév helyettesítõdik be)"
 
-#: src/sched/download.c:1090
+#: src/sched/download.c:1094
 #, c-format
 msgid "The file will be opened with the program '%s'."
 msgstr "A fájlt a '%s' programmal fogjuk megnyitni."
 
-#: src/sched/download.c:1107
+#: src/sched/download.c:1111
 msgid "Open"
 msgstr "Megnyitás"
 
-#: src/sched/download.c:1120
+#: src/sched/download.c:1124
 msgid "Display"
 msgstr "Megjelenítés"
 
-#: src/sched/download.c:1124
+#: src/sched/download.c:1128
 msgid "Show header"
 msgstr "Fejléc megjelenítése"
 
@@ -6895,6 +6908,15 @@ msgstr "Lua konzol"
 #: src/scripting/lua/core.c:716
 msgid "Enter expression"
 msgstr "Kifejezés"
+
+#: src/scripting/ruby/core.c:60
+#, fuzzy
+msgid "Ruby Error"
+msgstr "Lua hiba"
+
+#: src/scripting/ruby/core.c:156 src/scripting/ruby/core.c:212
+msgid "Ruby Message"
+msgstr ""
 
 #. name:
 #: src/scripting/scripting.c:40
@@ -7268,4 +7290,3 @@ msgstr "Mentési hiba"
 #: src/viewer/text/view.c:1281
 msgid "Error writing to file"
 msgstr "Hiba a fájl irása közben"
-

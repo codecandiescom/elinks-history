@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 01:34+0100\n"
+"POT-Creation-Date: 2005-02-11 22:37+0100\n"
 "PO-Revision-Date: 2005-02-04 01:40+0100\n"
 "Last-Translator: Adam Golebiowski <adamg@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -27,7 +27,7 @@ msgstr "Zamknij"
 #: src/bfu/hierbox.c:444 src/bfu/hierbox.c:455 src/cache/dialogs.c:219
 #: src/config/dialogs.c:516 src/cookies/dialogs.c:421
 #: src/dialogs/document.c:44 src/dialogs/document.c:223
-#: src/dialogs/download.c:470 src/formhist/dialogs.c:212
+#: src/dialogs/download.c:476 src/formhist/dialogs.c:212
 #: src/globhist/dialogs.c:225 src/protocol/auth/dialogs.c:254
 msgid "Info"
 msgstr "Informacja"
@@ -53,8 +53,8 @@ msgstr "Wci¶nij spacjê by rozwin±æ ten folder."
 #: src/ecmascript/spidermonkey.c:1963 src/formhist/dialogs.c:179
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
 #: src/protocol/nntp/codes.c:132 src/protocol/protocol.c:227
-#: src/protocol/user.c:268 src/sched/download.c:231 src/sched/download.c:327
-#: src/sched/download.c:368 src/sched/download.c:507 src/sched/download.c:601
+#: src/protocol/user.c:268 src/sched/download.c:229 src/sched/download.c:325
+#: src/sched/download.c:366 src/sched/download.c:505 src/sched/download.c:599
 #: src/sched/error.c:42 src/sched/session.c:239 src/sched/session.c:706
 #: src/sched/session.c:730 src/sched/session.c:747
 #: src/scripting/lua/core.c:395 src/scripting/lua/core.c:476
@@ -176,8 +176,8 @@ msgstr "Nazwa"
 #: src/dialogs/edit.c:102 src/dialogs/edit.c:105 src/dialogs/menu.c:97
 #: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:205
 #: src/dialogs/options.c:283 src/mime/dialogs.c:131
-#: src/protocol/auth/dialogs.c:109 src/sched/download.c:551
-#: src/sched/download.c:1130 src/scripting/lua/core.c:396
+#: src/protocol/auth/dialogs.c:109 src/sched/download.c:549
+#: src/sched/download.c:1134 src/scripting/lua/core.c:396
 #: src/scripting/lua/core.c:477 src/scripting/lua/core.c:717
 #: src/viewer/text/search.c:1571 src/viewer/text/view.c:730
 msgid "Cancel"
@@ -470,7 +470,7 @@ msgid "Add"
 msgstr "Dodaj"
 
 #: src/bookmarks/dialogs.c:452 src/cookies/dialogs.c:425
-#: src/dialogs/download.c:476 src/dialogs/edit.c:99 src/formhist/dialogs.c:215
+#: src/dialogs/download.c:482 src/dialogs/edit.c:99 src/formhist/dialogs.c:215
 #: src/globhist/dialogs.c:232 src/protocol/auth/dialogs.c:256
 msgid "Clear"
 msgstr "Wyczy¶æ"
@@ -479,7 +479,7 @@ msgstr "Wyczy¶æ"
 #: src/bookmarks/dialogs.c:455 src/config/dialogs.c:521
 #: src/config/dialogs.c:946 src/cookies/dialogs.c:426
 #: src/dialogs/options.c:204 src/formhist/dialogs.c:216
-#: src/globhist/dialogs.c:235 src/sched/download.c:1114
+#: src/globhist/dialogs.c:235 src/sched/download.c:1118
 msgid "Save"
 msgstr "Zapisz"
 
@@ -4453,7 +4453,7 @@ msgstr "Wewnêtrzne informacje o nag³ówku"
 msgid "No header info."
 msgstr "Brak nag³ówka."
 
-#: src/dialogs/download.c:253 src/dialogs/menu.c:570 src/sched/download.c:365
+#: src/dialogs/download.c:253 src/dialogs/menu.c:570 src/sched/download.c:363
 msgid "Download"
 msgstr "Pobieranie"
 
@@ -4465,58 +4465,58 @@ msgstr "W tle"
 msgid "Background with notify"
 msgstr "W tle z powiadomieniem"
 
-#: src/dialogs/download.c:262 src/dialogs/download.c:471
+#: src/dialogs/download.c:262 src/dialogs/download.c:477
 msgid "Abort"
 msgstr "Przerwij"
 
 #. This requires more work to make locking work and query the user
-#: src/dialogs/download.c:263 src/dialogs/download.c:474
+#: src/dialogs/download.c:267 src/dialogs/download.c:480
 msgid "Abort and delete file"
 msgstr "Przerwij i skasuj plik"
 
 #. cant_delete_item
-#: src/dialogs/download.c:402
+#: src/dialogs/download.c:408
 #, c-format
 msgid "Sorry, but download \"%s\" cannot be interrupted."
 msgstr "Przykro mi, ale ¶ci±ganie \"%s\" nie mo¿e byæ przerwane."
 
 #. cant_delete_used_item
-#: src/dialogs/download.c:404
+#: src/dialogs/download.c:410
 #, c-format
 msgid "Sorry, but download \"%s\" is being used by something else."
 msgstr "Przykro mi, ale ¶ci±ganie \"%s\" jest u¿ywane przez co¶ innego."
 
 #. delete_marked_items_title
-#: src/dialogs/download.c:410
+#: src/dialogs/download.c:416
 msgid "Interrupt marked downloads"
 msgstr "Przerwij zaznaczone ¶ci±gania"
 
 #. delete_marked_items
-#: src/dialogs/download.c:412
+#: src/dialogs/download.c:418
 msgid "Interrupt marked downloads?"
 msgstr "Przerwaæ zaznaczone ¶ci±gania?"
 
 #. delete_item_title
-#: src/dialogs/download.c:418
+#: src/dialogs/download.c:424
 msgid "Interrupt download"
 msgstr "Przerwij ¶ci±ganie"
 
 #. delete_item
-#: src/dialogs/download.c:420
+#: src/dialogs/download.c:426
 msgid "Interrupt this download?"
 msgstr "Przerwaæ to ¶ci±ganie?"
 
 #. clear_all_items_title
-#: src/dialogs/download.c:422
+#: src/dialogs/download.c:428
 msgid "Interrupt all downloads"
 msgstr "Przerwij wszystkie ¶ci±gania"
 
 #. clear_all_items_title
-#: src/dialogs/download.c:424
+#: src/dialogs/download.c:430
 msgid "Do you really want to interrupt all downloads?"
 msgstr "Czy na pewno chcesz przerwaæ wszystkie ¶ci±gania?"
 
-#: src/dialogs/download.c:481
+#: src/dialogs/download.c:487
 msgid "Download manager"
 msgstr "Menad¿er pobierania"
 
@@ -5587,40 +5587,40 @@ msgstr ""
 "czy zmienna $HOME jest ustawiona poprawnie i czy masz prawo zapisu do "
 "katalogu domowego."
 
-#: src/lowlevel/interlink.c:327 src/lowlevel/select.c:339
+#: src/lowlevel/interlink.c:327 src/lowlevel/select.c:341
 #, c-format
 msgid "The call to %s failed: %d (%s)"
 msgstr "Wywo³anie %s nieudane: %d (%s)"
 
 #. Infinite loop prevention.
-#: src/lowlevel/select.c:342
+#: src/lowlevel/select.c:344
 #, c-format
 msgid "%d select() failures."
 msgstr "%d b³êdów select()."
 
-#: src/main.c:143
+#: src/main.c:138
 msgid "Cannot create a pipe for internal communication."
 msgstr "Nie mo¿na utworzyæ potoku dla wewnêtrznej komunikacji."
 
-#: src/main.c:203
+#: src/main.c:198
 #, c-format
 msgid "URL expected after -%s"
 msgstr "Spodziewany URL po -%s"
 
-#: src/main.c:211
+#: src/main.c:206
 msgid "No running ELinks found."
 msgstr "¯adnego dzia³aj±cego ELinksa nie znaleziono."
 
 #. The remote session(s) can not be created
-#: src/main.c:218
+#: src/main.c:213
 msgid "No remote session to connect to."
 msgstr "Brak zdalnej sesji, ¿eby siê przy³±czyæ."
 
-#: src/main.c:227
+#: src/main.c:222
 msgid "Unable to encode session info."
 msgstr "Nie jestem w stanie zdekodowaæ informacji o sesji."
 
-#: src/main.c:244
+#: src/main.c:239
 msgid "Unable to attach_terminal()."
 msgstr "Nie jestem w stanie przy³±czyæ terminala."
 
@@ -6673,12 +6673,12 @@ msgstr "Nie okre¶lono programu"
 msgid "No program specified for protocol %s."
 msgstr "Nie okre¶lono programu do obs³ugi protoko³u %s."
 
-#: src/sched/download.c:227 src/sched/download.c:324 src/sched/download.c:503
-#: src/sched/download.c:597
+#: src/sched/download.c:225 src/sched/download.c:322 src/sched/download.c:501
+#: src/sched/download.c:595
 msgid "Download error"
 msgstr "B³±d pobierania"
 
-#: src/sched/download.c:228 src/sched/download.c:598
+#: src/sched/download.c:226 src/sched/download.c:596
 #, c-format
 msgid ""
 "Could not create file '%s':\n"
@@ -6687,7 +6687,7 @@ msgstr ""
 "Nie mo¿na utworzyæ pliku '%s':\n"
 "%s"
 
-#: src/sched/download.c:325
+#: src/sched/download.c:323
 #, c-format
 msgid ""
 "Error downloading %s:\n"
@@ -6698,7 +6698,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/sched/download.c:366
+#: src/sched/download.c:364
 #, c-format
 msgid ""
 "Download complete:\n"
@@ -6707,17 +6707,17 @@ msgstr ""
 "Pobieranie zakoñczone:\n"
 "%s"
 
-#: src/sched/download.c:504
+#: src/sched/download.c:502
 #, c-format
 msgid "'%s' is a directory."
 msgstr "'%s' to katalog."
 
 #
-#: src/sched/download.c:540
+#: src/sched/download.c:538
 msgid "File exists"
 msgstr "Plik istnieje"
 
-#: src/sched/download.c:541
+#: src/sched/download.c:539
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -6732,50 +6732,50 @@ msgstr ""
 "Alternatywna nazwa pliku:\n"
 "%s"
 
-#: src/sched/download.c:548
+#: src/sched/download.c:546
 msgid "Save under the alternative name"
 msgstr "Zapisz pod alternatywn± nazw±"
 
-#: src/sched/download.c:549
+#: src/sched/download.c:547
 msgid "Overwrite the original file"
 msgstr "Nadpisz oryginalny plik"
 
-#: src/sched/download.c:550
+#: src/sched/download.c:548
 msgid "Resume download of the original file"
 msgstr "Wznów pobieranie oryginalnego pliku"
 
-#: src/sched/download.c:1033
+#: src/sched/download.c:1037
 msgid "What to do?"
 msgstr "Co mam zrobiæ?"
 
-#: src/sched/download.c:1036
+#: src/sched/download.c:1040
 msgid "Unknown type"
 msgstr "Nieznany typ"
 
-#: src/sched/download.c:1053
+#: src/sched/download.c:1057
 #, c-format
 msgid "What would you like to do with the file '%s' (type: %s%s%s)?"
 msgstr "Co chcesz zrobiæ z plikiem '%s' (typu %s%s%s)?"
 
-#: src/sched/download.c:1083
+#: src/sched/download.c:1087
 #, no-c-format
 msgid "Program ('%' will be replaced by the filename)"
 msgstr "Program ('%' zostanie zast±pione nazw± pliku)"
 
-#: src/sched/download.c:1090
+#: src/sched/download.c:1094
 #, c-format
 msgid "The file will be opened with the program '%s'."
 msgstr "Plik zostanie otwarty przy u¿yciu programu '%s'."
 
-#: src/sched/download.c:1107
+#: src/sched/download.c:1111
 msgid "Open"
 msgstr "Otwórz"
 
-#: src/sched/download.c:1120
+#: src/sched/download.c:1124
 msgid "Display"
 msgstr "Wy¶wietl"
 
-#: src/sched/download.c:1124
+#: src/sched/download.c:1128
 msgid "Show header"
 msgstr "Poka¿ nag³ówek"
 
@@ -6969,19 +6969,17 @@ msgstr "Protokó³ CSO phone-book nie jest obs³ugiwany."
 
 #: src/sched/error.c:105
 msgid ""
-"The proxy configuration encountered an error.\n"
-"This usually means that either an environment\n"
-"variable with proxy info or a proxy scripting\n"
-"hook did not provide proxy configuration info\n"
-"in the correct format."
+"Configuration of the proxy server failed.\n"
+"This might be caused by an incorrect proxy\n"
+"setting specified by an environment variable\n"
+"or returned by a scripting proxy hook.\n"
+"\n"
+"The correct syntax for proxy settings are\n"
+"a host name optionally followed by a colon\n"
+"and a port number. Example: 'localhost:8080'."
 msgstr ""
-"Konfiguracja proxy napotka³a b³±d.\n"
-"Zazwyczaj oznacza to, ¿e zmienna ¶rodowiska\n"
-"zawieraj±ca informacje o proxy lub zaczepienia\n"
-"skryptowe nie dostarczy³y informacji o konfiguracji\n"
-"proxy w odpowiednim formacie."
 
-#: src/sched/error.c:132
+#: src/sched/error.c:135
 msgid "Unknown error"
 msgstr "Nieznany b³±d"
 
@@ -7195,7 +7193,7 @@ msgstr "B³êdne zdarzenie %d"
 msgid "Could not read event: %d (%s)"
 msgstr "Nie mo¿na odczytaæ zdarzenia: %d (%s)"
 
-#: src/terminal/kbd.c:998
+#: src/terminal/kbd.c:1000
 msgid "Too many bytes read from the itrm!"
 msgstr "Zbyt du¿o bajtów przeczytanych z itrm!"
 
@@ -7479,6 +7477,19 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1281
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
+
+#~ msgid ""
+#~ "The proxy configuration encountered an error.\n"
+#~ "This usually means that either an environment\n"
+#~ "variable with proxy info or a proxy scripting\n"
+#~ "hook did not provide proxy configuration info\n"
+#~ "in the correct format."
+#~ msgstr ""
+#~ "Konfiguracja proxy napotka³a b³±d.\n"
+#~ "Zazwyczaj oznacza to, ¿e zmienna ¶rodowiska\n"
+#~ "zawieraj±ca informacje o proxy lub zaczepienia\n"
+#~ "skryptowe nie dostarczy³y informacji o konfiguracji\n"
+#~ "proxy w odpowiednim formacie."
 
 #~ msgid "Would you like to save the file '%s' (type: %s) or display it?"
 #~ msgstr "Czy chcesz zapisaæ plik '%s' (typu %s) czy wy¶wietliæ go?"

@@ -1,7 +1,13 @@
-/* $Id: error.h,v 1.24 2003/06/08 14:14:41 pasky Exp $ */
+/* $Id: error.h,v 1.25 2003/06/08 14:17:16 pasky Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
+
+
+/* Here you will found a chunk of functions useful for error states --- from
+ * reporting of various problems to generic error tests/workarounds to some
+ * tools to be used when you got into an error state already. Some of the
+ * functions are also useful for debugging. */
 
 
 /* This errfile thing is needed, as we don't have var-arg macros in standart,
@@ -14,21 +20,21 @@ extern unsigned char *errfile;
  * lying there commented out, as it may get handy). */
 #undef debug
 #define debug errfile = __FILE__, errline = __LINE__, elinks_debug
-void elinks_debug(unsigned char *, ...);
+void elinks_debug(unsigned char *fmt, ...);
 
 /* @error(format_string) is used to report non-fatal errors during the ELinks
  * run. It tries to (not that agressively) draw user's attention to the error,
  * but never dumps core or so. */
 #undef error
 #define error errfile = __FILE__, errline = __LINE__, elinks_error
-void elinks_error(unsigned char *, ...);
+void elinks_error(unsigned char *fmt, ...);
 
 /* @internal(format_string) is used to report fatal errors during the ELinks
  * run. It tries to draw user's attention to the error and dumps core if ELinks
  * is running in the DEBUG mode. */
 #undef internal
 #define internal errfile = __FILE__, errline = __LINE__, elinks_internal
-void elinks_internal(unsigned char *, ...);
+void elinks_internal(unsigned char *fmt, ...);
 
 
 /* This is our smart assert(). It is basically equivalent to if (x) internal(),
@@ -55,7 +61,7 @@ void force_dump(void);
  * So we are just workarounding buggy compilers. */
 /* This function should be always used only in context of compiler version
  * specific macros. */
-void do_not_optimize_here(void *);
+void do_not_optimize_here(void *x);
 
 #if defined(__GNUC__) && __GNUC__ == 2 && __GNUC_MINOR__ <= 7
 #define do_not_optimize_here_gcc_2_7(x) do_not_optimize_here(x)

@@ -1,5 +1,5 @@
 /* Ruby interface (scripting engine) */
-/* $Id: core.c,v 1.3 2005/01/19 16:15:41 jonas Exp $ */
+/* $Id: core.c,v 1.4 2005/01/20 09:44:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,7 +173,7 @@ init_erb_module(void)
 	rb_define_const(erb_module, "VERSION", rb_str_new2(VERSION_STRING));
 
 	home = elinks_home ? elinks_home : (unsigned char *) CONFDIR;
-	rb_define_const(erb_module, "home", rb_str_new(home));
+	rb_define_const(erb_module, "HOME", rb_str_new2(home));
 
 	rb_define_module_function(erb_module, "message", erb_module_message, 1);
 	rb_define_module_function(erb_module, "method_missing", erb_module_method_missing, -1);

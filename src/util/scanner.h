@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.4 2004/01/28 01:23:04 jonas Exp $ */
+/* $Id: scanner.h,v 1.5 2004/01/28 01:26:29 jonas Exp $ */
 
 #ifndef EL__UTIL_SCANNER_H
 #define EL__UTIL_SCANNER_H
@@ -86,8 +86,9 @@ struct scanner_info {
 };
 
 
-/* Initializes the scan table */
-void init_scanner_info(struct scanner_info *scanner_info);
+/* Initializes the scanner. */
+void init_scanner(struct scanner *scanner, unsigned char *string,
+		  struct scanner_info *scanner_info);
 
 /* The number of tokens in the scanners token table:
  * At best it should be big enough to contain properties with space separated

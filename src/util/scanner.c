@@ -1,5 +1,5 @@
 /* A pretty generic scanner */
-/* $Id: scanner.c,v 1.1 2004/01/28 00:57:56 jonas Exp $ */
+/* $Id: scanner.c,v 1.2 2004/01/28 01:26:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,7 +15,7 @@
 #include "util/string.h"
 
 
-void
+static void
 init_scanner_info(struct scanner_info *scanner_info)
 {
 	struct scan_table_info *info = scanner_info->scan_table_info;
@@ -146,3 +146,24 @@ get_scanner_token_debug(struct scanner *scanner)
 	return get_scanner_token(scanner);
 }
 #endif
+
+
+/* Initializers */
+
+void
+init_scanner(struct scanner *scanner, unsigned char *string,
+		 struct scanner_info *scanner_info)
+{
+	if (!scanner_info->initialized) {
+		init_scanner_info(scanner_info);
+		scanner_info->initialized = 1;
+	}
+
+	memset(scanner, 0, sizeof(struct scanner));
+
+	scanner->string = string;
+	scanner->position = string;
+	scanner->current = scanner->table;
+	scanner->info = scanner_info;
+	scanner->info->scan(scanner);
+}

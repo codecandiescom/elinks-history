@@ -1,3 +1,99 @@
+Sun Sep 21 14:47:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/inphist.c, globhist/dialogs.c,
+	osdep/os_dep.c, sched/session.c, terminal/draw.c, terminal/tab.c,
+	terminal/window.c, util/base64.c, util/error.c, util/hash.c,
+	viewer/text/form.c, viewer/text/view.c:
+
+	Trivial whitespace fixes.  
+
+Sun Sep 21 14:13:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/conv.c:
+
+	More whitespace fixes.  
+
+Sun Sep 21 14:10:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/conv.h:
+
+	Fix whitespace.  
+
+Sun Sep 21 13:01:53 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/conv.h:
+
+	Comment about the need to pass lowercased strings to month2num() was
+	added.  
+
+Sun Sep 21 13:00:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: protocol/http/date.c, protocol/ftpparse.c, util/conv.c,
+	util/conv.h:
+
+	month2num() was introduced, and is now used in protocol/http/date.c
+	and protocol/ftpparse.c.  
+
+Sun Sep 21 12:35:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/date.c:
+
+	parse_month() was even more optimized.  
+
+Sun Sep 21 12:29:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/date.c:
+
+	parse_month(): got rid of these useless break.  
+
+Sun Sep 21 12:24:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/date.c:
+
+	parse_month() was optimized.  
+
+Sun Sep 21 12:02:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/: date.c, date.h:
+
+	char -> unsigned char, my_timegm() now takes a pointer to a struct
+	tm as parameter.  
+
+Sun Sep 21 11:24:48 2003  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/lua/core.c:
+
+	Cleanup and harmonisation: handle errors at end of functions.  
+
+Sun Sep 21 11:08:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/lua/core.c:
+
+	l_current_url() code was simplified.  
+
+Sun Sep 21 10:48:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/pl.po:
+
+	Polish translation update by Witold.  
+
+Sun Sep 21 00:15:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/mime/backend/default.c:
+
+	I've got such associations: c - text/html spec - text/plain 
+	
+	but elinks recognize .spec as .c and display as html.  This patch
+	"repair" it. In addition dot.in.middle.c like names should be
+	handled correctly, too.  -- Witold Filipczyk tohu-bohu 
+	<witekfl@poczta.gazeta.pl> 
+
+Sun Sep 21 00:12:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/mime/backend/default.c:
+
+	Cleanup.  
+
 Sat Sep 20 12:05:30 2003  Laurent Monin <zas@norz.org>:
 
 	* src/osdep/os_dep.c:

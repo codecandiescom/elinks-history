@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.177 2003/07/25 09:09:56 zas Exp $ */
+/* $Id: parser.c,v 1.178 2003/07/25 09:34:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2504,9 +2504,7 @@ Some were added like top, ... --Zas
 enum hlink_type {
 	LT_UNKNOWN = 0,
 	LT_START,
-	LT_TOP,
 	LT_PARENT,
-	LT_UP,
 	LT_NEXT,
 	LT_PREV,
 	LT_CONTENTS,
@@ -2562,9 +2560,7 @@ struct lt_default_name {
 /* TODO: i18n */
 static struct lt_default_name lt_names[] = {
 	{ LT_START, "start" },
-	{ LT_TOP, "top" },
 	{ LT_PARENT, "parent" },
-	{ LT_UP, "up" },
 	{ LT_NEXT, "next" },
 	{ LT_PREV, "previous" },
 	{ LT_CONTENTS, "contents" },
@@ -2647,19 +2643,20 @@ html_link_parse(unsigned char *a, struct hlink *link)
 	if (!link->name) return 1;
 
 	/* TODO: fastfind */
-	if (!strcasecmp(link->name, "start"))
+	if (!strcasecmp(link->name, "start") ||
+	    !strcasecmp(link->name, "top") ||
+	    !strcasecmp(link->name, "home"))
 		link->type = LT_START;
-	else if (!strcasecmp(link->name, "top"))
-		link->type = LT_TOP;
-	else if (!strcasecmp(link->name, "up"))
-		link->type = LT_UP;
-	else if (!strcasecmp(link->name, "parent"))
+	else if (!strcasecmp(link->name, "parent") ||
+		 !strcasecmp(link->name, "up"))
 		link->type = LT_PARENT;
 	else if (!strcasecmp(link->name, "next"))
 		link->type = LT_NEXT;
-	else if (!strcasecmp(link->name, "prev") || !strcasecmp(link->name, "previous"))
+	else if (!strcasecmp(link->name, "prev") ||
+		 !strcasecmp(link->name, "previous"))
 		link->type = LT_PREV;
-	else if (!strcasecmp(link->name, "contents") || !strcasecmp(link->name, "toc"))
+	else if (!strcasecmp(link->name, "contents") ||
+		 !strcasecmp(link->name, "toc"))
 		link->type = LT_CONTENTS;
 	else if (!strcasecmp(link->name, "index"))
 		link->type = LT_INDEX;
@@ -2669,7 +2666,9 @@ html_link_parse(unsigned char *a, struct hlink *link)
 		link->type = LT_CHAPTER;
 	else if (!strcasecmp(link->name, "section"))
 		link->type = LT_SECTION;
-	else if (!strcasecmp(link->name, "subsection"))
+	else if (!strcasecmp(link->name, "subsection") ||
+		 !strcasecmp(link->name, "child") ||
+		 !strcasecmp(link->name, "sibling"))
 		link->type = LT_SUBSECTION;
 	else if (!strcasecmp(link->name, "appendix"))
 		link->type = LT_APPENDIX;
@@ -2681,7 +2680,9 @@ html_link_parse(unsigned char *a, struct hlink *link)
 		link->type = LT_BOOKMARK;
 	else if (!strcasecmp(link->name, "copyright"))
 		link->type = LT_COPYRIGHT;
-	else if (!strcasecmp(link->name, "author") || !strcasecmp(link->name, "made"))
+	else if (!strcasecmp(link->name, "author") ||
+		 !strcasecmp(link->name, "made") ||
+		 !strcasecmp(link->name, "owner"))
 		link->type = LT_AUTHOR;
 	else if (strcasestr(link->name, "icon") ||
 		 (link->content_type && strcasestr(link->content_type, "icon")))

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.135 2003/07/02 20:44:49 zas Exp $ */
+/* $Id: view.c,v 1.136 2003/07/02 20:47:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2158,18 +2158,6 @@ toggle(struct session *ses, struct f_data_c *f, int a)
 	draw_formatted(ses);
 }
 
-static inline void
-back(struct session *ses, struct f_data_c *f, int a)
-{
-	go_back(ses);
-}
-
-static inline void
-unback(struct session *ses, struct f_data_c *f, int a)
-{
-	go_unback(ses);
-}
-
 void
 selected_item(struct terminal *term, void *pitem, struct session *ses)
 {
@@ -3195,10 +3183,10 @@ send_event(struct session *ses, struct event *ev)
 				draw_formatted(ses);
 				goto x;
 			case ACT_BACK:
-				back(ses, NULL, 0);
+				go_back(ses);
 				goto x;
 			case ACT_UNBACK:
-				unback(ses, NULL, 0);
+				go_unback(ses);
 				goto x;
 			case ACT_RELOAD:
 				reload(ses, -1);

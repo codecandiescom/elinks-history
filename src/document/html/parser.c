@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.401 2004/04/23 22:28:40 pasky Exp $ */
+/* $Id: parser.c,v 1.402 2004/04/23 22:30:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2736,6 +2736,57 @@ free_and_return:
 
 
 
+
+unsigned char *
+skip_comment(unsigned char *html, unsigned char *eof)
+{
+	int comm = html + 4 <= eof && html[2] == '-' && html[3] == '-';
+
+	html += comm ? 4 : 2;
+	while (html < eof) {
+		if (!comm && html[0] == '>') return html + 1;
+		if (comm && html + 2 <= eof && html[0] == '-' && html[1] == '-') {
+			html += 2;
+			while (html < eof && *html == '-') html++;
+			while (html < eof && isspace(*html)) html++;
+			if (html >= eof) return eof;
+			if (*html == '>') return html + 1;
+			continue;
+		}
+		html++;
+	}
+	return eof;
+}
+
+static void
+process_head(unsigned char *head)
+{
+	unsigned char *refresh, *url;
+
+	refresh = parse_http_header(head, "Refresh", NULL);
+	if (refresh) {
+		url = parse_http_header_param(refresh, "URL");
+		if (url) {
+			unsigned char *saved_url = url;
+			/* Extraction of refresh time. */
+			unsigned long seconds;
+
+			errno = 0;
+			seconds = strtoul(refresh, NULL, 10);
+			if (errno || seconds > 7200) seconds = 0;
+
+			html_focusable(NULL);
+			url = join_urls(format.href_base, saved_url);
+			put_link_line("Refresh: ", saved_url, url, global_doc_opts->framename);
+			special_f(ff, SP_REFRESH, seconds, url);
+			mem_free(url);
+			mem_free(saved_url);
+		}
+		mem_free(refresh);
+	}
+}
+
+
 struct element_info {
 	unsigned char *name;
 	void (*func)(unsigned char *);
@@ -2815,56 +2866,6 @@ static struct element_info elements[] = {
 	{"XMP",		html_xmp,	2, 0},
 	{NULL,		NULL, 0, 0},
 };
-
-
-unsigned char *
-skip_comment(unsigned char *html, unsigned char *eof)
-{
-	int comm = html + 4 <= eof && html[2] == '-' && html[3] == '-';
-
-	html += comm ? 4 : 2;
-	while (html < eof) {
-		if (!comm && html[0] == '>') return html + 1;
-		if (comm && html + 2 <= eof && html[0] == '-' && html[1] == '-') {
-			html += 2;
-			while (html < eof && *html == '-') html++;
-			while (html < eof && isspace(*html)) html++;
-			if (html >= eof) return eof;
-			if (*html == '>') return html + 1;
-			continue;
-		}
-		html++;
-	}
-	return eof;
-}
-
-static void
-process_head(unsigned char *head)
-{
-	unsigned char *refresh, *url;
-
-	refresh = parse_http_header(head, "Refresh", NULL);
-	if (refresh) {
-		url = parse_http_header_param(refresh, "URL");
-		if (url) {
-			unsigned char *saved_url = url;
-			/* Extraction of refresh time. */
-			unsigned long seconds;
-
-			errno = 0;
-			seconds = strtoul(refresh, NULL, 10);
-			if (errno || seconds > 7200) seconds = 0;
-
-			html_focusable(NULL);
-			url = join_urls(format.href_base, saved_url);
-			put_link_line("Refresh: ", saved_url, url, global_doc_opts->framename);
-			special_f(ff, SP_REFRESH, seconds, url);
-			mem_free(url);
-			mem_free(saved_url);
-		}
-		mem_free(refresh);
-	}
-}
 
 
 #ifndef USE_FASTFIND

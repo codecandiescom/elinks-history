@@ -1,11 +1,7 @@
-/* $Id: ttime.h,v 1.4 2003/05/08 21:50:08 zas Exp $ */
+/* $Id: ttime.h,v 1.5 2003/09/26 18:28:47 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_TTIME_H
 #define EL__LOWLEVEL_TTIME_H
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #ifdef TIME_WITH_SYS_TIME
 #ifdef HAVE_SYS_TIME_H

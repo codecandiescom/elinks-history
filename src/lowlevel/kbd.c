@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.15 2002/11/30 18:10:30 pasky Exp $ */
+/* $Id: kbd.c,v 1.16 2002/12/02 14:48:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -512,8 +512,14 @@ ex:
 
 	RD(fg);
 
+	/* FIXME: goto fr on error ?? */
 	path = init_str();
+	if (!path) goto fr;
 	delete = init_str();
+	if (!delete) {
+		mem_free(path);
+		goto fr;
+	}
 
 	pl = 0;
 	while (1) {

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.26 2003/11/11 14:17:42 pasky Exp $ */
+/* $Id: options.inc,v 1.27 2003/11/11 20:11:08 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -293,7 +293,7 @@ struct option_info config_options_info[] = {
 		N_("Horizontal text margin.")),
 
 	INIT_OPT_BOOL("document.browse", N_("Document meta refresh"),
-		"refresh", 0, 0,
+		"refresh", 0, 1,
 		N_("Automatically follow document-specified refresh directives ('<meta>\n"
 		"refresh' tags). Web-page authors use these to instruct the browser\n"
 		"to reload a document at a given interval or to load another page.")),

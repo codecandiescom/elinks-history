@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.55 2002/10/17 19:56:18 zas Exp $ */
+/* $Id: bookmarks.c,v 1.56 2002/11/29 09:36:56 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -147,16 +147,28 @@ update_bookmark(struct bookmark *bm, const unsigned char *title,
 	if (title) {
 		mem_free(bm->title);
 		bm->title = stracpy((unsigned char *) title);
+		if (!bm->title) return 0;
 
 		bm->box_item = mem_realloc(bm->box_item,
 					   sizeof(struct listbox_item)
 					   + strlen(bm->title) + 1);
+		if (!bm->box_item) {
+			mem_free(bm->title);
+			return 0;
+		}
 		strcpy(bm->box_item->text, bm->title);
 	}
 
 	if (url) {
 		mem_free(bm->url);
 		bm->url = stracpy((unsigned char *) url);
+		if (!bm->url) {
+			if (title) {
+				mem_free(bm->title);
+				mem_free(bm->box_item);
+			}
+			return 0;
+		}
 	}
 	bookmarks_dirty = 1;
 
@@ -219,10 +231,15 @@ bookmark_simple_search(unsigned char *search_url, unsigned char *search_title)
 	/* Memorize last searched title */
 	if (bm_last_searched_name) mem_free(bm_last_searched_name);
 	bm_last_searched_name = stracpy(search_title);
+	if (!bm_last_searched_name) return 0;
 
 	/* Memorize last searched url */
 	if (bm_last_searched_url) mem_free(bm_last_searched_url);
 	bm_last_searched_url = stracpy(search_url);
+	if (!bm_last_searched_url) {
+		mem_free(bm_last_searched_name);
+		return 0;
+	}
 
 	if (!*search_title && !*search_url) {
 		set_bookmarks_visible(&bookmarks, test_true, NULL);
@@ -358,8 +375,10 @@ write_bookmarks_do(struct secure_save_info *ssi, struct list_head *bookmarks)
 	struct bookmark *bm;
 
 	foreach (bm, *bookmarks) {
-		unsigned char *p = stracpy(bm->title);
 		int i;
+		unsigned char *p = stracpy(bm->title);
+
+		if (!p) break;
 
 		for (i = strlen(p) - 1; i >= 0; i--)
 			if (p[i] < ' ')

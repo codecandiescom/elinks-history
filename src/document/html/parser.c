@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.467 2004/06/25 10:52:29 zas Exp $ */
+/* $Id: parser.c,v 1.468 2004/06/28 11:07:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -172,7 +172,7 @@ void
 put_chrs(unsigned char *start, int len,
 	 void (*put_chars)(void *, unsigned char *, int), void *f)
 {
-	if (par_format.align == AL_NONE) html_context.putsp = 0;
+	if (par_format.align == ALIGN_NONE) html_context.putsp = 0;
 	if (!len || html_top.invisible) return;
 	if (html_context.putsp == 1) {
 		put_chars(f, " ", 1);
@@ -185,11 +185,11 @@ put_chrs(unsigned char *start, int len,
 	}
 	if (!len) {
 		html_context.putsp = -1;
-		if (par_format.align == AL_NONE) html_context.putsp = 0;
+		if (par_format.align == ALIGN_NONE) html_context.putsp = 0;
 		return;
 	}
 	if (isspace(start[len - 1])) html_context.putsp = -1;
-	if (par_format.align == AL_NONE) html_context.putsp = 0;
+	if (par_format.align == ALIGN_NONE) html_context.putsp = 0;
 	html_context.was_br = 0;
 	put_chars(f, start, len);
 	html_context.position += len;
@@ -411,7 +411,7 @@ html_title(unsigned char *a)
 void
 html_center(unsigned char *a)
 {
-	par_format.align = AL_CENTER;
+	par_format.align = ALIGN_CENTER;
 	if (!html_context.table_level)
 		par_format.leftmargin = par_format.rightmargin = 0;
 }
@@ -422,13 +422,13 @@ html_linebrk(unsigned char *a)
 	unsigned char *al = get_attr_val(a, "align");
 
 	if (al) {
-		if (!strcasecmp(al, "left")) par_format.align = AL_LEFT;
-		else if (!strcasecmp(al, "right")) par_format.align = AL_RIGHT;
+		if (!strcasecmp(al, "left")) par_format.align = ALIGN_LEFT;
+		else if (!strcasecmp(al, "right")) par_format.align = ALIGN_RIGHT;
 		else if (!strcasecmp(al, "center")) {
-			par_format.align = AL_CENTER;
+			par_format.align = ALIGN_CENTER;
 			if (!html_context.table_level)
 				par_format.leftmargin = par_format.rightmargin = 0;
-		} else if (!strcasecmp(al, "justify")) par_format.align = AL_BLOCK;
+		} else if (!strcasecmp(al, "justify")) par_format.align = ALIGN_BLOCK;
 		mem_free(al);
 	}
 }
@@ -448,7 +448,7 @@ html_p(unsigned char *a)
 {
 	int_lower_bound(&par_format.leftmargin, html_context.margin);
 	int_lower_bound(&par_format.rightmargin, html_context.margin);
-	/*par_format.align = AL_LEFT;*/
+	/*par_format.align = ALIGN_LEFT;*/
 	html_linebrk(a);
 }
 
@@ -456,14 +456,14 @@ void
 html_address(unsigned char *a)
 {
 	par_format.leftmargin++;
-	par_format.align = AL_LEFT;
+	par_format.align = ALIGN_LEFT;
 }
 
 void
 html_blockquote(unsigned char *a)
 {
 	par_format.leftmargin += 2;
-	par_format.align = AL_LEFT;
+	par_format.align = ALIGN_LEFT;
 }
 
 void
@@ -477,21 +477,21 @@ html_h(int h, unsigned char *a,
 	if (h < 0) h = 0;
 
 	switch (par_format.align) {
-		case AL_LEFT:
+		case ALIGN_LEFT:
 			par_format.leftmargin = h * 2;
 			par_format.rightmargin = 0;
 			break;
-		case AL_RIGHT:
+		case ALIGN_RIGHT:
 			par_format.leftmargin = 0;
 			par_format.rightmargin = h * 2;
 			break;
-		case AL_CENTER:
+		case ALIGN_CENTER:
 			par_format.leftmargin = par_format.rightmargin = 0;
 			break;
-		case AL_BLOCK:
+		case ALIGN_BLOCK:
 			par_format.leftmargin = par_format.rightmargin = h * 2;
 			break;
-		case AL_NONE:
+		case ALIGN_NONE:
 			/* Silence compiler warnings */
 			break;
 	}
@@ -501,43 +501,43 @@ void
 html_h1(unsigned char *a)
 {
 	format.attr |= AT_BOLD;
-	html_h(1, a, AL_CENTER);
+	html_h(1, a, ALIGN_CENTER);
 }
 
 void
 html_h2(unsigned char *a)
 {
-	html_h(2, a, AL_LEFT);
+	html_h(2, a, ALIGN_LEFT);
 }
 
 void
 html_h3(unsigned char *a)
 {
-	html_h(3, a, AL_LEFT);
+	html_h(3, a, ALIGN_LEFT);
 }
 
 void
 html_h4(unsigned char *a)
 {
-	html_h(4, a, AL_LEFT);
+	html_h(4, a, ALIGN_LEFT);
 }
 
 void
 html_h5(unsigned char *a)
 {
-	html_h(5, a, AL_LEFT);
+	html_h(5, a, ALIGN_LEFT);
 }
 
 void
 html_h6(unsigned char *a)
 {
-	html_h(6, a, AL_LEFT);
+	html_h(6, a, ALIGN_LEFT);
 }
 
 void
 html_pre(unsigned char *a)
 {
-	par_format.align = AL_NONE;
+	par_format.align = ALIGN_NONE;
 	par_format.leftmargin = (par_format.leftmargin > 1);
 	par_format.rightmargin = 0;
 }
@@ -558,11 +558,11 @@ html_hr(unsigned char *a)
 
 	if (q >= 0 && q < 2) r = (unsigned char)BORDER_SHLINE;
 	html_stack_dup(ELEMENT_KILLABLE);
-	par_format.align = AL_CENTER;
+	par_format.align = ALIGN_CENTER;
 	mem_free_set(&format.link, NULL);
 	format.form = NULL;
 	html_linebrk(a);
-	if (par_format.align == AL_BLOCK) par_format.align = AL_CENTER;
+	if (par_format.align == ALIGN_BLOCK) par_format.align = ALIGN_CENTER;
 	par_format.leftmargin = par_format.rightmargin = html_context.margin;
 
 	i = get_width(a, "width", 1);
@@ -581,7 +581,7 @@ void
 html_table(unsigned char *a)
 {
 	par_format.leftmargin = par_format.rightmargin = html_context.margin;
-	par_format.align = AL_LEFT;
+	par_format.align = ALIGN_LEFT;
 	html_linebrk(a);
 	format.attr = 0;
 }
@@ -663,7 +663,7 @@ html_ul(unsigned char *a)
 	if (!html_context.table_level)
 		int_upper_bound(&par_format.leftmargin, par_format.width / 2);
 
-	par_format.align = AL_LEFT;
+	par_format.align = ALIGN_LEFT;
 	html_top.type = ELEMENT_DONT_KILL;
 }
 
@@ -697,7 +697,7 @@ html_ol(unsigned char *a)
 	if (!html_context.table_level)
 		int_upper_bound(&par_format.leftmargin, par_format.width / 2);
 
-	par_format.align = AL_LEFT;
+	par_format.align = ALIGN_LEFT;
 	html_top.type = ELEMENT_DONT_KILL;
 }
 
@@ -721,7 +721,7 @@ html_li(unsigned char *a)
 		if (t == P_PLUS) x[0] = '+';
 		put_chrs(x, 7, html_context.put_chars_f, html_context.part);
 		par_format.leftmargin += 2;
-		par_format.align = AL_LEFT;
+		par_format.align = ALIGN_LEFT;
 
 	} else {
 		unsigned char c = 0;
@@ -762,7 +762,7 @@ html_li(unsigned char *a)
 		put_chrs(n, nlen, html_context.put_chars_f, html_context.part);
 		put_chrs(".&nbsp;", 7, html_context.put_chars_f, html_context.part);
 		par_format.leftmargin += nlen + c + 2;
-		par_format.align = AL_LEFT;
+		par_format.align = ALIGN_LEFT;
 		html_top.next->parattr.list_number = par_format.list_number + 1;
 		par_format.list_number = 0;
 	}
@@ -780,7 +780,7 @@ html_dl(unsigned char *a)
 	if (par_format.list_level) par_format.leftmargin += 5;
 	par_format.list_level++;
 	par_format.list_number = 0;
-	par_format.align = AL_LEFT;
+	par_format.align = ALIGN_LEFT;
 	par_format.dd_margin = par_format.leftmargin;
 	html_top.type = ELEMENT_DONT_KILL;
 	if (!(par_format.flags & P_COMPACT)) {
@@ -793,7 +793,7 @@ void
 html_dt(unsigned char *a)
 {
 	kill_html_stack_until(0, "", "DL", NULL);
-	par_format.align = AL_LEFT;
+	par_format.align = ALIGN_LEFT;
 	par_format.leftmargin = par_format.dd_margin;
 	if (!(par_format.flags & P_COMPACT) && !has_attr(a, "compact"))
 		ln_break(2, html_context.line_break_f, html_context.part);
@@ -808,7 +808,7 @@ html_dd(unsigned char *a)
 				+ (html_context.table_level ? 3 : 8);
 	if (!html_context.table_level)
 		int_upper_bound(&par_format.leftmargin, par_format.width / 2);
-	par_format.align = AL_LEFT;
+	par_format.align = ALIGN_LEFT;
 }
 
 
@@ -1319,7 +1319,7 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	format.href_base = get_uri_reference(uri);
 	format.target_base = null_or_stracpy(options->framename);
 
-	par_format.align = AL_LEFT;
+	par_format.align = ALIGN_LEFT;
 	par_format.leftmargin = options->margin;
 	par_format.rightmargin = options->margin;
 

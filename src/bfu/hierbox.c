@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.169 2004/06/21 14:03:07 jonas Exp $ */
+/* $Id: hierbox.c,v 1.170 2004/06/28 11:07:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -427,7 +427,7 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 
 	if (box->sel->type == BI_FOLDER) {
 		msg_box(term, NULL, 0,
-		N_("Info"), AL_CENTER,
+		N_("Info"), ALIGN_CENTER,
 		_("Press space to expand this folder.", term),
 		NULL, 1,
 		N_("OK"), NULL, B_ESC | B_ENTER);
@@ -449,7 +449,7 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 	box->ops->lock(context->item);
 
 	msg_box(term, getml(context, NULL), MSGBOX_FREE_TEXT /* | MSGBOX_SCROLLABLE */,
-		N_("Info"), AL_LEFT,
+		N_("Info"), ALIGN_LEFT,
 		msg,
 		context, 1,
 		N_("OK"), done_listbox_context, B_ESC | B_ENTER);
@@ -593,7 +593,7 @@ print_delete_error(struct listbox_item *item, struct terminal *term,
 	}
 
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("Delete error"), AL_LEFT,
+		N_("Delete error"), ALIGN_LEFT,
 		msg.source,
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
@@ -696,7 +696,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 
 	if (!context->item) {
 		msg_box(term, getml(context, NULL), 0,
-			N_("Delete marked items"), AL_CENTER,
+			N_("Delete marked items"), ALIGN_CENTER,
 			N_("Delete marked items?"),
 			context, 2,
 			N_("Yes"), push_ok_delete_button, B_ENTER,
@@ -722,7 +722,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 	if (context->item->type == BI_FOLDER) {
 		box->ops->lock(context->item);
 		msg_box(term, getml(context, NULL), MSGBOX_FREE_TEXT,
-			N_("Delete folder"), AL_CENTER,
+			N_("Delete folder"), ALIGN_CENTER,
 			msg_text(term, N_("Delete the folder \"%s\" and its content?"),
 				 text),
 			context, 2,
@@ -735,7 +735,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 		box->ops->lock(context->item);
 
 		msg_box(term, getml(context, NULL), MSGBOX_FREE_TEXT,
-			N_("Delete item"), AL_LEFT,
+			N_("Delete item"), ALIGN_LEFT,
 			msg_text(term, N_("Delete \"%s\"?\n\n"
 				"%s"),
 				text, empty_string_or_(msg)),
@@ -799,7 +799,7 @@ push_hierbox_clear_button(struct dialog_data *dlg_data,
 	}
 
 	msg_box(term, getml(context, NULL), 0,
-		N_("Clear all items"), AL_CENTER,
+		N_("Clear all items"), ALIGN_CENTER,
 		N_("Do you really want to remove all items?"),
 		context, 2,
 		N_("Yes"), do_clear_browser, B_ENTER,

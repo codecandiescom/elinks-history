@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.145 2004/06/22 06:46:15 miciah Exp $ */
+/* $Id: inpfield.c,v 1.146 2004/06/28 11:07:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,7 +43,7 @@ check_number(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 	if (errno || !*widget_data->cdata || *end) {
 		msg_box(dlg_data->win->term, NULL, 0,
-			N_("Bad number"), AL_CENTER,
+			N_("Bad number"), ALIGN_CENTER,
 			N_("Number expected in field"),
 			NULL, 1,
 			N_("OK"), NULL, B_ENTER | B_ESC);
@@ -52,7 +52,7 @@ check_number(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 	if (l < widget->info.field.min || l > widget->info.field.max) {
 		msg_box(dlg_data->win->term, NULL, MSGBOX_FREE_TEXT,
-			N_("Bad number"), AL_CENTER,
+			N_("Bad number"), ALIGN_CENTER,
 			msg_text(dlg_data->win->term,
 				 N_("Number should be in the range from %d to %d."),
 				 widget->info.field.min, widget->info.field.max),
@@ -74,7 +74,7 @@ check_nonempty(struct dialog_data *dlg_data, struct widget_data *widget_data)
 			return 0;
 
 	msg_box(dlg_data->win->term, NULL, 0,
-		N_("Bad string"), AL_CENTER,
+		N_("Bad string"), ALIGN_CENTER,
 		N_("Empty string not allowed"),
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
@@ -111,7 +111,7 @@ dlg_format_field(struct terminal *term,
 	if (label) {
 		if (term) text_color = get_bfu_color(term, "dialog.text");
 
-		dlg_format_text_do(term, label, x, y, w, rw, text_color, AL_LEFT);
+		dlg_format_text_do(term, label, x, y, w, rw, text_color, ALIGN_LEFT);
 	}
 
 	/* XXX: We want the field and label on the same line if the terminal
@@ -119,7 +119,7 @@ dlg_format_field(struct terminal *term,
 	if (widget_data->widget->info.field.float_label && label) {
 		if (widget_data->widget->info.field.float_label != 2) {
 			(*y)--;
-			dlg_format_text_do(term, ":", x + label_width, y, w, rw, text_color, AL_LEFT);
+			dlg_format_text_do(term, ":", x + label_width, y, w, rw, text_color, ALIGN_LEFT);
 			w -= 2;
 			x += 2;
 		}
@@ -516,7 +516,7 @@ input_line_layouter(struct dialog_data *dlg_data)
 		- ses->status.show_tabs_bar;
 
 	dlg_format_field(win->term, dlg_data->widgets_data, 0,
-			 &y, win->term->width, NULL, AL_LEFT);
+			 &y, win->term->width, NULL, ALIGN_LEFT);
 }
 
 static int

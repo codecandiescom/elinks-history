@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.180 2004/06/25 00:25:35 jonas Exp $ */
+/* $Id: dialogs.c,v 1.181 2004/06/28 11:07:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,7 +54,7 @@ write_config_dialog(struct terminal *term, unsigned char *config_file,
 		if (!get_opt_bool("ui.success_msgbox")) return;
 
 		msg_box(term, NULL, MSGBOX_FREE_TEXT,
-			N_("Write config success"), AL_CENTER,
+			N_("Write config success"), ALIGN_CENTER,
 			msg_text(term, N_("Options were saved successfully to config file %s."),
 				 config_file),
 			NULL, 2,
@@ -99,7 +99,7 @@ write_config_dialog(struct terminal *term, unsigned char *config_file,
 		errmsg = straconcat(strerr, " (", strerror(stdio_error), ")", NULL);
 
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("Write config error"), AL_CENTER,
+		N_("Write config error"), ALIGN_CENTER,
 		msg_text(term, N_("Unable to write to config file %s.\n%s"),
 			 config_file, errmsg ? errmsg : strerr),
 		NULL, 1,
@@ -299,7 +299,7 @@ check_valid_option(struct dialog_data *dlg_data, struct widget_data *widget_data
 	commandline = 0;
 
 	msg_box(term, NULL, 0,
-		N_("Error"), AL_LEFT,
+		N_("Error"), ALIGN_LEFT,
 		N_("Bad option value."),
 		NULL, 1,
 		N_("OK"), NULL, B_ESC | B_ENTER);
@@ -366,11 +366,11 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	}
 
 	/* FIXME: Compute some meaningful maximal width. --pasky */
-	add_dlg_text(dlg, name, AL_LEFT, 0);
+	add_dlg_text(dlg, name, ALIGN_LEFT, 0);
 	add_dlg_field(dlg, _("Value", term), 0, 0, check_valid_option, MAX_STR_LEN, value, NULL);
 	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
 
-	add_dlg_text(dlg, desc, AL_LEFT, 0);
+	add_dlg_text(dlg, desc, ALIGN_LEFT, 0);
 
 	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);
@@ -397,7 +397,7 @@ push_edit_button(struct dialog_data *dlg_data,
 	    !option_types[option->type].read ||
 	    !option_types[option->type].set) {
 		msg_box(term, NULL, 0,
-			N_("Edit"), AL_LEFT,
+			N_("Edit"), ALIGN_LEFT,
 			N_("This option cannot be edited. This means that "
 			   "this is some special option like a folder - try "
 			   "to press a space in order to see its contents."),
@@ -436,7 +436,7 @@ push_add_button(struct dialog_data *dlg_data,
 
 invalid_option:
 		msg_box(term, NULL, 0,
-			N_("Add option"), AL_CENTER,
+			N_("Add option"), ALIGN_CENTER,
 			N_("Cannot add an option here."),
 			NULL, 1,
 			N_("OK"), NULL, B_ESC | B_ENTER);
@@ -634,7 +634,7 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 		if (!new_hop) return; /* out of mem */
 
 		msg_box(new_hop->term, getml(new_hop, NULL), MSGBOX_FREE_TEXT,
-			N_("Keystroke already used"), AL_CENTER,
+			N_("Keystroke already used"), ALIGN_CENTER,
 			msg_text(new_hop->term, N_("The keystroke \"%s\" "
 			"is currently used for \"%s\".\n"
 			"Are you sure you want to replace it?"),
@@ -659,7 +659,7 @@ check_keystroke(struct dialog_data *dlg_data, struct widget_data *widget_data)
 		return 0;
 
 	msg_box(hop->term, NULL, 0,
-		N_("Add keybinding"), AL_CENTER,
+		N_("Add keybinding"), ALIGN_CENTER,
 		N_("Invalid keystroke."),
 		NULL, 1,
 		N_("OK"), NULL, B_ESC | B_ENTER);
@@ -679,7 +679,7 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 
 	if (!item || !item->depth) {
 		msg_box(term, NULL, 0,
-			N_("Add keybinding"), AL_CENTER,
+			N_("Add keybinding"), ALIGN_CENTER,
 			N_("Need to select a keymap."),
 			NULL, 1,
 			N_("OK"), NULL, B_ESC | B_ENTER);

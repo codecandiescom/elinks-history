@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.54 2004/06/22 06:46:16 miciah Exp $ */
+/* $Id: download.c,v 1.55 2004/06/28 11:07:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,16 +189,16 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 	}
 
 	dlg_format_text_do(NULL, url, 0, &y, w, &rw,
-			dialog_text_color, AL_LEFT);
+			dialog_text_color, ALIGN_LEFT);
 
 	y++;
 	if (show_meter) y += 2;
 	dlg_format_text_do(NULL, msg, 0, &y, w, &rw,
-			dialog_text_color, AL_LEFT);
+			dialog_text_color, ALIGN_LEFT);
 
 	y++;
 	dlg_format_buttons(NULL, dlg_data->widgets_data, dlg_data->n, 0, &y, w,
-			   &rw, AL_CENTER);
+			   &rw, ALIGN_CENTER);
 
 	draw_dialog(dlg_data, w, y);
 
@@ -216,7 +216,7 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 	y = dlg_data->box.y + DIALOG_TB + 1;
 	x = dlg_data->box.x + DIALOG_LB;
 	dlg_format_text_do(term, url, x, &y, w, NULL,
-			dialog_text_color, AL_LEFT);
+			dialog_text_color, ALIGN_LEFT);
 
 	if (show_meter) {
 		y++;
@@ -228,11 +228,11 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 
 	y++;
 	dlg_format_text_do(term, msg, x, &y, w, NULL,
-			dialog_text_color, AL_LEFT);
+			dialog_text_color, ALIGN_LEFT);
 
 	y++;
 	dlg_format_buttons(term, dlg_data->widgets_data, dlg_data->n, x, &y, w,
-			   NULL, AL_CENTER);
+			   NULL, ALIGN_CENTER);
 
 	mem_free(url);
 	mem_free(msg);

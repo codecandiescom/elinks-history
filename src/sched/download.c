@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.296 2004/06/25 10:52:31 zas Exp $ */
+/* $Id: download.c,v 1.297 2004/06/28 11:07:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -229,7 +229,7 @@ download_error_dialog(struct file_download *file_download, int saved_errno)
 	if (!ses) return;
 
 	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-		N_("Download error"), AL_CENTER,
+		N_("Download error"), ALIGN_CENTER,
 		msg_text(ses->tab->term, N_("Could not create file %s: %s"),
 			 file_download->file, emsg),
 		NULL, 1,
@@ -314,7 +314,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 		if (!url) goto abort;
 
 		msg_box(term, NULL, MSGBOX_FREE_TEXT,
-			N_("Download error"), AL_CENTER,
+			N_("Download error"), ALIGN_CENTER,
 			msg_text(term, N_("Error downloading %s:\n\n%s"), url, errmsg),
 			get_download_ses(file_download), 1,
 			N_("OK"), NULL, B_ENTER | B_ESC /*,
@@ -350,7 +350,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 
 		if (url) {
 			msg_box(term, NULL, MSGBOX_FREE_TEXT,
-				N_("Download"), AL_CENTER,
+				N_("Download"), ALIGN_CENTER,
 				msg_text(term, N_("Download complete:\n%s"), url),
 				get_download_ses(file_download), 1,
 				N_("OK"), NULL, B_ENTER | B_ESC);
@@ -496,7 +496,7 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 	 * case. */
 	if (file_is_dir(ofile)) {
 		msg_box(term, NULL, MSGBOX_FREE_TEXT,
-			N_("Download error"), AL_CENTER,
+			N_("Download error"), ALIGN_CENTER,
 			msg_text(term, N_("'%s' is a directory."),
 				 ofile),
 			NULL, 1,
@@ -533,7 +533,7 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 	lun_hop->data = data;
 
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("File exists"), AL_CENTER,
+		N_("File exists"), ALIGN_CENTER,
 		msg_text(term, N_("This file already exists:\n"
 			"%s\n\n"
 			"The alternative filename is:\n"
@@ -624,7 +624,7 @@ create_download_file_do(struct terminal *term, unsigned char *file, void *data,
 
 	if (h == -1) {
 		msg_box(term, NULL, MSGBOX_FREE_TEXT,
-			N_("Download error"), AL_CENTER,
+			N_("Download error"), ALIGN_CENTER,
 			msg_text(term, N_("Could not create file '%s':\n%s"),
 				file, strerror(saved_errno)),
 			NULL, 1,
@@ -998,7 +998,7 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 	if (!handler) {
 		if (!get_cmd_opt_int("anonymous")) {
 			msg_box(type_query->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-				N_("Unknown type"), AL_CENTER,
+				N_("Unknown type"), ALIGN_CENTER,
 				msg_text(type_query->ses->tab->term, N_("Would you like to "
 					 "save the file '%s' (type: %s) "
 					 "or display it?"),
@@ -1009,7 +1009,7 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
 			msg_box(type_query->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-				N_("Unknown type"), AL_CENTER,
+				N_("Unknown type"), ALIGN_CENTER,
 				msg_text(type_query->ses->tab->term, N_("Would you like to "
 					 "display the file '%s' (type: %s)?"),
 					 filename.source, ct),
@@ -1025,7 +1025,7 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 			/* TODO: Improve the dialog to let the user correct the
 			 * used program. */
 			msg_box(type_query->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-				N_("What to do?"), AL_CENTER,
+				N_("What to do?"), ALIGN_CENTER,
 				msg_text(type_query->ses->tab->term, N_("Would you like to "
 					 "open the file '%s' (type: %s%s%s)\n"
 					 "with '%s', save it or display it?"),
@@ -1038,7 +1038,7 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
 			msg_box(type_query->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-				N_("What to do?"), AL_CENTER,
+				N_("What to do?"), ALIGN_CENTER,
 				msg_text(type_query->ses->tab->term, N_("Would you like to "
 					 "open the file '%s' (type: %s%s%s)\n"
 					 "with '%s', or display it?"),

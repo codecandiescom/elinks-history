@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.250 2004/06/27 18:34:31 pasky Exp $ */
+/* $Id: search.c,v 1.251 2004/06/28 11:07:11 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -861,7 +861,7 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 	if (!ses->search_word) {
 		if (!ses->last_search_word) {
 			msg_box(ses->tab->term, NULL, 0,
-				N_("Search"), AL_CENTER,
+				N_("Search"), ALIGN_CENTER,
 				N_("No previous search"),
 				NULL, 1,
 				N_("OK"), NULL, B_ENTER | B_ESC);
@@ -888,7 +888,7 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 				return;
 
 			msg_box(ses->tab->term, NULL, 0,
-				N_("Search"), AL_CENTER,
+				N_("Search"), ALIGN_CENTER,
 				hit_top ? N_("Search hit top, continuing at bottom.")
 					: N_("Search hit bottom, continuing at top."),
 				NULL, 1,
@@ -912,7 +912,7 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 	switch (get_opt_int("document.browse.search.show_not_found")) {
 		case 2:
 			msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-				N_("Search"), AL_CENTER,
+				N_("Search"), ALIGN_CENTER,
 				msg_text(ses->tab->term,
 					 N_("Search string '%s' not found"),
 					 ses->search_word),
@@ -943,7 +943,7 @@ typeahead_error(struct session *ses, unsigned char *typeahead)
 	switch (get_opt_int("document.browse.search.show_not_found")) {
 		case 2:
 			msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-				N_("Typeahead"), AL_CENTER,
+				N_("Typeahead"), ALIGN_CENTER,
 				msg_text(ses->tab->term, N_("Could not find "
 					 "a link with the text '%s'."),
 					 typeahead),
@@ -1270,7 +1270,7 @@ search_typeahead(struct session *ses, struct document_view *doc_view, int action
 			}
 
 			msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-				N_("Typeahead"), AL_CENTER,
+				N_("Typeahead"), ALIGN_CENTER,
 				msg_text(ses->tab->term,
 					 N_("No links in current document")),
 				NULL, 1,

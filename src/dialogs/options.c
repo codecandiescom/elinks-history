@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.148 2004/06/22 06:46:16 miciah Exp $ */
+/* $Id: options.c,v 1.149 2004/06/28 11:07:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,14 +148,14 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	dlg->layout.padding_top = 1;
 	dlg->udata = values;
 
-	add_dlg_text(dlg, _("Frame handling:", term), AL_LEFT, 1);
+	add_dlg_text(dlg, _("Frame handling:", term), ALIGN_LEFT, 1);
 	add_dlg_radio(dlg, _("No frames", term), 1, TERM_DUMB, values[TERM_OPT_TYPE]);
 	add_dlg_radio(dlg, _("VT 100 frames", term), 1,  TERM_VT100, values[TERM_OPT_TYPE]);
 	add_dlg_radio(dlg, _("Linux or OS/2 frames", term), 1, TERM_LINUX, values[TERM_OPT_TYPE]);
 	add_dlg_radio(dlg, _("FreeBSD frames", term), 1, TERM_FREEBSD, values[TERM_OPT_TYPE]);
 	add_dlg_radio(dlg, _("KOI8-R frames", term), 1, TERM_KOI8, values[TERM_OPT_TYPE]);
 
-	add_dlg_text(dlg, _("Color mode:", term), AL_LEFT, 1);
+	add_dlg_text(dlg, _("Color mode:", term), ALIGN_LEFT, 1);
 	add_dlg_radio(dlg, _("No colors (mono)", term), 2, COLOR_MODE_MONO, values[TERM_OPT_COLORS]);
 	add_dlg_radio(dlg, _("16 colors", term), 2, COLOR_MODE_16, values[TERM_OPT_COLORS]);
 #ifdef CONFIG_256_COLORS

@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.28 2004/06/22 06:46:17 miciah Exp $ */
+/* $Id: dialogs.c,v 1.29 2004/06/28 11:07:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,7 +138,7 @@ push_login_button(struct dialog_data *dlg_data,
 	formhist_data = box->sel->udata;
 
 	if (formhist_data->dontsave) {
-		msg_box(term, NULL, 0, N_("Form not saved"), AL_CENTER,
+		msg_box(term, NULL, 0, N_("Form not saved"), ALIGN_CENTER,
 			N_("No saved information for this URL.\n"
 			"If you want to save passwords for this URL, enable "
 			"it by the \"Toggle saving\" button."),

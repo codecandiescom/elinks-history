@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.68 2004/06/11 14:56:54 jonas Exp $ */
+/* $Id: tab.c,v 1.69 2004/06/28 11:07:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,7 +189,7 @@ close_tab(struct terminal *term, struct session *ses)
 	}
 
 	msg_box(term, NULL, 0,
-		N_("Close tab"), AL_CENTER,
+		N_("Close tab"), ALIGN_CENTER,
 		N_("Do you really want to close the current tab?"),
 		ses, 2,
 		N_("Yes"), (void (*)(void *)) really_close_tab, B_ENTER,
@@ -225,7 +225,7 @@ close_all_tabs_but_current(struct session *ses)
 	}
 
 	msg_box(ses->tab->term, NULL, 0,
-		N_("Close tab"), AL_CENTER,
+		N_("Close tab"), ALIGN_CENTER,
 		N_("Do you really want to close all except the current tab?"),
 		ses, 2,
 		N_("Yes"), (void (*)(void *)) really_close_tabs, B_ENTER,

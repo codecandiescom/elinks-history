@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.527 2004/06/23 20:16:03 pasky Exp $ */
+/* $Id: session.c,v 1.528 2004/06/28 11:07:11 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -234,7 +234,7 @@ print_error_dialog(struct session *ses, enum connection_state state,
 	/* Don't show error dialogs for missing CSS stylesheets */
 	if (!t || priority == PRI_CSS) return;
 	msg_box(ses->tab->term, NULL, MSGBOX_NO_INTL,
-		_("Error", ses->tab->term), AL_CENTER,
+		_("Error", ses->tab->term), ALIGN_CENTER,
 		t,
 		ses, 1,
 		_("OK", ses->tab->term), NULL, B_ENTER | B_ESC /*,
@@ -637,7 +637,7 @@ setup_first_session(struct session *ses, struct uri *uri)
 
 	if (!*get_opt_str("protocol.http.user_agent")) {
 		msg_box(term, NULL, 0,
-			N_("Warning"), AL_CENTER,
+			N_("Warning"), ALIGN_CENTER,
 			N_("You have empty string in protocol.http.user_agent - "
 			"this was a default value in the past, substituted by "
 			"default ELinks User-Agent string. However, currently "
@@ -657,7 +657,7 @@ setup_first_session(struct session *ses, struct uri *uri)
 		get_opt_rec(config_options, "config.saving_style_w")->flags |= OPT_TOUCHED;
 		if (get_opt_int("config.saving_style") != 3) {
 			msg_box(term, NULL, 0,
-				N_("Warning"), AL_CENTER,
+				N_("Warning"), ALIGN_CENTER,
 				N_("You have option config.saving_style set to "
 				"a de facto obsolete value. The configuration "
 				"saving algorithms of ELinks were changed from "
@@ -685,7 +685,7 @@ setup_first_session(struct session *ses, struct uri *uri)
 		first_use = 0;
 
 		msg_box(term, NULL, 0,
-			N_("Welcome"), AL_CENTER,
+			N_("Welcome"), ALIGN_CENTER,
 			N_("Welcome to ELinks!\n\n"
 			"Press ESC for menu. Documentation is available in "
 			"Help menu."),

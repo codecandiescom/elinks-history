@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.56 2004/06/25 10:52:29 zas Exp $ */
+/* $Id: button.c,v 1.57 2004/06/28 11:07:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,7 @@ dlg_format_buttons(struct terminal *term,
 
 		if (term) {
 			int i;
-			int p = x + (align == AL_CENTER ? (w - mw) / 2 : 0);
+			int p = x + (align == ALIGN_CENTER ? (w - mw) / 2 : 0);
 
 			for (i = i1; i < i2; i++) {
 				set_box(&widget_data[i].box,

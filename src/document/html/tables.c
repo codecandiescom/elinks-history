@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.241 2004/06/28 10:07:19 jonas Exp $ */
+/* $Id: tables.c,v 1.242 2004/06/28 11:07:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,7 @@
 /* Fix namespace clash on MacOS. */
 #define table table_elinks
 
-#define AL_TR	-1
+#define ALIGN_TR	-1
 
 #define VALIGN_TR	-1
 #define VALIGN_TOP	0
@@ -163,11 +163,11 @@ get_align(unsigned char *attr, int align)
 
 	if (!al) return align;
 
-	if (!(strcasecmp(al, "left"))) align = AL_LEFT;
-	else if (!(strcasecmp(al, "right"))) align = AL_RIGHT;
-	else if (!(strcasecmp(al, "center"))) align = AL_CENTER;
-	else if (!(strcasecmp(al, "justify"))) align = AL_BLOCK;
-	else if (!(strcasecmp(al, "char"))) align = AL_RIGHT; /* NOT IMPLEMENTED */
+	if (!(strcasecmp(al, "left"))) align = ALIGN_LEFT;
+	else if (!(strcasecmp(al, "right"))) align = ALIGN_RIGHT;
+	else if (!(strcasecmp(al, "center"))) align = ALIGN_CENTER;
+	else if (!(strcasecmp(al, "justify"))) align = ALIGN_BLOCK;
+	else if (!(strcasecmp(al, "char"))) align = ALIGN_RIGHT; /* NOT IMPLEMENTED */
 	mem_free(al);
 
 	return align;
@@ -470,12 +470,12 @@ parse_table(unsigned char *html, unsigned char *eof,
 	color_t last_bgcolor = bgcolor;
 	int t_namelen;
 	int in_cell = 0;
-	int l_al = AL_LEFT;
+	int l_al = ALIGN_LEFT;
 	int l_val = VALIGN_MIDDLE;
 	int colspan, rowspan;
 	int group = 0;
 	int i, j, k;
-	int c_al = AL_TR, c_val = VALIGN_TR, c_width = WIDTH_AUTO, c_span = 0;
+	int c_al = ALIGN_TR, c_val = VALIGN_TR, c_width = WIDTH_AUTO, c_span = 0;
 	int cols, rows;
 	int col = 0, row = -1;
 
@@ -540,7 +540,7 @@ qwe:
 			lbhp = NULL;
 		}
 		c_width = WIDTH_AUTO;
-		c_al = get_align(t_attr, AL_TR);
+		c_al = get_align(t_attr, ALIGN_TR);
 		c_val = get_valign(t_attr, VALIGN_TR);
 		get_column_width(t_attr, &c_width, sh);
 		c_span = get_num(t_attr, "span");
@@ -555,7 +555,7 @@ qwe:
 			lbhp = NULL;
 		}
 		c_span = 0;
-		c_al = AL_TR;
+		c_al = ALIGN_TR;
 		c_val = VALIGN_TR;
 		c_width = WIDTH_AUTO;
 		goto see;
@@ -620,7 +620,7 @@ qwe:
 
 		if (group) group--;
 		last_bgcolor = bgcolor;
-		l_al = get_align(t_attr, AL_LEFT);
+		l_al = get_align(t_attr, ALIGN_LEFT);
 		l_val = get_valign(t_attr, VALIGN_MIDDLE);
 		get_bgcolor(t_attr, &last_bgcolor);
 		mem_free_set(&l_fragment_id, get_attr_val(t_attr, "id"));
@@ -690,12 +690,12 @@ qwe:
 	}
 
 	cell->is_header = (toupper(t_name[1]) == 'H');
-	if (cell->is_header) cell->align = AL_CENTER;
+	if (cell->is_header) cell->align = ALIGN_CENTER;
 
 	if (group == 1) cell->group = 1;
 
 	if (col < table->columns_count) {
-		if (table->columns[col].align != AL_TR)
+		if (table->columns[col].align != ALIGN_TR)
 			cell->align = table->columns[col].align;
 		if (table->columns[col].valign != VALIGN_TR)
 			cell->valign = table->columns[col].valign;
@@ -833,7 +833,7 @@ get_cell_width(unsigned char *start, unsigned char *end,
 	if (max) *max = -1;
 	if (new_link_num) *new_link_num = link_num;
 
-	part = format_html_part(start, end, AL_LEFT, cellpadding, width, NULL,
+	part = format_html_part(start, end, ALIGN_LEFT, cellpadding, width, NULL,
 			        !!a, !!a, NULL, link_num);
 	if (!part) return;
 
@@ -1830,13 +1830,13 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	}
 
 	align = par_format.align;
-	if (align == AL_NONE || align == AL_BLOCK) align = AL_LEFT;
+	if (align == ALIGN_NONE || align == ALIGN_BLOCK) align = ALIGN_LEFT;
 
 	al = get_attr_val(attr, "align");
 	if (al) {
-		if (!strcasecmp(al, "left")) align = AL_LEFT;
-		else if (!strcasecmp(al, "center")) align = AL_CENTER;
-		else if (!strcasecmp(al, "right")) align = AL_RIGHT;
+		if (!strcasecmp(al, "left")) align = ALIGN_LEFT;
+		else if (!strcasecmp(al, "center")) align = ALIGN_CENTER;
+		else if (!strcasecmp(al, "right")) align = ALIGN_RIGHT;
 		mem_free(al);
 	}
 
@@ -1878,7 +1878,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	mem_free_if(bad_html);
 
-	state = init_html_parser_state(ELEMENT_DONT_KILL, AL_LEFT, 0, 0);
+	state = init_html_parser_state(ELEMENT_DONT_KILL, ALIGN_LEFT, 0, 0);
 
 	table->part = part;
 	table->border = border;
@@ -1951,10 +1951,10 @@ again:
 	{
 		int ww = par_format.width - table->real_width;
 
-		if (align == AL_CENTER)
+		if (align == ALIGN_CENTER)
 			x = (ww + par_format.leftmargin
 		     	     - par_format.rightmargin) >> 1;
-		else if (align == AL_RIGHT)
+		else if (align == ALIGN_RIGHT)
 			x = ww - par_format.rightmargin;
 		else
 			x = par_format.leftmargin;

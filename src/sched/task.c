@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.118 2004/06/23 07:38:26 zas Exp $ */
+/* $Id: task.c,v 1.119 2004/06/28 11:07:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,7 +178,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 
 	m2 = get_uri_string(uri, URI_PUBLIC);
 	msg_box(ses->tab->term, getml(task, NULL), MSGBOX_FREE_TEXT,
-		N_("Warning"), AL_CENTER,
+		N_("Warning"), ALIGN_CENTER,
 		msg_text(ses->tab->term, m1, m2),
 		task, 2,
 		N_("Yes"), post_yes, B_ENTER,

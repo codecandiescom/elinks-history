@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.144 2004/06/20 21:19:28 jonas Exp $ */
+/* $Id: dialog.c,v 1.145 2004/06/28 11:07:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -456,11 +456,11 @@ format_widgets(struct terminal *term, struct dialog_data *dlg_data,
 		switch (wdata->widget->type) {
 		case WIDGET_FIELD_PASS:
 		case WIDGET_FIELD:
-			dlg_format_field(term, wdata, x, y, w, rw, AL_LEFT);
+			dlg_format_field(term, wdata, x, y, w, rw, ALIGN_LEFT);
 			break;
 
 		case WIDGET_LISTBOX:
-			dlg_format_box(term, wdata, x, y, w, h, rw, AL_LEFT);
+			dlg_format_box(term, wdata, x, y, w, h, rw, ALIGN_LEFT);
 			break;
 
 		case WIDGET_TEXT:
@@ -489,7 +489,7 @@ format_widgets(struct terminal *term, struct dialog_data *dlg_data,
 
 				/* No horizontal space between checkboxes belonging to
 				 * the same group. */
-				dlg_format_checkbox(term, wdata, x, y, w, rw, AL_LEFT);
+				dlg_format_checkbox(term, wdata, x, y, w, rw, ALIGN_LEFT);
 				if (widgets > 1
 				    && group == widget_has_group(&wdata[1]))
 					(*y)--;
@@ -501,7 +501,7 @@ format_widgets(struct terminal *term, struct dialog_data *dlg_data,
 		 * of the dialog. */
 		case WIDGET_BUTTON:
 			dlg_format_buttons(term, wdata, widgets,
-					   x, y, w, rw, AL_CENTER);
+					   x, y, w, rw, ALIGN_CENTER);
 			return;
 		}
 	}

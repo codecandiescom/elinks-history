@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.180 2004/06/25 09:54:46 jonas Exp $ */
+/* $Id: connection.c,v 1.181 2004/06/28 11:07:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1013,8 +1013,7 @@ void
 abort_all_connections(void)
 {
 	while (!list_empty(queue)) {
-		set_connection_state(queue.next, S_INTERRUPTED);
-		abort_connection(queue.next);
+		abort_conn_with_state(queue.next, S_INTERRUPTED);
 	}
 
 	abort_all_keepalive_connections();

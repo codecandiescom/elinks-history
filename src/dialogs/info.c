@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.102 2004/06/22 10:52:44 pasky Exp $ */
+/* $Id: info.c,v 1.103 2004/06/28 11:07:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,7 @@ void
 menu_about(struct terminal *term, void *d, struct session *ses)
 {
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("About"), AL_CENTER,
+		N_("About"), ALIGN_CENTER,
 		get_dyn_full_version(term, 1),
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
@@ -127,7 +127,7 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 	}
 
 	msg_box(term, getml(info, NULL), MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
-		N_("Keys"), AL_LEFT,
+		N_("Keys"), ALIGN_LEFT,
 		keys.source,
 		info, 2,
 		N_("OK"), NULL, B_ENTER | B_ESC,
@@ -138,7 +138,7 @@ void
 menu_copying(struct terminal *term, void *d, struct session *ses)
 {
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("Copying"), AL_CENTER,
+		N_("Copying"), ALIGN_CENTER,
 		msg_text(term, N_("ELinks %s\n"
 			"\n"
 			"(C) 1999 - 2002 Mikulas Patocka\n"
@@ -174,7 +174,7 @@ get_ressource_info(struct terminal *term, void *data)
 void
 resource_info(struct terminal *term)
 {
-	refreshed_msg_box(term, 0, N_("Resources"), AL_LEFT,
+	refreshed_msg_box(term, 0, N_("Resources"), ALIGN_LEFT,
 			  get_ressource_info, NULL);
 }
 
@@ -192,7 +192,7 @@ get_memory_info(struct terminal *term, void *data)
 void
 memory_inf(struct terminal *term, void *d, struct session *ses)
 {
-	refreshed_msg_box(term, 0, N_("Memory info"), AL_LEFT,
+	refreshed_msg_box(term, 0, N_("Memory info"), ALIGN_LEFT,
 			  get_memory_info, NULL);
 }
 

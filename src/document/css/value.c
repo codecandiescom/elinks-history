@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.51 2004/06/22 06:46:16 miciah Exp $ */
+/* $Id: value.c,v 1.52 2004/06/28 11:07:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,16 +210,16 @@ css_parse_text_align_value(struct css_property_info *propinfo,
 	if (token->type != CSS_TOKEN_IDENT) return 0;
 
 	if (scanner_token_contains(token, "left")) {
-		value->text_align = AL_LEFT;
+		value->text_align = ALIGN_LEFT;
 
 	} else 	if (scanner_token_contains(token, "right")) {
-		value->text_align = AL_RIGHT;
+		value->text_align = ALIGN_RIGHT;
 
 	} else 	if (scanner_token_contains(token, "center")) {
-		value->text_align = AL_CENTER;
+		value->text_align = ALIGN_CENTER;
 
 	} else 	if (scanner_token_contains(token, "justify")) {
-		value->text_align = AL_BLOCK;
+		value->text_align = ALIGN_BLOCK;
 
 	} else {
 		return 0;

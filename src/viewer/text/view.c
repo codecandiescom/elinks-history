@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.542 2004/06/27 19:07:00 pasky Exp $ */
+/* $Id: view.c,v 1.543 2004/06/28 11:07:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1117,7 +1117,7 @@ save_formatted_finish(struct terminal *term, int h, void *data, int resume)
 	if (h == -1) return;
 	if (dump_to_file(document, h)) {
 		msg_box(term, NULL, 0,
-			N_("Save error"), AL_CENTER,
+			N_("Save error"), ALIGN_CENTER,
 			N_("Error writing to file"),
 			NULL, 1,
 			N_("OK"), NULL, B_ENTER | B_ESC);

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.155 2004/06/27 18:34:00 jonas Exp $ */
+/* $Id: cookies.c,v 1.156 2004/06/28 11:07:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -565,7 +565,7 @@ accept_cookie_dialog(struct session *ses, void *data)
 		add_to_string(&string, _("at quit time",  ses->tab->term));
 
 	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-		N_("Accept cookie?"), AL_LEFT,
+		N_("Accept cookie?"), ALIGN_LEFT,
 		msg_text(ses->tab->term, N_("Do you want to accept a cookie "
 		"from %s?\n\n"
 		"Name: %s\n"

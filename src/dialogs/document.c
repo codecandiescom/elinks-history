@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.94 2004/06/13 00:17:56 jonas Exp $ */
+/* $Id: document.c,v 1.95 2004/06/28 11:07:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@ nowhere_box(struct terminal *term, unsigned char *title)
 		title = N_("Info");
 
 	msg_box(term, NULL, 0,
-		title, AL_LEFT,
+		title, ALIGN_LEFT,
 		N_("You are nowhere!"),
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
@@ -220,7 +220,7 @@ document_info_dialog(struct session *ses)
 	}
 
 	msg_box(term, NULL, MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
-		N_("Info"), AL_LEFT,
+		N_("Info"), ALIGN_LEFT,
 		msg.source,
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
@@ -281,7 +281,7 @@ protocol_header_dialog(struct session *ses)
 			if (*headers)
 				/* Headers info message box. */
 				msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
-					N_("Header info"), AL_LEFT,
+					N_("Header info"), ALIGN_LEFT,
 					headers,
 					NULL, 1,
 					N_("OK"), NULL, B_ENTER | B_ESC);
@@ -293,7 +293,7 @@ protocol_header_dialog(struct session *ses)
 	}
 
 	msg_box(ses->tab->term, NULL, 0,
-		N_("Header info"), AL_LEFT,
+		N_("Header info"), ALIGN_LEFT,
 		N_("No header info."),
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);

@@ -1,4 +1,4 @@
-/* $Id: style.h,v 1.3 2003/12/01 14:36:52 pasky Exp $ */
+/* $Id: style.h,v 1.4 2004/06/28 11:07:10 jonas Exp $ */
 
 #ifndef EL__BFU_STYLE_H
 #define EL__BFU_STYLE_H
@@ -7,11 +7,11 @@ struct color_pair;
 struct terminal;
 
 enum format_align {
-	AL_LEFT,
-	AL_CENTER,
-	AL_RIGHT,
-	AL_BLOCK,
-	AL_NONE,
+	ALIGN_LEFT,
+	ALIGN_CENTER,
+	ALIGN_RIGHT,
+	ALIGN_BLOCK,
+	ALIGN_NONE,
 };
 
 /* Get the colors of the bfu element. If @color is 0 a style suitable for

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.433 2004/06/01 06:57:06 miciah Exp $ */
+/* $Id: view.c,v 1.434 2004/06/02 06:38:12 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1017,8 +1017,8 @@ quit:
 		if (doc_view) x = do_mouse_event(ses, ev, doc_view);
 
 		if (!x && check_mouse_button(ev, B_RIGHT)) {
-				set_window_ptr(ses->tab, ev->x, ev->y);
-				tab_menu(ses->tab->term, ses->tab, ses);
+			set_window_ptr(ses->tab, ev->x, ev->y);
+			tab_menu(ses->tab->term, ses->tab, ses);
 		}
 	}
 #endif /* CONFIG_MOUSE */

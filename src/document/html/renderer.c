@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.451 2004/06/22 22:42:25 zas Exp $ */
+/* $Id: renderer.c,v 1.452 2004/06/23 04:43:31 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -604,6 +604,44 @@ split_line(struct part *part)
 	return 0;
 }
 
+/* Insert @new_spaces spaces before the coordinates @x and @y,
+ * adding those spaces to whatever link is at those coordinates. */
+/* TODO: Integrate with move_links. */
+static void
+insert_spaces_in_link(struct part *part, int x, int y, int new_spaces)
+{
+	int i = part->document->nlinks;
+
+	x = X(x);
+	y = Y(y);
+
+	while (i--) {
+		struct link *link = &part->document->links[i];
+		int j = link->npoints;
+
+		while (j--) {
+			struct point *point = &link->points[j];
+
+			if (point->x != x || point->y != y)
+				continue;
+
+			if (!realloc_points(link, link->npoints + new_spaces))
+				return;
+
+			link->npoints += new_spaces;
+			point = &link->points[link->npoints - 1];
+
+			while (new_spaces--) {
+				point->x = --x;
+				point->y = y;
+				point--;
+			}
+
+			return;
+		}
+	}
+}
+
 /* This function is very rare exemplary of clean and beautyful code here.
  * Please handle with care. --pasky */
 static void
@@ -673,6 +711,7 @@ justify_line(struct part *part, int y)
 			int word_len = space_list[word + 1] - word_start;
 			int word_shift;
 			int new_start;
+			int new_spaces;
 
 			assert(word_len >= 0);
 			if_assert_failed continue;
@@ -684,39 +723,11 @@ justify_line(struct part *part, int y)
 			copy_chars(part, new_start, y, word_len,
 				   &line[word_start]);
 
-			/* There are now (new_start - prev_end) spaces before
-			 * the word. */
-			if (word) {
-				/* The out commented code is a proposed fix for
-				 * bug 60. The align test page seems to work
-				 * but it failes for
-				 * http://www.chez.com/aikidossiers/francais/origines.htm
-				 */
-#if 0
-				int new_spaces = new_start - prev_end - 1;
-				struct link *link = part->document->nlinks > 0
-					? &part->document->links[part->document->nlinks - 1]
-					: NULL;
-#endif
+			new_spaces = new_start - prev_end - 1;
+			if (word && new_spaces) {
 				move_links(part, prev_end + 1, y, new_start, y);
-#if 0
-				/* FIXME: Move to move_links() --jonas */
-				if (new_spaces
-				    && link
-				    && link->points[link->npoints - 1].x < new_start
-				    && link->points[link->npoints - 1].y >= y
-				    && realloc_points(link, link->npoints + new_spaces)) {
-					struct point *point = &link->points[link->npoints];
-					int x = prev_end + 1;
-
-					link->npoints += new_spaces;
-
-					for (; new_spaces > 0; new_spaces--, point++, x++) {
-						point->x = x;
-						point->y = y;
-					}
-				}
-#endif
+				insert_spaces_in_link(part,
+						      new_start, y, new_spaces);
 			}
 
 			prev_end = new_start + word_len;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.366 2004/01/30 19:25:55 jonas Exp $ */
+/* $Id: view.c,v 1.367 2004/02/05 10:18:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -416,7 +416,7 @@ up(struct session *ses, struct document_view *doc_view, int a)
 /* Fix namespace clash on MacOS. */
 #define scrool scroll_elinks
 
-static void
+void
 scroll(struct session *ses, struct document_view *doc_view, int a)
 {
 	int max_height;

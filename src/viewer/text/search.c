@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.193 2004/02/05 10:03:56 jonas Exp $ */
+/* $Id: search.c,v 1.194 2004/02/05 10:18:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1020,6 +1020,20 @@ search_link_text(struct document *document, int current_link, int i,
 	return -1;
 }
 
+/* The typeahead input line takes up one of the viewed lines so we
+ * might have to scroll if the link is under the input line. */
+static inline void
+fixup_typeahead_match(struct session *ses, struct document_view *doc_view)
+{
+	int current_link = doc_view->vs->current_link;
+	struct link *link = &doc_view->document->links[current_link];
+
+	doc_view->height -= 1;
+	if (!in_viewy(doc_view, link))
+		scroll(ses, doc_view, 1);
+	doc_view->height += 1;
+}
+
 static inline void
 draw_link_text(struct terminal *term, struct document_view *doc_view, int chars)
 {	
@@ -1171,6 +1185,7 @@ link_typeahead_handler(struct input_line *line, int action)
 
 	switch (do_typeahead(ses, doc_view, buffer, action)) {
 		case TYPEAHEAD_MATCHED:
+			fixup_typeahead_match(ses, doc_view);
 			draw_formatted(ses, 0);
 			draw_link_text(ses->tab->term, doc_view, strlen(buffer));
 			return INPUT_LINE_PROCEED;

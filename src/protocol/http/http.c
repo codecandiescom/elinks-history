@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.364 2004/11/15 00:54:34 jonas Exp $ */
+/* $Id: http.c,v 1.365 2004/11/17 19:09:36 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1333,14 +1333,18 @@ again:
 	}
 
 	if (h == 401) {
-		d = parse_header(conn->cached->head, "WWW-Authenticate", NULL);
-		if (d) {
+		unsigned char *str;
+
+		d = parse_header(conn->cached->head, "WWW-Authenticate", &str);
+		while (d) {
 			if (!strncasecmp(d, "Basic", 5)) {
 				unsigned char *realm = get_header_param(d, "realm");
 
 				if (realm) {
 					add_auth_entry(uri, realm, NULL, NULL, 0);
 					mem_free(realm);
+					mem_free(d);
+					break;
 				}
 			}
 #ifdef CONFIG_SSL_DIGEST
@@ -1354,9 +1358,12 @@ again:
 				mem_free_if(realm);
 				mem_free_if(nonce);
 				mem_free_if(opaque);
+				mem_free(d);
+				break;
 			}
 #endif
 			mem_free(d);
+			d = parse_header(str, "WWW-Authenticate", &str);
 		}
 	}
 

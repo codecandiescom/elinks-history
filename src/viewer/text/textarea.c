@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.83 2004/06/17 00:35:33 jonas Exp $ */
+/* $Id: textarea.c,v 1.84 2004/06/17 05:22:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -433,7 +433,6 @@ free_and_return:
 enum frame_event_status
 textarea_op_up(struct form_state *fs, struct form_control *fc, int rep)
 {
-	unsigned char *position;
 	struct line_info *line;
 	int y;
 
@@ -443,10 +442,10 @@ textarea_op_up(struct form_state *fs, struct form_control *fc, int rep)
 	line = format_text(fs->value, fc->cols, !!fc->wrap);
 	if (!line) return FRAME_EVENT_OK;
 
-	position = fs->value + fs->state;
 
 	for (y = 0; line[y].start; y++) {
 		int wrap;
+		unsigned char *position = fs->value + fs->state;
 
 		if (position < line[y].start) continue;
 
@@ -474,7 +473,6 @@ free_and_return:
 enum frame_event_status
 textarea_op_down(struct form_state *fs, struct form_control *fc, int rep)
 {
-	unsigned char *position;
 	struct line_info *line;
 	int y;
 
@@ -484,10 +482,10 @@ textarea_op_down(struct form_state *fs, struct form_control *fc, int rep)
 	line = format_text(fs->value, fc->cols, !!fc->wrap);
 	if (!line) return FRAME_EVENT_OK;
 
-	position = fs->value + fs->state;
 
 	for (y = 0; line[y].start; y++) {
 		int wrap;
+		unsigned char *position = fs->value + fs->state;
 
 		if (position < line[y].start) continue;
 

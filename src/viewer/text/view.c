@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.583 2004/09/10 16:13:19 jonas Exp $ */
+/* $Id: view.c,v 1.584 2004/09/12 02:27:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -766,28 +766,23 @@ frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_
 	} else if (link) {
 		doc_view->vs->current_link = link - doc_view->document->links;
 
-		/* FIXME: We need to handle both up and down button events in
-		 * order to make it possible to press down to open a menu,
-		 * moving the mouse, and releasing the button to select an
-		 * item. It is standard behaviour available in most popular
-		 * GUIs.
-		 *
-		 * Miciah has suggested to add @last_mouse_event member to the
-		 * {struct terminal} and check against that. */
-		if (!link_is_textinput(link)
-		    && (check_mouse_action(ev, B_UP)
-			/* || check_mouse_action(ev, B_DOWN) */)) {
+		if (!link_is_textinput(link)) {
 
 			status = FRAME_EVENT_OK;
 
 			refresh_view(ses, doc_view, 0);
 
-			if (check_mouse_button(ev, B_LEFT))
-				status = enter(ses, doc_view, 0);
-			else if (check_mouse_button(ev, B_MIDDLE))
-				open_current_link_in_new_tab(ses, 1);
-			else
+			if (check_mouse_button(ev, B_LEFT)
+			     || check_mouse_button(ev, B_MIDDLE)) {
+				if (check_mouse_action(ev, B_DOWN))
+					do_not_ignore_next_mouse_event(ses->tab->term);
+				else if (check_mouse_button(ev, B_LEFT))
+					status = enter(ses, doc_view, 0);
+				else if (check_mouse_button(ev, B_MIDDLE))
+					open_current_link_in_new_tab(ses, 1);
+			} else {
 				link_menu(ses->tab->term, NULL, ses);
+			}
 		}
 
 	} else if (check_mouse_button(ev, B_LEFT)) {

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.35 2004/06/20 09:08:23 zas Exp $ */
+/* $Id: parse.c,v 1.36 2004/06/20 09:31:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -254,14 +254,13 @@ get_num(unsigned char *a, unsigned char *name)
 
 /* Parse 'width[%],....'-like string, and return width value in chars.
  * If @trunc is set, it will limit width value to current usable width. */
-static int
+static inline int
 parse_width(unsigned char *str, int trunc)
 {
 	unsigned char *end;
 	int percentage = 0;
 	int value;
 	int len;
-	int maxwidth;
 
 	while (isspace(*str)) str++;
 	for (len = 0; str[len] && str[len] != ','; len++);
@@ -274,22 +273,30 @@ parse_width(unsigned char *str, int trunc)
 	while (len && isspace(str[len - 1])) len--;
 	if (!len) return -1;
 
-	maxwidth = par_format.width - par_format.leftmargin - par_format.rightmargin;
-
 	errno = 0;
 	value = strtoul((char *)str, (char **)&end, 10);
 	if (errno) return -1;
 
-	if (percentage) {
-		if (trunc)
+#define WIDTH_PIXELS2CHARS(value) ((value) + (HTML_CHAR_WIDTH - 1) / 2) / HTML_CHAR_WIDTH;
+
+	if (trunc) {
+		int maxwidth = par_format.width - (par_format.leftmargin + par_format.rightmargin);
+
+		if (percentage)
 			value = value * maxwidth / 100;
 		else
-			return -1;
+			value = WIDTH_PIXELS2CHARS(value);
+
+		if (value > maxwidth) value = maxwidth;
+
 	} else {
-		value = (value + (HTML_CHAR_WIDTH - 1) / 2) / HTML_CHAR_WIDTH;
+		if (percentage)
+			return -1;	/* No sense, we need @trunc for percentage. */
+		else
+			value = WIDTH_PIXELS2CHARS(value);
 	}
 
-	if (trunc && value > maxwidth) value = maxwidth;
+#undef WIDTH_2CHAR
 
 	if (value < 0) value = 0;
 

@@ -1,3 +1,64 @@
+Fri Feb  6 22:41:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inphist.h, config/urlhist.c, dialogs/exmode.c,
+	dialogs/menu.c, globhist/globhist.c, scripting/lua/core.c,
+	viewer/text/search.c:
+
+	Use macros for input history initialization.  
+
+Fri Feb  6 18:38:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: renderer.c, html/renderer.c, plain/renderer.c:
+
+	Move cache entry defragmentation checking to render_document().  
+
+Fri Feb  6 15:58:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/renderer.c:
+
+	Make sort_links() static.  
+
+Fri Feb  6 13:03:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/cmdline.c, config/opttypes.c, util/color.c,
+	util/color.h:
+
+	get_color_name() -> get_color_string(), and take a hex color buffer
+	as arg that will be filled and returned if no color name is found.  
+
+Fri Feb  6 12:49:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/cmdline.c, config/opttypes.c, util/color.c,
+	util/color.h:
+
+	get_color_name(): Don't allocate the returned color name.  
+
+Fri Feb  6 12:47:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/color.c:
+
+	Cleanup.  
+
+Fri Feb  6 12:31:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/cmdline.c, config/options.h, globhist/dialogs.c:
+
+	I was reading through some old patches and it reminded me that it
+	would maybe be better to let the option value union have a
+	big_number member of type long.  
+
+Thu Feb  5 23:19:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Fix assert() failure in documents without links. Reported by Miciah.  
+
+Thu Feb  5 23:17:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Fix assertm() reported by Daniel Macks <dmacks@netspace.org>.  
+
 Thu Feb  5 19:47:05 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/viewer/text/search.c:

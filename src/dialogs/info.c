@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.71 2003/11/12 16:52:00 jonas Exp $ */
+/* $Id: info.c,v 1.72 2003/11/13 17:56:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,6 +73,7 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 		ACT_FIND_NEXT,
 		ACT_FIND_NEXT_BACK,
 		ACT_DOWNLOAD,
+		ACT_TOGGLE_HTML_PLAIN,
 
 		ACT_NONE,
 	};

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.89 2004/06/20 15:44:30 pasky Exp $ */
+/* $Id: cmdline.c,v 1.90 2004/06/20 16:15:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -567,6 +567,7 @@ redir_cmd(struct option *option, unsigned char ***argv, int *argc)
 		fprintf(stderr, "ELinks now determines the -stdin option value automatically.\n");
 		fprintf(stderr, "In the future versions ELinks will report error when you will\n");
 		fprintf(stderr, "continue to use this option.\a\n");
+		return NULL;
 
 	} else {
 		return gettext("Internal consistency error");

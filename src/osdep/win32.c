@@ -1,11 +1,9 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.9 2003/10/27 01:50:17 pasky Exp $ */
+/* $Id: win32.c,v 1.10 2003/10/27 02:21:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#if defined(_WIN32)
 
 #include <windows.h>
 #include <signal.h>
@@ -15,8 +13,9 @@
 
 #include "elinks.h"
 
-#include "osdep/os_depx.h"
 #include "terminal/terminal.h"
+
+#ifdef WIN32
 
 
 static int w32_input_pid;

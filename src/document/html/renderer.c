@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.109 2003/06/16 15:01:41 pasky Exp $ */
+/* $Id: renderer.c,v 1.110 2003/06/16 15:13:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -388,15 +388,15 @@ del_chars(struct part *part, int x, int y)
 static int
 split_line(struct part *part)
 {
-	register int i;
+	register int x;
 	register int tmp;
 
-	for (i = overlap(par_format); i >= par_format.leftmargin; i--)
-		if (i < part->spaces_len && part->spaces[i])
+	for (x = overlap(par_format); x >= par_format.leftmargin; x--)
+		if (x < part->spaces_len && part->spaces[x])
 			goto split;
 
-	for (i = par_format.leftmargin; i < part->cx ; i++)
-		if (i < part->spaces_len && part->spaces[i])
+	for (x = par_format.leftmargin; x < part->cx ; x++)
+		if (x < part->spaces_len && part->spaces[x])
 			goto split;
 
 	tmp = part->cx + par_format.rightmargin;
@@ -406,27 +406,27 @@ split_line(struct part *part)
 	return 0;
 
 split:
-	tmp = i + par_format.rightmargin;
+	tmp = x + par_format.rightmargin;
 	if (tmp > part->x)
 		part->x = tmp;
 
 	if (part->data) {
 #ifdef DEBUG
-		if ((POS(i, part->cy) & 0xff) != ' ')
-			internal("bad split: %c", (char)POS(i, part->cy));
+		if ((POS(x, part->cy) & 0xff) != ' ')
+			internal("bad split: %c", (char)POS(x, part->cy));
 #endif
-		move_chars(part, i + 1, part->cy, par_format.leftmargin, part->cy + 1);
-		del_chars(part, i, part->cy);
+		move_chars(part, x + 1, part->cy, par_format.leftmargin, part->cy + 1);
+		del_chars(part, x, part->cy);
 	}
 
-	i++; /* Since we were using (i + 1) only later... */
+	x++; /* Since we were using (x + 1) only later... */
 
-	tmp = part->spaces_len - i;
-	if (tmp > 0) /* 0 is possible and i'm paranoiac ... --Zas */
-		memmove(part->spaces, part->spaces + i, tmp);
+	tmp = part->spaces_len - x;
+	if (tmp > 0) /* 0 is possible and x'm paranoiac ... --Zas */
+		memmove(part->spaces, part->spaces + x, tmp);
 
 	/* XXX: is this correct ??? tmp <= 0 case ? --Zas */
-	memset(part->spaces + tmp, 0, i);
+	memset(part->spaces + tmp, 0, x);
 
 	tmp = part->spaces_len - par_format.leftmargin;
 	if (tmp > 0)
@@ -436,15 +436,14 @@ split:
 
 	part->cy++;
 
-	if (part->cx == i) {
+	if (part->cx == x) {
 		part->cx = -1;
 		if (part->y < part->cy) part->y = part->cy;
 		return 2;
 	} else {
-		part->cx -= i - par_format.leftmargin;
+		part->cx -= x - par_format.leftmargin;
 		if (part->y < part->cy + 1) part->y = part->cy + 1;
 		return 1;
-
 	}
 }
 

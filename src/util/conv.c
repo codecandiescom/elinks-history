@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.43 2003/07/21 16:24:54 jonas Exp $ */
+/* $Id: conv.c,v 1.44 2003/07/21 22:58:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -440,7 +440,6 @@ strtolx(unsigned char *str, unsigned char **end)
 	}
 
 	return num;
-
 }
 
 

@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.18 2004/01/18 15:19:56 pasky Exp $ */
+/* $Id: value.c,v 1.19 2004/01/18 15:25:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,7 +49,7 @@ rgb_component_parser(unsigned char **string, unsigned char terminator)
 	return part;
 }
 
-static int
+int
 css_parse_color_value(struct css_property_info *propinfo,
 		      union css_property_value *value,
 		      unsigned char **string)
@@ -88,7 +88,7 @@ css_parse_color_value(struct css_property_info *propinfo,
 }
 
 
-static int
+int
 css_parse_font_attribute_value(struct css_property_info *propinfo,
 				union css_property_value *value,
 				unsigned char **string)
@@ -156,7 +156,7 @@ css_parse_font_attribute_value(struct css_property_info *propinfo,
 }
 
 
-static int
+int
 css_parse_text_align_value(struct css_property_info *propinfo,
 			   union css_property_value *value,
 			   unsigned char **string)
@@ -189,23 +189,16 @@ css_parse_text_align_value(struct css_property_info *propinfo,
 }
 
 
-static css_property_value_parser css_value_parsers[CSS_VT_LAST] = {
-	/* CSS_VT_NONE */		NULL,
-	/* CSS_VT_COLOR */		css_parse_color_value,
-	/* CSS_VT_FONT_ATTRIBUTE */	css_parse_font_attribute_value,
-	/* CSS_VT_TEXT_ALIGN */		css_parse_text_align_value,
-};
-
 int
 css_parse_value(struct css_property_info *propinfo,
 		union css_property_value *value,
 		unsigned char **string)
 {
-	assert(string && value && propinfo->value_type < CSS_VT_LAST);
-	assert(css_value_parsers[propinfo->value_type]);
+	assert(string && value && propinfo);
+	assert(propinfo->parser);
 
 	/* Skip the leading whitespaces. */
 	skip_whitespace(*string);
 
-	return css_value_parsers[propinfo->value_type](propinfo, value, string);
+	return propinfo->parser(propinfo, value, string);
 }

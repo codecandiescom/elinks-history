@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.19 2003/06/20 17:28:02 jonas Exp $ */
+/* $Id: mime.c,v 1.20 2003/06/20 20:20:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@ done_mime(void)
 
 /* Checks if application/x-<extension> has any handlers. */
 static inline unsigned char *
-try_extension_type(unsigned char *extension)
+check_extension_type(unsigned char *extension)
 {
 	/* Trim the extension so only last .<extension> is used. */
 	unsigned char *trimmed = strrchr(extension, '.');
@@ -57,31 +57,36 @@ try_extension_type(unsigned char *extension)
 	return NULL;
 }
 
+/* Check if part of the extension coresponds to a supported encoding so
+ * that it can be stripped. */
 static inline unsigned char *
-try_encoding_type(unsigned char *extension)
+check_encoding_type(unsigned char *extension)
 {
 	enum stream_encoding encoding = guess_encoding(extension);
 	unsigned char **extensions;
 	int extensionlen;
 
-	/* Yes yes this is a bit dull, having to do the dirty work but
-	 * that's life. */
+	/* Yes this is a bit dull, having to do guess_extension() all over */
 	if (encoding == ENCODING_NONE) return NULL;
 	extensions = listext_encoded(encoding);
 	extensionlen = strlen(extension);
 
-	for (; extensions && *extensions; extensions++) {
+	while (extensions && *extensions) {
 		int len = strlen(*extensions);
 		unsigned char *snip = extension + extensionlen - len;
 		unsigned char *ctype;
+		unsigned char tmp;
 
-		if (extensionlen <= len && strncmp(snip + 1, *extensions, len))
+		if (extensionlen <= len && strncmp(snip+1, *extensions, len)) {
+			extensions++;
 			continue;
+		}
 
-		len = *snip;
+		tmp = *snip;
 		*snip = '\0';
 		ctype = get_content_type_backends(extension);
-		*snip = len;
+		*snip = tmp;
+
 		return ctype;
 	}
 
@@ -120,9 +125,8 @@ get_content_type(unsigned char *head, unsigned char *url)
 	if (extension) {
 		unsigned char *ctype = get_content_type_backends(extension);
 
-		if (!ctype) ctype = try_encoding_type(extension);
-
-		if (!ctype) ctype = try_extension_type(extension);
+		if (!ctype) ctype = check_encoding_type(extension);
+		if (!ctype) ctype = check_extension_type(extension);
 
 		mem_free(extension);
 

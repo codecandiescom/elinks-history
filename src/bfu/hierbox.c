@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.103 2003/11/26 11:29:40 miciah Exp $ */
+/* $Id: hierbox.c,v 1.104 2003/11/26 14:31:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -443,7 +443,7 @@ print_delete_error(struct listbox_item *item, struct terminal *term,
 		if (!msg) return;
 
 		msg_box(term, getml(msg, NULL), MSGBOX_FREE_TEXT,
-			N_("Deleting used item"), AL_CENTER,
+			N_("Deleting used item"), AL_LEFT,
 			msg_text(term, N_("Sorry, but the item \"%s\""
 				 " is being used by something else.\n\n"
 				 "%s"),
@@ -571,7 +571,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 		box->ops->lock(delete_info->item);
 
 		msg_box(term, getml(delete_info, msg, NULL), MSGBOX_FREE_TEXT,
-			N_("Delete item"), AL_CENTER,
+			N_("Delete item"), AL_LEFT,
 			msg_text(term, N_("Delete \"%s\"?\n\n"
 				"%s"),
 				delete_info->item->text, empty_string_or_(msg)),

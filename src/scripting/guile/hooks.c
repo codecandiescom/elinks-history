@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.23 2003/12/13 05:17:36 miciah Exp $ */
+/* $Id: hooks.c,v 1.24 2003/12/21 06:54:11 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,6 +25,31 @@ internal_module(void)
 	return scm_c_resolve_module("elinks internal");
 }
 
+
+/* We need to catch and handle errors because, otherwise, Guile will kill us.
+ * Unfortunately, I do not know Guile, but this seems to work... -- Miciah */
+static SCM
+error_handler(void *data, SCM tag, SCM throw_args)
+{
+	return SCM_BOOL_F;
+}
+
+static SCM
+get_guile_hook_do(void *data)
+{
+	unsigned char *hook = data;
+
+	return scm_c_module_lookup(internal_module(), hook);
+}
+
+static SCM
+get_guile_hook(unsigned char *hook)
+{
+	return scm_internal_catch(SCM_BOOL_T, get_guile_hook_do, hook,
+				  error_handler, NULL);
+}
+
+
 /* The events that will trigger the functions below and what they are expected
  * to do is explained in doc/events.txt */
 
@@ -40,7 +65,9 @@ script_hook_goto_url(va_list ap, void *data)
 
 	if (*url == NULL || !*url[0]) return EHS_NEXT;
 
-	proc = scm_c_module_lookup(internal_module(), "%goto-url-hook");
+	proc = get_guile_hook("%goto-url-hook");
+	if (SCM_FALSEP(proc)) return EHS_NEXT;
+
 	x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(*url));
 
 	if (SCM_STRINGP(x)) {
@@ -70,7 +97,9 @@ script_hook_follow_url(va_list ap, void *data)
 
 	if (*url == NULL || !*url[0]) return EHS_NEXT;
 
-	proc = scm_c_module_lookup(internal_module(), "%follow-url-hook");
+	proc = get_guile_hook("%follow-url-hook");
+	if (SCM_FALSEP(proc)) return EHS_NEXT;
+
 	x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(*url));
 
 	if (SCM_STRINGP(x)) {
@@ -103,7 +132,9 @@ script_hook_pre_format_html(va_list ap, void *data)
 
 	if (*html == NULL || *html_len == 0) return EHS_NEXT;
 
-	proc = scm_c_module_lookup(internal_module(), "%pre-format-html-hook");
+	proc = get_guile_hook("%pre-format-html-hook");
+	if (SCM_FALSEP(proc)) return EHS_NEXT;
+
 	x = scm_call_2(SCM_VARIABLE_REF(proc), scm_makfrom0str(url),
 		       scm_mem2string(*html, *html_len));
 
@@ -124,8 +155,12 @@ script_hook_get_proxy(va_list ap, void *data)
 {
 	unsigned char **retval = va_arg(ap, unsigned char **);
 	unsigned char *url = va_arg(ap, unsigned char *);
-	SCM proc = scm_c_module_lookup(internal_module(), "%get-proxy-hook");
-	SCM x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(url));
+	SCM proc = get_guile_hook("%get-proxy-hook");
+	SCM x;
+
+	if (SCM_FALSEP(proc)) return EHS_NEXT;
+
+	x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(url));
 
 	evhook_use_params(retval && url);
 
@@ -141,7 +176,9 @@ script_hook_get_proxy(va_list ap, void *data)
 static enum evhook_status
 script_hook_quit(va_list ap, void *data)
 {
-	SCM proc = scm_c_module_lookup(internal_module(), "%quit-hook");
+	SCM proc = get_guile_hook("%quit-hook");
+
+	if (SCM_FALSEP(proc)) return EHS_NEXT;
 
 	scm_call_0(SCM_VARIABLE_REF(proc));
 

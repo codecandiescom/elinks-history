@@ -1,5 +1,5 @@
 /* Guile interface (scripting engine) */
-/* $Id: core.c,v 1.10 2003/12/13 04:40:43 miciah Exp $ */
+/* $Id: core.c,v 1.11 2003/12/21 06:54:11 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,6 +49,8 @@ init_guile(struct module *module)
 	unsigned char *path;
 
 	scm_init_guile();
+
+	if (!elinks_home) return;
 
 	/* Remember the current module. */
 	user_module = scm_current_module();

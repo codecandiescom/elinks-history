@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.85 2004/07/28 03:36:36 jonas Exp $ */
+/* $Id: connect.c,v 1.86 2004/08/01 08:55:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,7 +97,8 @@ exception(void *data)
 }
 
 void
-make_connection(struct connection *conn, int port, int *sock,
+make_connection(struct connection *conn, int port,
+		struct connection_socket *socket,
 		void (*func)(struct connection *))
 {
 	unsigned char *host = get_uri_string(conn->uri, URI_DNS_HOST);
@@ -117,7 +118,7 @@ make_connection(struct connection *conn, int port, int *sock,
 	}
 
 	c_i->func = func;
-	c_i->sock = sock;
+	c_i->sock = &socket->fd;
 	c_i->port = port;
 	c_i->triedno = -1;
 	c_i->addr = NULL;

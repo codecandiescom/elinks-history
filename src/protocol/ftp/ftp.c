@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.160 2004/08/01 08:45:55 jonas Exp $ */
+/* $Id: ftp.c,v 1.161 2004/08/01 08:55:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,7 +231,7 @@ ftp_protocol_handler(struct connection *conn)
 	if (!has_keepalive_connection(conn)) {
 		int port = get_uri_port(conn->uri);
 
-		make_connection(conn, port, &conn->socket.fd, ftp_login);
+		make_connection(conn, port, &conn->socket, ftp_login);
 
 	} else {
 		ftp_send_retr_req(conn, S_SENT);

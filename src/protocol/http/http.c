@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.311 2004/08/01 08:45:55 jonas Exp $ */
+/* $Id: http.c,v 1.312 2004/08/01 08:55:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -278,7 +278,7 @@ http_protocol_handler(struct connection *conn)
 			return;
 		}
 
-		make_connection(conn, p, &conn->socket.fd, http_send_header);
+		make_connection(conn, p, &conn->socket, http_send_header);
 	} else {
 		http_send_header(conn);
 	}

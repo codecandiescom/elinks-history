@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.19 2004/07/22 17:15:09 pasky Exp $ */
+/* $Id: socket.h,v 1.20 2004/08/01 08:55:09 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -7,6 +7,7 @@
 #include <sys/socket.h> /* OS/2 needs this after sys/types.h */
 
 struct connection;
+struct connection_socket;
 
 struct conn_info {
 	struct sockaddr_storage *addr; /* array of addresses */
@@ -34,7 +35,7 @@ struct read_buffer {
 };
 
 void close_socket(struct connection *, int *);
-void make_connection(struct connection *, int, int *, void (*)(struct connection *));
+void make_connection(struct connection *, int, struct connection_socket *, void (*)(struct connection *));
 void dns_found(/* struct connection */ void *, int);
 int get_pasv_socket(struct connection *, int, unsigned char *);
 #ifdef CONFIG_IPV6

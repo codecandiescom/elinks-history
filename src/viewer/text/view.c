@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.656 2004/11/12 22:10:24 zas Exp $ */
+/* $Id: view.c,v 1.657 2004/11/12 22:20:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,7 +153,7 @@ move_page_up(struct session *ses, struct document_view *doc_view)
 	return FRAME_EVENT_REFRESH;
 }
 
-void
+enum frame_event_status
 move_link(struct session *ses, struct document_view *doc_view, int direction,
 	  int wraparound_bound, int wraparound_link)
 {
@@ -161,7 +161,7 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 	int count;
 
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
-	if_assert_failed return;
+	if_assert_failed return FRAME_EVENT_OK;
 
 	ses->navigate_mode = NAVIGATE_LINKWISE;
 
@@ -219,6 +219,8 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 			set_textarea(doc_view, -direction);
 		}
 	}
+
+	return FRAME_EVENT_REFRESH;
 }
 
 enum frame_event_status

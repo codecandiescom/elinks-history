@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.68 2004/11/12 22:10:24 zas Exp $ */
+/* $Id: view.h,v 1.69 2004/11/12 22:20:01 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -24,11 +24,11 @@ void detach_formatted(struct document_view *doc_view);
 
 enum frame_event_status move_page_down(struct session *ses, struct document_view *doc_view);
 enum frame_event_status move_page_up(struct session *ses, struct document_view *doc_view);
-void move_link(struct session *ses, struct document_view *doc_view,
-	       int direction, int wraparound_bound, int wraparound_link);
+enum frame_event_status move_link(struct session *ses, struct document_view *doc_view,
+				  int direction, int wraparound_bound, int wraparound_link);
 
-#define move_link_next(ses, doc_view) move_link(ses, doc_view,  1, doc_view->document->nlinks - 1, 0)
-#define move_link_prev(ses, doc_view) move_link(ses, doc_view, -1, 0, doc_view->document->nlinks - 1)
+#define move_link_next(ses, doc_view) move_link(ses, doc_view,  1, (doc_view)->document->nlinks - 1, 0)
+#define move_link_prev(ses, doc_view) move_link(ses, doc_view, -1, 0, (doc_view)->document->nlinks - 1)
 
 enum frame_event_status move_link_dir(struct session *ses, struct document_view *doc_view,
 				      int dir_x, int dir_y);

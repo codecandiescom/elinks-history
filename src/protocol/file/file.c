@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.124 2003/08/23 04:44:58 jonas Exp $ */
+/* $Id: file.c,v 1.125 2003/08/30 11:32:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -354,7 +354,7 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct string *page)
 
 	/* Setup @dircolor so it's easy to check if we should color dirs. */
 	if (get_opt_int("document.browse.links.color_dirs")) {
-		color_to_string(*(color_t *) get_opt_ptr("document.colors.dirs"),
+		color_to_string(get_opt_color("document.colors.dirs"),
 				(unsigned char *) &dircolor);
 	} else {
 		dircolor[0] = 0;

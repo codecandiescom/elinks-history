@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.123 2003/07/02 16:26:17 zas Exp $ */
+/* $Id: view.c,v 1.124 2003/07/02 16:46:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -360,7 +360,7 @@ draw_link(struct terminal *t, struct f_data_c *scr, int l)
 	int vx, vy;
 	int f = 0;
 
-	assert(scr && scr->vs);
+	assert(t && scr && scr->vs);
 	assertm(!scr->link_bg, "link background not empty");
 
 	if (l == -1) return;
@@ -442,16 +442,17 @@ draw_link(struct terminal *t, struct f_data_c *scr, int l)
 static inline void
 free_link(struct f_data_c *scr)
 {
-	if (scr->link_bg) {
-		mem_free(scr->link_bg);
-		scr->link_bg = NULL;
-	}
+	assert(scr);
+
+	if (scr->link_bg) mem_free(scr->link_bg), scr->link_bg = NULL;
 	scr->link_bg_n = 0;
 }
 
 static void
 clear_link(struct terminal *t, struct f_data_c *scr)
 {
+	assert(t && scr);
+
 	if (scr->link_bg) {
 		int i;
 
@@ -477,6 +478,8 @@ get_range(struct f_data *f, int y, int yw, int l,
 	  struct search **s1, struct search **s2)
 {
 	int i;
+
+	assert(f && s1 && s2);
 
 	*s1 = *s2 = NULL;
 	for (i = y < 0 ? 0 : y; i < y + yw && i < f->y; i++) {
@@ -505,14 +508,17 @@ static int
 is_in_range(struct f_data *f, int y, int yw, unsigned char *txt,
 	    int *min, int *max)
 {
-	int found = 0;
-	int l = strlen(txt);
 	struct search *s1, *s2;
+	int found = 0;
+	int l;
+
+	assert(f && txt && min && max);
 
 	if (min || max) *min = MAXINT, *max = 0;
+	l = strlen(txt);
 	if (get_range(f, y, yw, l, &s1, &s2)) return 0;
 	for (; s1 <= s2; s1++) {
-		int i;
+		register int i;
 
 		if (srch_cmp(s1->c, txt[0])) {
 unable_to_handle_kernel_paging_request___oops:
@@ -535,28 +541,36 @@ unable_to_handle_kernel_paging_request___oops:
 static void
 get_searched(struct f_data_c *scr, struct point **pt, int *pl)
 {
-	int xp = scr->xp;
-	int yp = scr->yp;
-	int xw = scr->xw;
-	int yw = scr->yw;
-	int vx = scr->vs->view_posx;
-	int vy = scr->vs->view_pos;
-	struct search *s1, *s2;
-	int l;
-	unsigned char c;
 	struct point *points = NULL;
+	struct search *s1, *s2;
+	int xp, yp;
+	int xw, yw;
+	int vx, vy;
+	int l;
 	int len = 0;
+	unsigned char c;
+
+	assert(scr && scr->vs && pt && pl);
 
 	if (!scr->search_word || !*scr->search_word || !(*scr->search_word)[0])
 		return;
+
+	xp = scr->xp;
+	yp = scr->yp;
+	xw = scr->xw;
+	yw = scr->yw;
+	vx = scr->vs->view_posx;
+	vy = scr->vs->view_pos;
+
 	get_search_data(scr->f_data);
 	l = strlen(*scr->search_word);
-	c = (*scr->search_word)[0];
 	if (get_range(scr->f_data, scr->vs->view_pos, scr->yw, l, &s1, &s2))
 		goto ret;
 
+	c = (*scr->search_word)[0];
+
 	for (; s1 <= s2; s1++) {
-		int i, j;
+		register int i;
 
 		if (srch_cmp(s1->c, c)) {
 cont:
@@ -567,19 +581,23 @@ cont:
 			if (srch_cmp(s1[i].c, (*scr->search_word)[i]))
 				goto cont;
 
-		for (i = 0; i < l; i++) for (j = 0; j < s1[i].n; j++) {
-			int x = s1[i].x + j + xp - vx;
+		for (i = 0; i < l; i++) {
+			register int j;
 			int y = s1[i].y + yp - vy;
 
-			if (x >= xp && y >= yp && x < xp + xw && y < yp + yw) {
-#if 0
-				unsigned co;
-				co = get_char(t, x, y);
-				co = ((co >> 3) & 0x0700) | ((co << 3) & 0x3800);
-				set_color(t, x, y, co);
-#endif
+			if (y < yp || y >= yp + yw) continue;
+
+			for (j = 0; j < s1[i].n; j++) {
+				int x = s1[i].x + j + xp - vx;
+
+				if (x < xp || x >= xp + xw) continue;
+
 				if (!(len % ALLOC_GR)) {
-					struct point *npt = mem_realloc(points, sizeof(struct point) * (len + ALLOC_GR));
+					struct point *npt;
+
+					npt = mem_realloc(points,
+							  sizeof(struct point)
+							  * (len + ALLOC_GR));
 
 					if (!npt) continue;
 					points = npt;

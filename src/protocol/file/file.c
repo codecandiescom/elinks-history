@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.72 2003/06/23 14:47:15 jonas Exp $ */
+/* $Id: file.c,v 1.73 2003/06/23 15:04:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,6 +147,7 @@ stat_links(unsigned char **p, int *l, struct stat *stp)
 }
 
 
+/* This is ugly and have to go. --jonas */
 static int last_uid = -1;
 static int last_gid = -1;
 
@@ -284,6 +285,7 @@ struct file_info {
 /* Generates a HTML page listing the content of @directory with the path
  * @filename. */
 /* Returns a connection state. S_OK if all is well. */
+/* TODO comment and split up this function; possibly the two loops. --jonas */
 static int
 list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 {
@@ -294,8 +296,10 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 	unsigned char dircolor[8];
 	int colorize_dir = get_opt_int("document.browse.links.color_dirs");
 	int show_hidden_files = get_opt_bool("protocol.file.show_hidden_files");
-	unsigned char *fragment;
-	int fragmentlen;
+	unsigned char *fragment = init_str();
+	int fragmentlen = 0;
+
+	if (!fragment) return S_OUT_OF_MEM;
 
 	if (colorize_dir) {
 		color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"),
@@ -304,15 +308,12 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 
 	last_uid = -1;
 	last_gid = -1;
-	fragment = init_str();
-	fragmentlen = 0;
-
-	if (!fragment) return S_OUT_OF_MEM;
 
 	add_to_str(&fragment, &fragmentlen, "<html>\n<head><title>");
 	add_htmlesc_str(&fragment, &fragmentlen, filename, strlen(filename));
 	add_to_str(&fragment, &fragmentlen, "</title></head>\n<body>\n<h2>Directory ");
 	{
+		/* Make the directory path with links to each subdir. */
 		unsigned char *pslash, *slash = filename - 1;
 
 		while (pslash = ++slash, slash = strchr(slash, '/')) {
@@ -389,7 +390,6 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 
 #ifdef FS_UNIX_SOFTLINKS
 		if (dir[i].s[0] == 'l') {
-
 			unsigned char *buf = NULL;
 			int size = 0;
 			int rl = -1;
@@ -526,13 +526,12 @@ read_file(struct stream_encoded *stream, int readsize, struct file_info *info)
 	/* + 1 is there because of bug in Linux. Read returns -EACCES when
 	 * reading 0 bytes to invalid address */
 	unsigned char *fragment = mem_alloc(readsize + 1);
-	int fragmentlen;
+	int fragmentlen = 0;
 	int readlen;
 
 	if (!fragment)
 		return S_OUT_OF_MEM;
 
-	fragmentlen = 0;
 	/* We read with granularity of stt.st_size (given as @readsize) - this
 	 * does best job for uncompressed files, and doesn't hurt for
 	 * compressed ones anyway - very large files usually tend to inflate

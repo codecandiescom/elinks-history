@@ -142,6 +142,7 @@ The basic default controls for managers are the following:
 	'*'		Toggle marking of a box.
 	Space		Open and close folders.
 	Left/Right	Select the button to the left/right.
+	Home/End	Select the first/last item.
 	Enter		Press the currently selected button.
 	Esc		Close the manager dialog.
 
@@ -290,4 +291,4 @@ Useful Document Display Options:
 
  - Insert mode in text-input form-fields
 
-$Id: introduction.txt,v 1.12 2005/01/03 16:01:46 zas Exp $
+$Id: introduction.txt,v 1.13 2005/01/03 20:34:19 miciah Exp $

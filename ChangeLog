@@ -1,3 +1,107 @@
+Sat Jul 31 18:29:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	transform_file_url(): Bug 358 revisited. Encode the CWD before
+	inserting it. Fixes test case added by lindi- in comment #14 on
+	2004-07-31 20:05.  
+
+Sat Jul 31 11:23:44 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bfu/dialog.c, bfu/menu.c, sched/session.c,
+	terminal/event.c, terminal/window.c, terminal/window.h,
+	viewer/text/view.c:
+
+	Eliminate the |int fwd| parameter from window event handlers.  
+	
+	|fwd| is a boolean indicating whether or not the event came from
+	delete_window or delete_window_ev. It is apparently named for its
+	usage by its one user, mainmenu_kbd_handler, which uses it to
+	determine whether the delete event was forwarded from a sub-menu. It
+	is used when one presses left or right with a menu open:
+	menu_kbd_handler deletes the menu and passes (via delete_window_ev) 
+	the ACT_MENU_LEFT or ACT_MENU_RIGHT event on to mainmenu_kbd_handler
+	which then knows from the |fwd| flag to open the newly selected
+	menu. This way, left and right open the newly selected menu only
+	when a menu was already open.  
+	
+	Now, menu_kbd_handler deletes the old menu and passes the
+	ACT_MENU_LEFT or ACT_MENU_RIGHT event on to mainmenu_kbd_handler as
+	before, but now menu_kbd_handler opens the newly selected menu
+	itself.  
+
+Sat Jul 31 11:05:54 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/terminal/kbd.c:
+
+	Tidy up a comment in decode_terminal_mouse_escape_sequence: 
+	s/Prospone/Postpone/ and remove a bogus 'errors has'.  
+
+Sat Jul 31 11:01:42 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bfu/hotkey.c, terminal/kbd.c, util/conv.c, util/hash.c,
+	util/snprintf.c, viewer/text/form.c, viewer/text/textarea.c:
+
+	Put spaces after some type casts.  
+
+Sat Jul 31 10:50:16 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: terminal/kbd.c, viewer/text/view.c:
+
+	In send_mouse_event and decode_terminal_mouse_escape_sequence, 
+	substitute two remaining uses of |ev->info.mouse| with the local
+	|mouse| variables in the respective routines.  
+
+Sat Jul 31 09:59:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	decode_terminal_escape_sequence(): Fix bug where the mark for
+	invalid KBD event would be removed. Initialize local variable to -1
+	and only update the event if it has been changed.  
+
+Sat Jul 31 09:53:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	process_queue(): Fix the check for event queuing to not access the
+	wrong union struct. Restore the old behaviour of only changing the
+	event type when all mouse sanity checks has been done.  
+
+Sat Jul 31 07:33:51 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/osdep/os2/os2.c:
+
+	Remove an extra space.  
+
+Sat Jul 31 06:32:27 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/text.c:
+
+	Update a comment in mouse_text to reflect 1.103 which changed the
+	region over which one can click the mouse or roll its wheel to
+	scroll a text widget.  
+
+Sat Jul 31 05:30:07 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/terminal/kbd.c:
+
+	In decode_terminal_mouse_escape_sequence, remove an extra space.  
+
+Sat Jul 31 04:06:01 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/mime/backend/default.c:
+
+	In get_content_type_default, remove some extra parentheses.  
+
+Fri Jul 30 22:22:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: osdep/osdep.c, osdep/osdep.h, osdep/os2/os2.c,
+	osdep/win32/win32.c, terminal/kbd.c:
+
+	get_terminal_size(): Drop bogus error return value. The @x and @y
+	variables are always non-NULL.  
+
 Fri Jul 30 16:39:44 2004  Laurent Monin <zas@norz.org>:
 
 	* src/terminal/kbd.c:

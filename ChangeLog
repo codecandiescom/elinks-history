@@ -1,3 +1,135 @@
+Mon Dec 22 18:24:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5rc2 
+
+Mon Dec 22 18:23:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Mon Dec 22 17:45:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/widget.h:
+
+	Partially revert last patch. No off by one here, but somewhere else.  
+
+Mon Dec 22 17:18:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/widget.h:
+
+	Fix an off by one error, preventing display of scrollbar when only
+	one element is out of visible range. Stricter values checking.  
+
+Mon Dec 22 17:09:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/cmdline.c:
+
+	Oops, swapped '_' and '-' in my last fix.  
+
+Mon Dec 22 16:31:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/dialogs.c:
+
+	Restore rev 1.134 option description layout: a extra newline before
+	Description: and one after it. It makes msgbox easier to read.  
+
+Mon Dec 22 16:25:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/text.c:
+
+	Use isspace() and drop only the first space char after a split.  
+
+Mon Dec 22 13:42:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	Typeahead searches support.  
+
+Mon Dec 22 13:13:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/dump/dump.c:
+
+	Fixed not showing the last link in the list.  
+
+Mon Dec 22 12:15:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Changed the default User-Agent string from ELinks (ver; sys; dim) to
+	ELinks/ver (textmode; sys; dim). I know it is quite late to do this,
+	but it is really important that we get this right in 0.5.0 ;-).
+	Uncovered long ago by Cliff Cunnington.  
+
+Mon Dec 22 11:54:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/cmdline.c:
+
+	Removed one really ancient TODO sticked to _parse_options().  
+
+Mon Dec 22 11:54:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/cmdline.c:
+
+	Try to fix compatibility problems with lynx using underscores in
+	their argument names vs. we using dashes (-force-html in
+	particular).  
+
+Mon Dec 22 11:45:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/cmdline.c:
+
+	Trivial cleanup. I know. But this is an exception ;).  
+
+Mon Dec 22 09:57:19 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Dec 22 09:53:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	Revert previous illicit lets-fix-end-in-textarea part.  
+
+Mon Dec 22 09:49:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/: dump/dump.c, text/textarea.c:
+
+	Setup the link numbering option before the call to
+	init_document_options(). Fixes references to links being dumped
+	without the link numbers appearing.  
+
+Mon Dec 22 07:44:43 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation was updated.  
+
+Mon Dec 22 04:30:37 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/widget.h:
+
+	Improve the comments for widget_data.info.text.*.  
+
+Mon Dec 22 04:14:11 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.inc:
+
+	Add the guideline that trees should be sorted before non-trees.  
+
+Mon Dec 22 03:48:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5rc1.CVS 
+
 Mon Dec 22 03:42:36 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

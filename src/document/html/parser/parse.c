@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.101 2004/11/13 02:22:07 jonas Exp $ */
+/* $Id: parse.c,v 1.102 2004/12/19 22:32:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -855,6 +855,20 @@ start_element(struct element_info *ei,
 		html_top.namelen = namelen;
 		html_top.options = attr;
 		html_top.linebreak = ei->linebreak;
+
+#ifdef CONFIG_ECMASCRIPT
+		if (has_attr(attr, "onClick")) {
+			/* XXX: Put something better to format.link. --pasky */
+			mem_free_set(&format.link, stracpy("javascript:void(0);"));
+			mem_free_set(&format.target, stracpy(html_context.base_target));
+			format.fg = format.clink;
+			html_top.pseudo_class = ELEMENT_LINK;
+			mem_free_set(&format.title, stracpy("onClick placeholder"));
+			/* Er. I know. Well, double html_focusable()s shouldn't
+			 * really hurt. */
+			html_focusable(attr);
+		}
+#endif
 	}
 
 #ifdef CONFIG_ECMASCRIPT

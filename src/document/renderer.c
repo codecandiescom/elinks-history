@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.53 2004/06/12 17:39:56 zas Exp $ */
+/* $Id: renderer.c,v 1.54 2004/06/12 17:42:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,7 +178,6 @@ render_document_frames(struct session *ses)
 	}
 }
 
-
 static int
 comp_links(struct link *l1, struct link *l2)
 {
@@ -186,20 +185,6 @@ comp_links(struct link *l1, struct link *l2)
 	if_assert_failed return 0;
 	return (l1->number - l2->number);
 }
-
-#if 0
-static int
-comp_links(struct link *l1, struct link *l2)
-{
-	int res;
-
-	assert(l1 && l2 && l1->pos && l2->pos);
-	if_assert_failed return 0;
-	res = l1->pos->y - l2->pos->y;
-	if (res) return res;
-	return l1->pos->x - l2->pos->x;
-}
-#endif
 
 static void
 sort_links(struct document *document)

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.55 2003/07/14 19:51:33 jonas Exp $ */
+/* $Id: auth.c,v 1.56 2003/07/17 04:23:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 
 #define set_auth_uid(e, u) \
 	do { \
-		int uidlen = min((u)->userlen, MAX_UID_LEN); \
+		int uidlen = min((u)->userlen, MAX_UID_LEN - 1); \
 		if (uidlen) \
 			memcpy((e)->uid, (u)->user, uidlen); \
 		(e)->uid[uidlen] = 0; \
@@ -71,7 +71,7 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 
 #define set_auth_passwd(e, u) \
 	do { \
-		int passwdlen = min((u)->passwordlen, MAX_PASSWD_LEN); \
+		int passwdlen = min((u)->passwordlen, MAX_PASSWD_LEN - 1); \
 		if (passwdlen) \
 			memcpy((e)->passwd, (u)->password, passwdlen); \
 		(e)->passwd[passwdlen] = 0; \

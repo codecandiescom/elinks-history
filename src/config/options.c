@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.278 2003/10/03 17:47:44 kuser Exp $ */
+/* $Id: options.c,v 1.279 2003/10/04 01:44:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1917,6 +1917,18 @@ register_options(void)
 		"background", 0, "green",
 		N_("Default background color."));
 
+	add_opt_tree("ui.colors.color.menu", N_("Marked menu item"),
+		"marked", 0,
+		N_("Marked menu item colors."));
+
+	add_opt_color("ui.colors.color.menu.marked", N_("Text color"),
+		"text", 0, "red",
+		N_("Default text color."));
+
+	add_opt_color("ui.colors.color.menu.marked", N_("Background color"),
+		"background", 0, "white",
+		N_("Default background color."));
+
 	add_opt_tree("ui.colors.color.menu", N_("Hotkey"),
 		"hotkey", 0,
 		N_("Menu item hotkey colors."));
@@ -2298,6 +2310,18 @@ register_options(void)
 
 	add_opt_color("ui.colors.mono.menu.selected", N_("Background color"),
 		"background", 0, "black",
+		N_("Default background color."));
+
+	add_opt_tree("ui.colors.mono.menu", N_("Marked menu item"),
+		"marked", 0,
+		N_("Marked menu item colors."));
+
+	add_opt_color("ui.colors.mono.menu.marked", N_("Text color"),
+		"text", 0, "gray",
+		N_("Default text color."));
+
+	add_opt_color("ui.colors.mono.menu.marked", N_("Background color"),
+		"background", 0, "white",
 		N_("Default background color."));
 
 	add_opt_tree("ui.colors.mono.menu", N_("Hotkey"),

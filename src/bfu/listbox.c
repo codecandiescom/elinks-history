@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.90 2003/09/28 00:13:17 zas Exp $ */
+/* $Id: listbox.c,v 1.91 2003/10/04 01:44:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -325,6 +325,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 {
 	struct box_context *data = data_;
 	unsigned char *text = item->text;
+	unsigned char *stylename;
 	int len; /* Length of the current text field. */
 	struct color_pair *color;
 	int depth = item->depth + 1;
@@ -337,9 +338,11 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 	len = strlen(text);
 	int_upper_bound(&len, data->listbox_item_data->l - depth * 5);
 
-	color = get_bfu_color(data->term,
-			      (item == data->box->sel) ? "menu.selected"
-						       : "menu.normal");
+	stylename = (item == data->box->sel) ? "menu.selected"
+		  : ((item->marked)	     ? "menu.marked"
+					     : "menu.normal");
+
+	color = get_bfu_color(data->term, stylename);
 
 	y = data->listbox_item_data->y + data->offset;
 	for (d = 0; d < depth - 1; d++) {

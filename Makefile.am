@@ -1,12 +1,12 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.25 2002/12/30 15:57:00 jonas Exp $
+## $Id: Makefile.am,v 1.26 2003/01/02 15:33:49 pasky Exp $
 
 SUBDIRS = Unicode contrib doc intl src test
 
 man_MANS = elinks.1 elinkskeys.5 elinks.conf.5
 
 EXTRA_DIST = \
- $(man_MANS) BUGS TODO SITES Makefile.base autogen.sh
+ $(man_MANS) BUGS TODO SITES Makefile.base autogen.sh m4/*
 
 install-exec-hook:
 	@echo "**************************************************************"

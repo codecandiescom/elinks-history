@@ -1,3 +1,191 @@
+Fri Nov 12 22:54:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/action.c:
+
+	FRAME_EVENT_OK is the default, so drop useless assignment.  
+
+Fri Nov 12 22:49:26 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/action.c, viewer/text/view.c, viewer/text/view.h:
+
+	move_document_(start|end)() now return enum frame_event_status.  
+
+Fri Nov 12 22:20:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/action.c, viewer/text/view.c, viewer/text/view.h:
+
+	move_link() and move_link_(next|prev)() now return enum
+	frame_event_status.  
+
+Fri Nov 12 22:10:24 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/action.c, viewer/text/view.c, viewer/text/view.h:
+
+	move_link_(dir|up|down|left|right) now return enum
+	frame_event_status.  
+
+Fri Nov 12 22:01:08 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/action.c:
+
+	Reduce indentation level.  
+
+Fri Nov 12 21:52:48 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/action.c:
+
+	Simplify things a bit using variables @anonymous and @has_vs.  
+
+Fri Nov 12 21:32:20 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Fix (horizontal|vertical)_scroll(), they must return
+	FRAME_EVENT_REFRESH when doc_view->vs->(x|y) were modified. Spotted
+	by Miciah.  
+
+Fri Nov 12 17:33:19 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/action.c, viewer/text/view.c, viewer/text/view.h:
+
+	move_page_(up|down)() now return enum frame_event_status.  
+
+Fri Nov 12 17:28:39 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: view.c, view.h:
+
+	move_(up|down)() were made static.  
+
+Fri Nov 12 17:24:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	move_cursor(): reflect changes related to
+	(horizontal|vertical)_scroll(). Please check carefully.  
+
+Fri Nov 12 17:19:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Propagate (horizontal|vertical)_scroll_() changes.  
+
+Fri Nov 12 17:15:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	(horizontal|vertical)_scroll_() now return enum frame_event_status.  
+
+Fri Nov 12 17:11:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/action.c, viewer/text/view.c, viewer/text/view.h:
+
+	scroll_*() now return enum frame_event_status. Related changes to
+	do_action() were made.  
+
+Fri Nov 12 17:03:51 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	scroll_mouse_*() now return an enum frame_event_status.
+	frame_ev_mouse() was modified to reflect that.  
+
+Fri Nov 12 16:48:30 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	frame_ev_mouse(): clear things a bit, behavior unchanged.  
+
+Fri Nov 12 16:24:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	frame_ev_kbd(): just return FRAME_EVENT_IGNORED at the end.  
+
+Fri Nov 12 16:16:22 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	frame_ev_kbd(): cache value of document.browse.accesskey.priority
+	option.  
+
+Fri Nov 12 16:10:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	move_link(): do not test twice for current_link == wraparound_bound.  
+
+Fri Nov 12 16:07:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	move_link(): Get document.browse.links.wraparound option value only
+	once and only if needed.  
+
+Fri Nov 12 13:45:59 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	Prevent an assertion failure in ecmascript_eval() (bug 558), may be
+	incorrect. Pasky please check.  
+
+Fri Nov 12 11:20:02 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	send_kbd_event(): attempt to make code clearer. @doc_view == NULL
+	case looks like to not be handled in last part.  
+
+Fri Nov 12 11:06:28 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	send_kbd_event(): let code breath a bit, @m -> @win.  
+
+Fri Nov 12 10:52:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/file.c:
+
+	stat_size(): Fix typo and improve the comment.  
+
+Fri Nov 12 10:06:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/globhist/globhist.c:
+
+	Increase the size of input buffer to a more reasonable value.  
+
+Fri Nov 12 09:49:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: cookies/cookies.c, globhist/globhist.c, util/ttime.h:
+
+	Introduce str_to_ttime() wrapper instead of using atol() directly,
+	since this one is surely non portable as Miciah told.  
+
+Fri Nov 12 09:42:22 2004  Laurent Monin <zas@norz.org>:
+
+	* src/globhist/globhist.c:
+
+	read_global_history(): cleanup and code simplification.  
+
+Fri Nov 12 09:38:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Move @cookies_nosave setting outside the while() loop.  
+
+Fri Nov 12 02:39:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/file.c:
+
+	stat_size(): Tidyup the unsigned long cast. Try to explain the two
+	ulongcat() calls that Miciah was pondering about.  
+
+Fri Nov 12 02:26:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/file.c:
+
+	stat_size(): Fix bad logic involving checking unsigned long
+	overflow.  
+
 Thu Nov 11 20:31:38 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/bfu/text.c:

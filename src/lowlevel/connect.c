@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.31 2002/12/07 20:05:56 pasky Exp $ */
+/* $Id: connect.c,v 1.32 2002/12/17 11:31:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,7 +62,6 @@ log_data(unsigned char *data, int len)
 #endif
 
 void dns_found(/* struct connection */ void *, int);
-
 void connected(/* struct connection */ void *);
 
 void
@@ -89,9 +88,7 @@ dns_exception(void *data)
 void
 exception(void *data)
 {
-	struct connection *c = (struct connection *) data;
-
-	retry_conn_with_state(c, S_EXCEPT);
+	retry_conn_with_state((struct connection *) data, S_EXCEPT);
 }
 
 void
@@ -108,7 +105,7 @@ make_connection(struct connection *conn, int port, int *sock,
 		return;
 	}
 
-	c_i = mem_alloc(sizeof(struct conn_info));
+	c_i = mem_calloc(1, sizeof(struct conn_info));
 	if (!c_i) {
 		mem_free(host);
 		retry_conn_with_state(conn, S_OUT_OF_MEM);
@@ -409,9 +406,7 @@ write_select(struct connection *c)
 
 	if (c->ssl) {
 		wr = ssl_write(c, wb);
-		if (wr <= 0) {
-			return;
-		}
+		if (wr <= 0) return;
 	} else {
 		wr = write(wb->sock, wb->data + wb->pos, wb->len - wb->pos);
 		if (wr <= 0) {
@@ -451,8 +446,7 @@ write_to_socket(struct connection *c, int s, unsigned char *data,
 	wb->pos = 0;
 	wb->done = write_func;
 	memcpy(wb->data, data, len);
-	if (c->buffer)
-		mem_free(c->buffer);
+	if (c->buffer) mem_free(c->buffer);
 	c->buffer = wb;
 	set_handlers(s, NULL, (void (*)())write_select, (void (*)())exception, c);
 }
@@ -488,9 +482,7 @@ read_select(struct connection *c)
 
 	if (c->ssl) {
 		rd = ssl_read(c, rb);
-		if (rd <= 0) {
-			return;
-		}
+		if (rd <= 0) return;
 	} else {
 		rd = read(rb->sock, rb->data + rb->len, rb->freespace);
 		if (rd <= 0) {
@@ -553,7 +545,7 @@ kill_buffer_data(struct read_buffer *rb, int n)
 		rb->len = 0;
 		return;
 	}
-	memmove(rb->data, rb->data + n, rb->len - n);
 	rb->len -= n;
+	memmove(rb->data, rb->data + n, rb->len);
 	rb->freespace += n;
 }

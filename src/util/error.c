@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.12 2002/06/15 22:02:14 pasky Exp $ */
+/* $Id: error.c,v 1.13 2002/06/15 22:11:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,30 +36,6 @@ struct alloc_header {
 #endif
 
 #define L_D_S ((sizeof(struct alloc_header) + 7) & ~7)
-
-#endif
-
-
-#ifdef SPECIAL_MALLOC
-
-/* Again, this is inherited from old links and I've no idea wtf is it ;). */
-
-void *sp_malloc(size_t);
-void *sp_calloc(size_t, size_t);
-void sp_free(void *);
-void *sp_realloc(void *, size_t);
-
-#define xmalloc sp_malloc
-#define xcalloc sp_calloc
-#define xfree sp_free
-#define xrealloc sp_realloc
-
-#else
-
-#define xmalloc malloc
-#define xcalloc calloc
-#define xfree free
-#define xrealloc realloc
 
 #endif
 
@@ -184,7 +160,7 @@ debug_mem_alloc(unsigned char *file, int line, size_t size)
 	mem_amount += size;
 	size += L_D_S;
 
-	p = xmalloc(size);
+	p = malloc(size);
 	if (!p) {
 		error("ERROR: out of memory (malloc returned NULL)\n");
 		return NULL;
@@ -224,7 +200,7 @@ debug_mem_calloc(unsigned char *file, int line, size_t size, size_t eltsize)
 	mem_amount += size * eltsize;
 	size += L_D_S;
 
-	p = xcalloc(1, size);
+	p = calloc(1, size);
 	if (!p) {
 		error("ERROR: out of memory (malloc returned NULL)\n");
 		return NULL;
@@ -266,7 +242,7 @@ debug_mem_free(unsigned char *file, int line, void *p)
 		free(ah->comment);
 #endif
 	mem_amount -= ah->size;
-	xfree(p);
+	free(p);
 }
 
 void *
@@ -287,7 +263,7 @@ debug_mem_realloc(unsigned char *file, int line, void *p, size_t size)
 		return DUMMY;
 	}
 
-	p = xrealloc((char *)p - L_D_S, size + L_D_S);
+	p = realloc((char *)p - L_D_S, size + L_D_S);
 	if (!p) {
 		error("ERROR: out of memory (realloc returned NULL)\n");
 		return NULL;

@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.28 2002/12/03 19:31:44 zas Exp $ */
+/* $Id: opttypes.c,v 1.29 2002/12/05 20:24:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -269,8 +269,13 @@ str_rd(struct option *opt, unsigned char **file)
 
 	/* We're getting used in some parser functions in conf.c as well, and
 	 * that's w/ opt == NULL; so don't rely on opt to point anywhere. */
-	if (!commandline && *str != '"') { mem_free(str2); return NULL; }
-	str++;
+	if (!commandline) {
+		if (*str != '"') {
+			mem_free(str2);
+			return NULL;
+		}
+		str++;
+	}
 
 	while (*str && (commandline || *str != '"')) {
 		if (*str == '\\') {

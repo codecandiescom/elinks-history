@@ -11,7 +11,7 @@ Arguments:
 
  <the order and type of the arguments>
 
-Triggered:
+Triggered When:
 
  <short description of when the event is triggered>
 
@@ -24,9 +24,9 @@ Please keep in alphabetical order!
 -------------------------------------------------------------------------------
 Name:		goto-url
 Managed By:	The scripting subsystem/backends
-Triggered:
+Triggered When:
 
- When user enters something into the goto URL dialog.
+ The user enters something into the goto URL dialog.
 
 Arguments:
 
@@ -43,10 +43,10 @@ Description:
 -------------------------------------------------------------------------------
 Name:		follow-url
 Managed By:	The scripting subsystem/backends
-Triggered:
+Triggered When:
 
- When user decided to let some document to load (followed a link, entered URL
- in the goto URL dialog, is loading frames from a frameset (?) or whatever).
+ The user decides to load some document by following a link, entering an URL
+ in the goto URL dialog, loading frames from a frameset (?) etc.
 
 Arguments:
 
@@ -63,9 +63,9 @@ Description:
 -------------------------------------------------------------------------------
 Name:		get-proxy
 Managed By:	The scripting subsystem/backends
-Triggered:
+Triggered When:
 
- When determining the how a request should be proxied.
+ Determining what proxy, if any, should be used to load a requested URL.
 
 Arguments:
 
@@ -81,9 +81,9 @@ Description:
 -------------------------------------------------------------------------------
 Name:		pre-format-html
 Managed By:	The scripting subsystem/backends
-Triggered:
+Triggered When:
 
- When a html document has been loaded before the document rendering begins.
+ A HTML document has been loaded - before the document rendering begins.
 
 Arguments:
 
@@ -96,15 +96,15 @@ Description:
  Possible values for @new_html_src includes:
  - new document content in a dynamically allocated string.
  - NULL to keep the content unchanged.
- When @new_html_src is changed @html_len should be updated to the new length of
- the document content.
+ If @new_html_src is changed @html_len should be updated to the new length
+ of the document content.
 
 -------------------------------------------------------------------------------
 Name:		quit
 Managed By:	The scripting subsystem/backends
-Triggered:
+Triggered When:
 
- When ELinks quits
+ ELinks quits
 
 Arguments:
 
@@ -112,7 +112,7 @@ Arguments:
 
 Description:
 
- Allows the user to do whatever clean up is required when ELinks quits.
+ Allows a subsystem to do whatever clean up is required when ELinks quits.
 
 -------------------------------------------------------------------------------
-$Id: events.txt,v 1.1 2003/09/25 00:36:31 jonas Exp $
+$Id: events.txt,v 1.2 2003/09/25 14:17:53 jonas Exp $

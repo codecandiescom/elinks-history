@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.12 2002/07/05 12:59:30 pasky Exp $ */
+/* $Id: ssl.c,v 1.13 2002/07/08 17:00:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,8 +29,8 @@
 #ifdef HAVE_OPENSSL
 SSL_CTX *context = NULL;
 #elif defined(HAVE_GNUTLS)
-GNUTLS_ANON_CLIENT_CREDENTIALS anon_cred;
-GNUTLS_CERTIFICATE_CLIENT_CREDENTIALS xcred;
+GNUTLS_ANON_CLIENT_CREDENTIALS anon_cred = NULL;
+GNUTLS_CERTIFICATE_CLIENT_CREDENTIALS xcred = NULL;
 #endif
 #endif
 

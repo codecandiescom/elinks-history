@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.185 2004/07/14 14:00:39 jonas Exp $ */
+/* $Id: dialogs.c,v 1.186 2004/07/14 14:20:57 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -37,8 +37,6 @@
 #include "util/object.h"
 #include "util/secsave.h"
 
-
-int keybinding_text_toggle;
 
 static void
 toggle_success_msgbox(void *dummy)
@@ -532,6 +530,8 @@ options_manager(struct session *ses)
   Keybinding manager stuff.
 ****************************************************************************/
 
+static int keybinding_text_toggle;
+
 /* Implementation of the listbox operations */
 
 /* XXX: If anything but delete button will use these object_*() requiring
@@ -790,7 +790,7 @@ static int
 push_kbdbind_toggle_display_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
-	toggle_display_action_listboxes();
+	keybinding_text_toggle = !keybinding_text_toggle;
 	clear_dialog(dlg_data, some_useless_info_button);
 	return 0;
 }

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.242 2004/07/14 14:17:14 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.243 2004/07/14 14:20:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -710,13 +710,6 @@ done_keybinding_listboxes(void)
 		free_list(action->child);
 	}
 	free_list(keybinding_browser.root.child);
-}
-
-
-void
-toggle_display_action_listboxes(void)
-{
-	keybinding_text_toggle = !keybinding_text_toggle;
 }
 
 

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.203 2003/11/26 14:10:37 jonas Exp $ */
+/* $Id: menu.c,v 1.204 2003/12/03 17:07:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,6 +68,57 @@ static void
 menu_close_tab(struct terminal *term, void *d, struct session *ses)
 {
 	close_tab(term, ses);
+}
+
+#if 0
+static void
+menu_close_other_tabs(struct terminal *term, void *d, struct session *ses)
+{
+	struct window *current = d;
+	int tabs = number_of_tabs(term);
+	int pos;
+
+	assert(term && ses && current);
+	if_assert_failed return;
+
+	for (pos = tabs - 1; pos >= 0; pos--) {
+		struct window *tab = get_tab_by_number(term, pos);
+
+		if (tab != current) delete_window(tab);
+	}
+}
+#endif
+
+void
+tab_menu(struct terminal *term, void *d, struct session *ses)
+{
+	struct menu_item *menu;
+	int tabs = number_of_tabs(term);
+
+	assert(term && ses);
+	if_assert_failed return;
+
+	menu = new_menu(FREE_LIST);
+	if (!menu) return;
+
+	if (tabs > 1) {
+		add_to_menu(&menu, N_("Nex~t tab"), ">",
+			    (menu_func) menu_next_tab, NULL, 0);
+
+		add_to_menu(&menu, N_("Pre~v tab"), "<",
+			    (menu_func) menu_prev_tab, NULL, 0);
+	}
+
+	add_to_menu(&menu, N_("~Close tab"), "c",
+		    (menu_func) menu_close_tab, NULL, 0);
+#if 0
+	if (tabs > 1) {
+		add_to_menu(&menu, N_("Close ~all but this"), "c",
+			    (menu_func) menu_close_other_tabs, d, 0);
+	}
+#endif
+
+	do_menu(term, menu, ses, 1);
 }
 
 /* Helper for url items in help menu. */

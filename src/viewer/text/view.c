@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.284 2003/12/03 13:02:43 miciah Exp $ */
+/* $Id: view.c,v 1.285 2003/12/03 17:07:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1198,7 +1198,17 @@ quit:
 			int nb_tabs = number_of_tabs(ses->tab->term);
 			int tab = get_tab_number_by_xpos(ses->tab->term, ev->x);
 
-			if (tab != -1) switch_to_tab(ses->tab->term, tab, nb_tabs);
+			if (tab != -1) {
+				switch_to_tab(ses->tab->term, tab, nb_tabs);
+
+				if ((ev->b & BM_BUTT) == B_RIGHT) {
+					struct window *tab = get_current_tab(ses->tab->term);
+
+					set_window_ptr(tab, tab->xpos, ev->y);
+					tab_menu(ses->tab->term, tab, ses);
+				}
+			}
+
 			goto x;
 		}
 		if (doc_view) do_mouse_event(ses, ev, doc_view);

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.363 2004/11/14 21:32:18 jonas Exp $ */
+/* $Id: http.c,v 1.364 2004/11/15 00:54:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -632,7 +632,7 @@ http_send_header(struct connection *conn)
 			unsigned char *id;
 
 			/* Create base64 encoded string. */
-			id = straconcat(entry->user, ":" ,entry->password, NULL);
+			id = straconcat(entry->user, ":", entry->password, NULL);
 			if (id) {
 				unsigned char *base64 = base64_encode(id);
 

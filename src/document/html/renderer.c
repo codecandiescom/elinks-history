@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.174 2003/07/20 23:41:07 pasky Exp $ */
+/* $Id: renderer.c,v 1.175 2003/07/20 23:42:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -694,7 +694,7 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 
 	static char buffer[CH_BUF];
 	int bufferpos = 0;
-	int pp = 0;
+	int charspos = 0;
 
 	/* FIXME: Code redundancy with convert_string() in charsets.c. --Zas */
 
@@ -712,23 +712,23 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 
 	/* Iterate ;-) */
 
-	while (pp < charslen) {
+	while (charspos < charslen) {
 		unsigned char *e;
 
-		if (chars[pp] < 128 && chars[pp] != '&') {
+		if (chars[charspos] < 128 && chars[charspos] != '&') {
 putc:
-			buffer[bufferpos++] = chars[pp++];
+			buffer[bufferpos++] = chars[charspos++];
 			if (bufferpos < CH_BUF) continue;
 			goto flush;
 		}
 
-		if (chars[pp] != '&') {
+		if (chars[charspos] != '&') {
 			struct conv_table *t;
 			int i;
 
 			if (!convert_table) goto putc;
 			t = convert_table;
-			i = pp;
+			i = charspos;
 
 decode:
 			if (!t[chars[i]].t) {
@@ -738,10 +738,10 @@ decode:
 				if (i >= charslen) goto putc;
 				goto decode;
 			}
-			pp = i + 1;
+			charspos = i + 1;
 
 		} else {
-			int start = pp + 1;
+			int start = charspos + 1;
 			int i = start;
 
 			if (d_opt->plain) goto putc;
@@ -768,7 +768,7 @@ decode:
 				e = get_entity_string(&chars[start], i - start,
 						      d_opt->cp);
 				if (!e) goto putc;
-				pp = i + (i < charslen);
+				charspos = i + (i < charslen);
 			} else goto putc;
 		}
 

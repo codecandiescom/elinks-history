@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.128 2004/07/16 18:30:27 jonas Exp $ */
+/* $Id: options.inc,v 1.129 2004/07/18 00:58:45 miciah Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1297,7 +1297,7 @@ struct option_info config_options_info[] = {
 		N_("Pop up goto dialog in newly created tabs when there's no homepage\n"
 		"set. This means also showing goto dialog on startup.")),
 
-	INIT_OPT_BOOL("ui", N_("Show a message box when file is saved sucessfully"),
+	INIT_OPT_BOOL("ui", N_("Show a message box when file is saved successfully"),
 		"success_msgbox", 0, 1,
 		N_("When you pressed a [ Save ] button in some manager, this option\n"
 		"will make sure that a box confirming success of the operation will\n"

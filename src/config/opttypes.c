@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.47 2003/01/03 00:38:33 pasky Exp $ */
+/* $Id: opttypes.c,v 1.48 2003/01/03 02:08:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -367,22 +367,18 @@ cp_wr(struct option *o, unsigned char **s, int *l)
 static int
 lang_set(struct option *opt, unsigned char *str)
 {
-	int i;
+	int i = name_to_language(str);
 
-	for (i = 0; i < n_languages(); i++)
-		if (!strcasecmp(language_name(i), str)) {
-			*((int *) opt->ptr) = i;
-			set_language(i);
-			return 1;
-		}
+	*((int *) opt->ptr) = i;
+	set_language(i);
 
-	return 0;
+	return 1;
 }
 
 static void
 lang_wr(struct option *o, unsigned char **s, int *l)
 {
-	add_quoted_to_str(s, l, language_name(current_language));
+	add_quoted_to_str(s, l, language_to_name(current_language));
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.49 2005/03/05 20:22:45 zas Exp $ */
+/* $Id: inpfield.h,v 1.50 2005/03/05 20:41:04 zas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -69,7 +69,7 @@ void dlg_format_field(struct terminal *, struct widget_data *, int, int *, int, 
 void input_field(struct terminal *, struct memory_list *, int, unsigned char *,
 		 unsigned char *, unsigned char *, unsigned char *, void *,
 		 struct input_history *, int, unsigned char *, int, int,
-		 t_handler_event_status (*)(struct dialog_data *, struct widget_data *),
+		 t_widget_handler *check,
 		 void (*)(void *, unsigned char *),
 		 void (*)(void *));
 

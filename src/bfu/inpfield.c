@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.199 2005/03/05 20:22:45 zas Exp $ */
+/* $Id: inpfield.c,v 1.200 2005/03/05 20:41:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -195,7 +195,7 @@ input_field(struct terminal *term, struct memory_list *ml, int intl,
 	    unsigned char *cancelbutton,
 	    void *data, struct input_history *history, int l,
 	    unsigned char *def, int min, int max,
-	    t_handler_event_status (*check)(struct dialog_data *, struct widget_data *),
+	    t_widget_handler *check,
 	    void (*fn)(void *, unsigned char *),
 	    void (*cancelfn)(void *))
 {

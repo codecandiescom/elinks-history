@@ -1523,6 +1523,18 @@ void go_back(struct session *ses)
 	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_BACK, NULL, end_load, 0);
 }
 
+void go_unback(struct session *ses)
+{
+	unsigned char *url;
+	ses->reloadlevel = NC_CACHE;
+	if (ses->unhistory.next == &ses->unhistory)
+		return;
+	abort_loading(ses);
+	if (!(url = stracpy(((struct location *)ses->unhistory.next)->vs.url)))
+		return;
+	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_UNBACK, NULL, end_load, 1);
+}
+
 #ifdef HAVE_LUA
 unsigned char *follow_url_hook(struct session *ses, unsigned char *url)
 {
@@ -1545,18 +1557,6 @@ unsigned char *follow_url_hook(struct session *ses, unsigned char *url)
 	return s;
 }
 #endif
-
-void go_unback(struct session *ses)
-{
-	unsigned char *url;
-	ses->reloadlevel = NC_CACHE;
-	if (ses->unhistory.next == &ses->unhistory)
-		return;
-	abort_loading(ses);
-	if (!(url = stracpy(((struct location *)ses->unhistory.next)->vs.url)))
-		return;
-	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_UNBACK, NULL, end_load, 1);
-}
 
 void goto_url_w(struct session *ses, unsigned char *url, unsigned char *target, int wtd)
 {

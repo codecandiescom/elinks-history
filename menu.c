@@ -275,13 +275,13 @@ void go_backwards(struct terminal *term, void *psteps, struct session *ses)
 		mem_free(ses->search_word), ses->search_word = NULL;*/
 	abort_loading(ses);
 
-	while (steps > 1) {
+	while (steps--) {
 		struct location *loc = ses->history.next;
+		
 		if ((void *) loc == &ses->history) return;
+
 		del_from_list(loc);
 		add_to_list(ses->unhistory, loc);
-
-		--steps;
 	}
 
 	if (steps)
@@ -296,7 +296,9 @@ void go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 
 	while (steps--) {
 	    	struct location *loc = ses->unhistory.next;
+		
 		if ((void *) loc == &ses->unhistory) return;
+		
 		del_from_list(loc);
 		add_to_list(ses->history, loc);
 	}
@@ -334,8 +336,11 @@ void unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 	struct menu_item *mi = NULL;
 	int n = 0;
 	foreach(l, ses->unhistory) {
+		unsigned char *url;
 		if (!mi && !(mi = new_menu(3))) return;
-		add_to_menu(&mi, stracpy(l->vs.url), "", "", MENU_FUNC go_unbackwards, (void *) n, 0);
+		url = stracpy(l->vs.url);
+		if (strchr(url, POST_CHAR)) *strchr(url, POST_CHAR) = 0;
+		add_to_menu(&mi, url, "", "", MENU_FUNC go_unbackwards, (void *) n, 0);
 		n++;
 	}
 	if (!n) do_menu(term, no_hist_menu, ses);

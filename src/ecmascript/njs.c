@@ -1,5 +1,5 @@
 /* The njs ECMAScript backend. */
-/* $Id: njs.c,v 1.2 2004/09/22 10:33:41 pasky Exp $ */
+/* $Id: njs.c,v 1.3 2004/09/22 10:42:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,6 +7,8 @@
 
 #include <js.h>
 #include <stdlib.h>
+
+#include "elinks.h"
 
 #include "document/view.h"
 #include "ecmascript/ecmascript.h"

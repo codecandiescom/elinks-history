@@ -1,11 +1,13 @@
 /* Base ECMAScript file. Mostly a proxy for specific library backends. */
-/* $Id: ecmascript.c,v 1.1 2004/09/21 22:11:43 pasky Exp $ */
+/* $Id: ecmascript.c,v 1.2 2004/09/22 10:42:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <stdlib.h>
+
+#include "elinks.h"
 
 #include "config/options.h"
 #include "document/view.h"

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.85 2003/10/29 23:59:43 jonas Exp $ */
+/* $Id: search.c,v 1.86 2003/10/30 00:54:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -460,8 +460,8 @@ get_searched_plain(struct document_view *doc_view, struct point **pt, int *pl,
 
 	xp = doc_view->xp;
 	yp = doc_view->yp;
-	xx = xp + doc_view->xw;
-	yy = yp + doc_view->yw;
+	xx = xp + doc_view->width;
+	yy = yp + doc_view->height;
 	xpv= xp - doc_view->vs->view_posx;
 	ypv= yp - doc_view->vs->view_pos;
 
@@ -565,8 +565,8 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 
 	xp = doc_view->xp;
 	yp = doc_view->yp;
-	xx = xp + doc_view->xw;
-	yy = yp + doc_view->yw;
+	xx = xp + doc_view->width;
+	yy = yp + doc_view->height;
 	xpv= xp - doc_view->vs->view_posx;
 	ypv= yp - doc_view->vs->view_pos;
 
@@ -630,7 +630,9 @@ get_searched(struct document_view *doc_view, struct point **pt, int *pl)
 
 	get_search_data(doc_view->document);
 	l = strlen(*doc_view->search_word);
-	if (get_range(doc_view->document, doc_view->vs->view_pos, doc_view->yw, l, &s1, &s2)) {
+	if (get_range(doc_view->document, doc_view->vs->view_pos,
+		      doc_view->height, l, &s1, &s2)
+	   ) {
 		*pt = NULL;
 		*pl = 0;
 
@@ -827,7 +829,7 @@ find_next(struct session *ses, struct document_view *doc_view, int a)
 	if_assert_failed return;
 
 	p = doc_view->vs->view_pos;
-	step = ses->search_direction * doc_view->yw;
+	step = ses->search_direction * doc_view->height;
 
 	if (!a && ses->search_word) {
 		if (!(find_next_link_in_search(doc_view, ses->search_direction))) return;
@@ -850,11 +852,11 @@ find_next(struct session *ses, struct document_view *doc_view, int a)
 	get_search_data(doc_view->document);
 
 	do {
-		if (is_in_range(doc_view->document, p, doc_view->yw, ses->search_word, &min, &max)) {
+		if (is_in_range(doc_view->document, p, doc_view->height, ses->search_word, &min, &max)) {
 			doc_view->vs->view_pos = p;
 			if (max >= min)
 				doc_view->vs->view_posx = int_min(int_max(doc_view->vs->view_posx,
-									  max - doc_view->xw),
+									  max - doc_view->width),
 								  min);
 
 			set_link(doc_view);
@@ -883,11 +885,11 @@ find_next(struct session *ses, struct document_view *doc_view, int a)
 		if (p < 0) {
 			hit_top = 1;
 			p = 0;
-			while (p < doc_view->document->height) p += doc_view->yw;
-			p -= doc_view->yw;
+			while (p < doc_view->document->height) p += doc_view->height;
+			p -= doc_view->height;
 		}
-		c += doc_view->yw;
-	} while (c < doc_view->document->height + doc_view->yw);
+		c += doc_view->height;
+	} while (c < doc_view->document->height + doc_view->height);
 
 	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 		N_("Search"), AL_CENTER,

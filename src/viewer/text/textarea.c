@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.19 2003/10/17 13:25:50 zas Exp $ */
+/* $Id: textarea.c,v 1.20 2003/10/30 00:54:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,8 +146,8 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 
 	xp = doc_view->xp;
 	yp = doc_view->yp;
-	xw = doc_view->xw;
-	yw = doc_view->yw;
+	xw = doc_view->width;
+	yw = doc_view->height;
 	vx = doc_view->vs->view_posx;
 	vy = doc_view->vs->view_pos;
 

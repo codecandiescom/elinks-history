@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.88 2003/10/29 19:59:43 jonas Exp $ */
+/* $Id: link.c,v 1.89 2003/10/30 00:54:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,8 +214,8 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 
 	set_term_color(template, &colors, color_flags, doc_opts->color_mode);
 
-	xmax = doc_view->xp + doc_view->xw;
-	ymax = doc_view->yp + doc_view->yw;
+	xmax = doc_view->xp + doc_view->width;
+	ymax = doc_view->yp + doc_view->height;
 	xpos = doc_view->xp - doc_view->vs->view_posx;
 	ypos = doc_view->yp - doc_view->vs->view_pos;
 
@@ -320,7 +320,7 @@ get_first_link(struct document_view *doc_view)
 	if (!document->lines1) return NULL;
 
 	l = document->links + document->nlinks;
-	width = doc_view->vs->view_pos + doc_view->yw;
+	width = doc_view->vs->view_pos + doc_view->height; /* XXX:zas: height ?? check again. */
 
 	for (i = doc_view->vs->view_pos; i < width; i++) {
 		if (i >= 0
@@ -344,7 +344,9 @@ get_last_link(struct document_view *doc_view)
 
 	if (!doc_view->document->lines2) return NULL;
 
-	for (i = doc_view->vs->view_pos; i < doc_view->vs->view_pos + doc_view->yw; i++)
+	for (i = doc_view->vs->view_pos;
+	     i < doc_view->vs->view_pos + doc_view->height;
+	     i++)
 		if (i >= 0 && i < doc_view->document->height
 		    && doc_view->document->lines2[i] > l)
 			l = doc_view->document->lines2[i];
@@ -363,7 +365,7 @@ in_viewx(struct document_view *doc_view, struct link *link)
 	for (i = 0; i < link->n; i++) {
 		int x = link->pos[i].x - doc_view->vs->view_posx;
 
-		if (x >= 0 && x < doc_view->xw)
+		if (x >= 0 && x < doc_view->width)
 			return 1;
 	}
 
@@ -381,7 +383,7 @@ in_viewy(struct document_view *doc_view, struct link *link)
 	for (i = 0; i < link->n; i++) {
 		int y = link->pos[i].y - doc_view->vs->view_pos;
 
-		if (y >= 0 && y < doc_view->yw)
+		if (y >= 0 && y < doc_view->height)
 			return 1;
 	}
 
@@ -417,7 +419,7 @@ next_in_view(struct document_view *doc_view, int p, int d,
 	if_assert_failed return 0;
 
 	p1 = doc_view->document->nlinks - 1;
-	yl = doc_view->vs->view_pos + doc_view->yw;
+	yl = doc_view->vs->view_pos + doc_view->height;
 
 	if (yl > doc_view->document->height) yl = doc_view->document->height;
 	for (y = int_max(0, doc_view->vs->view_pos); y < yl; y++) {
@@ -455,16 +457,14 @@ set_pos_x(struct document_view *doc_view, struct link *link)
 
 	for (i = 0; i < link->n; i++) {
 		if (link->pos[i].y >= doc_view->vs->view_pos
-		    && link->pos[i].y < doc_view->vs->view_pos + doc_view->yw) {
+		    && link->pos[i].y < doc_view->vs->view_pos + doc_view->height) {
 			/* XXX: bug ?? if l->pos[i].x == xm => xm = xm + 1 --Zas*/
 			if (link->pos[i].x >= xm) xm = link->pos[i].x + 1;
 			xl = int_min(xl, link->pos[i].x);
 		}
 	}
-	if (xl == MAXINT) return;
-	/* if ((doc_view->vs->view_posx = xm - doc_view->xw) > xl)
-	 *	doc_view->vs->view_posx = xl;*/
-	int_bounds(&doc_view->vs->view_posx, xm - doc_view->xw, xl);
+	if (xl != MAXINT) 
+		int_bounds(&doc_view->vs->view_posx, xm - doc_view->width, xl);
 }
 
 void
@@ -501,7 +501,7 @@ find_link(struct document_view *doc_view, int p, int s)
 	if (p == -1) {
 		line = doc_view->document->lines2;
 		if (!line) goto nolink;
-		y = doc_view->vs->view_pos + doc_view->yw - 1;
+		y = doc_view->vs->view_pos + doc_view->height - 1;
 		if (y >= doc_view->document->height) y = doc_view->document->height - 1;
 		if (y < 0) goto nolink;
 	} else {
@@ -747,11 +747,11 @@ choose_mouse_link(struct document_view *doc_view, struct term_event *ev)
 
 	if (!doc_view->document->nlinks
 	    || ev->x < 0 || ev->y < 0
-	    || ev->x >= doc_view->xw || ev->y >= doc_view->yw)
+	    || ev->x >= doc_view->width || ev->y >= doc_view->height)
 		return NULL;
 
 	for (i = doc_view->vs->view_pos;
-	     i < doc_view->document->height && i < doc_view->vs->view_pos + doc_view->yw;
+	     i < doc_view->document->height && i < doc_view->vs->view_pos + doc_view->height;
 	     i++) {
 		if (doc_view->document->lines1[i] && doc_view->document->lines1[i] < l1)
 			l1 = doc_view->document->lines1[i];

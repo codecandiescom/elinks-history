@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.237 2003/10/30 00:34:33 zas Exp $ */
+/* $Id: view.c,v 1.238 2003/10/30 00:54:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -179,7 +179,7 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 	struct color_pair color = INIT_COLOR_PAIR(0, 0);
 	struct view_state *vs;
 	int xp, yp;
-	int xw, yw;
+	int width, height;
 	int vx, vy;
 	int y;
 
@@ -188,15 +188,15 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 
 	xp = doc_view->xp;
 	yp = doc_view->yp;
-	xw = doc_view->xw;
-	yw = doc_view->yw;
+	width = doc_view->width;
+	height = doc_view->height;
 
 	/* The code in this function assumes that both width and height are
 	 * bigger than 1 so we have to bail out here. */
-	if (xw < 2 || yw < 2) return;
+	if (width < 2 || height < 2) return;
 
 	if (active) {
-		set_cursor(t, xp + xw - 1, yp + yw - 1, 1);
+		set_cursor(t, xp + width - 1, yp + height - 1, 1);
 		set_window_ptr(get_current_tab(t), xp, yp);
 	}
 
@@ -204,12 +204,12 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 		color.background = doc_view->document->bgcolor;
 
 	if (!doc_view->vs) {
-		draw_area(t, xp, yp, xw, yw, ' ', 0, &color);
+		draw_area(t, xp, yp, width, height, ' ', 0, &color);
 		return;
 	}
 
 	if (document_has_frames(doc_view->document)) {
-	 	draw_area(t, xp, yp, xw, yw, ' ', 0, &color);
+	 	draw_area(t, xp, yp, width, height, ' ', 0, &color);
 		draw_frame_lines(t, doc_view->document->frame_desc, xp, yp);
 		if (doc_view->vs && doc_view->vs->current_link == -1)
 			doc_view->vs->current_link = 0;
@@ -243,17 +243,17 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 	free_link(doc_view);
 	doc_view->xl = vx;
 	doc_view->yl = vy;
-	draw_area(t, xp, yp, xw, yw, ' ', 0, &color);
+	draw_area(t, xp, yp, width, height, ' ', 0, &color);
 	if (!doc_view->document->height) return;
 
-	while (vs->view_pos >= doc_view->document->height) vs->view_pos -= yw;
+	while (vs->view_pos >= doc_view->document->height) vs->view_pos -= height;
 	if (vs->view_pos < 0) vs->view_pos = 0;
 	if (vy != vs->view_pos) vy = vs->view_pos, check_vs(doc_view);
 	for (y = int_max(vy, 0);
-	     y < int_min(doc_view->document->height, yw + vy);
+	     y < int_min(doc_view->document->height, height + vy);
 	     y++) {
 		int st = int_max(vx, 0);
-		int en = int_min(doc_view->document->data[y].l, xw + vx);
+		int en = int_min(doc_view->document->data[y].l, width + vx);
 
 		if (en - st <= 0) continue;
 		draw_line(t, xp + st - vx, yp + y - vy, en - st,
@@ -345,7 +345,7 @@ page_up(struct session *ses, struct document_view *doc_view, int a)
 	assert(ses && doc_view && doc_view->vs);
 	if_assert_failed return;
 
-	doc_view->vs->view_pos -= doc_view->yw;
+	doc_view->vs->view_pos -= doc_view->height;
 	find_link(doc_view, -1, a);
 	if (doc_view->vs->view_pos < 0) doc_view->vs->view_pos = 0/*, find_link(f, 1, a)*/;
 }
@@ -801,14 +801,14 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			if (ev->y < scrollmargin) {
 				rep_ev(ses, doc_view, scroll, -2);
 			}
-			if (ev->y >= doc_view->yw - scrollmargin) {
+			if (ev->y >= doc_view->height - scrollmargin) {
 				rep_ev(ses, doc_view, scroll, 2);
 			}
 
 			if (ev->x < scrollmargin * 2) {
 				rep_ev(ses, doc_view, hscroll, -8);
 			}
-			if (ev->x >= doc_view->xw - scrollmargin * 2) {
+			if (ev->x >= doc_view->width - scrollmargin * 2) {
 				rep_ev(ses, doc_view, hscroll, 8);
 			}
 		}
@@ -1495,18 +1495,18 @@ print_current_title(struct session *ses)
 	width = ses->tab->term->x;
 
 	/* Set up the document page info string: '(' %page '/' %pages ')' */
-	if (doc_view->yw < document->height) {
-		int pos = doc_view->vs->view_pos + doc_view->yw;
+	if (doc_view->height < document->height) {
+		int pos = doc_view->vs->view_pos + doc_view->height;
 		int page = 1;
-		int pages = doc_view->yw
-			    ? (document->height + doc_view->yw - 1) / doc_view->yw
+		int pages = doc_view->height
+			    ? (document->height + doc_view->height - 1) / doc_view->height
 			    : 1;
 
 		/* Check if at the end else calculate the page. */
 		if (pos >= document->height) {
 			page = pages;
-		} else if (doc_view->yw) {
-			page = int_min((pos - doc_view->yw / 2) / doc_view->yw + 1,
+		} else if (doc_view->height) {
+			page = int_min((pos - doc_view->height / 2) / doc_view->height + 1,
 				       pages);
 		}
 

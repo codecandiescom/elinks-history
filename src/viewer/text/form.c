@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.49 2003/10/29 13:26:45 zas Exp $ */
+/* $Id: form.c,v 1.50 2003/10/30 00:54:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,7 +189,7 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 	struct form_control *frm;
 	struct view_state *vs;
 	int xp, yp;
-	int xw, yw;
+	int width, height;
 	int vx, vy;
 
 	assert(t && doc_view && doc_view->document && doc_view->vs && l);
@@ -203,8 +203,8 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 
 	xp = doc_view->xp;
 	yp = doc_view->yp;
-	xw = doc_view->xw;
-	yw = doc_view->yw;
+	width = doc_view->width;
+	height = doc_view->height;
 	vs = doc_view->vs;
 	vx = vs->view_posx;
 	vy = vs->view_pos;
@@ -221,12 +221,12 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 			if (!l->n) break;
 
 			y = l->pos[0].y + yp - vy;
-			if (y >= yp && y < yp + yw) {
+			if (y >= yp && y < yp + height) {
 				int len = strlen(fs->value) - fs->vpos;
 
 				x = l->pos[0].x + xp - vx;
 				for (i = 0; i < frm->size; i++, x++) {
-					if (x >= xp && x < xp + xw) {
+					if (x >= xp && x < xp + width) {
 						if (fs->value &&
 						    i >= -fs->vpos && i < len)
 							draw_char_data(t, x, y,
@@ -247,7 +247,7 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 			if (l->n < 2) break;
 			x = l->pos[1].x + xp - vx;
 			y = l->pos[1].y + yp - vy;
-			if (x >= xp && y >= yp && x < xp + xw && y < yp + yw)
+			if (x >= xp && y >= yp && x < xp + width && y < yp + height)
 				draw_char_data(t, x, y, fs->state ? 'X' : ' ');
 			break;
 		case FC_SELECT:
@@ -261,7 +261,7 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 			for (i = 0; i < l->n; i++) {
 				x = l->pos[i].x + xp - vx;
 				y = l->pos[i].y + yp - vy;
-				if (x >= xp && y >= yp && x < xp + xw && y < yp + yw)
+				if (x >= xp && y >= yp && x < xp + width && y < yp + height)
 					draw_char_data(t, x, y, i < sl ? s[i] : '_');
 			}
 			break;

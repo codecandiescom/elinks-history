@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.150 2003/09/21 14:47:27 jonas Exp $ */
+/* $Id: session.c,v 1.151 2003/09/22 21:48:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,12 +32,11 @@
 #include "protocol/uri.h"
 #include "sched/download.h"
 #include "sched/error.h"
+#include "sched/event.h"
 #include "sched/history.h"
 #include "sched/location.h"
 #include "sched/connection.h"
 #include "sched/session.h"
-#include "scripting/guile/hooks.h"
-#include "scripting/lua/hooks.h"
 #include "terminal/draw.h"
 #include "terminal/screen.h"
 #include "terminal/tab.h"
@@ -948,15 +947,18 @@ static void
 maybe_pre_format_html(struct cache_entry *ce, struct session *ses)
 {
 	struct fragment *fr;
-	unsigned char *s;
+	unsigned char *s = NULL;
 	int len;
+	static int pre_format_html_event_id = EVENT_NONE;
 
 	if (!ce || ce->done_pre_format_html_hook) return;
 
 	defrag_entry(ce);
 	fr = ce->frag.next;
 	len = fr->length;
-	s = script_hook_pre_format_html(ses, ce->url, fr->data, &len);
+	set_event_id(pre_format_html_event_id, "pre-format-html");
+	trigger_event(pre_format_html_event_id,
+		      &s, ses, ce->url, fr->data, &len);
 	if (s) {
 		add_fragment(ce, 0, s, len);
 		truncate_entry(ce, len, 1);
@@ -1507,8 +1509,11 @@ goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
 	   enum task_type task, enum cache_mode cache_mode)
 {
 #ifdef HAVE_SCRIPTING
-	unsigned char *newurl = script_hook_follow_url(ses, url);
+	unsigned char *newurl = NULL;
+	static int follow_url_event_id = EVENT_NONE;
 
+	set_event_id(follow_url_event_id, "follow-url");
+	trigger_event(follow_url_event_id, &newurl, ses, url);
 	if (newurl) url = newurl;
 #endif
 
@@ -1543,8 +1548,11 @@ void
 goto_url_with_hook(struct session *ses, unsigned char *url)
 {
 #ifdef HAVE_SCRIPTING
-	unsigned char *newurl = script_hook_goto_url(ses, url);
+	unsigned char *newurl = NULL;
+	static int goto_url_event_id = EVENT_NONE;
 
+	set_event_id(goto_url_event_id, "goto-url");
+	trigger_event(goto_url_event_id, &newurl, ses, url);
 	if (newurl) url = newurl;
 #endif
 

@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.3 2003/07/24 15:33:32 pasky Exp $ */
+/* $Id: proxy.c,v 1.4 2003/09/22 21:49:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,8 +11,7 @@
 #include "elinks.h"
 
 #include "config/options.h"
-#include "scripting/guile/hooks.h"
-#include "scripting/lua/hooks.h"
+#include "sched/event.h"
 #include "util/memory.h"
 #include "util/string.h"
 
@@ -103,9 +102,13 @@ unsigned char *
 get_proxy(unsigned char *url)
 {
 #ifdef HAVE_SCRIPTING
-	unsigned char *tmp = script_hook_get_proxy(url);
-	unsigned char *ret = get_proxy_worker(url, tmp);
+	unsigned char *tmp = NULL;
+	unsigned char *ret;
+	static int get_proxy_event_id = EVENT_NONE;
 
+	set_event_id(get_proxy_event_id, "get-proxy");
+	trigger_event(get_proxy_event_id, &tmp, url);
+	ret = get_proxy_worker(url, tmp);
 	if (tmp) mem_free(tmp);
 	return ret;
 #else

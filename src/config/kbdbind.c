@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.118 2003/12/21 02:06:24 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.119 2003/12/21 12:33:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -727,7 +727,6 @@ static struct default_kb default_main_keymap[] = {
 	{ 'h',		 0,		ACT_HISTORY_MANAGER },
 	{ 'k',		 0,		ACT_KEYBINDING_MANAGER },
 	{ 'l',		 0,		ACT_JUMP_TO_LINK },
-	{ 'l',		 KBD_CTRL,	ACT_REDRAW },
 	{ 'm',		 0,		ACT_MARK_SET },
 	{ 'n',		 0,		ACT_FIND_NEXT },
 	{ 'o',		 0,		ACT_OPTIONS_MANAGER },
@@ -777,7 +776,6 @@ static struct default_kb default_edit_keymap[] = {
 	{ 'V',		 KBD_CTRL,	ACT_PASTE_CLIPBOARD },
 	{ 'W',		 KBD_CTRL,	ACT_AUTO_COMPLETE },
 	{ 'X',		 KBD_CTRL,	ACT_CUT_CLIPBOARD },
-	{ 'l',		 KBD_CTRL,	ACT_REDRAW },
 	{ KBD_BS,	 0,		ACT_BACKSPACE },
 	{ KBD_DEL,	 0,		ACT_DELETE },
 	{ KBD_DOWN,	 0,		ACT_DOWN },
@@ -806,7 +804,6 @@ static struct default_kb default_menu_keymap[] = {
 	{ 'P',		 KBD_CTRL,	ACT_UP },
 	{ 'V',		 KBD_ALT,	ACT_PAGE_UP },
 	{ 'V',		 KBD_CTRL,	ACT_PAGE_DOWN },
-	{ 'l',		 KBD_CTRL,	ACT_REDRAW },
 	{ KBD_DEL,	 0,		ACT_DELETE },
 	{ KBD_DOWN,	 0,		ACT_DOWN },
 	{ KBD_END,	 0,		ACT_END },

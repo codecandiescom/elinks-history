@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.157 2004/01/09 09:52:55 zas Exp $ */
+/* $Id: menu.c,v 1.158 2004/01/09 10:09:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -852,7 +852,12 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 				int p = L_MENU_SPACE;
 				int i;
 
-				for (i = menu->first_displayed; i < menu->ni; i++) {
+				/* We don't initialize to
+				 * menu->first_displayed here,
+				 * since it breaks horizontal
+				 * scrolling using mouse in some
+				 * cases. --Zas */
+				for (i = 0; i < menu->ni; i++) {
 					int o = p;
 
 					if (mi_has_left_text(menu->items[i])) {

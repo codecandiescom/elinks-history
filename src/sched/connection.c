@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.70 2003/07/04 21:11:49 jonas Exp $ */
+/* $Id: connection.c,v 1.71 2003/07/04 21:41:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -414,7 +414,7 @@ has_keepalive_connection(struct connection *c)
 }
 
 void
-add_keepalive_socket(struct connection *c, ttime timeout)
+add_keepalive_connection(struct connection *c, ttime timeout)
 {
 	struct keepalive_connection *k;
 

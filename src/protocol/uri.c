@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.25 2003/07/22 02:28:11 jonas Exp $ */
+/* $Id: uri.c,v 1.26 2003/07/22 02:29:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -765,12 +765,12 @@ encode_uri_string(struct string *string, unsigned char *name)
 		else
 #endif
 		if (safe_char(*name)) {
-			add_char_to_string(&string, *name);
+			add_char_to_string(string, *name);
 		} else {
 			/* Hex it. */
 			n[1] = hx((((int) *name) & 0xF0) >> 4);
 			n[2] = hx(((int) *name) & 0xF);
-			add_to_string(&string, n);
+			add_to_string(string, n);
 		}
 	}
 }

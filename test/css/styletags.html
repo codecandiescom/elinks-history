@@ -2,21 +2,36 @@
 <style>
 	a	{ text-decoration: underline; color: aqua; }
 	b	{ font-weight: normal; }
-	body	{ background-color: white; }
+	body	{ background: garbage properties white; }
 	div	{ font-weight: bold; }
-	dt	{ weight: bold; color: blue; }
-	dd	{ font-weight: normal; color: white; }
-	h1	{ color: green; text-decoration: underline; }
+	dt	{ font-weight: bold; color: blue; }
+	dd	{ font-weight: normal; color: white }
+	h1	{ color: green; text-decoration: underline }
+	h2	{ color: red; font-weight: bold }
+	i	{ background: green; }
+	span	{ background: white }
 	p	{ color: rgb(100%, 100%, 0); }
 </style>
 <h1>green / underline</h1>
-<p>rgb(100%, 100%, 0) <a href="...">underline / aqua</a> bleh</p>
+<p>rgb(100%, 100%, 0) <a href="..">underline / aqua</a> bleh</p>
 <dl>
-	<dt>bold / blue</dt>
-	<dd>normal / white</dd>
 
-	<dt>bold / blue</dt>
-	<dd>normal / white <a href="...">underline / aqua</a> normal / white</dd>
+	<dt>bold / blue .. but doesn't work</dt>
+	<dd>normal / white but also doesn't work</dd>
+	<dt>bold / blue .. but doesn't work</dt>
+	<dd>normal / white but also doesn't work</dd>
 </dl>
-<div>This should be bold. <b>Can we overwrite bold tags?</b> Bold again </div>
+<p>rgb(100%, 100%, 0) <a href="..">underline / aqua</a> bleh</p>
+<div>This should be bold. <b>Can we overwrite bold tags? BTW also red</b> Bold again </div>
+
+<h2>The E (red / bold)</h2>
+<table border="1"><tr><td>
+<div><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i>E</div>
+<div><i>&nbsp;<span>&nbsp;&nbsp;&nbsp;</span><i>&nbsp;</i>L</div>
+<div><i>&nbsp;<span>&nbsp;</span><i>&nbsp;&nbsp;&nbsp;</i>i</div>
+<div><i>&nbsp;<span>&nbsp;&nbsp;&nbsp;</span><i>&nbsp;</i>n</div>
+<div><i>&nbsp;<span>&nbsp;</span><i>&nbsp;&nbsp;&nbsp;</i>k</div>
+<div><i>&nbsp;<span>&nbsp;&nbsp;&nbsp;</span><i>&nbsp;</i>s</div>
+<div><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i>&copy;</div>
+</td></tr></table>
 </html>

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.399 2004/01/08 13:47:05 zas Exp $ */
+/* $Id: renderer.c,v 1.400 2004/01/08 14:19:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1203,7 +1203,7 @@ html_special(struct part *part, enum html_special_type c, ...)
 			break;
 		case SP_COLOR_LINK_LINES:
 			va_end(l);
-			if (document && document->options.use_document_colors == 2)
+			if (document && doc_colors_and_bg(&document->options))
 				color_link_lines(document);
 			break;
 	}

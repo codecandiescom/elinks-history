@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.325 2004/01/08 13:47:05 zas Exp $ */
+/* $Id: parser.c,v 1.326 2004/01/08 14:19:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -339,7 +339,10 @@ get_color(unsigned char *a, unsigned char *c, color_t *rgb)
 	unsigned char *at;
 	int r;
 
-	if (!global_doc_opts->color_mode || global_doc_opts->use_document_colors < 1)
+	if (global_doc_opts->color_mode == COLOR_MODE_MONO)
+		return -1;
+	
+	if (doc_colors_defaults(global_doc_opts))
 		return -1;
 
 	at = get_attr_val(a, c);
@@ -354,8 +357,9 @@ get_color(unsigned char *a, unsigned char *c, color_t *rgb)
 int
 get_bgcolor(unsigned char *a, color_t *rgb)
 {
-	if (!global_doc_opts->color_mode || global_doc_opts->use_document_colors < 2)
+	if (!doc_colors_and_bg(global_doc_opts))
 		return -1;
+	
 	return get_color(a, "bgcolor", rgb);
 }
 

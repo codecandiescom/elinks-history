@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.40 2004/01/08 13:47:05 zas Exp $ */
+/* $Id: options.h,v 1.41 2004/01/08 14:19:24 zas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -96,5 +96,9 @@ void copy_opt(struct document_options *to, struct document_options *from);
 /* Compares comparable values from the two structures according to
  * the comparable members described in the struct definition. */
 int compare_opt(struct document_options *o1, struct document_options *o2);
+
+#define doc_colors_defaults(o) ((o)->use_document_colors == 0)
+#define doc_colors_no_bg(o) ((o)->use_document_colors == 1)
+#define doc_colors_and_bg(o) ((o)->use_document_colors == 2)
 
 #endif

@@ -186,73 +186,107 @@ void http_get_header(struct connection *);
 void http_send_header(struct connection *c)
 {
 	static unsigned char *accept_charset = NULL;
+	unsigned char *host = upcase(c->url[0]) != 'P' ? c->url
+						       : get_url_data(c->url);
 	struct http_connection_info *info;
 	int http10 = http_bugs.http10;
+	unsigned char *post;
+	
 	struct cache_entry *e = NULL;
 	unsigned char *hdr;
-	unsigned char *h, *u;
+	unsigned char *host_data, *url_data;
 	int l = 0;
-	unsigned char *post;
-	unsigned char *host = upcase(c->url[0]) != 'P' ? c->url : get_url_data(c->url);
+	
 	set_timeout(c);
-	if (!(info = mem_alloc(sizeof(struct http_connection_info)))) {
+	
+	info = mem_alloc(sizeof(struct http_connection_info));
+	if (!info) {
 		setcstate(c, S_OUT_OF_MEM);
 		abort_connection(c);
 		return;
 	}
 	memset(info, 0, sizeof(struct http_connection_info));
 	c->info = info;
-	if ((h = get_host_name(host))) {
-		info->bl_flags = get_blacklist_flags(h);
-		mem_free(h);
+	
+	if ((host_data = get_host_name(host))) {
+		info->bl_flags = get_blacklist_flags(host_data);
+		mem_free(host_data);
 	}
-	if (info->bl_flags & BL_HTTP10) http10 = 1;
+	
+	if (info->bl_flags & BL_HTTP10) {
+		http10 = 1;
+	}
+	
 	info->http10 = http10;
+	
 	post = strchr(c->url, POST_CHAR);
 	if (post) post++;
-	if (!(hdr = init_str())) {
+	
+	hdr = init_str();
+	if (!hdr) {
 		setcstate(c, S_OUT_OF_MEM);
 		http_end_request(c);
 		return;
 	}
-	if (!post) add_to_str(&hdr, &l, "GET ");
-	else {
+	
+	if (!post) {
+		add_to_str(&hdr, &l, "GET ");
+	} else {
 		add_to_str(&hdr, &l, "POST ");
 		c->unrestartable = 2;
 	}
-	if (upcase(c->url[0]) != 'P') add_to_str(&hdr, &l, "/");
-	if (!(u = get_url_data(c->url))) {
+	
+	if (upcase(c->url[0]) != 'P') {
+		add_to_str(&hdr, &l, "/");
+	}
+	
+	url_data = get_url_data(c->url);
+	if (!url_data) {
 		setcstate(c, S_BAD_URL);
 		http_end_request(c);
 		return;
 	}
-	if (!post) add_to_str(&hdr, &l, u);
-	else add_bytes_to_str(&hdr, &l, u, post - u - 1);
-	if (!http10) add_to_str(&hdr, &l, " HTTP/1.1\r\n");
-	else add_to_str(&hdr, &l, " HTTP/1.0\r\n");
-	if ((h = get_host_name(host))) {
+	
+	if (!post) {
+		add_to_str(&hdr, &l, url_data);
+	} else {
+		add_bytes_to_str(&hdr, &l, url_data, post - url_data - 1);
+	}
+	
+	if (http10) {
+		add_to_str(&hdr, &l, " HTTP/1.0\r\n");
+	} else {
+		add_to_str(&hdr, &l, " HTTP/1.1\r\n");
+	}
+	
+	if ((host_data = get_host_name(host))) {
 		add_to_str(&hdr, &l, "Host: ");
 #ifdef IPV6
-		if (strchr(h, ':') != strrchr(h, ':')) {
+		if (strchr(host_data, ':') != strrchr(host_data, ':')) {
 			/* IPv6 address */
 			add_to_str(&hdr, &l, "[");
-			add_to_str(&hdr, &l, h);
+			add_to_str(&hdr, &l, host_data);
 			add_to_str(&hdr, &l, "]");
 		} else
 #endif
-			add_to_str(&hdr, &l, h);
-		mem_free(h);
-		if ((h = get_port_str(host))) {
+			add_to_str(&hdr, &l, host_data);
+		
+		mem_free(host_data);
+		
+		if ((host_data = get_port_str(host))) {
 			add_to_str(&hdr, &l, ":");
-			add_to_str(&hdr, &l, h);
-			mem_free(h);
+			add_to_str(&hdr, &l, host_data);
+			mem_free(host_data);
 		}
+		
 		add_to_str(&hdr, &l, "\r\n");
 	}
         
-	if(!strcmp(user_agent, "")) {
-                add_to_str(&hdr, &l, "User-Agent: Elinks (" VERSION_STRING "; ");
+	if (!strcmp(user_agent, "")) {
+                add_to_str(&hdr, &l,
+			   "User-Agent: Elinks (" VERSION_STRING "; ");
                 add_to_str(&hdr, &l, system_name);
+		
 		if (!list_empty(terminals)) {
 			struct terminal *term = terminals.prev;
 			
@@ -262,14 +296,14 @@ void http_send_header(struct connection *c)
 			add_num_to_str(&hdr, &l, term->y);
 		}
                 add_to_str(&hdr, &l, ")\r\n");
+		
         } else {
                 add_to_str(&hdr, &l, "User-Agent: ");
                 add_to_str(&hdr, &l, user_agent);
                 add_to_str(&hdr, &l, "\r\n");
         }
 
-	switch (referer)
-	{
+	switch (referer) {
 		case REFERER_NONE:
 			/* oh well */
 			break;
@@ -282,80 +316,131 @@ void http_send_header(struct connection *c)
 
 		case REFERER_TRUE:
 			if (c->prev_url && c->prev_url[0]) {
-				unsigned char *etk;
+				unsigned char *prev_post;
+				
 				add_to_str(&hdr, &l, "Referer: ");
-				if ((etk = strchr(c->prev_url, '\1'))) /* braindead ;-) */
-					add_bytes_to_str(&hdr, &l, c->prev_url, etk - c->prev_url);
-				else
+				
+				prev_post = strchr(c->prev_url, POST_CHAR);
+				
+				if (prev_post) {
+					add_bytes_to_str(&hdr, &l, c->prev_url,
+							 prev_post - c->prev_url);
+				} else {
 					add_to_str(&hdr, &l, c->prev_url);
+				}
+				
 				add_to_str(&hdr, &l, "\r\n");
 			}
 			break;
 
 		case REFERER_SAME_URL:
 			add_to_str(&hdr, &l, "Referer: http://");
-			if ((h = get_host_name(host))) {
-				add_to_str(&hdr, &l, h);
-				mem_free(h);
-				if ((h = get_port_str(host))) {
+			if ((host_data = get_host_name(host))) {
+				add_to_str(&hdr, &l, host_data);
+				mem_free(host_data);
+				
+				if ((host_data = get_port_str(host))) {
 					add_to_str(&hdr, &l, ":");
-					add_to_str(&hdr, &l, h);
-					mem_free(h);
+					add_to_str(&hdr, &l, host_data);
+					mem_free(host_data);
 				}
 			}
-			if (upcase(c->url[0]) != 'P') add_to_str(&hdr, &l, "/");
-			if (!post) add_to_str(&hdr, &l, u);
-			else add_bytes_to_str(&hdr, &l, u, post - u - 1);
+			
+			if (upcase(c->url[0]) != 'P') {
+				add_to_str(&hdr, &l, "/");
+			}
+			
+			if (!post) {
+				add_to_str(&hdr, &l, url_data);
+			} else {
+				add_bytes_to_str(&hdr, &l, url_data,
+						 post - url_data - 1);
+			}
+			
 			add_to_str(&hdr, &l, "\r\n");
 			break;
 	}
 
 	add_to_str(&hdr, &l, "Accept: */*\r\n");
-	if (!(accept_charset)) {
-		int i;
+	
+	if (!accept_charset) {
 		unsigned char *cs, *ac;
 		int aclen = 0;
+		int i;
+		
 		ac = init_str();
 		for (i = 0; (cs = get_cp_mime_name(i)); i++) {
-			if (aclen) add_to_str(&ac, &aclen, ", ");
-			else add_to_str(&ac, &aclen, "Accept-Charset: ");
+			if (aclen) {
+				add_to_str(&ac, &aclen, ", ");
+			} else {
+				add_to_str(&ac, &aclen, "Accept-Charset: ");
+			}
 			add_to_str(&ac, &aclen, cs);
 		}
-		if (aclen) add_to_str(&ac, &aclen, "\r\n");
-		if ((accept_charset = malloc(strlen(ac) + 1))) strcpy(accept_charset, ac);
-		else accept_charset = "";
+		
+		if (aclen) {
+			add_to_str(&ac, &aclen, "\r\n");
+		}
+		
+		accept_charset = malloc(strlen(ac) + 1);
+		if (accept_charset) {
+			strcpy(accept_charset, ac);
+		} else {
+			accept_charset = "";
+		}
+
 		mem_free(ac);
 	}
-	if (!(info->bl_flags & BL_NO_CHARSET)) add_to_str(&hdr, &l, accept_charset);
-	if (!http10) {
-		if (upcase(c->url[0]) != 'P') add_to_str(&hdr, &l, "Connection: ");
-		else add_to_str(&hdr, &l, "Proxy-Connection: ");
-		if (!post || !http_bugs.bug_post_no_keepalive) add_to_str(&hdr, &l, "Keep-Alive\r\n");
-		else add_to_str(&hdr, &l, "close\r\n");
+	
+	if (!(info->bl_flags & BL_NO_CHARSET)) {
+		add_to_str(&hdr, &l, accept_charset);
 	}
+	
+	if (!http10) {
+		if (upcase(c->url[0]) != 'P') {
+			add_to_str(&hdr, &l, "Connection: ");
+		} else {
+			add_to_str(&hdr, &l, "Proxy-Connection: ");
+		}
+		
+		if (!post || !http_bugs.bug_post_no_keepalive) {
+			add_to_str(&hdr, &l, "Keep-Alive\r\n");
+		} else {
+			add_to_str(&hdr, &l, "close\r\n");
+		}
+	}
+	
 	if ((e = c->cache)) {
-		if (!e->incomplete && e->head && c->no_cache <= NC_IF_MOD &&
-		    e->last_modified) {
+		if (!e->incomplete && e->head && e->last_modified
+		    && c->no_cache <= NC_IF_MOD) {
 			add_to_str(&hdr, &l, "If-Modified-Since: ");
 			add_to_str(&hdr, &l, e->last_modified);
 			add_to_str(&hdr, &l, "\r\n");
 		}
 	}
-	if (c->no_cache >= NC_PR_NO_CACHE) add_to_str(&hdr, &l, "Pragma: no-cache\r\nCache-Control: no-cache\r\n");
+	
+	if (c->no_cache >= NC_PR_NO_CACHE) {
+		add_to_str(&hdr, &l, "Pragma: no-cache\r\n");
+		add_to_str(&hdr, &l, "Cache-Control: no-cache\r\n");
+	}
+	
 	if (c->from) {
 		add_to_str(&hdr, &l, "Range: bytes=");
 		add_num_to_str(&hdr, &l, c->from);
 		add_to_str(&hdr, &l, "-\r\n");
 	}
-	h = find_auth(host);
-	if (h) {
+	
+	host_data = find_auth(host);
+	if (host_data) {
 		add_to_str(&hdr, &l, "Authorization: Basic ");
-		add_to_str(&hdr, &l, h);
+		add_to_str(&hdr, &l, host_data);
 		add_to_str(&hdr, &l, "\r\n");
-		mem_free(h);
+		mem_free(host_data);
 	}
+	
 	if (post) {
 		unsigned char *pd = strchr(post, '\n');
+		
 		if (pd) {
 			add_to_str(&hdr, &l, "Content-Type: ");
 			add_bytes_to_str(&hdr, &l, post, pd - post);
@@ -366,20 +451,39 @@ void http_send_header(struct connection *c)
 		add_num_to_str(&hdr, &l, strlen(post) / 2);
 		add_to_str(&hdr, &l, "\r\n");
 	}
+	
 	send_cookies(&hdr, &l, host);
 	add_to_str(&hdr, &l, "\r\n");
+	
 	if (post) {
 		while (post[0] && post[1]) {
 			int h1, h2;
-			h1 = post[0] <= '9' ? post[0] - '0' : post[0] >= 'A' ? upcase(post[0]) - 'A' + 10 : 0;
-			if (h1 < 0 || h1 >= 16) h1 = 0;
-			h2 = post[1] <= '9' ? post[1] - '0' : post[1] >= 'A' ? upcase(post[1]) - 'A' + 10 : 0;
-			if (h2 < 0 || h2 >= 16) h2 = 0;
+			
+			h1 = post[0] <= '9' ? post[0] - '0'
+					    : post[0] >= 'A' ? upcase(post[0])
+					    		       - 'A' + 10
+							     : 0;
+			
+			if (h1 < 0 || h1 >= 16) {
+				h1 = 0;
+			}
+			
+			h2 = post[1] <= '9' ? post[1] - '0'
+					    : post[1] >= 'A' ? upcase(post[1])
+					    		       - 'A' + 10
+							     : 0;
+			
+			if (h2 < 0 || h2 >= 16) {
+				h2 = 0;
+			}
+			
 			add_chr_to_str(&hdr, &l, h1 * 16 + h2);
 			post += 2;
 		}
 	}
+	
 	write_to_socket(c, c->sock1, hdr, strlen(hdr), http_get_header);
+	
 	mem_free(hdr);
 	setcstate(c, S_SENT);
 }

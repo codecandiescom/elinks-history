@@ -1,3 +1,84 @@
+Fri Dec  6 22:35:17 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/listbox.c, bfu/listbox.h, bookmarks/dialogs.c:
+
+	Added possibility to add callbacks to listbox user into listbox
+	action handlers. Split listbox_delete_bookmark() from
+	push_delete_button(), call callback del when KBD_DEL is pressed, use
+	listbox_delete_bookmark() as such a callback.  
+
+Fri Dec  6 22:16:40 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	'*' acts as ins (marking items) in the listbox.  
+
+Fri Dec  6 20:44:19 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/sched.c:
+
+	Minor cleanup.  
+
+Fri Dec  6 20:28:46 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/Makefile.am, src/config/Makefile.am, src/config/dialogs.c,
+	src/config/dialogs.h, src/config/kbdbind.c, src/config/kbdbind.h,
+	src/config/options.c, src/config/options.h, src/document/view.c,
+	src/intl/lang_defs.h, src/intl/language.inc:
+
+	Added options manager, the castrated version (tm). No support for
+	autocreated options, no support for changing anything, probably
+	buggy as hell. Oh and you can't see even the option's value ;-).  
+
+Fri Dec  6 20:16:14 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/hierbox.c:
+
+	Even more bookmarks independence, actually this was a bug I suppose
+	(computing only width of small fraction of buttons ?).  
+
+Fri Dec  6 19:10:10 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/hierbox.c, bookmarks/dialogs.c:
+
+	Remove bookmark-specific parts from dialogs/hierbox.c.  
+
+Fri Dec  6 18:56:02 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/dialogs.c:
+
+	Fixed header comment.  
+
+Fri Dec  6 18:51:12 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Don't have mutt %h %p as a default telnet.unix-xwin handler, but
+	rather telnet %h %p ;-). Thanks, Jose.  
+
+Fri Dec  6 18:48:56 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Fixed mem_realloc() of bm->box_item without proper renovation of
+	possibly broken pointers. Fixes a bug reported by Jose.  
+
+Fri Dec  6 14:50:50 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.4pre23.CVS 
+
 Fri Dec  6 14:49:29 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

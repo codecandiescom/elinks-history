@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.44 2004/04/02 17:30:30 jonas Exp $ */
+/* $Id: mime.c,v 1.45 2004/04/24 10:59:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 
 #include "elinks.h"
 
+#include "cache/cache.h"
 #include "config/options.h"
 #include "encoding/encoding.h"
 #include "intl/gettext/libintl.h"
@@ -117,15 +118,16 @@ check_encoding_type(unsigned char *extension)
 #endif
 
 unsigned char *
-get_content_type(unsigned char *head, struct uri *uri)
+get_content_type(struct cache_entry *cached)
 {
+	struct uri *uri = get_cache_uri(cached);
 	unsigned char *extension, *ctype;
 
 	debug_get_content_type_params(head, uri);
 
 	/* If there's one in header, it's simple.. */
-	if (head) {
-		ctype = parse_http_header(head, "Content-Type", NULL);
+	if (cached->head) {
+		ctype = parse_http_header(cached->head, "Content-Type", NULL);
 		if (ctype) {
 			unsigned char *end = strchr(ctype, ';');
 			int ctypelen;

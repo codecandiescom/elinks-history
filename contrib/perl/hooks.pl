@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.78 2005/04/01 23:11:15 rrowan Exp $
+# $Id: hooks.pl,v 1.79 2005/04/02 00:52:19 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -597,7 +597,7 @@ sub goto_url_hook
 	# "bugmenot" (no blood today, thank you)
 	if ($url =~ '^bugmenot$' && $current_url)
 	{
-		(undef, $current_url) = $current_url =~ /^(.*):\/\/(.*)/;
+		($current_url) = $current_url =~ /^.*:\/\/(.*)/;
 		return 'http://bugmenot.com/view.php?url=' . $current_url;
 	}
 

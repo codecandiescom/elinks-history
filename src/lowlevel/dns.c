@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.44 2004/04/19 08:50:03 zas Exp $ */
+/* $Id: dns.c,v 1.45 2004/04/19 08:58:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -333,18 +333,19 @@ end_dns_lookup(struct dnsquery *q, int res)
 	}
 
 	if (find_in_dns_cache(q->name, &dnsentry) >= 0) {
+		assert(dnsentry);
+
 		if (res < 0) {
+			int size;
 			/* q->addr(no) is pointer to something already allocated */
 
-			assert(dnsentry && dnsentry->addrno > 0);
+			assert(dnsentry->addrno > 0);
 
-			*q->addr = mem_calloc(dnsentry->addrno,
-					      sizeof(struct sockaddr_storage));
+			size = dnsentry->addrno * sizeof(struct sockaddr_storage);
+			*q->addr = mem_alloc(size);
 			if (!*q->addr) goto done;
 
-			memcpy(*q->addr, dnsentry->addr, sizeof(struct sockaddr_storage)
-							 * dnsentry->addrno);
-
+			memcpy(*q->addr, dnsentry->addr, size);
 			*q->addrno = dnsentry->addrno;
 
 			res = 0;
@@ -360,17 +361,18 @@ end_dns_lookup(struct dnsquery *q, int res)
 
 	namelen = strlen(q->name);
 	dnsentry = mem_calloc(1, sizeof(struct dnsentry) + namelen);
-
 	if (dnsentry) {
+		int size;
+
 		memcpy(dnsentry->name, q->name, namelen); /* calloc() sets nul char for us. */
 
 		assert(*q->addrno > 0);
 
-		dnsentry->addr = mem_calloc(*q->addrno, sizeof(struct sockaddr_storage));
+		size = *q->addrno * sizeof(struct sockaddr_storage);
+		dnsentry->addr = mem_alloc(size);
 		if (!dnsentry->addr) goto done;
 
-		memcpy(dnsentry->addr, *q->addr, *q->addrno * sizeof(struct sockaddr_storage));
-
+		memcpy(dnsentry->addr, *q->addr, size);;
 		dnsentry->addrno = *q->addrno;
 
 		dnsentry->get_time = get_time();

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.24 2003/10/27 01:12:13 jonas Exp $ */
+/* $Id: leds.c,v 1.25 2003/10/30 16:12:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,14 +102,14 @@ draw_leds(struct terminal *term)
 		l = strlen(s);
 
 		for (i = l - 1; i >= 0; i--)
-			draw_char(term, term->x - LEDS_COUNT - 3 - (l - i),
-				  term->y - 1, s[i], 0, led_color);
+			draw_char(term, term->width - LEDS_COUNT - 3 - (l - i),
+				  term->height - 1, s[i], 0, led_color);
 	}
 
 	/* We must shift the whole thing by one char to left, because we don't
 	 * draft the char in the right-down corner :(. */
 
-	draw_char(term, term->x - LEDS_COUNT - 3, term->y - 1,
+	draw_char(term, term->width - LEDS_COUNT - 3, term->height - 1,
 		  '[', 0,  led_color);
 
 	color.background = led_color->background;
@@ -118,11 +118,11 @@ draw_leds(struct terminal *term)
 		color.foreground = leds[i].__used ? leds[i].fgcolor
 						  : led_color->foreground;
 
-		draw_char(term, term->x - LEDS_COUNT - 2 + i, term->y - 1,
+		draw_char(term, term->width - LEDS_COUNT - 2 + i, term->height - 1,
 			  leds[i].value, 0, &color);
 	}
 
-	draw_char(term, term->x - 2, term->y - 1, ']', 0, led_color);
+	draw_char(term, term->width - 2, term->height - 1, ']', 0, led_color);
 
 	/* Redraw each 100ms. */
 	if (!drawing && redraw_timer < 0)

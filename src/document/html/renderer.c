@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.472 2004/07/01 18:39:36 pasky Exp $ */
+/* $Id: renderer.c,v 1.473 2004/07/02 22:09:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1072,8 +1072,9 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	/* If we are not handling verbatim aligning and we are at the begining
 	 * of a line trim whitespace. */
 	if (part->cx == -1) {
-		/* If we are not handling verbatim aligning trim whitespace. */
-		if  (!html_is_preformatted()) {
+		/* If we are not handling verbatim aligning trim leading
+		 * whitespaces. */
+		if (!html_is_preformatted()) {
 			while (charslen && *chars == ' ') {
 				chars++;
 				charslen--;

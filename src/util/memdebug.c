@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.13 2002/11/29 16:26:13 zas Exp $ */
+/* $Id: memdebug.c,v 1.14 2002/11/29 21:01:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,7 +148,7 @@ dump_info(struct alloc_header *ah, unsigned char *info,
 }
 
 #ifdef CHECK_AH_SANITY
-static int
+static inline int
 bad_ah_sanity(struct alloc_header *ah, unsigned char *info,
 	      unsigned char *file, int line)
 {
@@ -163,7 +163,7 @@ bad_ah_sanity(struct alloc_header *ah, unsigned char *info,
 #endif /* CHECK_AH_SANITY */
 
 #ifdef CHECK_XFLOWS
-static int
+static inline int
 bad_xflow_magic(struct alloc_header *ah, unsigned char *info,
 		unsigned char *file, int line)
 {

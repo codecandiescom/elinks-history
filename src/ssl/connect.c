@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.16 2002/09/14 09:16:35 pasky Exp $ */
+/* $Id: connect.c,v 1.17 2002/11/18 16:40:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -291,9 +291,9 @@ ssl_read(struct connection *conn, struct read_buffer *rb)
 
 #ifdef HAVE_SSL
 #ifdef HAVE_OPENSSL
-	rd = SSL_read(conn->ssl, rb->data + rb->len, READ_SIZE);
+	rd = SSL_read(conn->ssl, rb->data + rb->len, rb->freespace);
 #elif defined(HAVE_GNUTLS)
-	rd = gnutls_record_recv(*conn->ssl, rb->data + rb->len, READ_SIZE);
+	rd = gnutls_record_recv(*conn->ssl, rb->data + rb->len, rb->freespace);
 #endif
 
 	if (rd <= 0) {

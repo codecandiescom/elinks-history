@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.9 2002/09/11 21:04:54 pasky Exp $ */
+/* $Id: connect.h,v 1.10 2002/11/18 16:40:52 zas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -9,8 +9,6 @@
 #include <sys/socket.h> /* OS/2 needs this after sys/types.h */
 
 #include "lowlevel/sched.h"
-
-#define READ_SIZE 16384
 
 struct conn_info {
 	struct sockaddr *addr; /* array of addresses */
@@ -25,6 +23,7 @@ struct read_buffer {
 	int sock;
 	int len;
 	int close;
+	int freespace;
 	void (*done)(struct connection *, struct read_buffer *);
 	unsigned char data[1];
 };

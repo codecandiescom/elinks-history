@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.27 2002/09/17 14:26:56 zas Exp $ */
+/* $Id: socket.c,v 1.28 2002/11/18 16:40:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -457,7 +457,9 @@ write_to_socket(struct connection *c, int s, unsigned char *data,
 	set_handlers(s, NULL, (void (*)())write_select, (void (*)())exception, c);
 }
 
-#define READ_SIZE 16384
+#define RD_ALLOC_GR (2<<11) /* 4096 */
+#define RD_READ_SIZE (2<<13) /* 16384 */
+#define RD_MEM (sizeof(struct read_buffer) + RD_READ_SIZE + RD_ALLOC_GR)
 
 void
 read_select(struct connection *c)
@@ -473,12 +475,17 @@ read_select(struct connection *c)
 
 	set_handlers(rb->sock, NULL, NULL, NULL, NULL);
 
-	rb = mem_realloc(rb, sizeof(struct read_buffer) + rb->len + READ_SIZE);
-	if (!rb) {
-		abort_conn_with_state(c, S_OUT_OF_MEM);
-		return;
+	if (!rb->freespace) {
+		int size = (RD_MEM + rb->len) & ~(RD_ALLOC_GR - 1);
+
+		rb = mem_realloc(rb, size);
+		if (!rb) {
+			abort_conn_with_state(c, S_OUT_OF_MEM);
+			return;
+		}
+		rb->freespace = size - sizeof(struct read_buffer);
+		c->buffer = rb;
 	}
-	c->buffer = rb;
 
 	if (c->ssl) {
 		rd = ssl_read(c, rb);
@@ -486,21 +493,24 @@ read_select(struct connection *c)
 			return;
 		}
 	} else {
-		rd = read(rb->sock, rb->data + rb->len, READ_SIZE);
+		rd = read(rb->sock, rb->data + rb->len, rb->freespace);
 		if (rd <= 0) {
 			if (rb->close && !rd) {
 				rb->close = 2;
 				rb->done(c, rb);
 				return;
 			}
-			/* mem_free(rb); */
+
 			retry_conn_with_state(c, rd ? -errno : S_CANT_READ);
 			return;
 		}
 	}
 
 	log_data(rb->data + rb->len, rd);
+
 	rb->len += rd;
+	rb->freespace -= rd;
+
 	rb->done(c, rb);
 }
 
@@ -508,15 +518,22 @@ struct read_buffer *
 alloc_read_buffer(struct connection *c)
 {
 	struct read_buffer *rb;
+	int size = RD_MEM & ~(RD_ALLOC_GR - 1);
 
-	rb = mem_calloc(1, sizeof(struct read_buffer) + READ_SIZE);
+	rb = mem_calloc(1, size);
 	if (!rb) {
 		abort_conn_with_state(c, S_OUT_OF_MEM);
 		return NULL;
 	}
 
+	rb->freespace = size - sizeof(struct read_buffer);
+
 	return rb;
 }
+
+#undef RD_ALLOC_GR
+#undef RD_READ_SIZE
+#undef RD_MEM
 
 void
 read_from_socket(struct connection *c, int s, struct read_buffer *buf,
@@ -540,4 +557,5 @@ kill_buffer_data(struct read_buffer *rb, int n)
 	}
 	memmove(rb->data, rb->data + n, rb->len - n);
 	rb->len -= n;
+	rb->freespace += n;
 }

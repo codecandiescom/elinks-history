@@ -407,4 +407,6 @@
 #define T_HK_ADD_BOOKMARK_LINK    403	
 #define T_ACCEPT_LANGUAGE    404	
 #define T_ACCEPT_UI_LANGUAGE    405	
-#define T__N_TEXTS    406	
+#define T_SSL_CIPHER    406	
+#define T_ENCODING    407	
+#define T__N_TEXTS    408	

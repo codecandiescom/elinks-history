@@ -407,6 +407,8 @@ struct translation translation_english [] = {
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "Preferred language (comma-separated list of ISO codes)"},
   {T_ACCEPT_UI_LANGUAGE, "Language of the interface as Accept-Language (little loss of privacy)"},
+  {T_SSL_CIPHER, "SSL Cipher"},
+  {T_ENCODING, "Encoding"},
   {0, NULL}
 };
 
@@ -817,6 +819,8 @@ struct translation translation_brazilian_portuguese [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -1227,6 +1231,8 @@ struct translation translation_bulgarian [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -1637,6 +1643,8 @@ struct translation translation_catalan [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -2047,6 +2055,8 @@ struct translation translation_croatian [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -2457,6 +2467,8 @@ struct translation translation_czech [] = {
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "Preferovan˝ jazyk str·nek (seznam ISO kÛd˘ oddÏlen˝ch Ë·rkami)"},
   {T_ACCEPT_UI_LANGUAGE, "PouæÌt jazyk uæivatelskÈho rozhranÌ jako preferovan˝ jazyk str·nek"},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -2867,6 +2879,8 @@ struct translation translation_danish [] = {
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "Fortrukne sprog (kommasepareret liste af ISO landekoder"},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -3277,6 +3291,8 @@ struct translation translation_dutch [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -3687,6 +3703,8 @@ struct translation translation_estonian [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -4097,6 +4115,8 @@ struct translation translation_finnish [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -4507,6 +4527,8 @@ struct translation translation_french [] = {
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "Langues prÈfÈrÈes (liste de codes ISO sÈparÈs par une virgule)"},
   {T_ACCEPT_UI_LANGUAGE, "Langue de l'interface pour Accept-Language"},
+  {T_SSL_CIPHER, "Chiffrement SSL"},
+  {T_ENCODING, "Encodage"},
   {0, NULL}
 };
 
@@ -4917,6 +4939,8 @@ struct translation translation_galician [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -5327,6 +5351,8 @@ struct translation translation_german [] = {
   {T_HK_ADD_BOOKMARK_LINK, "L"},
   {T_ACCEPT_LANGUAGE, "Bevorzugte Sprache (Komma-getrennte Liste von ISO-Codes)"},
   {T_ACCEPT_UI_LANGUAGE, "Sende Sprache der Benutzeroberfl‰che als Accept-Language (kleiner Verlust der Privatsph‰re)"},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -5737,6 +5763,8 @@ struct translation translation_greek [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -6147,6 +6175,8 @@ struct translation translation_hungarian [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -6557,6 +6587,8 @@ struct translation translation_icelandic [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -6967,6 +6999,8 @@ struct translation translation_indonesian [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -7377,6 +7411,8 @@ struct translation translation_italian [] = {
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "Lingua preferita"},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -7787,6 +7823,8 @@ struct translation translation_lithuanian [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -8197,6 +8235,8 @@ struct translation translation_norwegian [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -8607,6 +8647,8 @@ struct translation translation_polish [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -9017,6 +9059,8 @@ struct translation translation_romanian [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -9427,6 +9471,8 @@ struct translation translation_russian [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -9837,6 +9883,8 @@ struct translation translation_slovak [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -10247,6 +10295,8 @@ struct translation translation_spanish [] = {
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "Idiomas preferidos en web (cÛdigos ISO separados por comas)"},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -10657,6 +10707,8 @@ struct translation translation_swedish [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -11067,6 +11119,8 @@ struct translation translation_turkish [] = {
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
   {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 
@@ -11477,6 +11531,8 @@ struct translation translation_ukrainian [] = {
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "‚¡÷¡Œ¡ Õœ◊¡ (”–…”œÀ “œ⁄ƒ¶Ã≈Œ…» ÀœÕœ¿ ISO-Àœƒ¶◊)"},
   {T_ACCEPT_UI_LANGUAGE, "˜…Àœ“…”‘œ◊’◊¡‘… Õœ◊’ ¶Œ‘≈“∆≈ ”’ —À Accept-Language (Œ≈◊≈Ã…À≈ ⁄Õ≈Œ€≈ŒŒ— ¬≈⁄–≈À…)"},
+  {T_SSL_CIPHER, NULL},
+  {T_ENCODING, NULL},
   {0, NULL}
 };
 

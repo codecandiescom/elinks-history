@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.145 2004/04/06 01:13:20 jonas Exp $ */
+/* $Id: uri.c,v 1.146 2004/04/06 01:20:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -664,7 +664,6 @@ parse_uri:
 		 * this will give a "No such file or directory" error. */
 		else {
 			not_file = 1;
-			mem_free(expanded);
 		}
 #endif
 

@@ -1,3 +1,33 @@
+Fri Dec  3 22:51:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	query_file(): Order input_field() to check_nonempty() improving the
+	IQ of the resulting error message. On the other hand maybe empty
+	input should just close the dialog.  
+
+Fri Dec  3 17:12:33 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c, AUTHORS:
+
+	This is a patch to link.c that will shorten the alt or title
+	attribute of an image just as the filename is already done.  
+	
+	Patch by Russ Rowan <rrowan@dandy.net>.  Added to AUTHORS.  
+
+Fri Dec  3 10:26:12 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/hierbox.c:
+
+	Be stricter in print_delete_error(), let it produce an internal
+	error if @err is not a valid error code.  
+
+Fri Dec  3 10:06:56 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/hierbox.c:
+
+	Use EVENT_PROCESSED where it is appropriated.  
+
 Thu Dec  2 16:34:01 2004  Laurent Monin <zas@norz.org>:
 
 	* src/: bfu/inphist.c, bookmarks/bookmarks.c, cookies/cookies.c,

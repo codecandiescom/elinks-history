@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.26 2003/08/03 04:55:42 jonas Exp $ */
+/* $Id: parser.h,v 1.27 2003/08/23 03:31:42 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -8,8 +8,8 @@ struct link;
 struct form_control;
 struct f_data;
 
-#include "bfu/align.h"
 #include "bfu/dialog.h"
+#include "bfu/style.h"
 #include "document/html/colors.h"
 #include "document/html/renderer.h"
 #include "sched/session.h"

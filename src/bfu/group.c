@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.20 2003/08/01 11:13:44 zas Exp $ */
+/* $Id: group.c,v 1.21 2003/08/23 03:31:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,10 +9,10 @@
 
 #include "elinks.h"
 
-#include "bfu/align.h"
 #include "bfu/dialog.h"
 #include "bfu/button.h"
 #include "bfu/group.h"
+#include "bfu/style.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/draw.h"
 #include "terminal/terminal.h"
@@ -83,7 +83,7 @@ dlg_format_group(struct terminal *term, struct terminal *t2, int intl,
 {
 	int nx = 0;
 	int base = base_group_width(t2, item);
-	unsigned char dialog_text_color = get_bfu_color(term, "dialog.text");
+	struct screen_color *color = get_bfu_color(term, "dialog.text");
 
 	while (n--) {
 		int sl;
@@ -105,9 +105,9 @@ dlg_format_group(struct terminal *term, struct terminal *t2, int intl,
 		}
 
 		if (term) {
-			print_text(term, x + nx + 4 * (item->item->type == D_CHECKBOX),
-				   *y, ((sl == -1) ? strlen(text) : sl) /* hmmm... */, text,
-				   dialog_text_color);
+			draw_text(term, x + nx + 4 * (item->item->type == D_CHECKBOX), *y,
+				  text, ((sl == -1) ? strlen(text) : sl),
+				  0, color);
 			item->x = x + nx + (sl + 1) * (item->item->type != D_CHECKBOX);
 			item->y = *y;
 			if (item->item->type == D_FIELD ||

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.41 2003/08/01 11:49:51 zas Exp $ */
+/* $Id: dialogs.c,v 1.42 2003/08/23 03:31:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,12 +9,12 @@
 
 #include "elinks.h"
 
-#include "bfu/align.h"
 #include "bfu/dialog.h"
 #include "bfu/button.h"
 #include "bfu/inpfield.h"
 #include "bfu/menu.h"
 #include "bfu/msgbox.h"
+#include "bfu/style.h"
 #include "bfu/text.h"
 #include "config/options.h"
 #include "dialogs/mime.h"
@@ -47,7 +47,7 @@ add_ext_fn(struct dialog_data *dlg)
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
-	unsigned char dialog_text_color = get_bfu_color(term, "dialog.text");
+	struct screen_color *dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	text_width(term, ext_msg[0], &min, &max);
 	text_width(term, ext_msg[1], &min, &max);

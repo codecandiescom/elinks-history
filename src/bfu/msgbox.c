@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.48 2003/08/01 11:13:44 zas Exp $ */
+/* $Id: msgbox.c,v 1.49 2003/08/23 03:31:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,10 +9,10 @@
 
 #include "elinks.h"
 
-#include "bfu/align.h"
 #include "bfu/dialog.h"
 #include "bfu/button.h"
 #include "bfu/msgbox.h"
+#include "bfu/style.h"
 #include "bfu/text.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/terminal.h"
@@ -30,7 +30,7 @@ msg_box_fn(struct dialog_data *dlg)
 	int w, rw;
 	int y = 0;
 	unsigned char *text = dlg->dlg->udata;
-	unsigned char dialog_text_color = get_bfu_color(term, "dialog.text");
+	struct screen_color *text_color = get_bfu_color(term, "dialog.text");
 
 	text_width(term, text, &min, &max);
 	buttons_width(term, dlg->items, dlg->n, &min, &max);
@@ -42,7 +42,7 @@ msg_box_fn(struct dialog_data *dlg)
 	int_lower_bound(&w, 1);
 
 	rw = 0;
-	dlg_format_text(NULL, term, text, 0, &y, w, &rw, dialog_text_color,
+	dlg_format_text(NULL, term, text, 0, &y, w, &rw, text_color,
 			dlg->dlg->align);
 
 	y++;
@@ -58,7 +58,7 @@ msg_box_fn(struct dialog_data *dlg)
 
 	y = dlg->y + DIALOG_TB + 1;
 	dlg_format_text(term, term, text, dlg->x + DIALOG_LB, &y, w, NULL,
-			dialog_text_color, dlg->dlg->align);
+			text_color, dlg->dlg->align);
 
 	y++;
 	dlg_format_buttons(term, term, dlg->items, dlg->n, dlg->x + DIALOG_LB,

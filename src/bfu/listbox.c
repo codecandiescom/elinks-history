@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.82 2003/08/01 14:59:09 jonas Exp $ */
+/* $Id: listbox.c,v 1.83 2003/08/23 03:31:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 
 #include "bfu/dialog.h"
 #include "bfu/listbox.h"
+#include "bfu/style.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/draw.h"
 #include "terminal/kbd.h"
@@ -326,7 +327,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 	struct box_context *data = data_;
 	unsigned char *text = item->text;
 	int len; /* Length of the current text field. */
-	unsigned char color;
+	struct screen_color *color;
 	int depth = item->depth + 1;
 	int d;
 
@@ -336,11 +337,9 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 	len = strlen(text);
 	int_upper_bound(&len, data->listbox_item_data->l - depth * 5);
 
-	if (item == data->box->sel) {
-		color = get_bfu_color(data->term, "menu.selected");
-	} else {
-		color = get_bfu_color(data->term, "menu.normal");
-	}
+	color = get_bfu_color(data->term,
+			      (item == data->box->sel) ? "menu.selected"
+						      : "menu.normal");
 
 	for (d = 0; d < depth - 1; d++) {
 		struct listbox_item *root = item;
@@ -353,17 +352,17 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 		}
 
 		/* XXX */
-		print_text(data->term, data->listbox_item_data->x + d * 5,
-			   data->listbox_item_data->y + data->offset,
-			   5, "     ", color);
+		draw_text(data->term, data->listbox_item_data->x + d * 5,
+			  data->listbox_item_data->y + data->offset,
+			  "     ", 5, 0, color);
 
 		if (root ? root->child.prev == child
 			 : data->box->items->prev == child)
 			continue; /* We were the last branch. */
 
-		set_border_char(data->term, data->listbox_item_data->x + d * 5 + 1,
-				data->listbox_item_data->y + data->offset,
-				BORDER_SVLINE, color);
+		draw_border_char(data->term, data->listbox_item_data->x + d * 5 + 1,
+				 data->listbox_item_data->y + data->offset,
+				 BORDER_SVLINE, color);
 	}
 
 	if (depth) {
@@ -394,16 +393,16 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 		if (item->marked) str[4] = '*';
 
 		for (i = 0; i < 5; i++) {
-			set_border_char(data->term,
-					data->listbox_item_data->x + (depth - 1) * 5 + i,
-					data->listbox_item_data->y + data->offset,
-					str[i], color);
+			draw_border_char(data->term,
+					 data->listbox_item_data->x + (depth - 1) * 5 + i,
+					 data->listbox_item_data->y + data->offset,
+					 str[i], color);
 		}
 	}
 
-	print_text(data->term, data->listbox_item_data->x + depth * 5,
+	draw_text(data->term, data->listbox_item_data->x + depth * 5,
 		   data->listbox_item_data->y + data->offset,
-		   len, text, color);
+		   text, len, 0, color);
 	if (item == data->box->sel) {
 		/* For blind users: */
 		set_cursor(data->term, data->listbox_item_data->x,
@@ -432,8 +431,8 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 		if (!box->sel) box->sel = box->top;
 	}
 
-	fill_area(term, listbox_item_data->x, listbox_item_data->y,
-		  listbox_item_data->l, listbox_item_data->h, ' ',
+	draw_area(term, listbox_item_data->x, listbox_item_data->y,
+		  listbox_item_data->l, listbox_item_data->h, ' ', 0,
 		  get_bfu_color(term, "menu.normal"));
 
 

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.62 2003/07/31 16:56:15 jonas Exp $ */
+/* $Id: core.c,v 1.63 2003/08/23 03:31:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,12 +20,12 @@
 
 #include "elinks.h"
 
-#include "bfu/align.h"
 #include "bfu/button.h"
 #include "bfu/dialog.h"
 #include "bfu/inpfield.h"
 #include "bfu/inphist.h"
 #include "bfu/msgbox.h"
+#include "bfu/style.h"
 #include "bfu/text.h"
 #include "config/kbdbind.h"
 #include "document/cache.h"
@@ -345,7 +345,7 @@ dialog_fn(struct dialog_data *dlg)
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
-	unsigned char dialog_text_color = get_bfu_color(term, "dialog.text");
+	struct screen_color *dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	text_width(term, dlg_msg[0], &min, &max);
 	text_width(term, dlg_msg[1], &min, &max);
@@ -495,7 +495,7 @@ xdialog_fn(struct dialog_data *dlg)
 	int y = -1;
 	int i;
 	int nfields;
-	unsigned char dialog_text_color = get_bfu_color(term, "dialog.text");
+	struct screen_color *dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	for (nfields = 0; dlg->items[nfields].item->type == D_FIELD; nfields++);
 

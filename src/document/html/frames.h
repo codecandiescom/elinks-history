@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.6 2003/07/31 17:29:00 jonas Exp $ */
+/* $Id: frames.h,v 1.7 2003/08/23 03:31:42 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -75,9 +75,9 @@ struct document {
 	int cp;
 	int x, y; /* size of document */
 	int frame;
-	unsigned char bg;
 	int nlinks;
 	int nsearch;
+	struct rgb bgcolor;
 
 	enum cp_status cp_status;
 };

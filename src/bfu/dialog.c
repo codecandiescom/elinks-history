@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.38 2003/07/31 17:29:00 jonas Exp $ */
+/* $Id: dialog.c,v 1.39 2003/08/23 03:31:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,11 +9,13 @@
 #include <string.h>
 
 #include "elinks.h"
+#include "setup.h"
 
 #include "bfu/button.h"
 #include "bfu/dialog.h"
 #include "bfu/inphist.h"
 #include "bfu/listbox.h"
+#include "bfu/style.h"
 #include "bfu/widget.h"
 #include "config/kbdbind.h"
 #include "config/options.h"
@@ -68,18 +70,24 @@ redraw_dialog(struct dialog_data *dlg)
 	int x = dlg->x + DIALOG_LEFT_BORDER;
 	int y = dlg->y + DIALOG_TOP_BORDER;
 	struct terminal *term = dlg->win->term;
-	unsigned char dialog_title_color = get_bfu_color(term, "dialog.title");
+	struct screen_color *title_color;
 
-	draw_frame(term, x, y,
-		   dlg->xw - 2 * DIALOG_LEFT_BORDER,
-		   dlg->yw - 2 * DIALOG_TOP_BORDER,
-		   get_bfu_color(term, "dialog.frame"), DIALOG_FRAME);
+	draw_border(term, x, y,
+		    dlg->xw - 2 * DIALOG_LEFT_BORDER,
+		    dlg->yw - 2 * DIALOG_TOP_BORDER,
+		    get_bfu_color(term, "dialog.frame"),
+		    DIALOG_FRAME);
 
-	i = strlen(dlg->dlg->title);
-	x = (dlg->xw - i) / 2 + dlg->x;
-	print_text(term, x - 1, y, 1, " ", dialog_title_color);
-	print_text(term, x, y, i, dlg->dlg->title, dialog_title_color);
-	print_text(term, x + i, y, 1, " ", dialog_title_color);
+	title_color = get_bfu_color(term, "dialog.title");
+	if (title_color) {
+		unsigned char *title = dlg->dlg->title;
+		int titlelen = strlen(title);
+
+		x = (dlg->xw - titlelen) / 2 + dlg->x;
+		draw_text(term, x - 1, y, " ", 1, 0, title_color);
+		draw_text(term, x, y, title, titlelen, 0, title_color);
+		draw_text(term, x + titlelen, y, " ", 1, 0, title_color);
+	}
 
 	for (i = 0; i < dlg->n; i++)
 		display_dlg_item(dlg, &dlg->items[i], i == dlg->selected);
@@ -357,21 +365,21 @@ center_dlg(struct dialog_data *dlg)
 void
 draw_dlg(struct dialog_data *dlg)
 {
-	fill_area(dlg->win->term, dlg->x, dlg->y, dlg->xw, dlg->yw, ' ',
-		  get_bfu_color(dlg->win->term, "=dialog"));
+	draw_area(dlg->win->term, dlg->x, dlg->y, dlg->xw, dlg->yw, ' ', 0,
+		  get_bfu_color(dlg->win->term, "dialog"));
 
 	if (get_opt_bool("ui.dialogs.shadows")) {
 		/* Draw shadow */
-		unsigned char shadow_color = get_bfu_color(dlg->win->term, "=dialog.shadow");
+		struct screen_color * shadow_color;
+
+		shadow_color = get_bfu_color(dlg->win->term, "dialog.shadow");
 
 		/* (horizontal) */
-		fill_area(dlg->win->term, dlg->x + 2, dlg->y + dlg->yw,
-			  dlg->xw - 2, 1, ' ',
-			  shadow_color);
+		draw_area(dlg->win->term, dlg->x + 2, dlg->y + dlg->yw,
+			  dlg->xw - 2, 1, ' ', 0, shadow_color);
 
 		/* (vertical) */
-		fill_area(dlg->win->term, dlg->x + dlg->xw, dlg->y + 1,
-			  2, dlg->yw, ' ',
-			  shadow_color);
+		draw_area(dlg->win->term, dlg->x + dlg->xw, dlg->y + 1,
+			  2, dlg->yw, ' ', 0, shadow_color);
 	}
 }

@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.46 2003/08/01 11:49:51 zas Exp $ */
+/* $Id: dialogs.c,v 1.47 2003/08/23 03:31:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "bfu/button.h"
 #include "bfu/dialog.h"
 #include "bfu/inpfield.h"
+#include "bfu/style.h"
 #include "bfu/text.h"
 #include "dialogs/auth.h"
 #include "intl/gettext/libintl.h"
@@ -28,7 +29,7 @@ auth_layout(struct dialog_data *dlg)
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
-	unsigned char dialog_text_color = get_bfu_color(term, "dialog.text");
+	struct screen_color *dialog_text_color = get_bfu_color(term, "dialog.text");
 	unsigned char *label_login = N_("Login");
 	unsigned char *label_password = N_("Password");
 

@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.27 2003/07/31 16:56:11 jonas Exp $ */
+/* $Id: button.c,v 1.28 2003/08/23 03:31:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,9 +9,9 @@
 
 #include "elinks.h"
 
-#include "bfu/align.h"
-#include "bfu/dialog.h"
 #include "bfu/button.h"
+#include "bfu/dialog.h"
+#include "bfu/style.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/draw.h"
 #include "terminal/kbd.h"
@@ -107,14 +107,20 @@ static void
 display_button(struct widget_data *di, struct dialog_data *dlg, int sel)
 {
 	struct terminal *term = dlg->win->term;
-	unsigned char co = sel ? get_bfu_color(term, "dialog.button-selected")
-			       : get_bfu_color(term, "dialog.button");
+	struct screen_color *color;
 	int len = strlen(di->item->text);
 	int x = di->x + 2;
 
-	print_text(term, di->x, di->y, 2, "[ ", co);
-	print_text(term, x, di->y, len, di->item->text, co);
-	print_text(term, x + len, di->y, 2, " ]", co);
+	color = get_bfu_color(term, sel ? "dialog.button-selected"
+					: "dialog.button");
+	if (!color) return;
+
+	/* XXX: Call fg_color() ? --pasky */
+
+	draw_text(term, di->x, di->y, "[ ", 2, 0, color);
+	draw_text(term, x, di->y, di->item->text, len, 0, color);
+	draw_text(term, x + len, di->y, " ]", 2, 0, color);
+
 	if (sel) {
 		set_cursor(term, x, di->y, 0);
 		set_window_ptr(dlg->win, di->x, di->y);

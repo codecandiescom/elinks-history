@@ -1,14 +1,18 @@
-/* $Id: text.h,v 1.5 2003/07/31 16:56:11 jonas Exp $ */
+/* $Id: text.h,v 1.6 2003/08/23 03:31:41 jonas Exp $ */
 
 #ifndef EL__BFU_TEXT_H
 #define EL__BFU_TEXT_H
 
-#include "bfu/align.h"
+#include "bfu/style.h"
 #include "terminal/terminal.h"
+#include "terminal/draw.h"
 
 void text_width(struct terminal *term, register unsigned char *text, int *minwidth, int *maxwidth);
 void max_text_width(struct terminal *, unsigned char *, int *);
 void min_text_width(struct terminal *, unsigned char *, int *);
-void dlg_format_text(struct terminal *, struct terminal *, unsigned char *, int, int *, int, int *, unsigned char, enum format_align);
+
+void dlg_format_text(struct terminal *term, struct terminal *t2,
+		    unsigned char *text, int x, int *y, int w, int *rw,
+		    struct screen_color *scolor, enum format_align align);
 
 #endif

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.118 2003/08/02 15:51:02 jonas Exp $ */
+/* $Id: main.c,v 1.119 2003/08/23 03:31:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,7 @@
 #ifdef USE_LEDS
 #include "bfu/leds.h"
 #endif
+#include "bfu/style.h"
 #include "bookmarks/bookmarks.h"
 #include "config/cmdline.h"
 #include "config/conf.h"
@@ -282,6 +283,7 @@ terminate_all_subsystems(void)
 #ifdef USE_LEDS
 	done_leds();
 #endif
+	done_bfu_colors();
 	done_timer();
 	done_options();
 	terminate_osdep();

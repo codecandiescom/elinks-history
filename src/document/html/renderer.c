@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.197 2003/08/23 01:01:07 jonas Exp $ */
+/* $Id: renderer.c,v 1.198 2003/08/23 03:31:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,7 +12,6 @@
 #include "elinks.h"
 
 #include "main.h"
-#include "bfu/align.h"
 #include "config/options.h"
 #include "document/cache.h"
 #include "document/options.h"
@@ -1549,7 +1548,9 @@ format_html(struct cache_entry *ce, struct document *screen)
 	if (form.action) mem_free(form.action), form.action = NULL;
 	if (form.target) mem_free(form.target), form.target = NULL;
 
-	screen->bg = find_nearest_color(&par_format.bgcolor, 8) << 3;
+	screen->bgcolor.r = par_format.bgcolor.r;
+	screen->bgcolor.g = par_format.bgcolor.g;
+	screen->bgcolor.b = par_format.bgcolor.b;
 
 	kill_html_stack_item(html_stack.next);
 

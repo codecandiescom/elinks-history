@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.31 2003/08/21 13:03:55 zas Exp $ */
+/* $Id: form.c,v 1.32 2003/08/23 03:31:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,12 +205,12 @@ draw_form_entry(struct terminal *t, struct document_view *f, struct link *l)
 					if (x >= xp && x < xp + xw) {
 						if (fs->value &&
 						    i >= -fs->vpos && i < len)
-							set_only_char(t, x, y,
-								      frm->type != FC_PASSWORD
-								      ? fs->value[i + fs->vpos]
-								      : '*');
+							draw_char_data(t, x, y,
+								       frm->type != FC_PASSWORD
+								       ? fs->value[i + fs->vpos]
+								       : '*');
 						else
-							set_only_char(t, x, y, '_');
+							draw_char_data(t, x, y, '_');
 					}
 				}
 			}
@@ -224,7 +224,7 @@ draw_form_entry(struct terminal *t, struct document_view *f, struct link *l)
 			x = l->pos[1].x + xp - vx;
 			y = l->pos[1].y + yp - vy;
 			if (x >= xp && y >= yp && x < xp + xw && y < yp + yw)
-				set_only_char(t, x, y, fs->state ? 'X' : ' ');
+				draw_char_data(t, x, y, fs->state ? 'X' : ' ');
 			break;
 		case FC_SELECT:
 			fixup_select_state(frm, fs);
@@ -238,7 +238,7 @@ draw_form_entry(struct terminal *t, struct document_view *f, struct link *l)
 				x = l->pos[i].x + xp - vx;
 				y = l->pos[i].y + yp - vy;
 				if (x >= xp && y >= yp && x < xp + xw && y < yp + yw)
-					set_only_char(t, x, y, i < sl ? s[i] : '_');
+					draw_char_data(t, x, y, i < sl ? s[i] : '_');
 			}
 			break;
 		case FC_SUBMIT:

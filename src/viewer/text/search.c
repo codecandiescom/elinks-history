@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.13 2003/08/23 03:05:59 jonas Exp $ */
+/* $Id: search.c,v 1.14 2003/08/23 03:31:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 #include "elinks.h"
 
 #include "bfu/msgbox.h"
+#include "bfu/style.h"
 #include "intl/gettext/libintl.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
@@ -379,7 +380,6 @@ void
 draw_searched(struct terminal *term, struct document_view *scr)
 {
 	struct point *pt = NULL;
-	unsigned char color = 0;
 	int len = 0;
 	register int i;
 
@@ -390,19 +390,21 @@ draw_searched(struct terminal *term, struct document_view *scr)
 		return;
 
 	get_searched(scr, &pt, &len);
-	if (len) color = get_bfu_color(term, "searched");
+	if (len) {
+		struct screen_color *color = get_bfu_color(term, "searched");
 
-	for (i = 0; i < len; i++) {
-		int x = pt[i].x + scr->xp - scr->vs->view_posx;
-		int y = pt[i].y + scr->yp - scr->vs->view_pos;
+		for (i = 0; i < len; i++) {
+			int x = pt[i].x + scr->xp - scr->vs->view_posx;
+			int y = pt[i].y + scr->yp - scr->vs->view_pos;
 
 #if 0 /* We should take in account orignal colors and combine them
 	 with defined color. */
-		unsigned co = get_char(term, x, y);
-		co = ((co >> 3) & 0x0700) | ((co << 3) & 0x3800);
+			unsigned co = get_char(term, x, y);
+			co = ((co >> 3) & 0x0700) | ((co << 3) & 0x3800);
 #endif
 
-		set_color(term, x, y, color);
+			draw_char_color(term, x, y, color);
+		}
 	}
 
 	if (pt) mem_free(pt);

@@ -1,8 +1,9 @@
-/* $Id: draw.h,v 1.20 2003/08/23 01:01:07 jonas Exp $ */
+/* $Id: draw.h,v 1.21 2003/08/23 03:31:43 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
 
+#include "document/html/colors.h"
 #include "terminal/terminal.h"
 
 enum screen_char_attr {
@@ -22,6 +23,11 @@ struct screen_char {
 
 	/* Attributes are screen_char_attr bits. */
 	unsigned char attr;
+};
+
+struct screen_color {
+	struct rgb *foreground;
+	struct rgb *background;
 };
 
 /* Linux frame symbols table (it's magically converted to other terminals when
@@ -53,37 +59,61 @@ enum border_char {
 };
 
 /* 0 -> 1 <- 2 v 3 ^ */
-enum frame_cross_direction {
-	FRAME_X_RIGHT = 0,
-	FRAME_X_LEFT,
-	FRAME_X_DOWN,
-	FRAME_X_UP
+enum border_cross_direction {
+	BORDER_X_RIGHT = 0,
+	BORDER_X_LEFT,
+	BORDER_X_DOWN,
+	BORDER_X_UP
 };
 
-void draw_char(struct terminal *, int, int, unsigned char, unsigned char, unsigned char);
-void set_border_char(struct terminal *term, int x, int y, enum border_char border, unsigned char color);
-void set_xchar(struct terminal *, int x, int y, enum frame_cross_direction);
-struct screen_char *get_char(struct terminal *, int, int);
-void set_color(struct terminal *, int, int, unsigned char);
-void set_only_char(struct terminal *, int, int, unsigned char);
-void set_line(struct terminal *, int, int, int, struct screen_char *);
-void draw_area(struct terminal *, int, int, int, int, unsigned char, unsigned char, unsigned char color);
-void draw_frame(struct terminal *, int, int, int, int, unsigned char, int);
-void draw_text(struct terminal *, int, int, int, unsigned char *, unsigned char, unsigned char color);
+/* Extracts a char from the screen. */
+struct screen_char *get_char(struct terminal *, int xpos, int ypos);
 
-#define set_char(t, x, y, data, attr) draw_char(t, x, y, data, attr, (attr) & SCREEN_ATTR_FRAME)
-#define fill_area(t, x, y, xw, yw, d, c) draw_area(t, x, y, xw, yw, d, c, (c) & SCREEN_ATTR_FRAME)
-#define print_text(t, x, y, l, txt, c) draw_text(t, x, y, l, txt, c, (c) & SCREEN_ATTR_FRAME)
+/* Sets the color of a screen position. */
+void draw_char_color(struct terminal *term, int x, int y,
+	       struct screen_color *color);
 
-#define draw_border_area(t, x, y, xw, yw, d, c) do { \
-		draw_area(t, x, y, xw, yw, d, c, SCREEN_ATTR_FRAME); \
-	} while (0)
+/* Sets the data of a screen position. */
+void draw_char_data(struct terminal *term, int x, int y, unsigned char data);
+
+/* Sets the data to @border and of a screen position. */
+void draw_border_char(struct terminal *term, int x, int y,
+		      enum border_char border, struct screen_color *color);
+
+/* Sets the cross position of two borders. */
+void draw_border_cross(struct terminal *, int x, int y,
+		       enum border_cross_direction);
+
+/* Draws a char. */
+void draw_char(struct terminal *term, int x, int y,
+	       unsigned char data, enum screen_char_attr attr,
+	       struct screen_color *color);
+
+/* Draws an area using the same colors and attributes. */
+void draw_area(struct terminal *term, int x, int y, int xw, int yw,
+	       unsigned char data, enum screen_char_attr attr,
+	       struct screen_color *color);
+
+void draw_border(struct terminal *term, int x, int y, int xw, int yw,
+		 struct screen_color *color, int width);
+
+/* Draws @length chars from @text. */
+void draw_text(struct terminal *term, int x, int y,
+	       unsigned char *text, int length,
+	       enum screen_char_attr attr,
+	       struct screen_color *color);
+
+/* Draws @length chars from @line on the screen. */
+/* Used by viewer to copy over a document. */
+void draw_line(struct terminal *term, int x, int y, int length,
+	       struct screen_char *line);
 
 /* Updates the terminals cursor position. When @blockable is set the
  * block_cursor terminal option decides whether the cursor should be put at the
  * bottom right corner of the screen. */
 void set_cursor(struct terminal *term, int x, int y, int blockable);
 
+/* Blanks the screen. */
 void clear_terminal(struct terminal *);
 
 #endif

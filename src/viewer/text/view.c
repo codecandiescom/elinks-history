@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.181 2003/08/03 03:44:24 jonas Exp $ */
+/* $Id: view.c,v 1.182 2003/08/23 03:31:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,24 +208,26 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 			int wwx = fsd->f[i].xw;
 
 			if (i) {
-				draw_border_area(t, x, y + 1, 1, wwy, BORDER_SVLINE, 0);
+				draw_area(t, x, y + 1, 1, wwy, BORDER_SVLINE,
+					  SCREEN_ATTR_FRAME, NULL);
 				if (j == fsd->y - 1)
-					set_xchar(t, x, y + wwy + 1, FRAME_X_UP);
+					draw_border_cross(t, x, y + wwy + 1, BORDER_X_UP);
 			} else if (j) {
 				if (x >= 0)
-					set_xchar(t, x, y, FRAME_X_RIGHT);
+					draw_border_cross(t, x, y, BORDER_X_RIGHT);
 			}
 
 			if (j) {
-				draw_border_area(t, x + 1, y, wwx, 1, BORDER_SHLINE, 0);
+				draw_area(t, x + 1, y, wwx, 1, BORDER_SHLINE,
+					  SCREEN_ATTR_FRAME, NULL);
 				if (i == fsd->x - 1 && x + wwx + 1 < t->x)
-					set_xchar(t, x + wwx + 1, y, FRAME_X_LEFT);
+					draw_border_cross(t, x + wwx + 1, y, BORDER_X_LEFT);
 			} else if (i) {
-				set_xchar(t, x, y, FRAME_X_DOWN);
+				draw_border_cross(t, x, y, BORDER_X_DOWN);
 			}
 
 			if (i && j)
-				set_border_char(t, x, y, BORDER_SCROSS, 0);
+				draw_border_char(t, x, y, BORDER_SCROSS, 0);
 
 			x += wwx + 1;
 		}
@@ -261,6 +263,7 @@ draw_doc(struct terminal *t, struct document_view *scr, int active)
 	int xw, yw;
 	int vx, vy;
 	int y;
+	struct screen_color color;
 
 	assert(t && scr);
 	if_assert_failed return;
@@ -278,12 +281,17 @@ draw_doc(struct terminal *t, struct document_view *scr, int active)
 		set_cursor(t, xp + xw - 1, yp + yw - 1, 0);
 		set_window_ptr(get_current_tab(t), xp, yp);
 	}
+
+	color.foreground = NULL;
+	color.background = scr->document->y ? &scr->document->bgcolor : NULL;
+
 	if (!scr->vs) {
-		fill_area(t, xp, yp, xw, yw, ' ', scr->document->y ? scr->document->bg : 0);
+		draw_area(t, xp, yp, xw, yw, ' ', 0, &color);
 		return;
 	}
+
 	if (scr->document->frame) {
-	 	fill_area(t, xp, yp, xw, yw, ' ', scr->document->y ? scr->document->bg : 0);
+	 	draw_area(t, xp, yp, xw, yw, ' ', 0, &color);
 		draw_frame_lines(t, scr->document->frame_desc, xp, yp);
 		if (scr->vs && scr->vs->current_link == -1) scr->vs->current_link = 0;
 		return;
@@ -315,7 +323,7 @@ draw_doc(struct terminal *t, struct document_view *scr, int active)
 	free_link(scr);
 	scr->xl = vx;
 	scr->yl = vy;
-	fill_area(t, xp, yp, xw, yw, ' ', scr->document->y ? scr->document->bg : 0);
+	draw_area(t, xp, yp, xw, yw, ' ', 0, &color);
 	if (!scr->document->y) return;
 
 	while (vs->view_pos >= scr->document->y) vs->view_pos -= yw;
@@ -326,7 +334,7 @@ draw_doc(struct terminal *t, struct document_view *scr, int active)
 		int en = int_min(scr->document->data[y].l, xw + vx);
 
 		if (en - st <= 0) continue;
-		set_line(t, xp + st - vx, yp + y - vy, en - st, &scr->document->data[y].d[st]);
+		draw_line(t, xp + st - vx, yp + y - vy, en - st, &scr->document->data[y].d[st]);
 	}
 	draw_forms(t, scr);
 	if (active) draw_current_link(t, scr);
@@ -376,7 +384,8 @@ draw_formatted(struct session *ses)
 
 	if (!ses->screen || !ses->screen->document) {
 		/*internal("document not formatted");*/
-		fill_area(ses->tab->term, 0, 1, ses->tab->term->x, ses->tab->term->y - 2, ' ', 0);
+		draw_area(ses->tab->term, 0, 1, ses->tab->term->x,
+			  ses->tab->term->y - 2, ' ', 0, NULL);
 		return;
 	}
 

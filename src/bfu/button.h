@@ -1,9 +1,9 @@
-/* $Id: button.h,v 1.8 2003/06/27 20:39:32 zas Exp $ */
+/* $Id: button.h,v 1.9 2003/08/23 03:31:40 jonas Exp $ */
 
 #ifndef EL__BFU_BUTTON_H
 #define EL__BFU_BUTTON_H
 
-#include "bfu/align.h"
+#include "bfu/style.h"
 #include "bfu/widget.h"
 #include "terminal/terminal.h"
 

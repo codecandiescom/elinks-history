@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.90 2003/08/01 14:24:28 zas Exp $ */
+/* $Id: download.c,v 1.91 2003/08/23 03:31:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@
 #include "bfu/button.h"
 #include "bfu/dialog.h"
 #include "bfu/msgbox.h"
+#include "bfu/style.h"
 #include "bfu/text.h"
 #include "config/options.h"
 #include "dialogs/menu.h"
@@ -210,7 +211,7 @@ download_window_function(struct dialog_data *dlg)
 	unsigned char *u;
 	struct string msg;
 	struct download *download = &file_download->download;
-	unsigned char dialog_text_color = get_bfu_color(term, "dialog.text");
+	struct screen_color *dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	redraw_below_window(dlg->win);
 	file_download->win = dlg->win;
@@ -357,11 +358,11 @@ download_window_function(struct dialog_data *dlg)
 		q[qlen] = '\0';
 
 		y++;
-		set_only_char(term, x, y, '[');
-		set_only_char(term, x + w - qwidth, y, ']');
-		fill_area(term, x + 1, y, barprogress,
-			  1, ' ', get_bfu_color(term, "dialog.meter"));
-		print_text(term, x + w - qlen + 1, y, qlen, q, dialog_text_color);
+		draw_char_data(term, x, y, '[');
+		draw_char_data(term, x + w - qwidth, y, ']');
+		draw_area(term, x + 1, y, barprogress, 1, ' ', 0,
+			  get_bfu_color(term, "dialog.meter"));
+		draw_text(term, x + w - qlen + 1, y, q, qlen, 0, dialog_text_color);
 		y++;
 	}
 

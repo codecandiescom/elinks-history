@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.136 2003/08/01 14:34:56 zas Exp $ */
+/* $Id: session.c,v 1.137 2003/08/23 03:31:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #endif
 #include "bfu/menu.h"
 #include "bfu/msgbox.h"
+#include "bfu/style.h"
 #include "config/options.h"
 #include "dialogs/menu.h"
 #include "document/cache.h"
@@ -183,6 +184,7 @@ print_screen_status(struct session *ses)
 		static int last_current_link;
 		unsigned int tab_info_len = 0;
 		struct download *stat = NULL;
+		struct screen_color *text_color = NULL;
 
 		if (ses->task)
 			stat = &ses->loading;
@@ -215,11 +217,12 @@ print_screen_status(struct session *ses)
 				if (stat->state == S_OK)
 					msg = print_current_link(ses);
 			}
+
 			if (!msg)
 				msg = get_stat_msg(stat, term);
 		}
 
-		fill_area(term, 0, term->y - 1, term->x, 1, ' ',
+		draw_area(term, 0, term->y - 1, term->x, 1, ' ', 0,
 			  get_bfu_color(term, "status.status-bar"));
 
 		if (!ses->visible_tabs_bar && tabs_count > 1) {
@@ -231,14 +234,17 @@ print_screen_status(struct session *ses)
 			tab_info[tab_info_len++] = ' ';
 			tab_info[tab_info_len] = '\0';
 
-			print_text(term, 0, term->y - 1, tab_info_len,
-			   	   tab_info,
-				   get_bfu_color(term, "status.status-text"));
+			text_color = get_bfu_color(term, "status.status-text");
+			draw_text(term, 0, term->y - 1, tab_info, tab_info_len,
+				  0, text_color);
 		}
 
 		if (msg) {
-			print_text(term, 0 + tab_info_len, term->y - 1, strlen(msg),
-			   	   msg, get_bfu_color(term, "status.status-text"));
+			if (!text_color)
+				text_color = get_bfu_color(term, "status.status-text");
+
+			draw_text(term, 0 + tab_info_len, term->y - 1,
+				  msg, strlen(msg), 0, text_color);
 			mem_free(msg);
 		}
 	}
@@ -247,18 +253,15 @@ print_screen_status(struct session *ses)
 		int tab_width = term->x / tabs_count;
 		int tab_total_width = tab_width * tabs_count;
 		int tab_num;
-		unsigned char normal_color = get_bfu_color(term, "tabs.normal");
-		unsigned char selected_color = get_bfu_color(term, "tabs.selected");
+		struct screen_color *normal_color = get_bfu_color(term, "tabs.normal");
+		struct screen_color *selected_color = get_bfu_color(term, "tabs.selected");
 		unsigned char ypos = term->y - (ses->visible_status_bar ? 2 : 1);
-		unsigned char color = normal_color;
 
 		for (tab_num = 0; tab_num < tabs_count; tab_num++) {
+			struct screen_color *color;
 			struct window *tab = get_tab_by_number(term, tab_num);
 			int xpos = tab_num * tab_width;
 			int msglen;
-
-			color = (tab_num == term->current_tab)
-				? selected_color : normal_color;
 
 			if (tab->data && current_frame(tab->data)) {
 				if (current_frame(tab->data)->document->title &&
@@ -274,22 +277,26 @@ print_screen_status(struct session *ses)
 			if (msglen >= tab_width)
 				msglen = tab_width - 1;
 
-			if (tab_num)
-				print_text(term, xpos, ypos, 1, "|", normal_color);
+			if (tab_num) {
+				draw_text(term, xpos, ypos, "|", 1, 0, normal_color);
+				xpos += 1;
+			}
 
-			fill_area(term, xpos + !!tab_num, ypos, tab_width, 1, ' ', color);
+			color = (tab_num == term->current_tab)
+				? selected_color : normal_color;
 
-			print_text(term, xpos + !!tab_num, ypos, msglen, msg, color);
+			draw_area(term, xpos, ypos, tab_width, 1, ' ', 0, color);
+			draw_text(term, xpos, ypos, msg, msglen, 0, color);
 		}
 
 		if (tab_total_width < term->x)
-			fill_area(term, tab_total_width, ypos,
-				  term->x - tab_total_width, 1, ' ', color);
+			draw_area(term, tab_total_width, ypos,
+				  term->x - tab_total_width, 1, ' ', 0, normal_color);
 
 	}
 
 	if (ses_tab_is_current && ses->visible_title_bar) {
-		fill_area(term, 0, 0, term->x, 1, ' ',
+		draw_area(term, 0, 0, term->x, 1, ' ', 0,
 			  get_bfu_color(term, "title.title-bar"));
 
 		if (current_frame(ses)) {
@@ -299,8 +306,8 @@ print_screen_status(struct session *ses)
 				int pos = term->x - 1 - msglen;
 
 				if (pos < 0) pos = 0;
-				print_text(term, pos, 0, msglen,
-					   msg, get_bfu_color(term, "title.title-text"));
+				draw_text(term, pos, 0, msg, msglen, 0,
+					  get_bfu_color(term, "title.title-text"));
 				mem_free(msg);
 			}
 		}

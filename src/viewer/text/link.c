@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.33 2003/08/03 03:44:24 jonas Exp $ */
+/* $Id: link.c,v 1.34 2003/08/23 03:31:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,9 +233,7 @@ clear_link(struct terminal *t, struct document_view *scr)
 			struct link_bg *bgchar = &link_bg[i];
 
 			if (bgchar->x != -1 && bgchar->y != -1) {
-				draw_char(t, bgchar->x, bgchar->y,
-					  bgchar->c.data, bgchar->c.color,
-					  bgchar->c.attr);
+				draw_line(t, bgchar->x, bgchar->y, 1, &bgchar->c);
 			}
 		}
 		free_link(scr);

@@ -1,11 +1,10 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.21 2003/05/21 10:08:42 zas Exp $
+## $Id: Makefile.am,v 1.22 2003/08/23 03:31:40 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
 noinst_LIBRARIES = libbfu.a
 libbfu_a_SOURCES = \
- align.h \
  button.c \
  button.h \
  checkbox.c \
@@ -28,6 +27,8 @@ libbfu_a_SOURCES = \
  menu.h \
  msgbox.c \
  msgbox.h \
+ style.c \
+ style.h \
  text.c \
  text.h \
  widget.c \

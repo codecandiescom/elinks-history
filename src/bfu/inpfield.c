@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.43 2003/08/01 11:13:44 zas Exp $ */
+/* $Id: inpfield.c,v 1.44 2003/08/23 03:31:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,12 +11,12 @@
 
 #include "elinks.h"
 
-#include "bfu/align.h"
-#include "bfu/dialog.h"
 #include "bfu/button.h"
+#include "bfu/dialog.h"
 #include "bfu/inpfield.h"
 #include "bfu/inphist.h"
 #include "bfu/msgbox.h"
+#include "bfu/style.h"
 #include "bfu/text.h"
 #include "config/kbdbind.h"
 #include "intl/gettext/libintl.h"
@@ -127,7 +127,7 @@ input_field_fn(struct dialog_data *dlg)
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
-	unsigned char dialog_text_color = get_bfu_color(term, "dialog.text");
+	struct screen_color *text_color = get_bfu_color(term, "dialog.text");
 
 	text_width(term, dlg->dlg->udata, &min, &max);
 	buttons_width(term, dlg->items + 1, 2, &min, &max);
@@ -140,7 +140,7 @@ input_field_fn(struct dialog_data *dlg)
 
 	rw = 0; /* !!! FIXME: input field */
 	dlg_format_text(NULL, term, dlg->dlg->udata, 0, &y, w, &rw,
-			dialog_text_color, AL_LEFT);
+			text_color, AL_LEFT);
 	dlg_format_field(NULL, term, dlg->items, 0, &y, w, &rw,
 			 AL_LEFT);
 
@@ -157,7 +157,7 @@ input_field_fn(struct dialog_data *dlg)
 
 	y = dlg->y + DIALOG_TB;
 	dlg_format_text(term, term, dlg->dlg->udata, dlg->x + DIALOG_LB,
-			&y, w, NULL, dialog_text_color, AL_LEFT);
+			&y, w, NULL, text_color, AL_LEFT);
 	dlg_format_field(term, term, dlg->items, dlg->x + DIALOG_LB,
 			 &y, w, NULL, AL_LEFT);
 
@@ -243,25 +243,26 @@ display_field_do(struct widget_data *di, struct dialog_data *dlg, int sel,
 		 int hide)
 {
 	struct terminal *term = dlg->win->term;
+	struct screen_color *color;
 
 	int_lower_bound(&di->vpos, di->cpos - di->l + 1);
 	int_upper_bound(&di->vpos, di->cpos);
 	int_lower_bound(&di->vpos, 0);
 
-	fill_area(term, di->x, di->y, di->l, 1, ' ',
-		  get_bfu_color(term, "dialog.field"));
+	color = get_bfu_color(term, "dialog.field");
+	if (color)
+		draw_area(term, di->x, di->y, di->l, 1, ' ', 0, color);
 
-	{
+	color = get_bfu_color(term, "dialog.field-text");
+	if (color) {
 		int len = strlen(di->cdata + di->vpos);
 		int l = int_min(len, di->l);
 
 		if (!hide) {
-			print_text(term, di->x, di->y, l,
-				   di->cdata + di->vpos,
-				   get_bfu_color(term, "dialog.field-text"));
+			draw_text(term, di->x, di->y, di->cdata + di->vpos, l,
+				  0, color);
 		} else {
-			fill_area(term, di->x, di->y, l, 1, '*',
-				  get_bfu_color(term, "dialog.field-text"));
+			draw_area(term, di->x, di->y, l, 1, '*', 0, color);
 		}
 	}
 

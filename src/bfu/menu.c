@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.89 2003/08/03 03:44:23 jonas Exp $ */
+/* $Id: menu.c,v 1.90 2003/08/23 03:31:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,9 +9,9 @@
 
 #include "elinks.h"
 
-#include "bfu/align.h"
 #include "bfu/hotkey.h"
 #include "bfu/menu.h"
+#include "bfu/style.h"
 #include "config/kbdbind.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/draw.h"
@@ -243,23 +243,22 @@ static void
 display_menu(struct terminal *term, struct menu *menu)
 {
 	int p, s;
-	unsigned char menu_normal_color = get_bfu_color(term, "menu.normal");
-	unsigned char menu_frame_color = get_bfu_color(term, "menu.frame");
-	unsigned char menu_selected_color = get_bfu_color(term, "menu.selected");
-	unsigned char menu_hotkey_color = get_bfu_color(term, "menu.hotkey.normal");
-	unsigned char menu_selected_hotkey_color = get_bfu_color(term, "menu.hotkey.selected");
+	struct screen_color *normal_color = get_bfu_color(term, "menu.normal");
+	struct screen_color *selected_color = get_bfu_color(term, "menu.selected");
+	struct screen_color *frame_color = get_bfu_color(term, "menu.frame");
+	struct screen_color *hotkey_color = get_bfu_color(term, "menu.hotkey.normal");
+	struct screen_color *selected_hotkey_color = get_bfu_color(term, "menu.hotkey.selected");
 
-	fill_area(term,	menu->x + 1, menu->y + 1, menu->xw - 2, menu->yw - 2,
-		  ' ', menu_normal_color);
+	draw_area(term,	menu->x + 1, menu->y + 1, menu->xw - 2, menu->yw - 2,
+		  ' ', 0, normal_color);
 
-	draw_frame(term, menu->x, menu->y, menu->xw, menu->yw,
-		   menu_frame_color, 1);
+	draw_border(term, menu->x, menu->y, menu->xw, menu->yw, frame_color, 1);
 
 	for (p = menu->view, s = menu->y + 1;
 	     p < menu->ni && p < menu->view + menu->yw - 2;
 	     p++, s++) {
-		unsigned char co = menu_normal_color;
-		unsigned char hkco = menu_hotkey_color;
+		struct screen_color *color = normal_color;
+		struct screen_color *hkcolor = hotkey_color;
 
 #ifdef DEBUG
 		/* Sanity check. */
@@ -270,26 +269,26 @@ display_menu(struct terminal *term, struct menu *menu)
 
 		if (p == menu->selected) {
 			/* This entry is selected. */
-			co = menu_selected_color;
-			hkco = menu_selected_hotkey_color;
+			color = selected_color;
+			hkcolor = selected_hotkey_color;
 
 			set_cursor(term, menu->x + 1, s, 1);
 			set_window_ptr(menu->win, menu->x + menu->xw, s);
-			fill_area(term, menu->x + 1, s, menu->xw - 2, 1, ' ', co);
+			draw_area(term, menu->x + 1, s, menu->xw - 2, 1, ' ', 0, color);
 		}
 
 		if (menu->items[p].rtext == M_BAR &&
 		    menu->items[p].text && !*menu->items[p].text) {
 
 			/* Horizontal separator */
-			set_border_char(term, menu->x, s,
-					BORDER_SRTEE, menu_frame_color);
+			draw_border_char(term, menu->x, s,
+					 BORDER_SRTEE, frame_color);
 
-			draw_border_area(term, menu->x + 1, s, menu->xw - 2, 1,
-					 BORDER_SHLINE, menu_frame_color);
+			draw_area(term, menu->x + 1, s, menu->xw - 2, 1,
+				  BORDER_SHLINE, SCREEN_ATTR_FRAME, frame_color);
 
-			set_border_char(term, menu->x + menu->xw - 1, s,
-					BORDER_SLTEE, menu_frame_color);
+			draw_border_char(term, menu->x + menu->xw - 1, s,
+					 BORDER_SLTEE, frame_color);
 
 		} else {
 			unsigned char c;
@@ -322,15 +321,15 @@ display_menu(struct terminal *term, struct menu *menu)
 
 						if (hk == 1) {
 #ifdef DEBUG
-							set_char(term, menu->x + x - 1 + 2,
-								 s, c, (double_hk ?  menu_selected_hotkey_color : hkco));
+							draw_char(term, menu->x + x - 1 + 2, s, c, 0,
+								  (double_hk ? selected_hotkey_color : hkcolor));
 #else
-							set_char(term, menu->x + x - 1 + 2, s, c, hkco);
+							draw_char(term, menu->x + x - 1 + 2, s, c, 0, hkcolor);
 #endif
 							hk = 2;
 						} else {
-							set_char(term, menu->x + x - (hk ? 1 : 0) + 2,
-								 s, c, co);
+							draw_char(term, menu->x + x - (hk ? 1 : 0) + 2,
+								  s, c, 0, color);
 						}
 					}
 
@@ -340,7 +339,7 @@ display_menu(struct terminal *term, struct menu *menu)
 				     	     x < menu->xw - 4
 				     	     && (c = text[x]);
 				     	     x++)
-						set_char(term, menu->x + x + 2, s, c, co);
+						draw_char(term, menu->x + x + 2, s, c, 0, color);
 				}
 			}
 
@@ -357,7 +356,7 @@ display_menu(struct terminal *term, struct menu *menu)
 					     (x >= 0) && (menu->xw - 4 >= l - x)
 					     && (c = rtext[x]);
 				    	     x--)
-						set_char(term, menu->x + menu->xw - 2 - l + x, s, c, co);
+						draw_char(term, menu->x + menu->xw - 2 - l + x, s, c, 0, color);
 				}
 			}
 		}
@@ -627,17 +626,17 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 {
 	int i;
 	int p = 2;
-	unsigned char mainmenu_normal_color = get_bfu_color(term, "mainmenu.normal");
-	unsigned char mainmenu_selected_color = get_bfu_color(term, "mainmenu.selected");
-	unsigned char mainmenu_hotkey_color = get_bfu_color(term, "mainmenu.hotkey.normal");
-	unsigned char mainmenu_selected_hotkey_color = get_bfu_color(term, "mainmenu.hotkey.selected");
+	struct screen_color *normal_color = get_bfu_color(term, "mainmenu.normal");
+	struct screen_color *selected_color = get_bfu_color(term, "mainmenu.selected");
+	struct screen_color *hotkey_color = get_bfu_color(term, "mainmenu.hotkey.normal");
+	struct screen_color *selected_hotkey_color = get_bfu_color(term, "mainmenu.hotkey.selected");
 
-	fill_area(term, 0, 0, term->x, 1, ' ', mainmenu_normal_color);
+	draw_area(term, 0, 0, term->x, 1, ' ', 0, normal_color);
 
 	for (i = 0; i < menu->ni; i++) {
 		int j;
-		int co = mainmenu_normal_color;
-		int hkco = mainmenu_hotkey_color;
+		struct screen_color *co = normal_color;
+		struct screen_color *hkco = hotkey_color;
 		int hk = 0;
 		int key_pos = menu->items[i].hotkey_pos;
 		unsigned char c;
@@ -654,11 +653,11 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 			int tmptextlen = strlen(tmptext)
 					 - (key_pos ? 1 : 0);
 
-			co = mainmenu_selected_color;
-			hkco = mainmenu_selected_hotkey_color;
+			co = selected_color;
+			hkco = selected_hotkey_color;
 
-			fill_area(term, p, 0, 2, 1, ' ', co);
-			fill_area(term, p + tmptextlen + 2, 0, 2, 1, ' ', co);
+			draw_area(term, p, 0, 2, 1, ' ', 0, co);
+			draw_area(term, p + tmptextlen + 2, 0, 2, 1, ' ', 0, co);
 			menu->sp = p;
 			set_cursor(term, p, 0, 1);
 			set_window_ptr(menu->win, p, 1);
@@ -676,13 +675,13 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 
 			if (hk == 1) {
 #ifdef DEBUG
-				set_char(term, p, 0, c, (double_hk ? mainmenu_selected_hotkey_color : hkco));
+				draw_char(term, p, 0, c, 0, (double_hk ? selected_hotkey_color : hkco));
 #else
-				set_char(term, p, 0, c, hkco);
+				draw_char(term, p, 0, c, 0,  hkco);
 #endif
 				hk = 2;
 			} else {
-				set_char(term, p, 0, c, co);
+				draw_char(term, p, 0, c, 0, co);
 			}
 		}
 

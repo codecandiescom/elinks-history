@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.14 2003/07/31 16:56:11 jonas Exp $ */
+/* $Id: text.c,v 1.15 2003/08/23 03:31:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,7 +10,7 @@
 
 #include "elinks.h"
 
-#include "bfu/align.h"
+#include "bfu/style.h"
 #include "bfu/text.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/draw.h"
@@ -71,10 +71,11 @@ min_text_width(struct terminal *term, unsigned char *text, int *width)
 
 /* Format text according to dialog dimensions and alignment. */
 /* TODO: Longer names for local variables. */
+/* TODO: Optimized version tha wont decode the color for every draw_char(). */
 void
 dlg_format_text(struct terminal *term, struct terminal *t2,
 		unsigned char *text, int x, int *y, int w, int *rw,
-		unsigned char color, enum format_align align)
+		struct screen_color *color, enum format_align align)
 {
 	do {
 		unsigned char *tx;
@@ -113,7 +114,7 @@ dlg_format_text(struct terminal *term, struct terminal *t2,
 				if (rw) *rw = w;
 				rw = NULL;
 			}
-			if (term) set_char(term, x + s, *y, *tt, color);
+			if (term) draw_char(term, x + s, *y, *tt, 0, color);
 			s++;
 			tt++;
 		}

@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.34 2003/08/01 11:13:44 zas Exp $ */
+/* $Id: checkbox.c,v 1.35 2003/08/23 03:31:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,10 +7,10 @@
 
 #include "elinks.h"
 
-#include "bfu/align.h"
-#include "bfu/dialog.h"
 #include "bfu/button.h"
 #include "bfu/checkbox.h"
+#include "bfu/dialog.h"
+#include "bfu/style.h"
 #include "bfu/text.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/draw.h"
@@ -120,16 +120,20 @@ static void
 display_checkbox(struct widget_data *di, struct dialog_data *dlg, int sel)
 {
 	struct terminal *term = dlg->win->term;
+	struct screen_color *color;
+	unsigned char *text;
+
+	color = get_bfu_color(term, "dialog.checkbox");
+	if (!color) return;
 
 	if (di->checked) {
-		print_text(term, di->x, di->y, 3,
-				(!di->item->gid) ? "[X]" : "(X)",
-				get_bfu_color(term, "dialog.checkbox"));
+		text = (!di->item->gid) ? "[X]" : "(X)";
 	} else {
-		print_text(term, di->x,	di->y, 3,
-				(!di->item->gid) ? "[ ]" : "( )",
-				get_bfu_color(term, "dialog.checkbox"));
+		text = (!di->item->gid) ? "[ ]" : "( )";
 	}
+
+	draw_text(term, di->x,	di->y, text, 3, 0, color);
+
 	if (sel) {
 		set_cursor(term, di->x + 1, di->y, 0);
 		set_window_ptr(dlg->win, di->x, di->y);

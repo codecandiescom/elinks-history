@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.44 2003/10/07 09:26:14 zas Exp $ */
+/* $Id: search.c,v 1.45 2003/10/07 11:59:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -536,7 +536,7 @@ get_searched_regex(struct document_view *scr, struct point **pt, int *pl,
 	if (get_opt_int("document.browse.search.regex") == 2)
 		regex_flags |= REG_EXTENDED;
 
-	if (get_opt_bool("document.browse.search.case"))
+	if (!get_opt_bool("document.browse.search.case"))
 		regex_flags |= REG_ICASE;
 
 	/* TODO: show error message */

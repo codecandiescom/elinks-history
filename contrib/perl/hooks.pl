@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.72 2005/03/27 13:35:49 pasky Exp $
+# $Id: hooks.pl,v 1.73 2005/03/27 13:36:18 pasky Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -886,19 +886,16 @@ sub follow_url_hook
 Rewrites many I<google.com> URIs to use the phenomenal I<xx-bork> localization.
 
 =cut
-	if ($url =~ 'google\.com')
+	if ($url =~ 'google\.com' and loadrc("bork") eq "yes")
 	{
-		if (loadrc("bork") eq "yes")
+		if ($url =~ '^http://(|www\.|search\.)google\.com(|/search)(|/)$')
 		{
-			if ($url =~ '^http://(|www\.|search\.)google\.com(|/search)(|/)$')
-			{
-				return 'http://google.com/webhp?hl=xx-bork';
-			}
-			elsif ($url =~ '^http://(|www\.)groups\.google\.com(|/groups)(|/)$'
-				or $url =~ '^http://(|www\.|search\.)google\.com/groups(|/)$')
-			{
-				return 'http://google.com/groups?hl=xx-bork';
-			}
+			return 'http://google.com/webhp?hl=xx-bork';
+		}
+		elsif ($url =~ '^http://(|www\.)groups\.google\.com(|/groups)(|/)$'
+			or $url =~ '^http://(|www\.|search\.)google\.com/groups(|/)$')
+		{
+			return 'http://google.com/groups?hl=xx-bork';
 		}
 	}
 

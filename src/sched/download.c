@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.24 2003/05/04 20:42:13 pasky Exp $ */
+/* $Id: download.c,v 1.25 2003/05/04 20:54:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -506,7 +506,7 @@ write_error:
 					unsigned char *emsg = stracpy((unsigned char *) strerror(saved_errno));
 
 					if (msg && emsg) {
-						msg_box(get_download_ses(down)->term, getml(msg, emsg, NULL),
+						msg_box(get_download_ses(down)->tab->term, getml(msg, emsg, NULL),
 							N_("Download error"), AL_CENTER | AL_EXTD_TEXT,
 							N_("Could not create file"),
 							" ", msg, ": ", emsg, NULL,
@@ -539,7 +539,7 @@ end_store:
 					unsigned char *p = strchr(tt, POST_CHAR);
 					if (p) *p = '\0';
 
-					msg_box(get_download_ses(down)->term, getml(tt, NULL),
+					msg_box(get_download_ses(down)->tab->term, getml(tt, NULL),
 						N_("Download error"), AL_CENTER | AL_EXTD_TEXT,
 						N_("Error downloading"), " ",
 						tt, ":\n\n", t, NULL,
@@ -555,7 +555,7 @@ end_store:
 						  down->last_pos);
 				close(down->handle);
 				down->handle = -1;
-				exec_on_terminal(get_download_ses(down)->term,
+				exec_on_terminal(get_download_ses(down)->tab->term,
 						 down->prog, down->file,
 						 !!down->prog_flags);
 				mem_free(down->prog);
@@ -565,7 +565,7 @@ end_store:
 				if (down->notify) {
 					unsigned char *url = stracpy(down->url);
 
-					msg_box(get_download_ses(down)->term, getml(url, NULL),
+					msg_box(get_download_ses(down)->tab->term, getml(url, NULL),
 						N_("Download"), AL_CENTER | AL_EXTD_TEXT,
 						N_("Download complete"), ":\n", url, NULL,
 						get_download_ses(down), 1,
@@ -573,7 +573,7 @@ end_store:
 				}
 
 				if (get_opt_int("document.download.notify_bell") + down->notify >= 2) {
-					beep_terminal(get_download_ses(down)->term);
+					beep_terminal(get_download_ses(down)->tab->term);
 				}
 
 				if (down->remotetime && get_opt_int("document.download.set_original_time")) {

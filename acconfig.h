@@ -78,6 +78,9 @@
 /* Define to 1 if we should include mailcap support */
 #undef MAILCAP
 
+/* Define to 1 if we should include mime.types support */
+#undef MIMETYPES
+
 /* Directory containing default config */
 #undef CONFDIR
 

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.72 2004/01/21 05:39:36 jonas Exp $ */
+/* $Id: scanner.c,v 1.73 2004/01/21 05:46:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,8 +52,8 @@ struct css_identifier {
 };
 
 static enum css_token_type
-get_css_identifier_type(unsigned char *ident, int length,
-			enum css_token_type base_type)
+ident2type(unsigned char *ident, unsigned char *end,
+	       enum css_token_type base_type)
 {
 	static struct css_identifier identifiers2type[] = {
 		{ "Hz",		CSS_TOKEN_FREQUENCY,	CSS_TOKEN_DIMENSION },
@@ -84,6 +84,7 @@ get_css_identifier_type(unsigned char *ident, int length,
 		{ NULL, CSS_TOKEN_NONE, CSS_TOKEN_NONE },
 	};
 	struct css_identifier *ident2type = identifiers2type;
+	int length = end - ident;
 
 	for (; ident2type->name; ident2type++) {
 		if (ident2type->base_type == base_type
@@ -157,8 +158,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			unsigned char *ident = string;
 
 			scan_css(string, CSS_CHAR_IDENT);
-			type = get_css_identifier_type(ident, string - ident,
-							CSS_TOKEN_DIMENSION);
+			type = ident2type(ident, string, CSS_TOKEN_DIMENSION);
 		}
 
 	} else if (first_char == '#') {
@@ -189,8 +189,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 
 			/* Scan both ident start and ident */
 			scan_css(string, CSS_CHAR_IDENT);
-			type = get_css_identifier_type(ident, string - ident,
-						       CSS_TOKEN_AT_KEYWORD);
+			type = ident2type(ident, string, CSS_TOKEN_AT_KEYWORD);
 		}
 
 	} else if (first_char == '!') {
@@ -224,10 +223,8 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			/* Make sure that we have an ending ')' */
 			skip_css(function_end, ')');
 			if (*function_end == ')') {
-				int length = string - token->string;
-
-				type = get_css_identifier_type(token->string,
-						length, CSS_TOKEN_FUNCTION);
+				type = ident2type(token->string, string,
+						  CSS_TOKEN_FUNCTION);
 
 				/* If it is not a known function just skip the
 				 * how arg stuff so we don't end up generating

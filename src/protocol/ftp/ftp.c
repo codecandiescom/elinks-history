@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.30 2002/09/11 21:04:55 pasky Exp $ */
+/* $Id: ftp.c,v 1.31 2002/09/12 12:05:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -448,7 +448,9 @@ add_file_cmd_to_str(struct connection *conn)
 		return NULL;
 	}
 
+#ifdef IPV6
 	memset(&data_addr, 0, sizeof(struct sockaddr_in6));
+#endif
 	memset(pc, 0, 6);
 
 #ifdef IPV6

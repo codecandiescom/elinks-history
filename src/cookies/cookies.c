@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.63 2003/07/08 13:50:58 jonas Exp $ */
+/* $Id: cookies.c,v 1.64 2003/07/08 13:54:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,28 +177,25 @@ set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 	cstr.str = str;
 	if (!parse_cookie_str(&cstr)) return 0;
 
-	cookie = mem_alloc(sizeof(struct cookie));
+	cookie = mem_calloc(1, sizeof(struct cookie));
 	if (!cookie) return 0;
 
 	/* Fill main fields */
 
 	cookie->name = memacpy(str, cstr.nam_end - str);
 	if (!cookie->name) {
-free_cookie:
-		mem_free(cookie);
+		free_cookie(cookie);
 		return 0;
 	}
 	cookie->value = memacpy(cstr.val_start, cstr.val_end - cstr.val_start);
 	if (!cookie->value) {
-free_cookie_name:
-		mem_free(cookie->name);
-		goto free_cookie;
+		free_cookie(cookie);
+		return 0;
 	}
 	cookie->server = memacpy(uri->host, uri->hostlen);
 	if (!cookie->server) {
-free_cookie_value:
-		mem_free(cookie->value);
-		goto free_cookie_name;
+		free_cookie(cookie);
+		return 0;
 	}
 
 	/* Get expiration date */
@@ -230,9 +227,8 @@ free_cookie_value:
 
 		cookie->path = stracpy("/");
 		if (!cookie->path) {
-free_cookie_server:
-			mem_free(cookie->server);
-			goto free_cookie_value;
+			free_cookie(cookie);
+			return 0;
 		}
 
 		add_bytes_to_str(&cookie->path, &len, uri->data, uri->datalen);
@@ -269,8 +265,8 @@ free_cookie_server:
 	if (!cookie->domain) {
 		cookie->domain = memacpy(uri->host, uri->hostlen);
 		if (!cookie->domain) {
-			mem_free(cookie->path);
-			goto free_cookie_server;
+			free_cookie(cookie);
+			return 0;
 		}
 	}
 	if (cookie->domain[0] == '.')

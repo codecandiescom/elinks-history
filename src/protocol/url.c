@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.69 2003/06/20 14:08:43 pasky Exp $ */
+/* $Id: url.c,v 1.70 2003/06/26 16:49:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,15 +99,26 @@ get_prot_info(unsigned char *prot, int *port,
 	      void (**func)(struct connection *),
 	      void (**nc_func)(struct session *ses, unsigned char *))
 {
-	int i;
+	int i = check_protocol(prot, strlen(prot));
 
-	i = check_protocol(prot, strlen(prot));
 	if (i < 0) return -1;
 
 	if (port) *port = protocols[i].port;
 	if (func) *func = protocols[i].func;
 	if (nc_func) *nc_func = protocols[i].nc_func;
 	return 0;
+}
+
+static void
+get_prot_url_info(int i, int *free_syntax, int *need_slashes,
+		  int *need_slash_after_host)
+{
+	if (free_syntax)
+		*free_syntax = protocols[i].free_syntax;
+	if (need_slashes)
+		*need_slashes = protocols[i].need_slashes;
+	if (need_slash_after_host)
+		*need_slash_after_host = protocols[i].need_slash_after_host;
 }
 
 /* If url is invalid, it will return -1. */
@@ -124,6 +135,9 @@ parse_url(unsigned char *url, int *prlen,
 #ifdef IPV6
 	unsigned char *lbracket, *rbracket;
 #endif
+	int free_syntax;
+	int need_slashes;
+	int need_slash_after_host;
 	int protocol;
 
 	if (prlen) *prlen = 0;
@@ -156,18 +170,19 @@ parse_url(unsigned char *url, int *prlen,
 
 	protocol = check_protocol(url, prefix_end - url);
 	if (protocol == -1) return -1;
+	get_prot_url_info(protocol, &free_syntax, &need_slashes,
+			  &need_slash_after_host);
 
 	prefix_end++; /* ':' */
 
 	/* Skip slashes */
 
-	if (prefix_end[0] == '/' && prefix_end[1] == '/') {
+	if (prefix_end[0] == '/' && prefix_end[1] == '/')
 		prefix_end += 2;
-	} else {
-		if (protocols[protocol].need_slashes) return -1;
-	}
+	else if (need_slashes)
+		return -1;
 
-	if (protocols[protocol].free_syntax) {
+	if (free_syntax) {
 		if (data) *data = prefix_end;
 		if (dalen) *dalen = strlen(prefix_end);
 		return 0;
@@ -216,7 +231,7 @@ parse_url(unsigned char *url, int *prlen,
 #endif
 		host_end = prefix_end + strcspn(prefix_end, ":/");
 
-	if (!*host_end && protocols[protocol].need_slash_after_host) return -1;
+	if (!*host_end && need_slash_after_host) return -1;
 
 	if (host || holen) { /* Only enter if needed. */
 #ifdef IPV6
@@ -469,6 +484,9 @@ unsigned char *
 strip_url_password(unsigned char *url)
 {
 	unsigned char *str = init_str();
+	int need_slash_after_host;
+	int need_slashes;
+	int free_syntax;
 	int l = 0;
 
 	int prlen;
@@ -495,7 +513,14 @@ strip_url_password(unsigned char *url)
 	}
 
 	protocol = check_protocol(url, prlen);
-	if (protocol <= 0 || protocols[protocol].free_syntax) {
+
+	if (protocol <= 0)
+		free_syntax = 1;
+	else
+		get_prot_url_info(protocol, &free_syntax, &need_slashes,
+				  &need_slash_after_host);
+
+	if (protocol <= 0 || free_syntax) {
 		/* Custom or unknown or free-syntax protocol;
 		 * keep the URL untouched. */
 		mem_free(str);
@@ -505,7 +530,7 @@ strip_url_password(unsigned char *url)
 	add_bytes_to_str(&str, &l, url, prlen);
 	add_chr_to_str(&str, &l, ':');
 
-	if (protocols[protocol].need_slashes)
+	if (need_slashes)
 		add_to_str(&str, &l, "//");
 
 	if (user) {
@@ -530,7 +555,7 @@ strip_url_password(unsigned char *url)
 		add_bytes_to_str(&str, &l, port, polen);
 	}
 
-	if (protocols[protocol].need_slash_after_host)
+	if (need_slash_after_host)
 		add_chr_to_str(&str, &l, '/');
 
 	if (dalen) {

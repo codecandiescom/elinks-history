@@ -1,4 +1,4 @@
-/* $Id: checkbox.h,v 1.28 2003/12/27 03:27:31 miciah Exp $ */
+/* $Id: checkbox.h,v 1.29 2004/05/26 16:35:58 zas Exp $ */
 
 #ifndef EL__BFU_CHECKBOX_H
 #define EL__BFU_CHECKBOX_H
@@ -8,31 +8,25 @@
 
 struct terminal;
 
-#define add_dlg_checkbox(dlg, text_, data_)				\
-	do {								\
-		int n = (dlg)->widgets_size;				\
-		(dlg)->widgets[n].type = WIDGET_CHECKBOX;		\
-		(dlg)->widgets[n].text = (text_);			\
-		(dlg)->widgets[n].info.checkbox.gid = 0;		\
-		(dlg)->widgets[n].info.checkbox.gnum = 0;		\
-		(dlg)->widgets[n].datalen = sizeof(int);		\
-		(dlg)->widgets[n].data = (unsigned char *) &(data_);	\
-		(dlg)->widgets_size++;					\
+#define add_dlg_radio(dlg, text_, groupid, groupnum, data_)	\
+	do {							\
+		int *n = &(dlg)->widgets_size;			\
+		struct widget *widget = &(dlg)->widgets[*n];	\
+								\
+		widget->type = WIDGET_CHECKBOX;			\
+		widget->text = (text_);				\
+		widget->info.checkbox.gid = (groupid);		\
+		widget->info.checkbox.gnum = (groupnum);	\
+		widget->datalen = sizeof(int);			\
+		widget->data = (unsigned char *) &(data_);	\
+		(*n)++;						\
 	} while (0)
 
-#define add_dlg_radio(dlg, text_, groupid, groupnum, data_)		\
-	do {								\
-		int n = (dlg)->widgets_size;				\
-		(dlg)->widgets[n].type = WIDGET_CHECKBOX;		\
-		(dlg)->widgets[n].text = (text_);			\
-		(dlg)->widgets[n].info.checkbox.gid = (groupid);	\
-		(dlg)->widgets[n].info.checkbox.gnum = (groupnum);	\
-		(dlg)->widgets[n].datalen = sizeof(int);		\
-		(dlg)->widgets[n].data = (unsigned char *) &(data_);	\
-		(dlg)->widgets_size++;					\
-	} while (0)
+#define add_dlg_checkbox(dlg, text_, data_) \
+	add_dlg_radio(dlg, text_, 0, 0, data_)
 
 extern struct widget_ops checkbox_ops;
+
 void
 dlg_format_checkbox(struct terminal *term,
 		    struct widget_data *widget_data,

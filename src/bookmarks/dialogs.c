@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.35 2002/09/14 21:58:33 pasky Exp $ */
+/* $Id: dialogs.c,v 1.36 2002/09/15 15:32:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,8 +144,10 @@ bookmark_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 				struct listbox_data *box;
 			
 				box = (struct listbox_data *) dlg->items[BM_BOX_IND].item->data;
-				if (box->sel)
+				if (box->sel) {
 					box->sel->expanded = !box->sel->expanded;
+					bookmarks_dirty = 1;
+				}
 				display_dlg_item(dlg, &dlg->items[BM_BOX_IND], 1);
 
 				return EVENT_PROCESSED;

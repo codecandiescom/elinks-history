@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.44 2002/09/14 21:58:33 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.45 2002/09/15 15:32:43 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -245,6 +245,7 @@ read_bookmarks()
 		unsigned char *url;
 		unsigned char *depth_str;
 		int depth;
+		unsigned char *flags;
 		unsigned char *line_end;
 
 		/* Load URL. */
@@ -262,26 +263,33 @@ read_bookmarks()
 		/* Load depth. */
 
 		depth_str = strchr(url, '\t');
-
 		if (depth_str && (depth_str - url > MAX_STR_LEN - 1
 				  || depth_str == url))
 			continue;
 
-		if (!depth_str) {
-			depth_str = url;
-			depth = 0;
-		} else {
+		if (depth_str) {
 			*depth_str = '\0';
 			depth_str++;
 			depth = atoi(depth_str);
 			if (depth < 0) depth = 0;
 			if (depth > last_depth + 1) depth = last_depth + 1;
 			if (!last_bm && depth > 0) depth = 0;
+		} else {
+			depth_str = url;
+			depth = 0;
+		}
+
+		/* Load flags. */
+
+		flags = strchr(depth_str, '\t');
+		if (flags) {
+			*flags = '\0';
+			flags++;
 		}
 
 		/* Load EOLN. */
 
-		line_end = strchr(depth_str, '\n');
+		line_end = strchr(flags ? flags : depth_str, '\n');
 		if (!line_end)
 			continue;
 		*line_end = '\0';
@@ -304,6 +312,18 @@ read_bookmarks()
 			}
 			last_bm = add_bookmark(root, title, url);
 			last_depth = depth;
+
+			while (flags && *flags) {
+				switch (*flags) {
+					case 'F':
+						last_bm->box_item->type = BI_FOLDER;
+						break;
+					case 'E':
+						last_bm->box_item->expanded = 1;
+						break;
+				}
+				flags++;
+			}
 		}
 	}
 
@@ -332,6 +352,11 @@ write_bookmarks_do(struct secure_save_info *ssi, struct list_head *bookmarks)
 		secure_fputc(ssi, '\t');
 		snprintf(depth, 16, "%d", bm->box_item->depth);
 		secure_fputs(ssi, depth);
+		secure_fputc(ssi, '\t');
+		if (bm->box_item->type == BI_FOLDER)
+			secure_fputc(ssi, 'F');
+		if (bm->box_item->expanded)
+			secure_fputc(ssi, 'E');
 		secure_fputc(ssi, '\n');
 		mem_free(p);
 		if (ssi->err) break;

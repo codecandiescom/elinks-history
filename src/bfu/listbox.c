@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.30 2002/09/14 21:48:24 pasky Exp $ */
+/* $Id: listbox.c,v 1.31 2002/09/15 15:32:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,7 +144,7 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 				item = item->prev;
 
 				while (!list_empty(item->child) && item->expanded
-				    && (!follow_visible || item->visible)) {
+					&& (!follow_visible || item->visible)) {
 					/* Descend to children. */
 					item = item->child.prev;
 					visible_item = item;
@@ -289,7 +289,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int offset)
 	if (depth) {
 		unsigned char str[6] = " |-- ";
 
-		if (list_empty(item->child)) {
+		if (item->type == BI_LEAF) {
 			if (item->root) {
 				if (item == item->root->child.prev) {
 					str[1] = '`';

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.11 2002/05/17 22:13:39 pasky Exp $ */
+/* $Id: download.c,v 1.12 2002/05/18 19:23:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -389,7 +389,8 @@ download_data(struct status *stat, struct download *down)
 		u = stracpy(ce->redirect);
 		if (!u) return;
 
-		if (!http_bugs.bug_302_redirect && !ce->redirect_get) {
+		if (!get_opt_int("http_bugs.bug_302_redirect")
+		    && !ce->redirect_get) {
 			unsigned char *p = strchr(down->url, POST_CHAR);
 
 			if (p) add_to_strn(&u, p);
@@ -509,6 +510,7 @@ end_store:
 int
 create_download_file(struct terminal *term, unsigned char *fi, int safe)
 {
+	unsigned char *download_dir = get_opt_str("download_dir");
 	unsigned char *file = fi;
 	unsigned char *wd;
 	int h;

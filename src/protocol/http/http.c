@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.19 2002/05/17 22:41:52 pasky Exp $ */
+/* $Id: http.c,v 1.20 2002/05/18 19:23:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,7 +87,7 @@ int check_http_server_bugs(unsigned char *url,
 {
 	unsigned char *server, **s;
 
-	if (!http_bugs.allow_blacklist || info->http10)
+	if (!get_opt_int("http_bugs.allow_blacklist") || info->http10)
 		return 0;
 
 	server = parse_http_header(head, "Server", NULL);
@@ -125,7 +125,8 @@ void http_end_request(struct connection *c)
 #ifdef HAVE_SSL
 	&& (!c->ssl) /* We won't keep alive ssl connections */
 #endif
-	&& (!http_bugs.bug_post_no_keepalive || !strchr(c->url, POST_CHAR))) {
+	&& (!get_opt_int("http_bugs.bug_post_no_keepalive")
+	    || !strchr(c->url, POST_CHAR))) {
 		add_keepalive_socket(c, HTTP_KEEPALIVE_TIMEOUT);
 	} else {
 		abort_connection(c);
@@ -167,7 +168,7 @@ void http_send_header(struct connection *c)
 	unsigned char *host = upcase(c->url[0]) != 'P' ? c->url
 						       : get_url_data(c->url);
 	struct http_connection_info *info;
-	int http10 = http_bugs.http10;
+	int http10 = get_opt_int("http_bugs.http10");
 	unsigned char *post;
 
 	struct cache_entry *e = NULL;
@@ -448,7 +449,7 @@ void http_send_header(struct connection *c)
 			add_to_str(&hdr, &l, "Proxy-Connection: ");
 		}
 
-		if (!post || !http_bugs.bug_post_no_keepalive) {
+		if (!post || !get_opt_int("http_bugs.bug_post_no_keepalive")) {
 			add_to_str(&hdr, &l, "Keep-Alive\r\n");
 		} else {
 			add_to_str(&hdr, &l, "close\r\n");

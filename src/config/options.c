@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.18 2002/05/17 22:31:47 pasky Exp $ */
+/* $Id: options.c,v 1.19 2002/05/18 19:23:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,16 +30,16 @@
 #include "lowlevel/dns.h"
 #include "protocol/types.h"
 #include "util/error.h"
+#include "util/hash.h"
 
 
-/* TODO: We should store options in a hash, in order to have the searching
- * reasonably fast. */
+struct hash *links_options;
+struct hash *html_options;
 
+struct option links_options_list[];
+struct option html_options_list[];
 
-struct option links_options[];
-struct option html_options[];
-
-struct option *all_options[] = { links_options, html_options, NULL, };
+struct hash *all_options[] = { /*links_options*/ NULL, /*html_options*/ NULL, NULL, };
 
 
 /**********************************************************************
@@ -52,30 +52,66 @@ struct option *all_options[] = { links_options, html_options, NULL, };
 
 /* Get record of option of given name, or NULL if there's no such option. */
 struct option *
-get_opt_rec(struct option *optlist, unsigned char *name)
+get_opt_rec(struct hash *hash, unsigned char *name)
 {
-	struct option *opt;
+	struct hash_item *item = get_hash_item(hash, name);
 
-	for (opt = optlist; opt->name; opt++) {
-		if (!strcmp(opt->name, name)) {
-			return opt;
-		}
-	}
+	if (!item) return NULL;
 
-	return NULL;
+	return (struct option *) item->value;
 }
 
 /* Fetch pointer to value of certain option. It is guaranteed to never return
  * NULL. */
 void *
-get_opt(struct option *optlist, unsigned char *name)
+get_opt(struct hash *hash, unsigned char *name)
 {
-	struct option *opt = get_opt_rec(optlist, name);
+	struct option *opt = get_opt_rec(hash, name);
 
 	if (!opt) internal("Attempted to fetch unexistent option %s!", name);
 	if (!opt->ptr) internal("Option %s has no value!", name);
 	return opt->ptr;
 }
+
+/* Add option to hash. */
+void
+add_opt_rec(struct hash *hash, struct option *option)
+{
+	struct option *aopt = mem_alloc(sizeof(struct option));
+
+	memcpy(aopt, option, sizeof(struct option));
+
+	add_hash_item(hash, stracpy(option->name), aopt);
+}
+
+
+void
+init_options()
+{
+	struct option *opt;
+
+	/* 6 bits == 64 entries; I guess it's the best number for options
+	 * hash. --pasky */
+	links_options = init_hash(6);
+	html_options = init_hash(6);
+
+	all_options[0] = links_options;
+	all_options[1] = html_options;
+
+	for (opt = links_options_list; opt->name; opt++)
+		add_opt_rec(links_options, opt);
+
+	for (opt = html_options_list; opt->name; opt++)
+		add_opt_rec(html_options, opt);
+}
+
+void
+done_options()
+{
+	free_hash(links_options);
+	free_hash(html_options);
+}
+
 
 /* Get command-line alias for option name */
 unsigned char *
@@ -517,13 +553,13 @@ unsigned char *version_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 unsigned char *no_connect_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
-	no_connect = 1;
+	get_opt_int("no_connect") = 1;
 	return NULL;
 }
 
 unsigned char *anonymous_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
-	anonymous = 1;
+	get_opt_int("anonymous") = 1;
 	return NULL;
 }
 
@@ -531,7 +567,7 @@ unsigned char *dump_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
 	if (get_opt_int("dump") != o->min && get_opt_int("dump")) return "Can't use both -dump and -source";
 	dmp = o->min;
-	no_connect = 1;
+	get_opt_int("no_connect") = 1;
 	return NULL;
 }
 
@@ -545,7 +581,7 @@ unsigned char *printhelp_cmd(struct option *o, unsigned char ***argv, int *argc)
 	printf("Usage: links [OPTION]... [URL]\n\n");
 	printf("Options:\n\n");
 
-	for (option = links_options; option->name; option++) {
+	for (option = links_options_list; option->name; option++) {
 		if (option->flags & OPT_CMDLINE) {
 			unsigned char *cname = cmd_name(option->name);
 
@@ -704,7 +740,7 @@ struct http_bugs http_bugs = { 0, 1, 0, 0 };
 
 /* Following lists are sorted alphabetically */
 
-struct option links_options[] = {
+struct option links_options_list[] = {
 	/* <optname>, <cfgoptname>,
 	 * <cmdread_cmdline>, <cmdread_file>, <cmdwrite_file>,
 	 * <minval>, <maxval>, <varname>
@@ -1095,7 +1131,7 @@ struct option links_options[] = {
 		NULL },
 };
 
-struct option html_options[] = {
+struct option html_options_list[] = {
 
 	{	"html_assume_codepage", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, cp_rd, cp_wr,

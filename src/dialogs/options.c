@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.8 2002/05/17 23:18:18 pasky Exp $ */
+/* $Id: options.c,v 1.9 2002/05/18 19:23:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -247,7 +247,9 @@ httpopt_fn(struct dialog_data *dlg)
 int
 dlg_http_options(struct dialog_data *dlg, struct dialog_item_data *di)
 {
+#if 0
 	struct http_bugs *bugs = (struct http_bugs *)di->cdata;
+#endif
 	struct dialog *d;
 
 	d = mem_alloc(sizeof(struct dialog) + 14 * sizeof(struct dialog_item));
@@ -261,22 +263,22 @@ dlg_http_options(struct dialog_data *dlg, struct dialog_item_data *di)
 	d->items[0].type = D_CHECKBOX;
 	d->items[0].gid = 0;
 	d->items[0].dlen = sizeof(int);
-	d->items[0].data = (void *) &bugs->http10;
+	d->items[0].data = (void *) get_opt_ptr("http_bugs.http10");
 
 	d->items[1].type = D_CHECKBOX;
 	d->items[1].gid = 0;
 	d->items[1].dlen = sizeof(int);
-	d->items[1].data = (void *) &bugs->allow_blacklist;
+	d->items[1].data = (void *) get_opt_ptr("http_bugs.allow_blacklist");
 
 	d->items[2].type = D_CHECKBOX;
 	d->items[2].gid = 0;
 	d->items[2].dlen = sizeof(int);
-	d->items[2].data = (void *) &bugs->bug_302_redirect;
+	d->items[2].data = (void *) get_opt_ptr("http_bugs.bug_302_redirect");
 
 	d->items[3].type = D_CHECKBOX;
 	d->items[3].gid = 0;
 	d->items[3].dlen = sizeof(int);
-	d->items[3].data = (void *) &bugs->bug_post_no_keepalive;
+	d->items[3].data = (void *) get_opt_ptr("http_bugs.bug_post_no_keepalive");
 
 	d->items[4].type = D_CHECKBOX;
 	d->items[4].gid = 1;
@@ -522,8 +524,11 @@ net_options(struct terminal *term, void *xxx, void *yyy)
 	d->items[9].gid = 0;
 	d->items[9].fn = dlg_http_options;
 	d->items[9].text = TEXT(T_HTTP_OPTIONS);
-	d->items[9].data = (unsigned char *) &http_bugs;
+#if 0
+	/* Is this still needed? --pasky */
+	d->items[9].data = (unsigned char *) get_opt_ptr("http_bugs");
 	d->items[9].dlen = sizeof(struct http_bugs);
+#endif
 
 	d->items[10].type = D_BUTTON;
 	d->items[10].gid = 0;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.36 2002/05/17 22:31:47 pasky Exp $ */
+/* $Id: session.c,v 1.37 2002/05/18 19:23:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -580,7 +580,7 @@ do_move(struct session *ses, struct status **stat)
 		u = join_urls(ses->loading_url, ce->redirect);
 		if (!u) goto b;
 
-		if (!http_bugs.bug_302_redirect) {
+		if (!get_opt_int("http_bugs.bug_302_redirect")) {
 			if (!ce->redirect_get) {
 				p = strchr(ses->loading_url, POST_CHAR);
 				if (p) add_to_strn(&u, p);

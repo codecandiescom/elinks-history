@@ -1,10 +1,12 @@
-/* $Id: options.h,v 1.9 2002/05/17 22:14:59 pasky Exp $ */
+/* $Id: options.h,v 1.10 2002/05/18 19:23:51 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
 
 #include "document/options.h"
 #include "document/html/colors.h"
+/* Possibly, there should be util/hash.h included as well, but it somehow works
+ * without it and I'm glad that 2/3 of ELinks files don't depend on it ;). */
 
 #define option option_dirty_workaround_for_name_clash_with_include_on_cygwin
 
@@ -25,14 +27,15 @@ struct option {
 	unsigned char *desc;
 };
 
-extern struct option links_options[];
-extern struct option html_options[];
-extern struct option *all_options[];
+extern struct hash *links_options;
+extern struct hash *html_options;
+extern struct hash *all_options[];
 
+extern void init_options();
+extern void done_options();
 
-extern struct option *get_opt_rec(struct option *, unsigned char *);
-
-extern void *get_opt(struct option *, unsigned char *);
+extern struct option *get_opt_rec(struct hash *, unsigned char *);
+extern void *get_opt(struct hash *, unsigned char *);
 
 #define get_opt_int(name) *((int *) get_opt(links_options, name))
 #define get_opt_long(name) *((long *) get_opt(links_options, name))
@@ -40,16 +43,11 @@ extern void *get_opt(struct option *, unsigned char *);
 #define get_opt_str(name) ((unsigned char *) get_opt(links_options, name))
 #define get_opt_ptr(name) ((void *) get_opt(links_options, name))
 
+extern void add_opt_rec(struct hash *, struct option *);
+
 extern unsigned char *cmd_name(unsigned char *);
 extern unsigned char *opt_name(unsigned char *);
 
-
-extern int anonymous;
-extern unsigned char user_agent[];
-extern unsigned char accept_language[];
-
-extern int no_connect;
-extern int base_session;
 
 enum dump_type {
 	D_NONE,
@@ -58,7 +56,6 @@ enum dump_type {
 };
 
 extern enum dump_type dmp;
-extern int dump_width;
 
 enum cookies_accept {
 	COOKIES_ACCEPT_NONE,
@@ -66,47 +63,12 @@ enum cookies_accept {
 	COOKIES_ACCEPT_ALL
 };
 
-extern enum cookies_accept cookies_accept;
-extern int cookies_save;
-extern int cookies_resave;
-extern int cookies_paranoid_security;
-
-extern int secure_save;
-
-extern int async_lookup;
-extern int download_utime;
-extern int max_connections;
-extern int max_connections_to_host;
-extern int max_tries;
-extern int receive_timeout;
-extern int unrestartable_receive_timeout;
-
-extern int keep_unhistory;
-
-extern int enable_global_history;
-
 extern struct document_setup dds;
-
-extern int max_format_cache_entries;
-extern long memory_cache_size;
 
 extern struct rgb default_fg;
 extern struct rgb default_bg;
 extern struct rgb default_link;
 extern struct rgb default_vlink;
-
-extern int color_dirs;
-
-extern int show_status_bar;
-extern int show_title_bar;
-
-extern int form_submit_auto;
-extern int form_submit_confirm;
-extern int accesskey_enter;
-extern int accesskey_priority;
-extern int links_wraparound;
-
-extern int allow_special_files;
 
 enum referer {
 	REFERER_NONE,
@@ -115,28 +77,11 @@ enum referer {
 	REFERER_TRUE,
 };
 
-extern enum referer referer;
-extern unsigned char fake_referer[];
-extern unsigned char http_proxy[];
-extern unsigned char ftp_proxy[];
-extern unsigned char no_proxy_for[];
-extern unsigned char download_dir[];
-extern unsigned char default_mime_type[];
-
-extern unsigned char proxy_user[];
-extern unsigned char proxy_passwd[];
-
-extern int startup_goto_dialog;
-
 struct http_bugs {
 	int http10;
 	int allow_blacklist;
 	int bug_302_redirect;
 	int bug_post_no_keepalive;
 };
-
-extern struct http_bugs http_bugs;
-
-extern unsigned char default_anon_pass[];
 
 #endif

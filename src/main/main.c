@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.27 2002/05/17 21:59:58 pasky Exp $ */
+/* $Id: main.c,v 1.28 2002/05/18 19:23:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -248,7 +248,8 @@ init()
 	void *info;
 	int len;
 	unsigned char *u;
-	
+
+	init_options();
 	init_trans();
 	set_sigcld();
 	get_system_name();
@@ -385,6 +386,7 @@ terminate_all_subsystems()
 	free_home();
 	free_strerror_buf();
 	shutdown_trans();
+	done_options();
 	terminate_osdep();
 }
 

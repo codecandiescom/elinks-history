@@ -64,7 +64,10 @@ dnl ===================================================================
 dnl Macros for various checks. (TODO: Move to m4/)
 dnl ===================================================================
 
-dnl AC_CHECK_SPECIAL_TYPE(type, define, include sys types, code)
+dnl EL_DEFINE(define, what)
+AC_DEFUN([EL_DEFINE], [AC_DEFINE($1, 1, [Define if you have $2])])
+
+dnl EL_CHECK_SPECIAL_TYPE(type, define, include sys types, code)
 AC_DEFUN([EL_CHECK_SPECIAL_TYPE],
 [
 	$2=yes
@@ -79,9 +82,7 @@ AC_DEFUN([EL_CHECK_SPECIAL_TYPE],
 #include <inttypes.h>
 #endif
 #endif
-	], [$4],
-	[AC_DEFINE($2, 1, [Define to 1 if we have $1])],
-	$2=no)
+	], [$4], [EL_DEFINE($2, [$1])],	$2=no)
 	AC_MSG_RESULT([$]$2)
 ])
 
@@ -136,7 +137,7 @@ AC_CACHE_CHECK([for variadic cpp macros],
                 ac_cv_cpp_variadic_macros=no)])
 
 if test "x${ac_cv_cpp_variadic_macros}" != "xno"; then
-	AC_DEFINE(HAVE_VARIADIC_MACROS, 1, [Support for variadic macros])
+	EL_DEFINE(HAVE_VARIADIC_MACROS, [variadic macros])
 fi
 
 dnl Check for -rdynamic

@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.16 2002/04/20 09:49:43 zas Exp $ */
+/* $Id: default.c,v 1.17 2002/04/20 10:16:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1346,8 +1346,6 @@ struct option links_options[] = {
 	 	1, 16, &max_tries,
 		"Number of tries to estabilish a connection." },
 
-		/* TODO - this is not used anywhere yet. */
-#if 0
 	{	"secure-save", "secure_save",
 		gen_cmd, num_rd, num_wr,
 		0, 1, &secure_save,
@@ -1356,7 +1354,6 @@ struct option links_options[] = {
        		"config files, not downloaded files. You may want to disable\n"
 		"it, if you want some config file as a symlink or with some\n"
 		"exotic permissions." },
-#endif
 
 	{	"show-status-bar", "show_status_bar",
 		gen_cmd, num_rd, num_wr,

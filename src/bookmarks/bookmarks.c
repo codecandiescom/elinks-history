@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.18 2002/04/20 09:49:43 zas Exp $ */
+/* $Id: bookmarks.c,v 1.19 2002/04/20 10:16:36 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -16,7 +16,7 @@
 
 #include <bookmarks/bookmarks.h>
 #include <config/default.h>
-
+#include <util/secsave.h>
 
 /* The list of bookmarks */
 struct list_head bookmarks = { &bookmarks, &bookmarks };
@@ -237,15 +237,15 @@ void
 write_bookmarks()
 {
 	struct bookmark *bm;
-	FILE *out;
+	struct secure_save_info *ssi;
 	unsigned char *file_name;
 
 	file_name = straconcat(links_home, "bookmarks", NULL);
 	if (!file_name) return;
 
-	out = fopen(file_name, "w");
+	ssi = secure_open(file_name, 022);
 	mem_free(file_name);
-	if (!out) return;
+	if (!ssi) return;
 
 	foreachback(bm, bookmarks) {
 		unsigned char *p = stracpy(bm->title);
@@ -255,14 +255,15 @@ write_bookmarks()
 			if (p[i] < ' '
 			    || (!new_bookmarks_format && p[i] == '|'))
 				p[i] = ' ';
-		fputs(p,out);
-		fputc(new_bookmarks_format ? '\t' : '|', out);
-		fputs(bm->url,out);
-		fputc('\n',out);
+		secure_fputs(ssi, p);
+		secure_fputc(ssi, new_bookmarks_format ? '\t' : '|');
+		secure_fputs(ssi, bm->url);
+		secure_fputc(ssi, '\n');
 		mem_free(p);
+		if (ssi->err) break;
 	}
 
-	fclose(out);
+	secure_close(ssi);
 }
 
 /* Clears the bookmark list */

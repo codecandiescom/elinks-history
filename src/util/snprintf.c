@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.19 2003/06/17 11:09:48 pasky Exp $ */
+/* $Id: snprintf.c,v 1.20 2003/06/20 17:16:56 pasky Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -786,7 +786,13 @@ fmtfp(char *buffer, size_t *currlen, size_t maxlen,
 }
 
 
-/* yes this really must be a ||. Don't muck with this (tridge) */
+/* Yes the following preprocessor conditions really must be a ||. Don't muck
+ * with this. -- tridge
+ *
+ * The logic for these is that we need our own definition if the OS *either*
+ * has no definition of *sprintf, or if it does have one that doesn't work
+ * properly according to the autoconf test. -- mbp */
+
 #if !defined(HAVE_VSNPRINTF) || !defined(HAVE_C99_VSNPRINTF)
 int
 elinks_vsnprintf(char *str, size_t count, const char *fmt, va_list args)
@@ -795,17 +801,6 @@ elinks_vsnprintf(char *str, size_t count, const char *fmt, va_list args)
 }
 #endif
 
-
-/* yes this really must be a ||. Don't muck wiith this (tridge)
- *
- * The logic for these two is that we need our own definition if the
- * OS *either* has no definition of *sprintf, or if it does have one
- * that doesn't work properly according to the autoconf test.  Perhaps
- * these should really be smb_snprintf to avoid conflicts with buggy
- * linkers? -- mbp
- *
- * Now it is elinks_snprintf() ;-). --pasky
- */
 #if !defined(HAVE_SNPRINTF) || !defined(HAVE_C99_VSNPRINTF)
 int
 elinks_snprintf(char *str, size_t count, const char *fmt, ...)

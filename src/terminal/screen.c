@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.56 2003/08/31 17:28:04 jonas Exp $ */
+/* $Id: screen.c,v 1.57 2003/08/31 19:14:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,6 +96,7 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 	unsigned char c = ch->data;
 	unsigned char color = ch->color;
 	unsigned char border = (ch->attr & SCREEN_ATTR_FRAME);
+	unsigned char underline = (ch->attr & SCREEN_ATTR_UNDERLINE);
 
 	if (opt_cache->type == TERM_LINUX) {
 		if (opt_cache->m11_hack && !opt_cache->utf_8_io) {
@@ -130,8 +131,43 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 		}
 	}
 
+	/* This is optimized for the (common) case that underlines are rare. */
+	if (underline != state->underline) {
+		/* Underline is optional which makes everything a bit more
+		 * complicated. */
+		if (!opt_cache->underline) {
+			/* If underlines should _not_ be drawn color
+			 * enhancements have to be applied _before_ adding the
+			 * color below and the state should not be touch
+			 * because we want to apply enhancements for each
+			 * underlined char. */
+			if (underline) {
+				color |= SCREEN_ATTR_BOLD;
+				color ^= 0x04;
+
+				/* Mark that underline has been handled so it
+				 * is not added when adding the color below. */
+				underline = 0;
+			}
+		} else if (color != state->color) {
+			/* Color changes wipes away any previous attributes
+			 * which means underlines has to be added together with
+			 * the color below so here we just update the state. */
+			state->underline = underline;
+		} else {
+			/* Completely handle the underlining. */
+			state->underline = underline;
+
+			if (underline) {
+				add_bytes_to_string(screen, "\033[4m", 4);
+			} else {
+				add_bytes_to_string(screen, "\033[24m", 5);
+			}
+		}
+	}
+
 	if (color != state->color) {
-		unsigned char code[11];
+		unsigned char code[13];
 		int length;
 
 		state->color = color;
@@ -163,6 +199,11 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 			length = 3;
 		}
 
+		if (underline) {
+			code[length++] = ';';
+			code[length++] = '4';
+		}
+
 		/* Check if the char should be rendered bold. */
 		if (color & SCREEN_ATTR_BOLD) {
 			code[length++] = ';';
@@ -172,20 +213,6 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 		code[length++] = 'm';
 
 		add_bytes_to_string(screen, code, length);
-	}
-
-	if (opt_cache->underline) {
-		unsigned char underline = (ch->attr & SCREEN_ATTR_UNDERLINE);
-
-		if (underline != state->underline) {
-			state->underline = underline;
-
-			if (underline) {
-				add_bytes_to_string(screen, "\033[4m", 4);
-			} else {
-				add_bytes_to_string(screen, "\033[24m", 5);
-			}
-		}
 	}
 
 	if (c >= ' ' && c != ASCII_DEL /* && c != 155*/) {
@@ -267,7 +294,7 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 		(c).charset	 = get_opt_int_tree((t)->spec,	"charset"); \
 		(c).restrict_852 = get_opt_bool_tree((t)->spec,	"restrict_852"); \
 		(c).trans	 = get_opt_bool_tree((t)->spec,	"transparency"); \
-		(c).underline	 = get_opt_bool_tree((t)->spec,	"transparency"); \
+		(c).underline	 = get_opt_bool_tree((t)->spec,	"underline"); \
 		\
 		/* Cache these values as they don't change and
 		 * get_cp_index() is pretty CPU-intensive. */ \

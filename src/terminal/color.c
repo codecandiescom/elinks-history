@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.16 2003/08/31 17:20:15 jonas Exp $ */
+/* $Id: color.c,v 1.17 2003/08/31 19:14:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,13 +214,6 @@ encode_color(struct color_pair *pair, enum screen_char_attr attr)
 	if (attr) {
 		if (attr & SCREEN_ATTR_ITALIC)
 			fg ^= 0x01;
-
-		/* TODO: For terminals that support underline no enhancements
-		 *	 should be added. */
-		if (attr & SCREEN_ATTR_UNDERLINE) {
-			fg ^= 0x04;
-			bold = SCREEN_ATTR_BOLD;
-		}
 
 		if (attr & SCREEN_ATTR_BOLD) {
 			bold = SCREEN_ATTR_BOLD;

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.98 2003/04/14 15:18:07 zas Exp $ */
+/* $Id: http.c,v 1.99 2003/04/16 21:25:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -710,7 +710,7 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 	}
 
 	do {
-		int init;
+		int init = 0;
 
 		if (to_read == PIPE_BUF / 2) {
 			/* ... we aren't finishing yet. */
@@ -724,7 +724,7 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 				/* if info->length == LEN_CHUNKED, info->length < 0 */
 				if (*length_of_block > 0)
 					*length_of_block -= written;
-				if (!info->length) {
+				if (*length_of_block) {
 					/* That's all, folks - let's finish this. */
 					to_read = 65536;
 				} else if (!len) {
@@ -745,7 +745,7 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 			conn->stream = open_encoded(conn->stream_pipes[0],
 					conn->content_encoding);
 			if (!conn->stream) return NULL;
-			else init = 1;
+			else if (to_read != 65536) init = 1; /* at the end caution doesn't make sense */
 		} else init = 0;
 
 		output = (unsigned char *) mem_realloc(output, *new_len + to_read);

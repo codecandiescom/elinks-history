@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.203 2003/11/11 22:32:39 pasky Exp $ */
+/* $Id: http.c,v 1.204 2003/11/14 12:04:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,8 +116,7 @@ subst_user_agent(unsigned char *fmt, unsigned char *version,
 }
 
 static void
-add_url_to_http_string(struct string *header, unsigned char *url_data,
-		    unsigned char *post)
+add_url_to_http_string(struct string *header, unsigned char *url_data)
 {
 	/* This block substitues spaces in URL by %20s. This is
 	 * certainly not the right place where to do it, but now the
@@ -127,8 +126,7 @@ add_url_to_http_string(struct string *header, unsigned char *url_data,
 	 * backends. --pasky */
 
 	/* Nop, this doesn't stand for EuroURL, but Encoded URL. */
-	unsigned char *eurl = (post ? memacpy(url_data, post - url_data - 1)
-				    : stracpy(url_data));
+	unsigned char *eurl = get_no_post_url(url_data, NULL);
 	unsigned char *p = eurl;
 	unsigned char *p1 = eurl;
 
@@ -398,7 +396,7 @@ http_send_header(struct connection *conn)
 		add_char_to_string(&header, '/');
 	}
 
-	add_url_to_http_string(&header, conn->uri.data, conn->uri.post);
+	add_url_to_http_string(&header, conn->uri.data);
 
 	add_to_string(&header, " HTTP/");
 	add_long_to_string(&header, info->sent_version.major);
@@ -470,12 +468,8 @@ http_send_header(struct connection *conn)
 
 		case REFERER_TRUE:
 			if (conn->ref_url && conn->ref_url[0]) {
-				unsigned char *tmp_post = strchr(conn->ref_url,
-								 POST_CHAR);
-
-				if (tmp_post) tmp_post++;
 				add_to_string(&header, "Referer: ");
-				add_url_to_http_string(&header, conn->ref_url, tmp_post);
+				add_url_to_http_string(&header, conn->ref_url);
 				add_to_string(&header, "\r\n");
 			}
 			break;
@@ -492,7 +486,7 @@ http_send_header(struct connection *conn)
 				add_char_to_string(&header, '/');
 
 			if (uri->data)
-				add_url_to_http_string(&header, uri->data, uri->post);
+				add_url_to_http_string(&header, uri->data);
 
 			add_to_string(&header, "\r\n");
 			break;

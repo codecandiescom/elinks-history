@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.15 2002/07/04 19:18:17 pasky Exp $
+## $Id: Makefile.am,v 1.16 2002/07/04 21:04:45 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -25,5 +25,7 @@ libbfu_a_SOURCES = \
  msgbox.c \
  msgbox.h \
  text.c \
- text.h
+ text.h \
+ widget.c \
+ widget.h
 

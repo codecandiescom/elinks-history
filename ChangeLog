@@ -1,3 +1,75 @@
+Mon Jul 14 20:03:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Switch off code to add default port in get_uri_string(). HTTP Auth
+	hopefully won't suffer. Reported by Zas.  
+
+Mon Jul 14 19:51:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, document/cache.c, document/html/frames.c,
+	document/html/parser.c, document/html/renderer.c,
+	lowlevel/connect.c, mime/mime.c, protocol/Makefile.am,
+	protocol/file.c, protocol/finger.c, protocol/ftp.c, protocol/uri.c,
+	protocol/uri.h, protocol/url.c, protocol/url.h,
+	protocol/http/auth.c, sched/download.c, sched/session.c,
+	viewer/dump/dump.c, viewer/text/link.c, viewer/text/view.c:
+
+	Complete first part of the url -> uri switch. Some of the moved
+	functions still need to be cleaned up and we could probably populate
+	with struct uri more places.  
+
+Mon Jul 14 19:27:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/url.c:
+
+	Use struct uri in get_filename_from_url(). Last dep. part II. ;p 
+
+Mon Jul 14 19:14:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/url.c:
+
+	Use struct uri in translate_directories(). Last dependency on
+	parse_url().  
+
+Mon Jul 14 18:48:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/url.c:
+
+	Use struct uri in translate_url(). Note: !parse_url() ==
+	parse_uri().  
+
+Mon Jul 14 18:43:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/url.c:
+
+	Use struct uri in join_url(). Note: !parse_url() == parse_uri().  
+
+Mon Jul 14 18:23:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	Simplify check_encoding_extension() and correct the comment.  
+
+Mon Jul 14 10:17:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Forgot to tune the assertions to how the function is now used.
+	Thanks Zardoz.  
+
+Mon Jul 14 07:15:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/user.c:
+
+	Typo fix: costum -> custom.  
+
+Mon Jul 14 07:09:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/url.c:
+
+	A double affectation was fixed ( int a = a = b;) 
+
 Sun Jul 13 13:32:30 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/url.c:

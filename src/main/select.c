@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.19 2002/12/07 20:05:56 pasky Exp $ */
+/* $Id: select.c,v 1.20 2002/12/17 12:20:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,20 +49,6 @@ struct thread {
 	void *data;
 };
 
-struct thread threads[FD_SETSIZE];
-
-fd_set w_read;
-fd_set w_write;
-fd_set w_error;
-
-fd_set x_read;
-fd_set x_write;
-fd_set x_error;
-
-int w_max;
-
-int timer_id = 0;
-
 struct timer {
 	struct timer *next;
 	struct timer *prev;
@@ -72,7 +58,21 @@ struct timer {
 	int id;
 };
 
-struct list_head timers = {&timers, &timers};
+static struct list_head timers = {&timers, &timers};
+static struct thread threads[FD_SETSIZE];
+
+static fd_set w_read;
+static fd_set w_write;
+static fd_set w_error;
+
+static fd_set x_read;
+static fd_set x_write;
+static fd_set x_error;
+
+static int w_max;
+static int timer_id = 0;
+
+
 
 long
 select_info(int type)
@@ -105,7 +105,7 @@ struct bottom_half {
 	void *data;
 };
 
-struct list_head bottom_halves = { &bottom_halves, &bottom_halves };
+static struct list_head bottom_halves = { &bottom_halves, &bottom_halves };
 
 int
 register_bottom_half(void (*fn)(void *), void *data)
@@ -143,7 +143,7 @@ check_bottom_halves()
 
 static ttime last_time;
 
-void
+static void
 check_timers()
 {
 	ttime now = get_time();
@@ -282,14 +282,13 @@ struct signal_handler {
 	int critical;
 };
 
-int signal_mask[NUM_SIGNALS];
-struct signal_handler signal_handlers[NUM_SIGNALS];
+static int signal_mask[NUM_SIGNALS];
+static struct signal_handler signal_handlers[NUM_SIGNALS];
+static int critical_section = 0;
 
-int critical_section = 0;
+static inline void check_for_select_race();
 
-void check_for_select_race();
-
-void
+static inline void
 got_signal(int sig)
 {
 	if (sig >= NUM_SIGNALS || sig < 0) {
@@ -333,16 +332,16 @@ install_signal_handler(int sig, void (*fn)(void *), void *data, int critical)
 	if (fn) sigaction(sig, &sa, NULL);
 }
 
-int pending_alarm = 0;
+static int pending_alarm = 0;
 
-void
+static inline void
 alarm_handler(void *x)
 {
 	pending_alarm = 0;
 	check_for_select_race();
 }
 
-void
+static inline void
 check_for_select_race()
 {
 	if (critical_section) {
@@ -356,7 +355,7 @@ check_for_select_race()
 	}
 }
 
-void
+static inline void
 uninstall_alarm()
 {
 	pending_alarm = 0;
@@ -365,7 +364,7 @@ uninstall_alarm()
 #endif
 }
 
-int
+static int
 check_signals()
 {
 	int i, r = 0;
@@ -382,7 +381,7 @@ check_signals()
 	return r;
 }
 
-void
+static inline void
 sigchld(void *p)
 {
 #ifdef WNOHANG

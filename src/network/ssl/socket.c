@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.58 2004/06/27 13:20:32 jonas Exp $ */
+/* $Id: socket.c,v 1.59 2004/07/27 02:44:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,7 +148,7 @@ ssl_set_no_tls(struct connection *conn)
 #endif
 }
 
-void
+static void
 ssl_want_read(struct connection *conn)
 {
 	struct conn_info *b = conn->conn_info;

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.73 2003/07/23 03:12:14 jonas Exp $ */
+/* $Id: cookies.c,v 1.74 2003/07/23 12:46:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,9 +103,11 @@ check_domain_security(unsigned char *domain, unsigned char *server, int server_l
 	if (domain[0] == '.') domain++;
 	domain_len = strlen(domain);
 
-	if (domain_len > server_len) return 0;
-
 	/* Match domain and server.. */
+
+	/* XXX: Hmm, can't we use strlcasecmp() here? --pasky */
+
+	if (domain_len > server_len) return 0;
 
 	if (!strncasecmp(domain, server, server_len)) {
 		/* We should probably allow domains which are same as servers.
@@ -305,8 +307,7 @@ set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 	cookie->id = cookie_id++;
 
 	foreach (cs, c_servers) {
-		if (strlen(cs->server) != uri->hostlen
-		    || strncasecmp(cs->server, uri->host, uri->hostlen))
+		if (strlcasecmp(cs->server, -1, uri->host, uri->hostlen))
 			continue;
 
 		if (cs->accept)	goto ok;
@@ -472,6 +473,8 @@ static inline int
 is_path_prefix(unsigned char *d, unsigned char *s, int sl)
 {
 	int dl = strlen(d);
+
+	/* TODO: strlcmp()? --pasky */
 
 	if (dl > sl) return 0;
 

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.283 2004/06/29 07:46:59 pasky Exp $ */
+/* $Id: tables.c,v 1.284 2004/06/29 07:50:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -735,7 +735,7 @@ display_complicated_table(struct table *table, int x, int y)
 {
 	int col, row;
 	struct document *document = table->part->document;
-	int xp, yp;
+	int xp;
 	int expand_cols = (global_doc_opts && global_doc_opts->table_expand_cols);
 	color_t default_bgcolor = par_format.bgcolor;
 	struct table_frames table_frames;
@@ -747,7 +747,7 @@ display_complicated_table(struct table *table, int x, int y)
 
 	xp = x + table_frames.left;
 	for (col = 0; col < table->cols; col++) {
-		yp = y + table_frames.top;
+		int yp = y + table_frames.top;
 
 		for (row = 0; row < table->rows; row++) {
 			struct table_cell *cell = CELL(table, col, row);
@@ -838,15 +838,23 @@ display_complicated_table(struct table *table, int x, int y)
 		}
 	}
 
-	yp = table_frames.top + y + table_frames.bottom;
-	for (row = 0; row < table->rows; row++) {
-		yp += table->rows_heights[row] +
-		      (row < table->rows - 1 && get_hline_width(table, row + 1) >= 0);
-	}
+#ifndef CONFIG_FASTMEM
+	/* This is just a big sanity check */
+	{
+		/* XXX: Cannot we simply use the @yp value we just calculated?
+		 * --pasky */
+		int yp = table_frames.top + y + table_frames.bottom;
 
-	assertm(table->part->cy + table->real_height == yp,
-		"size does not match; 1:%d, 2:%d",
-		table->part->cy + table->real_height, yp);
+		for (row = 0; row < table->rows; row++) {
+			yp += table->rows_heights[row] +
+			      (row < table->rows - 1 && get_hline_width(table, row + 1) >= 0);
+		}
+
+		assertm(table->part->cy + table->real_height == yp,
+			"size does not match; 1:%d, 2:%d",
+			table->part->cy + table->real_height, yp);
+	}
+#endif
 }
 
 

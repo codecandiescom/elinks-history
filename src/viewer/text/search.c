@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.11 2003/07/31 16:56:16 jonas Exp $ */
+/* $Id: search.c,v 1.12 2003/08/01 13:13:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,7 +242,7 @@ get_range(struct document *f, int y, int yw, int l,
 
 	if (*s1 < f->search)
 		*s1 = f->search;
-	if (*s2 + l > f->search + f->nsearch)
+	if (*s2 > f->search + f->nsearch - l)
 		*s2 = f->search + f->nsearch - l;
 	if (*s1 > *s2)
 		*s1 = *s2 = NULL;
@@ -289,10 +289,8 @@ srch_failed:
 		for (i = 0; i < l; i++) {
 			if (!s1[i].n) continue;
 
-			if (s1[i].x < *min)
-				*min = s1[i].x;
-			if (s1[i].x + s1[i].n > *max)
-				*max = s1[i].x + s1[i].n;
+			*min = int_min(*min, s1[i].x);
+			*max = int_max(*max, s1[i].x + s1[i].n);
 		}
 	}
 	return found;
@@ -549,10 +547,8 @@ find_next(struct session *ses, struct document_view *f, int a)
 		if (is_in_range(f->document, p, f->yw, ses->search_word, &min, &max)) {
 			f->vs->view_pos = p;
 			if (max >= min) {
-				if (max > f->vs->view_posx + f->xw)
-					f->vs->view_posx = max - f->xw;
-				if (min < f->vs->view_posx)
-					f->vs->view_posx = min;
+				int_upper_bound(&f->vs->view_posx, max - f->xw);
+				int_lower_bound(&f->vs->view_posx, min);
 			}
 			set_link(f);
 			find_next_link_in_search(f, ses->search_direction * 2);

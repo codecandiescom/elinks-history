@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.30 2002/05/07 13:19:43 pasky Exp $ */
+/* $Id: session.c,v 1.31 2002/05/08 12:27:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -501,62 +501,90 @@ int do_move(struct session *ses, struct status **stat)
 	return 1;
 }
 
+
 void request_frameset(struct session *, struct frameset_desc *);
 
-void request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
+void
+request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 {
 	struct location *loc = cur_loc(ses);
 	struct frame *frm;
 	unsigned char *url, *pos;
+
 	if (!have_location(ses)) {
 		internal("request_frame: no location");
 		return;
 	}
-	foreach(frm, loc->frames) if (!strcasecmp(frm->name, name)) {
+
+	foreach(frm, loc->frames) {
+		if (strcasecmp(frm->name, name))
+			continue;
+
 		url = stracpy(frm->vs.url);
-		if (frm->vs.f && frm->vs.f->f_data && frm->vs.f->f_data->frame) {
-			/*del_from_list(frm);*/
+		if (frm->vs.f && frm->vs.f->f_data
+		    && frm->vs.f->f_data->frame) {
+			/* del_from_list(frm); */
 			request_frameset(ses, frm->vs.f->f_data->frame_desc);
-			/*destroy_vs(&frm->vs);
+#if 0
+			destroy_vs(&frm->vs);
 			mem_free(frm->name);
-			mem_free(frm);*/
+			mem_free(frm);
+#endif
 			mem_free(url);
 			return;
 		}
 		goto found;
 	}
+
 	url = stracpy(uurl);
 	pos = extract_position(url);
-	if (!(frm = mem_alloc(sizeof(struct frame) + strlen(url) + 1))) {
+
+	frm = mem_alloc(sizeof(struct frame) + strlen(url) + 1);
+	if (!frm) {
 		mem_free(url);
 		if (pos) mem_free(pos);
 		return;
 	}
 	memset(frm, 0, sizeof(struct frame));
-	if (!(frm->name = stracpy(name))) {
+
+	frm->name = stracpy(name);
+	if (!frm->name) {
 		mem_free(frm);
 		mem_free(url);
 		if (pos) mem_free(pos);
 		return;
 	}
+
 	init_vs(&frm->vs, url);
 	if (pos) frm->vs.goto_position = pos;
+
 	add_to_list(loc->frames, frm);
-	found:
-	if (*url) request_additional_file(ses, url, PRI_FRAME);
+
+found:
+	if (*url) {
+		request_additional_file(ses, url, PRI_FRAME);
+	}
+
 	mem_free(url);
 }
 
-void request_frameset(struct session *ses, struct frameset_desc *fd)
+void
+request_frameset(struct session *ses, struct frameset_desc *fd)
 {
+	static int depth = 0; /* Inheritation counter (recursion brake ;) */
 	int i;
-	static int depth = 0;
+
 	if (++depth <= HTML_MAX_FRAME_DEPTH) {
 		for (i = 0; i < fd->n; i++) {
-			if (fd->f[i].subframe) request_frameset(ses, fd->f[i].subframe);
-			else if (fd->f[i].name) request_frame(ses, fd->f[i].name, fd->f[i].url);
+			if (fd->f[i].subframe) {
+				request_frameset(ses, fd->f[i].subframe);
+			} else if (fd->f[i].name) {
+				request_frame(ses, fd->f[i].name,
+					      fd->f[i].url);
+			}
 		}
 	}
+
 	depth--;
 }
 
@@ -684,9 +712,11 @@ void file_end_load(struct status *stat, struct file_to_load *ftl)
 	doc_end_load(stat, ftl->ses);
 }
 
-struct file_to_load *request_additional_file(struct session *ses, unsigned char *url, int pri)
+struct file_to_load *
+request_additional_file(struct session *ses, unsigned char *url, int pri)
 {
 	struct file_to_load *ftl;
+
 	foreach(ftl, ses->more_files) {
 		if (!strcmp(ftl->url, url)) {
 			if (ftl->pri > pri) {
@@ -696,50 +726,75 @@ struct file_to_load *request_additional_file(struct session *ses, unsigned char 
 			return NULL;
 		}
 	}
-	if (!(ftl = mem_alloc(sizeof(struct file_to_load)))) return NULL;
-	if (!(ftl->url = stracpy(url))) {
+
+	ftl = mem_alloc(sizeof(struct file_to_load));
+	if (!ftl) {
+		return NULL;
+	}
+
+	ftl->url = stracpy(url);
+	if (!ftl->url) {
 		mem_free(ftl);
 		return NULL;
 	}
-	ftl->stat.end = (void (*)(struct status *, void *))file_end_load;
+
+	ftl->stat.end = (void (*)(struct status *, void *)) file_end_load;
 	ftl->stat.data = ftl;
 	ftl->req_sent = 0;
 	ftl->pri = pri;
 	ftl->ce = NULL;
 	ftl->ses = ses;
+
 	add_to_list(ses->more_files, ftl);
+
 	return ftl;
 }
 
-struct file_to_load *request_additional_loading_file(struct session *ses, unsigned char *url, struct status *stat, int pri)
+struct file_to_load *
+request_additional_loading_file(struct session *ses, unsigned char *url,
+				struct status *stat, int pri)
 {
 	struct file_to_load *ftl;
-	if (!(ftl = request_additional_file(ses, url, pri))) {
+
+	ftl = request_additional_file(ses, url, pri);
+	if (!ftl) {
 		change_connection(stat, NULL, PRI_CANCEL);
 		return NULL;
 	}
+
 	ftl->req_sent = 1;
 	ftl->ce = stat->ce;
+
 	change_connection(stat, &ftl->stat, pri);
+
 	return ftl;
 }
 
-void process_file_requests(struct session *ses)
+void
+process_file_requests(struct session *ses)
 {
 	static int stop_recursion = 0;
 	struct file_to_load *ftl;
 	struct f_data_c *fd = current_frame(ses);
-	int more;
+	int more = 1;
+
 	if (stop_recursion) return;
 	stop_recursion = 1;
-	do {
+
+	while (more) {
 		more = 0;
-		foreach(ftl, ses->more_files) if (!ftl->req_sent) {
+		foreach(ftl, ses->more_files) {
+			if (ftl->req_sent)
+				continue;
+
 			ftl->req_sent = 1;
-			load_url(ftl->url, fd?fd->f_data?fd->f_data->url:NULL:NULL, &ftl->stat, ftl->pri, NC_CACHE);
+			load_url(ftl->url, (fd && fd->f_data) ? fd->f_data->url
+							      : NULL,
+				 &ftl->stat, ftl->pri, NC_CACHE);
 			more = 1;
 		}
-	} while (more);
+	}
+
 	stop_recursion = 0;
 }
 

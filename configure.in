@@ -502,36 +502,25 @@ if test -z "$disable_lua"; then
 	if test ! -d "$withval"; then
 		withval="";
 	fi
-	# It's double here in order to have the piggyswitch hack working
-	# Hack, indeed. Guess why? Yes, it's Debian!
 	for luadir in "$withval" "$withval" "" /usr /usr /usr/local /usr/local; do
-		if test "$cf_result" = no; then
-			if test "$xyz_piggyswitch" = "cow"; then
-				LUA_LIBS="-llua40 -llualib40 -lm"
-			else
-				LUA_LIBS="-llua -llualib -lm"
-			fi
+		for suffix in "" 50 40; do
+			if test "$cf_result" = no; then
+				LUA_LIBS="-llua$suffix -llualib$suffix -lm"
 
-			if test ! -z "$luadir"; then
-				LUA_LIBS="-L$luadir/lib $LUA_LIBS"
-				if test "$xyz_piggyswitch" = "cow"; then
-					LUA_CFLAGS="-I$luadir/include -I$luadir/include/lua40"
-					# The switch should be performed at the last occurence
-					xyz_piggyswitch=sheep
-				else
-					LUA_CFLAGS="-I$luadir/include -I$luadir/include/lua"
-					xyz_piggyswitch=cow
+				if test ! -z "$luadir"; then
+					LUA_LIBS="-L$luadir/lib $LUA_LIBS"
+					LUA_CFLAGS="-I$luadir/include -I$luadir/include/lua$suffix"
 				fi
+
+				LIBS="$LUA_LIBS $LIBS_X"
+				CFLAGS="$CFLAGS_X $LUA_CFLAGS"
+				CPPFLAGS="$CPPFLAGS_X $LUA_CFLAGS"
+
+				AC_TRY_LINK([#include <lua.h>],
+					    [lua_close(0)],
+					    cf_result=yes, cf_result=no)
 			fi
-
-			LIBS="$LUA_LIBS $LIBS_X"
-			CFLAGS="$CFLAGS_X $LUA_CFLAGS"
-			CPPFLAGS="$CPPFLAGS_X $LUA_CFLAGS"
-
-			AC_TRY_LINK([#include <lua.h>],
-				    [lua_close(0)],
-				    cf_result=yes, cf_result=no)
-		fi
+		done
 	done
 fi
 

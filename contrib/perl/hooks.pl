@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.55 2005/03/27 01:17:53 rrowan Exp $
+# $Id: hooks.pl,v 1.56 2005/03/27 01:33:09 rrowan Exp $
 #
 # This file is (c) Russ Rowan and GPL'd.
 
@@ -579,7 +579,6 @@ sub quit_hook
 		die;
 	}
 	die if (loadrc('fortune') =~ /^(none|quiet)$/);
-
 	my $cookiejar = 'elinks.fortune';
 	my $ohwhynot = `ls /usr/share/doc/elinks*/$cookiejar 2>/dev/null`;
 	open COOKIES, $ENV{"HOME"} . '/.elinks/' . $cookiejar
@@ -587,24 +586,23 @@ sub quit_hook
 		or open COOKIES, '/usr/share/elinks/' . $cookiejar
 		or open COOKIES, $ohwhynot
 		or die system('echo ""; fortune -sa 2>/dev/null');
-
 	my (@line, $fortune);
 	$line[0] = 0;
-	while (<COOKIES>) {
+	while (<COOKIES>)
+	{
 		$line[$#line + 1] = tell if /^%$/;
 	}
 	srand();
-	while (not $fortune) {
-		# We don't want the last element of the $line array since that
-		# is the trailing % in the fortunes file.
+	while (not $fortune)
+	{
 		seek(COOKIES, $line[int rand($#line)], 0);
-		while (<COOKIES>) {
+		while (<COOKIES>)
+		{
 			last if /^%$/;
 			$fortune .= $_;
 		}
 	}
 	close COOKIES;
-
 	print "\n", $fortune;
 }
 
@@ -616,25 +614,28 @@ sub loadrc
 	my ($preference) = @_;
 	my $configperl = $ENV{'HOME'} . '/.elinks/config.pl';
 	my $answer = '';
-
 	open RC, "<$configperl" or return $answer;
-	while (<RC>) {
+	while (<RC>)
+	{
 		s/\s*#.*$//;
 		next unless (m/(.*):\s*(.*)/);
 		my $setting = $1;
 		my $switch = $2;
 		next unless ($setting eq $preference);
-
-		if ($switch =~ /^(yes|1|on|yea|yep|sure|ok|okay|yeah|why.*not)$/) {
+		if ($switch =~ /^(yes|1|on|yea|yep|sure|ok|okay|yeah|why.*not)$/)
+		{
 			$answer = "yes";
-		} elsif ($switch =~ /^(no|0|off|nay|nope|nah|hell.*no)$/) {
+		}
+		elsif ($switch =~ /^(no|0|off|nay|nope|nah|hell.*no)$/)
+		{
 			$answer = "no";
-		} else {
+		}
+		else
+		{
 			$answer = lc($switch);
 		}
 	}
 	close RC;
-
 	return $answer;
 }
 
@@ -802,7 +803,7 @@ sub news
 	my ($server, $search) = @_;
 	my $key = $search ? 'search' : 'home';
 
-	# Google is the default, Google is the best!
+	# Fall back to the BBC if no preference.
 	$server = 'bbc' unless $news_servers{$server}
 	                          and $news_servers{$server}->{$key};
 	my $url = $news_servers{$server}->{$key};

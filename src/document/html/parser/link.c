@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.40 2004/12/05 22:15:10 miciah Exp $ */
+/* $Id: link.c,v 1.41 2004/12/05 22:19:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,7 +156,10 @@ truncate_title(unsigned char *title)
 
 	len = strlen(title);
 
-	if (max_len && len > max_len) {
+	if (!max_len || len <= max_len) {
+		text = memacpy(title, len);
+
+	} else {
 		int max_part_len = max_len / 2;
 
 		text = mem_alloc(max_part_len * 2 + 2);
@@ -169,9 +172,6 @@ truncate_title(unsigned char *title)
 
 		/* For great safety! */
 		text[max_part_len * 2 + 1] = '\0';
-
-	} else {
-		text = memacpy(title, len);
 	}
 
 free_title:

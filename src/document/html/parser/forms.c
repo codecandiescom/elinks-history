@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.32 2004/06/22 23:24:17 zas Exp $ */
+/* $Id: forms.c,v 1.33 2004/06/23 12:13:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,7 +126,7 @@ find_form_for_input(unsigned char *i)
 
 	done_form();
 
-	if (!html_context.special_f(html_context.ff, SP_USED, NULL))
+	if (!html_context.special_f(html_context.part, SP_USED, NULL))
 		return;
 
 	if (html_context.last_input_tag && i <= html_context.last_input_tag
@@ -174,18 +174,18 @@ put_button(unsigned char *a)
 {
 	unsigned char *al;
 
-	put_chrs(" [&nbsp;", 8, html_context.put_chars_f, html_context.ff);
+	put_chrs(" [&nbsp;", 8, html_context.put_chars_f, html_context.part);
 
 	al = get_attr_val(a, "value");
 	if (al) {
-		put_chrs(al, strlen(al), html_context.put_chars_f, html_context.ff);
+		put_chrs(al, strlen(al), html_context.put_chars_f, html_context.part);
 		mem_free(al);
 	} else {
 		/* no value */
-		put_chrs("BUTTON", 6, html_context.put_chars_f, html_context.ff);
+		put_chrs("BUTTON", 6, html_context.put_chars_f, html_context.part);
 	}
 
-	put_chrs("&nbsp;] ", 8, html_context.put_chars_f, html_context.ff);
+	put_chrs("&nbsp;] ", 8, html_context.put_chars_f, html_context.part);
 }
 
 int
@@ -242,7 +242,7 @@ no_type_attr:
 	if (!fc->default_value) fc->default_value = stracpy("");
 
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
-	html_context.special_f(html_context.ff, SP_CONTROL, fc);
+	html_context.special_f(html_context.part, SP_CONTROL, fc);
 	format.form = fc;
 	format.attr |= AT_BOLD;
 }
@@ -310,7 +310,7 @@ no_type_attr:
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
 	if (fc->type == FC_HIDDEN) goto hid;
 
-	put_chrs(" ", 1, html_context.put_chars_f, html_context.ff);
+	put_chrs(" ", 1, html_context.put_chars_f, html_context.part);
 	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
 	if (format.title) mem_free(format.title);
@@ -321,15 +321,15 @@ no_type_attr:
 		case FC_FILE:
 			format.attr |= AT_BOLD;
 			for (i = 0; i < fc->size; i++)
-				put_chrs("_", 1, html_context.put_chars_f, html_context.ff);
+				put_chrs("_", 1, html_context.put_chars_f, html_context.part);
 			break;
 		case FC_CHECKBOX:
 			format.attr |= AT_BOLD;
-			put_chrs("[&nbsp;]", 8, html_context.put_chars_f, html_context.ff);
+			put_chrs("[&nbsp;]", 8, html_context.put_chars_f, html_context.part);
 			break;
 		case FC_RADIO:
 			format.attr |= AT_BOLD;
-			put_chrs("(&nbsp;)", 8, html_context.put_chars_f, html_context.ff);
+			put_chrs("(&nbsp;)", 8, html_context.put_chars_f, html_context.part);
 			break;
 		case FC_IMAGE:
 			mem_free_set(&format.image, NULL);
@@ -340,23 +340,23 @@ no_type_attr:
 				mem_free(al);
 			}
 			format.attr |= AT_BOLD;
-			put_chrs("[&nbsp;", 7, html_context.put_chars_f, html_context.ff);
+			put_chrs("[&nbsp;", 7, html_context.put_chars_f, html_context.part);
 			if (fc->alt)
-				put_chrs(fc->alt, strlen(fc->alt), html_context.put_chars_f, html_context.ff);
+				put_chrs(fc->alt, strlen(fc->alt), html_context.put_chars_f, html_context.part);
 			else if (fc->name)
-				put_chrs(fc->name, strlen(fc->name), html_context.put_chars_f, html_context.ff);
+				put_chrs(fc->name, strlen(fc->name), html_context.put_chars_f, html_context.part);
 			else
-				put_chrs("Submit", 6, html_context.put_chars_f, html_context.ff);
+				put_chrs("Submit", 6, html_context.put_chars_f, html_context.part);
 
-			put_chrs("&nbsp;]", 7, html_context.put_chars_f, html_context.ff);
+			put_chrs("&nbsp;]", 7, html_context.put_chars_f, html_context.part);
 			break;
 		case FC_SUBMIT:
 		case FC_RESET:
 			format.attr |= AT_BOLD;
-			put_chrs("[&nbsp;", 7, html_context.put_chars_f, html_context.ff);
+			put_chrs("[&nbsp;", 7, html_context.put_chars_f, html_context.part);
 			if (fc->default_value)
-				put_chrs(fc->default_value, strlen(fc->default_value), html_context.put_chars_f, html_context.ff);
-			put_chrs("&nbsp;]", 7, html_context.put_chars_f, html_context.ff);
+				put_chrs(fc->default_value, strlen(fc->default_value), html_context.put_chars_f, html_context.part);
+			put_chrs("&nbsp;]", 7, html_context.put_chars_f, html_context.part);
 			break;
 		case FC_TEXTAREA:
 		case FC_SELECT:
@@ -364,10 +364,10 @@ no_type_attr:
 			INTERNAL("bad control type");
 	}
 	kill_html_stack_item(&html_top);
-	put_chrs(" ", 1, html_context.put_chars_f, html_context.ff);
+	put_chrs(" ", 1, html_context.put_chars_f, html_context.part);
 
 hid:
-	html_context.special_f(html_context.ff, SP_CONTROL, fc);
+	html_context.special_f(html_context.part, SP_CONTROL, fc);
 }
 
 void
@@ -451,14 +451,14 @@ end_parse:
 	fc->default_value = val;
 	fc->default_state = has_attr(a, "selected");
 	fc->mode = has_attr(a, "disabled") ? FORM_MODE_DISABLED : format.select_disabled;
-	put_chrs(" ", 1, html_context.put_chars_f, html_context.ff);
+	put_chrs(" ", 1, html_context.put_chars_f, html_context.part);
 	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
 	format.attr |= AT_BOLD;
-	put_chrs("[ ]", 3, html_context.put_chars_f, html_context.ff);
+	put_chrs("[ ]", 3, html_context.put_chars_f, html_context.part);
 	kill_html_stack_item(&html_top);
-	put_chrs(" ", 1, html_context.put_chars_f, html_context.ff);
-	html_context.special_f(html_context.ff, SP_CONTROL, fc);
+	put_chrs(" ", 1, html_context.put_chars_f, html_context.part);
+	html_context.special_f(html_context.part, SP_CONTROL, fc);
 }
 
 static struct list_menu lnk_menu;
@@ -626,7 +626,7 @@ end_parse:
 
 	kill_html_stack_item(&html_top);
 	put_chrs("]", 1, html_context.put_chars_f, f);
-	html_context.special_f(html_context.ff, SP_CONTROL, fc);
+	html_context.special_f(html_context.part, SP_CONTROL, fc);
 
 	return 0;
 }

@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.29 2004/06/23 10:53:54 jonas Exp $ */
+/* $Id: internal.h,v 1.30 2004/06/23 12:13:53 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -63,7 +63,7 @@ struct html_context {
 	 * html/parser/parse.c
 	 * html/parser/stack.c
 	 * html/parser.c */
-	void *ff;
+	struct part *part;
 
 	/* For:
 	 * html/parser/forms.c

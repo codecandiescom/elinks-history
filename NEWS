@@ -19,7 +19,9 @@ ELinks-now:
 * data protocol support (RFC 2397)
 * gopher protocol support (RFC 1436)
 * NNTP protocol support (RFC 977 and 2980) (experimental)
+* build system fine-tuned to use automake conditionals
 * -localhost option to only permit local connections
+* -verbose option to control messages printed at startup
 * -default-keys command line option to ignore user-defined keybindings
 * -config-dir replaces -confdir option
 * -config-file replaces -conffile option

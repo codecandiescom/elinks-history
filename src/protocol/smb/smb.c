@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.5 2003/12/07 20:18:36 pasky Exp $ */
+/* $Id: smb.c,v 1.6 2003/12/08 16:16:16 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -13,6 +13,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef HAVE_SYS_RESOURCE_H
+#include <sys/resource.h>
+#endif
 #include <sys/types.h>
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h> /* OS/2 needs this after sys/types.h */
@@ -210,25 +213,25 @@ end_smb_connection(struct connection *conn)
 						pos = 0;
 					}
 					type = 1;
-					goto af;
+					goto print_as_is;
 				}
 				if (strstr(line, "Server")
 				    && strstr(line, "Comment")) {
 					type = 2;
-					goto af;
+					goto print_as_is;
 				}
 				if (strstr(line, "Workgroup")
 				    && strstr(line, "Master")) {
 					pos = (unsigned char *) strstr(line, "Master") - line;
 					type = 3;
-					goto af;
+					goto print_as_is;
 				}
 
-				if (!type) goto af;
+				if (!type) goto print_as_is;
 				for (ll = line; *ll; ll++)
 					if (!WHITECHAR(*ll) && *ll != '-')
 						goto np;
-				goto af;
+				goto print_as_is;
 np:
 
 				for (ll = line; *ll; ll++)
@@ -245,7 +248,7 @@ np:
 					unsigned char *llll;
 
 					if (!strstr(lll, "Disk"))
-						goto af;
+						goto print_as_is;
 
 					if (pos && pos < strlen(line)
 					    && WHITECHAR(*(llll = line + pos - 1))
@@ -292,13 +295,13 @@ np:
 					break;
 
 				default:
-					goto af;
+					goto print_as_is;
 				}
 
 			} else if (si->list == SMB_LIST_DIR) {
 				if (strstr(line, "NT_STATUS")) {
 					line_end[1] = 0;
-					goto af;
+					goto print_as_is;
 				}
 
 				if (line_end2 - line_start >= 5
@@ -308,13 +311,14 @@ np:
 					int dir;
 					unsigned char *pp;
 					unsigned char *p = line_start + 3;
+					unsigned char *url = p - 1;
 
 					while (p + 2 <= line_end2) {
 						if (p[0] == ' ' && p[1] == ' ')
 							goto o;
 						p++;
 					}
-					goto af;
+					goto print_as_is;
 
 o:
 					dir = 0;
@@ -329,24 +333,27 @@ o:
 						pp++;
 					}
 
+					if (*url == '.' && p - url == 1) goto ignored;
+
 					add_to_string(&page, "  <a href=\"");
-					add_bytes_to_string(&page, line_start + 2, p - (line_start + 2));
+					add_bytes_to_string(&page, url, p - url);
 					if (dir) add_char_to_string(&page, '/');
 					add_to_string(&page, "\">");
-					add_bytes_to_string(&page, line_start + 2, p - (line_start + 2));
+					add_bytes_to_string(&page, url, p - url);
 					add_to_string(&page, "</a>");
 					add_bytes_to_string(&page, p, line_end - p);
 
 				} else {
-					goto af;
+					goto print_as_is;
 				}
 
 			} else {
-af:
+print_as_is:
 				add_bytes_to_string(&page, line_start, line_end2 - line_start);
 			}
 
 			add_char_to_string(&page, '\n');
+ignored:
 			line_start = line_end + 1;
 			mem_free(line);
 		}
@@ -368,11 +375,27 @@ bye:
 	abort_conn_with_state(conn, S_OK);
 }
 
+/* Close all non-terminal file descriptors. */
+static void
+close_all_non_term_fd(void)
+{
+	int n;
+	int max = 1024;
+#ifdef RLIMIT_NOFILE
+	struct rlimit lim;
+
+	if (!getrlimit(RLIMIT_NOFILE, &lim));
+		max = lim.rlim_max;
+#endif
+	for (n = 3; n < max; n++)
+		close(n);
+}
 
 static void
 smb_func(struct connection *conn)
 {
-	int out_pipe[2] = { -1, -1 }, err_pipe[2] = { -1, -1 };
+	int out_pipe[2] = { -1, -1 };
+	int err_pipe[2] = { -1, -1 };
 	unsigned char *share, *dir;
 	unsigned char *p;
 	int cpid;
@@ -443,7 +466,7 @@ smb_func(struct connection *conn)
 	}
 
 	if (!cpid) {
-		int n;
+		int n = 0;
 		unsigned char *v[32];
 
 		close(1);
@@ -453,9 +476,7 @@ smb_func(struct connection *conn)
 		close(0);
 		dup2(open("/dev/null", O_RDONLY), 0);
 
-		for (n = 3; n < 1024; n++)
-			close(n);
-
+		close_all_non_term_fd();
 		close(out_pipe[0]);
 		close(err_pipe[0]);
 

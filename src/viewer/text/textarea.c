@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.122 2004/06/19 06:59:36 miciah Exp $ */
+/* $Id: textarea.c,v 1.123 2004/06/19 07:00:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -554,7 +554,7 @@ textarea_op_bob(struct form_state *fs, struct form_control *fc)
 
 	current = get_textarea_line_number(line, fs->state);
 	if (current != -1) {
-		fs->state = fs->state - line[current].start;
+		fs->state -= line[current].start;
 		int_upper_bound(&fs->state, line[0].end);
 	}
 

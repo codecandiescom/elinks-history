@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.127 2003/08/23 18:17:27 jonas Exp $ */
+/* $Id: menu.c,v 1.128 2003/09/15 14:09:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -229,11 +229,11 @@ static struct menu_item no_hist_menu[] = {
 static void
 history_menu(struct terminal *term, void *ddd, struct session *ses)
 {
-	struct location *l;
+	struct location *loc;
 	struct menu_item *mi = NULL;
 	int n = 0;
 
-	foreach (l, ses->history) {
+	foreach (loc, ses->history) {
 		unsigned char *url;
 
 		if (!n) {
@@ -246,7 +246,7 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 			if (!mi) return;
 		}
 
-		url = stracpy(l->vs.url);
+		url = memacpy(loc->vs.url, loc->vs.url_len);
 		if (url) {
 			unsigned char *pc = strchr(url, POST_CHAR);
 			if (pc) *pc = '\0';
@@ -266,11 +266,11 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 static void
 unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 {
-	struct location *l;
+	struct location *loc;
 	struct menu_item *mi = NULL;
 	int n = 0;
 
-	foreach (l, ses->unhistory) {
+	foreach (loc, ses->unhistory) {
 		unsigned char *url;
 
 		if (!mi) {
@@ -278,7 +278,7 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 			if (!mi) return;
 		}
 
-		url = stracpy(l->vs.url);
+		url = memacpy(loc->vs.url, loc->vs.url_len);
 		if (url) {
 			unsigned char *pc = strchr(url, POST_CHAR);
 			if (pc) *pc = '\0';

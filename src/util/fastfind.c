@@ -14,7 +14,7 @@
  *
  *  (c) 2003 Laurent MONIN (aka Zas)
  * Feel free to do whatever you want with that code. */
-/* $Id: fastfind.c,v 1.17 2003/06/14 18:58:32 jonas Exp $ */
+/* $Id: fastfind.c,v 1.18 2003/06/14 19:59:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -268,7 +268,9 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 	struct fastfind_key_value *p;
 	struct fastfind_info *info = init_fastfind(case_sensitive);
 
-	assert(info && reset && next);
+	if (!info) goto alloc_error;
+
+	assert(reset && next);
 
 	/* First search min, max, count and uniq_chars. */
 	(*reset)();

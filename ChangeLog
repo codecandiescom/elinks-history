@@ -1,3 +1,568 @@
+Fri Jan  2 22:06:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Remove unused variables left untouched from last patch. BTW Miciah
+	pointed out the suspicious code that lead to the fix.  
+
+Fri Jan  2 21:58:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Whoops major bookmark corruption since we do smarter text management
+	and this part was not updated.  
+
+Fri Jan  2 20:05:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Fixed hotkey conflict.  
+
+Fri Jan  2 19:54:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/cmdline.c, util/color.c:
+
+	Better cast the color to (unsigned long), to stay safe on 16-bit
+	systems.  
+
+Fri Jan  2 19:33:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, cache/cache.c,
+	cookies/cookies.c, formhist/formhist.c, globhist/globhist.c,
+	sched/download.c:
+
+	init_listbox_item() -> add_listbox_item().  
+
+Fri Jan  2 18:37:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, bfu/listbox.c,
+	bookmarks/bookmarks.c, bookmarks/bookmarks.h, bookmarks/dialogs.c,
+	cache/cache.c, cache/cache.h, cache/dialogs.c, config/dialogs.c,
+	config/kbdbind.c, config/kbdbind.h, config/options.c,
+	cookies/dialogs.c, dialogs/download.c, formhist/dialogs.c,
+	globhist/dialogs.c, globhist/globhist.c, globhist/globhist.h:
+
+	Add a root listbox item to the hierbox_browser struct. It will ease
+	hierarchic cookies and other stuff.  
+
+Fri Jan  2 17:53:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Remove default keybinding for tab-close-all-but-current action.  
+
+Fri Jan  2 17:51:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.h, bookmarks/dialogs.c, cache/dialogs.c,
+	config/dialogs.c, cookies/dialogs.c, dialogs/download.c,
+	formhist/dialogs.c, globhist/dialogs.c:
+
+	Use macros to intialize hierbox_browser structs.  
+
+Fri Jan  2 16:19:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Revert last patch. It breaks wraparound.  
+
+Fri Jan  2 16:14:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Use link->name if available to compare with in typeahead searching.  
+
+Fri Jan  2 15:47:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Fixed indentation of ACT_SAVE_AS.  
+
+Fri Jan  2 15:39:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.c:
+
+	It's ok to pass NULL strings to strl*cmp() now. Suggested by zas.  
+
+Fri Jan  2 15:38:06 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: string.c, string.h:
+
+	Reverted useless same_*str(), I explicitly said no to them before
+	their introduction.  
+
+Fri Jan  2 15:35:19 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.h:
+
+	strl*cmp() non-zero return value meaning is undefined.  
+
+Fri Jan  2 15:29:38 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/: string.c, string.h:
+
+	same_str() and same_casestr() were introduced. Their behavior is
+	similar (and in most cases) to strlcmp() and strlcasecmp() but well
+	defined. They return 1 if strings match (regarding rules we defined)
+	and 0 in all others case, they accept NULL pointers as strings, but
+	returns always 0 in that case. If passed string length is negative,
+	then nul char is used to detect end of comparaison. In near future,
+	almost all occurrences of strl[case]cmp() will be replaced by those,
+	and trashed. Feel free to propose better names, but not *strcmp*
+	since it may be confusing.  
+
+Fri Jan  2 14:42:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.c:
+
+	Fixed missspeling.  
+
+Fri Jan  2 13:29:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/dump/dump.c:
+
+	Show references list header only when we have some links to print.  
+
+Fri Jan  2 12:42:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Test against NULL strings before calling strlcasecmp(), it prevents
+	assertions failure.  
+
+Thu Jan  1 23:40:56 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: elinks.h, util/string.h:
+
+	empty_string_or_() and null_or_stracpy() macros were moved to
+	util/string.h.  
+
+Thu Jan  1 23:36:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/parser.c, document/html/tables.c,
+	util/string.h:
+
+	is_same_str() -> !strlcasecmp(). Idea by Jonas and Pasky ;).  
+
+Thu Jan  1 22:02:12 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/parser.c, document/html/tables.c,
+	util/string.h:
+
+	is_same_str(name, namelen, what, whatlen) was introduced. It
+	shortens lines and is equivalent to ((namelen) == (whatlen) &&
+	!strncasecmp((name), (what), (whatlen))), especially in parser.c.  
+
+Thu Jan  1 20:08:47 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Update the comment for the <ctype.h> inclusion to mention that we
+	now also use isprint().  
+
+Thu Jan  1 19:18:46 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/events.txt:
+
+	Improve the description of the goto-url event.  
+
+Thu Jan  1 18:52:05 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Move Alt-< (beginning-of-buffer) and Alt-> (end-of-buffer) to the
+	edit keymap, as suggested by pasky and Jonas.  
+
+Thu Jan  1 18:50:31 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/status.c:
+
+	s/if/ifdef/ so that ELinks can compile with CONFIG_LEDS enabled.  
+
+Thu Jan  1 18:21:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: elinks.h, config/options.c, document/html/frames.c,
+	document/html/parser.c, document/html/renderer.c, sched/task.c,
+	viewer/text/link.c:
+
+	Macro null_or_stracpy() was introduced to shorten lines. It is
+	equivalent to (str ? stracpy(str) : NULL).  
+
+Thu Jan  1 16:56:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/common.c:
+
+	foreach_(mime backend_module () ...  
+
+Thu Jan  1 16:42:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/modules/module.c:
+
+	Sort #includes.  
+
+Thu Jan  1 16:34:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, configure.in, feature.h, src/lowlevel/signals.c,
+	src/modules/version.c, src/util/error.c, src/util/error.h:
+
+	BACKTRACE -> CONFIG_BACKTRACE.  
+
+Thu Jan  1 16:15:16 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/smb.c:
+
+	Glum glum.  
+
+Thu Jan  1 15:54:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* feature.h, src/bfu/dialog.c, src/bfu/listbox.c, src/bfu/menu.c,
+	src/bfu/text.c, src/modules/version.c, src/osdep/osdep.c,
+	src/osdep/os2/sysinfo.h, src/osdep/unix/unix.c,
+	src/terminal/event.c, src/terminal/kbd.c, src/viewer/text/view.c:
+
+	USE_MOUSE -> CONFIG_MOUSE.  
+
+Thu Jan  1 15:50:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* feature.h, src/dialogs/options.c, src/terminal/color.c,
+	src/terminal/color.h, src/terminal/draw.c, src/terminal/draw.h,
+	src/terminal/screen.c:
+
+	USE_256_COLORS -> CONFIG_256_COLORS.  
+
+Thu Jan  1 15:47:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* feature.h, src/mime/mime.c, src/mime/backend/common.c,
+	src/mime/backend/mailcap.c, src/mime/backend/mailcap.h,
+	src/mime/backend/mimetypes.c, src/mime/backend/mimetypes.h,
+	src/modules/module.c, src/protocol/rewrite/rewrite.c,
+	src/protocol/rewrite/rewrite.h, src/sched/task.c:
+
+	URI_REWRITE, MAILCAP and MIMETYPES was prefixed with CONFIG_.  
+
+Thu Jan  1 15:38:12 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/terminal.c:
+
+	Removed close(p) from exec_thread(). We do that later and better in
+	the caller (by Mikulas; from 0.99pre15).  
+
+Thu Jan  1 15:36:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* feature.h, src/cookies/cookies.c, src/cookies/dialogs.c,
+	src/cookies/parser.c, src/cookies/parsetst.c, src/dialogs/menu.c,
+	src/modules/module.c, src/protocol/file/cgi.c,
+	src/protocol/http/http.c, src/viewer/text/view.c:
+
+	COOKIES -> CONFIG_COOKIES. More code is now excluded when cookies
+	are disabled.  
+
+Thu Jan  1 15:24:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/signals.c:
+
+	Fixed delayed signal delivery, or so ;) (by Mikulas; from
+	0.99pre15).  
+
+Thu Jan  1 15:20:32 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/: signals.c, signals.h:
+
+	Volatilize @critical_section and @pending_alarm (by Mikulas; from
+	0.99pre15).  
+
+Thu Jan  1 15:16:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.c:
+
+	check_protocol(): Handle NULL backends and insert NULL backend if we
+	are not supporting SMB.  
+
+Thu Jan  1 15:14:47 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* feature.h:
+
+	Normalize anti-recursive #define.  
+
+Thu Jan  1 15:14:12 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/backend/xbel.c:
+
+	Use CONFIG_XBEL_BOOKMARKS.  
+
+Thu Jan  1 15:12:12 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/backend/: common.c, xbel.c:
+
+	Reverted part of the CONFIG_XBEL_BOOKMARKS introduction, which was
+	already vetoed by me before introduction, didn't undergo discussion
+	and the usual overloaded-patch stuff. I feel touchy now, too little
+	sleep, so better don't do these things to me today.  
+
+Thu Jan  1 15:04:32 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated and some hotkeys conflict were fixed.  
+
+Thu Jan  1 14:51:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Fixed invalid translation.  
+
+Thu Jan  1 14:50:06 2004  Laurent Monin <zas@norz.org>:
+
+	* test/imgmap.html:
+
+	A test file for image map was added.  
+
+Thu Jan  1 14:47:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* feature.h, src/bookmarks/bookmarks.c,
+	src/bookmarks/backend/common.c, src/bookmarks/backend/xbel.c:
+
+	HAVE_LIBEXPAT usage converted to use CONFIG_XBEL_BOOKMARKS 
+
+Thu Jan  1 14:34:58 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Code simplification, i variable is uneeded.  
+
+Thu Jan  1 14:34:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Rather desperate attempt to try to clarify translation of Toggle
+	display.  
+
+Thu Jan  1 14:33:13 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Fixed accidentally swapped colors of .tabs.univisited.  
+
+Thu Jan  1 14:28:07 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Regression bug was fixed. USEMAP should now work as it should and
+	show all map entries.  
+
+Thu Jan  1 14:24:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* feature.h, src/bfu/hierbox.c, src/bookmarks/bookmarks.c,
+	src/bookmarks/bookmarks.h, src/bookmarks/dialogs.c,
+	src/bookmarks/dialogs.h, src/bookmarks/backend/common.c,
+	src/bookmarks/backend/default.c, src/bookmarks/backend/xbel.c,
+	src/dialogs/menu.c, src/globhist/dialogs.c, src/modules/module.c,
+	src/sched/session.c, src/terminal/terminal.c,
+	src/viewer/text/link.c, src/viewer/text/view.c:
+
+	BOOKMARKS -> CONFIG_BOOKMARKS.  
+
+Thu Jan  1 14:03:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* feature.h, src/bfu/leds.c, src/bfu/leds.h, src/dialogs/status.c,
+	src/modules/module.c, src/sched/session.c, src/sched/session.h:
+
+	USE_LEDS -> CONFIG_LEDS.  
+
+Thu Jan  1 13:58:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: file/cgi.c, smb/smb.c:
+
+	Exclude even more includes.  
+
+Thu Jan  1 13:54:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* feature.h, src/protocol/file/cgi.c, src/protocol/file/file.c:
+
+	ELINKS_LOCAL_CGI -> CONFIG_CGI.  
+
+Thu Jan  1 13:54:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/smb/: smb.c, smb.h:
+
+	Exclude more includes.  
+
+Thu Jan  1 13:38:36 2004  Laurent Monin <zas@norz.org>:
+
+	* configure.in:
+
+	ELINKS_SMB -> CONFIG_SMB 
+
+Thu Jan  1 11:53:36 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* feature.h:
+
+	s/myself/pasky/, noticed by Jonas.  
+
+Thu Jan  1 10:12:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* feature.h, src/main.c:
+
+	ELINKS_ROOT_EXEC -> CONFIG_NO_ROOT_EXEC + move dependencies. Now it
+	should be correct and not the inverted behaviour.  
+
+Thu Jan  1 10:04:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, feature.h, src/protocol/protocol.c,
+	src/protocol/smb/smb.c, src/protocol/smb/smb.h:
+
+	ELINKS_SMB -> CONFIG_SMB + make it possible to not compile in the
+	smb code when disabled.  
+
+Thu Jan  1 09:56:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* feature.h, src/dialogs/document.c, src/dialogs/menu.c,
+	src/document/html/parser.c, src/globhist/dialogs.c,
+	src/globhist/globhist.c, src/modules/module.c, src/sched/session.c,
+	src/viewer/text/view.c:
+
+	GLOBHIST -> CONFIG_GLOBHIST.  
+
+Thu Jan  1 09:52:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* feature.h, src/dialogs/menu.c, src/formhist/formhist.c,
+	src/modules/module.c, src/util/base64.c, src/viewer/text/form.c,
+	src/viewer/text/view.c:
+
+	FORMS_MEMORY -> CONFIG_FORMHIST.  
+
+Thu Jan  1 09:42:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* feature.h:
+
+	A few glitches, a few fixes.  
+
+Thu Jan  1 07:21:24 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Add default bindings of Alt-< to beginning-of-buffer and Alt-> to
+	end-of-buffer.  
+
+Thu Jan  1 07:16:48 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, viewer/text/form.c,
+	viewer/text/textarea.c, viewer/text/textarea.h:
+
+	Add beginning-of-buffer and end-of-buffer actions. This closes bug
+	147.  
+
+Thu Jan  1 07:03:49 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/conf.c, protocol/http/header.c:
+
+	Improve some comments: s/whitespaces/whitespace/, and clarify
+	skip_white's description.  
+
+Thu Jan  1 04:17:56 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/encoding/encoding.c:
+
+	Add .tbz to bzip2_extensions.  
+
+Thu Jan  1 03:40:10 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* acconfig.h:
+
+	Reintroduced ELINKS_SMB.  
+
+Thu Jan  1 03:27:48 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/marks.c:
+
+	index_from_char() was added to marks.c, it permits to reduce size of
+	array used by converting valid chars to an index in the marks array.
+	Some macros were added to clarify the code.  
+
+Thu Jan  1 03:25:48 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* acconfig.h, configure.in, feature.h:
+
+	Featurized ELINKS_SMB.  
+
+Thu Jan  1 03:16:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* acconfig.h, configure.in, feature.h:
+
+	Featurized Local CGI Support.  
+
+Thu Jan  1 03:09:13 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* acconfig.h, configure.in, feature.h:
+
+	Moved USE_MOUSE to feature.h.  
+
+Thu Jan  1 02:53:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/info.c:
+
+	Updated copyright notice. Welcome to the year 2004! 
+
+Thu Jan  1 02:53:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* feature.h:
+
+	Capitalize captions.  
+
+Thu Jan  1 02:22:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* acconfig.h, configure.in, feature.h:
+
+	Featurized FORMS_MEMORY.  
+
+Thu Jan  1 02:06:03 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* feature.h:
+
+	Examples of the URI rewriting.  
+
+Thu Jan  1 01:49:23 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* feature.h:
+
+	Cleanup.  
+
+Thu Jan  1 01:46:19 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* acconfig.h:
+
+	Oops, BACKTRACE still must be here. Spotted by zas.  
+
+Thu Jan  1 01:06:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, configure.in, feature.h:
+
+	Disable root user was featured.  
+
+Thu Jan  1 00:47:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, configure.in, feature.h:
+
+	URI rewriting was featured.  
+
+Wed Dec 31 23:52:25 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* po/de.po:
+
+	German translation update.  
+
+Wed Dec 31 23:26:34 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* po/de.po:
+
+	German translation update.  
+
+Wed Dec 31 23:19:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/README:
+
+	No ELusive yet. See the tireless army of ELinks hackers, not even
+	taking their break for new year celebrations. Happy new one, btw.  
+
 Wed Dec 31 22:15:38 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

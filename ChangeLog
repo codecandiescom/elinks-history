@@ -1,3 +1,54 @@
+Tue Jul 23 14:17:29 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/german.lng, src/intl/language.inc:
+
+	German translation was updated. Patch by Ingo Blechschmidt.  
+
+Tue Jul 23 12:58:11 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, document/options.c, document/options.h,
+	document/view.c, document/html/renderer.c:
+
+	An option to choose number keys behavior (command prefixing or
+	numbered links selection) was added.  
+
+Tue Jul 23 12:30:28 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, document/globhist.c:
+
+	Maximum number of entries in the global history is now configurable
+	by user. Patch by Miciah and me.  
+
+Tue Jul 23 10:01:23 2002  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/info.c:
+
+	A macro is now used in res_inf().  
+
+Tue Jul 23 09:34:34 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/leds.c:
+
+	Minor typo fix.  
+
+Tue Jul 23 09:28:26 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Minor optimizations.  
+
+Tue Jul 23 09:19:43 2002  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	Tidy up.  
+
+Tue Jul 23 08:26:43 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/french.lng, src/intl/language.inc:
+
+	Updated french translation.  
+
 Thu Jul 11 21:30:20 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/ssl/ssl.c:

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.41 2004/04/01 17:13:06 jonas Exp $ */
+/* $Id: task.c,v 1.42 2004/04/02 16:35:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -311,16 +311,22 @@ do_move(struct session *ses, struct download **stat)
 	if (ce->redirect && ses->redirect_cnt++ < MAX_REDIRECTS) {
 		unsigned char *u;
 		enum task_type task = ses->task.type;
+		struct uri *uri;
 		enum protocol protocol;
 
 		if (task == TASK_HISTORY && !have_location(ses))
 			goto b;
 
-		u = get_cache_redirect_uri(ce, ses->loading_uri);
-		if (!u) goto b;
+		uri = get_cache_redirect_uri(ce, ses->loading_uri);
+		if (!uri) goto b;
 
-		protocol = known_protocol(u, NULL);
-		if (protocol == PROTOCOL_UNKNOWN) return 0;
+		if (uri->protocol == PROTOCOL_UNKNOWN)
+			return 0;
+
+		protocol = uri->protocol;
+		u = get_uri_string(uri, ~0);
+		done_uri(uri);
+		if (!u) goto b;
 
 		abort_loading(ses, 0);
 		if (have_location(ses))

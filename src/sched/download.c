@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.233 2004/04/01 06:06:20 jonas Exp $ */
+/* $Id: download.c,v 1.234 2004/04/02 16:35:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -343,17 +343,12 @@ download_data(struct download *download, struct file_download *file_download)
 		file_download->remotetime = parse_http_date(ce->last_modified);
 
 	while (ce->redirect && file_download->redirect_cnt++ < MAX_REDIRECTS) {
-		unsigned char *u;
 		struct uri *uri;
 
 		if (download->state >= 0)
 			change_connection(&file_download->download, NULL, PRI_CANCEL, 0);
 
-		u = get_cache_redirect_uri(ce, file_download->uri);
-		if (!u) break;
-
-		uri = get_uri(u);
-		mem_free(u);
+		uri = get_cache_redirect_uri(ce, file_download->uri);
 		if (!uri) break;
 
 		done_uri(file_download->uri);

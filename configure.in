@@ -135,8 +135,8 @@ dnl ===================================================================
 dnl Checks for libtool.
 dnl ===================================================================
 
-AC_PROG_LIBTOOL
 AC_DISABLE_SHARED # unused for now anyway
+AC_PROG_LIBTOOL
 
 dnl ===================================================================
 dnl Checks for library functions.

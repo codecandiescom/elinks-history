@@ -1,3 +1,44 @@
+Sun Sep  1 12:06:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* INSTALL:
+
+	Added notice about building outside of the source tree. Also
+	mentioned ./configure --help.  
+
+Sun Sep  1 11:57:04 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: cookies/cookies.c, document/download.h,
+	globhist/globhist.c, globhist/globhist.h, lowlevel/select.c,
+	lowlevel/ttime.h, protocol/http/date.c, protocol/http/date.h:
+
+	Strict use of ttime in place of time_t - prevention of mass of huge
+	and complicated inclusions of sys/time.h vs time.h.  
+
+Sun Sep  1 11:42:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in, src/util/types.h:
+
+	Sometimes, (u)int32_t can be found only in sys/types.h.  
+
+Sun Sep  1 11:37:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/types.h:
+
+	I'm stupid - sizeof obviously returns number of bytes, not bits
+	;-)).  
+
+Sun Sep  1 08:33:36 2002  Laurent Monin <zas@norz.org>:
+
+	* INSTALL:
+
+	Minor typos were fixed.  
+
+Sat Aug 31 23:10:49 2002  Petr Baudis <pasky@ji.cz>:
+
+	* INSTALL:
+
+	s/tp/to/ 
+
 Sat Aug 31 21:40:01 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/html/TODO:

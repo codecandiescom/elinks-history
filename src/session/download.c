@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.275 2004/04/21 22:39:18 jonas Exp $ */
+/* $Id: download.c,v 1.276 2004/04/22 15:03:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -889,6 +889,10 @@ init_tq(struct session *ses, struct download *download,
 void
 done_tq(struct tq *tq)
 {
+	/* Unregister any active download */
+	if (is_in_progress_state(tq->download.state))
+		change_connection(&tq->download, NULL, PRI_CANCEL, 0);
+
 	object_unlock(tq->cached);
 	done_uri(tq->uri);
 	mem_free_if(tq->goto_position);

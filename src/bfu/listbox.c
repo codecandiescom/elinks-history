@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.26 2002/09/10 20:20:15 pasky Exp $ */
+/* $Id: listbox.c,v 1.27 2002/09/14 12:09:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -250,10 +250,12 @@ display_listbox_item(struct listbox_item *item, void *data_, int offset)
 	struct box_context *data = data_;
 	int len; /* Length of the current text field. */
 	int color;
+	int depth = item->depth * 5;
+	int d;
 
 	len = strlen(item->text);
-	if (len > data->listbox_item_data->l) {
-		len = data->listbox_item_data->l;
+	if (len > data->listbox_item_data->l - depth) {
+		len = data->listbox_item_data->l - depth;
 	}
 
 	if (item == data->box->sel) {
@@ -262,7 +264,25 @@ display_listbox_item(struct listbox_item *item, void *data_, int offset)
 		color = get_bfu_color(data->term, "menu.normal");
 	}
 
-	print_text(data->term, data->listbox_item_data->x,
+	/* TODO: Use graphics chars for lines if available. --pasky */
+
+	for (d = 0; depth < depth; d += 5) {
+		/* TODO: Don't draw this if there's no further child of
+		 * parent in that depth! Links suffers with the same, it
+		 * looks sooo ugly ;-). --pasky */
+		print_text(data->term, data->listbox_item_data->x + d,
+			   data->listbox_item_data->y + data->offset,
+			   5, " |   ", color);
+	}
+
+	print_text(data->term, data->listbox_item_data->x + d,
+		   data->listbox_item_data->y + data->offset,
+		   5, list_empty(item->child) ? " +-- "
+		   			      : item->expanded ? "[-]- "
+		 					       : "[+]- ",
+		   color);
+
+	print_text(data->term, data->listbox_item_data->x + depth,
 		   data->listbox_item_data->y + data->offset,
 		   len, item->text, color);
 

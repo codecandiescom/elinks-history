@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.14 2002/09/10 20:20:15 pasky Exp $ */
+/* $Id: listbox.h,v 1.15 2002/09/14 12:09:44 pasky Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -38,6 +38,7 @@ struct listbox_item {
 	struct list_head child;
 	int expanded; /* Only valid if child is non-empty */
 	int visible; /* Is this item visible? */
+	int depth;
 
 	/* Text to display */
 	unsigned char *text;

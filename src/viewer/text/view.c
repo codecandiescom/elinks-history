@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.482 2004/06/17 08:38:05 miciah Exp $ */
+/* $Id: view.c,v 1.483 2004/06/17 08:41:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -515,11 +515,10 @@ horizontal_scroll(struct session *ses, struct document_view *doc_view, int steps
 		/* RIGHT */
 		int max_width = doc_view->document->width - doc_view->box.width;
 
-		int_upper_bound(&x, int_max(0, max_width));
-	} else {
-		/* LEFT */
-		int_lower_bound(&x, 0);
+		int_upper_bound(&x, max_width);
 	}
+
+	int_lower_bound(&x, 0);
 
 	if (doc_view->vs->x == x) return;
 

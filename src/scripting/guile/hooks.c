@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.13 2003/10/01 10:33:12 jonas Exp $ */
+/* $Id: hooks.c,v 1.14 2003/10/01 11:31:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,7 +132,7 @@ struct scripting_hook guile_scripting_hooks[] = {
 	{ "pre-format-html", script_hook_pre_format_html, NULL },
 	{ "get-proxy", script_hook_get_proxy, NULL },
 	{ "quit", script_hook_quit, NULL },
-	{ NULL, NULL, NULL }
+	NULL_SCRIPTING_HOOK,
 };
 
 #endif /* HAVE_GUILE */

@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.14 2003/09/17 01:14:07 jonas Exp $ */
+/* $Id: memory.h,v 1.15 2003/09/26 18:32:29 pasky Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -99,7 +99,7 @@ void *mem_realloc(void *, size_t);
 #define ALIGN_MEMORY_SIZE(x, gr) (((x) + (gr)) & ~(gr))
 
 static inline void *
-__mem_align_alloc(void **ptr, size_t old, size_t new, size_t objsize, int mask)
+mem_align_alloc__(void **ptr, size_t old, size_t new, size_t objsize, int mask)
 {
 	size_t newsize = ALIGN_MEMORY_SIZE(new, mask);
 	size_t oldsize = ALIGN_MEMORY_SIZE(old, mask);
@@ -116,6 +116,6 @@ __mem_align_alloc(void **ptr, size_t old, size_t new, size_t objsize, int mask)
 }
 
 #define mem_align_alloc(ptr, old, new, objsize, mask) \
-	__mem_align_alloc((void **)ptr, old, new, objsize, mask)
+	mem_align_alloc__((void **)ptr, old, new, objsize, mask)
 
 #endif

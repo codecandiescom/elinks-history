@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.11 2003/01/01 20:30:34 pasky Exp $ */
+/* $Id: connect.h,v 1.12 2003/01/26 17:34:47 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -11,8 +11,8 @@
 #include "sched/sched.h"
 
 struct conn_info {
-	struct sockaddr *addr; /* array of addresses */
-	int addrno; /* array len / sizeof(sockaddr) */
+	struct sockaddr_storage *addr; /* array of addresses */
+	int addrno; /* array len / sizeof(sockaddr_storage) */
 	int triedno; /* index of last tried address */
 	int port;
 	int *sock;

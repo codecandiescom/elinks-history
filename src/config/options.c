@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.187 2003/01/23 02:47:41 pasky Exp $ */
+/* $Id: options.c,v 1.188 2003/01/26 17:34:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -531,7 +531,7 @@ eval_cmd(struct option *o, unsigned char ***argv, int *argc)
 static unsigned char *
 lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
-	struct sockaddr *addrs = NULL;
+	struct sockaddr_storage *addrs = NULL;
 	int addrno, i;
 
 	if (!*argc) return gettext("Parameter expected");
@@ -549,7 +549,7 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 	for (i = 0; i < addrno; i++) {
 #ifdef IPV6
-		struct sockaddr_in6 addr = *((struct sockaddr_in6 *) &((struct sockaddr_storage *) addrs)[i]);
+		struct sockaddr_in6 addr = *((struct sockaddr_in6 *) &(addrs)[i]);
 		unsigned char p[INET6_ADDRSTRLEN];
 
 		if (! inet_ntop(addr.sin6_family,
@@ -560,7 +560,7 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 		else
 			printf("%s\n", p);
 #else
-		struct sockaddr_in addr = *((struct sockaddr_in *) &((struct sockaddr_storage *) addrs)[i]);
+		struct sockaddr_in addr = *((struct sockaddr_in *) &(addrs)[i]);
 		unsigned char *p = (unsigned char *) &addr.sin_addr.s_addr;
 
 		printf("%d.%d.%d.%d\n", (int) p[0], (int) p[1],

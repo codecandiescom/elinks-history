@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.33 2003/01/01 20:30:34 pasky Exp $ */
+/* $Id: connect.c,v 1.34 2003/01/26 17:34:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,9 +279,9 @@ dns_found(void *data, int state)
 
 	for (i = c_i->triedno + 1; i < c_i->addrno; i++) {
 #ifdef IPV6
-		struct sockaddr_in6 addr = *((struct sockaddr_in6 *) &((struct sockaddr_storage *) c_i->addr)[i]);
+		struct sockaddr_in6 addr = *((struct sockaddr_in6 *) &c_i->addr[i]);
 #else
-		struct sockaddr_in addr = *((struct sockaddr_in *) &((struct sockaddr_storage *) c_i->addr)[i]);
+		struct sockaddr_in addr = *((struct sockaddr_in *) &c_i->addr[i]);
 #endif
 
 		c_i->triedno++;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.76 2002/09/17 14:21:50 zas Exp $ */
+/* $Id: view.c,v 1.77 2002/09/18 14:08:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -488,7 +488,6 @@ is_in_range(struct f_data *f, int y, int yw, unsigned char *txt,
 		int i;
 
 		if (srch_cmp(s1->c, txt[0])) {
-
 unable_to_handle_kernel_paging_request___oops:
 			continue;
 		}
@@ -533,24 +532,25 @@ get_searched(struct f_data_c *scr, struct point **pt, int *pl)
 		int i, j;
 
 		if (srch_cmp(s1->c, c)) {
-
-c:
+cont:
 			continue;
 		}
 
 		for (i = 1; i < l; i++)
 			if (srch_cmp(s1[i].c, (*scr->search_word)[i]))
-				goto c;
+				goto cont;
 
 		for (i = 0; i < l; i++) for (j = 0; j < s1[i].n; j++) {
 			int x = s1[i].x + j + xp - vx;
 			int y = s1[i].y + yp - vy;
 
 			if (x >= xp && y >= yp && x < xp + xw && y < yp + yw) {
-				/*unsigned co;
+#if 0
+				unsigned co;
 				co = get_char(t, x, y);
 				co = ((co >> 3) & 0x0700) | ((co << 3) & 0x3800);
-				set_color(t, x, y, co);*/
+				set_color(t, x, y, co);
+#endif
 				if (!(len & ALLOC_GR)) {
 					struct point *npt = mem_realloc(points, sizeof(struct point) * (len + ALLOC_GR));
 
@@ -2314,13 +2314,18 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 			}
 			set_link(f);
 			find_next_link_in_search(f, ses->search_direction * 2);
-			/*draw_doc(ses->term, f, 1);
+#if 0
+			draw_doc(ses->term, f, 1);
 			print_screen_status(ses);
-			redraw_from_window(ses->win);*/
+			redraw_from_window(ses->win);
+#endif
 			return;
 		}
 		p += ses->search_direction * f->yw;
-		if (p > f->f_data->y) p = 0;
+		if (p > f->f_data->y) {
+			/* TODO: A notice for user? --pasky */
+			p = 0;
+		}
 		if (p < 0) {
 			p = 0;
 			while (p < f->f_data->y) p += f->yw;

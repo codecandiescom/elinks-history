@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.131 2003/07/28 16:15:15 zas Exp $ */
+/* $Id: session.c,v 1.132 2003/07/28 16:18:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1340,13 +1340,6 @@ destroy_session(struct session *ses)
 	if (ses->last_search_word) mem_free(ses->last_search_word);
 	if (ses->last_title) mem_free(ses->last_title);
 	del_from_list(ses);
-	/*mem_free(ses);*/
-}
-
-void
-destroy_all_sessions(void)
-{
-	/*while (!list_empty(sessions)) destroy_session(sessions.next);*/
 }
 
 void

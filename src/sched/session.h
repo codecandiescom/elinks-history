@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.39 2003/07/22 14:17:58 pasky Exp $ */
+/* $Id: session.h,v 1.40 2003/07/28 16:18:56 zas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -200,12 +200,7 @@ struct frame *ses_find_frame(struct session *, unsigned char *);
 struct frame *ses_change_frame_url(struct session *, unsigned char *, unsigned char *);
 
 void map_selected(struct terminal *, struct link_def *, struct session *);
-
-/* void destroy_session(struct session *); */
-void destroy_all_sessions(void);
-
 void free_files(struct session *);
-
 void display_timer(struct session *ses);
 
 /* Information about the current document */

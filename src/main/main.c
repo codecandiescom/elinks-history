@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.114 2003/07/24 15:33:31 pasky Exp $ */
+/* $Id: main.c,v 1.115 2003/07/28 16:18:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,7 +233,6 @@ static void
 terminate_all_subsystems(void)
 {
 	af_unix_close();
-	destroy_all_sessions();
 	check_bottom_halves();
 	abort_all_downloads();
 	check_bottom_halves();

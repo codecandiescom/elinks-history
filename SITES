@@ -7,6 +7,7 @@ Mirrors:
 	http://mirrors.oven.com/links/
 	ftp://ftp.firenze.linux.it/pub/mirror/links/
 	http://links.sourceforge.net/download/
+	ftp://ftp.fu-berlin.de/unix/network/www/links/
 
 DEBs:
 	http://www.debian.org/Packages/unstable/net/links.html
@@ -28,4 +29,4 @@ Mailing list:
 elinks site:
 	http://pasky.ji.cz/elinks/
 
-$Id: SITES,v 1.4 2002/01/26 15:21:47 pasky Exp $
+$Id: SITES,v 1.5 2002/01/29 21:51:56 pasky Exp $

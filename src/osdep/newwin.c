@@ -1,5 +1,5 @@
 /* Open in new window handling */
-/* $Id: newwin.c,v 1.7 2004/04/15 15:35:28 jonas Exp $ */
+/* $Id: newwin.c,v 1.8 2004/04/15 16:13:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,7 +76,7 @@ struct open_in_new oinw[] = {
 };
 
 #define foreach_oinw(i, term_env) \
-	for ((i) = 0; oinw[(i)].env; (i)++) if (!((term_env) & oinw[(i)].env))
+	for ((i) = 0; oinw[(i)].env; (i)++) if (((term_env) & oinw[(i)].env))
 
 struct open_in_new *
 get_open_in_new(struct terminal *term)

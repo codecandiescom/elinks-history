@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.98 2003/11/26 18:14:41 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.99 2003/12/16 20:35:44 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,43 +162,41 @@ delete_bookmark(struct bookmark *bm)
 /* Replace invalid chars in @title with ' ' and trim all starting/ending
  * spaces. */
 static inline void
-sanitize_title(const unsigned char *title)
+sanitize_title(unsigned char *title)
 {
-	register unsigned char *p = (unsigned char *)title;
-	int len = strlen(p);
+	int len = strlen(title);
 
 	if (!len) return;
 
 	while (len--) {
-		if (p[len] < ' ')
-			p[len] = ' ';
+		if (title[len] < ' ')
+			title[len] = ' ';
 	}
-	trim_chars(p, ' ', NULL);
+	trim_chars(title, ' ', NULL);
 }
 
 /* Returns 0 if @url contains invalid chars, 1 if ok.
  * It trims starting/ending spaces. */
 static inline int
-sanitize_url(const unsigned char *url)
+sanitize_url(unsigned char *url)
 {
-	register unsigned char *p = (unsigned char *)url;
-	int len = strlen(p);
+	int len = strlen(url);
 
 	if (!len) return 1;
 
 	while (len--) {
-		if (p[len] < ' ')
+		if (url[len] < ' ')
 			return 0;
 	}
-	trim_chars(p, ' ', NULL);
+	trim_chars(url, ' ', NULL);
 	return 1;
 }
 
 /* Adds a bookmark to the bookmark list. Place 0 means top, place 1 means
  * bottom. */
 struct bookmark *
-add_bookmark(struct bookmark *root, int place, const unsigned char *title,
-	     const unsigned char *url)
+add_bookmark(struct bookmark *root, int place, unsigned char *title,
+	     unsigned char *url)
 {
 	struct bookmark *bm;
 
@@ -207,14 +205,14 @@ add_bookmark(struct bookmark *root, int place, const unsigned char *title,
 	bm = mem_calloc(1, sizeof(struct bookmark));
 	if (!bm) return NULL;
 
-	bm->title = stracpy((unsigned char *) title);
+	bm->title = stracpy(title);
 	if (!bm->title) {
 		mem_free(bm);
 		return NULL;
 	}
 	sanitize_title(bm->title);
 
-	bm->url = stracpy((unsigned char *) url);
+	bm->url = stracpy(url);
 	if (!bm->url) {
 		mem_free(bm->title);
 		mem_free(bm);
@@ -279,8 +277,8 @@ add_bookmark(struct bookmark *root, int place, const unsigned char *title,
  *
  * If any of the fields are NULL, the value is left unchanged. */
 int
-update_bookmark(struct bookmark *bm, const unsigned char *title,
-		const unsigned char *url)
+update_bookmark(struct bookmark *bm, unsigned char *title,
+		unsigned char *url)
 {
 	unsigned char *title2 = NULL;
 	unsigned char *url2 = NULL;
@@ -288,12 +286,12 @@ update_bookmark(struct bookmark *bm, const unsigned char *title,
 	if (url) {
 		if (!sanitize_url(url)) return 0;
 
-		url2 = stracpy((unsigned char *) url);
+		url2 = stracpy(url);
 		if (!url2) return 0;
 	}
 
 	if (title) {
-		title2 = stracpy((unsigned char *) title);
+		title2 = stracpy(title);
 		if (!title2) {
 			if (url2) mem_free(url2);
 			return 0;

@@ -1,4 +1,4 @@
-/* $Id: bookmarks.h,v 1.25 2003/11/21 01:13:25 jonas Exp $ */
+/* $Id: bookmarks.h,v 1.26 2003/12/16 20:35:44 fabio Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
@@ -46,7 +46,7 @@ void write_bookmarks(void);
 /* Bookmarks manipulation */
 
 int delete_bookmark(struct bookmark *);
-struct bookmark *add_bookmark(struct bookmark *, int, const unsigned char *, const unsigned char *);
-int update_bookmark(struct bookmark *, const unsigned char *, const unsigned char *);
+struct bookmark *add_bookmark(struct bookmark *, int, unsigned char *, unsigned char *);
+int update_bookmark(struct bookmark *, unsigned char *, unsigned char *);
 
 #endif

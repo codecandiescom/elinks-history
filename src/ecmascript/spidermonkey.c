@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.75 2004/11/25 18:01:39 witekfl Exp $ */
+/* $Id: spidermonkey.c,v 1.76 2004/12/16 00:15:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1291,6 +1291,9 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 	interpreter->backend_data = ctx;
 	JS_SetContextPrivate(ctx, interpreter);
 	/* TODO: Make JSOPTION_STRICT and JSOPTION_WERROR configurable. */
+#ifndef JSOPTION_COMPILE_N_GO
+#define JSOPTION_COMPILE_N_GO 0 /* Older SM versions don't have it. */
+#endif
 	/* XXX: JSOPTION_COMPILE_N_GO will go (will it?) when we implement
 	 * some kind of bytecode cache. (If we will ever do that.) */
 	JS_SetOptions(ctx, JSOPTION_VAROBJFIX | JSOPTION_COMPILE_N_GO);

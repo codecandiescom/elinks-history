@@ -1,5 +1,5 @@
 /* Guile interface (scripting engine) */
-/* $Id: core.c,v 1.13 2004/04/01 14:35:24 jonas Exp $ */
+/* $Id: core.c,v 1.14 2004/04/28 17:15:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #include "scripting/guile/hooks.h"
 #include "scripting/scripting.h"
 #include "util/error.h"
+#include "util/file.h"
 #include "util/string.h"
 
 
@@ -58,23 +59,29 @@ init_guile(struct module *module)
 	/* Load ~/.elinks/internal-hooks.scm. */
 	path = straconcat(elinks_home, "internal-hooks.scm", NULL);
 	if (!path) return;
-	scm_c_primitive_load_path(path);
+
+	if (file_can_read(path)) {
+		scm_c_primitive_load_path(path);
+
+		/* internal-hooks.scm should have created a new module (elinks
+		 * internal).  Let's remember it, even though I haven't figured
+		 * out how to use it directly yet... */
+		internal_module = scm_current_module();
+
+		/* Return to the user module, import bindings from (elinks
+		 * internal), then load ~/.elinks/user-hooks.scm. */
+
+		scm_set_current_module(user_module);
+		/* XXX: better way? i want to use internal_module directly */
+		scm_c_use_module("elinks internal");
+	}
+
 	mem_free(path);
 
-	/* internal-hooks.scm should have created a new module (elinks
-	 * internal).  Let's remember it, even though I haven't
-	 * figured out how to use it directly yet...
-	 */
-	internal_module = scm_current_module();
-
-	/* Return to the user module, import bindings from (elinks
-	 * internal), then load ~/.elinks/user-hooks.scm.
-	 */
-	scm_set_current_module(user_module);
-	scm_c_use_module("elinks internal"); /* XXX: better way? i want to use internal_module directly */
 	path = straconcat(elinks_home, "user-hooks.scm", NULL);
 	if (!path) return;
-	scm_c_primitive_load_path(path);
+	if (file_can_read(path))
+		scm_c_primitive_load_path(path);
 	mem_free(path);
 }
 

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.106 2003/10/30 16:49:21 jonas Exp $ */
+/* $Id: tables.c,v 1.107 2003/10/30 17:04:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,7 +104,7 @@ struct table {
 	int frame, rules, width, wf;
 	int rw;
 	int min_t, max_t;
-	int c, rc;
+	int columns_count, rc;
 	int xc;
 	int rh;
 	int link_num;
@@ -318,24 +318,25 @@ static void
 new_columns(struct table *t, int span, int width, int align,
 	    int valign, int group)
 {
-	if (t->c + span > t->rc) {
+	if (t->columns_count + span > t->rc) {
 		int n = t->rc;
-		struct table_column *nc;
+		struct table_column *new_columns;
 
-		while (t->c + span > n) if (!(n <<= 1)) return;
+		while (t->columns_count + span > n) if (!(n <<= 1)) return;
 
-		nc = mem_realloc(t->columns, n * sizeof(struct table_column));
-		if (!nc) return;
+		new_columns = mem_realloc(t->columns, n * sizeof(struct table_column));
+		if (!new_columns) return;
 
 		t->rc = n;
-		t->columns = nc;
+		t->columns = new_columns;
 	}
 
 	while (span--) {
-		t->columns[t->c].align = align;
-		t->columns[t->c].valign = valign;
-		t->columns[t->c].width = width;
-		t->columns[t->c++].group = group;
+		t->columns[t->columns_count].align = align;
+		t->columns[t->columns_count].valign = valign;
+		t->columns[t->columns_count].width = width;
+		t->columns[t->columns_count].group = group;
+		t->columns_count++;
 		group = 0;
 	}
 }
@@ -505,7 +506,7 @@ qwe:
 	}
 
 	if (t_namelen == 3 && !strncasecmp(t_name, "COL", 3)) {
-		int sp, wi, al, val;
+		int sp, width, al, val;
 
 		if (lbhp) {
 			(*bad_html)[*bhp-1].e = html;
@@ -515,13 +516,13 @@ qwe:
 		sp = get_num(t_attr, "span");
 		if (sp == -1) sp = 1;
 
-		wi = c_width;
+		width = c_width;
 		al = c_al;
 		val = c_val;
 		get_align(t_attr, &al);
 		get_valign(t_attr, &val);
-		get_column_width(t_attr, &wi, sh);
-		new_columns(t, sp, wi, al, val, !!c_span);
+		get_column_width(t_attr, &width, sh);
+		new_columns(t, sp, width, al, val, !!c_span);
 		c_span = 0;
 		goto see;
 	}
@@ -637,7 +638,7 @@ nc:
 
 	if (group == 1) cell->group = 1;
 
-	if (x < t->c) {
+	if (x < t->columns_count) {
 		if (t->columns[x].align != AL_TR)
 			cell->align = t->columns[x].align;
 		if (t->columns[x].valign != VAL_TR)
@@ -662,10 +663,10 @@ nc:
 	cell->rowspan = rsp;
 
 	if (csp == 1) {
-		int w = W_AUTO;
+		int width = W_AUTO;
 
-		get_column_width(t_attr, &w, sh);
-		if (w != W_AUTO) set_td_width(t, x, w, 0);
+		get_column_width(t_attr, &width, sh);
+		if (width != W_AUTO) set_td_width(t, x, width, 0);
 	}
 
 	qqq = t->x;
@@ -740,7 +741,7 @@ scan_done:
 		}
 	} else t->rows_height = NULL;
 
-	for (x = 0; x < t->c; x++)
+	for (x = 0; x < t->columns_count; x++)
 		if (t->columns[x].width != W_AUTO)
 			set_td_width(t, x, t->columns[x].width, 1);
 	set_td_width(t, t->x, W_AUTO, 0);
@@ -870,7 +871,7 @@ get_vline_width(struct table *t, int col)
 	if (t->rules == R_COLS || t->rules == R_ALL)
 		w = t->cellsp;
 	else if (t->rules == R_GROUPS)
-		w = (col < t->c && t->columns[col].group);
+		w = (col < t->columns_count && t->columns[col].group);
 
 	if (!w && t->cellpd) w = -1;
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.84 2003/06/07 14:16:57 pasky Exp $ */
+/* $Id: session.c,v 1.85 2003/06/07 14:37:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,7 @@
 #include "lua/hooks.h"
 #include "protocol/url.h"
 #include "sched/download.h"
+#include "sched/error.h"
 #include "sched/history.h"
 #include "sched/location.h"
 #include "sched/sched.h"
@@ -57,17 +58,10 @@ struct file_to_load {
 	struct status stat;
 };
 
-struct strerror_val {
-	LIST_HEAD(struct strerror_val);
-
-	unsigned char msg[1]; /* must be last */
-};
-
 
 INIT_LIST_HEAD(sessions);
 
 static int session_id = 1;
-static INIT_LIST_HEAD(strerror_buf);
 
 
 void check_questions_queue(struct session *ses);
@@ -77,43 +71,6 @@ struct file_to_load *request_additional_loading_file(struct session *,
 						     unsigned char *,
 						     struct status *, int);
 
-void
-free_strerror_buf(void)
-{
-	free_list(strerror_buf);
-}
-
-unsigned char *
-get_err_msg(int state)
-{
-	unsigned char *e;
-	struct strerror_val *s;
-
-	if (state <= S_OK || state >= S_WAIT) {
-		int i;
-
-		for (i = 0; msg_dsc[i].msg; i++)
-			if (msg_dsc[i].n == state)
-				return msg_dsc[i].msg;
-unknown_error:
-		return N_("Unknown error");
-	}
-
-	e = (unsigned char *) strerror(-state);
-	if (!e || !*e) goto unknown_error;
-
-	foreach(s, strerror_buf)
-		if (!strcmp(s->msg, e))
-			return s->msg;
-
-	s = mem_alloc(sizeof(struct strerror_val) + strlen(e) + 1);
-	if (!s) goto unknown_error;
-
-	strcpy(s->msg, e);
-	add_to_list(strerror_buf, s);
-
-	return s->msg;
-}
 
 static unsigned char *
 get_stat_msg(struct status *stat, struct terminal *term)

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.45 2003/01/10 17:50:30 pasky Exp $ */
+/* $Id: cookies.c,v 1.46 2003/01/13 11:18:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,6 +33,7 @@
 #ifdef COOKIES_DEBUG
 #include "util/error.h"
 #endif
+#include "util/file.h"
 #include "util/memory.h"
 #include "util/secsave.h"
 #include "util/string.h"
@@ -591,14 +592,12 @@ load_cookies() {
 	mem_free(cookfile);
 	if (!fp) return;
 
-	while (fgets(in_buffer, 6 * MAX_STR_LEN, fp)) {
+	while (safe_fgets(in_buffer, 6 * MAX_STR_LEN, fp)) {
 		struct cookie *cookie = mem_calloc(1, sizeof(struct cookie));
 
 		if (!cookie) return;
 
-		/* XXX: On some systems, fgets() won't put NUL at the end of
-		 * the string. -- Mikulas */
-		in_buffer[6 * MAX_STR_LEN - 1] = 0;
+		/* Drop ending '\n'. */
 		if (*in_buffer) in_buffer[strlen(in_buffer) - 1] = 0;
 
 		q = in_buffer;

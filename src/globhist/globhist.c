@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.19 2003/01/10 17:50:30 pasky Exp $ */
+/* $Id: globhist.c,v 1.20 2003/01/13 11:18:15 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -24,6 +24,7 @@
 #include "globhist/globhist.h"
 #include "lowlevel/home.h"
 #include "lowlevel/ttime.h"
+#include "util/file.h"
 #include "util/hash.h"
 #include "util/memory.h"
 #include "util/secsave.h"
@@ -346,10 +347,8 @@ read_global_history()
 	title = in_buffer;
 	globhist_nosave = 1;
 
-	while (fgets(in_buffer, MAX_STR_LEN, f)) {
-		/* XXX: On some systems, fgets() won't put NUL at the end of
-		 * the string. -- Mikulas */
-		in_buffer[MAX_STR_LEN - 1] = 0;
+	while (safe_fgets(in_buffer, MAX_STR_LEN, f)) {
+		/* Drop ending '\n'. */
 		if (*in_buffer) in_buffer[strlen(in_buffer) - 1] = 0;
 
 		url = strchr(in_buffer, '\t');

@@ -1,3 +1,27 @@
+Mon Apr 12 21:38:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inpfield.c:
+
+	check_number(): Make the error message guide the user.  
+
+Mon Apr 12 08:22:43 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Apr 11 23:06:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/info.c:
+
+	Cleanups.  
+
+Sun Apr 11 22:58:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/dialogs.c:
+
+	menu_del_ext(): Make better usage of printf format.  
+
 Sun Apr 11 21:11:54 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/config/conf.c:

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.133 2003/07/02 18:17:41 zas Exp $ */
+/* $Id: view.c,v 1.134 2003/07/02 18:30:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1543,6 +1543,8 @@ free_succesful_controls(struct list_head *submit)
 {
 	struct submitted_value *v;
 
+	assert(submit);
+
 	foreach (v, *submit) {
 		if (v->name) mem_free(v->name);
 		if (v->value) mem_free(v->value);
@@ -1554,9 +1556,12 @@ free_succesful_controls(struct list_head *submit)
 static inline unsigned char *
 encode_textarea(unsigned char *text)
 {
-	unsigned char *newtext = init_str();
+	unsigned char *newtext;
 	int len = 0;
 
+	assert(text);
+
+	newtext = init_str();
 	if (!newtext) return NULL;
 
 	for (; *text; text++) {
@@ -1571,8 +1576,10 @@ static void
 get_succesful_controls(struct f_data_c *f, struct form_control *fc,
 		       struct list_head *subm)
 {
-	int ch;
 	struct form_control *frm;
+	int ch;
+
+	assert(f && f->f_data && fc && subm);
 
 	init_list(*subm);
 	foreach (frm, f->f_data->forms) {
@@ -1665,9 +1672,11 @@ fi_rep:
 static inline unsigned char *
 strip_file_name(unsigned char *f)
 {
-	unsigned char *n;
-	unsigned char *l = f - 1;
+	unsigned char *n, *l;
 
+	assert(f);
+
+	l = f - 1;
 	for (n = f; *n; n++) if (dir_sep(*n)) l = n;
 	return l + 1;
 }
@@ -1679,6 +1688,8 @@ encode_controls(struct list_head *l, unsigned char **data, int *len,
 	struct submitted_value *sv;
 	struct conv_table *convert_table = NULL;
 	int lst = 0;
+
+	assert(l && data && len);
 
 	*data = init_str();
 	if (!*data) return;
@@ -1745,12 +1756,14 @@ encode_multipart(struct session *ses, struct list_head *l,
 		 unsigned char **data, int *len,
 		 unsigned char *bound, int cp_from, int cp_to)
 {
+	struct conv_table *convert_table = NULL;
+	struct submitted_value *sv;
 	int *nbp, *bound_ptrs = NULL;
 	int nbound_ptrs = 0;
-	struct submitted_value *sv;
-	int i;
 	int flg = 0;
-	struct conv_table *convert_table = NULL;
+	register int i;
+
+	assert(ses && l && data && len && bound);
 
 	*data = init_str();
 	if (!*data) return;
@@ -1887,6 +1900,8 @@ reset_form(struct f_data_c *f, int form_num)
 {
 	struct form_control *frm;
 
+	assert(f && f->f_data);
+
 	foreach (frm, f->f_data->forms) if (frm->form_num == form_num) {
 		struct form_state *fs = find_form_state(f, frm);
 
@@ -1900,12 +1915,16 @@ get_form_url(struct session *ses, struct f_data_c *f,
 {
 	struct list_head submit;
 	unsigned char *data;
+	unsigned char *go;
 	unsigned char bound[BL];
-	int len;
-	unsigned char *go = init_str();
 	int cp_from, cp_to;
+	int len;
 
-	if (!frm || !go) return NULL;
+	assert(ses && ses->tab && ses->tab->term);
+	assert(f && f->f_data && frm);
+
+	go = init_str();
+	if (!go) return NULL;
 
 	if (frm->type == FC_RESET) {
 		reset_form(f, frm->form_num);
@@ -1977,6 +1996,8 @@ static unsigned char *
 get_link_url(struct session *ses, struct f_data_c *f,
 	     struct link *l)
 {
+	assert(ses && f && l);
+
 	if (l->type == L_LINK) {
 		if (!l->where) return stracpy(l->where_img);
 		return stracpy(l->where);
@@ -1988,6 +2009,7 @@ get_link_url(struct session *ses, struct f_data_c *f,
 void
 set_frame(struct session *ses, struct f_data_c *f, int a)
 {
+	assert(ses && ses->screen && f && f->vs);
 	if (f == ses->screen) return;
 	goto_url(ses, f->vs->url);
 }
@@ -1997,7 +2019,7 @@ int
 goto_link(unsigned char *url, unsigned char *target, struct session *ses,
 	  int do_reload)
 {
-	if (!url) return 1;
+	assert(url && ses);
 
 	/* if (strlen(url) > 4 && !strncasecmp(url, "MAP@", 4)) { */
 	if (((url[0]|32) == 'm') &&

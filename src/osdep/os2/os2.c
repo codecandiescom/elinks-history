@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.21 2004/07/15 15:35:42 jonas Exp $ */
+/* $Id: os2.c,v 1.22 2004/07/28 13:56:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -508,7 +508,7 @@ mouse_thread(void *p)
 		ev.y = ms->row;
 		/*DBG("status: %d %d %d", ms->col, ms->row, ms->fs);*/
 		if (ms->fs & (MOUSE_BN1_DOWN | MOUSE_BN2_DOWN | MOUSE_BN3_DOWN))
-			ev.b = status = B_DOWN | (ms->fs & MOUSE_BN1_DOWN ? B_LEFT : ms->fs & MOUSE_BN2_DOWN ? B_MIDDLE : B_RIGHT);
+			ev.info.mouse.button = status = B_DOWN | (ms->fs & MOUSE_BN1_DOWN ? B_LEFT : ms->fs & MOUSE_BN2_DOWN ? B_MIDDLE : B_RIGHT);
 		else if (ms->fs & (MOUSE_MOTION_WITH_BN1_DOWN | MOUSE_MOTION_WITH_BN2_DOWN | MOUSE_MOTION_WITH_BN3_DOWN)) {
 			int b = ms->fs & MOUSE_MOTION_WITH_BN1_DOWN ? B_LEFT : ms->fs & MOUSE_MOTION_WITH_BN2_DOWN ? B_MIDDLE : B_RIGHT;
 
@@ -516,10 +516,10 @@ mouse_thread(void *p)
 				b |= B_DOWN;
 			else
 				b |= B_DRAG;
-			ev.b = status = b;
+			ev.info.mouse.button = status = b;
 		} else {
 			if (status == -1) continue;
-			ev.b = (status & BM_BUTT) | B_UP;
+			ev.info.mouse.button  = (status & BM_BUTT) | B_UP;
 			status = -1;
 		}
 		if (hard_write(oms->p[1], (unsigned char *) &ev, sizeof(struct term_event)) != sizeof(struct term_event)) break;

@@ -1,5 +1,5 @@
 /* UNIX system-specific routines. */
-/* $Id: unix.c,v 1.15 2004/07/15 15:35:42 jonas Exp $ */
+/* $Id: unix.c,v 1.16 2004/07/28 13:56:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,20 +47,20 @@ gpm_mouse_in(struct gpm_mouse_spec *gms)
 	ev.x = gev.x - 1;
 	ev.y = gev.y - 1;
 	if (gev.buttons & GPM_B_LEFT)
-		ev.b = B_LEFT;
+		ev.info.mouse.button = B_LEFT;
 	else if (gev.buttons & GPM_B_MIDDLE)
-		ev.b = B_MIDDLE;
+		ev->info.mouse.button = B_MIDDLE;
 	else if (gev.buttons & GPM_B_RIGHT)
-		ev.b = B_RIGHT;
+		ev->info.mouse.button = B_RIGHT;
 	else
 		return;
 
 	if (gev.type & GPM_DOWN)
-		ev.b |= B_DOWN;
+		ev->info.mouse.button |= B_DOWN;
 	else if (gev.type & GPM_UP)
-		ev.b |= B_UP;
+		ev->info.mouse.button |= B_UP;
 	else if (gev.type & GPM_DRAG)
-		ev.b |= B_DRAG;
+		ev->info.mouse.button |= B_DRAG;
 	else
 		return;
 

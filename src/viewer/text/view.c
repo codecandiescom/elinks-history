@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.590 2004/09/21 22:11:43 pasky Exp $ */
+/* $Id: view.c,v 1.591 2004/09/21 22:37:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,9 +27,7 @@
 #include "document/options.h"
 #include "document/renderer.h"
 #include "document/view.h"
-#ifdef HAVE_NJS
 #include "ecmascript/ecmascript.h"
-#endif
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
 #include "osdep/osdep.h"
@@ -78,7 +76,7 @@ detach_formatted(struct document_view *doc_view)
 	doc_view->vs = NULL;
 	if (doc_view->link_bg) free_link(doc_view);
 	mem_free_set(&doc_view->name, NULL);
-#ifdef HAVE_NJS
+#ifdef CONFIG_ECMASCRIPT
 	ecmascript_put_interpreter(doc_view->ecmascript);
 	doc_view->ecmascript = NULL;
 #endif

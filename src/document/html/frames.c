@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.81 2004/09/21 22:11:40 pasky Exp $ */
+/* $Id: frames.c,v 1.82 2004/09/21 22:37:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,9 +18,7 @@
 #include "document/options.h"
 #include "document/renderer.h"
 #include "document/view.h"
-#ifdef HAVE_NJS
 #include "ecmascript/ecmascript.h"
-#endif
 #include "protocol/uri.h"
 #include "sched/session.h"
 #include "terminal/draw.h"
@@ -161,7 +159,7 @@ find_fd(struct session *ses, unsigned char *name,
 	doc_view->search_word = &ses->search_word;
 	set_box(&doc_view->box, x, y, 0, 0);
 
-#ifdef HAVE_NJS
+#ifdef CONFIG_ECMASCRIPT
 	doc_view->ecmascript = ecmascript_get_interpreter(doc_view);
 #endif
 

@@ -581,6 +581,8 @@ AM_CONDITIONAL(CONFIG_NJS, test "$CONFIG_NJS" = yes)
 AC_SUBST(NJS_LIBS)
 AC_SUBST(NJS_CFLAGS)
 
+EL_CONFIG_DEPENDS(CONFIG_ECMASCRIPT, [CONFIG_NJS], [Ecmascript])
+AM_CONDITIONAL(CONFIG_ECMASCRIPT, test "$CONFIG_ECMASCRIPT" = yes)
 
 dnl ===================================================================
 dnl Check for SSL support.

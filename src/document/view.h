@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.22 2004/09/21 22:11:40 pasky Exp $ */
+/* $Id: view.h,v 1.23 2004/09/21 22:37:37 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_VIEW_H
 #define EL__DOCUMENT_VIEW_H
@@ -9,9 +9,7 @@
 
 
 struct document;
-#ifdef HAVE_NJS
 struct ecmascript_interpreter;
-#endif
 struct view_state;
 
 struct link_bg {
@@ -28,7 +26,7 @@ struct document_view {
 	struct document *document;
 	struct view_state *vs;
 	struct link_bg *link_bg;
-#ifdef HAVE_NJS
+#ifdef CONFIG_ECMASCRIPT
 	struct ecmascript_interpreter *ecmascript;
 #endif
 

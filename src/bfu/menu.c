@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.100 2003/09/28 13:00:29 zas Exp $ */
+/* $Id: menu.c,v 1.101 2003/09/28 13:02:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,14 +27,7 @@
 /* Types and structures */
 
 struct mainmenu {
-	/* menu_head */
-	struct window *win;
-	struct menu_item *items;
-	void *data;
-	int selected;
-	int ni;
-	/* end of menu_head */
-
+	MENU_HEAD;
 	int sp;
 };
 

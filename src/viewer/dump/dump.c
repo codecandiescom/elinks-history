@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.125 2004/04/22 18:14:14 pasky Exp $ */
+/* $Id: dump.c,v 1.126 2004/04/22 18:50:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,6 +180,7 @@ subst_url(unsigned char *str, struct string *url)
 
 		if (*str) str++;
 	}
+
 	return string.source;
 }
 
@@ -219,15 +220,25 @@ dump_pre_start(struct list_head *url_list)
 	if (!list_empty(todo_list)) {
 		static int first = 1;
 
-		item = todo_list.next;
 		terminate = 0;
+
+		item = todo_list.next;
 		del_from_list(item);
 		add_to_list(done_list, item);
-		if (!first) dump_print("document.dump.separator", NULL);
-		else first = 0;
+
+		if (!first) {
+			dump_print("document.dump.separator", NULL);
+		} else {
+			first = 0;
+		}
+
 		dump_print("document.dump.header", &item->string);
 		dump_start(item->string.source);
+		/* XXX: I think it ought to print footer at the end of
+		 * the whole dump (not only this file). Testing required.
+		 * --pasky */
 		dump_print("document.dump.footer", &item->string);
+
 	} else {
 		free_string_list(&done_list);
 		terminate = 1;

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.24 2003/07/10 12:05:41 jonas Exp $ */
+/* $Id: auth.c,v 1.25 2003/07/10 12:30:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,12 +105,10 @@ enum add_auth_code
 add_auth_entry(struct uri *uri, unsigned char *realm)
 {
 	struct http_auth_basic *entry;
-	unsigned char *user = memacpy(uri->user, uri->userlen);
-	unsigned char *pass = memacpy(uri->password, uri->passwordlen);
 	unsigned char *newurl = get_auth_url(uri);
 	int ret = ADD_AUTH_ERROR;
 
-	if (!newurl || !user || !pass) goto end;
+	if (!newurl) goto end;
 
 	/* Is host/realm already known ? */
 	entry = find_auth_entry(newurl, realm);
@@ -124,14 +122,17 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 
 		/* If we have user/pass info then check if identical to
 		 * those in entry. */
-		if ((*user || *pass) && entry->uid && entry->passwd) {
+		if ((uri->userlen || uri->passwordlen) && entry->uid && entry->passwd) {
 			if (((!realm && !entry->realm)
-			    || (realm && entry->realm && !strcmp(realm, entry->realm)))
-			    && !strcmp(user, entry->uid)
-			    && !strcmp(pass, entry->passwd)) {
-				/* Same host/realm/pass/user. */
-				ret = ADD_AUTH_EXIST;
-				goto end;
+			    || (realm && entry->realm && !strcmp(realm, entry->realm)))) {
+				if (strlen(entry->uid) == uri->userlen
+				    && strlen(entry->passwd) == uri->passwordlen
+				    && !strncmp(uri->user, entry->uid, uri->userlen)
+				    && !strncmp(uri->password, entry->passwd, uri->passwordlen)) {
+				    /* Same host/realm/pass/user. */
+				    ret = ADD_AUTH_EXIST;
+				    goto end;
+				}
 			}
 		}
 
@@ -156,7 +157,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 		}
 	}
 
-	if (*user || *pass) {
+	if (uri->userlen || uri->passwordlen) {
 		/* Copy user and pass info if any in passed url. */
 		entry->uid = mem_alloc(MAX_UID_LEN);
 		if (!entry->uid) {
@@ -164,7 +165,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 			mem_free(entry);
 			goto end;
 		}
-		safe_strncpy(entry->uid, user, MAX_UID_LEN);
+		safe_strncpy(entry->uid, uri->user, MAX_UID_LEN);
 
 		entry->passwd = mem_alloc(MAX_PASSWD_LEN);
 		if (!entry->passwd) {
@@ -173,7 +174,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 			mem_free(entry);
 			goto end;
 		}
-		safe_strncpy(entry->passwd, pass, MAX_PASSWD_LEN);
+		safe_strncpy(entry->passwd, uri->password, MAX_PASSWD_LEN);
 
 		ret = ADD_AUTH_NONE; /* Entry added with user/pass from url. */
 	}
@@ -186,9 +187,6 @@ end:
 	if (ret == ADD_AUTH_ERROR || ret == ADD_AUTH_EXIST) {
 		if (newurl) mem_free(newurl);
 	}
-
-	if (user) mem_free(user);
-	if (pass) mem_free(pass);
 
 	return ret;
 }

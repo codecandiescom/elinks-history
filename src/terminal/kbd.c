@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.13 2003/06/01 18:55:13 pasky Exp $ */
+/* $Id: kbd.c,v 1.14 2003/06/01 18:57:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -855,12 +855,6 @@ process_queue(struct itrm *itrm)
 		} else {
 			el = 2;
 
-			if (itrm->kqueue[1] >= ' ') {
-				ev.x = itrm->kqueue[1];
-				ev.y = KBD_ALT;
-				goto l2;
-			}
-
 			if (itrm->kqueue[1] == ASCII_ESC) {
 				if (itrm->qlen >= 3 &&
 				    (itrm->kqueue[2] == '[' ||
@@ -870,6 +864,10 @@ process_queue(struct itrm *itrm)
 				ev.x = KBD_ESC;
 				goto l2;
 			}
+
+			ev.x = itrm->kqueue[1];
+			ev.y = KBD_ALT;
+			goto l2;
 		}
 
 		goto l1;

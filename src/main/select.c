@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.41 2004/04/03 14:13:47 jonas Exp $ */
+/* $Id: select.c,v 1.42 2004/04/14 03:04:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,6 @@
 
 #include "elinks.h"
 
-#include "cache/cache.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
 #include "lowlevel/signals.h"
@@ -80,7 +79,7 @@ long
 select_info(int type)
 {
 	int i = 0, j;
-	struct cache_entry *cached;
+	struct timer *timer;
 
 	switch (type) {
 		case INFO_FILES:
@@ -91,7 +90,7 @@ select_info(int type)
 					i++;
 			return i;
 		case INFO_TIMERS:
-			foreach (cached, timers) i++;
+			foreach (timer, timers) i++;
 			return i;
 	}
 

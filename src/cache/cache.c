@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.193 2004/12/18 19:22:03 jonas Exp $ */
+/* $Id: cache.c,v 1.194 2004/12/19 18:04:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,6 +202,35 @@ cache_entry_is_valid(struct cache_entry *cached)
 	}
 
 	return 0;
+}
+
+
+struct cache_entry *
+follow_cached_redirects(struct cache_entry *cached)
+{
+	int redirects = 0;
+
+	while (cached) {
+		if (!cached->redirect) {
+			/* XXX: This is not quite true, but does that difference
+			 * matter here? */
+			return cached;
+		}
+
+		if (++redirects > MAX_REDIRECTS) break;
+
+		cached = find_in_cache(cached->redirect);
+	}
+
+	return NULL;
+}
+
+struct cache_entry *
+get_redirected_cache_entry(struct uri *uri)
+{
+	struct cache_entry *cached = find_in_cache(uri);
+
+	return cached ? follow_cached_redirects(cached) : NULL;
 }
 
 

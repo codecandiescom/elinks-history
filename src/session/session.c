@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.592 2004/12/18 19:22:03 jonas Exp $ */
+/* $Id: session.c,v 1.593 2004/12/19 18:04:42 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -480,18 +480,13 @@ maybe_pre_format_html(struct cache_entry *cached, struct session *ses)
 static int
 check_incomplete_redirects(struct cache_entry *cached)
 {
-	int redirects = 0;
+	assert(cached);
 
-	while (cached) {
-		if (!cached->redirect) {
-			/* XXX: This is not quite true, but does that difference
-			 * matter here? */
-			return cached->incomplete;
-		}
-
-		if (++redirects > MAX_REDIRECTS) break;
-
-		cached = find_in_cache(cached->redirect);
+	cached = follow_cached_redirects(cached);
+	if (cached && !cached->redirect) {
+		/* XXX: This is not quite true, but does that difference
+		 * matter here? */
+		return cached->incomplete;
 	}
 
 	return 0;
@@ -510,7 +505,8 @@ session_is_loading(struct session *ses)
 	/* The validness of download->cached (especially the download struct in
 	 * ses->loading) is hard to maintain so check before using it.
 	 * Related to bug 559. */
-	if (cache_entry_is_valid(download->cached)
+	if (download->cached
+	    && cache_entry_is_valid(download->cached)
 	    && check_incomplete_redirects(download->cached))
 		return 1;
 

@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.95 2004/12/18 19:22:03 jonas Exp $ */
+/* $Id: cache.h,v 1.96 2004/12/19 18:04:39 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -88,6 +88,14 @@ struct cache_entry *get_validated_cache_entry(struct uri *uri, enum cache_mode c
 
 /* Checks if a dangling cache entry pointer is still valid. */
 int cache_entry_is_valid(struct cache_entry *cached);
+
+/* Follow all redirects and return the resulting cache entry or NULL if there
+ * are missing redirects. */
+struct cache_entry *follow_cached_redirects(struct cache_entry *cached);
+
+/* Works like find_in_cache(), but will follow cached redirects using
+ * follow_cached_redirects(). */
+struct cache_entry *get_redirected_cache_entry(struct uri *uri);
 
 /* Add a fragment to the @cached object at the given @offset containing @length
  * bytes from the @data pointer. */

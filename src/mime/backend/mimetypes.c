@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.19 2003/10/13 21:45:21 pasky Exp $ */
+/* $Id: mimetypes.c,v 1.20 2003/10/20 14:54:55 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -257,7 +257,6 @@ get_content_type_mimetypes(unsigned char *extension)
 
 /* Setup the exported backend */
 struct mime_backend mimetypes_mime_backend = {
-	NULL_LIST_HEAD,
 	/* name: */		BACKEND_NAME,
 	/* init: */		init_mimetypes,
 	/* done: */		done_mimetypes,

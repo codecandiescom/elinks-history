@@ -1,4 +1,4 @@
-/* $Id: attrib.h,v 1.3 2002/12/26 02:31:48 pasky Exp $ */
+/* $Id: attrib.h,v 1.4 2002/12/30 23:55:18 pasky Exp $ */
 
 #ifndef EL__USIVE_PARSER_ATTRIB_H
 #define EL__USIVE_PARSER_ATTRIB_H
@@ -20,8 +20,13 @@ struct attribute {
 };
 
 /* Get attribute of a given name from the supplied list. Returns NULL on
- * failure. */
+ * failure (ie. the attribute doesn't exist in the list). */
 struct attribute *
 get_attrib(struct list_head attrs, unsigned char *name);
+
+/* Add a new attribute to the supplied list. */
+struct attribute *
+add_attrib(struct list_head attrs, unsigned char *name, int namelen,
+	   unsigned char *value, int valuelen);
 
 #endif

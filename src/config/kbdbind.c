@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.267 2005/04/06 15:08:14 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.268 2005/04/06 21:23:35 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,7 +55,7 @@ delete_keybinding(enum keymap km, long key, long meta)
 }
 
 struct keybinding *
-add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
+add_keybinding(enum keymap km, int action, long key, long meta, int event)
 {
 	struct keybinding *kb;
 	struct listbox_item *root;
@@ -70,7 +70,7 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 	kb->action = action;
 	kb->key = key;
 	kb->meta = meta;
-	kb->func_ref = func_ref;
+	kb->func_ref = event;
 	kb->flags = is_default * KBDB_DEFAULT;
 
 	object_nolock(kb, "keybinding");
@@ -135,18 +135,18 @@ keybinding_exists(enum keymap km, long key, long meta, int *action)
 
 
 int
-kbd_action(enum keymap kmap, struct term_event *ev, int *func_ref)
+kbd_action(enum keymap kmap, struct term_event *ev, int *event)
 {
 	struct keybinding *kb;
 
 	if (ev->ev != EVENT_KBD) return -1;
 
-	kb = kbd_ev_lookup(kmap, get_kbd_key(ev), get_kbd_modifier(ev), func_ref);
+	kb = kbd_ev_lookup(kmap, get_kbd_key(ev), get_kbd_modifier(ev), event);
 	return kb ? kb->action : -1;
 }
 
 struct keybinding *
-kbd_ev_lookup(enum keymap kmap, long key, long meta, int *func_ref)
+kbd_ev_lookup(enum keymap kmap, long key, long meta, int *event)
 {
 	struct keybinding *kb;
 
@@ -154,8 +154,8 @@ kbd_ev_lookup(enum keymap kmap, long key, long meta, int *func_ref)
 		if (key != kb->key || meta != kb->meta)
 			continue;
 
-		if (kb->action == ACT_MAIN_SCRIPTING_FUNCTION && func_ref)
-			*func_ref = kb->func_ref;
+		if (kb->action == ACT_MAIN_SCRIPTING_FUNCTION && event)
+			*event = kb->func_ref;
 
 		return kb;
 	}
@@ -656,7 +656,7 @@ free_keymaps(void)
 
 #ifdef CONFIG_SCRIPTING
 unsigned char *
-bind_scripting_func(unsigned char *ckmap, unsigned char *ckey, int func_ref)
+bind_scripting_func(unsigned char *ckmap, unsigned char *ckey, int event)
 {
 	unsigned char *err = NULL;
 	long key, meta;
@@ -670,7 +670,7 @@ bind_scripting_func(unsigned char *ckmap, unsigned char *ckey, int func_ref)
 	else if ((action = read_action(kmap, " *scripting-function*")) < 0)
 		err = gettext("Unrecognised action (internal error)");
 	else
-		add_keybinding(kmap, action, key, meta, func_ref);
+		add_keybinding(kmap, action, key, meta, event);
 
 	return err;
 }

@@ -1,3 +1,13 @@
+Mon Mar 18 15:14:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in, src/Makefile.am, src/main.c,
+	src/lowlevel/connect.c, src/lowlevel/connect.h,
+	src/lowlevel/sched.c, src/protocol/http/https.c,
+	src/protocol/http/https.h:
+	
+	XXX: the SSL move made connections not working at all :/
+	temporarily backed out
+
 Mon Mar 18 13:01:58 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, src/protocol/http/date.c:

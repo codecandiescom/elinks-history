@@ -1,10 +1,7 @@
-/* $Id: url.h,v 1.14 2003/06/20 13:56:39 jonas Exp $ */
+/* $Id: url.h,v 1.15 2003/06/26 17:06:39 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URL_H
 #define EL__PROTOCOL_URL_H
-
-#include "sched/sched.h"
-#include "sched/session.h"
 
 #define POST_CHAR 1
 
@@ -21,8 +18,6 @@ unsigned char *get_user_name(unsigned char *);
 unsigned char *get_pass(unsigned char *);
 unsigned char *get_port_str(unsigned char *);
 int get_port(unsigned char *);
-void (*get_protocol_handle(unsigned char *))(struct connection *);
-void (*get_external_protocol_function(unsigned char *))(struct session *, unsigned char *);
 unsigned char *get_url_data(unsigned char *);
 unsigned char *strip_url_password(unsigned char *);
 unsigned char *join_urls(unsigned char *, unsigned char *);

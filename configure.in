@@ -185,7 +185,7 @@ LIBS_X="$LIBS"
 cf_result=no
 
 if test -z "$disable_lua"; then
-    AC_SEARCH_LIBS(lua_open, dl, [cf_result=yes], [cf_result=no], [-llua -llualib -lm])
+    AC_SEARCH_LIBS(lua_open, [lua lualib], [cf_result=yes], [cf_result=no], [-ldl -lm])
     AC_MSG_CHECKING([for Lua])
    
     if test "$cf_result" = no; then
@@ -237,7 +237,7 @@ AC_ARG_WITH(ssl, [  --without-ssl           disable SSL support],
             [if test "$withval" = no;  then disable_ssl=yes; fi])
 
 if test -z "$disable_ssl"; then
-    AC_SEARCH_LIBS(OpenSSL_add_all_algorithms, dl, [cf_result=yes], [cf_result=no], [-lssl -lcrypto])
+    AC_SEARCH_LIBS(OpenSSL_add_all_algorithms, [ssl crypto], [cf_result=yes], [cf_result=no], [-ldl])
     AC_MSG_CHECKING([for OpenSSL])
     
     if test "$cf_result" = no; then

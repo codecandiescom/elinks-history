@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.11 2003/05/05 21:55:37 zas Exp $ */
+/* $Id: terminal.h,v 1.12 2003/05/07 09:57:56 zas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -61,30 +61,33 @@ struct window;
 struct terminal {
 	LIST_HEAD(struct terminal);
 
-	int master;
-	int fdin;
-	int fdout;
-	int x;
-	int y;
-	enum term_env_type environment;
-	unsigned char term[MAX_TERM_LEN];
-	unsigned char cwd[MAX_CWD_LEN];
+	struct list_head windows; /* struct window */
+
+	struct option *spec;
+
+	unsigned char *title;
+	unsigned char *input_queue;
+
 	unsigned *screen;
 	unsigned *last_screen;
-	struct option *spec;
-	int cx;
-	int cy;
-	int lcx;
-	int lcy;
+
+	int master;
+	int fdin, fdout;
+	int x, y;
+	int cx, cy;
+	int lcx, lcy;
 	int dirty;
 	int redrawing;
 	int blocked;
-	unsigned char *input_queue;
 	int qlen;
 	int qfreespace;
 	int current_tab;
-	struct list_head windows; /* struct window */
-	unsigned char *title;
+
+	enum term_env_type environment;
+
+	unsigned char term[MAX_TERM_LEN];
+	unsigned char cwd[MAX_CWD_LEN];
+
 	struct {
 		unicode_val ucs;
 		int len;

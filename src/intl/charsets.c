@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.55 2003/07/25 13:07:43 zas Exp $ */
+/* $Id: charsets.c,v 1.56 2003/08/20 10:10:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,7 +74,7 @@ char *strings[256] = {
 static void
 free_translation_table(struct conv_table *p)
 {
-	int i;
+	register int i;
 
 	for (i = 0; i < 256; i++)
 		if (p[i].t)
@@ -88,7 +88,7 @@ static unsigned char *no_str = "*";
 static void
 new_translation_table(struct conv_table *p)
 {
-	int i;
+	register int i;
 
 	for (i = 0; i < 256; i++)
 		if (p[i].t)
@@ -106,8 +106,10 @@ new_translation_table(struct conv_table *p)
 #define BIN_SEARCH(table, entry, entries, key, result)					\
 {											\
 	long _s = 0, _e = (entries) - 1;						\
+											\
 	while (_s <= _e || !((result) = -1)) {						\
 		long _m = (_s + _e) / 2;						\
+											\
 		if ((table)[_m].entry == (key)) {					\
 			(result) = _m;							\
 			break;								\
@@ -127,7 +129,8 @@ unicode_val strange_chars[32] = {
 unsigned char *
 u2cp(unicode_val u, int to)
 {
-	int j, s;
+	register int j;
+	int s;
 
 	if (u < 128) return strings[u];
 	if (u == 0xa0) return "\001";
@@ -190,7 +193,7 @@ encode_utf_8(unicode_val u)
 unsigned char *
 cp2utf_8(int from, int c)
 {
-	int j;
+	register int j;
 
 	if (codepages[from].table == table_utf_8)
 		return strings[c];
@@ -215,10 +218,9 @@ add_utf_8(struct conv_table *ct, unicode_val u, unsigned char *str)
 		else {
 			struct conv_table *nct;
 
-			if (ct[*p].u.str != no_str) {
-				internal("bad utf encoding #1");
-				return;
-			}
+			assertm(ct[*p].u.str == no_str, "bad utf encoding #1");
+			if_assert_failed return;
+
 			nct = mem_calloc(256, sizeof(struct conv_table));
 			if (!nct) return;
 			new_translation_table(nct);
@@ -228,10 +230,10 @@ add_utf_8(struct conv_table *ct, unicode_val u, unsigned char *str)
 		}
 		p++;
 	}
-	if (ct[*p].t) {
-		internal("bad utf encoding #2");
-		return;
-	}
+
+	assertm(!ct[*p].t, "bad utf encoding #2");
+	if_assert_failed return;
+
 	if (ct[*p].u.str == no_str)
 		ct[*p].u.str = str;
 }
@@ -242,7 +244,7 @@ int utf_table_init = 1;
 static void
 free_utf_table(void)
 {
-	int i;
+	register int i;
 
 	for (i = 128; i < 256; i++)
 		mem_free(utf_table[i].u.str);
@@ -251,7 +253,7 @@ free_utf_table(void)
 static struct conv_table *
 get_translation_table_to_utf_8(int from)
 {
-	int i;
+	register int i;
 	static int lfr = -1;
 
 	if (from == -1) return NULL;
@@ -262,14 +264,18 @@ get_translation_table_to_utf_8(int from)
 	else
 		free_utf_table();
 
-	for (i = 0; i < 128; i++) utf_table[i].u.str = strings[i];
+	for (i = 0; i < 128; i++)
+		utf_table[i].u.str = strings[i];
+
 	if (codepages[from].table == table_utf_8) {
 		for (i = 128; i < 256; i++)
 			utf_table[i].u.str = stracpy(strings[i]);
 		return utf_table;
 	}
 
-	for (i = 128; i < 256; i++) utf_table[i].u.str = NULL;
+	for (i = 128; i < 256; i++)
+		utf_table[i].u.str = NULL;
+
 	for (i = 0; codepages[from].table[i].c; i++) {
 		unicode_val u = codepages[from].table[i].u;
 
@@ -277,9 +283,11 @@ get_translation_table_to_utf_8(int from)
 			utf_table[codepages[from].table[i].c].u.str =
 				stracpy(encode_utf_8(u));
 	}
+
 	for (i = 128; i < 256; i++)
 		if (!utf_table[i].u.str)
 			utf_table[i].u.str = stracpy(no_str);
+
 	return utf_table;
 }
 
@@ -300,7 +308,6 @@ free_conv_table(void)
 struct conv_table *
 get_translation_table(int from, int to)
 {
-	int i;
 	static int lfr = -1;
 	static int lto = -1;
 
@@ -319,7 +326,7 @@ get_translation_table(int from, int to)
 	new_translation_table(table);
 
 	if (codepages[from].table == table_utf_8) {
-		int j;
+		register int i, j;
 
 		for (j = 0; codepages[to].table[j].c; j++)
 			add_utf_8(table, codepages[to].table[j].u,
@@ -330,18 +337,22 @@ get_translation_table(int from, int to)
 				add_utf_8(table, unicode_7b[i].x,
 					  unicode_7b[i].s);
 
-	} else for (i = 128; i < 256; i++) {
-		int j;
-		char *u;
+	} else {
+		register int i;
 
-		for (j = 0; codepages[from].table[j].c; j++) {
-			if (codepages[from].table[j].c == i) goto f;
+		for (i = 128; i < 256; i++) {
+			register int j;
+
+			for (j = 0; codepages[from].table[j].c; j++) {
+				if (codepages[from].table[j].c == i) {
+					unsigned char *u;
+
+					u = u2cp(codepages[from].table[j].u, to);
+					if (u) table[i].u.str = u;
+					break;
+				}
+			}
 		}
-		continue;
-
-f:
-		u = u2cp(codepages[from].table[j].u, to);
-		if (u) table[i].u.str = u;
 	}
 
 	return table;
@@ -369,11 +380,11 @@ xxstrcmp(unsigned char *s1, unsigned char *s2, int l2)
 #endif
 
 struct entity_cache {
-		unsigned int hits;
-		int strlen;
-		int encoding;
-		unsigned char *result;
-		unsigned char str[20]; /* Suffice in any case. */
+	unsigned int hits;
+	int strlen;
+	int encoding;
+	unsigned char *result;
+	unsigned char str[20]; /* Suffice in any case. */
 };
 
 static int
@@ -393,7 +404,6 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 	static struct entity_cache entity_cache[ENTITY_CACHE_MAXLEN][ENTITY_CACHE_SIZE];
 	static unsigned int nb_entity_cache[ENTITY_CACHE_MAXLEN];
 	static int first_time = 1;
-	int i;
 	unsigned int slen;
 	unsigned char *result = NULL;
 
@@ -430,6 +440,8 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 	slen = (strlen > 1 && strlen < ENTITY_CACHE_MAXLEN) ? strlen : 0;
 
 	if (strlen < ENTITY_CACHE_MAXLEN && nb_entity_cache[slen] > 0) {
+		register int i;
+
 		for (i = 0; i < nb_entity_cache[slen]; i++) {
 			if (entity_cache[slen][i].encoding == encoding
 			    && !memcmp(str, entity_cache[slen][i].str, strlen)) {
@@ -669,7 +681,7 @@ flush:
 int
 get_cp_index(unsigned char *n)
 {
-	int i, a;
+	register int i, a;
 
 	for (i = 0; codepages[i].name; i++) {
 		for (a = 0; codepages[i].aliases[a]; a++) {

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.282 2004/06/29 07:20:13 pasky Exp $ */
+/* $Id: tables.c,v 1.283 2004/06/29 07:46:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -838,19 +838,15 @@ display_complicated_table(struct table *table, int x, int y)
 		}
 	}
 
-	yp = y;
+	yp = table_frames.top + y + table_frames.bottom;
 	for (row = 0; row < table->rows; row++) {
 		yp += table->rows_heights[row] +
 		      (row < table->rows - 1 && get_hline_width(table, row + 1) >= 0);
 	}
 
-	assertm(table->part->cy + table->real_height
-		==
-		yp + table_frames.top + table_frames.bottom,
+	assertm(table->part->cy + table->real_height == yp,
 		"size does not match; 1:%d, 2:%d",
-		table->part->cy + table->real_height,
-		yp + table_frames.top + table_frames.bottom);
-
+		table->part->cy + table->real_height, yp);
 }
 
 

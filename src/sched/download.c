@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.60 2003/06/15 22:23:29 pasky Exp $ */
+/* $Id: download.c,v 1.61 2003/06/15 23:05:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,9 +34,8 @@
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
 #include "lowlevel/ttime.h"
+#include "mime/mime.h"
 #include "protocol/http/date.h"
-#include "protocol/mailcap.h"
-#include "protocol/mime.h"
 #include "protocol/url.h"
 #include "sched/download.h"
 #include "sched/error.h"
@@ -1161,7 +1160,7 @@ tp_display(struct session *ses)
 
 
 static void
-type_query(struct session *ses, unsigned char *ct, struct option *assoc, int mailcap)
+type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
 {
 	unsigned char *content_type;
 
@@ -1170,10 +1169,10 @@ type_query(struct session *ses, unsigned char *ct, struct option *assoc, int mai
 		ses->tq_prog = NULL;
 	}
 
-	if (assoc) {
-		ses->tq_prog = stracpy(get_opt_str_tree(assoc, "program"));
-		ses->tq_prog_flags = get_opt_bool_tree(assoc, "block");
-		if (!get_opt_bool_tree(assoc, "ask")) {
+	if (handler) {
+		ses->tq_prog = stracpy(handler->program);
+		ses->tq_prog_flags = handler->block;
+		if (!handler->ask) {
 			tp_open(ses);
 			return;
 		}
@@ -1182,7 +1181,7 @@ type_query(struct session *ses, unsigned char *ct, struct option *assoc, int mai
 	content_type = stracpy(ct);
 	if (!content_type) return;
 
-	if (!assoc) {
+	if (!handler) {
 		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
 			msg_box(ses->tab->term, getml(content_type, NULL), MSGBOX_FREE_TEXT,
 				N_("Unknown type"), AL_CENTER,
@@ -1204,22 +1203,8 @@ type_query(struct session *ses, unsigned char *ct, struct option *assoc, int mai
 				N_("Cancel"), tp_cancel, B_ESC);
 		}
 	} else {
-		unsigned char *name = NULL;
+		unsigned char *name = handler->description;
 
-		if (mailcap) {
-			name = stracpy(assoc->name);
-		} else {
-			/* XXX: This should be maybe handled generically by
-			 * some function in protocol/mime.c. --pasky */
-			unsigned char *mt = get_mime_type_name(ct);
-			struct option *opt;
-
-			if (mt) {
-				opt = get_opt_rec_real(&root_options, mt);
-				mem_free(mt);
-				if (opt) name = stracpy(opt->ptr);
-			}
-		}
 		if (!name) name = stracpy(""); /* FIXME: unchecked return value */
 		if (!name) {
 			mem_free(content_type);
@@ -1257,15 +1242,10 @@ type_query(struct session *ses, unsigned char *ct, struct option *assoc, int mai
 int
 ses_chktype(struct session *ses, struct status **status, struct cache_entry *ce)
 {
-	struct option *assoc;
-#ifdef MAILCAP
-	/* Used to see if association came from mailcap or not */
-	struct option *mailcap = NULL;
-#endif
+	struct mime_handler *handler;
 	int plaintext = 0;
-	unsigned char *ctype;
+	unsigned char *ctype = get_content_type(ce->head, ce->url);
 
-	ctype = get_content_type(ce->head, ce->url);
 	if (!ctype) goto end;
 
 	if (!strcasecmp(ctype, "text/html")) goto free_ct;
@@ -1275,22 +1255,10 @@ ses_chktype(struct session *ses, struct status **status, struct cache_entry *ce)
 	plaintext = 1;
 	if (!strcasecmp(ctype, "text/plain")) goto free_ct;
 
-	assoc = get_mime_type_handler(ses->tab->term, ctype);
+	handler = get_mime_type_handler(ses->tab->term, ctype);
 
-#ifdef MAILCAP
-	if (!assoc) {
-		/*
-		 * XXX: Mailcap handling goes here since it mimics the
-		 * option system based mime handling. This requires that
-		 * a new option is allocated and we want to control how
-		 * it should be freed before returning.
-		 */
-		mailcap = mailcap_lookup(ctype, NULL);
-		assoc = mailcap;
-	}
-#endif
 
-	if (!assoc && strlen(ctype) >= 4 && !strncasecmp(ctype, "text", 4))
+	if (!handler && strlen(ctype) >= 4 && !strncasecmp(ctype, "text", 4))
 		goto free_ct;
 
 	if (ses->tq_url)
@@ -1306,15 +1274,12 @@ ses_chktype(struct session *ses, struct status **status, struct cache_entry *ce)
 	if (ses->tq_goto_position) mem_free(ses->tq_goto_position);
 
 	ses->tq_goto_position = ses->goto_position ? stracpy(ses->goto_position) : NULL;
-#ifdef MAILCAP
-	type_query(ses, ctype, assoc, !!mailcap);
-#else
-	type_query(ses, ctype, assoc, 0);
-#endif
+	type_query(ses, ctype, handler);
 	mem_free(ctype);
-#ifdef MAILCAP
-	if (mailcap) delete_option(mailcap);
-#endif
+	if (handler) {
+		mem_free(handler->program);
+		mem_free(handler);
+	}
 
 	return 1;
 
@@ -1322,9 +1287,6 @@ free_ct:
 	mem_free(ctype);
 
 end:
-#ifdef MAILCAP
-	if (mailcap) delete_option(mailcap);
-#endif
 	if (ses->task_target && plaintext) *ses->task_target = 0;
 	ses_forward(ses);
 	cur_loc(ses)->vs.plain = plaintext;

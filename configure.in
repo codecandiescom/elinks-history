@@ -664,14 +664,21 @@ test "$have_emx" = yes && LDFLAGS=`echo "$LDFLAGS" | sed "s/-Zbin-files//g"`
 
 # Create CONFDIR #define for config.h
 
-sysconfdir_n=`(
-    test "x$prefix" = xNONE && prefix=$ac_default_prefix
-    test "x$exec_prefix" = xNONE && exec_prefix=${prefix}
-    eval echo "$sysconfdir"
-)`
-sysconfdir=$sysconfdir_n
-(echo "$sysconfdir" | grep elinks >/dev/null 2>/dev/null) || \
+
+# XXX: This may be dependent on a particular version of autoconf. Whatever,
+# it's autoconf fault to force us to do such hacks ;p.
+if test x"$sysconfdir" = x"\${prefix}/etc"; then
+  # sysconfdir is set to its default value... fine, let's append /elinks/
+  # XXX: We can't modify listing of the default in ./configure --help :-(
+  sysconfdir_n=`(
+      test "x$prefix" = xNONE && prefix=$ac_default_prefix
+      test "x$exec_prefix" = xNONE && exec_prefix=${prefix}
+      eval echo "$sysconfdir"
+  )`
+  sysconfdir=$sysconfdir_n
+  (echo "$sysconfdir" | grep elinks >/dev/null 2>/dev/null) || \
 	sysconfdir="$sysconfdir/elinks"
+fi
 
 CONFDIR=$sysconfdir
 AC_DEFINE_UNQUOTED(CONFDIR,"$CONFDIR")

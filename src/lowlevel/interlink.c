@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.44 2003/06/18 20:29:38 zas Exp $ */
+/* $Id: interlink.c,v 1.45 2003/06/18 20:37:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,7 @@
 #include "util/string.h"
 
 /* Testing purpose. Do not remove. */
-#if 1
+#if 0
 #undef DONT_USE_AF_UNIX
 #undef USE_AF_UNIX
 #endif
@@ -86,6 +86,8 @@ static int s_unix_fd = -1;
 static int
 get_sun_path(unsigned char **sun_path, int *sun_path_len)
 {
+	assert(sun_path && sun_path_len);
+
 	if (!elinks_home) return 0;
 
 	*sun_path = init_str();
@@ -107,6 +109,8 @@ get_address(struct sockaddr **s_addr, int *s_addr_len)
 	int sun_path_freespace;
 	unsigned char *path;
 	int pathl;
+
+	assert(s_addr && s_addr_len);
 
 	if (!get_sun_path(&path, &pathl)) return -1;
 
@@ -173,9 +177,16 @@ free_and_error:
 static int
 alloc_address(struct sockaddr **s_addr, int *s_addr_size)
 {
-	*s_addr = mem_alloc(sizeof(struct sockaddr_un));
-	if (!*s_addr) return 0;
-	if (s_addr_size) *s_addr_size = sizeof(struct sockaddr_un);
+	struct sockaddr_un *sa;
+
+	assert(s_addr);
+
+	sa = mem_alloc(sizeof(struct sockaddr_un));
+	if (!sa) return 0;
+
+	*s_addr = (struct sockaddr *) sa;
+	if (s_addr_size)
+		*s_addr_size = sizeof(struct sockaddr_un);
 
 	return 1;
 }
@@ -183,6 +194,8 @@ alloc_address(struct sockaddr **s_addr, int *s_addr_size)
 static void
 unlink_unix(struct sockaddr *s_addr)
 {
+	assert(s_addr);
+
 	unlink(((struct sockaddr_un *) s_addr)->sun_path);
 #if 0
 	if (unlink(((struct sockaddr_un *) s_unix)->sun_path)) {
@@ -206,6 +219,8 @@ get_address(struct sockaddr **s_addr, int *s_addr_len)
 {
 	struct sockaddr_in *sin;
 
+	assert(s_addr && s_addr_len);
+
 	sin = mem_calloc(1, sizeof(struct sockaddr_in));
 	if (!sin) return -1;
 
@@ -222,9 +237,16 @@ get_address(struct sockaddr **s_addr, int *s_addr_len)
 static int
 alloc_address(struct sockaddr **s_addr, int *s_addr_size)
 {
-	*s_addr = mem_alloc(sizeof(struct sockaddr_in));
-	if (!*s_addr) return 0;
-	if (s_addr_size) *s_addr_size = sizeof(struct sockaddr_in);
+	struct sockaddr_in *sa;
+
+	assert(s_addr);
+
+	sa = mem_alloc(sizeof(struct sockaddr_in));
+	if (!sa) return 0;
+
+	*s_addr = (struct sockaddr *) sa;
+	if (s_addr_size)
+		*s_addr_size = sizeof(struct sockaddr_in);
 
 	return 1;
 }

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.52 2003/10/24 21:17:56 pasky Exp $ */
+/* $Id: session.h,v 1.53 2003/10/24 21:19:14 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -162,8 +162,8 @@ have_location(struct session *ses) {
 static inline void
 go_back(struct session *ses)
 {
-	if (!ses->history.current) return;
-	go_history(ses, ses->history.current->prev);
+	if (!cur_loc(ses)) return;
+	go_history(ses, cur_loc(ses)->prev);
 }
 
 /* See go_history() description regarding unpredictable effects on cur_loc()
@@ -171,8 +171,8 @@ go_back(struct session *ses)
 static inline void
 go_unback(struct session *ses)
 {
-	if (!ses->history.current) return;
-	go_history(ses, ses->history.current->next);
+	if (!cur_loc(ses)) return;
+	go_history(ses, cur_loc(ses)->next);
 }
 
 

@@ -1,3 +1,573 @@
+Mon Oct 27 23:09:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ssl/ssl.c:
+
+	Whitespace cleanup.  
+
+Mon Oct 27 23:08:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/http/http.c, protocol/http/https.c,
+	sched/connection.c, ssl/connect.c, ssl/ssl.c, ssl/ssl.h:
+
+	Remove the whole fight club experience by moving ssl header includes
+	to ssl/connect.c and declaring ssl_t in both ssl/ files.  
+
+Mon Oct 27 22:53:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/http/http.c, protocol/http/https.c,
+	sched/connection.c, ssl/connect.c, ssl/ssl.c, ssl/ssl.h:
+
+	Change the ssl connection interface to take struct connection
+	pointer instead of ssl_t.  The initializer [init_ssl_connection()]
+	returns S_OK or S_SSL_ERROR to signal success or failure.  The
+	cleanup function [done_ssl_connection()] now sets conn->ssl to NULL
+	after freeing it.  
+
+Mon Oct 27 22:51:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os2.c:
+
+	Statify winch_thread().  
+
+Mon Oct 27 22:44:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os2.c:
+
+	Statify winch().  
+
+Mon Oct 27 22:32:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, protocol/http/http.c,
+	sched/connection.c, ssl/connect.c, ssl/connect.h, ssl/ssl.c,
+	ssl/ssl.h:
+
+	Add #ifdefs around users of ssl code and remove them inside the ssl
+	code.  
+
+Mon Oct 27 22:07:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.c:
+
+	Remove useless prototype.  
+
+Mon Oct 27 21:46:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/ssl.c:
+
+	Minor tidyup.  
+
+Mon Oct 27 21:44:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/modules/module.c:
+
+	Shield extern ssl_module declaration by #ifdef.  
+
+Mon Oct 27 21:43:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, modules/module.c, modules/version.c, ssl/ssl.c,
+	ssl/ssl.h:
+
+	Modulize ssl.  
+
+Mon Oct 27 21:36:48 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Oct 27 21:04:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/modules/version.c:
+
+	Make module string functions static.  
+
+Mon Oct 27 20:57:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/modules/: module.c, version.c:
+
+	Use builtin modules for version string composing. This means we have
+	to export builtin_modules and make it NULL terminated.  
+
+Mon Oct 27 20:48:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.c:
+
+	Capitalize history.  
+
+Mon Oct 27 16:42:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inphist.c:
+
+	Move check for duplicate entries before allocation so if there is a
+	dublicate entry we can just move it to the start of the list.  
+
+Mon Oct 27 16:19:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inphist.c:
+
+	Rename variables to be more consistent and remove trace of urlhist
+	connection.  
+
+Mon Oct 27 16:08:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/lua/core.c:
+
+	Compilation fix.  
+
+Mon Oct 27 15:59:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/proxy.c:
+
+	Reverted nonsensical second part of the patch.  
+
+Mon Oct 27 15:57:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/proxy.c:
+
+	Fixed bug reported by Stepan Kasal <kasal@ucw.cz>, FTP couldn't be
+	proxied through HTTP proxy like squid, even though that's a valid
+	setup and supported by other clients.  
+
+Mon Oct 27 15:56:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/core.c:
+
+	Update lua input history to new struct layout.  
+
+Mon Oct 27 15:52:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, dialogs/menu.c, viewer/text/search.c,
+	viewer/text/search.h:
+
+	Make search history static and free the list locally.  Rename
+	load/save functions to init/done since the input history already
+	provides these functions.  
+
+Mon Oct 27 15:40:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inphist.c, bfu/inphist.h, config/urlhist.c,
+	dialogs/menu.c, viewer/text/search.c:
+
+	Rename input_history.n to size.  
+
+Mon Oct 27 15:33:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inphist.c, bfu/inphist.h, config/urlhist.c,
+	config/urlhist.h, viewer/text/search.c:
+
+	Add dirty and nosave member to input history to generalize the code
+	(and store dirty state for search history) 
+
+Mon Oct 27 10:35:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/button.c, bfu/button.h, bfu/checkbox.c, bfu/group.c,
+	bfu/inpfield.c, bfu/msgbox.c, config/dialogs.c, dialogs/auth.c,
+	dialogs/edit.c, dialogs/hierbox.c, dialogs/mime.c,
+	dialogs/options.c, sched/download.c, scripting/lua/core.c,
+	viewer/text/search.c:
+
+	Remove unused term variable passed to *buttons_width().  
+
+Mon Oct 27 09:52:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/unix.c:
+
+	No comment.  
+
+Mon Oct 27 09:40:00 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	translation updated.  
+
+Mon Oct 27 03:29:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os2.c:
+
+	Removed ancient commented out code.  
+
+Mon Oct 27 03:29:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: os2.c, os_dep.c, unix.c, unix.h:
+
+	USE_GPM -> GPM_MOUSE (consistency with OS2_MOUSE) 
+
+Mon Oct 27 03:27:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: os_dep.c, unix.c, unix.h:
+
+	Define USE_GPM in unix.h.  
+
+Mon Oct 27 03:26:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: beos.h, os2.h, os_dep.c, win32.h:
+
+	Make the appropriate header files prototype system-specific
+	open-in-new handlers.  
+
+Mon Oct 27 03:18:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: elinks.h, osdep/Makefile.am, osdep/beos.c, osdep/beos.h,
+	osdep/os_dep.h, osdep/overrides.h:
+
+	Abadonded the osdep/overrides.h. Dissolved to osdep/beos.h and
+	osdep/os_dep.h. NO_OVERRIDES -> BEOS_SELF.  
+
+Mon Oct 27 03:13:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/html/parser.c, osdep/Makefile.am, osdep/ascii.h,
+	osdep/os_dep.h, protocol/ftpparse.c, protocol/http/http.c,
+	terminal/kbd.c, terminal/screen.c, util/string.h,
+	viewer/dump/dump.c, viewer/text/form.c:
+
+	Moved ASCII_* constants from osdep/os_dep.h to osdep/ascii.h.  
+
+Mon Oct 27 03:10:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/beos.c:
+
+	Declare NO_OVERRIDES.  
+
+Mon Oct 27 03:09:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elinks.h:
+
+	Introduced NO_OVERRIDES condition around inclusion of
+	osdep/overrides.h.  
+
+Mon Oct 27 03:08:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elinks.h:
+
+	Detailed comments regarding the 'bootup' includes.  
+
+Mon Oct 27 03:01:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: elinks.h, osdep/Makefile.am, osdep/generic.h,
+	osdep/overrides.h:
+
+	Moved overrides of the standard functions by out stubs from
+	osdep/generic.h to osdep/overrides.h.  
+
+Mon Oct 27 02:58:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elinks.h:
+
+	No it's bad idea to include generic.h before system.h. Do it between
+	system.h and os_dep.h ;-).  
+
+Mon Oct 27 02:55:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elinks.h:
+
+	Include first osdep/generic.h, then the other osdeps.  
+
+Mon Oct 27 02:55:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: elinks.h, osdep/os_dep.h:
+
+	Include osdep/system.h directly in elinks.h, not in osdep/os_dep.h.  
+
+Mon Oct 27 02:52:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: elinks.h, osdep/Makefile.am, osdep/generic.h,
+	osdep/os_depx.h:
+
+	mv osdep/os_depx.h osdep/generic.h 
+
+Mon Oct 27 02:50:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/unix.c:
+
+	Removed useless include.  
+
+Mon Oct 27 02:49:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: generic.h, os_depx.h:
+
+	Removed some forever-commented-out fragment.  
+
+Mon Oct 27 02:47:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_dep.c:
+
+	Removed obsolete TODO.  
+
+Mon Oct 27 02:47:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: os2.c, os2.h, os_dep.c:
+
+	USING_OS2_MOUSE -> OS2_MOUSE 
+
+Mon Oct 27 02:46:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: os2.h, system.h:
+
+	Moved USING_OS2_MOUSE define from system.h to os2.h.  
+
+Mon Oct 27 02:45:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/system.h:
+
+	GPM is UNIX-specific so remove it from the deciding process of
+	USING_OS2_MOUSE.  
+
+Mon Oct 27 02:44:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: beos.c, os2.c, riscos.c, unix.c, win32.c:
+
+	In the system-specific .c files, include osdep/system.h early
+	(before system includes) and decide whether to proceed right away.
+	This eliminates various compilation errors.  
+
+Mon Oct 27 02:41:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: beos.h, os2.h, system.h:
+
+	THREAD_SAFE_LOOKUP #define moved to the system-specific header
+	files.  
+
+Mon Oct 27 02:40:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: lowlevel/dns.c, osdep/system.h:
+
+	THREAD_SAFE_LOOKUP seems to be the exact opposite of its name. So
+	this turns it around.  
+
+Mon Oct 27 02:37:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: Makefile.am, beos.h, os2.h, riscos.h, system.h,
+	unix.h, win32.h:
+
+	Splitted system-specific stuff in system.h to
+	beos.h,os2.h,riscos.h,unix.h,win32.h.  
+
+Mon Oct 27 02:30:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/system.h:
+
+	Questionable tidyup.  
+
+Mon Oct 27 02:29:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/system.h:
+
+	The funny __EMX__ stuff is part of OS2.  
+
+Mon Oct 27 02:28:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: Makefile.am, os_dep.h, system.h:
+
+	Moved system-specific macros from os_dep.h to system.h, which is
+	included from os_dep.h at that place.  
+
+Mon Oct 27 02:25:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_dep.h:
+
+	Removed some really ancient comment.  
+
+Mon Oct 27 02:24:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_dep.h:
+
+	Cleanup of the system decision procedure.  
+
+Mon Oct 27 02:21:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: beos.c, os2.c, riscos.c, win32.c:
+
+	Normalized the headers.  
+
+Mon Oct 27 02:19:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: Makefile.am, os_dep.c, unix.c:
+
+	Moved GPM mouse handling from os_dep.c to unix.c.  
+
+Mon Oct 27 02:18:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/: version.c, version.h:
+
+	Moved to modules/version.* 
+
+Mon Oct 27 02:17:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, dialogs/info.c, lowlevel/signals.c,
+	modules/Makefile.am, modules/version.c, modules/version.h,
+	util/Makefile.am, util/error.c, util/error.h:
+
+	Move util/version.* to modules/version.*.  Trim get_version() from
+	the interface.  Move full_static_version[] to util/error.* since it
+	is the reason for that mess.  
+
+Mon Oct 27 02:08:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: Makefile.am, os_dep.c, riscos.c:
+
+	Moved RISCOS specific stuff from os_dep.c to riscos.c.  
+
+Mon Oct 27 02:04:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_dep.c:
+
+	Put back accidentally removed get_ctl_handle(). Spotted by Jonas.  
+
+Mon Oct 27 02:00:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/osdep/os_dep.c, src/osdep/os_dep.h:
+
+	While at it kill pthreads support as well, dead as clone() support.  
+
+Mon Oct 27 01:59:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/osdep/os_dep.c, src/osdep/os_dep.h:
+
+	Killed clone() support, long-disabled and useless and so on, for
+	good.  
+
+Mon Oct 27 01:50:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/win32.c:
+
+	Added standard includes suite.  
+
+Mon Oct 27 01:38:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: os_dep.c, win32.c:
+
+	Moved win32 bits from os_dep.c to win32.c.  
+
+Mon Oct 27 01:33:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: os_dep.c, os_dep.h:
+
+	Export get_e(), os2.c needs it.  
+
+Mon Oct 27 01:30:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: os2.c, os_dep.c:
+
+	Moved some hopefully last bits of OS/2 stuff.  
+
+Mon Oct 27 01:24:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: beos.c, os_dep.c:
+
+	Migrated BeOS-specific exe().  
+
+Mon Oct 27 01:21:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: os2.c, os_dep.c:
+
+	Made OS2-specific can_open_os_shell().  
+
+Mon Oct 27 01:20:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_dep.c:
+
+	Removed some unused OS/2 garbage.  
+
+Mon Oct 27 01:19:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: os2.c, os_dep.c:
+
+	Moved OS/2 mouse handling from os_dep.c to os2.c.  
+
+Mon Oct 27 01:17:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: os_dep.c, os_dep.h:
+
+	Moved defining of USING_OS2_MOUSE from os_dep.c to os_dep.h.  
+
+Mon Oct 27 01:12:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: os2.c, os_dep.c:
+
+	Tons of OS/2-specific stuff moved from os_dep.c to os2.c. What a
+	relief.. not everything yet, though.  
+
+Mon Oct 27 01:12:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/leds.c, bookmarks/bookmarks.c, cookies/cookies.c,
+	formhist/formhist.c, globhist/globhist.c, mime/mime.c,
+	mime/backend/default.c, mime/backend/mailcap.c,
+	mime/backend/mimetypes.c, scripting/scripting.c,
+	scripting/guile/core.c, scripting/lua/core.c:
+
+	Make the module name useful for version strings.  
+
+Mon Oct 27 01:05:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: Makefile.am, os2.c:
+
+	Added some dummy os2.c.  
+
+Mon Oct 27 01:03:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/beos.c:
+
+	Fixed include of os_depx.h.  
+
+Mon Oct 27 01:02:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: beos.c, os_dep.c:
+
+	Moved some BeOS-specific bits from os_dep.c to beos.c.  
+
+Mon Oct 27 00:55:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_dep.c:
+
+	Removed redundant preprocessor branch.  
+
+Mon Oct 27 00:55:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/beos.c:
+
+	Rearrange. Standard includes.  
+
+Mon Oct 27 00:46:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/beos.c:
+
+	Id tag and stuff.  
+
+Mon Oct 27 00:37:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_dep.c:
+
+	Split out GPM-specific parts of (un)handle_mouse() to
+	(init|done)_mouse().  
+
+Sun Oct 26 23:43:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Add change hook to update d_opt active link members.  
+
+Sun Oct 26 23:29:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: viewer/text/link.c, document/options.h,
+	document/html/renderer.c:
+
+	Move all active link handling to the viewer.  
+
+Sun Oct 26 23:23:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: connection.c, connection.h:
+
+	Use conn instead of c in struct download.  
+
+Sun Oct 26 23:17:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/cache.c, lowlevel/connect.c, protocol/finger.c,
+	protocol/http/https.c, sched/connection.c:
+
+	Use conn for struct connection *.  Use keep_conn for struct
+	keepalive_connection *.  Use host_conn for struct host_connection *.  
+	Use ce for struct cache_entry *. (not finished, nor definitive) 
+
 Sun Oct 26 22:22:12 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/html/renderer.c:

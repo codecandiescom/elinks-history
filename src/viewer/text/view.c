@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.110 2003/07/01 15:07:09 zas Exp $ */
+/* $Id: view.c,v 1.111 2003/07/01 19:47:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -626,15 +626,18 @@ draw_current_link(struct terminal *t, struct f_data_c *scr)
 static struct link *
 get_first_link(struct f_data_c *f)
 {
-	int i;
 	struct link *l = f->f_data->links + f->f_data->nlinks;
 
 	if (!f->f_data->lines1) return NULL;
 
-	for (i = f->vs->view_pos; i < f->vs->view_pos + f->yw; i++)
-		if (i >= 0 && i < f->f_data->y && f->f_data->lines1[i]
-		    && f->f_data->lines1[i] < l)
-			l = f->f_data->lines1[i];
+	if (f->vs->view_pos >= 0 && f->f_data->y < f->vs->view_pos + f->yw) {
+		int i;
+
+		for (i = f->vs->view_pos; i < f->vs->view_pos + f->yw; i++)
+			if (f->f_data->lines1[i] && f->f_data->lines1[i] < l)
+				l = f->f_data->lines1[i];
+	}
+
 	if (l == f->f_data->links + f->f_data->nlinks) l = NULL;
 	return l;
 }

@@ -854,7 +854,7 @@ struct read_buffer {
 void close_socket(int *);
 void make_connection(struct connection *, int, int *, void (*)(struct connection *));
 void dns_found(/* struct connection */ void *, int);
-int get_pasv_socket(struct connection *, int, int *, unsigned char *);
+int get_pasv_socket(struct connection *, int, unsigned char *);
 void write_to_socket(struct connection *, int, unsigned char *, int, void (*)(struct connection *));
 struct read_buffer *alloc_read_buffer(struct connection *c);
 void read_from_socket(struct connection *, int, struct read_buffer *, void (*)(struct connection *, struct read_buffer *));

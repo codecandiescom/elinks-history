@@ -105,36 +105,62 @@ void make_connection(struct connection *conn, int port, int *sock,
 	if (async) setcstate(conn, S_DNS);
 }
 
-int get_pasv_socket(struct connection *c, int cc, int *sock, unsigned char *port)
+/* Returns negative if error, otherwise pasv socket's fd. */
+/* TODO: IPv6 support? */
+int get_pasv_socket(struct connection *conn, int ctrl_sock, unsigned char *port)
 {
-	int s;
+	int sock;
 	struct sockaddr_in sa;
 	struct sockaddr_in sb;
 	int len = sizeof(sa);
-	if (getsockname(cc, (struct sockaddr *)&sa, &len)) {
-		e:
-		setcstate(c, -errno);
-		retry_connection(c);
-		return -2;
+	
+	/* Get our endpoint of the control socket */
+	
+	if (getsockname(ctrl_sock, (struct sockaddr *) &sa, &len)) {
+error:
+		setcstate(conn, -errno);
+		retry_connection(conn);
+		return -1;
 	}
-	if ((s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1) goto e;
-	*sock = s;
-	fcntl(s, F_SETFL, O_NONBLOCK);
+	
+	/* Get a passive socket */
+	
+	sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (sock < 0)
+		goto error;
+	
+	/* Set it non-blocking */
+	
+	fcntl(sock, F_SETFL, O_NONBLOCK);
+
+	/* Bind it to some port */
+	
 	memcpy(&sb, &sa, sizeof(struct sockaddr_in));
 	sb.sin_port = 0;
-	if (bind(s, (struct sockaddr *)&sb, sizeof sb)) goto e;
+	if (bind(sock, (struct sockaddr *) &sb, sizeof(sb)))
+		goto error;
+	
+	/* Get our endpoint of the passive socket and save it to port */
+	
 	len = sizeof(sa);
-	if (getsockname(s, (struct sockaddr *)&sa, &len)) goto e;
-	if (listen(s, 1)) goto e;
+	if (getsockname(sock, (struct sockaddr *) &sa, &len))
+		goto error;
 	memcpy(port, &sa.sin_addr.s_addr, 4);
 	memcpy(port + 4, &sa.sin_port, 2);
+
+	/* Go listen */
+	
+	if (listen(sock, 1))
+		goto error;
+	
 #if defined(IP_TOS) && defined(IPTOS_THROUGHPUT)
 	{
 		int on = IPTOS_THROUGHPUT;
-		setsockopt(s, IPPROTO_IP, IP_TOS, (char *)&on, sizeof(int));
+		setsockopt(sock, IPPROTO_IP, IP_TOS, (char *)&on, sizeof(int));
 	}
 #endif
-	return 0;
+
+	return sock;
 }
 
 #ifdef HAVE_SSL

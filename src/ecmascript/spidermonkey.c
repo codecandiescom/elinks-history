@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.60 2004/10/21 23:11:55 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.61 2004/10/22 07:36:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -910,8 +910,12 @@ error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 		report->linebuf && report->tokenptr
 		?
 		msg_text(term, N_("A script embedded in the current "
-		         "document raised the following exception: "
+		         "document raised the following%s%s%s%s: "
 		         "\n\n%s\n\n%s\n.%*s^%*s."),
+		         JSREPORT_IS_STRICT(report->flags) ? " strict" : "",
+		         JSREPORT_IS_EXCEPTION(report->flags) ? " exception" : "",
+		         JSREPORT_IS_WARNING(report->flags) ? " warning" : "",
+		         !report->flags ? " error" : "",
 		         message,
 			 report->linebuf,
 			 report->tokenptr - report->linebuf - 2, " ",
@@ -983,6 +987,10 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 		return NULL;
 	interpreter->backend_data = ctx;
 	JS_SetContextPrivate(ctx, interpreter);
+	/* TODO: Make JSOPTION_STRICT and JSOPTION_WERROR configurable. */
+	/* XXX: JSOPTION_COMPILE_N_GO will go (will it?) when we implement
+	 * some kind of bytecode cache. (If we will ever do that.) */
+	JS_SetOptions(ctx, JSOPTION_VAROBJFIX | JSOPTION_COMPILE_N_GO);
 	JS_SetErrorReporter(ctx, error_reporter);
 
 	window_obj = JS_NewObject(ctx, (JSClass *) &window_class, NULL, NULL);

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.99 2003/10/02 21:28:47 jonas Exp $ */
+/* $Id: screen.c,v 1.100 2003/10/02 23:36:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,7 +76,6 @@ static struct string underline_seqs[] = {
 	/* begin underline: */	TERM_STRING("\033[24m"),
 	/* end underline: */	TERM_STRING("\033[4m"),
 };
-
 
 /* Used in print_char() and redraw_screen() to reduce the logic. */
 /* TODO: termcap/terminfo can maybe gradually be introduced via this
@@ -407,6 +406,58 @@ add_char16(struct string *screen, struct screen_driver *driver,
 }
 
 #ifdef USE_256_COLORS
+static struct string color256_seqs[] = {
+	/* foreground: */	TERM_STRING("\033[0;38;5;%dm"),
+	/* background: */	TERM_STRING("\033[48;5;%dm"),
+};
+
+static inline void
+add_char_color(struct string *screen, struct string *seq, unsigned char color)
+{
+	unsigned char color_buf[4];
+	unsigned char *color_pos;
+	int seq_pos, color_len;
+
+	for (seq_pos = 0; seq->source[seq_pos] != '%'; seq_pos++) ;
+
+	add_bytes_to_string(screen, seq->source, seq_pos);
+
+	if (color > 9) {
+		int color2;
+
+		if (color > 199) {
+			color_buf[0] = '2';
+			color_pos = color_buf;
+			color_len = 3;
+			color -= 200;
+		} else if (color > 99) {
+			color_buf[0] = '1';
+			color_pos = color_buf;
+			color_len = 3;
+			color -= 100;
+		} else {
+			color_len = 2;
+			color_pos = color_buf + 1;
+		}
+
+		color2 = (color % 10);
+		color /= 10;
+		color_buf[1] = '0' + color;
+		color = color2;
+	} else {
+		color_len = 1;
+		color_pos = color_buf + 2;
+	}
+
+	color_buf[2] = '0' + color;
+	color_buf[3] = 0;
+
+	add_bytes_to_string(screen, color_pos, color_len);
+
+	seq_pos += 2; /* Skip "%d" */
+	add_bytes_to_string(screen, &seq->source[seq_pos], seq->length - seq_pos);
+}
+
 /* Time critical section. */
 static inline void
 add_char256(struct string *screen, struct screen_driver *driver,
@@ -436,9 +487,9 @@ add_char256(struct string *screen, struct screen_driver *driver,
 	if (!compare_color(ch->color, state->color)) {
 		copy_color(state->color, ch->color);
 
-		add_format_to_string(screen, "\033[0;38;5;%dm", ch->color[0]);
+		add_char_color(screen, &color256_seqs[0], ch->color[0]);
 		if (!driver->trans || ch->color[1] != 0) {
-			add_format_to_string(screen, "\033[48;5;%dm", ch->color[1]);
+			add_char_color(screen, &color256_seqs[1], ch->color[1]);
 		}
 
 		if (ch->attr & SCREEN_ATTR_BOLD)

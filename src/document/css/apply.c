@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.68 2004/09/20 10:02:06 zas Exp $ */
+/* $Id: apply.c,v 1.69 2004/09/20 15:49:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,7 @@ static css_applier_t css_appliers[CSS_PT_LAST] = {
 
 /* This looks for a match in list of selectors. */
 static void
-examine_element(struct css_selector *selector, struct list_head *selectors,
+examine_element(struct css_selector *base, struct list_head *selectors,
                 struct html_element *element)
 {
 	struct css_selector *altsel;
@@ -95,19 +95,19 @@ examine_element(struct css_selector *selector, struct list_head *selectors,
 
 	altsel = find_css_selector(selectors, CST_ELEMENT,
 	                           element->name, element->namelen);
-	process_found_selector(altsel, selector);
+	process_found_selector(altsel, base);
 
 	code = get_attr_val(element->options, "id");
 	if (code) {
 		altsel = find_css_selector(selectors, CST_ID, code, -1);
-		process_found_selector(altsel, selector);
+		process_found_selector(altsel, base);
 		mem_free(code);
 	}
 
 	code = get_attr_val(element->options, "class");
 	if (code) {
 		altsel = find_css_selector(selectors, CST_CLASS, code, -1);
-		process_found_selector(altsel, selector);
+		process_found_selector(altsel, base);
 		mem_free(code);
 	}
 

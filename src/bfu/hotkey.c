@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.12 2003/12/27 15:16:20 zas Exp $ */
+/* $Id: hotkey.c,v 1.13 2003/12/28 05:21:37 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,6 +128,7 @@ static inline int
 is_hotkey(struct menu_item *item, unsigned char key, struct terminal *term)
 {
 	unsigned char *text;
+	int key_pos;
 
 	assert(item);
 	if_assert_failed return 0;
@@ -139,19 +140,14 @@ is_hotkey(struct menu_item *item, unsigned char key, struct terminal *term)
 	if (mi_text_translate(*item)) text = _(text, term);
 	if (!*text) return 0;
 
-#ifdef DEBUG
-	{
-	int key_pos = item->hotkey_pos;
+	key_pos = item->hotkey_pos;
 
+#ifdef DEBUG
 	if (key_pos < 0) key_pos = -key_pos;
+#endif
 
 	return (key_pos && text
 		&& (upcase(text[key_pos]) == key));
-	}
-#else
-	return (item->hotkey_pos && text
-		&& (upcase(text[item->hotkey_pos]) == key));
-#endif
 }
 
 /* Returns true if a hotkey was found in the menu, and set menu->selected. */

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.56 2003/05/03 02:38:49 pasky Exp $ */
+/* $Id: terminal.c,v 1.57 2003/05/03 02:42:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -340,7 +340,7 @@ get_parent_ptr(struct window *win, int *x, int *y)
 }
 
 /* Number of tabs - just number of root windows in term->windows */
-int
+inline int
 number_of_tabs(struct terminal *term)
 {
 	int result = 0;
@@ -386,7 +386,7 @@ get_tab_by_number(struct terminal *term, int num)
 }
 
 /* Get root window */
-struct window *
+inline struct window *
 get_root_window(struct terminal *term)
 {
 	return (struct window *) get_tab_by_number(term, term->current_tab);
@@ -540,14 +540,16 @@ init_term(int fdin, int fdout,
 	return term;
 }
 
-/* We need to send event to correct root window, not to first one --karpov */
 void
 term_send_event(struct terminal *term, struct event *ev)
 {
 	struct window *first_win = term->windows.next;
-	struct window *win = first_win->type
-			     ? get_tab_by_number(term,term->current_tab)
-			     : first_win;
+	struct window *win;
+
+	/* We need to send event to correct root window, not to the first one.
+	 * --karpov */
+	/* ...if we want to send it to a root window at all. --pasky */
+	win = first_win->type ? get_root_window(term) : first_win;
 
 	win->handler(win, ev, 0);
 }

@@ -15,8 +15,8 @@ elinks (0.11-0.0upstream) unstable; urgency=low
     issues (closes: #300889)
   * Be more tolerant when handling values from the no_proxy environment
     variable (closes: #218451)
-  * Add support for explicitly specifying button shortcuts so that hotkeys
-    in managers do not clash (closes: #270205)
+  * explicitly define keyboard accelerators for buttons so that they
+    do not clash (closes: #270205)
 
  -- Jonas Fonseca <fonseca@diku.dk>  Tue,  5 Apr 2005 21:57:02 +0200
 

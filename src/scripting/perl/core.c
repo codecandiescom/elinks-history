@@ -1,5 +1,5 @@
 /* Perl scripting engine */
-/* $Id: core.c,v 1.5 2004/04/21 09:07:41 zas Exp $ */
+/* $Id: core.c,v 1.6 2004/04/21 09:21:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@ static char *
 get_global_hook_file(void)
 {
 	static char buf[] = CONFDIR "/" PERL_HOOKS_FILENAME;
-	
+
 	if (file_exists(buf)) return buf;
 	return NULL;
 }
@@ -35,10 +35,10 @@ get_global_hook_file(void)
 static char *
 get_local_hook_file(void)
 {
-	static char buf[256];
+	static char buf[256];	/* TODO: MAX_PATH ??? --Zas */
 
 	if (!elinks_home) return NULL;
-	snprintf(buf, 256, "%s/%s", elinks_home, PERL_HOOKS_FILENAME);
+	snprintf(buf, sizeof(buf), "%s/%s", elinks_home, PERL_HOOKS_FILENAME);
 	if (file_exists(buf)) return buf;
 	return NULL;
 }
@@ -46,13 +46,12 @@ get_local_hook_file(void)
 static void
 precleanup_perl(struct module *module)
 {
-	if (my_perl) {
-		perl_destruct(my_perl);
-		perl_free(my_perl);
-		my_perl = NULL;
-	}
-}
+	if (!my_perl) return;
 
+	perl_destruct(my_perl);
+	perl_free(my_perl);
+	my_perl = NULL;
+}
 
 static void
 cleanup_perl(struct module *module)
@@ -69,7 +68,7 @@ init_perl(struct module *module)
 /* FIXME: it seems that some systems like OS/2 requires PERL_SYS_INIT3
  * and PERL_SYS_TERM to open/close the same block, at least regarding some
  * ml messages.
- * 
+ *
  * Is passing @environ strictly needed ? --Zas */
 
 #ifdef PERL_SYS_INIT3	/* this macro may not be defined, it depends on system. */

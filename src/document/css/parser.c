@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.132 2004/09/21 11:00:19 pasky Exp $ */
+/* $Id: parser.c,v 1.133 2004/09/21 12:10:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,6 +171,29 @@ struct selector_pkg {
 	LIST_HEAD(struct selector_pkg);
 	struct css_selector *selector;
 };
+
+struct css_selector *
+reparent_selector(struct list_head *sels, struct css_selector *selector)
+{
+	struct css_selector *twin = find_css_selector(sels, selector->type,
+	                                              selector->name, -1);
+
+	if (twin) {
+		merge_css_selectors(twin, selector);
+		/* Reparent leaves. */
+		while (selector->leaves.next != &selector->leaves) {
+			struct css_selector *leaf = selector->leaves.next;
+
+			reparent_selector(&twin->leaves, leaf);
+		}
+		done_css_selector(selector);
+	} else {
+		if (selector->next) del_from_list(selector);
+		add_to_list(*sels, selector);
+	}
+
+	return twin ? twin : selector;
+}
 
 /* Our selector grammar:
  *
@@ -346,8 +369,9 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 				 * wasn't marked so and thus wasn't bound to
 				 * the stylesheet. Let's do that now. */
 				assert(prev_element_selector);
-				add_to_list(css->selectors,
-				            prev_element_selector);
+				prev_element_selector =
+					reparent_selector(&css->selectors,
+					                 prev_element_selector);
 			}
 
 			selector->relation = reltype;

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.163 2004/09/29 22:45:22 pasky Exp $ */
+/* $Id: cookies.c,v 1.164 2004/10/13 15:34:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,7 @@
 
 #include "elinks.h"
 
-/* #define COOKIES_DEBUG */
+/* #define DEBUG_COOKIES */
 
 #include "bfu/msgbox.h"
 #include "cookies/cookies.h"
@@ -34,7 +34,7 @@
 #include "sched/session.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"
-#ifdef COOKIES_DEBUG
+#ifdef DEBUG_COOKIES
 #include "util/error.h"
 #endif
 #include "util/file.h"
@@ -273,7 +273,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 	if (get_cookies_accept_policy() == COOKIES_ACCEPT_NONE)
 		return;
 
-#ifdef COOKIES_DEBUG
+#ifdef DEBUG_COOKIES
 	DBG("set_cookie -> (%s) %s", struri(uri), str);
 #endif
 
@@ -306,7 +306,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 	 * since it will maybe help to fix bug 77 - Support for more
 	 * finegrained control upon accepting of cookies. */
 	if (!cookie->server->accept) {
-#ifdef COOKIES_DEBUG
+#ifdef DEBUG_COOKIES
 		DBG("Dropped.");
 #endif
 		free_cookie(cookie);
@@ -392,7 +392,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 		cookie->secure = 0;
 	}
 
-#ifdef COOKIES_DEBUG
+#ifdef DEBUG_COOKIES
 	{
 		DBG("Got cookie %s = %s from %s, domain %s, "
 		      "expires at %d, secure %d\n", cookie->name,
@@ -402,7 +402,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 #endif
 
 	if (!check_domain_security(cookie->domain, uri->host, uri->hostlen)) {
-#ifdef COOKIES_DEBUG
+#ifdef DEBUG_COOKIES
 		DBG("Domain security violated: %s vs %*s", cookie->domain,
 				uri->host, uri->hostlen);
 #endif
@@ -647,7 +647,7 @@ send_cookies(struct uri *uri)
 			continue;
 
 		if (is_expired(c->expires)) {
-#ifdef COOKIES_DEBUG
+#ifdef DEBUG_COOKIES
 			DBG("Cookie %s=%s (exp %d) expired.\n",
 			      c->name, c->value, c->expires);
 #endif
@@ -671,7 +671,7 @@ send_cookies(struct uri *uri)
 		add_to_string(&header, c->name);
 		add_char_to_string(&header, '=');
 		add_to_string(&header, c->value);
-#ifdef COOKIES_DEBUG
+#ifdef DEBUG_COOKIES
 		DBG("Cookie: %s=%s", c->name, c->value);
 #endif
 	}

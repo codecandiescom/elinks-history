@@ -1,5 +1,5 @@
 /* Low-level terminal-suitable I/O routines */
-/* $Id: hardio.c,v 1.13 2004/07/14 21:37:11 zas Exp $ */
+/* $Id: hardio.c,v 1.14 2004/10/13 15:34:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,13 +18,13 @@
 #include "util/error.h"
 
 /* Define it to have data written to stderr */
-/* #define HW_DEBUG */
+/* #define DEBUG_HARDIO */
 
 #undef debug_open
 #undef debug_flush
 #undef debug_write
 
-#ifdef HW_DEBUG
+#ifdef DEBUG_HARDIO
 static void
 hw_debug_open(unsigned char *name, int fd, unsigned char *p, int l)
 {

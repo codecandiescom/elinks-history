@@ -1,5 +1,5 @@
 /* The DOM node handling */
-/* $Id: node.c,v 1.3 2004/09/24 18:59:44 jonas Exp $ */
+/* $Id: node.c,v 1.4 2004/10/13 15:34:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -204,7 +204,7 @@ init_dom_node_(unsigned char *file, int line,
 		struct dom_node *parent, enum dom_node_type type,
 		unsigned char *string, uint16_t length)
 {
-#ifdef LEAK_DEBUG
+#ifdef DEBUG_MEMLEAK
 	struct dom_node *node = debug_mem_calloc(file, line, 1, sizeof(struct dom_node));
 #else
 	struct dom_node *node = mem_calloc(1, sizeof(struct dom_node));

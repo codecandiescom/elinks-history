@@ -1,5 +1,5 @@
 /* The DOM tree navigation interface */
-/* $Id: navigator.c,v 1.3 2004/09/24 18:59:44 jonas Exp $ */
+/* $Id: navigator.c,v 1.4 2004/10/13 15:34:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@ realloc_dom_navigator_states(struct dom_navigator_state **states, size_t size)
 static inline unsigned char *
 realloc_dom_navigator_state_objects(struct dom_navigator *navigator)
 {
-#ifdef LEAK_DEBUG
+#ifdef DEBUG_MEMLEAK
 	return mem_align_alloc__(__FILE__, __LINE__, (void **) &navigator->state_objects,
 			       navigator->depth, navigator->depth + 1,
 			       navigator->object_size,

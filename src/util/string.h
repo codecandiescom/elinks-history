@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.86 2004/07/19 22:52:37 jonas Exp $ */
+/* $Id: string.h,v 1.87 2004/10/13 15:34:47 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -16,7 +16,7 @@
 #include "util/memory.h"
 
 
-#ifndef LEAK_DEBUG
+#ifndef DEBUG_MEMLEAK
 
 /* Autoallocation string constructors: */
 
@@ -32,7 +32,7 @@ unsigned char *memacpy(unsigned char *src, int len);
 /* Allocated NUL terminated string with the content of @src. */
 unsigned char *stracpy(unsigned char *src);
 
-#else /* LEAK_DEBUG */
+#else /* DEBUG_MEMLEAK */
 
 unsigned char *debug_memacpy(unsigned char *, int, unsigned char *, int);
 #define memacpy(s, l) debug_memacpy(__FILE__, __LINE__, s, l)
@@ -40,7 +40,7 @@ unsigned char *debug_memacpy(unsigned char *, int, unsigned char *, int);
 unsigned char *debug_stracpy(unsigned char *, int, unsigned char *);
 #define stracpy(s) debug_stracpy(__FILE__, __LINE__, s)
 
-#endif /* LEAK_DEBUG */
+#endif /* DEBUG_MEMLEAK */
 
 
 /* Concatenates @src to @str. */
@@ -171,7 +171,7 @@ struct string *add_format_to_string(struct string *string, unsigned char *format
 	mem_align_alloc(&(str)->source, (str)->length, (size) + 1, \
 			unsigned char, STRING_GRANULARITY)
 
-#ifdef LEAK_DEBUG
+#ifdef DEBUG_MEMLEAK
 
 #define add_bytes_to_string(string, bytes, length) \
 	add_bytes_to_string__(__FILE__, __LINE__, string, bytes, length)
@@ -191,7 +191,7 @@ struct string *add_format_to_string(struct string *string, unsigned char *format
 
 static inline struct string *
 add_bytes_to_string__(
-#ifdef LEAK_DEBUG
+#ifdef DEBUG_MEMLEAK
 		    unsigned char *file, int line,
 #endif
 		    struct string *string, unsigned char *bytes, int length)

@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.88 2004/09/23 22:18:34 jonas Exp $ */
+/* $Id: apply.c,v 1.89 2004/10/13 15:34:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-/* #define CSS_DEBUG */
+/* #define DEBUG_CSS */
 
 
 /* TODO: A way to disable CSS completely, PLUS a way to stop various property
@@ -94,7 +94,7 @@ examine_element(struct css_selector *base,
 	struct css_selector *selector;
 	unsigned char *code;
 
-#ifdef CSS_DEBUG
+#ifdef DEBUG_CSS
  	DBG("examine_element(%s, %d, %d, %p, %.*s);", base->name, seltype, rel, selectors, element->namelen, element->name);
 #define dbginfo(sel, type_, base) \
 	DBG("Matched selector %s (rel %d type %d [m%d])! Children %p !!%d, props !!%d", sel->name, sel->relation, sel->type, sel->type == type_, &sel->leaves, !list_empty(sel->leaves), !list_empty(sel->properties))
@@ -185,14 +185,14 @@ css_apply(struct html_element *element, struct css_stylesheet *css,
 	if (!selector)
 		return;
 
-#ifdef CSS_DEBUG
+#ifdef DEBUG_CSS
 	DBG("Applying to element %.*s...", element->namelen, element->name);
 #endif
 
 	examine_element(selector, CST_ELEMENT, CSR_ROOT,
 	                &css->selectors, element, html_stack);
 
-#ifdef CSS_DEBUG
+#ifdef DEBUG_CSS
 	DBG("Element %.*s applied.", element->namelen, element->name);
 #endif
 

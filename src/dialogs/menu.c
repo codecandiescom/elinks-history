@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.370 2004/09/29 17:02:43 jonas Exp $ */
+/* $Id: menu.c,v 1.371 2004/10/13 15:34:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -304,7 +304,7 @@ static struct menu_item file_menu22[] = {
 	INIT_MENU_ACTION(N_("~Kill background connections"), ACT_MAIN_KILL_BACKGROUNDED_CONNECTIONS),
 	INIT_MENU_ACTION(N_("Flush all ~caches"), ACT_MAIN_CACHE_MINIMIZE),
 	INIT_MENU_ACTION(N_("Resource ~info"), ACT_MAIN_RESOURCE_INFO),
-#ifdef LEAK_DEBUG
+#ifdef DEBUG_MEMLEAK
 	INIT_MENU_ITEM(N_("~Memory info"), NULL, ACT_MAIN_NONE, memory_inf, NULL, 0),
 #endif
 	BAR_MENU_ITEM,

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.103 2004/07/17 20:14:38 pasky Exp $ */
+/* $Id: string.c,v 1.104 2004/10/13 15:34:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,7 @@
 		elinks_internal("[" o "] assertion " #x " failed!"); \
 	}
 
-#ifdef LEAK_DEBUG
+#ifdef DEBUG_MEMLEAK
 
 inline unsigned char *
 debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
@@ -61,7 +61,7 @@ debug_stracpy(unsigned char *f, int l, unsigned char *src)
 	return debug_memacpy(f, l, src, strlen(src));
 }
 
-#else /* LEAK_DEBUG */
+#else /* DEBUG_MEMLEAK */
 
 inline unsigned char *
 memacpy(unsigned char *src, int len)
@@ -89,7 +89,7 @@ stracpy(unsigned char *src)
 	return memacpy(src, strlen(src));
 }
 
-#endif /* LEAK_DEBUG */
+#endif /* DEBUG_MEMLEAK */
 
 
 void

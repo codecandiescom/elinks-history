@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.28 2004/09/14 23:09:28 pasky Exp $ */
+/* $Id: memory.h,v 1.29 2004/10/13 15:34:47 zas Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -31,7 +31,7 @@ void *mem_mmap_realloc(void *p, size_t old_size, size_t new_size);
 #endif
 
 
-#ifdef LEAK_DEBUG
+#ifdef DEBUG_MEMLEAK
 
 #include "util/memdebug.h"
 
@@ -93,7 +93,7 @@ void *mem_realloc(void *, size_t);
 
 #endif /* CONFIG_FASTMEM */
 
-#endif /* LEAK_DEBUG */
+#endif /* DEBUG_MEMLEAK */
 
 
 /* Granular memory allocation. */
@@ -111,7 +111,7 @@ void *mem_realloc(void *, size_t);
 
 static inline void *
 mem_align_alloc__(
-#ifdef LEAK_DEBUG
+#ifdef DEBUG_MEMLEAK
 		  unsigned char *file, int line,
 #endif
 		  void **ptr, size_t old, size_t new, size_t objsize, int mask)
@@ -125,7 +125,7 @@ mem_align_alloc__(
 		newsize *= objsize;
 		oldsize *= objsize;
 
-#ifdef LEAK_DEBUG
+#ifdef DEBUG_MEMLEAK
 		data = debug_mem_realloc(file, line, *ptr, newsize);
 #else
 		data = mem_realloc(*ptr, newsize);
@@ -139,7 +139,7 @@ mem_align_alloc__(
 	return *ptr;
 }
 
-#ifdef LEAK_DEBUG
+#ifdef DEBUG_MEMLEAK
 #define mem_align_alloc(ptr, old, new, obj, mask) \
 	mem_align_alloc__(__FILE__, __LINE__, (void **) ptr, old, new, sizeof(obj), mask)
 #else

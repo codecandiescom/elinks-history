@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.23 2004/10/05 01:23:30 jonas Exp $ */
+/* $Id: memory.c,v 1.24 2004/10/13 15:34:47 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* MREMAP_MAYMOVE */
@@ -22,7 +22,7 @@
 #include "util/memory.h"
 
 
-#if !defined(LEAK_DEBUG) && !defined(CONFIG_FASTMEM)
+#if !defined(DEBUG_MEMLEAK) && !defined(CONFIG_FASTMEM)
 
 static int alloc_try = 0;
 
@@ -110,7 +110,7 @@ mem_realloc(void *p, size_t size)
 
 /* TODO: Leak detector and the usual protection gear? patience()?
  *
- * We could just alias mem_mmap_* to mem_debug_* #if LEAK_DEBUG, *WHEN* we are
+ * We could just alias mem_mmap_* to mem_debug_* #if DEBUG_MEMLEAK, *WHEN* we are
  * confident that the mmap() code is really bugless ;-). --pasky */
 
 #ifdef HAVE_MMAP

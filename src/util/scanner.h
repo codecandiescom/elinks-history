@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.14 2004/05/24 13:12:26 jonas Exp $ */
+/* $Id: scanner.h,v 1.15 2004/10/13 15:34:47 zas Exp $ */
 
 #ifndef EL__UTIL_SCANNER_H
 #define EL__UTIL_SCANNER_H
@@ -6,7 +6,7 @@
 #include "util/error.h"
 
 /* Define if you want a talking scanner */
-/* #define SCANNER_DEBUG */
+/* #define DEBUG_SCANNER */
 
 /* The {struct scanner_token} describes one scanner state. There are two kinds
  * of tokens: char and non-char tokens. Char tokens contains only one char and
@@ -115,7 +115,7 @@ struct scanner {
 	/* The 'meta' scanner information */
 	struct scanner_info *info;
 
-#ifdef SCANNER_DEBUG
+#ifdef DEBUG_SCANNER
 	/* Debug info about the caller. */
 	unsigned char *file;
 	int line;
@@ -182,7 +182,7 @@ int
 map_scanner_string(struct scanner *scanner,
 		   unsigned char *ident, unsigned char *end, int base_type);
 
-#ifdef SCANNER_DEBUG
+#ifdef DEBUG_SCANNER
 void dump_scanner(struct scanner *scanner);
 #endif
 

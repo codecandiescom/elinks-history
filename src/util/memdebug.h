@@ -1,9 +1,9 @@
-/* $Id: memdebug.h,v 1.4 2004/05/04 10:50:08 zas Exp $ */
+/* $Id: memdebug.h,v 1.5 2004/10/13 15:34:47 zas Exp $ */
 
 #ifndef EL__UTIL_MEMDEBUG_H
 #define EL__UTIL_MEMDEBUG_H
 
-#ifdef LEAK_DEBUG
+#ifdef DEBUG_MEMLEAK
 
 /* TODO: Another file? */
 
@@ -24,6 +24,6 @@ void check_memory_leaks(void);
 
 #else
 #define set_mem_comment(p, c, l)
-#endif /* LEAK_DEBUG */
+#endif /* DEBUG_MEMLEAK */
 
 #endif

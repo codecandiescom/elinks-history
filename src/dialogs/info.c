@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.107 2004/09/14 23:28:48 pasky Exp $ */
+/* $Id: info.c,v 1.108 2004/10/13 15:34:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 #include "sched/session.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"
-#ifdef LEAK_DEBUG
+#ifdef DEBUG_MEMLEAK
 #include "util/memdebug.h"
 #endif
 #include "util/memlist.h"
@@ -180,7 +180,7 @@ resource_info(struct terminal *term)
 			  get_ressource_info, NULL);
 }
 
-#ifdef LEAK_DEBUG
+#ifdef DEBUG_MEMLEAK
 
 static unsigned char *
 get_memory_info(struct terminal *term, void *data)

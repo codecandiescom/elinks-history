@@ -1,5 +1,5 @@
 /* A pretty generic scanner */
-/* $Id: scanner.c,v 1.9 2004/05/08 01:18:36 jonas Exp $ */
+/* $Id: scanner.c,v 1.10 2004/10/13 15:34:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ skip_scanner_tokens(struct scanner *scanner, int skipto, int precedence)
 		? get_next_scanner_token(scanner) : NULL;
 }
 
-#ifdef SCANNER_DEBUG
+#ifdef DEBUG_SCANNER
 void
 dump_scanner(struct scanner *scanner)
 {

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.221 2004/09/04 11:19:11 jonas Exp $ */
+/* $Id: main.c,v 1.222 2004/10/13 15:34:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -321,7 +321,7 @@ main(int argc, char *argv[])
 	select_loop(init);
 	terminate_all_subsystems();
 
-#ifdef LEAK_DEBUG
+#ifdef DEBUG_MEMLEAK
 	check_memory_leaks();
 #endif
 	return retval;

@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.28 2004/05/14 08:49:07 zas Exp $ */
+/* $Id: memdebug.c,v 1.29 2004/10/13 15:34:47 zas Exp $ */
 
 /* Wrappers for libc memory managment providing protection against common
  * pointers manipulation mistakes - bad realloc()/free() pointers, double
@@ -51,7 +51,7 @@
 #include "util/string.h"
 
 
-#ifdef LEAK_DEBUG
+#ifdef DEBUG_MEMLEAK
 
 /* Eat less memory, but sacrifice speed?
  * Default is defined. */
@@ -557,4 +557,4 @@ set_mem_comment(void *ptr, unsigned char *str, int len)
 	}
 }
 
-#endif /* LEAK_DEBUG */
+#endif /* DEBUG_MEMLEAK */

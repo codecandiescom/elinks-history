@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.28 2004/08/15 00:27:05 jonas Exp $ */
+/* $Id: os2.c,v 1.29 2004/10/13 15:34:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -257,7 +257,7 @@ set_clipboard_text(unsigned char *data)
 unsigned char *
 get_window_title(void)
 {
-#ifndef OS2_DEBUG
+#ifndef DEBUG_OS2
 	unsigned char *org_switch_title;
 	unsigned char *org_win_title = NULL;
 	static PTIB tib = NULL;
@@ -305,7 +305,7 @@ get_window_title(void)
 void
 set_window_title(unsigned char *title)
 {
-#ifndef OS2_DEBUG
+#ifndef DEBUG_OS2
 	static PTIB tib;
 	static PPIB pib;
 	ULONG oldType;

@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.53 2004/06/25 10:52:31 zas Exp $ */
+/* $Id: fastfind.c,v 1.54 2004/10/13 15:34:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,7 @@
 
 /* Define it to generate performance and memory usage statistics to stderr. */
 #if 0
-#define FASTFIND_DEBUG
+#define DEBUG_FASTFIND
 #endif
 
 /* Define whether to use 32 or 64 bits per compressed element. */
@@ -164,7 +164,7 @@ struct fastfind_info {
 	int pointers_count;
 	int leafsets_count;
 
-#ifdef FASTFIND_DEBUG
+#ifdef DEBUG_FASTFIND
 	struct {
 		unsigned long searches;
 		unsigned long found;
@@ -186,7 +186,7 @@ struct fastfind_info {
 };
 
 
-#ifdef FASTFIND_DEBUG
+#ifdef DEBUG_FASTFIND
 /* These are for performance testing. */
 #define FF_DBG_mem(x, size) (x)->debug.memory_usage += (size)
 #define FF_DBG_test(x) (x)->debug.tests++
@@ -206,7 +206,7 @@ struct fastfind_info {
 	} while (0)
 #define FF_DBG_comment(x, comment) do { (x)->debug.comment = empty_string_or_(comment); } while (0)
 
-#else /* !FASTFIND_DEBUG */
+#else /* !DEBUG_FASTFIND */
 
 #define FF_DBG_mem(x, size)
 #define FF_DBG_test(x)
@@ -214,7 +214,7 @@ struct fastfind_info {
 #define FF_DBG_found(x)
 #define FF_DBG_comment(x, comment)
 
-#endif /* FASTFIND_DEBUG */
+#endif /* DEBUG_FASTFIND */
 
 
 static struct fastfind_info *
@@ -532,7 +532,7 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 	assert(info);
 	if_assert_failed return NULL;
 
-#ifdef FASTFIND_DEBUG
+#ifdef DEBUG_FASTFIND
 	info->debug.searches++;
 	info->debug.total_key_len += key_len;
 	info->debug.teststmp = info->debug.tests;
@@ -567,7 +567,7 @@ fastfind_done(struct fastfind_info *info)
 {
 	if (!info) return;
 
-#ifdef FASTFIND_DEBUG
+#ifdef DEBUG_FASTFIND
 	fprintf(stderr, "------ FastFind Statistics ------\n");
 	fprintf(stderr, "Comment     : %s\n", info->debug.comment);
 	fprintf(stderr, "Uniq_chars  : %s\n", info->uniq_chars);

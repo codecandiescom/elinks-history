@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.138 2004/09/28 07:16:11 zas Exp $ */
+/* $Id: parser.c,v 1.139 2004/10/13 15:34:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-/* #define CSS_DEBUG */
+/* #define DEBUG_CSS */
 
 
 void
@@ -481,7 +481,7 @@ css_parse_ruleset(struct css_stylesheet *css, struct scanner *scanner)
 
 	/* Mirror the properties to all the selectors. */
 	foreach (pkg, selectors) {
-#ifdef CSS_DEBUG
+#ifdef DEBUG_CSS
 		DBG("Binding properties (!!%d) to selector %s (type %d, relation %d, children %d)",
 			!list_empty(properties),
 			pkg->selector->name, pkg->selector->type,
@@ -523,7 +523,7 @@ css_parse_stylesheet(struct css_stylesheet *css, struct uri *base_uri,
 			css_parse_ruleset(css, &scanner);
 		}
 	}
-#ifdef CSS_DEBUG
+#ifdef DEBUG_CSS
 	dump_css_selector_tree(&css->selectors);
 	WDBG("That's it.");
 #endif

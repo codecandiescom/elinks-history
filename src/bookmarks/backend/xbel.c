@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.8 2002/12/11 22:11:07 pasky Exp $ */
+/* $Id: xbel.c,v 1.9 2002/12/13 10:51:53 zas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -52,7 +52,7 @@ static void free_xbeltree(struct tree_node *node);
 static struct tree_node *get_child(struct tree_node *node, unsigned char *name);
 static unsigned char *get_attribute_value(struct attributes *attr,
 					  unsigned char *name);
-	
+
 
 static void read_bookmarks_xbel(FILE *f);
 static unsigned char * filename_bookmarks_xbel(int writing);
@@ -98,25 +98,25 @@ read_bookmarks_xbel(FILE *f)
 		sleep(1);
 		return;
 	}
-	
+
 	XML_SetElementHandler(p, on_element_open, on_element_close);
 	XML_SetCharacterDataHandler(p, on_text);
 
 	for (;;) {
 		int len;
 		int done;
-				
+
 		len = fread(in_buffer, 1, BUFSIZ, f);
 		if (ferror(f)) {
 			fprintf(stderr, "read_bookmarks_xbel(): "
 					"Error reading %s\n\007",
 					filename_bookmarks_xbel(0));
-			
+
 			free_xbeltree(root_node);
 			sleep(1);
 			return;
 		}
-		
+
 		done = feof(f);
 
 		if (!XML_Parse(p, in_buffer, len, done)) {
@@ -125,7 +125,7 @@ read_bookmarks_xbel(FILE *f)
 					filename_bookmarks_xbel(0),
 					XML_GetCurrentLineNumber(p),
 					XML_ErrorString(XML_GetErrorCode(p)));
-			
+
 			free_xbeltree(root_node);
 			sleep(1);
 			return;
@@ -144,17 +144,17 @@ write_bookmarks_xbel(struct secure_save_info *ssi, struct list_head *bookmarks)
 {
 	/* We check for readok in filename_bookmarks_xbel(). */
 
-	secure_fprintf(ssi, 
+	secure_fputs(ssi,
 		"<?xml version=\"1.0\"?>\n"
 		"<!DOCTYPE xbel PUBLIC \"+//IDN python.org//DTD XML "
 		"Bookmark Exchange Language 1.0//EN//XML\"\n"
 		"		       "
 		"\"http://www.python.org/topics/xml/dtds/xbel-1.0.dtd\">\n\n"
 		"<xbel>\n\n\n");
-	
-	
+
+
 	write_bookmarks_list(ssi, bookmarks, 0);
-	secure_fprintf(ssi, "\n</xbel>\n");
+	secure_fputs(ssi, "\n</xbel>\n");
 }
 
 static unsigned char *
@@ -168,8 +168,9 @@ static void
 indentation(struct secure_save_info *ssi, int num)
 {
 	int i;
+
 	for(i = 0; i < num; i++)
-		secure_fprintf(ssi, "    ");
+		secure_fputs(ssi, "    ");
 }
 
 /* FIXME This is totally broken, we should use the Unicode value in
@@ -188,23 +189,23 @@ print_xml_entities(struct secure_save_info *ssi, const unsigned char *str)
 				 || (x) == '+')
 
 	static int cp = 0;
-	
+
 	if (!cp) get_cp_index("us-ascii");
 
 	for (; *str; str++) {
 		if (accept_char(*str))
-			secure_fprintf(ssi, "%c", *str);
+			secure_fputc(ssi, *str);
 		else {
 			if (isascii(*str)) {
 				secure_fprintf(ssi, "&#%i;", (int) *str);
 			}
-			else {	
+			else {
 				char *tmp;
 
 				tmp = u2cp(*str, cp);
 				print_xml_entities(ssi, tmp);
 			}
-		}	
+		}
 	}
 
 #undef accept_char
@@ -220,33 +221,34 @@ write_bookmarks_list(struct secure_save_info *ssi, struct list_head *bookmarks,
 	foreach(bm, *bookmarks) {
 		if (bm->box_item->type == BI_FOLDER) {
 			indentation(ssi, n + 1);
-			secure_fprintf(ssi, "<folder folded=\"%s\">\n",
-				      bm->box_item->expanded ? "no" : "yes");
+			secure_fputs(ssi, "<folder folded=\"");
+			secure_fputs(ssi, bm->box_item->expanded ? "no" : "yes");
+			secure_fputs(ssi, "\">\n");
 
 			indentation(ssi, n + 2);
-			secure_fprintf(ssi, "<title>");
+			secure_fputs(ssi, "<title>");
 			print_xml_entities(ssi, bm->title);
-			secure_fprintf(ssi, "</title>\n");
+			secure_fputs(ssi, "</title>\n");
 
-			if (!list_empty(bm->child))	
+			if (!list_empty(bm->child))
 				write_bookmarks_list(ssi, &bm->child, n + 2);
 
 			indentation(ssi, n + 1);
-			secure_fprintf(ssi, "</folder>\n\n");
+			secure_fputs(ssi, "</folder>\n\n");
 		} else {
-			
+
 			indentation(ssi, n + 1);
-			secure_fprintf(ssi, "<bookmark href=\"");
+			secure_fputs(ssi, "<bookmark href=\"");
 			print_xml_entities(ssi, bm->url);
-			secure_fprintf(ssi, "\">\n");
+			secure_fputs(ssi, "\">\n");
 
 			indentation(ssi, n + 2);
-			secure_fprintf(ssi, "<title>");
+			secure_fputs(ssi, "<title>");
 			print_xml_entities(ssi, bm->title);
-			secure_fprintf(ssi, "</title>\n");
+			secure_fputs(ssi, "</title>\n");
 
 			indentation(ssi, n + 1);
-			secure_fprintf(ssi, "</bookmark>\n\n");
+			secure_fputs(ssi, "</bookmark>\n\n");
 		}
 	}
 }
@@ -269,7 +271,7 @@ on_element_open(void *data, const char *name, const char **attr)
 			current_node->children = node;
 			current_node->children->next = tmp;
 			current_node->children->prev = NULL;
-			
+
 		}
 		else current_node->children = node;
 	}
@@ -284,13 +286,20 @@ on_element_open(void *data, const char *name, const char **attr)
 		tmp = stracpy((unsigned char *) *attr);
 
 		if (!tmp) {
+
+free:
 			foreach(attribute, *current_node->attrs) {
 				mem_free(attribute->name);
 			}
 			mem_free(current_node->name);
 			return;
 		}
+
 		attribute = mem_alloc(sizeof(struct attributes));
+		if (!attribute) {
+			mem_free(tmp);
+			goto free;
+		}
 		attribute->name = tmp;
 		add_to_list(*current_node->attrs, attribute);
 
@@ -309,10 +318,11 @@ delete_whites(char *s)
 {
 	unsigned char *r;
 	int count = 0, c = 0, i;
-	int len;
+	int len = strlen(s);
 
-	len = strlen(s);	
 	r = mem_alloc(len + 1);
+	if (!r) return NULL;
+
 	for (i = 0; i < len; i++) {
 		if (isspace(s[i])) {
 			if(count == 1) continue;
@@ -331,7 +341,7 @@ delete_whites(char *s)
 	/* r = mem_realloc(r, strlen(r + 1)); */
 
 	return r;
-		
+
 }
 
 static void
@@ -339,12 +349,12 @@ on_text(void *data, const XML_Char *text, int len)
 {
 	char *tmp;
 	int len2 = 0;
-	
+
 	if (len) {
 		len2 = current_node->text ? strlen(current_node->text) : 0;
-		
+
 		tmp = mem_realloc(current_node->text, (size_t) (len + 1 + len2));
-	
+
 		/* Out of memory */
 		if (!tmp) return;
 
@@ -365,11 +375,11 @@ xbeltree_to_bookmarks_list(struct tree_node *node,
 	struct bookmark *tmp;
 	struct tree_node *title;
 	static struct bookmark *lastbm;
-	
+
 	while (node) {
 		if (!strcmp(node->name, "bookmark")) {
 			title = get_child(node, "title");
-			
+
 			tmp = add_bookmark(current_parent, 0,
 					   /* The <title> element is optional */
 					   title ? title->text : (unsigned char *) "No title",
@@ -393,7 +403,7 @@ xbeltree_to_bookmarks_list(struct tree_node *node,
 
 			/* Out of memory */
 			if (!tmp) return 0;
-			
+
 			tmp->root = current_parent;
 			tmp->box_item->type = BI_FOLDER;
 
@@ -403,10 +413,10 @@ xbeltree_to_bookmarks_list(struct tree_node *node,
 
 			lastbm = tmp;
 		}
-		
+
 		if (node->children) {
 			int ret;
-		
+
 			/* If this node is a <folder> element, current parent
 			 * changes */
 			ret = (!strcmp(node->name, "folder") ?
@@ -429,26 +439,26 @@ static void
 free_xbeltree(struct tree_node *node)
 {
 	struct tree_node *next_node;
-	
+
 	while (node) {
 
 		if (node->children)
 			free_xbeltree(node->children);
-		
+
 		next_node = node->next;
 		free_node(node);
 
 		node = next_node;
-	}	
+	}
 }
 
 static struct tree_node *
 get_child(struct tree_node *node, unsigned char *name)
 {
 	struct tree_node *ret;
-	
+
 	if (!node) return NULL;
-	
+
 	ret = node->children;
 
 	while (ret) {
@@ -465,7 +475,7 @@ static unsigned char *
 get_attribute_value(struct attributes *attr, unsigned char *name)
 {
 	struct attributes *attribute;
-	
+
 	foreachback(attribute, *attr) {
 		if (!strcmp(attribute->name, name)) {
 			return attribute->prev->name;
@@ -479,20 +489,24 @@ static struct tree_node *
 new_node(struct tree_node *parent)
 {
 	struct tree_node *node;
-	
+
 	node = mem_alloc(sizeof(struct tree_node));
 	if (!node) return NULL;
-	
+
 	node->parent = parent ? parent : node;
 
 	node->attrs = mem_alloc(sizeof(struct attributes));
+	if (!node->attrs) {
+		mem_free(node);
+		return NULL;
+	}
 	node->attrs->name = NULL;
 	node->text = NULL;
 	node->next = NULL;
 	node->prev = NULL;
 	init_list(*node->attrs);
 	node->children = NULL;
-	
+
 	return node;
 }
 
@@ -500,14 +514,14 @@ static void
 free_node(struct tree_node *node)
 {
 	struct attributes *attribute;
-	
+
 	foreach(attribute, *node->attrs) {
 		mem_free(attribute->name);
 		mem_free(attribute);
 	}
 	mem_free(node->attrs);
 	mem_free(node->name);
-	
+
 	if (node->text) mem_free(node->text);
 
 	mem_free(node);

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.409 2003/11/30 19:45:00 jonas Exp $ */
+/* $Id: options.c,v 1.410 2003/12/01 14:51:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,7 @@
 #include "cache/cache.h"
 #include "dialogs/status.h"
 #include "document/options.h"
+#include "document/document.h"
 #include "globhist/globhist.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"

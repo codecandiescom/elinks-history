@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.319 2004/08/19 10:23:19 miciah Exp $ */
+/* $Id: download.c,v 1.320 2004/08/19 10:24:01 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,6 +49,7 @@
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/file.h"
+#include "util/lists.h"
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/object.h"

@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.9.0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-09-11 19:11+0200\n"
-"PO-Revision-Date: 2004-09-09 12:00+0200\n"
+"PO-Revision-Date: 2004-09-11 22:30+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -274,19 +274,16 @@ msgid "Search menu/"
 msgstr "Menu wyszukiwania/"
 
 #: src/bfu/msgline.c:168 src/util/formatter.c:87
-#, fuzzy
 msgid "Is the current link bookmarked"
-msgstr "Poka¿ bie¿±cy obrazek"
+msgstr "Czy bie¿±cy odno¶nik jest dodany do zak³adek"
 
 #: src/bfu/msgline.c:169 src/util/formatter.c:88
-#, fuzzy
 msgid "Is the current location bookmarked"
-msgstr "Zapisz bie¿±cy dokument jako tekst"
+msgstr "Czy bie¿±ca lokacja jest dodana do zak³adek"
 
 #: src/bfu/msgline.c:170 src/util/formatter.c:89
-#, fuzzy
 msgid "Is the current link is the history"
-msgstr "Otwórz bie¿±cy odno¶nik w nowej karcie"
+msgstr "Czy bie¿±cy odno¶nik jest histori±"
 
 #: src/bookmarks/backend/xbel.c:98
 msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()"
@@ -5840,7 +5837,6 @@ msgid "File type handlers"
 msgstr "Programy obs³ugi typów plików"
 
 #: src/mime/backend/default.c:46
-#, fuzzy
 msgid ""
 "A file type handler is a set of information about how to use\n"
 "an external program to view a file. It is possible to refer to it\n"
@@ -5851,14 +5847,15 @@ msgid ""
 "Note you must define both a MIME handler and a MIME type association\n"
 "for it to work."
 msgstr ""
-"Uchwyty dla pewnych typów plików. Nale¿y skonfigurowaæ mime.type.*,\n"
-"aby odnosi³y siê do tych uchwytów.\n"
-"\n"
-"Mo¿na zdefiniowaæ jeden uchwyt, które bêdzie odpowiada³ za kilka typów "
-"MIME,\n"
-"np. mo¿na zdefiniowaæ uchwyt 'images', do którego bêd± odnosi³y siê\n"
-"mime.type.image.png, mime.type.image.jpeg, itd; mo¿na zdefiniowaæ uchwyt\n"
-"dla bardziej skomplikowanych typów plików, np. PDF."
+"Uchwyt typu pliku jest zbiorem informacji jak korzystaæ z zewnêtrznych\n"
+"programów, ¿eby zobaczyæ plik, np. mo¿na zdefiniowaæ uchwyt 'images',\n"
+"do którego bêd± odnosi³y siê mime.type.image.png, mime.type.image.jpeg,\n"
+"itd; mo¿na zdefiniowaæ uchwyt dla bardziej skomplikowanych typów plików,\n"
+"np. PDF.\n"
+"Pamiêtaj, ¿e musisz zdefiniowaæ uchwyt MIME i skojarzenie typu plików,\n"
+"¿eby to zadzia³a³o."
+
+
 
 #: src/mime/backend/default.c:57
 msgid "Description of this handler."

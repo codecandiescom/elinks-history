@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.340 2004/12/30 23:50:40 jonas Exp $ */
+/* $Id: download.c,v 1.341 2005/02/03 22:28:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -939,12 +939,16 @@ tp_open(struct type_query *type_query)
 }
 
 
-static void
-tp_show_header(struct type_query *type_query)
+/* This button handler uses the add_dlg_button() interface so that pressing
+ * 'Show header' will not close the type query dialog. */
+t_handler_event_status
+tp_show_header(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
+	struct type_query *type_query = widget_data->widget->data;
+
 	cached_header_dialog(type_query->ses, type_query->cached);
 
-	done_type_query(type_query);
+	return EVENT_PROCESSED;
 }
 
 
@@ -984,90 +988,159 @@ tp_display(struct type_query *type_query)
 	done_type_query(type_query);
 }
 
+/* Wraps the standard check_nonempty() handler which only gets called
+ * if the user pressed the button to open the queried URI with an external
+ * handler. */
+t_handler_event_status
+check_tp_nonempty(struct dialog_data *dlg_data, struct widget_data *widget_data)
+{
+	struct widget_data *selected_widget_data = selected_widget(dlg_data);
+	struct widget *selected_widget = selected_widget_data->widget;
+
+	if (selected_widget->type != WIDGET_BUTTON
+	    || selected_widget->info.button.done != (t_done_handler *) tp_open)
+		return EVENT_PROCESSED;
+
+	return check_nonempty(dlg_data, widget_data);
+}
 
 static void
 do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_handler *handler)
 {
 	struct string filename;
+	unsigned char *description;
+	unsigned char *desc_sep;
+	unsigned char *format, *text, *title;
+	struct dialog *dlg;
+#define TYPE_QUERY_WIDGETS_COUNT 7
+	int widgets = TYPE_QUERY_WIDGETS_COUNT;
+	struct terminal *term = type_query->ses->tab->term;
+	struct memory_list *ml;
 
 	mem_free_set(&type_query->external_handler, NULL);
 
 	if (handler) {
-		type_query->external_handler = stracpy(handler->program);
 		type_query->external_handler_flags = handler->block;
 		if (!handler->ask) {
+			type_query->external_handler = stracpy(handler->program);
 			tp_open(type_query);
 			return;
 		}
+
+		/* Start preparing for the type query dialog. */
+		description = handler->description;
+		desc_sep = *description ? "; " : "";
+		title = N_("What to do?");
+
+	} else {
+		title = N_("Unknown type");
+		description = "";
+		desc_sep = "";
 	}
 
-	if (init_string(&filename))
+	dlg = calloc_dialog(TYPE_QUERY_WIDGETS_COUNT, MAX_STR_LEN * 2);
+	if (!dlg) return;
+
+	if (init_string(&filename)) {
 		add_mime_filename_to_string(&filename, type_query->uri);
 
-	/* Let's make the filename pretty for display & save */
-	decode_uri_string_for_display(&filename);
-
-	if (!handler) {
-		if (!get_cmd_opt_bool("anonymous")) {
-			msg_box(type_query->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-				N_("Unknown type"), ALIGN_CENTER,
-				msg_text(type_query->ses->tab->term, N_("Would you like to "
-					 "save the file '%s' (type: %s) "
-					 "or display it?"),
-					 filename.source, ct),
-				type_query, 4,
-				N_("Save"), tp_save, B_ENTER,
-				N_("Display"), tp_display, 0,
-				N_("Show header"), tp_show_header, 0,
-				N_("Cancel"), tp_cancel, B_ESC);
-		} else {
-			msg_box(type_query->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-				N_("Unknown type"), ALIGN_CENTER,
-				msg_text(type_query->ses->tab->term, N_("Would you like to "
-					 "display the file '%s' (type: %s)?"),
-					 filename.source, ct),
-				type_query, 3,
-				N_("Display"), tp_display, B_ENTER,
-				N_("Show header"), tp_show_header, 0,
-				N_("Cancel"), tp_cancel, B_ESC);
-		}
-	} else {
-		unsigned char *description = handler->description;
-		unsigned char *desc_sep = (*description) ? "; " : "";
-
-		if (!get_cmd_opt_bool("anonymous")) {
-			/* TODO: Improve the dialog to let the user correct the
-			 * used program. */
-			msg_box(type_query->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-				N_("What to do?"), ALIGN_CENTER,
-				msg_text(type_query->ses->tab->term, N_("Would you like to "
-					 "open the file '%s' (type: %s%s%s)\n"
-					 "with '%s', save it or display it?"),
-					 filename.source, ct, desc_sep,
-					 description, handler->program),
-				type_query, 5,
-				N_("Open"), tp_open, B_ENTER,
-				N_("Save"), tp_save, 0,
-				N_("Display"), tp_display, 0,
-				N_("Show header"), tp_show_header, 0,
-				N_("Cancel"), tp_cancel, B_ESC);
-		} else {
-			msg_box(type_query->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-				N_("What to do?"), ALIGN_CENTER,
-				msg_text(type_query->ses->tab->term, N_("Would you like to "
-					 "open the file '%s' (type: %s%s%s)\n"
-					 "with '%s', or display it?"),
-					 filename.source, ct, desc_sep,
-					 description, handler->program),
-				type_query, 4,
-				N_("Open"), tp_open, B_ENTER,
-				N_("Display"), tp_display, 0,
-				N_("Show header"), tp_show_header, 0,
-				N_("Cancel"), tp_cancel, B_ESC);
-		}
+		/* Let's make the filename pretty for display & save */
+		/* TODO: The filename can be the empty string here. See bug 396. */
+		decode_uri_string_for_display(&filename);
 	}
 
+	text = get_dialog_offset(dlg, TYPE_QUERY_WIDGETS_COUNT);
+	format = _("What would you like to do with the file '%s' (type: %s%s%s)?", term);
+	snprintf(text, MAX_STR_LEN, format, filename.source, ct, desc_sep, description);
+
 	done_string(&filename);
+
+	dlg->title = _(title, term);
+	dlg->layouter = generic_dialog_layouter;
+	dlg->layout.padding_top = 1;
+	dlg->layout.fit_datalen = 1;
+	dlg->udata2 = type_query;
+
+	add_dlg_text(dlg, text, ALIGN_LEFT, 0);
+
+	/* Add input field or text widget with info about the program handler. */
+	if (!get_cmd_opt_bool("anonymous")) {
+		unsigned char *field = mem_calloc(1, MAX_STR_LEN);
+
+		if (!field) {
+			mem_free(dlg);
+			return;
+		}
+
+		if (handler && handler->program) {
+			int programlen = strlen(handler->program);
+
+			programlen = int_max(programlen, MAX_STR_LEN);
+			memcpy(field, handler->program, programlen);
+		}
+
+		/* xgettext:no-c-format */
+		add_dlg_field(dlg, _("Program ('%' will be replaced by the filename)", term),
+			0, 0, check_tp_nonempty, MAX_STR_LEN, field, NULL);
+		type_query->external_handler = field;
+
+	} else if (handler) {
+		unsigned char *field = text + MAX_STR_LEN;
+
+		format = _("The file will be opened with the program '%s'.", term);
+		snprintf(field, MAX_STR_LEN, format, handler->program);
+		add_dlg_text(dlg, field, ALIGN_LEFT, 0);
+
+		type_query->external_handler = stracpy(handler->program);
+		if (!type_query->external_handler) {
+			mem_free(dlg);
+			return;
+		}
+
+	} else {
+		widgets--;
+	}
+
+	/* Add buttons if they are both usable and allowed. */
+
+	if (!get_cmd_opt_bool("anonymous") || handler) {
+		add_dlg_ok_button(dlg, _("Open", term), B_ENTER,
+				  (t_done_handler *) tp_open, type_query);
+	} else {
+		widgets--;
+	}
+
+	if (!get_cmd_opt_bool("anonymous")) {
+		add_dlg_ok_button(dlg, _("Save", term), B_ENTER,
+				  (t_done_handler *) tp_save, type_query);
+	} else {
+		widgets--;
+	}
+
+	add_dlg_ok_button(dlg, _("Display", term), B_ENTER,
+			  (t_done_handler *) tp_display, type_query);
+
+	if (type_query->cached->head && type_query->cached->head) {
+		add_dlg_button(dlg, _("Show header", term), B_ENTER,
+			       tp_show_header, type_query);
+	} else {
+		widgets--;
+	}
+
+	add_dlg_ok_button(dlg, _("Cancel", term), B_ESC,
+			  (t_done_handler *) tp_cancel, type_query);
+
+	add_dlg_end(dlg, widgets);
+
+	ml = getml(dlg, NULL);
+	if (!ml) {
+		/* XXX: Assume that the allocated @external_handler will be
+		 * freed when releasing the @type_query. */
+		mem_free(dlg);
+		return;
+	}
+
+	do_dialog(term, dlg, ml);
 }
 
 struct {

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.102 2004/09/16 00:32:37 pasky Exp $ */
+/* $Id: charsets.c,v 1.103 2004/09/24 00:44:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -423,7 +423,7 @@ compare_entities(const void *key_, const void *element_)
 	return xxstrcmp(first, second, length);
 }
 
-static unsigned char *
+unsigned char *
 get_entity_string(const unsigned char *str, const int strlen, int encoding)
 {
 #define ENTITY_CACHE_SIZE 10	/* 10 seems a good value. */

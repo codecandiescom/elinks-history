@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.46 2004/06/28 20:12:36 jonas Exp $
+## $Id: Makefile.am,v 1.47 2004/09/24 00:44:58 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -15,12 +15,28 @@ cssobj = \
  css/value.o
 endif
 
-SUBDIRS = $(cssdir) html plain
+if CONFIG_DOM
+domdir = dom
+domobj = \
+ $(domdir)/navigator.o \
+ $(domdir)/node.o \
+ $(domdir)/renderer.o
+
+sgmldir = sgml
+sgmlobj = \
+ $(sgmldir)/html/html.o \
+ $(sgmldir)/parser.o \
+ $(sgmldir)/scanner.o \
+ $(sgmldir)/sgml.o
+endif
+
+SUBDIRS = $(cssdir) $(domdir) html plain $(sgmldir)
 
 noinst_LIBRARIES = libdocument.a
 
 libdocument_a_LIBADD = \
  $(cssobj) \
+ $(domobj) \
  html/parser/forms.o \
  html/parser/link.o \
  html/parser/parse.o \
@@ -30,7 +46,8 @@ libdocument_a_LIBADD = \
  html/parser.o \
  html/renderer.o \
  html/tables.o \
- plain/renderer.o
+ plain/renderer.o \
+ $(sgmlobj)
 
 libdocument_a_SOURCES = \
  docdata.c \

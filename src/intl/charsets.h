@@ -1,4 +1,4 @@
-/* $Id: charsets.h,v 1.21 2004/09/15 23:42:57 pasky Exp $ */
+/* $Id: charsets.h,v 1.22 2004/09/24 00:44:59 jonas Exp $ */
 
 #ifndef EL__INTL_CHARSETS_H
 #define EL__INTL_CHARSETS_H
@@ -30,6 +30,7 @@ enum convert_string_mode {
 };
 
 struct conv_table *get_translation_table(int, int);
+unsigned char *get_entity_string(const unsigned char *str, const int strlen, int encoding);
 
 /* The convert_string() name is also used by Samba (version 3.0.3), which
  * provides libnss_wins.so.2, which is called somewhere inside

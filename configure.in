@@ -895,6 +895,10 @@ EL_ARG_ENABLE(CONFIG_CSS, css, [Cascading Style Sheets],
 	      [  --disable-css           disable Cascading Style Sheet support])
 AM_CONDITIONAL(CONFIG_CSS, test "$CONFIG_CSS" = yes)
 
+EL_ARG_DEPEND(CONFIG_DOM, dom, [CONFIG_CSS=yes], [DOM Engine HTML highlighting],
+	      [  --enable-dom            enable DOM engine HMTL highlighting])
+AM_CONDITIONAL(CONFIG_DOM, test "$CONFIG_DOM" = yes)
+
 
 EL_ARG_DEPEND(CONFIG_BACKTRACE, backtrace, [HAVE_EXECINFO=yes], [Backtrace],
 	      [  --disable-backtrace     disable backtrace support])
@@ -1026,8 +1030,11 @@ AC_OUTPUT([ \
  src/dialogs/Makefile \
  src/document/Makefile \
  src/document/css/Makefile \
+ src/document/dom/Makefile \
  src/document/html/Makefile \
  src/document/html/parser/Makefile \
+ src/document/sgml/Makefile \
+ src/document/sgml/html/Makefile \
  src/document/plain/Makefile \
  src/ecmascript/Makefile \
  src/encoding/Makefile \

@@ -1,5 +1,5 @@
 /* Libc stub functions */
-/* $Id: stub.c,v 1.12 2004/06/22 06:46:17 miciah Exp $ */
+/* $Id: stub.c,v 1.13 2004/06/22 07:10:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,13 +28,13 @@ inline int
 elinks_strcasecmp(const char *s1, const char *s2)
 {
 	while ((*s1 != '\0')
-		 && (upcase(*(char *) s1) == upcase(*(char *) s2)))
+		 && (toupper(*(char *) s1) == toupper(*(char *) s2)))
 	{
 		s1++;
 		s2++;
 	}
 
-	return upcase(*(char *) s1) - upcase(*(char *) s2);
+	return toupper(*(char *) s1) - toupper(*(char *) s2);
 }
 #endif /* !HAVE_STRCASECMP */
 
@@ -46,7 +46,7 @@ elinks_strncasecmp(const char *s1, const char *s2, size_t len)
 		return 0;
 
 	while ((len-- != 0)
-	       && (upcase(*(char *) s1) == upcase(*(char *) s2)))
+	       && (toupper(*(char *) s1) == toupper(*(char *) s2)))
 	{
 		if (len == 0 || *s1 == '\0' || *s2 == '\0')
 			return 0;
@@ -54,7 +54,7 @@ elinks_strncasecmp(const char *s1, const char *s2, size_t len)
 		s2++;
 	}
 
-	return upcase(*(char *) s1) - upcase(*(char *) s2);
+	return toupper(*(char *) s1) - toupper(*(char *) s2);
 }
 #endif /* !HAVE_STRNCASECMP */
 

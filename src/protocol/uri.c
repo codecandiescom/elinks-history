@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.253 2004/06/20 15:49:27 pasky Exp $ */
+/* $Id: uri.c,v 1.254 2004/06/22 07:10:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -689,7 +689,7 @@ transform_file_url(struct uri *uri, unsigned char *cwd)
 	}
 
 #ifdef DOS_FS
-	if (upcase(path[0]) >= 'A' && upcase(path[0]) <= 'Z'
+	if (toupper(path[0]) >= 'A' && toupper(path[0]) <= 'Z'
 	    && path[1] == ':' && dir_sep(path[2]))
 		return NULL;
 #endif

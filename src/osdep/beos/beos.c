@@ -1,5 +1,5 @@
 /* BeOS system-specific routines. */
-/* $Id: beos.c,v 1.16 2004/06/22 06:46:17 miciah Exp $ */
+/* $Id: beos.c,v 1.17 2004/06/22 07:10:19 jonas Exp $ */
 
 /* Note that this file is currently unmaintained and basically dead. Noone
  * cares about BeOS support, apparently. This file may yet survive for some
@@ -44,7 +44,7 @@ get_system_env(void)
 	int env = get_common_env();
 	unsigned char *term = getenv("TERM");
 
-	if (!term || (upcase(term[0]) == 'B' && upcase(term[1]) == 'E'))
+	if (!term || (toupper(term[0]) == 'B' && toupper(term[1]) == 'E'))
 		env |= ENV_BE;
 
 	return env;

@@ -1,5 +1,8 @@
 Known bugs:
 
+	get_unique_name() and expand_tilde() are buggy, this will be fixed
+soon.
+
 	Frames don't work if there's more frames with same name. Turn them off
 in such case.
 
@@ -26,6 +29,6 @@ top/bottom of screen.
 
 	Call to OS Shell doesn't release mouse handler.
 
-$Id: BUGS,v 1.33 2003/04/29 13:22:22 zas Exp $
+$Id: BUGS,v 1.34 2003/04/30 18:28:45 zas Exp $
 
 vim: textwidth=80

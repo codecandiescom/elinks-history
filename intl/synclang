@@ -14,4 +14,4 @@ if [ -n "$languages" ]; then
 	echo Done.
 fi
 echo
-./gen-intl
+#./gen-intl

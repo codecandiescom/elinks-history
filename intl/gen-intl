@@ -99,6 +99,8 @@ else
 	echo -e " updated" 1>&2
 fi
 
+echo timestamp >../src/intl/stamp-intl
+
 echo
 echo Done.
 fi

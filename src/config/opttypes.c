@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.87 2004/11/19 16:42:35 zas Exp $ */
+/* $Id: opttypes.c,v 1.88 2004/12/16 14:43:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -355,7 +355,6 @@ tree_dup(struct option *opt, struct option *template)
 	}
 }
 
-
 const struct option_type_info option_types[] = {
 	{ N_("Boolean"), bool_cmd, num_rd, num_wr, NULL, num_set, NULL, N_("[0|1]") },
 	{ N_("Integer"), gen_cmd, num_rd, num_wr, NULL, num_set, NULL, N_("<num>") },
@@ -373,3 +372,12 @@ const struct option_type_info option_types[] = {
 	/* tree */
 	{ N_("Folder"), NULL, NULL, NULL, tree_dup, NULL, NULL, "" },
 };
+
+unsigned char *
+get_option_type_name(enum option_type type)
+{
+	assert(type >= 0 && type < sizeof(option_types)/sizeof(struct option_type_info));
+	if_assert_failed return "";
+
+	return option_types[type].name;
+}

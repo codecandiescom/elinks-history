@@ -1,4 +1,4 @@
-/* $Id: opttypes.h,v 1.11 2004/05/26 13:59:45 jonas Exp $ */
+/* $Id: opttypes.h,v 1.12 2004/12/16 14:43:41 zas Exp $ */
 
 #ifndef EL__CONFIG_OPTTYPES_H
 #define EL__CONFIG_OPTTYPES_H
@@ -21,5 +21,7 @@ struct option_type_info {
 extern const struct option_type_info option_types[];
 
 extern int commandline;
+
+unsigned char *get_option_type_name(enum option_type type);
 
 #endif

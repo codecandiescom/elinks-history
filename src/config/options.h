@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.106 2004/11/01 22:22:42 jonas Exp $ */
+/* $Id: options.h,v 1.107 2004/12/16 14:43:41 zas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -60,7 +60,7 @@ enum option_flags {
 };
 
 enum option_type {
-	OPT_BOOL,
+	OPT_BOOL = 0,
 	OPT_INT,
 	OPT_LONG,
 	OPT_STRING,
@@ -190,19 +190,19 @@ extern void checkout_option_values(struct option_resolver *resolvers,
 extern struct option *get_opt_rec(struct option *, unsigned char *);
 extern struct option *get_opt_rec_real(struct option *, unsigned char *);
 #ifdef CONFIG_DEBUG
-extern union option_value *get_opt_(unsigned char *, int, struct option *, unsigned char *);
-#define get_opt(tree, name) get_opt_(__FILE__, __LINE__, tree, name)
+extern union option_value *get_opt_(unsigned char *, int, enum option_type, struct option *, unsigned char *);
+#define get_opt(tree, name, type) get_opt_(__FILE__, __LINE__, type, tree, name)
 #else
 extern union option_value *get_opt_(struct option *, unsigned char *);
-#define get_opt(tree, name) get_opt_(tree, name)
+#define get_opt(tree, name, type) get_opt_(tree, name)
 #endif
 
-#define get_opt_bool_tree(tree, name)	get_opt(tree, name)->number
-#define get_opt_int_tree(tree, name)	get_opt(tree, name)->number
-#define get_opt_long_tree(tree, name)	get_opt(tree, name)->big_number
-#define get_opt_str_tree(tree, name)	get_opt(tree, name)->string
-#define get_opt_color_tree(tree, name)	get_opt(tree, name)->color
-#define get_opt_tree_tree(tree_, name)	get_opt(tree_, name)->tree
+#define get_opt_bool_tree(tree, name)	get_opt(tree, name, OPT_BOOL)->number
+#define get_opt_int_tree(tree, name)	get_opt(tree, name, OPT_INT)->number
+#define get_opt_long_tree(tree, name)	get_opt(tree, name, OPT_LONG)->big_number
+#define get_opt_str_tree(tree, name)	get_opt(tree, name, OPT_STRING)->string
+#define get_opt_color_tree(tree, name)	get_opt(tree, name, OPT_COLOR)->color
+#define get_opt_tree_tree(tree_, name)	get_opt(tree_, name, OPT_TREE)->tree
 
 #define get_opt_bool(name) get_opt_bool_tree(config_options, name)
 #define get_opt_int(name) get_opt_int_tree(config_options, name)

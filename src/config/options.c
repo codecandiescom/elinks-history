@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.465 2004/12/16 10:54:01 zas Exp $ */
+/* $Id: options.c,v 1.466 2004/12/16 14:43:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -243,7 +243,7 @@ get_opt_rec_real(struct option *tree, unsigned char *name)
 union option_value *
 get_opt_(
 #ifdef CONFIG_DEBUG
-	 unsigned char *file, int line,
+	 unsigned char *file, int line, enum option_type option_type,
 #endif
 	 struct option *tree, unsigned char *name)
 {
@@ -255,6 +255,12 @@ get_opt_(
 	if (!opt) elinks_internal("Attempted to fetch nonexisting option %s!", name);
 
 	/* Various sanity checks. */
+	if (option_type != opt->type)
+		DBG("get_opt_*(\"%s\") @ %s:%d: call with wrapper for %s for option of type %s",
+		    name, file, line,
+		    get_option_type_name(option_type),
+		    get_option_type_name(opt->type));
+
 	switch (opt->type) {
 	case OPT_TREE:
 		if (!opt->value.tree)

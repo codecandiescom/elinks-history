@@ -249,6 +249,10 @@ Michail Litvak <mci@owl.openwall.com>
 Michal Maruska <mmc@maruska.dyndns.org>
 	Show actual document's URL in xterm title bar
 
+Michal Politowski <mpol@charybda.icm.edu.pl>
+	Fixed saving of old xterm title in some odd cases
+		(like multi-gnome-terminal)
+
 Miciah Dashiel <theweirdo@subdimension.com>
 	Document-specific colors usage switch possibility
 	Global history
@@ -388,4 +392,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.92 2002/10/10 21:40:21 pasky Exp $
+$Id: AUTHORS,v 1.93 2002/10/12 15:49:24 pasky Exp $

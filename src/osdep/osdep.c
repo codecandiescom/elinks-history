@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.29 2002/09/18 15:59:33 pasky Exp $ */
+/* $Id: osdep.c,v 1.30 2002/10/12 15:49:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -546,9 +546,10 @@ get_window_title()
 	/* Following code is stolen from our beloved vim. */
 	char *winid;
 	Display *display;
-	Window window;
+	Window window, root, parent, *children;
 	XTextProperty text_prop;
 	Status status;
+	unsigned int num_children;
 	char *ret = NULL;
 
 	if (!is_xterm())
@@ -571,6 +572,17 @@ get_window_title()
 
 	status = XGetWMName(display, window, &text_prop);
 	/* status = XGetWMIconName(x11_display, x11_window, &text_prop); */
+	while (!x_error && (!status || !text_prop.value)) {
+		if (!XQueryTree(display, window, &root, &parent, &children, &num_children))
+			break;
+		if (children)
+			XFree((void *) children);
+		if (parent == root || parent == 0)
+			break;
+		window = parent;
+		status = XGetWMName(display, window, &text_prop);
+	}
+
 	if (!x_error && status && text_prop.value) {
 		ret = stracpy(text_prop.value);
 		XFree(text_prop.value);

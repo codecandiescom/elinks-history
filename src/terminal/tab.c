@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.38 2004/01/07 18:52:59 jonas Exp $ */
+/* $Id: tab.c,v 1.39 2004/01/09 09:14:21 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -258,18 +258,16 @@ do_open_in_new_tab(struct terminal *term, struct session *ses,
 }
 
 static unsigned char *
-get_tab_link_url(struct session *ses, int link)
+get_tab_link_url(struct session *ses)
 {
-	if (link) {
-		struct document_view *doc_view = current_frame(ses);
+	struct document_view *doc_view = current_frame(ses);
 
-		if (doc_view) assert(doc_view->vs && doc_view->document);
-		if_assert_failed return NULL;
+	if (doc_view) assert(doc_view->vs && doc_view->document);
+	if_assert_failed return NULL;
 
-		if (doc_view && doc_view->vs->current_link != -1)
-			return get_link_url(ses, doc_view,
-				&doc_view->document->links[doc_view->vs->current_link]);
-	}
+	if (doc_view && doc_view->vs->current_link != -1)
+		return get_link_url(ses, doc_view,
+			&doc_view->document->links[doc_view->vs->current_link]);
 
 	return NULL;
 }
@@ -277,14 +275,14 @@ get_tab_link_url(struct session *ses, int link)
 void
 open_in_new_tab(struct terminal *term, int link, struct session *ses)
 {
-	do_open_in_new_tab(term, ses, get_tab_link_url(ses, link), 0);
+	do_open_in_new_tab(term, ses, link ? get_tab_link_url(ses) : NULL, 0);
 }
 
 void
 open_in_new_tab_in_background(struct terminal *term, int link,
 			      struct session *ses)
 {
-	do_open_in_new_tab(term, ses, get_tab_link_url(ses, link), 1);
+	do_open_in_new_tab(term, ses, link ? get_tab_link_url(ses) : NULL, 1);
 }
 
 void

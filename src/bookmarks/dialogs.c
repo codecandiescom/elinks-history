@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.37 2002/09/17 13:45:46 zas Exp $ */
+/* $Id: dialogs.c,v 1.38 2002/09/17 16:58:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -559,7 +559,7 @@ bookmark_add_add(struct dialog *d)
 void
 bookmark_search_do(struct dialog *d)
 {
-	struct listbox_item *item = bookmark_box_items.prev;
+	struct listbox_item *item = bookmark_box_items.next;
 	struct listbox_data *box;
 
 	if (!bookmark_simple_search(d->items[1].data, d->items[0].data)) return;

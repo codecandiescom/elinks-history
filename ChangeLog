@@ -1,3 +1,58 @@
+Mon Sep 20 22:11:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/scanner.c:
+
+	Fix bad behaviour when we weren't sure whether a #string is a
+	TOKEN_HEX_COLOR or TOKEN_HASH. Patch by Jonas (the idea and missing
+	scan_css() fix) and me (the leading hex digits bugfix).  
+
+Mon Sep 20 16:41:35 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Removed forgotten check for end of selector which prevented us from
+	registering complex selectors.  
+
+Mon Sep 20 16:22:04 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.c:
+
+	In merge_css_selectors(), the new selector's properties now win over
+	the original ones in case of a conflict.  
+
+Mon Sep 20 15:59:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Mon Sep 20 15:49:32 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	examine_element(): @altsel -> @selector 
+
+Mon Sep 20 15:49:07 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	examine_element(): @selector -> @base 
+
+Mon Sep 20 15:27:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/link.c:
+
+	Spell fix.  
+
+Mon Sep 20 12:41:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Also redraw the hierbox browser window when refreshing it. Bad
+	behaviour intoduced in my fix for hierbox browser burying other
+	dialog window below itself in bfu/hierbox.c v1.188. Spotted by
+	Miciah.  
+
 Mon Sep 20 10:02:06 2004  Laurent Monin <zas@norz.org>:
 
 	* src/document/css/apply.c:

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.40 2002/09/08 19:12:23 pasky Exp $ */
+/* $Id: sched.c,v 1.41 2002/09/11 21:04:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,6 +46,7 @@ struct k_conn {
 	void (*protocol)(struct connection *);
 	unsigned char *host;
 	int port;
+	int pf;
 	int conn;
 	ttime timeout;
 	ttime add_time;
@@ -286,14 +287,16 @@ int
 get_keepalive_socket(struct connection *c)
 {
 	struct k_conn *k = is_host_on_keepalive_list(c);
-	int cc;
 
 	if (!k) return -1;
-	cc = k->conn;
+
+	c->sock1 = k->conn;
+	c->pf = k->pf;
+
 	del_from_list(k);
 	mem_free(k->host);
 	mem_free(k);
-	c->sock1 = cc;
+
 	return 0;
 }
 
@@ -420,6 +423,7 @@ free_and_close:
 		goto close;
 	}
 
+	k->pf = c->pf;
 	k->conn = c->sock1;
 	k->timeout = timeout;
 	k->add_time = get_time();

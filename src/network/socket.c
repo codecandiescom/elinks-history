@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.23 2002/09/09 12:55:41 zas Exp $ */
+/* $Id: socket.c,v 1.24 2002/09/11 21:04:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,9 +136,10 @@ void make_connection(struct connection *conn, int port, int *sock,
 	if (async) setcstate(conn, S_DNS);
 }
 
+
 /* Returns negative if error, otherwise pasv socket's fd. */
-/* TODO: IPv6 support? */
-int get_pasv_socket(struct connection *conn, int ctrl_sock, unsigned char *port)
+int
+get_pasv_socket(struct connection *conn, int ctrl_sock, unsigned char *port)
 {
 	int sock;
 	struct sockaddr_in sa;
@@ -198,6 +199,68 @@ error:
 	return sock;
 }
 
+#ifdef IPV6
+int
+get_pasv6_socket(struct connection *conn, int ctrl_sock,
+		 struct sockaddr_storage *s6)
+{
+	int sock;
+	struct sockaddr_in6 s0;
+	int len = sizeof(struct sockaddr_in6);
+
+	memset(&s0, 0, sizeof(s0));
+	memset(s6, 0, sizeof(s6));
+
+	/* Get our endpoint of the control socket */
+
+	if (getsockname(ctrl_sock, (struct sockaddr *) s6, &len)) {
+error:
+		setcstate(conn, -errno);
+		retry_connection(conn);
+		return -1;
+	}
+
+	/* Get a passive socket */
+
+	sock = socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
+	if (sock < 0)
+		goto error;
+
+	/* Set it non-blocking */
+
+	if (set_nonblocking_fd(sock) < 0)
+		goto error;
+
+	/* Bind it to some port */
+
+	memcpy(&s0, s6, sizeof(struct sockaddr_in6));
+	s0.sin6_port = 0;
+	if (bind(sock, (struct sockaddr *) &s0, sizeof(struct sockaddr_in6)))
+		goto error;
+
+	/* Get our endpoint of the passive socket and save it to port */
+
+	len = sizeof(struct sockaddr_in6);
+	if (getsockname(sock, (struct sockaddr *) s6, &len))
+		goto error;
+
+	/* Go listen */
+
+	if (listen(sock, 1))
+		goto error;
+
+#if defined(IP_TOS) && defined(IPTOS_THROUGHPUT)
+	{
+		int on = IPTOS_THROUGHPUT;
+		setsockopt(sock, IPPROTO_IP, IP_TOS, (char *)&on, sizeof(int));
+	}
+#endif
+
+	return sock;
+}
+#endif
+
+
 void dns_found(void *data, int state)
 {
 	int sock = -1;
@@ -242,14 +305,23 @@ void dns_found(void *data, int state)
 		addr.sin_port = htons(c_i->port);
 #endif
 
+		/* We can set conn->pf here even if the connection will fail,
+		 * as we will use it only when it will be successfully
+		 * established. At least I hope that noone else will want to do
+		 * something else ;-). --pasky */
+
 #ifdef IPV6
 		if (addr.sin6_family == AF_INET6) {
+			conn->pf = 2;
 			if (connect(sock, (struct sockaddr *) &addr, sizeof(struct sockaddr_in6)) == 0)
 				break;
 		} else
 #endif
+		{
+			conn->pf = 1;
 			if (connect(sock, (struct sockaddr *) &addr, sizeof(struct sockaddr_in)) == 0)
 				break; /* success */
+		}
 
 		if (errno == EALREADY || errno == EINPROGRESS) {
 			/* It will take some more time... */

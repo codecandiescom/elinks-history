@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.8 2002/07/05 03:59:40 pasky Exp $ */
+/* $Id: connect.h,v 1.9 2002/09/11 21:04:54 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -41,6 +41,9 @@ void close_socket(struct connection *, int *);
 void make_connection(struct connection *, int, int *, void (*)(struct connection *));
 void dns_found(/* struct connection */ void *, int);
 int get_pasv_socket(struct connection *, int, unsigned char *);
+#ifdef IPV6
+int get_pasv6_socket(struct connection *, int, struct sockaddr_storage *);
+#endif
 void write_to_socket(struct connection *, int, unsigned char *, int, void (*)(struct connection *));
 struct read_buffer *alloc_read_buffer(struct connection *c);
 void read_from_socket(struct connection *, int, struct read_buffer *, void (*)(struct connection *, struct read_buffer *));

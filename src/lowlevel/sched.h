@@ -1,4 +1,4 @@
-/* $Id: sched.h,v 1.14 2002/07/09 17:32:49 pasky Exp $ */
+/* $Id: sched.h,v 1.15 2002/09/11 21:04:54 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_SCHED_H
 #define EL__LOWLEVEL_SCHED_H
@@ -51,6 +51,7 @@ struct connection {
 	tcount count;
 	unsigned char *url;
 	unsigned char *prev_url;
+	int pf; /* 1 == PF_INET, 2 == PF_INET6 */
 	int running;
 	int state;
 	int prev_error;

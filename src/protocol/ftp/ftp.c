@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.29 2002/09/11 12:45:34 zas Exp $ */
+/* $Id: ftp.c,v 1.30 2002/09/11 21:04:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,10 @@
 #include <sys/socket.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
+
+#ifdef HAVE_ARPA_INET_H
+#include <arpa/inet.h>
 #endif
 
 #include "links.h"
@@ -384,15 +388,46 @@ add_portcmd_to_str(unsigned char **str, int *strl, unsigned char *pc)
 	add_to_str(str, strl, "\r\n");
 }
 
+#ifdef IPV6
+/* Construct EPRT command. */
+static void
+add_eprtcmd_to_str(unsigned char **str, int *strl, struct sockaddr_in6 *addr)
+{
+	unsigned char addr_str[INET6_ADDRSTRLEN];
+
+	inet_ntop(AF_INET6, &addr->sin6_addr, addr_str, INET6_ADDRSTRLEN);
+
+	/* From RFC 2428: EPRT
+	 * 
+	 * The format of EPRT is:
+	 *
+	 * EPRT<space><d><net-prt><d><net-addr><d><tcp-port><d>
+	 * 
+	 * <net-prt>:
+	 * AF Number   Protocol
+	 * ---------   --------
+	 * 1           Internet Protocol, Version 4 [Pos81a]
+	 * 2           Internet Protocol, Version 6 [DH96] */
+	add_to_str(str, strl, "EPRT |2|");
+	add_to_str(str, strl, addr_str);
+	add_chr_to_str(str, strl, '|');
+	add_num_to_str(str, strl, ntohs(addr->sin6_port));
+	add_to_str(str, strl, "|\r\n");
+}
+#endif
+
 /* Create passive socket and add appropriate announcing commands to str. Then
  * go and retrieve appropriate object from server.
  * Returns NULL if error. */
 struct ftp_connection_info *
 add_file_cmd_to_str(struct connection *conn)
 {
+#ifdef IPV6
+	struct sockaddr_in6 data_addr;
+#endif
+	unsigned char pc[6];
 	unsigned char *data;
 	unsigned char *data_end;
-	unsigned char pc[6];
 	int data_sock;
 	struct ftp_connection_info *c_i;
 	unsigned char *str;
@@ -413,7 +448,16 @@ add_file_cmd_to_str(struct connection *conn)
 		return NULL;
 	}
 
-	data_sock = get_pasv_socket(conn, conn->sock1, pc);
+	memset(&data_addr, 0, sizeof(struct sockaddr_in6));
+	memset(pc, 0, 6);
+
+#ifdef IPV6
+	if (conn->pf == 2)
+		data_sock = get_pasv6_socket(conn, conn->sock1,
+				(struct sockaddr_storage *) &data_addr);
+	else
+#endif
+		data_sock = get_pasv_socket(conn, conn->sock1, pc);
 	if (data_sock < 0)
 		return NULL;
 	conn->sock2 = data_sock;
@@ -442,7 +486,12 @@ add_file_cmd_to_str(struct connection *conn)
 		add_bytes_to_str(&str, &strl, data, data_end - data);
 		add_to_str(&str, &strl, "\r\n");
 
-		add_portcmd_to_str(&str, &strl, pc);
+#ifdef IPV6
+		if (conn->pf == 2)
+			add_eprtcmd_to_str(&str, &strl, &data_addr);
+		else
+#endif
+			add_portcmd_to_str(&str, &strl, pc);
 
 		add_to_str(&str, &strl, "LIST\r\n");
 
@@ -466,7 +515,12 @@ add_file_cmd_to_str(struct connection *conn)
 			c_i->pending_commands++;
 		}
 
-		add_portcmd_to_str(&str, &strl, pc);
+#ifdef IPV6
+		if (conn->pf == 2)
+			add_eprtcmd_to_str(&str, &strl, &data_addr);
+		else
+#endif
+			add_portcmd_to_str(&str, &strl, pc);
 
 		add_to_str(&str, &strl, "RETR /");
 		add_bytes_to_str(&str, &strl, data, data_end - data);

@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.17 2003/10/05 14:05:08 pasky Exp $ */
+/* $Id: vs.c,v 1.18 2003/10/17 14:11:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,20 +83,22 @@ copy_vs(struct view_state *dst, struct view_state *src)
 }
 
 void
-check_vs(struct document_view *f)
+check_vs(struct document_view *doc_view)
 {
-	struct view_state *vs = f->vs;
+	struct view_state *vs = doc_view->vs;
 
-	if (vs->current_link >= f->document->nlinks)
-		vs->current_link = f->document->nlinks - 1;
+	if (vs->current_link >= doc_view->document->nlinks)
+		vs->current_link = doc_view->document->nlinks - 1;
 
 	if (vs->current_link != -1) {
-		if (!c_in_view(f)) {
-			set_pos_x(f, &f->document->links[vs->current_link]);
-			set_pos_y(f, &f->document->links[vs->current_link]);
+		if (!c_in_view(doc_view)) {
+			struct link *links = doc_view->document->links;
+
+			set_pos_x(doc_view, &links[vs->current_link]);
+			set_pos_y(doc_view, &links[vs->current_link]);
 		}
 	} else {
-		find_link(f, 1, 0);
+		find_link(doc_view, 1, 0);
 	}
 }
 
@@ -104,7 +106,7 @@ void
 next_frame(struct session *ses, int p)
 {
 	struct view_state *vs;
-	struct document_view *fd;
+	struct document_view *doc_view;
 	int n;
 
 	if (!have_location(ses)
@@ -114,8 +116,8 @@ next_frame(struct session *ses, int p)
 	vs = &cur_loc(ses)->vs;
 
 	n = 0;
-	foreach (fd, ses->scrn_frames) {
-		if (!document_has_frames(fd->document))
+	foreach (doc_view, ses->scrn_frames) {
+		if (!document_has_frames(doc_view->document))
 			n++;
 	}
 

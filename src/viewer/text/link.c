@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.65 2003/10/17 12:56:39 zas Exp $ */
+/* $Id: link.c,v 1.66 2003/10/17 14:16:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -124,7 +124,7 @@ sort_links(struct document *document)
 
 
 static void
-draw_link(struct terminal *t, struct document_view *scr, int l)
+draw_link(struct terminal *t, struct document_view *doc_view, int l)
 {
 	struct link *link;
 	int xmax, ymax;
@@ -133,14 +133,14 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 	int cursor_offset = 0;
 	struct screen_char *template;
 
-	assert(t && scr && scr->vs);
+	assert(t && doc_view && doc_view->vs);
 	if_assert_failed return;
-	assertm(!scr->link_bg, "link background not empty");
-	if_assert_failed mem_free(scr->link_bg);
+	assertm(!doc_view->link_bg, "link background not empty");
+	if_assert_failed mem_free(doc_view->link_bg);
 
 	if (l == -1) return;
 
-	link = &scr->document->links[l];
+	link = &doc_view->document->links[l];
 
 	switch (link->type) {
 		struct form_state *fs;
@@ -158,12 +158,12 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 			break;
 
 		case L_FIELD:
-			fs = find_form_state(scr, link->form);
+			fs = find_form_state(doc_view, link->form);
 			if (fs) cursor_offset = fs->state - fs->vpos;
 			break;
 
 		case L_AREA:
-			fs = find_form_state(scr, link->form);
+			fs = find_form_state(doc_view, link->form);
 			if (fs) cursor_offset = area_cursor(link->form, fs);
 			break;
 
@@ -173,37 +173,39 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 	}
 
 	/* Allocate an extra background char to work on here. */
-	scr->link_bg = mem_alloc((1 + link->n) * sizeof(struct link_bg));
-	if (!scr->link_bg) return;
-	scr->link_bg_n = link->n;
+	doc_view->link_bg = mem_alloc((1 + link->n) * sizeof(struct link_bg));
+	if (!doc_view->link_bg) return;
+	doc_view->link_bg_n = link->n;
 
 	/* Setup the template char. */
-	template = &scr->link_bg[link->n].c;
+	template = &doc_view->link_bg[link->n].c;
 	template->attr = 0;
 	set_term_color(template, &link->color, COLOR_LINK,
-		       scr->document->opt.color_mode);
+		       doc_view->document->opt.color_mode);
 
-	xmax = scr->xp + scr->xw;
-	ymax = scr->yp + scr->yw;
-	xpos = scr->xp - scr->vs->view_posx;
-	ypos = scr->yp - scr->vs->view_pos;
+	xmax = doc_view->xp + doc_view->xw;
+	ymax = doc_view->yp + doc_view->yw;
+	xpos = doc_view->xp - doc_view->vs->view_posx;
+	ypos = doc_view->yp - doc_view->vs->view_pos;
 
 	for (i = 0; i < link->n; i++) {
 		int x = link->pos[i].x + xpos;
 		int y = link->pos[i].y + ypos;
 		struct screen_char *co;
 
-		if (!(x >= scr->xp && y >= scr->yp && x < xmax && y < ymax)) {
-			scr->link_bg[i].x = -1;
-			scr->link_bg[i].y = -1;
+		if (!(x >= doc_view->xp
+		      && y >= doc_view->yp
+		      && x < xmax && y < ymax)) {
+			doc_view->link_bg[i].x = -1;
+			doc_view->link_bg[i].y = -1;
 			continue;
 		}
 
-		scr->link_bg[i].x = x;
-		scr->link_bg[i].y = y;
+		doc_view->link_bg[i].x = x;
+		doc_view->link_bg[i].y = y;
 
 		co = get_char(t, x, y);
-		copy_screen_chars(&scr->link_bg[i].c, co, 1);
+		copy_screen_chars(&doc_view->link_bg[i].c, co, 1);
 
 		if (i == cursor_offset) {
 			int blockable;
@@ -226,27 +228,31 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 
 
 void
-free_link(struct document_view *scr)
+free_link(struct document_view *doc_view)
 {
-	assert(scr);
+	assert(doc_view);
 	if_assert_failed return;
 
-	if (scr->link_bg) mem_free(scr->link_bg), scr->link_bg = NULL;
-	scr->link_bg_n = 0;
+	if (doc_view->link_bg) {
+		mem_free(doc_view->link_bg);
+		doc_view->link_bg = NULL;
+	}
+
+	doc_view->link_bg_n = 0;
 }
 
 
 void
-clear_link(struct terminal *t, struct document_view *scr)
+clear_link(struct terminal *t, struct document_view *doc_view)
 {
-	assert(t && scr);
+	assert(t && doc_view);
 	if_assert_failed return;
 
-	if (scr->link_bg) {
-		struct link_bg *link_bg = scr->link_bg;
+	if (doc_view->link_bg) {
+		struct link_bg *link_bg = doc_view->link_bg;
 		int i;
 
-		for (i = scr->link_bg_n - 1; i >= 0; i--) {
+		for (i = doc_view->link_bg_n - 1; i >= 0; i--) {
 			struct link_bg *bgchar = &link_bg[i];
 
 			if (bgchar->x != -1 && bgchar->y != -1) {
@@ -257,7 +263,7 @@ clear_link(struct terminal *t, struct document_view *scr)
 			}
 		}
 
-		free_link(scr);
+		free_link(doc_view);
 	}
 }
 

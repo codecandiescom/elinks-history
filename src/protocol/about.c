@@ -1,5 +1,5 @@
-/* Protocol implementation manager. */
-/* $Id: about.c,v 1.1 2004/06/27 21:36:20 jonas Exp $ */
+/* Pseudo about: protocol implementation */
+/* $Id: about.c,v 1.2 2004/06/27 21:37:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

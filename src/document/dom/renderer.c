@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.20 2005/03/17 10:45:05 jonas Exp $ */
+/* $Id: renderer.c,v 1.21 2005/03/27 21:55:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -338,7 +338,9 @@ add_dom_link(struct dom_renderer *renderer, unsigned char *string, int length)
 	if (!realloc_points(link, length))
 		return NULL;
 
-	uristring = memacpy(string, length);
+	uristring = convert_string(renderer->convert_table,
+				   string, length, CSM_DEFAULT,
+				   NULL, NULL, NULL);
 	if (!uristring) return NULL;
 
 	where = join_urls(document->uri, uristring);

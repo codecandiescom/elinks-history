@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.88 2004/09/26 09:56:55 pasky Exp $ */
+/* $Id: frames.c,v 1.89 2004/09/29 20:03:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,12 +242,26 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 				struct document_view *doc_view;
 
 				doc_view = format_frame(ses, frame_desc, &o, depth);
+#ifdef CONFIG_DEBUG
+				do_not_optimize_here(&doc_view);
+#endif
 				if (doc_view && document_has_frames(doc_view->document))
 					format_frames(ses, doc_view->document->frame_desc,
 						      &o, depth + 1);
 			}
 			o.box.x += o.box.width + 1;
 			n++;
+#ifdef CONFIG_DEBUG
+			/* This makes this ugly loop actually at least remotely
+			 * debuggable by gdb, otherwise the compiler happily
+			 * randomly trashes or just blasts away *all* of these
+			 * variables. */
+			do_not_optimize_here(&n);
+			do_not_optimize_here(&i);
+			do_not_optimize_here(&j);
+			do_not_optimize_here(&fsd);
+			do_not_optimize_here(&frame_desc);
+#endif
 		}
 		o.box.y += o.box.height + 1;
 	}

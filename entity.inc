@@ -464,8 +464,8 @@ struct { char *s; int c; } entities [1002] = {
   {"esdot",	0x2250},  /* APPROACHES THE LIMIT			   */
   {"eta",	0x03B7},  /* GREEK SMALL LETTER ETA			   */
   {"eth",	0x00F0},  /* LATIN SMALL LETTER ETH			   */
-  {"euml",	0x20AC},  /* EURO CURRENCY SYMBOL			   */
-  {"euro",	0x00EB},  /* LATIN SMALL LETTER E WITH DIAERESIS	   */
+  {"euml",	0x00EB},  /* LATIN SMALL LETTER E WITH DIAERESIS	   */
+  {"euro",	0x20AC},  /* EURO CURRENCY SYMBOL			   */
   {"excl",	0x0021},  /* EXCLAMATION MARK				   */
   {"exist",	0x2203},  /* THERE EXISTS				   */
   {"fcy",	0x0444},  /* CYRILLIC SMALL LETTER EF			   */

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.78 2003/11/08 02:23:55 pasky Exp $ */
+/* $Id: cache.c,v 1.79 2003/11/08 02:25:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -294,15 +294,18 @@ ff:;
 void
 defrag_entry(struct cache_entry *ce)
 {
-	struct fragment *first_frag, *g, *h, *nf;
+	struct fragment *first_frag, *adj_frag, *h, *nf;
 	int l;
 
 	if (list_empty(ce->frag)) return;
 	first_frag = ce->frag.next;
 	if (first_frag->offset) return;
 
-	for (g = first_frag->next; g != (void *) &ce->frag; g = g->next) {
-		long overlay = g->offset - (g->prev->offset + g->prev->length);
+	for (adj_frag = first_frag->next; adj_frag != (void *) &ce->frag;
+	     adj_frag = adj_frag->next) {
+		long overlay = adj_frag->offset
+				- (adj_frag->prev->offset
+				   + adj_frag->prev->length);
 
 		if (overlay > 0) continue;
 		if (overlay == 0) break;
@@ -311,9 +314,9 @@ defrag_entry(struct cache_entry *ce)
 		return;
 	}
 
-	if (g == first_frag->next) return;
+	if (adj_frag == first_frag->next) return;
 
-	for (l = 0, h = first_frag; h != g; h = h->next)
+	for (l = 0, h = first_frag; h != adj_frag; h = h->next)
 		l += h->length;
 
 	/* One byte is reserved for data in struct fragment. */
@@ -322,7 +325,7 @@ defrag_entry(struct cache_entry *ce)
 	nf->length = l;
 	nf->real_length = l;
 
-	for (l = 0, h = first_frag; h != g; h = h->next) {
+	for (l = 0, h = first_frag; h != adj_frag; h = h->next) {
 		struct fragment *tmp = h;
 
 		memcpy(nf->data + l, h->data, h->length);

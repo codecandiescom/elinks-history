@@ -1,9 +1,9 @@
+<!-- $Id: installation.xml,v 1.2 2003/06/10 23:35:14 jonas Exp $ -->
+
 <chapter id="installation"><title> Getting ELinks up and running </title>
+	
 <?dbhtml filename="installation.html"?>
-<chapterinfo>
-	<pubdate> $Date: 2003/06/10 21:29:44 $ </pubdate>
-	<releaseinfo> $Revision: 1.1 $ </releaseinfo>
-</chapterinfo>
+
 <para>
 
 	Installing ELinks should be pretty easy on most systems. Below is

@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.25 2004/01/01 15:47:25 jonas Exp $ */
+/* $Id: module.c,v 1.26 2004/01/01 16:42:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,8 +14,8 @@
 /* Dynamic area: */
 
 #include "bfu/leds.h"
-#include "cookies/cookies.h"
 #include "bookmarks/bookmarks.h"
+#include "cookies/cookies.h"
 #include "formhist/formhist.h"
 #include "globhist/globhist.h"
 #include "mime/mime.h"

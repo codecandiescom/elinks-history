@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.79 2004/10/26 17:03:13 jonas Exp $ */
+/* $Id: tab.c,v 1.80 2004/11/19 16:16:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,7 +7,7 @@
 
 #include "elinks.h"
 
-#include "bfu/msgbox.h"
+#include "bfu/dialog.h"
 #include "config/options.h"
 #include "dialogs/menu.h"
 #include "document/document.h"

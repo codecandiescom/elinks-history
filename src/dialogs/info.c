@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.117 2004/11/14 03:23:54 jonas Exp $ */
+/* $Id: info.c,v 1.118 2004/11/19 16:16:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,7 @@
 
 #include "elinks.h"
 
-#include "bfu/msgbox.h"
+#include "bfu/dialog.h"
 #include "dialogs/info.h"
 #include "config/kbdbind.h"
 #include "config/options.h"

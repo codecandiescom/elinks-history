@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.300 2004/11/17 21:09:04 zas Exp $ */
+/* $Id: search.c,v 1.301 2004/11/19 16:16:27 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -19,14 +19,7 @@
 
 #include "elinks.h"
 
-#include "bfu/button.h"
-#include "bfu/checkbox.h"
-#include "bfu/group.h"
-#include "bfu/inpfield.h"
-#include "bfu/inphist.h"
-#include "bfu/msgbox.h"
-#include "bfu/style.h"
-#include "bfu/text.h"
+#include "bfu/dialog.h"
 #include "config/kbdbind.h"
 #include "document/document.h"
 #include "document/view.h"

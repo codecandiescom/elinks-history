@@ -1,5 +1,5 @@
 /* Text mode drawing functions */
-/* $Id: draw.c,v 1.20 2004/11/08 21:55:12 jonas Exp $ */
+/* $Id: draw.c,v 1.21 2004/11/19 16:16:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,7 @@
 
 #include "elinks.h"
 
-#include "bfu/msgbox.h"
+#include "bfu/dialog.h"
 #include "cache/cache.h"
 #include "document/document.h"
 #include "document/html/frames.h"

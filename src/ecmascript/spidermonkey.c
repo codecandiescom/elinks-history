@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.68 2004/10/25 12:56:38 jonas Exp $ */
+/* $Id: spidermonkey.c,v 1.69 2004/11/19 16:16:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,8 +25,7 @@
 
 #include "elinks.h"
 
-#include "bfu/msgbox.h"
-#include "bfu/style.h"
+#include "bfu/dialog.h"
 #include "cookies/cookies.h"
 #include "dialogs/menu.h"
 #include "dialogs/status.h"

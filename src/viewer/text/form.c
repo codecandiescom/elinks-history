@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.248 2004/11/08 02:12:40 jonas Exp $ */
+/* $Id: form.c,v 1.249 2004/11/19 16:16:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@
 #include "elinks.h"
 
 #include "bfu/listmenu.h"
-#include "bfu/msgbox.h"
+#include "bfu/dialog.h"
 #include "config/kbdbind.h"
 #include "dialogs/menu.h"
 #include "document/document.h"

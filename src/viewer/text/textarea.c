@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.140 2004/10/14 14:05:08 zas Exp $ */
+/* $Id: textarea.c,v 1.141 2004/11/19 16:16:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,7 @@
 
 #include "elinks.h"
 
-#include "bfu/msgbox.h"
+#include "bfu/dialog.h"
 #include "document/document.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.582 2004/11/17 21:09:04 zas Exp $ */
+/* $Id: session.c,v 1.583 2004/11/19 16:16:27 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -17,8 +17,7 @@
 #include "elinks.h"
 
 #include "bfu/leds.h"
-#include "bfu/msgbox.h"
-#include "bfu/style.h"
+#include "bfu/dialog.h"
 #include "bookmarks/bookmarks.h"
 #include "cache/cache.h"
 #include "config/options.h"

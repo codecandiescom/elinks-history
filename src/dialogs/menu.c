@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.374 2004/11/14 01:14:25 jonas Exp $ */
+/* $Id: menu.c,v 1.375 2004/11/19 16:16:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,10 +10,8 @@
 
 #include "elinks.h"
 
-#include "bfu/inpfield.h"
-#include "bfu/inphist.h"
+#include "bfu/dialog.h"
 #include "bfu/menu.h"
-#include "bfu/msgbox.h"
 #include "config/options.h"
 #include "config/urlhist.h"
 #include "document/document.h"

@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"POT-Creation-Date: 2004-05-26 16:48+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-05-29 01:28+0200\n"
 "PO-Revision-Date: 2004-03-04 11:48+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:375
 msgid "Close"
@@ -49,8 +49,8 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/protocol/auth/dialogs.c:81 src/protocol/user.c:164
 #: src/sched/download.c:228 src/sched/download.c:312 src/sched/download.c:348
 #: src/sched/download.c:495 src/sched/download.c:623 src/sched/error.c:42
-#: src/sched/session.c:124 src/sched/session.c:579 src/sched/session.c:596
-#: src/sched/session.c:620 src/scripting/lua/core.c:399
+#: src/sched/session.c:124 src/sched/session.c:576 src/sched/session.c:593
+#: src/sched/session.c:617 src/scripting/lua/core.c:399
 #: src/scripting/lua/core.c:480 src/scripting/lua/core.c:598
 #: src/scripting/lua/core.c:722 src/viewer/text/form.c:652
 #: src/viewer/text/search.c:847 src/viewer/text/search.c:875
@@ -95,14 +95,14 @@ msgstr "Supprimer les items sélectionnés?"
 
 #: src/bfu/hierbox.c:717 src/bfu/hierbox.c:738 src/bfu/hierbox.c:752
 #: src/bfu/hierbox.c:813 src/config/dialogs.c:543 src/dialogs/menu.c:124
-#: src/formhist/formhist.c:495 src/mime/dialogs.c:75 src/sched/task.c:173
+#: src/formhist/formhist.c:495 src/mime/dialogs.c:75 src/sched/task.c:207
 #: src/terminal/tab.c:195 src/terminal/tab.c:231
 msgid "Yes"
 msgstr "Oui"
 
 #: src/bfu/hierbox.c:718 src/bfu/hierbox.c:739 src/bfu/hierbox.c:753
 #: src/bfu/hierbox.c:814 src/config/dialogs.c:544 src/dialogs/menu.c:125
-#: src/formhist/formhist.c:496 src/mime/dialogs.c:76 src/sched/task.c:174
+#: src/formhist/formhist.c:496 src/mime/dialogs.c:76 src/sched/task.c:208
 #: src/terminal/tab.c:196 src/terminal/tab.c:232
 msgid "No"
 msgstr "Non"
@@ -4687,7 +4687,7 @@ msgid "No document"
 msgstr "Aucun document"
 
 #. name:
-#: src/document/css/css.c:29 src/document/css/css.c:163
+#: src/document/css/css.c:29 src/document/css/css.c:161
 msgid "Cascading Style Sheets"
 msgstr "Cascading Style Sheets (CSS)"
 
@@ -4768,8 +4768,6 @@ msgstr "Bascule sauvegarde"
 msgid "Form history manager"
 msgstr "Gestionnaire d'historique de formulaires"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:34
 msgid "Show forms history dialog"
 msgstr "Dialogue de mémorisation de formulaires"
@@ -5130,6 +5128,7 @@ msgstr "Système de configuration"
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
+#. name:
 #: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:126
 #: src/mime/backend/mailcap.c:687
 msgid "Mailcap"
@@ -5773,11 +5772,11 @@ msgstr "Cette version de ELinks ne supporte pas le protocole SMB"
 msgid "Unknown error"
 msgstr "Erreur inconnue"
 
-#: src/sched/session.c:574
+#: src/sched/session.c:571
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#: src/sched/session.c:575
+#: src/sched/session.c:572
 msgid ""
 "Welcome to ELinks!\n"
 "\n"
@@ -5788,11 +5787,11 @@ msgstr ""
 "Pressez ESC pour accèder au menu.\n"
 "La documentation est accessible par le menu Aide."
 
-#: src/sched/session.c:584 src/sched/session.c:604 src/sched/task.c:170
+#: src/sched/session.c:581 src/sched/session.c:601 src/sched/task.c:204
 msgid "Warning"
 msgstr "Avertissement"
 
-#: src/sched/session.c:585
+#: src/sched/session.c:582
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -5811,7 +5810,7 @@ msgstr ""
 "défaut sera utilisée. Si vous n'avez aucune idée de quoi nous parlons alors "
 "faites juste ça. Toutes nos excuses pour ce désagrément."
 
-#: src/sched/session.c:605
+#: src/sched/session.c:602
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -5832,19 +5831,28 @@ msgstr ""
 "l'option config.saving_style dans le but d'obtenir un fonctionnement "
 "correct. Toutes nos excuses pour l'éventuel désagrément causé."
 
-#: src/sched/task.c:160
+#: src/sched/task.c:188
 #, c-format
 msgid "Do you want to follow redirect and post form data to URL %s?"
 msgstr ""
 "Voulez-vous suivre la redirection et poster les données de formulaire à "
 "l'URL %s ?"
 
-#: src/sched/task.c:163
+#: src/sched/task.c:192
+#, c-format
+msgid ""
+"The form data you are about to post might be incomplete.\n"
+"Do you want to post to URL %s?"
+msgstr ""
+"Le formulaire que vous tenter de soumettre peut être incomplet.\n"
+"Voulez-vous le soumettre à l'URL %s?"
+
+#: src/sched/task.c:196
 #, c-format
 msgid "Do you want to post form data to URL %s?"
 msgstr "Voulez-vous poster les données de formulaire à l'URL %s ?"
 
-#: src/sched/task.c:165
+#: src/sched/task.c:199
 #, c-format
 msgid "Do you want to repost form data to URL %s?"
 msgstr "Voulez-vous re-poster les données de formulaire à l'URL %s ?"

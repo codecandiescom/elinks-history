@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.52 2003/09/09 17:50:23 jonas Exp $ */
+/* $Id: link.c,v 1.53 2003/09/15 20:24:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,15 +164,20 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 			return;
 	}
 
-	scr->link_bg = mem_alloc(link->n * sizeof(struct link_bg));
+	/* Allocate an extra background char to work on here. */
+	scr->link_bg = mem_alloc((1 + link->n) * sizeof(struct link_bg));
 	if (!scr->link_bg) return;
 	scr->link_bg_n = link->n;
+
+	/* Setup the template char. */
+	template = &scr->link_bg[link->n].c;
+	template->attr = 0;
+	set_term_color(template, &link->color, COLOR_LINK);
 
 	xmax = scr->xp + scr->xw;
 	ymax = scr->yp + scr->yw;
 	xpos = scr->xp - scr->vs->view_posx;
 	ypos = scr->yp - scr->vs->view_pos;
-	set_term_color(&link_char, &link->color, COLOR_LINK);
 
 	for (i = 0; i < link->n; i++) {
 		int x = link->pos[i].x + xpos;
@@ -195,7 +200,7 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 			int blockable;
 
 			if (link->type != L_FIELD && link->type != L_AREA
-			    && co->color != link_char.color) {
+			    && co->color != template->color) {
 				blockable = 1;
 			} else {
 				blockable = 0;

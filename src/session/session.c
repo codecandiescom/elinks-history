@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.367 2004/04/15 02:24:00 jonas Exp $ */
+/* $Id: session.c,v 1.368 2004/04/15 02:39:44 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -643,22 +643,6 @@ copy_session(struct session *old, struct session *new)
 
 #define SESSION_MAGIC(major, minor) -(((major) << 8) + (minor))
 
-/* Older versions (up to and including 0.9.1) sends no magic variable and if
- * this is detected we fallback to the old session info format. The format is
- * the simplest possible one:
- *
- *	0: base-session ID <int>
- *	1: URI length <int>
- *	2: URI length bytes containing the URI <unsigned char>*
- *
- * SESSION_MAGIC(1, 0) supports multiple URIs, remote opening and magic variables:
- *
- *	0: base-session ID <int>
- *	1: Session magic <int>
- *	2: Remote <int>
- *	3: NUL terminated URIs <unsigned char>+
- */
-
 struct string *
 create_session_info(struct string *info, int cp, struct list_head *url_list)
 {
@@ -699,11 +683,18 @@ decode_session_info(const void *pdata)
 	init_list(info->url_list);
 
 	info->base_session = *(data++);
-
-	magic = *(data++);
+	magic		   = *(data++);
 
 	switch (magic) {
 	case SESSION_MAGIC(1, 0):
+		/* SESSION_MAGIC(1, 0) supports multiple URIs, remote opening
+		 * and magic variables:
+		 *
+		 *	0: base-session ID <int>
+		 *	1: Session magic <int>
+		 *	2: Remote <int>
+		 *	3: NUL terminated URIs <unsigned char>+
+		 */
 		if (len < 3 * sizeof(int)) break;
 
 		info->remote = *(data++);
@@ -725,13 +716,22 @@ decode_session_info(const void *pdata)
 		return info;
 
 	default:
-		/* The old format. Extract URI containing @magic bytes */
+		/* Older versions (up to and including 0.9.1) sends no magic
+		 * variable and if this is detected we fallback to the old
+		 * session info format. The format is the simplest possible
+		 * one:
+		 *
+		 *	0: base-session ID <int>
+		 *	1: URI length <int>
+		 *	2: URI length bytes containing the URI <unsigned char>*
+		 */
 		str   = (unsigned char *) data;
 		len  -= 2 * sizeof(int);
 
 		if (magic <= 0 || len <= 0 || magic > len)
 			return info;
 
+		/* Extract URI containing @magic bytes */
 		add_to_string_list(&info->url_list, str, magic);
 
 		return info;

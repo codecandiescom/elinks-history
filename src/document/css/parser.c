@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.67 2004/01/27 02:23:20 pasky Exp $ */
+/* $Id: parser.c,v 1.68 2004/01/27 02:28:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -244,7 +244,15 @@ next_one:
 		token = get_next_css_token(scanner);
 	}
 
-	add_to_list(selectors, pkg);
+	/* This is a temporary measure, so that overly specific selectors won't
+	 * spoil our whole stylesheet until we support them, and we always
+	 * favour the general selectors instead. Keep just the add_to_list()
+	 * when we will start supporting the id/class/pseudo. */
+	if (!selector->id && !selector->class && !selector->pseudo) {
+		add_to_list(selectors, pkg);
+	} else {
+		mem_free(pkg); pkg = NULL;
+	}
 
 	if (token->type == ',') {
 		/* Multiple elements hooked up to this ruleset. */

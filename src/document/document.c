@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.2 2003/10/29 16:27:39 jonas Exp $ */
+/* $Id: document.c,v 1.3 2003/10/29 17:51:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,7 +93,7 @@ done_document(struct document *document)
 	if (document->links) mem_free(document->links);
 
 	if (document->data) {
-		for (pos = 0; pos < document->y; pos++) {
+		for (pos = 0; pos < document->height; pos++) {
 			if (document->data[pos].d)
 				mem_free(document->data[pos].d);
 		}

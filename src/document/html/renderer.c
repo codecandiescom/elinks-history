@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.322 2003/10/29 16:24:32 jonas Exp $ */
+/* $Id: renderer.c,v 1.323 2003/10/29 17:51:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,11 +111,11 @@ realloc_lines(struct document *document, int y)
 	assert(document);
 	if_assert_failed return 0;
 
-	if (document->y <= y) {
-		if (!ALIGN_LINES(&document->data, document->y, y + 1))
+	if (document->height <= y) {
+		if (!ALIGN_LINES(&document->data, document->height, y + 1))
 			return -1;
 
-		document->y = y + 1;
+		document->height = y + 1;
 	}
 
 	return 0;
@@ -1095,7 +1095,7 @@ color_link_lines(struct document *document)
 	enum color_flags color_flags = document->opt.color_flags;
 	int y;
 
-	for (y = 0; y < document->y; y++) {
+	for (y = 0; y < document->height; y++) {
 		int x;
 
 		for (x = 0; x < document->data[y].l; x++) {
@@ -1560,17 +1560,17 @@ format_html(struct cache_entry *ce, struct document *document)
 
 	done_string(&head);
 
-	document->x = 0;
+	document->width = 0;
 
-	for (i = document->y - 1; i >= 0; i--) {
+	for (i = document->height - 1; i >= 0; i--) {
 		if (!document->data[i].l) {
 			if (document->data[i].d) mem_free(document->data[i].d);
-			document->y--;
+			document->height--;
 		} else break;
 	}
 
-	for (i = 0; i < document->y; i++)
-		document->x = int_max(document->x, document->data[i].l);
+	for (i = 0; i < document->height; i++)
+		document->width = int_max(document->width, document->data[i].l);
 
 	if (form.action) mem_free(form.action), form.action = NULL;
 	if (form.target) mem_free(form.target), form.target = NULL;

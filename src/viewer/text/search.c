@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.81 2003/10/29 17:17:36 jonas Exp $ */
+/* $Id: search.c,v 1.82 2003/10/29 17:51:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,23 +81,23 @@ sort_srch(struct document *document)
 	assert(document);
 	if_assert_failed return;
 
-	document->slines1 = mem_calloc(document->y, sizeof(struct search *));
+	document->slines1 = mem_calloc(document->height, sizeof(struct search *));
 	if (!document->slines1) return;
 
-	document->slines2 = mem_calloc(document->y, sizeof(struct search *));
+	document->slines2 = mem_calloc(document->height, sizeof(struct search *));
 	if (!document->slines2) {
 		mem_free(document->slines1);
 		return;
 	}
 
-	min = mem_calloc(document->y, sizeof(int));
+	min = mem_calloc(document->height, sizeof(int));
 	if (!min) {
 		mem_free(document->slines1);
 		mem_free(document->slines2);
 		return;
 	}
 
-	max = mem_calloc(document->y, sizeof(int));
+	max = mem_calloc(document->height, sizeof(int));
 	if (!max) {
 		mem_free(document->slines1);
 		mem_free(document->slines2);
@@ -105,7 +105,7 @@ sort_srch(struct document *document)
 		return;
 	}
 
-	for (i = 0; i < document->y; i++) {
+	for (i = 0; i < document->height; i++) {
 		min[i] = MAXINT;
 		max[i] = 0;
 	}
@@ -154,7 +154,7 @@ get_srch(struct document *document)
 	else cnt++; \
 } while (0)
 
-		for (y = n->y; y < ym && y < document->y; y++) {
+		for (y = n->y; y < ym && y < document->height; y++) {
 			int ns = 1;
 
 			for (x = n->x; x < xm && x < document->data[y].l; x++) {
@@ -241,7 +241,7 @@ get_range(struct document *document, int y, int yw, int l,
 	*s1 = *s2 = NULL;
 	int_lower_bound(&y, 0);
 
-	for (i = y; i < y + yw && i < document->y; i++) {
+	for (i = y; i < y + yw && i < document->height; i++) {
 		if (document->slines1[i] && (!*s1 || document->slines1[i] < *s1))
 			*s1 = document->slines1[i];
 		if (document->slines2[i] && (!*s2 || document->slines2[i] > *s2))
@@ -877,18 +877,18 @@ find_next(struct session *ses, struct document_view *doc_view, int a)
 			return;
 		}
 		p += step;
-		if (p > doc_view->document->y) {
+		if (p > doc_view->document->height) {
 			hit_bottom = 1;
 			p = 0;
 		}
 		if (p < 0) {
 			hit_top = 1;
 			p = 0;
-			while (p < doc_view->document->y) p += doc_view->yw;
+			while (p < doc_view->document->height) p += doc_view->yw;
 			p -= doc_view->yw;
 		}
 		c += doc_view->yw;
-	} while (c < doc_view->document->y + doc_view->yw);
+	} while (c < doc_view->document->height + doc_view->yw);
 
 	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 		N_("Search"), AL_CENTER,

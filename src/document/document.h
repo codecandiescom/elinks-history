@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.4 2003/10/29 16:29:44 jonas Exp $ */
+/* $Id: document.h,v 1.5 2003/10/29 17:51:06 zas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -127,7 +127,7 @@ struct document {
 
 	int refcount;
 	int cp;
-	int x, y; /* size of document */
+	int width, height; /* size of document */
 	int nlinks;
 	int nsearch;
 	color_t bgcolor;

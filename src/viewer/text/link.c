@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.85 2003/10/28 12:47:19 jonas Exp $ */
+/* $Id: link.c,v 1.86 2003/10/29 17:51:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,11 +87,11 @@ sort_links(struct document *document)
 	qsort(document->links, document->nlinks, sizeof(struct link),
 	      (void *) comp_links);
 
-	if (!document->y) return;
+	if (!document->height) return;
 
-	document->lines1 = mem_calloc(document->y, sizeof(struct link *));
+	document->lines1 = mem_calloc(document->height, sizeof(struct link *));
 	if (!document->lines1) return;
-	document->lines2 = mem_calloc(document->y, sizeof(struct link *));
+	document->lines2 = mem_calloc(document->height, sizeof(struct link *));
 	if (!document->lines2) {
 		mem_free(document->lines1);
 		return;
@@ -113,7 +113,7 @@ sort_links(struct document *document)
 		q = link->pos[link->n - 1].y;
 		if (p > q) j = p, p = q, q = j;
 		for (j = p; j <= q; j++) {
-			if (j >= document->y) {
+			if (j >= document->height) {
 				internal("link out of screen");
 				continue;
 			}
@@ -332,7 +332,7 @@ get_first_link(struct document_view *doc_view)
 
 	for (i = doc_view->vs->view_pos; i < width; i++) {
 		if (i >= 0
-		    && i < document->y
+		    && i < document->height
 		    && document->lines1[i]
 		    && document->lines1[i] < l)
 			l = document->lines1[i];
@@ -353,7 +353,8 @@ get_last_link(struct document_view *doc_view)
 	if (!doc_view->document->lines2) return NULL;
 
 	for (i = doc_view->vs->view_pos; i < doc_view->vs->view_pos + doc_view->yw; i++)
-		if (i >= 0 && i < doc_view->document->y && doc_view->document->lines2[i] > l)
+		if (i >= 0 && i < doc_view->document->height
+		    && doc_view->document->lines2[i] > l)
 			l = doc_view->document->lines2[i];
 	return l;
 }
@@ -426,7 +427,7 @@ next_in_view(struct document_view *doc_view, int p, int d,
 	p1 = doc_view->document->nlinks - 1;
 	yl = doc_view->vs->view_pos + doc_view->yw;
 
-	if (yl > doc_view->document->y) yl = doc_view->document->y;
+	if (yl > doc_view->document->height) yl = doc_view->document->height;
 	for (y = int_max(0, doc_view->vs->view_pos); y < yl; y++) {
 		if (doc_view->document->lines1[y]
 		    && doc_view->document->lines1[y] - doc_view->document->links < p1)
@@ -484,14 +485,14 @@ set_pos_y(struct document_view *doc_view, struct link *link)
 	assert(doc_view && doc_view->document && doc_view->vs && link);
 	if_assert_failed return;
 
-	yl = doc_view->document->y;
+	yl = doc_view->document->height;
 	for (i = 0; i < link->n; i++) {
 		if (link->pos[i].y >= ym) ym = link->pos[i].y + 1;
 		yl = int_min(yl, link->pos[i].y);
 	}
 	doc_view->vs->view_pos = (ym + yl) / 2 - doc_view->document->opt.yw / 2;
 	int_bounds(&doc_view->vs->view_pos, 0,
-		   doc_view->document->y - doc_view->document->opt.yw);
+		   doc_view->document->height - doc_view->document->opt.yw);
 }
 
 void
@@ -509,14 +510,14 @@ find_link(struct document_view *doc_view, int p, int s)
 		line = doc_view->document->lines2;
 		if (!line) goto nolink;
 		y = doc_view->vs->view_pos + doc_view->yw - 1;
-		if (y >= doc_view->document->y) y = doc_view->document->y - 1;
+		if (y >= doc_view->document->height) y = doc_view->document->height - 1;
 		if (y < 0) goto nolink;
 	} else {
 		line = doc_view->document->lines1;
 		if (!line) goto nolink;
 		y = doc_view->vs->view_pos;
 		if (y < 0) y = 0;
-		if (y >= doc_view->document->y) goto nolink;
+		if (y >= doc_view->document->height) goto nolink;
 	}
 
 	link = NULL;
@@ -528,7 +529,7 @@ find_link(struct document_view *doc_view, int p, int s)
 	} while (!(y < 0
 		   || y < doc_view->vs->view_pos
 		   || y >= doc_view->vs->view_pos + doc_view->document->opt.yw
-		   || y >= doc_view->document->y));
+		   || y >= doc_view->document->height));
 
 	if (!link) goto nolink;
 	l = link - doc_view->document->links;
@@ -758,7 +759,7 @@ choose_mouse_link(struct document_view *doc_view, struct term_event *ev)
 		return NULL;
 
 	for (i = doc_view->vs->view_pos;
-	     i < doc_view->document->y && i < doc_view->vs->view_pos + doc_view->yw;
+	     i < doc_view->document->height && i < doc_view->vs->view_pos + doc_view->yw;
 	     i++) {
 		if (doc_view->document->lines1[i] && doc_view->document->lines1[i] < l1)
 			l1 = doc_view->document->lines1[i];

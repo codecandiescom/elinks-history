@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.475 2004/06/16 03:07:47 miciah Exp $ */
+/* $Id: view.c,v 1.476 2004/06/16 07:26:23 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -943,7 +943,7 @@ static enum frame_event_status
 frame_ev(struct session *ses, struct document_view *doc_view, struct term_event *ev)
 {
 	struct link *link;
-	enum frame_event_status status = FRAME_EVENT_REFRESH;
+	enum frame_event_status status;
 
 	assert(ses && doc_view && doc_view->document && doc_view->vs && ev);
 	if_assert_failed return FRAME_EVENT_IGNORED;

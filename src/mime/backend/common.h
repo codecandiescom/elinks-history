@@ -1,9 +1,7 @@
-/* $Id: common.h,v 1.19 2003/12/31 08:50:39 jonas Exp $ */
+/* $Id: common.h,v 1.20 2004/06/22 21:43:54 jonas Exp $ */
 
 #ifndef EL__MIME_BACKEND_COMMON_H
 #define EL__MIME_BACKEND_COMMON_H
-
-#include <stdio.h>
 
 #include "mime/mime.h"
 

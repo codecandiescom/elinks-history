@@ -1,9 +1,8 @@
-/* $Id: mime.h,v 1.17 2004/06/10 12:10:53 jonas Exp $ */
+/* $Id: mime.h,v 1.18 2004/06/22 21:43:54 jonas Exp $ */
 
 #ifndef EL__MIME_MIME_H
 #define EL__MIME_MIME_H
 
-#include "config/options.h"
 #include "modules/module.h"
 
 struct cache_entry;

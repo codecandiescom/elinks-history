@@ -1,4 +1,4 @@
-/* $Id: leds.h,v 1.11 2003/11/17 10:56:55 pasky Exp $ */
+/* $Id: leds.h,v 1.12 2003/11/17 10:58:43 pasky Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
@@ -44,7 +44,7 @@ void init_led_panel(struct led_panel *leds);
 
 void draw_leds(struct session *ses);
 
-struct led *register_led(struct session *ses, int number)
+struct led *register_led(struct session *ses, int number);
 void unregister_led(struct led *);
 
 #endif

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.156 2003/09/25 01:05:33 jonas Exp $ */
+/* $Id: session.c,v 1.157 2003/09/25 14:55:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,12 +30,12 @@
 #include "lowlevel/ttime.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
+#include "sched/connection.h"
 #include "sched/download.h"
 #include "sched/error.h"
 #include "sched/event.h"
 #include "sched/history.h"
 #include "sched/location.h"
-#include "sched/connection.h"
 #include "sched/session.h"
 #include "terminal/draw.h"
 #include "terminal/screen.h"

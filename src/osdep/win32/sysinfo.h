@@ -1,4 +1,4 @@
-/* $Id: sysinfo.h,v 1.5 2004/08/14 23:48:42 jonas Exp $ */
+/* $Id: sysinfo.h,v 1.6 2005/02/05 05:26:40 jonas Exp $ */
 
 #ifndef EL__OSDEP_WIN32_SYSINFO_H
 #define EL__OSDEP_WIN32_SYSINFO_H
@@ -10,13 +10,37 @@
 #define DEFAULT_SHELL	"cmd.exe"
 #define GETSHELL	getenv("COMSPEC")
 
-static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
+#define dir_sep(x) ((x) == '/' || (x) == '\\')
+
+
+/* When is this a problem? --jonas */
+#if !defined(__CYGWIN__)
+
+#include <io.h>
+#include <direct.h>
+
+#define mkdir(dir,access)	(mkdir)(dir)
+#define sleep(s)		Sleep(1000*(s))
+#define wait(status)		_cwait(NULL, 0xdeadbeef, _WAIT_CHILD)
+
+#endif /* __CYGWIN__ */
+
 
 /*#define NO_ASYNC_LOOKUP*/
 #define NO_FG_EXEC
 #define DOS_FS
 #define NO_FORK_ON_EXIT
 
-#endif
+/* Misc defines */
+#define IN_LOOPBACKNET   127
 
+#define EADDRINUSE    WSAEADDRINUSE
+#define EAFNOSUPPORT    WSAEAFNOSUPPORT
+#define EALREADY      WSAEALREADY
+#define ECONNREFUSED  WSAECONNREFUSED
+#define ECONNRESET    WSAECONNRESET
+#define EINPROGRESS   WSAEINPROGRESS
+#define EWOULDBLOCK   WSAEWOULDBLOCK
+
+#endif
 #endif

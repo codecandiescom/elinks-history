@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.23 2004/12/29 15:09:11 jonas Exp $ */
+/* $Id: generic.h,v 1.24 2005/02/05 05:26:40 jonas Exp $ */
 
 /* This is... er, the OS-independent part of osdep/ ;-). */
 
@@ -44,7 +44,7 @@
 #endif
 
 /* Attempt to workaround the EINTR mess. */
-#ifdef EINTR
+#if defined(EINTR) && !defined(CONFIG_WIN32)
 
 #ifdef TEMP_FAILURE_RETRY	/* GNU libc */
 #define safe_read(fd, buf, count) TEMP_FAILURE_RETRY(read(fd, buf, count))
@@ -76,12 +76,12 @@ safe_write(int fd, const void *buf, size_t count) {
 }
 #endif /* TEMP_FAILURE_RETRY */
 
-#else /* EINTR */
+#else /* EINTR && !CONFIG_WIN32 */
 
 #define safe_read(fd, buf, count) read(fd, buf, count)
 #define safe_write(fd, buf, count) write(fd, buf, count)
 
-#endif /* EINTR */
+#endif /* EINTR && !CONFIG_WIN32 */
 
 
 /* Compiler area: */

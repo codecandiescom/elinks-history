@@ -1,13 +1,17 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.19 2004/11/10 16:47:26 jonas Exp $ */
+/* $Id: win32.c,v 1.20 2005/02/05 05:26:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <windows.h>
+
 #include "osdep/system.h"
 
-#include <windows.h>
+#include <fcntl.h>
+#include <io.h>
+#include <process.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,167 +19,78 @@
 
 #include "elinks.h"
 
+#include "lowlevel/select.h"
 #include "osdep/win32/win32.h"
 #include "osdep/osdep.h"
 #include "terminal/terminal.h"
 
 
-static int w32_input_pid;
-
-static char* keymap[] = {
-	"\E[5~", /* VK_PRIOR */
-	"\E[6~", /* VK_NEXT */
-	"\E[F", /* VK_END */
-	"\E[H", /* VK_HOME */
-	"\E[D", /* VK_LEFT */
-	"\E[A", /* VK_UP */
-	"\E[C", /* VK_RIGHT */
-	"\E[B", /* VK_DOWN */
-	"", /* VK_SELECT */
-	"", /* VK_PRINT */
-	"", /* VK_EXECUTE */
-	"", /* VK_SNAPSHOT */
-	"\E[2~", /* VK_INSERT */
-	"\E[3~" /* VK_DELETE */
-};
-
-
 void
-input_function(int fd)
+init_osdep(void)
 {
-	BOOL bSuccess;
-	HANDLE hStdIn, hStdOut;
-	DWORD dwMode;
-	INPUT_RECORD inputBuffer;
-	DWORD dwInputEvents;
-	COORD coordScreen;
-	DWORD cCharsRead;
-	CONSOLE_CURSOR_INFO cci;
-	CONSOLE_SCREEN_BUFFER_INFO csbi;
-
-	/* let's put up a meaningful console title */
-	bSuccess = SetConsoleTitle("ELinks - Console mode browser");
-
-	/* get the standard handles */
-	hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-	hStdIn = GetStdHandle(STD_INPUT_HANDLE);
-
-	/* set up mouse and window input */
-	bSuccess = GetConsoleMode(hStdIn, &dwMode);
-
-	bSuccess = SetConsoleMode(hStdIn, (dwMode & ~(ENABLE_LINE_INPUT |
-			ENABLE_ECHO_INPUT)) | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
-
-	cci.dwSize = 100;
-	cci.bVisible = TRUE;
-	bSuccess = SetConsoleCursorInfo(hStdOut, &cci);
-	/* This is the main input loop. Read from the input queue and process */
-	/* the events read */
-	do {
-		/* read an input events from the input event queue */
-		bSuccess = ReadConsoleInput(hStdIn, &inputBuffer, 1, &dwInputEvents);
-		switch (inputBuffer.EventType) {
-		case KEY_EVENT:
-			if (inputBuffer.Event.KeyEvent.bKeyDown)
-			{
-				char c = inputBuffer.Event.KeyEvent.uChar.AsciiChar;
-
-				if (!c) {
-					int vkey = inputBuffer.Event.KeyEvent.wVirtualKeyCode;
-
-					if (vkey >= VK_PRIOR && vkey <= VK_DELETE)
-					{
-						char *p = keymap[vkey - VK_PRIOR];
-
-						if (*p)
-							if (write(fd, p, strlen(p)) < 0)
-								bSuccess = FALSE;
-					}
-					break;
-				}
-				if (write(fd, &c, 1) < 0)
-					bSuccess = FALSE;
-			}
-			break;
-		case MOUSE_EVENT:
-			if (inputBuffer.Event.MouseEvent.dwEventFlags == 0 &&
-				inputBuffer.Event.MouseEvent.dwButtonState)
-			{
-				char	mstr[] = "\E[Mxxx";
-
-				mstr[3] = ' ' | 0;
-				mstr[4] = ' ' + 1 +
-					inputBuffer.Event.MouseEvent.dwMousePosition.X;
-				mstr[5] = ' ' + 1 +
-					inputBuffer.Event.MouseEvent.dwMousePosition.Y;
-				if (write(fd, mstr, 6) < 0)
-					bSuccess = FALSE;
-				mstr[3] = ' ' | 3;
-				if (write(fd, mstr, 6) < 0)
-					bSuccess = FALSE;
-			}
-			break;
-		case WINDOW_BUFFER_SIZE_EVENT:
-			write(fd, "\E[R", 3);
-			break;
-		} /* switch */
-		/* when we receive an esc down key, drop out of do loop */
-	} while (bSuccess);
-
-	exit(0);
+#ifdef CONFIG_WIN32
+	WSADATA ws;
+	WORD ver = MAKEWORD(1,1);
+#ifdef CONFIG_IPV6
+	ver = MAKEWORD(2,0);;
+#endif
+	if (WSAStartup(ver,&ws) != 0) {
+		printf("Failed to initialise Winsock ver %d.%d\n", ver >> 8, ver & 255);
+		exit(-1);
+	}
+#endif
 }
 
-#if 0
-void
-handle_terminal_resize(int fd, void (*fn)())
+void terminate_osdep(void)
 {
-	return;
 }
 
-void
-unhandle_terminal_resize(int fd)
+
+int get_system_env(void)
 {
-	return;
+  return (0);
+}
+
+void handle_terminal_resize(int fd, void (*fn)())
+{
+}
+
+void unhandle_terminal_resize(int fd)
+{
 }
 
 void
 get_terminal_size(int fd, int *x, int *y)
 {
-	CONSOLE_SCREEN_BUFFER_INFO	s;
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
 
-	if (GetConsoleScreenBufferInfo (GetStdHandle (STD_OUTPUT_HANDLE), &s))
-	{
-		*x = s.dwSize.X - 1;
-		*y = s.dwSize.Y - 1;
+	GetConsoleScreenBufferInfo (GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+
+	if (!*x) {
+		*x = get_e("COLUMNS");
+		if (!*x)
+			*x = csbi.srWindow.Right - csbi.srWindow.Left + 1;
 	}
-	*x = DEFAULT_TERMINAL_WIDTH;
-	*y = DEFAULT_TERMINAL_HEIGHT;
-}
-#endif
-
-void
-terminate_osdep(void)
-{
-	kill (w32_input_pid, SIGINT);
-}
-
-void
-set_proc_id(int id)
-{
-	w32_input_pid = id;
+	if (!*y) {
+		*y = get_e("LINES");
+		if (!*y)
+			*y = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+	}
 }
 
 
 int
 exe(unsigned char *path)
 {
-	int r;
-	unsigned char *x1 = get_shell();
+	int rc;
+	unsigned char *shell = get_shell();
 	unsigned char *x = *path != '"' ? " /c start /wait " : " /c start /wait \"\" ";
-	unsigned char *p = malloc((strlen(x1) + strlen(x) + strlen(path)) * 2 + 1);
+	unsigned char *p = malloc((strlen(shell) + strlen(x) + strlen(path)) * 2 + 1);
 
-	if (!p) return -1;
-	strcpy(p, x1);
+	if (!p)
+		return -1;
+
+	strcpy(p, shell);
 	strcat(p, x);
 	strcat(p, path);
 	x = p;
@@ -186,41 +101,136 @@ exe(unsigned char *path)
 		}
 		x++;
 	}
-	r = system(p);
+	rc = system(p);
+
 	free(p);
 
-	return r;
+	return rc;
 }
 
 
-void input_function(int fd);
-void set_proc_id(int id);
+int
+get_ctl_handle(void)
+{
+	return get_input_handle();
+}
+
+
+#if defined(HAVE_BEGINTHREAD)
+
+struct tdata {
+	void (*fn)(void *, int);
+	int h;
+	unsigned char data[1];
+};
+
+extern void bgt(struct tdata *t);
+
+int
+start_thread(void (*fn)(void *, int), void *ptr, int l)
+{
+	int p[2];
+	struct tdata *t;
+
+	if (c_pipe(p) < 0)
+		return -1;
+
+	t = malloc(sizeof(struct tdata) + l);
+	if (!t)
+		return -1;
+	t->fn = fn;
+	t->h = p[1];
+	memcpy(t->data, ptr, l);
+	if (_beginthread((void (*)(void *)) bgt, 65536, t) == -1) {
+		close(p[0]);
+		close(p[1]);
+		mem_free(t);
+		return -1;
+	}
+
+	return p[0];
+}
+#endif
+
 
 int
 get_input_handle(void)
 {
-	int fd[2];
-	static int ti = -1;
-	static int tp = -1;
-	pid_t pid;
+	static HANDLE hStdIn = INVALID_HANDLE_VALUE;
 
-	if (ti != -1) return ti;
-	if (c_pipe(fd) < 0) return 0;
-	ti = fd[0];
-	tp = fd[1];
+	if (hStdIn == INVALID_HANDLE_VALUE) {
+		DWORD dwMode;
 
-	pid = fork();
-	if (!pid)
-		input_function(tp);
-	else
-		set_proc_id(pid);
+		SetConsoleTitle("ELinks - Console mode browser");
 
-	return ti;
+		hStdIn = GetStdHandle(STD_INPUT_HANDLE);
+		GetConsoleMode(hStdIn, &dwMode);
+		dwMode &= ~(ENABLE_LINE_INPUT |	ENABLE_ECHO_INPUT);
+		dwMode |= (ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
+		SetConsoleMode(hStdIn, dwMode);
+	}
+	return (int) hStdIn;
+}
+
+int
+get_output_handle(void)
+{
+	static HANDLE hStdOut = INVALID_HANDLE_VALUE;
+
+	if (hStdOut == INVALID_HANDLE_VALUE)
+		hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	return (int) hStdOut;
+}
+
+int
+gettimeofday(struct timeval* p, void* tz)
+{
+	union {
+		long long ns100; /*time since 1 Jan 1601 in 100ns units */
+		FILETIME ft;
+	} _now;
+
+	assertm (p != NULL);
+	GetSystemTimeAsFileTime (&_now.ft);
+	p->tv_usec = (long) ((_now.ns100 / 10LL) % 1000000LL);
+	p->tv_sec  = (long) ((_now.ns100 - 116444736000000000LL) / 10000000LL);
+	return (0);
 }
 
 
 int
-get_system_env(void)
+mkstemp(char *template)
 {
-	return get_common_env() | ENV_WIN32;
+	char tempname[MAX_PATH];
+	char pathname[MAX_PATH];
+
+ 	/* Get the directory for temp files */
+	GetTempPath(MAX_PATH, pathname);
+
+	/* Create a temporary file. */
+	GetTempFileName(pathname, template, 0, tempname);
+
+	return open(tempname, O_CREAT | O_WRONLY | O_EXCL | O_BINARY);
 }
+
+int tcgetattr(int fd, struct termios *_termios_p)
+{
+  (void) fd;
+  (void) _termios_p;
+  return 0;
+}
+
+int tcsetattr(int fd, int _optional_actions, const struct termios *_termios_p)
+{
+  (void) fd;
+  (void) _optional_actions;
+  (void) _termios_p;
+  return 0;
+}
+
+#ifdef ENABLE_NLS
+int gettext__parse(void *arg)
+{
+  return (0);
+}
+#endif

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.29 2005/01/13 14:14:50 jonas Exp $
+## $Id: Makefile.am,v 1.30 2005/02/05 05:26:40 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -25,7 +25,7 @@ endif
 
 if CONFIG_WIN32
 win32dir = win32
-win32obj = $(win32dir)/win32.o
+win32obj = $(win32dir)/win32.o $(win32dir)/overrides.o
 endif
 
 INCLUDES += $(X_CFLAGS)

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.4 2004/08/15 05:48:56 miciah Exp $
+## $Id: Makefile.am,v 1.5 2005/02/05 05:26:40 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -12,6 +12,8 @@ include $(top_srcdir)/Makefile.base
 
 noinst_LIBRARIES = libsystem.a
 libsystem_a_SOURCES = \
+ overrides.c \
+ overrides.h \
  sysinfo.h \
  win32.c \
  win32.h

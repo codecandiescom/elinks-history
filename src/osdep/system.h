@@ -1,4 +1,4 @@
-/* $Id: system.h,v 1.19 2004/08/14 23:34:19 jonas Exp $ */
+/* $Id: system.h,v 1.20 2005/02/05 05:26:40 jonas Exp $ */
 
 #ifndef EL__OSDEP_SYSTEM_H
 #define EL__OSDEP_SYSTEM_H
@@ -14,6 +14,7 @@
 #endif
 
 #include "osdep/beos/overrides.h"
+#include "osdep/win32/overrides.h"
 
 #include "osdep/beos/sysinfo.h"
 #include "osdep/os2/sysinfo.h"

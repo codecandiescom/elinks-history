@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.162 2005/02/05 04:35:43 jonas Exp $ */
+/* $Id: osdep.c,v 1.163 2005/02/05 05:26:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -179,7 +179,7 @@ get_shell(void)
 
 /* Terminal size */
 
-#ifndef CONFIG_OS2
+#if !defined(CONFIG_OS2) && !defined(CONFIG_WIN32)
 
 static void
 sigwinch(void *s)
@@ -668,6 +668,7 @@ done_draw(void)
 #endif
 
 
+#if !defined(CONFIG_WIN32)
 int
 get_output_handle(void)
 {
@@ -683,6 +684,7 @@ get_ctl_handle()
 	if (fd < 0) fd = open("/dev/tty", O_RDONLY);
 	return fd;
 }
+#endif
 
 
 #if !defined(CONFIG_BEOS) && !(defined(HAVE_BEGINTHREAD) && defined(HAVE_READ_KBD)) \

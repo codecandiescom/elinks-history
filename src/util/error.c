@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.87 2005/02/03 23:36:59 adamg Exp $ */
+/* $Id: error.c,v 1.88 2005/02/05 05:26:41 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -33,7 +33,12 @@ unsigned char full_static_version[1024] = "ELinks " VERSION_STRING;
 static void
 er(int bell, int shall_sleep, unsigned char *fmt, va_list params)
 {
-	if (bell) fputc(7, stderr);
+	if (bell)
+#ifdef CONFIG_WIN32
+		MessageBeep(MB_ICONEXCLAMATION);
+#else
+		fputc(7, stderr); /* load and annoying on Windows */
+#endif
 	vfprintf(stderr, fmt, params);
 	fputc('\n', stderr);
 	fflush(stderr);

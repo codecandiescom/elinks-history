@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.155 2005/01/28 12:50:00 jonas Exp $ */
+/* $Id: screen.c,v 1.156 2005/02/05 05:26:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -707,7 +707,11 @@ erase_screen(struct terminal *term)
 void
 beep_terminal(struct terminal *term)
 {
+#ifdef CONFIG_WIN32
+	MessageBeep(MB_ICONEXCLAMATION);
+#else
 	hard_write(term->fdout, "\a", 1);
+#endif
 }
 
 struct terminal_screen *

@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formsmem.c,v 1.2 2003/08/01 18:14:49 jonas Exp $ */
+/* $Id: formsmem.c,v 1.3 2003/08/01 19:24:29 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -266,11 +266,11 @@ free_formsmemory(void)
 void
 free_form(struct formsmem_data *form)
 {
-	struct submitted_value *sv;
-
 	if (form->url) mem_free(form->url);
 
-	foreachback (sv, *form->submit) {
+	while (!list_empty(*form->submit)) {
+		struct submitted_value *sv = form->submit->next;
+
 		if (sv->name) mem_free(sv->name);
 		if (sv->value) mem_free(sv->value);
 		mem_free(sv);

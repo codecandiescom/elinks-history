@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.11 2002/12/07 20:05:54 pasky Exp $ */
+/* $Id: options.c,v 1.12 2002/12/16 22:59:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,7 @@ compare_opt(struct document_options *o1, struct document_options *o2)
 	return 1;
 }
 
-void
+inline void
 copy_opt(struct document_options *o1, struct document_options *o2)
 {
 	memcpy(o1, o2, sizeof(struct document_options));

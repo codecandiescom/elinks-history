@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.145 2004/12/18 21:38:09 pasky Exp $ */
+/* $Id: task.c,v 1.146 2004/12/18 23:05:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,15 +114,20 @@ check_malicious_uri(struct uri *uri)
 	decode_uri_for_display(user);
 
 	while (*pos) {
-		int length;
+		int length, trailing_dots;
 
 		for (length = 0; pos[length] != '\0'; length++)
 			if (!(isalnum(pos[length]) || pos[length] == '.'))
 				break;
 
+		/* Wind back so that the TLD part is checked correctly. */
+		for (trailing_dots = 0; trailing_dots < length; trailing_dots++)
+			if (!length || pos[length - trailing_dots - 1] != '.')
+				break;
+
 		/* Not perfect, but I am clueless as how to do better. Besides
 		 * I don't really think it is an issue for ELinks. --jonas */
-		if (end_with_known_tld(pos, length) != -1) {
+		if (end_with_known_tld(pos, length - trailing_dots) != -1) {
 			warn = 1;
 			break;
 		}

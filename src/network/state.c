@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.8 2003/11/26 01:27:09 jonas Exp $ */
+/* $Id: state.c,v 1.9 2003/11/29 16:56:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 #include "sched/connection.h"
 #include "sched/error.h"
 #include "terminal/terminal.h"
+#include "util/conv.h"
 #include "util/lists.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -123,3 +124,48 @@ free_strerror_buf(void)
 {
 	free_list(strerror_buf);
 }
+
+unsigned char *
+get_stat_msg(struct download *stat, struct terminal *term)
+{
+	struct string msg;
+
+	if (stat->state != S_TRANS || !(stat->prg->elapsed / 100)) {
+
+		/* debug("%d -> %s", stat->state, _(get_err_msg(stat->state), term)); */
+		return stracpy(get_err_msg(stat->state, term));
+	}
+
+
+	if (!init_string(&msg)) return NULL;
+
+	add_to_string(&msg, _("Received", term));
+	add_char_to_string(&msg, ' ');
+	add_xnum_to_string(&msg, stat->prg->pos + stat->prg->start);
+	if (stat->prg->size >= 0) {
+		add_char_to_string(&msg, ' ');
+		add_to_string(&msg, _("of", term));
+		add_char_to_string(&msg, ' ');
+		add_xnum_to_string(&msg, stat->prg->size);
+	}
+	add_to_string(&msg, ", ");
+	if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
+		add_to_string(&msg, _("avg", term));
+		add_char_to_string(&msg, ' ');
+	}
+	add_xnum_to_string(&msg, (longlong)stat->prg->loaded * 10
+		/ (stat->prg->elapsed / 100));
+	add_to_string(&msg, "/s");
+	if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
+		add_to_string(&msg, ", ");
+		add_to_string(&msg, _("cur", term));
+		add_char_to_string(&msg, ' '),
+		add_xnum_to_string(&msg, stat->prg->cur_loaded
+			/ (CURRENT_SPD_SEC
+				* SPD_DISP_TIME / 1000));
+		add_to_string(&msg, "/s");
+	}
+
+	return msg.source;
+}
+

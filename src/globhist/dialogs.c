@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.96 2003/11/26 23:49:47 jonas Exp $ */
+/* $Id: dialogs.c,v 1.97 2003/11/27 01:06:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,7 +181,7 @@ static struct hierbox_browser_button globhist_buttons[] = {
 	{ N_("Goto"),		push_hierbox_goto_button,	1 },
 	{ N_("Info"),		push_hierbox_info_button,	1 },
 #ifdef BOOKMARKS
-	{ N_("Bookmark"),	push_bookmark_button,		1 },
+	{ N_("Bookmark"),	push_bookmark_button,		0 },
 #endif
 	{ N_("Delete"),		push_hierbox_delete_button,	1 },
 	{ N_("Search"),		push_search_button,		1 },

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.32 2003/07/15 22:18:02 miciah Exp $ */
+/* $Id: globhist.c,v 1.33 2003/07/15 23:15:07 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -328,8 +328,8 @@ globhist_simple_search(unsigned char *search_url, unsigned char *search_title)
 }
 
 
-void
-static read_global_history(void)
+static void
+read_global_history(void)
 {
 	unsigned char in_buffer[MAX_STR_LEN];
 	unsigned char *file_name = "globhist";

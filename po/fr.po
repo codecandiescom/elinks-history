@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"POT-Creation-Date: 2004-04-26 17:52+0200\n"
+"POT-Creation-Date: 2004-04-30 14:21+0200\n"
 "PO-Revision-Date: 2004-03-04 11:48+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
@@ -5962,7 +5962,7 @@ msgstr "Remettre à ~zéro le formulaire"
 
 #: src/viewer/text/link.c:863
 msgid "Open in ~external editor"
-msgstr "Ouvrir dans un ~editeur externe"
+msgstr "Ouvrir dans un ~éditeur externe"
 
 #: src/viewer/text/link.c:867
 msgid "~Submit form"

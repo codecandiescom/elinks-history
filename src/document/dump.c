@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.7 2002/04/27 13:15:52 pasky Exp $ */
+/* $Id: dump.c,v 1.8 2002/04/28 15:11:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,9 +68,9 @@ void dump_end(struct status *stat, void *p)
 	}
 	
 	if (stat->state >= 0 && stat->state < S_TRANS) return;
-	if (stat->state >= S_TRANS && dmp != D_SOURCE) return;
+	if (stat->state >= S_TRANS && get_opt_int("dump") != D_SOURCE) return;
 	
-	if (dmp == D_SOURCE) {
+	if (get_opt_int("dump") == D_SOURCE) {
 		if (ce) {
 			struct fragment *frag;
 
@@ -148,7 +148,7 @@ void dump_start(unsigned char *u)
 	unsigned char *uu, *wd;
 	
 	if (!*u) {
-		fprintf(stderr, "URL expected after %s\n.", dmp == D_DUMP ? "-dump" : "-source");
+		fprintf(stderr, "URL expected after %s\n.", get_opt_int("dump") == D_DUMP ? "-dump" : "-source");
 ttt:
 		terminate = 1;
 		retval = RET_SYNTAX;

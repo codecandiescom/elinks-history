@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.5 2002/04/28 14:33:27 pasky Exp $ */
+/* $Id: options.c,v 1.6 2002/04/28 15:11:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,14 +57,14 @@ get_opt_rec(unsigned char *name)
 {
 	struct option *opt;
 
-	for (opt = links_options; opt->ptr != NULL; opt++) {
-		if (!strcmp(opt->cfg_name, name)) {
+	for (opt = links_options; opt->cfg_name || opt->cmd_name; opt++) {
+		if (opt->cfg_name && !strcmp(opt->cfg_name, name)) {
 			return opt;
 		}
 	}
 
 	internal("Attempted to fetch unexistent option %s!", name);
-	return NULL; /* This never happens, though. */
+	return NULL; /* This never happens, though. Silencing gcc. */
 }
 
 /* Fetch pointer to value of certain option. It is guaranteed to never return
@@ -72,7 +72,10 @@ get_opt_rec(unsigned char *name)
 void *
 get_opt(unsigned char *name)
 {
-	return get_opt_rec(name)->ptr;
+	struct option *opt = get_opt_rec(name);
+
+	if (!opt->ptr) internal("Option %s has no value!", name);
+	return opt->ptr;
 }
 
 
@@ -499,7 +502,7 @@ unsigned char *anonymous_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 unsigned char *dump_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
-	if (dmp != o->min && dmp) return "Can't use both -dump and -source";
+	if (get_opt_int("dump") != o->min && get_opt_int("dump")) return "Can't use both -dump and -source";
 	dmp = o->min;
 	no_connect = 1;
 	return NULL;
@@ -591,7 +594,6 @@ int base_session = 0;
 
 enum dump_type dmp = D_NONE;
 int dump_width = 80;
-
 
 enum cookies_accept cookies_accept = COOKIES_ACCEPT_ALL;
 int cookies_save = 1;
@@ -704,7 +706,7 @@ struct option links_options[] = {
 
 	{	"anonymous", NULL,
 		anonymous_cmd, NULL, NULL,
-	 	0, 0, NULL,
+	 	0, 0, &anonymous,
 	      	"Restrict links so that it can run on an anonymous account.\n"
 		"No local file browsing, no downloads. Executing of viewers\n"
 		"is allowed, but user can't add or modify entries in\n"
@@ -800,9 +802,11 @@ struct option links_options[] = {
 	 	0, 1, &download_utime,
 	 	"Set time of downloaded files?" },
 
-	{	"dump", NULL,
+	/* FIXME: Yes, you shouldn't be able to specify this in a config file.
+	 * This will be fixed later. --pasky */
+	{	"dump", "dump",
 		dump_cmd, NULL, NULL,
-	 	D_DUMP, 0, NULL,
+	 	D_DUMP, 0, &dmp,
 		"Write a plain-text version of the given HTML document to\n"
 		"stdout." },
 

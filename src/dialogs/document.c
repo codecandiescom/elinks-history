@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.55 2003/09/13 21:32:24 miciah Exp $ */
+/* $Id: document.c,v 1.56 2003/10/05 12:48:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,11 +108,11 @@ loc_msg(struct terminal *term, struct location *location,
 		}
 
 		add_format_to_string(&msg, "\n%s: %s", _("Codepage", term),
-				get_cp_name(location->vs.view->document->cp));
+				get_cp_name(frame->document->cp));
 
-		if (location->vs.view->document->cp_status == CP_STATUS_ASSUMED) {
+		if (frame->document->cp_status == CP_STATUS_ASSUMED) {
 			add_format_to_string(&msg, "(%s)", _("assumed", term));
-		} else if (location->vs.view->document->cp_status == CP_STATUS_IGNORED) {
+		} else if (frame->document->cp_status == CP_STATUS_IGNORED) {
 			add_format_to_string(&msg, "(%s)",
 					_("ignoring server setting", term));
 		}

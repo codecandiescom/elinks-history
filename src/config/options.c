@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.236 2003/06/22 12:13:30 zas Exp $ */
+/* $Id: options.c,v 1.237 2003/06/28 23:34:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -502,6 +502,37 @@ smart_config_string(unsigned char **str, int *len, int print_comment,
 		 * saving the stuff...? --pasky */
 		option->flags &= ~OPT_TOUCHED;
 	}
+}
+
+/* A generic 'exchange char1 with char2 in string' would be better. --jonas */
+unsigned char *
+encode_option_name(unsigned char *name)
+{
+	unsigned char *encoded = stracpy(name);
+
+	if (encoded) {
+		unsigned char *pos = encoded;
+
+		for (; *pos; pos++)
+			if (*pos == '.') *pos = '*';
+	}
+
+	return encoded;
+}
+
+unsigned char *
+decode_option_name(unsigned char *name)
+{
+	unsigned char *decoded = stracpy(name);
+
+	if (decoded) {
+		unsigned char *pos = decoded;
+
+		for (; *pos; pos++)
+			if (*pos == '*') *pos = '.';
+	}
+
+	return decoded;
 }
 
 

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.34 2003/06/28 11:56:29 jonas Exp $ */
+/* $Id: mime.c,v 1.35 2003/06/28 23:34:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,39 +120,15 @@ really_del_ext(void *fcp)
 	if (opt) delete_option(opt);
 }
 
-static void
-transchars(unsigned char *str)
-{
-	register unsigned char *p = str;
-
-	while (*p) {
-		if (*p == '.') *p = '*';
-		p++;
-	}
-}
-
-static void
-untranschars(unsigned char *str)
-{
-	register unsigned char *p = str;
-
-	while (*p) {
-		if (*p == '*') *p = '.';
-		p++;
-	}
-}
-
 void
 menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 {
-	unsigned char *translated = fcp ? stracpy((unsigned char *) fcp) : NULL;
+	unsigned char *translated = fcp ? encode_option_name(fcp) : NULL;
 	struct option *opt;
 	unsigned char *str;
 	int strl;
 
 	if (!translated) goto end;
-
-	transchars(translated);
 
 	opt = get_real_opt("mime.extension", translated);
 	if (!opt) goto end;
@@ -191,10 +167,8 @@ really_add_ext(void *fcp)
 
 	if (!ext) return;
 
-	translated = stracpy(ext->ext);
+	translated = encode_option_name(ext->ext);
 	if (!translated) return;
-
-	transchars(translated);
 
 	name = straconcat("mime.extension.", translated, NULL);
 	mem_free(translated);
@@ -208,23 +182,20 @@ really_add_ext(void *fcp)
 void
 menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 {
-	unsigned char *translated = fcp ? stracpy((unsigned char *) fcp) : NULL;
-	struct option *opt = NULL;
+	unsigned char *translated = fcp ? encode_option_name(fcp) : NULL;
+	struct option *opt;
 	struct extension *new;
 	unsigned char *ext;
 	unsigned char *ct;
 	unsigned char *ext_orig;
 	struct dialog *d;
 
-	if (translated) {
-		transchars(translated);
-		opt = get_real_opt("mime.extension", translated);
-	}
-
+	opt = translated ? get_real_opt("mime.extension", translated) : NULL;
 	d = mem_calloc(1, sizeof(struct dialog) + 5 * sizeof(struct widget)
 			  + sizeof(struct extension) + 3 * MAX_STR_LEN);
 	if (!d) {
 		if (fcp) mem_free(fcp);
+		if (translated) mem_free(translated);
 		return;
 	}
 
@@ -296,10 +267,8 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 
 		if (!strcmp(opt->name, "_template_")) continue;
 
-		translated = stracpy(opt->name);
+		translated = decode_option_name(opt->name);
 		if (!translated) continue;
-
-		untranschars(translated);
 
 		if (!mi) {
 			mi = new_menu(FREE_LIST | FREE_TEXT | FREE_RTEXT | FREE_DATA);

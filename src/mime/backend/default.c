@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.13 2003/06/15 23:18:14 zas Exp $ */
+/* $Id: default.c,v 1.14 2003/06/28 23:34:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,9 +74,8 @@ get_mime_type_name(unsigned char *type)
 	unsigned char *class, *id;
 	unsigned char *name;
 
-	class = stracpy(type);
+	class = encode_option_name(type);
 	if (!class) return NULL;
-	rmdots(class);
 
 	id = strchr(class, '/');
 	if (!id) {
@@ -84,7 +83,6 @@ get_mime_type_name(unsigned char *type)
 		return NULL;
 	}
 	*(id++) = '\0';
-	rmdots(id);
 
 	name = straconcat("mime.type.", class, ".", id, NULL);
 	mem_free(class);

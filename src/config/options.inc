@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.156 2004/12/15 18:48:31 jonas Exp $ */
+/* $Id: options.inc,v 1.157 2004/12/15 19:05:52 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -216,16 +216,10 @@ static struct option_info config_options_info[] = {
 		"1-500 means display filename with this maximal length;\n"
 		"      if it is longer, the middle is substituted by an asterisk")),
 
-/* FIXME: Obsolete option. What should we do ?
-   It was replaced by display_style and filename_maxlen options combination.
-	INIT_OPT_INT("document.browse.images", N_("Display style for image links"),
-		"file_tags", 0, -1, 500, -1,
-		N_("Display [target filename] instead of [IMG] as visible image tags:\n"
-		"-1    means always display just [IMG]\n"
-		"0     means always display full target filename\n"
-		"1-500 means display target filename with this maximal length;\n"
-		"      if it is longer, the middle is substituted by an asterisk")),
-*/
+	/* Compatibility aliases. Added: 2004-12-15, 0.10pre3.CVS. It was
+	 * replaced by display_style and filename_maxlen options combination. */
+	INIT_OPT_ALIAS("document.browse.images", "file_tags",
+		"document.browse.images.filename_maxlen"),
 
 	INIT_OPT_INT("document.browse.images", N_("Image links tagging"),
 		"image_link_tagging", 0, 0, 2, 1,
@@ -1441,3 +1435,5 @@ static struct option_info config_options_info[] = {
 
 	NULL_OPTION_INFO,
 };
+
+/* vim: set filetype=c : */

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.72 2004/12/15 15:41:40 zas Exp $ */
+/* $Id: link.c,v 1.73 2004/12/15 19:05:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,6 +162,9 @@ get_image_filename_from_src(unsigned char *src)
 
 	filename = memacpy(start, len);
 	if (filename) {
+		/* XXX: Due to a compatibility alias (added: 2004-12-15 in
+		 * 0.10pre3.CVS for document.browse.images.file_tags) this can
+		 * return a negative @max_len. */
 		int max_len = get_opt_int("document.browse.images.filename_maxlen");
 
 		text = truncate_label(filename, max_len);

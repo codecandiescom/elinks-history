@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.265 2004/04/04 17:31:43 jonas Exp $ */
+/* $Id: http.c,v 1.266 2004/04/05 17:35:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -589,12 +589,12 @@ http_send_header(struct connection *conn)
 
 	if (uri->post) {
 		unsigned char *postend = strchr(uri->post, '\n');
+		unsigned char *poststart = postend ? postend + 1 : uri->post;
 
 		if (postend) {
 			add_to_string(&header, "Content-Type: ");
 			add_bytes_to_string(&header, uri->post, postend - uri->post);
 			add_to_string(&header, "\r\n");
-			uri->post = postend + 1;
 		}
 		add_to_string(&header, "Content-Length: ");
 		add_long_to_string(&header, strlen(uri->post) / 2);

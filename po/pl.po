@@ -465,7 +465,6 @@ msgid "Really delete the option \"%s\"?"
 msgstr "Czy na pewno chcesz  skasowaæ opcjê \"%s\"?"
 
 #: src/config/dialogs.c:401
-#, fuzzy
 msgid "Option manager"
 msgstr "Menad¿er ustawieñ"
 
@@ -4266,7 +4265,7 @@ msgstr "Opcje terminala"
 
 #: src/dialogs/options.c:162
 msgid "Frame handling:"
-msgstr ""
+msgstr "Rysowanie ramek:"
 
 #: src/dialogs/options.c:163
 msgid "No frames"
@@ -4285,9 +4284,8 @@ msgid "KOI8-R frames"
 msgstr "Ramki KOI8-R"
 
 #: src/dialogs/options.c:168
-#, fuzzy
 msgid "Color mode:"
-msgstr "Tryb kolorowy"
+msgstr "Tryb kolorowy:"
 
 #: src/dialogs/options.c:169
 msgid "No colors (mono)"
@@ -4425,9 +4423,8 @@ msgstr "Historia globalna"
 
 #
 #: src/globhist/dialogs.c:441
-#, fuzzy
 msgid "Bookmark"
-msgstr "Zak³adki"
+msgstr "Zak³adka"
 
 #
 #: src/globhist/globhist.c:70
@@ -5509,6 +5506,3 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1415
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
-
-#~ msgid "A field"
-#~ msgstr "Pole"

@@ -1,3 +1,29 @@
+Thu Dec  5 23:44:32 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.4pre22 
+
+Thu Dec  5 23:43:54 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO:
+
+	Implemented.  
+
+Thu Dec  5 23:38:36 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: lowlevel/sched.c, protocol/http/http.c:
+
+	Fixed leaks when compressed connection was interrupted.  
+
+Thu Dec  5 23:16:08 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/menu.c, document/history.c, document/session.c,
+	document/session.h, document/view.c, lowlevel/sched.c:
+
+	Extended abort_*() family in document/session.c by the interrupt
+	parameter, make use of it in abort-connection action.  
+
 Thu Dec  5 22:48:54 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: config/kbdbind.c, config/kbdbind.h, document/view.c:

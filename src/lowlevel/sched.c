@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.8 2002/03/18 20:28:06 pasky Exp $ */
+/* $Id: sched.c,v 1.9 2002/03/22 18:26:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,6 +25,7 @@
 #include <lowlevel/select.h>
 #include <lowlevel/ttime.h>
 #include <protocol/url.h>
+#include <util/base64.h>
 #include <util/error.h>
 
 tcount connection_count = 0;
@@ -908,8 +909,6 @@ err:
 	return 1;
 }
 
-unsigned char *base64_encode(unsigned char *);
-
 unsigned char *find_auth(unsigned char *url)
 {
 	struct http_auth_basic *a = NULL;
@@ -948,36 +947,6 @@ void free_auth()
 {
         while (!list_empty(http_auth_basic_list)) del_auth_entry(http_auth_basic_list.next);
 	free_list(questions_queue);
-}
-
-unsigned char base64_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-unsigned char *base64_encode(unsigned char *in)
-{
-	unsigned char *out, *outstr;
-	int inlen = strlen(in);
-	if (!(outstr = out = mem_alloc(((inlen / 3) + 1) * 4 + 1 ))) return NULL;
-	while (inlen >= 3) {
-		*out++ = base64_chars[ (int)(*in >> 2) ];
-		*out++ = base64_chars[ (int)((*in << 4 | *(in + 1) >> 4) & 63) ];
-		*out++ = base64_chars[ (int)((*(in + 1) << 2 | *(in + 2) >> 6) & 63) ];
-		*out++ = base64_chars[ (int)(*(in + 2) & 63) ];
-		inlen -= 3; in += 3;
-	}
-	if (inlen == 1) {
-		*out++ = base64_chars[ (int)(*in >> 2) ];
-		*out++ = base64_chars[ (int)(*in << 4 & 63) ];
-		*out++ = '=';
-		*out++ = '=';
-	}
-	if (inlen == 2) {
-		*out++ = base64_chars[ (int)(*in >> 2) ];
-		*out++ = base64_chars[ (int)((*in << 4 | *(in + 1) >> 4) & 63) ];
-		*out++ = base64_chars[ (int)((*(in + 1) << 2) & 63) ];
-		*out++ = '=';
-	}
-	*out = 0;
-	return outstr;
 }
 
 struct s_msg_dsc msg_dsc[] = {

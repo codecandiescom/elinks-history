@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.77 2003/11/06 22:02:51 jonas Exp $ */
+/* $Id: msgbox.c,v 1.78 2003/11/07 11:45:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,18 +27,11 @@ static void
 msg_box_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
-	int max = 0, min = 0;
 	int w = dialog_max_width(term);
 	int rw = 0;
 	int y = 0;
 	unsigned char *text = dlg_data->dlg->udata;
 	struct color_pair *text_color = get_bfu_color(term, "dialog.text");
-
-	text_width(term, text, &min, &max);
-	buttons_width(dlg_data->widgets_data, dlg_data->n, &min, &max);
-
-	int_bounds(&w, min, max);
-	int_bounds(&w, 1, term->width - 2 * DIALOG_LB);
 
 	dlg_format_text(NULL, text, 0, &y, w, &rw, text_color,
 			dlg_data->dlg->align);

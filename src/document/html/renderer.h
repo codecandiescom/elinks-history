@@ -1,12 +1,11 @@
-/* $Id: renderer.h,v 1.57 2003/12/01 14:40:08 pasky Exp $ */
+/* $Id: renderer.h,v 1.58 2003/12/01 15:09:11 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
 
+#include "document/document.h"
+
 struct cache_entry;
-struct cp_status;
-struct document;
-struct part;
 
 
 void render_html_document(struct cache_entry *ce, struct document *document);

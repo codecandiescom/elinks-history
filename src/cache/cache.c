@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.141 2004/04/22 12:39:46 zas Exp $ */
+/* $Id: cache.c,v 1.142 2004/04/22 18:45:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -482,7 +482,25 @@ redirect_cache(struct cache_entry *cached, unsigned char *location,
 {
 	unsigned char *uristring;
 
-	uristring = join_urls(struri(cached->uri), location);
+	/* XXX: I am a little puzzled whether we should only use the cache
+	 * entry's URI if it is valid. Hopefully always using it won't hurt.
+	 * Currently we handle direction redirects where "/" should be appended
+	 * special dunno if join_urls() could be made to handle that.
+	 * --jonas */
+	/* XXX: We are assuming here that incomplete will only be zero when
+	 * doing these fake redirects which only purpose is to add an ending
+	 * slash *cough* dirseparator to the end of the URI. Post data should
+	 * not be a problem since it is used only for protocols that do not
+	 * support posting (well file does but not for internal directory
+	 * redirects I hope atleast that would be a very odd situation some one
+	 * opening "file://etc{POST_CHAR}<post data>" and so on which well I
+	 * don't know for certain but could only mean open a file with the
+	 * highly strange name "etc{POST_CHAR}<post data>". --jonas */
+	if (incomplete == 0 && location[0] == '/' && location[1] == 0)
+		uristring = straconcat(struri(cached->uri), location, NULL);
+	else
+		uristring = join_urls(struri(cached->uri), location);
+
 	if (!uristring) return NULL;
 
 	/* According to RFC2068 POST must not be redirected to GET,

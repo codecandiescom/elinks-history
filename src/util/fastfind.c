@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.22 2003/06/14 20:42:32 pasky Exp $ */
+/* $Id: fastfind.c,v 1.23 2003/06/14 22:07:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,6 +48,7 @@
 #define COMPRESSED_BITS		1
 
 #ifdef USE_32_BITS
+
 /* Use only 32 bits per element, but has very low limits. */
 /* Adequate for ELinks tags search. */
 
@@ -64,6 +65,7 @@
 #endif
 
 #else /* !USE_32_BITS */
+
 /* Keep this one if there is more than 512 keywords in a list
  * it eats a bit more memory.
  * ELinks may need this one if fastfind is used in other
@@ -93,7 +95,7 @@ struct ff_elt {
 	unsigned int l:LINE_INDEX_BITS;
 };
 
-#endif
+#endif /* USE_32_BITS */
 
 
 #define FF_MAX_KEYS  (1  << POINTER_INDEX_BITS)

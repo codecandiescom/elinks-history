@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.17 2003/05/03 02:49:07 pasky Exp $ */
+/* $Id: lists.h,v 1.18 2003/05/14 16:59:40 zas Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -107,63 +107,67 @@ do { \
 
 #else /* LISTDEBUG */
 
-#define LISTMAGIC 0xdadababa
+#define LISTMAGIC1 ((void *) 0xdadababa)
+#define LISTMAGIC2 ((void *) 0xd0d0b0b0)
 
 /* I hope #xyz is ANSI C ;-). Or.. oh well, it's just debug :^). --pasky */
 #define list_magic_error(where,what) list_magic_error_(where, #what, __FILE__, __LINE__)
 
 struct list_head {
-	unsigned int magic1;
+	void *magic1;
 	void *next;
 	void *prev;
-	unsigned int magic2;
+	void *magic2;
 };
 
 #ifndef HAVE_TYPEOF
 
 struct xlist_head {
-	unsigned int magic1;
+	void *magic1;
 	struct xlist_head *next;
 	struct xlist_head *prev;
-	unsigned int magic2;
+	void *magic2;
 };
 
 #endif
 
 #define init_list(x) \
 do { \
-	(x).magic1 = LISTMAGIC; \
-	(x).magic2 = LISTMAGIC; \
+	(x).magic1 = LISTMAGIC1; \
+	(x).magic2 = LISTMAGIC2; \
 	(x).next = (x).prev = &(x); \
 } while (0)
 
 
 #define list_empty(x) \
-	((((x).magic1 == LISTMAGIC && (x).magic2 == LISTMAGIC) \
+	((((x).magic1 == LISTMAGIC1 && (x).magic2 == LISTMAGIC2) \
 	  || (list_magic_error("list_empty", x), 1)) && (x).next == &(x))
 
 #define del_from_list(x) \
 do { \
-	if ((x)->magic1 != LISTMAGIC || (x)->magic2 != LISTMAGIC) \
+	if ((x)->magic1 != LISTMAGIC1 || (x)->magic2 != LISTMAGIC2) \
 		list_magic_error("del_from_list", x); \
 	do_not_optimize_here(x); \
 	((struct list_head *) (x)->next)->prev = (x)->prev; \
 	((struct list_head *) (x)->prev)->next = (x)->next; \
-	(x)->prev = (void *) ~LISTMAGIC; \
+	/* Little hack: we put the complement of LISTMAGIC1 to prev */\
+	/* and the line number in next. Debugging purpose. */ \
+	(x)->prev = (void *) ~((unsigned int) LISTMAGIC1); \
 	(x)->next = (void *)((unsigned int) __LINE__); \
 	do_not_optimize_here(x); \
 } while (0)
 
 #define add_at_pos(p,x) \
 do { \
-	if ((p)->magic1 != LISTMAGIC || (p)->magic2 != LISTMAGIC) \
+	if ((p)->magic1 != LISTMAGIC1 || (p)->magic2 != LISTMAGIC2) \
 		list_magic_error("add_at_pos", p); \
 	do_not_optimize_here(p); \
 	(x)->next = (p)->next; \
 	(x)->prev = (p); \
    	(p)->next = (x); \
    	(x)->next->prev = (x); \
-	(x)->magic1 = (x)->magic2 = LISTMAGIC; \
+	(x)->magic1 = LISTMAGIC1; \
+	(x)->magic2 = LISTMAGIC2; \
 	do_not_optimize_here(p); \
 } while (0)
 
@@ -209,11 +213,11 @@ do { \
 	do_not_optimize_here(&l); \
 } while (0)
 
-#define NULL_LIST_HEAD LISTMAGIC, NULL, NULL, LISTMAGIC
-#define D_LIST_HEAD(x) LISTMAGIC, &x, &x, LISTMAGIC
+#define NULL_LIST_HEAD LISTMAGIC1, NULL, NULL, LISTMAGIC2
+#define D_LIST_HEAD(x) LISTMAGIC1, &x, &x, LISTMAGIC2
 #define INIT_LIST_HEAD(x) struct list_head x = { D_LIST_HEAD(x) }
-#define LIST_HEAD(x) unsigned int magic1; x *next; x *prev; unsigned int magic2;
-#define LIST_SET_MAGIC(x) x->magic1 = x->magic2 = LISTMAGIC
+#define LIST_HEAD(x) void *magic1; x *next; x *prev; void *magic2;
+#define LIST_SET_MAGIC(x) do { x->magic1 = LISTMAGIC1; x->magic2 = LISTMAGIC2 } while (0)
 
 #endif /* LISTDEBUG */
 

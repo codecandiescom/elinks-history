@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.358 2004/11/14 15:49:05 jonas Exp $ */
+/* $Id: http.c,v 1.359 2004/11/14 16:52:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -620,8 +620,9 @@ http_send_header(struct connection *conn)
 			mem_free_if(cnonce);
 			mem_free_if(ha1);
 			mem_free_if(response);
-		} else {
+		} else
 #endif
+		{
 			/* RFC2617 section 2 [Basic Authentication Scheme]
 			 *
 			 * To receive authorization, the client sends the userid

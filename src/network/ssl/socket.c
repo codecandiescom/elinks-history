@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.66 2004/08/02 22:45:47 jonas Exp $ */
+/* $Id: socket.c,v 1.67 2004/08/02 22:50:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,18 +45,18 @@
 
 #ifdef CONFIG_OPENSSL
 
-#define ssl_do_connect(socket)		SSL_get_error(socket->ssl, SSL_connect(socket->ssl))
+#define ssl_do_connect(conn)		SSL_get_error(conn->socket.ssl, SSL_connect(conn->socket.ssl))
 #define ssl_do_write(conn, data, len)	SSL_write(conn->socket.ssl /* FIXME: Assuming ssl handle */, data, len)
 #define ssl_do_read(conn, rb)		SSL_read(conn->socket.ssl /* FIXME: Assuming ssl handle */, rb->data + rb->len, rb->freespace)
 #define ssl_do_close(conn)		/* Hmh? No idea.. */
 
 #elif defined(CONFIG_GNUTLS)
 
-#define ssl_do_connect(conn)		gnutls_handshake(*((ssl_t *) socket->ssl))
+#define ssl_do_connect(conn)		gnutls_handshake(*((ssl_t *) conn->socket.ssl))
 #define ssl_do_write(conn, data, len)	gnutls_record_send(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), data, len)
 #define ssl_do_read(conn, rb)		gnutls_record_recv(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), rb->data + rb->len, rb->freespace)
 /* We probably don't handle this entirely correctly.. */
-#define ssl_do_close(conn)		gnutls_bye(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), GNUTLS_SHUT_RDWR);
+#define ssl_do_close(socket)		gnutls_bye(*((ssl_t *) socket->ssl), GNUTLS_SHUT_RDWR);
 
 #endif
 

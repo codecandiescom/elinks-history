@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.23 2003/05/03 23:26:43 zas Exp $ */
+/* $Id: session.c,v 1.24 2003/05/04 00:17:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,10 +228,8 @@ print_screen_status(struct session *ses)
 		stat = &ses->loading;
 	else if (have_location(ses))
 		stat = &cur_loc(ses)->stat;
-	else
-		goto stat_shown;
 
-	if (stat->state == S_OK) {
+	if (stat && stat->state == S_OK) {
 		struct file_to_load *ftl;
 
 		foreach(ftl, ses->more_files) {
@@ -247,6 +245,7 @@ print_screen_status(struct session *ses)
 
 	if (show_status_bar) {
 		static int last_current_link;
+		int tab_info_len = 0;
 
 		/* Show S_INTERRUPTED message *once* but then show links
 		 * again as usual. */
@@ -259,25 +258,26 @@ print_screen_status(struct session *ses)
 			last_current_link = ncl;
 		}
 
-		if (stat->state == S_OK)
-			msg = print_current_link(ses);
-		if (!msg)
-			msg = get_stat_msg(stat, term);
+		if (stat) {
+			if (stat->state == S_OK)
+				msg = print_current_link(ses);
+			if (!msg)
+				msg = get_stat_msg(stat, term);
+		}
+
+		if (!ses->visible_tab_bar && tabs_count > 1) {
+			unsigned char tab_info[64];
+
+			snprintf(tab_info, 64, "[%d] ", term->current_tab + 1);
+			tab_info_len = strlen(tab_info);
+			print_text(term, 0, term->y - 1, tab_info_len,
+			   	   tab_info,
+				   get_bfu_color(term, "status.status-text"));
+		}
+
 		if (msg) {
-			int tab_info_len = 0;
-
-			if (!ses->visible_tab_bar && tabs_count > 1) {
-				unsigned char tab_info[64];
-
-				snprintf(tab_info, 64, "[%d] ", term->current_tab + 1);
-				tab_info_len = strlen(tab_info);
-				print_text(term, 0, term->y - 1, tab_info_len,
-				   	   tab_info,
-					   get_bfu_color(term, "status.status-text"));
-			}
 			print_text(term, 0 + tab_info_len, term->y - 1, strlen(msg),
-				   msg, get_bfu_color(term, "status.status-text"));
-
+			   	   msg, get_bfu_color(term, "status.status-text"));
 			mem_free(msg);
 		}
 	}
@@ -339,7 +339,6 @@ print_screen_status(struct session *ses)
 		mem_free(msg);
 	}
 
-stat_shown:
 	redraw_from_window(ses->win);
 #ifdef USE_LEDS
 	draw_leds(term);

@@ -1,6 +1,4 @@
-<chapter>
-<title>Configuration</title>
-
+<chapter><title>Configuration</title>
 <para>
 
 	This chapter describes how to configure ELinks to suit your needs.
@@ -8,7 +6,6 @@
 </para>
 
 <sect1><title>The configuration file</title>
-
 <para>
 
 
@@ -41,7 +38,6 @@
 </para>
 
 <sect2><title>The Syntax</title>
-
 <para>
 
 	The syntax of the config file is very simple. The elinks.conf file is
@@ -53,8 +49,6 @@
 
 </para>
 </sect2>
-
 </sect1>
-
 </chapter>
 

@@ -1,7 +1,8 @@
-
-/* style.css 9. marts 2002 - inspireret af sslugs linuxbog.css */
-
-/* Først lidt generelle (taget fra sslug.css) :*/
+/*
+ * TODO: Rewrite!
+ *
+ * $Id: style.css,v 1.2 2002/12/30 03:51:43 jonas Exp $
+ */
 
 BODY {
     color:              black;
@@ -104,7 +105,7 @@ LI,DD {
     line-height:        120%;
 }
 
-/* docbook specifikke classes */
+/* DocBook specific classes */
 
 .USERINPUT {
     font-family:        monospace;

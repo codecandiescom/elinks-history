@@ -28,7 +28,6 @@
 </para>
 
 <sect1><title>The Bookmark Manager</title>
-
 <para>
 
 	Basically, almost everything is going on in so-called bookmark manager.
@@ -61,11 +60,9 @@
 	and you're free again!
 
 </para>
-
 </sect1>
 
 <sect1><title>The Ancient Forests</title>
-
 <para>
 
 	It's not very convenient to have all the bookmarks mixed up - soon, you
@@ -95,11 +92,9 @@
 	to have the stuff moved to, and press the "Move" button.
 
 </para>
-
 </sect1>
 
 <sect1><title>Searching needle in the haycock</title>
-
 <para>
 
 	Of course, you can search in the bookmarks. Just use the
@@ -110,6 +105,5 @@
 	bookmarks will be filtered so that only the matching ones are shown.
 
 </para>
-
 </sect1>
 </chapter>

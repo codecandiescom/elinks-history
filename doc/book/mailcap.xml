@@ -1,5 +1,4 @@
 <chapter><title>Using Mailcap</title>
-
 <para>
 
 	This chapter describes the support for mailcap (rfc1524) in ELinks.  It
@@ -37,22 +36,20 @@
 </para>
 
 </sect1>
-<sect1><title>Parameters</title>
 
+<sect1><title>Parameters</title>
 <para>
 
 	The code has been ported from mutt and thereby inherits some of it's
 	various features and limitation.
 
 </para>
-
 <para>
 
 	The following parameters are not supported. Since they do not make much
 	sense for non-MUA:
 	
 </para>
-
 <variablelist>
 	<varlistentry>
 		<term>
@@ -87,9 +84,11 @@
 		</listitem>
 	</varlistentry>
 </variablelist>
+<para>
 
-<para> The following parameters are supported: </para>
+	The following parameters are supported:
 
+</para>
 <variablelist>
 	<varlistentry>
 		<term>
@@ -112,11 +111,9 @@
 		</listitem>
 	</varlistentry>
 </variablelist>
-
 </sect1>
 
 <sect1><title>Reading of mailcap files</title>
-
 <para>
 
 	Mailcap files will be read when starting ELinks. The mailcap files to
@@ -145,10 +142,9 @@
 	</para></listitem>
 
 </itemizedlist>
-
 </sect1>
-<sect1><title>Fields</title>
 
+<sect1><title>Fields</title>
 <para>
 
 	Since mailcap handling is primarily for displaying of resources all
@@ -156,7 +152,6 @@
 	<option>compose</option> etc. is ignored.
 
 </para>
-
 <note>
 <para>
 
@@ -178,15 +173,13 @@
 	<filename>/usr/bin/more</filename> in that order). So if you define
 	<command>png2ascii</command> as your handler for <type>image/png</type>
 	and specify <option>copiousoutput</option> then the executed command
-	will be <command>png2ascii | /usr/bin/less</command> if less is your
-	pager or present on your system.
+	will be <command>png2ascii | /usr/bin/less</command> if
+	<command>less</command> is your pager or present on your system.
 
 </para>
-
 </sect1>
 
 <sect1><title>Mailcap configuration</title>
-
 <para>
 
 	Apart from the <option>protocol.mailcap.path</option> option you can
@@ -216,10 +209,9 @@
 	if you would like to be asked before opening a file.
 
 </para>
-
 </sect1>
-<sect1><title>Some sample mailcap entries</title>
 
+<sect1><title>Some sample mailcap entries</title>
 <screen>
 # Use xv if X is running
 image/*;                xv %s ; test=test -n "$DISPLAY";
@@ -234,6 +226,5 @@ audio/mpeg;             xmms '%s'; test=test -n "$DISPLAY";
 application/pdf;        xpdf '%s'; test=test -n "$DISPLAY";
 application/postscript; ps2ascii %s ; copiousoutput
 </screen>
-
 </sect1>
 </chapter>

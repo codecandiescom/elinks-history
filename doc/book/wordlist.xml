@@ -1,0 +1,49 @@
+<appendix><title>Wordlist</title>
+<!--
+DocBook apparently has bad support for showing the words
+making up acronyms so we link to this wordlist. Alternatively
+we could use footnotes but they might not be generic.
+
+Template:
+	<varlistentry xreflabel="acronym-">
+		<term></term>
+		<listitem><para></para></listitem>
+	</varlistentry>
+
+Add some "acronym-" prefix to no use up namespace.
+-->
+<sect1><title>Acronyms</title>
+<variablelist>
+	<varlistentry id="acronym-C">
+		<term>C</term>
+		<listitem><para>The C programming language</para></listitem>
+	</varlistentry>
+	<varlistentry id="acronym-FTP">
+		<term>FTP</term>
+		<listitem><para>File Transfer Protocol</para></listitem>
+	</varlistentry>
+	<varlistentry id="acronym-UI">
+		<term>UI</term>
+		<listitem><para>User Interface</para></listitem>
+	</varlistentry>
+</variablelist>
+</sect1>
+
+<sect1><title>Explanations</title>
+<variablelist>
+	<varlistentry id="explain-indent">
+		<term><command>indent</command></term>
+		<listitem><para>The indent program beautifier</para></listitem>
+	</varlistentry>
+	<varlistentry id="explain-X">
+		<term><command>The X Window System</command></term>
+		<listitem><para>
+
+		The  X  Window System is a network transparent window system
+		which runs on a wide range of computing and graphics machines.
+
+		</para></listitem>
+	</varlistentry>
+</variablelist>
+</sect1>
+</appendix>

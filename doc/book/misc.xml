@@ -1,9 +1,6 @@
-<chapter id="resources">
-
-		<title>Miscellaneous information</title>
+<chapter id="resources"><title>Miscellaneous information</title>
 
 <sect1><title>Online Ressources</title>
-
 <para>
 
 	There are several ways to get more info on ELinks online.  You might
@@ -29,7 +26,6 @@
 	want to stay informed about what is going on.
 
 </para>
-
 <variablelist>
 	<varlistentry>
 	<term><varname>links-list</varname></term>
@@ -96,7 +92,6 @@
 </sect2>
 
 <sect2><title>Irc Channel</title>
-
 <para>
 
 	If you have a question and need a quick reply or just want to meet
@@ -108,9 +103,11 @@
 </sect1>
 
 <sect1 id="bugreporting"><title>Bugreporting</title>
+<epigraph><para>
 
-<epigraph><para>If it breaks you get to keep both pieces.</para></epigraph>
-     
+	If it breaks you get to keep both pieces.
+
+</para></epigraph>
 <para>
 
 	However if that happens we would very much like to hear about it. Send
@@ -128,5 +125,4 @@
 
 </para>
 </sect1>
-
 </chapter>

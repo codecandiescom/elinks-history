@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.2 2002/05/18 16:36:45 zas Exp $ */
+/* $Id: hash.c,v 1.3 2002/05/18 19:03:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,6 @@
 
 /* TODO: This should be universal, not string-centric. */
 
-#define hash_size(n) (1 << (n))
 #define hash_mask(n) (hash_size(n) - 1)
 
 struct hash *
@@ -35,7 +34,7 @@ init_hash(int width)
 
 	hash->width = width;
 
-	hash->hash = mem_alloc(hash_size(width) * sizeof(struct hash_item *));
+	hash->hash = mem_alloc(hash_size(width) * sizeof(struct list_head));
 	if (!hash->hash) {
 		mem_free(hash);
 		return NULL;
@@ -53,11 +52,10 @@ init_hash(int width)
 void
 free_hash(struct hash *hash)
 {
+	struct hash_item *item;
 	int i;
 
 	for (i = 0; i < hash_size(hash->width); i++) {
-		struct hash_item *item;
-
 		foreach (item, hash->hash[i]) {
 			mem_free(item->key);
 			mem_free(item->value);
@@ -115,9 +113,10 @@ del_hash_item(struct hash *hash, struct hash_item *item)
 {
 	if (!item) return;
 
+	del_from_list(item);
 	mem_free(item->key);
 	mem_free(item->value);
-	del_from_list(item);
+	mem_free(item);
 }
 
 

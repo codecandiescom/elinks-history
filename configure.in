@@ -433,7 +433,7 @@ if test "$enable_guile" = "yes"; then
 	AC_MSG_RESULT(enabled);
 	## Based on the GUILE_FLAGS macro.
 
-	AC_PATH_PROG(GUILE_CONFIG, guile-config, "$guile_error", "$PATH:$withval")
+	AC_PATH_PROG(GUILE_CONFIG, guile-config, "$guile_error", "$withval:$PATH")
 
 	## First, let's just see if we can find Guile at all.
 	if test "$GUILE_CONFIG" != "$guile_error" ; then

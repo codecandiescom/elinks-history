@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.108 2003/11/25 21:23:51 pasky Exp $ */
+/* $Id: conf.c,v 1.109 2003/11/25 21:27:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,7 +100,7 @@ static enum parse_error
 parse_set(struct option *opt_tree, unsigned char **file, int *line,
 	  struct string *mirror)
 {
-	unsigned char *orig_pos = *file, *mirror_pos;
+	unsigned char *orig_pos = *file;
 	unsigned char *optname;
 	unsigned char bin;
 
@@ -125,8 +125,8 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 	*file = skip_white(*file, line);
 	if (!**file) { mem_free(optname); return ERROR_VALUE; }
 
-	/* (Virtually) mirror what we already have */
-	mirror_pos = *file;
+	/* Mirror what we already have */
+	if (mirror) add_bytes_to_string(mirror, orig_pos, *file - orig_pos);
 
 	/* Option value */
 	{
@@ -148,11 +148,6 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 		} else if (mirror) {
 			opt->flags |= OPT_WATERMARK;
 			if (option_types[opt->type].write) {
-				/* XXX: Otherwise we get garbaged config
-				 * files for alias'd options (see bug 216).
-				 * --pasky */
-				add_bytes_to_string(mirror, orig_pos,
-						    mirror_pos - orig_pos);
 				option_types[opt->type].write(opt, mirror);
 			}
 		} else if (!val || !option_types[opt->type].set

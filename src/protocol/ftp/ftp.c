@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.118 2003/12/07 11:24:06 pasky Exp $ */
+/* $Id: ftp.c,v 1.119 2003/12/07 11:29:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,18 @@
 #include <netinet/in.h>
 #ifdef HAVE_ARPA_INET_H
 #include <arpa/inet.h>
+#endif
+
+/* This is for some exotic TOS mangling when handling passive FTP sockets. */
+#ifdef HAVE_NETINET_IN_SYSTM_H
+#include <netinet/in_systm.h>
+#else
+#ifdef HAVE_NETINET_IN_SYSTEM_H
+#include <netinet/in_system.h>
+#endif
+#endif
+#ifdef HAVE_NETINET_IP_H
+#include <netinet/ip.h>
 #endif
 
 #include "elinks.h"
@@ -747,6 +759,8 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 			return;
 		}
 
+		/* XXX: Ugly code duplication. --pasky */
+
 		if (response == 227) {
 			/* TODO: move that to ... ?? */
 			int fd = socket(PF_INET, SOCK_STREAM, 0);
@@ -755,6 +769,15 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 				abort_conn_with_state(conn, S_FTP_ERROR);
 				return;
 			}
+
+#if defined(IP_TOS) && defined(IPTOS_THROUGHPUT)
+			{
+				int on = IPTOS_THROUGHPUT;
+
+				setsockopt(fd, IPPROTO_IP, IP_TOS, (char *)&on, sizeof(int));
+			}
+#endif
+
 			conn->data_socket = fd;
 			connect(fd, (struct sockaddr *) &sa, sizeof(struct sockaddr_in));
 		}
@@ -767,6 +790,15 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 				abort_conn_with_state(conn, S_FTP_ERROR);
 				return;
 			}
+
+#if defined(IP_TOS) && defined(IPTOS_THROUGHPUT)
+			{
+				int on = IPTOS_THROUGHPUT;
+
+				setsockopt(fd, IPPROTO_IP, IP_TOS, (char *)&on, sizeof(int));
+			}
+#endif
+
 			conn->data_socket = fd;
 			connect(fd, (struct sockaddr *) &sa, sizeof(struct sockaddr_in6));
 		}

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.93 2004/07/28 13:37:49 jonas Exp $ */
+/* $Id: kbd.c,v 1.94 2004/07/28 13:53:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -636,6 +636,20 @@ static struct key os2xtd[256] = {
 #endif
 
 #ifdef CONFIG_MOUSE
+static int
+decode_mouse_position(struct itrm *itrm, int from)
+{
+	int position;
+
+	position = (unsigned char)(itrm->kqueue[from]) - ' ' - 1
+		 + ((int)((unsigned char)(itrm->kqueue[from + 1]) - ' ' - 1) << 7);
+
+	return (position & (1 << 13)) ? 0 : position;
+}
+
+#define get_mouse_x_position(itrm, esclen) decode_mouse_position(itrm, (esclen) + 1)
+#define get_mouse_y_position(itrm, esclen) decode_mouse_position(itrm, (esclen) + 3)
+
 /* Returns length of the escape sequence or -1 if the caller needs to set up
  * the ESC delay timer. */
 static int
@@ -654,15 +668,8 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 		if (itrm->qlen - el < 5)
 			return -1;
 
-		ev->x = (unsigned char)(itrm->kqueue[el+1]) - ' ' - 1
-		       + ((int)((unsigned char)(itrm->kqueue[el+2]) - ' ' - 1) << 7);
-
-		if (ev->x & (1 << 13)) ev->x = 0; /* ev->x |= ~0 << 14; */
-
-		ev->y = (unsigned char)(itrm->kqueue[el+3]) - ' ' - 1
-		       + ((int)((unsigned char)(itrm->kqueue[el+4]) - ' ' - 1) << 7);
-
-		if (ev->y & (1 << 13)) ev->y = 0; /* ev->y |= ~0 << 14; */
+		ev->x = get_mouse_x_position(itrm, el);
+		ev->y = get_mouse_y_position(itrm, el);
 
 		switch ((itrm->kqueue[el] - ' ') ^ xterm_button) { /* Every event changes only one bit */
 		    case TW_BUTT_LEFT:   mouse->button = B_LEFT | ( (xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN ); break;

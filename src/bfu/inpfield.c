@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.136 2004/04/23 20:44:26 pasky Exp $ */
+/* $Id: inpfield.c,v 1.137 2004/05/02 12:45:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -314,7 +314,7 @@ mouse_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			    (void *) widget_data->info.field.cur_hist->prev != &widget_data->info.field.history) {
 				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->prev;
 				dlg_set_history(widget_data);
-				goto dsp_f;
+				goto display_field;
 			}
 			return EVENT_PROCESSED;
 
@@ -323,7 +323,7 @@ mouse_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			    (void *) widget_data->info.field.cur_hist != &widget_data->info.field.history) {
 				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->next;
 				dlg_set_history(widget_data);
-				goto dsp_f;
+				goto display_field;
 			}
 			return EVENT_PROCESSED;
 	}
@@ -334,7 +334,7 @@ mouse_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
 	dlg_data->selected = widget_data - dlg_data->widgets_data;
 
-dsp_f:
+display_field:
 	display_dlg_item(dlg_data, widget_data, 1);
 	return EVENT_PROCESSED;
 }
@@ -355,7 +355,7 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			if ((void *) widget_data->info.field.cur_hist->prev != &widget_data->info.field.history) {
 				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->prev;
 				dlg_set_history(widget_data);
-				goto dsp_f;
+				goto display_field;
 			}
 			break;
 
@@ -366,27 +366,27 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			if ((void *) widget_data->info.field.cur_hist != &widget_data->info.field.history) {
 				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->next;
 				dlg_set_history(widget_data);
-				goto dsp_f;
+				goto display_field;
 			}
 			break;
 
 		case ACT_EDIT_RIGHT:
 			if (widget_data->info.field.cpos < strlen(widget_data->cdata))
 				widget_data->info.field.cpos++;
-			goto dsp_f;
+			goto display_field;
 
 		case ACT_EDIT_LEFT:
 			if (widget_data->info.field.cpos > 0)
 				widget_data->info.field.cpos--;
-			goto dsp_f;
+			goto display_field;
 
 		case ACT_EDIT_HOME:
 			widget_data->info.field.cpos = 0;
-			goto dsp_f;
+			goto display_field;
 
 		case ACT_EDIT_END:
 			widget_data->info.field.cpos = strlen(widget_data->cdata);
-			goto dsp_f;
+			goto display_field;
 
 		case ACT_EDIT_BACKSPACE:
 			if (widget_data->info.field.cpos) {
@@ -395,18 +395,18 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 					strlen(widget_data->cdata) - widget_data->info.field.cpos + 1);
 				widget_data->info.field.cpos--;
 			}
-			goto dsp_f;
+			goto display_field;
 
 		case ACT_EDIT_DELETE:
 			{
 				int cdata_len = strlen(widget_data->cdata);
 
-				if (widget_data->info.field.cpos >= cdata_len) goto dsp_f;
+				if (widget_data->info.field.cpos >= cdata_len) goto display_field;
 
 				memmove(widget_data->cdata + widget_data->info.field.cpos,
 					widget_data->cdata + widget_data->info.field.cpos + 1,
 					cdata_len - widget_data->info.field.cpos + 1);
-				goto dsp_f;
+				goto display_field;
 			}
 
 		case ACT_EDIT_KILL_TO_BOL:
@@ -414,11 +414,11 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 					widget_data->cdata + widget_data->info.field.cpos,
 					strlen(widget_data->cdata + widget_data->info.field.cpos) + 1);
 			widget_data->info.field.cpos = 0;
-			goto dsp_f;
+			goto display_field;
 
 		case ACT_EDIT_KILL_TO_EOL:
 			widget_data->cdata[widget_data->info.field.cpos] = 0;
-			goto dsp_f;
+			goto display_field;
 
 		case ACT_EDIT_COPY_CLIPBOARD:
 			/* Copy to clipboard */
@@ -430,19 +430,19 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			set_clipboard_text(widget_data->cdata);
 			widget_data->cdata[0] = 0;
 			widget_data->info.field.cpos = 0;
-			goto dsp_f;
+			goto display_field;
 
 		case ACT_EDIT_PASTE_CLIPBOARD:
 			{
 				/* Paste from clipboard */
 				unsigned char *clipboard = get_clipboard_text();
 
-				if (!clipboard) goto dsp_f;
+				if (!clipboard) goto display_field;
 
 				safe_strncpy(widget_data->cdata, clipboard, widget_data->widget->datalen);
 				widget_data->info.field.cpos = strlen(widget_data->cdata);
 				mem_free(clipboard);
-				goto dsp_f;
+				goto display_field;
 			}
 
 		case ACT_EDIT_AUTO_COMPLETE:
@@ -450,14 +450,14 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 				return EVENT_NOT_PROCESSED;
 
 			do_tab_compl(dlg_data, &widget_data->info.field.history);
-			goto dsp_f;
+			goto display_field;
 
 		case ACT_EDIT_AUTO_COMPLETE_UNAMBIGUOUS:
 			if (!widget_has_history(widget_data))
 				return EVENT_NOT_PROCESSED;
 
 			do_tab_compl_unambiguous(dlg_data, &widget_data->info.field.history);
-			goto dsp_f;
+			goto display_field;
 
 		case ACT_EDIT_REDRAW:
 			redraw_terminal_cls(term);
@@ -468,18 +468,18 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 				int cdata_len = strlen(widget_data->cdata);
 
 				if (cdata_len >= widget_data->widget->datalen - 1)
-					goto dsp_f;
+					goto display_field;
 
 				memmove(widget_data->cdata + widget_data->info.field.cpos + 1,
 					widget_data->cdata + widget_data->info.field.cpos,
 					cdata_len - widget_data->info.field.cpos + 1);
 				widget_data->cdata[widget_data->info.field.cpos++] = ev->x;
-				goto dsp_f;
+				goto display_field;
 			}
 	}
 	return EVENT_NOT_PROCESSED;
 
-dsp_f:
+display_field:
 	display_dlg_item(dlg_data, widget_data, 1);
 	redraw_from_window(dlg_data->win);
 	return EVENT_PROCESSED;

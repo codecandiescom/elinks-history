@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.219 2005/03/30 10:30:44 zas Exp $ */
+/* $Id: dialogs.c,v 1.220 2005/04/01 15:17:43 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -520,7 +520,8 @@ struct bookmark_search_ctx {
 #define NULL_BOOKMARK_SEARCH_CTX {NULL, NULL, 0, 0}
 
 static int
-test_search(struct listbox_item *item, void *data_, int *offset) {
+test_search(struct listbox_item *item, void *data_, int *offset)
+{
 	struct bookmark_search_ctx *ctx = data_;
 
 	if (!ctx->offset) {

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.56 2002/12/12 16:46:49 pasky Exp $ */
+/* $Id: listbox.c,v 1.57 2002/12/19 15:33:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,6 +210,7 @@ struct box_context {
 	struct terminal *term;
 	struct widget_data *listbox_item_data;
 	struct listbox_data *box;
+	struct dialog_data *dlg;
 	int dist;
 	int offset;
 };
@@ -364,6 +365,14 @@ display_listbox_item(struct listbox_item *item, void *data_, int offset)
 	print_text(data->term, data->listbox_item_data->x + depth * 5,
 		   data->listbox_item_data->y + data->offset,
 		   len, item->text, color);
+	if (item == data->box->sel) {
+		/* For blind users: */
+		set_cursor(data->term,
+			data->listbox_item_data->x, data->listbox_item_data->y + data->offset,
+			data->listbox_item_data->x, data->listbox_item_data->y + data->offset);
+		set_window_ptr(data->dlg->win,
+			data->listbox_item_data->x, data->listbox_item_data->y + data->offset);
+	}
 
 	data->offset++;
 
@@ -394,6 +403,7 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 	data->term = term;
 	data->listbox_item_data = listbox_item_data;
 	data->box = box;
+	data->dlg = dlg;
 	data->offset = 0;
 
 	/* We want to have these visible if possible. */

@@ -1,16 +1,18 @@
-/* $Id: sysinfo.h,v 1.6 2004/08/14 23:36:45 jonas Exp $ */
+/* $Id: sysinfo.h,v 1.7 2004/08/14 23:48:38 jonas Exp $ */
 
 #ifndef EL__OSDEP_OS2_SYSINFO_H
 #define EL__OSDEP_OS2_SYSINFO_H
 
 #ifdef CONFIG_OS2
 
+#define SYSTEM_NAME	"OS/2"
+#define SYSTEM_STR	"os2"
+#define DEFAULT_SHELL	"cmd.exe"
+#define GETSHELL	getenv("COMSPEC")
+
 static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
+
 /*#define NO_ASYNC_LOOKUP*/
-#define SYSTEM_NAME "OS/2"
-#define SYSTEM_STR "os2"
-#define DEFAULT_SHELL "cmd.exe"
-#define GETSHELL getenv("COMSPEC")
 #define NO_FG_EXEC
 #define DOS_FS
 #define NO_FILE_SECURITY
@@ -31,6 +33,7 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 #ifndef HAVE_STRNCASECMP
 #define HAVE_STRNCASECMP
 #endif
+
 #define read _read
 #define write _write
 #ifdef O_SIZE

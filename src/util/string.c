@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.45 2003/06/02 16:07:43 pasky Exp $ */
+/* $Id: string.c,v 1.46 2003/06/02 17:05:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -420,8 +420,8 @@ elinks_strstr(const char *s, const char *p)
  * arguments reversed.
  * From http://www.unixpapa.com/incnote/string.html */
 /* XXX: Perhaps not the best place for it. --Zas */
-inline char *
-elinks_memmove(char *dst, const char *src, size_t n)
+inline void *
+elinks_memmove(void *dst, const void *src, size_t n)
 {
 	if (src > dst)
 		for (; n > 0; n--)

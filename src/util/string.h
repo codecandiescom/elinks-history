@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.33 2003/06/02 15:55:16 pasky Exp $ */
+/* $Id: string.h,v 1.34 2003/06/02 17:05:34 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -121,7 +121,7 @@ char *elinks_strstr(const char *, const char *);
 #else
 #undef memmove
 #define memmove(dst, src, n) elinks_memmove(dst, src, n)
-char *elinks_memmove(char *, const char *, size_t);
+void *elinks_memmove(void *, const void *, size_t);
 #endif
 #endif
 

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.83 2004/02/20 06:26:12 witekfl Exp $ */
+/* $Id: uri.c,v 1.84 2004/02/21 06:29:27 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -657,9 +657,15 @@ proxy:
 	if (*ch != ':' || url[strcspn(url, "/@")] == '@') {
 #endif
 		unsigned char *prefix = "file://";
+		unsigned char *expanded = expand_tilde(url);
 		int not_file = 0;
-		
-		if (file_exists(url)) goto end;
+
+		if (!expanded) return NULL;
+		if (file_exists(expanded)) goto end;
+		else {
+			not_file = 1;
+			mem_free(expanded);
+		}
 
 		/* Yes, it would be simpler to make test for IPv6 address first,
 		 * but it would result in confusing mix of ifdefs ;-). */
@@ -718,10 +724,6 @@ end:
 		newurl = stracpy(prefix);
 		if (!newurl) return NULL;
 		if (!not_file) {
-			unsigned char *expanded = expand_tilde(url);
-
-			if (!expanded) goto dammit_something_didnt_work_out;
-
 			if (!dir_sep(*expanded)) add_to_strn(&newurl, "./");
 			add_to_strn(&newurl, expanded);
 			mem_free(expanded);
@@ -738,7 +740,6 @@ end:
 			return newurl;
 		}
 
-dammit_something_didnt_work_out:
 		mem_free(newurl);
 		return NULL;
 	}

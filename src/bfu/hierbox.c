@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.96 2003/11/23 23:02:29 jonas Exp $ */
+/* $Id: hierbox.c,v 1.97 2003/11/24 00:23:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -254,8 +254,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 }
 
 struct dialog_data *
-hierbox_browser(struct hierbox_browser *browser, struct session *ses,
-		size_t add_size)
+hierbox_browser(struct hierbox_browser *browser, struct session *ses)
 {
 	struct terminal *term = ses->tab->term;
 	struct dialog *dlg;
@@ -266,7 +265,7 @@ hierbox_browser(struct hierbox_browser *browser, struct session *ses,
 	while (browser->buttons[button].label)
 		button++;
 
-	dlg = calloc_dialog(button + 2, add_size);
+	dlg = calloc_dialog(button + 2, 0);
 	if (!dlg) return NULL;
 
 	dlg->title = _(browser->title, term);

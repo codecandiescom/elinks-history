@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.89 2003/11/23 18:52:47 jonas Exp $ */
+/* $Id: dialogs.c,v 1.90 2003/11/24 00:23:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,8 +165,6 @@ push_bookmark_button(struct dialog_data *dlg_data,
 # define GLOBHIST_MANAGER_BUTTONS	6
 #endif
 
-#define GLOBHIST_MANAGER_ADDSIZE	(sizeof(struct global_history_item) + 2 * MAX_STR_LEN)
-
 static struct hierbox_browser_button globhist_buttons[] = {
 	{ N_("Goto"),		push_hierbox_goto_button	},
 	{ N_("Info"),		push_hierbox_info_button	},
@@ -208,7 +206,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 		gh_last_searched_url = NULL;
 	}
 
-	hierbox_browser(&globhist_browser, ses , GLOBHIST_MANAGER_ADDSIZE);
+	hierbox_browser(&globhist_browser, ses);
 }
 
 #endif /* GLOBHIST */

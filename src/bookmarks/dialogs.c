@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.134 2003/11/23 18:49:04 jonas Exp $ */
+/* $Id: dialogs.c,v 1.135 2003/11/24 00:23:41 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -361,7 +361,6 @@ push_move_button(struct dialog_data *dlg_data,
 /**** MANAGEMENT *****************************************************/
 
 #define	BOOKMARK_MANAGER_BUTTONS	7
-#define	BOOKMARK_MANAGER_ADDSIZE	(sizeof(struct bookmark) + 2 * MAX_STR_LEN)
 
 static struct hierbox_browser_button bookmark_buttons[] = {
 	{ N_("Goto"),		push_hierbox_goto_button	},
@@ -404,7 +403,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 		bm_last_searched_url = NULL;
 	}
 
-	hierbox_browser(&bookmark_browser, ses, BOOKMARK_MANAGER_ADDSIZE);
+	hierbox_browser(&bookmark_browser, ses);
 }
 
 

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.19 2003/11/23 18:52:37 jonas Exp $ */
+/* $Id: dialogs.c,v 1.20 2003/11/24 00:23:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,5 +141,5 @@ struct hierbox_browser cookie_browser = {
 void
 menu_cookie_manager(struct terminal *term, void *fcp, struct session *ses)
 {
-	hierbox_browser(&cookie_browser, ses, 0);
+	hierbox_browser(&cookie_browser, ses);
 }

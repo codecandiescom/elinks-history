@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.123 2003/11/23 18:49:30 jonas Exp $ */
+/* $Id: dialogs.c,v 1.124 2003/11/24 00:23:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -351,7 +351,6 @@ push_save_button(struct dialog_data *dlg_data,
 }
 
 #define	OPTION_MANAGER_BUTTONS	5
-#define	OPTION_MANAGER_ADDSIZE	(sizeof(struct option) + 2 * MAX_STR_LEN)
 
 static struct hierbox_browser_button option_buttons[] = {
 	{ N_("Info"),		push_info_button	},
@@ -379,7 +378,7 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	option_browser.items = &config_options->box_item->child;
 
-	hierbox_browser(&option_browser, ses, OPTION_MANAGER_ADDSIZE);
+	hierbox_browser(&option_browser, ses);
 }
 
 
@@ -524,7 +523,6 @@ push_kbdbind_save_button(struct dialog_data *dlg_data,
 }
 
 #define	KEYBINDING_MANAGER_BUTTONS	4
-#define KEYBINDING_MANAGER_ADDSIZE	(sizeof(struct option) + 2 * MAX_STR_LEN)
 
 static INIT_LIST_HEAD(keybinding_dialog_list);
 
@@ -551,5 +549,5 @@ struct hierbox_browser keybinding_browser = {
 void
 menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 {
-	hierbox_browser(&keybinding_browser, ses, KEYBINDING_MANAGER_ADDSIZE);
+	hierbox_browser(&keybinding_browser, ses);
 }

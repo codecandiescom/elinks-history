@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.13 2003/09/27 11:40:08 jonas Exp $ */
+/* $Id: options.h,v 1.14 2003/09/30 00:17:56 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -6,7 +6,7 @@
 #include "util/color.h"
 
 struct document_options {
-	int col, cp, assume_cp, hard_assume;
+	int color_mode, cp, assume_cp, hard_assume;
 	int margin;
 	int num_links_key;
 	int use_document_colours;

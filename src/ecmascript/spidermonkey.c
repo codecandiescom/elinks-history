@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.106 2004/12/17 20:26:11 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.107 2004/12/17 22:45:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -723,8 +723,11 @@ get_form_object(JSContext *ctx, JSObject *parent, struct form_control *fc)
 static JSBool
 forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	JSObject *parent = JS_GetParent(ctx, obj);
-	struct view_state *vs = JS_GetPrivate(ctx, parent);
+	JSObject *parent_doc = JS_GetParent(ctx, obj);
+	JSObject *parent_win = JS_GetParent(ctx, parent_doc);
+	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
+	struct document_view *doc_view = vs->doc_view;
+	struct document *document = doc_view->document;
 	VALUE_TO_JSVAL_START;
 
 	if (!JSVAL_IS_INT(id))
@@ -735,8 +738,6 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	{
 		struct form_control *fc;
 		int counter = 0;
-		struct document_view *doc_view = vs->doc_view;
-		struct document *document = doc_view->document;
 
 		foreach (fc, document->forms)
 			counter++;

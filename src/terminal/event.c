@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.48 2004/06/13 03:43:46 jonas Exp $ */
+/* $Id: event.c,v 1.49 2004/06/13 03:45:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,9 +123,8 @@ check_terminal_name(struct terminal *term)
 
 	strcpy(name, "terminal.");
 
-	/* We check TERM env. var for sanity, and fallback to
-	 * _template_ if needed. This way we prevent
-	 * elinks.conf potential corruption. */
+	/* We check TERM env. var for sanity, and fallback to _template_ if
+	 * needed. This way we prevent elinks.conf potential corruption. */
 	while (term->term[i]) {
 		if (!isA(term->term[i])) {
 			badchar = 1;
@@ -136,16 +135,16 @@ check_terminal_name(struct terminal *term)
 
 	if (badchar) {
 		usrerror(_("Warning: terminal name contains illicit chars.", term));
-	} else {
-		strcat(name, term->term);
-
-		/* Unlock the default _template_ option tree
-		 * that was asigned by init_term() and get the
-		 * correct one. */
-		object_unlock(term->spec);
-		term->spec = get_opt_rec(config_options, name);
-		object_lock(term->spec);
+		return;
 	}
+
+	strcat(name, term->term);
+
+	/* Unlock the default _template_ option tree that was asigned by
+	 * init_term() and get the correct one. */
+	object_unlock(term->spec);
+	term->spec = get_opt_rec(config_options, name);
+	object_lock(term->spec);
 }
 
 static int

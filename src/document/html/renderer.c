@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.511 2004/12/18 02:22:28 pasky Exp $ */
+/* $Id: renderer.c,v 1.512 2004/12/18 12:38:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1370,7 +1370,8 @@ html_special_form_control(struct part *part, struct form_control *fc)
 		/* No forms encountered yet, that means a homeless form
 		 * control. Generate a dummy form for those Flying
 		 * Dutchmans. */
-		add_to_list(part->document->forms, init_form());
+		form = init_form();
+		add_to_list(part->document->forms, form);
 	}
 	/* Attach this form control to the last form encountered. */
 	form = part->document->forms.next;

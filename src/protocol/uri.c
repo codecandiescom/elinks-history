@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.180 2004/04/11 15:32:22 jonas Exp $ */
+/* $Id: uri.c,v 1.181 2004/04/12 23:01:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -487,6 +487,8 @@ transform_file_url(struct uri *uri, unsigned char *cwd)
 	return uri;
 }
 
+static unsigned char *translate_url(unsigned char *url, unsigned char *cwd);
+
 unsigned char *
 join_urls(unsigned char *base, unsigned char *rel)
 {
@@ -532,25 +534,11 @@ join_urls(unsigned char *base, unsigned char *rel)
 
 	if (!strncasecmp("proxy://", rel, 8)) goto prx;
 
-	n = stracpy(rel);
-	if (!n) return NULL;
-
-	switch (parse_uri(&uri, n)) {
-	case URI_ERRNO_OK:
-		return normalize_uri_noparse(&uri);
-
-	case URI_ERRNO_NO_HOST_SLASH:
-	{
-		int len = strlen(n);
-
-		while (n[0] && n[len - 1] <= ' ') n[--len] = 0;
-		add_to_strn(&n, "/");
-
-		if (parse_uri(&uri, n) == URI_ERRNO_OK)
-			return normalize_uri_noparse(&uri);
-	}
-	default:
-		mem_free(n);
+	/* Check if there is some protocol name to go for */
+	tmp = get_protocol_length(rel);
+	if (tmp && get_protocol(rel, tmp) != PROTOCOL_UNKNOWN) {
+		n = translate_url(rel, NULL);
+		if (n) return n;
 	}
 
 prx:

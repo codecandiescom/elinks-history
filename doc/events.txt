@@ -3,6 +3,21 @@
 This file lists the events currently in use. When they are called, what they
 do and what arguments they expect.
 
+Events are a mechanism for communication between ELinks parts --- any ELinks
+subsystem (module) can register an event, hook at an event or trigger an event.
+Events are designed to allow transition to a completely message-passing model
+internally, with modules talking to each other through the events. However,
+currently only the "periodic-saving" element is used in this way (as sorta
+"clock pulse" for modules which have something to save periodically).
+Otherwise, events are currently used only as a generic way of trigger event
+handlers in various scripting backends.
+
+Therefore, so far this reference sheet is useful mainly to scripting backends
+developers and also scripting power users - it looks at the C side but usually
+you get most (if not all) of it passed to the hook functions in your scripts.
+
+
+
 Below is a template showing how to read the event information
 
 Name:		<event name>
@@ -20,6 +35,10 @@ Description:
  <description of the arguments, what the event does etc.>
 
 Please keep in alphabetical order!
+
+
+
+The list of events itself:
 
 -------------------------------------------------------------------------------
 Name:		dialog-lua-console
@@ -168,4 +187,4 @@ Description:
  Allows a subsystem to do whatever clean up is required when ELinks quits.
 
 -------------------------------------------------------------------------------
-$Id: events.txt,v 1.12 2004/07/16 18:33:45 jonas Exp $
+$Id: events.txt,v 1.13 2004/12/16 08:46:37 pasky Exp $

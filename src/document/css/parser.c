@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.98 2004/09/19 22:11:52 pasky Exp $ */
+/* $Id: parser.c,v 1.99 2004/09/19 22:25:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,7 +176,7 @@ struct selector_pkg {
  *	  element_name? ('#' id)? ('.' class)? (':' pseudo_class)? \
  *		  (' ' selector)?
  *
- * TODO: selector can currently not contain multiple types (i.e. both element
+ * TODO: selector cannot currently contain multiple types (i.e. both element
  * name and class), and combinators are not supported yet.
  */
 static void

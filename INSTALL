@@ -9,15 +9,7 @@ cvs login
 (empty password)
 cvs co elinks
 cd elinks
-./configure
-make cvs-dist
 ...
-
-Note that you don't need to call configure once more while compilation,
-once is enough :-).
-
-There is also target cvs-undist, which will keep really only contents of CVS
-repository in your directory.
 
 
 Compile:

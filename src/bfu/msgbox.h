@@ -1,4 +1,4 @@
-/* $Id: msgbox.h,v 1.18 2003/11/28 19:38:00 jonas Exp $ */
+/* $Id: msgbox.h,v 1.19 2003/11/29 01:46:26 jonas Exp $ */
 
 #ifndef EL__BFU_MSGBOX_H
 #define EL__BFU_MSGBOX_H
@@ -18,6 +18,9 @@ enum msgbox_flags {
 	/* The msg_box() string parameters should NOT be run through gettext
 	 * and translated. */
 	MSGBOX_NO_INTL = 0x2,
+	/* Should the text be scrollable */
+	/* XXX: The text need to be allocated since it will be mangled */
+	MSGBOX_SCROLLABLE = 0x4,
 };
 
 /* This is _the_ dialog function used in almost all parts of the code. It is

@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.43 2003/11/28 19:49:34 jonas Exp $ */
+/* $Id: widget.h,v 1.44 2003/11/29 01:46:26 jonas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -68,7 +68,8 @@ struct widget {
 		} button;
 		struct {
 			enum format_align align;
-			int is_label;
+			unsigned int is_label:1;
+			unsigned int is_scrollable:1;
 		} text;
 	} info;
 
@@ -94,6 +95,16 @@ struct widget_data {
 		struct {
 			int checked;
 		} checkbox;
+		struct {
+			/* Used only for the scrollable text widget */
+			int current;
+
+			/* The number of lines saved in @cdata */
+			int lines;
+
+			/* The maximum dialog width the lines are valid for */
+			int max_width;
+		} text;
 	} info;
 };
 
@@ -114,10 +125,12 @@ widget_is_focusable(struct widget_data *widget_data)
 {
 	enum widget_type type = widget_data->widget->type;
 
-	if (type == WIDGET_LISTBOX || type == WIDGET_TEXT)
-		return 0;
+	if (type == WIDGET_LISTBOX) return 0;
+	if (type != WIDGET_TEXT) return 1;
 
-	return 1;
+	/* Only focus if there is some text to scroll */
+	return (widget_data->widget->info.text.is_scrollable
+		&& widget_data->h < widget_data->info.text.lines);
 }
 
 #define widget_has_group(widget_data)	((widget_data)->widget->type == WIDGET_CHECKBOX \

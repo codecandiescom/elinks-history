@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.105 2003/11/28 20:53:13 jonas Exp $ */
+/* $Id: dialog.c,v 1.106 2003/11/29 01:46:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -408,7 +408,7 @@ format_widgets(struct terminal *term, struct dialog_data *dlg_data,
 			break;
 
 		case WIDGET_TEXT:
-			dlg_format_text(term, wdata, x, y, w, rw);
+			dlg_format_text(term, wdata, x, y, w, rw, h);
 			break;
 
 		case WIDGET_CHECKBOX:

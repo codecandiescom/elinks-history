@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.56 2003/11/28 19:38:00 jonas Exp $ */
+/* $Id: text.c,v 1.57 2003/11/29 01:46:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,8 +10,10 @@
 
 #include "elinks.h"
 
+#include "bfu/dialog.h"
 #include "bfu/style.h"
 #include "bfu/text.h"
+#include "config/kbdbind.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/draw.h"
 #include "terminal/terminal.h"
@@ -40,6 +42,47 @@ split_line(unsigned char *text, int max_width)
 	}
 
 	return split - text;
+}
+
+#define LINES_GRANULARITY 0x7
+#define realloc_lines(x, o, n) mem_align_alloc(x, o, n, sizeof(unsigned char *), LINES_GRANULARITY)
+
+/* Find the start of each line with the current max width */
+static unsigned char **
+split_lines(struct widget_data *widget_data, int max_width)
+{
+	unsigned char *text = widget_data->widget->text;
+	unsigned char **lines = (unsigned char **) widget_data->cdata;
+	int line = 0;
+	int width;
+
+	if (widget_data->info.text.max_width == max_width) return lines;
+
+	/* We want to recalculate the max line width */
+	widget_data->w = 0;
+
+	for (; *text; text += width) {
+
+		/* Skip any leading space from last line split */
+		if (*text == ' ' || *text == '\n') text++;
+
+		width = split_line(text, max_width);
+		int_lower_bound(&widget_data->w, width);
+
+		if (!realloc_lines(&lines, line, line + 1))
+			break;
+
+		lines[line++]= text;
+	}
+
+	/* Yes it might be a bit ugly on the other hand it will be autofreed
+	 * for us. */
+	widget_data->cdata = (unsigned char *) lines;
+	widget_data->info.text.lines = line;
+	widget_data->info.text.max_width = max_width;
+	int_bounds(&widget_data->info.text.current, 0, line);
+
+	return lines;
 }
 
 /* Format text according to dialog dimensions and alignment. */
@@ -77,19 +120,130 @@ dlg_format_text_do(struct terminal *term, unsigned char *text,
 
 void
 dlg_format_text(struct terminal *term, struct widget_data *widget_data,
-		int x, int *y, int dlg_width, int *real_width)
+		int x, int *y, int dlg_width, int *real_width, int max_height)
 {
-	dlg_format_text_do(term, widget_data->widget->text,
-			x, y, dlg_width, real_width,
-			term ? get_bfu_color(term, "dialog.text") : NULL,
-			widget_data->widget->info.text.align);
+	unsigned char *text = widget_data->widget->text;
+	unsigned char saved = 0;
+	unsigned char *saved_pos = NULL;
+
+	/* If we are drawing set up the dimensions before setting up the
+	 * scrolling. */
+	widget_data->x = x;
+	widget_data->y = *y;
+	widget_data->h = max_height * 7 / 10 - 3;
+	if (widget_data->h < 0) widget_data->h = max_height;
+
+	/* Can we scroll and do we even have to? */
+	if (widget_data->widget->info.text.is_scrollable
+	    && (widget_data->w != dlg_width
+		|| widget_data->h < widget_data->info.text.lines)) {
+		unsigned char **lines;
+		int current;
+		int visible;
+
+		/* Ensure that the current split is valid but don't
+		 * split if we don't have to */
+		if (widget_data->w != dlg_width
+		    && !split_lines(widget_data, dlg_width))
+			return;
+
+		lines = (unsigned char **) widget_data->cdata;
+		current = widget_data->info.text.current;
+
+		/* Set the current position */
+		text = lines[current];
+
+		/* Do we have to force a text end */
+		visible = widget_data->info.text.lines - current;
+		if (visible > widget_data->h) {
+			int lines_pos = current + widget_data->h;
+
+			saved_pos = lines[lines_pos];
+
+			/* We save the start of lines so backtrack to see
+			 * if the previous line has a line end that should
+			 * also be trimmed. */
+			if (lines_pos > 0 && saved_pos[-1] == '\n')
+				saved_pos--;
+
+			saved = *saved_pos;
+			*saved_pos = 0;
+		}
+
+		/* Force dialog to be the width of the longest line */
+		if (real_width) int_lower_bound(real_width, widget_data->w);
+
+	} else {
+		widget_data->info.text.current = 0;
+	}
+
+	dlg_format_text_do(term, text,
+		x, y, dlg_width, real_width,
+		term ? get_bfu_color(term, "dialog.text") : NULL,
+		widget_data->widget->info.text.align);
+
 	if (widget_data->widget->info.text.is_label) (*y)--;
+
+	/* If we scrolled and something was trimmed restore it */
+	if (saved && saved_pos) *saved_pos = saved;
+}
+
+/* TODO: Some kind of scroll bar or scroll percentage */
+
+static int
+kbd_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
+	 struct term_event *ev)
+{
+	int current = widget_data->info.text.current;
+	int lines = widget_data->info.text.lines;
+
+	switch (kbd_action(KM_MAIN, ev, NULL)) {
+		case ACT_UP:
+			current = int_max(current - 1, 0);
+			break;
+
+		case ACT_DOWN:
+			if (widget_data->h < lines - current)
+				current = int_min(current + 1, lines);
+			break;
+
+		case ACT_HOME:
+			current = 0;
+			break;
+
+		case ACT_END:
+			current = lines;
+			break;
+
+		default:
+			return EVENT_NOT_PROCESSED;
+	}
+
+	if (current != widget_data->info.text.current) {
+		struct terminal *term = dlg_data->win->term;
+		int y = widget_data->y;
+		int height = dialog_max_height(term);
+
+		widget_data->info.text.current = current;
+
+		draw_area(term, widget_data->x, widget_data->y,
+			  widget_data->w, widget_data->h, ' ', 0,
+			  get_bfu_color(term, "dialog.generic"));
+
+		dlg_format_text(term, widget_data,
+				widget_data->x, &y, widget_data->w, NULL,
+				height);
+
+		redraw_from_window(dlg_data->win);
+	}
+
+	return EVENT_PROCESSED;
 }
 
 struct widget_ops text_ops = {
 	NULL,
 	NULL,
 	NULL,
-	NULL,
+	kbd_text,
 	NULL,
 };

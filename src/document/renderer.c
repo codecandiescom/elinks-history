@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.57 2004/06/22 15:38:58 zas Exp $ */
+/* $Id: renderer.c,v 1.58 2004/06/22 15:45:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -248,6 +248,12 @@ get_convert_table(unsigned char *head, int to_cp,
 	assert(head);
 	if_assert_failed return NULL;
 
+	if (ignore_server_cp) {
+		if (cp_status) *cp_status = CP_STATUS_IGNORED;
+		if (from_cp) *from_cp = default_cp;
+		return get_translation_table(default_cp, to_cp);
+	}
+
 	while (cp_index == -1) {
 		unsigned char *ct_charset;
 
@@ -278,18 +284,13 @@ get_convert_table(unsigned char *head, int to_cp,
 		}
 	}
 
-	if (cp_status) {
-		if (cp_index == -1)
-			*cp_status = CP_STATUS_ASSUMED;
-		else {
-			if (ignore_server_cp)
-				*cp_status = CP_STATUS_IGNORED;
-			else
-				*cp_status = CP_STATUS_SERVER;
-		}
+	if (cp_index == -1) {
+		cp_index = default_cp;
+		if (cp_status) *cp_status = CP_STATUS_ASSUMED;
+	} else {
+		if (cp_status) *cp_status = CP_STATUS_SERVER;
 	}
 
-	if (ignore_server_cp || cp_index == -1) cp_index = default_cp;
 	if (from_cp) *from_cp = cp_index;
 
 	return get_translation_table(cp_index, to_cp);

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.54 2002/09/09 12:55:41 zas Exp $ */
+/* $Id: main.c,v 1.55 2002/09/14 14:13:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <signal.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #ifdef HAVE_SYS_SIGNAL_H
 #include <sys/signal.h>

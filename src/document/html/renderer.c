@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.408 2004/01/17 15:21:52 pasky Exp $ */
+/* $Id: renderer.c,v 1.409 2004/01/21 15:36:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,6 +86,7 @@ static int nowrap = 0; /* Activated/deactivated by SP_NOWRAP. */
 static struct conv_table *convert_table;
 static int g_ctrl_num;
 static int empty_format;
+static int did_subscript = 0;
 
 static struct hash *table_cache = NULL;
 
@@ -303,17 +304,15 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 		set_term_color(&schar_cache, &colors, color_flags, color_mode);
 
 		if (global_doc_opts->display_subs) {
-			static int sub = 0;
-
 			if (format.attr & AT_SUBSCRIPT) {
-				if (!sub) {
-					sub = 1;
+				if (!did_subscript) {
+					did_subscript = 1;
 					put_chars(part, "[", 1);
 				}
 			} else {
-				if (sub) {
+				if (did_subscript) {
 					put_chars(part, "]", 1);
-					sub = 0;
+					did_subscript = 0;
 				}
 			}
 		}
@@ -984,6 +983,7 @@ void
 put_chars(struct part *part, unsigned char *chars, int charslen)
 {
 	enum link_state link_state;
+	int update_after_subscript = did_subscript;
 
 	assert(part);
 	if_assert_failed return;
@@ -1026,7 +1026,8 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 		 * <sup> tags will output to the canvas using an inner
 		 * put_chars() call which results in their process_link() call
 		 * will ``update'' the @link_state. */
-		if (link_state == LINK_STATE_NEW && is_drawing_subs_or_sups()) {
+		if (link_state == LINK_STATE_NEW
+		    && (is_drawing_subs_or_sups() || update_after_subscript != did_subscript)) {
 			link_state = get_link_state();
 		}
 

@@ -1,3 +1,103 @@
+Sun Apr 20 15:05:49 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: util/string.c, bfu/inphist.c, document/html/parser.c:
+
+	A potential issue was fixed. trim_chars() no more modify pointer to
+	the start of string, it now uses memmove(). It may be responsible of
+	issues when trying to free the string.  
+
+Sun Apr 20 14:49:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/group.c:
+
+	Code redundancy was reduced. As a side effect it should improve
+	speed a bit.  
+
+Sun Apr 20 12:30:10 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Fix the Draw the frame lines connected patch. Please pasky recheck
+	it.  
+
+Sun Apr 20 10:35:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Draw the frame lines connected (by mikulas, from 0.99pre5).  
+
+Sun Apr 20 09:08:34 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.po files and french translation were updated.  
+
+Sun Apr 20 08:54:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	Ooops. Missing \n fixed.  
+
+Sun Apr 20 08:49:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/os_dep.c:
+
+	Fixed / -> _ URL translation when calling external helpers. Reported
+	by John D. Boy <john@voidhobo.de>, patch by Fabio.  
+
+Sun Apr 20 08:40:50 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Allow relative redirects while downloading (by mikulas, from
+	0.99pre5).  
+
+Sun Apr 20 08:37:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Convert '\' to '/' in HTTP requests (windows rulez) (by mikulas,
+	from 0.99pre5).  
+
+Sun Apr 20 08:35:09 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	Added mising newline in protocol.http.bugs.broken_302_redirect
+	description.  
+
+Sun Apr 20 08:33:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, protocol/http/http.c:
+
+	Introduced protocol.http.bugs.accept_charset which optionally
+	prohibits sending of the infamous Accept-Charset header (by mikulas,
+	from 0.99pre3).  
+
+Sun Apr 20 08:29:48 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Do not abort loading main page when loading link fails (by mikulas,
+	from 0.99pre3).  
+
+Sun Apr 20 08:27:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Read uploaded files in binary mode (matters for OS/2) (by mikulas,
+	from 0.99pre3).  
+
+Sun Apr 20 08:25:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, sched/sched.c:
+
+	connect.retries = 0 means unlimited retries (by mikulas, from
+	0.99pre3).  
+
 Sat Apr 19 19:15:09 2003  Laurent Monin <zas@norz.org>:
 
 	* po/: Makefile.in.in, be.po, bg.po, ca.po, cs.po, da.po, de.po,

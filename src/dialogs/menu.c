@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.228 2003/12/26 13:37:17 jonas Exp $ */
+/* $Id: menu.c,v 1.229 2003/12/26 13:40:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -388,7 +388,7 @@ static struct menu_item file_menu21[] = {
 	BAR_MENU_ITEM,
 	INIT_MENU_ITEM(N_("~Save as"), NULL, ACT_NONE, save_as, NULL, 0),
 	INIT_MENU_ITEM(N_("Save UR~L as"), NULL, ACT_NONE, menu_save_url_as, NULL, 0),
-	INIT_MENU_ITEM(N_("Sa~ve formatted document"), "", ACT_SAVE_FORMATTED,
+	INIT_MENU_ITEM(N_("Sa~ve formatted document"), NULL, ACT_SAVE_FORMATTED,
 			menu_save_formatted, NULL, 0),
 #ifdef BOOKMARKS
 	INIT_MENU_ITEM(N_("Bookm~ark document"), "a", ACT_ADD_BOOKMARK,
@@ -555,7 +555,7 @@ static struct menu_item tools_menu[] = {
 	INIT_MENU_ITEM(N_("~Bookmarks"), "s", ACT_BOOKMARK_MANAGER, menu_bookmark_manager, NULL, 0),
 #endif
 	INIT_MENU_ITEM(N_("~Cache"), "C", ACT_CACHE_MANAGER, menu_cache_manager, NULL, 0),
-	INIT_MENU_ITEM(N_("~Downloads"), "", ACT_DOWNLOAD_MANAGER, menu_download_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("~Downloads"), NULL, ACT_DOWNLOAD_MANAGER, menu_download_manager, NULL, 0),
 #ifdef COOKIES
 	INIT_MENU_ITEM(N_("Coo~kies"), "K", ACT_COOKIE_MANAGER, menu_cookie_manager, NULL, 0),
 #endif

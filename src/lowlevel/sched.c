@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.50 2002/11/19 11:00:35 zas Exp $ */
+/* $Id: sched.c,v 1.51 2002/11/19 22:08:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,7 +153,7 @@ connect_info(int type)
 		case CI_LIST:
 			return (long) &queue;
 		default:
-			internal("cache_info: bad request");
+			internal("connect_info: bad request");
 	}
 	return 0;
 }

@@ -1,5 +1,5 @@
 /* A pretty generic scanner */
-/* $Id: scanner.c,v 1.3 2004/01/28 01:32:42 jonas Exp $ */
+/* $Id: scanner.c,v 1.4 2004/01/28 01:34:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,38 +14,6 @@
 #include "util/scanner.h"
 #include "util/string.h"
 
-
-static void
-init_scanner_info(struct scanner_info *scanner_info)
-{
-	struct scan_table_info *info = scanner_info->scan_table_info;
-	int *scan_table = scanner_info->scan_table;
-	int i;
-
-	for (i = 0; info[i].type != SCAN_END; i++) {
-		union scan_table_data *data = &info[i].data;
-
-		if (info[i].type == SCAN_RANGE) {
-			int index = data->range.start;
-
-			assert(data->range.start > 0);
-			assert(data->range.end < SCAN_TABLE_SIZE);
-			assert(data->range.start <= data->range.end);
-
-			for (; index <= data->range.end; index++)
-				scan_table[index] |= info[i].bits;
-
-		} else {
-			unsigned char *string = info[i].data.string.source;
-			int pos = info[i].data.string.length - 1;
-
-			assert(info[i].type == SCAN_STRING && pos >= 0);
-
-			for (; pos >= 0; pos--)
-				scan_table[string[pos]] |= info[i].bits;
-		}
-	}
-}
 
 int
 map_scanner_string(struct scanner *scanner,
@@ -150,6 +118,38 @@ get_scanner_token_debug(struct scanner *scanner)
 
 
 /* Initializers */
+
+static inline void
+init_scanner_info(struct scanner_info *scanner_info)
+{
+	struct scan_table_info *info = scanner_info->scan_table_info;
+	int *scan_table = scanner_info->scan_table;
+	int i;
+
+	for (i = 0; info[i].type != SCAN_END; i++) {
+		union scan_table_data *data = &info[i].data;
+
+		if (info[i].type == SCAN_RANGE) {
+			int index = data->range.start;
+
+			assert(data->range.start > 0);
+			assert(data->range.end < SCAN_TABLE_SIZE);
+			assert(data->range.start <= data->range.end);
+
+			for (; index <= data->range.end; index++)
+				scan_table[index] |= info[i].bits;
+
+		} else {
+			unsigned char *string = info[i].data.string.source;
+			int pos = info[i].data.string.length - 1;
+
+			assert(info[i].type == SCAN_STRING && pos >= 0);
+
+			for (; pos >= 0; pos--)
+				scan_table[string[pos]] |= info[i].bits;
+		}
+	}
+}
 
 void
 init_scanner(struct scanner *scanner, unsigned char *string,

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.1 2002/12/29 13:40:29 pasky Exp $
+## $Id: Makefile.am,v 1.2 2003/01/01 18:58:13 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -15,5 +15,7 @@ libparser_a_SOURCES = \
  attrib.h \
  parser.c \
  parser.h \
+ stack.c \
+ stack.h \
  syntree.c \
  syntree.h

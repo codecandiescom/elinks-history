@@ -1,5 +1,5 @@
 /* Parser HTML backend */
-/* $Id: parser.c,v 1.26 2002/12/31 10:36:34 pasky Exp $ */
+/* $Id: parser.c,v 1.27 2003/01/01 18:58:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "elusive/parser/html/parser.h"
 #include "elusive/parser/attrib.h"
 #include "elusive/parser/parser.h"
+#include "elusive/parser/stack.h"
 #include "elusive/parser/syntree.h"
 #include "util/error.h"
 #include "util/memory.h"
@@ -34,9 +35,7 @@ enum state_code {
 };
 
 struct html_parser_state {
-	struct html_parser_state *up;
-
-	enum state_code state;
+	struct parser_stack_item stack;
 
 	union {
 		/* HPT_PLAIN */
@@ -59,36 +58,19 @@ struct html_parser_state {
 	} data;
 };
 
-static struct html_parser_state *
+static inline struct html_parser_state *
 html_state_push(struct parser_state *state, enum state_code state_code)
 {
-	struct html_parser_state *pstate;
-
-	/* debug("html_state_push [%d]", state_code); */
-
-	pstate = mem_calloc(1, sizeof(struct html_parser_state));
-	if (!pstate) return NULL;
-
-	pstate->up = state->data;
-	state->data = pstate;
-	pstate->state = state_code;
-	return pstate;
+	return (struct html_parser_state *)
+		state_stack_push(state, sizeof(struct html_parser_state),
+				 state_code);
 }
 
-static struct html_parser_state *
+static inline struct html_parser_state *
 html_state_pop(struct parser_state *state)
 {
-	struct html_parser_state *pstate = state->data;
-
-	/* debug("html_state_pop [%d]", pstate->state); */
-
-	if (!pstate) {
-		internal("HTML state stack underflow!");
-		return NULL;
-	}
-	state->data = pstate->up;
-	mem_free(pstate);
-	return state->data;
+	return (struct html_parser_state *)
+		state_stack_pop(state);
 }
 
 
@@ -273,8 +255,8 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 		/* We don't have anything to do for now. So just retire. */
 		pstate = html_state_pop(state);
 #ifdef DEBUG
-		if (pstate->state != HPT_PLAIN)
-			internal("At HPT_TAG [2], pstate->state is %d! That means corrupted HTML stack. Fear.", pstate->state);
+		if (pstate->stack.state != HPT_PLAIN)
+			internal("At HPT_TAG [2], pstate->stack.state is %d! That means corrupted HTML stack. Fear.", pstate->stack.state);
 #endif
 
 		html++, html_len--; /* > */
@@ -640,8 +622,8 @@ html_parse(struct parser_state *state, unsigned char **str, int *len)
 	struct html_parser_state *pstate = state->data;
 
 	while (*len) {
-		/* debug("parsing [%d] ::%s::", pstate->state, *str); */
-		if (state_parsers[pstate->state](state, str, len) < 0) {
+		/* debug("parsing [%d] ::%s::", pstate->stack.state, *str); */
+		if (state_parsers[pstate->stack.state](state, str, len) < 0) {
 			return;
 		}
 		pstate = state->data; /* update to the top of the stack */

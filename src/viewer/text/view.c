@@ -1,11 +1,10 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.295 2003/12/13 00:32:43 jonas Exp $ */
+/* $Id: view.c,v 1.296 2003/12/13 00:39:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 #ifdef HAVE_UNISTD_H
@@ -603,6 +602,7 @@ frm_download(struct session *ses, struct document_view *doc_view, int resume)
 		query_file(ses, ses->dn_url, ses, (resume ? resume_download : start_download), NULL, 1);
 	}
 }
+
 
 /* We return |x| at the end of the function. The value of x
  * should be one of the following:

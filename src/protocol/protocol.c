@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.23 2003/10/06 00:27:30 zas Exp $ */
+/* $Id: protocol.c,v 1.24 2003/11/11 23:44:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,15 +150,26 @@ get_protocol_handler(enum protocol protocol)
 protocol_external_handler *
 get_protocol_external_handler(unsigned char *url)
 {
-	/* Seek the end of the protocol name. */
-	unsigned char *end = strchr(url, ':');
+	enum protocol protocol;
+	unsigned char *end = url;
 
-	if (end) {
-		enum protocol protocol = check_protocol(url, end - url);
+	/* Seek the end of the protocol name if any. */
+	while (*end && *end != ':') {
+		/* RFC1738:
+		 * scheme  = 1*[ lowalpha | digit | "+" | "-" | "." ] */
+		if ((*end >= 'a' || *end <= 'z') || (*end >= '0' || *end <= '9')
+		    || *end == '+' || *end == '-' || *end == '.') {
+			end++;
+		} else
+			break;
 
-		if (protocol != PROTOCOL_UNKNOWN)
-			return protocol_backends[protocol]->external_handler;
-	}
+	};
+
+	if (*end != ':' || end == url) return NULL; /* No valid protocol scheme. */
+
+	protocol = check_protocol(url, end - url);
+	if (protocol != PROTOCOL_UNKNOWN)
+		return protocol_backends[protocol]->external_handler;
 
 	return NULL;
 }

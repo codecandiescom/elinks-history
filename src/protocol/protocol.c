@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.12 2003/06/26 21:39:02 pasky Exp $ */
+/* $Id: protocol.c,v 1.13 2003/06/26 23:49:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,24 +110,13 @@ check_protocol(unsigned char *p, int l)
 	return PROTOCOL_UNKNOWN;
 }
 
+
 int
-get_prot_info(unsigned char *prot, int *port, protocol_handler **handler,
-	      protocol_external_handler **external_handler)
+get_protocol_port(enum protocol protocol)
 {
-	enum protocol protocol = check_protocol(prot, strlen(prot));
-
-	if (protocol == PROTOCOL_UNKNOWN)
-		return -1;
-
-	if (port)
-		*port = protocol_backends[protocol]->port;
-	if (handler)
-		*handler = protocol_backends[protocol]->handler;
-	if (external_handler)
-		*external_handler = protocol_backends[protocol]->external_handler;
-	return 0;
+	assert(protocol != PROTOCOL_UNKNOWN);
+	return protocol_backends[protocol]->port;
 }
-
 
 int
 get_protocol_free_syntax(enum protocol protocol)
@@ -151,26 +140,34 @@ get_protocol_need_slash_after_host(enum protocol protocol)
 }
 
 
-protocol_handler *get_protocol_handler(unsigned char *url)
+protocol_handler *
+get_protocol_handler(unsigned char *url)
 {
-	protocol_handler *f = NULL;
-	unsigned char *p = get_protocol_name(url);
+	unsigned char *name = get_protocol_name(url);
 
-	if (!p) return NULL;
-	if (*p) get_prot_info(p, NULL, &f, NULL);
-	mem_free(p);
+	if (name) {
+		enum protocol protocol = check_protocol(name, strlen(name));
 
-	return f;
+		mem_free(name);
+		if (protocol != PROTOCOL_UNKNOWN)
+			return protocol_backends[protocol]->handler;
+	}
+
+	return NULL;
 }
 
-protocol_external_handler *get_protocol_external_handler(unsigned char *url)
+protocol_external_handler *
+get_protocol_external_handler(unsigned char *url)
 {
-	protocol_external_handler *f = NULL;
-	unsigned char *p = get_protocol_name(url);
+	unsigned char *name = get_protocol_name(url);
 
-	if (!p) return NULL;
-	if (*p) get_prot_info(p, NULL, NULL, &f);
-	mem_free(p);
+	if (name) {
+		enum protocol protocol = check_protocol(name, strlen(name));
 
-	return f;
+		mem_free(name);
+		if (protocol != PROTOCOL_UNKNOWN)
+			return protocol_backends[protocol]->external_handler;
+	}
+
+	return NULL;
 }

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.75 2003/06/26 21:39:02 pasky Exp $ */
+/* $Id: url.c,v 1.76 2003/06/26 23:49:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -310,7 +310,6 @@ get_port(unsigned char *url)
 {
 	unsigned char *h;
 	int hl;
-	int n = -1;
 
 	if (parse_url(url, NULL,
 		      NULL, NULL,
@@ -321,6 +320,8 @@ get_port(unsigned char *url)
 		      NULL)) return -1;
 
 	if (h) {
+		int n;
+
 		errno = 0;
 		n = strtol(h, NULL, 10);
 		if (!errno && n > 0) return n;
@@ -328,11 +329,14 @@ get_port(unsigned char *url)
 
 	h = get_protocol_name(url);
 	if (h) {
-		if (*h) get_prot_info(h, &n, NULL, NULL);
+		enum protocol protocol = check_protocol(h, strlen(h));
+
 		mem_free(h);
+		if (protocol != PROTOCOL_UNKNOWN)
+			return get_protocol_port(protocol);
 	}
 
-	return n;
+	return -1;
 }
 
 

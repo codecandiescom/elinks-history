@@ -1,3 +1,344 @@
+Sat Jun 26 22:05:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	Directional links navigation.  
+
+Sat Jun 26 22:03:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	next_in_dir(): Make sure get_link_*_intersect() never returns zero
+	on success. Dear diary, pasky is again trying to attain the CIA top
+	committer position.  
+
+Sat Jun 26 22:02:34 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	next_in_dir(): Fix of the minute - do not enter infinite loop when
+	going left from a link starting at the 0th column.  
+
+Sat Jun 26 21:58:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	next_in_dir(): Now fix move-link-left not working at all (or working
+	plain weird).  
+
+Sat Jun 26 21:55:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	next_in_dir(): Fix infinite loop when trying to move right from the
+	last link on the line.  
+
+Sat Jun 26 21:53:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	Fix down-at-the-document-bottom link wraparound.  
+
+Sat Jun 26 21:31:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	next_in_dir(): Fix an off-by-one error in vertical movement,
+	crashing when hitting the document bottom.  
+
+Sat Jun 26 21:29:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, sched/action.c,
+	viewer/text/link.c, viewer/text/link.h, viewer/text/view.c:
+
+	Introduced directional links navigation - actions
+	move-link-(up,down,left,right), move_link_dir() and next_in_dir().
+	Requested by Matus Lovecky of Siemens.  
+
+Sat Jun 26 21:25:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.h:
+
+	Whoops, fix get_link_index().  
+
+Sat Jun 26 20:33:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.h:
+
+	Introduced get_link_index().  
+
+Sat Jun 26 19:23:14 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): @mmax_c -> @max_cols_width.  
+
+Sat Jun 26 19:20:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	@tx_size -> @cols_size.  
+
+Sat Jun 26 19:18:48 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	@n_links -> @new_link_num.  
+
+Sat Jun 26 19:17:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cookies/cookies.c:
+
+	Sort cookie servers alphabetically. Makes the cookies manager
+	usable.  
+
+Sat Jun 26 19:15:39 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	@i -> @col, @j -> @row, (@nl, @n_link) -> @link_num, @n_links ->
+	@new_link_num.  
+
+Sat Jun 26 19:03:09 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	INIT_X -> INIT_REAL_COLS, INIT_Y -> INIT_REAL_ROWS, @rx ->
+	@real_cols, @ry -> @real_rows.  
+
+Sat Jun 26 18:39:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/header.c:
+
+	parse_http_header_param(): Trim ending spaces. It will help to fix
+	174, parsing cookie paths from '... path=/ ;...' strings and ending
+	spaces in filenames extracted from Content-Disposition.  
+
+Sat Jun 26 16:52:54 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	Statify get_visible_links_range().  
+
+Sat Jun 26 15:44:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	get_visible_links_range(): Tidyup.  
+
+Sat Jun 26 15:43:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	get_visible_links_range(): Cleanup.  
+
+Sat Jun 26 15:43:22 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	Split get_visible_links_range() from next_in_view().  
+
+Sat Jun 26 14:40:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/parser.c:
+
+	parse_cookie_str(): Use memset().  
+
+Sat Jun 26 14:36:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/: cookies.c, parser.c, parser.h, parsetst.c:
+
+	Pass cookie string to parse_cookie_str().  
+
+Sat Jun 26 14:35:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/parsetst.c:
+
+	Use stack allocated strings.  
+
+Sat Jun 26 14:27:27 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.h:
+
+	Describe link.points.  
+
+Sat Jun 26 14:25:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/parser.c:
+
+	parse_cookie_str(): s/return 0/return NULL/.  
+
+Sat Jun 26 13:06:13 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	Describe a bit what's going on in next_in_view().  
+
+Sat Jun 26 12:45:45 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.h:
+
+	Describe document.lines{1,2}.  
+
+Sat Jun 26 11:53:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/parser.c:
+
+	Improve the stepwise debug printing.  
+
+Sat Jun 26 10:53:49 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	parse_table(): @p -> @in_cell.  
+
+Sat Jun 26 10:48:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	parse_table(): @qqq -> @cols, @rows.  
+
+Sat Jun 26 10:45:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	struct table: @x -> @cols, @y -> @rows.  
+
+Sat Jun 26 10:37:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	struct cell: @mx -> @col, @my -> @row.  
+
+Sat Jun 26 10:33:30 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	parse_table(): @x -> @col, @y -> @row, @l_col -> @last_bgcolor.  
+
+Sat Jun 26 10:25:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Pop up 'No links in current document' error when doing link
+	typeahead with no links. Idea by Kalle Olavi Niemitalo (debian bug
+	238281).  
+
+Sat Jun 26 10:21:32 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	skip_table(): tidy up.  
+
+Sat Jun 26 10:17:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	skip_table(): move @name and @namelen declarations to inner loop.  
+
+Sat Jun 26 10:12:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/cmdline.c:
+
+	Typo fix.  
+
+Sat Jun 26 09:52:17 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/: cmdline.c, conf.c:
+
+	New command line option: -default-keys, which permit to override
+	user-defined keybindings and restoring default ones. Until now, it
+	was not possible to restore default keybindings but by manually
+	deleting entries from conf file. Please improve.  
+
+Sat Jun 26 03:45:15 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In frame_ev_kbd_number, return FRAME_EVENT_OK instead of
+	FRAME_EVENT_REFRESH after calling input_field for the 'Enter link
+	number' box: delete_window will trigger the necessary redraw, and,
+	anyway, the BFU is asynchronous, so input_field will return before a
+	link is selected.  
+
+Sat Jun 26 03:17:08 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In frame_ev_kbd_number, split the if-else-if block into two if
+	blocks as each ends with a return statement.  
+
+Sat Jun 26 03:14:49 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Add a missing blank line before a return.  
+
+Sat Jun 26 03:13:27 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In frame_ev_kbd_number, return FRAME_EVENT_OK instead of
+	FRAME_EVENT_REFRESH if we're to open the 'Enter link number' box but
+	there are no links on the page.  
+
+Sat Jun 26 03:10:30 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Change frame_ev_kbd_number to return an |enum frame_event_status|
+	value 
+	(whoops, it already has that type!) and remove that silly nested
+	switch from frame_ev_kbd.  
+
+Sat Jun 26 03:02:38 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Set |ses->kbdprefix.repeat_count| to 0 in frame_ev_kbd_number 
+	instead of signalling to the caller to do it.  
+
+Sat Jun 26 02:58:31 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In frame_ev_kbd_number, introduce the local variable doc_opts.  
+
+Sat Jun 26 02:50:27 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In frame_ev_kbd_number, move the declaration and initialisation of
+	|document| to the start of the routine so that both the if-block and
+	the else-block can use it.  
+
+Sat Jun 26 02:47:14 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Introduce frame_ev_kbd_number to reduce indentation.  
+
+Sat Jun 26 02:26:41 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Remove FIXME comment for what I just fixed.  
+
+Sat Jun 26 02:22:09 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Allow user key-bindings to over-ride 0-9 and the same in combination
+	with alt, which by default are used to select links or specify
+	command prefixes.  Clean-ups are forthcoming.  
+
+Sat Jun 26 02:11:50 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	If document.browse.accesskey.priority = 1, allow user key-bindings 
+	to over-ride document accesskeys, per the option's description.  
+
 Fri Jun 25 21:03:29 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/viewer/text/view.c:

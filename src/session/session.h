@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.89 2004/01/08 09:53:07 zas Exp $ */
+/* $Id: session.h,v 1.90 2004/01/15 22:51:06 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -248,6 +248,7 @@ unsigned char *get_current_url(struct session *, unsigned char *, size_t);
 unsigned char *get_current_title(struct session *, unsigned char *, size_t);
 
 struct link *get_current_link(struct session *ses);
+struct link *get_current_link_in_view(struct document_view *doc_view);
 unsigned char *get_current_link_url(struct session *, unsigned char *, size_t);
 unsigned char *get_current_link_name(struct session *, unsigned char *, size_t);
 

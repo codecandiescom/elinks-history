@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.293 2004/01/08 23:36:46 jonas Exp $ */
+/* $Id: session.c,v 1.294 2004/01/15 22:51:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1076,10 +1076,8 @@ get_current_link_name(struct session *ses, unsigned char *str, size_t str_size)
 }
 
 struct link *
-get_current_link(struct session *ses)
+get_current_link_in_view(struct document_view *doc_view)
 {
-	struct document_view *doc_view = current_frame(ses);
-
 	if (doc_view && doc_view->vs->current_link != -1) {
 		struct link *link;
 
@@ -1090,4 +1088,10 @@ get_current_link(struct session *ses)
 	}
 
 	return NULL;
+}
+
+struct link *
+get_current_link(struct session *ses)
+{
+	return get_current_link_in_view(current_frame(ses));
 }

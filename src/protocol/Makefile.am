@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.38 2004/10/12 15:23:27 zas Exp $
+## $Id: Makefile.am,v 1.39 2004/10/13 00:12:41 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -47,7 +47,16 @@ rewritedir = rewrite
 rewriteobj = $(rewritedir)/rewrite.o
 endif
 
-SUBDIRS = auth file $(fingerdir) $(ftpdir) $(gopherdir) http $(nntpdir) $(rewritedir) $(smbdir)
+SUBDIRS = \
+ auth \
+ file \
+ $(fingerdir) \
+ $(ftpdir) \
+ $(gopherdir) \
+ http \
+ $(nntpdir) \
+ $(rewritedir) \
+ $(smbdir)
 
 noinst_LIBRARIES = libprotocol.a
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.493 2004/06/12 11:35:08 jonas Exp $ */
+/* $Id: session.c,v 1.494 2004/06/12 11:45:09 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -774,7 +774,6 @@ encode_session_info(struct string *info, int cp, struct list_head *url_list)
 int
 decode_session_info(struct terminal *term, int len, const int *data)
 {
-	struct session *info = NULL;
 	struct session *ses;
 	enum remote_session_flags remote = 0;
 	struct uri *current_uri;
@@ -862,19 +861,15 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		uri = decoded ? get_hooked_uri(decoded, current_uri, term->cwd) : NULL;
 		mem_free_if(decoded);
 
-		/* If it is a remote session we never initialize the info so
-		 * that the terminal of the remote session will be destroyed
-		 * ASAP. */
 		if (uri) {
 			if (remote) {
 				init_remote_session(ses, &remote, uri);
 
-			} else if (!info) {
-				info = init_session(ses, term, uri, 0);
-				if (!info) return 0;
-
 			} else {
-				init_session(ses, term, uri, 1);
+				int backgrounded = !list_empty(term->windows);
+
+				if (!init_session(ses, term, uri, backgrounded))
+					break;
 			}
 			done_uri(uri);
 		}
@@ -884,7 +879,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 	}
 
 	/* If we only initialized remote sessions or didn't manage to add any
-	 * new tabs return failure code */
+	 * new tabs return zero so the terminal will be destroyed ASAP. */
 	return remote ? 0 : !list_empty(term->windows);
 }
 

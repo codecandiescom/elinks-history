@@ -40,12 +40,15 @@ The applier
 
 			      The current state
 
-   Currently only the element's 'style' attribute and content of <style> tags
-   is checked. It will automatically scan the current element, and if a
-   'style' attribute is found, it is parsed and applied to the current element.
-   If there is no 'style' attribute it will look up any styles retrieved from
-   <style> tags. TODO: We should always look up <style> tags and only apply those
-   not found in any 'style' attribute.
+   Currently we both check the element's 'style' attribute, content of <style>
+   tags and imports from either <link> tags in the HTML header or @imports from
+   the CSS code. But we lack a proper way to handle the cascading. Now it will
+   automatically scan the current element, and if a 'style' attribute is found,
+   it is parsed and applied to the current element.  If there is no 'style'
+   attribute it will look up any styles retrieved from the document stylesheet
+   and last try styles from the default user controlled stylesheet. TODO: We
+   should always look up <style> tags and only apply those not found in any
+   'style' attribute.
 
    One big problem with the current way of doing things is inheritance, there
    is no way we are telling the HTML engine what is going to be inherited and

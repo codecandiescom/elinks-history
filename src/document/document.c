@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.78 2004/09/24 00:03:35 pasky Exp $ */
+/* $Id: document.c,v 1.79 2004/09/24 01:41:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,7 +187,7 @@ get_document_css_magic(struct document *document)
 	foreach_uri (uri, index, &document->css_imports) {
 		struct cache_entry *cached = find_in_cache(uri);
 
-		if (cached) css_magic += cached->id;
+		if (cached) css_magic += cached->id + cached->data_size;
 	}
 
 	return css_magic;

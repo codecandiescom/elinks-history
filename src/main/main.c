@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.201 2004/04/23 19:37:06 pasky Exp $ */
+/* $Id: main.c,v 1.202 2004/04/23 19:38:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -182,6 +182,7 @@ init(void)
 		struct terminal *term = NULL;
 
 		if (!create_session_info(&info, id, &url_list)) {
+			ERROR(G_("Unable to create_session_info()."));
 			retval = RET_FATAL;
 			terminate = 1;
 
@@ -197,6 +198,7 @@ init(void)
 			term = attach_terminal(get_input_handle(), get_output_handle(),
 					       get_ctl_handle(), info.source, info.length);
 			if (!term) {
+				ERROR(G_("Unable to attach_terminal()."));
 				retval = RET_FATAL;
 				terminate = 1;
 			}

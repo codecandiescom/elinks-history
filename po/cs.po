@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-12-30 22:00+0100\n"
-"PO-Revision-Date: 2004-01-01 15:34+0100\n"
+"PO-Revision-Date: 2004-01-01 15:50+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -5762,7 +5762,7 @@ msgstr "Po %s oèekáváno URL."
 
 #: src/viewer/text/form.c:661
 msgid "Error while posting form"
-msgstr "Chyba pøi vypisování formuláøe"
+msgstr "Chyba pøi odesílání formuláøe"
 
 #: src/viewer/text/form.c:662
 #, c-format

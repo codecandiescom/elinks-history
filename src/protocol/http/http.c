@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.102 2003/04/20 08:33:41 zas Exp $ */
+/* $Id: http.c,v 1.103 2003/04/20 08:37:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,10 +129,15 @@ add_url_to_http_str(unsigned char **hdr, int *l, unsigned char *url_data,
 	if (!eurl) return;
 
 	p = p1 = eurl;
-	while (*(p += strcspn(p, " \t\r\n"))) {
-		*p = 0;
+	while (*(p += strcspn(p, " \t\r\n\\"))) {
+		unsigned char ch = *p;
+		
+		*p = '\0';
 		add_to_str(hdr, l, p1);
-		add_to_str(hdr, l, "%20");
+		if (ch == '\\')
+			add_to_str(hdr, l, "/");
+		else
+			add_to_str(hdr, l, "%20");
 		p++;
 		p1 = p;
 	}

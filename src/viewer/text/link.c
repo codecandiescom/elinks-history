@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.218 2004/06/13 22:46:45 zas Exp $ */
+/* $Id: link.c,v 1.219 2004/06/13 22:50:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,25 +87,24 @@ get_link_cursor_offset(struct document_view *doc_view, struct link *link)
 	return 0;
 }
 
-static inline void
-draw_link_do(struct terminal *term, struct document_view *doc_view,
-	     struct link *link, int cursor_offset)
+static inline struct screen_char *
+init_link_drawing(struct document_view *doc_view, struct link *link)
 {
+	struct document_options *doc_opts;
 	struct screen_char *template;
 	enum color_flags color_flags;
 	enum color_mode color_mode;
-	struct document_options *doc_opts;
 	struct color_pair colors;
-	int xpos, ypos;
-	int i;
 
 	/* Allocate an extra background char to work on here. */
 	doc_view->link_bg = mem_alloc((1 + link->npoints) * sizeof(struct link_bg));
-	if (!doc_view->link_bg) return;
+	if (!doc_view->link_bg) return NULL;
+
 	doc_view->link_bg_n = link->npoints;
 
 	/* Setup the template char. */
 	template = &doc_view->link_bg[link->npoints].c;
+
 	template->attr = SCREEN_ATTR_STANDOUT;
 
 	/* For the color mode options we use the options set for the document.
@@ -140,6 +139,17 @@ draw_link_do(struct terminal *term, struct document_view *doc_view,
 	}
 
 	set_term_color(template, &colors, color_flags, color_mode);
+
+	return template;
+}
+
+static inline void
+draw_link_do(struct terminal *term, struct document_view *doc_view,
+	     struct link *link, int cursor_offset)
+{
+	struct screen_char *template = init_link_drawing(doc_view, link);
+	int xpos, ypos;
+	int i;
 
 	xpos = doc_view->box.x - doc_view->vs->x;
 	ypos = doc_view->box.y - doc_view->vs->y;

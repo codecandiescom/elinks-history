@@ -61,7 +61,7 @@ sub goto_url_hook
 		return $url;
 	}
 
-	# MirrorDot dumb prefix
+	# MirrorDot smart prefix
 	if ($url =~ '^(mirrordot|md)(| .*)$')
 	{
 		my ($slashdotted) = $url =~ /^[a-z]* (.*)/;
@@ -105,11 +105,43 @@ sub goto_url_hook
 		return $url;
 	}
 
-	# torrent search
+	# torrent search smart prefix
 	if ($url =~ '^(bittorrent|torrent|bt)( .*)$')
 	{
 		my ($torrent) = $url =~ /^[a-z]* (.*)/;
 		$url = 'http://google.com/search?q=filetype:torrent ' . $torrent . '&hl=xx-bork';
+		return $url;
+	}
+
+	# Coral cache smart prefix
+	if ($url =~ '^(coral|cc)( .*)$')
+	{
+		my ($cache) = $url =~ /^[a-z]* (.*)/;
+		$cache =~ s/^http:\/\///;
+		($url) = $cache =~ s/\//.nyud.net:8090\//;
+		$url = 'http://' . $cache;
+		return $url;
+	}
+
+	# Babelfish smart prefix ("babelfish german english")
+	if ($url =~ '^(babelfish|babel|bf|translate|trans)( [a-zA-Z]* [a-zA-Z]*)$' && $current_url)
+	{
+		$url =~ s/ chinese/ zt/i;
+		$url =~ s/ dutch/ nl/i;
+		$url =~ s/ english/ en/i;
+		$url =~ s/ french/ fr/i;
+		$url =~ s/ german/ de/i;
+		$url =~ s/ greek/ el/i;
+		$url =~ s/ italian/ it/i;
+		$url =~ s/ japanese/ ja/i;
+		$url =~ s/ korean/ ko/i;
+		$url =~ s/ portugese/ pt/i;
+		$url =~ s/ russian/ ru/i;
+		$url =~ s/ spanish/ es/i;
+		my ($from_language, $to_language) = $url =~ /^[a-z]* (.*) (.*)$/;
+		my (undef, $target_url) = $current_url =~ /^(.*):\/\/(.*)/;
+		$url = 'http://babelfish.altavista.com/babelfish/urltrurl?url=' . $target_url . '&lp=' . $from_language . '_' . $to_language . '&tt=url';
+		return $url;
 	}
 
 	return $url;
@@ -149,7 +181,9 @@ sub pre_format_html_hook
 	# /. sanitation
 	if ($url =~ 'slashdot\.org')
 	{
-#		$html =~ s/^<!-- Advertisement code. -->.*<!-- end ad code -->$/<br>/sm;
+#		$html =~ s/^<!-- Advertisement code. -->.*<!-- end ad code -->$//sm;
+#		$html =~ s/<iframe.*><\/iframe>//g;
+		$html =~ s/<B>Advertisement<\/B>//;
 		return $html;
 	}
 
@@ -192,5 +226,5 @@ sub proxy_for_hook
 sub quit_hook
 {
 	# words of wisdom from ELinks the Sage
-	system('fortune -sa 2>/dev/null');
+	system('echo ""; fortune -sa 2>/dev/null');
 }

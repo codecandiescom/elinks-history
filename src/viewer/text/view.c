@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.199 2003/09/06 20:36:37 miciah Exp $ */
+/* $Id: view.c,v 1.200 2003/09/09 17:53:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,12 +279,12 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 void
 draw_doc(struct terminal *t, struct document_view *scr, int active)
 {
+	struct color_pair color = INIT_COLOR_PAIR(0, 0);
 	struct view_state *vs;
 	int xp, yp;
 	int xw, yw;
 	int vx, vy;
 	int y;
-	struct color_pair color;
 
 	assert(t && scr);
 	if_assert_failed return;
@@ -303,8 +303,8 @@ draw_doc(struct terminal *t, struct document_view *scr, int active)
 		set_window_ptr(get_current_tab(t), xp, yp);
 	}
 
-	color.foreground = 0;
-	color.background = scr->document->y ? scr->document->bgcolor : 0;
+	if (scr->document->y)
+		color.background = scr->document->bgcolor;
 
 	if (!scr->vs) {
 		draw_area(t, xp, yp, xw, yw, ' ', 0, &color);

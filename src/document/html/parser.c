@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.165 2003/07/22 03:09:44 jonas Exp $ */
+/* $Id: parser.c,v 1.166 2003/07/22 03:30:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2993,7 +2993,7 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	struct menu_item *nm;
 	struct conv_table *ct;
 	struct string hd;
-	int namelen, lblen;
+	int namelen;
 	int nmenu = 0;
 	int i;
 
@@ -3068,9 +3068,14 @@ look_for_link:
 
 	if (namelen == 1 && !strncasecmp(name, "A", 1)) {
 		unsigned char *pos2;
+		struct string str;
 
-		label = init_str();
-		lblen = 0;
+		if (!init_string(&str)) {
+			/* Is this the right way to bail out? --jonas */
+			freeml(*ml);
+			mem_free(*menu);
+			return -1;
+		}
 
 look_for_tag:
 		pos2 = pos;
@@ -3079,13 +3084,14 @@ look_for_tag:
 		}
 
 		if (pos2 >= eof) {
-			mem_free(label);
+			done_string(&str);
 			freeml(*ml);
 			mem_free(*menu);
 			return -1;
 		}
-
-		add_bytes_to_str(&label, &lblen, pos, pos2 - pos);
+		if (pos2 - pos)
+			add_bytes_to_string(&str, pos, pos2 - pos);
+		label = str.source;
 
 		pos = pos2;
 

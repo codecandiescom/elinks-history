@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.16 2003/12/09 13:38:59 pasky Exp $ */
+/* $Id: smb.c,v 1.17 2003/12/09 13:39:32 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -582,7 +582,7 @@ smb_func(struct connection *conn)
 
 struct protocol_backend smb_protocol_backend = {
 	/* name: */			"smb",
-	/* port: */			0,
+	/* port: */			139,
 	/* handler: */			smb_func,
 	/* external_handler: */		NULL,
 	/* free_syntax: */		0,

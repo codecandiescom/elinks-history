@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.84 2004/07/13 15:09:17 jonas Exp $ */
+/* $Id: action.c,v 1.85 2004/07/15 07:38:14 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -437,7 +437,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			else
 				set_window_ptr(ses->tab, 0, 0);
 
-			tab_menu(term, ses->tab, ses);
+			tab_menu(term, ses);
 			break;
 
 		case ACT_MAIN_TAB_PREV:

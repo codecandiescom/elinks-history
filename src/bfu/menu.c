@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.148 2003/12/28 20:56:54 zas Exp $ */
+/* $Id: menu.c,v 1.149 2003/12/30 17:54:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -300,10 +300,10 @@ draw_menu_left_text_hk(struct terminal *term, unsigned char *text, int len,
 
 		if (hk == 1) {
 #ifdef DEBUG
-			draw_char(term, xbase + x - 1, y, c, 0,
+			draw_char(term, xbase + x - 1, y, c, SCREEN_ATTR_UNDERLINE,
 				  (double_hk ? hk_color_sel : hk_color));
 #else
-			draw_char(term, xbase + x - 1, y, c, 0, hk_color);
+			draw_char(term, xbase + x - 1, y, c, SCREEN_ATTR_UNDERLINE, hk_color);
 #endif
 			hk = 2;
 		} else {

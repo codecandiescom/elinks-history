@@ -1,3 +1,503 @@
+Tue Sep 21 21:18:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	0.10pre1 
+
+Tue Sep 21 21:15:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	Update .po files.  
+
+Tue Sep 21 21:13:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Tue Sep 21 20:54:34 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/scanner.c:
+
+	And '*' is IDENT_START too.  
+
+Tue Sep 21 20:52:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/css/selectors.html:
+
+	Add test for selector containing *.  
+
+Tue Sep 21 20:49:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/scanner.c:
+
+	Moved '*' from CSS_CHAR_TOKEN to CSS_CHAR_IDENT... because it may be
+	an ident ;).  
+
+Tue Sep 21 20:34:35 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/README:
+
+	Hint regarding Grasping the selector tree - what the one dumped by
+	CSS_DEBUG.  
+
+Tue Sep 21 20:16:01 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	Reorder the selector type checking so that it's now in the
+	specificity order: '*', element name, pseudo-class, class, id.  
+
+Tue Sep 21 20:15:14 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	Try to support the '*' selector. Yes, I think it *could* be that
+	simple.  
+
+Tue Sep 21 20:10:56 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: parser.c, stylesheet.c:
+
+	Make sure really all the root selectors have CSR_ROOT relation, and
+	replace with that the 'relative relation' fix by Jonas. Jonas,
+	please verify whether this fixes stuff.  
+
+Tue Sep 21 20:09:58 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	Change even the last WDBG() to DBG().  
+
+Tue Sep 21 19:38:04 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.c:
+
+	In find_css_selector() first compare integers, then strings.  
+
+Tue Sep 21 19:15:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.c:
+
+	A little unsure about this one. Don't use free syntax URI parsing
+	for user protocols. It breaks mailto command invocation because both
+	uri->userlen and uri->hostlen is zero. It might break some more
+	exotic URIs defined by the user. Maybe free syntax should mean
+	'increase error tolerance' when parsing.  
+
+Tue Sep 21 18:23:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/stylesheet.c:
+
+	Pasky is afk so lets take out the sledgehammer and bump an itchy
+	corner.  It was introduced in '(find|get)_css_*selector() now takes
+	an {enum css_selector_relation} argument ...' and caused .classes
+	not to be matched. These CSS enhancements quickly get very
+	addictive.  Now the relation is good if the value is <= than the
+	selector->relation.  I have no clue if it is correct from a design
+	point of view.  
+
+Tue Sep 21 17:34:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: css/css.c, css/parser.c, css/parser.h,
+	css/stylesheet.h, html/internal.h, html/parser.c,
+	html/parser/link.c, html/parser/parse.c:
+
+	Pass a base uri all they way down the CSS @import callchain. Fixes
+	relative imports from imported stylesheets (example: redhat.com).  
+
+Tue Sep 21 17:22:02 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation was updated.  
+
+Tue Sep 21 17:07:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/link.c:
+
+	html_link(): Don't bail out when document.html.link_display is 0. We
+	are still interested in checking if it is a CSS link. Reported by
+	Witold.  
+
+Tue Sep 21 16:49:14 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: css/apply.c, html/parser.h, html/parser/link.c:
+
+	Support for link and visited CSS pseudo-classes. Don't expect more
+	from me ;).  
+
+Tue Sep 21 16:15:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	Specificity matches are more specific than ancestor matches, so do
+	them later.  
+
+Tue Sep 21 16:15:06 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	Apply CSS_PARENT after CSR_ANCESTOR, thus overriding it.  
+
+Tue Sep 21 16:09:22 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, parser.c, stylesheet.c, stylesheet.h:
+
+	(find|get)_css_*selector() now takes an {enum css_selector_relation}
+	argument (and honors it). This almost fixes the '>' combinator
+	support.  
+
+Tue Sep 21 16:03:49 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/scanner.c:
+
+	'>' is now CHAR_TOKEN.  
+
+Tue Sep 21 15:12:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/css/selectors.html:
+
+	Use <span> instead of <i> to test ancestors. Also added 'div .foo'
+	test and '>' combinator test (it doesn't work now ;).  
+
+Tue Sep 21 15:03:01 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: css/apply.c, css/apply.h, html/parser.c,
+	html/parser/parse.c:
+
+	Support for HTML stack lookups (ancestor and parent combinators). It
+	doesn't work 100% yet, it already has some visible effects
+	nevertheless.  
+
+Tue Sep 21 14:14:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Fix off by one errors in the <!-- and --> CSS scanning. Patch by
+	pasky and me.  
+
+Tue Sep 21 13:52:55 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	document.browse.forms.insert_mode is turned on by default now. It's
+	a Good Thing (tm), raises usability, reduces complaints, makes
+	people happy, and helps keep the world peace.  
+
+Tue Sep 21 13:00:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Fixed reparent_selector() blasting off selector pointed at by
+	pkg->selector. (It still blasts it but corrects the pointer.) Fixes
+	fm crash reported by zas.  
+
+Tue Sep 21 12:43:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	Applying to... WDBG() -> DBG().  
+
+Tue Sep 21 12:42:58 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	Recursive iterations of examine_element() keep all the same original
+	@base now, avoiding corrupting the whole stylesheet when merging
+	stuff together - now it all merges only to our temporary selector.
+	This fixes i.e. http://cia.navi.cx/.  
+
+Tue Sep 21 12:26:52 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.c:
+
+	Blast a forgotten argument.  
+
+Tue Sep 21 12:26:03 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.c:
+
+	Dump at least list of property types along with the selector.  
+
+Tue Sep 21 12:10:22 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Fixed hopefully one of the last bugs - multiple selectors of the
+	same name and type could appear in the stylesheet because of the
+	@prev_element_selector reparenting-if-specificitier-but-last hack.
+	Instead of simple add_to_list() introduced reparent_selector() which
+	checks for twins in the list and if it finds one it instead
+	ultra-merges the @prev_element_selector to it.  
+
+Tue Sep 21 11:43:38 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.c:
+
+	Fixed fatal error in dump_css_selector_tree_iter() call ;-).  
+
+Tue Sep 21 11:33:14 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.c:
+
+	Prettyprinting fixes.  
+
+Tue Sep 21 11:02:13 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.c:
+
+	Compilation fixes.  
+
+Tue Sep 21 11:00:19 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: parser.c, stylesheet.c, stylesheet.h:
+
+	Introduced dump_css_selector_tree() which does precisely that, but
+	it's around only #ifdef CSS_DEBUG.  
+
+Tue Sep 21 10:00:13 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	Fixed dbginfo().  
+
+Tue Sep 21 09:58:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, parser.c:
+
+	Commented out #define CSS_DEBUG added.  
+
+Tue Sep 21 09:57:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	Oops, forgot to add another message triggered in
+	process_found_selector().  
+
+Tue Sep 21 09:45:40 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, parser.c:
+
+	Some debugging messages #ifdef CSS_DEBUG.  
+
+Tue Sep 21 09:44:32 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Tue Sep 21 09:41:04 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Of course I got it slightly wrong. In css_parse_selector() try to
+	make the description of 'selector stack' variables less ambiguous
+	and more confusing.  
+
+Tue Sep 21 09:32:32 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Try to describe the most interesting variables in
+	css_parse_selector() so it's all a little more confusing.  
+
+Tue Sep 21 09:24:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	merge_css_selectors() in process_found_selector() before recursively
+	calling examine_element() so that the more specific matches aren't
+	overriden by the less specific ones later. But it's not like any
+	improvement would be visible now over the current bugs ;-).  
+
+Tue Sep 21 09:20:08 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Rant about how many memory can the format cache take in
+	document.cache.format.size description.  
+
+Tue Sep 21 08:34:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	If CST_SPECIFITY is marked as last_fragment, it means the last base
+	fragment wasn't and we need to add it to the stylesheet now.  
+
+Tue Sep 21 08:26:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.c:
+
+	set_mem_comment(selector, name) in init_css_selector().  
+
+Tue Sep 21 00:34:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Fixed setting of @last_chained_selector.  
+
+Tue Sep 21 00:30:49 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Fixed another few memory leaks.  
+
+Tue Sep 21 00:30:12 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Fixed the condition for determining @selector_start.  
+
+Tue Sep 21 00:21:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Fixed completely nonsensical condition when repkg->selectoring.  
+
+Tue Sep 21 00:12:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Oops - now pkg->selector (where the properties are bound) is the
+	_most_ specific selector in the chain, not the about least one. So
+	that's why some things had very strange styles applied.  
+
+Tue Sep 21 00:08:27 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	Some preliminary quick hack in the applier to handle applying of
+	structured selectors (i.e. 'div.foo' or 'p#bar' or 'i#baz.quux').
+	Note that HTML stack lookups ('i b' selectors) are still not
+	supported.  
+
+Tue Sep 21 00:03:06 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Now we finally correctly determine whether we are looking at 'p #x'
+	or 'p#x' (through @selector_start) and therefore correctly set
+	relations for potential specificitiers.  
+
+Mon Sep 20 23:33:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Unify the @last_fragment cleanup code.  
+
+Mon Sep 20 23:32:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Hopefully the last combined selectors fix: for 'div p#x', make sure
+	the hierarchy becomes 'p -> #x -> div', not 'p -> (#x, div)'.  
+
+Mon Sep 20 23:26:16 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Compilation fix.  
+
+Mon Sep 20 23:23:28 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	In css_parse_selector() do not rely on pkg->selector anymore when
+	referring to the previous selector but save it in @prev_*_selector
+	variables persistent over the loop iterations. This enabled us to
+	differentiate between @prev_specific_selector and
+	@prev_element_selector and makes sure that when we combine i.e. 'p#x
+	i', 'p' will be bound to 'i', not '#x'.  
+
+Mon Sep 20 23:11:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Fix the massive leaks for broken stylesheets breaking up in the
+	middle of selectors.  
+
+Mon Sep 20 23:01:11 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	assert() that we never slip to the next in-@pkg iteration when
+	@last_fragment is set.  
+
+Mon Sep 20 22:58:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Fixed destroying of perfectly good selectors by brute-force
+	reparenting fragments of combined ones (for 'p {x:y}' and 'p i
+	{z:a}', first and second 'p' shared a single selector but then we
+	reparented the selector behind 'i' and things broke).  
+
+Mon Sep 20 22:56:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Reverted invalid 1.111.  
+
+Mon Sep 20 22:56:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Fixed css_parse_selector()'s wrong token memcpy() size.  
+
+Mon Sep 20 22:54:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.h:
+
+	Fix get_css_base_selector() to grok complex expressions as
+	@stylesheet.  
+
+Mon Sep 20 22:48:38 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Fix get_css_base_selector() to grok complex expressions as
+	@stylesheet.  
+
+Mon Sep 20 22:41:45 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Ok, we will need the late @element again, so it's reintroduced now,
+	but under a different name @last_token.  
+
+Mon Sep 20 22:31:38 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.h:
+
+	get_css_base_selector() now handles NULL passed as @stylesheet.  
+
+Mon Sep 20 22:28:22 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Eliminated @element in css_parse_selector(), which is now useless.
+	Instead, we just move to the next token a little later now.  
+
+Mon Sep 20 22:24:30 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	Apply the style attribute content last, therefore overriding the
+	stylesheet once again. Fixes test/css/cascading.html.  
+
+Mon Sep 20 22:18:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Fixed parsing of ID selectors, we now accept the fact that they
+	contain the id string in the token itself, not as a successive
+	TOKEN_IDENT token.  
+
 Mon Sep 20 22:11:53 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/css/scanner.c:
@@ -261,16 +761,16 @@ Sun Sep 19 17:21:26 2004  Petr Baudis <pasky@ucw.cz>:
 
 Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
 
+	* AUTHORS:
+
+	Fix mmap() usage on FreeBSD. Patch by Lewis Collard.  
+
+Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
 	* src/util/memory.c:
 
 	Fix mmap() usage on FreeBSD filed as bug 501. Patch by Lewis
 	Collard.  
-
-Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
-
-	* AUTHORS:
-
-	Fix mmap() usage on FreeBSD. Patch by Lewis Collard.  
 
 Sun Sep 19 09:56:02 2004  Petr Baudis <pasky@ucw.cz>:
 

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.25 2003/08/29 23:27:14 pasky Exp $ */
+/* $Id: kbd.c,v 1.26 2003/09/04 14:14:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,7 +187,7 @@ send_init_sequence(int h, int flags)
 #define DONE_ALT_SCREEN_SEQ	"\033[?47l"
 
 static void
-send_term_sequence(int h, int flags)
+send_done_sequence(int h, int flags)
 {
 	write_sequence(h, DONE_TERMINAL_SEQ);
 
@@ -394,7 +394,7 @@ block_itrm(int fd)
 	itrm->blocked = 1;
 	block_stdin();
 	unhandle_terminal_resize(itrm->ctl_in);
-	send_term_sequence(itrm->std_out, itrm->flags);
+	send_done_sequence(itrm->std_out, itrm->flags);
 	tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
 	set_handlers(itrm->std_in, NULL, NULL,
 		     (void (*)(void *)) free_trm, itrm);
@@ -415,7 +415,7 @@ free_trm(struct itrm *itrm)
 	}
 
 	unhandle_terminal_resize(itrm->ctl_in);
-	send_term_sequence(itrm->std_out,itrm->flags);
+	send_done_sequence(itrm->std_out,itrm->flags);
 	tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
 
 	if (itrm->mouse_h)

@@ -1,3 +1,5 @@
+# translation of hu.po to 
+# translation of hu.po to
 # translation of hu.po to Hungarian
 # ELinks Hungarian translation.
 # Suveg Gabor <gsuveg@sgmobil2000.hu>
@@ -8,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2003-10-17 09:39+0200\n"
-"PO-Revision-Date: 2003-10-14 21:57+0200\n"
+"PO-Revision-Date: 2003-10-17 20:10+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -417,8 +419,7 @@ msgstr ""
 #: src/config/dialogs.c:730
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr ""
-"Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
+msgstr "Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
 
 #: src/config/dialogs.c:762
 msgid "Keybinding manager"
@@ -547,8 +548,7 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:393
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
-"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:394
 msgid "Go to the homepage"
@@ -1026,8 +1026,7 @@ msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
 #: src/config/options.c:1007
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr ""
-"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1013 src/util/version.c:86
@@ -1275,8 +1274,7 @@ msgstr "Alkönyvtárak kiemelése"
 
 #: src/config/options.c:1138
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr ""
-"Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
+msgstr "Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
 
 #: src/config/options.c:1140
 msgid "Number links"
@@ -1318,8 +1316,7 @@ msgstr "Linkek kiválasztása"
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
-msgstr ""
-"Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
+msgstr "Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.c:1164
 msgid "Searching"
@@ -1362,6 +1359,10 @@ msgid ""
 "1 for basic regular expression searches.\n"
 "2 for extended regular expression searches."
 msgstr ""
+"Reguláris kifejezésekkel való keresés engedélyezése.\n"
+"0 - sima szöveges keresés.\n"
+"1 - egyszerû reguláris kifejezések.\n"
+"2 - kiterjesztett reguláris kifejezések."
 
 #: src/config/options.c:1190
 msgid ""
@@ -1370,6 +1371,10 @@ msgid ""
 "1 for basic regular expression searches. (DISABLED)\n"
 "2 for extended regular expression searches. (DISABLED)"
 msgstr ""
+"Reguláris kifejezésekkel való keresés engedélyezése.\n"
+"0 - sima szöveges keresés.\n"
+"1 - egyszerû reguláris kifejezések. (LETILTVA)\n"
+"2 - kiterjesztett reguláris kifejezések. (LETILTVA)"
 
 #: src/config/options.c:1197
 msgid "Horizontal text margin"
@@ -1381,7 +1386,7 @@ msgstr "Vízszintes margó."
 
 #: src/config/options.c:1201
 msgid "Document meta refresh"
-msgstr ""
+msgstr "Meta refresh tag-ek kezelése"
 
 #: src/config/options.c:1203
 msgid ""
@@ -1389,6 +1394,10 @@ msgid ""
 "refresh' tags). Web-page authors use these to instruct the browser\n"
 "to reload a document at a given interval or to load another page."
 msgstr ""
+"Autómatikusan kövesse a refresh (újratöltés) direktívákat ('<meta>\n"
+"refresh tag-ek). A weblapok készítõi ezeket használják arra hogy a\n"
+"böngészõt arra utasítsák, frissítse a lapot megadott idõközönként,\n"
+"vagy töltsön le egy másik lapot."
 
 #: src/config/options.c:1207
 msgid "Scroll margin"
@@ -1456,14 +1465,16 @@ msgstr ""
 
 #: src/config/options.c:1250
 msgid "Ignore cache-control info from server"
-msgstr ""
-"A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
+msgstr "A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
 
 #: src/config/options.c:1252
 msgid ""
 "Ignore Cache-Control and Pragma server headers.\n"
 "When set, the document is cached even with 'Cache-Control: no-cache'."
 msgstr ""
+"A gyorsítótárvezérlési utasítások, és a 'pragma' fejlécek figyelmen kívül hagyása.\n"
+"Ha be van állítva, a dokumentum gyorsítótárazásra kerül, akkor is ha\n"
+"'Cache-Control: no-cache' van megadva."
 
 #: src/config/options.c:1255
 msgid "Formatted documents"
@@ -2931,7 +2942,7 @@ msgstr "Árnyék"
 
 #: src/config/options.c:2167 src/config/options.c:2562
 msgid "Dialog shadow colors (see ui.shadows option)."
-msgstr ""
+msgstr "A dialógusablakok árnyékának színei (lásd: ui.shadows opció)."
 
 #: src/config/options.c:2177 src/config/options.c:2573
 msgid "Title bar"
@@ -2939,23 +2950,23 @@ msgstr "Címsor"
 
 #: src/config/options.c:2179 src/config/options.c:2575
 msgid "Title bar colors."
-msgstr ""
+msgstr "Címsor színei."
 
 #: src/config/options.c:2181 src/config/options.c:2577
 msgid "Generic title bar"
-msgstr ""
+msgstr "Általános címsor"
 
 #: src/config/options.c:2183 src/config/options.c:2579
 msgid "Generic title bar colors."
-msgstr ""
+msgstr "Általános címsor színei."
 
 #: src/config/options.c:2193
 msgid "Title bar text"
-msgstr ""
+msgstr "Címsor szövege"
 
 #: src/config/options.c:2195 src/config/options.c:2591
 msgid "Title bar text colors."
-msgstr ""
+msgstr "Címsor szövegének színei."
 
 #: src/config/options.c:2206 src/config/options.c:2602
 msgid "Status bar"
@@ -2967,11 +2978,11 @@ msgstr "Állapotsor színei."
 
 #: src/config/options.c:2210 src/config/options.c:2606
 msgid "Generic status bar"
-msgstr ""
+msgstr "Általános állapotsor"
 
 #: src/config/options.c:2212 src/config/options.c:2608
 msgid "Generic status bar colors."
-msgstr ""
+msgstr "Általános állapotsor színei."
 
 #: src/config/options.c:2222 src/config/options.c:2618
 msgid "Status bar text"
@@ -2983,35 +2994,35 @@ msgstr "Állapotsor szöveg színei."
 
 #: src/config/options.c:2235 src/config/options.c:2631
 msgid "Tabs bar"
-msgstr ""
+msgstr "Fülek sora"
 
 #: src/config/options.c:2237 src/config/options.c:2633
 msgid "Tabs bar colors."
-msgstr ""
+msgstr "Fülek sorának színei."
 
 #: src/config/options.c:2239 src/config/options.c:2635
 msgid "Unselected tab"
-msgstr ""
+msgstr "Fülek"
 
 #: src/config/options.c:2241 src/config/options.c:2637
 msgid "Unselected tab colors."
-msgstr ""
+msgstr "Fülek színei."
 
 #: src/config/options.c:2251
 msgid "Loading tab"
-msgstr ""
+msgstr "Letöltés közben lévõ fül"
 
 #: src/config/options.c:2253
 msgid "Tab colors for tabs that are loading in the background."
-msgstr ""
+msgstr "Letöltés közben lévõ fül színei."
 
 #: src/config/options.c:2263 src/config/options.c:2647
 msgid "Selected tab"
-msgstr ""
+msgstr "Kiválasztott fül"
 
 #: src/config/options.c:2265 src/config/options.c:2649
 msgid "Selected tab colors."
-msgstr ""
+msgstr "Kiválasztott fül színei."
 
 #: src/config/options.c:2275 src/config/options.c:2659
 msgid "Searched strings"
@@ -3075,7 +3086,7 @@ msgstr ""
 
 #: src/config/options.c:2436
 msgid "Dialog generic background color"
-msgstr ""
+msgstr "Dialógusablak háttérszín"
 
 #: src/config/options.c:2526
 msgid "Dialog field colors."
@@ -3091,11 +3102,11 @@ msgstr "Cím"
 #. Keep options in alphabetical order.
 #: src/config/options.c:2679
 msgid "Dialog settings"
-msgstr ""
+msgstr "Dialógusablak beállítások"
 
 #: src/config/options.c:2681
 msgid "Dialogs-specific appearance and behaviour settings."
-msgstr ""
+msgstr "Dialógusablakok megjelenése és viselkedése."
 
 #: src/config/options.c:2683
 msgid "Minimal height of listbox widget"
@@ -3164,15 +3175,15 @@ msgstr ""
 
 #: src/config/options.c:2725
 msgid "Window tabs"
-msgstr ""
+msgstr "Fülek"
 
 #: src/config/options.c:2727
 msgid "Window tabs settings."
-msgstr ""
+msgstr "Fülek beállításai."
 
 #: src/config/options.c:2729
 msgid "Display tabs bar"
-msgstr ""
+msgstr "A fülek megjelenítése"
 
 #: src/config/options.c:2731
 msgid ""
@@ -3181,16 +3192,20 @@ msgid ""
 "1 means only if two or more tabs.\n"
 "2 means always."
 msgstr ""
+"A fülek megjelenítése:\n"
+"0 - soha.\n"
+"1 - csak ha kettõ vagy több fül van.\n"
+"2 - mindig."
 
 #: src/config/options.c:2736
 msgid "Wrap-around tabs cycling"
-msgstr ""
+msgstr "Fülek lapozása körbe"
 
 #: src/config/options.c:2738
 msgid ""
 "When moving right from the last tab, jump at the first one, and\n"
 "vice versa."
-msgstr ""
+msgstr "Ha az utolsó fülön tovább lapozunk, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.c:2743 src/config/opttypes.c:447
 msgid "Language"
@@ -3257,6 +3272,8 @@ msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the config.saving_style option instead."
 msgstr ""
+"Ez a beállítás elavult, nemsokára eltávolításra kerül.\n"
+"Használd a config.saving_style opciót helyette."
 
 #: src/config/options.c:2784
 msgid "Use secure file saving"
@@ -3281,7 +3298,7 @@ msgstr ""
 #. Commandline options
 #: src/config/options.c:2798
 msgid "Restrict to anonymous mode"
-msgstr ""
+msgstr "Korlátozott üzemmód"
 
 #: src/config/options.c:2800
 msgid ""
@@ -3290,6 +3307,9 @@ msgid ""
 "is allowed, but user can't add or modify entries in\n"
 "association table."
 msgstr ""
+"Az ELinks használata korlátozott üzemmódban. Nincs lokális böngészés,\n"
+"letöltés. A külsõ megjelenítõprogramok mûködnek, de a hozzárendelési\n"
+"táblához nem lehet hozzáadni új bejegyzést."
 
 #: src/config/options.c:2805
 msgid "Autosubmit first form"
@@ -3311,7 +3331,7 @@ msgstr ""
 
 #: src/config/options.c:2814
 msgid "Set config dir to given string"
-msgstr ""
+msgstr "A konfigurációs könyvtár helye"
 
 #: src/config/options.c:2816
 msgid ""
@@ -3320,14 +3340,18 @@ msgid ""
 "a '/' its used as an absolute path. Else it is assumed to\n"
 "be relative to your HOME dir."
 msgstr ""
+"A konfigurációs könyvtár elérési útvonala. Az ELinks innen fogja\n"
+"olvasni, és ide írja a konfigurációs állományait. Ha az útvonal '/' jellel\n"
+"kezdõdik, akkor abszolút elérési útvonalként, egyébként pedig a HOME\n"
+"könyvtárhoz képest relatívan kerül értelmezésre."
 
 #: src/config/options.c:2821
 msgid "MIME type to assume for documents"
-msgstr ""
+msgstr "Alapértelmezett MIME típus"
 
 #: src/config/options.c:2823
 msgid "Default MIME type to assume for documents of unknown type."
-msgstr ""
+msgstr "Az ismeretlen dokumentumok alapértelmezett MIME típusa."
 
 #: src/config/options.c:2825
 msgid "Write formatted version of given URL to stdout"
@@ -3366,13 +3390,15 @@ msgstr ""
 #. lynx compatibility
 #: src/config/options.c:2844
 msgid "Assume the file is HTML"
-msgstr ""
+msgstr "Értelmezzük a fájt HTML-ként"
 
 #: src/config/options.c:2846
 msgid ""
 "This makes ELinks assume that the files it sees are HTML. This is\n"
 "equivalent to -default-mime-type text/html."
 msgstr ""
+"Ezzel lehet megadni hogy az ELinks alapértelmezettnek vegye a HTML\n"
+"formátumot. Ez a beállítás megfelel a default-mime-type text/html-nek."
 
 #: src/config/options.c:2859
 msgid "Print usage help and exit"
@@ -3400,11 +3426,11 @@ msgstr "Segítség megjelenítése a beállításokhoz, és kilépés."
 
 #: src/config/options.c:2871
 msgid "Look up specified host"
-msgstr ""
+msgstr "A megadott host névfeloldása"
 
 #: src/config/options.c:2873
 msgid "Look up specified host."
-msgstr ""
+msgstr "A megadott host névfeloldása."
 
 #: src/config/options.c:2875
 msgid "Run as separate instance"
@@ -3431,7 +3457,7 @@ msgstr "Ne próbálja irni/használni a fáljokat a ~/.elinks könyvtárban."
 
 #: src/config/options.c:2886
 msgid "Connect to session ring with given ID"
-msgstr ""
+msgstr "Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
 
 #: src/config/options.c:2888
 msgid ""
@@ -3450,6 +3476,14 @@ msgid ""
 "are written to the disk when this option is used. See also\n"
 "-touch-files."
 msgstr ""
+"Annak a belsõ adatmegosztó hálózatnak az azonosítója, amihez csatlakozni\n"
+"szeretnénk. Az ELinks képes arra, hogy több futó példánya egymással\n"
+"kommunikálva megossza a gyorsítótárát, konyvjelzõit, stb. Alapállapotban\n"
+"minden ELinks a nullás azonosítóval indul. Ezzel a beállítással elkülönítheted\n"
+"a futó példányokat. Ha a megadott hálozat nem létezik, akkor létrejön.\n"
+"Megjegyzés: Ezt az opciót akkor érdemes állítani, ha valamit fejlesztesz a\n"
+"programon, és tesztelni szeretnéd. Ha azt szeretnéd hogy minden ELinks\n"
+"példány szeparáltan induljon, akkor ehelyett használd a -no-connect opciót."
 
 #: src/config/options.c:2903
 msgid "Write the source of given URL to stdout"
@@ -3505,7 +3539,7 @@ msgstr "[0|1]"
 
 #: src/config/opttypes.c:442
 msgid "Integer"
-msgstr ""
+msgstr "Integer"
 
 #: src/config/opttypes.c:442 src/config/opttypes.c:443
 msgid "<num>"
@@ -3513,7 +3547,7 @@ msgstr "<szám>"
 
 #: src/config/opttypes.c:443
 msgid "Longint"
-msgstr ""
+msgstr "Longint"
 
 #: src/config/opttypes.c:444
 msgid "String"
@@ -3756,8 +3790,7 @@ msgstr "Kilépés"
 
 #: src/dialogs/menu.c:143
 msgid "Do you really want to exit ELinks (and terminate all downloads)?"
-msgstr ""
-"Biztos, hogy kilépsz a Links-böl, (és megszakítod az aktiv letöltéseket)?"
+msgstr "Biztos, hogy kilépsz a Links-böl, (és megszakítod az aktiv letöltéseket)?"
 
 #: src/dialogs/menu.c:145
 msgid "Do you really want to exit ELinks?"
@@ -4165,9 +4198,8 @@ msgstr ""
 
 #: src/lowlevel/home.c:121
 #, c-format
-msgid ""
-"Commandline options -confdir set to %s, but could not create directory %s."
-msgstr ""
+msgid "Commandline options -confdir set to %s, but could not create directory %s."
+msgstr "Parancssori opciók -konfig könyvtár %s, de nem lehet létrehozni a %s könyvtárat."
 
 #: src/lowlevel/home.c:126
 #, c-format
@@ -4630,6 +4662,11 @@ msgid ""
 "what I'm talking about, just do this), so that correct default setting will "
 "be used. Apologies for any inconvience caused."
 msgstr ""
+"Üresen hagytad a protocol.http.user_agent beállítást. Ezelõtt ide behelyettesítésre "
+"került az alapértelmezett ELinks azonosító. Jelenleg így nem kerül küldésre "
+"User-Agent fejléc. Ha tényleg ezt szeretnéd akkor állítsd ezt a beállítást \" \"-re, "
+"egyébként töröld ezt a sort a konfigurációs állományból! Ha kitörlöd, korrekt "
+"alapbeállítás lép életbe."
 
 #: src/sched/session.c:1198
 msgid ""
@@ -5032,3 +5069,4 @@ msgstr "Hiba a fájl irása közben"
 #, fuzzy
 #~ msgid "Cache redirect information"
 #~ msgstr "Várakozás az átirányítás elfogadására"
+

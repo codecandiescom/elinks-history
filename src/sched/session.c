@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.50 2003/05/08 00:38:58 pasky Exp $ */
+/* $Id: session.c,v 1.51 2003/05/08 00:40:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1323,7 +1323,7 @@ int startup_goto_dialog_paint = 0;
 struct session *startup_goto_dialog_ses;
 
 static int
-read_session_info(int fd, struct session *ses, void *data, int len)
+read_session_info(struct session *ses, void *data, int len)
 {
 	int base_session, url_len;
 	struct session *s;
@@ -1337,7 +1337,7 @@ read_session_info(int fd, struct session *ses, void *data, int len)
 	 * it to possibly supplied -base-session here, and clone the session
 	 * with id of base-session (its current document association only,
 	 * rather) to the newly created session. */
-	foreach(s, sessions) {
+	foreach (s, sessions) {
 		if (s->id == base_session) {
 			copy_session(s, ses);
 			break;
@@ -1350,14 +1350,15 @@ read_session_info(int fd, struct session *ses, void *data, int len)
 		if (len < 2 * sizeof(int) + url_len) return 0;
 
 		u = mem_alloc(url_len + 1);
-		if (!u) {
-			memcpy(u, (int *)data + 2, url_len);
-			u[url_len] = '\0';
-			uu = decode_url(u);
-			goto_url(ses, uu);
-			mem_free(u);
-			mem_free(uu);
-		}
+		if (!u) return 0;
+
+		memcpy(u, (int *)data + 2, url_len);
+		u[url_len] = '\0';
+		uu = decode_url(u);
+		goto_url(ses, uu);
+		mem_free(u);
+		mem_free(uu);
+
 	} else {
 		unsigned char *h = getenv("WWW_HOME");
 
@@ -1689,7 +1690,7 @@ tabwin_func(struct window *tab, struct event *ev, int fw)
 			 * universally. Works only for the first tab. --pasky */
 			ses = tab->data = create_session(tab);
 			if (!ses
-			    || read_session_info(tab->term->fdin, ses,
+			    || read_session_info(ses,
 				                 (char *)ev->b + sizeof(int),
 						 *(int *)ev->b)) {
 				destroy_terminal(tab->term);

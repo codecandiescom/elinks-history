@@ -207,7 +207,7 @@ Jonas Fonseca <fonseca@diku.dk>
 	http://elinks.or.cz/ and doc/book keeper
 	Mailcap support
 	Random hacking
- 
+
 John <martian202002@yahoo.com>
 	Tab browsing initial patch
 
@@ -454,4 +454,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.137 2003/10/07 17:58:19 jonas Exp $
+$Id: AUTHORS,v 1.138 2003/10/07 20:17:45 pasky Exp $

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.1 2002/04/01 22:20:00 pasky Exp $ */
+/* $Id: dialogs.c,v 1.2 2002/04/02 13:36:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,10 @@
 #include <protocol/types.h>
 #include <util/error.h>
 
+
+/* Whether to save bookmarks after each modification of their list
+ * (add/modify/delete). */
+#define BOOKMARKS_RESAVE	1
 
 /* The location of the box in the bookmark manager */
 #define	BM_BOX_IND		6

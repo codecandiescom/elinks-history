@@ -1,4 +1,4 @@
-/* $Id: bookmarks.h,v 1.4 2002/04/01 22:20:00 pasky Exp $ */
+/* $Id: bookmarks.h,v 1.5 2002/04/02 13:36:53 pasky Exp $ */
 
 #ifndef EL__BOOKMARKS_H
 #define EL__BOOKMARKS_H
@@ -28,7 +28,7 @@ extern unsigned char *bm_last_searched_url;
 
 /* Read/write bookmarks functions */
 void read_bookmarks();
-/* void write_bookmarks(); */
+void write_bookmarks();
 
 /* Cleanups and saves bookmarks */
 void finalize_bookmarks();

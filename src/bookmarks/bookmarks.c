@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.12 2002/04/02 10:18:16 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.13 2002/04/02 13:36:53 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -17,10 +17,6 @@
 #include <bookmarks/bookmarks.h>
 #include <config/default.h>
 
-/* Whether to save bookmarks after each modification of their list
- * (add/modify/delete). */
-#define BOOKMARKS_RESAVE	1
-
 
 /* The list of bookmarks */
 struct list_head bookmarks = { &bookmarks, &bookmarks };
@@ -31,8 +27,6 @@ bookmark_id next_bookmark_id = 0;
 /* search memorization */
 unsigned char *bm_last_searched_name = NULL;
 unsigned char *bm_last_searched_url = NULL;
-
-static void write_bookmarks();
 
 
 /* Gets a bookmark by id */
@@ -68,10 +62,6 @@ delete_bookmark_by_id(bookmark_id id)
 	mem_free(bm->url);
 	mem_free(bm);
 
-#ifdef BOOKMARKS_RESAVE
-	write_bookmarks();
-#endif
-
 	return 1;
 }
 
@@ -102,10 +92,6 @@ add_bookmark(const unsigned char *title, const unsigned char *url)
 
 	/* Actually add it */
 	add_to_list(bookmarks, bm);
-
-#ifdef BOOKMARKS_RESAVE
-	if (0) write_bookmarks();
-#endif
 }
 
 /* Updates an existing bookmark.
@@ -133,10 +119,6 @@ update_bookmark(bookmark_id id, const unsigned char *title,
 		mem_free(bm->url);
 		bm->url = stracpy((unsigned char *)url);
 	}
-
-#ifdef BOOKMARKS_RESAVE
-	write_bookmarks();
-#endif
 
 	return 1;
 }
@@ -222,7 +204,7 @@ read_bookmarks()
 }
 
 /* Saves the bookmarks to file */
-static void
+void
 write_bookmarks()
 {
 	struct bookmark *bm;

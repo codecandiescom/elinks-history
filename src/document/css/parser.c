@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.97 2004/09/19 21:38:49 pasky Exp $ */
+/* $Id: parser.c,v 1.98 2004/09/19 22:11:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,15 +176,15 @@ struct selector_pkg {
  *	  element_name? ('#' id)? ('.' class)? (':' pseudo_class)? \
  *		  (' ' selector)?
  *
- * TODO: selector can currently only be simple element names, and element
- * chains are not supported yet.
+ * TODO: selector can currently not contain multiple types (i.e. both element
+ * name and class), and combinators are not supported yet.
  */
 static void
 css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		   struct list_head *selectors)
 {
-	/* TODO: selector is (<element>)?([#:.]<ident>)?, not just <element>.
-	 * --pasky */
+	/* TODO: selector is (<element>)?([#:.]<ident>)?, not just a single
+	 * thing. --pasky */
 	/* TODO: comma-separated list of simple selectors. */
 	/* FIXME: element can be even '*' --pasky */
 
@@ -193,6 +193,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		struct scanner_token element;
 		struct selector_pkg *pkg = NULL;
 		struct css_selector *selector;
+		enum css_selector_type seltype = CST_ELEMENT;
 
 		assert(token);
 
@@ -205,19 +206,37 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		    || token->type == ';')
 			break;
 
-		/* Load up the selector */
+		/* Examine the selector fragment */
 
 		if (token->type != CSS_TOKEN_IDENT) {
-			/* FIXME: Temporary fix for this weird CSS precedence
-			 * thing. ')' has higher than ',' and it can cause
-			 * problems when skipping here. The reason is for the
-			 * function() parsing. Hmm... --jonas */
-			if (!skip_css_tokens(scanner, ','))
-				skip_scanner_token(scanner);
-			continue;
+			switch (token->type) {
+			case CSS_TOKEN_HASH:
+			case CSS_TOKEN_HEX_COLOR:
+				seltype = CST_ID; break;
+			case '.': seltype = CST_CLASS; break;
+			case ':': seltype = CST_PSEUDO; break;
+			default:
+				/* FIXME: Temporary fix for this weird CSS
+				 * precedence thing. ')' has higher than ','
+				 * and it can cause problems when skipping
+				 * here. The reason is for the function()
+				 * parsing. Hmm... --jonas */
+				if (!skip_css_tokens(scanner, ','))
+					skip_scanner_token(scanner);
+				seltype = CST_INVALID;
+				break;
+			}
+
+			if (seltype == CST_INVALID)
+				continue;
+
+			token = get_next_scanner_token(scanner);
+			if (token->type != CSS_TOKEN_IDENT) /* wtf */
+				continue;
 		}
 
 		/* Save it */
+
 		memcpy(&element, token, sizeof(struct scanner_token));
 		token = get_next_scanner_token(scanner);
 		if (!token) return;
@@ -251,7 +270,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 		/* Check if we have already encountered the selector */
 
-		selector = get_css_base_selector(css, CST_ELEMENT,
+		selector = get_css_base_selector(css, seltype,
 		                                 element.string,
 		                                 element.length);
 		if (!selector) continue;

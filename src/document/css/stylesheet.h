@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.31 2004/09/19 21:46:21 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.32 2004/09/19 22:11:52 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -31,7 +31,7 @@
 /* The {struct css_selector} is used for mapping elements (or nodes) in the
  * document structure to properties. */
 /* For now we only handle really ``flat'' stylesheets and no complicated
- * selectors, only good clean element ones - CST_ELEMENT. */
+ * selectors, only single-type ones. */
 /* TODO: Form the selectors to trees, both in-element and pan-element, according
  * to les plans grands sketched in the README. --pasky */
 /* TODO: Then hash the selectors at least at the top levels? Binary trees could
@@ -45,6 +45,7 @@ struct css_selector {
 		CST_ID,
 		CST_CLASS,
 		CST_PSEUDO,
+		CST_INVALID, /* Auxiliary for the parser */
 	} type;
 
 	unsigned char *name;

@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.62 2004/09/19 21:38:49 pasky Exp $ */
+/* $Id: apply.c,v 1.63 2004/09/19 22:11:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,6 +108,23 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 	altsel = find_css_base_selector(css, CST_ELEMENT,
 	                                element->name, element->namelen);
 	if (altsel) merge_css_selectors(selector, altsel);
+
+	code = get_attr_val(element->options, "id");
+	if (code) {
+		altsel = find_css_base_selector(css, CST_ID, code, -1);
+		if (altsel) merge_css_selectors(selector, altsel);
+		mem_free(code);
+	}
+
+	code = get_attr_val(element->options, "class");
+	if (code) {
+		altsel = find_css_base_selector(css, CST_CLASS, code, -1);
+		if (altsel) merge_css_selectors(selector, altsel);
+		mem_free(code);
+	}
+
+	/* TODO: Somehow handle pseudo-classess. The caller will have to
+	 * tell us about those. --pasky */
 
 	foreach (property, selector->properties) {
 		assert(property->type < CSS_PT_LAST);

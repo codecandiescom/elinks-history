@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.20 2004/09/24 00:03:35 pasky Exp $ */
+/* $Id: stack.c,v 1.21 2004/09/24 01:46:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,7 @@ search_html_stack(unsigned char *name)
 void
 kill_html_stack_item(struct html_element *e)
 {
-	unsigned char *onLoad = NULL;
+	unsigned char *onload = NULL;
 
 	assert(e);
 	if_assert_failed return;
@@ -84,12 +84,12 @@ kill_html_stack_item(struct html_element *e)
 	assertm(e->type != ELEMENT_IMMORTAL, "trying to kill unkillable element");
 	if_assert_failed return;
 
-	if (e->options)	onLoad = get_attr_val(e->options, "onLoad");
-	if (onLoad && *onLoad && *onLoad != '^') {
+	if (e->options)	onload = get_attr_val(e->options, "onLoad");
+	if (onload && *onload && *onload != '^') {
 		/* XXX: The following expression alone amounts two #includes. */
 		add_to_string_list(&html_context.part->document->onload_snippets,
-		                   onLoad, -1);
-		mem_free(onLoad);
+		                   onload, -1);
+		mem_free(onload);
 	}
 
 	mem_free_if(e->attr.link);

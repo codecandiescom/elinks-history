@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.34 2003/07/03 00:07:02 pasky Exp $ */
+/* $Id: terminal.c,v 1.35 2003/07/17 08:56:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,7 +167,7 @@ init_term(int fdin, int fdout,
 	term->lcy = -1;
 	term->dirty = 1;
 	term->blocked = -1;
-	term->spec = get_opt_rec(&root_options, "terminal._template_");
+	term->spec = get_opt_rec(config_options, "terminal._template_");
 
 	/* alloc_term_screen(term, 80, 25); */
 	add_to_list(terminals, term);
@@ -303,7 +303,7 @@ test_queue:
 				strcat(name, term->term);
 			}
 
-			term->spec = get_opt_rec(&root_options, name);
+			term->spec = get_opt_rec(config_options, name);
 		}
 
 		memcpy(term->cwd, iq + evterm_len, MAX_CWD_LEN);

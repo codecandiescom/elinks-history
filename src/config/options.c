@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.241 2003/07/15 22:32:10 zas Exp $ */
+/* $Id: options.c,v 1.242 2003/07/17 08:56:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,20 +57,17 @@
  * (struct option *) instead. This applies to bookmarks, global history and
  * listbox items as well, though. --pasky */
 
-struct option root_options = {
-	NULL_LIST_HEAD,
-	"", 0, OPT_TREE, 0, 0,
-	NULL, "",
-	NULL,
-};
-struct option cmdline_options = {
+static struct option options_root = {
 	NULL_LIST_HEAD,
 	"", 0, OPT_TREE, 0, 0,
 	NULL, "",
 	NULL,
 };
 
-INIT_LIST_HEAD(root_option_box_items);
+struct option *config_options;
+struct option *cmdline_options;
+
+INIT_LIST_HEAD(config_option_box_items);
 INIT_LIST_HEAD(option_boxes);
 
 static void add_opt_rec(struct option *, unsigned char *, struct option *);
@@ -215,7 +212,7 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 
 		add_to_list_bottom(tree->box_item->child, option->box_item);
 	} else if (option->box_item) {
-		add_to_list_bottom(root_option_box_items, option->box_item);
+		add_to_list_bottom(config_option_box_items, option->box_item);
 	}
 
 	add_at_pos((struct option *) cat->prev, option);
@@ -240,7 +237,7 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 	option->desc = desc;
 	option->change_hook = NULL;
 
-	if (option->type == OPT_ALIAS || tree != &root_options) {
+	if (option->type == OPT_ALIAS || !(tree->flags & OPT_CONFIG)) {
 		option->box_item = NULL;
 	} else {
 		option->box_item = mem_calloc(1, sizeof(struct listbox_item));
@@ -361,8 +358,11 @@ init_options_tree(void)
 void
 init_options(void)
 {
-	root_options.ptr = init_options_tree();
-	cmdline_options.ptr = init_options_tree();
+	options_root.ptr = init_options_tree();
+	config_options = add_opt_tree_tree(&options_root, "", "",
+					 "config", OPT_CONFIG, "");
+	cmdline_options = add_opt_tree_tree(&options_root, "", "",
+					    "cmdline", 0, "");
 	register_options();
 }
 
@@ -381,10 +381,8 @@ free_options_tree(struct list_head *tree)
 void
 done_options(void)
 {
-	free_options_tree(root_options.ptr);
-	mem_free(root_options.ptr);
-	free_options_tree(cmdline_options.ptr);
-	mem_free(cmdline_options.ptr);
+	free_options_tree(options_root.ptr);
+	mem_free(options_root.ptr);
 }
 
 void
@@ -548,7 +546,7 @@ eval_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 	(*argv)++; (*argc)--;	/* Consume next argument */
 
-	parse_config_file(&root_options, "-eval", *(*argv - 1), NULL, NULL);
+	parse_config_file(config_options, "-eval", *(*argv - 1), NULL, NULL);
 
 	fflush(stdout);
 
@@ -650,7 +648,7 @@ print_full_help(struct option *tree, unsigned char *path)
 				      : (unsigned char *) "N/A";
 
 		/* Don't print autocreated options and deprecated aliases */
-		if (type == OPT_ALIAS && tree != &cmdline_options)
+		if (type == OPT_ALIAS && tree != cmdline_options)
 			continue;
 
 		if (!capt && !strncasecmp(option->name, "_template_", 10))
@@ -762,7 +760,7 @@ print_short_help()
 	while (len < ALIGN_WIDTH - 1) align[len++] = ' ';
 	align[len] = '\0';
 
-	foreach (option, *((struct list_head *) cmdline_options.ptr)) {
+	foreach (option, *((struct list_head *) cmdline_options->ptr)) {
 		unsigned char *capt;
 		unsigned char *help;
 
@@ -808,12 +806,12 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 
 	if (!strcmp(option->name, "config-help")) {
 		printf(gettext("Configuration options:\n"));
-		print_full_help(&root_options, "");
+		print_full_help(config_options, "");
 	} else {
 		printf(gettext("Usage: elinks [OPTION]... [URL]\n\n"));
 		printf(gettext("Options:\n"));
 		if (!strcmp(option->name, "long-help")) {
-			print_full_help(&cmdline_options, "-");
+			print_full_help(cmdline_options, "-");
 		} else {
 			print_short_help();
 		}
@@ -880,7 +878,7 @@ update_visibility(struct list_head *tree, int show)
 static int
 change_hook_stemplate(struct session *ses, struct option *current, struct option *changed)
 {
-	update_visibility(root_options.ptr, *((int *) changed->ptr));
+	update_visibility(config_options->ptr, *((int *) changed->ptr));
 	return 0;
 }
 
@@ -965,13 +963,13 @@ register_options(void)
 		"show_template", 0, 0,
 		N_("Show _template_ options in autocreated trees in the options\n"
 		"manager and save them to the configuration file."));
-	get_opt_rec(&root_options, "config.show_template")->change_hook = change_hook_stemplate;
+	get_opt_rec(config_options, "config.show_template")->change_hook = change_hook_stemplate;
 
 
 	add_opt_tree("", N_("Connections"),
 		"connection", 0,
 		N_("Connection options."));
-	get_opt_rec(&root_options, "connection")->change_hook = change_hook_connection;
+	get_opt_rec(config_options, "connection")->change_hook = change_hook_connection;
 
 
 	add_opt_tree("connection", N_("SSL"),
@@ -1058,7 +1056,7 @@ register_options(void)
 	add_opt_tree("document", N_("Browsing"),
 		"browse", 0,
 		N_("Document browsing options (mainly interactivity)."));
-	get_opt_rec(&root_options, "document.browse")->change_hook = change_hook_html;
+	get_opt_rec(config_options, "document.browse")->change_hook = change_hook_html;
 
 
 	add_opt_tree("document.browse", N_("Accesskeys"),
@@ -1177,7 +1175,7 @@ register_options(void)
 	add_opt_tree("document", N_("Cache"),
 		"cache", 0,
 		N_("Cache options."));
-	get_opt_rec(&root_options, "document.cache")->change_hook = change_hook_cache;
+	get_opt_rec(config_options, "document.cache")->change_hook = change_hook_cache;
 
 	add_opt_bool("document.cache", N_("Cache informations about redirects"),
 		"cache_redirects", 0, 0,
@@ -1239,7 +1237,7 @@ register_options(void)
 	add_opt_tree("document", N_("Default color settings"),
 		"colors", 0,
 		N_("Default document color settings."));
-	get_opt_rec(&root_options, "document.colors")->change_hook = change_hook_html;
+	get_opt_rec(config_options, "document.colors")->change_hook = change_hook_html;
 
 	add_opt_color("document.colors", N_("Text color"),
 		"text", 0, "#bfbfbf",
@@ -1358,7 +1356,7 @@ register_options(void)
 		"write_interval", 0, 0, MAXINT, 300,
 		N_("Interval at which to write global history to disk if it\n"
 		"has changed (seconds; 0 to disable)"));
-	get_opt_rec(&root_options, "document.history.global.write_interval")
+	get_opt_rec(config_options, "document.history.global.write_interval")
 		->change_hook = global_history_write_timer_change_hook;
 
 	add_opt_bool("document.history", N_("Keep unhistory"),
@@ -1370,7 +1368,7 @@ register_options(void)
 	add_opt_tree("document", N_("HTML rendering"),
 		"html", 0,
 		N_("Options concerning the display of HTML pages."));
-	get_opt_rec(&root_options, "document.html")->change_hook = change_hook_html;
+	get_opt_rec(config_options, "document.html")->change_hook = change_hook_html;
 
 	add_opt_bool("document.html", N_("Display frames"),
 		"display_frames", 0, 1,
@@ -1744,7 +1742,7 @@ register_options(void)
 	add_opt_tree("", N_("Terminals"),
 		"terminal", OPT_AUTOCREATE,
 		N_("Terminal options."));
-	get_opt_rec(&root_options, "terminal")->change_hook = change_hook_terminal;
+	get_opt_rec(config_options, "terminal")->change_hook = change_hook_terminal;
 
 	add_opt_tree("terminal", NULL,
 		"_template_", 0,
@@ -2622,7 +2620,7 @@ register_options(void)
 		"language", 0, OPT_LANGUAGE, mem_calloc(1, sizeof(int)),
 		N_("Language of user interface. System means that the language will\n"
 		"be extracted from the environment dynamically."));
-	get_opt_rec(&root_options, "ui.language")->change_hook = change_hook_language;
+	get_opt_rec(config_options, "ui.language")->change_hook = change_hook_language;
 
 	/* Compatibility alias: added by pasky at 2002-12-01, 0.4pre20.CVS.
 	 * Estimated due time: 2003-02-01 */
@@ -2671,88 +2669,88 @@ register_options(void)
 
 	/* Commandline options */
 
-	add_opt_bool_tree(&cmdline_options, "", N_("Restrict to anonymous mode"),
+	add_opt_bool_tree(cmdline_options, "", N_("Restrict to anonymous mode"),
 		"anonymous", 0, 0,
 		N_("Restrict ELinks so that it can run on an anonymous account.\n"
 		"No local file browsing, no downloads. Execution of viewers\n"
 		"is allowed, but user can't add or modify entries in\n"
 		"association table."));
 
-	add_opt_bool_tree(&cmdline_options, "", N_("Autosubmit first form"),
+	add_opt_bool_tree(cmdline_options, "", N_("Autosubmit first form"),
 		"auto-submit", 0, 0,
 		N_("Go and submit the first form you'll stumble upon."));
 
-	add_opt_int_tree(&cmdline_options, "", N_("Clone session with given ID"),
+	add_opt_int_tree(cmdline_options, "", N_("Clone session with given ID"),
 		"base-session", 0, 0, MAXINT, 0,
 		N_("ID of session (ELinks instance) which we want to clone.\n"
 		"This is internal ELinks option, you don't want to use it."));
 
-	add_opt_alias_tree(&cmdline_options, "", N_("MIME type to assume for documents"),
+	add_opt_alias_tree(cmdline_options, "", N_("MIME type to assume for documents"),
 		"default-mime-type", 0, "mime.default_type",
 		N_("Default MIME type to assume for documents of unknown type."));
 
-	add_opt_bool_tree(&cmdline_options, "", N_("Write formatted version of given URL to stdout"),
+	add_opt_bool_tree(cmdline_options, "", N_("Write formatted version of given URL to stdout"),
 		"dump", 0, 0,
 		N_("Write a plain-text version of the given HTML document to\n"
 		"stdout."));
 
-	add_opt_alias_tree(&cmdline_options, "", N_("Codepage to use with -dump"),
+	add_opt_alias_tree(cmdline_options, "", N_("Codepage to use with -dump"),
 		"dump-charset", 0, "document.dump.codepage",
 		N_("Codepage used in dump output."));
 
-	add_opt_alias_tree(&cmdline_options, "", N_("Width of document formatted with -dump"),
+	add_opt_alias_tree(cmdline_options, "", N_("Width of document formatted with -dump"),
 		"dump-width", 0, "document.dump.width",
 		N_("Width of the dump output."));
 
-	add_opt_command_tree(&cmdline_options, "", N_("Evaluate given configuration option"),
+	add_opt_command_tree(cmdline_options, "", N_("Evaluate given configuration option"),
 		"eval", 0, eval_cmd,
 		N_("Specify elinks.conf config options on the command-line:\n"
 		"  -eval 'set protocol.file.allow_special_files = 1'"));
 
 	/* lynx compatibility */
-	add_opt_command_tree(&cmdline_options, "", N_("Assume the file is HTML"),
+	add_opt_command_tree(cmdline_options, "", N_("Assume the file is HTML"),
 		"force-html", 0, forcehtml_cmd,
 		N_("This makes ELinks assume that the files it sees are HTML. This is\n"
 		"equivalent to -default-mime-type text/html."));
 
 	/* XXX: -?, -h and -help share the same caption and should be kept in
 	 * the current order for usage help printing to be ok */
-	add_opt_command_tree(&cmdline_options, "", NULL,
+	add_opt_command_tree(cmdline_options, "", NULL,
 		"?", 0, printhelp_cmd,
 		NULL);
 
-	add_opt_command_tree(&cmdline_options, "", NULL,
+	add_opt_command_tree(cmdline_options, "", NULL,
 		"h", 0, printhelp_cmd,
 		NULL);
 
-	add_opt_command_tree(&cmdline_options, "", N_("Print usage help and exit"),
+	add_opt_command_tree(cmdline_options, "", N_("Print usage help and exit"),
 		"help", 0, printhelp_cmd,
 		N_("Print usage help and exit."));
 
-	add_opt_command_tree(&cmdline_options, "", N_("Print detailed usage help and exit"),
+	add_opt_command_tree(cmdline_options, "", N_("Print detailed usage help and exit"),
 		"long-help", 0, printhelp_cmd,
 		N_("Print detailed usage help and exit."));
 
-	add_opt_command_tree(&cmdline_options, "", N_("Print help for configuration options"),
+	add_opt_command_tree(cmdline_options, "", N_("Print help for configuration options"),
 		"config-help", 0, printhelp_cmd,
 		N_("Print help on configuration options and exit."));
 
-	add_opt_command_tree(&cmdline_options, "", N_("Look up specified host"),
+	add_opt_command_tree(cmdline_options, "", N_("Look up specified host"),
 		"lookup", 0, lookup_cmd,
 		N_("Look up specified host."));
 
-	add_opt_bool_tree(&cmdline_options, "", N_("Run as separate instance"),
+	add_opt_bool_tree(cmdline_options, "", N_("Run as separate instance"),
 		"no-connect", 0, 0,
 		N_("Run ELinks as a separate instance instead of connecting to an\n"
 		"existing instance. Note that normally no runtime state files\n"
 		"(bookmarks, history and so on) are written to the disk when\n"
 		"this option is used. See also -touch-files."));
 
-	add_opt_bool_tree(&cmdline_options, "", N_("Don't use files in ~/.elinks"),
+	add_opt_bool_tree(cmdline_options, "", N_("Don't use files in ~/.elinks"),
 		"no-home", 0, 0,
 		N_("Don't attempt to create and/or use home rc directory (~/.elinks)."));
 
-	add_opt_int_tree(&cmdline_options, "", N_("Connect to session ring with given ID"),
+	add_opt_int_tree(cmdline_options, "", N_("Connect to session ring with given ID"),
 		"session-ring", 0, 0, MAXINT, 0,
 		N_("ID of session ring this ELinks session should connect to. ELinks\n"
 		"works in so-called session rings, whereby all instances of ELinks\n"
@@ -2769,11 +2767,11 @@ register_options(void)
 		"are written to the disk when this option is used. See also\n"
 		"-touch-files."));
 
-	add_opt_bool_tree(&cmdline_options, "", N_("Write the source of given URL to stdout"),
+	add_opt_bool_tree(cmdline_options, "", N_("Write the source of given URL to stdout"),
 		"source", 0, 0,
 		N_("Write the given HTML document in source form to stdout."));
 
-	add_opt_bool_tree(&cmdline_options, "", N_("Read document from stdin"),
+	add_opt_bool_tree(cmdline_options, "", N_("Read document from stdin"),
 		"stdin", 0, 0,
 		N_("Open stdin as an HTML document - this is fully equivalent to:\n"
 		" -eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin\n"
@@ -2781,13 +2779,13 @@ register_options(void)
 		"stdin WORKS ONLY WHEN YOU USE -dump OR -source!! (I would like to\n"
 		"know why you would use -source -stdin, though ;-)"));
 
-	add_opt_bool_tree(&cmdline_options, "", N_("Touch files in ~/.elinks when running with -no-connect/-session-ring"),
+	add_opt_bool_tree(cmdline_options, "", N_("Touch files in ~/.elinks when running with -no-connect/-session-ring"),
 		"touch-files", 0, 0,
 		N_("Set to 1 to have runtime state files (bookmarks, history, ...)\n"
 		"changed even when -no-connect or -session-ring is used; has no\n"
 		"effect if not used in connection with any of these options."));
 
-	add_opt_command_tree(&cmdline_options, "", N_("Print version information and exit"),
+	add_opt_command_tree(cmdline_options, "", N_("Print version information and exit"),
 		"version", 0, version_cmd,
 		N_("Print ELinks version information and exit."));
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.69 2003/07/09 23:03:09 jonas Exp $ */
+/* $Id: options.c,v 1.70 2003/07/17 08:56:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,7 +102,7 @@ terminal_options_save(struct dialog_data *dlg,
 {
 	update_dialog_data(dlg, some_useless_info_button);
 	terminal_options_ok(dlg->dlg->udata);
-	if (!get_opt_int_tree(&cmdline_options, "anonymous"))
+	if (!get_opt_int_tree(cmdline_options, "anonymous"))
 	        write_config(dlg->win->term);
         return 0;
 }

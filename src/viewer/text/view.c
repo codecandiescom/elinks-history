@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.159 2003/07/15 20:18:11 jonas Exp $ */
+/* $Id: view.c,v 1.160 2003/07/17 08:56:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -706,8 +706,8 @@ frame_ev(struct session *ses, struct document_view *fd, struct event *ev)
 			case ACT_END:  rep_ev(ses, fd, x_end, 0); break;
 			case ACT_ENTER: x = enter(ses, fd, 0); if (x == 2 && ses->kbdprefix.rep) x = 1; break;
 			case ACT_ENTER_RELOAD: x = enter(ses, fd, 1); if (x == 2 && ses->kbdprefix.rep) x = 1; break;
-			case ACT_DOWNLOAD: if (!get_opt_int_tree(&cmdline_options, "anonymous")) frm_download(ses, fd, 0); break;
-			case ACT_RESUME_DOWNLOAD: if (!get_opt_int_tree(&cmdline_options, "anonymous")) frm_download(ses, fd, 1); break;
+			case ACT_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, fd, 0); break;
+			case ACT_RESUME_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, fd, 1); break;
 			case ACT_SEARCH: search_dlg(ses, fd, 0); break;
 			case ACT_SEARCH_BACK: search_back_dlg(ses, fd, 0); break;
 			case ACT_FIND_NEXT: find_next(ses, fd, 0); break;
@@ -1022,39 +1022,39 @@ quak:
 				goto x;
 			case ACT_ADD_BOOKMARK:
 #ifdef BOOKMARKS
-				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
+				if (!get_opt_int_tree(cmdline_options, "anonymous"))
 					launch_bm_add_doc_dialog(ses->tab->term, NULL, ses);
 #endif
 				goto x;
 			case ACT_ADD_BOOKMARK_LINK:
 #ifdef BOOKMARKS
-				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
+				if (!get_opt_int_tree(cmdline_options, "anonymous"))
 					launch_bm_add_link_dialog(ses->tab->term, NULL, ses);
 #endif
 				goto x;
 			case ACT_BOOKMARK_MANAGER:
 #ifdef BOOKMARKS
-				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
+				if (!get_opt_int_tree(cmdline_options, "anonymous"))
 					menu_bookmark_manager(ses->tab->term, NULL, ses);
 #endif
 				goto x;
 			case ACT_HISTORY_MANAGER:
 #ifdef GLOBHIST
-				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
+				if (!get_opt_int_tree(cmdline_options, "anonymous"))
 					menu_history_manager(ses->tab->term, NULL, ses);
 #endif
 				goto x;
 			case ACT_OPTIONS_MANAGER:
-				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
+				if (!get_opt_int_tree(cmdline_options, "anonymous"))
 					menu_options_manager(ses->tab->term, NULL, ses);
 				goto x;
 			case ACT_KEYBINDING_MANAGER:
-				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
+				if (!get_opt_int_tree(cmdline_options, "anonymous"))
 					menu_keybinding_manager(ses->tab->term, NULL, ses);
 				goto x;
 			case ACT_COOKIES_LOAD:
 #ifdef COOKIES
-				if (!get_opt_int_tree(&cmdline_options, "anonymous")
+				if (!get_opt_int_tree(cmdline_options, "anonymous")
 				    && get_opt_int("cookies.save"))
 					load_cookies();
 #endif
@@ -1309,7 +1309,7 @@ add_session_ring_to_str(unsigned char **str, int *len)
 	assert(str && len);
 	if_assert_failed return 0;
 
-	ring = get_opt_int_tree(&cmdline_options, "session-ring");
+	ring = get_opt_int_tree(cmdline_options, "session-ring");
 	if (ring) {
 		add_to_str(str, len, " -session-ring ");
 		add_num_to_str(str, len, ring);

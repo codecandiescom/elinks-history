@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.55 2003/06/08 10:49:25 zas Exp $ */
+/* $Id: opttypes.c,v 1.56 2003/07/17 08:56:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,7 +87,7 @@ exec_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 
 /* Wrappers for OPT_ALIAS. */
-/* Note that they can wrap only to root_options now.  I don't think it could be
+/* Note that they can wrap only to config_options now.  I don't think it could be
  * a problem, but who knows.. however, changing that will be pretty tricky -
  * possibly changing ptr to structure containing target name and pointer to
  * options list? --pasky */
@@ -95,7 +95,7 @@ exec_cmd(struct option *o, unsigned char ***argv, int *argc)
 static unsigned char *
 redir_cmd(struct option *opt, unsigned char ***argv, int *argc)
 {
-	struct option *real = get_opt_rec(&root_options, opt->ptr);
+	struct option *real = get_opt_rec(config_options, opt->ptr);
 
 	if (!real) {
 		internal("Alias %s leads to unknown option %s!",
@@ -112,7 +112,7 @@ redir_cmd(struct option *opt, unsigned char ***argv, int *argc)
 static unsigned char *
 redir_rd(struct option *opt, unsigned char **file)
 {
-	struct option *real = get_opt_rec(&root_options, opt->ptr);
+	struct option *real = get_opt_rec(config_options, opt->ptr);
 
 	if (!real) {
 		internal("Alias %s leads to unknown option %s!",
@@ -129,7 +129,7 @@ redir_rd(struct option *opt, unsigned char **file)
 static int
 redir_set(struct option *opt, unsigned char *str)
 {
-	struct option *real = get_opt_rec(&root_options, opt->ptr);
+	struct option *real = get_opt_rec(config_options, opt->ptr);
 
 	if (!real) {
 		internal("Alias %s leads to unknown option %s!",
@@ -146,7 +146,7 @@ redir_set(struct option *opt, unsigned char *str)
 static int
 redir_add(struct option *opt, unsigned char *str)
 {
-	struct option *real = get_opt_rec(&root_options, opt->ptr);
+	struct option *real = get_opt_rec(config_options, opt->ptr);
 
 	if (!real) {
 		internal("Alias %s leads to unknown option %s!",
@@ -163,7 +163,7 @@ redir_add(struct option *opt, unsigned char *str)
 static int
 redir_remove(struct option *opt, unsigned char *str)
 {
-	struct option *real = get_opt_rec(&root_options, opt->ptr);
+	struct option *real = get_opt_rec(config_options, opt->ptr);
 
 	if (!real) {
 		internal("Alias %s leads to unknown option %s!",
@@ -450,7 +450,7 @@ tree_dup(struct option *opt, struct option *template)
 					new_opt->box_item);
 		} else {
 			add_at_pos((struct listbox_item *)
-					root_option_box_items.prev,
+					config_option_box_items.prev,
 					new_opt->box_item);
 		}
 		new_opt->box_item->root = opt->box_item;

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.63 2003/07/09 23:03:08 jonas Exp $ */
+/* $Id: dialogs.c,v 1.64 2003/07/17 08:56:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ option_dlg_box_build(void)
 	box = mem_calloc(1, sizeof(struct listbox_data));
 	if (!box) return NULL;
 
-	box->items = &root_option_box_items;
+	box->items = &config_option_box_items;
 	add_to_list(option_boxes, box);
 
 	return box;

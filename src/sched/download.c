@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.76 2003/07/14 19:51:33 jonas Exp $ */
+/* $Id: download.c,v 1.77 2003/07/17 08:56:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1171,7 +1171,7 @@ type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
 	if (!content_type) return;
 
 	if (!handler) {
-		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
+		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 			msg_box(ses->tab->term, getml(content_type, NULL), MSGBOX_FREE_TEXT,
 				N_("Unknown type"), AL_CENTER,
 				msg_text(ses->tab->term, N_("Content type is %s.\n"
@@ -1206,7 +1206,7 @@ type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
 			description = "";
 		}
 
-		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
+		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 			/* TODO: Improve the dialog to let the user correct the
 			 * used program. */
 			msg_box(ses->tab->term, getml(content_type, NULL), MSGBOX_FREE_TEXT,

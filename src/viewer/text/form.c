@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.8 2003/07/15 22:15:56 miciah Exp $ */
+/* $Id: form.c,v 1.9 2003/07/17 08:56:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -535,7 +535,7 @@ xx:
 			add_to_str(data, len, "\"\r\n\r\n");
 
 			if (*sv->value) {
-				if (get_opt_int_tree(&cmdline_options, "anonymous"))
+				if (get_opt_int_tree(cmdline_options, "anonymous"))
 					goto encode_error;
 
 				/* FIXME: DO NOT COPY FILE IN MEMORY !! --Zas */

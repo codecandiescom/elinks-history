@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.31 2003/07/15 20:18:10 jonas Exp $ */
+/* $Id: dump.c,v 1.32 2003/07/17 08:56:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,10 +163,10 @@ dump_end(struct download *status, void *p)
 
 	if (status->state >= 0 && status->state < S_TRANS) return;
 	if (status->state >= S_TRANS
-	    && get_opt_int_tree(&cmdline_options, "dump"))
+	    && get_opt_int_tree(cmdline_options, "dump"))
 		return;
 
-	if (get_opt_int_tree(&cmdline_options, "source")) {
+	if (get_opt_int_tree(cmdline_options, "source")) {
 		if (dump_source(fd, status, ce) > 0)
 			goto terminate;
 
@@ -196,7 +196,7 @@ dump_start(unsigned char *url)
 
 	if (!*url) {
 		error(gettext("URL expected after %s."),
-			get_opt_int_tree(&cmdline_options, "source")
+			get_opt_int_tree(cmdline_options, "source")
 			? "-source" : "-dump");
 		goto terminate;
 	}

@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.16 2003/07/09 23:03:09 jonas Exp $ */
+/* $Id: default.c,v 1.17 2003/07/17 08:56:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,7 @@ get_content_type_default(unsigned char *extension)
 	if (extend < extension)
 		return NULL;
 
-	opt_tree = get_opt_rec_real(&root_options, "mime.extension");
+	opt_tree = get_opt_rec_real(config_options, "mime.extension");
 
 	foreach (opt, *((struct list_head *) opt_tree->ptr)) {
 		unsigned char *namepos = opt->name + strlen(opt->name) - 1;
@@ -98,7 +98,7 @@ get_mime_handler_name(unsigned char *type, int xwin)
 
 	if (!name) return NULL;
 
-	opt = get_opt_rec_real(&root_options, name);
+	opt = get_opt_rec_real(config_options, name);
 	mem_free(name);
 	if (!opt) return NULL;
 
@@ -120,7 +120,7 @@ get_mime_handler_default(unsigned char *type, int have_x)
 
 	if (!handler_name) return NULL;
 
-	opt_tree = get_opt_rec_real(&root_options, handler_name);
+	opt_tree = get_opt_rec_real(config_options, handler_name);
 	mem_free(handler_name);
 
 	if (opt_tree) {
@@ -132,7 +132,7 @@ get_mime_handler_default(unsigned char *type, int have_x)
 		if (mt) {
 			struct option *opt;
 
-			opt = get_opt_rec_real(&root_options, mt);
+			opt = get_opt_rec_real(config_options, mt);
 			mem_free(mt);
 
 			if (opt)

@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.29 2003/06/04 20:05:55 zas Exp $ */
+/* $Id: secsave.c,v 1.30 2003/07/17 08:56:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,9 +77,9 @@ secure_open(unsigned char *file_name, mode_t mask)
 
 	secsave_errno = SS_ERR_NONE;
 
-	if ((get_opt_bool_tree(&cmdline_options, "no-connect")
-	     || get_opt_int_tree(&cmdline_options, "session-ring"))
-	    && !get_opt_bool_tree(&cmdline_options, "touch-files")) {
+	if ((get_opt_bool_tree(cmdline_options, "no-connect")
+	     || get_opt_int_tree(cmdline_options, "session-ring"))
+	    && !get_opt_bool_tree(cmdline_options, "touch-files")) {
 		secsave_errno = SS_ERR_DISABLED;
 		return NULL;
 	}

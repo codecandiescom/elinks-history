@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.35 2003/06/28 23:34:30 jonas Exp $ */
+/* $Id: dialogs.c,v 1.36 2003/07/17 08:56:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 static struct option *
 get_real_opt(unsigned char *base, unsigned char *id)
 {
-	struct option *opt = get_opt_rec_real(&root_options, base);
+	struct option *opt = get_opt_rec_real(config_options, base);
 
 	return (opt ? get_opt_rec_real(opt, id) : NULL);
 }

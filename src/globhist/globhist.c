@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.33 2003/07/15 23:15:07 miciah Exp $ */
+/* $Id: globhist.c,v 1.34 2003/07/17 08:56:31 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -459,7 +459,7 @@ global_history_write_timer_change_hook(struct session *ses,
 		global_history_write_timer = -1;
 	}
 
-	if (elinks_home && !get_opt_int_tree(&cmdline_options, "anonymous"))
+	if (elinks_home && !get_opt_int_tree(cmdline_options, "anonymous"))
 		global_history_write_timer_handler(NULL);
 
 	return 0;
@@ -470,7 +470,7 @@ init_global_history(void)
 {
 	read_global_history();
 
-	if (elinks_home && !get_opt_int_tree(&cmdline_options, "anonymous"))
+	if (elinks_home && !get_opt_int_tree(cmdline_options, "anonymous"))
 		global_history_write_timer_handler(NULL);
 }
 

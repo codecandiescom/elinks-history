@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.121 2003/07/15 20:18:08 jonas Exp $ */
+/* $Id: menu.c,v 1.122 2003/07/17 08:56:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -405,7 +405,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	int x;
 	int o;
 	struct menu_item *file_menu, *e, *f;
-	int anonymous = get_opt_int_tree(&cmdline_options, "anonymous");
+	int anonymous = get_opt_int_tree(cmdline_options, "anonymous");
 
 	file_menu = mem_alloc(sizeof(file_menu11) + sizeof(file_menu12)
 			      + sizeof(file_menu21) + sizeof(file_menu22)
@@ -574,7 +574,7 @@ static struct menu_item setup_menu_anon[] = {
 static void
 do_view_menu(struct terminal *term, void *xxx, struct session *ses)
 {
-	if (!get_opt_int_tree(&cmdline_options, "anonymous"))
+	if (!get_opt_int_tree(cmdline_options, "anonymous"))
 		do_menu(term, view_menu, ses, 1);
 	else
 		do_menu(term, view_menu_anon, ses, 1);
@@ -583,7 +583,7 @@ do_view_menu(struct terminal *term, void *xxx, struct session *ses)
 static void
 do_setup_menu(struct terminal *term, void *xxx, struct session *ses)
 {
-	if (!get_opt_int_tree(&cmdline_options, "anonymous"))
+	if (!get_opt_int_tree(cmdline_options, "anonymous"))
 		do_menu(term, setup_menu, ses, 1);
 	else
 		do_menu(term, setup_menu_anon, ses, 1);

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.120 2003/07/15 20:18:09 jonas Exp $ */
+/* $Id: session.c,v 1.121 2003/07/17 08:56:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,7 +208,7 @@ print_screen_status(struct session *ses)
 			    	    && ncl != last_current_link)
 					stat->state = S_OK;
 				last_current_link = ncl;
-			
+
 				if (stat->state == S_OK)
 					msg = print_current_link(ses);
 			}
@@ -940,11 +940,11 @@ doc_end_load(struct download *stat, struct session *ses)
 		}
 		html_interpret(ses);
 		draw_formatted(ses);
-		if (get_opt_bool_tree(&cmdline_options, "auto-submit")) {
+		if (get_opt_bool_tree(cmdline_options, "auto-submit")) {
 			fc = (struct form_control *)
 				ses->screen->document->forms.next;
 			if (fc != fc->next) {
-				get_opt_bool_tree(&cmdline_options,
+				get_opt_bool_tree(cmdline_options,
 						  "auto-submit") = 0;
 				submit = 1;
 			}
@@ -1142,7 +1142,7 @@ create_session(struct window *tab)
 
 	if (!get_opt_bool("config.saving_style_w")) {
 		get_opt_bool("config.saving_style_w") = 1;
-		get_opt_rec(&root_options, "config.saving_style_w")->flags |= OPT_TOUCHED;
+		get_opt_rec(config_options, "config.saving_style_w")->flags |= OPT_TOUCHED;
 		if (get_opt_int("config.saving_style") != 3) {
 			msg_box(term, NULL, 0,
 				N_("Warning"), AL_CENTER,

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.85 2003/06/10 19:19:35 pasky Exp $ */
+/* $Id: conf.c,v 1.86 2003/07/17 08:56:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -452,13 +452,13 @@ load_config(void)
 	static unsigned char *cf = "elinks.conf";
 
 	load_config_file(CONFDIR, cf,
-			 &root_options, NULL, NULL);
+			 config_options, NULL, NULL);
 	if (elinks_home)
 		load_config_file(elinks_home, cf,
-				 &root_options, NULL, NULL);
+				 config_options, NULL, NULL);
 	else
 		load_config_file((unsigned char *) "", cf,
-				 &root_options, NULL, NULL);
+				 config_options, NULL, NULL);
 }
 
 
@@ -705,5 +705,5 @@ free_cfg_str:
 void
 write_config(struct terminal *term)
 {
-	write_config_file(elinks_home, "elinks.conf", &root_options, term);
+	write_config_file(elinks_home, "elinks.conf", config_options, term);
 }

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.11 2003/07/15 20:18:10 jonas Exp $ */
+/* $Id: link.c,v 1.12 2003/07/17 08:56:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -818,7 +818,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 					     MENU_FUNC open_in_new_window,
 					     send_open_in_new_xterm, c - 1, 0);
 
-			if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
+			if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 				add_to_menu(&mi, N_("~Download link"), "d",
 					    MENU_FUNC send_download, NULL, 0, 0);
 
@@ -852,7 +852,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 					    MENU_FUNC open_in_new_window,
 					    send_open_in_new_xterm, c - 1, 0);
 
-			if (!get_opt_int_tree(&cmdline_options, "anonymous"))
+			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				add_to_menu(&mi, N_("Submit form and ~download"), "d",
 					    MENU_FUNC send_download, NULL, 0, 0);
 		}
@@ -862,7 +862,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 		l = 1;
 		add_to_menu(&mi, N_("V~iew image"), "",
 			    MENU_FUNC send_image, NULL, 0, 0);
-		if (!get_opt_int_tree(&cmdline_options, "anonymous"))
+		if (!get_opt_int_tree(cmdline_options, "anonymous"))
 			add_to_menu(&mi, N_("Download ima~ge"), "",
 				    MENU_FUNC send_download_image, NULL, 0, 0);
 	}

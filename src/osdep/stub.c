@@ -1,5 +1,5 @@
 /* Libc stub functions */
-/* $Id: stub.c,v 1.8 2004/02/19 14:39:39 pasky Exp $ */
+/* $Id: stub.c,v 1.9 2004/02/19 15:43:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,7 +167,7 @@ elinks_memmove(void *d, const void *s, size_t n)
 
 #ifndef HAVE_STPCPY
 inline char *
-elinks_stpcpy(char *dest, unsigned const char *src)
+elinks_stpcpy(char *dest, const char *src)
 {
 	while ((*dest++ = *src++));
 	return (dest - 1);

@@ -1,4 +1,4 @@
-/* $Id: file.h,v 1.4 2003/06/08 13:58:14 jonas Exp $ */
+/* $Id: file.h,v 1.5 2003/06/08 14:29:21 jonas Exp $ */
 
 #ifndef EL__UTIL_FILE_H
 #define EL__UTIL_FILE_H
@@ -13,7 +13,7 @@ unsigned char *expand_tilde(unsigned char *filename);
 
 /* Generate a unique file name by trial and error based on the @fileprefix by
  * adding suffix counter (e.g. '.42'). */
-/* The returned file name is allocated. */
+/* The returned file name is allocated if @fileprefix is not unique. */
 unsigned char *get_unique_name(unsigned char *fileprefix);
 
 /* Read a line from @file into the dynamically allocated @line, increasing

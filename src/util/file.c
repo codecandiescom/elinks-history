@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.12 2003/06/05 23:04:45 jonas Exp $ */
+/* $Id: file.c,v 1.13 2003/06/08 14:29:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,7 +42,6 @@ safe_fgets(unsigned char *s, int size, FILE *stream)
 	return ret;
 }
 
-/* Only returns true/false. */
 inline int
 file_exists(const unsigned char *filename)
 {
@@ -55,28 +54,27 @@ file_exists(const unsigned char *filename)
 }
 
 unsigned char *
-expand_tilde(unsigned char *fi)
+expand_tilde(unsigned char *filename)
 {
 	unsigned char *file = init_str();
-	int fl = 0;
+	int filelen = 0;
 
 	if (!file) return NULL;
 
-	if (fi[0] == '~' && (!fi[1] || dir_sep(fi[1]))) {
+	if (filename[0] == '~' && (!filename[1] || dir_sep(filename[1]))) {
 		unsigned char *home = getenv("HOME");
 
 		if (home) {
-			add_to_str(&file, &fl, home);
-			fi++;
+			add_to_str(&file, &filelen, home);
+			filename++;
 		}
 	}
 
-	add_to_str(&file, &fl, fi);
+	add_to_str(&file, &filelen, filename);
 
 	return file;
 }
 
-/* Return unique file name based on a prefix by adding suffix counter. */
 unsigned char *
 get_unique_name(unsigned char *fileprefix)
 {

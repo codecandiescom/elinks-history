@@ -1,4 +1,4 @@
-/* $Id: select.h,v 1.5 2003/05/23 21:22:20 zas Exp $ */
+/* $Id: select.h,v 1.6 2003/05/24 20:26:47 pasky Exp $ */
 
 #ifndef EL__SELECT_H
 #define EL__SELECT_H
@@ -10,8 +10,11 @@ extern struct list_head bottom_halves;
 
 long select_info(int);
 void select_loop(void (*)(void));
+
 int register_bottom_half(void (*)(void *), void *);
-void check_bottom_halves(void);
+void do_check_bottom_halves(void);
+#define check_bottom_halves() do { if (!list_empty(bottom_halves)) do_check_bottom_halves(); } while (0)
+
 int install_timer(ttime, void (*)(void *), void *);
 void kill_timer(int);
 

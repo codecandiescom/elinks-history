@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.2 2003/05/24 20:16:16 pasky Exp $ */
+/* $Id: signals.c,v 1.3 2003/05/24 20:26:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -337,7 +337,7 @@ check_signals(void)
 			signal_mask[i] = 0;
 			if (signal_handlers[i].fn)
 				signal_handlers[i].fn(signal_handlers[i].data);
-			if (!list_empty(bottom_halves)) check_bottom_halves();
+			check_bottom_halves();
 			r = 1;
 		}
 

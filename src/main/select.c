@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.27 2003/05/23 21:22:20 zas Exp $ */
+/* $Id: select.c,v 1.28 2003/05/24 20:26:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,9 +127,9 @@ register_bottom_half(void (*fn)(void *), void *data)
 }
 
 void
-check_bottom_halves()
+do_check_bottom_halves()
 {
-	while (!list_empty(bottom_halves)) {
+	do {
 		struct bottom_half *bh = bottom_halves.prev;
 		void (*fn)(void *) = bh->fn;
 		void *data = bh->data;
@@ -137,10 +137,8 @@ check_bottom_halves()
 		del_from_list(bh);
 		mem_free(bh);
 		fn(data);
-	}
+	} while (!list_empty(bottom_halves));
 }
-
-#define CHK_BH if (!list_empty(bottom_halves)) check_bottom_halves()
 
 static ttime last_time;
 
@@ -160,7 +158,7 @@ ch:
 		del_from_list(tt);
 		tt->func(tt->data);
 		mem_free(tt);
-		CHK_BH;
+		check_bottom_halves();
 		goto ch;
 	} else break;
 
@@ -287,7 +285,7 @@ select_loop(void (*init)(void))
 	last_time = get_time();
 	signal(SIGPIPE, SIG_IGN);
 	init();
-	CHK_BH;
+	check_bottom_halves();
 
 	while (!terminate) {
 		int n, i;
@@ -362,7 +360,7 @@ select_loop(void (*init)(void))
 			if (FD_ISSET(i, &x_read)) {
 				if (threads[i].read_func) {
 					threads[i].read_func(threads[i].data);
-					CHK_BH;
+					check_bottom_halves();
 				}
 				k = 1;
 			}
@@ -370,7 +368,7 @@ select_loop(void (*init)(void))
 			if (FD_ISSET(i, &x_write)) {
 				if (threads[i].write_func) {
 					threads[i].write_func(threads[i].data);
-					CHK_BH;
+					check_bottom_halves();
 				}
 				k = 1;
 			}
@@ -378,7 +376,7 @@ select_loop(void (*init)(void))
 			if (FD_ISSET(i, &x_error)) {
 				if (threads[i].error_func) {
 					threads[i].error_func(threads[i].data);
-					CHK_BH;
+					check_bottom_halves();
 				}
 				k = 1;
 			}

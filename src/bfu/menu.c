@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.136 2003/12/26 11:11:31 zas Exp $ */
+/* $Id: menu.c,v 1.137 2003/12/26 11:48:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -677,67 +677,46 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 {
 	struct color_pair *normal_color = get_bfu_color(term, "menu.normal");
 	struct color_pair *selected_color = get_bfu_color(term, "menu.selected");
-	struct color_pair *hotkey_color = get_bfu_color(term, "menu.hotkey.normal");
-	struct color_pair *selected_hotkey_color = get_bfu_color(term, "menu.hotkey.selected");
-	int p = 2;
+	int p = 0;
 	int i;
 
 	draw_area(term, 0, 0, term->width, 1, ' ', 0, normal_color);
 
 	for (i = 0; i < menu->ni; i++) {
-		struct color_pair *co = normal_color;
-		struct color_pair *hkco = hotkey_color;
+		struct color_pair *color = normal_color;
 		unsigned char *text = menu->items[i].text;
-		int key_pos = menu->items[i].hotkey_pos;
-		int hk = 0;
-		int j;
-		unsigned char c;
-
-		/* FIXME: merge all menus code. --Zas */
-
-#ifdef DEBUG
-		int double_hk = 0;
-		if (key_pos < 0) key_pos = -key_pos, double_hk = 1;
-#endif
+		int l = menu->items[i].hotkey_pos;
+		int textlen;
 
 		if (mi_text_translate(menu->items[i]))
 			text = _(text, term);
 
+		textlen = strlen(text) - !!l;
+
+		p += 2;
+
 		if (i == menu->selected) {
-			int textlen = strlen(text) - !!key_pos;
-
-			co = selected_color;
-			hkco = selected_hotkey_color;
-
-			draw_area(term, p, 0, 2, 1, ' ', 0, co);
-			draw_area(term, p + textlen + 2, 0, 2, 1, ' ', 0, co);
 			menu->sp = p;
+			color = selected_color;
+			draw_area(term, p, 0, 2, 1, ' ', 0, color);
+			draw_area(term, p + textlen + 2, 0, 2, 1, ' ', 0, color);
 			set_cursor(term, p, 0, 1);
 			set_window_ptr(menu->win, p, 1);
 		}
 
 		p += 2;
 
-		for (j = 0; (c = text[j]); j++, p++) {
-			if (!hk && key_pos && j == key_pos - 1) {
-				hk = 1;
-				p--;
-				continue;
-			}
-
-			if (hk == 1) {
-#ifdef DEBUG
-				draw_char(term, p, 0, c, 0, (double_hk ? selected_hotkey_color : hkco));
-#else
-				draw_char(term, p, 0, c, 0,  hkco);
-#endif
-				hk = 2;
-			} else {
-				draw_char(term, p, 0, c, 0, co);
-			}
+		if (l) {
+			draw_menu_left_text_hk(term, text, l,
+					       p, 0, textlen + 4,
+					       color, (i == menu->selected));
+		} else {
+			draw_menu_left_text(term, text, textlen,
+					    p, 0, textlen + 4,
+					    color);
 		}
 
-		p += 2;
+		p += textlen;
 	}
 
 	redraw_from_window(menu->win);

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.181 2004/07/14 13:51:18 jonas Exp $ */
+/* $Id: hierbox.c,v 1.182 2004/07/14 15:14:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,7 +68,6 @@ add_listbox_item(struct hierbox_browser *browser, struct listbox_item *root,
 	item->udata = data;
 	item->type = type;
 	item->depth = root->depth + 1;
-	if (item->depth > 0) item->root = root;
 
 	/* TODO: Possibility to sort by making add_position into a flag */
 	if (add_position < 0)

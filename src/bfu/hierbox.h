@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.59 2004/07/07 02:24:49 jonas Exp $ */
+/* $Id: hierbox.h,v 1.60 2004/07/14 15:14:32 jonas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -49,7 +49,6 @@ struct hierbox_browser {
 		{ D_LIST_HEAD(name.dialogs) },				\
 		{							\
 			NULL_LIST_HEAD,					\
-			NULL,						\
 			{ D_LIST_HEAD(name.root.child) },		\
 			BI_FOLDER,					\
 			-1,						\

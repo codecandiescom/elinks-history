@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.72 2004/07/14 13:51:18 jonas Exp $ */
+/* $Id: listbox.h,v 1.73 2004/07/14 15:14:32 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -129,9 +129,7 @@ enum listbox_item_type {
 struct listbox_item {
 	LIST_HEAD(struct listbox_item);
 
-	/* These may be NULL/empty list for root/leaf nodes or non-hiearchic
-	 * listboxes. */
-	struct listbox_item *root;
+	/* The list may be empty for leaf nodes or non-hiearchic listboxes */
 	struct list_head child;
 
 	enum listbox_item_type type;

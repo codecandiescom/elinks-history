@@ -396,6 +396,7 @@ Witold Filipczyk <witekfl@poczta.onet.pl>
 	FTP PASV support
 	Downloads resuming support
 	Polish translation updates
+	Random hacking
 
 Wojtek Bojdo/l <wojboj@lp.net.pl>
 	Updated Polish localization
@@ -407,4 +408,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.102 2002/12/01 19:31:09 pasky Exp $
+$Id: AUTHORS,v 1.103 2002/12/07 22:11:37 pasky Exp $

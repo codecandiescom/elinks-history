@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.53 2002/12/07 20:05:54 pasky Exp $ */
+/* $Id: parser.c,v 1.54 2002/12/07 22:11:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1649,14 +1649,17 @@ x:
 void
 clr_spaces(unsigned char *name)
 {
-	unsigned char *nm;
+	unsigned char *nm, *second;
 
-	/* FIXME: Rewrite that --Zas */
 	for (nm = name; *nm; nm++)
 		if (WHITECHAR(*nm) || *nm == 1) *nm = ' ';
-	for (nm = name; *nm; nm++)
-		while (nm[0] == ' ' && (nm == name || nm[1] == ' ' || !nm[1]))
-			memmove(nm, nm + 1, strlen(nm));
+	for (second = nm = name; *nm; nm++) {
+		if (nm[0] == ' ' && (second == name || nm[1] == ' ' || !nm[1]))
+			continue;
+		*second++ = *nm;						
+	}
+	/* FIXME: Shouldn't be *second = 0; enough? --pasky */
+	memset(second, 0, nm - second);
 }
 
 
@@ -2407,81 +2410,74 @@ struct element_info {
 	int nopair;
 };
 
-struct element_info elements[] = {
-	{"SPAN",	html_span,	0, 0},
-	{"B",		html_bold,	0, 0},
-	{"STRONG",	html_bold,	0, 0},
-	{"DFN",		html_bold,	0, 0},
-	{"I",		html_italic,	0, 0},
-	{"Q",		html_italic,	0, 0},
-	{"EM",		html_italic,	0, 0},
-	{"ABBR",	html_italic,	0, 0},
-	{"U",		html_underline,	0, 0},
-	{"S",		html_underline,	0, 0},
-	{"STRIKE",	html_underline,	0, 0},
-	{"FIXED",	html_fixed,	0, 0},
-	{"CODE",	html_fixed,	0, 0},
-	{"SUB",		html_subscript, 0, 0},
-	{"SUP",		html_superscript,0,0},
-	{"FONT",	html_font,	0, 0},
-	{"A",		html_a,		0, 2},
-	{"IMG",		html_img,	0, 1},
+#define NUMBER_OF_TAGS 64
 
+struct element_info elements[] = {
+	{"A",		html_a,		0, 2},
+	{"ABBR",	html_italic,	0, 0},
+	{"ADDRESS",	html_address,	2, 0},
+	{"B",		html_bold,	0, 0},
 	{"BASE",	html_base,	0, 1},
 	{"BASEFONT",	html_font,	0, 1},
-
+	{"BLOCKQUOTE",	html_blockquote,2, 0},
 	{"BODY",	html_body,	0, 0},
-
-/*	{"HEAD",	html_skip,	0, 0},*/
-	{"TITLE",	html_title,	0, 0},
-	{"SCRIPT",	html_skip,	0, 0},
-	{"STYLE",	html_skip,	0, 0},
-
 	{"BR",		html_br,	1, 1},
-	{"DIV",		html_linebrk,	1, 0},
-	{"CENTER",	html_center,	1, 0},
+	{"BUTTON",	html_button,	0, 0},
 	{"CAPTION",	html_center,	1, 0},
-	{"P",		html_p,		2, 2},
-	{"HR",		html_hr,	2, 1},
+	{"CENTER",	html_center,	1, 0},
+	{"CODE",	html_fixed,	0, 0},
+	{"DD",		html_dd,	1, 1},
+	{"DFN",		html_bold,	0, 0},
+	{"DIV",		html_linebrk,	1, 0},
+	{"DIR",		html_ul,	2, 0},
+	{"DL",		html_dl,	2, 0},
+	{"DT",		html_dt,	1, 1},
+	{"EM",		html_italic,	0, 0},
+	{"FIXED",	html_fixed,	0, 0},
+	{"FONT",	html_font,	0, 0},
+	{"FORM",	html_form,	1, 0},
+	{"FRAME",	html_frame,	1, 1},
+	{"FRAMESET",	html_frameset,	1, 0},
 	{"H1",		html_center,	2, 2},
 	{"H2",		html_h2,	2, 2},
 	{"H3",		html_h3,	2, 2},
 	{"H4",		html_h4,	2, 2},
 	{"H5",		html_h5,	2, 2},
 	{"H6",		html_h6,	2, 2},
-	{"BLOCKQUOTE",	html_blockquote,2, 0},
-	{"ADDRESS",	html_address,	2, 0},
-	{"PRE",		html_pre,	2, 0},
-	{"LISTING",	html_pre,	2, 0},
-	{"XMP",		html_pre,	2, 0}, /* TODO: you shouldn't interpret any tags inside! */
-
-	{"UL",		html_ul,	2, 0},
-	{"DIR",		html_ul,	2, 0},
-	{"MENU",	html_ul,	2, 0},
-	{"OL",		html_ol,	2, 0},
-	{"LI",		html_li,	1, 3},
-	{"DL",		html_dl,	2, 0},
-	{"DT",		html_dt,	1, 1},
-	{"DD",		html_dd,	1, 1},
-
-	{"TABLE",	html_table,	2, 0},
-	{"TR",		html_tr,	1, 0},
-	{"TD",		html_td,	0, 0},
-	{"TH",		html_th,	0, 0},
-
-	{"FORM",	html_form,	1, 0},
-	{"INPUT",	html_input,	0, 1},
-	{"TEXTAREA",	html_textarea,	0, 1},
-	{"SELECT",	html_select,	0, 0},
-	{"OPTION",	html_option,	1, 1},
-	{"BUTTON",	html_button,	0, 0},
-
-	{"LINK",	html_link,	1, 1},
+	/* {"HEAD",	html_skip,	0, 0}, */
+	{"HR",		html_hr,	2, 1},
+	{"I",		html_italic,	0, 0},
 	{"IFRAME",	html_iframe,	1, 1},
-	{"FRAME",	html_frame,	1, 1},
-	{"FRAMESET",	html_frameset,	1, 0},
+	{"IMG",		html_img,	0, 1},
+	{"INPUT",	html_input,	0, 1},
+	{"LI",		html_li,	1, 3},
+	{"LINK",	html_link,	1, 1},
+	{"LISTING",	html_pre,	2, 0},
+	{"MENU",	html_ul,	2, 0},
 	{"NOFRAMES",	html_noframes,	0, 0},
-
+	{"OL",		html_ol,	2, 0},
+	{"OPTION",	html_option,	1, 1},
+	{"P",		html_p,		2, 2},
+	{"PRE",		html_pre,	2, 0},
+	{"Q",		html_italic,	0, 0},
+	{"S",		html_underline,	0, 0},
+	{"SCRIPT",	html_skip,	0, 0},
+	{"SELECT",	html_select,	0, 0},
+	{"SPAN",	html_span,	0, 0},
+	{"STRIKE",	html_underline,	0, 0},
+	{"STRONG",	html_bold,	0, 0},
+	{"STYLE",	html_skip,	0, 0},
+	{"SUB",		html_subscript, 0, 0},
+	{"SUP",		html_superscript,0,0},
+	{"TABLE",	html_table,	2, 0},
+	{"TD",		html_td,	0, 0},
+	{"TEXTAREA",	html_textarea,	0, 1},
+	{"TH",		html_th,	0, 0},
+	{"TITLE",	html_title,	0, 0},
+	{"TR",		html_tr,	1, 0},
+	{"U",		html_underline,	0, 0},
+	{"UL",		html_ul,	2, 0},
+	{"XMP",		html_pre,	2, 0}, /* TODO: you shouldn't interpret any tags inside! */
 	{NULL,		NULL, 0, 0},
 };
 
@@ -2523,6 +2519,13 @@ process_head(unsigned char *head)
 	}
 }
 
+
+static int
+compar(const void *a, const void *b)
+{
+	return strcasecmp(((struct element_info *) a)->name, ((struct element_info *) b)->name);
+}
+
 void
 parse_html(unsigned char *html, unsigned char *eof,
 	   void (*put_chars)(void *, unsigned char *, int),
@@ -2533,6 +2536,8 @@ parse_html(unsigned char *html, unsigned char *eof,
 {
 	/*unsigned char *start = html;*/
 	unsigned char *lt;
+	struct element_info elem;
+	unsigned char tmp;
 
 	putsp = -1;
 	line_breax = table_level ? 2 : 1;
@@ -2673,10 +2678,18 @@ ng:;
 		}
 
 		html = end;
+#if 0
 		for (ei = elements; ei->name; ei++) {
 			if (ei->name &&
 			   (strlen(ei->name) != namelen || strncasecmp(ei->name, name, namelen)))
 				continue;
+#endif
+		tmp = name[namelen];
+		name[namelen] = '\0';
+		elem.name = name;
+		ei = bsearch(&elem, elements, NUMBER_OF_TAGS, sizeof(struct element_info), compar);
+		name[namelen] = tmp;
+		while (ei) { /* This exists just to be able to conviently break; out. */
 			if (!inv) {
 				char *a;
 

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.9 2003/12/01 18:28:03 pasky Exp $ */
+/* $Id: cgi.c,v 1.10 2003/12/03 01:16:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,14 +138,14 @@ set_vars(struct connection *conn, unsigned char *script)
 }
 
 static int
-test_path(unsigned char *path, int pathlen)
+test_path(unsigned char *path)
 {
 	unsigned char *cgi_path = get_opt_str("protocol.file.cgi.path");
 	unsigned char **path_ptr;
 	unsigned char *filename;
 
 	for (path_ptr = &cgi_path; (filename = get_next_path_filename(path_ptr, ':'));) {
-		int res = strncmp(path, filename, pathlen);
+		int res = strcmp(path, filename);
 
 		mem_free(filename);
 		if (!res) return 0;
@@ -191,7 +191,9 @@ execute_cgi(struct connection *conn)
 	if (last_slash) {
 		int res;
 
-		res = test_path(script, last_slash - script);
+		*last_slash = 0;
+		res = test_path(script);
+		*last_slash = '/';
 		if (res && (scriptlen < 4
 			    || strcasecmp(script + scriptlen - 4, ".cgi"))) {
 			state = S_FILE_CGI_BAD_PATH;

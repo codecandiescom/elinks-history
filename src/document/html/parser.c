@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.128 2003/06/14 20:13:36 pasky Exp $ */
+/* $Id: parser.c,v 1.129 2003/06/14 20:35:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2683,6 +2683,7 @@ compar(const void *a, const void *b)
 
 #else
 
+static struct fastfind_info *ff_info_tags;
 static struct element_info *internal_pointer;
 
 /* Reset internal list pointer */
@@ -2712,8 +2713,6 @@ tags_list_next(void)
 }
 
 #endif /* USE_FASTFIND */
-
-static void *ff_info_tags;
 
 void
 free_tags_cache(void)

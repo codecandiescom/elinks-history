@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-11-12 18:17+0100\n"
-"PO-Revision-Date: 2003-11-11 21:25+0100\n"
+"PO-Revision-Date: 2003-11-12 22:17+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -849,7 +849,7 @@ msgstr "Pøepnout èíslování odkazù"
 
 #: src/config/kbdbind.c:464
 msgid "Toggle usage of document specific colors"
-msgstr "Pøepnout pou¾ívání barev nastavených v dokumentu"
+msgstr "Pou¾ívat barvy dokumentu"
 
 #: src/config/kbdbind.c:465
 msgid "Go forward in the unhistory"
@@ -3781,13 +3781,12 @@ msgid "Link title"
 msgstr "Popiska linku"
 
 #: src/dialogs/document.c:226
-#, fuzzy
 msgid "Link last visit time"
-msgstr "Èas poslední náv¹tìvy"
+msgstr "Èas poslední náv¹tìvy odkazu"
 
 #: src/dialogs/document.c:232
 msgid "Link title (from history)"
-msgstr ""
+msgstr "Titulek odkazu (z historie)"
 
 #: src/dialogs/document.c:263 src/dialogs/document.c:310
 #: src/dialogs/document.c:322
@@ -4015,7 +4014,7 @@ msgstr "Pøepno~ut èíslování odkazù"
 
 #: src/dialogs/menu.c:428
 msgid "Toggle ~document colors"
-msgstr "Pøepnout pou¾ívání barev nastavených v ~dokumentu"
+msgstr "Pou¾ívat barvy ~dokumentu"
 
 #: src/dialogs/menu.c:429
 msgid "Document ~info"

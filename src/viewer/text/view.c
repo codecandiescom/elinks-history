@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.678 2005/02/21 22:50:23 miciah Exp $ */
+/* $Id: view.c,v 1.679 2005/02/21 22:52:34 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -763,15 +763,12 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 {
 	enum frame_event_status status = FRAME_EVENT_IGNORED;
 	int accesskey_priority;
+	struct link *link = get_current_link(doc_view);
 
-	{
-		struct link *link = get_current_link(doc_view);
-
-		if (link) {
-			status = try_form_action(ses, doc_view, link, ev);
-			if (status != FRAME_EVENT_IGNORED)
-				return status;
-		}
+	if (link) {
+		status = try_form_action(ses, doc_view, link, ev);
+		if (status != FRAME_EVENT_IGNORED)
+			return status;
 	}
 
 #ifdef CONFIG_MARKS

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.108 2003/07/15 06:02:05 miciah Exp $ */
+/* $Id: file.c,v 1.109 2003/07/15 06:17:22 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,7 +149,6 @@ stat_user(unsigned char **p, int *l, struct stat *stp)
 #ifdef FS_UNIX_USERS
 	static unsigned char last_user[64];
 	static int last_uid = -1;
-	int i;
 
 	if (!stp) {
 		add_to_str(p, l, "         ");
@@ -162,14 +161,12 @@ stat_user(unsigned char **p, int *l, struct stat *stp)
 		if (!pwd || !pwd->pw_name)
 			ulongcat(last_user, NULL, stp->st_uid, 8, 0);
 		else
-			sprintf(last_user, "%.8s", pwd->pw_name);
+			sprintf(last_user, "%-8.8s", pwd->pw_name);
 
 		last_uid = stp->st_uid;
 	}
 
 	add_to_str(p, l, last_user);
-	for (i = strlen(last_user); i < 8; i++)
-		add_chr_to_str(p, l, ' ');
 	add_chr_to_str(p, l, ' ');
 #endif
 }
@@ -180,7 +177,6 @@ stat_group(unsigned char **p, int *l, struct stat *stp)
 #ifdef FS_UNIX_USERS
 	static unsigned char last_group[64];
 	static int last_gid = -1;
-	int i;
 
 	if (!stp) {
 		add_to_str(p, l, "         ");
@@ -193,14 +189,12 @@ stat_group(unsigned char **p, int *l, struct stat *stp)
 		if (!grp || !grp->gr_name)
 			ulongcat(last_group, NULL, stp->st_gid, 8, 0);
 		else
-			sprintf(last_group, "%.8s", grp->gr_name);
+			sprintf(last_group, "%-8.8s", grp->gr_name);
 
 		last_gid = stp->st_gid;
 	}
 
 	add_to_str(p, l, last_group);
-	for (i = strlen(last_group); i < 8; i++)
-		add_chr_to_str(p, l, ' ');
 	add_chr_to_str(p, l, ' ');
 #endif
 }

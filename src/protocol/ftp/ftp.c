@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.13 2002/04/28 17:17:55 zas Exp $ */
+/* $Id: ftp.c,v 1.14 2002/04/28 17:28:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,8 @@ struct ftp_connection_info *add_file_cmd_to_str(struct connection *);
 
 /* Returns 0 if there's no numeric response, -1 if error, the positive response
  * number otherwise. */
-int get_ftp_response(struct connection *conn, struct read_buffer *rb, int part)
+int
+get_ftp_response(struct connection *conn, struct read_buffer *rb, int part)
 {
 	int pos;
 
@@ -125,7 +126,8 @@ ok:
 
 
 /* Initialize or continue ftp connection */
-void ftp_func(struct connection *conn)
+void
+ftp_func(struct connection *conn)
 {
 	set_timeout(conn);
 
@@ -146,7 +148,8 @@ void ftp_func(struct connection *conn)
 
 
 /* Send USER command */
-void ftp_login(struct connection *conn)
+void
+ftp_login(struct connection *conn)
 {
 	unsigned char *str;
 	unsigned char *cmd = init_str();
@@ -175,7 +178,8 @@ void ftp_login(struct connection *conn)
 
 
 /* Get connection response */
-void ftp_logged(struct connection *conn)
+void
+ftp_logged(struct connection *conn)
 {
 	struct read_buffer *rb = alloc_read_buffer(conn);
 
@@ -185,7 +189,8 @@ void ftp_logged(struct connection *conn)
 
 
 /* Parse connection response */
-void ftp_got_info(struct connection *conn, struct read_buffer *rb)
+void
+ftp_got_info(struct connection *conn, struct read_buffer *rb)
 {
 	int response = get_ftp_response(conn, rb, 0);
 
@@ -216,7 +221,8 @@ void ftp_got_info(struct connection *conn, struct read_buffer *rb)
 
 
 /* Parse USER response and send PASS command if needed */
-void ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
+void
+ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
 {
 	int response = get_ftp_response(conn, rb, 0);
 
@@ -290,7 +296,8 @@ void ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
 
 
 /* Get PASS command response */
-void ftp_sent_passwd(struct connection *conn)
+void
+ftp_sent_passwd(struct connection *conn)
 {
 	struct read_buffer *rb = alloc_read_buffer(conn);
 
@@ -300,7 +307,8 @@ void ftp_sent_passwd(struct connection *conn)
 
 
 /* Parse PASS command response */
-void ftp_pass_info(struct connection *conn, struct read_buffer *rb)
+void
+ftp_pass_info(struct connection *conn, struct read_buffer *rb)
 {
 	int response = get_ftp_response(conn, rb, 0);
 
@@ -377,7 +385,8 @@ add_portcmd_to_str(unsigned char **str, int *strl, unsigned char *pc)
 /* Create passive socket and add appropriate announcing commands to str. Then
  * go and retrieve appropriate object from server. */
 /* Returns NULL if error. */
-struct ftp_connection_info *add_file_cmd_to_str(struct connection *conn)
+struct ftp_connection_info *
+add_file_cmd_to_str(struct connection *conn)
 {
 	unsigned char *data;
 	unsigned char *data_end;
@@ -477,7 +486,8 @@ struct ftp_connection_info *add_file_cmd_to_str(struct connection *conn)
 
 
 /* Send commands to retrieve file or dir */
-void ftp_send_retr_req(struct connection *conn, int state)
+void
+ftp_send_retr_req(struct connection *conn, int state)
 {
 	struct ftp_connection_info *c_i;
 	unsigned char *cmd;
@@ -518,7 +528,8 @@ void ftp_send_retr_req(struct connection *conn, int state)
 
 
 /* ftp_retr_1() */
-void ftp_retr_1(struct connection *conn)
+void
+ftp_retr_1(struct connection *conn)
 {
 	struct read_buffer *rb = alloc_read_buffer(conn);
 
@@ -528,7 +539,8 @@ void ftp_retr_1(struct connection *conn)
 
 
 /* ftp_retr_file() */
-void ftp_retr_file(struct connection *conn, struct read_buffer *rb)
+void
+ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 {
 	struct ftp_connection_info *c_i = conn->info;
 	int response;
@@ -648,7 +660,8 @@ nol:
 
 
 /* ftp_got_final_response() */
-void ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
+void
+ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 {
 	struct ftp_connection_info *c_i = conn->info;
 	int response = get_ftp_response(conn, rb, 0);
@@ -711,9 +724,10 @@ void ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 
 
 /* List a directory in html format */
-int ftp_process_dirlist(struct cache_entry *c_e, int *pos, int *dpos,
-			unsigned char *buffer, int buflen, int last,
-			int *tries)
+int
+ftp_process_dirlist(struct cache_entry *c_e, int *pos, int *dpos,
+		    unsigned char *buffer, int buflen, int last,
+		    int *tries)
 {
 	int ret = 0;
 
@@ -831,7 +845,8 @@ rawentry:
 
 
 /* got_something_from_data_connection() */
-void got_something_from_data_connection(struct connection *conn)
+void
+got_something_from_data_connection(struct connection *conn)
 {
 	struct ftp_connection_info *c_i = conn->info;
 	int len;
@@ -961,7 +976,8 @@ out_of_mem:
 
 
 /* ftp_end_request() */
-void ftp_end_request(struct connection *conn)
+void
+ftp_end_request(struct connection *conn)
 {
 	if (conn->state == S_OK) {
 		if (conn->cache) {

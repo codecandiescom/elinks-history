@@ -1,3 +1,106 @@
+Sun Mar 17 19:35:49 2002  Petr Baudis <pasky@ji.cz>:
+
+	* autogen.sh:
+	
+	fixed ./autogen.sh so that it actually even works now
+
+Sun Mar 17 18:52:38 2002  Petr Baudis <pasky@ji.cz>:
+
+	* INSTALL, Makefile.in, aclocal.m4, autocommit.sh, config.h.in,
+	configure, stamp-h.in, src/Makefile.in, src/bfu/Makefile.in,
+	src/bookmarks/Makefile.in, src/config/Makefile.in,
+	src/cookies/Makefile.in, src/dialogs/Makefile.in,
+	src/document/Makefile.in, src/document/html/Makefile.in,
+	src/intl/Makefile.in, src/lowlevel/Makefile.in,
+	src/lua/Makefile.in, src/osdep/Makefile.in,
+	src/protocol/Makefile.in, src/protocol/http/Makefile.in,
+	src/util/Makefile.in:
+	
+	Removed files generated automatically by automake/autoconf. FROM
+	NOW ON YOU NEED TO CALL ./autogen.sh AFTER CHECKOUTcvs update!
+	Also, from now on, I'll probably do make cvs-dist when generating
+	release tarball.
+
+Sun Mar 17 18:20:31 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/internat/: Makefile.am, Makefile.in, charsets.c, charsets.h,
+	codepage.h, codepage.inc, entity.inc, lang_defs.h, language.c,
+	language.h, language.inc, uni_7b.inc:
+	
+	removed intrenat/'s contents
+
+Sun Mar 17 18:15:03 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.am, Makefile.in, acconfig.h, aclocal.m4, config.h.in,
+	configure, configure.in, stamp-h.in, src/Makefile.am,
+	src/Makefile.in, src/bfu/Makefile.am, src/bfu/Makefile.in,
+	src/bookmarks/Makefile.am, src/bookmarks/Makefile.in,
+	src/config/Makefile.am, src/config/Makefile.in,
+	src/cookies/Makefile.am, src/cookies/Makefile.in,
+	src/dialogs/Makefile.am, src/dialogs/Makefile.in,
+	src/document/Makefile.am, src/document/Makefile.in,
+	src/intl/Makefile.am, src/intl/Makefile.in,
+	src/lowlevel/Makefile.am, src/lowlevel/Makefile.in,
+	src/lua/Makefile.am, src/lua/Makefile.in, src/osdep/Makefile.am,
+	src/osdep/Makefile.in, src/protocol/Makefile.am,
+	src/protocol/Makefile.in, src/util/Makefile.am,
+	src/util/Makefile.in, src/document/html/Makefile.am,
+	src/document/html/Makefile.in, src/protocol/http/Makefile.am,
+	src/protocol/http/Makefile.in:
+	
+	added protocol/http/header.[ch]
+
+Sun Mar 17 18:14:06 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: cookies/cookies.c, document/view.c, document/html/parser.c,
+	document/html/renderer.c, protocol/types.c,
+	protocol/http/Makefile.am, protocol/http/header.c,
+	protocol/http/header.h, protocol/http/http.c, protocol/http/http.h:
+	
+	moved bits of http.c into header.c
+
+Sun Mar 17 18:02:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/http/: Makefile.am, Makefile.in, http.c:
+	
+	compilation fixes ;p
+
+Sun Mar 17 17:42:55 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, cookies/cookies.c, document/view.c,
+	document/html/parser.c, document/html/renderer.c,
+	lowlevel/connect.c, protocol/types.c, protocol/url.c,
+	protocol/http/https.c:
+	
+	Move http protocol support to separate subdir protocol/http/ -
+	update #includes
+
+Sun Mar 17 17:38:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in, src/Makefile.am, src/protocol/Makefile.am,
+	src/protocol/http.c, src/protocol/http.h, src/protocol/https.c,
+	src/protocol/https.h, src/protocol/http/Makefile.am,
+	src/protocol/http/http.c, src/protocol/http/http.h,
+	src/protocol/http/https.c, src/protocol/http/https.h, Makefile.am,
+	Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
+	configure.in, stamp-h.in, src/Makefile.am, src/Makefile.in,
+	src/bfu/Makefile.am, src/bfu/Makefile.in,
+	src/bookmarks/Makefile.am, src/bookmarks/Makefile.in,
+	src/config/Makefile.am, src/config/Makefile.in,
+	src/cookies/Makefile.am, src/cookies/Makefile.in,
+	src/dialogs/Makefile.am, src/dialogs/Makefile.in,
+	src/document/Makefile.am, src/document/Makefile.in,
+	src/intl/Makefile.am, src/intl/Makefile.in,
+	src/lowlevel/Makefile.am, src/lowlevel/Makefile.in,
+	src/lua/Makefile.am, src/lua/Makefile.in,
+	src/document/html/Makefile.am, src/document/html/Makefile.in,
+	src/osdep/Makefile.am, src/osdep/Makefile.in,
+	src/protocol/Makefile.am, src/protocol/Makefile.in,
+	src/protocol/http/Makefile.am, src/protocol/http/Makefile.in,
+	src/util/Makefile.am, src/util/Makefile.in:
+	
+	Move http protocol support to separate subdir protocol/http/
+
 Sun Mar 17 17:27:48 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: links.h, bfu/bfu.c, bfu/bfu.h, bookmarks/bookmarks.c,
@@ -106,6 +209,8 @@ Sun Mar 17 13:54:08 2002  Petr Baudis <pasky@ji.cz>:
 	src/document/html/parser.c, src/document/html/parser.h,
 	src/document/html/renderer.c, src/document/html/renderer.h,
 	src/document/html/tables.c, src/document/html/tables.h,
+	src/internat/charsets.c, src/internat/charsets.h,
+	src/internat/language.c, src/internat/language.h,
 	src/lowlevel/af_unix.c, src/lowlevel/connect.c,
 	src/lowlevel/connect.h, src/lowlevel/dns.c, src/lowlevel/kbd.c,
 	src/lowlevel/sched.c, src/lowlevel/sched.h, src/lowlevel/select.c,
@@ -127,12 +232,13 @@ Sun Mar 17 12:24:22 2002  Petr Baudis <pasky@ji.cz>:
 	configure.in, stamp-h.in, src/Makefile.in, src/bfu/Makefile.in,
 	src/bookmarks/Makefile.in, src/config/Makefile.in,
 	src/cookies/Makefile.in, src/document/Makefile.in,
-	src/lowlevel/Makefile.in, src/lua/Makefile.in,
-	src/osdep/Makefile.in, src/document/html/Makefile.in,
-	src/protocol/Makefile.in, src/util/Makefile.in, src/Makefile.am,
-	src/bfu/Makefile.am, src/bookmarks/Makefile.am,
-	src/config/Makefile.am, src/cookies/Makefile.am,
-	src/document/Makefile.am, src/document/html/Makefile.am,
+	src/internat/Makefile.in, src/lowlevel/Makefile.in,
+	src/lua/Makefile.in, src/osdep/Makefile.in,
+	src/document/html/Makefile.in, src/protocol/Makefile.in,
+	src/util/Makefile.in, src/Makefile.am, src/bfu/Makefile.am,
+	src/bookmarks/Makefile.am, src/config/Makefile.am,
+	src/cookies/Makefile.am, src/document/Makefile.am,
+	src/document/html/Makefile.am, src/internat/Makefile.am,
 	src/lowlevel/Makefile.am, src/lua/Makefile.am,
 	src/osdep/Makefile.am, src/protocol/Makefile.am,
 	src/util/Makefile.am:
@@ -144,8 +250,8 @@ Sun Mar 17 12:04:24 2002  Petr Baudis <pasky@ji.cz>:
 	* src/: Makefile.am, Makefile.in, bfu/Makefile.am, bfu/Makefile.in,
 	bookmarks/Makefile.am, config/Makefile.am, cookies/Makefile.am,
 	document/Makefile.am, document/html/Makefile.am,
-	lowlevel/Makefile.am, lua/Makefile.am, osdep/Makefile.am,
-	protocol/Makefile.am, util/Makefile.am:
+	internat/Makefile.am, lowlevel/Makefile.am, lua/Makefile.am,
+	osdep/Makefile.am, protocol/Makefile.am, util/Makefile.am:
 	
 	added INCLUDE to Makefiles.am
 
@@ -155,13 +261,14 @@ Sun Mar 17 11:54:41 2002  Petr Baudis <pasky@ji.cz>:
 	wipe-out-ssl, src/Makefile.am, src/bfu/Makefile.am,
 	src/bookmarks/Makefile.am, src/config/Makefile.am,
 	src/cookies/Makefile.am, src/document/Makefile.am,
-	src/document/html/Makefile.am, src/lowlevel/Makefile.am,
-	src/lua/Makefile.am, src/osdep/Makefile.am,
-	src/protocol/Makefile.am, src/util/Makefile.am, Makefile.in,
-	acconfig.h, aclocal.m4, config.h.in, configure, configure.in,
-	stamp-h.in, src/Makefile.in, src/bfu/Makefile.in,
-	src/bookmarks/Makefile.in, src/config/Makefile.in,
-	src/cookies/Makefile.in, src/document/Makefile.in,
+	src/document/html/Makefile.am, src/internat/Makefile.am,
+	src/lowlevel/Makefile.am, src/lua/Makefile.am,
+	src/osdep/Makefile.am, src/protocol/Makefile.am,
+	src/util/Makefile.am, Makefile.in, acconfig.h, aclocal.m4,
+	config.h.in, configure, configure.in, stamp-h.in, src/Makefile.in,
+	src/bfu/Makefile.in, src/bookmarks/Makefile.in,
+	src/config/Makefile.in, src/cookies/Makefile.in,
+	src/document/Makefile.in, src/internat/Makefile.in,
 	src/lowlevel/Makefile.in, src/lua/Makefile.in,
 	src/osdep/Makefile.in, src/document/html/Makefile.in,
 	src/protocol/Makefile.in, src/util/Makefile.in:
@@ -197,24 +304,30 @@ Sun Mar 17 11:28:53 2002  Petr Baudis <pasky@ji.cz>:
 	src/document/html/colors.h, src/document/html/parser.c,
 	src/document/html/parser.h, src/document/html/renderer.c,
 	src/document/html/renderer.h, src/document/html/tables.c,
-	src/document/html/tables.h, src/lowlevel/Makefile.am,
-	src/lowlevel/af_unix.c, src/lowlevel/af_unix.h,
-	src/lowlevel/connect.c, src/lowlevel/connect.h, src/lowlevel/dns.c,
-	src/lowlevel/dns.h, src/lowlevel/kbd.c, src/lowlevel/kbd.h,
-	src/lowlevel/sched.c, src/lowlevel/sched.h, src/lowlevel/select.c,
-	src/lowlevel/select.h, src/lowlevel/terminal.c,
-	src/lowlevel/terminal.h, src/lua/Makefile.am, src/lua/lua.c,
-	src/lua/lua.h, src/osdep/Makefile.am, src/osdep/beos.c,
-	src/osdep/os_dep.c, src/osdep/os_dep.h, src/osdep/os_depx.h,
-	src/osdep/win32.c, src/protocol/Makefile.am, src/protocol/file.c,
-	src/protocol/file.h, src/protocol/finger.c, src/protocol/finger.h,
-	src/protocol/ftp.c, src/protocol/ftp.h, src/protocol/http.c,
-	src/protocol/http.h, src/protocol/https.c, src/protocol/https.h,
-	src/protocol/mailto.c, src/protocol/mailto.h, src/protocol/types.c,
-	src/protocol/types.h, src/protocol/url.c, src/protocol/url.h,
-	src/util/Makefile.am, src/util/error.c, src/util/error.h,
-	src/config/Makefile.am, src/config/default.c, src/config/default.h,
-	src/config/kbdbind.c, src/config/kbdbind.h:
+	src/document/html/tables.h, src/internat/Makefile.am,
+	src/internat/charsets.c, src/internat/charsets.h,
+	src/internat/codepage.h, src/internat/codepage.inc,
+	src/internat/entity.inc, src/internat/lang_defs.h,
+	src/internat/language.c, src/internat/language.h,
+	src/internat/language.inc, src/internat/uni_7b.inc,
+	src/lowlevel/Makefile.am, src/lowlevel/af_unix.c,
+	src/lowlevel/af_unix.h, src/lowlevel/connect.c,
+	src/lowlevel/connect.h, src/lowlevel/dns.c, src/lowlevel/dns.h,
+	src/lowlevel/kbd.c, src/lowlevel/kbd.h, src/lowlevel/sched.c,
+	src/lowlevel/sched.h, src/lowlevel/select.c, src/lowlevel/select.h,
+	src/lowlevel/terminal.c, src/lowlevel/terminal.h,
+	src/lua/Makefile.am, src/lua/lua.c, src/lua/lua.h,
+	src/osdep/Makefile.am, src/osdep/beos.c, src/osdep/os_dep.c,
+	src/osdep/os_dep.h, src/osdep/os_depx.h, src/osdep/win32.c,
+	src/protocol/Makefile.am, src/protocol/file.c, src/protocol/file.h,
+	src/protocol/finger.c, src/protocol/finger.h, src/protocol/ftp.c,
+	src/protocol/ftp.h, src/protocol/http.c, src/protocol/http.h,
+	src/protocol/https.c, src/protocol/https.h, src/protocol/mailto.c,
+	src/protocol/mailto.h, src/protocol/types.c, src/protocol/types.h,
+	src/protocol/url.c, src/protocol/url.h, src/util/Makefile.am,
+	src/util/error.c, src/util/error.h, src/config/Makefile.am,
+	src/config/default.c, src/config/default.h, src/config/kbdbind.c,
+	src/config/kbdbind.h:
 	
 	Part III. of source layout change, stage 1. Moving source files to
 	subdirectories, sorted by the department they belong to. Also

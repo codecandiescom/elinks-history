@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.70 2003/07/23 15:57:56 pasky Exp $ */
+/* $Id: string.c,v 1.71 2003/07/23 16:02:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,7 +93,7 @@ memacpy(unsigned char *src, int len)
 {
 	unsigned char *m;
 
-	assert(len >= 0);
+	assertm(len >= 0, "[memacpy]");
 	if_assert_failed { len = 0; }
 
 	m = mem_alloc(len + 1);
@@ -108,7 +108,7 @@ memacpy(unsigned char *src, int len)
 inline unsigned char *
 stracpy(unsigned char *src)
 {
-	assert(src);
+	assertm(src, "[stracpy]");
 	if_assert_failed return NULL;
 
 	return memacpy(src, strlen(src));
@@ -117,7 +117,7 @@ stracpy(unsigned char *src)
 unsigned char *
 copy_string(unsigned char **dst, unsigned char *src)
 {
-	assert(src);
+	assertm(src, "[copy_string]");
 	if_assert_failed { *dst = NULL; return NULL; }
 
 	*dst = mem_alloc(strlen(src) + 1);
@@ -133,7 +133,7 @@ add_to_strn(unsigned char **s, unsigned char *a)
 {
 	unsigned char *p;
 
-	assert(*s && a);
+	assertm(*s && a, "[add_to_strn]");
 	if_assert_failed return;
 
 	p = mem_realloc(*s, strlen(*s) + strlen(a) + 1);
@@ -165,7 +165,7 @@ straconcat(unsigned char *str, ...)
 	unsigned char *s;
 	unsigned int len;
 
-	assert(str);
+	assertm(str, "[straconcat]");
 	if_assert_failed { return NULL; }
 
 	s = stracpy(str);
@@ -208,7 +208,7 @@ xstrcmp(unsigned char *s1, unsigned char *s2)
 unsigned char *
 safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 {
-	assert(dst && src && dst_size > 0);
+	assertm(dst && src && dst_size > 0, "[safe_strncpy]");
 	if_assert_failed return NULL;
 
 	strncpy(dst, src, dst_size);
@@ -292,7 +292,7 @@ elinks_strlcasecmp(const unsigned char *s1, size_t n1,
 struct string *
 init_string(struct string *string)
 {
-	assert(string);
+	assertm(string, "[init_string]");
 	if_assert_failed { return NULL; }
 
 	string->length = 0;
@@ -309,7 +309,7 @@ init_string(struct string *string)
 void
 done_string(struct string *string)
 {
-	assert(string);
+	assertm(string, "[done_string]");
 	if_assert_failed { return; }
 	check_string_magic(string);
 
@@ -336,7 +336,7 @@ add_bytes_to_string(struct string *string, unsigned char *bytes, int length)
 {
 	int newlength;
 
-	assert(string && bytes && length >= 0);
+	assertm(string && bytes && length >= 0, "[add_bytes_to_string]");
 	if_assert_failed { return NULL; }
 
 	check_string_magic(string);
@@ -354,7 +354,7 @@ add_bytes_to_string(struct string *string, unsigned char *bytes, int length)
 struct string *
 add_to_string(struct string *string, unsigned char *source)
 {
-	assert(string && source);
+	assertm(string && source, "[add_to_string]");
 	if_assert_failed { return NULL; }
 
 	check_string_magic(string);
@@ -366,7 +366,7 @@ add_to_string(struct string *string, unsigned char *source)
 struct string *
 add_string_to_string(struct string *string, struct string *from)
 {
-	assert(string && from);
+	assertm(string && from, "[add_string_to_string]");
 	if_assert_failed { return NULL; }
 
 	check_string_magic(string);
@@ -383,7 +383,7 @@ string_concat(struct string *string, ...)
 	va_list ap;
 	unsigned char *source;
 
-	assert(string);
+	assertm(string, "[string_concat]");
 	if_assert_failed { return NULL; }
 
 	check_string_magic(string);
@@ -403,7 +403,7 @@ add_char_to_string(struct string *string, unsigned char character)
 {
 	int newlength;
 
-	assert(string && character);
+	assertm(string && character, "[add_char_to_string]");
 	if_assert_failed { return NULL; }
 
 	check_string_magic(string);
@@ -423,7 +423,7 @@ add_xchar_to_string(struct string *string, unsigned char character, int times)
 {
 	int newlength;
 
-	assert(string && character && times > 0);
+	assertm(string && character && times > 0, "[add_xchar_to_string]");
 	if_assert_failed { return NULL; }
 
 	check_string_magic(string);
@@ -447,7 +447,7 @@ add_format_to_string(struct string *string, unsigned char *format, ...)
 	va_list ap;
 	va_list ap2;
 
-	assert(string && format);
+	assertm(string && format, "[add_format_to_string]");
 	if_assert_failed { return NULL; }
 
 	check_string_magic(string);

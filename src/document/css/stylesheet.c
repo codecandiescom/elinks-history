@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.20 2004/01/27 01:14:11 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.21 2004/01/27 01:15:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,14 +121,13 @@ static struct css_selector *
 clone_css_selector(struct css_stylesheet *css, struct css_selector *orig)
 {
 	struct css_selector *copy;
-	struct css_property *prop;
 
 	assert(css && orig);
 
 	copy = copy_css_selector(css, orig);
 	if (!copy)
 		return NULL;
-	mirror_css_selector(orig, new);
+	mirror_css_selector(orig, copy);
 	return copy;
 }
 
@@ -159,8 +158,6 @@ found:
 void
 done_css_selector(struct css_selector *selector)
 {
-	struct css_selector *selector = css->selectors.next;
-
 	if (selector->next) del_from_list(selector);
 	free_list(selector->properties);
 	if (selector->element) mem_free(selector->element);

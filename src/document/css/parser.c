@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.113 2004/09/20 22:56:43 pasky Exp $ */
+/* $Id: parser.c,v 1.114 2004/09/20 22:58:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,6 +191,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		struct css_selector *selector;
 		enum css_selector_relation reltype = CSR_ROOT;
 		enum css_selector_type seltype = CST_ELEMENT;
+		int last_fragment;
 
 		assert(token);
 
@@ -262,13 +263,17 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 		memcpy(&last_token, token, sizeof(*token));
 		token = get_next_scanner_token(scanner);
+		/* FIXME: This could create possible leaks with very broken
+		 * stylesheets ending in the middle of selector? --pasky */
 		if (!token) return;
+		last_fragment = (token->type == ',' || token->type == '{');
 
 
 		/* Register the selector */
 
 		if (!pkg) {
-			selector = get_css_base_selector(css, seltype,
+			selector = get_css_base_selector(
+			                last_fragment ? css : NULL, seltype,
 					last_token.string,
 					last_token.length);
 			if (!selector) continue;
@@ -291,12 +296,12 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 			/* We - in the perlish speak - unshift in front
 			 * of the previous selector fragment and reparent
 			 * it to the upcoming one. */
-			selector = get_css_base_selector(css, seltype,
+			selector = get_css_base_selector(
+			                last_fragment ? css : NULL, seltype,
 					last_token.string,
 					last_token.length);
 			if (!selector) continue;
 
-			del_from_list(pkg->selector);
 			add_to_list(selector->leaves, pkg->selector);
 			pkg->selector->relation = reltype;
 		}

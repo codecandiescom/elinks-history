@@ -4213,7 +4213,6 @@ msgid "Form memory"
 msgstr "Zapamiêtywanie formularzy"
 
 #: src/formhist/formhist.c:336
-#, fuzzy
 msgid ""
 "Should I remember this login?\n"
 "\n"

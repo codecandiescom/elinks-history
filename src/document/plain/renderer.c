@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.133 2004/08/17 08:03:20 miciah Exp $ */
+/* $Id: renderer.c,v 1.134 2004/08/19 05:26:33 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,6 +174,7 @@ print_document_link(struct plain_renderer *renderer, int lineno,
 	struct document *document = renderer->document;
 	unsigned char *start = &line[line_pos];
 	int len = get_uri_length(start, width - line_pos);
+	int screen_column = line_pos + expanded;
 	int link_end = line_pos + len;
 	unsigned char saved_char;
 	struct document_options *doc_opts = &document->options;
@@ -182,8 +183,8 @@ print_document_link(struct plain_renderer *renderer, int lineno,
 	struct screen_char template = renderer->template;
 	int i;
 
-	if (!len || !check_link_word(document, start, len, line_pos + expanded,
-				    lineno))
+	if (!len
+	    || !check_link_word(document, start, len, screen_column, lineno))
 		return 0;
 
 	saved_char = line[link_end];

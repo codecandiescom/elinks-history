@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.136 2004/01/17 14:18:14 pasky Exp $ */
+/* $Id: tables.c,v 1.137 2004/01/17 15:18:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 #include "util/string.h"
 
 /* Unsafe macros */
+#include "document/html/internal.h"
 #include "document/html/parser.h"
 
 

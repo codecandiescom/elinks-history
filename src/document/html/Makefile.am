@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.15 2004/01/17 14:06:23 pasky Exp $
+## $Id: Makefile.am,v 1.16 2004/01/17 15:18:27 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -16,6 +16,7 @@ noinst_LIBRARIES = libhtml.a
 libhtml_a_SOURCES = \
  frames.c \
  frames.h \
+ internal.h \
  parser.c \
  parser.h \
  renderer.c \

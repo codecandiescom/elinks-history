@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.333 2004/01/17 14:44:56 pasky Exp $ */
+/* $Id: parser.c,v 1.334 2004/01/17 15:18:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,6 +46,7 @@
 #include "viewer/text/view.h"
 
 /* Unsafe macros */
+#include "document/html/internal.h"
 #include "document/html/parser.h"
 
 /* TODO: This needs rewrite. Yes, no kidding. */

@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.55 2004/01/03 16:04:42 zas Exp $ */
+/* $Id: parser.h,v 1.56 2004/01/17 15:18:27 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -135,12 +135,6 @@ enum html_special_type {
 };
 
 /* Interface for both the renderer and the table handling */
-
-extern struct list_head html_stack;
-
-#define format (((struct html_element *) html_stack.next)->attr)
-#define par_format (((struct html_element *) html_stack.next)->parattr)
-#define html_top (*(struct html_element *) html_stack.next)
 
 void
 parse_html(unsigned char *html, unsigned char *eof,

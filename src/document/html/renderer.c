@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.406 2004/01/16 16:30:39 jonas Exp $ */
+/* $Id: renderer.c,v 1.407 2004/01/17 15:18:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,6 +38,7 @@
 #include "viewer/text/vs.h"
 
 /* Unsafe macros */
+#include "document/html/internal.h"
 #include "document/html/parser.h"
 
 /* Types and structs */

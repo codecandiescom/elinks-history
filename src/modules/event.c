@@ -1,5 +1,5 @@
 /* Event handling functions */
-/* $Id: event.c,v 1.22 2004/07/15 15:44:05 jonas Exp $ */
+/* $Id: event.c,v 1.23 2005/02/28 14:30:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,7 +196,7 @@ move_event_handler(struct event *event, int to, int from)
 	int d = int_max(to, from);
 
 	memmove(&event->handlers[to], &event->handlers[from],
-		(event->count - d) * sizeof(struct event_handler));
+		(event->count - d) * sizeof(*event->handlers));
 }
 
 int
@@ -219,7 +219,7 @@ register_event_hook(int id, event_hook callback, int priority, void *data)
 		struct event_handler *eh;
 
 		eh = mem_realloc(event->handlers,
-				 (event->count + 1) * sizeof(struct event_handler));
+				 (event->count + 1) * sizeof(*event->handlers));
 
 		if (!eh) return EVENT_NONE;
 
@@ -268,7 +268,7 @@ unregister_event_hook(int id, event_hook callback)
 				struct event_handler *eh;
 
 				eh = mem_realloc(event->handlers,
-						 event->count * sizeof(struct event_handler));
+						 event->count * sizeof(*event->handlers));
 				if (eh) event->handlers = eh;
 			}
 

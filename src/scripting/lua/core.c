@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.176 2005/02/03 23:36:59 adamg Exp $ */
+/* $Id: core.c,v 1.177 2005/02/28 14:33:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -370,7 +370,7 @@ l_edit_bookmark_dialog(LS)
 	}
 
 #define L_EDIT_BMK_WIDGETS_COUNT 5
-	dlg = calloc_dialog(L_EDIT_BMK_WIDGETS_COUNT, sizeof(struct lua_dlg_data));
+	dlg = calloc_dialog(L_EDIT_BMK_WIDGETS_COUNT, sizeof(*data));
 	if (!dlg) return 0;
 
 	data = (struct lua_dlg_data *) get_dialog_offset(dlg, L_EDIT_BMK_WIDGETS_COUNT);
@@ -452,7 +452,7 @@ l_xdialog(LS)
 	for (i = 1; i < nargs; i++) if (!lua_isstring(S, i)) goto lua_error;
 	if (!lua_isfunction(S, nargs)) goto lua_error;
 
-	dlg = calloc_dialog(nitems, sizeof(struct lua_xdialog_data));
+	dlg = calloc_dialog(nitems, sizeof(*data));
 	if (!dlg) return 0;
 
 	data = (struct lua_xdialog_data *) get_dialog_offset(dlg, nitems);

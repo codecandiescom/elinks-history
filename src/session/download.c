@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.345 2005/02/27 22:52:19 jonas Exp $ */
+/* $Id: download.c,v 1.346 2005/02/28 14:30:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,7 +83,7 @@ init_file_download(struct uri *uri, struct session *ses, unsigned char *file, in
 {
 	struct file_download *file_download;
 
-	file_download = mem_calloc(1, sizeof(struct file_download));
+	file_download = mem_calloc(1, sizeof(*file_download));
 	if (!file_download) return NULL;
 
 	/* Actually we could allow fragments in the URI and just change all the
@@ -521,7 +521,7 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 	/* overwrite == 2 (ask) and file != ofile (=> original file already
 	 * exists) */
 
-	lun_hop = mem_calloc(1, sizeof(struct lun_hop));
+	lun_hop = mem_calloc(1, sizeof(*lun_hop));
 	if (!lun_hop) {
 		if (file != ofile) mem_free(file);
 		mem_free(ofile);
@@ -634,7 +634,7 @@ create_download_file(struct terminal *term, unsigned char *fi,
 		     void (*callback)(struct terminal *, int, void *, int),
 		     void *data)
 {
-	struct cdf_hop *cdf_hop = mem_calloc(1, sizeof(struct cdf_hop));
+	struct cdf_hop *cdf_hop = mem_calloc(1, sizeof(*cdf_hop));
 	unsigned char *wd;
 
 	if (!cdf_hop) {
@@ -764,7 +764,7 @@ common_download(struct session *ses, unsigned char *file, int resume)
 
 	if (!ses->download_uri) return;
 
-	cmdw_hop = mem_calloc(1, sizeof(struct cmdw_hop));
+	cmdw_hop = mem_calloc(1, sizeof(*cmdw_hop));
 	if (!cmdw_hop) return;
 	cmdw_hop->ses = ses;
 
@@ -844,7 +844,7 @@ static void
 continue_download(void *data, unsigned char *file)
 {
 	struct type_query *type_query = data;
-	struct codw_hop *codw_hop = mem_calloc(1, sizeof(struct codw_hop));
+	struct codw_hop *codw_hop = mem_calloc(1, sizeof(*codw_hop));
 
 	if (!codw_hop) {
 		tp_cancel(type_query);
@@ -884,7 +884,7 @@ init_type_query(struct session *ses, struct download *download,
 		if (compare_uri(type_query->uri, ses->loading_uri, 0))
 			return NULL;
 
-	type_query = mem_calloc(1, sizeof(struct type_query));
+	type_query = mem_calloc(1, sizeof(*type_query));
 	if (!type_query) return NULL;
 
 	type_query->uri = get_uri_reference(ses->loading_uri);

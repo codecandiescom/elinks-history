@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.148 2005/01/05 16:54:58 zas Exp $ */
+/* $Id: task.c,v 1.149 2005/02/28 14:31:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,7 +220,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 		return;
 	}
 
-	task = mem_alloc(sizeof(struct task));
+	task = mem_alloc(sizeof(*task));
 	if (!task) return;
 
 	task->ses = ses;
@@ -296,7 +296,7 @@ ses_forward(struct session *ses, int loaded_in_frame)
 
 x:
 	if (!loaded_in_frame) {
-		loc = mem_calloc(1, sizeof(struct location));
+		loc = mem_calloc(1, sizeof(*loc));
 		if (!loc) return NULL;
 		copy_struct(&loc->download, &ses->loading);
 	}

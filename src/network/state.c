@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.38 2005/02/08 17:42:33 jonas Exp $ */
+/* $Id: state.c,v 1.39 2005/02/28 14:30:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,7 +153,7 @@ get_err_msg(int state, struct terminal *term)
 		if (!strlcmp(s->msg, -1, e, len))
 			return s->msg;
 
-	s = mem_calloc(1, sizeof(struct strerror_val) + len);
+	s = mem_calloc(1, sizeof(*s) + len);
 	if (!s) return unknown_error;
 
 	memcpy(s->msg, e, len + 1);

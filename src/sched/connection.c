@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.212 2005/02/02 17:33:14 jonas Exp $ */
+/* $Id: connection.c,v 1.213 2005/02/28 14:29:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,7 +163,7 @@ add_host_connection(struct connection *conn)
 	struct host_connection *host_conn = get_host_connection(conn);
 
 	if (!host_conn && conn->uri->host) {
-		host_conn = mem_calloc(1, sizeof(struct host_connection));
+		host_conn = mem_calloc(1, sizeof(*host_conn));
 		if (!host_conn) return 0;
 
 		host_conn->uri = get_uri_reference(conn->uri);
@@ -228,7 +228,7 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 		int start, enum cache_mode cache_mode,
 		enum connection_priority priority)
 {
-	struct connection *conn = mem_calloc(1, sizeof(struct connection));
+	struct connection *conn = mem_calloc(1, sizeof(*conn));
 
 	if (!conn) return NULL;
 
@@ -318,7 +318,7 @@ set_connection_state(struct connection *conn, enum connection_state state)
 				int tmp = progress->start;
 				int tmp2 = progress->seek;
 
-				memset(progress, 0, sizeof(struct progress));
+				memset(progress, 0, sizeof(*progress));
 				progress->start = tmp;
 				progress->seek = tmp2;
 				progress->valid = 1;
@@ -488,7 +488,7 @@ init_keepalive_connection(struct connection *conn, ttime timeout,
 	assert(uri->host);
 	if_assert_failed return NULL;
 
-	keep_conn = mem_calloc(1, sizeof(struct keepalive_connection));
+	keep_conn = mem_calloc(1, sizeof(*keep_conn));
 	if (!keep_conn) return NULL;
 
 	keep_conn->uri = get_uri_reference(uri);

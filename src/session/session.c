@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.598 2005/02/27 22:56:00 jonas Exp $ */
+/* $Id: session.c,v 1.599 2005/02/28 14:31:12 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -155,7 +155,7 @@ session_info_timeout(int id)
 int
 add_session_info(struct session *ses, struct uri *uri)
 {
-	struct session_info *info = mem_calloc(1, sizeof(struct session_info));
+	struct session_info *info = mem_calloc(1, sizeof(*info));
 
 	if (!info) return -1;
 
@@ -304,7 +304,7 @@ request_frame(struct session *ses, unsigned char *name,
 		return;
 	}
 
-	frame = mem_calloc(1, sizeof(struct frame));
+	frame = mem_calloc(1, sizeof(*frame));
 	if (!frame) return;
 
 	frame->name = stracpy(name);
@@ -435,7 +435,7 @@ check_questions_queue(struct session *ses)
 void
 add_questions_entry(void (*callback)(struct session *, void *), void *data)
 {
-	struct questions_entry *q = mem_alloc(sizeof(struct questions_entry));
+	struct questions_entry *q = mem_alloc(sizeof(*q));
 
 	if (!q) return;
 
@@ -624,7 +624,7 @@ request_additional_file(struct session *ses, unsigned char *name, struct uri *ur
 		}
 	}
 
-	ftl = mem_calloc(1, sizeof(struct file_to_load));
+	ftl = mem_calloc(1, sizeof(*ftl));
 	if (!ftl) return NULL;
 
 	ftl->uri = get_uri_reference(uri);
@@ -787,7 +787,7 @@ struct session *
 init_session(struct session *base_session, struct terminal *term,
 	     struct uri *uri, int in_background)
 {
-	struct session *ses = mem_calloc(1, sizeof(struct session));
+	struct session *ses = mem_calloc(1, sizeof(*ses));
 
 	if (!ses) return NULL;
 

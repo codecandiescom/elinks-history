@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.107 2004/02/05 19:18:44 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.108 2004/02/26 16:12:35 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -109,6 +109,8 @@ enum main_action {
 	ACT_MAIN_TAB_CLOSE,
 	ACT_MAIN_TAB_CLOSE_ALL_BUT_CURRENT,
 	ACT_MAIN_TAB_MENU,
+	ACT_MAIN_TAB_MOVE,
+	ACT_MAIN_TAB_MOVE_BACK,
 	ACT_MAIN_TAB_NEXT,
 	ACT_MAIN_TAB_PREV,
 	ACT_MAIN_TOGGLE_CSS,

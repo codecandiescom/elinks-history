@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.49 2004/02/26 00:50:56 miciah Exp $ */
+/* $Id: tab.c,v 1.50 2004/02/26 16:12:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -273,4 +273,35 @@ open_current_link_in_new_tab(struct session *ses, int in_background)
 
 	open_url_in_new_tab(ses, url, in_background);
 	if (url) mem_free(url);
+}
+
+void
+move_current_tab(struct session *ses, int direction)
+{
+	struct terminal *term = ses->tab->term;
+	int tabs = number_of_tabs(term);
+	int new_pos = term->current_tab + direction;
+	struct window *current_tab = get_current_tab(term);
+	struct window *tab;
+
+	assert(ses && direction);
+
+	while (new_pos < 1 || new_pos > tabs)
+		new_pos += new_pos < 1 ? tabs : -tabs;
+
+	assert(0 < new_pos && new_pos <= tabs);
+
+	if (new_pos == term->current_tab) return;
+
+	tab = get_tab_by_number(term, new_pos);
+
+	del_from_list(current_tab);
+
+	if (new_pos < term->current_tab) {
+		add_at_pos(tab, current_tab);
+	} else {
+		add_to_list_end(*tab, current_tab);
+	}
+
+	switch_to_tab(term, new_pos, tabs);
 }

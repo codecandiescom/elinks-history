@@ -1,8 +1,9 @@
-/* $Id: widget.h,v 1.68 2004/11/19 11:01:54 zas Exp $ */
+/* $Id: widget.h,v 1.69 2004/11/19 15:33:07 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
 
+#include "bfu/common.h"
 #include "bfu/style.h"
 #include "util/lists.h"
 #include "util/box.h"
@@ -27,16 +28,6 @@ enum widget_type {
 	do {								\
 		assert(n == (dlg)->number_of_widgets);			\
 	} while (0)
-
-
-/* Event handlers return this values */
-typedef enum t_handler_event_status {
-	EVENT_PROCESSED	= 0,
-	EVENT_NOT_PROCESSED = 1
-} t_handler_event_status;
-
-/* TODO: wrapper for handler functions */
-#define WIDGET_HANDLER_FUNC(fn) t_handler_event_status (*fn)(struct dialog_data *, struct widget_data *)
 
 
 struct widget_ops {

@@ -1,11 +1,10 @@
-/* $Id: inpfield.h,v 1.40 2004/11/19 11:01:54 zas Exp $ */
+/* $Id: inpfield.h,v 1.41 2004/11/19 15:33:07 zas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
 
 #include "bfu/dialog.h"
 #include "bfu/style.h"
-#include "bfu/widget.h"
 #include "util/memlist.h"
 
 struct dialog;

@@ -1,13 +1,13 @@
-/* $Id: button.h,v 1.28 2004/11/19 10:30:50 zas Exp $ */
+/* $Id: button.h,v 1.29 2004/11/19 15:33:07 zas Exp $ */
 
 #ifndef EL__BFU_BUTTON_H
 #define EL__BFU_BUTTON_H
 
 #include "bfu/style.h"
-#include "bfu/widget.h"
 
-struct terminal;
 struct dialog;
+struct terminal;
+struct widget_data;
 
 /* Button flags, go into widget.gid */
 #define B_ENTER		1

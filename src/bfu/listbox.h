@@ -1,11 +1,10 @@
-/* $Id: listbox.h,v 1.75 2004/11/19 11:06:40 zas Exp $ */
+/* $Id: listbox.h,v 1.76 2004/11/19 15:33:07 zas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
 
 #include "bfu/dialog.h"
 #include "bfu/style.h"
-#include "bfu/widget.h"
 #include "util/lists.h"
 
 struct dialog;

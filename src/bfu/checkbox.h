@@ -1,13 +1,13 @@
-/* $Id: checkbox.h,v 1.33 2004/11/19 10:48:04 zas Exp $ */
+/* $Id: checkbox.h,v 1.34 2004/11/19 15:33:07 zas Exp $ */
 
 #ifndef EL__BFU_CHECKBOX_H
 #define EL__BFU_CHECKBOX_H
 
 #include "bfu/style.h"
-#include "bfu/widget.h"
 
-struct terminal;
 struct dialog;
+struct terminal;
+struct widget_data;
 
 void add_dlg_radio_do(struct dialog *dlg, unsigned char *text, int groupid, int groupnum, void *data);
 

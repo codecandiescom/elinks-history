@@ -1,11 +1,10 @@
-/* $Id: hierbox.h,v 1.61 2004/11/17 19:09:50 zas Exp $ */
+/* $Id: hierbox.h,v 1.62 2004/11/19 15:33:07 zas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
 
 #include "bfu/dialog.h"
 #include "bfu/listbox.h"
-#include "bfu/widget.h"
 #include "util/lists.h"
 
 struct session;

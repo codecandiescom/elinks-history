@@ -1,10 +1,9 @@
-/* $Id: text.h,v 1.23 2004/11/19 11:12:53 zas Exp $ */
+/* $Id: text.h,v 1.24 2004/11/19 15:33:07 zas Exp $ */
 
 #ifndef EL__BFU_TEXT_H
 #define EL__BFU_TEXT_H
 
 #include "bfu/style.h"
-#include "bfu/widget.h"
 #include "util/color.h"
 
 struct dialog;

@@ -1,4 +1,4 @@
-/* $Id: textarea.h,v 1.20 2004/06/18 09:33:50 miciah Exp $ */
+/* $Id: textarea.h,v 1.21 2004/06/18 09:46:24 miciah Exp $ */
 
 #ifndef EL__VIEWER_TEXT_TEXTAREA_H
 #define EL__VIEWER_TEXT_TEXTAREA_H
@@ -28,6 +28,6 @@ enum frame_event_status textarea_op_bob(struct form_state *fs, struct form_contr
 enum frame_event_status textarea_op_eob(struct form_state *fs, struct form_control *fc);
 enum frame_event_status textarea_op_enter(struct form_state *fs, struct form_control *fc);
 
-void set_textarea(struct session *ses, struct document_view *doc_view, int direction);
+void set_textarea(struct document_view *doc_view, int direction);
 
 #endif

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.99 2004/06/18 09:33:50 miciah Exp $ */
+/* $Id: textarea.c,v 1.100 2004/06/18 09:46:24 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -624,11 +624,11 @@ textarea_op_enter(struct form_state *fs, struct form_control *fc)
 
 
 void
-set_textarea(struct session *ses, struct document_view *doc_view, int direction)
+set_textarea(struct document_view *doc_view, int direction)
 {
 	struct link *link;
 
-	assert(ses && doc_view && doc_view->vs && doc_view->document);
+	assert(doc_view && doc_view->vs && doc_view->document);
 	assert(direction == 1 || direction == -1);
 	if_assert_failed return;
 

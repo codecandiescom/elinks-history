@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.1 2003/11/17 22:11:38 jonas Exp $ */
+/* $Id: dialogs.c,v 1.2 2003/11/17 22:15:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,7 +164,7 @@ menu_cookie_manager(struct terminal *term, void *fcp, struct session *ses)
 		litem->visible = 1;
 	}
 
-	dlg_data = hierbox_browser(term, N_("Cache"),
+	dlg_data = hierbox_browser(term, N_("Cookie manager"),
 			0, cookie_dialog_box_build(), ses,
 			1,
 			N_("Info"), push_info_button, B_ENTER, ses);

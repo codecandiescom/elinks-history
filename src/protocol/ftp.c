@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.31 2002/09/12 12:05:58 pasky Exp $ */
+/* $Id: ftp.c,v 1.32 2002/09/12 12:52:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,8 +217,7 @@ ftp_got_info(struct connection *conn, struct read_buffer *rb)
 
 	if (response != 220) {
 		/* TODO? Retry in case of ... ?? */
-		setcstate(conn, S_FTP_UNAVAIL);
-		retry_connection(conn);
+		retry_conn_with_state(conn, S_FTP_UNAVAIL);
 		return;
 	}
 
@@ -398,11 +397,11 @@ add_eprtcmd_to_str(unsigned char **str, int *strl, struct sockaddr_in6 *addr)
 	inet_ntop(AF_INET6, &addr->sin6_addr, addr_str, INET6_ADDRSTRLEN);
 
 	/* From RFC 2428: EPRT
-	 * 
+	 *
 	 * The format of EPRT is:
 	 *
 	 * EPRT<space><d><net-prt><d><net-addr><d><tcp-port><d>
-	 * 
+	 *
 	 * <net-prt>:
 	 * AF Number   Protocol
 	 * ---------   --------
@@ -948,8 +947,7 @@ got_something_from_data_connection(struct connection *conn)
 		newsock = accept(conn->sock2, NULL, NULL);
 		if (newsock < 0) {
 error:
-			setcstate(conn, -errno);
-			retry_connection(conn);
+			retry_conn_with_state(conn, -errno);
 			return;
 		}
 

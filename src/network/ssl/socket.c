@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.13 2002/08/27 10:51:48 pasky Exp $ */
+/* $Id: socket.c,v 1.14 2002/09/12 12:54:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,7 +79,7 @@ ssl_set_no_tls(struct connection *conn)
 			GNUTLS_CIPHER_RIJNDAEL_256_CBC,
 			0
 		};
-		
+
 		gnutls_cipher_set_priority(*conn->ssl, cipher_priority);
 	}
 
@@ -162,8 +162,7 @@ ssl_want_read(struct connection *conn)
 
 		default:
 			conn->no_tsl++;
-			setcstate(conn, S_SSL_ERROR);
-			retry_connection(conn);
+			retry_conn_with_state(conn, S_SSL_ERROR);
 	}
 #endif
 	return;

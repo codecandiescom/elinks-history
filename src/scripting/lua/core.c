@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.134 2003/11/26 18:27:02 pasky Exp $ */
+/* $Id: core.c,v 1.135 2003/11/27 18:39:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -390,14 +390,12 @@ l_edit_bookmark_dialog(LS)
 	dlg->title = _("Edit bookmark", term);
 	dlg->layouter = generic_dialog_layouter;
 	dlg->layout.maximize_width = 1;
-	dlg->refresh = (void (*)(void *))dialog_run_lua;
-	dlg->refresh_data = data;
 
 	add_dlg_field(dlg, _("Name", term), 0, 0, NULL, MAX_STR_LEN, data->cat, NULL);
 	add_dlg_field(dlg, _("Name", term), 0, 0, NULL, MAX_STR_LEN, data->name, NULL);
 	add_dlg_field(dlg, _("URL", term), 0, 0, NULL, MAX_STR_LEN, data->url, NULL);
 
-	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);
+	add_dlg_ok_button(dlg, B_ENTER, _("OK", lua_ses->tab->term), dialog_run_lua, data);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", lua_ses->tab->term), NULL);
 
 	add_dlg_end(dlg, L_EDIT_BMK_WIDGETS_COUNT);
@@ -471,8 +469,6 @@ l_xdialog(LS)
 	dlg->title = _("User dialog", term);
 	dlg->layouter = generic_dialog_layouter;
 	dlg->layout.maximize_width = 1;
-	dlg->refresh = (void (*)(void *))xdialog_run_lua;
-	dlg->refresh_data = data;
 
 	i = 0;
 	while (dlg->widgets_size < nfields) {
@@ -480,7 +476,7 @@ l_xdialog(LS)
 			      data->fields[i++], NULL);
 	}
 
-	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
+	add_dlg_ok_button(dlg, B_ENTER, _("OK", term), xdialog_run_lua, data);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
 	add_dlg_end(dlg, nitems);

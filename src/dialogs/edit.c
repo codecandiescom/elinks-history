@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.75 2003/11/24 01:22:20 jonas Exp $ */
+/* $Id: edit.c,v 1.76 2003/11/27 18:39:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,8 +86,6 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	dlg->title = title;
 	dlg->layouter = generic_dialog_layouter;
 	dlg->layout.maximize_width = 1;
-	dlg->refresh = (void (*)(void *)) when_done;
-	dlg->refresh_data = dlg;
 	dlg->udata = parent;
 	dlg->udata2 = done_data;
 
@@ -98,7 +96,7 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	add_dlg_field(dlg, _("URL", term), 0, 0, NULL, MAX_STR_LEN, url, NULL);
 	/* if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty; */
 
-	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
+	add_dlg_ok_button(dlg, B_ENTER, _("OK", term), when_done, dlg);
 	add_dlg_button(dlg, 0, clear_dialog, _("Clear", term), NULL);
 
 	add_dlg_button(dlg, B_ESC, when_cancel ? my_cancel_dialog : cancel_dialog,

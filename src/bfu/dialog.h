@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.28 2003/11/24 01:10:53 jonas Exp $ */
+/* $Id: dialog.h,v 1.29 2003/11/27 18:39:24 jonas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -32,12 +32,10 @@ struct dialog {
 	unsigned char *title;
 	void *udata;
 	void *udata2;
-	void *refresh_data;
 
 	void (*layouter)(struct dialog_data *);
 	int (*handle_event)(struct dialog_data *, struct term_event *);
 	void (*abort)(struct dialog_data *);
-	void (*refresh)(void *);
 
 	struct dialog_layout layout;
 

@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.39 2003/11/10 15:35:50 jonas Exp $ */
+/* $Id: widget.h,v 1.40 2003/11/27 18:39:24 jonas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -61,6 +61,10 @@ struct widget {
 		} box;
 		struct {
 			int flags;
+			/* Used by some default handlers like ok_dialog()
+			 * as a callback. */
+			void (*done)(void *);
+			void *done_data;
 		} button;
 		struct {
 			enum format_align align;

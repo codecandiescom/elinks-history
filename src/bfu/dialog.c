@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.96 2003/11/26 22:06:40 jonas Exp $ */
+/* $Id: dialog.c,v 1.97 2003/11/27 18:39:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -344,14 +344,14 @@ update_dialog_data(struct dialog_data *dlg_data, struct widget_data *widget_data
 int
 ok_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
-	void (*fn)(void *) = dlg_data->dlg->refresh;
-	void *data = dlg_data->dlg->refresh_data;
+	void (*done)(void *) = widget_data->widget->info.button.done;
+	void *done_data = widget_data->widget->info.button.done_data;
 
 	if (check_dialog(dlg_data)) return 1;
 
 	update_dialog_data(dlg_data, widget_data);
 
-	if (fn) fn(data);
+	if (done) done(done_data);
 	return cancel_dialog(dlg_data, widget_data);
 }
 

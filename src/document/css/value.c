@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.40 2004/01/20 15:59:40 jonas Exp $ */
+/* $Id: value.c,v 1.41 2004/01/20 17:49:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,7 +74,7 @@ css_parse_color_value(struct css_property_info *propinfo,
 	}
 
 	/* Just a color value we already know how to parse. */
-	if (token->type != CSS_TOKEN_IDENTIFIER
+	if (token->type != CSS_TOKEN_IDENT
 	    && token->type != CSS_TOKEN_HEX_COLOR)
 		return 0;
 
@@ -125,7 +125,7 @@ css_parse_font_style_value(struct css_property_info *propinfo,
 
 	assert(propinfo->value_type == CSS_VT_FONT_ATTRIBUTE);
 
-	if (token->type != CSS_TOKEN_IDENTIFIER) return 0;
+	if (token->type != CSS_TOKEN_IDENT) return 0;
 
 	if (css_token_contains(token, "italic")
 	    || css_token_contains(token, "oblique")) {
@@ -141,7 +141,7 @@ css_parse_font_style_value(struct css_property_info *propinfo,
 		return 0;
 	}
 
-	skip_css_tokens(scanner, CSS_TOKEN_IDENTIFIER);
+	skip_css_tokens(scanner, CSS_TOKEN_IDENT);
 	return 1;
 }
 
@@ -157,7 +157,7 @@ css_parse_font_weight_value(struct css_property_info *propinfo,
 
 	assert(propinfo->value_type == CSS_VT_FONT_ATTRIBUTE);
 
-	if (token->type == CSS_TOKEN_IDENTIFIER) {
+	if (token->type == CSS_TOKEN_IDENT) {
 		if (css_token_contains(token, "bolder")) {
 			value->font_attribute.add |= AT_BOLD;
 
@@ -174,7 +174,7 @@ css_parse_font_weight_value(struct css_property_info *propinfo,
 			return 0;
 		}
 
-		skip_css_tokens(scanner, CSS_TOKEN_IDENTIFIER);
+		skip_css_tokens(scanner, CSS_TOKEN_IDENT);
 		return 1;
 	}
 
@@ -206,7 +206,7 @@ css_parse_text_align_value(struct css_property_info *propinfo,
 
 	assert(propinfo->value_type == CSS_VT_TEXT_ALIGN);
 
-	if (token->type != CSS_TOKEN_IDENTIFIER) return 0;
+	if (token->type != CSS_TOKEN_IDENT) return 0;
 
 	if (css_token_contains(token, "left")) {
 		value->text_align = AL_LEFT;
@@ -224,7 +224,7 @@ css_parse_text_align_value(struct css_property_info *propinfo,
 		return 0;
 	}
 
-	skip_css_tokens(scanner, CSS_TOKEN_IDENTIFIER);
+	skip_css_tokens(scanner, CSS_TOKEN_IDENT);
 	return 1;
 }
 

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.51 2004/01/20 17:28:29 jonas Exp $ */
+/* $Id: scanner.c,v 1.52 2004/01/20 17:49:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,7 +220,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			string++;
 
 		} else {
-			type = CSS_TOKEN_IDENTIFIER;
+			type = CSS_TOKEN_IDENT;
 		}
 
 	} else if (first_char == '<' && *string == '/') {

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.30 2004/01/20 05:11:01 jonas Exp $ */
+/* $Id: parser.c,v 1.31 2004/01/20 17:49:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,7 @@ css_parse_properties(struct list_head *props, unsigned char *string)
 
 		/* Extract property name. */
 
-		if (token->type != CSS_TOKEN_IDENTIFIER
+		if (token->type != CSS_TOKEN_IDENT
 		    || !check_next_css_token(&scanner, ':')) {
 			skip_css_tokens(&scanner, ';');
 			continue;
@@ -191,7 +191,7 @@ css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string)
 
 		assert(token);
 
-		if (token->type == CSS_TOKEN_IDENTIFIER) {
+		if (token->type == CSS_TOKEN_IDENT) {
 			/* Handle more selectors like '*' ':<ident>' to start */
 			css_parse_selector(css, &scanner);
 

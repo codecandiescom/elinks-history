@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.33 2004/01/20 17:28:29 jonas Exp $ */
+/* $Id: scanner.h,v 1.34 2004/01/20 17:49:41 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -15,13 +15,27 @@ enum css_token_type {
 	/* Char tokens from 0-255 have their char value as type and non string
 	 * tokens have values from 256 and up. */
 
-	CSS_TOKEN_ANGLE = 256,	/* <number>rad, <number>grad or <number>deg */
-	CSS_TOKEN_ATRULE,	/* @<identifier> */
+	/* Low level string tokens: */
+
+	/* Percentage is put because although it looks like being composed of
+	 * <number> and '%' floating point numbers are really not allowed but
+	 * strtol() will round it down for us ;) */
+	CSS_TOKEN_IDENT = 256,	/* [a-z_]|{nonascii} followed by *_NAME chars */
+	CSS_TOKEN_NAME,		/* [a-z0-9_-]|{nonascii}+ */
+	CSS_TOKEN_NUMBER,	/* [0-9]+|[0-9]*"."[0-9]+ */
+	CSS_TOKEN_PERCENTAGE,	/* <number>% */
+	CSS_TOKEN_STRING,	/* Char sequence delimted by matching ' or " */
+
+	/* High level string tokens: */
+
+	/* The various number values; dimension being the most generic */
+	CSS_TOKEN_ANGLE,	/* <number>rad, <number>grad or <number>deg */
 	CSS_TOKEN_DIMENSION,	/* <number><ident> */
 	CSS_TOKEN_EM,		/* <number>em */
 	CSS_TOKEN_EX,		/* <number>ex */
 	CSS_TOKEN_FREQUENCY,	/* <number>Hz or <number>kHz */
-	CSS_TOKEN_FUNCTION,	/* <identifier>( */
+	CSS_TOKEN_LENGTH,	/* <number>{px,cm,mm,in,pt,pc} */
+	CSS_TOKEN_TIME,		/* <number>ms or <number>s */
 
 	/* XXX: CSS_TOKEN_HASH conflicts with CSS_TOKEN_HEX_COLOR. Generating
 	 * hex color tokens has precedence and the hash token user have to
@@ -29,17 +43,19 @@ enum css_token_type {
 	CSS_TOKEN_HASH,		/* #<name> */
 	CSS_TOKEN_HEX_COLOR,	/* #[0-9a-f]\{3,6} */
 
-	CSS_TOKEN_IDENTIFIER,	/* [a-z_]|{nonascii} followed by *_NAME chars */
-	CSS_TOKEN_IMPORTANT,	/* !<whitespace>important */
-	CSS_TOKEN_LENGTH,	/* <number>{px,cm,mm,in,pt,pc} */
-	CSS_TOKEN_NAME,		/* [a-z0-9_-]|{nonascii}+ */
-	CSS_TOKEN_NUMBER,	/* [0-9]+|[0-9]*"."[0-9]+ */
-	CSS_TOKEN_PERCENTAGE,	/* <number>% */
+	/* Unknown functions contain also args so parsing is easier but for
+	 * known functions we want to generate tokens for every arg and arg
+	 * delimiter ( ',' or ')' ). */
+	CSS_TOKEN_FUNCTION,	/* <identifier>(<args>) */
 	CSS_TOKEN_RGB,		/* rgb( */
-	CSS_TOKEN_STRING,	/* Char sequence delimted by matching ' or " */
-	CSS_TOKEN_TIME,		/* <number>ms or <number>s */
 
-	/* A special token for unrecognized tokens */
+	/* TODO: @-rules; CSS_TOKEN_IMPORT etc. */
+	CSS_TOKEN_ATRULE,	/* @<identifier> */
+	CSS_TOKEN_IMPORTANT,	/* !<whitespace>important */
+
+	/* TODO: Selector stuff like "|=" and "~=" */
+
+	/* A special token for unrecognized strings */
 	CSS_TOKEN_GARBAGE,
 };
 

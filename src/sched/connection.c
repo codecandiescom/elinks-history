@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.109 2003/10/27 22:32:33 jonas Exp $ */
+/* $Id: connection.c,v 1.110 2003/10/27 22:53:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -593,10 +593,7 @@ static void
 interrupt_connection(struct connection *conn)
 {
 #ifdef HAVE_SSL
-	if (conn->ssl) {
-		free_ssl(conn->ssl);
-		conn->ssl = NULL;
-	}
+	if (conn->ssl) done_ssl_connection(conn);
 #endif
 
 	close_socket(conn, &conn->socket);

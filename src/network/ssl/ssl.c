@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.29 2003/10/27 22:32:33 jonas Exp $ */
+/* $Id: ssl.c,v 1.30 2003/10/27 22:53:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,6 +25,7 @@
 
 #include "intl/gettext/libintl.h"
 #include "modules/module.h"
+#include "sched/connection.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/string.h"
@@ -155,27 +156,30 @@ struct module ssl_module = struct_module(
 	/* done: */		done_ssl
 );
 
-ssl_t *
-get_ssl(void)
+int
+init_ssl_connection(struct connection *conn)
 {
+	ssl_t *state;
+
 #ifdef HAVE_OPENSSL
-	return (SSL_new(context));
+	state = SSL_new(context);
+	if (!state) return S_SSL_ERROR;
 #elif defined(HAVE_GNUTLS)
 	/* XXX: GNUTLS_STATE is obviously a pointer by itself, but as it is
 	 * hidden for some stupid design decision, we must not rely on that,
 	 * who knows if some future implementation won't have that as a
 	 * structure itself.. --pasky */
 	int ret;
-	GNUTLS_STATE *state = mem_alloc(sizeof(GNUTLS_STATE));
 
-	if (!state) return NULL;
+	state = mem_alloc(sizeof(GNUTLS_STATE));
+	if (!state) return S_SSL_ERROR;
 
 	ret = gnutls_init(state, GNUTLS_CLIENT);
 
 	if (ret < 0) {
 		/* debug("sslinit %s", gnutls_strerror(ret)); */
 		mem_free(state);
-		return NULL;
+		return S_SSL_ERROR;
 	}
 
 	ret = gnutls_cred_set(*state, GNUTLS_CRD_ANON, anon_cred);
@@ -183,7 +187,7 @@ get_ssl(void)
 		/* debug("sslanoncred %s", gnutls_strerror(ret)); */
 		gnutls_deinit(*state);
 		mem_free(state);
-		return NULL;
+		return S_SSL_ERROR;
 	}
 
 	ret = gnutls_cred_set(*state, GNUTLS_CRD_CERTIFICATE, xcred);
@@ -202,14 +206,17 @@ get_ssl(void)
         gnutls_mac_set_priority(*state, mac_priority);
         gnutls_certificate_type_set_priority(*state, cert_type_priority);
         gnutls_set_server_name(*state, GNUTLS_NAME_DNS, "localhost", strlen("localhost"));
-
-	return state;
 #endif
+
+	conn->ssl = state;
+	return S_OK;
 }
 
 void
-free_ssl(ssl_t *ssl)
+done_ssl_connection(struct connection *conn)
 {
+	ssl_t *ssl = conn->ssl;
+
 	if (!ssl) return;
 #ifdef HAVE_OPENSSL
 	SSL_free(ssl);
@@ -217,12 +224,14 @@ free_ssl(ssl_t *ssl)
 	gnutls_deinit(*ssl);
 	mem_free(ssl);
 #endif
+	conn->ssl = NULL;
 }
 
 
 unsigned char *
-get_ssl_cipher_str(ssl_t *ssl)
+get_ssl_connection_cipher(struct connection *conn)
 {
+	ssl_t *ssl = conn->ssl;
 	struct string str = NULL_STRING;
 
 	if (!init_string(&str)) return NULL;

@@ -1,4 +1,4 @@
-/* $Id: ssl.h,v 1.14 2003/10/27 22:32:34 jonas Exp $ */
+/* $Id: ssl.h,v 1.15 2003/10/27 22:53:38 jonas Exp $ */
 
 #ifndef EL__SSL_SSL_H
 #define EL__SSL_SSL_H
@@ -56,10 +56,16 @@
 #define	ssl_t	void
 #endif
 
-ssl_t *get_ssl(void);
-void free_ssl(ssl_t *);
+#include "sched/connection.h"
 
-unsigned char *get_ssl_cipher_str(ssl_t *);
+/* Initializes the SSL connection data. Returns S_OK on success and S_SSL_ERROR
+ * on failure. */
+int init_ssl_connection(struct connection *conn);
+
+/* Releases the SSL connection data */
+void done_ssl_connection(struct connection *conn);
+
+unsigned char *get_ssl_connection_cipher(struct connection *conn);
 
 #endif /* HAVE_SSL */
 #endif

@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.38 2003/10/27 22:32:33 jonas Exp $ */
+/* $Id: connect.c,v 1.39 2003/10/27 22:53:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -327,8 +327,7 @@ ssl_close(struct connection *conn)
 	/* We probably doesn't handle this entirely correctly.. */
 	gnutls_bye(*((ssl_t *) conn->ssl), GNUTLS_SHUT_RDWR);
 #endif
-	free_ssl(conn->ssl);
-	conn->ssl = NULL;
+	done_ssl_connection(conn);
 
 	return 0;
 }

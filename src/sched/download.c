@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.311 2004/08/14 05:56:25 jonas Exp $ */
+/* $Id: download.c,v 1.312 2004/08/19 09:30:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -329,7 +329,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 			msg_box(term, NULL, MSGBOX_FREE_TEXT,
 				N_("Download error"), ALIGN_CENTER,
 				msg_text(term, N_("Error downloading %s:\n\n%s"), url, errmsg),
-				get_download_ses(file_download), 1,
+				ses, 1,
 				N_("OK"), NULL, B_ENTER | B_ESC /*,
 				N_(T_RETRY), NULL, 0 */ /* FIXME: retry */);
 
@@ -369,7 +369,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 			msg_box(term, NULL, MSGBOX_FREE_TEXT,
 				N_("Download"), ALIGN_CENTER,
 				msg_text(term, N_("Download complete:\n%s"), url),
-				get_download_ses(file_download), 1,
+				ses, 1,
 				N_("OK"), NULL, B_ENTER | B_ESC);
 			mem_free(url);
 		}

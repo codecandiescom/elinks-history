@@ -1,5 +1,5 @@
 /* These routines represent handling of struct memory_list. */
-/* $Id: memlist.c,v 1.7 2003/06/04 23:23:18 zas Exp $ */
+/* $Id: memlist.c,v 1.8 2003/06/05 12:08:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 
 #include "elinks.h"
 
+#include "util/error.h"
 #include "util/memlist.h"
 #include "util/memory.h"
 
@@ -36,7 +37,12 @@ getml(void *p, ...)
 
 	/* If first element is NULL, there's no need to allocate memory, so
 	 * just return. */
-	if (!p) return NULL;
+	if (!p) {
+#ifdef DEBUG
+		error("getml(NULL, ....)");
+#endif
+		return NULL;
+	}
 
 	/* How many elements ? */
 	va_start(ap, p);
@@ -77,7 +83,12 @@ add_to_ml(struct memory_list **ml, ...)
 	va_end(ap);
 
 	/* None, so just return. */
-	if (!n) return;
+	if (!n) {
+#ifdef DEBUG
+		error("add_to_ml(%p, NULL, ...)", ml);
+#endif
+		return;
+	}
 
 	if (!*ml) {
 		/* If getml() wasn't called before or returned NULL,

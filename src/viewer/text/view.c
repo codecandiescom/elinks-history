@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.478 2004/06/16 10:18:03 zas Exp $ */
+/* $Id: view.c,v 1.479 2004/06/16 10:23:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -633,7 +633,7 @@ x_end(struct session *ses, struct document_view *doc_view)
 }
 
 void
-set_frame(struct session *ses, struct document_view *doc_view, int a)
+set_frame(struct session *ses, struct document_view *doc_view, int xxxx)
 {
 	assert(ses && ses->doc_view && doc_view && doc_view->vs);
 	if_assert_failed return;
@@ -644,7 +644,7 @@ set_frame(struct session *ses, struct document_view *doc_view, int a)
 
 
 void
-toggle_plain_html(struct session *ses, struct document_view *doc_view, int a)
+toggle_plain_html(struct session *ses, struct document_view *doc_view, int xxxx)
 {
 	assert(ses && doc_view && ses->tab && ses->tab->term);
 	if_assert_failed return;
@@ -659,7 +659,7 @@ toggle_plain_html(struct session *ses, struct document_view *doc_view, int a)
 }
 
 void
-toggle_wrap_text(struct session *ses, struct document_view *doc_view, int a)
+toggle_wrap_text(struct session *ses, struct document_view *doc_view, int xxxx)
 {
 	assert(ses && doc_view && ses->tab && ses->tab->term);
 	if_assert_failed return;
@@ -1223,7 +1223,7 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 }
 
 void
-view_image(struct session *ses, struct document_view *doc_view, int a)
+view_image(struct session *ses, struct document_view *doc_view, int xxxx)
 {
 	struct link *link = get_current_link(doc_view);
 
@@ -1285,7 +1285,7 @@ save_formatted(void *data, unsigned char *file)
 }
 
 void
-save_formatted_dlg(struct session *ses, struct document_view *doc_view, int a)
+save_formatted_dlg(struct session *ses, struct document_view *doc_view, int xxxx)
 {
 	query_file(ses, doc_view->vs->uri, ses, save_formatted, NULL, 1);
 }

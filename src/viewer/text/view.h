@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.52 2004/06/16 09:43:40 zas Exp $ */
+/* $Id: view.h,v 1.53 2004/06/16 10:23:39 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -25,16 +25,16 @@ void draw_doc(struct session *ses, struct document_view *doc_view, int active);
 
 void draw_formatted(struct session *ses, int rerender);
 
-void set_frame(struct session *, struct document_view *doc_view, int);
+void set_frame(struct session *ses, struct document_view *doc_view, int xxxx);
 struct document_view *current_frame(struct session *);
 
 void down(struct session *ses, struct document_view *doc_view);
 
 /* Used for changing between formatted and source (plain) view. */
-void toggle_plain_html(struct session *ses, struct document_view *doc_view, int a);
+void toggle_plain_html(struct session *ses, struct document_view *doc_view, int xxxx);
 
 /* Used for changing wrapping of text */
-void toggle_wrap_text(struct session *ses, struct document_view *doc_view, int a);
+void toggle_wrap_text(struct session *ses, struct document_view *doc_view, int xxxx);
 
 /* File menu handlers. */
 
@@ -44,8 +44,8 @@ void save_as(struct session *ses, struct document_view *doc_view, int magic);
 
 void send_event(struct session *, struct term_event *);
 
-void save_formatted_dlg(struct session *ses, struct document_view *doc_view, int a);
-void view_image(struct session *ses, struct document_view *doc_view, int a);
+void save_formatted_dlg(struct session *ses, struct document_view *doc_view, int xxxx);
+void view_image(struct session *ses, struct document_view *doc_view, int xxxx);
 void download_link(struct session *ses, struct document_view *doc_view, int image);
 
 void refresh_view(struct session *ses, struct document_view *doc_view, int frames);

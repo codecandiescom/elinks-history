@@ -35,6 +35,7 @@ ELinks-0.9.1:
 * support <object> tags by displaying a link to the data
 * add beginning-of-buffer and end-of-buffer actions for text fields
 * automatic session saving/restoring support (disabled by default)
+* add-bookmark-tabs (bookmark all tabs) option and menu item
 * fold successive blank lines when displaying a plain-text document
   (disabled by default; use the option document.plain.compress_empty_lines)
 

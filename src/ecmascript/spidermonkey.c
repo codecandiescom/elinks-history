@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.81 2004/12/17 00:25:13 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.82 2004/12/17 00:39:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -704,18 +704,25 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	VALUE_TO_JSVAL_START;
 	if (!JSVAL_IS_INT(id))
 		goto bye;
-	if (JSVAL_TO_INT(id) == JSP_FORMS_LENGTH) {
+
+	switch (JSVAL_TO_INT(id)) {
+	case JSP_FORMS_LENGTH:
+	{
 		struct form_control *fc;
 		int counter = 0;
 
-		foreach(fc, document->forms)
+		foreach (fc, document->forms)
 			counter++;
+
 		p.number = counter;
 		prop_type = JSPT_INT;
-	} else {
+		break;
+	}
+	default:
 		INTERNAL("Invalid ID %d in forms_get_property().", JSVAL_TO_INT(id));
 		goto bye;
 	}
+
 	VALUE_TO_JSVAL_END(vp);
 }
 
@@ -727,20 +734,30 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct document_view *doc_view = vs->doc_view;
 	struct document *document = doc_view->document;
 	struct form_control *fc;
+	union jsval_union v;
+	enum prop_type prop_type;
+	union prop_union p;
 	int counter = 0;
-	int index;
 
-	if (argc != 1) return JS_FALSE;
-	if (!JSVAL_IS_INT(argv[0])) return JS_FALSE;
-	index = JSVAL_TO_INT(argv[0]);
-	foreach(fc, document->forms) {
+	prop_type = JSPT_UNDEF;
+
+	if (argc != 1)
+		goto bye;
+
+	JSVAL_REQUIRE(&argv[0], INT);
+
+	foreach (fc, document->forms) {
 		counter++;
-		if (counter == index) break;
-	}
-	if (index > counter) return JS_FALSE;
+		if (counter == v.number) {
+			p.object = get_form_object(ctx, obj, fc);
+			prop_type = JSPT_OBJECT;
 
-	*rval = OBJECT_TO_JSVAL(get_form_object(ctx, obj, fc));
-	return JS_TRUE;
+			VALUE_TO_JSVAL_END(rval);
+			/* This returns. */
+		}
+	}
+
+	goto bye;
 }
 
 static JSBool
@@ -751,20 +768,30 @@ forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *r
 	struct document_view *doc_view = vs->doc_view;
 	struct document *document = doc_view->document;
 	struct form_control *fc;
-	unsigned char *name;
+	union jsval_union v;
+	enum prop_type prop_type;
+	union prop_union p;
 
-	if (argc != 1) return JS_FALSE;
-	if (!JSVAL_IS_STRING(argv[0])) return JS_FALSE;
-	name = JS_GetStringBytes(JS_ValueToString(ctx, argv[0]));
-	if (!name) return JS_FALSE;
-	foreach(fc, document->forms) {
-		if (fc->formname && !strcasecmp(name, fc->formname)) goto ok;
+	prop_type = JSPT_UNDEF;
+
+	if (argc != 1)
+		goto bye;
+
+	JSVAL_REQUIRE(&argv[0], STRING);
+	if (!v.string || !*v.string)
+		goto bye;
+
+	foreach (fc, document->forms) {
+		if (fc->formname && !strcasecmp(name, fc->formname)) {
+			p.object = get_form_object(ctx, obj, fc);
+			prop_type = JSPT_OBJECT;
+
+			VALUE_TO_JSVAL_END(rval);
+			/* This returns. */
+		}
 	}
-	return JS_FALSE;
 
-ok:
-	*rval = OBJECT_TO_JSVAL(get_form_object(ctx, obj, fc));
-	return JS_TRUE;
+	goto bye;
 }
 
 

@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.6 2002/03/22 15:31:26 pasky Exp $ */
+/* $Id: error.c,v 1.7 2002/03/25 17:18:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,6 +65,8 @@ static inline void force_dump()
 {
 	fprintf(stderr, "\n\033[1m%s\033[0m\n", "Forcing core dump");
 	fflush(stderr);
+	fprintf(stderr, "Man the Lifeboats! Women and children first!\n");
+	fflush(stderr);
 	raise(SIGSEGV);
 }
 
@@ -79,8 +81,6 @@ void er(int b, unsigned char *m, va_list l)
 	if (b) fprintf(stderr, "%c", (char)7);
 	vfprintf(stderr, m, l);
 	fprintf(stderr, "\n");
-	fflush(stderr);
-	fprintf(stderr, "Man the Lifeboats! Women and children first!\n");
 	fflush(stderr);
 	sleep(1);
 }

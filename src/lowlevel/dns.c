@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.4 2002/03/18 10:55:38 pasky Exp $ */
+/* $Id: dns.c,v 1.5 2002/03/25 17:18:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -179,6 +179,8 @@ void end_real_lookup(void *data)
 	int res = -1;
 	int i;
 
+//	debug("end_real_lookup");
+
 	if (!query->addr || !query->addrno)
 		goto done;
 
@@ -278,11 +280,12 @@ int do_queued_lookup(struct dnsquery *query)
 int find_in_dns_cache(char *name, struct dnsentry **dnsentry)
 {
 	struct dnsentry *e;
+	
 	foreach(e, dns_cache)
 		if (!strcasecmp(e->name, name)) {
 			del_from_list(e);
 			add_to_list(dns_cache, e);
-			*dnsentry=e;
+			*dnsentry = e;
 			return 0;
 		}
 	return -1;
@@ -402,7 +405,7 @@ int find_host(unsigned char *name, struct sockaddr **addr, int *addrno,
 		return 0;
 	}
 
-	timeout:
+timeout:
 	return find_host_no_cache(name, addr, addrno, query_p, fn, data);
 }
 

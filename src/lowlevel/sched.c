@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.10 2002/03/22 19:55:16 pasky Exp $ */
+/* $Id: sched.c,v 1.11 2002/03/25 17:18:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1045,7 +1045,7 @@ void connection_timeout(struct connection *c)
 	if (c->dnsquery) {
 		abort_connection(c);
 	} else if (c->conn_info) {
-		dns_found(c, 0);
+		dns_found(c, 0); /* jump to next addr */
 		if (c->conn_info) set_timeout(c);
 	} else {
 		retry_connection(c);

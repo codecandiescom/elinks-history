@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.31 2004/01/18 18:06:29 jonas Exp $ */
+/* $Id: value.c,v 1.32 2004/01/18 18:11:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,25 +133,24 @@ css_parse_font_style_value(struct css_property_info *propinfo,
 			   struct css_scanner *scanner)
 {
 	struct css_token *token = get_css_token(scanner);
-	unsigned char *tok_string = token->string;
-	unsigned char **string = &tok_string;
 
 	assert(propinfo->value_type == CSS_VT_FONT_ATTRIBUTE);
 
-	if (!strncasecmp(*string, "normal", 6)) {
-		(*string) += 6;
-		value->font_attribute.rem |= AT_ITALIC;
-		return 1;
-	}
+	if (token->type != CSS_TOKEN_IDENTIFIER) return 0;
 
-	if (!strncasecmp(*string, "italic", 6) ||
-	    !strncasecmp(*string, "oblique", 7)) {
-		(*string) += 6 + (**string == 'o');
+	if (css_token_contains(token, "italic", 6)
+	    || css_token_contains(token, "oblique", 7)) {
 		value->font_attribute.add |= AT_ITALIC;
-		return 1;
+
+	} else if (css_token_contains(token, "normal", 6)) {
+		value->font_attribute.rem |= AT_ITALIC;
+
+	} else {
+		return 0;
 	}
 
-	return 0;
+	skip_css_tokens(scanner, CSS_TOKEN_IDENTIFIER);
+	return 1;
 }
 
 

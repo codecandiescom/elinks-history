@@ -290,6 +290,9 @@ Sergei Borushevsky <b_sp@usa.net>
 Sergio R. Velasquez Zeballos <svelasqu@thor.uc.edu.ve>
 	Proxy auth (Basic)
 
+Simen Graaten <simeng@slarkware.com>
+	Norwegian translation
+
 Simos Xenitellis <simos@hellug.gr>
 	Greek codepages & translation
 
@@ -334,4 +337,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.67 2002/07/03 22:18:27 pasky Exp $
+$Id: AUTHORS,v 1.68 2002/07/03 22:20:02 pasky Exp $

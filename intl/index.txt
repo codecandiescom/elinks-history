@@ -17,6 +17,7 @@ icelandic
 indonesian
 italian
 lithuanian
+norwegian
 polish
 romanian
 russian

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.73 2003/08/31 17:03:51 jonas Exp $ */
+/* $Id: options.c,v 1.74 2003/09/01 13:02:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,10 +135,8 @@ terminal_options_fn(struct dialog_data *dlg)
 	buttons_width(term, dlg->items + dlg->n - 3, 3, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
-	int_upper_bound(&w, max);
-	int_lower_bound(&w, min);
-	int_upper_bound(&w, term->x - 2 * DIALOG_LB);
-	int_lower_bound(&w, 5);
+	int_bounds(&w, min, max);
+	int_bounds(&w, 5, term->x - 2 * DIALOG_LB);
 
 	rw = 0;
 	dlg_format_checkboxes(NULL, term, 1, dlg->items, dlg->n - 3, 0, &y, w,

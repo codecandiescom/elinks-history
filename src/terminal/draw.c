@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.56 2003/08/29 23:55:53 jonas Exp $ */
+/* $Id: draw.c,v 1.57 2003/09/01 13:07:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,10 +18,8 @@
 /* Makes sure that @x and @y are within the dimensions of the terminal. */
 #define check_range(term, x, y) \
 	do { \
-		int_upper_bound(&(x), (term)->x - 1); \
-		int_lower_bound(&(x), 0); \
-		int_upper_bound(&(y), (term)->y - 1); \
-		int_lower_bound(&(y), 0); \
+		int_bounds(&(x), 0, (term)->x - 1); \
+		int_bounds(&(y), 0, (term)->y - 1); \
 	} while (0)
 
 /* TODO: Clearify this piece of magic code. --jonas */

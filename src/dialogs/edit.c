@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.38 2003/08/23 16:44:42 jonas Exp $ */
+/* $Id: edit.c,v 1.39 2003/09/01 13:00:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,8 +55,7 @@ layout_add_dialog(struct dialog_data *dlg)
 
 	/* int_upper_bound(&w, max); */
 	int_lower_bound(&w, min);
-	int_upper_bound(&w, term->x - 2 * DIALOG_LB);
-	int_lower_bound(&w, 1);
+	int_bounds(&w, 1, term->x - 2 * DIALOG_LB);
 
 	rw = w;
 

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.67 2003/08/29 21:27:26 jonas Exp $ */
+/* $Id: tables.c,v 1.68 2003/09/01 13:05:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1670,8 +1670,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		int_upper_bound(&border, 2);
 
 		cellsp = get_num(attr, "cellspacing");
-		int_lower_bound(&cellsp, 1);
-		int_upper_bound(&cellsp, 2);
+		int_bounds(&cellsp, 1, 2);
 
 		frame = F_BOX;
 		al = get_attr_val(attr, "frame");
@@ -1805,8 +1804,7 @@ again:
 	if (!p->document && p->xp == 1) {
 		int ww = t->rw + margins;
 
-		int_upper_bound(&ww, par_format.width);
-		int_lower_bound(&ww, t->rw);
+		int_bounds(&ww, t->rw, par_format.width);
 		p->x = int_max(p->x, ww);
 		p->cy += t->rh;
 

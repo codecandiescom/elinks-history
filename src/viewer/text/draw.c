@@ -1,5 +1,5 @@
 /* Text mode drawing functions */
-/* $Id: draw.c,v 1.8 2004/07/04 10:54:12 jonas Exp $ */
+/* $Id: draw.c,v 1.9 2004/07/07 04:12:19 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,7 @@
 #include "viewer/text/vs.h"
 
 
-static inline int
+static inline void
 check_document_fragment(struct session *ses, struct document_view *doc_view)
 {
 	struct document *document = doc_view->document;
@@ -53,7 +53,7 @@ check_document_fragment(struct session *ses, struct document_view *doc_view)
 		unsigned char *fragment;
 
 		if (!cached || cached->incomplete)
-			return -1;
+			return;
 
 		fragment = memacpy(uri->fragment, uri->fragmentlen);
 
@@ -73,8 +73,6 @@ check_document_fragment(struct session *ses, struct document_view *doc_view)
 	}
 
 	doc_view->vs->did_fragment = 1;
-
-	return vy;
 }
 
 static void
@@ -221,7 +219,7 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 		check_vs(doc_view);
 
 	if (!vs->did_fragment) {
-		vy = check_document_fragment(ses, doc_view);
+		check_document_fragment(ses, doc_view);
 	}
 	vx = vs->x;
 	vy = vs->y;

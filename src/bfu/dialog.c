@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.121 2004/01/01 15:54:37 jonas Exp $ */
+/* $Id: dialog.c,v 1.122 2004/01/04 00:17:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,7 +93,7 @@ redraw_dialog(struct dialog_data *dlg_data, int layout)
 		    DIALOG_FRAME);
 
 	title_color = get_bfu_color(term, "dialog.title");
-	if (title_color) {
+	if (title_color && dlg_data->width >= 2) {
 		unsigned char *title = dlg_data->dlg->title;
 		int titlelen = int_min(dlg_data->width - 2, strlen(title));
 

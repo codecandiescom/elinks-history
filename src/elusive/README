@@ -11,3 +11,10 @@ know the whole document source at once frequently, but this is doable.
 See TODO file for TODO list.
 
 See DESIGN file for architecture and structure of the ELusive engine.
+
+Note that ELusive is licenced DIFFERENTLY than ELinks, please see the LICENCE
+file for details about ELusive licencing! In Bugzilla bug 50, the original HTML
+engine authors agreed to relicence their stuff under ELusive licence, thus the
+code may flow by both sides regarding this particular ELinks part. The only
+exception is code by Flemming Framdsen, who did not acknowledge relicencing of
+his code (that is mainly support for accesskey and tabindex).

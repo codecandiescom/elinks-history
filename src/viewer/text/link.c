@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.163 2004/05/10 17:15:22 zas Exp $ */
+/* $Id: link.c,v 1.164 2004/05/11 18:43:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -672,11 +672,8 @@ choose_mouse_link(struct document_view *doc_view, struct term_event *ev)
 	/* If no link in document, nothing to do. */
 	if (!doc_view->document->nlinks) return NULL;
 
-	mouse_x = ev->x + doc_view->vs->x;
-	mouse_y = ev->y + doc_view->vs->y;
-
 	/* If mouse is outside document view, no need to go further. */
-	if (!is_in_rect(&doc_view->dimensions, mouse_x, mouse_y))
+	if (!is_in_rect(&doc_view->dimensions, ev->x, ev->y))
 		return NULL;
 
 	/* Find links candidats. */
@@ -696,6 +693,8 @@ choose_mouse_link(struct document_view *doc_view, struct term_event *ev)
 	}
 
 	/* Is there a link under mouse cursor ? */
+	mouse_x = ev->x + doc_view->vs->x;
+	mouse_y = ev->y + doc_view->vs->y;
 
 	for (link = l1; link <= l2; link++) {
 		for (i = 0; i < link->n; i++)

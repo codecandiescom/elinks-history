@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.117 2003/11/26 12:28:37 miciah Exp $ */
+/* $Id: listbox.c,v 1.118 2003/11/26 12:33:13 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,6 +101,8 @@ dlg_format_box(struct terminal *term, struct widget_data *widget_data,
  * by traverse_listbox_items_list, and a pointer to @offset, which @fn can set
  * to 0 to stop traversal or to other values to change the direction in which
  * or the number of items over which we will traverse.
+ *
+ * @fn should return 1 if it freed its passed item, or return 0 otherwise.
  *
  * If the passed @offset is zero, we set @offset to 1 and traverse thru
  * the list (down) until either we reach the end or @fn sets @offset to 0. */

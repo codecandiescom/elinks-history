@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.12 2003/06/15 23:12:56 jonas Exp $ */
+/* $Id: default.c,v 1.13 2003/06/15 23:18:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,7 +128,7 @@ get_mime_handler_default(unsigned char *type, int have_x)
 
 	if (opt_tree) {
 		struct mime_handler *handler;
-		unsigned char *desc;
+		unsigned char *desc = "";
 		unsigned char *mt = get_mime_type_name(type);
 
 		/* Try to find some description to assing to @name */
@@ -140,8 +140,6 @@ get_mime_handler_default(unsigned char *type, int have_x)
 
 			if (opt)
 				desc = opt->ptr;
-		} else {
-			desc = "";
 		}
 
 		handler = mem_alloc(sizeof(struct mime_handler));

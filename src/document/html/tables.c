@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.175 2004/05/16 14:08:32 zas Exp $ */
+/* $Id: tables.c,v 1.176 2004/05/16 14:13:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,7 +112,8 @@ struct table {
 	int cellpadding;
 	int vcellpadding;
 	int cellspacing;
-	int frame, rules, width, wf;
+	int frame, rules, width;
+	/* int has_width; not used. */
 	int real_width;
 	int min_t, max_t;
 	int columns_count;
@@ -1737,7 +1738,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	color_t bordercolor = 0;
 	unsigned char *fragment_id;
 	int border, cellspacing, vcellpadding, cellpadding, align;
-	int frame, rules, width, wf;
+	int frame, rules, width, has_width;
 	int cye;
 	int x;
 	int i;
@@ -1825,12 +1826,12 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	fragment_id = get_attr_val(attr, "id");
 
-	wf = 0;
+	has_width = 0;
 	width = get_width(attr, "width", (part->document || part->box.x));
 	if (width == -1) {
 		width = par_format.width - par_format.leftmargin - par_format.rightmargin;
 		if (width < 0) width = 0;
-		wf = 1;
+		has_width = 1;
 	}
 
 	table = parse_table(html, eof, end, bgcolor, (part->document || part->box.x), &bad_html, &bad_html_n);
@@ -1861,7 +1862,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	table->frame = frame;
 	table->rules = rules;
 	table->width = width;
-	table->wf = wf;
+	/* table->has_width = has_width; not used. */
 	table->fragment_id = fragment_id;
 	fragment_id = NULL;
 
@@ -1877,7 +1878,7 @@ again:
 
 	margins = par_format.leftmargin + par_format.rightmargin;
 	if (!part->document && !part->box.x) {
-		if (!wf) int_upper_bound(&table->max_t, width);
+		if (!has_width) int_upper_bound(&table->max_t, width);
 		int_lower_bound(&table->max_t, table->min_t);
 
 		int_lower_bound(&part->max_width, table->max_t + margins);
@@ -1901,7 +1902,7 @@ again:
 	/* DBG("%d %d %d", t->min_t, t->max_t, width); */
 	if (table->min_t >= width)
 		distribute_widths(table, table->min_t);
-	else if (table->max_t < width && wf)
+	else if (table->max_t < width && has_width)
 		distribute_widths(table, table->max_t);
 	else
 		distribute_widths(table, width);

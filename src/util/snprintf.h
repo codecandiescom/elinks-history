@@ -1,9 +1,19 @@
-/* $Id: snprintf.h,v 1.4 2003/06/07 09:56:08 pasky Exp $ */
+/* $Id: snprintf.h,v 1.5 2003/06/07 09:59:44 pasky Exp $ */
 
 #ifndef EL__UTIL_SNPRINTF_H
 #define EL__UTIL_SNPRINTF_H
 
 #include <stdarg.h>
+
+/* XXX: This is not quite the best place for it, perhaps. But do we have
+ * a better one now? --pasky */
+#ifndef VA_COPY
+#ifdef HAVE_VA_COPY
+#define VA_COPY(dest, src) __va_copy(dest, src)
+#else
+#define VA_COPY(dest, src) (dest) = (src)
+#endif
+#endif
 
 #include <stdio.h> /* The system's snprintf(). */
 

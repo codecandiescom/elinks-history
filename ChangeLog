@@ -1,3 +1,43 @@
+Wed Feb 18 21:52:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	Remove bogus compiler bug notice, the bug is in me.  
+
+Wed Feb 18 21:46:22 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, src/document/html/tables.c:
+
+	Prevent a crash caused by a compiler bug (?) on OS X 10.3.2/XCode
+	1.1/gcc3.3, reported by Daniel Macks <dmacks@netspace.org>.  
+
+Wed Feb 18 18:56:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Try to fix session auto saving by using ses->loading_url if
+	get_current_url() fails.  
+
+Wed Feb 18 18:46:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Fix typeahead text drawing so the matched chars are properly
+	highlighted.  
+
+Wed Feb 18 14:03:10 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Feb 18 06:27:47 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/uri.c:
+
+	When url is without protocol use file:// if file with filename ==
+	url exist.  
+
 Tue Feb 17 19:17:36 2004  Laurent Monin <zas@norz.org>:
 
 	* src/protocol/http/http.c:

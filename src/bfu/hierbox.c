@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.199 2004/12/03 10:06:56 zas Exp $ */
+/* $Id: hierbox.c,v 1.200 2004/12/03 10:26:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -576,12 +576,7 @@ print_delete_error(struct listbox_item *item, struct terminal *term,
 {
 	struct string msg;
 	unsigned char *errmsg;
-	unsigned char *text = ops->get_text(item, term);
-
-	if (!text || !init_string(&msg)) {
-		mem_free_if(text);
-		return;
-	}
+	unsigned char *text;
 
 	switch (err) {
 	case DELETE_IMPOSSIBLE:
@@ -613,9 +608,16 @@ print_delete_error(struct listbox_item *item, struct terminal *term,
 		break;
 
 	default:
-		errmsg = delete_messages[0][DELETE_IMPOSSIBLE];
+		INTERNAL("Bad delete error code (%d)!", err);
+		return;
 	}
 
+	text = ops->get_text(item, term);
+
+	if (!text || !init_string(&msg)) {
+		mem_free_if(text);
+		return;
+	}
 
 	add_format_to_string(&msg, _(errmsg, term), text);
 	mem_free(text);

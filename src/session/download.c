@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.80 2003/07/21 23:48:11 jonas Exp $ */
+/* $Id: download.c,v 1.81 2003/07/22 01:08:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,6 +217,10 @@ download_window_function(struct dialog_data *dlg)
 	file_download->win = dlg->win;
 
 	if (!init_string(&msg)) return;
+
+	/* FIXME: The following is a PITA from the l10n standpoint. A *big*
+	 * one, _("of")-like pearls are a nightmare. Format strings needs to
+	 * be introduced to this fuggy corner of code as well. --pasky */
 
 	if (download->state == S_TRANS && download->prg->elapsed / 100) {
 		t = 1;

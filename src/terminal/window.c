@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.6 2003/05/24 13:38:02 pasky Exp $ */
+/* $Id: window.c,v 1.7 2003/07/17 06:55:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,7 +132,7 @@ struct ewd {
 static void
 empty_window_handler(struct window *win, struct event *ev, int fwd)
 {
-	struct window *n;
+	struct terminal *term = win->term;
 	struct ewd *ewd = win->data;
 	void (*fn)(void *) = ewd->fn;
 	void *data = ewd->data;
@@ -160,10 +160,9 @@ empty_window_handler(struct window *win, struct event *ev, int fwd)
 	}
 
 	ewd->b = 1;
-	n = win->next;
 	delete_window(win);
 	fn(data);
-	if (n->next != n) n->handler(n, ev, fwd);
+	term_send_event(term, ev);
 }
 
 void

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.153 2004/01/07 00:58:01 jonas Exp $ */
+/* $Id: menu.c,v 1.154 2004/01/07 01:22:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "config/kbdbind.h"
 #include "dialogs/menu.h"		/* For do_action() */
 #include "intl/gettext/libintl.h"
+#include "sched/action.h"
 #include "terminal/draw.h"
 #include "terminal/event.h"
 #include "terminal/kbd.h"

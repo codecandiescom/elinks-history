@@ -1,9 +1,8 @@
-/* $Id: menu.h,v 1.21 2004/01/07 00:58:01 jonas Exp $ */
+/* $Id: menu.h,v 1.22 2004/01/07 01:22:22 jonas Exp $ */
 
 #ifndef EL__DIALOG_MENU_H
 #define EL__DIALOG_MENU_H
 
-#include "config/kbdbind.h"
 #include "document/html/renderer.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
@@ -27,7 +26,5 @@ void really_exit_prog(struct session *ses);
 void query_exit(struct session *ses);
 void menu_save_url_as(struct terminal *term, void *d, struct session *ses);
 void menu_shell(struct terminal *term, void *xxx, void *yyy);
-
-enum keyact do_action(struct session *ses, enum keyact action, void *data, int verbose);
 
 #endif

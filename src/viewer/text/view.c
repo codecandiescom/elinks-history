@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.330 2004/01/07 01:09:03 jonas Exp $ */
+/* $Id: view.c,v 1.331 2004/01/07 01:22:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,6 +43,7 @@
 #include "osdep/osdep.h"
 #include "protocol/auth/auth.h"
 #include "protocol/uri.h"
+#include "sched/action.h"
 #include "sched/download.h"
 #include "sched/event.h"
 #include "sched/location.h"

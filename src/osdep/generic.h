@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.20 2004/12/29 14:39:03 jonas Exp $ */
+/* $Id: generic.h,v 1.21 2004/12/29 14:41:05 jonas Exp $ */
 
 /* This is... er, the OS-independent part of osdep/ ;-). */
 
@@ -90,6 +90,10 @@ safe_write(int fd, const void *buf, size_t count) {
 #ifndef offsetof
 #define offsetof(type, ident) ((size_t) &(((type *) 0)->ident))
 #endif
+
+/* Alignment of types.  */
+#define alignof(TYPE) \
+    ((int) &((struct { unsigned char dummy1; TYPE dummy2; } *) 0)->dummy2)
 
 /* This structs copying is faster than memcpy(value1, value2, sizeof(value1)).
  * Please, use this macro to improve readability. */

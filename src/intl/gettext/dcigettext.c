@@ -65,10 +65,6 @@ extern int errno;
 #include "intl/gettext/hash-string.h"
 #include "util/string.h"
 
-/* Alignment of types.  */
-#define alignof(TYPE) \
-    ((int) &((struct { unsigned char dummy1; TYPE dummy2; } *) 0)->dummy2)
-
 /* Amount to increase buffer size by in each try.  */
 #define PATH_INCR 32
 

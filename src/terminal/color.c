@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.50 2003/10/02 21:28:47 jonas Exp $ */
+/* $Id: color.c,v 1.51 2003/10/02 21:49:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,37 +88,35 @@ struct color_mode_info {
 	} levels[COLOR_TYPES];
 };
 
-static struct color_mode_info color_modes[] = {
-	/* COLOR_MODE_NONE */
+static struct color_mode_info color_mode_16 = {
+	palette16,
 	{
-		palette16,
-		{
-			/* COLOR_DEFAULT */	{ 8, 16 },
-			/* COLOR_LINK */	{ 8,  8 },
-			/* COLOR_ENHANCE */	{ 8, 16 },
-		}
-	},
-
-	/* COLOR_MODE_16 */
-	{
-		palette16,
-		{
-			/* COLOR_DEFAULT */	{ 8, 16 },
-			/* COLOR_LINK */	{ 8,  8 },
-			/* COLOR_ENHANCE */	{ 8, 16 },
-		}
-	},
+		/* COLOR_DEFAULT */	{ 8, 16 },
+		/* COLOR_LINK */	{ 8,  8 },
+		/* COLOR_ENHANCE */	{ 8, 16 },
+	}
+};
 
 #ifdef USE_256_COLORS
-	/* COLOR_MODE_256 */
+static struct color_mode_info color_mode_256 = {
+	palette256,
 	{
-		palette256,
-		{
-			/* COLOR_DEFAULT */	{ 128, 256 },
-			/* COLOR_LINK */	{ 128, 128 },
-			/* COLOR_ENHANCE */	{ 128, 256 },
-		}
-	},
+		/* COLOR_DEFAULT */	{ 128, 256 },
+		/* COLOR_LINK */	{ 128, 128 },
+		/* COLOR_ENHANCE */	{ 128, 256 },
+	}
+};
+#endif
+
+static struct color_mode_info *color_modes[] = {
+	/* COLOR_MODE_MONO */	&color_mode_16,
+	/* COLOR_MODE_16 */	&color_mode_16,
+#ifdef USE_256_COLORS
+	/* COLOR_MODE_256 */	&color_mode_256,
+#else
+	/* When 256 color mode is not compiled in the user can
+	 * still have terminal._template_.colors = 2. */
+	/* COLOR_MODE_16 */	&color_mode_16,
 #endif
 };
 
@@ -231,7 +229,7 @@ void
 set_term_color(struct screen_char *schar, struct color_pair *pair,
 	       enum color_type type, enum color_mode color_mode)
 {
-	struct color_mode_info *mode = &color_modes[color_mode];
+	struct color_mode_info *mode = color_modes[color_mode];
 	unsigned char fg;
 	unsigned char bg;
 

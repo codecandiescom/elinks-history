@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.79 2004/09/21 12:43:18 pasky Exp $ */
+/* $Id: apply.c,v 1.80 2004/09/21 15:03:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,7 +88,8 @@ static css_applier_t css_appliers[CSS_PT_LAST] = {
 static void
 examine_element(struct css_selector *base,
 		enum css_selector_type seltype, enum css_selector_relation rel,
-                struct list_head *selectors, struct html_element *element)
+                struct list_head *selectors, struct html_element *element,
+                struct list_head *html_stack)
 {
 	struct css_selector *selector;
 	unsigned char *code;
@@ -107,15 +108,36 @@ examine_element(struct css_selector *base,
 		merge_css_selectors(base, sel); \
 		/* More specific matches? */ \
 		examine_element(base, type + 1, CSR_SPECIFITY, \
-		                &sel->leaves, element); \
-		/* TODO: HTML stack lookup. */ \
+		                &sel->leaves, element, html_stack); \
+		/* Ancestor matches? */ \
+		if ((struct list_head *) element->next != html_stack) { \
+			struct html_element *ancestor; \
+			examine_element(base, CST_ELEMENT, CSR_PARENT, \
+			                &sel->leaves, element->next, \
+			                html_stack); \
+			/* This is less effective than doing reverse iterations,
+			 * first over sel->leaves and then over the HTML stack,
+			 * which shines in the most common case where there are
+			 * no CSR_ANCESTOR selector leaves. However we would
+			 * have to duplicate the whole examine_element(), so if
+			 * profiles won't show it really costs... */ \
+			for (ancestor = element->next; \
+			     (struct list_head *) ancestor != html_stack;\
+			     ancestor = ancestor->next) \
+				examine_element(base,CST_ELEMENT,CSR_ANCESTOR, \
+						&sel->leaves, ancestor, \
+						html_stack); \
+		} \
 	}
 
-	if (seltype <= CST_ELEMENT) {
+	if (seltype <= CST_ELEMENT && element->namelen) {
 		selector = find_css_selector(selectors, CST_ELEMENT,
 		                             element->name, element->namelen);
 		process_found_selector(selector, CST_ELEMENT, base);
 	}
+
+	if (!element->options)
+		return;
 
 	code = get_attr_val(element->options, "id");
 	if (code && seltype <= CST_ID) {
@@ -139,7 +161,8 @@ examine_element(struct css_selector *base,
 }
 
 void
-css_apply(struct html_element *element, struct css_stylesheet *css)
+css_apply(struct html_element *element, struct css_stylesheet *css,
+          struct list_head *html_stack)
 {
 	INIT_LIST_HEAD(props);
 	unsigned char *code;
@@ -157,7 +180,7 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 #endif
 
 	examine_element(selector, CST_ELEMENT, CSR_ROOT,
-	                &css->selectors, element);
+	                &css->selectors, element, html_stack);
 
 #ifdef CSS_DEBUG
 	WDBG("Element %.*s applied.", element->namelen, element->name);

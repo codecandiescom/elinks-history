@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.85 2004/09/15 23:37:44 pasky Exp $ */
+/* $Id: parse.c,v 1.86 2004/09/21 15:03:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -837,14 +837,16 @@ start_element(struct element_info *ei,
 		 * --pasky */
 		/* Call it now to gain some of the stuff which might affect
 		 * formatting of some elements. */
-		css_apply(&html_top, &html_context.css_styles);
+		css_apply(&html_top, &html_context.css_styles,
+		          &html_context.stack);
 	}
 #endif
 	if (ei->func) ei->func(attr);
 #ifdef CONFIG_CSS
 	if (html_top.options && global_doc_opts->css_enable) {
 		/* Call it now to override default colors of the elements. */
-		css_apply(&html_top, &html_context.css_styles);
+		css_apply(&html_top, &html_context.css_styles,
+		          &html_context.stack);
 	}
 #endif
 

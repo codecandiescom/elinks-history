@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.174 2004/05/31 23:19:51 jonas Exp $ */
+/* $Id: connection.c,v 1.175 2004/05/31 23:27:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,7 +39,10 @@
 struct keepalive_connection {
 	LIST_HEAD(struct keepalive_connection);
 
-	enum protocol protocol;
+	/* XXX: This is just the URI of the connection that registered the
+	 * keepalive connection so only rely on the protocol, user, password
+	 * and host part. */
+	struct uri *uri;
 
 	ttime timeout;
 	ttime add_time;
@@ -47,8 +50,6 @@ struct keepalive_connection {
 	int port;
 	int pf;
 	int socket;
-
-	unsigned char host[1]; /* Keep last */
 };
 
 
@@ -418,6 +419,7 @@ done_keepalive_connection(struct keepalive_connection *keep_conn)
 {
 	del_from_list(keep_conn);
 	if (keep_conn->socket != -1) close(keep_conn->socket);
+	done_uri(keep_conn->uri);
 	mem_free(keep_conn);
 }
 
@@ -426,18 +428,15 @@ init_keepalive_connection(struct connection *conn, ttime timeout)
 {
 	struct keepalive_connection *keep_conn;
 	struct uri *uri = conn->uri;
-	unsigned char *host = uri->user ? uri->user : uri->host;
-	int hostlen = get_uri_hostlen(uri, host);
 
 	assert(uri->host);
 	if_assert_failed return NULL;
 
-	keep_conn = mem_calloc(1, sizeof(struct keepalive_connection) + hostlen);
+	keep_conn = mem_calloc(1, sizeof(struct keepalive_connection));
 	if (!keep_conn) return NULL;
 
-	memcpy(keep_conn->host, host, hostlen);
 	keep_conn->port = get_uri_port(uri);
-	keep_conn->protocol = uri->protocol;
+	keep_conn->uri = get_uri_reference(uri);
 	keep_conn->pf = conn->pf;
 	keep_conn->socket = conn->socket;
 	keep_conn->timeout = timeout;
@@ -457,11 +456,19 @@ get_keepalive_connection(struct connection *conn)
 
 	if (!uri->host) return NULL;
 
-	foreach (keep_conn, keepalive_connections)
-		if (keep_conn->protocol == uri->protocol
+	foreach (keep_conn, keepalive_connections) {
+		unsigned char *khost;
+		int khostlen;
+
+		uri = keep_conn->uri;
+		khost = uri->user ? uri->user : uri->host;
+		khostlen = get_uri_hostlen(uri, khost);
+
+		if (keep_conn->uri->protocol == uri->protocol
 		    && keep_conn->port == port
-		    && !strlcmp(keep_conn->host, -1, host, hostlen))
+		    && !strlcmp(khost, khostlen, host, hostlen))
 			return keep_conn;
+	}
 
 	return NULL;
 }

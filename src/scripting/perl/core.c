@@ -1,5 +1,5 @@
 /* Perl scripting engine */
-/* $Id: core.c,v 1.6 2004/04/21 09:21:31 zas Exp $ */
+/* $Id: core.c,v 1.7 2004/04/23 15:52:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,21 +7,27 @@
 
 #ifdef HAVE_PERL
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "elinks.h"
 
 #include "main.h"
 #include "lowlevel/home.h"
+#include "module/module.h"
 #include "scripting/perl/core.h"
 #include "scripting/perl/hooks.h"
 #include "util/file.h"
 
 #define PERL_HOOKS_FILENAME	"hooks.pl"
 
+
 PerlInterpreter *my_perl;
 
 #ifdef PERL_SYS_INIT3
 extern char **environ;
 #endif
+
 
 static char *
 get_global_hook_file(void)
@@ -43,6 +49,7 @@ get_local_hook_file(void)
 	return NULL;
 }
 
+
 static void
 precleanup_perl(struct module *module)
 {
@@ -62,20 +69,23 @@ cleanup_perl(struct module *module)
 #endif
 }
 
+
 static void
 init_perl(struct module *module)
 {
-/* FIXME: it seems that some systems like OS/2 requires PERL_SYS_INIT3
- * and PERL_SYS_TERM to open/close the same block, at least regarding some
- * ml messages.
- *
- * Is passing @environ strictly needed ? --Zas */
+	/* FIXME: it seems that some systems like OS/2 requires PERL_SYS_INIT3
+	 * and PERL_SYS_TERM to open/close the same block, at least regarding
+	 * some ml messages.
+	 *
+	 * Is passing @environ strictly needed ? --Zas */
 
-#ifdef PERL_SYS_INIT3	/* this macro may not be defined, it depends on system. */
+	/* PERL_SYS_INIT3 may not be defined, it depends on the system. */
+#ifdef PERL_SYS_INIT3
 	char *my_argv[] = { NULL };
 	int my_argc = 0;
 
-	my_argv[my_argc++] = "";	/* hack to prevent unused variables warnings. */
+	/* A hack to prevent unused variables warnings. */
+	my_argv[my_argc++] = "";
 
 	PERL_SYS_INIT3(&my_argc, &my_argv, &environ);
 #endif

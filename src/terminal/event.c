@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.28 2004/04/14 22:35:29 jonas Exp $ */
+/* $Id: event.c,v 1.29 2004/04/14 22:47:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,7 +36,7 @@ term_send_event(struct terminal *term, struct term_event *ev)
 {
 	struct window *win;
 
-	assert(ev && term && !list_empty(term->windows));
+	assert(ev && term);
 	if_assert_failed return;
 
 	switch (ev->ev) {
@@ -54,7 +54,7 @@ term_send_event(struct terminal *term, struct term_event *ev)
 
 	case EV_REDRAW:
 		clear_terminal(term);
-		term->redrawing = 1;
+		term->redrawing = 2;
 		/* Note that you do NOT want to ever go and create new
 		 * window inside EV_INIT handler (it'll get second
 		 * EV_INIT here). Perhaps the best thing you could do
@@ -83,6 +83,9 @@ term_send_event(struct terminal *term, struct term_event *ev)
 	case EV_ABORT:
 		/* We need to send event to correct tab, not to the first one. --karpov */
 		/* ...if we want to send it to a tab at all. --pasky */
+		assert(!list_empty(term->windows));
+		if_assert_failed break;
+
 		win = term->windows.next;
 		if (win->type == WT_TAB) {
 			win = get_current_tab(term);

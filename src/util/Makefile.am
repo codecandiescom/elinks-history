@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.39 2004/05/09 21:46:23 zas Exp $
+## $Id: Makefile.am,v 1.40 2004/05/13 00:53:36 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -12,15 +12,24 @@ else
 fastfindobj = fastfind.o
 endif
 
+if CONFIG_CSS
+scannerobj = scanner.o
+endif
+
 noinst_LIBRARIES = libutil.a
 
 EXTRA_libutil_a_SOURCES = \
  fastfind.c \
  fastfind.h \
  memdebug.c \
- memdebug.h
+ memdebug.h \
+ scanner.c \
+ scanner.h \
 
-libutil_a_LIBADD = $(debugobj) $(fastfindobj)
+libutil_a_LIBADD = \
+ $(debugobj) \
+ $(fastfindobj) \
+ $(scannerobj)
 
 libutil_a_SOURCES = \
  base64.c \
@@ -46,8 +55,6 @@ libutil_a_SOURCES = \
  object.h \
  profile.h \
  rect.h	\
- scanner.c \
- scanner.h \
  secsave.c \
  secsave.h \
  snprintf.c \

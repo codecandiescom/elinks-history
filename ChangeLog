@@ -1,3 +1,102 @@
+Sun Sep  7 21:41:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/sysname.c:
+
+	get_system_name(): Use snprintf() it's simpler and zas said I should
+	do it. ;) 
+
+Sun Sep  7 21:03:49 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/sysname.c:
+
+	Cleanup of get_system_name(). Now code dependant to popen() has its
+	own function, some useless memset() were removed, struct utsname
+	extraction do not use memory allocation (and free) anymore, some
+	gotos are gone, and some hidden awful little bugs were added.  
+
+Sun Sep  7 20:23:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Tiny tidyup.  
+
+Sun Sep  7 20:09:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/signals.c:
+
+	Ooops, sizeof(struct signal_info) -> sizeof(signal_info) ;).  
+
+Sun Sep  7 20:04:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/: signals.c, signals.h:
+
+	Signals handling code was simplified, struct signal_handler and
+	signal_mask have been replaced by struct signal_info and is no more
+	exported.  
+
+Sun Sep  7 19:13:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/os_dep.c:
+
+	get_system_str() minor optimization and cleanup.  
+
+Sun Sep  7 18:11:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.h:
+
+	This is a pure test, some time ago fields reorganization in struct
+	cache_entry caused some issues, it doesnt seem to cause any problem
+	know. So i moved fields and let see.  
+
+Sun Sep  7 11:12:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/pl.po:
+
+	Polish translation update by Witold.  
+
+Sun Sep  7 11:08:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	A bug in truncate_entry() was fixed, a useless call to enlarge() has
+	now some use, fixing a minor memory leak it seems. Some
+	optimizations were made by caching some constant results.  
+
+Sun Sep  7 00:44:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Fix <hr> drawing + minor cleanup of last patch.  
+
+Sun Sep  7 00:10:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/renderer.c, elusive/renderer/text/renderer.c,
+	terminal/color.c, terminal/color.h, terminal/draw.c,
+	terminal/draw.h, viewer/text/link.c:
+
+	I keep redoing the same patch over and over again. This time code is
+	actually removed, it's slightly less hackish and adding support for
+	xterm256 will hopefully be easier since a screen char is now passed
+	to the color blender which btw is now renamed to set_term_color8().  
+
+Sat Sep  6 22:50:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/palette.inc:
+
+	Improve comments with help from Dickey's scripts.  
+
+Sat Sep  6 22:33:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: color.c, palette.inc:
+
+	Use the included palette16.  
+
+Sat Sep  6 22:27:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/palette.inc:
+
+	For the 16, 88 and 256 color palettes.  
+
 Sat Sep  6 21:02:06 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/terminal/color.c:

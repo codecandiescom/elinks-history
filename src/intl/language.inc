@@ -7323,7 +7323,7 @@ struct translation translation_italian [] = {
   {T_VIEW_IMAGE, "Visualizza immagine"},
   {T_DOWNLOAD_IMAGE, "Scarica immagine"},
   {T_NO_LINK_SELECTED, "Nessun link selezionato"},
-  {T_IMAGE, "Immmagine"},
+  {T_IMAGE, "Immagine"},
   {T_USEMAP, "Usemap"},
   {T_SUBMIT_FORM_TO, "Sottometti form a"},
   {T_POST_FORM_TO, "Invia form a"},
@@ -7500,8 +7500,8 @@ struct translation translation_italian [] = {
   {T_BOOKMARK_USED, "Spiacente, ma questo segnalibro è in uso, in questo momento"},
   {T_ELINKS_HOME, "Homepage di ELinks"},
   {T_HK_ELINKS_HOME, "E"},
-  {T_ADD_FOLDER, NULL},
-  {T_FOLDER_NAME, NULL},
+  {T_ADD_FOLDER, "Aggiungi cartella"},
+  {T_FOLDER_NAME, "Nome cartella"},
   {T_MOVE, NULL},
   {0, NULL}
 };

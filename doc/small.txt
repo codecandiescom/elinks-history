@@ -1,10 +1,13 @@
 Tips to obtain a very small static elinks binary suitable for mini distributions:
 
+Remove config.cache (previous CC may be cached):
+$ rm config.cache
+
 Use dietlibc (http://www.fefe.de/dietlibc/) or similar stuff (uClibc, ...):
-export CC='diet -Os gcc'
+$ export CC='diet -Os gcc'
 
 Use compilers flags to optimize for size:
-export CFLAGS='-s -fno-inline -nostdinc -fomit-frame-pointer'
+$ export CFLAGS='-s -fno-inline -nostdinc -fomit-frame-pointer'
 
 (Note that if you don't use dietlibc, you definitively want to add -Os or -O2
 to CFLAGS; gcc-2.95 does not know -Os and some say -O2 gives smaller
@@ -14,9 +17,10 @@ executables even for gcc-3.x.)
 (htons and suite, in particular), try removing -fno-inline parameter.)
 
 Disable some compile-time options:
-./configure --disable-ipv6 --disable-backtrace --disable-nls --enable-fastmem \
---without-zlib --without-bzlib --without-xbel --without-lua --without-gnutls \
---without-openssl --without-x --enable-small
+$ ./configure --disable-ipv6 --disable-backtrace --disable-nls \
+  --enable-fastmem --without-zlib --without-bzlib --disable-xbel \
+  --without-lua --without-gnutls --without-openssl --without-x \
+  --enable-small --without-spidermonkey --without-gpm
 
 You can disable bookmarks, globhist and more too if you want to.
 
@@ -29,11 +33,13 @@ Notes:
 Dependencies over external libs must be removed using related configure options.
 --without-zlib		removes libz dependency (compression)
 --without-bzlib		removes libbz2 dependency (compression)
---without-xbel		removes expat dependency (xbel bookmarks support)
+--disable-xbel		removes expat dependency (xbel bookmarks support)
 --without-lua		removes liblua dependency (lua scripting)
 --without-gnutls	removes libtls dependency (ssl support)
 --without-openssl	removes libssl dependency (ssl support)
 --without-x 		removes libx11 dependency (restoring terminal title)
+--without-spidermonkey  removes libjs dependency (javascript)
+--without-gpm		removes libgpm dependency (mouse/console)
 
 It seems gcc 2.95.x do not generate as small binaries as gcc 3.2.x with
 same flags.
@@ -60,4 +66,4 @@ Details about --enable-small configure option effects:
 - it disables fastfind feature (reducing performance, but also reducing a lot
   memory usage, and a bit the executable size).
 
-/* $Id: small.txt,v 1.11 2003/12/24 12:22:48 jonas Exp $ */
+/* $Id: small.txt,v 1.12 2004/11/06 13:48:13 zas Exp $ */

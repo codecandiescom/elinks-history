@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.280 2003/11/18 10:48:48 zas Exp $ */
+/* $Id: parser.c,v 1.281 2003/11/18 16:22:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,7 +170,7 @@ get_attr_val(register unsigned char *e, unsigned char *name)
 
 next_attr:
 	while (WHITECHAR(*e)) e++;
-	if (end_of_tag(*e) || !atchr(*e)) return NULL;
+	if (end_of_tag(*e) || !atchr(*e)) goto parse_error;
 	n = name;
 
 	while (atchr(*n) && atchr(*e) && upcase(*e) == upcase(*n)) e++, n++;
@@ -187,6 +187,7 @@ next_attr:
 
 	if (found) {
 		if (!IS_QUOTE(*e)) {
+			/* FIXME: *e == '\0' case is not handled here --Zas */
 			while (!WHITECHAR(*e) && !end_of_tag(*e)) {
 				add_chr(attr, attrlen, *e);
 				e++;
@@ -197,13 +198,14 @@ next_attr:
 parse_quoted_value:
 			while (*(++e) != quote) {
 				if (*e == ASCII_CR) continue;
-				if (!*e) goto end;
+				if (!*e) goto parse_error;
 				if (*e != ASCII_TAB && *e != ASCII_LF)
 					add_chr(attr, attrlen, *e);
 				else if (!get_attr_val_eat_nl)
 					add_chr(attr, attrlen, ' ');
 			}
 			e++;
+			/* FIXME: *e == '\0' case is not handled here --Zas */
 			if (*e == quote) {
 				add_chr(attr, attrlen, *e);
 				goto parse_quoted_value;
@@ -211,7 +213,7 @@ parse_quoted_value:
 		}
 
 found_endattr:
-		add_chr(attr, attrlen, 0);
+		add_chr(attr, attrlen, '\0');
 		attrlen--;
 		if (memchr(attr, '&', attrlen)) {
 			unsigned char *saved_attr = attr;
@@ -225,13 +227,14 @@ found_endattr:
 
 	} else {
 		if (!IS_QUOTE(*e)) {
+			/* FIXME: *e == '\0' case is not handled here --Zas */
 			while (!WHITECHAR(*e) && !end_of_tag(*e)) e++;
 		} else {
 			unsigned char quote = *e;
 
 			do {
 				while (*(++e) != quote)
-					if (!*e) goto end;
+					if (!*e) goto parse_error;
 				e++;
 			} while (*e == quote);
 		}
@@ -239,7 +242,7 @@ found_endattr:
 
 	goto next_attr;
 
-end:
+parse_error:
 	if (attr) mem_free(attr);
 	return NULL;
 }

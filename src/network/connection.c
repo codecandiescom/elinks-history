@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.219 2005/03/03 15:31:58 zas Exp $ */
+/* $Id: connection.c,v 1.220 2005/03/03 15:43:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,6 +65,7 @@ static INIT_LIST_HEAD(keepalive_connections);
 /* Prototypes */
 static void notify_connection_callbacks(struct connection *conn);
 static void check_keepalive_connections(void);
+
 
 static /* inline */ enum connection_priority
 get_priority(struct connection *conn)
@@ -555,7 +556,7 @@ add_keepalive_connection(struct connection *conn, ttime timeout,
 done:
 	free_connection_data(conn);
 	done_connection(conn);
-	register_bottom_half(check_queue, NULL);
+	register_check_queue();
 }
 
 static void
@@ -688,7 +689,7 @@ retry_connection(struct connection *conn)
 	if (conn->uri->post || !max_tries || ++conn->tries >= max_tries) {
 		/* notify_connection_callbacks(conn); */
 		done_connection(conn);
-		register_bottom_half(check_queue, NULL);
+		register_check_queue();
 	} else {
 		conn->prev_error = conn->state;
 		run_connection(conn);
@@ -701,7 +702,7 @@ abort_connection(struct connection *conn)
 	if (conn->running) interrupt_connection(conn);
 	/* notify_connection_callbacks(conn); */
 	done_connection(conn);
-	register_bottom_half(check_queue, NULL);
+	register_check_queue();
 }
 
 /* Set certain state on a connection and then abort the connection. */
@@ -753,7 +754,7 @@ try_connection(struct connection *conn, int max_conns_to_host, int max_conns)
 	return 1;
 }
 
-void
+static void
 check_queue(void)
 {
 	struct connection *conn;
@@ -800,6 +801,12 @@ again2:
 	}
 
 	check_queue_bugs();
+}
+
+int
+register_check_queue(void)
+{
+	return register_bottom_half(check_queue, NULL);
 }
 
 int
@@ -890,7 +897,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 			del_from_list(conn);
 			conn->pri[pri]++;
 			add_to_queue(conn);
-			register_bottom_half(check_queue, NULL);
+			register_check_queue();
 		} else {
 			conn->pri[pri]++;
 		}
@@ -934,7 +941,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 
 	check_queue_bugs();
 
-	register_bottom_half(check_queue, NULL);
+	register_check_queue();
 	return 0;
 }
 
@@ -988,7 +995,7 @@ change_connection(struct download *old, struct download *new,
 	sort_queue();
 	check_queue_bugs();
 
-	register_bottom_half(check_queue, NULL);
+	register_check_queue();
 }
 
 /* This will remove 'pos' bytes from the start of the cache for the specified

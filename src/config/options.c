@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.474 2005/03/03 15:31:57 zas Exp $ */
+/* $Id: options.c,v 1.475 2005/03/03 15:43:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -854,7 +854,7 @@ change_hook_cache(struct session *ses, struct option *current, struct option *ch
 static int
 change_hook_connection(struct session *ses, struct option *current, struct option *changed)
 {
-	register_bottom_half(check_queue, NULL);
+	register_check_queue();
 	return 0;
 }
 

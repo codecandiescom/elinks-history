@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.89 2005/03/03 15:14:20 zas Exp $ */
+/* $Id: connection.h,v 1.90 2005/03/03 15:43:26 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -224,7 +224,7 @@ struct download {
 };
 
 
-void check_queue(void);
+int register_check_queue(void);
 long connect_info(int);
 void set_connection_state(struct connection *, int);
 

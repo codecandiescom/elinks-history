@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.19 2005/03/05 21:34:30 jonas Exp $ */
+/* $Id: renderer.c,v 1.20 2005/03/17 10:45:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,10 +77,9 @@ get_css_property(struct list_head *list, enum css_property_type type)
 /* Checks the user CSS for properties for each DOM node type name */
 static inline void
 init_dom_renderer(struct dom_renderer *renderer, struct document *document,
-		  struct cache_entry *cache_entry, struct dom_node *root,
+		  struct string *buffer, struct dom_node *root,
 		  struct conv_table *convert_table)
 {
-	struct fragment *fr = cache_entry->frag.next;
 	enum dom_node_type type;
 	struct css_stylesheet *css = &default_stylesheet;
 
@@ -90,8 +89,8 @@ init_dom_renderer(struct dom_renderer *renderer, struct document *document,
 	renderer->convert_table = convert_table;
 	renderer->convert_mode	= document->options.plain ? CSM_NONE : CSM_DEFAULT;
 	renderer->root		= root;
-	renderer->source	= fr->data;
-	renderer->end		= fr->data + fr->length;
+	renderer->source	= buffer->source;
+	renderer->end		= buffer->source + buffer->length;
 	renderer->position	= renderer->source;
 
 	for (type = 0; type < DOM_NODES; type++) {
@@ -683,7 +682,7 @@ render_dom_document(struct cache_entry *cached, struct document *document,
 					  &document->cp_status,
 					  document->options.hard_assume);
 
-	init_dom_renderer(&renderer, document, cached, root, convert_table);
+	init_dom_renderer(&renderer, document, buffer, root, convert_table);
 	init_dom_navigator(&navigator, &renderer, callbacks, 0);
 
 	document->bgcolor = global_doc_opts->default_bg;

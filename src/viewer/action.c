@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.130 2004/12/30 23:42:02 jonas Exp $ */
+/* $Id: action.c,v 1.131 2005/02/27 15:50:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,7 +176,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_COOKIES_LOAD:
 #ifdef CONFIG_COOKIES
-			if (anonymous || !get_opt_int("cookies.save")) break;
+			if (anonymous || !get_opt_bool("cookies.save")) break;
 			load_cookies();
 #endif
 			break;

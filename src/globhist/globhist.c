@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.98 2004/12/21 07:30:47 miciah Exp $ */
+/* $Id: globhist.c,v 1.99 2004/12/21 07:34:41 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -217,6 +217,26 @@ cap_global_history(int max_globhist_items)
 	return 1;
 }
 
+static void
+add_item_to_global_history(struct global_history_item *history_item,
+			   int max_globhist_items)
+{
+	add_to_history_list(&global_history, history_item);
+
+	/* Hash creation if needed. */
+	if (!globhist_cache)
+		globhist_cache = init_hash(8, &strhash);
+
+	if (globhist_cache && globhist_cache_entries < max_globhist_items) {
+		int urllen = strlen(history_item->url);
+
+		/* Create a new entry. */
+		if (add_hash_item(globhist_cache, history_item->url, urllen, history_item)) {
+			globhist_cache_entries++;
+		}
+	}
+}
+
 /* Add a new entry in history list, take care of duplicate, respect history
  * size limit, and update any open history dialogs. */
 void
@@ -237,20 +257,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 	history_item = init_global_history_item(url, title, vtime);
 	if (!history_item) return;
 
-	add_to_history_list(&global_history, history_item);
-
-	/* Hash creation if needed. */
-	if (!globhist_cache)
-		globhist_cache = init_hash(8, &strhash);
-
-	if (globhist_cache && globhist_cache_entries < max_globhist_items) {
-		int urllen = strlen(history_item->url);
-
-		/* Create a new entry. */
-		if (add_hash_item(globhist_cache, history_item->url, urllen, history_item)) {
-			globhist_cache_entries++;
-		}
-	}
+	add_item_to_global_history(history_item, max_globhist_items);
 }
 
 

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.244 2004/10/17 21:05:34 miciah Exp $ */
+/* $Id: form.c,v 1.245 2004/10/22 20:15:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,6 +178,7 @@ init_form_state(struct form_control *fc, struct form_state *fs)
 		case FC_SUBMIT:
 		case FC_IMAGE:
 		case FC_RESET:
+		case FC_BUTTON:
 		case FC_HIDDEN:
 			/* Silence compiler warnings. */
 			break;
@@ -359,6 +360,7 @@ draw_form_entry(struct terminal *term, struct document_view *doc_view,
 		case FC_SUBMIT:
 		case FC_IMAGE:
 		case FC_RESET:
+		case FC_BUTTON:
 		case FC_HIDDEN:
 			break;
 	}
@@ -472,6 +474,7 @@ add_submitted_value_to_list(struct form_control *fc,
 	case FC_SUBMIT:
 	case FC_HIDDEN:
 	case FC_RESET:
+	case FC_BUTTON:
 		sub = init_submitted_value(name, fc->default_value, type, fc,
 					   position);
 		if (sub) add_to_list(*list, sub);
@@ -543,7 +546,8 @@ get_successful_controls(struct document_view *doc_view,
 		if (fc2->form_num == fc->form_num
 		    && ((fc2->type != FC_SUBMIT &&
 			 fc2->type != FC_IMAGE &&
-			 fc2->type != FC_RESET) || fc2 == fc)
+			 fc2->type != FC_RESET &&
+			 fc2->type != FC_BUTTON) || fc2 == fc)
 		    && fc2->name && fc2->name[0]) {
 			struct form_state *fs = find_form_state(doc_view, fc2);
 
@@ -960,6 +964,8 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 
 	if (fc->type == FC_RESET) {
 		do_reset_form(doc_view, fc->form_num);
+		return NULL;
+	} else if (fc->type == FC_BUTTON) {
 		return NULL;
 	}
 
@@ -1394,6 +1400,8 @@ get_form_label(struct form_control *fc)
 	switch (fc->type) {
 	case FC_RESET:
 		return N_("Reset form");
+	case FC_BUTTON:
+		return N_("Harmless button");
 	case FC_HIDDEN:
 		return NULL;
 	case FC_SUBMIT:
@@ -1530,6 +1538,7 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 
 	case FC_HIDDEN:
 	case FC_RESET:
+	case FC_BUTTON:
 	case FC_SELECT:
 		break;
 	}

@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.38 2004/08/15 11:52:51 jonas Exp $ */
+/* $Id: form.h,v 1.39 2004/10/22 20:15:07 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -31,6 +31,7 @@ enum form_type {
 	FC_SUBMIT,
 	FC_IMAGE,
 	FC_RESET,
+	FC_BUTTON,
 	FC_HIDDEN,
 };
 

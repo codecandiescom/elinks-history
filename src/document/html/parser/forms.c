@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.44 2004/10/20 08:16:35 zas Exp $ */
+/* $Id: forms.c,v 1.45 2004/10/22 20:15:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,25 +167,6 @@ end_parse:
 	}
 }
 
-static void
-put_button(unsigned char *a)
-{
-	unsigned char *al;
-
-	put_chrs(" [&nbsp;", 8, html_context.put_chars_f, html_context.part);
-
-	al = get_attr_val(a, "value");
-	if (al) {
-		put_chrs(al, strlen(al), html_context.put_chars_f, html_context.part);
-		mem_free(al);
-	} else {
-		/* no value */
-		put_chrs("BUTTON", 6, html_context.put_chars_f, html_context.part);
-	}
-
-	put_chrs("&nbsp;] ", 8, html_context.put_chars_f, html_context.part);
-}
-
 int
 get_form_mode(unsigned char *attr)
 {
@@ -227,13 +208,10 @@ html_button(unsigned char *a)
 	if (!al) goto no_type_attr;
 
 	if (!strcasecmp(al, "button")) {
-		mem_free(al);
-		put_button(a);
-		return;
-	}
-
-	if (!strcasecmp(al, "reset")) type = FC_RESET;
-	else if (strcasecmp(al, "submit")) {
+		type = FC_BUTTON;
+	} else if (!strcasecmp(al, "reset")) {
+		type = FC_RESET;
+	} else if (strcasecmp(al, "submit")) {
 		/* unknown type */
 		mem_free(al);
 		return;
@@ -248,8 +226,10 @@ no_type_attr:
 	fc->default_value = get_attr_val(a, "value");
 	if (!fc->default_value && fc->type == FC_SUBMIT) fc->default_value = stracpy("Submit");
 	if (!fc->default_value && fc->type == FC_RESET) fc->default_value = stracpy("Reset");
+	if (!fc->default_value && fc->type == FC_BUTTON) fc->default_value = stracpy("Button");
 	if (!fc->default_value) fc->default_value = stracpy("");
 
+	/* XXX: Does this make sense here? Where do we get FC_IMAGE? */
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
 	html_context.special_f(html_context.part, SP_CONTROL, fc);
 	format.form = fc;
@@ -270,18 +250,13 @@ html_input(unsigned char *a)
 	al = get_attr_val(a, "type");
 	if (!al) goto no_type_attr;
 
-	if (!strcasecmp(al, "button")) {
-		mem_free(al);
-		put_button(a);
-		return;
-	}
-
 	if (!strcasecmp(al, "text")) type = FC_TEXT;
 	else if (!strcasecmp(al, "password")) type = FC_PASSWORD;
 	else if (!strcasecmp(al, "checkbox")) type = FC_CHECKBOX;
 	else if (!strcasecmp(al, "radio")) type = FC_RADIO;
 	else if (!strcasecmp(al, "submit")) type = FC_SUBMIT;
 	else if (!strcasecmp(al, "reset")) type = FC_RESET;
+	else if (!strcasecmp(al, "button")) type = FC_BUTTON;
 	else if (!strcasecmp(al, "file")) type = FC_FILE;
 	else if (!strcasecmp(al, "hidden")) type = FC_HIDDEN;
 	else if (!strcasecmp(al, "image")) type = FC_IMAGE;
@@ -298,6 +273,7 @@ no_type_attr:
 	if (!fc->default_value && fc->type == FC_CHECKBOX) fc->default_value = stracpy("on");
 	if (!fc->default_value && fc->type == FC_SUBMIT) fc->default_value = stracpy("Submit");
 	if (!fc->default_value && fc->type == FC_RESET) fc->default_value = stracpy("Reset");
+	if (!fc->default_value && fc->type == FC_BUTTON) fc->default_value = stracpy("Button");
 	if (!fc->default_value) fc->default_value = stracpy("");
 
 	fc->size = get_num(a, "size");
@@ -353,6 +329,7 @@ no_type_attr:
 			break;
 		case FC_SUBMIT:
 		case FC_RESET:
+		case FC_BUTTON:
 			format.attr |= AT_BOLD;
 			put_chrs("[&nbsp;", 7, html_context.put_chars_f, html_context.part);
 			if (fc->default_value)

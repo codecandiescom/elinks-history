@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.501 2004/10/21 20:54:22 pasky Exp $ */
+/* $Id: renderer.c,v 1.502 2004/10/22 20:15:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -896,6 +896,7 @@ new_link(struct document *document, int link_number,
 		case FC_SUBMIT:
 		case FC_IMAGE:
 		case FC_RESET:
+		case FC_BUTTON:
 		case FC_HIDDEN:
 			link->type = LINK_BUTTON;
 		}

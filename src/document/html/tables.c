@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.235 2004/06/27 09:13:47 zas Exp $ */
+/* $Id: tables.c,v 1.236 2004/06/27 09:17:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1522,8 +1522,7 @@ display_complicated_table(struct table *table, int x, int y, int *yy)
 		}
 
 		if (col < table->cols - 1) {
-			/* FIXME: get_vline_width(.., row) ??? */
-			xp += table->cols_widths[col] + (get_vline_width(table, row + 1) >= 0);
+			xp += table->cols_widths[col] + (get_vline_width(table, col + 1) >= 0);
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.490 2004/08/20 15:19:58 jonas Exp $ */
+/* $Id: renderer.c,v 1.491 2004/08/20 15:51:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -440,6 +440,39 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 		int i;
 
 		for (i = 0; i < link->npoints; i++) {
+			/* Fix for bug 479 (part one) */
+			/* The scenario that triggered it:
+			 * 
+			 * Imagine a centered element containing a really long
+			 * word (over half of the screen width long) followed
+			 * by a few links with no spaces between them where all
+			 * the link text combined with the really long word
+			 * will force the line to be wrapped. When rendering
+			 * the line first words (including link text words) are
+			 * put on one line. Then wrapping is performed moving
+			 * all links from current line to the one below. Then
+			 * the current line (now only containing the really
+			 * long word) is centered. This will trigger a call to
+			 * move_links() which will increment.
+			 *
+			 * Without the fix below the centering of the current
+			 * line will increment last_link_to_move to that of the
+			 * last link which means centering of the next line
+			 * with all the links will only move the last link
+			 * leaving all the other links' points dangling and
+			 * causing buggy link highlighting.
+			 *
+			 * Even links like textareas will be correctly handled
+			 * because @last_link_to_move is a way to optimize how
+			 * many links move_links() will have to iterate and
+			 * this little fix will only decrease the effect of the
+			 * optimization by always ensuring it is never
+			 * incremented too far. */
+			if (!matched && link->points[i].y > Y(yf)) {
+				matched = 1;
+				continue;
+			}
+
 			if (link->points[i].y != Y(yf))
 				continue;
 
@@ -488,6 +521,10 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 				tag->y = Y(yt);
 				tag->x += -xf + xt;
 			}
+
+		} else if (!matched && tag->y > Y(yf)) {
+			/* Fix for bug 479 (part two) */
+			matched = 1;
 		}
 
 		if (!matched) renderer_context.last_tag_to_move = tag;

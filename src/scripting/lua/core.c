@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.92 2003/10/26 13:25:40 zas Exp $ */
+/* $Id: core.c,v 1.93 2003/10/26 13:46:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,6 +33,7 @@
 #include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
 #include "lowlevel/signals.h"
+#include "modules/module.h"
 #include "protocol/uri.h"
 #include "sched/event.h"
 #include "sched/session.h"
@@ -620,7 +621,7 @@ do_hooks_file(LS, unsigned char *prefix, unsigned char *filename)
 }
 
 static void
-init_lua(void)
+init_lua(struct module *module)
 {
 	L = lua_open(0);
 	lua_baselibopen(L);
@@ -646,7 +647,7 @@ init_lua(void)
 }
 
 static void
-cleanup_lua(void)
+cleanup_lua(struct module *module)
 {
 	free_lua_console_history(NULL, NULL);
 	lua_close(L);
@@ -830,10 +831,14 @@ free_lua_console_history(va_list ap, void *data)
 }
 
 
-struct scripting_backend lua_scripting_backend = {
-	/* init: */	init_lua,
-	/* done: */	cleanup_lua,
-	/* hooks: */	lua_scripting_hooks,
-};
+struct module lua_scripting_module = module_struct(
+	/* name: */		"lua",
+	/* options: */		NULL,
+	/* events: */		lua_scripting_hooks,
+	/* submodules: */	NULL,
+	/* data: */		NULL,
+	/* init: */		init_lua,
+	/* done: */		cleanup_lua
+);
 
 #endif

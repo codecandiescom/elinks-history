@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.1 2002/06/17 07:42:32 pasky Exp $ */
+/* $Id: memory.c,v 1.2 2002/06/21 19:25:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@ mem_calloc(size_t count, size_t eltsize)
 {
 	void *p;
 
-	if (!size) return DUMMY;
+	if (!eltsize || !count) return DUMMY;
 
 	p = calloc(count, eltsize);
 	if (!p) error("ERROR: out of memory (calloc returned NULL)\n");

@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.8 2002/06/17 07:42:30 pasky Exp $ */
+/* $Id: history.c,v 1.9 2002/06/21 19:25:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,19 @@
 
 
 void
+free_history(struct list_head *history)
+{
+	struct location *loc = history->next;
+
+	/* We can't do foreach() loop here, we access freed memory somehow. */
+	while ((struct list_head *) loc != history) {
+		destroy_location(loc);
+		loc = history->next;
+	}
+}
+
+
+void
 create_history(struct session *ses)
 {
 	init_list(ses->history);
@@ -39,19 +52,15 @@ create_history(struct session *ses)
 void
 destroy_history(struct session *ses)
 {
-	struct location *loc;
-
-	foreach(loc, ses->history) destroy_location(loc);
-	foreach(loc, ses->unhistory) destroy_location(loc);
+	free_history(&ses->history);
+	free_history(&ses->unhistory);
 }
 
 void
 clean_unhistory(struct session *ses)
 {
-	struct location *loc;
-
 	if (get_opt_int("document.history.keep_unhistory")) return;
-	foreach(loc, ses->unhistory) destroy_location(loc);
+	free_history(&ses->unhistory);
 }
 
 

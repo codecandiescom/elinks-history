@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.258 2004/06/29 01:48:40 jonas Exp $ */
+/* $Id: tables.c,v 1.259 2004/06/29 01:54:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1029,7 +1029,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	unsigned char *al;
 	struct html_element *state;
 	color_t bgcolor = par_format.bgcolor;
-	color_t bordercolor = 0;
 	unsigned char *fragment_id;
 	int border, cellspacing, vcellpadding, cellpadding, align;
 	int frame, rules, width, has_width;
@@ -1040,7 +1039,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	html_context.table_level++;
 	get_bgcolor(attr, &bgcolor);
-	get_bordercolor(attr, &bordercolor);
 
 	/* From http://www.w3.org/TR/html4/struct/tables.html#adef-border-TABLE
 	 * The following settings should be observed by user agents for
@@ -1133,7 +1131,9 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	table->part = part;
 	table->border = border;
-	table->bordercolor = bordercolor;
+
+	get_bordercolor(attr, &table->bordercolor);
+
 	table->cellpadding = cellpadding;
 	table->vcellpadding = vcellpadding;
 	table->cellspacing = cellspacing;

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.9 2002/05/08 13:55:04 pasky Exp $ */
+/* $Id: terminal.c,v 1.10 2002/05/10 13:27:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -386,7 +386,7 @@ void free_term_specs()
 
 
 struct list_head term_specs = {&term_specs, &term_specs};
-struct term_spec dumb_term = { NULL, NULL, "", 0, 0, 0, 0, 0 };
+struct term_spec dumb_term = { NULL, NULL, "", 0, 1, 0, 0, 0 };
 
 
 /* get_term_spec() */

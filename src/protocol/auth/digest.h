@@ -1,14 +1,10 @@
-/* $Id: digest.h,v 1.5 2004/11/19 23:45:42 jonas Exp $ */
+/* $Id: digest.h,v 1.6 2004/11/19 23:46:43 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_AUTH_DIGEST_H
 #define EL__PROTOCOL_AUTH_DIGEST_H
 
 struct auth_entry;
 struct uri;
-
-unsigned char *digest_calc_ha1(struct auth_entry *, unsigned char *);
-unsigned char *digest_calc_response(struct auth_entry *, struct uri *, unsigned char *, unsigned char *);
-unsigned char *random_cnonce(void);
 
 unsigned char *
 get_http_auth_digest_response(struct auth_entry *entry, struct uri *uri);

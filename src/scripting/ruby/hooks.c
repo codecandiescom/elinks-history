@@ -1,5 +1,5 @@
 /* Ruby scripting hooks */
-/* $Id: hooks.c,v 1.4 2005/01/18 15:12:37 jonas Exp $ */
+/* $Id: hooks.c,v 1.5 2005/01/18 22:20:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -239,11 +239,10 @@ script_hook_get_proxy(va_list ap, void *data)
 static enum evhook_status
 script_hook_quit(va_list ap, void *data)
 {
+	VALUE args[1];
 	int error;
 
-	rb_eval_string_protect("ELinks.quit_hook if ELinks.method_defined?(:quit_hook)",
-			       &error);
-
+	erb_protected_method_call("quit_hook", 0, args, &error);
 	if (error)
 		erb_report_error(NULL, error);
 

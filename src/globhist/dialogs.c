@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.118 2004/07/02 16:17:42 zas Exp $ */
+/* $Id: dialogs.c,v 1.119 2004/07/02 16:50:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,7 +118,7 @@ static struct listbox_ops_messages globhist_messages = {
 	/* delete_folder */
 	NULL,
 	/* delete_item_title */
-	N_("Delete cache history"),
+	N_("Delete history entry"),
 	/* delete_item */
 	N_("Delete this history entry?"),
 	/* clear_all_items_title */

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.155 2003/06/25 08:39:06 zas Exp $ */
+/* $Id: renderer.c,v 1.156 2003/06/25 10:30:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -439,12 +439,14 @@ split_line_at(struct part *part, register int x)
 		memmove(part->spaces, part->spaces + x, tmp);
 	}
 
-	/* XXX: is this correct ??? tmp <= 0 case ? --Zas */
+	assert(tmp >= 0);
 	memset(part->spaces + tmp, 0, x);
 
-	tmp = part->spaces_len - par_format.leftmargin;
-	assertm(tmp > 0, "part->spaces_len - par_format.leftmargin == %d", tmp);
-	memmove(part->spaces + par_format.leftmargin, part->spaces, tmp);
+	if (par_format.leftmargin > 0) {
+		tmp = part->spaces_len - par_format.leftmargin;
+		assertm(tmp > 0, "part->spaces_len - par_format.leftmargin == %d", tmp);
+		memmove(part->spaces + par_format.leftmargin, part->spaces, tmp);
+	}
 
 	part->cy++;
 

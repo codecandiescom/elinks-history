@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.14 2003/07/28 09:05:26 jonas Exp $ */
+/* $Id: tab.c,v 1.15 2003/09/18 13:07:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,6 +83,23 @@ get_tab_by_number(struct terminal *term, int num)
 	}
 
 	return win;
+}
+
+/* Returns number of the tab at @xpos, or -1 if none. */
+int
+get_tab_number_by_xpos(struct terminal *term, int xpos)
+{
+	int num = 0;
+	struct window *win = NULL;
+
+	foreachback (win, term->windows) {
+		if (win->type != WT_TAB) continue;
+		if (xpos >= win->xpos && xpos <= win->xpos + win->width)
+			return num;
+		num++;
+	}
+
+	return -1;
 }
 
 /* if nbtabs > 0, then it is taken as the result of a recent

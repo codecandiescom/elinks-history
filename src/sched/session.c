@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.148 2003/09/18 12:33:10 zas Exp $ */
+/* $Id: session.c,v 1.149 2003/09/18 13:07:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -323,6 +323,8 @@ print_screen_status(struct session *ses)
 
 			draw_area(term, xpos, ypos, actual_tab_width, 1, ' ', 0, color);
 			draw_text(term, xpos, ypos, msg, msglen, 0, color);
+			tab->xpos = xpos;
+			tab->width = actual_tab_width;
 			xpos += actual_tab_width;
 		}
 	}

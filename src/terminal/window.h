@@ -1,4 +1,4 @@
-/* $Id: window.h,v 1.2 2003/05/04 20:33:21 pasky Exp $ */
+/* $Id: window.h,v 1.3 2003/09/18 13:07:11 zas Exp $ */
 
 #ifndef EL__TERMINAL_WINDOW_H
 #define EL__TERMINAL_WINDOW_H
@@ -11,8 +11,9 @@ struct window {
 
 	void (*handler)(struct window *, struct event *, int fwd);
 	void *data;
-	int xp, yp;
 	struct terminal *term;
+	int xpos, width;	/* Used for tabs focus detection. */
+	int xp, yp;
 	enum window_type {
 		WT_NORMAL, /* normal window, ie. dialog one */
 		WT_TAB, /* sorta sessions container */

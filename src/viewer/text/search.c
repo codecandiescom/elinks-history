@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.288 2004/10/10 17:23:47 miciah Exp $ */
+/* $Id: search.c,v 1.289 2004/10/10 19:31:31 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1247,6 +1247,9 @@ text_typeahead_handler(struct input_line *line, int action)
 	if_assert_failed return INPUT_LINE_CANCEL;
 
 	switch (action) {
+		case ACT_EDIT_REDRAW:
+			return INPUT_LINE_PROCEED;
+
 		case ACT_EDIT_ENTER:
 			if (!*buffer) {
 				/* This ensures that search-typeahead-text
@@ -1312,6 +1315,19 @@ link_typeahead_handler(struct input_line *line, int action)
 		/* If something already were typed we need to redraw
 		 * in order to remove the coloring of the link text. */
 		if (line->data) draw_formatted(ses, 0);
+		return INPUT_LINE_PROCEED;
+	}
+
+	if (action == ACT_EDIT_REDRAW) {
+		int offset;
+		int current = int_max(doc_view->vs->current_link, 0);
+
+		if (current == search_link_text(doc_view->document, current,
+						current, buffer, 1, &offset)) {
+			draw_typeahead_match(ses->tab->term, doc_view,
+					     strlen(buffer), offset);
+		}
+
 		return INPUT_LINE_PROCEED;
 	}
 

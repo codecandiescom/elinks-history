@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.279 2004/10/01 16:03:47 pasky Exp $ */
+/* $Id: menu.c,v 1.280 2004/10/10 19:31:31 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -687,6 +687,9 @@ menu_search_handler(struct input_line *line, int action)
 	int direction;
 
 	switch (action) {
+	case ACT_EDIT_REDRAW:
+		return INPUT_LINE_PROCEED;
+
 	case ACT_EDIT_ENTER:
 		/* XXX: The input line dialog window is above the menu window.
 		 * Remove it from the top, so that select_menu() will correctly

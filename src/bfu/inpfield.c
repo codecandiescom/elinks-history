@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.162 2004/10/10 18:04:03 miciah Exp $ */
+/* $Id: inpfield.c,v 1.163 2004/10/10 19:31:31 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -573,6 +573,9 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 		    || widget_data->info.field.cpos <= strlen(input_line->buffer))
 			return EVENT_NOT_PROCESSED;
 
+		/* Fall thru */
+
+	case EVENT_RESIZE:
 		action = ACT_EDIT_REDRAW;
 		break;
 
@@ -604,6 +607,10 @@ cancel_input_line:
 	case INPUT_LINE_PROCEED:
 		break;
 	}
+
+	/* Hack: We want our caller to perform its redrawing routine,
+	 * even if we did process the event here. */
+	if (action == ACT_EDIT_REDRAW) return EVENT_NOT_PROCESSED;
 
 	/* Completely bypass any further dialog event handling */
 	return EVENT_PROCESSED;

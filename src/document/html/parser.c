@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.458 2004/06/22 23:16:29 zas Exp $ */
+/* $Id: parser.c,v 1.459 2004/06/22 23:24:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,7 +148,6 @@ get_target(unsigned char *a)
 	return v;
 }
 
-void *(*special_f)(void *, enum html_special_type, ...);
 
 struct html_context html_context;
 
@@ -201,7 +200,7 @@ set_fragment_identifier(unsigned char *attr_name, unsigned char *attr)
 	unsigned char *id_attr = get_attr_val(attr_name, attr);
 
 	if (id_attr) {
-		special_f(html_context.ff, SP_TAG, id_attr);
+		html_context.special_f(html_context.ff, SP_TAG, id_attr);
 		mem_free(id_attr);
 	}
 }
@@ -209,7 +208,7 @@ set_fragment_identifier(unsigned char *attr_name, unsigned char *attr)
 void
 add_fragment_identifier(void *part, unsigned char *attr)
 {
-	special_f(part, SP_TAG, attr);
+	html_context.special_f(part, SP_TAG, attr);
 }
 
 #ifdef CONFIG_CSS
@@ -238,7 +237,7 @@ import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len)
 	if (!uri) return;
 
 	/* Request the imported stylesheet as part of the document ... */
-	special_f(html_context.ff, SP_STYLESHEET, uri);
+	html_context.special_f(html_context.ff, SP_STYLESHEET, uri);
 
 	/* ... and then attempt to import from the cache. */
 	import_css(css, uri);
@@ -376,7 +375,7 @@ html_body(unsigned char *a)
 	if (html_context.has_link_lines
 	    && par_format.bgcolor
 	    && !search_html_stack("BODY")) {
-		special_f(html_context.ff, SP_COLOR_LINK_LINES);
+		html_context.special_f(html_context.ff, SP_COLOR_LINK_LINES);
 	}
 }
 
@@ -567,11 +566,11 @@ html_hr(unsigned char *a)
 	i = get_width(a, "width", 1);
 	if (i == -1) i = par_format.width - (margin - 2) * 2;
 	format.attr = AT_GRAPHICS;
-	special_f(html_context.ff, SP_NOWRAP, 1);
+	html_context.special_f(html_context.ff, SP_NOWRAP, 1);
 	while (i-- > 0) {
 		put_chrs(&r, 1, html_context.put_chars_f, html_context.ff);
 	}
-	special_f(html_context.ff, SP_NOWRAP, 0);
+	html_context.special_f(html_context.ff, SP_NOWRAP, 0);
 	ln_break(2, html_context.line_break_f, html_context.ff);
 	kill_html_stack_item(&html_top);
 }
@@ -854,8 +853,9 @@ html_frame(unsigned char *a)
 		put_link_line("Frame: ", name, url, "");
 
 	} else {
-		if (special_f(html_context.ff, SP_USED, NULL)) {
-			special_f(html_context.ff, SP_FRAME, html_top.frameset, name, url);
+		if (html_context.special_f(html_context.ff, SP_USED, NULL)) {
+			html_context.special_f(html_context.ff, SP_FRAME,
+					       html_top.frameset, name, url);
 		}
 	}
 
@@ -878,7 +878,7 @@ html_frameset(unsigned char *a)
 	 * <body> elements ;-). See also bug 171. --pasky */
 	if (search_html_stack("BODY")
 	    || !global_doc_opts->frames
-	    || !special_f(html_context.ff, SP_USED, NULL))
+	    || !html_context.special_f(html_context.ff, SP_USED, NULL))
 		return;
 
 	cols = get_attr_val(a, "cols");
@@ -921,7 +921,7 @@ html_frameset(unsigned char *a)
 
 	fp.parent = html_top.frameset;
 	if (fp.x && fp.y) {
-		html_top.frameset = special_f(html_context.ff, SP_FRAMESET, &fp);
+		html_top.frameset = html_context.special_f(html_context.ff, SP_FRAMESET, &fp);
 	}
 	mem_free_if(fp.width);
 	mem_free_if(fp.height);
@@ -955,7 +955,7 @@ process_head(unsigned char *head)
 			html_focusable(NULL);
 			url = join_urls(format.href_base, saved_url);
 			put_link_line("Refresh: ", saved_url, url, global_doc_opts->framename);
-			special_f(html_context.ff, SP_REFRESH, seconds, url);
+			html_context.special_f(html_context.ff, SP_REFRESH, seconds, url);
 			mem_free(url);
 			mem_free(saved_url);
 		}
@@ -1295,7 +1295,7 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	html_context.eofff = end;
 	html_context.put_chars_f = put_chars;
 	html_context.line_break_f = line_break;
-	special_f = special;
+	html_context.special_f = special;
 	scan_http_equiv(start, end, head, title);
 
 	e = mem_calloc(1, sizeof(struct html_element));

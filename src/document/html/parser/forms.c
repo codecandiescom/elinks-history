@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.31 2004/06/22 23:16:30 zas Exp $ */
+/* $Id: forms.c,v 1.32 2004/06/22 23:24:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,7 +126,8 @@ find_form_for_input(unsigned char *i)
 
 	done_form();
 
-	if (!special_f(html_context.ff, SP_USED, NULL)) return;
+	if (!html_context.special_f(html_context.ff, SP_USED, NULL))
+		return;
 
 	if (html_context.last_input_tag && i <= html_context.last_input_tag
 	    && i > html_context.last_form_tag) {
@@ -241,7 +242,7 @@ no_type_attr:
 	if (!fc->default_value) fc->default_value = stracpy("");
 
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
-	special_f(html_context.ff, SP_CONTROL, fc);
+	html_context.special_f(html_context.ff, SP_CONTROL, fc);
 	format.form = fc;
 	format.attr |= AT_BOLD;
 }
@@ -366,7 +367,7 @@ no_type_attr:
 	put_chrs(" ", 1, html_context.put_chars_f, html_context.ff);
 
 hid:
-	special_f(html_context.ff, SP_CONTROL, fc);
+	html_context.special_f(html_context.ff, SP_CONTROL, fc);
 }
 
 void
@@ -457,7 +458,7 @@ end_parse:
 	put_chrs("[ ]", 3, html_context.put_chars_f, html_context.ff);
 	kill_html_stack_item(&html_top);
 	put_chrs(" ", 1, html_context.put_chars_f, html_context.ff);
-	special_f(html_context.ff, SP_CONTROL, fc);
+	html_context.special_f(html_context.ff, SP_CONTROL, fc);
 }
 
 static struct list_menu lnk_menu;
@@ -466,7 +467,7 @@ int
 do_html_select(unsigned char *attr, unsigned char *html,
 	       unsigned char *eof, unsigned char **end, void *f)
 {
-	struct conv_table *ct = special_f(f, SP_TABLE, NULL);
+	struct conv_table *ct = html_context.special_f(f, SP_TABLE, NULL);
 	struct form_control *fc;
 	struct string lbl = NULL_STRING;
 	unsigned char **values = NULL;
@@ -625,7 +626,7 @@ end_parse:
 
 	kill_html_stack_item(&html_top);
 	put_chrs("]", 1, html_context.put_chars_f, f);
-	special_f(html_context.ff, SP_CONTROL, fc);
+	html_context.special_f(html_context.ff, SP_CONTROL, fc);
 
 	return 0;
 }
@@ -745,5 +746,5 @@ pp:
 		ln_break(1, html_context.line_break_f, f);
 	else
 		put_chrs(" ", 1, html_context.put_chars_f, f);
-	special_f(f, SP_CONTROL, fc);
+	html_context.special_f(f, SP_CONTROL, fc);
 }

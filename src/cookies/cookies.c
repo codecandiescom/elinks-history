@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.105 2003/11/26 18:24:57 pasky Exp $ */
+/* $Id: cookies.c,v 1.106 2003/11/26 21:08:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -556,7 +556,7 @@ accept_cookie_dialog(struct session *ses)
 		"Secure: %s\n"),
 		cookie->server, cookie->name, cookie->value,
 		cookie->domain,
-		expires ? expires : _("unknown",  ses->tab->term),
+		expires ? expires : _("at quit time",  ses->tab->term),
 		_(cookie->secure ? N_("yes") : N_("no"), ses->tab->term)),
 		cookie, 2,
 		N_("Accept"), accept_cookie, B_ENTER,

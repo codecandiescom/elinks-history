@@ -66,7 +66,7 @@ AC_CHECK_HEADERS(sys/time.h)
 AC_CHECK_HEADERS(sys/un.h)
 AC_CHECK_HEADERS(sys/utsname.h)
 AC_CHECK_HEADERS(stdint.h inttypes.h)
-AC_CHECK_HEADERS(locale.h)
+AC_CHECK_HEADERS(locale.h pwd.h)
 
 dnl ===================================================================
 dnl Checks for typedefs, structures, and compiler characteristics.
@@ -122,7 +122,7 @@ AC_CHECK_FUNCS(strcasecmp strncasecmp strcasestr strstr strchr strrchr)
 AC_CHECK_FUNCS(memmove bcopy stpcpy strdup index mempcpy memrchr)
 AC_CHECK_FUNCS(isalnum)
 AC_CHECK_FUNCS(snprintf vsnprintf asprintf vasprintf)
-AC_CHECK_FUNCS(getifaddrs)
+AC_CHECK_FUNCS(getifaddrs getpwnam)
 AC_CHECK_FUNCS(fflush fsync)
 
 AC_HAVE_FUNCS(cygwin_conv_to_full_win32_path)

@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.26 2004/06/02 10:34:58 zas Exp $ */
+/* $Id: file.c,v 1.27 2004/07/02 03:24:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,9 @@
 #include <sys/stat.h> /* OS/2 needs this after sys/types.h */
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h> /* OS/2 needs this after sys/types.h */
+#endif
+#ifdef HAVE_PWD_H
+#include <pwd.h>
 #endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -91,12 +94,33 @@ expand_tilde(unsigned char *filename)
 
 	if (!init_string(&file)) return NULL;
 
-	if (filename[0] == '~' && (!filename[1] || dir_sep(filename[1]))) {
-		unsigned char *home = getenv("HOME");
+	if (filename[0] == '~') {
+		if (!filename[1] || dir_sep(filename[1])) {
+			unsigned char *home = getenv("HOME");
 
-		if (home) {
-			add_to_string(&file, home);
-			filename++;
+			if (home) {
+				add_to_string(&file, home);
+				filename++;
+			}
+#ifdef HAVE_GETPWNAM
+		} else {
+			unsigned char *user = filename + 1;
+			int userlen = 0;
+
+			while (user[userlen] && !dir_sep(user[userlen]))
+				userlen++;
+
+			user = memacpy(user, userlen);
+			if (user) {
+				struct passwd *passwd = getpwnam(user);
+
+				if (passwd && passwd->pw_dir) {
+					add_to_string(&file, passwd->pw_dir);
+					filename += 1 + userlen;
+				}
+				mem_free(user);
+			}
+#endif
 		}
 	}
 

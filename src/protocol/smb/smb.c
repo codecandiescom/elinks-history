@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.46 2004/06/18 09:13:41 zas Exp $ */
+/* $Id: smb.c,v 1.47 2004/06/18 09:30:27 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -517,6 +517,7 @@ smb_protocol_handler(struct connection *conn)
 		close(out_pipe[0]);
 		close(err_pipe[0]);
 
+		/* Usage: smbclient service <password> [options] */
 		v[n++] = SMBCLIENT;
 
 		/* FIXME: handle alloc failures. */
@@ -527,32 +528,34 @@ smb_protocol_handler(struct connection *conn)
 		 * program does. Also, the user might also want to know, why
 		 * the hell does he see nothing on the screen. --pasky */
 
-		if (!*share) {
-			v[n++] = "-L";	/* get a list of shares available on a host */
-			v[n++] = memacpy(conn->uri->host, conn->uri->hostlen);
-
-		} else {
-			/* Construct path. */
+		if (*share) {
+			/* Construct service path. */
 			asprintf((char **) &v[n++], "//%.*s/%s",
 				 conn->uri->hostlen, conn->uri->host, share);
-			/* XXX: add password to argument if any. TODO: Recheck
-			 * if correct. --Zas. */
+
+			/* Add password if any. */
 			if (conn->uri->passwordlen && !conn->uri->userlen) {
 				v[n++] = memacpy(conn->uri->password, conn->uri->passwordlen);
 			}
+		} else {
+			/* Get a list of shares available on a host. */
+			v[n++] = "-L";
+			v[n++] = memacpy(conn->uri->host, conn->uri->hostlen);
 		}
 
-		v[n++] = "-N";		/* don't ask for a password */
-		v[n++] = "-E";		/* write messages to stderr instead of stdout */
-		v[n++] = "-d 0";	/* disable debug mode. */
+		v[n++] = "-N";		/* Don't ask for a password. */
+		v[n++] = "-E";		/* Write messages to stderr instead of stdout. */
+		v[n++] = "-d 0";	/* Disable debug mode. */
 
 		if (conn->uri->portlen) {
-			v[n++] = "-p";	/* connect to the specified port */
+			/* Connect to the specified port. */
+			v[n++] = "-p";
 			v[n++] = memacpy(conn->uri->port, conn->uri->portlen);
 		}
 
 		if (conn->uri->userlen) {
-			v[n++] = "-U";	/* set the network username */
+			/* Set the network username. */
+			v[n++] = "-U";
 			if (!conn->uri->passwordlen) {
 				/* No password. */
 				v[n++] = memacpy(conn->uri->user, conn->uri->userlen);
@@ -568,27 +571,32 @@ smb_protocol_handler(struct connection *conn)
 			/* FIXME: use si->list_type here ?? --Zas */
 			if (!dirlen || dir[dirlen - 1] == '/' || dir[dirlen - 1] == '\\') {
 				if (dirlen) {
-					v[n++] = "-D";	/* start from directory */
+					/* Initial directory. */
+					v[n++] = "-D";
 					v[n++] = dir;
 				}
-				v[n++] = "-c"; /* execute semicolon separated commands */
-				v[n++] = "ls";
+
+				v[n++] = "-c"; /* Execute semicolon separated commands. */
+				v[n++] = "ls"; /* List files. */
 
 			} else {
+				/* Copy remote file to stdout. */
 				unsigned char *s = straconcat("get \"", dir, "\" -", NULL);
 				unsigned char *ss = s;
 
-				v[n++] = "-c"; /* execute semicolon separated commands */
-				while ((ss = strchr(ss, '/'))) *ss = '\\';
+				v[n++] = "-c"; /* Execute semicolon separated commands. */
+				while ((ss = strchr(ss, '/'))) *ss = '\\'; /* Escape '/' */
 				v[n++] = s;
 			}
 		}
 
-		v[n++] = NULL;
+		v[n++] = NULL;	/* End of arguments list. */
 		assert(n < MAX_SMBCLIENT_ARGS);
 
 		execvp(SMBCLIENT, (char **) v);
 
+		/* FIXME: this message will never be displayed, since execvp()
+		 * failed. */
 		fprintf(stderr,  SMBCLIENT " not found in $PATH");
 		_exit(1);
 #undef MAX_SMBCLIENT_ARGS

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.43 2003/07/28 20:28:23 jonas Exp $ */
+/* $Id: terminal.c,v 1.44 2003/08/23 05:57:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,25 +138,25 @@ init_term(int fdin, int fdout,
 		return NULL;
 	}
 
+	init_list(term->windows);
+
+	win = init_tab(term, 1);
+	if (!win) {
+		mem_free(term->screen);
+		mem_free(term);
+		check_if_no_terminal();
+		return NULL;
+	}
+
+	win->handler = root_window;
+
 	term->fdin = fdin;
 	term->fdout = fdout;
 	term->master = (term->fdout == get_output_handle());
 	term->blocked = -1;
 	term->spec = get_opt_rec(config_options, "terminal._template_");
 
-	/* alloc_screen(term, 80, 25); */
 	add_to_list(terminals, term);
-
-	init_list(term->windows);
-
-	win = init_tab(term, 1);
-	if (!win) {
-		del_from_list(term);
-		mem_free(term);
-		check_if_no_terminal();
-		return NULL;
-	}
-	win->handler = root_window;
 
 	set_handlers(fdin, (void (*)(void *)) in_term, NULL,
 		     (void (*)(void *)) destroy_terminal, term);
@@ -175,7 +175,7 @@ redraw_all_terminals(void)
 void
 destroy_terminal(struct terminal *term)
 {
-	while ((term->windows.next) != &term->windows)
+	while (!list_empty(term->windows))
 		delete_window(term->windows.next);
 
 	/* if (term->cwd) mem_free(term->cwd); */

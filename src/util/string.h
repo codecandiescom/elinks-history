@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.9 2002/11/23 19:49:52 zas Exp $ */
+/* $Id: string.h,v 1.10 2002/11/27 11:45:45 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -9,6 +9,32 @@
 #include <string.h>
 #include "util/memdebug.h"
 #include "util/memory.h"
+
+#if !(defined HAVE_STRCHR) && !(defined HAVE_INDEX)
+# error You have neither strchr() nor index() function. Please go upgrade your system.
+#endif
+
+/* for old BSD systems. */
+#ifndef HAVE_STRCHR
+# define strchr(a,b) index(a,b)
+# define strrchr(a,b) rindex(a,b)
+#endif
+
+#ifndef HAVE_STRERROR
+char *strerror(int);
+#endif
+
+#ifndef HAVE_STRSTR
+char *strstr(char *, char *);
+#endif
+
+#ifndef HAVE_MEMMOVE
+#ifdef HAVE_BCOPY
+# define memmove(dst, src, n) bcopy(src, dst, n)
+#else
+char *memmove(char *, char *, int);
+#endif
+#endif
 
 #define ALLOC_GR 0x100 /* must be power of 2 */
 

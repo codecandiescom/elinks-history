@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.12 2002/11/26 10:02:01 zas Exp $ */
+/* $Id: string.c,v 1.13 2002/11/27 11:45:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -341,3 +341,62 @@ safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 
 	return dst;
 }
+
+#ifndef HAVE_STRERROR
+/* Many older systems don't have this, but have the global sys_errlist array
+ * instead. */
+char *
+strerror(int errno)
+{
+	extern int sys_nerr;
+	extern char *sys_errlist[];
+
+	if (errno < 0 || errno > sys_nerr)
+		return "Unknown Error";
+	else
+		return sys_errlist[errno];
+}
+#endif
+
+#ifndef HAVE_STRSTR
+/* From http://www.unixpapa.com/incnote/string.html */
+char *
+strstr(char *s, char *p)
+{
+	char *sp, *pp;
+
+	for(sp = s, pp = p; *sp && *pp;)
+	{
+		if (*sp == *pp) {
+			sp++;
+			pp++;
+		} else {
+			sp = sp - (pp - p) + 1;
+			pp = p;
+		}
+	}
+	return (*pp ? NULL : sp - (pp - p));
+}
+#endif
+
+#if !defined(HAVE_MEMMOVE) && !defined(HAVE_BCOPY)
+/* The memmove() function is a bit rarer than the other memory functions -
+ * some systems that have the others don't have this. It is identical to
+ * memcpy() but is guaranteed to work even if the strings overlap.
+ * Most systems that don't have memmove() do have
+ * the BSD bcopy() though some really old systems have neither.
+ * Note that bcopy() has the order of the source and destination
+ * arguments reversed.
+ * From http://www.unixpapa.com/incnote/string.html */
+/* XXX: Perhaps not the better place for it. --Zas */
+char *
+memmove(char *dst, char *src, int n)
+{
+	if (src > dst)
+		for ( ; n > 0; n--)
+			*(dst++)= *(src++);
+	else
+		for (dst+= n-1, src+= n-1; n > 0; n--)
+			*(dst--)= *(src--);
+}
+#endif

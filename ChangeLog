@@ -1,3 +1,126 @@
+Mon Jul  7 20:13:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Generalize keyact_box_item size.  
+
+Mon Jul  7 20:01:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Small cleanup.  
+
+Mon Jul  7 19:15:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Complete struct uri usage in http_send_header().  
+
+Mon Jul  7 19:14:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Remove check_queue_bugs() assertion failure handling. It's debug
+	code so we dump core.  
+
+Mon Jul  7 17:49:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Add '.' before extension to temporary file.  
+
+Mon Jul  7 15:36:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/http/http.c, util/blacklist.c, util/blacklist.h:
+
+	Preparing for complete struct uri usage in http protocol backend.  
+
+Mon Jul  7 15:04:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: main.c, lowlevel/Makefile.am, lowlevel/af_unix.c,
+	lowlevel/af_unix.h, lowlevel/interlink.c, lowlevel/interlink.h:
+
+	lowlevel/af_unix.* -> lowlevel/interlink.*.  
+
+Mon Jul  7 13:14:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Fix post uri handling. Reported by hq_star on #elinks.  
+
+Mon Jul  7 01:29:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/url.c:
+
+	Remove dead code that has been replaced by struct uri usage.  
+
+Mon Jul  7 01:23:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Optimize the encoding extension testing.  
+
+Mon Jul  7 00:57:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	More usage of connection uri.  
+
+Mon Jul  7 00:12:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/elusive/parser/css/: atrule.c, parser.c, ruleset.c,
+	scanner.c, state.h, tree.c:
+
+	Revert the assertion failure handling.  
+	1) Some are only useful while getting it running 
+	2) I cannot bare having to deal with goto spaghetti code already ;) 
+	3) Checking of some max stack depth should maybe be generic and
+	always done.  Let's get it running before we start do smart things
+	...  
+
+Sun Jul  6 23:24:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/url.c:
+
+	Don't think hidden file's name is its extension. (Ignore dot at the
+	start of string or right after a slash when looking for a file
+	extension.) Discovered by Diablo-D3.  
+
+Sun Jul  6 23:17:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/align.h, bfu/hotkey.c, dialogs/document.c,
+	document/html/frames.c, document/html/parser.c,
+	document/html/renderer.c, elusive/parser/css/atrule.c,
+	elusive/parser/css/parser.c, elusive/parser/css/ruleset.c,
+	elusive/parser/css/scanner.c, elusive/parser/css/state.h,
+	elusive/parser/css/tree.c, lowlevel/af_unix.c,
+	lowlevel/interlink.c, protocol/protocol.c, protocol/uri.c,
+	protocol/http/http.c, sched/connection.c, ssl/connect.c,
+	util/fastfind.c, viewer/text/form.c, viewer/text/link.c,
+	viewer/text/search.c, viewer/text/textarea.c, viewer/text/view.c:
+
+	(Re)introduced recovery paths for failed assertions. Ufff.... Jonas,
+	please check check_queue_bugs().  
+
+Sun Jul  6 23:01:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Cleanup get_temp_name(). The appended extension is now everything
+	after first dot, so external handler is given a better hint.  
+
+Sun Jul  6 22:15:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.h:
+
+	Added note about if_assert_failed to assert() description.  
+
+Sun Jul  6 22:15:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.h:
+
+	Moved if_assert_failed after other assert functions.  
+
 Sun Jul  6 22:04:03 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/util/error.h:
@@ -1377,7 +1500,8 @@ Sat Jun 28 11:13:10 2003  Jonas Fonseca <fonseca@diku.dk>:
 Sat Jun 28 10:47:53 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: document/cache.h, lowlevel/af_unix.h, lowlevel/dns.h,
-	lowlevel/select.h, osdep/os_dep.h, protocol/ftpparse.h:
+	lowlevel/interlink.h, lowlevel/select.h, osdep/os_dep.h,
+	protocol/ftpparse.h:
 
 	Rename header file guards.  
 
@@ -2410,13 +2534,13 @@ Sat Jun 21 09:09:08 2003  Laurent Monin <zas@norz.org>:
 
 Sat Jun 21 08:54:53 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	A now useless comment was removed.  
 
 Sat Jun 21 08:48:11 2003  Laurent Monin <zas@norz.org>:
 
-	* src/: setup.h, lowlevel/af_unix.c:
+	* src/: setup.h, lowlevel/af_unix.c, lowlevel/interlink.c:
 
 	General cleanup. MAX_BIND_TRIES was removed from setup.h since it is
 	only used in af_unix.c/AF_INET and there is no need for the user to
@@ -2518,7 +2642,8 @@ Fri Jun 20 18:51:37 2003  Petr Baudis <pasky@ucw.cz>:
 
 Fri Jun 20 18:21:58 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: setup.h, config/options.c, lowlevel/af_unix.c:
+	* src/: setup.h, config/options.c, lowlevel/af_unix.c,
+	lowlevel/interlink.c:
 
 	Reverted the last patch. As I indicated clearly, this has no
 	business in HEAD and should live in a branch on its own.  
@@ -2532,7 +2657,8 @@ Fri Jun 20 18:20:51 2003  Petr Baudis <pasky@ucw.cz>:
 
 Fri Jun 20 18:13:08 2003  Laurent Monin <zas@norz.org>:
 
-	* src/: config/options.c, lowlevel/af_unix.c, setup.h:
+	* src/: config/options.c, lowlevel/af_unix.c, lowlevel/interlink.c,
+	setup.h:
 
 	Experimental remote mode is now (almost) functionnal. To test define
 	ELINKS_REMOTE in setup.h, compile elinks, add a second ip to your
@@ -2572,13 +2698,13 @@ Fri Jun 20 17:16:56 2003  Petr Baudis <pasky@ucw.cz>:
 
 Fri Jun 20 16:45:09 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	addr_info was renamed to socket_info which is more adequate, imho.  
 
 Fri Jun 20 16:33:07 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	s_addr name may clash on Solaris, so all our s_addr were renamed to
 	addr.  
@@ -2639,27 +2765,27 @@ Fri Jun 20 12:51:22 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 Fri Jun 20 12:06:06 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	Indentation fix.  
 
 Fri Jun 20 12:04:10 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	Fix a potential issue: in some cases, we try to free a NULL pointer,
 	a little step to ELinks remote mode was done.  
 
 Fri Jun 20 11:03:12 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	enum addr_type was introduced, it will be used soon for remote
 	ELinks access.  
 
 Fri Jun 20 08:09:42 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	af_unix_close() was fixed, in certain cases, we closed fd 0.
 	session-ring now works with AF_INET too, we just bind/connect on
@@ -2680,7 +2806,8 @@ Fri Jun 20 01:45:54 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Jun 19 22:38:12 2003  Laurent Monin <zas@norz.org>:
 
-	* src/: main.c, lowlevel/af_unix.c, lowlevel/af_unix.h:
+	* src/: main.c, lowlevel/af_unix.c, lowlevel/af_unix.h,
+	lowlevel/interlink.c, lowlevel/interlink.h:
 
 	bind_to_af_unix() was splitted. connect_to_af_unix() and
 	af_unix_open() were introduced. Please torture and review.  
@@ -2693,56 +2820,56 @@ Thu Jun 19 12:22:15 2003  Laurent Monin <zas@norz.org>:
 
 Thu Jun 19 09:32:01 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	struct s_addr_info was introduced, it permit to get rid of s_unix,
 	s_unix_l, s_unix_fd.  
 
 Wed Jun 18 21:16:11 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	elinks_usleep() was introduced, it resides here for now.  
 
 Wed Jun 18 20:37:31 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	Prevent memleak in alloc_address(), assertions are now used.  
 
 Wed Jun 18 20:29:38 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	alloc_address() was introduced.  
 
 Wed Jun 18 20:11:01 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	void unlink_unix() -> void unlink_unix(struct sockaddr *s_addr) 
 
 Wed Jun 18 20:05:12 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	get_sun_path() was introduced, it computes unix socket path.  
 
 Wed Jun 18 19:44:49 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	get_address() now set values of passed parameters.  
 
 Wed Jun 18 18:58:43 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	Humm, better like that. ;) 
 
 Wed Jun 18 18:39:12 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	Well, struct sockaddr_un is a total mess. So i did it like that,
 	have a look and comment.  
@@ -2771,7 +2898,7 @@ Wed Jun 18 14:04:21 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Jun 18 12:10:23 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	Use SUN_LEN() macro to evaluate to actual length of the sockaddr_un
 	structure and provide a definition of it for systems that may not
@@ -2802,7 +2929,7 @@ Wed Jun 18 11:46:42 2003  Petr Baudis <pasky@ucw.cz>:
 
 Wed Jun 18 10:49:45 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	AF_UNIX get_address() was reworked. A check about too long path
 	(elinks_home) was added. An error produced by connect() is ignored,
@@ -2810,27 +2937,27 @@ Wed Jun 18 10:49:45 2003  Laurent Monin <zas@norz.org>:
 
 Wed Jun 18 08:51:25 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	Adequate error messages are now printed on socket(), connect(),
 	bind() failures.  
 
 Wed Jun 18 08:20:38 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	Dummy entry to fix last message log: accept() failure is now
 	handled.  
 
 Wed Jun 18 07:59:47 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	Connect() failure is now handled.  
 
 Wed Jun 18 07:48:33 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	Some variables were marked as static, minor comments were added
 	about future work to be done here.  
@@ -2916,7 +3043,7 @@ Tue Jun 17 23:44:18 2003  Laurent Monin <zas@norz.org>:
 
 Tue Jun 17 23:23:46 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	Static + minor cleanup.  
 
@@ -4933,9 +5060,9 @@ Sun Jun  8 22:12:35 2003  Petr Baudis <pasky@ucw.cz>:
 Sun Jun  8 22:11:46 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: main.c, config/cmdline.c, config/options.c,
-	lowlevel/af_unix.c, lowlevel/select.c, lowlevel/signals.c,
-	sched/session.c, scripting/lua/core.c, terminal/kbd.c,
-	terminal/terminal.c, viewer/dump/dump.c:
+	lowlevel/af_unix.c, lowlevel/interlink.c, lowlevel/select.c,
+	lowlevel/signals.c, sched/session.c, scripting/lua/core.c,
+	terminal/kbd.c, terminal/terminal.c, viewer/dump/dump.c:
 
 	Normalized error() users: the messages are now localized where it
 	makes sense, the messages text is edited for brevity, superfluous
@@ -6347,8 +6474,8 @@ Thu Jun  5 15:45:05 2003  Laurent Monin <zas@norz.org>:
 Thu Jun  5 15:28:02 2003  Laurent Monin <zas@norz.org>:
 
 	* src/: document/html/colors.c, lowlevel/af_unix.c,
-	lowlevel/signals.c, osdep/os_dep.c, osdep/win32.c, protocol/ftp.c,
-	protocol/url.h, sched/session.c:
+	lowlevel/interlink.c, lowlevel/signals.c, osdep/os_dep.c,
+	osdep/win32.c, protocol/ftp.c, protocol/url.h, sched/session.c:
 
 	Functions declarations tidyup.  
 
@@ -8367,12 +8494,12 @@ Thu May  8 23:03:06 2003  Laurent Monin <zas@norz.org>:
 	dialogs/hierbox.c, dialogs/menu.h, document/html/renderer.c,
 	intl/charsets.c, intl/gettext/localcharset.c, lowlevel/af_unix.c,
 	lowlevel/connect.c, lowlevel/dns.c, lowlevel/home.c,
-	lowlevel/timer.c, osdep/os_dep.c, protocol/url.c,
-	protocol/http/auth.c, protocol/http/date.c, protocol/http/http.c,
-	sched/connection.c, sched/download.c, sched/sched.c,
-	scripting/lua/hooks.c, sched/session.c, ssl/connect.c,
-	util/encoding.c, util/error.c, util/memdebug.h, util/snprintf.c,
-	viewer/text/view.c, viewer/text/view.h:
+	lowlevel/interlink.c, lowlevel/timer.c, osdep/os_dep.c,
+	protocol/url.c, protocol/http/auth.c, protocol/http/date.c,
+	protocol/http/http.c, sched/connection.c, sched/download.c,
+	sched/sched.c, scripting/lua/hooks.c, sched/session.c,
+	ssl/connect.c, util/encoding.c, util/error.c, util/memdebug.h,
+	util/snprintf.c, viewer/text/view.c, viewer/text/view.h:
 
 	Many missing declarations + static. Big patch, sorry.  
 
@@ -8407,12 +8534,13 @@ Thu May  8 21:50:07 2003  Laurent Monin <zas@norz.org>:
 	intl/gettext/libintl.h, intl/gettext/loadmsgcat.c,
 	intl/gettext/localcharset.c, lowlevel/af_unix.c,
 	lowlevel/af_unix.h, lowlevel/connect.c, lowlevel/home.h,
-	lowlevel/select.c, lowlevel/select.h, lowlevel/sysname.h,
-	lowlevel/timer.h, lowlevel/ttime.h, osdep/os_dep.c,
-	sched/connection.c, sched/connection.h, sched/download.h,
-	sched/sched.c, sched/sched.h, sched/session.h, ssl/ssl.h,
-	terminal/kbd.h, terminal/terminal.c, terminal/terminal.h,
-	util/blacklist.h, util/encoding.c, util/error.h, util/string.h:
+	lowlevel/interlink.c, lowlevel/interlink.h, lowlevel/select.c,
+	lowlevel/select.h, lowlevel/sysname.h, lowlevel/timer.h,
+	lowlevel/ttime.h, osdep/os_dep.c, sched/connection.c,
+	sched/connection.h, sched/download.h, sched/sched.c, sched/sched.h,
+	sched/session.h, ssl/ssl.h, terminal/kbd.h, terminal/terminal.c,
+	terminal/terminal.h, util/blacklist.h, util/encoding.c,
+	util/error.h, util/string.h:
 
 	Strict prototypes. void func() -> void func(void).  
 
@@ -9611,9 +9739,9 @@ Sun May  4 17:23:59 2003  Petr Baudis <pasky@ucw.cz>:
 	dialogs/options.h, dialogs/refresh.c, dialogs/refresh.h,
 	document/html/parser.c, document/html/renderer.h,
 	globhist/dialogs.c, globhist/dialogs.h, intl/gettext/libintl.h,
-	lowlevel/af_unix.c, lowlevel/select.c, lowlevel/timer.c,
-	osdep/os_dep.c, scripting/lua/core.c, protocol/mime.c,
-	protocol/mime.h, protocol/user.c, protocol/user.h,
+	lowlevel/af_unix.c, lowlevel/interlink.c, lowlevel/select.c,
+	lowlevel/timer.c, osdep/os_dep.c, scripting/lua/core.c,
+	protocol/mime.c, protocol/mime.h, protocol/user.c, protocol/user.h,
 	protocol/http/http.c, sched/download.c, sched/download.h,
 	sched/session.c, sched/session.h, terminal/kbd.c,
 	terminal/terminal.c, viewer/dump/dump.c, viewer/text/view.c,
@@ -9654,8 +9782,8 @@ Sun May  4 17:11:15 2003  Petr Baudis <pasky@ucw.cz>:
 
 Sun May  4 16:58:31 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: main.c, lowlevel/af_unix.c, sched/session.c,
-	sched/session.h:
+	* src/: main.c, lowlevel/af_unix.c, lowlevel/interlink.c,
+	sched/session.c, sched/session.h:
 
 	win_func() -> tabwin_func() 
 
@@ -10543,7 +10671,8 @@ Wed Apr 30 22:17:55 2003  Laurent Monin <zas@norz.org>:
 
 Wed Apr 30 21:56:52 2003  Laurent Monin <zas@norz.org>:
 
-	* src/: setup.h, dialogs/menu.c, lowlevel/af_unix.c:
+	* src/: setup.h, dialogs/menu.c, lowlevel/af_unix.c,
+	lowlevel/interlink.c:
 
 	The url to links manual was replaced by a link to documentation page
 	on ELinks website. Minor ELinksification in setup.h.  
@@ -12198,18 +12327,18 @@ Sun Jan  5 16:48:10 2003  Petr Baudis <pasky@ucw.cz>:
 	src/document/session.h, src/document/html/parser.c,
 	src/document/html/parser.h, src/document/html/renderer.c,
 	src/document/html/renderer.h, src/globhist/dialogs.h,
-	src/lowlevel/af_unix.c, src/lowlevel/terminal.c,
-	src/protocol/ftp.c, src/protocol/mailcap.c, src/protocol/url.c,
-	src/protocol/url.h, src/protocol/user.c, src/protocol/user.h,
-	src/protocol/http/auth.c, src/protocol/http/http.c,
-	src/sched/Makefile.am, src/sched/connection.c,
-	src/sched/download.c, src/sched/download.h, src/sched/history.c,
-	src/sched/history.h, src/sched/location.c, src/sched/location.h,
-	src/sched/sched.c, src/sched/session.c, src/sched/session.h,
-	src/scripting/lua/core.c, src/scripting/lua/core.h,
-	src/scripting/lua/hooks.c, src/scripting/lua/hooks.h,
-	src/viewer/text/view.c, src/viewer/text/view.h,
-	src/viewer/text/vs.c:
+	src/lowlevel/af_unix.c, src/lowlevel/interlink.c,
+	src/lowlevel/terminal.c, src/protocol/ftp.c,
+	src/protocol/mailcap.c, src/protocol/url.c, src/protocol/url.h,
+	src/protocol/user.c, src/protocol/user.h, src/protocol/http/auth.c,
+	src/protocol/http/http.c, src/sched/Makefile.am,
+	src/sched/connection.c, src/sched/download.c, src/sched/download.h,
+	src/sched/history.c, src/sched/history.h, src/sched/location.c,
+	src/sched/location.h, src/sched/sched.c, src/sched/session.c,
+	src/sched/session.h, src/scripting/lua/core.c,
+	src/scripting/lua/core.h, src/scripting/lua/hooks.c,
+	src/scripting/lua/hooks.h, src/viewer/text/view.c,
+	src/viewer/text/view.h, src/viewer/text/vs.c:
 
 	src/document/download.*,location.*,history.*,session.* ->
 	src/sched/.  
@@ -16033,19 +16162,19 @@ Sat Dec  7 20:05:50 2002  Petr Baudis <pasky@ucw.cz>:
 	document/html/parser.c, document/html/renderer.c,
 	document/html/tables.c, globhist/dialogs.c, globhist/globhist.c,
 	intl/charsets.c, intl/lang_defs.h, intl/language.c,
-	intl/language.inc, lowlevel/af_unix.c, lowlevel/connect.c,
-	lowlevel/dns.c, lowlevel/home.c, lowlevel/kbd.c, lowlevel/sched.c,
-	lowlevel/sched.h, lowlevel/select.c, lowlevel/sysname.c,
-	lowlevel/terminal.c, lowlevel/timer.c, lowlevel/ttime.c,
-	osdep/os_dep.c, scripting/lua/core.c, scripting/lua/hooks.c,
-	protocol/file.c, protocol/finger.c, protocol/ftp.c,
-	protocol/mime.c, protocol/url.c, protocol/user.c,
-	protocol/http/auth.c, protocol/http/date.c, protocol/http/header.c,
-	protocol/http/http.c, protocol/http/https.c, ssl/connect.c,
-	ssl/ssl.c, util/base64.c, util/blacklist.c, util/conv.c,
-	util/encoding.c, util/error.c, util/file.c, util/hash.c,
-	util/memdebug.c, util/memlist.c, util/memory.c, util/secsave.c,
-	util/string.c:
+	intl/language.inc, lowlevel/af_unix.c, lowlevel/interlink.c,
+	lowlevel/connect.c, lowlevel/dns.c, lowlevel/home.c,
+	lowlevel/kbd.c, lowlevel/sched.c, lowlevel/sched.h,
+	lowlevel/select.c, lowlevel/sysname.c, lowlevel/terminal.c,
+	lowlevel/timer.c, lowlevel/ttime.c, osdep/os_dep.c,
+	scripting/lua/core.c, scripting/lua/hooks.c, protocol/file.c,
+	protocol/finger.c, protocol/ftp.c, protocol/mime.c, protocol/url.c,
+	protocol/user.c, protocol/http/auth.c, protocol/http/date.c,
+	protocol/http/header.c, protocol/http/http.c,
+	protocol/http/https.c, ssl/connect.c, ssl/ssl.c, util/base64.c,
+	util/blacklist.c, util/conv.c, util/encoding.c, util/error.c,
+	util/file.c, util/hash.c, util/memdebug.c, util/memlist.c,
+	util/memory.c, util/secsave.c, util/string.c:
 
 	links.h -> elinks.h. Patch by Jonas and me.  
 
@@ -16096,8 +16225,8 @@ Sat Dec  7 15:28:35 2002  Petr Baudis <pasky@ucw.cz>:
 	dialogs/mime.c, dialogs/options.c, document/download.c,
 	document/dump.c, document/session.c, document/view.c,
 	document/html/renderer.c, intl/language.c, lowlevel/af_unix.c,
-	lowlevel/terminal.c, protocol/file.c, protocol/mime.c,
-	protocol/user.c, util/secsave.c:
+	lowlevel/interlink.c, lowlevel/terminal.c, protocol/file.c,
+	protocol/mime.c, protocol/user.c, util/secsave.c:
 
 	root_options and cmdline_options are now struct option, not struct
 	list_head *. Make get_opt*() and add_opt*() (and other relevant
@@ -16577,10 +16706,11 @@ Tue Dec  3 19:31:44 2002  Laurent Monin <zas@norz.org>:
 	document/location.c, document/session.c, document/html/parser.c,
 	document/html/tables.c, intl/charsets.c, intl/lang_defs.h,
 	lowlevel/af_unix.c, lowlevel/dns.c, lowlevel/home.c,
-	lowlevel/sched.c, osdep/os_dep.c, protocol/file.c, protocol/ftp.c,
-	protocol/url.c, protocol/http/auth.c, protocol/http/http.c,
-	ssl/connect.c, ssl/ssl.c, util/conv.c, util/file.c, util/hash.c,
-	util/memdebug.c, util/secsave.c:
+	lowlevel/interlink.c, lowlevel/sched.c, osdep/os_dep.c,
+	protocol/file.c, protocol/ftp.c, protocol/url.c,
+	protocol/http/auth.c, protocol/http/http.c, ssl/connect.c,
+	ssl/ssl.c, util/conv.c, util/file.c, util/hash.c, util/memdebug.c,
+	util/secsave.c:
 
 	Ending whitespaces cleanup.  
 
@@ -16665,7 +16795,7 @@ Mon Dec  2 14:43:01 2002  Petr Baudis <pasky@ucw.cz>:
 
 Mon Dec  2 14:41:11 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	Fixed possible memory leak and removed one bad test.  
 
@@ -16683,7 +16813,7 @@ Mon Dec  2 14:30:25 2002  Laurent Monin <zas@norz.org>:
 
 Mon Dec  2 14:25:58 2002  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	mem_free(NULL) tests, memory allocation checks, tidy up.  
 
@@ -18585,7 +18715,8 @@ Sat Oct 12 15:01:46 2002  Petr Baudis <pasky@ucw.cz>:
 
 Sat Oct 12 14:51:12 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: config/options.c, document/session.c, lowlevel/af_unix.c:
+	* src/: config/options.c, document/session.c, lowlevel/af_unix.c,
+	lowlevel/interlink.c:
 
 	Properly documented -base-session (_finally_ description of what it
 	_really_ does ;). Introduced -session-ring option which enables you
@@ -19196,7 +19327,7 @@ Tue Sep 17 14:29:44 2002  Laurent Monin <zas@norz.org>:
 
 Tue Sep 17 14:25:36 2002  Laurent Monin <zas@norz.org>:
 
-	* src/lowlevel/: af_unix.c, connect.c, dns.c:
+	* src/lowlevel/: af_unix.c, interlink.c, connect.c, dns.c:
 
 	Populate with mem_calloc().  
 
@@ -22451,15 +22582,16 @@ Mon Jun 17 07:42:28 2002  Petr Baudis <pasky@ucw.cz>:
 	document/view.c, document/vs.c, document/html/parser.c,
 	document/html/renderer.c, document/html/tables.c, intl/charsets.c,
 	intl/language.c, lowlevel/af_unix.c, lowlevel/connect.c,
-	lowlevel/dns.c, lowlevel/home.c, lowlevel/kbd.c, lowlevel/sched.c,
-	lowlevel/select.c, lowlevel/sysname.c, lowlevel/terminal.c,
-	osdep/os_dep.c, scripting/lua/core.c, protocol/file.c,
-	protocol/finger.c, protocol/ftp.c, protocol/mailto.c,
-	protocol/types.c, protocol/url.c, protocol/http/auth.c,
-	protocol/http/header.c, protocol/http/http.c, ssl/connect.c,
-	util/Makefile.am, util/base64.c, util/blacklist.c, util/encoding.c,
-	util/error.c, util/hash.c, util/memlist.c, util/memory.c,
-	util/memory.h, util/secsave.c, util/string.c:
+	lowlevel/dns.c, lowlevel/home.c, lowlevel/interlink.c,
+	lowlevel/kbd.c, lowlevel/sched.c, lowlevel/select.c,
+	lowlevel/sysname.c, lowlevel/terminal.c, osdep/os_dep.c,
+	scripting/lua/core.c, protocol/file.c, protocol/finger.c,
+	protocol/ftp.c, protocol/mailto.c, protocol/types.c,
+	protocol/url.c, protocol/http/auth.c, protocol/http/header.c,
+	protocol/http/http.c, ssl/connect.c, util/Makefile.am,
+	util/base64.c, util/blacklist.c, util/encoding.c, util/error.c,
+	util/hash.c, util/memlist.c, util/memory.c, util/memory.h,
+	util/secsave.c, util/string.c:
 
 	Moved standart memory allocation functions from links.h to
 	util/memory.*.  
@@ -22494,13 +22626,14 @@ Sun Jun 16 23:13:14 2002  Petr Baudis <pasky@ucw.cz>:
 	document/view.c, document/vs.c, document/html/parser.c,
 	document/html/renderer.c, document/html/tables.c, intl/charsets.c,
 	intl/language.c, lowlevel/af_unix.c, lowlevel/home.c,
-	lowlevel/kbd.c, lowlevel/sched.c, lowlevel/sysname.c,
-	lowlevel/terminal.c, osdep/os_dep.c, protocol/file.c,
-	protocol/finger.c, protocol/ftp.c, protocol/mailto.c,
-	protocol/types.c, scripting/lua/core.c, scripting/lua/hooks.c,
-	protocol/url.c, protocol/http/auth.c, protocol/http/header.c,
-	protocol/http/http.c, util/Makefile.am, util/conv.c, util/error.c,
-	util/secsave.c, util/string.c, util/string.h:
+	lowlevel/interlink.c, lowlevel/kbd.c, lowlevel/sched.c,
+	lowlevel/sysname.c, lowlevel/terminal.c, osdep/os_dep.c,
+	protocol/file.c, protocol/finger.c, protocol/ftp.c,
+	protocol/mailto.c, protocol/types.c, scripting/lua/core.c,
+	scripting/lua/hooks.c, protocol/url.c, protocol/http/auth.c,
+	protocol/http/header.c, protocol/http/http.c, util/Makefile.am,
+	util/conv.c, util/error.c, util/secsave.c, util/string.c,
+	util/string.h:
 
 	Moved string manipulation functions from links.h to util/string.*.
 	Compilation fixes related to move of some conversion functions.  
@@ -23174,7 +23307,8 @@ Sun May 19 19:34:51 2002  Petr Baudis <pasky@ucw.cz>:
 	src/config/options.c, src/config/options.h, src/config/urlhist.c,
 	src/cookies/cookies.c, src/document/globhist.c,
 	src/lowlevel/af_unix.c, src/lowlevel/home.c, src/lowlevel/home.h,
-	src/scripting/lua/core.c, src/osdep/os_dep.c, src/util/secsave.c:
+	src/lowlevel/interlink.c, src/scripting/lua/core.c,
+	src/osdep/os_dep.c, src/util/secsave.c:
 
 	Almost all remaing occurences of "links" changed to "elinks".
 	Produced binary is named "elinks" now, global config directory is
@@ -23434,7 +23568,7 @@ Fri May 17 20:04:55 2002  Petr Baudis <pasky@ucw.cz>:
 
 Fri May 17 19:12:48 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	Oops. We forgot to htons() LINKS_PORT. Merged from links-current.  
 
@@ -23908,10 +24042,11 @@ Wed May  8 13:55:00 2002  Petr Baudis <pasky@ucw.cz>:
 	document/html/renderer.h, document/html/tables.c, intl/charsets.c,
 	intl/charsets.h, intl/language.c, intl/language.h,
 	lowlevel/af_unix.c, lowlevel/connect.c, lowlevel/connect.h,
-	lowlevel/dns.c, lowlevel/home.c, lowlevel/kbd.c, lowlevel/sched.c,
-	lowlevel/sched.h, lowlevel/select.c, lowlevel/select.h,
-	lowlevel/sysname.c, lowlevel/terminal.c, lowlevel/terminal.h,
-	lowlevel/ttime.c, osdep/os_dep.c, protocol/file.c, protocol/file.h,
+	lowlevel/dns.c, lowlevel/home.c, lowlevel/interlink.c,
+	lowlevel/kbd.c, lowlevel/sched.c, lowlevel/sched.h,
+	lowlevel/select.c, lowlevel/select.h, lowlevel/sysname.c,
+	lowlevel/terminal.c, lowlevel/terminal.h, lowlevel/ttime.c,
+	osdep/os_dep.c, protocol/file.c, protocol/file.h,
 	protocol/finger.c, protocol/finger.h, protocol/ftp.c,
 	protocol/ftp.h, protocol/mailto.c, protocol/mailto.h,
 	protocol/types.c, protocol/types.h, protocol/url.c, protocol/url.h,
@@ -23984,8 +24119,8 @@ Mon May  6 14:12:12 2002  Petr Baudis <pasky@ucw.cz>:
 	* src/: main.c, config/conf.c, config/options.c, cookies/cookies.c,
 	document/download.c, document/dump.c, document/view.c,
 	lowlevel/af_unix.c, lowlevel/connect.c, lowlevel/connect.h,
-	lowlevel/dns.c, lowlevel/home.c, osdep/os_dep.c, protocol/file.c,
-	protocol/url.c, util/secsave.c:
+	lowlevel/dns.c, lowlevel/home.c, lowlevel/interlink.c,
+	osdep/os_dep.c, protocol/file.c, protocol/url.c, util/secsave.c:
 
 	OS/2 compilation fixes by Cris. IIRC only #includes swapping.  
 
@@ -24367,7 +24502,8 @@ Sun Apr 28 11:48:25 2002  Petr Baudis <pasky@ucw.cz>:
 	config/options.c, config/options.h, cookies/cookies.c,
 	document/globhist.c, document/session.c, lowlevel/Makefile.am,
 	lowlevel/af_unix.c, lowlevel/home.c, lowlevel/home.h,
-	lowlevel/sysname.c, lowlevel/sysname.h, protocol/http/http.c:
+	lowlevel/interlink.c, lowlevel/sysname.c, lowlevel/sysname.h,
+	protocol/http/http.c:
 
 	Moved home and sysname detection from config/conf.* and
 	config/options.* to lowlevel/home.* and lowlevel/sysname.*.  
@@ -24458,9 +24594,9 @@ Sat Apr 27 13:15:51 2002  Petr Baudis <pasky@ucw.cz>:
 	document/download.c, document/dump.c, document/globhist.c,
 	document/history.c, document/session.c, document/view.c,
 	document/html/parser.c, document/html/renderer.c,
-	lowlevel/af_unix.c, lowlevel/dns.c, lowlevel/sched.c,
-	protocol/file.c, protocol/ftp.c, protocol/types.c,
-	protocol/http/http.c, util/secsave.c:
+	lowlevel/af_unix.c, lowlevel/dns.c, lowlevel/interlink.c,
+	lowlevel/sched.c, protocol/file.c, protocol/ftp.c,
+	protocol/types.c, protocol/http/http.c, util/secsave.c:
 
 	Splitted config/default.* to config/conf.* (takes care about config
 	file and command line proccessing) and config/options.* (takes care
@@ -25162,7 +25298,7 @@ Sat Apr  6 17:08:11 2002  Petr Baudis <pasky@ucw.cz>:
 
 Sat Apr  6 16:57:06 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lowlevel/: af_unix.c, connect.c:
+	* src/lowlevel/: af_unix.c, connect.c, interlink.c:
 
 	Zero all sockaddr structures before messing with them. Also some
 	various fixes in af_unix.c, probably causing some OS/2 problems (by
@@ -25170,7 +25306,8 @@ Sat Apr  6 16:57:06 2002  Petr Baudis <pasky@ucw.cz>:
 
 Sat Apr  6 16:51:24 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: lowlevel/af_unix.c, osdep/os_dep.c, osdep/os_dep.h:
+	* src/: lowlevel/af_unix.c, lowlevel/interlink.c, osdep/os_dep.c,
+	osdep/os_dep.h:
 
 	Increase priority on OS/2 (by mikulas, from 0.97pre9).  
 
@@ -25756,19 +25893,19 @@ Tue Mar 26 17:37:31 2002  Petr Baudis <pasky@ucw.cz>:
 
 Tue Mar 26 17:21:14 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	another BSD compilation fix, take #3 
 
 Tue Mar 26 17:19:08 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	another BSD compilation fix, take #2 
 
 Tue Mar 26 17:16:43 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lowlevel/af_unix.c:
+	* src/lowlevel/: af_unix.c, interlink.c:
 
 	another BSD compilation fix 
 
@@ -26316,10 +26453,11 @@ Sun Mar 17 17:27:48 2002  Petr Baudis <pasky@ucw.cz>:
 	document/html/parser.h, document/html/renderer.c,
 	document/html/tables.c, intl/charsets.c, intl/lang_defs.h,
 	lowlevel/af_unix.c, lowlevel/connect.c, lowlevel/dns.c,
-	lowlevel/kbd.c, lowlevel/sched.c, lowlevel/select.c,
-	lowlevel/terminal.c, lowlevel/terminal.h, osdep/os_dep.c,
-	osdep/win32.c, protocol/file.c, protocol/ftp.c, protocol/http.c,
-	protocol/mailto.c, protocol/types.c, protocol/url.c, util/error.c:
+	lowlevel/interlink.c, lowlevel/kbd.c, lowlevel/sched.c,
+	lowlevel/select.c, lowlevel/terminal.c, lowlevel/terminal.h,
+	osdep/os_dep.c, osdep/win32.c, protocol/file.c, protocol/ftp.c,
+	protocol/http.c, protocol/mailto.c, protocol/types.c,
+	protocol/url.c, util/error.c:
 
 	remove trailing spaces/tabs and spaces before semicolons; simple
 	script by Zas :) 
@@ -26414,8 +26552,9 @@ Sun Mar 17 13:54:08 2002  Petr Baudis <pasky@ucw.cz>:
 	src/document/html/renderer.c, src/document/html/renderer.h,
 	src/document/html/tables.c, src/document/html/tables.h,
 	src/lowlevel/af_unix.c, src/lowlevel/connect.c,
-	src/lowlevel/connect.h, src/lowlevel/dns.c, src/lowlevel/kbd.c,
-	src/lowlevel/sched.c, src/lowlevel/sched.h, src/lowlevel/select.c,
+	src/lowlevel/connect.h, src/lowlevel/dns.c,
+	src/lowlevel/interlink.c, src/lowlevel/kbd.c, src/lowlevel/sched.c,
+	src/lowlevel/sched.h, src/lowlevel/select.c,
 	src/lowlevel/terminal.c, src/lowlevel/terminal.h,
 	src/osdep/os_dep.c, src/protocol/file.c, src/protocol/file.h,
 	src/protocol/finger.c, src/protocol/finger.h, src/protocol/ftp.c,
@@ -26506,7 +26645,8 @@ Sun Mar 17 11:28:53 2002  Petr Baudis <pasky@ucw.cz>:
 	src/document/html/tables.h, src/lowlevel/Makefile.am,
 	src/lowlevel/af_unix.c, src/lowlevel/af_unix.h,
 	src/lowlevel/connect.c, src/lowlevel/connect.h, src/lowlevel/dns.c,
-	src/lowlevel/dns.h, src/lowlevel/kbd.c, src/lowlevel/kbd.h,
+	src/lowlevel/dns.h, src/lowlevel/interlink.c,
+	src/lowlevel/interlink.h, src/lowlevel/kbd.c, src/lowlevel/kbd.h,
 	src/lowlevel/sched.c, src/lowlevel/sched.h, src/lowlevel/select.c,
 	src/lowlevel/select.h, src/lowlevel/terminal.c,
 	src/lowlevel/terminal.h, src/osdep/Makefile.am, src/osdep/beos.c,

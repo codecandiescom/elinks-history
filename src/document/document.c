@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.58 2004/04/03 13:06:13 jonas Exp $ */
+/* $Id: document.c,v 1.59 2004/04/03 13:17:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,7 +97,7 @@ done_link_members(struct link *link)
 void
 done_document(struct document *document)
 {
-	struct cache_entry *ce;
+	struct cache_entry *cache;
 	struct form_control *fc;
 	int pos;
 
@@ -107,11 +107,11 @@ done_document(struct document *document)
 	assertm(!is_object_used(document), "Attempt to free locked formatted data.");
 	if_assert_failed return;
 
-	ce = find_in_cache(document->uri);
-	if (!ce)
+	cache = find_in_cache(document->uri);
+	if (!cache)
 		INTERNAL("no cache entry for document");
 	else
-		object_unlock(ce);
+		object_unlock(cache);
 
 	if (document->uri) done_uri(document->uri);
 	if (document->title) mem_free(document->title);
@@ -229,15 +229,15 @@ shrink_format_cache(int whole)
 #endif
 
 	foreach (document, format_cache) {
-		struct cache_entry *ce;
+		struct cache_entry *cache;
 
 		if (is_object_used(document)) continue;
 
 		/* Destroy obsolete renderer documents which are already
 		 * out-of-sync. */
-		ce = find_in_cache(document->uri);
-		assertm(ce, "cached formatted document has no cache entry");
-		if (ce->id_tag == document->id_tag) continue;
+		cache = find_in_cache(document->uri);
+		assertm(cache, "cached formatted document has no cache entry");
+		if (cache->id_tag == document->id_tag) continue;
 
 		document = document->prev;
 		done_document(document->next);

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.129 2004/04/03 13:08:46 jonas Exp $ */
+/* $Id: cache.c,v 1.130 2004/04/03 13:10:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,12 +59,12 @@ do { \
 
 
 static int
-is_entry_used(struct cache_entry *ce)
+is_entry_used(struct cache_entry *cache)
 {
 	struct connection *conn;
 
 	foreach (conn, queue)
-		if (conn->cache == ce)
+		if (conn->cache == cache)
 			return 1;
 
 	return 0;
@@ -75,19 +75,19 @@ long
 cache_info(int type)
 {
 	int i = 0;
-	struct cache_entry *ce;
+	struct cache_entry *cache;
 
 	switch (type) {
 		case INFO_BYTES:
 			return cache_size;
 		case INFO_FILES:
-			foreach (ce, cache_entries) i++;
+			foreach (cache, cache_entries) i++;
 			return i;
 		case INFO_LOCKED:
-			foreach (ce, cache_entries) i += is_object_used(ce);
+			foreach (cache, cache_entries) i += is_object_used(cache);
 			return i;
 		case INFO_LOADING:
-			foreach (ce, cache_entries) i += is_entry_used(ce);
+			foreach (cache, cache_entries) i += is_entry_used(cache);
 			return i;
 		case INFO_LIST:
 			return (long) &cache_entries;
@@ -98,7 +98,7 @@ cache_info(int type)
 struct cache_entry *
 find_in_cache(struct uri *uri)
 {
-	struct cache_entry *ce;
+	struct cache_entry *cache;
 	struct cache_entry *found = NULL;
 	struct uri *proxy_uri = NULL;
 
@@ -115,14 +115,14 @@ find_in_cache(struct uri *uri)
 		if (!proxy_uri) return NULL;
 	}
 
-	foreach (ce, cache_entries) {
-		if (!ce->valid || ce->uri != uri) continue;
+	foreach (cache, cache_entries) {
+		if (!cache->valid || cache->uri != uri) continue;
 
 		/* Move it on the top of the list. */
-		del_from_list(ce);
-		add_to_list(cache_entries, ce);
+		del_from_list(cache);
+		add_to_list(cache_entries, cache);
 
-		found = ce;
+		found = cache;
 		break;
 	}
 
@@ -134,40 +134,40 @@ find_in_cache(struct uri *uri)
 struct cache_entry *
 get_cache_entry(struct uri *uri)
 {
-	struct cache_entry *ce = find_in_cache(uri);
+	struct cache_entry *cache = find_in_cache(uri);
 
-	if (ce) return ce;
+	if (cache) return cache;
 
 	shrink_memory(0);
 
-	ce = mem_calloc(1, sizeof(struct cache_entry));
-	if (!ce) return NULL;
+	cache = mem_calloc(1, sizeof(struct cache_entry));
+	if (!cache) return NULL;
 
-	ce->uri = get_proxied_uri(uri);
-	if (!ce->uri) {
-		mem_free(ce);
+	cache->uri = get_proxied_uri(uri);
+	if (!cache->uri) {
+		mem_free(cache);
 		return NULL;
 	}
 
-	ce->incomplete = 1;
-	ce->valid = 1;
-	init_list(ce->frag);
-	ce->id_tag = id_tag_counter++;
-	object_nolock(ce); /* Debugging purpose. */
+	cache->incomplete = 1;
+	cache->valid = 1;
+	init_list(cache->frag);
+	cache->id_tag = id_tag_counter++;
+	object_nolock(cache); /* Debugging purpose. */
 
-	add_to_list(cache_entries, ce);
+	add_to_list(cache_entries, cache);
 
-	ce->box_item = add_listbox_item(&cache_browser, struri(ce->uri), ce);
+	cache->box_item = add_listbox_item(&cache_browser, struri(cache->uri), cache);
 
-	return ce;
+	return cache;
 }
 
 static inline void
-enlarge_entry(struct cache_entry *ce, int size)
+enlarge_entry(struct cache_entry *cache, int size)
 {
-	ce->data_size += size;
-	assertm(ce->data_size >= 0, "cache entry data_size underflow: %ld", ce->data_size);
-	if_assert_failed { ce->data_size = 0; }
+	cache->data_size += size;
+	assertm(cache->data_size >= 0, "cache entry data_size underflow: %ld", cache->data_size);
+	if_assert_failed { cache->data_size = 0; }
 
 	cache_size += size;
 	assertm(cache_size >= 0, "cache_size underflow: %ld", cache_size);
@@ -184,7 +184,7 @@ enlarge_entry(struct cache_entry *ce, int size)
 /* Note that this function is maybe overcommented, but I'm certainly not
  * unhappy from that. */
 int
-add_fragment(struct cache_entry *ce, int offset,
+add_fragment(struct cache_entry *cache, int offset,
 	     unsigned char *data, int length)
 {
 	struct fragment *f, *nf;
@@ -195,15 +195,15 @@ add_fragment(struct cache_entry *ce, int offset,
 	if (!length) return 0;
 
 	end_offset = offset + length;
-	if (ce->length < end_offset)
-		ce->length = end_offset;
+	if (cache->length < end_offset)
+		cache->length = end_offset;
 
 	/* id_tag marks each entry, and change each time it's modified,
 	 * used in HTML renderer. */
-	ce->id_tag = id_tag_counter++;
+	cache->id_tag = id_tag_counter++;
 
 	/* Possibly insert the new data in the middle of existing fragment. */
-	foreach (f, ce->frag) {
+	foreach (f, cache->frag) {
 		f_end_offset = f->offset + f->length;
 
 		/* No intersection? */
@@ -224,7 +224,7 @@ add_fragment(struct cache_entry *ce, int offset,
 			if (end_offset - f->offset <= f->real_length) {
 				/* We fit here, so let's enlarge it by delta of
 				 * old and new end.. */
-				enlarge_entry(ce, end_offset - f_end_offset);
+				enlarge_entry(cache, end_offset - f_end_offset);
 				/* ..and length is now total length. */
 				f->length = end_offset - f->offset;
 			} else {
@@ -259,14 +259,14 @@ add_fragment(struct cache_entry *ce, int offset,
 	f = nf;
 
 	ret = 1;
-	enlarge_entry(ce, length);
+	enlarge_entry(cache, length);
 
 remove_overlaps:
 	/* Contatenate overlapping fragments. */
 
 	f_end_offset = f->offset + f->length;
 	/* Iterate thru all fragments we still overlap to. */
-	while ((void *) f->next != &ce->frag
+	while ((void *) f->next != &cache->frag
 		&& f_end_offset > f->next->offset) {
 
 		end_offset = f->next->offset + f->next->length;
@@ -291,7 +291,7 @@ remove_overlaps:
 			       f->next->data + f_end_offset - f->next->offset,
 			       end_offset - f_end_offset);
 
-			enlarge_entry(ce, end_offset - f_end_offset);
+			enlarge_entry(cache, end_offset - f_end_offset);
 			f->length = f->real_length = end_offset - f->offset;
 
 ff:;
@@ -306,29 +306,29 @@ ff:;
 
 		/* Remove the fragment, it influences our new one! */
 		nf = f->next;
-		enlarge_entry(ce, -nf->length);
+		enlarge_entry(cache, -nf->length);
 		del_from_list(nf);
 		mem_free(nf);
 	}
 
-	if (trunc) truncate_entry(ce, offset + length, 0);
+	if (trunc) truncate_entry(cache, offset + length, 0);
 
-	dump_frags(ce, "add_fragment");
+	dump_frags(cache, "add_fragment");
 
 	return ret;
 }
 
 void
-defrag_entry(struct cache_entry *ce)
+defrag_entry(struct cache_entry *cache)
 {
 	struct fragment *first_frag, *adj_frag, *frag, *new_frag;
 	int new_frag_len;
 
-	if (list_empty(ce->frag)) return;
-	first_frag = ce->frag.next;
+	if (list_empty(cache->frag)) return;
+	first_frag = cache->frag.next;
 	if (first_frag->offset) return;
 
-	for (adj_frag = first_frag->next; adj_frag != (void *) &ce->frag;
+	for (adj_frag = first_frag->next; adj_frag != (void *) &cache->frag;
 	     adj_frag = adj_frag->next) {
 		long overlay = adj_frag->offset
 				- (adj_frag->prev->offset
@@ -367,41 +367,41 @@ defrag_entry(struct cache_entry *ce)
 		mem_free(tmp);
 	}
 
-	add_to_list(ce->frag, new_frag);
+	add_to_list(cache->frag, new_frag);
 
-	dump_frags(ce, "defrag_entry");
+	dump_frags(cache, "defrag_entry");
 }
 
 void
-truncate_entry(struct cache_entry *ce, int off, int final)
+truncate_entry(struct cache_entry *cache, int off, int final)
 {
 	struct fragment *f;
 
-	if (ce->length > off) {
-		ce->length = off;
-		ce->incomplete = 1;
+	if (cache->length > off) {
+		cache->length = off;
+		cache->incomplete = 1;
 	}
 
-	foreach (f, ce->frag) {
+	foreach (f, cache->frag) {
 		long size = off - f->offset;
 
 		if (size <= 0) {
 
 del:
-			while ((void *)f != &ce->frag) {
+			while ((void *)f != &cache->frag) {
 				struct fragment *tmp = f->next;
 
-				enlarge_entry(ce, -f->length);
+				enlarge_entry(cache, -f->length);
 				del_from_list(f);
 				mem_free(f);
 				f = tmp;
 			}
-			dump_frags(ce, "truncate_entry");
+			dump_frags(cache, "truncate_entry");
 			return;
 		}
 
 		if (f->length > size) {
-			enlarge_entry(ce, -(f->length - size));
+			enlarge_entry(cache, -(f->length - size));
 			f->length = size;
 
 			if (final) {
@@ -422,22 +422,22 @@ del:
 }
 
 void
-free_entry_to(struct cache_entry *ce, int off)
+free_entry_to(struct cache_entry *cache, int off)
 {
 	struct fragment *f;
 
-	foreach (f, ce->frag) {
+	foreach (f, cache->frag) {
 		if (f->offset + f->length <= off) {
 			struct fragment *tmp = f;
 
-			enlarge_entry(ce, -f->length);
+			enlarge_entry(cache, -f->length);
 			f = f->prev;
 			del_from_list(tmp);
 			mem_free(tmp);
 		} else if (f->offset < off) {
 			long size = off - f->offset;
 
-			enlarge_entry(ce, -size);
+			enlarge_entry(cache, -size);
 			f->length -= size;
 			memmove(f->data, f->data + size, f->length);
 			f->offset = off;
@@ -446,45 +446,45 @@ free_entry_to(struct cache_entry *ce, int off)
 }
 
 void
-delete_entry_content(struct cache_entry *ce)
+delete_entry_content(struct cache_entry *cache)
 {
-	enlarge_entry(ce, -ce->data_size);
+	enlarge_entry(cache, -cache->data_size);
 
-	free_list(ce->frag);
-	ce->id_tag = id_tag_counter++;
-	ce->length = 0;
-	ce->incomplete = 1;
+	free_list(cache->frag);
+	cache->id_tag = id_tag_counter++;
+	cache->length = 0;
+	cache->incomplete = 1;
 
-	if (ce->last_modified) {
-		mem_free(ce->last_modified);
-		ce->last_modified = NULL;
+	if (cache->last_modified) {
+		mem_free(cache->last_modified);
+		cache->last_modified = NULL;
 	}
 
-	if (ce->etag) {
-		mem_free(ce->etag);
-		ce->etag = NULL;
+	if (cache->etag) {
+		mem_free(cache->etag);
+		cache->etag = NULL;
 	}
 }
 
 void
-delete_cache_entry(struct cache_entry *ce)
+delete_cache_entry(struct cache_entry *cache)
 {
-	assertm(!is_object_used(ce), "deleting locked cache entry");
-	assertm(!is_entry_used(ce), "deleting loading cache entry");
+	assertm(!is_object_used(cache), "deleting locked cache entry");
+	assertm(!is_entry_used(cache), "deleting loading cache entry");
 
-	delete_entry_content(ce);
-	del_from_list(ce);
+	delete_entry_content(cache);
+	del_from_list(cache);
 
-	if (ce->box_item) done_listbox_item(&cache_browser, ce->box_item);
-	if (ce->uri) done_uri(ce->uri);
-	if (ce->head) mem_free(ce->head);
-	if (ce->last_modified) mem_free(ce->last_modified);
-	if (ce->redirect) done_uri(ce->redirect);
-	if (ce->ssl_info) mem_free(ce->ssl_info);
-	if (ce->encoding_info) mem_free(ce->encoding_info);
-	if (ce->etag) mem_free(ce->etag);
+	if (cache->box_item) done_listbox_item(&cache_browser, cache->box_item);
+	if (cache->uri) done_uri(cache->uri);
+	if (cache->head) mem_free(cache->head);
+	if (cache->last_modified) mem_free(cache->last_modified);
+	if (cache->redirect) done_uri(cache->redirect);
+	if (cache->ssl_info) mem_free(cache->ssl_info);
+	if (cache->encoding_info) mem_free(cache->encoding_info);
+	if (cache->etag) mem_free(cache->etag);
 
-	mem_free(ce);
+	mem_free(cache);
 }
 
 
@@ -531,7 +531,7 @@ redirect_cache(struct cache_entry *cache, unsigned char *location,
 void
 garbage_collection(int whole)
 {
-	struct cache_entry *ce;
+	struct cache_entry *cache;
 	/* We recompute cache_size when scanning cache entries, to ensure
 	 * consistency. */
 	long old_cache_size = 0;
@@ -567,13 +567,13 @@ garbage_collection(int whole)
 	 * will work only with the unused entries from then on. Also ensure
 	 * that @cache_size is in sync. */
 
-	foreach (ce, cache_entries) {
-		old_cache_size += ce->data_size;
+	foreach (cache, cache_entries) {
+		old_cache_size += cache->data_size;
 
-		if (!is_object_used(ce) && !is_entry_used(ce))
+		if (!is_object_used(cache) && !is_entry_used(cache))
 			continue;
 
-		new_cache_size -= ce->data_size;
+		new_cache_size -= cache->data_size;
 
 		assertm(new_cache_size >= 0,
 				"cache_size (%ld) underflow: %ld",
@@ -593,23 +593,23 @@ garbage_collection(int whole)
 	 * Mark potential targets for destruction, from the oldest to the
 	 * newest. */
 
-	foreachback (ce, cache_entries) {
+	foreachback (cache, cache_entries) {
 		/* We would have shrinked enough already? */
 		if (!whole && new_cache_size <= gc_cache_size)
 			goto shrinked_enough;
 
 		/* Skip used cache entries. */
-		if (is_object_used(ce) || is_entry_used(ce)) {
+		if (is_object_used(cache) || is_entry_used(cache)) {
 #ifdef DEBUG_CACHE
 			obstacle_entry = 1;
 #endif
-			ce->gc_target = 0;
+			cache->gc_target = 0;
 			continue;
 		}
 
 		/* Mark me for destruction, sir. */
-		ce->gc_target = 1;
-		new_cache_size -= ce->data_size;
+		cache->gc_target = 1;
+		new_cache_size -= cache->data_size;
 
 		assertm(new_cache_size >= 0,
 			"cache_size (%ld) underflow: %ld",
@@ -627,11 +627,11 @@ shrinked_enough:
 
 
 	/* Now turn around and start walking in the opposite direction. */
-	ce = ce->next;
+	cache = cache->next;
 
 	/* Something is strange when we decided all is ok before dropping any
 	 * cache entry. */
-	if ((void *) ce == &cache_entries) return;
+	if ((void *) cache == &cache_entries) return;
 
 
 	if (!whole) {
@@ -647,7 +647,7 @@ shrinked_enough:
 		 * be enough to free the huge entry. This actually fixes that
 		 * situation. */
 
-		for (entry = ce; (void *) entry != &cache_entries; entry = entry->next) {
+		for (entry = cache; (void *) entry != &cache_entries; entry = entry->next) {
 			long newer_cache_size = new_cache_size + entry->data_size;
 
 			if (newer_cache_size > gc_cache_size)
@@ -662,10 +662,10 @@ shrinked_enough:
 	/* Scanning cache, pass #4:
 	 * Destroy the marked entries. So sad, but that's life, bro'. */
 
-	for (; (void *) ce != &cache_entries; ) {
-		ce = ce->next;
-		if (ce->prev->gc_target)
-			delete_cache_entry(ce->prev);
+	for (; (void *) cache != &cache_entries; ) {
+		cache = cache->next;
+		if (cache->prev->gc_target)
+			delete_cache_entry(cache->prev);
 	}
 
 

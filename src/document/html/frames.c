@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.61 2004/04/03 02:24:04 jonas Exp $ */
+/* $Id: frames.c,v 1.62 2004/04/03 13:13:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,7 +161,7 @@ static struct document_view *
 format_frame(struct session *ses, unsigned char *name,
 	     struct document_options *o, int depth)
 {
-	struct cache_entry *ce;
+	struct cache_entry *cache;
 	struct view_state *vs;
 	struct document_view *doc_view;
 	struct frame *frame;
@@ -175,14 +175,14 @@ repeat:
 	if (!frame) return NULL;
 
 	vs = &frame->vs;
-	ce = find_in_cache(vs->uri);
-	if (!ce) return NULL;
+	cache = find_in_cache(vs->uri);
+	if (!cache) return NULL;
 	plain = o->plain;
 	if (vs->plain != -1) o->plain = vs->plain;
 
-	if (ce->redirect && frame->redirect_cnt < MAX_REDIRECTS) {
+	if (cache->redirect && frame->redirect_cnt < MAX_REDIRECTS) {
 		frame->redirect_cnt++;
-		ses_change_frame_uri(ses, name, ce->redirect);
+		ses_change_frame_uri(ses, name, cache->redirect);
 		o->plain = plain;
 		goto repeat;
 	}

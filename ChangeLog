@@ -1,3 +1,74 @@
+Fri Dec 27 22:37:09 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/parser.c:
+
+	It's HPT, not HTP. Look, I already forgot what the HPT means... HTML
+	Parser <Something>, I suppose ;)).  
+
+Fri Dec 27 22:32:33 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/parser.c:
+
+	Activate on-< switch to HTP_TAG in the HTP_PLAIN parser.  
+
+Fri Dec 27 22:31:51 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/parser.c:
+
+	html_state_insert -> html_state_push, html_state_remove ->
+	html_state_pop 
+
+Fri Dec 27 22:29:30 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/parser.c:
+
+	spawn_syntree_node() introduced (and duplicate code scorched). Fixed
+	the data union, updated comments, written the parser states scheme.
+	And introduced HPT_TAG and appropriate parser (handles the start and
+	the end of the tag and switches states properly).  
+
+Fri Dec 27 17:52:35 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/parser.c:
+
+	The HTML parser state now forms a stack, where states are being
+	inserted and removed. Much better now, it is.  
+
+Fri Dec 27 14:59:56 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/: parser.c, parser.h:
+
+	Very rough bones of the HTML parser - just a draft of the state
+	machine and plain+entity parsing. And I'm going to rework it right
+	after the commit ;-).  
+
+Fri Dec 27 02:23:41 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/syntree.h:
+
+	Merged name,namelen and src,srclen to str,strlen and forked out src.
+	Now it all looks much saner.  
+
+Fri Dec 27 01:19:06 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/: parser.c, parser.h, syntree.c, syntree.h:
+
+	init_syntree_node() now doesn't take the root as a parameter
+	anymore. Comment improvements.  
+
+Fri Dec 27 00:01:20 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/: parser.c, parser.h:
+
+	Introduced struct parser_state, which is now passed to
+	elusive_parser() instead of the root node itself.  
+
+Thu Dec 26 23:58:27 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/: syntree.c, syntree.h:
+
+	Introduced init_syntree_node() routine.  
+
 Thu Dec 26 21:47:08 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: main.c, dialogs/mime.c, lowlevel/kbd.c, lowlevel/sched.c,

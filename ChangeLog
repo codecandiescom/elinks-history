@@ -1,3 +1,203 @@
+Tue Sep 28 20:08:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/frames.h:
+
+	Disclaimer near frameset_desc.box.  
+
+Tue Sep 28 19:22:13 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/marks.c:
+
+	Preserve vs->doc_view over goto_mark().  
+
+Tue Sep 28 19:20:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/vs.c:
+
+	Disconnect doc_view in destroy_vs().  
+
+Tue Sep 28 17:56:45 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/task.c:
+
+	When walking inside of a frame, break the bind between vs and
+	vs->doc_view when replacing vs->uri. This should fix the assertion
+	failures connected with frames.  
+
+Tue Sep 28 17:53:40 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Fixed broken usage of formatted cache by passing no_cache to
+	draw_formatted(), spotted by Jonas.  
+
+Tue Sep 28 16:55:54 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/task.c:
+
+	ses_forward()'s @loaded_in_frame description attempt.  
+
+Tue Sep 28 16:46:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/task.c:
+
+	Try to slightly simplify ses_forward(). Dancing in the minefield...  
+
+Tue Sep 28 16:34:14 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/task.c:
+
+	Fixed two errrorneous end_load() -> doc_loading_callback().  
+
+Tue Sep 28 16:33:33 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.h:
+
+	doc_end_load()-> doc_loading_callback() 
+
+Tue Sep 28 16:28:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/connection.h:
+
+	Fixed download.callback description, I got it wrong.  
+
+Tue Sep 28 16:25:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/connection.c:
+
+	sched_connection_info() -> notify_connection_callbacks() 
+
+Tue Sep 28 16:21:48 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/connection.c, sched/connection.h, sched/download.c,
+	sched/session.c, sched/task.c, viewer/dump/dump.c:
+
+	download.end -> download.callback 
+
+Tue Sep 28 16:13:48 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/dump/dump.c:
+
+	dump_end() -> dump_loading_callback() 
+
+Tue Sep 28 16:12:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: download.c, session.c, task.c, task.h:
+
+	*end_load() -> *loading_callback(), removing one of the
+	HYPER-misleading function names. It is called basically each time
+	something interesting happens on @stat.  
+
+Tue Sep 28 14:13:40 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Moved the commented out part of add_fragments() to a debug check in
+	the case of list_empty(*queued_snippets) which we now handle - it
+	can happen when we already visited that view_state and processed the
+	fragments.  
+
+Tue Sep 28 14:02:58 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	@doc_current now gets initialized to the first @doc_snippets item
+	like a nice good iterator. We could survive a page load without a
+	crash right away now again, maybe? 
+
+Tue Sep 28 14:00:49 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Oh. So pretend it's gradual rerendering only when you are gradual
+	rerendering (that's in display_timer()).  
+
+Tue Sep 28 13:56:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Simplification: peek to document_options at gradual_rerendering
+	directly thru the @options pointer.  
+
+Tue Sep 28 13:55:13 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: options.h, renderer.c:
+
+	Process onload snippets only when NOT just gradually rerendering the
+	document - thus only on final loads. This was probably inevitable
+	and I knew it subconciously anyway, but now I have few real reasons
+	why I must do this - they're described in an added comment. There
+	are still some historical relicts around but I'm not gonna break it
+	all up even more now. This should cure all the non-frames-related
+	assertion failures.  
+
+Tue Sep 28 13:30:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Swap two assert()ions in add_snippets().  
+
+Tue Sep 28 12:49:45 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Fix an assertion failure triggered when adding first a single
+	snippet and then some more later - it was a kinda off-by-one error,
+	skipping the last entry in the queued_snippets before adding new
+	stuff.  
+
+Tue Sep 28 12:18:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	http_send_header(): Use @talking_to_proxy to better fit into the
+	other code.  
+
+Tue Sep 28 12:17:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	URI_PROXY should no longer add post data. Should (finally) bring IDN
+	support to connections through proxies.  
+
+Tue Sep 28 11:57:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: proxy.c, http/http.c:
+
+	Make IDN work for through proxies by moving the IDN string munging
+	from the time the proxy URI is generated to when it is added to the
+	HTTP request send to the proxy. Now all IDN is only done at the
+	lowest levels keeping state data free from IDN strings. The old
+	behaviour actually caused assertion failures because URIs in the
+	cache could be either IDN encoded or not. (bug 495) 
+
+Tue Sep 28 10:27:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* m4/features.m4:
+
+	Fix the feature listing to handle () when appending dots.  
+
+Tue Sep 28 08:04:59 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Tue Sep 28 07:35:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/renderer.c:
+
+	Don't add snippets and fail the strlcmp() assertion when ecmascript
+	is enabled.  
+
+Tue Sep 28 07:16:11 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/css/parser.c:
+
+	get_next_scanner_token() can return NULL, so just break the loop in
+	that case. It prevents a segfault when accessing clamav.net. Patch
+	by Jonas and me.  
+
 Mon Sep 27 18:15:42 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: setup.h, dialogs/menu.c:

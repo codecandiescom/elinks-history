@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.91 2003/06/24 22:43:39 jonas Exp $ */
+/* $Id: file.c,v 1.92 2003/06/24 23:00:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,35 +59,6 @@ struct file_data {
 
 /* Directory listing */
 
-#ifdef FS_UNIX_RIGHTS
-static inline void
-setrwx(int m, unsigned char *p)
-{
-	if (m & S_IRUSR) p[0] = 'r';
-	if (m & S_IWUSR) p[1] = 'w';
-	if (m & S_IXUSR) p[2] = 'x';
-}
-
-
-static inline void
-setst(int m, unsigned char *p)
-{
-#ifdef S_ISUID
-	if (m & S_ISUID)
-		p[2] = (m & S_IXUSR) ? 's' : 'S';
-#endif
-#ifdef S_ISGID
-	if (m & S_ISGID)
-		p[5] = (m & S_IXGRP) ? 's' : 'S';
-#endif
-#ifdef S_ISVTX
-	if (m & S_ISVTX)
-		p[8] = (m & S_IXOTH) ? 't' : 'T';
-#endif
-}
-#endif
-
-
 static void
 stat_type(unsigned char **p, int *l, struct stat *stp)
 {
@@ -118,6 +89,7 @@ stat_type(unsigned char **p, int *l, struct stat *stp)
 	add_chr_to_str(p, l, c);
 }
 
+
 static void
 stat_mode(unsigned char **p, int *l, struct stat *stp)
 {
@@ -126,11 +98,29 @@ stat_mode(unsigned char **p, int *l, struct stat *stp)
 
 	if (stp) {
 		int mode = stp->st_mode;
+		int shift;
 
-		setrwx(mode << 0, &rwx[0]);
-		setrwx(mode << 3, &rwx[3]);
-		setrwx(mode << 6, &rwx[6]);
-		setst(mode, rwx);
+		/* Set permissions attributes for user, group and other */
+		for (shift = 0; shift <= 6; shift += 3) {
+			int m = mode << shift;
+
+			if (m & S_IRUSR) rwx[shift + 0] = 'r';
+			if (m & S_IWUSR) rwx[shift + 1] = 'w';
+			if (m & S_IXUSR) rwx[shift + 2] = 'x';
+		}
+
+#ifdef S_ISUID
+		if (mode & S_ISUID)
+			rwx[2] = (mode & S_IXUSR) ? 's' : 'S';
+#endif
+#ifdef S_ISGID
+		if (mode & S_ISGID)
+			rwx[5] = (mode & S_IXGRP) ? 's' : 'S';
+#endif
+#ifdef S_ISVTX
+		if (mode & S_ISVTX)
+			rwx[8] = (mode & S_IXOTH) ? 't' : 'T';
+#endif
 	}
 	add_to_str(p, l, rwx);
 #endif

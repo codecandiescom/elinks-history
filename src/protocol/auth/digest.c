@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.26 2004/11/22 17:04:24 jonas Exp $ */
+/* $Id: digest.c,v 1.27 2004/11/22 17:07:37 jonas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -29,11 +29,12 @@
 
 #define MD5_HEX_DIGEST_LENGTH (MD5_DIGEST_LENGTH * 2)
 
+typedef unsigned char md5_bin_digest[MD5_DIGEST_LENGTH + 1];
 typedef unsigned char md5_hex_digest[MD5_HEX_DIGEST_LENGTH + 1];
 
 /* Hexes a binary md5 digest. Taken from RFC 2617 */
 static void
-convert_to_md5_hex_digest(unsigned char bin[MD5_DIGEST_LENGTH + 1], md5_hex_digest hex)
+convert_to_md5_hex_digest(md5_bin_digest bin, md5_hex_digest hex)
 {
 	int i;
 
@@ -51,7 +52,7 @@ convert_to_md5_hex_digest(unsigned char bin[MD5_DIGEST_LENGTH + 1], md5_hex_dige
 static void
 init_cnonce_digest(md5_hex_digest cnonce)
 {
-	unsigned char md5[MD5_DIGEST_LENGTH + 1];
+	md5_bin_digest md5;
 	int random;
 
 	srand(time(0));
@@ -70,7 +71,7 @@ static void
 init_credential_digest(md5_hex_digest ha1, struct auth_entry *entry)
 {
 	MD5_CTX MD5Ctx;
-	unsigned char skey[MD5_DIGEST_LENGTH + 1];
+	md5_bin_digest skey;
 
 	MD5_Init(&MD5Ctx);
 	MD5_Update(&MD5Ctx, entry->user, strlen(entry->user));
@@ -96,7 +97,7 @@ static void
 init_uri_method_digest(md5_hex_digest uri_method, struct uri *uri)
 {
 	MD5_CTX MD5Ctx;
-	unsigned char ha2[MD5_DIGEST_LENGTH + 1];
+	md5_bin_digest ha2;
 
 	MD5_Init(&MD5Ctx);
 	MD5_Update(&MD5Ctx, "GET", 3);
@@ -117,7 +118,7 @@ init_response_digest(md5_hex_digest response, struct auth_entry *entry,
 {
 	MD5_CTX MD5Ctx;
 	md5_hex_digest ha1;
-	unsigned char Ha2[MD5_DIGEST_LENGTH + 1];
+	md5_bin_digest Ha2;
 	md5_hex_digest Ha2_hex;
 
 	init_credential_digest(ha1, entry);

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.90 2003/06/24 22:21:36 jonas Exp $ */
+/* $Id: file.c,v 1.91 2003/06/24 22:43:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,7 @@ setst(int m, unsigned char *p)
 
 
 static void
-stat_mode(unsigned char **p, int *l, struct stat *stp)
+stat_type(unsigned char **p, int *l, struct stat *stp)
 {
 	unsigned char c = '?';
 
@@ -116,20 +116,23 @@ stat_mode(unsigned char **p, int *l, struct stat *stp)
 #endif
 	}
 	add_chr_to_str(p, l, c);
+}
+
+static void
+stat_mode(unsigned char **p, int *l, struct stat *stp)
+{
 #ifdef FS_UNIX_RIGHTS
-	{
-		unsigned char rwx[10] = "---------";
+	unsigned char rwx[10] = "---------";
 
-		if (stp) {
-			int mode = stp->st_mode;
+	if (stp) {
+		int mode = stp->st_mode;
 
-			setrwx(mode << 0, &rwx[0]);
-			setrwx(mode << 3, &rwx[3]);
-			setrwx(mode << 6, &rwx[6]);
-			setst(mode, rwx);
-		}
-		add_to_str(p, l, rwx);
+		setrwx(mode << 0, &rwx[0]);
+		setrwx(mode << 3, &rwx[3]);
+		setrwx(mode << 6, &rwx[6]);
+		setst(mode, rwx);
 	}
+	add_to_str(p, l, rwx);
 #endif
 	add_chr_to_str(p, l, ' ');
 }
@@ -414,6 +417,7 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 #endif
 
 		attriblen = 0;
+		stat_type(&attrib, &attriblen, stp);
 		stat_mode(&attrib, &attriblen, stp);
 		stat_links(&attrib, &attriblen, stp);
 		stat_user(&attrib, &attriblen, stp, 0);

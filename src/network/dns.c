@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.47 2004/04/19 15:56:48 zas Exp $ */
+/* $Id: dns.c,v 1.48 2004/04/20 07:35:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -316,45 +316,45 @@ find_in_dns_cache(unsigned char *name, struct dnsentry **dnsentry)
 }
 
 static void
-end_dns_lookup(struct dnsquery *q, int res)
+end_dns_lookup(struct dnsquery *query, int res)
 {
 	struct dnsentry *dnsentry;
 	void (*fn)(void *, int);
 	void *data;
 	int namelen;
 
-	/* DBG("end lookup %s (%d)", q->name, res); */
+	/* DBG("end lookup %s (%d)", query->name, res); */
 
 #ifdef THREAD_SAFE_LOOKUP
-	if (q->next_in_queue) {
-		/* DBG("processing next in queue: %s", q->next_in_queue->name); */
-		do_lookup(q->next_in_queue, 1);
+	if (query->next_in_queue) {
+		/* DBG("processing next in queue: %s", query->next_in_queue->name); */
+		do_lookup(query->next_in_queue, 1);
 	} else {
 	       	dns_queue = NULL;
 	}
 #endif
 
-	if (!q->fn || !q->addr) {
-		if (q->addr) mem_free_set(&*q->addr, NULL);
-		mem_free(q);
+	if (!query->fn || !query->addr) {
+		if (query->addr) mem_free_set(&*query->addr, NULL);
+		mem_free(query);
 		return;
 	}
 
-	if (find_in_dns_cache(q->name, &dnsentry) >= 0) {
+	if (find_in_dns_cache(query->name, &dnsentry) >= 0) {
 		assert(dnsentry);
 
 		if (res < 0) {
 			int size;
-			/* q->addr(no) is pointer to something already allocated */
+			/* query->addr(no) is pointer to something already allocated */
 
 			assert(dnsentry->addrno > 0);
 
 			size = dnsentry->addrno * sizeof(struct sockaddr_storage);
-			*q->addr = mem_alloc(size);
-			if (!*q->addr) goto done;
+			*query->addr = mem_alloc(size);
+			if (!*query->addr) goto done;
 
-			memcpy(*q->addr, dnsentry->addr, size);
-			*q->addrno = dnsentry->addrno;
+			memcpy(*query->addr, dnsentry->addr, size);
+			*query->addrno = dnsentry->addrno;
 
 			res = 0;
 			goto done;
@@ -367,33 +367,33 @@ end_dns_lookup(struct dnsquery *q, int res)
 
 	if (res < 0) goto done;
 
-	namelen = strlen(q->name);
+	namelen = strlen(query->name);
 	dnsentry = mem_calloc(1, sizeof(struct dnsentry) + namelen);
 	if (dnsentry) {
 		int size;
 
-		memcpy(dnsentry->name, q->name, namelen); /* calloc() sets nul char for us. */
+		memcpy(dnsentry->name, query->name, namelen); /* calloc() sets nul char for us. */
 
-		assert(*q->addrno > 0);
+		assert(*query->addrno > 0);
 
-		size = *q->addrno * sizeof(struct sockaddr_storage);
+		size = *query->addrno * sizeof(struct sockaddr_storage);
 		dnsentry->addr = mem_alloc(size);
 		if (!dnsentry->addr) goto done;
 
-		memcpy(dnsentry->addr, *q->addr, size);;
-		dnsentry->addrno = *q->addrno;
+		memcpy(dnsentry->addr, *query->addr, size);;
+		dnsentry->addrno = *query->addrno;
 
 		dnsentry->get_time = get_time();
 		add_to_list(dns_cache, dnsentry);
 	}
 
 done:
-	fn = q->fn;
-	data = q->data;
+	fn = query->fn;
+	data = query->data;
 
-	if (q->s) *q->s = NULL;
-	/* q->addr is freed later by dns_found() */
-	mem_free(q);
+	if (query->s) *query->s = NULL;
+	/* query->addr is freed later by dns_found() */
+	mem_free(query);
 
 	fn(data, res);
 }

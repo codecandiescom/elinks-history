@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.29 2004/10/22 10:36:18 zas Exp $ */
+/* $Id: table.c,v 1.30 2004/10/22 10:39:19 zas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -166,10 +166,26 @@ set_table_frame(struct table *table, unsigned char *attr)
 }
 
 static void
-parse_table_attributes(struct table *table, unsigned char *attr, int real)
+set_table_rules(struct table *table, unsigned char *attr)
 {
 	unsigned char *al;
 
+	table->rules = table->border ? TABLE_RULE_ALL : TABLE_RULE_NONE;
+
+	al = get_attr_val(attr, "rules");
+	if (!al) return;
+
+	if (!strcasecmp(al, "none")) table->rules = TABLE_RULE_NONE;
+	else if (!strcasecmp(al, "groups")) table->rules = TABLE_RULE_GROUPS;
+	else if (!strcasecmp(al, "rows")) table->rules = TABLE_RULE_ROWS;
+	else if (!strcasecmp(al, "cols")) table->rules = TABLE_RULE_COLS;
+	else if (!strcasecmp(al, "all")) table->rules = TABLE_RULE_ALL;
+	mem_free(al);
+}
+
+static void
+parse_table_attributes(struct table *table, unsigned char *attr, int real)
+{
 	table->fragment_id = get_attr_val(attr, "id");
 
 	get_bordercolor(attr, &table->bordercolor);
@@ -216,16 +232,7 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real)
 		table->cellpadding = (table->cellpadding >= HTML_CHAR_WIDTH / 2 + 1);
 	}
 
-	table->rules = table->border ? TABLE_RULE_ALL : TABLE_RULE_NONE;
-	al = get_attr_val(attr, "rules");
-	if (al) {
-		if (!strcasecmp(al, "none")) table->rules = TABLE_RULE_NONE;
-		else if (!strcasecmp(al, "groups")) table->rules = TABLE_RULE_GROUPS;
-		else if (!strcasecmp(al, "rows")) table->rules = TABLE_RULE_ROWS;
-		else if (!strcasecmp(al, "cols")) table->rules = TABLE_RULE_COLS;
-		else if (!strcasecmp(al, "all")) table->rules = TABLE_RULE_ALL;
-		mem_free(al);
-	}
+	set_table_rules(table, attr);
 
 	table->align = par_format.align;
 	get_align(attr, &table->align);

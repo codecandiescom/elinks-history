@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.110 2004/12/29 22:07:56 jonas Exp $ */
+/* $Id: cmdline.c,v 1.111 2004/12/29 22:29:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,6 +39,7 @@
 #include "util/lists.h"
 #include "util/memory.h"
 #include "util/string.h"
+
 
 /* Hack to handle URL extraction for -remote commands */
 static unsigned char *remote_url;
@@ -530,8 +531,11 @@ print_short_help()
 static unsigned char *
 printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 {
-	version_cmd(NULL, NULL, NULL);
-	printf("\n");
+	unsigned char *lineend = strchr(full_static_version, '\n');
+
+	if (lineend) *lineend = '\0';
+
+	printf("%s\n\n", full_static_version);
 
 	if (!strcmp(option->name, "config-help")) {
 		printf("%s:\n", gettext("Configuration options"));

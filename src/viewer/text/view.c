@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.499 2004/06/20 12:35:35 zas Exp $ */
+/* $Id: view.c,v 1.500 2004/06/20 12:37:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -959,9 +959,9 @@ frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_
 		if (!check_mouse_action(ev, B_DOWN)) {
 			/* We handle only B_DOWN case... */
 		} else if (check_mouse_button(ev, B_WHEEL_UP)) {
-			rep_ev(ses, doc_view, scroll_mouse_up);
+			scroll_mouse_up(ses, doc_view);
 		} else if (check_mouse_button(ev, B_WHEEL_DOWN)) {
-			rep_ev(ses, doc_view, scroll_mouse_down);
+			scroll_mouse_down(ses, doc_view);
 		}
 
 	} else if (link) {
@@ -991,17 +991,17 @@ frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_
 		 * repeatcount-free here. */
 
 		if (ev->y < scrollmargin) {
-			rep_ev(ses, doc_view, scroll_mouse_up);
+			scroll_mouse_up(ses, doc_view);
 		}
 		if (ev->y >= doc_view->box.height - scrollmargin) {
-			rep_ev(ses, doc_view, scroll_mouse_down);
+			scroll_mouse_down(ses, doc_view);
 		}
 
 		if (ev->x < scrollmargin * 2) {
-			rep_ev(ses, doc_view, scroll_mouse_left);
+			scroll_mouse_left(ses, doc_view);
 		}
 		if (ev->x >= doc_view->box.width - scrollmargin * 2) {
-			rep_ev(ses, doc_view, scroll_mouse_right);
+			scroll_mouse_right(ses, doc_view);
 		}
 
 	} else {

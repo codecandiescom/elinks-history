@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.55 2003/09/15 20:40:54 jonas Exp $ */
+/* $Id: link.c,v 1.56 2003/09/15 20:42:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,6 +39,17 @@
 
 /* FIXME: Add comments!! --Zas */
 
+
+void
+done_link_members(struct link *link)
+{
+	if (link->where) mem_free(link->where);
+	if (link->target) mem_free(link->target);
+	if (link->title) mem_free(link->title);
+	if (link->where_img) mem_free(link->where_img);
+	if (link->pos) mem_free(link->pos);
+	if (link->name) mem_free(link->name);
+}
 
 void
 set_link(struct document_view *doc_view)
@@ -89,12 +100,7 @@ sort_links(struct document *f)
 		register int p, q, j;
 
 		if (!link->n) {
-			if (link->where) mem_free(link->where);
-			if (link->target) mem_free(link->target);
-			if (link->title) mem_free(link->title);
-			if (link->where_img) mem_free(link->where_img);
-			if (link->pos) mem_free(link->pos);
-			if (link->name) mem_free(link->name);
+			done_link_members(link);
 			memmove(link, link + 1,
 				(f->nlinks - i - 1) * sizeof(struct link));
 			f->nlinks--;

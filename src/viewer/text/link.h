@@ -1,4 +1,4 @@
-/* $Id: link.h,v 1.6 2003/07/15 20:18:10 jonas Exp $ */
+/* $Id: link.h,v 1.7 2003/09/15 20:42:54 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_LINK_H
 #define EL__VIEWER_TEXT_LINK_H
@@ -7,6 +7,9 @@
 #include "document/html/renderer.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
+
+/* Free's the allocated members of the link. */
+void done_link_members(struct link *link);
 
 void sort_links(struct document *);
 

@@ -1,3 +1,48 @@
+Tue Nov 26 22:58:00 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/mime.html:
+
+	XHTML validity fix by José.  
+
+Tue Nov 26 22:48:07 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.c:
+
+	Dump core in internal() only if DEBUG is set. Otherwise postpone it
+	to the totally untested, rusty rotten code following the internal()
+	call in the rest of ELinks usually ;-).  
+
+Tue Nov 26 22:47:01 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.c:
+
+	Wrong log message.  
+
+Tue Nov 26 22:46:20 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, doc/mime.html, src/util/error.c:
+
+	MIME types documentation, by José Luis González González
+	<jlg80@mi.madritel.es>.  
+
+Tue Nov 26 17:22:06 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/download.c:
+
+	Better handling of errors (NULL values and fstat() failure).  
+
+Tue Nov 26 16:53:58 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/download.c:
+
+	A segfault was fixed.  
+
+Tue Nov 26 10:02:01 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	Cleanup and optimizations.  
+
 Mon Nov 25 14:40:51 2002  Laurent Monin <zas@norz.org>:
 
 	* src/protocol/http/http.c:

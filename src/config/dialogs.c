@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.7 2002/12/08 16:58:14 pasky Exp $ */
+/* $Id: dialogs.c,v 1.8 2002/12/08 17:14:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,14 +185,19 @@ finish_edit_dialog(struct dialog *dlg)
 	unsigned char *value = dlg->items[0].data;
 	unsigned char *chinon;
 
-	/* FIXME: Free the old option value! --pasky */
-
 	commandline = 1;
 	chinon = option_types[option->type].read(option, &value);
 	commandline = 0;
-	if (chinon && option_types[option->type].set
-	    && option_types[option->type].set(option, chinon))
-		return;
+	if (chinon && option_types[option->type].set) {
+		/* XXX: Ideally, we should preserve the old value even when
+		 * set fails, but we will need more finetuning then, since
+		 * we clear option->ptr initiatively in .set handlers. Probably
+		 * another commandline overloading. */
+		free_option_value(option);
+		option->ptr = NULL;
+		if (option_types[option->type].set(option, chinon))
+			return;
+	}
 
 	/* TODO: msg_box(); */
 }

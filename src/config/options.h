@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.40 2002/12/07 15:28:36 pasky Exp $ */
+/* $Id: options.h,v 1.41 2002/12/08 17:14:50 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -88,6 +88,7 @@ extern void smart_config_string(unsigned char **, int *, int, struct list_head *
 
 extern struct option *copy_option(struct option *);
 extern void delete_option(struct option *);
+extern void free_option_value(struct option *);
 
 /* Shitload of various incredible macro combinations and other unusable garbage
  * follows. Have fun. */

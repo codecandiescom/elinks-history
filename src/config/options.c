@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.137 2002/12/07 23:06:48 pasky Exp $ */
+/* $Id: options.c,v 1.138 2002/12/08 17:14:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -262,7 +262,7 @@ add_it:
  * only option specs have short name. */
 
 void
-free_option(struct option *option)
+free_option_value(struct option *option)
 {
 	if (option->type == OPT_TREE) {
 		free_options_tree((struct list_head *) option->ptr);
@@ -278,7 +278,12 @@ free_option(struct option *option)
 			option->type == OPT_TREE) {
 		mem_free(option->ptr);
 	}
+}
 
+void
+free_option(struct option *option)
+{
+	free_option_value(option);
 	if (option->name) mem_free(option->name);
 	if (option->box_item) {
 		del_from_list(option->box_item);

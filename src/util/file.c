@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.27 2004/07/02 03:24:25 jonas Exp $ */
+/* $Id: file.c,v 1.28 2004/07/02 03:28:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,6 +104,7 @@ expand_tilde(unsigned char *filename)
 			}
 #ifdef HAVE_GETPWNAM
 		} else {
+			struct passwd *passwd = NULL;
 			unsigned char *user = filename + 1;
 			int userlen = 0;
 
@@ -112,13 +113,13 @@ expand_tilde(unsigned char *filename)
 
 			user = memacpy(user, userlen);
 			if (user) {
-				struct passwd *passwd = getpwnam(user);
-
-				if (passwd && passwd->pw_dir) {
-					add_to_string(&file, passwd->pw_dir);
-					filename += 1 + userlen;
-				}
+				passwd = getpwnam(user);
 				mem_free(user);
+			}
+
+			if (passwd && passwd->pw_dir) {
+				add_to_string(&file, passwd->pw_dir);
+				filename += 1 + userlen;
 			}
 #endif
 		}

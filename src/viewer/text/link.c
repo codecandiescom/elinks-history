@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.4 2003/07/03 08:24:14 zas Exp $ */
+/* $Id: link.c,v 1.5 2003/07/04 19:19:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -513,8 +513,10 @@ enter(struct session *ses, struct f_data_c *fd, int a)
 	    || ((has_form_submit(fd->f_data, link->form)
 		 || get_opt_int("document.browse.forms.auto_submit"))
 		&& (link->type == L_FIELD || link->type == L_AREA))) {
+		unsigned char *url = get_link_url(ses, fd, link);
 
-		return goto_link(get_link_url(ses, fd, link), link->target, ses, a);
+		if (url)
+			return goto_link(url, link->target, ses, a);
 
 	} else if (link->type == L_FIELD || link->type == L_AREA) {
 		/* We won't get here if (has_form_submit() ||

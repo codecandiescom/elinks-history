@@ -81,6 +81,9 @@ Carles Sadurní Anguita <isard@ctv.es>
 Csaba Raduly <csaba.raduly@sophos.com>
 	Random fixes
 
+Christian Biesinger <cbiesinger@gmx.at>
+	FTP authentication via user interface support
+
 Christian Cornelssen <ccorn@cs.tu-berlin.de>
 	Lua5 support
 
@@ -512,4 +515,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.169 2004/09/19 17:35:23 pasky Exp $
+$Id: AUTHORS,v 1.170 2004/09/27 00:38:08 pasky Exp $

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.168 2004/09/22 19:11:51 witekfl Exp $ */
+/* $Id: ftp.c,v 1.169 2004/09/27 00:38:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,6 +34,7 @@
 #include "lowlevel/connect.h"
 #include "lowlevel/select.h"
 #include "osdep/osdep.h"
+#include "protocol/auth/auth.h"
 #include "protocol/ftp/ftp.h"
 #include "protocol/ftp/ftpparse.h"
 #include "protocol/uri.h"
@@ -262,6 +263,9 @@ static void
 ftp_login(struct connection *conn)
 {
 	struct string cmd;
+	struct http_auth_basic* auth;
+
+	auth = find_auth_entry(conn->uri, NULL);
 
 	if (!init_string(&cmd)) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
@@ -273,6 +277,8 @@ ftp_login(struct connection *conn)
 		struct uri *uri = conn->uri;
 
 		add_bytes_to_string(&cmd, uri->user, uri->userlen);
+	} else if (auth && !auth->blocked && auth->valid) {
+		add_to_string(&cmd, auth->user);
 	} else {
 		add_to_string(&cmd, "anonymous");
 	}
@@ -361,11 +367,48 @@ ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
 	ftp_pass(conn);
 }
 
+/* Check if this auth token really belongs to this URI. */
+static int
+auth_user_matching_uri(struct http_auth_basic *auth, struct uri *uri)
+{
+	if (!uri->userlen) /* Noone said it doesn't. */
+		return 1;
+	return !strlcasecmp(auth->user, -1, uri->user, uri->userlen);
+}
+
+
+/* Kill the current connection and ask for a username/password for the next
+ * try. */
+static void
+prompt_username_pw(struct connection *conn)
+{
+	if (!conn->cached) {
+		conn->cached = get_cache_entry(conn->uri);
+		if (!conn->cached) {
+			abort_conn_with_state(conn, S_OUT_OF_MEM);
+			return;
+		}
+	}
+
+	mem_free_set(&conn->cached->content_type, stracpy("text/html"));
+	if (!conn->cached->content_type) {
+		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		return;
+	}
+
+	add_auth_entry(conn->uri, "FTP Login");
+
+	abort_conn_with_state(conn, S_OK);
+}
+
 /* Send PASS command. */
 static void
 ftp_pass(struct connection *conn)
 {
 	struct string cmd;
+	struct http_auth_basic *auth;
+
+	auth = find_auth_entry(conn->uri, NULL);
 
 	if (!init_string(&cmd)) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
@@ -377,6 +420,12 @@ ftp_pass(struct connection *conn)
 		struct uri *uri = conn->uri;
 
 		add_bytes_to_string(&cmd, uri->password, uri->passwordlen);
+	} else if (auth && !auth->blocked && auth->valid) {
+		if (!auth_user_matching_uri(auth, uri)) {
+			prompt_username_pw(conn);
+			return;
+		}
+		add_to_string(&cmd, auth->password);
 	} else {
 		add_to_string(&cmd, get_opt_str("protocol.ftp.anon_passwd"));
 	}
@@ -413,7 +462,9 @@ ftp_pass_info(struct connection *conn, struct read_buffer *rb)
 	 * 530 Not logged in. */
 
 	if (response == 332 || response >= 500) {
-		abort_conn_with_state(conn, S_FTP_LOGIN);
+		/* If we didn't have a user, we tried anonymous. But it failed, so ask for a
+		 * user and password */
+		prompt_username_pw(conn);
 		return;
 	}
 

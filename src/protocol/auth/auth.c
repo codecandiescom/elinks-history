@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.87 2004/07/23 16:04:45 zas Exp $ */
+/* $Id: auth.c,v 1.88 2004/09/27 00:38:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@ static INIT_LIST_HEAD(http_auth_basic_list);
 /* Find if url/realm is in auth list. If a matching url is found, but realm is
  * NULL, it returns the first record found. If realm isn't NULL, it returns
  * the first record that matches exactly (url and realm) if any. */
-static struct http_auth_basic *
+struct http_auth_basic *
 find_auth_entry(struct uri *uri, unsigned char *realm)
 {
 	struct http_auth_basic *match = NULL, *entry;

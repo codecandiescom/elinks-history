@@ -1,26 +1,13 @@
-/* $Id: bfu.h,v 1.12 2002/07/04 01:18:14 pasky Exp $ */
+/* $Id: bfu.h,v 1.13 2002/07/04 14:06:02 pasky Exp $ */
 
 #ifndef EL__BFU_BFU_H
 #define EL__BFU_BFU_H
 
 #include "bfu/align.h"
 #include "bfu/button.h"
+#include "bfu/inphist.h"
 #include "lowlevel/terminal.h"
 #include "util/lists.h"
-
-
-struct input_history_item {
-	struct input_history_item *next;
-	struct input_history_item *prev;
-	unsigned char d[1];
-};
-
-struct input_history {
-	int n;
-	struct list_head items;
-};
-
-void add_to_input_history(struct input_history *, unsigned char *, int);
 
 
 struct widget_data;
@@ -122,6 +109,8 @@ struct box_item {
 
 struct dialog_data *do_dialog(struct terminal *, struct dialog *,
 			      struct memory_list *);
+
+void dialog_func(struct window *, struct event *, int);
 
 int check_number(struct dialog_data *, struct widget_data *);
 int check_nonempty(struct dialog_data *, struct widget_data *);

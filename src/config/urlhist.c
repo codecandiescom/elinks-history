@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.7 2002/06/17 07:42:29 pasky Exp $ */
+/* $Id: urlhist.c,v 1.8 2002/07/04 14:06:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,7 @@
 
 #include "links.h"
 
-#include "bfu/bfu.h"
+#include "bfu/inphist.h"
 #include "config/options.h"
 #include "lowlevel/home.h"
 #include "util/memory.h"
@@ -55,7 +55,7 @@ int load_url_history()
 int
 save_url_history()
 {
-	struct input_history_item* historyitem;
+	struct input_history_item *historyitem;
 	struct secure_save_info *ssi;
 	unsigned char *history_file;
 	int i = 0;

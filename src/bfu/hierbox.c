@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.205 2005/03/05 20:46:46 zas Exp $ */
+/* $Id: hierbox.c,v 1.206 2005/03/18 13:26:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -470,18 +470,18 @@ recursively_goto_listbox(struct session *ses, struct listbox_item *root,
 	struct listbox_item *item;
 
 	foreach (item, root->child) {
-		struct uri *uri;
-
 		if (item->type == BI_FOLDER) {
 			recursively_goto_listbox(ses, item, box);
 			continue;
+
+		} else if (item->type == BI_LEAF) {
+			struct uri *uri = box->ops->get_uri(item);
+
+			if (!uri) continue;
+
+			open_uri_in_new_tab(ses, uri, 1, 0);
+			done_uri(uri);
 		}
-
-		uri = box->ops->get_uri(item);
-		if (!uri) continue;
-
-		open_uri_in_new_tab(ses, uri, 1, 0);
-		done_uri(uri);
 	}
 }
 
@@ -493,18 +493,19 @@ goto_marked(struct listbox_item *item, void *data_, int *offset)
 	if (item->marked) {
 		struct session *ses = context->dlg_data->dlg->udata;
 		struct listbox_data *box = context->box;
-		struct uri *uri;
 
 		if (item->type == BI_FOLDER) {
 			recursively_goto_listbox(ses, item, box);
 			return 0;
+
+		} else if (item->type == BI_LEAF) {
+			struct uri *uri = box->ops->get_uri(item);
+
+			if (!uri) return 0;
+
+			open_uri_in_new_tab(ses, uri, 1, 0);
+			done_uri(uri);
 		}
-
-		uri = box->ops->get_uri(item);
-		if (!uri) return 0;
-
-		open_uri_in_new_tab(ses, uri, 1, 0);
-		done_uri(uri);
 	}
 
 	return 0;
@@ -534,13 +535,17 @@ push_hierbox_goto_button(struct dialog_data *dlg_data,
 	} else if (box->sel->type == BI_FOLDER) {
 		recursively_goto_listbox(ses, box->sel, box);
 
-	} else {
+	} else if (box->sel->type == BI_LEAF) {
 		struct uri *uri = box->ops->get_uri(box->sel);
 
 		if (uri) {
 			goto_uri(ses, uri);
 			done_uri(uri);
 		}
+
+	} else {
+		mem_free(context);
+		return EVENT_PROCESSED;
 	}
 
 	mem_free(context);

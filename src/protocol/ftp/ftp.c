@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.87 2003/06/26 21:07:04 pasky Exp $ */
+/* $Id: ftp.c,v 1.88 2003/07/03 00:28:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@
 #include "protocol/ftp.h"
 #include "protocol/ftpparse.h"
 #include "protocol/url.h"
-#include "sched/sched.h"
+#include "sched/connection.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"

@@ -1,5 +1,5 @@
 /* Internal "https" protocol implementation */
-/* $Id: https.c,v 1.12 2003/06/26 21:15:44 jonas Exp $ */
+/* $Id: https.c,v 1.13 2003/07/03 00:28:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,7 +10,7 @@
 #include "protocol/http/http.h"
 #include "protocol/http/https.h"
 #include "protocol/protocol.h"
-#include "sched/sched.h"
+#include "sched/connection.h"
 
 static void
 https_func(struct connection *c)

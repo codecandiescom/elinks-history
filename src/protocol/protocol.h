@@ -1,9 +1,9 @@
-/* $Id: protocol.h,v 1.13 2003/06/28 10:46:31 jonas Exp $ */
+/* $Id: protocol.h,v 1.14 2003/07/03 00:28:22 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
 
-#include "sched/sched.h"
+#include "sched/connection.h"
 #include "sched/session.h"
 
 enum protocol {

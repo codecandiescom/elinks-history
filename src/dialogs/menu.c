@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.114 2003/07/02 22:59:36 pasky Exp $ */
+/* $Id: menu.c,v 1.115 2003/07/03 00:28:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,7 @@
 #include "sched/download.h"
 #include "sched/history.h"
 #include "sched/location.h"
-#include "sched/sched.h"
+#include "sched/connection.h"
 #include "sched/session.h"
 #include "scripting/lua/core.h"
 #include "scripting/lua/hooks.h"

@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.19 2005/03/28 23:19:00 zas Exp $ */
+/* $Id: parse.c,v 1.20 2005/03/28 23:20:00 zas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -172,13 +172,13 @@ parse_ftp_unix_permissions(const unsigned char *src, int len)
    case('-'): break;
    default: return -1;
    }
-   
+
    switch (src[1]) {
    case('w'): perms |= S_IWUSR; break;
    case('-'): break;
    default: return -1;
    }
-   
+
    switch (src[2]) {
    case('S'): perms |= S_ISUID; break;
    case('s'): perms |= S_ISUID; // fall-through
@@ -186,20 +186,20 @@ parse_ftp_unix_permissions(const unsigned char *src, int len)
    case('-'): break;
    default: return -1;
    }
-   
+
    src += 3;
    switch (src[0]) {
    case('r'): perms |= S_IRGRP; break;
    case('-'): break;
    default: return -1;
    }
-   
+
    switch (src[1]) {
    case('w'): perms |= S_IWGRP; break;
    case('-'): break;
    default: return -1;
    }
-   
+
    switch (src[2]) {
    case('S'): perms |= S_ISGID; break;
    case('s'): perms |= S_ISGID; // fall-through
@@ -207,20 +207,20 @@ parse_ftp_unix_permissions(const unsigned char *src, int len)
    case('-'): break;
    default: return -1;
    }
-   
+
    src += 3;
    switch (src[0]) {
    case('r'): perms |= S_IROTH; break;
    case('-'): break;
    default: return -1;
    }
-   
+
    switch (src[1]) {
    case('w'): perms |= S_IWOTH; break;
    case('-'): break;
    default: return -1;
    }
-   
+
    switch (src[2]) {
    case('T'): perms |= S_ISVTX; break;
    case('t'): perms |= S_ISVTX; // fall-through
@@ -402,7 +402,7 @@ parse_ftp_unix_response(struct ftp_file_info *info, unsigned char *src, int len)
 				/* Get the current time.  */
 				time_t timenow = time(NULL);
 				struct tm *now = localtime(&timenow);
-				
+
 				mtime.tm_year = now->tm_year;
 
 				/* Some listings will not specify the year if it
@@ -632,7 +632,7 @@ parse_ftp_winnt_response(struct ftp_file_info *info, unsigned char *src, int len
 		return NULL;
 
 	src++;
-	
+
 	mtime.tm_mday = parse_ftp_number(&src, end, 1, 31);
 	if (src + 2 >= end || *src != '-')
 		return NULL;

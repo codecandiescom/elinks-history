@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.53 2003/12/06 02:53:35 jonas Exp $ */
+/* $Id: string.h,v 1.54 2003/12/12 14:24:19 jonas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -30,8 +30,6 @@ unsigned char *memacpy(unsigned char *src, int len);
 /* Allocated NUL terminated string with the content of @src. */
 unsigned char *stracpy(unsigned char *src);
 
-unsigned char *copy_string(unsigned char **, unsigned char *);
-
 #else /* LEAK_DEBUG */
 
 unsigned char *debug_memacpy(unsigned char *, int, unsigned char *, int);
@@ -39,9 +37,6 @@ unsigned char *debug_memacpy(unsigned char *, int, unsigned char *, int);
 
 unsigned char *debug_stracpy(unsigned char *, int, unsigned char *);
 #define stracpy(s) debug_stracpy(__FILE__, __LINE__, s)
-
-unsigned char *debug_copy_string(unsigned char *, int, unsigned char **, unsigned char *);
-#define copy_string(d, s) debug_copy_string(__FILE__, __LINE__, d, s)
 
 #endif /* LEAK_DEBUG */
 

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.85 2003/10/01 17:16:15 zas Exp $ */
+/* $Id: string.c,v 1.86 2003/12/12 14:24:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,18 +61,6 @@ debug_stracpy(unsigned char *f, int l, unsigned char *src)
 	return debug_memacpy(f, l, src, strlen(src));
 }
 
-unsigned char *
-debug_copy_string(unsigned char *f, int l, unsigned char **dst,
-		  unsigned char *src)
-{
-	string_assert(f, l, src, "copy_string");
-	if_assert_failed { *dst = NULL; return NULL; }
-
-	*dst =  debug_memacpy(f, l, src, strlen(src));
-
-	return *dst;
-}
-
 #else /* LEAK_DEBUG */
 
 inline unsigned char *
@@ -101,16 +89,6 @@ stracpy(unsigned char *src)
 	return memacpy(src, strlen(src));
 }
 
-unsigned char *
-copy_string(unsigned char **dst, unsigned char *src)
-{
-	assertm(src, "[copy_string]");
-	if_assert_failed { *dst = NULL; return NULL; }
-
-	*dst = memacpy(src, strlen(src));
-
-	return *dst;
-}
 #endif /* LEAK_DEBUG */
 
 

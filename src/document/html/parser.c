@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.291 2003/12/06 02:56:02 jonas Exp $ */
+/* $Id: parser.c,v 1.292 2003/12/12 14:24:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -443,13 +443,13 @@ html_stack_dup(enum html_element_type type)
 	e = mem_alloc(sizeof(struct html_element));
 	if (!e) return;
 	memcpy(e, ep, sizeof(struct html_element));
-	if (ep->attr.link) copy_string(&e->attr.link, ep->attr.link);
-	if (ep->attr.target) copy_string(&e->attr.target, ep->attr.target);
-	if (ep->attr.image) copy_string(&e->attr.image, ep->attr.image);
-	if (ep->attr.title) copy_string(&e->attr.title, ep->attr.title);
-	if (ep->attr.href_base) copy_string(&e->attr.href_base, ep->attr.href_base);
-	if (ep->attr.target_base) copy_string(&e->attr.target_base, ep->attr.target_base);
-	if (ep->attr.select) copy_string(&e->attr.select, ep->attr.select);
+	if (ep->attr.link) e->attr.link = stracpy(ep->attr.link);
+	if (ep->attr.target) e->attr.target = stracpy(ep->attr.target);
+	if (ep->attr.image) e->attr.image = stracpy(ep->attr.image);
+	if (ep->attr.title) e->attr.title = stracpy(ep->attr.title);
+	if (ep->attr.href_base) e->attr.href_base = stracpy(ep->attr.href_base);
+	if (ep->attr.target_base) e->attr.target_base = stracpy(ep->attr.target_base);
+	if (ep->attr.select) e->attr.select = stracpy(ep->attr.select);
 #if 0
 	if (e->name) {
 		if (e->attr.link) set_mem_comment(e->attr.link, e->name, e->namelen);

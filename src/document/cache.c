@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.30 2003/05/07 09:49:01 zas Exp $ */
+/* $Id: cache.c,v 1.31 2003/06/07 23:37:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,7 @@ is_entry_used(struct cache_entry *e)
 {
 	struct connection *c;
 
-	foreach(c, queue)
+	foreach (c, queue)
 		if (c->cache == e)
 			return 1;
 
@@ -48,13 +48,13 @@ cache_info(int type)
 		case CI_BYTES:
 			return cache_size;
 		case CI_FILES:
-			foreach(ce, cache) i++;
+			foreach (ce, cache) i++;
 			return i;
 		case CI_LOCKED:
-			foreach(ce, cache) i += !!ce->refcount;
+			foreach (ce, cache) i += !!ce->refcount;
 			return i;
 		case CI_LOADING:
-			foreach(ce, cache) i += is_entry_used(ce);
+			foreach (ce, cache) i += is_entry_used(ce);
 			return i;
 		case CI_LIST:
 			return (long) &cache;
@@ -73,7 +73,7 @@ find_in_cache(unsigned char *url, struct cache_entry **f)
 
 	url = extract_proxy(url);
 
-	foreach(e, cache) {
+	foreach (e, cache) {
 		if (strcmp(e->url, url)) continue;
 
 		/* Move it on the top of the list. */
@@ -256,7 +256,7 @@ ff:;
 	if (trunc) truncate_entry(e, offset + length, 0);
 
 #if 0
-	foreach(f, e->frag)
+	foreach (f, e->frag)
 		fprintf(stderr, "%d, %d, %d\n",
 			f->offset, f->length, f->real_length);
 	debug("ret-");
@@ -296,7 +296,8 @@ defrag_entry(struct cache_entry *e)
 #if 0
 	{
 		struct fragment *f;
-		foreach(f, e->frag) fprintf(stderr, "%d, %d, %d\n", f->offset, f->length, f->real_length);
+		foreach (f, e->frag)
+			fprintf(stderr, "%d, %d, %d\n", f->offset, f->length, f->real_length);
 		debug("d1-");
 	}
 #endif
@@ -311,7 +312,8 @@ defrag_entry(struct cache_entry *e)
 	add_to_list(e->frag, n);
 #if 0
 	{
-		foreach(f, e->frag) fprintf(stderr, "%d, %d, %d\n", f->offset, f->length, f->real_length);
+		foreach (f, e->frag)
+			fprintf(stderr, "%d, %d, %d\n", f->offset, f->length, f->real_length);
 		debug("d-");
 	}
 #endif
@@ -327,7 +329,7 @@ truncate_entry(struct cache_entry *e, int off, int final)
 		e->incomplete = 1;
 	}
 
-	foreach(f, e->frag) {
+	foreach (f, e->frag) {
 		if (f->offset >= off) {
 
 del:
@@ -364,7 +366,7 @@ free_entry_to(struct cache_entry *e, int off)
 {
 	struct fragment *f, *g;
 
-	foreach(f, e->frag) {
+	foreach (f, e->frag) {
 		if (f->offset + f->length <= off) {
 			enlarge(e, -f->length);
 			g = f;
@@ -439,7 +441,7 @@ garbage_collection(int u)
 
 	if (!u && cache_size <= opt_cache_memory_size) return;
 
-	foreach(e, cache) {
+	foreach (e, cache) {
 		if (e->refcount || is_entry_used(e)) {
 			ncs -= e->data_size;
 			if (ncs < 0) {

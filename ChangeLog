@@ -1,3 +1,109 @@
+Fri Jul  5 21:53:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* acconfig.h, configure.in:
+
+	Introduced --enable-ui-colors configure option, turning on the ugly
+	colors usage in user interface.  
+
+Fri Jul  5 21:50:45 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/colors.h:
+
+	When COLOR_UI defined, the ELinks user interface is not the boring
+	gray anymore, but eyes-destructing colors; this color scheme is
+	something I just figured out and wrote there, and it is almost, but
+	not totally ugly.  
+
+Fri Jul  5 20:51:05 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	Mention %u in the URL as well (no, it's not implemented yet).  
+
+Fri Jul  5 20:42:13 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: setup.h, bfu/Makefile.am, bfu/button.c, bfu/checkbox.c,
+	bfu/colors.h, bfu/dialog.c, bfu/group.c, bfu/inpfield.c,
+	bfu/listbox.c, bfu/menu.c, bfu/msgbox.c, dialogs/auth.c,
+	dialogs/edit.c, dialogs/options.c, document/download.c,
+	document/session.c, lua/core.c, protocol/types.c:
+
+	Moved default colors settings from setup.h to bfu/colors.h.  
+
+Fri Jul  5 19:03:39 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/dialogs/menu.c:
+
+	Oops, by error enabled cache info menu item. Fixed 
+
+Fri Jul  5 18:57:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: setup.h, document/cache.c, lowlevel/sched.c:
+
+	MEMORY_CACHE_GC_PERCENT and MAX_CACHED_OBJECT_PERCENT is now
+	percentual valuee - this way, it works somehow even in integer
+	arithmetic and thus it works properly. Fixes bug that saved/opened
+	objects were never cached.  
+
+Fri Jul  5 18:25:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: dialogs/menu.c, lowlevel/sched.c:
+
+	Shit, compilation fix :).  
+
+Fri Jul  5 18:24:29 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/: cache.c, download.c:
+
+	Trivial cleanups.  
+
+Fri Jul  5 18:24:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/sched.c:
+
+	detach_function() commented and explained somehow.  
+
+Fri Jul  5 18:23:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/types.c:
+
+	We get extension after we will check extension->mimetype.  
+
+Fri Jul  5 17:24:30 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/romanian.lng, intl/russian.lng,
+	intl/slovak.lng, intl/spanish.lng, intl/swedish.lng,
+	intl/turkish.lng, intl/ukrainian.lng, src/dialogs/options.c,
+	src/document/options.c, src/document/options.h,
+	src/document/html/renderer.c, src/intl/lang_defs.h,
+	src/intl/language.inc:
+
+	avoid_dark_on_black occurrences were replaced by
+	allow_dark_on_black.  T_AVOID_DARK_ON_BLACK is replaced by
+	T_ALLOW_DARK_ON_BLACK.  Labels are now in sync with the option.  
+	English and french were updated to reflect that change.  
+	Translators, please update .lng files as needed.  
+
+Fri Jul  5 16:19:27 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/menu.c, protocol/types.h:
+
+	Extensions menu is now totally disabled.  
+
+Fri Jul  5 16:09:01 2002  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/options.c:
+
+	Fix: document.colors.allow_dark_on_black option is now properly
+	switched in HTML options dialog.  
+
 Fri Jul  5 13:16:10 2002  Petr Baudis <pasky@ji.cz>:
 
 	* INSTALL:

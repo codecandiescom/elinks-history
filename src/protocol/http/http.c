@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.35 2002/08/06 10:07:19 pasky Exp $ */
+/* $Id: http.c,v 1.36 2002/08/12 01:30:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,7 +47,8 @@ struct http_connection_info {
 	int version;
 
 	/* Either bytes coming in this chunk yet or "parser state". */
-#define CHUNK_DATA_END	-2
+#define CHUNK_DATA_END	-3
+#define CHUNK_ZERO_SIZE	-2
 #define CHUNK_SIZE	-1
 	int chunk_remaining;
 };
@@ -745,13 +746,20 @@ next_chunk:
 				/* Remove everything to the EOLN. */
 				kill_buffer_data(rb, l);
 				info->chunk_remaining = n;
+				if (!info->chunk_remaining)
+					info->chunk_remaining = CHUNK_ZERO_SIZE;
 				goto next_chunk;
 			}
 
 		} else {
 			unsigned char *data;
 			int data_len;
-			int len = info->chunk_remaining;
+			int len;
+			int zero = 0;
+
+			zero = (info->chunk_remaining == CHUNK_ZERO_SIZE);
+			if (zero) info->chunk_remaining = 0;
+			len = info->chunk_remaining;
 
 			/* Maybe everything neccessary didn't come yet.. */
 			if (len > rb->len) len = rb->len;
@@ -769,23 +777,23 @@ next_chunk:
 
 			kill_buffer_data(rb, len);
 
-			if (!len && !info->chunk_remaining) {
-				/* We got here with chunk_remaining zero
-				 * already, so we finished decompression just
-				 * now and now we can happily finish reading
-				 * this stuff. */
+			if (zero) {
+				/* Last chunk has zero length, so this is last
+				 * chunk, we finished decompression just now
+				 * and now we can happily finish reading this
+				 * stuff. */
 				info->chunk_remaining = CHUNK_DATA_END;
 				goto next_chunk;
 			}
 
-			if (!info->chunk_remaining && rb->len >= 1) {
+			if (!info->chunk_remaining && rb->len > 0) {
 				/* Eat newline succeeding each chunk. */
 				if (rb->data[0] == 10) {
 					kill_buffer_data(rb, 1);
 				} else {
 					if (rb->data[0] != 13
 					    || (rb->len >= 2
-					        && rb->data[1] != 10)) {
+						&& rb->data[1] != 10)) {
 						setcstate(conn, S_HTTP_ERROR);
 						abort_connection(conn);
 						return;
@@ -1014,6 +1022,7 @@ void http_got_header(struct connection *c, struct read_buffer *rb)
 	if (!e->last_modified && (d = parse_http_header(e->head, "Date", NULL)))
 		e->last_modified = d;
 	if (info->length == -1 || (version < 11 && info->close)) rb->close = 1;
+
 	c->content_encoding = ENCODING_NONE;
 	c->stream_pipes[0] = c->stream_pipes[1] = -1;
 	d = parse_http_header(e->head, "Content-Type", NULL);
@@ -1036,6 +1045,7 @@ void http_got_header(struct connection *c, struct read_buffer *rb)
 			mem_free(d);
 		}
 	}
+
 	read_http_data(c, rb);
 }
 

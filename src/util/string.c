@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.57 2003/07/21 23:04:04 pasky Exp $ */
+/* $Id: string.c,v 1.58 2003/07/21 23:08:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -689,4 +689,3 @@ add_format_to_string(struct string *string, unsigned char *format, ...)
 
 	return string;
 }
-

@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.10 2003/10/26 15:12:58 jonas Exp $ */
+/* $Id: module.c,v 1.11 2003/10/26 15:20:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,10 +147,6 @@ void
 done_modules(void)
 {
 	int i = 0;
-
-#ifdef HAVE_SCRIPTING
-	trigger_event_name("quit");
-#endif
 
 	/* Cleanups backward to initialization. */
 	/* TODO: We can probably figure out the number of modules by looking at

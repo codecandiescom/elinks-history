@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.6 2004/06/13 12:18:19 jonas Exp $ */
+/* $Id: event.h,v 1.7 2004/06/13 17:51:30 jonas Exp $ */
 
 #ifndef EL__TERMINAL_EVENT_H
 #define EL__TERMINAL_EVENT_H
@@ -32,6 +32,8 @@ struct terminal_info {
 	unsigned char cwd[MAX_CWD_LEN];
 	int system_env;
 	int length;
+	int base_session;
+	int magic;
 	unsigned char data[0];
 };
 
@@ -39,6 +41,8 @@ struct terminal;
 
 void term_send_event(struct terminal *, struct term_event *);
 void in_term(struct terminal *);
+
+#define INTERLINK_MAGIC(major, minor) -(((major) << 8) + (minor))
 
 #define INIT_TERM_EVENT(type, x, y, b) { (type), (x), (y), (b) }
 

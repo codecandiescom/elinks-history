@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.65 2004/06/13 12:18:19 jonas Exp $ */
+/* $Id: kbd.c,v 1.66 2004/06/13 17:51:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -259,6 +259,8 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 		"",
 		get_system_env(),
 		init_len,
+		get_opt_int_tree(cmdline_options, "base-session"),
+		INTERLINK_MAGIC(1, 0),
 	};
 	unsigned char *ts;
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.503 2004/06/13 17:42:00 jonas Exp $ */
+/* $Id: session.c,v 1.504 2004/06/13 17:51:30 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -833,17 +833,13 @@ init_remote_session(struct session *ses, enum remote_session_flags *remote_ptr,
  * Magic numbers are composed by the SESSION_MAGIC() macro. It is a negative
  * magic to be able to distinguish the oldest format from the newer ones. */
 
-#define SESSION_MAGIC(major, minor) -(((major) << 8) + (minor))
-
 struct string *
 encode_session_info(struct string *info, struct list_head *url_list)
 {
-	int id = get_opt_int_tree(cmdline_options, "base-session");
-	int numbers[3] = { id, SESSION_MAGIC(1, 0), remote_session_flags };
-	unsigned char *number_chars = (unsigned char *) numbers;
+	unsigned char *remote_chars = (unsigned char *) &remote_session_flags;
 
 	if (init_string(info)
-	    && add_bytes_to_string(info, number_chars, sizeof(numbers))) {
+	    && add_bytes_to_string(info, remote_chars, sizeof(int))) {
 		struct string_list_item *url;
 
 		foreach (url, *url_list) {
@@ -870,19 +866,17 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 	unsigned char *str;
 	int magic;
 
-	if (len < 2 * sizeof(int)) return 0;
-
 	/* This is the only place where the session id comes into game - we're
 	 * comparing it to possibly supplied -base-session here, and clone the
 	 * session with id of base-session (its current document association
 	 * only, rather) to the newly created session. */
-	if (init_saved_session(term, *(data++)))
+	if (init_saved_session(term, info->base_session))
 		return 1;
 
-	magic = *(data++);
+	magic = info->magic;
 
 	switch (magic) {
-	case SESSION_MAGIC(1, 0):
+	case INTERLINK_MAGIC(1, 0):
 		/* SESSION_MAGIC(1, 0) supports multiple URIs, remote opening
 		 * and magic variables:
 		 *
@@ -891,11 +885,11 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 		 *	2: Remote <int>
 		 *	3: NUL terminated URIs <unsigned char>+
 		 */
-		if (len < 3 * sizeof(int))
+		if (len < sizeof(int))
 			return 0;
 
 		remote = *(data++);
-		len -= 3 * sizeof(int);
+		len -= sizeof(int);
 
 		/* If processing session info from a -remote instance we just
 		 * want to hook up with the master. */
@@ -916,7 +910,6 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 		 *	1: URI length <int>
 		 *	2: URI length bytes containing the URI <unsigned char>*
 		 */
-		len -= 2 * sizeof(int);
 
 		/* Extract URI containing @magic bytes */
 		if (magic <= 0 || magic > len)

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.87 2004/04/16 16:36:25 zas Exp $ */
+/* $Id: form.c,v 1.88 2004/04/17 02:39:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -519,7 +519,7 @@ encode_controls(struct list_head *l, struct string *data,
 
 #define BL	32
 #define realloc_bound_ptrs(bptrs, bptrs_size) \
-	mem_align_alloc(bptrs, bptrs_size, bptrs_size + 1, sizeof(int), 0xFF)
+	mem_align_alloc(bptrs, bptrs_size, bptrs_size + 1, int, 0xFF)
 
 /* FIXME: shouldn't we encode data at send time (in http.c) ? --Zas */
 static void

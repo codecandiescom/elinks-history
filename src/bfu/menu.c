@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.200 2004/04/16 23:39:26 jonas Exp $ */
+/* $Id: menu.c,v 1.201 2004/04/17 02:39:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1027,7 +1027,7 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 
 /* For dynamic menus the last (cleared) item is used to mark the end. */
 #define realloc_menu_items(mi_, size) \
-	mem_align_alloc(mi_, size, (size) + 2, sizeof(struct menu_item), 0xF)
+	mem_align_alloc(mi_, size, (size) + 2, struct menu_item, 0xF)
 
 struct menu_item *
 new_menu(enum menu_item_flags flags)

@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.85 2004/04/16 10:02:06 zas Exp $ */
+/* $Id: text.c,v 1.86 2004/04/17 02:39:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,7 @@ split_line(unsigned char *text, int max_width)
 }
 
 #define LINES_GRANULARITY 0x7
-#define realloc_lines(x, o, n) mem_align_alloc(x, o, n, sizeof(unsigned char *), LINES_GRANULARITY)
+#define realloc_lines(x, o, n) mem_align_alloc(x, o, n, unsigned char *, LINES_GRANULARITY)
 
 /* Find the start of each line with the current max width */
 static unsigned char **

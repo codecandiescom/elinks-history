@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.153 2004/04/16 16:32:49 zas Exp $ */
+/* $Id: tables.c,v 1.154 2004/04/17 02:39:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,7 @@
 #define INIT_Y		2
 
 #define realloc_bad_html(bad_html, size) \
-	mem_align_alloc(bad_html, size, (size) + 1, sizeof(struct html_start_end), 0xFF)
+	mem_align_alloc(bad_html, size, (size) + 1, struct html_start_end, 0xFF)
 
 #define CELL(t, x, y) (&(t)->cells[(y) * (t)->rx + (x)])
 

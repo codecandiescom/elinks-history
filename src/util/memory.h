@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.21 2004/04/17 02:09:15 jonas Exp $ */
+/* $Id: memory.h,v 1.22 2004/04/17 02:39:53 jonas Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -129,18 +129,18 @@ mem_align_alloc__(
 }
 
 #ifdef LEAK_DEBUG
-#define mem_align_alloc(ptr, old, new, objsize, mask) \
-	mem_align_alloc__(__FILE__, __LINE__, (void **)ptr, old, new, objsize, mask)
+#define mem_align_alloc(ptr, old, new, obj, mask) \
+	mem_align_alloc__(__FILE__, __LINE__, (void **)ptr, old, new, sizeof(obj), mask)
 #else
-#define mem_align_alloc(ptr, old, new, objsize, mask) \
-	mem_align_alloc__((void **)ptr, old, new, objsize, mask)
+#define mem_align_alloc(ptr, old, new, obj, mask) \
+	mem_align_alloc__((void **)ptr, old, new, sizeof(obj), mask)
 #endif
 
 /* XXX: way to improve ? */
 #define mem_free_set_if(x, v) do { register void *p = (x); if (p) mem_free(p); (x) = (v); } while (0)
 
 #ifdef LEAK_DEBUG
-#define mem_free_if(x) do { register void *p = (x); if (p) mem_free(p); } while (0)
+#define mem_free_if(x) mem_free_set_if(x, NULL)
 #else
 #define mem_free_if(x) do { register void *p = (x); if (p) mem_free(p); } while (0)
 #endif

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.212 2004/04/16 16:36:25 zas Exp $ */
+/* $Id: search.c,v 1.213 2004/04/17 02:39:53 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -436,7 +436,7 @@ is_in_range(struct document *document, int y, int yw,
 }
 
 #define realloc_points(pts, size) \
-	mem_align_alloc(pts, size, (size) + 1, sizeof(struct point), 0xFF)
+	mem_align_alloc(pts, size, (size) + 1, struct point, 0xFF)
 
 static void
 get_searched_plain(struct document_view *doc_view, struct point **pt, int *pl,

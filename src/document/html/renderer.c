@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.424 2004/04/16 16:32:49 zas Exp $ */
+/* $Id: renderer.c,v 1.425 2004/04/17 02:39:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,7 +105,7 @@ void put_chars(struct part *, unsigned char *, int);
 
 #define SPACES_GRANULARITY	0x7F
 
-#define ALIGN_SPACES(x, o, n) mem_align_alloc(x, o, n, sizeof(unsigned char), SPACES_GRANULARITY)
+#define ALIGN_SPACES(x, o, n) mem_align_alloc(x, o, n, unsigned char, SPACES_GRANULARITY)
 
 static int
 realloc_line(struct document *document, int y, int x)

@@ -1,5 +1,5 @@
 /* Event handling functions */
-/* $Id: event.c,v 1.16 2004/04/16 16:35:19 zas Exp $ */
+/* $Id: event.c,v 1.17 2004/04/17 02:39:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,9 +66,8 @@ static struct hash *event_hash = NULL;
  * This should be also called after each new plugin loaded. */
 #define EVENT_GRANULARITY 0x07
 
-#define realloc_events() \
-	mem_align_alloc(&events, eventssize, eventssize + 1, \
-			sizeof(struct event), EVENT_GRANULARITY)
+#define realloc_events(ptr, size) \
+	mem_align_alloc(ptr, (size), (size), struct event, EVENT_GRANULARITY)
 
 static inline int
 invalid_event_id(register int id)
@@ -86,7 +85,7 @@ register_event(unsigned char *name)
 	if (id != EVENT_NONE) return id;
 
 	event = events;
-	if (!realloc_events()) return EVENT_NONE;
+	if (!realloc_events(&events, eventssize)) return EVENT_NONE;
 
 	/* If @events got relocated update the hash. */
 	if (event != events) {

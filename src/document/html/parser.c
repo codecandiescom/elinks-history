@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.390 2004/04/16 16:32:49 zas Exp $ */
+/* $Id: parser.c,v 1.391 2004/04/17 02:39:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -155,8 +155,7 @@ end:
 	return 0;
 }
 
-#define realloc_chrs(x, l) \
-	mem_align_alloc(x, l, (l) + 1, sizeof(unsigned char), 0xFF)
+#define realloc_chrs(x, l) mem_align_alloc(x, l, (l) + 1, unsigned char, 0xFF)
 
 #define add_chr(s, l, c)						\
 	do {								\
@@ -1983,7 +1982,7 @@ abort:
 		if (preselect == -1 && has_attr(t_attr, "selected")) preselect = order;
 		v = get_attr_val(t_attr, "value");
 
-		if (!mem_align_alloc(&val, order, order + 1, sizeof(unsigned char *), 0xFF))
+		if (!mem_align_alloc(&val, order, order + 1, unsigned char *, 0xFF))
 			goto abort;
 
 		val[order++] = v;

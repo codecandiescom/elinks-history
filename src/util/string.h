@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.71 2004/04/06 00:30:58 jonas Exp $ */
+/* $Id: string.h,v 1.72 2004/04/17 02:39:53 jonas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -163,7 +163,7 @@ struct string *add_format_to_string(struct string *string, unsigned char *format
 
 #define realloc_string(str, size) \
 	mem_align_alloc(&(str)->source, (str)->length, (size) + 1, \
-			sizeof(unsigned char), STRING_GRANULARITY)
+			unsigned char, STRING_GRANULARITY)
 
 #ifdef LEAK_DEBUG
 
@@ -172,7 +172,7 @@ struct string *add_format_to_string(struct string *string, unsigned char *format
 
 #define debug_realloc_string(str, size) \
 	mem_align_alloc__(file, line, (void **) &(str)->source, (str)->length, (size) + 1, \
-			sizeof(unsigned char), STRING_GRANULARITY)
+			  sizeof(unsigned char), STRING_GRANULARITY)
 
 #else
 

@@ -531,37 +531,38 @@ AM_CONDITIONAL(CONFIG_SCRIPTING, test "$CONFIG_SCRIPTING" = yes)
 
 
 dnl ===================================================================
-dnl Check for njs, optional even if installed.
+dnl Check for SpiderMonkey, optional even if installed.
 dnl ===================================================================
 
-AC_ARG_WITH(njs, [  --without-njs           disable njs support],
-            [if test "$withval" = no; then withval=""; disable_njs=yes; fi])
-AC_MSG_CHECKING([for njs])
+AC_ARG_WITH(spidermonkey, [  --without-spidermonkey  disable SpiderMonkey Mozilla JavaScript engine support],
+            [if test "$withval" = no; then withval=""; disable_spidermonkey=yes; fi])
+AC_MSG_CHECKING([for SpiderMonkey])
 
 if test "$withval" = yes; then withval=""; fi
 
 EL_SAVE_FLAGS
 cf_result=no
 
-if test -z "$disable_njs"; then
+if test -z "$disable_spidermonkey"; then
 	if test ! -d "$withval"; then
 		withval="";
 	fi
-	for njsdir in "$withval" "" /usr /usr/local; do
+	for spidermonkeydir in "$withval" "" /usr /usr/local /opt/spidermonkey /opt/js; do
 		if test "$cf_result" = no; then
-			NJS_LIBS="-ljs"
+			SPIDERMONKEY_LIBS="-ljs"
 
-			if test ! -z "$njsdir"; then
-				NJS_LIBS="-L$njsdir/lib $NJS_LIBS"
-				NJS_CFLAGS="-I$njsdir/include"
+			if test ! -z "$spidermonkeydir"; then
+				SPIDERMONKEY_LIBS="-L$spidermonkeydir/lib $SPIDERMONKEY_LIBS"
+				SPIDERMONKEY_CFLAGS="-I$spidermonkeydir/include"
 			fi
 
-			LIBS="$NJS_LIBS $LIBS_X"
-			CFLAGS="$CFLAGS_X $NJS_CFLAGS"
-			CPPFLAGS="$CPPFLAGS_X $NJS_CFLAGS"
+			LIBS="$SPIDERMONKEY_LIBS $LIBS_X"
+			CFLAGS="$CFLAGS_X $SPIDERMONKEY_CFLAGS"
+			CPPFLAGS="$CPPFLAGS_X $SPIDERMONKEY_CFLAGS"
 
-			AC_TRY_LINK([#include <js.h>],
-				    [js_version()],
+			AC_TRY_LINK([#define XP_UNIX
+				     #include <jsapi.h>],
+				    [JS_GetImplementationVersion()],
 				    cf_result=yes, cf_result=no)
 		fi
 		
@@ -573,16 +574,17 @@ AC_MSG_RESULT($cf_result)
 if test "$cf_result" != yes; then
 	EL_RESTORE_FLAGS
 else
-	EL_CONFIG(CONFIG_NJS, [njs])
+	EL_CONFIG(CONFIG_SPIDERMONKEY, [SpiderMonkey])
 fi
 
-AM_CONDITIONAL(CONFIG_NJS, test "$CONFIG_NJS" = yes)
+AM_CONDITIONAL(CONFIG_SPIDERMONKEY, test "$CONFIG_SPIDERMONKEY" = yes)
 
-AC_SUBST(NJS_LIBS)
-AC_SUBST(NJS_CFLAGS)
+AC_SUBST(SPIDERMONKEY_LIBS)
+AC_SUBST(SPIDERMONKEY_CFLAGS)
 
-EL_CONFIG_DEPENDS(CONFIG_ECMASCRIPT, [CONFIG_NJS], [Ecmascript])
+EL_CONFIG_DEPENDS(CONFIG_ECMASCRIPT, [CONFIG_SPIDERMONKEY], [Ecmascript])
 AM_CONDITIONAL(CONFIG_ECMASCRIPT, test "$CONFIG_ECMASCRIPT" = yes)
+
 
 dnl ===================================================================
 dnl Check for SSL support.

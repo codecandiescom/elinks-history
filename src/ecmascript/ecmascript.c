@@ -1,5 +1,5 @@
 /* Base ECMAScript file. Mostly a proxy for specific library backends. */
-/* $Id: ecmascript.c,v 1.2 2004/09/22 10:42:55 pasky Exp $ */
+/* $Id: ecmascript.c,v 1.3 2004/09/22 15:22:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,7 +12,7 @@
 #include "config/options.h"
 #include "document/view.h"
 #include "ecmascript/ecmascript.h"
-#include "ecmascript/njs.h"
+#include "ecmascript/spidermonkey.h"
 #include "intl/gettext/libintl.h"
 #include "modules/module.h"
 
@@ -40,6 +40,20 @@ static struct option_info ecmascript_options[] = {
 #define get_opt_ecmascript(which)	ecmascript_options[(which)].option.value
 #define get_ecmascript_enable()		get_opt_ecmascript(ECMASCRIPT_ENABLE).number
 
+
+static void
+ecmascript_init(struct module *module)
+{
+	spidermonkey_init();
+}
+
+static void
+ecmascript_done(struct module *module)
+{
+	spidermonkey_done();
+}
+
+
 struct ecmascript_interpreter *
 ecmascript_get_interpreter(struct document_view *doc_view)
 {
@@ -52,7 +66,7 @@ ecmascript_get_interpreter(struct document_view *doc_view)
 		return NULL;
 
 	interpreter->doc_view = doc_view;
-	njs_get_interpreter(interpreter);
+	spidermonkey_get_interpreter(interpreter);
 
 	return interpreter;
 }
@@ -61,9 +75,10 @@ void
 ecmascript_put_interpreter(struct ecmascript_interpreter *interpreter)
 {
 	assert(interpreter);
-	njs_put_interpreter(interpreter);
+	spidermonkey_put_interpreter(interpreter);
 	mem_free(interpreter);
 }
+
 
 struct module ecmascript_module = struct_module(
 	/* name: */		N_("ECMAScript"),
@@ -71,6 +86,6 @@ struct module ecmascript_module = struct_module(
 	/* events: */		NULL,
 	/* submodules: */	NULL,
 	/* data: */		NULL,
-	/* init: */		NULL,
-	/* done: */		NULL
+	/* init: */		ecmascript_init,
+	/* done: */		ecmascript_done
 );

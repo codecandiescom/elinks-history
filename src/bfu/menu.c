@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.55 2003/05/03 20:56:15 pasky Exp $ */
+/* $Id: menu.c,v 1.56 2003/05/03 22:46:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,8 +126,10 @@ refresh_hotkeys(struct terminal *term, struct menu *menu)
 static inline int
 is_hotkey(struct menu_item *item, unsigned char hotkey, struct terminal *term)
 {
-	return (item->hotkey_pos && (_(item->text, term))
-		&& (_(item->text, term)[item->hotkey_pos] == hotkey));
+	unsigned char *text = _(item->text, term);
+	
+	return (item->hotkey_pos && text
+		&& (upcase(text[item->hotkey_pos]) == upcase(hotkey)));
 }
 
 static void

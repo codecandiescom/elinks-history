@@ -3,8 +3,6 @@ Known bugs:
 - Tilde doesn't expand as it should when used in goto dialog, ~ -> /home and ~/
   -> current directory.
 
-- Menu accelerators are currently case-sensitive.
-
 - When a page displayed as plain-text includes '<title>' and '</title>', then
   the enclosed text is displayed as the page's title.
 
@@ -54,4 +52,4 @@ Known bugs:
 
 Key: - nothing done + work in progress * almost ready
 
-$Id: BUGS,v 1.41 2003/05/03 21:59:27 pasky Exp $
+$Id: BUGS,v 1.42 2003/05/03 22:46:29 zas Exp $

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.70 2004/07/18 13:33:58 pasky Exp $ */
+/* $Id: dialogs.c,v 1.71 2004/09/24 00:59:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -351,7 +351,7 @@ push_add_button(struct dialog_data *dlg_data, struct widget_data *button)
 	struct cookie *new_cookie;
 	struct cookie_server *server;
 
-	if (!box->sel && box->sel->udata) return 0;
+	if (!box->sel || !box->sel->udata) return 0;
 
 	new_cookie = mem_calloc(1, sizeof(struct cookie));
 	if (!new_cookie) return 0;

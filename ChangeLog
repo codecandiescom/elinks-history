@@ -1,3 +1,46 @@
+Fri Mar 26 18:15:02 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Minor tidyup. A useless FIXME was removed.  
+
+Fri Mar 26 18:05:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Do not call safe_hard_write() if there is no byte to write.  
+
+Fri Mar 26 17:56:53 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Label fr was renamed free_and_return.  
+
+Fri Mar 26 17:55:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/signals.c:
+
+	Fix wrong #include: kbd.c -> kdb.h.  
+
+Fri Mar 26 17:49:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	@c -> @bytes_read 
+
+Fri Mar 26 17:46:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	RD() macro was moved near the place where it is used.  
+
+Fri Mar 26 17:42:05 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Code redundancy was slightly reduced by introducing
+	safe_hard_write().  
+
 Thu Mar 25 17:34:59 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* contrib/elinks.spec.in:

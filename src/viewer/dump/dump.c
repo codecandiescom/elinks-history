@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.51 2003/10/31 17:32:41 jonas Exp $ */
+/* $Id: dump.c,v 1.52 2003/10/31 22:18:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,8 +24,7 @@
 #include "main.h"
 #include "config/options.h"
 #include "cache/cache.h"
-#include "document/document.h"
-#include "document/view.h"
+#include "document/html/renderer.h"
 #include "document/options.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"

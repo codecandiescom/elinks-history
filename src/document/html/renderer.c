@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.444 2004/05/26 16:22:08 jonas Exp $ */
+/* $Id: renderer.c,v 1.445 2004/06/04 07:54:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,6 +187,9 @@ realloc_spaces(struct part *part, int length)
 static inline void
 clear_hchars(struct part *part, int x, int y, int xl)
 {
+	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
+	struct screen_char *pos, *end;
+
 	assert(part && part->document && xl > 0);
 	if_assert_failed return;
 
@@ -196,10 +199,14 @@ clear_hchars(struct part *part, int x, int y, int xl)
 	assert(part->document->data);
 	if_assert_failed return;
 
-	for (; xl; xl--, x++) {
-		POS(x, y).data = ' ';
-		POS(x, y).attr = 0;
-	}
+	pos = &POS(x, y);
+	end = pos + xl - 1;
+	end->data = ' ';
+	end->attr = 0;
+	set_term_color(end, &colors, 0, part->document->options.color_mode);
+
+	while (pos < end)
+		copy_screen_chars(pos++, end, 1);
 }
 
 /* TODO: Merge parts with get_format_screen_char(). --jonas */

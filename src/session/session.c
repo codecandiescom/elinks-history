@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.234 2003/11/16 03:19:48 jonas Exp $ */
+/* $Id: session.c,v 1.235 2003/11/16 06:25:13 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1428,13 +1428,14 @@ destroy_session(struct session *ses)
 	if (ses->goto_position) mem_free(ses->goto_position);
 	if (ses->imgmap_href_base) mem_free(ses->imgmap_href_base);
 	if (ses->imgmap_target_base) mem_free(ses->imgmap_target_base);
-	if (ses->tq_ce) cache_entry_unlock(ses->tq_ce);
-	if (ses->tq_url) {
-		change_connection(&ses->tq, NULL, PRI_CANCEL, 0);
-		mem_free(ses->tq_url);
+	if (ses->tq.ce) cache_entry_unlock(ses->tq.ce);
+	if (ses->tq.url) {
+		change_connection(&ses->tq.download, NULL, PRI_CANCEL, 0);
+		mem_free(ses->tq.url);
 	}
-	if (ses->tq_goto_position) mem_free(ses->tq_goto_position);
-	if (ses->tq_prog) mem_free(ses->tq_prog);
+	if (ses->tq.goto_position) mem_free(ses->tq.goto_position);
+	if (ses->tq.prog) mem_free(ses->tq.prog);
+	if (ses->tq.target_frame) mem_free(ses->tq.target_frame);
 	if (ses->dn_url) mem_free(ses->dn_url);
 	if (ses->search_word) mem_free(ses->search_word);
 	if (ses->last_search_word) mem_free(ses->last_search_word);

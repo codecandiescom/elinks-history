@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.61 2003/11/13 21:42:24 pasky Exp $ */
+/* $Id: session.h,v 1.62 2003/11/16 06:25:13 witekfl Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -60,6 +60,17 @@ enum task_type {
 	TASK_IMGMAP,
 	TASK_RELOAD,
 	TASK_HISTORY,
+};
+
+struct tq {
+	struct download download;
+	struct cache_entry *ce;
+	unsigned char *url;
+	unsigned char *target_frame;
+	unsigned char *goto_position;
+	unsigned char *prog;
+	int prog_flags;
+	int frame;
 };
 
 /* This is one of the building stones of ELinks architecture --- this structure
@@ -127,14 +138,7 @@ struct session {
 
 
 	/* The possibly running type query (what-to-do-with-that-file?) */
-
-	struct download tq;
-	struct cache_entry *tq_ce;
-	unsigned char *tq_url;
-	unsigned char *tq_goto_position;
-	unsigned char *tq_prog;
-	int tq_prog_flags;
-
+	struct tq tq;
 
 	/* The Bars */
 

@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.3 2003/11/13 22:56:03 pasky Exp $ */
+/* $Id: refresh.c,v 1.4 2003/11/16 06:25:12 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,7 @@ do_document_refresh(void *data)
 	assert(refresh);
 
 	refresh->timer = -1;
-	if (ses->tq_url && !strcasecmp(refresh->url, ses->tq_url))
+	if (ses->tq.url && !strcasecmp(refresh->url, ses->tq.url))
 		return;
 
 	/* This makes sure that we send referer. */

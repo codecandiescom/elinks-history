@@ -1,3 +1,25 @@
+Wed Jun  2 10:36:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	Elinksify temporary file name template: "linksarea-XXXXXX" ->
+	"elinks-area-XXXXXX" 
+
+Wed Jun  2 10:34:58 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: protocol/user.c, util/file.c, util/file.h, util/secsave.c,
+	viewer/text/textarea.c:
+
+	safe_mkstemp() was introduced to prevent a potential security issue,
+	leading to permit all users to read textarea content while an user
+	edit it through external editor.  
+
+Wed Jun  2 06:38:12 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Remove some excess indentation spotted by Jonas.  
+
 Tue Jun  1 07:14:23 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/protocol/uri.c:

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.12 2003/07/13 10:24:46 jonas Exp $ */
+/* $Id: uri.c,v 1.13 2003/07/13 12:57:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,10 +185,9 @@ get_uri_port(struct uri *uri)
 	return port;
 }
 
-/* TODO The @no_data arg is a minimum solution. It should probably be
- * using an enum. --jonas */
+/* We might need something more intelligent than this Swiss army knife. */
 unsigned char *
-get_uri_string(struct uri *uri, int no_data)
+get_uri_string(struct uri *uri, int components)
 {
 	unsigned char *str = init_str();
 	int len = 0;
@@ -202,18 +201,33 @@ get_uri_string(struct uri *uri, int no_data)
 	if (protocol == PROTOCOL_UNKNOWN
 	    || get_protocol_free_syntax(protocol)) {
 		/* Custom or unknown or free-syntax protocol;
-		 * keep the URL untouched. */
+		 * keep the URI untouched. */
 		mem_free(str);
 		return stracpy(uri->protocol);
 	}
-	
-	add_bytes_to_str(&str, &len, uri->protocol, uri->protocollen);
-	add_chr_to_str(&str, &len, ':');
 
-	if (get_protocol_need_slashes(protocol))
-		add_to_str(&str, &len, "//");
+#define wants(x) !(components & (x))
 
-	if (uri->host) {
+	if (wants(URI_PROTOCOL)) {
+		add_bytes_to_str(&str, &len, uri->protocol, uri->protocollen);
+		add_chr_to_str(&str, &len, ':');
+		if (get_protocol_need_slashes(protocol))
+			add_to_str(&str, &len, "//");
+	}
+
+	if (wants(URI_USER) && uri->userlen) {
+		add_bytes_to_str(&str, &len, uri->user, uri->userlen);
+
+		if (wants(URI_PASSWORD) && uri->passwordlen) {
+			add_chr_to_str(&str, &len, ':');
+			add_bytes_to_str(&str, &len, uri->password,
+						     uri->passwordlen);
+		}
+
+		add_chr_to_str(&str, &len, '@');
+	}
+
+	if (wants(URI_HOST) && uri->host) {
 #ifdef IPV6
 		int brackets = !!memchr(uri->host, ':', uri->hostlen);
 
@@ -225,26 +239,28 @@ get_uri_string(struct uri *uri, int no_data)
 #endif
 	}
 
-	if (uri->port && uri->portlen) {
-		add_chr_to_str(&str, &len, ':');
-		add_bytes_to_str(&str, &len, uri->port, uri->portlen);
-	} else {
-		/* For HTTP Authentication RFC2616 section 3.2.2:
-		 * "If the port is empty or not given, port 80 is assumed." */
-		/* For user protocols we don't know a default port. Should
-		 * user protocols ports be configurable? */
-		if (protocol != PROTOCOL_USER) {
+	if (wants(URI_PORT)) {
+		if (uri->portlen) {
+			add_chr_to_str(&str, &len, ':');
+			add_bytes_to_str(&str, &len, uri->port, uri->portlen);
+		} else if (protocol != PROTOCOL_USER) {
+			/* For user protocols we don't know a default port.
+			 * Should user protocols ports be configurable? */
 			add_chr_to_str(&str, &len, ':');
 			add_num_to_str(&str, &len, get_protocol_port(protocol));
 		}
+
+		if (get_protocol_need_slash_after_host(protocol))
+			add_chr_to_str(&str, &len, '/');
 	}
 
-	if (get_protocol_need_slash_after_host(protocol))
-		add_chr_to_str(&str, &len, '/');
+	if (wants(URI_DATA) && uri->datalen)
+		add_bytes_to_str(&str, &len, uri->data, uri->datalen);
 
-	if (no_data || !uri->datalen) return str;
+	if (wants(URI_POST) && uri->post)
+		add_bytes_to_str(&str, &len, uri->post, strlen(uri->post));
 
-	add_bytes_to_str(&str, &len, uri->data, uri->datalen);
+#undef wants
 
 	return str;
 }

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.9 2003/07/13 10:17:16 jonas Exp $ */
+/* $Id: uri.h,v 1.10 2003/07/13 12:57:53 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -30,6 +30,16 @@ struct uri {
 	unsigned char *post;
 };
 
+enum uri_component {
+	URI_PROTOCOL	= (1 << 0),
+	URI_USER	= (1 << 1),
+	URI_PASSWORD	= (1 << 2),
+	URI_HOST	= (1 << 3),
+	URI_PORT	= (1 << 4),
+	URI_DATA	= (1 << 5),
+	URI_POST	= (1 << 6),
+};
+
 /* Expects that uri->protocol contains the uri string. */
 /* Returns the length of the parsed uri or 0 if some error was found. */
 int parse_uri(struct uri *uri, unsigned char *uristring);
@@ -45,8 +55,8 @@ end_of_dir(unsigned char c)
 }
 
 /* Returns a valid host URL (for http authentification) or NULL. */
-/* @no_data controls wheter the data part is should be added. */
-unsigned char *get_uri_string(struct uri *uri, int no_data);
+/* The @components bitmask controls what is NOT added. */
+unsigned char *get_uri_string(struct uri *uri, int components);
 
 void encode_uri_string(unsigned char *, unsigned char **, int *);
 void decode_uri_string(unsigned char *);

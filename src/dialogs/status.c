@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.77 2004/07/17 20:22:17 pasky Exp $ */
+/* $Id: status.c,v 1.78 2004/08/02 16:17:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,10 +171,6 @@ update_status(void)
 
 		if (show_tabs(show_tabs_bar, tabs) != status->show_tabs_bar) {
 			status->show_tabs_bar = show_tabs(show_tabs_bar, tabs);
-			/* Force the current document to be rerendered so the
-			 * document view and document height is updated to fit
-			 * into the new dimensions. Related to bug 87. */
-			render_document_frames(ses, 1);
 			dirty = 1;
 		}
 #ifdef CONFIG_LEDS
@@ -183,6 +179,13 @@ update_status(void)
 			dirty = 1;
 		}
 #endif
+
+		if (dirty) {
+			/* Force the current document to be rerendered so the
+			 * document view and document height is updated to fit
+			 * into the new dimensions. Related to bug 87. */
+			render_document_frames(ses, 1);
+		}
 
 		status->set_window_title = set_window_title;
 

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.161 2004/01/09 10:38:37 miciah Exp $ */
+/* $Id: menu.c,v 1.162 2004/01/09 10:39:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -459,11 +459,230 @@ display_menu(struct terminal *term, struct menu *menu)
 }
 
 
+#ifdef CONFIG_MOUSE
+static void
+menu_mouse_handler(struct menu *menu, struct term_event *ev)
+{
+	struct window *win = menu->win;
+
+	switch (ev->b & BM_BUTT) {
+		/* XXX: We return here directly because we
+		 * would just break this switch instead of the
+		 * large one. If you will add some generic
+		 * action after the former switch, replace the
+		 * return with goto here. --pasky */
+		case B_WHEEL_UP:
+			if ((ev->b & BM_ACT) == B_DOWN) {
+				scroll_menu(menu, -1);
+				display_menu(win->term, menu);
+			}
+			return;
+		case B_WHEEL_DOWN:
+			if ((ev->b & BM_ACT) == B_DOWN) {
+				scroll_menu(menu, 1);
+				display_menu(win->term, menu);
+			}
+			return;
+	}
+
+	if (ev->x < menu->x
+	    || ev->x >= menu->x + menu->width
+	    || ev->y < menu->y
+	    || ev->y >= menu->y + menu->height) {
+		if ((ev->b & BM_ACT) == B_DOWN) {
+			delete_window_ev(win, NULL);
+
+		} else {
+			struct window *w1;
+
+			for (w1 = win;
+			     (void *)w1 != &win->term->windows;
+			     w1 = w1->next) {
+				struct menu *m1;
+
+				if (w1->handler == mainmenu_handler) {
+					if (!ev->y)
+						delete_window_ev(win, ev);
+					break;
+				}
+
+				if (w1->handler != menu_handler) break;
+
+				m1 = w1->data;
+
+				if (ev->x > m1->x
+				    && ev->x < m1->x + m1->width - 1
+				    && ev->y > m1->y
+				    && ev->y < m1->y + m1->height - 1)
+					delete_window_ev(win, ev);
+			}
+		}
+
+	} else {
+		if (ev->x >=  menu->x
+		    && ev->x < menu->x + menu->width
+		    && ev->y >=  menu->y + 1
+		    && ev->y < menu->y + menu->height - 1) {
+			int sel = ev->y - menu->y - 1 + menu->view;
+
+			if (sel >= 0 && sel < menu->ni
+			    && mi_is_selectable(menu->items[sel])) {
+				menu->selected = sel;
+				scroll_menu(menu, 0);
+				display_menu(win->term, menu);
+
+				if ((ev->b & BM_ACT) == B_UP ||
+				    mi_is_submenu(menu->items[sel]))
+					select_menu(win->term, menu);
+			}
+		}
+	}
+}
+#endif
+
+static void
+menu_kbd_handler(struct menu *menu, struct term_event *ev)
+{
+	struct window *win = menu->win;
+	int s = 0;
+
+	switch (kbd_action(KM_MENU, ev, NULL)) {
+		case ACT_LEFT:
+		case ACT_RIGHT:
+			if ((void *) win->next != &win->term->windows
+			    && win->next->handler == mainmenu_handler) {
+				delete_window_ev(win, ev);
+				goto break2;
+			}
+
+			if (kbd_action(KM_MENU, ev, NULL) == ACT_RIGHT)
+				goto enter;
+
+			delete_window(win);
+
+			goto break2;
+
+		case ACT_UP:
+			scroll_menu(menu, -1);
+			break;
+
+		case ACT_DOWN:
+			scroll_menu(menu, 1);
+			break;
+
+		case ACT_HOME:
+			menu->selected = -1;
+			scroll_menu(menu, 1);
+			break;
+
+		case ACT_END:
+			menu->selected = menu->ni;
+			scroll_menu(menu, -1);
+			break;
+#define 
+		case ACT_PAGE_UP:
+		{
+			int i = menu->selected - 2;
+			int found = 0;
+			int step = -1;
+
+			for (; i >= 0; i--) {
+				if (mi_is_horizontal_bar(menu->items[i])) {
+					found = 1;
+					break;
+				}
+			}
+
+			if (found) {
+				step = i + 1 - menu->selected;
+			} else {
+				step = -DIST;
+			}
+
+			if (menu->selected + step < 0)
+				step = -menu->selected;
+			if (step < -DIST) step = DIST;
+			if (step > 0)
+				step = menu->selected - menu->ni - 1;
+
+			scroll_menu(menu, step);
+		}
+			break;
+
+		case ACT_PAGE_DOWN:
+		{
+			int i = menu->selected;
+			int found = 0;
+			int step = 1;
+
+			for (; i < menu->ni; i++) {
+				if (mi_is_horizontal_bar(menu->items[i])) {
+					found = 1;
+					break;
+				}
+			}
+
+			if (found) {
+				step = i + 1 - menu->selected;
+			} else {
+				step = DIST;
+			}
+
+			int_upper_bound(&step, menu->ni - menu->selected - 1);
+			int_upper_bound(&step, DIST);
+			int_upper_bound(&step, menu->ni - 1);
+
+			scroll_menu(menu, step);
+		}
+			break;
+#undef D
+		case ACT_ENTER:
+		case ACT_SELECT:
+			goto enter;
+
+		case ACT_CANCEL:
+			if ((void *) win->next != &win->term->windows
+			    && win->next->handler == mainmenu_handler)
+				delete_window_ev(win, ev);
+			else
+				delete_window_ev(win, NULL);
+
+			goto break2;
+
+		default:
+		{
+			if ((ev->x >= KBD_F1 && ev->x <= KBD_F12) ||
+			    ev->y == KBD_ALT) {
+				delete_window_ev(win, ev);
+				goto break2;
+			}
+
+			if (ev->x > ' ' && ev->x < 255) {
+				if (check_hotkeys((struct menu_head *)menu, ev->x, win->term))
+					s = 1, scroll_menu(menu, 0);
+				else if (check_not_so_hot_keys((struct menu_head *)menu, ev->x, win->term))
+					scroll_menu(menu, 0);
+				break;
+			}
+
+		}
+			break;
+	}
+
+	display_menu(win->term, menu);
+	if (s) {
+enter:
+		select_menu(win->term, menu);
+	}
+
+break2:
+	return;
+}
+
 static void
 menu_handler(struct window *win, struct term_event *ev, int fwd)
 {
 	struct menu *menu = win->data;
-	int s = 0;
 
 	menu->win = win;
 
@@ -480,212 +699,12 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 
 		case EV_MOUSE:
 #ifdef CONFIG_MOUSE
-			switch (ev->b & BM_BUTT) {
-				/* XXX: We return here directly because we
-				 * would just break this switch instead of the
-				 * large one. If you will add some generic
-				 * action after the former switch, replace the
-				 * return with goto here. --pasky */
-				case B_WHEEL_UP:
-					if ((ev->b & BM_ACT) == B_DOWN) {
-						scroll_menu(menu, -1);
-						display_menu(win->term, menu);
-					}
-					return;
-				case B_WHEEL_DOWN:
-					if ((ev->b & BM_ACT) == B_DOWN) {
-						scroll_menu(menu, 1);
-						display_menu(win->term, menu);
-					}
-					return;
-			}
-
-			if (ev->x < menu->x
-			    || ev->x >= menu->x + menu->width
-			    || ev->y < menu->y
-			    || ev->y >= menu->y + menu->height) {
-				if ((ev->b & BM_ACT) == B_DOWN) {
-					delete_window_ev(win, NULL);
-
-				} else {
-					struct window *w1;
-
-					for (w1 = win;
-					     (void *)w1 != &win->term->windows;
-					     w1 = w1->next) {
-						struct menu *m1;
-
-						if (w1->handler == mainmenu_handler) {
-							if (!ev->y)
-								delete_window_ev(win, ev);
-							break;
-						}
-
-						if (w1->handler != menu_handler) break;
-
-						m1 = w1->data;
-
-						if (ev->x > m1->x
-						    && ev->x < m1->x + m1->width - 1
-						    && ev->y > m1->y
-						    && ev->y < m1->y + m1->height - 1)
-							delete_window_ev(win, ev);
-					}
-				}
-
-			} else {
-				if (ev->x >=  menu->x
-				    && ev->x < menu->x + menu->width
-				    && ev->y >=  menu->y + 1
-				    && ev->y < menu->y + menu->height - 1) {
-					int sel = ev->y - menu->y - 1 + menu->view;
-
-					if (sel >= 0 && sel < menu->ni
-					    && mi_is_selectable(menu->items[sel])) {
-						menu->selected = sel;
-						scroll_menu(menu, 0);
-						display_menu(win->term, menu);
-
-						if ((ev->b & BM_ACT) == B_UP ||
-						    mi_is_submenu(menu->items[sel]))
-							select_menu(win->term, menu);
-					}
-				}
-			}
+			menu_mouse_handler(menu, ev);
 #endif /* CONFIG_MOUSE */
 			break;
 
 		case EV_KBD:
-			switch (kbd_action(KM_MENU, ev, NULL)) {
-				case ACT_LEFT:
-				case ACT_RIGHT:
-					if ((void *) win->next != &win->term->windows
-					    && win->next->handler == mainmenu_handler) {
-						delete_window_ev(win, ev);
-						goto break2;
-					}
-
-					if (kbd_action(KM_MENU, ev, NULL) == ACT_RIGHT)
-						goto enter;
-
-					delete_window(win);
-
-					goto break2;
-
-				case ACT_UP:
-					scroll_menu(menu, -1);
-					break;
-
-				case ACT_DOWN:
-					scroll_menu(menu, 1);
-					break;
-
-				case ACT_HOME:
-					menu->selected = -1;
-					scroll_menu(menu, 1);
-					break;
-
-				case ACT_END:
-					menu->selected = menu->ni;
-					scroll_menu(menu, -1);
-					break;
-#define DIST 5
-				case ACT_PAGE_UP:
-				{
-					int i = menu->selected - 2;
-					int found = 0;
-					int step = -1;
-
-					for (; i >= 0; i--) {
-						if (mi_is_horizontal_bar(menu->items[i])) {
-							found = 1;
-							break;
-						}
-					}
-
-					if (found) {
-						step = i + 1 - menu->selected;
-					} else {
-						step = -DIST;
-					}
-
-					if (menu->selected + step < 0)
-						step = -menu->selected;
-					if (step < -DIST) step = DIST;
-					if (step > 0)
-						step = menu->selected - menu->ni - 1;
-
-					scroll_menu(menu, step);
-				}
-					break;
-
-				case ACT_PAGE_DOWN:
-				{
-					int i = menu->selected;
-					int found = 0;
-					int step = 1;
-
-					for (; i < menu->ni; i++) {
-						if (mi_is_horizontal_bar(menu->items[i])) {
-							found = 1;
-							break;
-						}
-					}
-
-					if (found) {
-						step = i + 1 - menu->selected;
-					} else {
-						step = DIST;
-					}
-
-					int_upper_bound(&step, menu->ni - menu->selected - 1);
-					int_upper_bound(&step, DIST);
-					int_upper_bound(&step, menu->ni - 1);
-
-					scroll_menu(menu, step);
-				}
-					break;
-#undef DIST
-				case ACT_ENTER:
-				case ACT_SELECT:
-					goto enter;
-
-				case ACT_CANCEL:
-					if ((void *) win->next != &win->term->windows
-					    && win->next->handler == mainmenu_handler)
-						delete_window_ev(win, ev);
-					else
-						delete_window_ev(win, NULL);
-
-					goto break2;
-
-				default:
-				{
-					if ((ev->x >= KBD_F1 && ev->x <= KBD_F12) ||
-					    ev->y == KBD_ALT) {
-						delete_window_ev(win, ev);
-						goto break2;
-					}
-
-					if (ev->x > ' ' && ev->x < 255) {
-						if (check_hotkeys((struct menu_head *)menu, ev->x, win->term))
-							s = 1, scroll_menu(menu, 0);
-						else if (check_not_so_hot_keys((struct menu_head *)menu, ev->x, win->term))
-							scroll_menu(menu, 0);
-						break;
-					}
-
-				}
-					break;
-			}
-
-			display_menu(win->term, menu);
-			if (s) {
-enter:
-				select_menu(win->term, menu);
-			}
-
-break2:
+			menu_kbd_handler(menu, ev);
 			break;
 
 		case EV_ABORT:

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.41 2004/01/09 13:07:46 miciah Exp $ */
+/* $Id: leds.c,v 1.42 2004/02/13 17:11:30 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "elinks.h"
 
@@ -114,11 +115,12 @@ draw_leds(struct session *ses)
 	int i;
 	int xpos = term->width - LEDS_COUNT - 3;
 	int ypos = term->height - 1;
+	int l = 0;
 
 	/* This should be done elsewhere, but this is very nice place where we
 	 * could do that easily. */
 	if (get_opt_int("ui.timer.enable") == 2) {
-		char s[256]; int l;
+		char s[256];
 
 		snprintf(s, 256, "[%d]", timer_duration);
 		l = strlen(s);
@@ -135,6 +137,20 @@ draw_leds(struct session *ses)
 		led_color = get_bfu_color(term, "status.status-text");
 		if (!led_color) goto end;
 	}
+
+#ifdef HAVE_STRFTIME
+	if (get_opt_bool("ui.timer.clock.enable")) {
+		char s[30];
+		time_t curtime = time(NULL);
+		struct tm *loctime = localtime(&curtime);
+		int i, length;
+
+		length = strftime(s, 30, get_opt_str("ui.timer.clock.format"), loctime);
+		s[length] = '\0';
+		for (i = length - 1; i >= 0; i--)
+			draw_char(term, xpos - l - 1 - (length - i), ypos, s[i], 0, led_color);
+	}
+#endif
 
 	/* We must shift the whole thing by one char to left, because we don't
 	 * draft the char in the right-down corner :(. */

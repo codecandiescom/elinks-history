@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.97 2004/02/11 11:44:25 zas Exp $ */
+/* $Id: options.inc,v 1.98 2004/02/13 17:11:30 witekfl Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1150,7 +1150,7 @@ struct option_info config_options_info[] = {
 		N_("Timed action after certain interval of user inactivity. Someone can\n"
 		"even find this useful, although you may not believe that.")),
 
-#ifdef USE_LEDS
+#ifdef CONFIG_LEDS
 	INIT_OPT_INT("ui.timer", N_("Enable"),
 		"enable", 0, 0, 2, 0,
 		N_("Whether to enable the timer or not:\n"
@@ -1174,6 +1174,17 @@ struct option_info config_options_info[] = {
 		"action", 0, "",
 		N_("Key-binding action to be triggered when timer reaches zero.")),
 
+	INIT_OPT_TREE("ui.timer", N_("Clock"),
+		"clock", 0, N_("Digital clock.")),
+
+	INIT_OPT_BOOL("ui.timer.clock", N_("Enable"),
+		"enable", 0, 0,
+		N_("Whether to enable displaying of digital clock. Note that,\n"
+			"timer and LEDs should be enabled to make effect.")),
+
+	INIT_OPT_STRING("ui.timer.clock", N_("Format"),
+		"format", 0, "%H:%M",
+		N_("Format string for digital clock. See strftime(3) man page for details.")),
 
 	INIT_OPT_TREE("ui", N_("Window tabs"),
 		"tabs", 0,

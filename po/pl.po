@@ -2206,7 +2206,7 @@ msgstr "Wy¶wietlanie URI"
 
 #: src/config/options.inc:537
 msgid "Display URIs in the document as links."
-msgstr "Wy¶wietlanie URI w dokumencie jako odno¶niki."
+msgstr "Wy¶wietlanie URI w dokumencie jako odno¶ników."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:543

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.271 2004/08/21 21:11:33 miciah Exp $ */
+/* $Id: uri.c,v 1.272 2004/08/30 03:06:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,13 +82,14 @@ static int
 check_uri_file(unsigned char *name)
 {
 	/* Check POST_CHAR etc ... */
-	static const unsigned char *chars = "\001#?";
+	static const unsigned char chars[] = "\001#?";
+	int i;
 
 	if (file_exists(name))
 		return strlen(name);
 
-	for (; *chars; chars++) {
-		unsigned char *pos = strchr(name, *chars);
+	for (i = 0; i < sizeof(chars) - 1; i++) {
+		unsigned char *pos = strchr(name, chars[i]);
 		int namelen = -1;
 
 		if (!pos) continue;
@@ -161,15 +162,17 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 		return URI_ERRNO_OK;
 
 	} else if (uri->protocol == PROTOCOL_FILE) {
-		uri->data = prefix_end;
-		uri->datalen = check_uri_file(prefix_end);
+		int datalen = check_uri_file(prefix_end);
 
-		if (uri->datalen < 0)
-			uri->datalen = strlen(prefix_end);
-		else if (uri->data[uri->datalen] == '#') {
-			uri->fragment = uri->data + uri->datalen + 1;
+		if (datalen <= 0)
+			datalen = strlen(prefix_end);
+		else if (prefix_end[datalen] == '#') {
+			uri->fragment = uri->data + datalen + 1;
 			uri->fragmentlen = strlen(uri->fragment);
 		}
+
+		uri->data = prefix_end;
+		uri->datalen = datalen;
 
 		return URI_ERRNO_OK;
 	}

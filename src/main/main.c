@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.68 2002/12/31 01:07:28 pasky Exp $ */
+/* $Id: main.c,v 1.69 2002/12/31 01:08:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -439,36 +439,6 @@ terminate_all_subsystems()
 }
 
 
-#include "elusive/parser/attrib.h"
-#include "elusive/parser/parser.h"
-#include "elusive/parser/syntree.h"
-
-static void
-print_node(struct syntree_node *node, int indentation)
-{
-	struct syntree_node *leaf;
-	struct attribute *attrib;
-
-	printf("%.*s [%.*s] :: %d (%s)\n",
-		indentation,"                                                                                  ",
-		node->strlen, node->str,
-		node->special, node->src);
-
-	if (!list_empty(node->attrs))
-		printf("%.*s   ",
-			indentation,"                                                                                  ");
-	foreach (attrib, node->attrs)
-		printf("%.*s->%.*s :: ",
-			attrib->namelen, attrib->name, attrib->valuelen, attrib->value);
-	if (!list_empty(node->attrs))
-		printf("\n");
-
-	printf("\n");
-
-	foreach (leaf, node->leafs)
-		print_node(leaf, indentation + 5);
-}
-
 int
 main(int argc, char *argv[])
 {
@@ -476,29 +446,13 @@ main(int argc, char *argv[])
 	ac = argc;
 	av = (unsigned char **)argv;
 
-#if 0
 	select_loop(init);
 	terminate_all_subsystems();
-#endif
-	{
-		unsigned char *htmlcode = "<html><head><title>Hello world!</title></head><body bgcolor=\"black\" text=white dottedmargin whee = 1><h1>hello!</h1><hr /><p>So this is christmas... and <b>happy new year</b>!</p></body></html>";
-		int htmlcode_len = strlen(htmlcode);
-		struct parser_state *state = elusive_init(PARSER_HTML);
-
-		printf("HTML source: %s (%d)\n", htmlcode, htmlcode_len);
-		elusive_parse(state, &htmlcode, &htmlcode_len);
-		printf("HTML source left unparsed: %s (%d)\n", htmlcode, htmlcode_len);
-
-		print_node(state->real_root, 0);
-
-		elusive_done(state);
-	}
 
 #ifdef LEAK_DEBUG
 	check_memory_leaks();
 #endif
 	return retval;
-	select_loop(init); terminate_all_subsystems();
 }
 
 

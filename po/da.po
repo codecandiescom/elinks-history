@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-28 00:13+0100\n"
+"POT-Creation-Date: 2004-12-28 02:35+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -43,8 +43,8 @@ msgstr "Tryk mellemrum for at åbne denne mappe."
 #: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
 #: src/dialogs/menu.c:96 src/dialogs/menu.c:516 src/dialogs/menu.c:567
 #: src/dialogs/options.c:172 src/dialogs/options.c:249
-#: src/ecmascript/spidermonkey.c:509 src/ecmascript/spidermonkey.c:2103
-#: src/ecmascript/spidermonkey.c:2130 src/formhist/dialogs.c:179
+#: src/ecmascript/spidermonkey.c:371 src/ecmascript/spidermonkey.c:1931
+#: src/ecmascript/spidermonkey.c:1958 src/formhist/dialogs.c:179
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
 #: src/protocol/protocol.c:227 src/protocol/user.c:268
 #: src/sched/download.c:231 src/sched/download.c:327 src/sched/download.c:368
@@ -653,29 +653,32 @@ msgstr ""
 "kan ikke tilføje eller ændre indgange i filtypehåndteringstabellen."
 
 #: src/config/cmdline.c:608
-#, fuzzy
 msgid "Autosubmit first form"
-msgstr "~Send formular"
+msgstr "Send automatisk den første formular"
 
 #: src/config/cmdline.c:610
-msgid "Go and submit the first form you'll stumble upon."
-msgstr ""
+msgid "Automatically submit the first form in the given URLs."
+msgstr "Send automatisk den første formular i de givne URLer."
 
 #: src/config/cmdline.c:612
-msgid "Clone session with given ID"
-msgstr ""
+msgid "Clone internal session with given ID"
+msgstr "Klon intern session med det givne ID"
 
 #: src/config/cmdline.c:614
 msgid ""
-"ID of session (ELinks instance) which we want to clone.\n"
-"This is internal ELinks option, you don't want to use it."
+"Used internally when opening ELinks instances in new windows.\n"
+"The ID maps to information used when creating the new instance\n"
+"You don't want to use it."
 msgstr ""
+"Bruges internt, når ELinks instanser åbnes i nye terminalvinduer.\n"
+"Det givne ID henviser til information som den nye instans baseres på.\n"
+"Dette programargument bør ikke benyttes."
 
-#: src/config/cmdline.c:619
+#: src/config/cmdline.c:620
 msgid "Name of directory with configuration file"
-msgstr ""
+msgstr "Navn på mappen med konfigurationsfilen"
 
-#: src/config/cmdline.c:621
+#: src/config/cmdline.c:622
 msgid ""
 "ELinks will read and write its config files to the given\n"
 "directory instead of ~/.elinks. If the path begins with\n"
@@ -683,134 +686,133 @@ msgid ""
 "be relative to your HOME dir."
 msgstr ""
 
-#: src/config/cmdline.c:628
-#, fuzzy
+#: src/config/cmdline.c:629
 msgid "Name of configuration file"
-msgstr "Konfigurationsindstillinger:\n"
+msgstr "Navnet på konfigurationsfilen"
 
-#: src/config/cmdline.c:630
+#: src/config/cmdline.c:631
 msgid ""
 "Name of the file with configuration, from which and to\n"
 "which all the configuration shall be written. It should be\n"
 "relative to config-dir."
 msgstr ""
 
-#: src/config/cmdline.c:634
+#: src/config/cmdline.c:635
 msgid "Print help for configuration options"
 msgstr ""
 
-#: src/config/cmdline.c:636
+#: src/config/cmdline.c:637
 msgid "Print help on configuration options and exit."
 msgstr ""
 
-#: src/config/cmdline.c:638
+#: src/config/cmdline.c:639
 msgid "MIME type to assume for documents"
 msgstr ""
 
-#: src/config/cmdline.c:640
+#: src/config/cmdline.c:641
 msgid "Default MIME type to assume for documents of unknown type."
 msgstr ""
 
-#: src/config/cmdline.c:642
+#: src/config/cmdline.c:643
 msgid "Ignore user-defined keybindings"
 msgstr ""
 
-#: src/config/cmdline.c:644
+#: src/config/cmdline.c:645
 msgid ""
 "If set, parse but don't set keybindings from configuration\n"
 "file. It forces use of default keybindings and will reset\n"
 "user-defined ones on save."
 msgstr ""
 
-#: src/config/cmdline.c:648
+#: src/config/cmdline.c:649
 msgid "Write formatted version of given URL to stdout"
 msgstr ""
 
-#: src/config/cmdline.c:650
+#: src/config/cmdline.c:651
 msgid ""
 "Write a plain-text version of the given HTML document to\n"
 "stdout."
 msgstr ""
 
-#: src/config/cmdline.c:653
+#: src/config/cmdline.c:654
 msgid "Codepage to use with -dump"
 msgstr ""
 
-#: src/config/cmdline.c:655
+#: src/config/cmdline.c:656
 msgid "Codepage used in dump output."
 msgstr "Tegnopsætning brugt for -dump"
 
-#: src/config/cmdline.c:657
+#: src/config/cmdline.c:658
 msgid "Width of document formatted with -dump"
 msgstr ""
 
-#: src/config/cmdline.c:659
+#: src/config/cmdline.c:660
 msgid "Width of the dump output."
 msgstr ""
 
-#: src/config/cmdline.c:661
+#: src/config/cmdline.c:662
 msgid "Evaluate given configuration option"
 msgstr ""
 
-#: src/config/cmdline.c:663
+#: src/config/cmdline.c:664
 msgid ""
 "Specify elinks.conf config options on the command-line:\n"
 "  -eval 'set protocol.file.allow_special_files = 1'"
 msgstr ""
 
 #. lynx compatibility
-#: src/config/cmdline.c:667
+#: src/config/cmdline.c:668
 msgid "Assume the file is HTML"
 msgstr ""
 
-#: src/config/cmdline.c:669
+#: src/config/cmdline.c:670
 msgid ""
 "This makes ELinks assume that the files it sees are HTML. This is\n"
 "equivalent to -default-mime-type text/html."
 msgstr ""
 
-#: src/config/cmdline.c:678
+#: src/config/cmdline.c:679
 msgid "Print usage help and exit"
 msgstr ""
 
-#: src/config/cmdline.c:680
+#: src/config/cmdline.c:681
 msgid "Print usage help and exit."
 msgstr ""
 
-#: src/config/cmdline.c:682
+#: src/config/cmdline.c:683
 msgid "Only permit local connections"
 msgstr ""
 
-#: src/config/cmdline.c:684
+#: src/config/cmdline.c:685
 msgid ""
 "Restrict ELinks so that it can only open connections to\n"
 "local addresses (ie. 127.0.0.1), it will prevent any connection\n"
 "to distant servers."
 msgstr ""
 
-#: src/config/cmdline.c:688
+#: src/config/cmdline.c:689
 msgid "Print detailed usage help and exit"
 msgstr ""
 
-#: src/config/cmdline.c:690
+#: src/config/cmdline.c:691
 msgid "Print detailed usage help and exit."
 msgstr ""
 
-#: src/config/cmdline.c:692
+#: src/config/cmdline.c:693
 #, fuzzy
 msgid "Look up specified host"
 msgstr "Intet program angivet for"
 
-#: src/config/cmdline.c:694
+#: src/config/cmdline.c:695
 #, fuzzy
 msgid "Look up specified host."
 msgstr "Intet program angivet for"
 
-#: src/config/cmdline.c:696
+#: src/config/cmdline.c:697
 msgid "Run as separate instance"
 msgstr ""
 
-#: src/config/cmdline.c:698
+#: src/config/cmdline.c:699
 msgid ""
 "Run ELinks as a separate instance instead of connecting to an\n"
 "existing instance. Note that normally no runtime state files\n"
@@ -818,45 +820,45 @@ msgid ""
 "this option is used. See also -touch-files."
 msgstr ""
 
-#: src/config/cmdline.c:703
+#: src/config/cmdline.c:704
 msgid "Don't use files in ~/.elinks"
 msgstr ""
 
-#: src/config/cmdline.c:705
+#: src/config/cmdline.c:706
 msgid ""
 "Disables creation and use of files in the user specific home\n"
 "configuration directory (~/.elinks). It forces default configuration\n"
 "values to be used and disables saving of runtime state files."
 msgstr ""
 
-#: src/config/cmdline.c:709
+#: src/config/cmdline.c:710
 #, fuzzy
 msgid "Do not number links in dump output"
 msgstr "Tegnopsætning brugt for -dump"
 
-#: src/config/cmdline.c:711
+#: src/config/cmdline.c:712
 msgid ""
 "Prevents numbering of links in the -dump output; this was the\n"
 "default behaviour until 0.5pre12.\n"
 "Note that this really affects only -dump, nothing else."
 msgstr ""
 
-#: src/config/cmdline.c:715
+#: src/config/cmdline.c:716
 #, fuzzy
 msgid "Do not dump links references in dump output"
 msgstr "Tegnopsætning brugt for -dump"
 
-#: src/config/cmdline.c:717
+#: src/config/cmdline.c:718
 msgid ""
 "Prevents dumping of links references (URIs) in the -dump output.\n"
 "Note that this really affects only -dump, nothing else."
 msgstr ""
 
-#: src/config/cmdline.c:720
+#: src/config/cmdline.c:721
 msgid "Control an already running ELinks"
 msgstr ""
 
-#: src/config/cmdline.c:722
+#: src/config/cmdline.c:723
 msgid ""
 "Mozilla compliant support for controlling a remote ELinks instance.\n"
 "The command takes an additional argument containing the method which\n"
@@ -873,11 +875,11 @@ msgid ""
 "  xfeDoCommand(openBrowser) -- open new window"
 msgstr ""
 
-#: src/config/cmdline.c:736
+#: src/config/cmdline.c:737
 msgid "Connect to session ring with given ID"
 msgstr ""
 
-#: src/config/cmdline.c:738
+#: src/config/cmdline.c:739
 msgid ""
 "ID of session ring this ELinks session should connect to. ELinks\n"
 "works in so-called session rings, whereby all instances of ELinks\n"
@@ -895,30 +897,30 @@ msgid ""
 "-touch-files."
 msgstr ""
 
-#: src/config/cmdline.c:753
+#: src/config/cmdline.c:754
 msgid "Write the source of given URL to stdout"
 msgstr ""
 
-#: src/config/cmdline.c:755
+#: src/config/cmdline.c:756
 msgid "Write the given HTML document in source form to stdout."
 msgstr ""
 
-#: src/config/cmdline.c:759
+#: src/config/cmdline.c:760
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
 msgstr ""
 
-#: src/config/cmdline.c:761
+#: src/config/cmdline.c:762
 msgid ""
 "Set to 1 to have runtime state files (bookmarks, history, ...)\n"
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
 
-#: src/config/cmdline.c:765
+#: src/config/cmdline.c:766
 msgid "Verbose level"
 msgstr ""
 
-#: src/config/cmdline.c:767
+#: src/config/cmdline.c:768
 msgid ""
 "The verbose level controls what messages are shown at\n"
 "start up and while running:\n"
@@ -927,11 +929,11 @@ msgid ""
 "\t2 means show all messages"
 msgstr ""
 
-#: src/config/cmdline.c:773
+#: src/config/cmdline.c:774
 msgid "Print version information and exit"
 msgstr ""
 
-#: src/config/cmdline.c:775
+#: src/config/cmdline.c:776
 msgid "Print ELinks version information and exit."
 msgstr ""
 
@@ -4825,11 +4827,11 @@ msgstr ""
 msgid "Maximum execution time in seconds for a script."
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:506
+#: src/ecmascript/spidermonkey.c:368
 msgid "JavaScript Alert"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:2086
+#: src/ecmascript/spidermonkey.c:1914
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following%s%s%s%s: \n"
@@ -4840,7 +4842,7 @@ msgid ""
 ".%*s^%*s."
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:2094
+#: src/ecmascript/spidermonkey.c:1922
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following%s%s%s%s: \n"
@@ -4848,15 +4850,15 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:2101
+#: src/ecmascript/spidermonkey.c:1929
 msgid "JavaScript Error"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:2121
+#: src/ecmascript/spidermonkey.c:1949
 msgid "JavaScript Emergency"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:2123
+#: src/ecmascript/spidermonkey.c:1951
 #, c-format
 msgid ""
 "A script embedded in the current document was running for more than %d "
@@ -7019,470 +7021,3 @@ msgstr "Fejl ved skrivning"
 #: src/viewer/text/view.c:1267
 msgid "Error writing to file"
 msgstr "Fejl ved skrivning til fil"
-
-#, fuzzy
-#~ msgid "Expand table columns"
-#~ msgstr "Slå til"
-
-#~ msgid "Memory info"
-#~ msgstr "Hukommelsesinformation"
-
-#~ msgid "~Memory info"
-#~ msgstr "Huko~mmelsesinformation"
-
-#~ msgid "Number of cached formatted pages."
-#~ msgstr "Antal behandlede sider i cache."
-
-#, fuzzy
-#~ msgid "Sorry, but bookmark's folder \"%s\" cannot be deleted."
-#~ msgstr ""
-#~ "Desværre, dette bogmærke er allerede i brug.\n"
-#~ "\n"
-#~ "Titel: \"%s\""
-
-#, fuzzy
-#~ msgid "Sorry, but bookmark's folder \"%s\" is being used by something else."
-#~ msgstr ""
-#~ "Desværre, dette bogmærke er allerede i brug.\n"
-#~ "\n"
-#~ "Titel: \"%s\""
-
-#, fuzzy
-#~ msgid "Delete bookmark's folder"
-#~ msgstr "Slet bokmærke"
-
-#~ msgid "Begin editing"
-#~ msgstr "Begynd redigering"
-
-#, fuzzy
-#~ msgid "Save as"
-#~ msgstr "Gem som"
-
-#~ msgid "Save formatted document"
-#~ msgstr "Gem behandlet dokument"
-
-#, fuzzy
-#~ msgid "Sorry, but cookie's folder \"%s\" cannot be deleted."
-#~ msgstr ""
-#~ "Desværre, dette bogmærke er allerede i brug.\n"
-#~ "\n"
-#~ "Titel: \"%s\""
-
-#, fuzzy
-#~ msgid "Sorry, but cookie's folder \"%s\" is being used by something else."
-#~ msgstr ""
-#~ "Desværre, dette bogmærke er allerede i brug.\n"
-#~ "\n"
-#~ "Titel: \"%s\""
-
-#, fuzzy
-#~ msgid "This version of ELinks does not contain finger protocol support"
-#~ msgstr "Denne version af ELinks understøtter ikke SSL/TSL"
-
-#, fuzzy
-#~ msgid "Move downwards one link"
-#~ msgstr "Flyt en side ned"
-
-#~ msgid "Number out of range"
-#~ msgstr "Nummer uden for område"
-
-#~ msgid "ELinks %s - Text WWW browser\n"
-#~ msgstr "ELinks %s - Tekst WWW browser\n"
-
-#~ msgid "Delete keybinding"
-#~ msgstr "Slet tastaturgenvej"
-
-#~ msgid ""
-#~ "This item is not a keybinding. Try to press a space in order to get to "
-#~ "the keybindings themselves."
-#~ msgstr ""
-#~ "Dette er ikke en tastaturgenvej. Prøv at trykke \"Mellemrum\" for at gøre "
-#~ "tastaturgenvejene synlige."
-
-#~ msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-#~ msgstr ""
-#~ "Vil du virkelig slette tastaturgenvejen \"%s\" (handling \"%s\", "
-#~ "Tasteoversigt \"%s\")?"
-
-#, fuzzy
-#~ msgid "Move the current tab one step back"
-#~ msgstr "Åben det nuværende lænke i nyt vindue"
-
-#~ msgid "Scroll margin"
-#~ msgstr "Rulle margin"
-
-#~ msgid "Scroll step"
-#~ msgstr "Rulle bevægelse"
-
-#~ msgid "Default document codepage."
-#~ msgstr "Standard dokument kode-side (codepage)."
-
-#, fuzzy
-#~ msgid "%ld bytes of memory allocated."
-#~ msgstr "bytes hukommelse allokeret"
-
-#, fuzzy
-#~ msgid "Could not get terminal size"
-#~ msgstr "Kunne ikke hente fil"
-
-#~ msgid "hit ENTER to"
-#~ msgstr "tryk [Linieskift] for at"
-
-#~ msgid "post to"
-#~ msgstr "send til"
-
-#, fuzzy
-#~ msgid "(default: #%06lx)"
-#~ msgstr "    %s%s%s %s (standardværdi: %06x)"
-
-#~ msgid "Bad user protocol URL"
-#~ msgstr "Ugyldig bruger specificeret protocol URL"
-
-#, fuzzy
-#~ msgid ""
-#~ "This option is deprecated and will be removed very soon.\n"
-#~ "Please use the document.browse.search.wraparound option instead."
-#~ msgstr ""
-#~ "Denne indstilling er forældet og vil blive fjernet.\n"
-#~ "Brug venligst mime.default_type i stedet."
-
-#, fuzzy
-#~ msgid ""
-#~ "This option is deprecated and will be removed very soon.\n"
-#~ "Please use the document.browse.search.show_not_found option instead."
-#~ msgstr ""
-#~ "Denne indstilling er forældet og vil blive fjernet.\n"
-#~ "Brug venligst mime.default_type i stedet."
-
-#~ msgid ""
-#~ "This option is deprecated and will be removed very soon.\n"
-#~ "Please use the mime.default_type option instead."
-#~ msgstr ""
-#~ "Denne indstilling er forældet og vil blive fjernet.\n"
-#~ "Brug venligst mime.default_type i stedet."
-
-#, fuzzy
-#~ msgid ""
-#~ "This option is deprecated and will be removed very soon.\n"
-#~ "Please use ui.colors.color.dialog.generic.background instead."
-#~ msgstr ""
-#~ "Denne indstilling er forældet og vil blive fjernet.\n"
-#~ "Brug venligst mime.default_type i stedet."
-
-#, fuzzy
-#~ msgid ""
-#~ "This option is deprecated and will be removed very soon.\n"
-#~ "Please use ui.colors.mono.dialog.generic.background instead."
-#~ msgstr ""
-#~ "Denne indstilling er forældet og vil blive fjernet.\n"
-#~ "Brug venligst mime.default_type i stedet."
-
-#, fuzzy
-#~ msgid ""
-#~ "This option is deprecated and will be removed very soon.\n"
-#~ "Please use mime.mailcap.description option instead."
-#~ msgstr ""
-#~ "Denne indstilling er forældet og vil blive fjernet.\n"
-#~ "Brug venligst mime.default_type i stedet."
-
-#~ msgid "Main menu unselected hotkey default background color."
-#~ msgstr "Standard baggrundsfarve for ikke valgte genvejstaster i hovedmenu"
-
-#~ msgid "Main menu selected hotkey default background color."
-#~ msgstr "Standard baggrundsfarve for valgte genvejstaster i hovedmenu"
-
-#~ msgid "Menu item unselected hotkey default background color."
-#~ msgstr "Standard baggrundsfarve for ikke valgte genvejstaster i menu"
-
-#~ msgid "Menu item selected hotkey background color."
-#~ msgstr "Standard baggrundsfarve for valgte genvejstaster i menu"
-
-#, fuzzy
-#~ msgid "Menu unselected hotkey default background color."
-#~ msgstr "Dræb baggrundsforbindelse"
-
-#, fuzzy
-#~ msgid "Menu selected hotkey default background color."
-#~ msgstr "Dræb baggrundsforbindelse"
-
-#, fuzzy
-#~ msgid "Title text"
-#~ msgstr "Titel"
-
-#, fuzzy
-#~ msgid "Typeahead: %s [%s]"
-#~ msgstr "Type"
-
-#~ msgid ""
-#~ "Name: %s\n"
-#~ "Type: %s\n"
-#~ "Value: %s\n"
-#~ "\n"
-#~ "Description:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Navn: %s\n"
-#~ "Type: %s\n"
-#~ "Værdi: %s\n"
-#~ "\n"
-#~ "Beskrivelse:\n"
-#~ "%s"
-
-#, fuzzy
-#~ msgid ""
-#~ "Name: %s\n"
-#~ "Type: %s\n"
-#~ "\n"
-#~ "Description:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Navn: %s\n"
-#~ "Type: %s\n"
-#~ "Beskrivelse:\n"
-#~ "%s"
-
-#, fuzzy
-#~ msgid "unknown"
-#~ msgstr "Ukendt"
-
-#~ msgid "Save formatted ~document"
-#~ msgstr "Gem behandlet ~dokument"
-
-#~ msgid "after resume"
-#~ msgstr "efter fortsættelse"
-
-#, fuzzy
-#~ msgid "Stop"
-#~ msgstr "Ind~stillinger"
-
-#, fuzzy
-#~ msgid "Bad signal number: %d"
-#~ msgstr "Ugyldigt nummer"
-
-#, fuzzy
-#~ msgid "Deleting used folder"
-#~ msgstr "Skabelon indstillingsmappe"
-
-#, fuzzy
-#~ msgid "Deleting used item"
-#~ msgstr "Slet historik indgang"
-
-#, fuzzy
-#~ msgid "Cannot delete \"%s\""
-#~ msgstr "Denne indstilling kan ikke slettes."
-
-#, fuzzy
-#~ msgid "LEDs options."
-#~ msgstr "SSL indstillinger"
-
-#, fuzzy
-#~ msgid "Enable LEDs."
-#~ msgstr "Slå til"
-
-#~ msgid "No downloads"
-#~ msgstr "Ingen filoverførsler"
-
-#~ msgid "Global histor~y"
-#~ msgstr "Global historik"
-
-#~ msgid "Bookmark~s"
-#~ msgstr "Bogmærke"
-
-#~ msgid "Really delete the option \"%s\"?"
-#~ msgstr "Vil du virkelig slette indstillingen \"%s\"?"
-
-#~ msgid ""
-#~ "Sorry, but this bookmark is already being used by something right now.\n"
-#~ "\n"
-#~ "Title: \"%s\"\n"
-#~ "URL: \"%s\""
-#~ msgstr ""
-#~ "Desværre, dette bogmærke er allerede i brug.\n"
-#~ "\n"
-#~ "Title: \"%s\"\n"
-#~ "URL: \"%s\""
-
-#, fuzzy
-#~ msgid ""
-#~ "Sorry, but this history entry is already being used by something right "
-#~ "now.\n"
-#~ "\n"
-#~ "Title: \"%s\"\n"
-#~ "URL: \"%s\"\n"
-#~ msgstr "Desværre, dette bogmærke er allerede i brug."
-
-#, fuzzy
-#~ msgid ""
-#~ "Delete history item \"%s\"?\n"
-#~ "\n"
-#~ "URL: \"%s\""
-#~ msgstr "Slet historik indgang"
-
-#, fuzzy
-#~ msgid "Clear global history?"
-#~ msgstr "Ryd global historik"
-
-#, fuzzy
-#~ msgid "No entry."
-#~ msgstr "Intet indhold"
-
-#~ msgid "Cache info"
-#~ msgstr "Cacheinformation"
-
-#, fuzzy
-#~ msgid "Cache content: %s"
-#~ msgstr "Cacheindhold"
-
-#~ msgid "~Cache info"
-#~ msgstr "~Cacheinformation"
-
-#~ msgid "Overlapping matches"
-#~ msgstr "Overlappende matchende tekststrenge"
-
-#, fuzzy
-#~ msgid ""
-#~ "ESC      display menu\n"
-#~ "^C, q    quit\n"
-#~ "^P, ^N   scroll up, down\n"
-#~ "[, ]     scroll left, right\n"
-#~ "up, down select link\n"
-#~ "->       follow link\n"
-#~ "<-       go back\n"
-#~ "g        go to URL\n"
-#~ "G        go to URL based on current URL\n"
-#~ "/        search\n"
-#~ "?        search back\n"
-#~ "n        find next\n"
-#~ "N        find previous\n"
-#~ "=        document info\n"
-#~ "|        header info\n"
-#~ "\\        document source\n"
-#~ "d        download"
-#~ msgstr ""
-#~ "ESC      vis menu\n"
-#~ "^C, q    afslut\n"
-#~ "^P, ^N   bladre op/ned\n"
-#~ "[, ]     bladre venstre/højre\n"
-#~ "op,ned   vælg lænker\n"
-#~ "->       følg lænke\n"
-#~ "<-       gå tilbage\n"
-#~ "g        gå til URL\n"
-#~ "G        gå til URL baseret på nuværende URL\n"
-#~ "/        søg\n"
-#~ "?        søg baglæns\n"
-#~ "n        find næste\n"
-#~ "N        find foregående\n"
-#~ "=        dokument information\n"
-#~ "|        vis dokument hoved\n"
-#~ "\\        vis kilde\n"
-#~ "d        start filoverførsel"
-
-#~ msgid "Secure open failed"
-#~ msgstr "Sikker åbning af file mislykkedes"
-
-#, fuzzy
-#~ msgid "Unknown event."
-#~ msgstr "Ukendt type"
-
-#~ msgid "A field"
-#~ msgstr "Et felt"
-
-#~ msgid "Columns"
-#~ msgstr "Søjler"
-
-#~ msgid "Rows"
-#~ msgstr "Rækker"
-
-#~ msgid "Resize ~terminal"
-#~ msgstr "Ændre ~terminalstørrelse"
-
-#, fuzzy
-#~ msgid "Form memory"
-#~ msgstr "Hukommelse opbrugt"
-
-#~ msgid "    %s%s%s %s (default: #%02x%02x%02x)"
-#~ msgstr "    %s%s%s %s (standardværdi: #%02x%02x%02x)"
-
-#, fuzzy
-#~ msgid ""
-#~ "Content type is %s.\n"
-#~ "Do you want to save or display this file?"
-#~ msgstr "Vil du gemme eller vise filen?"
-
-#, fuzzy
-#~ msgid ""
-#~ "Content type is %s.\n"
-#~ "Do you want to display this file?"
-#~ msgstr "Vil du gemme eller vise filen?"
-
-#, fuzzy
-#~ msgid "GlobHist"
-#~ msgstr "Historik håndtering"
-
-#~ msgid "Find the next occurrence of the current search text, in reverse"
-#~ msgstr "Find forrige forkommelse af det nuværende søgestreng"
-
-#, fuzzy
-#~ msgid "error: host not found"
-#~ msgstr "Værtsmaskinen kan ikke lokaliseres"
-
-#, fuzzy
-#~ msgid "Lua Error: %s"
-#~ msgstr "Lua-fejl"
-
-#~ msgid " at "
-#~ msgstr " på "
-
-#~ msgid "action"
-#~ msgstr "handling"
-
-#~ msgid "keymap"
-#~ msgstr "tasteoversigt"
-
-#~ msgid "handles"
-#~ msgstr "håndtag"
-
-#~ msgid "timers"
-#~ msgstr "tidsafbrydere"
-
-#~ msgid "connections"
-#~ msgstr "forbindelser"
-
-#~ msgid "connecting"
-#~ msgstr "etablerer forbindelse"
-
-#~ msgid "transferring"
-#~ msgstr "overfører data"
-
-#~ msgid "keepalive"
-#~ msgstr "forbindelser holdes i live"
-
-#~ msgid "files"
-#~ msgstr "filer"
-
-#~ msgid "Formatted document cache"
-#~ msgstr "Cache for behandlede dokumenter"
-
-#~ msgid "Do you want to open file with"
-#~ msgstr "Vil du åbne filen med"
-
-#~ msgid "save it or display it?"
-#~ msgstr "gemme den, eller vise den?"
-
-#, fuzzy
-#~ msgid "or display it?"
-#~ msgstr "gemme den, eller vise den?"
-
-#~ msgid "Welcome to ELinks!"
-#~ msgstr "Velkommen til ELinks!"
-
-#, fuzzy
-#~ msgid " Bookmarks"
-#~ msgstr "Bogmærke"
-
-#~ msgid "User's ~manual"
-#~ msgstr "Brugervejledning"
-
-#, fuzzy
-#~ msgid "Cache redirect information"
-#~ msgstr "Venter på bekræftelse på omdirigering"

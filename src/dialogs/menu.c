@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.55 2002/12/03 22:00:50 pasky Exp $ */
+/* $Id: menu.c,v 1.56 2002/12/03 22:09:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,8 +46,10 @@ menu_elinks_home(struct terminal *term, void *d, struct session *ses)
 {
 	unsigned char *u = stracpy(ELINKS_HOMEPAGE);
 
-	goto_url(ses, u);
-	mem_free(u);
+	if (u) {
+		goto_url(ses, u);
+		mem_free(u);
+	}
 }
 
 void
@@ -55,8 +57,10 @@ menu_manual(struct terminal *term, void *d, struct session *ses)
 {
 	unsigned char *u = stracpy(LINKS_MANUAL_URL);
 
-	goto_url(ses, u);
-	mem_free(u);
+	if (u) {
+		goto_url(ses, u);
+		mem_free(u);
+	}
 }
 
 void

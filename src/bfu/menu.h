@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.51 2004/04/17 11:39:38 jonas Exp $ */
+/* $Id: menu.h,v 1.52 2004/04/17 11:52:03 jonas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -123,21 +123,12 @@ do {									\
 } while (0)
 
 
-/* These structs are used in hotkey.h. */
-/* Must match the start of structs menu and mainmenu */
-#define MENU_HEAD			\
-	struct window *win;		\
-	struct menu_item *items;	\
-	void *data;			\
-	int selected;			\
-	int ni
-
-struct menu_head {
-	MENU_HEAD;
-};
-
 struct menu {
-	MENU_HEAD;
+	struct window *win;
+	struct menu_item *items;
+	void *data;
+	int selected;
+	int ni;
 	int view;
 	int x, y;
 	int width, height;

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.204 2004/04/17 11:47:57 jonas Exp $ */
+/* $Id: menu.c,v 1.205 2004/04/17 11:52:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -683,9 +683,9 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 			}
 
 			if (ev->x > ' ' && ev->x < 255) {
-				if (check_hotkeys((struct menu_head *)menu, ev->x, win->term))
+				if (check_hotkeys(menu, ev->x, win->term))
 					s = 1, scroll_menu(menu, 0);
-				else if (check_not_so_hot_keys((struct menu_head *)menu, ev->x, win->term))
+				else if (check_not_so_hot_keys(menu, ev->x, win->term))
 					scroll_menu(menu, 0);
 				break;
 			}
@@ -965,7 +965,7 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 	}
 
 	if (ev->x > ' ' && ev->x < 256 &&
-	    check_hotkeys((struct menu_head *)menu, ev->x, win->term))
+	    check_hotkeys(menu, ev->x, win->term))
 		s = 2;
 
 	if (!s) {

@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.41 2004/11/12 02:39:00 jonas Exp $ */
+/* $Id: file.c,v 1.42 2004/11/12 10:52:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -437,10 +437,12 @@ stat_size(struct string *string, struct stat *stp)
 		unsigned char size[64];
 		int width = 9;
 
-		/* First try to fix the file size into 8 digits. If that is not
-		 * enough expand the size buffer if possible. */
+		/* First try to fit the file size into 8 digits ... */
 		width = ulongcat(size, NULL, stp->st_size, width, ' ');
 		if (0 < width && width < sizeof(size)) {
+			/* ... if that is not enough expand the size buffer.
+			 * This will only break the column alignment of the size
+			 * attribute if really needed. */
 			ulongcat(size, NULL, stp->st_size, width, ' ');
 		}
 

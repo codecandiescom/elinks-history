@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.57 2003/07/04 12:12:08 jonas Exp $ */
+/* $Id: connection.c,v 1.58 2003/07/04 12:58:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,17 +141,15 @@ connection_disappeared(struct connection *c)
 static struct host_connection *
 get_host_connection(struct connection *c)
 {
-	unsigned char *host = get_host_name(c->url);
+	unsigned char *host = c->uri.host;
+	int hostlen = c->uri.hostlen;
 	struct host_connection *host_connection;
 
 	if (!host) return NULL;
 	foreach (host_connection, host_connections)
-		if (!strcmp(host_connection->host, host)) {
-			mem_free(host);
+		if (!strncmp(host_connection->host, host, hostlen))
 			return host_connection;
-		}
 
-	mem_free(host);
 	return NULL;
 }
 
@@ -539,16 +537,7 @@ try_to_suspend_connection(struct connection *c, unsigned char *ho)
 		if (get_priority(d) <= priority) return -1;
 		if (d->state == S_WAIT) continue;
 		if (d->unrestartable == 2 && get_priority(d) < PRI_CANCEL) continue;
-		if (ho) {
-			unsigned char *h = get_host_name(d->url);
-
-			if (!h) continue;
-			if (strcmp(h, ho)) {
-				mem_free(h);
-				continue;
-			}
-			mem_free(h);
-		}
+		if (ho && strncmp(c->uri.host, ho, c->uri.hostlen)) continue;
 		suspend_connection(d);
 		return 0;
 	}

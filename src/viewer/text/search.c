@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.19 2003/10/04 14:00:25 kuser Exp $ */
+/* $Id: search.c,v 1.20 2003/10/04 18:26:51 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -239,8 +239,8 @@ get_range(struct document *f, int y, int yw, int l,
 
 	if (*s1 < f->search)
 		*s1 = f->search;
-	if (*s2 > f->search + f->nsearch - l)
-		*s2 = f->search + f->nsearch - l;
+	if (*s2 > f->search + f->nsearch - l + 1)
+		*s2 = f->search + f->nsearch - l + 1;
 	if (*s1 > *s2)
 		*s1 = *s2 = NULL;
 	if (!*s1 || !*s2)

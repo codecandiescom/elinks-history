@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.4 2004/05/04 07:55:48 jonas Exp $ */
+/* $Id: link.c,v 1.5 2004/05/30 01:49:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,6 +251,7 @@ show_al:
 		 * extension to the standart. After all, it makes sense. */
 		html_focusable(a);
 
+		format.fg = get_opt_color("document.colors.image");
 		put_chrs(al, strlen(al), put_chars_f, ff);
 		if (ismap) kill_html_stack_item(&html_top);
 		/* Anything below must take care of properly handling the

@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.3 2004/06/25 10:52:30 zas Exp $ */
+/* $Id: header.c,v 1.4 2004/06/26 18:39:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,6 +101,9 @@ parse_http_header_param(unsigned char *str, unsigned char *name)
 	if (!*p) return stracpy("");
 
 	while (p[plen] >= ' ' && p[plen] != ';') plen++;
+
+	/* Trim ending spaces */
+	while (plen > 0 && p[plen - 1] == ' ') plen--;
 
 	return memacpy(p, plen);
 }

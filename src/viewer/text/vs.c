@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.16 2003/09/27 13:47:29 jonas Exp $ */
+/* $Id: vs.c,v 1.17 2003/10/05 14:05:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,8 +80,6 @@ copy_vs(struct view_state *dst, struct view_state *src)
 						stracpy(src->form_info[i].value);
 		}
 	}
-
-	dst->view = NULL;
 }
 
 void

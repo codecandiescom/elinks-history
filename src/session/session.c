@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.168 2003/10/05 13:16:31 pasky Exp $ */
+/* $Id: session.c,v 1.169 2003/10/05 14:05:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -450,12 +450,7 @@ ses_forward(struct session *ses)
 
 	free_files(ses);
 	if (have_location(ses)) {
-		struct frame *frm;
-
 		loc = cur_loc(ses);
-		foreach (frm, loc->frames)
-			frm->vs.view = NULL;
-		loc->vs.view = NULL;
 	}
 
 	if (ses->search_word) {

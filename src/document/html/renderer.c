@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.291 2003/10/04 21:44:46 jonas Exp $ */
+/* $Id: renderer.c,v 1.292 2003/10/05 14:05:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1664,7 +1664,6 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 	document_view->name = name;
 	document_view->link_bg = NULL;
 	document_view->link_bg_n = 0;
-	vs->view = document_view;
 
 	document_view->vs = vs;
 	document_view->xl = document_view->yl = -1;

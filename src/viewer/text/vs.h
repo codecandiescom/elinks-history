@@ -1,4 +1,4 @@
-/* $Id: vs.h,v 1.4 2003/09/12 23:37:16 zas Exp $ */
+/* $Id: vs.h,v 1.5 2003/10/05 14:05:08 pasky Exp $ */
 
 /* Placing this before the #ifndef, we'll fix some crossdep problems. */
 #include "document/html/parser.h"
@@ -7,9 +7,10 @@
 #ifndef EL__VIEWER_TEXT_VS_H
 #define EL__VIEWER_TEXT_VS_H
 
+struct document_view; /* Crossdeps are evil. */
+
 struct view_state {
 	unsigned char *goto_position;
-	struct document_view *view;
 	struct form_state *form_info;
 	int form_info_len;
 	int view_pos;

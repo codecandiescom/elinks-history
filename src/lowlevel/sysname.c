@@ -1,5 +1,5 @@
 /* Get system name */
-/* $Id: sysname.c,v 1.2 2002/05/08 13:55:04 pasky Exp $ */
+/* $Id: sysname.c,v 1.3 2002/05/10 13:06:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@ get_system_name()
 	FILE *f;
 	unsigned char *p;
 
+#ifdef HAVE_POPEN
 	memset(system_name, 0, MAX_STR_LEN);
 
 	f = popen("uname -srm", "r");
@@ -42,6 +43,7 @@ get_system_name()
 
 	if (system_name[0])
 		return;
+#endif
 
 fail:
 	strcpy(system_name, SYSTEM_NAME);

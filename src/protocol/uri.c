@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.260 2004/07/09 17:55:33 jonas Exp $ */
+/* $Id: uri.c,v 1.261 2004/07/09 18:01:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -850,7 +850,13 @@ find_uri_protocol(unsigned char *newurl)
 
 	/* Yes, it would be simpler to make test for IPv6 address first,
 	 * but it would result in confusing mix of ifdefs ;-). */
-	/* FIXME: Handle irc. and other common hostnames? --jonas */
+	/* FIXME: Ideas for improve protocol detection
+	 *
+	 * - Handle common hostnames. It could be part of the protocol backend
+	 *   structure. [ www -> http, irc -> irc, news -> nntp, ... ]
+	 *
+	 * - Resolve using port number. [ 119 -> nntp, 443 -> https, ... ]
+	 */
 
 	ch = newurl + strcspn(newurl, ".:/@");
 	if (*ch == '@' || (*ch == ':' && *newurl != '[')

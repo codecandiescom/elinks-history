@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.91 2003/06/07 15:43:08 jonas Exp $ */
+/* $Id: session.c,v 1.92 2003/06/07 21:20:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -868,7 +868,7 @@ end_load(struct status *stat, struct session *ses)
 	}
 	if (stat->state < 0 && stat->state != S_OK && d != 2) {
 		print_error_dialog(ses, stat);
-		 if (!d) reload(ses, NC_CACHE);
+		if (!d) reload(ses, NC_CACHE);
 	}
 	check_questions_queue(ses);
 	print_screen_status(ses);

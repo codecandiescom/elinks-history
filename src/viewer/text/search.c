@@ -1,5 +1,7 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.206 2004/02/10 20:15:48 jonas Exp $ */
+/* $Id: search.c,v 1.207 2004/02/11 09:53:31 zas Exp $ */
+
+#define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1033,7 +1035,7 @@ fixup_typeahead_match(struct session *ses, struct document_view *doc_view)
 static inline void
 draw_link_text(struct terminal *term, struct document_view *doc_view,
 	       int chars, int offset)
-{	
+{
 	struct color_pair *color = get_bfu_color(term, "searched");
 	int xoffset = doc_view->x - doc_view->vs->x;
 	int yoffset = doc_view->y - doc_view->vs->y;

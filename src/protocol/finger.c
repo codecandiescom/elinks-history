@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.39 2004/08/03 09:39:42 jonas Exp $ */
+/* $Id: finger.c,v 1.40 2004/10/08 17:19:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,6 +8,7 @@
 #include "elinks.h"
 
 #include "cache/cache.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/connect.h"
 #include "protocol/finger.h"
 #include "protocol/protocol.h"
@@ -16,6 +17,15 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+struct module finger_protocol_module = struct_module(
+	/* name: */		N_("Finger"),
+	/* options: */		NULL,
+	/* hooks: */		NULL,
+	/* submodules: */	NULL,
+	/* data: */		NULL,
+	/* init: */		NULL,
+	/* done: */		NULL
+);
 
 static void
 finger_end_request(struct connection *conn, enum connection_state state)

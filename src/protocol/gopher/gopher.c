@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.18 2004/09/23 10:28:47 zas Exp $ */
+/* $Id: gopher.c,v 1.19 2004/10/08 17:19:25 zas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -47,6 +47,16 @@
 #include "util/conv.h"
 #include "util/memory.h"
 #include "util/string.h"
+
+struct module gopher_protocol_module = struct_module(
+	/* name: */		N_("Gopher"),
+	/* options: */		NULL,
+	/* hooks: */		NULL,
+	/* submodules: */	NULL,
+	/* data: */		NULL,
+	/* init: */		NULL,
+	/* done: */		NULL
+);
 
 
 /* Gopher entity types */

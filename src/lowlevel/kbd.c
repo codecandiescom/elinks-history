@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.20 2003/05/03 17:01:02 pasky Exp $ */
+/* $Id: kbd.c,v 1.21 2003/05/03 19:49:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -239,8 +239,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 		return;
 	}
 
-	/* TODO: mem_calloc() here ? --Zas */
-	itrm = mem_alloc(sizeof(struct itrm));
+	itrm = mem_calloc(1, sizeof(struct itrm));
 	if (!itrm) return;
 
 	ditrm = itrm;
@@ -249,11 +248,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	itrm->sock_in = sock_in;
 	itrm->sock_out = sock_out;
 	itrm->ctl_in = ctl_in;
-	itrm->blocked = 0;
-	itrm->qlen = 0;
 	itrm->tm = -1;
-	itrm->ev_queue = NULL;
-	itrm->eqlen = 0;
 
 	if (ctl_in >= 0) setraw(ctl_in, &itrm->t);
 	set_handlers(std_in, (void (*)(void *)) in_kbd,
@@ -269,8 +264,6 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	queue_event(itrm, (char *)&ev, sizeof(struct event));
 
 	env = get_system_env();
-
-	itrm->flags = 0;
 
 	ts = getenv("TERM");
 	if (!ts) ts = "";

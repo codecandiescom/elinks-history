@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.18 2003/06/11 10:23:15 miciah Exp $ */
+/* $Id: dump.c,v 1.19 2003/06/21 00:16:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,10 +40,52 @@
 #include "viewer/text/view.h"
 #include "viewer/text/vs.h"
 
+
 int dump_pos;
 
 static struct status dump_stat;
 static int dump_redir_count = 0;
+
+
+/* This dumps the given @ce's source onto @oh, nothing more. It returns 0 if it
+ * all went fine and 1 if something isn't quite right and we should terminate
+ * ourselves ASAP. */
+static int
+dump_source(int oh, struct status *status, struct cache_entry *ce)
+{
+	struct fragment *frag;
+
+	if (!ce) return 0;
+
+nextfrag:
+	foreach (frag, ce->frag) {
+		int d = dump_pos - frag->offset;
+
+		if (d >= 0 && frag->length > d) {
+			int l = frag->length - d;
+			int w = hard_write(oh, frag->data + d, l);
+
+			if (w != l) {
+				detach_connection(stat, dump_pos);
+
+				if (w < 0)
+					error(gettext("Can't write to stdout: %s"),
+					      (unsigned char *) strerror(errno));
+				else
+					error(gettext("Can't write to stdout."));
+
+				retval = RET_ERROR;
+				return -2;
+			}
+
+			dump_pos += w;
+			detach_connection(stat, dump_pos);
+			goto nextfrag;
+		}
+	}
+
+	return 0;
+}
 
 void
 dump_end(struct status *stat, void *p)
@@ -79,36 +121,7 @@ dump_end(struct status *stat, void *p)
 		return;
 
 	if (get_opt_int_tree(&cmdline_options, "source")) {
-		if (ce) {
-			struct fragment *frag;
-
-nextfrag:
-			foreach (frag, ce->frag) {
-				int d = dump_pos - frag->offset;
-
-				if (d >= 0 && frag->length > d) {
-					int l = frag->length - d;
-					int w = hard_write(oh, frag->data + d, l);
-
-					if (w != l) {
-						detach_connection(stat, dump_pos);
-
-						if (w < 0)
-							error(gettext("Can't write to stdout: %s"),
-							      (unsigned char *) strerror(errno));
-						else
-							error(gettext("Can't write to stdout."));
-
-						retval = RET_ERROR;
-						goto terminate;
-					}
-
-					dump_pos += w;
-					detach_connection(stat, dump_pos);
-					goto nextfrag;
-				}
-			}
-		}
+		if (dump_source(oh, status, ce) > 0) goto terminate;
 
 		if (stat->state >= 0) return;
 

@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.7 2004/06/13 17:51:30 jonas Exp $ */
+/* $Id: event.h,v 1.8 2004/06/13 18:39:07 jonas Exp $ */
 
 #ifndef EL__TERMINAL_EVENT_H
 #define EL__TERMINAL_EVENT_H
@@ -43,6 +43,8 @@ void term_send_event(struct terminal *, struct term_event *);
 void in_term(struct terminal *);
 
 #define INTERLINK_MAGIC(major, minor) -(((major) << 8) + (minor))
+
+#define INTERLINK_NORMAL_MAGIC INTERLINK_MAGIC(1, 0)
 
 #define INIT_TERM_EVENT(type, x, y, b) { (type), (x), (y), (b) }
 

@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.68 2004/03/31 22:39:39 jonas Exp $ */
+/* $Id: cache.h,v 1.69 2004/04/01 01:01:54 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -94,6 +94,10 @@ void truncate_entry(struct cache_entry *, int, int);
 void free_entry_to(struct cache_entry *, int);
 void delete_entry_content(struct cache_entry *);
 void delete_cache_entry(struct cache_entry *);
+
+/* Returns an allocated string containing the redirect URI. */
+unsigned char *
+get_cache_redirect_uri(struct cache_entry *cache_entry, unsigned char *base);
 
 /* The garbage collector trigger. If @whole is zero, remove unused cache
  * entries which are bigger than the cache size limit set by user. For @zero

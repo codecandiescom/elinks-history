@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.33 2004/03/31 23:17:59 jonas Exp $ */
+/* $Id: task.c,v 1.34 2004/04/01 01:01:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -319,17 +319,8 @@ do_move(struct session *ses, struct download **stat)
 		if (task == TASK_HISTORY && !have_location(ses))
 			goto b;
 
-		u = join_urls(ses->loading_url, ce->redirect);
+		u = get_cache_redirect_uri(ce, ses->loading_url);
 		if (!u) goto b;
-
-		if (!ce->redirect_get &&
-		    !get_opt_int("protocol.http.bugs.broken_302_redirect")) {
-			unsigned char *p = post_data_start(ses->loading_url);
-
-			if (p) add_to_strn(&u, p);
-		}
-		/* ^^^^ According to RFC2068 POST must not be redirected to GET, but
-			some BUGGY message boards rely on it :-( */
 
 		protocol = known_protocol(u, NULL);
 		if (protocol == PROTOCOL_UNKNOWN) return 0;

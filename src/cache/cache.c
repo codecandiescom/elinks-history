@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.112 2004/03/31 20:31:22 jonas Exp $ */
+/* $Id: cache.c,v 1.113 2004/04/01 01:01:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -470,6 +470,26 @@ delete_cache_entry(struct cache_entry *ce)
 	if (ce->etag) mem_free(ce->etag);
 
 	mem_free(ce);
+}
+
+unsigned char *
+get_cache_redirect_uri(struct cache_entry *entry, unsigned char *base)
+{
+	unsigned char *uristring;
+
+	uristring = join_urls(base, entry->redirect);
+	if (!uristring) return NULL;
+
+	/* According to RFC2068 POST must not be redirected to GET,
+	 * but some BUGGY message boards rely on it :-( */
+	if (!entry->redirect_get &&
+	    !get_opt_int("protocol.http.bugs.broken_302_redirect")) {
+		unsigned char *p = post_data_start(base);
+
+		if (p) add_to_strn(&uristring, p);
+	}
+
+	return uristring;
 }
 
 

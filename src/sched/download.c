@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.225 2004/04/01 00:37:44 jonas Exp $ */
+/* $Id: download.c,v 1.226 2004/04/01 01:01:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -333,7 +333,6 @@ static void
 download_data(struct download *download, struct file_download *file_download)
 {
 	struct cache_entry *ce = download->ce;
-	int broken_302_redirect;
 
 	if (!ce) goto store;
 
@@ -343,8 +342,6 @@ download_data(struct download *download, struct file_download *file_download)
 	if (ce->last_modified)
 		file_download->remotetime = parse_http_date(ce->last_modified);
 
-	broken_302_redirect = get_opt_int("protocol.http.bugs.broken_302_redirect");
-
 	while (ce->redirect && file_download->redirect_cnt++ < MAX_REDIRECTS) {
 		unsigned char *u;
 		struct uri *uri;
@@ -352,17 +349,8 @@ download_data(struct download *download, struct file_download *file_download)
 		if (download->state >= 0)
 			change_connection(&file_download->download, NULL, PRI_CANCEL, 0);
 
-		u = join_urls(struri(file_download->uri), ce->redirect);
+		u = get_cache_redirect_uri(ce, struri(file_download->uri));
 		if (!u) break;
-
-		if (!broken_302_redirect
-		    && !ce->redirect_get
-		    && file_download->uri->post) {
-			unsigned char post_char[2] = { POST_CHAR, 0 };
-
-			add_to_strn(&u, post_char);
-			add_to_strn(&u, file_download->uri->post);
-		}
 
 		uri = get_uri(u);
 		mem_free(u);

@@ -393,6 +393,7 @@ T_KEYMAP, "tasteoversigt",
 T_ADD_KEYBINDING, "Tilføj tastaturgenvej",
 T_NEED_TO_SELECT_KEYMAP, "Det er nødvendigt at vælge en tasteoversigt.",
 T_ACTION, "Handling",
+T_AACTION, "handling",
 T_KKEYMAP, "Tasteoversigt",
 T_KEYSTROKE_HELP, "Genvejskombinationen angives med følgende format: [Præfiks-]Tast\nPræfiks (kan undlades) er: Shift, Ctrl, Alt\nTast er: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 T_KEYSTROKE, "Genvejskombination",

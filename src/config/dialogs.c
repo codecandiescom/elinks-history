@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.26 2002/12/18 15:30:45 pasky Exp $ */
+/* $Id: dialogs.c,v 1.27 2002/12/19 12:18:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -707,8 +707,8 @@ push_kbdbind_del_button(struct dialog_data *dlg,
 
 	msg_box(term, NULL,
 		TEXT(T_DELETE_KEYBINDING), AL_CENTER | AL_EXTD_TEXT,
-		TEXT(T_REALLY_DELETE_KEYBINDING), " \"", box->sel->text, "\" ",
-		TEXT(T_OF), " \"", write_action(keybinding->action), "\" (",
+		TEXT(T_REALLY_DELETE_KEYBINDING), " \"", box->sel->text, "\" (",
+		TEXT(T_AACTION), " \"", write_action(keybinding->action), "\", ",
 		TEXT(T_KEYMAP), " \"", write_keymap(keybinding->keymap), "\") ?", NULL,
 		keybinding, 2,
 		TEXT(T_OK), really_delete_keybinding, B_ENTER,

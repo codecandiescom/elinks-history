@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.324 2004/06/30 01:52:44 jonas Exp $ */
+/* $Id: tables.c,v 1.325 2004/06/30 02:11:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -788,9 +788,7 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 		 * (/.) while other will look very ugly
 		 * and broken. */
 		par_format.bgcolor = table->bgcolor;
-		for (s = y; s < y + height; s++) {
-			expand_line(table->part, s, x - 1);
-		}
+		expand_lines(table->part, x - 1, y, height);
 	}
 
 	state = init_html_parser_state(ELEMENT_DONT_KILL,
@@ -812,12 +810,9 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 
 		part = format_cell(table, col, row, document, x, tmpy, width);
 		if (part) {
-			int yt;
+			int next_x = x + table->cols_widths[col];
 
-			for (yt = 0; yt < part->box.height; yt++) {
-				expand_line(table->part, y + yt,
-					    x + table->cols_widths[col]);
-			}
+			expand_lines(table->part, next_x, y, part->box.height);
 
 			if (cell->fragment_id)
 				add_fragment_identifier(part, cell->fragment_id);
@@ -850,14 +845,13 @@ draw_table_cells(struct table *table, int x, int y)
 		for (row = 0; row < table->rows; row++) {
 			int row_height = table->rows_heights[row] +
 				(row < table->rows - 1 && has_hline_width(table, row + 1));
-			int row2;
+			struct part *part = table->part;
+			/* Hmm that table_frame.top looks strange if you look
+			 * at how @yp is initialized. Bug? --jonas */
+			int lines = yp + row_height + table_frames.top - part->cy;
 
 			par_format.bgcolor = default_bgcolor;
-			for (row2 = table->part->cy;
-			     row2 < yp + row_height + table_frames.top;
-			     row2++) {
-				expand_line(table->part, row2, x - 1);
-			}
+			expand_lines(table->part, x - 1, part->cy, lines);
 
 			draw_table_cell(table, col, row, xp, yp);
 

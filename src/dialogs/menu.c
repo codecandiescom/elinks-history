@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.7 2002/03/22 18:57:20 pasky Exp $ */
+/* $Id: menu.c,v 1.8 2002/03/26 16:45:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,13 +227,26 @@ void downloads_menu(struct terminal *term, void *ddd, struct session *ses)
 	struct download *d;
 	struct menu_item *mi = NULL;
 	int n = 0;
+	
 	foreachback(d, downloads) {
-		if (!mi) if (!(mi = new_menu(3))) return;
-		add_to_menu(&mi, stracpy(d->url), "", "", MENU_FUNC display_download, d, 0);
+		unsigned char *url;
+
+		if (!mi) {
+			mi = new_menu(3);
+			if (!mi) return;
+		}
+
+		url = stracpy(d->url);
+		if (strchr(url, POST_CHAR)) *strchr(url, POST_CHAR) = '\0';
+		add_to_menu(&mi, url, "", "", MENU_FUNC display_download, d, 0);
 		n++;
 	}
-	if (!n) do_menu(term, no_downloads_menu, ses);
-	else do_menu(term, mi, ses);
+	
+	if (!n) {
+		do_menu(term, no_downloads_menu, ses);
+	} else {
+		do_menu(term, mi, ses);
+	}
 }
 
 void menu_doc_info(struct terminal *term, void *ddd, struct session *ses)

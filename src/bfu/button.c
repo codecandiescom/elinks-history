@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.92 2005/03/23 10:57:56 zas Exp $ */
+/* $Id: button.c,v 1.93 2005/03/24 14:49:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,6 +158,7 @@ display_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 	draw_text(term, pos->x, pos->y, BUTTON_LEFT, BUTTON_LEFT_LEN, 0, color);
 	if (len > 0) {
+		unsigned char *text = widget_data->widget->text;
 		int hk_pos = widget_data->widget->info.button.hotkey_pos;
 		int attr;
 
@@ -168,16 +169,18 @@ display_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 			int right = widget_data->widget->info.button.truetextlen - hk_pos - 1;
 
 			if (hk_pos) {
-				draw_text(term, x, pos->y, widget_data->widget->text, hk_pos, 0, color);
+				draw_text(term, x, pos->y, text, hk_pos, 0, color);
 			}
-			draw_text(term, x + hk_pos, pos->y, &widget_data->widget->text[hk_pos + 1], 1, attr, shortcut_color);
+			draw_text(term, x + hk_pos, pos->y,
+				  &text[hk_pos + 1], 1, attr, shortcut_color);
 			if (right > 1) {
-				draw_text(term, x + hk_pos + 1, pos->y, &widget_data->widget->text[hk_pos + 2], right - 1, 0, color);
+				draw_text(term, x + hk_pos + 1, pos->y,
+					  &text[hk_pos + 2], right - 1, 0, color);
 			}
 
 		} else {
-			draw_text(term, x, pos->y, widget_data->widget->text, 1, attr, shortcut_color);
-			draw_text(term, x + 1, pos->y, &widget_data->widget->text[1], len - 1, 0, color);
+			draw_text(term, x, pos->y, text, 1, attr, shortcut_color);
+			draw_text(term, x + 1, pos->y, &text[1], len - 1, 0, color);
 		}
 	}
 	draw_text(term, x + len, pos->y, BUTTON_RIGHT, BUTTON_RIGHT_LEN, 0, color);

@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.24 2004/11/09 00:33:29 jonas Exp $ */
+/* $Id: gopher.c,v 1.25 2004/11/09 01:02:01 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -221,6 +221,10 @@ add_gopher_command(struct connection *conn, struct string *command,
 		querylen = selector + selectorlen - query;
 		/* Exclude '?' */
 		selectorlen -= querylen + 1;
+		if (querylen >= 7 && !strncasecmp(query, "search=", 7)) {
+			query	 += 7;
+			querylen -= 7;
+		}
 	}
 
 	switch (entity) {
@@ -349,6 +353,21 @@ add_gopher_link(struct string *buffer, const unsigned char *text,
 }
 
 static void
+add_gopher_search_field(struct string *buffer, const unsigned char *text,
+		const unsigned char *addr)
+{
+	add_format_to_string(buffer,
+		"<form action=\"%s\">\n"
+		"<table>\n"
+		"<td><b>%s</b></td>\n"
+		"<td><input maxlength=\"256\" name=\"search\" value=\"\"></td>\n"
+		"<td><input type=submit value=\"Search\"></td>\n"
+		"</table>\n"
+		"</form>\n",
+		addr, text);
+}
+
+static void
 add_gopher_description(struct string *buffer, enum gopher_entity entity)
 {
 	unsigned char *description = get_gopher_entity_description(entity);
@@ -442,7 +461,9 @@ add_gopher_menu_line(struct string *buffer, unsigned char *line)
 			entity = GOPHER_INFO;
 	}
 
-	add_gopher_description(buffer, entity);
+	if (entity != GOPHER_INDEX) {
+		add_gopher_description(buffer, entity);
+	}
 
 	switch (entity) {
 	case GOPHER_WWW:
@@ -493,12 +514,17 @@ add_gopher_menu_line(struct string *buffer, unsigned char *line)
 
 		/* Error response from Gopher doesn't deserve to
 		 * be a hyperlink. */
-		if (address.length > 0
-		    && strlcmp(address.source, address.length - 1,
-			       "gopher://error.host:1/", -1))
+		if (entity == GOPHER_INDEX) {
+			add_gopher_search_field(buffer, name, address.source);
+
+		} else if (address.length > 0
+			   && strlcmp(address.source, address.length - 1,
+				      "gopher://error.host:1/", -1)) {
 			add_gopher_link(buffer, name, address.source);
-		else
+
+		} else {
 			add_to_string(buffer, name);
+		}
 
 		done_string(&address);
 	}
@@ -628,9 +654,13 @@ init_gopher_index_cache_entry(struct connection *conn)
 		"</head>\n"
 		"<body>\n"
 		"<h1>Gopher index at %s</h1>\n"
-		"<p>This is a searchable Gopher index.</p>\n"
-		"<p>Please enter search keywords.</p>\n",
+		"<p>This is a searchable Gopher index.</p>\n",
 		empty_string_or_(where), empty_string_or_(where));
+
+	if (where) {
+		add_gopher_search_field(&buffer, "Please enter search keywords",
+					where);
+	}
 
 	mem_free_if(where);
 

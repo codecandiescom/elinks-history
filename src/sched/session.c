@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.532 2004/07/26 17:10:15 zas Exp $ */
+/* $Id: session.c,v 1.533 2004/07/26 17:13:35 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -275,10 +275,11 @@ free_files(struct session *ses)
 
 
 
-static void request_frameset(struct session *, struct frameset_desc *);
+static void request_frameset(struct session *, struct frameset_desc *, int);
 
 static void
-request_frame(struct session *ses, unsigned char *name, struct uri *uri)
+request_frame(struct session *ses, unsigned char *name,
+	      struct uri *uri, int depth)
 {
 	struct location *loc = cur_loc(ses);
 	struct frame *frame;
@@ -294,7 +295,7 @@ request_frame(struct session *ses, unsigned char *name, struct uri *uri)
 
 		foreach(doc_view, ses->scrn_frames) {
 			if (doc_view->vs == &frame->vs && doc_view->document->frame_desc) {
-				request_frameset(ses, doc_view->document->frame_desc);
+				request_frameset(ses, doc_view->document->frame_desc, depth);
 				return;
 			}
 		}
@@ -330,23 +331,22 @@ found:
 }
 
 static void
-request_frameset(struct session *ses, struct frameset_desc *frameset_desc)
+request_frameset(struct session *ses, struct frameset_desc *frameset_desc, int depth)
 {
-	static int depth = 0; /* Inheritation counter (recursion brake ;) */
 	int i;
 
 	if (depth > HTML_MAX_FRAME_DEPTH) return;
 
-	depth++;
+	depth++; /* Inheritation counter (recursion brake ;) */
 
 	for (i = 0; i < frameset_desc->n; i++) {
 		struct frame_desc *frame_desc = &frameset_desc->frame_desc[i];
 
 		if (frame_desc->subframe) {
-			request_frameset(ses, frame_desc->subframe);
+			request_frameset(ses, frame_desc->subframe, depth);
 		} else if (frame_desc->name && frame_desc->uri) {
 			request_frame(ses, frame_desc->name,
-				      frame_desc->uri);
+				      frame_desc->uri, depth);
 		}
 	}
 }
@@ -357,7 +357,7 @@ load_frames(struct session *ses, struct document_view *doc_view)
 	struct document *document = doc_view->document;
 
 	if (!document || !document->frame_desc) return;
-	request_frameset(ses, document->frame_desc);
+	request_frameset(ses, document->frame_desc, 0);
 }
 
 #ifdef CONFIG_CSS

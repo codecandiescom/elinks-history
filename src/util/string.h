@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.52 2003/10/27 03:13:53 pasky Exp $ */
+/* $Id: string.h,v 1.53 2003/12/06 02:53:35 jonas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -155,12 +155,35 @@ struct string *add_format_to_string(struct string *string, unsigned char *format
 
 
 #undef realloc_string
+
 #define realloc_string(str, size) \
 	mem_align_alloc(&(str)->source, (str)->length, (size) + 1, \
 			sizeof(unsigned char), STRING_GRANULARITY)
 
+#ifdef LEAK_DEBUG
+
+#define add_bytes_to_string(string, bytes, length) \
+	add_bytes_to_string__(__FILE__, __LINE__, string, bytes, length)
+
+#define debug_realloc_string(str, size) \
+	mem_align_alloc__(file, line, (void **) &(str)->source, (str)->length, (size) + 1, \
+			sizeof(unsigned char), STRING_GRANULARITY)
+
+#else
+
+#define add_bytes_to_string(string, bytes, length) \
+	add_bytes_to_string__(string, bytes, length)
+
+#define debug_realloc_string(str, size) realloc_string(str, size)
+
+#endif
+
 static inline struct string *
-add_bytes_to_string(struct string *string, unsigned char *bytes, int length)
+add_bytes_to_string__(
+#ifdef LEAK_DEBUG
+		    unsigned char *file, int line,
+#endif
+		    struct string *string, unsigned char *bytes, int length)
 {
 	int newlength;
 
@@ -172,7 +195,7 @@ add_bytes_to_string(struct string *string, unsigned char *bytes, int length)
 	if (length == 0) return string;
 
 	newlength = string->length + length;
-	if (!realloc_string(string, newlength))
+	if (!debug_realloc_string(string, newlength))
 		return NULL;
 
 	memcpy(string->source + string->length, bytes, length);

@@ -181,13 +181,11 @@ U+015d:sh
 U+0166:T/
 U+0167:t/
 0x55	U+0168	U+016a	U+016e	U+0172		# U
-# "Fundamento" asks plain U but I find W clearer.
-# U-breve might appear in Latin texts, though.
-U+016c:W
+# "Fundamento"
+U+016c:U
 0x75	U+0169	U+016b	U+016f	U+0173	# u
-# "Fundamento" asks plain u but I find w clearer.
-# u-breve might appear in Latin texts, though.
-U+016d:w
+# "Fundamento"
+U+016d:u
 U+0170:U"
 U+0171:u"
 0x57	U+0174

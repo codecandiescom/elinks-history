@@ -1,5 +1,5 @@
 /* Ruby scripting hooks */
-/* $Id: hooks.c,v 1.2 2005/01/18 15:07:55 jonas Exp $ */
+/* $Id: hooks.c,v 1.3 2005/01/18 15:09:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,7 +241,7 @@ script_hook_quit(va_list ap, void *data)
 {
 	int error;
 
-	rb_eval_string_protect("quit_hook if Kernel.method_defined?(:quit_hook)",
+	rb_eval_string_protect("quit_hook if ELinks.method_defined?(:quit_hook)",
 			       &error);
 
 	if (error)

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.63 2003/01/19 08:33:39 pasky Exp $ */
+/* $Id: listbox.c,v 1.64 2003/04/26 09:41:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,19 +253,12 @@ void
 box_sel_move(struct widget_data *listbox_item_data, int dist)
 {
 	struct listbox_data *box;
-	struct box_context *data;
 
 	box = (struct listbox_data *) listbox_item_data->item->data;
 	if (!list_empty(*box->items)) {
 		if (!box->top) box->top = box->items->next;
 		if (!box->sel) box->sel = box->top;
 	}
-
-	data = mem_alloc(sizeof(struct box_context));
-	if (!data) return;
-	data->box = box;
-	data->listbox_item_data = listbox_item_data;
-	data->dist = dist;
 
 	/* We want to have these visible if possible. */
 	if (box->top && !box->top->visible) {
@@ -276,13 +269,24 @@ box_sel_move(struct widget_data *listbox_item_data, int dist)
 
 	if (traverse_listbox_items_list(box->sel, dist, 1, NULL, NULL)
 	    != box->sel) {
-		/* XXX: This is ugly, yes; but we don't want to call the
-		 * callback if we won't move on at all. */
-		box->sel = traverse_listbox_items_list(box->sel, dist, 1,
-						       box_sel_move_do, data);
-	}
+		struct box_context *data = fmem_alloc(sizeof(struct box_context));
 
-	mem_free(data);
+		if (data) {
+			data->box = box;
+			data->listbox_item_data = listbox_item_data;
+			data->dist = dist;
+			data->term = NULL;
+			data->dlg = NULL;
+			data->offset = 0;
+
+			/* XXX: This is ugly, yes; but we don't want to call the
+			 * callback if we won't move on at all. */
+			box->sel = traverse_listbox_items_list(box->sel, dist, 1,
+						       	       box_sel_move_do,
+							       data);
+			fmem_free(data);
+		}
+	}
 }
 
 
@@ -408,13 +412,6 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 		  listbox_item_data->l, listbox_item_data->h,
 		  get_bfu_color(term, "menu.normal"));
 
-	data = mem_alloc(sizeof(struct box_context));
-	if (!data) return;
-	data->term = term;
-	data->listbox_item_data = listbox_item_data;
-	data->box = box;
-	data->dlg = dlg;
-	data->offset = 0;
 
 	/* We want to have these visible if possible. */
 	if (box->top && !box->top->visible) {
@@ -424,10 +421,20 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 		box->sel = box->top;
 	}
 
-	traverse_listbox_items_list(box->top, listbox_item_data->h,
-				    1, display_listbox_item, data);
+	data = fmem_alloc(sizeof(struct box_context));
+	if (data) {
+		data->term = term;
+		data->listbox_item_data = listbox_item_data;
+		data->box = box;
+		data->dlg = dlg;
+		data->offset = 0;
+		data->dist = 0;
 
-	mem_free(data);
+		traverse_listbox_items_list(box->top, listbox_item_data->h,
+					    1, display_listbox_item, data);
+
+		fmem_free(data);
+	}
 }
 
 static void
@@ -479,9 +486,8 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 		    (ev->y >= di->y && ev->y < di->y + di->h) &&
 		    (ev->x >= di->x && ev->x <= di->x + di->l)) {
 			/* Clicked in the box. */
-			int offset;
+			int offset = ev->y - di->y;
 
-			offset = ev->y - di->y;
 			box->sel_offset = offset;
 			if (offset)
 			box->sel = traverse_listbox_items_list(box->top,

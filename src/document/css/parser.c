@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.7 2004/01/18 01:50:41 jonas Exp $ */
+/* $Id: parser.c,v 1.8 2004/01/18 01:57:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,40 +21,31 @@
 #include "util/string.h"
 
 
-/* Property <-> valtype associations. Indexed by property. */
-static enum css_decl_valtype prop2valtype[CSS_DP_LAST] = {
-	/* CSS_DP_NONE */		CSS_DV_NONE,
-	/* CSS_DP_BACKGROUND_COLOR */	CSS_DV_COLOR,
-	/* CSS_DP_COLOR */		CSS_DV_COLOR,
-	/* CSS_DP_FONT_STYLE */		CSS_DV_FONT_ATTRIBUTE,
-	/* CSS_DP_FONT_WEIGHT */	CSS_DV_FONT_ATTRIBUTE,
-	/* CSS_DP_TEXT_ALIGN */		CSS_DV_TEXT_ALIGN,
-};
-
-
 struct css_property_info {
 	unsigned char *name;
 	int namelen;
 	enum css_decl_property property;
+	enum css_decl_valtype value_type;
 };
 
-#define CSS_PROPERTY(name, property) { name, sizeof(name) - 1, property }
+#define CSS_PROPERTY(name, property, valtype) \
+	{ name, sizeof(name) - 1, property, valtype }
 
 /* TODO: Use fastfind when we get a lot of properties. */
 struct css_property_info css_property_info[] = {
-	CSS_PROPERTY("background-color", CSS_DP_BACKGROUND_COLOR),
-	CSS_PROPERTY("color", CSS_DP_COLOR),
-	CSS_PROPERTY("font-style", CSS_DP_FONT_STYLE),
-	CSS_PROPERTY("font-weight", CSS_DP_FONT_WEIGHT),
-	CSS_PROPERTY("text-align", CSS_DP_TEXT_ALIGN),
+	CSS_PROPERTY("background-color", CSS_DP_BACKGROUND_COLOR, CSS_DV_COLOR),
+	CSS_PROPERTY("color", CSS_DP_COLOR, CSS_DV_COLOR),
+	CSS_PROPERTY("font-style", CSS_DP_FONT_STYLE, CSS_DV_FONT_ATTRIBUTE),
+	CSS_PROPERTY("font-weight", CSS_DP_FONT_WEIGHT, CSS_DV_FONT_ATTRIBUTE),
+	CSS_PROPERTY("text-align", CSS_DP_TEXT_ALIGN, CSS_DV_TEXT_ALIGN),
 
-	CSS_PROPERTY("", CSS_DP_NONE),
+	CSS_PROPERTY("", CSS_DP_NONE, CSS_DV_NONE),
 };
 
 void
 css_parse_decl(struct list_head *props, unsigned char *string)
 {
-	enum css_decl_property property = CSS_DP_NONE;
+	struct css_property_info *property_info = NULL;
 	struct css_property *prop;
 	int pos, i;
 
@@ -76,14 +67,14 @@ css_parse_decl(struct list_head *props, unsigned char *string)
 		struct css_property_info *info = &css_property_info[i];
 
 		if (!strlcasecmp(string, pos, info->name, info->namelen)) {
-			property = info->property;
+			property_info = info;
 			break;
 		}
 	}
 
 	string += pos + 1;
 
-	if (property == CSS_DP_NONE) {
+	if (!property_info) {
 		/* Unknown property, check the next one. */
 ride_on:
 		pos = strcspn(string, ";");
@@ -100,8 +91,8 @@ ride_on:
 	if (!prop) {
 		goto ride_on;
 	}
-	prop->property = property;
-	prop->value_type = prop2valtype[property];
+	prop->property = property_info->property;
+	prop->value_type = property_info->value_type;
 	if (!css_parse_value(prop->value_type, &prop->value, &string)) {
 		mem_free(prop);
 		goto ride_on;

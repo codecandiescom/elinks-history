@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.43 2003/07/20 23:12:35 pasky Exp $ */
+/* $Id: charsets.c,v 1.44 2003/07/20 23:16:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -554,35 +554,35 @@ end:
 }
 
 unsigned char *
-convert_string(struct conv_table *ct, unsigned char *c, int l)
+convert_string(struct conv_table *convert_table, unsigned char *chars, int charslen)
 {
 	unsigned char *buffer;
 	unsigned char *b;
 	int bp = 0;
 	int pp = 0;
 
-	if (!ct) {
+	if (!convert_table) {
 		int i;
 
-		for (i = 0; i < l; i++)
-			if (c[i] == '&')
+		for (i = 0; i < charslen; i++)
+			if (chars[i] == '&')
 				goto xx;
-		return memacpy(c, l);
+		return memacpy(chars, charslen);
 
 xx:;
 	}
 
-	/* FIXME: Code redundancy with put_chars_conv() in renderer.c. --Zas
+	/* FIXME: Code redundancy with put_chars_conv() in renderer.chars. --Zas
 	 */
 	buffer = mem_alloc(ALLOC_GR);
 	if (!buffer) return NULL;
-	while (pp < l) {
+	while (pp < charslen) {
 		unsigned char *e;
 
-		if (c[pp] < 128 && c[pp] != '&') {
+		if (chars[pp] < 128 && chars[pp] != '&') {
 
 putc:
-			buffer[bp++] = c[pp++];
+			buffer[bp++] = chars[pp++];
 			if (!(bp & (ALLOC_GR - 1))) {
 				b = mem_realloc(buffer, bp + ALLOC_GR);
 				if (b)
@@ -593,20 +593,20 @@ putc:
 			continue;
 		}
 
-		if (c[pp] != '&') {
+		if (chars[pp] != '&') {
 			struct conv_table *t;
 			int i;
 
-			if (!ct) goto putc;
-			t = ct;
+			if (!convert_table) goto putc;
+			t = convert_table;
 			i = pp;
 
 decode:
-			if (!t[c[i]].t) {
-				e = t[c[i]].u.str;
+			if (!t[chars[i]].t) {
+				e = t[chars[i]].u.str;
 			} else {
-				t = t[c[i++]].u.tbl;
-				if (i >= l) goto putc;
+				t = t[chars[i++]].u.tbl;
+				if (i >= charslen) goto putc;
 				goto decode;
 			}
 			pp = i + 1;
@@ -616,30 +616,30 @@ decode:
 			int i = start;
 
 			if (d_opt->plain) goto putc;
-			while (i < l
-			       && ((c[i] >= 'A' && c[i] <= 'Z')
-				   || (c[i] >= 'a' && c[i] <= 'z')
-				   || (c[i] >= '0' && c[i] <= '9')
-				   || (c[i] == '#')))
+			while (i < charslen
+			       && ((chars[i] >= 'A' && chars[i] <= 'Z')
+				   || (chars[i] >= 'a' && chars[i] <= 'z')
+				   || (chars[i] >= '0' && chars[i] <= '9')
+				   || (chars[i] == '#')))
 				i++;
 
 			/* This prevents bug 213: we were expanding "entities"
 			 * in URL query strings. */
 			/* XXX: But this disables &nbsp&nbsp usage, which
 			 * appears to be relatively common! --pasky */
-			if (c[i] != '&' && c[i] != '='
-			    && !isalnum(c[i]) && i > start) {
-				if (c[i] != ';') {
+			if (chars[i] != '&' && chars[i] != '='
+			    && !isalnum(chars[i]) && i > start) {
+				if (chars[i] != ';') {
 					/* Eat &nbsp &nbsp<foo> happily, but
 					 * pull back from the character after
 					 * entity string if it is not the valid
 					 * terminator. */
 					i--;
 				}
-				e = get_entity_string(&c[start], i - start,
+				e = get_entity_string(&chars[start], i - start,
 	 					      d_opt->cp);
 				if (!e) goto putc;
-				pp = i + (i < l);
+				pp = i + (i < charslen);
 			} else goto putc;
 		}
 

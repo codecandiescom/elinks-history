@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-01-04 21:42+0100\n"
-"PO-Revision-Date: 2003-01-04 13:40+0100\n"
+"PO-Revision-Date: 2003-01-04 23:39+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -355,76 +355,74 @@ msgstr "Pøepnout URL/název"
 
 #: src/config/options.c:520 src/config/options.c:537 src/config/opttypes.c:40
 msgid "Parameter expected"
-msgstr ""
+msgstr "Oèekáván parametr"
 
 #: src/config/options.c:538
 msgid "Too many parameters"
-msgstr ""
+msgstr "Pøíli¹ mnoho parametrù"
 
 #: src/config/options.c:545
-#, fuzzy
 msgid "error: host not found\n"
-msgstr "Nena¹el jsem server"
+msgstr "chyba: nena¹el jsem server\n"
 
 #: src/config/options.c:559
-#, fuzzy
 msgid "Resolver error."
-msgstr "Chyba pøi ukládání"
+msgstr "Chyba pøi zji¹»ování IP adresy."
 
 #: src/config/options.c:581
 #, c-format
 msgid "ELinks %s - Text WWW browser\n"
-msgstr ""
+msgstr "ELinks %s - Textový WWW browser\n"
 
 #: src/config/options.c:709
 #, c-format
 msgid " (default: %d)\n"
-msgstr ""
+msgstr " (výchozí: %d)\n"
 
 #: src/config/options.c:711
 #, c-format
 msgid " (default: \"%s\")\n"
-msgstr ""
+msgstr " (výchozí: \"%s\")\n"
 
 #: src/config/options.c:713
 #, c-format
 msgid "(alias for %s)\n"
-msgstr ""
+msgstr "(alias pro %s)\n"
 
 #: src/config/options.c:715
 #, c-format
 msgid " (default: %s)\n"
-msgstr ""
+msgstr " (výchozí: %s)\n"
 
 #: src/config/options.c:719
 #, c-format
 msgid " (default: #%02x%02x%02x)\n"
-msgstr ""
+msgstr " (výchozí: #%02x%02x%02x)\n"
 
 #: src/config/options.c:756
 msgid "Configuration options:\n"
-msgstr ""
+msgstr "Konfiguraèní volby:\n"
 
 #: src/config/options.c:759
 msgid ""
 "Usage: elinks [OPTION]... [URL]\n"
 "\n"
 msgstr ""
+"Pou¾ití: elinks [PØEPÍNAÈ]... [URL]\n"
+"\n"
 
 #: src/config/options.c:760
 msgid "Options:\n"
-msgstr ""
+msgstr "Nastavení:\n"
 
 #. TODO: The change hooks should be added more elegantly! --pasky
 #: src/config/options.c:850
-#, fuzzy
 msgid "Bookmarks"
-msgstr "Bookmark~y"
+msgstr "Bookmarky"
 
 #: src/config/options.c:852
-#, fuzzy
 msgid "Bookmark options."
-msgstr "Bookmark~y"
+msgstr "Nastavení bookmarkù."
 
 #: src/config/options.c:857
 msgid ""
@@ -432,6 +430,9 @@ msgid ""
 "0 is the default ELinks (Links 0.9x compatible) format\n"
 "1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
 msgstr ""
+"Formát souboru s bookmarky (ovlivòuje naèítání i ukládání):\n"
+"0 je defaultní ELinksový formát (kompatibilní s Linksem 0.9x)\n"
+"1 is univerzální formát zalo¾ený na XML, XBEL (BEZ PODPORY DIAKRITIKY!)"
 
 #: src/config/options.c:861
 msgid ""
@@ -440,24 +441,26 @@ msgid ""
 "1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!) "
 "(DISABLED)"
 msgstr ""
+"Formát souboru s bookmarky (ovlivòuje naèítání i ukládání):\n"
+"0 znamená defaultní ELinksový formát (kompatibilní s Linksem 0.9x)\n"
+"1 znamená univerzální formát zalo¾ený na XML, XBEL (BEZ PODPORY DIAKRITIKY!) "
+"(MIMO PROVOZ)"
 
 #: src/config/options.c:867
-#, fuzzy
 msgid "File format"
-msgstr "Uploadnutí souboru"
+msgstr "Formát souboru"
 
 #: src/config/options.c:873
 msgid "Configuration system"
-msgstr ""
+msgstr "Konfiguraèní systém"
 
 #: src/config/options.c:875
 msgid "Configuration handling options."
-msgstr ""
+msgstr "Nastavení systému konfigurace."
 
 #: src/config/options.c:877
-#, fuzzy
 msgid "Comments"
-msgstr "dokumentù"
+msgstr "Komentáøe"
 
 #: src/config/options.c:879
 msgid ""
@@ -467,11 +470,15 @@ msgid ""
 "2 is only the description is written\n"
 "3 is full comments are written"
 msgstr ""
+"Zpùsob ukládání komentáøù do konfiguraèního souboru:\n"
+"0 znamená neukládat ¾ádné komentáøe\n"
+"1 znamená ukládat jenom struèné komentáøe (jméno a typ)\n"
+"2 znamená ukládat jenom popis volby\n"
+"3 znamená ukládat v¹echny komentáøe"
 
 #: src/config/options.c:885
-#, fuzzy
 msgid "Indentation"
-msgstr "Vyjednávání SSL"
+msgstr "Odsazení"
 
 #: src/config/options.c:887
 msgid ""
@@ -479,10 +486,12 @@ msgid ""
 "file. Zero means that no indentation is performed at all\n"
 "when saving the configuration."
 msgstr ""
+"Poèet mezer na jednu úroveò odsazení v konfiguraèním souboru.\n"
+"Nula znamená, ¾e se neodsazuje vùbec."
 
 #: src/config/options.c:891
 msgid "Saving style"
-msgstr ""
+msgstr "Zpùsob ukládání"
 
 #: src/config/options.c:893
 msgid ""
@@ -498,7 +507,7 @@ msgstr ""
 
 #: src/config/options.c:902
 msgid "Saving style warnings"
-msgstr ""
+msgstr "Varování o zpùsobu ukládání"
 
 #: src/config/options.c:904
 msgid ""
@@ -508,7 +517,7 @@ msgstr ""
 
 #: src/config/options.c:907
 msgid "Show template"
-msgstr ""
+msgstr "Zobrazovat ¹ablony"
 
 #: src/config/options.c:909
 msgid ""
@@ -521,22 +530,20 @@ msgid "Connections"
 msgstr "Spojení"
 
 #: src/config/options.c:916
-#, fuzzy
 msgid "Connection options."
-msgstr "Spojení"
+msgstr "Nastavení spojení."
 
 #: src/config/options.c:920
 msgid "SSL"
-msgstr ""
+msgstr "SSL"
 
 #: src/config/options.c:922
-#, fuzzy
 msgid "SSL options."
-msgstr "Ulo¾it na~stavení"
+msgstr "Nastavení SSL."
 
 #: src/config/options.c:925 src/config/options.c:930
 msgid "Verify certificates"
-msgstr ""
+msgstr "Kontrolovat certifikáty"
 
 #: src/config/options.c:927
 msgid ""
@@ -560,34 +567,31 @@ msgstr ""
 
 #: src/config/options.c:941
 msgid "Asynchronous DNS"
-msgstr ""
+msgstr "Asynchronní DNS"
 
 #: src/config/options.c:943
 msgid "Use asynchronous DNS resolver?"
 msgstr ""
 
 #: src/config/options.c:945
-#, fuzzy
 msgid "Maximum connections"
-msgstr "Navazuju spojení"
+msgstr "Maximální poèet spojení"
 
 #: src/config/options.c:947
 msgid "Maximum number of concurrent connections."
 msgstr ""
 
 #: src/config/options.c:949
-#, fuzzy
 msgid "Maximum connections per host"
-msgstr "Navazuju spojení"
+msgstr "Maximální poèet spojení na jeden server"
 
 #: src/config/options.c:951
 msgid "Maximum number of concurrent connections to a given host."
 msgstr ""
 
 #: src/config/options.c:953
-#, fuzzy
 msgid "Connection retries"
-msgstr "Spojení"
+msgstr "Opakování spojení"
 
 #: src/config/options.c:955
 msgid "Number of tries to establish a connection."
@@ -595,16 +599,15 @@ msgstr ""
 
 #: src/config/options.c:957 src/sched/sched.c:80
 msgid "Receive timeout"
-msgstr "Èas vypr¹el"
+msgstr "Èasový limit pro vypr¹ení spojení"
 
 #: src/config/options.c:959
-#, fuzzy
 msgid "Receive timeout (in seconds)."
-msgstr "Èas vypr¹el"
+msgstr ""
 
 #: src/config/options.c:961
 msgid "Timeout for non-restartable connections"
-msgstr ""
+msgstr "Èasový limit pro neobnovitelná spojení"
 
 #: src/config/options.c:963
 msgid "Timeout for non-restartable connections (in seconds)."
@@ -615,13 +618,12 @@ msgid "Cookies"
 msgstr ""
 
 #: src/config/options.c:969
-#, fuzzy
 msgid "Cookies options."
-msgstr "Ulo¾it na~stavení"
+msgstr ""
 
 #: src/config/options.c:971
 msgid "Accept policy"
-msgstr ""
+msgstr "Politika pøijímání"
 
 #: src/config/options.c:974
 msgid ""
@@ -633,7 +635,7 @@ msgstr ""
 
 #: src/config/options.c:979
 msgid "Paranoid security"
-msgstr ""
+msgstr "Paranoidní bezpeènost"
 
 #: src/config/options.c:981
 msgid ""
@@ -643,9 +645,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:985
-#, fuzzy
 msgid "Saving"
-msgstr "prùmìrnì"
+msgstr "Ukládání"
 
 #: src/config/options.c:987
 msgid "Load/save cookies from/to disk?"
@@ -653,7 +654,7 @@ msgstr ""
 
 #: src/config/options.c:989
 msgid "Resaving"
-msgstr ""
+msgstr "Prùbì¾né ukládání"
 
 #: src/config/options.c:991
 msgid ""
@@ -662,18 +663,16 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:996
-#, fuzzy
-msgid "Documents"
-msgstr "dokumentù"
+msgid "Document"
+msgstr "Dokument"
 
 #: src/config/options.c:998
-#, fuzzy
 msgid "Document options."
-msgstr "~Informace o dokumentu"
+msgstr "Mo¾nosti zpracování a práce s dokumentem."
 
 #: src/config/options.c:1000
 msgid "Browsing"
-msgstr ""
+msgstr "Prohlí¾ení"
 
 #: src/config/options.c:1002
 msgid "Document browsing options (mainly interactivity)."
@@ -691,7 +690,7 @@ msgstr ""
 
 #: src/config/options.c:1011
 msgid "Automatic links following"
-msgstr ""
+msgstr "Automatické následování linkù"
 
 #: src/config/options.c:1013
 msgid ""
@@ -702,7 +701,7 @@ msgstr ""
 
 #: src/config/options.c:1017
 msgid "Accesskey priority"
-msgstr ""
+msgstr "Priorita accesskey"
 
 #: src/config/options.c:1019
 msgid ""
@@ -714,16 +713,15 @@ msgstr ""
 
 #: src/config/options.c:1025
 msgid "Forms"
-msgstr ""
+msgstr "Formuláøe"
 
 #: src/config/options.c:1027
 msgid "Options for handling of the forms interaction."
 msgstr ""
 
 #: src/config/options.c:1029
-#, fuzzy
 msgid "Submit form automatically"
-msgstr "Po¹li formuláø na"
+msgstr "Automatické odesílání formuláøù"
 
 #: src/config/options.c:1031
 msgid ""
@@ -733,16 +731,15 @@ msgstr ""
 
 #: src/config/options.c:1034
 msgid "Confirm submission"
-msgstr ""
+msgstr "Potvrzování odesílání"
 
 #: src/config/options.c:1036
 msgid "Ask for confirmation when submitting a form."
 msgstr ""
 
 #: src/config/options.c:1039
-#, fuzzy
 msgid "Images"
-msgstr "Obrázek"
+msgstr "Obrázky"
 
 #: src/config/options.c:1041
 msgid "Options for handling of images."
@@ -750,7 +747,7 @@ msgstr ""
 
 #: src/config/options.c:1043
 msgid "Display style for image links"
-msgstr ""
+msgstr "Zpùsob zobrazování odkazù na obrázky"
 
 #: src/config/options.c:1045
 msgid ""
@@ -763,16 +760,15 @@ msgstr ""
 
 #: src/config/options.c:1051
 msgid "Display image links"
-msgstr ""
+msgstr "Zobrazovat odkazy na obrázky"
 
 #: src/config/options.c:1053
 msgid "Display links to images."
 msgstr ""
 
 #: src/config/options.c:1056
-#, fuzzy
 msgid "Links"
-msgstr "~Link"
+msgstr "Odkazy"
 
 #: src/config/options.c:1058
 msgid "Options for handling of links to other documents."
@@ -780,7 +776,7 @@ msgstr ""
 
 #: src/config/options.c:1060
 msgid "Directory highlighting"
-msgstr ""
+msgstr "Zvýrazòovat odkazy na adresáøe"
 
 #: src/config/options.c:1062
 msgid "Highlight links to directories in FTP and local directory listing."
@@ -788,7 +784,7 @@ msgstr ""
 
 #: src/config/options.c:1064
 msgid "Number links"
-msgstr ""
+msgstr "Èíslovat odkazy"
 
 #: src/config/options.c:1066
 msgid "Display numbers next to the links."
@@ -796,7 +792,7 @@ msgstr ""
 
 #: src/config/options.c:1068
 msgid "Number keys select links"
-msgstr ""
+msgstr "Numerické klávesy vybírají odkazy"
 
 #: src/config/options.c:1070
 msgid ""
@@ -822,7 +818,7 @@ msgstr ""
 
 #: src/config/options.c:1084
 msgid "Horizontal text margin"
-msgstr ""
+msgstr "Horizontální okraj textu"
 
 #: src/config/options.c:1086
 msgid "Horizontal text margin."
@@ -830,7 +826,7 @@ msgstr ""
 
 #: src/config/options.c:1088
 msgid "Scroll margin"
-msgstr ""
+msgstr "Okraj textu citlivý na scrollování"
 
 #: src/config/options.c:1090
 msgid ""
@@ -840,25 +836,23 @@ msgstr ""
 
 #: src/config/options.c:1093
 msgid "Tables navigation order"
-msgstr ""
+msgstr "Poøadí navigace v tabulkách"
 
 #: src/config/options.c:1095
 msgid "Move by columns in table, instead of rows."
 msgstr ""
 
 #: src/config/options.c:1099
-#, fuzzy
 msgid "Cache"
-msgstr "Zru¹it"
+msgstr ""
 
 #: src/config/options.c:1101
-#, fuzzy
 msgid "Cache options."
-msgstr "Ulo¾it na~stavení"
+msgstr "Nastavení cache."
 
 #: src/config/options.c:1104
 msgid "Ignore cache-control info from server"
-msgstr ""
+msgstr "Ignorovat informaci o cachování od serveru"
 
 #: src/config/options.c:1106
 msgid ""
@@ -867,18 +861,16 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1109
-#, fuzzy
 msgid "Formatted documents"
-msgstr "Zformátované dokumenty v cachi"
+msgstr "Formátované dokumenty"
 
 #: src/config/options.c:1111
 msgid "Format cache options."
 msgstr ""
 
 #: src/config/options.c:1113
-#, fuzzy
 msgid "Number"
-msgstr "Chybné èíslo"
+msgstr "Poèet"
 
 #: src/config/options.c:1115
 msgid "Number of cached formatted pages."
@@ -889,9 +881,8 @@ msgid "Memory cache"
 msgstr "Pamì»ová cache"
 
 #: src/config/options.c:1119
-#, fuzzy
 msgid "Memory cache options."
-msgstr "Pamì»ová cache"
+msgstr "Nastavení pamì»ové cache."
 
 #: src/config/options.c:1121 src/dialogs/document.c:100
 msgid "Size"
@@ -902,27 +893,24 @@ msgid "Memory cache size (in kilobytes)."
 msgstr ""
 
 #: src/config/options.c:1127
-#, fuzzy
 msgid "Charset"
-msgstr "~Znaková sada"
+msgstr "Znaková sada"
 
 #: src/config/options.c:1129
-#, fuzzy
 msgid "Charset options."
-msgstr "Ulo¾it na~stavení"
+msgstr ""
 
 #: src/config/options.c:1131
 msgid "Default codepage"
-msgstr ""
+msgstr "Výchozí kódová stránka"
 
 #: src/config/options.c:1133
-#, fuzzy
 msgid "Default document codepage."
-msgstr "Zformátované dokumenty v cachi"
+msgstr ""
 
 #: src/config/options.c:1135
 msgid "Ignore charset info from server"
-msgstr ""
+msgstr "Ignorovat informaci o kódové stránce od serveru"
 
 #: src/config/options.c:1137
 msgid "Ignore charset info sent by server."
@@ -930,7 +918,7 @@ msgstr ""
 
 #: src/config/options.c:1141
 msgid "Default color settings"
-msgstr ""
+msgstr "Výchozí nastavení barev"
 
 #: src/config/options.c:1143
 msgid "Default document color settings."
@@ -958,9 +946,8 @@ msgstr ""
 #: src/config/options.c:2140 src/config/options.c:2165
 #: src/config/options.c:2177 src/config/options.c:2194
 #: src/config/options.c:2206
-#, fuzzy
 msgid "Text color"
-msgstr "Textová plocha"
+msgstr "Barva textu"
 
 #: src/config/options.c:1148 src/config/options.c:1642
 #: src/config/options.c:1654 src/config/options.c:1666
@@ -1010,9 +997,8 @@ msgstr ""
 #: src/config/options.c:2152 src/config/options.c:2169
 #: src/config/options.c:2181 src/config/options.c:2198
 #: src/config/options.c:2210
-#, fuzzy
 msgid "Background color"
-msgstr "Na pozadí"
+msgstr "Barva pozadí"
 
 #: src/config/options.c:1152 src/config/options.c:1646
 #: src/config/options.c:1658 src/config/options.c:1670
@@ -1037,14 +1023,12 @@ msgstr "Na pozadí"
 #: src/config/options.c:2154 src/config/options.c:2171
 #: src/config/options.c:2183 src/config/options.c:2200
 #: src/config/options.c:2212
-#, fuzzy
 msgid "Default background color."
-msgstr "U~konèit v¹echny spojení na pozadí"
+msgstr "Výchozí barva pozadí."
 
 #: src/config/options.c:1154
-#, fuzzy
 msgid "Link color"
-msgstr "Popiska linku"
+msgstr "Barva odkazu"
 
 #: src/config/options.c:1156
 msgid "Default link color."
@@ -1052,7 +1036,7 @@ msgstr ""
 
 #: src/config/options.c:1158
 msgid "Visited-link color"
-msgstr ""
+msgstr "Barva nav¹tíveného odkazu"
 
 #: src/config/options.c:1160
 msgid "Default visited link color."
@@ -1060,7 +1044,7 @@ msgstr ""
 
 #: src/config/options.c:1162
 msgid "Directory color"
-msgstr ""
+msgstr "Barva adresáøe"
 
 #: src/config/options.c:1164
 msgid ""
@@ -1070,7 +1054,7 @@ msgstr ""
 
 #: src/config/options.c:1167
 msgid "Allow dark colors on black background"
-msgstr ""
+msgstr "Povolit tmavé barvy na èerném pozadí"
 
 #: src/config/options.c:1169
 msgid "Allow dark colors on black background."
@@ -1078,7 +1062,7 @@ msgstr ""
 
 #: src/config/options.c:1171
 msgid "Use document-specified colors"
-msgstr ""
+msgstr "Pou¾ívat barvy nastavené v dokumentu"
 
 #: src/config/options.c:1173
 msgid ""
@@ -1096,7 +1080,6 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1187
-#, fuzzy
 msgid "Downloading"
 msgstr "Stahování"
 
@@ -1106,7 +1089,7 @@ msgstr ""
 
 #: src/config/options.c:1191
 msgid "Default MIME-type"
-msgstr ""
+msgstr "Výchozí MIME typ"
 
 #: src/config/options.c:1193
 msgid ""
@@ -1115,9 +1098,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1196
-#, fuzzy
 msgid "Default download directory"
-msgstr "Chyba pøi downloadu"
+msgstr "Výchozí adresáø pro stahované soubory"
 
 #: src/config/options.c:1198
 msgid "Default download directory."
@@ -1125,7 +1107,7 @@ msgstr ""
 
 #: src/config/options.c:1200
 msgid "Set original time"
-msgstr ""
+msgstr "Nastavit pùvodní èas"
 
 #: src/config/options.c:1202
 msgid ""
@@ -1135,7 +1117,7 @@ msgstr ""
 
 #: src/config/options.c:1205
 msgid "Prevent overwriting"
-msgstr ""
+msgstr "Pøedcházet pøepisování"
 
 #: src/config/options.c:1207
 msgid ""
@@ -1145,9 +1127,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1211
-#, fuzzy
 msgid "Notify download completion by bell"
-msgstr "Stahování dokonèeno"
+msgstr "Upozornit na ukonèení stahování zvonkem"
 
 #: src/config/options.c:1213
 msgid ""
@@ -1159,7 +1140,7 @@ msgstr ""
 
 #: src/config/options.c:1219
 msgid "Dump output"
-msgstr ""
+msgstr "Dump výstup"
 
 #: src/config/options.c:1221
 msgid "Dump output options."
@@ -1176,16 +1157,15 @@ msgstr ""
 
 #: src/config/options.c:1227
 msgid "Width"
-msgstr ""
+msgstr "©íøka"
 
 #: src/config/options.c:1229
 msgid "Width of screen in characters when dumping a HTML document."
 msgstr ""
 
 #: src/config/options.c:1233
-#, fuzzy
 msgid "History"
-msgstr "~Historie"
+msgstr "Historie"
 
 #: src/config/options.c:1235
 msgid "History options."
@@ -1194,19 +1174,17 @@ msgstr ""
 #: src/config/options.c:1237 src/globhist/dialogs.c:118
 #: src/globhist/dialogs.c:433
 msgid "Global history"
-msgstr "Správa historie"
+msgstr "Globální historie"
 
 #: src/config/options.c:1239
-#, fuzzy
 msgid "Global history options."
-msgstr "Správa historie"
+msgstr ""
 
 #. XXX: Disable global history if -anonymous is given?
 #: src/config/options.c:1242 src/config/options.c:1516
 #: src/config/options.c:2242 src/config/options.c:2249
-#, fuzzy
 msgid "Enable"
-msgstr "jméno"
+msgstr "Zapnout"
 
 #: src/config/options.c:1244
 msgid "Enable global history (\"history of all pages visited\")."
@@ -1214,16 +1192,15 @@ msgstr ""
 
 #: src/config/options.c:1246
 msgid "Maximum number of entries"
-msgstr ""
+msgstr "Maximální poèet polo¾ek"
 
 #: src/config/options.c:1248
 msgid "Maximum number of entries in the global history."
 msgstr ""
 
 #: src/config/options.c:1250
-#, fuzzy
 msgid "Display style"
-msgstr "Zobrazit map~u"
+msgstr "Zpùsob zobrazování"
 
 #: src/config/options.c:1252
 msgid ""
@@ -1233,56 +1210,48 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1256
-#, fuzzy
 msgid "Keep unhistory"
-msgstr "An~tihistorie"
+msgstr "Udr¾ovat antihistorii"
 
 #: src/config/options.c:1258
 msgid "Keep unhistory (\"forward history\")?"
 msgstr ""
 
 #: src/config/options.c:1262
-#, fuzzy
 msgid "HTML rendering"
-msgstr "Pøená¹ím"
+msgstr "Zobrazování HTML"
 
 #: src/config/options.c:1264
 msgid "Options concerning the display of HTML pages."
 msgstr ""
 
 #: src/config/options.c:1267
-#, fuzzy
 msgid "Display frames"
-msgstr "Zobrazit"
+msgstr "Zobrazovat rámce"
 
 #: src/config/options.c:1269
-#, fuzzy
 msgid "Display frames."
-msgstr "Zobrazit"
+msgstr ""
 
 #: src/config/options.c:1271
-#, fuzzy
 msgid "Display tables"
-msgstr "Zobrazit"
+msgstr "Zobrazovat tabulky"
 
 #: src/config/options.c:1273
-#, fuzzy
 msgid "Display tables."
-msgstr "Zobrazit"
+msgstr ""
 
 #: src/config/options.c:1275
-#, fuzzy
 msgid "Display subscripts"
-msgstr "Zobrazit map~u"
+msgstr "Zobrazovat horní indexy"
 
 #: src/config/options.c:1277
 msgid "Display subscripts (as [thing])."
 msgstr ""
 
 #: src/config/options.c:1279
-#, fuzzy
 msgid "Display superscripts"
-msgstr "Zobrazit map~u"
+msgstr "Zobrazovat dolní indexy"
 
 #: src/config/options.c:1281
 msgid "Display superscripts (as ^thing)."
@@ -1298,7 +1267,7 @@ msgstr ""
 
 #: src/config/options.c:1291
 msgid "MIME type associations"
-msgstr ""
+msgstr "Asociace MIME typù"
 
 #: src/config/options.c:1293
 msgid ""
@@ -1323,7 +1292,7 @@ msgstr ""
 
 #: src/config/options.c:1310
 msgid "File type handlers"
-msgstr ""
+msgstr "Ovladaèe typù souborù"
 
 #: src/config/options.c:1312
 msgid ""
@@ -1341,25 +1310,23 @@ msgstr ""
 
 #: src/config/options.c:1323 src/config/options.c:1526
 msgid "Ask before opening"
-msgstr ""
+msgstr "Zeptat se pøed otevøením"
 
 #: src/config/options.c:1325
 msgid "Ask before opening."
 msgstr ""
 
 #: src/config/options.c:1327
-#, fuzzy
 msgid "Block terminal"
-msgstr "~BeOS terminál"
+msgstr "Zablokovat terminál"
 
 #: src/config/options.c:1329
 msgid "Block the terminal when the handler is running."
 msgstr ""
 
 #: src/config/options.c:1331
-#, fuzzy
 msgid "Program"
-msgstr "®ádný program"
+msgstr ""
 
 #: src/config/options.c:1333
 #, c-format
@@ -1369,9 +1336,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1337
-#, fuzzy
 msgid "File extension associations"
-msgstr "~Pøípony souborù"
+msgstr "Asociace pøípon souborù"
 
 #: src/config/options.c:1339
 msgid "Extension <-> MIME type association."
@@ -1385,7 +1351,7 @@ msgstr ""
 
 #: src/config/options.c:1348
 msgid "Protocols"
-msgstr ""
+msgstr "Protokoly"
 
 #: src/config/options.c:1350
 msgid "Protocol specific options."
@@ -1401,7 +1367,7 @@ msgstr ""
 
 #: src/config/options.c:1357
 msgid "Server bug workarounds"
-msgstr ""
+msgstr "Obcházení chyb v serverech"
 
 #: src/config/options.c:1359
 msgid "Server-side HTTP bugs workarounds."
@@ -1409,7 +1375,7 @@ msgstr ""
 
 #: src/config/options.c:1361
 msgid "Allow blacklisting"
-msgstr ""
+msgstr "Povolit èernou listinu"
 
 #: src/config/options.c:1363
 msgid "Allow blacklisting of buggy servers."
@@ -1417,7 +1383,7 @@ msgstr ""
 
 #: src/config/options.c:1365
 msgid "Broken 302 redirects"
-msgstr ""
+msgstr "©patná pøesmìrování HTTP kódem 302"
 
 #: src/config/options.c:1367
 msgid ""
@@ -1428,7 +1394,7 @@ msgstr ""
 
 #: src/config/options.c:1371
 msgid "No keepalive after POST requests"
-msgstr ""
+msgstr "Nepou¾ívat keepalive spojení po po¾adavku POST"
 
 #: src/config/options.c:1373
 msgid "Disable keepalive connection after POST request."
@@ -1436,7 +1402,7 @@ msgstr ""
 
 #: src/config/options.c:1375
 msgid "Use HTTP/1.0"
-msgstr ""
+msgstr "Pou¾ívat HTTP/1.0"
 
 #: src/config/options.c:1377
 msgid "Use HTTP/1.0 protocol instead of HTTP/1.1."
@@ -1444,16 +1410,15 @@ msgstr ""
 
 #: src/config/options.c:1380 src/config/options.c:1442
 msgid "Proxy configuration"
-msgstr ""
+msgstr "Nastavení proxy"
 
 #: src/config/options.c:1382
 msgid "HTTP proxy configuration."
 msgstr ""
 
 #: src/config/options.c:1384 src/config/options.c:1446
-#, fuzzy
 msgid "Host and port-number"
-msgstr "Chybné èíslo"
+msgstr "Adresa a port"
 
 #: src/config/options.c:1386
 msgid ""
@@ -1462,14 +1427,12 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1389
-#, fuzzy
 msgid "Username"
-msgstr "jméno"
+msgstr "U¾ivatelské jméno"
 
 #: src/config/options.c:1391
-#, fuzzy
 msgid "Proxy authentication username."
-msgstr "HTTP Autentikace"
+msgstr ""
 
 #: src/config/options.c:1393 src/dialogs/auth.c:35 src/dialogs/auth.c:36
 #: src/dialogs/auth.c:56 src/dialogs/auth.c:82
@@ -1477,14 +1440,12 @@ msgid "Password"
 msgstr "Heslo"
 
 #: src/config/options.c:1395
-#, fuzzy
 msgid "Proxy authentication password."
-msgstr "HTTP Autentikace"
+msgstr ""
 
 #: src/config/options.c:1398
-#, fuzzy
 msgid "Referer sending"
-msgstr "Smazat pøiøazení klávesy"
+msgstr "Posílat referer"
 
 #: src/config/options.c:1400
 msgid "HTTP referer sending options."
@@ -1492,7 +1453,7 @@ msgstr ""
 
 #: src/config/options.c:1402
 msgid "Policy"
-msgstr ""
+msgstr "Politika"
 
 #: src/config/options.c:1405
 msgid ""
@@ -1505,7 +1466,7 @@ msgstr ""
 
 #: src/config/options.c:1411
 msgid "Fake referer URL"
-msgstr ""
+msgstr "Fale¹né URL"
 
 #: src/config/options.c:1413
 msgid "Fake referer to be sent when policy is 2."
@@ -1513,7 +1474,7 @@ msgstr ""
 
 #: src/config/options.c:1416
 msgid "Send Accept-Language header"
-msgstr ""
+msgstr "Posílat hlavièku Accept-Language"
 
 #: src/config/options.c:1418
 msgid "Send Accept-Language header."
@@ -1521,7 +1482,7 @@ msgstr ""
 
 #: src/config/options.c:1420
 msgid "Use UI language as Accept-Language"
-msgstr ""
+msgstr "Posílat jazyk u¾ivatelského rozhraní"
 
 #: src/config/options.c:1422
 msgid ""
@@ -1533,7 +1494,7 @@ msgstr ""
 
 #: src/config/options.c:1427
 msgid "User-agent identification"
-msgstr ""
+msgstr "Identifikace prohlí¾eèe"
 
 #: src/config/options.c:1429
 msgid ""
@@ -1565,7 +1526,7 @@ msgstr ""
 
 #: src/config/options.c:1451
 msgid "Anonymous password"
-msgstr ""
+msgstr "Anonymní heslo"
 
 #: src/config/options.c:1453
 msgid "FTP anonymous password to be sent."
@@ -1573,7 +1534,7 @@ msgstr ""
 
 #: src/config/options.c:1455
 msgid "Use passive mode (IPv4)"
-msgstr ""
+msgstr "Pou¾ívat pasivní re¾im (IPv4)"
 
 #: src/config/options.c:1457
 msgid "Use PASV instead of PORT (passive vs active mode, IPv4 only)."
@@ -1581,7 +1542,7 @@ msgstr ""
 
 #: src/config/options.c:1459 src/config/options.c:1463
 msgid "Use passive mode (IPv6)"
-msgstr ""
+msgstr "Pou¾ívat pasivní re¾im (IPv6)"
 
 #: src/config/options.c:1461
 msgid "Use EPSV instead of EPRT (passive vs active mode, IPv6 only)."
@@ -1594,9 +1555,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1471
-#, fuzzy
 msgid "Local files"
-msgstr "souborù"
+msgstr "Lokální soubory"
 
 #: src/config/options.c:1473
 msgid "Options specific to local browsing."
@@ -1604,7 +1564,7 @@ msgstr ""
 
 #: src/config/options.c:1475
 msgid "Allow reading special files"
-msgstr ""
+msgstr "Povolit naèítání speciálních souborù"
 
 #: src/config/options.c:1477
 msgid ""
@@ -1613,9 +1573,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1480
-#, fuzzy
 msgid "Try encoding extensions"
-msgstr "®ádný pøípony"
+msgstr "Zkou¹et pøípony rùzných kódování"
 
 #: src/config/options.c:1482
 msgid ""
@@ -1625,9 +1584,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1487
-#, fuzzy
 msgid "User protocols"
-msgstr "©patná URL u¾ivatelského protokolu"
+msgstr "U¾ivatelské protokoly"
 
 #: src/config/options.c:1489
 msgid ""
@@ -1665,7 +1623,7 @@ msgstr ""
 
 #: src/config/options.c:1520
 msgid "Path"
-msgstr ""
+msgstr "Cesta"
 
 #: src/config/options.c:1522
 msgid ""
@@ -1680,7 +1638,7 @@ msgstr ""
 
 #: src/config/options.c:1530
 msgid "Type query string"
-msgstr ""
+msgstr "Øetìzec pou¾itý ve stahovacím dialogu"
 
 #: src/config/options.c:1532
 msgid ""
@@ -1693,7 +1651,7 @@ msgstr ""
 
 #: src/config/options.c:1538
 msgid "Prioritize entries by file"
-msgstr ""
+msgstr "Prioritizovat polo¾ky v souboru"
 
 #: src/config/options.c:1540
 msgid ""
@@ -1704,7 +1662,7 @@ msgstr ""
 
 #: src/config/options.c:1545
 msgid "No-proxy domains"
-msgstr ""
+msgstr "Domény pou¾itelné bez proxy"
 
 #: src/config/options.c:1547
 msgid ""
@@ -1715,14 +1673,12 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1554
-#, fuzzy
 msgid "Terminals"
-msgstr "Nastavení terminálu"
+msgstr "Terminály"
 
 #: src/config/options.c:1556
-#, fuzzy
 msgid "Terminal options."
-msgstr "Nastavení terminálu"
+msgstr "Nastavení terminálu."
 
 #: src/config/options.c:1561
 msgid "Options specific to this terminal type (according to $TERM value)."
@@ -1730,7 +1686,7 @@ msgstr ""
 
 #: src/config/options.c:1563
 msgid "Border type"
-msgstr ""
+msgstr "Typ rámeèkù"
 
 #: src/config/options.c:1565
 msgid ""
@@ -1744,7 +1700,7 @@ msgstr ""
 
 #: src/config/options.c:1572
 msgid "Switch fonts for line drawing"
-msgstr ""
+msgstr "Pøepínat fonty pøi kreslení èar"
 
 #: src/config/options.c:1574
 msgid ""
@@ -1755,7 +1711,7 @@ msgstr ""
 
 #: src/config/options.c:1578
 msgid "I/O in UTF8"
-msgstr ""
+msgstr "V/V v UTF8"
 
 #: src/config/options.c:1580
 msgid ""
@@ -1765,7 +1721,7 @@ msgstr ""
 
 #: src/config/options.c:1583
 msgid "Restrict CP852"
-msgstr ""
+msgstr "Omezit CP852"
 
 #: src/config/options.c:1585
 msgid ""
@@ -1773,7 +1729,6 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1587
-#, fuzzy
 msgid "Block cursor"
 msgstr "Blokovat kurzor"
 
@@ -1786,16 +1741,15 @@ msgstr ""
 
 #: src/config/options.c:1593
 msgid "Use colors"
-msgstr ""
+msgstr "Pou¾ívat barvièky"
 
 #: src/config/options.c:1595
 msgid "If we should use colors."
 msgstr ""
 
 #: src/config/options.c:1597
-#, fuzzy
 msgid "Enable transparency"
-msgstr "Prùhlednost"
+msgstr "Povolit prùhlednost"
 
 #: src/config/options.c:1599
 msgid ""
@@ -1812,16 +1766,15 @@ msgstr ""
 
 #: src/config/options.c:1611
 msgid "User interface"
-msgstr ""
+msgstr "U¾ivatelské rozhraní"
 
 #: src/config/options.c:1613
-#, fuzzy
 msgid "User interface options."
-msgstr "Nastavení terminálu"
+msgstr ""
 
 #: src/config/options.c:1617
 msgid "Color settings"
-msgstr ""
+msgstr "Nastavení barev"
 
 #: src/config/options.c:1619
 msgid "Default user interface color settings."
@@ -1831,9 +1784,8 @@ msgstr ""
 #. ============= BORING PART (colors) START =================
 #. ==========================================================
 #: src/config/options.c:1627
-#, fuzzy
 msgid "Color terminals"
-msgstr "~BeOS terminál"
+msgstr "Barevné terminály"
 
 #: src/config/options.c:1629
 msgid "Color settings for color terminal."
@@ -1889,9 +1841,8 @@ msgid "Unselected menu item colors."
 msgstr ""
 
 #: src/config/options.c:1689 src/config/options.c:1983
-#, fuzzy
 msgid "Selected menu item"
-msgstr "Vybírací políèko"
+msgstr ""
 
 #: src/config/options.c:1691 src/config/options.c:1985
 msgid "Selected menu item colors."
@@ -1902,9 +1853,8 @@ msgid "Unselected menu item hotkey colors."
 msgstr ""
 
 #: src/config/options.c:1713 src/config/options.c:2007
-#, fuzzy
 msgid "Menu frame"
-msgstr "Vypnout rámeèky"
+msgstr ""
 
 #: src/config/options.c:1715 src/config/options.c:2009
 msgid "Menu frame colors."
@@ -1919,18 +1869,16 @@ msgid "Dialog colors."
 msgstr ""
 
 #: src/config/options.c:1730
-#, fuzzy
 msgid "Generic background color"
-msgstr "U~konèit v¹echny spojení na pozadí"
+msgstr ""
 
 #: src/config/options.c:1732 src/config/options.c:2026
 msgid "Dialog generic background color."
 msgstr ""
 
 #: src/config/options.c:1734 src/config/options.c:2028
-#, fuzzy
 msgid "Frame"
-msgstr "jméno"
+msgstr ""
 
 #: src/config/options.c:1736 src/config/options.c:2030
 msgid "Dialog frame colors."
@@ -1941,9 +1889,8 @@ msgid "Dialog title colors."
 msgstr ""
 
 #: src/config/options.c:1758 src/config/options.c:2052
-#, fuzzy
 msgid "Text"
-msgstr "Textová plocha"
+msgstr ""
 
 #: src/config/options.c:1760 src/config/options.c:2054
 msgid "Dialog text colors."
@@ -1959,9 +1906,8 @@ msgid "Dialog checkbox colors."
 msgstr ""
 
 #: src/config/options.c:1782 src/config/options.c:2076
-#, fuzzy
 msgid "Checkbox label"
-msgstr "Za¹krtávací ètvereèek"
+msgstr ""
 
 #: src/config/options.c:1784 src/config/options.c:2078
 msgid "Dialog checkbox label colors."
@@ -1976,9 +1922,8 @@ msgid "Dialog button colors."
 msgstr ""
 
 #: src/config/options.c:1806 src/config/options.c:2100
-#, fuzzy
 msgid "Selected button"
-msgstr "Smazat volbu"
+msgstr ""
 
 #: src/config/options.c:1808 src/config/options.c:2102
 msgid "Dialog selected button colors."
@@ -1994,9 +1939,8 @@ msgid "Dialog text field colors."
 msgstr ""
 
 #: src/config/options.c:1830 src/config/options.c:2124
-#, fuzzy
 msgid "Text field text"
-msgstr "Textové políèko"
+msgstr ""
 
 #: src/config/options.c:1832 src/config/options.c:2126
 msgid "Dialog field text colors."
@@ -2019,9 +1963,8 @@ msgid "Dialog shadow colors (see ui.shadows option)."
 msgstr ""
 
 #: src/config/options.c:1863 src/config/options.c:2157
-#, fuzzy
 msgid "Title bar"
-msgstr "Titulek"
+msgstr ""
 
 #: src/config/options.c:1865 src/config/options.c:2159
 msgid "Title bar colors."
@@ -2060,9 +2003,8 @@ msgid "Generic status bar colors."
 msgstr ""
 
 #: src/config/options.c:1908 src/config/options.c:2202
-#, fuzzy
 msgid "Status bar text"
-msgstr "Hledání textu"
+msgstr ""
 
 #: src/config/options.c:1910 src/config/options.c:2204
 msgid "Status bar text colors."
@@ -2105,16 +2047,15 @@ msgid "Dialog field colors."
 msgstr ""
 
 #: src/config/options.c:2173
-#, fuzzy
 msgid "Title text"
-msgstr "Titulek"
+msgstr ""
 
 #. ==========================================================
 #. ============= BORING PART (colors) END ===================
 #. ==========================================================
 #: src/config/options.c:2220
 msgid "Dialog settings"
-msgstr ""
+msgstr "Dialogová okna"
 
 #: src/config/options.c:2222
 msgid "Dialogs-specific appearance and behaviour settings."
@@ -2122,7 +2063,7 @@ msgstr ""
 
 #: src/config/options.c:2224
 msgid "Minimal height of listbox widget"
-msgstr ""
+msgstr "Minimální vý¹ka listboxového udìlátka"
 
 #: src/config/options.c:2226
 msgid ""
@@ -2132,7 +2073,7 @@ msgstr ""
 
 #: src/config/options.c:2229
 msgid "Drop shadows"
-msgstr ""
+msgstr "Stíny"
 
 #: src/config/options.c:2231
 msgid ""
@@ -2142,9 +2083,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:2236
-#, fuzzy
 msgid "Timer options"
-msgstr "Nastavení terminálu"
+msgstr "Nastavení èasovaèù"
 
 #: src/config/options.c:2238
 msgid ""
@@ -2170,9 +2110,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:2257
-#, fuzzy
 msgid "Duration"
-msgstr "akce"
+msgstr "Délka trvání"
 
 #: src/config/options.c:2259
 msgid "Inactivity timeout. One day should be enough for just everyone (TM)."
@@ -2199,18 +2138,16 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:2280
-#, fuzzy
 msgid "Display status bar"
-msgstr "Zobrazit map~u"
+msgstr "Zobrazit stavový øádek"
 
 #: src/config/options.c:2282
 msgid "Show status bar on the screen."
 msgstr ""
 
 #: src/config/options.c:2284
-#, fuzzy
 msgid "Display title bar"
-msgstr "Zobrazit map~u"
+msgstr "Zobrazit øádek s menu"
 
 #: src/config/options.c:2286
 msgid "Show title bar on the screen."
@@ -2218,16 +2155,15 @@ msgstr ""
 
 #: src/config/options.c:2288
 msgid "Display goto dialog on startup"
-msgstr ""
+msgstr "Zobrazit pøi startu okno \"Jít na\""
 
 #: src/config/options.c:2290
 msgid "Pop up goto dialog on startup when there's no homepage set."
 msgstr ""
 
 #: src/config/options.c:2292
-#, fuzzy
 msgid "Set window title"
-msgstr "Popiska linku"
+msgstr "Nastavovat titulek okna"
 
 #: src/config/options.c:2294
 msgid ""
@@ -2243,7 +2179,7 @@ msgstr ""
 
 #: src/config/options.c:2306
 msgid "Use secure file saving"
-msgstr ""
+msgstr "Pou¾ívat bezpeèné ukládání souborù"
 
 #: src/config/options.c:2308
 msgid ""
@@ -2268,9 +2204,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:2325
-#, fuzzy
 msgid "Autosubmit first form"
-msgstr "Odeslat formuláø"
+msgstr ""
 
 #: src/config/options.c:2327
 msgid "Go and submit the first form you'll stumble upon."
@@ -2343,14 +2278,12 @@ msgid "Print help on configuration options and exit."
 msgstr ""
 
 #: src/config/options.c:2374
-#, fuzzy
 msgid "Look up specified host"
-msgstr "Není zadán ¾ádný program pro"
+msgstr ""
 
 #: src/config/options.c:2376
-#, fuzzy
 msgid "Look up specified host."
-msgstr "Není zadán ¾ádný program pro"
+msgstr ""
 
 #: src/config/options.c:2378
 msgid "Run as separate instance"
@@ -2465,25 +2398,23 @@ msgstr "Øetìzec"
 
 #: src/config/opttypes.c:465
 msgid "<str>"
-msgstr ""
+msgstr "<øetìzec>"
 
 #: src/config/opttypes.c:467
-#, fuzzy
 msgid "<codepage>"
-msgstr "Kódová stránka"
+msgstr "<znaková sada>"
 
 #: src/config/opttypes.c:468
-#, fuzzy
 msgid "<language>"
-msgstr "Jazyk"
+msgstr "<jazyk>"
 
 #: src/config/opttypes.c:469 src/dialogs/options.c:118
 msgid "Color"
-msgstr "Barvièky"
+msgstr "Barva"
 
 #: src/config/opttypes.c:469
 msgid "<color|#rrggbb>"
-msgstr ""
+msgstr "<barva|#rrggbb>"
 
 #: src/config/opttypes.c:471
 msgid "Special"
@@ -2505,7 +2436,7 @@ msgstr "U¾ivatelské jméno"
 
 #: src/dialogs/auth.c:147 src/dialogs/auth.c:166
 msgid "Authentication required for "
-msgstr "Zaloguj se pro "
+msgstr "Zaloguj se do "
 
 #: src/dialogs/auth.c:149 src/dialogs/auth.c:168
 msgid " at "

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.21 2004/01/06 21:48:20 pasky Exp $ */
+/* $Id: renderer.c,v 1.22 2004/01/07 00:40:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,6 +7,7 @@
 
 #include <ctype.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "elinks.h"

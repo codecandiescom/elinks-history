@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.45 2003/12/30 18:26:43 zas Exp $ */
+/* $Id: document.c,v 1.46 2004/01/07 00:40:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,6 +84,17 @@ free_frameset_desc(struct frameset_desc *frameset_desc)
 	}
 
 	mem_free(frameset_desc);
+}
+
+void
+done_link_members(struct link *link)
+{
+	if (link->where) mem_free(link->where);
+	if (link->target) mem_free(link->target);
+	if (link->title) mem_free(link->title);
+	if (link->where_img) mem_free(link->where_img);
+	if (link->pos) mem_free(link->pos);
+	if (link->name) mem_free(link->name);
 }
 
 void

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.40 2003/12/01 18:23:37 jonas Exp $ */
+/* $Id: document.h,v 1.41 2004/01/07 00:40:47 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -134,6 +134,9 @@ init_document(unsigned char *uri, struct cache_entry *cache_entry,
 
 /* Releases the document and all its resources. */
 void done_document(struct document *document);
+
+/* Free's the allocated members of the link. */
+void done_link_members(struct link *link);
 
 struct document *get_cached_document(unsigned char *uristring, struct document_options *options, unsigned int id);
 

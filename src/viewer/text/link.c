@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.138 2004/01/06 21:48:20 pasky Exp $ */
+/* $Id: link.c,v 1.139 2004/01/07 00:40:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,17 +48,6 @@
 
 /* FIXME: Add comments!! --Zas */
 
-
-void
-done_link_members(struct link *link)
-{
-	if (link->where) mem_free(link->where);
-	if (link->target) mem_free(link->target);
-	if (link->title) mem_free(link->title);
-	if (link->where_img) mem_free(link->where_img);
-	if (link->pos) mem_free(link->pos);
-	if (link->name) mem_free(link->name);
-}
 
 void
 set_link(struct document_view *doc_view)

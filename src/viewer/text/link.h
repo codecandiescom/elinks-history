@@ -1,4 +1,4 @@
-/* $Id: link.h,v 1.15 2004/01/06 21:48:21 pasky Exp $ */
+/* $Id: link.h,v 1.16 2004/01/07 00:40:47 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_LINK_H
 #define EL__VIEWER_TEXT_LINK_H
@@ -9,9 +9,6 @@ struct link;
 struct session;
 struct term_event;
 struct terminal;
-
-/* Free's the allocated members of the link. */
-void done_link_members(struct link *link);
 
 void set_link(struct document_view *doc_view);
 void free_link(struct document_view *doc_view);

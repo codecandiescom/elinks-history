@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.116 2003/10/25 12:45:09 zas Exp $ */
+/* $Id: download.c,v 1.117 2003/10/25 13:01:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -889,7 +889,7 @@ get_temp_name(unsigned char *url)
 	 * We use tempnam() here, which is unsafe (race condition), for now.
 	 * This should be changed at some time, but it needs an in-depth work
 	 * of whole download code. --Zas */
-	unsigned char *nm = tempnam(NULL, "elinks");
+	unsigned char *nm = tempnam(NULL, ELINKS_TEMPNAME_PREFIX);
 
 	if (!nm) return NULL;
 

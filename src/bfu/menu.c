@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.267 2004/09/12 03:31:36 miciah Exp $ */
+/* $Id: menu.c,v 1.268 2004/09/12 03:34:26 miciah Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -440,6 +440,8 @@ display_menu(struct terminal *term, struct menu *menu)
 
 	copy_box(&nbox, &box);
 
+	nbox.height = 1;
+
 	for (p = menu->first;
 	     p < menu->size && p < menu->first + box.height;
 	     p++, nbox.y++) {
@@ -452,8 +454,6 @@ display_menu(struct terminal *term, struct menu *menu)
 		if (mi_is_end_of_menu(mi))
 			INTERNAL("Unexpected end of menu [%p:%d]", mi, p);
 #endif
-
-		nbox.height = 1;
 
 		if (selected) {
 			/* This entry is selected. */

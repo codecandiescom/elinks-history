@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.206 2005/03/12 00:25:43 zas Exp $ */
+/* $Id: ftp.c,v 1.207 2005/03/27 02:20:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@
 #include "osdep/osdep.h"
 #include "protocol/auth/auth.h"
 #include "protocol/ftp/ftp.h"
-#include "protocol/ftp/ftpparse.h"
+#include "protocol/ftp/parse.h"
 #include "protocol/uri.h"
 #include "sched/connection.h"
 #include "util/conv.h"
@@ -1028,30 +1028,39 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 static int
 display_dir_entry(struct cache_entry *cached, int *pos, int *tries,
 		  int colorize_dir, unsigned char *dircolor,
-		  struct ftpparse *ftp_info)
+		  struct ftp_file_info *ftp_info)
 {
 	int is_file, is_dir = 0;
 	unsigned char typechr = '-';
 	struct string string;
+	unsigned char permissions[10] = "---------";
 
 	if (!init_string(&string)) return -1;
 
-	is_file = !ftp_info->flagtrycwd;
-	if (!is_file) {
-		is_dir = !ftp_info->flagtryretr;
-		typechr = is_dir ? 'd' : 'l';
-	}
+	is_file = ftp_info->type == FTP_FILE_PLAINFILE;
+	is_dir  = ftp_info->type == FTP_FILE_DIRECTORY;
+	typechr = ftp_info->type;
+
 	add_char_to_string(&string, typechr);
 
-	if (ftp_info->perm && ftp_info->permlen)
-		add_bytes_to_string(&string, ftp_info->perm, ftp_info->permlen);
-	else
-		add_to_string(&string, "---------");
+	if (ftp_info->permissions) {
+		int perms = ftp_info->permissions;
+		int i;
+
+		for (i = 6; i >= 0; i -= 3) {
+			if (perms & 4) permissions[i + 0] = 'r';
+			if (perms & 2) permissions[i + 1] = 'w';
+			if (perms & 1) permissions[i + 2] = 'x';
+			perms >>= 3;
+		}
+	}
+
+	add_to_string(&string, permissions);
 	add_char_to_string(&string, ' ');
 
 	add_to_string(&string, "   1 ftp      ftp ");
 
-	if (ftp_info->sizetype != FTPPARSE_SIZE_UNKNOWN) {
+	if (ftp_info->size != FTP_SIZE_UNKNOWN) {
 		add_format_to_string(&string, "%12lu ", ftp_info->size);
 	} else {
 		add_to_string(&string, "           - ");
@@ -1066,7 +1075,7 @@ display_dir_entry(struct cache_entry *cached, int *pos, int *tries,
 		unsigned char date[13];
 		int wr;
 
-		if (FTPPARSE_MTIME_LOCAL == ftp_info->mtimetype)
+		if (ftp_info->local_time_zone)
 			when_tm = localtime(&when);
 		else
 			when_tm = gmtime(&when);
@@ -1095,20 +1104,21 @@ display_dir_entry(struct cache_entry *cached, int *pos, int *tries,
 	}
 
 	add_to_string(&string, "<a href=\"");
-	add_html_to_string(&string, ftp_info->name, ftp_info->namelen);
+	add_html_to_string(&string, ftp_info->name.source, ftp_info->name.length);
 	if (is_dir)
 		add_char_to_string(&string, '/');
 	add_to_string(&string, "\">");
-	add_html_to_string(&string, ftp_info->name, ftp_info->namelen);
+	add_html_to_string(&string, ftp_info->name.source, ftp_info->name.length);
 	add_to_string(&string, "</a>");
 	if (is_dir && colorize_dir) {
 		add_to_string(&string, "</b></font>");
 	}
-	if (ftp_info->symlink) {
+	if (ftp_info->symlink.length) {
 		add_to_string(&string, " -&gt; ");
-		add_html_to_string(&string, ftp_info->symlink,
-				ftp_info->symlinklen);
+		add_html_to_string(&string, ftp_info->symlink.source,
+				ftp_info->symlink.length);
 	}
+
 	add_char_to_string(&string, '\n');
 
 	if (add_fragment(cached, *pos, string.source, string.length)) *tries = 0;
@@ -1127,7 +1137,7 @@ ftp_process_dirlist(struct cache_entry *cached, int *pos,
 	int ret = 0;
 
 	while (1) {
-		struct ftpparse ftp_info;
+		struct ftp_file_info ftp_info = INIT_FTP_FILE_INFO;
 		unsigned char *buf = buffer + ret;
 		int bufl = buflen - ret;
 		int bufp;
@@ -1153,12 +1163,12 @@ ftp_process_dirlist(struct cache_entry *cached, int *pos,
 
 		/* Process line whose end we've already found. */
 
-		if (ftpparse(&ftp_info, buf, bufp) == 1) {
+		if (parse_ftp_file_info(&ftp_info, buf, bufp)) {
 			int retv;
 
-			if ((ftp_info.namelen == 1 && ftp_info.name[0] == '.')
-			    || (ftp_info.namelen == 2 && ftp_info.name[0] == '.'
-				&& ftp_info.name[1] == '.'))
+			if ((ftp_info.name.length == 1 && ftp_info.name.source[0] == '.')
+			    || (ftp_info.name.length == 2 && ftp_info.name.source[0] == '.'
+				&& ftp_info.name.source[1] == '.'))
 				continue;
 
 			retv = display_dir_entry(cached, pos, tries, colorize_dir,
@@ -1271,13 +1281,7 @@ out_of_mem:
 		done_string(&string);
 
 		if (conn->uri->datalen) {
-			struct ftpparse ftp_info;
-
-			memset(&ftp_info, 0, sizeof(ftp_info));
-			ftp_info.name = "..";
-			ftp_info.namelen = 2;
-			ftp_info.flagtrycwd = 1;
-			ftp_info.mtime = -1;
+			struct ftp_file_info ftp_info = INIT_FTP_FILE_INFO_ROOT;
 
 			display_dir_entry(conn->cached, &conn->from, &conn->tries,
 					  colorize_dir, dircolor, &ftp_info);

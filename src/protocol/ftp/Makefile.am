@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.1 2003/11/26 22:14:31 pasky Exp $
+## $Id: Makefile.am,v 1.2 2005/03/27 02:20:34 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -8,5 +8,7 @@ libftp_a_SOURCES = \
  ftp.c \
  ftp.h \
  ftpparse.c \
- ftpparse.h
+ ftpparse.h \
+ parse.c \
+ parse.h
 

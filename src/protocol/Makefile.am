@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.44 2004/11/27 17:53:35 jonas Exp $
+## $Id: Makefile.am,v 1.45 2005/03/27 02:20:34 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -22,7 +22,7 @@ endif
 
 if CONFIG_FTP
 ftpdir = ftp
-ftpobj = $(ftpdir)/ftp.o $(ftpdir)/ftpparse.o
+ftpobj = $(ftpdir)/ftp.o $(ftpdir)/ftpparse.o $(ftpdir)/parse.o 
 endif
 
 if CONFIG_GOPHER

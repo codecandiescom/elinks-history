@@ -1,3 +1,166 @@
+Mon Dec 20 21:21:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/dump/dump.c:
+
+	Bahh. Dumb dump.  
+
+Mon Dec 20 21:19:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Revert (1.384 -> 1.385). lindi- reported that setting the user agent
+	string to something involving "Mozilla/X.0" makes the server return
+	a different page that is correctly renderered.  
+
+Mon Dec 20 20:38:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/dump/dump.c:
+
+	The -dump cmdline option is boolean. Reported by lindi-.  
+
+Mon Dec 20 20:24:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	The SSL and gzip combination is a killer for big documents, you just
+	always get a load of garbage. It is triggerable at 
+	https://www.christianbook.com/Christian/Books/place_order and filed 
+	as bug 592 and bug 524. For now work around the problem by never
+	accepting gzip for HTTPS connections.  
+
+Mon Dec 20 13:40:51 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Change an assertion to a normal bounds-check to prevent an assertion 
+	failure with _^H_.  
+
+Mon Dec 20 13:13:42 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Oops. s/default_clink/default_link/ 
+
+Mon Dec 20 12:12:39 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/document.h:
+
+	Document the struct color_pair color member of struct link.  
+
+Mon Dec 20 12:06:28 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Altho it makes absolutely no difference, initialise the link's 
+	foreground colour to the normal link colour instead of the vlink
+	colour in add_document_link.  
+
+Mon Dec 20 12:03:06 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	In print_document_link, drop the local variable color and use 
+	link->color instead, giving the link the proper colours as a
+	side-effect. (The correct colours were being put on the canvas, the
+	link structure just did not reflect this.) 
+
+Mon Dec 20 11:59:19 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	In print_document_link, save the link returned by check_link_word.  
+
+Mon Dec 20 11:56:42 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Minor simplification.  
+
+Mon Dec 20 11:56:04 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Fix a major typo in the last commit.  
+
+Mon Dec 20 11:55:21 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Change check_link_word to return the link returned by
+	add_document_link or NULL instead of an integer.  
+
+Mon Dec 20 11:50:51 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Simplify check_link_word by re-arranging some checks.  
+
+Mon Dec 20 11:48:12 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Return 0 from check_link_word if add_document_link fails.  
+
+Mon Dec 20 11:41:22 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Use doc_opts->default_(v|bookmark_|)link instead of get_opt in
+	print_document_link.  
+
+Mon Dec 20 11:22:11 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/: options.c, options.h, html/parser.c,
+	html/parser.h, html/parser/link.c:
+
+	Add color_t default_image_link to struct document_options and
+	color_t image_link to struct text_attrib and use them instead of
+	calling get_opt in the middle of the HTML parser.  
+
+Mon Dec 20 11:07:31 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/: options.c, options.h, dom/renderer.c,
+	html/parser.c, html/parser.h, html/parser/link.c:
+
+	Add color_t default_bookmark_link to struct document_options and
+	color_t bookmark_link to struct text_attribute and use them instead
+	of calling get_opt in the different document parsers.  
+
+Mon Dec 20 08:49:26 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Add a link's numeric prefix as normal link text. Now, a given link's 
+	prefix is included in its points.  
+	
+	This involves changing put_link_number not to hide from put_chars 
+	the fact that it is currently adding a link and changing put_chars 
+	not to fall into infinite recursion with it calling put_link_number 
+	and put_link_number calling put_chars.  
+	
+	User-visible effects: 
+	
+	 - Clicking a link's prefix will now select the link.  
+	 - Selecting a link will now highlight its prefix.  
+
+Mon Dec 20 00:29:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Compilation fixes for FreeBSD related to is_ip_address().  
+
+Mon Dec 20 00:08:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/sgml/html/html.c:
+
+	Remove unused variable.  
+
+Sun Dec 19 23:38:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	0.10rc2.CVS 
+
 Sun Dec 19 23:23:58 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* configure.in:
@@ -470,8 +633,7 @@ Sun Dec 19 01:51:56 2004  Petr Baudis <pasky@ucw.cz>:
 Sun Dec 19 01:47:17 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/: bookmarks/bookmarks.c, mime/backend/default.c,
-	mime/backend/mimetypes.c, protocol/protocol.c,
-	protocol/finger/finger.c:
+	mime/backend/mimetypes.c, protocol/protocol.c:
 
 	Include modules/module.h.  
 
@@ -9161,7 +9323,7 @@ Sun Sep 19 17:38:19 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/css/README:
 
-	$Id: ChangeLog,v 1.933 2004/12/18 23:12:17 jonas Exp $ tag.  
+	$Id$ tag.  
 
 Sun Sep 19 17:35:23 2004  Petr Baudis <pasky@ucw.cz>:
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.504 2004/06/20 16:08:17 jonas Exp $ */
+/* $Id: view.c,v 1.505 2004/06/20 16:12:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -391,7 +391,7 @@ move_down(struct session *ses, struct document_view *doc_view, int type)
 }
 
 static void
-page_down(struct session *ses, struct document_view *doc_view)
+move_page_down(struct session *ses, struct document_view *doc_view)
 {
 	int count = ses->kbdprefix.repeat_count;
 
@@ -422,7 +422,7 @@ move_up(struct session *ses, struct document_view *doc_view, int type)
 }
 
 static void
-page_up(struct session *ses, struct document_view *doc_view)
+move_page_up(struct session *ses, struct document_view *doc_view)
 {
 	int count = ses->kbdprefix.repeat_count;
 
@@ -470,7 +470,7 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 }
 
 static void
-down(struct session *ses, struct document_view *doc_view)
+move_link_down(struct session *ses, struct document_view *doc_view)
 {
 	int count = ses->kbdprefix.repeat_count;
 
@@ -481,7 +481,7 @@ down(struct session *ses, struct document_view *doc_view)
 }
 
 static void
-up(struct session *ses, struct document_view *doc_view)
+move_link_up(struct session *ses, struct document_view *doc_view)
 {
 	int count = ses->kbdprefix.repeat_count;
 
@@ -622,7 +622,7 @@ scroll_mouse_right(struct session *ses, struct document_view *doc_view)
 #endif /* CONFIG_MOUSE */
 
 static void
-home(struct session *ses, struct document_view *doc_view)
+move_document_start(struct session *ses, struct document_view *doc_view)
 {
 	assert(ses && doc_view && doc_view->vs);
 	if_assert_failed return;
@@ -632,7 +632,7 @@ home(struct session *ses, struct document_view *doc_view)
 }
 
 static void
-x_end(struct session *ses, struct document_view *doc_view)
+move_document_end(struct session *ses, struct document_view *doc_view)
 {
 	int max_height;
 
@@ -825,12 +825,12 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 	}
 
 	switch (kbd_action(KM_MAIN, ev, NULL)) {
-		case ACT_MAIN_MOVE_PAGE_DOWN: page_down(ses, doc_view); break;
-		case ACT_MAIN_MOVE_PAGE_UP: page_up(ses, doc_view); break;
-		case ACT_MAIN_MOVE_LINK_DOWN: down(ses, doc_view); break;
-		case ACT_MAIN_MOVE_LINK_UP: up(ses, doc_view); break;
-		case ACT_MAIN_MOVE_DOCUMENT_START: home(ses, doc_view); break;
-		case ACT_MAIN_MOVE_DOCUMENT_END: x_end(ses, doc_view); break;
+		case ACT_MAIN_MOVE_PAGE_DOWN: move_page_down(ses, doc_view); break;
+		case ACT_MAIN_MOVE_PAGE_UP: move_page_up(ses, doc_view); break;
+		case ACT_MAIN_MOVE_LINK_DOWN: move_link_down(ses, doc_view); break;
+		case ACT_MAIN_MOVE_LINK_UP: move_link_up(ses, doc_view); break;
+		case ACT_MAIN_MOVE_DOCUMENT_START: move_document_start(ses, doc_view); break;
+		case ACT_MAIN_MOVE_DOCUMENT_END: move_document_end(ses, doc_view); break;
 
 		case ACT_MAIN_SCROLL_DOWN: scroll_down(ses, doc_view); break;
 		case ACT_MAIN_SCROLL_UP: scroll_up(ses, doc_view); break;

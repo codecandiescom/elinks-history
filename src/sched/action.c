@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.121 2004/11/12 22:49:26 zas Exp $ */
+/* $Id: action.c,v 1.122 2004/11/12 22:54:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -666,7 +666,6 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_JUMP_TO_LINK:
 			try_jump_to_link_number(ses, doc_view);
-			status = FRAME_EVENT_OK;
 			break;
 
 		case ACT_MAIN_MARK_SET:

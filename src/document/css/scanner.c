@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.55 2004/01/20 20:09:33 jonas Exp $ */
+/* $Id: scanner.c,v 1.56 2004/01/20 20:40:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -256,13 +256,12 @@ static void
 scan_css_tokens(struct css_scanner *scanner)
 {
 	struct css_token *table = scanner->table;
-	int tokens = scanner->tokens;
-	int move_to_front = int_max(tokens - scanner->current, 0) * sizeof(struct css_token);
-	struct css_token *current = move_to_front ? &table[scanner->current] : table;
-	struct css_token *table_end;
+	struct css_token *table_end = table + scanner->tokens;
+	int move_to_front = int_max(table_end - scanner->current, 0) * sizeof(struct css_token);
+	struct css_token *current = move_to_front ? scanner->current : table;
 
 #ifdef CSS_SCANNER_DEBUG
-	if (tokens > 0) WDBG("Rescanning");
+	if (scanner->tokens > 0) WDBG("Rescanning");
 #endif
 
 	/* Move any untouched tokens */
@@ -276,7 +275,7 @@ scan_css_tokens(struct css_scanner *scanner)
 
 	if (!scanner->position) {
 		scanner->tokens = move_to_front ? current - table : -1;
-		scanner->current = 0;
+		scanner->current = table;
 		return;
 	}
 
@@ -297,7 +296,7 @@ scan_css_tokens(struct css_scanner *scanner)
 	}
 
 	scanner->tokens = (current - table);
-	scanner->current = 0;
+	scanner->current = table;
 	if (scanner->position && !*scanner->position)
 		scanner->position = NULL;
 }
@@ -310,7 +309,7 @@ scan_css_tokens(struct css_scanner *scanner)
  * token. */
 #define check_css_scanner(scanner) \
 	(scanner->tokens < CSS_SCANNER_TOKENS \
-	 || scanner->current + 1 < scanner->tokens)
+	 || scanner->current + 1 < scanner->table + scanner->tokens)
 
 struct css_token *
 get_css_token_(struct css_scanner *scanner)
@@ -319,7 +318,7 @@ get_css_token_(struct css_scanner *scanner)
 
 #ifdef CSS_SCANNER_DEBUG
 	if (css_scanner_has_tokens(scanner)) {
-		struct css_token *token = &scanner->table[scanner->current];
+		struct css_token *token = scanner->current;
 
 		errfile = scanner->file, errline = scanner->line;
 		elinks_wdebug("<%s> %d %d [%s]", scanner->function, token->type,
@@ -329,10 +328,10 @@ get_css_token_(struct css_scanner *scanner)
 
 	/* Make sure we do not return CSS_TOKEN_NONE tokens */
 	assert(!css_scanner_has_tokens(scanner)
-		|| scanner->table[scanner->current].type != CSS_TOKEN_NONE);
+		|| scanner->current->type != CSS_TOKEN_NONE);
 
 	return css_scanner_has_tokens(scanner)
-		? &scanner->table[scanner->current] : NULL;
+		? scanner->current : NULL;
 }
 
 struct css_token *
@@ -341,7 +340,7 @@ get_next_css_token_(struct css_scanner *scanner)
 	scanner->current++;
 
 	/* Do a scanning if we do not have also have access to next token */
-	if (scanner->current + 1 >= scanner->tokens) {
+	if (scanner->current + 1 >= scanner->table + scanner->tokens) {
 		scan_css_tokens(scanner);
 	}
 	return get_css_token_(scanner);
@@ -370,7 +369,7 @@ check_next_css_token(struct css_scanner *scanner, enum css_token_type type)
 {
 	assert(scanner && check_css_scanner(scanner));
 	return css_scanner_has_tokens(scanner)
-		&& scanner->table[scanner->current + 1].type == type;
+		&& scanner->current[1].type == type;
 }
 
 
@@ -455,5 +454,6 @@ init_css_scanner(struct css_scanner *scanner, unsigned char *string)
 
 	scanner->string = string;
 	scanner->position = string;
+	scanner->current = scanner->table;
 	scan_css_tokens(scanner);
 }

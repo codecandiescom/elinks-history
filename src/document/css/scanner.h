@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.34 2004/01/20 17:49:41 jonas Exp $ */
+/* $Id: scanner.h,v 1.35 2004/01/20 20:40:48 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -107,7 +107,8 @@ struct css_scanner {
 	/* The current token and number of scanned tokens in the table.
 	 * If the number of scanned tokens is less than CSS_SCANNER_TOKENS
 	 * it is because there are no more tokens in the string. */
-	int current, tokens;
+	struct css_token *current;
+	int tokens;
 
 #ifdef CSS_SCANNER_DEBUG
 	/* Info about the caller. Entry point and position in the source tree */
@@ -128,7 +129,7 @@ struct css_scanner {
 void init_css_scanner(struct css_scanner *scanner, unsigned char *string);
 
 #define css_scanner_has_tokens(scanner) \
-	((scanner)->tokens > 0 && (scanner)->current <= (scanner)->tokens)
+	((scanner)->tokens > 0 && (scanner)->current < (scanner)->table + (scanner)->tokens)
 
 
 /* Scanner table accessors and mutators */

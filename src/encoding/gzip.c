@@ -1,5 +1,5 @@
 /* Gzip encoding (ENCODING_GZIP) backend */
-/* $Id: gzip.c,v 1.7 2004/09/14 07:21:49 jonas Exp $ */
+/* $Id: gzip.c,v 1.8 2004/09/14 07:23:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,13 +147,10 @@ skip_gzip_header(z_stream *stream)
 }
 
 
-#define GZIP_DECODE_BUFFER_IN_MEMORY 1
-
 /* Freaking dammit. This is impossible for me to get working. */
 static unsigned char *
 gzip_decode_buffer(unsigned char *data, int len, int *new_len)
 {
-#if GZIP_DECODE_BUFFER_IN_MEMORY
 	unsigned char *buffer = NULL;
 	int error;
 	int tries, wbits;
@@ -232,66 +229,6 @@ gzip_decode_buffer(unsigned char *data, int len, int *new_len)
 	}
 
 	return buffer;
-#elif GZIP_DECODE_BUFFER_VIA_PIPE
-	struct stream_encoded *stream;
-	struct string buffer;
-	int pipefds[2];
-
-	*new_len = 0;
-
-	if (c_pipe(pipefds)) return NULL;
-
-	/* It chokes here when gzdopen() is called */
-	stream = open_encoded(pipefds[0], ENCODING_GZIP); 
-	if (!stream) {
-		close(pipefds[0]);
-		close(pipefds[1]);
-		return NULL;
-	}
-
-	len = safe_write(pipefds[1], data, len);
-	close(pipefds[1]);
-
-	if (init_string(&buffer)
-	    && read_file(stream, 0, &buffer) == S_OK) {
-		*new_len = buffer.length;
-
-	} else {
-		done_string(&buffer);
-	}
-
-	close_encoded(stream);
-	close(pipefds[0]);
-
-	return buffer.source;
-#elif GZIP_DECODE_BUFFER_FROM_TMP_FILE
-	FILE *file = tmpfile();
-	struct string buffer = NULL_STRING;
-
-	*new_len = 0;
-
-	if (!file) return NULL;
-
-	if (fwrite(data, len, 1, file)
-	    && fflush(file) != EOF
-	    && fseek(file, 0L, SEEK_SET) == 0) {
-		struct stream_encoded *stream = NULL;
-		int filefd = fileno(file);
-
-		if (filefd != -1)
-			stream = open_encoded(filefd, ENCODING_GZIP); 
-
-		if (stream) {
-			if (read_file(stream, 0, &buffer) == S_OK)
-				*new_len = buffer.length;
-			close_encoded(stream);
-		}
-	}
-
-	fclose(file);
-
-	return buffer.source;
-#endif /* Which decoding buffer routine */
 }
 
 

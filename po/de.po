@@ -4,7 +4,6 @@
 # Josef 'Jupp' Schugt <jupp@gmx.de>, 2003
 # Karsten 'kuser' Schölzel <kuser@gmx.de>
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
@@ -258,9 +257,9 @@ msgid "Config error"
 msgstr "Konfigurationsfehler"
 
 #: src/config/dialogs.c:41
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write to config file %s: %s"
-msgstr "Konfigurationsdatei kann nicht geschrieben werden"
+msgstr "In die Konfigurationsdatei %s kann nicht geschrieben werden: %s"
 
 #: src/config/dialogs.c:119 src/config/dialogs.c:132 src/config/dialogs.c:512
 #: src/dialogs/document.c:41 src/dialogs/document.c:205
@@ -406,7 +405,6 @@ msgid "Delete keybinding"
 msgstr "Tastenbelegung löschen"
 
 #: src/config/dialogs.c:719
-#, fuzzy
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
@@ -417,7 +415,7 @@ msgstr ""
 #: src/config/dialogs.c:730
 #, fuzzy, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr "Tastenbelegung \"%s\" wirklich löschen?"
+msgstr "Tastenbelegung \"%s\" wirklich löschen (Aktion \"%s\", )?"
 
 #: src/config/dialogs.c:762
 msgid "Keybinding manager"
@@ -505,7 +503,7 @@ msgstr "Bild herunterladen"
 
 #: src/config/kbdbind.c:383
 msgid "Begin editing"
-msgstr ""
+msgstr "Starte Bearbeitung"
 
 #. FIXME
 #: src/config/kbdbind.c:384
@@ -534,7 +532,7 @@ msgstr "Finde den vorherigen Treffer für den aktuellen Suchtext"
 
 #: src/config/kbdbind.c:390
 msgid "Forget authentication credentials"
-msgstr ""
+msgstr "Authentifizierungs-Nachweise vergessen"
 
 #: src/config/kbdbind.c:391
 msgid "Open \"Go to URL\" dialog box"
@@ -735,11 +733,11 @@ msgstr ""
 
 #: src/config/kbdbind.c:637
 msgid "Error parsing keystroke"
-msgstr ""
+msgstr "Fehler beim Lesen des Tastendrucks"
 
 #: src/config/kbdbind.c:639
 msgid "Unrecognised action (internal error)"
-msgstr ""
+msgstr "Nicht verstandene Aktion (interner Fehler)"
 
 #: src/config/options.c:526 src/config/options.c:550 src/config/opttypes.c:39
 msgid "Parameter expected"
@@ -934,6 +932,8 @@ msgid ""
 "Show _template_ options in autocreated trees in the options\n"
 "manager and save them to the configuration file."
 msgstr ""
+"Zeige _template_ Optionen in automatisch erstellten Bäumen\n"
+"im Optionsmanager und speicher diese in die Konfigurations-Datei."
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:957
@@ -1127,13 +1127,15 @@ msgstr ""
 
 #: src/config/options.c:1061
 msgid "Accesskeys"
-msgstr ""
+msgstr "Zugriffstasten"
 
 #: src/config/options.c:1063
 msgid ""
 "Options for handling of the accesskey attribute of the active\n"
 "HTML elements."
 msgstr ""
+"Optionen für den Umgang mit dem accesskey (Zugriffstaste) Attribut\n"
+"von aktiven HTML-Elementen."
 
 #: src/config/options.c:1066
 msgid "Automatic links following"
@@ -1145,10 +1147,13 @@ msgid ""
 "accesskey is pressed - this is the standard behaviour, but it's\n"
 "considered dangerous."
 msgstr ""
+"Folge einem Link oder sende ein Formular automatisch, wenn die\n"
+"entsprechende Zugriffstaste gedrückt wird - dies ist das\n"
+"Standard-Verhalten, wird aber als gefährlich betrachtet."
 
 #: src/config/options.c:1072
 msgid "Accesskey priority"
-msgstr ""
+msgstr "Priorität der Zugriffstasten"
 
 #: src/config/options.c:1074
 msgid ""
@@ -1157,6 +1162,12 @@ msgid ""
 "1 is first try only frame bindings; if it fails, check accesskey\n"
 "2 is first check accesskey (this can be dangerous)"
 msgstr ""
+"Priorität des 'accesskey' HTML-Attributs:\n"
+"0 zuerst alle normalen Tastenbelegungen probieren;\n"
+"  falls dies fehlschlägt, überprüfe die Zugriffstaste\n" 
+"1 zuerst nur Tastenbelegungen für Rahmen probieren;\n"
+"  falls dies fehlschlägt, überprüfe die Zugriffstaste\n" 
+"2 zuerst die Zugriffstaste überprüfen (dies kann gefährlich sein)"
 
 #: src/config/options.c:1080
 msgid "Forms"
@@ -1323,7 +1334,7 @@ msgstr ""
 #. * for now as it doesn't work.
 #: src/config/options.c:1158
 msgid "Wrap-around links cycling"
-msgstr ""
+msgstr "Zyklischer Link-Wechsel"
 
 #. 0
 #: src/config/options.c:1160
@@ -1446,7 +1457,7 @@ msgstr "Navigations-Reihenfolge in Tabllen"
 
 #: src/config/options.c:1219
 msgid "Move by columns in table, instead of rows."
-msgstr ""
+msgstr "Bewegung in den Spalten der Tabelle, anstatt Zeilen."
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1225
@@ -1766,13 +1777,12 @@ msgstr ""
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1337
-#, fuzzy
 msgid "Downloading"
 msgstr "Download"
 
 #: src/config/options.c:1339
 msgid "Options regarding files downloading and handling."
-msgstr ""
+msgstr "Optionen bezüglich des Download von Dateien."
 
 #: src/config/options.c:1344
 msgid ""
@@ -2102,7 +2112,6 @@ msgstr ""
 "wird durch den Dateinamen ersetzt."
 
 #: src/config/options.c:1514
-#, fuzzy
 msgid "File extension associations"
 msgstr "Verknüpfungen zu Dateiendungen"
 
@@ -2278,7 +2287,7 @@ msgstr ""
 
 #: src/config/options.c:1616 src/config/options.c:1691
 msgid "Host and port-number"
-msgstr ""
+msgstr "Host-Name und Port-Nummer"
 
 #: src/config/options.c:1618
 msgid ""
@@ -2667,6 +2676,8 @@ msgid ""
 "Restrict the characters used when drawing lines. Makes sense\n"
 "only with linux terminals using the cp850/852 character sets."
 msgstr ""
+"Beschränke die Zeichen zum Zeichnen von Linie. Nur sinnvoll\n"
+"für Linux-Terminals mit Zeichensatz cp850 oder cp852."
 
 #: src/config/options.c:1842
 msgid "Block cursor"
@@ -3150,7 +3161,7 @@ msgstr ""
 
 #: src/config/options.c:2526
 msgid "Dialog field colors."
-msgstr ""
+msgstr "Farben von Feldern in Dialogen."
 
 #: src/config/options.c:2589
 msgid "Title text"
@@ -3197,13 +3208,16 @@ msgstr ""
 
 #: src/config/options.c:2695
 msgid "Timer options"
-msgstr ""
+msgstr "Optionen des Zeitgebers"
 
 #: src/config/options.c:2697
 msgid ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
 msgstr ""
+"Nach einer bestimmten Zeit, in der der Benutzer inaktiv war, wird eine\n"
+"Aktion ausgeführt. Man sollte es nicht glauben, aber einige finden sogar\n"
+"das nützlich."
 
 #: src/config/options.c:2703
 msgid ""
@@ -3212,6 +3226,11 @@ msgid ""
 "1 is count down, but don't show the timer\n"
 "2 is count down and show the timer near LEDs"
 msgstr ""
+"Soll der Zeitgeber angeschaltet werden oder nicht:\n"
+"0 der Zeitgeber ist abgeschaltet\n"
+"1 der Zeitgeber ist angeschaltet, wird aber nicht angezeigt\n"
+"2 der Zeitgeber ist angeschaltet und die Zeit wird neben den LEDs\n"
+"  angezeigt"
 
 #: src/config/options.c:2710
 msgid ""
@@ -3221,6 +3240,11 @@ msgid ""
 "2 is count down and show the timer near LEDs (note that this feature is "
 "DISABLED)"
 msgstr ""
+"Soll der Zeitgeber angeschaltet werden oder nicht:\n"
+"0 der Zeitgeber ist abgeschaltet\n"
+"1 der Zeitgeber ist angeschaltet, wird aber nicht angezeigt\n"
+"2 der Zeitgeber ist angeschaltet und die Zeit wird neben den LEDs\n"
+"  angezeigt (beachte, dass diesr Möglichkeit ABGESCHALTET ist)"
 
 #: src/config/options.c:2716
 msgid "Duration"
@@ -3229,10 +3253,15 @@ msgstr "Dauer"
 #: src/config/options.c:2718
 msgid "Inactivity timeout. One day should be enough for just everyone (TM)."
 msgstr ""
+"Maximale Dauer der Inaktivität. Ein Tag sollte für wirklich jeden\n"
+"ausreichen (TM)."
 
 #: src/config/options.c:2722
 msgid "Key-binding action to be triggered when timer reaches zero."
 msgstr ""
+"Aktion, die ausgelöst werden soll, wenn der Zeitgeber null erreicht.\n"
+"Die Aktion kann aus den Aktionen aus dem Tastenbelegungsmanager\n"
+"ausgewählt werden."
 
 #: src/config/options.c:2725
 msgid "Window tabs"
@@ -3769,7 +3798,6 @@ msgid "Keys"
 msgstr "Tastaturbelegung"
 
 #: src/dialogs/info.c:57
-#, fuzzy
 msgid ""
 "ESC      display menu\n"
 "^C, q    quit\n"
@@ -3791,13 +3819,15 @@ msgid ""
 msgstr ""
 "ESC          Menüzeile ein/ausblenden\n"
 "^C, q        Programm beenden\n"
-"^P, ^N       nach oben/unten scrollen\n"
-"[, ]         nach links/rechts scrollen\n"
+"^P, ^N       nach oben/unten rollen\n"
+"[, ]         nach links/rechts rollen\n"
 "Cursor ^, v  vorheriger/nächster Link\n"
-"Cursor >, <  Link folgen / vorheriges Dokument\n"
+"Cursor >     Link folgen\n"
+"Cursor <     vorheriges Dokument\n"
 "g, G         URL öffnen / mit aktueller URL als Vorgabe\n"
 "/, ?         Suche vor/rückwärts\n"
-"n, N         Suche vor/rückwärts fortsetzen\n"
+"n            Finde den nächsten Treffer\n"
+"N            Finde den vorherigen Treffer\n"
 "=            Info zu aktuellem Dokument\n"
 "|            Header des aktuellen Dokuments anzeigen\n"
 "\\            Quellcode anzeigen\n"

@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.51 2005/03/05 20:46:46 zas Exp $ */
+/* $Id: inpfield.h,v 1.52 2005/03/05 20:50:34 zas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -38,7 +38,7 @@ struct widget_data_info_field {
 
 void
 add_dlg_field_do(struct dialog *dlg, enum widget_type type, unsigned char *label,
-		 int min, int max, t_widget_handler *handler,
+		 int min, int max, widget_handler_T *handler,
 		 int data_len, void *data,
 		 struct input_history *history, enum inpfield_flags flags);
 
@@ -69,7 +69,7 @@ void dlg_format_field(struct terminal *, struct widget_data *, int, int *, int, 
 void input_field(struct terminal *, struct memory_list *, int, unsigned char *,
 		 unsigned char *, unsigned char *, unsigned char *, void *,
 		 struct input_history *, int, unsigned char *, int, int,
-		 t_widget_handler *check,
+		 widget_handler_T *check,
 		 void (*)(void *, unsigned char *),
 		 void (*)(void *));
 

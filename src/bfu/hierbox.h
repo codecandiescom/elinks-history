@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.67 2005/03/05 20:46:46 zas Exp $ */
+/* $Id: hierbox.h,v 1.68 2005/03/05 20:50:34 zas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -11,7 +11,7 @@ struct session;
 
 struct hierbox_browser_button {
 	unsigned char *label;
-	t_widget_handler *handler;
+	widget_handler_T *handler;
 
 	/* Should the button be displayed in anonymous mode */
 	unsigned int anonymous:1;

@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.93 2005/03/01 16:59:58 zas Exp $ */
+/* $Id: widget.h,v 1.94 2005/03/05 20:50:34 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -23,12 +23,12 @@ struct dialog_data;
 
 struct widget_ops {
 	/* XXX: Order matters here. --Zas */
-	t_widget_handler *display;
-	t_widget_handler *init;
-	t_widget_handler *mouse;
-	t_widget_handler *kbd;
-	t_widget_handler *select;
-	t_widget_handler *clear;
+	widget_handler_T *display;
+	widget_handler_T *init;
+	widget_handler_T *mouse;
+	widget_handler_T *kbd;
+	widget_handler_T *select;
+	widget_handler_T *clear;
 };
 
 struct widget {
@@ -36,7 +36,7 @@ struct widget {
 
 	unsigned char *text;
 
-	t_widget_handler *handler;
+	widget_handler_T *handler;
 
 	void *data;
 	int datalen;	/* 0 = no alloc/copy to cdata. */

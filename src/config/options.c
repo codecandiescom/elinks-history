@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.234 2003/06/20 18:13:08 zas Exp $ */
+/* $Id: options.c,v 1.235 2003/06/20 18:21:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2697,18 +2697,6 @@ register_options(void)
 	add_opt_bool_tree(&cmdline_options, "", N_("Don't use files in ~/.elinks"),
 		"no-home", 0, 0,
 		N_("Don't attempt to create and/or use home rc directory (~/.elinks)."));
-
-/* Experimental purpose only. */
-#ifdef ELINKS_REMOTE
-	add_opt_string_tree(&cmdline_options, "", N_("remote ELinks IP"),
-		"remote", 0, "",
-		N_("IP address of a remote ELinks session."));
-
-	add_opt_string_tree(&cmdline_options, "", N_("listen ELinks IP"),
-		"listen", 0, "",
-		N_("IP address on which ELinks should listen for internal communication."));
-
-#endif
 
 	add_opt_int_tree(&cmdline_options, "", N_("Connect to session ring with given ID"),
 		"session-ring", 0, 0, MAXINT, 0,

@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.55 2003/06/20 18:13:08 zas Exp $ */
+/* $Id: interlink.c,v 1.56 2003/06/20 18:21:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,7 @@
 #include "util/string.h"
 
 /* Testing purpose. Do not remove. */
-#ifdef ELINKS_REMOTE
+#if 0
 #undef DONT_USE_AF_UNIX
 #undef USE_AF_UNIX
 #endif
@@ -251,25 +251,13 @@ get_address(struct socket_info *info, enum addr_type type)
 		case ADDR_ANY_SERVER:
 			ip.s_addr = htonl(INADDR_ANY); break;
 		case ADDR_IP_CLIENT:
-		{
-			unsigned char *remote_ip = get_opt_str_tree(&cmdline_options, "remote");
-
-			if (*remote_ip && !inet_aton(remote_ip, &ip)) {
-				error(gettext("Invalid remote ip address (%s)"), remote_ip);
+			if (!inet_aton("192.168.1.1", &ip))
 				return -1;
-			}
 			break;
-		}
 		case ADDR_IP_SERVER:
-		{
-			unsigned char *listen_ip = get_opt_str_tree(&cmdline_options, "listen");
-
-			if (*listen_ip && !inet_aton(listen_ip, &ip)) {
-				error(gettext("Invalid listen ip address (%s)"), listen_ip);
+			if (!inet_aton("192.168.1.1", &ip))
 				return -1;
-			}
 			break;
-		}
 #endif
 		default:
 			ip.s_addr = htonl(INADDR_LOOPBACK);

@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.53 2003/10/11 05:39:45 witekfl Exp $ */
+/* $Id: msgbox.c,v 1.54 2003/10/24 16:30:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,17 +24,17 @@
 
 
 static void
-msg_box_fn(struct dialog_data *dlg)
+msg_box_fn(struct dialog_data *dlg_data)
 {
-	struct terminal *term = dlg->win->term;
+	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
 	int w, rw;
 	int y = 0;
-	unsigned char *text = dlg->dlg->udata;
+	unsigned char *text = dlg_data->dlg->udata;
 	struct color_pair *text_color = get_bfu_color(term, "dialog.text");
 
 	text_width(term, text, &min, &max);
-	buttons_width(term, dlg->items, dlg->n, &min, &max);
+	buttons_width(term, dlg_data->items, dlg_data->n, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	int_bounds(&w, min, max);
@@ -42,36 +42,35 @@ msg_box_fn(struct dialog_data *dlg)
 
 	rw = 0;
 	dlg_format_text(NULL, term, text, 0, &y, w, &rw, text_color,
-			dlg->dlg->align);
+			dlg_data->dlg->align);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg->items, dlg->n, 0, &y, w, &rw,
+	dlg_format_buttons(NULL, term, dlg_data->items, dlg_data->n, 0, &y, w, &rw,
 			   AL_CENTER);
 
 	w = rw;
-	dlg->xw = rw + 2 * DIALOG_LB;
-	dlg->yw = y + 2 * DIALOG_TB;
-	center_dlg(dlg);
+	dlg_data->xw = rw + 2 * DIALOG_LB;
+	dlg_data->yw = y + 2 * DIALOG_TB;
+	center_dlg(dlg_data);
+	draw_dlg(dlg_data);
 
-	draw_dlg(dlg);
-
-	y = dlg->y + DIALOG_TB + 1;
-	dlg_format_text(term, term, text, dlg->x + DIALOG_LB, &y, w, NULL,
-			text_color, dlg->dlg->align);
+	y = dlg_data->y + DIALOG_TB + 1;
+	dlg_format_text(term, term, text, dlg_data->x + DIALOG_LB, &y, w, NULL,
+			text_color, dlg_data->dlg->align);
 
 	y++;
-	dlg_format_buttons(term, term, dlg->items, dlg->n, dlg->x + DIALOG_LB,
+	dlg_format_buttons(term, term, dlg_data->items, dlg_data->n, dlg_data->x + DIALOG_LB,
 			   &y, w, NULL, AL_CENTER);
 }
 
 static int
-msg_box_button(struct dialog_data *dlg, struct widget_data *di)
+msg_box_button(struct dialog_data *dlg_data, struct widget_data *di)
 {
 	void (*fn)(void *) = (void (*)(void *)) di->item->udata;
-	void *data = dlg->dlg->udata2;
+	void *data = dlg_data->dlg->udata2;
 
 	if (fn) fn(data);
-	cancel_dialog(dlg, di);
+	cancel_dialog(dlg_data, di);
 
 	return 0;
 }

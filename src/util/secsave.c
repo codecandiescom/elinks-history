@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.10 2002/05/17 21:59:59 pasky Exp $ */
+/* $Id: secsave.c,v 1.11 2002/05/18 11:49:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,11 +24,11 @@
  * ~~~~~~~~~~~~~~~~~~~~~
  *
  * A call to secure_open("/home/me/.links/filename", mask) will open a file
- * named "filename.tmp" in /home/me/.links/ and return a pointer to a structure
- * secure_save_info on success or NULL on error.
- * 
- * Note: if a file named "filename.tmp" exists, it will be truncated to a size
- * of zero.
+ * named "filename.tmp_XXXXXX" in /home/me/.links/ and return a pointer to a
+ * structure secure_save_info on success or NULL on error.
+ *
+ * filename.tmp_XXXXXX can't conflict with any file since it's created using
+ * mkstemp(). XXXXXX is a random string.
  *
  * Subsequent write operations are done using returned secure_save_info FILE *
  * field named fp.
@@ -36,12 +36,13 @@
  * If an error is encountered, secure_save_info int field named err is set
  * (automatically if using secure_fp*() functions or by programmer)
  *
- * When secure_close() is called, "filename.tmp" is closed, and if
- * secure_save_info err field has a value of zero, "filename.tmp" is renamed to
- * "filename".
+ * When secure_close() is called, "filename.tmp_XXXXXX" is closed, and if
+ * secure_save_info err field has a value of zero, "filename.tmp_XXXXXX" is
+ * renamed to "filename".
  *
- * WARNING: since rename() is used, any symlink called "filename" is replaced
- * by a regular file.
+ * WARNING: since rename() is used, any symlink called "filename" may be
+ * replaced by a regular file. If destination file isn't a regular file,
+ * then secsave is disabled for that file.
  *
  * If secure_save is unset:
  * ~~~~~~~~~~~~~~~~~~~~~~~
@@ -51,9 +52,12 @@
  *
  * In both cases:
  * ~~~~~~~~~~~~~
- * 
+ *
  * Access rights are affected by secure_open() mask parameter.
  */
+
+/* FIXME: locking system on files about to be rewritten ? */
+/* FIXME: race conditions about ssi->file_name. */
 
 
 /* Open a file for writing in a secure way. It returns a pointer to a structure
@@ -62,15 +66,15 @@ struct secure_save_info *
 secure_open(unsigned char *file_name, mode_t mask)
 {
 	mode_t saved_mask;
-	unsigned char *ext = NULL;
 	struct stat st;
 	struct secure_save_info *ssi = (struct secure_save_info *)
 				       mem_alloc(sizeof(struct secure_save_info));
 
 	if (!ssi) goto end;
 
+	memset(ssi, 0, sizeof(struct secure_save_info));
+
 	ssi->secure_save = get_opt_int("secure_save");
-	ssi->err = 0;
 
 	ssi->file_name = stracpy(file_name);
 	if (!ssi->file_name) goto free_f;
@@ -93,45 +97,75 @@ secure_open(unsigned char *file_name, mode_t mask)
 			ssi->secure_save = 0;
 		} else {
 #ifdef HAVE_ACCESS
+			/* XXX: access() do not work with setuid programs. */
 			if (access(ssi->file_name, R_OK | W_OK) < 0) {
 				ssi->err = errno;
 				goto free_file_name;
 			}
 #else
-			FILE *f1, *f2;
+			FILE *f1;
 
-			/* I hope this works :). --pasky */
-			
-			f1 = fopen(ssi->file_name, "r");
-			f2 = fopen(ssi->file_name, "w");
-			if (f1) fclose(f1);
-			if (f2) fclose(f2);
+			/* We still have a race condition here between
+			 * [l]stat() and fopen() */
 
-			if (!f1 || !f2) {
+			f1 = fopen(ssi->file_name, "r+");
+			if (f1) {
+				fclose(f1);
+			} else {
 				ssi->err = errno;
 				goto free_file_name;
 			}
 #endif
 		}
 	}
-	
-	if (ssi->secure_save) ext = ".tmp";
-	ssi->tmp_file_name = straconcat(ssi->file_name, ext, NULL);
-	if (!ssi->tmp_file_name) goto free_file_name;
 
 	saved_mask = umask(mask);
-	ssi->fp = fopen(ssi->tmp_file_name, "w");
+
+	if (ssi->secure_save) {
+		/* We use a random name for temporary file, mkstemp() opens
+		 * the file and return a file descriptor named fd, which is
+		 * then converted to FILE * using fdopen().
+		 */
+		int fd;
+		unsigned char *randname = straconcat(ssi->file_name,
+						     ".tmp_XXXXXX", NULL);
+
+		if (!randname) goto free_file_name;
+
+		fd = mkstemp(randname);
+		if (fd == -1) {
+			mem_free(randname);
+			goto free_file_name;
+		}
+
+		ssi->fp = fdopen(fd, "w");
+		if (!ssi->fp) {
+			ssi->err = errno;
+			mem_free(randname);
+			goto free_file_name;
+		}
+
+		ssi->tmp_file_name = randname;
+	} else {
+		/* No need to create a temporary file here. */
+		ssi->fp = fopen(ssi->file_name, "w");
+		if (!ssi->fp) {
+			ssi->err = errno;
+			goto free_file_name;
+		}
+	}
+
 	umask(saved_mask);
 
-	if (ssi->fp) return ssi;
-
-	mem_free(ssi->tmp_file_name);
+	return ssi;
 
 free_file_name:
 	mem_free(ssi->file_name);
+	ssi->file_name = NULL;
 
 free_f:
 	mem_free(ssi);
+	ssi = NULL;
 
 end:
 	return NULL;
@@ -145,6 +179,9 @@ secure_close(struct secure_save_info *ssi)
 {
 	int ret = -1;
 
+	if (!ssi) return ret;
+	if (!ssi->fp) goto free;
+
 	if (fclose(ssi->fp) == EOF) {
 		ret = errno;
 		goto free;
@@ -155,24 +192,26 @@ secure_close(struct secure_save_info *ssi)
 	}
 
 	if (ssi->secure_save) {
+		if (ssi->file_name && ssi->tmp_file_name) {
 #ifdef OS2
-		/* OS/2 needs this, however it breaks atomicity on UN*X. */
-		unlink(ssi->file_name);
+			/* OS/2 needs this, however it breaks atomicity on
+			 * UN*X. */
+			unlink(ssi->file_name);
 #endif
-		if (rename(ssi->tmp_file_name, ssi->file_name) == -1) {
-			ret = errno;
-		} else {
-			/* Return 0 if file is successfully written. */
-			ret = 0;
+			/* FIXME: Race condition on ssi->filename. */
+			if (rename(ssi->tmp_file_name, ssi->file_name) == -1) {
+				ret = errno;
+			} else {
+				/* Return 0 if file is successfully written. */
+				ret = 0;
+			}
 		}
-	} else {
-		ret = 0;
-	}
+	} else ret = 0;
 
 free:
-	mem_free(ssi->tmp_file_name);
-	mem_free(ssi->file_name);
-	mem_free(ssi);
+	if (ssi->tmp_file_name) mem_free(ssi->tmp_file_name);
+	if (ssi->file_name) mem_free(ssi->file_name);
+	if (ssi) mem_free(ssi);
 
 	return ret;
 }
@@ -185,8 +224,8 @@ secure_fputs(struct secure_save_info *ssi, const char *s)
 {
 	int ret;
 
-	if (ssi->err) return EOF;
-	
+	if (!ssi || !ssi->fp || ssi->err) return EOF;
+
 	ret = fputs(s, ssi->fp);
 	if (ret == EOF) ssi->err = errno;
 
@@ -201,8 +240,8 @@ secure_fputc(struct secure_save_info *ssi, int c)
 {
 	int ret;
 
-	if (ssi->err) return EOF;
-	
+	if (!ssi || !ssi->fp || ssi->err) return EOF;
+
 	ret = fputc(c, ssi->fp);
 	if (ret == EOF) ssi->err = errno;
 
@@ -217,7 +256,7 @@ secure_fprintf(struct secure_save_info *ssi, const char *format, ...)
 	va_list ap;
 	int ret;
 
-	if (ssi->err) return -1;
+	if (!ssi || !ssi->fp || ssi->err) return -1;
 
 	va_start(ap, format);
 	ret = vfprintf(ssi->fp, format, ap);

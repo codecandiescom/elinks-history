@@ -9,9 +9,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: ELinks 0.5pre12.CVS\n"
+"Project-Id-Version: ELinks 0.9.0.CVS\n"
 "POT-Creation-Date: 2003-12-24 17:51+0100\n"
-"PO-Revision-Date: 2003-12-23 08:00+0200\n"
+"PO-Revision-Date: 2003-12-25 08:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -531,7 +531,7 @@ msgid ""
 "relative to confdir."
 msgstr ""
 "Nazwa pliku z konfiguracj±, z którego bêdzie czytana i do którego\n"
-"bêdzie zapisywana konfiguracja. Powinien byæ wzglêdny (wzglêdem confdir)."
+"bêdzie zapisywana konfiguracja. Powinna byæ wzglêdna (wzglêdem confdir)."
 
 #: src/config/cmdline.c:454
 msgid "MIME type to assume for documents"
@@ -2942,7 +2942,7 @@ msgstr "Ustawienia dotycz±ce lokalnych skryptów CGI. (WY£¡CZONE)"
 
 #: src/config/options.inc:754
 msgid "Whether to execute local CGI scripts. (DISABLED)"
-msgstr "Czy uruchamiaæ skrypty CGI. (WY£¡CZONE)"
+msgstr "Czy uruchamiaæ lokalne skrypty CGI. (WY£¡CZONE)"
 
 #: src/config/options.inc:758
 msgid ""
@@ -4257,7 +4257,7 @@ msgstr "~Zamknij kartê"
 
 #: src/dialogs/menu.c:360
 msgid "Close ~all but this"
-msgstr "Z~amknij wszystkie za wyj±tekiem tego"
+msgstr "Z~amknij wszystkie za wyj±tkiem tego"
 
 #: src/dialogs/menu.c:373
 msgid "Open new ~tab"
@@ -4789,7 +4789,7 @@ msgstr "Historia globalna"
 #
 #: src/intl/gettext/libintl.c:24
 msgid "System"
-msgstr "System"
+msgstr "Systemowy"
 
 #: src/intl/gettext/libintl.c:25
 msgid "English"
@@ -4843,7 +4843,7 @@ msgstr "Francuski"
 
 #: src/intl/gettext/libintl.c:38
 msgid "Galician"
-msgstr ""
+msgstr "Galijski"
 
 #: src/intl/gettext/libintl.c:39
 msgid "German"
@@ -5059,7 +5059,7 @@ msgid "Program"
 msgstr "Program"
 
 #: src/mime/backend/default.c:67
-#, c-format
+#, no-c-format
 msgid ""
 "External viewer for this file type. '%' in this string will be\n"
 "substituted by a file name."
@@ -5332,7 +5332,7 @@ msgid ""
 "URI abbreviations, or smart ones, making it possible to pass\n"
 "arguments to them like search engine keywords."
 msgstr ""
-"Zasady przepisywanie URI wprowadzonego w okienku dialogowym.\n"
+"Zasady przepisywania URI wprowadzonego w okienku dialogowym.\n"
 "Mo¿liwe jest zdefiniowanie zestawu przedrostków, które zostan±\n"
 "rozwiniête je¶li bêd± pasowa³y do ³añcucha znaków wprowadzonego\n"
 "w okienku dialogowym. Przedrostki mog± byæ \"g³upie\", tzn.\n"
@@ -6080,6 +6080,3 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1528
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
-
-#~ msgid "Typeahead: %s [%s]"
-#~ msgstr "Szukanie z wyprzedzeniem: %s [%s]"

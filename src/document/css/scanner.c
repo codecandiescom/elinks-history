@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.89 2004/01/22 22:01:04 pasky Exp $ */
+/* $Id: scanner.c,v 1.90 2004/01/22 22:55:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -435,7 +435,7 @@ skip_css_tokens_(struct css_scanner *scanner, enum css_token_type skipto)
 struct scan_table_info {
 	enum { SCAN_RANGE, SCAN_STRING, SCAN_END } type;
 	union scan_table_data {
-		struct { unsigned char *source; int align; } string;
+		struct { unsigned char *source; int length; } string;
 		struct { int start, end; } range;
 	} data;
 	int bits;
@@ -446,7 +446,7 @@ struct scan_table_info {
 	{ (type), { { (unsigned char *) (data1), (data2) } }, (bits) }
 
 #define SCAN_TABLE_RANGE(from, to, bits) SCAN_TABLE_INFO(SCAN_RANGE, from, to, bits)
-#define SCAN_TABLE_STRING(str, bits)	 SCAN_TABLE_INFO(SCAN_STRING, str, 0, bits)
+#define SCAN_TABLE_STRING(str, bits)	 SCAN_TABLE_INFO(SCAN_STRING, str, sizeof(str) - 1, bits)
 #define SCAN_TABLE_END			 SCAN_TABLE_INFO(SCAN_END, 0, 0, 0)
 
 static struct scan_table_info css_scan_table_info[] = {
@@ -490,11 +490,12 @@ init_css_scan_table(void)
 
 		} else {
 			unsigned char *string = info[i].data.string.source;
+			int pos = info[i].data.string.length - 1;
 
-			assert(info[i].type == SCAN_STRING);
+			assert(info[i].type == SCAN_STRING && pos >= 0);
 
-			for (; *string; string++)
-				css_scan_table[*string] |= info[i].bits;
+			for (; pos >= 0; pos--)
+				css_scan_table[string[pos]] |= info[i].bits;
 		}
 	}
 }

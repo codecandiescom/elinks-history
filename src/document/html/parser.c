@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.307 2003/12/26 13:15:44 zas Exp $ */
+/* $Id: parser.c,v 1.308 2003/12/29 08:25:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -517,6 +517,7 @@ static int putsp;
 static int was_br;
 static int was_li;
 static int was_xmp;
+static int has_link_lines;
 
 static inline void
 ln_break(int n, void (*line_break)(void *), void *f)
@@ -717,6 +718,7 @@ static void
 put_link_line(unsigned char *prefix, unsigned char *linkname,
 	      unsigned char *link, unsigned char *target)
 {
+	has_link_lines = 1;
 	html_stack_dup(ELEMENT_KILLABLE);
 	ln_break(1, line_break_f, ff);
 	if (format.link) mem_free(format.link),	format.link = NULL;
@@ -1048,7 +1050,9 @@ html_body(unsigned char *a)
 		e->attr.bg = format.bg;
 	}
 
-	if (!search_html_stack("BODY")) {
+	if (has_link_lines
+	    && par_format.bgcolor
+	    && !search_html_stack("BODY")) {
 		special_f(ff, SP_COLOR_LINK_LINES);
 	}
 }
@@ -3848,6 +3852,7 @@ init_html_parser(unsigned char *url, struct document_options *options,
 	html_top.linebreak = 1;
 	html_top.type = ELEMENT_DONT_KILL;
 
+	has_link_lines = 0;
 	table_level = 0;
 	last_form_tag = NULL;
 	last_form_attr = NULL;

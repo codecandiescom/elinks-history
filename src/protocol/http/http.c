@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.344 2004/10/15 01:34:23 jonas Exp $ */
+/* $Id: http.c,v 1.345 2004/10/19 05:28:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -469,7 +469,7 @@ http_send_header(struct connection *conn)
 
 #ifdef CONFIG_GZIP
 
-#ifndef BUG_517
+#ifdef BUG_517
 #ifdef CONFIG_BZIP2
 	add_to_string(&header, ", ");
 #endif

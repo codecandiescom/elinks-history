@@ -1,10 +1,8 @@
 -- Source-code highlighting hook
--- $Id: highlight.lua,v 1.1 2005/03/25 18:40:15 miciah Exp $
+-- $Id: highlight.lua,v 1.2 2005/03/25 18:41:12 miciah Exp $
 
 function highlight (url, html)
   local ret=nil
-
-  if not highlight_enable then return nil,nil end
 
 -- highlight patches
   if string.find (url, "%.patch$") then

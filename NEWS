@@ -19,7 +19,7 @@ ELinks-0.4pre:
 * clicking on the edges of screen will make the document scroll in that dir
 * win32/cygwin support enhancements
 * parsing/rendering performance enhancements
-* internal gzip/bzip2 decompression support
+* file/http gzip/bzip2 decompression support
 * ELinks binary has now name elinks
 * relocated ELinks configuration files, changed format (if you are upgrading
   from Links or older ELinks version, read INSTALL file to see how to convert
@@ -28,6 +28,7 @@ ELinks-0.4pre:
 * performance improvements (especially when rendering tables)
 * unambiguous completion support
 * colorful user interface support
+* tiny useless LED-like indicators support
 * GNUTSL support paralel to the OpenSSL support (due to license issues)
 * extensive memory debugging support
 

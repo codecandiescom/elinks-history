@@ -1,4 +1,4 @@
-/* $Id: vs.h,v 1.7 2003/10/30 01:08:24 zas Exp $ */
+/* $Id: vs.h,v 1.8 2003/11/17 02:04:22 miciah Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VS_H
 #define EL__VIEWER_TEXT_VS_H
@@ -19,7 +19,7 @@ struct view_state {
 	unsigned char url[1];	/* Must be last. */
 };
 
-void init_vs(struct view_state *, unsigned char *);
+void init_vs(struct view_state *, unsigned char *, int);
 void destroy_vs(struct view_state *);
 void copy_vs(struct view_state *, struct view_state *);
 void check_vs(struct document_view *);

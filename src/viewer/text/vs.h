@@ -1,12 +1,13 @@
-/* $Id: vs.h,v 1.21 2004/08/19 20:57:17 jonas Exp $ */
+/* $Id: vs.h,v 1.22 2004/09/24 00:03:36 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VS_H
 #define EL__VIEWER_TEXT_VS_H
 
 /* Crossdeps are evil. */
 struct document_view;
-struct session;
 struct form_state;
+struct session;
+struct string_list_item;
 struct uri;
 
 struct view_state {
@@ -21,6 +22,18 @@ struct view_state {
 	int plain;
 	unsigned int wrap:1;
 	unsigned int did_fragment:1;
+
+#ifdef CONFIG_ECMASCRIPT
+	/* This is a cross-rerenderings accumulator of
+	 * @document.onload_snippets (see its description for juicy details).
+	 * They enter this list as they continue to appear there, and they
+	 * never leave it (so that we can always find from where to look for
+	 * any new snippets in document.onload_snippets). Instead, as we
+	 * go through the list we maintain a pointer to the last processed
+	 * entry. */
+	struct list_head onload_snippets; /* -> struct string_list_item */
+	struct string_list_item *current_onload_snippet;
+#endif
 };
 
 void init_vs(struct view_state *, struct uri *uri, int);

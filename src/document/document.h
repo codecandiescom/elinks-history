@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.73 2004/07/15 15:20:07 jonas Exp $ */
+/* $Id: document.h,v 1.74 2004/09/24 00:03:35 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -112,6 +112,16 @@ struct document {
 	struct list_head forms;
 	struct list_head tags;
 	struct list_head nodes;
+
+#ifdef CONFIG_ECMASCRIPT
+	/* ECMAScript snippets to be executed during loading the document into
+	 * a window.  This currently involves <script>s and onLoad handlers.
+	 * Note that if you hit a string beginning by '^' here, it is followed
+	 * by an external reference - you must wait with processing other items
+	 * until it gets resolved and loaded. New items are guaranteed to
+	 * always appear at the list end. */
+	struct list_head onload_snippets; /* -> struct string_list_item */
+#endif
 
 	/* FIXME: We should externally maybe using cache_entry store the
 	 * dependencies between the various entries so nothing gets removed

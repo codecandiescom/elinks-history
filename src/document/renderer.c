@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.73 2004/09/23 00:07:21 pasky Exp $ */
+/* $Id: renderer.c,v 1.74 2004/09/24 00:03:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,6 +38,52 @@
 
 
 static void sort_links(struct document *document);
+
+#ifdef CONFIG_ECMASCRIPT
+static void
+process_snippets(struct ecmascript_interpreter *interpreter,
+                 struct list_head *doc_snippets,
+                 struct list_head *queued_snippets,
+                 struct string_list_item **current)
+{
+	struct string_list_item *doc_current = NULL;
+
+	if (list_empty(*doc_snippets))
+		return;
+
+	/* Position @doc_current in @doc_snippet analogously to @*current in
+	 * @queued_snippets. */
+	if (!*current) {
+		doc_current = doc_snippets->next;
+	} else {
+		struct string_list_item *iter = queued_snippets->next;
+
+		assert(!list_empty(*queued_snippets));
+		while (iter != *current) {
+			doc_current = doc_current->next;
+			iter = iter->next;
+
+			if (iter == (struct string_list_item *) queued_snippets) {
+				INTERNAL("process_snippets(): current (%p) got off queued_snippets!", *current);
+				return;
+			}
+			if (doc_current == (struct string_list_item *) doc_snippets) {
+				INTERNAL("process_snippets(): doc_snippets shorter than queued_snippets!");
+				return;
+			}
+		}
+	}
+
+	assert(doc_current);
+	for (; doc_current != (struct string_list_item *) doc_snippets; doc_current = doc_current->next) {
+		add_to_string_list(queued_snippets, doc_current->string.source,
+		                   doc_current->string.length);
+		/* TODO: Support for external references. --pasky */
+		ecmascript_eval(interpreter, &doc_current->string);
+		*current = (*current)->next;
+	}
+}
+#endif
 
 static void
 render_encoded_document(struct cache_entry *cached, struct document *document)
@@ -134,6 +180,13 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 			}
 		}
 
+#ifdef CONFIG_ECMASCRIPT
+		process_snippets(doc_view->ecmascript,
+		                 &document->onload_snippets,
+		                 &vs->onload_snippets,
+		                 &vs->current_onload_snippet);
+#endif
+
 		document->css_magic = get_document_css_magic(document);
 	}
 
@@ -186,9 +239,18 @@ render_document_frames(struct session *ses, int no_cache)
 		doc_opts.color_flags |= COLOR_ENHANCE_UNDERLINE;
 
 	doc_opts.cp = get_opt_int_tree(ses->tab->term->spec, "charset");
-	doc_opts.no_cache = no_cache;
+	doc_opts.no_cache = no_cache == 1;
 
 	if (vs) {
+#ifdef CONFIG_ECMASCRIPT
+		if (no_cache != 2) {
+			/* This means we aren't doing gradual re-rendering,
+			 * thus don't need to preserve the online snippets
+			 * evaluation progress status. */
+			free_string_list(&vs->onload_snippets);
+			vs->current_onload_snippet = NULL;
+		}
+#endif
 		if (vs->plain < 0) vs->plain = 0;
 		doc_opts.plain = vs->plain;
 		doc_opts.wrap = vs->wrap;

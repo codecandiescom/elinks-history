@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.19 2004/07/21 23:15:44 pasky Exp $ */
+/* $Id: stack.c,v 1.20 2004/09/24 00:03:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,8 +12,11 @@
 
 #include "elinks.h"
 
+#include "document/document.h"
 #include "document/html/parser/stack.h"
+#include "document/html/parser/parse.h"
 #include "document/html/parser.h"
+#include "document/html/renderer.h"
 #include "protocol/uri.h"
 #include "util/conv.h"
 #include "util/error.h"
@@ -72,12 +75,22 @@ search_html_stack(unsigned char *name)
 void
 kill_html_stack_item(struct html_element *e)
 {
+	unsigned char *onLoad = NULL;
+
 	assert(e);
 	if_assert_failed return;
 	assertm((void *) e != &html_context.stack, "trying to free bad html element");
 	if_assert_failed return;
 	assertm(e->type != ELEMENT_IMMORTAL, "trying to kill unkillable element");
 	if_assert_failed return;
+
+	if (e->options)	onLoad = get_attr_val(e->options, "onLoad");
+	if (onLoad && *onLoad && *onLoad != '^') {
+		/* XXX: The following expression alone amounts two #includes. */
+		add_to_string_list(&html_context.part->document->onload_snippets,
+		                   onLoad, -1);
+		mem_free(onLoad);
+	}
 
 	mem_free_if(e->attr.link);
 	mem_free_if(e->attr.target);

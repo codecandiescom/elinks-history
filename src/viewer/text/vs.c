@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.39 2004/06/19 17:58:37 jonas Exp $ */
+/* $Id: vs.c,v 1.40 2004/09/24 00:03:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,9 @@ init_vs(struct view_state *vs, struct uri *uri, int plain)
 	vs->plain = plain;
 	vs->uri = get_uri_reference(uri);
 	vs->did_fragment = !uri->fragmentlen;
+#ifdef CONFIG_ECMASCRIPT
+	init_list(vs->onload_snippets);
+#endif
 }
 
 void
@@ -42,12 +45,29 @@ destroy_vs(struct view_state *vs)
 
 	if (vs->uri) done_uri(vs->uri);
 	mem_free_if(vs->form_info);
+#ifdef CONFIG_ECMASCRIPT
+	free_string_list(&vs->onload_snippets);
+#endif
 }
 
 void
 copy_vs(struct view_state *dst, struct view_state *src)
 {
+	struct string_list_item *snippet;
+
 	memcpy(dst, src, sizeof(struct view_state));
+
+#ifdef CONFIG_ECMASCRIPT
+	init_list(dst->onload_snippets);
+	dst->current_onload_snippet = NULL;
+	foreach (snippet, src->onload_snippets) {
+		add_to_string_list(&dst->onload_snippets,
+		                   snippet->string.source,
+		                   snippet->string.length);
+		if (snippet == src->current_onload_snippet)
+			dst->current_onload_snippet = dst->onload_snippets.prev;
+	}
+#endif
 
 	dst->uri = get_uri_reference(src->uri);
 	/* Redo fragment if there is one? */

@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.77 2004/08/28 14:58:47 jonas Exp $ */
+/* $Id: document.c,v 1.78 2004/09/24 00:03:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,6 +50,10 @@ init_document(struct cache_entry *cached, struct document_options *options)
 	init_list(document->forms);
 	init_list(document->tags);
 	init_list(document->nodes);
+
+#ifdef CONFIG_ECMASCRIPT
+	init_list(document->onload_snippets);
+#endif
 
 	object_nolock(document, "document");
 	object_lock(document);
@@ -136,10 +140,15 @@ done_document(struct document *document)
 		done_form_control(fc);
 	}
 
+	free_uri_list(&document->css_imports);
+
+#ifdef CONFIG_ECMASCRIPT
+	free_string_list(&document->onload_snippets);
+#endif
+
 	free_list(document->forms);
 	free_list(document->tags);
 	free_list(document->nodes);
-	free_uri_list(&document->css_imports);
 
 	mem_free_if(document->search);
 	mem_free_if(document->slines1);

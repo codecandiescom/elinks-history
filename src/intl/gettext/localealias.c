@@ -46,6 +46,8 @@ unsigned char *alloca();
 
 #include <string.h>
 
+#include "elinks.h"
+
 #include "gettextP.h"
 #include "util/string.h"
 

@@ -35,6 +35,8 @@
 #include <sys/types.h>
 #include <stdlib.h>
 
+#include "elinks.h"
+
 #include "loadinfo.h"
 
 #include "util/string.h"

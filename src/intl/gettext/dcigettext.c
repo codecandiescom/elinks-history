@@ -60,6 +60,8 @@ extern int errno;
 #include <sys/param.h>
 #endif
 
+#include "elinks.h"
+
 #include "gettextP.h"
 #include "libgnuintl.h"
 #include "hash-string.h"

@@ -60,6 +60,8 @@ unsigned char *alloca();
 #undef HAVE_MMAP
 #endif
 
+#include "elinks.h"
+
 #include "gettext.h"
 #include "gettextP.h"
 #include "util/string.h"

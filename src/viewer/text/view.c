@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.216 2003/10/17 12:35:12 zas Exp $ */
+/* $Id: view.c,v 1.217 2003/10/17 13:58:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -160,28 +160,28 @@ done_document(struct document *document)
 }
 
 void
-detach_formatted(struct document_view *scr)
+detach_formatted(struct document_view *doc_view)
 {
-	assert(scr);
+	assert(doc_view);
 	if_assert_failed return;
 
-	if (scr->document) {
-		format_cache_reactivate(scr->document);
-		if (!--scr->document->refcount) {
+	if (doc_view->document) {
+		format_cache_reactivate(doc_view->document);
+		if (!--doc_view->document->refcount) {
 			format_cache_entries++;
 		}
-		assertm(scr->document->refcount >= 0,
+		assertm(doc_view->document->refcount >= 0,
 			"format_cache refcount underflow");
-		if_assert_failed scr->document->refcount = 0;
-		scr->document = NULL;
+		if_assert_failed doc_view->document->refcount = 0;
+		doc_view->document = NULL;
 	}
-	scr->vs = NULL;
-	if (scr->link_bg) {
-		mem_free(scr->link_bg), scr->link_bg = NULL;
-		scr->link_bg_n = 0;
+	doc_view->vs = NULL;
+	if (doc_view->link_bg) {
+		mem_free(doc_view->link_bg), doc_view->link_bg = NULL;
+		doc_view->link_bg_n = 0;
 	}
-	if (scr->name) {
-		mem_free(scr->name), scr->name = NULL;
+	if (doc_view->name) {
+		mem_free(doc_view->name), doc_view->name = NULL;
 	}
 }
 
@@ -269,7 +269,7 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 }
 
 void
-draw_doc(struct terminal *t, struct document_view *scr, int active)
+draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 {
 	struct color_pair color = INIT_COLOR_PAIR(0, 0);
 	struct view_state *vs;
@@ -278,13 +278,13 @@ draw_doc(struct terminal *t, struct document_view *scr, int active)
 	int vx, vy;
 	int y;
 
-	assert(t && scr);
+	assert(t && doc_view);
 	if_assert_failed return;
 
-	xp = scr->xp;
-	yp = scr->yp;
-	xw = scr->xw;
-	yw = scr->yw;
+	xp = doc_view->xp;
+	yp = doc_view->yp;
+	xw = doc_view->xw;
+	yw = doc_view->yw;
 
 	/* The code in this function assumes that both width and height are
 	 * bigger than 1 so we have to bail out here. */
@@ -295,69 +295,78 @@ draw_doc(struct terminal *t, struct document_view *scr, int active)
 		set_window_ptr(get_current_tab(t), xp, yp);
 	}
 
-	if (scr->document->y)
-		color.background = scr->document->bgcolor;
+	if (doc_view->document->y)
+		color.background = doc_view->document->bgcolor;
 
-	if (!scr->vs) {
+	if (!doc_view->vs) {
 		draw_area(t, xp, yp, xw, yw, ' ', 0, &color);
 		return;
 	}
 
-	if (document_has_frames(scr->document)) {
+	if (document_has_frames(doc_view->document)) {
 	 	draw_area(t, xp, yp, xw, yw, ' ', 0, &color);
-		draw_frame_lines(t, scr->document->frame_desc, xp, yp);
-		if (scr->vs && scr->vs->current_link == -1) scr->vs->current_link = 0;
+		draw_frame_lines(t, doc_view->document->frame_desc, xp, yp);
+		if (doc_view->vs && doc_view->vs->current_link == -1)
+			doc_view->vs->current_link = 0;
 		return;
 	}
-	check_vs(scr);
-	vs = scr->vs;
+	check_vs(doc_view);
+	vs = doc_view->vs;
 	if (vs->goto_position) {
-		vy = find_tag(scr->document, vs->goto_position);
+		vy = find_tag(doc_view->document, vs->goto_position);
 		if (vy != -1) {
-			if (vy > scr->document->y) vy = scr->document->y - 1;
+			if (vy > doc_view->document->y) vy = doc_view->document->y - 1;
 			if (vy < 0) vy = 0;
 			vs->view_pos = vy;
-			set_link(scr);
+			set_link(doc_view);
 			mem_free(vs->goto_position);
 			vs->goto_position = NULL;
 		}
 	}
 	vx = vs->view_posx;
 	vy = vs->view_pos;
-	if (scr->xl == vx
-	    && scr->yl == vy
-	    && scr->xl != -1
-	    && (!scr->search_word || !*scr->search_word || !(*scr->search_word)[0])) {
-		clear_link(t, scr);
-		draw_forms(t, scr);
-		if (active) draw_current_link(t, scr);
+	if (doc_view->xl == vx
+	    && doc_view->yl == vy
+	    && doc_view->xl != -1
+	    && (!doc_view->search_word
+		|| !*doc_view->search_word
+		|| !(*doc_view->search_word)[0])) {
+		clear_link(t, doc_view);
+		draw_forms(t, doc_view);
+		if (active) draw_current_link(t, doc_view);
 		return;
 	}
-	free_link(scr);
-	scr->xl = vx;
-	scr->yl = vy;
+	free_link(doc_view);
+	doc_view->xl = vx;
+	doc_view->yl = vy;
 	draw_area(t, xp, yp, xw, yw, ' ', 0, &color);
-	if (!scr->document->y) return;
+	if (!doc_view->document->y) return;
 
-	while (vs->view_pos >= scr->document->y) vs->view_pos -= yw;
+	while (vs->view_pos >= doc_view->document->y) vs->view_pos -= yw;
 	if (vs->view_pos < 0) vs->view_pos = 0;
-	if (vy != vs->view_pos) vy = vs->view_pos, check_vs(scr);
-	for (y = int_max(vy, 0); y < int_min(scr->document->y, yw + vy); y++) {
+	if (vy != vs->view_pos) vy = vs->view_pos, check_vs(doc_view);
+	for (y = int_max(vy, 0);
+	     y < int_min(doc_view->document->y, yw + vy);
+	     y++) {
 		int st = int_max(vx, 0);
-		int en = int_min(scr->document->data[y].l, xw + vx);
+		int en = int_min(doc_view->document->data[y].l, xw + vx);
 
 		if (en - st <= 0) continue;
-		draw_line(t, xp + st - vx, yp + y - vy, en - st, &scr->document->data[y].d[st]);
+		draw_line(t, xp + st - vx, yp + y - vy, en - st,
+			  &doc_view->document->data[y].d[st]);
 	}
-	draw_forms(t, scr);
-	if (active) draw_current_link(t, scr);
-	if (scr->search_word && *scr->search_word && (*scr->search_word)[0]) scr->xl = scr->yl = -1;
+	draw_forms(t, doc_view);
+	if (active) draw_current_link(t, doc_view);
+	if (doc_view->search_word
+	    && *doc_view->search_word
+	    && (*doc_view->search_word)[0])
+		doc_view->xl = doc_view->yl = -1;
 }
 
 static void
 draw_frames(struct session *ses)
 {
-	struct document_view *f, *cf;
+	struct document_view *doc_view, *current_doc_view;
 	int *l;
 	int n, i, d, more;
 
@@ -366,20 +375,20 @@ draw_frames(struct session *ses)
 
 	if (!document_has_frames(ses->screen->document)) return;
 	n = 0;
-	foreach (f, ses->scrn_frames) f->xl = f->yl = -1, n++;
+	foreach (doc_view, ses->scrn_frames) doc_view->xl = doc_view->yl = -1, n++;
 	l = &cur_loc(ses)->vs.current_link;
 	if (*l < 0) *l = 0;
 	if (!n) n = 1;
 	*l %= n;
 	i = *l;
-	cf = current_frame(ses);
+	current_doc_view = current_frame(ses);
 	d = 0;
 	do {
 		more = 0;
-		foreach (f, ses->scrn_frames) {
-			if (f->depth == d)
-				draw_doc(ses->tab->term, f, f == cf);
-			else if (f->depth > d)
+		foreach (doc_view, ses->scrn_frames) {
+			if (doc_view->depth == d)
+				draw_doc(ses->tab->term, doc_view, doc_view == current_doc_view);
+			else if (doc_view->depth > d)
 				more = 1;
 		}
 		d++;
@@ -412,87 +421,87 @@ draw_formatted(struct session *ses)
 }
 
 static void
-page_down(struct session *ses, struct document_view *f, int a)
+page_down(struct session *ses, struct document_view *doc_view, int a)
 {
 	int newpos;
 
-	assert(ses && f && f->vs);
+	assert(ses && doc_view && doc_view->vs);
 	if_assert_failed return;
 
-	newpos = f->vs->view_pos + f->document->opt.yw;
-	if (newpos < f->document->y) {
-		f->vs->view_pos = newpos;
-		find_link(f, 1, a);
+	newpos = doc_view->vs->view_pos + doc_view->document->opt.yw;
+	if (newpos < doc_view->document->y) {
+		doc_view->vs->view_pos = newpos;
+		find_link(doc_view, 1, a);
 	} else {
-		find_link(f, -1, a);
+		find_link(doc_view, -1, a);
 	}
 }
 
 static void
-page_up(struct session *ses, struct document_view *f, int a)
+page_up(struct session *ses, struct document_view *doc_view, int a)
 {
-	assert(ses && f && f->vs);
+	assert(ses && doc_view && doc_view->vs);
 	if_assert_failed return;
 
-	f->vs->view_pos -= f->yw;
-	find_link(f, -1, a);
-	if (f->vs->view_pos < 0) f->vs->view_pos = 0/*, find_link(f, 1, a)*/;
+	doc_view->vs->view_pos -= doc_view->yw;
+	find_link(doc_view, -1, a);
+	if (doc_view->vs->view_pos < 0) doc_view->vs->view_pos = 0/*, find_link(f, 1, a)*/;
 }
 
 
 void
-down(struct session *ses, struct document_view *fd, int a)
+down(struct session *ses, struct document_view *doc_view, int a)
 {
 	int current_link;
 
-	assert(ses && fd && fd->vs && fd->document);
+	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	current_link = fd->vs->current_link;
+	current_link = doc_view->vs->current_link;
 
 	if (get_opt_int("document.browse.links.wraparound")
-	    && current_link >= fd->document->nlinks - 1) {
-		jump_to_link_number(ses, fd, 0);
+	    && current_link >= doc_view->document->nlinks - 1) {
+		jump_to_link_number(ses, doc_view, 0);
 		/* FIXME: This needs further work, we should call page_down()
 		 * and set_textarea() under some conditions as well. --pasky */
 		return;
 	}
 
 	if (current_link == -1
-	    || !next_in_view(fd, current_link + 1, 1, in_viewy, set_pos_x)) {
-		page_down(ses, fd, 1);
+	    || !next_in_view(doc_view, current_link + 1, 1, in_viewy, set_pos_x)) {
+		page_down(ses, doc_view, 1);
 	}
 
-	if (current_link != fd->vs->current_link) {
-		set_textarea(ses, fd, KBD_UP);
+	if (current_link != doc_view->vs->current_link) {
+		set_textarea(ses, doc_view, KBD_UP);
 	}
 }
 
 static void
-up(struct session *ses, struct document_view *fd, int a)
+up(struct session *ses, struct document_view *doc_view, int a)
 {
 	int current_link;
 
-	assert(ses && fd && fd->vs && fd->document);
+	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	current_link = fd->vs->current_link;
+	current_link = doc_view->vs->current_link;
 
 	if (get_opt_int("document.browse.links.wraparound")
 	    && current_link == 0) {
-		jump_to_link_number(ses, fd, fd->document->nlinks - 1);
+		jump_to_link_number(ses, doc_view, doc_view->document->nlinks - 1);
 		/* FIXME: This needs further work, we should call page_down()
 		 * and set_textarea() under some conditions as well. --pasky */
 		return;
 	}
 
 	if (current_link == -1
-	    || !next_in_view(fd, current_link - 1, -1, in_viewy, set_pos_x)) {
-		page_up(ses, fd, 1);
+	    || !next_in_view(doc_view, current_link - 1, -1, in_viewy, set_pos_x)) {
+		page_up(ses, doc_view, 1);
 	}
 
-	if (current_link != fd->vs->current_link) {
-		set_textarea(ses, fd, KBD_DOWN);
+	if (current_link != doc_view->vs->current_link) {
+		set_textarea(ses, doc_view, KBD_DOWN);
 	}
 }
 
@@ -500,117 +509,117 @@ up(struct session *ses, struct document_view *fd, int a)
 #define scroll scroll_dirty_workaround_for_name_clash_with_libraries_on_macos
 
 static void
-scroll(struct session *ses, struct document_view *f, int a)
+scroll(struct session *ses, struct document_view *doc_view, int a)
 {
-	assert(ses && f && f->vs && f->document);
+	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	if (a > 0 && f->vs->view_pos + f->document->opt.yw >= f->document->y)
+	if (a > 0 && doc_view->vs->view_pos + doc_view->document->opt.yw >= doc_view->document->y)
 		return;
-	f->vs->view_pos += a;
+	doc_view->vs->view_pos += a;
 	if (a > 0)
-		int_upper_bound(&f->vs->view_pos, f->document->y - f->document->opt.yw);
-	int_lower_bound(&f->vs->view_pos, 0);
-	if (c_in_view(f)) return;
-	find_link(f, a < 0 ? -1 : 1, 0);
+		int_upper_bound(&doc_view->vs->view_pos, doc_view->document->y - doc_view->document->opt.yw);
+	int_lower_bound(&doc_view->vs->view_pos, 0);
+	if (c_in_view(doc_view)) return;
+	find_link(doc_view, a < 0 ? -1 : 1, 0);
 }
 
 static void
-hscroll(struct session *ses, struct document_view *f, int a)
+hscroll(struct session *ses, struct document_view *doc_view, int a)
 {
-	assert(ses && f && f->vs && f->document);
+	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	f->vs->view_posx += a;
-	int_bounds(&f->vs->view_posx, 0, f->document->x - 1);
+	doc_view->vs->view_posx += a;
+	int_bounds(&doc_view->vs->view_posx, 0, doc_view->document->x - 1);
 
-	if (c_in_view(f)) return;
-	find_link(f, 1, 0);
+	if (c_in_view(doc_view)) return;
+	find_link(doc_view, 1, 0);
 	/* !!! FIXME: check right margin */
 }
 
 static void
-home(struct session *ses, struct document_view *f, int a)
+home(struct session *ses, struct document_view *doc_view, int a)
 {
-	assert(ses && f && f->vs);
+	assert(ses && doc_view && doc_view->vs);
 	if_assert_failed return;
 
-	f->vs->view_pos = f->vs->view_posx = 0;
-	find_link(f, 1, 0);
+	doc_view->vs->view_pos = doc_view->vs->view_posx = 0;
+	find_link(doc_view, 1, 0);
 }
 
 static void
-x_end(struct session *ses, struct document_view *f, int a)
+x_end(struct session *ses, struct document_view *doc_view, int a)
 {
-	assert(ses && f && f->vs && f->document);
+	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	f->vs->view_posx = 0;
-	int_lower_bound(&f->vs->view_pos, f->document->y - f->document->opt.yw);
-	int_lower_bound(&f->vs->view_pos, 0);
-	find_link(f, -1, 0);
+	doc_view->vs->view_posx = 0;
+	int_lower_bound(&doc_view->vs->view_pos, doc_view->document->y - doc_view->document->opt.yw);
+	int_lower_bound(&doc_view->vs->view_pos, 0);
+	find_link(doc_view, -1, 0);
 }
 
 void
-set_frame(struct session *ses, struct document_view *f, int a)
+set_frame(struct session *ses, struct document_view *doc_view, int a)
 {
-	assert(ses && ses->screen && f && f->vs);
+	assert(ses && ses->screen && doc_view && doc_view->vs);
 	if_assert_failed return;
 
-	if (f == ses->screen) return;
-	goto_url(ses, f->vs->url);
+	if (doc_view == ses->screen) return;
+	goto_url(ses, doc_view->vs->url);
 }
 
 
 void
-toggle(struct session *ses, struct document_view *f, int a)
+toggle(struct session *ses, struct document_view *doc_view, int a)
 {
-	assert(ses && f && ses->tab && ses->tab->term);
+	assert(ses && doc_view && ses->tab && ses->tab->term);
 	if_assert_failed return;
 
-	if (!f->vs) {
+	if (!doc_view->vs) {
 		nowhere_box(ses->tab->term, NULL);
 		return;
 	}
 
-	f->vs->plain = !f->vs->plain;
+	doc_view->vs->plain = !doc_view->vs->plain;
 	html_interpret(ses);
 	draw_formatted(ses);
 }
 
 
 static inline void
-rep_ev(struct session *ses, struct document_view *fd,
+rep_ev(struct session *ses, struct document_view *doc_view,
        void (*f)(struct session *, struct document_view *, int),
        int a)
 {
 	register int i;
 
-	assert(ses && fd && f);
+	assert(ses && doc_view && f);
 	if_assert_failed return;
 
 	i = ses->kbdprefix.rep ? ses->kbdprefix.rep_num : 1;
-	while (i--) f(ses, fd, a);
+	while (i--) f(ses, doc_view, a);
 }
 
 
 static void
-frm_download(struct session *ses, struct document_view *fd, int resume)
+frm_download(struct session *ses, struct document_view *doc_view, int resume)
 {
 	struct link *link;
 
-	assert(ses && fd && fd->vs && fd->document);
+	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	if (fd->vs->current_link == -1) return;
+	if (doc_view->vs->current_link == -1) return;
 	if (ses->dn_url) {
 		mem_free(ses->dn_url);
 		ses->dn_url = NULL;
 	}
-	link = &fd->document->links[fd->vs->current_link];
+	link = &doc_view->document->links[doc_view->vs->current_link];
 	if (link->type != L_LINK && link->type != L_BUTTON) return;
 
-	ses->dn_url = get_link_url(ses, fd, link);
+	ses->dn_url = get_link_url(ses, doc_view, link);
 	if (ses->dn_url) {
 		if (!strncasecmp(ses->dn_url, "MAP@", 4)) {
 			mem_free(ses->dn_url);
@@ -618,32 +627,32 @@ frm_download(struct session *ses, struct document_view *fd, int resume)
 			return;
 		}
 		if (ses->ref_url) mem_free(ses->ref_url);
-		ses->ref_url = stracpy(fd->document->url);
+		ses->ref_url = stracpy(doc_view->document->url);
 		query_file(ses, ses->dn_url, (resume ? resume_download : start_download), NULL, 1);
 	}
 }
 
 
 static int
-frame_ev(struct session *ses, struct document_view *fd, struct term_event *ev)
+frame_ev(struct session *ses, struct document_view *doc_view, struct term_event *ev)
 {
 	int x = 1;
 
-	assert(ses && fd && fd->document && fd->vs && ev);
+	assert(ses && doc_view && doc_view->document && doc_view->vs && ev);
 	if_assert_failed return 1;
 
-	if (fd->vs->current_link >= 0
-	    && (fd->document->links[fd->vs->current_link].type == L_FIELD ||
-		fd->document->links[fd->vs->current_link].type == L_AREA)
-	    && field_op(ses, fd, &fd->document->links[fd->vs->current_link], ev, 0))
+	if (doc_view->vs->current_link >= 0
+	    && (doc_view->document->links[doc_view->vs->current_link].type == L_FIELD ||
+		doc_view->document->links[doc_view->vs->current_link].type == L_AREA)
+	    && field_op(ses, doc_view, &doc_view->document->links[doc_view->vs->current_link], ev, 0))
 		return 1;
 
 	if (ev->ev == EV_KBD) {
 		if (ev->x >= '0' + !ses->kbdprefix.rep && ev->x <= '9'
 		    && (ev->y
-			|| !fd->document->opt.num_links_key
-			|| (fd->document->opt.num_links_key == 1
-			    && !fd->document->opt.num_links_display))) {
+			|| !doc_view->document->opt.num_links_key
+			|| (doc_view->document->opt.num_links_key == 1
+			    && !doc_view->document->opt.num_links_display))) {
 			/* Repeat count */
 
 			if (!ses->kbdprefix.rep) {
@@ -660,7 +669,7 @@ frame_ev(struct session *ses, struct document_view *fd, struct term_event *ev)
 		}
 
 		if (get_opt_int("document.browse.accesskey.priority") >= 2
-		    && try_document_key(ses, fd, ev)) {
+		    && try_document_key(ses, doc_view, ev)) {
 			/* The document ate the key! */
 			return 1;
 		}
@@ -679,7 +688,7 @@ frame_ev(struct session *ses, struct document_view *fd, struct term_event *ev)
 				if (!ses->kbdprefix.rep) break;
 
 				if (ses->kbdprefix.rep_num
-				    > fd->document->nlinks) {
+				    > doc_view->document->nlinks) {
 					ses->kbdprefix.rep = 0;
 					return 2;
 				}
@@ -691,10 +700,10 @@ frame_ev(struct session *ses, struct document_view *fd, struct term_event *ev)
 		}
 
 		switch (kbd_action(KM_MAIN, ev, NULL)) {
-			case ACT_PAGE_DOWN: rep_ev(ses, fd, page_down, 0); break;
-			case ACT_PAGE_UP: rep_ev(ses, fd, page_up, 0); break;
-			case ACT_DOWN: rep_ev(ses, fd, down, 0); break;
-			case ACT_UP: rep_ev(ses, fd, up, 0); break;
+			case ACT_PAGE_DOWN: rep_ev(ses, doc_view, page_down, 0); break;
+			case ACT_PAGE_UP: rep_ev(ses, doc_view, page_up, 0); break;
+			case ACT_DOWN: rep_ev(ses, doc_view, down, 0); break;
+			case ACT_UP: rep_ev(ses, doc_view, up, 0); break;
 			case ACT_COPY_CLIPBOARD: {
 				char *current_link = print_current_link(ses);
 
@@ -706,22 +715,22 @@ frame_ev(struct session *ses, struct document_view *fd, struct term_event *ev)
 			}
 
 			/* XXX: Code duplication of following for mouse */
-			case ACT_SCROLL_UP: scroll(ses, fd, ses->kbdprefix.rep ? -ses->kbdprefix.rep_num : -get_opt_int("document.browse.scroll_step")); break;
-			case ACT_SCROLL_DOWN: scroll(ses, fd, ses->kbdprefix.rep ? ses->kbdprefix.rep_num : get_opt_int("document.browse.scroll_step")); break;
-			case ACT_SCROLL_LEFT: rep_ev(ses, fd, hscroll, -1 - 7 * !ses->kbdprefix.rep); break;
-			case ACT_SCROLL_RIGHT: rep_ev(ses, fd, hscroll, 1 + 7 * !ses->kbdprefix.rep); break;
+			case ACT_SCROLL_UP: scroll(ses, doc_view, ses->kbdprefix.rep ? -ses->kbdprefix.rep_num : -get_opt_int("document.browse.scroll_step")); break;
+			case ACT_SCROLL_DOWN: scroll(ses, doc_view, ses->kbdprefix.rep ? ses->kbdprefix.rep_num : get_opt_int("document.browse.scroll_step")); break;
+			case ACT_SCROLL_LEFT: rep_ev(ses, doc_view, hscroll, -1 - 7 * !ses->kbdprefix.rep); break;
+			case ACT_SCROLL_RIGHT: rep_ev(ses, doc_view, hscroll, 1 + 7 * !ses->kbdprefix.rep); break;
 
-			case ACT_HOME: rep_ev(ses, fd, home, 0); break;
-			case ACT_END:  rep_ev(ses, fd, x_end, 0); break;
-			case ACT_ENTER: x = enter(ses, fd, 0); if (x == 2 && ses->kbdprefix.rep) x = 1; break;
-			case ACT_ENTER_RELOAD: x = enter(ses, fd, 1); if (x == 2 && ses->kbdprefix.rep) x = 1; break;
-			case ACT_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, fd, 0); break;
-			case ACT_RESUME_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, fd, 1); break;
-			case ACT_SEARCH: search_dlg(ses, fd, 0); break;
-			case ACT_SEARCH_BACK: search_back_dlg(ses, fd, 0); break;
-			case ACT_FIND_NEXT: find_next(ses, fd, 0); break;
-			case ACT_FIND_NEXT_BACK: find_next_back(ses, fd, 0); break;
-			case ACT_ZOOM_FRAME: set_frame(ses, fd, 0), x = 2; break;
+			case ACT_HOME: rep_ev(ses, doc_view, home, 0); break;
+			case ACT_END:  rep_ev(ses, doc_view, x_end, 0); break;
+			case ACT_ENTER: x = enter(ses, doc_view, 0); if (x == 2 && ses->kbdprefix.rep) x = 1; break;
+			case ACT_ENTER_RELOAD: x = enter(ses, doc_view, 1); if (x == 2 && ses->kbdprefix.rep) x = 1; break;
+			case ACT_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, doc_view, 0); break;
+			case ACT_RESUME_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, doc_view, 1); break;
+			case ACT_SEARCH: search_dlg(ses, doc_view, 0); break;
+			case ACT_SEARCH_BACK: search_back_dlg(ses, doc_view, 0); break;
+			case ACT_FIND_NEXT: find_next(ses, doc_view, 0); break;
+			case ACT_FIND_NEXT_BACK: find_next_back(ses, doc_view, 0); break;
+			case ACT_ZOOM_FRAME: set_frame(ses, doc_view, 0), x = 2; break;
 			case ACT_VIEW_IMAGE: send_image(ses->tab->term, NULL, ses); break;
 			case ACT_DOWNLOAD_IMAGE: send_download_image(ses->tab->term, NULL, ses); break;
 			case ACT_LINK_MENU: link_menu(ses->tab->term, NULL, ses); break;
@@ -731,7 +740,7 @@ frame_ev(struct session *ses, struct document_view *fd, struct term_event *ev)
 					/* FIXME: This probably doesn't work
 					 * together with the keybinding...? */
 
-					struct document *document = fd->document;
+					struct document *document = doc_view->document;
 					int nl, lnl;
 					unsigned char d[2];
 
@@ -774,7 +783,7 @@ frame_ev(struct session *ses, struct document_view *fd, struct term_event *ev)
 				}
 #endif
 				else if (get_opt_int("document.browse.accesskey.priority") == 1
-					 && try_document_key(ses, fd, ev)) {
+					 && try_document_key(ses, doc_view, ev)) {
 					/* The document ate the key! */
 					return 1;
 
@@ -784,31 +793,31 @@ frame_ev(struct session *ses, struct document_view *fd, struct term_event *ev)
 		}
 #ifdef USE_MOUSE
 	} else if (ev->ev == EV_MOUSE) {
-		struct link *link = choose_mouse_link(fd, ev);
+		struct link *link = choose_mouse_link(doc_view, ev);
 
 		if ((ev->b & BM_BUTT) >= B_WHEEL_UP) {
 			if ((ev->b & BM_ACT) != B_DOWN) {
 				/* We handle only B_DOWN case... */
 			} else if ((ev->b & BM_BUTT) == B_WHEEL_UP) {
-				rep_ev(ses, fd, scroll, -2);
+				rep_ev(ses, doc_view, scroll, -2);
 			} else if ((ev->b & BM_BUTT) == B_WHEEL_DOWN) {
-				rep_ev(ses, fd, scroll, 2);
+				rep_ev(ses, doc_view, scroll, 2);
 			}
 
 		} else if (link) {
 			x = 1;
-			fd->vs->current_link = link - fd->document->links;
+			doc_view->vs->current_link = link - doc_view->document->links;
 
 			if ((link->type == L_LINK || link->type == L_BUTTON ||
 			     link->type == L_CHECKBOX || link->type == L_SELECT)
 			    && (ev->b & BM_ACT) == B_UP) {
 
-				draw_doc(ses->tab->term, fd, 1);
+				draw_doc(ses->tab->term, doc_view, 1);
 				print_screen_status(ses);
 				redraw_from_window(ses->tab);
 
 				if ((ev->b & BM_BUTT) < B_MIDDLE)
-					x = enter(ses, fd, 0);
+					x = enter(ses, doc_view, 0);
 				else
 					link_menu(ses->tab->term, NULL, ses);
 			}
@@ -823,17 +832,17 @@ frame_ev(struct session *ses, struct document_view *fd, struct term_event *ev)
 			 * repeatcount-free here. */
 
 			if (ev->y < scrollmargin) {
-				rep_ev(ses, fd, scroll, -2);
+				rep_ev(ses, doc_view, scroll, -2);
 			}
-			if (ev->y >= fd->yw - scrollmargin) {
-				rep_ev(ses, fd, scroll, 2);
+			if (ev->y >= doc_view->yw - scrollmargin) {
+				rep_ev(ses, doc_view, scroll, 2);
 			}
 
 			if (ev->x < scrollmargin * 2) {
-				rep_ev(ses, fd, hscroll, -8);
+				rep_ev(ses, doc_view, hscroll, -8);
 			}
-			if (ev->x >= fd->xw - scrollmargin * 2) {
-				rep_ev(ses, fd, hscroll, 8);
+			if (ev->x >= doc_view->xw - scrollmargin * 2) {
+				rep_ev(ses, doc_view, hscroll, 8);
 			}
 		}
 #endif /* USE_MOUSE */

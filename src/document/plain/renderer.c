@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.71 2004/01/28 02:09:04 jonas Exp $ */
+/* $Id: renderer.c,v 1.72 2004/01/28 02:13:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -258,10 +258,7 @@ add_document_line(struct document *document, int lineno,
 static void
 init_template(struct screen_char *template, color_t background, color_t foreground)
 {
-	struct color_pair colors;
-
-	colors.background = background;
-	colors.foreground = foreground;
+	struct color_pair colors = INIT_COLOR_PAIR(background, foreground);
 
 	template->attr = 0;
 	template->data = ' ';
@@ -299,8 +296,6 @@ add_document_lines(struct plain_renderer *renderer)
 	int lineno;
 	int was_empty_line = 0;
 	int compress = document->options.plain_compress_empty_lines;
-
-	document->width = 0;
 
 	/* Setup the style */
 	init_template(&template, global_doc_opts->default_bg, global_doc_opts->default_fg);
@@ -418,6 +413,7 @@ render_plain_document(struct cache_entry *ce, struct document *document)
 
 	document->title = get_no_post_url(document->url, NULL);
 	document->bgcolor = global_doc_opts->default_bg;
+	document->width = 0;
 
 	renderer.document = document;
 	renderer.source = source;

@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.12 2003/12/30 08:17:32 jonas Exp $ */
+/* $Id: refresh.c,v 1.13 2003/12/30 11:22:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 
 #include "elinks.h"
 
+#include "config/options.h"
 #include "document/document.h"
 #include "document/refresh.h"
 #include "document/view.h"

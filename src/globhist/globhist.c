@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.21 2003/04/24 08:23:39 zas Exp $ */
+/* $Id: globhist.c,v 1.22 2003/04/28 09:47:12 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -59,6 +59,19 @@ static int globhist_cache_entries = 0;
 static int globhist_dirty = 0;
 static int globhist_nosave = 0;
 
+
+/* FIXME: stupid workaround for bookmarks/globhist segfault */
+/* I don't like this way, this workaround should be replaced by
+ * an in-depth fix. */
+static void
+box_item_mem_free(void *p)
+{
+	static void *tmp = NULL;
+
+	if (tmp) mem_free(tmp);
+	tmp = p;
+}
+
 static void
 free_global_history_item(struct global_history_item *historyitem)
 {
@@ -74,7 +87,11 @@ free_global_history_item(struct global_history_item *historyitem)
 	}
 
 	del_from_list(historyitem->box_item);
-	mem_free(historyitem->box_item);
+	/* FIXME: Segfault was caused by mem_free(bm->box_item).
+	 * This pointer was needed in traverse_listbox_item_list.
+	 * We suspend mem_free(), box_item is freed next time
+	 * when it is no longer needed. */
+	box_item_mem_free(historyitem->box_item);
 
 	mem_free(historyitem->title);
 	mem_free(historyitem->url);

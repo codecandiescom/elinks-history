@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.14 2003/12/09 11:37:01 jonas Exp $ */
+/* $Id: smb.c,v 1.15 2003/12/09 13:38:34 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -562,7 +562,7 @@ smb_func(struct connection *conn)
 
 		execvp("smbclient", (char **) v);
 
-		error("smbclient not found in $PATH");
+		fprintf(stderr, "smbclient not found in $PATH");
 		_exit(1);
 	}
 

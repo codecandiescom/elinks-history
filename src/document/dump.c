@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.13 2002/05/18 19:23:51 pasky Exp $ */
+/* $Id: dump.c,v 1.14 2002/05/19 11:05:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,12 +65,13 @@ void dump_end(struct status *stat, void *p)
 	}
 	
 	if (stat->state >= 0 && stat->state < S_TRANS) return;
-	if (stat->state >= S_TRANS && get_opt_int("dump") != D_SOURCE) return;
+	if (stat->state >= S_TRANS && get_opt_int("dump")) return;
 	
-	if (get_opt_int("dump") == D_SOURCE) {
+	if (get_opt_int("source")) {
 		if (ce) {
 			struct fragment *frag;
 
+nextfrag:
 			foreach(frag, ce->frag) if (frag->offset <= dump_pos && frag->offset + frag->length > dump_pos) {
 				int l = frag->length - (dump_pos - frag->offset);
 				int w = hard_write(oh, frag->data + dump_pos - frag->offset, l);
@@ -87,6 +88,7 @@ void dump_end(struct status *stat, void *p)
 				
 				dump_pos += w;
 				detach_connection(stat, dump_pos);
+				goto nextfrag;
 			}
 		}
 		
@@ -145,7 +147,7 @@ void dump_start(unsigned char *u)
 	unsigned char *uu, *wd;
 	
 	if (!*u) {
-		fprintf(stderr, "URL expected after %s\n.", get_opt_int("dump") == D_DUMP ? "-dump" : "-source");
+		fprintf(stderr, "URL expected after %s\n.", get_opt_int("source") ? "-source" : "-dump");
 ttt:
 		terminate = 1;
 		retval = RET_SYNTAX;

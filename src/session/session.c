@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.95 2003/06/08 22:11:47 pasky Exp $ */
+/* $Id: session.c,v 1.96 2003/06/11 15:26:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -642,8 +642,7 @@ do_move(struct session *ses, struct status **stat)
 
 		if (ses->ref_url)
 			mem_free(ses->ref_url);
-		ses->ref_url = init_str();
-		add_to_str(&ses->ref_url, &l, ce->url);
+		ses->ref_url = stracpy(ce->url);
 		if (w == WTD_FORWARD || w == WTD_IMGMAP) {
 			unsigned char *gp = ses->goto_position ?
 					    stracpy(ses->goto_position) : NULL;
@@ -1320,7 +1319,7 @@ destroy_session(struct session *ses)
 	if (ses->tq_goto_position) mem_free(ses->tq_goto_position);
 	if (ses->tq_prog) mem_free(ses->tq_prog);
 	if (ses->dn_url) mem_free(ses->dn_url);
-	if (ses->ref_url) mem_free(ses->ref_url), ses->ref_url=NULL;
+	if (ses->ref_url) mem_free(ses->ref_url), ses->ref_url = NULL;
 	if (ses->search_word) mem_free(ses->search_word);
 	if (ses->last_search_word) mem_free(ses->last_search_word);
 	if (ses->last_title) mem_free(ses->last_title);
@@ -1429,13 +1428,8 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 	}
 
 	fd = current_frame(ses);
-	if (fd && fd->f_data && fd->f_data->url) {
-		int l = 0;
-
- 		ses->ref_url = init_str();
-		if (ses->ref_url)
-			add_to_str(&ses->ref_url, &l, fd->f_data->url);
-	}
+	if (fd && fd->f_data && fd->f_data->url)
+ 		ses->ref_url = stracpy(fd->f_data->url);
 
 	ses_goto(ses, u, target, PRI_MAIN, cache_mode, wtd, pos, end_load, 0);
 

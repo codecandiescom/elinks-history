@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.100 2003/06/08 13:21:41 jonas Exp $ */
+/* $Id: view.c,v 1.101 2003/06/11 15:26:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3218,7 +3218,6 @@ void
 frm_download(struct session *ses, struct f_data_c *fd, int resume)
 {
 	struct link *link;
-	int l = 0;
 
 	if (fd->vs->current_link == -1) return;
 	if (ses->dn_url) {
@@ -3237,9 +3236,8 @@ no_mem:
 			return;
 		}
 		if (ses->ref_url) mem_free(ses->ref_url);
-		ses->ref_url = init_str();
+		ses->ref_url = stracpy(fd->f_data->url);
 		if (!ses->ref_url) goto no_mem;
-		add_to_str(&ses->ref_url, &l, fd->f_data->url);
 		query_file(ses, ses->dn_url, (resume ? resume_download : start_download), NULL, 1);
 	}
 }
@@ -3254,7 +3252,6 @@ send_download_do(struct terminal *term, void *xxx, struct session *ses,
 		enum dl_type dlt)
 {
 	struct f_data_c *fd = current_frame(ses);
-	int l = 0;
 
 	if (!fd || fd->vs->current_link == -1) return;
 	if (ses->dn_url) {
@@ -3276,13 +3273,12 @@ send_download_do(struct terminal *term, void *xxx, struct session *ses,
 
 	if (ses->dn_url) {
 		if (ses->ref_url) mem_free(ses->ref_url);
-		ses->ref_url = init_str();
+		ses->ref_url = stracpy(fd->f_data->url);
 		if (!ses->ref_url) {
 			mem_free(ses->dn_url);
 			ses->dn_url = NULL;
 			return;
 		}
-		add_to_str(&ses->ref_url, &l, fd->f_data->url);
 		query_file(ses, ses->dn_url, start_download, NULL, 1);
 	}
 }
@@ -3382,7 +3378,6 @@ open_in_new_window(struct terminal *term,
 void
 save_url(struct session *ses, unsigned char *url)
 {
-	int l = 0;
 	struct f_data_c *fd = current_frame(ses);
 	unsigned char *u = translate_url(url, ses->tab->term->cwd);
 
@@ -3397,9 +3392,8 @@ save_url(struct session *ses, unsigned char *url)
 	if (ses->dn_url) mem_free(ses->dn_url);
 	if (ses->ref_url) mem_free(ses->ref_url);
 	ses->dn_url = u;
-	ses->ref_url = init_str();
+	ses->ref_url = stracpy(fd->f_data->url);
 	if (!ses->ref_url) return;
-	add_to_str(&ses->ref_url, &l, fd->f_data->url);
 	query_file(ses, ses->dn_url, start_download, NULL, 1);
 }
 
@@ -3420,7 +3414,6 @@ save_as(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct f_data_c *fd = current_frame(ses);
 	struct location *l;
-	int len = 0;
 
 	if (!have_location(ses)) return;
 	l = cur_loc(ses);
@@ -3428,8 +3421,7 @@ save_as(struct terminal *term, void *xxx, struct session *ses)
 	ses->dn_url = stracpy(l->vs.url);
 	if (ses->dn_url) {
 		if (ses->ref_url) mem_free(ses->ref_url);
-		ses->ref_url = init_str();
-		add_to_str(&ses->ref_url, &len, fd->f_data->url);
+		ses->ref_url = stracpy(fd->f_data->url);
 		query_file(ses, ses->dn_url, start_download, NULL, 1);
 	}
 }

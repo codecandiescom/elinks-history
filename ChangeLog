@@ -1,3 +1,143 @@
+Wed Dec 18 22:54:07 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre0.CVS ;p 
+
+Wed Dec 18 21:48:30 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/sched.c:
+
+	Added some tiny notice about stat->data and non-zero start and
+	struct download mess ;-).  
+
+Wed Dec 18 21:30:27 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/sched.c:
+
+	Fixed yet another bug causing random segfaults (if no-caching is
+	allowed and conditions are really weird ;). Patch by witekfl.  
+
+Wed Dec 18 21:23:31 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO:
+
+	Removed stale TODO item, thanks Jonas.  
+
+Wed Dec 18 21:23:20 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Options improvements ported from REL_0_4 (massive fixes of
+	descriptions/captions, show captions in bookmarks manager).  
+
+Wed Dec 18 16:31:07 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lua/core.c:
+
+	Fixed memory leak upon Lua error.  
+
+Wed Dec 18 16:30:37 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/session.c:
+
+	Try to fix not caching stuff rewritten by lua.  
+
+Wed Dec 18 16:25:09 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inphist.c, config/urlhist.c, config/urlhist.h:
+
+	We now only save history if modified (history_dirty mecanism).  
+
+Wed Dec 18 16:17:02 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: config/urlhist.c, config/urlhist.h, bfu/inphist.c:
+
+	We now only save history if modified (history_dirty mecanism).  
+
+Wed Dec 18 15:30:45 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: dialogs.c, options.c, opttypes.c:
+
+	Initialize capt and change_hook properly for autocreated options.
+	Fixes subtle bug causing segfault when we modify autocreated option
+	(reported by Jose). Also fixed hidden bug in tree_add()'s box_item
+	condition.  
+
+Wed Dec 18 13:51:13 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/memdebug.c:
+
+	A new memory debugger optionnal feature: log all (de-)allocations to
+	stderr (huge and slow). Define LOG_MEMORY_ALLOC to try it.  
+
+Wed Dec 18 12:07:07 2002  Laurent Monin <zas@norz.org>:
+
+	* src/globhist/: globhist.c, globhist.h:
+
+	We now saved globhist only when needed (through globhist_dirty
+	mecanism). Staticfication.  
+
+Wed Dec 18 11:55:46 2002  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Ooops, COOKIES_DEBUG is now undefined ;).  
+
+Wed Dec 18 11:35:05 2002  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Cookies are now saved only if some change occured (cookies_dirty).  
+
+Wed Dec 18 10:52:21 2002  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Inline some small functions.  
+
+Wed Dec 18 00:38:58 2002  Laurent Monin <zas@norz.org>:
+
+	* src/main.c:
+
+	Static + inline.  
+
+Tue Dec 17 23:58:43 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/dialogs/document.c:
+
+	Show a message in header info box if there's no header info to show
+	instead of an empty box. Translations++.  
+
+Tue Dec 17 23:26:09 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/french.lng:
+
+	French translation was updated and fixed.  
+
+Tue Dec 17 23:09:39 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	Fixed problem with rendering of tables with slightly malformed HTML
+	code (ie. google's labs sets problem reported by Jose).  
+
+Tue Dec 17 21:45:42 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS, TODO:
+
+	Removed some stale TODO items.  
+
 Tue Dec 17 21:41:11 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

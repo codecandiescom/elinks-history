@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.122 2004/04/04 06:15:54 jonas Exp $ */
+/* $Id: uri.c,v 1.123 2004/04/04 07:19:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,19 +57,14 @@ get_protocol_length(const unsigned char *url)
 	register unsigned char *end = (unsigned char *) url;
 
 	/* Seek the end of the protocol name if any. */
-	while (*end && *end != ':') {
-		/* RFC1738:
-		 * scheme  = 1*[ lowalpha | digit | "+" | "-" | "." ] */
-		if ((*end >= 'a' && *end <= 'z') || (*end >= '0' && *end <= '9')
-		    || *end == '+' || *end == '-' || *end == '.') {
-			end++;
-		} else
-			break;
-	}
+	/* RFC1738:
+	 * scheme  = 1*[ lowalpha | digit | "+" | "-" | "." ] */
+	while (isalpha(*end) || isdigit(*end)
+		|| *end == '+' || *end == '-' || *end == '.')
+		end++;
 
-	if (*end != ':' || end == url) return 0; /* No valid protocol scheme. */
-
-	return end - url;
+	/* No need to check @end == @url */
+	return (*end == ':') ? end - url : 0;
 }
 
 /* Tcp port range */

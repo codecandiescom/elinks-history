@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.19 2002/06/10 15:54:51 pasky Exp $ */
+/* $Id: types.c,v 1.20 2002/06/11 20:12:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,7 +202,7 @@ get_content_type(unsigned char *head, unsigned char *url)
 	    (!casecmp(url + url_len - 5, ".html", 4)))
 		return stracpy("text/html");
 
-	{
+	if (extension) {
 		struct option *opt = get_real_opt("mime.extension", extension);
 
 		if (opt) return opt->ptr;
@@ -213,7 +213,7 @@ get_content_type(unsigned char *head, unsigned char *url)
 	exxt = init_str();
 	el = 0;
 	add_to_str(&exxt, &el, "application/x-");
-	add_bytes_to_str(&exxt, &el, extension, ext_len);
+	if (extension) add_bytes_to_str(&exxt, &el, extension, ext_len);
 
 	foreach(a, assoc) {
 		if (is_in_list(a->ct, exxt, el))

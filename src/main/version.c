@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.19 2003/10/27 02:17:52 jonas Exp $ */
+/* $Id: version.c,v 1.20 2003/10/27 20:57:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "elinks.h"
 
 #include "intl/gettext/libintl.h"
+#include "modules/module.h"
 #include "modules/version.h"
 #include "terminal/terminal.h"
 #include "util/error.h"
@@ -24,20 +25,60 @@
 
 #define ELINKS_VERSION	("ELinks " VERSION_STRING)
 
+void
+add_module_to_string(struct string *string, struct module *module,
+		     struct terminal *term)
+{
+	int i;
+
+	if (module->name) add_to_string(string, _(module->name, term));
+
+	if (!module->submodules) return;
+
+	add_to_string(string, " (");
+
+	for (i = 0; module->submodules[i]; i++) {
+		add_module_to_string(string, module->submodules[i], term);
+		if (module->submodules[i + 1])
+			add_to_string(string, ", ");
+	}
+
+	add_to_string(string, ")");
+}
+
+void
+add_modules_to_string(struct string *string, struct terminal *term)
+{
+	extern struct module *builtin_modules[];
+	int i;
+
+	for (i = 0; builtin_modules[i]; i++) {
+		add_module_to_string(string, builtin_modules[i], term);
+		if (builtin_modules[i + 1])
+			add_to_string(string, ", ");
+	}
+}
+
 /* @more will add more information especially for info box. */
 unsigned char *
 get_dyn_full_version(struct terminal *term, int more)
 {
 	static const unsigned char comma[] = ", ";
+	struct string string;
+ 
+	if (!init_string(&string)) return NULL;
 
-	return straconcat(
-		ELINKS_VERSION,
-#if defined(DEBUG) && defined(__DATE__) && defined(__TIME__)
-		(unsigned char *) (more ? " (" __DATE__ " " __TIME__ ")" : ""),
-#endif
-		(unsigned char *) (more ? "\n\n": ""),
-		more ? _("Text WWW browser", term) : (unsigned char *) "",
-		(unsigned char *) (more ? "\n\n" : "\n"),
+	add_to_string(&string, ELINKS_VERSION);
+	if (more) {
+ #if defined(DEBUG) && defined(__DATE__) && defined(__TIME__)
+		add_to_string(&string, " (" __DATE__ " " __TIME__ ")");
+ #endif
+		add_to_string(&string, "\n\n");
+		add_to_string(&string, _("Text WWW browser", term));
+		add_to_string(&string, "\n\n");
+	}
+
+	string_concat(&string,
 		_("Features:", term), " ",
 #ifndef DEBUG
 		_("Standard", term),
@@ -61,26 +102,8 @@ get_dyn_full_version(struct terminal *term, int more)
 		"(GnuTLS)",
 #endif
 #endif
-#ifdef HAVE_LUA
-		comma, "Lua",
-#endif
-#ifdef HAVE_GUILE
-		comma, "Guile",
-#endif
 #ifdef IPV6
 		comma, "IPv6",
-#endif
-#ifdef BOOKMARKS
-		comma, _("Bookmarks", term),
-#endif
-#ifdef COOKIES
-		comma, _("Cookies", term),
-#endif
-#ifdef GLOBHIST
-		comma, _("Global History", term),
-#endif
-#ifdef USE_LEDS
-		comma, _("LED indicators", term),
 #endif
 #ifdef HAVE_ZLIB_H
 		comma, "gzip",
@@ -88,20 +111,16 @@ get_dyn_full_version(struct terminal *term, int more)
 #ifdef HAVE_BZLIB_H
 		comma, "bzip2",
 #endif
-#ifdef MAILCAP
-		comma, _("Mailcap", term),
-#endif
-#ifdef MIMETYPES
-		comma, _("Mimetypes files", term),
-#endif
-#ifdef FORMS_MEMORY
-		comma, _("Forms memory", term),
-#endif
 #ifndef USE_MOUSE
 		comma, _("No mouse", term),
 #endif
+		comma,
 		NULL
 	);
+
+	add_modules_to_string(&string, term);
+
+	return string.source;
 }
 
 /* This one is used to prevent usage of straconcat() at backtrace time. */

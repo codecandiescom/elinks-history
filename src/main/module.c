@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.13 2003/10/26 19:37:45 zas Exp $ */
+/* $Id: module.c,v 1.14 2003/10/27 20:57:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,8 @@
 #include "mime/mime.h"
 #include "scripting/scripting.h"
 
-static struct module *builtin_modules[] = {
+/* This is also used for version string composing so keep NULL terminated */
+struct module *builtin_modules[] = {
 	&mime_module,
 #ifdef USE_LEDS
 	&leds_module,
@@ -41,9 +42,10 @@ static struct module *builtin_modules[] = {
 #ifdef HAVE_SCRIPTING
 	&scripting_module,
 #endif
+	NULL
 };
 
-#define BUILTIN_MODULES_COUNT (sizeof(builtin_modules) / sizeof(struct module *))
+#define BUILTIN_MODULES_COUNT (sizeof(builtin_modules) / sizeof(struct module *) - 1)
 
 /* Interface for handling single modules. */
 

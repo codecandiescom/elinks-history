@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.8 2002/04/01 20:10:00 pasky Exp $ */
+/* $Id: cookies.c,v 1.9 2002/04/02 22:29:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@
 #ifdef COOKIES_DEBUG
 #include <util/error.h>
 #endif
+
 
 tcount cookie_id = 0;
 
@@ -59,6 +60,9 @@ struct c_server {
 };
 
 struct list_head c_servers = { &c_servers, &c_servers };
+
+
+#ifdef COOKIES
 
 void accept_cookie(struct cookie *);
 void delete_cookie(struct cookie *);
@@ -587,3 +591,13 @@ void cleanup_cookies()
 
 	free_list(cookies);
 }
+
+#else /* COOKIES */
+
+int set_cookie(struct terminal *t, unsigned char *a, unsigned char *b) {}
+void send_cookies(unsigned char **u, int *i, unsigned char *c) {}
+void load_cookies() {}
+void init_cookies() {}
+void cleanup_cookies() {}
+
+#endif

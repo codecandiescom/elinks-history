@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: globhist.c,v 1.8 2002/04/02 17:09:32 pasky Exp $ */
+/* $Id: globhist.c,v 1.9 2002/04/02 22:29:46 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -18,6 +18,8 @@
 #include <intl/language.h>
 #include <lowlevel/kbd.h>
 
+
+#ifdef GLOBHIST
 
 #define HISTORY_BOX_IND 5
 
@@ -504,3 +506,9 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	d->items[HISTORY_BOX_IND + 1].type = D_END;
 	do_dialog(term, d, getml(d, NULL));
 }
+
+#else /* GLOBHIST */
+
+void menu_history_manager(struct terminal *t, void *d, struct session *s) {}
+
+#endif

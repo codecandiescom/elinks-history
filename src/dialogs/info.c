@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.5 2002/03/22 19:19:51 pasky Exp $ */
+/* $Id: info.c,v 1.6 2002/04/02 22:29:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,6 +52,15 @@ void menu_about(struct terminal *term, void *d, struct session *ses)
 #endif
 #ifdef IPV6
 			" IPv6"
+#endif
+#ifdef BOOKMARKS
+			" Bookmarks"
+#endif
+#ifdef COOKIES
+			" Cookies"
+#endif
+#ifdef GLOBHIST
+			" GlobHist"
 #endif
 	);
 	msg_box(term, getml(s, NULL),

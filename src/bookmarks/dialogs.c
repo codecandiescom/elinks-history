@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.5 2002/04/02 17:09:32 pasky Exp $ */
+/* $Id: dialogs.c,v 1.6 2002/04/02 22:29:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,7 +11,6 @@
 
 #include <bfu/align.h>
 #include <bfu/bfu.h>
-//#include <bfu/menu.h>
 #include <bookmarks/bookmarks.h>
 #include <bookmarks/dialogs.h>
 #include <dialogs/edit.h>
@@ -19,7 +18,6 @@
 #include <lowlevel/kbd.h>
 #include <lowlevel/terminal.h>
 #include <intl/language.h>
-//#include <protocol/types.h>
 #include <util/error.h>
 
 
@@ -29,6 +27,9 @@
 
 /* The location of the box in the bookmark manager */
 #define	BM_BOX_IND		6
+
+
+#ifdef BOOKMARKS
 
 
 /****************************************************************************
@@ -624,3 +625,11 @@ launch_bm_add_link_dialog(struct terminal *term,
 		       get_current_link_url(ses, url, MAX_STR_LEN), ses,
 		       parent, bookmark_add_add, NULL, 1);
 }
+
+#else /* BOOKMARKS */
+
+void menu_bookmark_manager(struct terminal *t, void *d, struct session *s) {}
+void launch_bm_add_doc_dialog(struct terminal *t, struct dialog_data *d, struct session *s) {}
+void launch_bm_add_link_dialog(struct terminal *t, struct dialog_data *d, struct session *s) {}
+
+#endif

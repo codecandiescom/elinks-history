@@ -35,3 +35,12 @@
 
 /* Define to 1 if we have XFree under OS/2 */
 #undef X2
+
+/* Define to 1 if we should include internal bookmark manager */
+#undef BOOKMARKS
+
+/* Define to 1 if we should include support for cookies */
+#undef COOKIES
+
+/* Define to 1 if we should include global history */
+#undef GLOBHIST

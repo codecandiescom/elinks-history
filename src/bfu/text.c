@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.66 2003/12/03 17:16:08 zas Exp $ */
+/* $Id: text.c,v 1.67 2003/12/04 12:28:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,10 +22,13 @@
 
 #define is_unsplitable(pos) (*(pos) && *(pos) != '\n' && *(pos) != ' ')
 
+/* Returns length of substring (from start of @text) before a split. */
 static inline int
 split_line(unsigned char *text, int max_width)
 {
 	unsigned char *split = text;
+
+	if (max_width <= 0) return 0;
 
 	while (*split && *split != '\n') {
 		unsigned char *next_split = split + 1;
@@ -34,8 +37,36 @@ split_line(unsigned char *text, int max_width)
 			next_split++;
 
 		if (next_split - text > max_width) {
-			/* Force a split if no position was found yet */
-			if (split == text) return max_width;
+			/* Force a split if no position was found yet,
+			 * meaning there's no splittable substring under
+			 * requested width. */
+			if (split == text) {
+				split = &text[max_width];
+
+				/* Give preference to split on a punctuation
+				 * if any. Note that most of the time
+				 * punctuation char is followed by a space so
+				 * this rule will not match often.
+				 * We match dash and quotes too. */
+				while (--split != text) {
+					if (*split != '.'
+					    && *split != ','
+					    && *split != ';'
+					    && *split != '?'
+					    && *split != '!'
+					    && *split != ':'
+					    && *split != '-'
+					    && *split != '"'
+					    && *split != '\'') continue;
+					split++;
+					break;
+				}
+
+				/* If no way to do a clean split, just return
+				 * requested maximal width. */
+				if (split == text)
+					return max_width;
+			}
 			break;
 		}
 
@@ -65,9 +96,17 @@ split_lines(struct widget_data *widget_data, int max_width)
 	for (; *text; text += width) {
 
 		/* Skip any leading space from last line split */
-		if (*text == ' ' || *text == '\n') text++;
+		while (*text == ' ' || *text == '\n') text++;
+		if (!*text) break;
 
 		width = split_line(text, max_width);
+
+		/* split_line() may return 0. */
+		if (width < 1) {
+			text++; /* Infinite loop prevention. */
+			continue;
+		}
+
 		int_lower_bound(&widget_data->w, width);
 
 		if (!realloc_lines(&lines, line, line + 1))
@@ -97,9 +136,15 @@ dlg_format_text_do(struct terminal *term, unsigned char *text,
 		int shift;
 
 		/* Skip any leading space from last line split */
-		if (*text == ' ' || *text == '\n') text++;
+		while (*text == ' ' || *text == '\n') text++;
+		if (!*text) break;
 
 		line_width = split_line(text, dlg_width);
+		/* split_line() may return 0. */
+		if (line_width < 1) {
+			text++; /* Infinite loop prevention. */
+			continue;
+		}
 
 		if (real_width) int_lower_bound(real_width, line_width);
 		if (!term || !line_width) continue;
@@ -131,19 +176,16 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 	widget_data->x = x;
 	widget_data->y = *y;
 	widget_data->h = max_height - 3;
-	if (widget_data->h < 0) {
+	if (widget_data->h <= 0) {
 		widget_data->h = 0;
 		return;
 	}
 
-	/* Always reset @current if we do not need to scroll */
-	if (widget_data->h >= widget_data->info.text.lines)
-		widget_data->info.text.current = 0;
-
 	/* Can we scroll and do we even have to? */
 	if (widget_data->widget->info.text.is_scrollable
 	    && (widget_data->info.text.max_width != dlg_width
-		|| widget_data->h < widget_data->info.text.lines)) {
+		|| widget_data->h < widget_data->info.text.lines))
+	{
 		unsigned char **lines;
 		int current;
 		int visible;
@@ -166,7 +208,7 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 		/* Set the current position */
 		text = lines[current];
 
-		/* Do we have to force a text end */
+		/* Do we have to force a text end ? */
 		visible = widget_data->info.text.lines - current;
 		if (visible > widget_data->h) {
 			int lines_pos = current + widget_data->h;
@@ -180,12 +222,15 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 				saved_pos--;
 
 			saved = *saved_pos;
-			*saved_pos = 0;
+			*saved_pos = '\0';
 		}
 
 		/* Force dialog to be the width of the longest line */
 		if (real_width) int_lower_bound(real_width, widget_data->w);
 
+	} else {
+		/* Always reset @current if we do not need to scroll */
+		widget_data->info.text.current = 0;
 	}
 
 	dlg_format_text_do(term, text,
@@ -246,6 +291,9 @@ format_and_display_text(struct widget_data *widget_data,
 	int y = widget_data->y;
 	int height = dialog_max_height(term);
 	int lines = widget_data->info.text.lines;
+
+	assert(lines >= 0);
+	assert(widget_data->h >= 0);
 
 	int_bounds(&current, 0, lines - widget_data->h);
 

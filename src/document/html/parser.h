@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.32 2003/09/26 17:35:45 zas Exp $ */
+/* $Id: parser.h,v 1.33 2003/10/01 00:49:47 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -227,6 +227,7 @@ enum html_special_type {
 	SP_FRAME,
 	SP_NOWRAP,
 	SP_REFRESH,
+	SP_COLOR_LINK_LINES,
 };
 
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.206 2003/09/30 00:17:56 jonas Exp $ */
+/* $Id: parser.c,v 1.207 2003/10/01 00:49:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -972,6 +972,7 @@ html_body(unsigned char *a)
 		((struct html_element *) html_stack.prev)->parattr.bgcolor = par_format.bgcolor;
 		((struct html_element *) html_stack.prev)->attr.bg = format.bg;
 	}
+	special_f(ff, SP_COLOR_LINK_LINES);
 }
 
 static void

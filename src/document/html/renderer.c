@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.285 2003/09/30 00:17:56 jonas Exp $ */
+/* $Id: renderer.c,v 1.286 2003/10/01 00:49:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1055,6 +1055,30 @@ html_form_control(struct part *part, struct form_control *fc)
 	add_to_list(part->document->forms, fc);
 }
 
+static inline void
+color_link_lines(struct document *document)
+{
+	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
+	enum color_mode cmode = document->opt.color_mode;
+	int y;
+
+	for (y = 0; y < document->y; y++) {
+		int x;
+
+		for (x = 0; x < document->data[y].l; x++) {
+			struct screen_char *schar = &document->data[y].d[x];
+
+			set_term_color(schar, &colors, COLOR_DEFAULT, cmode);
+
+			/* XXX: Entering hack zone! Change to clink color after
+			 * link text has been recolored. */
+			if (schar->data == ':' && colors.foreground == 0x0)
+				colors.foreground = format.clink;
+		}
+
+		colors.foreground = 0x0;
+	}
+}
 
 static void *
 html_special(struct part *part, enum html_special_type c, ...)
@@ -1107,6 +1131,11 @@ html_special(struct part *part, enum html_special_type c, ...)
 			t = va_arg(l, unsigned char *);
 			va_end(l);
 			document->refresh = init_document_refresh(t, seconds);
+			break;
+		case SP_COLOR_LINK_LINES:
+			va_end(l);
+			if (document->opt.use_document_colours == 2)
+				color_link_lines(document);
 			break;
 		default:
 			va_end(l);

@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.3 2003/12/31 21:31:49 pasky Exp $ */
+/* $Id: feature.h,v 1.4 2003/12/31 21:35:10 pasky Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -98,6 +98,7 @@
 #define GLOBHIST
 
 
+
 /*** MIME
  *
  * ELinks uses a MIME system for determining the content type of documents and
@@ -106,21 +107,21 @@
  * up the MIME handling using the option system can be found in the
  * doc/mime.html file.
  *
- * Below are listed additional ways to do it. */
+ * Below are listed some additional ways to do it. */
 
 /*** Mailcap
  *
  * Mailcap files describe what program - on the local system - can be used to
  * handle a media type. The file format is defined in RFC 1524 and more info
- * includingexamples can be found in the doc/mailcap.html file.
+ * including examples can be found in the doc/mailcap.html file.
  *
  * Default: enabled */
 
 #define MAILCAP
 
-/*** Mimetypes files
+/*** Mimetypes file
  *
- * Mimetypes files can be used to specify the relation between media types and
+ * Mimetypes file can be used to specify the relation between media types and
  * file extensions.
  *
  * Default: enabled */
@@ -128,21 +129,23 @@
 #define MIMETYPES
 
 
+
 /*** 256 colors in terminals
  *
- * Define to add support for using 256 colors in terminals. Note that it
- * requires a capable terminal emulator such as:
+ * Define to add support for using 256 colors in terminals. Note that this
+ * requires a capable terminal emulator, such as:
  *
  * - Thomas Dickey's XTerm, version 111 or later (check which version you have
  *   with xterm -version) compiled with --enable-256-color.
  *
- * - Recent versions of PuTTY also has minimal support of 256 colors.
- ø 
- * When enabled the memory usage is increased even when running in mono and 16
+ * - Recent versions of PuTTY also have some support for 256 colors.
+ *
+ * When enabled, the memory usage is increased even when running in mono and 16
  * color mode.
- * 
+ *
  * Default: disabled */
 
 /* #define USE_256_COLORS */
+
 
 #endif

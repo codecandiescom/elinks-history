@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.182 2004/07/14 15:14:32 jonas Exp $ */
+/* $Id: hierbox.c,v 1.183 2004/07/15 14:03:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,7 +101,7 @@ done_listbox_item(struct hierbox_browser *browser, struct listbox_item *box_item
 {
 	struct listbox_data *box_data;
 
-	assert(box_item);
+	assert(box_item && list_empty(box_item->child));
 
 	/* If we are removing the top or the selected box we have to figure out
 	 * a replacement. */

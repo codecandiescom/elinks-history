@@ -1,7 +1,7 @@
 When you add or delete any text, add or delete it in english.lng and run script
 ./synclang. It adds NULL entries to other languages, then it runs ./gen-intl.
 
-When you change any text, run ./get-intl. It will generate big header file from
+When you change any text, run ./get-intl. It will generate header files from
 the language files and place it inside src/intl/.
 
 Menu hotkeys are also translated via this interface. You can specify more
@@ -32,6 +32,7 @@ for details)
 * add your language (only the name without the .lng suffix) to
 * index.txt on single line
 * ./synclang
+* ./gen-intl
 * cd ..
 * make
 * check if the translation is correct

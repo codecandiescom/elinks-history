@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.37 2002/12/08 16:58:14 pasky Exp $ */
+/* $Id: opttypes.c,v 1.38 2002/12/08 18:28:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -350,10 +350,10 @@ cp_set(struct option *opt, unsigned char *str)
 {
 	int ret;
 
-	*((int *) opt->ptr) = ret = get_cp_index(str);
-
+	ret = get_cp_index(str);
 	if (ret < 0) return 0;
 
+	*((int *) opt->ptr) = ret;
 	return 1;
 }
 
@@ -375,8 +375,6 @@ lang_set(struct option *opt, unsigned char *str)
 			set_language(i);
 			return 1;
 		}
-
-	*((int *) opt->ptr) = -1;
 
 	return 0;
 }

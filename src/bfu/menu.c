@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.251 2004/07/27 16:11:42 jonas Exp $ */
+/* $Id: menu.c,v 1.252 2004/07/27 17:34:19 jonas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -818,7 +818,7 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 				return;
 			}
 
-			if (ev->x <= ' ' && ev->x >= 255)
+			if (!check_kbd_label_key(ev))
 				break;
 
 			s = check_hotkeys(menu, ev->x, win->term);
@@ -1106,7 +1106,7 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 
 	default:
 		/* Fallback to see if any hotkey matches the pressed key */
-		if (ev->x > ' ' && ev->x < 256
+		if (check_kbd_label_key(ev)
 		    && check_hotkeys(menu, ev->x, win->term)) {
 			fwd = 1;
 			break;

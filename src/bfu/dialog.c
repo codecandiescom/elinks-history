@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.150 2004/07/17 20:03:28 zas Exp $ */
+/* $Id: dialog.c,v 1.151 2004/07/27 17:34:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -247,7 +247,7 @@ dialog_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 	}
 
 	/* Look up for a button with matching starting letter. */
-	if (ev->x > ' ' && ev->x < 0x100) {
+	if (check_kbd_label_key(ev)) {
 		int i;
 
 		for (i = 0; i < dlg_data->n; i++) {

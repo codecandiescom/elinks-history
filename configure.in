@@ -74,8 +74,10 @@ if test "$CONFIG_BEOS" = no && \
    test "$CONFIG_WIN32" = no && \
    test "$CONFIG_OS2" = no; then
 	EL_CONFIG(CONFIG_UNIX, [UNIX])
+else
+	CONFIG_UNIX=no
 fi
-AC_MSG_RESULT("$CONFIG_UNIX")
+AC_MSG_RESULT($CONFIG_UNIX)
 AM_CONDITIONAL(CONFIG_UNIX, test "$CONFIG_UNIX" = yes)
 
 dnl ===================================================================

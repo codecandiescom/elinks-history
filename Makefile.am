@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.42 2005/01/08 21:23:01 jonas Exp $
+## $Id: Makefile.am,v 1.43 2005/01/08 21:45:28 jonas Exp $
 
 SUBDIRS = Unicode config contrib doc intl po src test
 
@@ -21,4 +21,3 @@ install-exec-hook:
 
 
 CLEANFILES = $(srcdir)/features.log
-DISTCLEANFILES = $(srcdir)/acinclude.m4

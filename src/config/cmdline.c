@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.111 2004/12/29 22:29:34 jonas Exp $ */
+/* $Id: cmdline.c,v 1.112 2005/01/02 19:31:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -667,7 +667,7 @@ struct option_info cmdline_options_info[] = {
 		N_("Specify configuration file directives on the command-line\n"
 		"which will be evaluated after all configuration files has been\n"
 		"read. Example usage:\n"
-		"	-eval 'set protocol.file.allow_special_files = 1'")),
+		"\t-eval 'set protocol.file.allow_special_files = 1'")),
 
 	/* lynx compatibility */
 	INIT_OPT_COMMAND("", N_("Interpret documents of unknown types as HTML"),
@@ -698,7 +698,7 @@ struct option_info cmdline_options_info[] = {
 
 	INIT_OPT_COMMAND("", N_("Look up specified host"),
 		"lookup", 0, lookup_cmd,
-		N_("Look up specified host.")),
+		N_("Look up specified host and print all DNS resolved IP addresses.")),
 
 	INIT_OPT_BOOL("", N_("Run as separate instance"),
 		"no-connect", 0, 0,
@@ -726,19 +726,20 @@ struct option_info cmdline_options_info[] = {
 
 	INIT_OPT_COMMAND("", N_("Control an already running ELinks"),
 		"remote", 0, remote_cmd,
-		N_("Mozilla compliant support for controlling a remote ELinks instance.\n"
-		"The command takes an additional argument containing the method which\n"
-		"should be invoked and any parameters that should be passed to it.\n"
-		"For ease of use the additional method argument can be omitted in which\n"
-		"case any URL arguments will be opened in new tabs in the remote instance.\n"
-		"Following is a list of the methods that are supported:\n"
-		"	ping()                    -- check for remote instance\n"
-		"	openURL()                 -- prompt URL in current tab\n"
-		"	openURL(URL)              -- open URL in current tab\n"
-		"	openURL(URL, new-tab)     -- open URL in new tab\n"
-		"	openURL(URL, new-window)  -- open URL in new window\n"
-		"	addBookmark(URL)          -- bookmark URL\n"
-		"	xfeDoCommand(openBrowser) -- open new window")),
+		N_("Control a remote ELinks instance by passing commands to it.\n"
+		"The option takes an additional argument containing the method\n"
+		"which should be invoked and any parameters that should be passed\n"
+		"to it. For ease of use, the additional method argument can be\n"
+		"omitted in which case any URL arguments will be opened in new\n"
+		"tabs in the remote instance.\n"
+		"Following is a list of the supported methods:\n"
+		"\tping()                    : look for a remote instance\n"
+		"\topenURL()                 : prompt URL in current tab\n"
+		"\topenURL(URL)              : open URL in current tab\n"
+		"\topenURL(URL, new-tab)     : open URL in new tab\n"
+		"\topenURL(URL, new-window)  : open URL in new window\n"
+		"\taddBookmark(URL)          : bookmark URL\n"
+		"\txfeDoCommand(openBrowser) : open instance in new window")),
 
 	INIT_OPT_INT("", N_("Connect to session ring with given ID"),
 		"session-ring", 0, 0, INT_MAX, 0,
@@ -767,15 +768,16 @@ struct option_info cmdline_options_info[] = {
 		"touch-files", 0, 0,
 		N_("When enabled, runtime state files (bookmarks, history, etc.) are\n"
 		"written to disk, even when -no-connect or -session-ring is used.\n"
-		"It has no effect if not used in connection with any of these options.")),
+		"The option has no effect if not used in conjunction with any of\n"
+		"these options.")),
 
 	INIT_OPT_INT("", N_("Verbose level"),
 		"verbose", 0, 0, VERBOSE_LEVELS - 1, 0,
 		N_("The verbose level controls what messages are shown at\n"
 		"start up and while running:\n"
-		"	0 means only show serious errors\n"
-		"	1 means show serious errors and warnings\n"
-		"	2 means show all messages")),
+		"\t0 means only show serious errors\n"
+		"\t1 means show serious errors and warnings\n"
+		"\t2 means show all messages")),
 
 	INIT_OPT_COMMAND("", N_("Print version information and exit"),
 		"version", 0, version_cmd,

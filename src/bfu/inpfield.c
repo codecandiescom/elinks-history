@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.127 2004/02/09 12:06:52 jonas Exp $ */
+/* $Id: inpfield.c,v 1.128 2004/04/11 00:59:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ dlg_format_field(struct terminal *term,
 		}
 	}
 
-	if (rw) *rw = int_min(w, DIALOG_MIN_WIDTH);
+	if (rw) int_lower_bound(rw, int_min(w, DIALOG_MIN_WIDTH));
 
 	if (term) {
 		widget_data->x = x;

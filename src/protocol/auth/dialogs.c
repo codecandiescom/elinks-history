@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.94 2004/03/13 15:17:03 zas Exp $ */
+/* $Id: dialogs.c,v 1.95 2004/04/11 00:59:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,10 +84,6 @@ do_auth_dialog(struct session *ses, void *data)
 
 	dlg->udata = (void *) ses;
 	dlg->udata2 = a;
-
-	/* Temporary workaround for bug 392, try http://www.dma.org/doc/tin-1.4pre980618/CHANGES
-	 * without it, buttons should be outside dialog box. --Zas */
-	dlg->layout.maximize_width = 1;
 
 	add_dlg_text(dlg, text, AL_LEFT, 0);
 	add_dlg_field(dlg, dlg_login, 0, 0, NULL, HTTP_AUTH_USER_MAXLEN, a->user, NULL);

@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.84 2004/02/10 23:40:51 jonas Exp $ */
+/* $Id: dump.c,v 1.85 2004/02/15 12:48:52 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,6 +138,71 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 	return 0;
 }
 
+static unsigned char *
+subst_url(unsigned char *str, unsigned char *url, int length)
+{
+	struct string string;
+
+	if (!init_string(&string)) return NULL;
+
+	while (*str) {
+		int p;
+
+		for (p = 0; str[p] && str[p] != '%' && str[p] != '\\'; p++);
+
+		add_bytes_to_string(&string, str, p);
+		str += p;
+
+		if (*str == '\\') {
+			unsigned char ch;
+
+			str++;
+			switch (*str) {
+				case 'f':
+					ch = '\f';
+					break;
+				case 'n':
+					ch = '\n';
+					break;
+				case 't':
+					ch = '\t';
+					break;
+				default:
+					ch = *str;
+			}
+			if (*str) {
+				add_char_to_string(&string, ch);
+				str++;
+			}
+			continue; 
+		} else if (*str != '%') break;
+		str++;
+		switch (*str) {
+			case 'u':
+				add_bytes_to_string(&string, url, length);
+				break;
+		}
+		if (*str) str++;
+	}
+	return string.source;
+}
+
+static void
+dump_print(unsigned char *option, unsigned char *url, int length)
+{
+	unsigned char *str = get_opt_str(option);
+
+	if (str) {
+		unsigned char *realstr = subst_url(str, url, length);
+
+		if (realstr) {
+			printf("%s", realstr);
+			fflush(stdout);
+			mem_free(realstr);
+		}
+	}
+}
+
 void
 dump_pre_start(struct list_head *url_list)
 {
@@ -156,12 +221,17 @@ dump_pre_start(struct list_head *url_list)
 
 	/* Dump each url list item one at a time */
 	if (!list_empty(todo_list)) {
+		static int first = 1;
+
 		item = todo_list.next;
 		terminate = 0;
 		del_from_list(item);
 		add_to_list(done_list, item);
+		if (!first) dump_print("document.dump.separator", "", 0);
+		else first = 0;
+		dump_print("document.dump.header", item->string.source, item->string.length);
 		dump_start(item->string.source);
-
+		dump_print("document.dump.footer", item->string.source, item->string.length);
 	} else {
 		free_string_list(&done_list);
 	}

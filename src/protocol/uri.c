@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.241 2004/06/12 00:14:10 jonas Exp $ */
+/* $Id: uri.c,v 1.242 2004/06/12 00:35:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -740,7 +740,7 @@ join_urls(struct uri *base, unsigned char *rel)
 
 		/* Get `<protocol>://' and add stuff after `//' from @rel */
 		n = get_uri_string(base, URI_PROTOCOL);
-		add_to_strn(&n, rel + 2);
+		if (n) add_to_strn(&n, rel + 2);
 		return n;
 	}
 

@@ -1,4 +1,4 @@
-/* $Id: rectangle.h,v 1.1 2002/12/30 16:30:28 pasky Exp $ */
+/* $Id: rectangle.h,v 1.2 2002/12/30 17:58:37 pasky Exp $ */
 
 #ifndef EL__USIVE_LAYOUTER_RECTANGLE_H
 #define EL__USIVE_LAYOUTER_RECTANGLE_H
@@ -54,8 +54,7 @@ struct layout_rectangle {
 	 * syntree_node if the attribute is not there (if syntree_node is not
 	 * NULL, obviously). We try to save memory, you know. */
 	/* For missing attributes, we will just ascend to the parent and look
-	 * there, and we will keep doing this until we will find something.
-	 * The root node bears full attribute set. */
+	 * there, and we will keep doing this until we find something. */
 	/* See parser/attrib.h for a description of the struct attribute. The
 	 * approach of list of individual attribute structures may seem
 	 * slightly ineffective - I decided on this in order to extend the

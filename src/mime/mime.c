@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.38 2003/12/21 14:51:20 zas Exp $ */
+/* $Id: mime.c,v 1.39 2004/01/01 15:47:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,10 +183,10 @@ get_mime_type_handler(unsigned char *content_type, int xwin)
 
 static struct module *mime_submodules[] = {
 	&default_mime_module,
-#ifdef MAILCAP
+#ifdef CONFIG_MAILCAP
 	&mailcap_mime_module,
 #endif
-#ifdef MIMETYPES
+#ifdef CONFIG_MIMETYPES
 	&mimetypes_mime_module,
 #endif
 	NULL,

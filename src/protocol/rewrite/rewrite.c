@@ -1,11 +1,11 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.13 2003/12/31 06:20:40 miciah Exp $ */
+/* $Id: rewrite.c,v 1.14 2004/01/01 15:47:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef URI_REWRITE
+#ifdef CONFIG_URI_REWRITE
 
 #include "elinks.h"
 

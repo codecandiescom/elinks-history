@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.29 2004/01/01 15:36:17 jonas Exp $ */
+/* $Id: feature.h,v 1.30 2004/01/01 15:47:25 jonas Exp $ */
 
 #ifndef EL__DOTDOT_FEATURE_H
 #define EL__DOTDOT_FEATURE_H
@@ -153,7 +153,7 @@
  *
  * Default: enabled */
 
-#define URI_REWRITE
+#define CONFIG_URI_REWRITE
 
 
 
@@ -180,7 +180,7 @@
  *
  * Default: enabled */
 
-#define MAILCAP
+#define CONFIG_MAILCAP
 
 /*** Mimetypes File
  *
@@ -191,7 +191,7 @@
  *
  * Default: enabled */
 
-#define MIMETYPES
+#define CONFIG_MIMETYPES
 
 
 

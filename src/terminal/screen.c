@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.112 2003/10/19 18:12:18 jonas Exp $ */
+/* $Id: screen.c,v 1.113 2003/10/26 16:23:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -182,6 +182,8 @@ update_screen_driver(struct screen_driver *driver, struct option *term_spec)
 
 	if (utf8_io) {
 		driver->charsets[0] = get_opt_int_tree(term_spec, "charset");
+	} else {
+		driver->charsets[0] = -1;
 	}
 
 	if (driver->type == TERM_LINUX) {
@@ -200,12 +202,15 @@ update_screen_driver(struct screen_driver *driver, struct option *term_spec)
 		if (utf8_io) {
 			driver->frame = frame_vt100_u;
 			driver->charsets[1] = get_cp_index("cp437");
+		} else {
+			driver->frame = frame_vt100;
 		}
 
 	} else if (driver->type == TERM_KOI8) {
 		if (utf8_io) {
 			driver->charsets[1] = get_cp_index("koi8-r");
 		}
+
 	} else {
 		if (utf8_io) {
 			driver->charsets[1] = driver->charsets[0];

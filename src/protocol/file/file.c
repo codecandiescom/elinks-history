@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.129 2003/10/30 17:01:40 pasky Exp $ */
+/* $Id: file.c,v 1.130 2003/11/10 23:36:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -292,7 +292,7 @@ add_dir_entry(struct directory_entry *entry, struct string *page,
 		unsigned char buf[MAX_STR_LEN];
 		int readlen = readlink(entry->name, buf, MAX_STR_LEN);
 
-		if (readlen != MAX_STR_LEN) {
+		if (readlen > 0 && readlen != MAX_STR_LEN) {
 			buf[readlen] = '\0';
 			lnk = straconcat(" -> ", buf, NULL);
 		}

@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.14 2003/11/29 12:59:18 pasky Exp $ */
+/* $Id: header.c,v 1.15 2003/11/29 12:59:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,16 +40,12 @@ parse_http_header(unsigned char *head, unsigned char *item,
 			for (g = ++f; *g >= ' '; g++);
 			while (g > f && g[-1] == ' ') g--;
 
-			if (h) mem_free(h);
 			h = mem_alloc(g - f + 1);
 
 			if (h) {
 				memcpy(h, f, g - f);
 				h[g - f] = '\0';
-				if (ptr) {
-					*ptr = f;
-					break;
-				}
+				if (ptr) *ptr = f;
 				return h;
 			}
 		}
@@ -57,7 +53,7 @@ parse_http_header(unsigned char *head, unsigned char *item,
 cont:;
 		f--;
 	}
-	return h;
+	return NULL;
 }
 
 /* Extract the value of name part of the value of attribute content.

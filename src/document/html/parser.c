@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.115 2003/06/08 23:59:21 zas Exp $ */
+/* $Id: parser.c,v 1.116 2003/06/09 00:08:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,7 +46,8 @@ INIT_LIST_HEAD(html_stack);
  * Subsequent characters in the name may include letters, digits,
  * underscores, hyphens, and periods. They may not include white space
  * or other punctuation marks. */
-#define ATTR_CHAR(c) (isA(c) || (c) == '.')
+/* ":" was added for tag attribute like xml:lang="en" */
+#define ATTR_CHAR(c) (isA(c) || (c) == '.' || c == ':')
 
 #define TAG_END(e)  ((e)[0] == '>')
 #define TAG_END_XML(e) ((e)[0] == '/' && (e)[1] == '>')

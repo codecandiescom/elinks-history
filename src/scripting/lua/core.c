@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.171 2004/11/21 14:53:30 zas Exp $ */
+/* $Id: core.c,v 1.172 2004/11/22 06:28:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -339,8 +339,9 @@ struct lua_dlg_data {
 };
 
 static void
-dialog_run_lua(struct lua_dlg_data *data)
+dialog_run_lua(void *data_)
 {
+	struct lua_dlg_data *data = data_;
 	lua_State *s = data->state;
 	int err;
 
@@ -418,8 +419,9 @@ struct lua_xdialog_data {
 };
 
 static void
-xdialog_run_lua(struct lua_xdialog_data *data)
+xdialog_run_lua(void *data_)
 {
+	struct lua_xdialog_data *data = data_;
 	lua_State *s = data->state;
 	int err;
 	int i;

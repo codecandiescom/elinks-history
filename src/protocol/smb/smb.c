@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.23 2003/12/09 13:58:41 pasky Exp $ */
+/* $Id: smb.c,v 1.24 2003/12/09 13:59:17 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -60,6 +60,20 @@ struct smb_connection_info {
 };
 
 static void end_smb_connection(struct connection *conn);
+
+
+/* Return 0 if @conn->cache was set. */
+static int
+smb_get_cache(struct connection *conn)
+{
+	if (conn->cache) return 0;
+
+	conn->cache = get_cache_entry(struri(conn->uri));
+	if (conn->cache) return 0;
+
+	abort_conn_with_state(conn, S_OUT_OF_MEM);
+	return -1;
+}
 
 
 #define READ_SIZE	4096
@@ -140,20 +154,6 @@ static void
 smb_got_text(struct connection *conn)
 {
 	smb_read_text(conn, conn->socket);
-}
-
-
-/* Return 0 if @conn->cache was set. */
-static int
-smb_get_cache(struct connection *conn)
-{
-	if (conn->cache) return 0;
-
-	conn->cache = get_cache_entry(struri(conn->uri));
-	if (conn->cache) return 0;
-
-	abort_conn_with_state(conn, S_OUT_OF_MEM);
-	return -1;
 }
 
 

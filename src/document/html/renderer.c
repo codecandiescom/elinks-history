@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.131 2003/06/17 13:10:33 zas Exp $ */
+/* $Id: renderer.c,v 1.132 2003/06/17 13:18:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -829,20 +829,13 @@ end_format_change:
 
 process_link:
 	if (part->data
+	    && part->data->nlinks > 0
 	    && (last_link /*|| last_target*/ || last_image || last_form)
 	    && !xstrcmp(format.link, last_link)
 	    && !xstrcmp(format.target, last_target)
 	    && !xstrcmp(format.image, last_image)
 	    && format.form == last_form) {
 		link = &part->data->links[part->data->nlinks - 1];
-		if (!part->data->nlinks) { /* if this is occur,
-					      then link = &part->data->links[-1];
-					      it seems strange to me,
-					      shouldn't we move that test before previous
-					      line ? --Zas */
-			internal("no link");
-			goto no_link;
-		}
 		goto set_link;
 	} else {
 		if (last_link) mem_free(last_link);	/* !!! FIXME: optimize */

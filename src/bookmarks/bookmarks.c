@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.107 2004/01/02 18:37:56 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.108 2004/01/02 21:58:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -307,49 +307,10 @@ update_bookmark(struct bookmark *bm, unsigned char *title,
 		int title_size = strlen(title2) + 1;
 
 		orig_child = &bm->box_item->child;
-		b2 = mem_realloc(bm->box_item,
-				 sizeof(struct listbox_item)
-				 + title_size);
-		if (!b2) {
-			mem_free(title2);
-			if (url2) mem_free(url2);
-			return 0;
-		}
 
 		mem_free(bm->title);
 		bm->title = title2;
-
-		if (b2 != bm->box_item) {
-			struct listbox_item *item;
-			struct listbox_data *box;
-
-			/* We are being relocated, so update everything. */
-			b2->next->prev = b2;
-			b2->prev->next = b2;
-			foreach (box, bookmark_browser.boxes) {
-				if (box->sel == bm->box_item) box->sel = b2;
-				if (box->top == bm->box_item) box->top = b2;
-			}
-
-			if (b2->child.next == orig_child) {
-				b2->child.next = &b2->child;
-				b2->child.prev = &b2->child;
-			} else {
-				((struct list_head *) b2->child.next)->prev = &b2->child;
-				((struct list_head *) b2->child.prev)->next = &b2->child;
-			}
-
-			foreach (item, b2->child) {
-				item->root = b2;
-			}
-
-			bm->box_item = b2;
-			bm->box_item->text =
-				((unsigned char *) bm->box_item
-				 + sizeof(struct listbox_item));
-		}
-
-		memcpy(bm->box_item->text, bm->title, title_size);
+		bm->box_item->text = bm->title;
 	}
 
 	if (url2) {

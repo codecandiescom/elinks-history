@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-12-23 13:37+0100\n"
-"PO-Revision-Date: 2003-12-22 04:40+0100\n"
+"PO-Revision-Date: 2003-12-23 15:18+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -4705,138 +4705,132 @@ msgid "Global History"
 msgstr "Globální historie"
 
 #: src/intl/gettext/libintl.c:24
-#, fuzzy
 msgid "System"
-msgstr "Rychlá pamì»"
+msgstr "Systémový"
 
 #: src/intl/gettext/libintl.c:25
 msgid "English"
-msgstr ""
+msgstr "Angliètina"
 
 #: src/intl/gettext/libintl.c:27
 msgid "Belarusian"
-msgstr ""
+msgstr "Bìloru¹tina"
 
 #: src/intl/gettext/libintl.c:28
 msgid "Brazilian Portuguese"
-msgstr ""
+msgstr "Brazilská portugal¹tina"
 
 #: src/intl/gettext/libintl.c:29
 msgid "Bulgarian"
-msgstr ""
+msgstr "Bulhar¹tina"
 
 #: src/intl/gettext/libintl.c:30
 msgid "Catalan"
-msgstr ""
+msgstr "Katalán¹tina"
 
 #: src/intl/gettext/libintl.c:31
-#, fuzzy
 msgid "Croatian"
-msgstr "Délka trvání"
+msgstr "Chorvat¹tina"
 
 #: src/intl/gettext/libintl.c:32
-#, fuzzy
 msgid "Czech"
-msgstr "Cache"
+msgstr "Èe¹tina"
 
 #: src/intl/gettext/libintl.c:33
 msgid "Danish"
-msgstr ""
+msgstr "Dán¹tina"
 
 #: src/intl/gettext/libintl.c:34
 msgid "Dutch"
-msgstr ""
+msgstr "Holand¹tina"
 
 #: src/intl/gettext/libintl.c:35
 msgid "Estonian"
-msgstr ""
+msgstr "Eston¹tina"
 
 #: src/intl/gettext/libintl.c:36
 msgid "Finnish"
-msgstr ""
+msgstr "Fin¹tina"
 
 #: src/intl/gettext/libintl.c:37
 msgid "French"
-msgstr ""
+msgstr "Francouz¹tina"
 
 #: src/intl/gettext/libintl.c:38
 msgid "Galician"
-msgstr ""
+msgstr "Gal¹tina"
 
 #: src/intl/gettext/libintl.c:39
 msgid "German"
-msgstr ""
+msgstr "Nìmèina"
 
 #: src/intl/gettext/libintl.c:40
 msgid "Greek"
-msgstr ""
+msgstr "Øeètina"
 
 #: src/intl/gettext/libintl.c:41
 msgid "Hungarian"
-msgstr ""
+msgstr "Maïar¹tina"
 
 #: src/intl/gettext/libintl.c:42
 msgid "Icelandic"
-msgstr ""
+msgstr "Island¹tina"
 
 #: src/intl/gettext/libintl.c:43
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonés¹tina"
 
 #: src/intl/gettext/libintl.c:44
 msgid "Italian"
-msgstr ""
+msgstr "Ital¹tina"
 
 #: src/intl/gettext/libintl.c:45
-#, fuzzy
 msgid "Leet"
-msgstr "Odmítnout"
+msgstr "L33t"
 
 #: src/intl/gettext/libintl.c:46
 msgid "Lithuanian"
-msgstr ""
+msgstr "Litev¹tina"
 
 #: src/intl/gettext/libintl.c:47
 msgid "Norwegian"
-msgstr ""
+msgstr "Nor¹tina"
 
 #: src/intl/gettext/libintl.c:48
-#, fuzzy
 msgid "Polish"
-msgstr "Politika"
+msgstr "Pol¹tina"
 
 #: src/intl/gettext/libintl.c:49
 msgid "Portuguese"
-msgstr ""
+msgstr "Portugal¹tina"
 
 #: src/intl/gettext/libintl.c:50
-#, fuzzy
 msgid "Romanian"
-msgstr "Doména"
+msgstr "Rumun¹tina"
 
 #: src/intl/gettext/libintl.c:51
 msgid "Russian"
-msgstr ""
+msgstr "Ru¹tina"
 
 #: src/intl/gettext/libintl.c:52
 msgid "Slovak"
-msgstr ""
+msgstr "Sloven¹tina"
 
 #: src/intl/gettext/libintl.c:53
 msgid "Spanish"
-msgstr ""
+msgstr "©panìl¹tina"
 
 #: src/intl/gettext/libintl.c:54
 msgid "Swedish"
-msgstr ""
+msgstr "©véd¹tina"
 
 #: src/intl/gettext/libintl.c:55
 msgid "Turkish"
-msgstr ""
+msgstr "Tureètina"
 
 #: src/intl/gettext/libintl.c:56
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukrajin¹tina"
 
 #: src/lowlevel/home.c:121
 #, c-format

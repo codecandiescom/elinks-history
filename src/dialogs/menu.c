@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.347 2004/07/14 22:16:14 zas Exp $ */
+/* $Id: menu.c,v 1.348 2004/07/15 07:30:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,10 +194,9 @@ history_menu_model(unhistory_menu, next);
 
 
 void
-tab_menu(struct terminal *term, void *tab_, struct session *ses)
+tab_menu(struct terminal *term, struct window *tab, struct session *ses)
 {
 	struct menu_item *menu;
-	struct window *tab = tab_;
 	int tabs = number_of_tabs(term);
 	int i = 0;
 #ifdef CONFIG_BOOKMARKS

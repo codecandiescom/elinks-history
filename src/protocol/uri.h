@@ -1,9 +1,9 @@
-/* $Id: uri.h,v 1.48 2003/12/01 14:10:10 pasky Exp $ */
+/* $Id: uri.h,v 1.49 2003/12/01 14:10:38 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
 
-#include "util/string.h"
+struct string;
 
 #define POST_CHAR 1
 

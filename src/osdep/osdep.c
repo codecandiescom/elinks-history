@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.106 2003/10/27 02:04:50 pasky Exp $ */
+/* $Id: osdep.c,v 1.107 2003/10/27 02:08:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,14 +231,6 @@ is_xterm(void)
 	}
 
 	return xt;
-}
-
-#elif defined(RISCOS)
-
-int
-is_xterm(void)
-{
-       return 1;
 }
 
 #endif

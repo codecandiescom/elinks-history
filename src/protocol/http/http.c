@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.49 2002/09/12 12:50:20 zas Exp $ */
+/* $Id: http.c,v 1.50 2002/09/12 13:00:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -784,8 +784,8 @@ next_chunk:
 			if (l) {
 				if (l == -1) {
 					/* Invalid character in buffer. */
-					setcstate(conn, S_HTTP_ERROR);
-					abort_connection(conn);
+					abort_conn_with_state(conn,
+							      S_HTTP_ERROR);
 					return;
 				}
 
@@ -809,8 +809,7 @@ next_chunk:
 					n = strtol(rb->data, (char **)&de, 16);
 
 				if (l == -1 || de == rb->data) {
-					setcstate(conn, S_HTTP_ERROR);
-					abort_connection(conn);
+					abort_conn_with_state(conn, S_HTTP_ERROR);
 					return;
 				}
 

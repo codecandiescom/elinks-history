@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.42 2002/09/12 12:37:59 zas Exp $ */
+/* $Id: sched.c,v 1.43 2002/09/12 13:00:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -993,10 +993,8 @@ change_connection(struct status *oldstat, struct status *newstat,
 		newstat->ce = c->cache;
 	}
 
-	if (c->detached && !newstat) {
-		setcstate(c, S_INTERRUPTED);
-		abort_connection(c);
-	}
+	if (c->detached && !newstat)
+		abort_conn_with_state(c, S_INTERRUPTED);
 
 	sort_queue();
 
@@ -1126,10 +1124,10 @@ abort_background_connections()
 				return;
 		}
 
-		if (getpri(c) >= PRI_CANCEL) {
-			setcstate(c, S_INTERRUPTED);
-			abort_connection(c);
-		} else i++;
+		if (getpri(c) >= PRI_CANCEL)
+			abort_conn_with_state(c, S_INTERRUPTED);
+		else
+			i++;
 	}
 }
 

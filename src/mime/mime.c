@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.6 2003/06/04 19:26:22 jonas Exp $ */
+/* $Id: mime.c,v 1.7 2003/06/05 14:23:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,13 +20,13 @@
 #include "util/string.h"
 
 void
-init_mime()
+init_mime(void)
 {
 	init_mime_backends();
 }
 
 void
-done_mime()
+done_mime(void)
 {
 	done_mime_backends();
 }

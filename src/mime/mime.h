@@ -1,4 +1,4 @@
-/* $Id: mime.h,v 1.2 2003/06/04 19:26:22 jonas Exp $ */
+/* $Id: mime.h,v 1.3 2003/06/05 14:23:54 zas Exp $ */
 
 #ifndef EL__MIME_MIME_H
 #define EL__MIME_MIME_H
@@ -19,8 +19,8 @@ struct mime_handler {
 };
 
 /* Start up and teardown of mime system. */
-void init_mime();
-void done_mime();
+void init_mime(void);
+void done_mime(void);
 
 /* Guess content type of the document. Either from the (http) @header or
  * using the @uri (extension). */

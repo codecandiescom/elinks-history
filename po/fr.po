@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-10-09 11:38+0200\n"
+"POT-Creation-Date: 2003-10-12 00:03+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -38,17 +38,17 @@ msgstr "Saisir un nombre"
 #: src/dialogs/menu.c:613 src/dialogs/mime.c:251 src/dialogs/options.c:261
 #: src/dialogs/options.c:356 src/globhist/dialogs.c:246
 #: src/globhist/dialogs.c:425 src/protocol/protocol.c:60
-#: src/protocol/user.c:156 src/protocol/user.c:172 src/sched/download.c:531
-#: src/sched/download.c:613 src/sched/download.c:638 src/sched/download.c:860
+#: src/protocol/user.c:156 src/protocol/user.c:172 src/sched/download.c:532
+#: src/sched/download.c:614 src/sched/download.c:639 src/sched/download.c:861
 #: src/sched/error.c:40 src/sched/session.c:392 src/sched/session.c:1172
 #: src/sched/session.c:1189 src/sched/session.c:1213
 #: src/scripting/lua/core.c:478 src/scripting/lua/core.c:620
 #: src/scripting/lua/core.c:729 src/scripting/lua/core.c:850
-#: src/viewer/text/form.c:667 src/viewer/text/search.c:828
-#: src/viewer/text/search.c:853 src/viewer/text/search.c:874
-#: src/viewer/text/search.c:1157 src/viewer/text/search.c:1168
-#: src/viewer/text/textarea.c:269 src/viewer/text/view.c:745
-#: src/viewer/text/view.c:1463
+#: src/viewer/text/form.c:667 src/viewer/text/search.c:834
+#: src/viewer/text/search.c:858 src/viewer/text/search.c:864
+#: src/viewer/text/search.c:887 src/viewer/text/search.c:1170
+#: src/viewer/text/search.c:1181 src/viewer/text/textarea.c:269
+#: src/viewer/text/view.c:745 src/viewer/text/view.c:1463
 msgid "OK"
 msgstr "OK"
 
@@ -99,11 +99,11 @@ msgstr "Nom du dossier"
 #: src/config/dialogs.c:736 src/dialogs/auth.c:165 src/dialogs/edit.c:173
 #: src/dialogs/menu.c:576 src/dialogs/menu.c:587 src/dialogs/menu.c:613
 #: src/dialogs/mime.c:255 src/dialogs/options.c:263 src/dialogs/options.c:361
-#: src/sched/download.c:776 src/sched/download.c:1254
-#: src/sched/download.c:1263 src/sched/download.c:1290
-#: src/sched/download.c:1302 src/scripting/lua/core.c:482
+#: src/sched/download.c:777 src/sched/download.c:1255
+#: src/sched/download.c:1264 src/sched/download.c:1291
+#: src/sched/download.c:1303 src/scripting/lua/core.c:482
 #: src/scripting/lua/core.c:625 src/scripting/lua/core.c:850
-#: src/viewer/text/search.c:1157 src/viewer/text/search.c:1168
+#: src/viewer/text/search.c:1170 src/viewer/text/search.c:1181
 #: src/viewer/text/view.c:745
 msgid "Cancel"
 msgstr "Annuler"
@@ -206,8 +206,9 @@ msgid "Add"
 msgstr "Ajouter"
 
 #: src/bookmarks/dialogs.c:643 src/globhist/dialogs.c:487
-#: src/viewer/text/search.c:825 src/viewer/text/search.c:850
-#: src/viewer/text/search.c:870 src/viewer/text/search.c:1167
+#: src/viewer/text/search.c:831 src/viewer/text/search.c:855
+#: src/viewer/text/search.c:861 src/viewer/text/search.c:883
+#: src/viewer/text/search.c:1180
 msgid "Search"
 msgstr "Chercher"
 
@@ -360,7 +361,7 @@ msgid "Options manager"
 msgstr "Gestion des options"
 
 #: src/config/dialogs.c:536 src/config/dialogs.c:790 src/dialogs/options.c:262
-#: src/sched/download.c:1252 src/sched/download.c:1288
+#: src/sched/download.c:1253 src/sched/download.c:1289
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -4121,7 +4122,7 @@ msgstr "Entrez l'URL"
 msgid "Save URL"
 msgstr "Enregistrer l'URL"
 
-#: src/dialogs/menu.c:612 src/sched/download.c:428 src/sched/download.c:635
+#: src/dialogs/menu.c:612 src/sched/download.c:429 src/sched/download.c:636
 msgid "Download"
 msgstr "Téléchargement"
 
@@ -4414,60 +4415,60 @@ msgstr "Aucun programme spécifié pour le protocole %s."
 #. FIXME: The following is a PITA from the l10n standpoint. A *big*
 #. * one, _("of")-like pearls are a nightmare. Format strings need to
 #. * be introduced to this fuggy corner of code as well. --pasky
-#: src/sched/download.c:217 src/sched/session.c:89
+#: src/sched/download.c:218 src/sched/session.c:89
 msgid "Received"
 msgstr "Réception"
 
-#: src/sched/download.c:223 src/sched/session.c:94
+#: src/sched/download.c:224 src/sched/session.c:94
 msgid "of"
 msgstr "sur"
 
-#: src/sched/download.c:233
+#: src/sched/download.c:234
 msgid "after resume"
 msgstr "après reprise"
 
-#: src/sched/download.c:239
+#: src/sched/download.c:240
 msgid "Average speed"
 msgstr "Vitesse moyenne"
 
-#: src/sched/download.c:241
+#: src/sched/download.c:242
 msgid "Speed"
 msgstr "Vitesse"
 
-#: src/sched/download.c:250
+#: src/sched/download.c:251
 msgid "current speed"
 msgstr "vitesse actuelle"
 
-#: src/sched/download.c:259
+#: src/sched/download.c:260
 msgid "Elapsed time"
 msgstr "Temps écoulé"
 
-#: src/sched/download.c:265
+#: src/sched/download.c:266
 msgid "estimated time"
 msgstr "temps restant estimé"
 
-#: src/sched/download.c:437
+#: src/sched/download.c:438
 msgid "Background"
 msgstr "Arrière-plan"
 
-#: src/sched/download.c:442
+#: src/sched/download.c:443
 msgid "Background with notify"
 msgstr "Arrière-plan et notifier"
 
-#: src/sched/download.c:447
+#: src/sched/download.c:448
 msgid "Abort"
 msgstr "Annuler"
 
-#: src/sched/download.c:528 src/sched/download.c:610 src/sched/download.c:856
+#: src/sched/download.c:529 src/sched/download.c:611 src/sched/download.c:857
 msgid "Download error"
 msgstr "Erreur de téléchargement"
 
-#: src/sched/download.c:529
+#: src/sched/download.c:530
 #, c-format
 msgid "Could not create file %s: %s"
 msgstr "Impossible de créer le fichier %s: %s"
 
-#: src/sched/download.c:611
+#: src/sched/download.c:612
 #, c-format
 msgid ""
 "Error downloading %s:\n"
@@ -4478,7 +4479,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/sched/download.c:636
+#: src/sched/download.c:637
 #, c-format
 msgid ""
 "Download complete:\n"
@@ -4487,11 +4488,11 @@ msgstr ""
 "Téléchargement terminé:\n"
 "%s"
 
-#: src/sched/download.c:765
+#: src/sched/download.c:766
 msgid "File exists"
 msgstr "Fichier existant"
 
-#: src/sched/download.c:766
+#: src/sched/download.c:767
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -4506,19 +4507,19 @@ msgstr ""
 "Le nom alternatif est:\n"
 "%s"
 
-#: src/sched/download.c:773
+#: src/sched/download.c:774
 msgid "Save under the alternative name"
 msgstr "Sauver sous un nom différent"
 
-#: src/sched/download.c:774
+#: src/sched/download.c:775
 msgid "Overwrite the original file"
 msgstr "Ecraser le fichier original"
 
-#: src/sched/download.c:775
+#: src/sched/download.c:776
 msgid "Resume download of the original file"
 msgstr "Reprendre le téléchargement du fichier original"
 
-#: src/sched/download.c:857
+#: src/sched/download.c:858
 #, c-format
 msgid ""
 "Could not create file '%s':\n"
@@ -4527,30 +4528,30 @@ msgstr ""
 "Impossible de créer le fichier '%s':\n"
 "%s"
 
-#: src/sched/download.c:1246 src/sched/download.c:1257
+#: src/sched/download.c:1247 src/sched/download.c:1258
 msgid "Unknown type"
 msgstr "Type inconnu"
 
-#: src/sched/download.c:1247
+#: src/sched/download.c:1248
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr "Voulez-vous sauvegarder le fichier '%s' (type: %s) ou le visualiser?"
 
-#: src/sched/download.c:1253 src/sched/download.c:1262
-#: src/sched/download.c:1289 src/sched/download.c:1301
+#: src/sched/download.c:1254 src/sched/download.c:1263
+#: src/sched/download.c:1290 src/sched/download.c:1302
 msgid "Display"
 msgstr "Afficher"
 
-#: src/sched/download.c:1258
+#: src/sched/download.c:1259
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr "Voulez-vous visualiser le fichier '%s' (type: %s)?"
 
-#: src/sched/download.c:1280 src/sched/download.c:1293
+#: src/sched/download.c:1281 src/sched/download.c:1294
 msgid "What to do?"
 msgstr "Que faire ?"
 
-#: src/sched/download.c:1281
+#: src/sched/download.c:1282
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -4559,11 +4560,11 @@ msgstr ""
 "Voulez-vous ouvrir le fichier '%s' (type: %s%s%s)\n"
 "avec '%s', l'enregistrer ou l'afficher ?"
 
-#: src/sched/download.c:1287 src/sched/download.c:1300
+#: src/sched/download.c:1288 src/sched/download.c:1301
 msgid "Open"
 msgstr "Ouvrir"
 
-#: src/sched/download.c:1294
+#: src/sched/download.c:1295
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -5024,44 +5025,48 @@ msgstr "Envoi à"
 msgid "post to"
 msgstr "Transfert à"
 
-#: src/viewer/text/search.c:826
+#: src/viewer/text/search.c:832
 msgid "No previous search"
 msgstr "Aucune clef de recherche"
 
-#: src/viewer/text/search.c:851
+#: src/viewer/text/search.c:856
 msgid "Search hit bottom, continuing at top."
 msgstr "La recherche a atteint le bas du document, poursuite à partir du haut."
 
-#: src/viewer/text/search.c:871
+#: src/viewer/text/search.c:862
+msgid "Search hit top, continuing at bottom."
+msgstr "La recherche a atteint le haut du document, poursuite à partir du bas."
+
+#: src/viewer/text/search.c:884
 #, c-format
 msgid "Search string '%s' not found"
 msgstr "Chaîne recherchée '%s' introuvable"
 
-#: src/viewer/text/search.c:899
+#: src/viewer/text/search.c:912
 msgid "Normal search"
 msgstr "Recherche plein texte"
 
-#: src/viewer/text/search.c:900
+#: src/viewer/text/search.c:913
 msgid "Regexp search"
 msgstr "Recherche par expression régulière"
 
-#: src/viewer/text/search.c:901
+#: src/viewer/text/search.c:914
 msgid "Extended regexp search"
 msgstr "Recherche par expression régulière étendue"
 
-#: src/viewer/text/search.c:906
+#: src/viewer/text/search.c:919
 msgid "Case sensitive"
 msgstr "Respecter la casse"
 
-#: src/viewer/text/search.c:907
+#: src/viewer/text/search.c:920
 msgid "Case insensitive"
 msgstr "Ignorer la casse"
 
-#: src/viewer/text/search.c:1156
+#: src/viewer/text/search.c:1169
 msgid "Search backward"
 msgstr "Chercher en arrière"
 
-#: src/viewer/text/search.c:1156 src/viewer/text/search.c:1167
+#: src/viewer/text/search.c:1169 src/viewer/text/search.c:1180
 msgid "Search for text"
 msgstr "Recherche du texte"
 

@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-10-07 10:24+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-10-12 00:03+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Ionel Mugurel Ciobica <I.M.Ciobica@TUe.nl>\n"
 "Language-Team: Romanian <translation-team-ro@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-16\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/inpfield.c:43 src/bfu/inpfield.c:52
 msgid "Bad number"
@@ -38,15 +38,16 @@ msgstr "Numãr aºteptat în acest cîmp"
 #: src/dialogs/menu.c:613 src/dialogs/mime.c:251 src/dialogs/options.c:261
 #: src/dialogs/options.c:356 src/globhist/dialogs.c:246
 #: src/globhist/dialogs.c:425 src/protocol/protocol.c:60
-#: src/protocol/user.c:156 src/protocol/user.c:172 src/sched/download.c:513
-#: src/sched/download.c:595 src/sched/download.c:620 src/sched/download.c:842
+#: src/protocol/user.c:156 src/protocol/user.c:172 src/sched/download.c:532
+#: src/sched/download.c:614 src/sched/download.c:639 src/sched/download.c:861
 #: src/sched/error.c:40 src/sched/session.c:392 src/sched/session.c:1172
 #: src/sched/session.c:1189 src/sched/session.c:1213
 #: src/scripting/lua/core.c:478 src/scripting/lua/core.c:620
 #: src/scripting/lua/core.c:729 src/scripting/lua/core.c:850
-#: src/viewer/text/form.c:667 src/viewer/text/search.c:815
-#: src/viewer/text/search.c:854 src/viewer/text/search.c:1137
-#: src/viewer/text/search.c:1148 src/viewer/text/textarea.c:269
+#: src/viewer/text/form.c:667 src/viewer/text/search.c:834
+#: src/viewer/text/search.c:858 src/viewer/text/search.c:864
+#: src/viewer/text/search.c:887 src/viewer/text/search.c:1170
+#: src/viewer/text/search.c:1181 src/viewer/text/textarea.c:269
 #: src/viewer/text/view.c:745 src/viewer/text/view.c:1463
 msgid "OK"
 msgstr "Bine"
@@ -96,11 +97,11 @@ msgstr ""
 #: src/config/dialogs.c:736 src/dialogs/auth.c:165 src/dialogs/edit.c:173
 #: src/dialogs/menu.c:576 src/dialogs/menu.c:587 src/dialogs/menu.c:613
 #: src/dialogs/mime.c:255 src/dialogs/options.c:263 src/dialogs/options.c:361
-#: src/sched/download.c:758 src/sched/download.c:1236
-#: src/sched/download.c:1245 src/sched/download.c:1272
-#: src/sched/download.c:1284 src/scripting/lua/core.c:482
+#: src/sched/download.c:777 src/sched/download.c:1255
+#: src/sched/download.c:1264 src/sched/download.c:1291
+#: src/sched/download.c:1303 src/scripting/lua/core.c:482
 #: src/scripting/lua/core.c:625 src/scripting/lua/core.c:850
-#: src/viewer/text/search.c:1137 src/viewer/text/search.c:1148
+#: src/viewer/text/search.c:1170 src/viewer/text/search.c:1181
 #: src/viewer/text/view.c:745
 msgid "Cancel"
 msgstr "Anuleazã"
@@ -193,8 +194,9 @@ msgid "Add"
 msgstr "Adaugã"
 
 #: src/bookmarks/dialogs.c:643 src/globhist/dialogs.c:487
-#: src/viewer/text/search.c:812 src/viewer/text/search.c:850
-#: src/viewer/text/search.c:1147
+#: src/viewer/text/search.c:831 src/viewer/text/search.c:855
+#: src/viewer/text/search.c:861 src/viewer/text/search.c:883
+#: src/viewer/text/search.c:1180
 msgid "Search"
 msgstr "Cautã"
 
@@ -337,7 +339,7 @@ msgid "Options manager"
 msgstr ""
 
 #: src/config/dialogs.c:536 src/config/dialogs.c:790 src/dialogs/options.c:262
-#: src/sched/download.c:1234 src/sched/download.c:1270
+#: src/sched/download.c:1253 src/sched/download.c:1289
 msgid "Save"
 msgstr "Salveazã"
 
@@ -3174,7 +3176,7 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:2809
-msgid "Set config dir to given string."
+msgid "Set config dir to given string"
 msgstr ""
 
 #: src/config/options.c:2811
@@ -3859,7 +3861,7 @@ msgstr "Intrã URL"
 msgid "Save URL"
 msgstr "Salveazã URL"
 
-#: src/dialogs/menu.c:612 src/sched/download.c:410 src/sched/download.c:617
+#: src/dialogs/menu.c:612 src/sched/download.c:429 src/sched/download.c:636
 msgid "Download"
 msgstr "Încarcã"
 
@@ -4136,60 +4138,60 @@ msgstr "Program nespecificat pentru"
 #. FIXME: The following is a PITA from the l10n standpoint. A *big*
 #. * one, _("of")-like pearls are a nightmare. Format strings need to
 #. * be introduced to this fuggy corner of code as well. --pasky
-#: src/sched/download.c:217 src/sched/session.c:89
+#: src/sched/download.c:218 src/sched/session.c:89
 msgid "Received"
 msgstr "Primite"
 
-#: src/sched/download.c:223 src/sched/session.c:94
+#: src/sched/download.c:224 src/sched/session.c:94
 msgid "of"
 msgstr "Din"
 
-#: src/sched/download.c:233
+#: src/sched/download.c:234
 msgid "after resume"
 msgstr ""
 
-#: src/sched/download.c:239
+#: src/sched/download.c:240
 msgid "Average speed"
 msgstr "Viteza medie"
 
-#: src/sched/download.c:241
+#: src/sched/download.c:242
 msgid "Speed"
 msgstr "Viteza"
 
-#: src/sched/download.c:250
+#: src/sched/download.c:251
 msgid "current speed"
 msgstr "Viteza curentã"
 
-#: src/sched/download.c:259
+#: src/sched/download.c:260
 msgid "Elapsed time"
 msgstr "Elapsed time"
 
-#: src/sched/download.c:265
+#: src/sched/download.c:266
 msgid "estimated time"
 msgstr "Timp estimat"
 
-#: src/sched/download.c:419
+#: src/sched/download.c:438
 msgid "Background"
 msgstr "Fundal"
 
-#: src/sched/download.c:424
+#: src/sched/download.c:443
 msgid "Background with notify"
 msgstr ""
 
-#: src/sched/download.c:429
+#: src/sched/download.c:448
 msgid "Abort"
 msgstr "Anuleazã"
 
-#: src/sched/download.c:510 src/sched/download.c:592 src/sched/download.c:838
+#: src/sched/download.c:529 src/sched/download.c:611 src/sched/download.c:857
 msgid "Download error"
 msgstr "Eroare la descãrcare"
 
-#: src/sched/download.c:511
+#: src/sched/download.c:530
 #, fuzzy, c-format
 msgid "Could not create file %s: %s"
 msgstr "Nu s-a putut crea fiºierul"
 
-#: src/sched/download.c:593
+#: src/sched/download.c:612
 #, fuzzy, c-format
 msgid ""
 "Error downloading %s:\n"
@@ -4197,19 +4199,19 @@ msgid ""
 "%s"
 msgstr "Eroare la descãrcare"
 
-#: src/sched/download.c:618
+#: src/sched/download.c:637
 #, fuzzy, c-format
 msgid ""
 "Download complete:\n"
 "%s"
 msgstr "Descarcã ima~ginea"
 
-#: src/sched/download.c:747
+#: src/sched/download.c:766
 #, fuzzy
 msgid "File exists"
 msgstr "~Extensia fiºierelor"
 
-#: src/sched/download.c:748
+#: src/sched/download.c:767
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -4219,60 +4221,60 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/sched/download.c:755
+#: src/sched/download.c:774
 msgid "Save under the alternative name"
 msgstr ""
 
-#: src/sched/download.c:756
+#: src/sched/download.c:775
 msgid "Overwrite the original file"
 msgstr ""
 
-#: src/sched/download.c:757
+#: src/sched/download.c:776
 msgid "Resume download of the original file"
 msgstr ""
 
-#: src/sched/download.c:839
+#: src/sched/download.c:858
 #, fuzzy, c-format
 msgid ""
 "Could not create file '%s':\n"
 "%s"
 msgstr "Nu s-a putut crea fiºierul"
 
-#: src/sched/download.c:1228 src/sched/download.c:1239
+#: src/sched/download.c:1247 src/sched/download.c:1258
 msgid "Unknown type"
 msgstr "Tip necunoscut"
 
-#: src/sched/download.c:1229
+#: src/sched/download.c:1248
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr ""
 
-#: src/sched/download.c:1235 src/sched/download.c:1244
-#: src/sched/download.c:1271 src/sched/download.c:1283
+#: src/sched/download.c:1254 src/sched/download.c:1263
+#: src/sched/download.c:1290 src/sched/download.c:1302
 msgid "Display"
 msgstr "Aratã"
 
-#: src/sched/download.c:1240
+#: src/sched/download.c:1259
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr ""
 
-#: src/sched/download.c:1262 src/sched/download.c:1275
+#: src/sched/download.c:1281 src/sched/download.c:1294
 msgid "What to do?"
 msgstr "Ce sã fac?"
 
-#: src/sched/download.c:1263
+#: src/sched/download.c:1282
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', save it or display it?"
 msgstr ""
 
-#: src/sched/download.c:1269 src/sched/download.c:1282
+#: src/sched/download.c:1288 src/sched/download.c:1301
 msgid "Open"
 msgstr "Deschide"
 
-#: src/sched/download.c:1276
+#: src/sched/download.c:1295
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -4722,41 +4724,49 @@ msgstr "Trimite la"
 msgid "post to"
 msgstr "Posteazã cãtre"
 
-#: src/viewer/text/search.c:813
+#: src/viewer/text/search.c:832
 msgid "No previous search"
 msgstr "Nu existã cãutãri anterioare"
 
-#: src/viewer/text/search.c:851
+#: src/viewer/text/search.c:856
+msgid "Search hit bottom, continuing at top."
+msgstr ""
+
+#: src/viewer/text/search.c:862
+msgid "Search hit top, continuing at bottom."
+msgstr ""
+
+#: src/viewer/text/search.c:884
 #, fuzzy, c-format
 msgid "Search string '%s' not found"
 msgstr "ªirul de cãutare nu existã"
 
-#: src/viewer/text/search.c:879
+#: src/viewer/text/search.c:912
 #, fuzzy
 msgid "Normal search"
 msgstr "Nu existã cãutãri anterioare"
 
-#: src/viewer/text/search.c:880
+#: src/viewer/text/search.c:913
 msgid "Regexp search"
 msgstr ""
 
-#: src/viewer/text/search.c:881
+#: src/viewer/text/search.c:914
 msgid "Extended regexp search"
 msgstr ""
 
-#: src/viewer/text/search.c:886
+#: src/viewer/text/search.c:919
 msgid "Case sensitive"
 msgstr ""
 
-#: src/viewer/text/search.c:887
+#: src/viewer/text/search.c:920
 msgid "Case insensitive"
 msgstr ""
 
-#: src/viewer/text/search.c:1136
+#: src/viewer/text/search.c:1169
 msgid "Search backward"
 msgstr "Cautã înapoi"
 
-#: src/viewer/text/search.c:1136 src/viewer/text/search.c:1147
+#: src/viewer/text/search.c:1169 src/viewer/text/search.c:1180
 msgid "Search for text"
 msgstr "Cautã pentru text"
 

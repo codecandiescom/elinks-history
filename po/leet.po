@@ -3,14 +3,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre1.CVS\n"
-"POT-Creation-Date: 2003-10-07 10:24+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-10-12 00:03+0200\n"
 "PO-Revision-Date: 2003-06-20 16:45+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: |=|4x0rs Un173\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/inpfield.c:43 src/bfu/inpfield.c:52
 msgid "Bad number"
@@ -36,15 +36,16 @@ msgstr "|\\|u|V|B3R 3><P3(73|) 1N |=i3|D"
 #: src/dialogs/menu.c:613 src/dialogs/mime.c:251 src/dialogs/options.c:261
 #: src/dialogs/options.c:356 src/globhist/dialogs.c:246
 #: src/globhist/dialogs.c:425 src/protocol/protocol.c:60
-#: src/protocol/user.c:156 src/protocol/user.c:172 src/sched/download.c:513
-#: src/sched/download.c:595 src/sched/download.c:620 src/sched/download.c:842
+#: src/protocol/user.c:156 src/protocol/user.c:172 src/sched/download.c:532
+#: src/sched/download.c:614 src/sched/download.c:639 src/sched/download.c:861
 #: src/sched/error.c:40 src/sched/session.c:392 src/sched/session.c:1172
 #: src/sched/session.c:1189 src/sched/session.c:1213
 #: src/scripting/lua/core.c:478 src/scripting/lua/core.c:620
 #: src/scripting/lua/core.c:729 src/scripting/lua/core.c:850
-#: src/viewer/text/form.c:667 src/viewer/text/search.c:815
-#: src/viewer/text/search.c:854 src/viewer/text/search.c:1137
-#: src/viewer/text/search.c:1148 src/viewer/text/textarea.c:269
+#: src/viewer/text/form.c:667 src/viewer/text/search.c:834
+#: src/viewer/text/search.c:858 src/viewer/text/search.c:864
+#: src/viewer/text/search.c:887 src/viewer/text/search.c:1170
+#: src/viewer/text/search.c:1181 src/viewer/text/textarea.c:269
 #: src/viewer/text/view.c:745 src/viewer/text/view.c:1463
 msgid "OK"
 msgstr "0|<"
@@ -96,11 +97,11 @@ msgstr "f0|D4R |\\|4|V|3"
 #: src/config/dialogs.c:736 src/dialogs/auth.c:165 src/dialogs/edit.c:173
 #: src/dialogs/menu.c:576 src/dialogs/menu.c:587 src/dialogs/menu.c:613
 #: src/dialogs/mime.c:255 src/dialogs/options.c:263 src/dialogs/options.c:361
-#: src/sched/download.c:758 src/sched/download.c:1236
-#: src/sched/download.c:1245 src/sched/download.c:1272
-#: src/sched/download.c:1284 src/scripting/lua/core.c:482
+#: src/sched/download.c:777 src/sched/download.c:1255
+#: src/sched/download.c:1264 src/sched/download.c:1291
+#: src/sched/download.c:1303 src/scripting/lua/core.c:482
 #: src/scripting/lua/core.c:625 src/scripting/lua/core.c:850
-#: src/viewer/text/search.c:1137 src/viewer/text/search.c:1148
+#: src/viewer/text/search.c:1170 src/viewer/text/search.c:1181
 #: src/viewer/text/view.c:745
 msgid "Cancel"
 msgstr "(4N(3|"
@@ -203,8 +204,9 @@ msgid "Add"
 msgstr "4|)|)"
 
 #: src/bookmarks/dialogs.c:643 src/globhist/dialogs.c:487
-#: src/viewer/text/search.c:812 src/viewer/text/search.c:850
-#: src/viewer/text/search.c:1147
+#: src/viewer/text/search.c:831 src/viewer/text/search.c:855
+#: src/viewer/text/search.c:861 src/viewer/text/search.c:883
+#: src/viewer/text/search.c:1180
 msgid "Search"
 msgstr "534R(H"
 
@@ -356,7 +358,7 @@ msgid "Options manager"
 msgstr "0P710|\\|5 |\\/|4N493|2"
 
 #: src/config/dialogs.c:536 src/config/dialogs.c:790 src/dialogs/options.c:262
-#: src/sched/download.c:1234 src/sched/download.c:1270
+#: src/sched/download.c:1253 src/sched/download.c:1289
 msgid "Save"
 msgstr "54\\/3"
 
@@ -3385,7 +3387,7 @@ msgstr ""
 "This is internal ELinks option, you don't want to use it."
 
 #: src/config/options.c:2809
-msgid "Set config dir to given string."
+msgid "Set config dir to given string"
 msgstr ""
 
 #: src/config/options.c:2811
@@ -4103,7 +4105,7 @@ msgstr "3|\\|73R |_|R|_"
 msgid "Save URL"
 msgstr "54\\/3 |_|R|_"
 
-#: src/dialogs/menu.c:612 src/sched/download.c:410 src/sched/download.c:617
+#: src/dialogs/menu.c:612 src/sched/download.c:429 src/sched/download.c:636
 msgid "Download"
 msgstr "|)0VVN|04|)"
 
@@ -4391,60 +4393,60 @@ msgstr "|\\|0 program specified for |oR070(0| %s."
 #. FIXME: The following is a PITA from the l10n standpoint. A *big*
 #. * one, _("of")-like pearls are a nightmare. Format strings need to
 #. * be introduced to this fuggy corner of code as well. --pasky
-#: src/sched/download.c:217 src/sched/session.c:89
+#: src/sched/download.c:218 src/sched/session.c:89
 msgid "Received"
 msgstr "Received"
 
-#: src/sched/download.c:223 src/sched/session.c:94
+#: src/sched/download.c:224 src/sched/session.c:94
 msgid "of"
 msgstr "of"
 
-#: src/sched/download.c:233
+#: src/sched/download.c:234
 msgid "after resume"
 msgstr "@f73R resume"
 
-#: src/sched/download.c:239
+#: src/sched/download.c:240
 msgid "Average speed"
 msgstr "Average 5p33|)"
 
-#: src/sched/download.c:241
+#: src/sched/download.c:242
 msgid "Speed"
 msgstr "5p33|)"
 
-#: src/sched/download.c:250
+#: src/sched/download.c:251
 msgid "current speed"
 msgstr "current 5p33|)"
 
-#: src/sched/download.c:259
+#: src/sched/download.c:260
 msgid "Elapsed time"
 msgstr "Elapsed 71|V|3"
 
-#: src/sched/download.c:265
+#: src/sched/download.c:266
 msgid "estimated time"
 msgstr "estimated 71|V|3"
 
-#: src/sched/download.c:419
+#: src/sched/download.c:438
 msgid "Background"
 msgstr "84(|<6R0Un|)"
 
-#: src/sched/download.c:424
+#: src/sched/download.c:443
 msgid "Background with notify"
 msgstr "84(|<6R0Un|) with |\\|071f`/"
 
-#: src/sched/download.c:429
+#: src/sched/download.c:448
 msgid "Abort"
 msgstr "@80R7"
 
-#: src/sched/download.c:510 src/sched/download.c:592 src/sched/download.c:838
+#: src/sched/download.c:529 src/sched/download.c:611 src/sched/download.c:857
 msgid "Download error"
 msgstr "|)0VVN|04|) 3RR0R"
 
-#: src/sched/download.c:511
+#: src/sched/download.c:530
 #, c-format
 msgid "Could not create file %s: %s"
 msgstr "(0VL|) |\\|07 create f1|3 %s: %s"
 
-#: src/sched/download.c:593
+#: src/sched/download.c:612
 #, c-format
 msgid ""
 "Error downloading %s:\n"
@@ -4455,7 +4457,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/sched/download.c:618
+#: src/sched/download.c:637
 #, c-format
 msgid ""
 "Download complete:\n"
@@ -4464,11 +4466,11 @@ msgstr ""
 "Download complete:\n"
 "%s"
 
-#: src/sched/download.c:747
+#: src/sched/download.c:766
 msgid "File exists"
 msgstr "f1|3 exists"
 
-#: src/sched/download.c:748
+#: src/sched/download.c:767
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -4483,19 +4485,19 @@ msgstr ""
 "The alternative filename is:\n"
 "%s"
 
-#: src/sched/download.c:755
+#: src/sched/download.c:774
 msgid "Save under the alternative name"
 msgstr "54\\/3 under the alternative |\\|4|V|3"
 
-#: src/sched/download.c:756
+#: src/sched/download.c:775
 msgid "Overwrite the original file"
 msgstr "OverVV|2173 the original f1|3"
 
-#: src/sched/download.c:757
+#: src/sched/download.c:776
 msgid "Resume download of the original file"
 msgstr "Resume |)0VVN|04|) of the original f1|3"
 
-#: src/sched/download.c:839
+#: src/sched/download.c:858
 #, c-format
 msgid ""
 "Could not create file '%s':\n"
@@ -4504,34 +4506,34 @@ msgstr ""
 "Could not create file '%s':\n"
 "%s"
 
-#: src/sched/download.c:1228 src/sched/download.c:1239
+#: src/sched/download.c:1247 src/sched/download.c:1258
 msgid "Unknown type"
 msgstr "U|\\||<N0VVn 7`/P3"
 
-#: src/sched/download.c:1229
+#: src/sched/download.c:1248
 #, fuzzy, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', or display it?"
 
-#: src/sched/download.c:1235 src/sched/download.c:1244
-#: src/sched/download.c:1271 src/sched/download.c:1283
+#: src/sched/download.c:1254 src/sched/download.c:1263
+#: src/sched/download.c:1290 src/sched/download.c:1302
 msgid "Display"
 msgstr "Display"
 
-#: src/sched/download.c:1240
+#: src/sched/download.c:1259
 #, fuzzy, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', or display it?"
 
-#: src/sched/download.c:1262 src/sched/download.c:1275
+#: src/sched/download.c:1281 src/sched/download.c:1294
 msgid "What to do?"
 msgstr "VV007 70 do?"
 
-#: src/sched/download.c:1263
+#: src/sched/download.c:1282
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -4540,11 +4542,11 @@ msgstr ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', save it or display it?"
 
-#: src/sched/download.c:1269 src/sched/download.c:1282
+#: src/sched/download.c:1288 src/sched/download.c:1301
 msgid "Open"
 msgstr "0p3N"
 
-#: src/sched/download.c:1276
+#: src/sched/download.c:1295
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -5008,41 +5010,49 @@ msgstr "5U8|\\/|17 70"
 msgid "post to"
 msgstr "|o057 70"
 
-#: src/viewer/text/search.c:813
+#: src/viewer/text/search.c:832
 msgid "No previous search"
 msgstr "|\\|0 |oR3\\/10U5 534R(H"
 
-#: src/viewer/text/search.c:851
+#: src/viewer/text/search.c:856
+msgid "Search hit bottom, continuing at top."
+msgstr ""
+
+#: src/viewer/text/search.c:862
+msgid "Search hit top, continuing at bottom."
+msgstr ""
+
+#: src/viewer/text/search.c:884
 #, c-format
 msgid "Search string '%s' not found"
 msgstr "534R(H 57r1|\\|6 '%s' |\\|07 f0u|\\|d"
 
-#: src/viewer/text/search.c:879
+#: src/viewer/text/search.c:912
 #, fuzzy
 msgid "Normal search"
 msgstr "|\\|0 |oR3\\/10U5 534R(H"
 
-#: src/viewer/text/search.c:880
+#: src/viewer/text/search.c:913
 msgid "Regexp search"
 msgstr ""
 
-#: src/viewer/text/search.c:881
+#: src/viewer/text/search.c:914
 msgid "Extended regexp search"
 msgstr ""
 
-#: src/viewer/text/search.c:886
+#: src/viewer/text/search.c:919
 msgid "Case sensitive"
 msgstr ""
 
-#: src/viewer/text/search.c:887
+#: src/viewer/text/search.c:920
 msgid "Case insensitive"
 msgstr ""
 
-#: src/viewer/text/search.c:1136
+#: src/viewer/text/search.c:1169
 msgid "Search backward"
 msgstr "534R(H 84(|<VV4R|)"
 
-#: src/viewer/text/search.c:1136 src/viewer/text/search.c:1147
+#: src/viewer/text/search.c:1169 src/viewer/text/search.c:1180
 msgid "Search for text"
 msgstr "534R(H for 73><7"
 

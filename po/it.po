@@ -6,14 +6,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-10-07 10:24+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-10-12 00:03+0200\n"
 "PO-Revision-Date: 2003-07-21 00:32+0200\n"
 "Last-Translator: Fabio Bonelli <fabiobonelli@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: elinks-dev@linuxfromscratch.org\n"
 
 #: src/bfu/inpfield.c:43 src/bfu/inpfield.c:52
 msgid "Bad number"
@@ -39,15 +39,16 @@ msgstr "Atteso numero nel campo"
 #: src/dialogs/menu.c:613 src/dialogs/mime.c:251 src/dialogs/options.c:261
 #: src/dialogs/options.c:356 src/globhist/dialogs.c:246
 #: src/globhist/dialogs.c:425 src/protocol/protocol.c:60
-#: src/protocol/user.c:156 src/protocol/user.c:172 src/sched/download.c:513
-#: src/sched/download.c:595 src/sched/download.c:620 src/sched/download.c:842
+#: src/protocol/user.c:156 src/protocol/user.c:172 src/sched/download.c:532
+#: src/sched/download.c:614 src/sched/download.c:639 src/sched/download.c:861
 #: src/sched/error.c:40 src/sched/session.c:392 src/sched/session.c:1172
 #: src/sched/session.c:1189 src/sched/session.c:1213
 #: src/scripting/lua/core.c:478 src/scripting/lua/core.c:620
 #: src/scripting/lua/core.c:729 src/scripting/lua/core.c:850
-#: src/viewer/text/form.c:667 src/viewer/text/search.c:815
-#: src/viewer/text/search.c:854 src/viewer/text/search.c:1137
-#: src/viewer/text/search.c:1148 src/viewer/text/textarea.c:269
+#: src/viewer/text/form.c:667 src/viewer/text/search.c:834
+#: src/viewer/text/search.c:858 src/viewer/text/search.c:864
+#: src/viewer/text/search.c:887 src/viewer/text/search.c:1170
+#: src/viewer/text/search.c:1181 src/viewer/text/textarea.c:269
 #: src/viewer/text/view.c:745 src/viewer/text/view.c:1463
 msgid "OK"
 msgstr "OK"
@@ -99,11 +100,11 @@ msgstr "Nome cartella"
 #: src/config/dialogs.c:736 src/dialogs/auth.c:165 src/dialogs/edit.c:173
 #: src/dialogs/menu.c:576 src/dialogs/menu.c:587 src/dialogs/menu.c:613
 #: src/dialogs/mime.c:255 src/dialogs/options.c:263 src/dialogs/options.c:361
-#: src/sched/download.c:758 src/sched/download.c:1236
-#: src/sched/download.c:1245 src/sched/download.c:1272
-#: src/sched/download.c:1284 src/scripting/lua/core.c:482
+#: src/sched/download.c:777 src/sched/download.c:1255
+#: src/sched/download.c:1264 src/sched/download.c:1291
+#: src/sched/download.c:1303 src/scripting/lua/core.c:482
 #: src/scripting/lua/core.c:625 src/scripting/lua/core.c:850
-#: src/viewer/text/search.c:1137 src/viewer/text/search.c:1148
+#: src/viewer/text/search.c:1170 src/viewer/text/search.c:1181
 #: src/viewer/text/view.c:745
 msgid "Cancel"
 msgstr "Annulla"
@@ -205,8 +206,9 @@ msgid "Add"
 msgstr "Aggiungi"
 
 #: src/bookmarks/dialogs.c:643 src/globhist/dialogs.c:487
-#: src/viewer/text/search.c:812 src/viewer/text/search.c:850
-#: src/viewer/text/search.c:1147
+#: src/viewer/text/search.c:831 src/viewer/text/search.c:855
+#: src/viewer/text/search.c:861 src/viewer/text/search.c:883
+#: src/viewer/text/search.c:1180
 msgid "Search"
 msgstr "Cerca"
 
@@ -359,7 +361,7 @@ msgid "Options manager"
 msgstr "Gestore opzioni"
 
 #: src/config/dialogs.c:536 src/config/dialogs.c:790 src/dialogs/options.c:262
-#: src/sched/download.c:1234 src/sched/download.c:1270
+#: src/sched/download.c:1253 src/sched/download.c:1289
 msgid "Save"
 msgstr "Salva"
 
@@ -515,7 +517,8 @@ msgstr "Segui collegamento corrente"
 
 #: src/config/kbdbind.c:386
 msgid "Follow the current link, forcing reload of the target"
-msgstr "Segui il collegamento corrente, forzando l'aggiornamento della destinazione"
+msgstr ""
+"Segui il collegamento corrente, forzando l'aggiornamento della destinazione"
 
 #: src/config/kbdbind.c:387
 msgid "Open the File menu"
@@ -1225,7 +1228,8 @@ msgid ""
 "1-500 means display target filename with this maximal length;\n"
 "      if it is longer, the middle is substituted by an asterisk"
 msgstr ""
-"Mostra [nomefile puntato] invece di [IMG] come segnaposto per le immagini visibili:\n"
+"Mostra [nomefile puntato] invece di [IMG] come segnaposto per le immagini "
+"visibili:\n"
 "-1    significa mostra sempre solo [IMG]\n"
 "0     significa mostra sempre il nome di file completo\n"
 "1-500 significa mostra il nome di file con questa lunghezza massima;\n"
@@ -2018,7 +2022,8 @@ msgstr "Tipo MIME predefinito"
 msgid ""
 "Document MIME-type to assume by default (when we are unable to\n"
 "guess it properly from known information about the document)."
-msgstr "Tipo MIME del documento da assumere di default (quando non\n"
+msgstr ""
+"Tipo MIME del documento da assumere di default (quando non\n"
 "si è in grado di rilevarlo correttamente dalle informazioni sul documento)."
 
 #: src/config/options.c:1468
@@ -2544,8 +2549,8 @@ msgid ""
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 "Gestore (programma esterno) per questo protocollo. Chiama\n"
-"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, "
-"unix-xwin)."
+"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, unix-"
+"xwin)."
 
 #: src/config/options.c:1751
 msgid ""
@@ -3230,9 +3235,8 @@ msgid ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
 msgstr ""
-"Azioni temporizzate dopo un certo intervallo di inattività "
-"dell'utente.Qualcuno lo può trovare persino utile, anche se puoi non "
-"crederci."
+"Azioni temporizzate dopo un certo intervallo di inattività dell'utente."
+"Qualcuno lo può trovare persino utile, anche se puoi non crederci."
 
 #: src/config/options.c:2698
 msgid ""
@@ -3434,7 +3438,8 @@ msgstr ""
 "Questa è un'opzione interna di ELinks, non vuoi usarla."
 
 #: src/config/options.c:2809
-msgid "Set config dir to given string."
+#, fuzzy
+msgid "Set config dir to given string"
 msgstr "Imposta la directory di configurazione alla stringa data."
 
 #: src/config/options.c:2811
@@ -3559,7 +3564,8 @@ msgstr "Non usare i file in ~/.elinks"
 
 #: src/config/options.c:2879
 msgid "Don't attempt to create and/or use home rc directory (~/.elinks)."
-msgstr "Non provare a creare o usare la directory di configurazione (~/.elinks)."
+msgstr ""
+"Non provare a creare o usare la directory di configurazione (~/.elinks)."
 
 #: src/config/options.c:2881
 msgid "Connect to session ring with given ID"
@@ -3640,8 +3646,8 @@ msgid ""
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
-"Impostare a 1 per modificare i file runtime di stato (bookmark, storico, "
-"...)\n"
+"Impostare a 1 per modificare i file runtime di stato (bookmark, "
+"storico, ...)\n"
 "anche quando si usano -no-connect o -session-ring; non ha effetto\n"
 "se non è usato in connessione con una di queste opzioni."
 
@@ -4157,7 +4163,7 @@ msgstr "Inserisci URL"
 msgid "Save URL"
 msgstr "Salva URL"
 
-#: src/dialogs/menu.c:612 src/sched/download.c:410 src/sched/download.c:617
+#: src/dialogs/menu.c:612 src/sched/download.c:429 src/sched/download.c:636
 msgid "Download"
 msgstr "Download"
 
@@ -4451,60 +4457,60 @@ msgstr "Nessun programma definito per %s."
 #. FIXME: The following is a PITA from the l10n standpoint. A *big*
 #. * one, _("of")-like pearls are a nightmare. Format strings need to
 #. * be introduced to this fuggy corner of code as well. --pasky
-#: src/sched/download.c:217 src/sched/session.c:89
+#: src/sched/download.c:218 src/sched/session.c:89
 msgid "Received"
 msgstr "Ricevuti"
 
-#: src/sched/download.c:223 src/sched/session.c:94
+#: src/sched/download.c:224 src/sched/session.c:94
 msgid "of"
 msgstr "di"
 
-#: src/sched/download.c:233
+#: src/sched/download.c:234
 msgid "after resume"
 msgstr "dopo il resume"
 
-#: src/sched/download.c:239
+#: src/sched/download.c:240
 msgid "Average speed"
 msgstr "Velocità media"
 
-#: src/sched/download.c:241
+#: src/sched/download.c:242
 msgid "Speed"
 msgstr "Velocità"
 
-#: src/sched/download.c:250
+#: src/sched/download.c:251
 msgid "current speed"
 msgstr "Velocità corrente"
 
-#: src/sched/download.c:259
+#: src/sched/download.c:260
 msgid "Elapsed time"
 msgstr "Tempo trascorso"
 
-#: src/sched/download.c:265
+#: src/sched/download.c:266
 msgid "estimated time"
 msgstr "tempo stimato"
 
-#: src/sched/download.c:419
+#: src/sched/download.c:438
 msgid "Background"
 msgstr "Background"
 
-#: src/sched/download.c:424
+#: src/sched/download.c:443
 msgid "Background with notify"
 msgstr "Background con notifica"
 
-#: src/sched/download.c:429
+#: src/sched/download.c:448
 msgid "Abort"
 msgstr "Interrompi"
 
-#: src/sched/download.c:510 src/sched/download.c:592 src/sched/download.c:838
+#: src/sched/download.c:529 src/sched/download.c:611 src/sched/download.c:857
 msgid "Download error"
 msgstr "Errore download"
 
-#: src/sched/download.c:511
+#: src/sched/download.c:530
 #, c-format
 msgid "Could not create file %s: %s"
 msgstr "Non posso creare il file %s: %s"
 
-#: src/sched/download.c:593
+#: src/sched/download.c:612
 #, c-format
 msgid ""
 "Error downloading %s:\n"
@@ -4515,7 +4521,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/sched/download.c:618
+#: src/sched/download.c:637
 #, c-format
 msgid ""
 "Download complete:\n"
@@ -4524,11 +4530,11 @@ msgstr ""
 "Download completato:\n"
 "%s"
 
-#: src/sched/download.c:747
+#: src/sched/download.c:766
 msgid "File exists"
 msgstr "Il file esiste"
 
-#: src/sched/download.c:748
+#: src/sched/download.c:767
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -4543,19 +4549,19 @@ msgstr ""
 "Il nome alternativo del file è:\n"
 "%s"
 
-#: src/sched/download.c:755
+#: src/sched/download.c:774
 msgid "Save under the alternative name"
 msgstr "Salva con un nome alternativo"
 
-#: src/sched/download.c:756
+#: src/sched/download.c:775
 msgid "Overwrite the original file"
 msgstr "Sovrascrivi il file originale"
 
-#: src/sched/download.c:757
+#: src/sched/download.c:776
 msgid "Resume download of the original file"
 msgstr "Riprendi download del file originale"
 
-#: src/sched/download.c:839
+#: src/sched/download.c:858
 #, c-format
 msgid ""
 "Could not create file '%s':\n"
@@ -4564,30 +4570,30 @@ msgstr ""
 "Non posso creare il file '%s':\n"
 "%s"
 
-#: src/sched/download.c:1228 src/sched/download.c:1239
+#: src/sched/download.c:1247 src/sched/download.c:1258
 msgid "Unknown type"
 msgstr "Tipo sconosciuto"
 
-#: src/sched/download.c:1229
+#: src/sched/download.c:1248
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr "Vuoi salvare il file '%s' (tipo: %s) o visualizzarlo?"
 
-#: src/sched/download.c:1235 src/sched/download.c:1244
-#: src/sched/download.c:1271 src/sched/download.c:1283
+#: src/sched/download.c:1254 src/sched/download.c:1263
+#: src/sched/download.c:1290 src/sched/download.c:1302
 msgid "Display"
 msgstr "Visualizza"
 
-#: src/sched/download.c:1240
+#: src/sched/download.c:1259
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr "Vuoi mostrare il file '%s' (tipo: %s)?"
 
-#: src/sched/download.c:1262 src/sched/download.c:1275
+#: src/sched/download.c:1281 src/sched/download.c:1294
 msgid "What to do?"
 msgstr "Cosa fare?"
 
-#: src/sched/download.c:1263
+#: src/sched/download.c:1282
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -4596,11 +4602,11 @@ msgstr ""
 "Vuoi aprire il file '%s' (tipo: %s%s%s)\n"
 "con '%s', salvarlo o visualizzarlo?"
 
-#: src/sched/download.c:1269 src/sched/download.c:1282
+#: src/sched/download.c:1288 src/sched/download.c:1301
 msgid "Open"
 msgstr "Apri"
 
-#: src/sched/download.c:1276
+#: src/sched/download.c:1295
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -4812,9 +4818,9 @@ msgid ""
 "saved to the configuration file, instead of just all the options. This "
 "simplifies our situation greatly when we see that some option has "
 "inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of "
-"config.saving_style option to 3 in order to get the \"right\" behaviour. "
-"Apologies for any inconvience caused."
+"a subtle way. Thus, we recommend you to change the value of config."
+"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
+"for any inconvience caused."
 msgstr ""
 "Hai l'opzione config.saving_style impostata a un valore obsoleto. Gli "
 "algoritmi di salvataggio della configurazione di ELinks sono stati cambiati "
@@ -4822,9 +4828,9 @@ msgstr ""
 "sono salvate nel file di configurazione, invece di tutte quante. Questo "
 "semplifica molto la situazione quando vediamo che delle opzioni hanno un "
 "valore predefinito inappropriato o abbiamo bisogno di cambiarne la "
-"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione "
-"config.saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le "
-"mie scuse per qualsiasi inconveniente causato."
+"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione config."
+"saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le mie "
+"scuse per qualsiasi inconveniente causato."
 
 #: src/sched/session.c:1677
 msgid "Unknown event."
@@ -5060,40 +5066,48 @@ msgstr "sottometti a"
 msgid "post to"
 msgstr "invia a"
 
-#: src/viewer/text/search.c:813
+#: src/viewer/text/search.c:832
 msgid "No previous search"
 msgstr "Nessuna ricerca precedente"
 
-#: src/viewer/text/search.c:851
+#: src/viewer/text/search.c:856
+msgid "Search hit bottom, continuing at top."
+msgstr ""
+
+#: src/viewer/text/search.c:862
+msgid "Search hit top, continuing at bottom."
+msgstr ""
+
+#: src/viewer/text/search.c:884
 #, c-format
 msgid "Search string '%s' not found"
 msgstr "Stringa '%s' non trovata"
 
-#: src/viewer/text/search.c:879
+#: src/viewer/text/search.c:912
 msgid "Normal search"
 msgstr "Ricerca normale"
 
-#: src/viewer/text/search.c:880
+#: src/viewer/text/search.c:913
 msgid "Regexp search"
 msgstr "Espressione regolare"
 
-#: src/viewer/text/search.c:881
+#: src/viewer/text/search.c:914
 msgid "Extended regexp search"
 msgstr "Espressione regolare estesa"
 
-#: src/viewer/text/search.c:886
+#: src/viewer/text/search.c:919
 msgid "Case sensitive"
 msgstr "Considera minuscole/maiuscole"
 
-#: src/viewer/text/search.c:887
+#: src/viewer/text/search.c:920
 msgid "Case insensitive"
 msgstr "Non considerare minuscole/maiuscole"
 
-#: src/viewer/text/search.c:1136
+#: src/viewer/text/search.c:1169
 msgid "Search backward"
 msgstr "Cerca indietro"
 
-#: src/viewer/text/search.c:1136 src/viewer/text/search.c:1147
+#: src/viewer/text/search.c:1169 src/viewer/text/search.c:1180
 msgid "Search for text"
 msgstr "Cerca testo"
 

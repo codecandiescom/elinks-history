@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-10-08 16:43+0200\n"
+"POT-Creation-Date: 2003-10-12 00:03+0200\n"
 "PO-Revision-Date: 2003-10-09 11:49+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <@li.org>\n"
@@ -47,17 +47,17 @@ msgstr "Ez a mezõ csak számokat fogad el"
 #: src/dialogs/menu.c:613 src/dialogs/mime.c:251 src/dialogs/options.c:261
 #: src/dialogs/options.c:356 src/globhist/dialogs.c:246
 #: src/globhist/dialogs.c:425 src/protocol/protocol.c:60
-#: src/protocol/user.c:156 src/protocol/user.c:172 src/sched/download.c:531
-#: src/sched/download.c:613 src/sched/download.c:638 src/sched/download.c:860
+#: src/protocol/user.c:156 src/protocol/user.c:172 src/sched/download.c:532
+#: src/sched/download.c:614 src/sched/download.c:639 src/sched/download.c:861
 #: src/sched/error.c:40 src/sched/session.c:392 src/sched/session.c:1172
 #: src/sched/session.c:1189 src/sched/session.c:1213
 #: src/scripting/lua/core.c:478 src/scripting/lua/core.c:620
 #: src/scripting/lua/core.c:729 src/scripting/lua/core.c:850
-#: src/viewer/text/form.c:667 src/viewer/text/search.c:828
-#: src/viewer/text/search.c:853 src/viewer/text/search.c:874
-#: src/viewer/text/search.c:1157 src/viewer/text/search.c:1168
-#: src/viewer/text/textarea.c:269 src/viewer/text/view.c:745
-#: src/viewer/text/view.c:1463
+#: src/viewer/text/form.c:667 src/viewer/text/search.c:834
+#: src/viewer/text/search.c:858 src/viewer/text/search.c:864
+#: src/viewer/text/search.c:887 src/viewer/text/search.c:1170
+#: src/viewer/text/search.c:1181 src/viewer/text/textarea.c:269
+#: src/viewer/text/view.c:745 src/viewer/text/view.c:1463
 msgid "OK"
 msgstr "OK"
 
@@ -108,11 +108,11 @@ msgstr "Mappa neve"
 #: src/config/dialogs.c:736 src/dialogs/auth.c:165 src/dialogs/edit.c:173
 #: src/dialogs/menu.c:576 src/dialogs/menu.c:587 src/dialogs/menu.c:613
 #: src/dialogs/mime.c:255 src/dialogs/options.c:263 src/dialogs/options.c:361
-#: src/sched/download.c:776 src/sched/download.c:1254
-#: src/sched/download.c:1263 src/sched/download.c:1290
-#: src/sched/download.c:1302 src/scripting/lua/core.c:482
+#: src/sched/download.c:777 src/sched/download.c:1255
+#: src/sched/download.c:1264 src/sched/download.c:1291
+#: src/sched/download.c:1303 src/scripting/lua/core.c:482
 #: src/scripting/lua/core.c:625 src/scripting/lua/core.c:850
-#: src/viewer/text/search.c:1157 src/viewer/text/search.c:1168
+#: src/viewer/text/search.c:1170 src/viewer/text/search.c:1181
 #: src/viewer/text/view.c:745
 msgid "Cancel"
 msgstr "Mégsem"
@@ -215,8 +215,9 @@ msgid "Add"
 msgstr "Hozzáadás"
 
 #: src/bookmarks/dialogs.c:643 src/globhist/dialogs.c:487
-#: src/viewer/text/search.c:825 src/viewer/text/search.c:850
-#: src/viewer/text/search.c:870 src/viewer/text/search.c:1167
+#: src/viewer/text/search.c:831 src/viewer/text/search.c:855
+#: src/viewer/text/search.c:861 src/viewer/text/search.c:883
+#: src/viewer/text/search.c:1180
 msgid "Search"
 msgstr "Keresés"
 
@@ -368,7 +369,7 @@ msgid "Options manager"
 msgstr "Beállítások"
 
 #: src/config/dialogs.c:536 src/config/dialogs.c:790 src/dialogs/options.c:262
-#: src/sched/download.c:1252 src/sched/download.c:1288
+#: src/sched/download.c:1253 src/sched/download.c:1289
 msgid "Save"
 msgstr "Mentés"
 
@@ -422,7 +423,8 @@ msgstr ""
 #: src/config/dialogs.c:730
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr "Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
+msgstr ""
+"Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
 
 #: src/config/dialogs.c:762
 msgid "Keybinding manager"
@@ -551,7 +553,8 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:393
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr ""
+"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:394
 msgid "Go to the homepage"
@@ -1029,7 +1032,8 @@ msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
 #: src/config/options.c:1007
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr ""
+"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1013 src/util/version.c:86
@@ -1277,7 +1281,8 @@ msgstr "Alkönyvtárak kiemelése"
 
 #: src/config/options.c:1138
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr "Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
+msgstr ""
+"Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
 
 #: src/config/options.c:1140
 msgid "Number links"
@@ -1319,7 +1324,8 @@ msgstr "Linkek kiválasztása"
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
-msgstr "Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
+msgstr ""
+"Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.c:1164
 msgid "Searching"
@@ -1456,7 +1462,8 @@ msgstr ""
 
 #: src/config/options.c:1250
 msgid "Ignore cache-control info from server"
-msgstr "A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
+msgstr ""
+"A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
 
 #: src/config/options.c:1252
 msgid ""
@@ -3253,7 +3260,7 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:2809
-msgid "Set config dir to given string."
+msgid "Set config dir to given string"
 msgstr ""
 
 #: src/config/options.c:2811
@@ -3694,7 +3701,8 @@ msgstr "Kilépés"
 
 #: src/dialogs/menu.c:143
 msgid "Do you really want to exit ELinks (and terminate all downloads)?"
-msgstr "Biztos, hogy kilépsz a Links-böl, (és megszakítod az aktiv letöltéseket)?"
+msgstr ""
+"Biztos, hogy kilépsz a Links-böl, (és megszakítod az aktiv letöltéseket)?"
 
 #: src/dialogs/menu.c:145
 msgid "Do you really want to exit ELinks?"
@@ -3932,7 +3940,7 @@ msgstr "URL beirása"
 msgid "Save URL"
 msgstr "URL mentése"
 
-#: src/dialogs/menu.c:612 src/sched/download.c:428 src/sched/download.c:635
+#: src/dialogs/menu.c:612 src/sched/download.c:429 src/sched/download.c:636
 msgid "Download"
 msgstr "Letöltés"
 
@@ -4102,7 +4110,8 @@ msgstr ""
 
 #: src/lowlevel/home.c:121
 #, c-format
-msgid "Commandline options -confdir set to %s, but could not create directory %s."
+msgid ""
+"Commandline options -confdir set to %s, but could not create directory %s."
 msgstr ""
 
 #: src/lowlevel/home.c:126
@@ -4221,60 +4230,60 @@ msgstr "Nincs program beállitva ehhez a protokollhoz: %s."
 #. FIXME: The following is a PITA from the l10n standpoint. A *big*
 #. * one, _("of")-like pearls are a nightmare. Format strings need to
 #. * be introduced to this fuggy corner of code as well. --pasky
-#: src/sched/download.c:217 src/sched/session.c:89
+#: src/sched/download.c:218 src/sched/session.c:89
 msgid "Received"
 msgstr "Fogadott"
 
-#: src/sched/download.c:223 src/sched/session.c:94
+#: src/sched/download.c:224 src/sched/session.c:94
 msgid "of"
 msgstr ", fájlméret"
 
-#: src/sched/download.c:233
+#: src/sched/download.c:234
 msgid "after resume"
 msgstr "a folytatás után"
 
-#: src/sched/download.c:239
+#: src/sched/download.c:240
 msgid "Average speed"
 msgstr "Átlagos sebesség"
 
-#: src/sched/download.c:241
+#: src/sched/download.c:242
 msgid "Speed"
 msgstr "Sebesség"
 
-#: src/sched/download.c:250
+#: src/sched/download.c:251
 msgid "current speed"
 msgstr "Aktuális sebesség"
 
-#: src/sched/download.c:259
+#: src/sched/download.c:260
 msgid "Elapsed time"
 msgstr "Eltelt idõ"
 
-#: src/sched/download.c:265
+#: src/sched/download.c:266
 msgid "estimated time"
 msgstr "Becsült hátralevõ idõ"
 
-#: src/sched/download.c:437
+#: src/sched/download.c:438
 msgid "Background"
 msgstr "Háttérbe"
 
-#: src/sched/download.c:442
+#: src/sched/download.c:443
 msgid "Background with notify"
 msgstr "Háttérbe, figyelmeztetéssel"
 
-#: src/sched/download.c:447
+#: src/sched/download.c:448
 msgid "Abort"
 msgstr "Megszakítás"
 
-#: src/sched/download.c:528 src/sched/download.c:610 src/sched/download.c:856
+#: src/sched/download.c:529 src/sched/download.c:611 src/sched/download.c:857
 msgid "Download error"
 msgstr "Hiba a letöltésben"
 
-#: src/sched/download.c:529
+#: src/sched/download.c:530
 #, c-format
 msgid "Could not create file %s: %s"
 msgstr "Nem lehet létrehozni ezt a fájlt: %s: %s"
 
-#: src/sched/download.c:611
+#: src/sched/download.c:612
 #, c-format
 msgid ""
 "Error downloading %s:\n"
@@ -4285,7 +4294,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/sched/download.c:636
+#: src/sched/download.c:637
 #, c-format
 msgid ""
 "Download complete:\n"
@@ -4294,11 +4303,11 @@ msgstr ""
 "A letöltés befejezödött:\n"
 "%s"
 
-#: src/sched/download.c:765
+#: src/sched/download.c:766
 msgid "File exists"
 msgstr "A fájl létezik"
 
-#: src/sched/download.c:766
+#: src/sched/download.c:767
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -4313,19 +4322,19 @@ msgstr ""
 "Az alternatív fájlnév:\n"
 "%s"
 
-#: src/sched/download.c:773
+#: src/sched/download.c:774
 msgid "Save under the alternative name"
 msgstr "Mentés más néven"
 
-#: src/sched/download.c:774
+#: src/sched/download.c:775
 msgid "Overwrite the original file"
 msgstr "Az eredeti fájl felülírása"
 
-#: src/sched/download.c:775
+#: src/sched/download.c:776
 msgid "Resume download of the original file"
 msgstr "A letöltés folytatása"
 
-#: src/sched/download.c:857
+#: src/sched/download.c:858
 #, c-format
 msgid ""
 "Could not create file '%s':\n"
@@ -4334,30 +4343,30 @@ msgstr ""
 "Hiba a fájlba irás közben: '%s': \n"
 "%s"
 
-#: src/sched/download.c:1246 src/sched/download.c:1257
+#: src/sched/download.c:1247 src/sched/download.c:1258
 msgid "Unknown type"
 msgstr "Ismeretlen fájlformátum"
 
-#: src/sched/download.c:1247
+#: src/sched/download.c:1248
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr "El akarod menteni ezt a fáljt: '%s' (típus: %s), vagy megjelenítsük?"
 
-#: src/sched/download.c:1253 src/sched/download.c:1262
-#: src/sched/download.c:1289 src/sched/download.c:1301
+#: src/sched/download.c:1254 src/sched/download.c:1263
+#: src/sched/download.c:1290 src/sched/download.c:1302
 msgid "Display"
 msgstr "Megjelenítés"
 
-#: src/sched/download.c:1258
+#: src/sched/download.c:1259
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr "Meg akarod jeleníteni ezt a fájlt: '%s' (típus %s)?"
 
-#: src/sched/download.c:1280 src/sched/download.c:1293
+#: src/sched/download.c:1281 src/sched/download.c:1294
 msgid "What to do?"
 msgstr "Mit tegyünk?"
 
-#: src/sched/download.c:1281
+#: src/sched/download.c:1282
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -4366,11 +4375,11 @@ msgstr ""
 "Meg akarod nyitni ezt a fáljt: '%s' (típus: %s %s %s)\n"
 "ezzel: '%s', esetleg mentsük, vagy megjelenítsük?"
 
-#: src/sched/download.c:1287 src/sched/download.c:1300
+#: src/sched/download.c:1288 src/sched/download.c:1301
 msgid "Open"
 msgstr "Megnyitás"
 
-#: src/sched/download.c:1294
+#: src/sched/download.c:1295
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -4814,44 +4823,48 @@ msgstr "elfogad"
 msgid "post to"
 msgstr "elküld"
 
-#: src/viewer/text/search.c:826
+#: src/viewer/text/search.c:832
 msgid "No previous search"
 msgstr "Nincs korábbi keresés"
 
-#: src/viewer/text/search.c:851
+#: src/viewer/text/search.c:856
 msgid "Search hit bottom, continuing at top."
 msgstr ""
 
-#: src/viewer/text/search.c:871
+#: src/viewer/text/search.c:862
+msgid "Search hit top, continuing at bottom."
+msgstr ""
+
+#: src/viewer/text/search.c:884
 #, c-format
 msgid "Search string '%s' not found"
 msgstr "Keresett szöveg ('%s') nem található"
 
-#: src/viewer/text/search.c:899
+#: src/viewer/text/search.c:912
 msgid "Normal search"
 msgstr "Normál keresés"
 
-#: src/viewer/text/search.c:900
+#: src/viewer/text/search.c:913
 msgid "Regexp search"
 msgstr "Keresés regexp alapján"
 
-#: src/viewer/text/search.c:901
+#: src/viewer/text/search.c:914
 msgid "Extended regexp search"
 msgstr "Részletes keresés regexp alapján"
 
-#: src/viewer/text/search.c:906
+#: src/viewer/text/search.c:919
 msgid "Case sensitive"
 msgstr ""
 
-#: src/viewer/text/search.c:907
+#: src/viewer/text/search.c:920
 msgid "Case insensitive"
 msgstr ""
 
-#: src/viewer/text/search.c:1156
+#: src/viewer/text/search.c:1169
 msgid "Search backward"
 msgstr "Keresés visszafelé"
 
-#: src/viewer/text/search.c:1156 src/viewer/text/search.c:1167
+#: src/viewer/text/search.c:1169 src/viewer/text/search.c:1180
 msgid "Search for text"
 msgstr "Szöveg keresése"
 
@@ -4961,4 +4974,3 @@ msgstr "Hiba a fájl irása közben"
 #, fuzzy
 #~ msgid "Cache redirect information"
 #~ msgstr "Várakozás az átirányítás elfogadására"
-

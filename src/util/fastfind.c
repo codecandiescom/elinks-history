@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.38 2003/06/17 15:58:36 zas Exp $ */
+/* $Id: fastfind.c,v 1.39 2003/06/17 16:07:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -488,12 +488,11 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 		 * disappear. It will imply code duplication. */
 		int lidx;
 	       	int k = ifcase(key[i]);
-		
-		if (k >= FF_MAX_CHARS) return NULL;
-	       	
-		lidx = info->idxtab[k];
 
 		iterinc(info);
+
+		accif(info) (k >= FF_MAX_CHARS) return NULL;
+		lidx = info->idxtab[k];
 
 		accif(info) (lidx < 0) return NULL;
 

@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.205 2004/10/08 16:04:12 zas Exp $ */
+/* $Id: connection.c,v 1.206 2004/10/08 16:35:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -843,13 +843,15 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 		if (download) {
 			download->cached = cached;
 			download->state = S_OK;
-			/* XXX: This doesn't work since sometimes stat->prg is
-			 * undefined and contains random memory locations. It's
-			 * not supposed to point on anything here since stat
-			 * has no connection attached. Downloads resuming will
-			 * probably break in some cases without this, though.
+			/* XXX:
+			 * This doesn't work since sometimes |download->prg|
+			 * is undefined and contains random memory locations.
+			 * It's not supposed to point on anything here since
+			 * |download| has no connection attached.
+			 * Downloads resuming will probably break in some
+			 * cases without this, though.
 			 * FIXME: Needs more investigation. --pasky */
-			/* if (stat->prg) stat->prg->start = start; */
+			/* if (download->prg) download->prg->start = start; */
 			if (download->callback)
 				download->callback(download, download->data);
 		}

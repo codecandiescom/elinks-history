@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.570 2004/10/01 16:02:41 jonas Exp $ */
+/* $Id: session.c,v 1.571 2004/10/08 16:32:51 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -70,7 +70,7 @@ struct file_to_load {
 	struct cache_entry *cached;
 	unsigned char *target_frame;
 	struct uri *uri;
-	struct download stat;
+	struct download download;
 };
 
 /* This structure and related functions are used to maintain information
@@ -87,7 +87,7 @@ struct session_info {
 	struct uri *uri;
 };
 
-#define file_to_load_is_active(ftl) ((ftl)->req_sent && is_in_progress_state((ftl)->stat.state))
+#define file_to_load_is_active(ftl) ((ftl)->req_sent && is_in_progress_state((ftl)->download.state))
 
 
 INIT_LIST_HEAD(sessions);
@@ -206,26 +206,26 @@ get_master_session(void)
 struct download *
 get_current_download(struct session *ses)
 {
-	struct download *stat = NULL;
+	struct download *download = NULL;
 
 	if (!ses) return NULL;
 
 	if (ses->task.type)
-		stat = &ses->loading;
+		download = &ses->loading;
 	else if (have_location(ses))
-		stat = &cur_loc(ses)->download;
+		download = &cur_loc(ses)->download;
 
-	if (stat && stat->state == S_OK) {
+	if (download && download->state == S_OK) {
 		struct file_to_load *ftl;
 
 		foreach (ftl, ses->more_files)
 			if (file_to_load_is_active(ftl))
-				return &ftl->stat;
+				return &ftl->download;
 	}
 
-	/* Note that @stat isn't necessarily NULL here,
+	/* Note that @download isn't necessarily NULL here,
 	 * if @ses->more_files is empty. -- Miciah */
-	return stat;
+	return download;
 }
 
 void
@@ -256,7 +256,7 @@ abort_files_load(struct session *ses, int interrupt)
 				continue;
 
 			more = 1;
-			change_connection(&ftl->stat, NULL, PRI_CANCEL, interrupt);
+			change_connection(&ftl->download, NULL, PRI_CANCEL, interrupt);
 		}
 	} while (more);
 }
@@ -472,7 +472,7 @@ session_is_loading(struct session *ses)
 	}
 
 	foreach (ftl, ses->more_files) {
-		if (!is_in_result_state(ftl->stat.state))
+		if (!is_in_result_state(ftl->download.state))
 			return 1;
 	}
 
@@ -480,13 +480,13 @@ session_is_loading(struct session *ses)
 }
 
 void
-doc_loading_callback(struct download *stat, struct session *ses)
+doc_loading_callback(struct download *download, struct session *ses)
 {
 	int submit = 0;
 
-	if (is_in_result_state(stat->state)) {
+	if (is_in_result_state(download->state)) {
 #ifdef CONFIG_SCRIPTING
-		maybe_pre_format_html(stat->cached, ses);
+		maybe_pre_format_html(download->cached, ses);
 #endif
 		if (ses->display_timer != -1) {
 			kill_timer(ses->display_timer);
@@ -512,11 +512,11 @@ doc_loading_callback(struct download *stat, struct session *ses)
 					       ses);
 		}
 
-		if (stat->state != S_OK) {
-			print_error_dialog(ses, stat->state, stat->pri);
+		if (download->state != S_OK) {
+			print_error_dialog(ses, download->state, download->pri);
 		}
 
-	} else if (is_in_transfering_state(stat->state)
+	} else if (is_in_transfering_state(download->state)
 	           && ses->display_timer == -1) {
 		display_timer(ses);
 	}
@@ -525,9 +525,9 @@ doc_loading_callback(struct download *stat, struct session *ses)
 	print_screen_status(ses);
 
 #ifdef CONFIG_GLOBHIST
-	if (stat->conn && stat->pri != PRI_CSS) {
+	if (download->conn && download->pri != PRI_CSS) {
 		unsigned char *title = ses->doc_view->document->title;
-		struct uri *uri = stat->conn->proxied_uri;
+		struct uri *uri = download->conn->proxied_uri;
 
 		add_global_history_item(struri(uri), title, time(NULL));
 	}
@@ -537,29 +537,29 @@ doc_loading_callback(struct download *stat, struct session *ses)
 }
 
 static void
-file_loading_callback(struct download *stat, struct file_to_load *ftl)
+file_loading_callback(struct download *download, struct file_to_load *ftl)
 {
-	if (ftl->stat.cached) {
+	if (ftl->download.cached) {
 		if (ftl->cached) object_unlock(ftl->cached);
-		ftl->cached = ftl->stat.cached;
+		ftl->cached = ftl->download.cached;
 		object_lock(ftl->cached);
 	}
 
 	/* FIXME: We need to do content-type check here! However, we won't
 	 * handle properly the "Choose action" dialog now :(. */
-	if (ftl->cached && !ftl->cached->redirect_get && stat->pri != PRI_CSS) {
+	if (ftl->cached && !ftl->cached->redirect_get && download->pri != PRI_CSS) {
 		struct session *ses = ftl->ses;
 		struct uri *loading_uri = ses->loading_uri;
 		unsigned char *target_frame = ses->task.target_frame;
 
 		ses->loading_uri = ftl->uri;
 		ses->task.target_frame = ftl->target_frame;
-		ses_chktype(ses, &ftl->stat, ftl->cached, 1);
+		ses_chktype(ses, &ftl->download, ftl->cached, 1);
 		ses->loading_uri = loading_uri;
 		ses->task.target_frame = target_frame;
 	}
 
-	doc_loading_callback(stat, ftl->ses);
+	doc_loading_callback(download, ftl->ses);
 }
 
 static struct file_to_load *
@@ -584,7 +584,7 @@ request_additional_file(struct session *ses, unsigned char *name, struct uri *ur
 		if (compare_uri(ftl->uri, uri, URI_BASE)) {
 			if (ftl->pri > pri) {
 				ftl->pri = pri;
-				change_connection(&ftl->stat, &ftl->stat, pri, 0);
+				change_connection(&ftl->download, &ftl->download, pri, 0);
 			}
 			return NULL;
 		}
@@ -595,8 +595,8 @@ request_additional_file(struct session *ses, unsigned char *name, struct uri *ur
 
 	ftl->uri = get_uri_reference(uri);
 	ftl->target_frame = stracpy(name);
-	ftl->stat.callback = (void (*)(struct download *, void *)) file_loading_callback;
-	ftl->stat.data = ftl;
+	ftl->download.callback = (void (*)(struct download *, void *)) file_loading_callback;
+	ftl->download.data = ftl;
 	ftl->pri = pri;
 	ftl->ses = ses;
 
@@ -612,7 +612,7 @@ load_additional_file(struct file_to_load *ftl, struct document_view *doc_view,
 	struct uri *referrer = doc_view && doc_view->document
 			     ? doc_view->document->uri : NULL;
 
-	load_uri(ftl->uri, referrer, &ftl->stat, ftl->pri, cache_mode, -1);
+	load_uri(ftl->uri, referrer, &ftl->download, ftl->pri, cache_mode, -1);
 }
 
 void
@@ -1080,8 +1080,8 @@ reload(struct session *ses, enum cache_mode cache_mode)
 			if (file_to_load_is_active(ftl))
 				continue;
 
-			ftl->stat.data = ftl;
-			ftl->stat.callback = (void *) file_loading_callback;
+			ftl->download.data = ftl;
+			ftl->download.callback = (void *) file_loading_callback;
 
 			load_additional_file(ftl, doc_view, cache_mode);
 		}

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.132 2004/10/08 13:00:08 zas Exp $ */
+/* $Id: task.c,v 1.133 2004/10/08 16:36:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -417,29 +417,29 @@ b:
 }
 
 void
-loading_callback(struct download *stat, struct session *ses)
+loading_callback(struct download *download, struct session *ses)
 {
 	int d;
 
 	assertm(ses->task.type, "loading_callback: no ses->task");
 	if_assert_failed return;
 
-	d = do_move(ses, &stat);
-	if (!stat) return;
+	d = do_move(ses, &download);
+	if (!download) return;
 	if (d == 2) goto end;
 
 	if (d == 1) {
-		stat->callback = (void (*)(struct download *, void *)) doc_loading_callback;
+		download->callback = (void (*)(struct download *, void *)) doc_loading_callback;
 		display_timer(ses);
 	}
 
-	if (is_in_result_state(stat->state)) {
+	if (is_in_result_state(download->state)) {
 		if (ses->task.type) free_task(ses);
-		if (d == 1) doc_loading_callback(stat, ses);
+		if (d == 1) doc_loading_callback(download, ses);
 	}
 
-	if (is_in_result_state(stat->state) && stat->state != S_OK) {
-		print_error_dialog(ses, stat->state, stat->pri);
+	if (is_in_result_state(download->state) && download->state != S_OK) {
+		print_error_dialog(ses, download->state, download->pri);
 		if (d == 0) reload(ses, CACHE_MODE_NORMAL);
 	}
 

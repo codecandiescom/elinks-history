@@ -1,3 +1,41 @@
+Wed Sep 11 16:16:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	0.4pre17 
+
+Wed Sep 11 16:10:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/string.c:
+
+	Linking fix - forgot to convert this one from casecmp() to
+	strncasecmp().  
+
+Wed Sep 11 15:58:28 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/: base64.c, blacklist.c:
+
+	Minor tidyup.  
+
+Wed Sep 11 15:33:32 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/: terminal.c, terminal.h:
+
+	Minor optimizations: some trivial functions were converted to
+	macros.  
+
+Wed Sep 11 15:10:41 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/terminal.c:
+
+	Conformance to HACKING document improved.  
+
+Wed Sep 11 12:45:34 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Fix minor typos in comments.  
+
 Tue Sep 10 20:20:15 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: bfu/listbox.c, bfu/listbox.h, bookmarks/dialogs.c:

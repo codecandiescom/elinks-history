@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.103 2004/09/24 00:44:59 jonas Exp $ */
+/* $Id: charsets.c,v 1.104 2004/10/13 16:26:11 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -656,7 +656,8 @@ convert_string(struct conv_table *convert_table,
 			/* XXX: But this disables &nbsp&nbsp usage, which
 			 * appears to be relatively common! --pasky */
 			if ((mode == CSM_DEFAULT || (chars[i] != '&' && chars[i] != '='))
-			    && i > start && !isalnum(chars[i])) {
+			    && i > start
+			    && !isasciialpha(chars[i]) && !isdigit(chars[i])) {
 				translit = get_entity_string(&chars[start], i - start,
 						      global_doc_opts->cp);
 				if (chars[i] != ';') {

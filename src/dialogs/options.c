@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.121 2003/11/11 13:32:09 jonas Exp $ */
+/* $Id: options.c,v 1.122 2003/11/11 13:38:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,10 +79,6 @@ enum termopt {
 	TERM_OPTIONS,
 };
 
-struct termopt_hop {
-	int values[TERM_OPTIONS];
-};
-
 struct termopt_info {
 	enum termopt id;
 	unsigned char *name;
@@ -102,8 +98,8 @@ static struct termopt_info termopt_info[] = {
 static int
 push_ok_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
-	struct termopt_hop *termopt_hop = dlg_data->dlg->udata;
 	struct terminal *term = dlg_data->win->term;
+	int *values = dlg_data->dlg->udata;
 	int touched = 0;
 	int i;
 
@@ -112,10 +108,9 @@ push_ok_button(struct dialog_data *dlg_data, struct widget_data *button)
 	for (i = 0; i < TERM_OPTIONS; i++) {
 		unsigned char *name = termopt_info[i].name;
 		struct option *o = get_opt_rec(term->spec, name);
-		int value = termopt_hop->values[i];
 
-		if (o->value.number != value) {
-			o->value.number = value;
+		if (o->value.number != values[i]) {
+			o->value.number = values[i];
 			o->flags |= OPT_TOUCHED;
 			touched++;
 		}
@@ -148,49 +143,43 @@ push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 void
 terminal_options(struct terminal *term, void *xxx, struct session *ses)
 {
-	struct termopt_hop *termopt_hop;
 	struct dialog *dlg;
-	int i;
+	int i, *values;
 
-	termopt_hop = mem_calloc(1, sizeof(struct termopt_hop));
-	if (!termopt_hop) return;
+	dlg = calloc_dialog(TERMOPT_WIDGETS_COUNT, sizeof(int) * TERM_OPTIONS);
+	if (!dlg) return;
 
-	dlg = calloc_dialog(TERMOPT_WIDGETS_COUNT, 0);
-	if (!dlg) {
-		mem_free(termopt_hop);
-		return;
-	}
-
+	values = (int *) dlg + sizeof_dialog(TERMOPT_WIDGETS_COUNT, 0);
 	for (i = 0; i < TERM_OPTIONS; i++) {
 		unsigned char *name = termopt_info[i].name;
 
-		termopt_hop->values[i] = get_opt_int_tree(term->spec, name);
+		values[i] = get_opt_int_tree(term->spec, name);
 	}
 
 	dlg->title = _("Terminal options", term);
 	dlg->layouter = generic_dialog_layouter;
 	dlg->layout.padding_top = 1;
-	dlg->udata = termopt_hop;
+	dlg->udata = values;
 
 	add_dlg_text(dlg, _("Frame handling:", term), AL_LEFT, 1);
-	add_dlg_radio(dlg, _("No frames", term), 1, TERM_DUMB, termopt_hop->values[TERM_OPT_TYPE]);
-	add_dlg_radio(dlg, _("VT 100 frames", term), 1,  TERM_VT100, termopt_hop->values[TERM_OPT_TYPE]);
-	add_dlg_radio(dlg, _("Linux or OS/2 frames", term), 1, TERM_LINUX, termopt_hop->values[TERM_OPT_TYPE]);
-	add_dlg_radio(dlg, _("KOI8-R frames", term), 1, TERM_KOI8, termopt_hop->values[TERM_OPT_TYPE]);
+	add_dlg_radio(dlg, _("No frames", term), 1, TERM_DUMB, values[TERM_OPT_TYPE]);
+	add_dlg_radio(dlg, _("VT 100 frames", term), 1,  TERM_VT100, values[TERM_OPT_TYPE]);
+	add_dlg_radio(dlg, _("Linux or OS/2 frames", term), 1, TERM_LINUX, values[TERM_OPT_TYPE]);
+	add_dlg_radio(dlg, _("KOI8-R frames", term), 1, TERM_KOI8, values[TERM_OPT_TYPE]);
 
 	add_dlg_text(dlg, _("Color mode:", term), AL_LEFT, 1);
-	add_dlg_radio(dlg, _("No colors (mono)", term), 2, COLOR_MODE_MONO, termopt_hop->values[TERM_OPT_COLORS]);
-	add_dlg_radio(dlg, _("16 colors", term), 2, COLOR_MODE_16, termopt_hop->values[TERM_OPT_COLORS]);
+	add_dlg_radio(dlg, _("No colors (mono)", term), 2, COLOR_MODE_MONO, values[TERM_OPT_COLORS]);
+	add_dlg_radio(dlg, _("16 colors", term), 2, COLOR_MODE_16, values[TERM_OPT_COLORS]);
 #ifdef USE_256_COLORS
-	add_dlg_radio(dlg, _("256 colors", term), 2, COLOR_MODE_256, ttermopt_hop->values[TERM_OPT_COLORS]);
+	add_dlg_radio(dlg, _("256 colors", term), 2, COLOR_MODE_256, values[TERM_OPT_COLORS]);
 #endif
 
-	add_dlg_checkbox(dlg, _("Use ^[[11m", term), termopt_hop->values[TERM_OPT_M11_HACK]);
-	add_dlg_checkbox(dlg, _("Restrict frames in cp850/852", term), termopt_hop->values[TERM_OPT_RESTRICT_852]);
-	add_dlg_checkbox(dlg, _("Block the cursor", term), termopt_hop->values[TERM_OPT_BLOCK_CURSOR]);
-	add_dlg_checkbox(dlg, _("Transparency", term), termopt_hop->values[TERM_OPT_TRANSPARENCY]);
-	add_dlg_checkbox(dlg, _("Underline", term), termopt_hop->values[TERM_OPT_UNDERLINE]);
-	add_dlg_checkbox(dlg, _("UTF-8 I/O", term), termopt_hop->values[TERM_OPT_UTF_8_IO]);
+	add_dlg_checkbox(dlg, _("Use ^[[11m", term), values[TERM_OPT_M11_HACK]);
+	add_dlg_checkbox(dlg, _("Restrict frames in cp850/852", term), values[TERM_OPT_RESTRICT_852]);
+	add_dlg_checkbox(dlg, _("Block the cursor", term), values[TERM_OPT_BLOCK_CURSOR]);
+	add_dlg_checkbox(dlg, _("Transparency", term), values[TERM_OPT_TRANSPARENCY]);
+	add_dlg_checkbox(dlg, _("Underline", term), values[TERM_OPT_UNDERLINE]);
+	add_dlg_checkbox(dlg, _("UTF-8 I/O", term), values[TERM_OPT_UTF_8_IO]);
 
 	add_dlg_button(dlg, B_ENTER, push_ok_button, _("OK", term), NULL);
 	add_dlg_button(dlg, B_ENTER, push_save_button, _("Save", term), NULL);
@@ -198,7 +187,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 
 	add_dlg_end(dlg, TERMOPT_WIDGETS_COUNT);
 
-	do_dialog(term, dlg, getml(dlg, termopt_hop, NULL));
+	do_dialog(term, dlg, getml(dlg, NULL));
 }
 
 #ifdef ENABLE_NLS

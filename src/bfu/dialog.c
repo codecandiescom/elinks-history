@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.184 2004/11/21 17:15:50 zas Exp $ */
+/* $Id: dialog.c,v 1.185 2004/11/22 07:28:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,10 +59,7 @@ update_all_widgets(struct dialog_data *dlg_data)
 	struct widget_data *widget_data;
 
 	foreach_widget(dlg_data, widget_data) {
-		if (is_selected_widget(dlg_data, widget_data))
-			display_widget_focused(dlg_data, widget_data);
-		else
-			display_widget_unfocused(dlg_data, widget_data);
+		display_widget(dlg_data, widget_data);
 	}
 }
 
@@ -166,9 +163,14 @@ init_widget(struct dialog_data *dlg_data, int i)
 void
 select_widget(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
-	display_widget_unfocused(dlg_data, selected_widget(dlg_data));
+	struct widget_data *previously_selected_widget;
+	
+	previously_selected_widget = selected_widget(dlg_data);
+
 	dlg_data->selected_widget_id = widget_data - dlg_data->widgets_data;
-	display_widget_focused(dlg_data, widget_data);
+
+	display_widget(dlg_data, previously_selected_widget);
+	display_widget(dlg_data, widget_data);
 }
 
 
@@ -186,8 +188,9 @@ static inline void
 cycle_widget_focus(struct dialog_data *dlg_data, int direction)
 {
 	int prev_selected = dlg_data->selected_widget_id;
-
-	display_widget_unfocused(dlg_data, selected_widget(dlg_data));
+	struct widget_data *previously_selected_widget;
+	
+	previously_selected_widget = selected_widget(dlg_data);
 
 	do {
 		dlg_data->selected_widget_id += direction;
@@ -200,7 +203,8 @@ cycle_widget_focus(struct dialog_data *dlg_data, int direction)
 	} while (!widget_is_focusable(selected_widget(dlg_data))
 		 && dlg_data->selected_widget_id != prev_selected);
 
-	display_widget_focused(dlg_data, selected_widget(dlg_data));
+	display_widget(dlg_data, previously_selected_widget);
+	display_widget(dlg_data, selected_widget(dlg_data));
 	redraw_from_window(dlg_data->win);
 }
 

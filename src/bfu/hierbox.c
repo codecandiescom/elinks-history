@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.195 2004/11/21 14:53:30 zas Exp $ */
+/* $Id: hierbox.c,v 1.196 2004/11/22 07:28:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -224,7 +224,7 @@ hierbox_ev_kbd(struct dialog_data *dlg_data)
 	if (browser->expansion_callback)
 		browser->expansion_callback();
 
-	display_widget_focused(dlg_data, dlg_data->widgets_data);
+	display_widget(dlg_data, dlg_data->widgets_data);
 
 	return EVENT_PROCESSED;
 }

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.181 2004/11/21 17:15:51 zas Exp $ */
+/* $Id: listbox.c,v 1.182 2004/11/22 07:28:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -547,12 +547,12 @@ mouse_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 		switch (get_mouse_button(ev)) {
 			case B_WHEEL_DOWN:
 				box_sel_move(dlg_item, 1);
-				display_widget_focused(dlg_data, dlg_item);
+				display_widget(dlg_data, dlg_item);
 				return EVENT_PROCESSED;
 
 			case B_WHEEL_UP:
 				box_sel_move(dlg_item, -1);
-				display_widget_focused(dlg_data, dlg_item);
+				display_widget(dlg_data, dlg_item);
 				return EVENT_PROCESSED;
 		}
 	}
@@ -578,7 +578,7 @@ mouse_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 				box->sel->expanded = !box->sel->expanded;
 		}
 
-		display_widget_focused(dlg_data, widget_data);
+		display_widget(dlg_data, widget_data);
 
 		return EVENT_PROCESSED;
 	}
@@ -606,42 +606,42 @@ kbd_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 			/* Moving the box */
 			if (action == ACT_MENU_DOWN) {
 				box_sel_move(dlg_item, 1);
-				display_widget_focused(dlg_data, dlg_item);
+				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (action == ACT_MENU_UP) {
 				box_sel_move(dlg_item, -1);
-				display_widget_focused(dlg_data, dlg_item);
+				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (action == ACT_MENU_PAGE_DOWN) {
 				box_sel_move(dlg_item, dlg_item->box.height / 2);
-				display_widget_focused(dlg_data, dlg_item);
+				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (action == ACT_MENU_PAGE_UP) {
 				box_sel_move(dlg_item, -dlg_item->box.height / 2);
-				display_widget_focused(dlg_data, dlg_item);
+				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (action == ACT_MENU_HOME) {
 				box_sel_move(dlg_item, -INT_MAX);
-				display_widget_focused(dlg_data, dlg_item);
+				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (action == ACT_MENU_END) {
 				box_sel_move(dlg_item, INT_MAX);
-				display_widget_focused(dlg_data, dlg_item);
+				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
@@ -654,7 +654,7 @@ kbd_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 					box->sel->marked = !box->sel->marked;
 					box_sel_move(dlg_item, 1);
 				}
-				display_widget_focused(dlg_data, dlg_item);
+				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}

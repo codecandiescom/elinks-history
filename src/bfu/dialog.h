@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.51 2004/11/19 17:14:56 zas Exp $ */
+/* $Id: dialog.h,v 1.52 2004/11/22 07:28:49 miciah Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -103,7 +103,6 @@ struct dialog_data {
 	struct box box;
 	int number_of_widgets;
 	int selected_widget_id;
-	unsigned int focus_selected_widget:1;
 	struct term_event *term_event;
 
 	struct widget_data widgets_data[1]; /* must be at end of struct */

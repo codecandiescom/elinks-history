@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.87 2004/11/21 17:15:51 zas Exp $ */
+/* $Id: widget.h,v 1.88 2004/11/22 07:28:49 miciah Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -67,10 +67,7 @@ struct widget_data {
 	} info;
 };
 
-/* Display widget selected. */
-void display_widget_focused(struct dialog_data *, struct widget_data *);
-/* Display widget unselected. */
-void display_widget_unfocused(struct dialog_data *, struct widget_data *);
+void display_widget(struct dialog_data *, struct widget_data *);
 
 static inline int
 widget_is_focusable(struct widget_data *widget_data)

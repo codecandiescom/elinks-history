@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.183 2004/11/21 14:03:25 zas Exp $ */
+/* $Id: dialogs.c,v 1.184 2004/11/22 07:28:49 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -432,7 +432,7 @@ push_move_button(struct dialog_data *dlg_data,
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
 #endif
-	display_widget_focused(dlg_data, widget_data);
+	display_widget(dlg_data, widget_data);
 	return EVENT_PROCESSED;
 }
 

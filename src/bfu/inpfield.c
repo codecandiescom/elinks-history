@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.185 2004/11/21 17:15:50 zas Exp $ */
+/* $Id: inpfield.c,v 1.186 2004/11/22 07:28:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -244,7 +244,7 @@ display_field_do(struct dialog_data *dlg_data, struct widget_data *widget_data,
 {
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *color;
-	int sel = dlg_data->focus_selected_widget;
+	int sel = is_selected_widget(dlg_data, widget_data);
 
 	int_bounds(&widget_data->info.field.vpos,
 		   widget_data->info.field.cpos - widget_data->box.width + 1,
@@ -503,7 +503,7 @@ kbd_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return EVENT_NOT_PROCESSED;
 
 display_field:
-	display_widget_focused(dlg_data, widget_data);
+	display_widget(dlg_data, widget_data);
 	redraw_from_window(dlg_data->win);
 	return EVENT_PROCESSED;
 }

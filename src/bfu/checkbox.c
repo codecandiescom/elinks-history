@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.90 2004/11/21 17:15:50 zas Exp $ */
+/* $Id: checkbox.c,v 1.91 2004/11/22 07:28:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,7 +62,7 @@ display_checkbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	struct color_pair *color;
 	unsigned char *text;
 	struct box *pos = &widget_data->box;
-	int selected = dlg_data->focus_selected_widget;
+	int selected = is_selected_widget(dlg_data, widget_data);
 
 	color = get_bfu_color(term, "dialog.checkbox");
 	if (!color) return EVENT_PROCESSED;
@@ -149,12 +149,12 @@ select_checkbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 			*cdata = widget_data->widget->info.checkbox.gnum;
 			wdata->info.checkbox.checked = 0;
-			display_widget_unfocused(dlg_data, wdata);
+			display_widget(dlg_data, wdata);
 		}
 		widget_data->info.checkbox.checked = 1;
 	}
 
-	display_widget_focused(dlg_data, widget_data);
+	display_widget(dlg_data, widget_data);
 	return EVENT_PROCESSED;
 }
 

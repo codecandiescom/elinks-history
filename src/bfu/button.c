@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.80 2004/11/21 17:15:50 zas Exp $ */
+/* $Id: button.c,v 1.81 2004/11/22 07:28:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,7 +118,7 @@ display_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	struct box *pos = &widget_data->box;
 	int len = widget_data->box.width - BUTTON_LR_LEN;
 	int x = pos->x + BUTTON_LEFT_LEN;
-	int sel = dlg_data->focus_selected_widget;
+	int sel = is_selected_widget(dlg_data, widget_data);
 
 	if (sel) {
 		shortcut_color = get_bfu_color(term, "dialog.button-shortcut-selected");

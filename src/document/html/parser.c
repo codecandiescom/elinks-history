@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.241 2003/10/30 13:30:32 zas Exp $ */
+/* $Id: parser.c,v 1.242 2003/10/30 16:49:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3044,10 +3044,6 @@ free_tags_lookup(void)
 
 void
 parse_html(unsigned char *html, unsigned char *eof,
-	   void (*put_chars)(void *, unsigned char *, int),
-	   void (*line_break)(void *),
-	   void (*init)(void *),
-	   void *(*special)(void *, enum html_special_type, ...),
 	   void *f, unsigned char *head)
 {
 	/*unsigned char *start = html;*/
@@ -3058,19 +3054,11 @@ parse_html(unsigned char *html, unsigned char *eof,
 	position = 0;
 	was_br = 0;
 	was_li = 0;
-	put_chars_f = put_chars;
-	line_break_f = line_break;
-	init_f = init;
-	special_f = special;
 	ff = f;
 	eoff = eof;
 	if (head) process_head(head);
 
 set_lt:
-	put_chars_f = put_chars;
-	line_break_f = line_break;
-	init_f = init;
-	special_f = special;
 	ff = f;
 	eoff = eof;
 	lt = html;
@@ -3094,7 +3082,7 @@ set_lt:
 			while (h < eof && WHITECHAR(*h)) h++;
 			if (h + 1 < eof && h[0] == '<' && h[1] == '/') {
 				if (!parse_element(h, eof, &name, &namelen, &attr, &end)) {
-					put_chrs(lt, html - lt, put_chars, f);
+					put_chrs(lt, html - lt, put_chars_f, f);
 					lt = html = h;
 					putsp = 1;
 					goto element;
@@ -3105,10 +3093,10 @@ set_lt:
 			if (*(html - 1) == ' ') {
 				/* BIG performance win; not sure if it doesn't cause any bug */
 				if (html < eof && !WHITECHAR(*html)) continue;
-				put_chrs(lt, html - lt, put_chars, f);
+				put_chrs(lt, html - lt, put_chars_f, f);
 			} else {
-				put_chrs(lt, html - 1 - lt, put_chars, f);
-				put_chrs(" ", 1, put_chars, f);
+				put_chrs(lt, html - 1 - lt, put_chars_f, f);
+				put_chrs(" ", 1, put_chars_f, f);
 			}
 
 skip_w:
@@ -3117,25 +3105,25 @@ skip_w:
 			goto set_lt;
 
 put_sp:
-			put_chrs(" ", 1, put_chars, f);
+			put_chrs(" ", 1, put_chars_f, f);
 			/*putsp = -1;*/
 		}
 
 		if (par_format.align == AL_NONE) {
 			putsp = 0;
 			if (*html == ASCII_TAB) {
-				put_chrs(lt, html - lt, put_chars, f);
-				put_chrs("        ", 8 - (position % 8), put_chars, f);
+				put_chrs(lt, html - lt, put_chars_f, f);
+				put_chrs("        ", 8 - (position % 8), put_chars_f, f);
 				html++;
 				goto set_lt;
 			} else if (*html == ASCII_CR || *html == ASCII_LF) {
-				put_chrs(lt, html - lt, put_chars, f);
+				put_chrs(lt, html - lt, put_chars_f, f);
 
 next_break:
 				if (*html == ASCII_CR && html < eof - 1
 				    && html[1] == ASCII_LF)
 					html++;
-				ln_break(1, line_break, f);
+				ln_break(1, line_break_f, f);
 				html++;
 				if (*html == ASCII_CR || *html == ASCII_LF) {
 					line_breax = 0;
@@ -3148,7 +3136,7 @@ next_break:
 		while (*html < ' ') {
 			/*if (putsp == 1) goto put_sp;
 			putsp = 0;*/
-			if (html - lt) put_chrs(lt, html - lt, put_chars, f);
+			if (html - lt) put_chrs(lt, html - lt, put_chars_f, f);
 			dotcounter++;
 			html++; lt = html;
 			if (*html >= ' ' || WHITECHAR(*html) || html >= eof) {
@@ -3156,7 +3144,7 @@ next_break:
 
 				if (dots) {
 					memset(dots, '.', dotcounter);
-					put_chrs(dots, dotcounter, put_chars, f);
+					put_chrs(dots, dotcounter, put_chars_f, f);
 					mem_free(dots);
 				}
 				goto set_lt;
@@ -3166,7 +3154,7 @@ next_break:
 		if (html + 2 <= eof && html[0] == '<' && (html[1] == '!' || html[1] == '?') && !d_opt->plain) {
 			/*if (putsp == 1) goto put_sp;
 			putsp = 0;*/
-			put_chrs(lt, html - lt, put_chars, f);
+			put_chrs(lt, html - lt, put_chars_f, f);
 			html = skip_comment(html, eof);
 			goto set_lt;
 		}
@@ -3181,7 +3169,7 @@ next_break:
 element:
 		inv = *name == '/'; name += inv; namelen -= inv;
 		if (!inv && putsp == 1 && !html_top.invisible) goto put_sp;
-		put_chrs(lt, html - lt, put_chars, f);
+		put_chrs(lt, html - lt, put_chars_f, f);
 		if (par_format.align != AL_NONE) if (!inv && !putsp) {
 			unsigned char *ee = end;
 			unsigned char *nm;
@@ -3190,7 +3178,7 @@ element:
 				if (*nm == '/') goto ng;
 			if (ee < eof && WHITECHAR(*ee)) {
 				/*putsp = -1;*/
-				put_chrs(" ", 1, put_chars, f);
+				put_chrs(" ", 1, put_chars_f, f);
 			}
 
 ng:;
@@ -3225,13 +3213,13 @@ ng:;
 				unsigned char *a;
 
 				if (d_opt->plain) {
-					put_chrs("<", 1, put_chars, f);
+					put_chrs("<", 1, put_chars_f, f);
 					html = prev_html + 1;
 					break;
 				}
-				ln_break(ei->linebreak, line_break, f);
+				ln_break(ei->linebreak, line_break_f, f);
 				if (ei->name && ((a = get_attr_val(attr, "id")))) {
-					special(f, SP_TAG, a);
+					special_f(f, SP_TAG, a);
 					mem_free(a);
 				}
 				if (!html_top.invisible) {
@@ -3240,7 +3228,7 @@ ng:;
 
 					if (ei->func == html_table && d_opt->tables && table_level < HTML_MAX_TABLE_LEVEL) {
 						format_table(attr, html, eof, &html, f);
-						ln_break(2, line_break, f);
+						ln_break(2, line_break_f, f);
 						goto set_lt;
 					}
 					if (ei->func == html_select) {
@@ -3306,7 +3294,7 @@ ng:;
 					}
 					for (elt = e; elt != (void *)&html_stack; elt = elt->prev)
 						if (elt->linebreak > lnb) lnb = elt->linebreak;
-					ln_break(lnb, line_break, f);
+					ln_break(lnb, line_break_f, f);
 					while (e->prev != (void *)&html_stack) kill_html_stack_item(e->prev);
 					kill_html_stack_item(e);
 					break;
@@ -3318,8 +3306,8 @@ ng:;
 		goto set_lt; /* unreachable */
 	}
 
-	put_chrs(lt, html - lt, put_chars, f);
-	ln_break(1, line_break, f);
+	put_chrs(lt, html - lt, put_chars_f, f);
+	ln_break(1, line_break_f, f);
 	putsp = -1;
 	position = 0;
 	/*line_breax = 1;*/
@@ -3710,7 +3698,11 @@ done_html_parser_state(struct html_element *element)
 void
 init_html_parser(unsigned char *url, struct document_options *options,
 		 unsigned char *start, unsigned char *end,
-		 struct string *head, struct string *title)
+		 struct string *head, struct string *title,
+		 void (*put_chars)(void *, unsigned char *, int),
+		 void (*line_break)(void *),
+		 void (*init)(void *),
+		 void *(*special)(void *, enum html_special_type, ...))
 {
 	struct html_element *e;
 
@@ -3721,6 +3713,10 @@ init_html_parser(unsigned char *url, struct document_options *options,
 
 	startf = start;
 	eofff = end;
+	put_chars_f = put_chars;
+	line_break_f = line_break;
+	init_f = init;
+	special_f = special;
 	scan_http_equiv(start, end, head, title);
 
 	e = mem_calloc(1, sizeof(struct html_element));

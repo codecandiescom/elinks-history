@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.344 2003/10/30 14:27:59 zas Exp $ */
+/* $Id: renderer.c,v 1.345 2003/10/30 16:49:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1180,10 +1180,6 @@ static inline void
 do_format(char *start, char *end, struct part *part, unsigned char *head)
 {
 	parse_html(start, end,
-		   (void (*)(void *, unsigned char *, int)) put_chars_conv,
-		   (void (*)(void *)) line_break,
-		   (void (*)(void *)) html_init,
-		   (void *(*)(void *, enum html_special_type, ...)) html_special,
 		   part, head);
 }
 
@@ -1448,7 +1444,11 @@ format_html(struct cache_entry *ce, struct document *document)
 
 	if (ce->head) add_to_string(&head, ce->head);
 
-	init_html_parser(url, &document->options, start, end, &head, &title);
+	init_html_parser(url, &document->options, start, end, &head, &title,
+			 (void (*)(void *, unsigned char *, int)) put_chars_conv,
+			 (void (*)(void *)) line_break,
+			 (void (*)(void *)) html_init,
+			 (void *(*)(void *, enum html_special_type, ...)) html_special);
 
 	i = d_opt->plain;
 	convert_table = get_convert_table(head.source, document->options.cp,

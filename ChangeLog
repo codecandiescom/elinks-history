@@ -1,3 +1,320 @@
+Sat Jun 21 15:12:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Move the directory coloring closer to where it is used.  
+
+Sat Jun 21 14:55:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Decentralize @readlen.  
+
+Sat Jun 21 14:45:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Rename: h -> fd, r -> readlen.  
+
+Sat Jun 21 14:30:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/codes.h:
+
+	Standarized .h header. Zassie zassie... *sigh* 
+
+Sat Jun 21 14:28:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/codes.c:
+
+	Sticked a TODO about the troubles of l10n in the protocol/ corner.  
+
+Sat Jun 21 14:25:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/: codes.c, http.c:
+
+	http_connection_info.(error_code -> http_code). It is set to @h
+	always, regardless on @h's value. http_error_document() itself tests
+	whether the code is suitable for generic error document or not.
+	Also, don't show the generic error document for documents with
+	status 3xx.  
+
+Sat Jun 21 14:19:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	<h1> element content is now bold.  
+
+Sat Jun 21 14:19:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	<h1> element now triggers not html_center() but html_h1(), which is
+	like html_h2() but w/ default alignment AL_CENTER.  
+
+Sat Jun 21 14:13:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	html_h() now takes additional parameter @default_align.  
+
+Sat Jun 21 14:10:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/codes.c:
+
+	Use asprintfa() instead of asprintf().  
+
+Sat Jun 21 14:10:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/snprintf.h:
+
+	(v)asprintfa() ELinks memory managment wrappers for vasprintf()
+	introduced.  
+
+Sat Jun 21 14:07:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Minor cleanup.  
+
+Sat Jun 21 13:43:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/file.c, util/encoding.c, util/encoding.h:
+
+	Rename NB_KNOWN_ENCODING -> ENCODINGS_KNOWN 
+
+Sat Jun 21 13:25:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/: README, completion.tcsh:
+
+	Fix typo and added note about how out dated tcsh completions are.  
+
+Sat Jun 21 13:16:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/codes.c:
+
+	Correctly cast &str in the asprintf() call.  
+
+Sat Jun 21 13:15:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/codes.c:
+
+	Use asprintf() instead of vasprintf(), fixed the calling semantics.
+	*hide* 
+
+Sat Jun 21 13:14:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/codes.c:
+
+	Extended the error message by some dumb talk about what happenned.  
+
+Sat Jun 21 13:01:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/codes.c:
+
+	Compilation fix: info->error_code -> @code in http_error_document().  
+
+Sat Jun 21 13:01:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/codes.c:
+
+	Removed now superfluous @errs from http_error_document().  
+
+Sat Jun 21 13:00:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/codes.c:
+
+	The error document is now a format string. Tidied up the generated
+	document.  
+
+Sat Jun 21 12:56:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/: codes.c, codes.h, http.c:
+
+	Moved the error document generator from thats_all_folks fragment of
+	read_http_data() to http_error_document(), placed in
+	protocol/http/codes.c.  
+
+Sat Jun 21 12:29:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/codes.c:
+
+	Added missing inclusion of codes.h, removed superfluous stdio.h
+	inclusion.  
+
+Sat Jun 21 12:28:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/codes.c:
+
+	Normalized the file header. The second time already. *grumble* 
+
+Sat Jun 21 12:26:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Oops, added forgotten break in the chunk loop ;-).  
+
+Sat Jun 21 12:12:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Typo fix.  
+
+Sat Jun 21 12:10:48 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/: Makefile.am, codes.c, codes.h, http.c:
+
+	Text error message corresponding to error code is now printed.
+	codes.{c,h} provide a way to check if code is known and if yes,
+	which is its associate message.  
+
+Sat Jun 21 12:03:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Sticked a TODO.  
+
+Sat Jun 21 12:03:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Converted some of the HTTP error dummy document to lowercase.  
+
+Sat Jun 21 12:01:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	The chunk decoding loop was converted from goto teleports to a while
+	(1) loop.  
+
+Sat Jun 21 11:58:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	The chunked branch moved outside of an else branch, the not-chunked
+	branch now jumps at read_more at the end. I didn't reindent the
+	chunked branch and i know why.  
+
+Sat Jun 21 11:54:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Moved the thats_all_folks code at the end of read_http_data().  
+
+Sat Jun 21 11:52:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Random minor cleanups --- mostly just reindentations.  
+
+Sat Jun 21 11:06:10 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	error_code replaces code and is_error integers.  
+
+Sat Jun 21 11:02:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Fix for bug 165 was improved a bit, now title is set.  
+
+Sat Jun 21 10:41:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Fast hack to fix bug 165. Feel free to improve.  
+
+Sat Jun 21 09:09:08 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.po files were resynced. French translation was updated.  
+
+Sat Jun 21 08:54:53 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/af_unix.c:
+
+	A now useless comment was removed.  
+
+Sat Jun 21 08:48:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: setup.h, lowlevel/af_unix.c:
+
+	General cleanup. MAX_BIND_TRIES was removed from setup.h since it is
+	only used in af_unix.c/AF_INET and there is no need for the user to
+	change it. Code related to perhaps future remote mode was removed.  
+
+Sat Jun 21 08:06:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/dump/dump.c:
+
+	Compilation fix: incomplete renaming of stat to status broke
+	compilation, it was fixed. Pasky please review.  
+
+Sat Jun 21 00:33:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/dump/dump.c:
+
+	Cleanup --- random variables renamed, some tests moved to nicer
+	places and so on.  
+
+Sat Jun 21 00:26:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/dump/dump.c:
+
+	Moved -dump implementation from dump_end() into dump_formatted().  
+
+Sat Jun 21 00:21:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/dump/dump.c:
+
+	stat->ce->... -> ce->...  
+
+Sat Jun 21 00:17:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/dump/dump.c:
+
+	Oops, dump_source()'s return value fix.  
+
+Sat Jun 21 00:17:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/dump/dump.c:
+
+	Reduced indentation.  
+
+Sat Jun 21 00:16:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/dump/dump.c:
+
+	Moved the -source code from dump_end() into dump_source().  
+
+Sat Jun 21 00:03:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Reverted most of the recent changes done in the realm of
+	parse_element() and get_attr_val(). They were buggy beyond repair
+	and it was agreed that they should go. I tried to preserve at least
+	part of the cleanups done in the meantime, so some variable renames
+	etc could be carried over.  
+
+Fri Jun 20 23:34:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/encoding.c:
+
+	Rename decoding_handler -> decoding_backend to better reflex the
+	recent changes.  
+
+Fri Jun 20 23:02:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/http/http.c, util/encoding.c, util/encoding.h:
+
+	Further encapsulate the decoding handlers by making the name part of
+	the backend.  
+
 Fri Jun 20 20:20:08 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/mime/mime.c:

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.78 2003/05/21 09:32:59 miciah Exp $ */
+/* $Id: view.c,v 1.79 2003/05/21 11:32:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3110,10 +3110,10 @@ quit:
 				ses = NULL; /* Disappeared in EV_ABORT handler. */
 				goto x;
 			case ACT_TAB_NEXT:
-				switch_to_tab(ses->tab->term, ses->tab->term->current_tab + 1, -1);
+				switch_to_next_tab(ses->tab->term);
 				goto x;
 			case ACT_TAB_PREV:
-				switch_to_tab(ses->tab->term, ses->tab->term->current_tab - 1, -1);
+				switch_to_prev_tab(ses->tab->term);
 				goto x;
 
 			default:

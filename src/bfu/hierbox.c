@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.82 2003/11/22 14:08:18 jonas Exp $ */
+/* $Id: hierbox.c,v 1.83 2003/11/22 14:19:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -347,6 +347,48 @@ init_hierbox_action_info(struct listbox_data *box, struct terminal *term,
 				    scan_for_marks, action_info);
 
 	return action_info;
+}
+
+/* Info action */
+
+static void
+push_ok_info_button(void *action_info_)
+{
+	struct hierbox_action_info *action_info = action_info_;
+
+	action_info->box->ops->unlock(action_info->item);
+}
+
+int
+push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *button)
+{
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
+	struct terminal *term = dlg_data->win->term;
+	struct hierbox_action_info *action_info;
+	unsigned char *msg;
+
+	if (!box->sel || !box->sel->udata) return 0;
+
+	assert(box->ops);
+
+	action_info = init_hierbox_action_info(box, term, 0);
+	if (!action_info) return 0;
+
+	msg = box->ops->get_info(action_info->item, term);
+	if (!msg) {
+		mem_free(action_info);
+		return 0;
+	}
+
+	box->ops->lock(action_info->item);
+
+	msg_box(term, getml(action_info, NULL), MSGBOX_FREE_TEXT,
+		N_("Info"), AL_LEFT,
+		msg,
+		action_info, 1,
+		N_("OK"), push_ok_info_button, B_ESC | B_ENTER);
+
+	return 0;
 }
 
 /* Delete action */

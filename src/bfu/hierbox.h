@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.29 2003/11/22 14:02:41 jonas Exp $ */
+/* $Id: hierbox.h,v 1.30 2003/11/22 14:19:55 jonas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -53,6 +53,7 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 		struct hierbox_browser *browser, void *udata,
 		size_t buttons, ...);
 
+int push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *button);
 int push_hierbox_delete_button(struct dialog_data *dlg_data, struct widget_data *button);
 
 #endif

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.11 2003/11/22 13:54:36 jonas Exp $ */
+/* $Id: dialogs.c,v 1.12 2003/11/22 14:19:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -124,40 +124,6 @@ get_cookie_info(struct cookie *cookie, struct terminal *term)
 	return string.source;
 }
 
-static void
-done_info_button(void *vhop)
-{
-	struct cookie *cookie = vhop;
-
-	object_unlock(cookie);
-}
-
-static int
-push_info_button(struct dialog_data *dlg_data, struct widget_data *button)
-{
-	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
-	struct terminal *term = dlg_data->win->term;
-	struct cookie *cookie;
-	unsigned char *msg;
-
-	/* Show history item info */
-	if (!box->sel) return 0;
-	cookie = box->sel->udata;
-	if (!cookie) return 0;
-
-	msg = get_cookie_info(cookie, term);
-
-	object_lock(cookie);
-
-	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("Info"), AL_LEFT,
-		msg,
-		cookie, 1,
-		N_("OK"), done_info_button, B_ESC | B_ENTER);
-
-	return 0;
-}
-
 static int
 push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
@@ -171,7 +137,7 @@ menu_cookie_manager(struct terminal *term, void *fcp, struct session *ses)
 	hierbox_browser(term, N_("Cookie manager"),
 			0, &cookie_browser, ses,
 			2,
-			N_("Info"), push_info_button, B_ENTER, ses,
+			N_("Info"), push_hierbox_info_button, B_ENTER, ses,
 			N_("Delete"), push_hierbox_delete_button, B_ENTER, ses,
 			N_("Save"), push_save_button, B_ENTER, ses);
 }

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.49 2003/09/25 19:17:33 zas Exp $ */
+/* $Id: inpfield.c,v 1.50 2003/10/05 15:09:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -271,13 +271,13 @@ display_field_do(struct widget_data *di, struct dialog_data *dlg, int sel,
 	}
 }
 
-static inline void
+static void
 display_field(struct widget_data *di, struct dialog_data *dlg, int sel)
 {
 	display_field_do(di, dlg, sel, 0);
 }
 
-static inline void
+static void
 display_field_pass(struct widget_data *di, struct dialog_data *dlg, int sel)
 {
 	display_field_do(di, dlg, sel, 1);

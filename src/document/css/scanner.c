@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.69 2004/01/21 05:05:12 jonas Exp $ */
+/* $Id: scanner.c,v 1.70 2004/01/21 05:17:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,6 +73,8 @@ get_css_identifier_type(unsigned char *ident, int length,
 		{ "rad",	CSS_TOKEN_ANGLE,	CSS_TOKEN_DIMENSION },
 		{ "s",		CSS_TOKEN_TIME,		CSS_TOKEN_DIMENSION },
 
+		{ "rgb",	CSS_TOKEN_RGB,		CSS_TOKEN_FUNCTION },
+
 		{ "charset",	CSS_TOKEN_CHARSET,	CSS_TOKEN_AT_KEYWORD },
 		{ "font-face",	CSS_TOKEN_FONT_FACE,	CSS_TOKEN_AT_KEYWORD },
 		{ "import",	CSS_TOKEN_IMPORT,	CSS_TOKEN_AT_KEYWORD },
@@ -87,7 +89,7 @@ get_css_identifier_type(unsigned char *ident, int length,
 		struct css_identifier *ident = &identifiers2type[i];
 
 		if (ident->base_type == base_type
-		    && !strncasecmp(name, ident, length))
+		    && !strncasecmp(ident->name, ident, length))
 			return identifiers2type[i].type;
 	}
 
@@ -219,19 +221,20 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		scan_css(string, CSS_CHAR_IDENT);
 
 		if (*string == '(') {
-			if (string - token->string == 3
-			    && !memcmp(token->string, "rgb", 3)) {
-				type = CSS_TOKEN_RGB;
+			unsigned char *function_end = string + 1;
 
-			} else {
-				unsigned char *function_end = string + 1;
+			/* Make sure that we have an ending ')' */
+			skip_css(function_end, ')');
+			if (*function_end == ')') {
+				int length = string - token->string;
 
-				skip_css(function_end, ')');
+				type = get_css_identifier_type(token->string,
+						length, CSS_TOKEN_FUNCTION);
 
-				/* Try to skip to the end so we do not generate
-				 * tokens for every argument. */
-				if (*function_end == ')') {
-					type = CSS_TOKEN_FUNCTION;
+				/* If it is not a known function just skip the
+				 * how arg stuff so we don't end up generating
+				 * a lot of useless tokens. */
+				if (type == CSS_TOKEN_FUNCTION) {
 					string = function_end;
 				}
 			}

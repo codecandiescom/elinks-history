@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.112 2004/11/19 16:16:26 zas Exp $ */
+/* $Id: document.c,v 1.113 2004/12/29 15:46:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -291,7 +291,7 @@ no_header_info:
 
 	if (!*headers) goto no_header_info;
 
-	title = artificial ? N_("Artificial header info") : N_("Header info");
+	title = artificial ? N_("Internal header info") : N_("Header info");
 
 	/* Headers info message box. */
 	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,

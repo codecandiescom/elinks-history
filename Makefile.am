@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.29 2003/01/02 18:19:33 pasky Exp $
+## $Id: Makefile.am,v 1.30 2003/01/02 18:31:05 pasky Exp $
 
 SUBDIRS = Unicode contrib doc intl po src test
 
@@ -15,9 +15,15 @@ install-exec-hook:
 	@echo "make symlink 'links' pointing to 'elinks'."
 	@echo "**************************************************************"
 
+
+DISTCLEANFILES = acinclude.m4 $(srcdir)/acinclude.m4
+
 # The aclocal.m4 dependency genereated by automake is broken - it depends on
 # acinclude.m4 instead of $(srcdir)/acinclude.m4. We try to workaround it.
 
 acinclude.m4: $(srcdir)/acinclude.m4
+	@echo "dnl This is never used. Look at $(srcdir)/acinclude.m4." > acinclude.m4
+
 $(srcdir)/acinclude.m4: $(srcdir)/m4/*.m4
-	cd $(srcdir); cat m4/*.m4 > acinclude.m4
+	@echo "dnl This is automatically generated from m4/ files! Do not modify!" > $(srcdir)/acinclude.m4
+	cat $(srcdir)/m4/*.m4 >> $(srcdir)/acinclude.m4

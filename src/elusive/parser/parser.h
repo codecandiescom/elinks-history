@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.5 2002/12/30 02:04:45 pasky Exp $ */
+/* $Id: parser.h,v 1.6 2002/12/30 16:42:05 pasky Exp $ */
 
 #ifndef EL__USIVE_PARSER_PARSER_H
 #define EL__USIVE_PARSER_PARSER_H
@@ -15,11 +15,11 @@ enum parser_backend_type {
 	PARSER_HTML,
 };
 
-/* This is the ELusive parser state - it is created by elusive_init() and
- * destroyed by elusive_done(). Note that the ELusive parser works perfectly
- * with multiple states - it will maintain the complete context per-sate, so
- * you can parse various sources independently at once. You then call init()
- * and done() for each of the states independently. */
+/* This is the ELusive parser state - it is created by init() and destroyed by
+ * done(). Note that the ELusive parser works perfectly with multiple states -
+ * it will maintain the complete context pter-sate, thus you can parse various
+ * sources independently at once. You then call init() and done() for each of
+ * the states independently. */
 
 struct parser_state {
 	enum parser_backend_type parser;
@@ -39,17 +39,17 @@ struct parser_backend {
 
 /* Initialize the ELusive parsing engine. Returns NULL if failed. */
 struct parser_state *
-elusive_init(enum parser_backend_type parser);
+elusive_parser_init(enum parser_backend_type parser);
 
 /* Parse the supplied snippet of source, in the context of state (thus also
  * previously parser source snippets). The str will usually end up pointing at
  * the end of the string, but it can point at few chars before that point, if
  * it's needed for an intermediate state (ie. while parsing tag content). */
 void
-elusive_parse(struct parser_state *state, unsigned char **str, int *len);
+elusive_parser_parse(struct parser_state *state, unsigned char **str, int *len);
 
 /* Shutdown the ELusive parsing engine. */
 void
-elusive_done(struct parser_state *state);
+elusive_parser_done(struct parser_state *state);
 
 #endif

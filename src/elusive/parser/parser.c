@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.8 2002/12/30 14:22:46 zas Exp $ */
+/* $Id: parser.c,v 1.9 2002/12/30 16:42:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@ struct parser_backend *parser_backends[] = {
 
 
 struct parser_state *
-elusive_init(enum parser_backend_type parser)
+elusive_parser_init(enum parser_backend_type parser)
 {
 	struct parser_state *state;
 
@@ -43,7 +43,7 @@ elusive_init(enum parser_backend_type parser)
 }
 
 void
-elusive_parse(struct parser_state *state, unsigned char **str, int *len)
+elusive_parser_parse(struct parser_state *state, unsigned char **str, int *len)
 {
 	if (parser_backends[state->parser] &&
 	    parser_backends[state->parser]->parse)
@@ -51,7 +51,7 @@ elusive_parse(struct parser_state *state, unsigned char **str, int *len)
 }
 
 void
-elusive_done(struct parser_state *state)
+elusive_parser_done(struct parser_state *state)
 {
 	if (parser_backends[state->parser] &&
 	    parser_backends[state->parser]->done)

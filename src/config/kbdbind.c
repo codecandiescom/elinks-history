@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.251 2004/07/27 22:01:00 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.252 2004/07/27 22:05:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -447,6 +447,7 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "find-next-back", ACT_MAIN_FIND_NEXT_BACK, DACT(N_("Find the previous occurrence of the current search text")) },
 	{ "forget-credentials", ACT_MAIN_FORGET_CREDENTIALS, DACT(N_("Forget authentication credentials")) },
 	{ "formhist-manager", ACT_MAIN_FORMHIST_MANAGER, DACT(N_("Open form history manager")) },
+	{ "frame-external-command", ACT_MAIN_FRAME_EXTERNAL_COMMAND, DACT(N_("Pass URI of current frame to external command")) },
 	{ "frame-maximize", ACT_MAIN_FRAME_MAXIMIZE, DACT(N_("Maximize the current frame")) },
 	{ "frame-next", ACT_MAIN_FRAME_NEXT, DACT(N_("Move to the next frame")) },
 	{ "frame-prev", ACT_MAIN_FRAME_PREV, DACT(N_("Move to the previous frame")) },

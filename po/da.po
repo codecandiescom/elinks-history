@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-25 23:50+0100\n"
-"PO-Revision-Date: 2005-01-31 19:27+0100\n"
+"PO-Revision-Date: 2005-01-31 23:27+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -693,7 +693,7 @@ msgstr "Indsend automatisk den første formular i de givne adresser."
 # bedre, men i så fald burde vi kalde det ID-nummer og ikke bare ID.
 #: src/config/cmdline.c:616
 msgid "Clone internal session with given ID"
-msgstr "Kloning af intern session med en given ID"
+msgstr "Kloning af intern session med et givent ID-nummer"
 
 #: src/config/cmdline.c:618
 msgid ""
@@ -702,8 +702,8 @@ msgid ""
 "new instance. You don't want to use it."
 msgstr ""
 "Bruges internt når ELinks-instanser åbnes i nye terminalvinduer.\n"
-"Den givne ID henviser til information som den nye instans baseres på.\n"
-"Dette programargument bør ikke benyttes."
+"Det givne ID-nummer henviser til information som den nye instans\n"
+"baseres på. Dette programargument bør ikke benyttes."
 
 #: src/config/cmdline.c:624
 msgid "Name of directory with configuration file"
@@ -1294,12 +1294,11 @@ msgstr "Primære tastetildelinger"
 
 #: src/config/kbdbind.c:258
 msgid "Edit mapping"
-msgstr "Redigér tastetildelinger"
+msgstr "Redigerings tastetildelinger"
 
-# Menu over tastaturoversigt?
 #: src/config/kbdbind.c:259
 msgid "Menu mapping"
-msgstr "Menu tastaturoversigt"
+msgstr "Menu tastetildelinger"
 
 #: src/config/kbdbind.c:430 src/config/kbdbind.c:550 src/config/kbdbind.c:581
 msgid "Do nothing"
@@ -1456,7 +1455,7 @@ msgstr "Forsøg at genoptage overførsel af det aktuelle link"
 
 #: src/config/kbdbind.c:469
 msgid "Pass URI of current link to external command"
-msgstr "Videregiv den aktuelle linkadresse et til eksternt program"
+msgstr "Videregiv den aktuelle linkadresse til eksternt program"
 
 #: src/config/kbdbind.c:470 src/config/kbdbind.c:563 src/config/kbdbind.c:587
 msgid "Follow the current link"
@@ -3982,7 +3981,7 @@ msgid ""
 "Pop up goto dialog in newly created tabs when there's no homepage\n"
 "set. This means also showing goto dialog on startup."
 msgstr ""
-"Åbn et \"gå til adresse\"-dialogvindue i nyåbnede faneblade\n"
+"Åbn et \"Gå til adresse\"-dialogvindue i nyåbnede faneblade\n"
 "når ingen hjemmeside er angivet. Dette indebærer også visning\n"
 "af \"gå til adresse\"-dialog ved opstart."
 
@@ -6394,7 +6393,7 @@ msgid ""
 "the value of the NNTPSERVER environment variable will be used."
 msgstr ""
 "Anvendes ved håndtering af news:-adresser til at omskrive til\n"
-"nntp: URI. Hvis sat til den tomme streng, vil miljøvariablen\n"
+"nntp:-adresser. Hvis sat til den tomme streng, vil miljøvariablen\n"
 "NNTPSERVER blive anvendt i stedet."
 
 #: src/protocol/nntp/nntp.c:42

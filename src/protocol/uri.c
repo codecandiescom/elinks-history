@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.109 2004/04/02 16:16:16 jonas Exp $ */
+/* $Id: uri.c,v 1.110 2004/04/02 16:58:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,6 +72,10 @@ get_protocol_end(const unsigned char *url)
 
 	return end;
 }
+
+/* Tcp port range */
+#define LOWEST_PORT 0
+#define HIGHEST_PORT 65535
 
 int
 parse_uri(struct uri *uri, unsigned char *uristring)
@@ -196,6 +200,17 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 		for (; host_end < port_end; host_end++)
 			if (*host_end < '0' || *host_end > '9')
 				return 0;
+
+		/* Check valid port value, and let show an error message
+		 * about invalid url syntax. */
+		if (uri->port && uri->portlen) {
+			int n;
+
+			errno = 0;
+			n = strtol(uri->port, NULL, 10);
+			if (errno || n < LOWEST_PORT || n > HIGHEST_PORT)
+				return 0;
+		}
 	}
 
 	if (*host_end == '/') host_end++;
@@ -218,8 +233,6 @@ unparse_uri(struct uri *uri)
 	return uristr;
 }
 
-
-
 int
 get_uri_port(struct uri *uri)
 {
@@ -230,7 +243,8 @@ get_uri_port(struct uri *uri)
 
 		errno = 0;
 		n = strtol(uri->port, NULL, 10);
-		if (!errno && n > 0) port = n;
+		if (!errno && n >= LOWEST_PORT && n <= HIGHEST_PORT)
+			port = n;
 	}
 
 	if (port == -1 && uri->protocol != PROTOCOL_UNKNOWN) {

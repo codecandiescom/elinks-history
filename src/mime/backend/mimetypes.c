@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.43 2004/07/04 11:26:40 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.44 2004/07/04 11:29:44 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-2004 The ELinks Project */
@@ -153,7 +153,7 @@ parse_mimetypes_file(unsigned char *filename)
 
 		/* Position on the next field in this line */
 		token = ctype;
-		skip_nonspace(tokan);
+		skip_nonspace(token);
 
 		if (!*token) continue;
 		*token++ = '\0';

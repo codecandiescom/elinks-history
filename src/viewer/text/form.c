@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.202 2004/06/17 19:16:06 jonas Exp $ */
+/* $Id: form.c,v 1.203 2004/06/17 23:41:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1286,25 +1286,14 @@ field_op(struct session *ses, struct document_view *doc_view,
 				break;
 			}
 
-			if (form_field_is_readonly(fc)) break;
-
-			length = strlen(fs->value);
-			if (length >= fc->maxlength) {
+			if (form_field_is_readonly(fc)
+			    || strlen(fs->value) >= fc->maxlength
+			    || !insert_in_string(&fs->value, fs->state, "?", 1)) {
 				status = FRAME_EVENT_OK;
 				break;
 			}
 
-			text = mem_realloc(fs->value, length + 2);
-			if (!text) {
-				status = FRAME_EVENT_OK;
-				break;
-			}
-
-			fs->value = text;
-
-			length = strlen(text + fs->state) + 1;
-			memmove(text + fs->state + 1, text + fs->state, length);
-			text[fs->state++] = ev->x;
+			fs->value[fs->state++] = ev->x;
 			break;
 	}
 

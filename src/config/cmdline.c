@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.60 2004/04/23 19:30:20 pasky Exp $ */
+/* $Id: cmdline.c,v 1.61 2004/04/23 19:32:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,8 @@
 static unsigned char *remote_url;
 
 static int
-parse_options_(int argc, unsigned char *argv[], struct option *opt, struct list_head *url_list)
+parse_options_(int argc, unsigned char *argv[], struct option *opt,
+               struct list_head *url_list)
 {
 	while (argc) {
 		argv++, argc--;
@@ -374,7 +375,7 @@ print_full_help(struct option *tree, unsigned char *path)
 			case OPT_LANGUAGE:
 #ifdef ENABLE_NLS
 				printf(G_("(default: \"%s\")"),
-					language_to_name(option->value.number));
+				       language_to_name(option->value.number));
 #endif
 				break;
 
@@ -477,7 +478,8 @@ print_short_help()
 		len = (len < 0) ? !!(*help) : len;
 
 		align[len] = '\0';
-		printf("  -%s%s %s%s%s\n", info, option->name, help, align, capt);
+		printf("  -%s%s %s%s%s\n",
+		       info, option->name, help, align, capt);
 		align[len] = ' ';
 		if (saved) {
 			done_string(saved);

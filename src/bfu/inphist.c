@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.44 2003/10/27 16:19:11 jonas Exp $ */
+/* $Id: inphist.c,v 1.45 2003/10/27 16:42:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,29 +126,37 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 }
 
 
-/* Search duplicate entries in history list and remove older ones. */
-static void
-remove_duplicate_entries(struct input_history *history, unsigned char *entry)
+/* Search for duplicate entries in history list, save first one and remove
+ * older ones. */
+static struct input_history_item *
+check_duplicate_entries(struct input_history *history, unsigned char *entry)
 {
-	struct input_history_item *item;
+	struct input_history_item *item, *first_duplicate = NULL;
 
-	if (!history || !entry || !*entry) return;
+	if (!history || !entry || !*entry) return NULL;
 
 	foreach (item, history->items) {
 		struct input_history_item *duplicate;
 
 		if (strcmp(item->d, entry)) continue;
 
-		/* found a duplicate -> remove it from history list */
+		/* Found a duplicate -> remove it from history list */
 
 		duplicate = item;
 		item = item->prev;
 
 		del_from_list(duplicate);
-		mem_free(duplicate);
 
-		history->size--;
+		/* Save the first duplicate entry */
+		if (!first_duplicate) {
+			first_duplicate = duplicate;
+		} else {
+			mem_free(duplicate);
+			history->size--;
+		}
 	}
+
+	return first_duplicate;
 }
 
 /* Add a new entry in inputbox history list, take care of duplicate if
@@ -167,15 +175,21 @@ add_to_input_history(struct input_history *history, unsigned char *entry,
 	trim_chars(entry, ' ', &length);
 	if (!length) return;
 
+	if (check_duplicate) {
+		item = check_duplicate_entries(history, entry);
+		if (item) {
+			add_to_list(history->items, item);
+			if (!history->nosave) history->dirty = 1;
+			return;
+		}
+	}
+
 	/* Copy it all etc. */
 	/* One byte is already reserved for url in struct input_history_item. */
 	item = mem_alloc(sizeof(struct input_history_item) + length);
 	if (!item) return;
 
 	memcpy(item->d, entry, length + 1);
-
-	if (check_duplicate)
-		remove_duplicate_entries(history, item->d);
 
 	/* add new entry to history list */
 	add_to_list(history->items, item);

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.46 2003/07/03 21:51:12 jonas Exp $ */
+/* $Id: connection.c,v 1.47 2003/07/03 22:26:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -827,6 +827,8 @@ load_url(unsigned char *url, unsigned char *ref_url, struct status *stat,
 		stat->c = NULL;
 		stat->ce = NULL;
 		stat->pri = pri;
+		stat->state = S_OUT_OF_MEM;
+		stat->prev_error = 0;
 	}
 
 #ifdef DEBUG
@@ -837,11 +839,6 @@ load_url(unsigned char *url, unsigned char *ref_url, struct status *stat,
 			assertm(st != stat, "Status assigned to '%s'", c->url);
 	}
 #endif
-
-	if (stat) {
-		stat->state = S_OUT_OF_MEM;
-		stat->prev_error = 0;
-	}
 
 	if (cache_mode <= NC_CACHE && find_in_cache(url, &e) && !e->incomplete) {
 		if (!e->refcount &&
@@ -911,7 +908,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct status *stat,
 	c->url = u;
 	c->ref_url = ref_url;
 
-	if (cache_mode < NC_RELOAD && e && e->frag.next != &e->frag
+	if (cache_mode < NC_RELOAD && e && !list_empty(e->frag)
 	    && !((struct fragment *) e->frag.next)->offset)
 		c->from = ((struct fragment *) e->frag.next)->length;
 
@@ -951,11 +948,9 @@ change_connection(struct status *oldstat, struct status *newstat,
 		  int newpri, int interrupt)
 {
 	struct connection *c;
-	int oldpri;
 
 	assertm(oldstat, "change_connection: oldstat == NULL");
 
-	oldpri = oldstat->pri;
 	if (oldstat->state < 0) {
 		if (newstat) {
 			newstat->ce = oldstat->ce;
@@ -972,8 +967,8 @@ change_connection(struct status *oldstat, struct status *newstat,
 
 	c = oldstat->c;
 
-	c->pri[oldpri]--;
-	assertm(c->pri[oldpri] >= 0, "priority counter underflow");
+	c->pri[oldstat->pri]--;
+	assertm(c->pri[oldstat->pri] >= 0, "priority counter underflow");
 
 	c->pri[newpri]++;
 	del_from_list(oldstat);

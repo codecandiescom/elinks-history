@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.1 2002/03/17 11:29:10 pasky Exp $ */
+/* $Id: session.h,v 1.2 2002/03/17 13:54:12 pasky Exp $ */
 
 #ifndef EL__SESSION_H
 #define EL__SESSION_H
@@ -7,12 +7,12 @@
 struct location;
 struct session;
 
-#include "cache.h"
-#include "html.h"
-#include "html_r.h"
-#include "sched.h"
-#include "terminal.h"
-#include "view.h"
+#include <document/cache.h>
+#include <document/view.h>
+#include <document/html/parser.h>
+#include <document/html/renderer.h>
+#include <lowlevel/sched.h>
+#include <lowlevel/terminal.h>
 
 struct location {
 	struct location *next;

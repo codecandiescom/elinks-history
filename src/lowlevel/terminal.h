@@ -1,9 +1,9 @@
-/* $Id: terminal.h,v 1.1 2002/03/17 11:29:11 pasky Exp $ */
+/* $Id: terminal.h,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
 
 #ifndef EL__TERMINAL_H
 #define EL__TERMINAL_H
 
-#include "links.h" /* list_head */
+#include <links.h> /* list_head */
 
 typedef unsigned short chr;
 

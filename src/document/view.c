@@ -1,5 +1,5 @@
 /* HTML viewer (and many more) */
-/* $Id: view.c,v 1.1 2002/03/17 11:29:10 pasky Exp $ */
+/* $Id: view.c,v 1.2 2002/03/17 13:54:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,26 +21,26 @@
 #include <unistd.h>
 #endif
 
-#include "links.h"
+#include <links.h>
 
-#include "bfu.h"
-#include "bookmarks.h"
-#include "cache.h"
-#include "charsets.h"
-#include "cookies.h"
-#include "default.h"
-#include "error.h"
-#include "html.h"
-#include "html_r.h"
-#include "http.h"
-#include "kbd.h"
-#include "kbdbind.h"
-#include "language.h"
-#include "lua.h"
-#include "main.h"
-#include "menu.h"
-#include "terminal.h"
-#include "url.h"
+#include <main.h>
+#include <bfu/bfu.h>
+#include <bfu/menu.h>
+#include <bookmarks/bookmarks.h>
+#include <cookies/cookies.h>
+#include <config/default.h>
+#include <config/kbdbind.h>
+#include <document/cache.h>
+#include <document/html/parser.h>
+#include <document/html/renderer.h>
+#include <internat/charsets.h>
+#include <internat/language.h>
+#include <lowlevel/kbd.h>
+#include <lowlevel/terminal.h>
+#include <lua/lua.h>
+#include <protocol/http.h>
+#include <protocol/url.h>
+#include <util/error.h>
 
 /* FIXME: Add comments!! --Zas */
 /* TODO: This file needs to be splitted to many smaller ones. Definitively.

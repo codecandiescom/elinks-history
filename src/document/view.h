@@ -1,11 +1,11 @@
-/* $Id: view.h,v 1.1 2002/03/17 11:29:10 pasky Exp $ */
+/* $Id: view.h,v 1.2 2002/03/17 13:54:12 pasky Exp $ */
 
 #ifndef EL__VIEW_H
 #define EL__VIEW_H
 
-#include "html.h"
-#include "html_r.h"
-#include "terminal.h"
+#include <document/html/parser.h>
+#include <document/html/renderer.h>
+#include <lowlevel/terminal.h>
 
 struct view_state {
 	int view_pos;
@@ -19,7 +19,7 @@ struct view_state {
 	unsigned char url[1];
 };
 
-#include "session.h"
+#include <document/session.h>
 
 extern int textarea_editor;
 void textarea_edit(int, struct terminal *, struct form_control *, struct form_state *, struct f_data_c *, struct link *);

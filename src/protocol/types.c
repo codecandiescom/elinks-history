@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.1 2002/03/17 11:29:12 pasky Exp $ */
+/* $Id: types.c,v 1.2 2002/03/17 13:54:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,14 +7,14 @@
 
 #include <string.h>
 
-#include "links.h"
+#include <links.h>
 
-#include "bfu.h"
-#include "http.h"
-#include "language.h"
-#include "terminal.h"
-#include "types.h"
-#include "url.h"
+#include <bfu/bfu.h>
+#include <internat/language.h>
+#include <lowlevel/terminal.h>
+#include <protocol/http.h>
+#include <protocol/types.h>
+#include <protocol/url.h>
 
 struct list_head mailto_prog = { &mailto_prog, &mailto_prog };
 struct list_head telnet_prog = { &telnet_prog, &telnet_prog };

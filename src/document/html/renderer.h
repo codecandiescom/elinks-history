@@ -1,12 +1,12 @@
-/* $Id: renderer.h,v 1.1 2002/03/17 11:29:11 pasky Exp $ */
+/* $Id: renderer.h,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
 
-#ifndef EL__HTML_R_H
-#define EL__HTML_R_H
+#ifndef EL__DOCUMENT_HTML_RENDERER_H
+#define EL__DOCUMENT_HTML_RENDERER_H
 
-#include "charsets.h"
-#include "colors.h"
-#include "links.h" /* list_head */
-#include "select.h" 
+#include <links.h> /* list_head */
+#include <document/html/colors.h>
+#include <internat/charsets.h>
+#include <lowlevel/select.h>
 /* We need this included later, otherwise it will miss some our
  * declarations. */
 /* #include "html.h" */
@@ -31,8 +31,8 @@ struct document_options {
 	unsigned char *framename;
 };
 
-#include "html.h"
-#include "session.h"
+#include <document/html/parser.h>
+#include <document/session.h>
 
 struct tag {
 	struct tag *next;
@@ -144,7 +144,7 @@ struct f_data {
 	struct search **slines2;
 };
 
-#include "view.h"
+#include <document/view.h>
 
 struct f_data_c {
 	struct f_data_c *next;

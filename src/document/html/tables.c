@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.1 2002/03/17 11:29:11 pasky Exp $ */
+/* $Id: tables.c,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,13 +8,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "links.h"
+#include <links.h>
 
-#include "colors.h"
-#include "error.h"
-#include "html.h"
-#include "html_r.h"
-#include "html_tbl.h"
+#include <document/html/colors.h>
+#include <document/html/parser.h>
+#include <document/html/renderer.h>
+#include <document/html/tables.h>
+#include <util/error.h>
 
 #define AL_TR		-1
 

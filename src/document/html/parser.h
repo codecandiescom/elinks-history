@@ -1,18 +1,18 @@
-/* $Id: parser.h,v 1.1 2002/03/17 11:29:11 pasky Exp $ */
+/* $Id: parser.h,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
 
-#ifndef EL__HTML_H
-#define EL__HTML_H
+#ifndef EL__DOCUMENT_HTML_PARSER_H
+#define EL__DOCUMENT_HTML_PARSER_H
 
 /* And this is stuff for session.h. */
 struct link;
 struct form_control;
 struct f_data;
 
-#include "bfu.h"
-#include "colors.h"
-#include "links.h"
-#include "html_r.h"
-#include "session.h"
+#include <links.h>
+#include <bfu/bfu.h>
+#include <document/session.h>
+#include <document/html/colors.h>
+#include <document/html/renderer.h>
 
 /* XXX: This is just terible - this interface is from 75% only for other HTML
  * files - there's lack of any well defined interface and it's all randomly

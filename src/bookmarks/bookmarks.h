@@ -1,11 +1,11 @@
-/* $Id: bookmarks.h,v 1.1 2002/03/17 11:29:10 pasky Exp $ */
+/* $Id: bookmarks.h,v 1.2 2002/03/17 13:54:12 pasky Exp $ */
 
 #ifndef EL__BOOKMARKS_H
 #define EL__BOOKMARKS_H
 
-#include "bfu.h"
-#include "session.h"
-#include "terminal.h"
+#include <bfu/bfu.h>
+#include <document/session.h>
+#include <lowlevel/terminal.h>
 
 /* Read/write bookmarks functions */
 void read_bookmarks();

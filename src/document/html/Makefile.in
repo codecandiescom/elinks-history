@@ -68,7 +68,7 @@ INCLUDES =   -I$(srcdir)/../..
 
 
 noinst_LIBRARIES = libhtml.a
-libhtml_a_SOURCES =   colors.c  colots.h  parser.c  parser.h  renderer.c  renderer.h  tables.c  tables.h
+libhtml_a_SOURCES =   colors.c  colors.h  parser.c  parser.h  renderer.c  renderer.h  tables.c  tables.h
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../../config.h

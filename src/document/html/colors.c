@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.1 2002/03/17 11:29:11 pasky Exp $ */
+/* $Id: colors.c,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,9 +8,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "links.h"
+#include <links.h>
 
-#include "colors.h"
+#include <document/html/colors.h>
 
 
 struct color_spec {

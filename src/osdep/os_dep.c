@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.1 2002/03/17 11:29:12 pasky Exp $ */
+/* $Id: os_dep.c,v 1.2 2002/03/17 13:54:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,10 +21,10 @@
 
 #include "links.h"
 
-#include "kbd.h"
-#include "language.h"
-#include "select.h"
-#include "terminal.h"
+#include <internat/language.h>
+#include <lowlevel/kbd.h>
+#include <lowlevel/select.h>
+#include <lowlevel/terminal.h>
 
 #if defined(HAVE_LIBGPM) && defined(HAVE_GPM_H)
 #define USE_GPM

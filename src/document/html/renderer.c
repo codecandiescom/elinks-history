@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.1 2002/03/17 11:29:11 pasky Exp $ */
+/* $Id: renderer.c,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,22 +8,22 @@
 #include <stdarg.h>
 #include <string.h>
 
-#include "links.h"
+#include <links.h>
 
-#include "cache.h"
-#include "charsets.h"
-#include "colors.h"
-#include "default.h"
-#include "error.h"
-#include "html.h"
-#include "html_r.h"
-#include "html_tbl.h"
-#include "http.h"
-#include "main.h"
-#include "select.h"
-#include "session.h"
-#include "url.h"
-#include "view.h"
+#include <main.h>
+#include <config/default.h>
+#include <document/cache.h>
+#include <document/session.h>
+#include <document/view.h>
+#include <document/html/colors.h>
+#include <document/html/parser.h>
+#include <document/html/renderer.h>
+#include <document/html/tables.h>
+#include <internat/charsets.h>
+#include <lowlevel/select.h>
+#include <protocol/http.h>
+#include <protocol/url.h>
+#include <util/error.h>
 
 static inline int color_distance(struct rgb *c1, struct rgb *c2)
 {

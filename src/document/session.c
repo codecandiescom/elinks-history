@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.1 2002/03/17 11:29:10 pasky Exp $ */
+/* $Id: session.c,v 1.2 2002/03/17 13:54:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,24 +39,24 @@
 #endif
 #endif
 
-#include "links.h"
+#include <links.h>
 
-#include "bfu.h"
-#include "cache.h"
-#include "default.h"
-#include "error.h"
-#include "html.h"
-#include "html_r.h"
-#include "language.h"
-#include "lua.h"
-#include "menu.h"
-#include "sched.h"
-#include "select.h"
-#include "session.h"
-#include "terminal.h"
-#include "types.h"
-#include "url.h"
-#include "view.h"
+#include <bfu/bfu.h>
+#include <bfu/menu.h>
+#include <config/default.h>
+#include <document/cache.h>
+#include <document/view.h>
+#include <document/session.h>
+#include <document/html/parser.h>
+#include <document/html/renderer.h>
+#include <internat/language.h>
+#include <lowlevel/sched.h>
+#include <lowlevel/select.h>
+#include <lowlevel/terminal.h>
+#include <lua/lua.h>
+#include <protocol/types.h>
+#include <protocol/url.h>
+#include <util/error.h>
 
 
 #ifdef HAVE_LONG_LONG

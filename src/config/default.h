@@ -1,11 +1,11 @@
-/* $Id: default.h,v 1.1 2002/03/17 11:30:06 pasky Exp $ */
+/* $Id: default.h,v 1.2 2002/03/17 13:54:12 pasky Exp $ */
 
 #ifndef EL__DEFAULT_H
 #define EL__DEFAULT_H
 
-#include "colors.h"
-#include "session.h"
-#include "terminal.h"
+#include <document/session.h>
+#include <document/html/colors.h>
+#include <lowlevel/terminal.h>
 
 #define option option_dirty_workaround_for_name_clash_with_include_on_cygwin
 

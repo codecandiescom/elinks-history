@@ -1,9 +1,9 @@
-/* $Id: connect.h,v 1.1 2002/03/17 11:29:11 pasky Exp $ */
+/* $Id: connect.h,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
 
 #ifndef EL__CONNECT_H
 #define EL__CONNECT_H
 
-#include "sched.h"
+#include <lowlevel/sched.h>
 
 struct read_buffer {
 	int sock;

@@ -1,11 +1,11 @@
-/* $Id: menu.h,v 1.1 2002/03/17 11:29:10 pasky Exp $ */
+/* $Id: menu.h,v 1.2 2002/03/17 13:54:11 pasky Exp $ */
 
 #ifndef EL__MENU_H
 #define EL__MENU_H
 
-#include "html_r.h"
-#include "session.h"
-#include "terminal.h"
+#include <document/session.h>
+#include <document/html/renderer.h>
+#include <lowlevel/terminal.h>
 
 void activate_bfu_technology(struct session *, int);
 

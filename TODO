@@ -3,6 +3,8 @@ TODO list for links (sorted approximatelly by priority):
 
 	Resuming of downloads (URGENT)
 
+	Each header file should include full path in anti-reinclude #define
+
 	Support for <xmp>
 
 	Support for vlink
@@ -51,4 +53,4 @@ suffix appropriate to the file type.
 	CSS (?)
 
 
-$Id: TODO,v 1.13 2002/03/14 17:38:39 pasky Exp $
+$Id: TODO,v 1.14 2002/03/17 13:54:08 pasky Exp $

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.1 2002/03/17 11:29:12 pasky Exp $ */
+/* $Id: file.c,v 1.2 2002/03/17 13:54:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,10 +36,10 @@
 
 #include "links.h"
 
-#include "cache.h"
-#include "default.h"
-#include "file.h"
-#include "sched.h"
+#include <config/default.h>
+#include <document/cache.h>
+#include <lowlevel/sched.h>
+#include <protocol/file.h>
 
 #ifdef FS_UNIX_RIGHTS
 void setrwx(int m, unsigned char *p)

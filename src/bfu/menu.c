@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.1 2002/03/17 11:29:10 pasky Exp $ */
+/* $Id: menu.c,v 1.2 2002/03/17 13:54:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,29 +16,29 @@
 #include <unistd.h>
 #endif
 
-#include "links.h"
+#include <links.h>
 
-#include "bfu.h"
-#include "bookmarks.h"
-#include "cache.h"
-#include "charsets.h"
-#include "default.h"
+#include <main.h>
+#include <bfu/bfu.h>
+#include <bfu/menu.h>
+#include <bookmarks/bookmarks.h>
+#include <config/default.h>
+#include <document/cache.h>
+#include <document/session.h>
+#include <document/view.h>
+#include <document/html/renderer.h>
+#include <internat/charsets.h>
+#include <internat/language.h>
+#include <lowlevel/kbd.h>
+#include <lowlevel/sched.h>
+#include <lowlevel/select.h>
+#include <lowlevel/terminal.h>
+#include <lua/lua.h>
+#include <protocol/types.h>
+#include <protocol/url.h>
 #ifdef LEAK_DEBUG
-#include "error.h"
+#include <util/error.h>
 #endif
-#include "html_r.h"
-#include "kbd.h"
-#include "language.h"
-#include "lua.h"
-#include "main.h"
-#include "menu.h"
-#include "sched.h"
-#include "select.h"
-#include "session.h"
-#include "terminal.h"
-#include "types.h"
-#include "url.h"
-#include "view.h"
 
 void menu_about(struct terminal *term, void *d, struct session *ses)
 {

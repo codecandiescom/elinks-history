@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.1 2002/03/17 11:29:11 pasky Exp $ */
+/* $Id: terminal.c,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,17 +12,17 @@
 #include <unistd.h>
 #endif
 
-#include "links.h"
+#include <links.h>
 
-#include "error.h"
-#include "kbd.h"
-#include "main.h"
-#include "select.h"
+#include <main.h>
 /* We don't require this ourselves, but view.h does, and directly including
  * view.h w/o session.h already loaded doesn't work :/. --pasky */
-#include "session.h"
-#include "terminal.h"
-#include "view.h"
+#include <document/session.h>
+#include <document/view.h>
+#include <lowlevel/kbd.h>
+#include <lowlevel/select.h>
+#include <lowlevel/terminal.h>
+#include <util/error.h>
 
 int hard_write(int fd, unsigned char *p, int l)
 {

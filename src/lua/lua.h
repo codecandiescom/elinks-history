@@ -1,11 +1,11 @@
-/* $Id: lua.h,v 1.1 2002/03/17 11:29:12 pasky Exp $ */
+/* $Id: lua.h,v 1.2 2002/03/17 13:54:14 pasky Exp $ */
 
 #ifndef EL__LUA_H
 #define EL__LUA_H
 
 #ifdef HAVE_LUA
 
-#include "session.h"
+#include <document/session.h>
 
 extern lua_State *lua_state;
 

@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.1 2002/03/17 11:29:12 pasky Exp $ */
+/* $Id: error.c,v 1.2 2002/03/17 13:54:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,10 +12,10 @@
 #include <unistd.h>
 #endif
 
-#include "links.h"
+#include <links.h>
 
-#include "bfu.h"
-#include "error.h"
+#include <bfu/bfu.h>
+#include <util/error.h>
 
 
 #ifdef LEAK_DEBUG

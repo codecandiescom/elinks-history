@@ -1,5 +1,5 @@
 /* URL parser and translator */
-/* $Id: url.c,v 1.1 2002/03/17 11:29:12 pasky Exp $ */
+/* $Id: url.c,v 1.2 2002/03/17 13:54:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,17 +8,17 @@
 #include <netdb.h>
 #include <string.h>
 
-#include "links.h"
+#include <links.h>
 
-#include "error.h"
-#include "file.h"
-#include "finger.h"
-#include "ftp.h"
-#include "http.h"
-#include "https.h"
-#include "mailto.h"
-#include "sched.h"
-#include "url.h"
+#include <lowlevel/sched.h>
+#include <protocol/file.h>
+#include <protocol/finger.h>
+#include <protocol/ftp.h>
+#include <protocol/http.h>
+#include <protocol/https.h>
+#include <protocol/mailto.h>
+#include <protocol/url.h>
+#include <util/error.h>
 
 struct {
 	unsigned char *prot;

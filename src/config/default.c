@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.1 2002/03/17 11:30:06 pasky Exp $ */
+/* $Id: default.c,v 1.2 2002/03/17 13:54:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,20 +21,20 @@
 #include <unistd.h>
 #endif
 
-#include "links.h"
+#include <links.h>
 
-#include "bfu.h"
-#include "charsets.h"
-#include "default.h"
-#include "dns.h"
-#include "colors.h"
-#include "html_r.h"
-#include "kbdbind.h"
-#include "language.h"
-#include "main.h"
-#include "session.h"
-#include "terminal.h"
-#include "types.h"
+#include <main.h>
+#include <bfu/bfu.h>
+#include <config/default.h>
+#include <config/kbdbind.h>
+#include <document/session.h>
+#include <document/html/colors.h>
+#include <document/html/renderer.h>
+#include <internat/charsets.h>
+#include <internat/language.h>
+#include <lowlevel/dns.h>
+#include <lowlevel/terminal.h>
+#include <protocol/types.h>
 
 void get_system_name()
 {

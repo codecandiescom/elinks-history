@@ -1,7 +1,7 @@
-/* $Id: tables.h,v 1.1 2002/03/17 11:29:11 pasky Exp $ */
+/* $Id: tables.h,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
 
-#ifndef EL__HTML_TBL_H
-#define EL__HTML_TBL_H
+#ifndef EL__DOCUMENT_HTML_TABLES_H
+#define EL__DOCUMENT_HTML_TABLES_H
 
 extern int table_level;
 

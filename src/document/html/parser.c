@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.1 2002/03/17 11:29:11 pasky Exp $ */
+/* $Id: parser.c,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,22 +13,22 @@
 #include <unistd.h> /* XXX: only for debug_stack() */
 #endif
 
-#include "links.h"
+#include <links.h>
 
-#include "bfu.h"
-#include "charsets.h"
-#include "colors.h"
-#include "default.h"
-#include "error.h"
-#include "html.h"
-#include "html_r.h"
-#include "html_tbl.h"
-#include "http.h"
-#include "kbdbind.h"
-#include "session.h"
-#include "terminal.h"
-#include "url.h"
-#include "view.h"
+#include <bfu/bfu.h>
+#include <config/default.h>
+#include <config/kbdbind.h>
+#include <document/session.h>
+#include <document/view.h>
+#include <document/html/colors.h>
+#include <document/html/parser.h>
+#include <document/html/renderer.h>
+#include <document/html/tables.h>
+#include <internat/charsets.h>
+#include <lowlevel/terminal.h>
+#include <protocol/http.h>
+#include <protocol/url.h>
+#include <util/error.h>
 
 /* TODO: This needs rewrite. Yes, no kidding. */
 

@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.1 2002/03/17 11:29:11 pasky Exp $ */
+/* $Id: interlink.c,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,14 +14,14 @@
 #include <unistd.h>
 #endif
 
-#include "links.h"
+#include <links.h>
 
-#include "af_unix.h"
-#include "default.h"
-#include "error.h"
-#include "select.h"
-#include "session.h"
-#include "terminal.h"
+#include <config/default.h>
+#include <document/session.h>
+#include <lowlevel/af_unix.h>
+#include <lowlevel/select.h>
+#include <lowlevel/terminal.h>
+#include <util/error.h>
 
 #ifdef DONT_USE_AF_UNIX
 

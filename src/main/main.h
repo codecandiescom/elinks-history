@@ -1,9 +1,9 @@
-/* $Id: main.h,v 1.1 2002/03/17 11:29:09 pasky Exp $ */
+/* $Id: main.h,v 1.2 2002/03/17 13:54:11 pasky Exp $ */
 
 #ifndef EL__MAIN_H
 #define EL__MAIN_H
 
-#include "terminal.h"
+#include <lowlevel/terminal.h>
 
 extern unsigned char *path_to_exe;
 

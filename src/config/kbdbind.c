@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.1 2002/03/17 11:30:06 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.2 2002/03/17 13:54:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,12 +11,12 @@
 #endif
 #include <string.h>
 
-#include "links.h"
+#include <links.h>
 
-#include "default.h"
-#include "kbd.h"
-#include "kbdbind.h"
-#include "lua.h"
+#include <config/default.h>
+#include <config/kbdbind.h>
+#include <lowlevel/kbd.h>
+#include <lua/lua.h>
 
 #ifndef HAVE_LUA
 #define LUA_NOREF	0

@@ -1,17 +1,17 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.1 2002/03/17 11:29:12 pasky Exp $ */
+/* $Id: finger.c,v 1.2 2002/03/17 13:54:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include "links.h"
+#include <links.h>
 
-#include "cache.h"
-#include "connect.h"
-#include "finger.h"
-#include "sched.h"
-#include "url.h"
+#include <document/cache.h>
+#include <lowlevel/connect.h>
+#include <lowlevel/sched.h>
+#include <protocol/finger.h>
+#include <protocol/url.h>
 
 void finger_send_request(struct connection *);
 void finger_sent_request(struct connection *);

@@ -1,10 +1,10 @@
-/* $Id: bfu.h,v 1.1 2002/03/17 11:29:10 pasky Exp $ */
+/* $Id: bfu.h,v 1.2 2002/03/17 13:54:11 pasky Exp $ */
 
 #ifndef EL__BFU_H
 #define EL__BFU_H
 
-#include "links.h" /* list_head */
-#include "terminal.h"
+#include <links.h> /* list_head */
+#include <lowlevel/terminal.h>
 
 struct memory_list {
 	int n;

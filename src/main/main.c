@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.1 2002/03/17 11:29:09 pasky Exp $ */
+/* $Id: main.c,v 1.2 2002/03/17 13:54:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,31 +20,31 @@
 #include <unistd.h>
 #endif
 
-#include "links.h"
+#include <links.h>
 
-#include "af_unix.h"
-#include "bookmarks.h"
-#include "cache.h"
-#include "charsets.h"
-#include "colors.h"
-#include "cookies.h"
-#include "default.h"
-#include "dns.h"
-#include "error.h"
-#include "html_r.h"
-#include "https.h"
-#include "kbd.h"
-#include "kbdbind.h"
-#include "language.h"
-#include "lua.h"
-#include "main.h"
-#include "menu.h"
-#include "select.h"
-#include "sched.h"
-#include "terminal.h"
-#include "types.h"
-#include "url.h"
-#include "view.h"
+#include <main.h>
+#include <bfu/menu.h>
+#include <bookmarks/bookmarks.h>
+#include <config/default.h>
+#include <config/kbdbind.h>
+#include <cookies/cookies.h>
+#include <document/cache.h>
+#include <document/view.h>
+#include <document/html/colors.h>
+#include <document/html/renderer.h>
+#include <internat/charsets.h>
+#include <internat/language.h>
+#include <lowlevel/kbd.h>
+#include <lowlevel/af_unix.h>
+#include <lowlevel/dns.h>
+#include <lowlevel/sched.h>
+#include <lowlevel/select.h>
+#include <lowlevel/terminal.h>
+#include <lua/lua.h>
+#include <protocol/https.h>
+#include <protocol/types.h>
+#include <protocol/url.h>
+#include <util/error.h>
 
 enum {
 	RET_OK,

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.100 2004/06/25 10:52:31 zas Exp $ */
+/* $Id: string.c,v 1.101 2004/07/03 10:26:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,6 +279,24 @@ add_to_string(struct string *string, unsigned char *source)
 
 	return (*source ? add_bytes_to_string(string, source, strlen(source))
 			: string);
+}
+
+inline struct string *
+add_crlf_to_string(struct string *string)
+{
+	assertm(string, "[add_crlf_to_string]");
+	if_assert_failed { return NULL; }
+
+	check_string_magic(string);
+
+	if (!realloc_string(string, string->length + 2))
+		return NULL;
+
+	string->source[string->length++] = ASCII_CR;
+	string->source[string->length++] = ASCII_LF;
+	string->source[string->length]   = '\0';
+
+	return string;
 }
 
 inline struct string *

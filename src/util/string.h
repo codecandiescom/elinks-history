@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.74 2004/04/23 14:20:52 pasky Exp $ */
+/* $Id: string.h,v 1.75 2004/07/03 10:26:46 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -148,6 +148,7 @@ void done_string(struct string *string);
 struct string *add_to_string(struct string *string, unsigned char *text);
 struct string *add_char_to_string(struct string *string, unsigned char character);
 struct string *add_string_to_string(struct string *to, struct string *from);
+struct string *add_crlf_to_string(struct string *string);
 
 /* Adds each C string to @string until a terminating NULL is met. */
 struct string *string_concat(struct string *string, ...);

@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.1 2004/01/28 00:57:56 jonas Exp $ */
+/* $Id: scanner.h,v 1.2 2004/01/28 01:12:03 jonas Exp $ */
 
 #ifndef EL__UTIL_SCANNER_H
 #define EL__UTIL_SCANNER_H
@@ -35,6 +35,48 @@ struct scanner_token {
 #define scanner_token_contains(token, str) \
 	scanner_token_strlcasecmp(token, str, sizeof(str) - 1)
 
+
+struct scan_table_info {
+	enum { SCAN_RANGE, SCAN_STRING, SCAN_END } type;
+	union scan_table_data {
+		struct { unsigned char *source; long length; } string;
+		struct { long start, end; } range;
+	} data;
+	int bits;
+};
+
+#define	SCAN_TABLE_SIZE	256
+
+/* FIXME: We assume that sizeof(void *) == sizeof(long) here! --pasky */
+#define SCAN_TABLE_INFO(type, data1, data2, bits) \
+	{ (type), { { (unsigned char *) (data1), (data2) } }, (bits) }
+
+#define SCAN_TABLE_RANGE(from, to, bits) SCAN_TABLE_INFO(SCAN_RANGE, from, to, bits)
+#define SCAN_TABLE_STRING(str, bits)	 SCAN_TABLE_INFO(SCAN_STRING, str, sizeof(str) - 1, bits)
+#define SCAN_TABLE_END			 SCAN_TABLE_INFO(SCAN_END, 0, 0, 0)
+
+struct scanner_string_mapping {
+	unsigned char *name;
+	int type;
+	int base_type;
+};
+
+struct scanner_info {
+	/* Table containing how to map strings to token types */
+	struct scanner_string_mapping *string_mappings;
+
+	/* Information for how to initialize the scanner table */
+	struct scan_table_info *scan_table_info;
+
+	/* The scanner table */
+	/* Contains bitmaps for the various characters groups.
+	 * Idea sync'ed from mozilla browser. */
+	int scan_table[SCAN_TABLE_SIZE];
+};
+
+
+/* Initializes the scan table */
+void init_scanner_info(struct scanner_info *scanner_info);
 
 /* The number of tokens in the scanners token table:
  * At best it should be big enough to contain properties with space separated
@@ -117,50 +159,6 @@ get_next_scanner_token(struct scanner *scanner)
  * This token will then also be skipped. */
 struct scanner_token *
 skip_scanner_tokens(struct scanner *scanner, int skipto, int precedence);
-
-
-struct scan_table_info {
-	enum { SCAN_RANGE, SCAN_STRING, SCAN_END } type;
-	union scan_table_data {
-		struct { unsigned char *source; long length; } string;
-		struct { long start, end; } range;
-	} data;
-	int bits;
-};
-
-#define	SCAN_TABLE_SIZE	256
-
-/* FIXME: We assume that sizeof(void *) == sizeof(long) here! --pasky */
-#define SCAN_TABLE_INFO(type, data1, data2, bits) \
-	{ (type), { { (unsigned char *) (data1), (data2) } }, (bits) }
-
-#define SCAN_TABLE_RANGE(from, to, bits) SCAN_TABLE_INFO(SCAN_RANGE, from, to, bits)
-#define SCAN_TABLE_STRING(str, bits)	 SCAN_TABLE_INFO(SCAN_STRING, str, sizeof(str) - 1, bits)
-#define SCAN_TABLE_END			 SCAN_TABLE_INFO(SCAN_END, 0, 0, 0)
-
-
-struct scanner_string_mapping {
-	unsigned char *name;
-	int type;
-	int base_type;
-};
-
-
-struct scanner_info {
-	/* Table containing how to map strings to token types */
-	struct scanner_string_mapping *string_mappings;
-
-	/* Information for how to initialize the scanner table */
-	struct scan_table_info *scan_table_info;
-
-	/* The scanner table */
-	/* Contains bitmaps for the various characters groups.
-	 * Idea sync'ed from mozilla browser. */
-	int scan_table[SCAN_TABLE_SIZE];
-};
-
-/* Initializes the scan table */
-void init_scanner_info(struct scanner_info *scanner_info);
 
 /* Looks up the string from @ident to @end to in the @mappings table */
 int

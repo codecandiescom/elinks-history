@@ -1,4 +1,4 @@
-/* $Id: link.h,v 1.34 2004/06/13 22:26:06 zas Exp $ */
+/* $Id: link.h,v 1.35 2004/06/13 22:43:53 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_LINK_H
 #define EL__VIEWER_TEXT_LINK_H
@@ -30,7 +30,6 @@ unsigned char *get_current_link_info(struct session *ses, struct document_view *
 void set_pos_x(struct document_view *doc_view, struct link *link);
 void set_pos_y(struct document_view *doc_view, struct link *link);
 
-void find_link(struct document_view *doc_view, int direction, int normal);
 void find_link_up(struct document_view *doc_view);
 void find_link_page_up(struct document_view *doc_view);
 void find_link_down(struct document_view *doc_view);

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.216 2004/06/13 22:42:48 jonas Exp $ */
+/* $Id: link.c,v 1.217 2004/06/13 22:43:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,10 +53,10 @@ set_link(struct document_view *doc_view)
 	assert(doc_view);
 	if_assert_failed return;
 
-	if (!current_link_is_visible(doc_view))
-		find_link(doc_view, 1, 0);
-}
+	if (current_link_is_visible(doc_view)) return;
 
+	find_link_page_down(doc_view);
+}
 
 static inline int
 get_link_cursor_offset(struct document_view *doc_view, struct link *link)
@@ -432,7 +432,7 @@ set_pos_y(struct document_view *doc_view, struct link *link)
 /* direction == 1 -> DOWN
  * direction == -1 -> UP
  * normal == 0 -> PAGE	*/ /* TODO: invert test -> page */
-void
+static void
 find_link(struct document_view *doc_view, int direction, int normal)
 {
 	struct link **line;

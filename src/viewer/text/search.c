@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.241 2004/06/12 17:28:43 zas Exp $ */
+/* $Id: search.c,v 1.242 2004/06/13 22:43:53 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -800,7 +800,11 @@ find_next_link_in_search(struct document_view *doc_view, int direction)
 
 	if (direction == -2 || direction == 2) {
 		direction /= 2;
-		find_link(doc_view, direction, 0);
+		if (direction < 0)
+			find_link_page_up(doc_view);
+		else
+			find_link_page_down(doc_view);
+
 		if (doc_view->vs->current_link == -1) return 1;
 		goto nt;
 	}
@@ -822,7 +826,11 @@ nt:
 		mem_free_if(pt);
 	}
 
-	find_link(doc_view, direction, 0);
+	if (direction < 0)
+		find_link_page_up(doc_view);
+	else
+		find_link_page_down(doc_view);
+
 	return 1;
 }
 

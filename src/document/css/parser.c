@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.57 2004/01/27 00:42:50 pasky Exp $ */
+/* $Id: parser.c,v 1.58 2004/01/27 00:54:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -203,11 +203,7 @@ css_parse_selector(struct css_stylesheet *css, struct css_scanner *scanner)
 	if (token->type == CSS_TOKEN_HASH
 	    || token->type == CSS_TOKEN_HEX_COLOR) {
 		/* id */
-		token = get_next_css_token(scanner);
-		if (token->type != CSS_TOKEN_IDENT) {
-			goto syntax_error;
-		}
-		selector->id = memacpy(token->string, token->length);
+		selector->id = memacpy(token->string + 1, token->length - 1);
 		token = get_next_css_token(scanner);
 	}
 

@@ -1,3 +1,47 @@
+Thu May  6 22:06:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Fix keybinding toggling that was broken by the int <-> void *
+	removal.  
+
+Thu May  6 15:32:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/finger.c:
+
+	Rearrange functions so it is not necessary to declare any.  
+
+Thu May  6 15:26:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Fix typo.  
+
+Thu May  6 14:39:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/options.c:
+
+	Use get_cp_mime_name() instead of get_cp_name() as the name key for
+	the charset menu.  
+
+Thu May  6 14:39:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/charsets.c:
+
+	Use N_CODEPAGES and remove define of CODEPAGES.  
+
+Thu May  6 00:15:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Add header to the config pretty printing area.  
+
+Thu May  6 00:14:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* INSTALL, NEWS, README, THANKS:
+
+	Capital letter files got aspelled.  
+
 Wed May  5 17:52:45 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/session.c:

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.46 2003/12/22 12:15:31 pasky Exp $ */
+/* $Id: options.inc,v 1.47 2003/12/24 13:39:21 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -207,7 +207,7 @@ struct option_info config_options_info[] = {
 	INIT_OPT_BOOL("document.browse.links.active_link", N_("Enable color"),
 		"enable_color", 0, 0,
 		N_("Enable use of the active link background and text color\n"
-		"settings instead of browse.links from the document.")),
+		"settings instead of the link colors from the document.")),
 
 	INIT_OPT_BOOL("document.browse.links.active_link", N_("Bold"),
 		"bold", 0, 0,

@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.27 2003/12/01 14:51:34 pasky Exp $ */
+/* $Id: download.h,v 1.28 2003/12/22 02:09:14 pasky Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -23,6 +23,7 @@ struct file_download {
 	unsigned char *file;
 	unsigned char *prog;
 	struct session *ses;
+	struct terminal *term;
 	ttime remotetime;
 	int last_pos;
 	int handle;

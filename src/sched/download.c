@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.204 2003/12/22 02:07:50 pasky Exp $ */
+/* $Id: download.c,v 1.205 2003/12/22 02:09:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,6 +82,10 @@ get_download_ses(struct file_download *down)
 
 	foreach (ses, sessions)
 		if (ses == down->ses)
+			return ses;
+
+	foreach (ses, sessions)
+		if (ses->tab->term == down->term)
 			return ses;
 
 	if (!list_empty(sessions))
@@ -272,8 +276,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 				  file_download->last_pos);
 		close(file_download->handle);
 		file_download->handle = -1;
-		exec_on_terminal(get_download_ses(file_download)->tab->term,
-				 file_download->prog, file_download->file,
+		exec_on_terminal(term, file_download->prog, file_download->file,
 				 !!file_download->prog_flags);
 		file_download->delete = 0;
 		goto abort;
@@ -302,7 +305,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 abort:
 	if (get_opt_int("document.download.notify_bell")
 	    + file_download->notify >= 2) {
-		beep_terminal(get_download_ses(file_download)->tab->term);
+		beep_terminal(term);
 	}
 
 	abort_download(file_download, 0);
@@ -709,6 +712,9 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download->download.data = file_download;
 	file_download->handle = fd;
 	file_download->ses = cmdw_hop->ses;
+	/* The tab may be closed, but we will still want to ie. open the
+	 * handler on that terminal. */
+	file_download->term = cmdw_hop->ses->tab->term;
 	file_download->remotetime = 0;
 	file_download->box_item = init_listbox_item(&download_browser,
 					file_download->url, file_download);

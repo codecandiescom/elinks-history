@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.183 2004/12/27 19:35:24 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.184 2004/12/30 20:28:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1415,8 +1415,6 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	if (JSVAL_IS_STRING(id)) {
 		struct form *form;
 		unsigned char *string = jsval_to_string(ctx, &id);
-
-		undef_to_jsval(ctx, vp);
 
 #ifdef CONFIG_COOKIES
 		if (!strcmp(string, "cookie")) {

@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: error.c,v 1.12 2003/11/29 17:37:33 jonas Exp $ */
+/* $Id: error.c,v 1.13 2003/11/29 17:49:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,8 +132,13 @@ free_strerror_buf(void)
 #define current_speed(progress) \
 	((progress)->cur_loaded / (CURRENT_SPD_SEC * SPD_DISP_TIME / 1000))
 
+#define estimated_time(progress) \
+	(((progress)->size - (progress)->pos) \
+	 / ((longlong) (progress)->loaded * 10 / (progress)->elapsed / 100) \
+	 * 1000)
+
 /* If the terminal is wide enough show full message */
-#define WIDE(term, thin, wide) _((term)->width < 40 ? thin : wide, term)
+#define WIDE(term, thin, wide) _((term)->width < 80 ? thin : wide, term)
 
 unsigned char *
 get_stat_msg(struct download *stat, struct terminal *term)
@@ -176,6 +181,23 @@ get_stat_msg(struct download *stat, struct terminal *term)
 		add_char_to_string(&msg, ' '),
 		add_xnum_to_string(&msg, current_speed(stat->prg));
 		add_to_string(&msg, "/s");
+	}
+
+	if (term->width < 100) return msg.source;
+
+	/* Do the following only if there is room */
+
+	add_to_string(&msg, ", ");
+
+	add_to_string(&msg, _("Elapsed time", term));
+	add_char_to_string(&msg, ' ');
+	add_time_to_string(&msg, stat->prg->elapsed);
+
+	if (stat->prg->size >= 0 && stat->prg->loaded > 0) {
+		add_to_string(&msg, ", ");
+		add_to_string(&msg, _("estimated time", term));
+		add_char_to_string(&msg, ' ');
+		add_time_to_string(&msg, estimated_time(stat->prg));
 	}
 
 	return msg.source;

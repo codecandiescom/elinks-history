@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.124 2004/11/13 20:27:01 jonas Exp $ */
+/* $Id: action.c,v 1.125 2004/11/13 21:51:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -673,8 +673,8 @@ do_action(struct session *ses, enum main_action action, int verbose)
 		case ACT_MAIN_MARK_SET:
 #ifdef CONFIG_MARKS
 			ses->kbdprefix.mark = KP_MARK_SET;
-#endif
 			status = FRAME_EVENT_REFRESH;
+#endif
 			break;
 
 		case ACT_MAIN_MARK_GOTO:
@@ -683,8 +683,8 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			 * with all the marks. But the next letter must
 			 * still choose a mark directly! --pasky */
 			ses->kbdprefix.mark = KP_MARK_GOTO;
-#endif
 			status = FRAME_EVENT_REFRESH;
+#endif
 			break;
 
 		case ACT_MAIN_SCRIPTING_FUNCTION:

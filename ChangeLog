@@ -1,3 +1,23 @@
+Wed Jan 26 22:36:01 2005  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	updated and fixed hungarian translation 
+
+Wed Jan 26 15:20:52 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Try to link a simple program against -lperl during configuration
+	before enabling perl. This was reported by Miciah and I can
+	reproduce it, but question is if it is Debian specific.  
+
+Wed Jan 26 14:43:25 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Sync and fix a few translations.  
+
 Tue Jan 25 15:27:02 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* po/pl.po:

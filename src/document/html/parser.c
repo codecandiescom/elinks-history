@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.161 2003/07/22 01:52:59 jonas Exp $ */
+/* $Id: parser.c,v 1.162 2003/07/22 02:33:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1966,20 +1966,20 @@ abort:
 		goto se;
 	}
 
-#define add_select_item(string, value, order, dont_add) 			\
-	do {									\
-		if ((string).source) {						\
-			if (!value[(order) - 1])				\
-				value[(order) - 1] = memacpy((string).source,	\
-							     (string).length);	\
-			if (!(dont_add)) {					\
-				new_menu_item((string).source, (order) - 1, 1);	\
-				(string).source = NULL;				\
-				(string).length = 0;				\
-			} else {						\
-				done_string(&(string));				\
-			}							\
-		}								\
+#define add_select_item(string, value, order, dont_add) 		\
+	do {								\
+		if (!(string).source) break;				\
+									\
+		if (!value[(order) - 1])				\
+			value[(order) - 1] = memacpy((string).source,	\
+						     (string).length);	\
+		if (!(dont_add)) {					\
+			new_menu_item((string).source, (order) - 1, 1);	\
+			(string).source = NULL;				\
+			(string).length = 0;				\
+		} else {						\
+			done_string(&(string));				\
+		}							\
 	} while (0)
 
 	if (t_namelen == 7 && !strncasecmp(t_name, "/SELECT", 7)) {

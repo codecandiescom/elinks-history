@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.32 2003/06/15 11:25:24 pasky Exp $ */
+/* $Id: fastfind.c,v 1.33 2003/06/15 11:29:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -373,13 +373,15 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 			/* Convert char to its index value */
 			int idx = info->idxtab[ifcase(p->key[i])];
 
+			/* leafset[idx] is the desired leaf node's bucket. */
+
 			if (leafset[idx].l == 0) {
-				/* There's no leaf leafset yet */
+				/* There's no leaf yet */
 				if (!alloc_leafset(info)) goto alloc_error;
 				leafset[idx].l = info->leafsets_count;
 			}
 
-			/* Descend to leaf leafset */
+			/* Descend to leaf */
 			leafset = info->leafsets[leafset[idx].l];
 		}
 

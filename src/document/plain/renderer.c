@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.172 2005/01/01 14:38:52 jonas Exp $ */
+/* $Id: renderer.c,v 1.173 2005/02/25 17:05:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -527,8 +527,6 @@ render_plain_document(struct cache_entry *cached, struct document *document,
 	struct conv_table *convert_table;
 	unsigned char *head = empty_string_or_(cached->head);
 	struct plain_renderer renderer;
-
-	assert(!list_empty(cached->frag));
 
 	convert_table = get_convert_table(head, document->options.cp,
 					  document->options.assume_cp,

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.141 2004/12/30 23:50:39 jonas Exp $ */
+/* $Id: renderer.c,v 1.142 2005/02/25 17:05:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,12 +206,14 @@ render_encoded_document(struct cache_entry *cached, struct document *document)
 	enum stream_encoding encoding = ENCODING_NONE;
 	unsigned char *extension;
 	struct fragment *fragment = get_cache_fragment(cached);
-	struct string buffer = NULL_STRING;
+	struct string buffer = INIT_STRING("", 0);
 
-	if (!fragment) return;
-
-	buffer.source = fragment->data;
-	buffer.length = fragment->length;
+	/* Even empty documents have to be rendered so that info in the protocol
+	 * header, such as refresh info, get processed. (bug 625) */
+	if (fragment) {
+		buffer.source = fragment->data;
+		buffer.length = fragment->length;
+	}
 
 	extension = get_extension_from_uri(uri);
 	if (extension) {

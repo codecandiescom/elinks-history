@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.525 2005/02/03 23:36:58 adamg Exp $ */
+/* $Id: renderer.c,v 1.526 2005/02/25 17:05:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1756,7 +1756,7 @@ render_html_document(struct cache_entry *cached, struct document *document,
 	struct string head;
 	int i;
 
-	assert(cached && document && !list_empty(cached->frag));
+	assert(cached && document);
 	if_assert_failed return;
 
 	if (!init_string(&head)) return;

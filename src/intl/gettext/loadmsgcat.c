@@ -144,7 +144,7 @@ _nl_init_domain_conv(struct loaded_l10nfile *domain_file,
 			charsetstr += strlen("charset=");
 			len = strcspn(charsetstr, " \t\n");
 
-			charset = (unsigned char *) fmem_alloc(le*n + 1);
+			charset = (unsigned char *) fmem_alloc(len + 1);
 			*((unsigned char *) mempcpy(charset, charsetstr, len)) = '\0';
 
 			/* The output charset should normally be determined by the

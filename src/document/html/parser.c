@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.402 2004/04/23 22:30:03 pasky Exp $ */
+/* $Id: parser.c,v 1.403 2004/04/23 22:43:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2790,7 +2790,14 @@ process_head(unsigned char *head)
 struct element_info {
 	unsigned char *name;
 	void (*func)(unsigned char *);
+
 	int linebreak;
+
+	/* 0 - normal pair tags
+	 * 1 - normal non-pair tags
+	 * 2 - pair tags which cannot be nested (ie. you cannot have <a><a>)
+	 * 3 - similiar to 2 but a little stricter, seems to be a
+	 *     <li>-specific hack */
 	int nopair;
 };
 

@@ -1,3 +1,41 @@
+Thu Feb 19 20:43:56 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/dns.c:
+
+	Make addrno writing/reading capable of dealing of partial
+	write()s/read()s, this should fix random DNS failures on some
+	systems with not-so-smooth-linux-glibc-like buffering.  
+
+Thu Feb 19 17:48:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/dns.c:
+
+	Be more paranoid about passing data from the async resolver.  
+
+Thu Feb 19 15:43:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/stub.c:
+
+	Fixed dangling 'unsigned'. Damn, people, this stuff has some given
+	order ;-).  
+
+Thu Feb 19 14:39:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: stub.c, stub.h:
+
+	Use strictly (char *) instead of (unsigned char *) in the stubs,
+	because that's how these functions are defined in the system.
+	Otherwise you will run into problems like different problems in
+	conditional expressions on systems not having these, like fissie
+	just reported.  
+
+Thu Feb 19 14:30:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/stub.h:
+
+	util/stub.h -> osdep/stub.h. Happenned on Jan 28 but Jonas didn't
+	commit it.  
+
 Wed Feb 18 21:52:09 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/html/tables.c:

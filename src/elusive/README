@@ -8,19 +8,7 @@ parse it (and don't mix parser and renderer in one file), store the syntactic
 tree and then walk thru it. Sure that it'll be a bit more tricky as we won't
 know the whole document source at once frequently, but this is doable.
 
-What we should support (remember that this engine is intended to be universal,
-at least the parser should be usable for graphics as well):
-
-* XML+DTD processing, complete set
-* XHTML 1.0, complete set
-* CSS2, complete set
-* XSLT, complete set
-* scripting hooks (for ECMAScript)
-
-What do we support:
-
-* nothing ;-)
-
+See TODO file for TODO list.
 
 Structure:
 

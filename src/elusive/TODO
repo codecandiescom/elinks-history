@@ -1,0 +1,131 @@
+[GENERIC]
+
+  * Scripting hooks (for ECMAScript).
+  * Split this TODO list to appropriate subdirs...?
+
+
+
+[PARSER]
+
+  * Generic XML parser
+
+    STATUS:
+
+      The XML parser lives in html/ disguise yet. It will be moved.
+
+      Basic parsing is now implemented, without correct support for entities
+      and HTML compatibility support for elements with optional or none closing
+      tag (for now, only tags starting by ! aren't checked for closing pair
+      tag).
+
+    TODO:
+
+      - Values parsing to some usable form (ie. struct rgb or raw numbers).
+      - Reformating of text portions - whitespace transformations and removal.
+      - !DOCTYPE parsing.
+      - Reuse info gained by DTD parser.
+
+
+  * (X)HTML parser
+
+    STATUS:
+
+      Not done.
+
+    TODO:
+
+      - XHTML parser - it should be a front-end for XML parser, implementing
+        special tags like <XMP> or <FRAMESET>.
+      - XHTML 1.0 DTD in pre-compiled form, merged with HTML 4.01 DTD in some
+        sane way.
+
+
+  * Generic DTD parser
+
+    STATUS:
+
+      Not done.
+
+    TODO:
+
+      - DTD parsing ;-)
+
+
+  * CSS parser
+
+    STATUS:
+
+      Not done. Jonas should be working on it.
+
+    TODO:
+
+      - CSS parsing
+
+
+  * XSLT parser
+
+    STATUS:
+
+      Not done.
+
+    TODO:
+
+      - XSLT parsing... maybe CSS should be then re-done to provide
+        XSLT-compatible output?
+
+
+
+[LAYOUTER]
+
+  * HTML layouter
+
+    STATUS:
+
+      Not done.
+
+    TODO:
+
+      - XML layouter - take HTML and CSS and XSLT syntree and work something
+        out.
+      - Dunno if we should have special layouter optimized for HTML? We'll see.
+
+
+  * Syntree layouter
+
+    STATUS:
+
+      Being worked on by pasky.
+
+    TODO:
+
+      - Format raw syntax tree data to a tree-like structure.
+      - Support for CSS specifying details about formatting of such tree.
+
+
+
+[RENDERER]
+
+  * Text renderer
+
+    STATUS:
+
+      Not done.
+
+    TODO:
+
+      - Take document layout and format it to array of form items, links, lines
+        and line attributes, compatible with the current ELinks text viewer, if
+        possible.
+
+
+  * Graphics renderer
+
+    STATUS:
+
+      Not done. Depends on generic ELinks graphics support ;-).
+
+    TODO:
+
+      - Take document layout and format it to array of form items, links and
+        graphics "objects". Should just take adjusting of layout rectangles to
+        the viewport dimensions and some attributes transformations.

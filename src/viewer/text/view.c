@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.219 2003/10/17 15:31:44 zas Exp $ */
+/* $Id: view.c,v 1.220 2003/10/18 20:40:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -938,8 +938,6 @@ ok:
 	send_to_frame(ses, &evv);
 }
 #endif /* USE_MOUSE */
-
-void send_open_in_new_xterm(struct terminal *, void (*)(struct terminal *, unsigned char *, unsigned char *), struct session *);
 
 void
 send_event(struct session *ses, struct term_event *ev)

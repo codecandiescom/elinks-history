@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.37 2004/12/05 21:48:03 miciah Exp $ */
+/* $Id: link.c,v 1.38 2004/12/05 21:54:20 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -124,26 +124,11 @@ get_image_text(unsigned char *attr)
 
 		len -= start - src;
 
-		if (max_len && len > max_len) {
-			int max_part_len = max_len / 2;
-
-			text = mem_alloc(max_part_len * 2 + 2);
-			if (!text) goto free_src;
-
-			/* TODO: Faster way ?? sprintf() is quite expensive. */
-			sprintf(text, "%.*s*%.*s",
-				max_part_len, start,
-				max_part_len, start + len
-					      - max_part_len);
-
-		} else {
-			text = memacpy(start, len);
-		}
+		text = memacpy(start, len);
 	} else {
 		text = stracpy("IMG");
 	}
 
-free_src:
 	mem_free_if(src);
 
 	return text;
@@ -223,7 +208,6 @@ html_img(unsigned char *a)
 	 * but we still want to drop extra spaces in alt or title attribute
 	 * to limit display width on certain websites. --Zas */
 	if (al && strlen(al) > 5) clr_spaces(al);
-	if (al) al = truncate_title(al);
 
 	if (!al || !*al) {
 		mem_free_if(al);
@@ -239,6 +223,8 @@ html_img(unsigned char *a)
 			al = get_image_text(a);
 		}
 	}
+
+	if (al) al = truncate_title(al);
 
 	mem_free_set(&format.image, NULL);
 	mem_free_set(&format.title, NULL);

@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.37 2004/01/19 00:56:04 jonas Exp $ */
+/* $Id: value.c,v 1.38 2004/01/19 06:10:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,13 +39,13 @@ css_parse_color_value(struct css_property_info *propinfo,
 		/* First color component is shifted 16, next is shifted 8 and
 		 * last is not shifted. */
 		for (shift = 16; token && shift >= 0; shift -= 8) {
-			/* The two first two args are terminated by ',' and the
+			/* The first two args are terminated by ',' and the
 			 * last one by ')'. */
 			unsigned char paskynator = shift ? ',' : ')';
 			unsigned char *nstring = token->string;
 			int part;
 
-			/* Is the current and next token valid? */
+			/* Are the current and next token valid? */
 			if ((token->type != CSS_TOKEN_DIGIT
 			     && token->type != CSS_TOKEN_PERCENTAGE)
 			    || !check_next_css_token(scanner, paskynator))

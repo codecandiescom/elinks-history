@@ -1,3 +1,171 @@
+Fri May  7 18:14:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.c:
+
+	Undent the code.  
+
+Fri May  7 18:05:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.c:
+
+	Move unknown_protocol_handler closer to the user and rename to
+	generic_external_protocol_handler.  
+
+Fri May  7 18:01:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.c:
+
+	Remove protocol_backend->external_handler member since it is now
+	only user or unknown handler so this is less bloated IMO.  
+
+Fri May  7 17:53:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, protocol.h:
+
+	Move struct protocol_backend to .c file.  
+
+Fri May  7 17:47:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/: Makefile.am, https.c, https.h:
+
+	Only conditionally build HTTPS else simply #define the HTTPS
+	protocol handler to NULL like SMB does and let the generic unknown
+	protocol handler do the work.  
+
+Fri May  7 17:40:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.c:
+
+	Use common handler for unknown and javascript protocol backend.
+	Prepare for HTTPS backend to use it as well.  
+
+Fri May  7 17:36:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.c:
+
+	If both external and regular protocol handler is NULL return the
+	unknown protocol handler so that disabled (but otherwise known)
+	protocols can use a common handler.  
+
+Fri May  7 17:31:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/https.c:
+
+	Fix HTTPS building.  
+
+Fri May  7 17:30:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, protocol.h:
+
+	Move the lua protocol backend last so it doesn't match user:// URIs
+	and cause assertion failures. Hope this doesn't break anything? 
+
+Fri May  7 17:27:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: finger.c, finger.h, protocol.c, user.c, user.h,
+	file/file.c, file/file.h, ftp/ftp.c, ftp/ftp.h, http/http.c,
+	http/http.h, http/https.c, http/https.h, smb/smb.c, smb/smb.h:
+
+	Centralize protocol_backends again. It makes more sense when
+	building with conditionals.  
+
+Fri May  7 16:32:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Only check for expat and link with -lexpat when needed. Reported by
+	fredlwm.  
+
+Fri May  7 12:28:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/text.c:
+
+	Use set_rect().  
+
+Fri May  7 12:21:20 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/listbox.c:
+
+	Use set_rect() and is_in_rect().  
+
+Fri May  7 12:15:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: group.c, inpfield.c:
+
+	Use set_rect() and is_in_rect().  
+
+Fri May  7 11:24:20 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, checkbox.c, group.c, inpfield.c, listbox.c,
+	text.c, widget.c, widget.h:
+
+	Struct rect was introduced, as well as convenience macros set_rect()
+	and is_in_rect(). It is currently used by struct widget_data only.  
+
+Fri May  7 09:05:59 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri May  7 08:58:27 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/: parse.c, parse.h:
+
+	Comment out HTML_ATTR_NO_CONV stuff since it is not used yet.  
+
+Fri May  7 08:55:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/: parse.c, parse.h:
+
+	get_attr_val(), get_url_val() and has_attr() are now macros wrapping
+	get_attr_value() calls.  
+
+Fri May  7 08:49:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/: parse.c, parse.h:
+
+	Declare and describe get_attr_value() in parse.h.  
+
+Fri May  7 08:45:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/: parse.c, parse.h:
+
+	get_attr_val_() was renamed get_attr_value().  
+
+Fri May  7 08:42:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/: parse.c, parse.h:
+
+	enum html_attr_flags was introduced to control get_attr_val_()
+	behavior.  
+
+Fri May  7 01:46:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, protocol.h, smb/smb.h:
+
+	Move macro conditions for SMB protocol backend to smb header.  
+
+Thu May  6 23:50:05 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/: parse.c, parse.h:
+
+	Previous patch was a commit error. Sorry....  
+
+Thu May  6 23:39:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/: parse.c, parse.h:
+
+	enum gav_flags was introduced, and is now used by get_attr_val_(),
+	it is now possible to disable conversion though convert_string(). It
+	may help to fix bug 451.  
+
+Thu May  6 22:35:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* m4/gettext.m4, src/intl/Makefile.am:
+
+	If --disable-nls don't enter src/intl/gettext 
+
 Thu May  6 22:06:30 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/config/kbdbind.c:

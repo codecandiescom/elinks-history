@@ -458,6 +458,26 @@ static inline int casecmp(unsigned char *c1, unsigned char *c2, int len)
 	return 0;
 }
 
+#ifndef HAVE_STRCASESTR
+/* Stub for strcasestr(), GNU extension */
+static inline unsigned char *strcasestr(unsigned char *haystack, unsigned char *needle) {
+	size_t haystack_length = strlen(haystack);
+	size_t needle_length = strlen(needle);
+	int i;
+
+	if (haystack_length < needle_length)
+		return NULL;
+
+	for (i = haystack_length - needle_length + 1; i; i--) {
+		if (!casecmp(haystack, needle, needle_length))
+			return haystack;
+		haystack++;
+	}
+
+	return NULL;
+}
+#endif
+
 static inline int can_write(int fd)
 {
 	fd_set fds;

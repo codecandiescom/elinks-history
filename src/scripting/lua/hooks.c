@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.54 2004/06/22 06:46:18 miciah Exp $ */
+/* $Id: hooks.c,v 1.55 2004/06/22 23:11:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@ script_hook_goto_url(va_list ap, void *data)
 {
 	lua_State *L = lua_state;
 	unsigned char **url = va_arg(ap, unsigned char **);
-	struct uri *current_uri = va_arg(ap, struct uri *);
+	struct session *ses = va_arg(ap, struct session *);
 	int err;
 
 	if (*url == NULL) return EHS_NEXT;
@@ -38,13 +38,13 @@ script_hook_goto_url(va_list ap, void *data)
 
 	lua_pushstring(L, *url);
 
-	if (!current_uri) {
+	if (!have_location(ses)) {
 		lua_pushnil(L);
 	} else {
-		lua_pushstring(L, struri(current_uri));
+		lua_pushstring(L, struri(cur_loc(ses)->vs.uri));
 	}
 
-	if (prepare_lua(NULL)) return EHS_NEXT;
+	if (prepare_lua(ses)) return EHS_NEXT;
 
 	err = lua_call(L, 2, 1);
 	finish_lua();

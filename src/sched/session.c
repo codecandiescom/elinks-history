@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.524 2004/06/22 06:46:18 miciah Exp $ */
+/* $Id: session.c,v 1.525 2004/06/22 23:11:19 pasky Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -931,7 +931,7 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 		unsigned char *uristring = memacpy(str, urilength);
 
 		if (uristring) {
-			uri = get_hooked_uri(uristring, current_uri, term->cwd);
+			uri = get_hooked_uri(uristring, base_session, term->cwd);
 			mem_free(uristring);
 		}
 

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.59 2003/12/29 12:24:31 miciah Exp $ */
+/* $Id: renderer.c,v 1.60 2003/12/29 17:46:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,14 +157,12 @@ add_document_line(struct document *document, int lineno,
 	line = convert_string(convert_table, line, width, CSM_NONE);
 	if (!line) return 0;
 
-	if (!*line) {
+	/* After conversion, line may have a different length. */
+	width = strlen(line);
+	if (!width) {
 		mem_free(line);
 		return 0;
 	}
-
-	/* After conversion, line may have a different length. */
-	width = strlen(line);
-	assert(width > 0);
 
 	/* Now expand tabs and handle urls if needed.
 	 * Here little code redundancy to improve performance. */

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.199 2004/06/17 00:35:33 jonas Exp $ */
+/* $Id: form.c,v 1.200 2004/06/17 04:07:43 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -536,11 +536,11 @@ get_succesful_controls(struct document_view *doc_view, struct form_control *fc,
 			 fc2->type != FC_IMAGE &&
 			 fc2->type != FC_RESET) || fc2 == fc)
 		    && fc2->name && fc2->name[0]) {
-			struct form_state *fs = find_form_state(doc_view, fc);
+			struct form_state *fs = find_form_state(doc_view, fc2);
 
 			if (!fs) continue;
 
-			add_submitted_value_to_list(fc, fs, list);
+			add_submitted_value_to_list(fc2, fs, list);
 		}
 	}
 

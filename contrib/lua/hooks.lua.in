@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.30 2005/03/23 05:18:09 miciah Exp $
+-- $Id: hooks.lua.in,v 1.31 2005/03/23 05:40:41 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -442,7 +442,7 @@ function pre_format_html_hook (url, html)
         return string.gsub(html, "javascript:z%('(.-)'%)", "/cg/amg.dll?p=amg&sql=%1")
     end
 
-    return ret and html
+    return ret and html or nil
 end
 
 

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.43 2002/09/08 19:43:51 zas Exp $ */
+/* $Id: http.c,v 1.44 2002/09/08 20:42:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -398,7 +398,7 @@ void http_send_header(struct connection *c)
 
 		case REFERER_FAKE:
 			optstr = get_opt_str("protocol.http.referer.fake");
-			if (optstr && optstr[0]) {
+			if (optstr[0]) {
 				add_to_str(&hdr, &l, "Referer: ");
 				add_to_str(&hdr, &l, optstr);
 				add_to_str(&hdr, &l, "\r\n");

@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.30 2003/10/27 22:53:38 jonas Exp $ */
+/* $Id: ssl.c,v 1.31 2003/10/27 23:08:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,8 @@
 #include <openssl/rand.h>
 #elif defined(HAVE_GNUTLS)
 #include <gnutls/gnutls.h>
+#else
+#error "Huh?! You have SSL enabled, but not OPENSSL nor GNUTLS!! And then you want exactly *what* from me?"
 #endif
 
 #ifdef HAVE_LIMITS_H
@@ -20,15 +22,20 @@
 
 #include "elinks.h"
 
-/* We'll be legend. We won't grow old. */
-#include "ssl/ssl.h"
-
 #include "intl/gettext/libintl.h"
 #include "modules/module.h"
 #include "sched/connection.h"
+#include "ssl/ssl.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/string.h"
+
+
+#ifdef HAVE_OPENSSL
+#define	ssl_t	SSL
+#elif defined(HAVE_GNUTLS)
+#define	ssl_t	GNUTLS_STATE
+#endif
 
 #ifndef PATH_MAX
 #define	PATH_MAX	256 /* according to my /usr/include/bits/posix1_lim.h */

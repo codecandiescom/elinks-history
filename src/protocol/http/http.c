@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.195 2003/10/27 22:53:37 jonas Exp $ */
+/* $Id: http.c,v 1.196 2003/10/27 23:08:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,9 +21,6 @@
 
 #include "elinks.h"
 
-/* We're the all singing, all dancing shit of the world. */
-#include "ssl/ssl.h"
-
 #include "config/options.h"
 #include "cookies/cookies.h"
 #include "dialogs/menu.h"
@@ -40,6 +37,7 @@
 #include "protocol/uri.h"
 #include "sched/connection.h"
 #include "sched/session.h"
+#include "ssl/ssl.h"
 #include "terminal/terminal.h"
 #include "util/base64.h"
 #include "util/blacklist.h"

@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.39 2003/10/27 22:53:38 jonas Exp $ */
+/* $Id: connect.c,v 1.40 2003/10/27 23:08:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,12 +7,17 @@
 
 #ifdef HAVE_SSL
 
+#ifdef HAVE_OPENSSL
+#include <openssl/ssl.h>
+#elif defined(HAVE_GNUTLS)
+#include <gnutls/gnutls.h>
+#else
+#error "Huh?! You have SSL enabled, but not OPENSSL nor GNUTLS!! And then you want exactly *what* from me?"
+#endif
+
 #include <errno.h>
 
 #include "elinks.h"
-
-/* I'm Joe's compilation fix. I get removed, I kill Joe. */
-#include "ssl/ssl.h"
 
 #include "config/options.h"
 #include "lowlevel/connect.h"
@@ -20,8 +25,15 @@
 #include "lowlevel/select.h"
 #include "sched/connection.h"
 #include "ssl/connect.h"
+#include "ssl/ssl.h"
 #include "util/memory.h"
 
+
+#ifdef HAVE_OPENSSL
+#define	ssl_t	SSL
+#elif defined(HAVE_GNUTLS)
+#define	ssl_t	GNUTLS_STATE
+#endif
 
 /* SSL errors */
 #ifdef HAVE_OPENSSL

@@ -3,7 +3,9 @@
 # Simple shell scripts to insert style sheet in all html files in a directory,
 # directory is passed as the first argument to the program
 #
-# $Id: installcss,v 1.1 2002/12/29 10:57:29 jonas Exp $
+# $Id: installcss,v 1.2 2002/12/30 15:57:01 jonas Exp $
+
+cp style.css $1
 
 cd $1
 

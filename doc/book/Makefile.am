@@ -13,9 +13,7 @@ clean:
 	rm -rf $(OUTDIR)
 
 html: outdir
-	scripts/make-manual html $(TARGET) $(DBPROC)
-	cp style.css manual.html
-	scripts/installcss manual.html
+	scripts/make-manual html $(TARGET) $(DOCTOOL)
 	rm -rf $(MANUAL).html
 	mv manual.html $(MANUAL).html
 
@@ -26,15 +24,15 @@ html_zip: html
 	zip -r $(MANUAL).zip $(MANUAL).html
 
 pdf: outdir
-	scripts/make-manual pdf $(TARGET) $(DBPROC)
+	scripts/make-manual pdf $(TARGET) $(DOCTOOL)
 	mv manual.pdf $(MANUAL).pdf
 
 ps: outdir
-	scripts/make-manual ps $(TARGET) $(DBPROC)
+	scripts/make-manual ps $(TARGET) $(DOCTOOL)
 	gzip manual.ps
 	mv manual.ps.gz $(MANUAL).ps.gz
 
 txt: outdir
-	scripts/make-manual txt $(TARGET) $(DBPROC)
+	scripts/make-manual txt $(TARGET) $(DOCTOOL)
 	mv manual.txt $(MANUAL).txt
 

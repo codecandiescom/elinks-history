@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.52 2004/06/10 11:51:56 jonas Exp $ */
+/* $Id: mime.c,v 1.53 2004/06/10 11:55:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,10 +49,11 @@ static struct option_info mime_options[] = {
 
 /* Checks protocols headers for a suitable filename */
 static unsigned char *
-get_content_filename(struct uri *uri)
+get_content_filename(struct uri *uri, struct cache_entry *cached)
 {
-	struct cache_entry *cached = find_in_cache(uri);
 	unsigned char *filename, *pos;
+
+	if (!cached) cached = find_in_cache(uri);
 
 	if (!cached || !cached->head)
 		return NULL;
@@ -196,7 +197,7 @@ get_content_type(struct cache_entry *cached)
 		}
 	}
 
-	extension = uri ? get_content_filename(uri) : NULL;
+	extension = uri ? get_content_filename(uri, cached) : NULL;
 	debug_extension(extension);
 	if (extension) {
 		ctype = get_extension_content_type(extension);
@@ -232,7 +233,7 @@ get_mime_type_handler(unsigned char *content_type, int xwin)
 struct string *
 add_mime_filename_to_string(struct string *string, struct uri *uri)
 {
-	unsigned char *filename = get_content_filename(uri);
+	unsigned char *filename = get_content_filename(uri, NULL);
 
 	assert(uri->data);
 

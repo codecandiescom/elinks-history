@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.266 2003/08/30 11:32:19 jonas Exp $ */
+/* $Id: options.c,v 1.267 2003/08/31 17:03:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1761,9 +1761,10 @@ register_options(void)
 		N_("Enable I/O in UTF8 for Unicode terminals. Note that currently,\n"
 		"only the subset of UTF8 according to terminal codepage is used."));
 
-	add_opt_bool("terminal._template_", N_("Restrict CP852"),
+	add_opt_bool("terminal._template_", N_("Restrict frames in cp850/852"),
 		"restrict_852", 0, 0,
-		N_("Someone who understands this ... ;)) I'm too lazy to think about this now :P."));
+		N_("Restrict the characters used when drawing lines. Makes sense\n"
+		"only with linux terminals using the cp850/852 character sets."));
 
 	add_opt_bool("terminal._template_", N_("Block cursor"),
 		"block_cursor", 0, 0,
@@ -1782,6 +1783,10 @@ register_options(void)
 		"environment) with a background image or a transparent background -\n"
 		"it will be visible in ELinks as well. Note that this option makes\n"
 		"sense only when colors are enabled."));
+
+	add_opt_bool("terminal._template_", N_("Use underline"),
+		"underline", 0, 1,
+		N_("If we should use underline or enhance the color instead."));
 
 	add_opt_codepage("terminal._template_", N_("Codepage"),
 		"charset", 0, get_cp_index("us-ascii"),

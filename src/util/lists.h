@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.34 2003/12/07 11:39:59 pasky Exp $ */
+/* $Id: lists.h,v 1.35 2003/12/07 12:50:10 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -41,12 +41,10 @@ struct list_head {
 	void *prev;
 };
 
-#ifndef HAVE_TYPEOF
 struct xlist_head {
 	struct xlist_head *next;
 	struct xlist_head *prev;
 };
-#endif
 
 #define NULL_LIST_HEAD NULL, NULL
 #define D_LIST_HEAD(x) &x, &x
@@ -189,12 +187,16 @@ do { \
 
 #define free_list(l) \
 do { \
+	struct xlist_head *head; \
+\
 	list_magic_check(&(l), "free_list"); \
 	do_not_optimize_here_gcc_2_7(&l); \
+	foreach (head, (l)) do_not_optimize_here_gcc_3_x(head); /* AA */ \
+	foreachback (head, (l)) do_not_optimize_here_gcc_3_x(head); /* AA */ \
 	while ((l).next != &(l)) { \
-		struct list_head *a__ = (l).next; \
-		del_from_list(a__); \
-		mem_free(a__); \
+		head = (l).next; \
+		del_from_list(head); \
+		mem_free(head); \
 	} \
 	do_not_optimize_here_gcc_2_7(&l); \
 } while (0)

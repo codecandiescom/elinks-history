@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.228 2004/06/22 14:42:18 zas Exp $ */
+/* $Id: kbdbind.c,v 1.229 2004/06/23 12:29:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -459,6 +459,9 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "find-next-back", ACT_MAIN_FIND_NEXT_BACK, DACT(N_("Find the previous occurrence of the current search text")) },
 	{ "forget-credentials", ACT_MAIN_FORGET_CREDENTIALS, DACT(N_("Forget authentication credentials")) },
 	{ "formhist-manager", ACT_MAIN_FORMHIST_MANAGER, DACT(N_("Open form history manager")) },
+	{ "frame-next", ACT_MAIN_FRAME_NEXT, DACT(N_("Move to the next frame")) },
+	{ "frame-prev", ACT_MAIN_FRAME_PREV, DACT(N_("Move to the previous frame")) },
+	{ "frame-maximize", ACT_MAIN_FRAME_MAXIMIZE, DACT(N_("Maximize the current frame")) },
 	{ "goto-url", ACT_MAIN_GOTO_URL, DACT(N_("Open \"Go to URL\" dialog box")) },
 	{ "goto-url-current", ACT_MAIN_GOTO_URL_CURRENT, DACT(N_("Open \"Go to URL\" dialog box containing the current URL")) },
 	{ "goto-url-current-link", ACT_MAIN_GOTO_URL_CURRENT_LINK, DACT(N_("Open \"Go to URL\" dialog box containing the current link URL")) },
@@ -495,7 +498,6 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "move-link-prev", ACT_MAIN_MOVE_LINK_PREV, DACT(N_("Move to the previous link")) },
 	{ "move-page-down", ACT_MAIN_MOVE_PAGE_DOWN, DACT(N_("Move downwards by a page")) },
 	{ "move-page-up", ACT_MAIN_MOVE_PAGE_UP, DACT(N_("Move upwards by a page")) },
-	{ "next-frame", ACT_MAIN_NEXT_FRAME, DACT(N_("Move to the next frame")) },
 	{ "open-link-in-new-tab", ACT_MAIN_OPEN_LINK_IN_NEW_TAB, DACT(N_("Open the current link in a new tab")) },
 	{ "open-link-in-new-tab-in-background", ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND, DACT(N_("Open the current link a new tab in background")) },
 	{ "open-link-in-new-window", ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW, DACT(N_("Open the current link in a new window")) },
@@ -504,7 +506,6 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "open-new-window", ACT_MAIN_OPEN_NEW_WINDOW, DACT(N_("Open a new window")) },
 	{ "open-os-shell", ACT_MAIN_OPEN_OS_SHELL, DACT(N_("Open an OS shell")) },
 	{ "options-manager", ACT_MAIN_OPTIONS_MANAGER, DACT(N_("Open options manager")) },
-	{ "previous-frame", ACT_MAIN_PREVIOUS_FRAME, DACT(N_("Move to the previous frame")) },
 	{ "quit", ACT_MAIN_QUIT, DACT(N_("Open a quit confirmation dialog box")) },
 	{ "really-quit", ACT_MAIN_REALLY_QUIT, DACT(N_("Quit without confirmation")) },
 	{ "redraw", ACT_MAIN_REDRAW, DACT(N_("Redraw the terminal")) },
@@ -545,7 +546,6 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "toggle-plain-compress-empty-lines", ACT_MAIN_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES, DACT(N_("Toggle plain renderer compression of empty lines")) },
 	{ "toggle-wrap-text", ACT_MAIN_TOGGLE_WRAP_TEXT, DACT(N_("Toggle wrapping of text")) },
 	{ "view-image", ACT_MAIN_VIEW_IMAGE, DACT(N_("View the current image")) },
-	{ "zoom-frame", ACT_MAIN_ZOOM_FRAME, DACT(N_("Maximize the current frame")) },
 
 	{ NULL, 0, NULL }
 };
@@ -771,7 +771,7 @@ static struct default_kb default_main_keymap[] = {
 	{ 'c',		 0,		ACT_MAIN_TAB_CLOSE },
 	{ 'd',		 0,		ACT_MAIN_LINK_DOWNLOAD },
 	{ 'e',		 0,		ACT_MAIN_TAB_MENU },
-	{ 'f',		 0,		ACT_MAIN_ZOOM_FRAME },
+	{ 'f',		 0,		ACT_MAIN_FRAME_MAXIMIZE },
 	{ 'g',		 0,		ACT_MAIN_GOTO_URL },
 	{ 'h',		 0,		ACT_MAIN_HISTORY_MANAGER },
 	{ 'k',		 0,		ACT_MAIN_KEYBINDING_MANAGER },
@@ -807,8 +807,8 @@ static struct default_kb default_main_keymap[] = {
 	{ KBD_PAGE_UP,	 0,		ACT_MAIN_MOVE_PAGE_UP },
 	{ KBD_RIGHT,	 0,		ACT_MAIN_LINK_FOLLOW },
 	{ KBD_RIGHT,	 KBD_CTRL,	ACT_MAIN_LINK_FOLLOW_RELOAD },
-	{ KBD_TAB,	 0,		ACT_MAIN_NEXT_FRAME },
-	{ KBD_TAB,	 KBD_ALT,	ACT_MAIN_PREVIOUS_FRAME },
+	{ KBD_TAB,	 0,		ACT_MAIN_FRAME_NEXT },
+	{ KBD_TAB,	 KBD_ALT,	ACT_MAIN_FRAME_PREV },
 	{ KBD_UP,	 0,		ACT_MAIN_MOVE_LINK_PREV },
 	{ 0, 0, 0 }
 };
@@ -920,11 +920,14 @@ static struct strtonum main_action_aliases[] = {
 	{ "enter", ACT_MAIN_LINK_FOLLOW, "link-follow" },
 	{ "enter-reload", ACT_MAIN_LINK_FOLLOW_RELOAD, "link-follow-reload" },
 	{ "home", ACT_MAIN_MOVE_DOCUMENT_START, "move-document-start" },
+	{ "next-frame", ACT_MAIN_FRAME_NEXT, "frame-next" },
 	{ "page-down", ACT_MAIN_MOVE_PAGE_DOWN, "move-page-down" },
 	{ "page-up", ACT_MAIN_MOVE_PAGE_UP, "move-page-up" },
+	{ "previous-frame", ACT_MAIN_FRAME_PREV, "frame-prev" },
 	{ "resume-download", ACT_MAIN_LINK_DOWNLOAD_RESUME, "link-download-resume" },
 	{ "unback", ACT_MAIN_HISTORY_MOVE_FORWARD, "history-move-forward" },
 	{ "up",	ACT_MAIN_MOVE_LINK_PREV, "move-link-prev" },
+	{ "zoom-frame", ACT_MAIN_FRAME_MAXIMIZE, "frame-maximize" },
 
 	{ NULL, 0, NULL }
 };

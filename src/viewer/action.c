@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.80 2004/06/23 08:16:23 jonas Exp $ */
+/* $Id: action.c,v 1.81 2004/06/23 12:29:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -286,7 +286,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			activate_bfu_technology(ses, -1);
 			break;
 
-		case ACT_MAIN_NEXT_FRAME:
+		case ACT_MAIN_FRAME_NEXT:
 			next_frame(ses, 1);
 			draw_formatted(ses, 0);
 			break;
@@ -330,7 +330,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			do_frame_action(ses, pass_uri_to_command, 0);
 			break;
 
-		case ACT_MAIN_PREVIOUS_FRAME:
+		case ACT_MAIN_FRAME_PREV:
 			next_frame(ses, -1);
 			draw_formatted(ses, 0);
 			break;
@@ -492,7 +492,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			do_frame_action(ses, view_image, 0);
 			break;
 
-		case ACT_MAIN_ZOOM_FRAME:
+		case ACT_MAIN_FRAME_MAXIMIZE:
 			do_frame_action(ses, set_frame, 0);
 			break;
 

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.338 2004/06/23 10:28:12 zas Exp $ */
+/* $Id: menu.c,v 1.339 2004/06/23 12:29:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -224,7 +224,7 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 	add_menu_action(&menu, N_("~Reload"), ACT_MAIN_RELOAD);
 
 	if (ses->doc_view && document_has_frames(ses->doc_view->document))
-		add_menu_action(&menu, N_("Frame at ~full-screen"), ACT_MAIN_ZOOM_FRAME);
+		add_menu_action(&menu, N_("Frame at ~full-screen"), ACT_MAIN_FRAME_MAXIMIZE);
 
 	/* Keep tab related operations below this separator */
 	add_menu_separator(&menu);
@@ -372,7 +372,7 @@ static struct menu_item view_menu[] = {
 	INIT_MENU_ACTION(N_("H~eader info"), ACT_MAIN_HEADER_INFO),
 	INIT_MENU_ACTION(N_("Rel~oad document"), ACT_MAIN_RELOAD),
 	INIT_MENU_ACTION(N_("~Rerender document"), ACT_MAIN_RERENDER),
-	INIT_MENU_ACTION(N_("Frame at ~full-screen"), ACT_MAIN_ZOOM_FRAME),
+	INIT_MENU_ACTION(N_("Frame at ~full-screen"), ACT_MAIN_FRAME_MAXIMIZE),
 	BAR_MENU_ITEM,
 	INIT_MENU_ACTION(N_("Nex~t tab"), ACT_MAIN_TAB_NEXT),
 	INIT_MENU_ACTION(N_("Pre~v tab"), ACT_MAIN_TAB_PREV),

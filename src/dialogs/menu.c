@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.246 2004/01/01 09:52:51 jonas Exp $ */
+/* $Id: menu.c,v 1.247 2004/01/01 09:56:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -538,7 +538,7 @@ static struct menu_item setup_menu_anon[] = {
 };
 
 static struct menu_item tools_menu[] = {
-#ifdef GLOBHIST
+#ifdef CONFIG_GLOBHIST
 	INIT_MENU_ITEM(N_("Global ~history"), NULL, ACT_HISTORY_MANAGER, menu_history_manager, NULL, 0),
 #endif
 #ifdef BOOKMARKS

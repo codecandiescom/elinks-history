@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.58 2003/12/21 14:56:55 zas Exp $ */
+/* $Id: globhist.c,v 1.59 2004/01/01 09:56:02 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -53,7 +53,7 @@ unsigned char *gh_last_searched_url = NULL;
 /* Timer for periodically writing the history to disk. */
 static int global_history_write_timer = -1;
 
-#ifdef GLOBHIST
+#ifdef CONFIG_GLOBHIST
 
 enum global_history_options {
 	GLOBHIST_TREE,
@@ -502,4 +502,4 @@ struct module global_history_module = struct_module(
 	/* done: */		done_global_history
 );
 
-#endif /* GLOBHIST */
+#endif /* CONFIG_GLOBHIST */

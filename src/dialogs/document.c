@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.70 2003/12/01 15:29:19 pasky Exp $ */
+/* $Id: document.c,v 1.71 2004/01/01 09:56:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,7 +143,7 @@ loc_msg(struct terminal *term, struct location *location,
 
 	}
 
-#ifdef GLOBHIST
+#ifdef CONFIG_GLOBHIST
 	{
 		unsigned char *last_visit = NULL;
 		struct global_history_item *historyitem;
@@ -191,7 +191,7 @@ loc_msg(struct terminal *term, struct location *location,
 			mem_free(a);
 		}
 
-#ifdef GLOBHIST
+#ifdef CONFIG_GLOBHIST
 		{
 			struct global_history_item *historyitem = NULL;
 			int cur_link = doc_view->vs->current_link;

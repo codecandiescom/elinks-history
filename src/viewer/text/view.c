@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.322 2004/01/01 09:52:52 jonas Exp $ */
+/* $Id: view.c,v 1.323 2004/01/01 09:56:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1118,7 +1118,7 @@ quak:
 #endif
 				goto x;
 			case ACT_HISTORY_MANAGER:
-#ifdef GLOBHIST
+#ifdef CONFIG_GLOBHIST
 				if (!get_opt_int_tree(cmdline_options, "anonymous"))
 					menu_history_manager(ses->tab->term, NULL, ses);
 #endif

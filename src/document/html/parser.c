@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.311 2003/12/30 18:26:44 zas Exp $ */
+/* $Id: parser.c,v 1.312 2004/01/01 09:56:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -829,7 +829,7 @@ html_a(unsigned char *a)
 			if (format.target) mem_free(format.target);
 			format.target = stracpy(format.target_base);
 		}
-#ifdef GLOBHIST
+#ifdef CONFIG_GLOBHIST
 		if (get_global_history_item(format.link))
 			format.fg = format.vlink;
 		else

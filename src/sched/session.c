@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.285 2003/12/29 21:02:02 zas Exp $ */
+/* $Id: session.c,v 1.286 2004/01/01 09:56:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -387,7 +387,7 @@ doc_end_load(struct download *stat, struct session *ses)
 	check_questions_queue(ses);
 	print_screen_status(ses);
 
-#ifdef GLOBHIST
+#ifdef CONFIG_GLOBHIST
 	if (stat->conn) {
 		unsigned char *title = ses->doc_view->document->title;
 		struct uri *uri = &stat->conn->uri;

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.99 2003/12/21 14:41:41 pasky Exp $ */
+/* $Id: dialogs.c,v 1.100 2004/01/01 09:56:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 #include "util/object.h"
 
 
-#ifdef GLOBHIST
+#ifdef CONFIG_GLOBHIST
 
 /* Implementation of the listbox operations */
 
@@ -219,4 +219,4 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	hierbox_browser(&globhist_browser, ses);
 }
 
-#endif /* GLOBHIST */
+#endif /* CONFIG_GLOBHIST */

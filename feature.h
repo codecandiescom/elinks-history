@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.19 2004/01/01 09:52:51 jonas Exp $ */
+/* $Id: feature.h,v 1.20 2004/01/01 09:56:01 jonas Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -122,7 +122,7 @@
  *
  * Default: enabled */
 
-#define GLOBHIST
+#define CONFIG_GLOBHIST
 
 
 

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.246 2004/07/19 16:14:53 zas Exp $ */
+/* $Id: menu.c,v 1.247 2004/07/19 16:25:04 zas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -251,7 +251,7 @@ count_menu_size(struct terminal *term, struct menu *menu)
 static void
 scroll_menu(struct menu *menu, int steps, int wrap)
 {
-	int w, scr_i;
+	int height, scr_i;
 	int s = steps ? steps/abs(steps) : 1; /* Selectable item search direction. */
 
 	if (menu->size <= 0) {
@@ -319,19 +319,17 @@ scroll_menu(struct menu *menu, int steps, int wrap)
 		menu->first = 0;
 	}
 
-	w = int_max(1, menu->box.height - MENU_BORDER_SIZE * 2);
-	int_lower_bound(&w, 0);
+	height = int_max(1, menu->box.height - MENU_BORDER_SIZE * 2);
 
 	/* The rest is not needed for horizontal menus like the mainmenu.
 	 * FIXME: We need a better way to figure out which menus are horizontal and
 	 * which are vertical (normal) --jonas */
-	if (w <= 1) return;
+	if (height == 1) return;
 
-	scr_i = int_min((w - 1) / 2, SCROLL_ITEMS);
-	int_lower_bound(&scr_i, 0);
+	scr_i = int_min((height - 1) / 2, SCROLL_ITEMS);
 
-	int_bounds(&menu->first, menu->selected - w + scr_i + 1, menu->selected - scr_i);
-	int_bounds(&menu->first, 0, menu->size - w);
+	int_bounds(&menu->first, menu->selected - height + scr_i + 1, menu->selected - scr_i);
+	int_bounds(&menu->first, 0, menu->size - height);
 }
 
 static inline void

@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.27 2004/06/23 10:26:16 zas Exp $ */
+/* $Id: internal.h,v 1.28 2004/06/23 10:33:06 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -19,7 +19,7 @@ struct html_context {
 	 * html/parser/parse.c
 	 * html/parser/stack.c
 	 * html/parser.c */
-	struct list_head html_stack;
+	struct list_head stack;
 
 	/* For parser/parse.c: */
 	unsigned char *eoff; /* For parser/forms.c too */
@@ -80,9 +80,9 @@ struct html_context {
 	void *(*special_f)(void *, enum html_special_type, ...);
 };
 
-#define format (((struct html_element *) html_context.html_stack.next)->attr)
-#define par_format (((struct html_element *) html_context.html_stack.next)->parattr)
-#define html_top (*(struct html_element *) html_context.html_stack.next)
+#define format (((struct html_element *) html_context.stack.next)->attr)
+#define par_format (((struct html_element *) html_context.stack.next)->parattr)
+#define html_top (*(struct html_element *) html_context.stack.next)
 
 
 extern struct html_context html_context;

@@ -1,3 +1,636 @@
+Sat Oct 25 22:09:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Make DEFAULT_MAILCAP_PATH available via the option.  
+
+Sat Oct 25 22:03:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Cleanup and fix last patch.  
+
+Sat Oct 25 21:46:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/modules/module.h:
+
+	Added module.data.  
+
+Sat Oct 25 21:43:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/modules/module.h:
+
+	Captionized some comments.  
+
+Sat Oct 25 21:43:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Access mailcap option directly.  
+
+Sat Oct 25 21:40:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/modules/module.h:
+
+	Describe the lifecycle functions.  
+
+Sat Oct 25 21:39:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/modules/module.h:
+
+	Clarified uniqueness of module.name.  
+
+Sat Oct 25 21:34:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/modules/module.c:
+
+	Fixed missing include of the paired .h file.  
+
+Sat Oct 25 19:53:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, mime/backend/mimetypes.c:
+
+	Move mimetypes options to the backend.  
+
+Sat Oct 25 19:52:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Compilation fix. And that's it. I'm disgusted and exhausted, I
+	really do not want to touch the options system logic for at least
+	few days. Brrr.  
+
+Sat Oct 25 19:50:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Femtotidyup.  
+
+Sat Oct 25 19:48:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.h:
+
+	gqap 
+
+Sat Oct 25 19:47:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: options.c, options.h:
+
+	Sort all OPT_TREEs before the other options.  
+
+Sat Oct 25 19:46:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, mime/backend/mailcap.c:
+
+	Move mailcap options to the backend.  
+
+Sat Oct 25 19:38:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	We must track the listboxes (major PITA ;) independently to options
+	in the foreach in add_opt_rec(). If no assert()s will fail, and
+	everything will be symmetric enough, this could even finally work.  
+
+Sat Oct 25 19:29:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	add_opt_rec(): Introduced @bcat, mirroring @cat but for
+	listbox_item.  
+
+Sat Oct 25 19:27:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Compile fix[tm].  
+
+Sat Oct 25 19:24:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Moved @cat to inner scope in add_opt_rec(). This means elaborating
+	at some places but the overall result is IMHO more elegant.  
+
+Sat Oct 25 19:22:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Try to fix the problem with listbox_item being added to itself.  
+
+Sat Oct 25 19:17:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/: mimetypes.c, mimetypes.h:
+
+	Modulize mimetypes mime backend.  
+
+Sat Oct 25 19:17:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/: mailcap.c, mailcap.h:
+
+	Modulize mailcap mime backend.  
+
+Sat Oct 25 19:17:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/: default.c, default.h:
+
+	Modulize default mime backend.  
+
+Sat Oct 25 19:16:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/: mime.c, backend/common.c, backend/common.h:
+
+	Move lifecycle functions out of mime_backend and into mime
+	submodules. The begining.  
+
+Sat Oct 25 19:10:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: mime/mime.c, mime/mime.h, modules/module.c:
+
+	Introduce a mime module.  
+
+Sat Oct 25 18:57:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	[no log message] 
+
+Sat Oct 25 17:55:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Compilation fix.  
+
+Sat Oct 25 17:14:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Sort box_items properly as well if OPT_SORT.  
+
+Sat Oct 25 16:38:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/Makefile.am, src/main.c,
+	src/bookmarks/bookmarks.c, src/bookmarks/bookmarks.h,
+	src/modules/Makefile.am, src/modules/module.c,
+	src/modules/module.h:
+
+	Introducing struct module. Behaviour of submodules handling is not
+	tested. Fixes unknown option errors at startup.  
+
+Sat Oct 25 16:32:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation fix.  
+
+Sat Oct 25 16:19:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	config_root-parent options won't care about its listbox at all.  
+
+Sat Oct 25 16:06:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	Stop traversing in traverse_listbox_items_list() when cnext is NULL,
+	instead of crashing happily.  
+
+Sat Oct 25 16:05:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Make the config_options->box_item invisible.  
+
+Sat Oct 25 15:22:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Do the del_from_list() test right.  
+
+Sat Oct 25 15:19:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	del_from_list(option->box_item) only if it is in any list (that's
+	not the case for config_options->box_item.  
+
+Sat Oct 25 15:15:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Forgot one instance of introduction of the new OPT_LISTBOX meaning.  
+
+Sat Oct 25 15:09:58 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	Revert brain-dead and useless changes. Thanks to Pasky.  
+
+Sat Oct 25 14:49:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: options.c, options.h:
+
+	Changed OPT_LISTBOX behaviour so that it makes listbox even on the
+	option which has it set itself.  
+
+Sat Oct 25 14:41:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/options.h, document/html/tables.c,
+	intl/charsets.c, util/lists.h, viewer/text/view.c:
+
+	Make namespace pollution fixing macros look like <original struct
+	name>_elinks.  That should be unique enough and our keyboards will
+	be more likely to survive debugging sessions.  
+
+Sat Oct 25 14:09:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/bookmarks.c, config/options.c, config/options.h:
+
+	Make option registration via [un]register_options().  Previous
+	internal [un]register_option() was merged with [init|done]_options() 
+
+Sat Oct 25 13:49:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: dialogs.c, options.c, options.h, opttypes.c:
+
+	Removed config_option_box_items, config_options->box_item exists
+	now.  
+
+Sat Oct 25 13:44:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	init_listbox_item() reindentation.  
+
+Sat Oct 25 13:26:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Cleaned up possibly confusing form of typecast.  
+
+Sat Oct 25 13:25:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Reenabled the OPT_SORT implementation, let's see what will happen.  
+
+Sat Oct 25 13:13:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	add_at_pos -> add_to_list_end in add_opt_rec().  
+
+Sat Oct 25 13:01:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: setup.h, sched/download.c:
+
+	Add temporary file name prefix macro. Make indentation consistent.  
+
+Sat Oct 25 12:59:06 2003  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/lua/core.c:
+
+	Fix a memleak caused by unfreed lua console history.  
+
+Sat Oct 25 12:50:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Compilation fix.  
+
+Sat Oct 25 12:49:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Detector of options which were not properly unregistered. It ignores
+	autocreated options, maybe it shouldn't.  
+
+Sat Oct 25 12:45:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/edit.c, dialogs/mime.c, dialogs/options.c,
+	globhist/dialogs.c, sched/download.c, scripting/lua/core.c,
+	viewer/text/search.c:
+
+	Use calloc_dialog().  
+
+Sat Oct 25 12:33:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Unregister options through unregister_option_info().  
+
+Sat Oct 25 12:31:05 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/auth.c:
+
+	Use calloc_dialog().  
+
+Sat Oct 25 12:28:07 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/dialogs.c:
+
+	Use calloc_dialog(). Fix the count of widgets in main options
+	dialog.  
+
+Sat Oct 25 12:20:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inpfield.c, bfu/msgbox.c, bookmarks/dialogs.c,
+	dialogs/refresh.c:
+
+	Use calloc_dialog().  
+
+Sat Oct 25 12:17:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.h:
+
+	calloc_dialog(n, add_size) and sizeof_dialog(n, add_size) macros
+	were introduced.  
+
+Sat Oct 25 12:13:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Initialize @i to zero in unregister_option_info(). Spotted by Zas.  
+
+Sat Oct 25 12:02:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Call unregister_option_info() from done_bookmarks().  
+
+Sat Oct 25 11:54:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: options.c, options.h:
+
+	Introduced unregister_option_info().  
+
+Sat Oct 25 11:46:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/globhist/dialogs.c:
+
+	Use dlg_data for struct dialog_data *.  
+
+Sat Oct 25 11:42:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/hierbox.c:
+
+	Use dlg_data for struct dialog_data *.  
+
+Sat Oct 25 11:39:19 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: listbox.c, widget.c:
+
+	Use dlg_data for struct dialog_data *.  
+
+Sat Oct 25 11:33:36 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inphist.c:
+
+	Use dlg_data for struct dialog_data *.  
+
+Sat Oct 25 11:29:58 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: dialog.c, group.c:
+
+	Use dlg_data for struct dialog_data *.  
+
+Sat Oct 25 11:18:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, checkbox.c:
+
+	Use dlg_data for struct dialog_data *.  
+
+Sat Oct 25 10:45:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: setup.h, config/options.c:
+
+	Use setup.h to define default user protocols handlers, and save few
+	bytes using static const strings.  
+
+Sat Oct 25 10:42:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Reorganization, no source changes.  
+
+Sat Oct 25 10:31:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/bookmarks.h:
+
+	Populated with some more comments + little reorganization.  
+
+Sat Oct 25 10:26:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: main.c, bookmarks/bookmarks.c, bookmarks/bookmarks.h,
+	globhist/globhist.c, globhist/globhist.h:
+
+	finalize_*() -> done_*() 
+
+Sat Oct 25 10:19:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Reverted unapproved witekfl's patch [rev 1.99].  
+
+Sat Oct 25 10:17:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Temporarily comment out the OPT_SORT implementation, it causes
+	segfaults upon startup.  
+
+Sat Oct 25 05:39:33 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* contrib/elinks.spec.in:
+
+	More BRs.  
+
+Sat Oct 25 04:45:58 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/config/conf.c:
+
+	Smart config is even smarter now. '\n' could be removed from
+	descriptions.  
+
+Sat Oct 25 04:39:07 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/file.c:
+
+	Length must be recalculated after decoding string.  
+
+Sat Oct 25 01:32:54 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sat Oct 25 00:53:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Sat Oct 25 00:52:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, el.po, es.po, et.po,
+	fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, leet.po, lt.po,
+	nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po, sv.po,
+	tr.po, uk.po:
+
+	.po files were resynced.  
+
+Sat Oct 25 00:37:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: options.c, options.h:
+
+	Added support for OPT_SORT option flag, automagically sorting
+	subtree options. The flag is set on the config_options root tree.  
+
+Sat Oct 25 00:04:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Actually register the options.  
+
+Fri Oct 24 23:59:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Added include for N_().  
+
+Fri Oct 24 23:53:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bookmarks/bookmarks.c, config/options.c, config/options.h,
+	config/options.inc:
+
+	Moved bookmarks options registration from config/options.inc to
+	bookmarks/bookmarks.c. It will probably get a wrong order in the
+	tree, but it is going to serve nicely as a testbed for the New
+	Order.  
+
+Fri Oct 24 23:49:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Cleanup removing useless #define.  
+
+Fri Oct 24 23:46:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: main.c, bookmarks/bookmarks.c, bookmarks/bookmarks.h:
+
+	Introduced init_bookmarks().  
+
+Fri Oct 24 23:39:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/button.h, bfu/checkbox.h, bfu/inpfield.c,
+	bfu/inpfield.h, bfu/listbox.h, bfu/msgbox.c, bfu/widget.h,
+	bookmarks/dialogs.c, config/dialogs.c, dialogs/auth.c,
+	dialogs/edit.c, dialogs/mime.c, dialogs/options.c,
+	globhist/dialogs.c, sched/download.c, scripting/lua/core.c,
+	viewer/text/search.c:
+
+	set_dlg_*() -> add_dlg_*(). Okay, I probably should've thought about
+	this before spreading it all over the source ;-).  
+
+Fri Oct 24 23:36:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/listbox.h, bookmarks/dialogs.c, config/dialogs.c,
+	globhist/dialogs.c:
+
+	Introduced set_dlg_listbox().  
+
+Fri Oct 24 23:35:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/button.h, bfu/inpfield.h, sched/download.c:
+
+	A few trivial fixes.  
+
+Fri Oct 24 23:31:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/inpfield.c, bfu/msgbox.c, bfu/widget.h,
+	bookmarks/dialogs.c, config/dialogs.c, dialogs/auth.c,
+	dialogs/edit.c, dialogs/mime.c, dialogs/options.c,
+	globhist/dialogs.c, sched/download.c, scripting/lua/core.c,
+	viewer/text/search.c:
+
+	set_dlg_end() introduced. Probably the most useful one ;-).  
+
+Fri Oct 24 23:24:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/options.c:
+
+	Dialog titles don't contain hotkeys.  
+
+Fri Oct 24 23:24:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inpfield.h:
+
+	We cannot use @history because it would get expanded on both sides
+	of the assignment.  
+
+Fri Oct 24 23:23:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/inpfield.h, dialogs/auth.c:
+
+	set_dlg_field_pass() introduced, and used in the HTTP auth dialog.  
+
+Fri Oct 24 23:19:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/inpfield.c, bfu/inpfield.h, config/dialogs.c,
+	dialogs/auth.c, dialogs/edit.c, dialogs/mime.c, dialogs/options.c,
+	scripting/lua/core.c, viewer/text/search.c:
+
+	Introduced ses_dlg_field().  
+
+Fri Oct 24 23:08:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/inpfield.c, bookmarks/dialogs.c, config/dialogs.c,
+	dialogs/auth.c, dialogs/edit.c, dialogs/mime.c, dialogs/options.c,
+	globhist/dialogs.c, sched/download.c, scripting/lua/core.c,
+	viewer/text/search.c:
+
+	Use ses_dlg_button(). Blah. I wonder what did I mess up during this.  
+
+Fri Oct 24 22:57:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Remove useless end goto.  
+
+Fri Oct 24 22:46:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/button.h, dialogs/options.c:
+
+	Moved set_dlg_button() from dialogs/options.c to bfu/button.h, and
+	added udata parameter to it.  
+
+Fri Oct 24 22:38:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/checkbox.h, dialogs/options.c, viewer/text/search.c:
+
+	Moved set_dlg_checkbox() from dialogs/options.c to bfu/checkbox.h,
+	and used in viewer/text/search.c.  
+
+Fri Oct 24 22:33:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/options.c:
+
+	set_term_opt*() -> set_dlg*() 
+
+Fri Oct 24 22:30:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: history.c, session.c:
+
+	Moved the keep_unhistory check from really_goto_url_w() (completely
+	inappropriate, IMNSHO) to ses_history_move().  
+
+Fri Oct 24 22:25:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	clean_unhistory() in ses_forward().  
+
 Fri Oct 24 21:19:14 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/sched/session.h:

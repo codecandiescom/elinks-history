@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.34 2005/03/26 14:44:20 pasky Exp $
+# $Id: hooks.pl,v 1.35 2005/03/26 15:39:00 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -181,96 +181,8 @@ sub goto_url_hook
 	}
 
 
-	# Google Groups (DejaNews)
-	if ($url =~ '^(deja|gg|groups|gr|nntp|usenet|nn)(| .*)$') {
-		my ($search) = $url =~ /^[a-z]* (.*)/;
-		my $beta = "groups.google.co.uk";
-		$beta = "groups-beta.google.com" unless (loadrc("googlebeta") ne "yes");
-
-		my $bork = "";
-		if ($search) {
-			$bork = "&hl=xx-bork" unless (loadrc("bork") ne "yes");
-			$url = 'http://' . $beta . '/groups?q=' . $search . $bork;
-		} else {
-			$bork = "/groups?hl=xx-bork" unless (loadrc("bork") ne "yes");
-			$url = 'http://' . $beta . $bork;
-		}
-		return $url;
-	}
-
-	# MirrorDot
-	if ($url =~ '^(mirrordot|md)(| .*)$') {
-		my ($slashdotted) = $url =~ /^[a-z]* (.*)/;
-		if ($slashdotted) {
-			$url = 'http://mirrordot.com/find-mirror.html?' . $slashdotted;
-		} else {
-			$url = 'http://mirrordot.com';
-		}
-		return $url;
-	}
-
-	# The Bastard Operator from Hell
-	if ($url =~ '^bofh$') {
-		$url = 'http://prime-mover.cc.waikato.ac.nz/Bastard.html';
-		return $url;
-	}
-
-	# Coral cache <URL>
-	if ($url =~ '^(coral|cc|nyud)( .*)$') {
-		my ($cache) = $url =~ /^[a-z]* (.*)/;
-		$cache =~ s/^http:\/\///;
-		($url) = $cache =~ s/\//.nyud.net:8090\//;
-		$url = 'http://' . $cache;
-		return $url;
-	}
-
-	# Babelfish ("babelfish german english"  or  "bf de en")
-	if (($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]* [a-zA-Z]*)$')
-	    or ($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]*(| [a-zA-Z]*))$'
-	        and (loadrc("language") ne "no") and $current_url))
-	{
-		$url = 'http://babelfish.altavista.com' if ($url =~ /^[a-z]*$/);
-		if ($url =~ /^[a-z]* /) {
-			my $tongue = loadrc("language");
-			$url = $url . " " . $tongue if ($tongue ne "no" and $url !~ /^[a-z]* [a-zA-Z]* [a-zA-Z]*$/);
-			$url =~ s/ chinese/ zt/i;
-			$url =~ s/ dutch/ nl/i;
-			$url =~ s/ english/ en/i;
-			$url =~ s/ french/ fr/i;
-			$url =~ s/ german/ de/i;
-			$url =~ s/ greek/ el/i;
-			$url =~ s/ italian/ it/i;
-			$url =~ s/ japanese/ ja/i;
-			$url =~ s/ korean/ ko/i;
-			$url =~ s/ portugese/ pt/i;
-			$url =~ s/ russian/ ru/i;
-			$url =~ s/ spanish/ es/i;
-
-			my ($from_language, $to_language) = $url =~ /^[a-z]* (.*) (.*)$/;
-			($current_url) = $current_url =~ /^.*:\/\/(.*)/;
-			$url = 'http://babelfish.altavista.com/babelfish/urltrurl?lp='
-			       . $from_language . '_' . $to_language . '&url=' . $current_url;
-		}
-		return $url;
-	}
-
-	# XYZZY
-	if ($url =~ '^xyzzy$') {
-		# $url = 'http://sundae.triumf.ca/pub2/cave/node001.html';
-		srand();
-		my $yzzyx;
-		my $xyzzy = int(rand(6));
-		$yzzyx = 1   if ($xyzzy == 0); # Colossal Cave Adventure
-		$yzzyx = 227 if ($xyzzy == 1); # Zork Zero: The Revenge of Megaboz
-		$yzzyx = 3   if ($xyzzy == 2); # Zork I: The Great Underground Empire
-		$yzzyx = 4   if ($xyzzy == 3); # Zork II: The Wizard of Frobozz
-		$yzzyx = 5   if ($xyzzy == 4); # Zork III: The Dungeon Master
-		$yzzyx = 6   if ($xyzzy == 5); # Zork: The Undiscovered Underground
-		$url = 'http://ifiction.org/games/play.php?game=' . $yzzyx;
-		return $url;
-	}
-
 	# News
+
 	if ($url =~ '^(news|n)(| .*)$'
 	    or $url =~ '^bbc(| .*)$'
 	    or $url =~ '^msnbc(| .*)$'
@@ -348,13 +260,8 @@ sub goto_url_hook
 		return $url;
 	}
 
-	# ...and now, Deep Thoughts.  by Jack Handey
-	if ($url =~ '^(jack|handey)$') {
-		$url = 'http://glug.com/handey';
-		return $url;
-	}
-
 	# Locators
+
 	if ($url =~ '^(imdb|movie|flick)(| .*)$'
 	    or $url =~ '^(zip|usps)(| .*)$'
 	    or $url =~ '^ip(| .*)$'
@@ -446,6 +353,102 @@ sub goto_url_hook
 		$url = $locator_dead        if ($url =~ '^(alive|dead)(| .*)$');
 		$url = $locator_book        if ($url =~ '^(book|read)(| .*)$');
 		$url = $locator_ipl         if ($url =~ '^ipl(| .*)$');
+		return $url;
+	}
+
+
+	# Google Groups (DejaNews)
+	if ($url =~ '^(deja|gg|groups|gr|nntp|usenet|nn)(| .*)$') {
+		my ($search) = $url =~ /^[a-z]* (.*)/;
+		my $beta = "groups.google.co.uk";
+		$beta = "groups-beta.google.com" unless (loadrc("googlebeta") ne "yes");
+
+		my $bork = "";
+		if ($search) {
+			$bork = "&hl=xx-bork" unless (loadrc("bork") ne "yes");
+			$url = 'http://' . $beta . '/groups?q=' . $search . $bork;
+		} else {
+			$bork = "/groups?hl=xx-bork" unless (loadrc("bork") ne "yes");
+			$url = 'http://' . $beta . $bork;
+		}
+		return $url;
+	}
+
+	# MirrorDot
+	if ($url =~ '^(mirrordot|md)(| .*)$') {
+		my ($slashdotted) = $url =~ /^[a-z]* (.*)/;
+		if ($slashdotted) {
+			$url = 'http://mirrordot.com/find-mirror.html?' . $slashdotted;
+		} else {
+			$url = 'http://mirrordot.com';
+		}
+		return $url;
+	}
+
+	# The Bastard Operator from Hell
+	if ($url =~ '^bofh$') {
+		$url = 'http://prime-mover.cc.waikato.ac.nz/Bastard.html';
+		return $url;
+	}
+
+	# Coral cache <URL>
+	if ($url =~ '^(coral|cc|nyud)( .*)$') {
+		my ($cache) = $url =~ /^[a-z]* (.*)/;
+		$cache =~ s/^http:\/\///;
+		($url) = $cache =~ s/\//.nyud.net:8090\//;
+		$url = 'http://' . $cache;
+		return $url;
+	}
+
+	# Babelfish ("babelfish german english"  or  "bf de en")
+	if (($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]* [a-zA-Z]*)$')
+	    or ($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]*(| [a-zA-Z]*))$'
+	        and (loadrc("language") ne "no") and $current_url))
+	{
+		$url = 'http://babelfish.altavista.com' if ($url =~ /^[a-z]*$/);
+		if ($url =~ /^[a-z]* /) {
+			my $tongue = loadrc("language");
+			$url = $url . " " . $tongue if ($tongue ne "no" and $url !~ /^[a-z]* [a-zA-Z]* [a-zA-Z]*$/);
+			$url =~ s/ chinese/ zt/i;
+			$url =~ s/ dutch/ nl/i;
+			$url =~ s/ english/ en/i;
+			$url =~ s/ french/ fr/i;
+			$url =~ s/ german/ de/i;
+			$url =~ s/ greek/ el/i;
+			$url =~ s/ italian/ it/i;
+			$url =~ s/ japanese/ ja/i;
+			$url =~ s/ korean/ ko/i;
+			$url =~ s/ portugese/ pt/i;
+			$url =~ s/ russian/ ru/i;
+			$url =~ s/ spanish/ es/i;
+
+			my ($from_language, $to_language) = $url =~ /^[a-z]* (.*) (.*)$/;
+			($current_url) = $current_url =~ /^.*:\/\/(.*)/;
+			$url = 'http://babelfish.altavista.com/babelfish/urltrurl?lp='
+			       . $from_language . '_' . $to_language . '&url=' . $current_url;
+		}
+		return $url;
+	}
+
+	# XYZZY
+	if ($url =~ '^xyzzy$') {
+		# $url = 'http://sundae.triumf.ca/pub2/cave/node001.html';
+		srand();
+		my $yzzyx;
+		my $xyzzy = int(rand(6));
+		$yzzyx = 1   if ($xyzzy == 0); # Colossal Cave Adventure
+		$yzzyx = 227 if ($xyzzy == 1); # Zork Zero: The Revenge of Megaboz
+		$yzzyx = 3   if ($xyzzy == 2); # Zork I: The Great Underground Empire
+		$yzzyx = 4   if ($xyzzy == 3); # Zork II: The Wizard of Frobozz
+		$yzzyx = 5   if ($xyzzy == 4); # Zork III: The Dungeon Master
+		$yzzyx = 6   if ($xyzzy == 5); # Zork: The Undiscovered Underground
+		$url = 'http://ifiction.org/games/play.php?game=' . $yzzyx;
+		return $url;
+	}
+
+	# ...and now, Deep Thoughts.  by Jack Handey
+	if ($url =~ '^(jack|handey)$') {
+		$url = 'http://glug.com/handey';
 		return $url;
 	}
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.6 2003/11/17 18:39:15 jonas Exp $ */
+/* $Id: renderer.c,v 1.7 2003/11/21 00:44:21 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,7 +108,8 @@ render_document_frames(struct session *ses)
 
 	init_document_options(&doc_opts);
 
-	/* XXX: Sets 0.height and 0.width so keep after init_document_options(). */
+	/* XXX: init_bars_status sets @doc_opts.height and @doc_opts.width,
+	 * so call it after init_document_options(). */
 	init_bars_status(ses, NULL, &doc_opts);
 
 	doc_opts.color_mode = get_opt_int_tree(ses->tab->term->spec, "colors");

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.205 2003/12/06 02:56:01 jonas Exp $ */
+/* $Id: menu.c,v 1.206 2003/12/07 00:15:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -341,24 +341,6 @@ static struct menu_item file_menu11[] = {
 	INIT_MENU_ITEM(N_("Unh~istory"), M_SUBMENU, unhistory_menu, NULL, SUBMENU),
 };
 
-static struct menu_item tools_menu[] = {
-#ifdef GLOBHIST
-	INIT_MENU_ITEM(N_("Global ~history"), "h", menu_history_manager, NULL, 0),
-#endif
-#ifdef BOOKMARKS
-	INIT_MENU_ITEM(N_("~Bookmarks"), "s", menu_bookmark_manager, NULL, 0),
-#endif
-	INIT_MENU_ITEM(N_("~Cache"), "C", menu_cache_manager, NULL, 0),
-	INIT_MENU_ITEM(N_("~Downloads"), "", menu_download_manager, NULL, 0),
-#ifdef COOKIES
-	INIT_MENU_ITEM(N_("Coo~kies"), "K", menu_cookie_manager, NULL, 0),
-#endif
-#ifdef FORMS_MEMORY
-	INIT_MENU_ITEM(N_("~Form history"), "", menu_formhist_manager, NULL, 0),
-#endif
-	NULL_MENU_ITEM
-};
-
 static struct menu_item file_menu21[] = {
 	BAR_MENU_ITEM,
 	INIT_MENU_ITEM(N_("Sa~ve as"), "", save_as, NULL, 0),
@@ -507,6 +489,24 @@ static struct menu_item setup_menu_anon[] = {
 	INIT_MENU_ITEM(N_("~Language"), M_SUBMENU, menu_language_list, NULL, SUBMENU),
 	INIT_MENU_ITEM(N_("C~haracter set"), M_SUBMENU, charset_list, NULL, SUBMENU),
 	INIT_MENU_ITEM(N_("~Terminal options"), "", terminal_options, NULL, 0),
+	NULL_MENU_ITEM
+};
+
+static struct menu_item tools_menu[] = {
+#ifdef GLOBHIST
+	INIT_MENU_ITEM(N_("Global ~history"), "h", menu_history_manager, NULL, 0),
+#endif
+#ifdef BOOKMARKS
+	INIT_MENU_ITEM(N_("~Bookmarks"), "s", menu_bookmark_manager, NULL, 0),
+#endif
+	INIT_MENU_ITEM(N_("~Cache"), "C", menu_cache_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("~Downloads"), "", menu_download_manager, NULL, 0),
+#ifdef COOKIES
+	INIT_MENU_ITEM(N_("Coo~kies"), "K", menu_cookie_manager, NULL, 0),
+#endif
+#ifdef FORMS_MEMORY
+	INIT_MENU_ITEM(N_("~Form history"), "", menu_formhist_manager, NULL, 0),
+#endif
 	NULL_MENU_ITEM
 };
 

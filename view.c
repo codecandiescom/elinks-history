@@ -1398,10 +1398,20 @@ int enter(struct session *ses, struct f_data_c *f, int a)
 	if (f->vs->current_link == -1) return 1;
 	link = &f->f_data->links[f->vs->current_link];
 	if (link->type == L_LINK || link->type == L_BUTTON) {
-		return submit_form(NULL, NULL, ses);
+submit:
+		/* XXX: Some code duplication with submit_form() here. */
+		if ((u = get_link_url(ses, f, link))) {
+			if (strlen(u) >= 4 && !casecmp(u, "MAP@", 4)) {
+				goto_imgmap(ses, u + 4, stracpy(u + 4), stracpy(link->target));
+			} else {
+				goto_url_f(ses, u, link->target);
+			}
+			mem_free(u);
+			return 2;
+		}
 	} else if (link->type == L_FIELD || link->type == L_AREA) {
 		if (!has_form_submit(f->f_data, link->form))
-			return submit_form(NULL, NULL, ses);
+			goto submit;
 		down(ses, f, 0);
 	} else if (link->type == L_CHECKBOX) {
 		struct form_state *fs = find_form_state(f, link->form);

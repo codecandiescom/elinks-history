@@ -1,3 +1,67 @@
+Tue Jan  6 23:02:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	do_action(): Add ACT_RELOAD handling.  
+
+Tue Jan  6 22:55:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	do_action(): Add ACT_GOTO_URL and sort actions alphabetically for
+	now.  
+
+Tue Jan  6 22:47:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Blast menu wrappers in favour of do_action() handling.  
+
+Tue Jan  6 21:48:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/renderer.c, viewer/text/link.c,
+	viewer/text/link.h:
+
+	Moved sort_links() from viewer/text/link.c to document/renderer.c.
+	It really operates on {struct document} exclusively, so it really
+	belongs to document/.  
+
+Tue Jan  6 21:43:06 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.c:
+
+	Add a notice to the force_dump() that what happenned is not a
+	regular segfault but rather an internal error, and therefore users
+	shouldn't report it as a segfault but internal error. Really tired
+	of those 'ELinks segfaulted' reports, being just assertion failures
+	in disguise.  
+
+Tue Jan  6 21:00:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/menu.c, bfu/menu.h, dialogs/menu.c, dialogs/menu.h:
+
+	Introduce do_action() for handling session oriented actions. It can
+	hopefully gradually evolve into some backend for frame_ev() or
+	send_event(). To start with it is used for menus since - after Zas'
+	menu action hacking - we begin to use generic action event handlers.
+	It is called when the menu function is NULL and the action !=
+	ACT_NONE. A macro add_menu_action() ease the dynamic adding of such
+	menu entries.  
+
+Tue Jan  6 19:35:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Fix bookmark adding from plain document (where link->name is NULL)
+	and improve the 'name' by checking if globhist can provide us with a
+	title.  
+
+Tue Jan  6 06:28:15 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/dialogs/status.c:
+
+	Displaying of received after resume was broken.  
+
 Mon Jan  5 19:47:33 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/globhist/globhist.c:

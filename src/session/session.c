@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.99 2003/06/12 00:02:08 jonas Exp $ */
+/* $Id: session.c,v 1.100 2003/06/15 13:59:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -530,8 +530,8 @@ post_yes(struct task *task)
 	ses->task = task->type;
 	ses->task_target = task->target;
 
-	load_url(task->ses->loading_url, task->ses->ref_url,
-		 &task->ses->loading, task->pri, task->cache_mode, -1);
+	load_url(ses->loading_url, ses->ref_url,
+		 &ses->loading, task->pri, task->cache_mode, -1);
 }
 
 static void

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.64 2004/06/16 17:11:00 jonas Exp $ */
+/* $Id: textarea.c,v 1.65 2004/06/16 17:21:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -391,7 +391,7 @@ menu_textarea_edit(struct terminal *term, void *xxx, struct session *ses)
 
 /* TODO: Unify the textarea field_op handlers to one trampoline function. */
 
-int
+enum frame_event_status
 textarea_op_home(struct form_state *fs, struct form_control *frm, int rep)
 {
 	unsigned char *position = fs->value + fs->state;
@@ -400,10 +400,10 @@ textarea_op_home(struct form_state *fs, struct form_control *frm, int rep)
 	int y;
 
 	assert(fs && fs->value && frm);
-	if_assert_failed return 0;
+	if_assert_failed return FRAME_EVENT_OK;
 
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
-	if (!ln) return 0;
+	if (!ln) return FRAME_EVENT_OK;
 
 	for (y = 0; ln[y].st; prev_end = ln[y].en, y++) {
 		if (position >= ln[y].st &&
@@ -416,27 +416,27 @@ textarea_op_home(struct form_state *fs, struct form_control *frm, int rep)
 
 x:
 	mem_free(ln);
-	return 0;
+	return FRAME_EVENT_REFRESH;
 }
 
-int
+enum frame_event_status
 textarea_op_up(struct form_state *fs, struct form_control *frm, int rep)
 {
 	struct line_info *ln;
 	int y = 0;
 
 	assert(fs && fs->value && frm);
-	if_assert_failed return 0;
+	if_assert_failed return FRAME_EVENT_OK;
 
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
-	if (!ln) return 0;
+	if (!ln) return FRAME_EVENT_OK;
 
 	while (ln[y].st) {
 		if (fs->value + fs->state >= ln[y].st &&
 		    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
 			if (!y) {
 				mem_free(ln);
-				return 1;
+				return FRAME_EVENT_OK;
 			}
 			fs->state -= ln[y].st - ln[y-1].st;
 			int_upper_bound(&fs->state, ln[y-1].en - fs->value);
@@ -447,31 +447,31 @@ textarea_op_up(struct form_state *fs, struct form_control *frm, int rep)
 		}
 	}
 	mem_free(ln);
-	return 1;
+	return FRAME_EVENT_OK;
 
 xx:
 	mem_free(ln);
-	return 0;
+	return FRAME_EVENT_REFRESH;
 }
 
-int
+enum frame_event_status
 textarea_op_down(struct form_state *fs, struct form_control *frm, int rep)
 {
 	struct line_info *ln;
 	int y = 0;
 
 	assert(fs && fs->value && frm);
-	if_assert_failed return 0;
+	if_assert_failed return FRAME_EVENT_OK;
 
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
-	if (!ln) return 0;
+	if (!ln) return FRAME_EVENT_OK;
 
 	while (ln[y].st) {
 		if (fs->value + fs->state >= ln[y].st &&
 		    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
 			if (!ln[y+1].st) {
 				mem_free(ln);
-				return 1;
+				return FRAME_EVENT_OK;
 			}
 			fs->state += ln[y+1].st - ln[y].st;
 			int_upper_bound(&fs->state, ln[y+1].en - fs->value);
@@ -482,23 +482,23 @@ textarea_op_down(struct form_state *fs, struct form_control *frm, int rep)
 		}
 	}
 	mem_free(ln);
-	return 1;
+	return FRAME_EVENT_OK;
 yy:
 	mem_free(ln);
-	return 0;
+	return FRAME_EVENT_REFRESH;
 }
 
-int
+enum frame_event_status
 textarea_op_end(struct form_state *fs, struct form_control *frm, int rep)
 {
 	struct line_info *ln;
 	int y;
 
 	assert(fs && fs->value && frm);
-	if_assert_failed return 0;
+	if_assert_failed return FRAME_EVENT_OK;
 
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
-	if (!ln) return 0;
+	if (!ln) return FRAME_EVENT_OK;
 
 	for (y = 0; ln[y].st; y++) {
 		if (fs->value + fs->state >= ln[y].st &&
@@ -516,10 +516,10 @@ textarea_op_end(struct form_state *fs, struct form_control *frm, int rep)
 	fs->state = strlen(fs->value);
 yyyy:
 	mem_free(ln);
-	return 0;
+	return FRAME_EVENT_REFRESH;
 }
 
-int
+enum frame_event_status
 textarea_op_bob(struct form_state *fs, struct form_control *frm, int rep)
 {
 	unsigned char *position = fs->value + fs->state;
@@ -527,10 +527,10 @@ textarea_op_bob(struct form_state *fs, struct form_control *frm, int rep)
 	int y;
 
 	assert(fs && fs->value && frm);
-	if_assert_failed return 0;
+	if_assert_failed return FRAME_EVENT_OK;
 
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
-	if (!ln) return 0;
+	if (!ln) return FRAME_EVENT_OK;
 
 	for (y = 0; ln[y].st; y++) {
 		if (position <= ln[y].en) {
@@ -547,7 +547,7 @@ textarea_op_bob(struct form_state *fs, struct form_control *frm, int rep)
 
 x:
 	mem_free(ln);
-	return 0;
+	return FRAME_EVENT_REFRESH;
 }
 
 enum frame_event_status

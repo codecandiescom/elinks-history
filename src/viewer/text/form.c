@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.191 2004/06/16 17:11:00 jonas Exp $ */
+/* $Id: form.c,v 1.192 2004/06/16 17:21:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1110,10 +1110,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 			break;
 		case ACT_EDIT_HOME:
 			if (frm->type == FC_TEXTAREA) {
-				if (textarea_op_home(fs, frm, rep)) {
-					status = FRAME_EVENT_OK;
-					break;
-				}
+				status = textarea_op_home(fs, frm, rep);
 			} else {
 				fs->state = 0;
 			}
@@ -1121,31 +1118,25 @@ field_op(struct session *ses, struct document_view *doc_view,
 		case ACT_EDIT_UP:
 			if (frm->type != FC_TEXTAREA)
 				status = FRAME_EVENT_IGNORED;
-			else if (textarea_op_up(fs, frm, rep))
-				status = FRAME_EVENT_OK;
+			else
+				status = textarea_op_up(fs, frm, rep);
 			break;
 		case ACT_EDIT_DOWN:
 			if (frm->type != FC_TEXTAREA)
 				status = FRAME_EVENT_IGNORED;
-			else if (textarea_op_down(fs, frm, rep))
-				status = FRAME_EVENT_OK;
+			else
+				status = textarea_op_down(fs, frm, rep);
 			break;
 		case ACT_EDIT_END:
 			if (frm->type == FC_TEXTAREA) {
-				if (textarea_op_end(fs, frm, rep)) {
-					status = FRAME_EVENT_OK;
-					break;
-				}
+				status = textarea_op_end(fs, frm, rep);
 			} else {
 				fs->state = strlen(fs->value);
 			}
 			break;
 		case ACT_EDIT_BEGINNING_OF_BUFFER:
 			if (frm->type == FC_TEXTAREA) {
-				if (textarea_op_bob(fs, frm, rep)) {
-					status = FRAME_EVENT_OK;
-					break;
-				}
+				status = textarea_op_bob(fs, frm, rep);
 			} else {
 				fs->state = 0;
 			}

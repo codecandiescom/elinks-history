@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.110 2004/10/19 05:54:47 miciah Exp $ */
+/* $Id: document.c,v 1.111 2004/10/19 06:02:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,6 +230,7 @@ void
 cached_header_dialog(struct session *ses, struct cache_entry *cached)
 {
 	int artificial;
+	unsigned char *title;
 	unsigned char *headers;
 	int i = 0, j = 0;
 
@@ -290,9 +291,11 @@ no_header_info:
 
 	if (!*headers) goto no_header_info;
 
+	title = artificial ? N_("Artificial header info") : N_("Header info");
+
 	/* Headers info message box. */
 	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
-		artificial ? N_("Artificial header info") : N_("Header info"), ALIGN_LEFT,
+		title, ALIGN_LEFT,
 		headers,
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);

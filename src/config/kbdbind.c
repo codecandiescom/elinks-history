@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.91 2003/11/13 01:46:26 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.92 2003/11/13 17:43:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -325,23 +325,6 @@ read_key(unsigned char *key)
 	return (key[0] && !key[1]) ? *key : strtonum(key_table, key);
 }
 
-static unsigned char *
-write_key(long key)
-{
-	static unsigned char dirty[3];
-	unsigned char *bin = numtostr(key_table, key);
-
-	if (bin) return bin;
-
-	dirty[0] = (unsigned char) key;
-	if (key == '\\')
-		dirty[1] = '\\', dirty[2] = '\0';
-	else
-		dirty[1] = '\0';
-	return dirty;
-}
-
-
 int
 parse_keystroke(unsigned char *s, long *key, long *meta)
 {
@@ -365,6 +348,9 @@ parse_keystroke(unsigned char *s, long *key, long *meta)
 void
 make_keystroke(struct string *str, long key, long meta)
 {
+	unsigned char key_buffer[3];
+	unsigned char *key_string = numtostr(key_table, key);
+
 	if (meta & KBD_SHIFT)
 		add_to_string(str, "Shift-");
 	if (meta & KBD_CTRL)
@@ -372,7 +358,19 @@ make_keystroke(struct string *str, long key, long meta)
 	if (meta & KBD_ALT)
 		add_to_string(str, "Alt-");
 
-	add_to_string(str, write_key(key));
+	if (!key_string) {
+		key_buffer[0] = (unsigned char) key;
+		if (key == '\\') {
+			key_buffer[1] = '\\';
+			key_buffer[2] = '\0';
+		} else {
+			key_buffer[1] = '\0';
+		}
+
+		key_string = key_buffer;
+	}
+
+	add_to_string(str, key_string);
 }
 
 #ifndef ELINKS_SMALL

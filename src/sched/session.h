@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.64 2003/11/17 10:56:56 pasky Exp $ */
+/* $Id: session.h,v 1.65 2003/11/17 16:59:19 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -153,6 +153,7 @@ struct session {
 
 #ifdef USE_LEDS
 	struct led_panel leds;
+	struct led *ssl_led;
 #endif
 };
 

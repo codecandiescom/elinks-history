@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.30 2003/11/17 11:11:51 pasky Exp $ */
+/* $Id: leds.c,v 1.31 2003/11/17 16:59:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,11 +28,15 @@
 
 
 /* Current leds allocation:
- * 1 - unused, reserved for ELinks internal use
+ * 1 - SSL connection indicator
  * 2 - unused, reserved for ELinks internal use
  * 3 - unused, reserved for Lua
  * 4 - unused, reserved for Lua
  * 5 - unused */
+
+/* XXX: Currently, the leds toggling is quite hackish, some more work should go
+ * to it (ie. some led hooks called in sync_leds() to light the leds
+ * dynamically. --pasky */
 
 /* Always reset led to '-' when not used anymore. */
 

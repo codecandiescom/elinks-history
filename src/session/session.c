@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.239 2003/11/17 10:56:56 pasky Exp $ */
+/* $Id: session.c,v 1.240 2003/11/17 16:59:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -377,7 +377,24 @@ print_screen_status(struct session *ses)
 title_set:
 
 	redraw_from_window(ses->tab);
+
 #ifdef USE_LEDS
+	if (ses->doc_view && ses->doc_view->document
+	    && ses->doc_view->document->url) {
+		struct cache_entry *cache_entry =
+			find_in_cache(ses->doc_view->document->url);
+
+		if (cache_entry) {
+			if (cache_entry->ssl_info)
+				ses->ssl_led->value = 'S';
+			else
+				ses->ssl_led->value = '-';
+		} else {
+			/* FIXME: We should do this thing better. */
+			ses->ssl_led->value = '?';
+		}
+	}
+
 	draw_leds(ses);
 #endif
 }
@@ -1202,6 +1219,8 @@ create_basic_session(struct window *tab)
 	ses->display_timer = -1;
 #ifdef USE_LEDS
 	init_led_panel(&ses->leds);
+	ses->ssl_led = register_led(ses, 0);
+	if (ses->ssl_led) ses->ssl_led->__used = 1;
 #endif
 
 	add_to_list(sessions, ses);

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.25 2003/05/04 01:21:50 zas Exp $ */
+/* $Id: session.c,v 1.26 2003/05/04 01:45:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,30 +231,30 @@ print_screen_status(struct session *ses)
 		else if (have_location(ses))
 			stat = &cur_loc(ses)->stat;
 
-		if (stat && stat->state == S_OK) {
-			struct file_to_load *ftl;
+		if (stat) {
+			if (stat->state == S_OK) {
+				struct file_to_load *ftl;
 
-			foreach(ftl, ses->more_files) {
-				if (ftl->req_sent
-				    && ftl->stat.state >= 0) {
-					stat = &ftl->stat;
-					break;
+				foreach(ftl, ses->more_files) {
+					if (ftl->req_sent
+					    && ftl->stat.state >= 0) {
+						stat = &ftl->stat;
+						break;
+					}
 				}
 			}
-		}
 
-		/* Show S_INTERRUPTED message *once* but then show links
-		 * again as usual. */
-		if (current_frame(ses)) {
-			int ncl = current_frame(ses)->vs->current_link;
+			/* Show S_INTERRUPTED message *once* but then show links
+			 * again as usual. */
+			if (current_frame(ses)) {
+				int ncl = current_frame(ses)->vs->current_link;
 
-			if (stat->state == S_INTERRUPTED
-			    && ncl != last_current_link)
-				stat->state = S_OK;
-			last_current_link = ncl;
-		}
+				if (stat->state == S_INTERRUPTED
+			    	    && ncl != last_current_link)
+					stat->state = S_OK;
+				last_current_link = ncl;
+			}
 
-		if (stat) {
 			if (stat->state == S_OK)
 				msg = print_current_link(ses);
 			if (!msg)
@@ -335,7 +335,6 @@ print_screen_status(struct session *ses)
 
 	msg = stracpy("ELinks");
 	if (msg) {
-		static unsigned char *last_title = NULL;
 		int msglen;
 		int do_it = 0;
 
@@ -347,15 +346,18 @@ print_screen_status(struct session *ses)
 		}
 
 		msglen = strlen(msg);
-		if (!last_title ||
-		    strlen(last_title) != msglen ||
-		    memcmp(last_title, msg, msglen)) {
-			last_title = msg;
+		if (!ses->last_title ||
+		    strlen(ses->last_title) != msglen ||
+		    memcmp(ses->last_title, msg, msglen)) {
+			if (ses->last_title) mem_free(ses->last_title);
+			ses->last_title = msg;
 			do_it = 1;
 		}
 
-		if (do_it) set_terminal_title(term, msg);
-		else mem_free(msg);
+		if (do_it)
+			set_terminal_title(term, msg);
+		else
+			mem_free(msg);
 	}
 
 	redraw_from_window(ses->win);
@@ -1126,6 +1128,7 @@ create_basic_session(struct window *win)
 	ses->display_timer = -1;
 	ses->loading_url = NULL;
 	ses->goto_position = NULL;
+	ses->last_title = NULL;
 
 	add_to_list(sessions, ses);
 
@@ -1389,6 +1392,7 @@ destroy_session(struct session *ses)
 	if (ses->ref_url) mem_free(ses->ref_url), ses->ref_url=NULL;
 	if (ses->search_word) mem_free(ses->search_word);
 	if (ses->last_search_word) mem_free(ses->last_search_word);
+	if (ses->last_title) mem_free(ses->last_title);
 	del_from_list(ses);
 	/*mem_free(ses);*/
 }

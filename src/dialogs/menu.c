@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.48 2002/09/09 14:26:05 zas Exp $ */
+/* $Id: menu.c,v 1.49 2002/11/28 20:53:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -209,25 +209,25 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 	int n = 0;
 
 	foreach(l, ses->history) {
-		if (n/* || ses->tq_goto_position*/) {
-			unsigned char *url, *pc;
+		unsigned char *url, *pc;
 
-			if (!mi) {
-				mi = new_menu(FREE_LIST | FREE_TEXT);
-				if (!mi) return;
-			}
+		if (!mi) {
+			mi = new_menu(FREE_LIST | FREE_TEXT);
+			if (!mi) return;
+		}
 
-			url = stracpy(l->vs.url);
+		url = stracpy(l->vs.url);
+		if (url) {
 			pc = strchr(url, POST_CHAR);
 			if (pc) *pc = '\0';
 
 			add_to_menu(&mi, url, "", "", MENU_FUNC go_backwards,
-				    (void *) n, 0);
+			    	    (void *) n, 0);
+			n++;
 		}
-		n++;
 	}
 
-	if (n <= 1)
+	if (!n)
 		do_menu(term, no_hist_menu, ses);
 	else
 		do_menu(term, mi, ses);
@@ -249,12 +249,14 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 		}
 
 		url = stracpy(l->vs.url);
-		pc = strchr(url, POST_CHAR);
-		if (pc) *pc = '\0';
+		if (url) {
+			pc = strchr(url, POST_CHAR);
+			if (pc) *pc = '\0';
 
-		add_to_menu(&mi, url, "", "", MENU_FUNC go_unbackwards,
-			    (void *) n, 0);
-		n++;
+			add_to_menu(&mi, url, "", "", MENU_FUNC go_unbackwards,
+			    	    (void *) n, 0);
+			n++;
+		}
 	}
 
 	if (!n)
@@ -285,11 +287,14 @@ downloads_menu(struct terminal *term, void *ddd, struct session *ses)
 		}
 
 		url = stracpy(d->url);
-		pc = strchr(url, POST_CHAR);
-		if (pc) *pc = '\0';
-		add_to_menu(&mi, url, "", "", MENU_FUNC display_download,
-			    d, 0);
-		n++;
+		if (url) {
+			pc = strchr(url, POST_CHAR);
+			if (pc) *pc = '\0';
+			
+			add_to_menu(&mi, url, "", "", MENU_FUNC display_download,
+			    	    d, 0);
+			n++;
+		}
 	}
 
 	if (!n)

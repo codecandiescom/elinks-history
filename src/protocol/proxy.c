@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.40 2004/07/22 00:15:55 pasky Exp $ */
+/* $Id: proxy.c,v 1.41 2004/07/22 00:17:24 pasky Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -77,20 +77,20 @@ get_protocol_proxy(unsigned char *opt,
                    unsigned char *env1, unsigned char *env2,
 		   unsigned char *strip1, unsigned char *strip2)
 {
-	unsigned char *protocol_proxy;
+	unsigned char *proxy;
 
-	protocol_proxy = get_opt_str(opt);
-	if (!*protocol_proxy) protocol_proxy = getenv(env1);
-	if (!protocol_proxy || !*protocol_proxy) protocol_proxy = getenv(env2);
+	proxy = get_opt_str(opt);
+	if (!*proxy) proxy = getenv(env1);
+	if (!proxy || !*proxy) proxy = getenv(env2);
 
-	if (protocol_proxy && *protocol_proxy) {
-		if (!strncasecmp(protocol_proxy, strip1, strlen(strip1)))
-			protocol_proxy += strlen(strip1);
-		else if (strip2 && !strncasecmp(protocol_proxy, strip2, strlen(strip2)))
-			protocol_proxy += strlen(strip2);
+	if (proxy && *proxy) {
+		if (!strncasecmp(proxy, strip1, strlen(strip1)))
+			proxy += strlen(strip1);
+		else if (strip2 && !strncasecmp(proxy, strip2, strlen(strip2)))
+			proxy += strlen(strip2);
 	}
 
-	return protocol_proxy;
+	return proxy;
 }
 
 static struct uri *

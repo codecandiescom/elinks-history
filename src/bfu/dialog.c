@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.161 2004/11/17 01:12:04 zas Exp $ */
+/* $Id: dialog.c,v 1.162 2004/11/17 01:17:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -271,19 +271,18 @@ dialog_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 	if (ops->kbd && ops->kbd(widget_data, dlg_data, ev) == EVENT_PROCESSED)
 		return;
 
-	/* Can we select? */
-	if (action == ACT_MENU_SELECT) {
+	switch (action) {
+	case ACT_MENU_SELECT:
+		/* Can we select? */
 		if (ops->select) {
 			ops->select(widget_data, dlg_data);
-			return;
 		}
-	}
-
-	/* Submit button. */
-	if (action == ACT_MENU_ENTER) {
+		break;
+	case ACT_MENU_ENTER:
+		/* Submit button. */
 		if (ops->select) {
 			ops->select(widget_data, dlg_data);
-			return;
+			break;
 		}
 
 		if (widget_is_textfield(widget_data)
@@ -291,36 +290,30 @@ dialog_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 		    || check_kbd_modifier(ev, KBD_ALT)) {
 			select_button_by_flag(dlg_data, B_ENTER);
 		}
-		return;
-	}
-
-	/* Cancel button. */
-	if (action == ACT_MENU_CANCEL) {
+		break;
+	case ACT_MENU_CANCEL:
+		/* Cancel button. */
 		select_button_by_flag(dlg_data, B_ESC);
-		return;
-	}
-
-	/* Cycle focus. */
-	if (action == ACT_MENU_NEXT_ITEM
-	    || action == ACT_MENU_DOWN
-	    || action == ACT_MENU_RIGHT) {
+		break;
+	case ACT_MENU_NEXT_ITEM:
+	case ACT_MENU_DOWN:
+	case ACT_MENU_RIGHT:
+		/* Cycle focus. */
 		cycle_widget_focus(dlg_data, 1);
-			return;
-	}
-
-	if (action == ACT_MENU_PREVIOUS_ITEM
-	    || action == ACT_MENU_UP
-	    || action == ACT_MENU_LEFT) {
+		break;
+	case ACT_MENU_PREVIOUS_ITEM:
+	case ACT_MENU_UP:
+	case ACT_MENU_LEFT:
+		/* Cycle focus (reverse). */
 		cycle_widget_focus(dlg_data, -1);
-		return;
-	}
-
-	if (action == ACT_MENU_REDRAW) {
+		break;
+	case ACT_MENU_REDRAW:
 		redraw_terminal_cls(dlg_data->win->term);
-		return;
+		break;
+	default:
+		select_button_by_key(dlg_data, ev);
+		break;
 	}
-
-	select_button_by_key(dlg_data, ev);
 }
 
 static void

@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.88 2004/05/07 11:24:21 zas Exp $ */
+/* $Id: text.c,v 1.89 2004/05/07 12:28:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,13 +170,11 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 
 	/* If we are drawing set up the dimensions before setting up the
 	 * scrolling. */
+	set_rect(widget_data->dimensions, x, *y, 0, int_max(0, max_height - 3));
 	widget_data->dimensions.x = x;
 	widget_data->dimensions.y = *y;
 	widget_data->dimensions.height = max_height - 3;
-	if (widget_data->dimensions.height <= 0) {
-		widget_data->dimensions.height = 0;
-		return;
-	}
+	if (widget_data->dimensions.height == 0) return;
 
 	/* Can we scroll and do we even have to? */
 	if (widget_data->widget->info.text.is_scrollable
@@ -376,6 +374,7 @@ mouse_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	int scroller_middle = scroller_y + scroller_height/2
 			      - widget_data->info.text.scroller_last_dir;
 
+	/* TODO: -> is_in_rect() --Zas */
 	if (ev->x != x || ev->y < y || ev->y >= y + height)
 		return EVENT_NOT_PROCESSED;
 

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.155 2004/12/15 15:15:46 zas Exp $ */
+/* $Id: options.inc,v 1.156 2004/12/15 18:48:31 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -209,7 +209,7 @@ static struct option_info config_options_info[] = {
 		"2     means display alt/title attribute if possible, IMG if not\n"
 		"3     means display alt/title attribute if possible, filename if not\n")),
 
-	INIT_OPT_INT("document.browse.images", N_("Max. length for image filename"),
+	INIT_OPT_INT("document.browse.images", N_("Maximum length for image filename"),
 		"filename_maxlen", 0, 0, 500, 0,
 		N_("Maximum length of image filename when displayed:\n"
 		"0     means always display full filename\n"
@@ -242,7 +242,7 @@ static struct option_info config_options_info[] = {
 		"image_link_suffix", 0, "]",
 		N_("Suffix string to use to mark image links.")),
 
-	INIT_OPT_INT("document.browse.images", N_("Max. length for image label"),
+	INIT_OPT_INT("document.browse.images", N_("Maximum length for image label"),
 		"label_maxlen", 0, 0, 500, 0,
 		N_("Maximum length of image label (alt/title):\n"
 		"0     means always display full label\n"

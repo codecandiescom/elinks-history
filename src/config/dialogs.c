@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.20 2002/12/13 18:08:19 pasky Exp $ */
+/* $Id: dialogs.c,v 1.21 2002/12/13 18:44:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,7 @@
 #include "util/memory.h"
 
 /* The location of the box in the options manager */
-#define	OP_BOX_IND		5
+#define	OP_BOX_IND		6
 
 
 void
@@ -354,8 +354,7 @@ add_option_to_tree(void *data, unsigned char *name)
 	struct option *option = data;
 
 	/* get_opt_rec() will do all the work for ourselves... ;-) */
-	if (!get_opt_rec(option, name)) {
-	}
+	get_opt_rec(option, name);
 	/* TODO: If the return value is NULL, we should pop up a msgbox. */
 }
 
@@ -392,6 +391,72 @@ invalid_option:
 }
 
 
+static void
+really_delete_option(void *data)
+{
+	struct option *option = data;
+	struct listbox_data *box;
+
+	foreach (box, *option->box_item->box) {
+		if (box->sel == option->box_item) {
+			box->sel = traverse_listbox_items_list(option->box_item, -1,
+					1, NULL, NULL);
+			if (option->box_item == box->sel)
+				box->sel = traverse_listbox_items_list(option->box_item, 1,
+						1, NULL, NULL);
+			if (option->box_item == box->sel)
+				box->sel = NULL;
+		}
+
+		if (box->top == option->box_item) {
+			box->top = traverse_listbox_items_list(option->box_item, -1,
+					1, NULL, NULL);
+			if (option->box_item == box->top)
+				box->top = traverse_listbox_items_list(option->box_item, 1,
+						1, NULL, NULL);
+			if (option->box_item == box->top)
+				box->top = NULL;
+		}
+	}
+
+	delete_option(option);
+}
+
+static int
+push_del_button(struct dialog_data *dlg,
+		struct widget_data *some_useless_info_button)
+{
+	struct terminal *term = dlg->win->term;
+	struct listbox_data *box = (void *) dlg->dlg->items[OP_BOX_IND].data;
+	struct option *option;
+
+	if (!box->sel || !box->sel->udata) {
+invalid_option:
+		msg_box(term, NULL,
+			TEXT(T_DELETE_OPTION), AL_CENTER,
+			TEXT(T_CANNOT_DELETE_OPTION_HERE),
+			NULL, 1,
+			TEXT(T_CANCEL), NULL, B_ESC | B_ENTER);
+		return 0;
+	}
+
+	option = box->sel->udata;
+	if (!box->sel->root ||
+	    ((struct option *) box->sel->root->udata)->flags != OPT_AUTOCREATE) {
+		goto invalid_option;
+	}
+
+	msg_box(term, NULL,
+		TEXT(T_DELETE_OPTION), AL_CENTER | AL_EXTD_TEXT,
+		TEXT(T_REALLY_DELETE_OPTION), " \"", option->name, "\" ?", NULL,
+		option, 2,
+		TEXT(T_OK), really_delete_option, B_ENTER,
+		TEXT(T_CANCEL), NULL, B_ESC);
+
+	return 0;
+}
+
+
 static int
 push_save_button(struct dialog_data *dlg,
 		struct widget_data *some_useless_info_button)
@@ -399,6 +464,7 @@ push_save_button(struct dialog_data *dlg,
 	write_config(dlg->win->term);
 	return 0;
 }
+
 
 /* Builds the "Options manager" dialog */
 void
@@ -438,14 +504,20 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ENTER;
-	d->items[3].fn = push_save_button;
+	d->items[3].fn = push_del_button;
 	d->items[3].udata = ses;
-	d->items[3].text = TEXT(T_SAVE);
+	d->items[3].text = TEXT(T_DELETE);
 
 	d->items[4].type = D_BUTTON;
-	d->items[4].gid = B_ESC;
-	d->items[4].fn = cancel_dialog;
-	d->items[4].text = TEXT(T_CLOSE);
+	d->items[4].gid = B_ENTER;
+	d->items[4].fn = push_save_button;
+	d->items[4].udata = ses;
+	d->items[4].text = TEXT(T_SAVE);
+
+	d->items[5].type = D_BUTTON;
+	d->items[5].gid = B_ESC;
+	d->items[5].fn = cancel_dialog;
+	d->items[5].text = TEXT(T_CLOSE);
 
 	d->items[OP_BOX_IND].type = D_BOX;
 	d->items[OP_BOX_IND].gid = 12;

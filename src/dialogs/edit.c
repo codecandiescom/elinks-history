@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.30 2003/06/27 20:18:09 zas Exp $ */
+/* $Id: edit.c,v 1.31 2003/06/27 20:39:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,7 @@ layout_add_dialog(struct dialog_data *dlg)
 
 	min_max_text_width(term, edit_add_msg[0], &min, &max);
 	min_max_text_width(term, edit_add_msg[1], &min, &max);
-	min_max_buttons_width(term, dlg->items + 2, 2, &min, &max);
+	buttons_width(term, dlg->items + 2, 2, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 

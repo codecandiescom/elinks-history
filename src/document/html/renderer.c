@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.246 2003/09/08 22:19:38 jonas Exp $ */
+/* $Id: renderer.c,v 1.247 2003/09/09 17:39:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,7 +153,7 @@ realloc_line(struct document *document, int y, int x)
 	set_term_color(&schar, &colors, COLOR_DEFAULT);
 
 	for (i = line->l; i <= x; i++) {
-		memcpy(&line->d[i], &schar, sizeof(struct screen_char));
+		copy_screen_chars(&line->d[i], &schar, 1);
 	}
 
 	line->l = i;
@@ -256,7 +256,7 @@ set_hchars(struct part *part, int x, int y, int xl,
 		set_term_color(&schar, &colors, COLOR_DEFAULT);
 
 		for (; xl; xl--, x++) {
-			memcpy(&POS(x, y), &schar, sizeof(struct screen_char));
+			copy_screen_chars(&POS(x, y), &schar, 1);
 		}
 	} else {
 		for (; xl; xl--, x++) {
@@ -315,7 +315,7 @@ xset_vchars(struct part *part, int x, int y, int yl,
 	for (; yl; yl--, y++) {
 	    	if (xpand_line(part, y, x)) return;
 
-		memcpy(&POS(x, y), &schar, sizeof(struct screen_char));
+		copy_screen_chars(&POS(x, y), &schar, 1);
 	}
 }
 
@@ -414,7 +414,7 @@ copy_chars(struct part *part, int x, int y, int xl, struct screen_char *d)
 	    || xpand_line(part, y, x + xl - 1))
 		return;
 
-	memcpy(&POS(x, y), d, xl * sizeof(struct screen_char));
+	copy_screen_chars(&POS(x, y), d, xl);
 }
 
 static inline void
@@ -443,7 +443,7 @@ shift_chars(struct part *part, int y, int shift)
 	a = mem_alloc(len * sizeof(struct screen_char));
 	if (!a) return;
 
-	memcpy(a, &POS(0, y), len * sizeof(struct screen_char));
+	copy_screen_chars(a, &POS(0, y), len);
 	/* When we shift chars we want to preserve and use the background
 	 * colors already in place else we could end up ``staining'' the background
 	 * especial when drawing table cells. So make the shifted chars share the
@@ -583,7 +583,7 @@ justify_line(struct part *part, int y)
 		return;
 	}
 
-	memcpy(line, &POS(0, y), len * sizeof(struct screen_char));
+	copy_screen_chars(line, &POS(0, y), len);
 
 	/* Skip leading spaces */
 

@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.32 2003/09/08 22:19:38 jonas Exp $ */
+/* $Id: draw.h,v 1.33 2003/09/09 17:39:46 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -29,6 +29,9 @@ struct screen_char {
 };
 
 #define INIT_SCREEN_CHAR(data, attr, color) { data, attr, color }
+
+#define copy_screen_chars(from, to, amount) \
+	do { memcpy(from, to, (amount) * sizeof(struct screen_char)); } while (0)
 
 /* Linux frame symbols table (it's magically converted to other terminals when
  * needed). */

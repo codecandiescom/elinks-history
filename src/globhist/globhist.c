@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.90 2004/12/17 23:53:42 miciah Exp $ */
+/* $Id: globhist.c,v 1.91 2004/12/17 23:58:06 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -198,12 +198,13 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 		mem_free(history_item);
 		return;
 	}
-	object_nolock(history_item, "globhist");
-
-	add_to_history_list(&global_history, history_item);
 
 	history_item->box_item = add_listbox_leaf(&globhist_browser, NULL,
 						  history_item);
+
+	object_nolock(history_item, "globhist");
+
+	add_to_history_list(&global_history, history_item);
 
 	/* Hash creation if needed. */
 	if (!globhist_cache)

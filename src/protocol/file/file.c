@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.135 2003/12/01 06:23:46 witekfl Exp $ */
+/* $Id: file.c,v 1.136 2003/12/04 11:11:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,11 @@
 #include "config/options.h"
 #include "cache/cache.h"
 #include "osdep/osdep.h"
+
+#ifdef ELINKS_LOCAL_CGI
 #include "protocol/file/cgi.h"
+#endif /* ELINKS_LOCAL_CGI */
+
 #include "protocol/file/file.h"
 #include "protocol/uri.h"
 #include "sched/connection.h"
@@ -585,7 +589,10 @@ file_func(struct connection *connection)
 		abort_conn_with_state(connection, S_BAD_URL);
 		return;
 	}
+
+#ifdef ELINKS_LOCAL_CGI
 	if (!execute_cgi(connection)) return;
+#endif /* ELINKS_LOCAL_CGI */
 
 	/* This function works on already simplified file-scheme URI pre-chewed
 	 * by transform_file_url(). By now, the function contains no hostname

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.10 2003/12/03 01:16:16 jonas Exp $ */
+/* $Id: cgi.c,v 1.11 2003/12/04 11:11:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,8 @@
 #endif
 
 #include "elinks.h"
+
+#ifdef ELINKS_LOCAL_CGI
 
 #include "config/options.h"
 #include "mime/backend/common.h"
@@ -65,7 +67,7 @@ send_post_data(struct connection *conn)
 	postend = strchr(post, '\n');
 	if (postend) post = postend + 1;
 
-	/* FIXME: Code duplication with protocol/http/http.c! --witekfl */	
+	/* FIXME: Code duplication with protocol/http/http.c! --witekfl */
 	while (post[0] && post[1]) {
 		register int h1, h2;
 
@@ -106,14 +108,14 @@ static int
 set_vars(struct connection *conn, unsigned char *script)
 {
 	unsigned char *post = conn->uri.post;
-	
+
 	if (post) {
 		unsigned char *postend = strchr(post, '\n');
 		unsigned char buf[16];
-		
+
 		if (postend) {
 			int res;
-			
+
 			*postend = '\0';
 			res = setenv("CONTENT_TYPE", post, 1);
 			*postend = '\n';
@@ -233,7 +235,7 @@ execute_cgi(struct connection *conn)
 		}
 	} else { /* ELinks */
 		struct http_connection_info *info;
-		
+
 		info = mem_calloc(1, sizeof(struct http_connection_info));
 		if (!info) {
 			state = S_OUT_OF_MEM;
@@ -256,3 +258,5 @@ end2:
 	abort_conn_with_state(conn, state);
 	return 0;
 }
+
+#endif /* ELINKS_LOCAL_CGI */

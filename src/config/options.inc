@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.35 2003/12/01 06:23:46 witekfl Exp $ */
+/* $Id: options.inc,v 1.36 2003/12/04 11:11:04 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -707,6 +707,7 @@ struct option_info config_options_info[] = {
 		   "If set to false, files with name starting with a dot will be\n"
 		   "hidden in local directories listing.")),
 
+#ifdef ELINKS_LOCAL_CGI
 	INIT_OPT_TREE("protocol.file", N_("Local CGI"),
 		"cgi", 0,
 		N_("Local CGI specific options.")),
@@ -714,10 +715,23 @@ struct option_info config_options_info[] = {
 	INIT_OPT_BOOL("protocol.file.cgi", N_("Allow local CGI"),
 		"policy", 0, 0,
 		N_("Whether to execute local CGI scripts.")),
-	
+
 	INIT_OPT_STRING("protocol.file.cgi", N_("Path"),
 		"path", 0, "",
 		N_("Colon separated list of directories, where CGI scripts are stored.")),
+#else
+	INIT_OPT_TREE("protocol.file", N_("Local CGI"),
+		"cgi", 0,
+		N_("Local CGI specific options. (DISABLED)")),
+
+	INIT_OPT_BOOL("protocol.file.cgi", N_("Allow local CGI"),
+		"policy", 0, 0,
+		N_("Whether to execute local CGI scripts. (DISABLED)")),
+
+	INIT_OPT_STRING("protocol.file.cgi", N_("Path"),
+		"path", 0, "",
+		N_("Colon separated list of directories, where CGI scripts are stored. (DISABLED)")),
+#endif /* ELINKS_LOCAL_CGI */
 
 	INIT_OPT_TREE("protocol", N_("User protocols"),
 		"user", OPT_AUTOCREATE,

@@ -118,3 +118,5 @@
 /* Define to 1 to permit execution as root user. */
 #undef ELINKS_ROOT_EXEC
 
+/* Define to 1 to enable support of local CGIs. */
+#undef ELINKS_LOCAL_CGI

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.9 2004/09/22 23:21:18 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.10 2004/09/22 23:21:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,7 +131,7 @@ jsval_to_value(JSContext *ctx, jsval *vp, JSType type, void *var)
 		case JSTYPE_BOOLEAN: *boolean = JSVAL_TO_BOOLEAN(val); break;
 		case JSTYPE_NUMBER: *number = JSVAL_TO_DOUBLE(val); break;
 		case JSTYPE_STRING:
-			*string = (unsigned char *) JS_GetStringChars(JS_ValueToString(ctx, val));
+			*string = JS_GetStringBytes(JS_ValueToString(ctx, val));
 			break;
 		case JSTYPE_VOID:
 		case JSTYPE_OBJECT:

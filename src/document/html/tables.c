@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.367 2004/07/13 16:54:37 zas Exp $ */
+/* $Id: tables.c,v 1.368 2004/07/15 08:42:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -470,7 +470,6 @@ stretch_columns(struct table *table, int widths[], int max_widths[],
 
 /* This function distributes space evenly between @table columns so that it
  * stretches to @width. */
-/* TODO: understand and rewrite this thing... --Zas */
 static void
 distribute_widths(struct table *table, int width)
 {

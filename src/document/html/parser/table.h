@@ -1,4 +1,4 @@
-/* $Id: table.h,v 1.12 2004/07/08 12:44:33 jonas Exp $ */
+/* $Id: table.h,v 1.13 2004/07/15 08:42:16 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_TABLE_H
 #define EL__DOCUMENT_HTML_PARSER_TABLE_H
@@ -68,7 +68,6 @@ struct table_column {
 	int width;
 };
 
-/* TODO: rename fields. --Zas */
 struct table {
 	struct part *part;
 	struct table_cell *cells;

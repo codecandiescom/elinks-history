@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.183 2004/07/14 00:24:46 jonas Exp $ */
+/* $Id: connection.c,v 1.184 2004/07/15 08:42:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -718,7 +718,6 @@ again:
 		struct connection *c;
 		enum connection_priority pri = get_priority(conn);
 
-		/* No way to reduce code redundancy here ? --Zas */
 		for (c = conn; c != (struct connection *) &queue && get_priority(c) == pri;) {
 			struct connection *cc = c;
 

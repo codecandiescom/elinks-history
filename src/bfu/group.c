@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.59 2004/06/28 11:07:10 jonas Exp $ */
+/* $Id: group.c,v 1.60 2004/07/15 08:42:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,6 @@ dlg_format_group(struct terminal *term,
 		}
 
 		if (term) {
-			/* TODO: rewrite this. --Zas */
 			int is_checkbox = (widget_data->widget->type == WIDGET_CHECKBOX);
 			int xnx = x + nx;
 			int width = 1;

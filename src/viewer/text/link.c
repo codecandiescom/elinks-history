@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.275 2004/07/15 08:29:08 miciah Exp $ */
+/* $Id: link.c,v 1.276 2004/07/15 08:42:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,8 +43,6 @@
 
 /* Perhaps some of these would be more fun to have in viewer/common/, dunno.
  * --pasky */
-
-/* FIXME: Add comments!! --Zas */
 
 
 void

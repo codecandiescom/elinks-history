@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.223 2004/07/13 08:42:10 zas Exp $ */
+/* $Id: form.c,v 1.224 2004/07/15 08:42:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,8 +52,6 @@
 
 /* TODO: Some of these (particulary those encoding routines) would feel better
  * in viewer/common/. --pasky */
-
-/* FIXME: Add comments!! --Zas */
 
 struct submitted_value *
 init_submitted_value(unsigned char *name, unsigned char *value, enum form_type type,

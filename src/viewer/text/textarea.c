@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.135 2004/06/28 11:07:11 jonas Exp $ */
+/* $Id: textarea.c,v 1.136 2004/07/15 08:42:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,8 +33,6 @@
 #include "viewer/text/textarea.h"
 #include "viewer/text/view.h"
 
-
-/* FIXME: Add comments!! --Zas */
 
 struct line_info {
 	int start;

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.254 2004/07/12 12:07:14 jonas Exp $ */
+/* $Id: search.c,v 1.255 2004/07/15 08:42:16 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -49,8 +49,6 @@
 
 static INIT_INPUT_HISTORY(search_history);
 
-
-/* FIXME: Add comments!! --Zas */
 
 static inline void
 add_srch_chr(struct document *document, unsigned char c, int x, int y, int nn)

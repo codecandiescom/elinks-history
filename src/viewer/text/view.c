@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.550 2004/07/15 08:13:16 miciah Exp $ */
+/* $Id: view.c,v 1.551 2004/07/15 08:42:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,9 +59,6 @@
 #include "viewer/text/vs.h"
 
 
-/* FIXME: Add comments!! --Zas */
-/* TODO: This file needs to be splitted to many smaller ones. Definitively.
- * --pasky */
 
 void
 detach_formatted(struct document_view *doc_view)

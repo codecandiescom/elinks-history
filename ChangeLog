@@ -1,3 +1,108 @@
+Tue Oct  7 22:10:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	A bit hackish fix so that the "Search hit bottom" msg_box is not
+	shown when the search string is not found.  
+
+Tue Oct  7 20:42:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/color-model.txt:
+
+	Some rant about the state of the implementation (AFAIK, that is;
+	please write up on that) and especially the expected availability
+	(my opinion on that).  
+
+Tue Oct  7 20:30:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Updated vinnui contact email addy.  
+
+Tue Oct  7 20:21:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/color-model.txt:
+
+	Typo/grammar fixes.  
+
+Tue Oct  7 20:17:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Tiny whitespace fix.  
+
+Tue Oct  7 18:56:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: color-model.txt, configure.txt:
+
+	Add CVS Id tag and TODOs.  
+
+Tue Oct  7 18:51:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/color-model.txt:
+
+	Some thoughts/excerpts/links about color models 
+
+Tue Oct  7 17:58:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS:
+
+	s/links-current/elinks-current/ 
+
+Tue Oct  7 16:49:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Allocate 9 widgets .. fixes spurious segfaults I was having.  
+
+Tue Oct  7 14:54:58 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation updated.  
+
+Tue Oct  7 12:04:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/search.c:
+
+	Show a 'Search hit bottom, continuing at top.' notice to the user
+	when the search wraps to the start of the document.  
+
+Tue Oct  7 11:59:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/search.c:
+
+	Fixed case insensitivity reversed after Jonas' cleanups.  
+
+Tue Oct  7 09:26:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	Fix two potential memleaks, regfree() should be called before
+	return. Code preparation to handle regexp errors messages, but we
+	need to pass term, or to display messages in calling functions.  
+
+Tue Oct  7 08:43:26 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	French translation was updated and .po files were resynced.  
+
+Mon Oct  6 23:35:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Oops .. commiting late and uncompiled code is bad.  
+
+Mon Oct  6 23:09:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Cleanup.  
+
 Mon Oct  6 21:52:18 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/viewer/text/search.c:

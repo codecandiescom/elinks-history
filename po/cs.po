@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-11-11 21:00+0100\n"
-"PO-Revision-Date: 2003-11-10 16:13+0100\n"
+"PO-Revision-Date: 2003-11-11 21:25+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -338,34 +338,28 @@ msgid "Automatically saved keybindings\n"
 msgstr "Automaticky ulo¾ené klávesové vazby\n"
 
 #: src/config/conf.c:701
-#, fuzzy
 msgid "Secure file error"
-msgstr "Chyba FTP souboru"
+msgstr "Bezpeèné otevírání souboru selhalo"
 
 #: src/config/conf.c:707
-#, fuzzy
 msgid "Cannot read the file"
-msgstr "Chyba pøi zápisu do souboru"
+msgstr "Chyba pøi ètení ze do souboru"
 
 #: src/config/conf.c:710
-#, fuzzy
 msgid "Cannot stat the file"
-msgstr "Chyba pøi zápisu do souboru"
+msgstr "Chyba pøi zji¹»ování informací (stat()) o souboru"
 
 #: src/config/conf.c:713
-#, fuzzy
 msgid "Cannot access the file"
-msgstr "Chyba pøi zápisu do souboru"
+msgstr "Chyba pøi pøístupu k souboru"
 
 #: src/config/conf.c:716
-#, fuzzy
 msgid "Cannot create temp file"
-msgstr "Chyba pøi zápisu do souboru"
+msgstr "Chyba pøi vytváøení doèasného souboru"
 
 #: src/config/conf.c:719
-#, fuzzy
 msgid "Cannot rename the file"
-msgstr "Chyba pøi zápisu do souboru"
+msgstr "Chyba pøi pøejmenovávání souboru"
 
 #: src/config/conf.c:722
 msgid "File saving disabled by option"

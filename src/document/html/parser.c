@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.530 2005/03/07 09:03:15 zas Exp $ */
+/* $Id: parser.c,v 1.531 2005/04/01 22:45:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1147,7 +1147,6 @@ process_head(unsigned char *head)
 	}
 
 	if (url) {
-		unsigned char *saved_url = url;
 		/* Extraction of refresh time. */
 		unsigned long seconds = 0;
 		int valid = 1;
@@ -1176,16 +1175,17 @@ process_head(unsigned char *head)
 		}
 
 		if (valid) {
+			unsigned char *joined_url = join_urls(html_context.base_href, url);
+
 			html_focusable(NULL);
 
-			url = join_urls(html_context.base_href, saved_url);
-			put_link_line("Refresh: ", saved_url, url, global_doc_opts->framename);
-			html_context.special_f(html_context.part, SP_REFRESH, seconds, url);
+			put_link_line("Refresh: ", url, joined_url, global_doc_opts->framename);
+			html_context.special_f(html_context.part, SP_REFRESH, seconds, joined_url);
 
-			mem_free(url);
+			mem_free(joined_url);
 		}
 
-		mem_free(saved_url);
+		mem_free(url);
 	}
 
 	mem_free(refresh);

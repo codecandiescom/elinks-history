@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.81 2003/07/22 01:08:31 pasky Exp $ */
+/* $Id: download.c,v 1.82 2003/07/22 14:17:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1287,7 +1287,7 @@ free_ct:
 	mem_free(ctype);
 
 end:
-	if (ses->task_target && plaintext) *ses->task_target = 0;
+	if (ses->task_target_frame && plaintext) *ses->task_target_frame = 0;
 	ses_forward(ses);
 	cur_loc(ses)->vs.plain = plaintext;
 	return 0;

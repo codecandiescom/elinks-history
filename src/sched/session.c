@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.125 2003/07/22 01:09:41 miciah Exp $ */
+/* $Id: session.c,v 1.126 2003/07/22 14:17:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -437,7 +437,7 @@ x:
 	memset(l, 0, sizeof(struct location));
 	memcpy(&l->download, &ses->loading, sizeof(struct download));
 
-	if (ses->task_target && *ses->task_target) {
+	if (ses->task_target_frame && *ses->task_target_frame) {
 		struct frame *frm;
 
 		if (!have_location(ses)) {
@@ -446,12 +446,12 @@ x:
 		}
 		copy_location(l, cur_loc(ses));
 		add_to_history(ses, l);
-		frm = ses_change_frame_url(ses, ses->task_target,
+		frm = ses_change_frame_url(ses, ses->task_target_frame,
 					   ses->loading_url);
 
 		if (!frm) {
 			destroy_location(l);
-			ses->task_target = NULL;
+			ses->task_target_frame = NULL;
 			goto x;
 		}
 
@@ -543,7 +543,7 @@ post_yes(struct task *task)
 	ses->loading.data = task->ses;
 	ses->loading_url = stracpy(task->url);
 	ses->task = task->type;
-	ses->task_target = task->target;
+	ses->task_target_frame = task->target;
 
 	load_url(ses->loading_url, ses->ref_url,
 		 &ses->loading, task->pri, task->cache_mode, -1);
@@ -581,7 +581,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 		ses->loading.data = ses;
 		ses->loading_url = url;
 		ses->task = task_type;
-		ses->task_target = target;
+		ses->task_target_frame = target;
 
 		load_url(url, ses->ref_url, &ses->loading, pri, cache_mode, -1);
 
@@ -663,7 +663,8 @@ do_move(struct session *ses, struct download **stat)
 		if (task == TASK_FORWARD || task == TASK_IMGMAP) {
 			unsigned char *gp = ses->goto_position ?
 					    stracpy(ses->goto_position) : NULL;
-			ses_goto(ses, u, ses->task_target, PRI_MAIN, NC_CACHE,
+
+			ses_goto(ses, u, ses->task_target_frame, PRI_MAIN, NC_CACHE,
 				 task, gp, end_load, 1);
 
 			if (gp) mem_free(gp);

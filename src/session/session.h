@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.38 2003/07/15 20:18:09 jonas Exp $ */
+/* $Id: session.h,v 1.39 2003/07/22 14:17:58 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -119,7 +119,7 @@ struct session {
 	/* The current action-in-progress selector */
 
 	enum task_type task;
-	unsigned char *task_target;
+	unsigned char *task_target_frame;
 
 
 	/* The current browsing state */

@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.64 2004/08/18 19:49:55 jonas Exp $ */
+/* $Id: mime.c,v 1.65 2004/08/18 21:19:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,13 +227,21 @@ get_content_type(struct cache_entry *cached)
 	extension = uri ? get_extension_from_uri(uri) : NULL;
 	debug_extension(extension);
 
-#if defined(CONFIG_GZIP) || defined(CONFIG_BZIP2)
 	/* The @encoding variable controls when we check for the content
 	 * type in the cache header and there is really only a reason for
 	 * doing this if decoding is an option. */
-	if (extension)
+	if (extension) {
+		/* XXX:	A little hack for making extension handling case
+		 * insensitive. We could probably do it better by making
+		 * guess_encoding() case independent the real problem however
+		 * is with default (via option system) and mimetypes resolving
+		 * doing that option and hash lookup will not be easy to
+		 * convert. --jonas */
+		convert_to_lowercase(extension, strlen(extension));
+#if defined(CONFIG_GZIP) || defined(CONFIG_BZIP2)
 		encoding = guess_encoding(extension);
 #endif
+	}
 
 	/* If the URI have no sign of being encoded and there's one in header,
 	 * it's simple.. */

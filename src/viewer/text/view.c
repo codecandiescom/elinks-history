@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.56 2003/05/05 15:40:04 zas Exp $ */
+/* $Id: view.c,v 1.57 2003/05/05 22:18:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3116,7 +3116,7 @@ quit:
 		init_bars_status(ses, &nb_tabs, d_opt);
 		bars = 0;
 		if (ses->visible_tabs_bar) bars++;
-		if (ses->visible_status_bar && ses->visible_tabs_bar) bars++;
+		if (ses->visible_status_bar) bars++;
 
 		if (ev->y == ses->tab->term->y - bars && (ev->b & BM_ACT) == B_DOWN
 		    && (ev->b & BM_BUTT) < B_WHEEL_UP) {

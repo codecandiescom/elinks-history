@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.70 2003/06/23 03:11:06 jonas Exp $ */
+/* $Id: file.c,v 1.71 2003/06/23 05:26:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -582,10 +582,12 @@ void
 file_func(struct connection *connection)
 {
 	struct cache_entry *cache;
+	unsigned char *redirect = NULL;
 	unsigned char *filename;
 	DIR *directory;
 	int filenamelen;
 	struct file_info *info;
+	int state;
 
 	if (get_opt_int_tree(&cmdline_options, "anonymous")) {
 		abort_conn_with_state(connection, S_BAD_URL);
@@ -607,46 +609,27 @@ file_func(struct connection *connection)
 
 	directory = opendir(filename);
 	if (directory) {
-		int state;
-
+		/* For some strange reason the directory url must end with a
+		 * directory separator. */
 		if (filename[0] && !dir_sep(filename[filenamelen - 1])) {
-			mem_free(filename);
-			mem_free(info);
-			closedir(directory);
-
-			if (get_cache_entry(connection->url, &cache)) {
-				abort_conn_with_state(connection, S_OUT_OF_MEM);
-				return;
-			}
-
-			connection->cache = cache;
-
-			if (cache->redirect) mem_free(cache->redirect);
-			cache->redirect_get = 1;
-			cache->redirect = straconcat(connection->url, "/", NULL);
-
-			goto end;
+			redirect = straconcat(connection->url, "/", NULL);
+			state = S_OK;
+		} else {
+			state = list_directory(directory, filename, info);
 		}
 
-		state = list_directory(directory, filename, info);
 		closedir(directory);
 		mem_free(filename);
-
-		if (state != S_OK) {
-			mem_free(info);
-			abort_conn_with_state(connection, state);
-			return;
-		}
 
 	} else {
 		struct stream_encoded *stream;
 		struct stat stt;
 		enum stream_encoding encoding = ENCODING_NONE;
 		int fd = open(filename, O_RDONLY | O_NOCTTY);
-		int state = S_OK;
 		int saved_errno = errno;
 
-		if (fd == -1 && get_opt_bool("protocol.file.try_encoding_extensions")) {
+		if (fd == -1 &&
+		    get_opt_bool("protocol.file.try_encoding_extensions")) {
 			encoding = try_encoding_extensions(filename, &fd);
 		} else if (fd != -1) {
 			encoding = guess_encoding(filename);
@@ -660,60 +643,59 @@ file_func(struct connection *connection)
 			return;
 		}
 
+		/* Some file was opened so let's get down to bi'ness */
 		set_bin(fd);
-		if (fstat(fd, &stt))
+
+		/* Do all the necessary checks before trying to read the file.
+		 * @state code is used to block further progress. */
+		if (fstat(fd, &stt)) {
 			state = -errno;
 
-		if (state == S_OK && !S_ISREG(stt.st_mode)) {
-			if (encoding != ENCODING_NONE)
-				/* We only want to open regular encoded files. */
-				state = -saved_errno;
-		    	else if (!get_opt_int("protocol.file.allow_special_files"))
-				state = S_FILE_TYPE;
+		} else if (!S_ISREG(stt.st_mode) && encoding != ENCODING_NONE) {
+			/* We only want to open regular encoded files. */
+			state = -saved_errno;
+
+		} else if (!S_ISREG(stt.st_mode) &&
+			   !get_opt_int("protocol.file.allow_special_files")) {
+			state = S_FILE_TYPE;
+
+		} else if (!(stream = open_encoded(fd, encoding))) {
+			state = S_OUT_OF_MEM;
+
+		} else {
+			state = read_file(stream, stt.st_size, info);
+			close_encoded(stream);
 		}
 
-		if (state == S_OK) {
-			stream = open_encoded(fd, encoding);
-			if (!stream)
-				state = S_OUT_OF_MEM;
-		}
-
-		if (state != S_OK) {
-			close(fd);
-			mem_free(info);
-			abort_conn_with_state(connection, state);
-			return;
-		}
-
-		state = read_file(stream, stt.st_size, info);
-
-		close_encoded(stream);
 		close(fd);
+	}
 
-		if (state != S_OK) {
-			mem_free(info);
-			abort_conn_with_state(connection, state);
-			return;
+	/* Try to add fragment data to the connection cache if either file
+	 * reading or directory listing worked out ok. */
+	if (state == S_OK) {
+		if (get_cache_entry(connection->url, &cache)) {
+			mem_free(info->fragment);
+			state = S_OUT_OF_MEM;
+
+		} else if (redirect) {
+			if (cache->redirect) mem_free(cache->redirect);
+			cache->redirect_get = 1;
+			cache->redirect = redirect;
+			cache->incomplete = 0;
+			connection->cache = cache;
+
+		} else {
+			if (cache->head) mem_free(cache->head);
+			cache->head = info->head;
+			cache->incomplete = 0;
+			connection->cache = cache;
+
+			add_fragment(cache, 0, info->fragment, info->fragmentlen);
+			truncate_entry(cache, info->fragmentlen, 1);
+			mem_free(info->fragment);
 		}
 	}
 
-	if (get_cache_entry(connection->url, &cache)) {
-		mem_free(info->fragment);
-		mem_free(info);
-		abort_conn_with_state(connection, S_OUT_OF_MEM);
-		return;
-	}
-
-	if (cache->head) mem_free(cache->head);
-	cache->head = info->head;
-	connection->cache = cache;
-	add_fragment(cache, 0, info->fragment, info->fragmentlen);
-	truncate_entry(cache, info->fragmentlen, 1);
-
-	mem_free(info->fragment);
 	mem_free(info);
-
-end:
-	connection->cache->incomplete = 0;
-	abort_conn_with_state(connection, S_OK);
+	abort_conn_with_state(connection, state);
 }

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.10 2003/09/08 22:19:37 jonas Exp $ */
+/* $Id: options.h,v 1.11 2003/09/26 23:06:06 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -6,12 +6,9 @@
 #include "util/color.h"
 
 struct document_options {
-	int xw, yw; /* size of window */
-	int xp, yp; /* pos of window */
 	int col, cp, assume_cp, hard_assume;
 	int use_document_colours;
 	int allow_dark_on_black;
-	/* if you add anything, fix it in compare_opt */
 	int tables, frames, images, margin;
 	int plain;
 	int num_links_display;
@@ -23,7 +20,16 @@ struct document_options {
 	color_t default_bg;
 	color_t default_link;
 	color_t default_vlink;
+
+	/* TODO: Having these members as part of the compared ones are to blame
+	 * for the massive memory consumption when resizing. They should be
+	 * moved after @framename but first they have to somehow be updated
+	 * when resizing. --jonas */
+	int xw, yw; /* size of window */
+
+	/* XXX: Everything past this comment is specialy handled by compare_opt() */
 	unsigned char *framename;
+	int xp, yp; /* pos of window */
 };
 
 extern struct document_options *d_opt;

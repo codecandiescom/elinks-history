@@ -1,10 +1,11 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.19 2003/09/08 22:19:37 jonas Exp $ */
+/* $Id: options.c,v 1.20 2003/09/26 23:06:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <stddef.h>
 #include <string.h>
 
 #include "elinks.h"
@@ -14,6 +15,11 @@
 #include "util/color.h"
 #include "util/string.h"
 
+
+/* Some compilers, like SunOS4 cc, don't have offsetof in <stddef.h>.  */
+#ifndef offsetof
+#define offsetof(type,ident) ((size_t)&(((type*)0)->ident))
+#endif
 
 struct document_options *d_opt;
 
@@ -39,32 +45,8 @@ mk_document_options(struct document_options *doo)
 int
 compare_opt(struct document_options *o1, struct document_options *o2)
 {
-	if (o1->xw == o2->xw &&
-	    o1->yw == o2->yw &&
-	    o1->xp == o2->xp &&
-	    o1->yp == o2->yp &&
-	    o1->col == o2->col &&
-	    o1->cp == o2->cp &&
-	    o1->assume_cp == o2->assume_cp &&
-	    o1->hard_assume == o2->hard_assume &&
-	    o1->use_document_colours == o2->use_document_colours &&
-	    o1->allow_dark_on_black == o2->allow_dark_on_black &&
-	    o1->tables == o2->tables &&
-	    o1->frames == o2->frames &&
-	    o1->images == o2->images &&
-	    o1->margin == o2->margin &&
-	    o1->plain == o2->plain &&
-	    o1->display_subs == o2->display_subs &&
-	    o1->display_sups == o2->display_sups &&
-	    o1->num_links_display == o2->num_links_display &&
-	    o1->num_links_key == o2->num_links_key &&
-	    o1->table_order == o2->table_order &&
-	    o1->default_fg == o2->default_fg &&
-	    o1->default_bg == o2->default_bg &&
-	    o1->default_link == o2->default_link &&
-	    o1->default_vlink == o2->default_vlink &&
-	    !strcasecmp(o1->framename, o2->framename)) return 0;
-	return 1;
+	return memcmp(o1, o2, offsetof(struct document_options, framename))
+		|| strcasecmp(o1->framename, o2->framename);
 }
 
 inline void

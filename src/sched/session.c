@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.143 2003/09/10 08:16:25 miciah Exp $ */
+/* $Id: session.c,v 1.144 2003/09/12 18:51:01 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,6 +170,31 @@ init_bars_status(struct session *ses, int *tabs_count, struct document_options *
 	}
 }
 
+static struct download *
+get_current_download(struct session *ses)
+{
+	struct download *stat = NULL;
+
+	if (!ses) return NULL;
+
+	if (ses->task)
+		stat = &ses->loading;
+	else if (have_location(ses))
+		stat = &cur_loc(ses)->download;
+
+	if (stat && stat->state == S_OK) {
+		struct file_to_load *ftl;
+
+		foreach (ftl, ses->more_files)
+			if (ftl->req_sent && ftl->stat.state >= 0)
+				return &ftl->stat;
+	}
+
+	/* Note that @stat isn't necessarily NULL here,
+	 * if @ses->more_files is empty. -- Miciah */
+	return stat;
+}
+
 /* Print statusbar and titlebar, set terminal title. */
 void
 print_screen_status(struct session *ses)
@@ -184,27 +209,10 @@ print_screen_status(struct session *ses)
 	if (ses->visible_status_bar && ses_tab_is_current) {
 		static int last_current_link;
 		unsigned int tab_info_len = 0;
-		struct download *stat = NULL;
+		struct download *stat = get_current_download(ses);
 		struct color_pair *text_color = NULL;
 
-		if (ses->task)
-			stat = &ses->loading;
-		else if (have_location(ses))
-			stat = &cur_loc(ses)->download;
-
 		if (stat) {
-			if (stat->state == S_OK) {
-				struct file_to_load *ftl;
-
-				foreach (ftl, ses->more_files) {
-					if (ftl->req_sent
-					    && ftl->stat.state >= 0) {
-						stat = &ftl->stat;
-						break;
-					}
-				}
-			}
-
 			/* Show S_INTERRUPTED message *once* but then show links
 			 * again as usual. */
 			if (current_frame(ses)) {
@@ -256,6 +264,7 @@ print_screen_status(struct session *ses)
 		int tab_num;
 		struct color_pair *normal_color = get_bfu_color(term, "tabs.normal");
 		struct color_pair *selected_color = get_bfu_color(term, "tabs.selected");
+		struct color_pair *loading_color = get_bfu_color(term, "tabs.loading");
 		unsigned char ypos = term->y - (ses->visible_status_bar ? 2 : 1);
 
 		for (tab_num = 0; tab_num < tabs_count; tab_num++) {
@@ -286,8 +295,20 @@ print_screen_status(struct session *ses)
 				xpos += 1;
 			}
 
-			color = (tab_num == term->current_tab)
-				? selected_color : normal_color;
+			/* TODO: fresh_color, for tabs that have not been
+			 * selected since they completed loading. -- Miciah */
+			if (tab_num == term->current_tab) {
+				color = selected_color;
+			} else {
+				struct download *stat;
+				
+				stat = get_current_download(tab->data);
+
+				if (stat && stat->state != S_OK)
+					color = loading_color;
+				else
+					color = normal_color;
+			}
 
 			draw_area(term, xpos, ypos, tab_width, 1, ' ', 0, color);
 			draw_text(term, xpos, ypos, msg, msglen, 0, color);

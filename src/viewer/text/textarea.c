@@ -1,9 +1,11 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.115 2004/06/18 14:27:15 jonas Exp $ */
+/* $Id: textarea.c,v 1.116 2004/06/18 15:02:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#define _GNU_SOURCE /* XXX: we want memrchr() ! */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -65,24 +67,18 @@ format_text(unsigned char *text, int width, enum form_wrap wrap, int format)
 			continue;
 
 		} else {
-			int s;
-
-			skip = 0;
+			unsigned char *wrappos;
 
 			/* Find a place to wrap the text */
-			/* FIXME: Use memrchr(&text[begin], ' ', pos) when stub
-			 * is added. */
-			for (s = pos; s >= begin; s--) {
-				if (text[s] != ' ') continue;
-
+			wrappos = memrchr(&text[begin], ' ', pos - begin);
+			if (wrappos) {
 				/* When formatting text for form submitting we
 				 * have to apply the wrapping mode. */
 				if (wrap == FORM_WRAP_HARD && format)
-					text[s] = '\n';
-				pos = s;
-				skip = 1;
-				break;
+					*wrappos = '\n';
+				pos = wrappos - text;
 			}
+			skip = !!wrappos;
 		}
 
 		if (!realloc_line_info(&line, line_number)) {

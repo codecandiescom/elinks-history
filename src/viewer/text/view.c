@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.122 2003/07/02 16:18:37 zas Exp $ */
+/* $Id: view.c,v 1.123 2003/07/02 16:26:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -267,6 +267,8 @@ format_text(unsigned char *text, int width, int wrap)
 	unsigned char *b = text;
 	int sk, ps = 0;
 
+	assert(text);
+
 	while (*text) {
 		unsigned char *s;
 
@@ -321,6 +323,8 @@ _area_cursor(struct form_control *frm, struct form_state *fs)
 	int q = 0;
 	int y;
 
+	assert(frm && fs);
+
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!ln) return 0;
 
@@ -349,22 +353,27 @@ _area_cursor(struct form_control *frm, struct form_state *fs)
 static void
 draw_link(struct terminal *t, struct f_data_c *scr, int l)
 {
-	struct link *link = &scr->f_data->links[l];
-	int xp = scr->xp;
-	int yp = scr->yp;
-	int xw = scr->xw;
-	int yw = scr->yw;
+	struct link *link;
+	struct view_state *vs;
+	int xp, yp;
+	int xw, yw;
 	int vx, vy;
-	struct view_state *vs = scr->vs;
 	int f = 0;
 
+	assert(scr && scr->vs);
+	assertm(!scr->link_bg, "link background not empty");
+
+	if (l == -1) return;
+
+	link = &scr->f_data->links[l];
+	xp = scr->xp;
+	yp = scr->yp;
+	xw = scr->xw;
+	yw = scr->yw;
+	vs = scr->vs;
 	vx = vs->view_posx;
 	vy = vs->view_pos;
-	if (scr->link_bg) {
-		internal("link background not empty");
-		mem_free(scr->link_bg);
-	}
-	if (l == -1) return;
+
 	switch (link->type) {
 		int i;
 		int q;

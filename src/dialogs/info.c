@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.112 2004/11/14 02:42:33 jonas Exp $ */
+/* $Id: info.c,v 1.113 2004/11/14 02:43:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,7 +157,7 @@ menu_copying(struct terminal *term, void *d, struct session *ses)
 
 
 static unsigned char *
-get_ressource_info(struct terminal *term, void *data)
+get_resource_info(struct terminal *term, void *data)
 {
 	struct string info;
 
@@ -197,5 +197,5 @@ void
 resource_info(struct terminal *term)
 {
 	refreshed_msg_box(term, 0, N_("Resources"), ALIGN_LEFT,
-			  get_ressource_info, NULL);
+			  get_resource_info, NULL);
 }

@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.37 2004/12/26 18:58:37 jonas Exp $ */
+/* $Id: default.c,v 1.38 2005/03/03 12:19:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,13 +88,12 @@ static struct option_info default_mime_options[] = {
 #define INIT_OPT_MIME_EXTENSION(extension, type) \
 	INIT_OPT_STRING("mime.extension", NULL, extension, 0, type, NULL)
 
-	INIT_OPT_MIME_EXTENSION("gif",	"image/gif"),
-	INIT_OPT_MIME_EXTENSION("jpg",	"image/jpg"),
-	INIT_OPT_MIME_EXTENSION("jpeg",	"image/jpeg"),
-	INIT_OPT_MIME_EXTENSION("png",	"image/png"),
-	INIT_OPT_MIME_EXTENSION("txt",	"text/plain"),
-	INIT_OPT_MIME_EXTENSION("htm",	"text/html"),
-	INIT_OPT_MIME_EXTENSION("html",	"text/html"),
+	INIT_OPT_MIME_EXTENSION("gif",		"image/gif"),
+	INIT_OPT_MIME_EXTENSION("jpg",		"image/jpg"),
+	INIT_OPT_MIME_EXTENSION("jpeg",		"image/jpeg"),
+	INIT_OPT_MIME_EXTENSION("png",		"image/png"),
+	INIT_OPT_MIME_EXTENSION("txt",		"text/plain"),
+	INIT_OPT_MIME_EXTENSION("htm",		"text/html"),
 
 	NULL_OPTION_INFO,
 };

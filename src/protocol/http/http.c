@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.176 2003/07/15 06:32:22 miciah Exp $ */
+/* $Id: http.c,v 1.177 2003/07/21 04:57:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,45 +79,44 @@ static unsigned char *
 subst_user_agent(unsigned char *fmt, unsigned char *version,
 		 unsigned char *sysname, unsigned char *termsize)
 {
-	unsigned char *n = init_str();
-	int l = 0;
+	struct string agent;
 
-	if (!n) return NULL;
+	if (!init_string(&agent)) return NULL;
 
 	while (*fmt) {
 		int p;
 
 		for (p = 0; fmt[p] && fmt[p] != '%'; p++);
 
-		add_bytes_to_str(&n, &l, fmt, p);
+		add_bytes_to_string(&agent, fmt, p);
 		fmt += p;
 
 		if (*fmt == '%') {
 			fmt++;
 			switch (*fmt) {
 				case 'v':
-					add_to_str(&n, &l, version);
+					add_to_string(&agent, version);
 					break;
 				case 's':
-					add_to_str(&n, &l, sysname);
+					add_to_string(&agent, sysname);
 					break;
 				case 't':
 					if (termsize)
-						add_to_str(&n, &l, termsize);
+						add_to_string(&agent, termsize);
 					break;
 				default:
-					add_bytes_to_str(&n, &l, fmt - 1, 2);
+					add_bytes_to_string(&agent, fmt - 1, 2);
 					break;
 			}
 			if (*fmt) fmt++;
 		}
 	}
 
-	return n;
+	return agent.source;
 }
 
 static void
-add_url_to_http_str(unsigned char **hdr, int *l, unsigned char *url_data,
+add_url_to_http_string(struct string *header, unsigned char *url_data,
 		    unsigned char *post)
 {
 	/* This block substitues spaces in URL by %20s. This is
@@ -139,16 +138,16 @@ add_url_to_http_str(unsigned char **hdr, int *l, unsigned char *url_data,
 		unsigned char ch = *p;
 
 		*p = '\0';
-		add_to_str(hdr, l, p1);
+		add_to_string(header, p1);
 		if (ch == '\\')
-			add_chr_to_str(hdr, l, '/');
+			add_char_to_string(header, '/');
 		else
-			add_to_str(hdr, l, "%20");
+			add_to_string(header, "%20");
 		p++;
 		p1 = p;
 	}
 
-	add_to_str(hdr, l, p1);
+	add_to_string(header, p1);
 	mem_free(eurl);
 }
 
@@ -314,21 +313,21 @@ proxy_func(struct connection *conn)
 static void http_get_header(struct connection *);
 
 static void
-add_uri_host_to_str(unsigned char **hdr, int *l, struct uri *uri)
+add_uri_host_to_string(struct string *header, struct uri *uri)
 {
 #ifdef IPV6
 	if (strchr(uri->host, ':') != strrchr(uri->host, ':')) {
 		/* IPv6 address */
-		add_chr_to_str(hdr, l, '[');
-		add_bytes_to_str(hdr, l, uri->host, uri->hostlen);
-		add_chr_to_str(hdr, l, ']');
+		add_char_to_string(header, '[');
+		add_bytes_to_string(header, uri->host, uri->hostlen);
+		add_char_to_string(header, ']');
 	} else
 #endif
-		add_bytes_to_str(hdr, l, uri->host, uri->hostlen);
+		add_bytes_to_string(header, uri->host, uri->hostlen);
 
 	if (uri->portlen) {
-		add_chr_to_str(hdr, l, ':');
-		add_bytes_to_str(hdr, l, uri->port, uri->portlen);
+		add_char_to_string(header, ':');
+		add_bytes_to_string(header, uri->port, uri->portlen);
 	}
 }
 
@@ -341,11 +340,10 @@ http_send_header(struct connection *conn)
 	static unsigned char *accept_charset = NULL;
 	struct http_connection_info *info;
 	int trace = get_opt_bool("protocol.http.trace");
-	unsigned char *hdr;
+	struct string header;
 	unsigned char *host_data;
 	struct uri real_uri;
 	struct uri *uri;
-	int l = 0;
 	unsigned char *optstr;
 
 	set_connection_timeout(conn);
@@ -383,36 +381,35 @@ http_send_header(struct connection *conn)
 		info->sent_version.minor = 0;
 	}
 
-	hdr = init_str();
-	if (!hdr) {
+	if (!init_string(&header)) {
 		http_end_request(conn, S_OUT_OF_MEM);
 		return;
 	}
 
 	if (trace) {
-		add_to_str(&hdr, &l, "TRACE ");
+		add_to_string(&header, "TRACE ");
 	} else if (uri->post) {
-		add_to_str(&hdr, &l, "POST ");
+		add_to_string(&header, "POST ");
 		conn->unrestartable = 1;
 	} else {
-		add_to_str(&hdr, &l, "GET ");
+		add_to_string(&header, "GET ");
 	}
 
 	if (!IS_PROXY_URI(conn->uri)) {
-		add_chr_to_str(&hdr, &l, '/');
+		add_char_to_string(&header, '/');
 	}
 
-	add_url_to_http_str(&hdr, &l, conn->uri.data, conn->uri.post);
+	add_url_to_http_string(&header, conn->uri.data, conn->uri.post);
 
-	add_to_str(&hdr, &l, " HTTP/");
-	add_num_to_str(&hdr, &l, info->sent_version.major);
-	add_chr_to_str(&hdr, &l, '.');
-	add_num_to_str(&hdr, &l, info->sent_version.minor);
-	add_to_str(&hdr, &l, "\r\n");
+	add_to_string(&header, " HTTP/");
+	add_long_to_string(&header, info->sent_version.major);
+	add_char_to_string(&header, '.');
+	add_long_to_string(&header, info->sent_version.minor);
+	add_to_string(&header, "\r\n");
 
-	add_to_str(&hdr, &l, "Host: ");
-	add_uri_host_to_str(&hdr, &l, uri);
-	add_to_str(&hdr, &l, "\r\n");
+	add_to_string(&header, "Host: ");
+	add_uri_host_to_string(&header, uri);
+	add_to_string(&header, "\r\n");
 
 	optstr = get_opt_str("protocol.http.proxy.user");
 	if (optstr[0]) {
@@ -425,9 +422,9 @@ http_send_header(struct connection *conn)
 			unsigned char *proxy_64 = base64_encode(proxy_data);
 
 			if (proxy_64) {
-				add_to_str(&hdr, &l, "Proxy-Authorization: Basic ");
-				add_to_str(&hdr, &l, proxy_64);
-				add_to_str(&hdr, &l, "\r\n");
+				add_to_string(&header, "Proxy-Authorization: Basic ");
+				add_to_string(&header, proxy_64);
+				add_to_string(&header, "\r\n");
 				mem_free(proxy_64);
 			}
 			mem_free(proxy_data);
@@ -438,7 +435,7 @@ http_send_header(struct connection *conn)
 	if (*optstr && strcmp(optstr, " ")) {
 		unsigned char *ustr, ts[64] = "";
 
-		add_to_str(&hdr, &l, "User-Agent: ");
+		add_to_string(&header, "User-Agent: ");
 
 		if (!list_empty(terminals)) {
 			unsigned int tslen = 0;
@@ -452,11 +449,11 @@ http_send_header(struct connection *conn)
 					ts);
 
 		if (ustr) {
-			add_to_str(&hdr, &l, ustr);
+			add_to_string(&header, ustr);
 			mem_free(ustr);
 		}
 
-		add_to_str(&hdr, &l, "\r\n");
+		add_to_string(&header, "\r\n");
 	}
 
 	switch (get_opt_int("protocol.http.referer.policy")) {
@@ -467,9 +464,9 @@ http_send_header(struct connection *conn)
 		case REFERER_FAKE:
 			optstr = get_opt_str("protocol.http.referer.fake");
 			if (!optstr[0]) break;
-			add_to_str(&hdr, &l, "Referer: ");
-			add_to_str(&hdr, &l, optstr);
-			add_to_str(&hdr, &l, "\r\n");
+			add_to_string(&header, "Referer: ");
+			add_to_string(&header, optstr);
+			add_to_string(&header, "\r\n");
 			break;
 
 		case REFERER_TRUE:
@@ -478,148 +475,149 @@ http_send_header(struct connection *conn)
 								 POST_CHAR);
 
 				if (tmp_post) tmp_post++;
-				add_to_str(&hdr, &l, "Referer: ");
-				add_url_to_http_str(&hdr, &l, conn->ref_url, tmp_post);
-				add_to_str(&hdr, &l, "\r\n");
+				add_to_string(&header, "Referer: ");
+				add_url_to_http_string(&header, conn->ref_url, tmp_post);
+				add_to_string(&header, "\r\n");
 			}
 			break;
 
 		case REFERER_SAME_URL:
-			add_to_str(&hdr, &l, "Referer: ");
+			add_to_string(&header, "Referer: ");
 
 			/* FIXME: IPv6. */
-			add_to_str(&hdr, &l, "http://");
-			add_uri_host_to_str(&hdr, &l, uri);
+			add_to_string(&header, "http://");
+			add_uri_host_to_string(&header, uri);
 
-			if (!IS_PROXY_URI(conn->uri) || hdr[l - 1] != '/')
-				add_chr_to_str(&hdr, &l, '/');
+			if (!IS_PROXY_URI(conn->uri)
+			    || header.source[header.length - 1] != '/')
+				add_char_to_string(&header, '/');
 
 			if (uri->data)
-				add_url_to_http_str(&hdr, &l, uri->data, uri->post);
+				add_url_to_http_string(&header, uri->data, uri->post);
 
-			add_to_str(&hdr, &l, "\r\n");
+			add_to_string(&header, "\r\n");
 			break;
 	}
 
-	add_to_str(&hdr, &l, "Accept: */*\r\n");
+	add_to_string(&header, "Accept: */*\r\n");
 
 	/* TODO: Make this encoding.c function. */
 #if defined(HAVE_BZLIB_H) || defined(HAVE_ZLIB_H)
-	add_to_str(&hdr, &l, "Accept-Encoding: ");
+	add_to_string(&header, "Accept-Encoding: ");
 
 #ifdef HAVE_BZLIB_H
-	add_to_str(&hdr, &l, "bzip2");
+	add_to_string(&header, "bzip2");
 #endif
 
 #ifdef HAVE_ZLIB_H
 #ifdef HAVE_BZLIB_H
-	add_to_str(&hdr, &l, ", ");
+	add_to_string(&header, ", ");
 #endif
-	add_to_str(&hdr, &l, "gzip");
+	add_to_string(&header, "gzip");
 #endif
-	add_to_str(&hdr, &l, "\r\n");
+	add_to_string(&header, "\r\n");
 #endif
 
 	if (!accept_charset) {
-		unsigned char *ac = init_str();
+		struct string ac;
 
-		if (ac) {
+		if (init_string(&ac)) {
 			unsigned char *cs;
 			int aclen = 0;
 			int i;
 
 			for (i = 0; (cs = get_cp_mime_name(i)); i++) {
 				if (aclen) {
-					add_to_str(&ac, &aclen, ", ");
+					add_to_string(&ac, ", ");
 				} else {
-					add_to_str(&ac, &aclen, "Accept-Charset: ");
+					add_to_string(&ac, "Accept-Charset: ");
 				}
-				add_to_str(&ac, &aclen, cs);
+				add_to_string(&ac, cs);
 			}
 
-			if (aclen) {
-				add_to_str(&ac, &aclen, "\r\n");
+			if (ac.length) {
+				add_to_string(&ac, "\r\n");
 			}
 
 			/* Never freed until exit(), if you found a  better solution,
 			 * let us now ;)
 			 * Do not use mem_alloc() here. */
-			accept_charset = malloc(strlen(ac) + 1);
+			accept_charset = malloc(ac.length + 1);
 			if (accept_charset) {
-				strcpy(accept_charset, ac);
+				strcpy(accept_charset, ac.source);
 			} else {
 				accept_charset = "";
 			}
 
-			mem_free(ac);
+			done_string(&ac);
 		}
 	}
 
 	if (!(info->bl_flags & BL_NO_CHARSET)
 	    && !get_opt_int("protocol.http.bugs.accept_charset")) {
-		add_to_str(&hdr, &l, accept_charset);
+		add_to_string(&header, accept_charset);
 	}
 
 	optstr = get_opt_str("protocol.http.accept_language");
 	if (optstr[0]) {
-		add_to_str(&hdr, &l, "Accept-Language: ");
-		add_to_str(&hdr, &l, optstr);
-		add_to_str(&hdr, &l, "\r\n");
+		add_to_string(&header, "Accept-Language: ");
+		add_to_string(&header, optstr);
+		add_to_string(&header, "\r\n");
 	} else if (get_opt_bool("protocol.http.accept_ui_language")) {
 /* FIXME */
 #ifdef ENABLE_NLS
 			unsigned char *code;
 
 			code = language_to_iso639(current_language);
-			add_to_str(&hdr, &l, "Accept-Language: ");
-			add_to_str(&hdr, &l, code ? code : (unsigned char *) "");
-			add_to_str(&hdr, &l, "\r\n");
+			add_to_string(&header, "Accept-Language: ");
+			add_to_string(&header, code ? code : (unsigned char *) "");
+			add_to_string(&header, "\r\n");
 #endif
 	}
 
 	if (info->sent_version.major == 1 &&
 	    info->sent_version.minor == 1) {
 		if (!IS_PROXY_URI(conn->uri)) {
-			add_to_str(&hdr, &l, "Connection: ");
+			add_to_string(&header, "Connection: ");
 		} else {
-			add_to_str(&hdr, &l, "Proxy-Connection: ");
+			add_to_string(&header, "Proxy-Connection: ");
 		}
 
 		if (!uri->post || !get_opt_int("protocol.http.bugs.post_no_keepalive")) {
-			add_to_str(&hdr, &l, "Keep-Alive\r\n");
+			add_to_string(&header, "Keep-Alive\r\n");
 		} else {
-			add_to_str(&hdr, &l, "close\r\n");
+			add_to_string(&header, "close\r\n");
 		}
 	}
 
 	if (conn->cache) {
 		if (!conn->cache->incomplete && conn->cache->head && conn->cache->last_modified
 		    && conn->cache_mode <= NC_IF_MOD) {
-			add_to_str(&hdr, &l, "If-Modified-Since: ");
-			add_to_str(&hdr, &l, conn->cache->last_modified);
-			add_to_str(&hdr, &l, "\r\n");
+			add_to_string(&header, "If-Modified-Since: ");
+			add_to_string(&header, conn->cache->last_modified);
+			add_to_string(&header, "\r\n");
 		}
 	}
 
 	if (conn->cache_mode >= NC_PR_NO_CACHE) {
-		add_to_str(&hdr, &l, "Pragma: no-cache\r\n");
-		add_to_str(&hdr, &l, "Cache-Control: no-cache\r\n");
+		add_to_string(&header, "Pragma: no-cache\r\n");
+		add_to_string(&header, "Cache-Control: no-cache\r\n");
 	}
 
 	if (conn->from || (conn->prg.start > 0)) {
 		/* conn->from takes precedence. conn->prg.start is set only the first
 		 * time, then conn->from gets updated and in case of any retries
 		 * etc we have everything interesting in conn->from already. */
-		add_to_str(&hdr, &l, "Range: bytes=");
-		add_num_to_str(&hdr, &l, conn->from ? conn->from : conn->prg.start);
-		add_to_str(&hdr, &l, "-\r\n");
+		add_to_string(&header, "Range: bytes=");
+		add_long_to_string(&header, conn->from ? conn->from : conn->prg.start);
+		add_to_string(&header, "-\r\n");
 	}
 
 	host_data = find_auth(uri);
 	if (host_data) {
-		add_to_str(&hdr, &l, "Authorization: Basic ");
-		add_to_str(&hdr, &l, host_data);
-		add_to_str(&hdr, &l, "\r\n");
+		add_to_string(&header, "Authorization: Basic ");
+		add_to_string(&header, host_data);
+		add_to_string(&header, "\r\n");
 		mem_free(host_data);
 	}
 
@@ -627,21 +625,21 @@ http_send_header(struct connection *conn)
 		unsigned char *postend = strchr(uri->post, '\n');
 
 		if (postend) {
-			add_to_str(&hdr, &l, "Content-Type: ");
-			add_bytes_to_str(&hdr, &l, uri->post, postend - uri->post);
-			add_to_str(&hdr, &l, "\r\n");
+			add_to_string(&header, "Content-Type: ");
+			add_bytes_to_string(&header, uri->post, postend - uri->post);
+			add_to_string(&header, "\r\n");
 			uri->post = postend + 1;
 		}
-		add_to_str(&hdr, &l, "Content-Length: ");
-		add_num_to_str(&hdr, &l, strlen(uri->post) / 2);
-		add_to_str(&hdr, &l, "\r\n");
+		add_to_string(&header, "Content-Length: ");
+		add_long_to_string(&header, strlen(uri->post) / 2);
+		add_to_string(&header, "\r\n");
 	}
 
 #ifdef COOKIES
-	send_cookies(&hdr, &l, uri);
+	send_cookies(&header, uri);
 #endif
 
-	add_to_str(&hdr, &l, "\r\n");
+	add_to_string(&header, "\r\n");
 
 	if (uri->post) {
 #define POST_BUFFER_SIZE 4096		
@@ -663,18 +661,19 @@ http_send_header(struct connection *conn)
 			buffer[n++] = (h1<<4) + h2;
 			post += 2;
 			if (n == POST_BUFFER_SIZE) {
-				add_bytes_to_str(&hdr, &l, buffer, n);
+				add_bytes_to_string(&header, buffer, n);
 				n = 0;
 			}
 		}
 		
 		if (n)
-			add_bytes_to_str(&hdr, &l, buffer, n);
+			add_bytes_to_string(&header, buffer, n);
 #undef POST_BUFFER_SIZE
 	}
 
-	write_to_socket(conn, conn->sock1, hdr, l, http_get_header);
-	mem_free(hdr);
+	write_to_socket(conn, conn->sock1, header.source, header.length,
+			http_get_header);
+	done_string(&header);
 
 	set_connection_state(conn, S_SENT);
 }

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.94 2003/07/09 19:40:30 pasky Exp $ */
+/* $Id: connection.c,v 1.95 2003/07/09 19:46:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -429,7 +429,7 @@ init_keepalive_connection(struct connection *c, ttime timeout)
 	assertm(uri->host);
 	if_assert_failed return NULL;
 
-	k = mem_alloc(sizeof(struct keepalive_connection) + hostlen);
+	k = mem_calloc(1, sizeof(struct keepalive_connection) + hostlen);
 	if (!k) return NULL;
 
 	memcpy(k->host, host, hostlen);

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.51 2004/02/26 00:59:39 miciah Exp $ */
+/* $Id: status.c,v 1.52 2004/02/26 01:02:59 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -292,7 +292,7 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 		struct window *tab = get_tab_by_number(term, tab_num);
 		struct document_view *doc_view;
 		struct session *tab_ses = tab->data;
-		int actual_tab_width = tab_width;
+		int actual_tab_width = tab_width - 1;
 		unsigned char *msg;
 
 		/* Adjust tab size to use full term width. */
@@ -336,21 +336,21 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 				stat = NULL;
 		}
 
-		draw_area(term, xpos, ypos, actual_tab_width, 1, ' ', 0, color);
+		draw_area(term, xpos, ypos, actual_tab_width + 1, 1, ' ', 0, color);
 
 		if (stat) {
 			download_progress_bar(term, xpos, ypos,
-					      actual_tab_width - 1, msg, NULL,
+					      actual_tab_width, msg, NULL,
 					      stat->prg->pos, stat->prg->size);
 		} else {
-			int msglen = int_min(strlen(msg), actual_tab_width - 1);
+			int msglen = int_min(strlen(msg), actual_tab_width);
 
 			draw_text(term, xpos, ypos, msg, msglen, 0, color);
 		}
 
 		tab->xpos = xpos;
-		tab->width = actual_tab_width;
-		xpos += actual_tab_width - 1;
+		tab->width = actual_tab_width + 1;
+		xpos += actual_tab_width;
 	}
 }
 

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.106 2004/05/29 17:42:14 jonas Exp $ */
+/* $Id: uri.h,v 1.107 2004/05/29 18:14:03 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -101,13 +101,16 @@ enum uri_component {
 	 * should never be exposed to the user. */
 	URI_IDN			= (1 << 8),
 
-	/* Add stuff from uri->data and up and prefixes a '/'  */
+	/* Add stuff from uri->data and up and prefixes a '/' */
 	URI_PATH		= (1 << 9),
+
+	/* Add query part from uri->data not including the '?' */
+	URI_QUERY		= (1 << 10),
 
 	/* Some predefined classes for formatting of URIs */
 
 	/* Special flags */
-	URI_SPECIAL		= URI_DEFAULT_PORT | URI_PATH,
+	URI_SPECIAL		= URI_DEFAULT_PORT | URI_PATH | URI_QUERY,
 
 	/* The usual suspects */
 	URI_RARE		= URI_SPECIAL | URI_POST | URI_IDN,

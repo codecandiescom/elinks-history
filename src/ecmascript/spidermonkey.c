@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.39 2004/09/25 17:38:19 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.40 2004/09/25 17:40:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,25 +185,18 @@ static const JSClass window_class = {
 
 enum window_prop {
 	JSP_WIN_CLOSED,
-	JSP_WIN_DOC,
-	/* JSP_WIN_LOC, */
-	JSP_WIN_MBAR,
 	JSP_WIN_SELF,
-	JSP_WIN_SBAR,
 	JSP_WIN_TOP,
 };
+/* "location" is special because we need to simulate "location.href"
+ * when the code is asking directly for "location". We do not register
+ * it as a "known" property since that was yielding strange bugs
+ * (SpiderMonkey was still asking us about the "location" string after
+ * assigning to it once), instead we do just a little string
+ * comparing. */
 static const JSPropertySpec window_props[] = {
 	{ "closed",	JSP_WIN_CLOSED,	JSPROP_ENUMERATE | JSPROP_READONLY },
-	{ "document",	JSP_WIN_DOC,	JSPROP_ENUMERATE | JSPROP_READONLY },
-	/* "location" is special because we need to simulate "location.href"
-	 * when the code is asking directly for "location". We do not register
-	 * it as a "known" property since that was yielding strange bugs
-	 * (SpiderMonkey was still asking us about the "location" string after
-	 * assigning to it once), instead we do just a little string
-	 * comparing. */
-	{ "menubar",	JSP_WIN_MBAR,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "self",	JSP_WIN_SELF,	JSPROP_ENUMERATE | JSPROP_READONLY },
-	{ "statusbar",	JSP_WIN_SBAR,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "top",	JSP_WIN_TOP,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "window",	JSP_WIN_SELF,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ NULL }

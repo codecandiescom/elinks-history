@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.89 2004/09/29 20:03:24 pasky Exp $ */
+/* $Id: frames.c,v 1.90 2004/09/29 22:12:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,7 +219,9 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 	assert(ses && fsd && op);
 	if_assert_failed return;
 
-	if (depth > HTML_MAX_FRAME_DEPTH) return;
+	if (depth > HTML_MAX_FRAME_DEPTH) {
+		return;
+	}
 
 	memcpy(&o, op, sizeof(struct document_options));
 
@@ -236,18 +238,40 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 			o.box.width = frame_desc->width;
 			o.box.height = frame_desc->height;
 			o.framename = frame_desc->name;
-			if (frame_desc->subframe)
+			if (frame_desc->subframe) {
 				format_frames(ses, frame_desc->subframe, &o, depth + 1);
-			else if (frame_desc->name) {
+			} else if (frame_desc->name) {
 				struct document_view *doc_view;
 
 				doc_view = format_frame(ses, frame_desc, &o, depth);
 #ifdef CONFIG_DEBUG
 				do_not_optimize_here(&doc_view);
 #endif
-				if (doc_view && document_has_frames(doc_view->document))
-					format_frames(ses, doc_view->document->frame_desc,
+				if (doc_view && document_has_frames(doc_view->document)) {
+					struct document *document = doc_view->document;
+
+					/* Make sure the frameset does not
+					 * disappear during processing further
+					 * frames - this can happen when we
+					 * kick the same-frame-ids bug and
+					 * replace view_state of an existing
+					 * frame - if that frame is *this* one,
+					 * it gets detached, losing the
+					 * document and if we aren't lucky the
+					 * document gets burned in
+					 * shrink_format_cache(). Also note
+					 * that the same bug replacing
+					 * view_state also causes doc_view
+					 * recyclation so we end up with a
+					 * *different* document attached to it
+					 * after the call, so we need to cache
+					 * it. It's all fun to debug, really.
+					 * --pasky */
+					object_lock(document);
+					format_frames(ses, document->frame_desc,
 						      &o, depth + 1);
+					object_unlock(document);
+				}
 			}
 			o.box.x += o.box.width + 1;
 			n++;

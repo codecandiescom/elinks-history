@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.470 2005/01/01 05:44:02 miciah Exp $ */
+/* $Id: options.c,v 1.471 2005/01/05 14:37:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,7 +91,7 @@ check_caption(unsigned char *caption)
 	if (isspace(c) || bad_punct(c))
 		DBG("bad char at end of caption [%s]", caption);
 
-#ifdef ENABLE_NLS
+#ifdef CONFIG_NLS
 	caption = gettext(caption);
 	len = strlen(caption);
 	if (!len) return;
@@ -119,7 +119,7 @@ check_description(unsigned char *desc)
 	if (isspace(c))
 		DBG("bad char at end of description [%s]", desc);
 
-#ifdef ENABLE_NLS
+#ifdef CONFIG_NLS
 	desc = gettext(desc);
 	len = strlen(desc);
 	if (!len) return;
@@ -942,7 +942,7 @@ change_hook_stemplate(struct session *ses, struct option *current, struct option
 static int
 change_hook_language(struct session *ses, struct option *current, struct option *changed)
 {
-#ifdef ENABLE_NLS
+#ifdef CONFIG_NLS
 	set_language(changed->value.number);
 #endif
 	return 0;

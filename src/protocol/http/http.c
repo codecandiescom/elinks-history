@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.390 2004/12/31 09:17:07 zas Exp $ */
+/* $Id: http.c,v 1.391 2005/01/05 14:37:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -711,7 +711,7 @@ http_send_header(struct connection *conn)
 		add_to_string(&header, optstr);
 		add_crlf_to_string(&header);
 	}
-#ifdef ENABLE_NLS
+#ifdef CONFIG_NLS
 	else if (get_opt_bool("protocol.http.accept_ui_language")) {
 		unsigned char *code = language_to_iso639(current_language);
 

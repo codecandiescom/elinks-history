@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.384 2005/01/05 09:48:34 zas Exp $ */
+/* $Id: menu.c,v 1.385 2005/01/05 14:37:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -444,7 +444,7 @@ static struct menu_item ext_menu[] = {
 };
 
 static struct menu_item setup_menu[] = {
-#ifdef ENABLE_NLS
+#ifdef CONFIG_NLS
 	INIT_MENU_ITEM(N_("~Language"), NULL, ACT_MAIN_NONE, menu_language_list, NULL, SUBMENU),
 #endif
 	INIT_MENU_ITEM(N_("C~haracter set"), NULL, ACT_MAIN_NONE, charset_list, NULL, SUBMENU),

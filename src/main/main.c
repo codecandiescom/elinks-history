@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.230 2004/12/31 01:39:55 jonas Exp $ */
+/* $Id: main.c,v 1.231 2005/01/05 14:37:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,7 +118,7 @@ init(void)
 #ifdef HAVE_LOCALE_H
 	setlocale(LC_ALL, "");
 #endif
-#ifdef ENABLE_NLS
+#ifdef CONFIG_NLS
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
 	set_language(0);

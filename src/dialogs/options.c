@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.167 2004/12/31 09:17:06 zas Exp $ */
+/* $Id: options.c,v 1.168 2005/01/05 14:37:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,7 +181,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	do_dialog(term, dlg, getml(dlg, NULL));
 }
 
-#ifdef ENABLE_NLS
+#ifdef CONFIG_NLS
 static void
 menu_set_language(struct terminal *term, void *pcp_, void *xxx)
 {
@@ -195,7 +195,7 @@ menu_set_language(struct terminal *term, void *pcp_, void *xxx)
 void
 menu_language_list(struct terminal *term, void *xxx, void *ses)
 {
-#ifdef ENABLE_NLS
+#ifdef CONFIG_NLS
 	int i;
 	struct menu_item *mi = new_menu(FREE_LIST);
 

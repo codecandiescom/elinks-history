@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.26 2005/01/03 12:26:15 jonas Exp $ */
+/* $Id: libintl.h,v 1.27 2005/01/05 14:37:44 jonas Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -23,7 +23,7 @@
 
 /* The intl/gettext/libgettext.h header nukes gettext functions but not the _()
  * function so make sure it is also just a noop when NLS is disabled. */
-#ifndef ENABLE_NLS
+#ifndef CONFIG_NLS
 
 /* In order to make it able to compile using -Werror this has to be a function
  * so that local @term variables will not be reported as unused. */
@@ -162,6 +162,6 @@ extern int get_system_language_index(void);
 extern int current_language, system_language;
 extern void set_language(int language);
 
-#endif /* ENABLE_NLS */
+#endif /* CONFIG_NLS */
 
 #endif

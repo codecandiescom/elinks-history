@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.67 2004/11/22 13:27:41 zas Exp $ */
+/* $Id: menu.h,v 1.68 2005/01/05 14:37:44 jonas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -150,7 +150,7 @@ struct menu {
 	int parent_x, parent_y;	/* The coordinates of the parent window */
 
 	int hotkeys;		/* Whether to check and display hotkeys */
-#ifdef ENABLE_NLS
+#ifdef CONFIG_NLS
 	int lang;		/* For keeping the hotkey cache in sync */
 #endif
 

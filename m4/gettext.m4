@@ -49,19 +49,17 @@ AC_DEFUN([AM_WITH_NLS],
     EL_ARG_ENABLE(CONFIG_NLS, nls, [Native Language Support],
       [  --disable-nls           do not use Native Language Support])
 
-    USE_NLS=$CONFIG_NLS
-    AC_MSG_RESULT($USE_NLS)
-    AC_SUBST(USE_NLS)
+    AC_MSG_RESULT($CONFIG_NLS)
 
     BUILD_INCLUDED_LIBINTL=no
     USE_INCLUDED_LIBINTL=no
     INTLLIBS=
 
-    AM_CONDITIONAL(ENABLE_NLS, test "$USE_NLS" = "yes")
+    AM_CONDITIONAL(CONFIG_NLS, test "$CONFIG_NLS" = "yes")
 
     dnl If we use NLS figure out what method
-    if test "$USE_NLS" = "yes"; then
-      AC_DEFINE(ENABLE_NLS, 1,
+    if test "$CONFIG_NLS" = "yes"; then
+      AC_DEFINE(CONFIG_NLS, 1,
         [Define to 1 if translation of program messages to the user's native language
    is requested.])
 dnl      AC_MSG_CHECKING([whether included gettext is requested])

@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.h,v 1.8 2004/08/03 21:25:00 zas Exp $ */
+/* $Id: hotkey.h,v 1.9 2005/01/05 14:37:44 jonas Exp $ */
 
 #ifndef EL__BFU_HOTKEY_H
 #define EL__BFU_HOTKEY_H
@@ -9,7 +9,7 @@ struct terminal;
 
 /* int find_hotkey_pos(unsigned char *text); */
 void init_hotkeys(struct terminal *term, struct menu *menu);
-#ifdef ENABLE_NLS
+#ifdef CONFIG_NLS
 void clear_hotkeys_cache(struct menu *menu);
 #endif
 void refresh_hotkeys(struct terminal *term, struct menu *menu);

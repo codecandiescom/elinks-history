@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.85 2004/12/21 22:44:57 pasky Exp $ */
+/* $Id: cgi.c,v 1.86 2005/01/05 14:37:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,7 +212,7 @@ set_vars(struct connection *conn, unsigned char *script)
 	if (*str) {
 		setenv("HTTP_ACCEPT_LANGUAGE", str, 1);
 	}
-#ifdef ENABLE_NLS
+#ifdef CONFIG_NLS
 	else if (get_opt_bool("protocol.http.accept_ui_language")) {
 		setenv("HTTP_ACCEPT_LANGUAGE",
 			language_to_iso639(current_language), 1);

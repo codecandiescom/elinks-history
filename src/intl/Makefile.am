@@ -1,9 +1,9 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.12 2004/07/17 20:08:54 pasky Exp $
+## $Id: Makefile.am,v 1.13 2005/01/05 14:37:44 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
-if ENABLE_NLS
+if CONFIG_NLS
 gettextdir = gettext
 endif
 

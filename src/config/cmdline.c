@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.114 2005/01/03 23:10:24 pasky Exp $ */
+/* $Id: cmdline.c,v 1.115 2005/01/05 14:37:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -413,7 +413,7 @@ print_full_help(struct option *tree, unsigned char *path)
 				break;
 
 			case OPT_LANGUAGE:
-#ifdef ENABLE_NLS
+#ifdef CONFIG_NLS
 				printf(gettext("(default: \"%s\")"),
 				       language_to_name(option->value.number));
 #endif

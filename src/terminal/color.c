@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.41 2003/09/29 23:07:08 jonas Exp $ */
+/* $Id: color.c,v 1.42 2003/09/29 23:36:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,25 +43,10 @@ color_distance(struct rgb *c1, struct rgb *c2)
 static inline unsigned char
 get_color(color_t color, struct rgb *palette, int level)
 {
-	static struct rgb_cache_entry rgb_fgcache[RGB_HASH_SIZE];
-	struct rgb_cache_entry *rgb_cache;
+	static struct rgb_cache_entry cache[RGB_HASH_SIZE];
+	struct rgb_cache_entry *rgb_cache = &cache[HASH_RGB(color, level)];
 
-#if 0
-	/* No need to poison the cache since calling this function is only
-	 * meaningfull when level > 0 */
-	static int cache_init = 0;
-
-	if (!cache_init) {
-		register int h;
-
-		for (h = 0; h < RGB_HASH_SIZE; h++)
-			rgb_fgcache[h].color = -1;
-		cache_init = 1;
-	}
-#endif
-
-	rgb_cache = &rgb_fgcache[HASH_RGB(color, level)];
-
+	/* Uninialized cache entries have level = 0. */
 	if (rgb_cache->level == 0
 	    || rgb_cache->level != level
 	    || rgb_cache->rgb != color) {

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.426 2004/05/26 16:22:08 jonas Exp $ */
+/* $Id: parser.c,v 1.427 2004/05/26 16:32:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -237,7 +237,7 @@ import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len)
 
 	if (!import_url) return;
 
-	uri = get_uri(import_url, -1);
+	uri = get_translated_uri(import_url, NULL, NULL);
 	mem_free(import_url);
 
 	if (!uri) return;

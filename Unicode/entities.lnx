@@ -233,6 +233,8 @@ static CONST UC_entity_info unicode_entities[] = {
   {"Scaron",	0x0160},  /* LATIN CAPITAL LETTER S WITH CARON		   */
   {"Scedil",	0x015E},  /* LATIN CAPITAL LETTER S WITH CEDILLA	   */
   {"Scirc",	0x015C},  /* LATIN CAPITAL LETTER S WITH CIRCUMFLEX	   */
+  {"Scomma",	0x0218},  /* LATIN CAPITAL LETTER S WITH COMMA BELOW	   */
+  {"Scomma",	0x0218},  /* LATIN CAPITAL LETTER S WITH COMMA BELOW	   */
   {"Scy",	0x0421},  /* CYRILLIC CAPITAL LETTER ES 		   */
   {"Sgr",	0x03A3},  /* GREEK CAPITAL LETTER SIGMA 		   */
   {"Sigma",	0x03A3},  /* GREEK CAPITAL LETTER SIGMA 		   */
@@ -244,7 +246,9 @@ static CONST UC_entity_info unicode_entities[] = {
   {"TScy",	0x0426},  /* CYRILLIC CAPITAL LETTER TSE		   */
   {"Tau",	0x03A4},  /* GREEK CAPITAL LETTER TAU			   */
   {"Tcaron",	0x0164},  /* LATIN CAPITAL LETTER T WITH CARON		   */
+  {"Tcomma",	0x021A},  /* LATIN CAPITAL LETTER T WITH COMMA BELOW	   */
   {"Tcedil",	0x0162},  /* LATIN CAPITAL LETTER T WITH CEDILLA	   */
+  {"Tcomma",	0x021A},  /* LATIN CAPITAL LETTER T WITH COMMA BELOW	   */
   {"Tcy",	0x0422},  /* CYRILLIC CAPITAL LETTER TE 		   */
   {"Tgr",	0x03A4},  /* GREEK CAPITAL LETTER TAU			   */
   {"Theta",	0x0398},  /* GREEK CAPITAL LETTER THETA 		   */
@@ -906,8 +910,10 @@ static CONST UC_entity_info unicode_entities[] = {
   {"sccue",	0x227D},  /* SUCCEEDS OR EQUAL TO			   */
   {"sce",	0x227D},  /* SUCCEEDS OR EQUAL TO			   */
   {"scedil",	0x015F},  /* LATIN SMALL LETTER S WITH CEDILLA		   */
+  {"scomma",	0x0219},  /* LATIN SMALL LETTER S WITH COMMA BELOW	   */
   {"scirc",	0x015D},  /* LATIN SMALL LETTER S WITH CIRCUMFLEX	   */
   {"scnsim",	0x22E9},  /* SUCCEEDS BUT NOT EQUIVALENT TO		   */
+  {"scomma",	0x0219},  /* LATIN SMALL LETTER S WITH COMMA BELOW	   */
   {"scsim",	0x227F},  /* SUCCEEDS OR EQUIVALENT TO			   */
   {"scy",	0x0441},  /* CYRILLIC SMALL LETTER ES			   */
   {"sdot",	0x22C5},  /* DOT OPERATOR				   */
@@ -964,9 +970,11 @@ static CONST UC_entity_info unicode_entities[] = {
   {"supne",	0x228B},  /* SUPERSET OF WITH NOT EQUAL TO		   */
   {"szlig",	0x00DF},  /* LATIN SMALL LETTER SHARP S 		   */
   {"target",	0x2316},  /* POSITION INDICATOR 			   */
+  {"tcomma",	0x021B},  /* LATIN SMALL LETTER T WITH COMMA BELOW	   */
   {"tau",	0x03C4},  /* GREEK SMALL LETTER TAU			   */
   {"tcaron",	0x0165},  /* LATIN SMALL LETTER T WITH CARON		   */
   {"tcedil",	0x0163},  /* LATIN SMALL LETTER T WITH CEDILLA		   */
+  {"tcomma",	0x021B},  /* LATIN SMALL LETTER T WITH COMMA BELOW	   */
   {"tcy",	0x0442},  /* CYRILLIC SMALL LETTER TE			   */
   {"tdot",	0x20DB},  /* COMBINING THREE DOTS ABOVE 		   */
   {"telrec",	0x2315},  /* TELEPHONE RECORDER 			   */

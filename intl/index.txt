@@ -13,6 +13,7 @@ icelandic
 italian
 lithuanian
 polish
+romanian
 russian
 slovak
 spanish

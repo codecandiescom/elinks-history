@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.394 2004/04/22 15:44:15 jonas Exp $ */
+/* $Id: parser.c,v 1.395 2004/04/22 16:05:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2810,8 +2810,9 @@ static struct element_info elements[] = {
 static inline int
 element_has_implicit_end(unsigned char *name, int namelen, unsigned char *attr)
 {
-	return attr > name
-		&& memchr(name + namelen, '/', attr - name - namelen);
+	int len = (attr - name) - namelen;
+
+	return len > 0 && memchr(name + namelen, '/', len);
 }
 
 unsigned char *

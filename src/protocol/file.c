@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.89 2003/06/24 12:32:29 jonas Exp $ */
+/* $Id: file.c,v 1.90 2003/06/24 22:21:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,22 +73,16 @@ static inline void
 setst(int m, unsigned char *p)
 {
 #ifdef S_ISUID
-	if (m & S_ISUID) {
-		p[2] = 'S';
-		if (m & S_IXUSR) p[2] = 's';
-	}
+	if (m & S_ISUID)
+		p[2] = (m & S_IXUSR) ? 's' : 'S';
 #endif
 #ifdef S_ISGID
-	if (m & S_ISGID) {
-		p[5] = 'S';
-		if (m & S_IXGRP) p[5] = 's';
-	}
+	if (m & S_ISGID)
+		p[5] = (m & S_IXGRP) ? 's' : 'S';
 #endif
 #ifdef S_ISVTX
-	if (m & S_ISVTX) {
-		p[8] = 'T';
-		if (m & S_IXOTH) p[8] = 't';
-	}
+	if (m & S_ISVTX)
+		p[8] = (m & S_IXOTH) ? 't' : 'T';
 #endif
 }
 #endif
@@ -100,15 +94,14 @@ stat_mode(unsigned char **p, int *l, struct stat *stp)
 	unsigned char c = '?';
 
 	if (stp) {
-		if (0);
+		if (S_ISDIR(stp->st_mode)) c = 'd';
+		else if (S_ISREG(stp->st_mode)) c = '-';
 #ifdef S_ISBLK
 		else if (S_ISBLK(stp->st_mode)) c = 'b';
 #endif
 #ifdef S_ISCHR
 		else if (S_ISCHR(stp->st_mode)) c = 'c';
 #endif
-		else if (S_ISDIR(stp->st_mode)) c = 'd';
-		else if (S_ISREG(stp->st_mode)) c = '-';
 #ifdef S_ISFIFO
 		else if (S_ISFIFO(stp->st_mode)) c = 'p';
 #endif

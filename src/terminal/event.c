@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.44 2004/06/13 03:21:46 jonas Exp $ */
+/* $Id: event.c,v 1.45 2004/06/13 03:23:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -281,7 +281,6 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 void
 in_term(struct terminal *term)
 {
-	struct term_event *ev;
 	int r;
 	unsigned char *iq = term->input_queue;
 
@@ -309,21 +308,19 @@ in_term(struct terminal *term)
 	term->qlen += r;
 	term->qfreespace -= r;
 
-test_queue:
-	if (term->qlen < sizeof(struct term_event)) return;
-	ev = (struct term_event *)iq;
+	while (term->qlen >= sizeof(struct term_event)) {
+		struct term_event *ev = (struct term_event *)iq;
 
-	r = handle_interlink_event(term, ev);
-	if (!r) return;
-	/* redraw_screen(term); */
+		r = handle_interlink_event(term, ev);
+		if (!r) return;
+		/* redraw_screen(term); */
 
-	if (term->qlen == r) {
-		term->qlen = 0;
-	} else {
-		term->qlen -= r;
-		memmove(iq, iq + r, term->qlen);
+		if (term->qlen == r) {
+			term->qlen = 0;
+		} else {
+			term->qlen -= r;
+			memmove(iq, iq + r, term->qlen);
+		}
+		term->qfreespace += r;
 	}
-	term->qfreespace += r;
-
-	goto test_queue;
 }

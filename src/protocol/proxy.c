@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.10 2004/04/01 06:22:38 jonas Exp $ */
+/* $Id: proxy.c,v 1.11 2004/04/01 07:56:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,28 +69,20 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 	if (proxy) {
 		if (!*proxy) proxy = NULL; /* "" from script_hook_get_proxy() */
 	} else {
-		unsigned char *slash;
+		unsigned char *protocol_proxy = NULL;
 
 		if (http_proxy && *http_proxy && uri->protocol == PROTOCOL_HTTP) {
 			if (!strncasecmp(http_proxy, "http://", 7))
 				http_proxy += 7;
 
-			slash = strchr(http_proxy, '/');
-			if (slash) *slash = 0;
-
-			if (!proxy_probe_no_proxy(uri->host, no_proxy))
-				proxy = http_proxy;
+			protocol_proxy = http_proxy;
 		}
 
 		if (https_proxy && *https_proxy && uri->protocol == PROTOCOL_HTTPS) {
 			if (!strncasecmp(https_proxy, "http://", 7))
 				https_proxy += 7;
 
-			slash = strchr(https_proxy, '/');
-			if (slash) *slash = 0;
-
-			if (!proxy_probe_no_proxy(uri->host, no_proxy))
-				proxy = https_proxy;
+			protocol_proxy = https_proxy;
 		}
 
 		if (ftp_proxy && *ftp_proxy && uri->protocol == PROTOCOL_FTP) {
@@ -99,11 +91,16 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 			else if(!strncasecmp(ftp_proxy, "http://", 7))
 				ftp_proxy += 7;
 
-			slash = strchr(ftp_proxy, '/');
+			protocol_proxy = ftp_proxy;
+		}
+
+		if (protocol_proxy) {
+			unsigned char *slash = strchr(protocol_proxy, '/');
+
 			if (slash) *slash = 0;
 
 			if (!proxy_probe_no_proxy(uri->host, no_proxy))
-				proxy = ftp_proxy;
+				proxy = protocol_proxy;
 		}
 	}
 

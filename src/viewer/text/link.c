@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.73 2003/10/17 20:57:30 jonas Exp $ */
+/* $Id: link.c,v 1.74 2003/10/18 00:57:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -192,6 +192,9 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 
 		if (d_opt->underline_active_link)
 			template->attr |= SCREEN_ATTR_UNDERLINE;
+
+		if (d_opt->bold_active_link)
+			template->attr |= SCREEN_ATTR_BOLD;
 	}
 
 	set_term_color(template, &link->color, color_flags,

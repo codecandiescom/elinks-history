@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.301 2003/10/17 23:27:52 jonas Exp $ */
+/* $Id: options.c,v 1.302 2003/10/18 00:57:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1154,6 +1154,10 @@ register_options(void)
 		N_("Enable use of the active link background and text color\n"
 		"settings instead of browse.links from the document."));
 
+	add_opt_bool("document.browse.links.active_link", N_("Bold"),
+		"bold", 0, 0,
+		N_("Make the active link test bold."));
+
 	add_opt_bool("document.browse.links.active_link", N_("Invert colors"),
 		"invert", 0, 1,
 		N_("Invert the fore- and background color so the link "
@@ -1162,6 +1166,7 @@ register_options(void)
 	add_opt_bool("document.browse.links.active_link", N_("Underline"),
 		"underline", 0, 0,
 		N_("Underline the active link."));
+
 
 	add_opt_bool("document.browse.links", N_("Directory highlighting"),
 		"color_dirs", 0, 1,

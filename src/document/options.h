@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.20 2003/10/17 20:57:29 jonas Exp $ */
+/* $Id: options.h,v 1.21 2003/10/18 00:57:56 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -63,6 +63,7 @@ struct document_options {
 	 * drawing is faster. --jonas */
 	unsigned int color_active_link:1;
 	unsigned int underline_active_link:1;
+	unsigned int bold_active_link:1;
 	color_t active_link_fg;
 	color_t active_link_bg;
 };

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.73 2003/04/19 17:33:55 zas Exp $ */
+/* $Id: conf.c,v 1.74 2003/04/19 17:36:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,7 +166,7 @@ parse_bind(struct option *opt_tree, unsigned char **file, int *line,
 {
 	unsigned char *orig_pos = *file, *next_pos;
 	unsigned char *keymap, *keystroke, *action;
-	enum parse_error error = ERROR_NONE;
+	enum parse_error err = ERROR_NONE;
 
 	*file = skip_white(*file, line);
 	if (!*file) return ERROR_PARSE;
@@ -216,13 +216,13 @@ parse_bind(struct option *opt_tree, unsigned char **file, int *line,
 			add_to_str(str, len, act_str);
 			mem_free(act_str);
 		} else {
-			error = ERROR_VALUE;
+			err = ERROR_VALUE;
 		}
 	} else {
-		error = bind_do(keymap, keystroke, action) ? ERROR_VALUE : ERROR_NONE;
+		err = bind_do(keymap, keystroke, action) ? ERROR_VALUE : ERROR_NONE;
 	}
 	mem_free(keymap); mem_free(keystroke); mem_free(action);
-	return error;
+	return err;
 }
 
 static
@@ -360,7 +360,7 @@ parse_config_file(struct option *options, unsigned char *name,
 
 test_end:
 
-		if (!str && error) {
+		if (!str && err) {
 			/* TODO: Make this a macro and report error directly
 			 * as it's stumbled upon; line info may not be accurate
 			 * anymore now (?). --pasky */

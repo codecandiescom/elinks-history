@@ -1,5 +1,5 @@
 /* Base64 encoder implementation. */
-/* $Id: base64.c,v 1.6 2003/07/24 13:38:49 zas Exp $ */
+/* $Id: base64.c,v 1.7 2003/07/25 00:39:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,11 +31,10 @@ base64_encode(unsigned char *str)
 
 	while (inlen >= 3) {
 		*out++ = base64_chars[ (*in >> 2) ];
-		*out++ = base64_chars[ ((*in << 4 | *(++in) >> 4) & 63) ];
-		*out++ = base64_chars[ ((*in << 2 | *(++in) >> 6) & 63) ];
-		*out++ = base64_chars[ (*in & 63) ];
-		in++;
-		inlen -= 3;
+		*out++ = base64_chars[ ((*in << 4 | *(in + 1) >> 4) & 63) ];
+		*out++ = base64_chars[ ((*(in + 1) << 2 | *(in + 2) >> 6) & 63) ];
+		*out++ = base64_chars[ (*(in + 2) & 63) ];
+		inlen -= 3; in += 3;
 	}
 	if (inlen == 1) {
 		*out++ = base64_chars[ (*in >> 2) ];
@@ -45,8 +44,8 @@ base64_encode(unsigned char *str)
 	}
 	if (inlen == 2) {
 		*out++ = base64_chars[ (*in >> 2) ];
-		*out++ = base64_chars[ ((*in << 4 | *(++in) >> 4) & 63) ];
-		*out++ = base64_chars[ ((*in << 2) & 63) ];
+		*out++ = base64_chars[ ((*in << 4 | *(in + 1) >> 4) & 63) ];
+		*out++ = base64_chars[ ((*(in + 1) << 2) & 63) ];
 		*out++ = '=';
 	}
 	*out = 0;

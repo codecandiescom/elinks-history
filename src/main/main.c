@@ -1,14 +1,11 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.232 2005/02/05 04:35:43 jonas Exp $ */
+/* $Id: main.c,v 1.233 2005/02/11 20:04:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <errno.h>
-#ifdef HAVE_LOCALE_H
-#include <locale.h>
-#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -116,9 +113,6 @@ init(void)
 	init_static_version();
 	check_cwd();
 
-#ifdef HAVE_LOCALE_H
-	setlocale(LC_ALL, "");
-#endif
 #ifdef CONFIG_NLS
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);

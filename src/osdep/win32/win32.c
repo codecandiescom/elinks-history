@@ -1,5 +1,5 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.22 2005/02/05 17:36:55 jonas Exp $ */
+/* $Id: win32.c,v 1.23 2005/02/11 20:04:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#ifdef HAVE_LOCALE_H
+#include <locale.h>
+#endif
 
 #include "elinks.h"
 
@@ -38,6 +41,9 @@ init_osdep(void)
 		printf("Failed to initialise Winsock ver %d.%d\n", ver >> 8, ver & 255);
 		exit(-1);
 	}
+#endif
+#ifdef HAVE_LOCALE_H
+	setlocale(LC_ALL, "");
 #endif
 #ifdef CONFIG_IDN
 	{

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.164 2005/02/05 22:36:37 jonas Exp $ */
+/* $Id: osdep.c,v 1.165 2005/02/11 20:04:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,6 +53,14 @@
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
+
+#ifdef HAVE_LOCALE_H
+/* For the sake of SunOS, keep this away from files including
+ * intl/gettext/libintl.h because <locale.h> includes system <libintl.h> which
+ * either includes system gettext header or contains gettext function
+ * declarations. */
+#include <locale.h>
 #endif
 
 #ifdef HAVE_X11
@@ -703,6 +711,9 @@ get_input_handle(void)
 void
 init_osdep(void)
 {
+#ifdef HAVE_LOCALE_H
+	setlocale(LC_ALL, "");
+#endif
 }
 
 #endif

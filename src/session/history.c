@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.3 2003/06/07 19:44:48 pasky Exp $ */
+/* $Id: history.c,v 1.4 2003/06/08 21:45:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,17 +63,23 @@ clean_unhistory(struct session *ses)
 }
 
 
-void
-ses_back(struct session *ses)
+static void
+ses_leave_location(struct session *ses)
 {
-	struct location *loc;
-
 	free_files(ses);
 
 	if (ses->search_word) {
 		mem_free(ses->search_word);
 		ses->search_word = NULL;
 	}
+}
+
+void
+ses_back(struct session *ses)
+{
+	struct location *loc;
+
+	ses_leave_location(ses);
 
 	/* This is the current location. */
 	if (!have_location(ses)) return;
@@ -103,12 +109,7 @@ ses_back(struct session *ses)
 void
 ses_unback(struct session *ses)
 {
-	free_files(ses);
-
-	if (ses->search_word) {
-		mem_free(ses->search_word);
-		ses->search_word = NULL;
-	}
+	ses_leave_location(ses);
 
 	if (!list_empty(ses->unhistory)) {
 		struct location *loc = ses->unhistory.next;

@@ -1,3 +1,92 @@
+Thu Apr  8 19:47:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	add_url_to_http_string(): Rewrite to not allocate no post url copy.  
+
+Thu Apr  8 19:36:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	Small workaround for URI_DEFAULT_PORT adding. Hmm I will have to
+	figure out something better.  
+
+Thu Apr  8 19:21:48 2004  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Translation updated.  
+
+Thu Apr  8 14:38:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h, http/http.c:
+
+	Add support for adding default port if the URI has no port specified
+	using new URI_DEFAULT_PORT component.  
+
+Thu Apr  8 14:14:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: connection.c, task.c:
+
+	Fix bug in URI reference counting and add assertion about
+	ses->loading_uri. Thanks to iSteve for his irc presence that lead to
+	triggering the bug.  
+
+Thu Apr  8 13:17:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Initialize option lock.  
+
+Thu Apr  8 13:05:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Comment out is_object_used(file_download) assertion and describe why
+	we need to make it not fail when the time comes.  
+
+Thu Apr  8 04:33:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix assertion failure when calling protocol function with unknown
+	protocol.  
+
+Thu Apr  8 02:52:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/download.c, sched/download.c:
+
+	More download consistency checking. Should fix bug 399 (pasting crap
+	into goto url dialog) caused by the input to start downloads and
+	aborting them (using bottom halves) and then deleting before the
+	bottom half gets called. Well we already know how racy the whole
+	download code is so ...  
+
+Thu Apr  8 02:00:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, util/types.h:
+
+	Remove gross INFO_LIST hack.  
+
+Wed Apr  7 22:24:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/dialogs.c:
+
+	Show proxy URI info for cache entries.  
+
+Wed Apr  7 22:14:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	parse_uri(): Remove useless test. If the protocol is unknown we bail
+	out after skipping the '//'s.  
+
+Wed Apr  7 22:10:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Improve and add comments.  
+
 Wed Apr  7 21:53:15 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,

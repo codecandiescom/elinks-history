@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.41 2002/07/01 16:44:28 pasky Exp $ */
+/* $Id: conf.c,v 1.42 2002/07/01 18:00:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -371,13 +371,15 @@ load_config()
 
 
 void
-tree_config_string(unsigned char **str, int *len, struct list_head *options,
-		   unsigned char *path, int depth)
+tree_config_string(unsigned char **str, int *len, int print_comment,
+		   struct list_head *options, unsigned char *path, int depth)
 {
 	struct option *option;
 	int j;
 
 	foreachback (option, *options) {
+		int do_print_comment = 1;
+
 		if (option->flags & OPT_HIDDEN) continue;
 
 		/* Pop out the comment */
@@ -395,7 +397,28 @@ tree_config_string(unsigned char **str, int *len, struct list_head *options,
 		add_to_str(str, len, option_types[option->type].help_str);
 		add_to_str(str, len, NEWLINE);
 
-		if (option->desc) {
+		/* We won't pop out the description when we're in autocreate
+		 * category and not template. It'd be boring flood of
+		 * repetitive comments otherwise ;). */
+
+		/* This print_comment parameter is weird. If it is negative, it
+		 * means that we shouldn't print comments at all. If it is 1,
+		 * we shouldn't print comment UNLESS the option is _template_
+		 * or not-an-autocreating-tree (it is set for the first-level
+		 * autocreation tree). When it is 2, we can print out comments
+		 * normally. */
+		/* It is still broken somehow, as it didn't work for terminal.*
+		 * (the first autocreated level) by the time I wrote this. Good
+		 * summer job for bored mad hackers with spare boolean mental
+		 * power. I have better things to think about, personally.
+		 * Maybe we should just mark autocreated options somehow ;). */
+		if (!print_comment || (print_comment == 1
+					&& (strcmp(option->name, "_template_")
+					    && (option->flags & OPT_AUTOCREATE
+					        && option->type == OPT_TREE))))
+			do_print_comment = 0;
+		
+		if (option->desc && do_print_comment) {
 			int l = strlen(option->desc);
 			int i;
 
@@ -432,24 +455,31 @@ tree_config_string(unsigned char **str, int *len, struct list_head *options,
 			add_to_str(str, len, " = ");
 			option_types[option->type].write(option, str, len);
 			add_to_str(str, len, NEWLINE);
+			if (do_print_comment) add_to_str(str, len, NEWLINE);
 
 		} else if (option->type == OPT_TREE) {
 			unsigned char *str2 = init_str();
 			int len2 = 0;
+			int pc = print_comment;
 
-			add_to_str(str, len, NEWLINE);
+			if (pc == 2 && option->flags & OPT_AUTOCREATE)
+				pc = 1;
+			else if (pc == 1 && strcmp(option->name, "_template_"))
+				pc = 0;
+
+			if (pc < 2) add_to_str(str, len, NEWLINE);
 
 			if (path) {
 				add_to_str(&str2, &len2, path);
 				add_to_str(&str2, &len2, ".");
 			}
 			add_to_str(&str2, &len2, option->name);
-			tree_config_string(str, len, option->ptr,
+			tree_config_string(str, len, pc, option->ptr,
 					   str2, depth + 1);
 			mem_free(str2);
-		}
 
-		add_to_str(str, len, NEWLINE);
+			if (pc < 2) add_to_str(str, len, NEWLINE);
+		}
 	}
 }
 
@@ -471,7 +501,7 @@ create_config_string(struct list_head *options)
 	add_to_str(&str, &len, "#" NEWLINE);
 	add_to_str(&str, &len, NEWLINE);
 
-	tree_config_string(&str, &len, options, NULL, 0);
+	tree_config_string(&str, &len, 2, options, NULL, 0);
 
 	add_to_str(&str, &len, NEWLINE NEWLINE NEWLINE);
 	add_to_str(&str, &len, "#####################################" NEWLINE);

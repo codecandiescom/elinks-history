@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.48 2003/08/29 11:16:58 jonas Exp $ */
+/* $Id: screen.c,v 1.49 2003/08/29 11:31:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,13 +46,14 @@ static unsigned char frame_koi[48] = {
 	188, 133, 130, 141, 140, 142, 143, 139,
 };
 
+/* Most of this table is just 176 + <index in table>. */
 static unsigned char frame_restrict[48] = {
-	  0,   0,   0,   0,   0, 179, 186, 186,
-	205,   0,   0,   0,   0, 186, 205,   0,
-	  0,   0,   0,   0,   0,   0, 179, 186,
-	  0,   0,   0,   0,   0,   0,   0, 205,
+	176, 177, 178, 179, 180, 179, 186, 186,
+	205, 185, 186, 187, 188, 186, 205, 191,
+	192, 193, 194, 195, 196, 197, 179, 186,
+	200, 201, 202, 203, 204, 205, 206, 205,
 	196, 205, 196, 186, 205, 205, 186, 186,
-	179,   0,   0,   0,   0,   0,   0,   0,
+	179, 217, 218, 219, 220, 221, 222, 223,
 };
 
 
@@ -73,6 +74,7 @@ struct rs_opt_cache {
 };
 
 struct screen_state {
+	unsigned char *frame;
 	unsigned char color;
 	unsigned char border;
 	unsigned char underline;
@@ -101,13 +103,12 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 			}
 		}
 
-		if (opt_cache->restrict_852 && border && c >= 176 && c < 224
-		    && frame_restrict[c - 176]) {
-			c = frame_restrict[c - 176];
+		if (opt_cache->restrict_852 && border && c >= 176 && c < 224) {
+			c = state->frame[c - 176];
 		}
 
-	} else if (opt_cache->type == TERM_VT100 && !opt_cache->utf_8_io) {
-		if (border != state->border) {
+	} else {
+		if (state->frame == frame_vt100 && border != state->border) {
 			state->border = border;
 
 			if (!border) {
@@ -118,16 +119,7 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 		}
 
 		if (border && c >= 176 && c < 224) {
-			c = frame_vt100[c - 176];
-		}
-
-	} else if (border && c >= 176 && c < 224) {
-		if (opt_cache->type == TERM_VT100) {
-			c = frame_vt100_u[c - 176];
-		} else if (opt_cache->type == TERM_KOI8) {
-			c = frame_koi[c - 176];
-		} else if (opt_cache->type == TERM_DUMB) {
-			c = frame_dumb[c - 176];
+			c = state->frame[c - 176];
 		}
 	}
 
@@ -274,6 +266,25 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 	} while (0)
 #endif
 
+static inline unsigned char *
+get_frame_table(struct rs_opt_cache *opt_cache)
+{
+	switch (opt_cache->type) {
+		case TERM_LINUX:
+			return frame_restrict;
+
+		case TERM_VT100:
+			return (opt_cache->utf_8_io)
+				? frame_vt100_u : frame_vt100;
+
+		case TERM_KOI8:
+			return frame_koi;
+
+		default:
+			return frame_dumb;
+	}
+}
+
 /* Updating of the terminal screen is done by checking what needs to be updated
  * using the last screen. */
 void
@@ -283,7 +294,7 @@ redraw_screen(struct terminal *term)
 	struct string image;
 	register int y = 0;
 	int prev_y = -1;
-	struct screen_state state = { 0xFF, 0xFF, 0xFF };
+	struct screen_state state = { NULL, 0xFF, 0xFF, 0xFF };
 	struct terminal_screen *screen = term->screen;
  	register struct screen_char *current;
  	register struct screen_char *pos;
@@ -295,6 +306,7 @@ redraw_screen(struct terminal *term)
 	    || !init_string(&image)) return;
 
  	fill_option_cache(opt_cache, term);
+	state.frame = get_frame_table(&opt_cache);
 
 	current = screen->last_image;
  	pos = screen->image;

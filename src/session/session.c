@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.406 2004/05/25 04:48:55 jonas Exp $ */
+/* $Id: session.c,v 1.407 2004/05/25 07:14:50 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -755,17 +755,6 @@ dialog_goto_url_open(void *data)
 	dialog_goto_url((struct session *) data, NULL);
 }
 
-unsigned char *
-get_homepage_url(void)
-{
-	unsigned char *homepage = get_opt_str("ui.sessions.homepage");
-
-	if (!*homepage) homepage = getenv("WWW_HOME");
-	if (!homepage || !*homepage) homepage = WWW_HOME_URL;
-
-	return homepage;
-}
-
 static int
 process_session_info(struct session *ses, struct initial_session_info *info)
 {
@@ -862,17 +851,13 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 
 #endif
 	} else {
-		unsigned char *h = get_homepage_url();
-
-		if (!h || !*h) {
+		if (!goto_url_home(ses)) {
 			if ((get_opt_int("ui.startup_goto_dialog")
 			    && !first_use)) {
 				/* We can't create new window in EV_INIT
 				 * handler! */
 				register_bottom_half(dialog_goto_url_open, ses);
 			}
-		} else {
-			goto_url(ses, h);
 		}
 	}
 

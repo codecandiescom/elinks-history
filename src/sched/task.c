@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.84 2004/05/25 03:52:55 jonas Exp $ */
+/* $Id: task.c,v 1.85 2004/05/25 07:14:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -541,6 +541,20 @@ goto_url_with_hook(struct session *ses, unsigned char *url)
 #if defined(CONFIG_SCRIPTING) || defined(CONFIG_URI_REWRITE)
 	mem_free(url);
 #endif
+}
+
+int
+goto_url_home(struct session *ses)
+{
+	unsigned char *homepage = get_opt_str("ui.sessions.homepage");
+
+	if (!*homepage) homepage = getenv("WWW_HOME");
+	if (!homepage || !*homepage) homepage = WWW_HOME_URL;
+
+	if (!homepage || !*homepage) return 0;
+
+	goto_url_with_hook(ses, homepage);
+	return 1;
 }
 
 /* TODO: Should there be goto_imgmap_reload() ? */

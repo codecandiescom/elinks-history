@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.64 2004/05/25 06:46:11 jonas Exp $ */
+/* $Id: action.c,v 1.65 2004/05/25 07:14:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,14 +98,6 @@ do_frame_action(struct session *ses, frame_action action, int magic)
 		print_screen_status(ses);
 		redraw_from_window(ses->tab);
 	}
-}
-
-static void
-goto_url_home(struct session *ses)
-{
-	unsigned char *url = get_homepage_url();
-
-	if (url) goto_url_with_hook(ses, url);
 }
 
 static void

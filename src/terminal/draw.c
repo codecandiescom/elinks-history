@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.106 2004/08/06 08:43:38 zas Exp $ */
+/* $Id: draw.c,v 1.107 2004/08/06 09:02:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,18 @@
 #else
 #define clear_screen_char_color(schar) do { (schar)->color[0] = 0; } while (0)
 #endif
+
+
+
+inline struct screen_char *
+get_char(struct terminal *term, int x, int y)
+{
+	assert(term && term->screen && term->screen->image);
+	if_assert_failed return NULL;
+	check_range(term, x, y);
+
+	return &term->screen->image[x + term->width * y];
+}
 
 /* TODO: Clearify this piece of magic code. --jonas */
 void
@@ -68,17 +80,6 @@ draw_border_char(struct terminal *term, int x, int y,
 	set_term_color(screen_char, color, 0,
 		       get_opt_int_tree(term->spec, "colors"));
 	set_screen_dirty(term->screen, y, y);
-}
-
-
-struct screen_char *
-get_char(struct terminal *term, int x, int y)
-{
-	assert(term && term->screen && term->screen->image);
-	if_assert_failed return NULL;
-	check_range(term, x, y);
-
-	return &term->screen->image[x + term->width * y];
 }
 
 void

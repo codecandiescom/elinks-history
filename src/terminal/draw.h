@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.48 2004/05/14 00:18:41 jonas Exp $ */
+/* $Id: draw.h,v 1.49 2004/08/06 09:02:29 zas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -74,7 +74,7 @@ enum border_cross_direction {
 };
 
 /* Extracts a char from the screen. */
-struct screen_char *get_char(struct terminal *, int xpos, int ypos);
+struct screen_char *get_char(struct terminal *, int x, int y);
 
 /* Sets the color of a screen position. */
 void draw_char_color(struct terminal *term, int x, int y,

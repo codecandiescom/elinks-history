@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.28 2003/10/25 22:30:22 jonas Exp $ */
+/* $Id: mime.c,v 1.29 2003/10/26 13:26:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,9 +145,10 @@ static struct module *mime_submodules[] = {
 	NULL,
 };
 
-struct module mime_module = INIT_MODULE(
+struct module mime_module = module_struct(
 	/* name: */		"mime",
 	/* options: */		NULL,
+	/* events: */		NULL,
 	/* submodules: */	mime_submodules,
 	/* data: */		NULL,
 	/* init: */		NULL,

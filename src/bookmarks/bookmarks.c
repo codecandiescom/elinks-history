@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.87 2003/10/25 22:30:22 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.88 2003/10/26 13:26:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,9 +95,10 @@ done_bookmarks(struct module *module)
 	if (bm_last_searched_url) mem_free(bm_last_searched_url);
 }
 
-struct module bookmarks_module = INIT_MODULE(
+struct module bookmarks_module = module_struct(
 	/* name: */		"bookmarks",
 	/* options: */		bookmark_options_info,	
+	/* events: */		NULL,	
 	/* submodules: */	NULL,
 	/* data: */		NULL,
 	/* init: */		init_bookmarks,	

@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.83 2004/09/21 16:15:31 pasky Exp $ */
+/* $Id: apply.c,v 1.84 2004/09/21 16:49:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,8 +153,15 @@ examine_element(struct css_selector *base,
 	}
 	if (code) mem_free(code);
 
-	/* TODO: Somehow handle pseudo-classess. The css_apply() caller will
-	 * have to tell us about those. --pasky */
+	/* TODO: More pseudo-classess. --pasky */
+	if (element->pseudo_class & ELEMENT_LINK) {
+		selector = find_css_selector(selectors, CST_PSEUDO, rel, "link", -1);
+		process_found_selector(selector, CST_PSEUDO, base);
+	}
+	if (element->pseudo_class & ELEMENT_VISITED) {
+		selector = find_css_selector(selectors, CST_PSEUDO, rel, "visited", -1);
+		process_found_selector(selector, CST_PSEUDO, base);
+	}
 
 #undef process_found_selector
 #undef dbginfo

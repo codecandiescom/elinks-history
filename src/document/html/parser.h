@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.68 2004/07/21 23:15:44 pasky Exp $ */
+/* $Id: parser.h,v 1.69 2004/09/21 16:49:14 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -123,6 +123,12 @@ struct html_element {
 	unsigned char *options;
 	int linebreak;
 	struct frameset_desc *frameset;
+
+	/* For the needs of CSS engine. A wannabe bitmask. */
+	enum html_element_pseudo_class {
+		ELEMENT_LINK = 1,
+		ELEMENT_VISITED = 2,
+	} pseudo_class;
 };
 
 enum html_special_type {

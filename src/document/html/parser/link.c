@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.29 2004/09/20 15:27:26 jonas Exp $ */
+/* $Id: link.c,v 1.30 2004/09/21 16:49:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,19 +68,26 @@ html_a(unsigned char *a)
 			mem_free_set(&format.target, stracpy(html_context.base_target));
 		}
 
-		if (0)
+		if (0) {
 			; /* Shut up compiler */
 #ifdef CONFIG_GLOBHIST
-		else if (get_global_history_item(format.link))
+		} else if (get_global_history_item(format.link)) {
 			format.fg = format.vlink;
+			html_top.pseudo_class &= ~ELEMENT_LINK;
+			html_top.pseudo_class |= ELEMENT_VISITED;
 #endif
 #ifdef CONFIG_BOOKMARKS
-		else if (get_bookmark(format.link)) {
+		} else if (get_bookmark(format.link)) {
 			format.fg = get_opt_color("document.colors.bookmark");
-		}
+			html_top.pseudo_class &= ~ELEMENT_VISITED;
+			/* XXX: Really set ELEMENT_LINK? --pasky */
+			html_top.pseudo_class |= ELEMENT_LINK;
 #endif
-		else
+		} else {
 			format.fg = format.clink;
+			html_top.pseudo_class &= ~ELEMENT_VISITED;
+			html_top.pseudo_class |= ELEMENT_LINK;
+		}
 
 		mem_free_set(&format.title, get_attr_val(a, "title"));
 

@@ -1,3 +1,38 @@
+Sat Jul 10 18:57:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/connect.c:
+
+	Attempt to fix a potential bug in connected(): @func may be NULL and
+	still used, as func(conn). This case should not occur since with
+	assertions enabled, but it may when these are disabled. Please
+	verify, this patch is may be wrong if i missed something.  
+
+Sat Jul 10 18:40:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/file/cgi.c:
+
+	Drop redundant call to abort_conn_with_state(), alloc_read_buffer()
+	takes care of that.  
+
+Sat Jul 10 14:30:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Minor cleanup.  
+
+Sat Jul 10 13:31:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	mark_option_as_deleted(): For OPT_TREE also mark children as
+	deleted.  
+
+Sat Jul 10 13:02:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.c, options.inc:
+
+	Make user protocol option initialization table driven.  
+
 Fri Jul  9 18:01:01 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/uri.c:

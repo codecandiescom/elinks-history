@@ -1,5 +1,5 @@
 /* Raw syntax tree layouter */
-/* $Id: layouter.c,v 1.9 2003/01/18 01:00:31 pasky Exp $ */
+/* $Id: layouter.c,v 1.10 2003/01/18 01:15:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,8 +116,9 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 		struct layout_box *root_box = state->root;
 
 		box = spawn_box(state);
-		state->root = box;
 		add_property(&box->properties, "display", 7, "block", 5);
+		add_property(&box->properties, "padding-left", 12, "2", 1);
+		state->root = box;
 		layout_node(state, leaf);
 		state->root = root_box;
 		state->current = box;

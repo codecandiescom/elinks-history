@@ -1,5 +1,5 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.11 2003/01/18 01:00:31 pasky Exp $ */
+/* $Id: renderer.c,v 1.12 2003/01/18 01:15:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,9 +144,14 @@ render_box(struct renderer_state *state, struct layout_box *box)
 		case RECT_TEXT:
 			{
 				struct layout_box_text *data = box->data;
+				unsigned char *leftpad;
+				int x = frame_data->data[y].l;
 
-				put_text(frame_data, frame_data->data[y].l, y,
-					data->str, data->len);
+				/* XXX: Assuming em unit. */
+				leftpad = get_box_property(box, "padding-left");
+				if (leftpad) x = atoi(leftpad);
+
+				put_text(frame_data, x, y, data->str, data->len);
 			}
 			break;
 	}

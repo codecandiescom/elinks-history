@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.82 2004/07/18 15:38:48 zas Exp $ */
+/* $Id: interlink.c,v 1.83 2004/07/18 15:42:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -428,6 +428,7 @@ connect_to_af_unix(void)
 {
 	int attempts = 0;
 	int af = get_address(&s_info_connect, ADDR_IP_CLIENT);
+	int saved_errno;
 
 	if (af == -1) goto free_and_error;
 
@@ -443,22 +444,22 @@ again:
 		    s_info_connect.size) >= 0)
 			return s_info_connect.fd;
 
+	saved_errno = errno;
+	close(s_info_connect.fd);
+	s_info_connect.fd = -1;
+
 	{
-		if (errno != ECONNREFUSED && errno != ENOENT)
+		if (saved_errno != ECONNREFUSED && saved_errno != ENOENT)
 			ERROR(G_("connect() failed: %d (%s)"),
-			      errno, (unsigned char *) strerror(errno));
+			      saved_errno, (unsigned char *) strerror(saved_errno));
 
 		if (++attempts <= MAX_CONNECT_TRIES) {
 			elinks_usleep(CONNECT_TRIES_DELAY * attempts);
-			close(s_info_connect.fd);
 
 			goto again;
 		}
-
-		close(s_info_connect.fd); s_info_connect.fd = -1;
-
 	}
-	
+
 free_and_error:
 	mem_free_set(&s_info_connect.addr, NULL);
 	return -1;

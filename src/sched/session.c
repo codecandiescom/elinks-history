@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.312 2004/03/21 22:26:54 jonas Exp $ */
+/* $Id: session.c,v 1.313 2004/03/21 22:43:41 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1010,17 +1010,16 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 }
 
 void
-set_session_referrer(struct session *ses, unsigned char *referrer)
+set_session_referrer(struct session *ses, struct uri *referrer)
 {
 	if (ses->ref_url) mem_free(ses->ref_url);
 
-	if (referrer) {
-		/* Don't set referrer for file protocol */
-		referrer = strncasecmp("file:", referrer, 5)
-			 ? stracpy(referrer) : NULL;
+	/* Don't set referrer for file protocol */
+	if (referrer && referrer->protocol != PROTOCOL_FILE) {
+		ses->ref_url = stracpy(struri(referrer));
+	} else {
+		ses->ref_url = NULL;
 	}
-
-	ses->ref_url = referrer;
 }
 
 void

@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.10 2003/06/11 05:12:15 miciah Exp $ */
+/* $Id: default.c,v 1.11 2003/06/15 22:53:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,15 +119,16 @@ static struct mime_handler *
 get_mime_handler_default(unsigned char *type, int have_x)
 {
 	struct option *opt_tree;
-	unsigned char *name;
+	unsigned char *handler_name = get_mime_handler_name(type, have_x);
 
-	name = get_mime_handler_name(type, have_x);
-	if (!name) return NULL;
+	if (!handler_name) return NULL;
 
-	opt_tree = get_opt_rec_real(&root_options, name);
+	opt_tree = get_opt_rec_real(&root_options, handler_name);
+	mem_free(handler_name);
 
 	if (opt_tree) {
 		struct mime_handler *handler;
+		unsigned char *desc;
 		unsigned char *mt = get_mime_type_name(type);
 
 		/* Try to find some description to assing to @name */
@@ -138,7 +139,7 @@ get_mime_handler_default(unsigned char *type, int have_x)
 			mem_free(mt);
 
 			if (opt)
-				name = opt->ptr;
+				desc = opt->ptr;
 		}
 
 		handler = mem_alloc(sizeof(struct mime_handler));
@@ -147,13 +148,11 @@ get_mime_handler_default(unsigned char *type, int have_x)
 		handler->block = get_opt_bool_tree(opt_tree, "block");
 		handler->ask = get_opt_bool_tree(opt_tree, "ask");
 		handler->program = stracpy(get_opt_str_tree(opt_tree, "program"));
-		handler->description = name;
+		handler->description = desc;
 		handler->backend_name = BACKEND_NAME;
 
 		return handler;
 	}
-
-	mem_free(name);
 
 	return NULL;
 }

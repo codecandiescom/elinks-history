@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.41 2005/03/02 09:36:15 jonas Exp $ */
+/* $Id: encoding.c,v 1.42 2005/03/21 00:37:56 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -328,7 +328,7 @@ read_encoded_file(struct string *filename, struct string *page)
 		/* Leave @state being the saved errno */
 
 	} else if (!S_ISREG(stt.st_mode) && !is_stdin_pipe(&stt, filename)
-	           && !get_opt_int("protocol.file.allow_special_files")) {
+	           && !get_opt_bool("protocol.file.allow_special_files")) {
 		state = S_FILE_TYPE;
 
 	} else if (!(stream = open_encoded(fd, encoding))) {

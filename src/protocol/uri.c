@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.5 2003/07/08 12:23:23 jonas Exp $ */
+/* $Id: uri.c,v 1.6 2003/07/09 01:23:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,10 +102,10 @@ parse_uri(struct uri *uri)
 
 #ifdef IPV6
 	if (rbracket)
-		host_end = rbracket + strcspn(rbracket, ":/");
+		host_end = rbracket + strcspn(rbracket, ":/?");
 	else
 #endif
-		host_end = prefix_end + strcspn(prefix_end, ":/");
+		host_end = prefix_end + strcspn(prefix_end, ":/?");
 
 	if (!*host_end && get_protocol_need_slash_after_host(protocol))
 		return 0;
@@ -149,7 +149,7 @@ parse_uri(struct uri *uri)
 				return 0;
 	}
 
-	if (*host_end) host_end++; /* skip slash */
+	if (*host_end == '/') host_end++;
 
 	prefix_end = strchr(host_end, POST_CHAR);
 	uri->data = host_end;

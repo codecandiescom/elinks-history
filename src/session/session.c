@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.358 2004/04/04 04:44:48 jonas Exp $ */
+/* $Id: session.c,v 1.359 2004/04/04 04:49:59 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -162,7 +162,6 @@ request_frame(struct session *ses, unsigned char *name, struct uri *uri)
 {
 	struct location *loc = cur_loc(ses);
 	struct frame *frame;
-	unsigned char *url, *pos;
 
 	assertm(have_location(ses), "request_frame: no location");
 	if_assert_failed return;
@@ -202,26 +201,33 @@ request_frame(struct session *ses, unsigned char *name, struct uri *uri)
 		return;
 	}
 
-	url = stracpy(struri(uri));
-	if (!url) {
-		mem_free(frame->name);
-		mem_free(frame);
-		return;
-	}
+	/* If there is no fragment part we can take a shortcut */
+	if (!memchr(uri->data, '#', uri->datalen)) {
+		init_vs(&frame->vs, uri, -1);
 
-	pos = extract_fragment(url);
-	uri = get_uri(url, -1);
-	mem_free(url);
-	if (!uri) {
-		mem_free(frame->name);
-		mem_free(frame);
-		mem_free(pos);
-		return;
-	}
+	} else {
+		unsigned char *pos, *url = stracpy(struri(uri));
 
-	init_vs(&frame->vs, uri, -1);
-	if (pos) frame->vs.goto_position = pos;
-	done_uri(uri);
+		if (!url) {
+			mem_free(frame->name);
+			mem_free(frame);
+			return;
+		}
+
+		pos = extract_fragment(url);
+		uri = get_uri(url, -1);
+		mem_free(url);
+		if (!uri) {
+			mem_free(frame->name);
+			mem_free(frame);
+			mem_free(pos);
+			return;
+		}
+
+		init_vs(&frame->vs, uri, -1);
+		if (pos) frame->vs.goto_position = pos;
+		done_uri(uri);
+	}
 
 	add_to_list(loc->frames, frame);
 

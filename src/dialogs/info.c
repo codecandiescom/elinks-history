@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.35 2003/05/07 13:45:24 zas Exp $ */
+/* $Id: info.c,v 1.36 2003/05/09 17:40:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -255,25 +255,20 @@ void cache_inf(struct terminal *term, void *d, struct session *ses)
 
 void memory_inf(struct terminal *term, void *d, struct session *ses)
 {
-	char message[2048];
-	char *p;
+	static unsigned char message[512];
+	unsigned int len = 0;
 	struct refresh *r;
 
 	r = mem_alloc(sizeof(struct refresh));
 	if (!r) return;
 
-	snprintf(message, sizeof(message), "%ld %s.",
-		 mem_amount, _("bytes of memory allocated", term));
+	ulongcat(message, &len, mem_amount, 20, 0);
+	message[len++] = ' ';
+	safe_strncpy(message + len, _("bytes of memory allocated", term), sizeof(message) - len);
 
-	p = stracpy(message);
-	if (!p) {
-		mem_free(r);
-		return;
-	}
-
-	msg_box(term, getml(p, NULL),
+	msg_box(term, NULL,
 		N_("Memory info"), AL_CENTER,
-		p,
+		message,
 		r, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 

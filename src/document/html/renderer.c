@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.364 2003/11/08 12:34:15 zas Exp $ */
+/* $Id: renderer.c,v 1.365 2003/11/08 12:48:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1527,12 +1527,12 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 
 	document = get_cached_document(vs->url, options, cache_entry->id_tag);
 	if (!document) {
-		cache_entry_lock_inc(cache_entry);
+		cache_entry_lock(cache_entry);
 		shrink_memory(0);
 
 		document = init_document(vs->url, options);
 		if (!document) {
-			cache_entry_lock_dec(cache_entry);
+			cache_entry_unlock(cache_entry);
 			return;
 		}
 

@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.29 2003/11/08 12:47:01 pasky Exp $ */
+/* $Id: cache.h,v 1.30 2003/11/08 12:48:33 pasky Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -48,8 +48,8 @@ struct cache_entry {
 
 #define get_cache_entry_locks(ce) ((ce)->locks)
 #define is_cache_entry_locked(ce) (!!(ce)->locks)
-#define cache_entry_lock_inc(ce) do { (ce)->locks++; } while (0)
-#define cache_entry_lock_dec(ce) do { (ce)->locks--; } while (0)
+#define cache_entry_lock(ce) do { (ce)->locks++; } while (0)
+#define cache_entry_unlock(ce) do { (ce)->locks--; } while (0)
 
 struct fragment {
 	LIST_HEAD(struct fragment);

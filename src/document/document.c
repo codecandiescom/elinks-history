@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.23 2003/11/08 12:34:15 zas Exp $ */
+/* $Id: document.c,v 1.24 2003/11/08 12:48:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,7 @@ done_document(struct document *document)
 	if (!find_in_cache(document->url, &ce) || !ce)
 		internal("no cache entry for document");
 	else
-		cache_entry_lock_dec(ce);
+		cache_entry_unlock(ce);
 
 	if (document->url) mem_free(document->url);
 	if (document->title) mem_free(document->title);

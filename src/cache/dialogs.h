@@ -1,11 +1,12 @@
-/* $Id: dialogs.h,v 1.4 2003/11/21 22:39:27 jonas Exp $ */
+/* $Id: dialogs.h,v 1.5 2003/12/01 15:04:15 pasky Exp $ */
 
 #ifndef EL__CACHE_DIALOGS_H
 #define EL__CACHE_DIALOGS_H
 
 #include "bfu/hierbox.h"
-#include "sched/session.h"
-#include "terminal/terminal.h"
+
+struct session;
+struct terminal;
 
 extern struct hierbox_browser cache_browser;
 void menu_cache_manager(struct terminal *, void *, struct session *);

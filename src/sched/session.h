@@ -1,24 +1,22 @@
-/* $Id: session.h,v 1.75 2003/12/01 14:55:12 pasky Exp $ */
+/* $Id: session.h,v 1.76 2003/12/01 15:00:43 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
-
-/* We need to declare these first :/. Damn cross-dependencies. */
-struct session;
 
 #ifdef USE_LEDS
 #include "bfu/leds.h"
 #endif
 #include "cache/cache.h"
-#include "document/options.h"
-#include "document/view.h"
-#include "terminal/terminal.h"
-#include "terminal/window.h"
 #include "sched/connection.h"
 #include "sched/history.h"
-#include "sched/location.h"
 #include "util/lists.h"
 #include "viewer/text/vs.h"
+
+struct document_view;
+struct location;
+struct term_event;
+struct terminal;
+struct window;
 
 
 /* This is used to pass along the initial session parameters. */
@@ -67,6 +65,8 @@ enum task_type {
 	TASK_RELOAD,
 	TASK_HISTORY,
 };
+
+struct session;
 
 struct tq {
 	LIST_HEAD(struct tq);
@@ -191,6 +191,10 @@ go_unback(struct session *ses)
 	if (!cur_loc(ses)) return;
 	go_history(ses, cur_loc(ses)->next);
 }
+
+#include <string.h>
+#include "util/memory.h"
+#include "util/string.h"
 
 static inline void
 set_referrer(struct session *ses, unsigned char *referrer)

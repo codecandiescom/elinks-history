@@ -1,3 +1,92 @@
+Fri Aug  6 18:26:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Fix bug 491 - 'Link navigation looks weird after disabling title or
+	status bar.' by setting the screen dirty when drawing and clearing a
+	link.  
+
+Fri Aug  6 17:03:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	draw_current_link(): Minor optimization.  
+
+Fri Aug  6 09:11:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	Little hack to preserve rendering of [   ], in directories listing,
+	we only clear spaces if length of alt or title attributes is > 5.
+	Issue reported by Jonas.  
+
+Fri Aug  6 09:02:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/: draw.c, draw.h:
+
+	Move get_char() at top of draw.c, make it inline, and rename
+	xpos,ypos to x,y in header file.  
+
+Fri Aug  6 08:43:38 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	draw_border_char(): @sc -> @screen_char.  
+
+Fri Aug  6 08:41:58 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	draw_text(): use get_char() and simplify code.  
+
+Fri Aug  6 08:40:19 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	draw_box(): use get_char() and simplify code.  
+
+Fri Aug  6 08:38:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	draw_char(): use get_char() and simplify code.  
+
+Fri Aug  6 08:36:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	draw_line(): use get_char() and simplify code.  
+
+Fri Aug  6 08:35:22 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	draw_char_data(): use get_char() and simplify code.  
+
+Fri Aug  6 08:34:19 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	draw_char_color(): use get_char() and simplify code.  
+
+Fri Aug  6 08:32:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	draw_border_cross(): use get_char() and simplify code.  
+
+Fri Aug  6 08:31:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	draw_border_char(): use get_char() and simplify code.  
+
+Fri Aug  6 08:30:27 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	get_char(): return NULL on assertion failure.  
+
 Wed Aug  4 22:32:01 2004  Varga Balázs <vinnui@ent.hu>:
 
 	* po/hu.po:

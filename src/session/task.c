@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.130 2004/09/28 16:55:54 pasky Exp $ */
+/* $Id: task.c,v 1.131 2004/09/28 17:56:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -240,6 +240,13 @@ x:
 		} else {
 			done_uri(vs->uri);
 			vs->uri = get_uri_reference(ses->loading_uri);
+			if (vs->doc_view) {
+				/* vs->doc_view itself will get detached in
+				 * render_document_frames(), but that's too
+				 * late for us. */
+				vs->doc_view->vs = NULL;
+				vs->doc_view = NULL;
+			}
 #ifdef CONFIG_ECMASCRIPT
 			vs->ecmascript_fragile = 1;
 #endif

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.4 2004/04/24 01:00:18 pasky Exp $ */
+/* $Id: parse.c,v 1.5 2004/04/24 01:05:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -591,7 +591,8 @@ set_lt:
 		if (isspace(*html) && par_format.align != AL_NONE) {
 			unsigned char *h = html;
 
-			while (h < eof && isspace(*h)) h++;
+			while (h < eof && isspace(*h))
+				h++;
 			if (h + 1 < eof && h[0] == '<' && h[1] == '/') {
 				if (!parse_element(h, eof, &name, &namelen, &attr, &end)) {
 					put_chrs(lt, html - lt, put_chars_f, f);
@@ -601,10 +602,12 @@ set_lt:
 				}
 			}
 			html++;
-			if (!(position + (html - lt - 1))) goto skip_w; /* ??? */
+			if (!(position + (html - lt - 1)))
+				goto skip_w; /* ??? */
 			if (isspace(*(html - 1))) {
 				/* BIG performance win; not sure if it doesn't cause any bug */
-				if (html < eof && !isspace(*html)) continue;
+				if (html < eof && !isspace(*html))
+					continue;
 				put_chrs(lt, html - lt, put_chars_f, f);
 			} else {
 				put_chrs(lt, html - 1 - lt, put_chars_f, f);
@@ -612,7 +615,8 @@ set_lt:
 			}
 
 skip_w:
-			while (html < eof && isspace(*html)) html++;
+			while (html < eof && isspace(*html))
+				html++;
 			goto set_lt;
 
 put_sp:
@@ -626,6 +630,7 @@ put_sp:
 				put_chrs("        ", 8 - (position % 8), put_chars_f, f);
 				html++;
 				goto set_lt;
+
 			} else if (*html == ASCII_CR || *html == ASCII_LF) {
 				put_chrs(lt, html - lt, put_chars_f, f);
 
@@ -672,7 +677,8 @@ next_break:
 
 element:
 		inv = *name == '/'; name += inv; namelen -= inv;
-		if (!inv && putsp == 1 && !html_top.invisible) goto put_sp;
+		if (!inv && putsp == 1 && !html_top.invisible)
+			goto put_sp;
 		put_chrs(lt, html - lt, put_chars_f, f);
 		if (par_format.align != AL_NONE && !inv && !putsp) {
 			unsigned char *ee = end;
@@ -682,21 +688,19 @@ element:
 				if (*nm == '/')
 					goto ng;
 			if (ee < eof && isspace(*ee)) {
-				/*putsp = -1;*/
 				put_chrs(" ", 1, put_chars_f, f);
 			}
-
 ng:;
 		}
 
 		prev_html = html;
 		html = end;
+
 #if 0
 		for (ei = elements; ei->name; ei++) {
 			if (strlcasecmp(ei->name, -1, name, namelen))
 				continue;
 #endif
-
 #ifndef USE_FASTFIND
 		{
 			struct element_info elem;
@@ -712,6 +716,7 @@ ng:;
 #else
 		ei = (struct element_info *) fastfind_search(name, namelen, ff_info_tags);
 #endif
+
 		while (ei) { /* This exists just to be able to conviently break; out. */
 			if (!inv) {
 				unsigned char *a;
@@ -769,7 +774,7 @@ ng:;
 							if (!strlcasecmp(e->name, e->namelen, name, namelen)) break;
 						}
 						if (!strlcasecmp(e->name, e->namelen, name, namelen)) {
-							while (e->prev != (void *)&html_stack)
+							while (e->prev != (void *) &html_stack)
 								kill_html_stack_item(e->prev);
 
 							if (e->type > ELEMENT_IMMORTAL)
@@ -844,11 +849,11 @@ ng:;
 						kill_html_stack_item(e);
 						break;
 					}
-					for (elt = e; elt != (void *)&html_stack; elt = elt->prev)
+					for (elt = e; elt != (void *) &html_stack; elt = elt->prev)
 						if (elt->linebreak > lnb)
 							lnb = elt->linebreak;
 					ln_break(lnb, line_break_f, f);
-					while (e->prev != (void *)&html_stack)
+					while (e->prev != (void *) &html_stack)
 						kill_html_stack_item(e->prev);
 					kill_html_stack_item(e);
 					break;

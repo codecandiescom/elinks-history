@@ -1,10 +1,11 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.69 2003/06/06 23:06:40 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.70 2003/06/06 23:13:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <ctype.h>
 #include <string.h>
 
 #include "elinks.h"
@@ -334,6 +335,7 @@ parse_keystroke(unsigned char *s, long *key, long *meta)
 	} else if (!strncmp(s, "Ctrl-", 5)) {
 		*meta |= KBD_CTRL;
 		s += 5;
+		if (s[0] && !s[1]) s[0] = toupper(s[0]);
 	} else if (!strncmp(s, "Alt-", 4)) {
 		*meta |= KBD_ALT;
 		s += 4;

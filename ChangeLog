@@ -1,3 +1,76 @@
+Tue Jun 11 20:23:37 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	Compilation warning fix.  
+
+Tue Jun 11 20:22:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/osdep/os_dep.h:
+
+	Introduced SYSTEM_STR for each OS.  
+
+Tue Jun 11 20:17:09 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	First bit in introducing of new scheme for specifying user protocols
+	handlers.  
+
+Tue Jun 11 20:12:21 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/types.c:
+
+	Fixed crash when opening files with no extension, reported by Witold
+	Filipczyk <witekfl@poczta.onet.pl>.  
+
+Tue Jun 11 19:27:17 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: protocol/file.c, util/Makefile.am, util/compress.c,
+	util/compress.h, util/encoding.c, util/encoding.h:
+
+	Move util/compress.* to more appropriate util/encoding.*.  
+
+Tue Jun 11 15:32:16 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/dialogs/refresh.h:
+
+	Remove spurious ';', reported by Doug Kearns
+	<djkea2@mugca.its.monash.edu.au>.  
+
+Tue Jun 11 15:20:38 2002  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/globhist.c:
+
+	Information about an global history item can now be obtained in
+	globhist dialog by pressing the (new) info button. It prints title,
+	url, and last visit time. Last inserted item is now printed on top
+	of the list instead of the bottom.  
+
+Tue Jun 11 15:15:07 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/french.lng, src/intl/language.inc:
+
+	Fix french block cursor translation.  
+
+Tue Jun 11 15:11:10 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: document/dump.c, lowlevel/sched.c:
+
+	Tidy up.  
+
+Tue Jun 11 15:09:07 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Fix a potential bad comparaison of keys in table cache code 
+
+Tue Jun 11 10:18:17 2002  Petr Baudis <pasky@ji.cz>:
+
+	* NEWS:
+
+	Release summaries added to NEWS.  
+
 Mon Jun 10 19:00:46 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lua/core.c:

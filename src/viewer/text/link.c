@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.236 2004/06/20 13:11:34 jonas Exp $ */
+/* $Id: link.c,v 1.237 2004/06/20 13:30:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -623,17 +623,22 @@ enter(struct session *ses, struct document_view *doc_view, int do_reload)
 	link = get_current_link(doc_view);
 	if (!link) return FRAME_EVENT_REFRESH;
 
-	if (!link_is_form(link)
-	    || link->type == LINK_BUTTON) {
+	if (!link_is_form(link)) {
+		if (goto_current_link(ses, doc_view, do_reload))
+			return FRAME_EVENT_OK;
 
+		return FRAME_EVENT_REFRESH;
+	}
+
+	if (form_field_is_readonly(link->form_control))
+		return FRAME_EVENT_OK;
+
+	if (link->type == LINK_BUTTON) {
 		if (goto_current_link(ses, doc_view, do_reload))
 			return FRAME_EVENT_OK;
 
 	} else if (link->type == LINK_CHECKBOX) {
 		struct form_state *fs = find_form_state(doc_view, link->form_control);
-
-		if (form_field_is_readonly(link->form_control))
-			return FRAME_EVENT_REFRESH;
 
 		if (link->form_control->type == FC_CHECKBOX) {
 			fs->state = !fs->state;
@@ -655,9 +660,6 @@ enter(struct session *ses, struct document_view *doc_view, int do_reload)
 		}
 
 	} else if (link->type == LINK_SELECT) {
-		if (form_field_is_readonly(link->form_control))
-			return FRAME_EVENT_REFRESH;
-
 		object_lock(doc_view->document);
 		add_empty_window(ses->tab->term,
 				 (void (*)(void *)) release_document,

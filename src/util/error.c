@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.18 2002/06/16 16:46:53 zas Exp $ */
+/* $Id: error.c,v 1.19 2002/06/16 16:59:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,7 @@
 /* Check alloc_header block sanity ?
  * Default is defined. */
 #define CHECK_AH_SANITY
-#define CHECK_AH_SANITY_MAGIC 0xD3BA110C
+#define AH_SANITY_MAGIC 0xD3BA110C
 
 /* Check for realloc(NULL, size) ?
  * Default is undef. */
@@ -64,18 +64,20 @@ struct alloc_header {
 	unsigned char *file;
 	unsigned char *comment;
 };
-#endif
+#endif /* LEAK_DEBUG_LIST */
 
 /* Size is set to be a multiple of 16, forcing aligment by the way. */
 #define SIZE_AH_ALIGNED ((sizeof(struct alloc_header) + 15) & ~15)
 
+/* These macros are used to convert pointers and sizes to or from real ones
+ * when using alloc_header stuff. */
 #define AH2REAL(ah) (void *) ((char *)(ah) + SIZE_AH_ALIGNED)
 #define REAL2AH(ptr) (struct alloc_header *) ((char *)(ptr) - SIZE_AH_ALIGNED)
 
 #define SIZE_REAL2AH(size) ((size) + SIZE_AH_ALIGNED)
 #define SIZE_AH2REAL(size) ((size) - SIZE_AH_ALIGNED)
 
-#endif
+#endif /* LEAK_DEBUG */
 
 
 static inline void
@@ -166,18 +168,18 @@ int
 bad_ah_sanity(struct alloc_header *ah, unsigned char *comment)
 {
 	if (!ah) return 1;
-	if (ah->magic != CHECK_AH_SANITY_MAGIC) {
+	if (ah->magic != AH_SANITY_MAGIC) {
 		if (comment && *comment) fprintf(stderr, "%s ", comment);
 		fprintf(stderr, "%p:%d @ %s:%d magic:%08x != %08x @ %p",
 				AH2REAL(ah),
 				ah->size, ah->file, ah->line, ah->magic,
-				CHECK_AH_SANITY_MAGIC, ah);
+				AH_SANITY_MAGIC, ah);
 		return 1;
 	}
 
 	return 0;
 }
-#endif
+#endif /* CHECK_AH_SANITY */
 
 void
 check_memory_leaks()
@@ -234,7 +236,7 @@ debug_mem_alloc(unsigned char *file, int line, size_t size)
 
 	ah->size = size;
 #ifdef CHECK_AH_SANITY
-	ah->magic = CHECK_AH_SANITY_MAGIC;
+	ah->magic = AH_SANITY_MAGIC;
 #endif
 #ifdef LEAK_DEBUG_LIST
 	ah->file = file;
@@ -273,7 +275,7 @@ debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 
 	ah->size = size;
 #ifdef CHECK_AH_SANITY
-	ah->magic = CHECK_AH_SANITY_MAGIC;
+	ah->magic = AH_SANITY_MAGIC;
 #endif
 #ifdef LEAK_DEBUG_LIST
 	ah->file = file;
@@ -370,7 +372,7 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 
 	ah->size = size;
 #ifdef CHECK_AH_SANITY
-	ah->magic = CHECK_AH_SANITY_MAGIC;
+	ah->magic = AH_SANITY_MAGIC;
 #endif
 #ifdef LEAK_DEBUG_LIST
 	ah->prev->next = ah;
@@ -409,7 +411,13 @@ set_mem_comment(void *ptr, unsigned char *str, int len)
 #undef CHECK_REALLOC_NULL
 
 #undef CHECK_AH_SANITY
-#undef CHECK_AH_SANITY_MAGIC
+#undef AH_SANITY_MAGIC
 
-#endif
+#undef AH2REAL
+#undef REAL2AH
+
+#undef SIZE_REAL2AH
+#undef SIZE_AH2REAL
+
+#endif /* LEAK_DEBUG */
 

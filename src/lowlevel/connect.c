@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.79 2004/07/10 18:57:23 zas Exp $ */
+/* $Id: connect.c,v 1.80 2004/07/12 10:59:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,18 +15,6 @@
 #endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif
-
-/* This is for some exotic TOS mangling when creating passive FTP sockets. */
-#ifdef HAVE_NETINET_IN_SYSTM_H
-#include <netinet/in_systm.h>
-#else
-#ifdef HAVE_NETINET_IN_SYSTEM_H
-#include <netinet/in_system.h>
-#endif
-#endif
-#ifdef HAVE_NETINET_IP_H
-#include <netinet/ip.h>
 #endif
 
 #ifdef HAVE_GETIFADDRS
@@ -201,12 +189,7 @@ sock_error:
 	if (listen(sock, 1))
 		goto sock_error;
 
-#if defined(IP_TOS) && defined(IPTOS_THROUGHPUT)
-	{
-		int on = IPTOS_THROUGHPUT;
-		setsockopt(sock, IPPROTO_IP, IP_TOS, (char *) &on, sizeof(int));
-	}
-#endif
+	set_ip_tos_throughput(sock);
 
 	return sock;
 }
@@ -260,12 +243,7 @@ sock_error:
 	if (listen(sock, 1))
 		goto sock_error;
 
-#if defined(IP_TOS) && defined(IPTOS_THROUGHPUT)
-	{
-		int on = IPTOS_THROUGHPUT;
-		setsockopt(sock, IPPROTO_IP, IP_TOS, (char *) &on, sizeof(int));
-	}
-#endif
+	set_ip_tos_throughput(sock);
 
 	return sock;
 }

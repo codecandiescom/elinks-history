@@ -1,4 +1,4 @@
-/* $Id: osdep.h,v 1.38 2004/04/14 23:35:54 jonas Exp $ */
+/* $Id: osdep.h,v 1.39 2004/07/12 10:59:24 zas Exp $ */
 
 #ifndef EL__OSDEP_OSDEP_H
 #define EL__OSDEP_OSDEP_H
@@ -52,6 +52,7 @@ unsigned char *get_system_str(int);
 
 int set_nonblocking_fd(int);
 int set_blocking_fd(int);
+void set_ip_tos_throughput(int socket);
 
 unsigned char *get_cwd(void);
 void set_cwd(unsigned char *);

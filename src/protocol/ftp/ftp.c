@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.153 2004/07/05 04:45:25 miciah Exp $ */
+/* $Id: ftp.c,v 1.154 2004/07/12 10:59:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,7 +11,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
+#ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
+#endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -23,18 +25,6 @@
 #include <netinet/in.h>
 #ifdef HAVE_ARPA_INET_H
 #include <arpa/inet.h>
-#endif
-
-/* This is for some exotic TOS mangling when handling passive FTP sockets. */
-#ifdef HAVE_NETINET_IN_SYSTM_H
-#include <netinet/in_systm.h>
-#else
-#ifdef HAVE_NETINET_IN_SYSTEM_H
-#include <netinet/in_system.h>
-#endif
-#endif
-#ifdef HAVE_NETINET_IP_H
-#include <netinet/ip.h>
 #endif
 
 #include "elinks.h"
@@ -751,13 +741,7 @@ ftp_data_connect(struct connection *conn, int family, struct sockaddr_storage *s
 		return -1;
 	}
 
-#if defined(IP_TOS) && defined(IPTOS_THROUGHPUT)
-	{
-		int on = IPTOS_THROUGHPUT;
-
-		setsockopt(fd, IPPROTO_IP, IP_TOS, (char *) &on, sizeof(int));
-	}
-#endif
+	set_ip_tos_throughput(fd);
 
 	conn->data_socket = fd;
 	/* XXX: We ignore connect() errors here. */

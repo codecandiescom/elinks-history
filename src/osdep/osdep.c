@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.139 2004/07/05 10:41:59 jonas Exp $ */
+/* $Id: osdep.c,v 1.140 2004/07/12 10:59:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,9 +20,31 @@
 #include <sys/signal.h>
 #endif
 #include <sys/types.h>
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>	/* Need to be after sys/types.h */
+#endif
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h> /* OS/2 needs this after sys/types.h */
 #endif
+
+/* We need to have it here. Stupid BSD. */
+#include <netinet/in.h>
+#ifdef HAVE_ARPA_INET_H
+#include <arpa/inet.h>
+#endif
+
+/* This is for some exotic TOS mangling when handling passive FTP sockets. */
+#ifdef HAVE_NETINET_IN_SYSTM_H
+#include <netinet/in_systm.h>
+#else
+#ifdef HAVE_NETINET_IN_SYSTEM_H
+#include <netinet/in_system.h>
+#endif
+#endif
+#ifdef HAVE_NETINET_IP_H
+#include <netinet/ip.h>
+#endif
+
 #include <termios.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -91,6 +113,16 @@ set_blocking_fd(int fd)
 	return ioctl(fd, FIONBIO, &flag);
 #else
 	return 0;
+#endif
+}
+
+void
+set_ip_tos_throughput(int socket)
+{
+#if defined(IP_TOS) && defined(IPTOS_THROUGHPUT)
+	int on = IPTOS_THROUGHPUT;
+
+	setsockopt(socket, IPPROTO_IP, IP_TOS, (char *) &on, sizeof(int));
 #endif
 }
 

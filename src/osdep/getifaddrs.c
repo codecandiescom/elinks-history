@@ -1,5 +1,5 @@
 /* Provide stub function getifaddrs(). */
-/* $Id: getifaddrs.c,v 1.7 2004/04/29 23:11:43 jonas Exp $ */
+/* $Id: getifaddrs.c,v 1.8 2004/07/12 10:59:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,8 +45,10 @@
  * This file was borrowed from dkftpbench-0.45 sources (http://www.kegel.com/dkftpbench). */
 
 #include <errno.h>
-#include <sys/socket.h>		/* SunOS needs this before net/if.h */
 #include <sys/types.h>		/* SunOS needs this before net/if.h */
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>		/* SunOS needs this before net/if.h, and need to be after sys/types.h */
+#endif
 #ifdef HAVE_NET_IF_H
 #include <net/if.h>
 #endif

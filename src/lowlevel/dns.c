@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.50 2004/04/29 23:11:43 jonas Exp $ */
+/* $Id: dns.c,v 1.51 2004/07/12 10:59:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,9 @@
 #include <string.h>
 #include <sys/types.h>
 #include <netdb.h> /* OS/2 needs this after sys/types.h */
+#ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h> /* OS/2 needs this after sys/types.h */
+#endif
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h> /* OS/2 needs this after sys/types.h */
 #endif

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.98 2004/07/04 11:04:33 jonas Exp $ */
+/* $Id: cmdline.c,v 1.99 2004/07/12 10:59:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,7 +8,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
+#ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h> /* OS/2 needs this after sys/types.h */
+#endif
 #include <sys/stat.h> /* OS/2 needs this after sys/types.h */
 #include <netdb.h>
 

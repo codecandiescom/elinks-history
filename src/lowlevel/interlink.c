@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.74 2004/06/22 06:46:17 miciah Exp $ */
+/* $Id: interlink.c,v 1.75 2004/07/12 10:59:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,9 @@
 #ifdef HAVE_SYS_SELECT_H
 #include <sys/select.h>
 #endif
+#ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h> /* OS/2 needs this after sys/types.h */
+#endif
 
 #include "elinks.h"
 

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.196 2004/08/03 10:41:05 jonas Exp $ */
+/* $Id: connection.c,v 1.197 2004/08/04 19:16:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -782,9 +782,9 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 
 	cached = get_validated_cache_entry(uri, cache_mode);
 	if (cached) {
-			if (download) {
-				download->cached = cached;
-				download->state = S_OK;
+		if (download) {
+			download->cached = cached;
+			download->state = S_OK;
 			/* XXX: This doesn't work since sometimes stat->prg is
 			 * undefined and contains random memory locations. It's
 			 * not supposed to point on anything here since stat
@@ -792,10 +792,10 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 			 * probably break in some cases without this, though.
 			 * FIXME: Needs more investigation. --pasky */
 			/* if (stat->prg) stat->prg->start = start; */
-				if (download->end)
-					download->end(download, download->data);
-			}
-			return 0;
+			if (download->end)
+				download->end(download, download->data);
+		}
+		return 0;
 	}
 
 	proxied_uri = get_proxied_uri(uri);

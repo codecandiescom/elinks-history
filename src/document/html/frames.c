@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.6 2003/07/15 20:18:08 jonas Exp $ */
+/* $Id: frames.c,v 1.7 2003/07/31 00:23:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,9 +48,11 @@ struct frameset_desc *
 create_frameset(struct document *fda, struct frameset_param *fp)
 {
 	struct frameset_desc *fd;
+	unsigned int size;
 
-	assert(fp);
+	assert(fda && fp);
 	if_assert_failed return NULL;
+
 	assertm(fp->x > 0 && fp->y > 0,
 		"Bad size of frameset: x=%d y=%d", fp->x, fp->y);
 	if_assert_failed {
@@ -58,26 +60,28 @@ create_frameset(struct document *fda, struct frameset_param *fp)
 		if (fp->y <= 0) fp->y = 1;
 	}
 
+	if (!fp->parent && fda->frame_desc) return NULL;
+
+	size = fp->x * fp->y;
 	fd = mem_calloc(1, sizeof(struct frameset_desc)
-			   + fp->x * fp->y * sizeof(struct frame_desc));
+			   + size * sizeof(struct frame_desc));
 	if (!fd) return NULL;
-
-	fd->n = fp->x * fp->y;
-	fd->x = fp->x;
-	fd->y = fp->y;
-
 	{
 		register int i;
 
-		for (i = 0; i < fd->n; i++) {
+		for (i = 0; i < size; i++) {
 			fd->f[i].xw = fp->xw[i % fp->x];
 			fd->f[i].yw = fp->yw[i / fp->x];
 		}
 	}
+	fd->n = size;
+	fd->x = fp->x;
+	fd->y = fp->y;
 
-	if (fp->parent) add_frameset_entry(fp->parent, fd, NULL, NULL);
-	else if (!fda->frame_desc) fda->frame_desc = fd;
-	     else mem_free(fd), fd = NULL;
+	if (fp->parent)
+		add_frameset_entry(fp->parent, fd, NULL, NULL);
+	else if (!fda->frame_desc)
+		fda->frame_desc = fd;
 
 	return fd;
 }

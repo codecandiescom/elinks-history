@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.154 2003/11/14 20:50:41 zas Exp $ */
+/* $Id: main.c,v 1.155 2003/11/25 22:55:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,6 +59,7 @@
 #include "util/memdebug.h"
 #include "util/memory.h"
 #include "viewer/dump/dump.h"
+#include "viewer/text/marks.h"
 #include "viewer/text/search.h"
 
 int terminate = 0;
@@ -215,6 +216,7 @@ terminate_all_subsystems(void)
 #endif
 		save_url_history();
 		done_search_history();
+		free_marks();
 		done_modules();
 	}
 

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.7 2003/07/03 01:23:00 pasky Exp $
+## $Id: Makefile.am,v 1.8 2003/11/25 22:55:03 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -9,6 +9,8 @@ libviewer_text_a_SOURCES = \
  form.h \
  link.c \
  link.h \
+ marks.c \
+ marks.h \
  search.c \
  search.h \
  textarea.c \

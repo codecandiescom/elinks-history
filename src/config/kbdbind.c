@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.103 2003/11/25 21:06:10 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.104 2003/11/25 22:55:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -420,6 +420,8 @@ static struct strtonum action_table[] = {
 	{ "lua-console", ACT_LUA_CONSOLE, DACT(N_("Open a Lua console (DISABLED)")) },
 #endif
 	{ " *scripting-function*", ACT_SCRIPTING_FUNCTION, NULL }, /* internal use only */
+	{ "mark-set", ACT_MARK_SET, DACT(N_("Set a mark")) },
+	{ "mark-goto", ACT_MARK_GOTO, DACT(N_("Go at a specified mark")) },
 	{ "menu", ACT_MENU, DACT(N_("Activate the menu")) },
 	{ "next-frame", ACT_NEXT_FRAME, DACT(N_("Move to the next frame")) },
 	{ "open-new-tab", ACT_OPEN_NEW_TAB, DACT(N_("Open a new tab")) },
@@ -746,6 +748,8 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_LINK_MENU, 'L' },
 	{ ACT_JUMP_TO_LINK, 'l' },
 	{ ACT_VIEW_IMAGE, 'v' },
+	{ ACT_MARK_SET, 'm' },
+	{ ACT_MARK_GOTO, '\'' },
 	{ 0, 0, 0 }
 };
 

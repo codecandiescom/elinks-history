@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.273 2003/11/21 04:45:11 witekfl Exp $ */
+/* $Id: view.c,v 1.274 2003/11/25 22:55:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,6 +55,7 @@
 #include "viewer/dump/dump.h"
 #include "viewer/text/form.h"
 #include "viewer/text/link.h"
+#include "viewer/text/marks.h"
 #include "viewer/text/search.h"
 #include "viewer/text/textarea.h"
 #include "viewer/text/view.h"
@@ -617,6 +618,45 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 		return 1;
 
 	if (ev->ev == EV_KBD) {
+		if (ses->kbdprefix.mark != KP_MARK_NOTHING) {
+			/* Marks */
+			unsigned char mark = ev->x;
+
+			switch (ses->kbdprefix.mark) {
+				case KP_MARK_NOTHING:
+					assert(0);
+					break;
+
+				case KP_MARK_SET:
+					/* It is intentional to set the mark
+					 * to NULL if !doc_view->vs. */
+					set_mark(mark, doc_view->vs);
+					break;
+
+				case KP_MARK_GOTO:
+				{
+					struct view_state *vs;
+
+					vs = get_mark(mark);
+					if (!vs) break;
+
+					/* TODO: Support for cross-document
+					 * marks. See marks.c for detailed
+					 * TODOs. --pasky */
+					if (strcmp(doc_view->vs->url, vs->url))
+						break;
+
+					destroy_vs(doc_view->vs);
+					copy_vs(doc_view->vs, vs);
+					break;
+				}
+			}
+
+			ses->kbdprefix.rep = 0;
+			ses->kbdprefix.mark = KP_MARK_NOTHING;
+			return 1;
+		}
+
 		if (ev->x >= '0' + !ses->kbdprefix.rep && ev->x <= '9'
 		    && (ev->y
 			|| !doc_view->document->options.num_links_key
@@ -710,6 +750,17 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			case ACT_DOWNLOAD_IMAGE: send_download_image(ses->tab->term, NULL, ses); break;
 			case ACT_LINK_MENU: link_menu(ses->tab->term, NULL, ses); break;
 			case ACT_JUMP_TO_LINK: x = 2; break;
+			case ACT_MARK_SET:
+				ses->kbdprefix.mark = KP_MARK_SET;
+				x = 2;
+				break;
+			case ACT_MARK_GOTO:
+				/* TODO: Show promptly a menu (or even listbox?)
+				 * with all the marks. But the next letter must
+				 * still choose a mark directly! --pasky */
+				ses->kbdprefix.mark = KP_MARK_GOTO;
+				x = 2;
+				break;
 			default:
 				if (ev->x >= '1' && ev->x <= '9' && !ev->y) {
 					/* FIXME: This probably doesn't work

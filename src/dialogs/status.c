@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.12 2003/12/01 21:46:32 jonas Exp $ */
+/* $Id: status.c,v 1.13 2003/12/01 21:47:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -366,6 +366,7 @@ display_window_title(struct session *ses, struct terminal *term)
 			   doc_title ? " - " : NULL,
 			   doc_title,
 			   NULL);
+	if (!title) return;
 
 	titlelen = strlen(title);
 	if (last_ses != ses

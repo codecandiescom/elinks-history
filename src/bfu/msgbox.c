@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.31 2003/06/07 10:43:34 zas Exp $ */
+/* $Id: msgbox.c,v 1.32 2003/06/07 12:07:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,8 +117,6 @@ msg_box(struct terminal *term, struct memory_list *ml,
 
 	add_one_to_ml(&ml, info);
 
-	if (buttons < 1) buttons = 0;
-
 	dlg = mem_calloc(1, sizeof(struct dialog) +
 			    (buttons + 1) * sizeof(struct widget));
 	if (!dlg) {
@@ -134,46 +132,35 @@ msg_box(struct terminal *term, struct memory_list *ml,
 	dlg->udata2 = udata;
 	dlg->align = align;
 
-	if (!buttons) {
-		/* Default OK button. */
-		dlg->items[0].type = D_BUTTON;
-		dlg->items[0].gid = B_ENTER | B_ESC;
-		dlg->items[0].fn = msg_box_button;
-		dlg->items[0].dlen = 0;
-		dlg->items[0].text = N_("OK");
-		dlg->items[0].udata = NULL;
-		dlg->items[1].type = D_END;
+	va_start(ap, buttons);
 
-	} else {
-		va_start(ap, buttons);
+	for (button = 0; button < buttons; button++) {
+		unsigned char *label;
+		void (*fn)(void *);
+		int flags;
 
-		for (button = 0; button < buttons; button++) {
-			unsigned char *label;
-			void (*fn)(void *);
-			int flags;
+		label = va_arg(ap, unsigned char *);
+		fn = va_arg(ap, void *);
+		flags = va_arg(ap, int);
 
-			label = va_arg(ap, unsigned char *);
-			fn = va_arg(ap, void *);
-			flags = va_arg(ap, int);
-
-			if (!label) {
-				/* Skip this button. */
-				button--;
-				buttons--;
-				continue;
-			}
-
-			dlg->items[button].type = D_BUTTON;
-			dlg->items[button].gid = flags;
-			dlg->items[button].fn = msg_box_button;
-			dlg->items[button].dlen = 0;
-			dlg->items[button].text = label;
-			dlg->items[button].udata = fn;
+		if (!label) {
+			/* Skip this button. */
+			button--;
+			buttons--;
+			continue;
 		}
 
-		va_end(ap);
-		dlg->items[button].type = D_END;
+		dlg->items[button].type = D_BUTTON;
+		dlg->items[button].gid = flags;
+		dlg->items[button].fn = msg_box_button;
+		dlg->items[button].dlen = 0;
+		dlg->items[button].text = label;
+		dlg->items[button].udata = fn;
 	}
+
+	va_end(ap);
+
+	dlg->items[button].type = D_END;
 
 	do_dialog(term, dlg, ml);
 }

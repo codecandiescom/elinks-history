@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.94 2003/05/16 22:28:17 pasky Exp $ */
+/* $Id: menu.c,v 1.95 2003/05/17 00:00:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -359,9 +359,9 @@ menu_kill_background_connections(struct terminal *term, void *xxx, void *yyy)
 static struct menu_item file_menu11[] = {
 	{N_("~Go to URL"), "g", MENU_FUNC menu_goto_url, (void *)0, 0, 0},
 	{N_("Go ~back"), "<-", MENU_FUNC menu_go_back, (void *)0, 0, 0},
+	{N_("~Reload"), "Ctrl-R", MENU_FUNC menu_reload, (void *)0, 0, 0},
 	{N_("~History"), M_SUBMENU, MENU_FUNC history_menu, (void *)0, 1, 0},
 	{N_("Unhis~tory"), M_SUBMENU, MENU_FUNC unhistory_menu, (void *)0, 1, 0},
-	{N_("~Reload"), "Ctrl-R", MENU_FUNC menu_reload, (void *)0, 0, 0},
 };
 
 static struct menu_item file_menu12[] = {
@@ -415,13 +415,6 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	if (!file_menu) return;
 	e = file_menu;
-	memcpy(e, file_menu11, sizeof(file_menu11));
-	e += sizeof(file_menu11) / sizeof(struct menu_item);
-
-	if (!anonymous) {
-		memcpy(e, file_menu12, sizeof(file_menu12));
-		e += sizeof(file_menu12) / sizeof(struct menu_item);
-	}
 
 	o = can_open_in_new(term);
 	if (o) {
@@ -436,7 +429,14 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 		e++;
 	}
 
+	memcpy(e, file_menu11, sizeof(file_menu11));
+	e += sizeof(file_menu11) / sizeof(struct menu_item);
+
+
 	if (!anonymous) {
+		memcpy(e, file_menu12, sizeof(file_menu12));
+		e += sizeof(file_menu12) / sizeof(struct menu_item);
+
 		memcpy(e, file_menu21, sizeof(file_menu21));
 		e += sizeof(file_menu21) / sizeof(struct menu_item);
 	}

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.32 2003/01/05 16:48:13 pasky Exp $ */
+/* $Id: info.c,v 1.33 2003/04/17 07:53:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,12 +61,12 @@ void menu_about(struct terminal *term, void *d, struct session *ses)
 
 		"\n\n",
 		_("Features: ", term),
-		_(" Standard", term),
+		_(" Standard", term), ",",
 #ifdef DEBUG
-		_(" Debug", term),
+		_(" Debug", term), ",",
 #endif
 #ifdef FASTMEM
-		_(" Fastmem", term),
+		_(" Fastmem", term), ",",
 #endif
 #ifdef HAVE_SSL
 		_(" SSL", term),
@@ -75,24 +75,25 @@ void menu_about(struct terminal *term, void *d, struct session *ses)
 #elif defined(HAVE_GNUTLS)
 		"(GNUTLS)",
 #endif
+		 ",",
 #endif
 #ifdef HAVE_LUA
-		_(" Lua", term),
+		_(" Lua", term), ",",
 #endif
 #ifdef IPV6
-		_(" IPv6", term),
+		_(" IPv6", term), ",",
 #endif
 #ifdef BOOKMARKS
-		_(" Bookmarks", term),
+		_(" Bookmarks", term), ",",
 #endif
 #ifdef COOKIES
-		_(" Cookies", term),
+		_(" Cookies", term), ",",
 #endif
 #ifdef GLOBHIST
-		_(" GlobHist", term),
+		_(" GlobHist", term), ",",
 #endif
 #ifdef HAVE_ZLIB_H
-		_(" gzip", term),
+		_(" gzip", term), ",",
 #endif
 #ifdef HAVE_BZLIB_H
 		_(" bzip2", term),

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.540 2004/07/26 22:09:43 zas Exp $ */
+/* $Id: session.c,v 1.541 2004/07/26 22:15:55 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -245,18 +245,18 @@ static void
 abort_files_load(struct session *ses, int interrupt)
 {
 	struct file_to_load *ftl;
-	int q;
+	int more;
 
 	do {
-		q = 0;
+		more = 0;
 		foreach (ftl, ses->more_files) {
 			if (!file_to_load_is_active(ftl))
 				continue;
 
-			q = 1;
+			more = 1;
 			change_connection(&ftl->stat, NULL, PRI_CANCEL, interrupt);
 		}
-	} while (q);
+	} while (more);
 }
 
 void

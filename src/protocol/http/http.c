@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.269 2004/04/07 16:11:28 zas Exp $ */
+/* $Id: http.c,v 1.270 2004/04/08 14:38:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -360,11 +360,8 @@ http_send_header(struct connection *conn)
 	}
 
 	if (use_connect) {
-		add_uri_to_string(&header, uri, URI_HOST | URI_PORT);
-		if (!uri->port) {
-			add_char_to_string(&header, ':');
-			add_long_to_string(&header, get_protocol_port(uri->protocol));
-		}
+		/* Add port if it was specified or the default port */
+		add_uri_to_string(&header, uri, URI_HOST | URI_DEFAULT_PORT);
 	} else {
 		if (IS_PROXY_URI(conn->uri) && (uri->protocol == PROTOCOL_HTTPS) && conn->ssl) {
 			add_url_to_http_string(&header, uri->data);

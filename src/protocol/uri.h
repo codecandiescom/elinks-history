@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.89 2004/04/07 22:10:56 jonas Exp $ */
+/* $Id: uri.h,v 1.90 2004/04/08 14:38:54 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -85,8 +85,9 @@ enum uri_component {
 	URI_PASSWORD		= (1 << 2),
 	URI_HOST		= (1 << 3),
 	URI_PORT		= (1 << 4),
-	URI_DATA		= (1 << 5),
-	URI_POST		= (1 << 6),
+	URI_DEFAULT_PORT	= (1 << 5),
+	URI_DATA		= (1 << 6),
+	URI_POST		= (1 << 7),
 };
 
 

@@ -35,7 +35,7 @@ User's Guide
 		URL shortcuts ......................... urlprefixes.txt
 	Advanced Topics
 		Automatic MIME Type Resolution .............. mime.html
-		Mailcap MIME Handlers in ELinks .......... mailcap.html
+		Managing External Viewers with Mailcap .... mailcap.txt
 		JavaScript/ECMAScript in ELinks ........ ecmascript.txt
 		The Ex-mode Secrets Pamphlet ............... exmode.txt
 		Managing Remote ELinks Instances ........... remote.txt
@@ -71,7 +71,7 @@ detailed notes regarding given modules/subsystems.
 
 
 
-$Id: index.txt,v 1.7 2004/12/18 15:33:06 jonas Exp $
+$Id: index.txt,v 1.8 2004/12/21 13:18:43 jonas Exp $
 
 vim: textwidth=72
 (Note: Sometimes, I broke the lines manually earlier than gqap would,

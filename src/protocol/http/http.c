@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.174 2003/07/11 19:20:49 jonas Exp $ */
+/* $Id: http.c,v 1.175 2003/07/12 12:59:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1202,9 +1202,9 @@ again:
 					struct http_auth_basic *entry;
 
 					entry = add_auth_entry(uri, realm);
-					if (!entry->valid) {
+					if (entry && !entry->valid)
 						add_questions_entry(do_auth_dialog);
-					}
+
 					mem_free(realm);
 				}
 			}

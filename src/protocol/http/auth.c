@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.44 2003/07/11 19:58:49 jonas Exp $ */
+/* $Id: auth.c,v 1.45 2003/07/12 12:59:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,13 +62,21 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 
 #define min(x, y) ((x) < (y) ? (x) : (y))
 
-#define set_auth_uid(_entry_, _uri_) \
-	(!(_uri_)->userlen	? *(_entry_)->uid = 0 \
-	 			: min((_uri_)->userlen + 1, MAX_UID_LEN))
+#define set_auth_uid(e, u) \
+	do { \
+		int uidlen = min((u)->userlen, MAX_UID_LEN); \
+		if (uidlen) \
+			memcpy((e)->uid, (u)->user, uidlen); \
+		(e)->uid[uidlen] = 0; \
+	} while (0)
 
-#define set_auth_passwd(_entry_, _uri_) \
-	(!(_uri_)->passwordlen	? *(_entry_)->passwd = 0 \
-	 			: min((_uri_)->passwordlen + 1, MAX_PASSWD_LEN))
+#define set_auth_passwd(e, u) \
+	do { \
+		int passwdlen = min((u)->passwordlen, MAX_PASSWD_LEN); \
+		if (passwdlen) \
+			memcpy((e)->passwd, (u)->password, passwdlen); \
+		(e)->passwd[passwdlen] = 0; \
+	} while (0)
 
 static struct http_auth_basic *
 init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)

@@ -1,3 +1,243 @@
+Sat Mar 26 23:05:51 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Drop the trailing underscore from hash names.  
+
+Sat Mar 26 23:03:04 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	De-compressed some braces.  
+
+Sat Mar 26 22:48:31 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Provided what I believe to be clearer comment grouping.  
+
+Sat Mar 26 22:34:56 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	The weather prefix was broken.  There was no need to check for
+	jeeves, and it wasn't falling back to the default.  
+
+Sat Mar 26 22:05:45 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	config options with a space in them ("ask jeeves", for example) work
+	again 
+
+Sat Mar 26 21:42:36 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	search works with quotes again 
+
+Sat Mar 26 19:08:33 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Move the more-or-less normal locators to a special array etc, you
+	know the rest of the story.  
+
+Sat Mar 26 18:06:52 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Make the news servers goto prefixes matching data-driven.  
+
+Sat Mar 26 17:49:17 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Fixed search(), now it actually appends the query to the URI.  
+
+Sat Mar 26 17:48:33 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Kill the now-obsolete %news_, $news_.  
+
+Sat Mar 26 17:48:06 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	The news servers were thrown to %news_servers_ with sub news as an
+	accessor (similar to search()).  
+
+Sat Mar 26 17:23:03 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	loadrc() now by default returns an empty string. Fixes nonsensical
+	behaviour in many cases where this was assumed but 'no' was in fact
+	returned.  
+
+Sat Mar 26 17:19:25 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Separate the weather locators to own hash.  
+
+Sat Mar 26 15:39:00 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Moved news and locators just behind search engines.  
+
+Sat Mar 26 14:44:20 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Make the search engine prefix matching in goto_url_hook()
+	data-driven.  
+
+Sat Mar 26 14:35:07 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Oops, fix the totally broken broken search(). Forgot the home/search
+	distinction. ;-) 
+
+Sat Mar 26 14:33:59 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	In the search engines processing of goto_url_hook(), make the search
+	query regexp more whitespace-tolerant.  
+
+Sat Mar 26 14:33:09 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	In the search engines processing of goto_url_hook(), separate the
+	special cases from the common ones.  
+
+Sat Mar 26 14:21:28 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Be more tolerant to whitespaces in the config file.  
+
+Sat Mar 26 14:20:50 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Make the SAMPLE CONFIGURATION FILE not look like crap in the perldoc
+	view.  
+
+Sat Mar 26 14:14:04 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	In the rc file, allow even comments which don't start at the line
+	beginning.  
+
+Sat Mar 26 13:47:10 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Fix the 'last empty fortune' to be sometimes printed out.  
+
+Sat Mar 26 13:45:38 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	quit_hook() quotations, whitespace, parenthesis etc cleanup and
+	consistency insurance.  
+
+Sat Mar 26 13:40:09 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Handle the case when file cannot be opened and don't prohibit
+	special files being $configperls.  
+
+Sat Mar 26 13:38:59 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Quotation cleanups in loadrc().  
+
+Sat Mar 26 13:37:58 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Reduce loadrc()'s indentation level.  
+
+Sat Mar 26 13:36:02 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Cleaned up search()'s bork handling. Much more efficient and
+	everything now.  
+
+Sat Mar 26 13:35:22 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Rewritten search() to be data-driven instead.  
+
+Sat Mar 26 13:26:46 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Reindentations, curlies compression, consistency changes and stuff.
+	Didn't bother with some code which is so awful that I will probably
+	need to rewrite it completely.  
+
+Sat Mar 26 13:13:42 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Killed the custom vim settings, now the file is presented as the
+	ELinks coding standards dictate! ;-) 
+
+Sat Mar 26 13:11:48 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Random whitespace cleanup, comments sanitization, some first skims
+	of pod, an $Id$ tag, copyright notice and such.  
+
+Sat Mar 26 13:07:25 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.c:
+
+	This was triggered when downloading adobes pdf reader v7 via ftp.
+	First it didn't stop even though it had reached 100% and then the
+	assertion failed.  
+
+Sat Mar 26 12:50:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/href_tests.html:
+
+	Add mailto: links which is not handled very gracefully. Reported by
+	Renato Botelho <freebsd@galle.com.br>.  
+
+Sat Mar 26 12:03:04 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/: elinks.fortune, perl/hooks.pl:
+
+	Apparently Pasky liked the *pimp slap* remark, so I added it to 
+	elinks.fortune.  
+	
+	The fortune bit in hooks.pl can now handle a fortune file with
+	either a beginning or ending %.  
+	                                                                    
+	Russ
+
+Sat Mar 26 11:56:54 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/user.c:
+
+	Decode the subject when handling mailto: links. There is still a
+	problem with using add_shell_safe... which is the same as it was for
+	URI passing.  
+
 Fri Mar 25 19:29:38 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* contrib/Makefile.am:

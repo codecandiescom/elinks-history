@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.22 2004/01/19 16:17:42 jonas Exp $ */
+/* $Id: scanner.h,v 1.23 2004/01/19 21:17:20 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -101,9 +101,7 @@ void scan_css_tokens(struct css_scanner *scanner);
 
 /* Scanner table accessors and mutators */
 
-/* Checks the type of the next token. Might cause a rescanning so any token
- * pointers that has been stored in a local variable might not be valid after
- * calling this function. */
+/* Checks the type of the next token */
 int check_next_css_token(struct css_scanner *scanner, enum css_token_type type);
 
 /* Access current and next token. Getting the next token might cause

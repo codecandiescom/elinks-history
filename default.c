@@ -852,11 +852,11 @@ int enable_html_tables = 1;
 int enable_html_frames = 1;
 int display_images = 1;
 
-struct document_setup dds = { 0, 0, 1, 1, 0, 3, 0, 0 };
+struct document_setup dds = { 0, 0, 1, 1, 1, 1, 0, 3, 0, 0 };
 
 struct rgb default_fg = { 191, 191, 191 };
 struct rgb default_bg = { 0, 0, 0 };
-struct rgb default_link = { 255, 255, 255 };
+struct rgb default_link = { 0, 0, 255 };
 struct rgb default_vlink = { 255, 255, 0 };
 
 int default_left_margin = HTML_LEFT_MARGIN;
@@ -925,11 +925,14 @@ struct option links_options[] = {
 	1, NULL, prog_rd, prog_wr, 0, 0, &tn3270_prog, "tn3270", NULL,
 	1, NULL, bind_rd, NULL, 0, 0, NULL, "bind", NULL,
 	1, NULL, unbind_rd, NULL, 0, 0, NULL, "unbind", NULL,
+	1, NULL, num_rd, NULL, 0, 1, &keep_unhistory, "keep_unhistory", NULL,
 	0, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL,
 };
 
 struct option html_options[] = {
 	1, gen_cmd, num_rd, num_wr, 0, 1, &dds.hard_assume, "html_hard_assume", "html-hard-assume",
+	1, gen_cmd, num_rd, num_wr, 0, 1, &dds.use_document_colours, "html_use_document_colours", "html-use-document-colours",
+	1, gen_cmd, num_rd, num_wr, 0, 1, &dds.avoid_dark_on_black, "html_avoid_dark_on_black", "html-avoid-dark-on-black",
 	1, gen_cmd, cp_rd, cp_wr, 0, 0, &dds.assume_cp, "html_assume_codepage", "html-assume-codepage",
 	1, gen_cmd, num_rd, num_wr, 0, 1, &dds.tables, "html_tables", "html-tables",
 	1, gen_cmd, num_rd, num_wr, 0, 1, &dds.frames, "html_frames", "html-frames",

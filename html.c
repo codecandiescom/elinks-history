@@ -379,10 +379,11 @@ int get_color(unsigned char *a, unsigned char *c, struct rgb *rgb)
 {
 	char *at;
 	int r = -1;
-	if (d_opt->col >= 1) if ((at = get_attr_val(a, c))) {
-		r = decode_color(at, rgb);
-		mem_free(at);
-	}
+	if (d_opt->col >= 1 && d_opt->use_document_colours)
+		if ((at = get_attr_val(a, c))) {
+			r = decode_color(at, rgb);
+			mem_free(at);
+		}
 	return r;
 }
 

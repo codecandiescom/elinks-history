@@ -5,7 +5,7 @@
 #define PACKAGE "elinks"
 
 /* Version number of package */
-#define VERSION "0.2"
+#define VERSION "0.3"
 
 /* Define to empty if the keyword does not work.  */
 /* #undef const */

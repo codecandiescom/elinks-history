@@ -1269,6 +1269,8 @@ struct rgb {
 
 struct document_setup {
 	int assume_cp, hard_assume;
+	int use_document_colours;
+	int avoid_dark_on_black;
 	int tables, frames, images;
 	int margin;
 	int num_links, table_order;
@@ -1278,6 +1280,8 @@ struct document_options {
 	int xw, yw; /* size of window */
 	int xp, yp; /* pos of window */
 	int col, cp, assume_cp, hard_assume;
+	int use_document_colours;
+	int avoid_dark_on_black;
 	int tables, frames, images, margin;  /* if you add anything, fix it in compare_opt */
 	int plain;
 	int num_links, table_order;
@@ -1292,6 +1296,8 @@ static inline void ds2do(struct document_setup *ds, struct document_options *doo
 {
 	doo->assume_cp = ds->assume_cp;
 	doo->hard_assume = ds->hard_assume;
+	doo->use_document_colours = ds->use_document_colours;
+	doo->avoid_dark_on_black = ds->avoid_dark_on_black;
 	doo->tables = ds->tables;
 	doo->frames = ds->frames;
 	doo->images = ds->images;
@@ -1407,6 +1413,7 @@ struct location {
 #define WTD_IMGMAP	2
 #define WTD_RELOAD	3
 #define WTD_BACK	4
+#define WTD_UNBACK	5
 
 #define cur_loc(x) ((struct location *)((x)->history.next))
 
@@ -1433,6 +1440,8 @@ struct download {
 	struct window *ask;
 };
 
+extern int keep_unhistory;
+
 extern struct list_head downloads;
 
 struct file_to_load {
@@ -1450,6 +1459,7 @@ struct session {
 	struct session *next;
 	struct session *prev;
 	struct list_head history;
+	struct list_head unhistory;
 	struct terminal *term;
 	struct window *win;
 	int id;
@@ -1506,6 +1516,7 @@ void goto_url(struct session *, unsigned char *);
 void abort_loading(struct session *);
 void goto_imgmap(struct session *, unsigned char *, unsigned char *, unsigned char *);
 void go_back(struct session *);
+void go_unback(struct session *);
 void reload(struct session*, int);
 struct frame *ses_find_frame(struct session *, unsigned char *);
 struct frame *ses_change_frame_url(struct session *, unsigned char *, unsigned char *);
@@ -1715,6 +1726,9 @@ int is_cp_special(int);
 void free_conv_table();
 
 /* view.c */
+
+extern int textarea_editor;
+void textarea_edit(int, struct terminal *, struct form_control *, struct form_state *);
 
 int can_open_in_new(struct terminal *);
 void open_in_new_window(struct terminal *, void (*)(struct terminal *, void (*)(struct terminal *, unsigned char *, unsigned char *), struct session *ses), struct session *);
@@ -2128,6 +2142,7 @@ enum {
 	ACT_DOCUMENT_INFO,
 	ACT_DOWN,
 	ACT_DOWNLOAD,
+	ACT_EDIT,
 	ACT_END,
 	ACT_ENTER,
 	ACT_FILE_MENU,
@@ -2164,6 +2179,7 @@ enum {
 	ACT_TOGGLE_DISPLAY_IMAGES,
 	ACT_TOGGLE_DISPLAY_TABLES,
 	ACT_TOGGLE_HTML_PLAIN,
+	ACT_UNBACK,
 	ACT_UP,
 	ACT_VIEW_IMAGE,
 	ACT_ZOOM_FRAME

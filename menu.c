@@ -275,15 +275,30 @@ void go_backwards(struct terminal *term, void *psteps, struct session *ses)
 	while (steps > 1) {
 		struct location *loc = ses->history.next;
 		if ((void *) loc == &ses->history) return;
-		loc = loc->next;
-		if ((void *) loc == &ses->history) return;
-		destroy_location(loc);
+		del_from_list(loc);
+		add_to_list(ses->unhistory, loc);
 
 		--steps;
 	}
 
 	if (steps)
 		go_back(ses);
+}
+
+void go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
+{
+	int steps = (int) psteps;
+
+	abort_loading(ses);
+
+	while (steps--) {
+	    	struct location *loc = ses->unhistory.next;
+		if ((void *) loc == &ses->unhistory) return;
+		del_from_list(loc);
+		add_to_list(ses->history, loc);
+	}
+
+	go_unback(ses);
 }
 
 struct menu_item no_hist_menu[] = {
@@ -307,6 +322,20 @@ void history_menu(struct terminal *term, void *ddd, struct session *ses)
 		n++;
 	}
 	if (n <= 1) do_menu(term, no_hist_menu, ses);
+	else do_menu(term, mi, ses);
+}
+
+void unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
+{
+	struct location *l;
+	struct menu_item *mi = NULL;
+	int n = 0;
+	foreach(l, ses->unhistory) {
+		if (!mi && !(mi = new_menu(3))) return;
+		add_to_menu(&mi, stracpy(l->vs.url), "", "", MENU_FUNC go_unbackwards, (void *) n, 0);
+		n++;
+	}
+	if (!n) do_menu(term, no_hist_menu, ses);
 	else do_menu(term, mi, ses);
 }
 
@@ -908,7 +937,7 @@ void html_refresh(struct session *ses)
 	print_screen_status(ses);
 }
 
-unsigned char *html_texts[] = { TEXT(T_DISPLAY_TABLES), TEXT(T_DISPLAY_FRAMES), TEXT(T_DISPLAY_LINKS_TO_IMAGES), TEXT(T_LINK_ORDER_BY_COLUMNS), TEXT(T_NUMBERED_LINKS), TEXT(T_TEXT_MARGIN), "", TEXT(T_IGNORE_CHARSET_INFO_SENT_BY_SERVER) };
+unsigned char *html_texts[] = { TEXT(T_DISPLAY_TABLES), TEXT(T_DISPLAY_FRAMES), TEXT(T_DISPLAY_LINKS_TO_IMAGES), TEXT(T_LINK_ORDER_BY_COLUMNS), TEXT(T_NUMBERED_LINKS), TEXT(T_TEXT_MARGIN), "", TEXT(T_IGNORE_CHARSET_INFO_SENT_BY_SERVER), TEXT(T_USE_DOCUMENT_COLOURS), TEXT(T_AVOID_DARK_ON_BLACK) };
 
 int dlg_assume_cp(struct dialog_data *dlg, struct dialog_item_data *di)
 {
@@ -920,8 +949,8 @@ void menu_html_options(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct dialog *d;
 	snprint(marg_str, 2, ses->ds.margin);
-	if (!(d = mem_alloc(sizeof(struct dialog) + 11 * sizeof(struct dialog_item)))) return;
-	memset(d, 0, sizeof(struct dialog) + 11 * sizeof(struct dialog_item));
+	if (!(d = mem_alloc(sizeof(struct dialog) + 13 * sizeof(struct dialog_item)))) return;
+	memset(d, 0, sizeof(struct dialog) + 13 * sizeof(struct dialog_item));
 	d->title = TEXT(T_HTML_OPTIONS);
 	d->fn = group_fn;
 	d->udata = html_texts;
@@ -958,15 +987,21 @@ void menu_html_options(struct terminal *term, void *xxx, struct session *ses)
 	d->items[7].type = D_CHECKBOX;
 	d->items[7].data = (unsigned char *) &ses->ds.hard_assume;
 	d->items[7].dlen = sizeof(int);
-	d->items[8].type = D_BUTTON;
-	d->items[8].gid = B_ENTER;
-	d->items[8].fn = ok_dialog;
-	d->items[8].text = TEXT(T_OK);
-	d->items[9].type = D_BUTTON;
-	d->items[9].gid = B_ESC;
-	d->items[9].fn = cancel_dialog;
-	d->items[9].text = TEXT(T_CANCEL);
-	d->items[10].type = D_END;
+	d->items[8].type = D_CHECKBOX;
+	d->items[8].data = (unsigned char *) &ses->ds.use_document_colours;
+	d->items[8].dlen = sizeof(int);
+	d->items[9].type = D_CHECKBOX;
+	d->items[9].data = (unsigned char *) &ses->ds.avoid_dark_on_black;
+	d->items[9].dlen = sizeof(int);
+	d->items[10].type = D_BUTTON;
+	d->items[10].gid = B_ENTER;
+	d->items[10].fn = ok_dialog;
+	d->items[10].text = TEXT(T_OK);
+	d->items[11].type = D_BUTTON;
+	d->items[11].gid = B_ESC;
+	d->items[11].fn = cancel_dialog;
+	d->items[11].text = TEXT(T_CANCEL);
+	d->items[12].type = D_END;
 	do_dialog(term, d, getml(d, NULL));
 }
 
@@ -1047,6 +1082,7 @@ struct menu_item file_menu11[] = {
 	TEXT(T_GOTO_URL), "g", TEXT(T_HK_GOTO_URL), MENU_FUNC menu_goto_url, (void *)0, 0, 0,
 	TEXT(T_GO_BACK), "<-", TEXT(T_HK_GO_BACK), MENU_FUNC menu_go_back, (void *)0, 0, 0,
 	TEXT(T_HISTORY), ">", TEXT(T_HK_HISTORY), MENU_FUNC history_menu, (void *)0, 1, 0,
+	TEXT(T_UNHISTORY), ">", TEXT(T_HK_UNHISTORY), MENU_FUNC unhistory_menu, (void *)0, 1, 0,
 	TEXT(T_RELOAD), "Ctrl-R", TEXT(T_HK_RELOAD), MENU_FUNC menu_reload, (void *)0, 0, 0,
 };
 

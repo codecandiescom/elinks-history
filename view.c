@@ -1418,6 +1418,11 @@ void back(struct session *ses, struct f_data_c *f, int a)
 	go_back(ses);
 }
 
+void unback(struct session *ses, struct f_data_c *f, int a)
+{
+	go_unback(ses);
+}
+
 void selected_item(struct terminal *term, void *pitem, struct session *ses)
 {
 	int item = (int)pitem;
@@ -1448,6 +1453,55 @@ int get_current_state(struct session *ses)
 	if (l->type != L_SELECT) return -1;
 	if ((fs = find_form_state(f, l->form))) return fs->state;
 	return -1;
+}
+
+int textarea_editor = 0;
+
+void textarea_edit(int op, struct terminal *term_, struct form_control *form_, struct form_state *fs_)
+{
+	static int form_maxlength;
+	static struct form_state *fs;
+	static struct terminal *term;
+	static char *fn = NULL;
+	char *ed, *ex;
+	FILE *taf;
+	int flen;
+
+	if (form_) form_maxlength = form_->maxlength;
+	if (fs_) fs = fs_;
+	if (term_) term = term_;
+	
+	if (! fn) fn = tempnam(NULL, "linksarea");
+
+	if (! op) {
+		taf = fopen(fn, "w");
+		fwrite(fs->value, strlen(fs->value), 1, taf);
+		fclose(taf);
+					
+		ed = getenv("EDITOR");
+		if (! ed) ed = "vi";
+		ex = mem_alloc(strlen(ed) + strlen(fn) + 2);
+		sprintf(ex, "%s %s", ed, fn);
+		exec_on_terminal(term, ex, "", 1);
+		mem_free(ex);
+
+		textarea_editor = 1;
+		
+	} else {
+	  
+		taf = fopen(fn, "r+");
+		if (taf) {
+			fseek(taf, 0, SEEK_END); flen = ftell(taf); fseek(taf, 0, SEEK_SET);
+			if (flen <= form_maxlength) {
+				mem_free(fs->value);
+				fs->value = mem_alloc(flen + 1);
+				fread(fs->value, flen, 1, taf); fs->value[flen] = 0;
+				fs->state = flen;
+			}
+			fclose(taf);
+		}
+		textarea_editor = 0; fn = NULL;
+	}
 }
 
 int field_op(struct session *ses, struct f_data_c *f, struct link *l, struct event *ev, int rep)
@@ -1541,6 +1595,10 @@ int field_op(struct session *ses, struct f_data_c *f, struct link *l, struct eve
 						mem_free(ln);
 					}
 				} else fs->state = strlen(fs->value);
+				break;
+			case ACT_EDIT:
+				if (form->type == FC_TEXTAREA && !form->ro)
+				  	textarea_edit(0, ses->term, form, fs);
 				break;
 			case ACT_COPY_CLIPBOARD:
 				set_clipboard_text(fs->value);
@@ -2005,6 +2063,9 @@ void send_event(struct session *ses, struct event *ev)
 				goto x;
 			case ACT_BACK:
 				back(ses, NULL, 0);
+				goto x;
+			case ACT_UNBACK:
+				unback(ses, NULL, 0);
 				goto x;
 			case ACT_RELOAD:
 				reload(ses, -1);

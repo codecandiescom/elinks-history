@@ -15,4 +15,6 @@ connection is refused.
 
 Handling of &#13; is not lynx-compatible in <pre> tag (should be newline).
 
+Textarea editor calling is broken.
+
 vim: textwidth=80

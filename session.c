@@ -1,5 +1,7 @@
 #include "links.h"
 
+int keep_unhistory = 0;
+
 struct list_head downloads = {&downloads, &downloads};
 
 int are_there_downloads()
@@ -277,12 +279,24 @@ void ses_back(struct session *ses)
 	loc = ses->history.next;
 	if (ses->search_word) mem_free(ses->search_word), ses->search_word = NULL;
 	if ((void *)loc == &ses->history) return;
-	destroy_location(loc);
+    	del_from_list(loc);
+	add_to_list(ses->unhistory, loc);	
 	loc = ses->history.next;
 	if ((void *)loc == &ses->history) return;
 	if (!strcmp(loc->vs.url, ses->loading_url)) return;
 	destroy_location(loc);
 	ses_forward(ses);
+}
+
+void ses_unback(struct session *ses)
+{
+	struct location *loc;
+	free_files(ses); 
+	loc = ses->unhistory.next;
+	if (ses->search_word) mem_free(ses->search_word), ses->search_word = NULL;
+	if ((void *)loc == &ses->unhistory) return;
+	del_from_list(loc);
+	add_to_list(ses->history, loc);
 }
 
 void end_load(struct status *, struct session *);
@@ -926,7 +940,7 @@ int do_move(struct session *ses, struct status **stat)
 			return 2;
 		}
 		if (gp) mem_free(gp);
-		if (w == WTD_BACK) {
+		if (w == WTD_BACK || w == WTD_UNBACK) {
 			ses_goto(ses, u, NULL, PRI_MAIN, NC_CACHE, WTD_RELOAD, NULL, end_load, 1);
 			return 2;
 		}
@@ -946,6 +960,7 @@ int do_move(struct session *ses, struct status **stat)
 	}
 	if (ses->wtd == WTD_IMGMAP) ses_imgmap(ses);
 	if (ses->wtd == WTD_BACK) ses_back(ses);
+	if (ses->wtd == WTD_UNBACK) ses_unback(ses);
 	if (ses->wtd == WTD_RELOAD) ses_back(ses), ses_forward(ses);
 	if ((*stat)->state >= 0) change_connection(&ses->loading, *stat = &cur_loc(ses)->stat, PRI_MAIN);
 	else cur_loc(ses)->stat.state = ses->loading.state;
@@ -1217,6 +1232,7 @@ struct session *create_session(struct window *win)
 	if ((ses = mem_alloc(sizeof(struct session)))) {
 		memset(ses, 0, sizeof(struct session));
 		init_list(ses->history);
+	    	init_list(ses->unhistory);
 		init_list(ses->scrn_frames);
 		init_list(ses->more_files);
 		ses->term = term;
@@ -1369,18 +1385,8 @@ void destroy_session(struct session *ses)
 	if (ses->screen) detach_formatted(ses->screen), mem_free(ses->screen);
 	foreach(fdc, ses->scrn_frames) detach_formatted(fdc);
 	free_list(ses->scrn_frames);
-	while ((void *)(l = ses->history.next) != &ses->history) {
-		struct frame *frm;
-		while ((void *)(frm = l->frames.next) != &l->frames) {
-			destroy_vs(&frm->vs);
-			mem_free(frm->name);
-			del_from_list(frm);
-			mem_free(frm);
-		}
-		destroy_vs(&l->vs);
-		del_from_list(l);
-		mem_free(l);
-	}
+	foreach(l, ses->history) destroy_location(l);
+	foreach(l, ses->unhistory) destroy_location(l);
 	if (ses->loading_url) mem_free(ses->loading_url);
 	if (ses->display_timer != -1) kill_timer(ses->display_timer);
 	if (ses->goto_position) mem_free(ses->goto_position);
@@ -1498,6 +1504,18 @@ unsigned char *follow_url_hook(struct session *ses, unsigned char *url)
 }
 #endif
 
+void go_unback(struct session *ses)
+{
+	unsigned char *url;
+	ses->reloadlevel = NC_CACHE;
+	if (ses->unhistory.next == &ses->unhistory)
+		return;
+	abort_loading(ses);
+	if (!(url = stracpy(((struct location *)ses->unhistory.next)->vs.url)))
+		return;
+	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_UNBACK, NULL, end_load, 1);
+}
+
 void goto_url_w(struct session *ses, unsigned char *url, unsigned char *target, int wtd)
 {
 	unsigned char *u;
@@ -1539,7 +1557,12 @@ void goto_url_w(struct session *ses, unsigned char *url, unsigned char *target, 
 	}
 	ses_goto(ses, u, target, PRI_MAIN, NC_CACHE, wtd, pos, end_load, 0);
 	/*abort_loading(ses);*/
+	
 	end:
+        if (!keep_unhistory) {
+		struct location *l;
+        	foreach(l, ses->unhistory) destroy_location(l);
+        }
 #ifdef HAVE_LUA
 	if (tofree) mem_free(tofree);
 #endif

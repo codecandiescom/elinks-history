@@ -113,13 +113,39 @@ static inline int find_nearest_color(struct rgb *r, int l)
 
 static inline int fg_color(int fg, int bg)
 {
+	/* 0 == brightgrey  6 == cyan        12 == brightblue 
+	 * 1 == red         7 == brightgrey  13 == brightmagenta 
+	 * 2 == green       8 == black       14 == brightcyan 
+	 * 3 == red         9 == brightred   15 == brightwhite
+	 * 4 == blue       10 == brightgreen 
+	 * 5 == magenta    11 == brightyellow 
+	 */
+
+	/* This looks like it should be more efficient. It results in
+	 * different machine-code, but the same number of instructions:
+	 * int l, h;
+	 * if (bg < fg) l = bg, h = fg; else l = fg, h = bg;
+	 */ 
 	int l = bg < fg ? bg : fg;
 	int h = bg < fg ? fg : bg;
-	if (l == h || (!l && (h == 4 || h == 8 || h == 12)) ||
-	   (l == 1 && (h == 3 || h == 5 || h == 8 || h == 12)) ||
-	   (l == 2 && h == 6) || (l == 3 && (h == 5 || h == 12)) ||
-	   (l == 4 && (h == 8 || h == 12)) || (l == 5 && (h == 8 || h == 12)))
-	   	return (fg == 4 || fg == 12) && (bg == 0 || bg == 8) ? 6 : (7 - 7 * (bg == 2 || bg == 6 || bg == 7));
+	
+	/* Below, I changed !l to l == 0. The two forms compile to the same
+	 * machine-code with GCC 2.95.4. The latter is more readable (IMO). */
+
+	if (l == h
+		/* Check for clashing colours. For example, 3 (red) clashes
+		 * with 5 (magenta) and 12 (brightblue). */
+		|| (l == 0 && (h == 8))
+		|| (l == 1 && (h == 3 || h == 5 || h == 12))
+		|| (l == 2 && (h == 6))
+		|| (l == 3 && (h == 5 || h == 12))
+		|| ((l == 4 || l == 5) && (h == 8 || h == 12))
+		|| (d_opt->avoid_dark_on_black &&
+			   (l == 0 && (h == 4 || h == 12))
+			|| (l == 1 && (h == 8))
+		   )
+	   )
+		return (fg == 4 || fg == 12) && (bg == 0 || bg == 8) ? 6 : (7 - 7 * (bg == 2 || bg == 6 || bg == 7));
 	return fg;
 }
 
@@ -965,6 +991,8 @@ static inline int compare_opt(struct document_options *o1, struct document_optio
 	    o1->cp == o2->cp &&
 	    o1->assume_cp == o2->assume_cp &&
 	    o1->hard_assume == o2->hard_assume &&
+	    o1->use_document_colours == o2->use_document_colours &&
+	    o1->avoid_dark_on_black == o2->avoid_dark_on_black &&
 	    o1->tables == o2->tables &&
 	    o1->frames == o2->frames &&
 	    o1->images == o2->images &&

@@ -128,6 +128,9 @@ Mediavilla David <f4j900zx001@NOSPAMsneakemail.com>
 Michail Litvak <mci@owl.openwall.com>
 	Patch configure.in to force error if OpenSSL not found
 
+Miciah Dashiel <theweirdo@subdimension.com>
+	Document-specific colors usage switch possibility, colourful cleanup
+
 Mike Swieton <pyromage@pyromage.net>
 	Fixed bug: Form is not posted when jumping to field by number
 
@@ -170,6 +173,7 @@ Peter Wang <tjaden@alphalink.com.au>
 	Rebindable keys
 	/etc/links.cfg
 	Lua scripting support
+	Unhistory support
 
 Radovan Stas <radoone@skmi.science.upjs.sk>
 	Slovak translation

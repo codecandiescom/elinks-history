@@ -698,6 +698,8 @@ void unblock_terminal(struct terminal *term)
 	set_handlers(term->fdin, (void (*)(void *))in_term, NULL, (void (*)(void *))destroy_terminal, term);
 	unblock_itrm(term->fdin);
 	redraw_terminal_cls(term);
+	if (textarea_editor)	/* XXX */
+		textarea_edit(1, NULL, NULL, NULL);
 }
 
 void exec_on_terminal(struct terminal *term, unsigned char *path, unsigned char *delete, int fg)

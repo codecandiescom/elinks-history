@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.85 2004/03/21 16:30:12 jonas Exp $ */
+/* $Id: renderer.c,v 1.86 2004/03/21 22:57:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -413,7 +413,6 @@ render_plain_document(struct cache_entry *ce, struct document *document)
 					  &document->cp_status,
 					  document->options.hard_assume);
 
-	document->title = get_no_post_url(struri(document->uri), NULL);
 	document->bgcolor = global_doc_opts->default_bg;
 	document->width = 0;
 

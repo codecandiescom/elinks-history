@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.29 2004/03/21 16:30:12 jonas Exp $ */
+/* $Id: renderer.c,v 1.30 2004/03/21 22:57:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,15 +72,18 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 		fr = cache_entry->frag.next;
 
 		if (list_empty(cache_entry->frag) || fr->offset || !fr->length) {
-			unsigned char *uristring = struri(document->uri);
-
-			document->title = get_no_post_url(uristring, NULL);
+			/* m33p */
 
 		} else if (document->options.plain) {
 			render_plain_document(cache_entry, document);
 
 		} else {
 			render_html_document(cache_entry, document);
+		}
+
+		if (!document->title) {
+			/* FIXME: Remove user and password too? --jonas */
+			document->title = get_uri_string(document->uri, ~URI_POST);
 		}
 
 		sort_links(document);

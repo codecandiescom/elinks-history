@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.486 2004/07/29 09:45:17 jonas Exp $ */
+/* $Id: renderer.c,v 1.487 2004/07/30 09:49:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1072,6 +1072,18 @@ get_link_state(void)
 	((format.attr & AT_SUBSCRIPT && global_doc_opts->display_subs) \
 	 || (format.attr & AT_SUPERSCRIPT && global_doc_opts->display_sups))
 
+static inline int
+html_has_non_space_chars(unsigned char *chars, int charslen)
+{
+	int pos = 0;
+
+	while (pos < charslen)
+		if (!isspace(chars[pos++]))
+			return 1;
+
+	return 0;
+}
+
 void
 put_chars(struct part *part, unsigned char *chars, int charslen)
 {
@@ -1101,21 +1113,14 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 		part->cx = par_format.leftmargin;
 	}
 
+	/* For preformatted html always update 'the last tag' so we never end
+	 * up moving tags to the wrong line (Fixes bug 324). For all other html
+	 * it is moved only when the line being rendered carry some real
+	 * non-whitespace content. */
 	if (html_is_preformatted()
-	    || chars[0] != ' ' || (charslen > 1 && chars[1] != ' ')) {
+	    || html_has_non_space_chars(chars, charslen)) {
 		renderer_context.last_tag_for_newline = (void *) &part->document->tags;
 	}
-#ifndef CONFIG_FASTMEM
-	else {
-		/* XXX: I believe the test above is just a funny (and errie)
-		 * way to make sure we carry some real non-whitespace content.
-		 * --pasky */
-		int pos = 0;
-
-		while (pos < charslen)
-			assertm(isspace(chars[pos++]), "[%.*s]", charslen, chars);
-	}
-#endif
 
 	int_lower_bound(&part->box.height, part->cy + 1);
 

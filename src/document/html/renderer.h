@@ -1,9 +1,10 @@
-/* $Id: renderer.h,v 1.54 2003/11/10 20:53:21 jonas Exp $ */
+/* $Id: renderer.h,v 1.55 2003/11/18 22:59:59 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
 
 #include "intl/charsets.h"
+#include "cache/cache.h"
 #include "document/document.h"
 #include "document/html/frames.h"
 #include "terminal/draw.h"

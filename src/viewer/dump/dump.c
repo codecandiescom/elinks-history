@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.110 2004/04/04 05:55:16 jonas Exp $ */
+/* $Id: dump.c,v 1.111 2004/04/04 22:00:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -239,7 +239,7 @@ dump_end(struct download *status, void *p)
 
 	if (fd == -1) return;
 	if (cached && cached->redirect && dump_redir_count++ < MAX_REDIRECTS) {
-		struct uri *uri = get_uri_reference(cached->redirect);
+		struct uri *uri = cached->redirect;
 
 		if (status->state >= 0)
 			change_connection(status, NULL, PRI_CANCEL, 0);

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.252 2004/04/04 03:51:02 jonas Exp $ */
+/* $Id: download.c,v 1.253 2004/04/08 02:52:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,6 +98,8 @@ get_download_ses(struct file_download *file_download)
 void
 abort_download(struct file_download *file_download, int stop)
 {
+	assert(!is_object_used(file_download));
+
 	if (file_download->box_item)
 		done_listbox_item(&download_browser, file_download->box_item);
 	if (file_download->dlg_data)

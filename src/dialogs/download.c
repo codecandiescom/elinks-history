@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.42 2004/04/01 00:37:44 jonas Exp $ */
+/* $Id: download.c,v 1.43 2004/04/08 02:52:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,13 +40,17 @@
 static void
 undisplay_download(struct file_download *file_download)
 {
-	if (file_download->dlg_data) cancel_dialog(file_download->dlg_data, NULL);
+	/* We are maybe called from bottom halve so check consistency */
+	if (is_in_downloads_list(file_download) && file_download->dlg_data)
+		cancel_dialog(file_download->dlg_data, NULL);
 }
 
 static void
 do_abort_download(struct file_download *file_download)
 {
-	abort_download(file_download, 1);
+	/* We are maybe called from bottom halve so check consistency */
+	if (is_in_downloads_list(file_download))
+		abort_download(file_download, 1);
 }
 
 static int

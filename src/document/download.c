@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.60 2002/12/10 23:23:51 pasky Exp $ */
+/* $Id: download.c,v 1.61 2002/12/16 22:47:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,7 @@
 struct list_head downloads = {&downloads, &downloads};
 
 
-int
+inline int
 are_there_downloads()
 {
 	struct download *down;
@@ -70,7 +70,7 @@ are_there_downloads()
 }
 
 
-struct session *
+static inline struct session *
 get_download_ses(struct download *down)
 {
 	struct session *ses;
@@ -86,7 +86,7 @@ get_download_ses(struct download *down)
 }
 
 
-void
+static void
 abort_download(struct download *down)
 {
 	if (down->win) delete_window(down->win);
@@ -111,7 +111,7 @@ abort_download(struct download *down)
 }
 
 
-void
+static inline void
 kill_downloads_to_file(unsigned char *file)
 {
 	struct download *down;
@@ -125,7 +125,7 @@ kill_downloads_to_file(unsigned char *file)
 }
 
 
-void
+inline void
 abort_all_downloads()
 {
 	while (!list_empty(downloads))
@@ -133,7 +133,7 @@ abort_all_downloads()
 }
 
 
-void
+inline void
 destroy_downloads(struct session *ses)
 {
 	struct download *d;
@@ -147,14 +147,14 @@ destroy_downloads(struct session *ses)
 }
 
 
-void
+static inline void
 undisplay_download(struct download *down)
 {
 	if (down->win) delete_window(down->win);
 }
 
 
-int
+static inline int
 dlg_set_notify(struct dialog_data *dlg, struct widget_data *di)
 {
 	struct download *down = dlg->dlg->udata;
@@ -164,7 +164,7 @@ dlg_set_notify(struct dialog_data *dlg, struct widget_data *di)
 	return 0;
 }
 
-int
+static inline int
 dlg_abort_download(struct dialog_data *dlg, struct widget_data *di)
 {
 	register_bottom_half((void (*)(void *)) abort_download,
@@ -173,7 +173,7 @@ dlg_abort_download(struct dialog_data *dlg, struct widget_data *di)
 }
 
 
-int
+static inline int
 dlg_undisplay_download(struct dialog_data *dlg, struct widget_data *di)
 {
 	register_bottom_half((void (*)(void *)) undisplay_download,
@@ -182,7 +182,7 @@ dlg_undisplay_download(struct dialog_data *dlg, struct widget_data *di)
 }
 
 
-void
+static inline void
 download_abort_function(struct dialog_data *dlg)
 {
 	struct download *down = dlg->dlg->udata;
@@ -191,7 +191,7 @@ download_abort_function(struct dialog_data *dlg)
 }
 
 
-void
+static void
 download_window_function(struct dialog_data *dlg)
 {
 	struct download *down = dlg->dlg->udata;
@@ -406,7 +406,7 @@ found:
 }
 
 
-void
+static void
 download_data(struct status *stat, struct download *down)
 {
 	struct cache_entry *ce;
@@ -655,7 +655,7 @@ create_download_file(struct terminal *term, unsigned char *fi, int safe, int res
 }
 
 
-unsigned char *
+static unsigned char *
 get_temp_name(unsigned char *url)
 {
 	int l, nl;
@@ -778,13 +778,13 @@ error:
 	}
 }
 
-void
+inline void
 start_download(struct session *ses, unsigned char *file)
 {
 	common_download(ses, file, 0);
 }
 
-void
+inline void
 resume_download(struct session *ses, unsigned char *file)
 {
 	common_download(ses, file, 1);
@@ -792,11 +792,10 @@ resume_download(struct session *ses, unsigned char *file)
 
 
 void tp_cancel(struct session *);
-
 void tp_free(struct session *);
 
 
-void
+static void
 continue_download(struct session *ses, unsigned char *file)
 {
 	struct download *down = NULL;
@@ -893,7 +892,7 @@ tp_save(struct session *ses)
 }
 
 
-void
+inline void
 tp_open(struct session *ses)
 {
 	continue_download(ses, "");
@@ -937,7 +936,7 @@ tp_display(struct session *ses)
 }
 
 
-void
+static void
 type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 	   struct option *assoc, int mailcap)
 {
@@ -951,11 +950,10 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 	if (assoc) {
 		ses->tq_prog = stracpy(get_opt_str_tree(assoc, "program"));
 		ses->tq_prog_flags = get_opt_bool_tree(assoc, "block");
-	}
-
-	if (assoc && !get_opt_bool_tree(assoc, "ask")) {
-		tp_open(ses);
-		return;
+		if (!get_opt_bool_tree(assoc, "ask")) {
+			tp_open(ses);
+			return;
+		}
 	}
 
 	content_type = stracpy(ct);
@@ -997,7 +995,11 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 				if (opt) name = stracpy(opt->ptr);
 			}
 		}
-		if (!name) name = stracpy("");
+		if (!name) name = stracpy(""); /* FIXME: unchecked return value */
+		if (!name) {
+			mem_free(content_type);
+			return;
+		}
 
 		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
 			msg_box(ses->term, getml(content_type, name, NULL),
@@ -1048,7 +1050,7 @@ ses_chktype(struct session *ses, struct status **stat, struct cache_entry *ce)
 
 #ifdef MAILCAP
 	if (!assoc) {
-		/* 
+		/*
 		 * XXX: Mailcap handling goes here since it mimics the
 		 * option system based mime handling. This requires that
 		 * a new option is allocated and we want to control how

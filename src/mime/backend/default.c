@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.4 2003/06/06 21:18:07 jonas Exp $ */
+/* $Id: default.c,v 1.5 2003/06/07 21:56:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,12 +140,8 @@ get_mime_handler_default(unsigned char *type, int have_x)
 		handler = mem_alloc(sizeof(struct mime_handler));
 		if (!handler) return NULL;
 
-		if (get_opt_bool_tree(opt_tree, "block"))
-			handler->flags |= MIME_BLOCK;
-
-		if (get_opt_bool_tree(opt_tree, "ask"))
-			handler->flags |= MIME_ASK;
-
+		handler->block = get_opt_bool_tree(opt_tree, "block") ? 1 : 0;
+		handler->ask = get_opt_bool_tree(opt_tree, "ask") ? 1 : 0;
 		handler->program = stracpy(get_opt_str_tree(opt_tree, "program"));
 		handler->description = name;
 		handler->backend_name = BACKEND_NAME;

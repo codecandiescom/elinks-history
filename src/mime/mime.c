@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.7 2003/06/05 14:23:54 zas Exp $ */
+/* $Id: mime.c,v 1.8 2003/06/07 21:56:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,8 +89,6 @@ get_content_type(unsigned char *head, unsigned char *url)
 	return stracpy(get_opt_str("mime.default_type"));
 }
 
-/* Find program to handle mimetype. The @term is for getting info about X
- * capabilities. */
 struct mime_handler *
 get_mime_type_handler(struct terminal *term, unsigned char *content_type)
 {

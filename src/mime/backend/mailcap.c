@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.28 2003/06/07 03:55:15 jonas Exp $ */
+/* $Id: mailcap.c,v 1.29 2003/06/07 21:56:54 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -63,17 +63,17 @@ struct mailcap_entry {
 	/* Used to inform the user of the type or handler. */
 	unsigned char *description;
 
+	/* Used to determine between an exact match and a wildtype match. Lower
+	 * is better. Increased for each sourced file. */
+	unsigned int priority;
+
 	/* Wether the program "blocks" the term. */
-	int needsterminal;
+	int needsterminal:1;
 
 	/* If "| ${PAGER}" should be added. It would of course be better to
 	 * pipe the output into a buffer and let ELinks display it but this
 	 * will have to do for now. */
-	int copiousoutput;
-
-	/* Used to determine between an exact match and a wildtype match. Lower
-	 * is better. Increased for each sourced file. */
-	unsigned int priority;
+	int copiousoutput:1;
 };
 
 /* State variables */
@@ -585,12 +585,8 @@ get_mime_handler_mailcap(unsigned char *type, int options)
 			return NULL;
 		}
 
-		if (entry->needsterminal || entry->copiousoutput)
-			handler->flags |= MIME_BLOCK;
-
-		if (get_opt_bool_tree(mailcap_tree, "ask"))
-			handler->flags |= MIME_ASK;
-
+		handler->block = (entry->needsterminal || entry->copiousoutput);
+		handler->ask = get_opt_bool_tree(mailcap_tree, "ask") ? 1 : 0;
 		handler->program = program;
 		handler->description = entry->description;
 		handler->backend_name = BACKEND_NAME;

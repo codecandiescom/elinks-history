@@ -1,4 +1,4 @@
-/* $Id: mime.h,v 1.3 2003/06/05 14:23:54 zas Exp $ */
+/* $Id: mime.h,v 1.4 2003/06/07 21:56:54 jonas Exp $ */
 
 #ifndef EL__MIME_MIME_H
 #define EL__MIME_MIME_H
@@ -6,16 +6,13 @@
 #include "config/options.h"
 #include "terminal/terminal.h"
 
-enum mime_handler_flags {
-	MIME_ASK	= (1 << 0),
-	MIME_BLOCK	= (1 << 1),
-};
-
 struct mime_handler {
 	int flags;
 	unsigned char *program;
 	unsigned char *description;
 	unsigned char *backend_name;
+	int ask:1;
+	int block:1;
 };
 
 /* Start up and teardown of mime system. */

@@ -18,6 +18,17 @@ is actively developed and ought to work.
 
 		Ok, so how to get the ECMAScript support working?
 
+Some systems come with either the SpiderMonkey installed or as an option. It
+would be good to test if you can take the easy path and install it through
+some package system. Below are listed instructions on what package you need to
+install on various systems (please help improve the list). If all goes well
+proceed to rebuilding ELinks.
+
+   On Debian testing or unstable install the packages libsmjs1 and libsmjs-dev
+   by running:
+
+	$ apt-get install libsmjs1 libsmjs-dev
+
 Note that this procedure enables you to install SpiderMonkey, but in such a way
 that it might not work with anything else but ELinks. It is unlikely that
 anything else is ever going to use SpiderMonkey on your system, but if you want

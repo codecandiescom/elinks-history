@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.57 2003/11/07 13:55:26 jonas Exp $ */
+/* $Id: dialogs.c,v 1.58 2003/11/08 05:00:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,7 +99,7 @@ history_dialog_abort_handler(struct dialog_data *dlg_data)
 
 static int
 history_dialog_event_handler(struct dialog_data *dlg_data,
-		             struct term_event *ev)
+			     struct term_event *ev)
 {
 	switch (ev->ev) {
 		case EV_KBD:

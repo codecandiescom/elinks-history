@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.links/ as hooks.lua.
--- $Id: hooks.lua,v 1.3 2002/05/01 18:33:58 pasky Exp $
+-- $Id: hooks.lua,v 1.4 2002/05/05 15:10:20 pasky Exp $
 
 ----------------------------------------------------------------------
 --  Local configuration
@@ -51,6 +51,10 @@
 -- as well.
 
     bookmark_addon = nil
+
+-- For any other lua script to be loaded, clone following line:
+
+    dofile (home_dir.."/.links/script.lua")
 
 
 ----------------------------------------------------------------------

@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+# This script lets you pass URLs from external programs to ELinks easily. You
+# just call this script with URL as a parameter (just like i.e. "netscape
+# -remote url"), and then press 'x' in the ELinks instance where you want the
+# URL to be loaded.
+#
+# Note that you also need remote.lua loaded in ELinks.
+#
+# These two scripts were contributed by Len Trigg <len@reeltwo.com>.
+#
+
+echo $* >$HOME/.links/external.url

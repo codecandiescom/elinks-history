@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.15 2003/01/23 02:47:42 pasky Exp $ */
+/* $Id: view.c,v 1.16 2003/02/19 17:26:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1906,7 +1906,7 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 	if (op == 0 && !term_->master) {
 		if (fn) mem_free(fn); fn = NULL; fs = NULL;
 
-		msg_box(term, NULL,
+		msg_box(term_, NULL,
 			N_("Error"), AL_CENTER,
 			N_("You can do this only on the master terminal"),
 			NULL, 1,

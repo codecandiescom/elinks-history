@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.62 2004/04/04 02:07:36 jonas Exp $ */
+/* $Id: task.c,v 1.63 2004/04/04 04:28:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -447,6 +447,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	unsigned char *pos = u ? extract_fragment(u) : NULL;
 	struct uri *referrer = NULL;
 	struct uri *uri = u ? get_uri(u, -1) : NULL;
+	protocol_external_handler *external_handler;
 
 	if (u) mem_free(u);
 
@@ -463,16 +464,12 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 		return;
 	}
 
-	if (uri->protocol != PROTOCOL_INVALID) {
-		protocol_external_handler *fn =
-			get_protocol_external_handler(uri->protocol);
-
-		if (fn) {
-			fn(ses, uri);
-			if (pos) mem_free(pos);
-			done_uri(uri);
-			return;
-		}
+	external_handler = get_protocol_external_handler(uri->protocol);
+	if (external_handler) {
+		external_handler(ses, uri);
+		if (pos) mem_free(pos);
+		done_uri(uri);
+		return;
 	}
 
 	ses->reloadlevel = cache_mode;

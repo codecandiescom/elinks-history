@@ -1,3 +1,47 @@
+Sat Nov 13 21:51:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/action.c:
+
+	When CONFIG_MARKS is undefined, do not set status to
+	FRAME_EVENT_REFRESH, just use the default which is FRAME_EVENT_OK.  
+
+Sat Nov 13 20:27:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	do_action(): Don't touch the @ses variable if the status is
+	FRAME_EVENT_SESSION_DESTROYED. Maybe it was causing bug 563.  
+
+Sat Nov 13 20:10:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/README:
+
+	Try to rewrite and complement a few sections.  
+
+Sat Nov 13 13:33:50 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* configure.in:
+
+	Check for isdigit.  
+
+Sat Nov 13 13:31:54 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/osdep/: stub.c, stub.h:
+
+	Own definition of isdigit.  
+
+Sat Nov 13 13:09:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	Safety boots required when entering do_action().  
+
+Sat Nov 13 02:22:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/parse.c:
+
+	Fix missing linebreak when ending a list efter an empty list item.  
+
 Fri Nov 12 22:54:45 2004  Laurent Monin <zas@norz.org>:
 
 	* src/sched/action.c:

@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.20 2004/01/24 10:08:26 pasky Exp $ */
+/* $Id: signals.c,v 1.21 2004/03/26 17:55:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@
 #include "lowlevel/select.h"
 #include "lowlevel/signals.h"
 #include "modules/version.h"
-#include "terminal/kbd.c"
+#include "terminal/kbd.h"
 #include "util/error.h"
 
 

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.68 2002/11/25 14:24:49 zas Exp $ */
+/* $Id: http.c,v 1.69 2002/11/25 14:40:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -823,7 +823,7 @@ next_chunk:
 				if (l != -1) {
 					errno = 0;
 					n = strtol(rb->data, (char **)&de, 16);
-					if (errno || *de) {
+					if (errno || !*de) {
 						abort_conn_with_state(conn, S_HTTP_ERROR);
 						return;
 					}

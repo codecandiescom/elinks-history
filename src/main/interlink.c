@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.92 2004/10/07 02:54:50 jonas Exp $ */
+/* $Id: interlink.c,v 1.93 2004/12/31 02:37:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -321,6 +321,12 @@ setsock_reuse_addr(int fd)
 /* Base delay in useconds between connect attempts. */
 #define CONNECT_TRIES_DELAY		50000
 
+static void
+report_af_unix_error(unsigned char *function, int error)
+{
+	ERROR(gettext("The call to %s failed: %d (%s)"),
+	      function, error, (unsigned char *) strerror(error));
+}
 
 /* Called when we receive a connection on listening socket. */
 static void
@@ -337,8 +343,7 @@ af_unix_connection(struct socket_info *info)
 	memset(info->addr, 0, l);
 	ns = accept(info->fd, info->addr, &l);
 	if (ns < 0) {
-		ERROR(gettext("accept() failed: %d (%s)"),
-		      errno, (unsigned char *) strerror(errno));
+		report_af_unix_error("accept()", errno);
 		return;
 	}
 
@@ -377,8 +382,7 @@ bind_to_af_unix(void)
 again:
 	s_info_listen.fd = socket(af, SOCK_STREAM, 0);
 	if (s_info_listen.fd == -1) {
-		ERROR(gettext("socket() failed: %d (%s)"),
-		      errno, (unsigned char *) strerror(errno));
+		report_af_unix_error("socket()", errno);
 		goto free_and_error;
 	}
 
@@ -386,8 +390,7 @@ again:
 
 	if (bind(s_info_listen.fd, s_info_listen.addr, s_info_listen.size) < 0) {
 		if (errno != EADDRINUSE)
-			ERROR(gettext("bind() failed: %d (%s)"),
-			      errno, (unsigned char *) strerror(errno));
+			report_af_unix_error("bind()", errno);
 
 		if (++attempts <= MAX_BIND_TRIES) {
 			elinks_usleep(BIND_TRIES_DELAY * attempts);
@@ -406,8 +409,7 @@ again:
 	s_info_accept.fd = s_info_listen.fd;
 
 	if (listen(s_info_listen.fd, LISTEN_BACKLOG)) {
-		ERROR(gettext("listen() failed: %d (%s)"),
-		      errno, (unsigned char *) strerror(errno));
+		report_af_unix_error("listen()", errno);
 		goto free_and_error;
 	}
 
@@ -438,8 +440,7 @@ connect_to_af_unix(void)
 
 		s_info_connect.fd = socket(af, SOCK_STREAM, 0);
 		if (s_info_connect.fd == -1) {
-			ERROR(gettext("socket() failed: %d (%s)"),
-			      errno, (unsigned char *) strerror(errno));
+			report_af_unix_error("socket()", errno);
 			break;
 		}
 
@@ -451,8 +452,7 @@ connect_to_af_unix(void)
 		close(s_info_connect.fd);
 
 		if (saved_errno != ECONNREFUSED && saved_errno != ENOENT) {
-			ERROR(gettext("connect() failed: %d (%s)"),
-			      saved_errno, (unsigned char *) strerror(saved_errno));
+			report_af_unix_error("connect()", errno);
 			break;
 		}
 

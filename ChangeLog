@@ -1,3 +1,89 @@
+Thu Jan 15 22:51:52 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/document.c:
+
+	Use directly @doc_view when gettin current link for globhist.  
+
+Thu Jan 15 22:51:06 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: session.c, session.h:
+
+	Introduced get_current_link_in_view() which is same as
+	get_current_link() but takes directly struct document_view as an
+	argument.  
+
+Thu Jan 15 22:36:11 2004  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Thu Jan 15 21:44:08 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/document.c:
+
+	Use get_current_link() to get @historyitem, instead of copy of the
+	code.  
+
+Thu Jan 15 21:30:54 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	A missing header inclusion was added.  
+
+Thu Jan 15 17:34:27 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Simplify and fix scroll_menu(). It now behaves like it should when
+	paging down in View menu.  
+
+Thu Jan 15 17:02:24 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Simplify menu_page_(up|down)().  
+
+Thu Jan 15 16:11:18 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Move menu page up/down code to separated functions.  
+
+Thu Jan 15 16:04:19 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Fix a segfault occuring when pressing page down on empty Link
+	submenu of main menu.  
+
+Thu Jan 15 05:01:00 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: dialogs/download.c, sched/download.c, sched/download.h:
+
+	Rename a few functions' parameters and local variables from @down to
+	@file_download 
+
+Thu Jan 15 04:41:22 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: dialogs/download.c, sched/download.c, sched/download.h:
+
+	Create a new function, is_in_downloads_list, to check whether the
+	passed struct file_download * is in @downloads (the global variable
+	that points into the list of running file downloads).  
+	
+	Replace the equivalent code in display_download with a call to this
+	function.  
+	
+	In common_download_do and continue_download_do, only add
+	@file_download to the download manager _after_ calling load_url or
+	change_connection, respectively, and only if
+	is_in_downloads_list(file_download).  
+	
+	This fixes a bug reported by dacap on IRC whereby ELinks would crash 
+	when one attempted to download a file while the download manager was
+	open.  
+
 Wed Jan 14 19:54:32 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/action.c:

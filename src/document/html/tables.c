@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.172 2004/05/16 13:57:32 zas Exp $ */
+/* $Id: tables.c,v 1.173 2004/05/16 14:01:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1727,7 +1727,7 @@ void
 format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	     unsigned char **end, void *f)
 {
-	struct part *p = f;
+	struct part *part = f;
 	struct table *table;
 	struct html_start_end *bad_html;
 	struct node *node, *new_node;
@@ -1826,14 +1826,14 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	fragment_id = get_attr_val(attr, "id");
 
 	wf = 0;
-	width = get_width(attr, "width", (p->document || p->box.x));
+	width = get_width(attr, "width", (part->document || part->box.x));
 	if (width == -1) {
 		width = par_format.width - par_format.leftmargin - par_format.rightmargin;
 		if (width < 0) width = 0;
 		wf = 1;
 	}
 
-	table = parse_table(html, eof, end, bgcolor, (p->document || p->box.x), &bad_html, &bad_html_n);
+	table = parse_table(html, eof, end, bgcolor, (part->document || part->box.x), &bad_html, &bad_html_n);
 	if (!table) {
 		mem_free_if(bad_html);
 		goto ret0;
@@ -1845,14 +1845,14 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		while (bad_html[i].start < bad_html[i].end && isspace(bad_html[i].end[-1]))
 			bad_html[i].end--;
 		if (bad_html[i].start < bad_html[i].end)
-			parse_html(bad_html[i].start, bad_html[i].end, p, NULL);
+			parse_html(bad_html[i].start, bad_html[i].end, part, NULL);
 	}
 
 	mem_free_if(bad_html);
 
 	state = init_html_parser_state(ELEMENT_DONT_KILL, AL_LEFT, 0, 0);
 
-	table->part = p;
+	table->part = part;
 	table->border = border;
 	table->bordercolor = bordercolor;
 	table->cellpadding = cellpadding;
@@ -1876,12 +1876,12 @@ again:
 	get_table_width(table);
 
 	margins = par_format.leftmargin + par_format.rightmargin;
-	if (!p->document && !p->box.x) {
+	if (!part->document && !part->box.x) {
 		if (!wf) int_upper_bound(&table->max_t, width);
 		int_lower_bound(&table->max_t, table->min_t);
 
-		int_lower_bound(&p->max_width, table->max_t + margins);
-		int_lower_bound(&p->box.width, table->min_t + margins);
+		int_lower_bound(&part->max_width, table->max_t + margins);
+		int_lower_bound(&part->box.width, table->min_t + margins);
 
 		goto ret2;
 	}
@@ -1906,12 +1906,12 @@ again:
 	else
 		distribute_widths(table, width);
 
-	if (!p->document && p->box.x == 1) {
+	if (!part->document && part->box.x == 1) {
 		int ww = table->rw + margins;
 
 		int_bounds(&ww, table->rw, par_format.width);
-		int_lower_bound(&p->box.width, ww);
-		p->cy += table->rh;
+		int_lower_bound(&part->box.width, ww);
+		part->cy += table->rh;
 
 		goto ret2;
 	}
@@ -1936,34 +1936,34 @@ again:
 
 	get_table_heights(table);
 
-	if (!p->document) {
-		int_lower_bound(&p->box.width, table->rw + margins);
-		p->cy += table->rh;
+	if (!part->document) {
+		int_lower_bound(&part->box.width, table->rw + margins);
+		part->cy += table->rh;
 		goto ret2;
 	}
 
-	node = p->document->nodes.next;
-	node->box.height = p->box.y - node->box.y + p->cy;
+	node = part->document->nodes.next;
+	node->box.height = part->box.y - node->box.y + part->cy;
 
-	display_complicated_table(table, x, p->cy, &cye);
-	display_table_frames(table, x, p->cy);
+	display_complicated_table(table, x, part->cy, &cye);
+	display_table_frames(table, x, part->cy);
 
 	new_node = mem_alloc(sizeof(struct node));
 	if (new_node) {
-		set_box(&new_node->box, node->box.x, p->box.y + cye,
+		set_box(&new_node->box, node->box.x, part->box.y + cye,
 			node->box.width, 0);
-		add_to_list(p->document->nodes, new_node);
+		add_to_list(part->document->nodes, new_node);
 	}
 
-	assertm(p->cy + table->rh == cye, "size does not match; 1:%d, 2:%d",
-		p->cy + table->rh, cye);
+	assertm(part->cy + table->rh == cye, "size does not match; 1:%d, 2:%d",
+		part->cy + table->rh, cye);
 
-	p->cy = cye;
-	p->cx = -1;
+	part->cy = cye;
+	part->cx = -1;
 
 ret2:
-	p->link_num = table->link_num;
-	int_lower_bound(&p->box.height, p->cy);
+	part->link_num = table->link_num;
+	int_lower_bound(&part->box.height, part->cy);
 	free_table(table);
 	done_html_parser_state(state);
 

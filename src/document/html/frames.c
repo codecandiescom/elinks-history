@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.84 2004/09/25 19:24:19 pasky Exp $ */
+/* $Id: frames.c,v 1.85 2004/09/25 19:25:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -179,7 +179,7 @@ format_frame(struct session *ses, struct frame_desc *frame,
 	struct frame *frame;
 	int plain;
 
-	assert(ses && name && o);
+	assert(ses && o);
 	if_assert_failed return NULL;
 
 repeat:
@@ -197,7 +197,7 @@ repeat:
 		goto repeat;
 	}
 
-	doc_view = find_fd(ses, name, depth, o->box.x, o->box.y);
+	doc_view = find_fd(ses, frame->name, depth, o->box.x, o->box.y);
 	if (doc_view) render_document(vs, doc_view, o);
 	o->plain = plain;
 

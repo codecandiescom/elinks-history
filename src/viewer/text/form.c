@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.261 2004/12/19 00:17:55 pasky Exp $ */
+/* $Id: form.c,v 1.262 2004/12/19 01:15:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,7 +214,7 @@ find_form_state(struct document_view *doc_view, struct form_control *fc)
 	}
 	fs = &vs->form_info[n];
 
-	if (fs->form_view && fs->form_view->form == fc->form
+	if (fs->form_view && fs->form_view->form_num == fc->form->form_num
 	    && fs->g_ctrl_num == fc->g_ctrl_num
 	    && fs->position == fc->position
 	    && fs->type == fc->type)
@@ -248,18 +248,18 @@ find_form_control(struct document *document, struct form_state *fs)
 }
 
 struct form_view *
-find_form_view_in_vs(struct view_state *vs, struct form *form)
+find_form_view_in_vs(struct view_state *vs, int form_num)
 {
 	struct form_view *fv;
 
 	assert(vs);
 
 	foreach (fv, vs->forms)
-		if (fv->form == form)
+		if (fv->form_num == form_num)
 			return fv;
 
 	fv = mem_calloc(1, sizeof(struct form_view));
-	fv->form = form;
+	fv->form_num = form_num;
 	add_to_list(vs->forms, fv);
 	return fv;
 }
@@ -267,14 +267,19 @@ find_form_view_in_vs(struct view_state *vs, struct form *form)
 struct form_view *
 find_form_view(struct document_view *doc_view, struct form *form)
 {
-	return find_form_view_in_vs(doc_view->vs, form);
+	return find_form_view_in_vs(doc_view->vs, form->form_num);
 }
 
 struct form *
 find_form_by_form_view(struct document *document, struct form_view *fv)
 {
-	/* This won't be so simple soon. --pasky */
-	return fv->form;
+	struct form *form;
+
+	foreach (form, document->forms) {
+		if (form->form_num == fv->form_num)
+			return form;
+	}
+	return NULL;
 }
 
 

@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.50 2004/12/19 00:17:55 pasky Exp $ */
+/* $Id: vs.c,v 1.51 2004/12/19 01:15:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,7 +86,7 @@ copy_vs(struct view_state *dst, struct view_state *src)
 		struct form_view *newfv = mem_calloc(1, sizeof(struct form_view));
 
 		if (!newfv) continue;
-		newfv->form = fv->form;
+		newfv->form_num = fv->form_num;
 		/* We do leave out the ECMAScript object intentionally. */
 		add_to_list(dst->forms, newfv);
 	}
@@ -105,7 +105,7 @@ copy_vs(struct view_state *dst, struct view_state *src)
 						stracpy(src->form_info[i].value);
 				/* XXX: This makes it O(nm). */
 				dst->form_info[i].form_view =
-					find_form_view_in_vs(dst, src->form_info[i].form_view->form);
+					find_form_view_in_vs(dst, src->form_info[i].form_view->form_num);
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.46 2004/12/19 00:17:55 pasky Exp $ */
+/* $Id: form.h,v 1.47 2004/12/19 01:15:22 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -17,12 +17,9 @@ struct terminal;
 struct form_view {
 	LIST_HEAD(struct form_view);
 
-	/* XXX: This is actually very broken. lifespan of form_view (and
-	 * clones, see copy_vs()) can get much longer than form's lifespan.
-	 * That's why find_form_state() is so clumsy. So this way of
-	 * associating form_view to form simply leads to frequent crashes,
-	 * plain and simple. --pasky */
-	struct form *form;
+	/* We can't just reference to {struct form} since we can potentially
+	 * live much longer than that. */
+	int form_num;
 
 #ifdef CONFIG_ECMASCRIPT
 	/* This holds the ECMAScript object attached to this structure. It can
@@ -80,7 +77,7 @@ int get_current_state(struct session *ses);
 
 struct form_state *find_form_state(struct document_view *doc_view, struct form_control *fc);
 struct form_control *find_form_control(struct document *document, struct form_state *fs);
-struct form_view *find_form_view_in_vs(struct view_state *vs, struct form *form);
+struct form_view *find_form_view_in_vs(struct view_state *vs, int form_num);
 struct form_view *find_form_view(struct document_view *doc_view, struct form *form);
 struct form *find_form_by_form_view(struct document *document, struct form_view *fv);
 

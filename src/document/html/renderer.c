@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.512 2004/12/18 12:38:02 jonas Exp $ */
+/* $Id: renderer.c,v 1.513 2004/12/19 01:15:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1336,6 +1336,13 @@ html_special_form(struct part *part, struct form *form)
 		return;
 	}
 
+	if (!list_empty(part->document->forms)) {
+		struct form *nform = part->document->forms.next;
+
+		form->form_num = nform->form_num + 1;
+	} else {
+		form->form_num = 0;
+	}
 	add_to_list(part->document->forms, form);
 }
 
@@ -1371,6 +1378,7 @@ html_special_form_control(struct part *part, struct form_control *fc)
 		 * control. Generate a dummy form for those Flying
 		 * Dutchmans. */
 		form = init_form();
+		form->form_num = 0;
 		add_to_list(part->document->forms, form);
 	}
 	/* Attach this form control to the last form encountered. */

@@ -1,4 +1,4 @@
-/* $Id: forms.h,v 1.5 2004/12/19 00:17:54 pasky Exp $ */
+/* $Id: forms.h,v 1.6 2004/12/19 01:15:18 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_FORMS_H
 #define EL__DOCUMENT_FORMS_H
@@ -19,6 +19,8 @@ enum form_method {
 
 struct form {
 	LIST_HEAD(struct form);
+
+	int form_num;
 
 	unsigned char *action;
 	unsigned char *name;

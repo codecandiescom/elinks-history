@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.171 2004/01/24 20:05:22 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.172 2004/01/24 20:08:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -830,6 +830,15 @@ static struct default_kb default_menu_keymap[] = {
 	{ 0, 0, 0}
 };
 
+static inline void
+add_keymap_default_keybindings(enum keymap keymap, struct default_kb *defaults)
+{
+	struct default_kb *kb;
+
+	for (kb = defaults; kb->key; kb++)
+		add_keybinding(keymap, kb->action, kb->key, kb->meta, EVENT_NONE);
+}
+
 static void
 add_default_keybindings(void)
 {
@@ -839,14 +848,9 @@ add_default_keybindings(void)
 	 * can't trust clueless users what they'll push into sources modifying
 	 * defaults, can we? ;)) */
 
-	for (kb = default_main_keymap; kb->key; kb++)
-		add_keybinding(KM_MAIN, kb->action, kb->key, kb->meta, EVENT_NONE);
-
-	for (kb = default_edit_keymap; kb->key; kb++)
-		add_keybinding(KM_EDIT, kb->action, kb->key, kb->meta, EVENT_NONE);
-
-	for (kb = default_menu_keymap; kb->key; kb++)
-		add_keybinding(KM_MENU, kb->action, kb->key, kb->meta, EVENT_NONE);
+	add_keymap_default_keybindings(KM_MAIN, default_main_keymap);
+	add_keymap_default_keybindings(KM_EDIT, default_edit_keymap);
+	add_keymap_default_keybindings(KM_MENU, default_menu_keymap);
 }
 
 

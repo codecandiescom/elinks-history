@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.150 2004/07/03 23:58:21 zas Exp $ */
+/* $Id: ftp.c,v 1.151 2004/07/04 00:01:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,12 +260,12 @@ get_resp(struct connection *conn)
 
 /* Send command, set connection state and free cmd string. */
 static void
-send_cmd(struct connection *conn, unsigned char *cmd, int cmdl, void *callback, int state)
+send_cmd(struct connection *conn, struct string *cmd, void *callback, int state)
 {
 	conn->read_func = callback;
-	write_to_socket(conn, conn->socket, cmd, cmdl, get_resp);
+	write_to_socket(conn, conn->socket, cmd->source, cmd->length, get_resp);
 
-	mem_free(cmd);
+	done_string(cmd);
 	set_connection_state(conn, state);
 }
 
@@ -290,7 +290,7 @@ ftp_login(struct connection *conn)
 	}
 	add_crlf_to_string(&cmd);
 
-	send_cmd(conn, cmd.source, cmd.length, (void *) ftp_got_info, S_SENT);
+	send_cmd(conn, &cmd, (void *) ftp_got_info, S_SENT);
 }
 
 /* Parse connection response. */
@@ -394,7 +394,7 @@ ftp_pass(struct connection *conn)
 	}
 	add_crlf_to_string(&cmd);
 
-	send_cmd(conn, cmd.source, cmd.length, (void *) ftp_pass_info, S_LOGIN);
+	send_cmd(conn, &cmd, (void *) ftp_pass_info, S_LOGIN);
 }
 
 /* Parse PASS command response. */
@@ -691,7 +691,7 @@ ftp_send_retr_req(struct connection *conn, int state)
 	/* Send it line-by-line. */
 	send_it_line_by_line(conn, &cmd);
 
-	send_cmd(conn, cmd.source, cmd.length, (void *) ftp_retr_file, state);
+	send_cmd(conn, &cmd, (void *) ftp_retr_file, state);
 }
 
 /* Parse RETR response and return file size or -1 on error. */

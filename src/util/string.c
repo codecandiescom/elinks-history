@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.59 2003/07/22 03:40:53 jonas Exp $ */
+/* $Id: string.c,v 1.60 2003/07/22 15:50:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,17 +27,6 @@
  * have. --pasky */
 
 
-#define fatalfl(x) errfile = f, errline = l, elinks_internal(x)
-#define fatal(x) internal(x)
-#ifdef DEBUG
-#define warnfl(x) errfile = f, errline = l, elinks_error(x)
-#define warn(x) error(x)
-#else
-#define warnfl(x)
-#define warn(x)
-#endif
-
-
 /* Autoallocation string constructors */
 
 /* Note that, contrary to init_str() & co, these functions are NOT granular,
@@ -50,7 +39,8 @@ debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
 {
 	unsigned char *m;
 
-	if (len < 0) { warnfl("memacpy len < 1"); len = 0; }
+	assert(len >= 0);
+	if_assert_failed len = 0;
 
 	m = debug_mem_alloc(f, l, len + 1);
 	if (m) {
@@ -64,7 +54,8 @@ debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
 inline unsigned char *
 debug_stracpy(unsigned char *f, int l, unsigned char *src)
 {
-	if (!src) { warnfl("stracpy src=NULL"); return NULL; }
+	assert(src);
+	if_assert_failed return NULL;
 
 	return debug_memacpy(f, l, src, strlen(src));
 }
@@ -73,11 +64,8 @@ unsigned char *
 debug_copy_string(unsigned char *f, int l, unsigned char **dst,
 		  unsigned char *src)
 {
-	if (!src) {
-		warnfl("copy_string src=NULL");
-		*dst = NULL;
-		return NULL;
-	}
+	assert(src);
+	if_assert_failed { *dst = NULL; return NULL; }
 
 	*dst = debug_mem_alloc(f, l, strlen(src) + 1);
 	if (*dst) strcpy(*dst, src);
@@ -98,9 +86,8 @@ memacpy(unsigned char *src, int len)
 {
 	unsigned char *m;
 
-#ifdef DEBUG
-	if (len < 0) { warn("memacpy len < 0"); len = 0; }
-#endif
+	assert(len >= 0);
+	if_assert_failed { len = 0; }
 
 	m = mem_alloc(len + 1);
 	if (m) {
@@ -114,10 +101,8 @@ memacpy(unsigned char *src, int len)
 inline unsigned char *
 stracpy(unsigned char *src)
 {
-	if (!src) {
-		warn("stracpy src=NULL");
-		return NULL;
-	}
+	assert(src);
+	if_assert_failed return NULL;
 
 	return memacpy(src, strlen(src));
 }
@@ -125,11 +110,8 @@ stracpy(unsigned char *src)
 unsigned char *
 copy_string(unsigned char **dst, unsigned char *src)
 {
-	if (!src) {
-		warn("copy_string src=NULL");
-		*dst = NULL;
-		return NULL;
-	}
+	assert(src);
+	if_assert_failed { *dst = NULL; return NULL; }
 
 	*dst = mem_alloc(strlen(src) + 1);
 	if (*dst) strcpy(*dst, src);
@@ -144,10 +126,8 @@ add_to_strn(unsigned char **s, unsigned char *a)
 {
 	unsigned char *p;
 
-#ifdef DEBUG
-	if (!*s) { fatal("add_to_strn *s=NULL"); return; }
-	if (!a) { fatal("add_to_strn a=NULL"); return; }
-#endif
+	assert(*s && a);
+	if_assert_failed return;
 
 	p = mem_realloc(*s, strlen(*s) + strlen(a) + 1);
 
@@ -178,12 +158,8 @@ straconcat(unsigned char *str, ...)
 	unsigned char *s;
 	unsigned int len;
 
-	if (!str) {
-#ifdef DEBUG
-		fatal("straconcat str=NULL");
-#endif
-		return NULL;
-	}
+	assert(str);
+	if_assert_failed { return NULL; }
 
 	s = stracpy(str);
 	if (!s) return NULL;
@@ -384,11 +360,8 @@ xstrcmp(unsigned char *s1, unsigned char *s2)
 unsigned char *
 safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 {
-#ifdef DEBUG
-	if (!dst) { fatal("safe_strncpy dst=NULL"); return NULL; }
-	if (!src) { fatal("safe_strncpy src=NULL"); return NULL; }
-	if (dst_size <= 0) { fatal("safe_strncpy dst_size <= 0"); return NULL; }
-#endif
+	assert(dst && src && dst_size > 0);
+	if_assert_failed return NULL;
 
 	strncpy(dst, src, dst_size);
 	dst[dst_size - 1] = 0;

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.35 2004/01/16 23:49:54 jonas Exp $ */
+/* $Id: cmdline.c,v 1.36 2004/01/18 00:29:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -438,15 +438,19 @@ struct option_info cmdline_options_info[] = {
 		N_("ID of session (ELinks instance) which we want to clone.\n"
 		"This is internal ELinks option, you don't want to use it.")),
 
+	INIT_OPT_ALIAS("", "confdir", "config-dir"),
+
 	INIT_OPT_STRING("", N_("Name of directory with configuration file"),
-		"confdir", 0, "",
+		"config-dir", 0, "",
 		N_("ELinks will read and write its config files to the given\n"
 		"directory instead of ~/.elinks. If the path begins with\n"
 		"a '/' its used as an absolute path. Else it is assumed to\n"
 		"be relative to your HOME dir.")),
 
+	INIT_OPT_ALIAS("", "conffile", "config-file"),
+
 	INIT_OPT_STRING("", N_("Name of configuration file"),
-		"conffile", 0, "elinks.conf",
+		"config-file", 0, "elinks.conf",
 		N_("Name of the file with configuration, from which and to\n"
 		"which all the configuration shall be written. It should be\n"
 		"relative to confdir.")),

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.100 2004/01/26 22:44:36 jonas Exp $ */
+/* $Id: scanner.c,v 1.101 2004/01/26 22:50:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,6 +90,28 @@ enum css_char_group {
 	CSS_CHAR_WHITESPACE	= (1 << 10),
 };
 
+static struct scan_table_info css_scan_table_info[] = {
+	SCAN_TABLE_RANGE('0', '9', CSS_CHAR_DIGIT | CSS_CHAR_HEX_DIGIT | CSS_CHAR_IDENT),
+	SCAN_TABLE_RANGE('A', 'F', CSS_CHAR_HEX_DIGIT),
+	SCAN_TABLE_RANGE('A', 'Z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+	SCAN_TABLE_RANGE('a', 'f', CSS_CHAR_HEX_DIGIT),
+	SCAN_TABLE_RANGE('a', 'z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+	SCAN_TABLE_RANGE(161, 255, CSS_CHAR_NON_ASCII | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+
+	SCAN_TABLE_STRING(" \f\n\r\t\v", CSS_CHAR_WHITESPACE),
+	SCAN_TABLE_STRING("\f\n\r",	 CSS_CHAR_NEWLINE),
+	SCAN_TABLE_STRING("-",		 CSS_CHAR_IDENT),
+	SCAN_TABLE_STRING(".#@!\"'<-/",	 CSS_CHAR_TOKEN_START),
+	/* Unicode escape (that we do not handle yet) + other special chars */
+	SCAN_TABLE_STRING("\\_",	 CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+	/* This should contain mostly used char tokens like ':' and maybe a few
+	 * garbage chars that people might put in their CSS code */
+	SCAN_TABLE_STRING("({});:,*",	 CSS_CHAR_TOKEN),
+	SCAN_TABLE_STRING("<!->",	 CSS_CHAR_SGML_MARKUP),
+
+	SCAN_TABLE_END,
+};
+
 #define	check_css_table(c, bit)	(css_scan_table[(c)] & (bit))
 #define	scan_css(s, bit)	while (check_css_table(*(s), bit)) (s)++;
 #define	scan_back_css(s, bit)	while (check_css_table(*(s), bit)) (s)--;
@@ -100,6 +122,7 @@ enum css_char_group {
 #define	is_css_hexdigit(c)	check_css_table(c, CSS_CHAR_HEX_DIGIT)
 #define	is_css_char_token(c)	check_css_table(c, CSS_CHAR_TOKEN)
 #define	is_css_token_start(c)	check_css_table(c, CSS_CHAR_TOKEN_START)
+
 
 struct css_identifier {
 	unsigned char *name;
@@ -522,28 +545,6 @@ skip_css_tokens_(struct css_scanner *scanner, enum css_token_type skipto)
 
 
 /* Initializers */
-
-static struct scan_table_info css_scan_table_info[] = {
-	SCAN_TABLE_RANGE('0', '9', CSS_CHAR_DIGIT | CSS_CHAR_HEX_DIGIT | CSS_CHAR_IDENT),
-	SCAN_TABLE_RANGE('A', 'F', CSS_CHAR_HEX_DIGIT),
-	SCAN_TABLE_RANGE('A', 'Z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
-	SCAN_TABLE_RANGE('a', 'f', CSS_CHAR_HEX_DIGIT),
-	SCAN_TABLE_RANGE('a', 'z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
-	SCAN_TABLE_RANGE(161, 255, CSS_CHAR_NON_ASCII | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
-
-	SCAN_TABLE_STRING(" \f\n\r\t\v", CSS_CHAR_WHITESPACE),
-	SCAN_TABLE_STRING("\f\n\r",	 CSS_CHAR_NEWLINE),
-	SCAN_TABLE_STRING("-",		 CSS_CHAR_IDENT),
-	SCAN_TABLE_STRING(".#@!\"'<-/",	 CSS_CHAR_TOKEN_START),
-	/* Unicode escape (that we do not handle yet) + other special chars */
-	SCAN_TABLE_STRING("\\_",	 CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
-	/* This should contain mostly used char tokens like ':' and maybe a few
-	 * garbage chars that people might put in their CSS code */
-	SCAN_TABLE_STRING("({});:,*",	 CSS_CHAR_TOKEN),
-	SCAN_TABLE_STRING("<!->",	 CSS_CHAR_SGML_MARKUP),
-
-	SCAN_TABLE_END,
-};
 
 void
 init_css_scanner(struct css_scanner *scanner, unsigned char *string)

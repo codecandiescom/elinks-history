@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.166 2004/01/23 19:24:57 jonas Exp $ */
+/* $Id: main.c,v 1.167 2004/01/28 00:38:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,6 +45,7 @@
 #include "modules/version.h"
 #include "osdep/osdep.h"
 #include "protocol/auth/auth.h"
+#include "protocol/http/blacklist.h"
 #include "sched/connection.h"
 #include "sched/download.h"
 #include "sched/error.h"
@@ -53,7 +54,6 @@
 #include "terminal/kbd.h"
 #include "terminal/screen.h"
 #include "terminal/terminal.h"
-#include "util/blacklist.h"
 #include "util/color.h"
 #include "util/error.h"
 #include "util/memdebug.h"

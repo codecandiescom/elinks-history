@@ -1,12 +1,12 @@
-/* $Id: http.h,v 1.7 2003/12/05 18:02:04 pasky Exp $ */
+/* $Id: http.h,v 1.8 2004/01/28 00:38:11 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_HTTP_HTTP_H
 #define EL__PROTOCOL_HTTP_HTTP_H
 
 #include "lowlevel/connect.h"
+#include "protocol/http/blacklist.h"
 #include "protocol/protocol.h"
 #include "sched/connection.h"
-#include "util/blacklist.h"
 
 struct http_version {
 	int major;

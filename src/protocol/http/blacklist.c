@@ -1,5 +1,5 @@
 /* Blacklist manager */
-/* $Id: blacklist.c,v 1.14 2003/07/25 12:32:22 pasky Exp $ */
+/* $Id: blacklist.c,v 1.15 2004/01/28 00:38:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,7 @@
 
 #include "elinks.h"
 
-#include "util/blacklist.h"
+#include "protocol/http/blacklist.h"
 #include "util/lists.h"
 #include "util/memory.h"
 #include "util/string.h"

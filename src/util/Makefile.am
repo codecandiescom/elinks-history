@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.32 2003/12/20 18:35:17 pasky Exp $
+## $Id: Makefile.am,v 1.33 2004/01/28 00:38:12 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -7,8 +7,6 @@ noinst_LIBRARIES = libutil.a
 libutil_a_SOURCES = \
  base64.c \
  base64.h \
- blacklist.c \
- blacklist.h \
  color.c \
  color.h \
  conv.c \

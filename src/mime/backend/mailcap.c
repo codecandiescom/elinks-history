@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.70 2003/10/27 23:25:35 pasky Exp $ */
+/* $Id: mailcap.c,v 1.71 2003/11/12 23:15:20 zas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -158,8 +158,7 @@ init_mailcap_entry(unsigned char *command, int priority)
 	int commandlen = strlen(command);
 
 	entry = mem_calloc(1, sizeof(struct mailcap_entry) + commandlen);
-	if (!entry)
-		return NULL;
+	if (!entry) return NULL;
 
 	memcpy(entry->command, command, commandlen);
 
@@ -194,11 +193,11 @@ add_mailcap_entry(struct mailcap_entry *entry, unsigned char *type, int typelen)
 			done_mailcap_entry(entry);
 			return;
 		}
-	} else if (!item->value) {
+	} else if (item->value) {
+		mitem = item->value;
+	} else {
 		done_mailcap_entry(entry);
 		return;
-	} else {
-		mitem = item->value;
 	}
 
 	add_to_list_end(mitem->entries, entry);
@@ -342,7 +341,6 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 		unsigned char *type;
 		int typelen;
 
-
 		/* Ignore comments */
 		if (*line == '#') continue;
 
@@ -372,7 +370,7 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 		if (!basetypeend) {
 			unsigned char implicitwild[64];
 
-			if (typelen + 3 > 64) {
+			if (typelen + 3 > sizeof(implicitwild)) {
 				done_mailcap_entry(entry);
 				continue;
 			}
@@ -408,12 +406,10 @@ init_mailcap_map(void)
 	unsigned char *path;
 	unsigned int priority = 0;
 
-	if (!get_mailcap_enable())
-		return NULL;
+	if (!get_mailcap_enable()) return NULL;
 
 	mailcap_map = init_hash(8, &strhash);
-	if (!mailcap_map)
-		return NULL;
+	if (!mailcap_map) return NULL;
 
 	/* Try to setup mailcap_path */
 	path = get_mailcap_path();
@@ -437,8 +433,7 @@ done_mailcap(struct module *module)
 	struct hash_item *item;
 	int i;
 
-	if (!mailcap_map)
-		return;
+	if (!mailcap_map) return;
 
 	foreach_hash_item (item, *mailcap_map, i) {
 		struct mailcap_hash_item *mitem = item->value;
@@ -609,8 +604,7 @@ get_mailcap_entry(unsigned char *type)
 	struct mailcap_entry *entry;
 	struct hash_item *item;
 
-	if (!mailcap_map && !init_mailcap_map())
-		return NULL;
+	if (!mailcap_map && !init_mailcap_map()) return NULL;
 
 	item = get_hash_item(mailcap_map, type, strlen(type));
 
@@ -627,8 +621,7 @@ get_mailcap_entry(unsigned char *type)
 			int wildlen = wildpos - type + 1; /* include '/' */
 			unsigned char *wildtype = memacpy(type, wildlen + 2);
 
-			if (!wildtype)
-				return NULL;
+			if (!wildtype) return NULL;
 
 			wildtype[wildlen++] = '*';
 			wildtype[wildlen] = '\0';

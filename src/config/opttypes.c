@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.83 2004/05/26 13:59:45 jonas Exp $ */
+/* $Id: opttypes.c,v 1.84 2004/07/04 13:32:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,22 +194,22 @@ str_rd(struct option *opt, unsigned char **file, int *line)
 	/* We're getting used in some parser functions in conf.c as well, and
 	 * that's w/ opt == NULL; so don't rely on opt to point anywhere. */
 	if (!commandline) {
-		if (*str != '"') {
+		if (!isquote(*str)) {
 			done_string(&str2);
 			return NULL;
 		}
 		str++;
 	}
 
-	while (*str && (commandline || *str != '"')) {
+	while (*str && (commandline || !isquote(*str))) {
 		if (*str == '\\') {
 			/* FIXME: This won't work on crlf systems. */
 			if (str[1] == '\n') { str[1] = ' '; str++; }
-			/* When there's '"', we will just move on there, thus
-			 * we will never test for it in while () condition and
-			 * we will treat it just as '"', ignoring the backslash
-			 * itself. */
-			if (str[1] == '"') str++;
+			/* When there's quote char, we will just move on there,
+			 * thus we will never test for it in while () condition
+			 * and we will treat it just as '"', ignoring the
+			 * backslash itself. */
+			if (isquote(str[1])) str++;
 			/* \\ means \. */
 			if (str[1] == '\\') str++;
 		}

@@ -1,3 +1,9 @@
+Sat Dec 22 12:27:09 2001  Petr Baudis <pasky@ji.cz>:
+
+	* bfu.c, html.c:
+	
+	merge with stable
+
 Mon Dec 17 13:13:07 2001  Petr Baudis <pasky@ji.cz>:
 
 	* http.c:

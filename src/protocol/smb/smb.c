@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.59 2004/10/08 13:06:14 zas Exp $ */
+/* $Id: smb.c,v 1.60 2004/11/03 17:20:36 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -180,6 +180,7 @@ static void
 end_smb_connection(struct connection *conn)
 {
 	struct smb_connection_info *si = conn->info;
+	struct uri *uri;
 
 	if (smb_get_cache(conn)) return;
 
@@ -193,9 +194,10 @@ end_smb_connection(struct connection *conn)
 		si->text[si->textlen++] = ASCII_LF;
 	si->text[si->textlen] = '\0';
 
-	if (conn->uri->datalen
-	    && conn->uri->data[conn->uri->datalen - 1] != '/'
-	    && conn->uri->data[conn->uri->datalen - 1] != '\\'
+	uri = conn->uri;
+	if (uri->datalen
+	    && uri->data[uri->datalen - 1] != '/'
+	    && uri->data[uri->datalen - 1] != '\\'
 	    && (strstr(si->text, "NT_STATUS_FILE_IS_A_DIRECTORY")
 		|| strstr(si->text, "NT_STATUS_ACCESS_DENIED")
 		|| strstr(si->text, "ERRbadfile"))) {
@@ -219,7 +221,7 @@ end_smb_connection(struct connection *conn)
 		}
 
 		add_to_string(&page, "<html><head><title>/");
-		add_bytes_to_string(&page, conn->uri->data, conn->uri->datalen);
+		add_bytes_to_string(&page, uri->data, uri->datalen);
 		add_to_string(&page, "</title></head><body><pre>");
 
 		line_start = si->text;
@@ -509,6 +511,7 @@ smb_protocol_handler(struct connection *conn)
 	unsigned char *p;
 	int cpid, dirlen;
 	struct smb_connection_info *si;
+	struct uri *uri;
 
 	si = mem_calloc(1, sizeof(struct smb_connection_info) + 2);
 	if (!si) {
@@ -517,13 +520,14 @@ smb_protocol_handler(struct connection *conn)
 	}
 	conn->info = si;
 
-	p = strchr(conn->uri->data, '/');
-	if (p && p - conn->uri->data < conn->uri->datalen) {
-		share = memacpy(conn->uri->data, p - conn->uri->data);
+	uri = conn->uri;
+	p = strchr(uri->data, '/');
+	if (p && p - uri->data < uri->datalen) {
+		share = memacpy(uri->data, p - uri->data);
 		dir = p + 1;
 		/* FIXME: ensure @dir do not contain dangerous chars. --Zas */
 
-	} else if (conn->uri->datalen) {
+	} else if (uri->datalen) {
 		if (smb_get_cache(conn)) return;
 
 		redirect_cache(conn->cached, "/", 1, 0);
@@ -605,39 +609,39 @@ smb_protocol_handler(struct connection *conn)
 		if (*share) {
 			/* Construct service path. */
 			asprintf((char **) &v[n++], "//%.*s/%s",
-				 conn->uri->hostlen, conn->uri->host, share);
+				 uri->hostlen, uri->host, share);
 
 			/* Add password if any. */
-			if (conn->uri->passwordlen && !conn->uri->userlen) {
-				v[n++] = memacpy(conn->uri->password, conn->uri->passwordlen);
+			if (uri->passwordlen && !uri->userlen) {
+				v[n++] = memacpy(uri->password, uri->passwordlen);
 			}
 		} else {
 			/* Get a list of shares available on a host. */
 			v[n++] = "-L";
-			v[n++] = memacpy(conn->uri->host, conn->uri->hostlen);
+			v[n++] = memacpy(uri->host, uri->hostlen);
 		}
 
 		v[n++] = "-N";		/* Don't ask for a password. */
 		v[n++] = "-E";		/* Write messages to stderr instead of stdout. */
 		v[n++] = "-d 0";	/* Disable debug mode. */
 
-		if (conn->uri->portlen) {
+		if (uri->portlen) {
 			/* Connect to the specified port. */
 			v[n++] = "-p";
-			v[n++] = memacpy(conn->uri->port, conn->uri->portlen);
+			v[n++] = memacpy(uri->port, uri->portlen);
 		}
 
-		if (conn->uri->userlen) {
+		if (uri->userlen) {
 			/* Set the network username. */
 			v[n++] = "-U";
-			if (!conn->uri->passwordlen) {
+			if (!uri->passwordlen) {
 				/* No password. */
-				v[n++] = memacpy(conn->uri->user, conn->uri->userlen);
+				v[n++] = memacpy(uri->user, uri->userlen);
 			} else {
 				/* With password. */
 				asprintf((char **) &v[n++], "%.*s%%%.*s",
-					 conn->uri->userlen, conn->uri->user,
-					 conn->uri->passwordlen, conn->uri->password);
+					 uri->userlen, uri->user,
+					 uri->passwordlen, uri->password);
 			}
 		}
 

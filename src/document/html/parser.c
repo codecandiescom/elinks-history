@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.347 2004/01/18 15:12:32 zas Exp $ */
+/* $Id: parser.c,v 1.348 2004/01/18 15:14:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2270,7 +2270,7 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int *
 {
 	unsigned char *tmp_str;
 	unsigned long number;
-	int val, tmp_val, divisor, nn;
+	int val, tmp_val, divisor;
 	int *tmp_values;
 	int *values = NULL;
 	int values_count = 0;
@@ -2336,13 +2336,14 @@ distribute:
 			values[i] = values[i] * (divisor - tmp_val) / divisor;
 		}
 		while (val) {
-			nn = 0;
+			int flag = 0;
+			
 			for (i = 0; i < values_count; i++) {
-				if (val < 0) values[i]++, val++, nn = 1;
-				if (val > 0 && values[i] > 1) values[i]--, val--, nn = 1;
+				if (val < 0) values[i]++, val++, flag = 1;
+				if (val > 0 && values[i] > 1) values[i]--, val--, flag = 1;
 				if (!val) break;
 			}
-			if (!nn) break;
+			if (!flag) break;
 		}
 	} else {
 		int neg = 0;

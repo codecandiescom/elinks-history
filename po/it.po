@@ -339,34 +339,28 @@ msgid "Automatically saved keybindings\n"
 msgstr "Associazioni di tasti salvate automaticamente\n"
 
 #: src/config/conf.c:701
-#, fuzzy
 msgid "Secure file error"
-msgstr "Errore file FTP"
+msgstr "Errore nel salvataggio sicuro"
 
 #: src/config/conf.c:707
-#, fuzzy
 msgid "Cannot read the file"
-msgstr "Impossibile scrivere il file"
+msgstr "Impossibile leggere il file"
 
 #: src/config/conf.c:710
-#, fuzzy
 msgid "Cannot stat the file"
-msgstr "Impossibile scrivere il file"
+msgstr "Impossibile fare stat() sul file"
 
 #: src/config/conf.c:713
-#, fuzzy
 msgid "Cannot access the file"
-msgstr "Impossibile scrivere il file"
+msgstr "Impossibile accedere al file"
 
 #: src/config/conf.c:716
-#, fuzzy
 msgid "Cannot create temp file"
-msgstr "Impossibile scrivere il file"
+msgstr "Impossibile creare file temporaneo"
 
 #: src/config/conf.c:719
-#, fuzzy
 msgid "Cannot rename the file"
-msgstr "Impossibile scrivere il file"
+msgstr "Impossibile rinominare il file"
 
 #: src/config/conf.c:722
 msgid "File saving disabled by option"
@@ -5454,59 +5448,3 @@ msgstr "Errore salvataggio"
 #: src/viewer/text/view.c:1412
 msgid "Error writing to file"
 msgstr "Errore scrittura del file"
-
-#~ msgid "Secure open failed"
-#~ msgstr "Apertura sicura fallita"
-
-#~ msgid "Unknown event."
-#~ msgstr "Evento sconosciuto."
-
-#~ msgid "A field"
-#~ msgstr "Un campo"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Internally allocated = %li KiB\n"
-#~ "Total program size = %li KiB\n"
-#~ "Resident set size = %li KiB\n"
-#~ "Shared pages = %li KiB\n"
-#~ "Text (code) = %li KiB\n"
-#~ "Data/stack = %li KiB\n"
-#~ "Libraries = %li KiB\n"
-#~ "Dirty pages = %li KiB"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Allocati internamente = %li KiB\n"
-#~ "Dimensione totale del programma = %li KiB\n"
-#~ "Dimensione residente = %li KiB\n"
-#~ "Pagine condivise = %li KiB\n"
-#~ "Text (codice) = %li KiB\n"
-#~ "Dati/stack = %li KiB\n"
-#~ "Librerie  = %li KiB\n"
-#~ "Pagine marcate dirty = %li KiB"
-
-#~ msgid "Verify the peer's SSL certificate."
-#~ msgstr "Verifica il certificato SSL del peer."
-
-#~ msgid "Columns"
-#~ msgstr "Colonne"
-
-#~ msgid "Rows"
-#~ msgstr "Righe"
-
-#~ msgid ""
-#~ "Ask if a login form should be saved to file or not.\n"
-#~ "This option only disables the dialog, already saved login\n"
-#~ "forms are unaffected. (DISABLED)"
-#~ msgstr ""
-#~ "Chiedi se un form di login deve essere salvato o no.\n"
-#~ "Questa opzione disabilita solo la finestra di dialogo, i form\n"
-#~ "di login già salvati non ne riesentono. (DISABILITATO)"
-
-#~ msgid "Resize ~terminal"
-#~ msgstr "Ridimensiona ~terminale"
-
-#~ msgid "Form memory"
-#~ msgstr "Storico dei form"

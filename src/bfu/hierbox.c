@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.79 2003/11/22 03:04:20 miciah Exp $ */
+/* $Id: hierbox.c,v 1.80 2003/11/22 13:42:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 #include "bfu/dialog.h"
 #include "bfu/hierbox.h"
 #include "bfu/listbox.h"
+#include "bfu/msgbox.h"
 #include "bfu/text.h"
 #include "bookmarks/bookmarks.h"
 #include "bookmarks/dialogs.h"
@@ -302,6 +303,8 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 	return do_dialog(term, dlg, getml(dlg, NULL));
 }
 
+/* Delete operation */
+
 static int
 scan_for_marks(struct listbox_item *item, void *info, int *offset)
 {
@@ -325,6 +328,7 @@ get_hierbox_delete_info(struct listbox_data *box, struct terminal *term)
 
 	delete_info->item = box->sel;
 	delete_info->term = term;
+	delete_info->box = box;
 
 	/* Look if it wouldn't be more interesting to blast off the marked
 	 * item. */
@@ -334,14 +338,151 @@ get_hierbox_delete_info(struct listbox_data *box, struct terminal *term)
 	return delete_info;
 }
 
+static void
+do_delete_item(struct listbox_item *item, struct delete_hierbox_item_info *info,
+	       int last)
+{
+	struct listbox_ops *ops = info->box->ops;
+
+	assert(item && item->udata);
+
+	if (ops->is_used(item)) {
+		struct terminal *term = info->term;
+
+		if (item->type == BI_FOLDER) {
+			msg_box(term, NULL, MSGBOX_FREE_TEXT,
+				N_("Deleting used folder"), AL_CENTER,
+				msg_text(term, N_("Sorry, but the folder \"%s\""
+					 "is being used by something else."),
+					item->text),
+				NULL, 1,
+				N_("OK"), NULL, B_ENTER | B_ESC);
+
+		} else {
+			unsigned char *msg = ops->get_info(item, term);
+
+			if (!msg) return;
+
+			msg_box(term, getml(msg, NULL), MSGBOX_FREE_TEXT,
+				N_("Deleting used item"), AL_CENTER,
+				msg_text(term, N_("Sorry, but the item \"%s\""
+					 "is being used by something else.\n\n"
+					 "%s"),
+					item->text, msg),
+				NULL, 1,
+				N_("OK"), NULL, B_ENTER | B_ESC);
+		}
+
+		return;
+	}
+
+	if (item->type == BI_FOLDER) {
+		struct listbox_item *child = item->child.next;
+
+		while (child != (void *) &item->child) {
+			child = child->next;
+			do_delete_item(child->prev, info, 0);
+		}
+	}
+
+	if (list_empty(item->child))
+		ops->done(item, last);
+}
+
+static int
+delete_marked(struct listbox_item *item, void *data_, int *offset)
+{
+	struct delete_hierbox_item_info *delete_info = data_;
+
+	if (item->marked && !delete_info->box->ops->is_used(item)) {
+		/* Save the first marked so it can be deleted last */
+		if (!delete_info->item) {
+			delete_info->item = item;
+		} else {
+			do_delete_item(item, delete_info, 0);
+		}
+
+		return 1;
+	}
+
+	return 0;
+}
+
+static void
+push_ok_delete_button(void *delete_info_)
+{
+	struct delete_hierbox_item_info *delete_info = delete_info_;
+
+	if (delete_info->item) {
+		delete_info->box->ops->unlock(delete_info->item);
+	} else {
+		traverse_listbox_items_list(delete_info->box->items->next, 0, 0,
+					    delete_marked, delete_info);
+		if (!delete_info->item) return;
+	}
+
+	/* Delete the last one (traversal should save one to delete) */
+	do_delete_item(delete_info->item, delete_info, 1);
+}
+
+static void
+push_cancel_delete_button(void *delete_info_)
+{
+	struct delete_hierbox_item_info *delete_info = delete_info_;
+
+	if (delete_info->item)
+		delete_info->box->ops->unlock(delete_info->item);
+}
+
 int
 push_hierbox_delete_button(struct dialog_data *dlg_data,
 			   struct widget_data *button)
 {
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
+	struct delete_hierbox_item_info *delete_info;
 
-	assert(box->ops->del);
-	box->ops->del(term, box);
+	if (!box->sel || !box->sel->udata) return 0;
+
+	assert(box->ops);
+
+	delete_info = get_hierbox_delete_info(box, term);
+	if (!delete_info) return 0;
+
+	if (!delete_info->item) {
+		msg_box(term, getml(delete_info, NULL), 0,
+			N_("Delete marked items"), AL_CENTER,
+			N_("Delete marked items?"),
+			delete_info, 2,
+			N_("Yes"), push_ok_delete_button, B_ENTER,
+			N_("No"), push_cancel_delete_button, B_ESC);
+		return 0;
+	}
+
+	box->ops->lock(delete_info->item);
+
+	if (delete_info->item->type == BI_FOLDER) {
+		msg_box(term, getml(delete_info, NULL), MSGBOX_FREE_TEXT,
+			N_("Delete folder"), AL_CENTER,
+			msg_text(term, N_("Delete the folder \"%s\" and its content?"),
+				 delete_info->item->text),
+			delete_info, 2,
+			N_("Yes"), push_ok_delete_button, B_ENTER,
+			N_("No"), push_cancel_delete_button, B_ESC);
+	} else {
+		unsigned char *msg = box->ops->get_info(delete_info->item, term);
+
+		if (!msg) return 0;
+
+		msg_box(term, getml(delete_info, msg, NULL), MSGBOX_FREE_TEXT,
+			N_("Delete item"), AL_CENTER,
+			msg_text(term, N_("Delete item \"%s\"?\n\n"
+				"%s"),
+				delete_info->item->text, msg),
+			delete_info, 2,
+			N_("Yes"), push_ok_delete_button, B_ENTER,
+			N_("No"), push_cancel_delete_button, B_ESC);
+	}
+
 	return 0;
 }

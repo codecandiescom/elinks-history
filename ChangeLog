@@ -1,3 +1,186 @@
+Fri Apr  2 22:05:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Remove extract_proxy().  
+
+Fri Apr  2 22:04:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/protocol.c, protocol/protocol.h, protocol/user.c,
+	sched/task.c:
+
+	A nicish patch that should hopefully make the last one all worth it.
+	Pass URI struct to external protocol handler. Makes the job easier
+	for user protocol handlers.  
+
+Fri Apr  2 21:55:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	do_follow_url(): Cleanup protocol usage.  
+
+Fri Apr  2 21:52:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Another patch which is a bit fishy but it will all make sence in a
+	moment. Move URI struct registering up before anything else in in
+	do_follow_url() it is hopefully also more correct since any external
+	handler will be passed the translated URI with all the file://,
+	http:// etc crap (or will break some user protocol settings?).  
+
+Fri Apr  2 21:36:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.c:
+
+	Is it probably not so nice either but 'if you have said A ...'
+	anyways try to make better usage of URI struct in find_in_cache().  
+
+Fri Apr  2 21:21:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, dialogs/document.c,
+	document/document.c, document/renderer.c, document/css/css.c,
+	document/html/frames.c, protocol/http/codes.c, sched/connection.c,
+	sched/task.c:
+
+	find_in_cache(): Take URI arg.  
+
+Fri Apr  2 21:10:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/css.c:
+
+	It might look stupid and pointless at this stage but once we have
+	CSS cache it will be less I hope, anyway aquire URI struct in CSS
+	import handler.  
+
+Fri Apr  2 18:58:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, protocol.h:
+
+	Merge check_protocol() into known_protocol().  
+
+Fri Apr  2 18:41:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Removing path expansion from option parsing in the client. The bug
+	is else where and it works perfectly without on FreeBSD.  
+
+Fri Apr  2 18:15:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, document/refresh.c, protocol/proxy.c,
+	protocol/uri.c, protocol/uri.h, sched/download.c, sched/session.c,
+	sched/task.c, viewer/dump/dump.c:
+
+	get_uri(): Take URI string length as arg. If -1 strlen() will be
+	used.  
+
+Fri Apr  2 18:07:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/smb/smb.c:
+
+	Oops. Forgotten get_cache_entry(struri(..)) call.  
+
+Fri Apr  2 18:03:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	Describe the URI cache interface.  
+
+Fri Apr  2 17:58:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, protocol/uri.h:
+
+	get_cache_entry(): Make proper use of URI struct arg by calling new
+	macro get_proxied_uri().  
+
+Fri Apr  2 17:45:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, dialogs/document.c,
+	protocol/finger.c, protocol/file/file.c, protocol/ftp/ftp.c,
+	protocol/http/codes.c, protocol/http/http.c:
+
+	get_cache_entry(): Take URI arg.  
+
+Fri Apr  2 17:30:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: mime/mime.c, protocol/uri.c, protocol/uri.h,
+	protocol/http/http.c, sched/download.c:
+
+	get_extension_from_url(): Rename to get_extension_from_uri() and
+	take URI arg. Also we now start searching for the extension at the
+	uri->data position.  
+
+Fri Apr  2 17:17:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: mime/mime.c, mime/mime.h, sched/download.c:
+
+	get_content_type(): Take URI arg.  
+
+Fri Apr  2 17:13:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	get_temp_name(): Take URI arg.  
+
+Fri Apr  2 16:58:03 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/uri.c:
+
+	Check range of port, and let display an invalid syntax error message
+	if provided one is out of range.  
+
+Fri Apr  2 16:53:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: history.c, task.c, task.h:
+
+	ses_goto(): Take URI struct as arg.  
+
+Fri Apr  2 16:50:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	A few fixes of accessing free()d memory and useless checking.  
+
+Fri Apr  2 16:39:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Oops .. fix return value.  
+
+Fri Apr  2 16:38:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	A little preparing.  
+
+Fri Apr  2 16:35:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, sched/download.c,
+	sched/task.c, viewer/dump/dump.c:
+
+	get_cache_redirect_uri(): Return URI struct.  
+
+Fri Apr  2 16:16:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Add TODO about lowercasing scheme and hostname part in the URI
+	cache.  
+
+Fri Apr  2 15:03:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: refresh.c, refresh.h:
+
+	Use URI struct for document refreshing.  
+
+Fri Apr  2 07:27:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: config/conf.c, document/html/tables.c,
+	scripting/perl/hooks.c, terminal/kbd.c, viewer/dump/dump.c:
+
+	Trailing spaces fixes.  
+
 Thu Apr  1 18:34:13 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: protocol/proxy.c, protocol/proxy.h, sched/connection.c:

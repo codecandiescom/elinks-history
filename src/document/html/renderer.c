@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.99 2003/06/16 14:07:05 pasky Exp $ */
+/* $Id: renderer.c,v 1.100 2003/06/16 14:08:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -359,7 +359,7 @@ shift_chars(struct part *part, int y, int shift)
 	if (!a) return;
 
 	memcpy(a, &POS(0, y), len * sizeof(chr));
-	/* XXX: This is broken fundamentally and it gives us those color stains
+	/* XXX: This is fundamentally broken and it gives us those color stains
 	 * all over spanning from the colorful table cells. We asume that the
 	 * whole line is one-colored here, but we should take definitively more
 	 * care. But this looks like a fundamental design flaw and it'd require

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.5 2002/05/08 13:55:04 pasky Exp $ */
+/* $Id: charsets.c,v 1.6 2002/05/10 08:53:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,22 +61,37 @@ char *strings[256] = {
 	"\370", "\371", "\372", "\373", "\374", "\375", "\376", "\377",
 };
 
-void free_translation_table(struct conv_table *p)
+void
+free_translation_table(struct conv_table *p)
 {
 	int i;
-	for (i = 0; i < 256; i++) if (p[i].t) free_translation_table(p[i].u.tbl);
+
+	for (i = 0; i < 256; i++)
+		if (p[i].t)
+			free_translation_table(p[i].u.tbl);
+
 	mem_free(p);
 }
 
 unsigned char *no_str = NULL;
 
-void new_translation_table(struct conv_table *p)
+void
+new_translation_table(struct conv_table *p)
 {
 	int i;
+
 	if (!no_str) no_str = stracpy("*");
-	for (i = 0; i < 256; i++) if (p[i].t) free_translation_table(p[i].u.tbl);
-	for (i = 0; i < 128; i++) p[i].t = 0, p[i].u.str = strings[i];
-	for (; i < 256; i++) p[i].t = 0, p[i].u.str = no_str;
+	for (i = 0; i < 256; i++)
+		if (p[i].t)
+			free_translation_table(p[i].u.tbl);
+	for (i = 0; i < 128; i++) {
+		p[i].t = 0;
+		p[i].u.str = strings[i];
+	}
+	for (; i < 256; i++) {
+		p[i].t = 0;
+	       	p[i].u.str = no_str;
+	}
 }
 
 #define BIN_SEARCH(table, entry, entries, key, result)					\
@@ -100,30 +115,40 @@ int strange_chars[32] = {
 0x007e, 0x2122, 0x0161, 0x003e, 0x0153, 0x0000, 0x0000, 0x0000,
 };
 
-unsigned char *u2cp(int u, int to)
+unsigned char *
+u2cp(int u, int to)
 {
 	int j, s;
+
 	if (u < 128) return strings[u];
 	if (u == 0xa0) return "\001";
 	if (u == 0xad) return "";
+
 	if (u < 0xa0) {
-		if (!strange_chars[u - 0x80]) return NULL;
+		if (!strange_chars[u - 0x80])
+			return NULL;
+
 		return u2cp(strange_chars[u - 0x80], to);
 	}
 	for (j = 0; codepages[to].table[j].c; j++)
 		if (codepages[to].table[j].u == u)
 			return strings[codepages[to].table[j].c];
+
 	BIN_SEARCH(unicode_7b, x, N_UNICODE_7B, u, s);
 	if (s != -1) return unicode_7b[s].s;
+
 	return NULL;
 }
 
 unsigned char utf_buffer[7];
 
-unsigned char *encode_utf_8(int u)
+unsigned char *
+encode_utf_8(int u)
 {
 	memset(utf_buffer, 0, 7);
-	if (u < 0x80) utf_buffer[0] = u;
+
+	if (u < 0x80)
+		utf_buffer[0] = u;
 	else if (u < 0x800)
 		utf_buffer[0] = 0xc0 | ((u >> 6) & 0x1f),
 		utf_buffer[1] = 0x80 | (u & 0x3f);
@@ -148,37 +173,45 @@ unsigned char *encode_utf_8(int u)
 		utf_buffer[3] = 0x80 | ((u >> 12) & 0x3f),
 		utf_buffer[4] = 0x80 | ((u >> 6) & 0x3f),
 		utf_buffer[5] = 0x80 | (u & 0x3f);
+
 	return utf_buffer;
 }
 
 /* This slow and ugly code is used by the terminal utf_8_io */
-unsigned char *cp2utf_8(int from, int c)
+unsigned char *
+cp2utf_8(int from, int c)
 {
 	int j;
 
-	if (codepages[from].table == table_utf_8) return strings[c];
-	for (j = 0; codepages[from].table[j].c; j++) {
+	if (codepages[from].table == table_utf_8)
+		return strings[c];
+
+	for (j = 0; codepages[from].table[j].c; j++)
 		if (codepages[from].table[j].c == c)
-		{
 			return encode_utf_8(codepages[from].table[j].u);
-		}
-	}
-	if (c < 128) return strings[c];
+
+	if (c < 128)
+		return strings[c];
+
 	return encode_utf_8(UCS_NO_CHAR);
 }
 
-void add_utf_8(struct conv_table *ct, int u, unsigned char *str)
+void
+add_utf_8(struct conv_table *ct, int u, unsigned char *str)
 {
 	unsigned char *p = encode_utf_8(u);
+
 	while (p[1]) {
 		if (ct[*p].t) ct = ct[*p].u.tbl;
 		else {
 			struct conv_table *nct;
+
 			if (ct[*p].u.str != no_str) {
 				internal("bad utf encoding #1");
 				return;
 			}
-			if (!(nct = mem_alloc(sizeof(struct conv_table) * 256))) return;
+			nct = mem_alloc(sizeof(struct conv_table) * 256);
+			if (!nct) return;
 			memset(nct, 0, sizeof(struct conv_table) * 256);
 			new_translation_table(nct);
 			ct[*p].t = 1;
@@ -191,13 +224,15 @@ void add_utf_8(struct conv_table *ct, int u, unsigned char *str)
 		internal("bad utf encoding #2");
 		return;
 	}
-	if (ct[*p].u.str == no_str) ct[*p].u.str = str;
+	if (ct[*p].u.str == no_str)
+		ct[*p].u.str = str;
 }
 
 struct conv_table utf_table[256];
 int utf_table_init = 1;
 
-void free_utf_table()
+void
+free_utf_table()
 {
 	int i;
 
@@ -205,7 +240,8 @@ void free_utf_table()
 		mem_free(utf_table[i].u.str);
 }
 
-struct conv_table *get_translation_table_to_utf_8(int from)
+struct conv_table *
+get_translation_table_to_utf_8(int from)
 {
 	int i;
 	static int lfr = -1;
@@ -217,12 +253,14 @@ struct conv_table *get_translation_table_to_utf_8(int from)
 		utf_table_init = 0;
 	else
 		free_utf_table();
+
 	for (i = 0; i < 128; i++) utf_table[i].u.str = strings[i];
 	if (codepages[from].table == table_utf_8) {
 		for (i = 128; i < 256; i++)
 			utf_table[i].u.str = stracpy(strings[i]);
 		return utf_table;
 	}
+
 	for (i = 128; i < 256; i++) utf_table[i].u.str = NULL;
 	for (i = 0; codepages[from].table[i].c; i++) {
 		int u = codepages[from].table[i].u;
@@ -240,56 +278,87 @@ struct conv_table *get_translation_table_to_utf_8(int from)
 struct conv_table table[256];
 static int first = 1;
 
-void free_conv_table()
+void
+free_conv_table()
 {
 	if (!utf_table_init) free_utf_table();
-	if (first) memset(table, 0, sizeof(struct conv_table) * 256), first = 0;
+	if (first) {
+		memset(table, 0, sizeof(struct conv_table) * 256);
+		first = 0;
+	}
 	new_translation_table(table);
 	mem_free(no_str), no_str = NULL;
 }
 
-struct conv_table *get_translation_table(int from, int to)
+struct conv_table *
+get_translation_table(int from, int to)
 {
 	int i;
 	static int lfr = -1;
 	static int lto = -1;
-	if (first) memset(table, 0, sizeof(struct conv_table) * 256), first = 0;
-	if (/*from == to ||*/ from == -1 || to == -1) return NULL;
-	if (codepages[to].table == table_utf_8) return get_translation_table_to_utf_8(from);
-	if (from == lfr && to == lto) return table;
-	lfr = from; lto = to;
+
+	if (first) {
+		memset(table, 0, sizeof(struct conv_table) * 256);
+		first = 0;
+	}
+	if (/*from == to ||*/ from == -1 || to == -1)
+		return NULL;
+	if (codepages[to].table == table_utf_8)
+		return get_translation_table_to_utf_8(from);
+	if (from == lfr && to == lto)
+		return table;
+	lfr = from;
+	lto = to;
 	new_translation_table(table);
+
 	if (codepages[from].table == table_utf_8) {
 		int j;
-		for (j = 0; codepages[to].table[j].c; j++) add_utf_8(table, codepages[to].table[j].u, strings[codepages[to].table[j].c]);
-		for (i = 0; unicode_7b[i].x != -1; i++) if (unicode_7b[i].x >= 0x80) add_utf_8(table, unicode_7b[i].x, unicode_7b[i].s);
+
+		for (j = 0; codepages[to].table[j].c; j++)
+			add_utf_8(table, codepages[to].table[j].u,
+				  strings[codepages[to].table[j].c]);
+
+		for (i = 0; unicode_7b[i].x != -1; i++)
+			if (unicode_7b[i].x >= 0x80)
+				add_utf_8(table, unicode_7b[i].x,
+					  unicode_7b[i].s);
+
 	} else for (i = 128; i < 256; i++) {
 		int j;
 		char *u;
+
 		for (j = 0; codepages[from].table[j].c; j++) {
 			if (codepages[from].table[j].c == i) goto f;
 		}
 		continue;
-		f:
+
+f:
 		u = u2cp(codepages[from].table[j].u, to);
 		if (u) table[i].u.str = u;
 	}
+
 	return table;
 }
 
-static inline int xxstrcmp(unsigned char *s1, unsigned char *s2, int l2)
+static inline int
+xxstrcmp(unsigned char *s1, unsigned char *s2, int l2)
 {
 	while (l2) {
 		if (*s1 > *s2) return 1;
 		if (!*s1 || *s1 < *s2) return -1;
-		s1++, s2++, l2--;
+		s1++;
+	       	s2++;
+		l2--;
 	}
+
 	return !!*s1;
 }
 
-unsigned char *get_entity_string(unsigned char *st, int l, int encoding)
+unsigned char *
+get_entity_string(unsigned char *st, int l, int encoding)
 {
 	int n;
+
 	if (l <= 0) return NULL;
 	if (st[0] == '#') {
 		if (l == 1) return NULL;
@@ -299,75 +368,105 @@ unsigned char *get_entity_string(unsigned char *st, int l, int encoding)
 			st += 2, l -= 2;
 			do {
 				char c = upcase(*(st++));
-				if (c >= '0' && c <= '9') n = n * 16 + c - '0';
-				else if (c >= 'A' && c <= 'F') n = n * 16 + c - 'A' + 10;
-				else return NULL;
-				if (n >= 0x10000) return NULL;
+
+				if (c >= '0' && c <= '9')
+					n = n * 16 + c - '0';
+				else if (c >= 'A' && c <= 'F')
+					n = n * 16 + c - 'A' + 10;
+				else
+					return NULL;
+				if (n >= 0x10000)
+					return NULL;
 			} while (--l);
 		} else {
 			n = 0;
 			if (l > 6) return NULL;
-			st++, l--;
+			st++;
+		       	l--;
+
 			do {
 				char c = *(st++);
-				if (c >= '0' && c <= '9') n = n * 10 + c - '0';
-				else return NULL;
-				if (n >= 0x10000) return NULL;
+
+				if (c >= '0' && c <= '9')
+					n = n * 10 + c - '0';
+				else
+					return NULL;
+				if (n >= 0x10000)
+					return NULL;
 			} while (--l);
 		}
 	} else {
 		int s = 0, e = N_ENTITIES - 1;
+
 		while (s <= e) {
 			int c;
 			int m = (s + e) / 2;
+
 			c = xxstrcmp(entities[m].s, st, l);
 			if (!c) {
 				n = entities[m].c;
 				goto f;
 			}
-			if (c > 0) e = m - 1;
-			else s = m + 1;
+			if (c > 0)
+				e = m - 1;
+			else
+				s = m + 1;
 		}
+
 		return NULL;
-		f:;
+f:;
 	}
 
 	return u2cp(n, encoding);
 }
 
-unsigned char *convert_string(struct conv_table *ct, unsigned char *c, int l)
+unsigned char *
+convert_string(struct conv_table *ct, unsigned char *c, int l)
 {
 	unsigned char *buffer;
 	unsigned char *b;
 	int bp = 0;
 	int pp = 0;
+
 	if (!ct) {
 		int i;
-		for (i = 0; i < l; i++) if (c[i] == '&') goto xx;
+
+		for (i = 0; i < l; i++)
+			if (c[i] == '&')
+				goto xx;
 		return memacpy(c, l);
-		xx:;
+
+xx:;
 	}
-	if (!(buffer = mem_alloc(ALLOC_GR))) return NULL;
+
+	buffer = mem_alloc(ALLOC_GR);
+	if (!buffer) return NULL;
 	while (pp < l) {
 		unsigned char *e;
+
 		if (c[pp] < 128 && c[pp] != '&') {
-			putc:
+
+putc:
 			buffer[bp++] = c[pp++];
 			if (!(bp & (ALLOC_GR - 1))) {
-				if ((b = mem_realloc(buffer, bp + ALLOC_GR)))
+				b = mem_realloc(buffer, bp + ALLOC_GR);
+				if (b)
 					buffer = b;
 				else
 					bp--;
 			}
 			continue;
 		}
+
 		if (c[pp] != '&') {
 			struct conv_table *t;
 			int i;
+
 			if (!ct) goto putc;
 			t = ct;
 			i = pp;
-			decode:
+
+decode:
 			if (!t[c[i]].t) {
 				e = t[c[i]].u.str;
 			} else {
@@ -376,75 +475,100 @@ unsigned char *convert_string(struct conv_table *ct, unsigned char *c, int l)
 				goto decode;
 			}
 			pp = i + 1;
+
 		} else {
 			int i = pp + 1;
+
 			if (d_opt->plain) goto putc;
-			while (i < l && c[i] != ';' && c[i] != '&' && c[i] > ' ') i++;
-			if (!(e = get_entity_string(&c[pp + 1], i - pp - 1, d_opt->cp))) goto putc;
+			while (i < l && c[i] != ';'
+			       && c[i] != '&' && c[i] > ' ')
+				i++;
+
+			e = get_entity_string(&c[pp + 1], i - pp - 1,
+					      d_opt->cp);
+			if (!e) goto putc;
 			pp = i + (i < l && c[i] == ';');
 		}
+
 		if (!e[0]) continue;
 		if (!e[1]) {
 			buffer[bp++] = e[0];
 			if (!(bp & (ALLOC_GR - 1))) {
-				if ((b = mem_realloc(buffer, bp + ALLOC_GR)))
+				b = mem_realloc(buffer, bp + ALLOC_GR);
+				if (b)
 					buffer = b;
 				else
 					bp--;
 			}
 			continue;
 		}
+
 		while (*e) {
 			buffer[bp++] = *(e++);
 			if (!(bp & (ALLOC_GR - 1))) {
-				if ((b = mem_realloc(buffer, bp + ALLOC_GR)))
+				b = mem_realloc(buffer, bp + ALLOC_GR);
+				if (b)
 					buffer = b;
 				else
 					bp--;
 			}
 		}
 	}
+
 	buffer[bp] = 0;
 	return buffer;
 }
 
-int get_cp_index(unsigned char *n)
+int
+get_cp_index(unsigned char *n)
 {
 	int i, a, p, q;
 	int ii = -1, ll = 0;
+
 	for (i = 0; codepages[i].name; i++) {
 		for (a = 0; codepages[i].aliases[a]; a++) {
 			for (p = 0; n[p]; p++) {
 				if (upcase(n[p]) == upcase(codepages[i].aliases[a][0])) {
+					int slen;
+
 					for (q = 1; codepages[i].aliases[a][q]; q++) {
-						if (upcase(n[p+q]) != upcase(codepages[i].aliases[a][q])) goto fail;
+						if (upcase(n[p+q]) != upcase(codepages[i].aliases[a][q]))
+							goto fail;
 					}
-					if (strlen(codepages[i].aliases[a]) > ll) {
-						ll = strlen(codepages[i].aliases[a]);
+
+					slen = strlen(codepages[i].aliases[a]);
+					if (slen > ll) {
+						ll = slen;
 						ii = i;
 					}
 				}
-				fail:;
+fail:;
 			}
 		}
 	}
+
 	return ii;
 }
 
-unsigned char *get_cp_name(int index)
+unsigned char *
+get_cp_name(int index)
 {
 	if (index < 0) return "none";
+
 	return codepages[index].name;
 }
 
-unsigned char *get_cp_mime_name(int index)
+unsigned char *
+get_cp_mime_name(int index)
 {
 	if (index < 0) return "none";
 	if (!codepages[index].aliases) return NULL;
+
 	return codepages[index].aliases[0];
 }
 
-int is_cp_special(int index)
+int
+is_cp_special(int index)
 {
 	return codepages[index].table == table_utf_8;
 }

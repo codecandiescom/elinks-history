@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.56 2004/01/20 20:40:48 jonas Exp $ */
+/* $Id: scanner.c,v 1.57 2004/01/21 00:02:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -257,8 +257,9 @@ scan_css_tokens(struct css_scanner *scanner)
 {
 	struct css_token *table = scanner->table;
 	struct css_token *table_end = table + scanner->tokens;
-	int move_to_front = int_max(table_end - scanner->current, 0) * sizeof(struct css_token);
+	int move_to_front = int_max(table_end - scanner->current, 0);
 	struct css_token *current = move_to_front ? scanner->current : table;
+	size_t moved_size = 0;
 
 #ifdef CSS_SCANNER_DEBUG
 	if (scanner->tokens > 0) WDBG("Rescanning");
@@ -266,15 +267,16 @@ scan_css_tokens(struct css_scanner *scanner)
 
 	/* Move any untouched tokens */
 	if (move_to_front) {
-		memmove(table, current, move_to_front);
-		current = &table[move_to_front / sizeof(struct css_token)];
+		moved_size = move_to_front * sizeof(struct css_token);
+		memmove(table, current, moved_size);
+		current = &table[move_to_front];
 	}
 
 	/* Set all unused tokens to CSS_TOKEN_NONE */
-	memset(current, 0, CSS_SCANNER_TABLE_SIZE - move_to_front);
+	memset(current, 0, CSS_SCANNER_TABLE_SIZE - moved_size);
 
 	if (!scanner->position) {
-		scanner->tokens = move_to_front ? current - table : -1;
+		scanner->tokens = move_to_front ? move_to_front : -1;
 		scanner->current = table;
 		return;
 	}

@@ -9,6 +9,7 @@ ELinks-0.5.0:
 * new MIME subsystem
 * Guile scripting extensions
 * HTML meta refresh
+* 256 colors support
 
 ELinks-0.4.0:
 

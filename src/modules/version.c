@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.16 2003/09/28 00:13:18 zas Exp $ */
+/* $Id: version.c,v 1.17 2003/09/29 21:15:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,6 +37,8 @@ get_version(void)
 unsigned char *
 get_dyn_full_version(struct terminal *term, int more)
 {
+	static const unsigned char comma[] = ", ";
+
 	return straconcat(
 		get_version(),
 #if defined(DEBUG) && defined(__DATE__) && defined(__TIME__)
@@ -47,60 +49,59 @@ get_dyn_full_version(struct terminal *term, int more)
 		(unsigned char *) (more ? "\n\n" : "\n"),
 		_("Features:", term), " ",
 #ifndef DEBUG
-		_("Standard", term), ", ",
+		_("Standard", term),
 #else
-		_("Debug", term), ", ",
+		_("Debug", term),
 #endif
 #ifdef FASTMEM
-		_("Fastmem", term), ", ",
+		comma, _("Fastmem", term),
 #endif
 #ifdef USE_OWN_LIBC
-		_("Own Libc Routines", term), ", ",
+		comma, _("Own Libc Routines", term),
 #endif
 #ifndef BACKTRACE
-		_("No Backtrace", term), ", ",
+		comma, _("No Backtrace", term),
 #endif
 #ifdef HAVE_SSL
-		_("SSL", term), " ",
+		comma, _("SSL", term), " ",
 #ifdef HAVE_OPENSSL
 		"(OpenSSL)",
 #elif defined(HAVE_GNUTLS)
-		"(GNUTLS)",
+		"(GnuTLS)",
 #endif
-		 ", ",
 #endif
 #ifdef HAVE_LUA
-		"Lua", ", ",
+		comma, "Lua",
 #endif
 #ifdef HAVE_GUILE
-		"Guile", ", ",
+		comma, "Guile",
 #endif
 #ifdef IPV6
-		"IPv6", ", ",
+		comma, "IPv6",
 #endif
 #ifdef BOOKMARKS
-		_("Bookmarks", term), ", ",
+		comma, _("Bookmarks", term),
 #endif
 #ifdef COOKIES
-		_("Cookies", term), ", ",
+		comma, _("Cookies", term),
 #endif
 #ifdef GLOBHIST
-		_("Global History", term), ", ",
+		comma, _("Global History", term),
 #endif
 #ifdef USE_LEDS
-		_("LED indicators", term), ", ",
+		comma, _("LED indicators", term),
 #endif
 #ifdef HAVE_ZLIB_H
-		"gzip" ", ",
+		comma, "gzip",
 #endif
 #ifdef HAVE_BZLIB_H
-		"bzip2", ", ",
+		comma, "bzip2",
 #endif
 #ifdef FORMS_MEMORY
-		_("Forms memory", term), ", ",
+		comma, _("Forms memory", term),
 #endif
 #ifndef USE_MOUSE
-		_("No mouse", term),
+		comma, _("No mouse", term),
 #endif
 		NULL
 	);

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.229 2004/04/01 01:47:26 jonas Exp $ */
+/* $Id: download.c,v 1.230 2004/04/01 01:51:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -838,10 +838,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 	object_nolock(file_download); /* Debugging purpose. */
 
 	file_download->uri = get_uri_reference(codw_hop->tq->uri);
-	if (!file_download->uri) goto cancel;
-
 	file_download->file = codw_hop->real_file;
-
 	file_download->download.end = (void (*)(struct download *, void *)) download_data;
 	file_download->download.data = file_download;
 	file_download->last_pos = 0;
@@ -1091,10 +1088,16 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 
 	tq = mem_calloc(1, sizeof(struct tq));
 	if (!tq) goto do_not_follow;
+
+	tq->uri = get_uri(ses->loading_uri);
+	if (!tq->uri) {
+		mem_free(tq);
+		goto do_not_follow;
+	}
+
 	add_to_list(ses->tq, tq);
 	ret = 1;
 
-	tq->uri = get_uri(ses->loading_uri);
 	change_connection(loading, &tq->download, PRI_MAIN, 0);
 	loading->state = S_OK;
 

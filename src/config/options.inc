@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.102 2004/03/03 12:00:05 witekfl Exp $ */
+/* $Id: options.inc,v 1.103 2004/04/22 18:02:09 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1141,6 +1141,30 @@ struct option_info config_options_info[] = {
 		"dialogs", 0,
 		N_("Dialogs-specific appearance and behaviour settings.")),
 
+
+	INIT_OPT_TREE("ui", N_("Clock"),
+		"clock", 0, N_("Digital clock in the statusbar.")),
+
+#ifdef CONFIG_LEDS
+	INIT_OPT_BOOL("ui.clock", N_("Enable"),
+		"enable", 0, 0,
+		N_("Whether to display a digital clock in the statusbar.\n"
+		"Note that the LED indicators must be enabled for this\n"
+		"to take effect.")),
+#else
+	INIT_OPT_BOOL("ui.clock", N_("Enable"),
+		"enable", 0, 0,
+		N_("Whether to display a digital clock in the statusbar.\n"
+		"Note that the LED indicators (DISABLED) must be enabled\n"
+		"for this to take any effect.")),
+#endif
+
+	INIT_OPT_STRING("ui.clock", N_("Format"),
+		"format", 0, "%H:%M",
+		N_("Format string for the digital clock. See the strftime(3)\n"
+		"manpage for details.")),
+
+
 	INIT_OPT_INT("ui.dialogs", N_("Minimal height of listbox widget"),
 		"listbox_min_height", 0, 1, 20, 10,
 		N_("Minimal height of the listbox widget (used e.g. for bookmarks\n"
@@ -1162,6 +1186,10 @@ struct option_info config_options_info[] = {
 		"timer", 0,
 		N_("Timed action after certain interval of user inactivity. Someone can\n"
 		"even find this useful, although you may not believe that.")),
+
+	/* Compatibility alias. Added: 2004-04-22, 0.9.CVS. */
+	INIT_OPT_ALIAS("ui.timer", "clock",
+		"ui.clock"),
 
 #ifdef CONFIG_LEDS
 	INIT_OPT_INT("ui.timer", N_("Enable"),
@@ -1187,17 +1215,6 @@ struct option_info config_options_info[] = {
 		"action", 0, "",
 		N_("Key-binding action to be triggered when timer reaches zero.")),
 
-	INIT_OPT_TREE("ui.timer", N_("Clock"),
-		"clock", 0, N_("Digital clock.")),
-
-	INIT_OPT_BOOL("ui.timer.clock", N_("Enable"),
-		"enable", 0, 0,
-		N_("Whether to enable displaying of digital clock. Note that,\n"
-			"timer and LEDs should be enabled to make effect.")),
-
-	INIT_OPT_STRING("ui.timer.clock", N_("Format"),
-		"format", 0, "%H:%M",
-		N_("Format string for digital clock. See strftime(3) man page for details.")),
 
 	INIT_OPT_TREE("ui", N_("Window tabs"),
 		"tabs", 0,

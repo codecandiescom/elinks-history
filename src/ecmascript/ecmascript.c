@@ -1,5 +1,5 @@
 /* Base ECMAScript file. Mostly a proxy for specific library backends. */
-/* $Id: ecmascript.c,v 1.8 2004/09/23 15:25:27 jonas Exp $ */
+/* $Id: ecmascript.c,v 1.9 2004/09/23 15:26:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,6 +105,7 @@ ecmascript_protocol_handler(struct session *ses, struct uri *uri)
 
 	if (!doc_view)
 		return;
+
 	redirect_url = ecmascript_eval_stringback(doc_view->ecmascript,
 		&current_url);
 	if (!redirect_url)
@@ -114,11 +115,11 @@ ecmascript_protocol_handler(struct session *ses, struct uri *uri)
 	mem_free(redirect_url);
 	if (!redirect_uri)
 		return;
+
 	/* XXX: Is that safe to do at this point? --pasky */
 	goto_uri_frame(ses, redirect_uri, doc_view->name,
 		CACHE_MODE_NORMAL);
 	done_uri(redirect_uri);
-	return;
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: listmenu.h,v 1.2 2004/01/03 16:04:42 zas Exp $ */
+/* $Id: listmenu.h,v 1.3 2004/07/23 01:56:44 pasky Exp $ */
 
 #ifndef EL__BFU_LISTMENU_H
 #define EL__BFU_LISTMENU_H
@@ -14,7 +14,7 @@ struct list_menu {
 
 void init_menu(struct list_menu *menu);
 void destroy_menu(struct list_menu *menu);
-void add_select_item(struct list_menu *menu, struct string *string, unsigned char **value, int order, int dont_add);
+void add_select_item(struct list_menu *menu, struct string *string, struct string *orig_string, unsigned char **value, int order, int dont_add);
 void new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullname);
 struct menu_item *detach_menu(struct list_menu *menu);
 void menu_labels(struct menu_item *m, unsigned char *base, unsigned char **lbls);

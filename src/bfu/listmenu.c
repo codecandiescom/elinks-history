@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.31 2004/06/22 06:46:15 miciah Exp $ */
+/* $Id: listmenu.c,v 1.32 2004/07/23 01:56:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -192,7 +192,8 @@ menu_labels(struct menu_item *items, unsigned char *base, unsigned char **lbls)
 
 void
 add_select_item(struct list_menu *menu, struct string *string,
-		unsigned char **value, int order, int dont_add)
+		struct string *orig_string, unsigned char **value,
+		int order, int dont_add)
 {
 	int pos = order - 1;
 
@@ -203,7 +204,10 @@ add_select_item(struct list_menu *menu, struct string *string,
 	assert(value && pos >= 0);
 
 	if (!value[pos])
-		value[pos] = memacpy(string->source, string->length);
+		/* <select> values are not mangled by various encode_*()
+		 * functions, therefore we need to store them in the
+		 * original document encoding. */
+		value[pos] = memacpy(orig_string->source, orig_string->length);
 
 	if (dont_add) {
 		done_string(string);
@@ -212,4 +216,5 @@ add_select_item(struct list_menu *menu, struct string *string,
 		string->source = NULL;
 		string->length = 0;
 	}
+	done_string(orig_string);
 }

@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.40 2004/07/21 23:15:44 pasky Exp $ */
+/* $Id: forms.c,v 1.41 2004/07/23 01:56:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -470,7 +470,7 @@ do_html_select(unsigned char *attr, unsigned char *html,
 {
 	struct conv_table *ct = html_context.special_f(part, SP_TABLE, NULL);
 	struct form_control *fc;
-	struct string lbl = NULL_STRING;
+	struct string lbl = NULL_STRING, orig_lbl = NULL_STRING;
 	unsigned char **values = NULL;
 	unsigned char **labels;
 	unsigned char *t_name, *t_attr, *en;
@@ -498,6 +498,7 @@ see:
 abort:
 		*end = html;
 		if (lbl.source) done_string(&lbl);
+		if (orig_lbl.source) done_string(&orig_lbl);
 		if (values) {
 			int j;
 
@@ -518,6 +519,7 @@ abort:
 		while (l && isspace(s[l-1])) l--;
 		q = convert_string(ct, s, l, CSM_DEFAULT, NULL);
 		if (q) add_to_string(&lbl, q), mem_free(q);
+		add_bytes_to_string(&orig_lbl, s, l);
 	}
 
 	if (html + 2 <= eof && (html[1] == '!' || html[1] == '?')) {
@@ -531,19 +533,19 @@ abort:
 	}
 
 	if (!strlcasecmp(t_name, t_namelen, "/SELECT", 7)) {
-		add_select_item(&lnk_menu, &lbl, values, order, nnmi);
+		add_select_item(&lnk_menu, &lbl, &orig_lbl, values, order, nnmi);
 		goto end_parse;
 	}
 
 	if (!strlcasecmp(t_name, t_namelen, "/OPTION", 7)) {
-		add_select_item(&lnk_menu, &lbl, values, order, nnmi);
+		add_select_item(&lnk_menu, &lbl, &orig_lbl, values, order, nnmi);
 		goto see;
 	}
 
 	if (!strlcasecmp(t_name, t_namelen, "OPTION", 6)) {
 		unsigned char *value, *label;
 
-		add_select_item(&lnk_menu, &lbl, values, order, nnmi);
+		add_select_item(&lnk_menu, &lbl, &orig_lbl, values, order, nnmi);
 
 		if (has_attr(t_attr, "disabled")) goto see;
 		if (preselect == -1 && has_attr(t_attr, "selected")) preselect = order;
@@ -557,6 +559,7 @@ abort:
 		if (label) new_menu_item(&lnk_menu, label, order - 1, 0);
 		if (!value || !label) {
 			init_string(&lbl);
+			init_string(&orig_lbl);
 			nnmi = !!label;
 		}
 		goto see;
@@ -564,7 +567,7 @@ abort:
 
 	if (!strlcasecmp(t_name, t_namelen, "OPTGROUP", 8)
 	    || !strlcasecmp(t_name, t_namelen, "/OPTGROUP", 9)) {
-		add_select_item(&lnk_menu, &lbl, values, order, nnmi);
+		add_select_item(&lnk_menu, &lbl, &orig_lbl, values, order, nnmi);
 
 		if (group) new_menu_item(&lnk_menu, NULL, -1, 0), group = 0;
 	}

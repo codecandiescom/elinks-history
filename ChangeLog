@@ -1,3 +1,15 @@
+Fri Mar  8 10:49:15 2002  Petr Baudis <pasky@ji.cz>:
+
+	* cookies.c, default.c, links.h:
+	
+	make cookies accepting settable thru runtime option
+
+Fri Mar  8 10:18:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* cookies.c, default.c, links.h, view.c:
+	
+	make cookies saving/loading/resaving turnable thru option
+
 Thu Mar  7 22:33:32 2002  Petr Baudis <pasky@ji.cz>:
 
 	* bfu.c, default.c, links.h:

@@ -1,3 +1,234 @@
+Thu Jan  2 19:36:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* Makefile.base, src/cookies/Makefile.am:
+
+	Generic handling of test dependencies (src/util/). Cookie test
+	building updated to use it. This also means tests are only build
+	recursively when invoking 'make check' 
+
+Thu Jan  2 18:39:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/Makefile.in:
+
+	Dependency and compilator invocation fixes. Now gettext actually
+	compiles ;-).  
+
+Thu Jan  2 18:31:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* m4/gettext.m4:
+
+	_REALLY_ always use our own gettext implementation, never the system
+	one.  
+
+Thu Jan  2 18:31:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile.am, autogen.sh:
+
+	Put a notice at the top of acinclude.m4. Create dummy acinclude.m4
+	in build tree in order to force aclocal/autoconf/... call when
+	acinclude.m4 was modified (stupid automake's broken dependecies).
+	Destroy acinclude.m4 upon make distclean.  
+
+Thu Jan  2 18:19:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile.am:
+
+	Automatically regenerate acinclude.m4.  
+
+Thu Jan  2 18:09:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* m4/gettext.m4, src/intl/gettext/TODO:
+
+	Always use our own gettext implementation, never the system one.  
+
+Thu Jan  2 17:57:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/Makefile.am:
+
+	intl/gettext/libintl.a -> @INTLLIBS@ 
+
+Thu Jan  2 17:57:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/Makefile.in:
+
+	Fix automatic Makefile rebuilding rule to depend on config.status
+	with correct path.  
+
+Thu Jan  2 17:56:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/TODO:
+
+	Force to always use our own gettext.  
+
+Thu Jan  2 17:52:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* acconfig.h, configure.in:
+
+	Set LOCALEDIR macro in config.h.  
+
+Thu Jan  2 17:50:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/Makefile.am:
+
+	Link ELinks against intl/gettext/libintl.a.  
+
+Thu Jan  2 17:41:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile.am:
+
+	Connected po/ to the build system.  
+
+Thu Jan  2 16:31:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/intl/Makefile.am, src/intl/gettext/Makefile.in,
+	src/intl/gettext/TODO, src/intl/gettext/VERSION,
+	src/intl/gettext/bindtextdom.c, src/intl/gettext/config.charset,
+	src/intl/gettext/dcgettext.c, src/intl/gettext/dcigettext.c,
+	src/intl/gettext/dcngettext.c, src/intl/gettext/dgettext.c,
+	src/intl/gettext/dngettext.c, src/intl/gettext/explodename.c,
+	src/intl/gettext/finddomain.c, src/intl/gettext/gettext.c,
+	src/intl/gettext/gettext.h, src/intl/gettext/gettextP.h,
+	src/intl/gettext/hash-string.h, src/intl/gettext/intl-compat.c,
+	src/intl/gettext/l10nflist.c, src/intl/gettext/libgettext.h,
+	src/intl/gettext/libgnuintl.h, src/intl/gettext/loadinfo.h,
+	src/intl/gettext/loadmsgcat.c, src/intl/gettext/localcharset.c,
+	src/intl/gettext/locale.alias, src/intl/gettext/localealias.c,
+	src/intl/gettext/ngettext.c, src/intl/gettext/plural.c,
+	src/intl/gettext/plural.y, src/intl/gettext/ref-add.sin,
+	src/intl/gettext/ref-del.sin, src/intl/gettext/textdomain.c:
+
+	Gettext sources included in the ELinks source tree (and build
+	system). Not used anywhere yet.  
+
+Thu Jan  2 16:26:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/.cvsignore:
+
+	Makefile.in shouldn't be ignored here.  
+
+Thu Jan  2 16:24:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* m4/gettext.m4:
+
+	intl/ -> src/intl/gettext/ 
+
+Thu Jan  2 16:17:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile.am:
+
+	Distribute ABOUT_NLS.  
+
+Thu Jan  2 16:10:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* config.guess, config.sub:
+
+	config.guess and config.sub re-introduced. Gettext wants them.  
+
+Thu Jan  2 16:02:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Added some gettext calls.  
+
+Thu Jan  2 15:51:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* m4/: codeset.m4, gettext.m4, glibc21.m4, iconv.m4, isc-posix.m4,
+	lcmessage.m4, progtest.m4:
+
+	Added gettext's m4s.  
+
+Thu Jan  2 15:45:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* .cvsignore, autogen.sh:
+
+	autogen.sh now also creates acinclude.m4 from m4/*.m4 and removes
+	config.cache.  
+
+Thu Jan  2 15:34:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* m4/.vimrc, src/intl/gettext/.cvsignore, src/intl/gettext/.vimrc:
+
+	Added fairies.  
+
+Thu Jan  2 15:33:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile.am:
+
+	Distribute content of m4/.  
+
+Thu Jan  2 15:32:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: Makefile.in.in, POTFILES.in:
+
+	Added some base for po-files infrastructure.  
+
+Thu Jan  2 15:07:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* ABOUT-NLS:
+
+	Added gettext's ABOUT-NLS.  
+
+Thu Jan  2 15:01:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Removed arekm's record from AUTHORS - it contained only gettext
+	support, which is not used anymore and now with its reintroduction
+	(completely new), it could be misleading.  
+
+Thu Jan  2 14:34:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: .cvsignore, .vimrc:
+
+	Added fairies.  
+
+Thu Jan  2 12:28:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO, src/elusive/TODO:
+
+	Document source colorization moved from ELinks TODO to ELusive TODO.
+	Added link to ELusive TODO to ELinks TODO.  
+
+Thu Jan  2 09:40:17 2003  Laurent Monin <zas@norz.org>:
+
+	* TODO:
+
+	Source colorization added.  
+
+Thu Jan  2 05:37:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/inpfield.c, bookmarks/dialogs.c, config/dialogs.c,
+	config/opttypes.c, dialogs/auth.c, dialogs/document.c,
+	dialogs/edit.c, dialogs/info.c, dialogs/menu.c, dialogs/mime.c,
+	dialogs/options.c, document/download.c, document/session.c,
+	globhist/dialogs.c, intl/language.h, lua/core.c, osdep/os_dep.c,
+	protocol/url.c, protocol/user.c, sched/sched.c, viewer/text/view.c:
+
+	Second step in the gettext transition - use a _() macro instead of
+	the TEXT() macro. Patch by witekfl (no-hotkey updates by me).  
+
+Thu Jan  2 05:25:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/README, intl/belarusian.lng, intl/brazilian_portuguese.lng,
+	intl/bulgarian.lng, intl/catalan.lng, intl/croatian.lng,
+	intl/czech.lng, intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/bfu/inphist.c, src/bfu/menu.c, src/bfu/menu.h,
+	src/dialogs/menu.c, src/dialogs/mime.c, src/dialogs/options.c,
+	src/document/html/parser.c, src/osdep/os_dep.c, src/osdep/os_dep.h,
+	src/viewer/text/view.c:
+
+	Removed separate hotkey translations. Now hotkeys are directly in
+	menu item translations, indicated by a tilde (~) preceding the
+	hotkey. Should make things easier for translators, also gettext
+	transition preparation step.  
+
 Wed Jan  1 20:42:45 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* intl/: belarusian.lng, brazilian_portuguese.lng, bulgarian.lng,

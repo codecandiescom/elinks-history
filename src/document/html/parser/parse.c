@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.11 2004/04/24 02:52:04 jonas Exp $ */
+/* $Id: parse.c,v 1.12 2004/04/24 10:35:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -794,13 +794,13 @@ process_element(unsigned char *name, int namelen, int endingtag,
 
 				if (ei->nopair == 2) {
 					foreach (e, html_stack) {
-						if (e->type < ELEMENT_KILLABLE) return;
-						if (e->linebreak || !ei->linebreak) return;
+						if (e->type < ELEMENT_KILLABLE) break;
+						if (e->linebreak || !ei->linebreak) break;
 					}
 				} else foreach (e, html_stack) {
-					if (e->linebreak && !ei->linebreak) return;
-					if (e->type < ELEMENT_KILLABLE) return;
-					if (!strlcasecmp(e->name, e->namelen, name, namelen)) return;
+					if (e->linebreak && !ei->linebreak) break;
+					if (e->type < ELEMENT_KILLABLE) break;
+					if (!strlcasecmp(e->name, e->namelen, name, namelen)) break;
 				}
 				if (!strlcasecmp(e->name, e->namelen, name, namelen)) {
 					while (e->prev != (void *) &html_stack)

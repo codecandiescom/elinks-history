@@ -1,4 +1,4 @@
-/* $Id: auth.h,v 1.7 2003/07/10 03:02:55 jonas Exp $ */
+/* $Id: auth.h,v 1.8 2003/07/10 13:16:36 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_HTTP_AUTH_H
 #define EL__PROTOCOL_HTTP_AUTH_H
@@ -11,7 +11,6 @@ struct http_auth_basic {
         int blocked;
         int valid;
         unsigned char *url;
-        int url_len;
         unsigned char *realm;
         unsigned char *uid;
         unsigned char *passwd;

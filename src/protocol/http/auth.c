@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.28 2003/07/10 13:02:16 jonas Exp $ */
+/* $Id: auth.c,v 1.29 2003/07/10 13:16:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,7 +104,6 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 	if (!entry) return NULL;
 
 	entry->url = auth_url;
-	entry->url_len = strlen(entry->url); /* FIXME: Not really needed. */
 
 	if (realm) {
 		/* Copy realm value. */

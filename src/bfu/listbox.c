@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.17 2002/08/29 15:22:25 pasky Exp $ */
+/* $Id: listbox.c,v 1.18 2002/08/29 15:34:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,6 +78,8 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 	box = (struct listbox_data *) item->data;
 
 	while (offset) {
+		if (fn) fn (item, d);
+
 		if (offset > 0) {
 			/* Direction UP. */
 
@@ -132,9 +134,10 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 		}
 
 next:
-		if (fn) fn (item, d);
+		/* Hmm.. sometimes I need this place ;-). --pasky */
 	}
 
+	/* if (fn) fn (item, d); */
 	return item;
 }
 
@@ -279,8 +282,8 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 	}
 
 	if ((ev->b & BM_ACT) == B_UP) {
-		if ((ev->y >= di->y) && (ev->x >= di->x &&
-					 ev->x <= di->l + di->x)) {
+		if ((ev->y >= di->y && ev->y < di->y + di->item->gid) &&
+		    (ev->x >= di->x && ev->x <= di->x + di->l)) {
 			/* Clicked in the box. */
 			int offset;
 

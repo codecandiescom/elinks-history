@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.108 2004/10/13 15:34:46 zas Exp $ */
+/* $Id: info.c,v 1.109 2004/11/14 01:02:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,18 +159,26 @@ menu_copying(struct terminal *term, void *d, struct session *ses)
 static unsigned char *
 get_ressource_info(struct terminal *term, void *data)
 {
-	return msg_text(term, N_("Resources: %d handles, %d timers.\n"
+	struct string info;
+
+	if (!init_string(&info))
+		return NULL;
+
+	add_format_to_string(&info,
+		_("Resources: %d handles, %d timers.\n"
 		"Connections: %d connections, %d connecting, %d "
 		"transferring, %d keepalive.\n"
 		"Memory cache: %d bytes, %d files, %d locked, %d "
 		"loading.\n"
-		"Formatted document cache: %d documents, %d locked."),
+		"Formatted document cache: %d documents, %d locked.", term),
 		select_info(INFO_FILES), select_info(INFO_TIMERS),
 		connect_info(INFO_FILES), connect_info(INFO_CONNECTING),
 		connect_info(INFO_TRANSFER), connect_info(INFO_KEEP),
 		cache_info(INFO_BYTES), cache_info(INFO_FILES),
 		cache_info(INFO_LOCKED), cache_info(INFO_LOADING),
 		formatted_info(INFO_FILES), formatted_info(INFO_LOCKED));
+
+	return info.source;
 }
 
 void

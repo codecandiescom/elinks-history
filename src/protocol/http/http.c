@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.69 2002/11/25 14:40:51 zas Exp $ */
+/* $Id: http.c,v 1.70 2002/11/29 00:32:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -657,6 +657,11 @@ is_line_in_buffer(struct read_buffer *rb)
  * @remark	In this function, value of either info->chunk_remaining or
  *		info->length is being changed (it depends on if chunked mode is
  *		used or not).
+ *		Note that the function is still a little esotheric for me. Don't
+ *		take it lightly and don't mess with it without grave reason! If
+ *		you dare to touch this without testing the changes on slashdot
+ *		and cvsweb (including revision history), don't dare to send me
+ *		any patches! ;) --pasky
  */
 static unsigned char *
 uncompress_data(struct connection *conn, unsigned char *data, int len,
@@ -683,18 +688,25 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 		return data;
 	}
 
+	*new_len = 0; /* new_len must be zero if we would ever return NULL */
+
 	if (conn->stream_pipes[0] == -1) {
 		if (c_pipe(conn->stream_pipes) < 0) return NULL;
 		if (set_nonblocking_fd(conn->stream_pipes[0]) < 0) return NULL;
 		if (set_nonblocking_fd(conn->stream_pipes[1]) < 0) return NULL;
 	}
 
-	*new_len = 0;
 	while (r == ret) {
 		if (!finishing) {
 			int written = write(conn->stream_pipes[1], data, len);
 
-			if (written > 0) {
+			/* When we're writing zero bytes already, we want to
+			 * zero ret properly for now, so that we'll go out for
+			 * some more data. Otherwise, read_encoded() will yield
+			 * zero bytes, but ret will be on its original value,
+			 * causing us to close the stream, and that's disaster
+			 * when more data are about to come yet. */
+			if (written > 0 || (!written && !len)) {
 				ret = written;
 				data += ret;
 				len -= ret;
@@ -712,8 +724,20 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 			}
 		}
 		/* finishing could be changed above ;) */
-		if (finishing) ret = 65536;
-		if (ret < 4096) return (output == DUMMY ? NULL : output);
+		if (finishing) {
+			/* Granularity of the final decompression. When we were
+			 * taking the decompressed content, we only took the
+			 * amount which we inserted there. When finishing, we
+			 * have to drain the rest from the beast. */
+			/* TODO: We should probably double the ret before trying
+			 * to read as well..? Would maybe make the progressive
+			 * displaying feeling better? --pasky */
+			ret = 65536;
+		}
+		if (ret < 4096) {
+			/* Not enough data, try in next round. */
+			return (output == DUMMY ? NULL : output);
+		}
 
 		if (!conn->stream) {
 			conn->stream = open_encoded(conn->stream_pipes[0],
@@ -726,7 +750,7 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 
 		r = read_encoded(conn->stream, output + *new_len, ret);
 		if (r > 0) *new_len += r;
-	};
+	}
 
 	if (r < 0) {
 		mem_free(output);

@@ -15,10 +15,12 @@ AC_PROG_CC
 AC_PROG_AWK
 AC_PROG_RANLIB
 
-dnl gcc specific options
+dnl gcc specific options (to be continued at the bottom of configure)
 if test "x$ac_cv_prog_gcc" = "xyes"; then
   dnl We want to see all warnings and live with none.
-  CFLAGS="$CFLAGS -Wall -Werror"
+  dnl We can't set up -Werror here as there may be some warnings in test
+  dnl suite of configure, and we don't want to fail them.
+  CFLAGS="$CFLAGS -Wall"
 fi
 
 dnl ===================================================================
@@ -407,6 +409,11 @@ CONFDIR=`(
 AC_DEFINE_UNQUOTED(CONFDIR,"$CONFDIR")
 AC_SUBST(CONFDIR)
 
+dnl gcc specific options (continue)
+if test "x$ac_cv_prog_gcc" = "xyes"; then
+  dnl We want to see all warnings and live with none.
+  CFLAGS="$CFLAGS -Werror"
+fi
 
 
 AC_OUTPUT([ \

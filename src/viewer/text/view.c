@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.352 2004/01/08 03:15:02 jonas Exp $ */
+/* $Id: view.c,v 1.353 2004/01/08 21:00:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1022,7 +1022,7 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 			break;
 
 		default:
-			INTERNAL("I think you forgot to take your medication, mental boy!.");
+			INTERNAL("I think you forgot to take your medication, mental boy!");
 			return;
 	}
 

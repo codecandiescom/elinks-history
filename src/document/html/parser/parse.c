@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.7 2004/04/24 01:19:26 pasky Exp $ */
+/* $Id: parse.c,v 1.8 2004/04/24 01:20:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -812,28 +812,22 @@ process_element(unsigned char *name, int namelen, int inv,
 			}
 
 			if (html_top.options && global_doc_opts->css_enable) {
-				/* XXX: We should apply CSS
-				 * otherwise as well, but
-				 * that'll need some deeper
-				 * changes in order to have
-				 * options filled etc. Probably
-				 * just calling css_apply()
-				 * from more places, since we
-				 * usually have nopair set when
-				 * we either (1) rescan on your
-				 * own from somewhere else (2)
-				 * html_stack_dup() in our own
-				 * way. --pasky */
-				/* Call it now to gain some of
-				 * the stuff which might affect
-				 * formatting of some elements. */
+				/* XXX: We should apply CSS otherwise as well,
+				 * but that'll need some deeper changes in
+				 * order to have options filled etc. Probably
+				 * just calling css_apply() from more places,
+				 * since we usually have nopair set when we
+				 * either (1) rescan on your own from somewhere
+				 * else (2) html_stack_dup() in our own way.
+				 * --pasky */
+				/* Call it now to gain some of the stuff which
+				 * might affect formatting of some elements. */
 				css_apply(&html_top, &css_styles);
 			}
 			if (ei->func) ei->func(attr);
 			if (html_top.options && global_doc_opts->css_enable) {
-				/* Call it now to override
-				 * default colors of the
-				 * elements. */
+				/* Call it now to override default colors of
+				 * the elements. */
 				css_apply(&html_top, &css_styles);
 			}
 

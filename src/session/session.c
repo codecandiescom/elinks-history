@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.494 2004/06/12 11:45:09 jonas Exp $ */
+/* $Id: session.c,v 1.495 2004/06/12 11:54:08 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -774,7 +774,7 @@ encode_session_info(struct string *info, int cp, struct list_head *url_list)
 int
 decode_session_info(struct terminal *term, int len, const int *data)
 {
-	struct session *ses;
+	struct session *base_session;
 	enum remote_session_flags remote = 0;
 	struct uri *current_uri;
 	unsigned char *str;
@@ -786,7 +786,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 	 * comparing it to possibly supplied -base-session here, and clone the
 	 * session with id of base-session (its current document association
 	 * only, rather) to the newly created session. */
-	ses = get_session(*(data++));
+	base_session = get_session(*(data++));
 	magic = *(data++);
 
 	switch (magic) {
@@ -809,8 +809,8 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		 * want to hook up with the master. */
 		if (!remote) break;
 
-		ses = get_master_session();
-		if (!ses) return 0;
+		base_session = get_master_session();
+		if (!base_session) return 0;
 
 		break;
 
@@ -837,16 +837,16 @@ decode_session_info(struct terminal *term, int len, const int *data)
 
 	if (len <= 0) {
 		if (!remote)
-			return !!init_session(ses, term, NULL, 0);
+			return !!init_session(base_session, term, NULL, 0);
 
 		/* Even though there are no URIs we still have to
 		 * handle remote stuff. */
-		init_remote_session(ses, &remote, NULL);
+		init_remote_session(base_session, &remote, NULL);
 		return 0;
 	}
 
-	current_uri = ses && have_location(ses)
-		    ? cur_loc(ses)->vs.uri : NULL;
+	current_uri = base_session && have_location(base_session)
+		    ? cur_loc(base_session)->vs.uri : NULL;
 
 	/* TODO: Warn about bad syntax. --jonas */
 
@@ -863,12 +863,12 @@ decode_session_info(struct terminal *term, int len, const int *data)
 
 		if (uri) {
 			if (remote) {
-				init_remote_session(ses, &remote, uri);
+				init_remote_session(base_session, &remote, uri);
 
 			} else {
 				int backgrounded = !list_empty(term->windows);
 
-				if (!init_session(ses, term, uri, backgrounded))
+				if (!init_session(base_session, term, uri, backgrounded))
 					break;
 			}
 			done_uri(uri);

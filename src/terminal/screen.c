@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.81 2003/09/22 15:31:11 zas Exp $ */
+/* $Id: screen.c,v 1.82 2003/09/25 21:47:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -258,9 +258,14 @@ get_screen_driver(struct terminal *term)
 	int len = strlen(name);
 	struct screen_driver *driver;
 
-	/* TODO: LRU? ;) */
 	foreach (driver, active_screen_drivers) {
 		if (driver->type == type && !memcmp(driver->name, name, len)) {
+			/* Some simple probably useless MRU ;) */
+			if (driver != active_screen_drivers.next) {
+				del_from_list(driver);
+				add_to_list(active_screen_drivers, driver);
+			}
+
 			return driver;
 		}
 	}
@@ -352,7 +357,7 @@ print_char(struct string *screen, struct screen_driver *driver,
 			} else {
 				length = 6;
 			}
-	 	} else if (ch->attr & SCREEN_ATTR_STANDOUT) {
+		} else if (ch->attr & SCREEN_ATTR_STANDOUT) {
 			/* Flip the fore- and background colors for highlighing
 			 * purposes. */
 			code[3] = ';';
@@ -434,9 +439,9 @@ redraw_screen(struct terminal *term)
 	int prev_y = -1;
 	struct screen_state state = { 0xFF, 0xFF, 0xFF };
 	struct terminal_screen *screen = term->screen;
- 	register struct screen_char *current;
- 	register struct screen_char *pos;
- 	register struct screen_char *prev_pos;
+	register struct screen_char *current;
+	register struct screen_char *pos;
+	register struct screen_char *prev_pos;
 
 	if (!driver
 	    || !screen
@@ -445,13 +450,13 @@ redraw_screen(struct terminal *term)
 	    || !init_string(&image)) return;
 
 	current = screen->last_image;
- 	pos = screen->image;
- 	prev_pos = NULL;
+	pos = screen->image;
+	prev_pos = NULL;
 
- 	for (; y < term->y; y++) {
- 		register int x = 0;
+	for (; y < term->y; y++) {
+		register int x = 0;
 
- 		for (; x < term->x; x++, current++, pos++) {
+		for (; x < term->x; x++, current++, pos++) {
 
 			if (pos->color == current->color) {
 				/* No update for exact match. */
@@ -459,15 +464,15 @@ redraw_screen(struct terminal *term)
 					continue;
 				/* Else if the color match and the data is ``space''. */
 				if ((pos->data <= 1 || pos->data == ' ') &&
- 				    (current->data <= 1 || current->data == ' '))
+				    (current->data <= 1 || current->data == ' '))
 					continue;
 			}
 
 			/* Move the cursor when @prev_pos is more than 10 chars
 			 * away. */
- 			if (prev_y != y || prev_pos + 10 <= pos) {
- 				add_cursor_move_to_string(&image, y + 1, x + 1);
- 				prev_pos = pos;
+			if (prev_y != y || prev_pos + 10 <= pos) {
+				add_cursor_move_to_string(&image, y + 1, x + 1);
+				prev_pos = pos;
 				prev_y = y;
 			}
 

@@ -1,4 +1,4 @@
-/* $Id: sched.h,v 1.3 2002/03/16 23:02:37 pasky Exp $ */
+/* $Id: sched.h,v 1.4 2002/03/16 23:25:49 pasky Exp $ */
 
 #ifndef EL__SCHED_H
 #define EL__SCHED_H
@@ -166,8 +166,8 @@ int is_entry_used(struct cache_entry *);
 void set_timeout(struct connection *);
 
 enum blacklist_flags {
-	BL_HTTP10,
-	BL_NO_CHARSET,
+	BL_HTTP10 = 1,
+	BL_NO_CHARSET = 2,
 };
 
 void add_blacklist_entry(unsigned char *, enum blacklist_flags);

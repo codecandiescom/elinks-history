@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.24 2002/03/16 23:02:36 pasky Exp $ */
+/* $Id: http.c,v 1.25 2002/03/16 23:25:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,24 +144,40 @@ static int get_http_code(unsigned char *head, int *code, int *version)
 	return 0;
 }
 
-unsigned char *buggy_servers[] = { "mod_czech/3.1.0", "Purveyor", "Netscape-Enterprise", NULL };
+unsigned char *buggy_servers[] = {
+	"mod_czech/3.1.0",
+	"Purveyor",
+	"Netscape-Enterprise",
+	NULL
+};
 
-int check_http_server_bugs(unsigned char *url, struct http_connection_info *info, unsigned char *head)
+int check_http_server_bugs(unsigned char *url,
+			   struct http_connection_info *info,
+			   unsigned char *head)
 {
 	unsigned char *server, **s;
-	if (!http_bugs.allow_blacklist || info->http10) return 0;
-	if (!(server = parse_http_header(head, "Server", NULL))) return 0;
-	for (s = buggy_servers; *s; s++) if (strstr(server, *s)) goto bug;
+	
+	if (!http_bugs.allow_blacklist || info->http10)
+		return 0;
+	
+	server = parse_http_header(head, "Server", NULL);
+	if (!server)
+		return 0;
+	
+	for (s = buggy_servers; *s; s++)
+		if (strstr(server, *s)) {
+			mem_free(server);
+			server = get_host_name(url);
+			if (server) {
+				add_blacklist_entry(server, BL_HTTP10);
+				mem_free(server);
+				return 1;
+			}
+			return 0;	
+		}
+	
 	mem_free(server);
 	return 0;
-	bug:
-	mem_free(server);
-	if ((server = get_host_name(url))) {
-		add_blacklist_entry(server, BL_HTTP10);
-		mem_free(server);
-		return 1;
-	}
-	return 0;	
 }
 
 void http_end_request(struct connection *c)

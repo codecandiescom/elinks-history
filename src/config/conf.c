@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.133 2004/04/03 12:58:25 jonas Exp $ */
+/* $Id: conf.c,v 1.134 2004/04/11 20:13:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -747,7 +747,7 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 {
 	int ret = -1;
 	struct secure_save_info *ssi;
-	unsigned char *config_file;
+	unsigned char *config_file = NULL;
 	unsigned char *cfg_str = create_config_string(prefix, name, options);
 	int prefixlen = strlen(prefix);
 	int prefix_has_slash, name_has_slash;
@@ -810,20 +810,15 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 		if (ret > 0)
 			errmsg = straconcat(strerr, " (", strerror(ret), ")", NULL);
 
-		if (errmsg) {
-			write_config_error(term, getml(config_file, errmsg, NULL),
-					   config_file, errmsg);
-		} else {
-			write_config_error(term, getml(config_file, NULL),
-					   config_file, strerr);
-		}
-
+		write_config_error(term, config_file, errmsg ? errmsg : strerr);
+		if (errmsg) mem_free(errmsg);
 		goto free_cfg_str;
 	}
 
-	write_config_success(term, getml(config_file, NULL), config_file);
+	write_config_success(term, config_file);
 
 free_cfg_str:
+	if (config_file) mem_free(config_file);
 	mem_free(cfg_str);
 
 	return ret;

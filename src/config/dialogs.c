@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.158 2004/03/05 17:58:53 witekfl Exp $ */
+/* $Id: dialogs.c,v 1.159 2004/04/11 20:13:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,13 +34,13 @@
 
 
 void
-write_config_error(struct terminal *term, struct memory_list *ml,
-		   unsigned char *config_file, unsigned char *strerr)
+write_config_error(struct terminal *term, unsigned char *config_file,
+		   unsigned char *strerr)
 {
-	msg_box(term, ml, MSGBOX_FREE_TEXT,
+	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Write config error"), AL_CENTER,
 		msg_text(term, N_("Unable to write to config file %s.\n%s"),
-			config_file, strerr),
+			 config_file, strerr),
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 }
@@ -53,20 +53,16 @@ toggle_success_msgbox(void *dummy)
 }
 
 void
-write_config_success(struct terminal *term, struct memory_list *ml,
-		     unsigned char *config_file)
+write_config_success(struct terminal *term, unsigned char *config_file)
 {
-	if (!get_opt_bool("ui.success_msgbox")) {
-		freeml(ml);
-		return;
-	}
+	if (!get_opt_bool("ui.success_msgbox")) return;
 
 	if (!term) return;
 
-	msg_box(term, ml, MSGBOX_FREE_TEXT,
+	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Write config success"), AL_CENTER,
 		msg_text(term, N_("Options were saved successfully to config file %s."),
-			config_file),
+			 config_file),
 		NULL, 2,
 		N_("OK"), NULL, B_ENTER | B_ESC,
 		N_("Do not show anymore"), toggle_success_msgbox, 0);

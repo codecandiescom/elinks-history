@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.1 2003/06/04 19:04:33 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.2 2003/06/05 14:15:02 zas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -8,7 +8,7 @@
 #include "config.h"
 #endif
 
-#ifdef MIMETYPES 
+#ifdef MIMETYPES
 
 #include <ctype.h>
 #include <stdio.h>
@@ -151,7 +151,7 @@ init_mimetypes()
 {
 	unsigned char *path;
 
-	if(!get_opt_bool("mime.mimetypes.enable"))
+	if (!get_opt_bool("mime.mimetypes.enable"))
 		return; /* and leave mailcap_map = NULL */
 
 	mimetypes_map = init_hash(8, &strhash);
@@ -198,7 +198,8 @@ get_content_type_mimetypes(unsigned char *url)
 	int extensionlen;
 
 	/* Check if mailcap support is disabled */
-	if(!get_opt_bool("mime.mimetypes.enable")) return NULL;
+	if (!get_opt_bool("mime.mimetypes.enable"))
+		return NULL;
 
 	/* If the map was not initialized do it now. */
 	if (!mimetypes_map)

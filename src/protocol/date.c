@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.16 2005/03/29 03:35:48 jonas Exp $ */
+/* $Id: date.c,v 1.17 2005/03/29 03:47:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -270,8 +270,7 @@ parse_date(const unsigned char *date)
 		tm.tm_year = parse_year(&date, NULL);
 		if (tm.tm_year < 0) return 0;
 
-		if (*date++ != ' ') return 0;
-		while ((c = *date) == ' ') date++;
+		skip_time_sep(date);
 
 		/* Eat time */
 

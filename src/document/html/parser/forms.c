@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.45 2004/10/22 20:15:06 pasky Exp $ */
+/* $Id: forms.c,v 1.46 2004/10/23 09:53:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -245,7 +245,6 @@ html_input(unsigned char *a)
 	enum form_type type = FC_TEXT;
 
 	find_form_for_input(a);
-	html_focusable(a);
 
 	al = get_attr_val(a, "type");
 	if (!al) goto no_type_attr;
@@ -289,6 +288,7 @@ no_type_attr:
 
 	put_chrs(" ", 1, html_context.put_chars_f, html_context.part);
 	html_stack_dup(ELEMENT_KILLABLE);
+	html_focusable(a);
 	format.form = fc;
 	if (format.title) mem_free(format.title);
 	format.title = get_attr_val(a, "title");

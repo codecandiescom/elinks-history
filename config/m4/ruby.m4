@@ -6,18 +6,17 @@ AC_DEFUN([EL_CONFIG_RUBY],
 [
 AC_MSG_CHECKING([for Ruby])
 
-enable_ruby="no";
+CONFIG_RUBY="no";
 
 EL_SAVE_FLAGS
 
 AC_ARG_ENABLE(ruby,
 	[  --enable-ruby           enable Ruby support],
-	[if test "$enableval" != no; then enable_ruby="yes"; fi]
-	[enable_ruby="no"])
+	[if test "$enableval" != no; then CONFIG_RUBY="yes"; fi])
 
-AC_MSG_RESULT($enable_ruby)
+AC_MSG_RESULT($CONFIG_RUBY)
 
-if test "$enable_ruby" = "yes"; then
+if test "$CONFIG_RUBY" = "yes"; then
 
 	AC_SUBST(elinks_cv_path_ruby)
 	AC_PATH_PROG(elinks_cv_path_ruby, ruby)
@@ -80,7 +79,7 @@ if test "$enable_ruby" = "yes"; then
 	fi
 fi
 
-if test "$enable_ruby" != "yes"; then
+if test "$CONFIG_RUBY" != "yes"; then
 	EL_RESTORE_FLAGS
 fi
 ])

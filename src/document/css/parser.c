@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.50 2004/01/26 18:06:30 pasky Exp $ */
+/* $Id: parser.c,v 1.51 2004/01/26 18:27:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,6 +91,7 @@ ride_on:
 	}
 }
 
+
 /* TODO: We should handle suppoert for skipping blocks better like "{ { } }"
  * will be handled correctly. --jonas */
 #define skip_css_block(scanner) \
@@ -160,16 +161,20 @@ css_parse_atrule(struct css_stylesheet *css, struct css_scanner *scanner)
 	}
 }
 
-/* Ruleset grammar:
+
+/* Selector grammar:
  *
- * ruleset:
- *	  selector [ ',' selector ]* '{' properties '}'
+ * selector:
+ *	  (element_name id? class? pseudo_class?)+
+ *	  | '#' ('.' class)? (':' pseudo_class)?
+ *	  | '.' class (':' pseudo_class)?
+ *	  | ':' pseudo_class
  *
- * TODO: selector can currently only be simple element names and we don't even
- * handle comma separated list of selectors yet.
+ * TODO: selector can currently only be simple element names, and element
+ * chains are not supported yet.
  */
-static void
-css_parse_ruleset(struct css_stylesheet *css, struct css_scanner *scanner)
+static struct css_selector *
+css_parse_selector(struct css_stylesheet *css, struct css_scanner *scanner)
 {
 	struct css_token *token = get_css_token(scanner);
 	struct css_selector *selector;
@@ -182,7 +187,7 @@ css_parse_ruleset(struct css_stylesheet *css, struct css_scanner *scanner)
 	if (token->type != CSS_TOKEN_IDENT
 	    || !check_next_css_token(scanner, '{')) {
 		skip_css_tokens(scanner, '}');
-		return;
+		return NULL;
 	}
 
 	/* Check if we have already encountered the selector */
@@ -192,6 +197,27 @@ css_parse_ruleset(struct css_stylesheet *css, struct css_scanner *scanner)
 
 	if (!selector) {
 		skip_css_block(scanner);
+		return NULL;
+	}
+
+	return selector;
+}
+
+
+/* Ruleset grammar:
+ *
+ * ruleset:
+ *	  selector [ ',' selector ]* '{' properties '}'
+ *
+ * TODO: we don't handle comma separated list of selectors yet.
+ */
+static void
+css_parse_ruleset(struct css_stylesheet *css, struct css_scanner *scanner)
+{
+	struct css_selector *selector;
+
+	selector = css_parse_selector(css, scanner);
+	if (!selector) {
 		return;
 	}
 
@@ -205,6 +231,7 @@ css_parse_ruleset(struct css_stylesheet *css, struct css_scanner *scanner)
 
 	skip_css_tokens(scanner, '}');
 }
+
 
 void
 css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string)

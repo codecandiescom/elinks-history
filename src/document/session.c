@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.55 2002/08/08 18:01:46 pasky Exp $ */
+/* $Id: session.c,v 1.56 2002/08/18 13:17:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1063,12 +1063,13 @@ encode_url(unsigned char *url)
 	int l = 0;
 
 	for (; *url; url++) {
-		if (is_safe_in_shell(*url) && *url != '+')
+		if (is_safe_in_shell(*url))
 			add_chr_to_str(&u, &l, *url);
 		else {
-			add_chr_to_str(&u, &l, '+');
+			add_chr_to_str(&u, &l, '=');
 			add_chr_to_str(&u, &l, hx(*url >> 4));
 		       	add_chr_to_str(&u, &l, hx(*url & 0xf));
+			add_chr_to_str(&u, &l, '=');
 		}
 	}
 
@@ -1081,14 +1082,14 @@ unsigned char *
 decode_url(unsigned char *url)
 {
 	unsigned char *u = init_str();
-	int l = 0;
+	int l = 0, r = strlen(url);
 
-	for (; *url; url++) {
-		if (*url != '+' || unhx(url[1]) == -1 || unhx(url[2]) == -1)
+	for (; *url; url++, r--) {
+		if (r < 4 || url[0] != '=' || unhx(url[1]) == -1 || unhx(url[2]) == -1 || url[3] != '=')
 			add_chr_to_str(&u, &l, *url);
 		else {
 			add_chr_to_str(&u, &l, (unhx(url[1]) << 4) + unhx(url[2]));
-		       	url += 2;
+		       	url += 3; r -= 3;
 		}
 	}
 

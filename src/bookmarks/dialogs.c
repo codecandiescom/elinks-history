@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.189 2004/12/14 18:32:26 miciah Exp $ */
+/* $Id: dialogs.c,v 1.190 2004/12/14 18:36:46 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -331,8 +331,8 @@ update_depths(struct listbox_item *parent)
 	}
 }
 
-/* Traverse all expanded folders and move all marked items right
- * after bm_dest. */
+/* Traverse all bookmarks and move all marked items
+ * _into_ destb or, if destb is NULL, _after_ dest. */
 static void
 do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 		 struct list_head *desti, struct list_head *src,

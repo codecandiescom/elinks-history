@@ -1214,9 +1214,12 @@ void html_input(unsigned char *a)
 			for (i = 0; i < fc->size; i++) put_chrs("_", 1, put_chars_f, ff);
 			break;
 		case FC_CHECKBOX:
-		case FC_RADIO:
 			format.attr |= AT_BOLD;
 			put_chrs("[&nbsp;]", 8, put_chars_f, ff);
+			break;
+		case FC_RADIO:
+			format.attr |= AT_BOLD;
+			put_chrs("(&nbsp;)", 8, put_chars_f, ff);
 			break;
 		case FC_IMAGE:
 			if (format.image) mem_free(format.image), format.image = NULL;

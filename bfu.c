@@ -448,8 +448,8 @@ void display_dlg_item(struct dialog_data *dlg, struct dialog_item_data *di, int 
 		int co;
 		unsigned char *text;
 		case D_CHECKBOX:
-			if (di->checked) print_text(term, di->x, di->y, 3, "[X]", COLOR_DIALOG_CHECKBOX);
-			else print_text(term, di->x, di->y, 3, "[ ]", COLOR_DIALOG_CHECKBOX);
+			if (di->checked) print_text(term, di->x, di->y, 3, (!di->item->gid) ? "[X]" : "(X)", COLOR_DIALOG_CHECKBOX);
+			else print_text(term, di->x, di->y, 3, (!di->item->gid) ? "[ ]" : "( )", COLOR_DIALOG_CHECKBOX);
 			if (sel) {
 				set_cursor(term, di->x + 1, di->y, di->x + 1, di->y);
 				set_window_ptr(dlg->win, di->x, di->y);

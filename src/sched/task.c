@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.158 2005/03/02 16:37:50 zas Exp $ */
+/* $Id: task.c,v 1.159 2005/03/02 17:29:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,11 +72,7 @@ post_yes(struct task *task)
 	ses->loading.callback = (void (*)(struct download *, void *)) loading_callback;
 	ses->loading.data = task->ses;
 	ses->loading_uri = task->uri; /* XXX: Make the session inherit the URI. */
-
-	/* TODO: memcpy(). --Zas */
-	ses->task.type = task->session_task.type;
-	ses->task.target.frame = task->session_task.target.frame;
-	ses->task.target.location = task->session_task.target.location;
+	memcpy(&ses->task, &task->session_task, sizeof(ses->task));
 
 	load_uri(ses->loading_uri, ses->referrer, &ses->loading,
 		 PRI_MAIN, task->cache_mode, -1);

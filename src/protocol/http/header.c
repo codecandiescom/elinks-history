@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.19 2003/11/29 13:02:45 pasky Exp $ */
+/* $Id: header.c,v 1.20 2003/11/29 13:06:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,9 +24,12 @@ parse_http_header(unsigned char *head, unsigned char *item,
 	if (!head) return NULL;
 
 	for (pos = head; *pos; pos++) {
+		/* Go for a newline. */
 		if (*pos != '\n') continue;
 
 		pos++;
+
+		/* Start of line now. */
 
 		{
 			unsigned char *i;
@@ -56,6 +59,8 @@ parse_http_header(unsigned char *head, unsigned char *item,
 		}
 
 cont:
+		/* We could've hit a newline at this point, so keep the chance
+		 * to check for it in the next iteration. */
 		pos--;
 	}
 

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.217 2004/06/26 10:48:50 zas Exp $ */
+/* $Id: tables.c,v 1.218 2004/06/26 10:53:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -464,7 +464,7 @@ parse_table(unsigned char *html, unsigned char *eof,
 	unsigned char *l_fragment_id = NULL;
 	color_t last_bgcolor = bgcolor;
 	int t_namelen;
-	int p = 0;
+	int in_cell = 0;
 	int l_al = AL_LEFT;
 	int l_val = VALIGN_MIDDLE;
 	int colspan, rowspan;
@@ -489,7 +489,7 @@ se:
 
 see:
 	html = en;
-	if (bad_html && !p && !lbhp) {
+	if (bad_html && !in_cell && !lbhp) {
 		if (!realloc_bad_html(bad_html, *bhp)) {
 			goto qwe;
 		}
@@ -501,7 +501,7 @@ qwe:
 	while (html < eof && *html != '<') html++;
 
 	if (html >= eof) {
-		if (p) CELL(table, col, row)->end = html;
+		if (in_cell) CELL(table, col, row)->end = html;
 		if (lbhp) (*bad_html)[*bhp-1].end = html;
 		goto scan_done;
 	}
@@ -523,7 +523,7 @@ qwe:
 
 	if (!strlcasecmp(t_name, t_namelen, "/TABLE", 6)) {
 		if (c_span) new_columns(table, c_span, c_width, c_al, c_val, 1);
-		if (p) CELL(table, col, row)->end = html;
+		if (in_cell) CELL(table, col, row)->end = html;
 		if (lbhp) (*bad_html)[*bhp-1].end = html;
 		goto scan_done;
 	}
@@ -590,9 +590,9 @@ qwe:
 	 		if (c_span)
 				new_columns(table, c_span, c_width, c_al, c_val, 1);
 
-			if (p) {
+			if (in_cell) {
 				CELL(table, col, row)->end = html;
-				p = 0;
+				in_cell = 0;
 			}
 			if (lbhp) {
 				(*bad_html)[*bhp-1].end = html;
@@ -608,9 +608,9 @@ qwe:
 	if (t_namelen == 2 && toupper(t_name[1]) == 'R') {
 		if (c_span) new_columns(table, c_span, c_width, c_al, c_val, 1);
 
-		if (p) {
+		if (in_cell) {
 			CELL(table, col, row)->end = html;
-			p = 0;
+			in_cell = 0;
 		}
 		if (lbhp) {
 			(*bad_html)[*bhp-1].end = html;
@@ -657,9 +657,9 @@ qwe:
 		(*bad_html)[*bhp-1].end = html;
 		lbhp = NULL;
 	}
-	if (p) {
+	if (in_cell) {
 		CELL(table, col, row)->end = html;
-		p = 0;
+		in_cell = 0;
 	}
 
 	if (row == -1) {
@@ -675,7 +675,7 @@ qwe:
 		if (cell->colspan == -1) goto see;
 	}
 
-	p = 1;
+	in_cell = 1;
 
 	cell->col = col;
 	cell->row = row;

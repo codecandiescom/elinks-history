@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.83 2003/09/17 01:04:46 jonas Exp $ */
+/* $Id: string.c,v 1.84 2003/10/01 14:19:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -398,7 +398,7 @@ add_format_to_string(struct string *string, unsigned char *format, ...)
 	if (!realloc_string(string, newlength))
 		return NULL;
 
-	vsnprintf(&string->source[string->length], newlength, format, ap);
+	vsnprintf(&string->source[string->length], width + 1, format, ap);
 
 	va_end(ap);
 

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.165 2004/12/27 00:51:57 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.166 2004/12/27 01:05:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -193,6 +193,31 @@ value_to_jsval(JSContext *ctx, jsval *vp, struct jsval_property *prop)
 		*vp = JSVAL_NULL;
 		break;
 	}
+}
+
+static void
+string_to_jsval(JSContext *ctx, jsval *vp, unsigned char *string)
+{
+	if (!string) {
+		*vp = JSVAL_NULL;
+	} else {
+		*vp = STRING_TO_JSVAL(JS_NewStringCopyZ(ctx, string));
+	}
+}
+
+/* Unused for now.
+static void
+astring_to_jsval(JSContext *ctx, jsval *vp, unsigned char *string)
+{
+	string_to_jsval(ctx, vp, string);
+	mem_free(string);
+}
+*/
+
+static void
+int_to_jsval(JSContext *ctx, jsval *vp, int number)
+{
+	*vp = INT_TO_JSVAL(number);
 }
 
 static void
@@ -652,7 +677,6 @@ input_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct form_control *fc = find_form_control(document, fs);
 	int linknum;
 	struct link *link = NULL;
-	struct jsval_property prop;
 
 	assert(fc);
 	assert(fc->form && fs);
@@ -664,7 +688,7 @@ input_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	/* Hiddens have no link. */
 	if (linknum >= 0) link = &document->links[linknum];
 
-	set_prop_undef(&prop);
+	undef_to_jsval(ctx, vp);
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_INPUT_ACCESSKEY:
@@ -675,76 +699,80 @@ input_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 		init_string(&keystr);
 		make_keystroke(&keystr, link->accesskey, 0, 0);
-		set_prop_string(&prop, keystr.source);
+		string_to_jsval(ctx, vp, keystr.source);
 		done_string(&keystr);
 		break;
 	}
 	case JSP_INPUT_ALT:
-		set_prop_string(&prop, fc->alt);
+		string_to_jsval(ctx, vp, fc->alt);
 		break;
 	case JSP_INPUT_CHECKED:
-		set_prop_boolean(&prop, fs->state);
+		boolean_to_jsval(ctx, vp, fs->state);
 		break;
 	case JSP_INPUT_DEFAULT_CHECKED:
-		set_prop_boolean(&prop, fc->default_state);
+		boolean_to_jsval(ctx, vp, fc->default_state);
 		break;
 	case JSP_INPUT_DEFAULT_VALUE:
-		set_prop_string(&prop, fc->default_value);
+		string_to_jsval(ctx, vp, fc->default_value);
 		break;
 	case JSP_INPUT_DISABLED:
 		/* FIXME: <input readonly disabled> --pasky */
-		set_prop_boolean(&prop, fc->mode == FORM_MODE_DISABLED);
+		boolean_to_jsval(ctx, vp, fc->mode == FORM_MODE_DISABLED);
 		break;
 	case JSP_INPUT_FORM:
-		set_prop_object(&prop, parent_form);
+		object_to_jsval(ctx, vp, parent_form);
 		break;
 	case JSP_INPUT_MAX_LENGTH:
-		set_prop_int(&prop, fc->maxlength);
+		int_to_jsval(ctx, vp, fc->maxlength);
 		break;
 	case JSP_INPUT_NAME:
-		set_prop_string(&prop, fc->name);
+		string_to_jsval(ctx, vp, fc->name);
 		break;
 	case JSP_INPUT_READONLY:
 		/* FIXME: <input readonly disabled> --pasky */
-		set_prop_boolean(&prop, fc->mode == FORM_MODE_READONLY);
+		boolean_to_jsval(ctx, vp, fc->mode == FORM_MODE_READONLY);
 		break;
 	case JSP_INPUT_SIZE:
-		set_prop_int(&prop, fc->size);
+		int_to_jsval(ctx, vp, fc->size);
 		break;
 	case JSP_INPUT_SRC:
 		if (link && link->where_img)
-			set_prop_string(&prop, link->where_img);
+			string_to_jsval(ctx, vp, link->where_img);
 		break;
 	case JSP_INPUT_TABINDEX:
 		if (link)
 			/* FIXME: This is WRONG. --pasky */
-			set_prop_int(&prop, link->number);
+			int_to_jsval(ctx, vp, link->number);
 		break;
 	case JSP_INPUT_TYPE:
+	{
+		unsigned char *s = NULL;
+
 		switch (fc->type) {
-		case FC_TEXT: set_prop_string(&prop, "text"); break;
-		case FC_PASSWORD: set_prop_string(&prop, "password"); break;
-		case FC_FILE: set_prop_string(&prop, "file"); break;
-		case FC_CHECKBOX: set_prop_string(&prop, "checkbox"); break;
-		case FC_RADIO: set_prop_string(&prop, "radio"); break;
-		case FC_SUBMIT: set_prop_string(&prop, "submit"); break;
-		case FC_IMAGE: set_prop_string(&prop, "image"); break;
-		case FC_RESET: set_prop_string(&prop, "reset"); break;
-		case FC_BUTTON: set_prop_string(&prop, "button"); break;
-		case FC_HIDDEN: set_prop_string(&prop, "hidden"); break;
+		case FC_TEXT: s = "text"; break;
+		case FC_PASSWORD: s = "password"; break;
+		case FC_FILE: s = "file"; break;
+		case FC_CHECKBOX: s = "checkbox"; break;
+		case FC_RADIO: s = "radio"; break;
+		case FC_SUBMIT: s = "submit"; break;
+		case FC_IMAGE: s = "image"; break;
+		case FC_RESET: s = "reset"; break;
+		case FC_BUTTON: s = "button"; break;
+		case FC_HIDDEN: s = "hidden"; break;
 		default: INTERNAL("input_get_property() upon a non-input item."); break;
 		}
+		string_to_jsval(ctx, vp, s);
 		break;
+	}
 	case JSP_INPUT_VALUE:
-		set_prop_string(&prop, fs->value);
+		string_to_jsval(ctx, vp, fs->value);
 		break;
 
 	default:
 		INTERNAL("Invalid ID %d in input_get_property().", JSVAL_TO_INT(id));
-		return JS_TRUE;
+		break;
 	}
 
-	value_to_jsval(ctx, vp, &prop);
 	return JS_TRUE;
 }
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.428 2004/06/05 21:03:18 jonas Exp $ */
+/* $Id: parser.c,v 1.429 2004/06/05 21:14:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -232,7 +232,7 @@ import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len)
 	if (!url) return;
 
 	/* HTML <head> urls should already be fine but we can.t detect them. */
-	import_url = join_urls(struri(format.href_base), url);
+	import_url = join_urls(format.href_base, url);
 	mem_free(url);
 
 	if (!import_url) return;
@@ -623,7 +623,7 @@ html_base(unsigned char *a)
 
 	if (al) {
 		struct html_element *element = html_stack.prev;
-		unsigned char *base = join_urls(struri(element->attr.href_base), al);
+		unsigned char *base = join_urls(element->attr.href_base, al);
 		struct uri *uri = base ? get_uri(base, -1) : NULL;
 
 		mem_free(al);
@@ -830,7 +830,7 @@ html_frame(unsigned char *a)
 	if (!src) {
 		url = stracpy("");
 	} else {
-		url = join_urls(struri(format.href_base), src);
+		url = join_urls(format.href_base, src);
 		mem_free(src);
 	}
 	if (!url) return;
@@ -942,7 +942,7 @@ process_head(unsigned char *head)
 			if (errno || seconds > 7200) seconds = 0;
 
 			html_focusable(NULL);
-			url = join_urls(struri(format.href_base), saved_url);
+			url = join_urls(format.href_base, saved_url);
 			put_link_line("Refresh: ", saved_url, url, global_doc_opts->framename);
 			special_f(ff, SP_REFRESH, seconds, url);
 			mem_free(url);
@@ -1116,7 +1116,7 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 	}
 
 
-	ld->link = join_urls(struri(href_base), href);
+	ld->link = join_urls(href_base, href);
 	mem_free(href);
 	if (!ld->link) {
 		mem_free_if(label);

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.224 2004/06/04 13:44:20 jonas Exp $ */
+/* $Id: uri.c,v 1.225 2004/06/05 21:14:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -632,7 +632,7 @@ transform_file_url(struct uri *uri, unsigned char *cwd)
 static unsigned char *translate_url(unsigned char *url, unsigned char *cwd);
 
 unsigned char *
-join_urls(unsigned char *base, unsigned char *rel)
+join_urls(struct uri *base, unsigned char *rel)
 {
 	unsigned char *p, *n, *path;
 	int add_slash = 0;
@@ -643,7 +643,9 @@ join_urls(unsigned char *base, unsigned char *rel)
 	/* TODO: Support for ';' ? (see the RFC) --pasky */
 
 	if (rel[0] == '#') {
-		n = stracpy(base);
+		/* FIXME: When uri->fragment have been added use
+		 * get_uri_string(base, URI_JOIN_FRAGMENT */
+		n = stracpy(struri(base));
 		if (!n) return NULL;
 
 		for (p = n; *p && *p != POST_CHAR && *p != '#'; p++);
@@ -652,7 +654,9 @@ join_urls(unsigned char *base, unsigned char *rel)
 
 		return normalize_uri_reparse(&uri, n);
 	} else if (rel[0] == '?') {
-		n = stracpy(base);
+		/* FIXME: When uri->fragment have been added use
+		 * get_uri_string(base, URI_JOIN_QUERY) */
+		n = stracpy(struri(base));
 		if (!n) return NULL;
 
 		for (p = n; *p && *p != POST_CHAR && *p != '?' && *p != '#'; p++);
@@ -661,14 +665,16 @@ join_urls(unsigned char *base, unsigned char *rel)
 
 		return normalize_uri_reparse(&uri, n);
 	} else if (rel[0] == '/' && rel[1] == '/') {
-		unsigned char *s = strstr(base, "//");
+		/* FIXME: This is equal to checking if
+		 * get_protocol_need_slashes(base->protocol), is it not? */
+		unsigned char *s = strstr(struri(base), "//");
 
 		if (!s) {
 			INTERNAL("bad base url: %s", base);
 			return NULL;
 		}
 
-		n = memacpy(base, s - base);
+		n = memacpy(struri(base), s - struri(base));
 		add_to_strn(&n, rel);
 		return n;
 	}
@@ -683,11 +689,11 @@ join_urls(unsigned char *base, unsigned char *rel)
 	}
 
 prx:
-	if (parse_uri(&uri, base) != URI_ERRNO_OK || !uri.data) {
+	if (!base->data) {
 		INTERNAL("bad base url");
 		return NULL;
 	}
-	path = uri.data;
+	path = base->data;
 
 	/* Either is path blank, but we've slash char before, or path is not
 	 * blank, but doesn't start by a slash (if we'd just stay along with
@@ -697,12 +703,12 @@ prx:
 	/* We skip first char of URL ('/') in parse_url() (ARGH). This
 	 * is reason of all this bug-bearing magic.. */
 	if (*path) {
-		if (!is_uri_dir_sep(&uri, *path)) path--;
+		if (!is_uri_dir_sep(base, *path)) path--;
 	} else {
-		if (is_uri_dir_sep(&uri, path[-1])) path--;
+		if (is_uri_dir_sep(base, path[-1])) path--;
 	}
 
-	if (!is_uri_dir_sep(&uri, rel[0])) {
+	if (!is_uri_dir_sep(base, rel[0])) {
 		unsigned char *path_end;
 
 		/* The URL is relative. */
@@ -716,20 +722,20 @@ prx:
 		}
 
 		for (path_end = path; *path_end; path_end++) {
-			if (end_of_dir(&uri, *path_end)) break;
+			if (end_of_dir(base, *path_end)) break;
 			/* Modify the path pointer, so that it'll always point
 			 * above the last '/' in the URL; later, we'll copy the
 			 * URL only _TO_ this point, and anything after last
 			 * slash will be substituted by 'rel'. */
-			if (is_uri_dir_sep(&uri, *path_end)) path = path_end + 1;
+			if (is_uri_dir_sep(base, *path_end)) path = path_end + 1;
 		}
 	}
 
-	tmp = path - base;
+	tmp = path - struri(base);
 	n = mem_alloc(tmp + strlen(rel) + add_slash + 1);
 	if (!n) return NULL;
 
-	memcpy(n, base, tmp);
+	memcpy(n, struri(base), tmp);
 	if (add_slash) n[tmp] = '/';
 	strcpy(n + tmp + add_slash, rel);
 

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.147 2004/05/31 03:45:44 jonas Exp $ */
+/* $Id: cache.c,v 1.148 2004/06/05 21:14:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -530,7 +530,7 @@ redirect_cache(struct cache_entry *cached, unsigned char *location,
 	if (incomplete == 0 && location[0] == '/' && location[1] == 0)
 		uristring = straconcat(struri(cached->uri), location, NULL);
 	else
-		uristring = join_urls(struri(cached->uri), location);
+		uristring = join_urls(cached->uri, location);
 
 	if (!uristring) return NULL;
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.211 2003/08/23 17:34:10 jonas Exp $ */
+/* $Id: renderer.c,v 1.212 2003/08/23 17:45:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1652,88 +1652,88 @@ format_cache_reactivate(struct document *ce)
 }
 
 void
-cached_format_html(struct view_state *vs, struct document_view *screen,
-		   struct document_options *opt)
+cached_format_html(struct view_state *vs, struct document_view *document_view,
+		   struct document_options *options)
 {
-	unsigned char *n;
-	struct document *ce;
-	struct cache_entry *cee = NULL;
+	unsigned char *name;
+	struct document *document;
+	struct cache_entry *cache_entry = NULL;
 
-	assert(vs && screen && opt);
+	assert(vs && document_view && options);
 	if_assert_failed return;
 
-	n = screen->name;
-	screen->name = NULL;
-	detach_formatted(screen);
+	name = document_view->name;
+	document_view->name = NULL;
+	detach_formatted(document_view);
 
-	screen->name = n;
-	screen->link_bg = NULL;
-	screen->link_bg_n = 0;
-	vs->view = screen;
+	document_view->name = name;
+	document_view->link_bg = NULL;
+	document_view->link_bg_n = 0;
+	vs->view = document_view;
 
-	screen->vs = vs;
-	screen->xl = screen->yl = -1;
-	screen->document = NULL;
+	document_view->vs = vs;
+	document_view->xl = document_view->yl = -1;
+	document_view->document = NULL;
 
-	if (!find_in_cache(vs->url, &cee) || !cee) {
+	if (!find_in_cache(vs->url, &cache_entry) || !cache_entry) {
 		internal("document %s to format not found", vs->url);
 		return;
 	}
 
-	foreach (ce, format_cache) {
-		if (strcmp(ce->url, vs->url)
-		    || compare_opt(&ce->opt, opt))
+	foreach (document, format_cache) {
+		if (strcmp(document->url, vs->url)
+		    || compare_opt(&document->opt, options))
 			continue;
 
-		if (cee->count != ce->use_tag) {
-			if (!ce->refcount) {
-				ce = ce->prev;
-				destroy_formatted(ce->next);
+		if (cache_entry->count != document->use_tag) {
+			if (!document->refcount) {
+				document = document->prev;
+				destroy_formatted(document->next);
 				format_cache_entries--;
 			}
 			continue;
 		}
 
-		format_cache_reactivate(ce);
+		format_cache_reactivate(document);
 
-		if (!ce->refcount++) format_cache_entries--;
-		screen->document = ce;
+		if (!document->refcount++) format_cache_entries--;
+		document_view->document = document;
 
 		goto sx;
 	}
 
-	cee->refcount++;
+	cache_entry->refcount++;
 	shrink_memory(0);
 
-	ce = mem_alloc(sizeof(struct document));
-	if (!ce) {
-		cee->refcount--;
+	document = mem_alloc(sizeof(struct document));
+	if (!document) {
+		cache_entry->refcount--;
 		return;
 	}
 
-	init_formatted(ce);
-	ce->refcount = 1;
+	init_formatted(document);
+	document->refcount = 1;
 
-	ce->url = stracpy(vs->url);
-	if (!ce->url) {
-		mem_free(ce);
-		cee->refcount--;
+	document->url = stracpy(vs->url);
+	if (!document->url) {
+		mem_free(document);
+		cache_entry->refcount--;
 		return;
 	}
 
-	copy_opt(&ce->opt, opt);
-	add_to_list(format_cache, ce);
+	copy_opt(&document->opt, options);
+	add_to_list(format_cache, document);
 
-	screen->document = ce;
-	ce->time_to_get = -get_time();
-	format_html(cee, ce);
-	ce->time_to_get += get_time();
+	document_view->document = document;
+	document->time_to_get = -get_time();
+	format_html(cache_entry, document);
+	document->time_to_get += get_time();
 
 sx:
-	screen->xw = ce->opt.xw;
-	screen->yw = ce->opt.yw;
-	screen->xp = ce->opt.xp;
-	screen->yp = ce->opt.yp;
+	document_view->xw = document->opt.xw;
+	document_view->yw = document->opt.yw;
+	document_view->xp = document->opt.xp;
+	document_view->yp = document->opt.yp;
 }
 
 long

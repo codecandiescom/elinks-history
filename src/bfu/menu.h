@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.49 2004/01/24 23:50:17 pasky Exp $ */
+/* $Id: menu.h,v 1.50 2004/01/25 13:17:22 jonas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -104,10 +104,10 @@ struct menu_item {
 	INIT_MENU_ITEM(text, NULL, action, NULL, NULL, 0)
 
 #define NULL_MENU_ITEM							\
-	INIT_MENU_ITEM(NULL, NULL, ACT_NONE, NULL, NULL, 0)
+	INIT_MENU_ITEM(NULL, NULL, ACT_MAIN_NONE, NULL, NULL, 0)
 
 #define BAR_MENU_ITEM							\
-	INIT_MENU_ITEM("", NULL, ACT_NONE, NULL, NULL, NO_SELECT)
+	INIT_MENU_ITEM("", NULL, ACT_MAIN_NONE, NULL, NULL, NO_SELECT)
 
 #define SET_MENU_ITEM(e_, text_, rtext_, action_, func_, data_, flags_,	\
 		      hotkey_state_, hotkey_pos_)			\
@@ -157,7 +157,7 @@ add_to_menu(struct menu_item **mi, unsigned char *text, unsigned char *rtext,
 	    enum menu_item_flags flags);
 
 #define add_separator_to_menu(menu) \
-	add_to_menu(menu, "", NULL, ACT_NONE, NULL, NULL, NO_SELECT)
+	add_to_menu(menu, "", NULL, ACT_MAIN_NONE, NULL, NULL, NO_SELECT)
 
 /* Implies that the action will be handled by do_action() */
 #define add_menu_action(menu, text, action) \

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.46 2004/01/25 00:21:14 pasky Exp $ */
+/* $Id: action.c,v 1.47 2004/01/25 13:17:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,49 +132,49 @@ do_action(struct session *ses, enum main_action action, int verbose)
 	switch (action) {
 		/* Please keep in alphabetical order for now. Later we can sort
 		 * by most used or something. */
-		case ACT_ABORT_CONNECTION:
+		case ACT_MAIN_ABORT_CONNECTION:
 			abort_loading(ses, 1);
 			print_screen_status(ses);
 			break;
 
-		case ACT_ADD_BOOKMARK:
+		case ACT_MAIN_ADD_BOOKMARK:
 #ifdef CONFIG_BOOKMARKS
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				launch_bm_add_doc_dialog(term, NULL, ses);
 #endif
 			break;
-		case ACT_ADD_BOOKMARK_LINK:
+		case ACT_MAIN_ADD_BOOKMARK_LINK:
 #ifdef CONFIG_BOOKMARKS
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				launch_bm_add_link_dialog(term, NULL, ses);
 #endif
 			break;
-		case ACT_ADD_BOOKMARK_TABS:
+		case ACT_MAIN_ADD_BOOKMARK_TABS:
 #ifdef CONFIG_BOOKMARKS
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				bookmark_terminal_tabs_dialog(term);
 #endif
 			break;
 
-		case ACT_BACK:
+		case ACT_MAIN_BACK:
 			go_back(ses);
 			break;
 
-		case ACT_BOOKMARK_MANAGER:
+		case ACT_MAIN_BOOKMARK_MANAGER:
 #ifdef CONFIG_BOOKMARKS
 			bookmark_manager(ses);
 #endif
 			break;
 
-		case ACT_CACHE_MANAGER:
+		case ACT_MAIN_CACHE_MANAGER:
 			cache_manager(ses);
 			break;
 
-		case ACT_CACHE_MINIMIZE:
+		case ACT_MAIN_CACHE_MINIMIZE:
 			shrink_memory(1);
 			break;
 
-		case ACT_COOKIES_LOAD:
+		case ACT_MAIN_COOKIES_LOAD:
 #ifdef CONFIG_COOKIES
 			if (!get_opt_int_tree(cmdline_options, "anonymous")
 			    && get_opt_int("cookies.save"))
@@ -182,240 +182,240 @@ do_action(struct session *ses, enum main_action action, int verbose)
 #endif
 			break;
 
-		case ACT_COOKIE_MANAGER:
+		case ACT_MAIN_COOKIE_MANAGER:
 #ifdef CONFIG_COOKIES
 			cookie_manager(ses);
 #endif
 			break;
 
-		case ACT_DOCUMENT_INFO:
+		case ACT_MAIN_DOCUMENT_INFO:
 			state_msg(ses);
 			break;
 
-		case ACT_DOWNLOAD:
+		case ACT_MAIN_DOWNLOAD:
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				do_frame_action(ses, download_link, action);
 			break;
 
-		case ACT_DOWNLOAD_IMAGE:
+		case ACT_MAIN_DOWNLOAD_IMAGE:
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				do_frame_action(ses, download_link, action);
 			break;
 
-		case ACT_DOWNLOAD_MANAGER:
+		case ACT_MAIN_DOWNLOAD_MANAGER:
 			download_manager(ses);
 			break;
 
-		case ACT_ENTER:
+		case ACT_MAIN_ENTER:
 			do_frame_action(ses, (frame_action) enter, 0);
 			break;
 
-		case ACT_ENTER_RELOAD:
+		case ACT_MAIN_ENTER_RELOAD:
 			do_frame_action(ses, (frame_action) enter, 1);
 			break;
 
-		case ACT_EXMODE:
+		case ACT_MAIN_EXMODE:
 			exmode_start(ses);
 			break;
 
-		case ACT_FILE_MENU:
+		case ACT_MAIN_FILE_MENU:
 			activate_bfu_technology(ses, 0);
 			break;
 
-		case ACT_FIND_NEXT:
+		case ACT_MAIN_FIND_NEXT:
 			do_frame_action(ses, find_next, 0);
 			break;
 
-		case ACT_FIND_NEXT_BACK:
+		case ACT_MAIN_FIND_NEXT_BACK:
 			do_frame_action(ses, find_next_back, 0);
 			break;
 
-		case ACT_FORGET_CREDENTIALS:
+		case ACT_MAIN_FORGET_CREDENTIALS:
 			free_auth();
 			shrink_memory(1); /* flush caches */
 			break;
 
-		case ACT_FORMHIST_MANAGER:
+		case ACT_MAIN_FORMHIST_MANAGER:
 #ifdef CONFIG_FORMHIST
 			formhist_manager(ses);
 #endif
 			break;
 
-		case ACT_GOTO_URL:
+		case ACT_MAIN_GOTO_URL:
 			goto_url_action(ses, NULL);
 			break;
 
-		case ACT_GOTO_URL_CURRENT:
+		case ACT_MAIN_GOTO_URL_CURRENT:
 			goto_url_action(ses, get_current_url);
 			break;
 
-		case ACT_GOTO_URL_CURRENT_LINK:
+		case ACT_MAIN_GOTO_URL_CURRENT_LINK:
 			goto_url_action(ses, get_current_link_url);
 			break;
 
-		case ACT_GOTO_URL_HOME:
+		case ACT_MAIN_GOTO_URL_HOME:
 			goto_url_home(ses);
 			break;
 
-		case ACT_HEADER_INFO:
+		case ACT_MAIN_HEADER_INFO:
 			head_msg(ses);
 			break;
 
-		case ACT_HISTORY_MANAGER:
+		case ACT_MAIN_HISTORY_MANAGER:
 #ifdef CONFIG_GLOBHIST
 			history_manager(ses);
 #endif
 			break;
 
-		case ACT_KEYBINDING_MANAGER:
+		case ACT_MAIN_KEYBINDING_MANAGER:
 			keybinding_manager(ses);
 			break;
 
-		case ACT_KILL_BACKGROUNDED_CONNECTIONS:
+		case ACT_MAIN_KILL_BACKGROUNDED_CONNECTIONS:
 			abort_background_connections();
 			break;
 
-		case ACT_LINK_MENU:
+		case ACT_MAIN_LINK_MENU:
 			link_menu(term, NULL, ses);
 			break;
 
-		case ACT_LUA_CONSOLE:
+		case ACT_MAIN_LUA_CONSOLE:
 #ifdef HAVE_LUA
 			trigger_event_name("dialog-lua-console", ses);
 #endif
 			break;
 
-		case ACT_MENU:
+		case ACT_MAIN_MENU:
 			activate_bfu_technology(ses, -1);
 			break;
 
-		case ACT_NEXT_FRAME:
+		case ACT_MAIN_NEXT_FRAME:
 			next_frame(ses, 1);
 			draw_formatted(ses, 0);
 			break;
 
-		case ACT_OPEN_LINK_IN_NEW_TAB:
+		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB:
 			open_current_link_in_new_tab(ses, 0);
 			break;
 
-		case ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
+		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
 			open_current_link_in_new_tab(ses, 1);
 			break;
 
-		case ACT_OPEN_LINK_IN_NEW_WINDOW:
+		case ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW:
 			/* FIXME: Use do_frame_action(). --jonas */
 			if (!doc_view || doc_view->vs->current_link == -1) break;
 			open_in_new_window(term, send_open_in_new_window, ses);
 			break;
 
-		case ACT_OPEN_NEW_TAB:
+		case ACT_MAIN_OPEN_NEW_TAB:
 			open_url_in_new_tab(ses, NULL, 0);
 			break;
 
-		case ACT_OPEN_NEW_TAB_IN_BACKGROUND:
+		case ACT_MAIN_OPEN_NEW_TAB_IN_BACKGROUND:
 			open_url_in_new_tab(ses, NULL, 1);
 			break;
 
-		case ACT_OPEN_NEW_WINDOW:
+		case ACT_MAIN_OPEN_NEW_WINDOW:
 			open_in_new_window(term, send_open_new_window, ses);
 			break;
 
-		case ACT_OPEN_OS_SHELL:
+		case ACT_MAIN_OPEN_OS_SHELL:
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				exec_shell(term);
 			break;
 
-		case ACT_OPTIONS_MANAGER:
+		case ACT_MAIN_OPTIONS_MANAGER:
 			options_manager(ses);
 			break;
 
-		case ACT_PREVIOUS_FRAME:
+		case ACT_MAIN_PREVIOUS_FRAME:
 			next_frame(ses, -1);
 			draw_formatted(ses, 0);
 			break;
 
-		case ACT_QUIT:
+		case ACT_MAIN_QUIT:
 			exit_prog(ses, 1);
 			break;
 
-		case ACT_REALLY_QUIT:
+		case ACT_MAIN_REALLY_QUIT:
 			exit_prog(ses, 0);
 			break;
 
-		case ACT_REDRAW:
+		case ACT_MAIN_REDRAW:
 			redraw_terminal_cls(term);
 			break;
 
-		case ACT_RELOAD:
+		case ACT_MAIN_RELOAD:
 			reload(ses, CACHE_MODE_INCREMENT);
 			break;
 
-		case ACT_RERENDER:
+		case ACT_MAIN_RERENDER:
 			draw_formatted(ses, 1);
 			break;
 
-		case ACT_RESET_FORM:
+		case ACT_MAIN_RESET_FORM:
 			do_frame_action(ses, reset_form, 0);
 			break;
 
-		case ACT_RESOURCE_INFO:
+		case ACT_MAIN_RESOURCE_INFO:
 			resource_info(term);
 			break;
 
-		case ACT_RESUME_DOWNLOAD:
+		case ACT_MAIN_RESUME_DOWNLOAD:
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				do_frame_action(ses, download_link, action);
 			break;
 
-		case ACT_SAVE_AS:
+		case ACT_MAIN_SAVE_AS:
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				save_as(term, NULL, ses);
 			break;
 
-		case ACT_SAVE_FORMATTED:
+		case ACT_MAIN_SAVE_FORMATTED:
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				do_frame_action(ses, save_formatted_dlg, 0);
 			break;
 
-		case ACT_SAVE_URL_AS:
+		case ACT_MAIN_SAVE_URL_AS:
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				save_url_as(ses);
 			break;
 
-		case ACT_SAVE_OPTIONS:
+		case ACT_MAIN_SAVE_OPTIONS:
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				write_config(term);
 			break;
 
-		case ACT_SEARCH:
+		case ACT_MAIN_SEARCH:
 			do_frame_action(ses, search_dlg, 0);
 			break;
 
-		case ACT_SEARCH_BACK:
+		case ACT_MAIN_SEARCH_BACK:
 			do_frame_action(ses, search_back_dlg, 0);
 			break;
 
-		case ACT_SEARCH_TYPEAHEAD:
+		case ACT_MAIN_SEARCH_TYPEAHEAD:
 			do_frame_action(ses, search_typeahead, 0);
 			break;
 
-		case ACT_SHOW_TERM_OPTIONS:
+		case ACT_MAIN_SHOW_TERM_OPTIONS:
 			terminal_options(term, NULL, ses);
 			break;
 
-		case ACT_SUBMIT_FORM:
+		case ACT_MAIN_SUBMIT_FORM:
 			do_frame_action(ses, submit_form, 0);
 			break;
 
-		case ACT_SUBMIT_FORM_RELOAD:
+		case ACT_MAIN_SUBMIT_FORM_RELOAD:
 			do_frame_action(ses, submit_form, 1);
 			break;
 
-		case ACT_TAB_NEXT:
+		case ACT_MAIN_TAB_NEXT:
 			switch_to_next_tab(term);
 			break;
 
-		case ACT_TAB_MENU:
+		case ACT_MAIN_TAB_MENU:
 			assert(ses->tab == get_current_tab(term));
 
 			if (ses->status.show_tabs_bar)
@@ -426,99 +426,99 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			tab_menu(term, ses->tab, ses);
 			break;
 
-		case ACT_TAB_PREV:
+		case ACT_MAIN_TAB_PREV:
 			switch_to_prev_tab(term);
 			break;
 
-		case ACT_TAB_CLOSE:
+		case ACT_MAIN_TAB_CLOSE:
 			close_tab(term, ses);
 			break;
 
-		case ACT_TAB_CLOSE_ALL_BUT_CURRENT:
+		case ACT_MAIN_TAB_CLOSE_ALL_BUT_CURRENT:
 			close_all_tabs_but_current(ses);
 			break;
 
-		case ACT_TOGGLE_DISPLAY_IMAGES:
+		case ACT_MAIN_TOGGLE_DISPLAY_IMAGES:
 			toggle_document_option(ses, "document.browse.images.show_as_links");
 			break;
 
-		case ACT_TOGGLE_DISPLAY_TABLES:
+		case ACT_MAIN_TOGGLE_DISPLAY_TABLES:
 			toggle_document_option(ses, "document.html.display_tables");
 			break;
 
-		case ACT_TOGGLE_DOCUMENT_COLORS:
+		case ACT_MAIN_TOGGLE_DOCUMENT_COLORS:
 			toggle_document_option(ses, "document.colors.use_document_colors");
 			break;
 
-		case ACT_TOGGLE_HTML_PLAIN:
+		case ACT_MAIN_TOGGLE_HTML_PLAIN:
 			toggle_plain_html(ses, ses->doc_view, 0);
 			break;
 
-		case ACT_TOGGLE_NUMBERED_LINKS:
+		case ACT_MAIN_TOGGLE_NUMBERED_LINKS:
 			toggle_document_option(ses, "document.browse.links.numbering");
 			break;
 
-		case ACT_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES:
+		case ACT_MAIN_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES:
 			toggle_document_option(ses, "document.plain.compress_empty_lines");
 			break;
 
-		case ACT_TOGGLE_WRAP_TEXT:
+		case ACT_MAIN_TOGGLE_WRAP_TEXT:
 			toggle_wrap_text(ses, ses->doc_view, 0);
 			break;
 
-		case ACT_UNBACK:
+		case ACT_MAIN_UNBACK:
 			go_unback(ses);
 			break;
 
-		case ACT_VIEW_IMAGE:
+		case ACT_MAIN_VIEW_IMAGE:
 			do_frame_action(ses, view_image, 0);
 			break;
 
-		case ACT_ZOOM_FRAME:
+		case ACT_MAIN_ZOOM_FRAME:
 			do_frame_action(ses, set_frame, 0);
 			break;
 
-		case ACT_AUTO_COMPLETE:
-		case ACT_AUTO_COMPLETE_UNAMBIGUOUS:
-		case ACT_BACKSPACE:
-		case ACT_BEGINNING_OF_BUFFER:
-		case ACT_CANCEL:
-		case ACT_COPY_CLIPBOARD:
-		case ACT_CUT_CLIPBOARD:
-		case ACT_DELETE:
-		case ACT_DOWN:
-		case ACT_EDIT:
-		case ACT_END:
-		case ACT_END_OF_BUFFER:
-		case ACT_EXPAND:
-		case ACT_HOME:
-		case ACT_KILL_TO_BOL:
-		case ACT_KILL_TO_EOL:
-		case ACT_LEFT:
-		case ACT_JUMP_TO_LINK:
-		case ACT_MARK_SET:
-		case ACT_MARK_GOTO:
-		case ACT_MARK_ITEM:
-		case ACT_NEXT_ITEM:
-		case ACT_PAGE_DOWN:
-		case ACT_PAGE_UP:
-		case ACT_PASTE_CLIPBOARD:
-		case ACT_RIGHT:
-		case ACT_SCRIPTING_FUNCTION:
-		case ACT_SCROLL_DOWN:
-		case ACT_SCROLL_LEFT:
-		case ACT_SCROLL_RIGHT:
-		case ACT_SCROLL_UP:
-		case ACT_SELECT:
-		case ACT_UNEXPAND:
-		case ACT_UP:
+		case ACT_MAIN_AUTO_COMPLETE:
+		case ACT_MAIN_AUTO_COMPLETE_UNAMBIGUOUS:
+		case ACT_MAIN_BACKSPACE:
+		case ACT_MAIN_BEGINNING_OF_BUFFER:
+		case ACT_MAIN_CANCEL:
+		case ACT_MAIN_COPY_CLIPBOARD:
+		case ACT_MAIN_CUT_CLIPBOARD:
+		case ACT_MAIN_DELETE:
+		case ACT_MAIN_DOWN:
+		case ACT_MAIN_EDIT:
+		case ACT_MAIN_END:
+		case ACT_MAIN_END_OF_BUFFER:
+		case ACT_MAIN_EXPAND:
+		case ACT_MAIN_HOME:
+		case ACT_MAIN_KILL_TO_BOL:
+		case ACT_MAIN_KILL_TO_EOL:
+		case ACT_MAIN_LEFT:
+		case ACT_MAIN_JUMP_TO_LINK:
+		case ACT_MAIN_MARK_SET:
+		case ACT_MAIN_MARK_GOTO:
+		case ACT_MAIN_MARK_ITEM:
+		case ACT_MAIN_NEXT_ITEM:
+		case ACT_MAIN_PAGE_DOWN:
+		case ACT_MAIN_PAGE_UP:
+		case ACT_MAIN_PASTE_CLIPBOARD:
+		case ACT_MAIN_RIGHT:
+		case ACT_MAIN_SCRIPTING_FUNCTION:
+		case ACT_MAIN_SCROLL_DOWN:
+		case ACT_MAIN_SCROLL_LEFT:
+		case ACT_MAIN_SCROLL_RIGHT:
+		case ACT_MAIN_SCROLL_UP:
+		case ACT_MAIN_SELECT:
+		case ACT_MAIN_UNEXPAND:
+		case ACT_MAIN_UP:
 		default:
 			if (verbose) {
 				INTERNAL("No action handling defined for '%s'.",
 					 write_action(KM_MAIN, action));
 			}
 
-			return ACT_NONE;
+			return ACT_MAIN_NONE;
 	}
 
 	return action;

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.150 2004/01/17 15:21:54 pasky Exp $ */
+/* $Id: link.c,v 1.151 2004/01/25 13:17:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -820,35 +820,35 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	if (link->type == LINK_HYPERTEXT && link->where) {
 		if (strlen(link->where) >= 4
 		    && !strncasecmp(link->where, "MAP@", 4))
-			add_to_menu(&mi, N_("Display ~usemap"), NULL, ACT_ENTER,
+			add_to_menu(&mi, N_("Display ~usemap"), NULL, ACT_MAIN_ENTER,
 				    NULL, NULL, SUBMENU);
 		else {
 			int c = can_open_in_new(term);
 
-			add_menu_action(&mi, N_("~Follow link"), ACT_ENTER);
+			add_menu_action(&mi, N_("~Follow link"), ACT_MAIN_ENTER);
 
-			add_menu_action(&mi, N_("Follow link and r~eload"), ACT_ENTER_RELOAD);
+			add_menu_action(&mi, N_("Follow link and r~eload"), ACT_MAIN_ENTER_RELOAD);
 
 			add_separator_to_menu(&mi);
 			if (c)
 				add_to_menu(&mi, N_("Open in new ~window"),
 					     NULL,
-					     ACT_OPEN_LINK_IN_NEW_WINDOW,
+					     ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW,
 					     (menu_func) open_in_new_window,
 					     send_open_in_new_window, c - 1 ? SUBMENU : 0);
 
-			add_menu_action(&mi, N_("Open in new ~tab"), ACT_OPEN_LINK_IN_NEW_TAB);
+			add_menu_action(&mi, N_("Open in new ~tab"), ACT_MAIN_OPEN_LINK_IN_NEW_TAB);
 
 			add_menu_action(&mi, N_("Open in new tab in ~background"),
-					ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND);
+					ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND);
 
 			if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 				add_separator_to_menu(&mi);
-				add_menu_action(&mi, N_("~Download link"), ACT_DOWNLOAD);
+				add_menu_action(&mi, N_("~Download link"), ACT_MAIN_DOWNLOAD);
 
 #ifdef CONFIG_BOOKMARKS
 				add_menu_action(&mi, N_("~Add link to bookmarks"),
-						ACT_ADD_BOOKMARK_LINK);
+						ACT_MAIN_ADD_BOOKMARK_LINK);
 #endif
 			}
 
@@ -857,40 +857,40 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	if (link->form) {
 		if (link->form->type == FC_RESET) {
-			add_menu_action(&mi, N_("~Reset form"), ACT_RESET_FORM);
+			add_menu_action(&mi, N_("~Reset form"), ACT_MAIN_RESET_FORM);
 		} else {
 			int c = can_open_in_new(term);
 
 			if (link->form->type == FC_TEXTAREA && !link->form->ro) {
-				add_to_menu(&mi, N_("Open in ~external editor"), NULL, ACT_EDIT,
+				add_to_menu(&mi, N_("Open in ~external editor"), NULL, ACT_MAIN_EDIT,
 					    (menu_func) menu_textarea_edit, NULL, 0);
 			}
 
-			add_menu_action(&mi, N_("~Submit form"), ACT_SUBMIT_FORM);
-			add_menu_action(&mi, N_("Submit form and rel~oad"), ACT_SUBMIT_FORM_RELOAD);
+			add_menu_action(&mi, N_("~Submit form"), ACT_MAIN_SUBMIT_FORM);
+			add_menu_action(&mi, N_("Submit form and rel~oad"), ACT_MAIN_SUBMIT_FORM_RELOAD);
 
 			if (c && link->form->method == FM_GET)
 				add_to_menu(&mi, N_("Submit form and open in new ~window"),
-					    NULL, ACT_NONE,
+					    NULL, ACT_MAIN_NONE,
 					    (menu_func) open_in_new_window,
 					    send_open_in_new_window, c - 1 ? SUBMENU : 0);
 
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
-				add_menu_action(&mi, N_("Submit form and ~download"), ACT_DOWNLOAD);
+				add_menu_action(&mi, N_("Submit form and ~download"), ACT_MAIN_DOWNLOAD);
 
-			add_menu_action(&mi, N_("~Reset form"), ACT_RESET_FORM);
+			add_menu_action(&mi, N_("~Reset form"), ACT_MAIN_RESET_FORM);
 		}
 	}
 
 	if (link->where_img) {
-		add_menu_action(&mi, N_("V~iew image"), ACT_VIEW_IMAGE);
+		add_menu_action(&mi, N_("V~iew image"), ACT_MAIN_VIEW_IMAGE);
 		if (!get_opt_int_tree(cmdline_options, "anonymous"))
-			add_menu_action(&mi, N_("Download ima~ge"), ACT_DOWNLOAD_IMAGE);
+			add_menu_action(&mi, N_("Download ima~ge"), ACT_MAIN_DOWNLOAD_IMAGE);
 	}
 
 end:
 	if (!mi->text) {
-		add_to_menu(&mi, N_("No link selected"), NULL, ACT_NONE,
+		add_to_menu(&mi, N_("No link selected"), NULL, ACT_MAIN_NONE,
 			    NULL, NULL, NO_SELECT);
 	}
 

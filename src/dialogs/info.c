@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.92 2004/01/25 09:48:23 jonas Exp $ */
+/* $Id: info.c,v 1.93 2004/01/25 13:17:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,28 +67,28 @@ void
 menu_keys(struct terminal *term, void *d, struct session *ses)
 {
 	enum main_action actions[] = {
-		ACT_MENU,
-		ACT_QUIT,
-		ACT_DOWN,
-		ACT_UP,
-		ACT_SCROLL_DOWN,
-		ACT_SCROLL_UP,
-		ACT_SCROLL_LEFT,
-		ACT_SCROLL_RIGHT,
-		ACT_BACK,
-		ACT_ENTER,
-		ACT_GOTO_URL,
-		ACT_GOTO_URL_CURRENT,
-		ACT_DOCUMENT_INFO,
-		ACT_HEADER_INFO,
-		ACT_SEARCH,
-		ACT_SEARCH_BACK,
-		ACT_FIND_NEXT,
-		ACT_FIND_NEXT_BACK,
-		ACT_DOWNLOAD,
-		ACT_TOGGLE_HTML_PLAIN,
+		ACT_MAIN_MENU,
+		ACT_MAIN_QUIT,
+		ACT_MAIN_DOWN,
+		ACT_MAIN_UP,
+		ACT_MAIN_SCROLL_DOWN,
+		ACT_MAIN_SCROLL_UP,
+		ACT_MAIN_SCROLL_LEFT,
+		ACT_MAIN_SCROLL_RIGHT,
+		ACT_MAIN_BACK,
+		ACT_MAIN_ENTER,
+		ACT_MAIN_GOTO_URL,
+		ACT_MAIN_GOTO_URL_CURRENT,
+		ACT_MAIN_DOCUMENT_INFO,
+		ACT_MAIN_HEADER_INFO,
+		ACT_MAIN_SEARCH,
+		ACT_MAIN_SEARCH_BACK,
+		ACT_MAIN_FIND_NEXT,
+		ACT_MAIN_FIND_NEXT_BACK,
+		ACT_MAIN_DOWNLOAD,
+		ACT_MAIN_TOGGLE_HTML_PLAIN,
 
-		ACT_NONE,
+		ACT_MAIN_NONE,
 	};
 	struct string keys;
 	struct keys_toggle_info *info;

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.156 2004/01/25 13:09:01 pasky Exp $ */
+/* $Id: dialogs.c,v 1.157 2004/01/25 13:17:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -489,7 +489,7 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 	}
 
 	if (keybinding_exists(hop->keymap, hop->key, hop->meta, &action)
-	    && action != ACT_NONE) {
+	    && action != ACT_MAIN_NONE) {
 		struct kbdbind_add_hop *new_hop;
 
 		/* Same keystroke for same action, just return. */

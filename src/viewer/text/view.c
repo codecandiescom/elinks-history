@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.359 2004/01/24 23:50:19 pasky Exp $ */
+/* $Id: view.c,v 1.360 2004/01/25 13:17:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -635,18 +635,18 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 		}
 
 		switch (kbd_action(KM_MAIN, ev, NULL)) {
-			case ACT_COPY_CLIPBOARD:
-			case ACT_ENTER:
-			case ACT_ENTER_RELOAD:
-			case ACT_DOWNLOAD:
-			case ACT_RESUME_DOWNLOAD:
-			case ACT_VIEW_IMAGE:
-			case ACT_DOWNLOAD_IMAGE:
-			case ACT_LINK_MENU:
-			case ACT_JUMP_TO_LINK:
-			case ACT_OPEN_LINK_IN_NEW_WINDOW:
-			case ACT_OPEN_LINK_IN_NEW_TAB:
-			case ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
+			case ACT_MAIN_COPY_CLIPBOARD:
+			case ACT_MAIN_ENTER:
+			case ACT_MAIN_ENTER_RELOAD:
+			case ACT_MAIN_DOWNLOAD:
+			case ACT_MAIN_RESUME_DOWNLOAD:
+			case ACT_MAIN_VIEW_IMAGE:
+			case ACT_MAIN_DOWNLOAD_IMAGE:
+			case ACT_MAIN_LINK_MENU:
+			case ACT_MAIN_JUMP_TO_LINK:
+			case ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW:
+			case ACT_MAIN_OPEN_LINK_IN_NEW_TAB:
+			case ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
 				if (!ses->kbdprefix.rep) break;
 
 				if (ses->kbdprefix.rep_num
@@ -666,11 +666,11 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 		}
 
 		switch (kbd_action(KM_MAIN, ev, NULL)) {
-			case ACT_PAGE_DOWN: rep_ev(ses, doc_view, page_down, 0); break;
-			case ACT_PAGE_UP: rep_ev(ses, doc_view, page_up, 0); break;
-			case ACT_DOWN: rep_ev(ses, doc_view, down, 0); break;
-			case ACT_UP: rep_ev(ses, doc_view, up, 0); break;
-			case ACT_COPY_CLIPBOARD: {
+			case ACT_MAIN_PAGE_DOWN: rep_ev(ses, doc_view, page_down, 0); break;
+			case ACT_MAIN_PAGE_UP: rep_ev(ses, doc_view, page_up, 0); break;
+			case ACT_MAIN_DOWN: rep_ev(ses, doc_view, down, 0); break;
+			case ACT_MAIN_UP: rep_ev(ses, doc_view, up, 0); break;
+			case ACT_MAIN_COPY_CLIPBOARD: {
 				char *current_link = print_current_link(ses);
 
 				if (current_link) {
@@ -681,21 +681,21 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			}
 
 			/* XXX: Code duplication of following for mouse */
-			case ACT_SCROLL_UP: scroll(ses, doc_view, ses->kbdprefix.rep ? -ses->kbdprefix.rep_num : -get_opt_int("document.browse.scroll_step")); break;
-			case ACT_SCROLL_DOWN: scroll(ses, doc_view, ses->kbdprefix.rep ? ses->kbdprefix.rep_num : get_opt_int("document.browse.scroll_step")); break;
-			case ACT_SCROLL_LEFT: rep_ev(ses, doc_view, hscroll, -1 - 7 * !ses->kbdprefix.rep); break;
-			case ACT_SCROLL_RIGHT: rep_ev(ses, doc_view, hscroll, 1 + 7 * !ses->kbdprefix.rep); break;
+			case ACT_MAIN_SCROLL_UP: scroll(ses, doc_view, ses->kbdprefix.rep ? -ses->kbdprefix.rep_num : -get_opt_int("document.browse.scroll_step")); break;
+			case ACT_MAIN_SCROLL_DOWN: scroll(ses, doc_view, ses->kbdprefix.rep ? ses->kbdprefix.rep_num : get_opt_int("document.browse.scroll_step")); break;
+			case ACT_MAIN_SCROLL_LEFT: rep_ev(ses, doc_view, hscroll, -1 - 7 * !ses->kbdprefix.rep); break;
+			case ACT_MAIN_SCROLL_RIGHT: rep_ev(ses, doc_view, hscroll, 1 + 7 * !ses->kbdprefix.rep); break;
 
-			case ACT_HOME: rep_ev(ses, doc_view, home, 0); break;
-			case ACT_END:  rep_ev(ses, doc_view, x_end, 0); break;
-			case ACT_ENTER: x = enter(ses, doc_view, 0); break;
-			case ACT_ENTER_RELOAD: x = enter(ses, doc_view, 1); break;
-			case ACT_JUMP_TO_LINK: x = 2; break;
-			case ACT_MARK_SET:
+			case ACT_MAIN_HOME: rep_ev(ses, doc_view, home, 0); break;
+			case ACT_MAIN_END:  rep_ev(ses, doc_view, x_end, 0); break;
+			case ACT_MAIN_ENTER: x = enter(ses, doc_view, 0); break;
+			case ACT_MAIN_ENTER_RELOAD: x = enter(ses, doc_view, 1); break;
+			case ACT_MAIN_JUMP_TO_LINK: x = 2; break;
+			case ACT_MAIN_MARK_SET:
 				ses->kbdprefix.mark = KP_MARK_SET;
 				x = 2;
 				break;
-			case ACT_MARK_GOTO:
+			case ACT_MAIN_MARK_GOTO:
 				/* TODO: Show promptly a menu (or even listbox?)
 				 * with all the marks. But the next letter must
 				 * still choose a mark directly! --pasky */
@@ -903,22 +903,22 @@ send_event(struct session *ses, struct term_event *ev)
 
 		action = kbd_action(KM_MAIN, ev, &func_ref);
 
-		if (action == ACT_QUIT) {
+		if (action == ACT_MAIN_QUIT) {
 quit:
 			if (ev->x == KBD_CTRL_C)
-				action = ACT_REALLY_QUIT;
+				action = ACT_MAIN_REALLY_QUIT;
 		}
 
 		if (do_action(ses, action, 0) == action) {
 			/* Did the session disappear in some EV_ABORT handler? */
-			if (action == ACT_TAB_CLOSE
-			    || action == ACT_TAB_CLOSE_ALL_BUT_CURRENT)
+			if (action == ACT_MAIN_TAB_CLOSE
+			    || action == ACT_MAIN_TAB_CLOSE_ALL_BUT_CURRENT)
 				ses = NULL;
 			goto x;
 		}
 
 		switch (action) {
-			case ACT_SCRIPTING_FUNCTION:
+			case ACT_MAIN_SCRIPTING_FUNCTION:
 #ifdef HAVE_SCRIPTING
 				trigger_event(func_ref, ses);
 #endif
@@ -1028,13 +1028,13 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 	link = &doc_view->document->links[doc_view->vs->current_link];
 
 	switch (action) {
-		case ACT_RESUME_DOWNLOAD:
+		case ACT_MAIN_RESUME_DOWNLOAD:
 			download = resume_download;
-		case ACT_DOWNLOAD:
+		case ACT_MAIN_DOWNLOAD:
 			ses->dn_url = get_link_url(ses, doc_view, link);
 			break;
 
-		case ACT_DOWNLOAD_IMAGE:
+		case ACT_MAIN_DOWNLOAD_IMAGE:
 			ses->dn_url = stracpy(link->where_img);
 			break;
 
@@ -1147,7 +1147,7 @@ open_in_new_window(struct terminal *term,
 		return;
 	}
 	for (oi = oin; oi->text; oi++)
-		add_to_menu(&mi, oi->text, NULL, ACT_NONE, (menu_func) xxx, oi->fn, 0);
+		add_to_menu(&mi, oi->text, NULL, ACT_MAIN_NONE, (menu_func) xxx, oi->fn, 0);
 	mem_free(oin);
 	do_menu(term, mi, ses, 1);
 }

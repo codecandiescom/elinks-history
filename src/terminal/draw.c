@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.39 2003/07/31 21:35:05 zas Exp $ */
+/* $Id: draw.c,v 1.40 2003/07/31 21:48:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,7 +119,7 @@ void
 set_line(struct terminal *term, int x, int y, int l, struct screen_char *line)
 {
 	int position, end;
-	register int i;
+	register int i, j;
 
 	assert(term && term->screen && term->screen->image && line);
 	if_assert_failed return;
@@ -129,11 +129,9 @@ set_line(struct terminal *term, int x, int y, int l, struct screen_char *line)
 	if (end == 0) return;
 
 	position = x + term->x * y;
-	for (i = 0; i < end; i++) {
-		int pos = i + position;
-
-		term->screen->image[pos].data = line[i].data;
-		term->screen->image[pos].attr = line[i].attr;
+	for (i = position, j = 0; i < end + position; i++, j++) {
+		term->screen->image[i].data = line[j].data;
+		term->screen->image[i].attr = line[j].attr;
 	}
 	term->screen->dirty = 1;
 }
@@ -143,8 +141,6 @@ fill_area(struct terminal *term, int x, int y, int xw, int yw,
 	  unsigned char data, unsigned char attr)
 {
 	int position;
-	int starty = (y >= 0) ? 0 : -y;
-	int startx = (x >= 0) ? 0 : -x;
 	int endx, endy;
 	register int j;
 
@@ -157,14 +153,14 @@ fill_area(struct terminal *term, int x, int y, int xw, int yw,
 
 	position = x + term->x * y;
 
-	for (j = starty; j < endy; j++) {
+	for (j = 0; j < endy; j++) {
 		register int offset = position + term->x * j;
 		register int i;
 
 		/* No, we can't use memset() here :(. It's int, not char. */
 		/* TODO: Make screen two arrays actually. Enables various
 		 * optimalizations, consumes nearly same memory. --pasky */
-		for (i = startx + offset; i < endx + offset; i++) {
+		for (i = offset; i < endx + offset; i++) {
 			term->screen->image[i].data = data;
 			term->screen->image[i].attr = attr;
 		}
@@ -217,7 +213,7 @@ print_text(struct terminal *term, int x, int y, int l,
 {
 	int position, end;
 
-	assert(term  && term->screen && term->screen->image && text && l >= 0);
+	assert(term && term->screen && term->screen->image && text && l >= 0);
 	if_assert_failed return;
 	if (out_of_range(term, x, y)) return;
 
@@ -235,7 +231,7 @@ print_text(struct terminal *term, int x, int y, int l,
 void
 set_cursor(struct terminal *term, int x, int y, int blockable)
 {
-	assert(term  && term->screen);
+	assert(term && term->screen);
 	if_assert_failed return;
 	if (out_of_range(term, x, y)) return;
 

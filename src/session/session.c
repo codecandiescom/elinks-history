@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.417 2004/06/04 12:46:34 jonas Exp $ */
+/* $Id: session.c,v 1.418 2004/06/04 13:04:26 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -994,7 +994,6 @@ ses_change_frame_uri(struct session *ses, unsigned char *name, struct uri *uri)
 	}
 
 	return NULL;
-
 }
 
 void

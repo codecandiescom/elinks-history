@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.81 2004/04/24 01:43:59 jonas Exp $ */
+/* $Id: cmdline.c,v 1.82 2004/04/24 02:11:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,11 +196,13 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 			REMOTE_METHOD_OPENURL,
 			REMOTE_METHOD_PING,
 			REMOTE_METHOD_XFEDOCOMMAND,
+			REMOTE_METHOD_BOOKMARK,
 			REMOTE_METHOD_NOT_SUPPORTED,
 		} type;
 	} remote_methods[] = {
 		{ "openURL",	  REMOTE_METHOD_OPENURL },
 		{ "ping",	  REMOTE_METHOD_PING },
+		{ "bookmark",	  REMOTE_METHOD_BOOKMARK },
 		{ "xfeDoCommand", REMOTE_METHOD_XFEDOCOMMAND },
 		{ NULL,		  REMOTE_METHOD_NOT_SUPPORTED },
 	};
@@ -258,7 +260,7 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 			} else {
 				/* Bail out when getting unknown parameter */
 				/* TODO: new-screen */
-				break
+				break;
 			}
 
 		} else {
@@ -280,6 +282,12 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 	case REMOTE_METHOD_PING:
 		remote_session_flags = SES_REMOTE_PING;
+		break;
+
+	case REMOTE_METHOD_BOOKMARK:
+		if (arg == argend) break;
+		remote_url = memacpy(arg, argend - arg);
+		remote_session_flags = SES_REMOTE_BOOKMARK;
 		break;
 
 	case REMOTE_METHOD_NOT_SUPPORTED:
@@ -686,6 +694,7 @@ struct option_info cmdline_options_info[] = {
 		"  openURL(http://elinks.or.cz)             -- open URL in current tab\n"
 		"  openURL(http://elinks.or.cz, new-tab)    -- open URL in new tab\n"
 		"  openURL(http://elinks.or.cz, new-window) -- open URL in new window\n"
+		"  bookmark(http://elinks.or.cz)            -- bookmark URL\n"
 		"  xfeDoCommand(openBrowser)                -- open new window")),
 
 	INIT_OPT_INT("", N_("Connect to session ring with given ID"),

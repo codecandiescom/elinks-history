@@ -1,4 +1,4 @@
-/* $Id: edit.h,v 1.9 2003/09/25 14:29:05 zas Exp $ */
+/* $Id: edit.h,v 1.10 2004/11/21 14:03:25 zas Exp $ */
 
 #ifndef EL__DIALOGS_EDIT_H
 #define EL__DIALOGS_EDIT_H
@@ -15,7 +15,7 @@ enum edit_dialog_type {
 void do_edit_dialog(struct terminal *, int, unsigned char *,
 		    const unsigned char *, const unsigned char *,
 		    struct session *, struct dialog_data *,
-		    void when_done(struct dialog *),
+		    t_done_handler *when_done,
 		    void when_cancel(struct dialog *),
 		    void *, enum edit_dialog_type);
 

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.182 2004/11/19 16:22:19 zas Exp $ */
+/* $Id: dialogs.c,v 1.183 2004/11/21 14:03:25 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -272,7 +272,8 @@ push_add_folder_button(struct dialog_data *dlg_data, struct widget_data *widget_
 
 /* Called when an edit is complete. */
 static void
-bookmark_edit_done(struct dialog *dlg) {
+bookmark_edit_done(void *data) {
+	struct dialog *dlg = data;
 	struct bookmark *bm = (struct bookmark *) dlg->udata2;
 
 	update_bookmark(bm, dlg->widgets[0].data, dlg->widgets[1].data);
@@ -481,8 +482,9 @@ bookmark_manager(struct session *ses)
 
 /* Adds the bookmark */
 static void
-bookmark_add_add(struct dialog *dlg)
+bookmark_add_add(void *data)
 {
+	struct dialog *dlg = data;
 	struct widget_data *widget_data = NULL; /* silence stupid gcc */
 	struct listbox_data *box = NULL;
 	struct bookmark *bm = NULL;
@@ -560,8 +562,9 @@ test_search(struct listbox_item *item, void *data_, int *offset) {
 
 /* Search bookmarks */
 static void
-bookmark_search_do(struct dialog *dlg)
+bookmark_search_do(void *data)
 {
+	struct dialog *dlg = data;
 	unsigned char *search_title = dlg->widgets[0].data;
 	unsigned char *search_url = dlg->widgets[1].data;
 	struct bookmark_search_ctx ctx = NULL_BOOKMARK_SEARCH_CTX;

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.156 2004/11/21 13:33:18 zas Exp $ */
+/* $Id: options.c,v 1.157 2004/11/21 14:03:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,8 +210,9 @@ static unsigned char x_str[4];
 static unsigned char y_str[4];
 
 static void
-push_resize_button(struct terminal *term)
+push_resize_button(void *data)
 {
+	struct terminal *term = data;
 	unsigned char str[8];
 
 	strcpy(str, x_str);

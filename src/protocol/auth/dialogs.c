@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.118 2004/11/19 16:26:12 zas Exp $ */
+/* $Id: dialogs.c,v 1.119 2004/11/21 14:03:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,8 +26,9 @@
 
 
 static void
-auth_ok(struct dialog *dlg)
+auth_ok(void *data)
 {
+	struct dialog *dlg = data;
 	struct auth_entry *entry = dlg->udata2;
 	struct session *ses = dlg->udata;
 
@@ -57,8 +58,10 @@ auth_ok(struct dialog *dlg)
 }
 
 static void
-auth_cancel(struct auth_entry *entry)
+auth_cancel(void *data)
 {
+	struct auth_entry *entry = data;
+
 	entry->blocked = 0;
 	del_auth_entry(entry);
 }

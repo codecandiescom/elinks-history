@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.79 2004/11/19 16:26:11 zas Exp $ */
+/* $Id: edit.c,v 1.80 2004/11/21 14:03:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,7 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	       const unsigned char *src_name,
 	       const unsigned char *src_url,
 	       struct session *ses, struct dialog_data *parent,
-	       void when_done(struct dialog *),
+	       t_done_handler *when_done,
 	       void when_cancel(struct dialog *),
 	       void *done_data,
 	       enum edit_dialog_type dialog_type)

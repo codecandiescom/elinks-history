@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.101 2004/11/19 16:26:12 zas Exp $ */
+/* $Id: dialogs.c,v 1.102 2004/11/21 14:03:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,8 +79,9 @@ struct extension {
 };
 
 static void
-add_mime_extension(struct extension *ext)
+add_mime_extension(void *data)
 {
+	struct extension *ext = data;
 	struct string name;
 
 	if (!ext || !init_string(&name)) return;

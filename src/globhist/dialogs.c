@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.125 2004/11/19 16:26:11 zas Exp $ */
+/* $Id: dialogs.c,v 1.126 2004/11/21 14:03:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,8 +146,9 @@ static struct listbox_ops gh_listbox_ops = {
 /* Searching: */
 
 static void
-history_search_do(struct dialog *dlg)
+history_search_do(void *data)
 {
+	struct dialog *dlg = data;
 	struct listbox_item *item = globhist_browser.root.child.next;
 	struct listbox_data *box;
 

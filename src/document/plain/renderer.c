@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.17 2003/11/14 03:39:10 jonas Exp $ */
+/* $Id: renderer.c,v 1.18 2003/11/14 12:45:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,7 @@ add_document_link(struct document *document, unsigned char *uri, int length,
 		  int x, int y)
 {
 	struct link *link;
-	struct uri test_uri;
+	struct uri test;
 	struct point *point;
 	int keep = uri[length];
 	unsigned char *mailto;
@@ -86,7 +86,7 @@ add_document_link(struct document *document, unsigned char *uri, int length,
 		uri[length] = keep;
 		if (!mailto) return length;
 
-	} else if (!parse_uri(&test_uri, uri)) {
+	} else if (!parse_uri(&test, uri) || (!test.datalen && !test.hostlen)) {
 		uri[length] = keep;
 		return 0;
 	} else {

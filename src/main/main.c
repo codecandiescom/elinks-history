@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.56 2002/09/17 17:11:02 zas Exp $ */
+/* $Id: main.c,v 1.57 2002/09/17 17:17:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -384,8 +384,6 @@ terminate_all_subsystems()
 	abort_all_connections();
 	done_ssl();
 
-	shrink_memory(1);
-
 	if (init_b) {
 #ifdef HAVE_SCRIPTING
 		script_hook_quit();
@@ -401,6 +399,8 @@ terminate_all_subsystems()
 		cleanup_cookies();
 #endif
 	}
+
+	shrink_memory(1);
 
 	free_table_cache();
 	free_history_lists();

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.187 2004/01/24 23:50:17 pasky Exp $ */
+/* $Id: menu.c,v 1.188 2004/01/24 23:58:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -953,29 +953,29 @@ mainmenu_kbd_handler(struct mainmenu *menu, struct term_event *ev, int fwd)
 	enum menu_action action = kbd_action(KM_MENU, ev, NULL);
 	int s = 0;
 
-	if (action == ACT_ENTER
-	    || action == ACT_DOWN
-	    || action == ACT_UP
-	    || action == ACT_PAGE_UP
-	    || action == ACT_PAGE_DOWN) {
+	if (action == ACT_MENU_ENTER
+	    || action == ACT_MENU_DOWN
+	    || action == ACT_MENU_UP
+	    || action == ACT_MENU_PAGE_UP
+	    || action == ACT_MENU_PAGE_DOWN) {
 		select_mainmenu(win->term, menu);
 		return;
 	}
 
-	if (action == ACT_LEFT) {
+	if (action == ACT_MENU_LEFT) {
 		menu->selected--;
 		if (menu->selected < 0)
 			menu->selected = menu->ni - 1;
 		s = 1;
 
-	} else if (action == ACT_RIGHT) {
+	} else if (action == ACT_MENU_RIGHT) {
 		menu->selected++;
 		if (menu->selected >= menu->ni)
 			menu->selected = 0;
 		s = 1;
 	}
 
-	if (fwd && (action == ACT_LEFT || action == ACT_RIGHT)) {
+	if (fwd && (action == ACT_MENU_LEFT || action == ACT_MENU_RIGHT)) {
 		display_mainmenu(win->term, menu);
 		select_mainmenu(win->term, menu);
 		return;
@@ -986,7 +986,7 @@ mainmenu_kbd_handler(struct mainmenu *menu, struct term_event *ev, int fwd)
 		s = 2;
 
 	if (!s) {
-		delete_window_ev(win, action != ACT_CANCEL
+		delete_window_ev(win, action != ACT_MENU_CANCEL
 				      ? ev : NULL);
 	} else {
 		display_mainmenu(win->term, menu);

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.145 2004/01/24 23:50:17 pasky Exp $ */
+/* $Id: hierbox.c,v 1.146 2004/01/24 23:58:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -207,7 +207,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 			selected = box->sel;
 			action = kbd_action(KM_MENU, ev, NULL);
 
-			if (action == ACT_SELECT) {
+			if (action == ACT_MENU_SELECT) {
 				if (!selected) return EVENT_PROCESSED;
 				if (selected->type != BI_FOLDER)
 					return EVENT_NOT_PROCESSED;
@@ -216,7 +216,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 			}
 
 			/* Recursively unexpand all folders */
-			if (action == ACT_UNEXPAND) {
+			if (action == ACT_MENU_UNEXPAND) {
 				if (!selected) return EVENT_PROCESSED;
 
 				/* Special trick: if the folder is already
@@ -247,7 +247,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 			}
 
 			/* Recursively expand all folders */
-			if (action == ACT_EXPAND) {
+			if (action == ACT_MENU_EXPAND) {
 				if (!selected || box->sel->type != BI_FOLDER)
 					return EVENT_PROCESSED;
 

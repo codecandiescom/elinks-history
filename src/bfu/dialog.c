@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.125 2004/01/24 23:50:17 pasky Exp $ */
+/* $Id: dialog.c,v 1.126 2004/01/24 23:58:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,7 +242,7 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 				break;
 
 			/* Can we select? */
-			if ((action == ACT_ENTER || action == ACT_SELECT)
+			if ((action == ACT_MENU_ENTER || action == ACT_MENU_SELECT)
 			    && widget_data->widget->ops->select) {
 				widget_data->widget->ops->select(widget_data, dlg_data);
 				break;
@@ -260,7 +260,7 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 			}
 
 			/* Submit button. */
-			if (action == ACT_ENTER
+			if (action == ACT_MENU_ENTER
 			    && (widget_is_textfield(widget_data)
 				|| ev->y == KBD_CTRL || ev->y == KBD_ALT)) {
 				for (i = 0; i < dlg_data->n; i++)
@@ -272,7 +272,7 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 			}
 
 			/* Cancel button. */
-			if (action == ACT_CANCEL) {
+			if (action == ACT_MENU_CANCEL) {
 				for (i = 0; i < dlg_data->n; i++)
 					if (dlg_data->dlg->widgets[i].type == WIDGET_BUTTON
 					    && dlg_data->dlg->widgets[i].info.button.flags & B_ESC) {
@@ -283,19 +283,19 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 
 			/* Cycle focus. */
 
-			if ((action == ACT_NEXT_ITEM && !ev->y)
-			    || action == ACT_DOWN || action == ACT_RIGHT) {
+			if ((action == ACT_MENU_NEXT_ITEM && !ev->y)
+			    || action == ACT_MENU_DOWN || action == ACT_MENU_RIGHT) {
 				cycle_widget_focus(dlg_data, 1);
 				break;
 			}
 
-			if ((action == ACT_NEXT_ITEM && ev->y)
-			    || action == ACT_UP || action == ACT_LEFT) {
+			if ((action == ACT_MENU_NEXT_ITEM && ev->y)
+			    || action == ACT_MENU_UP || action == ACT_MENU_LEFT) {
 				cycle_widget_focus(dlg_data, -1);
 				break;
 			}
 
-			if (action == ACT_REDRAW) {
+			if (action == ACT_MENU_REDRAW) {
 				redraw_terminal_cls(win->term);
 			}
 

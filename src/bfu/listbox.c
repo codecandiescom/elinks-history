@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.138 2004/01/24 23:50:17 pasky Exp $ */
+/* $Id: listbox.c,v 1.139 2004/01/24 23:58:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -581,49 +581,49 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			action = kbd_action(KM_MENU, ev, NULL);
 
 			/* Moving the box */
-			if (action == ACT_DOWN) {
+			if (action == ACT_MENU_DOWN) {
 				box_sel_move(dlg_item, 1);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_UP) {
+			if (action == ACT_MENU_UP) {
 				box_sel_move(dlg_item, -1);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_PAGE_DOWN) {
+			if (action == ACT_MENU_PAGE_DOWN) {
 				box_sel_move(dlg_item, dlg_item->h / 2);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_PAGE_UP) {
+			if (action == ACT_MENU_PAGE_UP) {
 				box_sel_move(dlg_item, -dlg_item->h / 2);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_HOME) {
+			if (action == ACT_MENU_HOME) {
 				box_sel_move(dlg_item, -MAXINT);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_END) {
+			if (action == ACT_MENU_END) {
 				box_sel_move(dlg_item, MAXINT);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_MARK_ITEM) {
+			if (action == ACT_MENU_MARK_ITEM) {
 				struct listbox_data *box;
 
 				box = get_listbox_widget_data(dlg_item);
@@ -636,7 +636,7 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_DELETE) {
+			if (action == ACT_MENU_DELETE) {
 				struct listbox_data *box;
 
 				box = get_listbox_widget_data(dlg_item);

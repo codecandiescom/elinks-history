@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.156 2004/01/24 23:50:19 pasky Exp $ */
+/* $Id: search.c,v 1.157 2004/01/24 23:58:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -973,13 +973,13 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 	i = current_link;
 
 	switch (action) {
-		case ACT_BACKSPACE:
+		case ACT_EDIT_BACKSPACE:
 			if (charpos > 0) charpos--;
 			typeahead[charpos] = 0;
 			direction = -1;
 			break;
 
-		case ACT_UP:
+		case ACT_EDIT_UP:
 			direction = -1;
 			i--;
 			if (i < 0) {
@@ -990,8 +990,8 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			}
 			break;
 
-		case ACT_NEXT_ITEM:
-		case ACT_DOWN:
+		case ACT_EDIT_NEXT_ITEM:
+		case ACT_EDIT_DOWN:
 			direction = 1;
 			i++;
 			if (i >= doc_view->document->nlinks) {
@@ -1002,11 +1002,11 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			}
 			break;
 
-		case ACT_KILL_TO_BOL:
+		case ACT_EDIT_KILL_TO_BOL:
 			memset(typeahead, 0, charpos);
 			return TYPEAHEAD_MATCHED;
 
-		case ACT_REDRAW:
+		case ACT_EDIT_REDRAW:
 			redraw_terminal_cls(ses->tab->term);
 			return TYPEAHEAD_MATCHED;
 

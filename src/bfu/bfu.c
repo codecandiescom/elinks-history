@@ -1,5 +1,5 @@
 /* This routines are the bones of user interface. */
-/* $Id: bfu.c,v 1.27 2002/07/04 01:07:12 pasky Exp $ */
+/* $Id: bfu.c,v 1.28 2002/07/04 01:18:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,13 +35,13 @@ do_dialog(struct terminal *term, struct dialog *dlg,
 	       struct memory_list *ml)
 {
 	struct dialog_data *dd;
-	struct dialog_item *d;
+	struct widget *d;
 	int n = 0;
 
 	for (d = dlg->items; d->type != D_END; d++) n++;
 
 	dd = mem_alloc(sizeof(struct dialog_data) +
-		       sizeof(struct dialog_item_data) * n);
+		       sizeof(struct widget_data) * n);
 	if (!dd) return NULL;
 
 	dd->dlg = dlg;
@@ -53,7 +53,7 @@ do_dialog(struct terminal *term, struct dialog *dlg,
 }
 
 /* display_dlg_item() */
-void display_dlg_item(struct dialog_data *dlg, struct dialog_item_data *di,
+void display_dlg_item(struct dialog_data *dlg, struct widget_data *di,
 		      int sel)
 {
 	struct terminal *term = dlg->win->term;
@@ -141,7 +141,7 @@ void display_dlg_item(struct dialog_data *dlg, struct dialog_item_data *di,
 }
 
 /* dlg_select_item() */
-void dlg_select_item(struct dialog_data *dlg, struct dialog_item_data *di)
+void dlg_select_item(struct dialog_data *dlg, struct widget_data *di)
 {
 	if (di->item->type == D_CHECKBOX) {
 		if (!di->item->gid) {
@@ -169,7 +169,7 @@ void dlg_select_item(struct dialog_data *dlg, struct dialog_item_data *di)
 }
 
 /* dlg_set_history() */
-void dlg_set_history(struct dialog_item_data *di)
+void dlg_set_history(struct widget_data *di)
 {
 	unsigned char *s = "";
 	int len;
@@ -185,7 +185,7 @@ void dlg_set_history(struct dialog_item_data *di)
 }
 
 /* dlg_mouse() */
-int dlg_mouse(struct dialog_data *dlg, struct dialog_item_data *di,
+int dlg_mouse(struct dialog_data *dlg, struct widget_data *di,
 	      struct event *ev)
 {
 	switch (di->item->type) {
@@ -288,7 +288,7 @@ tab_compl_n(struct terminal *term, unsigned char *item, int len,
 {
 	struct event ev = {EV_REDRAW, 0, 0, 0};
 	struct dialog_data *dd = (struct dialog_data *) win->data;
-	struct dialog_item_data *di = &(dd)->items[dd->selected];
+	struct widget_data *di = &(dd)->items[dd->selected];
 
 	if (len >= di->item->dlen)
 		len = di->item->dlen - 1;
@@ -401,7 +401,7 @@ void dialog_func(struct window *win, struct event *ev, int fwd)
 	int i;
 	struct terminal *term = win->term;
 	struct dialog_data *dlg = win->data;
-	struct dialog_item_data *di;
+	struct widget_data *di;
 
 	dlg->win = win;
 
@@ -414,9 +414,9 @@ void dialog_func(struct window *win, struct event *ev, int fwd)
 	switch (ev->ev) {
 		case EV_INIT:
 			for (i = 0; i < dlg->n; i++) {
-				struct dialog_item_data *di = &dlg->items[i];
+				struct widget_data *di = &dlg->items[i];
 
-				memset(di, 0, sizeof(struct dialog_item_data));
+				memset(di, 0, sizeof(struct widget_data));
 				di->item = &dlg->dlg->items[i];
 
 				di->cdata = mem_alloc(di->item->dlen);
@@ -675,7 +675,7 @@ sel:
 				dlg->dlg->abort(dlg);
 
 			for (i = 0; i < dlg->n; i++) {
-				struct dialog_item_data *di = &dlg->items[i];
+				struct widget_data *di = &dlg->items[i];
 
 				if (di->cdata) mem_free(di->cdata);
 				free_list(di->history);
@@ -686,7 +686,7 @@ sel:
 }
 
 /* check_number() */
-int check_number(struct dialog_data *dlg, struct dialog_item_data *di)
+int check_number(struct dialog_data *dlg, struct widget_data *di)
 {
 	unsigned char *end;
 	long l = strtol(di->cdata, (char **)&end, 10);
@@ -713,7 +713,7 @@ int check_number(struct dialog_data *dlg, struct dialog_item_data *di)
 }
 
 /* check_nonempty() */
-int check_nonempty(struct dialog_data *dlg, struct dialog_item_data *di)
+int check_nonempty(struct dialog_data *dlg, struct widget_data *di)
 {
 	unsigned char *p;
 
@@ -731,7 +731,7 @@ int check_nonempty(struct dialog_data *dlg, struct dialog_item_data *di)
 }
 
 /* cancel_dialog() */
-int cancel_dialog(struct dialog_data *dlg, struct dialog_item_data *di)
+int cancel_dialog(struct dialog_data *dlg, struct widget_data *di)
 {
 	delete_window(dlg->win);
 	return 0;
@@ -758,7 +758,7 @@ int check_dialog(struct dialog_data *dlg)
 }
 
 /* ok_dialog() */
-int ok_dialog(struct dialog_data *dlg, struct dialog_item_data *di)
+int ok_dialog(struct dialog_data *dlg, struct widget_data *di)
 {
 	int i;
 	void (*fn)(void *) = dlg->dlg->refresh;
@@ -778,7 +778,7 @@ int ok_dialog(struct dialog_data *dlg, struct dialog_item_data *di)
 
 /* FIXME? Added to clear fields in bookmarks dialogs, may be broken if used
  * elsewhere. --Zas */
-int clear_dialog(struct dialog_data *dlg, struct dialog_item_data *di)
+int clear_dialog(struct dialog_data *dlg, struct widget_data *di)
 {
 	int i;
 
@@ -892,7 +892,7 @@ void dlg_format_text(struct terminal *term, struct terminal *t2,
 }
 
 /* max_buttons_width() */
-void max_buttons_width(struct terminal *term, struct dialog_item_data *butt,
+void max_buttons_width(struct terminal *term, struct widget_data *butt,
 		       int n, int *width)
 {
 	int w = -2;
@@ -904,7 +904,7 @@ void max_buttons_width(struct terminal *term, struct dialog_item_data *butt,
 }
 
 /* min_buttons_width() */
-void min_buttons_width(struct terminal *term, struct dialog_item_data *butt,
+void min_buttons_width(struct terminal *term, struct widget_data *butt,
 		       int n, int *width)
 {
 	int i;
@@ -918,7 +918,7 @@ void min_buttons_width(struct terminal *term, struct dialog_item_data *butt,
 
 /* dlg_format_buttons() */
 void dlg_format_buttons(struct terminal *term, struct terminal *t2,
-			struct dialog_item_data *butt, int n,
+			struct widget_data *butt, int n,
 			int x, int *y, int w, int *rw, enum format_align align)
 {
 	int i1 = 0;
@@ -960,7 +960,7 @@ void dlg_format_buttons(struct terminal *term, struct terminal *t2,
 
 /* dlg_format_checkbox() */
 void dlg_format_checkbox(struct terminal *term, struct terminal *t2,
-			 struct dialog_item_data *chkb,
+			 struct widget_data *chkb,
 			 int x, int *y, int w, int *rw,
 			 unsigned char *text)
 {
@@ -977,7 +977,7 @@ void dlg_format_checkbox(struct terminal *term, struct terminal *t2,
 
 /* dlg_format_checkboxes() */
 void dlg_format_checkboxes(struct terminal *term, struct terminal *t2,
-			   struct dialog_item_data *chkb, int n,
+			   struct widget_data *chkb, int n,
 			   int x, int *y, int w, int *rw,
 			   unsigned char **texts)
 {
@@ -1004,7 +1004,7 @@ void checkboxes_width(struct terminal *term, unsigned char **texts, int *w,
 
 /* dlg_format_field() */
 void dlg_format_field(struct terminal *term, struct terminal *t2,
-		      struct dialog_item_data *item,
+		      struct widget_data *item,
 		      int x, int *y, int w, int *rw, enum format_align align)
 {
 	item->x = x;
@@ -1020,7 +1020,7 @@ void dlg_format_field(struct terminal *term, struct terminal *t2,
 
 /* Layout for generic boxes */
 void dlg_format_box(struct terminal *term, struct terminal *t2,
-		    struct dialog_item_data *item,
+		    struct widget_data *item,
 		    int x, int *y, int w, int *rw, enum format_align align)
 {
 	item->x = x;
@@ -1036,7 +1036,7 @@ void dlg_format_box(struct terminal *term, struct terminal *t2,
 
 /* max_group_width() */
 void max_group_width(struct terminal *term, unsigned char **texts,
-		     struct dialog_item_data *item, int n, int *w)
+		     struct widget_data *item, int n, int *w)
 {
 	int ww = 0;
 
@@ -1063,7 +1063,7 @@ void max_group_width(struct terminal *term, unsigned char **texts,
 
 /* min_group_width() */
 void min_group_width(struct terminal *term, unsigned char **texts,
-		     struct dialog_item_data *item, int n, int *w)
+		     struct widget_data *item, int n, int *w)
 {
 	while (n--) {
 		int wx;
@@ -1085,7 +1085,7 @@ void min_group_width(struct terminal *term, unsigned char **texts,
 
 /* dlg_format_group() */
 void dlg_format_group(struct terminal *term, struct terminal *t2,
-		      unsigned char **texts, struct dialog_item_data *item,
+		      unsigned char **texts, struct widget_data *item,
 		      int n, int x, int *y, int w, int *rw)
 {
 	int nx = 0;
@@ -1300,7 +1300,7 @@ void add_to_input_history(struct input_history *historylist, unsigned char *url,
 }
 
 /* input_field_cancel() */
-int input_field_cancel(struct dialog_data *dlg, struct dialog_item_data *di)
+int input_field_cancel(struct dialog_data *dlg, struct widget_data *di)
 {
 	void (*fn)(void *) = di->item->udata;
 	void *data = dlg->dlg->udata2;
@@ -1312,7 +1312,7 @@ int input_field_cancel(struct dialog_data *dlg, struct dialog_item_data *di)
 }
 
 /* input_field_ok() */
-int input_field_ok(struct dialog_data *dlg, struct dialog_item_data *di)
+int input_field_ok(struct dialog_data *dlg, struct widget_data *di)
 {
 	void (*fn)(void *, unsigned char *) = di->item->udata;
 	void *data = dlg->dlg->udata2;
@@ -1382,14 +1382,14 @@ void input_field(struct terminal *term, struct memory_list *ml,
 		 unsigned char *cancelbutton,
 		 void *data, struct input_history *history, int l,
 		 unsigned char *def, int min, int max,
-		 int (*check)(struct dialog_data *, struct dialog_item_data *),
+		 int (*check)(struct dialog_data *, struct widget_data *),
 		 void (*fn)(void *, unsigned char *),
 		 void (*cancelfn)(void *))
 {
 	struct dialog *dlg;
 	unsigned char *field;
 
-#define SIZEOF_DIALOG (sizeof(struct dialog) + 4 * sizeof(struct dialog_item))
+#define SIZEOF_DIALOG (sizeof(struct dialog) + 4 * sizeof(struct widget))
 
 	dlg = mem_alloc(SIZEOF_DIALOG + l);
 	if (!dlg) return;
@@ -1442,7 +1442,7 @@ void input_field(struct terminal *term, struct memory_list *ml,
 
 
 /* Sets the selected item to one that is visible.*/
-void box_sel_set_visible(struct dialog_item_data *box_item_data, int offset)
+void box_sel_set_visible(struct widget_data *box_item_data, int offset)
 {
 	struct dlg_data_item_data_box *box;
 	int sel;
@@ -1464,7 +1464,7 @@ void box_sel_set_visible(struct dialog_item_data *box_item_data, int offset)
 
 /* Moves the selected item [dist] thingies. If [dist] is out of the current
  * range, the selected item is moved to the extreme (ie, the top or bottom) */
-void box_sel_move(struct dialog_item_data *box_item_data, int dist)
+void box_sel_move(struct widget_data *box_item_data, int dist)
 {
     struct dlg_data_item_data_box *box;
 	int new_sel;
@@ -1501,7 +1501,7 @@ void box_sel_move(struct dialog_item_data *box_item_data, int dist)
 
 /* Displays a dialog box */
 void show_dlg_item_box(struct dialog_data *dlg,
-		       struct dialog_item_data *box_item_data)
+		       struct widget_data *box_item_data)
 {
 	struct terminal *term = dlg->win->term;
 	struct dlg_data_item_data_box *box;

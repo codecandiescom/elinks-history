@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.36 2002/07/04 01:07:14 pasky Exp $ */
+/* $Id: types.c,v 1.37 2002/07/04 01:18:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -429,7 +429,7 @@ menu_add_ct(struct terminal *term, void *fcp, void *xxx2)
 		opt = get_opt_real_
 	}
 
-#define DIALOG_MEMSIZE sizeof(struct dialog) + 10 * sizeof(struct dialog_item) \
+#define DIALOG_MEMSIZE sizeof(struct dialog) + 10 * sizeof(struct widget) \
 		       + sizeof(struct assoc) + 2 * MAX_STR_LEN
 
 	d = mem_alloc(DIALOG_MEMSIZE);
@@ -754,7 +754,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 
 	if (translated) opt = get_real_opt("mime.extension", translated);
 
-#define DIALOG_MEMSIZE sizeof(struct dialog) + 5 * sizeof(struct dialog_item) \
+#define DIALOG_MEMSIZE sizeof(struct dialog) + 5 * sizeof(struct widget) \
 		       + sizeof(struct extension) + 3 * MAX_STR_LEN
 
 	d = mem_alloc(DIALOG_MEMSIZE);

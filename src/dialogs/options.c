@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.22 2002/07/04 01:07:13 pasky Exp $ */
+/* $Id: options.c,v 1.23 2002/07/04 01:18:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,9 +111,9 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	struct dialog *d;
 	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
 
-	d = mem_alloc(sizeof(struct dialog) + 12 * sizeof(struct dialog_item));
+	d = mem_alloc(sizeof(struct dialog) + 12 * sizeof(struct widget));
 	if (!d) return;
-	memset(d, 0, sizeof(struct dialog) + 12 * sizeof(struct dialog_item));
+	memset(d, 0, sizeof(struct dialog) + 12 * sizeof(struct widget));
 
 	d->title = TEXT(T_TERMINAL_OPTIONS);
 	d->fn = checkbox_list_fn;
@@ -249,16 +249,16 @@ httpopt_fn(struct dialog_data *dlg)
 
 
 int
-dlg_http_options(struct dialog_data *dlg, struct dialog_item_data *di)
+dlg_http_options(struct dialog_data *dlg, struct widget_data *di)
 {
 #if 0
 	struct http_bugs *bugs = (struct http_bugs *)di->cdata;
 #endif
 	struct dialog *d;
 
-	d = mem_alloc(sizeof(struct dialog) + 14 * sizeof(struct dialog_item));
+	d = mem_alloc(sizeof(struct dialog) + 14 * sizeof(struct widget));
 	if (!d) return 0;
-	memset(d, 0, sizeof(struct dialog) + 14 * sizeof(struct dialog_item));
+	memset(d, 0, sizeof(struct dialog) + 14 * sizeof(struct widget));
 
 	d->title = TEXT(T_HTTP_BUG_WORKAROUNDS);
 	d->fn = httpopt_fn;
@@ -340,13 +340,13 @@ dlg_http_options(struct dialog_data *dlg, struct dialog_item_data *di)
 }
 
 int
-dlg_ftp_options(struct dialog_data *dlg, struct dialog_item_data *di)
+dlg_ftp_options(struct dialog_data *dlg, struct widget_data *di)
 {
 	struct dialog *d;
 
-	d = mem_alloc(sizeof(struct dialog) + 4 * sizeof(struct dialog_item));
+	d = mem_alloc(sizeof(struct dialog) + 4 * sizeof(struct widget));
 	if (!d) return 0;
-	memset(d, 0, sizeof(struct dialog) + 4 * sizeof(struct dialog_item));
+	memset(d, 0, sizeof(struct dialog) + 4 * sizeof(struct widget));
 
 	d->title = TEXT(T_FTP_OPTIONS);
 	d->fn = input_field_fn;
@@ -465,9 +465,9 @@ net_options(struct terminal *term, void *xxx, void *yyy)
 	snprint(time_str, 5, get_opt_int("connection.receive_timeout"));
 	snprint(unrtime_str, 5, get_opt_int("connection.unrestartable_receive_timeout"));
 
-	d = mem_alloc(sizeof(struct dialog) + 14 * sizeof(struct dialog_item));
+	d = mem_alloc(sizeof(struct dialog) + 14 * sizeof(struct widget));
 	if (!d) return;
-	memset(d, 0, sizeof(struct dialog) + 14 * sizeof(struct dialog_item));
+	memset(d, 0, sizeof(struct dialog) + 14 * sizeof(struct widget));
 
 	d->title = TEXT(T_NETWORK_OPTIONS);
 	d->fn = netopt_fn;
@@ -621,9 +621,9 @@ net_programs(struct terminal *term, void *xxx, void *yyy)
 	
 	system_str = get_system_str(term->environment & ENV_XWIN);
 
-	d = mem_alloc(sizeof(struct dialog) + 6 * sizeof(struct dialog_item));
+	d = mem_alloc(sizeof(struct dialog) + 6 * sizeof(struct widget));
 	if (!d) return;
-	memset(d, 0, sizeof(struct dialog) + 6 * sizeof(struct dialog_item));
+	memset(d, 0, sizeof(struct dialog) + 6 * sizeof(struct widget));
 
 	d->title = TEXT(T_MAIL_AND_TELNET_PROGRAMS);
 	d->fn = netprog_fn;
@@ -711,9 +711,9 @@ cache_opt(struct terminal *term, void *xxx, void *yyy)
 	snprint(mc_str, 8, get_opt_long("document.cache.memory.size") / 1024);
 	snprint(doc_str, 4, get_opt_int("document.cache.format.size"));
 
-	d = mem_alloc(sizeof(struct dialog) + 5 * sizeof(struct dialog_item));
+	d = mem_alloc(sizeof(struct dialog) + 5 * sizeof(struct widget));
 	if (!d) return;
-	memset(d, 0, sizeof(struct dialog) + 5 * sizeof(struct dialog_item));
+	memset(d, 0, sizeof(struct dialog) + 5 * sizeof(struct widget));
 
 	d->title = TEXT(T_CACHE_OPTIONS);
 	d->fn = group_fn;
@@ -786,7 +786,7 @@ unsigned char *html_texts[] = {
 };
 
 int
-dlg_assume_cp(struct dialog_data *dlg, struct dialog_item_data *di)
+dlg_assume_cp(struct dialog_data *dlg, struct widget_data *di)
 {
 	charset_sel_list(dlg->win->term, dlg->dlg->udata2, (int *)di->cdata);
 	return 0;
@@ -799,9 +799,9 @@ menu_html_options(struct terminal *term, void *xxx, struct session *ses)
 
 	snprint(marg_str, 2, get_opt_int("document.browse.margin_width"));
 
-	d = mem_alloc(sizeof(struct dialog) + 13 * sizeof(struct dialog_item));
+	d = mem_alloc(sizeof(struct dialog) + 13 * sizeof(struct widget));
 	if (!d) return;
-	memset(d, 0, sizeof(struct dialog) + 13 * sizeof(struct dialog_item));
+	memset(d, 0, sizeof(struct dialog) + 13 * sizeof(struct widget));
 
 	d->title = TEXT(T_HTML_OPTIONS);
 	d->fn = group_fn;
@@ -923,9 +923,9 @@ dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 	sprintf(x_str, "%d", x);
 	sprintf(y_str, "%d", y);
 
-	d = mem_alloc(sizeof(struct dialog) + 5 * sizeof(struct dialog_item));
+	d = mem_alloc(sizeof(struct dialog) + 5 * sizeof(struct widget));
 	if (!d) return;
-	memset(d, 0, sizeof(struct dialog) + 5 * sizeof(struct dialog_item));
+	memset(d, 0, sizeof(struct dialog) + 5 * sizeof(struct widget));
 
 	d->title = TEXT(T_RESIZE_TERMINAL);
 	d->fn = group_fn;

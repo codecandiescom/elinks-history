@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.4 2002/07/04 00:26:08 pasky Exp $ */ 
+/* $Id: auth.c,v 1.5 2002/07/04 01:18:15 pasky Exp $ */ 
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,7 +67,7 @@ auth_layout(struct dialog_data *dlg)
 }
 
 int
-auth_ok(struct dialog_data *dlg, struct dialog_item_data *di)
+auth_ok(struct dialog_data *dlg, struct widget_data *di)
 {
         ((struct http_auth_basic *)dlg->dlg->udata2)->blocked = 0;
         reload(dlg->dlg->refresh_data, -1);
@@ -75,7 +75,7 @@ auth_ok(struct dialog_data *dlg, struct dialog_item_data *di)
 }
 
 int
-auth_cancel(struct dialog_data *dlg, struct dialog_item_data *di)
+auth_cancel(struct dialog_data *dlg, struct widget_data *di)
 {
         ((struct http_auth_basic *)dlg->dlg->udata2)->blocked = 0;
         del_auth_entry(dlg->dlg->udata2);
@@ -114,16 +114,16 @@ do_auth_dialog(struct session *ses)
                 }
                 *a->passwd = 0;
         }
-        d = mem_alloc(sizeof(struct dialog) + 5 * sizeof(struct dialog_item)
+        d = mem_alloc(sizeof(struct dialog) + 5 * sizeof(struct widget)
                       + strlen(_(TEXT(T_ENTER_USERNAME), term))
                       + (a->realm ? strlen(a->realm) : 0)
                       + strlen(_(TEXT(T_AT), term)) + strlen(a->url) + 1);
         if (!d) return;
-        memset(d, 0, sizeof(struct dialog) + 5 * sizeof(struct dialog_item));
+        memset(d, 0, sizeof(struct dialog) + 5 * sizeof(struct widget));
         d->title = TEXT(T_AUTHEN);
         d->fn = auth_layout;
 
-        d->udata = (char *)d + sizeof(struct dialog) + 5 * sizeof(struct dialog_item);
+        d->udata = (char *)d + sizeof(struct dialog) + 5 * sizeof(struct widget);
         strcpy(d->udata, _(TEXT(T_ENTER_USERNAME), term));
         if (a->realm) strcat(d->udata, a->realm);
         strcat(d->udata, _(TEXT(T_AT), term));

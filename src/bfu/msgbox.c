@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.1 2002/07/04 01:07:12 pasky Exp $ */
+/* $Id: msgbox.c,v 1.2 2002/07/04 01:18:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,7 @@ msg_box_fn(struct dialog_data *dlg)
 
 /* msg_box_button() */
 int
-msg_box_button(struct dialog_data *dlg, struct dialog_item_data *di)
+msg_box_button(struct dialog_data *dlg, struct widget_data *di)
 {
 	void (*fn)(void *) = (void (*)(void *)) di->item->udata;
 	void *data = dlg->dlg->udata2;
@@ -154,7 +154,7 @@ msg_box(struct terminal *term, struct memory_list *ml,
 	buttons = va_arg(ap, int);
 
 #define SIZEOF_DIALOG \
-	(sizeof(struct dialog) + (buttons + 1) * sizeof(struct dialog_item))
+	(sizeof(struct dialog) + (buttons + 1) * sizeof(struct widget))
 
 	dlg = mem_alloc(SIZEOF_DIALOG);
 	if (!dlg) {

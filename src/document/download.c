@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.24 2002/07/04 01:07:13 pasky Exp $ */
+/* $Id: download.c,v 1.25 2002/07/04 01:18:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,7 +150,7 @@ undisplay_download(struct download *down)
 
 
 int
-dlg_abort_download(struct dialog_data *dlg, struct dialog_item_data *di)
+dlg_abort_download(struct dialog_data *dlg, struct widget_data *di)
 {
 	register_bottom_half((void (*)(void *)) abort_download,
 			     dlg->dlg->udata);
@@ -159,7 +159,7 @@ dlg_abort_download(struct dialog_data *dlg, struct dialog_item_data *di)
 
 
 int
-dlg_undisplay_download(struct dialog_data *dlg, struct dialog_item_data *di)
+dlg_undisplay_download(struct dialog_data *dlg, struct widget_data *di)
 {
 	register_bottom_half((void (*)(void *)) undisplay_download,
 			     dlg->dlg->udata);
@@ -344,7 +344,7 @@ display_download(struct terminal *term, struct download *down,
 	return;
 
 found:
-#define DLG_ALLOC_SIZE sizeof(struct dialog) + 3 * sizeof(struct dialog_item)
+#define DLG_ALLOC_SIZE sizeof(struct dialog) + 3 * sizeof(struct widget)
 	dlg = mem_alloc(DLG_ALLOC_SIZE);
 	if (!dlg) return;
 	memset(dlg, 0, DLG_ALLOC_SIZE);

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.9 2002/07/04 01:07:13 pasky Exp $ */
+/* $Id: core.c,v 1.10 2002/07/04 01:18:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -359,7 +359,7 @@ l_edit_bookmark_dialog(LS)
 		return 1;
 	}
 
-	sz = sizeof(struct dialog) + 6 * sizeof(struct dialog_item) + sizeof *data;
+	sz = sizeof(struct dialog) + 6 * sizeof(struct widget) + sizeof *data;
 	if (!(d = mem_alloc(sz))) return 0;
 	memset(d, 0, sz);
 
@@ -496,7 +496,7 @@ l_xdialog(LS)
 	for (i = 1; i < nargs; i++) if (!lua_isstring(S, i)) goto error;
 	if (!lua_isfunction(S, nargs)) goto error;
 
-	sz = sizeof(struct dialog) + nitems * sizeof(struct dialog_item) + sizeof *data;
+	sz = sizeof(struct dialog) + nitems * sizeof(struct widget) + sizeof *data;
 	if (!(d = mem_alloc(sz))) return 0;
 	memset(d, 0, sz);
 

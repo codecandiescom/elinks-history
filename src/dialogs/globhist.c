@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: globhist.c,v 1.19 2002/07/04 01:07:13 pasky Exp $ */
+/* $Id: globhist.c,v 1.20 2002/07/04 01:18:15 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -162,7 +162,7 @@ history_dialog_abort_handler(struct dialog_data *dlg)
 static int
 history_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 {
-	struct dialog_item_data *di;
+	struct widget_data *di;
 
 	switch (ev->ev) {
 		case EV_KBD:
@@ -323,7 +323,7 @@ launch_search_dialog(struct terminal *term, struct dialog_data *parent,
 }
 
 static int
-push_search_button(struct dialog_data *dlg, struct dialog_item_data *di)
+push_search_button(struct dialog_data *dlg, struct widget_data *di)
 {
 	launch_search_dialog(dlg->win->term, dlg,
 			     (struct session *) dlg->dlg->udata);
@@ -332,7 +332,7 @@ push_search_button(struct dialog_data *dlg, struct dialog_item_data *di)
 
 
 static int
-push_goto_button(struct dialog_data *dlg, struct dialog_item_data *goto_btn)
+push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 {
 	struct global_history_item *historyitem;
 	struct dlg_data_item_data_box *box;
@@ -354,7 +354,7 @@ push_goto_button(struct dialog_data *dlg, struct dialog_item_data *goto_btn)
 
 static int
 push_delete_button(struct dialog_data *dlg,
-		   struct dialog_item_data *some_useless_delete_button)
+		   struct widget_data *some_useless_delete_button)
 {
 	struct global_history_item *historyitem;
 	struct terminal *term = dlg->win->term;
@@ -391,7 +391,7 @@ really_clear_history(struct dlg_data_item_data_box *box)
 
 static int
 push_clear_button(struct dialog_data *dlg,
-		  struct dialog_item_data *some_useless_clear_button)
+		  struct widget_data *some_useless_clear_button)
 {
 	struct terminal *term = dlg->win->term;
 	struct dlg_data_item_data_box *box;
@@ -411,7 +411,7 @@ push_clear_button(struct dialog_data *dlg,
 
 static int
 push_info_button(struct dialog_data *dlg,
-		  struct dialog_item_data *some_useless_info_button)
+		  struct widget_data *some_useless_info_button)
 {
 	struct terminal *term = dlg->win->term;
 	struct global_history_item *historyitem;
@@ -455,7 +455,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	}
 
 #define DIALOG_MEMSIZE (sizeof(struct dialog) \
-		       + (HISTORY_BOX_IND + 2) * sizeof(struct dialog_item) \
+		       + (HISTORY_BOX_IND + 2) * sizeof(struct widget) \
 		       + sizeof(struct global_history_item) + 2 * MAX_STR_LEN)
 	/* XXX: sizeof(struct global_history_item): why? */
 

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.10 2002/07/04 01:07:13 pasky Exp $ */
+/* $Id: dialogs.c,v 1.11 2002/07/04 01:18:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,7 +141,7 @@ bookmark_dialog_abort_handler(struct dialog_data *dlg)
 int
 bookmark_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 {
-	struct dialog_item_data *di;
+	struct widget_data *di;
 
 	switch (ev->ev) {
 		case EV_KBD:
@@ -288,7 +288,7 @@ void launch_bm_add_doc_dialog(struct terminal *, struct dialog_data *,
 
 /* Callback for the "add" button in the bookmark manager */
 int
-push_add_button(struct dialog_data *dlg, struct dialog_item_data *di)
+push_add_button(struct dialog_data *dlg, struct widget_data *di)
 {
 	launch_bm_add_doc_dialog(dlg->win->term, dlg,
 				 (struct session *) dlg->dlg->udata);
@@ -302,7 +302,7 @@ void launch_bm_search_doc_dialog(struct terminal *, struct dialog_data *,
 
 /* Callback for the "search" button in the bookmark manager */
 int
-push_search_button(struct dialog_data *dlg, struct dialog_item_data *di)
+push_search_button(struct dialog_data *dlg, struct widget_data *di)
 {
 	launch_bm_search_doc_dialog(dlg->win->term, dlg,
 				    (struct session *) dlg->dlg->udata);
@@ -312,7 +312,7 @@ push_search_button(struct dialog_data *dlg, struct dialog_item_data *di)
 
 /* Called when the goto button is pushed */
 int
-push_goto_button(struct dialog_data *dlg, struct dialog_item_data *goto_btn)
+push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 {
 	bookmark_id id;
 	struct dlg_data_item_data_box *box;
@@ -358,7 +358,7 @@ bookmark_edit_done(struct dialog *d) {
 /* Called when the edit button is pushed */
 int
 push_edit_button(struct dialog_data *dlg,
-		 struct dialog_item_data *edit_btn)
+		 struct widget_data *edit_btn)
 {
 	bookmark_id id;
 	struct dlg_data_item_data_box *box;
@@ -419,7 +419,7 @@ really_del_bookmark(void *vhop)
 /* Callback for the "delete" button in the bookmark manager */
 int
 push_delete_button(struct dialog_data *dlg,
-		   struct dialog_item_data *some_useless_delete_button)
+		   struct widget_data *some_useless_delete_button)
 {
 	struct bookmark *bm;
 	struct push_del_button_hop_struct *hop;
@@ -460,7 +460,7 @@ void
 menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 #define BM_DIALOG_MEMSIZE (sizeof(struct dialog) \
-		           + (BM_BOX_IND + 2) * sizeof(struct dialog_item) \
+		           + (BM_BOX_IND + 2) * sizeof(struct widget) \
 			   + sizeof(struct bookmark) + 2 * MAX_STR_LEN)
 
 	struct bookmark *new_bm;

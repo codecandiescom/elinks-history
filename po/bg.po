@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-01-04 12:51+0100\n"
+"POT-Creation-Date: 2003-01-04 13:35+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Dimitar Dimitrov <mitaka_ddd@yahoo.com>\n"
 "Language-Team: Bulgarian <bg-team@bash.info>\n"
@@ -97,9 +97,9 @@ msgstr ""
 #: src/config/dialogs.c:471 src/config/dialogs.c:654 src/config/dialogs.c:730
 #: src/dialogs/auth.c:187 src/dialogs/document.c:52 src/dialogs/document.c:207
 #: src/dialogs/document.c:230 src/dialogs/document.c:277
-#: src/dialogs/document.c:289 src/dialogs/edit.c:164 src/dialogs/info.c:103
-#: src/dialogs/info.c:130 src/dialogs/info.c:146 src/dialogs/info.c:207
-#: src/dialogs/info.c:239 src/dialogs/info.c:268 src/dialogs/menu.c:605
+#: src/dialogs/document.c:289 src/dialogs/edit.c:164 src/dialogs/info.c:108
+#: src/dialogs/info.c:135 src/dialogs/info.c:154 src/dialogs/info.c:215
+#: src/dialogs/info.c:247 src/dialogs/info.c:276 src/dialogs/menu.c:605
 #: src/dialogs/menu.c:615 src/dialogs/menu.c:643 src/dialogs/menu.c:662
 #: src/dialogs/menu.c:672 src/dialogs/mime.c:265 src/dialogs/options.c:257
 #: src/dialogs/options.c:355 src/document/download.c:563
@@ -476,23 +476,74 @@ msgstr ""
 msgid "Clear"
 msgstr "Изчисти"
 
-#: src/dialogs/info.c:55
+#: src/dialogs/info.c:44 src/dialogs/info.c:142
+msgid "ELinks "
+msgstr ""
+
+#: src/dialogs/info.c:60
 msgid "Text WWW browser"
 msgstr " Lynx-подобен текстов web-браузър"
 
-#: src/dialogs/info.c:58
-msgid "Features"
+#: src/dialogs/info.c:63
+#, fuzzy
+msgid "Features: "
 msgstr "Добавки"
 
-#: src/dialogs/info.c:100
+#: src/dialogs/info.c:64
+msgid " Standard"
+msgstr ""
+
+#: src/dialogs/info.c:66
+msgid " Debug"
+msgstr ""
+
+#: src/dialogs/info.c:69
+msgid " Fastmem"
+msgstr ""
+
+#: src/dialogs/info.c:72
+msgid " SSL"
+msgstr ""
+
+#: src/dialogs/info.c:80
+msgid " Lua"
+msgstr ""
+
+#: src/dialogs/info.c:83
+msgid " IPv6"
+msgstr ""
+
+#: src/dialogs/info.c:86
+#, fuzzy
+msgid " Bookmarks"
+msgstr "Отметки"
+
+#: src/dialogs/info.c:89
+msgid " Cookies"
+msgstr ""
+
+#: src/dialogs/info.c:92
+#, fuzzy
+msgid " GlobHist"
+msgstr "Обща история"
+
+#: src/dialogs/info.c:95
+msgid " gzip"
+msgstr ""
+
+#: src/dialogs/info.c:98
+msgid " bzip2"
+msgstr ""
+
+#: src/dialogs/info.c:105
 msgid "About"
 msgstr "За програмата"
 
-#: src/dialogs/info.c:111
+#: src/dialogs/info.c:116
 msgid "Keys"
 msgstr "Клавиши"
 
-#: src/dialogs/info.c:112
+#: src/dialogs/info.c:117
 msgid ""
 "ESC      display menu\n"
 "^C, q    quit\n"
@@ -530,15 +581,11 @@ msgstr ""
 "\\        покажи HTML кода\n"
 "d        свали (дръпни, изтегли)"
 
-#: src/dialogs/info.c:136
+#: src/dialogs/info.c:141
 msgid "Copying"
 msgstr "Авторско правo"
 
-#: src/dialogs/info.c:137
-msgid "ELinks "
-msgstr ""
-
-#: src/dialogs/info.c:137
+#: src/dialogs/info.c:143
 msgid ""
 "\n"
 "\n"
@@ -560,79 +607,79 @@ msgstr ""
 "Фондацията за свободен софтуер (FSF); версия 2 на Лиценза или (по Ваше "
 "желание) която и да е по-късна версия."
 
-#: src/dialogs/info.c:189 src/dialogs/info.c:190
+#: src/dialogs/info.c:197 src/dialogs/info.c:198
 msgid "Resources"
 msgstr "Ресурси"
 
-#: src/dialogs/info.c:191
+#: src/dialogs/info.c:199
 msgid "handles"
 msgstr "handles"
 
-#: src/dialogs/info.c:192
+#: src/dialogs/info.c:200
 msgid "timers"
 msgstr "таймери"
 
-#: src/dialogs/info.c:193
+#: src/dialogs/info.c:201
 msgid "Connections"
 msgstr "Връзка(и)"
 
-#: src/dialogs/info.c:194
+#: src/dialogs/info.c:202
 msgid "connections"
 msgstr "връзка(и)"
 
-#: src/dialogs/info.c:195
+#: src/dialogs/info.c:203
 msgid "connecting"
 msgstr "свързване"
 
-#: src/dialogs/info.c:196
+#: src/dialogs/info.c:204
 msgid "transferring"
 msgstr "предаване"
 
-#: src/dialogs/info.c:197
+#: src/dialogs/info.c:205
 msgid "keepalive"
 msgstr "реанимиране на връзката"
 
-#: src/dialogs/info.c:198
+#: src/dialogs/info.c:206
 msgid "Memory cache"
 msgstr "Кеш-памет"
 
-#: src/dialogs/info.c:199
+#: src/dialogs/info.c:207
 msgid "bytes"
 msgstr "байта"
 
-#: src/dialogs/info.c:200
+#: src/dialogs/info.c:208
 msgid "files"
 msgstr "файла"
 
-#: src/dialogs/info.c:201 src/dialogs/info.c:205
+#: src/dialogs/info.c:209 src/dialogs/info.c:213
 msgid "locked"
 msgstr "заключен"
 
-#: src/dialogs/info.c:202
+#: src/dialogs/info.c:210
 msgid "loading"
 msgstr "зареждане"
 
-#: src/dialogs/info.c:203
+#: src/dialogs/info.c:211
 msgid "Formatted document cache"
 msgstr "Кеш за форматираните документи"
 
-#: src/dialogs/info.c:204
+#: src/dialogs/info.c:212
 msgid "documents"
 msgstr "документи"
 
-#: src/dialogs/info.c:236
+#: src/dialogs/info.c:244
 msgid "Cache info"
 msgstr "Информация за кеша"
 
-#: src/dialogs/info.c:237
+#: src/dialogs/info.c:245
 msgid "Cache content"
 msgstr "Съдържание на кеша"
 
-#: src/dialogs/info.c:256
+#: src/dialogs/info.c:264
 msgid "bytes of memory allocated"
 msgstr "байта заделена памет"
 
-#: src/dialogs/info.c:265
+#: src/dialogs/info.c:273
 msgid "Memory info"
 msgstr "Информация за паметта"
 
@@ -1085,6 +1132,30 @@ msgid "Press ESC for menu. Select Help->Manual in menu for user's manual."
 msgstr ""
 "Натиснете ESC за да извикате менюто. Изберете 'Помощ->Ръководство', за да "
 "прочетете ръководството за потребителя."
+
+#: src/document/session.c:1081
+msgid ""
+"You have empty string in protocol.http.user_agent - this was a default value "
+"in the past, substituted by default ELinks User-Agent string. However, "
+"currently this means that NO User-Agent HEADER WILL BE SENT AT ALL - if this "
+"is really what you want, set its value to \" \", otherwise please delete "
+"line with this settings from your configuration file (if you have no idea "
+"what I'm talking about, just do this), so that correct default setting will "
+"be used. Apologies for any inconvience caused."
+msgstr ""
+
+#: src/document/session.c:1101
+msgid ""
+"You have option config.saving_style set to a de facto obsolete value. The "
+"configuration saving algorithms of ELinks were changed from the last time "
+"you upgraded ELinks. Now, only those options which you actually changed are "
+"saved to the configuration file, instead of just all the options. This "
+"simplifies our situation greatly when we see that some option has "
+"inappropriate default value or we need to change semantic of some option in "
+"a subtle way. Thus, we recommend you to change the value of config."
+"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
+"for any inconvience caused."
+msgstr ""
 
 #: src/globhist/dialogs.c:118 src/globhist/dialogs.c:433
 msgid "Global history"

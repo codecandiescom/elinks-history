@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.23 2003/10/18 21:45:49 pasky Exp $ */
+/* $Id: tab.c,v 1.24 2003/10/18 22:00:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,12 +171,15 @@ close_tab(struct terminal *term)
 
 
 static void
-do_open_in_new_tab(struct terminal *term, struct session *ses,
-		   unsigned char *url, int in_background)
+do_open_in_new_tab(struct terminal *term, struct session *ses, int link,
+	           int in_background)
 {
+	struct document_view *doc_view;
 	struct window *tab;
 	struct initial_session_info *info;
 	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 0, 0, 0);
+
+	assert(term && ses);
 
 	tab = init_tab(term, in_background);
 	if (!tab) return;
@@ -188,33 +191,34 @@ do_open_in_new_tab(struct terminal *term, struct session *ses,
 	}
 
 	info->base_session = ses->id;
-	info->url = url;
+
+	while (link) {
+		doc_view = current_frame(ses);
+		if (doc_view) assert(doc_view->vs && doc_view->document);
+		if_assert_failed break;
+
+		if (doc_view && doc_view->vs->current_link != -1)
+			info->url = get_link_url(ses, doc_view,
+					&doc_view->document->links[doc_view->vs->current_link]);
+		else
+			info->url = NULL;
+
+		break;
+	}
 
 	ev.b = (long) info;
 	tab->handler(tab, &ev, 0);
 }
 
 void
-open_in_new_tab(struct terminal *term, void *xxx, struct session *ses)
+open_in_new_tab(struct terminal *term, int link, struct session *ses)
 {
-	do_open_in_new_tab(term, ses, NULL, 0);
+	do_open_in_new_tab(term, ses, link, 0);
 }
 
 void
-open_in_new_tab_in_background(struct terminal *term, void *xxx,
+open_in_new_tab_in_background(struct terminal *term, int link,
 			      struct session *ses)
 {
-	struct document_view *doc_view;
-
-	assert(ses);
-
-	doc_view = current_frame(ses);
-	if (doc_view) assert(doc_view->vs && doc_view->document);
-	if_assert_failed return;
-
-	do_open_in_new_tab(term, ses,
-			   doc_view && doc_view->vs->current_link != -1
-			   	? get_link_url(ses, doc_view, &doc_view->document->links[doc_view->vs->current_link])
-				: NULL,
-			   1);
+	do_open_in_new_tab(term, ses, link, 1);
 }

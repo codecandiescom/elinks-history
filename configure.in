@@ -393,6 +393,10 @@ test "$have_emx" = yes && LDFLAGS="$LDFLAGS -Zexe"
 
 AC_OUTPUT([ \
  Makefile \
+ Unicode/Makefile \
+ contrib/Makefile \
+ contrib/elinks.spec \
+ intl/Makefile \
  src/Makefile \
  src/bfu/Makefile \
  src/bookmarks/Makefile \
@@ -409,7 +413,7 @@ AC_OUTPUT([ \
  src/protocol/http/Makefile \
  src/ssl/Makefile \
  src/util/Makefile \
- contrib/elinks.spec
+ test/Makefile
 ])
 
 

@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.16 2004/06/10 15:21:01 zas Exp $ */
+/* $Id: forms.c,v 1.17 2004/06/11 23:03:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,12 +230,6 @@ no_type_attr:
 	special_f(ff, SP_CONTROL, fc);
 	format.form = fc;
 	format.attr |= AT_BOLD;
-#if 0
-	put_chrs("[&nbsp;", 7, put_chars_f, ff);
-	if (fc->default_value) put_chrs(fc->default_value, strlen(fc->default_value), put_chars_f, ff);
-	put_chrs("&nbsp;]", 7, put_chars_f, ff);
-	put_chrs(" ", 1, put_chars_f, ff);
-#endif
 }
 
 void

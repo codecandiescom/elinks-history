@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.70 2003/05/08 23:03:08 zas Exp $ */
+/* $Id: view.c,v 1.71 2003/05/13 23:57:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3142,7 +3142,7 @@ quit:
 			goto x;
 		}
 
-		init_bars_status(ses, &nb_tabs, d_opt);
+		init_bars_status(ses, &nb_tabs, NULL);
 		bars = 0;
 		if (ses->visible_tabs_bar) bars++;
 		if (ses->visible_status_bar) bars++;

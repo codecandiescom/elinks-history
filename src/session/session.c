@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.66 2003/05/12 20:23:59 pasky Exp $ */
+/* $Id: session.c,v 1.67 2003/05/13 23:57:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -236,6 +236,9 @@ init_bars_status(struct session *ses, int *tabs_count, struct document_options *
 	int show_tabs_bar = get_opt_int("ui.tabs.show_bar");
 	int tabs_cnt = number_of_tabs(ses->tab->term);
 
+	if (!doo && ses->screen && ses->screen->f_data)
+		doo = &ses->screen->f_data->opt;
+
 	if (tabs_count) *tabs_count = tabs_cnt;
 	ses->visible_tabs_bar = (show_tabs_bar > 0) &&
 		 	       !(show_tabs_bar == 1 && tabs_cnt < 2);
@@ -278,7 +281,7 @@ print_screen_status(struct session *ses)
 	int tabs_count;
 	int ses_tab_is_current = (ses->tab == get_current_tab(ses->tab->term));
 
-	init_bars_status(ses, &tabs_count, d_opt);
+	init_bars_status(ses, &tabs_count, NULL);
 
 	if (ses->visible_status_bar && ses_tab_is_current) {
 		static int last_current_link;

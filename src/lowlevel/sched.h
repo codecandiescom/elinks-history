@@ -1,4 +1,4 @@
-/* $Id: sched.h,v 1.21 2002/11/12 21:30:07 pasky Exp $ */
+/* $Id: sched.h,v 1.22 2002/11/19 11:00:35 zas Exp $ */
 
 #ifndef EL__LOWLEVEL_SCHED_H
 #define EL__LOWLEVEL_SCHED_H
@@ -19,14 +19,6 @@
 #define PRI_PRELOAD	4
 #define PRI_CANCEL	5
 #define N_PRI		6
-
-enum cache_mode {
-	NC_ALWAYS_CACHE,
-	NC_CACHE,
-	NC_IF_MOD,
-	NC_RELOAD,
-	NC_PR_NO_CACHE,
-};
 
 #ifdef HAVE_LONG_LONG
 #define longlong long long

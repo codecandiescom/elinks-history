@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.61 2002/11/12 21:30:08 pasky Exp $ */
+/* $Id: http.c,v 1.62 2002/11/19 11:00:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1009,6 +1009,22 @@ again:
 	if (e->head) mem_free(e->head);
 	e->head = head;
 
+	d = parse_http_header(e->head, "Cache-Control", NULL);
+	if (d) {
+		if (strstr(d, "no-cache")) {
+			e->cache_mode = NC_PR_NO_CACHE;
+		}
+		mem_free(d);
+	}
+
+	d = parse_http_header(e->head, "Pragma", NULL);
+	if (d) {
+		if (strstr(d, "no-cache")) {
+			e->cache_mode = NC_PR_NO_CACHE;
+		}
+		mem_free(d);
+	}
+
 	if (c->ssl) {
 		if (e->ssl_info) mem_free(e->ssl_info);
 		e->ssl_info = get_ssl_cipher_str(c->ssl);
@@ -1077,7 +1093,7 @@ again:
 		return;
 	}
 
-#if 0	
+#if 0
 	{
 		struct status *s;
 		foreach (s, c->statuss) {
@@ -1105,8 +1121,9 @@ again:
 			abort_conn_with_state(c, -errno);
 			return;
 		}
-		c->prg.start = down->last_pos = c->from;
+		down->last_pos = c->from;
 	}
+	c->prg.start = c->from;
 
 	d = parse_http_header(e->head, "Content-Length", NULL);
 	if (d) {

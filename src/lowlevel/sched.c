@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.49 2002/10/13 13:27:45 pasky Exp $ */
+/* $Id: sched.c,v 1.50 2002/11/19 11:00:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -847,9 +847,12 @@ load_url(unsigned char *url, unsigned char *prev_url,
 	}
 
 	if (cache_mode <= NC_CACHE && find_in_cache(url, &e) && !e->incomplete) {
-		if (stat) {
-			stat->ce = e;
-			stat->state = S_OK;
+		if (e->cache_mode == NC_PR_NO_CACHE)
+			delete_entry_content(e);
+		else {
+			if (stat) {
+				stat->ce = e;
+				stat->state = S_OK;
 			/* XXX: This doesn't work since sometimes stat->prg is
 			 * undefined and contains random memory locations. It's
 			 * not supposed to point on anything here since stat
@@ -857,9 +860,10 @@ load_url(unsigned char *url, unsigned char *prev_url,
 			 * probably break in some cases without this, though.
 			 * FIXME: Needs more investigation. --pasky */
 			/* if (stat->prg) stat->prg->start = start; */
-			if (stat->end) stat->end(stat, stat->data);
+				if (stat->end) stat->end(stat, stat->data);
+			}
+			return 0;
 		}
-		return 0;
 	}
 
 	u = get_proxy(url);

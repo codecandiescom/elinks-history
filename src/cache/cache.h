@@ -1,10 +1,18 @@
-/* $Id: cache.h,v 1.7 2002/08/27 13:31:23 pasky Exp $ */
+/* $Id: cache.h,v 1.8 2002/11/19 11:00:35 zas Exp $ */
 
 #ifndef EL__CACHE_H
 #define EL__CACHE_H
 
 #include "util/lists.h"
 #include "links.h" /* tcount */
+
+enum cache_mode {
+	NC_ALWAYS_CACHE,
+	NC_CACHE,
+	NC_IF_MOD,
+	NC_RELOAD,
+	NC_PR_NO_CACHE,
+};
 
 struct cache_entry {
 	struct cache_entry *next;
@@ -16,6 +24,7 @@ struct cache_entry {
 	int length;
 	int incomplete;
 	int tgc;
+	enum cache_mode cache_mode;
 	unsigned char *last_modified;
 	int data_size;
 	struct list_head frag;

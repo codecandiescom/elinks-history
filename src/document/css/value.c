@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.9 2004/01/17 21:17:22 pasky Exp $ */
+/* $Id: value.c,v 1.10 2004/01/17 21:18:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,8 +158,7 @@ css_parse_font_attribute_value(union css_decl_value *value,
 
 
 static int
-css_parse_font_attribute_value(union css_decl_value *value,
-				unsigned char **string)
+css_parse_text_align_value(union css_decl_value *value, unsigned char **string)
 {
 	if (!strlcasecmp(*string, -1, "left", 4)) {
 		(*string) += 4;

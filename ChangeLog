@@ -1,3 +1,221 @@
+Wed Oct 22 21:59:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Cleanup: added some comments about tempnam(), removed an obsolete
+	TODO, moved download error dialog code to a separate function.  
+
+Wed Oct 22 21:55:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.h:
+
+	Described the order of items in session.(un)history.  
+
+Wed Oct 22 21:44:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/: mailcap.c, mimetypes.c:
+
+	Make the changehooks a bit smarter.  
+
+Wed Oct 22 21:35:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.h, opttypes.h:
+
+	More option value unionization comment updates.  
+
+Wed Oct 22 21:23:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Update help printing comments.  
+
+Wed Oct 22 21:14:44 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* doc/small.txt:
+
+	ELinks doesn't depend on libxml.  
+
+Wed Oct 22 21:13:03 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Little fix.  
+
+Wed Oct 22 20:56:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Remove FIXME.  
+
+Wed Oct 22 20:52:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/opttypes.c:
+
+	str_dup(): Revert and don't use memacpy().  
+
+Wed Oct 22 20:44:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.h:
+
+	Fixed add_opt_str_tree(), broken by the un-ionization.  
+
+Wed Oct 22 20:22:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/opttypes.c:
+
+	gen_cmd(): Cleanup.  
+
+Wed Oct 22 20:19:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/opttypes.c:
+
+	Misc. cleanups. Int and long options now use common num_set()
+	function.  
+
+Wed Oct 22 20:13:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/opttypes.c:
+
+	color_set(): Cleanups.  
+
+Wed Oct 22 20:07:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Cleanup.  
+
+Wed Oct 22 20:00:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Wed Oct 22 19:59:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/opttypes.c:
+
+	str_dup(): Use memacpy().  
+
+Wed Oct 22 19:57:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: opttypes.c, opttypes.h:
+
+	Don't return anything in option_types[type]->dub() functions.  
+
+Wed Oct 22 19:50:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Use &options_root_tree instead of options_root.value.tree.  
+
+Wed Oct 22 19:46:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.c, options.h:
+
+	Make free_option_value() static.  
+
+Wed Oct 22 19:44:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Use delete_option() and cleanup indentation.  
+
+Wed Oct 22 19:42:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Check for option value allocation error.  
+
+Wed Oct 22 19:24:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/conf.c, config/options.c, config/options.h,
+	config/opttypes.c, dialogs/mime.c, dialogs/options.c,
+	globhist/dialogs.c, mime/backend/default.c, mime/backend/mailcap.c,
+	mime/backend/mimetypes.c, protocol/user.c, viewer/text/search.c,
+	viewer/text/view.c:
+
+	Use union type for option values. Improves type safety, startup time
+	and memory usage.  I've not yet found a sane way to cast to the
+	requested type in get_opt_*() calls so for now we cast locally.  
+
+Wed Oct 22 17:23:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	menu_handler(): Don't propagate the event when calling
+	delete_window_ev().  Bug was reproducable with backgrounded tab and
+	opening link menu and clicking outside the menu.  This is the same
+	as the fix for bug 33 (bfu/menu.c rev 1.92).  One delete_window_ev()
+	that propagate the event remains .. should it also be changed? 
+
+Wed Oct 22 17:20:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Wed Oct 22 16:57:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	New attempt to fix bug 42: Font tags are not handled correctly but
+	shown verbatim. Please test heavily since parser is concerned, this
+	patch may break some other things (but it should not).  
+
+Wed Oct 22 15:11:29 2003  Laurent Monin <zas@norz.org>:
+
+	* po/pl.po:
+
+	A typo preventing gmo compilation was fixed. Witekfl please review.  
+
+Wed Oct 22 14:00:56 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Translation update.  
+
+Wed Oct 22 12:53:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	This should fix the mouse handler issue when calling OS Shell (bug
+	55).  
+
+Wed Oct 22 11:45:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	do_move(): When handling TASK_FORWARD do a lookup to see if any
+	external handlers are defined. If so use that and do not attempt to
+	run the connection. Fixes bug 253.  
+
+Wed Oct 22 10:48:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Wrap assignment of boolean expression in ().  
+
+Wed Oct 22 10:37:27 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Wed Oct 22 10:09:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Expand 1 chars less. Make slrn.sf.net and /. look better.  
+
+Wed Oct 22 08:54:11 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced and french translation was updated.  
+
 Tue Oct 21 15:36:25 2003  Laurent Monin <zas@norz.org>:
 
 	* src/: config/options.c, viewer/text/search.c:

@@ -1,11 +1,11 @@
-/* $Id: blacklist.h,v 1.5 2004/03/22 14:35:40 jonas Exp $ */
+/* $Id: blacklist.h,v 1.6 2004/07/15 15:52:32 jonas Exp $ */
 
-#ifndef EL__UTIL_BLACKLIST_H
-#define EL__UTIL_BLACKLIST_H
+#ifndef EL__PROTOCOL_HTTP_BLACKLIST_H
+#define EL__PROTOCOL_HTTP_BLACKLIST_H
 
 enum blacklist_flags {
-	BL_HTTP10 = 1,
-	BL_NO_CHARSET = 2,
+	SERVER_BLACKLIST_HTTP10 = 1,
+	SERVER_BLACKLIST_NO_CHARSET = 2,
 };
 
 void add_blacklist_entry(unsigned char *, int, enum blacklist_flags);

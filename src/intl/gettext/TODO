@@ -1,7 +1,13 @@
 * Remove plural.c from CVS.
 
-* Maybe some portability fixes...?
-
 * Use terminal-specific charset.
 
 * Use our own charset routines instead of iconv.
+
+* Don't require make install in order to have ELinks using the updated
+  translation - it should be able to use them even when they are in the source
+  tree and ELinks is there yet as well.
+
+* Make it possible to include the translations directly in the ELinks binary.
+
+* Maybe some portability fixes...?

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.91 2003/01/03 02:23:54 pasky Exp $ */
+/* $Id: session.c,v 1.92 2003/01/04 12:35:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1078,7 +1078,7 @@ create_session(struct window *win)
 	if (!*get_opt_str("protocol.http.user_agent")) {
 		msg_box(term, NULL,
 			N_("Warning"), AL_CENTER,
-			"You have empty string in protocol.http.user_agent - "
+			N_("You have empty string in protocol.http.user_agent - "
 			"this was a default value in the past, substituted by "
 			"default ELinks User-Agent string. However, currently "
 			"this means that NO User-Agent HEADER "
@@ -1087,7 +1087,7 @@ create_session(struct window *win)
 			"with this settings from your configuration file (if you "
 			"have no idea what I'm talking about, just do this), so "
 			"that correct default setting will be used. Apologies for "
-			"any inconvience caused.",
+			"any inconvience caused."),
 			NULL, 1,
 			N_("OK"), NULL, B_ENTER | B_ESC);
 	}
@@ -1098,7 +1098,7 @@ create_session(struct window *win)
 		if (get_opt_int("config.saving_style") != 3) {
 			msg_box(term, NULL,
 				N_("Warning"), AL_CENTER,
-				"You have option config.saving_style set to "
+				N_("You have option config.saving_style set to "
 				"a de facto obsolete value. The configuration "
 				"saving algorithms of ELinks were changed from "
 				"the last time you upgraded ELinks. Now, only "
@@ -1111,7 +1111,7 @@ create_session(struct window *win)
 				"Thus, we recommend you to change the value of "
 				"config.saving_style option to 3 in order to get "
 				"the \"right\" behaviour. Apologies for any "
-				"inconvience caused.",
+				"inconvience caused."),
 				NULL, 1,
 				N_("OK"), NULL, B_ENTER | B_ESC);
 		}

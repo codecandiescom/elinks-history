@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.57 2005/03/03 17:05:54 zas Exp $ */
+/* $Id: select.c,v 1.58 2005/03/03 17:10:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,13 +139,11 @@ check_bottom_halves(void)
 	};
 }
 
-static ttime last_time;
-
 static void
-check_timers(void)
+check_timers(ttime *last_time)
 {
 	ttime now = get_time();
-	ttime interval = now - last_time;
+	ttime interval = now - *last_time;
 	struct timer *timer;
 
 	foreach (timer, timers) timer->interval -= interval;
@@ -161,7 +159,7 @@ check_timers(void)
 		check_bottom_halves();
 	}
 
-	last_time = now;
+	*last_time = now;
 }
 
 int
@@ -289,6 +287,7 @@ get_next_timer_time(struct timeval *tv)
 void
 select_loop(void (*init)(void))
 {
+	static ttime last_time;
 	int select_errors = 0;
 
 	clear_signal_mask_and_handlers();
@@ -308,7 +307,7 @@ select_loop(void (*init)(void))
 		struct timeval tv;
 
 		check_signals();
-		check_timers();
+		check_timers(&last_time);
 		redraw_all_terminals();
 
 		has_timer = get_next_timer_time(&tv);
@@ -360,7 +359,7 @@ select_loop(void (*init)(void))
 		uninstall_alarm();
 		check_signals();
 		/*printf("sel: %d\n", n);*/
-		check_timers();
+		check_timers(&last_time);
 
 		i = -1;
 		while (n > 0 && ++i < w_max) {

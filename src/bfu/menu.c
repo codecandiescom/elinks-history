@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.257 2004/07/28 16:03:32 jonas Exp $ */
+/* $Id: menu.c,v 1.258 2004/07/31 11:23:44 miciah Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -760,7 +760,12 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 		case ACT_MENU_RIGHT:
 			if (list_has_next(win->term->windows, win)
 			    && win->next->handler == mainmenu_handler) {
+				struct window *next_win = win->next;
+
 				delete_window_ev(win, ev);
+
+				select_menu(next_win->term, next_win->data);
+
 				return;
 			}
 
@@ -839,7 +844,7 @@ enter:
 }
 
 static void
-menu_handler(struct window *win, struct term_event *ev, int fwd)
+menu_handler(struct window *win, struct term_event *ev)
 {
 	struct menu *menu = win->data;
 
@@ -1069,7 +1074,7 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 #endif
 
 static void
-mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
+mainmenu_kbd_handler(struct menu *menu, struct term_event *ev)
 {
 	struct window *win = menu->win;
 	enum menu_action action = kbd_action(KEYMAP_MENU, ev, NULL);
@@ -1113,8 +1118,10 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 		/* Fallback to see if any hotkey matches the pressed key */
 		if (check_kbd_label_key(ev)
 		    && check_hotkeys(menu, get_kbd_key(ev), win->term)) {
-			fwd = 1;
-			break;
+			display_mainmenu(win->term, menu);
+			select_menu(win->term, menu);
+
+			return;
 		}
 
 	case ACT_MENU_CANCEL:
@@ -1124,11 +1131,10 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 
 	/* Redraw the menu */
 	display_mainmenu(win->term, menu);
-	if (fwd) select_menu(win->term, menu);
 }
 
 static void
-mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
+mainmenu_handler(struct window *win, struct term_event *ev)
 {
 	struct menu *menu = win->data;
 
@@ -1148,7 +1154,7 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 			break;
 
 		case EVENT_KBD:
-			mainmenu_kbd_handler(menu, ev, fwd);
+			mainmenu_kbd_handler(menu, ev);
 			break;
 
 		case EVENT_ABORT:

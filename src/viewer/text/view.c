@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.577 2004/07/31 10:50:16 miciah Exp $ */
+/* $Id: view.c,v 1.578 2004/07/31 11:23:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -952,7 +952,7 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 
 		activate_bfu_technology(ses, -1);
 		m = ses->tab->term->windows.next;
-		m->handler(m, ev, 0);
+		m->handler(m, ev);
 
 		return ses;
 	}
@@ -1036,7 +1036,7 @@ quit:
 		get_kbd_modifier(ev) &= ~KBD_ALT;
 		activate_bfu_technology(ses, -1);
 		m = ses->tab->term->windows.next;
-		m->handler(m, ev, 0);
+		m->handler(m, ev);
 		if (ses->tab->term->windows.next == m) {
 			delete_window(m);
 

@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.19 2004/07/28 16:03:33 jonas Exp $ */
+/* $Id: window.c,v 1.20 2004/07/31 11:23:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@ redraw_from_window(struct window *win)
 	term->redrawing = 1;
 	for (win = win->prev; win != end; win = win->prev) {
 		if (!inactive_tab(win))
-			win->handler(win, &ev, 0);
+			win->handler(win, &ev);
 	}
 	term->redrawing = 0;
 }
@@ -45,7 +45,7 @@ redraw_below_window(struct window *win)
 	term->redrawing = 2;
 	for (win = term->windows.prev; win != end; win = win->prev) {
 		if (!inactive_tab(win))
-			win->handler(win, &ev, 0);
+			win->handler(win, &ev);
 	}
 	term->redrawing = tr;
 }
@@ -67,7 +67,7 @@ add_window_at_pos(struct terminal *term, window_handler handler,
 	win->term = term;
 	win->type = WINDOW_NORMAL;
 	add_at_pos(at, win);
-	win->handler(win, &ev, 0);
+	win->handler(win, &ev);
 }
 
 void
@@ -84,7 +84,7 @@ delete_window(struct window *win)
 	/* Updating the status when destroying tabs needs this before the win
 	 * handler call. */
 	del_from_list(win);
-	win->handler(win, &ev, 1);
+	win->handler(win, &ev);
 	mem_free_if(win->data);
 	redraw_terminal(win->term);
 	mem_free(win);
@@ -99,7 +99,7 @@ delete_window_ev(struct window *win, struct term_event *ev)
 
 	delete_window(win);
 
-	if (ev && w) w->handler(w, ev, 1);
+	if (ev && w) w->handler(w, ev);
 }
 
 void
@@ -132,7 +132,7 @@ struct ewd {
 };
 
 static void
-empty_window_handler(struct window *win, struct term_event *ev, int fwd)
+empty_window_handler(struct window *win, struct term_event *ev)
 {
 	struct terminal *term = win->term;
 	struct ewd *ewd = win->data;

@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.73 2004/07/28 15:43:51 jonas Exp $ */
+/* $Id: event.c,v 1.74 2004/07/31 11:23:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,12 +96,12 @@ term_send_event(struct terminal *term, struct term_event *ev)
 			 * thus will be drawn last here. Thanks, Witek!
 			 * --pasky */
 			foreachback (win, term->windows)
-				win->handler(win, ev, 0);
+				win->handler(win, ev);
 
 		} else {
 			foreachback (win, term->windows)
 				if (!inactive_tab(win))
-					win->handler(win, ev, 0);
+					win->handler(win, ev);
 		}
 		term->redrawing = 0;
 		break;
@@ -121,7 +121,7 @@ term_send_event(struct terminal *term, struct term_event *ev)
 			if_assert_failed return;
 		}
 
-		win->handler(win, ev, 0);
+		win->handler(win, ev);
 	}
 }
 

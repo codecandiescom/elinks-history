@@ -1,4 +1,4 @@
-/* $Id: window.h,v 1.10 2004/07/28 16:03:33 jonas Exp $ */
+/* $Id: window.h,v 1.11 2004/07/31 11:23:44 miciah Exp $ */
 
 #ifndef EL__TERMINAL_WINDOW_H
 #define EL__TERMINAL_WINDOW_H
@@ -22,7 +22,7 @@ enum window_type {
 	WINDOW_TAB,
 };
 
-typedef void (window_handler)(struct window *, struct term_event *, int);
+typedef void (window_handler)(struct window *, struct term_event *);
 
 struct window {
 	LIST_HEAD(struct window);

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.154 2004/07/28 16:03:32 jonas Exp $ */
+/* $Id: dialog.c,v 1.155 2004/07/31 11:23:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -336,7 +336,7 @@ dialog_ev_abort(struct dialog_data *dlg_data, struct term_event *ev)
 
 /* TODO: use EVENT_PROCESSED/EVENT_NOT_PROCESSED. */
 static void
-dialog_func(struct window *win, struct term_event *ev, int xxx)
+dialog_func(struct window *win, struct term_event *ev)
 {
 	struct dialog_data *dlg_data = win->data;
 

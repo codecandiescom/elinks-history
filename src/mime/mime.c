@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.55 2004/06/10 12:00:52 jonas Exp $ */
+/* $Id: mime.c,v 1.56 2004/06/10 12:09:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -218,11 +218,10 @@ get_content_type(struct cache_entry *cached)
 		if (ctype) return ctype;
 	}
 
-	ctype = get_default_mime_type();
-	debug_ctype(ctype);
+	debug_ctype(get_default_mime_type());
 
 	/* Fallback.. use some hardwired default */
-	return stracpy(ctype);
+	return stracpy(get_default_mime_type());
 }
 
 struct mime_handler *

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.439 2004/06/10 15:27:18 jonas Exp $ */
+/* $Id: session.c,v 1.440 2004/06/10 15:30:58 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -674,7 +674,7 @@ create_session_info(struct string *info, int cp, struct list_head *url_list)
 
 struct initial_session_info *
 init_session_info(struct session *base_session, enum remote_session_flags remote,
-		  unsigned char *uri, int len)
+		  struct uri *uri)
 {
 	struct initial_session_info *info;
 
@@ -686,7 +686,7 @@ init_session_info(struct session *base_session, enum remote_session_flags remote
 
 	init_list(info->url_list);
 
-	if (uri) add_to_string_list(&info->url_list, uri, len);
+	if (uri) add_to_string_list(&info->url_list, struri(uri), -1);
 
 	return info;
 }
@@ -724,7 +724,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		 */
 		if (len < 3 * sizeof(int)) break;
 
-		info = init_session_info(base_session, *(data++), NULL, 0);
+		info = init_session_info(base_session, *(data++), NULL);
 		if (!info) return NULL;
 
 		str = (unsigned char *) data;
@@ -768,7 +768,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		uri = get_hooked_uri(str, current_uri, term->cwd);
 		mem_free_if(str);
 
-		info = init_session_info(base_session, 0, uri ? struri(uri) : NULL, -1);
+		info = init_session_info(base_session, 0, uri);
 		if (uri) done_uri(uri);
 
 		return info;

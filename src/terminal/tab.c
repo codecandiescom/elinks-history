@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.60 2004/06/10 14:27:56 jonas Exp $ */
+/* $Id: tab.c,v 1.61 2004/06/10 15:30:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -244,7 +244,7 @@ open_uri_in_new_tab(struct session *ses, struct uri *uri, int in_background)
 	tab = init_tab(ses->tab->term, in_background);
 	if (!tab) return;
 
-	ev.b = (long) init_session_info(ses, 0, uri ? struri(uri) : NULL, -1);
+	ev.b = (long) init_session_info(ses, 0, uri);
 	if (!ev.b) {
 		mem_free(tab);
 		return;

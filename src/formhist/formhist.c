@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.45 2003/09/05 21:18:26 miciah Exp $ */
+/* $Id: formhist.c,v 1.46 2003/09/05 21:29:24 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,8 +30,6 @@
 #define FORMHIST_FILENAME		"formhist"
 
 INIT_LIST_HEAD(saved_forms);
-
-static int loaded = 0;
 
 static struct submitted_value *
 new_submitted_value(unsigned char *name, unsigned char *value)
@@ -98,10 +96,13 @@ free_form(struct formhist_data *form)
 static int
 load_saved_forms(void)
 {
+	static int loaded = 0;
 	struct formhist_data *form;
 	unsigned char tmp[MAX_STR_LEN];
        	unsigned char *file;
 	FILE *f;
+
+	if (loaded) return 1;
 
 	file = straconcat(elinks_home, FORMHIST_FILENAME, NULL);
 	if (!file) return 0;
@@ -207,7 +208,7 @@ form_already_saved(struct formhist_data *form1)
 {
 	struct formhist_data *form;
 
-	if (!loaded && !load_saved_forms()) return 0;
+	if (!load_saved_forms()) return 0;
 
 	foreach (form, saved_forms) {
 		int count = 0;
@@ -278,7 +279,7 @@ get_form_history_value(unsigned char *url, unsigned char *name)
 
 	if (!url || !*url || !name || !*name) return NULL;
 
-	if (!loaded && !load_saved_forms()) return NULL;
+	if (!load_saved_forms()) return NULL;
 
 	foreach (form, saved_forms) {
 		if (!strcmp(form->url, url)) {

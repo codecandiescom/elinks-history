@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.9 2002/12/21 20:52:40 zas Exp $ */
+/* $Id: mime.c,v 1.10 2002/12/24 10:33:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,12 +122,6 @@ add_ext_fn(struct dialog_data *dlg)
 
 
 static inline void
-free_translated(void *fcp)
-{
-	mem_free(fcp);
-}
-
-static inline void
 really_del_ext(void *fcp)
 {
 	struct option *opt;
@@ -162,12 +156,12 @@ menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 	add_to_str(&str, &strl, " -> ");
 	add_to_str(&str, &strl, (unsigned char *) opt->ptr);
 
-	msg_box(term, getml(str, NULL),
+	msg_box(term, getml(str, translated, NULL),
 		TEXT(T_DELETE_EXTENSION), AL_CENTER | AL_EXTD_TEXT,
 		TEXT(T_DELETE_EXTENSION), " ", str, "?", NULL,
 		translated, 2,
 		TEXT(T_YES), really_del_ext, B_ENTER,
-		TEXT(T_NO), free_translated, B_ESC);
+		TEXT(T_NO), NULL, B_ESC);
 
 end:
 	if (fcp) mem_free(fcp);

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.130 2004/04/30 08:39:56 zas Exp $ */
+/* $Id: screen.c,v 1.131 2004/04/30 08:48:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -624,16 +624,18 @@ add_char256(struct string *screen, struct screen_driver *driver,
 void
 redraw_screen(struct terminal *term)
 {
-	struct screen_driver *driver = get_screen_driver(term);
+	struct screen_driver *driver;
 	struct string image;
 	struct screen_state state = { 0xFF, 0xFF, 0xFF, 0, { 0xFF, 0xFF } };
 	struct terminal_screen *screen = term->screen;
 
-	if (!driver
-	    || !screen
-	    || (screen->dirty_from > screen->dirty_to)
-	    || (term->master && is_blocked())
-	    || !init_string(&image)) return;
+	if (!screen || screen->dirty_from > screen->dirty_to) return;
+	if (term->master && is_blocked()) return;
+
+	driver = get_screen_driver(term);
+	if (!driver) return;
+
+	if (!init_string(&image)) return;
 
 	switch (driver->color_mode) {
 	case COLOR_MODES:

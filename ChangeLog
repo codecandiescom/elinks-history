@@ -1,3 +1,72 @@
+Sun Aug 24 20:26:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	write_sequence(): Macro that wraps the hard_write().  
+
+Sun Aug 24 14:30:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, config/options.c,
+	viewer/text/view.c:
+
+	toggle-document-colors action added. Activator defaults to '%'.  
+
+Sun Aug 24 13:57:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/style.c:
+
+	Oops somebody didn't test and compile before committing. ;( 
+
+Sun Aug 24 13:55:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/style.c:
+
+	Tidyup of comments.  
+
+Sun Aug 24 13:35:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/style.c:
+
+	Empty the color cache when a switch between a mono and color term is 
+	detected. Fixes lookups of wrong colors and reduces the memory
+	usage.  
+
+Sun Aug 24 12:01:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Alternate term screen handling seems to be incompatible with mouse
+	handling in X, i disabled support for alt screen under X for now.
+	Mouse clicks are partially ignored if we use alt screen and ie.
+	xterm, but it works on linux console. Miciah please have a look at
+	that. ;) 
+
+Sun Aug 24 02:54:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/renderer.c, document/html/renderer.h,
+	viewer/text/link.c:
+
+	Store link color as struct color_pair.  
+
+Sun Aug 24 02:53:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: color.c, color.h:
+
+	mix_colors(): Rename to mix_color_pair().  
+
+Sun Aug 24 02:30:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/style.c:
+
+	Expand color info to also include option tree pointers to the
+	colors.  This way the colors can be updated for each lookup.  
+
+Sun Aug 24 00:32:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	Merge alternate screen support; fixes bug 28.  
+
 Sat Aug 23 18:24:44 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: document/html/frames.c, document/html/frames.h,

@@ -1,3 +1,30 @@
+Tue Aug 19 16:37:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/splash.h:
+
+	file splash.h was initially added on branch ELUSION.  
+
+Tue Aug 19 16:37:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/splash.c:
+
+	file splash.c was initially added on branch ELUSION.  
+
+Tue Aug 19 11:45:13 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files and french translation were updated.  
+
+Tue Aug 19 07:26:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/base64.c:
+
+	A stupid bug was fixed, patch by Zardoz.  
+
 Sun Aug 17 14:49:47 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/viewer/text/canvas.c:

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.120 2004/01/08 16:53:04 zas Exp $ */
+/* $Id: conf.c,v 1.121 2004/01/08 21:17:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -589,15 +589,14 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 		touching = 0;
 	}
 
-	/* At first line, and in english, write ELinks version, may be
-	 * of some help in future. Please keep that format for it. --Zas */
-	add_to_string(&config, "## ELinks " VERSION " configuration file\n\n");
-
 	/* Scaring. */
 	if (savestyle == 2
 	    || (savestyle < 2
 		&& (load_config_file(prefix, name, options, &config)
 		    || !config.length))) {
+		/* At first line, and in english, write ELinks version, may be
+		 * of some help in future. Please keep that format for it. --Zas */
+		add_to_string(&config, "## ELinks " VERSION " configuration file\n\n");
 		assert(savestyle >= 0  && savestyle <= 2);
 		switch (savestyle) {
 		case 0:

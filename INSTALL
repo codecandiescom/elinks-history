@@ -134,7 +134,7 @@ now; however, basic usage is almost same and it still looks like the old
 from ~/.links to ~/.elinks, because name and format of part of them changed:
 
   links.cfg became elinks.conf and you need to convert it with
-contrib/conv/conf-links2elinks.awk; html.cfg was merged to elinks.conf
+contrib/conv/conf-links2elinks.pl; html.cfg was merged to elinks.conf
 
   bookmarks are still bookmarks, but you need to convert it with
 old_to_new_bookmarks.sh.
@@ -148,5 +148,5 @@ old_to_new_bookmarks.sh.
 
 ##########
 
-$Id: INSTALL,v 1.15 2002/07/05 13:16:10 pasky Exp $
+$Id: INSTALL,v 1.16 2002/08/06 23:19:49 pasky Exp $
 vim: textwidth=80

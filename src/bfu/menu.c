@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.68 2003/05/08 11:17:40 zas Exp $ */
+/* $Id: menu.c,v 1.69 2003/05/08 14:19:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -363,20 +363,17 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	int my;
 
 	for (my = 0; my < menu->ni; my++) {
+		unsigned char *text = _(menu->items[my].text, term);
+		unsigned char *rtext = _(menu->items[my].rtext, term);
 		int s = 4;
 
-		if (_(menu->items[my].text, term)
-		    && _(menu->items[my].text, term)[0]) {
-			s += strlen(_(menu->items[my].text, term))
+		if (text && text[0])
+			s += strlen(text)
 			     - (menu->items[my].hotkey_pos ? 1 : 0)
 			     + 1;
-		}
 
-		if (_(menu->items[my].rtext, term)
-		    && _(menu->items[my].rtext, term)[0]) {
-			s += MENU_HOTKEY_SPACE
-			     + strlen(_(menu->items[my].rtext, term));
-		}
+		if (rtext && rtext[0])
+			s += MENU_HOTKEY_SPACE + strlen(rtext);
 
 		if (s > mx) mx = s;
 	}

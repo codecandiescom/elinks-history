@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.8 2003/07/15 20:18:11 jonas Exp $ */
+/* $Id: search.c,v 1.9 2003/07/16 02:45:24 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -465,7 +465,7 @@ point_intersect(struct point *p1, int l1, struct point *p2, int l2)
 	static char hash[HASH_SIZE];
 	static int first_time = 1;
 
-	assert(p1 && p2);
+	assert(p2);
 	if_assert_failed return 0;
 
 	if (first_time) memset(hash, 0, HASH_SIZE), first_time = 0;

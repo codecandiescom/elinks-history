@@ -1,5 +1,5 @@
 /* Low-level terminal-suitable I/O routines */
-/* $Id: hardio.c,v 1.11 2004/07/14 21:27:16 zas Exp $ */
+/* $Id: hardio.c,v 1.12 2004/07/14 21:32:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,14 +88,17 @@ hw_debug_write(unsigned char *p, int w)
 int
 hard_write(int fd, unsigned char *p, int l)
 {
-	int w = 1;
 	int t = l;
 
 	debug_open("hard_write", fd, p, l);
 
-	while (l > 0 && w) {
-		w = safe_write(fd, p, l);
-		if (w < 0) return -1;
+	while (l > 0) {
+		int w = safe_write(fd, p, l);
+
+		if (w <= 0) {
+			if (w) return -1;
+			break;
+		}
 
 		debug_write(p, w);
 
@@ -112,14 +115,17 @@ hard_write(int fd, unsigned char *p, int l)
 int
 hard_read(int fd, unsigned char *p, int l)
 {
-	int r = 1;
 	int t = l;
 
 	debug_open("hard_read", fd, p, l);
 
-	while (l > 0 && r) {
-		r = safe_read(fd, p, l);
-		if (r < 0) return -1;
+	while (l > 0) {
+		int r = safe_read(fd, p, l);
+
+		if (r <= 0) {
+			if (r) return -1;
+			break;
+		}
 
 		debug_write(p, r);
 

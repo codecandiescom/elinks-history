@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.151 2003/11/09 23:43:14 jonas Exp $ */
+/* $Id: download.c,v 1.152 2003/11/10 21:29:57 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -581,7 +581,9 @@ download_data(struct download *download, struct file_download *file_download)
 	struct cache_entry *ce = download->ce;
 	int broken_302_redirect;
 
-	if (ce && download->state >= S_WAIT && download->state < S_TRANS)
+	if (!ce) goto end_store;
+	
+	if (download->state >= S_WAIT && download->state < S_TRANS)
 		goto end_store;
 
 	if (ce->last_modified)

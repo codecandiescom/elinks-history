@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.113 2003/06/08 23:34:38 zas Exp $ */
+/* $Id: parser.c,v 1.114 2003/06/08 23:36:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,13 +66,13 @@ parse_element(register unsigned char *e, unsigned char *eof,
 	      unsigned char **name, int *namelen,
 	      unsigned char **attr, unsigned char **end)
 {
-	unsigned char tmp;
+	unsigned char saved_eof_char;
 
 	if (e >= eof || !TAG_START(e)) return -1;
 	e++;
 	if (name) *name = e;
 
-	tmp = *eof;
+	saved_eof_char = *eof;
 	*eof = '\0';
 
 	if (*e == '/') e++;
@@ -120,11 +120,11 @@ endattr:
 end:
 	if (TAG_END_XML(e)) e++;
 	if (end) *end = e + TAG_END(e);
-	*eof = tmp;
+	*eof = saved_eof_char;
 	return 0;
 end_1:
 	if (TAG_END_XML(e)) e++;
-	*eof = tmp;
+	*eof = saved_eof_char;
 	return -1;
 }
 

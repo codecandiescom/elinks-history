@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.33 2003/06/27 20:42:38 zas Exp $ */
+/* $Id: mime.c,v 1.34 2003/06/28 11:56:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,15 +27,9 @@
 static struct option *
 get_real_opt(unsigned char *base, unsigned char *id)
 {
-	struct option *opt = NULL;
-	unsigned char *name = straconcat(base, ".", id, NULL);
+	struct option *opt = get_opt_rec_real(&root_options, base);
 
-	if (name) {
-		opt = get_opt_rec_real(&root_options, name);
-		mem_free(name);
-	}
-
-	return opt;
+	return (opt ? get_opt_rec_real(opt, id) : NULL);
 }
 
 
@@ -291,11 +285,9 @@ static struct menu_item mi_no_ext[] = {
 void
 menu_list_ext(struct terminal *term, void *fn, void *xxx)
 {
-	struct list_head *opt_tree;
+	struct option *opt_tree = get_opt_ptr("mime.extension");
 	struct option *opt;
 	struct menu_item *mi = NULL;
-
-	opt_tree = (struct list_head *) get_opt_ptr("mime.extension");
 
 	foreachback (opt, *opt_tree) {
 		unsigned char *translated;
@@ -311,7 +303,10 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 
 		if (!mi) {
 			mi = new_menu(FREE_LIST | FREE_TEXT | FREE_RTEXT | FREE_DATA);
-		       	if (!mi) { mem_free(translated); return; }
+			if (!mi) {
+				mem_free(translated);
+				return;
+			}
 		}
 
 		translated2 = stracpy(translated);
@@ -323,13 +318,10 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 		} else {
 			if (optptr2) mem_free(optptr2);
 			if (translated2) mem_free(translated2);
-			if (translated) mem_free(translated);
+			mem_free(translated);
 		}
-
 	}
 
-	if (!mi)
-		do_menu(term, mi_no_ext, xxx, 0);
-	else
-		do_menu(term, mi, xxx, 0);
+	if (!mi) mi = mi_no_ext;
+	do_menu(term, mi, xxx, 0);
 }

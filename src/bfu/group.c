@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.38 2003/11/04 21:56:56 zas Exp $ */
+/* $Id: group.c,v 1.39 2003/11/04 23:25:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@ base_group_width(struct terminal *term, struct widget_data *widget_data)
 }
 
 inline void
-group_width(struct terminal *term, int intl,
+group_width(struct terminal *term,
   	    struct widget_data *widget_data, int n,
 	    int *min_width, int *max_width)
 {
@@ -45,7 +45,6 @@ group_width(struct terminal *term, int intl,
 		int wx_max;
 		unsigned char *text = widget_data->widget->text;
 
-		if (intl) text = _(text, term);
 		wx_min = strlen(text);
 		wx_max = base + wx_min;
 
@@ -63,7 +62,7 @@ group_width(struct terminal *term, int intl,
 void
 dlg_format_group(struct terminal *term, struct terminal *t2,
 		 struct widget_data *widget_data,
-		 int n, int x, int *y, int w, int *rw, int intl)
+		 int n, int x, int *y, int w, int *rw)
 {
 	int nx = 0;
 	int base = base_group_width(t2, widget_data);
@@ -73,8 +72,6 @@ dlg_format_group(struct terminal *term, struct terminal *t2,
 		int sl;
 		int wx = base;
 		unsigned char *text = widget_data->widget->text;
-
-		if (intl) text = _(text, t2);
 
 		if (text[0]) {
 			sl = strlen(text);
@@ -118,7 +115,7 @@ group_fn(struct dialog_data *dlg_data)
 	int y = 0;
 	int n = dlg_data->n - 2;
 
-	group_width(term, 1, dlg_data->widgets_data, n, &min, &max);
+	group_width(term, dlg_data->widgets_data, n, &min, &max);
 	buttons_width(dlg_data->widgets_data + n, 2, &min, &max);
 
 	w = term->width * 9 / 10 - 2 * DIALOG_LB;
@@ -127,7 +124,7 @@ group_fn(struct dialog_data *dlg_data)
 
 	rw = 0;
 	dlg_format_group(NULL, term, dlg_data->widgets_data, n,
-			 0, &y, w, &rw, 1);
+			 0, &y, w, &rw);
 
 	y++;
 	dlg_format_buttons(NULL, term, dlg_data->widgets_data + n, 2, 0, &y, w,
@@ -142,7 +139,7 @@ group_fn(struct dialog_data *dlg_data)
 
 	y = dlg_data->y + DIALOG_TB + 1;
 	dlg_format_group(term, term, dlg_data->widgets_data, n,
-			 dlg_data->x + DIALOG_LB, &y, w, NULL, 1);
+			 dlg_data->x + DIALOG_LB, &y, w, NULL);
 
 	y++;
 	dlg_format_buttons(term, term, dlg_data->widgets_data + n, 2,

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.91 2003/11/04 14:25:47 zas Exp $ */
+/* $Id: search.c,v 1.92 2003/11/04 23:25:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -995,8 +995,8 @@ search_dlg_fn(struct dialog_data *dlg_data)
 
 	text_width(term, dlg_data->dlg->udata, &min, &max);
 	/* I'm leet! --pasky */
-	group_width(term, 1, dlg_data->widgets_data + 1, 3, &min, &max);
-	group_width(term, 1, dlg_data->widgets_data + 4, 2, &min, &max);
+	group_width(term, dlg_data->widgets_data + 1, 3, &min, &max);
+	group_width(term, dlg_data->widgets_data + 4, 2, &min, &max);
 	buttons_width(dlg_data->widgets_data + 6, 2, &min, &max);
 
 	int_lower_bound(&max, dlg_data->dlg->widgets->datalen);
@@ -1013,11 +1013,11 @@ search_dlg_fn(struct dialog_data *dlg_data)
 
 	y++;
 	dlg_format_group(NULL, term, dlg_data->widgets_data + 1, 3, 0,
-			 &y, w, &rw, 1);
+			 &y, w, &rw);
 
 	y++;
 	dlg_format_group(NULL, term, dlg_data->widgets_data + 4, 2, 0,
-			 &y, w, &rw, 1);
+			 &y, w, &rw);
 
 	y++;
 	dlg_format_buttons(NULL, term, dlg_data->widgets_data + 6, 2, 0, &y, w, &rw,
@@ -1038,11 +1038,11 @@ search_dlg_fn(struct dialog_data *dlg_data)
 
 	y++;
 	dlg_format_group(term, term, dlg_data->widgets_data + 1, 3,
-			 dlg_data->x + DIALOG_LB, &y, w, NULL, 1);
+			 dlg_data->x + DIALOG_LB, &y, w, NULL);
 
 	y++;
 	dlg_format_group(term, term, dlg_data->widgets_data + 4, 2,
-			 dlg_data->x + DIALOG_LB, &y, w, NULL, 1);
+			 dlg_data->x + DIALOG_LB, &y, w, NULL);
 
 	y++;
 	dlg_format_buttons(term, term, dlg_data->widgets_data + 6, 2, dlg_data->x + DIALOG_LB,
@@ -1105,11 +1105,11 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 
 	add_dlg_field(dlg, n, min, max, check, l, field, history);
 
-	add_dlg_radio(dlg, n, N_("Normal search"), 1, 0, hop->whether_regex);
-	add_dlg_radio(dlg, n, N_("Regexp search"), 1, 1, hop->whether_regex);
-	add_dlg_radio(dlg, n, N_("Extended regexp search"), 1, 2, hop->whether_regex);
-	add_dlg_radio(dlg, n, N_("Case sensitive"), 2, 1, hop->cases);
-	add_dlg_radio(dlg, n, N_("Case insensitive"), 2, 0, hop->cases);
+	add_dlg_radio(dlg, n, _("Normal search", term), 1, 0, hop->whether_regex);
+	add_dlg_radio(dlg, n, _("Regexp search", term), 1, 1, hop->whether_regex);
+	add_dlg_radio(dlg, n, _("Extended regexp search", term), 1, 2, hop->whether_regex);
+	add_dlg_radio(dlg, n, _("Case sensitive", term), 2, 1, hop->cases);
+	add_dlg_radio(dlg, n, _("Case insensitive", term), 2, 0, hop->cases);
 
 	add_dlg_button(dlg, n, B_ENTER, search_dlg_ok, okbutton, fn);
 	add_dlg_button(dlg, n, B_ESC, search_dlg_cancel, cancelbutton, cancelfn);

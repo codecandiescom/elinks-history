@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.105 2003/10/31 21:46:09 pasky Exp $ */
+/* $Id: options.c,v 1.106 2003/11/04 23:25:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,7 +130,7 @@ terminal_options_fn(struct dialog_data *dlg_data)
 	int w, rw;
 	int y = 0;
 
-	checkboxes_width(term, 1, dlg_data->widgets_data, dlg_data->n - 3, &min, &max);
+	checkboxes_width(term, dlg_data->widgets_data, dlg_data->n - 3, &min, &max);
 	buttons_width(dlg_data->widgets_data + dlg_data->n - 3, 3, &min, &max);
 
 	w = term->width * 9 / 10 - 2 * DIALOG_LB;
@@ -139,7 +139,7 @@ terminal_options_fn(struct dialog_data *dlg_data)
 
 	rw = 0;
 	dlg_format_checkboxes(NULL, term, dlg_data->widgets_data, dlg_data->n - 3, 0, &y, w,
-			      &rw, 1);
+			      &rw);
 
 	y++;
 	dlg_format_buttons(NULL, term, dlg_data->widgets_data + dlg_data->n - 3, 3, 0, &y, w,
@@ -154,7 +154,7 @@ terminal_options_fn(struct dialog_data *dlg_data)
 
 	y = dlg_data->y + DIALOG_TB + 1;
 	dlg_format_checkboxes(term, term, dlg_data->widgets_data, dlg_data->n - 3,
-			      dlg_data->x + DIALOG_LB, &y, w, NULL, 1);
+			      dlg_data->x + DIALOG_LB, &y, w, NULL);
 
 
 	y++;
@@ -201,23 +201,23 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	dlg->refresh = (void (*)(void *)) terminal_options_ok;
 	dlg->refresh_data = termopt_hop;
 
-	add_dlg_radio(dlg, n, N_("No frames"), 1, TERM_DUMB, termopt_hop->type);
-	add_dlg_radio(dlg, n, N_("VT 100 frames"), 1,  TERM_VT100, termopt_hop->type);
-	add_dlg_radio(dlg, n, N_("Linux or OS/2 frames"), 1, TERM_LINUX, termopt_hop->type);
-	add_dlg_radio(dlg, n, N_("KOI8-R frames"), 1, TERM_KOI8, termopt_hop->type);
+	add_dlg_radio(dlg, n, _("No frames", term), 1, TERM_DUMB, termopt_hop->type);
+	add_dlg_radio(dlg, n, _("VT 100 frames", term), 1,  TERM_VT100, termopt_hop->type);
+	add_dlg_radio(dlg, n, _("Linux or OS/2 frames", term), 1, TERM_LINUX, termopt_hop->type);
+	add_dlg_radio(dlg, n, _("KOI8-R frames", term), 1, TERM_KOI8, termopt_hop->type);
 
-	add_dlg_radio(dlg, n, N_("No colors (mono)"), 2, COLOR_MODE_MONO, termopt_hop->colors);
-	add_dlg_radio(dlg, n, N_("16 colors"), 2, COLOR_MODE_16, termopt_hop->colors);
+	add_dlg_radio(dlg, n, _("No colors (mono)", term), 2, COLOR_MODE_MONO, termopt_hop->colors);
+	add_dlg_radio(dlg, n, _("16 colors", term), 2, COLOR_MODE_16, termopt_hop->colors);
 #ifdef USE_256_COLORS
-	add_dlg_radio(dlg, n, N_("256 colors"), 2, COLOR_MODE_256, termopt_hop->colors);
+	add_dlg_radio(dlg, n, _("256 colors", term), 2, COLOR_MODE_256, termopt_hop->colors);
 #endif
 
-	add_dlg_checkbox(dlg, n, N_("Use ^[[11m"), termopt_hop->m11_hack);
-	add_dlg_checkbox(dlg, n, N_("Restrict frames in cp850/852"), termopt_hop->restrict_852);
-	add_dlg_checkbox(dlg, n, N_("Block the cursor"), termopt_hop->block_cursor);
-	add_dlg_checkbox(dlg, n, N_("Transparency"), termopt_hop->trans);
-	add_dlg_checkbox(dlg, n, N_("Underline"), termopt_hop->underline);
-	add_dlg_checkbox(dlg, n, N_("UTF-8 I/O"), termopt_hop->utf_8_io);
+	add_dlg_checkbox(dlg, n, _("Use ^[[11m", term), termopt_hop->m11_hack);
+	add_dlg_checkbox(dlg, n, _("Restrict frames in cp850/852", term), termopt_hop->restrict_852);
+	add_dlg_checkbox(dlg, n, _("Block the cursor", term), termopt_hop->block_cursor);
+	add_dlg_checkbox(dlg, n, _("Transparency", term), termopt_hop->trans);
+	add_dlg_checkbox(dlg, n, _("Underline", term), termopt_hop->underline);
+	add_dlg_checkbox(dlg, n, _("UTF-8 I/O", term), termopt_hop->utf_8_io);
 
 	add_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
 	add_dlg_button(dlg, n, B_ENTER, terminal_options_save, _("Save", term), NULL);

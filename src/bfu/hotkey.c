@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.18 2004/04/20 13:48:12 zas Exp $ */
+/* $Id: hotkey.c,v 1.19 2004/05/26 20:40:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,9 +64,11 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 				unsigned char *used = &used_hotkeys[upcase(text[items[i].hotkey_pos])];
 
 				if (*used) {
+					int n = *used - 1;
+
 					items[i].hotkey_pos = -items[i].hotkey_pos;
-					if (items[*used - 1].hotkey_pos > 0)
-						items[*used - 1].hotkey_pos = -items[*used - 1].hotkey_pos;
+					if (items[n].hotkey_pos > 0)
+						items[n].hotkey_pos = -items[n].hotkey_pos;
 				}
 
 				*used = i + 1;

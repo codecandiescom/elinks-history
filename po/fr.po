@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-11 19:11+0200\n"
-"PO-Revision-Date: 2004-08-22 17:15+0200\n"
+"POT-Creation-Date: 2004-09-13 15:53+0200\n"
+"PO-Revision-Date: 2004-09-13 16:15+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:345
 msgid "Close"
@@ -49,15 +49,15 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/protocol/auth/dialogs.c:92 src/protocol/protocol.c:219
 #: src/protocol/user.c:206 src/sched/download.c:231 src/sched/download.c:327
 #: src/sched/download.c:367 src/sched/download.c:506 src/sched/download.c:600
-#: src/sched/error.c:42 src/sched/session.c:240 src/sched/session.c:644
-#: src/sched/session.c:668 src/sched/session.c:685
+#: src/sched/error.c:42 src/sched/session.c:241 src/sched/session.c:645
+#: src/sched/session.c:669 src/sched/session.c:686
 #: src/scripting/lua/core.c:400 src/scripting/lua/core.c:482
 #: src/scripting/lua/core.c:598 src/scripting/lua/core.c:722
 #: src/viewer/text/draw.c:66 src/viewer/text/form.c:840
 #: src/viewer/text/search.c:949 src/viewer/text/search.c:1010
 #: src/viewer/text/search.c:1398 src/viewer/text/search.c:1511
 #: src/viewer/text/textarea.c:363 src/viewer/text/textarea.c:372
-#: src/viewer/text/view.c:579 src/viewer/text/view.c:1178
+#: src/viewer/text/view.c:580 src/viewer/text/view.c:1187
 msgid "OK"
 msgstr "OK"
 
@@ -96,14 +96,14 @@ msgstr "Supprimer les items sélectionnés ?"
 #: src/bfu/hierbox.c:739 src/bfu/hierbox.c:775 src/bfu/hierbox.c:796
 #: src/bfu/hierbox.c:867 src/config/dialogs.c:819 src/dialogs/menu.c:125
 #: src/formhist/formhist.c:454 src/mime/dialogs.c:75 src/sched/task.c:184
-#: src/terminal/tab.c:194 src/terminal/tab.c:230
+#: src/terminal/tab.c:196 src/terminal/tab.c:232
 msgid "Yes"
 msgstr "Oui"
 
 #: src/bfu/hierbox.c:740 src/bfu/hierbox.c:776 src/bfu/hierbox.c:797
 #: src/bfu/hierbox.c:868 src/config/dialogs.c:820 src/dialogs/menu.c:126
 #: src/formhist/formhist.c:455 src/mime/dialogs.c:76 src/sched/task.c:185
-#: src/terminal/tab.c:195 src/terminal/tab.c:231
+#: src/terminal/tab.c:197 src/terminal/tab.c:233
 msgid "No"
 msgstr "Non"
 
@@ -171,7 +171,7 @@ msgstr "Nom"
 #: src/sched/download.c:1013 src/sched/download.c:1033
 #: src/sched/download.c:1045 src/scripting/lua/core.c:401
 #: src/scripting/lua/core.c:483 src/scripting/lua/core.c:722
-#: src/viewer/text/search.c:1512 src/viewer/text/view.c:579
+#: src/viewer/text/search.c:1512 src/viewer/text/view.c:580
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -264,33 +264,18 @@ msgstr ""
 msgid "LED indicators"
 msgstr "Indicateurs LED"
 
-#: src/bfu/menu.c:746
+#: src/bfu/menu.c:736
 msgid "Search menu/"
 msgstr "Chercher menu/"
 
-#: src/bfu/msgline.c:168 src/util/formatter.c:87
-#, fuzzy
-msgid "Is the current link bookmarked"
-msgstr "Voir l'image courante"
-
-#: src/bfu/msgline.c:169 src/util/formatter.c:88
-#, fuzzy
-msgid "Is the current location bookmarked"
-msgstr "Sauver le document courant sous la forme formatée"
-
-#: src/bfu/msgline.c:170 src/util/formatter.c:89
-#, fuzzy
-msgid "Is the current link is the history"
-msgstr "Ouvrir le lien courant dans un nouvel onglet"
-
 #: src/bookmarks/backend/xbel.c:98
 msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()"
-msgstr ""
+msgstr "read_bookmarks_xbel(): Erreur dans XML_ParserCreate()"
 
 #: src/bookmarks/backend/xbel.c:109
 #, c-format
 msgid "read_bookmarks_xbel(): Error reading %s"
-msgstr ""
+msgstr "read_bookmarks_xbel(): Erreur lors de la lecture de %s"
 
 #: src/bookmarks/backend/xbel.c:117
 #, c-format
@@ -298,6 +283,8 @@ msgid ""
 "Parse error while processing XBEL bookmarks in %s at line %d column %d:\n"
 "%s"
 msgstr ""
+"Erreur lors du parcours de signets XBEL dans %s ligne %d colonne %d:\n"
+"%s"
 
 #: src/bookmarks/backend/xbel.c:384 src/bookmarks/backend/xbel.c:405
 msgid "No title"
@@ -583,14 +570,14 @@ msgid "Cache manager"
 msgstr "Gestionnaire de cache"
 
 #: src/config/cmdline.c:88
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse option %s: %s"
-msgstr "Options des jeux de caractères."
+msgstr "Ne peut interpréter l'option %s: %s"
 
 #: src/config/cmdline.c:106
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown option %s"
-msgstr "Options de connexion."
+msgstr "Option %s inconnue"
 
 #: src/config/cmdline.c:124 src/config/cmdline.c:148 src/config/cmdline.c:214
 #: src/config/opttypes.c:39
@@ -602,18 +589,16 @@ msgid "Too many parameters"
 msgstr "Trop de paramètres"
 
 #: src/config/cmdline.c:154
-#, fuzzy
 msgid "error"
-msgstr "Erreur"
+msgstr "erreur"
 
 #: src/config/cmdline.c:156 src/sched/error.c:47
 msgid "Host not found"
 msgstr "Hôte introuvable"
 
 #: src/config/cmdline.c:170
-#, fuzzy
 msgid "Resolver error"
-msgstr "Erreur de suppression"
+msgstr "Erreur du résolveur"
 
 #: src/config/cmdline.c:302
 msgid "Remote method not supported"
@@ -626,36 +611,34 @@ msgstr "Dossier des modèles d'option"
 #: src/config/cmdline.c:377
 #, c-format
 msgid "(default: %ld)"
-msgstr ""
+msgstr "(défaut: %ld)"
 
 #: src/config/cmdline.c:384 src/config/cmdline.c:413
 #, c-format
 msgid "(default: \"%s\")"
-msgstr ""
+msgstr "(défaut: \"%s\")"
 
 #: src/config/cmdline.c:389
 #, c-format
 msgid "(alias for %s)"
-msgstr ""
+msgstr "(alias for %s)"
 
 #: src/config/cmdline.c:394 src/config/cmdline.c:403
 #, c-format
 msgid "(default: %s)"
-msgstr ""
+msgstr "(défaut: %s)"
 
 #: src/config/cmdline.c:534
-#, fuzzy
 msgid "Configuration options"
-msgstr "Options de gestion de la configuration."
+msgstr "Options de configuration"
 
 #: src/config/cmdline.c:538
 msgid "Usage: elinks [OPTION]... [URL]"
-msgstr ""
+msgstr "Usage: elinks [OPTION]... [URL]"
 
 #: src/config/cmdline.c:539
-#, fuzzy
 msgid "Options"
-msgstr "Système de configuration"
+msgstr "Options"
 
 #: src/config/cmdline.c:581
 msgid "Internal consistency error"
@@ -1164,7 +1147,7 @@ msgid "Description"
 msgstr "Description"
 
 #: src/config/dialogs.c:336 src/protocol/protocol.c:213
-#: src/sched/session.c:237 src/viewer/text/textarea.c:360
+#: src/sched/session.c:238 src/viewer/text/textarea.c:360
 #: src/viewer/text/textarea.c:369
 msgid "Error"
 msgstr "Erreur"
@@ -1631,7 +1614,7 @@ msgstr "Envoyer le formulaire"
 msgid "Submit form and reload"
 msgstr "Envoyer le formulaire et recharger"
 
-#: src/config/kbdbind.c:526 src/terminal/tab.c:191 src/terminal/tab.c:227
+#: src/config/kbdbind.c:526 src/terminal/tab.c:193 src/terminal/tab.c:229
 msgid "Close tab"
 msgstr "Fermer l'onglet"
 
@@ -4684,7 +4667,7 @@ msgid "Copying"
 msgstr "Licence"
 
 #: src/dialogs/info.c:142
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "ELinks %s\n"
 "\n"
@@ -4700,11 +4683,13 @@ msgstr ""
 "ELinks %s\n"
 "\n"
 "(C) 1999 - 2002 Mikulas Patocka\n"
-"(C) 2001 - 2004 Petr Baudis et d'autres\n"
+"(C) 2001 - 2004 Petr Baudis\n"
+"(C) 2002 - 2004 Jonas Fonseca\n"
+"et d'autres\n"
 "\n"
-"Ce programme est un logiciel libre, et peut être publié, modifié et diffusé "
-"selon les termes de la GNU General Public License version 2 publiée par la "
-"Free Software Foundation."
+"Ce programme est un logiciel libre; vous pouvez le redistribuer et/ou le "
+"modifier selon les termes de la GNU General Public License publiée par la  "
+"Free Software Foundation, spécifiquement la version 2 de la licence."
 
 #: src/dialogs/info.c:162
 #, c-format
@@ -5350,6 +5335,8 @@ msgstr "Bascule sauvegarde"
 msgid "Form history manager"
 msgstr "Gestionnaire d'historique de formulaires"
 
+#. TODO: Remember multiple login for the same form.
+#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:34
 msgid "Show forms history dialog"
 msgstr "Dialogue de mémorisation de formulaires"
@@ -5635,63 +5622,66 @@ msgid ""
 "$HOME variable set correctly and if you have write permission to your home "
 "directory."
 msgstr ""
+"Impossible de trouver ou de créer le répertoire de configuration d'ELinks. "
+"Merci de vérifier si vous avez la variable $HOME correctement configurée et "
+"si vous avez le droit d'écrire dans votre répertoire personnel."
 
 #: src/lowlevel/interlink.c:336
 #, c-format
 msgid "accept() failed: %d (%s)"
-msgstr ""
+msgstr "échec de accept(): %d (%s)"
 
 #: src/lowlevel/interlink.c:376 src/lowlevel/interlink.c:437
 #, c-format
 msgid "socket() failed: %d (%s)"
-msgstr ""
+msgstr "échec de socket(): %d (%s)"
 
 #: src/lowlevel/interlink.c:385
 #, c-format
 msgid "bind() failed: %d (%s)"
-msgstr ""
+msgstr "échec de bind(): %d (%s)"
 
 #: src/lowlevel/interlink.c:405
 #, c-format
 msgid "listen() failed: %d (%s)"
-msgstr ""
+msgstr "échec de listen(): %d (%s)"
 
 #: src/lowlevel/interlink.c:450
 #, c-format
 msgid "connect() failed: %d (%s)"
-msgstr ""
+msgstr "échec de connect(): %d (%s)"
 
 #: src/lowlevel/select.c:339
 #, c-format
 msgid "select() failed: %d (%s)"
-msgstr ""
+msgstr "échec de select(): %d (%s)"
 
 #. Infinite loop prevention.
 #: src/lowlevel/select.c:342
 #, c-format
 msgid "%d select() failures."
-msgstr ""
+msgstr "%d échecs de select()."
 
 #: src/main.c:127
 msgid "Cannot create a pipe for internal communication."
-msgstr ""
+msgstr "Ne peut créer un pipe pour la communication interne."
 
 #: src/main.c:180
 msgid "No running ELinks found."
-msgstr ""
+msgstr "Aucun ELinks en cours d'éxecution."
 
 #. The remote session(s) can not be created
 #: src/main.c:187
 msgid "No remote session to connect to."
-msgstr ""
+msgstr "Aucune session distante à laquelle se connecter."
 
 #: src/main.c:196
 msgid "Unable to encode session info."
-msgstr ""
+msgstr "Impossible d'encoder les infos de session."
 
 #: src/main.c:213
 msgid "Unable to attach_terminal()."
-msgstr ""
+msgstr "Echec de attach_terminal()."
 
 #: src/mime/backend/default.c:25
 msgid "MIME type associations"
@@ -5733,7 +5723,6 @@ msgid "File type handlers"
 msgstr "Gestionnaires de type de fichiers"
 
 #: src/mime/backend/default.c:46
-#, fuzzy
 msgid ""
 "A file type handler is a set of information about how to use\n"
 "an external program to view a file. It is possible to refer to it\n"
@@ -5744,14 +5733,15 @@ msgid ""
 "Note you must define both a MIME handler and a MIME type association\n"
 "for it to work."
 msgstr ""
-"Gestionnaires pour certains type de fichiers. Vous devez configurer mime."
-"type.*\n"
-"pour se référer à ces gestionnaires\n"
-"\n"
+"Un gestionnaire de type de fichier est en ensemble d'informations\n"
+"définissant comment utiliser un programme externe pour visualiser\n"
+"un fichier.\n"
 "Un gestionnaire peut être utilisé pour plusieurs types MIME -- par exemple,\n"
 "définir un gestionnaire 'images' pour les types mime.type.image.png,\n"
 "mime.type.image.jpeg, etc.; ou définir un gestionnaire pour un type\n"
-"plus spécifique comme les fichiers PDF, par exemple."
+"plus spécifique comme les fichiers PDF, par exemple.\n"
+"Notez que vous devez définir un gestionnaire MIME et une association\n"
+"de type MIME pour que cela fonctionne"
 
 #: src/mime/backend/default.c:57
 msgid "Description of this handler."
@@ -5816,7 +5806,6 @@ msgstr "Système de configuration"
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
-#. name:
 #: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:126
 #: src/mime/backend/mailcap.c:685
 msgid "Mailcap"
@@ -5889,7 +5878,7 @@ msgstr ""
 #: src/mime/backend/mailcap.c:368
 #, c-format
 msgid "Badly formated mailcap entry for type %s in \"%s\" line %d"
-msgstr ""
+msgstr "Entrée mailcap mal formatée pour le type %s dans \"%s\" ligne %d"
 
 #. name:
 #: src/mime/backend/mimetypes.c:46 src/mime/backend/mimetypes.c:285
@@ -6130,11 +6119,11 @@ msgstr ""
 "devrait\n"
 "  pas se produire.\n"
 
-#: src/protocol/nntp.old/codes.c:124 src/protocol/nntp/codes.c:124
+#: src/protocol/nntp/codes.c:124
 msgid "NNTP error"
 msgstr "Erreur NNTP"
 
-#: src/protocol/nntp.old/codes.c:126 src/protocol/nntp/codes.c:126
+#: src/protocol/nntp/codes.c:126
 #, c-format
 msgid ""
 "An error occurred while fetching the document you\n"
@@ -6147,25 +6136,24 @@ msgstr ""
 "\n"
 "Le message d'erreur est: %s"
 
-#: src/protocol/nntp.old/codes.c:132 src/protocol/nntp/codes.c:132
+#: src/protocol/nntp/codes.c:132
 msgid "Ok"
 msgstr "Ok"
 
 #. name:
-#: src/protocol/nntp.old/nntp.c:33 src/protocol/nntp.old/nntp.c:66
 #: src/protocol/nntp/nntp.c:33 src/protocol/nntp/nntp.c:66
 msgid "NNTP"
 msgstr "NNTP"
 
-#: src/protocol/nntp.old/nntp.c:35 src/protocol/nntp/nntp.c:35
+#: src/protocol/nntp/nntp.c:35
 msgid "NNTP and news specific options."
 msgstr "Options du protocole NNTP et des news."
 
-#: src/protocol/nntp.old/nntp.c:37 src/protocol/nntp/nntp.c:37
+#: src/protocol/nntp/nntp.c:37
 msgid "Default news server"
 msgstr "Serveur de news par défaut"
 
-#: src/protocol/nntp.old/nntp.c:39 src/protocol/nntp/nntp.c:39
+#: src/protocol/nntp/nntp.c:39
 msgid ""
 "Used when resolving news: URIs. If set to the empty string\n"
 "the value of the NNTPSERVER environment variable will be used."
@@ -6174,11 +6162,11 @@ msgstr ""
 "Si chaîne vide, la valeur de la variable d'environnement\n"
 "NNTPSERVER sera utilisée."
 
-#: src/protocol/nntp.old/nntp.c:42 src/protocol/nntp/nntp.c:42
+#: src/protocol/nntp/nntp.c:42
 msgid "Message header entries"
 msgstr "En-têtes des messages"
 
-#: src/protocol/nntp.old/nntp.c:44 src/protocol/nntp/nntp.c:44
+#: src/protocol/nntp/nntp.c:44
 msgid ""
 "Comma separated list of which entries in the article header\n"
 "to show. E.g. 'Subject' and 'From'.\n"
@@ -6190,9 +6178,10 @@ msgstr ""
 "Info. En-têtes."
 
 #: src/protocol/protocol.c:215
-#, fuzzy, c-format
+#, c-format
 msgid "This version of ELinks does not contain %s protocol support"
-msgstr "Cette version de ELinks ne supporte pas le protocole SMB"
+msgstr ""
+"Cette version de ELinks ne contient pas le support pour le protocole %s"
 
 #. name:
 #: src/protocol/protocol.c:253
@@ -6622,11 +6611,11 @@ msgstr "Le protocole de carnet d'adresse CSO n'est pas supporté"
 msgid "Unknown error"
 msgstr "Erreur inconnue"
 
-#: src/sched/session.c:632 src/sched/session.c:652 src/sched/task.c:181
+#: src/sched/session.c:633 src/sched/session.c:653 src/sched/task.c:181
 msgid "Warning"
 msgstr "Avertissement"
 
-#: src/sched/session.c:633
+#: src/sched/session.c:634
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -6645,7 +6634,7 @@ msgstr ""
 "défaut sera utilisée. Si vous n'avez aucune idée de quoi nous parlons alors "
 "faites juste ça. Toutes nos excuses pour ce désagrément."
 
-#: src/sched/session.c:653
+#: src/sched/session.c:654
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -6666,11 +6655,11 @@ msgstr ""
 "l'option config.saving_style dans le but d'obtenir un fonctionnement "
 "correct. Toutes nos excuses pour l'éventuel désagrément causé."
 
-#: src/sched/session.c:680
+#: src/sched/session.c:681
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#: src/sched/session.c:681
+#: src/sched/session.c:682
 msgid ""
 "Welcome to ELinks!\n"
 "\n"
@@ -6789,56 +6778,55 @@ msgstr "SSL"
 msgid "SSL options."
 msgstr "Options SSL."
 
-#: src/terminal/event.c:70
+#: src/terminal/event.c:71
 #, c-format
 msgid "Bad terminal size: %d, %d"
 msgstr "Mauvaise taille de terminal: %d, %d"
 
-#: src/terminal/event.c:153
+#: src/terminal/event.c:154
 msgid "Warning: terminal name contains illicit chars."
 msgstr "Attention: le nom du terminal contient des caractères illicites."
 
-#: src/terminal/event.c:287
+#: src/terminal/event.c:310
 #, c-format
 msgid "Bad event %d"
 msgstr "Mauvais évenement %d"
 
-#: src/terminal/event.c:327
+#: src/terminal/event.c:350
 #, c-format
 msgid "Could not read event: %d (%s)"
 msgstr "Impossible de lire l'évenement: %d (%s)"
 
 #: src/terminal/kbd.c:988
 msgid "Too many bytes read from the itrm!"
-msgstr ""
+msgstr "Trop d'octets lus en provenance de itrm!"
 
-#: src/terminal/tab.c:192
+#: src/terminal/tab.c:194
 msgid "Do you really want to close the current tab?"
 msgstr "Êtes-vous sûr de vouloir fermer l'onglet courant ?"
 
-#: src/terminal/tab.c:228
+#: src/terminal/tab.c:230
 msgid "Do you really want to close all except the current tab?"
 msgstr "Êtes-vous sûr de vouloir fermer tous les onglets sauf celui-ci ?"
 
 #: src/viewer/dump/dump.c:79
 #, c-format
 msgid "Can't write to stdout: %s"
-msgstr ""
+msgstr "Ne peut écrire sur la sortie standard: %s"
 
 #: src/viewer/dump/dump.c:82
-#, fuzzy
 msgid "Can't write to stdout."
-msgstr "Ecriture du fichier impossible"
+msgstr "Ne peut écrire sur la sortie standard."
 
 #: src/viewer/dump/dump.c:255
 #, c-format
 msgid "URL expected after %s."
-msgstr ""
+msgstr "URL attendue après %s."
 
 #: src/viewer/dump/dump.c:261
-#, fuzzy, c-format
+#, c-format
 msgid "URL protocol not supported (%s)."
-msgstr "Le protocole de carnet d'adresse CSO n'est pas supporté"
+msgstr "Protocole de l'URL non supporté (%s)."
 
 #: src/viewer/text/draw.c:61
 msgid "Missing fragment"
@@ -7072,21 +7060,18 @@ msgstr "Vous ne pouvez utiliser un éditeur externe en mode anonyme."
 msgid "You can do this only on the master terminal"
 msgstr "Vous ne pouvez faire ça que dans le terminal maître"
 
-#: src/viewer/text/view.c:578
+#: src/viewer/text/view.c:579
 msgid "Go to link"
 msgstr "Aller au lien"
 
-#: src/viewer/text/view.c:578
+#: src/viewer/text/view.c:579
 msgid "Enter link number"
 msgstr "Entrez un numéro de lien"
 
-#: src/viewer/text/view.c:1175
+#: src/viewer/text/view.c:1184
 msgid "Save error"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/viewer/text/view.c:1176
+#: src/viewer/text/view.c:1185
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
-
-#~ msgid "This version of ELinks does not contain finger protocol support"
-#~ msgstr "Cette version de ELinks ne supporte pas le protocole finger"

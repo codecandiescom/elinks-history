@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.28 2003/05/03 20:42:09 pasky Exp $ */
+/* $Id: terminal.h,v 1.29 2003/05/04 14:50:08 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_TERMINAL_H
 #define EL__LOWLEVEL_TERMINAL_H
@@ -99,7 +99,10 @@ struct window {
 	void *data;
 	int xp, yp;
 	struct terminal *term;
-	int type; /* 0 means ordinary window, 1 means root window (one per tab) */
+	enum window_type {
+		WT_NORMAL,
+		WT_ROOT, /* one per tab */
+	} type;
 };
 
 extern struct list_head terminals;

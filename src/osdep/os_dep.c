@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.55 2003/05/03 19:40:18 pasky Exp $ */
+/* $Id: os_dep.c,v 1.56 2003/05/04 14:50:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1815,8 +1815,7 @@ open_in_new_tab(struct terminal *term, unsigned char *exe_name,
 		win->handler = get_root_window(term)->handler;
 		win->data = NULL;
 		win->term = term;
-		/* Root window */
-		win->type = 1;
+		win->type = WT_ROOT;
 
 		add_to_list(term->windows, win);
 		term->current_tab = get_tab_number(win);

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.63 2003/05/03 22:42:02 pasky Exp $ */
+/* $Id: terminal.c,v 1.64 2003/05/04 14:50:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -270,8 +270,7 @@ add_window_at_pos(struct terminal *term,
 	win->handler = handler;
 	win->data = data;
 	win->term = term;
-	/* Ordinary (not root) window */
-	win->type = 0;
+	win->type = WT_NORMAL;
 	add_at_pos(at, win);
 	win->handler(win, &ev, 0);
 }
@@ -345,8 +344,9 @@ number_of_tabs(struct terminal *term)
 	int result = 0;
 	struct window *win;
 
-	foreach (win, term->windows)
-		result += win->type;
+	foreach (win, term->windows) {
+		result += (win->type == WT_ROOT);
+	}
 
 	return result;
 }
@@ -360,11 +360,13 @@ get_tab_number(struct window *window)
         int current = 0;
 	int num = 0;
 
-	foreachback (win, term->windows)
-		if (win == window)
+	foreachback (win, term->windows) {
+		if (win == window) {
 			num = current;
-		else
-			current += win->type;
+			break;
+		}
+		current += (win->type == WT_ROOT);
+	}
 
 	return num;
 }
@@ -375,11 +377,11 @@ get_tab_by_number(struct terminal *term, int num)
 {
 	struct window *win = NULL;
 
-	foreachback (win, term->windows)
-		if (win->type && !num)
+	foreachback (win, term->windows) {
+		if (win->type == WT_ROOT && !num)
 			break;
-		else
-                        num -= win->type;
+		num -= win->type;
+	}
 
 	return win;
 }
@@ -530,8 +532,7 @@ init_term(int fdin, int fdout,
 
 	win->handler = root_window;
 	win->term = term;
-	/* Root window */
-	win->type = 1;
+	win->type = WT_ROOT;
 
 	add_to_list(term->windows, win);
 
@@ -549,7 +550,7 @@ term_send_event(struct terminal *term, struct event *ev)
 	/* We need to send event to correct root window, not to the first one.
 	 * --karpov */
 	/* ...if we want to send it to a root window at all. --pasky */
-	win = first_win->type ? get_root_window(term) : first_win;
+	win = first_win->type == WT_ROOT ? get_root_window(term) : first_win;
 
 	win->handler(win, ev, 0);
 }

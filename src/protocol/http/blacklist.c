@@ -1,5 +1,5 @@
 /* Blacklist manager */
-/* $Id: blacklist.c,v 1.17 2004/03/22 14:35:40 jonas Exp $ */
+/* $Id: blacklist.c,v 1.18 2004/07/15 16:01:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 #include "elinks.h"
 
 #include "protocol/http/blacklist.h"
+#include "protocol/uri.h"
 #include "util/lists.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -25,38 +26,39 @@ struct blacklist_entry {
 INIT_LIST_HEAD(blacklist);
 
 void
-add_blacklist_entry(unsigned char *host, int hostlen, enum blacklist_flags flags)
+add_blacklist_entry(struct uri *uri, enum blacklist_flags flags)
 {
 	struct blacklist_entry *b;
 
-	assert(host && hostlen > 0);
+	assert(uri && uri->hostlen > 0);
 	if_assert_failed return;
 
 	foreach (b, blacklist) {
-		if (strncasecmp(b->host, host, hostlen)) continue;
+		if (strncasecmp(b->host, uri->host, uri->hostlen))
+			continue;
 
 		b->flags |= flags;
 		return;
 	}
 
-	b = mem_alloc(sizeof(struct blacklist_entry) + hostlen);
+	b = mem_alloc(sizeof(struct blacklist_entry) + uri->hostlen);
 	if (!b) return;
 
 	b->flags = flags;
-	memcpy(b->host, host, hostlen);
+	memcpy(b->host, uri->host, uri->hostlen);
 	add_to_list(blacklist, b);
 }
 
 void
-del_blacklist_entry(unsigned char *host, int hostlen, enum blacklist_flags flags)
+del_blacklist_entry(struct uri *uri, enum blacklist_flags flags)
 {
 	struct blacklist_entry *b;
 
-	assert(host && hostlen > 0);
+	assert(uri && uri->hostlen > 0);
 	if_assert_failed return;
 
 	foreach (b, blacklist) {
-		if (strncasecmp(b->host, host, hostlen)) continue;
+		if (strncasecmp(b->host, uri->host, uri->hostlen)) continue;
 
 		b->flags &= ~flags;
 		if (!b->flags) {
@@ -68,15 +70,15 @@ del_blacklist_entry(unsigned char *host, int hostlen, enum blacklist_flags flags
 }
 
 int
-get_blacklist_flags(unsigned char *host, int hostlen)
+get_blacklist_flags(struct uri *uri)
 {
 	struct blacklist_entry *b;
 
-	assert(host && hostlen > 0);
+	assert(uri && uri->hostlen > 0);
 	if_assert_failed return 0;
 
 	foreach (b, blacklist)
-		if (!strncasecmp(b->host, host, hostlen))
+		if (!strncasecmp(b->host, uri->host, uri->hostlen))
 			return b->flags;
 	return 0;
 }

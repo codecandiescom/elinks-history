@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.162 2004/04/11 15:32:22 jonas Exp $ */
+/* $Id: connection.c,v 1.163 2004/04/14 00:09:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,10 +67,6 @@ static INIT_LIST_HEAD(keepalive_connections);
 /* Prototypes */
 static void send_connection_info(struct connection *conn);
 static void check_keepalive_connections(void);
-
-/* See connection_state description. */
-#define is_in_result_state(cstate)	(cstate < 0)
-#define is_in_progress_state(cstate)	(cstate >= 0)
 
 static /* inline */ enum connection_priority
 get_priority(struct connection *conn)

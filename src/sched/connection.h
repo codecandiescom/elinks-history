@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.61 2004/04/04 05:22:59 jonas Exp $ */
+/* $Id: connection.h,v 1.62 2004/04/14 00:09:22 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -28,6 +28,11 @@ enum connection_priority {
 /* Numbers < 0 and > -10000 are reserved for system errors reported via
  * errno/strerror(), see session.c and connection.c for further information. */
 /* WARNING: an errno value <= -10000 may cause some bad things... */
+
+#define is_system_error(state)		(S_OK < (state) || (state) < S_WAIT)
+#define is_in_result_state(state)	((state) < 0)
+#define is_in_progress_state(state)	((state) >= 0)
+
 enum connection_state {
 	/* States >= 0 are used for connections still in progress. */
 	S_WAIT			= 0,

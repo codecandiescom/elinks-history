@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: error.c,v 1.22 2004/04/04 01:48:18 jonas Exp $ */
+/* $Id: error.c,v 1.23 2004/04/14 00:09:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,7 +100,7 @@ get_err_msg(int state, struct terminal *term)
 	struct strerror_val *s;
 	int len;
 
-	if (state <= S_OK || state >= S_WAIT) {
+	if (!is_system_error(state)) {
 		int i;
 
 		for (i = 0; msg_dsc[i].msg; i++)

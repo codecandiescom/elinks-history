@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.24 2003/06/05 04:58:36 jonas Exp $ */
+/* $Id: msgbox.c,v 1.25 2003/06/07 00:33:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -201,3 +201,123 @@ msg_box(struct terminal *term, struct memory_list *ml,
 	add_to_ml(&ml, dlg, info, NULL);
 	do_dialog(term, dlg, ml);
 }
+
+#if 0
+
+void
+msg_box(struct terminal *term, struct memory_list *ml,
+	unsigned char *title, enum format_align align,
+	unsigned char *text, void *udata, int buttons, ...)
+{
+	unsigned char **info = NULL;
+	int button;
+	struct dialog *dlg;
+	va_list ap;
+
+	/* Check if the info string is valid */
+	if (!text) return;
+
+	/* What's up with this hack? Allocate a pointer to a pointer ;) */
+	info = mem_alloc(2 * sizeof(unsigned char *));
+	if (!info) {
+		freeml(ml);
+		if (align & AL_EXTD_TEXT)
+			mem_free(text);
+		return;
+	}
+
+	info[0] = text;
+	info[1] = NULL;
+
+	dlg = mem_calloc(1, sizeof(struct dialog) +
+			    (buttons + 1) * sizeof(struct widget));
+	if (!dlg) {
+		mem_free(info);
+		freeml(ml);
+		if (align & AL_EXTD_TEXT)
+			mem_free(text);
+		return;
+	}
+
+	dlg->title = title;
+	dlg->fn = msg_box_fn;
+	dlg->udata = info;
+	dlg->udata2 = udata;
+	dlg->align = align;
+
+	va_start(ap, buttons);
+
+	for (button = 0; button < buttons; button++) {
+		unsigned char *label;
+		void (*fn)(void *);
+		int flags;
+
+		label = va_arg(ap, unsigned char *);
+		fn = va_arg(ap, void *);
+		flags = va_arg(ap, int);
+
+		if (!label) {
+			/* Skip this button. */
+			button--;
+			buttons--;
+			continue;
+		}
+
+		dlg->items[button].type = D_BUTTON;
+		dlg->items[button].gid = flags;
+		dlg->items[button].fn = msg_box_button;
+		dlg->items[button].dlen = 0;
+		dlg->items[button].text = label;
+		dlg->items[button].udata = fn;
+	}
+
+	va_end(ap);
+
+	dlg->items[button].type = D_END;
+
+	/* Use the align string to determine wether @text should be free()d */
+	if (align & AL_EXTD_TEXT)
+		add_to_ml(&ml, dlg, text, info, NULL);
+	else
+		add_to_ml(&ml, dlg, info, NULL);
+
+	do_dialog(term, dlg, ml);
+}
+
+/* Copied from util/snprint.c */
+#ifndef VA_COPY
+#ifdef HAVE_VA_COPY
+#define VA_COPY(dest, src) __va_copy(dest, src)
+#else
+#define VA_COPY(dest, src) (dest) = (src)
+#endif
+#endif
+
+unsigned char *
+msg_text(unsigned char *format, ...)
+{
+	unsigned char *info;
+	int infolen;
+	va_list ap;
+	va_list ap2;
+
+	va_start(ap, format);
+	VA_COPY(ap2, ap);
+
+	infolen = vsnprintf(NULL, 0, format, ap2);
+	info = mem_alloc(infolen + 1);
+
+	if (vsnprintf((char *)info, infolen, format, ap) != infolen) {
+		mem_free(info);
+		info = NULL;
+	} else {
+		/* Wear safety boots */
+		info[infolen - 1] = '\0';
+	}
+
+	va_end(ap);
+
+	return info;
+}
+
+#endif

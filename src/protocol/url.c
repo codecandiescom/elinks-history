@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.24 2002/06/22 21:20:53 pasky Exp $ */
+/* $Id: url.c,v 1.25 2002/06/23 13:17:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -766,6 +766,7 @@ translate_url(unsigned char *url, unsigned char *cwd)
 	/* Strip starting spaces */
 	while (*url == ' ') url++;
 
+	/* XXX: Why?! */
 	if (!casecmp("proxy://", url, 8)) goto proxy;
 
 	/* Ordinary parse */
@@ -891,11 +892,11 @@ http:				prefix = "http://";
 		return NULL;
 	}
 
+	/* Try prefix:some.url -> prefix://some.url.. */
 	newurl = memacpy(url, ch - url + 1);
 	if (!newurl) return NULL;
 	add_to_strn(&newurl, "//");
 	add_to_strn(&newurl, ch + 1);
-
 	if (!parse_url(newurl, NULL,
 		       NULL, NULL,
 		       NULL, NULL,
@@ -909,8 +910,8 @@ http:				prefix = "http://";
 		return newurl;
 	}
 
+	/* ..and with slash */
 	add_to_strn(&newurl, "/");
-
 	if (!parse_url(newurl, NULL,
 		       NULL, NULL,
 		       NULL, NULL,

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.31 2002/10/18 18:26:43 zas Exp $ */
+/* $Id: osdep.c,v 1.32 2002/10/23 12:16:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1485,7 +1485,10 @@ start_thread(void (*fn)(void *, int), void *ptr, int l)
 		fn(ptr, p[1]);
 		write(p[1], "x", 1);
 		close(p[1]);
-		exit(0);
+		/* We use _exit() here instead of exit(), see 
+		 * http://www.erlenstar.demon.co.uk/unix/faq_2.html#SEC6 for 
+		 * reasons. Fixed by Sven Neumann <sven@convergence.de>. */
+		_exit(0);
 	}
 	if (f == -1) {
 		close(p[0]);

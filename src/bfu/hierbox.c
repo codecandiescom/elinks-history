@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.102 2003/11/26 04:28:52 jonas Exp $ */
+/* $Id: hierbox.c,v 1.103 2003/11/26 11:29:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,24 +40,24 @@ update_hierbox_browser(struct hierbox_browser *browser)
 }
 
 struct listbox_item *
-init_browser_box(struct hierbox_browser *browser, unsigned char *text,
-		 void *data)
+init_browser_box_item(struct hierbox_browser *browser, unsigned char *text,
+		      void *data)
 {
-	struct listbox_item *box = mem_calloc(1, sizeof(struct listbox_item));
+	struct listbox_item *item = mem_calloc(1, sizeof(struct listbox_item));
 
-	if (!box) return NULL;
+	if (!item) return NULL;
 
-	init_list(box->child);
-	box->visible = 1;
+	init_list(item->child);
+	item->visible = 1;
 
-	box->text = text;
-	box->udata = data;
+	item->text = text;
+	item->udata = data;
 
-	add_to_list(*browser->items, box);
+	add_to_list(*browser->items, item);
 
 	update_hierbox_browser(browser);
 
-	return box;
+	return item;
 }
 
 /* Find a box to replace @item. This is done by trying first to traverse down, then

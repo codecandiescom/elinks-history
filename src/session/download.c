@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.185 2003/11/26 04:43:52 jonas Exp $ */
+/* $Id: download.c,v 1.186 2003/11/26 11:29:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -715,7 +715,7 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download->handle = fd;
 	file_download->ses = cmdw_hop->ses;
 	file_download->remotetime = 0;
-	file_download->box_item = init_browser_box(&download_browser,
+	file_download->box_item = init_browser_box_item(&download_browser,
 					file_download->url, file_download);
 
 	add_to_list(downloads, file_download);
@@ -834,7 +834,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	file_download->prog_flags = codw_hop->tq->prog_flags;
 
-	file_download->box_item = init_browser_box(&download_browser,
+	file_download->box_item = init_browser_box_item(&download_browser,
 					file_download->url, file_download);
 
 	add_to_list(downloads, file_download);

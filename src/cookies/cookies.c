@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.103 2003/11/26 04:10:07 jonas Exp $ */
+/* $Id: cookies.c,v 1.104 2003/11/26 11:29:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -398,7 +398,7 @@ accept_cookie(struct cookie *c)
 	struct cookie *d, *e;
 	int domain_len;
 
-	c->box_item = init_browser_box(&cookie_browser, c->server, c);
+	c->box_item = init_browser_box_item(&cookie_browser, c->server, c);
 
 	foreach (d, cookies) {
 		if (strcasecmp(d->name, c->name)

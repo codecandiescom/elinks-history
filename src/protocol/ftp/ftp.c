@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.169 2004/09/27 00:38:09 pasky Exp $ */
+/* $Id: ftp.c,v 1.170 2004/09/27 00:57:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -421,7 +421,7 @@ ftp_pass(struct connection *conn)
 
 		add_bytes_to_string(&cmd, uri->password, uri->passwordlen);
 	} else if (auth && !auth->blocked && auth->valid) {
-		if (!auth_user_matching_uri(auth, uri)) {
+		if (!auth_user_matching_uri(auth, conn->uri)) {
 			prompt_username_pw(conn);
 			return;
 		}

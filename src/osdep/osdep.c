@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.160 2005/02/05 03:00:02 jonas Exp $ */
+/* $Id: osdep.c,v 1.161 2005/02/05 03:22:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -597,7 +597,9 @@ struct tdata {
 void
 bgt(struct tdata *t)
 {
+#ifdef SIGPIPE
 	signal(SIGPIPE, SIG_IGN);
+#endif
 	t->fn(t->data, t->h);
 	write(t->h, "x", 1);
 	close(t->h);

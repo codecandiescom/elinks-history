@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.27 2004/11/08 19:41:04 jonas Exp $ */
+/* $Id: signals.c,v 1.28 2005/02/05 03:22:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,11 +58,14 @@ sig_ctrl_c(struct terminal *term)
 	if (!is_blocked()) kbd_ctrl_c();
 }
 
+#ifdef SIGTTOU
 static void
 sig_ign(void *x)
 {
 }
+#endif
 
+#if defined(SIGTSTP) || defined(SIGTTIN)
 static void
 sig_tstp(struct terminal *term)
 {
@@ -80,12 +83,15 @@ sig_tstp(struct terminal *term)
 	raise(SIGSTOP);
 #endif
 }
+#endif
 
+#ifdef SIGCONT
 static void
 sig_cont(struct terminal *term)
 {
 	if (!unblock_itrm(0)) resize_terminal();
 }
+#endif
 
 #ifdef CONFIG_BACKTRACE
 static void
@@ -120,7 +126,9 @@ sig_segv(struct terminal *term)
 void
 handle_basic_signals(struct terminal *term)
 {
+#ifdef SIGHUP
 	install_signal_handler(SIGHUP, (void (*)(void *)) sig_intr, term, 0);
+#endif
 	install_signal_handler(SIGINT, (void (*)(void *)) sig_ctrl_c, term, 0);
 	install_signal_handler(SIGTERM, (void (*)(void *)) sig_terminate, term, 0);
 #ifdef SIGTSTP
@@ -143,7 +151,9 @@ handle_basic_signals(struct terminal *term)
 void
 unhandle_terminal_signals(struct terminal *term)
 {
+#ifdef SIGHUP
 	install_signal_handler(SIGHUP, NULL, NULL, 0);
+#endif
 	install_signal_handler(SIGINT, NULL, NULL, 0);
 #ifdef SIGTSTP
 	install_signal_handler(SIGTSTP, NULL, NULL, 0);
@@ -165,7 +175,9 @@ unhandle_terminal_signals(struct terminal *term)
 static void
 unhandle_basic_signals(struct terminal *term)
 {
+#ifdef SIGHUP
 	install_signal_handler(SIGHUP, NULL, NULL, 0);
+#endif
 	install_signal_handler(SIGINT, NULL, NULL, 0);
 	install_signal_handler(SIGTERM, NULL, NULL, 0);
 #ifdef SIGTSTP
@@ -253,16 +265,19 @@ install_signal_handler(int sig, void (*fn)(void *), void *data, int critical)
 	signal_info[sig].data = data;
 	signal_info[sig].critical = critical;
 	if (fn) sigaction(sig, &sa, NULL);
+#endif
 }
 
 static volatile int pending_alarm = 0;
 
+#ifdef SIGALRM
 static void
 alarm_handler(void *x)
 {
 	pending_alarm = 0;
 	check_for_select_race();
 }
+#endif
 
 static void
 check_for_select_race(void)
@@ -288,8 +303,9 @@ uninstall_alarm(void)
 }
 
 
+#ifdef SIGCHLD
 static void
-sigchld(void *p)
+sig_chld(void *p)
 {
 #ifdef WNOHANG
 	while ((int) waitpid(-1, NULL, WNOHANG) > 0);
@@ -297,11 +313,14 @@ sigchld(void *p)
 	wait(NULL);
 #endif
 }
+#endif
 
 void
 set_sigcld(void)
 {
-	install_signal_handler(SIGCHLD, sigchld, NULL, 1);
+#ifdef SIGCHLD
+	install_signal_handler(SIGCHLD, sig_chld, NULL, 1);
+#endif
 }
 
 void

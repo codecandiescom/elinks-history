@@ -1,3 +1,21 @@
+Sun Jun  6 13:19:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Fix URI referencing. Reported by Stephen Stocker.  
+
+Sun Jun  6 12:34:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	join_urls(): Cleanup checking whether @rel contains protocol.  
+
+Sun Jun  6 12:21:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	join_urls(): Cleanup case when relative string start with '//'.  
+
 Sat Jun  5 21:14:33 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: cache/cache.c, document/html/parser.c,

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.298 2004/06/29 15:09:02 zas Exp $ */
+/* $Id: tables.c,v 1.299 2004/06/29 15:19:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -380,7 +380,7 @@ distribute_widths(struct table *table, int width)
 	if (!max_widths) goto end1;
 
 	while (d) {
-		int mss, mii;
+		int max, max_index;
 		int p = 0;
 		int wq;
 		int dd;
@@ -463,8 +463,8 @@ distribute_widths(struct table *table, int width)
 		dd = d;
 
 again:
-		mss = 0;
-		mii = -1;
+		max = 0;
+		max_index = -1;
 		for (col = 0; col < table->cols; col++) if (widths[col]) {
 			int ss;
 
@@ -472,23 +472,23 @@ again:
 			ss = dd * widths[col] / p;
 			if (!ss) ss = 1;
 			if (ss > max_widths[col]) ss = max_widths[col];
-			if (ss > mss) {
-				mss = ss;
-				mii = col;
+			if (ss > max) {
+				max = ss;
+				max_index = col;
 			}
 		}
 
-		if (mii != -1) {
-			int q = table->cols_widths[mii];
+		if (max_index != -1) {
+			int q = table->cols_widths[max_index];
 
-			if (u) u[mii] = 1;
-			table->cols_widths[mii] += mss;
-			d -= table->cols_widths[mii] - q;
+			if (u) u[max_index] = 1;
+			table->cols_widths[max_index] += max;
+			d -= table->cols_widths[max_index] - q;
 			while (d < 0) {
-				table->cols_widths[mii]--;
+				table->cols_widths[max_index]--;
 				d++;
 			}
-			assertm(table->cols_widths[mii] >= q, "shrinking cell");
+			assertm(table->cols_widths[max_index] >= q, "shrinking cell");
 			wq = 1;
 			if (d) goto again;
 		} else if (!wq) om++;

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: plain.c,v 1.2 2003/10/31 19:14:37 jonas Exp $ */
+/* $Id: plain.c,v 1.3 2003/10/31 19:54:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 
 #include "cache/cache.h"
 #include "document/document.h"
+#include "document/draw.h"
 #include "document/html/renderer.h" /* TODO: Move get_convert_table() */
 #include "terminal/draw.h"
 #include "util/error.h"
@@ -20,45 +21,6 @@
 
 
 /* TODO: Highlight uris in the plaintext (optional ofcourse) */
-
-#define LINES_GRANULARITY	0x7F
-#define LINE_GRANULARITY	0x0F
-
-#define ALIGN_LINES(x, o, n) mem_align_alloc(x, o, n, sizeof(struct line), LINES_GRANULARITY)
-#define ALIGN_LINE(x, o, n) mem_align_alloc(x, o, n, sizeof(struct screen_char), LINE_GRANULARITY)
-
-static struct line *
-realloc_lines(struct document *document, int y)
-{
-	assert(document);
-	if_assert_failed return 0;
-
-	if (document->height <= y) {
-		if (!ALIGN_LINES(&document->data, document->height, y + 1))
-			return NULL;
-
-		document->height = y + 1;
-	}
-
-	return &document->data[y];
-}
-
-static struct screen_char *
-realloc_line(struct document *document, int y, int x)
-{
-	struct line *line = realloc_lines(document, y);
-
-	if (!line) return NULL;
-
-	if (line->l <= x) {
-		if (!ALIGN_LINE(&line->d, line->l, x + 1))
-			return NULL;
-
-		line->l = x + 1;
-	}
-
-	return line->d;
-}
 
 static void
 add_document_lines(struct document *document, unsigned char *source)
@@ -93,7 +55,7 @@ add_document_lines(struct document *document, unsigned char *source)
 			add_to_list(document->nodes, node);
 		}
 
-		pos = realloc_line(document, lineno, width);
+		pos = get_document_line(document, lineno, width);
 		if (!pos) continue;
 
 		for (end = pos + width; pos < end; pos++, source++) {

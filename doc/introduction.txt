@@ -114,7 +114,7 @@ buttons at the bottom. Below, a view of the cookie manager is shown.
 |  [ Info ]  [ Add ]  [ Edit ]  [ Delete ]  [ Clear ]  [ Save ]  [ Close ]  |
 +---------------------------------------------------------------------------+
 
-The hierarchic boxes are either folders or leafs. Folder boxes are displayed
+Each hierarchic box is either a folder or a leaf. A folder box is displayed
 with a "[-]" or "[+]" before the name telling whether the folder is currently
 open or closed. Nested boxes are displayed indented compared to the folder
 they are nested in. In the cookie manager example above "bjork.com" is a
@@ -291,4 +291,4 @@ Useful Document Display Options:
 
  - Insert mode in text-input form-fields
 
-$Id: introduction.txt,v 1.13 2005/01/03 20:34:19 miciah Exp $
+$Id: introduction.txt,v 1.14 2005/01/03 20:38:29 miciah Exp $

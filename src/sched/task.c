@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.117 2004/06/22 23:11:19 pasky Exp $ */
+/* $Id: task.c,v 1.118 2004/06/23 07:38:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -532,6 +532,8 @@ goto_url(struct session *ses, unsigned char *url)
 struct uri *
 get_hooked_uri(unsigned char *uristring, struct session *ses, unsigned char *cwd)
 {
+	struct uri *uri;
+
 #if defined(CONFIG_SCRIPTING) || defined(CONFIG_URI_REWRITE)
 	static int goto_url_event_id = EVENT_NONE;
 

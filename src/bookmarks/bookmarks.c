@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.75 2003/10/01 17:39:57 zas Exp $ */
+/* $Id: bookmarks.c,v 1.76 2003/10/09 09:09:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,6 +68,8 @@ sanitize_title(const unsigned char *title)
 	register unsigned char *p = (unsigned char *)title;
 	int len = strlen(p);
 
+	if (!len) return;
+
 	while (len--) {
 		if (p[len] < ' ')
 			p[len] = ' ';
@@ -82,6 +84,8 @@ sanitize_url(const unsigned char *url)
 {
 	register unsigned char *p = (unsigned char *)url;
 	int len = strlen(p);
+
+	if (!len) return 1;
 
 	while (len--) {
 		if (p[len] < ' ')

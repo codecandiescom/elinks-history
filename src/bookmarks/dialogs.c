@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.19 2002/08/29 11:48:30 pasky Exp $ */
+/* $Id: dialogs.c,v 1.20 2002/08/29 22:36:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -333,10 +333,10 @@ really_del_bookmark(void *vhop)
 
 		bm = get_bookmark_by_id((bookmark_id) box->sel->udata);
 		box->sel = traverse_listbox_items_list(bm->box_item, -1,
-						       NULL, NULL);
+				1, NULL, NULL);
 		if (bm->box_item == box->sel)
 			box->sel = traverse_listbox_items_list(bm->box_item, 1,
-							       NULL, NULL);
+					1, NULL, NULL);
 		if (bm->box_item == box->sel)
 			box->sel = NULL;
 	}
@@ -346,10 +346,10 @@ really_del_bookmark(void *vhop)
 
 		bm = get_bookmark_by_id((bookmark_id) box->top->udata);
 		box->top = traverse_listbox_items_list(bm->box_item, 1,
-						       NULL, NULL);
+				1, NULL, NULL);
 		if (bm->box_item == box->top)
 			box->top = traverse_listbox_items_list(bm->box_item, -1,
-							       NULL, NULL);
+					1, NULL, NULL);
 		if (bm->box_item == box->top)
 			box->top = NULL;
 	}

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.22 2002/08/29 21:15:03 pasky Exp $ */
+/* $Id: globhist.c,v 1.23 2002/08/29 22:36:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,20 +59,20 @@ delete_global_history_item(struct global_history_item *historyitem)
 	if (box) {
 		if (box->sel && item == box->sel) {
 			box->sel = traverse_listbox_items_list(item, -1,
-					NULL, NULL);
+					1, NULL, NULL);
 			if (item == box->sel)
 				box->sel = traverse_listbox_items_list(item, 1,
-						NULL, NULL);
+						1, NULL, NULL);
 			if (item == box->sel)
 				box->sel = NULL;
 		}
 
 		if (box->top && item == box->top) {
 			box->top = traverse_listbox_items_list(item, 1,
-					NULL, NULL);
+					1, NULL, NULL);
 			if (item == box->top)
 				box->top = traverse_listbox_items_list(item, -1,
-						NULL, NULL);
+						1, NULL, NULL);
 			if (item == box->top)
 				box->top = NULL;
 		}
@@ -152,6 +152,8 @@ add_global_history_item(unsigned char *url, unsigned char *title, time_t time)
 	history_item->box_item = mem_calloc(1, sizeof(struct listbox_item)
 					       + strlen(history_item->url) + 1);
 	if (!history_item) return;
+	init_list(history_item->box_item->child);
+	history_item->box_item->visible = 1;
 
 	history_item->box_item->text = ((unsigned char *) history_item->box_item
 					+ sizeof(struct listbox_item));

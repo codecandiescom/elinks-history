@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.10 2002/08/29 21:15:02 pasky Exp $ */
+/* $Id: listbox.h,v 1.11 2002/08/29 22:36:41 pasky Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -31,6 +31,7 @@ struct listbox_item {
 	struct listbox_item *root;
 	struct list_head child;
 	int expanded; /* Only valid if child is non-empty */
+	int visible; /* Is this item visible? */
 
 	/* Text to display */
 	unsigned char *text;
@@ -48,7 +49,7 @@ extern struct widget_ops listbox_ops;
 
 void dlg_format_box(struct terminal *, struct terminal *, struct widget_data *, int, int *, int, int *, enum format_align);
 
-struct listbox_item *traverse_listbox_items_list(struct listbox_item *, int, int (*)(struct listbox_item *, void *, int), void *);
+struct listbox_item *traverse_listbox_items_list(struct listbox_item *, int, int, int (*)(struct listbox_item *, void *, int), void *);
 
 void box_sel_move(struct widget_data *, int);
 

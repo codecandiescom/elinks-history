@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.14 2002/12/22 10:23:59 pasky Exp $ */
+/* $Id: colors.c,v 1.15 2002/12/22 16:34:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -387,7 +387,7 @@ fg_color(int fg, int bg)
 	/* 0 == brightgrey  6 == cyan        12 == brightblue
 	 * 1 == red         7 == brightgrey  13 == brightmagenta
 	 * 2 == green       8 == black       14 == brightcyan
-	 * 3 == red         9 == brightred   15 == brightwhite
+	 * 3 == brown       9 == brightred   15 == brightwhite
 	 * 4 == blue       10 == brightgreen
 	 * 5 == magenta    11 == brightyellow
 	 */

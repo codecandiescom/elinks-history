@@ -1,3 +1,35 @@
+Fri Mar 18 14:41:12 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/dialogs.c, config/dialogs.c:
+
+	Drop old #define for hierbox number of buttons.  
+
+Fri Mar 18 14:39:06 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	Reorder buttons in bookmarks manager.  
+
+Fri Mar 18 13:39:16 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/backend/xbel.c:
+
+	Add a newline after <separator/>.  
+
+Fri Mar 18 13:30:53 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/listbox.c, bfu/listbox.h, bookmarks/bookmarks.c,
+	bookmarks/backend/default.c, bookmarks/backend/xbel.c:
+
+	Add support for bookmarks separators. To insert one enter "-" as
+	title and no url.  
+
+Fri Mar 18 13:26:01 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/hierbox.c:
+
+	Code cleanup.  
+
 Thu Mar 17 10:45:05 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/dom/renderer.c:

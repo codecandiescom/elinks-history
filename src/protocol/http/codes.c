@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.21 2004/03/22 14:35:40 jonas Exp $ */
+/* $Id: codes.c,v 1.22 2004/03/31 20:29:11 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -14,6 +14,7 @@
 #include "cache/cache.h"
 #include "intl/gettext/libintl.h"
 #include "protocol/http/codes.h"
+#include "protocol/uri.h"
 #include "sched/connection.h"
 #include "sched/session.h"
 #include "sched/task.h"

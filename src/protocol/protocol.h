@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.30 2004/06/27 19:30:48 jonas Exp $ */
+/* $Id: protocol.h,v 1.31 2004/06/28 10:33:25 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -26,8 +26,6 @@ enum protocol {
 	PROTOCOL_USER,
 	PROTOCOL_LUA,
 };
-
-#define VALID_PROTOCOL(p) ((p) != PROTOCOL_INVALID)
 
 /* Besides the session an external handler also takes the url as an argument */
 typedef void (protocol_handler)(struct connection *);

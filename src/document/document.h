@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.67 2004/06/26 12:45:45 pasky Exp $ */
+/* $Id: document.h,v 1.68 2004/06/26 14:27:27 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -80,6 +80,8 @@ struct link {
 
 	struct form_control *form_control;
 
+	/* The set of characters belonging to this link (their coordinates
+	 * in the document) - each character has own {struct point}. */
 	struct point *points;
 	int npoints;
 

@@ -1,10 +1,10 @@
-/* $Id: conv.h,v 1.23 2003/11/05 11:30:33 zas Exp $ */
+/* $Id: conv.h,v 1.24 2003/12/01 13:55:41 pasky Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
 
-#include "lowlevel/ttime.h" /* ttime type */
 #include "util/string.h"
+#include "util/ttime.h" /* ttime type */
 
 static inline unsigned char
 upcase(unsigned char ch)

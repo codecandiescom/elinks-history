@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.25 2003/11/29 19:09:12 jonas Exp $ */
+/* $Id: download.h,v 1.26 2003/12/01 13:55:41 pasky Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -7,11 +7,11 @@
 
 #include "bfu/dialog.h"
 #include "cache/cache.h"
-#include "lowlevel/ttime.h"
 #include "sched/connection.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
 #include "util/lists.h"
+#include "util/ttime.h"
 
 struct file_download {
 	LIST_HEAD(struct file_download);

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.44 2003/12/01 13:50:42 pasky Exp $ */
+/* $Id: connection.h,v 1.45 2003/12/01 13:55:40 pasky Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -11,11 +11,11 @@ struct read_buffer;
 
 #include "cache/cache.h"
 #include "lowlevel/connect.h"
-#include "lowlevel/ttime.h"
 #include "protocol/uri.h"
 #include "util/encoding.h"
 #include "util/error.h"
 #include "util/lists.h"
+#include "util/ttime.h"
 
 enum connection_priority {
 	PRI_MAIN	= 0,

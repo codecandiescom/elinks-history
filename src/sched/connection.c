@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.130 2003/12/01 13:50:42 pasky Exp $ */
+/* $Id: connection.c,v 1.131 2003/12/01 13:55:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,6 @@
 #include "lowlevel/connect.h"
 #include "lowlevel/dns.h"
 #include "lowlevel/select.h"
-#include "lowlevel/ttime.h"
 #include "protocol/protocol.h"
 #include "protocol/proxy.h"
 #include "protocol/uri.h"
@@ -33,6 +32,7 @@
 #include "util/memory.h"
 #include "util/object.h"
 #include "util/string.h"
+#include "util/ttime.h"
 #include "util/types.h"
 
 

@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.6 2003/08/01 14:46:30 zas Exp $ */
+/* $Id: time.c,v 1.7 2003/12/01 13:55:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,7 @@
 
 #include "elinks.h"
 
-#include "lowlevel/ttime.h"
+#include "util/ttime.h"
 
 
 ttime

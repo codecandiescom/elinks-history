@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.15 2003/11/30 19:45:00 jonas Exp $ */
+/* $Id: download.c,v 1.16 2003/12/01 13:55:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,6 @@
 #include "dialogs/status.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
-#include "lowlevel/ttime.h"
 #include "sched/download.h"
 #include "sched/session.h"
 #include "terminal/draw.h"
@@ -34,6 +33,7 @@
 #include "util/memory.h"
 #include "util/object.h"
 #include "util/string.h"
+#include "util/ttime.h"
 
 
 static void

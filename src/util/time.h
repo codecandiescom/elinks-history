@@ -1,7 +1,7 @@
-/* $Id: time.h,v 1.5 2003/09/26 18:28:47 pasky Exp $ */
+/* $Id: time.h,v 1.6 2003/12/01 13:55:41 pasky Exp $ */
 
-#ifndef EL__LOWLEVEL_TTIME_H
-#define EL__LOWLEVEL_TTIME_H
+#ifndef EL__UTIL_TTIME_H
+#define EL__UTIL_TTIME_H
 
 #ifdef TIME_WITH_SYS_TIME
 #ifdef HAVE_SYS_TIME_H

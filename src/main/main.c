@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.98 2003/06/13 17:54:23 zas Exp $ */
+/* $Id: main.c,v 1.99 2003/06/14 01:00:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,6 @@ enum retval retval = RET_OK;
 unsigned char *path_to_exe;
 #ifdef USE_FASTFIND
 void *ff_info_tags = NULL;
-void *ff_info_entities = NULL;
 #endif
 
 static int ac;
@@ -266,7 +265,6 @@ terminate_all_subsystems(void)
 	shrink_memory(1);
 #ifdef USE_FASTFIND
 	fastfind_terminate(ff_info_tags);
-	fastfind_terminate(ff_info_entities);
 #endif
 	free_table_cache();
 	free_history_lists();

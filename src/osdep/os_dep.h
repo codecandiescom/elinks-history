@@ -1,4 +1,4 @@
-/* $Id: os_dep.h,v 1.17 2003/06/28 21:43:55 zas Exp $ */
+/* $Id: os_dep.h,v 1.18 2003/07/21 23:52:05 jonas Exp $ */
 
 #ifndef EL__OSDEP_OS_DEP_H
 #define EL__OSDEP_OS_DEP_H
@@ -195,7 +195,6 @@ unsigned char *get_clipboard_text(void);
 void set_clipboard_text(unsigned char *);
 void set_window_title(unsigned char *);
 unsigned char *get_window_title(void);
-void check_shell_security(unsigned char **);
 void block_stdin(void);
 void unblock_stdin(void);
 int exe(unsigned char *);

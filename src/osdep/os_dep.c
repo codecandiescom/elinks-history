@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.80 2003/07/09 23:03:10 jonas Exp $ */
+/* $Id: os_dep.c,v 1.81 2003/07/21 23:52:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,17 +102,6 @@ set_blocking_fd(int fd)
 #else
 	return 0;
 #endif
-}
-
-void
-check_shell_security(unsigned char **cmd)
-{
-	register unsigned char *c = *cmd;
-
-	while (*c) {
-		if (!is_safe_in_shell(*c)) *c = '_';
-		c++;
-	}
 }
 
 static int

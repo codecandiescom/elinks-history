@@ -3610,11 +3610,12 @@ msgstr "Opcje dotycz±ce SAMBY."
 
 #: src/config/options.inc:928
 msgid "Credentials"
-msgstr "Certyfilaty"
+msgstr "Dane uwierzytelniaj±ce"
 
 #: src/config/options.inc:930
 msgid "Credentials file passed to smbclient via -A option."
-msgstr "Plik z certyfikatami podawany do smbclient-a przy u¿yciu opcji -A."
+msgstr "Plik z danymi uwierzytelniaj±cymi przekazywany do smbclient-a\n"
+"przy u¿yciu opcji -A."
 
 #: src/config/options.inc:940
 msgid ""

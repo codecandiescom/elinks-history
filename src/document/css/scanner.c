@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.41 2004/01/20 02:12:00 jonas Exp $ */
+/* $Id: scanner.c,v 1.42 2004/01/20 02:30:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 
 #include "document/css/scanner.h"
 #include "util/error.h"
+#include "util/string.h"
 
 
 #define	SCAN_TABLE_SIZE	256
@@ -41,6 +42,46 @@ enum css_char_group {
 #define	is_css_hexdigit(c)	check_css_table(c, CSS_CHAR_HEX_DIGIT)
 #define	is_css_char_token(c)	check_css_table(c, CSS_CHAR_TOKEN)
 #define	scan_css(s, bit)	while (check_css_table(*(s), bit)) (s)++;
+
+struct css_number_identifier {
+	unsigned char *name;
+	enum css_token_type type;
+};
+
+static inline enum css_token_type
+get_number_identifier(unsigned char *ident, int length)
+{
+	static struct css_number_identifier number_identifiers[] = {
+		{ "Hz",   CSS_TOKEN_FREQUENCY },
+		{ "cm",	  CSS_TOKEN_LENGTH },
+		{ "deg",  CSS_TOKEN_ANGLE },
+		{ "em",   CSS_TOKEN_EM },
+		{ "ex",   CSS_TOKEN_EX },
+		{ "grad", CSS_TOKEN_ANGLE },
+		{ "in",   CSS_TOKEN_LENGTH },
+		{ "kHz",  CSS_TOKEN_FREQUENCY },
+		{ "mm",   CSS_TOKEN_LENGTH },
+		{ "mm",   CSS_TOKEN_LENGTH },
+		{ "ms",   CSS_TOKEN_TIME },
+		{ "pc",   CSS_TOKEN_LENGTH },
+		{ "pt",   CSS_TOKEN_LENGTH },
+		{ "px",   CSS_TOKEN_LENGTH },
+		{ "rad",  CSS_TOKEN_ANGLE },
+		{ "s",    CSS_TOKEN_TIME },
+
+		{ NULL, CSS_TOKEN_NONE },
+	};
+	int i;
+
+	for (i = 0; number_identifiers[i].name; i++) {
+		unsigned char *name = number_identifiers[i].name;
+
+		if (!strncasecmp(name, ident, length))
+			return number_identifiers[i].type;
+	}
+
+	return CSS_TOKEN_DIMENSION;
+}
 
 static inline void
 scan_css_token(struct css_scanner *scanner, struct css_token *token)
@@ -76,6 +117,11 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		} else if (!is_css_ident_start(*string)) {
 			type = CSS_TOKEN_NUMBER;
 
+		} else {
+			unsigned char *ident = string;
+
+			scan_css(string, CSS_CHAR_IDENT);
+			type = get_number_identifier(ident, string - ident);
 		}
 
 	} else if (first_char == '#') {

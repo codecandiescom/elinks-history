@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.139 2004/08/01 20:46:34 pasky Exp $ */
+/* $Id: uri.h,v 1.140 2004/08/01 20:54:11 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -125,9 +125,8 @@ enum uri_component {
 	/* The usual suspects */
 	URI_RARE		= URI_SPECIAL | URI_POST | URI_POST_INFO | URI_IDN,
 
-	/* Used for public display either in dialogs or sent over the Net */
-	/* FIXME: URI_POST_INFO must not be ever sent over the net. --pasky */
-	URI_PUBLIC		= ~(URI_PASSWORD | URI_RARE) /*| URI_POST_INFO*/,
+	/* Used _only_ for displaying URIs in dialogs or document titles. */
+	URI_PUBLIC		= ~(URI_PASSWORD | URI_RARE) | URI_POST_INFO,
 
 	/* Used for getting the original URI with no internal post encoding */
 	URI_ORIGINAL		= ~URI_RARE,
@@ -144,8 +143,11 @@ enum uri_component {
 	/* Used for the value of HTTP "Host" header info */
 	URI_HTTP_HOST		= URI_HOST | URI_PORT,
 
-	/* Used for the host part of HTTP referrer */
+	/* Used for the host part of HTTP referrer. Stripped from user info. */
 	URI_HTTP_REFERRER_HOST	= URI_PROTOCOL | URI_HOST | URI_PORT,
+
+	/* Used for the whole HTTP referrer. Contains no user/passwd info. */
+	URI_HTTP_REFERRER	= URI_HTTP_REFERRER_HOST | URI_DATA,
 
 	/* Used for HTTP CONNECT method info */
 	URI_HTTP_CONNECT	= URI_HOST | URI_PORT | URI_DEFAULT_PORT,

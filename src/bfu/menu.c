@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.74 2003/06/07 20:05:18 pasky Exp $ */
+/* $Id: menu.c,v 1.75 2003/06/07 21:28:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,12 +20,6 @@
 #include "terminal/window.h"
 #include "util/conv.h"
 #include "util/memory.h"
-
-
-/* FIXME: Now, all the menu items are translated agressively. There should be
- * special item in the {struct menu_item} regulating that action. In the
- * meantime, perhaps an approximation from hotkey usage variable could be
- * used...? --pasky */
 
 
 /* Types and structures */
@@ -161,7 +155,9 @@ count_menu_size(struct terminal *term, struct menu *menu)
 		int s = 4;
 
 		if (menu->items[my].text && *menu->items[my].text) {
-			unsigned char *text = _(menu->items[my].text, term);
+			unsigned char *text = menu->items[my].text;
+
+			if (!menu->items[my].no_intl) text = _(text, term);
 
 			if (text[0])
 				s += strlen(text)
@@ -170,7 +166,9 @@ count_menu_size(struct terminal *term, struct menu *menu)
 		}
 
 		if (menu->items[my].rtext && *menu->items[my].rtext) {
-			unsigned char *rtext = _(menu->items[my].rtext, term);
+			unsigned char *rtext = menu->items[my].rtext;
+
+			if (!menu->items[my].no_intl) rtext = _(rtext, term);
 
 			if (rtext[0])
 				s += MENU_HOTKEY_SPACE + strlen(rtext);
@@ -299,7 +297,9 @@ display_menu(struct terminal *term, struct menu *menu)
 
 			if (menu->items[p].text && *menu->items[p].text) {
 				int l = menu->items[p].hotkey_pos;
-				unsigned char *text = _(menu->items[p].text, term);
+				unsigned char *text = menu->items[p].text;
+
+				if (!menu->items[p].no_intl) text = _(text, term);
 
 				if (l) {
 					/* There's an hotkey so handle it. */
@@ -345,7 +345,9 @@ display_menu(struct terminal *term, struct menu *menu)
 			}
 
 			if (menu->items[p].rtext && *menu->items[p].rtext) {
-				unsigned char *rtext = _(menu->items[p].rtext, term);
+				unsigned char *rtext = menu->items[p].rtext;
+
+				if (!menu->items[p].no_intl) rtext = _(rtext, term);
 
 				if (*rtext) {
 					/* There's a right text, so print it */
@@ -639,9 +641,11 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		int co = mainmenu_normal_color;
 		int hkco = mainmenu_hotkey_color;
 		int hk = 0;
-		unsigned char c;
-		unsigned char *tmptext = _(menu->items[i].text, term);
 		int key_pos = menu->items[i].hotkey_pos;
+		unsigned char c;
+		unsigned char *tmptext = menu->items[i].text;
+
+		if (!menu->items[i].no_intl) tmptext = _(tmptext, term);
 
 #ifdef DEBUG
 		int double_hk = 0;
@@ -746,7 +750,9 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 
 				for (i = 0; i < menu->ni; i++) {
 					int o = p;
-					unsigned char *text = _(menu->items[i].text, win->term);
+					unsigned char *text = menu->items[i].text;
+
+					if (!menu->items[i].no_intl) text = _(text, term);
 
 					if (text && text[0])
 						p += strlen(text) + 4
@@ -831,7 +837,7 @@ void
 add_to_menu(struct menu_item **mi, unsigned char *text,
 	    unsigned char *rtext,
 	    void (*func)(struct terminal *, void *, void *),
-	    void *data, int submenu)
+	    void *data, int submenu, int no_intl)
 {
 	struct menu_item *mii;
 	int n = count_items(*mi);
@@ -846,6 +852,7 @@ add_to_menu(struct menu_item **mi, unsigned char *text,
 	mii[n].func = func;
 	mii[n].data = data;
 	mii[n].submenu = submenu;
+	mii[n].no_intl = no_intl;
 	mii[n].hotkey_pos = 0;
 	mii[n].ignore_hotkey = 1;
 }

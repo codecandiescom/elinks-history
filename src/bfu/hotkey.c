@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.3 2003/06/07 17:53:54 pasky Exp $ */
+/* $Id: hotkey.c,v 1.4 2003/06/07 21:28:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,6 +52,8 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 			unsigned char *text = items[i].text;
 
 			if (!*text) continue;
+			if (!item[i].no_intl) text = _(text, term);
+			if (!*text) continue;
 
 			if (items[i].ignore_hotkey != 2 && !items[i].hotkey_pos)
 				items[i].hotkey_pos = find_hotkey_pos(text);
@@ -81,9 +83,16 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 			items[i].hotkey_pos = 0;
 			items[i].ignore_hotkey = 1;
 		} else if (items[i].ignore_hotkey != 2 && !items[i].hotkey_pos) {
-			if (!*items[i].text) continue;
-			items[i].hotkey_pos = find_hotkey_pos(items[i].text);
-			if (items[i].hotkey_pos) items[i].ignore_hotkey = 2; /* cached */
+			unsigned char *text = items[i].text;
+
+			if (!*text) continue;
+			if (!item[i].no_intl) text = _(text, term);
+			if (!*text) continue;
+
+			items[i].hotkey_pos = find_hotkey_pos(text);
+
+			if (items[i].hotkey_pos)
+				items[i].ignore_hotkey = 2; /* cached */
 		}
 }
 
@@ -121,6 +130,8 @@ is_hotkey(struct menu_item *item, unsigned char key, struct terminal *term)
 	unsigned char *text = item->text;
 
 	if (!item || !text || !*text) return 0;
+	if (!item->no_intl) text = _(text, term);
+	if (!*text) return 0;
 
 #ifdef DEBUG
 	{

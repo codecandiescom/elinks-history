@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.22 2003/06/07 20:51:57 pasky Exp $ */
+/* $Id: menu.h,v 1.23 2003/06/07 21:28:53 pasky Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -50,6 +50,11 @@ struct menu_item {
 	void *data;
 	enum item_free item_free;
 	unsigned int submenu:1;
+
+	/* If true, don't try to translate text/rtext inside of the menu
+	 * routines. */
+	unsigned int no_intl:1;
+
 	unsigned int ignore_hotkey:2;
 	int hotkey_pos;
 };
@@ -87,7 +92,7 @@ struct menu {
 
 
 struct menu_item *new_menu(enum item_free);
-void add_to_menu(struct menu_item **, unsigned char *, unsigned char *, MENU_FUNC_TYPE, void *, int);
+void add_to_menu(struct menu_item **, unsigned char *, unsigned char *, MENU_FUNC_TYPE, void *, int, int);
 void do_menu(struct terminal *, struct menu_item *, void *, int);
 void do_menu_selected(struct terminal *, struct menu_item *, void *, int, int);
 void do_mainmenu(struct terminal *, struct menu_item *, void *, int);

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.46 2004/01/01 18:50:31 miciah Exp $ */
+/* $Id: status.c,v 1.47 2004/01/04 18:56:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "config/options.h"
 #include "cache/cache.h"
 #include "dialogs/download.h"
+#include "dialogs/status.h"
 #include "document/document.h"
 #include "document/renderer.h"
 #include "document/view.h"
@@ -48,9 +49,6 @@
 	(((progress)->size - (progress)->pos) \
 	 / ((longlong) (progress)->loaded * 10 / ((progress)->elapsed / 100)) \
 	 * 1000)
-
-#define download_is_progressing(down) \
-	((down) && (down)->state == S_TRANS && ((down)->prg->elapsed / 100))
 
 unsigned char *
 get_stat_msg(struct download *stat, struct terminal *term,

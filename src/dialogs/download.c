@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.32 2004/01/02 18:37:57 jonas Exp $ */
+/* $Id: download.c,v 1.33 2004/01/04 18:56:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,8 +161,9 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 	unsigned char *url;
 	struct download *download = &file_download->download;
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
-	int t = (download->state == S_TRANS && (download->prg->elapsed / 100));
 	unsigned char *msg = get_stat_msg(download, term, 1, 1, "\n");
+	int show_meter = (download_is_progressing(download)
+			  && download->prg->size >= 0);
 
 	redraw_below_window(dlg_data->win);
 	file_download->dlg_data = dlg_data;
@@ -175,7 +176,7 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 		return;
 	}
 
-	if (t && download->prg->size >= 0) {
+	if (show_meter) {
 		int_lower_bound(&w, DOWN_DLG_MIN);
 	}
 
@@ -183,7 +184,7 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 			dialog_text_color, AL_LEFT);
 
 	y++;
-	if (t && download->prg->size >= 0) y += 2;
+	if (show_meter) y += 2;
 	dlg_format_text_do(NULL, msg, 0, &y, w, &rw,
 			dialog_text_color, AL_LEFT);
 
@@ -209,7 +210,7 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 	dlg_format_text_do(term, url, x, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 
-	if (t && download->prg->size >= 0) {
+	if (show_meter) {
 		y++;
 		download_progress_bar(term, x, y, w, NULL, NULL,
 				      download->prg->pos,

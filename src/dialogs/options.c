@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.88 2003/10/24 23:19:44 pasky Exp $ */
+/* $Id: options.c,v 1.89 2003/10/24 23:24:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -314,7 +314,7 @@ dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 			    + (RESIZE_DLG_SIZE + 1) * sizeof(struct widget));
 	if (!dlg) return;
 
-	dlg->title = _("Resize ~terminal", term);
+	dlg->title = _("Resize terminal", term);
 	dlg->fn = group_fn;
 	dlg->udata = resize_texts;
 	dlg->refresh = (void (*)(void *)) do_resize_terminal;

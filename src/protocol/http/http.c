@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.141 2003/06/21 12:56:16 pasky Exp $ */
+/* $Id: http.c,v 1.142 2003/06/21 14:25:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,7 @@ struct http_connection_info {
 #define CHUNK_SIZE	-1
 	int chunk_remaining;
 
-	int error_code;
+	int http_code;
 };
 
 static void uncompress_shutdown(struct connection *);
@@ -1016,8 +1016,8 @@ thats_all_folks:
 	/* There's no content but an error so just print
 	 * that instead of nothing. */
 	/* TODO: Make sure that Content-type is text/html. --pasky */
-	if (!conn->from && info->error_code) {
-		unsigned char *str = http_error_document(info->error_code);
+	if (!conn->from && info->http_code) {
+		unsigned char *str = http_error_document(info->http_code);
 
 		if (str) {
 			int strl = strlen(str);
@@ -1154,7 +1154,7 @@ out_of_mem:
 		mem_free(cookie);
 	}
 #endif
-	info->error_code = (h >= 300) ? h : 0;
+	info->http_code = h;
 
 	if (h == 100) {
 		mem_free(head);

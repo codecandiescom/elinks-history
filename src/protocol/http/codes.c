@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.11 2003/06/21 14:10:49 pasky Exp $ */
+/* $Id: codes.c,v 1.12 2003/06/21 14:25:48 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -92,8 +92,20 @@ http_code_to_string(int code)
 unsigned char *
 http_error_document(int code)
 {
-	unsigned char *codestr = http_code_to_string(code);
+	unsigned char *codestr;
 
+	if (code < 400) {
+		/* This is not an error, thus fine. No need generate any
+		 * document, as this may be empty and it's not a problem.
+		 * In case of 3xx, we're probably just getting kicked to
+		 * another page anyway. And in case of 2xx, the document
+		 * may indeed be empty and thus the user should see it so. */
+		/* TODO: Some short intermediate document for the 3xx
+		 * messages? --pasky */
+		return NULL;
+	}
+
+	codestr = http_code_to_string(code);
 	if (!codestr) codestr = "Unknown error";
 
 	return asprintfa(

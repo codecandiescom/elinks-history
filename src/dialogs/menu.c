@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.104 2003/06/07 20:55:13 pasky Exp $ */
+/* $Id: menu.c,v 1.105 2003/06/07 21:31:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -379,7 +379,7 @@ static struct menu_item file_menu11[] = {
 	{N_("~Go to URL"), "g", MENU_FUNC menu_goto_url, (void *)0, 0, 0},
 	{N_("Go ~back"), "<-", MENU_FUNC menu_go_back, (void *)0, 0, 0},
 	{N_("~Reload"), "Ctrl-R", MENU_FUNC menu_reload, (void *)0, 0, 0},
-	{N_("~History"), M_SUBMENU, MENU_FUNC history_menu, (void *)0, 0, 1,
+	{N_("~History"), M_SUBMENU, MENU_FUNC history_menu, (void *)0, 0, 1},
 	{N_("Unhis~tory"), M_SUBMENU, MENU_FUNC unhistory_menu, (void *)0, 0, 1},
 };
 

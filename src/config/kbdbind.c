@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.141 2004/01/01 07:21:24 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.142 2004/01/01 18:52:05 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -723,10 +723,8 @@ static struct default_kb default_main_keymap[] = {
 	{ '.',		 0,		ACT_TOGGLE_NUMBERED_LINKS },
 	{ '/',		 0,		ACT_SEARCH },
 	{ '<',		 0,		ACT_TAB_PREV },
-	{ '<',		 KBD_ALT,	ACT_BEGINNING_OF_BUFFER },
 	{ '=',		 0,		ACT_DOCUMENT_INFO },
 	{ '>',		 0,		ACT_TAB_NEXT },
-	{ '>',		 KBD_ALT,	ACT_END_OF_BUFFER },
 	{ '?',		 0,		ACT_SEARCH_BACK },
 	{ 'A',		 0,		ACT_ADD_BOOKMARK_LINK },
 	{ 'A',		 KBD_CTRL,	ACT_HOME },
@@ -801,6 +799,8 @@ static struct default_kb default_main_keymap[] = {
 };
 
 static struct default_kb default_edit_keymap[] = {
+	{ '<',		 KBD_ALT,	ACT_BEGINNING_OF_BUFFER },
+	{ '>',		 KBD_ALT,	ACT_END_OF_BUFFER },
 	{ 'A',		 KBD_CTRL,	ACT_HOME },
 	{ 'D',		 KBD_CTRL,	ACT_DELETE },
 	{ 'E',		 KBD_CTRL,	ACT_END },

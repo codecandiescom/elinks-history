@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.101 2002/09/17 16:36:03 pasky Exp $ */
+/* $Id: options.c,v 1.102 2002/09/18 16:07:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -716,6 +716,12 @@ register_options()
 		"0 is files will silently be overwritten.\n"
 		"1 is add the suffix .{number} (for example '.1') to the name.");
 
+	add_opt_int("document.download",
+		"notify_bell", 0, 0, 2, 0, 
+		"Audio notification when download is completed:\n"
+		"0 is never.\n"
+		"1 is when background notification is active.\n"
+		"2 is always");
 
 	add_opt_tree("document",
 		"dump", 0,

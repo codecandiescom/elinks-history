@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.26 2002/09/17 14:33:04 zas Exp $ */
+/* $Id: terminal.c,v 1.27 2002/09/18 16:07:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1208,6 +1208,12 @@ do_terminal_function(struct terminal *term, unsigned char code,
 	strcpy(x_data + 1, data);
 	exec_on_terminal(term, NULL, x_data, 0);
 	mem_free(x_data);
+}
+
+void
+beep_terminal(struct terminal *term)
+{
+	hard_write(term->fdout, "\a", 1);
 }
 
 void

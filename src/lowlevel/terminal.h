@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.18 2002/09/11 16:31:30 zas Exp $ */
+/* $Id: terminal.h,v 1.19 2002/09/18 16:07:01 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_TERMINAL_H
 #define EL__LOWLEVEL_TERMINAL_H
@@ -136,6 +136,7 @@ void close_handle(void *);
 void exec_on_terminal(struct terminal *, unsigned char *, unsigned char *, int);
 void set_terminal_title(struct terminal *, unsigned char *);
 void do_terminal_function(struct terminal *, unsigned char, unsigned char *);
+void beep_terminal(struct terminal *);
 
 #define term_send_event(terminal, event) ((struct window *) &(terminal)->windows)->next->handler((terminal)->windows.next, (event), 0)
 

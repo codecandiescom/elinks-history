@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.40 2002/09/17 14:09:36 zas Exp $ */
+/* $Id: download.c,v 1.41 2002/09/18 16:07:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -546,6 +546,10 @@ end_store:
 						TEXT(T_DOWNLOAD_COMPLETE), ":\n", url, NULL,
 						get_download_ses(down), 1,
 						TEXT(T_OK), NULL, B_ENTER | B_ESC);
+				}
+	
+				if (get_opt_int("document.download.notify_bell") + down->notify >= 2) {
+					beep_terminal(get_download_ses(down)->term);
 				}
 
 				if (down->remotetime && get_opt_int("document.download.set_original_time")) {

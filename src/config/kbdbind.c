@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.68 2003/06/05 14:38:16 zas Exp $ */
+/* $Id: kbdbind.c,v 1.69 2003/06/06 23:06:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,7 +119,7 @@ delete_keybinding(enum keymap km, long key, long meta)
 {
 	struct keybinding *kb;
 
-	foreach(kb, keymaps[km]) {
+	foreach (kb, keymaps[km]) {
 		if (kb->key != key || kb->meta != meta)
 			continue;
 
@@ -169,7 +169,7 @@ kbd_ev_lookup(enum keymap kmap, long key, long meta, int *func_ref)
 {
 	struct keybinding *kb;
 
-	foreach(kb, keymaps[kmap]) {
+	foreach (kb, keymaps[kmap]) {
 		if (key != kb->key || meta != kb->meta)
 			continue;
 
@@ -190,7 +190,7 @@ kbd_nm_lookup(enum keymap kmap, unsigned char *name, int *func_ref)
 
 	if (act < 0) return NULL;
 
-	foreach(kb, keymaps[kmap]) {
+	foreach (kb, keymaps[kmap]) {
 		if (act != kb->action)
 			continue;
 

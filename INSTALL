@@ -32,13 +32,30 @@ don't need to do this there.
 ##########
   If you'll want to compile elinks, first check directory contrib/, if it
 doesn't contain some patches which would be interesting for you. If you're
-excited by one, try to apply it by doing
+excited by any of them, try to apply it by doing
 
 $ patch -p0 <contrib/that-pach
 
   It may not apply - I don't update patches in contrib/ regularily - if you
 want, feel free to go and update the patch for current tree and send me the new
-version. Then,
+version.
+
+  Usually, even after strip, ELinks binary can grow a lot these days; I plan to
+spawning various extrnal files optionally, containing boring stuff like various
+translations etc; later, even DSO modules may come etc. But even nowadays, you
+can reduce resulting binary size by throwing out stuff you don't like. First, if
+you want better performance and smaller binary, don't compile us with debug.  It
+won't hurt you if you will, though, and ELinks will tell you about any memory
+leaks, incorrect memory manipulation etc, which may be helpful for us if you'll
+report it. Next, disable any optional features you are not going to use, they
+can make resulting binary smaller (altough it'll probably have no non-marginal
+performance imapact). Also, you may try to overtalk the build system to build
+dynamically linked binary, which can be a lot smaller as well. Last, you can go
+to Unicode/ and intl/ directories, edit index.txt and remove any codepages or
+translations you don't like; especially for translations, it can significantly
+reduce resulting binary size as well. Good luck!
+
+  The basic compilation looks like:
 
   Unix - just doing:
 
@@ -85,5 +102,5 @@ want them ;) so just copy the hooks.lua to ~/.links, and edit the configuration
 part - it adds various nice functionality to elinks, like decompression of
 gzipped files or user-defined protocols.
 
-$Id: INSTALL,v 1.9 2002/05/04 12:50:49 pasky Exp $
+$Id: INSTALL,v 1.10 2002/06/30 21:21:29 pasky Exp $
 vim: textwidth=80

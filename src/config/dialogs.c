@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.45 2003/06/07 10:56:17 pasky Exp $ */
+/* $Id: dialogs.c,v 1.46 2003/06/07 13:17:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,8 +35,8 @@ void
 write_config_error(struct terminal *term, struct memory_list *ml,
 		   unsigned char *config_file, unsigned char *strerr)
 {
-	msg_box(term, ml,
-		N_("Config error"), AL_CENTER | AL_EXTD_TEXT,
+	msg_box(term, ml, MSGBOX_EXTD_TEXT,
+		N_("Config error"), AL_CENTER,
 		msg_text(N_("Unable to write to config file %s: %s"),
 			config_file, strerr),
 		NULL, 1,
@@ -115,8 +115,8 @@ push_info_button(struct dialog_data *dlg,
 
 		option_types[option->type].write(option, &value, &val_len);
 
-		msg_box(term, getml(value, NULL),
-			N_("Info"), AL_LEFT | AL_EXTD_TEXT,
+		msg_box(term, getml(value, NULL), MSGBOX_EXTD_TEXT,
+			N_("Info"), AL_LEFT,
 			msg_text(N_("Name: %s\n"
 				"Type: %s\n"
 				"Value: %s\n\n"
@@ -126,8 +126,8 @@ push_info_button(struct dialog_data *dlg,
 			option, 1,
 			N_("OK"), done_info_button, B_ESC | B_ENTER);
 	} else {
-		msg_box(term, NULL,
-			N_("Info"), AL_LEFT | AL_EXTD_TEXT,
+		msg_box(term, NULL, MSGBOX_EXTD_TEXT,
+			N_("Info"), AL_LEFT,
 			msg_text(N_("Name: %s\n"
 				"Type: %s\n"
 				"Description: %s\n"),
@@ -182,7 +182,7 @@ check_valid_option(struct dialog_data *dlg, struct widget_data *di)
 	}
 	commandline = 0;
 
-	msg_box(term, NULL,
+	msg_box(term, NULL, 0,
 		N_("Error"), AL_LEFT,
 		N_("Bad option value."),
 		NULL, 1,
@@ -351,7 +351,7 @@ push_edit_button(struct dialog_data *dlg,
 	if (!option_types[option->type].write ||
 	    !option_types[option->type].read ||
 	    !option_types[option->type].set) {
-		msg_box(term, NULL,
+		msg_box(term, NULL, 0,
 			N_("Edit"), AL_LEFT,
 			N_("This option cannot be edited. This means that "
 			   "this is some special option like a folder - try "
@@ -388,7 +388,7 @@ push_add_button(struct dialog_data *dlg,
 	if (!box->sel || !box->sel->udata) {
 
 invalid_option:
-		msg_box(term, NULL,
+		msg_box(term, NULL, 0,
 			N_("Add option"), AL_CENTER,
 			N_("Cannot add an option here."),
 			NULL, 1,
@@ -455,7 +455,7 @@ push_del_button(struct dialog_data *dlg,
 	if (!box->sel || !box->sel->udata) {
 
 invalid_option:
-		msg_box(term, NULL,
+		msg_box(term, NULL, 0,
 			N_("Delete option"), AL_CENTER,
 			N_("Cannot delete this option."),
 			NULL, 1,
@@ -469,8 +469,8 @@ invalid_option:
 		goto invalid_option;
 	}
 
-	msg_box(term, NULL,
-		N_("Delete option"), AL_CENTER | AL_EXTD_TEXT,
+	msg_box(term, NULL, MSGBOX_EXTD_TEXT,
+		N_("Delete option"), AL_CENTER,
 		msg_text(N_("Really delete the option \"%s\" ?"), option->name),
 		option, 2,
 		N_("OK"), really_delete_option, B_ENTER,
@@ -604,7 +604,7 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 
 	/* TODO: This should maybe rather happen in a validation function? */
 	if (parse_keystroke(keystroke, &key, &meta) < 0) {
-		msg_box(hop->term, NULL,
+		msg_box(hop->term, NULL, 0,
 			N_("Add keybinding"), AL_CENTER,
 			N_("Invalid keystroke."),
 			NULL, 1,
@@ -626,7 +626,7 @@ push_kbdbind_add_button(struct dialog_data *dlg,
 	unsigned char *text;
 
 	if (!item || !item->depth) {
-		msg_box(term, NULL,
+		msg_box(term, NULL, 0,
 			N_("Add keybinding"), AL_CENTER,
 			N_("Need to select a keymap."),
 			NULL, 1,
@@ -715,7 +715,7 @@ push_kbdbind_del_button(struct dialog_data *dlg,
 	struct keybinding *keybinding;
 
 	if (!box->sel || box->sel->depth < 2) {
-		msg_box(term, NULL,
+		msg_box(term, NULL, 0,
 			N_("Delete keybinding"), AL_CENTER,
 			N_("This item is not a keybinding. Try to press a space"
 			   " in order to get to the keybindings themselves."),
@@ -726,8 +726,8 @@ push_kbdbind_del_button(struct dialog_data *dlg,
 
 	keybinding = box->sel->udata;
 
-	msg_box(term, NULL,
-		N_("Delete keybinding"), AL_CENTER | AL_EXTD_TEXT,
+	msg_box(term, NULL, MSGBOX_EXTD_TEXT,
+		N_("Delete keybinding"), AL_CENTER,
 		msg_text(N_("Really delete the keybinding \"%s\" "
 			"(action \"%s\", keymap \"%s\")?"),
 			box->sel->text, write_action(keybinding->action),

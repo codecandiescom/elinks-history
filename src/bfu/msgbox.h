@@ -1,4 +1,4 @@
-/* $Id: msgbox.h,v 1.8 2003/06/07 12:54:01 pasky Exp $ */
+/* $Id: msgbox.h,v 1.9 2003/06/07 13:17:35 pasky Exp $ */
 
 #ifndef EL__BFU_MSGBOX_H
 #define EL__BFU_MSGBOX_H
@@ -7,6 +7,18 @@
 #include "bfu/button.h"
 #include "terminal/terminal.h"
 #include "util/memlist.h"
+
+
+/* Bitmask specifying some @msg_box() function parameters attributes or
+ * altering function operation. See @msg_box() description for details about
+ * the flags effect. */
+enum msgbox_flags {
+	/* {msg_box(.text)} is dynamically allocated */
+	MSGBOX_EXTD_TEXT = 0x1,
+	/* All the msg_box() string parameters should be run through gettext
+	 * and translated. */
+	MSGBOX_INTL = 0x2,
+};
 
 /* This is _the_ dialog function used in almost all parts of the code. It is
  * used to easily format dialogs containing only text and few buttons below.
@@ -19,21 +31,20 @@
  *		This is useful especially when you pass stuff to @udata
  *		which you want to be free()d when not needed anymore.
  *
+ * @flags	If the MSGBOX_EXTD_TEXT flag is passed, @text is free()d upon
+ *		the dialog's death. This is equivalent to adding @text to the
+ *		@mem_list.
+ *
+ *		If the MSGBOX_INTL flag is passed, @text, @title and button
+ *		labels will be run through gettext before being further
+ *		processed. Note that if you will dare to do this in conjuction
+ *		with msg_text() usage, it is going to break l18n as result of
+ *		format string expansion will be localized, not the format
+ *		string itself (which would be the right thing).
+ *
  * @title	The title of the message box.
  *
  * @align	Provides info about how @text should be aligned.
- *
- *		If a special flag AL_EXTD_TEXT is bitwise or'd with the
- *		alignment information, @text is free()d upon the dialog's
- *		death. This is equivalent to adding @text to the @mem_list.
- *
- *		If a special flag AL_INTL is bitwise or'd with the alignment
- *		information, @text, @title and button labels will be run
- *		through gettext before being further processed. Note that if
- *		you will dare to do this in conjuction with msg_text() usage,
- *		it is going to break l18n as result of format string expansion
- *		will be localized, not the format string itself (which would
- *		be the right thing).
  *
  * @text	The info text of the message box. If the text requires
  *		formatting use msg_text(format, args...). This will allocate
@@ -55,7 +66,7 @@
  *
  * Note that you should ALWAYS format the msg_box() call like:
  *
- * msg_box(term, mem_list,
+ * msg_box(term, mem_list, flags,
  *         title, align,
  *         text,
  *         udata, M,
@@ -65,7 +76,7 @@
  *
  * ...no matter that it could fit on one line in case of a tiny message box. */
 void msg_box(struct terminal *term, struct memory_list *mem_list,
-	unsigned char *title, enum format_align align,
+	enum msgbox_flags flags, unsigned char *title, enum format_align align,
 	unsigned char *text, void *udata, int buttons, ...);
 
 /* This is basically an equivalent to asprintf(), specifically to be used

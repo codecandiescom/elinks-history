@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.38 2003/06/07 10:56:17 pasky Exp $ */
+/* $Id: document.c,v 1.39 2003/06/07 13:17:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,7 +46,7 @@ loc_msg(struct terminal *term, struct location *location,
 	int strl;
 
 	if (!location) {
-		msg_box(term, NULL,
+		msg_box(term, NULL, 0,
 			N_("Info"), AL_LEFT,
 			N_("You are nowhere!"),
 			NULL, 1,
@@ -201,7 +201,7 @@ loc_msg(struct terminal *term, struct location *location,
 		}
 	}
 
-	msg_box(term, getml(str, NULL),
+	msg_box(term, getml(str, NULL), 0,
 		N_("Info"), AL_LEFT,
 		str,
 		NULL, 1,
@@ -224,7 +224,7 @@ head_msg(struct session *ses)
 	struct cache_entry *ce;
 
 	if (!have_location(ses)) {
-		msg_box(ses->tab->term, NULL,
+		msg_box(ses->tab->term, NULL, 0,
 			N_("Header info"), AL_LEFT,
 			N_("You are nowhere!"),
 			NULL, 1,
@@ -274,7 +274,7 @@ head_msg(struct session *ses)
 
 			if (*headers)
 				/* Headers info message box. */
-				msg_box(ses->tab->term, getml(headers, NULL),
+				msg_box(ses->tab->term, getml(headers, NULL), 0,
 					N_("Header info"), AL_LEFT,
 					headers,
 					NULL, 1,
@@ -286,7 +286,7 @@ head_msg(struct session *ses)
 		mem_free(headers);
 	}
 
-	msg_box(ses->tab->term, NULL,
+	msg_box(ses->tab->term, NULL, 0,
 		N_("Header info"), AL_LEFT,
 		N_("No header info."),
 		NULL, 1,

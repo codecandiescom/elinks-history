@@ -1,4 +1,4 @@
-/* $Id: align.h,v 1.12 2003/06/07 12:58:21 pasky Exp $ */
+/* $Id: align.h,v 1.13 2003/06/07 13:17:35 pasky Exp $ */
 
 #ifndef EL__BFU_ALIGN_H
 #define EL__BFU_ALIGN_H
@@ -12,14 +12,6 @@ enum format_align {
 	AL_NONE,
 
 	AL_MASK = 0x7f,
-
-	/* XXX: DIRTY! Flags for msg_box() : */
-
-	/* {msg_box(.text)} is dynamically allocated */
-	AL_EXTD_TEXT = 0x80,
-	/* All the msg_box() string parameters should be run through gettext
-	 * and translated. */
-	AL_INTL = 0x100,
 };
 
 #include "config/options.h"

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.39 2003/06/07 10:56:18 pasky Exp $ */
+/* $Id: download.c,v 1.40 2003/06/07 13:17:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -518,7 +518,8 @@ write_error:
 
 					if (msg && emsg) {
 						msg_box(get_download_ses(down)->tab->term, getml(msg, emsg, NULL),
-							N_("Download error"), AL_CENTER | AL_EXTD_TEXT,
+								MSGBOX_EXTD_TEXT,
+							N_("Download error"), AL_CENTER,
 							msg_text(N_("Could not create file %s: %s"), msg, emsg),
 							NULL, 1,
 							N_("Cancel"), NULL, B_ENTER | B_ESC);
@@ -549,8 +550,8 @@ end_store:
 					unsigned char *p = strchr(tt, POST_CHAR);
 					if (p) *p = '\0';
 
-					msg_box(get_download_ses(down)->tab->term, getml(tt, NULL),
-						N_("Download error"), AL_CENTER | AL_EXTD_TEXT,
+					msg_box(get_download_ses(down)->tab->term, getml(tt, NULL), MSGBOX_EXTD_TEXT,
+						N_("Download error"), AL_CENTER,
 						msg_text(N_("Error downloading %s:\n\n%s"), tt, t),
 						get_download_ses(down), 1,
 						N_("Cancel"), NULL, B_ENTER | B_ESC /*,
@@ -574,8 +575,8 @@ end_store:
 				if (down->notify) {
 					unsigned char *url = stracpy(down->url);
 
-					msg_box(get_download_ses(down)->tab->term, getml(url, NULL),
-						N_("Download"), AL_CENTER | AL_EXTD_TEXT,
+					msg_box(get_download_ses(down)->tab->term, getml(url, NULL), MSGBOX_EXTD_TEXT,
+						N_("Download"), AL_CENTER,
 						msg_text(N_("Download complete:\n%s"), url),
 						get_download_ses(down), 1,
 						N_("OK"), NULL, B_ENTER | B_ESC);
@@ -702,8 +703,8 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 	lun_hop->callback = callback;
 	lun_hop->data = data;
 
-	msg_box(term, NULL,
-		N_("File exists"), AL_CENTER | AL_EXTD_TEXT,
+	msg_box(term, NULL, MSGBOX_EXTD_TEXT,
+		N_("File exists"), AL_CENTER,
 		msg_text(N_("This file already exists:\n"
 			"%s\n\n"
 			"The alternative filename is:\n"
@@ -799,8 +800,8 @@ create_download_file_do(struct terminal *term, unsigned char *file, void *data,
 		unsigned char *msge = stracpy((unsigned char *) strerror(saved_errno));
 
 		if (msg && msge) {
-			msg_box(term, getml(msg, msge, NULL),
-				N_("Download error"), AL_CENTER | AL_EXTD_TEXT,
+			msg_box(term, getml(msg, msge, NULL), MSGBOX_EXTD_TEXT,
+				N_("Download error"), AL_CENTER,
 				msg_text(N_("Could not create file %s: %s"),
 					msg, msge),
 				NULL, 1,
@@ -1185,8 +1186,8 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 
 	if (!assoc) {
 		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
-			msg_box(ses->tab->term, getml(content_type, NULL),
-				N_("Unknown type"), AL_CENTER | AL_EXTD_TEXT,
+			msg_box(ses->tab->term, getml(content_type, NULL), MSGBOX_EXTD_TEXT,
+				N_("Unknown type"), AL_CENTER,
 				msg_text(N_("Content type is %s.\n"
 					"Do you want to save or display this file?"),
 					content_type),
@@ -1195,8 +1196,8 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 				N_("Display"), tp_display, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
-			msg_box(ses->tab->term, getml(content_type, NULL),
-				N_("Unknown type"), AL_CENTER | AL_EXTD_TEXT,
+			msg_box(ses->tab->term, getml(content_type, NULL), MSGBOX_EXTD_TEXT,
+				N_("Unknown type"), AL_CENTER,
 				msg_text(N_("Content type is %s.\n"
 					"Do you want to display this file?"),
 					content_type),
@@ -1228,8 +1229,8 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 		}
 
 		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
-			msg_box(ses->tab->term, getml(content_type, name, NULL),
-				N_("What to do?"), AL_CENTER | AL_EXTD_TEXT,
+			msg_box(ses->tab->term, getml(content_type, name, NULL), MSGBOX_EXTD_TEXT,
+				N_("What to do?"), AL_CENTER,
 				msg_text(N_("Content type is %s.\n"
 					"Do you want to open file with %s, "
 					"save it or display it?"),
@@ -1240,8 +1241,8 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 				N_("Display"), tp_display, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
-			msg_box(ses->tab->term, getml(content_type, name, NULL),
-				N_("What to do?"), AL_CENTER | AL_EXTD_TEXT,
+			msg_box(ses->tab->term, getml(content_type, name, NULL), MSGBOX_EXTD_TEXT,
+				N_("What to do?"), AL_CENTER,
 				msg_text(N_("Content type is %s.\n"
 					"Do you want to open file with %s, or "
 					"display it?"),

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.88 2003/06/07 10:56:18 pasky Exp $ */
+/* $Id: view.c,v 1.89 2003/06/07 13:17:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1680,8 +1680,8 @@ error:
 	m1 = stracpy(sv->value);
 	if (!m1) return;
 	m2 = stracpy((unsigned char *) strerror(errno));
-	msg_box(ses->tab->term, getml(m1, m2, NULL),
-		N_("Error while posting form"), AL_CENTER | AL_EXTD_TEXT,
+	msg_box(ses->tab->term, getml(m1, m2, NULL), MSGOX_EXTD_TEXT,
+		N_("Error while posting form"), AL_CENTER,
 		msg_text(N_("Could not get file %s: %s"), m1, m2),
 		ses, 1,
 		N_("Cancel"), NULL, B_ENTER | B_ESC);
@@ -2024,7 +2024,7 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 		if (fn) mem_free(fn);
 		fn = NULL; fs = NULL;
 
-		msg_box(term_, NULL,
+		msg_box(term_, NULL, 0,
 			N_("Error"), AL_CENTER,
 			N_("You can do this only on the master terminal"),
 			NULL, 1,
@@ -2457,7 +2457,7 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 	}
 	if (!ses->search_word) {
 		if (!ses->last_search_word) {
-			msg_box(ses->tab->term, NULL,
+			msg_box(ses->tab->term, NULL, 0,
 				N_("Search"), AL_CENTER,
 				N_("No previous search"),
 				NULL, 1,
@@ -2505,8 +2505,8 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 	print_screen_status(ses);
 	redraw_from_window(ses->tab);
 #endif
-	msg_box(ses->tab->term, NULL,
-		N_("Search"), AL_CENTER | AL_EXTD_TEXT,
+	msg_box(ses->tab->term, NULL, MSGBOX_EXTD_TEXT,
+		N_("Search"), AL_CENTER,
 		msg_text(N_("'%s'\n"
 			"Search string not found"),
 			ses->search_word),
@@ -3440,7 +3440,7 @@ save_formatted_finish(struct terminal *term, int h, void *data, int resume)
 
 	if (h == -1) return;
 	if (dump_to_file(f_data, h)) {
-		msg_box(term, NULL,
+		msg_box(term, NULL, 0,
 			N_("Save error"), AL_CENTER,
 			N_("Error writing to file"),
 			NULL, 1,

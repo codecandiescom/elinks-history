@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.22 2003/06/07 01:45:55 jonas Exp $ */
+/* $Id: user.c,v 1.23 2003/06/07 13:17:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,8 +100,8 @@ prog_func(struct terminal *term, unsigned char *url, unsigned char *proto,
 	if (!prog || !*prog) {
 		/* Shouldn't ever happen, but be paranoid. */
 		/* Happens when you're in X11 and you've no handler for it. */
-		msg_box(term, NULL,
-			N_("No program"), AL_CENTER | AL_EXTD_TEXT,
+		msg_box(term, NULL, MSGBOX_EXTD_TEXT,
+			N_("No program"), AL_CENTER,
 			msg_text(N_("No program specified for %s."), proto),
 			NULL, 1,
 			N_("Cancel"), NULL, B_ENTER | B_ESC);
@@ -128,7 +128,7 @@ user_func(struct session *ses, unsigned char *url)
 	host = get_host_and_pass(url, 0);
 	if (!host) {
 		if (proto) mem_free(proto);
-		msg_box(ses->tab->term, NULL,
+		msg_box(ses->tab->term, NULL, 0,
 			N_("Bad URL syntax"), AL_CENTER,
 			N_("Bad user protocol URL"),
 			NULL, 1,

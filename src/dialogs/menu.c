@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.98 2003/06/05 14:38:16 zas Exp $ */
+/* $Id: menu.c,v 1.99 2003/06/07 13:17:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -124,7 +124,7 @@ static void
 query_exit(struct session *ses)
 {
 	ses->exit_query = 1;
-	msg_box(ses->tab->term, NULL,
+	msg_box(ses->tab->term, NULL, 0,
 		N_("Exit ELinks"), AL_CENTER,
 		(ses->tab->term->next == ses->tab->term->prev && are_there_downloads())
 		? N_("Do you really want to exit ELinks "

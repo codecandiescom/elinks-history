@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.24 2003/06/07 10:56:18 pasky Exp $ */
+/* $Id: dialogs.c,v 1.25 2003/06/07 13:17:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -229,8 +229,8 @@ do_delete_global_history_item(struct terminal *term,
 			      struct global_history_item *historyitem)
 {
 	if (historyitem->refcount > 0) {
-		msg_box(term, NULL,
-			N_("Delete history item"), AL_CENTER | AL_EXTD_TEXT,
+		msg_box(term, NULL, MSGBOX_EXTD_TEXT,
+			N_("Delete history item"), AL_CENTER,
 			msg_text(N_("Sorry, but this history entry is already "
 				"being used by something right now.\n\n"
 				"Title: \"%s\"\n"
@@ -315,7 +315,7 @@ listbox_delete_historyitem(struct terminal *term, struct listbox_data *box)
 	if (historyitem) historyitem->refcount++;
 
 	if (!historyitem)
-		msg_box(term, getml(ctx, NULL),
+		msg_box(term, getml(ctx, NULL), 0,
 			N_("Delete history item"), AL_CENTER,
 			N_("Delete marked history items?"),
 			ctx, 2,
@@ -324,8 +324,8 @@ listbox_delete_historyitem(struct terminal *term, struct listbox_data *box)
 	/* XXX: When we add tree-history, remember to add a check for
 	 * historyitem->box_item->type == BI_FOLDER here. -- Miciah */
 	else
-		msg_box(term, getml(ctx, NULL),
-			N_("Delete history item"), AL_CENTER | AL_EXTD_TEXT,
+		msg_box(term, getml(ctx, NULL), MSGBOX_EXTD_TEXT,
+			N_("Delete history item"), AL_CENTER,
 			msg_text(N_("Delete history item \"%s\" ?\n\n"
 				"URL: \"%s\""),
 				historyitem->title, historyitem->url),
@@ -371,7 +371,7 @@ push_clear_button(struct dialog_data *dlg,
 	box = (struct listbox_data *)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
-	msg_box(term, NULL,
+	msg_box(term, NULL, 0,
 		N_("Clear global history"), AL_CENTER,
 		N_("Clear global history?"),
 		box, 2,
@@ -407,8 +407,8 @@ push_info_button(struct dialog_data *dlg,
 	if (!historyitem) return 0;
 	historyitem->refcount++;
 
-	msg_box(term, NULL,
-		N_("Info"), AL_LEFT | AL_EXTD_TEXT,
+	msg_box(term, NULL, MSGBOX_EXTD_TEXT,
+		N_("Info"), AL_LEFT,
 		msg_text(N_("Title: %s\n"
 			"URL: %s\n"
 			"Last visit time: %s"),

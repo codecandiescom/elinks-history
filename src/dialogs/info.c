@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.50 2003/06/07 11:35:35 pasky Exp $ */
+/* $Id: info.c,v 1.51 2003/06/07 13:17:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@ menu_about(struct terminal *term, void *d, struct session *ses)
 	unsigned char *s = get_dyn_full_version(term, 1);
 
 	if (s) {
-		msg_box(term, getml(s, NULL),
+		msg_box(term, getml(s, NULL), 0,
 			N_("About"), AL_CENTER,
 			s,
 			NULL, 1,
@@ -52,7 +52,7 @@ menu_about(struct terminal *term, void *d, struct session *ses)
 void
 menu_keys(struct terminal *term, void *d, struct session *ses)
 {
-	msg_box(term, NULL,
+	msg_box(term, NULL, 0,
 		N_("Keys"), AL_LEFT,
 		N_("ESC      display menu\n"
 		   "^C, q    quit\n"
@@ -78,8 +78,8 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 void
 menu_copying(struct terminal *term, void *d, struct session *ses)
 {
-	msg_box(term, NULL,
-		N_("Copying"), AL_CENTER | AL_EXTD_TEXT,
+	msg_box(term, NULL, MSGBOX_EXTD_TEXT,
+		N_("Copying"), AL_CENTER,
 		msg_text(N_("ELinks %s\n"
 			"\n"
 			"(C) 1999 - 2002 Mikulas Patocka\n"
@@ -104,8 +104,8 @@ res_inf(struct terminal *term, void *d, struct session *ses)
 	r = mem_alloc(sizeof(struct refresh));
 	if (!r)	return;
 
-	msg_box(term, NULL,
-		N_("Resources"), AL_LEFT | AL_EXTD_TEXT,
+	msg_box(term, NULL, MSGBOX_EXTD_TEXT,
+		N_("Resources"), AL_LEFT,
 		msg_text(N_("Resources: %d handles, %d timers.\n"
 			"Connections: %d connections, %d connecting, %d "
 			"transferring, %d keepalive.\n"
@@ -179,8 +179,8 @@ cache_inf(struct terminal *term, void *d, struct session *ses)
 		add_to_str(&a, &l, buf);
 	}
 
-	msg_box(term, getml(a, NULL),
-		N_("Cache info"), AL_LEFT | AL_EXTD_TEXT,
+	msg_box(term, getml(a, NULL), MSGBOX_EXTD_TEXT,
+		N_("Cache info"), AL_LEFT,
 		msg_text(N_("Cache content: %s"), a),
 		r, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
@@ -198,8 +198,8 @@ memory_inf(struct terminal *term, void *d, struct session *ses)
 	r = mem_alloc(sizeof(struct refresh));
 	if (!r) return;
 
-	msg_box(term, NULL,
-		N_("Memory info"), AL_CENTER | AL_EXTD_TEXT,
+	msg_box(term, NULL, MSGBOX_EXTD_TEXT,
+		N_("Memory info"), AL_CENTER,
 		msg_text(N_("%ld bytes of memory allocated."), mem_amount),
 		r, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);

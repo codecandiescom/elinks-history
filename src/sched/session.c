@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.82 2003/06/07 10:58:00 pasky Exp $ */
+/* $Id: session.c,v 1.83 2003/06/07 13:17:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -372,7 +372,7 @@ print_error_dialog(struct session *ses, struct status *stat,
 	unsigned char *t = get_err_msg(stat->state);
 
 	if (!t) return;
-	msg_box(ses->tab->term, NULL,
+	msg_box(ses->tab->term, NULL, 0,
 		title, AL_CENTER,
 		t,
 		ses, 1,
@@ -634,8 +634,8 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 
 	m2 = memacpy(url, (unsigned char *) strchr(url, POST_CHAR) - url);
 	msg_box(ses->tab->term, getml(m2, wtd_data, wtd_data->url, wtd_data->pos,
-				 NULL),
-		N_("Warning"), AL_CENTER | AL_EXTD_TEXT,
+				 NULL), MSGBOX_EXTD_TEXT,
+		N_("Warning"), AL_CENTER,
 		msg_text(m1, m2),
 		wtd_data, 2,
 		N_("Yes"), post_yes, B_ENTER,
@@ -1135,7 +1135,7 @@ create_session(struct window *tab)
 
 	if (first_use) {
 		first_use = 0;
-		msg_box(term, NULL,
+		msg_box(term, NULL, 0,
 			N_("Welcome"), AL_CENTER,
 			N_("Welcome to ELinks!\n\n"
 			"Press ESC for menu. Documentation is available in "
@@ -1145,7 +1145,7 @@ create_session(struct window *tab)
 	}
 
 	if (!*get_opt_str("protocol.http.user_agent")) {
-		msg_box(term, NULL,
+		msg_box(term, NULL, 0,
 			N_("Warning"), AL_CENTER,
 			N_("You have empty string in protocol.http.user_agent - "
 			"this was a default value in the past, substituted by "
@@ -1165,7 +1165,7 @@ create_session(struct window *tab)
 		get_opt_bool("config.saving_style_w") = 1;
 		get_opt_rec(&root_options, "config.saving_style_w")->flags |= OPT_TOUCHED;
 		if (get_opt_int("config.saving_style") != 3) {
-			msg_box(term, NULL,
+			msg_box(term, NULL, 0,
 				N_("Warning"), AL_CENTER,
 				N_("You have option config.saving_style set to "
 				"a de facto obsolete value. The configuration "

@@ -1,3 +1,58 @@
+Wed Jul 21 19:39:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/task.c:
+
+	ses_forward(): assert(loc) and provide a recovery path.  
+
+Wed Jul 21 19:35:54 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Set url to about:blank if no src attribute is set in frame tag. It
+	prevents segfault reported by Miciah triggered by
+	thinkofthechildren.co.uk.  
+
+Wed Jul 21 12:53:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/proxy.c:
+
+	Rewrap comment and remove blank line.  
+
+Tue Jul 20 22:46:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	...and fix @edit_action_table sort order, pointed out by Miciah.  
+
+Tue Jul 20 22:31:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Bla.  
+
+Tue Jul 20 22:26:01 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In send_event, we |ev->y &= ~KBD_ALT| before calling the menu code 
+	and |ev->y |= ~KBD_ALT| after. I don't understand why we do the
+	bitwise-or or where |ev| will be used after that, but the
+	bitwise-not looks wrong, and disappeared silently in Links 1.00pre5,
+	so drop it in ELinks.  
+
+Tue Jul 20 22:25:59 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/kbdbind.c, viewer/text/form.c, viewer/text/link.c,
+	config/kbdbind.h:
+
+	ACT_EDIT_EDIT -> ACT_EDIT_OPEN_EXTERNAL 
+
+Tue Jul 20 22:14:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/uri.c:
+
+	check_uri_file(): use static const attributes for @chars.  
+
 Tue Jul 20 22:07:47 2004  Laurent Monin <zas@norz.org>:
 
 	* src/protocol/proxy.c:

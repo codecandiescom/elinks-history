@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.235 2005/03/20 10:20:34 jonas Exp $ */
+/* $Id: main.c,v 1.236 2005/03/21 09:06:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,8 +73,12 @@ check_stdio(struct list_head *url_list)
 {
 	/* Should the document be read from stdin? */
 	if (!isatty(STDIN_FILENO)) {
-		if (url_list)
+		/* Only start reading from stdin if no URL was given on the
+		 * command line. */
+		if (url_list && list_empty(*url_list)) {
+			get_opt_bool("protocol.file.allow_special_files") = 1;
 			add_to_string_list(url_list, "file:///dev/stdin", 17);
+		}
 		get_cmd_opt_bool("no-connect") = 1;
 	}
 
@@ -277,6 +281,9 @@ terminate_all_subsystems(void)
 	abort_all_connections();
 
 	if (init_b) {
+#ifdef CONFIG_SCRIPTING
+		trigger_event_name("quit");
+#endif
 		done_url_history();
 		done_search_history();
 #ifdef CONFIG_MARKS
@@ -287,9 +294,6 @@ terminate_all_subsystems(void)
 		done_modules(builtin_modules);
 		done_screen_drivers();
 		done_saved_session_info();
-#ifdef CONFIG_SCRIPTING
-		trigger_event_name("quit");
-#endif
 	}
 
 	shrink_memory(1);

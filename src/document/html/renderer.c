@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.458 2004/06/24 09:04:34 zas Exp $ */
+/* $Id: renderer.c,v 1.459 2004/06/24 23:49:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1524,8 +1524,11 @@ render_html_document(struct cache_entry *cached, struct document *document)
 							   &document->cp_status,
 							   document->options.hard_assume);
 
-	document->title = convert_string(renderer_context.convert_table, title.source,
-					 title.length, CSM_DEFAULT, NULL);
+	if (title.length) {
+		document->title = convert_string(renderer_context.convert_table,
+						 title.source, title.length,
+						 CSM_DEFAULT, NULL);
+	}
 	done_string(&title);
 
 	part = format_html_part(start, end, par_format.align,

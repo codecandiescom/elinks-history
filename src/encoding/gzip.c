@@ -1,5 +1,5 @@
 /* Gzip encoding (ENCODING_GZIP) backend */
-/* $Id: gzip.c,v 1.3 2004/08/16 00:59:09 jonas Exp $ */
+/* $Id: gzip.c,v 1.4 2004/08/18 19:24:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,8 +170,9 @@ gzip_decode_buffer(unsigned char *data, int len, int *new_len)
 		if (filefd != -1)
 			stream = open_encoded(filefd, ENCODING_GZIP); 
 
-		if (stream && read_file(stream, 0, &buffer) == S_OK) {
-			*new_len = buffer.length;
+		if (stream) {
+			if (read_file(stream, 0, &buffer) == S_OK)
+				*new_len = buffer.length;
 			close_encoded(stream);
 		}
 	}

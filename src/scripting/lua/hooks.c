@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.19 2003/09/22 23:02:36 jonas Exp $ */
+/* $Id: hooks.c,v 1.20 2003/09/22 23:07:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,6 +77,8 @@ script_hook_goto_url(va_list ap)
 		}
 
 		lua_pop(L, 1);
+	} else {
+		url = "";
 	}
 
 	return str_event_code(returl, url ? stracpy(url) : NULL);

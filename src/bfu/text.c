@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.24 2003/11/06 02:38:45 jonas Exp $ */
+/* $Id: text.c,v 1.25 2003/11/06 14:22:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,55 +42,59 @@ text_width(struct terminal *term, register unsigned char *text,
 	} while (*(text++));
 }
 
-#define is_unsplitable(pos) (*(pos) && *(pos) != '\n' && *(pos) != ' ')
+static inline int
+split_line(unsigned char *text, int max_length, int text_length)
+{
+	int length = int_min(max_length, text_length);
+	/* Always prefer to split at new lines */
+	unsigned char *split = memchr(text, '\n', length);
+
+	if (!split) {
+		/* If the length is the rest of the text split there */
+		if (length == text_length) return length;
+
+		/* Else find a good place to split starting from last char */
+		split = text + length;
+
+		while (*split != ' ' && split > text)
+			split--;
+	}
+
+	return split - text;
+}
 
 /* Format text according to dialog dimensions and alignment. */
-/* TODO: Longer names for local variables. */
 void
-dlg_format_text(struct terminal *term,
-		unsigned char *text, int x, int *y, int w, int *rw,
+dlg_format_text(struct terminal *term, unsigned char *text,
+		int x, int *y, int dlg_width, int *real_width,
 		struct color_pair *color, enum format_align align)
 {
-	do {
-		unsigned char *tx;
-		unsigned char *split = text;
+	int length = strlen(text);
+	int line_y = *y;
+	int split;
+
+	/* Layout the text line by line working on text chunks of max
+	 * @dlg_width chars. */
+	for (; length > 0; line_y++, text += split + 1, length -= split + 1) {
 		int shift;
-		int line_x = x;
-		int line_width;
 
-		do {
-			while (is_unsplitable(split)) {
-				split++;
-			       	line_x++;
-			}
+		split = split_line(text, dlg_width, length);
+		if (real_width) int_lower_bound(real_width, split);
 
-			tx = ++split;
-			line_width = line_x - x;
-			line_x++;
-			if (*(split - 1) != ' ') break;
+		assert(split <= dlg_width);
 
-			while (is_unsplitable(tx))
-				tx++;
-		} while (tx - split < w - line_width);
+		if (!term || !split) continue;
 
-		shift = (align == AL_CENTER ? int_max((w - line_width) / 2, 0) : 0);
-
-		if (shift >= w) {
+		/* Calculate the number of chars to indent */
+		if (align == AL_CENTER)
+			shift = (dlg_width - split) / 2;
+		else if (align == AL_RIGHT)
+			shift = dlg_width - split;
+		else
 			shift = 0;
-			if (rw) {
-				*rw = w;
-				rw = NULL;
-			}
-		}
 
-		if (term && split > text) {
-			int length = split - text - 1;
+		draw_text(term, x + shift, line_y, text, split, 0, color);
+	}
 
-			draw_text(term, x + shift, *y, text, length, 0, color);
-		}
-
-		if (rw) int_lower_bound(rw, line_width);
-		text = split;
-		(*y)++;
-	} while (*(text - 1));
+	*y = line_y;
 }

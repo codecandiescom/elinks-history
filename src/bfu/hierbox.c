@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.47 2003/11/09 03:17:55 jonas Exp $ */
+/* $Id: hierbox.c,v 1.48 2003/11/09 03:30:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@ test_search(struct listbox_item *item, void *data_, int *offset) {
 	return 0;
 }
 
-int
+static int
 hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 {
 	switch (ev->ev) {
@@ -137,7 +137,7 @@ display_dlg:
 	return EVENT_NOT_PROCESSED;
 }
 
-void
+static void
 hierbox_browser_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: mime.c,v 1.4 2002/11/19 22:41:58 zas Exp $ */
+/* $Id: mime.c,v 1.5 2002/11/28 15:14:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,13 +105,15 @@ get_content_type(unsigned char *head, unsigned char *url)
 		unsigned char *ext_type = init_str();
 		int el = 0;
 
-		add_to_str(&ext_type, &el, "application/x-");
-		add_bytes_to_str(&ext_type, &el, extension, ext_len);
+		if (ext_type) {
+			add_to_str(&ext_type, &el, "application/x-");
+			add_bytes_to_str(&ext_type, &el, extension, ext_len);
 
-		if (get_mime_type_handler(NULL, ext_type))
-			return ext_type;
+			if (get_mime_type_handler(NULL, ext_type))
+				return ext_type;
 
-		mem_free(ext_type);
+			mem_free(ext_type);
+		}
 	}
 
 	/* Fallback.. use some hardwired default */
@@ -138,15 +140,18 @@ get_mime_type_name(unsigned char *type)
 	unsigned char *name;
 
 	class = stracpy(type);
-	if (!class) { return NULL; }
+	if (!class) return NULL;
 	rmdots(class);
 
 	id = strchr(class, '/');
-	if (!id) { mem_free(class); return NULL; }
+	if (!id) {
+		mem_free(class);
+		return NULL;
+	}
 	*(id++) = '\0';
 	rmdots(id);
 
-	name = straconcat("mime.type", ".", class, ".", id, NULL);
+	name = straconcat("mime.type.", class, ".", id, NULL);
 	mem_free(class);
 
 	return name;
@@ -163,12 +168,12 @@ get_mime_handler_name(unsigned char *type, int xwin)
 
 	opt = get_opt_rec_real(root_options, name);
 	mem_free(name);
-	if (!opt) { return NULL; }
+	if (!opt) return NULL;
 
 	system_str = get_system_str(xwin);
-	if (!system_str) { return NULL; }
+	if (!system_str) return NULL;
 
-	name = straconcat("mime.handler", ".", (unsigned char *) opt->ptr,
+	name = straconcat("mime.handler.", (unsigned char *) opt->ptr,
 			  ".", system_str, NULL);
 	mem_free(system_str);
 
@@ -203,7 +208,7 @@ get_prog(struct terminal *term, unsigned char *progid)
 	unsigned char *name;
 
 	if (!system_str) return NULL;
-	name = straconcat("protocol.user", ".", progid, ".",
+	name = straconcat("protocol.user.", progid, ".",
 			  system_str, NULL);
 	mem_free(system_str);
 	if (!name) return NULL;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.548 2004/07/26 23:01:04 zas Exp $ */
+/* $Id: session.c,v 1.549 2004/07/27 03:07:54 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -582,14 +582,8 @@ load_file_from_doc_view(struct file_to_load *ftl,
 			struct document_view *doc_view,
 			enum cache_mode cache_mode)
 {
-	struct uri *referrer = NULL;
-
-	/* We set referrer here but for file protocol. */
-	if (doc_view && doc_view->document && doc_view->document->uri
-	    && doc_view->document->uri->protocol != PROTOCOL_FILE) {
-
-		referrer = doc_view->document->uri;
-	}
+	struct uri *referrer = doc_view && doc_view->document
+			     ? doc_view->document->uri : NULL;
 
 	load_uri(ftl->uri, referrer, &ftl->stat, ftl->pri, cache_mode, -1);
 }
@@ -1062,13 +1056,7 @@ void
 set_session_referrer(struct session *ses, struct uri *referrer)
 {
 	if (ses->referrer) done_uri(ses->referrer);
-
-	if (referrer && referrer->protocol != PROTOCOL_FILE) {
-		/* Don't set referrer for file protocol */
-		ses->referrer = get_uri_reference(referrer);
-	} else {
-		ses->referrer = NULL;
-	}
+	ses->referrer = referrer ? get_uri_reference(referrer) : NULL;
 }
 
 static void

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.157 2004/07/26 22:07:15 zas Exp $ */
+/* $Id: session.h,v 1.158 2004/07/27 03:07:54 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -139,6 +139,11 @@ struct session {
 
 	struct uri *download_uri;
 
+	/* The URI which is the referrer to the current loaded document or NULL
+	 * if there are no referrer. */
+	/* The @referrer members sole purpose is to have the information handy
+	 * when loading URIs. It is not 'filtered' in anyway at this level only
+	 * at the lower ones. */
 	struct uri *referrer;
 
 
@@ -205,6 +210,8 @@ go_unback(struct session *ses)
 	go_history(ses, cur_loc(ses)->next);
 }
 
+/* Swaps the current session referrer with the new one passed as @referrer */
+/* @referrer may be NULL */
 void set_session_referrer(struct session *ses, struct uri *referrer);
 
 void

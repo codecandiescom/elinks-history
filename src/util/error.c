@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.5 2002/03/18 22:12:33 pasky Exp $ */
+/* $Id: error.c,v 1.6 2002/03/22 15:31:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,6 +79,8 @@ void er(int b, unsigned char *m, va_list l)
 	if (b) fprintf(stderr, "%c", (char)7);
 	vfprintf(stderr, m, l);
 	fprintf(stderr, "\n");
+	fflush(stderr);
+	fprintf(stderr, "Man the Lifeboats! Women and children first!\n");
 	fflush(stderr);
 	sleep(1);
 }

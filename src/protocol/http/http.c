@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.38 2002/08/27 15:45:07 pasky Exp $ */
+/* $Id: http.c,v 1.39 2002/08/27 17:22:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -444,13 +444,24 @@ void http_send_header(struct connection *c)
 	}
 
 	add_to_str(&hdr, &l, "Accept: */*\r\n");
+
 	/* TODO: Make this encoding.c function. */
+#if defined(HAVE_BZLIB_H) || defined(HAVE_ZLIB_H)
+	add_to_str(&hdr, &l, "Accept-Encoding: ");
+
 #ifdef HAVE_BZLIB_H
-	add_to_str(&hdr, &l, "Accept-Encoding: bzip2\r\n");
+	add_to_str(&hdr, &l, "bzip2");
 #endif
+
 #ifdef HAVE_ZLIB_H
-	add_to_str(&hdr, &l, "Accept-Encoding: gzip\r\n");
+#ifdef HAVE_BZLIB_H
+	add_to_str(&hdr, &l, ", ");
 #endif
+	add_to_str(&hdr, &l, "gzip");
+#endif
+	add_to_str(&hdr, &l, "\r\n");
+#endif
+	
 	if (!accept_charset) {
 		unsigned char *cs, *ac;
 		int aclen = 0;

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.7 2002/04/21 19:12:35 pasky Exp $ */
+/* $Id: http.c,v 1.8 2002/04/24 14:49:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,20 +288,20 @@ void http_send_header(struct connection *c)
 	}
 
 	if (*proxy_user) {
-			unsigned char *proxy_data, *proxy_64;
+		unsigned char *proxy_data;
 
-			proxy_data = mem_alloc(256);
-			strcpy(proxy_data, proxy_user);
-			strcat(proxy_data, ":");
-			strcat(proxy_data, proxy_passwd);
-			proxy_64 = base64_encode(proxy_data);
-			
-			add_to_str(&hdr, &l, "Proxy-Authorization: Basic ");
-			add_to_str(&hdr, &l, proxy_64);
-			add_to_str(&hdr, &l, "\r\n");
+		proxy_data = straconcat(proxy_user, ":", proxy_passwd, NULL);
+		if (proxy_data) {
+			unsigned char *proxy_64 = base64_encode(proxy_data);
 
-			mem_free(proxy_64);
+			if (proxy_64) {
+				add_to_str(&hdr, &l, "Proxy-Authorization: Basic ");
+				add_to_str(&hdr, &l, proxy_64);
+				add_to_str(&hdr, &l, "\r\n");
+				mem_free(proxy_64);
+			}
 			mem_free(proxy_data);
+		}
 	}
 	
 	if (!*user_agent) {

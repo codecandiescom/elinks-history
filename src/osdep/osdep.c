@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.104 2003/10/27 01:59:25 pasky Exp $ */
+/* $Id: osdep.c,v 1.105 2003/10/27 02:00:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -406,7 +406,7 @@ resize_window(int x, int y)
 
 /* Threads */
 
-#if defined(HAVE_BEGINTHREAD) || defined(BEOS) || defined(HAVE_PTHREADS)
+#if defined(HAVE_BEGINTHREAD) || defined(BEOS)
 
 struct tdata {
 	void (*fn)(void *, int);
@@ -423,15 +423,6 @@ bgt(struct tdata *t)
 	close(t->h);
 	free(t);
 }
-
-#ifdef HAVE_PTHREADS
-void *
-bgpt(struct tdata *t)
-{
-	bgt(t);
-	return NULL;
-}
-#endif
 
 #endif
 
@@ -461,38 +452,6 @@ unblock_stdin(void)
 #if defined(BEOS)
 
 #elif defined(HAVE_BEGINTHREAD)
-
-#elif defined(HAVE_PTHREADS)
-
-#include <pthread.h>
-
-int
-start_thread(void (*fn)(void *, int), void *ptr, int l)
-{
-	pthread_t thread;
-	struct tdata *t;
-	int p[2];
-	int f;
-
-	if (c_pipe(p) < 0) return -1;
-	if (set_nonblocking_fd(p[0]) < 0) return -1;
-	if (set_nonblocking_fd(p[1]) < 0) return -1;
-
-	t = malloc(sizeof(struct tdata) + l);
-	if (!t) return -1;
-
-	t->fn = fn;
-	t->h = p[1];
-	memcpy(t->data, ptr, l);
-	if (pthread_create(&thread, NULL, (void *(*)(void *))bgpt, t)) {
-		close(p[0]);
-		close(p[1]);
-		mem_free(t);
-		return -1;
-	}
-
-	return p[0];
-}
 
 #else /* HAVE_BEGINTHREAD */
 

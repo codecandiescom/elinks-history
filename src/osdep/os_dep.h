@@ -1,4 +1,4 @@
-/* $Id: os_dep.h,v 1.23 2003/10/27 01:59:25 pasky Exp $ */
+/* $Id: os_dep.h,v 1.24 2003/10/27 02:00:38 pasky Exp $ */
 
 #ifndef EL__OSDEP_OS_DEP_H
 #define EL__OSDEP_OS_DEP_H
@@ -150,7 +150,7 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 
 #endif
 
-#if !defined(HAVE_BEGINTHREAD) && !defined(BEOS) && !defined(HAVE_PTHREADS)
+#if !defined(HAVE_BEGINTHREAD) && !defined(BEOS)
 #define THREAD_SAFE_LOOKUP
 #endif
 

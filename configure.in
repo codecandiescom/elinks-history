@@ -375,13 +375,6 @@ if test "$cf_result" = yes; then
 	AC_DEFINE(HAVE_BEGINTHREAD)
 else
 	CFLAGS="$CFLAGS_X"
-        # AC_CHECK_FUNC(pthread_create, cf_result=yes, cf_result=no)
-        # if  test "$cf_result" = yes; then
-        #	AC_DEFINE(HAVE_PTHREADS)
-        # else
-        #	AC_CHECK_LIB(pthread, pthread_create, AC_DEFINE(HAVE_PTHREADS)
-        #	LDFLAGS="$LDFLAGS -lpthread" )
-        # fi
 fi
 
 AC_CHECK_FUNC(MouOpen, AC_DEFINE(HAVE_MOUOPEN))

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.16 2003/07/14 19:51:32 jonas Exp $ */
+/* $Id: uri.c,v 1.17 2003/07/14 20:03:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -243,16 +243,21 @@ get_uri_string(struct uri *uri, int components)
 		if (uri->portlen) {
 			add_chr_to_str(&str, &len, ':');
 			add_bytes_to_str(&str, &len, uri->port, uri->portlen);
-		} else if (protocol != PROTOCOL_USER) {
+		}
+#if 0
+		/* We needs to add possibility to only add port if it's
+		 * different from the default protocol port. */
+		else if (protocol != PROTOCOL_USER) {
 			/* For user protocols we don't know a default port.
 			 * Should user protocols ports be configurable? */
 			add_chr_to_str(&str, &len, ':');
 			add_num_to_str(&str, &len, get_protocol_port(protocol));
 		}
-
-		if (get_protocol_need_slash_after_host(protocol))
-			add_chr_to_str(&str, &len, '/');
+#endif
 	}
+
+	if (get_protocol_need_slash_after_host(protocol))
+		add_chr_to_str(&str, &len, '/');
 
 	if (wants(URI_DATA) && uri->datalen)
 		add_bytes_to_str(&str, &len, uri->data, uri->datalen);

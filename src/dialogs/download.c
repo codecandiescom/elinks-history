@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.11 2003/11/29 20:39:09 jonas Exp $ */
+/* $Id: download.c,v 1.12 2003/11/29 20:55:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -406,7 +406,10 @@ static INIT_LIST_HEAD(download_box_items);
 static struct hierbox_browser_button download_buttons[] = {
 	{ N_("Info"),			push_info_button		},
 	{ N_("Abort"),			push_hierbox_delete_button	},
+#if 0
+	/* This requires more work to make locking work and query the user */
 	{ N_("Abort and delete file"),	push_delete_button		},
+#endif
 	{ N_("Clear"),			push_hierbox_clear_button	},
 };
 

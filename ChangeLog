@@ -1,3 +1,197 @@
+Mon Dec 29 22:47:10 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Minor french grammar fix.  
+
+Mon Dec 29 22:43:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/: dialogs.c, kbdbind.c, kbdbind.h:
+
+	Trivial cleanup: use enum keyact type for action, drop 2 useless
+	variables in really_add_keybinding() and make it call
+	really_really_add_keybinding() instead of add_keybinding().  
+
+Mon Dec 29 22:36:23 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Typo fix.  
+
+Mon Dec 29 21:10:00 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Dec 29 21:02:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.inc, sched/session.c, terminal/terminal.c:
+
+	ui.auto_save_restore_session tristate option was replaced by two
+	boolean options ui.sessions.auto_save and ui.sessions.auto_restore.  
+	Folder name is now configurable through
+	ui.sessions.auto_save_foldername.  It fixes issues related to i18n
+	of this folder name.  
+
+Mon Dec 29 20:20:26 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Minor translation fix.  
+
+Mon Dec 29 20:15:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.c, hierbox.h, listbox.c:
+
+	Redo the bogus fix for hierbox browser cursor position restoring
+	(bug 36) by saving the complete box data and check it is till valid
+	when initializing a new browser.  
+
+Mon Dec 29 19:44:49 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/plain/renderer.c:
+
+	Jonas told me about cvs admin -m <rev>:<msg> <file> and suddenly...  
+
+Mon Dec 29 19:43:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/plain/renderer.c:
+
+	Ooops twice the same message... Previous patch changed order of
+	parameter in realloc_line() from y,x to x,y as other functions
+	there. This commit is a dummy one i just added a new line.  
+
+Mon Dec 29 19:38:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/plain/renderer.c:
+
+	Order of parameters of realloc_line() was modified: y,x -> x,y.  
+
+Mon Dec 29 19:35:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/plain/renderer.c:
+
+	Move some code from add_document_lines() to new functions add_node()
+	and init_template() and make them more generic.  
+
+Mon Dec 29 19:04:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/plain/renderer.c:
+
+	We now call get_uri_length() only if we are at the start of line or
+	we have two consecutive alpha chars.  
+
+Mon Dec 29 18:27:06 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation cleanup.  
+
+Mon Dec 29 17:54:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/plain/renderer.c:
+
+	Code cleanup.  
+
+Mon Dec 29 17:46:34 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/plain/renderer.c:
+
+	Minor code simplification.  
+
+Mon Dec 29 14:05:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: history.c, history.h:
+
+	A cleanuped up version of the history compression patch pasky
+	attached to bug 309. It ensures that the added history location is
+	unique and that redirects can be bypassed. It does not fix it for
+	the bug URI tho' since it uses document refresh with time set to
+	zero.  
+
+Mon Dec 29 13:15:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/history.h:
+
+	Cleanup workaround.  
+
+Mon Dec 29 12:24:31 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: document/plain/renderer.c, intl/charsets.c,
+	intl/charsets.h:
+
+	Add CSM_NONE to enum convert_string_mode for the plain-text
+	renderer. I hope that this works! 
+
+Mon Dec 29 12:23:09 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	In add_document_line, simplify to eliminate a variable.  
+
+Mon Dec 29 11:59:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/plain/renderer.c:
+
+	Optimizations and clean up. Now useless debug code was removed.  
+
+Mon Dec 29 11:42:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/plain/renderer.c:
+
+	Replace bad chars but tab before calling convert_string(). It
+	preserves previous behavior.  
+
+Mon Dec 29 11:33:21 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Fix an off-by-one error in the plain-text renderer's linkyfying
+	code.  
+
+Mon Dec 29 11:28:44 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	In the plain text renderer, perform character-set conversion on the
+	input _before_ expanding tabs. Closes bug 351. Thanks to zas for
+	finding the problem.  
+
+Mon Dec 29 08:25:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Keep state of whether link lines was drawn. Only draw link lines if
+	we actually put some and if the background color is different from
+	the default one.  Fixes bug 326.  
+
+Mon Dec 29 08:04:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Whoops revert stupid part of last patch.  
+
+Mon Dec 29 07:58:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Improve forcing of current scaling to last position in the
+	scrollbar.  
+
+Mon Dec 29 07:43:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Partly revert previous scollbar fixes and only adjust the offset of
+	current (@step) to hit the last position.  
+
+Mon Dec 29 07:34:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Use set_screen_dirty() macro.  
+
 Sun Dec 28 20:56:54 2003  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/menu.c:

@@ -1,14 +1,11 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.4 2002/03/18 10:55:38 pasky Exp $ */
+/* $Id: select.c,v 1.5 2002/03/26 17:39:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <errno.h>
-#ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>
-#endif
 #include <sys/signal.h>
 #include <sys/types.h>
 #ifdef HAVE_SYS_WAIT_H
@@ -31,6 +28,11 @@
 #elif defined(HAVE_TIME_H)
 #include <time.h>
 #endif
+#endif
+
+/* This must be here, thanks to BSD. */
+#ifdef HAVE_SYS_SELECT_H
+#include <sys/select.h>
 #endif
 
 #include <links.h>

@@ -1,13 +1,10 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.5 2002/03/25 17:18:09 pasky Exp $ */
+/* $Id: dns.c,v 1.6 2002/03/26 17:39:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_ARPA_INET_H
-#include <arpa/inet.h>
-#endif
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h>
 #endif
@@ -17,6 +14,11 @@
 #include <sys/types.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
+
+/* Go and say 'thanks' to BSD. */
+#ifdef HAVE_ARPA_INET_H
+#include <arpa/inet.h>
 #endif
 
 #include <links.h>

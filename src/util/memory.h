@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.15 2003/09/26 18:32:29 pasky Exp $ */
+/* $Id: memory.h,v 1.16 2003/09/28 19:55:35 jonas Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -99,13 +99,23 @@ void *mem_realloc(void *, size_t);
 #define ALIGN_MEMORY_SIZE(x, gr) (((x) + (gr)) & ~(gr))
 
 static inline void *
-mem_align_alloc__(void **ptr, size_t old, size_t new, size_t objsize, int mask)
+mem_align_alloc__(
+#ifdef LEAK_DEBUG
+		  unsigned char *file, int line,
+#endif
+		  void **ptr, size_t old, size_t new, size_t objsize, int mask)
 {
 	size_t newsize = ALIGN_MEMORY_SIZE(new, mask);
 	size_t oldsize = ALIGN_MEMORY_SIZE(old, mask);
 
 	if (newsize > oldsize) {
-		unsigned char *data = mem_realloc(*ptr, newsize * objsize);
+		unsigned char *data;
+
+#ifdef LEAK_DEBUG
+		data = debug_mem_realloc(file, line, *ptr, newsize * objsize);
+#else
+		data = mem_realloc(*ptr, newsize * objsize);
+#endif
 		if (!data) return NULL;
 
 		*ptr = (void *)data;
@@ -115,7 +125,12 @@ mem_align_alloc__(void **ptr, size_t old, size_t new, size_t objsize, int mask)
 	return *ptr;
 }
 
+#ifdef LEAK_DEBUG
+#define mem_align_alloc(ptr, old, new, objsize, mask) \
+	mem_align_alloc__(__FILE__, __LINE__, (void **)ptr, old, new, objsize, mask)
+#else
 #define mem_align_alloc(ptr, old, new, objsize, mask) \
 	mem_align_alloc__((void **)ptr, old, new, objsize, mask)
+#endif
 
 #endif

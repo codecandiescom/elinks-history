@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.256 2004/04/11 12:42:05 jonas Exp $ */
+/* $Id: download.c,v 1.257 2004/04/11 14:18:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,6 +92,39 @@ get_download_ses(struct file_download *file_download)
 		return sessions.next;
 
 	return NULL;
+}
+
+
+static void download_data(struct download *download, struct file_download *file_download);
+
+static struct file_download *
+init_file_download(struct uri *uri, struct session *ses, unsigned char *file, int fd)
+{
+	struct file_download *file_download;
+
+	file_download = mem_calloc(1, sizeof(struct file_download));
+	if (!file_download) return NULL;
+
+	file_download->box_item = add_listbox_item(&download_browser,
+						   struri(uri), file_download);
+
+	file_download->uri = get_uri_reference(uri);
+	file_download->file = file;
+	file_download->handle = fd;
+
+	file_download->download.end = (void (*)(struct download *, void *)) download_data;
+	file_download->download.data = file_download;
+	file_download->ses = ses;
+	/* The tab may be closed, but we will still want to ie. open the
+	 * handler on that terminal. */
+	file_download->term = ses->tab->term;
+
+	object_nolock(file_download, "file_download"); /* Debugging purpose. */
+	add_to_list(downloads, file_download);
+
+	display_download(ses->tab->term, file_download, ses);
+
+	return file_download;
 }
 
 
@@ -712,34 +745,14 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	if (!cmdw_hop->real_file || fstat(fd, &buf))
 		goto download_error;
 
-	file_download = mem_calloc(1, sizeof(struct file_download));
+	file_download = init_file_download(ses->download_uri, ses,
+					   cmdw_hop->real_file, fd);
 	if (!file_download) goto download_error;
 
-	file_download->uri = get_uri_reference(ses->download_uri);
-	file_download->file = cmdw_hop->real_file;
 	file_download->last_pos = resume ? (int) buf.st_size : 0;
-
-	file_download->download.end = (void (*)(struct download *, void *)) download_data;
-	file_download->download.data = file_download;
-	file_download->handle = fd;
-	file_download->ses = cmdw_hop->ses;
-	/* The tab may be closed, but we will still want to ie. open the
-	 * handler on that terminal. */
-	file_download->term = ses->tab->term;
-	file_download->remotetime = 0;
-
-	object_nolock(file_download, "file_download");
-	add_to_list(downloads, file_download);
 
 	load_uri(file_download->uri, ses->referrer, &file_download->download, PRI_DOWNLOAD, CACHE_MODE_NORMAL,
 		 (resume ? file_download->last_pos : 0));
-
-	if (is_in_downloads_list(file_download))
-		file_download->box_item = add_listbox_item(&download_browser,
-							   struri(file_download->uri),
-							   file_download);
-
-	display_download(ses->tab->term, file_download, ses);
 
 download_error:
 	mem_free(cmdw_hop);
@@ -815,6 +828,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 {
 	struct codw_hop *codw_hop = data;
 	struct file_download *file_download = NULL;
+	struct tq *tq;
 
 	assert(codw_hop);
 	assert(codw_hop->tq);
@@ -823,18 +837,11 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	if (!codw_hop->real_file) goto cancel;
 
-	file_download = mem_calloc(1, sizeof(struct file_download));
+	tq = codw_hop->tq;
+
+	file_download = init_file_download(tq->uri, tq->ses,
+					   codw_hop->real_file, fd);
 	if (!file_download) goto cancel;
-
-	object_nolock(file_download, "file_download"); /* Debugging purpose. */
-
-	file_download->uri = get_uri_reference(codw_hop->tq->uri);
-	file_download->file = codw_hop->real_file;
-	file_download->download.end = (void (*)(struct download *, void *)) download_data;
-	file_download->download.data = file_download;
-	file_download->last_pos = 0;
-	file_download->handle = fd;
-	file_download->ses = codw_hop->tq->ses;
 
 	if (codw_hop->tq->prog) {
 		file_download->prog = subst_file(codw_hop->tq->prog, codw_hop->file);
@@ -846,15 +853,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	file_download->prog_flags = codw_hop->tq->prog_flags;
 
-	add_to_list(downloads, file_download);
 	change_connection(&codw_hop->tq->download, &file_download->download, PRI_DOWNLOAD, 0);
-
-	if (is_in_downloads_list(file_download))
-		file_download->box_item = add_listbox_item(&download_browser,
-							   struri(file_download->uri),
-							   file_download);
-
-	display_download(codw_hop->tq->ses->tab->term, file_download, codw_hop->tq->ses);
 	tp_free(codw_hop->tq);
 
 	mem_free(codw_hop);

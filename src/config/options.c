@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.98 2002/09/12 21:12:40 pasky Exp $ */
+/* $Id: options.c,v 1.99 2002/09/13 20:34:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -710,6 +710,11 @@ register_options()
 		"set_original_time", 0, 0,
 		"Set time of downloaded files accordingly to one stored on server.");
 
+	add_opt_int("document.download",
+		"overwrite", 0, 0, 1, 0,
+		"Prevention of overwriting of the local files:\n"
+		"0 is files will silently be overwritten.\n"
+		"1 is add the suffix .{number} (for example '.1') to the name.");
 
 
 	add_opt_tree("document",

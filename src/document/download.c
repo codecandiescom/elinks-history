@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.37 2002/09/13 20:29:36 pasky Exp $ */
+/* $Id: download.c,v 1.38 2002/09/13 20:34:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -592,7 +592,12 @@ create_download_file(struct terminal *term, unsigned char *fi, int safe)
 	wd = get_cwd();
 	set_cwd(term->cwd);
 
-	file = expand_tilde(file);
+	if (!get_opt_int("document.download.overwrite")) {
+		file = expand_tilde(file);
+	} else {
+		/* The tilde will be expanded by get_unique_name() */
+		file = get_unique_name(file);
+	}
 
 	h = open(file, O_CREAT | O_WRONLY | O_TRUNC | (sf ? O_EXCL : 0),
 		 sf ? 0600 : 0666);

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.3 2003/10/31 12:57:22 jonas Exp $
+## $Id: Makefile.am,v 1.4 2004/05/02 13:08:17 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -10,13 +10,26 @@ include $(top_srcdir)/Makefile.base
 # However, we apparently need to create the library in order to convience
 # automake to compile the objects :/. We DON'T use libmimebackend.a ANYWHERE.
 
+if CONFIG_MAILCAP
+mailcapobj = mailcap.o
+endif
+
+if CONFIG_MIMETYPES
+mimetypesobj = mimetypes.o
+endif
+
 noinst_LIBRARIES = libmimebackend.a
-libmimebackend_a_SOURCES = \
- common.c \
- common.h \
- default.c \
- default.h \
+
+EXTRA_libmimebackend_a_SOURCES = \
  mailcap.c \
  mailcap.h \
  mimetypes.c \
  mimetypes.h
+
+libmimebackend_a_LIBADD = $(mailcapobj) $(mimetypesobj)
+
+libmimebackend_a_SOURCES = \
+ common.c \
+ common.h \
+ default.c \
+ default.h

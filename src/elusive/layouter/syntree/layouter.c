@@ -1,10 +1,11 @@
 /* Raw syntax tree layouter */
-/* $Id: layouter.c,v 1.3 2002/12/31 00:48:54 pasky Exp $ */
+/* $Id: layouter.c,v 1.4 2002/12/31 17:13:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <stdio.h>
 #include <string.h>
 
 #include "elinks.h"

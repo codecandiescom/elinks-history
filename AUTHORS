@@ -196,6 +196,9 @@ Jonas Fonseca <fonseca@diku.dk>
 	Mailcap support
 	Random hacking
 
+John
+	Tab browsing initial patch
+	
 José Luis González González <jlg80@mi.madritel.es>
 	MIME types documentation
 	Referred as 'Jose'
@@ -357,6 +360,10 @@ Sergei Borushevsky <b_sp@usa.net>
 	Ctrl-W completion
 	SSL
 
+Sergey Karpov <karpov@sai.msu.su>
+	First tab browsing patch for ELinks
+	Ideas !
+
 Sergio R. Velasquez Zeballos <svelasqu@thor.uc.edu.ve>
 	Proxy auth (Basic)
 
@@ -426,4 +433,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.119 2003/04/28 10:00:51 zas Exp $
+$Id: AUTHORS,v 1.120 2003/05/02 21:43:44 zas Exp $

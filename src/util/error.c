@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.49 2003/05/19 14:12:30 zas Exp $ */
+/* $Id: error.c,v 1.50 2003/05/21 08:35:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,6 +37,7 @@ force_dump()
 		"\n\033[1m%s\033[0m %s\n", "Forcing core dump!",
 	        "Man the Lifeboats! Women and children first!\n");
 	fputs(full_static_version, stderr);
+	fputc('\n', stderr);
 	fflush(stderr);
 	raise(SIGSEGV);
 }
@@ -171,7 +172,7 @@ dump_backtrace(FILE *f, int trouble)
 		"You will _suffer_ >:).\n"
 		"\n"
 		"CPU burning sequence initiated...\n", f);
-	
+
 	/* TODO: Include cpuburn.c here. --pasky */
 	while (1);
 #endif

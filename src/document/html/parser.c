@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.137 2003/06/17 23:44:18 zas Exp $ */
+/* $Id: parser.c,v 1.138 2003/06/21 00:03:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,19 +42,11 @@
 
 INIT_LIST_HEAD(html_stack);
 
-/* Attribute names are strings that follow the same rules as element
- * names. That is, attribute names must contain one or more characters,
- * and the first character must be a letter or the underscore (_).
- * Subsequent characters in the name may include letters, digits,
- * underscores, hyphens, and periods. They may not include white space
- * or other punctuation marks. */
-/* ":" was added for tag attribute like xml:lang="en" */
-#define ATTR_CHAR(c) (isA(c) || (c) == '.' || c == ':')
-
-#define TAG_END(e)  ((e)[0] == '>')
-#define TAG_END_XML(e) ((e)[0] == '/' && (e)[1] == '>')
-#define TAG_START(e)  ((e)[0] == '<')
-#define TAG_DELIM(e) (TAG_END(e) || TAG_END_XML(e) || TAG_START(e))
+static inline int
+atchr(unsigned char c)
+{
+	return isA(c) || (c > ' ' && c != '=' && c != '<' && c != '>');
+}
 
 /* This function eats one html element. */
 /* - e is pointer to the begining of the element (*e must be '<')
@@ -71,85 +63,64 @@ parse_element(register unsigned char *e, unsigned char *eof,
 {
 	unsigned char saved_eof_char;
 
-	if (e >= eof || !TAG_START(e)) return -1;
-	e++;
+	if (e >= eof || *(e++) != '<') return -1;
 	if (name) *name = e;
 
 	saved_eof_char = *eof;
 	*eof = '\0';
 
-	while (WHITECHAR(*e)) e++;
-	if (!*e) goto parse_error;
-
-	if (TAG_END(e) || TAG_END_XML(e) || WHITECHAR(*e)) goto end;
 	if (*e == '/') e++;
-
-	if (!isA(*e)) {
-		while (*e && !TAG_START(e)) e++;
-		if (!*e) goto parse_error;
-		goto end;
-	}
+	if (e >= eof || !isA(*e)) goto parse_error;
 
 	while (isA(*e)) e++;
-	if ((!WHITECHAR(*e) && !TAG_DELIM(e) && *e != ':')) goto parse_error;
+	if (e >= eof || (!WHITECHAR(*e) && *e != '>' && *e != '<' && *e != '/' && *e != ':')) goto parse_error;
 
 	if (name && namelen) *namelen = e - *name;
 
-	while (WHITECHAR(*e) || *e == ':') e++;
+	while (WHITECHAR(*e) || *e == '/' || *e == ':') e++;
+	if (e >= eof || (!atchr(*e) && *e != '>' && *e != '<')) goto parse_error;
+
 	if (attr) *attr = e;
 
 nextattr:
 	while (WHITECHAR(*e)) e++;
-	if (!*e) goto parse_error;
-	if (TAG_DELIM(e)) goto end;
+	if (e >= eof || (!atchr(*e) && *e != '>' && *e != '<')) goto parse_error;
 
-	if (!ATTR_CHAR(*e)) {
-		/* Bad attribute, skip it. */
-		do {
-			e++;
-			if (IS_QUOTE(*e)) {
-				unsigned char quote = *e;
+	if (*e == '>' || *e == '<') goto end;
 
-				while (*e == quote) {
-					e++;
-					while (*e != quote && *e) e++;
-					if (!*e) goto parse_error;
-					e++;
-				}
-			}
-		} while (*e && !WHITECHAR(*e) && !TAG_DELIM(e));
-
-		goto endattr;
-	}
-
-	while (ATTR_CHAR(*e)) e++;
+	while (atchr(*e)) e++;
 	while (WHITECHAR(*e)) e++;
+	if (e >= eof) goto parse_error;
+
 	if (*e != '=') goto endattr;
 	e++;
 
 	while (WHITECHAR(*e)) e++;
+	if (e >= eof) goto parse_error;
 
 	if (IS_QUOTE(*e)) {
 		unsigned char quote = *e;
 
-		while (*e == quote) {
-			e++;
-			while (*e != quote && *e) e++;
-			if (!*e) goto parse_error;
-			e++;
-		}
+quoted_value:
+		e++;
+		while (*e != quote && *e) e++;
+		if (e >= eof || *e < ' ') goto parse_error;
+		e++;
+		if (e >= eof) goto parse_error;
+		if (*e == quote) goto quoted_value;
 	} else {
-		while (*e && !WHITECHAR(*e) && !TAG_DELIM(e)) e++;
+		while (*e && !WHITECHAR(*e) && *e != '>' && *e != '<') e++;
+		if (e >= eof) goto parse_error;
 	}
+
 	while (WHITECHAR(*e)) e++;
+	if (e >= eof) goto parse_error;
 
 endattr:
-	if (!*e) goto parse_error;
-	if (!TAG_DELIM(e)) goto nextattr;
+	if (*e != '>' && *e != '<') goto nextattr;
 
 end:
-	if (TAG_END_XML(e)) e++;
-	if (end) *end = e + TAG_END(e);
+	if (end) *end = e + (*e == '>');
 	*eof = saved_eof_char;
 	return 0;
 
@@ -158,15 +129,15 @@ parse_error:
 	return -1;
 }
 
-#define add_chr(s, l, c) 						\
-	do { 								\
-		if (!((l) % ALLOC_GR)) { 				\
+#define add_chr(s, l, c)						\
+	do {								\
+		if (!((l) % ALLOC_GR)) {				\
 			unsigned char *_xx_;				\
 			_xx_ = mem_realloc((s), (l) + ALLOC_GR);	\
-			if (!_xx_) return NULL; 			\
-			(s) = _xx_; 					\
-		} 							\
-		(s)[(l)++] = (c); 					\
+			if (!_xx_) return NULL;				\
+			(s) = _xx_;					\
+		}							\
+		(s)[(l)++] = (c);					\
 	} while (0)
 
 
@@ -188,48 +159,19 @@ get_attr_val(register unsigned char *e, unsigned char *name)
 
 nextattr:
 	while (WHITECHAR(*e)) e++;
-	if (!*e || !ATTR_CHAR(*e) || TAG_DELIM(e)) goto end;
-
-	/* Does it match ? */
+	if (*e == '>' || *e == '<') return NULL;
 	n = name;
+
 	while (*n && upcase(*e) == upcase(*n)) e++, n++;
 	found = !*n;
-	while (ATTR_CHAR(*e)) found = 0, e++;
-
+	while (atchr(*e)) found = 0, e++;
 	while (WHITECHAR(*e)) e++;
-	if (*e != '=') {
-		if (found) goto found_endattr;
-		goto nextattr;
-	}
+	if (*e != '=') goto found_endattr;
 	e++;
 	while (WHITECHAR(*e)) e++;
-
-	if (found) goto found_parse_value;
-
-	/* Attribute not found, we still parse until next one. */
-	/* Code duplication here improves performance a lot. --Zas */
 	if (!IS_QUOTE(*e)) {
-		while (!WHITECHAR(*e) && !(TAG_DELIM(e))) e++;
-	} else {
-		unsigned char quote = *e;
-
-		while (*e == quote) {
-			e++;
-			while (*e != quote) {
-				if (!*e) goto end;
-				e++;
-			}
-			e++;
-		}
-	}
-
-	goto nextattr;
-
-	/* Attribute was found, so we parse its value. */
-found_parse_value:
-	if (!IS_QUOTE(*e)) {
-		while (!WHITECHAR(*e) && !(TAG_DELIM(e))) {
-			add_chr(attr, attrlen, *e);
+		while (!WHITECHAR(*e) && *e != '>' && *e != '<') {
+			if (found) add_chr(attr, attrlen, *e);
 			e++;
 		}
 	} else {
@@ -238,9 +180,11 @@ found_parse_value:
 found_parse_quoted_value:
 		e++;
 		while (*e != quote) {
-			if (!*e) goto end;
-
-			if (*e != ASCII_CR) {
+			if (!*e) {
+				if (attr) mem_free(attr);
+				return NULL;
+			}
+			if (found && *e != ASCII_CR) {
 				if (*e != ASCII_TAB && *e != ASCII_LF)
 					add_chr(attr, attrlen, *e);
 				else if (!get_attr_val_eat_nl)
@@ -250,32 +194,30 @@ found_parse_quoted_value:
 		}
 		e++;
 		if (*e == quote) {
-			add_chr(attr, attrlen, *e);
+			if (found) add_chr(attr, attrlen, *e);
 			goto found_parse_quoted_value;
 		}
 	}
 
 found_endattr:
-	add_chr(attr, attrlen, '\0');
+	if (found) {
+		add_chr(attr, attrlen, 0);
+		if (strchr(attr, '&')) {
+			unsigned char *saved_attr = attr;
 
-	/* Convert entities if needed. */
-	if (strchr(attr, '&')) {
-		unsigned char *saved_attr = attr;
+			attr = convert_string(NULL, saved_attr, strlen(saved_attr));
+			mem_free(saved_attr);
+		}
 
-		attr = convert_string(NULL, attr, attrlen);
-		mem_free(saved_attr);
+		set_mem_comment(trim_chars(attr, ' ', NULL), name, strlen(name));
+		return attr;
 	}
 
-	set_mem_comment(trim_chars(attr, ' ', NULL), name, strlen(name));
-
-	return attr;
-
-end:
-	if (attr) mem_free(attr);
-	return NULL;
+	goto nextattr;
 }
 
 #undef add_chr
+
 
 static inline unsigned char *
 get_url_val(unsigned char *e, unsigned char *name)

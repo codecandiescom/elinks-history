@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.117 2004/06/15 01:48:09 jonas Exp $ */
+/* $Id: options.inc,v 1.118 2004/06/15 16:49:14 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -277,7 +277,7 @@ struct option_info config_options_info[] = {
 		N_("Scrolling options.")),
 
 	INIT_OPT_INT("document.browse.scrolling", N_("Horizontal step"),
-		"horizontal_step", 0, 0, 9999, 8,
+		"horizontal_step", 0, 1, 9999, 8,
 		N_("Number of columns to scroll when a key bound to scroll-left or scroll-\n"
 		"right is pressed and no prefix was given.")),
 
@@ -287,7 +287,7 @@ struct option_info config_options_info[] = {
 		"document scrolls in that direction.")),
 
 	INIT_OPT_INT("document.browse.scrolling", N_("Vertical step"),
-		"vertical_step", 0, 0, 9999, 2,
+		"vertical_step", 0, 1, 9999, 2,
 		N_("Number of lines to scroll when a key bound to scroll-up or scroll-\n"
 		"down is pressed and no prefix was given.")),
 

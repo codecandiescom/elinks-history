@@ -1,3 +1,123 @@
+Sat Apr 19 19:15:09 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: Makefile.in.in, be.po, bg.po, ca.po, cs.po, da.po, de.po,
+	el.po, es.po, et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po,
+	is.po, it.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po,
+	ru.po, sk.po, sv.po, tr.po, uk.po:
+
+	.po files and french translation were updated. msgmerge report was
+	slightly modified (clearer).  
+
+Sat Apr 19 18:45:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/dump/dump.c:
+
+	error() + gettext().  
+
+Sat Apr 19 18:39:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/home.c, lua/core.c:
+
+	error() + gettext().  
+
+Sat Apr 19 18:35:26 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	error() is now used instead of fprintf(stderr,...).  
+
+Sat Apr 19 17:45:40 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.po files were updated.  
+
+Sat Apr 19 17:36:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/conf.c:
+
+	A namespace clash was fixed (now).  
+
+Sat Apr 19 17:33:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/conf.c:
+
+	Use error(). A namespace clash was fixed.  
+
+Sat Apr 19 17:27:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/cmdline.c:
+
+	Use error() and gettext().  
+
+Sat Apr 19 17:22:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/backend/xbel.c:
+
+	error() calls were fixed.  
+
+Sat Apr 19 17:20:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/error.c:
+
+	error() no more waits 1 second, and made use of fputc() instead of
+	fprintf().  
+
+Sat Apr 19 17:11:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/backend/xbel.c:
+
+	Some fprintf(stderr,..) were replace by error().  
+
+Sat Apr 19 17:00:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: setup.h, protocol/mailcap.c:
+
+	Minor cleanup.  
+
+Sat Apr 19 12:25:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bookmarks/bookmarks.c, util/lists.h:
+
+	Removed usage of ternary operators from list routines, it brings
+	portability problems. Thanks, Jose.  
+
+Sat Apr 19 11:02:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/gettext/: Makefile.in, gettextP.h, loadmsgcat.c,
+	plural.c:
+
+	Prefix __gettext was moved to gettext__.  
+
+Sat Apr 19 11:00:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.h:
+
+	ACT_NONE is now just zero instead of -1, thus it is enabled for use
+	in config files etc. This way, default keybindings may be removed.
+	Idea by Raul.  
+
+Sat Apr 19 10:46:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/gettext/: bindtextdom.c, dcgettext.c, dcigettext.c,
+	dcngettext.c, dgettext.c, dngettext.c, explodename.c, finddomain.c,
+	gettext.c, gettextP.h, hash-string.h, intl-compat.c, l10nflist.c,
+	libgettext.h, libgnuintl.h, loadinfo.h, loadmsgcat.c,
+	localcharset.c, localealias.c, ngettext.c, plural.c, plural.y,
+	textdomain.c:
+
+	char -> unsigned char + some fixes related to plural.c generation.  
+
+Sat Apr 19 10:24:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/gettext/: dcigettext.c, finddomain.c, gettextP.h,
+	loadmsgcat.c, localealias.c:
+
+	Some libc-specific code was removed.  
+
 Fri Apr 18 09:34:02 2003  Laurent Monin <zas@norz.org>:
 
 	* src/intl/gettext/: bindtextdom.c, dcgettext.c, dcigettext.c,

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.71 2003/07/21 23:39:43 pasky Exp $ */
+/* $Id: cookies.c,v 1.72 2003/07/23 03:07:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -305,7 +305,9 @@ set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 	cookie->id = cookie_id++;
 
 	foreach (cs, c_servers) {
-		if (strncasecmp(cs->server, uri->host, uri->hostlen)) continue;
+		if (strlen(cs->server) == uri->hostlen
+		    && strncasecmp(cs->server, uri->host, uri->hostlen))
+			continue;
 
 		if (cs->accept)	goto ok;
 

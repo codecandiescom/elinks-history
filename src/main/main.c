@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.184 2004/04/14 05:25:12 jonas Exp $ */
+/* $Id: main.c,v 1.185 2004/04/14 05:31:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,7 +168,6 @@ init(void)
 			close_terminal_pipes();
 		}
 	} else {
-		int attached;
 		int len;
 		void *info = create_session_info(get_opt_int_tree(cmdline_options,
 								  "base-session"),
@@ -189,11 +188,9 @@ init(void)
 			goto end;
 		}
 
-		attached = attach_terminal(get_input_handle(),
-					   get_output_handle(),
-					   get_ctl_handle(), info, len);
-
-		if (attached == -1) {
+		fd = attach_terminal(get_input_handle(), get_output_handle(),
+				     get_ctl_handle(), info, len);
+		if (fd == -1) {
 fatal_error:
 			retval = RET_FATAL;
 			terminate = 1;

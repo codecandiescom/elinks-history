@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.50 2002/09/12 13:00:14 zas Exp $ */
+/* $Id: http.c,v 1.51 2002/09/17 14:37:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,12 +279,11 @@ http_send_header(struct connection *c)
 
 	set_timeout(c);
 
-	info = mem_alloc(sizeof(struct http_connection_info));
+	info = mem_calloc(1, sizeof(struct http_connection_info));
 	if (!info) {
 		abort_conn_with_state(c, S_OUT_OF_MEM);
 		return;
 	}
-	memset(info, 0, sizeof(struct http_connection_info));
 	c->info = info;
 
 	host_data = get_host_name(host);

@@ -1,5 +1,5 @@
-/* HTTP Authentication support */ 
-/* $Id: auth.c,v 1.4 2002/06/17 07:42:32 pasky Exp $ */
+/* HTTP Authentication support */
+/* $Id: auth.c,v 1.5 2002/09/17 14:36:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,9 +142,8 @@ add_auth_entry(unsigned char *url, unsigned char *realm)
         }
 
         /* Create a new entry. */
-        entry = mem_alloc(sizeof(struct http_auth_basic));
+        entry = mem_calloc(1, sizeof(struct http_auth_basic));
         if (!entry) goto end;
-        memset(entry, 0, sizeof(struct http_auth_basic));
 
         entry->url = newurl;
         entry->url_len = strlen(entry->url); /* FIXME: Not really needed. */

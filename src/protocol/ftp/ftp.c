@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.37 2002/09/15 21:03:56 pasky Exp $ */
+/* $Id: ftp.c,v 1.38 2002/09/17 14:39:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -424,12 +424,11 @@ add_file_cmd_to_str(struct connection *conn)
 	unsigned char *str;
 	int strl = 0;
 
-	c_i = mem_alloc(sizeof(struct ftp_connection_info));
+	c_i = mem_calloc(1, sizeof(struct ftp_connection_info));
 	if (!c_i) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return NULL;
 	}
-	memset(c_i, 0, sizeof(struct ftp_connection_info));
 	conn->info = c_i;
 
 	str = init_str();

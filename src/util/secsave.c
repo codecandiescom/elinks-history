@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.18 2002/06/22 22:39:35 pasky Exp $ */
+/* $Id: secsave.c,v 1.19 2002/09/17 14:40:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,11 +72,9 @@ secure_open(unsigned char *file_name, mode_t mask)
 	mode_t saved_mask;
 	struct stat st;
 	struct secure_save_info *ssi = (struct secure_save_info *)
-				       mem_alloc(sizeof(struct secure_save_info));
+				       mem_calloc(1, sizeof(struct secure_save_info));
 
 	if (!ssi) goto end;
-
-	memset(ssi, 0, sizeof(struct secure_save_info));
 
 	ssi->secure_save = get_opt_int("secure_file_saving");
 

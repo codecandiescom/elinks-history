@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.41 2002/09/17 10:29:32 zas Exp $ */
+/* $Id: parser.c,v 1.42 2002/09/17 14:44:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1376,9 +1376,8 @@ html_button(unsigned char *a)
 	find_form_for_input(a);
 	html_focusable(a);
 
-	fc = mem_alloc(sizeof(struct form_control));
+	fc = mem_calloc(1, sizeof(struct form_control));
 	if (!fc) return;
-	memset(fc, 0, sizeof(struct form_control));
 
 	al = get_attr_val(a, "type");
 	if (!al) {
@@ -1442,9 +1441,8 @@ html_input(unsigned char *a)
 	find_form_for_input(a);
 	html_focusable(a);
 
-	fc = mem_alloc(sizeof(struct form_control));
+	fc = mem_calloc(1, sizeof(struct form_control));
 	if (!fc) return;
-	memset(fc, 0, sizeof(struct form_control));
 
 	al = get_attr_val(a, "type");
 	if (!al) {
@@ -2024,9 +2022,8 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	if (parse_element(p, eof, &t_name, &t_namelen, NULL, end)) goto pp;
 	if (t_namelen != 9 || strncasecmp(t_name, "/TEXTAREA", 9)) goto pp;
 
-	fc = mem_alloc(sizeof(struct form_control));
+	fc = mem_calloc(1, sizeof(struct form_control));
 	if (!fc) return;
-	memset(fc, 0, sizeof(struct form_control));
 
 	fc->form_num = last_form_tag - startf;
 	fc->ctrl_num = attr - last_form_tag;

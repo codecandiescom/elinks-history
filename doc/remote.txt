@@ -77,14 +77,14 @@ Mozilla -remote compatible commands:
 		Opens an ELinks instance in a new window. This ELinks instance
 		will connect to the already running one.
 
-ELinks -remote extensions command:
+ELinks extensions:
 
 	addBookmark(URL)
 
-		Adds the passed URL to the list of bookmarks.
+		Bookmarks the passed URL.
 
-For ease of use the additional action argument can be omitted in which case
-any URL arguments will be opened in new tabs in the remote instance. For example
+-remote can also take a list of URLs without an explicit action, in which case
+the URL arguments will be opened in new tabs in the remote instance. For example,
 by running:
 
 	$ elinks -remote slashdot.org fm g:elinks
@@ -93,4 +93,4 @@ new tabs containing slashdot.org, freshmeat.net and a Google search of elinks
 will be opened.
 
 
-$Id: remote.txt,v 1.6 2005/01/03 08:12:57 miciah Exp $
+$Id: remote.txt,v 1.7 2005/01/03 08:23:11 miciah Exp $

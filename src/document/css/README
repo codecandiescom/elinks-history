@@ -23,7 +23,7 @@ The scanner
 The parser
 
    It takes a string with CSS code, composes tokens (from the scanner) into
-   some meaningfull syntax and transforms it to an internal set of structures
+   some meaningful syntax and transforms it to an internal set of structures
    describing the data (let's call it a "rawer"). It currently does no recovery
    when something unexpected shows up but skips to next special control char.
 
@@ -31,8 +31,9 @@ The parser
 
 The applier
 
-   It applies style info from a syntax tree or fracment of one (in the case of
-   style="" attributes) to the current element.
+   It applies style info from a syntax tree (parsed ELinks or document
+   stylesheet) or fragment of one (in the case of style="" attributes) to the
+   current element.
 
    The applier lives in apply.*
 

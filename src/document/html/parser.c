@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.117 2003/06/09 01:48:56 zas Exp $ */
+/* $Id: parser.c,v 1.118 2003/06/09 09:44:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,13 +98,11 @@ nextattr:
 			if (IS_QUOTE(*e)) {
 				unsigned char quote = *e;
 
-skip_quoted_value:
-				e++;
-				while (*e != quote && *e) e++;
-				if (*e) {
+				while (*e == quote) {
 					e++;
-					if (*e == quote)
-						goto skip_quoted_value;
+					while (*e != quote && *e) e++;
+					if (!*e) goto end_1;
+					e++;
 				}
 			}
 		} while (*e && !WHITECHAR(*e) && !TAG_DELIM(e));
@@ -122,12 +120,12 @@ skip_quoted_value:
 	if (IS_QUOTE(*e)) {
 		unsigned char quote = *e;
 
-quoted_value:
-		e++;
-		while (*e != quote && *e) e++;
-		if (*e < ' ') goto end_1;
-		e++;
-		if (*e == quote) goto quoted_value;
+		while (*e == quote) {
+			e++;
+			while (*e != quote && *e) e++;
+			if (!*e) goto end_1;
+			e++;
+		}
 	} else {
 		while (*e && !WHITECHAR(*e) && !TAG_DELIM(e)) e++;
 	}

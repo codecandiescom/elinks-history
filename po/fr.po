@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"POT-Creation-Date: 2004-06-21 10:02+0200\n"
+"POT-Creation-Date: 2004-06-21 19:27+0200\n"
 "PO-Revision-Date: 2004-06-12 01:20+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
@@ -55,8 +55,8 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/viewer/text/search.c:864 src/viewer/text/search.c:892
 #: src/viewer/text/search.c:917 src/viewer/text/search.c:948
 #: src/viewer/text/search.c:1374 src/viewer/text/textarea.c:365
-#: src/viewer/text/textarea.c:374 src/viewer/text/view.c:255
-#: src/viewer/text/view.c:930 src/viewer/text/view.c:1336
+#: src/viewer/text/textarea.c:374 src/viewer/text/view.c:256
+#: src/viewer/text/view.c:953 src/viewer/text/view.c:1359
 msgid "OK"
 msgstr "OK"
 
@@ -84,42 +84,42 @@ msgstr "Désolé, mais le dossier \"%s\" est actuellement utilisé ailleurs."
 msgid "Delete error"
 msgstr "Erreur de suppression"
 
-#: src/bfu/hierbox.c:688
+#: src/bfu/hierbox.c:699
 msgid "Delete marked items"
 msgstr "Supprimer les items sélectionnés"
 
-#: src/bfu/hierbox.c:689
+#: src/bfu/hierbox.c:700
 msgid "Delete marked items?"
 msgstr "Supprimer les items sélectionnés?"
 
-#: src/bfu/hierbox.c:691 src/bfu/hierbox.c:718 src/bfu/hierbox.c:732
-#: src/bfu/hierbox.c:794 src/config/dialogs.c:638 src/dialogs/menu.c:124
+#: src/bfu/hierbox.c:702 src/bfu/hierbox.c:729 src/bfu/hierbox.c:743
+#: src/bfu/hierbox.c:805 src/config/dialogs.c:638 src/dialogs/menu.c:124
 #: src/formhist/formhist.c:454 src/mime/dialogs.c:75 src/sched/task.c:184
 #: src/terminal/tab.c:195 src/terminal/tab.c:231
 msgid "Yes"
 msgstr "Oui"
 
-#: src/bfu/hierbox.c:692 src/bfu/hierbox.c:719 src/bfu/hierbox.c:733
-#: src/bfu/hierbox.c:795 src/config/dialogs.c:639 src/dialogs/menu.c:125
+#: src/bfu/hierbox.c:703 src/bfu/hierbox.c:730 src/bfu/hierbox.c:744
+#: src/bfu/hierbox.c:806 src/config/dialogs.c:639 src/dialogs/menu.c:125
 #: src/formhist/formhist.c:455 src/mime/dialogs.c:76 src/sched/task.c:185
 #: src/terminal/tab.c:196 src/terminal/tab.c:232
 msgid "No"
 msgstr "Non"
 
-#: src/bfu/hierbox.c:714
+#: src/bfu/hierbox.c:725
 msgid "Delete folder"
 msgstr "Supprimer un dossier"
 
-#: src/bfu/hierbox.c:715
+#: src/bfu/hierbox.c:726
 #, c-format
 msgid "Delete the folder \"%s\" and its content?"
 msgstr "Supprimer le dossier \"%s\" et son contenu?"
 
-#: src/bfu/hierbox.c:727
+#: src/bfu/hierbox.c:738
 msgid "Delete item"
 msgstr "Supprimer un item"
 
-#: src/bfu/hierbox.c:728
+#: src/bfu/hierbox.c:739
 #, c-format
 msgid ""
 "Delete \"%s\"?\n"
@@ -130,11 +130,11 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/bfu/hierbox.c:791
+#: src/bfu/hierbox.c:802
 msgid "Clear all items"
 msgstr "Effacer tous les items"
 
-#: src/bfu/hierbox.c:792
+#: src/bfu/hierbox.c:803
 msgid "Do you really want to remove all items?"
 msgstr "Êtes-vous sûr de vouloir effacer tous les items?"
 
@@ -300,7 +300,7 @@ msgstr "Nom du dossier"
 #: src/sched/download.c:1038 src/sched/download.c:1050
 #: src/scripting/lua/core.c:400 src/scripting/lua/core.c:481
 #: src/scripting/lua/core.c:719 src/viewer/text/search.c:1375
-#: src/viewer/text/view.c:930
+#: src/viewer/text/view.c:953
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -1169,21 +1169,21 @@ msgstr "Télécharger l'image courante"
 msgid "Attempt to resume download of the current link"
 msgstr "Reprendre le téléchargement du lien courant"
 
-#: src/config/kbdbind.c:472 src/config/kbdbind.c:564 src/config/kbdbind.c:586
+#: src/config/kbdbind.c:472
+msgid "Pass URI of current link to external command"
+msgstr "Passer l'URI du lien courant à une commande externe"
+
+#: src/config/kbdbind.c:473 src/config/kbdbind.c:564 src/config/kbdbind.c:586
 msgid "Follow the current link"
 msgstr "Suivre le lien courant"
 
-#: src/config/kbdbind.c:473
+#: src/config/kbdbind.c:474
 msgid "Follow the current link, forcing reload of the target"
 msgstr "Suivre le lien courant et rafraîchir la cible"
 
-#: src/config/kbdbind.c:474
+#: src/config/kbdbind.c:475
 msgid "Open the link context menu"
 msgstr "Ouvrir le menu contextuel du lien"
-
-#: src/config/kbdbind.c:475
-msgid "Pass URI of current link to external command"
-msgstr "Passer l'URI du lien courant à une commande externe"
 
 #: src/config/kbdbind.c:477
 msgid "Open a Lua console"
@@ -1222,12 +1222,12 @@ msgid "Move cursor up"
 msgstr "Déplacer le curseur vers le haut"
 
 #: src/config/kbdbind.c:488
-msgid "Move to the start of the document"
-msgstr "Aller au début du document"
-
-#: src/config/kbdbind.c:489
 msgid "Move to the end of the document"
 msgstr "Aller à la fin du document"
+
+#: src/config/kbdbind.c:489
+msgid "Move to the start of the document"
+msgstr "Aller au début du document"
 
 #: src/config/kbdbind.c:490
 msgid "Move downwards one link"
@@ -1237,11 +1237,11 @@ msgstr "Descendre d'un lien"
 msgid "Move upwards one link"
 msgstr "Monter d'un lien"
 
-#: src/config/kbdbind.c:492 src/config/kbdbind.c:593
+#: src/config/kbdbind.c:492 src/config/kbdbind.c:592
 msgid "Move downwards by a page"
 msgstr "Descendre d'une page"
 
-#: src/config/kbdbind.c:493 src/config/kbdbind.c:594
+#: src/config/kbdbind.c:493 src/config/kbdbind.c:593
 msgid "Move upwards by a page"
 msgstr "Monter d'une page"
 
@@ -1406,12 +1406,12 @@ msgid "Previous tab"
 msgstr "Onglet précédent"
 
 #: src/config/kbdbind.c:535
-msgid "Toggle displaying of links to images"
-msgstr "Commuter l'affichage des liens vers les images."
-
-#: src/config/kbdbind.c:536
 msgid "Toggle rendering of page using CSS"
 msgstr "Commuter le rendu avec CSS"
+
+#: src/config/kbdbind.c:536
+msgid "Toggle displaying of links to images"
+msgstr "Commuter l'affichage des liens vers les images."
 
 #: src/config/kbdbind.c:537
 msgid "Toggle rendering of tables"
@@ -1508,13 +1508,13 @@ msgstr "Déplacer le curseur vers la gauche"
 msgid "Move to the next item"
 msgstr "Se déplacer à l'item suivant"
 
-#: src/config/kbdbind.c:570 src/config/kbdbind.c:592
-msgid "Move to the previous item"
-msgstr "Se déplacer à l'item précédent"
-
-#: src/config/kbdbind.c:571
+#: src/config/kbdbind.c:570
 msgid "Paste text from the clipboard"
 msgstr "Coller le texte du tampon"
+
+#: src/config/kbdbind.c:571 src/config/kbdbind.c:594
+msgid "Move to the previous item"
+msgstr "Se déplacer à l'item précédent"
 
 #: src/config/kbdbind.c:573 src/config/kbdbind.c:596
 msgid "Move the cursor right"
@@ -2736,6 +2736,7 @@ msgid "Rules for passing URIs to external commands."
 msgstr "Règles de passage d'URIs aux commandes externes."
 
 #: src/config/options.inc:627
+#, c-format
 msgid ""
 "A rule for passing URI to an external command.\n"
 "The format is:\n"
@@ -4797,11 +4798,16 @@ msgstr "temps restant estimé"
 msgid "ETA"
 msgstr "ETA"
 
-#: src/dialogs/status.c:325
+#: src/dialogs/status.c:230
+#, c-format
+msgid "Cursor position: %dx%d"
+msgstr ""
+
+#: src/dialogs/status.c:331
 msgid "Untitled"
 msgstr "Sans titre"
 
-#: src/dialogs/status.c:327
+#: src/dialogs/status.c:333
 msgid "No document"
 msgstr "Aucun document"
 
@@ -5565,6 +5571,7 @@ msgid "Dumb prefixes."
 msgstr "Préfixes simples."
 
 #: src/protocol/rewrite/rewrite.c:68
+#, c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
 "%c in the string means the current URL\n"
@@ -6175,87 +6182,87 @@ msgstr "pressez %s pour soumettre à"
 msgid "press %s to post to"
 msgstr "pressez %s pour poster à"
 
-#: src/viewer/text/link.c:838
+#: src/viewer/text/link.c:839
 msgid "Display ~usemap"
 msgstr "Afficher ~usemap"
 
-#: src/viewer/text/link.c:841
+#: src/viewer/text/link.c:842
 msgid "~Follow link"
 msgstr "~Suivre le lien"
 
-#: src/viewer/text/link.c:843
+#: src/viewer/text/link.c:844
 msgid "Follow link and r~eload"
 msgstr "Suivre le lien et ~recharger"
 
-#: src/viewer/text/link.c:847
+#: src/viewer/text/link.c:848
 msgid "Open in new ~window"
 msgstr "Ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:849
+#: src/viewer/text/link.c:850
 msgid "Open in new ~tab"
 msgstr "Ouvrir dans un nouvel ongle~t"
 
-#: src/viewer/text/link.c:851
+#: src/viewer/text/link.c:852
 msgid "Open in new tab in ~background"
 msgstr "Ouvrir dans un nouvel onglet en arrière-~plan"
 
-#: src/viewer/text/link.c:856
+#: src/viewer/text/link.c:857
 msgid "~Download link"
 msgstr "~Enregistrer le lien"
 
-#: src/viewer/text/link.c:859
+#: src/viewer/text/link.c:860
 msgid "~Add link to bookmarks"
 msgstr "~Ajouter ce lien aux signets"
 
-#: src/viewer/text/link.c:870 src/viewer/text/link.c:896
+#: src/viewer/text/link.c:871 src/viewer/text/link.c:897
 msgid "~Reset form"
 msgstr "Remettre à ~zéro le formulaire"
 
-#: src/viewer/text/link.c:875
+#: src/viewer/text/link.c:876
 msgid "Open in ~external editor"
 msgstr "Ouvrir dans un ~éditeur externe"
 
-#: src/viewer/text/link.c:880
+#: src/viewer/text/link.c:881
 msgid "~Submit form"
 msgstr "~Envoyer le formulaire"
 
-#: src/viewer/text/link.c:881
+#: src/viewer/text/link.c:882
 msgid "Submit form and rel~oad"
 msgstr "Envoyer le formulaire et ~recharger"
 
-#: src/viewer/text/link.c:884
+#: src/viewer/text/link.c:885
 msgid "Submit form and open in new ~window"
 msgstr "Envoyer le formulaire et ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:886
+#: src/viewer/text/link.c:887
 msgid "Submit form and open in new ~tab"
 msgstr "Envoyer le formulaire et ouvrir un ~onglet"
 
-#: src/viewer/text/link.c:889
+#: src/viewer/text/link.c:890
 msgid "Submit form and open in new tab in ~background"
 msgstr "Envoyer le formulaire et ouvrir un onglet en ~arrière-plan"
 
-#: src/viewer/text/link.c:894
+#: src/viewer/text/link.c:895
 msgid "Submit form and ~download"
 msgstr "Envoyer le formulaire et ~télécharger"
 
-#: src/viewer/text/link.c:901
+#: src/viewer/text/link.c:902
 msgid "V~iew image"
 msgstr "~Voir l'image"
 
-#: src/viewer/text/link.c:903
+#: src/viewer/text/link.c:904
 msgid "Download ima~ge"
 msgstr "Enregistrer l'~image"
 
-#: src/viewer/text/link.c:908
+#: src/viewer/text/link.c:909
 msgid "No link selected"
 msgstr "Aucun lien sélectionné"
 
-#: src/viewer/text/link.c:958
+#: src/viewer/text/link.c:959
 msgid "Image"
 msgstr "Image"
 
-#: src/viewer/text/link.c:963
+#: src/viewer/text/link.c:964
 msgid "Usemap"
 msgstr "Usemap"
 
@@ -6321,28 +6328,28 @@ msgstr "Vous ne pouvez utiliser un éditeur externe en mode anonyme."
 msgid "You can do this only on the master terminal"
 msgstr "Vous ne pouvez faire ça que dans le terminal maître"
 
-#: src/viewer/text/view.c:250
+#: src/viewer/text/view.c:251
 msgid "Missing fragment"
 msgstr "Ancre manquante"
 
-#: src/viewer/text/view.c:251
+#: src/viewer/text/view.c:252
 #, c-format
 msgid "The requested fragment \"#%s\" doesn't exist."
 msgstr "L'ancre recherchée \"#%s\" n'existe pas."
 
-#: src/viewer/text/view.c:929
+#: src/viewer/text/view.c:952
 msgid "Go to link"
 msgstr "Aller au lien"
 
-#: src/viewer/text/view.c:929
+#: src/viewer/text/view.c:952
 msgid "Enter link number"
 msgstr "Entrez un numéro de lien"
 
-#: src/viewer/text/view.c:1333
+#: src/viewer/text/view.c:1356
 msgid "Save error"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/viewer/text/view.c:1334
+#: src/viewer/text/view.c:1357
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
 

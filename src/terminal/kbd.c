@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.73 2004/06/19 12:00:29 jonas Exp $ */
+/* $Id: kbd.c,v 1.74 2004/06/19 12:04:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,8 +41,6 @@
 #define TW_BUTT_MIDDLE	2
 #define TW_BUTT_RIGHT	4
 
-#define USE_ALTSCREEN	1
-
 struct itrm {
 	int std_in;
 	int std_out;
@@ -50,7 +48,6 @@ struct itrm {
 	int sock_out;
 	int ctl_in;
 	struct termios t;
-	int flags;
 	unsigned char kqueue[IN_BUF_SIZE];
 	int qlen;
 	int timer;
@@ -60,6 +57,7 @@ struct itrm {
 	unsigned char *orig_title;
 
 	unsigned int blocked:1;
+	unsigned int altscreen:1;
 };
 
 static struct itrm *ditrm = NULL;
@@ -168,12 +166,12 @@ kbd_ctrl_c(void)
 #define INIT_ALT_SCREEN_SEQ	"\033[?47h"	/* Use Alternate Screen Buffer */
 
 static void
-send_init_sequence(int h, int flags)
+send_init_sequence(int h, int altscreen)
 {
 	write_sequence(h, INIT_TERMINAL_SEQ);
 
 	/* If alternate screen is supported switch to it. */
-	if (flags & USE_ALTSCREEN) {
+	if (altscreen) {
 		write_sequence(h, INIT_ALT_SCREEN_SEQ);
 	}
 #ifdef CONFIG_MOUSE
@@ -189,7 +187,7 @@ send_init_sequence(int h, int flags)
 #define DONE_ALT_SCREEN_SEQ	"\033[?47l"	/* Use Normal Screen Buffer */
 
 static void
-send_done_sequence(int h, int flags)
+send_done_sequence(int h, int altscreen)
 {
 	write_sequence(h, DONE_CLS_SEQ);
 
@@ -202,7 +200,7 @@ send_done_sequence(int h, int flags)
 #endif
 
 	/* Switch from alternate screen. */
-	if (flags & USE_ALTSCREEN) {
+	if (altscreen) {
 		write_sequence(h, DONE_ALT_SCREEN_SEQ);
 	}
 
@@ -287,7 +285,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	/* FIXME: Combination altscreen + xwin does not work as it should,
 	 * mouse clicks are reportedly partially ignored. */
 	if (info.system_env & (ENV_SCREEN | ENV_XWIN))
-		itrm->flags |= USE_ALTSCREEN;
+		itrm->altscreen = 1;
 
 	if (ctl_in >= 0) setraw(ctl_in, &itrm->t);
 	set_handlers(std_in, (void (*)(void *)) in_kbd,
@@ -315,7 +313,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 
 	queue_event(itrm, (char *)&info, sizeof(struct terminal_info));
 	queue_event(itrm, (char *)init_string, init_len);
-	send_init_sequence(std_out, itrm->flags);
+	send_init_sequence(std_out, itrm->altscreen);
 
 	itrm->mouse_h = handle_mouse(0, (void (*)(void *, unsigned char *, int)) queue_event, itrm);
 }
@@ -340,7 +338,7 @@ unblock_itrm(int fd)
 
 	if (itrm->ctl_in >= 0 && setraw(itrm->ctl_in, NULL)) return -1;
 	itrm->blocked = 0;
-	send_init_sequence(itrm->std_out, itrm->flags);
+	send_init_sequence(itrm->std_out, itrm->altscreen);
 
 	set_handlers(itrm->std_in, (void (*)(void *)) in_kbd, NULL,
 		     (void (*)(void *)) free_trm, itrm);
@@ -364,7 +362,7 @@ block_itrm(int fd)
 	itrm->blocked = 1;
 	block_stdin();
 	unhandle_terminal_resize(itrm->ctl_in);
-	send_done_sequence(itrm->std_out, itrm->flags);
+	send_done_sequence(itrm->std_out, itrm->altscreen);
 	tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
 	set_handlers(itrm->std_in, NULL, NULL,
 		     (void (*)(void *)) free_trm, itrm);
@@ -385,7 +383,7 @@ free_trm(struct itrm *itrm)
 
 	unhandle_terminal_resize(itrm->ctl_in);
 	unhandle_mouse(itrm->mouse_h);
-	send_done_sequence(itrm->std_out,itrm->flags);
+	send_done_sequence(itrm->std_out,itrm->altscreen);
 	tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
 
 	set_handlers(itrm->std_in, NULL, NULL, NULL, NULL);

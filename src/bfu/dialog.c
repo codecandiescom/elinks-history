@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.136 2004/05/09 21:38:41 zas Exp $ */
+/* $Id: dialog.c,v 1.137 2004/05/10 12:56:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -541,11 +541,11 @@ draw_dialog(struct dialog_data *dlg_data, int width, int height)
 	struct terminal *term = dlg_data->win->term;
 	int dlg_width = int_min(term->width, width + 2 * DIALOG_LB);
 	int dlg_height = int_min(term->height, height + 2 * DIALOG_TB);
-	
-	set_rect(dlg_data->dimensions,
+
+	set_rect(&dlg_data->dimensions,
 		 (term->width - dlg_width) / 2, (term->height - dlg_height) / 2,
 		 dlg_width, dlg_height);
-	
+
 	draw_area(term, dlg_data->dimensions.x, dlg_data->dimensions.y,
 		  dlg_data->dimensions.width, dlg_data->dimensions.height, ' ', 0,
 		  get_bfu_color(term, "dialog.generic"));

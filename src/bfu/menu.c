@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.227 2004/05/09 22:27:36 zas Exp $ */
+/* $Id: menu.c,v 1.228 2004/05/10 12:56:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,7 +234,7 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	foreach_menu_item (item, menu->items)
 		int_lower_bound(&mx, get_menuitem_width(term, item, width));
 
-	set_rect(menu->dimensions,
+	set_rect(&menu->dimensions,
 		 menu->parent_x, menu->parent_y,
 		 mx + MENU_BORDER_SIZE * 2,
 		 my + MENU_BORDER_SIZE * 2);
@@ -377,12 +377,12 @@ display_menu(struct terminal *term, struct menu *menu)
 	struct rect m;
 	int p, y;
 
-	set_rect(m,
+	set_rect(&m,
 		 menu->dimensions.x + MENU_BORDER_SIZE,
 		 menu->dimensions.y + MENU_BORDER_SIZE,
 		 int_max(0, menu->dimensions.width - MENU_BORDER_SIZE * 2),
 		 int_max(0, menu->dimensions.height - MENU_BORDER_SIZE * 2));
-	
+
 	draw_area(term,	m.x, m.y, m.width, m.height, ' ', 0, normal_color);
 	draw_border(term, menu->dimensions.x, menu->dimensions.y,
 		    menu->dimensions.width, menu->dimensions.height, frame_color, 1);
@@ -512,7 +512,7 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 			return;
 	}
 
-	if (!is_in_rect(menu->dimensions, ev->x, ev->y)) {
+	if (!is_in_rect(&menu->dimensions, ev->x, ev->y)) {
 		if (check_mouse_action(ev, B_DOWN)) {
 			delete_window_ev(win, NULL);
 
@@ -533,7 +533,7 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 
 				m1 = w1->data;
 
-				if (is_in_rect(m1->dimensions, ev->x, ev->y)) {
+				if (is_in_rect(&m1->dimensions, ev->x, ev->y)) {
 					delete_window_ev(win, ev);
 					break;
 				}
@@ -541,7 +541,7 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 		}
 
 	} else {
-		if (is_in_rect(menu->dimensions, ev->x, ev->y)) {
+		if (is_in_rect(&menu->dimensions, ev->x, ev->y)) {
 			int sel = ev->y - menu->dimensions.y - 1 + menu->first;
 
 			if (sel >= 0 && sel < menu->size

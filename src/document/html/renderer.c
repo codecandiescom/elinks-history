@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.432 2004/05/10 01:51:04 jonas Exp $ */
+/* $Id: renderer.c,v 1.433 2004/05/10 12:56:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1349,7 +1349,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 		if (node) {
 			int node_width = !table_level ? MAXINT : width;
 
-			set_rect(node->box, xs, ys, node_width, 1);
+			set_rect(&node->box, xs, ys, node_width, 1);
 			add_to_list(document->nodes, node);
 		}
 

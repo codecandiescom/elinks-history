@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.139 2004/05/07 12:15:40 zas Exp $ */
+/* $Id: inpfield.c,v 1.140 2004/05/10 12:56:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,7 +134,7 @@ dlg_format_field(struct terminal *term,
 
 	if (rw) int_lower_bound(rw, int_min(w, DIALOG_MIN_WIDTH));
 
-	set_rect(widget_data->dimensions, x, *y, w, 1);
+	set_rect(&widget_data->dimensions, x, *y, w, 1);
 
 	(*y)++;
 }
@@ -302,7 +302,7 @@ mouse_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	if (!widget_has_history(widget_data))
 		return EVENT_NOT_PROCESSED;
 
-	if (!is_in_rect(widget_data->dimensions, ev->x, ev->y))
+	if (!is_in_rect(&widget_data->dimensions, ev->x, ev->y))
 		return EVENT_NOT_PROCESSED;
 
 	switch (get_mouse_button(ev)) {

@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.51 2004/05/07 11:24:20 zas Exp $ */
+/* $Id: button.c,v 1.52 2004/05/10 12:56:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,7 +78,7 @@ dlg_format_buttons(struct terminal *term,
 			int p = x + (align == AL_CENTER ? (w - mw) / 2 : 0);
 
 			for (i = i1; i < i2; i++) {
-				set_rect(widget_data[i].dimensions,
+				set_rect(&widget_data[i].dimensions,
 					 p, *y,
 					 strlen(widget_data[i].widget->text) + BUTTON_LR_LEN, 1);
 
@@ -119,7 +119,7 @@ mouse_button(struct widget_data *widget_data, struct dialog_data *dlg_data, stru
 	if (check_mouse_wheel(ev))
 		return EVENT_NOT_PROCESSED;
 
-	if (!is_in_rect(widget_data->dimensions, ev->x, ev->y))
+	if (!is_in_rect(&widget_data->dimensions, ev->x, ev->y))
 		return EVENT_NOT_PROCESSED;
 
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);

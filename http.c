@@ -682,15 +682,14 @@ void http_got_header(struct connection *c, struct read_buffer *rb)
 		unsigned char *ep;
 		int l = strtol(d, (char **)&ep, 10);
 		if (!*ep && l >= 0) {
-			if (!info->close) info->length = l;
+			if (!info->close || version >= 11) info->length = l;
 			c->est_length = c->from + l;
 		}
 		mem_free(d);
 	}
 	if ((d = parse_http_header(e->head, "Accept-Ranges", NULL))) {
-		if (!strcasecmp(d, "none")) {
-			if (!c->unrestartable) c->unrestartable = 1;
-		}
+		if (!strcasecmp(d, "none") && !c->unrestartable)
+			c->unrestartable = 1;
 		mem_free(d);
 	} else if (!c->unrestartable && !c->from) c->unrestartable = 1;
 	if ((d = parse_http_header(e->head, "Transfer-Encoding", NULL))) {

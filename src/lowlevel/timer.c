@@ -1,5 +1,5 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.8 2003/09/25 19:32:17 zas Exp $ */
+/* $Id: timer.c,v 1.9 2003/11/22 19:19:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,7 +49,10 @@ count_down(void *xxx)
 void
 reset_timer(void)
 {
-	if (countdown >= 0) kill_timer(countdown);
+	if (countdown >= 0) {
+		kill_timer(countdown);
+		countdown = -1;
+	}
 
 	if (!get_opt_int("ui.timer.enable")) return;
 

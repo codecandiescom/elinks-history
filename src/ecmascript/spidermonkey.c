@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.31 2004/09/25 00:02:31 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.32 2004/09/25 00:03:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,7 +73,7 @@ union prop_union {
 	if (!JSVAL_IS_INT(id) || (p.string = NULL)) \
 		goto bye;
 
-#define VALUE_TO_JSVAL_END \
+#define VALUE_TO_JSVAL_END(vp) \
 	value_to_jsval(ctx, vp, prop_type, &p); \
  \
 bye: \
@@ -225,7 +225,7 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		goto bye;
 	}
 
-	VALUE_TO_JSVAL_END;
+	VALUE_TO_JSVAL_END(vp);
 }
 
 static JSBool
@@ -256,7 +256,6 @@ window_alert(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 	union jsval_union v;
 	enum prop_type prop_type;
 	union prop_union p;
-	jsval *vp = rval;
 
 	assert(argc == 1);
 
@@ -271,7 +270,7 @@ window_alert(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 		N_("OK"), NULL, B_ENTER | B_ESC);
 
 	p.boolean = 1; prop_type = JSPT_BOOLEAN;
-	VALUE_TO_JSVAL_END;
+	VALUE_TO_JSVAL_END(rval);
 }
 
 
@@ -310,7 +309,7 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		goto bye;
 	}
 
-	VALUE_TO_JSVAL_END;
+	VALUE_TO_JSVAL_END(vp);
 }
 
 static JSBool
@@ -367,7 +366,7 @@ location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		goto bye;
 	}
 
-	VALUE_TO_JSVAL_END;
+	VALUE_TO_JSVAL_END(vp);
 }
 
 static JSBool

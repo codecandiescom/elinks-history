@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.31 2004/01/01 13:58:44 jonas Exp $ */
+/* $Id: smb.c,v 1.32 2004/01/01 16:15:16 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -511,6 +511,9 @@ smb_func(struct connection *conn)
 		/* At this point, we are the child process.
 		 * Maybe we just don't care if the child kills itself
 		 * dereferencing a NULL pointer... -- Miciah */
+		/* Leaving random core files after itself is not what a nice
+		 * program does. Also, the user might also want to know, why
+		 * the hell does he see nothing on the screen. --pasky */
 
 		if (!*share) {
 			v[n++] = "-L";	/* get a list of shares available on a host */

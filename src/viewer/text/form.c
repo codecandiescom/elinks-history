@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.88 2004/04/17 02:39:53 jonas Exp $ */
+/* $Id: form.c,v 1.89 2004/04/17 18:56:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -346,7 +346,6 @@ free_succesful_controls(struct list_head *submit)
 	foreach (v, *submit) {
 		mem_free_if(v->name);
 		mem_free_if(v->value);
-		mem_free_if(v->file_content);
 	}
 	free_list(*submit);
 }

@@ -1,3 +1,30 @@
+Thu Feb 24 21:51:51 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/download.c:
+
+	Fix the comment Jonas added in his last patch.  
+
+Thu Feb 24 12:07:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Fix displaying of ordered lists when <li> is not directly nested in
+	<ol>-elements. Reported by Michal Kwiatkowski.  
+
+Thu Feb 24 12:05:26 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Revert bad part of the patch that fixes the what-to-do dialog.
+	Thanks Zas.  
+
+Wed Feb 23 23:42:12 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/parser.c, sched/download.c:
+
+	Fix the what-to-do dialog fixed so that the input box does not get
+	focus.  
+
 Wed Feb 23 22:02:36 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/bookmarks/: bookmarks.c, dialogs.c:

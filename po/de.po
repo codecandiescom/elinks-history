@@ -604,28 +604,24 @@ msgid "Move to the next frame"
 msgstr "Wechsel zum nächsten Rahmen"
 
 #: src/config/kbdbind.c:417
-#, fuzzy
 msgid "Open a new tab"
-msgstr "Öffne ein neues Fenster"
+msgstr "Öffne eine neue Ansicht"
 
 #: src/config/kbdbind.c:418
-#, fuzzy
 msgid "Open a new tab in background"
-msgstr "A~nsicht im Hintergrund"
+msgstr "Öffne eine neue Ansicht im Hintergrund"
 
 #: src/config/kbdbind.c:419
 msgid "Open a new window"
 msgstr "Öffne ein neues Fenster"
 
 #: src/config/kbdbind.c:420
-#, fuzzy
 msgid "Open the current link in a new tab"
-msgstr "Öffne den aktuellen Link in einem neuem Fenster"
+msgstr "Öffne den aktuellen Link in einer neuen Ansicht"
 
 #: src/config/kbdbind.c:422
-#, fuzzy
 msgid "Open the current link a new tab in background"
-msgstr "Öffne den aktuellen Link in einem neuem Fenster"
+msgstr "Öffne den aktuellen Link in einer neuen Ansicht im Hintergrund"
 
 #: src/config/kbdbind.c:423
 msgid "Open the current link in a new window"
@@ -1263,7 +1259,6 @@ msgid "Image links tagging"
 msgstr "Kennzeichnung von Links zu Bildern"
 
 #: src/config/options.c:1108
-#, fuzzy
 msgid ""
 "When to enclose image links:\n"
 "0 means never\n"
@@ -1271,10 +1266,9 @@ msgid ""
 "2 means always"
 msgstr ""
 "Wann sollen Links zu Bildern eingefasst werden:\n"
-"0     niemals\n"
-"1     niemals wenn alt oder Titel vorhanden sind\n"
-"      (ursprüngliches Verhalten)\n"
-"2     immer"
+"0 niemals\n"
+"1 niemals wenn alt oder Titel vorhanden sind (ursprüngliches Verhalten)\n"
+"2 immer"
 
 #: src/config/options.c:1113
 msgid "Image link prefix"
@@ -1295,7 +1289,7 @@ msgstr "Suffix, um Links zu Bildern zu kennzeichnen."
 #: src/config/options.c:1121
 #, fuzzy
 msgid "Display links to images w/o alt"
-msgstr "Zeige Links zu Bildern an."
+msgstr "Zeige Links zu Bildern an"
 
 #: src/config/options.c:1123
 msgid ""
@@ -1304,9 +1298,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1126
-#, fuzzy
 msgid "Display links to images"
-msgstr "Zeige Links zu Bildern an."
+msgstr "Zeige Links zu Bildern an"
 
 #: src/config/options.c:1128
 msgid ""
@@ -1326,22 +1319,19 @@ msgstr "Optionen für den Umgang mit Links zu anderen Dokumenten."
 
 #: src/config/options.c:1138
 msgid "Active link"
-msgstr ""
+msgstr "Aktiver Link"
 
 #: src/config/options.c:1140
-#, fuzzy
 msgid "Options for the active link."
-msgstr "Optionen für die Suche."
+msgstr "Optionen für den aktiven Link."
 
 #: src/config/options.c:1142
-#, fuzzy
 msgid "Colors"
-msgstr "Farbe"
+msgstr "Farben"
 
 #: src/config/options.c:1144
-#, fuzzy
 msgid "Active link colors."
-msgstr "Grundeinstellung der Farbe von Links."
+msgstr "Farben von aktiven Links."
 
 #: src/config/options.c:1146 src/config/options.c:1334
 #: src/config/options.c:1967 src/config/options.c:1979
@@ -1472,9 +1462,8 @@ msgid "Default text color."
 msgstr "Grundeinstellung der Textfarbe."
 
 #: src/config/options.c:1154
-#, fuzzy
 msgid "Enable color"
-msgstr "Aktivieren"
+msgstr "Farben aktivieren"
 
 #: src/config/options.c:1156
 msgid ""
@@ -1492,9 +1481,8 @@ msgid "Make the active link text bold."
 msgstr ""
 
 #: src/config/options.c:1163
-#, fuzzy
 msgid "Invert colors"
-msgstr "Textfarbe"
+msgstr "Farben invertieren"
 
 #: src/config/options.c:1165
 msgid "Invert the fore- and background color so the link stands out."
@@ -2126,14 +2114,12 @@ msgstr ""
 "5 alles anzeigen"
 
 #: src/config/options.c:1505
-#, fuzzy
 msgid "Underline links"
-msgstr "Unterstreichen"
+msgstr "Links unterstreichen"
 
 #: src/config/options.c:1507
-#, fuzzy
 msgid "Underline links."
-msgstr "Unterstreichen"
+msgstr "Links unterstreichen."
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1513
@@ -3049,13 +3035,13 @@ msgid "Dialog colors."
 msgstr "Farben von Dialogen."
 
 #: src/config/options.c:2100
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use ui.colors.color.dialog.generic.background instead."
 msgstr ""
 "Diese Option ist veraltet und wird bald entfernt.\n"
-"Bitte benutze stattdessen die Option ui.dialog.shadows."
+"Bitte benutze stattdessen die Option\n"
+"ui.colors.color.dialog.generic.background."
 
 #: src/config/options.c:2103 src/config/options.c:2512
 msgid "Generic"
@@ -3299,13 +3285,13 @@ msgid "Menu selected hotkey default background color."
 msgstr ""
 
 #: src/config/options.c:2509
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use ui.colors.mono.dialog.generic.background instead."
 msgstr ""
 "Diese Option ist veraltet und wird bald entfernt.\n"
-"Bitte benutze stattdessen die Option ui.dialog.shadows."
+"Bitte benutze stattdessen die Option\n"
+"ui.colors.mono.dialog.generic.background."
 
 #: src/config/options.c:2610
 msgid "Dialog field colors."
@@ -3381,7 +3367,6 @@ msgstr ""
 "  angezeigt"
 
 #: src/config/options.c:2794
-#, fuzzy
 msgid ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
@@ -3392,7 +3377,7 @@ msgstr ""
 "0 der Zeitgeber ist abgeschaltet\n"
 "1 der Zeitgeber ist angeschaltet, wird aber nicht angezeigt\n"
 "2 der Zeitgeber ist angeschaltet und die Zeit wird neben den LEDs\n"
-"  angezeigt"
+"  angezeigt (ABGESCHALTET)"
 
 #: src/config/options.c:2800
 msgid "Duration"
@@ -3497,7 +3482,6 @@ msgid "Set window title"
 msgstr "Fenstertitel setzen"
 
 #: src/config/options.c:2855
-#, fuzzy
 msgid ""
 "Set the window title when running in a windowing environment\n"
 "in an xterm-like terminal. This way the document's title is\n"
@@ -4077,14 +4061,12 @@ msgid "No downloads"
 msgstr "Keine Downloads aktiv"
 
 #: src/dialogs/menu.c:362
-#, fuzzy
 msgid "Open new ~tab"
-msgstr "~In neuem Fenster öffnen"
+msgstr "In neuer Ansich~t öffnen"
 
 #: src/dialogs/menu.c:363
-#, fuzzy
 msgid "Open new tab in ~background"
-msgstr "A~nsicht im Hintergrund"
+msgstr "In neuer Ansicht in ~Hintergrund öffnen"
 
 #: src/dialogs/menu.c:365
 msgid "~Go to URL"
@@ -4103,7 +4085,6 @@ msgid "~History"
 msgstr "~Verlauf"
 
 #: src/dialogs/menu.c:369
-#, fuzzy
 msgid "Unh~istory"
 msgstr "s~päterer Verlauf"
 
@@ -4136,7 +4117,6 @@ msgid "~Flush all caches"
 msgstr "~Alle Caches löschen"
 
 #: src/dialogs/menu.c:392
-#, fuzzy
 msgid "Resource in~fo"
 msgstr "Belegte ~Ressourcen"
 
@@ -4161,7 +4141,6 @@ msgid "~OS shell"
 msgstr "~Kommandozeile"
 
 #: src/dialogs/menu.c:453
-#, fuzzy
 msgid "Resize t~erminal"
 msgstr "Terminalgrösse ~ändern"
 
@@ -5113,14 +5092,12 @@ msgid "Open in new ~window"
 msgstr "~In neuem Fenster öffnen"
 
 #: src/viewer/text/link.c:894
-#, fuzzy
 msgid "Open in new ~tab"
-msgstr "~In neuem Fenster öffnen"
+msgstr "In neuer Ansich~t öffnen"
 
 #: src/viewer/text/link.c:897
-#, fuzzy
 msgid "Open in new tab in ~background"
-msgstr "A~nsicht im Hintergrund"
+msgstr "In neuer Ansicht im ~Hintergrund öffnen"
 
 #: src/viewer/text/link.c:901
 msgid "~Download link"

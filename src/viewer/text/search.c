@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.110 2003/11/15 18:44:38 kuser Exp $ */
+/* $Id: search.c,v 1.111 2003/11/15 18:51:08 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,19 +279,6 @@ is_in_range_regex(struct document *document, int y, int yy,
 	regex_t regex;
 	regmatch_t regmatch;
 
-	doclen = s2 - s1 + l;
-	if (!doclen) return 0;
-	doc = mem_alloc(sizeof(unsigned char) * (doclen + 1));
-	if (!doc) return 0;
-
-	for (i = 0; i < doclen; i++) {
-		if (i > 0 && s1[i - 1].c == ' ' && s1[i - 1].y != s1[i].y) {
-			doc[i - 1] = '\n';
-		}
-		doc[i] = s1[i].c;
-	}
-	doc[doclen] = 0;
-
 	if (get_opt_int("document.browse.search.regex") == 2)
 		regex_flags |= REG_EXTENDED;
 
@@ -302,9 +289,27 @@ is_in_range_regex(struct document *document, int y, int yy,
 	if (reg_err) {
 		/* TODO: error message */
 		regfree(&regex);
-		mem_free(doc);
 		return 0;
 	}
+
+	doclen = s2 - s1 + l;
+	if (!doclen) {
+		regfree(&regex);
+		return 0;
+	}
+	doc = mem_alloc(sizeof(unsigned char) * (doclen + 1));
+	if (!doc) {
+		regfree(&regex);
+		return 0;
+	}
+
+	for (i = 0; i < doclen; i++) {
+		if (i > 0 && s1[i - 1].c == ' ' && s1[i - 1].y != s1[i].y) {
+			doc[i - 1] = '\n';
+		}
+		doc[i] = s1[i].c;
+	}
+	doc[doclen] = 0;
 
 	doctmp = doc;
 	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, regexec_flags)) {
@@ -502,19 +507,6 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	regex_t regex;
 	regmatch_t regmatch;
 
-	doclen = s2 - s1 + l;
-	if (!doclen) goto ret;
-	doc = mem_alloc(sizeof(unsigned char) * (doclen + 1));
-	if (!doc) goto ret;
-
-	for (i = 0; i < doclen; i++) {
-		if (i > 0 && s1[i - 1].c == ' ' && s1[i - 1].y != s1[i].y) {
-			doc[i - 1] = '\n';
-		}
-		doc[i] = s1[i].c;
-	}
-	doc[doclen] = 0;
-
 	if (get_opt_int("document.browse.search.regex") == 2)
 		regex_flags |= REG_EXTENDED;
 
@@ -531,9 +523,27 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 		regerror(reg_err, &regex, regerror_string, sizeof(regerror_string));
 #endif
 		regfree(&regex);
-		mem_free(doc);
 		goto ret;
 	}
+
+	doclen = s2 - s1 + l;
+	if (!doclen) {
+		regfree(&regex);
+		goto ret;
+	}
+	doc = mem_alloc(sizeof(unsigned char) * (doclen + 1));
+	if (!doc) {
+		regfree(&regex);
+		goto ret;
+	}
+
+	for (i = 0; i < doclen; i++) {
+		if (i > 0 && s1[i - 1].c == ' ' && s1[i - 1].y != s1[i].y) {
+			doc[i - 1] = '\n';
+		}
+		doc[i] = s1[i].c;
+	}
+	doc[doclen] = 0;
 
 	xp = doc_view->x;
 	yp = doc_view->y;

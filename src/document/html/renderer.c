@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.192 2003/08/01 12:16:21 zas Exp $ */
+/* $Id: renderer.c,v 1.193 2003/08/01 20:55:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -523,7 +523,7 @@ split_line(struct part *part)
 
 	/* Make sure that we count the right margin to the total
 	 * actual box width. */
-	int_upper_bound(&part->x, part->cx + par_format.rightmargin);
+	int_lower_bound(&part->x, part->cx + par_format.rightmargin);
 
 	return 0;
 }

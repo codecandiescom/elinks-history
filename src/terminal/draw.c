@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.55 2003/08/29 23:28:31 jonas Exp $ */
+/* $Id: draw.c,v 1.56 2003/08/29 23:55:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "util/color.h"
 
 
+/* Makes sure that @x and @y are within the dimensions of the terminal. */
 #define check_range(term, x, y) \
 	do { \
 		int_upper_bound(&(x), (term)->x - 1); \
@@ -23,6 +24,7 @@
 		int_lower_bound(&(y), 0); \
 	} while (0)
 
+/* TODO: Clearify this piece of magic code. --jonas */
 void
 draw_border_cross(struct terminal *term, int x, int y,
 		  enum border_cross_direction dir, struct color_pair *color)
@@ -62,7 +64,7 @@ draw_border_char(struct terminal *term, int x, int y,
 
 	position = x + term->x * y;
 	term->screen->image[position].data = (unsigned char) border;
-	term->screen->image[position].color = color ? mix_color_pair(color) : 0;
+	term->screen->image[position].color = mix_color_pair(color);
 	term->screen->image[position].attr = SCREEN_ATTR_FRAME;
 	term->screen->dirty = 1;
 }
@@ -201,11 +203,12 @@ draw_area(struct terminal *term, int x, int y, int xw, int yw,
 	position = x + term->x * y;
 	line = &term->screen->image[position];
 
-	/* Compose a screen position in the ares so memcpy() can be used. */
+	/* Compose a screen position in the area so memcpy() can be used. */
 	area.color = color ? mix_color_pair(color) : 0;
 	area.data = data;
 	area.attr = attr;
 
+	/* Draw the first area line. */
 	for (i = 0; i < endx; i++) {
 		memcpy(&line[i], &area, sizeof(struct screen_char));
 	}

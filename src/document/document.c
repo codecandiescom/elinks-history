@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.13 2003/10/30 19:29:23 jonas Exp $ */
+/* $Id: document.c,v 1.14 2003/10/30 19:34:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -182,6 +182,9 @@ shrink_format_cache(int whole)
 	struct document *document;
 	int format_cache_size = get_opt_int("document.cache.format.size");
 
+	assertm(format_cache_entries >= 0, "format_cache_entries underflow on entry");
+	if_assert_failed format_cache_entries = 0;
+
 	foreach (document, format_cache) {
 		if (!whole) {
 			struct cache_entry *ce = NULL;
@@ -204,6 +207,9 @@ shrink_format_cache(int whole)
 		done_document(document->next);
 		format_cache_entries--;
 	}
+
+	assertm(format_cache_entries >= 0, "format_cache_entries underflow");
+	if_assert_failed format_cache_entries = 0;
 }
 
 void

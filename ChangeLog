@@ -1,3 +1,44 @@
+Wed Nov 24 22:47:23 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Nov 24 22:16:54 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/group.c:
+
+	Fix a segfault triggered by resize terminal dialog: let accept NULL
+	widget text.  
+
+Wed Nov 24 18:21:39 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/: ecmascript.c, spidermonkey.c:
+
+	An option called ecmascript.max_exec_time was added to control the
+	maximum time a script may be run (5 seconds by default). Ecmascript
+	options stuff was simplified.  
+
+Wed Nov 24 17:42:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Fix compilation issues: JSVAL_TO_VALUE_START should follow variable
+	declaration block.  
+
+Wed Nov 24 17:10:33 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Now should be compilable.  
+
+Wed Nov 24 09:03:58 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Disable parts recently added by witekfl, they break compilation. #if
+	1 -> #ifdef WITEKFL. Please witekfl, fix these asap ;).  
+
 Tue Nov 23 17:12:56 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/: document/html/parser/forms.c, document/renderer.c,

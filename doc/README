@@ -1,0 +1,20 @@
+		A few words about documentation for ELinks
+
+There is only limited documentation available for ELinks. Sorry. It basicly
+amounts to the documents in this directory and the manpages + README/INSTALL
+files in the root.
+
+Other things you will find in this directory are:
+
+	book/ -	Where development on moving existing documentation to docbook
+		format does on.
+
+	man/  -	The place where manpages will be moved once they are integrated
+		from doc/book/manpages.
+
+	html/ - Will contain (in the future) processed docbook documents.
+		Manual pages and man pages should be already processed.
+
+If you'd like to contribute please read book/README.
+
+$Id: README,v 1.1 2003/05/09 15:03:58 jonas Exp $

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.268 2004/06/29 02:35:30 jonas Exp $ */
+/* $Id: tables.c,v 1.269 2004/06/29 02:37:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1008,7 +1008,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	unsigned char *al;
 	struct html_element *state;
 	color_t bgcolor = par_format.bgcolor;
-	int border, cellspacing, vcellpadding, cellpadding, align;
+	int border, vcellpadding, cellpadding, align;
 	int cye;
 	int x;
 	int cpd_pass, cpd_width, cpd_last;
@@ -1041,8 +1041,8 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	if (border) {
 		int_upper_bound(&border, 2);
 
-		cellspacing = get_num(attr, "cellspacing");
-		int_bounds(&cellspacing, 1, 2);
+		table->cellspacing = get_num(attr, "cellspacing");
+		int_bounds(&table->cellspacing, 1, 2);
 
 		table->frame = TABLE_FRAME_BOX;
 		al = get_attr_val(attr, "frame");
@@ -1059,7 +1059,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 			mem_free(al);
 		}
 	} else {
-		cellspacing = 0;
 		table->frame = TABLE_FRAME_VOID;
 	}
 
@@ -1098,7 +1097,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	table->border = border;
 	table->cellpadding = cellpadding;
 	table->vcellpadding = vcellpadding;
-	table->cellspacing = cellspacing;
 
 	format_bad_table_html(table);
 

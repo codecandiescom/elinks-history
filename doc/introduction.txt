@@ -104,4 +104,9 @@ Searching (TODO)
  - Link searching
 
 
-$Id: introduction.txt,v 1.1 2004/12/21 23:34:32 jonas Exp $
+Hints and Odd Features
+~~~~~~~~~~~~~~~~~~~~~~
+
+ - Command prefixing. Example 3<Down> jumps down three links.
+
+$Id: introduction.txt,v 1.2 2004/12/22 20:36:35 jonas Exp $

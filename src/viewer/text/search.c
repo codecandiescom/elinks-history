@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.12 2003/08/01 13:13:06 zas Exp $ */
+/* $Id: search.c,v 1.13 2003/08/23 03:05:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -547,8 +547,10 @@ find_next(struct session *ses, struct document_view *f, int a)
 		if (is_in_range(f->document, p, f->yw, ses->search_word, &min, &max)) {
 			f->vs->view_pos = p;
 			if (max >= min) {
-				int_upper_bound(&f->vs->view_posx, max - f->xw);
-				int_lower_bound(&f->vs->view_posx, min);
+				if (max > f->vs->view_posx + f->xw)
+					f->vs->view_posx = max - f->xw;
+				if (min < f->vs->view_posx)
+					f->vs->view_posx = min;
 			}
 			set_link(f);
 			find_next_link_in_search(f, ses->search_direction * 2);

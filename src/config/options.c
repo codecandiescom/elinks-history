@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.254 2003/07/23 02:11:03 jonas Exp $ */
+/* $Id: options.c,v 1.255 2003/07/24 00:59:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,7 +242,7 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 	option->desc = desc;
 	option->change_hook = NULL;
 
-	if (option->type == OPT_ALIAS || !(tree->flags & OPT_CONFIG)) {
+	if (option->type == OPT_ALIAS || !(tree->flags & OPT_LISTBOX)) {
 		option->box_item = NULL;
 	} else {
 		option->box_item = mem_calloc(1, sizeof(struct listbox_item));
@@ -365,7 +365,7 @@ init_options(void)
 {
 	options_root.ptr = init_options_tree();
 	config_options = add_opt_tree_tree(&options_root, "", "",
-					 "config", OPT_CONFIG, "");
+					 "config", OPT_LISTBOX, "");
 	cmdline_options = add_opt_tree_tree(&options_root, "", "",
 					    "cmdline", 0, "");
 	register_options();

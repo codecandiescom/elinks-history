@@ -147,6 +147,36 @@ void ssl_want_read(struct connection *c)
 }
 #endif
 
+#ifdef HAVE_SSL
+int ssl_connect(struct connection *conn, int sock)
+{
+	if (conn->ssl) {
+		conn->ssl = getSSL();
+		SSL_set_fd(conn->ssl, sock);
+		if (conn->no_tsl) conn->ssl->options |= SSL_OP_NO_TLSv1;
+		
+		switch (SSL_get_error(conn->ssl, SSL_connect(conn->ssl))) {
+			case SSL_ERROR_WANT_READ:
+				setcstate(conn, S_SSL_NEG);
+				set_handlers(sock, (void (*)(void *)) ssl_want_read,
+					     NULL, exception, conn);
+				return -1;
+				
+			case SSL_ERROR_NONE:
+				break;
+				
+			default:
+				conn->no_tsl++;
+				setcstate(conn, S_SSL_ERROR);
+				retry_connection(conn);
+				return -1;
+		}
+	}
+
+	return 0;
+}
+#endif
+
 void dns_found(void *data, int state)
 {
 	int sock;
@@ -198,28 +228,7 @@ void dns_found(void *data, int state)
 	}
 
 #ifdef HAVE_SSL
-	if (conn->ssl) {
-		conn->ssl = getSSL();
-		SSL_set_fd(conn->ssl, sock);
-		if (conn->no_tsl) conn->ssl->options |= SSL_OP_NO_TLSv1;
-		
-		switch (SSL_get_error(conn->ssl, SSL_connect(conn->ssl))) {
-			case SSL_ERROR_WANT_READ:
-				setcstate(conn, S_SSL_NEG);
-				set_handlers(sock, (void (*)(void *)) ssl_want_read,
-					     NULL, exception, conn);
-				return;
-				
-			case SSL_ERROR_NONE:
-				break;
-				
-			default:
-				conn->no_tsl++;
-				setcstate(conn, S_SSL_ERROR);
-				retry_connection(conn);
-				return;
-		}
-	}
+	if (ssl_connect(conn, sock) < 0) return;
 #endif
 	conn->conn_info = NULL;
 	c_i->func(conn);
@@ -251,32 +260,8 @@ skiperrdec:
 		void (*func)(struct connection *) = c_i->func;
 
 #ifdef HAVE_SSL
-		if (conn->ssl) {
-			conn->ssl = getSSL();
-			SSL_set_fd(conn->ssl, *c_i->sock);
-			if (conn->no_tsl) conn->ssl->options |= SSL_OP_NO_TLSv1;
-			
-			switch (SSL_get_error(conn->ssl, SSL_connect(conn->ssl))) {
-				case SSL_ERROR_WANT_READ:
-					setcstate(conn, S_SSL_NEG);
-					set_handlers(*c_i->sock,
-						     (void (*)(void *)) ssl_want_read,
-						     NULL, (void (*)(void *)) exception,
-						     conn);
-					return;
-					
-				case SSL_ERROR_NONE:
-					break;
-					
-				default:
-					conn->no_tsl++;
-					setcstate(conn, S_SSL_ERROR);
-					retry_connection(conn);
-					return;
-			}
-		}
+		if (ssl_connect(conn, *c_i->sock) < 0) return;
 #endif
-		
 		conn->conn_info = NULL;
 		func(conn);
 		mem_free(c_i->addr);

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.306 2004/03/03 17:27:15 jonas Exp $ */
+/* $Id: session.c,v 1.307 2004/03/03 17:42:20 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1102,10 +1102,9 @@ get_current_link_url(struct session *ses, unsigned char *str, size_t str_size)
 {
 	struct link *l = get_current_session_link(ses);
 
-	if (l) return safe_strncpy(str, l->where ? l->where : l->where_img,
-				   str_size);
+	if (!l) return NULL;
 
-	return NULL;
+	return safe_strncpy(str, l->where ? l->where : l->where_img, str_size);
 }
 
 /* get_current_link_name: returns the name of the current link
@@ -1136,16 +1135,10 @@ get_current_link_name(struct session *ses, unsigned char *str, size_t str_size)
 struct link *
 get_current_link_in_view(struct document_view *doc_view)
 {
-	if (doc_view && doc_view->vs->current_link != -1) {
-		struct link *link;
+	struct link *link = get_current_link(doc_view);
 
-		link = &doc_view->document->links[doc_view->vs->current_link];
-
-		/* Only return a hyper text link */
-		if (link->type == LINK_HYPERTEXT) return link;
-	}
-
-	return NULL;
+	return (link && link->type == LINK_HYPERTEXT)
+		? link : NULL;
 }
 
 struct link *

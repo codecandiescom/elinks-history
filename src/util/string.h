@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.15 2003/01/20 15:09:38 pasky Exp $ */
+/* $Id: string.h,v 1.16 2003/04/17 13:25:37 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -82,6 +82,13 @@ unsigned char *strcasestr(const unsigned char *, const unsigned char *);
 #ifndef HAVE_STRDUP
 unsigned char *strdup(const unsigned char *);
 #endif
+#ifndef HAVE_STPCPY
+unsigned char *stpcpy(unsigned char *, unsigned const char *);
+#endif
+#ifndef HAVE_MEMPCPY
+void *mempcpy(void *, const void *, size_t);
+#endif
+
 
 unsigned char *safe_strncpy(unsigned char *, const unsigned char *, size_t);
 unsigned char *trim_chars(unsigned char *, unsigned char, int *);

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.23 2003/01/20 15:08:52 pasky Exp $ */
+/* $Id: string.c,v 1.24 2003/04/17 13:25:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -462,3 +462,20 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
 	if (len) *len = l;
 	return s;
 }
+
+#ifndef HAVE_STPCPY
+unsigned char *
+stpcpy(unsigned char *dest, unsigned const char *src)
+{
+	while ((*dest++ = *src++) != '\0')
+	return dest - 1;
+}
+#endif
+
+#ifndef HAVE_MEMPCPY
+void *
+mempcpy(void *dest, const void *src, size_t n)
+{
+	return (void *) ((unsigned char *) memcpy(dest, src, n) + n);
+}
+#endif

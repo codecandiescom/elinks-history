@@ -1,3 +1,16 @@
+Fri Oct 18 19:39:46 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/view.c:
+
+	Fixed another bug in textarea editor support - it was unusable when
+	you tried to edit stuff at two instances at once.  
+
+Fri Oct 18 18:26:43 2002  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/os_dep.c:
+
+	Portability of set_(non)blocking_fd() functions was improved a bit.  
+
 Thu Oct 17 20:26:40 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, src/config/kbdbind.c, src/config/kbdbind.h,

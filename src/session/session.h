@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.98 2004/03/21 23:55:19 jonas Exp $ */
+/* $Id: session.h,v 1.99 2004/03/22 01:04:20 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -55,7 +55,7 @@ struct tq {
 	struct download download;
 	struct cache_entry *ce;
 	struct session *ses;
-	unsigned char *url;
+	struct uri *uri;
 	unsigned char *target_frame;
 	unsigned char *goto_position;
 	unsigned char *prog;

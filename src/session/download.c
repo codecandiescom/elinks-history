@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.9 2003/01/23 13:14:46 zas Exp $ */
+/* $Id: download.c,v 1.10 2003/01/23 19:03:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -923,6 +923,8 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	unsigned char *url = cmdw_hop->ses->dn_url;
 	struct stat buf;
 
+	if (!cmdw_hop->real_file) goto error;
+
 	down = mem_calloc(1, sizeof(struct download));
 	if (!down) goto error;
 
@@ -1014,6 +1016,8 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 	struct codw_hop *codw_hop = data;
 	struct download *down = NULL;
 	unsigned char *url = codw_hop->ses->tq_url;
+
+	if (!codw_hop->real_file) goto cancel;
 
 	down = mem_calloc(1, sizeof(struct download));
 	if (!down) goto cancel;

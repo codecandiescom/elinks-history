@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.47 2004/11/18 21:39:33 zas Exp $ */
+/* $Id: dialog.h,v 1.48 2004/11/19 09:28:40 zas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -132,5 +132,17 @@ void refresh_dialog(struct dialog_data *, dialog_refresh_handler handler, void *
 
 void select_widget(struct dialog_data *dlg_data, struct widget_data *widget_data);
 struct widget_data *select_widget_by_id(struct dialog_data *dlg_data, int i);
+
+#define end_of_widgets(dlg_data) (&(dlg_data)->widgets_data[(dlg_data)->n])
+#define first_widget(dlg_data) (&(dlg_data)->widgets_data[0])
+#define last_widget(dlg_data) (&(dlg_data)->widgets_data[(dlg_data)->n - 1])
+
+#define foreach_widget(dlg_data, widget_data) \
+	for ((widget_data) = first_widget(dlg_data); \
+	     (widget_data) != end_of_widgets(dlg_data); \
+	     (widget_data)++)
+
+#define is_selected_widget(dlg_data, widget_data) ((widget_data) == selected_widget(dlg_data))
+
 
 #endif

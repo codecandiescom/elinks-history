@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.175 2004/11/18 21:39:33 zas Exp $ */
+/* $Id: dialog.c,v 1.176 2004/11/19 09:28:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,16 +68,14 @@ static inline void cycle_widget_focus(struct dialog_data *dlg_data, int directio
 static void
 update_all_widgets(struct dialog_data *dlg_data)
 {
-	int i;
+	struct widget_data *widget_data;
 
-	for (i = 0; i < dlg_data->n; i++) {
-		struct widget_data *widget_data = &dlg_data->widgets_data[i];
-
-		if (i == dlg_data->selected_widget_id)
+	foreach_widget(dlg_data, widget_data) {
+		if (is_selected_widget(dlg_data, widget_data))
 			display_widget_focused(dlg_data, widget_data);
 		else
 			display_widget_unfocused(dlg_data, widget_data);
-		}
+	}
 }
 
 void
@@ -128,9 +126,9 @@ redraw_dialog(struct dialog_data *dlg_data, int layout)
 }
 
 static void
-select_dlg_item(struct dialog_data *dlg_data, int i)
+select_dlg_item(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
-	struct widget_data *widget_data = select_widget_by_id(dlg_data, i);
+	select_widget(dlg_data, widget_data);
 
 	if (widget_data->widget->ops->select)
 		widget_data->widget->ops->select(dlg_data, widget_data);
@@ -239,13 +237,11 @@ dialog_ev_init(struct dialog_data *dlg_data)
 static void
 dialog_ev_mouse(struct dialog_data *dlg_data)
 {
-	int i;
+	struct widget_data *widget_data;
 
-	for (i = 0; i < dlg_data->n; i++) {
-		struct widget_data *wdata = &dlg_data->widgets_data[i];
-
-		if (wdata->widget->ops->mouse
-		    && wdata->widget->ops->mouse(dlg_data, wdata)
+	foreach_widget(dlg_data, widget_data) {
+		if (widget_data->widget->ops->mouse
+		    && widget_data->widget->ops->mouse(dlg_data, widget_data)
 		       == EVENT_PROCESSED)
 			break;
 	}
@@ -256,14 +252,12 @@ dialog_ev_mouse(struct dialog_data *dlg_data)
 static void
 select_button_by_flag(struct dialog_data *dlg_data, int flag)
 {
-	int i;
+	struct widget_data *widget_data;
 
-	for (i = 0; i < dlg_data->n; i++) {
-		struct widget *widget = &dlg_data->dlg->widgets[i];
-
-		if (widget->type == WIDGET_BUTTON
-		    && widget->info.button.flags & flag) {
-			select_dlg_item(dlg_data, i);
+	foreach_widget(dlg_data, widget_data) {
+		if (widget_data->widget->type == WIDGET_BUTTON
+		    && widget_data->widget->info.button.flags & flag) {
+			select_dlg_item(dlg_data, widget_data);
 			break;
 		}
 	}
@@ -274,19 +268,17 @@ static void
 select_button_by_key(struct dialog_data *dlg_data)
 {
 	unsigned char key;
-	int i;
+	struct widget_data *widget_data;
 	struct term_event *ev = dlg_data->term_event;
 
 	if (!check_kbd_label_key(ev)) return;
 
 	key = toupper(get_kbd_key(ev));
 
-	for (i = 0; i < dlg_data->n; i++) {
-		struct widget *widget = &dlg_data->dlg->widgets[i];
-
-		if (widget->type == WIDGET_BUTTON
-		    && toupper(widget->text[0]) == key) {
-			select_dlg_item(dlg_data, i);
+	foreach_widget(dlg_data, widget_data) {
+		if (widget_data->widget->type == WIDGET_BUTTON
+		    && toupper(widget_data->widget->text[0]) == key) {
+			select_dlg_item(dlg_data, widget_data);
 			break;
 		}
 	}
@@ -354,7 +346,7 @@ dialog_ev_kbd(struct dialog_data *dlg_data)
 static void
 dialog_ev_abort(struct dialog_data *dlg_data)
 {
-	int i;
+	struct widget_data *widget_data;
 
 	if (dlg_data->dlg->refresh) {
 		struct dialog_refresh *refresh = dlg_data->dlg->refresh;
@@ -367,9 +359,7 @@ dialog_ev_abort(struct dialog_data *dlg_data)
 	if (dlg_data->dlg->abort)
 		dlg_data->dlg->abort(dlg_data);
 
-	for (i = 0; i < dlg_data->n; i++) {
-		struct widget_data *widget_data = &dlg_data->widgets_data[i];
-
+	foreach_widget(dlg_data, widget_data) {
 		mem_free_if(widget_data->cdata);
 		if (widget_has_history(widget_data))
 			free_list(widget_data->info.field.history);
@@ -421,11 +411,9 @@ dialog_func(struct window *win, struct term_event *ev)
 int
 check_dialog(struct dialog_data *dlg_data)
 {
-	int i;
+	struct widget_data *widget_data;
 
-	for (i = 0; i < dlg_data->n; i++) {
-		struct widget_data *widget_data = &dlg_data->widgets_data[i];
-
+	foreach_widget(dlg_data, widget_data) {
 		if (widget_data->widget->type != WIDGET_CHECKBOX &&
 		    !widget_is_textfield(widget_data))
 			continue;
@@ -451,12 +439,13 @@ cancel_dialog(struct dialog_data *dlg_data, struct widget_data *xxx)
 int
 update_dialog_data(struct dialog_data *dlg_data, struct widget_data *xxx)
 {
-	int i;
+	struct widget_data *widget_data;
 
-	for (i = 0; i < dlg_data->n; i++)
-		memcpy(dlg_data->dlg->widgets[i].data,
-		       dlg_data->widgets_data[i].cdata,
-		       dlg_data->dlg->widgets[i].datalen);
+	foreach_widget(dlg_data, widget_data) {
+		memcpy(widget_data->widget->data,
+		       widget_data->cdata,
+		       widget_data->widget->datalen);
+	}
 
 	return 0;
 }
@@ -479,11 +468,9 @@ ok_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 t_handler_event_status
 clear_dialog(struct dialog_data *dlg_data, struct widget_data *xxx)
 {
-	int i;
+	struct widget_data *widget_data;
 
-	for (i = 0; i < dlg_data->n; i++) {
-		struct widget_data *widget_data = &dlg_data->widgets_data[i];
-
+	foreach_widget(dlg_data, widget_data) {
 		if (!widget_is_textfield(widget_data))
 			continue;
 		memset(widget_data->cdata, 0, widget_data->widget->datalen);

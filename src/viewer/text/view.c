@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.578 2004/07/31 11:23:44 miciah Exp $ */
+/* $Id: view.c,v 1.579 2004/08/15 07:54:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -522,16 +522,16 @@ try_jump_to_link_number(struct session *ses, struct document_view *doc_view)
 {
 	int link_number = ses->kbdprefix.repeat_count - 1;
 
-	if (link_number < 0) return 0;
+	if (link_number < 0) return 1;
 
 	ses->kbdprefix.repeat_count = 0;
 	if (link_number >= doc_view->document->nlinks)
-		return 1;
+		return 0;
 
 	jump_to_link_number(ses, doc_view, link_number);
 	refresh_view(ses, doc_view, 0);
 
-	return 0;
+	return 1;
 }
 
 static enum frame_event_status
@@ -657,7 +657,7 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 			struct uri *uri;
 			unsigned char *uristring;
 
-			if (try_jump_to_link_number(ses, doc_view))
+			if (!try_jump_to_link_number(ses, doc_view))
 				return FRAME_EVENT_OK;
 
 			link = get_current_link(doc_view);
@@ -677,13 +677,13 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 		}
 
 		case ACT_MAIN_LINK_FOLLOW:
-			if (try_jump_to_link_number(ses, doc_view))
+			if (!try_jump_to_link_number(ses, doc_view))
 				status = FRAME_EVENT_OK;
 			else
 				status = enter(ses, doc_view, 0);
 			break;
 		case ACT_MAIN_LINK_FOLLOW_RELOAD:
-			if (try_jump_to_link_number(ses, doc_view))
+			if (!try_jump_to_link_number(ses, doc_view))
 				status = FRAME_EVENT_OK;
 			else
 				status = enter(ses, doc_view, 1);
@@ -715,7 +715,7 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 		case ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW:
 		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB:
 		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
-			if (try_jump_to_link_number(ses, doc_view))
+			if (!try_jump_to_link_number(ses, doc_view))
 				status = FRAME_EVENT_OK;
 			else
 				status = FRAME_EVENT_IGNORED;

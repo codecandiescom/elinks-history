@@ -1,3 +1,16 @@
+Sat Sep 20 12:05:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/os_dep.c:
+
+	Compilation bug under Cygwin was fixed. Patch by Witold.  
+
+Fri Sep 19 22:30:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Add dummy shadow.text option. This was causing get_bfu_color() to
+	fetch a non existing option. Reported by darix.  
+
 Fri Sep 19 15:41:53 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/event.c:

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.40 2002/07/01 16:21:31 pasky Exp $ */
+/* $Id: conf.c,v 1.41 2002/07/01 16:44:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -372,14 +372,18 @@ load_config()
 
 void
 tree_config_string(unsigned char **str, int *len, struct list_head *options,
-		   unsigned char *path)
+		   unsigned char *path, int depth)
 {
 	struct option *option;
+	int j;
 
 	foreachback (option, *options) {
 		if (option->flags & OPT_HIDDEN) continue;
 
 		/* Pop out the comment */
+
+		for (j = 0; j < depth * 2; j++)
+			add_chr_to_str(str, len, ' ');
 
 		add_to_str(str, len, "## ");
 		if (path) {
@@ -395,14 +399,20 @@ tree_config_string(unsigned char **str, int *len, struct list_head *options,
 			int l = strlen(option->desc);
 			int i;
 
+			for (j = 0; j < depth * 2; j++)
+				add_chr_to_str(str, len, ' ');
 			add_to_str(str, len, "# ");
 
 			for (i = 0; i < l; i++) {
-				if (option->desc[i] == '\n')
-					add_to_str(str, len, NEWLINE "# ");
-				else
+				if (option->desc[i] == '\n') {
+					add_to_str(str, len, NEWLINE);
+					for (j = 0; j < depth * 2; j++)
+						add_chr_to_str(str, len, ' ');
+					add_to_str(str, len, "# ");
+				} else {
 					add_chr_to_str(str, len,
 						       option->desc[i]);
+				}
 			}
 
 			add_to_str(str, len, NEWLINE);
@@ -411,6 +421,8 @@ tree_config_string(unsigned char **str, int *len, struct list_head *options,
 		/* And the option itself */
 
 		if (option_types[option->type].write) {
+			for (j = 0; j < depth * 2; j++)
+				add_chr_to_str(str, len, ' ');
 			add_to_str(str, len, "set ");
 			if (path) {
 				add_to_str(str, len, path);
@@ -432,10 +444,9 @@ tree_config_string(unsigned char **str, int *len, struct list_head *options,
 				add_to_str(&str2, &len2, ".");
 			}
 			add_to_str(&str2, &len2, option->name);
-			tree_config_string(str, len, option->ptr, str2);
+			tree_config_string(str, len, option->ptr,
+					   str2, depth + 1);
 			mem_free(str2);
-
-			add_to_str(str, len, NEWLINE);
 		}
 
 		add_to_str(str, len, NEWLINE);
@@ -460,7 +471,7 @@ create_config_string(struct list_head *options)
 	add_to_str(&str, &len, "#" NEWLINE);
 	add_to_str(&str, &len, NEWLINE);
 
-	tree_config_string(&str, &len, options, NULL);
+	tree_config_string(&str, &len, options, NULL, 0);
 
 	add_to_str(&str, &len, NEWLINE NEWLINE NEWLINE);
 	add_to_str(&str, &len, "#####################################" NEWLINE);

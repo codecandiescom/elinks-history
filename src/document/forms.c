@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: forms.c,v 1.3 2004/12/18 01:44:13 pasky Exp $ */
+/* $Id: forms.c,v 1.4 2004/12/18 02:17:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,6 +41,7 @@ done_form(struct form *form)
 	foreach (fc, form->items) {
 		done_form_control(fc);
 	}
+	free_list(form->items);
 }
 
 int

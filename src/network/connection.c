@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.65 2003/07/04 18:45:55 jonas Exp $ */
+/* $Id: connection.c,v 1.66 2003/07/04 18:50:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -563,16 +563,9 @@ try_to_suspend_connection(struct connection *c, unsigned char *ho)
 static void
 run_connection(struct connection *c)
 {
-	protocol_handler *func;
+	protocol_handler *func = get_protocol_handler(&c->uri);
 
 	assertm(!c->running, "connection already running");
-
-	func = get_protocol_handler(&c->uri);
-	if (!func) {
-		set_connection_state(c, S_BAD_URL);
-		del_connection(c);
-		return;
-	}
 
 	if (!add_host_connection(c)) {
 		set_connection_state(c, S_OUT_OF_MEM);

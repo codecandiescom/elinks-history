@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.272 2004/04/09 02:19:08 jonas Exp $ */
+/* $Id: http.c,v 1.273 2004/04/09 03:19:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -355,7 +355,7 @@ http_send_header(struct connection *conn)
 
 	if (use_connect) {
 		/* Add port if it was specified or the default port */
-		add_uri_to_string(&header, uri, URI_HOST | URI_DEFAULT_PORT);
+		add_uri_to_string(&header, uri, URI_HTTP_CONNECT);
 	} else {
 		if (IS_PROXY_URI(conn->uri) && (uri->protocol == PROTOCOL_HTTPS) && conn->ssl) {
 			add_url_to_http_string(&header, uri->data);
@@ -371,7 +371,7 @@ http_send_header(struct connection *conn)
 	add_to_string(&header, "\r\n");
 
 	add_to_string(&header, "Host: ");
-	add_uri_to_string(&header, uri, URI_HOST | URI_PORT);
+	add_uri_to_string(&header, uri, URI_HTTP_HOST);
 	add_to_string(&header, "\r\n");
 
 	optstr = get_opt_str("protocol.http.proxy.user");
@@ -441,7 +441,7 @@ http_send_header(struct connection *conn)
 
 		case REFERER_SAME_URL:
 			add_to_string(&header, "Referer: ");
-			add_uri_to_string(&header, uri, URI_PROTOCOL | URI_HOST | URI_PORT);
+			add_uri_to_string(&header, uri, URI_HTTP_REFERRER_HOST);
 
 			if (!IS_PROXY_URI(conn->uri)
 			    || header.source[header.length - 1] != '/')

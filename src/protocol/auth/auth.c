@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.73 2004/03/22 14:35:39 jonas Exp $ */
+/* $Id: auth.c,v 1.74 2004/04/09 03:19:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,7 +128,7 @@ struct http_auth_basic *
 add_auth_entry(struct uri *uri, unsigned char *realm)
 {
 	struct http_auth_basic *entry;
-	unsigned char *newurl = get_uri_string(uri, ~(URI_DATA | URI_POST));
+	unsigned char *newurl = get_uri_string(uri, URI_HTTP_AUTH);
 
 #ifdef DEBUG_HTTP_AUTH
 	DBG("add_auth_entry: newurl=%s realm=%s uri=%p", newurl, realm, uri);
@@ -206,7 +206,7 @@ find_auth(struct uri *uri)
 {
 	struct http_auth_basic *entry = NULL;
 	unsigned char *id, *ret;
-	unsigned char *newurl = get_uri_string(uri, ~(URI_DATA | URI_POST));
+	unsigned char *newurl = get_uri_string(uri, URI_HTTP_AUTH);
 
 #ifdef DEBUG_HTTP_AUTH
 	DBG("find_auth: newurl=%s uri=%p", newurl, uri);

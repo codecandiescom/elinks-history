@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.94 2004/04/09 03:13:21 jonas Exp $ */
+/* $Id: uri.h,v 1.95 2004/04/09 03:19:43 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -97,6 +97,18 @@ enum uri_component {
 
 	/* Used for getting the original URI with no internal encoding */
 	URI_ORIGINAL	 = ~(URI_DEFAULT_PORT | URI_POST),
+
+	/* Used in the HTTP Auth code for ma*/
+	URI_HTTP_AUTH		= ~(URI_DEFAULT_PORT | URI_DATA | URI_POST),
+
+	/* Used for the value of HTTP "Host" header info */
+	URI_HTTP_HOST		= URI_HOST | URI_PORT,
+
+	/* Used for the host part of HTTP referrer */
+	URI_HTTP_REFERRER_HOST	= URI_PROTOCOL |URI_HOST | URI_PORT,
+
+	/* Used for HTTP CONNECT method info */
+	URI_HTTP_CONNECT	= URI_HOST | URI_PORT | URI_DEFAULT_PORT,
 };
 
 

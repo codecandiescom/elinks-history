@@ -174,7 +174,12 @@ void print_error_dialog(struct session *ses, struct status *stat, unsigned char 
 {
 	unsigned char *t = get_err_msg(stat->state);
 	if (!t) return;
-	msg_box(ses->term, NULL, title, AL_CENTER, t, ses, 1, TEXT(T_CANCEL), NULL, B_ENTER | B_ESC/*, _("Retry"), NULL, 0 !!! FIXME: retry */);
+	msg_box(ses->term, NULL,
+		title, AL_CENTER,
+		t,
+		ses, 1,
+		TEXT(T_CANCEL), NULL, B_ENTER | B_ESC /*,
+		_("Retry"), NULL, 0 */ /* !!! FIXME: retry */);
 }
 
 void free_wtd(struct session *ses)
@@ -631,7 +636,11 @@ void download_data(struct status *stat, struct download *down)
 			if (!list_empty(sessions)) {
 				unsigned char *msg = stracpy(down->file);
 				unsigned char *emsg = stracpy(strerror(errno));
-				msg_box(get_download_ses(down)->term, getml(msg, emsg, NULL), TEXT(T_DOWNLOAD_ERROR), AL_CENTER | AL_EXTD_TEXT, TEXT(T_COULD_NOT_WRITE_TO_FILE), " ", msg, ": ", emsg, NULL, NULL, 1, TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+				msg_box(get_download_ses(down)->term, getml(msg, emsg, NULL),
+					TEXT(T_DOWNLOAD_ERROR), AL_CENTER | AL_EXTD_TEXT,
+					TEXT(T_COULD_NOT_WRITE_TO_FILE), " ", msg, ": ", emsg, NULL,
+					NULL, 1,
+					TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
 			}
 			abort_download(down);
 			return;
@@ -646,7 +655,12 @@ void download_data(struct status *stat, struct download *down)
 			if (t) {
 				unsigned char *tt = stracpy(down->url);
 				if (strchr(tt, POST_CHAR)) *strchr(tt, POST_CHAR) = 0;
-				msg_box(get_download_ses(down)->term, getml(tt, NULL), TEXT(T_DOWNLOAD_ERROR), AL_CENTER | AL_EXTD_TEXT, TEXT(T_ERROR_DOWNLOADING), " ", tt, ":\n\n", t, NULL, get_download_ses(down), 1, TEXT(T_CANCEL), NULL, B_ENTER | B_ESC/*, TEXT(T_RETRY), NULL, 0 !!! FIXME: retry */);
+				msg_box(get_download_ses(down)->term, getml(tt, NULL),
+					TEXT(T_DOWNLOAD_ERROR), AL_CENTER | AL_EXTD_TEXT,
+					TEXT(T_ERROR_DOWNLOADING), " ", tt, ":\n\n", t, NULL,
+					get_download_ses(down), 1,
+					TEXT(T_CANCEL), NULL, B_ENTER | B_ESC /*,
+					TEXT(T_RETRY), NULL, 0 */ /* !!! FIXME: retry */);
 			}
 		} else {
 			if (down->prog) {
@@ -698,7 +712,11 @@ int create_download_file(struct terminal *term, unsigned char *fi, int safe)
 	if (h == -1) {
 		unsigned char *msg = stracpy(file);
 		unsigned char *msge = stracpy(strerror(errno));
-		msg_box(term, getml(msg, msge, NULL), TEXT(T_DOWNLOAD_ERROR), AL_CENTER | AL_EXTD_TEXT, TEXT(T_COULD_NOT_CREATE_FILE), " ", msg, ": ", msge, NULL, NULL, 1, TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+		msg_box(term, getml(msg, msge, NULL),
+			TEXT(T_DOWNLOAD_ERROR), AL_CENTER | AL_EXTD_TEXT,
+			TEXT(T_COULD_NOT_CREATE_FILE), " ", msg, ": ", msge, NULL,
+			NULL, 1,
+			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
 		if (file != fi) mem_free(file);
 		return -1;
 	}
@@ -887,12 +905,48 @@ void type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct, 
 	}
 	m1 = stracpy(ct);
 	if (!a) {
-		if (!anonymous) msg_box(ses->term, getml(m1, NULL), TEXT(T_UNKNOWN_TYPE), AL_CENTER | AL_EXTD_TEXT, TEXT(T_CONTEN_TYPE_IS), " ", m1, ".\n", TEXT(T_DO_YOU_WANT_TO_SAVE_OR_DISLPAY_THIS_FILE), NULL, ses, 3, TEXT(T_SAVE), tp_save, B_ENTER, TEXT(T_DISPLAY), tp_display, 0, TEXT(T_CANCEL), tp_cancel, B_ESC);
-		else msg_box(ses->term, getml(m1, NULL), TEXT(T_UNKNOWN_TYPE), AL_CENTER | AL_EXTD_TEXT, TEXT(T_CONTEN_TYPE_IS), " ", m1, ".\n", TEXT(T_DO_YOU_WANT_TO_SAVE_OR_DISLPAY_THIS_FILE), NULL, ses, 2, TEXT(T_DISPLAY), tp_display, B_ENTER, TEXT(T_CANCEL), tp_cancel, B_ESC);
+		if (!anonymous) {
+			msg_box(ses->term, getml(m1, NULL),
+				TEXT(T_UNKNOWN_TYPE), AL_CENTER | AL_EXTD_TEXT,
+				TEXT(T_CONTEN_TYPE_IS), " ", m1, ".\n",
+				TEXT(T_DO_YOU_WANT_TO_SAVE_OR_DISLPAY_THIS_FILE), NULL,
+				ses, 3,
+				TEXT(T_SAVE), tp_save, B_ENTER,
+				TEXT(T_DISPLAY), tp_display, 0,
+				TEXT(T_CANCEL), tp_cancel, B_ESC);
+		} else {
+			msg_box(ses->term, getml(m1, NULL),
+				TEXT(T_UNKNOWN_TYPE), AL_CENTER | AL_EXTD_TEXT,
+				TEXT(T_CONTEN_TYPE_IS), " ", m1, ".\n",
+				TEXT(T_DO_YOU_WANT_TO_SAVE_OR_DISLPAY_THIS_FILE), NULL,
+				ses, 2,
+				TEXT(T_DISPLAY), tp_display, B_ENTER,
+				TEXT(T_CANCEL), tp_cancel, B_ESC);
+		}
 	} else {
 		m2 = stracpy(a->label ? a->label : (unsigned char *)"");
-		if (!anonymous) msg_box(ses->term, getml(m1, m2, NULL), TEXT(T_WHAT_TO_DO), AL_CENTER | AL_EXTD_TEXT, TEXT(T_CONTEN_TYPE_IS), " ", m1, ".\n", TEXT(T_DO_YOU_WANT_TO_OPEN_FILE_WITH), " ", m2, ", ", TEXT(T_SAVE_IT_OR_DISPLAY_IT), NULL, ses, 4, TEXT(T_OPEN), tp_open, B_ENTER, TEXT(T_SAVE), tp_save, 0, TEXT(T_DISPLAY), tp_display, 0, TEXT(T_CANCEL), tp_cancel, B_ESC);
-		else msg_box(ses->term, getml(m1, m2, NULL), TEXT(T_WHAT_TO_DO), AL_CENTER | AL_EXTD_TEXT, TEXT(T_CONTEN_TYPE_IS), " ", m1, ".\n", TEXT(T_DO_YOU_WANT_TO_OPEN_FILE_WITH), " ", m2, ", ", TEXT(T_SAVE_IT_OR_DISPLAY_IT), NULL, ses, 3, TEXT(T_OPEN), tp_open, B_ENTER, TEXT(T_DISPLAY), tp_display, 0, TEXT(T_CANCEL), tp_cancel, B_ESC);
+		if (!anonymous) {
+			msg_box(ses->term, getml(m1, m2, NULL),
+				TEXT(T_WHAT_TO_DO), AL_CENTER | AL_EXTD_TEXT,
+				TEXT(T_CONTEN_TYPE_IS), " ", m1, ".\n",
+				TEXT(T_DO_YOU_WANT_TO_OPEN_FILE_WITH),
+				" ", m2, ", ", TEXT(T_SAVE_IT_OR_DISPLAY_IT), NULL,
+				ses, 4,
+				TEXT(T_OPEN), tp_open, B_ENTER,
+				TEXT(T_SAVE), tp_save, 0,
+				TEXT(T_DISPLAY), tp_display, 0,
+				TEXT(T_CANCEL), tp_cancel, B_ESC);
+		} else {
+			msg_box(ses->term, getml(m1, m2, NULL),
+				TEXT(T_WHAT_TO_DO), AL_CENTER | AL_EXTD_TEXT,
+				TEXT(T_CONTEN_TYPE_IS), " ", m1, ".\n",
+				TEXT(T_DO_YOU_WANT_TO_OPEN_FILE_WITH),
+				" ", m2, ", ", TEXT(T_SAVE_IT_OR_DISPLAY_IT), NULL,
+				ses, 3,
+				TEXT(T_OPEN), tp_open, B_ENTER,
+				TEXT(T_DISPLAY), tp_display, 0,
+				TEXT(T_CANCEL), tp_cancel, B_ESC);
+		}
 	}
 }
 
@@ -991,7 +1045,13 @@ void ses_goto(struct session *ses, unsigned char *url, unsigned char *target, in
 	else if (wtd == WTD_FORWARD) m1 = TEXT(T_DO_YOU_WANT_TO_POST_FORM_DATA_TO_URL);
 	else m1 = TEXT(T_DO_YOU_WANT_TO_REPOST_FORM_DATA_TO_URL);
 	m2 = memacpy(url, (unsigned char *)strchr(url, POST_CHAR) - url);
-	msg_box(ses->term, getml(m2, w, w->url, w->pos, NULL), TEXT(T_WARNING), AL_CENTER | AL_EXTD_TEXT, m1, " ", m2, "?", NULL, w, 3, TEXT(T_YES), post_yes, B_ENTER, TEXT(T_NO), post_no, 0, TEXT(T_CANCEL), post_cancel, B_ESC);
+	msg_box(ses->term, getml(m2, w, w->url, w->pos, NULL),
+		TEXT(T_WARNING), AL_CENTER | AL_EXTD_TEXT,
+		m1, " ", m2, "?", NULL,
+		w, 3,
+		TEXT(T_YES), post_yes, B_ENTER,
+		TEXT(T_NO), post_no, 0,
+		TEXT(T_CANCEL), post_cancel, B_ESC);
 }
 
 int do_move(struct session *ses, struct status **stat)
@@ -1338,7 +1398,12 @@ struct session *create_session(struct window *win)
 	}
 	if (first_use) {
 		first_use = 0;
-		msg_box(term, NULL, TEXT(T_WELCOME), AL_CENTER | AL_EXTD_TEXT, TEXT(T_WELCOME_TO_LINKS), "\n\n", TEXT(T_BASIC_HELP), NULL, NULL, 1, TEXT(T_OK), NULL, B_ENTER | B_ESC);
+		msg_box(term, NULL,
+			TEXT(T_WELCOME), AL_CENTER | AL_EXTD_TEXT,
+			TEXT(T_WELCOME_TO_LINKS), "\n\n",
+			TEXT(T_BASIC_HELP), NULL,
+			NULL, 1,
+			TEXT(T_OK), NULL, B_ENTER | B_ESC);
 	}
 	return ses;
 }

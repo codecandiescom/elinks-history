@@ -475,8 +475,13 @@ void init_lua()
 
 void alert_lua_error(unsigned char *msg)
 {
-	if (errterm) msg_box(errterm, NULL, TEXT(T_LUA_ERROR), AL_LEFT, msg, NULL, 1, TEXT(T_OK), NULL, B_ENTER | B_ESC);
-	else {
+	if (errterm) {
+		msg_box(errterm, NULL,
+			TEXT(T_LUA_ERROR), AL_LEFT,
+			msg,
+			NULL, 1,
+			TEXT(T_OK), NULL, B_ENTER | B_ESC);
+	} else {
 		fprintf(stderr, "Lua Error: %s\n", msg);
 		sleep(3);
 	}

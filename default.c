@@ -408,7 +408,13 @@ int write_config_file(unsigned char *prefix, unsigned char *name, struct option 
 	}
 	add_to_strn(&config_file, name);
 	if (write_to_config_file(config_file, c)) {
-		if (term) msg_box(term, NULL, TEXT(T_CONFIG_ERROR), AL_CENTER, TEXT(T_UNABLE_TO_WRITE_TO_CONFIG_FILE), NULL, 1, TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+		if (term) {
+			msg_box(term, NULL,
+				TEXT(T_CONFIG_ERROR), AL_CENTER,
+				TEXT(T_UNABLE_TO_WRITE_TO_CONFIG_FILE),
+				NULL, 1,
+				TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+		}
 		mem_free(c);
 		mem_free(config_file);
 		return -1;

@@ -4,7 +4,9 @@
 
 /*
  * memory_list is used to track information about all allocated memory
- * belonging to something.
+ * belonging to something. Then we can free it when we won't need it
+ * anymore, but the one who allocated it won't be able to get control
+ * back in order to free it himself.
  */
 
 struct memory_list *getml(void *p, ...)
@@ -1022,11 +1024,19 @@ int check_number(struct dialog_data *dlg, struct dialog_item_data *di)
 	unsigned char *end;
 	long l = strtol(di->cdata, (char **)&end, 10);
 	if (!*di->cdata || *end) {
-		msg_box(dlg->win->term, NULL, TEXT(T_BAD_NUMBER), AL_CENTER, TEXT(T_NUMBER_EXPECTED), NULL, 1, TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+		msg_box(dlg->win->term, NULL,
+			TEXT(T_BAD_NUMBER), AL_CENTER,
+			TEXT(T_NUMBER_EXPECTED),
+			NULL, 1,
+			TEXT(T_CANCEL),	NULL, B_ENTER | B_ESC);
 		return 1;
 	}
 	if (l < di->item->gid || l > di->item->gnum) {
-		msg_box(dlg->win->term, NULL, TEXT(T_BAD_NUMBER), AL_CENTER, TEXT(T_NUMBER_OUT_OF_RANGE), NULL, 1, TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+		msg_box(dlg->win->term, NULL,
+			TEXT(T_BAD_NUMBER), AL_CENTER,
+			TEXT(T_NUMBER_OUT_OF_RANGE),
+			NULL, 1,
+			TEXT(T_CANCEL),	NULL, B_ENTER | B_ESC);
 		return 1;
 	}
 	return 0;
@@ -1036,7 +1046,11 @@ int check_nonempty(struct dialog_data *dlg, struct dialog_item_data *di)
 {
 	unsigned char *p;
 	for (p = di->cdata; *p; p++) if (*p > ' ') return 0;
-	msg_box(dlg->win->term, NULL, TEXT(T_BAD_STRING), AL_CENTER, TEXT(T_EMPTY_STRING_NOT_ALLOWED), NULL, 1, TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+	msg_box(dlg->win->term, NULL,
+		TEXT(T_BAD_STRING), AL_CENTER,
+		TEXT(T_EMPTY_STRING_NOT_ALLOWED),
+		NULL, 1,
+		TEXT(T_CANCEL),	NULL, B_ENTER | B_ESC);
 	return 1;
 }
 
@@ -1372,7 +1386,10 @@ void msg_box_fn(struct dialog_data *dlg)
 	unsigned char **ptr;
 	unsigned char *text = init_str();
 	int textl = 0;
-	for (ptr = dlg->dlg->udata; *ptr; ptr++) add_to_str(&text, &textl, _(*ptr, term));
+	
+	for (ptr = dlg->dlg->udata; *ptr; ptr++)
+		add_to_str(&text, &textl, _(*ptr, term));
+	
 	max_text_width(term, text, &max);
 	min_text_width(term, text, &min);
 	max_buttons_width(term, dlg->items, dlg->n, &max);
@@ -1400,74 +1417,117 @@ void msg_box_fn(struct dialog_data *dlg)
 
 int msg_box_button(struct dialog_data *dlg, struct dialog_item_data *di)
 {
-	void (*fn)(void *) = (void (*)(void *))di->item->udata;
+	void (*fn)(void *) = (void (*)(void *)) di->item->udata;
 	void *data = dlg->dlg->udata2;
-	/*struct dialog *dl = dlg->dlg;*/
+	
 	if (fn) fn(data);
 	cancel_dialog(dlg, di);
+	
 	return 0;
 }
 
-void msg_box(struct terminal *term, struct memory_list *ml, unsigned char *title, int align, /*unsigned char *text, void *data, int n,*/ ...)
+/* The '...' means:
+ * 
+ * ( text1, [text2, ..., textN, NULL,]
+ *   udata, M,
+ *   label1, handler1, flags1,
+ *   ...,
+ *   labelM, handlerM, flagsM )
+ *
+ * If !(align & AL_EXTD_TEXT), only one text is accepted, if you'll give it
+ * AL_EXTD_TEXT, more texts are accepted, terminated by NULL.
+ *
+ * When labelX == NULL, the entire record is skipped.
+ *
+ * Handler takes one (void *), and udata is passed as it.
+ *
+ * You should always align it in a similiar way. */
+void msg_box(struct terminal *term, struct memory_list *ml,
+	     unsigned char *title, int align,
+	     ...)
 {
+	unsigned char **info = DUMMY;
+	int info_n = 0;
+	int button;
+	int buttons;
 	struct dialog *dlg;
-	int i;
-	int n;
-	unsigned char *text;
-	unsigned char **udata;
-	void *udata2;
-	int udatan;
+	void *udata;
 	va_list ap;
+	
 	va_start(ap, align);
-	udata = DUMMY;
-	udatan = 0;
-	do {
-		unsigned char **udata_;
-		text = va_arg(ap, unsigned char *);
-		na_kovarne__to_je_narez:
-		if (!(udata_ = mem_realloc(udata, ++udatan * sizeof(unsigned char *)))) {
-			mem_free(udata);
-			return;
+
+	if (align & AL_EXTD_TEXT) {
+		unsigned char *text = "";
+		
+		while (text) {
+			text = va_arg(ap, unsigned char *);
+			
+			info_n++;
+			info = mem_realloc(info, info_n
+						 * sizeof(unsigned char *));
+			if (!info) return;
+			
+			info[info_n - 1] = text;
 		}
-		udata = udata_;
-		udata[udatan - 1] = text;
-		if (text && !(align & AL_EXTD_TEXT)) {
-			text = NULL;
-			goto na_kovarne__to_je_narez;
-		}
-	} while (text);
-	udata2 = va_arg(ap, void *);
-	n = va_arg(ap, int);
-	if (!(dlg = mem_alloc(sizeof(struct dialog) + (n + 1) * sizeof(struct dialog_item)))) {
-		mem_free(udata);
+		
+	} else {
+		/* I had to decide between evil gotos and code duplication. */
+		unsigned char *text = va_arg(ap, unsigned char *);
+		unsigned char **info_;
+
+		info_n = 2;
+		info_ = mem_realloc(info, info_n
+					 * sizeof(unsigned char *));
+		if (!info_) { free(info); return; }
+		info = info_;
+
+		info[0] = text;
+		info[1] = NULL;
+	}
+	
+	udata = va_arg(ap, void *);
+	buttons = va_arg(ap, int);
+	
+	dlg = mem_alloc(sizeof(struct dialog) +
+			(buttons + 1) * sizeof(struct dialog_item));
+	if (!dlg) {
+		mem_free(info);
 		return;
 	}
-	memset(dlg, 0, sizeof(struct dialog) + (n + 1) * sizeof(struct dialog_item));
+	memset(dlg, 0, sizeof(struct dialog) +
+		       (buttons + 1) * sizeof(struct dialog_item));
+	
 	dlg->title = title;
 	dlg->fn = msg_box_fn;
-	dlg->udata = udata;
-	dlg->udata2 = udata2;
+	dlg->udata = info;
+	dlg->udata2 = udata;
 	dlg->align = align;
-	for (i = 0; i < n; i++) {
-		unsigned char *m;
+	
+	for (button = 0; button < buttons; button++) {
+		unsigned char *label;
 		void (*fn)(void *);
 		int flags;
-		m = va_arg(ap, unsigned char *);
+		
+		label = va_arg(ap, unsigned char *);
 		fn = va_arg(ap, void *);
 		flags = va_arg(ap, int);
-		if (!m) {
-			i--, n--;
+		
+		if (!label) {
+			/* Skip this button. */
+			button--, buttons--;
 			continue;
 		}
-		dlg->items[i].type = D_BUTTON;
-		dlg->items[i].gid = flags;
-		dlg->items[i].fn = msg_box_button;
-		dlg->items[i].dlen = 0;
-		dlg->items[i].text = m;
-		dlg->items[i].udata = fn;
+		
+		dlg->items[button].type = D_BUTTON;
+		dlg->items[button].gid = flags;
+		dlg->items[button].fn = msg_box_button;
+		dlg->items[button].dlen = 0;
+		dlg->items[button].text = label;
+		dlg->items[button].udata = fn;
 	}
-	dlg->items[i].type = D_END;
-	add_to_ml(&ml, dlg, udata, NULL);
+	
+	dlg->items[button].type = D_END;
+	add_to_ml(&ml, dlg, info, NULL);
 	do_dialog(term, dlg, ml);
 }
 

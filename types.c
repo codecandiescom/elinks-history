@@ -230,7 +230,12 @@ void menu_del_ct(struct terminal *term, void *fcp, void *xxx2)
 	add_to_str(&str, &l, del->ct);
 	add_to_str(&str, &l, " -> ");
 	add_to_str(&str, &l, del->prog);
-	msg_box(term, getml(str, NULL), TEXT(T_DELETE_ASSOCIATION), AL_CENTER | AL_EXTD_TEXT, TEXT(T_DELETE_ASSOCIATION), ": ", str, "?", NULL, fcp, 2, TEXT(T_YES), really_del_ct, B_ENTER, TEXT(T_NO), NULL, B_ESC);
+	msg_box(term, getml(str, NULL),
+		TEXT(T_DELETE_ASSOCIATION), AL_CENTER | AL_EXTD_TEXT,
+		TEXT(T_DELETE_ASSOCIATION), ": ", str, "?", NULL,
+		fcp, 2,
+		TEXT(T_YES), really_del_ct, B_ENTER,
+		TEXT(T_NO), NULL, B_ESC);
 }
 
 void menu_add_ct(struct terminal *term, void *fcp, void *xxx2)
@@ -419,7 +424,12 @@ void menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 	add_to_str(&str, &l, del->ext);
 	add_to_str(&str, &l, " -> ");
 	add_to_str(&str, &l, del->ct);
-	msg_box(term, getml(str, NULL), TEXT(T_DELETE_EXTENSION), AL_CENTER | AL_EXTD_TEXT, TEXT(T_DELETE_EXTENSION), " ", str, "?", NULL, fcp, 2, TEXT(T_YES), really_del_ext, B_ENTER, TEXT(T_NO), NULL, B_ESC);
+	msg_box(term, getml(str, NULL),
+		TEXT(T_DELETE_EXTENSION), AL_CENTER | AL_EXTD_TEXT,
+		TEXT(T_DELETE_EXTENSION), " ", str, "?", NULL,
+		fcp, 2,
+		TEXT(T_YES), really_del_ext, B_ENTER,
+		TEXT(T_NO), NULL, B_ESC);
 }
 
 void menu_add_ext(struct terminal *term, void *fcp, void *xxx2)

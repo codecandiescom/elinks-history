@@ -704,8 +704,8 @@ int push_delete_button(struct dialog_data *dlg, struct dialog_item_data *some_us
 	msg_box(term, getml(hop, NULL),
 		TEXT(T_DELETE_BOOKMARK), AL_CENTER | AL_EXTD_TEXT,
 		TEXT(T_DELETE_BOOKMARK), " \"", bm->title, "\" (",
-		TEXT(T_url), ": \"", bm->url, "\")?",
-		NULL, hop, 2,
+		TEXT(T_url), ": \"", bm->url, "\")?", NULL,
+		hop, 2,
 		TEXT(T_YES), really_del_bookmark, B_ENTER,
 		TEXT(T_NO), NULL, B_ESC);
 

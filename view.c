@@ -1423,7 +1423,11 @@ void encode_multipart(struct session *ses, struct list_head *l, unsigned char **
 	*data = NULL;
 	m1 = stracpy(sv->value);
 	m2 = stracpy(strerror(errno));
-	msg_box(ses->term, getml(m1, m2, NULL), TEXT(T_ERROR_WHILE_POSTING_FORM), AL_CENTER | AL_EXTD_TEXT, TEXT(T_COULD_NOT_GET_FILE), " ", m1, ": ", m2, NULL, ses, 1, TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+	msg_box(ses->term, getml(m1, m2, NULL),
+		TEXT(T_ERROR_WHILE_POSTING_FORM), AL_CENTER | AL_EXTD_TEXT,
+		TEXT(T_COULD_NOT_GET_FILE), " ", m1, ": ", m2, NULL,
+		ses, 1,
+		TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
 }
 
 void reset_form(struct f_data_c *f, int form_num)
@@ -1743,8 +1747,10 @@ void textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 	} else if (op == 0 && !term->master) {
 		fn = NULL; fs = NULL;
 
-		msg_box(term, NULL, TEXT(T_ERROR), AL_CENTER,
-			TEXT(T_NEED_MASTER_TERMINAL), NULL, 1,
+		msg_box(term, NULL,
+			TEXT(T_ERROR), AL_CENTER,
+			TEXT(T_NEED_MASTER_TERMINAL),
+			NULL, 1,
 			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
 
 	} else if (op == 1 && fs) {
@@ -2073,7 +2079,11 @@ void find_next(struct session *ses, struct f_data_c *f, int a)
 	}
 	if (!ses->search_word) {
 		if (!ses->last_search_word) {
-			msg_box(ses->term, NULL, TEXT(T_SEARCH), AL_CENTER, TEXT(T_NO_PREVIOUS_SEARCH), NULL, 1, TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+			msg_box(ses->term, NULL,
+				TEXT(T_SEARCH), AL_CENTER,
+				TEXT(T_NO_PREVIOUS_SEARCH),
+				NULL, 1,
+				TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
 			return;
 		}
 		ses->search_word = stracpy(ses->last_search_word);
@@ -2103,7 +2113,11 @@ void find_next(struct session *ses, struct f_data_c *f, int a)
 	/*draw_doc(ses->term, f, 1);
 	print_screen_status(ses);
 	redraw_from_window(ses->win);*/
-	msg_box(ses->term, NULL, TEXT(T_SEARCH), AL_CENTER, TEXT(T_SEARCH_STRING_NOT_FOUND), NULL, 1, TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+	msg_box(ses->term, NULL,
+		TEXT(T_SEARCH), AL_CENTER,
+		TEXT(T_SEARCH_STRING_NOT_FOUND),
+		NULL, 1,
+		TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
 }
 
 void find_next_back(struct session *ses, struct f_data_c *f, int a)
@@ -2777,7 +2791,13 @@ void save_formatted(struct session *ses, unsigned char *file)
 	
 	if (!(f = current_frame(ses)) || !f->f_data) return;
 	if ((h = create_download_file(ses->term, file, 0)) == -1) return;
-	if (dump_to_file(f->f_data, h)) msg_box(ses->term, NULL, TEXT(T_SAVE_ERROR), AL_CENTER, TEXT(T_ERROR_WRITING_TO_FILE), NULL, 1, TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+	if (dump_to_file(f->f_data, h)) {
+		msg_box(ses->term, NULL,
+			TEXT(T_SAVE_ERROR), AL_CENTER,
+			TEXT(T_ERROR_WRITING_TO_FILE),
+			NULL, 1,
+			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+	}
 	close(h);
 }
 
@@ -2968,7 +2988,11 @@ void loc_msg(struct terminal *term, struct location *lo, struct f_data_c *frame)
 	unsigned char *a;
 	
 	if (!lo) {
-		msg_box(term, NULL, TEXT(T_INFO), AL_LEFT, TEXT(T_YOU_ARE_NOWHERE), NULL, 1, TEXT(T_OK), NULL, B_ENTER | B_ESC);
+		msg_box(term, NULL,
+			TEXT(T_INFO), AL_LEFT,
+			TEXT(T_YOU_ARE_NOWHERE),
+			NULL, 1,
+			TEXT(T_OK), NULL, B_ENTER | B_ESC);
 		return;
 	}
 	s = init_str();
@@ -3030,7 +3054,11 @@ void loc_msg(struct terminal *term, struct location *lo, struct f_data_c *frame)
 		add_to_str(&s, &l, a);
 		mem_free(a);
 	}
-	msg_box(term, getml(s, NULL), TEXT(T_INFO), AL_LEFT, s, NULL, 1, TEXT(T_OK), NULL, B_ENTER | B_ESC);
+	msg_box(term, getml(s, NULL),
+		TEXT(T_INFO), AL_LEFT,
+		s,
+		NULL, 1,
+		TEXT(T_OK), NULL, B_ENTER | B_ESC);
 }
 
 void state_msg(struct session *ses)
@@ -3046,7 +3074,11 @@ void head_msg(struct session *ses)
 	int len;
 	
 	if (list_empty(ses->history)) {
-		msg_box(ses->term, NULL, TEXT(T_HEADER_INFO), AL_LEFT, TEXT(T_YOU_ARE_NOWHERE), NULL, 1, TEXT(T_OK), NULL, B_ENTER | B_ESC);
+		msg_box(ses->term, NULL,
+			TEXT(T_HEADER_INFO), AL_LEFT,
+			TEXT(T_YOU_ARE_NOWHERE),
+			NULL, 1,
+			TEXT(T_OK), NULL, B_ENTER | B_ESC);
 		return;
 	}
 	if (!find_in_cache(cur_loc(ses)->vs.url, &ce)) {
@@ -3057,6 +3089,10 @@ void head_msg(struct session *ses)
 			while ((ss = strstr(s, "\r\n"))) memmove(ss, ss + 1, strlen(ss));
 			while (*s && s[strlen(s) - 1] == '\n') s[strlen(s) - 1] = 0;
 		}
-		msg_box(ses->term, getml(s, NULL), TEXT(T_HEADER_INFO), AL_LEFT, s, NULL, 1, TEXT(T_OK), NULL, B_ENTER | B_ESC);
+		msg_box(ses->term, getml(s, NULL),
+			TEXT(T_HEADER_INFO), AL_LEFT,
+			s,
+			NULL, 1,
+			TEXT(T_OK), NULL, B_ENTER | B_ESC);
 	}
 }

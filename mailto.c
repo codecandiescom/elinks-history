@@ -4,7 +4,11 @@ void prog_func(struct terminal *term, struct list_head *list, unsigned char *par
 {
 	unsigned char *prog, *cmd;
 	if (!(prog = get_prog(list)) || !*prog) {
-		msg_box(term, NULL, TEXT(T_NO_PROGRAM), AL_CENTER | AL_EXTD_TEXT, TEXT(T_NO_PROGRAM_SPECIFIED_FOR), " ", name, ".", NULL, NULL, 1, TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+		msg_box(term, NULL,
+			TEXT(T_NO_PROGRAM), AL_CENTER | AL_EXTD_TEXT,
+			TEXT(T_NO_PROGRAM_SPECIFIED_FOR), " ", name, ".", NULL,
+			NULL, 1,
+			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
 		return;
 	}
 	if ((cmd = subst_file(prog, param))) {
@@ -32,7 +36,13 @@ void mailto_func(struct session *ses, unsigned char *url)
 	fail1:
 	mem_free(user);
 	fail:
-	if (f) msg_box(ses->term, NULL, TEXT(T_BAD_URL_SYNTAX), AL_CENTER, TEXT(T_BAD_MAILTO_URL), NULL, 1, TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+	if (f) {
+		msg_box(ses->term, NULL,
+			TEXT(T_BAD_URL_SYNTAX), AL_CENTER,
+			TEXT(T_BAD_MAILTO_URL),
+			NULL, 1,
+			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+	}
 }
 
 void tn_func(struct session *ses, unsigned char *url, struct list_head *prog, unsigned char *t1, unsigned char *t2)
@@ -62,7 +72,13 @@ void tn_func(struct session *ses, unsigned char *url, struct list_head *prog, un
 	fail1:
 	mem_free(hh);
 	fail:
-	if (f) msg_box(ses->term, NULL, TEXT(T_BAD_URL_SYNTAX), AL_CENTER, t2, NULL, 1, TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+	if (f) {
+		msg_box(ses->term, NULL,
+			TEXT(T_BAD_URL_SYNTAX), AL_CENTER,
+			t2,
+			NULL, 1,
+			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+	}
 }
 
 

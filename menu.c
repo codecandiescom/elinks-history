@@ -29,18 +29,30 @@ void menu_about(struct terminal *term, void *d, struct session *ses)
 #endif
 	);
 #endif
-	msg_box(term, NULL, TEXT(T_ABOUT), AL_CENTER, s, NULL, 1, TEXT(T_OK), NULL, B_ENTER | B_ESC);
+	msg_box(term, NULL,
+		TEXT(T_ABOUT), AL_CENTER,
+		s,
+		NULL, 1,
+		TEXT(T_OK), NULL, B_ENTER | B_ESC);
 	mem_free(s);
 }
 
 void menu_keys(struct terminal *term, void *d, struct session *ses)
 {
-	msg_box(term, NULL, TEXT(T_KEYS), AL_LEFT, TEXT(T_KEYS_DESC), NULL, 1, TEXT(T_OK), NULL, B_ENTER | B_ESC);
+	msg_box(term, NULL,
+		TEXT(T_KEYS), AL_LEFT,
+		TEXT(T_KEYS_DESC),
+		NULL, 1,
+		TEXT(T_OK), NULL, B_ENTER | B_ESC);
 }
 
 void menu_copying(struct terminal *term, void *d, struct session *ses)
 {
-	msg_box(term, NULL, TEXT(T_COPYING), AL_CENTER, TEXT(T_COPYING_DESC), NULL, 1, TEXT(T_OK), NULL, B_ENTER | B_ESC);
+	msg_box(term, NULL,
+		TEXT(T_COPYING), AL_CENTER,
+		TEXT(T_COPYING_DESC),
+		NULL, 1,
+		TEXT(T_OK), NULL, B_ENTER | B_ESC);
 }
 
 void menu_manual(struct terminal *term, void *d, struct session *ses)
@@ -86,7 +98,14 @@ void dont_exit_prog(struct session *ses)
 void query_exit(struct session *ses)
 {
 	ses->exit_query = 1;
-	msg_box(ses->term, NULL, TEXT(T_EXIT_LINKS), AL_CENTER, (ses->term->next == ses->term->prev && are_there_downloads()) ? TEXT(T_DO_YOU_REALLY_WANT_TO_EXIT_LINKS_AND_TERMINATE_ALL_DOWNLOADS) : TEXT(T_DO_YOU_REALLY_WANT_TO_EXIT_LINKS), ses, 2, TEXT(T_YES), (void (*)(void *))really_exit_prog, B_ENTER, TEXT(T_NO), dont_exit_prog, B_ESC);
+	msg_box(ses->term, NULL,
+		TEXT(T_EXIT_LINKS), AL_CENTER,
+		(ses->term->next == ses->term->prev && are_there_downloads())
+		? TEXT(T_DO_YOU_REALLY_WANT_TO_EXIT_LINKS_AND_TERMINATE_ALL_DOWNLOADS)
+		: TEXT(T_DO_YOU_REALLY_WANT_TO_EXIT_LINKS),
+		ses, 2,
+		TEXT(T_YES), (void (*)(void *)) really_exit_prog, B_ENTER,
+		TEXT(T_NO), (void (*)(void *)) dont_exit_prog, B_ESC);
 }
 
 void exit_prog(struct terminal *term, void *d, struct session *ses)
@@ -196,8 +215,8 @@ void cache_inf(struct terminal *term, void *d, struct session *ses)
 		TEXT(T_LOADING), a13,
 		TEXT(T_FORMATTED_DOCUMENT_CACHE), a14,
 		TEXT(T_DOCUMENTS), a15,
-		TEXT(T_LOCKED), a16,
-		NULL, r, 1,
+		TEXT(T_LOCKED), a16, NULL,
+		r, 1,
 		TEXT(T_OK), NULL, B_ENTER | B_ESC);
 	
 	r->win = term->windows.next;
@@ -234,9 +253,9 @@ void list_cache(struct terminal *term, void *d, struct session *ses)
 	
 	msg_box(term, getml(a, NULL),
 		TEXT(T_CACHE_INFO), AL_LEFT | AL_EXTD_TEXT,
-		TEXT(T_CACHE_CONTENT), a,
-		NULL, r, 1,
-		TEXT(T_OK), /*end_refresh*/ NULL, B_ENTER | B_ESC);
+		TEXT(T_CACHE_CONTENT), a, NULL,
+		r, 1,
+		TEXT(T_OK), NULL, B_ENTER | B_ESC);
 	
 	r->win = term->windows.next;
 	((struct dialog_data *) r->win->data)->dlg->abort = refresh_abort;
@@ -311,7 +330,8 @@ void memory_info(struct terminal *term, void *d, struct session *ses)
 	
 	msg_box(term, getml(p, NULL),
 		TEXT(T_MEMORY_INFO), AL_CENTER,
-		p, r, 1,
+		p,
+		r, 1,
 		TEXT(T_OK), NULL, B_ENTER | B_ESC);
 	
 	r->win = term->windows.next;
@@ -949,14 +969,22 @@ void net_programs(struct terminal *term, void *xxx, void *yyy)
 	do_dialog(term, d, getml(d, NULL));
 }
 
-/*void net_opt_ask(struct terminal *term, void *xxx, void *yyy)
+#if 0
+void net_opt_ask(struct terminal *term, void *xxx, void *yyy)
 {
 	if (list_empty(downloads)) {
 		net_options(term, xxx, yyy);
 		return;
 	}
-	msg_box(term, NULL, _("Network options"), AL_CENTER, _("Warning: configuring network will terminate all running downloads. Do you really want to configure network?"), term, 2, _("Yes"), (void (*)(void *))net_options, B_ENTER, _("No"), NULL, B_ESC);
-}*/
+	
+	msg_box(term, NULL,
+		_("Network options"), AL_CENTER,
+		_("Warning: configuring network will terminate all running downloads. Do you really want to configure network?"),
+		term, 2,
+		_("Yes"), (void (*)(void *)) net_options, B_ENTER,
+		_("No"), NULL, B_ESC);
+}
+#endif
 
 unsigned char mc_str[8];
 unsigned char doc_str[4];

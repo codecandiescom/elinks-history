@@ -1,3 +1,18 @@
+Thu Dec 27 02:53:59 2001  Petr Baudis <pasky@ji.cz>:
+
+	* connect.c, default.c, dns.c, links.h, sched.c:
+	
+	Partially rewritten fashion of address handling in DNS 'subsystem';
+	it is maybe still a little broken and certainly leakage, but I want
+	to have some reference point - it compiles and doesn't core to me
+	;)
+
+Wed Dec 26 15:39:24 2001  Petr Baudis <pasky@ji.cz>:
+
+	* error.c:
+	
+	remove of some inherited LEAK_DEBUG ifdefs
+
 Wed Dec 26 00:19:15 2001  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, session.c:

@@ -1,3 +1,65 @@
+Tue Nov  9 14:42:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Reduce code redundancy by introducing move_cursor_rel().  
+
+Tue Nov  9 13:59:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/nntp/response.c:
+
+	Markup the shown NNTP headers with <b> instead of <i>.  
+
+Tue Nov  9 13:56:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/gopher/gopher.c:
+
+	Align the search input-field with the rest of the gopher menu text.
+	Shorten the searchable gopher index page.  
+
+Tue Nov  9 12:21:38 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/header.c:
+
+	Rewrite parse_header() to be more tolerant about header syntax,
+	especially tab chars and separators. It should partially fix bug
+	439. Please test heavily.  
+
+Tue Nov  9 05:47:19 2004  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Translation update.  
+
+Tue Nov  9 01:39:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/gopher/gopher.c:
+
+	Only encode slashes if there are two successive ones. It gets too
+	ugly with %2F's in globhist.  
+
+Tue Nov  9 01:02:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/gopher/gopher.c:
+
+	Add support for gopher index searching by introducing a little
+	(HTTP) GET method extension. Now a text-input form-field is shown
+	for gopher index menu entries and index pages.  
+
+Tue Nov  9 00:33:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/gopher/gopher.c:
+
+	Fix off by one error in the query string calculation.  
+
+Mon Nov  8 23:51:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/gopher/gopher.c:
+
+	Fix issue with handling links like
+	gopher://gopher.floodgap.com/hURL:http://www.floodgap.com/ where the
+	slashes in the selector apparently has to be encoded as well.  
+
 Mon Nov  8 22:15:24 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/man/man1/elinks.1.in:

@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.3 2004/01/13 14:22:55 zas Exp $ */
+/* $Id: listmenu.c,v 1.4 2004/01/25 12:52:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,11 +94,11 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 		}
 
 		if (data == -1) {
-			SET_MENU_ITEM(item, name, NULL, ACT_NONE, do_select_submenu,
+			SET_MENU_ITEM(item, name, NULL, ACT_MENU_NONE, do_select_submenu,
 				      new_menu_item, SUBMENU | (fullname ? MENU_FULLNAME : 0) | NO_INTL,
 				      0, 0);
 		} else {
-			SET_MENU_ITEM(item, name, NULL, ACT_NONE, selected_item,
+			SET_MENU_ITEM(item, name, NULL, ACT_MENU_NONE, selected_item,
 				      data, (fullname ? MENU_FULLNAME : 0) | NO_INTL,
 				      0, 0);
 		}

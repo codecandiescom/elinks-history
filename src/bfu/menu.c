@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.190 2004/01/25 12:44:43 jonas Exp $ */
+/* $Id: menu.c,v 1.191 2004/01/25 12:52:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,7 +151,7 @@ select_menu_item(struct terminal *term, struct menu_item *it, void *data)
 		}
 	}
 
-	if (action != ACT_NONE && !func) {
+	if (action != ACT_MENU_NONE && !func) {
 		struct session *ses = data;
 
 		do_action(ses, action, 1);
@@ -199,7 +199,7 @@ get_menuitem_rtext_width(struct terminal *term, struct menu_item *mi)
 	if (mi_is_submenu(*mi)) {
 		rtext_width = L_RTEXT_SPACE + m_submenu_len + R_RTEXT_SPACE;
 
-	} else if (mi->action != ACT_NONE) {
+	} else if (mi->action != ACT_MENU_NONE) {
 		struct string keystroke;
 
 		if (init_string(&keystroke)) {
@@ -454,7 +454,7 @@ display_menu(struct terminal *term, struct menu *menu)
 			if (mi_is_submenu(menu->items[p])) {
 				draw_menu_right_text(term, m_submenu, m_submenu_len,
 						     menu->x, y, mwidth, color);
-			} else if (menu->items[p].action != ACT_NONE) {
+			} else if (menu->items[p].action != ACT_MENU_NONE) {
 				struct string keystroke;
 
 #ifdef DEBUG

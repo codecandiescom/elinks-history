@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.75 2004/01/22 21:37:13 pasky Exp $ */
+/* $Id: inphist.c,v 1.76 2004/01/25 12:52:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,7 +65,7 @@ do_tab_compl(struct terminal *term, struct list_head *history,
 		if (strncmp(widget_data->cdata, entry->data, cdata_len))
 			continue;
 
-		add_to_menu(&items, entry->data, NULL, ACT_NONE,
+		add_to_menu(&items, entry->data, NULL, ACT_MENU_NONE,
 			    (menu_func) tab_compl, entry->data, 0);
 		n++;
 	}

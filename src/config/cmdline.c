@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.46 2004/02/11 10:12:34 zas Exp $ */
+/* $Id: cmdline.c,v 1.47 2004/02/13 08:02:47 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,11 +32,9 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-static unsigned char *
+static void
 _parse_options(int argc, unsigned char *argv[], struct option *opt, struct list_head *url_list)
 {
-	unsigned char *location = NULL;
-
 	while (argc) {
 		argv++, argc--;
 
@@ -71,7 +69,7 @@ _parse_options(int argc, unsigned char *argv[], struct option *opt, struct list_
 			if (!option) {
 unknown_option:
 				ERROR(gettext("Unknown option %s"), argv[-1]);
-				return NULL;
+				return;
 			}
 
 			if (option_types[option->type].cmdline
@@ -84,7 +82,7 @@ unknown_option:
 					if (err[0])
 						ERROR(gettext("Cannot parse option %s: %s"), argv[-1], err);
 
-					return NULL;
+					return;
 				}
 			} else {
 				goto unknown_option;
@@ -92,17 +90,14 @@ unknown_option:
 
 		} else if (url_list) {
 			add_to_string_list(url_list, argv[-1], -1);
-			if (!location) location = argv[-1];
 		}
 	}
-
-	return empty_string_or_(location);
 }
 
-unsigned char *
+void
 parse_options(int argc, unsigned char *argv[], struct list_head *url_list)
 {
-	return _parse_options(argc, argv, cmdline_options, url_list);
+	_parse_options(argc, argv, cmdline_options, url_list);
 }
 
 
@@ -568,14 +563,6 @@ struct option_info cmdline_options_info[] = {
 	INIT_OPT_BOOL("", N_("Write the source of given URL to stdout"),
 		"source", 0, 0,
 		N_("Write the given HTML document in source form to stdout.")),
-
-	INIT_OPT_BOOL("", N_("Read document from stdin"),
-		"stdin", 0, 0,
-		N_("Open stdin as an HTML document - this is fully equivalent to:\n"
-		" -eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin\n"
-		"Use whichever suits you more ;-). Note that reading document from\n"
-		"stdin WORKS ONLY WHEN YOU USE -dump OR -source!! (I would like to\n"
-		"know why you would use -source -stdin, though ;-)")),
 
 	INIT_OPT_BOOL("", N_("Do not number links in dump output"),
 		"no-numbering", 0, 0,

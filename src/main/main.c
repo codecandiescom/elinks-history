@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.173 2004/02/12 17:51:38 witekfl Exp $ */
+/* $Id: main.c,v 1.174 2004/02/13 08:03:57 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,7 +73,6 @@ static int init_b = 0;
 void
 init(void)
 {
-	unsigned char *url = NULL;
 	INIT_LIST_HEAD(url_list);
 
 	init_static_version();
@@ -107,15 +106,7 @@ init(void)
 	}
 
 	/* Parsing command line options */
-	url = parse_options(ac - 1, av + 1, &url_list);
-	if (!url) {
-		retval = RET_SYNTAX;
-		terminate = 1;
-		goto end;
-	}
-
-	url = stracpy(url);
-	if (!url) goto fatal_error;
+	parse_options(ac - 1, av + 1, &url_list);
 
 	if (!isatty(0)) add_to_string_list(&url_list, "file:///dev/stdin", 17);
 
@@ -164,14 +155,8 @@ init(void)
 
 	if (get_opt_int_tree(cmdline_options, "dump") ||
 	    get_opt_int_tree(cmdline_options, "source")) {
-		if (!*url || !strcmp(url, "-")
-		    || get_opt_bool_tree(cmdline_options, "stdin")) {
-			get_opt_bool("protocol.file.allow_special_files") = 1;
-			dump_start("file:///dev/stdin");
-		} else {
-			dump_pre_start(&url_list);
-		}
-
+		get_opt_bool("protocol.file.allow_special_files") = 1;
+		dump_pre_start(&url_list);
 		if (terminate) {
 			/* XXX? */
 			close_terminal_pipes();
@@ -196,7 +181,6 @@ fatal_error:
 		}
 	}
 end:
-	if (url) mem_free(url);
 	if (!list_empty(url_list)) free_string_list(&url_list);
 }
 

@@ -1,7 +1,19 @@
 elinks (0.11-cvs.1) unstable; urgency=low
 
   * NMU
-  * Only remove CVS files from packaging directory
+  * Fix repeatedly and endless refreshing of documents that triggers a
+    download (like sourceforge's download pages) (closes: #293298)
+  * Add watch file, thanks Hugo Haas
+
+ -- Jonas Fonseca <fonseca@diku.dk>  Tue, 11 Jan 2005 19:29:31 +0100
+
+elinks (0.10.2-1) unstable; urgency=low
+
+  * New upstream version v0.10.2
+  * Cleanups by Jonas Fonseca <fonseca@diku.dk>, debian dir
+    installed into upstream CVS:
+  * Only remove CVS files from packaging directory so the package can
+    be built from checked out sources
   * Install elinks.conf from contrib/
   * Install documentation files about using ELinks from doc/
   * Remove more unrelevant files from contrib/
@@ -28,11 +40,8 @@ elinks (0.11-cvs.1) unstable; urgency=low
   * Fix assertion failure when searching in empty documents (closes: #238281)
   * Remove www-browser alternative, thanks Andreas Metzler (closes: #247495)
   * Fix uncompressing of .gz files on download (closes: #221207)
-  * Fix repeatedly and endless refreshing of documents that triggers a
-    download (like sourceforge's download pages) (closes: #293298)
-  * Add watch file, thanks Hugo Haas
 
- -- Jonas Fonseca <fonseca@diku.dk>  Tue, 11 Jan 2005 19:29:31 +0100
+ -- Peter Gervai <grin@tolna.net>  Mon, 21 Feb 2005 15:21:55 +0100
 
 elinks (0.9.3-1) unstable; urgency=low
 

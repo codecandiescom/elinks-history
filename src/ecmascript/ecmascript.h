@@ -1,4 +1,4 @@
-/* $Id: ecmascript.h,v 1.8 2004/09/26 10:03:45 pasky Exp $ */
+/* $Id: ecmascript.h,v 1.9 2004/12/16 23:48:43 pasky Exp $ */
 
 #ifndef EL__ECMASCRIPT_ECMASCRIPT_H
 #define EL__ECMASCRIPT_ECMASCRIPT_H
@@ -28,6 +28,16 @@ struct ecmascript_interpreter {
 	 * entry. */
 	struct list_head onload_snippets; /* -> struct string_list_item */
 	struct string_list_item *current_onload_snippet;
+
+	/* ID of the {struct document} where those onload_snippets belong to.
+	 * It is kept at 0 until it is definitively hard-attached to a given
+	 * final document. Then if we suddenly appear with this structure upon
+	 * a document with a different ID, we reset the state and start with a
+	 * fresh one (normally, that does not happen since reloading sets
+	 * ecmascript_fragile, but it can happen i.e. when the urrent document
+	 * is reloaded in another tab and then you just cause the current tab
+	 * to redraw. */
+	unsigned int onload_snippets_owner;
 };
 
 /* Why is the interpreter bound to {struct view_state} instead of {struct

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.135 2004/12/16 15:14:49 jonas Exp $ */
+/* $Id: renderer.c,v 1.136 2004/12/16 23:48:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -330,9 +330,27 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	if (!vs->ecmascript_fragile)
 		assert(vs->ecmascript);
 	if (!options->gradual_rerendering) {
-		if (vs->ecmascript_fragile)
+		/* We also reset the state if the underlying document changed
+		 * from the last time we did the snippets. This may be
+		 * triggered i.e. when redrawing a document which has been
+		 * reloaded in a different tab meanwhile (OTOH we don't want
+		 * to reset the state if we are redrawing a document we have
+		 * already drawn before).
+		 *
+		 * (vs->ecmascript->onload_snippets_owner) check may be
+		 * superfluous since we should always have
+		 * vs->ecmascript_fragile set in those cases; that's why we
+		 * don't ever bother to re-zero it if we are suddenly doing
+		 * gradual rendering again.
+		 *
+		 * XXX: What happens if a document is still loading in the
+		 * other tab when we press ^L here? */
+		if (vs->ecmascript_fragile
+		    || (vs->ecmascript && vs->ecmascript->onload_snippets_owner
+		       && document->id != vs->ecmascript->onload_snippets_owner))
 			ecmascript_reset_state(vs);
 		assert(vs->ecmascript);
+		vs->ecmascript->onload_snippets_owner = document->id;
 
 		/* Passing of the onload_snippets pointers gives *_snippets()
 		 * some feeling of universality, shall we ever get any other

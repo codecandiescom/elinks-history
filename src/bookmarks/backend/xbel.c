@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.15 2002/12/20 15:26:29 zas Exp $ */
+/* $Id: xbel.c,v 1.16 2002/12/20 16:09:15 zas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -130,6 +130,8 @@ read_bookmarks_xbel(FILE *f)
 	if (!err) readok = xbeltree_to_bookmarks_list(root_node, NULL);
 
 	XML_ParserFree(p);
+	free_xbeltree(root_node);
+
 }
 
 static void

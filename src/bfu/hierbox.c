@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.200 2004/12/03 10:26:12 zas Exp $ */
+/* $Id: hierbox.c,v 1.201 2004/12/17 01:22:10 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -908,6 +908,13 @@ scan_for_matches(struct listbox_item *item, void *info_, int *offset)
 	return 0;
 }
 
+static int
+mark_visible(struct listbox_item *item, void *xxx, int *offset)
+{
+	item->visible = 1;
+	return 0;
+}
+
 
 static void
 search_hierbox_browser(void *data, unsigned char *text)
@@ -944,6 +951,9 @@ search_hierbox_browser(void *data, unsigned char *text)
 		default:
 			break;
 		}
+
+		traverse_listbox_items_list(box->items->next, box, 0, 0,
+					    mark_visible, NULL);
 	}
 
 	mem_free(context);

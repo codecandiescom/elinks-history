@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.58 2003/11/08 05:00:50 miciah Exp $ */
+/* $Id: dialogs.c,v 1.59 2003/11/08 05:23:39 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 
 #include <string.h>
 
+#include "bookmarks/dialogs.h"
 #include "bfu/button.h"
 #include "bfu/dialog.h"
 #include "bfu/listbox.h"
@@ -28,7 +29,12 @@
 #ifdef GLOBHIST
 
 /* Number of widgets in dialog excluding the listbox. */
-#define HISTORY_WIDGETS_COUNT 7
+#define HISTORY_WIDGETS_COUNT_ 7
+#ifdef BOOKMARKS
+# define HISTORY_WIDGETS_COUNT (HISTORY_WIDGETS_COUNT_+1)
+#else
+# define HISTORY_WIDGETS_COUNT (HISTORY_WIDGETS_COUNT_)
+#endif
 
 struct history_dialog_list_item {
 	LIST_HEAD(struct history_dialog_list_item);
@@ -430,6 +436,31 @@ push_info_button(struct dialog_data *dlg_data,
 }
 
 
+#ifdef BOOKMARKS
+static int
+push_bookmark_button(struct dialog_data *dlg_data,
+		     struct widget_data *some_useless_info_button)
+{
+	struct terminal *term = dlg_data->win->term;
+	struct global_history_item *historyitem;
+	struct listbox_data *box;
+	struct widget *widget = &(dlg_data->dlg->widgets[HISTORY_WIDGETS_COUNT]);
+
+	box = (struct listbox_data *) widget->data;
+
+	if (!box->sel) return 0;
+
+	historyitem = box->sel->udata;
+	if (!historyitem) return 0;
+
+	launch_bm_add_dialog(term, NULL, NULL,
+			     historyitem->title, historyitem->url);
+
+	return 0;
+}
+#endif
+
+
 
 void
 menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
@@ -466,6 +497,9 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	add_dlg_button(dlg, B_ENTER, push_goto_button, _("Goto", term), ses);
 	add_dlg_button(dlg, B_ENTER, push_info_button, _("Info", term), NULL);
+#ifdef BOOKMARKS
+	add_dlg_button(dlg, B_ENTER, push_bookmark_button, _("Bookmark", term), NULL);
+#endif
 	add_dlg_button(dlg, B_ENTER, push_delete_button, _("Delete", term), NULL);
 	add_dlg_button(dlg, B_ENTER, push_search_button, _("Search", term), NULL);
 	add_dlg_button(dlg, B_ENTER, push_toggle_display_button, _("Toggle display", term), NULL);

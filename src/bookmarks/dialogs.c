@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.68 2003/01/05 16:48:13 pasky Exp $ */
+/* $Id: dialogs.c,v 1.69 2003/04/22 08:57:36 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -459,7 +459,8 @@ update_depths(struct listbox_item *parent)
 static void
 do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 		 struct list_head *desti, struct list_head *src,
-		 struct listbox_data *box) {
+		 struct listbox_data *box)
+{
 	struct bookmark *bm = (struct bookmark *) src; /* piggy */
 	struct bookmark *bm_next = bm->next;
 	int blind_insert = (destb && desti);
@@ -470,14 +471,8 @@ do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 		bm = bm_next;
 		bm_next = bm->next;
 
-		if (bm == dest) {
-			/* We WON'T ever try to proceed ourselves - saves us
-			 * from insanities like moving a folder into itself
-			 * and so on. */
-			continue;
-		}
-
-		if (bm->box_item->marked && bm != move_cache_root_avoid) {
+		if (bm != dest /* prevent moving a folder into itself */
+		    && bm->box_item->marked && bm != move_cache_root_avoid) {
 			bm->box_item->marked = 0;
 
 			if (box->top == bm->box_item) {
@@ -520,7 +515,7 @@ do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 		}
 
 		if (bm->box_item->type == BI_FOLDER) {
-			do_move_bookmark(dest, blind_insert ? destb : NULL,
+ 			do_move_bookmark(dest, blind_insert ? destb : NULL,
 					 blind_insert ? desti : NULL,
 					 &bm->child, box);
 		}
@@ -546,7 +541,6 @@ push_move_button(struct dialog_data *dlg,
 		destb = &((struct bookmark *) box->sel->udata)->child;
 		desti = &box->sel->child;
 	}
-
 	/* Avoid recursion headaches (prevents moving a folder into itself). */
 	move_cache_root_avoid = NULL;
 	{

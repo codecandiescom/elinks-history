@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.429 2004/01/07 23:24:29 zas Exp $ */
+/* $Id: options.c,v 1.430 2004/01/07 23:53:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -211,8 +211,11 @@ get_opt_(
 		if (!opt->value.tree)
 			elinks_internal("Option %s has no value!", name);
 		break;
-	case OPT_STRING:
 	case OPT_ALIAS:
+		elinks_internal("Invalid use of alias %s for option %s!",
+				name, opt->value.string);
+		break;
+	case OPT_STRING:
 		if (!opt->value.string)
 			elinks_internal("Option %s has no value!", name);
 		break;

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.7 2002/06/17 07:42:29 pasky Exp $ */
+/* $Id: cmdline.c,v 1.8 2002/07/02 00:53:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,7 +28,7 @@ _parse_options(int argc, unsigned char *argv[], struct list_head *opt)
 		if (argv[-1][0] == '-') {
 			struct option *option;
 			unsigned char *argname = &argv[-1][1];
-			unsigned char *oname = opt_name(argname);
+			unsigned char *oname = stracpy(argname);
 
 			/* Treat --foo same as -foo. */
 			if (argname[0] == '-') argname++;

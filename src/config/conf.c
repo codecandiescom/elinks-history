@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.43 2002/07/01 22:47:26 pasky Exp $ */
+/* $Id: conf.c,v 1.44 2002/07/02 00:53:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,6 +230,11 @@ parse_include(struct list_head *opt_tree, unsigned char **file, int *line,
 	/* Mirror what we already have */
 	if (str) add_bytes_to_str(str, len, orig_pos, *file - orig_pos);
 
+	/* We want load_config_file() to watermark stuff, but not to load
+	 * anything, polluting our beloved options tree - thus, we will feed it
+	 * with some dummy string which we will destroy later; still better
+	 * than cloning whole options tree or polluting interface with another
+	 * rarely-used option ;). */
 	/* XXX: We should try /etc/elinks/<file> when proceeding
 	 * /etc/elinks/<otherfile> ;). --pasky */
 	if (load_config_file(fname[0] == '/' ? (unsigned char *) ""
@@ -600,6 +605,8 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	/* bind_config_string(&str, &len); */
 	if (tmplen > origlen) add_bytes_to_str(&str, &len, tmpstr, tmplen);
 	mem_free(tmpstr);
+
+	unmark_options_tree(options);
 
 	return str;
 }

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.34 2002/07/01 14:48:09 pasky Exp $ */
+/* $Id: options.h,v 1.35 2002/07/02 00:53:22 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -72,6 +72,7 @@ extern void done_options();
 
 extern struct list_head *init_options_tree();
 extern void free_options_tree(struct list_head *);
+extern void unmark_options_tree(struct list_head *);
 
 extern struct option *copy_option(struct option *);
 extern void delete_option(struct option *);
@@ -163,9 +164,7 @@ extern void add_opt(struct list_head *, unsigned char *path, unsigned char *name
 #define add_opt_tree(path, name, flags, desc) add_opt_tree_tree(root_options, path, name, flags, desc)
 
 
-extern unsigned char *cmd_name(unsigned char *);
-extern unsigned char *opt_name(unsigned char *);
-
+/* TODO: We need to do *something* with this ;). */
 
 enum cookies_accept {
 	COOKIES_ACCEPT_NONE,

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.63 2002/06/23 18:27:00 pasky Exp $ */
+/* $Id: options.c,v 1.64 2002/07/02 00:53:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -286,33 +286,16 @@ done_options()
 	free_options_tree(cmdline_options);
 }
 
-
-/* Get command-line alias for option name */
-unsigned char *
-cmd_name(unsigned char *name)
+void
+unmark_options_tree(struct list_head *tree)
 {
-	unsigned char *cname = stracpy(name);
-	unsigned char *ptr;
+	struct option *option;
 
-	for (ptr = cname; *ptr; ptr++) {
-		if (*ptr == '_') *ptr = '-';
+	foreach (option, *tree) {
+		option->flags &= ~OPT_WATERMARK;
+		if (option->type == OPT_TREE)
+			unmark_options_tree((struct list_head *) option->ptr);
 	}
-
-	return cname;
-}
-
-/* Get option name from command-line alias */
-unsigned char *
-opt_name(unsigned char *name)
-{
-	unsigned char *cname = stracpy(name);
-	unsigned char *ptr;
-
-	for (ptr = cname; *ptr; ptr++) {
-		if (*ptr == '-') *ptr = '_';
-	}
-
-	return cname;
 }
 
 
@@ -382,13 +365,9 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 	foreachback (option, *cmdline_options) {
 
 		if (1 /*option->flags & OPT_CMDLINE*/) {
-			unsigned char *cname = cmd_name(option->name);
-
-			printf("-%s ", cname);
-			mem_free(cname);
+			printf("-%s ", option->name);
 
 			printf("%s", option_types[option->type].help_str);
-			printf("  (%s)\n", option->name);
 
 			if (option->desc) {
 				int l = strlen(option->desc);

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.122 2003/06/09 10:29:18 zas Exp $ */
+/* $Id: parser.c,v 1.123 2003/06/09 10:47:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,21 +175,25 @@ get_attr_val(register unsigned char *e, unsigned char *name)
 	int attrlen = 0;
 	int found = 0;
 
-again:
+nextattr:
 	while (WHITECHAR(*e)) e++;
 	if (!*e || !ATTR_CHAR(*e) || TAG_DELIM(e)) {
 		if (TAG_END_XML(e)) e++;
 		return NULL;
 	}
-	n = name;
 
+	/* Does it match ? */
+	n = name;
 	while (*n && upcase(*e) == upcase(*n)) e++, n++;
 	found = !*n;
 	while (ATTR_CHAR(*e)) found = 0, e++;
+
 	while (WHITECHAR(*e)) e++;
 	if (*e != '=') goto endattr;
 	e++;
 	while (WHITECHAR(*e)) e++;
+
+	/* Parse value part. */
 	if (!IS_QUOTE(*e)) {
 		while (!WHITECHAR(*e) && !(TAG_DELIM(e))) {
 			if (found) add_chr(attr, attrlen, *e);
@@ -223,6 +227,8 @@ quoted_value:
 endattr:
 	if (found) {
 		add_chr(attr, attrlen, '\0');
+
+		/* Convert entities if needed. */
 		if (strchr(attr, '&')) {
 			unsigned char *saved_attr = attr;
 
@@ -231,10 +237,11 @@ endattr:
 		}
 
 		set_mem_comment(trim_chars(attr, ' ', NULL), name, strlen(name));
+
 		return attr;
 	}
 
-	goto again;
+	goto nextattr;
 }
 
 #undef add_chr

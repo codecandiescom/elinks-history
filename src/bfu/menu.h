@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.32 2003/12/05 22:30:10 jonas Exp $ */
+/* $Id: menu.h,v 1.33 2003/12/10 17:05:17 jonas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -124,6 +124,7 @@ struct menu {
 
 struct menu_item *new_menu(enum menu_item_flags);
 void add_to_menu(struct menu_item **, unsigned char *, unsigned char *, menu_func, void *, enum menu_item_flags flags);
+#define add_separator_to_menu(menu) add_to_menu(menu, "", M_BAR, NULL, NULL, 0)
 void do_menu(struct terminal *, struct menu_item *, void *, int);
 void do_menu_selected(struct terminal *, struct menu_item *, void *, int, int);
 void do_mainmenu(struct terminal *, struct menu_item *, void *, int);

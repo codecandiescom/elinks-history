@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.214 2003/12/10 16:42:12 jonas Exp $ */
+/* $Id: menu.c,v 1.215 2003/12/10 17:05:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,6 +139,12 @@ static inline void
 menu_go_back(struct terminal *term, void *d, struct session *ses)
 {
 	go_back(ses);
+}
+
+static inline void
+menu_go_unback(struct terminal *term, void *d, struct session *ses)
+{
+	go_unback(ses);
 }
 
 static inline void
@@ -298,6 +304,7 @@ menu_kill_background_connections(struct terminal *term, void *xxx, void *yyy)
 	abort_background_connections();
 }
 
+
 void
 tab_menu(struct terminal *term, void *d, struct session *ses)
 {
@@ -312,10 +319,28 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 	menu = new_menu(FREE_LIST);
 	if (!menu) return;
 
+	add_to_menu(&menu, N_("Go ~back"), "<-",
+		    (menu_func) menu_go_back, NULL, 0);
+
+	add_to_menu(&menu, N_("Go forward"), "->",
+		    (menu_func) menu_go_unback, NULL, 0);
+
+	add_separator_to_menu(&menu);
+
 #ifdef BOOKMARKS
 	add_to_menu(&menu, N_("Bookm~ark document"), "a",
 		    (menu_func) launch_bm_add_doc_dialog, NULL, 0);
 #endif
+
+	add_to_menu(&menu, N_("~Reload"), "Ctrl-R",
+		    (menu_func) menu_reload, NULL, 0);
+
+	if (ses->doc_view && document_has_frames(ses->doc_view->document))
+		add_to_menu(&menu, N_("Frame at ~full-screen"), "f",
+			    (menu_func) menu_for_frame, (void *)set_frame, 0);
+
+	/* Keep tab related operations below this separator */
+	add_separator_to_menu(&menu);
 
 	if (tabs > 1) {
 		add_to_menu(&menu, N_("Nex~t tab"), ">",
@@ -340,12 +365,14 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 	do_menu(term, menu, ses, 1);
 }
 
+
 static struct menu_item file_menu11[] = {
 	INIT_MENU_ITEM(N_("Open new ~tab"), "t", open_in_new_tab, (void *) 0, 0),
 	INIT_MENU_ITEM(N_("Open new tab in backgroun~d"), "T", open_in_new_tab_in_background,
 								(void *) 0, 0),
 	INIT_MENU_ITEM(N_("~Go to URL"), "g", menu_goto_url, NULL, 0),
 	INIT_MENU_ITEM(N_("Go ~back"), "<-", menu_go_back, NULL, 0),
+	INIT_MENU_ITEM(N_("Go forward"), "<-", menu_go_unback, NULL, 0),
 	INIT_MENU_ITEM(N_("~Reload"), "Ctrl-R", menu_reload, NULL, 0),
 	INIT_MENU_ITEM(N_("~History"), M_SUBMENU, history_menu, NULL, SUBMENU),
 	INIT_MENU_ITEM(N_("~Unhistory"), M_SUBMENU, unhistory_menu, NULL, SUBMENU),

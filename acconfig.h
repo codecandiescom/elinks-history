@@ -75,5 +75,8 @@
 /* Directory containing default config */
 #undef CONFDIR
 
+/* Directory containing locales */
+#undef LOCALEDIR
+
 /* Enable direct use of system allocation functions */
 #undef FASTMEM

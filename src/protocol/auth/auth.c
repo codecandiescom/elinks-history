@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.43 2003/07/11 19:48:37 jonas Exp $ */
+/* $Id: auth.c,v 1.44 2003/07/11 19:58:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,11 +112,8 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 }
 
 /* Add a Basic Auth entry if needed. */
-/* Returns:
- *	ADD_AUTH_NONE	if entry do not exists and user/pass are in url
- *	ADD_AUTH_EXIST	if exact entry already exists or is in blocked state
- *	ADD_AUTH_NEW	if entry was added
- *	ADD_AUTH_ERROR	on error. */
+/* Returns the new entry or updates an existing one. Sets the @valid member
+ * if both @uid and @passwd are non empty. */
 struct http_auth_basic *
 add_auth_entry(struct uri *uri, unsigned char *realm)
 {
@@ -208,25 +205,6 @@ find_auth(struct uri *uri)
 	unsigned char *newurl = get_uri_string(uri);
 
 	if (!newurl) return NULL;
-
-	/* FIXME Somehow this seems over complicated. If add_auth_entry()
-	 * returned the added entry it would be a lot easier as in no need
-	 * to call find_auth_entry() to get the added entry BUT how should the
-	 * return values be added?
-	 *
-	 *	ADD_AUIH_ERROR	on error.
-	 *			-> NULL
-	 *	ADD_AUTH_NONE	if entry do not exists and user/pass are in url
-	 *			-> entry->valid == 1
-	 *	ADD_AUTH_EXIST	if exact entry already exists or is in blocked state
-	 *			-> entry->valid == 1
-	 *				&& (entry->blocked == 1 || <something>)
-	 *	ADD_AUTH_NEW	if entry was added
-	 *			-> entry->valid == 0
-	 *
-	 * <something> could be a new flag. Or maybe we should just split up
-	 * add_auth_entry() so existing entries was a matter of calling
-	 * get_auth_entry(). */
 
 	entry = find_auth_entry(newurl, NULL);
 	mem_free(newurl);

@@ -1,3 +1,27 @@
+Sun Aug 18 13:17:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/session.c:
+
+	Changed URL shell encoding from +XY to =XY=.  
+
+Sun Aug 18 13:04:47 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/intl/: charsets.c, charsets.h:
+
+	Use unsigned int instead of int for unicode codes.  
+
+Sun Aug 18 11:53:37 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/kbdbind.c:
+
+	'v' now views image.  
+
+Sun Aug 18 11:49:45 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/dialogs/menu.c:
+
+	Network options removed from menu in anonymous mode.  
+
 Fri Aug 16 17:32:35 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/user.c:

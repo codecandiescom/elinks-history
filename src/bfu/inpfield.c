@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.47 2003/09/01 12:52:26 zas Exp $ */
+/* $Id: inpfield.c,v 1.48 2003/09/15 22:18:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,7 +86,7 @@ dlg_format_field(struct terminal *term, struct terminal *t2,
 	item->y = *y;
 	item->l = w;
 
-	if (rw) int_bounds(rw, item->l, w);
+	if (rw && w > *rw) *rw = w;
 	(*y)++;
 }
 

@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.36 2004/09/04 12:34:35 jonas Exp $ */
+/* $Id: rewrite.c,v 1.37 2004/09/23 16:14:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,7 +104,7 @@ static struct option_info uri_rewrite_options[] = {
 	INIT_OPT_DUMB_PREFIX("g", "http://www.google.com/"),
 	INIT_OPT_DUMB_PREFIX("gg", "http://www.google.com/"),
 	INIT_OPT_DUMB_PREFIX("go", "http://www.google.com/"),
-	INIT_OPT_DUMB_PREFIX("fm", "http://www.freshmeat.net/"),
+	INIT_OPT_DUMB_PREFIX("fm", "http://freshmeat.net/"),
 	INIT_OPT_DUMB_PREFIX("sf", "http://www.sourceforge.net/"),
 	INIT_OPT_DUMB_PREFIX("dbug", "http://bugs.debian.org/"),
 	INIT_OPT_DUMB_PREFIX("dpkg", "http://packages.debian.org/"),
@@ -116,7 +116,7 @@ static struct option_info uri_rewrite_options[] = {
 	INIT_OPT_DUMB_PREFIX("pyhelp", "http://starship.python.net/crew/theller/pyhelp.cgi"),
 	INIT_OPT_DUMB_PREFIX("pyvault", "http://www.vex.net/parnassus/"),
 	INIT_OPT_DUMB_PREFIX("e2", "http://www.everything2.org/"),
-	INIT_OPT_DUMB_PREFIX("sd", "http://www.slashdot.org/"),
+	INIT_OPT_DUMB_PREFIX("sd", "http://slashdot.org/"),
 	INIT_OPT_DUMB_PREFIX("vhtml", "http://validator.w3.org/check?uri=%c"),
 	INIT_OPT_DUMB_PREFIX("vcss", "http://jigsaw.w3.org/css-validator/validator?uri=%c"),
 
@@ -154,15 +154,15 @@ static struct option_info uri_rewrite_options[] = {
 	INIT_OPT_SMART_PREFIX("gwhat", "http://www.googlism.com/?ism=%s&name=2"),
 	INIT_OPT_SMART_PREFIX("gwhere", "http://www.googlism.com/?ism=%s&name=3"),
 	INIT_OPT_SMART_PREFIX("gwhen", "http://www.googlism.com/?ism=%s&name=4"),
-	INIT_OPT_SMART_PREFIX("fm", "http://www.freshmeat.net/search/?q=%s"),
+	INIT_OPT_SMART_PREFIX("fm", "http://freshmeat.net/search/?q=%s"),
 	INIT_OPT_SMART_PREFIX("savannah", "http://savannah.nongnu.org/search/?words=%s&type_of_search=soft&exact=1"),
 	INIT_OPT_SMART_PREFIX("sf", "http://sourceforge.net/search/?q=%s"),
 	INIT_OPT_SMART_PREFIX("sfp", "http://sourceforge.net/projects/%s"),
-	INIT_OPT_SMART_PREFIX("sd", "http://www.slashdot.org/search.pl?query=%s"),
-	INIT_OPT_SMART_PREFIX("sdc", "http://www.slashdot.org/search.pl?query=%s&op=comments"),
-	INIT_OPT_SMART_PREFIX("sdu", "http://www.slashdot.org/search.pl?query=%s&op=users"),
-	INIT_OPT_SMART_PREFIX("sdp", "http://www.slashdot.org/search.pl?query=%s&op=polls"),
-	INIT_OPT_SMART_PREFIX("sdj", "http://www.slashdot.org/search.pl?query=%s&op=journals"),
+	INIT_OPT_SMART_PREFIX("sd", "http://slashdot.org/search.pl?query=%s"),
+	INIT_OPT_SMART_PREFIX("sdc", "http://slashdot.org/search.pl?query=%s&op=comments"),
+	INIT_OPT_SMART_PREFIX("sdu", "http://slashdot.org/search.pl?query=%s&op=users"),
+	INIT_OPT_SMART_PREFIX("sdp", "http://slashdot.org/search.pl?query=%s&op=polls"),
+	INIT_OPT_SMART_PREFIX("sdj", "http://slashdot.org/search.pl?query=%s&op=journals"),
 	INIT_OPT_SMART_PREFIX("dbug", "http://bugs.debian.org/%s"),
 	INIT_OPT_SMART_PREFIX("dpkg", "http://packages.debian.org/%s"),
 	INIT_OPT_SMART_PREFIX("emacs", "http://www.emacswiki.org/cgi-bin/wiki.pl?search=%s"),

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.251 2003/09/09 20:19:45 jonas Exp $ */
+/* $Id: renderer.c,v 1.252 2003/09/09 20:46:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,10 +317,81 @@ xset_vchars(struct part *part, int x, int y, int yl,
 	}
 }
 
-static inline void
-set_hline(struct part *part, int x, int y, unsigned char *chars,
-	  int charslen, struct screen_char *schar)
+static inline struct screen_char *
+get_format_screen_char(struct part *part)
 {
+	static struct text_attrib_beginning ta_cache = { -1, 0x0, 0x0 };
+	static struct screen_char schar_cache;
+
+	if (memcmp(&ta_cache, &format, sizeof(struct text_attrib_beginning))) {
+		struct color_pair colors = INIT_COLOR_PAIR(format.bg, format.fg);
+
+		schar_cache.attr = 0;
+		if (format.attr) {
+			if (format.attr & AT_UNDERLINE) {
+				schar_cache.attr |= SCREEN_ATTR_UNDERLINE;
+			}
+
+			if (format.attr & AT_BOLD) {
+				schar_cache.attr |= SCREEN_ATTR_BOLD;
+			}
+
+			if (format.attr & AT_ITALIC) {
+				schar_cache.attr |= SCREEN_ATTR_ITALIC;
+			}
+
+			if (format.attr & AT_GRAPHICS) {
+				schar_cache.attr |= SCREEN_ATTR_FRAME;
+			}
+		}
+
+		memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
+		set_term_color(&schar_cache, &colors, COLOR_DEFAULT);
+
+		if (d_opt->display_subs) {
+			static int sub = 0;
+
+			if (format.attr & AT_SUBSCRIPT) {
+				if (!sub) {
+					sub = 1;
+					put_chars(part, "[", 1);
+				}
+			} else {
+				if (sub) {
+					put_chars(part, "]", 1);
+					sub = 0;
+				}
+			}
+		}
+
+		if (d_opt->display_sups) {
+			static int super = 0;
+
+			if (format.attr & AT_SUPERSCRIPT) {
+				if (!super) {
+					super = 1;
+					put_chars(part, "^", 1);
+				}
+			} else {
+				if (super) {
+					super = 0;
+				}
+			}
+		}
+	}
+
+	return &schar_cache;
+}
+
+/* First possibly do the format change and then find out what coordinates
+ * to use since sub- or superscript might change them */
+static inline void
+set_hline(struct part *part, unsigned char *chars, int charslen)
+{
+	struct screen_char *schar = get_format_screen_char(part);
+	int x = part->cx;
+	int y = part->cy;
+
 	assert(part);
 	if_assert_failed return;
 
@@ -742,73 +813,6 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 	}
 }
 
-/* Returns bolean indicating wether a format change was made. */
-static inline struct screen_char *
-get_format_screen_char(struct part *part)
-{
-	static struct text_attrib_beginning ta_cache = { -1, 0x0, 0x0 };
-	static struct screen_char schar_cache;
-
-	if (memcmp(&ta_cache, &format, sizeof(struct text_attrib_beginning))) {
-		struct color_pair colors = INIT_COLOR_PAIR(format.bg, format.fg);
-
-		schar_cache.attr = 0;
-		if (format.attr) {
-			if (format.attr & AT_UNDERLINE) {
-				schar_cache.attr |= SCREEN_ATTR_UNDERLINE;
-			}
-
-			if (format.attr & AT_BOLD) {
-				schar_cache.attr |= SCREEN_ATTR_BOLD;
-			}
-
-			if (format.attr & AT_ITALIC) {
-				schar_cache.attr |= SCREEN_ATTR_ITALIC;
-			}
-
-			if (format.attr & AT_GRAPHICS) {
-				schar_cache.attr |= SCREEN_ATTR_FRAME;
-			}
-		}
-
-		memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
-		set_term_color(&schar_cache, &colors, COLOR_DEFAULT);
-
-		if (d_opt->display_subs) {
-			static int sub = 0;
-
-			if (format.attr & AT_SUBSCRIPT) {
-				if (!sub) {
-					sub = 1;
-					put_chars(part, "[", 1);
-				}
-			} else {
-				if (sub) {
-					put_chars(part, "]", 1);
-					sub = 0;
-				}
-			}
-		}
-
-		if (d_opt->display_sups) {
-			static int super = 0;
-
-			if (format.attr & AT_SUPERSCRIPT) {
-				if (!super) {
-					super = 1;
-					put_chars(part, "^", 1);
-				}
-			} else {
-				if (super) {
-					super = 0;
-				}
-			}
-		}
-	}
-
-	return &schar_cache;
-}
-
 static inline void
 put_link_number(struct part *part)
 {
@@ -946,8 +950,6 @@ process_link(struct part *part, unsigned char *chars, int charslen)
 void
 put_chars(struct part *part, unsigned char *chars, int charslen)
 {
-	struct screen_char *schar;
-
 	assert(part);
 	if_assert_failed return;
 
@@ -981,8 +983,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	if (nowrap && part->cx + charslen > overlap(par_format))
 		return;
 
-	schar = get_format_screen_char(part);
-	set_hline(part, part->cx, part->cy, chars, charslen, schar);
+	set_hline(part, chars, charslen);
 
 	if (last_link || last_image || last_form || format.link
 	    || format.image || format.form)

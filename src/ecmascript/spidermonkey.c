@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.176 2004/12/27 10:37:16 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.177 2004/12/27 10:41:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,6 +121,8 @@ set_prop_string(struct jsval_property *prop, unsigned char *string)
 	prop->type = JSPT_STRING;
 }
 
+#if 0 /* not used. */
+
 static void
 set_prop_astring(struct jsval_property *prop, unsigned char *string)
 {
@@ -129,7 +131,6 @@ set_prop_astring(struct jsval_property *prop, unsigned char *string)
 	prop->type = JSPT_ASTRING;
 }
 
-#if 0 /* not used. */
 static void
 set_prop_object(struct jsval_property *prop, JSObject *object)
 {
@@ -1665,9 +1666,6 @@ document_write(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rv
 #ifdef CONFIG_LEDS
 	struct ecmascript_interpreter *interpreter = JS_GetContextPrivate(ctx);
 #endif
-	struct jsval_property prop;
-
-	set_prop_boolean(&prop, 0);
 
 	/* XXX: I don't know about you, but I have *ENOUGH* of those 'Undefined
 	 * function' errors, I want to see just the useful ones. So just
@@ -1680,7 +1678,7 @@ document_write(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rv
 	interpreter->vs->doc_view->session->status.ecmascript_led->value = 'J';
 #endif
 
-	value_to_jsval(ctx, rval, &prop);
+	boolean_to_jsval(ctx, rval, 0);
 
 	return JS_TRUE;
 }
@@ -1709,23 +1707,21 @@ location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	JSObject *parent = JS_GetParent(ctx, obj);
 	struct view_state *vs = JS_GetPrivate(ctx, parent);
-	struct jsval_property prop;
-
-	set_prop_undef(&prop);
 
 	if (!JSVAL_IS_INT(id))
 		return JS_TRUE;
 
+	undef_to_jsval(ctx, vp);
+
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_LOC_HREF:
-		set_prop_astring(&prop, get_uri_string(vs->uri, URI_ORIGINAL));
+		astring_to_jsval(ctx, vp, get_uri_string(vs->uri, URI_ORIGINAL));
 		break;
 	default:
 		INTERNAL("Invalid ID %d in location_get_property().", JSVAL_TO_INT(id));
-		return JS_TRUE;
+		break;
 	}
 
-	value_to_jsval(ctx, vp, &prop);
 	return JS_TRUE;
 }
 

@@ -1,5 +1,5 @@
 /* Base ECMAScript file. Mostly a proxy for specific library backends. */
-/* $Id: ecmascript.c,v 1.21 2004/10/21 23:18:39 pasky Exp $ */
+/* $Id: ecmascript.c,v 1.22 2004/10/21 23:22:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,6 +107,8 @@ ecmascript_reset_state(struct view_state *vs)
 	if (vs->ecmascript)
 		ecmascript_put_interpreter(vs->ecmascript);
 	vs->ecmascript = ecmascript_get_interpreter(vs);
+	if (!vs->ecmascript)
+		vs->ecmascript_fragile = 1;
 }
 
 

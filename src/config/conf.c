@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.103 2003/11/02 06:27:54 witekfl Exp $ */
+/* $Id: conf.c,v 1.104 2003/11/05 14:46:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -528,19 +528,14 @@ smart_config_output_fn(struct string *string, struct option *option,
 				
 				for (; *i; i++, n++) {
 					if (*i == '\n') {
-						add_bytes_to_string(string, j, i - j + 1);
-						if (depth)
-							add_xchar_to_string(string, ' ', depth * indentation);
-						add_to_string(string, "# ");
-						j = i + 1;
-						n = depth * indentation + 1;
-						last_space = NULL;
-						continue;
+						last_space = i;
+						goto split;
 					}
 
 					if (*i == ' ') last_space = i;
 
 					if (n >= config_width && last_space) {
+split:
 						add_bytes_to_string(string, j, last_space - j);
 						add_char_to_string(string, '\n');
 						if (depth)

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.3 2002/03/17 17:27:51 pasky Exp $ */
+/* $Id: terminal.c,v 1.4 2002/03/21 18:34:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -275,7 +275,7 @@ void empty_window_handler(struct window *win, struct event *ev, int fwd)
 		case EV_KBD:
 		case EV_MOUSE:
 			/* Silence compiler warnings */
-			return;
+			break;
 	}
 	ewd->b = 1;
 	n = win->next;

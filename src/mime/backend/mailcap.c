@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.58 2003/10/25 19:17:32 jonas Exp $ */
+/* $Id: mailcap.c,v 1.59 2003/10/25 19:46:30 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -30,6 +30,7 @@
 #include "elinks.h"
 
 #include "config/options.h"
+#include "intl/gettext/libintl.h"
 #include "mime/backend/common.h"
 #include "mime/backend/mailcap.h"
 #include "mime/mime.h"
@@ -75,6 +76,44 @@ struct mailcap_entry {
 
 	/* The 'raw' unformatted (view)command from the mailcap files. */
 	unsigned char command[1];
+};
+
+
+/* Keep options in alphabetical order. */
+static struct option_info mailcap_options[] = {
+	INIT_OPT_TREE("mime", N_("Mailcap"),
+		"mailcap", 0,
+		N_("Options for mailcap support.")),
+
+	INIT_OPT_BOOL("mime.mailcap", N_("Enable"),
+		"enable", 0, 1,
+		N_("Enable mailcap support.")),
+
+	INIT_OPT_STRING("mime.mailcap", N_("Path"),
+		"path", 0, "",
+		N_("Mailcap search path. Colon-separated list of files.\n"
+		"Leave as \"\" to use MAILCAP environment variable or\n"
+		"built-in defaults instead.")),
+
+	INIT_OPT_BOOL("mime.mailcap", N_("Ask before opening"),
+		"ask", 0, 1,
+		N_("Ask before using the handlers defined by mailcap.")),
+
+	INIT_OPT_INT("mime.mailcap", N_("Type query string"),
+		"description", 0, 0, 2, 0,
+		N_("Type of description to show in \"what shall I do with this file\"\n"
+		"query dialog:\n"
+		"0 is show \"mailcap\".\n"
+		"1 is show program to be run.\n"
+		"2 is show mailcap description field if any; \"mailcap\" otherwise.")),
+
+	INIT_OPT_BOOL("mime.mailcap", N_("Prioritize entries by file"),
+		"prioritize", 0, 1,
+		N_("Prioritize entries by the order of the files in the mailcap\n"
+		"path. This means that wildcard entries (like: image/*) will\n"
+		"also be checked before deciding the handler.")),
+
+	NULL_OPTION_INFO,
 };
 
 /* State variables */
@@ -629,7 +668,7 @@ struct mime_backend mailcap_mime_backend = {
 /* Setup the exported module. */
 struct module mailcap_mime_module = INIT_MODULE(
 	/* name: */		"mailcap",
-	/* options: */		NULL,
+	/* options: */		mailcap_options,
 	/* submodules: */	NULL,
 	/* init: */		init_mailcap,
 	/* done: */		done_mailcap

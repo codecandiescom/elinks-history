@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.14 2003/10/24 23:53:03 pasky Exp $ */
+/* $Id: options.inc,v 1.15 2003/10/25 19:46:30 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -699,39 +699,6 @@ struct option_info config_options_info[] = {
 		"_template_", 0, "",
 		N_("MIME-type matching this file extension ('*' is used here in place\n"
 		"of '.').")),
-
-
-	INIT_OPT_TREE("mime", N_("Mailcap"),
-		"mailcap", 0,
-		N_("Options for mailcap support.")),
-
-	INIT_OPT_BOOL("mime.mailcap", N_("Enable"),
-		"enable", 0, 1,
-		N_("Enable mailcap support.")),
-
-	INIT_OPT_STRING("mime.mailcap", N_("Path"),
-		"path", 0, "",
-		N_("Mailcap search path. Colon-separated list of files.\n"
-		"Leave as \"\" to use MAILCAP environment variable or\n"
-		"built-in defaults instead.")),
-
-	INIT_OPT_BOOL("mime.mailcap", N_("Ask before opening"),
-		"ask", 0, 1,
-		N_("Ask before using the handlers defined by mailcap.")),
-
-	INIT_OPT_INT("mime.mailcap", N_("Type query string"),
-		"description", 0, 0, 2, 0,
-		N_("Type of description to show in \"what shall I do with this file\"\n"
-		"query dialog:\n"
-		"0 is show \"mailcap\".\n"
-		"1 is show program to be run.\n"
-		"2 is show mailcap description field if any; \"mailcap\" otherwise.")),
-
-	INIT_OPT_BOOL("mime.mailcap", N_("Prioritize entries by file"),
-		"prioritize", 0, 1,
-		N_("Prioritize entries by the order of the files in the mailcap\n"
-		"path. This means that wildcard entries (like: image/*) will\n"
-		"also be checked before deciding the handler.")),
 
 
 	INIT_OPT_TREE("mime", N_("Mimetypes files"),

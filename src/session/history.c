@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.2 2003/06/07 19:07:07 jonas Exp $ */
+/* $Id: history.c,v 1.3 2003/06/07 19:44:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,12 +70,12 @@ ses_back(struct session *ses)
 
 	free_files(ses);
 
-	/* This is the current location. */
 	if (ses->search_word) {
 		mem_free(ses->search_word);
 		ses->search_word = NULL;
 	}
 
+	/* This is the current location. */
 	if (!have_location(ses)) return;
 	loc = cur_loc(ses);
     	del_from_list(loc);

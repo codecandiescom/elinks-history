@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.26 2002/08/30 23:32:57 pasky Exp $ */
+/* $Id: dialogs.c,v 1.27 2002/08/30 23:38:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -328,6 +328,7 @@ really_del_bookmark(void *vhop)
 	struct listbox_data *box;
 
 	hop = (struct push_del_button_hop_struct *) vhop;
+	hop->bm->refcount--;
 
 	if (hop->bm->refcount > 0) {
 		msg_box(hop->term, NULL,
@@ -379,6 +380,13 @@ really_del_bookmark(void *vhop)
 #endif
 }
 
+void
+cancel_del_bookmark(void *vhop)
+{	struct push_del_button_hop_struct *hop;
+
+	hop = (struct push_del_button_hop_struct *) vhop;
+	hop->bm->refcount--;
+}
 
 /* Callback for the "delete" button in the bookmark manager */
 int
@@ -408,13 +416,15 @@ push_delete_button(struct dialog_data *dlg,
 	hop->dlg = dlg->dlg;
 	hop->term = term;
 
+	bm->refcount++;
+
 	msg_box(term, getml(hop, NULL),
 		TEXT(T_DELETE_BOOKMARK), AL_CENTER | AL_EXTD_TEXT,
 		TEXT(T_DELETE_BOOKMARK), " \"", bm->title, "\" ?\n\n",
 		TEXT(T_URL), ": \"", bm->url, "\"", NULL,
 		hop, 2,
 		TEXT(T_YES), really_del_bookmark, B_ENTER,
-		TEXT(T_NO), NULL, B_ESC);
+		TEXT(T_NO), cancel_del_bookmark, B_ESC);
 
 	return 0;
 }

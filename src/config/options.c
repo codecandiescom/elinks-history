@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.443 2004/05/25 16:29:00 jonas Exp $ */
+/* $Id: options.c,v 1.444 2004/05/26 13:00:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -583,11 +583,13 @@ register_autocreated_options(void)
 	get_opt_int("terminal.xterm.type") = 1;
 	get_opt_int("terminal.xterm.underline") = 1;
 	get_opt_int("terminal.xterm-color.type") = 1;
-	get_opt_bool("terminal.xterm-color.colors") = 1;
+	get_opt_int("terminal.xterm-color.colors") = COLOR_MODE_16;
 	get_opt_int("terminal.xterm-color.underline") = 1;
+#ifdef CONFIG_256_COLORS
 	get_opt_int("terminal.xterm-256color.type") = 1;
-	get_opt_bool("terminal.xterm-256color.colors") = 2;
+	get_opt_int("terminal.xterm-256color.colors") = COLOR_MODE_256;
 	get_opt_int("terminal.xterm-256color.underline") = 1;
+#endif
 
 	strcpy(get_opt_str("protocol.user.mailto.unix"), DEFAULT_AC_OPT_MAILTO);
 	strcpy(get_opt_str("protocol.user.mailto.unix-xwin"),DEFAULT_AC_OPT_MAILTO);

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.2 2005/01/09 01:50:17 jonas Exp $
+## $Id: Makefile.am,v 1.3 2005/01/09 10:35:26 jonas Exp $
 
 EXTRA_DIST = README $(PACKAGE).pot $(POFILES) $(GMOFILES)
 
@@ -95,7 +95,9 @@ update-gmo: Makefile $(GMOFILES)
 #
 # Use *-local targets to place and remove .gmo files.
 
-install-data-local:
+install-data-local: install-data-local-@CONFIG_NLS@
+install-data-local-no:
+install-data-local-yes:
 	$(mkinstalldirs) $(DESTDIR)$(localedir)
 	@catalogs='$(CATALOGS)'; \
 	for cat in $$catalogs; do \

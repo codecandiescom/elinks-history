@@ -399,3 +399,4 @@ T_KEYSTROKE_HELP, "Keystroke should be written in the format: [Prefix-]Key\nPref
 T_KEYSTROKE, "Keystroke",
 T_INVALID_KEYSTROKE, "Invalid keystroke.",
 T_NO_HEADER_INFO, "No header info.",
+T_HK_KEYBINDING_MANAGER, "K",

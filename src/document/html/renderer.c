@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.177 2003/07/21 00:03:41 pasky Exp $ */
+/* $Id: renderer.c,v 1.178 2003/07/22 00:32:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1499,15 +1499,13 @@ format_html(struct cache_entry *ce, struct document *screen)
 	unsigned char *start = NULL;
 	unsigned char *end = NULL;
 	unsigned char *t;
-	unsigned char *head;
-	int hdl = 0;
+	struct string head;
 	int i;
 
 	assert(ce && screen);
 	if_assert_failed return;
 
-	head = init_str();
-	if (!head) return;
+	if (!init_string(&head)) return;
 
 	url = ce->url;
 	d_opt = &screen->opt;
@@ -1523,11 +1521,11 @@ format_html(struct cache_entry *ce, struct document *screen)
 	startf = start;
 	eofff = end;
 
-	if (ce->head) add_to_str(&head, &hdl, ce->head);
+	if (ce->head) add_to_string(&head, ce->head);
 
 	i = d_opt->plain;
-	scan_http_equiv(start, end, &head, &hdl, &t);
-	convert_table = get_convert_table(head, screen->opt.cp,
+	scan_http_equiv(start, end, &head.source, &head.length, &t);
+	convert_table = get_convert_table(head.source, screen->opt.cp,
 					  screen->opt.assume_cp,
 					  &screen->cp,
 					  &screen->cp_status,
@@ -1547,10 +1545,10 @@ format_html(struct cache_entry *ce, struct document *screen)
 
 	rp = format_html_part(start, end, par_format.align,
 			      par_format.leftmargin, screen->opt.xw, screen,
-			      0, 0, head, 1);
+			      0, 0, head.source, 1);
 	if (rp) mem_free(rp);
 
-	mem_free(head);
+	done_string(&head);
 
 	screen->x = 0;
 

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.13 2002/04/06 17:38:29 pasky Exp $ */
+/* $Id: main.c,v 1.14 2002/04/06 22:19:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,18 +212,18 @@ attach_terminal(int in, int out, int ctl, void *info, int len)
 	mem_free(info);
 
 	term = init_term(terminal_pipe[0], out, win_func);
-	if (term) {
-		/* OK, this is race condition, but it must be so; GPM installs
-		 * it's own buggy TSTP handler. */
-		handle_basic_signals(term);
+	if (!term) {
+		close(terminal_pipe[0]);
+		close(terminal_pipe[1]);
 
-		return terminal_pipe[1];
+		return -1;
 	}
 
-	close(terminal_pipe[0]);
-	close(terminal_pipe[1]);
+	/* OK, this is race condition, but it must be so; GPM installs it's own
+	 * buggy TSTP handler. */
+	handle_basic_signals(term);
 
-	return -1;
+	return terminal_pipe[1];
 }
 
 
@@ -264,11 +264,11 @@ init()
 	/* If there's no -no-connect option, check if there's no other ELinks
 	 * running. If we found any, open socket and act as a slave for it. */
 	if (!no_connect) {
-		close(terminal_pipe[0]);
-		close(terminal_pipe[1]);
-
 		uh = bind_to_af_unix();
 		if (uh != -1) {
+			close(terminal_pipe[0]);
+			close(terminal_pipe[1]);
+
 			info = create_session_info(base_session, u, &len);
 			if (!info) {
 				retval = RET_FATAL;

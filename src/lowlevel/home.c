@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.23 2003/09/10 00:33:12 jonas Exp $ */
+/* $Id: home.c,v 1.24 2003/09/10 00:37:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@ unsigned char *elinks_home = NULL;
 int first_use = 0;
 
 static unsigned char *
-test_confdir(unsigned char *confdir, int *new)
+test_confdir(unsigned char *confdir)
 {
 	struct stat st;
 
@@ -47,7 +47,7 @@ test_confdir(unsigned char *confdir, int *new)
 	}
 
 	if (S_ISDIR(st.st_mode)) {
-		if (new) *new = 0;
+		first_use = 0;
 		return confdir;
 	}
 
@@ -81,7 +81,7 @@ elinks_dirname(unsigned char *path)
 }
 
 static unsigned char *
-get_home(int *new)
+get_home(void)
 {
 	struct stat st;
 	unsigned char *home_elinks;
@@ -91,8 +91,6 @@ get_home(int *new)
 
 	/* TODO: We want to use commandline option instead of environment
 	 * variable, especially one with so common name. */
-
-	if (new) *new = 1;
 
 	if (!home) {
 		home = elinks_dirname(path_to_exe);
@@ -134,7 +132,7 @@ get_home(int *new)
 		add_to_strn(&home_elinks, ".elinks");
 	}
 
-	if (!test_confdir(home_elinks, new)) {
+	if (!test_confdir(home_elinks)) {
 		mem_free(home_elinks);
 
 		home_elinks = stracpy(home);
@@ -145,7 +143,7 @@ get_home(int *new)
 
 		add_to_strn(&home_elinks, "elinks");
 
-		if (!test_confdir(home_elinks, new)) {
+		if (!test_confdir(home_elinks)) {
 			mem_free(home_elinks);
 			mem_free(home);
 
@@ -162,7 +160,8 @@ get_home(int *new)
 void
 init_home(void)
 {
-	elinks_home = get_home(&first_use);
+	first_use = 1;
+	elinks_home = get_home();
 	if (!elinks_home) {
 		error(gettext("Unable to find or create ELinks config "
 			      "directory. Please check if you have $HOME "

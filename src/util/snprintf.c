@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.28 2004/11/15 03:36:04 miciah Exp $ */
+/* $Id: snprintf.c,v 1.29 2004/11/18 22:25:48 miciah Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -839,7 +839,7 @@ elinks_vasprintf(char **ptr, const char *format, va_list ap)
 	 * vasprintf, we would need to change all users of the memory
 	 * allocated by vasprintf to take into account whether the system
 	 * vasprintf (and therefore malloc) or our own vasprintf
-	 * (and therefore mem_alloc) was used. -- Miciah */
+	 * (and therefore mem_alloc) were used. -- Miciah */
 	(*ptr) = (char *) malloc(ret + 1);
 	if (!*ptr) return -1;
 

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.72 2003/09/08 19:24:21 jonas Exp $ */
+/* $Id: screen.c,v 1.73 2003/09/08 20:37:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -445,13 +445,15 @@ redraw_screen(struct terminal *term)
 
  		for (; x < term->x; x++, current++, pos++) {
 
-			if (pos->color == current->color) {
+			if (!memcmp(pos->color, current->color, 1)) {
 				/* No update for exact match. */
-				if (pos->data == current->data && pos->attr == current->attr)
+				if (pos->data == current->data
+				    && pos->attr == current->attr)
 					continue;
+
 				/* Else if the color match and the data is ``space''. */
-				if ((pos->data <= 1 || pos->data == ' ') &&
- 				    (current->data <= 1 || current->data == ' '))
+				if ((pos->data <= 1 || pos->data == ' ')
+				    && (current->data <= 1 || current->data == ' '))
 					continue;
 			}
 
@@ -463,7 +465,7 @@ redraw_screen(struct terminal *term)
 				prev_y = y;
 			}
 
-			for (; prev_pos <= pos ; prev_pos++)
+			for (; prev_pos <= pos; prev_pos++)
 				print_char(&image, driver, prev_pos, &state);
 		}
 	}

@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.19 2003/12/01 16:05:48 jonas Exp $ */
+/* $Id: event.c,v 1.20 2003/12/07 11:52:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -262,7 +262,10 @@ send_redraw:
 		};
 	}
 
-	if (ev->ev == EV_ABORT) destroy_terminal(term);
+	if (ev->ev == EV_ABORT) {
+		destroy_terminal(term);
+		return;
+	}
 	/* redraw_screen(term); */
 mm:
 	if (term->qlen == r) {

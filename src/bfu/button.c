@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.22 2003/06/07 13:46:36 pasky Exp $ */
+/* $Id: button.c,v 1.23 2003/06/27 19:26:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,21 +90,17 @@ static void
 display_button(struct widget_data *di, struct dialog_data *dlg, int sel)
 {
 	struct terminal *term = dlg->win->term;
-	int co;
+	int co = sel ? get_bfu_color(term, "dialog.button-selected")
+		     : get_bfu_color(term, "dialog.button");
+	int len = strlen(di->item->text);
+	int x = di->x + 2;
 
-	co = sel ? get_bfu_color(term, "dialog.button-selected")
-		: get_bfu_color(term, "dialog.button");
-	{
-		int len = strlen(di->item->text);
-		int x = di->x + 2;
-
-		print_text(term, di->x, di->y, 2, "[ ", co);
-		print_text(term, x, di->y, len, di->item->text, co);
-		print_text(term, x + len, di->y, 2, " ]", co);
-		if (sel) {
-			set_cursor(term, x, di->y, x, di->y);
-			set_window_ptr(dlg->win, di->x, di->y);
-		}
+	print_text(term, di->x, di->y, 2, "[ ", co);
+	print_text(term, x, di->y, len, di->item->text, co);
+	print_text(term, x + len, di->y, 2, " ]", co);
+	if (sel) {
+		set_cursor(term, x, di->y, x, di->y);
+		set_window_ptr(dlg->win, di->x, di->y);
 	}
 }
 

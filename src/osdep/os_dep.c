@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.9 2002/04/16 18:34:57 pasky Exp $ */
+/* $Id: os_dep.c,v 1.10 2002/04/19 12:20:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,6 +34,11 @@
 
 #ifdef USE_GPM
 #include <gpm.h>
+#endif
+
+#ifdef HAVE_X11
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #endif
 
 int is_safe_in_shell(unsigned char c)
@@ -392,8 +397,40 @@ void set_window_title(unsigned char *title)
 
 unsigned char *get_window_title()
 {
-	/* !!! FIXME */
+#ifdef HAVE_X11
+	/* Following code is stolen from our beloved vim. */
+	char *winid;
+	Display *display;
+	Window window;
+	XTextProperty text_prop;
+	Status status;
+	char *ret = NULL;
+
+	if (!is_xterm())
+		return NULL;
+
+	winid = getenv("WINDOWID");
+	if (!winid)
+		return NULL;
+	window = (Window) atol(winid);
+	if (!window)
+		return NULL;
+
+	display = XOpenDisplay(NULL);
+
+	status = XGetWMName(display, window, &text_prop);
+	/* status = XGetWMIconName(x11_display, x11_window, &text_prop); */
+	if (status && text_prop.value) {
+		ret = stracpy(text_prop.value);
+		XFree(text_prop.value);
+	}
+
+	XCloseDisplay(display);
+
+	return ret;
+#else
 	return NULL;
+#endif
 }
 
 int resize_window(int x, int y)

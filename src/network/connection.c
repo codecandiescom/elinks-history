@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.66 2003/07/04 18:50:50 jonas Exp $ */
+/* $Id: connection.c,v 1.67 2003/07/04 18:57:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@
 struct host_connection {
 	LIST_HEAD(struct host_connection);
 
-	int conn;
+	int connections;
 	unsigned char host[1]; /* Keep last */
 };
 
@@ -161,13 +161,13 @@ add_host_connection(struct connection *c)
 	struct host_connection *hc = get_host_connection(c);
 
 	if (hc) {
-		hc->conn++;
+		hc->connections++;
 
 	} else if (c->uri.host) {
 		hc = mem_alloc(sizeof(struct host_connection) + c->uri.hostlen);
 		if (!hc) return 0;
 
-		hc->conn = 1;
+		hc->connections = 1;
 		memcpy(hc->host, c->uri.host, c->uri.hostlen);
 		add_to_list(host_connections, hc);
 	}
@@ -182,8 +182,8 @@ del_host_connection(struct connection *c)
 
 	if (!h) return;
 
-	h->conn--;
-	if (h->conn) return;
+	h->connections--;
+	if (h->connections > 0) return;
 
 	del_from_list(h);
 	mem_free(h);
@@ -649,7 +649,7 @@ try_connection(struct connection *c, int max_conns_to_host, int max_conns)
 {
 	struct host_connection *hc = get_host_connection(c);
 
-	if (hc && hc->conn >= max_conns_to_host)
+	if (hc && hc->connections >= max_conns_to_host)
 		return try_to_suspend_connection(c, hc->host) ? 0 : -1;
 
 	if (active_connections >= max_conns)

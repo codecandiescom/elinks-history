@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.23 2004/11/20 01:27:36 jonas Exp $ */
+/* $Id: digest.c,v 1.24 2004/11/20 01:32:47 jonas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -79,6 +79,21 @@ init_credential_digest(md5_hex_digest ha1, struct auth_entry *entry)
 }
 
 static void
+init_uri_method_digest(md5_hex_digest uri_method, struct uri *uri)
+{
+	MD5_CTX MD5Ctx;
+	unsigned char ha2[MD5_DIGEST_LENGTH + 1];
+
+	MD5_Init(&MD5Ctx);
+	MD5_Update(&MD5Ctx, "GET", 3);
+	MD5_Update(&MD5Ctx, ":/", 2);
+	MD5_Update(&MD5Ctx, uri->data, uri->datalen);
+	MD5_Final(ha2, &MD5Ctx);
+
+	convert_hex(ha2, uri_method);
+}
+
+static void
 digest_calc_response(md5_hex_digest response, struct auth_entry *entry,
 		     struct uri *uri, unsigned char *cnonce)
 {
@@ -87,14 +102,8 @@ digest_calc_response(md5_hex_digest response, struct auth_entry *entry,
 	unsigned char Ha2[MD5_DIGEST_LENGTH + 1];
 	md5_hex_digest Ha2_hex;
 
-	MD5_Init(&MD5Ctx);
-	MD5_Update(&MD5Ctx, "GET", 3);
-	MD5_Update(&MD5Ctx, ":/", 2);
-	MD5_Update(&MD5Ctx, uri->data, uri->datalen);
-	MD5_Final(Ha2, &MD5Ctx);
-	convert_hex(Ha2, Ha2_hex);
-
 	init_credential_digest(ha1, entry);
+	init_uri_method_digest(Ha2_hex, uri);
 
 	MD5_Init(&MD5Ctx);
 	MD5_Update(&MD5Ctx, ha1, MD5_HEX_DIGEST_LENGTH);

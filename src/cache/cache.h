@@ -1,10 +1,14 @@
-/* $Id: cache.h,v 1.34 2003/11/08 16:32:47 zas Exp $ */
+/* $Id: cache.h,v 1.35 2003/11/11 21:43:55 pasky Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
 
 #include "util/lists.h"
 
+/* This enum describes the level of caching of certain cache entry. That is,
+ * under what conditions shall it be reloaded, if ever. The one with lowest
+ * value is most agressively cached, however the cache is most reluctant to
+ * cache the one with highest value. */
 enum cache_mode {
 	NC_ALWAYS_CACHE,
 	NC_CACHE,

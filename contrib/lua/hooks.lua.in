@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.11 2002/12/15 02:14:04 zas Exp $
+-- $Id: hooks.lua.in,v 1.12 2003/01/04 13:14:08 pasky Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -187,13 +187,17 @@ function pre_format_html_hook (url, html)
     local ret = nil
 
     -- Handle gzip'd files within reasonable size.
-    if strfind (url, "%.gz$") and strlen (html) < 65536 then
-        local tmp = tmpname ()
-        writeto (tmp) write (html) writeto ()
-        html = pipe_read ("(gzip -dc "..tmp.." || cat "..tmp..") 2>/dev/null")
-        remove (tmp)
-        ret = 1
-    end
+    -- Note that this is not needed anymore since we have a support for this
+    -- in core ELinks. I still keep it here for a reference (as an example),
+    -- though. If you will add something similiar using pipe_read(), feel free
+    -- to remove this. --pasky
+--    if strfind (url, "%.gz$") and strlen (html) < 65536 then
+--        local tmp = tmpname ()
+--        writeto (tmp) write (html) writeto ()
+--        html = pipe_read ("(gzip -dc "..tmp.." || cat "..tmp..") 2>/dev/null")
+--        remove (tmp)
+--        ret = 1
+--    end
 
     -- Mangle ALT="" in IMG tags.
     if mangle_blank_alt then

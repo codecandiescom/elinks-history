@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.3 2004/01/17 16:45:18 pasky Exp $ */
+/* $Id: value.c,v 1.4 2004/01/17 16:46:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,13 +56,6 @@ static int
 css_parse_color_value(union css_decl_value *value, unsigned char **string)
 {
 	int pos;
-
-	/* Long live spaghetti code! Well, whatever, someone will come
-	 * by and clean this up. I hope. Er... of course someone will!
-	 * --pasky */
-
-	/* TODO: Generic parser for "functions" in the declarations.
-	 * --pasky */
 
 	if (!strncasecmp(*string, "rgb(", 4)) {
 		/* RGB function */

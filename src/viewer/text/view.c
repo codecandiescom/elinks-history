@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.642 2004/11/12 11:20:02 zas Exp $ */
+/* $Id: view.c,v 1.643 2004/11/12 16:07:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,6 +153,7 @@ void
 move_link(struct session *ses, struct document_view *doc_view, int direction,
 	  int wraparound_bound, int wraparound_link)
 {
+	int wraparound = 0;
 	int count;
 
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
@@ -167,13 +168,16 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 		/* There are no links, therefore the only sensible value for
 		 * wraparound_bound is -1 (no link selected). */
 		wraparound_bound = -1;
+	} else {
+		/* We only bother this option is there's some links
+		 * in document. */
+		wraparound = get_opt_int("document.browse.links.wraparound");
 	}
 
 	while (count--) {
 		int current_link = doc_view->vs->current_link;
 
-		if (current_link == wraparound_bound
-		    && get_opt_int("document.browse.links.wraparound")) {
+		if (current_link == wraparound_bound && wraparound) {
 			jump_to_link_number(ses, doc_view, wraparound_link);
 			/* FIXME: This needs further work, we should call
 			 * page_down() and set_textarea() under some conditions

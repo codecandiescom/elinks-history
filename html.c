@@ -1928,12 +1928,12 @@ struct element_info elements[] = {
 	{"LISTING",	html_pre,	2, 0},
 	{"XMP",		html_pre,	2, 0}, /* TODO: you shouldn't interpret any tags inside! */
 
-	{"UL",		html_ul,	1, 0},
-	{"DIR",		html_ul,	1, 0},
-	{"MENU",	html_ul,	1, 0},
-	{"OL",		html_ol,	1, 0},
+	{"UL",		html_ul,	2, 0},
+	{"DIR",		html_ul,	2, 0},
+	{"MENU",	html_ul,	2, 0},
+	{"OL",		html_ol,	2, 0},
 	{"LI",		html_li,	1, 3},
-	{"DL",		html_dl,	1, 0},
+	{"DL",		html_dl,	2, 0},
 	{"DT",		html_dt,	1, 1},
 	{"DD",		html_dd,	1, 1},
 

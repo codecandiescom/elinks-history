@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.119 2003/07/21 04:09:16 jonas Exp $ */
+/* $Id: file.c,v 1.120 2003/07/21 16:22:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -550,6 +550,8 @@ read_file(struct stream_encoded *stream, int readsize, struct string *page)
 
 	page->source = fragment;
 	page->length = fragmentlen;
+	/* XXX BAD practice that should be changed. --jonas */
+	set_string_magic(page);
 	return S_OK;
 }
 
@@ -648,7 +650,7 @@ file_func(struct connection *connection)
 		/* Try to add fragment data to the connection cache if either
 		 * file reading or directory listing worked out ok. */
 		if (get_cache_entry(connection->uri.protocol, &cache)) {
-			done_string(&page);
+			if (!redirect) done_string(&page);
 			state = S_OUT_OF_MEM;
 
 		} else if (redirect) {

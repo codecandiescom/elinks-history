@@ -358,27 +358,33 @@ source_tree_filename(struct loaded_l10nfile *domain_file)
 	if (slash) {
 		*(++slash) = 0;
 		filename = malloc(strlen(dirname) + strlen(language)
-				+ 6 + 3 + 1);
+				+ 6 + 4 + 1);
 		if (!filename) {
 			free(dirname);
+			free(language);
 			return NULL;
 		}
 		fp = stpcpy(filename, dirname);
 		fp = stpcpy(fp, "../po/");
 		fp = stpcpy(fp, language);
 		fp = stpcpy(fp, ".gmo");
+		*fp = 0;
 
 	} else {
-		filename = malloc(strlen(language) + 6 + 3 + 1);
+		filename = malloc(strlen(language) + 6 + 4 + 1);
 		if (!filename) {
+			if (dirname) free(dirname);
+			free(language);
 			return NULL;
 		}
 		fp = stpcpy(filename, "../po/");
 		fp = stpcpy(fp, language);
 		fp = stpcpy(fp, ".gmo");
+		*fp = 0;
 	}
 
 	if (dirname) free(dirname);
+	free(language);
 
 	return filename;
 }

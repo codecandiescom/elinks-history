@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.67 2004/06/24 15:09:23 jonas Exp $ */
+/* $Id: parse.c,v 1.68 2004/06/24 15:15:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -664,6 +664,7 @@ next_break:
 				 * something along the lines of NBSP_CHAR or
 				 * checking for '\n's in AL_NONE text. */
 				/* See bug 52 and 387 for more info. */
+				int length = html - base_pos;
 				int newlines = 0;
 
 				while (html + 5 < eof && !memcmp(html, "&#13;", 5)) {
@@ -672,7 +673,7 @@ next_break:
 				}
 
 				if (newlines) {
-					put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
+					put_chrs(base_pos, length, html_context.put_chars_f, f);
 					ln_break(newlines, html_context.line_break_f, f);
 					continue;
 				}

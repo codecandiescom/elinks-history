@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.24 2003/12/10 04:47:21 jonas Exp $ */
+/* $Id: status.c,v 1.25 2003/12/10 05:07:35 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -440,8 +440,8 @@ display_leds(struct session *ses, struct session_status *status)
 	}
 
 	draw_leds(ses);
-#endif
 }
+#endif /* USE_LEDS */
 
 /* Print statusbar and titlebar, set terminal title. */
 void

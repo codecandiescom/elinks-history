@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.244 2004/07/19 13:33:35 zas Exp $ */
+/* $Id: menu.c,v 1.245 2004/07/19 16:11:01 zas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -253,37 +253,74 @@ scroll_menu(struct menu *menu, int steps, int wrap)
 {
 	int w = int_max(1, menu->box.height - MENU_BORDER_SIZE * 2);
 	int scr_i = int_min((w - 1) / 2, SCROLL_ITEMS);
+	int s = steps ? steps/abs(steps) : 1; /* Selectable item search direction. */
 
 	int_lower_bound(&scr_i, 0);
 	int_lower_bound(&w, 0);
 
-	if (menu->size < 1) {
+	if (menu->size <= 0) {
+		/* Menu is empty. */
 		menu->selected = -1;
 		menu->first = 0;
 		return;
 	}
 
+	/* Move by required steps and handle wraparound if needed.
+	 * A step of zero can be used, indicating we want to select
+	 * item corresponding to |menu->selected| value rather than
+	 * moving by to a position relative to this value.
+	 * We override search direction for selectable items if we encounter
+	 * a limit, since it depends in which conditions this limit is
+	 * attained. */
 	menu->selected += steps;
+	if (menu->selected >= menu->size) {
+		if (wrap) {
+			menu->selected = 0;
+			s = 1;
+		} else {
+			menu->selected = int_max(0, menu->size - 1);
+			s = -1;
+		}
+	} else if (menu->selected < 0) {
+		if (wrap) {
+			menu->selected = int_max(0, menu->size - 1);
+			s = -1;
+		} else {
+			menu->selected = 0;
+			s = 1;
+		}
+	}
 
-	menu->selected %= menu->size;
-	if (menu->selected < 0)
-		menu->selected += menu->size;
+	/* Current selected item may be an unselectable item, so we need to
+	 * find first selectable item near to it.
+	 * @s = 1 : ascending search.
+	 * @s = -1: descending search. */
 
-	int_bounds(&menu->selected, 0, menu->size - 1);
-
+	/* Search first selectable item in one direction. */
 	while (!mi_is_selectable(menu->items[menu->selected])) {
-		menu->selected += steps ? steps/abs(steps) : 1;
+		if (s > 0 && menu->selected == menu->size - 1)
+			break;
+		else if (s < 0 && menu->selected == 0)
+			break;
 
-		if (menu->selected < 0) {
-			menu->selected += menu->size;
-			menu->first = menu->selected - w;
-		}
+		menu->selected += s;
+	}
 
-		if (menu->selected >= menu->size) {
-			menu->selected = -1;
-			menu->first = 0;
-			return;
-		}
+	/* If not found, invert the search direction and try again. */
+	s = -s;
+	while (!mi_is_selectable(menu->items[menu->selected])) {
+		if (s > 0 && menu->selected == menu->size - 1)
+			break;
+		else if (s < 0 && menu->selected == 0)
+			break;
+
+		menu->selected += s;
+	}
+
+	/* No selectable item found, just return. */
+	if (!mi_is_selectable(menu->items[menu->selected])) {
+		menu->selected = -1;
+		menu->first = 0;
 	}
 
 	/* The rest is not needed for horizontal menus like the mainmenu.

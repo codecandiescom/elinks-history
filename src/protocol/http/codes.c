@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.12 2003/06/21 14:25:48 pasky Exp $ */
+/* $Id: codes.c,v 1.13 2003/06/21 14:28:58 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -13,6 +13,12 @@
 
 #include "protocol/http/codes.h"
 #include "util/snprintf.h"
+
+
+/* TODO: Somehow, this should be l10n'd. I don't know how, though. Perhaps some
+ * clever Accept-Language tricks? We're in trouble in these parts of code
+ * because it is detached from terminal and we could have different language on
+ * each terminal. --pasky */
 
 
 struct http_code {

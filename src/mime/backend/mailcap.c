@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.11 2003/06/05 23:34:56 jonas Exp $ */
+/* $Id: mailcap.c,v 1.12 2003/06/06 11:14:26 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -58,16 +58,8 @@ static int mailcap_map_entries = 0;
 static struct hash *mailcap_map = NULL;
 
 
-/* Clear memory to make freeing it safer laterand we get
- * needsterminal and copiousoutput inialized for free. */
-static inline struct mailcap_entry *
-mailcap_new_entry(void)
-{
-	return mem_calloc(1, sizeof(struct mailcap_entry));
-}
-
 static inline void
-free_mailcap_entry(struct mailcap_entry *entry)
+done_mailcap_entry(struct mailcap_entry *entry)
 {
 	if (!entry) return;
 	if (entry->command)	mem_free(entry->command);
@@ -75,6 +67,14 @@ free_mailcap_entry(struct mailcap_entry *entry)
 	if (entry->type)	mem_free(entry->type);
 	if (entry->description)	mem_free(entry->description);
 	mem_free(entry);
+}
+
+/* Clear memory to make freeing it safer laterand we get
+ * needsterminal and copiousoutput inialized for free. */
+static inline struct mailcap_entry *
+init_mailcap_entry(void)
+{
+	return mem_calloc(1, sizeof(struct mailcap_entry));
 }
 
 
@@ -300,10 +300,11 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 
 		/* Clean up from previous iterations */
 		/* This could of course be better since we alloc right after */
-		if (entry) free_mailcap_entry(entry);
+		if (entry)
+			done_mailcap_entry(entry);
 
 		/* Create the next entry */
-		entry = mailcap_new_entry();
+		entry = init_mailcap_entry();
 		if (!entry) break;
 
 		entry->needsterminal = 0; /* Redundant since mailcap_new_entry */
@@ -343,7 +344,7 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 			item = get_hash_item(mailcap_map, entry->type, typelen);
 			if (!item) {
 				if (!add_hash_item(mailcap_map, entry->type, typelen, entry)) {
-					free_mailcap_entry(entry);
+					done_mailcap_entry(entry);
 					continue;
 				}
 			} else {
@@ -363,7 +364,8 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 	}
 
 	/* Clean up from previous iterations */
-	if (entry) free_mailcap_entry(entry);
+	if (entry)
+		done_mailcap_entry(entry);
 
 	fclose(file);
 	if (line) mem_free(line); /* Alloced by file_read_line() */
@@ -418,7 +420,7 @@ done_mailcap(void)
 				while (entry) {
 					struct mailcap_entry *next = entry->next;
 
-					free_mailcap_entry(entry);
+					done_mailcap_entry(entry);
 					entry = next;
 				}
 			}

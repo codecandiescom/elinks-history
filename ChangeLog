@@ -1,3 +1,42 @@
+Sat Mar 12 00:25:43 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	get_ftp_data_socket(): describe it.  
+
+Sat Mar 12 00:17:25 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	get_ftp_data_socket(): re-arrange and simplify code.  
+
+Sat Mar 12 00:08:02 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	add_file_cmd_to_str(): do the conn->uri->data test before anything
+	else.  
+
+Sat Mar 12 00:06:28 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	add_file_cmd_to_str(): Move ftp data socket related code to new
+	get_ftp_data_socket().  
+
+Fri Mar 11 23:35:43 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	got_something_from_data_connection(): minor code redundancy
+	reduction.  
+
+Fri Mar 11 23:22:44 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	display_dir_entry(): simplify code.  
+
 Fri Mar 11 15:13:30 2005  Laurent Monin <zas@norz.org>:
 
 	* src/protocol/ftp/ftp.c:

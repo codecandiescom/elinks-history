@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.377 2004/04/20 15:53:49 jonas Exp $ */
+/* $Id: session.c,v 1.378 2004/04/21 22:43:04 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -897,7 +897,6 @@ static void
 destroy_session(struct session *ses)
 {
 	struct document_view *doc_view;
-	struct tq *tq;
 
 	assert(ses);
 	if_assert_failed return;
@@ -924,17 +923,8 @@ destroy_session(struct session *ses)
 	mem_free_if(ses->imgmap_href_base);
 	mem_free_if(ses->imgmap_target_base);
 
-	foreach (tq, ses->tq) {
-		if (tq->cached) object_unlock(tq->cached);
-		if (tq->uri) {
-			change_connection(&tq->download, NULL, PRI_CANCEL, 0);
-			done_uri(tq->uri);
-		}
-		mem_free_if(tq->goto_position);
-		mem_free_if(tq->prog);
-		mem_free_if(tq->target_frame);
-	}
-	free_list(ses->tq);
+	while (!list_empty(ses->tq))
+		done_tq(ses->tq.next);
 
 	if (ses->download_uri) done_uri(ses->download_uri);
 	mem_free_if(ses->search_word);

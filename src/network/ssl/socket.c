@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.52 2004/06/27 12:59:00 jonas Exp $ */
+/* $Id: socket.c,v 1.53 2004/06/27 13:01:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,9 +44,9 @@
 #endif
 
 #ifdef CONFIG_OPENSSL
-#define get_ssl_error(conn) SSL_get_error(conn->ssl, SSL_connect(conn->ssl))
+#define ssl_do_connect(conn) SSL_get_error(conn->ssl, SSL_connect(conn->ssl))
 #elif defined(CONFIG_GNUTLS)
-#define get_ssl_error(conn) gnutls_handshake(*((ssl_t *) conn->ssl))
+#define ssl_do_connect(conn) gnutls_handshake(*((ssl_t *) conn->ssl))
 #endif
 
 static void
@@ -146,7 +146,7 @@ ssl_want_read(struct connection *conn)
 	if (conn->no_tsl)
 		ssl_set_no_tls(conn);
 
-	switch (get_ssl_error(conn)) {
+	switch (ssl_do_connect(conn)) {
 		case SSL_ERROR_NONE:
 #ifdef CONFIG_GNUTLS
 			if (get_opt_bool("connection.ssl.cert_verify")
@@ -214,7 +214,7 @@ ssl_connect(struct connection *conn, int sock)
 	gnutls_transport_set_ptr(*((ssl_t *) conn->ssl), (gnutls_transport_ptr) sock);
 #endif
 
-	ret = get_ssl_error(conn);
+	ret = ssl_do_connect(conn);
 
 	switch (ret) {
 		case SSL_ERROR_WANT_READ:

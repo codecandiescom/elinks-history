@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.2 2003/05/04 17:25:56 pasky Exp $ */
+/* $Id: terminal.c,v 1.3 2003/05/04 17:51:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,9 +21,10 @@
 #include "dialogs/menu.h" /* XXX */
 #include "terminal/kbd.h"
 #include "lowlevel/select.h"
-#include "terminal/terminal.h"
 #include "lowlevel/timer.h"
 #include "sched/session.h"
+#include "terminal/hardio.h"
+#include "terminal/terminal.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"
@@ -32,55 +33,6 @@
 
 
 /* TODO: We must use termcap/terminfo if available! --pasky */
-
-int
-hard_write(int fd, unsigned char *p, int l)
-{
-	int w = 1;
-	int t = 0;
-
-	while (l > 0 && w) {
-		w = write(fd, p, l);
-		if (w < 0) {
-			if (errno == EINTR) continue;
-			return -1;
-		}
-		t += w;
-		p += w;
-		l -= w;
-	}
-
-	return t;
-}
-
-int
-hard_read(int fd, unsigned char *p, int l)
-{
-	int r = 1;
-	int t = 0;
-
-	while (l > 0 && r) {
-		r = read(fd, p, l);
-		if (r < 0) {
-			if (errno == EINTR) continue;
-			return -1;
-		}
-#if 0
-		{
-		 int ww;
-
-		 for (ww = 0; ww < r; ww++)
-			 fprintf(stderr, " %02x", (int) p[ww]);
-		 fflush(stderr);
-		}
-#endif
-	 	t += r;
-		p += r;
-		l -= r;
-	}
-
-	return t;
-}
 
 unsigned char *
 get_cwd()

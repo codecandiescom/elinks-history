@@ -1,3 +1,39 @@
+Thu Jun  3 21:12:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	search_dlg(): @a -> @direction, do test only once.  
+
+Thu Jun  3 21:08:06 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	search_dlg_do(): make it static and reindent parameters.  
+
+Thu Jun  3 21:01:54 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	get_searched_regex(): code cleanup and loop optimization.  
+
+Thu Jun  3 13:47:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	search_link_text(): code simplification and optimization.  
+
+Thu Jun  3 13:27:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	Tidy up.  
+
+Thu Jun  3 08:08:54 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Fix a typo (CONFIG_MAKRS) that broke the mark-set action.  
+
 Wed Jun  2 10:36:55 2004  Laurent Monin <zas@norz.org>:
 
 	* src/viewer/text/textarea.c:

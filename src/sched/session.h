@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.156 2004/06/19 17:58:37 jonas Exp $ */
+/* $Id: session.h,v 1.157 2004/07/26 22:07:15 zas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -88,6 +88,9 @@ struct session_status {
 #endif
 	/* Has the tab been visited yet. */
 	unsigned int visited:1;
+
+	/* Is processing file requests. */
+	unsigned int processing_file_requests:1;
 };
 
 enum insert_mode {

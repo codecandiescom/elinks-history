@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.538 2004/07/26 22:02:01 zas Exp $ */
+/* $Id: session.c,v 1.539 2004/07/26 22:07:15 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -595,13 +595,12 @@ load_file_from_doc_view(struct file_to_load *ftl,
 void
 process_file_requests(struct session *ses)
 {
-	static int stop_recursion = 0;
 	struct file_to_load *ftl;
 	struct document_view *doc_view = current_frame(ses);
 	int more;
 
-	if (stop_recursion) return;
-	stop_recursion = 1;
+	if (ses->status.processing_file_requests) return;
+	ses->status.processing_file_requests = 1;
 
 	do {
 		more = 0;
@@ -616,7 +615,7 @@ process_file_requests(struct session *ses)
 		}
 	} while (more);
 
-	stop_recursion = 0;
+	ses->status.processing_file_requests = 0;
 }
 
 

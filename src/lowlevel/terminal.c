@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.31 2002/11/29 17:37:33 zas Exp $ */
+/* $Id: terminal.c,v 1.32 2002/11/29 19:11:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -862,9 +862,9 @@ redraw_screen(struct terminal *term)
 			} else {
 				add_to_str(&a, &l, "\033[");
 				add_num_to_str(&a, &l, y + 1);
-				add_to_str(&a, &l, ";");
+				add_chr_to_str(&a, &l, ';');
 				add_num_to_str(&a, &l, x + 1);
-				add_to_str(&a, &l, "H");
+				add_chr_to_str(&a, &l, 'H');
 				cx = x; cy = y;
 				print_char(term, &opt_cache, &a, &l,
 					   p, &mode, &attrib);
@@ -882,7 +882,7 @@ redraw_screen(struct terminal *term)
 			add_to_str(&a, &l, "\033[10m");
 
 		if (opt_cache.type == TERM_VT100)
-			add_to_str(&a, &l, "\x0f");
+			add_chr_to_str(&a, &l, '\x0f');
 	}
 
 	if (l || term->cx != term->lcx || term->cy != term->lcy) {
@@ -890,9 +890,9 @@ redraw_screen(struct terminal *term)
 		term->lcy = term->cy;
 		add_to_str(&a, &l, "\033[");
 		add_num_to_str(&a, &l, term->cy + 1);
-		add_to_str(&a, &l, ";");
+		add_chr_to_str(&a, &l, ';');
 		add_num_to_str(&a, &l, term->cx + 1);
-		add_to_str(&a, &l, "H");
+		add_chr_to_str(&a, &l, 'H');
 	}
 
 	if (l && term->master) want_draw();

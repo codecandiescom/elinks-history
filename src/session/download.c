@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.323 2004/09/28 16:21:48 pasky Exp $ */
+/* $Id: download.c,v 1.324 2004/10/08 15:33:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,7 @@ are_there_downloads(void)
 	struct file_download *file_download;
 
 	foreach (file_download, downloads)
-		if (!file_download->prog)
+		if (!file_download->external_handler)
 			return 1;
 
 	return 0;
@@ -143,7 +143,7 @@ abort_download(struct file_download *file_download)
 		close(file_download->handle);
 	}
 
-	mem_free_if(file_download->prog);
+	mem_free_if(file_download->external_handler);
 	if (file_download->file) {
 		if (file_download->delete) unlink(file_download->file);
 		mem_free(file_download->file);
@@ -204,7 +204,7 @@ destroy_downloads(struct session *ses)
 		if (file_download->ses != ses)
 			continue;
 
-		if (!file_download->prog) {
+		if (!file_download->external_handler) {
 			file_download->ses = NULL;
 			continue;
 		}
@@ -334,13 +334,14 @@ download_data_store(struct download *download, struct file_download *file_downlo
 		return;
 	}
 
-	if (file_download->prog) {
+	if (file_download->external_handler) {
 		prealloc_truncate(file_download->handle,
 				  file_download->last_pos);
 		close(file_download->handle);
 		file_download->handle = -1;
-		exec_on_terminal(term, file_download->prog, file_download->file,
-				 !!file_download->prog_flags);
+		exec_on_terminal(term, file_download->external_handler,
+				 file_download->file,
+				 !!file_download->external_handler_flags);
 		file_download->delete = 0;
 		abort_download_and_beep(file_download, term);
 		return;
@@ -814,15 +815,15 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 					   codw_hop->real_file, fd);
 	if (!file_download) goto cancel;
 
-	if (type_query->prog) {
-		file_download->prog = subst_file(type_query->prog, codw_hop->file);
+	if (type_query->external_handler) {
+		file_download->external_handler = subst_file(type_query->external_handler,
+							     codw_hop->file);
 		file_download->delete = 1;
 		mem_free(codw_hop->file);
-		mem_free(type_query->prog);
-		type_query->prog = NULL;
+		mem_free_set(&type_query->external_handler, NULL);
 	}
 
-	file_download->prog_flags = type_query->prog_flags;
+	file_download->external_handler_flags = type_query->external_handler_flags;
 
 	change_connection(&type_query->download, &file_download->download, PRI_DOWNLOAD, 0);
 	done_type_query(type_query);
@@ -831,7 +832,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 	return;
 
 cancel:
-	if (type_query->prog) mem_free_if(codw_hop->file);
+	if (type_query->external_handler) mem_free_if(codw_hop->file);
 	tp_cancel(type_query);
 	mem_free(codw_hop);
 }
@@ -847,7 +848,7 @@ continue_download(void *data, unsigned char *file)
 		return;
 	}
 
-	if (type_query->prog) {
+	if (type_query->external_handler) {
 		/* FIXME: get_temp_name() calls tempnam(). --Zas */
 		file = get_temp_name(type_query->uri);
 		if (!file) {
@@ -862,8 +863,10 @@ continue_download(void *data, unsigned char *file)
 
 	kill_downloads_to_file(file);
 
-	create_download_file(type_query->ses->tab->term, file, &codw_hop->real_file,
-			     !!type_query->prog, 0, continue_download_do, codw_hop);
+	create_download_file(type_query->ses->tab->term, file,
+			     &codw_hop->real_file,
+			     !!type_query->external_handler, 0,
+			     continue_download_do, codw_hop);
 }
 
 
@@ -905,7 +908,7 @@ done_type_query(struct type_query *type_query)
 
 	object_unlock(type_query->cached);
 	done_uri(type_query->uri);
-	mem_free_if(type_query->prog);
+	mem_free_if(type_query->external_handler);
 	mem_free_if(type_query->target_frame);
 	del_from_list(type_query);
 	mem_free(type_query);
@@ -925,7 +928,7 @@ tp_cancel(void *data)
 static void
 tp_save(struct type_query *type_query)
 {
-	mem_free_set(&type_query->prog, NULL);
+	mem_free_set(&type_query->external_handler, NULL);
 	query_file(type_query->ses, type_query->uri, type_query, continue_download, tp_cancel, 1);
 }
 
@@ -976,11 +979,11 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 {
 	struct string filename;
 
-	mem_free_set(&type_query->prog, NULL);
+	mem_free_set(&type_query->external_handler, NULL);
 
 	if (handler) {
-		type_query->prog = stracpy(handler->program);
-		type_query->prog_flags = handler->block;
+		type_query->external_handler = stracpy(handler->program);
+		type_query->external_handler_flags = handler->block;
 		if (!handler->ask) {
 			tp_open(type_query);
 			return;

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.84 2004/09/28 23:45:29 jonas Exp $ */
+/* $Id: status.c,v 1.85 2004/09/28 23:50:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -240,10 +240,13 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 
 		/* Show S_INTERRUPTED message *once* but then show links
 		 * again as usual. */
-		if (doc_view) {
+		/* doc_view->vs may be NULL here in the short interval between
+		 * ses_forward() with @loading_in_frame set, disconnecting the
+		 * doc_view from vs, and render_document_frames(), detaching
+		 * the doc_view. */
+		if (doc_view && doc_view->vs) {
 			static int last_current_link;
-			int ncl = doc_view->vs
-				? doc_view->vs->current_link : -1;
+			int ncl = doc_view->vs->current_link;
 
 			if (stat->state == S_INTERRUPTED
 			    && ncl != last_current_link)

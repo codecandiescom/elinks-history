@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.192 2003/11/28 01:46:45 jonas Exp $ */
+/* $Id: download.c,v 1.193 2003/11/28 01:51:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,11 +279,6 @@ download_data_store(struct download *download, struct file_download *file_downlo
 		}
 	}
 
-	if (get_opt_int("document.download.notify_bell")
-	    + file_download->notify >= 2) {
-		beep_terminal(get_download_ses(file_download)->tab->term);
-	}
-
 	if (file_download->remotetime
 	    && get_opt_int("document.download.set_original_time")) {
 		struct utimbuf foo;
@@ -293,6 +288,11 @@ download_data_store(struct download *download, struct file_download *file_downlo
 	}
 
 abort:
+	if (get_opt_int("document.download.notify_bell")
+	    + file_download->notify >= 2) {
+		beep_terminal(get_download_ses(file_download)->tab->term);
+	}
+
 	abort_download(file_download, 0);
 }
 

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.70 2004/07/10 18:40:43 zas Exp $ */
+/* $Id: cgi.c,v 1.71 2004/07/24 06:48:52 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,6 +139,8 @@ set_vars(struct connection *conn, unsigned char *script)
 	/* XXX: Maybe it is better to set this to an empty string? --pasky */
 	if (setenv("REMOTE_ADDR", "127.0.0.1", 1)) return -1;
 	if (setenv("GATEWAY_INTERFACE", "CGI/1.1", 1)) return -1;
+	/* This is the path name extracted from the URI and decoded, per
+	 * http://cgi-spec.golux.com/draft-coar-cgi-v11-03-clean.html#8.1 */
 	if (setenv("SCRIPT_NAME", script, 1)) return -1;
 
 	/* From now on, just HTTP-like headers are being set. Missing variables
@@ -286,6 +288,7 @@ execute_cgi(struct connection *conn)
 		state = S_OUT_OF_MEM;
 		goto end2;
 	}
+	decode_uri_string(script);
 	scriptlen = strlen(script);
 
 	if (stat(script, &buf) || !(S_ISREG(buf.st_mode))

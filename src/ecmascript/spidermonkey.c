@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.172 2004/12/27 10:02:50 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.173 2004/12/27 10:24:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1172,9 +1172,6 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct document_view *doc_view = vs->doc_view;
 	struct form_view *fv = JS_GetPrivate(ctx, obj);
 	struct form *form = find_form_by_form_view(doc_view->document, fv);
-	struct jsval_property prop;
-
-	set_prop_undef(&prop);
 
 	assert(form);
 
@@ -1191,11 +1188,10 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 			fcobj = get_form_control_object(ctx, obj, fc->type, find_form_state(doc_view, fc));
 			if (fcobj) {
-				set_prop_object(&prop, fcobj);
+				object_to_jsval(ctx, vp, fcobj);
 			} else {
-				set_prop_undef(&prop);
+				undef_to_jsval(ctx, vp);
 			}
-			value_to_jsval(ctx, vp, &prop);
 			break;
 		}
 		return JS_TRUE;
@@ -1204,9 +1200,11 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	if (!JSVAL_IS_INT(id))
 		return JS_TRUE;
 
+	undef_to_jsval(ctx, vp);
+
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_FORM_ACTION:
-		set_prop_string(&prop, form->action);
+		string_to_jsval(ctx, vp, form->action);
 		break;
 
 	case JSP_FORM_ELEMENTS:
@@ -1216,7 +1214,7 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 		JS_DefineProperties(ctx, jsform_elems, (JSPropertySpec *) form_elements_props);
 		JS_DefineFunctions(ctx, jsform_elems, (JSFunctionSpec *) form_elements_funcs);
-		set_prop_object(&prop, jsform_elems);
+		object_to_jsval(ctx, vp, jsform_elems);
 		/* SM will cache this property value for us so we create this
 		 * just once per form. */
 	}
@@ -1226,13 +1224,13 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		switch (form->method) {
 		case FORM_METHOD_GET:
 		case FORM_METHOD_POST:
-			set_prop_string(&prop, "application/x-www-form-urlencoded");
+			string_to_jsval(ctx, vp, "application/x-www-form-urlencoded");
 			break;
 		case FORM_METHOD_POST_MP:
-			set_prop_string(&prop, "multipart/form-data");
+			string_to_jsval(ctx, vp, "multipart/form-data");
 			break;
 		case FORM_METHOD_POST_TEXT_PLAIN:
-			set_prop_string(&prop, "text/plain");
+			string_to_jsval(ctx, vp, "text/plain");
 			break;
 		}
 		break;
@@ -1244,38 +1242,37 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 		foreach (fc, form->items)
 			counter++;
-		set_prop_int(&prop, counter);
+		int_to_jsval(ctx, vp, counter);
 		break;
 	}
 
 	case JSP_FORM_METHOD:
 		switch (form->method) {
 		case FORM_METHOD_GET:
-			set_prop_string(&prop, "GET");
+			string_to_jsval(ctx, vp, "GET");
 			break;
 
 		case FORM_METHOD_POST:
 		case FORM_METHOD_POST_MP:
 		case FORM_METHOD_POST_TEXT_PLAIN:
-			set_prop_string(&prop, "POST");
+			string_to_jsval(ctx, vp, "POST");
 			break;
 		}
 		break;
 
 	case JSP_FORM_NAME:
-		set_prop_string(&prop, form->name);
+		string_to_jsval(ctx, vp, form->name);
 		break;
 
 	case JSP_FORM_TARGET:
-		set_prop_string(&prop, form->target);
+		string_to_jsval(ctx, vp, form->target);
 		break;
 
 	default:
 		INTERNAL("Invalid ID %d in form_get_property().", JSVAL_TO_INT(id));
-		return JS_TRUE;
+		break;
 	}
 
-	value_to_jsval(ctx, vp, &prop);
 	return JS_TRUE;
 }
 

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.17 2002/06/07 17:20:37 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.18 2002/06/09 14:53:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -495,4 +495,11 @@ add_default_keybindings()
 
 	for (kb = default_menu_keymap; kb->x; kb++)
 		add_keybinding(KM_MENU, kb->act, kb->x, kb->y, LUA_NOREF);
+}
+
+void
+i_am_dummy_and_do_nothing_so_remove_me() {
+	parse_keymap("");
+	parse_keystroke("", NULL, NULL);
+	parse_act("");
 }

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.28 2002/06/01 18:46:41 pasky Exp $ */
+/* $Id: conf.c,v 1.29 2002/06/09 14:53:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,6 +166,9 @@ parse_config_file(unsigned char *name, unsigned char *file,
 		}
 
 		if (error) {
+			/* TODO: Make this a macro and report error directly
+			 * as it's stumbled upon; line info may not be accurate
+			 * anymore now. --pasky */
 			fprintf(stderr, "%s:%d: %s\n",
 				name, line, error_msg[error]);
 			error_occured = 1;

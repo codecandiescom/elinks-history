@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.42 2002/06/07 22:28:18 pasky Exp $ */
+/* $Id: options.c,v 1.43 2002/06/09 14:53:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,21 +58,22 @@ struct list_head *cmdline_options;
 struct option *
 get_opt_rec(struct list_head *tree, unsigned char *name_)
 {
+	struct option *cat = NULL;
 	struct option *option;
 	unsigned char *aname = stracpy(name_);
 	unsigned char *name = aname;
 	unsigned char *sep;
 
-	/* Thou shalt read name of following function carefully. */
+	/* We iteratively call get_opt_rec() each for path_elemets-1, getting
+	 * appropriate tree for it and then resolving [path_elemets]. */
 	if ((sep = strrchr(name, '.'))) {
-		struct option *cat;
-
 		*sep = '\0';
 
 		cat = get_opt_rec(tree, name);
 		if (!cat || cat->type != OPT_TREE || cat->flags & OPT_HIDDEN) {
 #if 0
-			debug("ERROR in get_opt_rec() crawl: %s (%d) -> %s", name, cat?cat->type:-1, sep + 1);
+			debug("ERROR in get_opt_rec() crawl: %s (%d) -> %s",
+			      name, cat ? cat->type : -1, sep + 1);
 #endif
 			mem_free(aname);
 			return NULL;
@@ -89,6 +90,35 @@ get_opt_rec(struct list_head *tree, unsigned char *name_)
 			mem_free(aname);
 			return option;
 		}
+	}
+
+	if (cat && cat->flags & OPT_AUTOCREATE) {
+		struct option *template = get_opt_rec(tree, "#template#");
+
+		if (!template) {
+			internal("Requested %s should be autocreated but "
+				 "%.*s.#template# is missing!",
+				 name_, sep - name_, name_);
+			mem_free(aname);
+			return NULL;
+		}
+
+		/* We will just create the option and return pointer to it
+		 * automagically. And, we will create it by cloning #template#
+		 * option. By having #template# OPT_AUTOCREATE and #template#
+		 * inside, you can have even multi-level autocreating. */
+
+		option = copy_option(template);
+		if (!option) {
+			mem_free(aname);
+			return NULL;
+		}
+		option->name = stracpy(name);
+
+		add_opt_rec(tree, "", option);
+
+		mem_free(aname);
+		return option;
 	}
 
 	mem_free(aname);
@@ -142,6 +172,24 @@ add_opt(struct list_head *tree, unsigned char *path, unsigned char *name,
 	option->desc = desc;
 
 	add_opt_rec(tree, path, option);
+}
+
+struct option *
+copy_option(struct option *template)
+{
+	struct option *option = mem_alloc(sizeof(struct option));
+
+	option->name = template->name;
+	option->flags = template->flags;
+	option->type = template->type;
+	option->min = template->min;
+	option->max = template->max;
+	option->ptr = option_types[template->type].dup(template)
+				? option_types[template->type].dup(template)
+				: template->ptr;
+	option->desc = template->desc;
+
+	return option;
 }
 
 
@@ -847,6 +895,7 @@ register_options()
 	/* config-file-only options */
 	/* These will disappear */
 
+#if 0
 	add_opt_void("",
 		"terminal", 0, OPT_TERM,
 		NULL);
@@ -866,4 +915,5 @@ register_options()
 	add_opt_void("",
 		"unbind", 0, OPT_KEYUNBIND,
 		NULL);
+#endif
 }

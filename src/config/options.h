@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.26 2002/06/07 17:14:57 pasky Exp $ */
+/* $Id: options.h,v 1.27 2002/06/09 14:53:22 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -30,12 +30,14 @@ enum option_type {
 
 	OPT_CODEPAGE,
 	OPT_LANGUAGE,
+#if 0
 	OPT_MIME_TYPE,
 	OPT_EXTENSION,
-	OPT_PROGRAM,
 	OPT_TERM,
 	OPT_KEYBIND,
 	OPT_KEYUNBIND,
+#endif
+	OPT_PROGRAM,
 	OPT_COLOR,
 
 	OPT_COMMAND,
@@ -67,6 +69,8 @@ extern void done_options();
 
 extern struct list_head *init_options_tree();
 extern void free_options_tree(struct list_head *);
+
+extern struct option *copy_option(struct option *);
 
 /* Shitload of various incredible macro combinations and other unusable garbage
  * follows. Have fun. */

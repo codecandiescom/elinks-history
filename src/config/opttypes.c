@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.11 2002/06/07 17:20:37 pasky Exp $ */
+/* $Id: opttypes.c,v 1.12 2002/06/09 14:53:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,6 +143,24 @@ num_wr(struct option *o, unsigned char **s, int *l)
 	add_knum_to_str(s, l, *((int *) o->ptr));
 }
 
+void *
+int_dup(struct option *opt)
+{
+	int *new = mem_alloc(sizeof(int));
+
+	memcpy(new, opt->ptr, sizeof(int));
+	return new;
+}
+
+void *
+long_dup(struct option *opt)
+{
+	long *new = mem_alloc(sizeof(long));
+
+	memcpy(new, opt->ptr, sizeof(long));
+	return new;
+}
+
 
 int
 str_rd(struct option *opt, unsigned char **file)
@@ -196,6 +214,12 @@ str_wr(struct option *o, unsigned char **s, int *l)
 	} else {
 		add_quoted_to_str(s, l, o->ptr);
 	}
+}
+
+void *
+str_dup(struct option *opt)
+{
+	return stracpy(opt->ptr);
 }
 
 
@@ -515,27 +539,54 @@ color_wr(struct option *opt, unsigned char **str, int *len)
 	add_quoted_to_str(str, len, strcolor);
 }
 
+void *
+rgb_dup(struct option *opt)
+{
+	struct rgb *new = mem_alloc(sizeof(struct rgb));
+
+	memcpy(new, opt->ptr, sizeof(struct rgb));
+	return new;
+}
+
+void *
+tree_dup(struct option *opt)
+{
+	struct list_head *new = mem_alloc(sizeof(struct list_head));
+	struct list_head *tree = (struct list_head *) opt->ptr;
+	struct option *option;
+
+	foreach (option, *tree) {
+		struct option *new_opt = copy_option(option);
+
+		if (new_opt) add_to_list(*new, new_opt);
+	}
+
+	return new;
+}
+
 
 struct option_type_info option_types[] = {
-	{ bool_cmd, num_rd, num_wr, "[0|1]" },
-	{ gen_cmd, num_rd, num_wr, "<num>" },
-	{ gen_cmd, num_rd, num_wr, "<num>" },
-	{ gen_cmd, str_rd, str_wr, "<str>" },
+	{ bool_cmd, num_rd, num_wr, int_dup, "[0|1]" },
+	{ gen_cmd, num_rd, num_wr, int_dup, "<num>" },
+	{ gen_cmd, num_rd, num_wr, long_dup, "<num>" },
+	{ gen_cmd, str_rd, str_wr, str_dup, "<str>" },
 
-	{ gen_cmd, cp_rd, cp_wr, "<codepage>" },
-	{ gen_cmd, lang_rd, lang_wr, "<language>" },
+	{ gen_cmd, cp_rd, cp_wr, int_dup, "<codepage>" },
+	{ gen_cmd, lang_rd, lang_wr, int_dup, "<language>" },
+#if 0
 	{ NULL, type_rd, NULL /*type_wr*/, "" },
 	{ NULL, ext_rd, NULL /*ext_wr*/, "" },
-	{ NULL, prog_rd, NULL /*prog_wr*/, "" },
 	{ NULL, term_rd, NULL /*term_wr*/, "" },
 	{ NULL, bind_rd, NULL, "" },
 	{ NULL, unbind_rd, NULL, "" },
-	{ gen_cmd, color_rd, color_wr, "<color|#rrggbb>" },
+#endif
+	{ NULL, prog_rd, NULL /*prog_wr*/, NULL, "" },
+	{ gen_cmd, color_rd, color_wr, rgb_dup, "<color|#rrggbb>" },
 
-	{ exec_cmd, NULL, NULL, "[<...>]" },
+	{ exec_cmd, NULL, NULL, NULL, "[<...>]" },
 
-	{ redir_cmd, redir_rd, NULL, "" },
+	{ redir_cmd, redir_rd, NULL, NULL, "" },
 
 	/* tree */
-	{ NULL, NULL, NULL, "" },
+	{ NULL, NULL, NULL, tree_dup, "" },
 };

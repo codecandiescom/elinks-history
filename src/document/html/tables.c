@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.278 2004/06/29 03:33:28 jonas Exp $ */
+/* $Id: tables.c,v 1.279 2004/06/29 03:47:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -524,6 +524,46 @@ end:
 }
 
 
+static int
+get_table_cellpadding(struct table *table)
+{
+	struct part *part = table->part;
+	int cpd_pass = 0, cpd_width = 0, cpd_last = table->cellpadding;
+	int margins = par_format.leftmargin + par_format.rightmargin;
+
+again:
+	get_cell_widths(table);
+	if (get_column_widths(table)) return 1;
+
+	get_table_width(table);
+
+	if (!part->document && !part->box.x) {
+		if (!table->full_width)
+			int_upper_bound(&table->max_width, table->width);
+		int_lower_bound(&table->max_width, table->min_width);
+
+		int_lower_bound(&part->max_width, table->max_width + margins);
+		int_lower_bound(&part->box.width, table->min_width + margins);
+
+		return 1;
+	}
+
+	if (!cpd_pass && table->min_width > table->width && table->cellpadding) {
+		table->cellpadding = 0;
+		cpd_pass = 1;
+		cpd_width = table->min_width;
+		goto again;
+	}
+	if (cpd_pass == 1 && table->min_width > cpd_width) {
+		table->cellpadding = cpd_last;
+		cpd_pass = 2;
+		goto again;
+	}
+
+	return 0;
+}
+
+
 
 #ifdef HTML_TABLE_2ND_PASS /* This is by default ON! (<setup.h>) */
 static void
@@ -1042,7 +1082,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	struct html_element *state;
 	color_t bgcolor = par_format.bgcolor;
 	int x;
-	int cpd_pass, cpd_width, cpd_last;
 	int margins;
 
 	html_context.table_level++;
@@ -1057,39 +1096,8 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	state = init_html_parser_state(ELEMENT_DONT_KILL, ALIGN_LEFT, 0, 0);
 
-	cpd_pass = 0;
-	cpd_last = table->cellpadding;
-	cpd_width = 0;  /* not needed, but let the warning go away */
-
-again:
-	get_cell_widths(table);
-	if (get_column_widths(table)) goto ret2;
-
-	get_table_width(table);
-
 	margins = par_format.leftmargin + par_format.rightmargin;
-	if (!part->document && !part->box.x) {
-		if (!table->full_width)
-			int_upper_bound(&table->max_width, table->width);
-		int_lower_bound(&table->max_width, table->min_width);
-
-		int_lower_bound(&part->max_width, table->max_width + margins);
-		int_lower_bound(&part->box.width, table->min_width + margins);
-
-		goto ret2;
-	}
-
-	if (!cpd_pass && table->min_width > table->width && table->cellpadding) {
-		table->cellpadding = 0;
-		cpd_pass = 1;
-		cpd_width = table->min_width;
-		goto again;
-	}
-	if (cpd_pass == 1 && table->min_width > cpd_width) {
-		table->cellpadding = cpd_last;
-		cpd_pass = 2;
-		goto again;
-	}
+	if (get_table_cellpadding(table)) goto ret2;
 
 	/* DBG("%d %d %d", t->min_width, t->max_width, table->width); */
 	if (table->min_width >= table->width)

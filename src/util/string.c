@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.72 2003/07/23 16:09:44 zas Exp $ */
+/* $Id: string.c,v 1.73 2003/07/23 16:17:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -336,10 +336,12 @@ add_bytes_to_string(struct string *string, unsigned char *bytes, int length)
 {
 	int newlength;
 
-	assertm(string && bytes && length > 0, "[add_bytes_to_string]");
+	assertm(string && bytes && length >= 0, "[add_bytes_to_string]");
 	if_assert_failed { return NULL; }
 
 	check_string_magic(string);
+
+	if (length == 0) return string;
 
 	newlength = string->length + length;
 	realloc_string(string, newlength);
@@ -423,10 +425,12 @@ add_xchar_to_string(struct string *string, unsigned char character, int times)
 {
 	int newlength;
 
-	assertm(string && character && times > 0, "[add_xchar_to_string]");
+	assertm(string && character && times >= 0, "[add_xchar_to_string]");
 	if_assert_failed { return NULL; }
 
 	check_string_magic(string);
+
+	if (times == 0) return string;
 
 	newlength = string->length + times;
 	realloc_string(string, newlength);

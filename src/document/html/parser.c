@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.251 2003/11/06 22:25:57 zas Exp $ */
+/* $Id: parser.c,v 1.252 2003/11/06 22:45:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2441,53 +2441,55 @@ distribute:
 	}
 }
 
+/* TODO: Move this to frames.c (?) --Zas */
 static void
 html_frameset(unsigned char *a)
 {
 	struct frameset_param fp;
-	unsigned char *c, *d;
-	int x, y;
+	unsigned char *cols, *rows;
+	int width, height;
 
 	if (!global_doc_opts->frames || !special_f(ff, SP_USED, NULL)) return;
 
-	c = get_attr_val(a, "cols");
-	if (!c) {
-		c = stracpy("100%");
-		if (!c) return;
+	cols = get_attr_val(a, "cols");
+	if (!cols) {
+		cols = stracpy("100%");
+		if (!cols) return;
 	}
 
-	d = get_attr_val(a, "rows");
-	if (!d) {
-		d = stracpy("100%");
-	       	if (!d) {
-			mem_free(c);
+	rows = get_attr_val(a, "rows");
+	if (!rows) {
+		rows = stracpy("100%");
+	       	if (!rows) {
+			mem_free(cols);
 			return;
 		}
 	}
 
 	if (!html_top.frameset) {
-		x = global_doc_opts->width;
-		y = global_doc_opts->height;
+		width = global_doc_opts->width;
+		height = global_doc_opts->height;
 	} else {
 		struct frameset_desc *frameset_desc = html_top.frameset;
 		int offset;
-		
-		if (frameset_desc->y >= frameset_desc->height) goto free_cd;
+
+		if (frameset_desc->y >= frameset_desc->height) goto free_and_return;
 		offset = frameset_desc->x + frameset_desc->y * frameset_desc->width;
-		x = frameset_desc->frame_desc[offset].width;
-		y = frameset_desc->frame_desc[offset].height;
+		width = frameset_desc->frame_desc[offset].width;
+		height = frameset_desc->frame_desc[offset].height;
 	}
 
-	parse_frame_widths(c, x, HTML_FRAME_CHAR_WIDTH, &fp.width, &fp.x);
-	parse_frame_widths(d, y, HTML_FRAME_CHAR_HEIGHT, &fp.height, &fp.y);
+	parse_frame_widths(cols, width, HTML_FRAME_CHAR_WIDTH, &fp.width, &fp.x);
+	parse_frame_widths(rows, height, HTML_FRAME_CHAR_HEIGHT, &fp.height, &fp.y);
+
 	fp.parent = html_top.frameset;
 	if (fp.x && fp.y) html_top.frameset = special_f(ff, SP_FRAMESET, &fp);
 	mem_free(fp.width);
 	mem_free(fp.height);
 
-free_cd:
-	mem_free(c);
-	mem_free(d);
+free_and_return:
+	mem_free(cols);
+	mem_free(rows);
 }
 
 /* Link types

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.311 2005/03/02 13:50:02 zas Exp $ */
+/* $Id: search.c,v 1.312 2005/03/05 20:22:45 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1429,7 +1429,7 @@ search_typeahead(struct session *ses, struct document_view *doc_view,
 {
 	unsigned char *prompt = "#";
 	unsigned char *data = NULL;
-	input_line_handler handler = text_typeahead_handler;
+	input_line_handler_T handler = text_typeahead_handler;
 	struct input_history *history = &search_history;
 
 	switch (action) {

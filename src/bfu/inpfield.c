@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.198 2005/03/01 16:59:58 zas Exp $ */
+/* $Id: inpfield.c,v 1.199 2005/03/05 20:22:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -558,7 +558,7 @@ static t_handler_event_status
 input_line_event_handler(struct dialog_data *dlg_data)
 {
 	struct input_line *input_line = dlg_data->dlg->udata;
-	input_line_handler handler = input_line->handler;
+	input_line_handler_T handler = input_line->handler;
 	enum edit_action action;
 	struct widget_data *widget_data = dlg_data->widgets_data;
 	struct term_event *ev = dlg_data->term_event;
@@ -658,7 +658,7 @@ cancel_input_line:
 
 void
 input_field_line(struct session *ses, unsigned char *prompt, void *data,
-		 struct input_history *history, input_line_handler handler)
+		 struct input_history *history, input_line_handler_T handler)
 {
 	struct dialog *dlg;
 	unsigned char *buffer;

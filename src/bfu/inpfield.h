@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.48 2004/11/30 17:47:11 zas Exp $ */
+/* $Id: inpfield.h,v 1.49 2005/03/05 20:22:45 zas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -88,18 +88,18 @@ enum input_line_code {
 struct input_line;
 
 /* If the handler returns non zero value it means to cancel the input line */
-typedef enum input_line_code (*input_line_handler)(struct input_line *line, int action);
+typedef enum input_line_code (*input_line_handler_T)(struct input_line *line, int action);
 
 struct input_line {
 	struct session *ses;
-	input_line_handler handler;
+	input_line_handler_T handler;
 	void *data;
 	unsigned char buffer[INPUT_LINE_BUFFER_SIZE];
 };
 
 void
 input_field_line(struct session *ses, unsigned char *prompt, void *data,
-		 struct input_history *history, input_line_handler handler);
+		 struct input_history *history, input_line_handler_T handler);
 
 #define widget_has_history(widget_data) ((widget_data)->widget->type == WIDGET_FIELD \
 					 && (widget_data)->widget->info.field.history)

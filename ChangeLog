@@ -1,3 +1,17 @@
+Mon Jan 13 11:18:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/urlhist.c, bookmarks/backend/default.c,
+	cookies/cookies.c, globhist/globhist.c, util/file.c, util/file.h:
+
+	safe_fgets() was introduced. It fixes a bug in bookmarks loading and
+	simplify code.  
+
+Mon Jan 13 10:14:04 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated. Temporary fix for --help issue.  
+
 Fri Jan 10 22:28:09 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in, src/intl/gettext/loadmsgcat.c:

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.498 2004/09/24 19:01:43 pasky Exp $ */
+/* $Id: parser.c,v 1.499 2004/09/24 19:14:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -471,20 +471,23 @@ not_processed:
 		unsigned char *name;
 		int namelen;
 
-		if (**end != '<')
-			continue;
 		if (in_comment) {
 			/* TODO: If we ever get some standards-quirk mode
 			 * distinction, this should be disabled in the
 			 * standards mode (and we should just look for CDATA
 			 * end, which is "</"). --pasky */
-			if (strlcmp(*end + 1, *end - eof - 1, "-->", 3))
-				continue;
-			in_comment = 0;
+			if (eof - *end >= 3 && !strncmp(*end, "-->", 3)) {
+				(*end) += 3;
+				in_comment = 0;
+			}
+			continue;
 			/* XXX: Scan for another comment? That's admittelly
 			 * already stretching things a little bit to an
 			 * extreme ;-). */
 		}
+
+		if (**end != '<')
+			continue;
 		/* We want to land before the closing element, that's why we
 		 * don't pass @end also as the appropriate parse_element()
 		 * argument. */

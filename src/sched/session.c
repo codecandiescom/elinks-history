@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.496 2004/06/12 12:24:47 jonas Exp $ */
+/* $Id: session.c,v 1.497 2004/06/12 12:33:15 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -833,8 +833,6 @@ decode_session_info(struct terminal *term, int len, const int *data)
 			len = magic;
 	}
 
-	str = (unsigned char *) data;
-
 	if (len <= 0) {
 		if (!remote)
 			return !!init_session(base_session, term, NULL, 0);
@@ -845,6 +843,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		return 0;
 	}
 
+	str = (unsigned char *) data;
 	current_uri = base_session && have_location(base_session)
 		    ? cur_loc(base_session)->vs.uri : NULL;
 
@@ -852,12 +851,13 @@ decode_session_info(struct terminal *term, int len, const int *data)
 	while (len > 0) {
 		unsigned char *end = memchr(str, 0, len);
 		int urilength = end ? end - str : len;
-		struct uri *uri;
-		unsigned char *decoded;
+		struct uri *uri = NULL;
+		unsigned char *decoded = decode_shell_safe_url(str, urilength);
 
-		decoded = decode_shell_safe_url(str, urilength);
-		uri = decoded ? get_hooked_uri(decoded, current_uri, term->cwd) : NULL;
-		mem_free_if(decoded);
+		if (decoded) {
+			uri = get_hooked_uri(decoded, current_uri, term->cwd);
+			mem_free(decoded);
+		}
 
 		len -= urilength + 1;
 		str += urilength + 1;

@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.45 2003/10/16 13:08:47 zas Exp $ */
+/* $Id: fastfind.c,v 1.46 2003/10/20 08:12:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,9 +130,9 @@ struct ff_node {
 #endif /* USE_32_BITS */
 
 
-#define FF_MAX_KEYS  (1  << POINTER_INDEX_BITS)
+#define FF_MAX_KEYS	(1  << POINTER_INDEX_BITS)
 #define FF_MAX_LEAFSETS ((1 << LEAFSET_INDEX_BITS) - 1)
-#define FF_MAX_CHARS (1  << COMP_CHAR_INDEX_BITS)
+#define FF_MAX_CHARS	(1  << COMP_CHAR_INDEX_BITS)
 
 
 struct ff_node_c {
@@ -265,13 +265,13 @@ alloc_leafset(struct fastfind_info *info)
 	/* info->leafsets[0] is never used since l=0 marks no leaf
 	 * in struct ff_node. That's the reason of that + 2. */
 	leafsets = mem_realloc(info->leafsets,
-				  sizeof(struct ff_node *)
-				  * (info->leafsets_count + 2));
+			       sizeof(struct ff_node *)
+			       * (info->leafsets_count + 2));
 	if (!leafsets) return 0;
 	info->leafsets = leafsets;
 
 	leafset = mem_calloc(info->uniq_chars_count,
-				sizeof(struct ff_node));
+			     sizeof(struct ff_node));
 	if (!leafset) return 0;
 
 	meminc(info, sizeof(struct ff_node *));
@@ -471,7 +471,7 @@ fastfind_index_compress(struct fastfind_info *info)
 }
 
 /* This macro searchs for the key in indexed list */
-#define FF_SEARCH(what)								\
+#define FF_SEARCH(what) do {							\
 	register int i = 0;							\
 										\
 	for (; i < key_len; i++) {						\
@@ -502,7 +502,8 @@ fastfind_index_compress(struct fastfind_info *info)
 		accif(info) (!current->l)					\
 				return NULL;					\
 		current = (struct ff_node *) info->leafsets[current->l];	\
-	}
+	}									\
+} while (0)
 
 void *
 fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
@@ -531,11 +532,10 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 	 * If you find a better way (same or better performance) then
 	 * propose it and be prepared to defend it. --Zas */
 
-	accif(info) (info->case_sensitive) {
+	accif(info) (info->case_sensitive)
 		FF_SEARCH(key[i]);
-	} else {
+	else
 		FF_SEARCH(upcase(key[i]));
-	}
 
 	return NULL;
 }

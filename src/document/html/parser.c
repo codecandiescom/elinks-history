@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.514 2004/12/29 15:43:31 zas Exp $ */
+/* $Id: parser.c,v 1.515 2005/01/03 08:22:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -491,8 +491,8 @@ imported:
 	if (eof - html > 4 && !strncmp(html, "<!--", 4)) {
 		in_comment = 1;
 		/* We either skip to the end of line or to -->. */
-		for (; *html != '\n' && *html != '\r'; html++) {
-			if (eof - html >= 3 && !strncmp(html, "-->", 3)) {
+		for (; *html != '\n' && *html != '\r' && eof - html >= 3; html++) {
+			if (!strncmp(html, "-->", 3)) {
 				/* This means the document is probably broken.
 				 * We will now try to process the rest of
 				 * <script> contents, which is however likely

@@ -264,6 +264,7 @@ if test -z "$disable_ssl"; then
 			fi
 		fi
 	done
+    fi	
 
 	if test "$cf_result" != yes; then
 		if test "$withval" = yes; then
@@ -274,7 +275,7 @@ if test -z "$disable_ssl"; then
 	else
 		AC_DEFINE(HAVE_SSL)
 	fi
-    fi	
+
 fi
 
 AC_MSG_RESULT($cf_result)

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.87 2003/11/09 15:07:06 pasky Exp $ */
+/* $Id: dialog.c,v 1.88 2003/11/09 15:09:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -428,7 +428,12 @@ generic_dialog_layouter(struct dialog_data *dlg_data)
 	format_widgets(NULL, dlg_data, x, &y, w, height, &rw);
 
 	/* Update the width to respond to the required minimum width */
-	if (!dlg_data->dlg->layout.maximize_width) w = rw;
+	if (dlg_data->dlg->layout.fit_datalen) {
+		int_lower_bound(&rw, dlg_data->dlg->widgets->datalen);
+		int_upper_bound(&w, rw);
+	} else if (!dlg_data->dlg->layout.maximize_width) {
+		w = rw;
+	}
 
 	draw_dialog(dlg_data, w, y);
 

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.99 2003/11/09 15:05:17 pasky Exp $ */
+/* $Id: inpfield.c,v 1.100 2003/11/09 15:09:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,36 +146,6 @@ input_field_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 }
 
 void
-input_field_layouter(struct dialog_data *dlg_data)
-{
-	struct terminal *term = dlg_data->win->term;
-	int w = dialog_max_width(term);
-	int rw = 0;
-	int y = -1;
-
-	dlg_format_field(NULL, dlg_data->widgets_data,
-			 0, &y, w, &rw, AL_LEFT);
-
-	y++;
-	dlg_format_buttons(NULL, dlg_data->widgets_data + 1, 2,
-			   0, &y, w, &rw, AL_CENTER);
-
-	int_lower_bound(&rw, dlg_data->dlg->widgets->datalen);
-	int_upper_bound(&w, rw);
-
-	draw_dialog(dlg_data, w, y);
-
-	y = dlg_data->y + DIALOG_TB;
-
-	dlg_format_field(term, dlg_data->widgets_data, dlg_data->x + DIALOG_LB,
-			 &y, w, NULL, AL_LEFT);
-
-	y++;
-	dlg_format_buttons(term, dlg_data->widgets_data + 1, 2, dlg_data->x + DIALOG_LB,
-			   &y, w, NULL, AL_CENTER);
-}
-
-void
 input_field(struct terminal *term, struct memory_list *ml, int intl,
 	    unsigned char *title,
 	    unsigned char *text,
@@ -211,7 +181,8 @@ input_field(struct terminal *term, struct memory_list *ml, int intl,
 	}
 
 	dlg->title = title;
-	dlg->layouter = input_field_layouter;
+	dlg->layouter = generic_dialog_layouter;
+	dlg->layout.fit_datalen = 1;
 	dlg->udata2 = data;
 
 	add_dlg_field(dlg, text, min, max, check, l, field, history);

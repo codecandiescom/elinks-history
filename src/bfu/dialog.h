@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.23 2003/11/09 14:55:22 jonas Exp $ */
+/* $Id: dialog.h,v 1.24 2003/11/09 15:09:27 jonas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -24,6 +24,8 @@ struct dialog_layout {
 	unsigned int padding_top:1;
 	/* Whether to horizontally pad widgets. */
 	unsigned int nopad_widgets:1;
+	/* Whether to adjust width to fit datalen of _first_ widget. */
+	unsigned int fit_datalen:1;
 };
 
 struct dialog {

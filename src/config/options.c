@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.124 2002/11/30 02:16:57 pasky Exp $ */
+/* $Id: options.c,v 1.125 2002/12/01 11:07:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1785,6 +1785,22 @@ register_options()
 
 
 	add_opt_tree("ui",
+		"dialogs", 0,
+		"Dialogs-specific appearance and behaviour settings.");
+
+	add_opt_int("ui.dialogs",
+		"listbox_min_height", 0, 1, 20, 10,
+		"Minimal height of the listbox widget (used ie. for bookmakrs\n"
+		"or global history).");
+
+	add_opt_bool("ui.dialogs",
+		"shadows", 0, 0,
+		"Make dialogs drop shadows (the shadows are solid, you can\n"
+		"adjust their color by ui.colors.*.dialog.shadow). You may\n"
+		"also want to eliminate the wide borders by adjusting setup.h.");
+
+
+	add_opt_tree("ui",
 		"timer", 0,
 		"Timed action after certain interval of user inactivity. Someone can\n"
 		"even find this useful, altough you may not believe that.");
@@ -1795,14 +1811,14 @@ register_options()
 		"Whether to enable the timer or not:\n"
 		"0 is don't count down anything\n"
 		"1 is count down, but don't show the timer\n"
-		"2 is count down and show the timer near LEDs\n");
+		"2 is count down and show the timer near LEDs");
 #else
 	add_opt_int("ui.timer",
 		"enable", 0, 0, 2, 0,
 		"Whether to enable the timer or not:\n"
 		"0 is don't count down anything\n"
 		"1 is count down, but don't show the timer\n"
-		"2 is count down and show the timer near LEDs (note that this feature is DISABLED)\n");
+		"2 is count down and show the timer near LEDs (note that this feature is DISABLED)");
 #endif
 
 	add_opt_int("ui.timer",
@@ -1820,8 +1836,10 @@ register_options()
 		"language", 0, OPT_LANGUAGE, &current_language,
 		"Language of user interface.");
 
-	add_opt_bool("ui",
-		"shadows", 0, 0,
+	/* Compatibility alias: added by pasky at 2002-12-01, 0.4pre20.CVS.
+	 * Estimated due time: 2003-02-01 */
+	add_opt_alias("ui",
+		"shadows", 0, "ui.dialogs.shadows",
 		"Make dialogs drop shadows (the shadows are solid, you can\n"
 		"adjust their color by ui.colors.*.dialog.shadow). You may\n"
 		"also want to eliminate the wide borders by adjusting setup.h.");

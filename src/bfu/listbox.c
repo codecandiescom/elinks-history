@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.47 2002/11/30 22:42:35 pasky Exp $ */
+/* $Id: listbox.c,v 1.48 2002/12/01 11:07:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,8 @@ dlg_format_box(struct terminal *term, struct terminal *t2,
 	       struct widget_data *item, int x, int *y, int w, int *rw,
 	       enum format_align align)
 {
+	int min, optimal_h, max_y = term ? term->y : t2 ? t2->y : 25;
+
 	item->x = x;
 	item->y = *y;
 	item->l = w;
@@ -30,12 +32,27 @@ dlg_format_box(struct terminal *term, struct terminal *t2,
 		*rw = item->l;
 		if (*rw > w) *rw = w;
 	}
+
+	/* Height bussiness follows: */
+
 	/* We ignore this one happily now. Rather be Dynamic ;p. */
 	/* (*y) += item->item->gid; */
+
 	/* This is only weird heuristic, it could scale well I hope. */
-	item->h = (term ? term->y : t2 ? t2->y : 25) * 2 / 3 - 2 * DIALOG_TB - 8;
-	if (item->h < 6) item->h = 6;
-	/* debug("::%d(%d)::%d::%d::", term?term->y:t2->y, term?1:2, item->h, *y); */
+	optimal_h = max_y * 2 / 3 - 2 * DIALOG_TB - 8;
+	min = get_opt_int("ui.dialogs.listbox_min_height");
+
+	if (max_y - 8 < min) {
+		/* Big trouble: can't satisfy even the minimum :-(. */
+		item->h = max_y - 8;
+	} else if (optimal_h < min) {
+		item->h = min;
+	} else {
+		item->h = optimal_h;
+	}
+
+	/* debug("::%d(%d)::%d::%d::", max_y, term?1:2, item->h, *y); */
+
 	(*y) += item->h;
 }
 

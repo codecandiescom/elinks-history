@@ -1,5 +1,5 @@
-/* Options list and handlers */
-/* $Id: options.c,v 1.3 2002/04/28 11:48:25 pasky Exp $ */
+/* Options list and handlers and interface */
+/* $Id: options.c,v 1.4 2002/04/28 14:24:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,11 @@
 #include <intl/language.h>
 #include <lowlevel/dns.h>
 #include <protocol/types.h>
+#include <util/error.h>
+
+
+/* TODO: We should store options in a hash, in order to have the searching
+ * reasonably fast. */
 
 
 struct option links_options[];
@@ -36,6 +41,39 @@ struct option html_options[];
 
 struct option *all_options[] = { links_options, html_options, NULL, };
 
+
+/**********************************************************************
+ Options interface
+**********************************************************************/
+
+/* Note that this is only a base for hiearchical options, which will be much
+ * more fun. This part of code is under heavy development, so please treat
+ * with care. --pasky, 20020428 ;) */
+
+/* Get record of option of given name. It is guaranteed to never return
+ * NULL. */
+struct option *
+get_opt_rec(unsigned char *name)
+{
+	struct option *opt;
+
+	for (opt = links_options; opt->ptr != NULL; opt++) {
+		if (!strcmp(opt->cfg_name, name)) {
+			return opt;
+		}
+	}
+
+	internal("Attempted to fetch unexistent option %s!", name);
+	return NULL; /* This never happens, though. */
+}
+
+/* Fetch pointer to value of certain option. It is guaranteed to never return
+ * NULL. */
+void *
+get_opt(unsigned char *name)
+{
+	return get_opt_rec(name)->ptr;
+}
 
 
 /**********************************************************************

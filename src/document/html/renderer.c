@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.17 2002/04/27 13:15:53 pasky Exp $ */
+/* $Id: renderer.c,v 1.18 2002/05/02 19:20:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,6 +106,7 @@ struct table_cache_entry {
 	int width;
 	int xs;
 	int link_num;
+	unsigned int cache_hits;
 	struct part part;
 };
 
@@ -1301,21 +1302,39 @@ struct part *format_html_part(unsigned char *start, unsigned char *end,
 	int ef = empty_format;
 	struct form_control *fc;
 	struct table_cache_entry *tce;
-
+	struct table_cache_entry *unused_tce = NULL;
+	int cache_entries_count = 0;
+	
 	if (!data) {
+		/* Search for cached entry. */
 		foreach(tce, table_cache) {
 			if (tce->start == start && tce->end == end
 			    && tce->align == align && tce->m == m
 			    && tce->width == width && tce->xs == xs
 			    && tce->link_num == link_num) {
+				/* Add one to hit cache counter. */
+				tce->cache_hits++;
+
+				/* Copy and return part. */
 				part = mem_alloc(sizeof(struct part));
 				if (!part) continue;
 				memcpy(part, &tce->part, sizeof(struct part));
 				return part;
 			}
+			
+			/* Memorize most unused entry as first candidate to
+			 * replacement when maximum number of entries in cache
+			 * is attained. */
+			if (!unused_tce)
+				unused_tce = tce;
+			else if (tce->cache_hits < unused_tce->cache_hits)
+				unused_tce = tce; 
+			
+			/* Count number of entries in cache. */
+			cache_entries_count++;
 		}
 	}
-
+	
 	if (ys < 0) {
 		internal("format_html_part: ys == %d", ys);
 		return NULL;
@@ -1419,20 +1438,37 @@ ret:
 	empty_format = ef;
 
 	if (table_level > 1 && !data) {
-		tce = mem_alloc(sizeof(struct table_cache_entry));
-		if (tce) {
-			tce->start = start;
-			tce->end = end;
-			tce->align = align;
-			tce->m = m;
-			tce->width = width;
-			tce->xs = xs;
-			tce->link_num = link_num;
-			memcpy(&tce->part, part, sizeof(struct part));
-			add_to_list(table_cache, tce);
+		int replace = 0;
+		
+		/* Limit number of cache entries. */
+		if (cache_entries_count >= 64 && unused_tce) {
+			/* Replace an unused entry. */
+			tce = unused_tce;
+			replace = 1;
+		} else {
+			/* Create a new entry. */
+			tce = mem_alloc(sizeof(struct table_cache_entry));
+			/* A goto is used here to prevent a test or code
+			 * redundancy. */
+			if (!tce) goto end;
 		}
+		
+		tce->start = start;
+		tce->end = end;
+		tce->align = align;
+		tce->m = m;
+		tce->width = width;
+		tce->xs = xs;
+		tce->link_num = link_num;
+		tce->cache_hits = 0;
+		memcpy(&tce->part, part, sizeof(struct part));
+		
+		/* Add to list if it's an entry creation. */
+		if (!replace) add_to_list(table_cache, tce);
+		
 	}
 
+end:
 	last_link = last_image = last_target = NULL;
 	last_form = NULL;
 

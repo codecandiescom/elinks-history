@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.41 2003/10/06 21:52:18 pasky Exp $ */
+/* $Id: search.c,v 1.42 2003/10/06 23:09:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -509,11 +509,8 @@ get_searched_regex(struct document_view *scr, struct point **pt, int *pl,
 	int xx, yy;
 	int xpv, ypv;
 	int len = 0;
-	int reg_extended = get_opt_int("document.browse.search.regex") == 2
-			   ? REG_EXTENDED : 0;
-	int case_insensitive = get_opt_int("document.browse.search.case")
-				? 0 : REG_ICASE;
 	int matches_may_overlap = get_opt_bool("document.browse.search.overlap");
+	int regex_flags = REG_NEWLINE;
 	register int i;
 	regex_t regex;
 	regmatch_t regmatch;
@@ -522,7 +519,7 @@ get_searched_regex(struct document_view *scr, struct point **pt, int *pl,
 	if (!doclen) goto ret;
 	doc = mem_alloc(sizeof(unsigned char) * (doclen + 1));
 	if (!doc) goto ret;
-	
+
 	for (i = 0; i < doclen; i++) {
 		if (i > 0 && s1[i - 1].c == ' ' && s1[i - 1].y != s1[i].y) {
 			doc[i - 1] = '\n';
@@ -531,9 +528,14 @@ get_searched_regex(struct document_view *scr, struct point **pt, int *pl,
 	}
 	doc[doclen] = 0;
 
+	if (get_opt_int("document.browse.search.regex") == 2)
+		regex_flag |= REG_EXTENDED; 
+
+	if (get_opt_bool("document.browse.search.case"))
+		regex_flag |= REG_ICASE;
+
 	/* TODO: show error message */
-	if (regcomp(&regex, *scr->search_word,
-		    REG_NEWLINE | case_insensitive | reg_extended)) {
+	if (regcomp(&regex, *scr->search_word, regex_flags)) {
 		mem_free(doc);
 		goto ret;
 	}

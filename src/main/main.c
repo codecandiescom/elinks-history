@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.100 2003/06/14 20:02:34 pasky Exp $ */
+/* $Id: main.c,v 1.101 2003/06/14 20:13:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,6 +36,7 @@
 #include "dialogs/auth.h"
 #include "document/cache.h"
 #include "document/html/colors.h"
+#include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "globhist/globhist.h"
 #include "intl/charsets.h"
@@ -43,7 +44,6 @@
 #include "lowlevel/af_unix.h"
 #include "lowlevel/dns.h"
 #include "lowlevel/home.h"
-#include "terminal/kbd.h"
 #include "lowlevel/select.h"
 #include "lowlevel/signals.h"
 #include "lowlevel/sysname.h"
@@ -59,10 +59,10 @@
 #include "sched/sched.h"
 #include "sched/session.h"
 #include "ssl/ssl.h"
+#include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "util/blacklist.h"
 #include "util/error.h"
-#include "util/fastfind.h"
 #include "util/memdebug.h"
 #include "util/memory.h"
 #include "util/version.h"
@@ -258,9 +258,7 @@ terminate_all_subsystems(void)
 	}
 
 	shrink_memory(1);
-#ifdef USE_FASTFIND
-	fastfind_terminate();
-#endif
+	free_tags_cache();
 	free_table_cache();
 	free_history_lists();
 	free_auth();

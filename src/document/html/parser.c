@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.127 2003/06/14 13:16:48 zas Exp $ */
+/* $Id: parser.c,v 1.128 2003/06/14 20:13:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2674,12 +2674,15 @@ process_head(unsigned char *head)
 }
 
 #ifndef USE_FASTFIND
+
 static int
 compar(const void *a, const void *b)
 {
 	return strcasecmp(((struct element_info *) a)->name, ((struct element_info *) b)->name);
 }
+
 #else
+
 static struct element_info *internal_pointer;
 
 /* Reset internal list pointer */
@@ -2707,7 +2710,18 @@ tags_list_next(void)
 
 	return &kv;
 }
+
 #endif /* USE_FASTFIND */
+
+static void *ff_info_tags;
+
+void
+free_tags_cache(void)
+{
+#ifdef USE_FASTFIND
+	fastfind_terminate(ff_info_tags);
+#endif
+}
 
 void
 parse_html(unsigned char *html, unsigned char *eof,

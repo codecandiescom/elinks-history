@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.20 2003/05/08 21:50:07 zas Exp $ */
+/* $Id: parser.h,v 1.21 2003/06/14 20:13:36 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -234,5 +234,8 @@ struct frame_param {
 
 void free_menu(struct menu_item *);
 void do_select_submenu(struct terminal *, struct menu_item *, struct session *);
+
+/* This releases the tags fastfind cache, if being in use. */
+void free_tags_cache(void);
 
 #endif

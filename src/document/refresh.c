@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.5 2003/11/21 04:50:28 witekfl Exp $ */
+/* $Id: refresh.c,v 1.6 2003/11/23 13:59:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,10 +56,15 @@ do_document_refresh(void *data)
 {
 	struct session *ses = data;
 	struct document_refresh *refresh = ses->doc_view->document->refresh;
+	struct tq *type_query;
 
 	assert(refresh);
 
 	refresh->timer = -1;
+
+	foreach (type_query, ses->tq)
+		if (!strcasecmp(refresh->url, type_query->url))
+			return;
 
 	/* This makes sure that we send referer. */
 	goto_url_frame(ses, refresh->url, NULL);

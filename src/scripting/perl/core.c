@@ -1,5 +1,5 @@
 /* Perl scripting engine */
-/* $Id: core.c,v 1.8 2004/04/24 00:25:57 pasky Exp $ */
+/* $Id: core.c,v 1.9 2004/04/24 00:32:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,7 +103,9 @@ init_perl(struct module *module)
 			err = perl_parse(my_perl, NULL, 2, local_argv, NULL);
 		else if (hook_global)
 			err = perl_parse(my_perl, NULL, 2, global_argv, NULL);
+#ifdef PERL_EXIT_DESTRUCT_END
 		PL_exit_flags |= PERL_EXIT_DESTRUCT_END;
+#endif
 		if (!err) err = perl_run(my_perl);
 		if (err) precleanup_perl(module);
 	}

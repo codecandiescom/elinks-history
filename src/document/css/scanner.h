@@ -1,11 +1,7 @@
-/* $Id: scanner.h,v 1.46 2004/01/22 19:32:37 jonas Exp $ */
+/* $Id: scanner.h,v 1.47 2004/01/22 19:34:19 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
-
-#include "document/css/property.h"
-#include "util/error.h"
-
 
 /* The various token types and what they contain. Patterns taken from
  * the flex scanner declarations in the CSS 2 Specification. */

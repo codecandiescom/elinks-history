@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.3 2003/01/02 05:25:15 pasky Exp $ */
+/* $Id: view.c,v 1.4 2003/01/02 05:37:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1574,10 +1574,10 @@ error:
 	if (!m1) return;
 	m2 = stracpy(strerror(errno));
 	msg_box(ses->term, getml(m1, m2, NULL),
-		TEXT(T_ERROR_WHILE_POSTING_FORM), AL_CENTER | AL_EXTD_TEXT,
-		TEXT(T_COULD_NOT_GET_FILE), " ", m1, ": ", m2, NULL,
+		_(T_ERROR_WHILE_POSTING_FORM), AL_CENTER | AL_EXTD_TEXT,
+		_(T_COULD_NOT_GET_FILE), " ", m1, ": ", m2, NULL,
 		ses, 1,
-		TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+		_(T_CANCEL), NULL, B_ENTER | B_ESC);
 }
 
 void
@@ -1908,10 +1908,10 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 		if (fn) mem_free(fn); fn = NULL; fs = NULL;
 
 		msg_box(term, NULL,
-			TEXT(T_ERROR), AL_CENTER,
-			TEXT(T_NEED_MASTER_TERMINAL),
+			_(T_ERROR), AL_CENTER,
+			_(T_NEED_MASTER_TERMINAL),
 			NULL, 1,
-			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+			_(T_CANCEL), NULL, B_ENTER | B_ESC);
 		return;
 	}
 
@@ -2337,10 +2337,10 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 	if (!ses->search_word) {
 		if (!ses->last_search_word) {
 			msg_box(ses->term, NULL,
-				TEXT(T_SEARCH), AL_CENTER,
-				TEXT(T_NO_PREVIOUS_SEARCH),
+				_(T_SEARCH), AL_CENTER,
+				_(T_NO_PREVIOUS_SEARCH),
 				NULL, 1,
-				TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+				_(T_CANCEL), NULL, B_ENTER | B_ESC);
 			return;
 		}
 		ses->search_word = stracpy(ses->last_search_word);
@@ -2383,10 +2383,10 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 	print_screen_status(ses);
 	redraw_from_window(ses->win);*/
 	msg_box(ses->term, NULL,
-		TEXT(T_SEARCH), AL_CENTER,
-		TEXT(T_SEARCH_STRING_NOT_FOUND),
+		_(T_SEARCH), AL_CENTER,
+		_(T_SEARCH_STRING_NOT_FOUND),
 		NULL, 1,
-		TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+		_(T_CANCEL), NULL, B_ENTER | B_ESC);
 }
 
 void
@@ -2621,9 +2621,9 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 					nl = f_data->nlinks, lnl = 1;
 					while (nl) nl /= 10, lnl++;
 					if (lnl > 1)
-						input_field(ses->term, NULL, TEXT(T_GO_TO_LINK),
-							    TEXT(T_ENTER_LINK_NUMBER), TEXT(T_OK),
-							    TEXT(T_CANCEL), ses, NULL, lnl, d, 1,
+						input_field(ses->term, NULL, _(T_GO_TO_LINK),
+							    _(T_ENTER_LINK_NUMBER), _(T_OK),
+							    _(T_CANCEL), ses, NULL, lnl, d, 1,
 							    f_data->nlinks, check_number,
 							    (void (*)(void *, unsigned char *)) goto_link_number, NULL);
 				}
@@ -3223,7 +3223,7 @@ save_url(struct session *ses, unsigned char *url)
 	if (!u) {
 		struct status stat = { NULL, NULL, NULL, NULL, S_BAD_URL, PRI_CANCEL, 0, NULL, NULL };
 
-		print_error_dialog(ses, &stat, TEXT(T_ERROR));
+		print_error_dialog(ses, &stat, _(T_ERROR));
 		return;
 	}
 	if (ses->dn_url) mem_free(ses->dn_url);
@@ -3278,10 +3278,10 @@ save_formatted(struct session *ses, unsigned char *file)
 	if (h == -1) return;
 	if (dump_to_file(f->f_data, h)) {
 		msg_box(ses->term, NULL,
-			TEXT(T_SAVE_ERROR), AL_CENTER,
-			TEXT(T_ERROR_WRITING_TO_FILE),
+			_(T_SAVE_ERROR), AL_CENTER,
+			_(T_ERROR_WRITING_TO_FILE),
 			NULL, 1,
-			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+			_(T_CANCEL), NULL, B_ENTER | B_ESC);
 	}
 	close(h);
 }
@@ -3313,29 +3313,29 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 		l = 1;
 		if (strlen(link->where) >= 4
 		    && !strncasecmp(link->where, "MAP@", 4))
-			add_to_menu(&mi, TEXT(T_DISPLAY_USEMAP),
+			add_to_menu(&mi, _(T_DISPLAY_USEMAP),
 				    ">", MENU_FUNC send_enter, NULL, 1);
 		else {
 			int c = can_open_in_new(term);
 
-			add_to_menu(&mi, TEXT(T_FOLLOW_LINK),
+			add_to_menu(&mi, _(T_FOLLOW_LINK),
 				    "", MENU_FUNC send_enter, NULL, 0);
 
-			add_to_menu(&mi, TEXT(T_FOLLOW_LINK_RELOAD), "",
+			add_to_menu(&mi, _(T_FOLLOW_LINK_RELOAD), "",
 				    MENU_FUNC send_enter_reload, NULL, 0);
 
 			if (c)
-				add_to_menu(&mi, TEXT(T_OPEN_IN_NEW_WINDOW),
+				add_to_menu(&mi, _(T_OPEN_IN_NEW_WINDOW),
 					     c - 1 ? ">" : "",
 					     MENU_FUNC open_in_new_window,
 					     send_open_in_new_xterm, c - 1);
 
 			if (!get_opt_int_tree(&cmdline_options, "anonymous"))
-				add_to_menu(&mi, TEXT(T_DOWNLOAD_LINK), "d",
+				add_to_menu(&mi, _(T_DOWNLOAD_LINK), "d",
 					    MENU_FUNC send_download, NULL, 0);
 
 #ifdef BOOKMARKS
-			add_to_menu(&mi, TEXT(T_ADD_BOOKMARK_LINK), "A",
+			add_to_menu(&mi, _(T_ADD_BOOKMARK_LINK), "A",
 				    MENU_FUNC launch_bm_add_link_dialog,
 				    NULL, 0);
 #endif
@@ -3346,41 +3346,41 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	if (link->form) {
 		l = 1;
 		if (link->form->type == FC_RESET) {
-			add_to_menu(&mi, TEXT(T_RESET_FORM), "",
+			add_to_menu(&mi, _(T_RESET_FORM), "",
 				    MENU_FUNC send_enter, NULL, 0);
 		} else {
 			int c = can_open_in_new(term);
 
-			add_to_menu(&mi, TEXT(T_SUBMIT_FORM), "",
+			add_to_menu(&mi, _(T_SUBMIT_FORM), "",
 				    MENU_FUNC submit_form, NULL, 0);
 
-			add_to_menu(&mi, TEXT(T_SUBMIT_FORM_RELOAD), "",
+			add_to_menu(&mi, _(T_SUBMIT_FORM_RELOAD), "",
 				    MENU_FUNC submit_form_reload, NULL, 0);
 
 			if (c && link->form->method == FM_GET)
-				add_to_menu(&mi, TEXT(T_SUBMIT_FORM_AND_OPEN_IN_NEW_WINDOW),
+				add_to_menu(&mi, _(T_SUBMIT_FORM_AND_OPEN_IN_NEW_WINDOW),
 					    c - 1 ? ">" : "",
 					    MENU_FUNC open_in_new_window,
 					    send_open_in_new_xterm, c - 1);
 
 			if (!get_opt_int_tree(&cmdline_options, "anonymous"))
-				add_to_menu(&mi, TEXT(T_SUBMIT_FORM_AND_DOWNLOAD), "d",
+				add_to_menu(&mi, _(T_SUBMIT_FORM_AND_DOWNLOAD), "d",
 					    MENU_FUNC send_download, NULL, 0);
 		}
 	}
 
 	if (link->where_img) {
 		l = 1;
-		add_to_menu(&mi, TEXT(T_VIEW_IMAGE), "",
+		add_to_menu(&mi, _(T_VIEW_IMAGE), "",
 			    MENU_FUNC send_image, NULL, 0);
 		if (!get_opt_int_tree(&cmdline_options, "anonymous"))
-			add_to_menu(&mi, TEXT(T_DOWNLOAD_IMAGE), "",
+			add_to_menu(&mi, _(T_DOWNLOAD_IMAGE), "",
 				    MENU_FUNC send_download_image, NULL, 0);
 	}
 
 end:
 	if (!l) {
-		add_to_menu(&mi, TEXT(T_NO_LINK_SELECTED), M_BAR,
+		add_to_menu(&mi, _(T_NO_LINK_SELECTED), M_BAR,
 			    NULL, NULL, 0);
 	}
 	do_menu(term, mi, ses);
@@ -3427,7 +3427,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 			if (!str) return NULL;
 			strl = 0;
 
-			add_to_str(&str, &strl, GT(TEXT(T_IMAGE), term));
+			add_to_str(&str, &strl, GT(_(T_IMAGE), term));
 			add_to_str(&str, &strl, " ");
 			url = strip_url_password(link->where_img);
 			if (url) {
@@ -3443,7 +3443,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 			if (!str) return NULL;
 			strl = 0;
 
-			add_to_str(&str, &strl, GT(TEXT(T_USEMAP), term));
+			add_to_str(&str, &strl, GT(_(T_USEMAP), term));
 			add_to_str(&str, &strl, " ");
 			url = strip_url_password(link->where + 4);
 			if (url) {
@@ -3463,7 +3463,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 
 	if (link->type == L_BUTTON) {
 		if (link->form->type == FC_RESET) {
-			str = stracpy(GT(TEXT(T_RESET_FORM), term));
+			str = stracpy(GT(_(T_RESET_FORM), term));
 			return str;
 		}
 
@@ -3476,9 +3476,9 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 		strl = 0;
 
 		if (link->form->method == FM_GET)
-			add_to_str(&str, &strl, GT(TEXT(T_SUBMIT_FORM_TO), term));
+			add_to_str(&str, &strl, GT(_(T_SUBMIT_FORM_TO), term));
 		else
-			add_to_str(&str, &strl, GT(TEXT(T_POST_FORM_TO), term));
+			add_to_str(&str, &strl, GT(_(T_POST_FORM_TO), term));
 		add_to_str(&str, &strl, " ");
 
 		url = strip_url_password(link->form->action);
@@ -3496,25 +3496,25 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 		strl = 0;
 
 		if (link->form->type == FC_RADIO)
-			add_to_str(&str, &strl, GT(TEXT(T_RADIO_BUTTON), term));
+			add_to_str(&str, &strl, GT(_(T_RADIO_BUTTON), term));
 
 		else if (link->form->type == FC_CHECKBOX)
-			add_to_str(&str, &strl, GT(TEXT(T_CHECKBOX), term));
+			add_to_str(&str, &strl, GT(_(T_CHECKBOX), term));
 
 		else if (link->form->type == FC_SELECT)
-			add_to_str(&str, &strl, GT(TEXT(T_SELECT_FIELD), term));
+			add_to_str(&str, &strl, GT(_(T_SELECT_FIELD), term));
 
 		else if (link->form->type == FC_TEXT)
-			add_to_str(&str, &strl, GT(TEXT(T_TEXT_FIELD), term));
+			add_to_str(&str, &strl, GT(_(T_TEXT_FIELD), term));
 
 		else if (link->form->type == FC_TEXTAREA)
-			add_to_str(&str, &strl, GT(TEXT(T_TEXT_AREA), term));
+			add_to_str(&str, &strl, GT(_(T_TEXT_AREA), term));
 
 		else if (link->form->type == FC_FILE)
-			add_to_str(&str, &strl, GT(TEXT(T_FILE_UPLOAD), term));
+			add_to_str(&str, &strl, GT(_(T_FILE_UPLOAD), term));
 
 		else if (link->form->type == FC_PASSWORD)
-			add_to_str(&str, &strl, GT(TEXT(T_PASSWORD_FIELD), term));
+			add_to_str(&str, &strl, GT(_(T_PASSWORD_FIELD), term));
 
 		else {
 			mem_free(str);
@@ -3523,7 +3523,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 
 		if (link->form->name && link->form->name[0]) {
 			add_to_str(&str, &strl, ", ");
-			add_to_str(&str, &strl, GT(TEXT(T_NAME), term));
+			add_to_str(&str, &strl, GT(_(T_NAME), term));
 			add_to_str(&str, &strl, " ");
 			add_to_str(&str, &strl, link->form->name);
 		}
@@ -3533,7 +3533,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 		    && link->form->default_value
 		    && link->form->default_value[0]) {
 			add_to_str(&str, &strl, ", ");
-			add_to_str(&str, &strl, GT(TEXT(T_VALUE), term));
+			add_to_str(&str, &strl, GT(_(T_VALUE), term));
 			add_to_str(&str, &strl, " ");
 			add_to_str(&str, &strl, link->form->default_value);
 		}
@@ -3542,12 +3542,12 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 		    && !has_form_submit(fd->f_data, link->form)
 		    && link->form->action) {
 			add_to_str(&str, &strl, ", ");
-			add_to_str(&str, &strl, GT(TEXT(T_HIT_ENTER_TO), term));
+			add_to_str(&str, &strl, GT(_(T_HIT_ENTER_TO), term));
 			add_to_str(&str, &strl, " ");
 			if (link->form->method == FM_GET)
-				add_to_str(&str, &strl, GT(TEXT(T_SUBMIT_TO), term));
+				add_to_str(&str, &strl, GT(_(T_SUBMIT_TO), term));
 			else
-				add_to_str(&str, &strl, GT(TEXT(T_POST_TO), term));
+				add_to_str(&str, &strl, GT(_(T_POST_TO), term));
 			add_to_str(&str, &strl, " ");
 			url = strip_url_password(link->form->action);
 			if (url) {

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.63 2002/12/22 16:29:33 pasky Exp $ */
+/* $Id: dialogs.c,v 1.64 2003/01/02 05:37:42 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -167,8 +167,8 @@ do_add_folder(struct dialog_data *dlg, unsigned char *name)
 static int
 push_add_folder_button(struct dialog_data *dlg, struct widget_data *di)
 {
-	input_field(dlg->win->term, NULL, TEXT(T_ADD_FOLDER), TEXT(T_FOLDER_NAME),
-		    TEXT(T_OK), TEXT(T_CANCEL), dlg, NULL,
+	input_field(dlg->win->term, NULL, _(T_ADD_FOLDER), _(T_FOLDER_NAME),
+		    _(T_OK), _(T_CANCEL), dlg, NULL,
 		    MAX_STR_LEN, NULL, 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) do_add_folder,
 		    NULL);
@@ -238,7 +238,7 @@ push_edit_button(struct dialog_data *dlg, struct widget_data *edit_btn)
 		const unsigned char *url = bm->url;
 
 		bm->refcount++;
-		do_edit_dialog(dlg->win->term, TEXT(T_EDIT_BOOKMARK), name, url,
+		do_edit_dialog(dlg->win->term, _(T_EDIT_BOOKMARK), name, url,
 			       (struct session *) edit_btn->item->udata, dlg,
 			       bookmark_edit_done, bookmark_edit_cancel,
 			       (void *) bm, 1);
@@ -266,19 +266,19 @@ do_del_bookmark(struct terminal *term, struct bookmark *bookmark)
 	if (bookmark->refcount > 0) {
 		if (bookmark->box_item->type == BI_FOLDER)
 		msg_box(term, NULL,
-			TEXT(T_DELETE_BOOKMARK), AL_CENTER | AL_EXTD_TEXT,
-			TEXT(T_BOOKMARK_USED), "\n\n",
-			TEXT(T_TITLE), ": \"", bookmark->title, NULL,
+			_(T_DELETE_BOOKMARK), AL_CENTER | AL_EXTD_TEXT,
+			_(T_BOOKMARK_USED), "\n\n",
+			_(T_TITLE), ": \"", bookmark->title, NULL,
 			NULL, 1,
-			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+			_(T_CANCEL), NULL, B_ENTER | B_ESC);
 		else
 		msg_box(term, NULL,
-			TEXT(T_DELETE_BOOKMARK), AL_CENTER | AL_EXTD_TEXT,
-			TEXT(T_BOOKMARK_USED), "\n\n",
-			TEXT(T_TITLE), ": \"", bookmark->title, "\n",
-			TEXT(T_URL), ": \"", bookmark->url, NULL,
+			_(T_DELETE_BOOKMARK), AL_CENTER | AL_EXTD_TEXT,
+			_(T_BOOKMARK_USED), "\n\n",
+			_(T_TITLE), ": \"", bookmark->title, "\n",
+			_(T_URL), ": \"", bookmark->url, NULL,
 			NULL, 1,
-			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+			_(T_CANCEL), NULL, B_ENTER | B_ESC);
 		return;
 	}
 
@@ -403,26 +403,26 @@ listbox_delete_bookmark(struct terminal *term, struct listbox_data *box)
 
 	if (!bm)
 	msg_box(term, getml(hop, NULL),
-		TEXT(T_DELETE_BOOKMARK), AL_CENTER,
-		TEXT(T_DELETE_MARKED_BOOKMARKS),
+		_(T_DELETE_BOOKMARK), AL_CENTER,
+		_(T_DELETE_MARKED_BOOKMARKS),
 		hop, 2,
-		TEXT(T_YES), really_del_bookmark, B_ENTER,
-		TEXT(T_NO), cancel_del_bookmark, B_ESC);
+		_(T_YES), really_del_bookmark, B_ENTER,
+		_(T_NO), cancel_del_bookmark, B_ESC);
 	else if (bm->box_item->type == BI_FOLDER)
 	msg_box(term, getml(hop, NULL),
-		TEXT(T_DELETE_BOOKMARK), AL_CENTER | AL_EXTD_TEXT,
-		TEXT(T_DELETE_FOLDER), " \"", bm->title, "\" ?", NULL,
+		_(T_DELETE_BOOKMARK), AL_CENTER | AL_EXTD_TEXT,
+		_(T_DELETE_FOLDER), " \"", bm->title, "\" ?", NULL,
 		hop, 2,
-		TEXT(T_YES), really_del_bookmark, B_ENTER,
-		TEXT(T_NO), cancel_del_bookmark, B_ESC);
+		_(T_YES), really_del_bookmark, B_ENTER,
+		_(T_NO), cancel_del_bookmark, B_ESC);
 	else
 	msg_box(term, getml(hop, NULL),
-		TEXT(T_DELETE_BOOKMARK), AL_CENTER | AL_EXTD_TEXT,
-		TEXT(T_DELETE_BOOKMARK), " \"", bm->title, "\" ?\n\n",
-		TEXT(T_URL), ": \"", bm->url, "\"", NULL,
+		_(T_DELETE_BOOKMARK), AL_CENTER | AL_EXTD_TEXT,
+		_(T_DELETE_BOOKMARK), " \"", bm->title, "\" ?\n\n",
+		_(T_URL), ": \"", bm->url, "\"", NULL,
 		hop, 2,
-		TEXT(T_YES), really_del_bookmark, B_ENTER,
-		TEXT(T_NO), cancel_del_bookmark, B_ESC);
+		_(T_YES), really_del_bookmark, B_ENTER,
+		_(T_NO), cancel_del_bookmark, B_ESC);
 
 	return;
 }
@@ -605,7 +605,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 			  + sizeof(struct bookmark) + 2 * MAX_STR_LEN);
 	if (!d) return;
 
-	d->title = TEXT(T_BOOKMARK_MANAGER);
+	d->title = _(T_BOOKMARK_MANAGER);
 	d->fn = layout_hierbox_browser;
 	d->handle_event = hierbox_dialog_event_handler;
 	d->abort = bookmark_dialog_abort_handler;
@@ -615,43 +615,43 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	d->items[0].gid = B_ENTER;
 	d->items[0].fn = push_goto_button;
 	d->items[0].udata = ses;
-	d->items[0].text = TEXT(T_GOTO);
+	d->items[0].text = _(T_GOTO);
 
 	d->items[1].type = D_BUTTON;
 	d->items[1].gid = B_ENTER;
 	d->items[1].fn = push_edit_button;
 	d->items[1].udata = ses;
-	d->items[1].text = TEXT(T_EDIT);
+	d->items[1].text = _(T_EDIT);
 
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
 	d->items[2].fn = push_delete_button;
-	d->items[2].text = TEXT(T_DELETE);
+	d->items[2].text = _(T_DELETE);
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ENTER;
 	d->items[3].fn = push_move_button;
-	d->items[3].text = TEXT(T_MOVE);
+	d->items[3].text = _(T_MOVE);
 
 	d->items[4].type = D_BUTTON;
 	d->items[4].gid = B_ENTER;
 	d->items[4].fn = push_add_folder_button;
-	d->items[4].text = TEXT(T_ADD_FOLDER);
+	d->items[4].text = _(T_ADD_FOLDER);
 
 	d->items[5].type = D_BUTTON;
 	d->items[5].gid = B_ENTER;
 	d->items[5].fn = push_add_button;
-	d->items[5].text = TEXT(T_ADD);
+	d->items[5].text = _(T_ADD);
 
 	d->items[6].type = D_BUTTON;
 	d->items[6].gid = B_ENTER;
 	d->items[6].fn = push_search_button;
-	d->items[6].text = TEXT(T_SEARCH);
+	d->items[6].text = _(T_SEARCH);
 
 	d->items[7].type = D_BUTTON;
 	d->items[7].gid = B_ESC;
 	d->items[7].fn = cancel_dialog;
-	d->items[7].text = TEXT(T_CLOSE);
+	d->items[7].text = _(T_CLOSE);
 
 	d->items[BM_BOX_IND].type = D_BOX;
 	d->items[BM_BOX_IND].gid = 12;
@@ -785,7 +785,7 @@ launch_bm_add_doc_dialog(struct terminal *term,
 			 struct dialog_data *parent,
 			 struct session *ses)
 {
-	do_edit_dialog(term, TEXT(T_ADD_BOOKMARK), NULL, NULL,
+	do_edit_dialog(term, _(T_ADD_BOOKMARK), NULL, NULL,
 		       ses, parent, bookmark_add_add, NULL, NULL, 1);
 }
 
@@ -796,7 +796,7 @@ launch_bm_search_doc_dialog(struct terminal *term,
 			    struct dialog_data *parent,
 			    struct session *ses)
 {
-	do_edit_dialog(term, TEXT(T_SEARCH_BOOKMARK),
+	do_edit_dialog(term, _(T_SEARCH_BOOKMARK),
 		       bm_last_searched_name, bm_last_searched_url,
 		       ses, parent, bookmark_search_do, NULL, NULL, 0);
 }
@@ -810,7 +810,7 @@ launch_bm_add_link_dialog(struct terminal *term,
 {
 	unsigned char title[MAX_STR_LEN], url[MAX_STR_LEN];
 
-	do_edit_dialog(term, TEXT(T_ADD_BOOKMARK),
+	do_edit_dialog(term, _(T_ADD_BOOKMARK),
 		       get_current_link_name(ses, title, MAX_STR_LEN),
 		       get_current_link_url(ses, url, MAX_STR_LEN), ses,
 		       parent, bookmark_add_add, NULL, NULL, 1);

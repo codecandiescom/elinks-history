@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.23 2003/01/01 20:36:09 pasky Exp $ */
+/* $Id: info.c,v 1.24 2003/01/02 05:37:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,10 +52,10 @@ void menu_about(struct terminal *term, void *d, struct session *ses)
 		")"
 #endif
 		"\n\n"
-		, GT(TEXT(T_LINKS__LYNX_LIKE), term),
+		, GT(_(T_LINKS__LYNX_LIKE), term),
 
 		"\n\n"
-		, GT(TEXT(T_FEATURES), term),
+		, GT(_(T_FEATURES), term),
 		": Default"
 #ifdef DEBUG
 		" Debug"
@@ -97,10 +97,10 @@ void menu_about(struct terminal *term, void *d, struct session *ses)
 
 	if (s) {
 		msg_box(term, getml(s, NULL),
-			TEXT(T_ABOUT), AL_CENTER,
+			_(T_ABOUT), AL_CENTER,
 			s,
 			NULL, 1,
-			TEXT(T_OK), NULL, B_ENTER | B_ESC);
+			_(T_OK), NULL, B_ENTER | B_ESC);
 	}
 }
 
@@ -108,19 +108,19 @@ void menu_about(struct terminal *term, void *d, struct session *ses)
 void menu_keys(struct terminal *term, void *d, struct session *ses)
 {
 	msg_box(term, NULL,
-		TEXT(T_KEYS), AL_LEFT,
-		TEXT(T_KEYS_DESC),
+		_(T_KEYS), AL_LEFT,
+		_(T_KEYS_DESC),
 		NULL, 1,
-		TEXT(T_OK), NULL, B_ENTER | B_ESC);
+		_(T_OK), NULL, B_ENTER | B_ESC);
 }
 
 void menu_copying(struct terminal *term, void *d, struct session *ses)
 {
 	msg_box(term, NULL,
-		TEXT(T_COPYING), AL_CENTER,
-		TEXT(T_COPYING_DESC),
+		_(T_COPYING), AL_CENTER,
+		_(T_COPYING_DESC),
 		NULL, 1,
-		TEXT(T_OK), NULL, B_ENTER | B_ESC);
+		_(T_OK), NULL, B_ENTER | B_ESC);
 }
 
 
@@ -163,25 +163,25 @@ void res_inf(struct terminal *term, void *d, struct session *ses)
 #undef create_str
 
 	msg_box(term, getml(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, NULL),
-		TEXT(T_RESOURCES), AL_LEFT | AL_EXTD_TEXT,
-		TEXT(T_RESOURCES), a1,
-		TEXT(T_HANDLES), a2,
-		TEXT(T_TIMERS), a3,
-		TEXT(T_CONNECTIONS), a4,
-		TEXT(T_cONNECTIONS), a5,
-		TEXT(T_CONNECTING), a6,
-		TEXT(T_tRANSFERRING), a7,
-		TEXT(T_KEEPALIVE), a8,
-		TEXT(T_MEMORY_CACHE), a9,
-		TEXT(T_BYTES), a10,
-		TEXT(T_FILES), a11,
-		TEXT(T_LOCKED), a12,
-		TEXT(T_LOADING), a13,
-		TEXT(T_FORMATTED_DOCUMENT_CACHE), a14,
-		TEXT(T_DOCUMENTS), a15,
-		TEXT(T_LOCKED), a16, NULL,
+		_(T_RESOURCES), AL_LEFT | AL_EXTD_TEXT,
+		_(T_RESOURCES), a1,
+		_(T_HANDLES), a2,
+		_(T_TIMERS), a3,
+		_(T_CONNECTIONS), a4,
+		_(T_cONNECTIONS), a5,
+		_(T_CONNECTING), a6,
+		_(T_tRANSFERRING), a7,
+		_(T_KEEPALIVE), a8,
+		_(T_MEMORY_CACHE), a9,
+		_(T_BYTES), a10,
+		_(T_FILES), a11,
+		_(T_LOCKED), a12,
+		_(T_LOADING), a13,
+		_(T_FORMATTED_DOCUMENT_CACHE), a14,
+		_(T_DOCUMENTS), a15,
+		_(T_LOCKED), a16, NULL,
 		r, 1,
-		TEXT(T_OK), NULL, B_ENTER | B_ESC);
+		_(T_OK), NULL, B_ENTER | B_ESC);
 
 	refresh_init(r, term, ses, d, res_inf);
 }
@@ -210,10 +210,10 @@ void cache_inf(struct terminal *term, void *d, struct session *ses)
 	}
 
 	msg_box(term, getml(a, NULL),
-		TEXT(T_CACHE_INFO), AL_LEFT | AL_EXTD_TEXT,
-		TEXT(T_CACHE_CONTENT), a, NULL,
+		_(T_CACHE_INFO), AL_LEFT | AL_EXTD_TEXT,
+		_(T_CACHE_CONTENT), a, NULL,
 		r, 1,
-		TEXT(T_OK), NULL, B_ENTER | B_ESC);
+		_(T_OK), NULL, B_ENTER | B_ESC);
 
 	refresh_init(r, term, ses, d, cache_inf);
 }
@@ -230,7 +230,7 @@ void memory_inf(struct terminal *term, void *d, struct session *ses)
 	if (!r) return;
 
 	snprintf(message, sizeof(message), "%ld %s.",
-		 mem_amount, GT(TEXT(T_MEMORY_ALLOCATED), term));
+		 mem_amount, GT(_(T_MEMORY_ALLOCATED), term));
 
 	p = stracpy(message);
 	if (!p) {
@@ -239,10 +239,10 @@ void memory_inf(struct terminal *term, void *d, struct session *ses)
 	}
 
 	msg_box(term, getml(p, NULL),
-		TEXT(T_MEMORY_INFO), AL_CENTER,
+		_(T_MEMORY_INFO), AL_CENTER,
 		p,
 		r, 1,
-		TEXT(T_OK), NULL, B_ENTER | B_ESC);
+		_(T_OK), NULL, B_ENTER | B_ESC);
 
 	refresh_init(r, term, ses, d, memory_inf);
 }

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.47 2003/01/02 05:25:14 pasky Exp $ */
+/* $Id: options.c,v 1.48 2003/01/02 05:37:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,16 +108,16 @@ terminal_options_save(struct dialog_data *dlg,
 }
 
 static unsigned char *td_labels[] = {
-	TEXT(T_NO_FRAMES),
-	TEXT(T_VT_100_FRAMES),
-	TEXT(T_LINUX_OR_OS2_FRAMES),
-	TEXT(T_KOI8R_FRAMES),
-	TEXT(T_USE_11M),
-	TEXT(T_RESTRICT_FRAMES_IN_CP850_852),
-	TEXT(T_BLOCK_CURSOR),
-	TEXT(T_COLOR),
-	TEXT(T_TRANSPARENCY),
-	TEXT(T_UTF_8_IO),
+	_(T_NO_FRAMES),
+	_(T_VT_100_FRAMES),
+	_(T_LINUX_OR_OS2_FRAMES),
+	_(T_KOI8R_FRAMES),
+	_(T_USE_11M),
+	_(T_RESTRICT_FRAMES_IN_CP850_852),
+	_(T_BLOCK_CURSOR),
+	_(T_COLOR),
+	_(T_TRANSPARENCY),
+	_(T_UTF_8_IO),
 	NULL
 };
 
@@ -191,7 +191,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	termopt_hop->trans = get_opt_int_tree(term->spec, "transparency");
 	termopt_hop->utf_8_io = get_opt_int_tree(term->spec, "utf_8_io");
 
-	d->title = TEXT(T_TERMINAL_OPTIONS);
+	d->title = _(T_TERMINAL_OPTIONS);
 	d->fn = terminal_options_fn;
 	d->udata = termopt_hop;
 	d->refresh = (void (*)(void *)) terminal_options_ok;
@@ -254,17 +254,17 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	d->items[10].type = D_BUTTON;
 	d->items[10].gid = B_ENTER;
 	d->items[10].fn = ok_dialog;
-	d->items[10].text = TEXT(T_OK);
+	d->items[10].text = _(T_OK);
 
 	d->items[11].type = D_BUTTON;
 	d->items[11].gid = B_ENTER;
 	d->items[11].fn = terminal_options_save;
-	d->items[11].text = TEXT(T_SAVE);
+	d->items[11].text = _(T_SAVE);
 
 	d->items[12].type = D_BUTTON;
 	d->items[12].gid = B_ESC;
 	d->items[12].fn = cancel_dialog;
-	d->items[12].text = TEXT(T_CANCEL);
+	d->items[12].text = _(T_CANCEL);
 
 	d->items[13].type = D_END;
 
@@ -300,8 +300,8 @@ menu_language_list(struct terminal *term, void *xxx, struct session *ses)
 /* FIXME: This doesn't in fact belong here at all. --pasky */
 
 static unsigned char *resize_texts[] = {
-	TEXT(T_COLUMNS),
-	TEXT(T_ROWS)
+	_(T_COLUMNS),
+	_(T_ROWS)
 };
 
 static unsigned char x_str[4];
@@ -331,7 +331,7 @@ dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 	d = mem_calloc(1, sizeof(struct dialog) + 5 * sizeof(struct widget));
 	if (!d) return;
 
-	d->title = TEXT(T_RESIZE_TERMINAL);
+	d->title = _(T_RESIZE_TERMINAL);
 	d->fn = group_fn;
 	d->udata = resize_texts;
 	d->refresh = (void (*)(void *))do_resize_terminal;
@@ -354,12 +354,12 @@ dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
 	d->items[2].fn = ok_dialog;
-	d->items[2].text = TEXT(T_OK);
+	d->items[2].text = _(T_OK);
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ESC;
 	d->items[3].fn = cancel_dialog;
-	d->items[3].text = TEXT(T_CANCEL);
+	d->items[3].text = _(T_CANCEL);
 
 	d->items[4].type = D_END;
 

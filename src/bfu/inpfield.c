@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.19 2002/12/08 20:30:32 pasky Exp $ */
+/* $Id: inpfield.c,v 1.20 2003/01/02 05:37:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,19 +37,19 @@ check_number(struct dialog_data *dlg, struct widget_data *di)
 
 	if (errno || !*di->cdata || *end) {
 		msg_box(dlg->win->term, NULL,
-			TEXT(T_BAD_NUMBER), AL_CENTER,
-			TEXT(T_NUMBER_EXPECTED),
+			_(T_BAD_NUMBER), AL_CENTER,
+			_(T_NUMBER_EXPECTED),
 			NULL, 1,
-			TEXT(T_CANCEL),	NULL, B_ENTER | B_ESC);
+			_(T_CANCEL),	NULL, B_ENTER | B_ESC);
 		return 1;
 	}
 
 	if (l < di->item->gid || l > di->item->gnum) {
 		msg_box(dlg->win->term, NULL,
-			TEXT(T_BAD_NUMBER), AL_CENTER,
-			TEXT(T_NUMBER_OUT_OF_RANGE),
+			_(T_BAD_NUMBER), AL_CENTER,
+			_(T_NUMBER_OUT_OF_RANGE),
 			NULL, 1,
-			TEXT(T_CANCEL),	NULL, B_ENTER | B_ESC);
+			_(T_CANCEL),	NULL, B_ENTER | B_ESC);
 		return 1;
 	}
 
@@ -66,10 +66,10 @@ check_nonempty(struct dialog_data *dlg, struct widget_data *di)
 			return 0;
 
 	msg_box(dlg->win->term, NULL,
-		TEXT(T_BAD_STRING), AL_CENTER,
-		TEXT(T_EMPTY_STRING_NOT_ALLOWED),
+		_(T_BAD_STRING), AL_CENTER,
+		_(T_EMPTY_STRING_NOT_ALLOWED),
 		NULL, 1,
-		TEXT(T_CANCEL),	NULL, B_ENTER | B_ESC);
+		_(T_CANCEL),	NULL, B_ENTER | B_ESC);
 
 	return 1;
 }

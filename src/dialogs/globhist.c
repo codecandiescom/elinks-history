@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: globhist.c,v 1.9 2002/04/02 22:29:46 pasky Exp $ */
+/* $Id: globhist.c,v 1.10 2002/04/19 12:45:03 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -23,24 +23,27 @@
 
 #define HISTORY_BOX_IND 5
 
+struct history_dialog_list_item {
+	struct history_dialog_list_item *next;
+	struct history_dialog_list_item *prev;
+	struct dialog_data *dlg;
+};
+
+static struct list_head history_dialog_list = {
+	&history_dialog_list,
+	&history_dialog_list
+};
+
 static inline void
 history_dialog_list_clear(struct list_head *list)
 {
-	struct box_item *item;
-
-	foreach (item, *list) {
-		free_global_history_item((struct global_history_item *)
-					 item->data);
-		mem_free(item->data);
-	}
-
 	free_list(*list);
 }
 
 static int
 history_dialog_list_update(struct list_head *list)
 {
-	struct global_history_item *historyitem, *newhistoryitem;
+	struct global_history_item *historyitem;
 	struct box_item	*item;
 	int count = 0;
 
@@ -63,18 +66,7 @@ history_dialog_list_update(struct list_head *list)
 
 		item->text = ((unsigned char *) item + sizeof(struct box_item));
 
-		newhistoryitem = mem_alloc(sizeof(struct global_history_item));
-		if (!newhistoryitem) {
-			mem_free(item);
-			return count;
-		}
-
-		/* Wow, this is stupid. */
-		newhistoryitem->last_visit = historyitem->last_visit;
-		newhistoryitem->title = stracpy(historyitem->title);
-		newhistoryitem->url = stracpy(historyitem->url);
-
-		item->data = (void *) newhistoryitem;
+		item->data = (void *) historyitem;
 
 		strcpy(item->text, historyitem->url);
 
@@ -82,6 +74,22 @@ history_dialog_list_update(struct list_head *list)
 		count++;
 	}
 	return count;
+}
+
+void
+update_all_history_dialogs(void)
+{
+	struct history_dialog_list_item *item;
+
+	foreach (item, history_dialog_list) {
+		struct dlg_data_item_data_box *box =
+			(struct dlg_data_item_data_box *)
+				item->dlg->dlg->items[HISTORY_BOX_IND].data;
+
+		history_dialog_list_update(&(box->items));
+		show_dlg_item_box(item->dlg,
+				&(item->dlg->items[HISTORY_BOX_IND]));
+	}
 }
 
 /* Creates the box display (holds everything EXCEPT the actual rendering data) */
@@ -127,9 +135,18 @@ static void
 history_dialog_abort_handler(struct dialog_data *dlg)
 {
 	struct dlg_data_item_data_box *box;
+	struct history_dialog_list_item *item;
 
 	box = (struct dlg_data_item_data_box *)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
+
+	foreach (item, history_dialog_list) {
+		if (item->dlg == dlg) {
+			del_from_list(item);
+			mem_free(item);
+			break;
+		}
+	}
 
 	history_dialog_list_clear(&(box->items));
 
@@ -330,44 +347,18 @@ push_goto_button(struct dialog_data *dlg, struct dialog_item_data *goto_btn)
 }
 
 
-/* Used to carry extra info between push_delete_button() and 
- * really_del_history() */
-struct push_del_button_hop_struct {
+/* Used to carry extra info between confirmation and real function. */
+struct push_button_hop_struct {
 	struct dialog *dlg;
 	struct dlg_data_item_data_box *box;
 	struct global_history_item *historyitem;
 };
-
-static void
-really_del_history(void *vhop)
-{
-	struct push_del_button_hop_struct *hop =
-		(struct push_del_button_hop_struct *) vhop;
-	struct global_history_item *historyitem;
-	int last;
-
-	historyitem = get_global_history_item(hop->historyitem->url,
-					      hop->historyitem->title, 0);
-	if (!historyitem)
-		return;
-
-	delete_global_history_item(historyitem);
-
-	last = history_dialog_list_update(&hop->box->items);
-	/* In case we deleted the last history item */
-	if (hop->box->sel >= (last - 1))
-		hop->box->sel = last - 1;
-
-	/* Made in push_delete_button(), as we've it in memlist. */
-	/* mem_free(vhop); */
-}
 
 static int
 push_delete_button(struct dialog_data *dlg,
 		   struct dialog_item_data *some_useless_delete_button)
 {
 	struct global_history_item *historyitem;
-	struct push_del_button_hop_struct *hop;
 	struct terminal *term = dlg->win->term;
 	struct dlg_data_item_data_box *box;
 
@@ -378,20 +369,12 @@ push_delete_button(struct dialog_data *dlg,
 	if (!historyitem)
 		return 0;
 
-	hop = mem_alloc(sizeof(struct push_del_button_hop_struct));
-	if (!hop)
-		return 0;
-
-	hop->historyitem = historyitem;
-	hop->dlg = dlg->dlg;
-	hop->box = box;
-
-	msg_box(term, getml(hop, NULL),
+	msg_box(term, NULL,
 		TEXT(T_DELETE_HISTORY_ITEM), AL_CENTER | AL_EXTD_TEXT,
 		TEXT(T_DELETE_HISTORY_ITEM), " \"", historyitem->title, "\" ?\n\n",
 		TEXT(T_URL), ": \"", historyitem->url, "\"", NULL,
-		hop, 2,
-		TEXT(T_YES), really_del_history, B_ENTER,
+		historyitem, 2,
+		TEXT(T_YES), delete_global_history_item, B_ENTER,
 		TEXT(T_NO), NULL, B_ESC);
 
 	return 0;
@@ -401,8 +384,8 @@ push_delete_button(struct dialog_data *dlg,
 static void
 really_clear_history(void *vhop)
 {
-	struct push_del_button_hop_struct *hop =
-		(struct push_del_button_hop_struct *) vhop;
+	struct push_button_hop_struct *hop =
+		(struct push_button_hop_struct *) vhop;
 
 	while (global_history.n) {
 		delete_global_history_item(global_history.items.prev);
@@ -415,14 +398,14 @@ static int
 push_clear_button(struct dialog_data *dlg,
 		  struct dialog_item_data *some_useless_clear_button)
 {
-	struct push_del_button_hop_struct *hop;
+	struct push_button_hop_struct *hop;
 	struct terminal *term = dlg->win->term;
 	struct dlg_data_item_data_box *box;
 
 	box = (struct dlg_data_item_data_box *)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
-	hop = mem_alloc(sizeof(struct push_del_button_hop_struct));
+	hop = mem_alloc(sizeof(struct push_button_hop_struct));
 	if (!hop)
 		return 0;
 
@@ -444,6 +427,8 @@ void
 menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	struct dialog *d;
+	struct dialog_data *dd;
+	struct history_dialog_list_item *item;
 
 	if (gh_last_searched_title) {
 		mem_free(gh_last_searched_title);
@@ -458,6 +443,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 #define DIALOG_MEMSIZE (sizeof(struct dialog) \
 		       + (HISTORY_BOX_IND + 2) * sizeof(struct dialog_item) \
 		       + sizeof(struct global_history_item) + 2 * MAX_STR_LEN)
+	/* XXX: sizeof(struct global_history_item): why? */
 
 	d = mem_alloc(DIALOG_MEMSIZE);
 	if (!d) return;
@@ -504,7 +490,13 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 				 &(d->items[HISTORY_BOX_IND].data));
 
 	d->items[HISTORY_BOX_IND + 1].type = D_END;
-	do_dialog(term, d, getml(d, NULL));
+	dd = do_dialog(term, d, getml(d, NULL));
+
+	item = mem_alloc(sizeof(struct history_dialog_list_item));
+	if (item) {
+		item->dlg = dd;
+		add_to_list(history_dialog_list, item);
+	}
 }
 
 #else /* GLOBHIST */

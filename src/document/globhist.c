@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.5 2002/04/02 22:29:46 pasky Exp $ */
+/* $Id: globhist.c,v 1.6 2002/04/19 12:45:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 #include <string.h>
 
 #include <config/default.h>
+#include <dialogs/globhist.h>
 #include <document/globhist.h>
 
 
@@ -42,6 +43,8 @@ delete_global_history_item(struct global_history_item *historyitem)
 	del_from_list(historyitem);
 	mem_free(historyitem);
 	global_history.n--;
+
+	update_all_history_dialogs();
 }
 
 /* Search global history for certain item. There must be full match with the
@@ -63,9 +66,8 @@ get_global_history_item(unsigned char *url, unsigned char *title, time_t time)
 }
 
 
-/* Add a new entry in history list, take care of duplicate, and respect history
- * size limit. add_to_history() doesn't handle last_visit, so I needed to make
- * this new function. */
+/* Add a new entry in history list, take care of duplicate, respect history
+ * size limit, and update any open history dialogs. */
 void
 add_global_history_item(unsigned char *url, unsigned char *title, time_t time)
 {
@@ -106,6 +108,8 @@ add_global_history_item(unsigned char *url, unsigned char *title, time_t time)
 
 		delete_global_history_item(historyitem);
 	}
+
+	update_all_history_dialogs();
 }
 
 void

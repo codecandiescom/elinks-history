@@ -1,4 +1,4 @@
-/* $Id: bfu.h,v 1.7 2002/03/28 21:38:50 pasky Exp $ */
+/* $Id: bfu.h,v 1.8 2002/04/19 12:45:02 pasky Exp $ */
 
 #ifndef EL__BFU_H
 #define EL__BFU_H
@@ -125,7 +125,8 @@ struct box_item {
 void show_dlg_item_box(struct dialog_data *, struct dialog_item_data *);
 
 
-void do_dialog(struct terminal *, struct dialog *, struct memory_list *);
+struct dialog_data *do_dialog(struct terminal *, struct dialog *,
+			      struct memory_list *);
 
 int check_number(struct dialog_data *, struct dialog_item_data *);
 int check_nonempty(struct dialog_data *, struct dialog_item_data *);

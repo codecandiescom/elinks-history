@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.111 2003/10/27 03:26:27 pasky Exp $ */
+/* $Id: osdep.c,v 1.112 2003/10/27 03:27:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,10 +25,6 @@
 #include <termios.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif
-
-#if defined(HAVE_LIBGPM) && defined(HAVE_GPM_H)
-#define USE_GPM
 #endif
 
 #ifdef HAVE_X11

@@ -1,5 +1,5 @@
 /* UNIX system-specific routines. */
-/* $Id: unix.c,v 1.3 2003/10/27 02:50:50 pasky Exp $ */
+/* $Id: unix.c,v 1.4 2003/10/27 03:27:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,10 +8,6 @@
 #include "osdep/system.h"
 
 #ifdef UNIX
-
-#if defined(HAVE_LIBGPM) && defined(HAVE_GPM_H)
-#define USE_GPM
-#endif
 
 #ifdef USE_GPM
 #include <gpm.h>

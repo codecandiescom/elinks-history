@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.65 2004/08/21 15:59:25 jonas Exp $ */
+/* $Id: protocol.c,v 1.66 2004/08/21 16:55:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,10 +73,16 @@ static const struct protocol_backend protocol_backends[] = {
 };
 
 
+/* This function gets called quite a lot these days. With incremental rendering
+ * and all I counted 4400 calls alone when loading fm. With the old linear
+ * comparison this would lead to 30800 comparison against protocol names. The
+ * binary search used currently reduces it to 4400 (meaning fm only has HTTP
+ * links). */
+
 enum protocol
 get_protocol(unsigned char *name, int namelen)
 {
-	int protocol;
+	enum protocol protocol, start, end;
 
 	/* First check if this isn't some custom (protocol.user) protocol. It
 	 * has higher precedence than builtin handlers. */
@@ -85,12 +91,38 @@ get_protocol(unsigned char *name, int namelen)
 	if (get_user_program(NULL, name, namelen))
 		return PROTOCOL_USER;
 
-	/* Check until @protocol is PROTOCOL_UNKNOWN */
-	for (protocol = 0; protocol_backends[protocol].name; protocol++) {
-		unsigned char *pname = protocol_backends[protocol].name;
+	/* Almost dichotomic search is used here */
+	/* Starting at the HTTP entry which is the most common that will make
+	 * file and NNTP the next entries checked and amongst the third checks
+	 * are proxy and FTP. */
+	start	 = 0;
+	end	 = PROTOCOL_UNKNOWN - 1;
+	protocol = PROTOCOL_HTTP;
 
-		if (!strlcasecmp(pname, -1, name, namelen))
-			return protocol;
+	assert(start <= protocol && protocol <= end);
+
+	while (start <= end) {
+		unsigned char *pname = protocol_backends[protocol].name;
+		int pnamelen = strlen(pname);
+		int minlen = int_min(pnamelen, namelen);
+		int compare = strncasecmp(pname, name, minlen);
+
+		if (compare == 0) {
+			if (pnamelen == namelen)
+				return protocol;
+
+			/* If the current protocol name is longer thatn the
+			 * protocol name being searched for move @end else move
+			 * @start. */
+			compare = pnamelen > namelen ? 1 : -1;
+		}
+
+		if (compare > 0)
+			end = protocol - 1;
+		else
+			start = protocol + 1;
+
+		protocol = (start + end) / 2;
 	}
 
 	return PROTOCOL_UNKNOWN;

@@ -1,11 +1,12 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.22 2003/10/04 20:03:11 kuser Exp $ */
+/* $Id: search.c,v 1.23 2003/10/04 20:24:54 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <ctype.h> /* tolower() */
+#include <regex.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -271,6 +272,65 @@ lowered_string(unsigned char *s, int l)
 }
 
 static int
+is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
+		  int *min, int *max, struct search *s1, struct search *s2)
+{
+	unsigned char *doc;
+	unsigned char *doctmp;
+	int doclen;
+	int found = 0;
+	int matches_may_overlap = get_opt_bool("document.browse.search.overlap");
+	register int i;
+	regex_t regex;
+	regmatch_t regmatch;
+
+	doclen = s2 - s1 + l;
+	doc = mem_alloc(sizeof(unsigned char) * (doclen + 1));
+	if (!doc) return 0;
+	
+	for (i = 0; i < doclen; i++)
+		doc[i] = s1[i].c;
+	doc[doclen] = 0;
+
+	if (regcomp(&regex, text, REG_ICASE)) {
+		mem_free(doc);
+		return 0;
+	}
+
+	doctmp = doc;
+	while (!regexec(&regex, doctmp, 1, &regmatch, 0)) {
+		l = regmatch.rm_eo - regmatch.rm_so;
+		s1 += regmatch.rm_so;
+		doctmp += regmatch.rm_so;
+
+		if (s1[l].y < y || s1[l].y >= yy)
+			break;
+
+		found = 1;
+
+		for (i = 0; i < l; i++) {
+			if (!s1[i].n) continue;
+
+			int_upper_bound(min, s1[i].x);
+			int_lower_bound(max, s1[i].x + s1[i].n);
+		}
+
+		if (matches_may_overlap) {
+			doctmp++;
+			s1++;
+		} else {
+			doctmp += int_max(l, 1);
+			s1 += int_max(l, 1);
+		}
+	}
+
+	regfree(&regex);
+	mem_free(doc);
+
+	return found;
+}
+
+static int
 is_in_range_plain(struct document *f, int y, int yy, unsigned char *text, int l,
 		  int *min, int *max, struct search *s1, struct search *s2)
 {
@@ -326,7 +386,9 @@ is_in_range(struct document *f, int y, int yw, unsigned char *text,
 	if (get_range(f, y, yw, l, &s1, &s2))
 		return 0;
 
-	return is_in_range_plain(f, y, y + yw, text, l, min, max, s1, s2);
+	return get_opt_bool("document.browse.search.regex")
+	       ? is_in_range_regex(f, y, y + yw, text, l, min, max, s1, s2)
+	       : is_in_range_plain(f, y, y + yw, text, l, min, max, s1, s2);
 }
 
 #define realloc_points(pts, size) \

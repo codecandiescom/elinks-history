@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.71 2003/11/09 11:16:33 jonas Exp $ */
+/* $Id: edit.c,v 1.72 2003/11/09 11:22:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,54 +28,6 @@ my_cancel_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	((void (*)(struct dialog *)) dlg_data->dlg->widgets[4].data)(dlg_data->dlg);
 	return cancel_dialog(dlg_data, widget_data);
-}
-
-static inline void
-layout_widgets(struct terminal *term, struct widget_data *wdata, int widgets,
-	       int x, int *y, int w, int *rw)
-{
-	for (; widgets > 0; widgets--, wdata++) {
-		switch (wdata->widget->type) {
-		case WIDGET_FIELD:
-			dlg_format_field(term, wdata, x, y, w, rw, AL_LEFT);
-			(*y)++;
-			break;
-
-		/* We assume that the first button is part of the ending dialog
-		 * buttons. */
-		case WIDGET_BUTTON:
-			dlg_format_buttons(term, wdata, widgets,
-					   x, y, w, rw, AL_CENTER);
-			return;
-		default:
-			internal("Bad widget type or widget not supported.");
-		}
-	}
-}
-
-
-/* Called to setup the edit dialog */
-static void
-add_dialog_layouter(struct dialog_data *dlg_data)
-{
-	struct terminal *term = dlg_data->win->term;
-	int w = dialog_max_width(term);
-	int rw = 0;
-	int y = -1, x = 0;
-
-	layout_widgets(NULL, dlg_data->widgets_data, dlg_data->n,
-		       x, &y, w, &rw);
-
-	/* Update the width to respond to the required minimum width */
-	if (dlg_data->dlg->align != AL_NONE) w = rw;
-
-	draw_dialog(dlg_data, w, y, AL_CENTER);
-
-	y = dlg_data->y + DIALOG_TB;
-	x = dlg_data->x + DIALOG_LB;
-
-	layout_widgets(term, dlg_data->widgets_data, dlg_data->n,
-		       x, &y, w, NULL);
 }
 
 
@@ -130,7 +82,7 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	}
 
 	dlg->title = title;
-	dlg->layouter = add_dialog_layouter;
+	dlg->layouter = generic_dialog_layouter;
 	dlg->refresh = (void (*)(void *)) when_done;
 	dlg->refresh_data = dlg;
 	dlg->udata = parent;

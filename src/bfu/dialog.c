@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.77 2003/11/09 03:13:15 jonas Exp $ */
+/* $Id: dialog.c,v 1.78 2003/11/09 11:22:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -375,6 +375,53 @@ clear_dialog(struct dialog_data *dlg_data, struct widget_data *unused)
 
 	redraw_dialog(dlg_data);
 	return 0;
+}
+
+static inline void
+layout_widgets(struct terminal *term, struct widget_data *wdata, int widgets,
+	       int x, int *y, int w, int *rw)
+{
+	for (; widgets > 0; widgets--, wdata++) {
+		switch (wdata->widget->type) {
+		case WIDGET_FIELD:
+			dlg_format_field(term, wdata, x, y, w, rw, AL_LEFT);
+			(*y)++;
+			break;
+
+		/* We assume that the first button is part of the ending dialog
+		 * buttons. */
+		case WIDGET_BUTTON:
+			dlg_format_buttons(term, wdata, widgets,
+					   x, y, w, rw, AL_CENTER);
+			return;
+		default:
+			internal("Bad widget type or widget not supported.");
+		}
+	}
+}
+
+
+void
+generic_dialog_layouter(struct dialog_data *dlg_data)
+{
+	struct terminal *term = dlg_data->win->term;
+	int w = dialog_max_width(term);
+	int rw = 0;
+	int y = -1, x = 0;
+
+	layout_widgets(NULL, dlg_data->widgets_data, dlg_data->n,
+		       x, &y, w, &rw);
+
+	/* Update the width to respond to the required minimum width */
+	if (dlg_data->dlg->align != AL_NONE) w = rw;
+
+	draw_dialog(dlg_data, w, y, AL_CENTER);
+
+	y = dlg_data->y + DIALOG_TB;
+	x = dlg_data->x + DIALOG_LB;
+
+	layout_widgets(term, dlg_data->widgets_data, dlg_data->n,
+		       x, &y, w, NULL);
 }
 
 void

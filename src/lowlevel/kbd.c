@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.19 2002/12/26 21:47:08 pasky Exp $ */
+/* $Id: kbd.c,v 1.20 2003/05/03 17:01:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,7 +231,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	struct itrm *itrm;
 	struct event ev = { EV_INIT, 80, 24, 0 };
 	unsigned char *ts;
-	int xwin;
+	int env;
 	int ts_len;
 
 	if (get_terminal_size(ctl_in, &x, &y)) {
@@ -268,15 +268,14 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	handle_terminal_resize(ctl_in, resize_terminal);
 	queue_event(itrm, (char *)&ev, sizeof(struct event));
 
-	xwin = is_xterm() * ENV_XWIN + can_twterm() * ENV_TWIN
-	       + (!!getenv("STY")) * ENV_SCREEN + get_system_env();
+	env = get_system_env();
 
 	itrm->flags = 0;
 
 	ts = getenv("TERM");
 	if (!ts) ts = "";
 
-	if ((xwin & ENV_TWIN) && !strcmp(ts, "linux"))
+	if ((env & ENV_TWIN) && !strcmp(ts, "linux"))
 		itrm->flags |= USE_TWIN_MOUSE;
 
 	ts_len = strlen(ts);
@@ -328,7 +327,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	mem_free(ts);
 
 end:
-	queue_event(itrm, (char *)&xwin, sizeof(int));
+	queue_event(itrm, (char *)&env, sizeof(int));
 	queue_event(itrm, (char *)&init_len, sizeof(int));
 	queue_event(itrm, (char *)init_string, init_len);
 	itrm->mouse_h = handle_mouse(0, (void (*)(void *, unsigned char *, int)) queue_event, itrm);

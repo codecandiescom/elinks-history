@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.48 2003/05/03 16:33:13 pasky Exp $ */
+/* $Id: os_dep.c,v 1.49 2003/05/03 17:01:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1712,16 +1712,41 @@ unhandle_mouse(void *data)
 
 #endif /* #ifdef USE_GPM */
 
+/* Create a bitmask consisting from system-independent envirnoment modifiers.
+ * This is then complemented by system-specific modifiers in an appropriate
+ * get_system_env() routine. */
+static int
+get_common_env()
+{
+	int env = 0;
+
+	/* TODO: This should be named uniformly ;-). --pasky */
+	if (is_xterm()) env |= ENV_XWIN;
+	if (can_twterm()) env |= ENV_TWIN;
+	if (getenv("STY")) env |= ENV_SCREEN;
+
+	/* ENV_CONSOLE is always set now and indicates that we are working w/ a
+	 * displaying-capable character-adressed terminal. Sounds purely
+	 * theoretically now, but it already makes some things easier and it
+	 * could give us interesting opportunities later (after graphical
+	 * frontends will be introduced, when working in some mysterious daemon
+	 * mode or who knows what ;). --pasky */
+	env |= ENV_CONSOLE;
+
+	return env;
+}
+
 #if defined(OS2)
 
 int
 get_system_env()
 {
-	/* XXX: Couldn't we return ENV_XWIN instead of ENV_CONSOLE, if it
-	 * is_xterm() ? I don't have a clue about OS/2 but it seems right.
-	 * --pasky */
-	if (is_xterm()) return ENV_CONSOLE;
-	return ENV_OS2VIO;		/* !!! FIXME: telnet */
+	int env = get_common_env();
+
+	/* !!! FIXME: telnet */
+	if (!is_xterm()) env |= ENV_OS2VIO;
+
+	return env;
 }
 
 #elif defined(BEOS)
@@ -1729,12 +1754,13 @@ get_system_env()
 int
 get_system_env()
 {
+	int env = get_common_env();
 	unsigned char *term = getenv("TERM");
 
 	if (!term || (upcase(term[0]) == 'B' && upcase(term[1]) == 'E'))
-		return ENV_BE;
+		env |= ENV_BE;
 
-	return ENV_CONSOLE;
+	return env;
 }
 
 #elif defined(WIN32)
@@ -1742,7 +1768,7 @@ get_system_env()
 int
 get_system_env()
 {
-	return ENV_WIN32;
+	return get_common_env() | ENV_WIN32;
 }
 
 #else
@@ -1750,7 +1776,7 @@ get_system_env()
 int
 get_system_env()
 {
-	return ENV_CONSOLE;
+	return get_common_env();
 }
 
 #endif

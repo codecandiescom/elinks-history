@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.31 2004/10/25 09:59:09 zas Exp $ */
+/* $Id: table.c,v 1.32 2004/10/25 10:16:43 zas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -347,6 +347,19 @@ expand_cells(struct table *table, int dest_col, int dest_row)
 	}
 }
 
+static void
+copy_table(struct table *table_src, struct table *table_dst)
+{
+	int row;
+	int size = sizeof(struct table_cell) * table_src->cols;
+
+	for (row = 0; size > 0 && row < table_src->rows; row++) {
+		memcpy(&table_dst->cells[row * table_dst->real_cols],
+		       &table_src->cells[row * table_src->real_cols],
+		       size);
+	}
+}
+
 static struct table_cell *
 new_cell(struct table *table, int dest_col, int dest_row)
 {
@@ -355,7 +368,6 @@ new_cell(struct table *table, int dest_col, int dest_row)
 
 	while (1) {
 		struct table new_table;
-		int row;
 
 		if (dest_col < table->real_cols && dest_row < table->real_rows) {
 			expand_cells(table, dest_col, dest_row);
@@ -376,11 +388,7 @@ new_cell(struct table *table, int dest_col, int dest_row)
 					     sizeof(struct table_cell));
 		if (!new_table.cells) return NULL;
 
-		for (row = 0; table->cols > 0 && row < table->rows; row++) {
-			memcpy(&new_table.cells[row * new_table.real_cols],
-			       &table->cells[row * table->real_cols],
-			       sizeof(struct table_cell) * table->cols);
-		}
+		copy_table(table, &new_table);
 
 		mem_free(table->cells);
 		table->cells = new_table.cells;

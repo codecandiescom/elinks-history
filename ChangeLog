@@ -1,3 +1,179 @@
+Sun Oct 13 19:18:10 2002  Laurent Monin <zas@norz.org>:
+
+	* TODO:
+
+	links -> ELinks.  
+
+Sun Oct 13 19:08:55 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/ftp.c:
+
+	Fix of previous fix.  
+
+Sun Oct 13 19:06:30 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/ftp.c:
+
+	Swap also PORT/CWD. Thanks, zas.  
+
+Sun Oct 13 19:01:16 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/file.c:
+
+	Directory name in titles is now html escaped.  
+
+Sun Oct 13 18:57:34 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/ftp.c:
+
+	FTP support for downloads resuming, patch by Witekfl and me.  
+
+Sun Oct 13 18:45:25 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Directory name in titles is now html escaped.  
+
+Sun Oct 13 18:43:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/ftp.c:
+
+	Switch order of PORT/PASV and REST, patch by Witold.  
+
+Sun Oct 13 18:35:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/http/http.c:
+
+	Test if lseek() didn't fail.  
+
+Sun Oct 13 18:28:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* TODO:
+
+	We shrink! We shrink! 
+
+Sun Oct 13 18:20:05 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/download.c:
+
+	Fixed problem with resuming download of file being downloaded :^).
+	Patch by Witold.  
+
+Sun Oct 13 17:41:12 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/document.c, globhist/globhist.c,
+	protocol/ftpparse.c:
+
+	We include time.h only if we have it.  
+
+Sun Oct 13 17:30:30 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	We only include unistd.h if we have it.  
+
+Sun Oct 13 16:17:55 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/http/http.c:
+
+	Another error with download resuming fixed - now, it _basically_
+	works if you are very lucky ;). Patch by Witold and me (note that
+	previous patch was by Witold and me as well).  
+
+Sun Oct 13 16:10:43 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/http/http.c:
+
+	Fixed HTTP error occuring when one tries to resume a download.  
+
+Sun Oct 13 15:49:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/http/http.c:
+
+	Some more download resuming fixes, patch by Witold and me. I should
+	also test this sometimes, I suppose ;-). Damn, and another afternoon
+	spent by unwoving the ball of dependencies between various
+	mysterious structs.  
+
+Sun Oct 13 13:27:45 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: document/download.c, lowlevel/sched.c, lowlevel/sched.h:
+
+	Some download resume related fixes (still doesn't work, though),
+	nice comments in struct remaining_info. Patch by Witold and me.  
+
+Sun Oct 13 13:06:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/download.c:
+
+	Minor tidyups and anti-headache fix for future in resuming by Witold
+	;-).  
+
+Sun Oct 13 12:44:50 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/sched.c:
+
+	struct remaining_info * is now always named prg, makes grepping for
+	strange things a joy.  
+
+Sun Oct 13 12:11:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: conf.c, options.c:
+
+	Introduced config_saving_style, permits you to choose what you want
+	to have written to elinks.conf actually.  
+
+Sun Oct 13 12:06:25 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, contrib/lua/hooks.lua.in:
+
+	New dumbprefixes, introduced %c substitution for current_url. Patch
+	by Grzegorz Adam Hankiewicz <gradha@terra.es>.  
+
+Sun Oct 13 12:00:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Fixed error if getenv is nil.  
+
+Sun Oct 13 07:03:34 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/ftp.c:
+
+	Trivial tidyup.  
+
+Sun Oct 13 00:37:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/ftp.c:
+
+	Three bugs in one line of code - inbelievable ;-). Fixed passive
+	FTP6.  
+
+Sat Oct 12 23:47:32 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/ftp.c:
+
+	Fixed dain bramaged if() causing FTP6 always fail if pasv was
+	enabled and epsv disabled.  
+
+Sat Oct 12 23:42:11 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	We only want to include fcntl.h if we have it.  
+
+Sat Oct 12 23:36:55 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	We only want to include fcntl.h if we have it.  
+
+Sat Oct 12 22:50:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	Fixed protocol.ftp.use_epsv 
+
 Sat Oct 12 22:03:30 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/config/options.c:

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.93 2003/06/24 23:55:26 jonas Exp $ */
+/* $Id: file.c,v 1.94 2003/06/25 09:57:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,16 +142,12 @@ stat_links(unsigned char **p, int *l, struct stat *stp)
 #endif
 }
 
-/* This is ugly and have to go. --jonas */
-static int last_uid = -1;
-static int last_gid = -1;
-
 static inline void
-stat_user(unsigned char **p, int *l, struct stat *stp, int g)
+stat_user(unsigned char **p, int *l, struct stat *stp)
 {
 #ifdef FS_UNIX_USERS
-	int id;
-	unsigned char *pp;
+	static unsigned char last_user[64];
+	static int last_uid = -1;
 	int i;
 
 	if (!stp) {
@@ -159,43 +155,50 @@ stat_user(unsigned char **p, int *l, struct stat *stp, int g)
 		return;
 	}
 
-	if (!g) {
-		static unsigned char last_user[64];
-		struct passwd *pwd;
+	if (stp->st_uid != last_uid || last_uid == -1) {
+		struct passwd *pwd = getpwuid(stp->st_uid);
 
-		id = stp->st_uid;
-		pp = last_user;
-		if (id == last_uid && last_uid != -1)
-			goto end;
-
-		pwd = getpwuid(id);
 		if (!pwd || !pwd->pw_name)
-			ulongcat(pp, NULL, id, 8, 0);
+			ulongcat(last_user, NULL, stp->st_uid, 8, 0);
 		else
-			sprintf(pp, "%.8s", pwd->pw_name);
-		last_uid = id;
+			sprintf(last_user, "%.8s", pwd->pw_name);
 
-	} else {
-		static unsigned char last_group[64];
-		struct group *grp;
-
-
-		id = stp->st_gid;
-		pp = last_group;
-		if (id == last_gid && last_gid != -1)
-			goto end;
-
-		grp = getgrgid(id);
-		if (!grp || !grp->gr_name)
-			ulongcat(pp, NULL, id, 8, 0);
-		else
-			sprintf(pp, "%.8s", grp->gr_name);
-		last_gid = id;
+		last_uid = stp->st_uid;
 	}
 
-end:
-	add_to_str(p, l, pp);
-	for (i = strlen(pp); i < 8; i++) add_chr_to_str(p, l, ' ');
+	add_to_str(p, l, last_user);
+	for (i = strlen(last_user); i < 8; i++) add_chr_to_str(p, l, ' ');
+	add_chr_to_str(p, l, ' ');
+#endif
+}
+
+static inline void
+stat_group(unsigned char **p, int *l, struct stat *stp)
+{
+#ifdef FS_UNIX_USERS
+	static unsigned char last_group[64];
+	static int last_gid = -1;
+	int i;
+
+	if (!stp) {
+		add_to_str(p, l, "         ");
+		return;
+	}
+
+	if (stp->st_gid != last_gid || last_gid == -1) {
+		struct group *grp = getgrgid(stp->st_gid);
+
+		if (!grp || !grp->gr_name)
+			ulongcat(last_group, NULL, stp->st_gid, 8, 0);
+		else
+			sprintf(last_group, "%.8s", grp->gr_name);
+
+		last_gid = stp->st_gid;
+	}
+
+	add_to_str(p, l, last_group);
+		;
+	for (i = strlen(last_group); i < 8; i++) add_chr_to_str(p, l, ' ');
 	add_chr_to_str(p, l, ' ');
 #endif
 }
@@ -359,9 +362,6 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 		dircolor[0] = 0;
 	}
 
-	last_uid = -1;
-	last_gid = -1;
-
 	while ((entry = readdir(directory))) {
 		struct stat st, *stp;
 		struct directory_entry *new_entries;
@@ -403,8 +403,8 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 		stat_type(&attrib, &attriblen, stp);
 		stat_mode(&attrib, &attriblen, stp);
 		stat_links(&attrib, &attriblen, stp);
-		stat_user(&attrib, &attriblen, stp, 0);
-		stat_user(&attrib, &attriblen, stp, 1);
+		stat_user(&attrib, &attriblen, stp);
+		stat_group(&attrib, &attriblen, stp);
 		stat_size(&attrib, &attriblen, stp);
 		stat_date(&attrib, &attriblen, stp);
 		entries[size].name = name;

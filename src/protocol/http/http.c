@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.126 2003/06/11 15:27:53 pasky Exp $ */
+/* $Id: http.c,v 1.127 2003/06/20 18:51:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -700,24 +700,20 @@ http_send_header(struct connection *conn)
 }
 
 
-/** @func	uncompress_data(struct connection *conn, unsigned char *data,
-		int len, int *dlen)
- * @brief	This function uncompress data blocks (if they were compressed).
- * @param	conn	standard structure
- * @param	data	block of data
- * @param	len	length of the block
- * @param	new_len	number of uncompressed bytes (length of returned block
-			of data)
- * @ret		unsigned char *	address of uncompressed block
- * @remark	In this function, value of either info->chunk_remaining or
- *		info->length is being changed (it depends on if chunked mode is
- *		used or not).
- *		Note that the function is still a little esotheric for me. Don't
- *		take it lightly and don't mess with it without grave reason! If
- *		you dare to touch this without testing the changes on slashdot
- *		and cvsweb (including revision history), don't dare to send me
- *		any patches! ;) --pasky
- */
+/* This function uncompresses the data block given in @data (if it was
+ * compressed), which is long @len bytes. The uncompressed data block is given
+ * back to the world as the return value and its length is stored into
+ * @new_len.
+ * 
+ * In this function, value of either info->chunk_remaining or info->length is
+ * being changed (it depends on if chunked mode is used or not).
+ *
+ * Note that the function is still a little esotheric for me. Don't take it
+ * lightly and don't mess with it without grave reason! If you dare to touch
+ * this without testing the changes on slashdot, freshmeat and cvsweb
+ * (including revision history), don't dare to send me any patches! ;) --pasky
+ * 
+ * This function gotta die. */
 static unsigned char *
 uncompress_data(struct connection *conn, unsigned char *data, int len,
 		int *new_len)

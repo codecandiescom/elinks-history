@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.21 2003/06/21 00:17:53 pasky Exp $ */
+/* $Id: dump.c,v 1.22 2003/06/21 00:21:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,7 +131,7 @@ dump_end(struct status *stat, void *p)
 		struct document_options o;
 		struct f_data_c fd;
 		struct view_state *vs = mem_alloc(sizeof(struct view_state)
-						  + strlen(stat->ce->url) + 1);
+						  + strlen(ce->url) + 1);
 
 		if (!vs) goto terminate;
 
@@ -154,7 +154,7 @@ dump_end(struct status *stat, void *p)
 		memcpy(&o.default_vlink, get_opt_ptr("document.colors.vlink"), sizeof(struct rgb));
 		o.framename = "";
 
-		init_vs(vs, stat->ce->url);
+		init_vs(vs, ce->url);
 		cached_format_html(vs, &fd, &o);
 		dump_to_file(fd.f_data, oh);
 		detach_formatted(&fd);

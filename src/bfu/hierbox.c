@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.60 2003/11/18 07:52:48 miciah Exp $ */
+/* $Id: hierbox.c,v 1.61 2003/11/19 01:45:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,77 @@
 #include "intl/gettext/libintl.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
+
+
+void
+update_hierbox_browser(struct hierbox_browser *browser)
+{
+	struct hierbox_dialog_list_item *item;
+
+	foreach (item, *browser->dialogs) {
+		struct widget_data *widget_data =
+			item->dlg_data->widgets_data;
+
+		display_dlg_item(item->dlg_data, widget_data, 1);
+	}
+}
+
+struct listbox_item *
+init_browser_box(struct hierbox_browser *browser, unsigned char *text,
+		 void *data)
+{
+	struct listbox_item *box = mem_calloc(1, sizeof(struct listbox_item));
+
+	if (!box) return NULL;
+
+	init_list(box->child);
+	box->visible = 1;
+
+	box->text = text;
+	box->box = browser->boxes;
+	box->udata = data;
+
+	add_to_list(*browser->items, box);
+
+	update_hierbox_browser(browser);
+
+	return box;
+}
+
+/* Creates the box display (holds everything EXCEPT
+ * the actual rendering data) */
+static struct listbox_data *
+hierbox_browser_box_build(struct hierbox_browser *browser)
+{
+	struct listbox_data *box;
+
+	box = mem_calloc(1, sizeof(struct listbox_data));
+	if (!box) return NULL;
+
+	box->ops = browser->ops;
+	box->items = browser->items;
+	add_to_list(*browser->boxes, box);
+
+	return box;
+}
+
+/* Cleans up after the hierbox dialog */
+static void
+hierbox_dialog_abort_handler(struct dialog_data *dlg_data)
+{
+	struct hierbox_browser *browser = dlg_data->dlg->udata2;
+	struct hierbox_dialog_list_item *item;
+
+	if (browser->dialogs) {
+		foreach (item, *browser->dialogs) {
+			if (item->dlg_data == dlg_data) {
+				del_from_list(item);
+				mem_free(item);
+				break;
+			}
+		}
+	}
+}
 
 
 static void
@@ -159,15 +230,18 @@ display_dlg:
 	return EVENT_NOT_PROCESSED;
 }
 
-
 struct dialog_data *
 hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
-		struct listbox_data *listbox_data, void *udata,
+		struct hierbox_browser *browser, void *udata,
 		size_t buttons, ...)
 {
+	struct hierbox_dialog_list_item *item;
+	struct listbox_data *listbox_data;
+	struct dialog_data *dlg_data;
 	struct dialog *dlg;
 	va_list ap;
 
+	listbox_data = hierbox_browser_box_build(browser);
 	if (!listbox_data) return NULL;
 
 	/* Create the dialog */
@@ -183,6 +257,8 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 	dlg->layout.padding_top = 1;
 	dlg->handle_event = hierbox_dialog_event_handler;
 	dlg->udata = udata;
+	dlg->udata2 = browser;
+	dlg->abort = hierbox_dialog_abort_handler;
 
 	add_dlg_listbox(dlg, 12, listbox_data);
 
@@ -213,22 +289,13 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
 	add_dlg_end(dlg, buttons + 2);
 
-	return do_dialog(term, dlg, getml(dlg, NULL));
-}
+	dlg_data = do_dialog(term, dlg, getml(dlg, NULL));
 
-struct listbox_data *
-hierbox_browser_box_build(struct list_head *boxes,
-			  struct list_head *items,
-			  struct listbox_ops *ops)
-{
-	struct listbox_data *box;
+	item = mem_alloc(sizeof(struct hierbox_dialog_list_item));
+	if (item) {
+		item->dlg_data = dlg_data;
+		add_to_list(*browser->dialogs, item);
+	}
 
-	box = mem_calloc(1, sizeof(struct listbox_data));
-	if (!box) return NULL;
-
-	box->ops = ops;
-	box->items = items;
-	add_to_list(*boxes, box);
-
-	return box;
+	return dlg_data;
 }

@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.23 2003/11/18 23:17:43 jonas Exp $ */
+/* $Id: dialogs.c,v 1.24 2003/11/19 01:45:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,36 +29,12 @@
 
 static INIT_LIST_HEAD(cache_dialog_list);
 
-void
-update_all_cache_dialogs(void)
-{
-	struct hierbox_dialog_list_item *item;
-
-	foreach (item, cache_dialog_list) {
-		struct widget_data *widget_data =
-			item->dlg_data->widgets_data;
-
-		display_dlg_item(item->dlg_data, widget_data, 1);
-	}
-}
-
-
-/* Cleans up after the cache dialog */
-static void
-cache_dialog_abort_handler(struct dialog_data *dlg_data)
-{
-	struct hierbox_dialog_list_item *item;
-
-	foreach (item, cache_dialog_list) {
-		if (item->dlg_data == dlg_data) {
-			del_from_list(item);
-			mem_free(item);
-			break;
-		}
-	}
-}
-
-
+struct hierbox_browser cache_browser = {
+	&cache_entry_box_items,
+	&cache_entry_boxes,
+	&cache_dialog_list,
+	NULL,
+};
 
 static void
 done_info_button(void *vhop)
@@ -156,7 +132,6 @@ void
 menu_cache_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	struct dialog_data *dlg_data;
-	struct hierbox_dialog_list_item *item;
 	struct listbox_item *litem;
 
 	foreach (litem, cache_entry_box_items) {
@@ -164,20 +139,7 @@ menu_cache_manager(struct terminal *term, void *fcp, struct session *ses)
 	}
 
 	dlg_data = hierbox_browser(term, N_("Cache"),
-			0,
-			hierbox_browser_box_build(&cache_entry_boxes,
-						  &cache_entry_box_items,
-						  NULL),
-			ses,
+			0, &cache_browser, ses,
 			1,
 			N_("Info"), push_info_button, B_ENTER, ses);
-
-	if (!dlg_data) return;
-	dlg_data->dlg->abort = cache_dialog_abort_handler;
-
-	item = mem_alloc(sizeof(struct hierbox_dialog_list_item));
-	if (item) {
-		item->dlg_data = dlg_data;
-		add_to_list(cache_dialog_list, item);
-	}
 }

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.96 2003/11/17 22:22:35 jonas Exp $ */
+/* $Id: cookies.c,v 1.97 2003/11/19 01:45:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -400,22 +400,7 @@ accept_cookie(struct cookie *c)
 	struct cookie *d, *e;
 	int domain_len;
 
-	c->box_item = mem_calloc(1, sizeof(struct listbox_item));
-	if (!c->box_item) {
-		free_cookie(c);
-		return;
-	}
-
-	init_list(c->box_item->child);
-	c->box_item->visible = 1;
-
-	c->box_item->text = c->server;
-	c->box_item->box = &cookie_boxes;
-	c->box_item->udata = (void *) c;
-
-	add_to_list(cookie_box_items, c->box_item);
-
-	update_all_cookie_dialogs();
+	c->box_item = init_browser_box(&cookie_browser, c->server, c);
 
 	foreach (d, cookies) {
 		if (strcasecmp(d->name, c->name)

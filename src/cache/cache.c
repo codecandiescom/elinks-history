@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.97 2003/11/17 21:39:52 pasky Exp $ */
+/* $Id: cache.c,v 1.98 2003/11/19 01:45:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,18 +145,7 @@ get_cache_entry(unsigned char *url)
 
 	add_to_list(cache, ce);
 
-	ce->box_item = mem_calloc(1, sizeof(struct listbox_item));
-	if (!ce->box_item) return ce;
-	init_list(ce->box_item->child);
-	ce->box_item->visible = 1;
-
-	ce->box_item->text = struri(ce->uri);
-	ce->box_item->box = &cache_entry_boxes;
-	ce->box_item->udata = (void *) ce;
-
-	add_to_list(cache_entry_box_items, ce->box_item);
-
-	update_all_cache_dialogs();
+	ce->box_item = init_browser_box(&cache_browser, struri(ce->uri), ce);
 
 	return ce;
 }

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.69 2003/11/18 23:17:43 jonas Exp $ */
+/* $Id: dialogs.c,v 1.70 2003/11/19 01:45:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,34 +38,12 @@ static struct listbox_ops gh_listbox_ops = {
 	listbox_delete_historyitem,
 };
 
-void
-update_all_history_dialogs(void)
-{
-	struct hierbox_dialog_list_item *item;
-
-	foreach (item, history_dialog_list) {
-		struct widget_data *widget_data =
-			item->dlg_data->widgets_data;
-
-		display_dlg_item(item->dlg_data, widget_data, 1);
-	}
-}
-
-
-/* Cleans up after the history dialog */
-static void
-history_dialog_abort_handler(struct dialog_data *dlg_data)
-{
-	struct hierbox_dialog_list_item *item;
-
-	foreach (item, history_dialog_list) {
-		if (item->dlg_data == dlg_data) {
-			del_from_list(item);
-			mem_free(item);
-			break;
-		}
-	}
-}
+struct hierbox_browser globhist_browser = {
+	&gh_boxes,
+	&gh_box_items,
+	&history_dialog_list,
+	&gh_listbox_ops,
+};
 
 
 static void
@@ -140,7 +118,7 @@ push_toggle_display_button(struct dialog_data *dlg_data, struct widget_data *wid
 		strcpy(item->box_item->text, text);
 	}
 
-	update_all_history_dialogs();
+	update_hierbox_browser(&globhist_browser);
 
 	return 0;
 }
@@ -394,7 +372,6 @@ void
 menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	struct dialog_data *dlg_data;
-	struct hierbox_dialog_list_item *item;
 	struct global_history_item *litem;
 
 	foreach (litem, global_history.items) {
@@ -412,10 +389,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	}
 
 	dlg_data = hierbox_browser(term, N_("Global history"),
-			GLOBHIST_MANAGER_ADDSIZE,
-			hierbox_browser_box_build(&gh_boxes, &gh_box_items,
-						  &gh_listbox_ops),
-			ses,
+			GLOBHIST_MANAGER_ADDSIZE, &globhist_browser, ses,
 			GLOBHIST_MANAGER_BUTTONS,
 			N_("Goto"), push_goto_button, B_ENTER, ses,
 			N_("Info"), push_info_button, B_ENTER, ses,
@@ -426,15 +400,6 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 			N_("Search"), push_search_button, B_ENTER, NULL,
 			N_("Toggle display"), push_toggle_display_button, B_ENTER, ses,
 			N_("Clear"), push_clear_button, B_ENTER, NULL);
-
-	if (!dlg_data) return;
-	dlg_data->dlg->abort = history_dialog_abort_handler;
-
-	item = mem_alloc(sizeof(struct hierbox_dialog_list_item));
-	if (item) {
-		item->dlg_data = dlg_data;
-		add_to_list(history_dialog_list, item);
-	}
 }
 
 #endif /* GLOBHIST */

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.115 2003/11/18 07:52:48 miciah Exp $ */
+/* $Id: dialogs.c,v 1.116 2003/11/19 01:45:04 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -47,6 +47,15 @@ static void listbox_delete_bookmark(struct terminal *, struct listbox_data *);
 
 static struct listbox_ops bookmarks_listbox_ops = {
 	listbox_delete_bookmark,
+};
+
+static INIT_LIST_HEAD(bookmark_dialog_list);
+
+static struct hierbox_browser bookmark_browser = {
+	&bookmark_boxes,
+	&bookmark_box_items,
+	&bookmark_dialog_list,
+	&bookmarks_listbox_ops,
 };
 
 /****************************************************************************
@@ -558,11 +567,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	}
 
 	hierbox_browser(term, N_("Bookmark manager"),
-			BOOKMARK_MANAGER_ADDSIZE,
-			hierbox_browser_box_build(&bookmark_boxes,
-						  &bookmark_box_items,
-						  &bookmarks_listbox_ops),
-			ses,
+			BOOKMARK_MANAGER_ADDSIZE, &bookmark_browser, ses,
 			BOOKMARK_MANAGER_BUTTONS,
 			N_("Goto"), push_goto_button, B_ENTER, ses,
 			N_("Edit"), push_edit_button, B_ENTER, ses,

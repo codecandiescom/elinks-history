@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.115 2003/11/18 07:52:48 miciah Exp $ */
+/* $Id: dialogs.c,v 1.116 2003/11/19 01:45:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,24 @@
 #include "util/lists.h"
 #include "util/memory.h"
 
+
+static INIT_LIST_HEAD(option_dialog_list);
+
+static struct hierbox_browser option_browser = {
+	&option_boxes,
+	NULL,	/* Set in menu_options_manager() */
+	&option_dialog_list,
+	NULL,
+};
+
+static INIT_LIST_HEAD(keybinding_dialog_list);
+
+static struct hierbox_browser keybinding_browser = {
+	&kbdbind_boxes,
+	&kbdbind_box_items,
+	&keybinding_dialog_list,
+	NULL,
+};
 
 void
 write_config_error(struct terminal *term, struct memory_list *ml,
@@ -380,12 +398,10 @@ push_save_button(struct dialog_data *dlg_data,
 void
 menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 {
-	struct list_head *items = &config_options->box_item->child;
+	option_browser.items = &config_options->box_item->child;
 
 	hierbox_browser(term, N_("Option manager"),
-			OPTION_MANAGER_ADDSIZE,
-			hierbox_browser_box_build(&option_boxes, items, NULL),
-			ses,
+			OPTION_MANAGER_ADDSIZE, &option_browser, ses,
 			OPTION_MANAGER_BUTTONS,
 			N_("Info"), push_info_button, B_ENTER, ses,
 			N_("Edit"), push_edit_button, B_ENTER, ses,
@@ -566,11 +582,7 @@ void
 menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	hierbox_browser(term, N_("Keybinding manager"),
-			KEYBINDING_MANAGER_ADDSIZE,
-			hierbox_browser_box_build(&kbdbind_boxes,
-						  &kbdbind_box_items,
-						  NULL),
-			ses,
+			KEYBINDING_MANAGER_ADDSIZE, &keybinding_browser, ses,
 			KEYBINDING_MANAGER_BUTTONS,
 			N_("Add"), push_kbdbind_add_button, B_ENTER, ses,
 			N_("Delete"), push_kbdbind_del_button, B_ENTER, ses,

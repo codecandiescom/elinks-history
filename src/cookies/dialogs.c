@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.5 2003/11/18 13:29:00 jonas Exp $ */
+/* $Id: dialogs.c,v 1.6 2003/11/19 01:45:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,34 +30,12 @@
 
 static INIT_LIST_HEAD(cookie_dialog_list);
 
-void
-update_all_cookie_dialogs(void)
-{
-	struct hierbox_dialog_list_item *item;
-
-	foreach (item, cookie_dialog_list) {
-		struct widget_data *widget_data =
-			item->dlg_data->widgets_data;
-
-		display_dlg_item(item->dlg_data, widget_data, 1);
-	}
-}
-
-
-/* Cleans up after the cache dialog */
-static void
-cookie_dialog_abort_handler(struct dialog_data *dlg_data)
-{
-	struct hierbox_dialog_list_item *item;
-
-	foreach (item, cookie_dialog_list) {
-		if (item->dlg_data == dlg_data) {
-			del_from_list(item);
-			mem_free(item);
-			break;
-		}
-	}
-}
+struct hierbox_browser cookie_browser = {
+	&cookie_boxes,
+	&cookie_box_items,
+	&cookie_dialog_list,
+	NULL,
+};
 
 
 static unsigned char *
@@ -140,7 +118,6 @@ void
 menu_cookie_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	struct dialog_data *dlg_data;
-	struct hierbox_dialog_list_item *item;
 	struct listbox_item *litem;
 
 	foreach (litem, cookie_box_items) {
@@ -148,20 +125,8 @@ menu_cookie_manager(struct terminal *term, void *fcp, struct session *ses)
 	}
 
 	dlg_data = hierbox_browser(term, N_("Cookie manager"),
-			0,
-			hierbox_browser_box_build(&cookie_boxes,
-						  &cookie_box_items, NULL),
-			ses,
+			0, &cookie_browser, ses,
 			2,
 			N_("Info"), push_info_button, B_ENTER, ses,
 			N_("Save"), push_save_button, B_ENTER, ses);
-
-	if (!dlg_data) return;
-	dlg_data->dlg->abort = cookie_dialog_abort_handler;
-
-	item = mem_alloc(sizeof(struct hierbox_dialog_list_item));
-	if (item) {
-		item->dlg_data = dlg_data;
-		add_to_list(cookie_dialog_list, item);
-	}
 }

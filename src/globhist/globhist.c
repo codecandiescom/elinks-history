@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.44 2003/11/18 05:51:37 miciah Exp $ */
+/* $Id: globhist.c,v 1.45 2003/11/19 01:45:06 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -173,7 +173,7 @@ delete_global_history_item(struct global_history_item *historyitem)
 	mem_free(historyitem);
 	global_history.n--;
 
-	update_all_history_dialogs();
+	update_hierbox_browser(&globhist_browser);
 	globhist_dirty = 1;
 }
 
@@ -310,7 +310,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 
 	add_to_list(gh_box_items, history_item->box_item);
 
-	update_all_history_dialogs();
+	update_hierbox_browser(&globhist_browser);
 
 	if (!globhist_nosave) globhist_dirty = 1;
 

@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.38 2004/01/31 00:43:40 jonas Exp $ */
+/* $Id: css.c,v 1.39 2004/04/02 21:10:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #include "lowlevel/home.h"
 #include "modules/module.h"
 #include "protocol/file/file.h"
+#include "protocol/uri.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "viewer/text/view.h"
@@ -53,9 +54,11 @@ void
 import_css(struct css_stylesheet *css, unsigned char *url)
 {
 	/* Do we have it in the cache? (TODO: CSS cache) */
-	struct cache_entry *cache_entry = find_in_cache(url);
+	struct uri *uri = get_uri(url, -1);
+	struct cache_entry *cache_entry = uri ? find_in_cache(struri(uri)) : NULL;
 	struct fragment *fragment;
 
+	if (uri) done_uri(uri);
 	if (!cache_entry
 	    || css->import_level >= MAX_REDIRECTS)
 		return;

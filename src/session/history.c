@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.23 2003/06/15 19:57:45 zas Exp $ */
+/* $Id: history.c,v 1.24 2003/06/15 22:11:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,9 +154,9 @@ go_away(struct session *ses, int dir)
 		return 0;
 	}
 
-	if (!have_location(ses) ||
-	    (dir == -1 && history->prev == history->next) ||
-	    (dir == 1 && list_empty(*history))) {
+	if (!have_location(ses)
+	    || (dir == -1 && history->prev == history->next)
+	    || (dir == 1 && list_empty(*history))) {
 		/* There's no history, at most only the current location. */
 		return 0;
 	}

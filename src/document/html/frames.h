@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.17 2003/10/29 16:10:29 jonas Exp $ */
+/* $Id: frames.h,v 1.18 2003/10/29 22:58:10 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -29,6 +29,11 @@ struct frameset_desc {
 };
 
 struct view_state;
+
+struct link_bg {
+	int x, y;
+	struct screen_char c;
+};
 
 struct document_view {
 	LIST_HEAD(struct document_view);

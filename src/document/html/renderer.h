@@ -1,10 +1,11 @@
-/* $Id: renderer.h,v 1.46 2003/10/29 16:29:44 jonas Exp $ */
+/* $Id: renderer.h,v 1.47 2003/10/29 22:58:10 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
 
 #include "intl/charsets.h"
-#include "document/html/parser.h"
+#include "document/document.h"
+#include "document/html/frames.h"
 #include "terminal/draw.h"
 #include "lowlevel/ttime.h"
 #include "util/color.h"
@@ -12,13 +13,6 @@
 /* We need this included later, otherwise it will miss some our
  * declarations. */
 /* #include "vs.h" */
-
-
-/* For struct document_view */
-struct link_bg {
-	int x, y;
-	struct screen_char c;
-};
 
 
 extern int format_cache_entries;
@@ -32,7 +26,6 @@ void delete_unused_format_cache_entries(void);
 void format_cache_reactivate(struct document *);
 
 struct view_state;
-struct document_view;
 struct document_options;
 void cached_format_html(struct view_state *, struct document_view *, struct document_options *);
 

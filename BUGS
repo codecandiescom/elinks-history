@@ -34,6 +34,9 @@ top/bottom of screen.
 
 	About dialog is containing garbage content during a transfer.
 
-$Id: BUGS,v 1.16 2002/03/16 12:31:14 pasky Exp $
+	Empty menu will cause ignoring of everything except ^C when you'll
+close it.
+
+$Id: BUGS,v 1.17 2002/03/19 18:34:51 pasky Exp $
 
 vim: textwidth=80

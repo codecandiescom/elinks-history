@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.46 2004/09/04 11:19:11 jonas Exp $ */
+/* $Id: xbel.c,v 1.47 2004/11/19 16:42:35 zas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -21,7 +21,7 @@
 
 #include "elinks.h"
 
-#include "bfu/listbox.h"
+#include "bfu/dialog.h"
 #include "bookmarks/bookmarks.h"
 #include "bookmarks/backend/common.h"
 #include "bookmarks/backend/xbel.h"

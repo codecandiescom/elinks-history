@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.188 2004/11/19 15:53:54 jonas Exp $ */
+/* $Id: cookies.c,v 1.189 2004/11/19 16:42:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,7 @@
 #define DEBUG_COOKIES
 #endif
 
-#include "bfu/msgbox.h"
+#include "bfu/dialog.h"
 #include "cookies/cookies.h"
 #include "cookies/dialogs.h"
 #include "cookies/parser.h"

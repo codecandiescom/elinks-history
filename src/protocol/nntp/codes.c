@@ -1,5 +1,5 @@
 /* NNTP response codes */
-/* $Id: codes.c,v 1.1 2004/08/14 07:53:14 jonas Exp $ */
+/* $Id: codes.c,v 1.2 2004/11/19 16:42:35 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -11,7 +11,7 @@
 
 #include "elinks.h"
 
-#include "bfu/msgbox.h"
+#include "bfu/dialog.h"
 #include "intl/gettext/libintl.h"
 #include "protocol/nntp/codes.h"
 #include "protocol/uri.h"

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.189 2004/10/14 20:28:24 jonas Exp $ */
+/* $Id: cache.c,v 1.190 2004/11/19 16:42:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,7 @@
 
 #include "elinks.h"
 
-#include "bfu/listbox.h"
+#include "bfu/dialog.h"
 #include "cache/cache.h"
 #include "cache/dialogs.h"
 #include "config/options.h"

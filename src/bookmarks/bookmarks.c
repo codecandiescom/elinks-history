@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.138 2004/09/26 00:28:24 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.139 2004/11/19 16:42:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,7 +11,7 @@
 
 #include "elinks.h"
 
-#include "bfu/listbox.h"
+#include "bfu/dialog.h"
 #include "bookmarks/bookmarks.h"
 #include "bookmarks/dialogs.h"
 #include "bookmarks/backend/common.h"

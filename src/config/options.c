@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.461 2004/07/15 12:50:07 jonas Exp $ */
+/* $Id: options.c,v 1.462 2004/11/19 16:42:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,7 +11,7 @@
 #include "elinks.h"
 
 #include "main.h" /* shrink_memory() */
-#include "bfu/listbox.h"
+#include "bfu/dialog.h"
 #include "config/conf.h"
 #include "config/dialogs.h"
 #include "config/options.h"

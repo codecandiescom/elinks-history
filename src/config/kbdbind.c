@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.260 2004/10/14 13:23:05 zas Exp $ */
+/* $Id: kbdbind.c,v 1.261 2004/11/19 16:42:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,7 +10,7 @@
 
 #include "elinks.h"
 
-#include "bfu/listbox.h"
+#include "bfu/dialog.h"
 #include "config/conf.h"
 #include "config/dialogs.h"
 #include "config/kbdbind.h"

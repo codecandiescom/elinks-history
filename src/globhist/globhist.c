@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.86 2004/11/16 10:32:25 zas Exp $ */
+/* $Id: globhist.c,v 1.87 2004/11/19 16:42:35 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -18,8 +18,7 @@
 #include <time.h>
 #endif
 
-#include "bfu/inphist.h" /* For struct input_history */
-#include "bfu/listbox.h"
+#include "bfu/dialog.h"
 #include "config/options.h"
 #include "globhist/dialogs.h"
 #include "globhist/globhist.h"

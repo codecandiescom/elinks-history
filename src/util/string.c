@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.7 2002/09/08 19:12:23 pasky Exp $ */
+/* $Id: string.c,v 1.8 2002/09/11 16:10:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -195,7 +195,7 @@ strcasestr(unsigned char *haystack, unsigned char *needle)
 		return NULL;
 
 	for (i = haystack_length - needle_length + 1; i; i--) {
-		if (!casecmp(haystack, needle, needle_length))
+		if (!strncasecmp(haystack, needle, needle_length))
 			return haystack;
 		haystack++;
 	}

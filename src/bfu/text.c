@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.49 2003/11/09 03:13:15 jonas Exp $ */
+/* $Id: text.c,v 1.50 2003/11/09 14:23:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,6 +73,16 @@ dlg_format_text(struct terminal *term, unsigned char *text,
 
 		draw_text(term, x + shift, *y, text, line_width, 0, color);
 	}
+}
+
+void
+layout_text_widget(struct terminal *term, struct widget_data *widget_data,
+		   int x, int *y, int dlg_width, int *real_width)
+{
+	dlg_format_text(term, widget_data->widget->text,
+			x, y, dlg_width, real_width,
+			term ? get_bfu_color(term, "dialog.text") : NULL,
+			widget_data->widget->info.text.align);
 }
 
 struct widget_ops text_ops = {

@@ -1,3 +1,17 @@
+Sun Apr  7 12:47:02 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+	
+	Breaking things at least partially working yet.. oh well ;) Now
+	we'll check for -ldl when checking for Lua as well.
+
+Sun Apr  7 07:01:52 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lua/lua.c:
+	
+	Include stdio.h in lua.c, thanks to José Luis González González
+	<jlg80@mi.madritel.es>.
+
 Sat Apr  6 22:19:13 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/main.c:

@@ -151,14 +151,14 @@ while (<>) {
 	$Fld[2] = substr($Fld[2], 2, length($Fld[2]) - 2);
 	print 'set terminal.' . $Fld[2] . '.type = ' . $Fld[4];
 	print 'set terminal.' . $Fld[2] . '.m11_hack = ' . $Fld[4];
-	print 'set terminal.' . $Fld[2] . '.utf_8_io = ' . (($Fld[7] eq '') ? '0' : $Fld[7]);
+	print 'set terminal.' . $Fld[2] . '.utf_8_io = ' . (($Fld[7] eq '') ? '0' : '1');
 	print 'set terminal.' . $Fld[2] . '.restrict_852 = ' . (!(!($Fld[5] & 2))+0);
 	print 'set terminal.' . $Fld[2] . '.block_cursor = ' . (!(!($Fld[5] & 4))+0);
 	print 'set terminal.' . $Fld[2] . '.colors = ' . (!(!($Fld[5] & 1))+0);
 	print 'set terminal.' . $Fld[2] . '.charset = "' . $Fld[6] . '"';
     }
     if ($Fld[1] eq 'extension') {
-	$num_exts = (@ext = split(/,/, substr($Fld[2], 2, length($Fld[2]) - 2), 9999));
+	$num_exts = (@ext = split(/, */, substr($Fld[2], 2, length($Fld[2]) - 2), 9999));
 	for ($i = $num_exts; $i; --$i) {
 	    $ext[$i] =~ s/\./*/g;
 	    print 'set mime.extension.' . $ext[$i] . ' = ' . $Fld[3];
@@ -170,14 +170,14 @@ while (<>) {
 
 	$name = &get_token();
 	$name = substr($name, 2, length($name) - 2);
-	$name =~ s/[[:blank:]]/_/g;
-	$name =~ s/[^[:alnum:]_]/-/g;
+	$name =~ s/[ \t]/_/g;
+	$name =~ s/[^a-zA-Z0-9_]/-/g;
 
 	$mimelist = &get_token();
 	$mimelist = substr($mimelist, 2, length($mimelist) - 2);
 	$mimelist =~ s/\./*/g;
 	$mimelist =~ s/\//./g;
-	$num_mimetypes = (@mimetype = split(/,/, $mimelist, 9999));
+	$num_mimetypes = (@mimetype = split(/, */, $mimelist, 9999));
 
 	$program = &get_token();
 
@@ -272,6 +272,6 @@ sub get_token {
 sub print_association {
     local($name, $system_str, $ask, $block, $program) = @_;
     print 'set mime.handler.' . $name . '.' . $system_str . '.ask = ' . $ask;
-    print 'set mime.handler.' . $name . '.' . $system_str . '.block = ' . $block;
+    print 'set mime.handler.' . $name . '.' . $system_str . '.block = ' . ($block ? '1' : '0');
     print 'set mime.handler.' . $name . '.' . $system_str . '.program = ' . $program;
 }

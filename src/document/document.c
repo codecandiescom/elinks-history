@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.67 2004/06/07 16:18:32 jonas Exp $ */
+/* $Id: document.c,v 1.68 2004/06/07 17:46:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,7 +46,7 @@ init_document(struct cache_entry *cached, struct document_options *options)
 	document->uri = get_uri_reference(cached->uri);
 
 	object_lock(cached);
-	document->id_tag = cached->id_tag;
+	document->id = cached->id;
 
 	init_list(document->forms);
 	init_list(document->tags);
@@ -180,7 +180,7 @@ get_cached_document(struct cache_entry *cached, struct document_options *options
 		    || compare_opt(&document->options, options))
 			continue;
 
-		if (cached->id_tag != document->id_tag) {
+		if (cached->id != document->id) {
 			if (!is_object_used(document)) {
 				document = document->prev;
 				done_document(document->next);
@@ -232,7 +232,7 @@ shrink_format_cache(int whole)
 		 * out-of-sync. */
 		cached = find_in_cache(document->uri);
 		assertm(cached, "cached formatted document has no cache entry");
-		if (cached->id_tag == document->id_tag) continue;
+		if (cached->id == document->id) continue;
 
 		document = document->prev;
 		done_document(document->next);

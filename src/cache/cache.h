@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.86 2004/05/29 13:21:08 jonas Exp $ */
+/* $Id: cache.h,v 1.87 2004/06/07 17:46:52 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -39,7 +39,7 @@ struct cache_entry {
 	unsigned char *ssl_info;	/* SSL ciphers used during transfer */
 	unsigned char *encoding_info;	/* Encoding used during transfer */
 
-	unsigned int id_tag;		/* Change each time entry is modified. */
+	unsigned int id;		/* Change each time entry is modified. */
 
 	int length;			/* The expected and complete size */
 	int data_size;			/* The actual size of all fragments */

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.150 2004/06/07 17:39:48 jonas Exp $ */
+/* $Id: cache.c,v 1.151 2004/06/07 17:46:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 static INIT_LIST_HEAD(cache_entries);
 
 static long cache_size;
-static int id_tag_counter = 0;
+static int id_counter = 0;
 
 
 /* Change 0 to 1 to enable cache debugging features (redirect stderr to a file). */
@@ -146,7 +146,7 @@ get_cache_entry(struct uri *uri)
 	cached->valid = 1;
 
 	init_list(cached->frag);
-	cached->id_tag = id_tag_counter++;
+	cached->id = id_counter++;
 	object_nolock(cached, "cache_entry"); /* Debugging purpose. */
 
 	add_to_list(cache_entries, cached);
@@ -223,9 +223,9 @@ add_fragment(struct cache_entry *cached, int offset,
 	if (cached->length < end_offset)
 		cached->length = end_offset;
 
-	/* id_tag marks each entry, and change each time it's modified,
+	/* id marks each entry, and change each time it's modified,
 	 * used in HTML renderer. */
-	cached->id_tag = id_tag_counter++;
+	cached->id = id_counter++;
 
 	/* Possibly insert the new data in the middle of existing fragment. */
 	foreach (f, cached->frag) {
@@ -476,7 +476,7 @@ delete_entry_content(struct cache_entry *cached)
 	enlarge_entry(cached, -cached->data_size);
 
 	free_list(cached->frag);
-	cached->id_tag = id_tag_counter++;
+	cached->id = id_counter++;
 	cached->length = 0;
 	cached->incomplete = 1;
 

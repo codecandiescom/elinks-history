@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.61 2004/06/07 16:18:33 jonas Exp $ */
+/* $Id: document.h,v 1.62 2004/06/07 17:46:52 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -131,7 +131,7 @@ struct document {
 	struct search **slines1;
 	struct search **slines2;
 
-	unsigned int id_tag; /* Used to check cache entries. */
+	unsigned int id; /* Used to check cache entries. */
 
 	struct object object; /* No direct access, use provided macros for that. */
 	int cp;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.519 2004/06/14 18:04:34 jonas Exp $ */
+/* $Id: session.c,v 1.520 2004/06/14 22:03:42 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1154,6 +1154,7 @@ get_current_title(struct session *ses, unsigned char *str, size_t str_size)
 	struct document_view *doc_view = current_frame(ses);
 
 	/* Ensure that the title is defined */
+	/* TODO: Try globhist --jonas */
 	if (doc_view && doc_view->document->title)
 		return safe_strncpy(str, doc_view->document->title, str_size);
 

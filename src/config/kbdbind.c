@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.102 2003/11/25 13:29:35 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.103 2003/11/25 21:06:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -715,7 +715,7 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_GOTO_URL_CURRENT_LINK, 'E', 0},
 	{ ACT_GOTO_URL, 'g', 0 },
 	{ ACT_GOTO_URL_CURRENT, 'G', 0 },
-	{ ACT_GOTO_URL_HOME, 'm' },
+	{ ACT_GOTO_URL_HOME, 'H' },
 	{ ACT_ADD_BOOKMARK, 'a' },
 	{ ACT_ADD_BOOKMARK_LINK, 'A' },
 	{ ACT_BOOKMARK_MANAGER, 's' },

@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.7 2003/05/04 19:39:51 pasky Exp $ */
+/* $Id: terminal.h,v 1.8 2003/05/04 19:40:17 pasky Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -6,8 +6,6 @@
 #include "config/options.h"
 #include "intl/charsets.h"
 #include "util/lists.h"
-
-typedef unsigned short chr;
 
 enum event_type {
 	EV_INIT,

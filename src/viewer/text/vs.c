@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.14 2003/09/14 01:04:22 miciah Exp $ */
+/* $Id: vs.c,v 1.15 2003/09/26 15:50:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ copy_vs(struct view_state *dst, struct view_state *src)
 	/* XXX: Beware @dst should point to a large enough memory space
 	 * to copy @src _and_ @src->url string. If it's not the case
 	 * an overflow will occur inducing a totally unexpected behavior
-	 * and a crash in more or less time.
+	 * and a crash sooner or later.
 	 * I warned you. --Zas */
 	assert(dst->url_len >= src->url_len);
 	if_assert_failed return;

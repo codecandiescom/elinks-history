@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.8 2002/03/26 15:28:11 pasky Exp $ */
+/* $Id: tables.c,v 1.9 2002/04/10 13:00:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1638,6 +1638,7 @@ void format_table(unsigned char *attr, unsigned char *html, unsigned char *eof, 
 	struct s_e *bad_html;
 	int bad_html_n;
 	struct node *n, *nn;
+	int cpd_pass, cpd_width, cpd_last;
 	/* int llm = last_link_to_move; */
 
 	table_level++;
@@ -1742,6 +1743,10 @@ void format_table(unsigned char *attr, unsigned char *html, unsigned char *eof, 
 	t->width = width;
 	t->wf = wf;
 
+	cpd_pass = 0;
+	cpd_last = t->cellpd;
+	cpd_width = 0;  /* not needed, but let the warning go away */
+
 again:
 	get_cell_widths(t);
 	if (get_column_widths(t)) goto ret2;
@@ -1760,8 +1765,15 @@ again:
 		goto ret2;
 	}
 
-	if (t->min_t > width && t->cellpd) {
+	if (!cpd_pass && t->min_t > width && t->cellpd) {
 		t->cellpd = 0;
+		cpd_pass = 1;
+		cpd_width = t->min_t;
+		goto again;
+	}
+	if (cpd_pass == 1 && t->min_t > cpd_width) {
+		t->cellpd = cpd_last;
+		cpd_pass = 2;
 		goto again;
 	}
 

@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.45 2004/04/19 08:58:15 zas Exp $ */
+/* $Id: dns.c,v 1.46 2004/04/19 09:41:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,7 +146,7 @@ lookup_fn(void *data, int h)
 {
 	unsigned char *name = (unsigned char *) data;
 	struct sockaddr_storage *addrs;
-	int addrno, i, w, done = 0;
+	int addrno, i, done, todo;
 
 	if (do_real_lookup(name, &addrs, &addrno, 1) < 0) return;
 
@@ -156,24 +156,28 @@ lookup_fn(void *data, int h)
 	 * useless) to do this in non-blocking way. */
 	if (set_blocking_fd(h) < 0) return;
 
+	todo = sizeof(int);
+	done = 0;
 	do {
-		w = safe_write(h, &addrno + done, sizeof(int) - done);
+		int w = safe_write(h, &addrno + done, todo - done);
+
 		if (w < 0) return;
 		done += w;
-	} while (done < sizeof(int));
-	assert(done == sizeof(int));
+	} while (done < todo);
+	assert(done == todo);
 
 	for (i = 0; i < addrno; i++) {
+		struct sockaddr_storage *addr = &addrs[i];
+
+		todo = sizeof(struct sockaddr_storage);
 		done = 0;
-
 		do {
-			struct sockaddr_storage *addr = &addrs[i];
+			int w = safe_write(h, addr + done, todo - done);
 
-			w = safe_write(h, addr + done, sizeof(struct sockaddr_storage) - done);
 			if (w < 0) return;
 			done += w;
-		} while (done < sizeof(struct sockaddr_storage));
-		assert(done == sizeof(struct sockaddr_storage));
+		} while (done < todo);
+		assert(done == todo);
 	}
 
 	/* We're in thread, thus we must do plain free(). */
@@ -185,7 +189,7 @@ end_real_lookup(void *data)
 {
 	struct dnsquery *query = (struct dnsquery *) data;
 	int res = -1;
-	int i, r, done = 0;
+	int i, done, todo;
 
 	if (!query->addr || !query->addrno) goto done;
 
@@ -197,27 +201,31 @@ end_real_lookup(void *data)
 	 * useless) to do this in non-blocking way. */
 	if (set_blocking_fd(query->h) < 0) goto done;
 
+	todo = sizeof(int);
+	done = 0;
 	do {
-		r = safe_read(query->h, query->addrno + done, sizeof(int) - done);
+		int r = safe_read(query->h, query->addrno + done, todo - done);
+
 		if (r <= 0) goto done;
 		done += r;
-	} while (done < sizeof(int));
-	assert(done == sizeof(int));
+	} while (done < todo);
+	assert(done == todo);
 
 	*query->addr = mem_calloc(*query->addrno, sizeof(struct sockaddr_storage));
 	if (!*query->addr) goto done;
 
 	for (i = 0; i < *query->addrno; i++) {
+		struct sockaddr_storage *addr = &(*query->addr)[i];
+
+		todo = sizeof(struct sockaddr_storage);
 		done = 0;
-
 		do {
-			struct sockaddr_storage *addr = &(*query->addr)[i];
+			int r = safe_read(query->h, addr + done, todo - done);
 
-			r = safe_read(query->h, addr + done, sizeof(struct sockaddr_storage) - done);
 			if (r <= 0) goto done;
 			done += r;
-		} while (done < sizeof(struct sockaddr_storage));
-		assert(done == sizeof(struct sockaddr_storage));
+		} while (done < todo);
+		assert(done == todo);
 	}
 
 	res = 0;

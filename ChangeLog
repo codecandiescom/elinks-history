@@ -1,3 +1,28 @@
+Mon Feb 21 22:52:34 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	De-localise |link| in frame_ev_kbd.  
+
+Mon Feb 21 22:50:23 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Move the check for whether |link| is NULL from try_form_action to
+	frame_ev_kbd and assert |link| in try_form_action.  
+
+Mon Feb 21 22:46:17 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Move the call to try_form_action from frame_ev to frame_kbd_ev.  
+
+Mon Feb 21 18:07:38 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Added comment.  
+
 Sun Feb 20 23:04:37 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/ecmascript/spidermonkey.c:

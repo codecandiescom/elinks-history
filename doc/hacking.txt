@@ -14,7 +14,7 @@ Motto: I didn't expect someone to look at the source, so it's unreadable.
 ~~~~~~~~~~~~~~~~~
 
 Each UI output should use language files in order to be able to translate the
-messages to a desired language.  Those language files reside in po/ subdir. If
+messages to a desired language.  Those language files reside in the po/ subdir. If
 you want to update a .po file, please read the gettext manual available at
 <http://www.gnu.org/manual/gettext>. In order to actually use your updates on
 your own system, you have to have the gettext tools installed.
@@ -98,8 +98,8 @@ three tabs, they all show contents of the same single underlying struct
 document and family.
 
 However, each of the tabs gets own struct document_view. That structure
-contains information about the currently active link, position in the document,
-size of the viewport, search terms currently highlighted etc. This structure
+contains information about the currently active link, the position in the document,
+the size of the viewport, search terms currently highlighted etc. This structure
 stays around only when the document is displayed in some session, thus its
 lifespan is always shorter than struct document's. document_view to document
 mapping is many to one.
@@ -436,7 +436,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.24 2005/01/03 07:12:20 miciah Exp $ */
+	/* $Id: hacking.txt,v 1.25 2005/01/03 08:12:57 miciah Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -502,7 +502,7 @@ some very rare critical structures.
 4, Patches
 ~~~~~~~~~~
 
-Please send unified patches only.  Recommended way is:
+Please send unified patches only.  The recommended way is:
 
 cp -a elinks/ elinks+mysuperfeature/
 cd elinks+mysuperfeature/
@@ -558,4 +558,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.24 2005/01/03 07:12:20 miciah Exp $
+$Id: hacking.txt,v 1.25 2005/01/03 08:12:57 miciah Exp $

@@ -5,8 +5,8 @@ to use them, how to maintain them, and also something more about the file
 formats and maybe even about the code structure later. But don't fear, we won't
 burden you with it, just stop reading when you know enough already.
 
-In order to read this, you need some common sense, ability to start ELinks and
-some idea about what's a Web document, URL address and knowledge like that.
+In order to read this, you need some common sense, the ability to start ELinks and
+some idea about what's a Web document, a URL address and knowledge like that.
 
 If we ever mention some keys here, please note that you can rebind almost
 any action to another key which you like more - then you must obviously imagine
@@ -21,8 +21,8 @@ keymap) to do that.
 
 		Chapter 1: The Bookmark Manager
 
-Basically, almost everything is going on in so-called bookmark manager. That's
-special dialog window, which contains listing of all bookmarks you ever told
+Basically, almost everything is going on in the so-called bookmark manager. That's
+a special dialog window, which contains a listing of all the bookmarks you ever told
 ELinks to remember and it lets you to do with them anything you would ever want
 to do with them.
 
@@ -49,7 +49,7 @@ get lost in them. Thus, in ELinks you can categorize them to various folders,
 subfolders, subsubfolders and so on, then you can expand and back enfold them
 and so on.
 
-In order to create your first folder, use button "Add folder" and fill the
+In order to create your first folder, use the button "Add folder" and fill the
 first input field. You can safely ignore the URL field, ELinks will do the
 same. *POOF* and you see it - it has that strange [+] or [-] thing there. If
 it has [+] near, it's enfolded, while when it has [-] near, it is expanded,
@@ -67,9 +67,9 @@ press the "Move" button.
 		Chapter 3: Searching needle in the haycock
 
 Of course, you can search in the bookmarks. Just use the "Find" button - for
-convenience, you have current document's URL and title pre-filled there, and
+convenience, you have the current document's URL and title pre-filled there, and
 for convenience only up-up-enter-down-down sequence is enough to have the
-playground clean. Then, just fill substring of what you are looking for, and
+playground clean. Then, just fill a substring of what you are looking for, and
 the bookmarks will be filtered so that only the matching ones are shown.
 (Actually, currently it will not be filtered but the cursor will only jump
 to the first matching bookmark below the current cursor position - and it
@@ -125,7 +125,7 @@ unambiguously figure out the bookmarks hierarchy:
 	F: This entry is a folder. The <url> part is usually empty.
 
 
-Pros: Naturally, ELinks handles the native format best, easiest and most
+Pros: Naturally, ELinks handles the native format the best, easiest and most
 reliably.
 
 Cons: It is unlikely that you could use the native format anywhere else
@@ -205,4 +205,4 @@ simplified rather sooner than later.
 
 
 
-$Id: bookmarks.txt,v 1.11 2005/01/03 07:12:20 miciah Exp $
+$Id: bookmarks.txt,v 1.12 2005/01/03 08:12:57 miciah Exp $

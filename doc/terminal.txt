@@ -96,7 +96,7 @@ For each terminal the following options can be configured:
 		Controls outputting of I/O in UTF-8 for Unicode terminals.
 
 		Note that currently, only the subset of UTF-8 according to
-		terminal codepage is used.
+		the terminal codepage is used.
 
 	Character Set (default is to use the charset of the current locale)
 

@@ -191,7 +191,7 @@ Description:
  Possible values for @new_proxy_url includes:
  - a dynamically allocated string with the format proxy:port;
  - an empty string (dynamically allocated!) to use no proxy; or
- - NULL to use default proxies.
+ - NULL to use the default proxies.
 
 -------------------------------------------------------------------------------
 Name:		periodic-saving
@@ -245,4 +245,4 @@ Description:
  Allows a subsystem to do whatever clean-up is required when ELinks quits.
 
 -------------------------------------------------------------------------------
-$Id: events.txt,v 1.15 2005/01/03 07:12:20 miciah Exp $
+$Id: events.txt,v 1.16 2005/01/03 08:12:57 miciah Exp $

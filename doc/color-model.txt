@@ -28,7 +28,7 @@ distinguishable to someone with a visual disorder. It is important to appreciate
 that it is the contrast of colors one against another that makes them more or
 less discernible rather than the individual colors themselves.
 
-I.e., current allow/forbid dark on black colors will be really simple and far
+I.e., the current allow/forbid dark on black colors will be really simple and far
 more universal.  Zas is currently researching about rules to preserve page
 readability by eliminating bad colors combinations (like dark red on dark red
 or even primary red / primary blue, yellow on white, green on grey, ...). One
@@ -189,7 +189,7 @@ Hmmm, since we use colors to render text attributes, I (zas) think we need to
 integrate them in the process.
 E.g., italics are rendered by color, so let the user tells which color to use.
 
-(bg, fg, type) triplet can be used for that. In constraint definition, we'll
+A (bg, fg, type) triplet can be used for that. In constraint definition, we'll
 have H, S, L and type (T) variables.
 Type is (link|normal) and/or italic and/or bold and/or underline and/or
 (subscript|supscript) etc...
@@ -197,7 +197,7 @@ Note link is not a text attribute (in the terminal sense of it); that's all the
 magic.
 Also note that the attribute enhancement should be fully optional.
 
-In solution we'll have (bg, fg, attributes), where bg and fg are colors.
+In the solution we'll have (bg, fg, attributes), where bg and fg are colors.
 Attributes are the ones supported by displaying device (i.e. normal bold underline
 for now).
 
@@ -216,12 +216,12 @@ Hey, this language is better than the one before ;)
 More about hues, or "what is red?":
 
 Defining hues is not as easy it seems; the main problem here is to know what
-we talk about when using red name.
+we talk about when using the red name.
 
-Where is start and end of red? Applying KISS principle, let's say that in HLS
-system, S < H < E, where S is starting hue and E ending one.
+Where is the start and the end of red? Applying the KISS principle, let's say that in the HLS
+system, S < H < E, where S is the starting hue and E the ending one.
 For each hue we want to express let use a similar non-overlapping interval.
-Take a circle and divide it in 3 parts for primary hues, RGB:
+Take a circle and divide it in 3 parts for the primary hues, RGB:
 Make R starts at 0 (hmm, in HLS it's not exactly the case, but NM).
 Red is [0, 1*360/3[  (no, not a typo, 120 is not red)
 Green is [1*360/3, 2*360/3[
@@ -260,7 +260,7 @@ color combinations shown would differ dramatically from the intended look.
 Jonas: I agree that the color adjustment should be optional like the current
 one. Especially since the development of this will probably require quite a lot
 of tuning before being really usable. In the future, with some kind of CSS
-implementation, the user will have further possibility to override any unreadable
+implementation, the user will have a further possibility to override any unreadable
 styling. Whether this kind of fix-up will still be necessary only time will show.
 Anyway since even 256 colors are pretty limited
 
@@ -269,9 +269,9 @@ author color choice (there is some really sick stuff color-wise around the Web,
 and of course there are the "secret" black-on-black or white-on-white texts ;-),
 and people with all sorts of color disabilities (which are quite frequent in the
 population, AFAIK). This would be a killer feature for them and that is the
-reason why Pasky thinks that the compile-time option for including of color
+reason why Pasky thinks that the compile-time option for including of the color
 models implementation should be by default enabled. Pasky is still not sure
-whether the color models should be by default enabled or disabled at the
+whether the color models should be by default enabled or disabled at
 runtime; pros and cons welcomed.
 
 Further reading
@@ -296,5 +296,5 @@ http://www.lighthouse.org/color_contrast.htm
 
 
 
-$Id: color-model.txt,v 1.16 2005/01/03 07:12:20 miciah Exp $
+$Id: color-model.txt,v 1.17 2005/01/03 08:12:57 miciah Exp $
 vim: textwidth=80

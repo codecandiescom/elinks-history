@@ -18,7 +18,7 @@ Options related to tabs are located under ``User Interface -> Window Tabs'' in
 the option manager. In the configuration file the naming prefix is
 ``ui.tabs''.
 
-The tabbed browsing has been supported since version 0.9.0 and is fairly
+Tabbed browsing has been supported since version 0.9.0 and is fairly
 complete. The documentation on tabs is therefore divided into two chapters: a
 general introduction and an introduction to advanced topics.
 
@@ -115,4 +115,4 @@ tabs will be added. There are various ways to do this:
    periodically saved tabs will be removed.
 
 
-$Id: tabs.txt,v 1.2 2005/01/03 07:12:21 miciah Exp $
+$Id: tabs.txt,v 1.3 2005/01/03 08:12:57 miciah Exp $

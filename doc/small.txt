@@ -30,7 +30,7 @@ Notes:
 --enable-fastmem disables internal malloc() debugging and use alloca() wherever possible.
 --enable-small forces to remove some text descriptions in options and keybind stuff (regain 30Kb).
 
-Dependencies over external libs must be removed using related configure options:
+Dependencies over external libs must be removed using the related configure options:
 --without-zlib		removes libz dependency (compression)
 --without-bzlib		removes libbz2 dependency (compression)
 --disable-xbel		removes expat dependency (XBEL bookmarks support)
@@ -59,11 +59,11 @@ me$ ls -l src/elinks
 Whow ! Around 200kb :)
 
 
-Details about --enable-small configure option effects:
+Details about the --enable-small configure option effects:
 - it disables long descriptions of options;
 - it disables textual descriptions of keybinding options;
 - it reduces size of some HTTP errors messages;
 - it disables fastfind feature, reducing performance, but also reducing a lot
   memory usage, and a bit the executable size.
 
-/* $Id: small.txt,v 1.13 2005/01/03 07:12:21 miciah Exp $ */
+/* $Id: small.txt,v 1.14 2005/01/03 08:12:57 miciah Exp $ */

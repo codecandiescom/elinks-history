@@ -14,7 +14,7 @@ ELinks constantly irritates you, if you have even patch for any new feature and
 you think others would appreciate it or even use it, or even we would like to
 include it in the mainstream ELinks, feel free to let us know!
 
-Remember, the things probably won't change magically. If you don't like
+Remember, things probably won't change magically. If you don't like
 something and you won't let us know, then we _won't_ know, then nothing will
 change and then you won't like something and that's not what we desire ;-). So,
 don't fear and go for it!
@@ -34,4 +34,4 @@ he'll split the stuff properly amongst himself and other developers >:).
 
 
 
-$Id: feedback.txt,v 1.4 2005/01/03 07:12:20 miciah Exp $
+$Id: feedback.txt,v 1.5 2005/01/03 08:12:57 miciah Exp $

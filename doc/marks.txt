@@ -52,7 +52,7 @@ There is no way to get a listing of all marks set in a document. Yet.
 Marks lifespan
 ~~~~~~~~~~~~~~
 
-I already hinted something about another restriction regarding the aimless
+I already hinted something about another restriction regarding aimless
 browsing. The lifespan of document marks depends on rather ill-defined and
 (for an average mortal) mostly non-deterministic technical conditions.
 
@@ -82,4 +82,4 @@ under a single user on a single system, they "join" together and you must quit
 
 
 
-$Id: marks.txt,v 1.6 2005/01/03 07:12:21 miciah Exp $
+$Id: marks.txt,v 1.7 2005/01/03 08:12:57 miciah Exp $

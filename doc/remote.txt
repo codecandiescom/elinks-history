@@ -13,7 +13,7 @@ action.  Here is an example for opening freshmeat.net in a new tab:
 
 	$ elinks -remote "openURL(http://freshmeat.net/, new-tab)"
 
-When running this command in a terminal, you will see a small delay before the
+When running this command in a terminal, you will see a small delay before
 ELinks returns. If no running instance was found, it will return with the error
 message:
 
@@ -93,4 +93,4 @@ new tabs containing slashdot.org, freshmeat.net and a Google search of elinks
 will be opened.
 
 
-$Id: remote.txt,v 1.5 2005/01/03 07:12:21 miciah Exp $
+$Id: remote.txt,v 1.6 2005/01/03 08:12:57 miciah Exp $

@@ -44,7 +44,7 @@ Reading of Mailcap Files
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Mailcap files will be read when starting ELinks. The mailcap files to use will
-be found from the a mailcap path, a colon separated list of files similar to
+be found from the mailcap path, a colon separated list of files similar to the
 $PATH environment variable. The mailcap path will be determined in the
 following way:
 
@@ -116,4 +116,4 @@ Below are examples of how to specify external viewers:
 	application/postscript; ps2ascii %s ; copiousoutput
 
 
-$Id: mailcap.txt,v 1.2 2005/01/03 07:12:21 miciah Exp $
+$Id: mailcap.txt,v 1.3 2005/01/03 08:12:57 miciah Exp $

@@ -24,8 +24,8 @@ More so, if you type 'g elinks' to the Goto URL dialog, it will be rewritten to
 
 	http://www.google.com/search?q=elinks&btnG=Google+Search
 
-and then loaded --- therefore, Google search for the 'elinks' keyword will
-ensue. Note that you can separate the 'g' by either space or colon, so
+and then loaded --- therefore, a Google search for the 'elinks' keyword will
+ensue. Note that you can separate the 'g' by either a space or a colon, so
 'g:elinks' will do the exact same thing.
 
 
@@ -56,7 +56,7 @@ to spend lengthy seconds navigating in the bookmarks manager, you can just
 fire up the Goto URL dialog, type the shortcut and there you go.
 
 
-In the 'g' case, more advanced URI rewriting mechanism called "smart prefix"
+In the 'g' case, a more advanced URI rewriting mechanism called "smart prefix"
 is used. If protocol.rewrite.enable-smart is true, ELinks looks at the
 contents of protocol.rewrite.smart tree and if it finds option
 protocol.rewrite.smart.g, it will use its value as the target URI.
@@ -94,4 +94,4 @@ goto-url hook isn't triggered when the URL is passed on the command line.
 
 
 
-$Id: urlprefixes.txt,v 1.5 2005/01/03 07:12:21 miciah Exp $
+$Id: urlprefixes.txt,v 1.6 2005/01/03 08:12:57 miciah Exp $

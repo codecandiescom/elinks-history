@@ -214,7 +214,7 @@ Position-Oriented Navigation:
 	link, the link is highlighted, and when the cursor moves outside the
 	current document view, it will cause the document view to scroll.
 
-	The possibilities when using the mouse to navigate document depend on
+	The possibilities when using the mouse to navigate the document depend on
 	what terminal you are using. In some terminals, it is possible to
 	scroll by using the mouse wheel. Scrolling is however also possible by
 	clicking in the edge areas of the document view. Highlighting links
@@ -252,4 +252,4 @@ Useful Document Display Options:
 
  - Insert mode in text-input form-fields
 
-$Id: introduction.txt,v 1.10 2005/01/03 07:12:20 miciah Exp $
+$Id: introduction.txt,v 1.11 2005/01/03 08:12:57 miciah Exp $

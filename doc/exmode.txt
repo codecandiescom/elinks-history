@@ -43,7 +43,7 @@ value saved in your configuration file, though).
 
 It's the same story with keybindings. You can use 'bind "main" "h" =
 "move-cursor-left"'. It's not the same story with keybindings documentation.
-There is elinkskeys (5) manual page but it's horribly obsolete, so don't rely
+There is the elinkskeys (5) manual page but it's horribly obsolete, so don't rely
 on it. You can refer to the keybindings manager for names of actions and even
 their short descriptions. Also, all the 'bind' commands are saved to the
 configuration file if you set config.saving_style = 2 (but see above).
@@ -102,4 +102,4 @@ should be able to take arguments.
 
 
 
-$Id: exmode.txt,v 1.5 2005/01/03 07:12:20 miciah Exp $
+$Id: exmode.txt,v 1.6 2005/01/03 08:12:57 miciah Exp $

@@ -1,5 +1,5 @@
 <!-- The DTD used for costumization and common entities. -->
-<!-- $Id: elinksbook.dtd,v 1.5 2003/06/10 19:17:35 jonas Exp $ -->
+<!-- $Id: elinksbook.dtd,v 1.6 2003/06/10 21:29:43 jonas Exp $ -->
 
 <!-- ================================================================== -->
 <!-- Costumize section							-->
@@ -49,4 +49,6 @@
 <!ENTITY config-cmdoptions	SYSTEM "config/cmdoptions.xml">
 <!ENTITY config-envvars		SYSTEM "config/envvars.xml">
 <!ENTITY config-files		SYSTEM "config/files.xml">
+<!ENTITY config-mime		SYSTEM "config/mime.xml">
 <!ENTITY features-bookmarks	SYSTEM "features/bookmarks.xml">
+<!ENTITY intro-installation	SYSTEM "intro/installation.xml">

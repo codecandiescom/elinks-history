@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.7 2002/03/21 18:39:03 pasky Exp $
+## $Id: Makefile.am,v 1.8 2002/03/21 21:31:49 pasky Exp $
 
-EXTRA_DIST = README.my_timegm
+EXTRA_DIST = README.timegm
 
 INCLUDES = \
  -I$(srcdir)/../..

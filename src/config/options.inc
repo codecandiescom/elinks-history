@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.24 2003/11/04 17:11:57 zas Exp $ */
+/* $Id: options.inc,v 1.25 2003/11/10 20:45:54 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1255,7 +1255,7 @@ struct option_info config_options_info[] = {
 		N_("Tab separator colors.")),
 
 	INIT_OPT_COLOR("ui.colors.color.tabs.separator", N_("Text color"),
-		"text", 0, "green",
+		"text", 0, "red",
 		N_("Default text color.")),
 
 	INIT_OPT_COLOR("ui.colors.color.tabs.separator", N_("Background color"),

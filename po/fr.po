@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-19 00:26+0100\n"
-"PO-Revision-Date: 2005-03-19 00:28+0100\n"
+"POT-Creation-Date: 2005-03-19 01:37+0100\n"
+"PO-Revision-Date: 2005-03-19 01:38+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -146,8 +146,8 @@ msgstr "Effacer tous les items"
 msgid "Do you really want to remove all items?"
 msgstr "Êtes-vous sûr de vouloir effacer tous les items ?"
 
-#: src/bfu/hierbox.c:945 src/bfu/hierbox.c:978 src/bookmarks/dialogs.c:465
-#: src/cache/dialogs.c:222 src/config/dialogs.c:519 src/config/dialogs.c:943
+#: src/bfu/hierbox.c:945 src/bfu/hierbox.c:978 src/cache/dialogs.c:222
+#: src/config/dialogs.c:519 src/config/dialogs.c:943
 #: src/globhist/dialogs.c:230 src/viewer/text/search.c:986
 #: src/viewer/text/search.c:994 src/viewer/text/search.c:1011
 #: src/viewer/text/search.c:1589
@@ -424,7 +424,7 @@ msgstr "Effacer tous les signets"
 msgid "Do you really want to remove all bookmarks?"
 msgstr "Êtes-vous sûr de vouloir effacer tous les signets ?"
 
-#: src/bookmarks/dialogs.c:277 src/bookmarks/dialogs.c:463
+#: src/bookmarks/dialogs.c:277
 msgid "Add folder"
 msgstr "Créer dossier"
 
@@ -436,36 +436,37 @@ msgstr "Nom du dossier"
 msgid "Edit bookmark"
 msgstr "Modifier un signet"
 
-#: src/bookmarks/dialogs.c:458 src/cache/dialogs.c:220
-#: src/globhist/dialogs.c:224 src/protocol/auth/dialogs.c:253
-msgid "Goto"
-msgstr "Aller à"
+#: src/bookmarks/dialogs.c:458
+msgid "~Goto"
+msgstr "A~ller à"
 
-#: src/bookmarks/dialogs.c:459 src/config/dialogs.c:364
-#: src/config/dialogs.c:432 src/config/dialogs.c:516 src/cookies/dialogs.c:323
-#: src/cookies/dialogs.c:423
-msgid "Edit"
-msgstr "Modifier"
+#: src/bookmarks/dialogs.c:459
+msgid "~Edit"
+msgstr "~Modifier"
 
-#: src/bookmarks/dialogs.c:460 src/cache/dialogs.c:221
-#: src/config/dialogs.c:518 src/config/dialogs.c:941 src/cookies/dialogs.c:424
-#: src/formhist/dialogs.c:213 src/globhist/dialogs.c:229
-#: src/protocol/auth/dialogs.c:255
-msgid "Delete"
-msgstr "Supprimer"
+#: src/bookmarks/dialogs.c:460 src/dialogs/menu.c:446
+msgid "~Delete"
+msgstr "~Supprimer"
 
-#: src/bookmarks/dialogs.c:461 src/config/dialogs.c:517
-#: src/config/dialogs.c:940 src/cookies/dialogs.c:422
-msgid "Add"
-msgstr "Ajouter"
+#: src/bookmarks/dialogs.c:461 src/dialogs/menu.c:444
+msgid "~Add"
+msgstr "~Ajouter"
 
 #: src/bookmarks/dialogs.c:462
-msgid "Add separator"
-msgstr "Séparateur"
+msgid "Add se~parator"
+msgstr "Sé~parateur"
+
+#: src/bookmarks/dialogs.c:463
+msgid "Add ~folder"
+msgstr "C~réer dossier"
 
 #: src/bookmarks/dialogs.c:464
-msgid "Move"
-msgstr "Déplacer"
+msgid "~Move"
+msgstr "~Déplacer"
+
+#: src/bookmarks/dialogs.c:465 src/dialogs/menu.c:397
+msgid "~Search"
+msgstr "~Chercher"
 
 #. This one is too dangerous, so just let user delete
 #. * the bookmarks file if needed. --Zas
@@ -591,6 +592,17 @@ msgstr "Supprimer l'entrée de cache"
 #: src/cache/dialogs.c:196
 msgid "Delete this cache entry?"
 msgstr "Supprimer cette entrée de cache ?"
+
+#: src/cache/dialogs.c:220 src/globhist/dialogs.c:224
+#: src/protocol/auth/dialogs.c:253
+msgid "Goto"
+msgstr "Aller à"
+
+#: src/cache/dialogs.c:221 src/config/dialogs.c:518 src/config/dialogs.c:941
+#: src/cookies/dialogs.c:424 src/formhist/dialogs.c:213
+#: src/globhist/dialogs.c:229 src/protocol/auth/dialogs.c:255
+msgid "Delete"
+msgstr "Supprimer"
 
 #: src/cache/dialogs.c:227
 msgid "Cache manager"
@@ -1223,6 +1235,11 @@ msgstr "Erreur"
 msgid "Bad option value."
 msgstr "Mauvaise valeur."
 
+#: src/config/dialogs.c:364 src/config/dialogs.c:432 src/config/dialogs.c:516
+#: src/cookies/dialogs.c:323 src/cookies/dialogs.c:423
+msgid "Edit"
+msgstr "Modifier"
+
 #: src/config/dialogs.c:433
 msgid ""
 "This option cannot be edited. This means that this is some special option "
@@ -1239,6 +1256,10 @@ msgstr "Ajouter option"
 #: src/config/dialogs.c:473
 msgid "Cannot add an option here."
 msgstr "Impossible d'ajouter une option ici."
+
+#: src/config/dialogs.c:517 src/config/dialogs.c:940 src/cookies/dialogs.c:422
+msgid "Add"
+msgstr "Ajouter"
 
 #: src/config/dialogs.c:525
 msgid "Option manager"
@@ -4763,10 +4784,6 @@ msgstr "~Ligne de commandes"
 msgid "Resize t~erminal"
 msgstr "Redi~mensionner le terminal"
 
-#: src/dialogs/menu.c:397
-msgid "~Search"
-msgstr "~Chercher"
-
 #: src/dialogs/menu.c:398
 msgid "Search ~backward"
 msgstr "Chercher en ~arrière"
@@ -4855,17 +4872,9 @@ msgstr "~Licence"
 msgid "~About"
 msgstr "~Info"
 
-#: src/dialogs/menu.c:444
-msgid "~Add"
-msgstr "~Ajouter"
-
 #: src/dialogs/menu.c:445
 msgid "~Modify"
 msgstr "~Modifier"
-
-#: src/dialogs/menu.c:446
-msgid "~Delete"
-msgstr "~Supprimer"
 
 #: src/dialogs/menu.c:452 src/dialogs/menu.c:465
 msgid "~Language"

@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.27 2003/12/31 08:14:10 miciah Exp $ */
+/* $Id: smb.c,v 1.28 2003/12/31 08:37:14 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -507,6 +507,9 @@ smb_func(struct connection *conn)
 		v[n++] = "smbclient";
 
 		/* FIXME: handle alloc failures. */
+		/* At this point, we are the child process.
+		 * Maybe we just don't care if the child kills itself
+		 * dereferencing a NULL pointer... -- Miciah */
 
 		if (!*share) {
 			v[n++] = "-L";	/* get a list of shares available on a host */

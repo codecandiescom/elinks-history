@@ -1,3 +1,37 @@
+Thu Oct 10 21:40:21 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/config/kbdbind.c, src/config/kbdbind.h,
+	src/document/download.c, src/document/download.h,
+	src/document/dump.c, src/document/session.c, src/document/view.c,
+	src/intl/lang_defs.h, src/intl/language.inc, src/lowlevel/sched.c,
+	src/lowlevel/sched.h, src/protocol/http/http.c:
+
+	Support for downloads resuming by Witold (only HTTP currently, is
+	triggered by 'r' now, not tested at all ;), very very minor changes
+	by me.  
+
+Thu Oct 10 21:19:45 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, intl/russian.lng, src/intl/language.inc:
+
+	Russian translation update by Cyril Slobin <slobin@ice.ru>.  
+
+Thu Oct 10 21:08:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/italian.lng, src/intl/language.inc:
+
+	Italian translation update by Fabio.  
+
 Wed Oct  9 13:01:29 2002  Laurent Monin <zas@norz.org>:
 
 	* src/protocol/ftp.c:

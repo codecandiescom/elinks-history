@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.11 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: dump.c,v 1.12 2002/05/17 21:59:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,7 +106,7 @@ void dump_end(struct status *stat, void *p)
 		
 		o.xp = 0;
 		o.yp = 1;
-		o.xw = dump_width;
+		o.xw = get_opt_int("dump_width");
 		o.yw = 25;
 		o.col = 0;
 		o.cp = 0;

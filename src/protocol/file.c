@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.16 2002/05/09 21:32:27 pasky Exp $ */
+/* $Id: file.c,v 1.17 2002/05/17 21:59:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -331,7 +331,7 @@ file_func(struct connection *c)
 	int namelen;
 	int saved_errno;
 	
-	if (anonymous) {
+	if (get_opt_int("anonymous")) {
 		abort_conn_with_state(c, S_BAD_URL);
 		return;
 	}

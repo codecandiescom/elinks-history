@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.26 2002/05/12 16:40:43 fis Exp $ */
+/* $Id: main.c,v 1.27 2002/05/17 21:59:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -272,13 +272,13 @@ init()
 	
 	/* If there's no -no-connect option, check if there's no other ELinks
 	 * running. If we found any, open socket and act as a slave for it. */
-	if (!no_connect) {
+	if (!get_opt_int("no_connect")) {
 		uh = bind_to_af_unix();
 		if (uh != -1) {
 			close(terminal_pipe[0]);
 			close(terminal_pipe[1]);
 
-			info = create_session_info(base_session, u, &len);
+			info = create_session_info(get_opt_int("base_session"), u, &len);
 			if (!info) {
 				retval = RET_FATAL;
 				terminate = 1;
@@ -333,7 +333,7 @@ init()
 	} else {
 		int attached;
 
-		info = create_session_info(base_session, u, &len);
+		info = create_session_info(get_opt_int("base_session"), u, &len);
 		if (!info) goto fatal_error;
 		
 		attached = attach_terminal(get_input_handle(),

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.21 2002/05/08 13:55:01 pasky Exp $ */
+/* $Id: cookies.c,v 1.22 2002/05/17 21:59:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,8 @@
 #include "util/error.h"
 #endif
 #include "util/secsave.h"
+
+int cookies_nosave = 0;
 
 tcount cookie_id = 0;
 
@@ -115,7 +117,7 @@ check_domain_security(unsigned char *server, unsigned char *domain)
 
 	need_dots = 1;
 
-	if (cookies_paranoid_security) {
+	if (get_opt_int("cookies_paranoid_security")) {
 		/* This is somehow controversial attempt (by the way violating
 		 * RFC) to increase cookies security in national domains, done
 		 * by Mikulas. As it breaks a lot of sites, I decided to make
@@ -159,7 +161,7 @@ set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 	struct c_server *cs;
 	struct cookie_str cstr;
 
-	if (cookies_accept == COOKIES_ACCEPT_NONE)
+	if (get_opt_int("cookies_accept") == COOKIES_ACCEPT_NONE)
 		return 0;
 
 #ifdef COOKIES_DEBUG
@@ -283,7 +285,7 @@ set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 		return 0;
 	}
 
-	if (cookies_accept != COOKIES_ACCEPT_ALL) {
+	if (get_opt_int("cookies_accept") != COOKIES_ACCEPT_ALL) {
 		/* TODO */
 		free_cookie(cookie);
 		mem_free(cookie);
@@ -327,7 +329,7 @@ accept_cookie(struct cookie *c)
 	strcpy(cd->domain, c->domain);
 	add_to_list(c_domains, cd);
 
-	if (cookies_save && cookies_resave)
+	if (get_opt_int("cookies_save") && get_opt_int("cookies_resave"))
 		save_cookies();
 }
 
@@ -353,7 +355,7 @@ end:
 	free_cookie(c);
 	mem_free(c);
 
-	if (cookies_save && cookies_resave)
+	if (get_opt_int("cookies_save") && get_opt_int("cookies_resave"))
 		save_cookies();
 }
 
@@ -487,7 +489,7 @@ ok:
 			free_cookie(d);
 			mem_free(d);
 
-			if (cookies_save && cookies_resave)
+			if (get_opt_int("cookies_save") && get_opt_int("cookies_resave"))
 				save_cookies();
 
 			continue;
@@ -589,15 +591,11 @@ load_cookies() {
 
 		cookie->id = cookie_id++;
 
-		{
-			int cr = cookies_resave;
-
-			/* XXX: We don't want to overwrite the cookies file
-			 * periodically to our death. */
-			cookies_resave = 0;
-			accept_cookie(cookie);
-			cookies_resave = cr;
-		}
+		/* XXX: We don't want to overwrite the cookies file
+		 * periodically to our death. */
+		cookies_nosave = 1;
+		accept_cookie(cookie);
+		cookies_nosave = 0;
 
 		continue;
 
@@ -615,6 +613,8 @@ save_cookies() {
 	struct cookie *c;
 	unsigned char *cookfile;
 	struct secure_save_info *ssi;
+
+	if (cookies_nosave) return;
 
 	cookfile = straconcat(links_home, "cookies", NULL);
 	if (!cookfile) return;
@@ -640,7 +640,7 @@ save_cookies() {
 void
 init_cookies()
 {
-	if (cookies_save)
+	if (get_opt_int("cookies_save"))
 		load_cookies();
 }
 
@@ -652,7 +652,7 @@ cleanup_cookies()
 
 	free_list(c_domains);
 
-	if (cookies_save)
+	if (get_opt_int("cookies_save"))
 		save_cookies();
 
 	foreach (c, cookies)

@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.2 2002/05/08 13:55:01 pasky Exp $ */
+/* $Id: urlhist.c,v 1.3 2002/05/17 21:59:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@ int load_url_history()
 	unsigned char *history_file;
 	unsigned char url[MAX_STR_LEN];
 
-	if (anonymous) return 0;
+	if (get_opt_int("anonymous")) return 0;
 	/* Must have been called after init_home */
 	/* if (!links_home) return 0; */ /* strconcat() checks it --Zas */
 
@@ -58,7 +58,7 @@ save_url_history()
 	unsigned char *history_file;
 	int i = 0;
 
-	if (anonymous) return 0;
+	if (get_opt_int("anonymous")) return 0;
 
 	history_file = straconcat(links_home, "links.his", NULL);
 	if (!history_file) return -1;

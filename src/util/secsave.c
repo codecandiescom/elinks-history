@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.9 2002/05/17 20:08:04 pasky Exp $ */
+/* $Id: secsave.c,v 1.10 2002/05/17 21:59:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,7 @@ secure_open(unsigned char *file_name, mode_t mask)
 
 	if (!ssi) goto end;
 
-	ssi->secure_save = secure_save;
+	ssi->secure_save = get_opt_int("secure_save");
 	ssi->err = 0;
 
 	ssi->file_name = stracpy(file_name);

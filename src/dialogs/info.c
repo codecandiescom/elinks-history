@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.39 2003/05/12 21:53:22 pasky Exp $ */
+/* $Id: info.c,v 1.40 2003/05/12 21:59:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -243,7 +243,7 @@ cache_inf(struct terminal *term, void *d, struct session *ses)
 	}
 
 	cache = (struct cache_entry *) cache_info(CI_LIST);
-	foreach(ce, *cache) {
+	foreach (ce, *cache) {
 		if (count++ < term->y - 10) { /* 10 seems a kool value. --Zas */
 			add_chr_to_str(&a, &l, '\n');
 #ifdef DEBUG
@@ -267,12 +267,15 @@ cache_inf(struct terminal *term, void *d, struct session *ses)
 
 	if (!count) {
 		add_chr_to_str(&a, &l, '\n');
-		add_to_str(&a, &l, N_("No entry."));
+		add_to_str(&a, &l, _("No entry.", term));
 	} else if (truncated) {
-		add_to_str(&a, &l, "\n... (");
-		add_num_to_str(&a, &l, count - truncated + 1);
-		add_to_str(&a, &l, ") ");
-	        add_to_str(&a, &l, N_("more entries."));
+		unsigned char buf[256];
+
+		add_chr_to_str(&a, &l, '\n');
+
+		snprintf(buf, 64, _("%ld more entries.", term),
+			count - truncated + 1);
+		add_to_str(&a, &l, buf);
 	}
 
 	msg_box(term, getml(a, NULL),

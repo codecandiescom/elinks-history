@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.161 2003/07/07 20:01:45 jonas Exp $ */
+/* $Id: http.c,v 1.162 2003/07/08 00:02:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -325,6 +325,25 @@ proxy_func(struct connection *conn)
 
 static void http_get_header(struct connection *);
 
+static void
+add_uri_host_to_str(unsigned char **hdr, int *l, struct uri *uri)
+{
+#ifdef IPV6
+	if (strchr(uri->host, ':') != strrchr(uri->host, ':')) {
+		/* IPv6 address */
+		add_chr_to_str(hdr, l, '[');
+		add_bytes_to_str(hdr, l, uri->host, uri->hostlen);
+		add_chr_to_str(hdr, l, ']');
+	} else
+#endif
+		add_bytes_to_str(hdr, l, uri->host, uri->hostlen);
+
+	if (uri->portlen) {
+		add_chr_to_str(hdr, l, ':');
+		add_bytes_to_str(hdr, l, uri->port, uri->portlen);
+	}
+}
+
 #define IS_PROXY_URI(x) ((x).protocollen == 5 && !strncasecmp("proxy", (x).protocol, 5))
 #define GET_REAL_URI(x) (IS_PROXY_URI((x)) ? (x).data : (x).protocol)
 
@@ -343,7 +362,20 @@ http_send_header(struct connection *conn)
 
 	set_connection_timeout(conn);
 
-	if (!conn->uri.data) {
+	/* Setup the real uri. */
+	if (IS_PROXY_URI(conn->uri) && conn->uri.data) {
+		uri = &real_uri;
+		uri->protocol = conn->uri.data;
+		if (!parse_uri(uri))
+			uri = NULL;
+
+	} else {
+		uri = &conn->uri;
+	}
+
+	/* Sanity check for a host */
+	assert(uri && uri->host);
+	if_assert_failed {
 		http_end_request(conn, S_BAD_URL);
 		return;
 	}
@@ -356,22 +388,7 @@ http_send_header(struct connection *conn)
 	conn->info = info;
 	info->sent_version.major = 1;
 	info->sent_version.minor = 1;
-
-	/* Setup the real uri. */
-	if (IS_PROXY_URI(conn->uri)) {
-		uri = &real_uri;
-		uri->protocol = conn->uri.data;
-		if (!parse_uri(uri)) {
-			/* We messed up the proxy url somehow! */
-			http_end_request(conn, S_BAD_URL);
-			return;
-		}
-	} else {
-		uri = &conn->uri;
-	}
-
-	if (uri->host)
-		info->bl_flags = get_blacklist_flags(uri->host, uri->hostlen);
+	info->bl_flags = get_blacklist_flags(uri->host, uri->hostlen);
 
 	if (info->bl_flags & BL_HTTP10
 	    || get_opt_int("protocol.http.bugs.http10")) {
@@ -405,25 +422,9 @@ http_send_header(struct connection *conn)
 	add_num_to_str(&hdr, &l, info->sent_version.minor);
 	add_to_str(&hdr, &l, "\r\n");
 
-	if (uri->host) {
-		add_to_str(&hdr, &l, "Host: ");
-#ifdef IPV6
-		if (strchr(uri->host, ':') != strrchr(uri->host, ':')) {
-			/* IPv6 address */
-			add_chr_to_str(&hdr, &l, '[');
-			add_bytes_to_str(&hdr, &l, uri->host, uri->hostlen);
-			add_chr_to_str(&hdr, &l, ']');
-		} else
-#endif
-			add_bytes_to_str(&hdr, &l, uri->host, uri->hostlen);
-
-		if (uri->portlen) {
-			add_chr_to_str(&hdr, &l, ':');
-			add_bytes_to_str(&hdr, &l, uri->port, uri->portlen);
-		}
-
-		add_to_str(&hdr, &l, "\r\n");
-	}
+	add_to_str(&hdr, &l, "Host: ");
+	add_uri_host_to_str(&hdr, &l, uri);
+	add_to_str(&hdr, &l, "\r\n");
 
 	optstr = get_opt_str("protocol.http.proxy.user");
 	if (optstr[0]) {
@@ -500,13 +501,7 @@ http_send_header(struct connection *conn)
 
 			/* FIXME: IPv6. */
 			add_to_str(&hdr, &l, "http://");
-			if (uri->host) {
-				int hostlen = uri->hostlen;
-
-				/* Maybe add ':' and port string. */
-				if (uri->portlen) hostlen += uri->portlen + 1;
-				add_bytes_to_str(&hdr, &l, uri->host, hostlen);
-			}
+			add_uri_host_to_str(&hdr, &l, uri);
 
 			if (!IS_PROXY_URI(conn->uri) || hdr[l - 1] != '/')
 				add_chr_to_str(&hdr, &l, '/');
@@ -538,12 +533,13 @@ http_send_header(struct connection *conn)
 #endif
 
 	if (!accept_charset) {
-		unsigned char *cs, *ac;
-		int aclen = 0;
-		int i;
+		unsigned char *ac = init_str();
 
-		ac = init_str();
 		if (ac) {
+			unsigned char *cs;
+			int aclen = 0;
+			int i;
+
 			for (i = 0; (cs = get_cp_mime_name(i)); i++) {
 				if (aclen) {
 					add_to_str(&ac, &aclen, ", ");

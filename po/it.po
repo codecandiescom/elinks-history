@@ -55,7 +55,7 @@ msgid "OK"
 msgstr "OK"
 
 #: src/bfu/hierbox.c:437
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the item \"%s\" cannot be deleted."
 msgstr "Spiacente, ma l'elemento \"%s\" non può essere rimosso."
 
@@ -65,7 +65,7 @@ msgid "Sorry, but the item \"%s\" is being used by something else."
 msgstr "Spiacente, ma l'elemento \"%s\" è in uso in questo momento."
 
 #: src/bfu/hierbox.c:441
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the folder \"%s\" cannot be deleted."
 msgstr "Spiacente, ma la cartella \"%s\" non può essere rimossa."
 
@@ -433,8 +433,8 @@ msgid ""
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
 "## Ovviamente, se non ti piace quello che ELinks farà di questo file,\n"
-"## puoi cambiare il comportamento modificando l'opzione config."
-"saving_style.\n"
+"## puoi cambiare il comportamento modificando l'opzione "
+"config.saving_style.\n"
 "## Dai, siamo dei bravi ragazzi dopo tutto.\n"
 
 #: src/config/conf.c:645
@@ -628,8 +628,8 @@ msgstr ""
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
-"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap \"%"
-"s\")?"
+"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap "
+"\"%s\")?"
 
 #: src/config/dialogs.c:531 src/dialogs/info.c:126 src/globhist/dialogs.c:188
 msgid "Toggle display"
@@ -724,9 +724,8 @@ msgid "Download the current image"
 msgstr "Scarica immagine corrente"
 
 #: src/config/kbdbind.c:396
-#, fuzzy
 msgid "Open download manager"
-msgstr "Gestore download"
+msgstr "Apre gestore download"
 
 #: src/config/kbdbind.c:397
 msgid "Begin editing"
@@ -2536,22 +2535,20 @@ msgstr ""
 "saranno nascosti dalla lista delle directory."
 
 #: src/config/options.inc:710
-#, fuzzy
 msgid "Local CGI"
-msgstr "File locali"
+msgstr "CGI locali"
 
 #: src/config/options.inc:712
-#, fuzzy
 msgid "Local CGI specific options."
-msgstr "Opzioni specifiche del protocollo."
+msgstr "Opzioni specifiche dei CGI locali."
 
 #: src/config/options.inc:714
 msgid "Allow local CGI"
-msgstr ""
+msgstr "Consenti CGI locali"
 
 #: src/config/options.inc:716
 msgid "Whether to execute local CGI scripts."
-msgstr ""
+msgstr "Abilita esecuzione degli script CGI locali."
 
 #: src/config/options.inc:718 src/mime/backend/mailcap.c:102
 #: src/mime/backend/mimetypes.c:59
@@ -2561,6 +2558,7 @@ msgstr "Percorso"
 #: src/config/options.inc:720
 msgid "Colon separated list of directories, where CGI scripts are stored."
 msgstr ""
+"Lista di directory separate da due punti nelle quali cercare gli script CGI."
 
 #: src/config/options.inc:722
 msgid "User protocols"
@@ -2582,8 +2580,8 @@ msgid ""
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 "Gestore (programma esterno) per questo protocollo. Chiama\n"
-"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, unix-"
-"xwin)."
+"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, "
+"unix-xwin)."
 
 #: src/config/options.inc:740
 msgid ""
@@ -3007,24 +3005,20 @@ msgid "Dialog frame colors."
 msgstr "Colori cornici dialoghi."
 
 #: src/config/options.inc:1054 src/config/options.inc:1499
-#, fuzzy
 msgid "Scrollbar"
-msgstr "Margine di scorrimento"
+msgstr "Barra di scorrimento"
 
 #: src/config/options.inc:1056 src/config/options.inc:1501
-#, fuzzy
 msgid "Scrollbar colors."
-msgstr "Colori barra del titolo."
+msgstr "Colori barra di scorrimento."
 
 #: src/config/options.inc:1066 src/config/options.inc:1511
-#, fuzzy
 msgid "Scrollbar selected"
-msgstr "Scorri a sinistra"
+msgstr "Barra di scorrimento selezionata"
 
 #: src/config/options.inc:1068 src/config/options.inc:1513
-#, fuzzy
 msgid "Scrollbar selected colors."
-msgstr "Colori scheda selezionata."
+msgstr "Colori barra di scorrimento selezionata."
 
 #: src/config/options.inc:1078 src/config/options.inc:1523
 #: src/dialogs/document.c:84
@@ -3735,8 +3729,8 @@ msgid ""
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
-"Impostare a 1 per modificare i file runtime di stato (bookmark, "
-"storico, ...)\n"
+"Impostare a 1 per modificare i file runtime di stato (bookmark, storico, "
+"...)\n"
 "anche quando si usano -no-connect o -session-ring; non ha effetto\n"
 "se non è usato in combinazione con una di queste opzioni."
 
@@ -4044,9 +4038,8 @@ msgstr "Interrompi"
 
 #. This requires more work to make locking work and query the user
 #: src/dialogs/download.c:250 src/dialogs/download.c:417
-#, fuzzy
 msgid "Abort and delete file"
-msgstr "Impossibile leggere il file"
+msgstr "Interrompi e cancella file"
 
 #: src/dialogs/download.c:423
 msgid "Download manager"
@@ -4490,9 +4483,8 @@ msgid "Average speed"
 msgstr "Velocità media"
 
 #: src/dialogs/status.c:85
-#, fuzzy
 msgid "average speed"
-msgstr "Velocità media"
+msgstr "velocità media"
 
 #: src/dialogs/status.c:86
 msgid "avg"
@@ -4503,9 +4495,8 @@ msgid "Speed"
 msgstr "Velocità"
 
 #: src/dialogs/status.c:89
-#, fuzzy
 msgid "speed"
-msgstr "Velocità"
+msgstr "velocità"
 
 #: src/dialogs/status.c:100
 msgid "current speed"
@@ -4520,9 +4511,8 @@ msgid "Elapsed time"
 msgstr "Tempo trascorso"
 
 #: src/dialogs/status.c:112
-#, fuzzy
 msgid "elapsed time"
-msgstr "Tempo trascorso"
+msgstr "tempo trascorso"
 
 #: src/dialogs/status.c:119
 msgid "estimated time"
@@ -4750,8 +4740,8 @@ msgstr ""
 "Associazione Gestore <-> tipo MIME. Il primo sotto albero è la\n"
 "classe MIME, mentre il secondo sotto albero è il tipo MIME (il\n"
 "gestore di image/gif risiedera in mime.type.image.gif). Ogni opzione\n"
-"del tipo MIME dovrebbe contenere il nome (considerando le maiuscole/"
-"minuscole)\n"
+"del tipo MIME dovrebbe contenere il nome (considerando le "
+"maiuscole/minuscole)\n"
 "del gestore MIME (le sue proprietà sono memorizzate in mime.handler.<nome>)."
 
 #: src/mime/backend/default.c:35
@@ -4891,8 +4881,8 @@ msgid ""
 "also be checked before deciding the handler."
 msgstr ""
 "Dà priorità alle voci per l'ordine dei file nel percorso di\n"
-"mailcap. Questo significa che anche le voci con metacaratteri (come image/"
-"*)\n"
+"mailcap. Questo significa che anche le voci con metacaratteri (come "
+"image/*)\n"
 "saranno controllate prima di decidere il gestore."
 
 #. name:
@@ -5228,7 +5218,7 @@ msgstr "Errore nell'apertura del file"
 
 #: src/sched/error.c:62
 msgid "CGI script not in CGI path"
-msgstr ""
+msgstr "Lo script CGI non è nel percorso dei CGI."
 
 #: src/sched/error.c:64
 msgid "Bad FTP response"
@@ -5325,9 +5315,9 @@ msgid ""
 "saved to the configuration file, instead of just all the options. This "
 "simplifies our situation greatly when we see that some option has "
 "inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of config."
-"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
-"for any inconvience caused."
+"a subtle way. Thus, we recommend you to change the value of "
+"config.saving_style option to 3 in order to get the \"right\" behaviour. "
+"Apologies for any inconvience caused."
 msgstr ""
 "Hai l'opzione config.saving_style impostata a un valore obsoleto. Gli "
 "algoritmi di salvataggio della configurazione di ELinks sono stati cambiati "
@@ -5335,9 +5325,9 @@ msgstr ""
 "sono salvate nel file di configurazione, invece di tutte quante. Questo "
 "semplifica molto la situazione quando vediamo che delle opzioni hanno un "
 "valore predefinito inappropriato o abbiamo bisogno di cambiarne la "
-"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione config."
-"saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le mie "
-"scuse per qualsiasi inconveniente causato."
+"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione "
+"config.saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le "
+"mie scuse per qualsiasi inconveniente causato."
 
 #: src/sched/session.c:1269
 msgid ""
@@ -5521,7 +5511,7 @@ msgstr "~Cancella fo~rm"
 
 #: src/viewer/text/link.c:933
 msgid "Open in ~external editor"
-msgstr ""
+msgstr "Apri con editor ~esterno"
 
 #: src/viewer/text/link.c:937
 msgid "~Submit form"

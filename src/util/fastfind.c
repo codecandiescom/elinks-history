@@ -14,7 +14,7 @@
  *
  *  (c) 2003 Laurent MONIN (aka Zas)
  * Feel free to do whatever you want with that code. */
-/* $Id: fastfind.c,v 1.11 2003/06/14 00:25:14 zas Exp $ */
+/* $Id: fastfind.c,v 1.12 2003/06/14 00:48:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,9 +253,7 @@ fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void),
 	}
 
 	if (!info->count) return 0;
-#ifdef FASTFIND_DEBUG
-	fprintf(stderr, "uniq_chars: %s\n", info->uniq_chars);
-#endif
+
 	init_idxtab(info);
 
 	/* Root line allocation */
@@ -269,7 +267,7 @@ fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void),
 		int key_len = strlen(p->key);
 		struct ff_elt *current = info->root_line;
 
-#ifdef FASTFIND_DEBUG
+#if 0
 		fprintf(stderr, "K: %s\n", p->key);
 #endif
 		for (i = 0; i < key_len; i++) {
@@ -395,13 +393,16 @@ fastfind_search(unsigned char *key, int key_len, void *fastfind_info)
 
 	current = info->root_line;
 
+	testinc(); /* We count one test for case sensitivity (in loop for now). */
+
 	for (; i < key_len; i++) {
 		int lidx;
 
 		iterinc();
 
 		/* TODO: Move this test outside loop. Here performance matters.
-		 * We do not count this test in stats as it will disappear. */
+		 * We do not count this test in stats as it will disappear.
+		 * It will imply code duplication. */
 		if (info->case_sensitive)
 			lidx = info->idxtab[key[i]];
 		else
@@ -443,7 +444,6 @@ fastfind_search(unsigned char *key, int key_len, void *fastfind_info)
 				current = (struct ff_elt *) info->lines[current[lidx].l];
 			else
 				return NULL;
-
 		}
 	}
 
@@ -459,6 +459,11 @@ fastfind_terminate(void *fastfind_info)
 	if (!info) return;
 
 #ifdef FASTFIND_DEBUG
+	fprintf(stderr, "------ FastFind Statistics ------\n");
+	fprintf(stderr, "Uniq_chars  : %s\n", info->uniq_chars);
+	fprintf(stderr, "Uniq_chars #: %d\n", info->uniq_chars_count);
+	fprintf(stderr, "Min_key_len : %d\n", info->min_key_len);
+	fprintf(stderr, "Max_key_len : %d\n", info->max_key_len);
 	fprintf(stderr, "Entries     : %d/%d\n", info->pointers_count, FF_MAX_KEYS);
 	fprintf(stderr, "FFlines     : %d/%d\n", info->lines_count, FF_MAX_LINES);
 	fprintf(stderr, "Memory usage: %lu bytes (cost per entry = %0.2f bytes)\n",

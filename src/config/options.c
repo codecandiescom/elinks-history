@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.129 2002/12/03 19:31:44 zas Exp $ */
+/* $Id: options.c,v 1.130 2002/12/05 20:29:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -823,7 +823,7 @@ register_options()
 		"Options regarding files downloading and handling.");
 
 	add_opt_string("document.download",
-		"default_mime_type", 0, "text/plain",
+		"default_mime_type", 0, "application/octet-stream",
 		"MIME type for a document we should assume by default (when we are\n"
 		"unable to guess it properly from known informations about the\n"
 		"document).");

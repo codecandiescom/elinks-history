@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.376 2004/03/22 14:35:41 jonas Exp $ */
+/* $Id: view.c,v 1.377 2004/03/30 15:42:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,10 +74,7 @@ detach_formatted(struct document_view *doc_view)
 		doc_view->document = NULL;
 	}
 	doc_view->vs = NULL;
-	if (doc_view->link_bg) {
-		mem_free(doc_view->link_bg), doc_view->link_bg = NULL;
-		doc_view->link_bg_n = 0;
-	}
+	if (doc_view->link_bg) free_link(doc_view);
 	if (doc_view->name) {
 		mem_free(doc_view->name), doc_view->name = NULL;
 	}

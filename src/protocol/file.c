@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.77 2003/06/23 23:10:17 jonas Exp $ */
+/* $Id: file.c,v 1.78 2003/06/23 23:12:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -286,7 +286,7 @@ struct file_info {
  * All entries are then sorted and finally the sorted entries are added to the
  * fragment one by one. */
 static void
-add_dir_entries(DIR *directory, unsigned char *filename, struct file_info *info)
+add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_info *info)
 {
 	struct directory_entry *entries = NULL;
 	unsigned char *fragment = info->fragment;
@@ -333,7 +333,7 @@ add_dir_entries(DIR *directory, unsigned char *filename, struct file_info *info)
 		*p = init_str();
 		if (!*p) continue;
 
-		name = straconcat(filename, entry->d_name, NULL);
+		name = straconcat(dirpath, entry->d_name, NULL);
 		if (!name) continue;
 
 #ifdef FS_UNIX_SOFTLINKS
@@ -376,7 +376,7 @@ add_dir_entries(DIR *directory, unsigned char *filename, struct file_info *info)
 			int nl = 0;
 
 			if (!n) continue;
-			add_to_str(&n, &nl, filename);
+			add_to_str(&n, &nl, dirpath);
 			add_htmlesc_str(&n, &nl, name, namelen);
 			do {
 				if (buf) mem_free(buf);
@@ -410,7 +410,7 @@ add_dir_entries(DIR *directory, unsigned char *filename, struct file_info *info)
 			int nl = 0;
 
 			if (n) {
-				add_to_str(&n, &nl, filename);
+				add_to_str(&n, &nl, dirpath);
 				add_htmlesc_str(&n, &nl, name, namelen);
 				if (!stat(n, &st) && S_ISDIR(st.st_mode))
 					add_chr_to_str(&fragment, &fragmentlen, '/');
@@ -454,11 +454,11 @@ add_dir_entries(DIR *directory, unsigned char *filename, struct file_info *info)
 }
 
 /* Generates a HTML page listing the content of @directory with the path
- * @filename. */
+ * @dirpath. */
 /* Returns a connection state. S_OK if all is well. */
 /* TODO comment and split up this function; possibly the two loops. --jonas */
 static int
-list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
+list_directory(DIR *directory, unsigned char *dirpath, struct file_info *info)
 {
 	unsigned char *fragment = init_str();
 	int fragmentlen = 0;
@@ -466,11 +466,11 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 	if (!fragment) return S_OUT_OF_MEM;
 
 	add_to_str(&fragment, &fragmentlen, "<html>\n<head><title>");
-	add_htmlesc_str(&fragment, &fragmentlen, filename, strlen(filename));
+	add_htmlesc_str(&fragment, &fragmentlen, dirpath, strlen(dirpath));
 	add_to_str(&fragment, &fragmentlen, "</title></head>\n<body>\n<h2>Directory ");
 	{
 		/* Make the directory path with links to each subdir. */
-		unsigned char *slash = filename;
+		unsigned char *slash = dirpath;
 		unsigned char *pslash = ++slash;
 
 		add_chr_to_str(&fragment, &fragmentlen, '/');
@@ -478,7 +478,7 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 			*slash = 0;
 			add_to_str(&fragment, &fragmentlen, "<a href=\"");
 			/* FIXME: htmlesc? At least we should escape quotes. --pasky */
-			add_to_str(&fragment, &fragmentlen, filename);
+			add_to_str(&fragment, &fragmentlen, dirpath);
 			add_to_str(&fragment, &fragmentlen, "/\">");
 			add_htmlesc_str(&fragment, &fragmentlen, pslash, strlen(pslash));
 			add_to_str(&fragment, &fragmentlen, "</a>/");
@@ -491,7 +491,7 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 	info->fragment = fragment;
 	info->fragmentlen = fragmentlen;
 
-	add_dir_entries(directory, filename, info);
+	add_dir_entries(directory, dirpath, info);
 
 	add_to_str(&info->fragment, &info->fragmentlen, "</pre>\n<hr>\n</body>\n</html>\n");
 

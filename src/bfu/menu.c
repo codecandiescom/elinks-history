@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.166 2004/01/09 10:56:14 miciah Exp $ */
+/* $Id: menu.c,v 1.167 2004/01/09 11:00:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -578,7 +578,7 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 			menu->selected = menu->ni;
 			scroll_menu(menu, -1);
 			break;
-#define 
+#define DIST 5
 		case ACT_PAGE_UP:
 		{
 			int i = menu->selected - 2;
@@ -634,7 +634,7 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 			scroll_menu(menu, step);
 		}
 			break;
-#undef D
+#undef DIST
 		case ACT_ENTER:
 		case ACT_SELECT:
 			goto enter;

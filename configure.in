@@ -716,6 +716,47 @@ AM_GNU_GETTEXT
 
 
 dnl ===================================================================
+dnl DocBook tools configuration
+dnl ===================================================================
+
+dnl TODO Take user input for which program to use
+AC_CHECK_PROGS(DOCTOOL, [docbook2html db2html jw xmlto], [], [$PATH])
+
+if test -n "$ac_cv_prog_DOCTOOL"; then
+	AC_MSG_CHECKING(for how doctools should be called)
+	DOCTOOL=
+	HTMLDOCTOOL=
+	MANDOCTOOL=
+	doctool_result=""
+	case "$ac_cv_prog_DOCTOOL" in
+		docbook2* | db2*)
+			frontend="docbook2"
+			if test "$ac_cv_prog_DOCTOOL" = db2html; then
+				frontend="db2"
+			fi
+			DOCTOOL=jw
+			HTMLDOCTOOL="${frontend}html"
+			MANDOCTOOL="${frontend}man"
+			doctool_result="assuming man frontend is available"
+		;;
+		jw)
+			HTMLDOCTOOL="$DOCTOOL -f html"
+			MANDOCTOOL="$DOCTOOL -f man"
+			doctool_result="using -f \${format}"
+		;;
+		xmlto)
+			DOCTOOL="$DOCTOOL --skip-validation"
+			HTMLDOCTOOL="$DOCTOOL html"
+			MANDOCTOOL="$DOCTOOL man"
+			doctool_result="cross your fingers that it will work"
+		;;
+	esac
+	AC_SUBST(HTMLDOCTOOL)
+	AC_SUBST(MANDOCTOOL)
+	AC_MSG_RESULT($doctool_result)
+fi
+
+dnl ===================================================================
 dnl Compile-time features control
 dnl ===================================================================
 

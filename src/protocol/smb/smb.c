@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.13 2003/12/09 09:34:06 zas Exp $ */
+/* $Id: smb.c,v 1.14 2003/12/09 11:37:01 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -13,10 +13,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/time.h> /* FreeBSD needs this before resource.h */
+#include <sys/types.h> /* FreeBSD needs this before resource.h */
 #ifdef HAVE_SYS_RESOURCE_H
 #include <sys/resource.h>
 #endif
-#include <sys/types.h>
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h> /* OS/2 needs this after sys/types.h */
 #endif

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.29 2003/12/27 21:56:08 zas Exp $ */
+/* $Id: cmdline.c,v 1.30 2004/01/02 19:54:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -272,8 +272,8 @@ print_full_help(struct option *tree, unsigned char *path)
 					mem_free(name);
 					break;
 				}
-				printf(gettext("(default: #%06x)"),
-					(unsigned int) option->value.color);
+				printf(gettext("(default: #%06lx)"),
+					(unsigned long) option->value.color);
 			}
 				break;
 

@@ -1,5 +1,5 @@
 /* Color parser */
-/* $Id: color.c,v 1.3 2003/12/27 22:05:15 zas Exp $ */
+/* $Id: color.c,v 1.4 2004/01/02 19:56:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -267,5 +267,5 @@ get_color_name(color_t color)
 void
 color_to_string(color_t color, unsigned char str[])
 {
-	snprintf(str, 8, "#%06x", (unsigned int) color);
+	snprintf(str, 8, "#%06lx", (unsigned long) color);
 }

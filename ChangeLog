@@ -1,3 +1,104 @@
+Fri Jan 30 23:01:08 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Added default keybinding to previous-(item|frame) to alt-tab, idea
+	by Miciah.  
+
+Fri Jan 30 22:38:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Use option 'cache' for search dialog checkbox values.  
+
+Fri Jan 30 19:54:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, config/options.h, dialogs/options.c:
+
+	Generalize the terminal option cache thingy.  
+
+Fri Jan 30 19:25:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Fix page down, scroll and end handling by using document view height
+	and _not_ ... ;-) 
+
+Fri Jan 30 19:13:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/inpfield.c,
+	bfu/listbox.c, bfu/menu.c, terminal/event.h, terminal/kbd.c,
+	viewer/text/view.c:
+
+	Wrap mouse bit magic in macros. Actions too.  
+
+Fri Jan 30 19:01:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/inpfield.c,
+	bfu/listbox.c, bfu/menu.c, bfu/text.c, terminal/event.h,
+	terminal/kbd.c, viewer/text/view.c:
+
+	Wrap mouse bit magic in macros.  
+
+Fri Jan 30 18:36:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Minor cleanup.  
+
+Fri Jan 30 18:28:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Always compare to the current document view height and width and
+	_not_ document options height or width. Fixes detection of links
+	from mouse clicks when the terminal has been resized after the first
+	rendering. Reported by zas.  
+
+Fri Jan 30 18:16:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Compile fix.  
+
+Fri Jan 30 15:25:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: css.c, parser.c, parser.h:
+
+	css_parse_stylesheet() now takes @end variable. BTW idea by Zardoz.  
+
+Fri Jan 30 15:15:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/css/apply.c, document/css/parser.c,
+	document/css/scanner.c, util/scanner.c, util/scanner.h:
+
+	Add end member to the scanner struct so we can start to support NUL
+	chars in cache data.  
+
+Fri Jan 30 10:14:25 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Jan 30 08:22:23 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Standardization.  
+
+Fri Jan 30 07:35:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Now with proper header comments and new options.  
+
+Fri Jan 30 07:33:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/tools/help2doc:
+
+	Out put proper .\" comments.  
+
 Thu Jan 29 13:32:05 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/css/: parser.c, stylesheet.c, stylesheet.h:

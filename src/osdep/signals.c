@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.26 2004/11/08 19:37:52 jonas Exp $ */
+/* $Id: signals.c,v 1.27 2004/11/08 19:41:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,7 +67,7 @@ static void
 sig_tstp(struct terminal *term)
 {
 #ifdef SIGSTOP
-	int pid = getpid();
+	pid_t pid = getpid();
 
 	block_itrm(0);
 #if defined (SIGCONT) && defined(SIGTTOU)

@@ -1,0 +1,15 @@
+#!/bin/sh
+#
+# Simple shell scripts to insert style sheet in all html files in a directory,
+# directory is passed as the first argument to the program
+#
+# $Id: installcss,v 1.1 2002/12/29 10:57:29 jonas Exp $
+
+cd $1
+
+for i in `ls *.html`; do
+    cat $i | sed 's/<\/head>/<link rel="STYLESHEET" type="text\/css" href="style.css"><\/head>/' > tmp
+    mv tmp $i
+done
+
+cd -

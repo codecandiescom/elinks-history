@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# Script for multiplexing which manual generator to use.
+#
+# $Id: make-manual,v 1.1 2002/12/29 10:57:29 jonas Exp $
+#
+
+format=$1
+target=$2
+processor=$3
+
+if [[ ${format} == "" ]];
+then
+	echo "Usage: `basename $0` [format] [target] [processor]"
+	echo "  format    - which format to generate (dvi, ps, html, etc.)"
+	echo "  target    - xml file to process"
+	echo "  processor - which tool to process with (xmlto, db, docbook)"
+	exit -1
+fi
+
+echo "Generating ${format} format"
+
+docbook_utils="docbook2${format}"
+generator=`which ${docbook_utils}`
+
+if [[ ${generator} != "" ]];
+then
+	# Using the docbook2* suite
+	options=""
+	htmldir="`basename ${target} .xml`.html"
+
+	if [[ ${format} == "html" ]];
+	then
+		rm -rf ${htmldir}
+		mkdir ${htmldir}
+		options="-o ${htmldir}"
+	fi
+
+	${generator} ${options} ${target}
+
+	if [[ ${format} == "html" ]];
+	then
+		tidy=`which tidy`
+		if [[ ${tidy} != "" ]];
+		then
+			cd ${htmldir} ; ${tidy} -latin1 -f err -im *.html ; rm -f err ; cd ..
+		fi
+	fi
+	exit 0
+fi

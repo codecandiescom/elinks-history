@@ -1,0 +1,15 @@
+<appendix id="sample-configuration">
+		<title>Sample configuration File</title>
+
+<para>
+
+	Provided here is a sample &elinks.conf; file with some the default settings.
+
+</para>
+<example><title>Sample &elinks.conf; file</title>
+<programlisting>
+&elinks.conf-sample;
+</programlisting>
+</example>
+
+</appendix>

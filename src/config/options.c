@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.394 2003/10/31 22:18:15 pasky Exp $ */
+/* $Id: options.c,v 1.395 2003/11/01 22:38:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -872,8 +872,10 @@ print_full_help(struct option *tree, unsigned char *path)
 				break;
 
 			case OPT_LANGUAGE:
+#ifdef ENABLE_NLS
 				printf(gettext("(default: \"%s\")"),
 					language_to_name(option->value.number));
+#endif
 				break;
 
 			case OPT_TREE:

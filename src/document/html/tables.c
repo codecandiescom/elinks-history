@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.345 2004/07/01 18:12:18 jonas Exp $ */
+/* $Id: tables.c,v 1.346 2004/07/01 18:18:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1099,10 +1099,6 @@ draw_table_frames(struct table *table, int indent, int y)
 	fmem_free(frame[0]);
 }
 
-/* This in fact renders stuff like the <caption>-tag, but also other tags that
- * confused the <table> parser. The formatting is done so that it has same
- * alignment and width as the main table. */
-
 static void
 draw_table_caption(struct table *table, int x, int y)
 {
@@ -1132,6 +1128,8 @@ draw_table_caption(struct table *table, int x, int y)
 	}
 }
 
+/* This renders tag soup elements that the parser detected while chewing it's
+ * way through the table HTML. */
 static void
 draw_table_bad_html(struct table *table)
 {

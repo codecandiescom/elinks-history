@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.184 2004/10/04 13:26:39 jonas Exp $ */
+/* $Id: cache.c,v 1.185 2004/10/08 13:06:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -372,7 +372,7 @@ add_fragment(struct cache_entry *cached, int offset,
 		 * snippets - we "guess" the rest of the document here,
 		 * interpret the snippet, then it turns out in the real
 		 * document the snippet is different and we are in trouble.
-		 * 
+		 *
 		 * Debugging this took me about 1.5 day (really), the diff with
 		 * all the debugging print commands amounted about 20kb (gdb
 		 * wasn't much useful since it stalled the download, de facto

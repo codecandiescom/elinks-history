@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.500 2004/09/29 15:05:58 jonas Exp $ */
+/* $Id: parser.c,v 1.501 2004/10/08 13:06:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -414,7 +414,7 @@ do_html_script(unsigned char *a, unsigned char *html, unsigned char *eof, unsign
 	int in_comment = 0;
 
 	html_skip(a);
-	
+
 	/* We try to process nested <script> if we didn't process the parent
 	 * one. That's why's all the fuzz. */
 	type = get_attr_val(a, "type");

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.594 2004/10/06 12:10:04 zas Exp $ */
+/* $Id: view.c,v 1.595 2004/10/08 13:06:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -830,7 +830,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 
 	/* When changing frame, vs may be NULL. See bug 525. */
 	if (!doc_view->vs) return FRAME_EVENT_IGNORED;
-	
+
 	link = get_current_link(doc_view);
 
 	if (link && link_is_textinput(link)) {

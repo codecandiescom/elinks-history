@@ -1,5 +1,5 @@
 /* SGML token scanner utilities */
-/* $Id: scanner.c,v 1.9 2004/09/29 14:47:18 jonas Exp $ */
+/* $Id: scanner.c,v 1.10 2004/10/08 13:06:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -324,7 +324,7 @@ scan_sgml_element_token(struct scanner *scanner, struct scanner_token *token)
 		type = SGML_TOKEN_TAG_END;
 		assert(scanner->state == SGML_STATE_ELEMENT);
 		scanner->state = SGML_STATE_TEXT;
- 
+
 	} else if (first_char == '/') {
 		if (*string == '>') {
 			string++;

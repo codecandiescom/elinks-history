@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.16 2004/01/27 01:12:26 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.17 2004/01/27 01:13:43 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -98,7 +98,7 @@ struct css_selector *
 init_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen);
 
 /* Mirror @sel1 to an identical copy of itself, @sel2. */
-void mirror_css_selector(struct css_stylesheet *css1, struct css_selector *css2);
+void mirror_css_selector(struct css_selector *sel1, struct css_selector *sel2);
 
 /* Join @sel2 to @sel1, @sel1 taking precedence in all conflicts. */
 void merge_css_selectors(struct css_selector *sel1, struct css_selector *sel2);

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.211 2003/05/18 15:13:18 pasky Exp $ */
+/* $Id: options.c,v 1.212 2003/05/24 22:32:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -211,11 +211,9 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 		option->box_item->depth = tree->box_item->depth + 1;
 		option->box_item->root = tree->box_item;
 
-		add_at_pos((struct listbox_item *) tree->box_item->child.prev,
-				option->box_item);
+		add_to_list_bottom(tree->box_item->child, option->box_item);
 	} else if (option->box_item) {
-		add_at_pos((struct listbox_item *) root_option_box_items.prev,
-				option->box_item);
+		add_to_list_bottom(root_option_box_items, option->box_item);
 	}
 
 	add_at_pos((struct option *) cat->prev, option);

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.88 2003/05/18 23:37:04 zas Exp $ */
+/* $Id: renderer.c,v 1.89 2003/05/24 22:32:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1769,7 +1769,7 @@ add_frame_to_list(struct session *ses, struct f_data_c *fd)
 		}
 	}
 
-	add_at_pos((struct f_data_c *)ses->scrn_frames.prev, fd);
+	add_to_list_bottom(ses->scrn_frames, fd);
 }
 
 static struct f_data_c *

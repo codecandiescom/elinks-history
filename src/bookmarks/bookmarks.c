@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.71 2003/05/02 22:25:20 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.72 2003/05/24 22:32:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,9 +108,9 @@ add_bookmark(struct bookmark *root, int place, const unsigned char *title,
 	 * not vice versa. */
 	if (place) {
 		if (root)
-			add_at_pos((struct bookmark *) root->child.prev, bm);
+			add_to_list_bottom(root->child, bm);
 		else
-			add_at_pos((struct bookmark *) bookmarks.prev, bm);
+			add_to_list_bottom(bookmarks, bm);
 	} else {
 		if (root)
 			add_to_list(root->child, bm);

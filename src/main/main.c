@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.128 2003/10/02 13:38:28 kuser Exp $ */
+/* $Id: main.c,v 1.129 2003/10/02 15:51:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,11 +288,13 @@ terminate_all_subsystems(void)
 }
 
 void
-shrink_memory(int u)
+shrink_memory(int whole)
 {
-	shrink_dns_cache(u);
-	shrink_format_cache(u);
-	garbage_collection(u);
+	shrink_dns_cache(whole);
+	shrink_format_cache(whole);
+	garbage_collection(whole);
+	/* TODO: next one was already called in shrink_format_cache(),
+	 * verify if this is useful or not. --Zas */
 	delete_unused_format_cache_entries();
 }
 

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.44 2003/10/02 14:36:17 zas Exp $ */
+/* $Id: cache.c,v 1.45 2003/10/02 15:51:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -452,7 +452,7 @@ delete_cache_entry(struct cache_entry *e)
 }
 
 void
-garbage_collection(int u)
+garbage_collection(int whole)
 {
 	struct cache_entry *e, *f;
 	long ncs = cache_size;
@@ -463,7 +463,7 @@ garbage_collection(int u)
 				 * MEMORY_CACHE_GC_PERCENT  / 100;
 
 
-	if (!u && cache_size <= opt_cache_memory_size) return;
+	if (!whole && cache_size <= opt_cache_memory_size) return;
 
 	foreach (e, cache) {
 		if (e->refcount || is_entry_used(e)) {
@@ -480,10 +480,10 @@ garbage_collection(int u)
 		cache_size, ccs);
 	if_assert_failed { cache_size = ccs; }
 
-	if (!u && ncs <= opt_cache_memory_size) return;
+	if (!whole && ncs <= opt_cache_memory_size) return;
 
 	foreachback (e, cache) {
-		if (!u && ncs <= opt_cache_gc_size)
+		if (!whole && ncs <= opt_cache_gc_size)
 			goto g;
 		if (e->refcount || is_entry_used(e)) {
 			no = 1;
@@ -504,7 +504,7 @@ g:
 	e = e->next;
 	if ((void *) e == &cache) return;
 
-	if (!u) {
+	if (!whole) {
 		for (f = e; (void *)f != &cache; f = f->next) {
 			long newncs = ncs + f->data_size;
 

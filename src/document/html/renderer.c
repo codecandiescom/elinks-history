@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.288 2003/10/01 23:12:06 jonas Exp $ */
+/* $Id: renderer.c,v 1.289 2003/10/02 15:51:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1575,9 +1575,10 @@ format_html(struct cache_entry *ce, struct document *screen)
 }
 
 void
-shrink_format_cache(int u)
+shrink_format_cache(int whole)
 {
 	struct document *ce;
+	int format_cache_size = get_opt_int("document.cache.format.size");
 
 	delete_unused_format_cache_entries();
 
@@ -1585,7 +1586,7 @@ shrink_format_cache(int u)
 	if_assert_failed format_cache_entries = 0;
 
 	ce = format_cache.prev;
-	while ((u || format_cache_entries > get_opt_int("document.cache.format.size"))
+	while ((whole || format_cache_entries > format_cache_size)
 	       && (void *)ce != &format_cache) {
 
 		if (ce->refcount) {

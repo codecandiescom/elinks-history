@@ -1,10 +1,9 @@
-/* $Id: mime.h,v 1.6 2003/06/18 00:21:20 jonas Exp $ */
+/* $Id: mime.h,v 1.7 2003/06/18 00:30:25 jonas Exp $ */
 
 #ifndef EL__MIME_MIME_H
 #define EL__MIME_MIME_H
 
 #include "config/options.h"
-#include "terminal/terminal.h"
 
 struct mime_handler {
 	unsigned char *program;
@@ -22,9 +21,8 @@ void done_mime(void);
  * using the @uri (extension). */
 unsigned char *get_content_type(unsigned char *header, unsigned char *uri);
 
-/* Find program to handle mimetype. The @term is for getting info about X
- * capabilities. */
+/* Find program to handle mimetype. The @xwin tells about X capabilities. */
 struct mime_handler *
-get_mime_type_handler(struct terminal *term, unsigned char *content_type);
+get_mime_type_handler(unsigned char *content_type, int xwin);
 
 #endif

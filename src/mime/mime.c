@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.15 2003/06/15 23:34:53 zas Exp $ */
+/* $Id: mime.c,v 1.16 2003/06/18 00:30:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,7 +10,6 @@
 #include "elinks.h"
 
 #include "config/options.h"
-#include "terminal/terminal.h"
 #include "mime/backend/common.h"
 #include "mime/mime.h"
 #include "protocol/http/header.h"	/* For parse_http_header() */
@@ -45,7 +44,7 @@ try_extension_type(unsigned char *extension)
 	if (!content_type)
 		return NULL;
 
-	handler = get_mime_type_handler(NULL, content_type);
+	handler = get_mime_type_handler(content_type, 0);
 	if (handler) {
 		mem_free(handler->program);
 		mem_free(handler);
@@ -103,9 +102,7 @@ get_content_type(unsigned char *head, unsigned char *url)
 }
 
 struct mime_handler *
-get_mime_type_handler(struct terminal *term, unsigned char *content_type)
+get_mime_type_handler(unsigned char *content_type, int xwin)
 {
-	int have_x = term ? term->environment & ENV_XWIN : 0;
-
-	return get_mime_handler_backends(content_type, have_x);
+	return get_mime_handler_backends(content_type, xwin);
 }

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.95 2004/04/06 00:30:58 jonas Exp $ */
+/* $Id: string.c,v 1.96 2004/04/06 09:50:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -392,6 +392,9 @@ add_to_string_list(struct list_head *list, unsigned char *source, int length)
 	struct string_list_item *item;
 	struct string *string;
 
+	assertm(list && source, "[add_to_string_list]");
+	if_assert_failed return NULL;
+
 	item = mem_alloc(sizeof(struct string_list_item));
 	if (!item) return NULL;
 
@@ -412,6 +415,9 @@ add_to_string_list(struct list_head *list, unsigned char *source, int length)
 void
 free_string_list(struct list_head *list)
 {
+	assertm(list, "[free_string_list]");
+	if_assert_failed return;
+
 	while (!list_empty(*list)) {
 		struct string_list_item *item = list->next;
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.59 2003/05/25 01:39:45 zas Exp $ */
+/* $Id: options.c,v 1.60 2003/05/27 21:57:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,7 +317,7 @@ do_resize_terminal(struct terminal *term)
 	strcpy(str, x_str);
 	strcat(str, ",");
 	strcat(str, y_str);
-	do_terminal_function(term, TERM_FN_RESIZE, str, 0);
+	do_terminal_function(term, TERM_FN_RESIZE, str);
 }
 
 void

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.121 2003/05/18 16:08:42 pasky Exp $ */
+/* $Id: http.c,v 1.122 2003/05/18 16:26:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1097,13 +1097,26 @@ again:
 		return;
 	}
 
-	head = mem_alloc(a + 1);
-	if (!head) {
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
-		return;
+	if (a) {
+		head = mem_alloc(a + 1);
+		if (!head) {
+out_of_mem:
+			abort_conn_with_state(conn, S_OUT_OF_MEM);
+			return;
+		}
+		memcpy(head, rb->data, a);
+		head[a] = 0;
+	} else {
+		/* No header, HTTP/0.9 document. That's always text/html,
+		 * according to
+		 * http://www.w3.org/Protocols/HTTP/AsImplemented.html. */
+
+		head = stracpy("\r\n");
+		if (!head) goto out_of_mem;
+
+		add_to_strn(&head, "Content-Type: text/html\r\n");
 	}
-	memcpy(head, rb->data, a);
-	head[a] = 0;
+
 	if (check_http_server_bugs(host, conn->info, head)) {
 		mem_free(head);
 		retry_conn_with_state(conn, S_RESTART);

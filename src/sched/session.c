@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.96 2003/06/11 15:26:39 pasky Exp $ */
+/* $Id: session.c,v 1.97 2003/06/11 16:42:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -603,7 +603,6 @@ static int
 do_move(struct session *ses, struct status **stat)
 {
 	struct cache_entry *ce = NULL;
-	int l = 0;
 
 	if (!ses->loading_url) {
 		internal("no ses->loading_url");

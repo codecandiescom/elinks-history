@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.113 2003/12/21 14:51:19 zas Exp $ */
+/* $Id: cookies.c,v 1.114 2003/12/23 12:06:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -357,7 +357,8 @@ set_cookie(struct uri *uri, unsigned char *str)
 
 	if (!check_domain_security(cookie->domain, uri->host, uri->hostlen)) {
 #ifdef COOKIES_DEBUG
-		DBG("Domain security violated.");
+		DBG("Domain security violated: %s vs %*s", cookie->domain,
+				uri->host, uri->hostlen);
 #endif
 		mem_free(cookie->domain);
 		cookie->domain = memacpy(uri->host, uri->hostlen);

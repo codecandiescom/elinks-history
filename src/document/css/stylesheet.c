@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.26 2004/09/17 23:01:11 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.27 2004/09/17 23:03:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,7 +42,8 @@ find_css_selector_by_element(struct css_stylesheet *css, unsigned char *element,
 }
 
 struct css_selector *
-init_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
+init_css_selector(struct css_stylesheet *css,
+                  unsigned char *element, int elementlen)
 {
 	struct css_selector *selector;
 
@@ -51,10 +52,10 @@ init_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
 
 	init_list(selector->properties);
 
-	if (name) {
-		if (namelen < 0)
-			namelen = strlen(name);
-		selector->element = memacpy(name, namelen);
+	if (element) {
+		if (elementlen < 0)
+			elementlen = strlen(element);
+		selector->element = memacpy(element, elementlen);
 		if (!selector->element) {
 			mem_free(selector);
 			return NULL;
@@ -69,17 +70,19 @@ init_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
 }
 
 struct css_selector *
-get_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
+get_css_selector(struct css_stylesheet *css,
+                 unsigned char *element, int elementlen)
 {
 	struct css_selector *selector = NULL;
 
-	if (css && name && namelen) {
-		selector = find_css_selector_by_element(css, name, namelen);
+	if (css && element && elementlen) {
+		selector = find_css_selector_by_element(css, element,
+		                                        elementlen);
 		if (selector)
 			return selector;
 	}
 
-	selector = init_css_selector(css, name, namelen);
+	selector = init_css_selector(css, element, elementlen);
 	if (selector)
 		return selector;
 
@@ -224,8 +227,8 @@ merge_css_stylesheets(struct css_stylesheet *css1,
 	foreach (selector, css2->selectors) {
 		struct css_selector *origsel;
 
-		origsel = find_css_selector(css1, selector->name,
-					    strlen(selector->name));
+		origsel = find_css_selector_by_element(css1, selector->element,
+					             strlen(selector->element));
 		if (!origsel) {
 			clone_css_selector(css1, selector);
 		} else {

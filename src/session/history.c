@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.42 2003/10/24 17:05:27 pasky Exp $ */
+/* $Id: history.c,v 1.43 2003/10/24 20:32:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,26 +135,25 @@ ses_unback(struct session *ses)
 }
 
 
-/* Common part of go_(un)back(). */
-/* @dir: 1 == forward (unback), -1 == back */
-/* Returns < 0 upon error, 0 if we should abort the movement and 1 if we should
- * proceed fearlessly. */
-static int
-go_away(struct session *ses, struct location *loc, int dir)
+/* go_(un)back() backend. */
+static inline void
+go_away(struct session *ses, struct location *loc, enum task_type task)
 {
+	unsigned char *url;
+
 	ses->reloadlevel = NC_CACHE;
 
 	if (ses->task) {
 		abort_loading(ses, 0);
 		print_screen_status(ses);
 		reload(ses, NC_CACHE);
-		return 0;
+		return;
 	}
 
 	if (!have_location(ses)
 	    || loc == (struct location *) &ses->history.history) {
 		/* There's no history, at most only the current location. */
-		return 0;
+		return;
 	}
 
 	abort_loading(ses, 0);
@@ -164,37 +163,22 @@ go_away(struct session *ses, struct location *loc, int dir)
 		ses->ref_url = NULL;
 	}
 
-	return 1;
+	url = memacpy(loc->vs.url, loc->vs.url_len);
+	if (!url) return;
+
+	ses_goto(ses, url, NULL, loc,
+		 PRI_MAIN, NC_ALWAYS_CACHE, task,
+		 NULL, end_load, 0);
 }
 
 void
 go_back(struct session *ses, struct location *loc)
 {
-	unsigned char *url;
-
-	if (go_away(ses, loc, -1) < 1)
-		return;
-
-	url = memacpy(loc->vs.url, loc->vs.url_len);
-	if (!url) return;
-
-	ses_goto(ses, url, NULL, loc,
-		 PRI_MAIN, NC_ALWAYS_CACHE, TASK_BACK,
-		 NULL, end_load, 0);
+	go_away(ses, loc, TASK_BACK);
 }
 
 void
 go_unback(struct session *ses, struct location *loc)
 {
-	unsigned char *url;
-
-	if (go_away(ses, loc, 1) < 1)
-		return;
-
-	url = memacpy(loc->vs.url, loc->vs.url_len);
-	if (!url) return;
-
-	ses_goto(ses, url, NULL, loc,
-		 PRI_MAIN, NC_ALWAYS_CACHE, TASK_UNBACK,
-		 NULL, end_load, 0);
+	go_away(ses, loc, TASK_UNBACK);
 }

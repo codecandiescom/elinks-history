@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.6 2002/04/09 08:07:03 pasky Exp $ */
+/* $Id: terminal.c,v 1.7 2002/04/16 12:43:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -414,12 +414,7 @@ struct term_spec *new_term_spec(unsigned char *term)
 	if (!t) return NULL;
 	memcpy(t, &dumb_term, sizeof(struct term_spec));
 
-	if (strlen(term) < MAX_TERM_LEN) {
-		strcpy(t->term, term);
-	} else {
-		memcpy(t->term, term, MAX_TERM_LEN - 1);
-		t->term[MAX_TERM_LEN - 1] = 0;
-	}
+	safe_strncpy(t->term, term, MAX_TERM_LEN - 1);
 
 	add_to_list(term_specs, t);
 	sync_term_specs();
@@ -454,7 +449,7 @@ struct terminal *init_term(int fdin, int fdout,
 
 	term->fdin = fdin;
 	term->fdout = fdout;
-	term->master = term->fdout == get_output_handle();
+	term->master = (term->fdout == get_output_handle());
 #if 0
 	term->x = 0;
 	term->y = 0;
@@ -821,6 +816,7 @@ void destroy_terminal(struct terminal *term)
 void destroy_all_terminals()
 {
 	struct terminal *term;
+
 	while ((void *) (term = terminals.next) != &terminals)
 		destroy_terminal(term);
 }
@@ -829,8 +825,9 @@ void destroy_all_terminals()
 /* check_if_no_terminal() */
 void check_if_no_terminal()
 {
-	if (!list_empty(terminals)) return;
-	terminate = 1;
+	if (list_empty(terminals)) {
+		terminate = 1;
+	}
 }
 
 

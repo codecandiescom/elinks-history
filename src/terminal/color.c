@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.65 2003/11/11 14:39:05 zas Exp $ */
+/* $Id: color.c,v 1.66 2003/11/11 22:26:04 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -245,6 +245,7 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 	/* Options for the various color modes. */
 	switch (color_mode) {
 	case COLOR_MODES:
+		internal("Bad color mode, it should _never_ occur here.");
 	case COLOR_MODE_DUMP:
 		return;
 

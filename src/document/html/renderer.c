@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.303 2003/10/18 16:12:55 jonas Exp $ */
+/* $Id: renderer.c,v 1.304 2003/10/18 16:28:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,20 +212,21 @@ clear_hchars(struct part *part, int x, int y, int xl)
 
 /* xset_hchar() and xset_vchars() are used for rendering table frames. */
 
-void
-xset_hchars(struct part *part, int x, int y, int xl, unsigned char data)
+
+static inline struct screen_char *
+get_frame_char(struct part *part, int x, int y, unsigned char data)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
 	struct screen_char *template;
 
-	assert(part && part->document && xl > 0);
-	if_assert_failed return;
+	assert(part && part->document && x >= 0 && y >= 0);
+	if_assert_failed return NULL;
 
-	if (realloc_line(part->document, Y(y), X(x) + xl - 1))
-		return;
+	if (realloc_line(part->document, Y(y), X(x)))
+		return NULL;
 
 	assert(part->document->data);
-	if_assert_failed return;
+	if_assert_failed return NULL;
 
 	template = &POS(x, y);
 	template->data = data;
@@ -233,8 +234,17 @@ xset_hchars(struct part *part, int x, int y, int xl, unsigned char data)
 
 	/* TODO: We need to acquire color flags from the document options. */
 	set_term_color(template, &colors, 0, part->document->opt.color_mode);
+	return template;
+}
 
-	for (xl -= 1, x += 1; xl; xl--, x++) {
+void
+xset_hchars(struct part *part, int x, int y, int xl, unsigned char data)
+{
+	struct screen_char *template = get_frame_char(part, x + xl - 1, y, data);
+
+	if (!template) return;
+
+	for (xl -= 1; xl; xl--, x++) {
 		copy_screen_chars(&POS(x, y), template, 1);
 	}
 }
@@ -242,21 +252,9 @@ xset_hchars(struct part *part, int x, int y, int xl, unsigned char data)
 void
 xset_vchars(struct part *part, int x, int y, int yl, unsigned char data)
 {
-	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
-	struct screen_char *template;
+	struct screen_char *template = get_frame_char(part, x, y, data);
 
-	assert(part && part->document);
-	if_assert_failed return;
-
-	if (realloc_line(part->document, Y(y), X(x)))
-		return;
-
-	template = &POS(x, y);
-	template->data = data;
-	template->attr = SCREEN_ATTR_FRAME;
-
-	/* TODO: We need to acquire color flags from the document options. */
-	set_term_color(template, &colors, 0, part->document->opt.color_mode);
+	if (!template) return;
 
 	for (yl -= 1, y += 1; yl; yl--, y++) {
 	    	if (realloc_line(part->document, Y(y), X(x)))

@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.4 2003/05/06 15:20:33 pasky Exp $ */
+/* $Id: window.c,v 1.5 2003/05/06 15:32:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,7 +169,7 @@ add_empty_window(struct terminal *term, void (*fn)(void *), void *data)
 {
 	struct ewd *ewd = mem_alloc(sizeof(struct ewd));
 
-	if (!ewd) return NULL;
+	if (!ewd) return;
 	ewd->fn = fn;
 	ewd->data = data;
 	ewd->b = 0;

@@ -3487,7 +3487,7 @@ trap 'rm -fr `echo " \
  src/cookies/Makefile \
  src/document/Makefile \
  src/document/html/Makefile \
- src/internat/Makefile \
+ src/intl/Makefile \
  src/lowlevel/Makefile \
  src/lua/Makefile \
  src/osdep/Makefile \
@@ -3591,7 +3591,7 @@ CONFIG_FILES=\${CONFIG_FILES-"\
  src/cookies/Makefile \
  src/document/Makefile \
  src/document/html/Makefile \
- src/internat/Makefile \
+ src/intl/Makefile \
  src/lowlevel/Makefile \
  src/lua/Makefile \
  src/osdep/Makefile \

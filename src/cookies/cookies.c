@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.92 2003/11/16 00:14:37 zas Exp $ */
+/* $Id: cookies.c,v 1.93 2003/11/16 01:02:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,8 +221,8 @@ check_domain_security(unsigned char *domain, unsigned char *server, int server_l
 
 static void accept_cookie_dialog(struct session *ses);
 
-int
-set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
+void
+set_cookie(struct uri *uri, unsigned char *str)
 {
 	unsigned char *date, *secure;
 	struct cookie *cookie;
@@ -230,34 +230,34 @@ set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 	struct cookie_str cstr;
 
 	if (get_cookies_accept_policy() == COOKIES_ACCEPT_NONE)
-		return 0;
+		return;
 
 #ifdef COOKIES_DEBUG
 	debug("set_cookie -> (%s) %s", struri(*uri), str);
 #endif
 
 	cstr.str = str;
-	if (!parse_cookie_str(&cstr)) return 0;
+	if (!parse_cookie_str(&cstr)) return;
 
 	cookie = mem_calloc(1, sizeof(struct cookie));
-	if (!cookie) return 0;
+	if (!cookie) return;
 
 	/* Fill main fields */
 
 	cookie->name = memacpy(str, cstr.nam_end - str);
 	if (!cookie->name) {
 		free_cookie(cookie);
-		return 0;
+		return;
 	}
 	cookie->value = memacpy(cstr.val_start, cstr.val_end - cstr.val_start);
 	if (!cookie->value) {
 		free_cookie(cookie);
-		return 0;
+		return;
 	}
 	cookie->server = memacpy(uri->host, uri->hostlen);
 	if (!cookie->server) {
 		free_cookie(cookie);
-		return 0;
+		return;
 	}
 
 	/* Get expiration date */
@@ -302,7 +302,7 @@ set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 
 		if (!init_string(&path)) {
 			free_cookie(cookie);
-			return 0;
+			return;
 		}
 
 		add_char_to_string(&path, '/');
@@ -342,7 +342,7 @@ set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 		cookie->domain = memacpy(uri->host, uri->hostlen);
 		if (!cookie->domain) {
 			free_cookie(cookie);
-			return 0;
+			return;
 		}
 	}
 	if (cookie->domain[0] == '.')
@@ -389,20 +389,20 @@ set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 		debug("Dropped.");
 #endif
 		free_cookie(cookie);
-		return 0;
+		return;
 	}
 
 	/* We have already check COOKIES_ACCEPT_NONE */
 	if (get_cookies_accept_policy() == COOKIES_ACCEPT_ASK) {
 		add_to_list(cookie_queries, cookie);
 		add_questions_entry(accept_cookie_dialog);
-		return 1;
+		return;
 	}
 
 ok:
 	accept_cookie(cookie);
 
-	return 0;
+	return;
 }
 
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.215 2003/10/05 13:58:55 kuser Exp $ */
+/* $Id: parser.c,v 1.216 2003/10/09 09:34:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2713,11 +2713,9 @@ html_link_parse(unsigned char *a, struct hlink *link)
 			link->type = LT_ALTERNATE_STYLESHEET;
 		else if (link->media)
 			link->type = LT_ALTERNATE_MEDIA;
-	}
-	else if (!strcasecmp(link->name, "stylesheet") ||
-		 (link->content_type && strcasestr(link->content_type, "css")))
+	} else if (!strcasecmp(link->name, "stylesheet") ||
+		   (link->content_type && strcasestr(link->content_type, "css")))
 		link->type = LT_STYLESHEET;
-
 
 	return 1;
 }
@@ -2728,14 +2726,15 @@ html_link(unsigned char *a)
 	int link_display = get_opt_int("document.html.link_display");
 	unsigned char *name = NULL;
 	struct hlink link;
+	static unsigned char link_rel_string[] = "Link: ";
+	static unsigned char link_rev_string[] = "Reverse link: ";
 
 	if (!link_display) return;
 	if (!html_link_parse(a, &link)) return;
 
 	/* Ignore few annoying links.. */
 	if (link_display < 5 &&
-	    (link.direction == LD_REV || /* printing rev links is a non-sense here */
-	     link.type == LT_ICON ||
+	    (link.type == LT_ICON ||
 	     link.type == LT_AUTHOR ||
 	     link.type == LT_STYLESHEET ||
 	     link.type == LT_ALTERNATE_STYLESHEET)) goto free_and_return;
@@ -2749,50 +2748,67 @@ html_link(unsigned char *a)
 
 	if (name && link.href) {
 		struct string text;
+		int name_neq_title = 0;
+		int first = 1;
 
 		if (!init_string(&text)) goto free_and_return;
 
 		html_focusable(a);
 
-		if (link.title)
+		if (link.title) {
 			add_to_string(&text, link.title);
-		else
+			name_neq_title = strcmp(link.title, name);
+		} else
 			add_to_string(&text, name);
 
 		if (link_display == 1) goto only_title;
 
-		add_to_string(&text, " (");
-		add_to_string(&text, name);
+		if (name_neq_title) {
+			if (!first) add_to_string(&text, ", ");
+			else add_to_string(&text, " (");
+			add_to_string(&text, name);
+			first = 0;
+		}
 
 		if (link_display >= 3 && link.hreflang) {
-			add_to_string(&text, ", ");
+			if (!first) add_to_string(&text, ", ");
+			else add_to_string(&text, " (");
 			add_to_string(&text, link.hreflang);
+			first = 0;
 		}
 
 		if (link_display >= 4 && link.content_type) {
-			add_to_string(&text, ", ");
+			if (!first) add_to_string(&text, ", ");
+			else add_to_string(&text, " (");
 			add_to_string(&text, link.content_type);
+			first = 0;
 		}
 
 		if (link.lang && link.type == LT_ALTERNATE_LANG &&
 		    (link_display < 3 || (link.hreflang &&
 					  strcasecmp(link.hreflang, link.lang)))) {
-			add_to_string(&text, ", ");
+			if (!first) add_to_string(&text, ", ");
+			else add_to_string(&text, " (");
 			add_to_string(&text, link.lang);
+			first = 0;
 		}
 
 		if (link.media) {
-			add_to_string(&text, ", ");
+			if (!first) add_to_string(&text, ", ");
+			else add_to_string(&text, " (");
 			add_to_string(&text, link.media);
+			first = 0;
 		}
 
-		add_char_to_string(&text, ')');
+		if (!first) add_char_to_string(&text, ')');
 
 only_title:
 		if (text.length)
-			put_link_line("Link: ", text.source, link.href, format.target_base);
+			put_link_line((link.direction == LD_REL) ? link_rel_string :  link_rev_string,
+				      text.source, link.href, format.target_base);
 		else
-			put_link_line("Link: ", name, link.href, format.target_base);
+			put_link_line((link.direction == LD_REL) ? link_rel_string :  link_rev_string,
+				      name, link.href, format.target_base);
 
 		if (text.source) done_string(&text);
 	}

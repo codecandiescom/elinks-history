@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.320 2004/08/19 10:24:01 miciah Exp $ */
+/* $Id: download.c,v 1.321 2004/08/19 10:32:46 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -303,7 +303,11 @@ download_data_store(struct download *download, struct file_download *file_downlo
 	struct session *ses = file_download->ses;
 	struct terminal *term = file_download->term;
 
-	assert(ses && term);
+	if (!term) {
+		/* No term here, so no beep. --Zas */
+		abort_download(file_download);
+		return;
+	}
 
 	if (is_in_progress_state(download->state)) {
 		if (file_download->dlg_data)

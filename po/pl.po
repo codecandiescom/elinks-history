@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-09-05 00:25+0200\n"
+"POT-Creation-Date: 2003-09-05 11:24+0200\n"
 "PO-Revision-Date: 2003-01-04 12:06+0100\n"
 "Last-Translator: Witold Filipczyk <witekfl@poczta.onet.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -1076,9 +1076,8 @@ msgstr ""
 "Czas ¿ycia ciasteczka (w dniach):\n"
 "-1 - u¿yj daty przedawnienia ciasteczka, je¶li podana\n"
 " 0 - ciasteczko wa¿ne do koñca sesji\n"
-"1+ - u¿yj daty przedawnienia ciasteczka, ograniczaj±c czas ¿ycia"
-"do podanej liczby dni"
-
+"1+ - u¿yj daty przedawnienia ciasteczka, ograniczaj±c czas ¿yciado podanej "
+"liczby dni"
 
 #: src/config/options.c:1026
 msgid "Paranoid security"

@@ -54,9 +54,6 @@ Arkadiusz Sochala <jojoro@priv2.onet.pl>
 Armon Red <armon@islandia.is>
 	Icelandic translation
 
-Arun Upadhyaya Kishan <akishan@cs.stanford.edu>
-	ftpparse.{c,h} update for gcc 2.95
-
 Aurimas Mikalauskas <inner@dammit.lt>
 	Lithuanian translation
 
@@ -139,9 +136,6 @@ Dimitar Dimitrov <mitaka_ddd@yahoo.com>
 
 dinux <dinux@mail.bg>
 	Bulgarian translation updates
-
-D.J. Bernstein <djb@cr.yp.to>
-	ftpparse.{c,h}
 
 Dmitry M. Klimov <dmk@gtrk.kmtn.ru>
 	KOI8-R frames
@@ -544,4 +538,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.187 2005/03/27 19:39:11 jonas Exp $
+$Id: AUTHORS,v 1.188 2005/03/27 21:07:54 jonas Exp $

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.190 2003/08/23 18:16:46 jonas Exp $ */
+/* $Id: view.c,v 1.191 2003/08/23 18:17:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -890,22 +890,6 @@ send_to_frame(struct session *ses, struct event *ev)
 	}
 
 	return r;
-}
-
-void
-do_for_frame(struct session *ses,
-	     void (*f)(struct session *, struct document_view *, int),
-	     int a)
-{
-	struct document_view *fd;
-
-	assert(ses && f);
-	if_assert_failed return;
-	fd = current_frame(ses);
-	assertm(fd, "document not formatted");
-	if_assert_failed return;
-
-	f(ses, fd, a);
 }
 
 static void

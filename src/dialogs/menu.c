@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.126 2003/07/24 15:33:32 pasky Exp $ */
+/* $Id: menu.c,v 1.127 2003/08/23 18:17:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,8 +82,19 @@ menu_for_frame(struct terminal *term,
 	       void (*f)(struct session *, struct document_view *, int),
 	       struct session *ses)
 {
+	struct document_view *fd;
+
+	assert(ses && f);
+	if_assert_failed return;
+
 	if (!have_location(ses)) return;
-	do_for_frame(ses, f, 0);
+
+	fd = current_frame(ses);
+
+	assertm(fd, "document not formatted");
+	if_assert_failed return;
+
+	f(ses, fd, 0);
 }
 
 static inline void

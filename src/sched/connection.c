@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.131 2003/12/01 13:55:40 pasky Exp $ */
+/* $Id: connection.c,v 1.132 2003/12/03 13:03:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,7 +228,7 @@ init_connection(unsigned char *url, unsigned char *ref_url, int start,
 
 	if (!conn) return NULL;
 
-	if (!parse_uri(&conn->uri, url)) {
+	if (!parse_uri(&conn->uri, url) || !conn->uri.hostlen) {
 		/* Alert small hack to signal parse uri failure. */
 		*url = 0;
 		mem_free(conn);

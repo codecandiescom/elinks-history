@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.147 2004/12/16 09:44:51 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.148 2004/12/17 21:54:31 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,6 +37,7 @@ static int bookmarks_dirty = 0;
 
 static struct hash *bookmark_cache = NULL;
 
+static struct bookmark *bm_snapshot_last_folder;
 
 
 /* Life functions */
@@ -61,8 +62,51 @@ static struct option_info bookmark_options_info[] = {
 		"  (DISABLED)")),
 #endif
 
+	INIT_OPT_BOOL("ui.sessions", N_("Periodic snapshotting"),
+		"snapshot", 0, 0,
+		N_("Automatically save a snapshot of all tabs periodically.\n"
+		"This will periodically bookmark the tabs of each terminal in a separate folder\n"
+		"for recovery after a crash.\n\n"
+		"This feature requires bookmark support.")),
+
 	NULL_OPTION_INFO
 };
+
+static enum evhook_status bookmark_change_hook(va_list ap, void *data);
+static enum evhook_status bookmark_write_hook(va_list ap, void *data);
+
+struct event_hook_info bookmark_hooks[] = {
+	{ "bookmark-delete", bookmark_change_hook, NULL },
+	{ "bookmark-move",   bookmark_change_hook, NULL },
+	{ "bookmark-update", bookmark_change_hook, NULL },
+	{ "periodic-saving", bookmark_write_hook,  NULL },
+
+	NULL_EVENT_HOOK_INFO,
+};
+
+static enum evhook_status
+bookmark_change_hook(va_list ap, void *data)
+{
+	struct bookmark *bookmark = va_arg(ap, struct bookmark *);
+
+	if (bookmark == bm_snapshot_last_folder)
+		bm_snapshot_last_folder = NULL;
+
+	return EVENT_HOOK_STATUS_NEXT;
+}
+
+static void bookmark_snapshot();
+
+static enum evhook_status
+bookmark_write_hook(va_list ap, void *data)
+{
+	if (get_opt_bool("ui.sessions.snapshot")
+	    && !get_cmd_opt_bool("anonymous"))
+		bookmark_snapshot();
+
+	return EVENT_HOOK_STATUS_NEXT;
+}
+
 
 static void
 init_bookmarks(struct module *module)
@@ -96,6 +140,10 @@ free_bookmarks(struct list_head *bookmarks_list,
 static void
 done_bookmarks(struct module *module)
 {
+	/* This is a clean shutdown, so delete the last snapshot. */
+	if (bm_snapshot_last_folder) delete_bookmark(bm_snapshot_last_folder);
+	bm_snapshot_last_folder = NULL;
+
 	write_bookmarks();
 	free_bookmarks(&bookmarks, &bookmark_browser.root.child);
 	mem_free_if(bm_last_searched_name);
@@ -105,7 +153,7 @@ done_bookmarks(struct module *module)
 struct module bookmarks_module = struct_module(
 	/* name: */		N_("Bookmarks"),
 	/* options: */		bookmark_options_info,
-	/* hooks: */		NULL,
+	/* hooks: */		bookmark_hooks,
 	/* submodules: */	NULL,
 	/* data: */		NULL,
 	/* init: */		init_bookmarks,
@@ -162,9 +210,14 @@ bookmarks_are_dirty(void)
 void
 delete_bookmark(struct bookmark *bm)
 {
+	static int delete_bookmark_event_id = EVENT_NONE;
+
 	while (!list_empty(bm->child)) {
 		delete_bookmark(bm->child.next);
 	}
+
+	set_event_id(delete_bookmark_event_id, "bookmark-delete");
+	trigger_event(delete_bookmark_event_id, bm);
 
 	if (check_bookmark_cache(bm->url)) {
 		struct hash_item *item;
@@ -292,6 +345,7 @@ int
 update_bookmark(struct bookmark *bm, unsigned char *title,
 		unsigned char *url)
 {
+	static int update_bookmark_event_id = EVENT_NONE;
 	unsigned char *title2 = NULL;
 	unsigned char *url2 = NULL;
 
@@ -310,6 +364,9 @@ update_bookmark(struct bookmark *bm, unsigned char *title,
 		}
 		sanitize_title(title2);
 	}
+
+	set_event_id(update_bookmark_event_id, "bookmark-update");
+	trigger_event(update_bookmark_event_id, bm, title2, url2);
 
 	if (title2) {
 		mem_free(bm->title);
@@ -383,6 +440,37 @@ bookmark_terminal_tabs(struct terminal *term, unsigned char *foldername)
 	bookmark_terminal(term, folder);
 }
 
+static void
+bookmark_all_terminals(struct bookmark *folder)
+{
+	unsigned int n = 0;
+	struct terminal *term;
+
+	if (get_cmd_opt_bool("anonymous"))
+		return;
+
+	if (list_is_singleton(terminals)) {
+		bookmark_terminal(terminals.next, folder);
+		return;
+	}
+
+	foreach (term, terminals) {
+		unsigned char subfoldername[4];
+		struct bookmark *subfolder;
+
+		if (ulongcat(subfoldername, NULL, n, sizeof(subfoldername), 0)
+		     >= sizeof(subfoldername))
+			return;
+
+		++n;
+
+		subfolder = add_bookmark(folder, 1, subfoldername, NULL);
+		if (!subfolder) return;
+
+		bookmark_terminal(term, subfolder);
+	}
+}
+
 
 void
 bookmark_auto_save_tabs(struct terminal *term)
@@ -402,6 +490,32 @@ bookmark_auto_save_tabs(struct terminal *term)
 
 	bookmark_terminal_tabs(term, foldername);
 }
+
+static void
+bookmark_snapshot()
+{
+	struct string folderstring;
+	struct bookmark *folder;
+
+	if (!init_string(&folderstring)) return;
+
+	add_to_string(&folderstring, "Session snapshot");
+
+#ifdef HAVE_STRFTIME
+	add_to_string(&folderstring, " - ");
+	add_date_to_string(&folderstring, get_opt_str("ui.date_format"), NULL);
+#endif
+
+	folder = add_bookmark(NULL, 1, folderstring.source, NULL);
+	done_string(&folderstring);
+	if (!folder) return;
+
+	bookmark_all_terminals(folder);
+
+	if (bm_snapshot_last_folder) delete_bookmark(bm_snapshot_last_folder);
+	bm_snapshot_last_folder = folder;
+}
+
 
 void
 open_bookmark_folder(struct session *ses, unsigned char *foldername)

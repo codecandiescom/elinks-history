@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.158 2004/12/16 10:31:23 zas Exp $ */
+/* $Id: options.inc,v 1.159 2004/12/17 21:54:31 miciah Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1390,7 +1390,7 @@ static struct option_info config_options_info[] = {
 
 
 	INIT_OPT_TREE("ui", N_("Sessions"),
-		"sessions", 0,
+		"sessions", OPT_SORT,
 		N_("Sessions settings.")),
 
 	INIT_OPT_BOOL("ui.sessions", N_("Auto save session"),

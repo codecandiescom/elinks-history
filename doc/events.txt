@@ -6,11 +6,10 @@ do and what arguments they expect.
 Events are a mechanism for communication between ELinks parts --- any ELinks
 subsystem (module) can register an event, hook at an event or trigger an event.
 Events are designed to allow transition to a completely message-passing model
-internally, with modules talking to each other through the events. However,
-currently only the "periodic-saving" element is used in this way (as sorta
-"clock pulse" for modules which have something to save periodically).
-Otherwise, events are currently used only as a generic way of trigger event
-handlers in various scripting backends.
+internally, with modules talking to each other through the events.
+
+Events are currently used primarily as a generic way to trigger event handlers
+in various scripting backends.
 
 Therefore, so far this reference sheet is useful mainly to scripting backends
 developers and also scripting power users - it looks at the C side but usually
@@ -39,6 +38,65 @@ Please keep in alphabetical order!
 
 
 The list of events itself:
+
+-------------------------------------------------------------------------------
+Name:		bookmark-delete
+Managed By:	The bookmarks subsystem
+Triggered When:
+
+ A bookmark is being deleted.
+
+Arguments:
+
+ struct bookmark *bookmark
+
+Description:
+
+ Currently only used by the tab snapshotting code to avoid a dangling pointer
+ should the deleted bookmark be the folder to which it made the last snapshot.
+
+-------------------------------------------------------------------------------
+Name:		bookmark-move
+Managed By:	The bookmarks subsystem
+Triggered When:
+
+ A bookmark is being moved.
+
+Arguments:
+
+ struct bookmark *bookmark
+ struct bookmark *destination
+
+Description:
+
+ The bookmark is moved immediately after the destination bookmark.
+
+ This is currently only used by the tab snapshotting code, which assumes
+ that when a user moves a bookmark, the user does not want the snapshotting
+ code to delete it when it makes the next snapshot.
+
+-------------------------------------------------------------------------------
+Name:		bookmark-update
+Managed By:	The bookmarks subsystem
+Triggered When:
+
+ The user finishes editing a bookmark.
+
+Arguments:
+
+ struct bookmark *bookmark
+ unsigned char *new_title
+ unsigned char *new_url
+
+Description:
+
+ This is triggered before the new title and URL are assigned to the bookmark.
+ Therefore, handlers can get the old title and URL from the bookmark structure
+ and the new title and URL from the event arguments.
+
+ This is currently only used by the tab snapshotting code, which assumes
+ that when a user edits a bookmark, the user does not want the snapshotting
+ code to delete it when it makes the next snapshot.
 
 -------------------------------------------------------------------------------
 Name:		dialog-lua-console
@@ -187,4 +245,4 @@ Description:
  Allows a subsystem to do whatever clean up is required when ELinks quits.
 
 -------------------------------------------------------------------------------
-$Id: events.txt,v 1.13 2004/12/16 08:46:37 pasky Exp $
+$Id: events.txt,v 1.14 2004/12/17 21:54:31 miciah Exp $

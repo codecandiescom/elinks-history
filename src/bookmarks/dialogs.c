@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.193 2004/12/14 18:48:16 miciah Exp $ */
+/* $Id: dialogs.c,v 1.194 2004/12/17 21:54:31 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -338,14 +338,21 @@ do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 		 struct list_head *desti, struct list_head *src,
 		 struct listbox_data *box)
 {
+	static int move_bookmark_event_id = EVENT_NONE;
 	struct bookmark *bm, *next;
 
 	assert((destb && desti) || (!destb && !desti));
+
+	set_event_id(move_bookmark_event_id, "bookmark-move");
 
 	foreachsafe (bm, next, *src) {
 		if (bm != dest /* prevent moving a folder into itself */
 		    && bm->box_item->marked && bm != move_cache_root_avoid) {
 			bm->box_item->marked = 0;
+
+			trigger_event(move_bookmark_event_id, bm,
+				      destb ? (struct bookmark *) destb
+					    : dest);
 
 			if (box->top == bm->box_item) {
 				/* It's theoretically impossible that bm->next

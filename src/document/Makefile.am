@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.28 2003/10/31 22:28:03 pasky Exp $
+## $Id: Makefile.am,v 1.29 2003/10/31 22:37:16 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -20,6 +20,5 @@ libdocument_a_SOURCES = \
  options.h \
  refresh.c \
  refresh.h \
- view.c \
  view.h
 

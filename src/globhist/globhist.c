@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.7 2002/09/07 10:01:54 zas Exp $ */
+/* $Id: globhist.c,v 1.8 2002/09/08 20:49:59 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -148,18 +148,6 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 		}
 	}
 
-	history_item = mem_alloc(sizeof(struct global_history_item));
-	if (!history_item)
-		return;
-
-	history_item->last_visit = time;
-	history_item->title = stracpy(title);
-	history_item->url = stracpy(url);
-	history_item->refcount = 0;
-
-	add_to_list(global_history.items, history_item);
-	global_history.n++;
-
 	while (global_history.n > get_opt_int("document.history.global.max_items")) {
 		history_item = global_history.items.prev;
 
@@ -171,6 +159,18 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 
 		delete_global_history_item(history_item);
 	}
+
+	history_item = mem_alloc(sizeof(struct global_history_item));
+	if (!history_item)
+		return;
+
+	history_item->last_visit = time;
+	history_item->title = stracpy(title);
+	history_item->url = stracpy(url);
+	history_item->refcount = 0;
+
+	add_to_list(global_history.items, history_item);
+	global_history.n++;
 
 	/* Deleted in history_dialog_clear_list() */
 	history_item->box_item = mem_calloc(1, sizeof(struct listbox_item)

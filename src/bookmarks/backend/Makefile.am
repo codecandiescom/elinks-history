@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.3 2004/05/02 12:59:42 jonas Exp $
+## $Id: Makefile.am,v 1.4 2004/08/14 21:12:36 miciah Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -7,7 +7,7 @@ include $(top_srcdir)/Makefile.base
 # merge the whole library of these with libbookmarks.a. So we only compile
 # objects here and link them directly to libbookmarks.a in ../Makefile.am.
 
-# However, we apparently need to create the library in order to convience
+# However, we apparently need to create the library in order to convince
 # automake to compile the objects :/. We DON'T use libbackend.a ANYWHERE.
 
 if CONFIG_XBEL_BOOKMARKS

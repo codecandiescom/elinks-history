@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.4 2004/05/02 13:08:17 jonas Exp $
+## $Id: Makefile.am,v 1.5 2004/08/14 21:12:39 miciah Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -7,7 +7,7 @@ include $(top_srcdir)/Makefile.base
 # the whole library of these with libmime.a. So we only compile objects here
 # and link them directly to libmime.a in ../Makefile.am.
 
-# However, we apparently need to create the library in order to convience
+# However, we apparently need to create the library in order to convince
 # automake to compile the objects :/. We DON'T use libmimebackend.a ANYWHERE.
 
 if CONFIG_MAILCAP

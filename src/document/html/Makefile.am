@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.17 2004/04/24 00:20:10 pasky Exp $
+## $Id: Makefile.am,v 1.18 2004/08/14 21:12:38 miciah Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -7,7 +7,7 @@ include $(top_srcdir)/Makefile.base
 # merge the whole library of these with libdocument.a. So we only compile
 # objects here and link them directly to libdocument.a in ../Makefile.am.
 
-# However, we apparently need to create the library in order to convience
+# However, we apparently need to create the library in order to convince
 # automake to compile the objects :/. We DON'T use libhtml.a ANYWHERE.
 
 EXTRA_DIST = TODO

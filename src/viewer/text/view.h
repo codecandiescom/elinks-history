@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.8 2003/06/11 22:52:31 pasky Exp $ */
+/* $Id: view.h,v 1.9 2003/07/02 22:59:38 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -44,11 +44,6 @@ unsigned char *print_current_link_title_do(struct f_data_c *, struct terminal *)
 unsigned char *print_current_link_do(struct f_data_c *, struct terminal *);
 unsigned char *print_current_link(struct session *);
 unsigned char *print_current_title(struct session *);
-
-void search_for(struct session *, unsigned char *);
-void search_for_back(struct session *, unsigned char *);
-void find_next(struct session *, struct f_data_c *, int);
-void find_next_back(struct session *, struct f_data_c *, int);
 
 void set_frame(struct session *, struct f_data_c *, int);
 struct f_data_c *current_frame(struct session *);

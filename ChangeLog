@@ -1,3 +1,76 @@
+Thu Jan 13 15:55:57 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/Makefile.am:
+
+	SSL headers are needed for auth/digest.c, reported by Zas.  
+
+Thu Jan 13 14:14:50 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/ecmascript/Makefile.am, src/osdep/Makefile.am,
+	src/scripting/guile/Makefile.am, src/scripting/lua/Makefile.am,
+	src/scripting/perl/Makefile.am, src/ssl/Makefile.am:
+
+	Add certain compile flags only when needed to decrease the build
+	output.  
+
+Thu Jan 13 14:13:05 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Jan 13 14:12:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	The tabindex can be atmost 32767.  
+
+Thu Jan 13 13:30:39 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/Makefile.am:
+
+	Add lua.h to EXTRA_DIST.  
+
+Thu Jan 13 13:29:25 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/: scripting.c, lua/core.h, lua/lua.h:
+
+	Like the recent Perl change, never include scripting library headers
+	in the main module.  
+
+Thu Jan 13 13:26:21 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Only add the 'Pass URI ...' option to the tab menu if the session
+	has a location so that the '>>' won't be misleading since no submenu
+	can be opened.  
+
+Thu Jan 13 13:24:30 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, mime/backend/mailcap.c:
+
+	More clarification of option descriptions.  
+
+Thu Jan 13 13:23:26 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Fix off by one error in cursor routing.  
+
+Thu Jan 13 13:21:35 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Should be the final merging of Danish Translation: 159
+	insertions(+), 161 deletions(-).  
+
+Thu Jan 13 13:20:07 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/elinks-lua.texi:
+
+	Fix nodes so makeinfo don't choke on it.  
+
 Wed Jan 12 16:50:29 2005  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

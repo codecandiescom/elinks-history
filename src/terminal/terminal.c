@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.66 2004/06/11 13:29:50 jonas Exp $ */
+/* $Id: terminal.c,v 1.67 2004/06/11 13:58:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,6 @@
 #include "terminal/hardio.h"
 #include "terminal/kbd.h"
 #include "terminal/screen.h"
-#include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
 #include "util/error.h"
@@ -64,7 +63,6 @@ init_term(int fdin, int fdout,
 	  void (*root_window)(struct window *, struct term_event *, int))
 {
 	struct terminal *term = mem_calloc(1, sizeof(struct terminal));
-	struct window *win;
 
 	if (!term) {
 		check_if_no_terminal();
@@ -78,14 +76,6 @@ init_term(int fdin, int fdout,
 	}
 
 	init_list(term->windows);
-
-	win = init_tab(term, 1, root_window);
-	if (!win) {
-		mem_free(term->screen);
-		mem_free(term);
-		check_if_no_terminal();
-		return NULL;
-	}
 
 	term->fdin = fdin;
 	term->fdout = fdout;

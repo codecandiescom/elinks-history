@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.478 2004/06/11 13:54:33 jonas Exp $ */
+/* $Id: session.c,v 1.479 2004/06/11 13:58:01 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -713,6 +713,7 @@ init_session(struct session *ses, struct terminal *term,
 	struct initial_session_info *info;
 	struct window *tab;
 	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 0, 0, 0);
+	int first = list_empty(term->windows);
 
 	tab = init_tab(term, in_background, tabwin_func);
 	if (!tab) return NULL;
@@ -722,6 +723,8 @@ init_session(struct session *ses, struct terminal *term,
 		mem_free(tab);
 		return NULL;
 	}
+
+	if (first) return info;
 
 	ev.b = (long) info;
 	tab->handler(tab, &ev, 0);
@@ -880,7 +883,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 
 	if (len <= 0) {
 		if (!remote)
-			return init_session_info(base_session, NULL);
+			return init_session(base_session, term, NULL, 1);
 
 		/* Even though there are no URIs we still have to
 		 * handle remote stuff. */
@@ -914,7 +917,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 				remote = init_remote_session(base_session, remote, uri);
 
 			} else if (!info) {
-				info = init_session_info(base_session, uri);
+				info = init_session(base_session, term, uri, 1);
 				if (!info) return NULL;
 
 			} else {

@@ -1,3 +1,10 @@
+Thu Mar 14 20:21:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* bfu.c, bookmarks.c, default.c, lua.c, mailto.c, menu.c,
+	session.c, types.c, view.c:
+	
+	cleanup of msg_box() and tidyup of all its usages
+
 Thu Mar 14 18:56:39 2002  Petr Baudis <pasky@ji.cz>:
 
 	* menu.c:

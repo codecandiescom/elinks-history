@@ -60,7 +60,7 @@ Benjamin Michotte <binny@baby-linux.net>
 Bunch <kisto@go2.pl>
 	HTML renderer hacking
 
-Carles Sadurni Anguita <isard@ctv.es>
+Carles Sadurní Anguita <isard@ctv.es>
 	Catalan translation
 
 Csaba Raduly <csaba.raduly@sophos.com>
@@ -331,4 +331,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.65 2002/07/03 16:32:25 pasky Exp $
+$Id: AUTHORS,v 1.66 2002/07/03 22:13:24 pasky Exp $

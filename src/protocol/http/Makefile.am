@@ -1,10 +1,9 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.10 2002/05/12 20:15:25 pasky Exp $
+## $Id: Makefile.am,v 1.11 2002/06/16 23:38:23 pasky Exp $
+
+include $(top_srcdir)/Makefile.base
 
 EXTRA_DIST = README.timegm
-
-INCLUDES = \
- -I$(srcdir)/../..
 
 noinst_LIBRARIES = libhttp.a
 libhttp_a_SOURCES = \

@@ -1,8 +1,7 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.8 2002/04/01 22:20:00 pasky Exp $
+## $Id: Makefile.am,v 1.9 2002/06/16 23:38:21 pasky Exp $
 
-INCLUDES = \
- -I$(srcdir)/..
+include $(top_srcdir)/Makefile.base
 
 noinst_LIBRARIES = libbookmarks.a
 libbookmarks_a_SOURCES = \

@@ -1,8 +1,7 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.9 2002/04/28 11:48:26 pasky Exp $
+## $Id: Makefile.am,v 1.10 2002/06/16 23:38:23 pasky Exp $
 
-INCLUDES = \
- -I$(srcdir)/..
+include $(top_srcdir)/Makefile.base
 
 noinst_LIBRARIES = liblowlevel.a
 liblowlevel_a_SOURCES = \

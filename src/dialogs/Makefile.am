@@ -1,8 +1,7 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.12 2002/05/12 20:15:25 pasky Exp $
+## $Id: Makefile.am,v 1.13 2002/06/16 23:38:22 pasky Exp $
 
-INCLUDES = \
- -I$(srcdir)/..
+include $(top_srcdir)/Makefile.base
 
 noinst_LIBRARIES = libdialogs.a
 libdialogs_a_SOURCES = \

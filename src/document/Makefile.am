@@ -1,8 +1,7 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.14 2002/04/01 15:52:41 pasky Exp $
+## $Id: Makefile.am,v 1.15 2002/06/16 23:38:22 pasky Exp $
 
-INCLUDES = \
- -I$(srcdir)/..
+include $(top_srcdir)/Makefile.base
 
 SUBDIRS = html
 

@@ -1,8 +1,7 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.7 2002/03/17 18:15:10 pasky Exp $
+## $Id: Makefile.am,v 1.8 2002/06/16 23:38:23 pasky Exp $
 
-INCLUDES = \
- -I$(srcdir)/..
+include $(top_srcdir)/Makefile.base
 
 noinst_LIBRARIES = libosdep.a
 libosdep_a_SOURCES = \

@@ -1,0 +1,13 @@
+## Base file for Makefile.am files in the tree, contains common stuff.
+## $Id: Makefile.base,v 1.1 2002/06/16 23:38:20 pasky Exp $
+
+INCLUDES = -I$(top_srcdir)/src
+
+# The author of automake should be shot, quartered and forced to code in COBOL
+# for the rest of his days for the shit he designed - anything forcing me to
+# -I. -I$(srcdir) regardless if I want or not is just idiotic. Another totally
+# dumb thing is that you can't just use @CONFIG_INCLUDE_SPEC@ in your own .am.
+
+COMPILE = $(CC) @DEFS@ -I`dirname $(CONFIG_HEADER)` $(INCLUDES) \
+$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+

@@ -1,8 +1,7 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.11 2002/05/23 18:50:36 pasky Exp $
+## $Id: Makefile.am,v 1.12 2002/06/16 23:38:22 pasky Exp $
 
-INCLUDES = \
- -I$(srcdir)/..
+include $(top_srcdir)/Makefile.base
 
 noinst_LIBRARIES = libconfig.a
 libconfig_a_SOURCES = \

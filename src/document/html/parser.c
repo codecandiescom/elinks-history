@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.89 2003/05/09 12:42:14 zas Exp $ */
+/* $Id: parser.c,v 1.90 2003/05/09 15:11:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1262,7 +1262,10 @@ html_li(unsigned char *a)
 			put_chrs("&nbsp;", 6, put_chars_f, ff), c = 1;
 
 		if (t == P_ALPHA || t == P_alpha) {
-			n[0] = par_format.list_number ? (par_format.list_number - 1) % 26 + (t == P_ALPHA ? 'A' : 'a') : 0;
+			n[0] = par_format.list_number
+			       ? (par_format.list_number - 1) % 26
+			         + (t == P_ALPHA ? 'A' : 'a')
+			       : 0;
 			n[1] = 0;
 		} else if (t == P_ROMAN || t == P_roman) {
 			roman(n, par_format.list_number);
@@ -1271,10 +1274,9 @@ html_li(unsigned char *a)
 
 				for (x = n; *x; x++) *x = upcase(*x);
 			}
-		} else ulongcat((unsigned char *) &n, (int *) NULL,
-				(unsigned long) par_format.list_number,
-				(int) (sizeof(n) - 1));
-
+		} else {
+			ulongcat(&n, NULL, par_format.list_number, (sizeof(n) - 1), 0);
+		}
 		put_chrs(n, strlen(n), put_chars_f, ff);
 		put_chrs(".&nbsp;", 7, put_chars_f, ff);
 		par_format.leftmargin += strlen(n) + c + 2;

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.30 2003/05/09 12:42:13 zas Exp $ */
+/* $Id: string.c,v 1.31 2003/05/09 15:11:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -353,26 +353,33 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
  * updated accordingly.
  * Filling is starting at right.
  * So, ulongcat(s, NULL, 12345, 4) will set s to "2345";
+ * If zerofill is set, then ulongcat(s, NULL, 123, 5) will set s to "00123"
  *
  * A NUL char is always added at end of string.
  * s should point to a sufficient memory space (size >= width + 1).
  *
  */
 void
-ulongcat(unsigned char *s, unsigned int *slen,
-	 unsigned long number, unsigned int width)
+elinks_ulongcat(unsigned char *s, unsigned int *slen,
+		unsigned long number, unsigned int width,
+		int zerofill)
 {
 	unsigned int start = 0;
 	unsigned int pos = 1;
-        unsigned long q = number;
+	unsigned long q = number;
 
 	if (width < 1 || !s) return;
 
-        while (q > 9) {
+	while (q > 9) {
 		if (pos == width) break;
 		++pos;
-                q /= 10;
-        }
+	q /= 10;
+	}
+
+	if (zerofill) {
+		memset(&s[(slen ? *slen : 0)], '0', width - pos );
+		pos += (width - pos);
+	}
 
 	if (slen) {
 		start = *slen;
@@ -382,10 +389,10 @@ ulongcat(unsigned char *s, unsigned int *slen,
 
 	s[pos] = '\0';
 
-        while (pos > start) {
+	while (pos > start) {
 		s[--pos] = '0' + (number % 10);
 		number /= 10;
-        }
+	}
 }
 
 #ifndef HAVE_STRCASECMP

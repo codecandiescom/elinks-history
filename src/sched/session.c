@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.60 2003/05/09 13:43:17 pasky Exp $ */
+/* $Id: session.c,v 1.61 2003/05/09 15:11:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,25 +149,38 @@ void
 add_time_to_str(unsigned char **s, int *l, ttime t)
 {
 	unsigned char q[64];
+	int qlen = 0;
 
 	t /= 1000;
 	t &= 0xffffffff;
+
 	if (t < 0) t = 0;
-	if (t >= 24*3600) {
-		snprintf(q, sizeof(q), "%dd ", (int)(t / (24*3600)));
-	       	add_to_str(s, l, q);
+
+	/* Days */
+	if (t >= (24 * 3600)) {
+		ulongcat(&q, &qlen, (t / (24 * 3600)), 5, 0);
+		q[qlen++] = 'd';
+		q[qlen++] = ' ';
 	}
+
+	/* Hours and minutes */
 	if (t >= 3600) {
-		t %= 24*3600;
-	       	snprintf(q, sizeof(q), "%d:%02d", (int)(t / 3600), (int)(t / 60 % 60));
-		add_to_str(s, l, q);
+		t %= (24 * 3600);
+		ulongcat(&q, &qlen, (t / 3600), 4, 0);
+		q[qlen++] = ':';
+		ulongcat(&q, &qlen, ((t / 60) % 60), 2, 1);
 	} else {
-		snprintf(q, sizeof(q), "%d", (int)(t / 60));
-		add_to_str(s, l, q);
+		/* Only minutes */
+		ulongcat(&q, &qlen, (t / 60), 2, 0);
 	}
-	snprintf(q, sizeof(q), ":%02d", (int)(t % 60));
+
+	/* Seconds */
+	q[qlen++] = ':';
+	ulongcat(&q, &qlen, (t % 60), 2, 1);
+
 	add_to_str(s, l, q);
 }
+
 
 static unsigned char *
 get_stat_msg(struct status *stat, struct terminal *term)

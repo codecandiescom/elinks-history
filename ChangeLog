@@ -1,3 +1,105 @@
+Sun Jun 16 21:22:10 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: links.h, bfu/bfu.c, bfu/menu.c, cookies/cookies.c,
+	document/view.c, document/html/parser.c, intl/charsets.c,
+	lowlevel/terminal.c, osdep/os_dep.c, protocol/http/header.c,
+	protocol/http/http.c, util/conv.c, util/conv.h:
+
+	Moved upcase(), sn(z)print(), add_(k)num_to_str() and strtolx() from
+	links.h to util/conv.h. Tidyup of them.  
+
+Sun Jun 16 20:41:01 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/error.c:
+
+	Tiny tidyup. Removed one superfluous fflush(). bad_ah_sanity() is
+	static (by zas).  
+
+Sun Jun 16 20:37:42 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: links.h, setup.h, util/error.c:
+
+	Removed LEAK_DEBUG_LIST; some accompanied tiny cleanups.  
+
+Sun Jun 16 17:24:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/error.c:
+
+	Introduced LESS_MEMORY_SPEED - if undefined, align pointers by 16
+	rather than 8. Don't fill calloc()ed memory ;).  
+
+Sun Jun 16 17:16:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/error.c:
+
+	Added filling of memory to debug_mem_calloc(); english language
+	fixes.  
+
+Sun Jun 16 17:12:03 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/error.c:
+
+	#undefs are now in proper order.  
+
+Sun Jun 16 17:10:37 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/error.c:
+
+	Normalized some macro names.  
+
+Sun Jun 16 17:06:10 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/error.c:
+
+	SIZE_AH_ALIGNED alignment lowered back to 7 (it's not clear why it
+	was 15 before).  
+
+Sun Jun 16 16:59:40 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/error.c:
+
+	CHECK_AH_SANITY_MAGIC name was changed to a shorter AH_SANITY_MAGIC.  
+
+Sun Jun 16 16:46:53 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/error.c:
+
+	Introduced some convenient macros. Next step is under/overflows
+	detection.  
+
+Sun Jun 16 16:22:41 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/error.c:
+
+	alloc_header is now checked for sanity using a magic number.  
+
+Sun Jun 16 15:37:48 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/error.c:
+
+	Allocated memory filling is implemented and can be (des-)actived at
+	compile time if needed.  
+
+Sun Jun 16 15:15:31 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/error.c:
+
+	debug_mem_realloc() behavior is now similar to realloc().  Code
+	cleanup. Next step will be optionnal filling of allocated memory.  
+
+Sun Jun 16 13:47:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/error.c:
+
+	Tidyup - mainly rename of variables; L_D_S -> SIZE_AH_ALIGNED.
+	Inspired by zas.  
+
+Sat Jun 15 22:11:42 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/error.c:
+
+	Removed x..?alloc(), useless bloat.  
+
 Sat Jun 15 22:02:13 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: links.h, util/error.c, util/error.h:

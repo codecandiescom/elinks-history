@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.189 2005/01/22 13:54:57 jonas Exp $ */
+/* $Id: spidermonkey.c,v 1.190 2005/02/16 20:18:30 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,6 +41,7 @@
 #include "osdep/newwin.h"
 #include "protocol/http/http.h"
 #include "protocol/uri.h"
+#include "sched/session.h"
 #include "sched/task.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
@@ -1560,7 +1561,31 @@ document_write(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rv
 	return JS_TRUE;
 }
 
+static JSBool history_back(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
 
+static const JSFunctionSpec history_funcs[] = {
+	{ "back",		history_back,		0 },
+	{ NULL }
+};
+
+static const JSClass history_class = {
+	"history",
+	JSCLASS_HAS_PRIVATE,
+	JS_PropertyStub, JS_PropertyStub,
+	JS_PropertyStub, JS_PropertyStub,
+	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
+};
+
+static JSBool
+history_back(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
+{
+	struct ecmascript_interpreter *interpreter = JS_GetContextPrivate(ctx);
+	struct session *ses = interpreter->vs->doc_view->session;
+
+	go_back(ses);
+
+	return JS_TRUE;
+}
 
 static JSBool location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
 static JSBool location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
@@ -1993,7 +2018,7 @@ void *
 spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 {
 	JSContext *ctx;
-	JSObject *window_obj, *document_obj, *forms_obj, *location_obj,
+	JSObject *window_obj, *document_obj, *forms_obj, *history_obj, *location_obj,
 	         *statusbar_obj, *menubar_obj, *navigator_obj;
 
 	assert(interpreter);
@@ -2032,6 +2057,12 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 				    (JSClass *) &forms_class, NULL, 0,
 				    (JSPropertySpec *) forms_props,
 				    (JSFunctionSpec *) forms_funcs,
+				    NULL, NULL);
+
+	history_obj = JS_InitClass(ctx, window_obj, NULL,
+				    (JSClass *) &history_class, NULL, 0,
+				    (JSPropertySpec *) NULL,
+				    (JSFunctionSpec *) history_funcs,
 				    NULL, NULL);
 
 	location_obj = JS_InitClass(ctx, window_obj, NULL,

@@ -177,7 +177,7 @@ _nl_init_domain_conv(struct loaded_l10nfile *domain_file,
 #endif
 			domain->conv = iconv_open(outcharset, charset);
 #if _LIBICONV_VERSION >= 0x0105
-			fmem_free(outcharset);
+			fmem_free((void *) outcharset);
 #endif
 
 			fmem_free(charset);

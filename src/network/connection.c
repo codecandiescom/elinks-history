@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.171 2004/05/29 13:21:08 jonas Exp $ */
+/* $Id: connection.c,v 1.172 2004/05/31 17:19:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,20 +133,21 @@ connection_disappeared(struct connection *conn)
 struct host_connection {
 	LIST_HEAD(struct host_connection);
 
+	/* XXX: This is just the URI of the connection that registered the
+	 * host connection so only rely on the host part. */
+	struct uri *uri;
 	int connections;
-	unsigned char host[1]; /* Keep last */
 };
 
 static struct host_connection *
 get_host_connection(struct connection *conn)
 {
-	unsigned char *host = conn->uri->host;
-	int hostlen = conn->uri->hostlen;
 	struct host_connection *host_conn;
 
-	if (!host) return NULL;
+	if (!conn->uri->host) return NULL;
+
 	foreach (host_conn, host_connections)
-		if (!strlcmp(host_conn->host, -1, host, hostlen))
+		if (compare_uri(host_conn->uri, conn->uri, URI_HOST))
 			return host_conn;
 
 	return NULL;
@@ -160,10 +161,10 @@ add_host_connection(struct connection *conn)
 	struct host_connection *host_conn = get_host_connection(conn);
 
 	if (!host_conn && conn->uri->host) {
-		host_conn = mem_calloc(1, sizeof(struct host_connection) + conn->uri->hostlen);
+		host_conn = mem_calloc(1, sizeof(struct host_connection));
 		if (!host_conn) return 0;
 
-		memcpy(host_conn->host, conn->uri->host, conn->uri->hostlen);
+		host_conn->uri = get_uri_reference(conn->uri);
 		add_to_list(host_connections, host_conn);
 	}
 	if (host_conn) host_conn->connections++;
@@ -183,6 +184,7 @@ done_host_connection(struct connection *conn)
 	if (host_conn->connections > 0) return;
 
 	del_from_list(host_conn);
+	done_uri(host_conn->uri);
 	mem_free(host_conn);
 }
 
@@ -668,7 +670,7 @@ retry_conn_with_state(struct connection *conn, enum connection_state state)
 }
 
 static int
-try_to_suspend_connection(struct connection *conn, unsigned char *host)
+try_to_suspend_connection(struct connection *conn, struct uri *uri)
 {
 	enum connection_priority priority = get_priority(conn);
 	struct connection *c;
@@ -677,7 +679,7 @@ try_to_suspend_connection(struct connection *conn, unsigned char *host)
 		if (get_priority(c) <= priority) return -1;
 		if (c->state == S_WAIT) continue;
 		if (c->uri->post && get_priority(c) < PRI_CANCEL) continue;
-		if (host && strlcmp(host, -1, c->uri->host, c->uri->hostlen)) continue;
+		if (uri && !compare_uri(uri, c->uri, URI_HOST)) continue;
 		suspend_connection(c);
 		return 0;
 	}
@@ -691,7 +693,7 @@ try_connection(struct connection *conn, int max_conns_to_host, int max_conns)
 	struct host_connection *host_conn = get_host_connection(conn);
 
 	if (host_conn && host_conn->connections >= max_conns_to_host)
-		return try_to_suspend_connection(conn, host_conn->host) ? 0 : -1;
+		return try_to_suspend_connection(conn, host_conn->uri) ? 0 : -1;
 
 	if (active_connections >= max_conns)
 		return try_to_suspend_connection(conn, NULL) ? 0 : -1;

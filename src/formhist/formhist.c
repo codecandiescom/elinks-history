@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.62 2003/11/24 17:07:09 fabio Exp $ */
+/* $Id: formhist.c,v 1.63 2003/11/24 17:35:48 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@ static struct option_info forms_history_options[] = {
 INIT_LIST_HEAD(saved_forms);
 
 static struct submitted_value *
-new_submitted_value(unsigned char *name, unsigned char *value)
+new_submitted_value(unsigned char *name, unsigned char *value, int type)
 {
 	struct submitted_value *sv;
 
@@ -57,9 +57,10 @@ new_submitted_value(unsigned char *name, unsigned char *value)
 	sv->name = stracpy(name);
 	if (!sv->name) { mem_free(sv->value); mem_free(sv); return NULL; }
 
+	sv->type = type;
+
 	return sv;
 }
-
 
 static void inline
 free_submitted_value(struct submitted_value *sv)
@@ -144,6 +145,7 @@ load_saved_forms(void)
 			struct submitted_value *sv;
 			unsigned char *name, *value, *p;
 			unsigned char *enc_value;
+			int is_pass = 0;
 
 			if (tmp[0] == '\n' && !tmp[1]) break;
 
@@ -160,7 +162,11 @@ load_saved_forms(void)
 					   : stracpy(value);
 			if (!enc_value) goto fail;
 
-			sv = new_submitted_value(name, enc_value);
+			if (*name == '*') { is_pass = 1; name++; }
+			sv = new_submitted_value(name, enc_value,
+						 is_pass ? FC_PASSWORD
+							 : FC_TEXT);
+
 			mem_free(enc_value);
 			if (!sv) goto fail;
 
@@ -208,13 +214,28 @@ save_saved_forms(void)
 			 * we don't want someone behind our back to read our
 			 * password (androids don't count). */
 			if (sv->value && *sv->value) {
-				unsigned char *encvalue = base64_encode(sv->value);
+				unsigned char *encvalue =
+						base64_encode(sv->value);
 
 				if (!encvalue) return 0;
-				secure_fprintf(ssi, "%s\t%s\n", sv->name, encvalue);
+				secure_fprintf(ssi, "%s%s\t%s\n",
+					       /* Mark the line containing the
+						* password with '*', otherwise
+						* we can't tell which is the
+						* password when we'll load from
+						* file. */
+					       sv->type == FC_PASSWORD ? "*"
+								       : "",
+					       sv->name, encvalue);
+
 				mem_free(encvalue);
 			} else {
 				secure_fprintf(ssi, "%s\t\n", sv->name);
+				secure_fprintf(ssi, "%s%s\t\n",
+					       /* Ditto, see above. */
+					       sv->type == FC_PASSWORD ? "*"
+								       : "",
+					       sv->name);
 			}
 		}
 
@@ -374,7 +395,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 		if ((sv->type == FC_TEXT) || (sv->type == FC_PASSWORD)) {
 			struct submitted_value *sv2;
 
-			sv2 = new_submitted_value(sv->name, sv->value);
+			sv2 = new_submitted_value(sv->name, sv->value, sv->type);
 			if (!sv2) goto fail;
 
 			add_to_list(*form->submit, sv2);

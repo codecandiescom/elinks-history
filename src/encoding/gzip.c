@@ -1,5 +1,5 @@
 /* Gzip encoding (ENCODING_GZIP) backend */
-/* $Id: gzip.c,v 1.8 2004/09/14 07:23:00 jonas Exp $ */
+/* $Id: gzip.c,v 1.9 2004/09/29 12:10:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -152,7 +152,7 @@ static unsigned char *
 gzip_decode_buffer(unsigned char *data, int len, int *new_len)
 {
 	unsigned char *buffer = NULL;
-	int error;
+	int error = Z_OK;
 	int tries, wbits;
 
 	/* This WBITS loop thing was something I got from

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.122 2003/07/23 15:20:49 pasky Exp $ */
+/* $Id: file.c,v 1.123 2003/07/31 09:12:46 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -472,7 +472,7 @@ try_encoding_extensions(unsigned char *filename, int filenamelen, int *fd)
 	for (encoding = 1; encoding < ENCODINGS_KNOWN; encoding++) {
 		unsigned char **ext = listext_encoded(encoding);
 
-		while (ext && *ext) {
+		for (; ext && *ext; ext++) {
 			int extlen = strlen(*ext);
 
 			if (extlen > maxlen) continue;
@@ -485,8 +485,6 @@ try_encoding_extensions(unsigned char *filename, int filenamelen, int *fd)
 			if (*fd >= 0)
 				/* Ok, found one, use it. */
 				return encoding;
-
-			ext++;
 		}
 	}
 

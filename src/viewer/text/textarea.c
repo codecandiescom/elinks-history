@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.94 2004/06/18 08:23:44 miciah Exp $ */
+/* $Id: textarea.c,v 1.95 2004/06/18 08:25:20 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,13 +63,13 @@ format_text(unsigned char *text, int width, int wrap)
 			continue;
 
 		} else {
-			unsigned char *s;
+			int s;
 
 			skip = 0;
-			for (s = text; s >= begin; s--) {
-				if (*s == ' ') {
-					if (wrap == 2) *s = '\n';
-					text = s;
+			for (s = 0; s + text >= begin; s--) {
+				if (text[s] == ' ') {
+					if (wrap == 2) text[s] = '\n';
+					text += s;
 					skip = 1;
 					break;
 				}

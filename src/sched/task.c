@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.88 2004/05/28 16:50:43 jonas Exp $ */
+/* $Id: task.c,v 1.89 2004/05/28 16:51:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -195,7 +195,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 		m1 = N_("Do you want to repost form data to URL %s?");
 	}
 
-	m2 = get_uri_string(uri, ~URI_POST);
+	m2 = get_uri_string(uri, URI_PUBLIC);
 	msg_box(ses->tab->term, getml(task, task->pos, NULL), MSGBOX_FREE_TEXT,
 		N_("Warning"), AL_CENTER,
 		msg_text(ses->tab->term, m1, m2),

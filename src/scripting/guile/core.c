@@ -1,5 +1,5 @@
 /* Guile interface (scripting engine) */
-/* $Id: core.c,v 1.4 2003/09/23 20:30:44 jonas Exp $ */
+/* $Id: core.c,v 1.5 2003/09/25 17:08:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,17 +40,6 @@
 /* c_xdialog */
 
 
-/*
- * Console stuff
- */
-
-/* TODO */
-
-
-/*
- * Init
- */
-
 static void
 init_guile(void)
 {
@@ -85,7 +74,7 @@ init_guile(void)
 }
 
 
-struct scripting_backend lua_scripting_backend = {
+struct scripting_backend guile_scripting_backend = {
 	/* init: */	init_guile,
 	/* done: */	NULL,
 	/* hooks: */	guile_scripting_hooks,

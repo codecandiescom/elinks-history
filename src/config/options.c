@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.462 2004/11/19 16:42:35 zas Exp $ */
+/* $Id: options.c,v 1.463 2004/12/16 10:38:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,7 +76,7 @@ static void free_options_tree(struct list_head *, int recursive);
 
 #define bad_punct(c) (c != ')' && !isquote(c) && ispunct(c))
 
-void
+static void
 check_caption(unsigned char *caption)
 {
 	int len;

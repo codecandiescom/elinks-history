@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.93 2003/05/16 22:25:02 pasky Exp $ */
+/* $Id: menu.c,v 1.94 2003/05/16 22:28:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,25 +43,15 @@
 #include "viewer/text/view.h"
 
 /* Helper for url items in help menu. */
-#define menu_url(func_name, url) \
-static void \
-func_name(struct terminal *term, void *d, struct session *ses)\
-{ \
-	unsigned char *u = stracpy(url);\
- \
-	if (u) { \
-		goto_url(ses, u); \
-		mem_free(u); \
-	} \
-} \
+static void
+menu_url_shortcut(struct terminal *term, void *d, struct session *ses)
+{
+	unsigned char *u = stracpy((unsigned char *) d);
 
-menu_url(menu_elinks_home, ELINKS_HOMEPAGE);
-menu_url(menu_documentation, ELINKS_DOC_URL);
-#ifdef DEBUG
-/* Developpers shortcuts ;) */
-menu_url(menu_bugs, ELINKS_BUGS_URL);
-menu_url(menu_cvsweb, ELINKS_CVSWEB_URL);
-#endif
+	if (!u) return;
+	goto_url(ses, u);
+	mem_free(u);
+}
 
 static inline void
 menu_for_frame(struct terminal *term,
@@ -517,13 +507,13 @@ static struct menu_item view_menu_anon[] = {
 };
 
 static struct menu_item help_menu[] = {
-	{N_("~ELinks homepage"), "", MENU_FUNC menu_elinks_home, (void *)0, 0, 0},
-	{N_("~Documentation"), "", MENU_FUNC menu_documentation, (void *)0, 0, 0},
+	{N_("~ELinks homepage"), "", MENU_FUNC menu_url_shortcut, (void *)ELINKS_HOMEPAGE, 0, 0},
+	{N_("~Documentation"), "", MENU_FUNC menu_url_shortcut, (void *)ELINKS_DOC_URL, 0, 0},
 	{N_("~Keys"), "", MENU_FUNC menu_keys, (void *)0, 0, 0},
 	{"", M_BAR, NULL, NULL, 0, 0},
 #ifdef DEBUG
-	{N_("~Bugs information"), "", MENU_FUNC menu_bugs, (void *)0, 0, 0},
-	{N_("~ELinks CvsWeb"), "", MENU_FUNC menu_cvsweb, (void *)0, 0, 0},
+	{N_("~Bugs information"), "", MENU_FUNC menu_url_shortcut, (void *)ELINKS_BUGS_URL, 0, 0},
+	{N_("~ELinks CvsWeb"), "", MENU_FUNC menu_url_shortcut, (void *)ELINKS_CVSWEB_URL, 0, 0},
 	{"", M_BAR, NULL, NULL, 0, 0},
 #endif
 	{N_("~Copying"), "", MENU_FUNC menu_copying, (void *)0, 0, 0},

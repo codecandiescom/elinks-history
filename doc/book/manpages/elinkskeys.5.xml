@@ -1,4 +1,4 @@
-<!-- $Id: elinkskeys.5.xml,v 1.7 2003/06/11 01:40:20 jonas Exp $ -->
+<!-- $Id: elinkskeys.5.xml,v 1.8 2003/10/12 19:19:45 jonas Exp $ -->
 
 <!DOCTYPE refentry SYSTEM "../elinksbook.dtd">
 
@@ -623,11 +623,10 @@
 <refsect1><title> NAVIGATION KEYS </title>
 <para>
 
-	You may optionally prefix each of this keys with a number, telling its
-	repeat count (how much times to do it). You can also re-bind those
-	keys.  See <command>elinkskeys(5)</command> for complete documentation
-	about keybindings and more complete list of keys bound by default.  The
-	keys you may use for navigation are:
+	You may prefix each of these keys with a number, telling its repeat
+	count (how many times to do it).  You  can  also  re-bind  keys, see
+	<command>elinkskeys(5)</command> for documentation and a more complete
+	list of keys bound by default.
 
 </para>
 <variablelist>

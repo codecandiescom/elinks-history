@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.158 2005/01/05 10:09:06 zas Exp $ */
+/* $Id: bookmarks.c,v 1.159 2005/02/23 22:02:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -551,7 +551,7 @@ open_bookmark_folder(struct session *ses, unsigned char *foldername)
 		    || !*bookmark->url)
 			continue;
 
-		uri = get_uri(bookmark->url, 0);
+		uri = get_translated_uri(bookmark->url, 0);
 		if (!uri) continue;
 
 		/* Save the first bookmark for the current tab */

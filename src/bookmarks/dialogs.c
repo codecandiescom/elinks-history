@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.195 2004/12/27 23:13:35 jonas Exp $ */
+/* $Id: dialogs.c,v 1.196 2005/02/23 22:02:36 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -84,7 +84,7 @@ get_bookmark_uri(struct listbox_item *item)
 	struct bookmark *bookmark = item->udata;
 
 	return bookmark->url && *bookmark->url
-		? get_uri(bookmark->url, 0) : NULL;
+		? get_translated_uri(bookmark->url, 0) : NULL;
 }
 
 static struct listbox_item *

@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.54 2003/10/30 01:25:15 jonas Exp $ */
+/* $Id: formhist.c,v 1.55 2003/11/05 00:40:20 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,7 +109,7 @@ load_saved_forms(void)
 	static int loaded = 0;
 	struct formhist_data *form;
 	unsigned char tmp[MAX_STR_LEN];
-       	unsigned char *file;
+	unsigned char *file;
 	FILE *f;
 
 	if (loaded) return 1;
@@ -229,6 +229,13 @@ form_already_saved(struct formhist_data *form1)
 		int exact = 0;
 		struct submitted_value *sv;
 
+		/* If the URL to be saved is marked with "dontsave," in our
+		 * list we can't check the submitted values, as we don't save
+		 * them. Let's return 1 instead of wasting time */
+		if ((strstr(form->url, "dontsave,") == (char *) form->url)
+		    && !strcmp(form->url + 9, form1->url))
+			return 1;
+
 		if (strcmp(form->url, form1->url)) continue;
 
 		/* Iterate through submitted entries. */
@@ -281,6 +288,28 @@ static int
 remember_form(struct formhist_data *form)
 {
 	forget_forms_with_url(form->url);
+	add_to_list(saved_forms, form);
+
+	return save_saved_forms();
+}
+
+static int
+never_for_this_site(struct formhist_data *form)
+{
+	unsigned char *s;
+	int len;
+
+	forget_forms_with_url(form->url);
+	free_form_in_list(form);
+
+	s = straconcat("dontsave,", form->url, NULL);
+	if (!s) return 0;
+	len = strlen(s);
+
+	form = mem_realloc(form, sizeof(struct formhist_data) + len);
+	memcpy(form->url, s, len + 1);
+	mem_free(s);
+
 	add_to_list(saved_forms, form);
 
 	return save_saved_forms();
@@ -347,9 +376,10 @@ memorize_form(struct session *ses, struct list_head *submit,
 		"Please note that the password will be stored "
 		"obscured (but unencrypted) in a file on your disk.\n\n"
 		"If you are using a valuable password, answer NO."),
-		form, 2,
+		form, 3,
 		N_("Yes"), remember_form, B_ENTER,
-		N_("No"), free_form, NULL);
+		N_("No"), free_form, B_ESC,
+		"Never for this site", never_for_this_site, NULL);
 
 	return;
 

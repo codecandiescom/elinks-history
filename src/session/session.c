@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.288 2004/01/01 14:24:09 jonas Exp $ */
+/* $Id: session.c,v 1.289 2004/01/04 15:40:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -265,13 +265,14 @@ void
 display_timer(struct session *ses)
 {
 	ttime t = get_time();
+
 	draw_formatted(ses, 1);
 
 	t = (get_time() - t) * DISPLAY_TIME;
 	if (t < DISPLAY_TIME_MIN) t = DISPLAY_TIME_MIN;
-
 	ses->display_timer = install_timer(t, (void (*)(void *))display_timer,
 					   ses);
+
 	load_frames(ses, ses->doc_view);
 	process_file_requests(ses);
 }

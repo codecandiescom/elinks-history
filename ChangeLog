@@ -1,3 +1,109 @@
+Wed Dec 10 21:34:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Fixed shortcut of File::Go forward.  
+
+Wed Dec 10 19:02:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	A few hotkey fixes.  
+
+Wed Dec 10 17:14:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Add a few separators to the link menu.  
+
+Wed Dec 10 17:05:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/menu.h, dialogs/menu.c:
+
+	Add more fun stuff to the tab menu.  
+
+Wed Dec 10 16:42:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, viewer/text/view.c:
+
+	Move the tab_menu() so more handlers are accessible.  
+
+Wed Dec 10 15:50:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Other part of fix for goto-url leak.  
+
+Wed Dec 10 11:21:20 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/dialogs/menu.c:
+
+	Add missing #ifdef BOOKMARKS.  
+
+Wed Dec 10 05:07:35 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/dialogs/status.c:
+
+	Compilation fix.  
+
+Wed Dec 10 04:47:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/status.c, sched/session.h:
+
+	Handle the led panel like everything else in the status struct. Also
+	fixes a bug causing leds from other that the current tab to be
+	drawn.  
+
+Wed Dec 10 03:45:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Pass the session for the selected tab to the tab menu.  
+
+Wed Dec 10 03:38:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Add bookmark entry to the tab menu.  
+
+Wed Dec 10 02:49:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, viewer/text/view.c:
+
+	Properly adjust the position of the tab menu so entries are not
+	accidentially envoked.  
+
+Wed Dec 10 01:49:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/download.c:
+
+	Remove unused text color.  
+
+Wed Dec 10 01:45:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/download.c:
+
+	Simplify getting of meter color.  
+
+Wed Dec 10 00:24:09 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* contrib/elinks.spec.in:
+
+	Enabled leds and local-cgi.  
+
+Wed Dec 10 00:13:39 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
+Wed Dec 10 00:12:08 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/sched/task.c:
+
+	The cursor was repositioned at the first link of a frame, if a link
+	(of this frame) opens page in another frame. It should be fixed now.  
+
 Tue Dec  9 23:08:12 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: protocol/rewrite/rewrite.c, scripting/guile/hooks.c,

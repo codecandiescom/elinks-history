@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.61 2004/04/14 23:35:55 jonas Exp $ */
+/* $Id: terminal.c,v 1.62 2004/04/15 00:36:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,6 +94,7 @@ init_term(int fdin, int fdout,
 	term->master = (term->fdout == get_output_handle());
 	term->blocked = -1;
 	term->spec = get_opt_rec(config_options, "terminal._template_");
+	object_lock(term->spec);
 
 	add_to_list(terminals, term);
 

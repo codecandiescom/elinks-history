@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.32 2004/04/14 22:59:29 jonas Exp $ */
+/* $Id: event.c,v 1.33 2004/04/15 00:36:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,14 +184,16 @@ test_queue:
 
 			if (badchar) {
 				ERROR(_("Warning: terminal name contains illicit chars.", term));
-				strcat(name, "_template_");
 			} else {
 				strcat(name, term->term);
-			}
 
-			term->spec = get_opt_rec(config_options, name);
-			/* Lock the term specs so it can not be deleted */
-			object_lock(term->spec);
+				/* Unlock the default _template_ option tree
+				 * that was asigned by init_term() and get the
+				 * correct one. */
+				object_unlock(term->spec);
+				term->spec = get_opt_rec(config_options, name);
+				object_lock(term->spec);
+			}
 		}
 
 		memcpy(term->cwd, iq + evterm_len, MAX_CWD_LEN);

@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.98 2005/03/22 14:56:23 zas Exp $ */
+/* $Id: checkbox.c,v 1.99 2005/03/24 15:10:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,7 @@
 #include "terminal/mouse.h"
 #include "terminal/terminal.h"
 
-
+#define CHECKBOX_HEIGHT 1
 #define CHECKBOX_LEN 3	/* "[X]" or "(X)" */
 #define CHECKBOX_SPACING 1	/* "[X]" + " " + "Label" */
 #define CHECKBOX_LS (CHECKBOX_LEN + CHECKBOX_SPACING)	/* "[X] " */
@@ -44,15 +44,18 @@ dlg_format_checkbox(struct terminal *term,
 {
 	unsigned char *text = widget_data->widget->text;
 
-	set_box(&widget_data->box, x, *y, CHECKBOX_LS, 1);
+	set_box(&widget_data->box, x, *y, CHECKBOX_LEN, CHECKBOX_HEIGHT);
 
 	if (w <= CHECKBOX_LS) return;
 
-	if (rw) *rw -= CHECKBOX_LS;
-	dlg_format_text_do(term, text, x + CHECKBOX_LS, y, w - CHECKBOX_LS, rw,
-			get_bfu_color(term, "dialog.checkbox-label"), align);
-	if (rw) *rw += CHECKBOX_LS;
-
+	if (text && *text) {
+		if (rw) *rw -= CHECKBOX_LS;
+		dlg_format_text_do(term, text, x + CHECKBOX_LS, y,
+				   w - CHECKBOX_LS, rw,
+				   get_bfu_color(term, "dialog.checkbox-label"),
+				   align);
+		if (rw) *rw += CHECKBOX_LS;
+	}
 }
 
 static widget_handler_status_T

@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.11 2003/12/09 08:56:18 zas Exp $ */
+/* $Id: smb.c,v 1.12 2003/12/09 09:21:25 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -422,6 +422,7 @@ smb_func(struct connection *conn)
 	if (p && p - conn->uri.data < conn->uri.datalen) {
 		share = memacpy(conn->uri.data, p - conn->uri.data);
 		dir = p + 1;
+		/* FIXME: ensure @dir do not contain dangerous chars. --Zas */
 
 	} else if (conn->uri.datalen) {
 		if (smb_get_cache(conn)) return;
@@ -480,7 +481,7 @@ smb_func(struct connection *conn)
 
 	if (!cpid) {
 		int n = 0;
-		unsigned char *v[32];
+		unsigned char *v[32]; /* FIXME: overflow risk (v[n++]). --Zas */
 
 		close(1);
 		dup2(out_pipe[1], 1);
@@ -498,30 +499,36 @@ smb_func(struct connection *conn)
 		/* FIXME: handle alloc failures. */
 
 		if (!*share) {
-			v[n++] = "-L";
+			v[n++] = "-L";	/* get a list of shares available on a host */
 			v[n++] = memacpy(conn->uri.host, conn->uri.hostlen);
 
 		} else {
+			/* Construct path. */
 			asprintf((char **) &v[n++], "//%.*s/%s",
 				 conn->uri.hostlen, conn->uri.host, share);
+			/* XXX: add password to argument if any. TODO: Recheck
+			 * if correct. --Zas. */
 			if (conn->uri.passwordlen && !conn->uri.userlen) {
 				v[n++] = memacpy(conn->uri.password, conn->uri.passwordlen);
 			}
 		}
 
-		v[n++] = "-N";
-		v[n++] = "-E";
+		v[n++] = "-N";		/* don't ask for a password */
+		v[n++] = "-E";		/* write messages to stderr instead of stdout */
+		v[n++] = "-d 0";	/* disable debug mode. */
 
 		if (conn->uri.portlen) {
-			v[n++] = "-p";
+			v[n++] = "-p";	/* connect to the specified port */
 			v[n++] = memacpy(conn->uri.port, conn->uri.portlen);
 		}
 
 		if (conn->uri.userlen) {
-			v[n++] = "-U";
+			v[n++] = "-U";	/* set the network username */
 			if (!conn->uri.passwordlen) {
+				/* No password. */
 				v[n++] = memacpy(conn->uri.user, conn->uri.userlen);
 			} else {
+				/* With password. */
 				asprintf((char **) &v[n++], "%.*s%%%.*s",
 					 conn->uri.userlen, conn->uri.user,
 					 conn->uri.passwordlen, conn->uri.password);
@@ -532,17 +539,17 @@ smb_func(struct connection *conn)
 			/* FIXME: use si->list_type here ?? --Zas */
 			if (!dirlen || dir[dirlen - 1] == '/' || dir[dirlen - 1] == '\\') {
 				if (dirlen) {
-					v[n++] = "-D";
+					v[n++] = "-D";	/* start from directory */
 					v[n++] = dir;
 				}
-				v[n++] = "-c";
+				v[n++] = "-c"; /* execute semicolon separated commands */
 				v[n++] = "ls";
 
 			} else {
 				unsigned char *s = straconcat("get \"", dir, "\" -", NULL);
 				unsigned char *ss;
 
-				v[n++] = "-c";
+				v[n++] = "-c"; /* execute semicolon separated commands */
 				while ((ss = strchr(s, '/'))) *ss = '\\';
 				v[n++] = s;
 			}
@@ -573,7 +580,7 @@ smb_func(struct connection *conn)
 
 struct protocol_backend smb_protocol_backend = {
 	/* name: */			"smb",
-	/* port: */			139, /* FIXME: why ? we use pipes and fork() to call smbclient, no tcp/ip there... --Zas */
+	/* port: */			0,
 	/* handler: */			smb_func,
 	/* external_handler: */		NULL,
 	/* free_syntax: */		0,

@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.2 2002/05/04 08:14:44 pasky Exp $ */
+/* $Id: document.c,v 1.3 2002/05/04 17:06:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,9 +25,10 @@
 #include <protocol/http/header.h>
 #include <protocol/url.h>
 
-
-void loc_msg(struct terminal *term, struct location *location,
-	     struct f_data_c *frame)
+/* Location info. message box. */
+void
+loc_msg(struct terminal *term, struct location *location,
+	struct f_data_c *frame)
 {
 	struct global_history_item *historyitem;
 	struct cache_entry *ce;
@@ -46,6 +47,7 @@ void loc_msg(struct terminal *term, struct location *location,
 	}
 
 	str = init_str();
+	if (!str) return;
 	strl = 0;
 
 	add_to_str(&str, &strl, _(TEXT(T_URL), term));
@@ -117,7 +119,8 @@ void loc_msg(struct terminal *term, struct location *location,
 			add_to_str(&str, &strl, ")");
 		}
 
-		if ((a = parse_http_header(ce->head, "Server", NULL))) {
+		a = parse_http_header(ce->head, "Server", NULL);
+		if (a) {
 			add_to_str(&str, &strl, "\n");
 			add_to_str(&str, &strl, _(TEXT(T_SERVER), term));
 			add_to_str(&str, &strl, ": ");
@@ -125,7 +128,8 @@ void loc_msg(struct terminal *term, struct location *location,
 			mem_free(a);
 		}
 
-		if ((a = parse_http_header(ce->head, "Date", NULL))) {
+		a = parse_http_header(ce->head, "Date", NULL);
+		if (a) {
 			add_to_str(&str, &strl, "\n");
 			add_to_str(&str, &strl, _(TEXT(T_DATE), term));
 			add_to_str(&str, &strl, ": ");
@@ -148,7 +152,8 @@ void loc_msg(struct terminal *term, struct location *location,
 #endif
 	}
 
-	if ((a = print_current_link_do(frame, term))) {
+	a = print_current_link_do(frame, term);
+	if (a) {
 		add_to_str(&str, &strl, "\n\n");
 		add_to_str(&str, &strl, _(TEXT(T_LINK), term));
 		add_to_str(&str, &strl, ": ");
@@ -163,17 +168,20 @@ void loc_msg(struct terminal *term, struct location *location,
 		TEXT(T_OK), NULL, B_ENTER | B_ESC);
 }
 
-void state_msg(struct session *ses)
+void
+state_msg(struct session *ses)
 {
-	if (!have_location(ses)) loc_msg(ses->term, NULL, NULL);
-	else loc_msg(ses->term, cur_loc(ses), current_frame(ses));
+	if (!have_location(ses))
+		loc_msg(ses->term, NULL, NULL);
+	else
+		loc_msg(ses->term, cur_loc(ses), current_frame(ses));
 }
 
-void head_msg(struct session *ses)
+/* Headers info. message box. */
+void
+head_msg(struct session *ses)
 {
 	struct cache_entry *ce;
-	unsigned char *s, *ss;
-	int len;
 
 	if (!have_location(ses)) {
 		msg_box(ses->term, NULL,
@@ -183,17 +191,56 @@ void head_msg(struct session *ses)
 			TEXT(T_OK), NULL, B_ENTER | B_ESC);
 		return;
 	}
+
 	if (find_in_cache(cur_loc(ses)->vs.url, &ce)) {
-		if (ce->head) ss = s = stracpy(ce->head);
-		else s = ss = stracpy("");
-		len = strlen(s) - 1;
-		if (len > 0) {
-			while ((ss = strstr(s, "\r\n"))) memmove(ss, ss + 1, strlen(ss));
-			while (*s && s[strlen(s) - 1] == '\n') s[strlen(s) - 1] = 0;
+		unsigned char *headers;
+
+		if (ce->head) {
+			headers = stracpy(ce->head);
+			if (!headers) return;
+
+			if (*headers)  {
+				int i = 0, j = 0;
+
+				/* Sanitize headers string. */
+				/* XXX: Do we need to check length and limit
+				 * it to something reasonable ? */
+
+				while (ce->head[i]) {
+					/* Check for control chars. */
+					if (ce->head[i] < ' '
+					    && ce->head[i] != '\n') {
+						/* Ignore '\r' but replace
+						 * others control chars with
+						 * a visible char. */
+						if (ce->head[i] != '\r') {
+							 headers[j] = '*';
+							 j++;
+						}
+					} else {
+						headers[j] = ce->head[i];
+						j++;
+					}
+					i++;
+				}
+
+				/* Ensure null termination. */
+				headers[j] = '\0';
+
+				/* Remove all ending '\n' if any. */
+				while (j && headers[--j] == '\n')
+					headers[j] = '\0';
+			}
+
+		} else {
+			headers = stracpy("");
+			if (!headers) return;
 		}
-		msg_box(ses->term, getml(s, NULL),
+
+		/* Headers info message box. */
+		msg_box(ses->term, getml(headers, NULL),
 			TEXT(T_HEADER_INFO), AL_LEFT,
-			s,
+			headers,
 			NULL, 1,
 			TEXT(T_OK), NULL, B_ENTER | B_ESC);
 	}

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.155 2004/01/09 01:06:17 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.156 2004/01/09 01:08:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -531,19 +531,20 @@ init_action_listboxes(void)
 		if (act->num == ACT_SCRIPTING_FUNCTION)
 			continue;
 
-		keyact_box_items[act->num] = box_item =
-			mem_calloc(1, sizeof(struct listbox_item));
+		box_item = mem_calloc(1, sizeof(struct listbox_item));
 		if (!box_item) continue;
-		add_to_list_end(keybinding_browser.root.child, box_item);
-		box_item->root = NULL;
+
 		init_list(box_item->child);
-		box_item->visible = (act->num != ACT_SCRIPTING_FUNCTION); /* XXX */
-		box_item->translated = 1;
 		box_item->udata = (void *) act->num;
 		box_item->type = BI_FOLDER;
 		box_item->expanded = 0; /* Maybe you would like this being 1? */
-		box_item->depth = 0;
-		box_item->text = act->desc ? act->desc : act->str;
+
+		assert(act->desc);
+		box_item->text = act->desc;
+		box_item->translated = 1;
+
+		add_to_list_end(keybinding_browser.root.child, box_item);
+		keyact_box_items[act->num] = box_item;
 
 		for (i = 0; i < KM_MAX; i++) {
 			struct listbox_item *keymap;
@@ -595,8 +596,12 @@ toggle_display_action_listboxes(void)
 		struct listbox_item *keymap;
 
 		action->text = toggle(action_table, (int) action->udata);
-		foreach (keymap, action->child)
+		action->translated = state;
+
+		foreach (keymap, action->child) {
 			keymap->text = toggle(keymap_table, (int) keymap->udata);
+			keymap->translated = state;
+		}
 	}
 }
 

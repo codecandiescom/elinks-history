@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.69 2004/09/21 16:49:14 pasky Exp $ */
+/* $Id: parser.h,v 1.70 2004/09/24 12:43:36 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -174,5 +174,9 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 /* For html/parser/forms.c,link.c,parse.c,stack.c */
 
 void ln_break(int n, void (*line_break)(struct part *), struct part *part);
+
+#ifdef CONFIG_ECMASCRIPT
+int do_html_script(unsigned char *attr, unsigned char *html, unsigned char *eof, unsigned char **end, struct part *part);
+#endif
 
 #endif

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.89 2004/09/24 10:57:52 pasky Exp $ */
+/* $Id: parse.c,v 1.90 2004/09/24 12:43:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -391,6 +391,7 @@ void html_noframes(unsigned char *);
 void html_ol(unsigned char *);
 void html_p(unsigned char *);
 void html_pre(unsigned char *);
+void html_script(unsigned char *);
 void html_skip(unsigned char *);
 void html_span(unsigned char *);
 void html_style(unsigned char *);
@@ -485,7 +486,7 @@ static struct element_info elements[] = {
 	{"PRE",		html_pre,	2, 0},
 	{"Q",		html_italic,	0, 0},
 	{"S",		html_underline,	0, 0},
-	{"SCRIPT",	html_skip,	0, 0},
+	{"SCRIPT",	html_script,	0, 0},
 	{"SELECT",	html_select,	0, 0},
 	{"SPAN",	html_span,	0, 0},
 	{"STRIKE",	html_underline,	0, 0},
@@ -776,7 +777,10 @@ start_element(struct element_info *ei,
 		kill_html_stack_item(&html_top);
 	}
 
-	if (html_top.invisible) {
+	/* We try to process nested <script> if we didn't process the parent
+	 * one. */
+	if (html_top.invisible
+	    && (ei->func != html_script || html_top.invisible < 2)) {
 		return html;
 	}
 
@@ -797,6 +801,12 @@ start_element(struct element_info *ei,
 		do_html_textarea(attr, html, eof, &html, part);
 		return html;
 	}
+#ifdef CONFIG_ECMASCRIPT
+	if (ei->func == html_script) {
+		if (!do_html_script(attr, html, eof, &html, part))
+			return html;
+	}
+#endif
 #ifdef CONFIG_CSS
 	if (ei->func == html_style && global_doc_opts->css_enable) {
 		css_parse_stylesheet(&html_context.css_styles,

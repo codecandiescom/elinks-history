@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.493 2004/09/24 02:51:43 jonas Exp $ */
+/* $Id: parser.c,v 1.494 2004/09/24 12:43:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -401,6 +401,106 @@ html_skip(unsigned char *a)
 {
 	html_top.invisible = 1;
 	html_top.type = ELEMENT_DONT_KILL;
+}
+
+#ifdef CONFIG_ECMASCRIPT
+int
+do_html_script(unsigned char *a, unsigned char *html, unsigned char *eof, unsigned char **end, struct part *part)
+{
+	/* TODO: <noscript> processing. Well, same considerations apply as to
+	 * CSS property display: none processing. */
+	/* TODO: Charsets for external scripts. */
+	unsigned char *type, *src;
+	unsigned char *element_end = NULL;
+
+	html_skip(a);
+	
+	/* We try to process nested <script> if we didn't process the parent
+	 * one. That's why's all the fuzz. */
+	type = get_attr_val(a, "type");
+	if (type && strcasecmp(type, "text/javascript")) {
+		mem_free(type);
+not_processed:
+		/* Permit nested scripts and retreat. */
+		html_top.invisible++;
+		return 1;
+	}
+	if (type) mem_free(type);
+
+	/* XXX: Do any non-javascript scripts use the language attribute? */
+
+	src = get_attr_val(a, "src");
+	if (src) {
+		/* TODO: External references. --pasky */
+		mem_free(src);
+		goto not_processed;
+	}
+
+	/* Positive, grab the rest and interpret it. */
+
+	/* First position to the real script start. */
+	while (html < eof && (*html == '\n' || *html == '\r')) html++;
+	if (eof - html > 4 && !strncmp(html, "<!--", 4)) {
+		/* We either skip to the end of line or to -->. */
+		for (; *html != '\n' && *html != '\r'; html++) {
+			if (eof - html >= 3 && !strncmp(html, "-->", 3)) {
+				/* This means the document is probably broken.
+				 * We will now try to process the rest of
+				 * <script> contents, which is however likely
+				 * to be empty. Should we try to process the
+				 * comment too? Currently it seems safer but
+				 * less tolerant to broken pages, if there are
+				 * any like this. */
+				html += 3;
+				break;
+			}
+		}
+	}
+
+	*end = html;
+
+	/* Now look ahead for the script end. */
+	for (; *end < eof; (*end)++) {
+		unsigned char *name;
+		int namelen;
+
+		if (**end != '<')
+			continue;
+		/* We want to land before the closing element now but skip it
+		 * before going back to the HTML parser. */
+		if (parse_element(*end, eof, &name, &namelen, NULL,
+		                  &element_end))
+			continue;
+		if (strlcasecmp(name, namelen, "/script", 7))
+			continue;
+		/* We have won! */
+		break;
+	}
+	if (*end >= eof) {
+		/* Either the document is not completely loaded yet or it's
+		 * broken. At any rate, run away screaming. */
+		*end = eof; /* Just for sanity. */
+		return 1;
+	}
+
+	if (*html != '^') {
+		add_to_string_list(&part->document->onload_snippets,
+		                   html, *end - html);
+	}
+	assert(element_end);
+	*end = element_end;
+	return 0;
+}
+#endif
+
+void
+html_script(unsigned char *a)
+{
+#ifdef CONFIG_ECMASCRIPT
+	/* We did everything (even possibly html_skip()) in do_html_script(). */
+#else
+	html_skip(a);
+#endif
 }
 
 void

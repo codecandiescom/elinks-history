@@ -418,7 +418,7 @@ default:
 			skip_space(nplurals);
 
 			for (endp = (unsigned char *) nplurals, n = 0;
-			    *endp >= '0' && *endp <= '9'; endp++)
+			     isdigit(*endp); endp++)
 				n = n * 10 + (*endp - '0');
 
 			domain->nplurals = n;

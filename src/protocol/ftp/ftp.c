@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.151 2004/07/04 00:01:28 zas Exp $ */
+/* $Id: ftp.c,v 1.152 2004/07/04 12:13:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,21 +120,21 @@ parse_psv_resp(unsigned char *data, int *n, int max_value)
 	while (*p >= ' ') p++;
 
 	/* Ignore non-numeric ending chars. */
-       	while (p != data && (*p < '0' || *p > '9')) p--;
+       	while (p != data && !isdigit(*p)) p--;
 	if (p == data) return 0;
 
 	while (i >= 0) {
 		int x = 1;
 
 		/* Parse one number. */
-		while (p != data && *p >= '0' && *p <= '9') {
+		while (p != data && isdigit(*p)) {
 			n[i] += (*p - '0') * x;
 			if (n[i] > max_value) return 0;
 			x *= 10;
 			p--;
 		}
 		/* Ignore non-numeric chars. */
-		while (p != data && (*p < '0' || *p > '9')) p--;
+		while (p != data && !isdigit(*p)) p--;
 		if (p == data) return (6 - i);
 		/* Get the next one. */
 		i--;
@@ -713,11 +713,11 @@ get_filesize_from_RETR(unsigned char *data, int data_len)
 		return -1;
 
 	pos_file_len++;
-	if (data[pos_file_len] < '0' || data[pos_file_len] > '9')
+	if (!isdigit(data[pos_file_len]))
 		return -1;
 
 	for (pos = pos_file_len; pos < data_len; pos++)
-		if (data[pos] < '0' || data[pos] > '9')
+		if (!isdigit(data[pos]))
 			goto next;
 
 	return -1;

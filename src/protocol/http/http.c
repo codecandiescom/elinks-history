@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.297 2004/07/03 11:31:30 jonas Exp $ */
+/* $Id: http.c,v 1.298 2004/07/04 12:13:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,7 +163,7 @@ get_http_code(unsigned char *head, int *code, struct http_version *version)
 	/* Sanity check. */
 	if (!*head || !(head - start)
 	    || (head - start) > 4
-	    || *(head + 1) < '0' || *(head + 1) > '9' )
+	    || !isdigit(*(head + 1)))
 		return -2;
 	end = head;
 
@@ -171,7 +171,7 @@ get_http_code(unsigned char *head, int *code, struct http_version *version)
 	q = 1;
 	do {
 		--head;
-		if (*head < '0' || *head > '9') return -3; /* NaN */
+		if (!isdigit(*head)) return -3; /* NaN */
 		version->major += (*head - '0') * q;
 		q *= 10;
 	} while (head != start);
@@ -187,7 +187,7 @@ get_http_code(unsigned char *head, int *code, struct http_version *version)
 	q = 1;
 	do {
 		--head;
-		if (*head < '0' || *head > '9') return -5; /* NaN */
+		if (!isdigit(*head)) return -5; /* NaN */
 		version->minor += (*head - '0') * q;
 		q *= 10;
 	} while (head != start);
@@ -198,8 +198,8 @@ get_http_code(unsigned char *head, int *code, struct http_version *version)
 
 	/* Sanity check for code. */
 	if (head[0] < '1' || head[0] > '9' ||
-	    head[1] < '0' || head[1] > '9' ||
-	    head[2] < '0' || head[2] > '9')
+	    !isdigit(head[1]) ||
+	    !isdigit(head[2]))
 		return -6; /* Invalid code. */
 
 	/* Extract code. */
@@ -1207,7 +1207,7 @@ again:
 	if (d) {
 		if (strlen(d) > 6) {
 			d[5] = 0;
-			if (d[6] >= '0' && d[6] <= '9' && !strcasecmp(d, "bytes")) {
+			if (isdigit(d[6]) && !strcasecmp(d, "bytes")) {
 				int f;
 
 				errno = 0;

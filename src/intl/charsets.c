@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.91 2004/07/01 12:22:28 jonas Exp $ */
+/* $Id: charsets.c,v 1.92 2004/07/04 12:13:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -482,9 +482,9 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 			do {
 				unsigned char c = (*(st++) | 32);
 
-				if (c >= '0' && c <= '9')
+				if (isdigit(c))
 					n = (n << 4) | (c - '0');
-				else if (c >= 'a' && c <= 'f')
+				else if (isxdigit(c))
 					n = (n << 4) | (c - 'a' + 10);
 				else
 					goto end; /* Bad char. */
@@ -494,7 +494,7 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 			do {
 				unsigned char c = *(st++);
 
-				if (c >= '0' && c <= '9')
+				if (isdigit(c))
 					n = n * 10 + c - '0';
 				else
 					goto end; /* Bad char. */
@@ -630,7 +630,7 @@ convert_string(struct conv_table *convert_table,
 			while (i < charslen
 			       && ((chars[i] >= 'A' && chars[i] <= 'Z')
 				   || (chars[i] >= 'a' && chars[i] <= 'z')
-				   || (chars[i] >= '0' && chars[i] <= '9')
+				   || isdigit(chars[i])
 				   || (chars[i] == '#')))
 				i++;
 

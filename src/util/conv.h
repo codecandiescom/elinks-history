@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.35 2004/06/25 10:52:31 zas Exp $ */
+/* $Id: conv.h,v 1.36 2004/07/04 12:13:42 jonas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -34,7 +34,7 @@ hx(register int a)
 static inline int
 unhx(register unsigned char a)
 {
-	if (a >= '0' && a <= '9') return a - '0';
+	if (isdigit(a)) return a - '0';
 	if (a >= 'A' && a <= 'F') return a - 'A' + 10;
 	if (a >= 'a' && a <= 'f') return a - 'a' + 10;
 	return -1;

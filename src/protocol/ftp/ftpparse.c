@@ -1,5 +1,5 @@
 /* FTP directory parsing */
-/* $Id: ftpparse.c,v 1.19 2004/07/04 01:10:25 jonas Exp $ */
+/* $Id: ftpparse.c,v 1.20 2004/07/04 12:13:42 jonas Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -489,7 +489,7 @@ ftpparse(struct ftpparse *fp, unsigned char *buf, int len)
 	/* 04-27-00  09:09PM       <DIR>          licensed */
 	/* 07-18-00  10:16AM       <DIR>          pub */
 	/* 04-14-00  03:47PM                  589 readme.htm */
-	if ((*buf >= '0') && (*buf <= '9')) {
+	if (isdigit(*buf)) {
 		i = 0;
 		j = 0;
 		while (buf[j] != '-')

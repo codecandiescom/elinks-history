@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.50 2004/06/18 16:38:35 zas Exp $ */
+/* $Id: smb.c,v 1.51 2004/07/04 12:13:42 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -367,31 +367,32 @@ print_next:
 /* filename                             2444  Thu Feb 19 15:52:46 2004 */
 
 					/* Skip end of line */
-					while (p > url && (*p < '0' || *p > '9')) p--;
+					while (p > url && !isdigit(*p)) p--;
 					if (p == url) goto print_as_is;
 
+					/* FIXME: Use parse_date()? */
 					/* year */
-					while (p > url && *p >= '0' && *p <= '9') p--;
+					while (p > url && isdigit(*p)) p--;
 					if (p == url || !isspace(*p)) goto print_as_is;
 					while (p > url && isspace(*p)) p--;
 
 					/* seconds */
-					while (p > url && *p >= '0' && *p <= '9') p--;
+					while (p > url && isdigit(*p)) p--;
 					if (p == url || *p != ':') goto print_as_is;
 					p--;
 
 					/* minutes */
-					while (p > url && *p >= '0' && *p <= '9') p--;
+					while (p > url && isdigit(*p)) p--;
 					if (p == url || *p != ':') goto print_as_is;
 					p--;
 
 					/* hours */
-					while (p > url && *p >= '0' && *p <= '9') p--;
+					while (p > url && isdigit(*p)) p--;
 					if (p == url || !isspace(*p)) goto print_as_is;
 					p--;
 
 					/* day as number */
-					while (p > url && *p >= '0' && *p <= '9') p--;
+					while (p > url && isdigit(*p)) p--;
 					while (p > url && isspace(*p)) p--;
 					if (p == url) goto print_as_is;
 
@@ -406,11 +407,11 @@ print_next:
 					while (p > url && isspace(*p)) p--;
 
 					/* file size */
-					if (p == url || *p < '0' || *p > '9') goto print_as_is;
+					if (p == url || !isdigit(*p)) goto print_as_is;
 
 					if (*p == '0' && isspace(*(p - 1))) may_be_dir = 1;
 
-					while (p > url && *p >= '0' && *p <= '9') p--;
+					while (p > url && isdigit(*p)) p--;
 					if (p == url) goto print_as_is;
 
 					/* Magic to determine if we have a

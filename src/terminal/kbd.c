@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.78 2004/07/03 16:25:04 jonas Exp $ */
+/* $Id: kbd.c,v 1.79 2004/07/04 12:13:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -607,7 +607,7 @@ get_esc_code(unsigned char *str, int len, unsigned char *code,
 	*code = '\0';
 
 	for (pos = 2; pos < len; pos++) {
-		if (str[pos] < '0' || str[pos] > '9' || pos > 7) {
+		if (!isdigit(str[pos]) || pos > 7) {
 			*el = pos + 1;
 			*code = str[pos];
 			return 0;

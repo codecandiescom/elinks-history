@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.4 2004/07/04 10:49:04 jonas Exp $ */
+/* $Id: date.c,v 1.5 2004/07/04 12:13:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,20 +47,20 @@ parse_year(const unsigned char **date_p)
 	 * Well, if faster only... --Zas */
 
 	c = *date++;
-	if (c < '0' || c > '9') return -1;
+	if (!isdigit(c)) return -1;
 	year = (c - '0') * 10;
 
 	c = *date++;
-	if (c < '0' || c > '9') return -1;
+	if (!isdigit(c)) return -1;
 	year += c - '0';
 
 	c = *date++;
-	if (c >= '0' && c <= '9') {
+	if (isdigit(c)) {
 		/* Four digits date */
 		year = year * 10 + c - '0';
 
 		c = *date++;
-		if (c < '0' || c > '9') return -1;
+		if (!isdigit(c)) return -1;
 		year = year * 10 + c - '0' - 1900;
 
 	} else if (year < 60) {
@@ -114,16 +114,16 @@ parse_time(const unsigned char *date, struct tm *tm)
 {
 	unsigned char h1, h2, m1, m2, s1, s2;
 
-	h1 = *date++; if (h1 < '0' || h1 > '9') return 0;
-	h2 = *date++; if (h2 < '0' || h2 > '9') return 0;
+	h1 = *date++; if (!isdigit(h1)) return 0;
+	h2 = *date++; if (!isdigit(h2)) return 0;
 	if (*date++ != ':') return 0;
 
-	m1 = *date++; if (m1 < '0' || m1 > '9') return 0;
-	m2 = *date++; if (m2 < '0' || m2 > '9') return 0;
+	m1 = *date++; if (!isdigit(m1)) return 0;
+	m2 = *date++; if (!isdigit(m2)) return 0;
 	if (*date++ != ':') return 0;
 
-	s1 = *date++; if (s1 < '0' || s1 > '9') return 0;
-	s2 = *date++; if (s2 < '0' || s2 > '9') return 0;
+	s1 = *date++; if (!isdigit(s1)) return 0;
+	s2 = *date++; if (!isdigit(s2)) return 0;
 
 	tm->tm_hour = (h1 - '0') * 10 + h2 - '0';
 	tm->tm_min = (m1 - '0') * 10 + m2 - '0';
@@ -217,7 +217,7 @@ parse_date(const unsigned char *date)
 
 	while ((c = *date) == ' ') date++;
 
-	if (c >= '0' && c <= '9') {
+	if (isdigit(c)) {
 		/* RFC 1036 / RFC 1123 */
 
 		/* Eat day */

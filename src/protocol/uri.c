@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.257 2004/06/27 20:43:47 jonas Exp $ */
+/* $Id: uri.c,v 1.258 2004/07/04 12:13:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -258,7 +258,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 		/* test if port is number */
 		/* TODO: possibly lookup for the service otherwise? --pasky */
 		for (; host_end < port_end; host_end++)
-			if (*host_end < '0' || *host_end > '9')
+			if (!isdigit(*host_end))
 				return URI_ERRNO_INVALID_PORT;
 
 		/* Check valid port value, and let show an error message
@@ -1085,7 +1085,7 @@ safe_char(unsigned char c)
 {
 	/* RFC 2396, Page 8, Section 2.3 ;-) */
 	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
-	       || (c >= '0' && c <= '9')
+	       || isdigit(c)
 	       || c == '-' || c == '_' || c == '.' || c == '!' || c == '~'
 	       || c == '*' || c == '\''|| c == '(' || c == ')';
 }

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.265 2004/06/29 02:30:23 jonas Exp $ */
+/* $Id: tables.c,v 1.266 2004/06/29 02:31:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1018,6 +1018,9 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	html_context.table_level++;
 	get_bgcolor(attr, &bgcolor);
 
+	table = parse_table(html, eof, end, bgcolor, attr, (part->document || part->box.x));
+	if (!table) goto ret0;
+
 	/* From http://www.w3.org/TR/html4/struct/tables.html#adef-border-TABLE
 	 * The following settings should be observed by user agents for
 	 * backwards compatibility.
@@ -1091,9 +1094,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		else if (!strcasecmp(al, "all")) rules = TABLE_RULE_ALL;
 		mem_free(al);
 	}
-
-	table = parse_table(html, eof, end, bgcolor, attr, (part->document || part->box.x));
-	if (!table) goto ret0;
 
 	table->part = part;
 	table->border = border;

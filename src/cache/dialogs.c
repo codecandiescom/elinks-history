@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.68 2004/06/11 23:48:06 jonas Exp $ */
+/* $Id: dialogs.c,v 1.69 2004/06/12 15:34:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,13 +74,13 @@ get_cache_entry_info(struct listbox_item *item, struct terminal *term,
 	/* No need to use compare_uri() here we only want to check whether they
 	 * point to the same URI. */
 	if (cached->proxy_uri != cached->uri) {
-		add_format_to_string(&msg, "\n%s: %s", _("Proxy URL", term),
-						struri(cached->proxy_uri));
+		add_format_to_string(&msg, "\n%s: ", _("Proxy URL", term));
+		add_uri_to_string(&msg, cached->proxy_uri, URI_PUBLIC);
 	}
 
 	if (cached->redirect) {
-		add_format_to_string(&msg, "\n%s: %s", _("Redirect", term),
-						struri(cached->redirect));
+		add_format_to_string(&msg, "\n%s: ", _("Redirect", term));
+		add_uri_to_string(&msg, cached->redirect, URI_PUBLIC);
 
 		if (cached->redirect_get) {
 			add_to_string(&msg, " (GET)");

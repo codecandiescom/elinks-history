@@ -936,7 +936,7 @@ AC_OUTPUT([ \
  src/elusive/parser/html/Makefile \
  src/elusive/renderer/Makefile \
  src/elusive/renderer/text/Makefile \
- src/formsmem/Makefile \
+ src/formhist/Makefile \
  src/globhist/Makefile \
  src/intl/Makefile \
  src/intl/gettext/Makefile \

@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formsmem.c,v 1.5 2003/08/02 14:19:32 jonas Exp $ */
+/* $Id: formhist.c,v 1.1 2003/08/02 14:59:54 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -16,7 +16,7 @@
 
 #include "document/html/parser.h"
 #include "viewer/text/form.h"
-#include "formsmem/formsmem.h"
+#include "formhist/formhist.h"
 #include "lowlevel/home.h"
 #include "util/base64.h"
 #include "util/file.h"

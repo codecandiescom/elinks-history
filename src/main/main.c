@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.116 2003/08/01 17:28:37 zas Exp $ */
+/* $Id: main.c,v 1.117 2003/08/02 14:59:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,7 @@
 #include "document/html/colors.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
-#include "formsmem/formsmem.h"
+#include "formhist/formhist.h"
 #include "globhist/globhist.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"

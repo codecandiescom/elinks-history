@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formsmem.h,v 1.3 2003/08/01 19:35:21 jonas Exp $ */
+/* $Id: formhist.h,v 1.1 2003/08/02 14:59:54 jonas Exp $ */
 
 #ifndef EL__FORMSMEM_FORMSMEM_H
 #define EL__FORMSMEM_FORMSMEM_H

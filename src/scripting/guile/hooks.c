@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.18 2003/10/26 13:13:42 jonas Exp $ */
+/* $Id: hooks.c,v 1.19 2003/12/09 23:08:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,6 +44,7 @@ script_hook_goto_url(va_list ap)
 	x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(*url));
 
 	if (SCM_STRINGP(x)) {
+		mem_free(*url);
 		*url = stracpy(SCM_STRING_UCHARS(x));
 	} else {
 		*url = NULL;

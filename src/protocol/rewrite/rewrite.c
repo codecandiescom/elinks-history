@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.7 2003/12/08 23:08:27 pasky Exp $ */
+/* $Id: rewrite.c,v 1.8 2003/12/09 23:08:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -229,7 +229,10 @@ goto_url_hook(va_list ap, void *data)
 
 	if (uu) {
 		uu = substitute_url(uu, cur_loc(ses)->vs.url, arg);
-		if (uu) *url = uu;
+		if (uu) {
+			mem_free(*url);
+			*url = uu;
+		}
 	}
 
 	return EHS_NEXT;

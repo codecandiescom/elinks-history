@@ -1,4 +1,4 @@
-/* $Id: object.h,v 1.2 2003/11/17 21:31:00 pasky Exp $ */
+/* $Id: object.h,v 1.3 2003/11/17 21:31:16 pasky Exp $ */
 
 #ifndef EL__UTIL_OBJECT_H
 #define EL__UTIL_OBJECT_H
@@ -45,7 +45,7 @@
 	do {								\
 		(obj)->refcount--;					\
 		object_lock_debug(obj, "-1");				\
-		object_sanity_check(obj);					\
+		object_sanity_check(obj);				\
 	} while (0)
 
 /* Please keep this one. It serves for debugging. --Zas */

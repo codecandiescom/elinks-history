@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.580 2004/11/14 18:00:41 jonas Exp $ */
+/* $Id: session.c,v 1.581 2004/11/14 22:54:56 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1124,21 +1124,13 @@ reload(struct session *ses, enum cache_mode cache_mode)
 		loc->vs.ecmascript_fragile = 1;
 #endif
 
-		/* When reloading use loading_callback and set up a session task
-		 * so that the reloading will work even when the reloaded
-		 * document contains redirects. This is needed atleast when
-		 * reloading HTTP auth document after the user has entered
+		/* FIXME: When reloading use loading_callback and set up a
+		 * session task so that the reloading will work even when the
+		 * reloaded document contains redirects. This is needed atleast
+		 * when reloading HTTP auth document after the user has entered
 		 * credentials. */
 		loc->download.data = ses;
-		loc->download.callback = (void *) loading_callback;
-
-		ses->task.type = TASK_RELOAD;
-		ses->task.target_frame = NULL;
-		ses->task.target_location = NULL;
-
-		if (ses->loading_uri)
-			done_uri(ses->loading_uri);
-		ses->loading_uri = get_uri_reference(loc->vs.uri);
+		loc->download.callback = (void *) doc_loading_callback;
 
 		load_uri(loc->vs.uri, ses->referrer, &loc->download, PRI_MAIN, cache_mode, -1);
 

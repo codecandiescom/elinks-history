@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.77 2004/12/16 23:53:05 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.78 2004/12/17 00:05:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -775,7 +775,7 @@ static const JSClass document_class = {
 	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
 };
 
-enum document_prop { JSP_DOC_REF, JSP_DOC_TITLE, JSP_DOC_URL, JSP_DOC_FORMS };
+enum document_prop { JSP_DOC_REF, JSP_DOC_TITLE, JSP_DOC_URL };
 /* "cookie" is special; it isn't a regular property but we channel it to the
  * cookie-module. XXX: Would it work if "cookie" was defined in this array? */
 static const JSPropertySpec document_props[] = {
@@ -783,7 +783,6 @@ static const JSPropertySpec document_props[] = {
 	{ "referrer",	JSP_DOC_REF,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "title",	JSP_DOC_TITLE,	JSPROP_ENUMERATE }, /* TODO: Charset? */
 	{ "url",	JSP_DOC_URL,	JSPROP_ENUMERATE },
-	{ "forms",	JSP_DOC_FORMS,	JSPROP_ENUMERATE },
 	{ NULL }
 };
 
@@ -795,11 +794,11 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct document_view *doc_view = vs->doc_view;
 	struct document *document = doc_view->document;
 	struct session *ses = doc_view->session;
-	struct form_control *fc;
-	JSObject *forms_obj;
 
 	VALUE_TO_JSVAL_START;
 	if (JSVAL_IS_STRING(id)) {
+		struct form_control *fc;
+
 		JSVAL_TO_VALUE_START;
 		JSVAL_REQUIRE(&id, STRING);
 #ifdef CONFIG_COOKIES
@@ -857,12 +856,6 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		break;
 	case JSP_DOC_TITLE: p.string = document->title; prop_type = JSPT_STRING; break;
 	case JSP_DOC_URL: p.string = get_uri_string(document->uri, URI_ORIGINAL); prop_type = JSPT_ASTRING; break;
-	case JSP_DOC_FORMS:
-		forms_obj = JS_NewObject(ctx, (JSClass *)&forms_class, NULL, parent);
-		JS_DefineFunctions(ctx, forms_obj, (JSFunctionSpec *)&forms_funcs);
-		p.object = forms_obj;
-		prop_type = JSPT_OBJECT;
-		break;
 
 	default:
 		INTERNAL("Invalid ID %d in document_get_property().", JSVAL_TO_INT(id));
@@ -1314,6 +1307,12 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 				    (JSClass *) &document_class, NULL, 0,
 				    (JSPropertySpec *) document_props,
 				    (JSFunctionSpec *) document_funcs,
+				    NULL, NULL);
+
+	forms_obj = JS_InitClass(ctx, document_obj, NULL,
+				    (JSClass *) &forms_class, NULL, 0,
+				    (JSPropertySpec *) forms_props,
+				    (JSFunctionSpec *) forms_funcs,
 				    NULL, NULL);
 
 	location_obj = JS_InitClass(ctx, window_obj, NULL,

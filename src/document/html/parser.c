@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.276 2003/11/17 14:27:10 zas Exp $ */
+/* $Id: parser.c,v 1.277 2003/11/17 14:34:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,10 +55,12 @@ struct form {
 
 INIT_LIST_HEAD(html_stack);
 
+#define end_of_tag(c) ((c) == '>' || (c) == '<')
+
 static inline int
 atchr(register unsigned char c)
 {
-	return (c < 127 && (c > '>' || (c > ' ' && c != '=' && c != '<' && c != '>')));
+	return (c < 127 && (c > '>' || (c > ' ' && c != '=' && !end_of_tag(c))));
 }
 
 /* This function eats one html element. */
@@ -74,7 +76,6 @@ parse_element(register unsigned char *e, unsigned char *eof,
 	      unsigned char **name, int *namelen,
 	      unsigned char **attr, unsigned char **end)
 {
-#define end_of_tag(c) ((c) == '>' || (c) == '<')
 #define next_char() if (++e == eof) goto parse_error
 
 	unsigned char saved_eof_char;
@@ -182,7 +183,7 @@ get_attr_val(register unsigned char *e, unsigned char *name)
 
 next_attr:
 	while (WHITECHAR(*e)) e++;
-	if (*e == '>' || *e == '<' || !atchr(*e)) return NULL;
+	if (end_of_tag(*e) || !atchr(*e)) return NULL;
 	n = name;
 
 	while (atchr(*n) && atchr(*e) && upcase(*e) == upcase(*n)) e++, n++;
@@ -199,7 +200,7 @@ next_attr:
 
 	if (found) {
 		if (!IS_QUOTE(*e)) {
-			while (!WHITECHAR(*e) && *e != '>' && *e != '<') {
+			while (!WHITECHAR(*e) && !end_of_tag(*e)) {
 				add_chr(attr, attrlen, *e);
 				e++;
 			}
@@ -237,7 +238,7 @@ found_endattr:
 
 	} else {
 		if (!IS_QUOTE(*e)) {
-			while (!WHITECHAR(*e) && *e != '>' && *e != '<') e++;
+			while (!WHITECHAR(*e) && !end_of_tag(*e)) e++;
 		} else {
 			unsigned char quote = *e;
 

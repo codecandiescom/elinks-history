@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.56 2003/07/04 11:56:25 jonas Exp $ */
+/* $Id: connection.c,v 1.57 2003/07/04 12:12:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -910,6 +910,17 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 
 	c = mem_calloc(1, sizeof(struct connection));
 	if (!c) {
+		if (download) {
+			download->state = S_BAD_URL;
+			download->end(download, download->data);
+		}
+		mem_free(u);
+		return -1;
+	}
+
+	c->uri.protocol = u;
+
+	if (!parse_uri(&c->uri)) {
 		if (download) download->end(download, download->data);
 		mem_free(u);
 		return -1;

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.25 2003/07/04 11:56:25 jonas Exp $ */
+/* $Id: connection.h,v 1.26 2003/07/04 12:12:08 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -7,6 +7,7 @@
 
 #include "document/cache.h"
 #include "lowlevel/ttime.h"
+#include "protocol/uri.h"
 #include "ssl/ssl.h"
 #include "util/encoding.h"
 #include "util/error.h"
@@ -108,6 +109,7 @@ struct connection {
 	struct list_head downloads;
 	struct remaining_info prg;
 
+	struct uri uri;
 	unsigned char *url;
 	unsigned char *ref_url;
 	void *dnsquery;

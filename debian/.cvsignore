@@ -1,0 +1,10 @@
+Makefile
+Makefile.in
+depcomp
+.deps
+*.swp
+elinks.postinst.debhelper
+elinks.postrm.debhelper
+elinks.substvars
+files
+elinks

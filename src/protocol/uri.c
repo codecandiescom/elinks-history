@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.9 2003/07/12 20:21:15 jonas Exp $ */
+/* $Id: uri.c,v 1.10 2003/07/12 20:42:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,29 +190,52 @@ get_uri_string(struct uri *uri)
 {
 	unsigned char *str = init_str();
 	int len = 0;
+	enum protocol protocol = check_protocol(uri->protocol,
+						uri->protocollen);
+
 
 	if (!str) return NULL;
 	assert(uri->protocol && uri->protocollen && uri->host && uri->hostlen);
 	if_assert_failed { mem_free(str); return NULL; }
 
 	add_bytes_to_str(&str, &len, uri->protocol, uri->protocollen);
-	add_to_str(&str, &len, "://");
-	add_bytes_to_str(&str, &len, uri->host, uri->hostlen);
 	add_chr_to_str(&str, &len, ':');
 
+	if (get_protocol_need_slashes(protocol))
+		add_to_str(&str, &len, "//");
+
+	if (uri->host) {
+#ifdef IPV6
+		int brackets = !!memchr(uri->host, ':', uri->hostlen);
+
+		if (brackets) add_chr_to_str(&str, &len, '[');
+#endif
+		add_bytes_to_str(&str, &len, uri->host, uri->hostlen);
+#ifdef IPV6
+		if (brackets) add_chr_to_str(&str, &len, ']');
+#endif
+	}
+
 	if (uri->port && uri->portlen) {
+		add_chr_to_str(&str, &len, ':');
 		add_bytes_to_str(&str, &len, uri->port, uri->portlen);
 	} else {
-		/* Should user protocols ports be configurable? */
-		enum protocol protocol = check_protocol(uri->protocol,
-							uri->protocollen);
-		int port = get_protocol_port(protocol);
-
-		/* RFC2616 section 3.2.2:
+		/* For HTTP Authentication RFC2616 section 3.2.2:
 		 * "If the port is empty or not given, port 80 is assumed." */
-		/* Port 0 comes from user protocol backend so be httpcentric. */
-		add_num_to_str(&str, &len, (port != 0 ? port : 80));
+		/* For user protocols we don't know a default port. Should
+		 * user protocols ports be configurable? */
+		if (protocol != PROTOCOL_USER) {
+			add_chr_to_str(&str, &len, ':');
+			add_num_to_str(&str, &len, get_protocol_port(protocol));
+		}
 	}
+
+	if (get_protocol_need_slash_after_host(protocol))
+		add_chr_to_str(&str, &len, '/');
+
+	/* TODO Also add path and query info to the URI string but it has to be
+	 * configurable since http auth needs only the protocol and authority
+	 * part. */
 
 	return str;
 }
@@ -252,7 +275,6 @@ encode_uri_string(unsigned char *name, unsigned char **data, int *len)
 		}
 	}
 }
-
 
 /* This function is evil, it modifies its parameter. */
 /* XXX: but decoded string is _never_ longer than encoded string so it's an

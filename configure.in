@@ -444,8 +444,6 @@ AC_MSG_CHECKING([for Guile])
 
 cf_result=no
 
-AC_SAVE_FLAGS
-
 if test "$enable_guile" = "yes"; then
 	## Based on the GUILE_FLAGS macro.
 
@@ -453,26 +451,21 @@ if test "$enable_guile" = "yes"; then
 
 	## First, let's just see if we can find Guile at all.
 	if guile-config --version 2>/dev/null >/dev/null; then
+		cf_result="yes";
+
 		GUILE_LIBS="`guile-config link`"
 		GUILE_CFLAGS="`guile-config compile`"
 		LIBS="$GUILE_LIBS $LIBS"
 		CFLAGS="$CFLAGS $GUILE_CFLAGS"
 		CPPFLAGS="$CPPFLAGS $GUILE_CFLAGS"
-		cf_result="yes";
+		AC_DEFINE(HAVE_GUILE)
+		AC_DEFINE(HAVE_SCRIPTING)
+		AC_SUBST(GUILE_LIBS)
+		AC_SUBST(GUILE_CFLAGS)
 	fi
 fi
 
-if test "$cf_result" != "yes"; then
-	AC_RESTORE_FLAGS
-else
-	AC_DEFINE(HAVE_GUILE)
-	AC_DEFINE(HAVE_SCRIPTING)
-fi
-
-AC_SUBST(GUILE_LIBS)
-AC_SUBST(GUILE_CFLAGS)
-
-if test "$cf_result"; then AC_MSG_RESULT($cf_result); fi
+AC_MSG_RESULT($cf_result);
 
 dnl ===================================================================
 dnl Check for Perl

@@ -1,3 +1,22 @@
+Tue Jun 18 19:52:22 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/header.c:
+
+	Minor tidy up.  
+
+Tue Jun 18 19:36:01 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/parser.c, protocol/http/header.c,
+	util/string.h:
+
+	The macro named U() was renamed to IS_QUOTE().  
+
+Tue Jun 18 08:23:53 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/memdebug.c:
+
+	A typo in an error message in debug_mem_calloc() was fixed.  
+
 Mon Jun 17 21:41:44 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/util/memdebug.c:

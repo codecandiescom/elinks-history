@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.51 2004/04/02 22:04:05 jonas Exp $ */
+/* $Id: task.c,v 1.52 2004/04/02 23:52:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -207,8 +207,8 @@ x:
 			copy_location(loc, cur_loc(ses));
 			add_to_history(&ses->history, loc);
 		}
-		frame = ses_change_frame_url(ses, ses->task.target_frame,
-					     struri(ses->loading_uri));
+		frame = ses_change_frame_uri(ses, ses->task.target_frame,
+					     ses->loading_uri);
 
 		if (!frame) {
 			if (!loaded_in_frame) {

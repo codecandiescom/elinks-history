@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.57 2004/04/02 23:43:16 jonas Exp $ */
+/* $Id: frames.c,v 1.58 2004/04/02 23:52:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,7 +185,7 @@ repeat:
 
 		if (uri) {
 			frame->redirect_cnt++;
-			ses_change_frame_url(ses, name, struri(uri));
+			ses_change_frame_uri(ses, name, uri);
 			done_uri(uri);
 			o->plain = plain;
 			goto repeat;

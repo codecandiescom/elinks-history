@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.163 2003/07/22 02:44:36 jonas Exp $ */
+/* $Id: view.c,v 1.164 2003/07/24 10:48:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1248,12 +1248,11 @@ enum dl_type {
 };
 
 static void
-send_download_do(struct terminal *term, void *xxx, struct session *ses,
-		enum dl_type dlt)
+send_download_do(struct session *ses, enum dl_type dlt)
 {
 	struct document_view *fd;
 
-	assert(term && ses);
+	assert(ses);
 	if_assert_failed return;
 	fd = current_frame(ses);
 	assert(fd && fd->vs && fd->document);
@@ -1290,7 +1289,7 @@ send_download_image(struct terminal *term, void *xxx, struct session *ses)
 {
 	assert(term && ses);
 	if_assert_failed return;
-	send_download_do(term, xxx, ses, IMAGE);
+	send_download_do(ses, IMAGE);
 }
 
 void
@@ -1298,7 +1297,7 @@ send_download(struct terminal *term, void *xxx, struct session *ses)
 {
 	assert(term && ses);
 	if_assert_failed return;
-	send_download_do(term, xxx, ses, URL);
+	send_download_do(ses, URL);
 }
 
 static struct string *

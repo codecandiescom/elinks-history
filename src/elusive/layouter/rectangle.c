@@ -1,5 +1,5 @@
 /* Layout rectangle utility tools */
-/* $Id: rectangle.c,v 1.2 2002/12/30 18:04:50 pasky Exp $ */
+/* $Id: rectangle.c,v 1.3 2002/12/30 23:57:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,6 @@ unsigned char *
 get_rect_attrib(struct layout_rectangle *rect, unsigned char *name)
 {
 	struct attribute *attr = get_attrib(rect->attrs, name);
-	unsigned char *value;
 
 	/* XXX: When we'll be ascending to root, we won't want to let
 	 * get_syntree_attrib() ascend to root, will we? --pasky */
@@ -72,9 +71,5 @@ get_rect_attrib(struct layout_rectangle *rect, unsigned char *name)
 					  : NULL;
 	}
 
-	value = mem_alloc(attr->valuelen + 1);
-	strncpy(value, attr->value, attr->valuelen);
-	value[attr->valuelen] = 0;
-
-	return value;
+	return memacpy(attr->value, attr->valuelen);
 }

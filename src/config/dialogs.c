@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.16 2002/12/11 21:09:49 pasky Exp $ */
+/* $Id: dialogs.c,v 1.17 2002/12/12 22:38:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,7 +194,7 @@ layout_edit_dialog(struct dialog_data *dlg)
 
 	/* TODO: Memory allocation errors handling; any good idea what exactly
 	 * should we do? --pasky */
-	name = straconcat(_(TEXT(T_INFO), term), ": ", option->name, NULL);
+	name = straconcat(_(TEXT(T_NNAME), term), ": ", option->name, NULL);
 	type = straconcat(_(TEXT(T_TYPE), term), ": ", option_types[option->type].name, NULL);
 	value= straconcat(_(TEXT(T_VALUE), term), ": ", NULL);
 	desc = straconcat(_(TEXT(T_DESCRIPTION), term), ": \n", option->desc, NULL);

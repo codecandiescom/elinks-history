@@ -845,6 +845,7 @@ int get_port(unsigned char *);
 void (*get_protocol_handle(unsigned char *))(struct connection *);
 void (*get_external_protocol_function(unsigned char *))(struct session *, unsigned char *);
 unsigned char *get_url_data(unsigned char *);
+unsigned char *strip_url_password(unsigned char *);
 unsigned char *join_urls(unsigned char *, unsigned char *);
 unsigned char *translate_url(unsigned char *, unsigned char *);
 unsigned char *extract_position(unsigned char *);

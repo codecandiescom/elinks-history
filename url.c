@@ -179,7 +179,7 @@ int parse_url(unsigned char *url, int *prlen,
 		host_end = port_end;
 	}
 	
-	if (*host_end) host_end++;
+	if (*host_end) host_end++; /* skip slash */
 	
 	prefix_end = strchr(host_end, POST_CHAR);
 	if (data) *data = host_end;
@@ -282,7 +282,64 @@ unsigned char *get_url_data(unsigned char *url)
 	return d;
 }
 
-/*void translate_directories(unsigned char *url)
+/* This reconstructs URL with password stripped. In order not to duplicate URL
+ * parsing code, we get all the needed info one-by-one.
+ * FIXME: Not terribly effective.
+ * XXX: We don't preserve post information; we're used only in BFU anyway.
+ * XXX: In order to vastly simplify usage we return pointer to static buffer */
+unsigned char *strip_url_password(unsigned char *url)
+{
+	static unsigned char u[MAX_STR_LEN];
+	unsigned char *str;
+
+	u[0] = '\0';
+
+	str = get_protocol_name(url);
+	if (str && *str) {
+		strcat(u, str);
+		strcat(u, "://");
+	}
+	if (str) mem_free(str);
+
+	str = get_user_name(url);
+	if (str && *str) {
+		strcat(u, str);
+		strcat(u, "@");
+	}
+	if (str) mem_free(str);
+
+	str = get_host_name(url);
+	if (str && *str) {
+#ifdef IPV6
+		int brackets = !!strchr(str, ':');
+
+		if (brackets) strcat(u, "[");
+#endif
+		strcat(u, str);
+#ifdef IPV6
+		if (brackets) strcat(u, "]");
+#endif
+	}
+	if (str) mem_free(str);
+
+	str = get_port_str(url);
+	if (str && *str) {
+		strcat(u, ":");
+		strcat(u, str);
+	}
+	if (str) mem_free(str);
+
+	str = get_url_data(url);
+	if (str && *str) {
+		strcat(u, "/");
+		strcat(u, str);
+	}
+
+	return u;
+}
+
+#if 0
+void translate_directories(unsigned char *url)
 {
 	unsigned char *p;
 	unsigned char *dd = get_url_data(url);
@@ -309,7 +366,8 @@ unsigned char *get_url_data(unsigned char *url)
 	}
 	d = p + 1;
 	goto r;
-}*/
+}
+#endif
 
 #define dsep(x) (lo ? dir_sep(x) : (x) == '/')
 

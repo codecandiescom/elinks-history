@@ -2893,86 +2893,144 @@ unsigned char *print_current_titlex(struct f_data_c *fd, int w)
 	return m;
 }
 
-unsigned char *print_current_linkx(struct f_data_c *fd, struct terminal *term)
+unsigned char *print_current_link_do(struct f_data_c *fd,
+				     struct terminal *term)
 {
-	int ll = 0;
-	struct link *l;
-	unsigned char *m;
+	struct link *link;
+	unsigned char *str;
+	int strl = 0;
 	
-	if (!fd) return NULL;
-	if (fd->vs->current_link == -1
-	    || fd->vs->current_link >= fd->f_data->nlinks
-	    || fd->f_data->frame) return NULL;
-	l = &fd->f_data->links[fd->vs->current_link];
-	if (l->type == L_LINK) {
-		if (!l->where && l->where_img) {
-			m = init_str();
-			ll = 0;
-			add_to_str(&m, &ll, _(TEXT(T_IMAGE), term));
-			add_to_str(&m, &ll, " ");
-			add_to_str(&m, &ll, l->where_img);
-			goto p;
-		}
-		if (strlen(l->where) >= 4 && !casecmp(l->where, "MAP@", 4)) {
-			m = init_str();
-			ll = 0;
-			add_to_str(&m, &ll, _(TEXT(T_USEMAP), term));
-			add_to_str(&m, &ll, " ");
-			add_to_str(&m, &ll, l->where + 4);
-			goto p;
-		}
-		m = stracpy(l->where);
-		goto p;
+	if (!fd || fd->f_data->frame || fd->vs->current_link == -1
+	    || fd->vs->current_link >= fd->f_data->nlinks) {
+		return NULL;
 	}
-	if (!l->form) return NULL;
-	if (l->type == L_BUTTON) {
-		if (l->form->type == FC_RESET) {
-			m = stracpy(_(TEXT(T_RESET_FORM), term));
-			goto p;
+	
+	link = &fd->f_data->links[fd->vs->current_link];
+	
+	if (link->type == L_LINK) {
+		if (!link->where && link->where_img) {
+			str = init_str();
+			strl = 0;
+			
+			add_to_str(&str, &strl, _(TEXT(T_IMAGE), term));
+			add_to_str(&str, &strl, " ");
+			add_to_str(&str, &strl, strip_url_password(link->where_img));
+			return str;
 		}
-		if (!l->form->action) return NULL;
-		m = init_str();
-		ll = 0;
-		if (l->form->method == FM_GET) add_to_str(&m, &ll, _(TEXT(T_SUBMIT_FORM_TO), term));
-		else add_to_str(&m, &ll, _(TEXT(T_POST_FORM_TO), term));
-		add_to_str(&m, &ll, " ");
-		add_to_str(&m, &ll, l->form->action);
-		goto p;
+		
+		if (strlen(link->where) >= 4
+		    && !casecmp(link->where, "MAP@", 4)) {
+			str = init_str();
+			strl = 0;
+			
+			add_to_str(&str, &strl, _(TEXT(T_USEMAP), term));
+			add_to_str(&str, &strl, " ");
+			add_to_str(&str, &strl, strip_url_password(link->where + 4));
+			return str;
+		}
+		
+		str = stracpy(strip_url_password(link->where));
+		return str;
 	}
-	if (l->type == L_CHECKBOX || l->type == L_SELECT || l->type == L_FIELD || l->type == L_AREA) {
-		m = init_str();
-		ll = 0;
-		if (l->form->type == FC_RADIO) add_to_str(&m, &ll, _(TEXT(T_RADIO_BUTTON), term));
-		else if (l->form->type == FC_CHECKBOX) add_to_str(&m, &ll, _(TEXT(T_CHECKBOX), term));
-		else if (l->form->type == FC_SELECT) add_to_str(&m, &ll, _(TEXT(T_SELECT_FIELD), term));
-		else if (l->form->type == FC_TEXT) add_to_str(&m, &ll, _(TEXT(T_TEXT_FIELD), term));
-		else if (l->form->type == FC_TEXTAREA) add_to_str(&m, &ll, _(TEXT(T_TEXT_AREA), term));
-		else if (l->form->type == FC_FILE) add_to_str(&m, &ll, _(TEXT(T_FILE_UPLOAD), term));
-		else if (l->form->type == FC_PASSWORD) add_to_str(&m, &ll, _(TEXT(T_PASSWORD_FIELD), term));
-		else {
-			mem_free(m);
+	
+	if (!link->form) {
+		return NULL;
+	}
+	
+	if (link->type == L_BUTTON) {
+		if (link->form->type == FC_RESET) {
+			str = stracpy(_(TEXT(T_RESET_FORM), term));
+			return str;
+		}
+		
+		if (!link->form->action) {
 			return NULL;
 		}
-		if (l->form->name && l->form->name[0]) add_to_str(&m, &ll, ", "), add_to_str(&m, &ll, _(TEXT(T_NAME), term)), add_to_str(&m, &ll, " "), add_to_str(&m, &ll, l->form->name);
-		if ((l->form->type == FC_CHECKBOX || l->form->type == FC_RADIO) && l->form->default_value && l->form->default_value[0]) add_to_str(&m, &ll, ", "), add_to_str(&m, &ll, _(TEXT(T_VALUE), term)), add_to_str(&m, &ll, " "), add_to_str(&m, &ll, l->form->default_value);
-		if (l->type == L_FIELD && !has_form_submit(fd->f_data, l->form) && l->form->action) {
-			add_to_str(&m, &ll, ", ");
-			add_to_str(&m, &ll, _(TEXT(T_HIT_ENTER_TO), term));
-			add_to_str(&m, &ll, " ");
-			if (l->form->method == FM_GET) add_to_str(&m, &ll, _(TEXT(T_SUBMIT_TO), term));
-			else add_to_str(&m, &ll, _(TEXT(T_POST_TO), term));
-			add_to_str(&m, &ll, " ");
-			add_to_str(&m, &ll, l->form->action);
-		}
-		goto p;
+		
+		str = init_str();
+		strl = 0;
+		
+		if (link->form->method == FM_GET)
+			add_to_str(&str, &strl, _(TEXT(T_SUBMIT_FORM_TO), term));
+		else
+			add_to_str(&str, &strl, _(TEXT(T_POST_FORM_TO), term));
+		add_to_str(&str, &strl, " ");
+		add_to_str(&str, &strl, strip_url_password(link->form->action));
+		return str;
 	}
-	p:
-	return m;
+	
+	if (link->type == L_CHECKBOX || link->type == L_SELECT
+	    || link->type == L_FIELD || link->type == L_AREA) {
+		str = init_str();
+		strl = 0;
+		
+		if (link->form->type == FC_RADIO)
+			add_to_str(&str, &strl, _(TEXT(T_RADIO_BUTTON), term));
+		
+		else if (link->form->type == FC_CHECKBOX)
+			add_to_str(&str, &strl, _(TEXT(T_CHECKBOX), term));
+		
+		else if (link->form->type == FC_SELECT)
+			add_to_str(&str, &strl, _(TEXT(T_SELECT_FIELD), term));
+		
+		else if (link->form->type == FC_TEXT)
+			add_to_str(&str, &strl, _(TEXT(T_TEXT_FIELD), term));
+		
+		else if (link->form->type == FC_TEXTAREA)
+			add_to_str(&str, &strl, _(TEXT(T_TEXT_AREA), term));
+		
+		else if (link->form->type == FC_FILE)
+			add_to_str(&str, &strl, _(TEXT(T_FILE_UPLOAD), term));
+		
+		else if (link->form->type == FC_PASSWORD)
+			add_to_str(&str, &strl, _(TEXT(T_PASSWORD_FIELD), term));
+		
+		else {
+			mem_free(str);
+			return NULL;
+		}
+		
+		if (link->form->name && link->form->name[0]) {
+			add_to_str(&str, &strl, ", ");
+			add_to_str(&str, &strl, _(TEXT(T_NAME), term));
+			add_to_str(&str, &strl, " ");
+			add_to_str(&str, &strl, link->form->name);
+		}
+		
+		if ((link->form->type == FC_CHECKBOX ||
+		     link->form->type == FC_RADIO)
+		    && link->form->default_value
+		    && link->form->default_value[0]) {
+			add_to_str(&str, &strl, ", ");
+			add_to_str(&str, &strl, _(TEXT(T_VALUE), term));
+			add_to_str(&str, &strl, " ");
+			add_to_str(&str, &strl, link->form->default_value);
+		}
+		
+		if (link->type == L_FIELD
+		    && !has_form_submit(fd->f_data, link->form)
+		    && link->form->action) {
+			add_to_str(&str, &strl, ", ");
+			add_to_str(&str, &strl, _(TEXT(T_HIT_ENTER_TO), term));
+			add_to_str(&str, &strl, " ");
+			if (link->form->method == FM_GET)
+				add_to_str(&str, &strl, _(TEXT(T_SUBMIT_TO), term));
+			else
+				add_to_str(&str, &strl, _(TEXT(T_POST_TO), term));
+			add_to_str(&str, &strl, " ");
+			add_to_str(&str, &strl, strip_url_password(link->form->action));
+		}
+		
+		return str;
+	}
+	
+	/* Uh-oh? */
+	return NULL;
 }
 
 unsigned char *print_current_link(struct session *ses)
 {
-	return print_current_linkx(current_frame(ses), ses->term);
+	return print_current_link_do(current_frame(ses), ses->term);
 }
 
 unsigned char *print_current_title(struct session *ses)
@@ -2980,14 +3038,15 @@ unsigned char *print_current_title(struct session *ses)
 	return print_current_titlex(current_frame(ses), ses->term->x);
 }
 
-void loc_msg(struct terminal *term, struct location *lo, struct f_data_c *frame)
+void loc_msg(struct terminal *term, struct location *location,
+	     struct f_data_c *frame)
 {
 	struct cache_entry *ce;
-	unsigned char *s;
-	int l = 0;
 	unsigned char *a;
+	unsigned char *str;
+	int strl;
 	
-	if (!lo) {
+	if (!location) {
 		msg_box(term, NULL,
 			TEXT(T_INFO), AL_LEFT,
 			TEXT(T_YOU_ARE_NOWHERE),
@@ -2995,68 +3054,98 @@ void loc_msg(struct terminal *term, struct location *lo, struct f_data_c *frame)
 			TEXT(T_OK), NULL, B_ENTER | B_ESC);
 		return;
 	}
-	s = init_str();
-	add_to_str(&s, &l, _(TEXT(T_URL), term));
-	add_to_str(&s, &l, ": ");
-	if (strchr(lo->vs.url, POST_CHAR))
-		add_bytes_to_str(&s, &l, lo->vs.url, (unsigned char *)strchr(lo->vs.url, POST_CHAR) - (unsigned char *)lo->vs.url);
-	else add_to_str(&s, &l, lo->vs.url);
-	if (!get_cache_entry(lo->vs.url, &ce)) {
-		add_to_str(&s, &l, "\n");
-		add_to_str(&s, &l, _(TEXT(T_SIZE), term));
-		add_to_str(&s, &l, ": ");
-		add_num_to_str(&s, &l, ce->length);
+	
+	str = init_str();
+	strl = 0;
+	
+	add_to_str(&str, &strl, _(TEXT(T_URL), term));
+	add_to_str(&str, &strl, ": ");
+
+	add_to_str(&str, &strl, strip_url_password(location->vs.url));
+	
+#if 0
+	if (strchr(location->vs.url, POST_CHAR)) {
+		add_bytes_to_str(&str, &strl, location->vs.url,
+				 (unsigned char *) strchr(location->vs.url,
+							  POST_CHAR)
+				 - (unsigned char *) location->vs.url);
+		
+	} else {
+		add_to_str(&str, &strl, location->vs.url);
+	}
+#endif
+	
+	if (!get_cache_entry(location->vs.url, &ce)) {
+		add_to_str(&str, &strl, "\n");
+		add_to_str(&str, &strl, _(TEXT(T_SIZE), term));
+		add_to_str(&str, &strl, ": ");
+		add_num_to_str(&str, &strl, ce->length);
+		
 		if (ce->incomplete) {
-			add_to_str(&s, &l, " (");
-			add_to_str(&s, &l, _(TEXT(T_INCOMPLETE), term));
-			add_to_str(&s, &l, ")");
+			add_to_str(&str, &strl, " (");
+			add_to_str(&str, &strl, _(TEXT(T_INCOMPLETE), term));
+			add_to_str(&str, &strl, ")");
 		}
-		add_to_str(&s, &l, "\n");
-		add_to_str(&s, &l, _(TEXT(T_CODEPAGE), term));
-		add_to_str(&s, &l, ": ");
-		add_to_str(&s, &l, get_cp_name(lo->vs.f->f_data->cp));
-		if (lo->vs.f->f_data->ass == 1)
-			add_to_str(&s, &l, " ("), add_to_str(&s, &l, _(TEXT(T_ASSUMED), term)), add_to_str(&s, &l, ")");
-		if (lo->vs.f->f_data->ass == 2)
-			add_to_str(&s, &l, " ("), add_to_str(&s, &l, _(TEXT(T_IGNORING_SERVER_SETTING), term)), add_to_str(&s, &l, ")");
+		
+		add_to_str(&str, &strl, "\n");
+		add_to_str(&str, &strl, _(TEXT(T_CODEPAGE), term));
+		add_to_str(&str, &strl, ": ");
+		add_to_str(&str, &strl, get_cp_name(location->vs.f->f_data->cp));
+		
+		if (location->vs.f->f_data->ass == 1) {
+			add_to_str(&str, &strl, " (");
+			add_to_str(&str, &strl, _(TEXT(T_ASSUMED), term));
+			add_to_str(&str, &strl, ")");
+		}
+		
+		if (location->vs.f->f_data->ass == 2) {
+			add_to_str(&str, &strl, " (");
+			add_to_str(&str, &strl, _(TEXT(T_IGNORING_SERVER_SETTING), term));
+			add_to_str(&str, &strl, ")");
+		}
+		
 		if ((a = parse_http_header(ce->head, "Server", NULL))) {
-			add_to_str(&s, &l, "\n");
-			add_to_str(&s, &l, _(TEXT(T_SERVER), term));
-			add_to_str(&s, &l, ": ");
-			add_to_str(&s, &l, a);
+			add_to_str(&str, &strl, "\n");
+			add_to_str(&str, &strl, _(TEXT(T_SERVER), term));
+			add_to_str(&str, &strl, ": ");
+			add_to_str(&str, &strl, a);
 			mem_free(a);
 		}
+		
 		if ((a = parse_http_header(ce->head, "Date", NULL))) {
-			add_to_str(&s, &l, "\n");
-			add_to_str(&s, &l, _(TEXT(T_DATE), term));
-			add_to_str(&s, &l, ": ");
-			add_to_str(&s, &l, a);
+			add_to_str(&str, &strl, "\n");
+			add_to_str(&str, &strl, _(TEXT(T_DATE), term));
+			add_to_str(&str, &strl, ": ");
+			add_to_str(&str, &strl, a);
 			mem_free(a);
 		}
+		
 		if (ce->last_modified) {
-			add_to_str(&s, &l, "\n");
-			add_to_str(&s, &l, _(TEXT(T_LAST_MODIFIED), term));
-			add_to_str(&s, &l, ": ");
-			add_to_str(&s, &l, ce->last_modified);
+			add_to_str(&str, &strl, "\n");
+			add_to_str(&str, &strl, _(TEXT(T_LAST_MODIFIED), term));
+			add_to_str(&str, &strl, ": ");
+			add_to_str(&str, &strl, ce->last_modified);
 		}
 #ifdef HAVE_SSL
 		if (ce->ssl_info) {
-			add_to_str(&s, &l, "\n");
-			add_to_str(&s, &l, "SSL cipher: ");
-			add_to_str(&s, &l, ce->ssl_info);
+			add_to_str(&str, &strl, "\n");
+			add_to_str(&str, &strl, "SSL cipher: ");
+			add_to_str(&str, &strl, ce->ssl_info);
 		}
 #endif
 	}
-	if ((a = print_current_linkx(frame, term))) {
-		add_to_str(&s, &l, "\n\n");
-		add_to_str(&s, &l, _(TEXT(T_LINK), term));
-		add_to_str(&s, &l, ": ");
-		add_to_str(&s, &l, a);
+	
+	if ((a = print_current_link_do(frame, term))) {
+		add_to_str(&str, &strl, "\n\n");
+		add_to_str(&str, &strl, _(TEXT(T_LINK), term));
+		add_to_str(&str, &strl, ": ");
+		add_to_str(&str, &strl, a);
 		mem_free(a);
 	}
-	msg_box(term, getml(s, NULL),
+	
+	msg_box(term, getml(str, NULL),
 		TEXT(T_INFO), AL_LEFT,
-		s,
+		str,
 		NULL, 1,
 		TEXT(T_OK), NULL, B_ENTER | B_ESC);
 }

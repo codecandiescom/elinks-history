@@ -1,5 +1,5 @@
 /* Config file and commandline proccessing */
-/* $Id: conf.c,v 1.13 2002/05/19 19:34:57 pasky Exp $ */
+/* $Id: conf.c,v 1.14 2002/05/20 12:39:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,30 @@
 #include "util/secsave.h"
 
 
-unsigned char *_parse_options(int argc, unsigned char *argv[], struct hash *opt)
+/* Config file has only very simple grammar:
+ * 
+ * /^set option *= *value;$/
+ * /^#.*$/
+ * 
+ * Where option consists from any number of categories separated by dots and
+ * name of the option itself. Both category and option name consists from
+ * [a-zA-Z0-9_] - using uppercase letters is not recommended, though.
+ * 
+ * Value can consist from:
+ * - number (it will be converted to int/long)
+ * - enum (like on, off; true, fake, last_url; etc ;) - in planning state yet
+ * - string - "blah blah"
+ * 
+ * "set" command is parsed first, and then type-specific function is called,
+ * with option as one parameter and value as a second. Usually it just assigns
+ * value to an option, but sometimes you may want to first create the option
+ * ;). Then this will come handy. */
+
+
+/* TODO: This ought to be rewritten - we want special hash for commandline
+ * options as "aliases" there. */
+unsigned char *
+_parse_options(int argc, unsigned char *argv[], struct hash *opt)
 {
 	unsigned char *location = NULL;
 
@@ -54,9 +77,11 @@ unsigned char *_parse_options(int argc, unsigned char *argv[], struct hash *opt)
 			if (!option)
 				continue;
 
-			if (option_types[option->type].rd_cmd &&
-			    option->flags & OPT_CMDLINE) {
-				unsigned char *err = option_types[option->type].rd_cmd(option, &argv, &argc);
+			if (option_types[option->type].rd_cmd
+			    && option->flags & OPT_CMDLINE) {
+				unsigned char *err;
+
+				err = option_types[option->type].rd_cmd(option, &argv, &argc);
 
 				if (err) {
 					if (err[0])
@@ -85,12 +110,16 @@ found:
 	return location ? location : (unsigned char *) "";
 }
 
-unsigned char *parse_options(int argc, unsigned char *argv[])
+unsigned char *
+parse_options(int argc, unsigned char *argv[])
 {
 	return _parse_options(argc, argv, root_options);
 }
 
-unsigned char *get_token(unsigned char **line)
+
+/* TODO: This ought to disappear. */
+unsigned char *
+get_token(unsigned char **line)
 {
 	unsigned char *s = NULL;
 	int l = 0;
@@ -118,7 +147,9 @@ unsigned char *get_token(unsigned char **line)
 	return s;
 }
 
-void parse_config_file(unsigned char *name, unsigned char *file, struct hash *opt)
+/* TODO: New config file format. */
+void
+parse_config_file(unsigned char *name, unsigned char *file, struct hash *opt)
 {
 	int error = 0;
 	int line = 0;
@@ -165,6 +196,8 @@ void parse_config_file(unsigned char *name, unsigned char *file, struct hash *op
 		tok = get_token(&id);
 		if (!tok) continue;
 
+		/* TODO: Move following to separate function. */
+
 		tok_len = strlen(tok);
 		oname = mem_alloc(tok_len + 1);
 		safe_strncpy(oname, tok, tok_len + 1);
@@ -201,7 +234,10 @@ next:
 	}
 }
 
-unsigned char *create_config_string(struct hash *options)
+/* TODO: We want to get rid of user.cfg. Let's rewrite config file
+ * non-destructively. */
+unsigned char *
+create_config_string(struct hash *options)
 {
 	unsigned char *str = init_str();
 	int len = 0;
@@ -227,11 +263,15 @@ unsigned char *create_config_string(struct hash *options)
 	return str;
 }
 
+/* TODO: No line context. Treat whole file as one long line, where # is comment
+ * start and \n is comment end. */
+
 #define FILE_BUF	1024
 
 unsigned char cfg_buffer[FILE_BUF];
 
-unsigned char *read_config_file(unsigned char *name)
+unsigned char *
+read_config_file(unsigned char *name)
 {
 	int h, r;
 	int l = 0;
@@ -279,13 +319,15 @@ ok:
 	mem_free(config_file);
 }
 
-void load_config()
+void
+load_config()
 {
 	load_config_file("/etc/elinks/", "elinks.cfg");
 	load_config_file(elinks_home, "elinks.cfg");
 	load_config_file(elinks_home, "user.cfg");
 }
 
+/* TODO: The error condition should be handled somewhere else. */
 int
 write_config_file(unsigned char *prefix, unsigned char *name, struct hash *o,
 		  struct terminal *term)
@@ -324,7 +366,8 @@ free_cfg_str:
 	return ret;
 }
 
-void write_config(struct terminal *term)
+void
+write_config(struct terminal *term)
 {
 	write_config_file(elinks_home, "elinks.cfg", root_options, term);
 }

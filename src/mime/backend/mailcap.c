@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.19 2003/06/06 19:04:13 jonas Exp $ */
+/* $Id: mailcap.c,v 1.20 2003/06/06 19:13:35 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -76,8 +76,8 @@ struct mailcap_entry {
 };
 
 /* State variables */
-static int mailcap_map_entries = 0;
 static struct hash *mailcap_map = NULL;
+static int mailcap_map_size = 0;
 
 
 static inline void
@@ -144,7 +144,7 @@ init_mailcap_entry(unsigned char *type, unsigned char *command, int priority)
 	}
 
 	add_to_list_bottom(mitem->entries, entry);
-	mailcap_map_entries++;
+	mailcap_map_size++;
 
 	return entry;
 }
@@ -231,10 +231,10 @@ parse_optional_fields(struct mailcap_entry *entry, unsigned char *line)
 
 		if (!field) break;
 
-		if (!strcasecmp(field, "needsterminal")) {
+		if (!strncasecmp(field, "needsterminal", 13)) {
 				entry->needsterminal = 1;
 
-		} else if (!strcasecmp(field, "copiousoutput")) {
+		} else if (!strncasecmp(field, "copiousoutput", 13)) {
 			entry->copiousoutput = 1;
 
 		} else if (!strncasecmp(field, "test", 4)) {
@@ -374,7 +374,7 @@ done_mailcap(void)
 
 	free_hash(mailcap_map);
 	mailcap_map = NULL;
-	mailcap_map_entries = 0;
+	mailcap_map_size = 0;
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.76 2003/10/23 09:48:36 jonas Exp $ */
+/* $Id: options.h,v 1.77 2003/10/23 15:03:30 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -114,6 +114,9 @@ struct option {
 	struct listbox_item *box_item;
 };
 
+#define INIT_OPTION(name, flags, type, min, max, value, desc, capt) \
+	{ NULL_LIST_HEAD, name, flags, type, min, max, { value }, desc, capt }
+
 extern struct option options_root;
 extern struct option *config_options;
 extern struct option *cmdline_options;
@@ -223,9 +226,9 @@ do { \
 #define add_opt_tree_tree(tree, path, capt, name, flags, desc) \
 	add_opt(tree, path, capt, name, flags, OPT_TREE, 0, 0, init_options_tree(), DESC(desc));
 
+
 #define add_opt_bool(path, capt, name, flags, def, desc) \
 	add_opt_bool_tree(config_options, path, capt, name, flags, def, DESC(desc))
-
 
 #define add_opt_int(path, capt, name, flags, min, max, def, desc) \
 	add_opt_int_tree(config_options, path, capt, name, flags, min, max, def, DESC(desc))
@@ -256,7 +259,6 @@ do { \
 
 #define add_opt_tree(path, capt, name, flags, desc) \
 	add_opt_tree_tree(config_options, path, capt, name, flags, DESC(desc))
-
 
 /* TODO: We need to do *something* with this ;). */
 

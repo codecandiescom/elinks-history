@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.41 2003/05/15 23:37:11 zas Exp $ */
+/* $Id: info.c,v 1.42 2003/05/19 13:23:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,9 +40,9 @@ menu_about(struct terminal *term, void *d, struct session *ses)
 	unsigned char *s;
 
 	/* XXX: The s is then gettextized again inside of msgbox, it looks. */
-
+	/* XXX: I don't see where ... --Zas */
 	s = straconcat(
-		_("ELinks ", term),
+		"ELinks ",
 		/* FIXME: This should be elsewhere. */
 		VERSION_STRING "\n",
 #ifdef DEBUG
@@ -61,44 +61,44 @@ menu_about(struct terminal *term, void *d, struct session *ses)
 		_("Text WWW browser", term),
 
 		"\n\n",
-		_("Features:", term),
+		_("Features:", term), " ",
 #ifndef DEBUG
-		_(" Standard", term), ",",
+		_("Standard", term), ", ",
 #else
-		_(" Debug", term), ",",
+		_("Debug", term), ", ",
 #endif
 #ifdef FASTMEM
-		_(" Fastmem", term), ",",
+		_("Fastmem", term), ", ",
 #endif
 #ifdef HAVE_SSL
-		_(" SSL", term),
+		_("SSL", term),
 #ifdef HAVE_OPENSSL
 		"(OpenSSL)",
 #elif defined(HAVE_GNUTLS)
 		"(GNUTLS)",
 #endif
-		 ",",
+		 ", ",
 #endif
 #ifdef HAVE_LUA
-		_(" Lua", term), ",",
+		"Lua", ", ",
 #endif
 #ifdef IPV6
-		_(" IPv6", term), ",",
+		"IPv6", ", ",
 #endif
 #ifdef BOOKMARKS
-		_(" Bookmarks", term), ",",
+		_("Bookmarks", term), ", ",
 #endif
 #ifdef COOKIES
-		_(" Cookies", term), ",",
+		_("Cookies", term), ", ",
 #endif
 #ifdef GLOBHIST
-		_(" GlobHist", term), ",",
+		_("GlobHist", term), ", ",
 #endif
 #ifdef HAVE_ZLIB_H
-		_(" gzip", term), ",",
+		"gzip" ", ",
 #endif
 #ifdef HAVE_BZLIB_H
-		_(" bzip2", term),
+		" bzip2",
 #endif
 		NULL
 	);

@@ -1,4 +1,4 @@
-/* $Id: timers.h,v 1.9 2005/03/10 13:47:14 jonas Exp $ */
+/* $Id: timers.h,v 1.10 2005/03/10 15:30:13 zas Exp $ */
 
 #ifndef EL__LOWLEVEL_TIMERS_H
 #define EL__LOWLEVEL_TIMERS_H
@@ -10,7 +10,6 @@ struct timer;
 
 /* Little hack, timer_id_T is in fact a pointer to the timer, so
  * it has to be of a pointer type.
- * Using void * because we don't want to export struct timer.
  * The fact each timer is allocated ensure us that timer id will
  * be unique.
  * That way there is no need of id field in struct timer. --Zas */

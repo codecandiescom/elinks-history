@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.4 2004/01/18 15:59:38 jonas Exp $ */
+/* $Id: scanner.h,v 1.5 2004/01/18 16:12:07 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -6,24 +6,31 @@
 #include "document/css/property.h"
 #include "util/error.h"
 
-enum css_token_type {
-	CSS_TOKEN_NONE,
 
-	/* Tokens can contain chars that have special meaning like '*'. Their
-	 * type are simply their char value. So all non char tokens have value
-	 * greater than 256. */
-	CSS_TOKEN_DIGIT = 256,
-	CSS_TOKEN_HEX_COLOR,
-	CSS_TOKEN_IDENTIFIER,
-	CSS_TOKEN_NAME,
-	CSS_TOKEN_PERCENTAGE,
-
-	CSS_TOKEN_GARBAGE,
-};
-
-/* This is a token and scanner state */
+/* The {struct css_token} describes one CSS scanner state. There are two kinds
+ * of tokens: char and non-char tokens. Char tokens contains only one char and
+ * simply have their char value as type. They are tokens having special control
+ * meaning in the CSS code, like ':', ';', '{', '}' and '*'. Non char tokens
+ * contains one or more chars and contains stuff like digit or indentifier
+ * string. */
 struct css_token {
-	enum css_token_type type;
+	/* The type the token */
+	enum css_token_type {
+		CSS_TOKEN_NONE,
+
+		/* Char tokens have type (integer values) from 255 and down and
+		 * non char tokens have values from 256 and up. */
+		CSS_TOKEN_DIGIT = 256,
+		CSS_TOKEN_HEX_COLOR,
+		CSS_TOKEN_IDENTIFIER,
+		CSS_TOKEN_NAME,
+		CSS_TOKEN_PERCENTAGE,
+
+		/* A special token for unrecognized tokens */
+		CSS_TOKEN_GARBAGE,
+	} type;
+
+	/* The start of the token string and the token length */
 	unsigned char *string;
 	int length;
 };

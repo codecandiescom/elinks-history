@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.66 2003/09/09 18:00:38 jonas Exp $ */
+/* $Id: draw.c,v 1.67 2003/09/09 21:52:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -272,5 +272,5 @@ void
 clear_terminal(struct terminal *term)
 {
 	draw_area(term, 0, 0, term->x, term->y, ' ', 0, NULL);
-	set_cursor(term, 0, 0, 0);
+	set_cursor(term, 0, 0, 1);
 }

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.200 2003/09/09 17:53:16 jonas Exp $ */
+/* $Id: view.c,v 1.201 2003/09/09 21:52:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -299,7 +299,7 @@ draw_doc(struct terminal *t, struct document_view *scr, int active)
 	if (xw < 2 || yw < 2) return;
 
 	if (active) {
-		set_cursor(t, xp + xw - 1, yp + yw - 1, 0);
+		set_cursor(t, xp + xw - 1, yp + yw - 1, 1);
 		set_window_ptr(get_current_tab(t), xp, yp);
 	}
 

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.272 2004/08/30 03:06:48 jonas Exp $ */
+/* $Id: uri.c,v 1.273 2004/08/30 03:08:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,7 +167,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 		if (datalen <= 0)
 			datalen = strlen(prefix_end);
 		else if (prefix_end[datalen] == '#') {
-			uri->fragment = uri->data + datalen + 1;
+			uri->fragment = prefix_end + datalen + 1;
 			uri->fragmentlen = strlen(uri->fragment);
 		}
 

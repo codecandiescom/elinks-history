@@ -131,6 +131,9 @@ Jan Sembera <fis@ji.cz>
 Jimenez Martinez Angel Luis <al026635@alumail.uji.es>
 	Spanish translation
 
+Julian Kinraid <jkinraid@clear.net.nz>
+	QNX-related fixes
+
 Kaloian Doganov <kaloian@europe.com>
 	Bulgarian translation
 	Bulgarian translation update ;)
@@ -292,4 +295,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 <zimon@niksula.hut.fi>
 	RPM spec file in contrib/
 
-$Id: AUTHORS,v 1.48 2002/04/03 20:52:41 pasky Exp $
+$Id: AUTHORS,v 1.49 2002/04/16 18:34:56 pasky Exp $

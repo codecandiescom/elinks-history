@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.2 2002/04/11 16:16:40 pasky Exp $ */
+/* $Id: options.c,v 1.3 2002/04/16 18:34:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -381,6 +381,7 @@ unsigned char *net_msg[] = {
 	TEXT(T_SET_TIME_OF_DOWNLOADED_FILES),
 	"",
 	"",
+	NULL
 };
 
 void
@@ -533,7 +534,8 @@ unsigned char *prg_msg[] = {
 	TEXT(T_MAILTO_PROG),
 	TEXT(T_TELNET_PROG),
 	TEXT(T_TN3270_PROG),
-	""
+	"",
+	NULL	
 };
 
 void

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.8 2002/04/16 12:41:40 pasky Exp $ */
+/* $Id: os_dep.c,v 1.9 2002/04/16 18:34:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,9 @@
 #ifdef HAVE_SYS_IOCTL_H
 #include <sys/ioctl.h>
 #endif
+#ifdef HAVE_SYS_SIGNAL_H
 #include <sys/signal.h>
+#endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif

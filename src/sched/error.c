@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: error.c,v 1.14 2003/11/29 18:07:44 jonas Exp $ */
+/* $Id: error.c,v 1.15 2003/11/29 18:18:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,7 +134,7 @@ free_strerror_buf(void)
 
 #define estimated_time(progress) \
 	(((progress)->size - (progress)->pos) \
-	 / ((longlong) (progress)->loaded * 10 / (progress)->elapsed / 100) \
+	 / ((longlong) (progress)->loaded * 10 / ((progress)->elapsed / 100)) \
 	 * 1000)
 
 unsigned char *

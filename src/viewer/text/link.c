@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.14 2003/07/22 14:53:48 jonas Exp $ */
+/* $Id: link.c,v 1.15 2003/07/24 11:09:20 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -690,7 +690,7 @@ choose_mouse_link(struct document_view *f, struct event *ev)
 void
 jump_to_link_number(struct session *ses, struct document_view *fd, int n)
 {
-	assert(ses && fd && fd->vs);
+	assert(ses && fd && fd->vs && fd->document);
 	if_assert_failed return;
 
 	if (n < 0 || n > fd->document->nlinks) return;

@@ -1,3 +1,39 @@
+Sun Aug 11 18:54:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/: listbox.c, listbox.h:
+
+	Added listbox_item.(parent,child), guess for what ;-).  
+
+Sun Aug 11 18:25:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/inphist.c, bfu/listbox.c, bfu/listbox.h, bfu/menu.c,
+	bfu/menu.h, bookmarks/dialogs.c, dialogs/globhist.c,
+	dialogs/menu.c, dialogs/mime.c, dialogs/options.c, document/view.c,
+	document/html/parser.c:
+
+	box_item -> listbox_item, listbox_item_free -> item_free, item_free
+	enum is now actually used..  
+
+Sun Aug 11 18:07:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/listbox.c, bfu/listbox.h, bookmarks/dialogs.c,
+	dialogs/globhist.c:
+
+	dlg_data_item_data_box -> listbox_data 
+
+Sun Aug 11 17:17:18 2002  Petr Baudis <pasky@ji.cz>:
+
+	* TODO, BUGS:
+
+	Updates.  
+
+Sun Aug 11 13:49:45 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/: timer.c, timer.h:
+
+	Simple keyboard inactivity timer support (yes, someone can make use
+	of this).  
+
 Sat Aug 10 10:41:24 2002  Laurent Monin <zas@norz.org>:
 
 	* src/config/options.c:

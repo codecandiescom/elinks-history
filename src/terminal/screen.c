@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.23 2003/07/26 01:36:58 jonas Exp $ */
+/* $Id: screen.c,v 1.24 2003/07/26 02:14:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,18 +92,18 @@ struct rs_opt_cache {
 /* Time critical section. */
 static inline void
 print_char(struct string *screen, struct rs_opt_cache *opt_cache, unsigned ch,
-	   int *mode, int *attrib)
+	   int *prev_mode, int *prev_attrib)
 {
 	unsigned char c = ch & 0xff;
-	unsigned char A = ch >> 8 & 0x7f;
-	unsigned char B = ch >> 15;
+	unsigned char attrib = ch >> 8 & 0x7f;
+	unsigned char mode = ch >> 15;
 
 	if (opt_cache->type == TERM_LINUX) {
 		if (opt_cache->m11_hack && !opt_cache->utf_8_io) {
-			if (B != *mode) {
-				*mode = B;
+			if (mode != *prev_mode) {
+				*prev_mode = mode;
 
-				if (!*mode) {
+				if (!mode) {
 					add_bytes_to_string(screen, "\033[10m", 5);
 				} else {
 					add_bytes_to_string(screen, "\033[11m", 5);
@@ -111,26 +111,26 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache, unsigned ch,
 			}
 		}
 
-		if (opt_cache->restrict_852 && B && c >= 176 && c < 224
+		if (opt_cache->restrict_852 && mode && c >= 176 && c < 224
 		    && frame_restrict[c - 176]) {
 			c = frame_restrict[c - 176];
 		}
 
 	} else if (opt_cache->type == TERM_VT100 && !opt_cache->utf_8_io) {
-		if (B != *mode) {
-			*mode = B;
-			if (!*mode) {
+		if (mode != *prev_mode) {
+			*prev_mode = mode;
+			if (!mode) {
 				add_char_to_string(screen, '\x0f');
 			} else {
 				add_char_to_string(screen, '\x0e');
 			}
 		}
 
-		if (*mode && c >= 176 && c < 224) {
+		if (mode && c >= 176 && c < 224) {
 			c = frame_vt100[c - 176];
 		}
 
-	} else if (B && c >= 176 && c < 224) {
+	} else if (mode && c >= 176 && c < 224) {
 		if (opt_cache->type == TERM_VT100) {
 			c = frame_vt100_u[c - 176];
 		} else if (opt_cache->type == TERM_KOI8) {
@@ -140,15 +140,15 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache, unsigned ch,
 		}
 	}
 
-	if (!(A & 0100) && (A >> 3) == (A & 7)) {
-		A = (A & 070) | 7 * !(A & 020);
+	if (!(attrib & 0100) && (attrib >> 3) == (attrib & 7)) {
+		attrib = (attrib & 070) | 7 * !(attrib & 020);
 	}
 
-	if (A != *attrib) {
+	if (attrib != *prev_attrib) {
 		unsigned char code[11];
 		int length;
 
-		*attrib = A;
+		*prev_attrib = attrib;
 
 		code[0] = '\033';
 		code[1] = '[';
@@ -157,9 +157,9 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache, unsigned ch,
 		if (opt_cache->colors) {
 			code[3] = ';';
 			code[4] = '3';
-			code[5] = (*attrib & 7) + '0';
+			code[5] = (attrib & 7) + '0';
 
-			code[8] = (*attrib >> 3 & 7) + '0';
+			code[8] = (attrib >> 3 & 7) + '0';
 			if (!opt_cache->trans || code[8] != '0') {
 				code[6] = ';';
 				code[7] = '4';
@@ -168,7 +168,7 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache, unsigned ch,
 				length = 6;
 			}
 
-		} else if (getcompcode(*attrib & 7) < getcompcode(*attrib >> 3 & 7)) {
+		} else if (getcompcode(attrib & 7) < getcompcode(attrib >> 3 & 7)) {
 			code[3] = ';';
 			code[4] = '7';
 			length = 5;
@@ -176,7 +176,7 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache, unsigned ch,
 			length = 3;
 		}
 
-		if (*attrib & 0100) {
+		if (attrib & 0100) {
 			code[length++] = ';';
 			code[length++] = '1';
 		}
@@ -190,7 +190,7 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache, unsigned ch,
 		if (opt_cache->utf_8_io) {
 			int charset;
 
-			if (B) {
+			if (mode) {
 				switch (opt_cache->type) {
 					case TERM_LINUX:
 					case TERM_VT100:
@@ -210,7 +210,7 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache, unsigned ch,
 		} else {
 			add_char_to_string(screen, c);
 		}
-	} else if (!c || c == 1) {
+	} else if (c == 0 || c == 1) {
 		add_char_to_string(screen, ' ');
 	} else {
 		add_char_to_string(screen, '.');

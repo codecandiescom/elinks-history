@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.15 2002/11/30 01:02:43 pasky Exp $ */
+/* $Id: globhist.c,v 1.16 2002/11/30 01:08:26 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -238,6 +238,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 
 	text = get_opt_int("document.history.global.display_type")
 		? history_item->title : history_item->url;
+	if (!*text) text = history_item->url;
 
 	/* Deleted in history_dialog_clear_list() */
 	history_item->box_item = mem_calloc(1, sizeof(struct listbox_item)

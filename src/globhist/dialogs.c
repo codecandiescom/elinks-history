@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.9 2002/11/30 01:02:43 pasky Exp $ */
+/* $Id: dialogs.c,v 1.10 2002/11/30 01:08:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -207,6 +207,8 @@ push_toggle_display_button(struct dialog_data *dlg, struct widget_data *di)
 	foreach (item, global_history.items) {
 		struct listbox_item *b2;
 		unsigned char *text = *display_type ? item->title : item->url;
+
+		if (!*text) text = item->url;
 
 		b2 = mem_realloc(item->box_item,
 				sizeof(struct listbox_item) + strlen(text) + 1);

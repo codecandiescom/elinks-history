@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.50 2002/10/11 18:32:17 zas Exp $ */
+/* $Id: ftp.c,v 1.51 2002/10/11 19:24:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,6 @@ struct ftp_connection_info {
 unsigned char ftp_dirlist_head[] = "<html>\n<head><title>/";
 unsigned char ftp_dirlist_head2[] = "</title></head>\n<body>\n<h2>Directory /";
 unsigned char ftp_dirlist_head3[] = "</h2>\n<pre>";
-unsigned char ftp_dirlist_updir[] = "<A HREF=\"../\">[&lt;--]</A>\n";
 unsigned char ftp_dirlist_end[] = "</pre>\n<hr>\n</body>\n</html>";
 
 
@@ -913,16 +912,9 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 static int
 ftp_process_dirlist(struct cache_entry *c_e, int *pos,
 		    unsigned char *buffer, int buflen, int last,
-		    int *tries)
+		    int *tries, int colorize_dir, unsigned char *dircolor)
 {
 	int ret = 0;
-	unsigned char dircolor[8];
-	int colorize_dir = get_opt_int("document.browse.links.color_dirs");
-
-	if (colorize_dir) {
-		color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"),
-				(unsigned char *) &dircolor);
-	}
 
 	while (1) {
 		unsigned char *str;
@@ -1034,6 +1026,8 @@ got_something_from_data_connection(struct connection *conn)
 {
 	struct ftp_connection_info *c_i = conn->info;
 	int len;
+	unsigned char dircolor[8];
+	int colorize_dir = 0; 
 
 	/* XXX: This probably belongs rather to connect.c ? */
 
@@ -1083,6 +1077,13 @@ out_of_mem:
 		unsigned char *url_data;
 		unsigned char *postchar;
 
+		colorize_dir = get_opt_int("document.browse.links.color_dirs");
+
+		if (colorize_dir) {
+			color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"),
+					(unsigned char *) &dircolor);
+		}
+
 		url_data = stracpy(get_url_data(conn->url));
 		if (!url_data) goto out_of_mem;
 
@@ -1094,8 +1095,39 @@ out_of_mem:
 		A(ftp_dirlist_head2);
 		if (url_data) A(url_data);
 		A(ftp_dirlist_head3);
-		if (url_data && *url_data)
-			A(ftp_dirlist_updir);
+		if (url_data && *url_data) {
+			unsigned char * str = init_str();
+			int strl = 0;
+			
+			if (str) {
+				if (colorize_dir) {
+					/* The <b> is here for the case when we've
+					* use_document_colors off. */
+					add_to_str(&str, &strl, "<font color=\"");
+					add_to_str(&str, &strl, dircolor);
+					add_to_str(&str, &strl, "\"><b>");
+				}
+				add_to_str(&str, &strl, "[DIR] ");
+				if (colorize_dir) {
+					add_to_str(&str, &strl, "</b></font>");
+				}
+				add_to_str(&str, &strl, "                                 - ");
+				if (colorize_dir) {
+					add_to_str(&str, &strl, "<font color=\"");
+					add_to_str(&str, &strl, dircolor);
+					add_to_str(&str, &strl, "\"><b>");
+				}
+				add_to_str(&str, &strl, "<A HREF=\"../\">..</A>");
+				if (colorize_dir) {
+					add_to_str(&str, &strl, "</b></font>");
+				}
+				add_chr_to_str(&str, &strl, '\n');
+
+				add_fragment(conn->cache, conn->from, str, strl);
+				conn->from += strl;
+				mem_free(str);
+			}
+		}
 		
 		if (url_data)
 			mem_free(url_data);
@@ -1130,7 +1162,9 @@ out_of_mem:
 							&conn->from,
 							c_i->ftp_buffer,
 							len + c_i->buf_pos,
-							0, &conn->tries);
+							0, &conn->tries,
+							colorize_dir,
+							(unsigned char *) dircolor);
 
 			if (proceeded == -1) goto out_of_mem;
 
@@ -1147,7 +1181,8 @@ out_of_mem:
 
 	if (ftp_process_dirlist(conn->cache, &conn->from,
 				c_i->ftp_buffer, c_i->buf_pos, 1,
-				&conn->tries) == -1)
+				&conn->tries, colorize_dir,
+				(unsigned char *) dircolor) == -1)
 		goto out_of_mem;
 
 	if (c_i->dir) A(ftp_dirlist_end);

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-11-13 10:27+0100\n"
+"POT-Creation-Date: 2003-11-13 15:33+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Taniel Kirikal <taniel@colleduc.ee>\n"
 "Language-Team: Estonian <et@li.org>\n"
@@ -45,14 +45,15 @@ msgstr "Eeldame välja sees numbrit"
 #: src/protocol/protocol.c:60 src/protocol/user.c:157 src/protocol/user.c:173
 #: src/sched/download.c:450 src/sched/download.c:526 src/sched/download.c:552
 #: src/sched/download.c:827 src/sched/error.c:40 src/sched/session.c:395
-#: src/sched/session.c:1222 src/sched/session.c:1239 src/sched/session.c:1263
-#: src/scripting/lua/core.c:384 src/scripting/lua/core.c:467
-#: src/scripting/lua/core.c:574 src/scripting/lua/core.c:700
-#: src/viewer/text/form.c:652 src/viewer/text/search.c:824
-#: src/viewer/text/search.c:850 src/viewer/text/search.c:856
-#: src/viewer/text/search.c:878 src/viewer/text/search.c:1044
-#: src/viewer/text/search.c:1055 src/viewer/text/textarea.c:269
-#: src/viewer/text/view.c:728 src/viewer/text/view.c:1409
+#: src/sched/session.c:1226 src/sched/session.c:1243 src/sched/session.c:1267
+#: src/sched/session.c:1514 src/scripting/lua/core.c:384
+#: src/scripting/lua/core.c:467 src/scripting/lua/core.c:574
+#: src/scripting/lua/core.c:700 src/viewer/text/form.c:652
+#: src/viewer/text/search.c:824 src/viewer/text/search.c:850
+#: src/viewer/text/search.c:856 src/viewer/text/search.c:878
+#: src/viewer/text/search.c:1044 src/viewer/text/search.c:1055
+#: src/viewer/text/textarea.c:269 src/viewer/text/view.c:728
+#: src/viewer/text/view.c:1409
 msgid "OK"
 msgstr "OK"
 
@@ -384,7 +385,7 @@ msgid ""
 msgstr ""
 
 #: src/config/dialogs.c:170 src/protocol/protocol.c:57 src/sched/session.c:392
-#: src/viewer/text/textarea.c:266
+#: src/sched/session.c:1510 src/viewer/text/textarea.c:266
 msgid "Error"
 msgstr "Viga"
 
@@ -4718,15 +4719,15 @@ msgstr "Kas tahate postitada ankeedi sisu URL-le"
 msgid "Do you want to repost form data to URL %s?"
 msgstr "Kas tahate uuesti postitada ankeedi sinu URL-le"
 
-#: src/sched/session.c:668 src/sched/session.c:1227 src/sched/session.c:1247
+#: src/sched/session.c:668 src/sched/session.c:1231 src/sched/session.c:1251
 msgid "Warning"
 msgstr "Hoiatus"
 
-#: src/sched/session.c:1217
+#: src/sched/session.c:1221
 msgid "Welcome"
 msgstr "Tere tulemast"
 
-#: src/sched/session.c:1218
+#: src/sched/session.c:1222
 #, fuzzy
 msgid ""
 "Welcome to ELinks!\n"
@@ -4736,7 +4737,7 @@ msgstr ""
 "Vajutage ESC menüü jaoks. Valige Abi->Kasutamisjuhend menüüs inglisekeelse "
 "kasutusõpetuse jaoks."
 
-#: src/sched/session.c:1228
+#: src/sched/session.c:1232
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -4747,7 +4748,7 @@ msgid ""
 "be used. Apologies for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:1248
+#: src/sched/session.c:1252
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -4758,6 +4759,12 @@ msgid ""
 "a subtle way. Thus, we recommend you to change the value of config."
 "saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
 "for any inconvience caused."
+msgstr ""
+
+#: src/sched/session.c:1511
+msgid ""
+"This URL contains a protocol not yet known by ELinks.\n"
+"You can configure an external handler for it through options system."
 msgstr ""
 
 #: src/scripting/lua/core.c:455
@@ -4863,16 +4870,16 @@ msgstr "Ei suuda tuua faili"
 msgid "Too many bytes read from the itrm!"
 msgstr ""
 
-#: src/viewer/dump/dump.c:76
+#: src/viewer/dump/dump.c:77
 #, fuzzy, c-format
 msgid "Can't write to stdout: %s"
 msgstr "Viga soklisse kirjutamisel"
 
-#: src/viewer/dump/dump.c:79
+#: src/viewer/dump/dump.c:80
 msgid "Can't write to stdout."
 msgstr ""
 
-#: src/viewer/dump/dump.c:195
+#: src/viewer/dump/dump.c:196
 #, c-format
 msgid "URL expected after %s."
 msgstr ""

@@ -1,3 +1,9 @@
+Sun Aug 25 20:15:32 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/url.c:
+
+	Comment *hint* *hint* ;-).  
+
 Sun Aug 18 13:17:08 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/session.c:

@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.77 2003/12/21 12:51:56 pasky Exp $ */
+/* $Id: error.c,v 1.78 2003/12/21 13:53:30 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -31,13 +31,13 @@
 unsigned char full_static_version[1024] = "ELinks " VERSION_STRING;
 
 static void
-er(int bell, int sleep, unsigned char *fmt, va_list params)
+er(int bell, int shall_sleep, unsigned char *fmt, va_list params)
 {
 	if (bell) fputc(7, stderr);
 	vfprintf(stderr, fmt, params);
 	fputc('\n', stderr);
 	fflush(stderr);
-	if (sleep) sleep(1);
+	if (shall_sleep) sleep(1);
 }
 
 int errline;

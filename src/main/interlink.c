@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.40 2003/06/18 18:58:43 zas Exp $ */
+/* $Id: interlink.c,v 1.41 2003/06/18 19:44:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,8 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-#if 0	/* Testing purpose. */
+/* Testing purpose. Do not remove. */
+#if 0
 #undef DONT_USE_AF_UNIX
 #undef USE_AF_UNIX
 #endif
@@ -79,7 +80,7 @@ static int s_unix_fd = -1;
 #ifdef USE_AF_UNIX
 
 static int
-get_address(void)
+get_address(struct sockaddr **s_addr, int *s_addr_len)
 {
 	struct sockaddr_un *addr = NULL;
 	unsigned char *path;
@@ -141,13 +142,13 @@ get_address(void)
 
 	addr->sun_family = AF_UNIX;
 
-	s_unix = (struct sockaddr *) addr;
+	*s_addr = (struct sockaddr *) addr;
 	/* The size of the address is the offset of the start of the filename,
 	 * plus its length, plus one for the terminating null byte (well, this
 	 * last byte may or not be needed it depends of....).
 	 * Alternatively we can use SUN_LEN() macro but this one is not always
 	 * defined nor always defined in the same way. --Zas */
-	s_unix_l = sizeof(struct sockaddr_un) - sun_path_freespace;
+	*s_addr_len = sizeof(struct sockaddr_un) - sun_path_freespace;
 
 	return AF_UNIX;
 
@@ -180,7 +181,7 @@ unlink_unix(void)
 /* FIXME: IPv6 support. */
 
 static int
-get_address(void)
+get_address(struct sockaddr **s_addr, int *s_addr_len)
 {
 	struct sockaddr_in *sin;
 
@@ -197,8 +198,8 @@ get_address(void)
 	sin->sin_port = htons(ELINKS_PORT);
 	sin->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 
-	s_unix = (struct sockaddr *) sin;
-	s_unix_l = sizeof(struct sockaddr_in);
+	*s_addr = (struct sockaddr *) sin;
+	*s_addr_len = sizeof(struct sockaddr_in);
 
 	return AF_INET;
 }
@@ -236,7 +237,7 @@ bind_to_af_unix(void)
 	int attempts = 0;
 	int af;
 
-	af = get_address();
+	af = get_address(&s_unix, &s_unix_l);
 	if (af == -1) return -1;
 
 again:

@@ -1,3 +1,15 @@
+Wed Aug  6 23:08:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/display.h:
+
+	file display.h was initially added on branch ELUSION.  
+
+Wed Aug  6 23:08:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/display.c:
+
+	file display.c was initially added on branch ELUSION.  
+
 Tue Aug  5 01:12:13 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/cache.c:

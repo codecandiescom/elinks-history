@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.174 2004/07/18 04:28:35 jonas Exp $ */
+/* $Id: file.c,v 1.175 2004/07/23 05:21:11 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ add_dir_entry(struct directory_entry *entry, struct string *page,
 		return;
 	}
 
-	encode_uri_string(&uri_encoded_name, entry->name + pathlen);
+	encode_uri_string(&uri_encoded_name, entry->name + pathlen, 1);
 	add_html_to_string(&html_encoded_name, entry->name + pathlen,
 			   strlen(entry->name) - pathlen);
 

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.233 2004/07/22 15:50:12 pasky Exp $ */
+/* $Id: form.c,v 1.234 2004/07/23 05:21:11 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -573,7 +573,7 @@ encode_controls(struct list_head *l, struct string *data,
 		else
 			lst = 1;
 
-		encode_uri_string(data, sv->name);
+		encode_uri_string(data, sv->name, 1);
 		add_char_to_string(data, '=');
 
 		/* Convert back to original encoding (see html_form_control()
@@ -602,7 +602,7 @@ encode_controls(struct list_head *l, struct string *data,
 		}
 
 		if (p2) {
-			encode_uri_string(data, p2);
+			encode_uri_string(data, p2, 1);
 			mem_free(p2);
 		}
 	}

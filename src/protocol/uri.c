@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.265 2004/07/20 22:14:25 zas Exp $ */
+/* $Id: uri.c,v 1.266 2004/07/23 05:21:11 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -949,9 +949,18 @@ parse_uri:
 			/* Check if it could be just some local file with ':'
 			 * in its name. */
 			if (check_uri_file(newurl) >= 0) {
+				struct string str;
+
+				if (!init_string(&str)) return NULL;
+
+				add_to_string(&str, "file://");
 				if (!dir_sep(*newurl))
-					insert_in_string(&newurl, 0, "./", 2);
-				insert_in_string(&newurl, 0, "file://", 7);
+					add_to_string(&str, "./");
+				encode_uri_string(&str, newurl, 0);
+
+				mem_free(newurl);
+				newurl = str.source;
+
 				/* Work around the infinite loop prevention */
 				prev_errno = URI_ERRNO_EMPTY;
 				goto parse_uri;
@@ -1008,25 +1017,31 @@ parse_uri:
 	{
 		/* No protocol name */
 		enum protocol protocol = find_uri_protocol(newurl);
-		unsigned char *prefix;
+		struct string str;
+
+		if (!init_string(&str)) return NULL;
 
 		switch (protocol) {
 			case PROTOCOL_FTP:
-				prefix = "ftp://";
+				add_to_string(&str, "ftp://");
 				break;
 
 			case PROTOCOL_HTTP:
-				prefix = "http://";
+				add_to_string(&str, "http://");
 				break;
 
 			case PROTOCOL_FILE:
 			default:
-				prefix = "file://";
+				add_to_string(&str, "file://");
 				if (!dir_sep(*newurl))
-					insert_in_string(&newurl, 0, "./", 2);
+					add_to_string(&str, "./");
 		}
 
-		insert_in_string(&newurl, 0, prefix, strlen(prefix));
+		encode_uri_string(&str, newurl, 0);
+
+		mem_free(newurl);
+		newurl = str.source;
+
 		goto parse_uri;
 	}
 	case URI_ERRNO_EMPTY:
@@ -1110,7 +1125,8 @@ safe_char(unsigned char c)
 }
 
 void
-encode_uri_string(struct string *string, unsigned char *name)
+encode_uri_string(struct string *string, unsigned char *name,
+		  int convert_slashes)
 {
 	unsigned char n[4];
 
@@ -1123,7 +1139,7 @@ encode_uri_string(struct string *string, unsigned char *name)
 		if (*name == ' ') add_char_to_string(data, len, '+');
 		else
 #endif
-		if (safe_char(*name)) {
+		if (safe_char(*name) || (!convert_slashes && *name == '/')) {
 			add_char_to_string(string, *name);
 		} else {
 			/* Hex it. */

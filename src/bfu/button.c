@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.30 2003/08/23 16:53:39 jonas Exp $ */
+/* $Id: button.c,v 1.31 2003/08/29 14:09:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,19 +20,19 @@
 
 void
 buttons_width(struct terminal *term, struct widget_data *butt,
-		      int n, int *minwidth, int *maxwidth)
+	      int n, int *minwidth, int *maxwidth)
 {
 	int maxw = -2;
 	register int i;
 
 	for (i = 0; i < n; i++) {
-		int minw = strlen((butt++)->item->text) + 4;
+		int minw = strlen((butt++)->item->text) + 6;
 
-		maxw += minw + 2;
-		if (minw > *minwidth) *minwidth = minw;
+		maxw += minw;
+		*minwidth = int_max(*minwidth, minw);
 	}
 
-	if (maxw > *maxwidth) *maxwidth = maxw;
+	*maxwidth = int_max(*maxwidth, maxw);
 }
 
 void
@@ -40,24 +40,22 @@ max_buttons_width(struct terminal *term, struct widget_data *butt,
 		  int n, int *width)
 {
 	int w = -2;
-	int i;
+	register int i;
 
 	for (i = 0; i < n; i++)
 		w += strlen((butt++)->item->text) + 6;
-	if (w > *width) *width = w;
+
+	*width = int_max(*width, w);
 }
 
 void
 min_buttons_width(struct terminal *term, struct widget_data *butt,
 		  int n, int *width)
 {
-	int i;
+	register int i;
 
-	for (i = 0; i < n; i++) {
-		int w = strlen((butt++)->item->text) + 4;
-
-		if (w > *width) *width = w;
-	}
+	for (i = 0; i < n; i++)
+		*width = int_max(*width, strlen((butt++)->item->text) + 4);
 }
 
 void
@@ -68,21 +66,22 @@ dlg_format_buttons(struct terminal *term, struct terminal *t2,
 	int i1 = 0;
 
 	while (i1 < n) {
+		struct widget_data *butt1 = butt + i1;
 		int i2 = i1 + 1;
 		int mw;
 
 		while (i2 < n) {
 			mw = 0;
-			max_buttons_width(t2, butt + i1, i2 - i1 + 1, &mw);
+			max_buttons_width(t2, butt1, i2 - i1 + 1, &mw);
 			if (mw <= w) i2++;
 			else break;
 		}
 
 		mw = 0;
-		max_buttons_width(t2, butt + i1, i2 - i1, &mw);
-		if (rw && mw > *rw) {
-			*rw = mw;
-			if (*rw > w) *rw = w;
+		max_buttons_width(t2, butt1, i2 - i1, &mw);
+		if (rw) {
+			int_lower_bound(rw, mw);
+			int_upper_bound(rw, w);
 		}
 
 		if (term) {

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.44 2003/07/03 21:22:15 jonas Exp $ */
+/* $Id: connection.c,v 1.45 2003/07/03 21:30:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -637,43 +637,23 @@ static void
 check_queue_bugs(void)
 {
 	struct connection *d;
-	int ps = 0;
 	enum connection_priority prev_priority = 0;
-	int cc;
+	int cc = 0;
 
-again:
-	cc = 0;
 	foreach (d, queue) {
 		enum connection_priority priority = get_priority(d);
 
+		assertm(priority >= prev_priority, "queue is not sorted");
+		assertm(d->state >= 0, "interrupted connection on queue "
+			"(conn %s, state %d)", d->url, d->state);
+
 		cc += d->running;
-		if (priority < prev_priority) {
-			if (!ps) {
-				internal("queue is not sorted");
-				sort_queue();
-				ps = 1;
-				goto again;
-			} else {
-				internal("queue is not sorted even after sort_queue!");
-				break;
-			}
-		} else {
-			prev_priority = priority;
-		}
-
-		if (d->state < 0) {
-			internal("interrupted connection on queue (conn %s, state %d)",
-				 d->url, d->state);
-			d = d->prev;
-			abort_connection(d->next);
-		}
+		prev_priority = priority;
 	}
 
-	if (cc != active_connections) {
-		internal("bad number of active connections (counted %d, stored %d)",
-			 cc, active_connections);
-		active_connections = cc;
-	}
+	assertm(cc == active_connections,
+		"bad number of active connections (counted %d, stored %d)",
+		cc, active_connections);
 }
 #endif
 

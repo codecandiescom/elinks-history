@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.122 2003/07/17 08:56:31 zas Exp $ */
+/* $Id: menu.c,v 1.123 2003/07/21 05:22:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -646,30 +646,30 @@ query_file(struct session *ses, unsigned char *url,
 	   void (*cancel)(struct session *), int interactive)
 {
 	unsigned char *file;
-	unsigned char *def = init_str();
-	int dfl = 0;
+	struct string def;
 	int l;
 
-	if (!def) return;
+	if (!init_string(&def)) return;
 
 	get_filename_from_url(url, &file, &l);
 
-	add_to_str(&def, &dfl, get_opt_str("document.download.directory"));
-	if (*def && !dir_sep(def[strlen(def) - 1])) add_chr_to_str(&def, &dfl, '/');
-	add_bytes_to_str(&def, &dfl, file, l);
+	add_to_string(&def, get_opt_str("document.download.directory"));
+	if (def.length && !dir_sep(def.source[def.length - 1]))
+		add_char_to_string(&def, '/');
+	add_bytes_to_string(&def, file, l);
 
 	if (interactive) {
 		input_field(ses->tab->term, NULL, 1,
 			    N_("Download"), N_("Save to file"),
 			    N_("OK"),  N_("Cancel"), ses, &file_history,
-			    MAX_STR_LEN, def, 0, 0, NULL,
+			    MAX_STR_LEN, def.source, 0, 0, NULL,
 			    (void (*)(void *, unsigned char *)) std,
 			    (void (*)(void *)) cancel);
 	} else {
-		std(ses, def);
+		std(ses, def.source);
 	}
 
-	mem_free(def);
+	done_string(&def);
 }
 
 static struct input_history search_history = { 0, {D_LIST_HEAD(search_history.items)} };

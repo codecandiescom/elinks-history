@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.71 2003/11/29 00:48:08 pasky Exp $ */
+/* $Id: uri.c,v 1.72 2003/11/29 00:49:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -429,7 +429,6 @@ transform_file_url(unsigned char **up, unsigned char *cwd)
 {
 	unsigned char *url = *up;
 	unsigned char *path;
-	int cwdlen;
 
 	if (!url || !cwd || !*cwd
 	    || strncasecmp(url, "file://", 7))
@@ -449,9 +448,10 @@ transform_file_url(unsigned char **up, unsigned char *cwd)
 
 	/* Who would name their file/dir '...' ? */
 	if (url[0] == '.') {
+		int cwdlen = strlen(cwd);
+
 		/* Insert the current working directory. */
 
-		cwdlen = strlen(cwd);
 		/* XXX: Post data copy. --zas */
 		url = mem_alloc(strlen(*up) + cwdlen + 2);
 		if (!url) return;

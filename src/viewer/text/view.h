@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.55 2004/06/23 08:16:23 jonas Exp $ */
+/* $Id: view.h,v 1.56 2004/08/15 11:52:52 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -20,7 +20,7 @@ enum frame_event_status {
 /* Releases the document view's resources. But doesn't free() the @view. */
 void detach_formatted(struct document_view *doc_view);
 
-void set_frame(struct session *ses, struct document_view *doc_view, int xxxx);
+enum frame_event_status set_frame(struct session *ses, struct document_view *doc_view, int xxxx);
 struct document_view *current_frame(struct session *);
 
 /* Used for changing between formatted and source (plain) view. */
@@ -31,14 +31,14 @@ void toggle_wrap_text(struct session *ses, struct document_view *doc_view, int x
 
 /* File menu handlers. */
 
-void save_as(struct session *ses, struct document_view *doc_view, int magic);
+enum frame_event_status save_as(struct session *ses, struct document_view *doc_view, int magic);
 
 /* Various event emitters and link menu handlers. */
 
 void send_event(struct session *, struct term_event *);
 
-void save_formatted_dlg(struct session *ses, struct document_view *doc_view, int xxxx);
-void view_image(struct session *ses, struct document_view *doc_view, int xxxx);
-void download_link(struct session *ses, struct document_view *doc_view, int image);
+enum frame_event_status save_formatted_dlg(struct session *ses, struct document_view *doc_view, int xxxx);
+enum frame_event_status view_image(struct session *ses, struct document_view *doc_view, int xxxx);
+enum frame_event_status download_link(struct session *ses, struct document_view *doc_view, int action);
 
 #endif

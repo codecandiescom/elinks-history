@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.581 2004/08/15 09:53:22 miciah Exp $ */
+/* $Id: view.c,v 1.582 2004/08/15 11:52:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -412,15 +412,17 @@ move_document_end(struct session *ses, struct document_view *doc_view)
 	}
 }
 
-void
+enum frame_event_status
 set_frame(struct session *ses, struct document_view *doc_view, int xxxx)
 {
 	assert(ses && ses->doc_view && doc_view && doc_view->vs);
-	if_assert_failed return;
+	if_assert_failed return FRAME_EVENT_OK;
 
-	if (doc_view == ses->doc_view) return;
+	if (doc_view == ses->doc_view) return FRAME_EVENT_OK;
 	goto_uri(ses, doc_view->vs->uri);
 	ses->navigate_mode = NAVIGATE_LINKWISE;
+
+	return FRAME_EVENT_OK;
 }
 
 
@@ -1082,13 +1084,13 @@ send_event(struct session *ses, struct term_event *ev)
 	if (ses) ses->kbdprefix.repeat_count = 0;
 }
 
-void
+enum frame_event_status
 download_link(struct session *ses, struct document_view *doc_view, int action)
 {
 	struct link *link = get_current_link(doc_view);
 	void (*download)(void *ses, unsigned char *file) = start_download;
 
-	if (!link) return;
+	if (!link) return FRAME_EVENT_OK;
 
 	if (ses->download_uri) {
 		done_uri(ses->download_uri);
@@ -1109,40 +1111,46 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 
 		default:
 			INTERNAL("I think you forgot to take your medication, mental boy!");
-			return;
+			return FRAME_EVENT_OK;
 	}
 
-	if (!ses->download_uri) return;
+	if (!ses->download_uri) return FRAME_EVENT_OK;
 
 	set_session_referrer(ses, doc_view->document->uri);
 	query_file(ses, ses->download_uri, ses, download, NULL, 1);
+
+	return FRAME_EVENT_OK;
 }
 
-void
+enum frame_event_status
 view_image(struct session *ses, struct document_view *doc_view, int xxxx)
 {
 	struct link *link = get_current_link(doc_view);
 
 	if (link && link->where_img)
 		goto_url(ses, link->where_img);
+
+	return FRAME_EVENT_OK;
 }
 
-void
+enum frame_event_status
 save_as(struct session *ses, struct document_view *doc_view, int magic)
 {
 	assert(ses);
-	if_assert_failed return;
+	if_assert_failed return FRAME_EVENT_OK;
 
-	if (!have_location(ses)) return;
+	if (!have_location(ses)) return FRAME_EVENT_OK;
 
 	if (ses->download_uri) done_uri(ses->download_uri);
 	ses->download_uri = get_uri_reference(cur_loc(ses)->vs.uri);
 
 	assert(doc_view && doc_view->document && doc_view->document->uri);
-	if_assert_failed return;
+	if_assert_failed return FRAME_EVENT_OK;
 
 	set_session_referrer(ses, doc_view->document->uri);
 	query_file(ses, ses->download_uri, ses, start_download, NULL, 1);
+
+	return FRAME_EVENT_OK;
 }
 
 static void
@@ -1180,8 +1188,9 @@ save_formatted(void *data, unsigned char *file)
 			     save_formatted_finish, doc_view->document);
 }
 
-void
+enum frame_event_status
 save_formatted_dlg(struct session *ses, struct document_view *doc_view, int xxxx)
 {
 	query_file(ses, doc_view->vs->uri, ses, save_formatted, NULL, 1);
+	return FRAME_EVENT_OK;
 }

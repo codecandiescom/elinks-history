@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.95 2004/08/13 21:02:20 jonas Exp $ */
+/* $Id: action.c,v 1.96 2004/08/15 11:52:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,7 +73,7 @@ toggle_document_option(struct session *ses, unsigned char *option_name)
 	draw_formatted(ses, 1);
 }
 
-typedef void (*frame_action)(struct session *, struct document_view *, int);
+typedef enum frame_event_status (*frame_action)(struct session *, struct document_view *, int);
 
 static void
 do_frame_action(struct session *ses, frame_action action, int magic)
@@ -99,10 +99,8 @@ do_frame_action(struct session *ses, frame_action action, int magic)
 	assertm(doc_view->vs, "document view has no state");
 	if_assert_failed return;
 
-	action(ses, doc_view, magic);
-
 	/* This is hopefully only some temporary setup. --jonas */
-	if (action == find_next)
+	if (action(ses, doc_view, magic) == FRAME_EVENT_REFRESH)
 		refresh_view(ses, doc_view, 0);
 }
 
@@ -209,11 +207,11 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_LINK_FOLLOW:
-			do_frame_action(ses, (frame_action) enter, 0);
+			do_frame_action(ses, enter, 0);
 			break;
 
 		case ACT_MAIN_LINK_FOLLOW_RELOAD:
-			do_frame_action(ses, (frame_action) enter, 1);
+			do_frame_action(ses, enter, 1);
 			break;
 
 		case ACT_MAIN_EXMODE:
@@ -336,15 +334,15 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_LINK_EXTERNAL_COMMAND:
-			do_frame_action(ses, (frame_action) pass_uri_to_command, PASS_URI_LINK);
+			do_frame_action(ses, pass_uri_to_command, PASS_URI_LINK);
 			break;
 
 		case ACT_MAIN_FRAME_EXTERNAL_COMMAND:
-			do_frame_action(ses, (frame_action) pass_uri_to_command, PASS_URI_FRAME);
+			do_frame_action(ses, pass_uri_to_command, PASS_URI_FRAME);
 			break;
 
 		case ACT_MAIN_TAB_EXTERNAL_COMMAND:
-			do_frame_action(ses, (frame_action) pass_uri_to_command, PASS_URI_TAB);
+			do_frame_action(ses, pass_uri_to_command, PASS_URI_TAB);
 			break;
 
 		case ACT_MAIN_FRAME_PREV:

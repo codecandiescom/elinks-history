@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.365 2004/07/27 22:53:05 jonas Exp $ */
+/* $Id: menu.c,v 1.366 2004/08/15 11:52:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -751,11 +751,12 @@ format_command(unsigned char *format, struct uri *uri)
 	return string.source;
 }
 
-void
+enum frame_event_status
 pass_uri_to_command(struct session *ses, struct document_view *doc_view,
-		    enum pass_uri_type type)
+		    int which_type)
 {
 	struct list_head *tree = get_opt_tree("document.uri_passing");
+	enum pass_uri_type type = which_type;
 	struct menu_item *items;
 	struct option *option;
 	struct uri *uri;
@@ -770,10 +771,10 @@ pass_uri_to_command(struct session *ses, struct document_view *doc_view,
 	{
 		struct link *link = get_current_link(doc_view);
 
-		if (!link) return;
+		if (!link) return FRAME_EVENT_OK;
 
 		uri = get_link_uri(ses, doc_view, link);
-		if (!uri) return;
+		if (!uri) return FRAME_EVENT_OK;
 		break;
 	}
 	default:
@@ -784,7 +785,7 @@ pass_uri_to_command(struct session *ses, struct document_view *doc_view,
 	items = new_menu(FREE_LIST | FREE_TEXT | FREE_DATA | NO_INTL);
 	if (!items) {
 		done_uri(uri);
-		return;
+		return FRAME_EVENT_OK;
 	}
 
 	foreach (option, *tree) {
@@ -819,6 +820,8 @@ pass_uri_to_command(struct session *ses, struct document_view *doc_view,
 		mem_free(items->text);
 		mem_free(items);
 	}
+
+	return FRAME_EVENT_OK;
 }
 
 void

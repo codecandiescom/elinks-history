@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.282 2004/08/15 07:38:23 miciah Exp $ */
+/* $Id: search.c,v 1.283 2004/08/15 11:52:51 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1010,10 +1010,13 @@ print_find_error(struct session *ses, enum find_error find_error)
 			N_("OK"), NULL, B_ENTER | B_ESC);
 }
 
-void
+enum frame_event_status
 find_next(struct session *ses, struct document_view *doc_view, int direction)
 {
 	print_find_error(ses, find_next_do(ses, doc_view, direction));
+
+	/* FIXME: Make this more fine-grained */
+	return FRAME_EVENT_REFRESH;
 }
 
 
@@ -1358,7 +1361,7 @@ link_typeahead_handler(struct input_line *line, int action)
 	}
 }
 
-void
+enum frame_event_status
 search_typeahead(struct session *ses, struct document_view *doc_view,
 		 int action)
 {
@@ -1394,10 +1397,11 @@ search_typeahead(struct session *ses, struct document_view *doc_view,
 				NULL, 1,
 				N_("OK"), NULL, B_ENTER | B_ESC);
 
-			return;
+			return FRAME_EVENT_OK;
 	}
 
 	input_field_line(ses, prompt, data, history, handler);
+	return FRAME_EVENT_OK;
 }
 
 
@@ -1513,14 +1517,14 @@ search_dlg_do(struct terminal *term, struct memory_list *ml,
 	do_dialog(term, dlg, ml);
 }
 
-void
+enum frame_event_status
 search_dlg(struct session *ses, struct document_view *doc_view, int direction)
 {
 	unsigned char *title;
 	void *search_function;
 
 	assert(direction);
-	if_assert_failed return;
+	if_assert_failed return FRAME_EVENT_OK;
 
 	if (direction > 0) {
 		title = N_("Search");
@@ -1534,6 +1538,8 @@ search_dlg(struct session *ses, struct document_view *doc_view, int direction)
 		      title, ses,
 		      &search_history,
 		      search_function);
+
+	return FRAME_EVENT_OK;
 }
 
 static enum evhook_status

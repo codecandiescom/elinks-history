@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.239 2004/07/31 11:01:42 miciah Exp $ */
+/* $Id: form.c,v 1.240 2004/08/15 11:52:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -923,15 +923,19 @@ do_reset_form(struct document_view *doc_view, int form_num)
 		}
 }
 
-void
+enum frame_event_status
 reset_form(struct session *ses, struct document_view *doc_view, int a)
 {
 	struct link *link = get_current_link(doc_view);
 
-	if (!link) return;
+	if (!link) return FRAME_EVENT_OK;
 
 	do_reset_form(doc_view, get_link_form_control(link)->form_num);
 	draw_forms(ses->tab->term, doc_view);
+
+	/* Could be the refresh return value and then ditch the draw_forms()
+	 * call. */
+	return FRAME_EVENT_OK;
 }
 
 struct uri *
@@ -1063,10 +1067,11 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 #undef BOUNDARY_LENGTH
 
 
-void
+enum frame_event_status
 submit_form(struct session *ses, struct document_view *doc_view, int do_reload)
 {
 	goto_current_link(ses, doc_view, do_reload);
+	return FRAME_EVENT_OK;
 }
 
 void

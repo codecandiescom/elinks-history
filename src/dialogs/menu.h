@@ -1,10 +1,11 @@
-/* $Id: menu.h,v 1.50 2004/07/28 02:20:01 jonas Exp $ */
+/* $Id: menu.h,v 1.51 2004/08/15 11:52:49 jonas Exp $ */
 
 #ifndef EL__DIALOGS_MENU_H
 #define EL__DIALOGS_MENU_H
 
-#include "terminal/terminal.h"
 #include "bfu/menu.h"
+#include "terminal/terminal.h"
+#include "viewer/text/view.h"
 
 struct document_view;
 struct open_in_new;
@@ -51,7 +52,7 @@ enum pass_uri_type {
 };
 
 void add_uri_command_to_menu(struct menu_item **mi, enum pass_uri_type type);
-void pass_uri_to_command(struct session *ses, struct document_view *doc_view, enum pass_uri_type type);
+enum frame_event_status pass_uri_to_command(struct session *ses, struct document_view *doc_view, int /* enum pass_uri_type */ type);
 
 void
 auto_complete_file(struct terminal *term, int no_elevator, unsigned char *path,

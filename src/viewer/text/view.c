@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.318 2003/12/27 15:38:23 zas Exp $ */
+/* $Id: view.c,v 1.319 2003/12/27 15:46:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "bookmarks/dialogs.h"
 #include "cache/cache.h"
 #include "cache/dialogs.h"
+#include "config/conf.h"
 #include "config/dialogs.h"
 #include "config/kbdbind.h"
 #include "config/options.h"
@@ -1073,6 +1074,10 @@ quak:
 			case ACT_SAVE_FORMATTED:
 				if (!get_opt_int_tree(cmdline_options, "anonymous"))
 					menu_save_formatted(ses->tab->term, (void *) 1, ses);
+				goto x;
+			case ACT_SAVE_OPTIONS:
+				if (!get_opt_int_tree(cmdline_options, "anonymous"))
+					write_config(ses->tab->term);
 				goto x;
 			case ACT_KILL_BACKGROUNDED_CONNECTIONS:
 				abort_background_connections();

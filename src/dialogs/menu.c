@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.239 2003/12/27 15:38:22 zas Exp $ */
+/* $Id: menu.c,v 1.240 2003/12/27 15:46:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -521,7 +521,7 @@ static struct menu_item setup_menu[] = {
 	BAR_MENU_ITEM,
 	INIT_MENU_ITEM(N_("~Options manager"), NULL, ACT_OPTIONS_MANAGER, menu_options_manager, NULL, 0),
 	INIT_MENU_ITEM(N_("~Keybinding manager"), NULL, ACT_KEYBINDING_MANAGER, menu_keybinding_manager, NULL, 0),
-	INIT_MENU_ITEM(N_("~Save options"), NULL, ACT_NONE, write_config, NULL, 0),
+	INIT_MENU_ITEM(N_("~Save options"), NULL, ACT_SAVE_OPTIONS, write_config, NULL, 0),
 	NULL_MENU_ITEM
 };
 

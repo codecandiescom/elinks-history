@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.133 2003/12/27 15:38:22 zas Exp $ */
+/* $Id: kbdbind.c,v 1.134 2003/12/27 15:46:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -470,6 +470,7 @@ static struct strtonum action_table[] = {
         { "save-as", ACT_SAVE_AS, DACT(N_("Save as")) },
 	{ "save-url-as", ACT_SAVE_URL_AS, DACT(N_("Save URL as")) },
 	{ "save-formatted", ACT_SAVE_FORMATTED, DACT(N_("Save formatted document")) },
+	{ "save-options", ACT_SAVE_OPTIONS, DACT(N_("Save options")), },
 	{ "scroll-down", ACT_SCROLL_DOWN, DACT(N_("Scroll down")) },
 	{ "scroll-left", ACT_SCROLL_LEFT, DACT(N_("Scroll left")) },
 	{ "scroll-right", ACT_SCROLL_RIGHT, DACT(N_("Scroll right")) },

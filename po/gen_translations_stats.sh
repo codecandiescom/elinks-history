@@ -13,10 +13,10 @@ for i in *.po; do
 	| awk '{ \
 		tot = $1 + $2 + $3; \
 		if (tot != 0) \
-			printf "%8s %.02f%% (%3d/%3d untranslated)\n",\
+			printf "%8s %6.02f%% (%3d/%3d untranslated)\n",\
 			"'"$i"'", $1*100/tot, $2+$3, tot}' ;
 done | sort -r -n -k2
 
 echo
 
-# $Id: gen_translations_stats.sh,v 1.2 2003/05/21 18:07:39 jonas Exp $ #
+# $Id: gen_translations_stats.sh,v 1.3 2003/07/23 15:32:52 pasky Exp $ #

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.186 2004/11/12 09:38:43 zas Exp $ */
+/* $Id: cookies.c,v 1.187 2004/11/12 09:49:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -761,7 +761,7 @@ load_cookies(void) {
 		if (member != MEMBERS) continue;	/* Invalid line. */
 
 		/* Skip expired cookies if any. */
-		expires = atol(members[EXPIRES].pos);
+		expires = str_to_ttime(members[EXPIRES].pos);
 		if (is_dead(expires)) {
 			cookies_dirty = 1;
 			continue;

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.83 2004/11/12 09:42:22 zas Exp $ */
+/* $Id: globhist.c,v 1.84 2004/11/12 09:49:04 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -305,9 +305,7 @@ read_global_history(void)
 		if (!eol) continue;
 		*eol = '\0'; /* Drop ending '\n'. */
 
-		/* Is using atol() in this way acceptable? It seems
-		 * non-portable to me; ttime might not be a long. -- Miciah */
-		add_global_history_item(url, title, atol(last_visit));
+		add_global_history_item(url, title, str_to_ttime(last_visit));
 	}
 
 	global_history.nosave = 0;

@@ -1,4 +1,4 @@
-/* $Id: time.h,v 1.7 2004/09/24 20:34:11 pasky Exp $ */
+/* $Id: time.h,v 1.8 2004/11/12 09:49:05 zas Exp $ */
 
 #ifndef EL__UTIL_TTIME_H
 #define EL__UTIL_TTIME_H
@@ -15,5 +15,9 @@
 typedef time_t ttime;
 
 ttime get_time(void);
+
+/* Is using atol() in this way acceptable? It seems
+ * non-portable to me; ttime might not be a long. -- Miciah */
+#define str_to_ttime(s) ((ttime) atol(s))
 
 #endif

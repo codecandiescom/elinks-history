@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.110 2003/07/17 08:56:31 zas Exp $ */
+/* $Id: file.c,v 1.111 2003/07/20 20:11:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -332,6 +332,22 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 	data->fragmentlen = fragmentlen;
 }
 
+static inline int
+file_visible(unsigned char *d_name, int show_hidden_files)
+{
+	/* Always show "..", always hide ".", others like ".x" are shown if
+	 * show_hidden_files = 1 */
+	if (entry->d_name[0] == '.') {
+		if (entry->d_name[1] == '\0')
+			return 0;
+
+		if (!show_hidden_files && strcmp(entry->d_name, ".."))
+			return 0;
+	}
+
+	return 1;
+}
+
 /* First information such as permissions is gathered for each directory entry.
  * All entries are then sorted and finally the sorted entries are added to the
  * @data->fragment one by one. */
@@ -359,15 +375,8 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 		unsigned char *attrib;
 		int attriblen;
 
-		/* Always show "..", always hide ".", others like ".x" are shown if
-		 * show_hidden_files = 1 */
-		if (entry->d_name[0] == '.') {
-			if (entry->d_name[1] == '\0')
-				continue;
-
-			if (!show_hidden_files && strcmp(entry->d_name, ".."))
-				continue;
-		}
+		if (!file_visible(entry->d_name, show_hidden_files))
+			continue;
 
 		new_entries = mem_realloc(entries, (size + 1) *
 					  sizeof(struct directory_entry));

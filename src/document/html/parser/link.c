@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.39 2004/12/05 21:59:54 miciah Exp $ */
+/* $Id: link.c,v 1.40 2004/12/05 22:15:10 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,10 +162,13 @@ truncate_title(unsigned char *title)
 		text = mem_alloc(max_part_len * 2 + 2);
 		if (!text) goto free_title;
 
-		/* TODO: Faster way ?? sprintf() is quite expensive. */
-		sprintf(text, "%.*s*%.*s",
-				max_part_len, title,
-				max_part_len, title + len - max_part_len);
+		memcpy(text, title, max_part_len);
+		text[max_part_len] = '*';
+		memcpy(text + max_part_len + 1, 
+		       title + len - max_part_len, max_part_len + 1);
+
+		/* For great safety! */
+		text[max_part_len * 2 + 1] = '\0';
 
 	} else {
 		text = memacpy(title, len);

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.17 2002/04/27 13:15:53 pasky Exp $ */
+/* $Id: parser.c,v 1.18 2002/05/01 12:47:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -956,7 +956,8 @@ void get_html_form(unsigned char *a, struct form *form)
 	} else {
 		form->action = stracpy(format.href_base);
 		if ((ch = strchr(form->action, POST_CHAR))) *ch = 0;
-		if ((ch = strchr(form->action, '?'))) *ch = 0;
+		/* I believe this is invalid behaviour. --pasky */
+		/* if ((ch = strchr(form->action, '?'))) *ch = 0; */
 	}
 	if ((al = get_target(a))) {
 		form->target = al;

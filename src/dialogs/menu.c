@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.356 2004/07/18 10:51:19 zas Exp $ */
+/* $Id: menu.c,v 1.357 2004/07/19 00:56:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -824,6 +824,11 @@ add_uri_command_to_menu(struct menu_item **mi)
  * start. First is the 'Directory:' or 'Files:' text and then a separator. */
 #define FILE_COMPLETION_MENU_OFFSET 2
 
+static struct menu_item empty_directory_menu[] = {
+	INIT_MENU_ITEM(N_("Empty directory"), NULL, ACT_MAIN_NONE, NULL, NULL, NO_SELECT),
+	NULL_MENU_ITEM
+};
+
 /* Builds the file completion menu. If there is only one item it is selected
  * else the menu is launched. */
 static void
@@ -902,17 +907,26 @@ complete_file_menu(struct terminal *term, int no_elevator, void *data,
 
 		mem_free(menu);
 
-		/* Complete what is already there even for directory names */
-		file_func(term, text, data);
+		if (fileentries) {
+			/* Complete what is already there */
+			file_func(term, text, data);
+			return;
+		}
 
-		/* For single directory entries open the lonely subdir */
-		if (direntries)
+		/* For single directory entries open the lonely subdir if it is
+		 * not the parent elevator. */
+		if (strcmp(&text[strlen(dirname)], "..")) {
 			dir_func(term, text, data);
-		return;
-	}
+		} else {
+			do_menu(term, empty_directory_menu, NULL, 0); 			\
+		}
 
-	/* Start with the first directory or file entry selected */
-	do_menu_selected(term, menu, data, FILE_COMPLETION_MENU_OFFSET, 0);
+		mem_free(text);
+
+	} else {
+		/* Start with the first directory or file entry selected */
+		do_menu(term, menu, data, 0);
+	}
 }
 
 /* Prepares the launching of the file completion menu by expanding the @path

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.587 2004/09/12 18:03:35 miciah Exp $ */
+/* $Id: view.c,v 1.588 2004/09/12 18:09:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,6 +38,7 @@
 #include "sched/session.h"
 #include "sched/task.h"
 #include "terminal/draw.h"
+#include "terminal/event.h"
 #include "terminal/kbd.h"
 #include "terminal/mouse.h"
 #include "terminal/tab.h"
@@ -970,10 +971,21 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 	if (ses->status.show_tabs_bar) bars++;
 	if (ses->status.show_status_bar) bars++;
 
-	if (mouse->y == term->height - bars
-	    && check_mouse_action(ev, B_DOWN)) {
+	if (mouse->y == term->height - bars) {
 		int tab_num = get_tab_number_by_xpos(term, mouse->x);
 		struct window *tab = get_current_tab(term);
+
+		if (check_mouse_action(ev, B_UP)) {
+			if (check_mouse_button(ev, B_MIDDLE)
+			    && term->current_tab == tab_num
+			    && mouse->y == term->prev_mouse_event.y) {
+				close_tab(term, tab->data);
+
+				if (tab->data == ses) return NULL;
+			}
+
+			return ses;
+		}
 
 		if (check_mouse_button(ev, B_WHEEL_UP)) {
 			switch_to_prev_tab(term);
@@ -984,7 +996,9 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 		} else if (tab_num != -1) {
 			switch_to_tab(term, tab_num, -1);
 
-			if (check_mouse_button(ev, B_RIGHT)) {
+			if (check_mouse_button(ev, B_MIDDLE)) {
+				do_not_ignore_next_mouse_event(term);
+			} else if (check_mouse_button(ev, B_RIGHT)) {
 				tab_menu(tab->data, mouse->x, mouse->y, 1);
 			}
 		}

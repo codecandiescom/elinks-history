@@ -1,8 +1,11 @@
 /* Secure file saving handling */
-/* $Id: secsave.h,v 1.1 2002/04/19 14:28:00 pasky Exp $ */
+/* $Id: secsave.h,v 1.2 2002/05/06 11:45:11 pasky Exp $ */
 
 #ifndef EL__UTIL_SECFILE_H
 #define EL__UTIL_SECFILE_H
+
+#include <stdio.h>
+#include <sys/types.h> /* mode_t */
 
 struct secure_save_info {
 	FILE *fp; /* file stream pointer */

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.163 2005/02/05 05:26:40 jonas Exp $ */
+/* $Id: osdep.c,v 1.164 2005/02/05 22:36:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -777,7 +777,7 @@ resume_mouse(void *data)
 
 #endif
 
-
+#ifndef CONFIG_WIN32
 /* Create a bitmask consisting from system-independent envirnoment modifiers.
  * This is then complemented by system-specific modifiers in an appropriate
  * get_system_env() routine. */
@@ -800,6 +800,7 @@ get_common_env(void)
 
 	return env;
 }
+#endif
 
 #if defined(CONFIG_UNIX) || defined(CONFIG_RISCOS)
 int

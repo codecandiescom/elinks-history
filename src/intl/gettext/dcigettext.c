@@ -58,6 +58,10 @@ extern int errno;
 #include <sys/param.h>
 #endif
 
+#ifdef HAVE_MALLOC_H
+#include <malloc.h> /* Needed for alloca() on MingW/Win32 */
+#endif
+
 #include "elinks.h"
 
 #include "intl/gettext/gettextP.h"

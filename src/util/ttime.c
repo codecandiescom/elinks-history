@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: ttime.c,v 1.7 2003/12/01 13:55:41 pasky Exp $ */
+/* $Id: ttime.c,v 1.8 2005/02/05 22:36:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 
 #include "elinks.h"
 
+#include "osdep/win32/win32.h" /* For gettimeofday stub */
 #include "util/ttime.h"
 
 

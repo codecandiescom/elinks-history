@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.29 2005/02/05 03:35:43 jonas Exp $ */
+/* $Id: signals.c,v 1.30 2005/02/05 22:36:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,6 +41,7 @@ sig_terminate(struct terminal *term)
 	retval = RET_SIGNAL;
 }
 
+#ifdef SIGHUP
 static void
 sig_intr(struct terminal *term)
 {
@@ -51,6 +52,7 @@ sig_intr(struct terminal *term)
 	else
 		register_bottom_half((void (*)(void *)) destroy_terminal, term);
 }
+#endif
 
 void
 sig_ctrl_c(struct terminal *term)

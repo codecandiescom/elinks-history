@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.43 2004/09/15 23:37:44 pasky Exp $ */
+/* $Id: forms.c,v 1.44 2004/10/20 08:16:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -416,7 +416,7 @@ se:
 		while (p < html_context.eoff && !isspace(*p) && *p != '<') {
 
 sp:
-			add_char_to_string(&str, *p), p++;
+			add_char_to_string(&str, *p ? *p : ' '), p++;
 		}
 
 		r = p;

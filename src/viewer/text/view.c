@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.459 2004/06/14 00:53:48 jonas Exp $ */
+/* $Id: view.c,v 1.460 2004/06/14 09:33:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -470,13 +470,9 @@ up(struct session *ses, struct document_view *doc_view)
 	}
 }
 
-
-/* Fix namespace clash on MacOS. */
-#define scrool scroll_elinks
-
 /* @steps > 0 -> down */
 static void
-scroll(struct session *ses, struct document_view *doc_view, int steps)
+vertical_scroll(struct session *ses, struct document_view *doc_view, int steps)
 {
 	int max_height;
 
@@ -507,7 +503,7 @@ scroll_up(struct session *ses, struct document_view *doc_view)
 	else
 		steps = get_opt_int("document.browse.scroll_step");
 
-	scroll(ses, doc_view, -steps);
+	vertical_scroll(ses, doc_view, -steps);
 }
 
 static void
@@ -520,25 +516,25 @@ scroll_down(struct session *ses, struct document_view *doc_view)
 	else
 		steps = get_opt_int("document.browse.scroll_step");
 
-	scroll(ses, doc_view, steps);
+	vertical_scroll(ses, doc_view, steps);
 }
 
 #ifdef CONFIG_MOUSE
 static void
 scroll_mouse_up(struct session *ses, struct document_view *doc_view)
 {
-	scroll(ses, doc_view, -2);
+	vertical_scroll(ses, doc_view, -2);
 }
 
 static void
 scroll_mouse_down(struct session *ses, struct document_view *doc_view)
 {
-	scroll(ses, doc_view, 2);
+	vertical_scroll(ses, doc_view, 2);
 }
 #endif /* CONFIG_MOUSE */
 
 static void
-hscroll(struct session *ses, struct document_view *doc_view, int steps)
+horizontal_scroll(struct session *ses, struct document_view *doc_view, int steps)
 {
 	int x;
 
@@ -568,7 +564,7 @@ scroll_left(struct session *ses, struct document_view *doc_view)
 	else
 		steps = 1;
 
-	hscroll(ses, doc_view, -steps);
+	horizontal_scroll(ses, doc_view, -steps);
 }
 
 static void
@@ -581,20 +577,20 @@ scroll_right(struct session *ses, struct document_view *doc_view)
 	else
 		steps = 1;
 
-	hscroll(ses, doc_view, steps);
+	horizontal_scroll(ses, doc_view, steps);
 }
 
 #ifdef CONFIG_MOUSE
 static void
 scroll_mouse_left(struct session *ses, struct document_view *doc_view)
 {
-	hscroll(ses, doc_view, -8);
+	horizontal_scroll(ses, doc_view, -8);
 }
 
 static void
 scroll_mouse_right(struct session *ses, struct document_view *doc_view)
 {
-	hscroll(ses, doc_view, 8);
+	horizontal_scroll(ses, doc_view, 8);
 }
 #endif /* CONFIG_MOUSE */
 

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.138 2004/08/01 20:43:53 pasky Exp $ */
+/* $Id: uri.h,v 1.139 2004/08/01 20:46:34 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -135,8 +135,11 @@ enum uri_component {
 	/* Used for getting the URI with no #fragment */
 	URI_BASE		= ~(URI_RARE | URI_FRAGMENT) | URI_POST,
 
+	/* Used for getting data-less URI (stuff only up to the slash). */
+	URI_SERVER		= ~(URI_RARE | URI_DATA | URI_FRAGMENT),
+
 	/* Used in the HTTP Auth code */
-	URI_HTTP_AUTH		= ~(URI_RARE | URI_DATA | URI_FRAGMENT),
+	URI_HTTP_AUTH		= URI_SERVER,
 
 	/* Used for the value of HTTP "Host" header info */
 	URI_HTTP_HOST		= URI_HOST | URI_PORT,
@@ -157,7 +160,7 @@ enum uri_component {
 	URI_KEEPALIVE		= URI_PROTOCOL | URI_USER | URI_PASSWORD | URI_HOST | URI_PORT,
 
 	/* Used for the form action URI using the GET method */
-	URI_FORM_GET		= ~(URI_RARE | URI_DATA | URI_FRAGMENT) | URI_PATH,
+	URI_FORM_GET		= URI_SERVER | URI_PATH,
 };
 
 

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.206 2004/06/13 17:22:12 zas Exp $ */
+/* $Id: link.c,v 1.207 2004/06/13 17:43:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -240,7 +240,7 @@ draw_current_link(struct terminal *term, struct document_view *doc_view)
 struct link *
 get_first_link(struct document_view *doc_view)
 {
-	struct link *link;
+	struct link *link, *undef;
 	struct document *document;
 	int height;
 	register int i;
@@ -252,37 +252,43 @@ get_first_link(struct document_view *doc_view)
 
 	if (!document->lines1) return NULL;
 
-	link = document->links + document->nlinks;
 	height = doc_view->vs->y + doc_view->box.height;
+	link = undef = document->links + document->nlinks;
 
-	for (i = doc_view->vs->y; i < height; i++) {
-		if (i >= 0
-		    && i < document->height
-		    && document->lines1[i]
+	for (i = int_max(0, doc_view->vs->y);
+	     i < int_min(height, document->height);
+	     i++) {
+		if (document->lines1[i]
 		    && document->lines1[i] < link)
 			link = document->lines1[i];
 	}
 
-	return (link == document->links + document->nlinks) ? NULL : link;
+	return (link == undef) ? NULL : link;
 }
 
 struct link *
 get_last_link(struct document_view *doc_view)
 {
 	struct link *link = NULL;
+	struct document *document;
+	int height;
 	register int i;
 
 	assert(doc_view && doc_view->document);
 	if_assert_failed return NULL;
 
-	if (!doc_view->document->lines2) return NULL;
+	document = doc_view->document;
 
-	for (i = doc_view->vs->y;
-	     i < doc_view->vs->y + doc_view->box.height;
+	if (!document->lines2) return NULL;
+
+	height = doc_view->vs->y + doc_view->box.height;
+
+	for (i = int_max(0, doc_view->vs->y);
+	     i < int_min(height, document->height);
 	     i++)
-		if (i >= 0 && i < doc_view->document->height
-		    && doc_view->document->lines2[i] > link)
-			link = doc_view->document->lines2[i];
+		if (document->lines2[i] > link)
+			link = document->lines2[i];
+
 	return link;
 }
 

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.234 2004/06/27 09:06:20 zas Exp $ */
+/* $Id: tables.c,v 1.235 2004/06/27 09:13:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1421,7 +1421,7 @@ get_table_heights(struct table *table)
 static void
 display_complicated_table(struct table *table, int x, int y, int *yy)
 {
-	int i, j;
+	int col, row;
 	struct document *document = table->part->document;
 	int xp, yp;
 	int expand_cols = (global_doc_opts && global_doc_opts->table_expand_cols);
@@ -1434,21 +1434,21 @@ display_complicated_table(struct table *table, int x, int y, int *yy)
 		add_fragment_identifier(table->part, table->fragment_id);
 
 	xp = x + table_frames.left;
-	for (i = 0; i < table->cols; i++) {
+	for (col = 0; col < table->cols; col++) {
 		yp = y + table_frames.top;
 
-		for (j = 0; j < table->rows; j++) {
-			struct table_cell *cell = CELL(table, i, j);
-			int row_height = table->rows_heights[j] +
-				(j < table->rows - 1 && get_hline_width(table, j + 1) >= 0);
-			int row;
+		for (row = 0; row < table->rows; row++) {
+			struct table_cell *cell = CELL(table, col, row);
+			int row_height = table->rows_heights[row] +
+				(row < table->rows - 1 && get_hline_width(table, row + 1) >= 0);
+			int row2;
 
 			par_format.bgcolor = default_bgcolor;
-			for (row = table->part->cy;
-			     row < yp + row_height + table_frames.top;
-			     row++) {
-				expand_lines(table->part, row);
-				expand_line(table->part, row, x - 1);
+			for (row2 = table->part->cy;
+			     row2 < yp + row_height + table_frames.top;
+			     row2++) {
+				expand_lines(table->part, row2);
+				expand_line(table->part, row2, x - 1);
 			}
 
 			if (cell->start) {
@@ -1458,15 +1458,15 @@ display_complicated_table(struct table *table, int x, int y, int *yy)
 				struct html_element *state;
 
 				for (s = 0; s < cell->colspan; s++) {
-					xw += table->cols_widths[i + s] +
+					xw += table->cols_widths[col + s] +
 					      (s < cell->colspan - 1 &&
-					       get_vline_width(table, i + s + 1) >= 0);
+					       get_vline_width(table, col + s + 1) >= 0);
 				}
 
 				for (s = 0; s < cell->rowspan; s++) {
-					yw += table->rows_heights[j + s] +
+					yw += table->rows_heights[row + s] +
 					      (s < cell->rowspan - 1 &&
-					       get_hline_width(table, j + s + 1) >= 0);
+					       get_hline_width(table, row + s + 1) >= 0);
 				}
 
 				if (expand_cols) {
@@ -1497,14 +1497,14 @@ display_complicated_table(struct table *table, int x, int y, int *yy)
 					else if (cell->valign == VALIGN_BOTTOM)
 						tmpy += (yw - cell->height);
 
-				   	part = format_cell(table, i, j, document, xp, tmpy, xw);
+				   	part = format_cell(table, col, row, document, xp, tmpy, xw);
 					if (part) {
 						int yt;
 
 						for (yt = 0; yt < part->box.height; yt++) {
 							expand_lines(table->part, yp + yt);
 							expand_line(table->part, yp + yt,
-								    xp + table->cols_widths[i]);
+								    xp + table->cols_widths[col]);
 						}
 
 						if (cell->fragment_id)
@@ -1517,19 +1517,20 @@ display_complicated_table(struct table *table, int x, int y, int *yy)
 				done_html_parser_state(state);
 			}
 
-			yp += table->rows_heights[j] +
-			      (j < table->rows - 1 && get_hline_width(table, j + 1) >= 0);
+			yp += table->rows_heights[row] +
+			      (row < table->rows - 1 && get_hline_width(table, row + 1) >= 0);
 		}
 
-		if (i < table->cols - 1) {
-			xp += table->cols_widths[i] + (get_vline_width(table, j + 1) >= 0);
+		if (col < table->cols - 1) {
+			/* FIXME: get_vline_width(.., row) ??? */
+			xp += table->cols_widths[col] + (get_vline_width(table, row + 1) >= 0);
 		}
 	}
 
 	yp = y;
-	for (j = 0; j < table->rows; j++) {
-		yp += table->rows_heights[j] +
-		      (j < table->rows - 1 && get_hline_width(table, j + 1) >= 0);
+	for (row = 0; row < table->rows; row++) {
+		yp += table->rows_heights[row] +
+		      (row < table->rows - 1 && get_hline_width(table, row + 1) >= 0);
 	}
 
 	*yy = yp + table_frames.top + table_frames.bottom;

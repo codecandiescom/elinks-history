@@ -2,6 +2,6 @@
 
 * Maybe some portability fixes...?
 
-* Use terminal-specific language.
+* Use terminal-specific charset.
 
 * Use our own charset routines instead of iconv.

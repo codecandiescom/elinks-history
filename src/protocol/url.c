@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.84 2003/07/12 20:21:15 jonas Exp $ */
+/* $Id: url.c,v 1.85 2003/07/13 13:02:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,80 +90,14 @@ get_url_data(unsigned char *url)
 
 /* This reconstructs URL with password stripped. */
 unsigned char *
-strip_url_password(unsigned char *url)
+strip_url_password(unsigned char *uristring)
 {
-	unsigned char *str = init_str();
-	int l = 0;
+	struct uri uri;
 
-	int prlen;
-	unsigned char *user;
-	int uslen;
-	unsigned char *pass;
-	int palen;
-	unsigned char *host;
-	int holen;
-	unsigned char *port;
-	int polen;
-	unsigned char *data;
-	int dalen;
-	int protocol;
+	if (!parse_uri(&uri, uristring))
+		return NULL;
 
-	if (!str) return NULL;
-
-	if (parse_url(url, &prlen, &user, &uslen, &pass, &palen, &host, &holen,
-			   &port, &polen, &data, &dalen, NULL)
-	    || !prlen) {
-		/* Unknown protocol or mangled URL; keep the URL untouched. */
-		mem_free(str);
-		return stracpy(url);
-	}
-
-	protocol = check_protocol(url, prlen);
-
-	if (protocol == PROTOCOL_UNKNOWN
-	    || get_protocol_free_syntax(protocol)) {
-		/* Custom or unknown or free-syntax protocol;
-		 * keep the URL untouched. */
-		mem_free(str);
-		return stracpy(url);
-	}
-
-	add_bytes_to_str(&str, &l, url, prlen);
-	add_chr_to_str(&str, &l, ':');
-
-	if (get_protocol_need_slashes(protocol))
-		add_to_str(&str, &l, "//");
-
-	if (user) {
-		add_bytes_to_str(&str, &l, user, uslen);
-		add_chr_to_str(&str, &l, '@');
-	}
-
-	if (host) {
-#ifdef IPV6
-		int brackets = !!memchr(host, ':', holen);
-
-		if (brackets) add_chr_to_str(&str, &l, '[');
-#endif
-		add_bytes_to_str(&str, &l, host, holen);
-#ifdef IPV6
-		if (brackets) add_chr_to_str(&str, &l, ']');
-#endif
-	}
-
-	if (port) {
-		add_chr_to_str(&str, &l, ':');
-		add_bytes_to_str(&str, &l, port, polen);
-	}
-
-	if (get_protocol_need_slash_after_host(protocol))
-		add_chr_to_str(&str, &l, '/');
-
-	if (dalen) {
-		add_bytes_to_str(&str, &l, data, dalen);
-	}
-
-	return str;
+	return get_uri_string(&uri, URI_PASSWORD|URI_POST);
 }
 
 

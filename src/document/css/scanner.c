@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.120 2004/02/01 05:52:05 jonas Exp $ */
+/* $Id: scanner.c,v 1.121 2004/02/01 16:42:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -264,7 +264,8 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 
 	} else if (first_char == '"' || first_char == '\'') {
 		/* TODO: Escaped delimiters --jonas */
-		unsigned char *string_end = strchr(string, first_char);
+		int size = scanner->end - string;
+		unsigned char *string_end = memchr(string, first_char, size);
 
 		if (string_end) {
 			/* We don't want the delimiters in the token */

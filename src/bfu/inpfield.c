@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.66 2003/10/26 15:59:12 zas Exp $ */
+/* $Id: inpfield.c,v 1.67 2003/10/26 16:11:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,7 +111,7 @@ input_field_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 	if (check_dialog(dlg_data)) return 1;
 
-	add_to_input_history(dlg_data->dlg->widgets->history, text, 1);
+	add_to_input_history(dlg_data->dlg->widgets->info.field.history, text, 1);
 
 	if (fn) fn(data, text);
 	ok_dialog(dlg_data, widget_data);
@@ -274,19 +274,19 @@ static void
 init_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	   struct term_event *ev)
 {
-	if (widget_data->widget->history) {
+	if (widget_data->widget->info.field.history) {
 		struct input_history_item *item;
 
-		foreach (item, widget_data->widget->history->items) {
+		foreach (item, widget_data->widget->info.field.history->items) {
 			int dsize = strlen(item->d) + 1;
 			struct input_history_item *hi;
 
 			hi = mem_alloc(sizeof(struct input_history_item)
-					+ dsize);
+				       + dsize);
 			if (!hi) continue;
 
 			memcpy(hi->d, item->d, dsize);
-			add_to_list(widget_data->history, hi);
+			add_to_list(widget_data->info.field.history, hi);
 		}
 	}
 
@@ -304,8 +304,8 @@ mouse_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	switch (ev->b & BM_BUTT) {
 		case B_WHEEL_UP:
 			if ((ev->b & BM_ACT) == B_DOWN &&
-			    (void *) widget_data->cur_hist->prev != &widget_data->history) {
-				widget_data->cur_hist = widget_data->cur_hist->prev;
+			    (void *) widget_data->info.field.cur_hist->prev != &widget_data->info.field.history) {
+				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->prev;
 				dlg_set_history(widget_data);
 				goto dsp_f;
 			}
@@ -313,8 +313,8 @@ mouse_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 
 		case B_WHEEL_DOWN:
 			if ((ev->b & BM_ACT) == B_DOWN &&
-			    (void *) widget_data->cur_hist != &widget_data->history) {
-				widget_data->cur_hist = widget_data->cur_hist->next;
+			    (void *) widget_data->info.field.cur_hist != &widget_data->info.field.history) {
+				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->next;
 				dlg_set_history(widget_data);
 				goto dsp_f;
 			}
@@ -342,16 +342,16 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 
 	switch (kbd_action(KM_EDIT, ev, NULL)) {
 		case ACT_UP:
-			if ((void *) widget_data->cur_hist->prev != &widget_data->history) {
-				widget_data->cur_hist = widget_data->cur_hist->prev;
+			if ((void *) widget_data->info.field.cur_hist->prev != &widget_data->info.field.history) {
+				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->prev;
 				dlg_set_history(widget_data);
 				goto dsp_f;
 			}
 			break;
 
 		case ACT_DOWN:
-			if ((void *) widget_data->cur_hist != &widget_data->history) {
-				widget_data->cur_hist = widget_data->cur_hist->next;
+			if ((void *) widget_data->info.field.cur_hist != &widget_data->info.field.history) {
+				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->next;
 				dlg_set_history(widget_data);
 				goto dsp_f;
 			}
@@ -433,11 +433,11 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			}
 
 		case ACT_AUTO_COMPLETE:
-			do_tab_compl(term, &widget_data->history, win);
+			do_tab_compl(term, &widget_data->info.field.history, win);
 			goto dsp_f;
 
 		case ACT_AUTO_COMPLETE_UNAMBIGUOUS:
-			do_tab_compl_unambiguous(term, &widget_data->history, win);
+			do_tab_compl_unambiguous(term, &widget_data->info.field.history, win);
 			goto dsp_f;
 
 		default:

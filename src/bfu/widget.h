@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.22 2003/10/26 15:59:12 zas Exp $ */
+/* $Id: widget.h,v 1.23 2003/10/26 16:11:15 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -37,8 +37,6 @@ struct widget_ops {
 struct widget {
 	struct widget_ops *ops;
 
-	struct input_history *history;
-
 	unsigned char *text;
 	unsigned char *data;
 
@@ -54,6 +52,7 @@ struct widget {
 		struct {
 			int min;
 			int max;
+			struct input_history *history;
 		} field;
 		struct {
 			int height;
@@ -69,11 +68,7 @@ struct widget {
 };
 
 struct widget_data {
-	struct list_head history;
-
 	struct widget *widget;
-	struct input_history_item *cur_hist;
-
 	unsigned char *cdata;
 
 	int x, y;
@@ -83,6 +78,8 @@ struct widget_data {
 		struct {
 			int vpos;
 			int cpos;
+			struct list_head history;
+			struct input_history_item *cur_hist;
 		} field;
 		struct {
 			int checked;

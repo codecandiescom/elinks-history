@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.14 2003/10/26 15:47:24 zas Exp $ */
+/* $Id: inpfield.h,v 1.15 2003/10/26 16:11:14 zas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -18,7 +18,7 @@
 		(dlg)->widgets[n].fn = (handler);			\
 		(dlg)->widgets[n].datalen = (datalen_);			\
 		(dlg)->widgets[n].data = (data_);			\
-		(dlg)->widgets[n].history = (hist);			\
+		(dlg)->widgets[n].info.field.history = (hist);		\
 		(n)++;							\
 	} while (0)
 

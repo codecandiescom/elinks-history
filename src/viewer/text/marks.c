@@ -1,5 +1,5 @@
 /* Marks registry */
-/* $Id: marks.c,v 1.1 2003/11/25 22:55:03 pasky Exp $ */
+/* $Id: marks.c,v 1.2 2004/01/01 03:27:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,36 +49,53 @@
 
 
 /* The @marks array is indexed by ASCII code of the mark. */
-/* TODO: Shrink the array not to waste memory by plenty of fields we are never
- * going to use, but do not overcomplicate it. It must be reasonably easy to
- * add slots for other marks in the future. --pasky */
-static struct view_state *marks[128];
+#define MARKS_SIZE 26 * 2
+static struct view_state *marks[MARKS_SIZE];
 
+#define is_valid_mark_char(c) (((c) >= 'A' && (c) <= 'Z') || ((c) >= 'a' && (c) <= 'z'))
+#define is_valid_mark_index(i)  ((i) >= 0 && (i) < MARKS_SIZE)
+
+static inline int
+index_from_char(unsigned char mark)
+{
+	assert(is_valid_mark_char(mark));
+		
+	if (mark >= 'A' && mark <= 'Z')
+		return mark - 'A';
+	
+	return mark - 'a' + 26;
+}
+		
 struct view_state *
 get_mark(unsigned char mark)
 {
-	assert(mark < 128);
+	int i;
 
-	if (!((mark >= 'A' && mark <= 'Z') || (mark >= 'a' && mark <= 'z')))
+	if (!is_valid_mark_char(mark))
 		return NULL;
 
-	return marks[mark];
+	i = index_from_char(mark);
+	assert(is_valid_mark_index(i));
+
+	return marks[i];
 }
 
 void
 set_mark(unsigned char mark, struct view_state *mark_vs)
 {
 	struct view_state *vs;
-
-	assert(mark < 128);
-
-	if (!((mark >= 'A' && mark <= 'Z') || (mark >= 'a' && mark <= 'z')))
+	int i;
+	
+	if (!is_valid_mark_char(mark))
 		return;
 
-	if (marks[mark]) {
-		destroy_vs(marks[mark]);
-		mem_free(marks[mark]);
-		marks[mark] = NULL;
+	i = index_from_char(mark);
+	assert(is_valid_mark_index(i));
+	
+	if (marks[i]) {
+		destroy_vs(marks[i]);
+		mem_free(marks[i]);
+		marks[i] = NULL;
 	}
 
 	if (!mark_vs) return;
@@ -87,7 +104,7 @@ set_mark(unsigned char mark, struct view_state *mark_vs)
 	if (!vs) return;
 	copy_vs(vs, mark_vs);
 
-	marks[mark] = vs;
+	marks[i] = vs;
 }
 
 void
@@ -95,7 +112,8 @@ free_marks(void)
 {
 	int i;
 
-	for (i = 0; i < 128; i++) {
+	for (i = 0; i < MARKS_SIZE; i++) {
+		assert(is_valid_mark_index(i));
 		if (!marks[i]) continue;
 		destroy_vs(marks[i]);
 		mem_free(marks[i]);

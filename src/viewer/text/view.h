@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.61 2004/10/09 22:51:05 miciah Exp $ */
+/* $Id: view.h,v 1.62 2004/10/09 23:00:33 miciah Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -67,8 +67,9 @@ enum frame_event_status move_cursor(struct session *ses,
 /* Used for changing wrapping of text */
 void toggle_wrap_text(struct session *ses, struct document_view *doc_view, int xxxx);
 
-void copy_current_link_to_clipboard(struct session *ses,
-				    struct document_view *doc_view);
+enum frame_event_status copy_current_link_to_clipboard(struct session *ses,
+						struct document_view *doc_view,
+						int xxx);
 
 /* If the user has provided a numeric prefix, jump to the link
  * with that number as its index. */

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.601 2004/10/09 22:51:05 miciah Exp $ */
+/* $Id: view.c,v 1.602 2004/10/09 23:00:33 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -506,22 +506,20 @@ move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 }
 
 
-void
+enum frame_event_status
 copy_current_link_to_clipboard(struct session *ses,
-			       struct document_view *doc_view)
+			       struct document_view *doc_view,
+			       int xxx)
 {
 	struct link *link;
 	struct uri *uri;
 	unsigned char *uristring;
 
-	if (!try_jump_to_link_number(ses, doc_view))
-		return;
-
 	link = get_current_link(doc_view);
-	if (!link) return;
+	if (!link) return FRAME_EVENT_OK;
 
 	uri = get_link_uri(ses, doc_view, link);
-	if (!uri) return;
+	if (!uri) return FRAME_EVENT_OK;
 
 	uristring = get_uri_string(uri, URI_ORIGINAL);
 	done_uri(uri);
@@ -530,6 +528,8 @@ copy_current_link_to_clipboard(struct session *ses,
 		set_clipboard_text(uristring);
 		mem_free(uristring);
 	}
+
+	return FRAME_EVENT_OK;
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.39 2004/06/25 09:54:45 jonas Exp $ */
+/* $Id: lists.h,v 1.40 2004/07/14 00:03:12 jonas Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -114,6 +114,13 @@ struct xlist_head {
 #endif /* LISTDEBUG */
 
 
+#ifdef HAVE_TYPEOF
+#define list_typeof(x) typeof(x)
+#else
+#define list_typeof(x) struct xlist_head *
+#endif /* HAVE_TYPEOF */
+
+
 #define init_list(x) \
 do { \
 	list_magic_set(x); \
@@ -150,40 +157,21 @@ do { \
 } while (0)
 
 
-#ifdef HAVE_TYPEOF
+#define add_to_list(l,x) \
+	add_at_pos((list_typeof(x)) &(l), (list_typeof(x)) (x))
 
-#define add_to_list(l,x) add_at_pos((typeof(x)) &(l), (x))
-#define add_to_list_end(l,x) add_at_pos((typeof(x)) (l).prev, (x))
+#define add_to_list_end(l,x) \
+	add_at_pos((list_typeof(x)) (l).prev, (list_typeof(x)) (x))
 
 #define foreach(e,l) \
 	for ((e) = (l).next; \
-	     (e) != (typeof(e)) &(l); \
+	     (list_typeof(e)) (e) != (list_typeof(e)) &(l); \
 	     (e) = (e)->next)
 
 #define foreachback(e,l) \
 	for ((e) = (l).prev; \
-	     (e) != (typeof(e)) &(l); \
+	     (list_typeof(e)) (e) != (list_typeof(e)) &(l); \
 	     (e) = (e)->prev)
-
-#else
-
-#define add_to_list(l,x) \
-	add_at_pos((struct xlist_head *) &(l), (struct xlist_head *) (x))
-#define add_to_list_end(l,x) \
-	add_at_pos((struct xlist_head *) (l).prev, (struct xlist_head *) (x))
-
-#define foreach(e,l) \
-	for ((e) = (l).next;\
-	     (e) != (void *) &(l);\
-	     (e) = (e)->next)
-
-#define foreachback(e,l) \
-	for ((e) = (l).prev; \
-	     (e) != (void *) &(l); \
-	     (e) = (e)->prev)
-
-#endif /* HAVE_TYPEOF */
-
 
 #define free_list(l) \
 do { \

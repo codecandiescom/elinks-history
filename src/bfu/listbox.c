@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.68 2003/05/02 23:17:56 pasky Exp $ */
+/* $Id: listbox.c,v 1.69 2003/05/02 23:19:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,11 +210,9 @@ done_down:
 			}
 
 			/* We're not at the start of anything, go on. */
-			if (!levmove) {
-				if (!stop) {
-					item = cprev;
-					item_cache(item);
-				}
+			if (!levmove && !stop) {
+				item = cprev;
+				item_cache(item);
 
 				while (item && !list_empty(item->child)
 					&& item->expanded

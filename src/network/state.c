@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.16 2003/11/29 18:32:03 jonas Exp $ */
+/* $Id: state.c,v 1.17 2003/11/29 21:55:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,86 +123,4 @@ void
 free_strerror_buf(void)
 {
 	free_list(strerror_buf);
-}
-
-
-#define average_speed(progress) \
-	((longlong) (progress)->loaded * 10 / ((progress)->elapsed / 100))
-
-#define current_speed(progress) \
-	((progress)->cur_loaded / (CURRENT_SPD_SEC * SPD_DISP_TIME / 1000))
-
-#define estimated_time(progress) \
-	(((progress)->size - (progress)->pos) \
-	 / ((longlong) (progress)->loaded * 10 / ((progress)->elapsed / 100)) \
-	 * 1000)
-
-unsigned char *
-get_stat_msg(struct download *stat, struct terminal *term,
-	     int wide, int full, unsigned char *separater)
-{
-	struct string msg;
-
-	if (stat->state != S_TRANS || !(stat->prg->elapsed / 100)) {
-
-		/* debug("%d -> %s", stat->state, _(get_err_msg(stat->state), term)); */
-		return stracpy(get_err_msg(stat->state, term));
-	}
-
-	if (!init_string(&msg)) return NULL;
-
-	/* FIXME: The following is a PITA from the l10n standpoint. A *big*
-	 * one, _("of")-like pearls are a nightmare. Format strings need to
-	 * be introduced to this fuggy corner of code as well. --pasky */
-
-	add_to_string(&msg, _("Received", term));
-	add_char_to_string(&msg, ' ');
-	add_xnum_to_string(&msg, stat->prg->pos + stat->prg->start);
-	if (stat->prg->size >= 0) {
-		add_char_to_string(&msg, ' ');
-		add_to_string(&msg, _("of", term));
-		add_char_to_string(&msg, ' ');
-		add_xnum_to_string(&msg, stat->prg->size);
-	}
-
-	add_to_string(&msg, separater);
-
-	if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
-		add_to_string(&msg,
-			      _(wide ? N_("Average speed") : N_("avg"), term));
-	} else {
-		add_to_string(&msg, _("Speed", term));
-	}
-
-	add_char_to_string(&msg, ' ');
-	add_xnum_to_string(&msg, average_speed(stat->prg));
-	add_to_string(&msg, "/s");
-
-	if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
-		add_to_string(&msg, ", ");
-		add_to_string(&msg,
-			      _(wide ? N_("current speed") : N_("cur"), term));
-		add_char_to_string(&msg, ' '),
-		add_xnum_to_string(&msg, current_speed(stat->prg));
-		add_to_string(&msg, "/s");
-	}
-
-	if (!full) return msg.source;
-
-	/* Do the following only if there is room */
-
-	add_to_string(&msg, separater);
-
-	add_to_string(&msg, _("Elapsed time", term));
-	add_char_to_string(&msg, ' ');
-	add_time_to_string(&msg, stat->prg->elapsed);
-
-	if (stat->prg->size >= 0 && stat->prg->loaded > 0) {
-		add_to_string(&msg, ", ");
-		add_to_string(&msg, _("estimated time", term));
-		add_char_to_string(&msg, ' ');
-		add_time_to_string(&msg, estimated_time(stat->prg));
-	}
-
-	return msg.source;
 }

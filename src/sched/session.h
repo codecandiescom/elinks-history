@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.71 2003/11/25 22:55:03 pasky Exp $ */
+/* $Id: session.h,v 1.72 2003/11/29 21:55:34 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -256,5 +256,10 @@ unsigned char *get_current_link_name(struct session *, unsigned char *, size_t);
 extern struct list_head questions_queue;
 
 void add_questions_entry(void *);
+
+unsigned char *
+get_stat_msg(struct download *stat, struct terminal *term,
+	     int wide, int full, unsigned char *separator);
+
 
 #endif

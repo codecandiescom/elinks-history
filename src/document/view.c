@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.90 2002/11/13 20:50:36 pasky Exp $ */
+/* $Id: view.c,v 1.91 2002/11/14 22:23:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1878,7 +1878,7 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 	static char *fn = NULL;
 	int flen;
 
-	if (op == 0 && !term->master) {
+	if (op == 0 && !term_->master) {
 		if (fn) mem_free(fn); fn = NULL; fs = NULL;
 
 		msg_box(term, NULL,

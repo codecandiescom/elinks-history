@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.7 2003/01/07 19:57:29 pasky Exp $ */
+/* $Id: connection.c,v 1.8 2003/01/07 23:20:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,11 @@ static int active_connections = 0;
 static int st_r = 0;
 static int keepalive_timeout = -1;
 
-static struct list_head queue = {&queue, &queue};
+/* TODO: queue probably shouldn't be exported; ideally we should probably
+ * separate it to an own module and define operations on it (especially
+ * foreach_queue or so). Ok ok, that's nothing important and I'm not even
+ * sure I would really like it ;-). --pasky */
+struct list_head queue = {&queue, &queue};
 static struct list_head h_conns = {&h_conns, &h_conns};
 static struct list_head keepalive_connections = {&keepalive_connections, &keepalive_connections};
 
@@ -910,7 +914,9 @@ load_url(unsigned char *url, unsigned char *prev_url,
 	}
 
 	if (cache_mode <= NC_CACHE && find_in_cache(url, &e) && !e->incomplete) {
-		if (!e->refcount && e->cache_mode == NC_PR_NO_CACHE && cache_mode != NC_ALWAYS_CACHE) {
+		if ((!e->refcount && e->cache_mode == NC_PR_NO_CACHE
+		     && cache_mode != NC_ALWAYS_CACHE)
+		    || (e->redirect && !get_opt_int("document.cache.cache_redirects"))) {
 			delete_cache_entry(e);
 			e = NULL;
 		} else {

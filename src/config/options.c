@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.180 2003/01/05 16:48:13 pasky Exp $ */
+/* $Id: options.c,v 1.181 2003/01/07 23:20:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1100,6 +1100,26 @@ register_options()
 		"cache", 0,
 		N_("Cache options."));
 	get_opt_rec(&root_options, "document.cache")->change_hook = change_hook_cache;
+
+	add_opt_bool("document.cache", N_("Cache informations about redirects"),
+		"cache_redirects", 0, 0,
+		N_("Cache even redirects sent by server (usually thru HTTP by a 302\n"
+		"HTTP code and a Location header). This was the original behaviour\n"
+		"for a quite some time, but it causes problems in a situation very\n"
+		"common to various web login systems - frequently, when accessing\n"
+		"certain location, they will redirect you to a login page if they\n"
+		"don't receive an auth cookie, the login page then gives you the\n"
+		"cookie and redirects you back to the original page, but there you\n"
+		"have already cached redirect back to the login page! If this\n"
+		"option has value of 0, this malfunction is fixed, but occassionally\n"
+		"you may get superfluous (depends on how you take it ;-) requests to\n"
+		"the server. If this option has value of 1, experienced users can\n"
+		"still workaround it by clever combination of usage of reload,\n"
+		"jumping around in session history and hitting ctrl+enter.\n"
+		"Note that this option is checked when retrieving the information\n"
+		"from cache, not when saving it to cache - thus if you will enable\n"
+		"it, even previous redirects will be taken from cache instead of\n"
+		"asking the server."));
 
 	add_opt_bool("document.cache", N_("Ignore cache-control info from server"),
 		"ignore_cache_control", 0, 1,

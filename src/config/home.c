@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.33 2003/10/03 16:25:41 kuser Exp $ */
+/* $Id: home.c,v 1.34 2003/10/03 16:28:17 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,12 +75,10 @@ elinks_dirname(unsigned char *path)
 	int i;
 	unsigned char *dir;
 
-	if (!path)
-		return NULL;
+	if (!path) return NULL;
 
 	dir = stracpy(path);
-	if (!dir)
-		return NULL;
+	if (!dir) return NULL;
 
 	for (i = strlen(dir) - 1; i >= 0; i--)
 		if (dir_sep(dir[i]))

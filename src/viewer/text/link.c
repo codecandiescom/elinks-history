@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.167 2004/05/14 10:19:19 zas Exp $ */
+/* $Id: link.c,v 1.168 2004/05/15 17:20:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -673,8 +673,13 @@ choose_mouse_link(struct document_view *doc_view, struct term_event *ev)
 	if (!doc_view->document->nlinks) return NULL;
 
 	/* If mouse is outside document view, no need to go further. */
+	if (ev->x < 0 || ev->x >= doc_view->box.width) return NULL;
+	if (ev->y < 0 || ev->y >= doc_view->box.height) return NULL;
+
+	/* FIXME: This does'nt work. --Zas
 	if (!is_in_box(&doc_view->box, ev->x, ev->y))
 		return NULL;
+	*/
 
 	/* Find links candidats. */
 	l1 = doc_view->document->links + doc_view->document->nlinks;

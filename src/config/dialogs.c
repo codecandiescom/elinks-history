@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.192 2004/07/15 15:54:20 jonas Exp $ */
+/* $Id: dialogs.c,v 1.193 2004/07/20 07:58:44 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -464,9 +464,10 @@ push_add_button(struct dialog_data *dlg_data,
 {
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
+	struct listbox_item *item = box->sel;
 	struct option *option;
 
-	if (!box->sel || !box->sel->udata) {
+	if (!item || !item->udata) {
 
 invalid_option:
 		msg_box(term, NULL, 0,
@@ -477,7 +478,15 @@ invalid_option:
 		return 0;
 	}
 
-	option = box->sel->udata;
+
+	if (item->type == BI_FOLDER && !item->expanded) {
+		item = box->ops->get_root(item);
+		if (!item || !item->udata)
+			goto invalid_option;
+	}
+
+	option = item->udata;
+
 	if (!(option->flags & OPT_AUTOCREATE)) {
 		if (option->root) option = option->root;
 		if (!option || !(option->flags & OPT_AUTOCREATE))

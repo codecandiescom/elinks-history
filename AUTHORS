@@ -452,6 +452,9 @@ Sergei Borushevsky <b_sp@usa.net>
 	Ctrl-W completion
 	SSL
 
+Sergey E. Galanov <sgsoftware@mail.ru>
+	Lua-support for setting and getting Elinks options
+
 Sergey Karpov <karpov@sai.msu.su>
 	First tab browsing patch for ELinks
 	Ideas !
@@ -538,4 +541,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.188 2005/03/27 21:07:54 jonas Exp $
+$Id: AUTHORS,v 1.189 2005/04/01 15:36:17 jonas Exp $

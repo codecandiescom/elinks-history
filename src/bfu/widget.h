@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.14 2003/10/24 23:39:47 pasky Exp $ */
+/* $Id: widget.h,v 1.15 2003/10/26 12:26:04 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -72,5 +72,7 @@ struct widget_data {
 void display_dlg_item(struct dialog_data *, struct widget_data *, int);
 
 void dlg_set_history(struct widget_data *);
+
+#define selected_widget(dlg_data) (&(dlg_data)->items[(dlg_data)->selected])
 
 #endif

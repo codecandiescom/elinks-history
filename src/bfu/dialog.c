@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.46 2003/10/25 11:29:58 zas Exp $ */
+/* $Id: dialog.c,v 1.47 2003/10/26 12:26:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,7 +100,7 @@ static void
 select_dlg_item(struct dialog_data *dlg_data, int i)
 {
 	if (dlg_data->selected != i) {
-		display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 0);
+		display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
 		display_dlg_item(dlg_data, &dlg_data->items[i], 1);
 		dlg_data->selected = i;
 	}
@@ -108,6 +108,43 @@ select_dlg_item(struct dialog_data *dlg_data, int i)
 		dlg_data->items[i].item->ops->select(&dlg_data->items[i], dlg_data);
 }
 
+static struct widget_ops *widget_type_to_ops[] = {
+	NULL,
+	&checkbox_ops,
+	&field_ops,
+	&field_pass_ops,
+	&button_ops,
+	&listbox_ops,
+};
+
+static inline struct widget_data *
+init_widget(struct dialog_data *dlg_data, struct term_event *ev, int i)
+{
+	struct widget_data *widget = &dlg_data->items[i];
+
+	memset(widget, 0, sizeof(struct widget_data));
+	widget->item = &dlg_data->dlg->items[i];
+
+	if (widget->item->dlen) {
+		widget->cdata = mem_alloc(widget->item->dlen);
+		if (widget->cdata) {
+			memcpy(widget->cdata,
+			       widget->item->data,
+			       widget->item->dlen);
+		} else {
+			return NULL;
+		}
+	}
+
+	widget->item->ops = widget_type_to_ops[widget->item->type];
+	init_list(widget->history);
+	widget->cur_hist = (struct input_history_item *) &widget->history;
+
+	if (widget->item->ops->init)
+		widget->item->ops->init(widget, dlg_data, ev);
+
+	return widget;
+}
 
 /* TODO: This is too long and ugly. Rewrite and split. */
 void
@@ -126,46 +163,8 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 
 	switch (ev->ev) {
 		case EV_INIT:
-			for (i = 0; i < dlg_data->n; i++) {
-				struct widget_data *widget = &dlg_data->items[i];
-
-				memset(widget, 0, sizeof(struct widget_data));
-				widget->item = &dlg_data->dlg->items[i];
-
-				if (widget->item->dlen) {
-					widget->cdata = mem_alloc(widget->item->dlen);
-					if (widget->cdata) {
-						memcpy(widget->cdata,
-						       widget->item->data,
-						       widget->item->dlen);
-					} else {
-						continue;
-					}
-				}
-				/* XXX: REMOVE THIS! --pasky */
-				/* XXX: YES YES ! GOOD IDEA ! --Zas */
-				{
-					struct widget_ops *w_o[] = {
-						NULL,
-						&checkbox_ops,
-						&field_ops,
-						&field_pass_ops,
-						&button_ops,
-						&listbox_ops,
-					};
-
-					widget->item->ops =
-						w_o[widget->item->type];
-				}
-
-				init_list(widget->history);
-				widget->cur_hist = (struct input_history_item *)
-						   &widget->history;
-
-				if (widget->item->ops->init)
-					widget->item->ops->init(widget, dlg_data,
-								ev);
-			}
+			for (i = 0; i < dlg_data->n; i++)
+				init_widget(dlg_data, ev, i);
 			dlg_data->selected = 0;
 
 		case EV_RESIZE:
@@ -186,9 +185,7 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 
 		case EV_KBD:
 			{
-			struct widget_data *di;
-
-			di = &dlg_data->items[dlg_data->selected];
+			struct widget_data *di = selected_widget(dlg_data);
 
 			/* First let the widget try out. */
 			if (di->item->ops->kbd
@@ -241,26 +238,26 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 
 			if ((ev->x == KBD_TAB && !ev->y) || ev->x == KBD_DOWN
 			    || ev->x == KBD_RIGHT) {
-				display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 0);
+				display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
 
 				dlg_data->selected++;
 				if (dlg_data->selected >= dlg_data->n)
 					dlg_data->selected = 0;
 
-				display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 1);
+				display_dlg_item(dlg_data, selected_widget(dlg_data), 1);
 				redraw_from_window(dlg_data->win);
 				break;
 			}
 
 			if ((ev->x == KBD_TAB && ev->y) || ev->x == KBD_UP
 			    || ev->x == KBD_LEFT) {
-				display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 0);
+				display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
 
 				dlg_data->selected--;
 				if (dlg_data->selected < 0)
 					dlg_data->selected = dlg_data->n - 1;
 
-				display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 1);
+				display_dlg_item(dlg_data, selected_widget(dlg_data), 1);
 				redraw_from_window(dlg_data->win);
 				break;
 			}
@@ -368,14 +365,14 @@ center_dlg(struct dialog_data *dlg_data)
 void
 draw_dlg(struct dialog_data *dlg_data)
 {
-	draw_area(dlg_data->win->term, dlg_data->x, dlg_data->y, dlg_data->xw, dlg_data->yw, ' ', 0,
+	draw_area(dlg_data->win->term, dlg_data->x, dlg_data->y, dlg_data->xw,
+		  dlg_data->yw, ' ', 0,
 		  get_bfu_color(dlg_data->win->term, "dialog.generic"));
 
 	if (get_opt_bool("ui.dialogs.shadows")) {
 		/* Draw shadow */
-		struct color_pair * shadow_color;
-
-		shadow_color = get_bfu_color(dlg_data->win->term, "dialog.shadow");
+		struct color_pair *shadow_color = get_bfu_color(dlg_data->win->term,
+								"dialog.shadow");
 
 		/* (horizontal) */
 		draw_area(dlg_data->win->term, dlg_data->x + 2, dlg_data->y + dlg_data->yw,

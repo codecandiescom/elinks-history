@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.34 2003/10/25 11:18:23 zas Exp $ */
+/* $Id: button.c,v 1.35 2003/10/26 12:26:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,7 +128,7 @@ mouse_button(struct widget_data *di, struct dialog_data *dlg_data, struct term_e
 	    || ev->x >= di->x + strlen(di->item->text) + 4)
 		return EVENT_NOT_PROCESSED;
 
-	display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 0);
+	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
 	dlg_data->selected = di - dlg_data->items;
 	display_dlg_item(dlg_data, di, 1);
 	if ((ev->b & BM_ACT) == B_UP && di->item->ops->select)

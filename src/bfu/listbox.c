@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.94 2003/10/25 16:06:39 pasky Exp $ */
+/* $Id: listbox.c,v 1.95 2003/10/26 12:26:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -552,20 +552,20 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg_data,
 			/* Catch change focus requests */
 			if (ev->x == KBD_RIGHT || (ev->x == KBD_TAB && !ev->y)) {
 				/* Move right */
-				display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 0);
+				display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
 				if (++dlg_data->selected >= n)
 					dlg_data->selected = 0;
-				display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 1);
+				display_dlg_item(dlg_data, selected_widget(dlg_data), 1);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (ev->x == KBD_LEFT || (ev->x == KBD_TAB && ev->y)) {
 				/* Move left */
-				display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 0);
+				display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
 				if (--dlg_data->selected < 0)
 					dlg_data->selected = n - 1;
-				display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 1);
+				display_dlg_item(dlg_data, selected_widget(dlg_data), 1);
 
 				return EVENT_PROCESSED;
 			}

@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.11 2004/01/17 22:12:19 pasky Exp $ */
+/* $Id: value.c,v 1.12 2004/01/17 23:05:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,25 +102,25 @@ css_parse_font_attribute_value(union css_decl_value *value,
 
 	/* font-weight */
 
-	if (!strlcasecmp(*string, -1, "bolder", 6)) {
+	if (!strncasecmp(*string, "bolder", 6)) {
 		(*string) += 6;
 		value->font_attribute.add |= AT_BOLD;
 		return 1;
 	}
 
-	if (!strlcasecmp(*string, -1, "lighter", 7)) {
+	if (!strncasecmp(*string, "lighter", 7)) {
 		(*string) += 7;
 		value->font_attribute.rem |= AT_BOLD;
 		return 1;
 	}
 
-	if (!strlcasecmp(*string, -1, "bold", 4)) {
+	if (!strncasecmp(*string, "bold", 4)) {
 		(*string) += 4;
 		value->font_attribute.add |= AT_BOLD;
 		return 1;
 	}
 
-	if (!strlcasecmp(*string, -1, "normal", 6)) {
+	if (!strncasecmp(*string, "normal", 6)) {
 		(*string) += 6;
 		/* XXX: font-weight/font-style distinction */
 		value->font_attribute.rem |= AT_BOLD | AT_ITALIC;
@@ -129,8 +129,8 @@ css_parse_font_attribute_value(union css_decl_value *value,
 
 	/* font-style */
 
-	if (!strlcasecmp(*string, -1, "italic", 6) ||
-	    !strlcasecmp(*string, -1, "oblique", 7)) {
+	if (!strncasecmp(*string, "italic", 6) ||
+	    !strncasecmp(*string, "oblique", 7)) {
 		(*string) += 6 + (**string == 'o');
 		value->font_attribute.add |= AT_ITALIC;
 		return 1;
@@ -160,25 +160,25 @@ css_parse_font_attribute_value(union css_decl_value *value,
 static int
 css_parse_text_align_value(union css_decl_value *value, unsigned char **string)
 {
-	if (!strlcasecmp(*string, -1, "left", 4)) {
+	if (!strncasecmp(*string, "left", 4)) {
 		(*string) += 4;
 		value->text_align = AL_LEFT;
 		return 1;
 	}
 
-	if (!strlcasecmp(*string, -1, "right", 5)) {
+	if (!strncasecmp(*string, "right", 5)) {
 		(*string) += 5;
 		value->text_align = AL_RIGHT;
 		return 1;
 	}
 
-	if (!strlcasecmp(*string, -1, "center", 6)) {
+	if (!strncasecmp(*string, "center", 6)) {
 		(*string) += 6;
 		value->text_align = AL_CENTER;
 		return 1;
 	}
 
-	if (!strlcasecmp(*string, -1, "justify", 7)) {
+	if (!strncasecmp(*string, "justify", 7)) {
 		(*string) += 7;
 		value->text_align = AL_BLOCK;
 		return 1;

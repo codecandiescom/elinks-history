@@ -1,3 +1,158 @@
+Thu Jun 24 18:15:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/menu.c, config/kbdbind.c, config/kbdbind.h:
+
+	Add ACT_MENU_SEARCH action by default bound to '/'.  Implement menu
+	searching by using input lines and strcasestr(). A little bloated
+	perhaps but ...  
+	
+	Fixes bug 24.  
+
+Thu Jun 24 15:43:13 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	@xcols -> @cols_x, @xc -> @cols_x_count, @nc -> @new_cols_x.  
+
+Thu Jun 24 15:36:28 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Use plural for columns widths array and rows heights array:
+	@columns_width -> @cols_widths, @rows_height -> @rows_heights,
+	@rows_height (local variable) -> @row_height. Perhaps clearer.  
+
+Thu Jun 24 15:32:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	menu_kbd_handler(): Cleanup default label.  
+
+Thu Jun 24 15:29:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	get_table_heights(): make more obvious table->rows_height is an
+	array.  
+
+Thu Jun 24 15:26:07 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	get_column_widths(): make more obvious table->(max_c|min_c) are
+	arrays.  
+
+Thu Jun 24 15:22:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	check_table_widths(): make more obvious table->max_c is an array.  
+
+Thu Jun 24 15:16:38 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	check_table_widths(): @w -> @widths.  
+
+Thu Jun 24 15:15:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/parse.c:
+
+	Fix fix for bug 52 to only output chars before the first &#13; 
+
+Thu Jun 24 15:12:21 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	@m -> @max, @mi -> @max_index. An extra space in a comment was
+	dropped too.  
+
+Thu Jun 24 15:09:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/parse.c:
+
+	Really nasty hack to make &#13; handling in <pre>-tags
+	lynx-compatible. It works around the entity handling done in the
+	renderer, since checking #13 value there would require something
+	along the lines of NBSP_CHAR or checking for '\n's in AL_NONE text.  
+	
+	Fixes bug 52 (and 387) 
+
+Thu Jun 24 15:05:46 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Use for() instead of while() loop.  
+
+Thu Jun 24 13:17:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Don't save default keybindings that has not been deleted. Should fix
+	bug 337 although I don't know if it breaks the config style saving
+	or that requires some more complex changes. If not please close the
+	bug.  
+
+Thu Jun 24 11:11:06 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.inc:
+
+	Change the default value for document.browse.accesskey.priority from
+	1 to 2.  Anyone who wants alt-h to select the 'Home' link on
+	freshmeat.net instead of opening the Help menu can figure out how to
+	change the setting.  
+
+Thu Jun 24 11:02:28 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Refresh when an access key is used and
+	document.browse.accesskey.priority = 1.  
+
+Thu Jun 24 11:01:13 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Fix access-key code to work when document.browse.accesskey.priority
+	= 2.  
+
+Thu Jun 24 09:48:14 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Translation fix.  
+
+Thu Jun 24 09:07:06 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	get_cell_width(): @w -> @width.  
+
+Thu Jun 24 09:04:34 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	@m -> @margin, @xs -> @x, @ys -> @y.  
+
+Thu Jun 24 08:39:21 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Jun 24 07:35:34 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Remove find_tag, which was 'moved' to src/viewer/text/draw.c.  
+
+Thu Jun 24 06:35:32 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: main.c, config/options.c, config/options.h:
+
+	Update option box-items to reflect the value of config.show_template 
+	when they are first loaded.  
+
 Wed Jun 23 20:33:18 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* po/cs.po:

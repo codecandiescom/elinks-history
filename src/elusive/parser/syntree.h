@@ -1,4 +1,4 @@
-/* $Id: syntree.h,v 1.6 2002/12/27 02:23:41 pasky Exp $ */
+/* $Id: syntree.h,v 1.7 2002/12/29 14:42:02 pasky Exp $ */
 
 #ifndef EL__USIVE_PARSER_SYNTREE_H
 #define EL__USIVE_PARSER_SYNTREE_H
@@ -74,6 +74,10 @@ struct syntree_node {
 /* Initializes a node structure. Returns NULL upon allocation failure. */
 struct syntree_node *
 init_syntree_node();
+
+/* Releases the node structure and all its attributes and leafs. */
+void
+done_syntree_node(struct syntree_node *node);
 
 /* Returns value string of an attribute with this name. NULL means there's no
  * such attribute set, otherwise a pointer is returned that points to

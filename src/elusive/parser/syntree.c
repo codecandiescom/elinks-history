@@ -1,5 +1,5 @@
 /* Syntax tree utility tools */
-/* $Id: syntree.c,v 1.6 2002/12/29 13:39:35 pasky Exp $ */
+/* $Id: syntree.c,v 1.7 2002/12/29 14:42:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,37 @@ init_syntree_node()
 
 	return node;
 }
+
+void
+done_syntree_node(struct syntree_node *node)
+{
+	struct syntree_node *leaf = node->leafs.next;
+	struct attribute *attrib = node->attrs.next;
+
+	while ((struct list_head *) leaf != &node->leafs) {
+		struct syntree_node *leaf_next = leaf->next;
+
+		done_syntree_node(leaf);
+		leaf = leaf_next;
+	}
+
+	while ((struct list_head *) attrib != &node->attrs) {
+		struct attribute *attrib_next = attrib->next;
+
+		/* TODO: Implement free function in attrib.c. */
+		mem_free(attrib);
+		attrib = attrib_next;
+	}
+
+	if (node->str != node->src)
+		mem_free(node->str);
+	if (node->special_data)
+		mem_free(node->special_data);
+
+	if (node->next) del_from_list(node);
+	mem_free(node);
+}
+
 
 /* TODO: Possibly ascend to the root. */
 unsigned char *

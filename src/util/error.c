@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.3 2002/03/17 17:27:52 pasky Exp $ */
+/* $Id: error.c,v 1.4 2002/03/18 06:33:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,8 +14,8 @@
 
 #include <links.h>
 
-#include <bfu/bfu.h>
 #include <util/error.h>
+#include <util/memlist.h>
 
 
 #ifdef LEAK_DEBUG

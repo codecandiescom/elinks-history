@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.6 2002/03/17 18:14:07 pasky Exp $ */
+/* $Id: parser.c,v 1.7 2002/03/18 06:33:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,7 @@
 #include <protocol/http/header.h>
 #include <protocol/url.h>
 #include <util/error.h>
+#include <util/memlist.h>
 
 /* TODO: This needs rewrite. Yes, no kidding. */
 

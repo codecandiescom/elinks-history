@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.3 2002/03/17 17:27:50 pasky Exp $ */
+/* $Id: parser.h,v 1.4 2002/03/18 06:33:13 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -9,10 +9,10 @@ struct form_control;
 struct f_data;
 
 #include <links.h>
-#include <bfu/bfu.h>
 #include <document/session.h>
 #include <document/html/colors.h>
 #include <document/html/renderer.h>
+#include <util/memlist.h>
 
 /* XXX: This is just terible - this interface is from 75% only for other HTML
  * files - there's lack of any well defined interface and it's all randomly

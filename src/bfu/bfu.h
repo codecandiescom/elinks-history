@@ -1,19 +1,10 @@
-/* $Id: bfu.h,v 1.3 2002/03/17 17:27:48 pasky Exp $ */
+/* $Id: bfu.h,v 1.4 2002/03/18 06:33:12 pasky Exp $ */
 
 #ifndef EL__BFU_H
 #define EL__BFU_H
 
 #include <links.h> /* list_head */
 #include <lowlevel/terminal.h>
-
-struct memory_list {
-	int n;
-	void *p[1];
-};
-
-struct memory_list *getml(void *, ...);
-void add_to_ml(struct memory_list **, ...);
-void freeml(struct memory_list *);
 
 
 #define MENU_FUNC (void (*)(struct terminal *, void *, void *))

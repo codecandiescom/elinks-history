@@ -1,5 +1,5 @@
 /* Base64 encode/decode implementation. */
-/* $Id: base64.c,v 1.11 2003/08/01 21:49:40 jonas Exp $ */
+/* $Id: base64.c,v 1.12 2003/08/02 08:42:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,12 +62,12 @@ unsigned char *
 base64_decode(register unsigned char *in)
 {
 	static unsigned char is_base64_char[256]; /* static to force initialization at zero */
-	unsigned char decode[256];
+	static unsigned char decode[256];
 	register unsigned char *out;
 	unsigned char *outstr;
-	int i = sizeof(base64_chars) - 1;
 	int count = 0;
 	unsigned int bits = 0;
+	static int once = 0;
 
 	assert(in && *in);
 	if_assert_failed return NULL;
@@ -75,11 +75,15 @@ base64_decode(register unsigned char *in)
 	outstr = out = mem_alloc(strlen(in) / 4 * 3 + 1);
 	if (!outstr) return NULL;
 
-	/* XXX: move this elsewhere if intense usage of base64_decode. --Zas */
-	while (i >= 0) {
-		is_base64_char[base64_chars[i]] = 1;
-		decode[base64_chars[i]] = i;
-		i--;
+	if (!once) {
+		int i = sizeof(base64_chars) - 1;
+
+		while (i >= 0) {
+			is_base64_char[base64_chars[i]] = 1;
+			decode[base64_chars[i]] = i;
+			i--;
+		}
+		once = 1;
 	}
 
 	while (*in) {

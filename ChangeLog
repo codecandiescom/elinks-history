@@ -1,3 +1,9 @@
+Mon Aug 12 01:40:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/listbox.c:
+
+	Generic tidyup.  
+
 Mon Aug 12 01:30:19 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/http/http.c:

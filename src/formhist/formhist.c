@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.32 2003/09/01 20:32:27 zas Exp $ */
+/* $Id: formhist.c,v 1.33 2003/09/01 22:44:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,14 +228,7 @@ add_to_saved_forms(struct formhist_data *form1)
 	 * action url.
 	 * FIXME: for some yet unknown reason, there's still some duplicate
 	 * url entries in formhist file... --Zas */
-	foreach (form, saved_forms) {
-		if (!strcmp(form->url, form1->url)) {
-			/* Delete entry. */
-			del_from_list(form);
-			free_form(form);
-			break;
-		}
-	}
+	forget_form(form1);
 
 	form = mem_calloc(1, sizeof(struct formhist_data));
 	if (!form) return 0;
@@ -297,9 +290,18 @@ remember_form(struct formhist_data *form1)
 }
 
 int
-forget_form(struct formhist_data *form)
+forget_form(struct formhist_data *form1)
 {
-	/* FIXME: write me. */
+	struct formhist_data *form;
+
+	foreach (form, saved_forms) {
+		if (!strcmp(form->url, form1->url)) {
+			del_from_list(form);
+			free_form(form);
+			return 1;
+		}
+	}
+
 	return 0;
 }
 

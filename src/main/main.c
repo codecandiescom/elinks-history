@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.172 2004/02/11 10:12:34 zas Exp $ */
+/* $Id: main.c,v 1.173 2004/02/12 17:51:38 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,6 +116,8 @@ init(void)
 
 	url = stracpy(url);
 	if (!url) goto fatal_error;
+
+	if (!isatty(0)) add_to_string_list(&url_list, "file:///dev/stdin", 17);
 
 	if (!get_opt_bool_tree(cmdline_options, "no-home")) {
 		init_home();

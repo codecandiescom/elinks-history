@@ -1,9 +1,422 @@
+Sun Jan 25 15:28:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/exmode.c:
+
+	Get the exmode rolling by supporting action execution. Also
+	':goto-url fm' should work.  
+
+Sun Jan 25 14:43:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/info.c:
+
+	Fix Help -> Keys toggling.  
+
+Sun Jan 25 14:24:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, sched/action.c:
+
+	Trim the main mappings. Only those currently in use remains.  
+
+Sun Jan 25 14:10:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Trim the menu mappings. Only those currently in use remains.  
+
+Sun Jan 25 14:04:14 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Moved delete_keybinding() in front of add_keybinding().  
+
+Sun Jan 25 14:03:32 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	delete_keybinding() now drops @kb's KBDB_DEFAULT flag before
+	free_keybinding() so that it's really *always* deleted. However its
+	only user add_keybinding() sets KBDB_DEFAULT for the new keybinding
+	taking place of the original default keybinding, so that if the new
+	one is removed by the user, it is written to the configfile. This
+	should fix the tons of none-binds appearing in configfile now.  
+
+Sun Jan 25 13:59:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: inphist.c, listmenu.c:
+
+	Fix usage of ACT_MENU_NONE for menu entry actions. We should use
+	main mapping everywhere for that.  
+
+Sun Jan 25 13:57:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/exmode.c:
+
+	I hope this is right. Use edit key map for exmode.  
+
+Sun Jan 25 13:53:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Trim the edit mappings. Only those currently in use remains.  
+
+Sun Jan 25 13:52:29 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Do not export delete_keybinding().  
+
+Sun Jan 25 13:51:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/exmode.c:
+
+	Use ACT_EDIT_CANCEL for bailing out of exmode.  
+
+Sun Jan 25 13:20:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	Remove actions that are clearly not ACT_MAIN_.  
+
+Sun Jan 25 13:17:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/menu.h, bfu/text.c, config/dialogs.c, config/kbdbind.c,
+	config/kbdbind.h, dialogs/info.c, dialogs/menu.c,
+	dialogs/options.c, mime/dialogs.c, sched/action.c,
+	viewer/text/link.c, viewer/text/view.c:
+
+	s/ACT_/ACT_MAIN_/. Geronimooooo!! 
+
+Sun Jan 25 13:09:01 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	Swapped action/keymap guessing from item udata, therefore fixing
+	adding a keybinding.  
+
+Sun Jan 25 13:05:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	s/ACT_MENU_NONE/ACT_MAIN_NONE/ .. all menu entry actions are really
+	main actions.  
+
+Sun Jan 25 13:03:55 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	Trivial tidyup.  
+
+Sun Jan 25 13:03:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	assert() keymap when using it to lookup in action_table[].  
+
+Sun Jan 25 12:52:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: inphist.c, listmenu.c, menu.c:
+
+	Use ACT_MENU_NONE for menu actions.  
+
+Sun Jan 25 12:47:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/exmode.c:
+
+	Even more ACT_MENU_ usage.  
+
+Sun Jan 25 12:44:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	More ACT_MENU_ usage.  
+
+Sun Jan 25 12:38:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, viewer/text/form.c:
+
+	s/ACT_/ACT_EDIT_/ 
+
+Sun Jan 25 12:38:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	s/ACT_/ACT_MENU_/ 
+
+Sun Jan 25 12:03:54 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Add 'Space' -> ' ' to @key_table and remove its special handling
+	from make_keystroke().  
+
+Sun Jan 25 10:19:49 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Tiny whitespace fix.  
+
+Sun Jan 25 10:18:48 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	In make_keystroke, if !escape, print '<space>' instead of ' '. This
+	affects the keybinding manager and Help->Keys box.  
+
+Sun Jan 25 09:55:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Don.t add CSS to globhist.  
+
+Sun Jan 25 09:48:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/info.c:
+
+	menu_keys() message box currently only have on button.  
+
+Sun Jan 25 09:33:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/document.c, document/document.h,
+	document/options.c, document/options.h, document/css/css.c,
+	document/css/css.h, document/html/parser.c, document/html/parser.h,
+	document/html/renderer.c, sched/connection.h, sched/session.c:
+
+	Add support for importing external stylesheets. It is done using the
+	import callback to add urls to a new document->css_imports string
+	list via html_special(). The patch also introduces an option for
+	controling whether external stylesheets should be imported
+	(document.css.import). Downloading of stylesheets have special
+	PRI_CSS priority that amongst other things is used to avoid any
+	ses_chktype() calls from file_end_load() so atleast it is useful.  
+
+Sun Jan 25 08:17:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Remove some pseudo code. It messes up the css import patch.  
+
+Sun Jan 25 07:31:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	When reloading use the original priority for files to load and not
+	the hardcoded PRI_FRAME. This is needed for importing CSS documents.  
+
+Sun Jan 25 07:19:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/css.c:
+
+	Sort the many CSS options.  
+
+Sun Jan 25 05:02:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: css/css.c, css/parser.c, css/stylesheet.c,
+	css/stylesheet.h, html/parser.c:
+
+	Use callback for imports. It seems more easy and straight forward
+	now. Any import will then be loaded and added before the rest of the
+	stylesheet it was imported from. For the html parser we will just
+	check cache to see if we can go ahead and parse it or need to call
+	special_f(). Oh an patch is loaded with fixes for last patch.  
+
+Sun Jan 25 04:20:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/css.c:
+
+	Ok .. read_encodede_file() wants the filename in a MAX_STR_LEN
+	buffer so let's give it just that so it doesn't cause memory
+	corruptions in try_encoding_extensions().  
+
+Sun Jan 25 03:42:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: parser.c, scanner.c:
+
+	Support url() imports. It seems importing non existing files cases
+	memory corruption.  
+
+Sun Jan 25 03:16:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: parser.c, scanner.c:
+
+	We now trim string and url() tokens so token->string and
+	token->length only contains the information we are interested in.  
+
+Sun Jan 25 02:35:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Generate url() tokens.  
+
+Sun Jan 25 02:10:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/css.c:
+
+	Try to handle imports for the default stylesheet. Very inefficient.
+	We need some merge_stylesheet() and some kind of rating to control
+	what gets in and what not.  
+
+Sun Jan 25 02:08:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: parser.c, stylesheet.c, stylesheet.h:
+
+	Add string list import member to struct css_stylesheet.  
+
+Sun Jan 25 01:33:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: css/css.c, css/stylesheet.h, html/parser.c:
+
+	Use macro for static initialization of stylesheets.  
+
+Sun Jan 25 01:27:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	css_parse_stylesheet(): Use a switch in the main loop so all @-rule
+	tokens are routed to css_parse_atrule().  
+
+Sun Jan 25 01:20:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/cmdline.c, sched/session.c, terminal/tab.c,
+	util/string.c, util/string.h:
+
+	Make add_to_string_list() take length of added string. -1 means call
+	strlen().  
+
+Sun Jan 25 00:27:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/stylesheet.h:
+
+	Describe stylesheet structs.  
+
+Sun Jan 25 00:24:07 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Put a separator between the togglers and info/reload in the View
+	menu.  
+
+Sun Jan 25 00:23:35 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Moved ACT_RELOAD from File to View. This is maybe a little
+	controversial, but well... ;) 
+
+Sun Jan 25 00:21:13 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/menu.c,
+	sched/action.c:
+
+	Added ACT_(MAIN_)RERENDER, by default not bound to anything, but
+	available through the View menu. It rerenders the current document,
+	thing useful in such a wide variety of scenarios.  
+
+Sun Jan 25 00:11:47 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/info.c:
+
+	Fixed more compilation problems.  
+
+Sun Jan 25 00:09:50 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/info.c:
+
+	Fixed misplaced #endif.  
+
+Sun Jan 25 00:09:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Some other compilation fixes.  
+
+Sun Jan 25 00:07:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Some compilation fixes.  
+
+Sun Jan 25 00:04:10 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.h:
+
+	...and also add the missed actions to the other keymap enums.  
+
+Sun Jan 25 00:01:38 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.h:
+
+	Reintroduced actions accidentally removed from enum main_action.  
+
+Sat Jan 24 23:58:42 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/dialog.c, bfu/hierbox.c, bfu/listbox.c, bfu/menu.c,
+	viewer/text/search.c:
+
+	Use keymap-specific enum names for non-main actions.  
+
+Sat Jan 24 23:55:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/css.c:
+
+	Add TODO about updating format cache when default stylesheet has be
+	reloaded.  
+
+Sat Jan 24 23:50:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/dialog.c, bfu/hierbox.c, bfu/listbox.c, bfu/menu.c,
+	bfu/menu.h, config/kbdbind.h, dialogs/info.c, sched/action.c,
+	sched/action.h, viewer/text/search.c, viewer/text/view.c:
+
+	enum action -> enum {main,edit,menu}_action, edit,menu being just
+	mindless clones of main now.  
+
+Sat Jan 24 23:33:34 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/info.c:
+
+	Removed KEYACTS, which has no business in the modern actions
+	organization. This also means one dirty'n'quick hack for
+	@action_box_items and temporarily disabling menu_keys() toggling
+	until the water will be calm again.  
+
+Sat Jan 24 23:25:06 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: dialogs.c, kbdbind.c, kbdbind.h:
+
+	Since enum action is gonna be split, remove its usage on places
+	where generic non-keymap-specific action number will be used.  
+
+Sat Jan 24 23:14:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Move ACT_SCRIPTING_FUNCTION up in the enum, so that it is grouped
+	together with ACT_NONE as universal for all keymaps (by its very
+	nature).  
+
+Sat Jan 24 23:11:29 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/dialogs.c, config/kbdbind.c, config/kbdbind.h,
+	sched/action.c:
+
+	The action number is now keymap specific. From the outside the only
+	change for now is that write_action() takes keymap along the action
+	enum, from the inside the action_table was split into three yet
+	identical copies (one for each keymap) and we carry enum keymap
+	along enum action everywhere where we didn't yet for some reason.  
+
 Sat Jan 24 22:52:55 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/config/kbdbind.c:
 
 	Fixed toggle_display_action_listboxes() to handle the new
 	organization.  
+
+Sat Jan 24 22:52:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/css.c:
+
+	Make document.css.stylesheet description more clear.  
 
 Sat Jan 24 22:52:39 2004  Jonas Fonseca <fonseca@diku.dk>:
 

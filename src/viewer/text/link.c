@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.132 2003/12/28 04:56:34 miciah Exp $ */
+/* $Id: link.c,v 1.133 2003/12/28 18:45:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -904,10 +904,10 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 		else {
 			int c = can_open_in_new(term);
 
-			add_to_menu(&mi, N_("~Follow link"), NULL, ACT_NONE,
+			add_to_menu(&mi, N_("~Follow link"), NULL, ACT_ENTER,
 				    (menu_func) send_enter, NULL, 0);
 
-			add_to_menu(&mi, N_("Follow link and r~eload"), NULL, ACT_NONE,
+			add_to_menu(&mi, N_("Follow link and r~eload"), NULL, ACT_ENTER_RELOAD,
 				    (menu_func) send_enter_reload, NULL, 0);
 
 			add_separator_to_menu(&mi);

@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.26 2004/01/18 14:22:08 pasky Exp $ */
+/* $Id: apply.c,v 1.27 2004/01/18 14:23:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,7 +81,7 @@ css_apply(struct html_element *element)
 	if (!code)
 		return;
 
-	css_parse_decl(&props, code);
+	css_parse_properties(&props, code);
 	mem_free(code);
 
 	foreach (prop, props) {

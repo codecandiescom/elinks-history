@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.15 2004/01/18 12:50:16 pasky Exp $ */
+/* $Id: parser.c,v 1.16 2004/01/18 14:23:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@
 
 
 void
-css_parse_decl(struct list_head *props, unsigned char *string)
+css_parse_properties(struct list_head *props, unsigned char *string)
 {
 	assert(props && string);
 

@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.5 2004/01/18 12:54:45 pasky Exp $ */
+/* $Id: parser.h,v 1.6 2004/01/18 14:23:03 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PARSER_H
 #define EL__DOCUMENT_CSS_PARSER_H
@@ -13,6 +13,6 @@
  * css_property}es to the specified list. The function returns positive value
  * in case it recognized a property in the given string, or zero in case of an
  * error. */
-void css_parse_decl(struct list_head *props, unsigned char *string);
+void css_parse_properties(struct list_head *props, unsigned char *string);
 
 #endif

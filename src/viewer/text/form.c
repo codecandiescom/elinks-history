@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.32 2003/08/23 03:31:43 jonas Exp $ */
+/* $Id: form.c,v 1.33 2003/08/23 06:18:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,6 +112,30 @@ init_ctrl(struct form_control *frm, struct form_state *fs)
 		default:
 			internal("unknown form field type");
 	}
+}
+
+void
+done_form_control(struct form_control *fc)
+{
+	int i;
+
+	assert(fc);
+	if_assert_failed return;
+
+	if (fc->action) mem_free(fc->action);
+	if (fc->target) mem_free(fc->target);
+	if (fc->name) mem_free(fc->name);
+	if (fc->alt) mem_free(fc->alt);
+	if (fc->default_value) mem_free(fc->default_value);
+
+	for (i = 0; i < fc->nvalues; i++) {
+		if (fc->values[i]) mem_free(fc->values[i]);
+		if (fc->labels[i]) mem_free(fc->labels[i]);
+	}
+
+	if (fc->values) mem_free(fc->values);
+	if (fc->labels) mem_free(fc->labels);
+	if (fc->menu) free_menu(fc->menu);
 }
 
 struct form_state *

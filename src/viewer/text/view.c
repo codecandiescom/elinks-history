@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.183 2003/08/23 04:44:59 jonas Exp $ */
+/* $Id: view.c,v 1.184 2003/08/23 06:18:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,7 +126,7 @@ clear_formatted(struct document *scr)
 	if (scr->lines2) mem_free(scr->lines2);
 	if (scr->opt.framename) mem_free(scr->opt.framename);
 	foreach (fc, scr->forms) {
-		destroy_fc(fc);
+		done_form_control(fc);
 	}
 	free_list(scr->forms);
 	free_list(scr->tags);

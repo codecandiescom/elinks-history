@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.201 2003/08/23 06:15:56 jonas Exp $ */
+/* $Id: renderer.c,v 1.202 2003/08/23 06:18:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,7 @@
 #include "util/hash.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "viewer/text/form.h"
 #include "viewer/text/link.h"
 #include "viewer/text/view.h"
 #include "viewer/text/vs.h"
@@ -1060,30 +1061,6 @@ html_init(struct part *part)
 	/* !!! FIXME: background */
 }
 
-void
-destroy_fc(struct form_control *fc)
-{
-	int i;
-
-	assert(fc);
-	if_assert_failed return;
-
-	if (fc->action) mem_free(fc->action);
-	if (fc->target) mem_free(fc->target);
-	if (fc->name) mem_free(fc->name);
-	if (fc->alt) mem_free(fc->alt);
-	if (fc->default_value) mem_free(fc->default_value);
-
-	for (i = 0; i < fc->nvalues; i++) {
-		if (fc->values[i]) mem_free(fc->values[i]);
-		if (fc->labels[i]) mem_free(fc->labels[i]);
-	}
-
-	if (fc->values) mem_free(fc->values);
-	if (fc->labels) mem_free(fc->labels);
-	if (fc->menu) free_menu(fc->menu);
-}
-
 static void
 html_form_control(struct part *part, struct form_control *fc)
 {
@@ -1337,7 +1314,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 		n->yw = ys - n->y + part->y;
 	}
 
-	foreach (fc, part->uf) destroy_fc(fc);
+	foreach (fc, part->uf) done_form_control(fc);
 	free_list(part->uf);
 
 ret:

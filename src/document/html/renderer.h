@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.35 2003/08/23 04:44:58 jonas Exp $ */
+/* $Id: renderer.h,v 1.36 2003/08/23 06:18:22 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -111,8 +111,6 @@ void format_cache_reactivate(struct document *);
 
 void cached_format_html(struct view_state *, struct document_view *, struct document_options *);
 void html_interpret(struct session *);
-
-void destroy_fc(struct form_control *);
 
 /* Interface with html_tbl.c */
 

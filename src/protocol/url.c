@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.16 2002/04/29 19:03:34 zas Exp $ */
+/* $Id: url.c,v 1.17 2002/04/29 22:37:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,8 +200,10 @@ parse_url(unsigned char *url, int *prlen,
 
 
 	if (*host_end == ':') { /* we have port here */
-		unsigned char *port_end = ++host_end + strcspn(host_end, "/");
+		unsigned char *port_end = host_end + 1 + strcspn(host_end + 1, "/");
 		int idx;
+
+		host_end++;
 
 		if (port) *port = host_end;
 		if (polen) *polen = port_end - host_end;

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.78 2004/07/14 17:44:40 zas Exp $ */
+/* $Id: globhist.c,v 1.79 2004/07/14 18:21:17 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -170,7 +170,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 	int max_globhist_items;
 
 	if (!url || !get_globhist_enable()) return;
-	
+
 	max_globhist_items = get_globhist_max_items();
 
 	history_item = get_global_history_item(url);
@@ -330,7 +330,8 @@ write_global_history(void)
 	struct secure_save_info *ssi;
 
 	if (!global_history.dirty || !elinks_home
-	    || !get_globhist_enable())
+	    || !get_globhist_enable()
+	    || get_cmd_opt_int("anonymous"))
 		return;
 
 	file_name = straconcat(elinks_home, GLOBAL_HISTORY_FILENAME, NULL);
@@ -368,10 +369,12 @@ free_global_history(void)
 static void
 global_history_write_timer_handler(void *xxx)
 {
-	int interval = get_globhist_write_interval();
+	int interval;
+
+	if (get_cmd_opt_int("anonymous")) return;
 
 	write_global_history();
-
+	interval = get_globhist_write_interval();
 	if (!interval) return;
 
 	global_history_write_timer =
@@ -385,13 +388,14 @@ global_history_write_timer_change_hook(struct session *ses,
 				       struct option *current,
 				       struct option *changed)
 {
+	if (get_cmd_opt_int("anonymous")) return 0;
+
 	if (global_history_write_timer >= 0) {
 		kill_timer(global_history_write_timer);
 		global_history_write_timer = -1;
 	}
 
-	if (elinks_home && !get_cmd_opt_int("anonymous"))
-		global_history_write_timer_handler(NULL);
+	global_history_write_timer_handler(NULL);
 
 	return 0;
 }
@@ -408,8 +412,7 @@ init_global_history(struct module *module)
 	register_change_hooks(global_history_change_hooks);
 	read_global_history();
 
-	if (elinks_home && !get_cmd_opt_int("anonymous"))
-		global_history_write_timer_handler(NULL);
+	global_history_write_timer_handler(NULL);
 }
 
 static void
@@ -417,8 +420,8 @@ done_global_history(struct module *module)
 {
 	if (global_history_write_timer >= 0)
 		kill_timer(global_history_write_timer);
-	if (elinks_home && !get_cmd_opt_int("anonymous"))
-		write_global_history();
+
+	write_global_history();
 	free_global_history();
 	mem_free_if(gh_last_searched_title);
 	mem_free_if(gh_last_searched_url);

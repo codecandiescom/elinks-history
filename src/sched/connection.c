@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.216 2005/03/03 15:06:50 zas Exp $ */
+/* $Id: connection.c,v 1.217 2005/03/03 15:11:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1104,4 +1104,16 @@ abort_background_connections(void)
 			abort_conn_with_state(conn->next, S_INTERRUPTED);
 		}
 	}
+}
+
+int
+is_entry_used(struct cache_entry *cached)
+{
+	struct connection *conn;
+
+	foreach (conn, connection_queue)
+		if (conn->cached == cached)
+			return 1;
+
+	return 0;
 }

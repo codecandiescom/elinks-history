@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.198 2005/03/03 15:06:50 zas Exp $ */
+/* $Id: cache.c,v 1.199 2005/03/03 15:11:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,19 +57,6 @@ do { \
 #else
 #define dump_frags(entry, comment)
 #endif /* DEBUG_CACHE */
-
-
-static int
-is_entry_used(struct cache_entry *cached)
-{
-	struct connection *conn;
-
-	foreach (conn, connection_queue)
-		if (conn->cached == cached)
-			return 1;
-
-	return 0;
-}
 
 
 long

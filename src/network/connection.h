@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.87 2005/03/03 15:06:50 zas Exp $ */
+/* $Id: connection.h,v 1.88 2005/03/03 15:11:44 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -252,5 +252,7 @@ void set_connection_timeout(struct connection *);
 /* Returns 0 on success and -1 on failure. */
 int load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 	     enum connection_priority pri, enum cache_mode cache_mode, int start);
+
+int is_entry_used(struct cache_entry *cached);
 
 #endif

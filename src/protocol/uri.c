@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.220 2004/06/01 00:42:46 jonas Exp $ */
+/* $Id: uri.c,v 1.221 2004/06/01 07:14:23 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -292,27 +292,15 @@ compare_uri(struct uri *a, struct uri *b, enum uri_component components)
 	assertm(can_compare_uri_components(components),
 		"compare_uri() is a work in progress. Component unsupported");
 
-	if (wants(URI_PROTOCOL)
-	    && a->protocol != b->protocol)
-		return 0;
-
-	if (wants(URI_USER)
-	    && !compare_component(a->user, a->userlen, b->user, b->userlen))
-		return 0;
-
-	if (wants(URI_PASSWORD)
-	    && !compare_component(a->password, a->passwordlen, b->password, b->passwordlen))
-		return 0;
-
-	if (wants(URI_HOST)
-	    && !compare_component(a->host, a->hostlen, b->host, b->hostlen))
-		return 0;
-
-	if (wants(URI_PORT)
-	    && !compare_component(a->port, a->portlen, b->port, b->portlen))
-		return 0;
-
-	return 1;
+	return (!wants(URI_PROTOCOL) || a->protocol == b->protocol)
+		&& (!wants(URI_USER)
+		    || compare_component(a->user, a->userlen, b->user, b->userlen))
+		&& (!wants(URI_PASSWORD)
+		    || compare_component(a->password, a->passwordlen, b->password, b->passwordlen))
+		&& (!wants(URI_HOST)
+		    || compare_component(a->host, a->hostlen, b->host, b->hostlen))
+		&& (!wants(URI_PORT)
+		    || compare_component(a->port, a->portlen, b->port, b->portlen));
 }
 
 

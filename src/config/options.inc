@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.153 2004/12/15 15:06:57 zas Exp $ */
+/* $Id: options.inc,v 1.154 2004/12/15 15:11:55 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -208,6 +208,13 @@ static struct option_info config_options_info[] = {
 		"1     means always display filename\n"
 		"2     means display alt/title attribute if possible, IMG if not\n"
 		"3     means display alt/title attribute if possible, filename if not\n")),
+
+	INIT_OPT_INT("document.browse.images", N_("Max. length for image filename"),
+		"filename_maxlen", 0, 0, 500, 0,
+		N_("Maximum length of image filename when displayed:\n"
+		"0     means always display full filename\n"
+		"1-500 means display filename with this maximal length;\n"
+		"      if it is longer, the middle is substituted by an asterisk")),
 
 	INIT_OPT_INT("document.browse.images", N_("Display style for image links"),
 		"file_tags", 0, -1, 500, -1,

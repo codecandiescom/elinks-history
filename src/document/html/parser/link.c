@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.69 2004/12/15 15:06:57 zas Exp $ */
+/* $Id: link.c,v 1.70 2004/12/15 15:11:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,7 +149,7 @@ get_image_filename_from_src(unsigned char *src)
 
 	/* We can display image as [foo.gif]. */
 
-	max_len = get_opt_int("document.browse.images.file_tags");
+	max_len = get_opt_int("document.browse.images.filename_maxlen");
 
 	if (max_len >= 0 && src) {
 		int len = strcspn(src, "?");

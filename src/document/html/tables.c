@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.199 2004/06/25 09:11:33 zas Exp $ */
+/* $Id: tables.c,v 1.200 2004/06/25 09:20:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,15 +98,22 @@ struct table_column {
 struct table {
 	struct part *part;
 	struct table_cell *cells;
-	struct table_column *columns;
 	unsigned char *fragment_id;
 	color_t bgcolor;
 	color_t bordercolor;
+
+	struct table_column *columns;
+	int columns_count;
+	int real_columns_count;	/* Number of columns really allocated. */
+
 	int *min_cols_widths;
         int *max_cols_widths;
 	int *cols_widths;
 	int *cols_x;
+	int cols_x_count;
+
 	int *rows_heights;
+
 	int x, y;
 	int rx, ry;
 	int border;
@@ -116,11 +123,10 @@ struct table {
 	int frame, rules, width;
 	/* int has_width; not used. */
 	int real_width;
-	int min_t, max_t;
-	int columns_count;
-	int real_columns_count;	/* Number of columns really allocated. */
-	int cols_x_count;
 	int real_height;
+	int min_width;
+	int max_width;
+
 	int link_num;
 };
 
@@ -1067,8 +1073,8 @@ get_table_width(struct table *table)
 
 	get_table_frames(table, &table_frames);
 
-	table->min_t = min + table_frames.left + table_frames.right;
-	table->max_t = max + table_frames.left + table_frames.right;
+	table->min_width = min + table_frames.left + table_frames.right;
+	table->max_width = max + table_frames.left + table_frames.right;
 
 	assertm(min <= max, "min(%d) > max(%d)", min, max);
 	/* XXX: Recovery path? --pasky */
@@ -1080,7 +1086,7 @@ static void
 distribute_widths(struct table *table, int width)
 {
 	register int i;
-	int d = width - table->min_t;
+	int d = width - table->min_width;
 	int om = 0;
 	char *u;
 	int *w, *mx;
@@ -1089,7 +1095,7 @@ distribute_widths(struct table *table, int width)
 
 	if (!table->x) return;
 
-	assertm(d >= 0, "too small width %d, required %d", width, table->min_t);
+	assertm(d >= 0, "too small width %d, required %d", width, table->min_width);
 
 	for (i = 0; i < table->x; i++)
 		int_lower_bound(&mmax_c, table->max_cols_widths[i]);
@@ -1885,32 +1891,32 @@ again:
 
 	margins = par_format.leftmargin + par_format.rightmargin;
 	if (!part->document && !part->box.x) {
-		if (!has_width) int_upper_bound(&table->max_t, width);
-		int_lower_bound(&table->max_t, table->min_t);
+		if (!has_width) int_upper_bound(&table->max_width, width);
+		int_lower_bound(&table->max_width, table->min_width);
 
-		int_lower_bound(&part->max_width, table->max_t + margins);
-		int_lower_bound(&part->box.width, table->min_t + margins);
+		int_lower_bound(&part->max_width, table->max_width + margins);
+		int_lower_bound(&part->box.width, table->min_width + margins);
 
 		goto ret2;
 	}
 
-	if (!cpd_pass && table->min_t > width && table->cellpadding) {
+	if (!cpd_pass && table->min_width > width && table->cellpadding) {
 		table->cellpadding = 0;
 		cpd_pass = 1;
-		cpd_width = table->min_t;
+		cpd_width = table->min_width;
 		goto again;
 	}
-	if (cpd_pass == 1 && table->min_t > cpd_width) {
+	if (cpd_pass == 1 && table->min_width > cpd_width) {
 		table->cellpadding = cpd_last;
 		cpd_pass = 2;
 		goto again;
 	}
 
-	/* DBG("%d %d %d", t->min_t, t->max_t, width); */
-	if (table->min_t >= width)
-		distribute_widths(table, table->min_t);
-	else if (table->max_t < width && has_width)
-		distribute_widths(table, table->max_t);
+	/* DBG("%d %d %d", t->min_width, t->max_width, width); */
+	if (table->min_width >= width)
+		distribute_widths(table, table->min_width);
+	else if (table->max_width < width && has_width)
+		distribute_widths(table, table->max_width);
 	else
 		distribute_widths(table, width);
 

@@ -1,4 +1,4 @@
-/* $Id: bookmarks.h,v 1.11 2002/08/30 22:55:27 pasky Exp $ */
+/* $Id: bookmarks.h,v 1.12 2002/08/30 23:21:02 pasky Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
@@ -15,7 +15,8 @@ struct bookmark {
 
 	unsigned char *title;   /* title of bookmark */
 	unsigned char *url;     /* Location of bookmarked item */
-	
+	int refcount;		/* Isn't anything else using this item now? */
+
 	/* This is indeed maintained by bookmarks.c, not dialogs.c; much easier
 	 * and simpler. */
 	struct listbox_item *box_item;

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.37 2002/08/30 22:55:27 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.38 2002/08/30 23:21:01 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -76,6 +76,8 @@ add_bookmark(const unsigned char *title, const unsigned char *url)
 		free(bm);
 		return NULL;
 	}
+
+	bm->refcount = 0;
 
 	/* Actually add it */
 	add_to_list(bookmarks, bm);

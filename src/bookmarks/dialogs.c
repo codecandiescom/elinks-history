@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.24 2002/08/30 22:55:27 pasky Exp $ */
+/* $Id: dialogs.c,v 1.25 2002/08/30 23:21:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,7 +253,7 @@ push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 {
 	struct listbox_data *box;
 
-	box = (struct listbox_data*) dlg->dlg->items[BM_BOX_IND].data;
+	box = (struct listbox_data *) dlg->dlg->items[BM_BOX_IND].data;
 
 	/* Follow the bookmark */
 	if (box->sel)
@@ -272,6 +272,7 @@ bookmark_edit_done(struct dialog *d) {
 	struct bookmark *bm = (struct bookmark *) d->udata2;
 
 	update_bookmark(bm, d->items[0].data, d->items[1].data);
+	bm->refcount--;
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
@@ -293,6 +294,7 @@ push_edit_button(struct dialog_data *dlg, struct widget_data *edit_btn)
 		const unsigned char *name = bm->title;
 		const unsigned char *url = bm->url;
 
+		bm->refcount++;
 		do_edit_dialog(dlg->win->term, TEXT(T_EDIT_BOOKMARK), name, url,
 			       (struct session *) edit_btn->item->udata, dlg,
 			       bookmark_edit_done, (void *) bm, 1);
@@ -305,6 +307,7 @@ push_edit_button(struct dialog_data *dlg, struct widget_data *edit_btn)
 /* Used to carry extra info between the push_delete_button() and the
  * really_del_bookmark() */
 struct push_del_button_hop_struct {
+	struct terminal *term;
 	struct dialog *dlg;
 	struct bookmark *bm;
 };
@@ -318,6 +321,16 @@ really_del_bookmark(void *vhop)
 	struct listbox_data *box;
 
 	hop = (struct push_del_button_hop_struct *) vhop;
+
+	if (hop->bm->refcount > 0) {
+		msg_box(hop->term, NULL,
+			TEXT(T_DELETE_BOOKMARK), AL_CENTER,
+			TEXT(T_BOOKMARK_USED),
+			NULL, 1,
+			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+
+		return;
+	}
 
 	/* Take care about move of the selected item if we're deleting it. */
 
@@ -386,6 +399,7 @@ push_delete_button(struct dialog_data *dlg,
 
 	hop->bm = bm;
 	hop->dlg = dlg->dlg;
+	hop->term = term;
 
 	msg_box(term, getml(hop, NULL),
 		TEXT(T_DELETE_BOOKMARK), AL_CENTER | AL_EXTD_TEXT,

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.72 2004/11/24 17:10:33 witekfl Exp $ */
+/* $Id: spidermonkey.c,v 1.73 2004/11/24 17:42:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -647,7 +647,7 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		p.object = forms_obj;
 		prop_type = JSPT_OBJECT;
 		break;
-		
+
 	default:
 		INTERNAL("Invalid ID %d in document_get_property().", JSVAL_TO_INT(id));
 		goto bye;
@@ -960,9 +960,10 @@ form_control_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	struct form_control *fc = JS_GetPrivate(ctx, obj);
 
+	VALUE_TO_JSVAL_START;
+
 	if (!fc) return JS_FALSE;
 
-	VALUE_TO_JSVAL_START;
 	if (!JSVAL_IS_INT(id))
 		goto bye;
 
@@ -970,7 +971,7 @@ form_control_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	case JSP_FORM_CONTROL_NAME:
 		p.string = fc->name;
 		prop_type = JSPT_STRING;
-		break;	
+		break;
 	case JSP_FORM_CONTROL_ACTION:
 		p.string = fc->action;
 		prop_type  = JSPT_STRING;
@@ -1006,17 +1007,18 @@ form_control_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	struct form_control *fc = JS_GetPrivate(ctx, obj);
 
+	JSVAL_TO_VALUE_START;
+
 	if (!fc) return JS_FALSE;
 
-	JSVAL_TO_VALUE_START;
 	if (!JSVAL_IS_INT(id))
 		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_FORM_CONTROL_NAME:
 		JSVAL_REQUIRE(vp, STRING);
-		mem_free_set(fc->name, stracpy(v.string)); 
-		break;	
+		mem_free_set(fc->name, stracpy(v.string));
+		break;
 	case JSP_FORM_CONTROL_ACTION:
 		JSVAL_REQUIRE(vp, STRING);
 		mem_free_set(fc->action, stracpy(v.string));
@@ -1055,7 +1057,7 @@ form_control_reset(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval
 	if (argc != 0) return JS_FALSE;
 	do_reset_form(doc_view, fc->form_num);
 	draw_forms(doc_view->session->tab->term, doc_view);
-	return JS_TRUE; 
+	return JS_TRUE;
 }
 
 static JSBool
@@ -1140,7 +1142,7 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	JS_DefineFunctions(ctx, form, (JSFunctionSpec *)&form_control_funcs);
 	JS_SetPrivate(ctx, form, fc);
 	*rval = OBJECT_TO_JSVAL(form);
-	return JS_TRUE; 
+	return JS_TRUE;
 }
 
 static JSBool
@@ -1167,7 +1169,7 @@ ok:
 	JS_DefineFunctions(ctx, form, (JSFunctionSpec *)&form_control_funcs);
 	JS_SetPrivate(ctx, form, fc);
 	*rval = OBJECT_TO_JSVAL(form);
-	return JS_TRUE; 
+	return JS_TRUE;
 }
 
 /*** The ELinks interface */

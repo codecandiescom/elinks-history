@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.172 2003/01/04 17:06:10 pasky Exp $ */
+/* $Id: options.c,v 1.173 2003/01/04 17:17:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -842,31 +842,32 @@ register_options()
 {
 	/* TODO: The change hooks should be added more elegantly! --pasky */
 
-	add_opt_tree("", "Bookmarks",
+	add_opt_tree("", N_("Bookmarks"),
 		"bookmarks", 0,
-		"Bookmark options.");
+		N_("Bookmark options."));
 
-	{
 	unsigned char *bff =
-		"File format for bookmarks (affects both reading and saving):\n"
+#ifdef HAVE_LIBEXPAT
+		N_("File format for bookmarks (affects both reading and saving):\n"
+		"0 is the default ELinks (Links 0.9x compatible) format\n"
+		"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)");
+#else
+		N_("File format for bookmarks (affects both reading and saving):\n"
 		"0 is the default ELinks (Links 0.9x compatible) format\n"
 		"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
-#ifndef HAVE_LIBEXPAT
-		" (DISABLED)"
+		" (DISABLED)");
 #endif
-		;
 
-	add_opt_int("bookmarks", "File format",
+	add_opt_int("bookmarks", N_("File format"),
 		"file_format", 0, 0, 1, 0,
 		bff);
-	}
 
 
-	add_opt_tree("", "Configuration system",
+	add_opt_tree("", N_("Configuration system"),
 		"config", 0,
-		"Configuration handling options.");
+		N_("Configuration handling options."));
 
-	add_opt_int("config", "Comments",
+	add_opt_int("config", N_("Comments"),
 		"comments", 0, 0, 3, 3,
 		"Amount of comments automatically written to the config file:\n"
 		"0 is no comments are written\n"
@@ -874,13 +875,13 @@ register_options()
 		"2 is only the description is written\n"
 		"3 is full comments are written");
 
-	add_opt_int("config", "Indentation",
+	add_opt_int("config", N_("Indentation"),
 		"indentation", 0, 0, 16, 2,
 		"Shift width of one indentation level in the configuration\n"
 		"file. Zero means that no indentation is performed at all\n"
 		"when saving the configuration.");
 
-	add_opt_int("config", "Saving style",
+	add_opt_int("config", N_("Saving style"),
 		"saving_style", 0, 0, 3, 3,
 		"Determines what happens when you tell ELinks to save options:\n"
 		"0 is only values of current options are altered\n"
@@ -891,76 +892,76 @@ register_options()
 		"     CHANGED during this ELinks session are added at the end of\n"
 		"     the file");
 
-	add_opt_bool("config", "Saving style warnings",
+	add_opt_bool("config", N_("Saving style warnings"),
 		"saving_style_w", 0, 0,
 		"This is internal option used when displaying a warning about\n"
 		"obsolete config.saving_style. You shouldn't touch it.");
 
-	add_opt_bool("config", "Show template",
+	add_opt_bool("config", N_("Show template"),
 		"show_template", 0, 0,
 		"Show _template_ options in autocreated trees in the options\n"
 		"manager and save them to the configuration file.");
 	get_opt_rec(&root_options, "config.show_template")->change_hook = change_hook_stemplate;
 
 
-	add_opt_tree("", "Connections",
+	add_opt_tree("", N_("Connections"),
 		"connection", 0,
 		"Connection options.");
 	get_opt_rec(&root_options, "connection")->change_hook = change_hook_connection;
 
 
-	add_opt_tree("connection", "SSL",
+	add_opt_tree("connection", N_("SSL"),
 		"ssl", 0,
 		"SSL options.");
 
 #ifdef HAVE_OPENSSL
-	add_opt_bool("connection.ssl", "Verify certificates",
+	add_opt_bool("connection.ssl", N_("Verify certificates"),
 		"cert_verify", 0, 0,
 		"Verify the peer's SSL certificate. Note that this\n"
 		"needs extensive configuration of OpenSSL by the user.");
 #elif defined(HAVE_GNUTLS)
-	add_opt_bool("connection.ssl", "Verify certificates",
+	add_opt_bool("connection.ssl", N_("Verify certificates"),
 		"cert_verify", 0, 0,
 		"Verify the peer's SSL certificate. Note that this\n"
 		"probably doesn't work properly at all with GnuTLS.");
 #else
-	add_opt_bool("connection.ssl", "Certificate verification",
+	add_opt_bool("connection.ssl", N_("Certificate verification"),
 		"cert_verify", 0, 0,
 		"Verify the peer's SSL certificate.");
 #endif
 
 
-	add_opt_bool("connection", "Asynchronous DNS",
+	add_opt_bool("connection", N_("Asynchronous DNS"),
 		"async_dns", 0, 1,
 		"Use asynchronous DNS resolver?");
 
-	add_opt_int("connection", "Maximum connections",
+	add_opt_int("connection", N_("Maximum connections"),
 		"max_connections", 0, 1, 16, 10,
 		"Maximum number of concurrent connections.");
 
-	add_opt_int("connection", "Maximum connections per host",
+	add_opt_int("connection", N_("Maximum connections per host"),
 		"max_connections_to_host", 0, 1, 8, 2,
 		"Maximum number of concurrent connections to a given host.");
 
-	add_opt_int("connection", "Connection retries",
+	add_opt_int("connection", N_("Connection retries"),
 		"retries", 0, 1, 16, 3,
 		"Number of tries to establish a connection.");
 
-	add_opt_int("connection", "Receive timeout",
+	add_opt_int("connection", N_("Receive timeout"),
 		"receive_timeout", 0, 1, 1800, 120,
 		"Receive timeout (in seconds).");
 
-	add_opt_int("connection", "Timeout for non-restartable connections",
+	add_opt_int("connection", N_("Timeout for non-restartable connections"),
 		"unrestartable_receive_timeout", 0, 1, 1800, 600,
 		"Timeout for non-restartable connections (in seconds).");
 
 
 
-	add_opt_tree("", "Cookies",
+	add_opt_tree("", N_("Cookies"),
 		"cookies", 0,
 		"Cookies options.");
 
-	add_opt_int("cookies", "Accept policy",
+	add_opt_int("cookies", N_("Accept policy"),
 		"accept_policy", 0,
 		COOKIES_ACCEPT_NONE, COOKIES_ACCEPT_ALL, COOKIES_ACCEPT_ALL,
 		"Cookies accepting policy:\n"
@@ -968,45 +969,45 @@ register_options()
 		"1 is ask for confirmation before accepting cookie (UNIMPLEMENTED)\n"
 		"2 is accept all cookies");
 
-	add_opt_bool("cookies", "Paranoid security",
+	add_opt_bool("cookies", N_("Paranoid security"),
 		"paranoid_security", 0, 0,
 		"When enabled, we'll require three dots in cookies domain for all\n"
 		"non-international domains (instead of just two dots). Please see\n"
 		"code (cookies.c:check_domain_security()) for explanation.");
 
-	add_opt_bool("cookies", "Saving",
+	add_opt_bool("cookies", N_("Saving"),
 		"save", 0, 1,
 		"Load/save cookies from/to disk?");
 
-	add_opt_bool("cookies", "Resaving",
+	add_opt_bool("cookies", N_("Resaving"),
 		"resave", 0, 1,
 		"Save cookies after each change in cookies list? No effect when\n"
 		"cookies_save is off.");
 
 	
 
-	add_opt_tree("", "Documents",
+	add_opt_tree("", N_("Documents"),
 		"document", 0,
 		"Document options.");
 
-	add_opt_tree("document", "Browsing",
+	add_opt_tree("document", N_("Browsing"),
 		"browse", 0,
 		"Document browsing options (mainly interactivity).");
 	get_opt_rec(&root_options, "document.browse")->change_hook = change_hook_html;
 
 
-	add_opt_tree("document.browse", "Accesskeys",
+	add_opt_tree("document.browse", N_("Accesskeys"),
 		"accesskey", 0,
 		"Options for handling of the accesskey attribute of the active\n"
 		"HTML elements.");
 
-	add_opt_bool("document.browse.accesskey", "Automatic links following",
+	add_opt_bool("document.browse.accesskey", N_("Automatic links following"),
 		"auto_follow", 0, 0,
 		"Automatically follow a link or submit a form if appropriate\n"
 		"accesskey is pressed - this is the standard behaviour, but it's\n"
 		"considered dangerous.");
 
-	add_opt_int("document.browse.accesskey", "Accesskey priority",
+	add_opt_int("document.browse.accesskey", N_("Accesskey priority"),
 		"priority", 0, 0, 2, 1,
 		"Priority of 'accesskey' HTML attribute:\n"
 		"0 is first try all normal bindings; if it fails, check accesskey\n"
@@ -1014,25 +1015,25 @@ register_options()
 		"2 is first check accesskey (this can be dangerous)");
 
 
-	add_opt_tree("document.browse", "Forms",
+	add_opt_tree("document.browse", N_("Forms"),
 		"forms", 0,
 		"Options for handling of the forms interaction.");
 
-	add_opt_bool("document.browse.forms", "Submit form automatically",
+	add_opt_bool("document.browse.forms", N_("Submit form automatically"),
 		"auto_submit", 0, 1,
 		"Automagically submit a form when enter is pressed with a text\n"
 		"field selected.");
 
-	add_opt_bool("document.browse.forms", "Confirm submission",
+	add_opt_bool("document.browse.forms", N_("Confirm submission"),
 		"confirm_submit", 0, 1,
 		"Ask for confirmation when submitting a form.");
 
 
-	add_opt_tree("document.browse", "Images",
+	add_opt_tree("document.browse", N_("Images"),
 		"images", 0,
 		"Options for handling of images.");
 
-	add_opt_int("document.browse.images", "Display style for image links",
+	add_opt_int("document.browse.images", N_("Display style for image links"),
 		"file_tags", 0, -1, 500, -1,
 		"Display [target filename] instead of [IMG] as visible image tags:\n"
 		"-1    means always display just [IMG]\n"
@@ -1040,24 +1041,24 @@ register_options()
 		"1-500 means display target filename with this maximal length;\n"
 		"      if it is longer, the middle is substituted by an asterisk");
 
-	add_opt_bool("document.browse.images", "Display image links",
+	add_opt_bool("document.browse.images", N_("Display image links"),
 		"show_as_links", 0, 0,
 		"Display links to images.");
 
 
-	add_opt_tree("document.browse", "Links",
+	add_opt_tree("document.browse", N_("Links"),
 		"links", 0,
 		"Options for handling of links to other documents.");
 
-	add_opt_bool("document.browse.links", "Directory highlighting",
+	add_opt_bool("document.browse.links", N_("Directory highlighting"),
 		"color_dirs", 0, 1,
 		"Highlight links to directories in FTP and local directory listing.");
 
-	add_opt_bool("document.browse.links", "Number links",
+	add_opt_bool("document.browse.links", N_("Number links"),
 		"numbering", 0, 0,
 		"Display numbers next to the links.");
 
-	add_opt_int("document.browse.links", "Number keys select links",
+	add_opt_int("document.browse.links", N_("Number keys select links"),
 		"number_keys_select_link", 0, 0, 2, 1,
 		"Number keys select links rather than specify command prefixes. This\n"
 		"is a tristate:\n"
@@ -1067,100 +1068,100 @@ register_options()
 
 	/* TODO - this is somehow implemented by ff, but disabled
 	 * for now as it doesn't work. */
-	add_opt_bool("document.browse.links", "Wrap-around links cycling",
+	add_opt_bool("document.browse.links", N_("Wrap-around links cycling"),
 		"wraparound", /* 0 */ 0, 0,
 		"When pressing 'down' on the last link, jump at the first one, and\n"
 		"vice versa.");
 
 
-	add_opt_int("document.browse", "Horizontal text margin",
+	add_opt_int("document.browse", N_("Horizontal text margin"),
 		"margin_width", 0, 0, 9, 3,
 		"Horizontal text margin.");
 
-	add_opt_int("document.browse", "Scroll margin",
+	add_opt_int("document.browse", N_("Scroll margin"),
 		"scroll_margin", 0, 0, 20, 3,
 		"Size of the virtual margin - when you click inside of that margin,\n"
 		"document scrolls in that direction.");
 
-	add_opt_bool("document.browse", "Tables navigation order",
+	add_opt_bool("document.browse", N_("Tables navigation order"),
 		"table_move_order", 0, 0,
 		"Move by columns in table, instead of rows.");
 
 
 
-	add_opt_tree("document", "Cache",
+	add_opt_tree("document", N_("Cache"),
 		"cache", 0,
 		"Cache options.");
 	get_opt_rec(&root_options, "document.cache")->change_hook = change_hook_cache;
 
-	add_opt_bool("document.cache", "Ignore cache-control info from server",
+	add_opt_bool("document.cache", N_("Ignore cache-control info from server"),
 		"ignore_cache_control", 0, 1,
 		"Ignore Cache-Control and Pragma server headers.\n"
 		"When set, the document is cached even with 'Cache-Control: no-cache'.");
 
-	add_opt_tree("document.cache", "Formatted documents",
+	add_opt_tree("document.cache", N_("Formatted documents"),
 		"format", 0,
 		"Format cache options.");
 
-	add_opt_int("document.cache.format", "Number",
+	add_opt_int("document.cache.format", N_("Number"),
 		"size", 0, 0, 256, 5,
 		"Number of cached formatted pages.");
 
-	add_opt_tree("document.cache", "Memory cache",
+	add_opt_tree("document.cache", N_("Memory cache"),
 		"memory", 0,
 		"Memory cache options.");
 
-	add_opt_int("document.cache.memory", "Size",
+	add_opt_int("document.cache.memory", N_("Size"),
 		"size", 0, 0, MAXINT, 1048576,
 		"Memory cache size (in kilobytes).");
 
 
 
-	add_opt_tree("document", "Charset",
+	add_opt_tree("document", N_("Charset"),
 		"codepage", 0,
 		"Charset options.");
 
-	add_opt_codepage("document.codepage", "Default codepage",
+	add_opt_codepage("document.codepage", N_("Default codepage"),
 		"assume", 0, get_cp_index("ISO-8859-1"),
 		"Default document codepage.");
 
-	add_opt_bool("document.codepage", "Ignore charset info from server",
+	add_opt_bool("document.codepage", N_("Ignore charset info from server"),
 		"force_assumed", 0, 0,
 		"Ignore charset info sent by server.");
 
 
 
-	add_opt_tree("document", "Default color settings",
+	add_opt_tree("document", N_("Default color settings"),
 		"colors", 0,
 		"Default document color settings.");
 	get_opt_rec(&root_options, "document.colors")->change_hook = change_hook_html;
 
-	add_opt_color("document.colors", "Text color",
+	add_opt_color("document.colors", N_("Text color"),
 		"text", 0, "#bfbfbf",
 		"Default text color.");
 
-	add_opt_color("document.colors", "Background color",
+	add_opt_color("document.colors", N_("Background color"),
 		"background", 0, "#000000",
 		"Default background color.");
 
-	add_opt_color("document.colors", "Link color",
+	add_opt_color("document.colors", N_("Link color"),
 		"link", 0, "#0000ff",
 		"Default link color.");
 
-	add_opt_color("document.colors", "Visited-link color",
+	add_opt_color("document.colors", N_("Visited-link color"),
 		"vlink", 0, "#ffff00",
 		"Default visited link color.");
 
-	add_opt_color("document.colors", "Directory color",
+	add_opt_color("document.colors", N_("Directory color"),
 		"dirs", 0, "#ffff00",
 		"Default directory color.\n"
 	       	"See document.browse.links.color_dirs option.");
 
-	add_opt_bool("document.colors", "Allow dark colors on black background",
+	add_opt_bool("document.colors", N_("Allow dark colors on black background"),
 		"allow_dark_on_black", 0, 0,
 		"Allow dark colors on black background.");
 
-	add_opt_int("document.colors", "Use document-specified colors",
+	add_opt_int("document.colors", N_("Use document-specified colors"),
 		"use_document_colors", 0, 0, 2, 1,
 		"Use colors specified in document:\n"
 		"0 is use always the default settings\n"
@@ -1176,31 +1177,31 @@ register_options()
 
 
 
-	add_opt_tree("document", "Downloading",
+	add_opt_tree("document", N_("Downloading"),
 		"download", 0,
 		"Options regarding files downloading and handling.");
 
-	add_opt_string("document.download", "Default MIME-type",
+	add_opt_string("document.download", N_("Default MIME-type"),
 		"default_mime_type", 0, "application/octet-stream",
 		"Document MIME-type to assume by default (when we are unable to\n"
 		"guess it properly from known information about the document).");
 
-	add_opt_string("document.download", "Default download directory",
+	add_opt_string("document.download", N_("Default download directory"),
 		"directory", 0, "./",
 		"Default download directory.");
 
-	add_opt_bool("document.download", "Set original time",
+	add_opt_bool("document.download", N_("Set original time"),
 		"set_original_time", 0, 0,
 		"Set the timestamp of each downloaded file to the timestamp\n"
 		"stored on the server.");
 
-	add_opt_int("document.download", "Prevent overwriting",
+	add_opt_int("document.download", N_("Prevent overwriting"),
 		"overwrite", 0, 0, 1, 0,
 		"Prevent overwriting the local files:\n"
 		"0 is files will silently be overwritten.\n"
 		"1 is add a suffix .{number} (for example '.1') to the name.");
 
-	add_opt_int("document.download", "Notify download completion by bell",
+	add_opt_int("document.download", N_("Notify download completion by bell"),
 		"notify_bell", 0, 0, 2, 0,
 		"Audio notification when download is completed:\n"
 		"0 is never.\n"
@@ -1208,79 +1209,79 @@ register_options()
 		"2 is always");
 
 
-	add_opt_tree("document", "Dump output",
+	add_opt_tree("document", N_("Dump output"),
 		"dump", 0,
 		"Dump output options.");
 
-	add_opt_codepage("document.dump", "Codepage",
+	add_opt_codepage("document.dump", N_("Codepage"),
 		"codepage", 0, get_cp_index("us-ascii"),
 		"Codepage used in dump output.");
 
-	add_opt_int("document.dump", "Width",
+	add_opt_int("document.dump", N_("Width"),
 		"width", 0, 40, 512, 80,
 		"Width of screen in characters when dumping a HTML document.");
 
 
 
-	add_opt_tree("document", "History",
+	add_opt_tree("document", N_("History"),
 		"history", 0,
 		"History options.");
 
-	add_opt_tree("document.history", "Global history",
+	add_opt_tree("document.history", N_("Global history"),
 		"global", 0,
 		"Global history options.");
 
 	/* XXX: Disable global history if -anonymous is given? */
-	add_opt_bool("document.history.global", "Enable",
+	add_opt_bool("document.history.global", N_("Enable"),
 		"enable", 0, 1,
 		"Enable global history (\"history of all pages visited\").");
 
-	add_opt_int("document.history.global", "Maximum number of entries",
+	add_opt_int("document.history.global", N_("Maximum number of entries"),
 		"max_items", 0, 1, MAXINT, 1024,
 		"Maximum number of entries in the global history.");
 
-	add_opt_int("document.history.global", "Display style",
+	add_opt_int("document.history.global", N_("Display style"),
 		"display_type", 0, 0, 1, 0,
 		"What to display in global history dialog:\n"
 		"0 is URLs\n"
 		"1 is page titles");
 
-	add_opt_bool("document.history", "Keep unhistory",
+	add_opt_bool("document.history", N_("Keep unhistory"),
 		"keep_unhistory", 0, 1,
 		"Keep unhistory (\"forward history\")?");
 
 
 
-	add_opt_tree("document", "HTML rendering",
+	add_opt_tree("document", N_("HTML rendering"),
 		"html", 0,
 		"Options concerning the display of HTML pages.");
 	get_opt_rec(&root_options, "document.html")->change_hook = change_hook_html;
 
-	add_opt_bool("document.html", "Display frames",
+	add_opt_bool("document.html", N_("Display frames"),
 		"display_frames", 0, 1,
 		"Display frames.");
 
-	add_opt_bool("document.html", "Display tables",
+	add_opt_bool("document.html", N_("Display tables"),
 		"display_tables", 0, 1,
 		"Display tables.");
 
-	add_opt_bool("document.html", "Display subscripts",
+	add_opt_bool("document.html", N_("Display subscripts"),
 		"display_subs", 0, 1,
 		"Display subscripts (as [thing]).");
 
-	add_opt_bool("document.html", "Display superscripts",
+	add_opt_bool("document.html", N_("Display superscripts"),
 		"display_sups", 0, 1,
 		"Display superscripts (as ^thing).");
 
 
 
 
-	add_opt_tree("", "MIME",
+	add_opt_tree("", N_("MIME"),
 		"mime", 0,
 		"MIME-related options (handlers of various MIME types).");
 
 
-	add_opt_tree("mime", "MIME type associations",
+	add_opt_tree("mime", N_("MIME type associations"),
 		"type", OPT_AUTOCREATE,
 		"Handler <-> MIME type association. The first sub-tree is the MIME\n"
 		"class while the second sub-tree is the MIME type (ie. image/gif\n"
@@ -1299,7 +1300,7 @@ register_options()
 		"of '.').");
 
 
-	add_opt_tree("mime", "File type handlers",
+	add_opt_tree("mime", N_("File type handlers"),
 		"handler", OPT_AUTOCREATE,
 		"Handler for certain MIME types (as specified in mime.type.*).\n"
 		"Each handler usually serves family of MIME types (ie. images).");
@@ -1312,21 +1313,21 @@ register_options()
 		"_template_", 0,
 		"System-specific handler description (ie. unix, unix-xwin, ...).");
 
-	add_opt_bool("mime.handler._template_._template_", "Ask before opening",
+	add_opt_bool("mime.handler._template_._template_", N_("Ask before opening"),
 		"ask", 0, 1,
 		"Ask before opening.");
 
-	add_opt_bool("mime.handler._template_._template_", "Block terminal",
+	add_opt_bool("mime.handler._template_._template_", N_("Block terminal"),
 		"block", 0, 1,
 		"Block the terminal when the handler is running.");
 
-	add_opt_string("mime.handler._template_._template_", "Program",
+	add_opt_string("mime.handler._template_._template_", N_("Program"),
 		"program", 0, "",
 		"External viewer for this file type. '%' in this string will be\n"
 		"substituted by a file name.");
 
 
-	add_opt_tree("mime", "File extension associations",
+	add_opt_tree("mime", N_("File extension associations"),
 		"extension", OPT_AUTOCREATE,
 		"Extension <-> MIME type association.");
 
@@ -1337,61 +1338,61 @@ register_options()
 
 
 
-	add_opt_tree("", "Protocols",
+	add_opt_tree("", N_("Protocols"),
 		"protocol", 0,
 		"Protocol specific options.");
 
-	add_opt_tree("protocol", "HTTP",
+	add_opt_tree("protocol", N_("HTTP"),
 		"http", 0,
 		"HTTP-specific options.");
 
 
-	add_opt_tree("protocol.http", "Server bug workarounds",
+	add_opt_tree("protocol.http", N_("Server bug workarounds"),
 		"bugs", 0,
 		"Server-side HTTP bugs workarounds.");
 
-	add_opt_bool("protocol.http.bugs", "Allow blacklisting",
+	add_opt_bool("protocol.http.bugs", N_("Allow blacklisting"),
 		"allow_blacklist", 0, 1,
 		"Allow blacklisting of buggy servers.");
 
-	add_opt_bool("protocol.http.bugs", "Broken 302 redirects",
+	add_opt_bool("protocol.http.bugs", N_("Broken 302 redirects"),
 		"broken_302_redirect", 0, 1,
 		"Broken 302 redirect (violates RFC but compatible with Netscape).\n"
 		"This is a problem for a lot of web discussion boards and the like."
 		"If they will do strange things to you, try to play with this.");
 
-	add_opt_bool("protocol.http.bugs", "No keepalive after POST requests",
+	add_opt_bool("protocol.http.bugs", N_("No keepalive after POST requests"),
 		"post_no_keepalive", 0, 0,
 		"Disable keepalive connection after POST request.");
 
-	add_opt_bool("protocol.http.bugs", "Use HTTP/1.0",
+	add_opt_bool("protocol.http.bugs", N_("Use HTTP/1.0"),
 		"http10", 0, 0,
 		"Use HTTP/1.0 protocol instead of HTTP/1.1.");
 
 
-	add_opt_tree("protocol.http", "Proxy configuration",
+	add_opt_tree("protocol.http", N_("Proxy configuration"),
 		"proxy", 0,
 		"HTTP proxy configuration.");
 
-	add_opt_string("protocol.http.proxy", "Host and port-number",
+	add_opt_string("protocol.http.proxy", N_("Host and port-number"),
 		"host", 0, "",
 		"Host and port-number (host:port) of the HTTP proxy, or blank.\n"
 		"If it's blank, HTTP_PROXY environment variable is checked as well.");
 
-	add_opt_string("protocol.http.proxy", "Username",
+	add_opt_string("protocol.http.proxy", N_("Username"),
 		"user", 0, "",
 		"Proxy authentication username.");
 
-	add_opt_string("protocol.http.proxy", "Password",
+	add_opt_string("protocol.http.proxy", N_("Password"),
 		"passwd", 0, "",
 		"Proxy authentication password.");
 
 
-	add_opt_tree("protocol.http", "Referer sending",
+	add_opt_tree("protocol.http", N_("Referer sending"),
 		"referer", 0,
 		"HTTP referer sending options.");
 
-	add_opt_int("protocol.http.referer", "Policy",
+	add_opt_int("protocol.http.referer", N_("Policy"),
 		"policy", 0,
 		REFERER_NONE, REFERER_TRUE, REFERER_SAME_URL,
 		"Mode of sending HTTP referer:\n"
@@ -1400,23 +1401,23 @@ register_options()
 		"2 is send fixed fake referer\n"
 		"3 is send previous URL as referer (correct, but insecure)\n");
 
-	add_opt_string("protocol.http.referer", "Fake referer URL",
+	add_opt_string("protocol.http.referer", N_("Fake referer URL"),
 		"fake", 0, "",
 		"Fake referer to be sent when policy is 2.");
 
 
-	add_opt_string("protocol.http", "Send Accept-Language header",
+	add_opt_string("protocol.http", N_("Send Accept-Language header"),
 		"accept_language", 0, "",
 		"Send Accept-Language header.");
 
-	add_opt_bool("protocol.http", "Use UI language as Accept-Language",
+	add_opt_bool("protocol.http", N_("Use UI language as Accept-Language"),
 		"accept_ui_language", 0, 1,
 		"Request localised versions of documents from web-servers (using the\n"
 		"Accept-Language header) using the language you have configured for\n"
 		"ELinks' user-interface. Note that some see this as a potential security\n"
 		"risk because it tells web-masters about your preference in language.");
 
-	add_opt_string("protocol.http", "User-agent identification",
+	add_opt_string("protocol.http", N_("User-agent identification"),
 		"user_agent", 0, "ELinks (%v; %s; %t)",
 		"Change the User Agent ID. That means identification string, which\n"
 		"is sent to HTTP server when a document is requested.\n"
@@ -1427,32 +1428,32 @@ register_options()
 
 
 
-	add_opt_tree("protocol", "FTP",
+	add_opt_tree("protocol", N_("FTP"),
 		"ftp", 0,
 		"FTP specific options.");
 
-	add_opt_tree("protocol.ftp", "Proxy configuration",
+	add_opt_tree("protocol.ftp", N_("Proxy configuration"),
 		"proxy", 0,
 		"FTP proxy configuration.");
 
-	add_opt_string("protocol.ftp.proxy", "Host and port-number",
+	add_opt_string("protocol.ftp.proxy", N_("Host and port-number"),
 		"host", 0, "",
 		"Host and port-number (host:port) of the FTP proxy, or blank.\n"
 		"If it's blank, FTP_PROXY environment variable is checked as well.");
 
-	add_opt_string("protocol.ftp", "Anonymous password",
+	add_opt_string("protocol.ftp", N_("Anonymous password"),
 		"anon_passwd", 0, "some@host.domain",
 		"FTP anonymous password to be sent.");
 
-	add_opt_bool("protocol.ftp", "Use passive mode (IPv4)",
+	add_opt_bool("protocol.ftp", N_("Use passive mode (IPv4)"),
 		"use_pasv", 0, 1,
 		"Use PASV instead of PORT (passive vs active mode, IPv4 only).");
 #ifdef IPV6
-	add_opt_bool("protocol.ftp", "Use passive mode (IPv6)",
+	add_opt_bool("protocol.ftp", N_("Use passive mode (IPv6)"),
 		"use_epsv", 0, 0,
 		"Use EPSV instead of EPRT (passive vs active mode, IPv6 only).");
 #else
-	add_opt_bool("protocol.ftp", "Use passive mode (IPv6)",
+	add_opt_bool("protocol.ftp", N_("Use passive mode (IPv6)"),
 		"use_epsv", 0, 0,
 		"Use EPSV instead of EPRT (passive vs active mode, IPv6 only).\n"
 		"Works only with IPv6 enabled, so nothing interesting for you.");
@@ -1460,23 +1461,23 @@ register_options()
 
 
 
-	add_opt_tree("protocol", "Local files",
+	add_opt_tree("protocol", N_("Local files"),
 		"file", 0,
 		"Options specific to local browsing.");
 
-	add_opt_bool("protocol.file", "Allow reading special files",
+	add_opt_bool("protocol.file", N_("Allow reading special files"),
 		"allow_special_files", 0, 0,
 		"Allow reading from non-regular files? (DANGEROUS - reading\n"
 		"/dev/urandom or /dev/zero can ruin your day!)");
 
-	add_opt_bool("protocol.file", "Try encoding extensions",
+	add_opt_bool("protocol.file", N_("Try encoding extensions"),
 		"try_encoding_extensions", 0, 1,
 		"When set, if we can't open a file named 'filename', we'll try\n"
 		"to open 'filename' + some encoding extensions (ie.\n"
 		"'filename.gz'); it depends on the supported encodings.");
 
 
-	add_opt_tree("protocol", "User protocols",
+	add_opt_tree("protocol", N_("User protocols"),
 		"user", OPT_AUTOCREATE,
 		"User protocols. Options in this tree specify external\n"
 		"handlers for the appropriate protocols. Ie.\n"
@@ -1501,25 +1502,25 @@ register_options()
 		"%u in the string means the whole URL");
 
 
-	add_opt_tree("protocol", "Mailcap",
+	add_opt_tree("protocol", N_("Mailcap"),
 		"mailcap", 0,
 		"Options for mailcap support.");
 
-	add_opt_bool("protocol.mailcap", "Enable",
+	add_opt_bool("protocol.mailcap", N_("Enable"),
 		"enable", 0, 1,
 		"Enable mailcap support.");
 
-	add_opt_string("protocol.mailcap", "Path",
+	add_opt_string("protocol.mailcap", N_("Path"),
 		"path", 0, "",
 		"Mailcap search path. Colon-separated list of files.\n"
 		"Leave as \"\" to use MAILCAP environment variable or\n"
 		"build-in defaults instead.");
 
-	add_opt_bool("protocol.mailcap", "Ask before opening",
+	add_opt_bool("protocol.mailcap", N_("Ask before opening"),
 		"ask", 0, 1,
 		"Ask before using the handlers defined by mailcap.");
 
-	add_opt_int("protocol.mailcap", "Type query string",
+	add_opt_int("protocol.mailcap", N_("Type query string"),
 		"description", 0, 0, 2, 0,
 		"Type of description to show in \"what shall I do with this file\"\n"
 		"query dialog:\n"
@@ -1527,14 +1528,14 @@ register_options()
 		"1 is show program to be run.\n"
 		"2 is show mailcap description field if any; \"mailcap\" otherwise.");
 
-	add_opt_bool("protocol.mailcap", "Prioritize entries by file",
+	add_opt_bool("protocol.mailcap", N_("Prioritize entries by file"),
 		"prioritize", 0, 1,
 		"Prioritize entries by the order of the files in the mailcap\n"
 		"path. This means that wildcard entries (like: image/*) will\n"
 		"also be checked before deciding the handler.");
 
 
-	add_opt_string("protocol", "No-proxy domains",
+	add_opt_string("protocol", N_("No-proxy domains"),
 		"no_proxy", 0, "",
 		"Comma separated list of domains for which the proxy (HTTP/FTP)\n"
 		"should be disabled. Optionally, a port can be specified for some\n"
@@ -1543,7 +1544,7 @@ register_options()
 
 
 
-	add_opt_tree("", "Terminals",
+	add_opt_tree("", N_("Terminals"),
 		"terminal", OPT_AUTOCREATE,
 		"Terminal options.");
 	get_opt_rec(&root_options, "terminal")->change_hook = change_hook_terminal;
@@ -1552,7 +1553,7 @@ register_options()
 		"_template_", 0,
 		"Options specific to this terminal type (according to $TERM value).");
 
-	add_opt_int("terminal._template_", "Border type",
+	add_opt_int("terminal._template_", N_("Border type"),
 		"type", 0, 0, 3, 0,
 		"Terminal type; matters mostly only when drawing frames and\n"
 		"dialog box borders:\n"
@@ -1561,32 +1562,32 @@ register_options()
 		"2 is Linux, you get double frames and other goodies\n"
 		"3 is KOI-8");
 
-	add_opt_bool("terminal._template_", "Switch fonts for line drawing",
+	add_opt_bool("terminal._template_", N_("Switch fonts for line drawing"),
 		"m11_hack", 0, 0,
 		"Switch fonts when drawing lines, enabling both local characters\n"
 		"and lines working at the same time. Makes sense only with linux\n"
 		"terminal.");
 
-	add_opt_bool("terminal._template_", "I/O in UTF8",
+	add_opt_bool("terminal._template_", N_("I/O in UTF8"),
 		"utf_8_io", 0, 0,
 		"Enable I/O in UTF8 for Unicode terminals. Note that currently,\n"
 		"only the subset of UTF8 according to terminal codepage is used.");
 
-	add_opt_bool("terminal._template_", "Restrict CP852",
+	add_opt_bool("terminal._template_", N_("Restrict CP852"),
 		"restrict_852", 0, 0,
 		"Someone who understands this ... ;)) I'm too lazy to think about this now :P.");
 
-	add_opt_bool("terminal._template_", "Block cursor",
+	add_opt_bool("terminal._template_", N_("Block cursor"),
 		"block_cursor", 0, 0,
 		"Move cursor to bottom right corner when done drawing.\n"
 		"This is particularly useful when we have a block cursor,\n"
 		"so that inversed text is displayed correctly.");
 
-	add_opt_bool("terminal._template_", "Use colors",
+	add_opt_bool("terminal._template_", N_("Use colors"),
 		"colors", 0, 0,
 		"If we should use colors.");
 
-	add_opt_bool("terminal._template_", "Enable transparency",
+	add_opt_bool("terminal._template_", N_("Enable transparency"),
 		"transparency", 0, 1,
 		"If we should not set the background to black. This is particularly\n"
 		"useful when we have a terminal (typically in some windowing\n"
@@ -1594,19 +1595,19 @@ register_options()
 		"it will be visible in ELinks as well. Note that this option makes\n"
 		"sense only when colors are enabled.");
 
-	add_opt_codepage("terminal._template_", "Codepage",
+	add_opt_codepage("terminal._template_", N_("Codepage"),
 		"charset", 0, get_cp_index("us-ascii"),
 		"Codepage of charset used for displaying content on terminal.");
 
 
 
-	add_opt_tree("", "User interface",
+	add_opt_tree("", N_("User interface"),
 		"ui", 0,
 		"User interface options.");
 
 
 
-	add_opt_tree("ui", "Color settings",
+	add_opt_tree("ui", N_("Color settings"),
 		"colors", 0,
 		"Default user interface color settings.");
 
@@ -1616,590 +1617,590 @@ register_options()
 	/* ========================================================== */
 
 
-	add_opt_tree("ui.colors", "Color terminals",
+	add_opt_tree("ui.colors", N_("Color terminals"),
 		"color", 0,
 		"Color settings for color terminal.");
 
 
-	add_opt_tree("ui.colors.color", "Main menu bar",
+	add_opt_tree("ui.colors.color", N_("Main menu bar"),
 		"mainmenu", 0,
 		"Main menu bar colors.");
 
-	add_opt_tree("ui.colors.color.mainmenu", "Unselected main menu bar item",
+	add_opt_tree("ui.colors.color.mainmenu", N_("Unselected main menu bar item"),
 		"normal", 0,
 		"Unselected main menu bar item colors.");
 
-	add_opt_color("ui.colors.color.mainmenu.normal", "Text color",
+	add_opt_color("ui.colors.color.mainmenu.normal", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.mainmenu.normal", "Background color",
+	add_opt_color("ui.colors.color.mainmenu.normal", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.mainmenu", "Selected main menu bar item",
+	add_opt_tree("ui.colors.color.mainmenu", N_("Selected main menu bar item"),
 		"selected", 0,
 		"Selected main menu bar item colors.");
 
-	add_opt_color("ui.colors.color.mainmenu.selected", "Text color",
+	add_opt_color("ui.colors.color.mainmenu.selected", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.mainmenu.selected", "Background color",
+	add_opt_color("ui.colors.color.mainmenu.selected", N_("Background color"),
 		"background", 0, "green",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.mainmenu", "Hotkey",
+	add_opt_tree("ui.colors.color.mainmenu", N_("Hotkey"),
 		"hotkey", 0,
 		"Unselected main menu bar item hotkey colors.");
 
-	add_opt_color("ui.colors.color.mainmenu.hotkey", "Text color",
+	add_opt_color("ui.colors.color.mainmenu.hotkey", N_("Text color"),
 		"text", 0, "darkred",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.mainmenu.hotkey", "Background color",
+	add_opt_color("ui.colors.color.mainmenu.hotkey", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
 
-	add_opt_tree("ui.colors.color", "Menu bar",
+	add_opt_tree("ui.colors.color", N_("Menu bar"),
 		"menu", 0,
 		"Menu bar colors.");
 
-	add_opt_tree("ui.colors.color.menu", "Unselected menu item",
+	add_opt_tree("ui.colors.color.menu", N_("Unselected menu item"),
 		"normal", 0,
 		"Unselected menu item colors.");
 
-	add_opt_color("ui.colors.color.menu.normal", "Text color",
+	add_opt_color("ui.colors.color.menu.normal", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.menu.normal", "Background color",
+	add_opt_color("ui.colors.color.menu.normal", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.menu", "Selected menu item",
+	add_opt_tree("ui.colors.color.menu", N_("Selected menu item"),
 		"selected", 0,
 		"Selected menu item colors.");
 
-	add_opt_color("ui.colors.color.menu.selected", "Text color",
+	add_opt_color("ui.colors.color.menu.selected", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.menu.selected", "Background color",
+	add_opt_color("ui.colors.color.menu.selected", N_("Background color"),
 		"background", 0, "green",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.menu", "Hotkey",
+	add_opt_tree("ui.colors.color.menu", N_("Hotkey"),
 		"hotkey", 0,
 		"Unselected menu item hotkey colors.");
 
-	add_opt_color("ui.colors.color.menu.hotkey", "Text color",
+	add_opt_color("ui.colors.color.menu.hotkey", N_("Text color"),
 		"text", 0, "darkred",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.menu.hotkey", "Background color",
+	add_opt_color("ui.colors.color.menu.hotkey", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.menu", "Menu frame",
+	add_opt_tree("ui.colors.color.menu", N_("Menu frame"),
 		"frame", 0,
 		"Menu frame colors.");
 
-	add_opt_color("ui.colors.color.menu.frame", "Text color",
+	add_opt_color("ui.colors.color.menu.frame", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.menu.frame", "Background color",
+	add_opt_color("ui.colors.color.menu.frame", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
 
-	add_opt_tree("ui.colors.color", "Dialog",
+	add_opt_tree("ui.colors.color", N_("Dialog"),
 		"dialog", 0,
 		"Dialog colors.");
 
-	add_opt_color("ui.colors.color.dialog", "Generic background color",
+	add_opt_color("ui.colors.color.dialog", N_("Generic background color"),
 		"background", 0, "white",
 		"Dialog generic background color.");
 
-	add_opt_tree("ui.colors.color.dialog", "Frame",
+	add_opt_tree("ui.colors.color.dialog", N_("Frame"),
 		"frame", 0,
 		"Dialog frame colors.");
 
-	add_opt_color("ui.colors.color.dialog.frame", "Text color",
+	add_opt_color("ui.colors.color.dialog.frame", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.dialog.frame", "Background color",
+	add_opt_color("ui.colors.color.dialog.frame", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.dialog", "Title",
+	add_opt_tree("ui.colors.color.dialog", N_("Title"),
 		"title", 0,
 		"Dialog title colors.");
 
-	add_opt_color("ui.colors.color.dialog.title", "Text color",
+	add_opt_color("ui.colors.color.dialog.title", N_("Text color"),
 		"text", 0, "darkred",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.dialog.title", "Background color",
+	add_opt_color("ui.colors.color.dialog.title", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.dialog", "Text",
+	add_opt_tree("ui.colors.color.dialog", N_("Text"),
 		"text", 0,
 		"Dialog text colors.");
 
-	add_opt_color("ui.colors.color.dialog.text", "Text color",
+	add_opt_color("ui.colors.color.dialog.text", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.dialog.text", "Background color",
+	add_opt_color("ui.colors.color.dialog.text", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.dialog", "Checkbox",
+	add_opt_tree("ui.colors.color.dialog", N_("Checkbox"),
 		"checkbox", 0,
 		"Dialog checkbox colors.");
 
-	add_opt_color("ui.colors.color.dialog.checkbox", "Text color",
+	add_opt_color("ui.colors.color.dialog.checkbox", N_("Text color"),
 		"text", 0, "darkred",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.dialog.checkbox", "Background color",
+	add_opt_color("ui.colors.color.dialog.checkbox", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.dialog", "Checkbox label",
+	add_opt_tree("ui.colors.color.dialog", N_("Checkbox label"),
 		"checkbox-label", 0,
 		"Dialog checkbox label colors.");
 
-	add_opt_color("ui.colors.color.dialog.checkbox-label", "Text color",
+	add_opt_color("ui.colors.color.dialog.checkbox-label", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.dialog.checkbox-label", "Background color",
+	add_opt_color("ui.colors.color.dialog.checkbox-label", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.dialog", "Button",
+	add_opt_tree("ui.colors.color.dialog", N_("Button"),
 		"button", 0,
 		"Dialog button colors.");
 
-	add_opt_color("ui.colors.color.dialog.button", "Text color",
+	add_opt_color("ui.colors.color.dialog.button", N_("Text color"),
 		"text", 0, "white",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.dialog.button", "Background color",
+	add_opt_color("ui.colors.color.dialog.button", N_("Background color"),
 		"background", 0, "blue",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.dialog", "Selected button",
+	add_opt_tree("ui.colors.color.dialog", N_("Selected button"),
 		"button-selected", 0,
 		"Dialog selected button colors.");
 
-	add_opt_color("ui.colors.color.dialog.button-selected", "Text color",
+	add_opt_color("ui.colors.color.dialog.button-selected", N_("Text color"),
 		"text", 0, "yellow",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.dialog.button-selected", "Background color",
+	add_opt_color("ui.colors.color.dialog.button-selected", N_("Background color"),
 		"background", 0, "green",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.dialog", "Text field",
+	add_opt_tree("ui.colors.color.dialog", N_("Text field"),
 		"field", 0,
 		"Dialog text field colors.");
 
-	add_opt_color("ui.colors.color.dialog.field", "Text color",
+	add_opt_color("ui.colors.color.dialog.field", N_("Text color"),
 		"text", 0, "white",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.dialog.field", "Background color",
+	add_opt_color("ui.colors.color.dialog.field", N_("Background color"),
 		"background", 0, "blue",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.dialog", "Text field text",
+	add_opt_tree("ui.colors.color.dialog", N_("Text field text"),
 		"field-text", 0,
 		"Dialog field text colors.");
 
-	add_opt_color("ui.colors.color.dialog.field-text", "Text color",
+	add_opt_color("ui.colors.color.dialog.field-text", N_("Text color"),
 		"text", 0, "yellow",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.dialog.field-text", "Background color",
+	add_opt_color("ui.colors.color.dialog.field-text", N_("Background color"),
 		"background", 0, "blue",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.dialog", "Meter",
+	add_opt_tree("ui.colors.color.dialog", N_("Meter"),
 		"meter", 0,
 		"Dialog meter colors.");
 
-	add_opt_color("ui.colors.color.dialog.meter", "Text color",
+	add_opt_color("ui.colors.color.dialog.meter", N_("Text color"),
 		"text", 0, "white",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.dialog.meter", "Background color",
+	add_opt_color("ui.colors.color.dialog.meter", N_("Background color"),
 		"background", 0, "blue",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.dialog", "Shadow",
+	add_opt_tree("ui.colors.color.dialog", N_("Shadow"),
 		"shadow", 0,
 		"Dialog shadow colors (see ui.shadows option).");
 
-	add_opt_color("ui.colors.color.dialog.shadow", "Background color",
+	add_opt_color("ui.colors.color.dialog.shadow", N_("Background color"),
 		"background", 0, "black",
 		"Default background color.");
 
 
-	add_opt_tree("ui.colors.color", "Title bar",
+	add_opt_tree("ui.colors.color", N_("Title bar"),
 		"title", 0,
 		"Title bar colors.");
 
-	add_opt_tree("ui.colors.color.title", "Generic title bar",
+	add_opt_tree("ui.colors.color.title", N_("Generic title bar"),
 		"title-bar", 0,
 		"Generic title bar colors.");
 
-	add_opt_color("ui.colors.color.title.title-bar", "Text color",
+	add_opt_color("ui.colors.color.title.title-bar", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.title.title-bar", "Background color",
+	add_opt_color("ui.colors.color.title.title-bar", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.title", "Title bar text",
+	add_opt_tree("ui.colors.color.title", N_("Title bar text"),
 		"title-text", 0,
 		"Title bar text colors.");
 
-	add_opt_color("ui.colors.color.title.title-text", "Text color",
+	add_opt_color("ui.colors.color.title.title-text", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.title.title-text", "Background color",
+	add_opt_color("ui.colors.color.title.title-text", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
 
-	add_opt_tree("ui.colors.color", "Status bar",
+	add_opt_tree("ui.colors.color", N_("Status bar"),
 		"status", 0,
 		"Status bar colors.");
 
-	add_opt_tree("ui.colors.color.status", "Generic status bar",
+	add_opt_tree("ui.colors.color.status", N_("Generic status bar"),
 		"status-bar", 0,
 		"Generic status bar colors.");
 
-	add_opt_color("ui.colors.color.status.status-bar", "Text color",
+	add_opt_color("ui.colors.color.status.status-bar", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.status.status-bar", "Background color",
+	add_opt_color("ui.colors.color.status.status-bar", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.status", "Status bar text",
+	add_opt_tree("ui.colors.color.status", N_("Status bar text"),
 		"status-text", 0,
 		"Status bar text colors.");
 
-	add_opt_color("ui.colors.color.status.status-text", "Text color",
+	add_opt_color("ui.colors.color.status.status-text", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.color.status.status-text", "Background color",
+	add_opt_color("ui.colors.color.status.status-text", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
 
-	add_opt_tree("ui.colors", "Non-color terminals",
+	add_opt_tree("ui.colors", N_("Non-color terminals"),
 		"mono", 0,
 		"Color settings for non-color terminal.");
 
 
-	add_opt_tree("ui.colors.mono", "Main menu bar",
+	add_opt_tree("ui.colors.mono", N_("Main menu bar"),
 		"mainmenu", 0,
 		"Main menu bar colors.");
 
-	add_opt_tree("ui.colors.mono.mainmenu", "Unselected menu bar item",
+	add_opt_tree("ui.colors.mono.mainmenu", N_("Unselected menu bar item"),
 		"normal", 0,
 		"Unselected menu bar item colors.");
 
-	add_opt_color("ui.colors.mono.mainmenu.normal", "Text color",
+	add_opt_color("ui.colors.mono.mainmenu.normal", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.mainmenu.normal", "Background color",
+	add_opt_color("ui.colors.mono.mainmenu.normal", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.mainmenu", "Selected menu bar item",
+	add_opt_tree("ui.colors.mono.mainmenu", N_("Selected menu bar item"),
 		"selected", 0,
 		"Selected menu bar item colors.");
 
-	add_opt_color("ui.colors.mono.mainmenu.selected", "Text color",
+	add_opt_color("ui.colors.mono.mainmenu.selected", N_("Text color"),
 		"text", 0, "gray",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.mainmenu.selected", "Background color",
+	add_opt_color("ui.colors.mono.mainmenu.selected", N_("Background color"),
 		"background", 0, "black",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.mainmenu", "Hotkey",
+	add_opt_tree("ui.colors.mono.mainmenu", N_("Hotkey"),
 		"hotkey", 0,
 		"Unselected menu bar item hotkey colors.");
 
-	add_opt_color("ui.colors.mono.mainmenu.hotkey", "Text color",
+	add_opt_color("ui.colors.mono.mainmenu.hotkey", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.mainmenu.hotkey", "Background color",
+	add_opt_color("ui.colors.mono.mainmenu.hotkey", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
 
-	add_opt_tree("ui.colors.mono", "Menu bar",
+	add_opt_tree("ui.colors.mono", N_("Menu bar"),
 		"menu", 0,
 		"Menu bar colors.");
 
-	add_opt_tree("ui.colors.mono.menu", "Unselected menu item",
+	add_opt_tree("ui.colors.mono.menu", N_("Unselected menu item"),
 		"normal", 0,
 		"Unselected menu item colors.");
 
-	add_opt_color("ui.colors.mono.menu.normal", "Text color",
+	add_opt_color("ui.colors.mono.menu.normal", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.menu.normal", "Background color",
+	add_opt_color("ui.colors.mono.menu.normal", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.menu", "Selected menu item",
+	add_opt_tree("ui.colors.mono.menu", N_("Selected menu item"),
 		"selected", 0,
 		"Selected menu item colors.");
 
-	add_opt_color("ui.colors.mono.menu.selected", "Text color",
+	add_opt_color("ui.colors.mono.menu.selected", N_("Text color"),
 		"text", 0, "gray",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.menu.selected", "Background color",
+	add_opt_color("ui.colors.mono.menu.selected", N_("Background color"),
 		"background", 0, "black",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.menu", "Hotkey",
+	add_opt_tree("ui.colors.mono.menu", N_("Hotkey"),
 		"hotkey", 0,
 		"Unselected menu item hotkey colors.");
 
-	add_opt_color("ui.colors.mono.menu.hotkey", "Text color",
+	add_opt_color("ui.colors.mono.menu.hotkey", N_("Text color"),
 		"text", 0, "gray",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.menu.hotkey", "Background color",
+	add_opt_color("ui.colors.mono.menu.hotkey", N_("Background color"),
 		"background", 0, "black",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.menu", "Menu frame",
+	add_opt_tree("ui.colors.mono.menu", N_("Menu frame"),
 		"frame", 0,
 		"Menu frame colors.");
 
-	add_opt_color("ui.colors.mono.menu.frame", "Text color",
+	add_opt_color("ui.colors.mono.menu.frame", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.menu.frame", "Background color",
+	add_opt_color("ui.colors.mono.menu.frame", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
 
-	add_opt_tree("ui.colors.mono", "Dialog",
+	add_opt_tree("ui.colors.mono", N_("Dialog"),
 		"dialog", 0,
 		"Dialog colors.");
 
-	add_opt_color("ui.colors.mono.dialog", "Dialog generic background color",
+	add_opt_color("ui.colors.mono.dialog", N_("Dialog generic background color"),
 		"background", 0, "white",
 		"Dialog generic background color.");
 
-	add_opt_tree("ui.colors.mono.dialog", "Frame",
+	add_opt_tree("ui.colors.mono.dialog", N_("Frame"),
 		"frame", 0,
 		"Dialog frame colors.");
 
-	add_opt_color("ui.colors.mono.dialog.frame", "Text color",
+	add_opt_color("ui.colors.mono.dialog.frame", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.dialog.frame", "Background color",
+	add_opt_color("ui.colors.mono.dialog.frame", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.dialog", "Title",
+	add_opt_tree("ui.colors.mono.dialog", N_("Title"),
 		"title", 0,
 		"Dialog title colors.");
 
-	add_opt_color("ui.colors.mono.dialog.title", "Text color",
+	add_opt_color("ui.colors.mono.dialog.title", N_("Text color"),
 		"text", 0, "gray",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.dialog.title", "Background color",
+	add_opt_color("ui.colors.mono.dialog.title", N_("Background color"),
 		"background", 0, "black",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.dialog", "Text",
+	add_opt_tree("ui.colors.mono.dialog", N_("Text"),
 		"text", 0,
 		"Dialog text colors.");
 
-	add_opt_color("ui.colors.mono.dialog.text", "Text color",
+	add_opt_color("ui.colors.mono.dialog.text", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.dialog.text", "Background color",
+	add_opt_color("ui.colors.mono.dialog.text", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.dialog", "Checkbox",
+	add_opt_tree("ui.colors.mono.dialog", N_("Checkbox"),
 		"checkbox", 0,
 		"Dialog checkbox colors.");
 
-	add_opt_color("ui.colors.mono.dialog.checkbox", "Text color",
+	add_opt_color("ui.colors.mono.dialog.checkbox", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.dialog.checkbox", "Background color",
+	add_opt_color("ui.colors.mono.dialog.checkbox", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.dialog", "Checkbox label",
+	add_opt_tree("ui.colors.mono.dialog", N_("Checkbox label"),
 		"checkbox-label", 0,
 		"Dialog checkbox label colors.");
 
-	add_opt_color("ui.colors.mono.dialog.checkbox-label", "Text color",
+	add_opt_color("ui.colors.mono.dialog.checkbox-label", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.dialog.checkbox-label", "Background color",
+	add_opt_color("ui.colors.mono.dialog.checkbox-label", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.dialog", "Button",
+	add_opt_tree("ui.colors.mono.dialog", N_("Button"),
 		"button", 0,
 		"Dialog button colors.");
 
-	add_opt_color("ui.colors.mono.dialog.button", "Text color",
+	add_opt_color("ui.colors.mono.dialog.button", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.dialog.button", "Background color",
+	add_opt_color("ui.colors.mono.dialog.button", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.dialog", "Selected button",
+	add_opt_tree("ui.colors.mono.dialog", N_("Selected button"),
 		"button-selected", 0,
 		"Dialog selected button colors.");
 
-	add_opt_color("ui.colors.mono.dialog.button-selected", "Text color",
+	add_opt_color("ui.colors.mono.dialog.button-selected", N_("Text color"),
 		"text", 0, "white",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.dialog.button-selected", "Background color",
+	add_opt_color("ui.colors.mono.dialog.button-selected", N_("Background color"),
 		"background", 0, "black",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.dialog", "Text field",
+	add_opt_tree("ui.colors.mono.dialog", N_("Text field"),
 		"field", 0,
 		"Dialog field colors.");
 
-	add_opt_color("ui.colors.mono.dialog.field", "Text color",
+	add_opt_color("ui.colors.mono.dialog.field", N_("Text color"),
 		"text", 0, "gray",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.dialog.field", "Background color",
+	add_opt_color("ui.colors.mono.dialog.field", N_("Background color"),
 		"background", 0, "black",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.dialog", "Text field text",
+	add_opt_tree("ui.colors.mono.dialog", N_("Text field text"),
 		"field-text", 0,
 		"Dialog field text colors.");
 
-	add_opt_color("ui.colors.mono.dialog.field-text", "Text color",
+	add_opt_color("ui.colors.mono.dialog.field-text", N_("Text color"),
 		"text", 0, "gray",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.dialog.field-text", "Background color",
+	add_opt_color("ui.colors.mono.dialog.field-text", N_("Background color"),
 		"background", 0, "black",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.dialog", "Meter",
+	add_opt_tree("ui.colors.mono.dialog", N_("Meter"),
 		"meter", 0,
 		"Dialog meter colors.");
 
-	add_opt_color("ui.colors.mono.dialog.meter", "Text color",
+	add_opt_color("ui.colors.mono.dialog.meter", N_("Text color"),
 		"text", 0, "gray",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.dialog.meter", "Background color",
+	add_opt_color("ui.colors.mono.dialog.meter", N_("Background color"),
 		"background", 0, "black",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.dialog", "Shadow",
+	add_opt_tree("ui.colors.mono.dialog", N_("Shadow"),
 		"shadow", 0,
 		"Dialog shadow colors (see ui.shadows option).");
 
-	add_opt_color("ui.colors.mono.dialog.shadow", "Background color",
+	add_opt_color("ui.colors.mono.dialog.shadow", N_("Background color"),
 		"background", 0, "black",
 		"Default background color.");
 
 
-	add_opt_tree("ui.colors.mono", "Title bar",
+	add_opt_tree("ui.colors.mono", N_("Title bar"),
 		"title", 0,
 		"Title bar colors.");
 
-	add_opt_tree("ui.colors.mono.title", "Generic title bar",
+	add_opt_tree("ui.colors.mono.title", N_("Generic title bar"),
 		"title-bar", 0,
 		"Generic title bar colors.");
 
-	add_opt_color("ui.colors.mono.title.title-bar", "Text color",
+	add_opt_color("ui.colors.mono.title.title-bar", N_("Text color"),
 		"text", 0, "gray",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.title.title-bar", "Background color",
+	add_opt_color("ui.colors.mono.title.title-bar", N_("Background color"),
 		"background", 0, "black",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.title", "Title text",
+	add_opt_tree("ui.colors.mono.title", N_("Title text"),
 		"title-text", 0,
 		"Title bar text colors.");
 
-	add_opt_color("ui.colors.mono.title.title-text", "Text color",
+	add_opt_color("ui.colors.mono.title.title-text", N_("Text color"),
 		"text", 0, "gray",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.title.title-text", "Background color",
+	add_opt_color("ui.colors.mono.title.title-text", N_("Background color"),
 		"background", 0, "black",
 		"Default background color.");
 
 
-	add_opt_tree("ui.colors.mono", "Status bar",
+	add_opt_tree("ui.colors.mono", N_("Status bar"),
 		"status", 0,
 		"Status bar colors.");
 
-	add_opt_tree("ui.colors.mono.status", "Generic status bar",
+	add_opt_tree("ui.colors.mono.status", N_("Generic status bar"),
 		"status-bar", 0,
 		"Generic status bar colors.");
 
-	add_opt_color("ui.colors.mono.status.status-bar", "Text color",
+	add_opt_color("ui.colors.mono.status.status-bar", N_("Text color"),
 		"text", 0, "gray",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.status.status-bar", "Background color",
+	add_opt_color("ui.colors.mono.status.status-bar", N_("Background color"),
 		"background", 0, "black",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.status", "Status bar text",
+	add_opt_tree("ui.colors.mono.status", N_("Status bar text"),
 		"status-text", 0,
 		"Status bar text colors.");
 
-	add_opt_color("ui.colors.mono.status.status-text", "Text color",
+	add_opt_color("ui.colors.mono.status.status-text", N_("Text color"),
 		"text", 0, "black",
 		"Default text color.");
 
-	add_opt_color("ui.colors.mono.status.status-text", "Background color",
+	add_opt_color("ui.colors.mono.status.status-text", N_("Background color"),
 		"background", 0, "white",
 		"Default background color.");
 
@@ -2209,36 +2210,36 @@ register_options()
 	/* ========================================================== */
 
 
-	add_opt_tree("ui", "Dialog settings",
+	add_opt_tree("ui", N_("Dialog settings"),
 		"dialogs", 0,
 		"Dialogs-specific appearance and behaviour settings.");
 
-	add_opt_int("ui.dialogs", "Minimal height of listbox widget",
+	add_opt_int("ui.dialogs", N_("Minimal height of listbox widget"),
 		"listbox_min_height", 0, 1, 20, 10,
 		"Minimal height of the listbox widget (used e.g. for bookmarks\n"
 		"or global history).");
 
-	add_opt_bool("ui.dialogs", "Drop shadows",
+	add_opt_bool("ui.dialogs", N_("Drop shadows"),
 		"shadows", 0, 0,
 		"Make dialogs drop shadows (the shadows are solid, you can\n"
 		"adjust their color by ui.colors.*.dialog.shadow). You may\n"
 		"also want to eliminate the wide borders by adjusting setup.h.");
 
 
-	add_opt_tree("ui", "Timer options",
+	add_opt_tree("ui", N_("Timer options"),
 		"timer", 0,
 		"Timed action after certain interval of user inactivity. Someone can\n"
 		"even find this useful, although you may not believe that.");
 
 #ifdef USE_LEDS
-	add_opt_int("ui.timer", "Enable",
+	add_opt_int("ui.timer", N_("Enable"),
 		"enable", 0, 0, 2, 0,
 		"Whether to enable the timer or not:\n"
 		"0 is don't count down anything\n"
 		"1 is count down, but don't show the timer\n"
 		"2 is count down and show the timer near LEDs");
 #else
-	add_opt_int("ui.timer", "Enable",
+	add_opt_int("ui.timer", N_("Enable"),
 		"enable", 0, 0, 2, 0,
 		"Whether to enable the timer or not:\n"
 		"0 is don't count down anything\n"
@@ -2246,17 +2247,17 @@ register_options()
 		"2 is count down and show the timer near LEDs (note that this feature is DISABLED)");
 #endif
 
-	add_opt_int("ui.timer", "Duration",
+	add_opt_int("ui.timer", N_("Duration"),
 		"duration", 0, 1, 86400, 86400,
 		"Inactivity timeout. One day should be enough for just everyone (TM).");
 
-	add_opt_string("ui.timer", "Action",
+	add_opt_string("ui.timer", N_("Action"),
 		"action", 0, "",
 		"Key-binding action to be triggered when timer reaches zero.");
 
 
 
-	add_opt_ptr("ui", "Language",
+	add_opt_ptr("ui", N_("Language"),
 		"language", 0, OPT_LANGUAGE, mem_calloc(1, sizeof(int)),
 		"Language of user interface. System means that the language will "
 		"be extracted from the environment dynamically.");
@@ -2269,19 +2270,19 @@ register_options()
 		"This option is deprecated and will be removed very soon.\n"
 		"Please use the ui.dialog.shadows option instead.");
 
-	add_opt_bool("ui", "Display status bar",
+	add_opt_bool("ui", N_("Display status bar"),
 		"show_status_bar", 0, 1,
 		"Show status bar on the screen.");
 
-	add_opt_bool("ui", "Display title bar",
+	add_opt_bool("ui", N_("Display title bar"),
 		"show_title_bar", 0, 1,
 		"Show title bar on the screen.");
 
-	add_opt_bool("ui", "Display goto dialog on startup",
+	add_opt_bool("ui", N_("Display goto dialog on startup"),
 		"startup_goto_dialog", 0, 0,
 		"Pop up goto dialog on startup when there's no homepage set.");
 
-	add_opt_bool("ui", "Set window title",
+	add_opt_bool("ui", N_("Set window title"),
 		"window_title", 0, 1,
 		"Whether ELinks window title should be touched when ELinks is\n"
 		"run in a windowing environment.");
@@ -2295,7 +2296,7 @@ register_options()
 		"This option is deprecated and will be removed very soon.\n"
 		"Please use the config.saving_style option instead.");
 
-	add_opt_bool("", "Use secure file saving",
+	add_opt_bool("", N_("Use secure file saving"),
 		"secure_file_saving", 0, 1,
 		"First write data to 'file.tmp', then rename to 'file' upon\n"
 		"successfully finishing this. Note that this relates only to\n"
@@ -2307,36 +2308,36 @@ register_options()
 
 	/* Commandline options */
 
-	add_opt_bool_tree(&cmdline_options, "", "Restrict to anonymous mode",
+	add_opt_bool_tree(&cmdline_options, "", N_("Restrict to anonymous mode"),
 		"anonymous", 0, 0,
 		"Restrict ELinks so that it can run on an anonymous account.\n"
 		"No local file browsing, no downloads. Execution of viewers\n"
 		"is allowed, but user can't add or modify entries in\n"
 		"association table.");
 
-	add_opt_bool_tree(&cmdline_options, "", "Autosubmit first form",
+	add_opt_bool_tree(&cmdline_options, "", N_("Autosubmit first form"),
 		"auto-submit", 0, 0,
 		"Go and submit the first form you'll stumble upon.");
 
-	add_opt_int_tree(&cmdline_options, "", "Clone session with given ID",
+	add_opt_int_tree(&cmdline_options, "", N_("Clone session with given ID"),
 		"base-session", 0, 0, MAXINT, 0,
 		"ID of session (ELinks instance) which we want to clone.\n"
 		"This is internal ELinks option, you don't want to use it.");
 
-	add_opt_bool_tree(&cmdline_options, "", "Write formatted version of given URL to stdout",
+	add_opt_bool_tree(&cmdline_options, "", N_("Write formatted version of given URL to stdout"),
 		"dump", 0, 0,
 		"Write a plain-text version of the given HTML document to\n"
 		"stdout.");
 
-	add_opt_alias_tree(&cmdline_options, "", "Codepage to use with -dump",
+	add_opt_alias_tree(&cmdline_options, "", N_("Codepage to use with -dump"),
 		"dump-charset", 0, "document.dump.codepage",
 		"Codepage used in dump output.");
 
-	add_opt_alias_tree(&cmdline_options, "", "Width of document formatted with -dump",
+	add_opt_alias_tree(&cmdline_options, "", N_("Width of document formatted with -dump"),
 		"dump-width", 0, "document.dump.width",
 		"Width of the dump output.");
 
-	add_opt_command_tree(&cmdline_options, "", "Evaluate given configuration option",
+	add_opt_command_tree(&cmdline_options, "", N_("Evaluate given configuration option"),
 		"eval", 0, eval_cmd,
 		"Specify elinks.conf config options on the command-line:\n"
 		"  -eval 'set protocol.file.allow_special_files = 1'");
@@ -2351,34 +2352,34 @@ register_options()
 		"h", 0, printhelp_cmd,
 		NULL);
 
-	add_opt_command_tree(&cmdline_options, "", "Print usage help and exit",
+	add_opt_command_tree(&cmdline_options, "", N_("Print usage help and exit"),
 		"help", 0, printhelp_cmd,
 		"Print usage help and exit.");
 
-	add_opt_command_tree(&cmdline_options, "", "Print detailed usage help and exit",
+	add_opt_command_tree(&cmdline_options, "", N_("Print detailed usage help and exit"),
 		"long-help", 0, printhelp_cmd,
 		"Print detailed usage help and exit.");
 
-	add_opt_command_tree(&cmdline_options, "", "Print help for configuration options",
+	add_opt_command_tree(&cmdline_options, "", N_("Print help for configuration options"),
 		"config-help", 0, printhelp_cmd,
 		"Print help on configuration options and exit.");
 
-	add_opt_command_tree(&cmdline_options, "", "Look up specified host",
+	add_opt_command_tree(&cmdline_options, "", N_("Look up specified host"),
 		"lookup", 0, lookup_cmd,
 		"Look up specified host.");
 
-	add_opt_bool_tree(&cmdline_options, "", "Run as separate instance",
+	add_opt_bool_tree(&cmdline_options, "", N_("Run as separate instance"),
 		"no-connect", 0, 0,
 		"Run ELinks as a separate instance instead of connecting to an\n"
 		"existing instance. Note that normally no runtime state files\n"
 		"(bookmarks, history and so on) are written to the disk when\n"
 		"this option is used. See also -touch-files.");
 
-	add_opt_bool_tree(&cmdline_options, "", "Don't use files in ~/.elinks",
+	add_opt_bool_tree(&cmdline_options, "", N_("Don't use files in ~/.elinks"),
 		"no-home", 0, 0,
 		"Don't attempt to create and/or use home rc directory (~/.elinks).");
 
-	add_opt_int_tree(&cmdline_options, "", "Connect to session ring with given ID",
+	add_opt_int_tree(&cmdline_options, "", N_("Connect to session ring with given ID"),
 		"session-ring", 0, 0, MAXINT, 0,
 		"ID of session ring this ELinks session should connect to. ELinks\n"
 		"works in so-called session rings, whereby all instances of ELinks\n"
@@ -2395,11 +2396,11 @@ register_options()
 		"are written to the disk when this option is used. See also\n"
 		"-touch-files.");
 
-	add_opt_bool_tree(&cmdline_options, "", "Write the source of given URL to stdout",
+	add_opt_bool_tree(&cmdline_options, "", N_("Write the source of given URL to stdout"),
 		"source", 0, 0,
 		"Write the given HTML document in source form to stdout.");
 
-	add_opt_bool_tree(&cmdline_options, "", "Read document from stdin",
+	add_opt_bool_tree(&cmdline_options, "", N_("Read document from stdin"),
 		"stdin", 0, 0,
 		"Open stdin as an HTML document - this is fully equivalent to:\n"
 		" -eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin\n"
@@ -2407,14 +2408,13 @@ register_options()
 		"stdin WORKS ONLY WHEN YOU USE -dump OR -source!! (I would like to\n"
 		"know why you would use -source -stdin, though ;-)");
 
-	add_opt_bool_tree(&cmdline_options, "",
-		"Touch files in ~/.elinks when running with -no-connect/-session-ring",
+	add_opt_bool_tree(&cmdline_options, "", N_("Touch files in ~/.elinks when running with -no-connect/-session-ring"),
 		"touch-files", 0, 0,
 		"Set to 1 to have runtime state files (bookmarks, history, ...)\n"
 		"changed even when -no-connect or -session-ring is used; has no\n"
 		"effect if not used in connection with any of these options.");
 
-	add_opt_command_tree(&cmdline_options, "", "Print version information and exit",
+	add_opt_command_tree(&cmdline_options, "", N_("Print version information and exit"),
 		"version", 0, version_cmd,
 		"Print ELinks version information and exit.");
 

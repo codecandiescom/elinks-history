@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.349 2003/10/23 23:23:54 jonas Exp $ */
+/* $Id: options.c,v 1.350 2003/10/23 23:44:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -247,6 +247,24 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 	add_at_pos((struct option *) cat->prev, option);
 }
 
+static inline struct listbox_item *
+init_option_listbox_item(struct option *option)
+{
+	struct listbox_item *box = mem_calloc(1, sizeof(struct listbox_item));
+
+	if (box) {
+		init_list(box->child);
+		box->visible = 1;
+		box->translated = 1;
+		box->text = option->capt ? option->capt : option->name;
+		box->box = &option_boxes;
+		box->udata = option;
+		box->type = (option->type == OPT_TREE) ? BI_FOLDER : BI_LEAF;
+	}
+
+	return box;
+}
+
 struct option *
 add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 	unsigned char *name, enum option_flags flags, enum option_type type,
@@ -269,19 +287,11 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 	option->desc = desc;
 
 	if (option->type != OPT_ALIAS && (tree->flags & OPT_LISTBOX)) {
-		option->box_item = mem_calloc(1, sizeof(struct listbox_item));
+		option->box_item = init_option_listbox_item(option);
 		if (!option->box_item) {
 			delete_option(option);
 			return NULL;
 		}
-
-		init_list(option->box_item->child);
-		option->box_item->visible = 1;
-		option->box_item->translated = 1;
-		option->box_item->text = option->capt ? option->capt : option->name;
-		option->box_item->box = &option_boxes;
-		option->box_item->udata = option;
-		option->box_item->type = (type == OPT_TREE) ? BI_FOLDER : BI_LEAF;
 	}
 
 	/* XXX: For allocated values we allocate in the add_opt_<type>() macro.
@@ -382,22 +392,10 @@ copy_option(struct option *template)
 	option->desc = template->desc;
 	option->change_hook = template->change_hook;
 
-	option->box_item = mem_calloc(1, sizeof(struct listbox_item));
-	if (option->box_item) {
-		init_list(option->box_item->child);
-		option->box_item->visible = 1;
-		option->box_item->translated = 1;
-		option->box_item->text = option->capt ? option->capt : option->name;
-		option->box_item->box = &option_boxes;
-		option->box_item->udata = option;
-		option->box_item->type = template->box_item
-						? template->box_item->type
-						: template->type == OPT_TREE
-							? BI_FOLDER
-							: BI_LEAF;
-		option->box_item->depth = template->box_item
-						? template->box_item->depth
-						: 0;
+	option->box_item = init_option_listbox_item(template);
+	if (option->box_item && template->box_item) {
+		option->box_item->type = template->box_item->type;
+		option->box_item->depth = template->box_item->depth;
 	}
 
 	if (option_types[template->type].dup) {
@@ -1025,21 +1023,11 @@ register_option_info(struct option_info info[], struct option *tree)
 		unsigned char *string;
 
 		if (option->type != OPT_ALIAS && (tree->flags & OPT_LISTBOX)) {
-			option->box_item = mem_calloc(1, sizeof(struct listbox_item));
+			option->box_item = init_option_listbox_item(option);
 			if (!option->box_item) {
 				delete_option(option);
 				continue;
 			}
-
-			init_list(option->box_item->child);
-			option->box_item->visible = 1;
-			option->box_item->translated = 1;
-			option->box_item->text = option->capt
-						? option->capt : option->name;
-			option->box_item->box = &option_boxes;
-			option->box_item->udata = option;
-			option->box_item->type = (option->type == OPT_TREE)
-						? BI_FOLDER : BI_LEAF;
 		}
 
 		switch (option->type) {

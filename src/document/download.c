@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.43 2002/10/10 21:40:23 pasky Exp $ */
+/* $Id: download.c,v 1.44 2002/10/13 13:06:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -475,7 +475,6 @@ download_data(struct status *stat, struct download *down)
 
 			w = write(down->handle, frag->data + remain,
 				  frag->length - remain);
-
 			if (w == -1) {
 				int saved_errno;
 
@@ -608,7 +607,8 @@ create_download_file(struct terminal *term, unsigned char *fi, int safe, int res
 		file = get_unique_name(file);
 	}
 
-	h = open(file, O_CREAT | O_WRONLY | (resume ? O_APPEND : O_TRUNC) | (sf ? O_EXCL : 0),
+	h = open(file, O_CREAT | O_WRONLY | (resume ? O_APPEND : O_TRUNC)
+			| (sf && !resume ? O_EXCL : 0),
 		 sf ? 0600 : 0666);
 	saved_errno = errno; /* Saved in case of ... --Zas */
 

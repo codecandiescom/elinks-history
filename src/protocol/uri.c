@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.99 2004/03/21 16:16:11 jonas Exp $ */
+/* $Id: uri.c,v 1.100 2004/03/21 22:48:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1010,6 +1010,8 @@ get_uri_cache_entry(unsigned char *string, int length)
 		return NULL;
 	}
 
+	object_lock(&uri_cache);
+
 	return entry;
 }
 
@@ -1031,7 +1033,6 @@ get_uri(unsigned char *string)
 	}
 
 	object_lock(&entry->uri);
-	object_lock(&uri_cache);
 
 	return &entry->uri;
 }
@@ -1052,9 +1053,9 @@ done_uri(struct uri *uri)
 	assertm(entry, "Releasing unknown URI [%s]", string);
 
 	object_unlock(&entry->uri);
-	object_unlock(&uri_cache);
 
 	if (!is_object_used(&entry->uri)) {
+		object_unlock(&uri_cache);
 		del_hash_item(uri_cache.map, item);
 		mem_free(entry);
 	}

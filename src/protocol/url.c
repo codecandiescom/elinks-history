@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.31 2002/09/08 19:12:23 pasky Exp $ */
+/* $Id: url.c,v 1.32 2002/11/12 21:05:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,13 +113,6 @@ parse_url(unsigned char *url, int *prlen,
 	if (dalen) *dalen = 0;
 	if (post) *post = NULL;
 
-#ifdef IPV6
-	/* Get brackets enclosing IPv6 address */
-	lbracket = strchr(url, '[');
-	rbracket = strchr(url, ']');
-	if (lbracket > rbracket) return -1;
-#endif
-
 	/* Isolate prefix */
 
 	prefix_end = strchr(url, ':');
@@ -150,6 +143,19 @@ parse_url(unsigned char *url, int *prlen,
 
 	/* Isolate host */
 
+#ifdef IPV6
+	/* Get brackets enclosing IPv6 address */
+	lbracket = strchr(prefix_end, '[');
+	rbracket = strchr(prefix_end, ']');
+
+	/* [address] is permitted only inside hostname part. */
+	if (prefix_end + strcspn(prefix_end, "/") < (rbracket ? rbracket : lbracket))
+		lbracket = rbracket = NULL;
+
+	if (lbracket > rbracket) return -1;
+#endif
+
+	/* Possibly skip auth part */
 	host_end = prefix_end + strcspn(prefix_end, "@");
 	if (prefix_end + strcspn(prefix_end, "/") > host_end
 	    && *host_end) { /* we have auth info here */
@@ -168,10 +174,6 @@ parse_url(unsigned char *url, int *prlen,
 	}
 
 #ifdef IPV6
-	/* [address] is permitted only inside hostname part. */
-	if (prefix_end + strcspn(prefix_end, "/") < rbracket)
-		lbracket = rbracket = NULL;
-
 	if (lbracket && rbracket)
 		host_end = rbracket + strcspn(rbracket, ":/");
 	else

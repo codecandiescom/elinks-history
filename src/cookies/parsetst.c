@@ -1,5 +1,5 @@
 /* Tool for testing of cookies string parser */
-/* $Id: parsetst.c,v 1.3 2002/04/23 08:14:24 pasky Exp $ */
+/* $Id: parsetst.c,v 1.4 2002/04/23 08:25:45 pasky Exp $ */
 
 #if 0
 /* Dunno.. --pasky */
@@ -39,7 +39,9 @@ main(int argc, char *argv[])
 		}
 
 		memcpy(name, cstr.str, cstr.nam_end - cstr.str);
-		memcpy(value, cstr.val_start, cstr.val_end - cstr.val_start + 1);
+		name[cstr.nam_end - cstr.str] = '\0';
+		memcpy(value, cstr.val_start, cstr.val_end - cstr.val_start);
+		value[cstr.val_end - cstr.val_start] = '\0';
 
 		printf("'%s' -> '%s' :: '%s'\n", cstr.str, name, value);
 		free(cstr.str);

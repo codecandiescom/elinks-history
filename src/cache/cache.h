@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.84 2004/04/22 21:12:45 jonas Exp $ */
+/* $Id: cache.h,v 1.85 2004/05/25 03:40:18 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -64,9 +64,6 @@ struct cache_entry {
 
 #define get_cache_uri(cache_entry) \
 	((cache_entry)->valid ? (cache_entry)->uri : NULL)
-
-#define get_cache_uri_string(cache_entry) \
-	((cache_entry)->valid ? struri((cache_entry)->uri) : (unsigned char *) "")
 
 struct fragment {
 	LIST_HEAD(struct fragment);

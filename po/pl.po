@@ -352,7 +352,7 @@ msgstr "Menad¿er przypisañ klawiszy"
 
 #: src/config/dialogs.c:779 src/globhist/dialogs.c:463
 msgid "Toggle display"
-msgstr "Prze³±cz ekran"
+msgstr "Krótki/d³ugi opis"
 
 #: src/config/options.c:520 src/config/options.c:537 src/config/opttypes.c:40
 msgid "Parameter expected"
@@ -684,7 +684,7 @@ msgstr "Zapis"
 
 #: src/config/options.c:1004
 msgid "Load/save cookies from/to disk?"
-msgstr "Odczytaæ/zapisaæ ciasteczka z/na dysk?"
+msgstr "Czy wczytywaæ/zapisywaæ ciasteczka z dysku/na dysk?"
 
 #: src/config/options.c:1006
 msgid "Resaving"
@@ -786,7 +786,7 @@ msgstr "Potwierdzenie chêci wys³ania"
 
 #: src/config/options.c:1053
 msgid "Ask for confirmation when submitting a form."
-msgstr "Prosi o potwierdzenie przy wysy³aniu formularza."
+msgstr "Czy pytaæ o potwierdzenie przy wysy³aniu formularza?"
 
 #: src/config/options.c:1056
 #
@@ -853,7 +853,7 @@ msgstr "Wy¶wietlaj ³±cza-obrazki"
 
 #: src/config/options.c:1085
 msgid "Display links to images."
-msgstr "Wy¶wietlaj ³±cza do obrazków."
+msgstr "Czy wy¶wietlaæ ³±cza do obrazków?"
 
 #: src/config/options.c:1088
 #
@@ -870,7 +870,7 @@ msgstr "Pod¶wietlanie katalogów"
 
 #: src/config/options.c:1094
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr "Pod¶wietlaj hiper³±cza do katalogów na FTP i lokalnie."
+msgstr "Czy pod¶wietlaæ hiper³±cza do katalogów na FTP i lokalnie?"
 
 #: src/config/options.c:1096
 msgid "Number links"
@@ -878,7 +878,7 @@ msgstr "Numerowanie hiper³±czy"
 
 #: src/config/options.c:1098
 msgid "Display numbers next to the links."
-msgstr "Wy¶wietlaj liczby z prawej strony hiper³±czy."
+msgstr "Czy wy¶wietlaæ liczby z prawej strony hiper³±czy?"
 
 #: src/config/options.c:1100
 msgid "Number keys select links"
@@ -1008,7 +1008,7 @@ msgstr ""
 #: src/config/options.c:1161
 #
 msgid "Formatted documents"
-msgstr "Zformatowane dokumenty"
+msgstr "Sformatowane dokumenty"
 
 #: src/config/options.c:1163
 msgid "Format cache options."
@@ -1714,7 +1714,7 @@ msgstr "Wy¶lij pole nag³ówka Accept-Language"
 
 #: src/config/options.c:1474
 msgid "Use UI language as Accept-Language"
-msgstr "U¿yj jêzyka intefejsu u¿ytkownika jako Accept-Language"
+msgstr "U¿yj jêzyka interfejsu u¿ytkownika jako Accept-Language"
 
 #: src/config/options.c:1476
 msgid ""
@@ -2072,7 +2072,7 @@ msgstr "Strona kodowa u¿ywana do wy¶wietlania na terminalu."
 
 #: src/config/options.c:1666
 msgid "User interface"
-msgstr "Intefejs u¿ytkownika"
+msgstr "Interfejs u¿ytkownika"
 
 #: src/config/options.c:1668
 #
@@ -2382,7 +2382,7 @@ msgstr "Ustawienia dotycz±ce wygl±du i zachowania okien dialogowych."
 
 #: src/config/options.c:2279
 msgid "Minimal height of listbox widget"
-msgstr "Mimalna wysoko¶æ listboksa"
+msgstr "Minimalna wysoko¶æ listboksa"
 
 #: src/config/options.c:2281
 msgid ""
@@ -2595,7 +2595,7 @@ msgstr "Domy¶lny typ MIME dla dokumentów nieznanego typu."
 
 #: src/config/options.c:2393
 msgid "Write formatted version of given URL to stdout"
-msgstr "Wypisanie zformatowanej wersji danego URLa na standardowe wyj¶cie"
+msgstr "Wypisanie sformatowanej wersji danego URLa na standardowe wyj¶cie"
 
 #: src/config/options.c:2395
 msgid ""
@@ -2611,7 +2611,7 @@ msgstr "Strona kodowa u¿ywana razem z -dump"
 
 #: src/config/options.c:2402
 msgid "Width of document formatted with -dump"
-msgstr "Szeroko¶æ zformatowanego dokumentu z -dump"
+msgstr "Szeroko¶æ sformatowanego dokumentu z -dump"
 
 #: src/config/options.c:2404
 msgid "Width of the dump output."
@@ -3176,7 +3176,7 @@ msgstr "Z~apisz URL jako"
 
 #: src/dialogs/menu.c:405
 msgid "Save formatted ~document"
-msgstr "Zapisz zformatowany ~dokument"
+msgstr "Zapisz sformatowany ~dokument"
 
 #: src/dialogs/menu.c:410
 msgid "~Kill background connections"

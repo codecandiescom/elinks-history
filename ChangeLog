@@ -1,3 +1,35 @@
+Sun Jan  9 22:36:54 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* THANKS:
+
+	Zdenek Burda donated the elinks.cz domain (reg in progress).  
+
+Sun Jan  9 10:35:26 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/Makefile.am:
+
+	Only install anything when NLS is enabled, so use *-local-(no|yes)
+	targets.  
+
+Sun Jan  9 08:28:36 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Jan  9 01:50:17 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/Makefile.am:
+
+	Describe the PO weirdness.  
+
+Sun Jan  9 01:36:22 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/: Makefile.am, Makefile.in:
+
+	Move this sucker up the foodchain. Atleast now it is partially
+	readable, well if vim would only handle that shell-GNUism.  
+
 Sat Jan  8 23:08:14 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* po/Makefile.in:

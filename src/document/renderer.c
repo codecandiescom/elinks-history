@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.70 2004/08/16 01:02:11 jonas Exp $ */
+/* $Id: renderer.c,v 1.71 2004/09/21 22:11:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,9 @@
 #include "document/plain/renderer.h"
 #include "document/renderer.h"
 #include "document/view.h"
+#ifdef HAVE_NJS
+#include "ecmascript/ecmascript.h"
+#endif
 #include "intl/charsets.h"
 #include "protocol/header.h"
 #include "protocol/uri.h"
@@ -101,6 +104,9 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	doc_view->name = name;
 	doc_view->vs = vs;
 	doc_view->last_x = doc_view->last_y = -1;
+#ifdef HAVE_NJS
+	doc_view->ecmascript = ecmascript_get_interpreter(doc_view);
+#endif
 
 	cached = find_in_cache(vs->uri);
 	if (!cached) {

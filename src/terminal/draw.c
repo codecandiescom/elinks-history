@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.16 2003/07/28 06:53:06 zas Exp $ */
+/* $Id: draw.c,v 1.17 2003/07/28 07:02:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,6 +189,7 @@ print_text(struct terminal *t, int x, int y, int l,
 		t->screen[position].data = get_screen_char_data((*text + c));
 		t->screen[position].attr = get_screen_char_attr((*text + c));
 	}
+	t->dirty = 1;
 }
 
 

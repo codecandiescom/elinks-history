@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.66 2003/05/07 10:28:27 zas Exp $ */
+/* $Id: view.c,v 1.67 2003/05/08 11:46:43 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2541,7 +2541,7 @@ choose_mouse_link(struct f_data_c *f, struct event *ev)
 static void
 jump_to_link_number(struct session *ses, struct f_data_c *fd, int n)
 {
-	if (n < 0 && n > fd->f_data->nlinks) return;
+	if (n < 0 || n > fd->f_data->nlinks) return;
 	fd->vs->current_link = n;
 	check_vs(fd);
 }

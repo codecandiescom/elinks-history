@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.189 2004/01/25 12:38:11 jonas Exp $ */
+/* $Id: menu.c,v 1.190 2004/01/25 12:44:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -625,9 +625,10 @@ static void
 menu_kbd_handler(struct menu *menu, struct term_event *ev)
 {
 	struct window *win = menu->win;
+	enum menu_action action = kbd_action(KM_MENU, ev, NULL);
 	int s = 0;
 
-	switch (kbd_action(KM_MENU, ev, NULL)) {
+	switch (action) {
 		case ACT_MENU_LEFT:
 		case ACT_MENU_RIGHT:
 			if ((void *) win->next != &win->term->windows
@@ -636,7 +637,7 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 				goto break2;
 			}
 
-			if (kbd_action(KM_MENU, ev, NULL) == ACT_RIGHT)
+			if (action == ACT_MENU_RIGHT)
 				goto enter;
 
 			delete_window(win);
@@ -663,8 +664,6 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 
 		case ACT_MENU_PAGE_UP:
 			menu_page_up(menu);
-			break;
-
 			break;
 
 		case ACT_MENU_PAGE_DOWN:

@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.2 2004/01/04 00:56:29 zas Exp $ */
+/* $Id: listmenu.c,v 1.3 2004/01/13 14:22:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@ menu_contains(struct menu_item *m, int f)
 {
 	if (m->func != (menu_func) do_select_submenu)
 		return (int)m->data == f;
-	for (m = m->data; m->text; m++)
+	for (m = m->data; !mi_is_end_of_menu(*m); m++)
 		if (menu_contains(m, f))
 			return 1;
 	return 0;
@@ -44,7 +44,7 @@ do_select_submenu(struct terminal *term, struct menu_item *menu,
 	int sel = 0;
 
 	if (def < 0) def = 0;
-	for (m = menu; m->text; m++, sel++)
+	for (m = menu; !mi_is_end_of_menu(*m); m++, sel++)
 		if (menu_contains(m, def))
 			goto found;
 	sel = 0;
@@ -76,7 +76,7 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 		struct menu_item *top, *item;
 
 		top = item = menu->stack[menu->stack_size - 1];
-		while (item->text) item++;
+		while (!mi_is_end_of_menu(*item)) item++;
 
 		top = mem_realloc(top, (char *)(item + 2) - (char *)top);
 		if (!top) {
@@ -104,6 +104,7 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 		}
 
 		item++;
+		/* TODO: recheck that --Zas */
 		memset(item, 0, sizeof(struct menu_item));
 
 	} else if (name) mem_free(name);
@@ -136,7 +137,7 @@ free_menu(struct menu_item *m) /* Grrr. Recursion */
 
 	if (!m) return; /* XXX: Who knows... need to be verified */
 
-	for (mm = m; mm->text; mm++) {
+	for (mm = m; !mi_is_end_of_menu(*mm); mm++) {
 		if (mm->text) mem_free(mm->text);
 		if (mm->func == (menu_func) do_select_submenu) free_menu(mm->data);
 	}
@@ -168,7 +169,7 @@ menu_labels(struct menu_item *m, unsigned char *base, unsigned char **lbls)
 {
 	unsigned char *bs;
 
-	for (; m->text; m++) {
+	for (; !mi_is_end_of_menu(*m); m++) {
 		if (m->func == (menu_func) do_select_submenu) {
 			bs = stracpy(base);
 			if (bs) {

@@ -822,6 +822,7 @@ struct part *format_html_part(unsigned char *start, unsigned char *end, int alig
 	p->cx = -1;
 	p->cy = 0;
 	do_format(start, end, p, head);
+	if (p->xmax < p->x) p->xmax = p->x;
 	nobreak = 0;
 	line_breax = 1;
 	if (last_link) mem_free(last_link);

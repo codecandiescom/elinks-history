@@ -1196,6 +1196,7 @@ void html_input(unsigned char *a)
 	if (fc->type != FC_FILE) fc->default_value = get_attr_val(a, "value");
 	if (fc->type == FC_CHECKBOX && !fc->default_value) fc->default_value = stracpy("on");
 	if ((fc->size = get_num(a, "size")) == -1) fc->size = HTML_DEFAULT_INPUT_SIZE;
+	if (fc->size > d_opt->xw) fc->size = d_opt->xw;
 	if ((fc->maxlength = get_num(a, "maxlength")) == -1) fc->maxlength = MAXINT;
 	if (fc->type == FC_CHECKBOX || fc->type == FC_RADIO) fc->default_state = has_attr(a, "checked");
 	fc->ro = has_attr(a, "disabled") ? 2 : has_attr(a, "readonly") ? 1 : 0;
@@ -1638,6 +1639,8 @@ void do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *e
 		else p[0] = '\n';
 	if ((cols = get_num(attr, "cols")) <= 0) cols = 20;
 	if ((rows = get_num(attr, "rows")) <= 0) rows = 1;
+	if (cols > d_opt->xw) cols = d_opt->xw;
+	if (rows > d_opt->xw) rows = d_opt->xw;
 	fc->cols = cols;
 	fc->rows = rows;
 	fc->wrap = has_attr(attr, "wrap");

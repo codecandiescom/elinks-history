@@ -1,3 +1,48 @@
+Thu Nov  4 13:17:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	0.10pre3 
+
+Thu Nov  4 13:15:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	Sync .po files.  
+
+Thu Nov  4 13:10:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Fix version.  
+
+Thu Nov  4 13:07:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/tools/help2doc:
+
+	Fix elinks version extraction.  
+
+Thu Nov  4 13:02:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Thu Nov  4 12:50:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Alphabetize Makefile creation.  
+
+Thu Nov  4 09:59:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/header.c:
+
+	Add comments and documentation related to bug 549.  
+
 Wed Nov  3 18:03:57 2004  Laurent Monin <zas@norz.org>:
 
 	* src/protocol/smb/smb.c:
@@ -313,6 +358,12 @@ Sat Oct 23 09:53:02 2004  Petr Baudis <pasky@ucw.cz>:
 
 	html_focusable() only the new element created for the form control;
 	this makes the event handlers to work.  
+
+Sat Oct 23 09:48:10 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/ecmascript/ontest.html:
+
+	Some simple event hooks test.  
 
 Sat Oct 23 08:04:03 2004  Petr Baudis <pasky@ucw.cz>:
 
@@ -1142,7 +1193,8 @@ Thu Oct 14 14:21:29 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Oct 14 14:05:07 2004  Laurent Monin <zas@norz.org>:
 
-	* src/: document/html/parser/parse.c, viewer/text/textarea.c:
+	* src/: document/html/parser/parse.c, protocol/finger/finger.c,
+	viewer/text/textarea.c:
 
 	Use add_crlf_to_string() where applicable.  
 
@@ -1321,6 +1373,18 @@ Tue Oct 12 23:32:03 2004  Jonas Fonseca <fonseca@diku.dk>:
 	* AUTHORS:
 
 	Alphabetize entries.  
+
+Tue Oct 12 15:28:12 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/finger/: Makefile.am, finger.c, finger.h:
+
+	Finger-related files added.  
+
+Tue Oct 12 15:25:21 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/finger/: .cvsignore, .vimrc:
+
+	Add .vimrc .cvsignore to finger/.  
 
 Tue Oct 12 15:23:26 2004  Laurent Monin <zas@norz.org>:
 
@@ -3256,6 +3320,13 @@ Fri Sep 24 22:11:01 2004  Petr Baudis <pasky@ucw.cz>:
 
 	Introduced error_reporter(), which is, well, an error reporter ;-).  
 
+Fri Sep 24 21:45:45 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/ecmascript/inlinescript.html:
+
+	nice_href() needs to be called as nice_href(0). I'd love to know
+	why.  
+
 Fri Sep 24 21:29:53 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/ecmascript/spidermonkey.c:
@@ -3279,7 +3350,8 @@ Fri Sep 24 21:21:51 2004  Petr Baudis <pasky@ucw.cz>:
 
 Fri Sep 24 20:47:20 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/ecmascript/: ecmascript.h, spidermonkey.c:
+	* src/ecmascript/ecmascript.h, src/ecmascript/spidermonkey.c,
+	test/ecmascript/infinite.html:
 
 	A safeguard function introduced, which kills the script after 5
 	seconds of running. That has to be enough for anything.  
@@ -3378,6 +3450,19 @@ Fri Sep 24 18:01:49 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	Make HTML highlighting support official.  
 
+Fri Sep 24 13:48:19 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/ecmascript/inlinescript.html:
+
+	Some nice_href() fixes.  
+
+Fri Sep 24 13:45:19 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/ecmascript/inlinescript.html:
+
+	Oops, fix syntax errors in the code snippets ;-). So that's why the
+	testcases didn't work! 
+
 Fri Sep 24 13:07:23 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/html/: parser.c, parser/parse.c:
@@ -3386,6 +3471,12 @@ Fri Sep 24 13:07:23 2004  Petr Baudis <pasky@ucw.cz>:
 	Otherwise it would be difficult to skip the contents if we weren't
 	processing the element (and if we were processing it, it was broken
 	until now because we were calling html_skip() on its parent).  
+
+Fri Sep 24 12:58:40 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/ecmascript/inlinescript.html:
+
+	Testcase for the inline <script> element.  
 
 Fri Sep 24 12:54:51 2004  Petr Baudis <pasky@ucw.cz>:
 
@@ -3495,6 +3586,12 @@ Fri Sep 24 01:45:11 2004  Petr Baudis <pasky@ucw.cz>:
 
 	Fixed initial adding to the snippets queue in process_snippets().
 	onLoad should work fine now.  
+
+Fri Sep 24 01:44:32 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/ecmascript/onload.html:
+
+	onLoad testcase.  
 
 Fri Sep 24 01:43:51 2004  Petr Baudis <pasky@ucw.cz>:
 
@@ -3633,6 +3730,18 @@ Thu Sep 23 19:34:41 2004  Petr Baudis <pasky@ucw.cz>:
 	/usr/include/smjs as $spidermonkeydir makes no sense, try to check
 	it as $spidermonkeyinclude instead and see who gets enraged.  
 
+Thu Sep 23 19:31:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/ecmascript/protocol.html:
+
+	Elaborate on the tests.  
+
+Thu Sep 23 19:23:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/ecmascript/protocol.html:
+
+	Each link in a single paragraph.  
+
 Thu Sep 23 19:15:15 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* configure.in:
@@ -3665,6 +3774,12 @@ Thu Sep 23 16:14:19 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	Looks like freshmeat and slashdot redirects away from www host. Hit
 	them directly instead.  
+
+Thu Sep 23 15:43:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/ecmascript/protocol.html:
+
+	Grow with separate tests for javascrip: URIs.  
 
 Thu Sep 23 15:40:33 2004  Laurent Monin <zas@norz.org>:
 
@@ -3705,7 +3820,7 @@ Thu Sep 23 15:04:07 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Sep 23 14:55:47 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* test/Makefile.am:
+	* test/: Makefile.am, ecmascript/protocol.html:
 
 	Add a simple testcase for the javascript: protocol, document.title
 	and document.url.  
@@ -4796,16 +4911,16 @@ Sun Sep 19 17:21:26 2004  Petr Baudis <pasky@ucw.cz>:
 
 Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
 
+	* AUTHORS:
+
+	Fix mmap() usage on FreeBSD. Patch by Lewis Collard.  
+
+Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
 	* src/util/memory.c:
 
 	Fix mmap() usage on FreeBSD filed as bug 501. Patch by Lewis
 	Collard.  
-
-Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
-
-	* AUTHORS:
-
-	Fix mmap() usage on FreeBSD. Patch by Lewis Collard.  
 
 Sun Sep 19 09:56:02 2004  Petr Baudis <pasky@ucw.cz>:
 

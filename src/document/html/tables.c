@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.111 2003/10/30 17:49:44 zas Exp $ */
+/* $Id: tables.c,v 1.112 2003/10/30 17:51:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,8 +77,8 @@ struct table_cell {
 	int width, height;
 	int link_num;
 
-	unsigned int used:1;
-	unsigned int spanned:1;
+	unsigned int is_used:1;
+	unsigned int is_spanned:1;
 	unsigned int is_header:1;
 };
 
@@ -237,8 +237,8 @@ expand_cells(struct table *t, int x, int y)
 				for (j = t->x; j <= x; j++) {
 					struct table_cell *cell = CELL(t, j, i);
 
-					cell->used = 1;
-					cell->spanned = 1;
+					cell->is_used = 1;
+					cell->is_spanned = 1;
 					cell->rowspan = cellp->rowspan;
 					cell->colspan = -1;
 					cell->mx = cellp->mx;
@@ -263,8 +263,8 @@ expand_cells(struct table *t, int x, int y)
 				for (j = t->y; j <= y; j++) {
 					struct table_cell *cell = CELL(t, i, j);
 
-					cell->used = 1;
-					cell->spanned = 1;
+					cell->is_used = 1;
+					cell->is_spanned = 1;
 					cell->rowspan = -1;
 					cell->colspan = cellp->colspan;
 					cell->mx = cellp->mx;
@@ -620,7 +620,7 @@ nc:
 	cell = new_cell(t, x, y);
 	if (!cell) goto see;
 
-	if (cell->used) {
+	if (cell->is_used) {
 		if (cell->colspan == -1) goto see;
 		x++;
 		goto nc;
@@ -630,7 +630,7 @@ nc:
 
 	cell->mx = x;
 	cell->my = y;
-	cell->used = 1;
+	cell->is_used = 1;
 	cell->start = en;
 
 	cell->align = l_al;
@@ -677,13 +677,13 @@ nc:
 	for (i = 1; colspan != -1 ? i < colspan : i < qqq; i++) {
 		struct table_cell *sc = new_cell(t, x + i, y);
 
-		if (!sc || sc->used) {
+		if (!sc || sc->is_used) {
 			colspan = i;
 			for (k = 0; k < i; k++) CELL(t, x + k, y)->colspan = colspan;
 			break;
 		}
 
-		sc->used = sc->spanned = 1;
+		sc->is_used = sc->is_spanned = 1;
 		sc->rowspan = rowspan;
 		sc->colspan = colspan;
 		sc->mx = x;
@@ -695,7 +695,7 @@ nc:
 		for (k = 0; k < i; k++) {
 			struct table_cell *sc = new_cell(t, x + k, y + j);
 
-			if (!sc || sc->used) {
+			if (!sc || sc->is_used) {
 				int l, m;
 
 				if (sc->mx == x && sc->my == y) continue;
@@ -714,7 +714,7 @@ nc:
 				goto see;
 			}
 
-			sc->used = sc->spanned = 1;
+			sc->is_used = sc->is_spanned = 1;
 			sc->rowspan = rowspan;
 			sc->colspan = colspan;
 			sc->mx = x;
@@ -730,7 +730,7 @@ scan_done:
 	for (x = 0; x < t->x; x++) for (y = 0; y < t->y; y++) {
 		struct table_cell *c = CELL(t, x, y);
 
-		if (!c->spanned) {
+		if (!c->is_spanned) {
 			if (c->colspan == -1) c->colspan = t->x - x;
 			if (c->rowspan == -1) c->rowspan = t->y - y;
 		}
@@ -944,7 +944,7 @@ get_column_widths(struct table *t)
 		for (; i < t->x; i++) for (j = 0; j < t->y; j++) {
 			struct table_cell *c = CELL(t, i, j);
 
-			if (c->spanned || !c->used) continue;
+			if (c->is_spanned || !c->is_used) continue;
 
 			assertm(c->colspan + i <= t->x, "colspan out of table");
 			if_assert_failed return -1;
@@ -1272,7 +1272,7 @@ get_table_heights(struct table *t)
 			struct part *p;
 			int xw = 0, sp;
 
-			if (!cell->used || cell->spanned) continue;
+			if (!cell->is_used || cell->is_spanned) continue;
 
 			for (sp = 0; sp < cell->colspan; sp++) {
 				xw += t->columns_width[i + sp] +
@@ -1298,7 +1298,7 @@ get_table_heights(struct table *t)
 			for (i = 0; i < t->x; i++) {
 				struct table_cell *cell = CELL(t, i, j);
 
-				if (!cell->used || cell->spanned) continue;
+				if (!cell->is_used || cell->is_spanned) continue;
 
 				if (cell->rowspan == s) {
 					register int k, p = 0;
@@ -1535,7 +1535,7 @@ display_table_frames(struct table *t, int x, int y)
 		int xsp, ysp;
 		struct table_cell *cell = CELL(t, i, j);
 
-		if (!cell->used || cell->spanned) continue;
+		if (!cell->is_used || cell->is_spanned) continue;
 
 		xsp = cell->colspan ? cell->colspan : t->x - i;
 		ysp = cell->rowspan ? cell->rowspan : t->y - j;

@@ -958,7 +958,6 @@ AC_OUTPUT([ \
  src/osdep/beos/Makefile \
  src/osdep/os2/Makefile \
  src/osdep/riscos/Makefile \
- src/osdep/sysinfo/Makefile \
  src/osdep/unix/Makefile \
  src/osdep/win32/Makefile \
  src/protocol/Makefile \

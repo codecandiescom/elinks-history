@@ -32,6 +32,10 @@ Minor first-level goals:
 
 - Disk cache
 
+- Maintain in-core user URL "protocols" (like g:, gg:) instead of them living
+  in Lua hooks. This also means much more user-friendly configuration, perhaps
+  using Prefixes manager or so.
+
 
 ELusive:
 
@@ -203,4 +207,4 @@ Permanent goals:
 Key: - nothing done + work in progress * almost ready
      (reflects only what is already committed to CVS)
 
-$Id: TODO,v 1.53 2003/05/08 12:42:34 pasky Exp $
+$Id: TODO,v 1.54 2003/05/08 12:44:12 pasky Exp $

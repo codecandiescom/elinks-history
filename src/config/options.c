@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.356 2003/10/24 23:53:03 pasky Exp $ */
+/* $Id: options.c,v 1.357 2003/10/25 00:37:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -244,7 +244,35 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 		add_to_list_end(config_option_box_items, option->box_item);
 	}
 
-	add_at_pos((struct option *) cat->prev, option);
+	if (tree->flags & OPT_SORT) {
+		struct option *pos;
+
+		/* The list is empty, just add it there. */
+		if (list_empty(*cat)) {
+			add_to_list(*cat, option);
+
+		/* This fits as the last list entry, add it there. This
+		 * optimizes the most expensive BUT most common case ;-). */
+		} else if (strcmp((pos = cat->prev)->name, option->name) <= 0) {
+			add_to_list_end(*cat, option);
+
+		/* Scan the list linearly. This could be probably optimized ie.
+		 * to choose direction based on the first letter or so. */
+		} else {
+			foreach (pos, *cat) {
+				if (strcmp(pos->name, option->name) <= 0)
+					continue;
+
+				add_at_pos(pos->prev, option);
+				break;
+			}
+			
+			assert(pos != (struct option *) cat);
+		}
+
+	} else {
+		add_at_pos((struct option *) cat->prev, option);
+	}
 }
 
 static inline struct listbox_item *
@@ -468,7 +496,7 @@ void
 init_options(void)
 {
 	config_options = add_opt_tree_tree(&options_root, "", "",
-					 "config", OPT_LISTBOX, "");
+					 "config", OPT_LISTBOX | OPT_SORT, "");
 	cmdline_options = add_opt_tree_tree(&options_root, "", "",
 					    "cmdline", 0, "");
 	register_options();

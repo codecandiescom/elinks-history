@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.81 2003/10/24 23:53:03 pasky Exp $ */
+/* $Id: options.h,v 1.82 2003/10/25 00:37:23 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -47,6 +47,15 @@ enum option_flags {
 	/* This is used to mark that the option _and_ the option name is
 	 * allocated and should be freed when the option is released. */
 	OPT_ALLOC = 32,
+	/* For OPT_TREE, automatically sort the content of the tree
+	 * alphabetically when adding new options. Note that this applies only
+	 * to the one level below - it will not apply to the sub-trees in this
+	 * tree. Also, this can be quite expensive for busy-adding big trees,
+	 * so think twice before doing it - in fact, it is supposed to be used
+	 * only where you add stuff from more modules, not all at once;
+	 * typically the config_options root tree. Especially NOT RECOMMENDED
+	 * to be used on the template trees. */
+	OPT_SORT = 64,
 };
 
 enum option_type {

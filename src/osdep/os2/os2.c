@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.19 2004/06/22 06:46:17 miciah Exp $ */
+/* $Id: os2.c,v 1.20 2004/07/03 16:28:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,8 +129,8 @@ get_terminal_size(int fd, int *x, int *y)
 /*
 			DBG("%d", errno);
 */
-			*x = 80;
-			*y = 24;
+			*x = DEFAULT_TERMINAL_WIDTH;
+			*y = DEFAULT_TERMINAL_HEIGHT;
 			return 0;
 		}
 		*y = win.ws_row;
@@ -141,8 +141,8 @@ get_terminal_size(int fd, int *x, int *y)
 
 		return 0;
 #else
-		*x = 80;
-		*y = 24;
+		*x = DEFAULT_TERMINAL_WIDTH;
+		*y = DEFAULT_TERMINAL_HEIGHT;
 		return 0;
 #endif
 	} else {
@@ -153,11 +153,11 @@ get_terminal_size(int fd, int *x, int *y)
 		*y = a[1];
 		if (!*x) {
 			*x = get_e("COLUMNS");
-			if (!*x) *x = 80;
+			if (!*x) *x = DEFAULT_TERMINAL_WIDTH;
 		}
 		if (!*y) {
 			*y = get_e("LINES");
-			if (!*y) *y = 24;
+			if (!*y) *y = DEFAULT_TERMINAL_HEIGHT;
 		}
 	}
 

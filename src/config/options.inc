@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.123 2004/07/01 20:40:51 pasky Exp $ */
+/* $Id: options.inc,v 1.124 2004/07/03 16:28:02 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -543,7 +543,7 @@ struct option_info config_options_info[] = {
 		N_("String which separates two dumps.")),
 
 	INIT_OPT_INT("document.dump", N_("Width"),
-		"width", 0, 1, 65536, 80,
+		"width", 0, 1, 65536, DEFAULT_TERMINAL_WIDTH,
 		N_("Width of screen in characters when dumping a HTML document.")),
 
 

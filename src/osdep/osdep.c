@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.136 2004/07/03 16:03:53 jonas Exp $ */
+/* $Id: osdep.c,v 1.137 2004/07/03 16:28:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,11 +168,11 @@ get_terminal_size(int fd, int *x, int *y)
 
 	if (!*x) {
 		*x = get_e("COLUMNS");
-		if (!*x) *x = 80;
+		if (!*x) *x = DEFAULT_TERMINAL_WIDTH;
 	}
 	if (!*y) {
 		*y = get_e("LINES");
-		if (!*y) *y = 24;
+		if (!*y) *y = DEFAULT_TERMINAL_HEIGHT;
 	}
 
 	return 0;

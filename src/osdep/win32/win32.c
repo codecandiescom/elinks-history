@@ -1,5 +1,5 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.13 2004/04/17 01:30:32 jonas Exp $ */
+/* $Id: win32.c,v 1.14 2004/07/03 16:28:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,8 +151,8 @@ get_terminal_size(int fd, int *x, int *y)
 		*y = s.dwSize.Y - 1;
 		return 0;
 	}
-	*x = 80;
-	*y = 25;
+	*x = DEFAULT_TERMINAL_WIDTH;
+	*y = DEFAULT_TERMINAL_HEIGHT;
 	return 0;
 }
 #endif

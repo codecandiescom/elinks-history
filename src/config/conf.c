@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.143 2004/06/27 13:06:57 pasky Exp $ */
+/* $Id: conf.c,v 1.144 2004/07/03 16:28:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -384,7 +384,7 @@ parse_config_file(struct option *options, unsigned char *name,
 	int error_occured = 0;
 	enum parse_error err = 0;
 	enum verbose_level verbose = get_cmd_opt_int("verbose");
-	unsigned char error_msg[][80] = {
+	unsigned char error_msg[][DEFAULT_TERMINAL_WIDTH] = {
 		"no error",
 		"parse error",
 		"unknown command",

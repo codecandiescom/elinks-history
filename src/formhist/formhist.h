@@ -1,4 +1,4 @@
-/* $Id: formhist.h,v 1.25 2004/04/03 17:40:53 jonas Exp $ */
+/* $Id: formhist.h,v 1.26 2004/08/28 02:52:47 jonas Exp $ */
 
 #ifndef EL__FORMHIST_FORMHIST_H
 #define EL__FORMHIST_FORMHIST_H
@@ -21,7 +21,7 @@ struct formhist_data {
 	struct object object;
 
 	/* Whether to save this form or not. */
-	int dontsave:1;
+	unsigned int dontsave:1;
 
 	/* <action> URI for this form. Must be at end of struct. */
 	unsigned char url[1];

@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.9 2004/08/18 18:27:41 jonas Exp $ */
+/* $Id: gopher.c,v 1.10 2004/08/18 20:40:57 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -79,6 +79,11 @@ enum gopher_entity {
 
 /* Default Gopher Node type is directory listing */
 #define DEFAULT_GOPHER_ENTITY	GOPHER_DIRECTORY
+
+#define entity_needs_gopher_access(entity)	\
+	((entity) != GOPHER_TELNET		\
+	 && (entity) != GOPHER_TN3270		\
+	 && (entity) != GOPHER_WWW)
 
 struct gopher_entity_info {
 	enum gopher_entity type;
@@ -378,14 +383,35 @@ add_gopher_menu_line(struct string *buffer, unsigned char *line)
 
 		port = host ? strchr(host, ASCII_TAB) : NULL;
 		if (port) {
-			unsigned char *junk;
+			unsigned char *end;
+			int portno;
 
-			port[0] = ':';	/* delimit host a la W3 */
-			junk = strchr(port, ASCII_TAB);
-			if (junk)
-				*junk++ = '\0';		/* Chop port */
-			if ((port[1] == '0') && (!port[2]))
-				port[0] = '\0';		/* 0 means none */
+			errno = 0;
+			portno = strtol(port + 1, (char **) &end, 10);
+			if (errno || !uri_port_is_valid(portno)) {
+				port = NULL;
+
+			} else {
+				/* Try to wipe out the default gopher port
+				 * number from being appended to links. */
+				if (portno == 70
+				    && entity_needs_gopher_access(entity))
+					portno = 0;
+
+				/* If the port number is 0 it means no port
+				 * number is needed in which case it can be
+				 * wiped out completely. Else append it to the
+				 * host string a la W3.  */
+				if (portno == 0) {
+					*port = '\0';
+				} else {
+					*port = ':';
+
+					/* Chop port if there is junk after the
+					 * number */
+					if (!*end) *end = 0;
+				}
+			}
 		}
 	}
 

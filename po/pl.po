@@ -4701,11 +4701,11 @@ msgstr "W³±cz CSS"
 
 #: src/document/css/css.c:32
 msgid "Enable adding of CSS style info to documents."
-msgstr "W³±cza dodawanie styli CSS do dokumentu."
+msgstr "W³±cza dodawanie stylów CSS do dokumentu."
 
 #: src/document/css/css.c:34
 msgid "Import external style sheets"
-msgstr "Importowanie zewnêtrznych szablonów styli"
+msgstr "Importowanie zewnêtrznych szablonów stylów"
 
 #: src/document/css/css.c:36
 msgid ""

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.59 2004/05/24 18:05:42 jonas Exp $ */
+/* $Id: kbd.c,v 1.60 2004/05/24 18:18:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -252,6 +252,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 {
 	struct itrm *itrm;
 	int x = 80, y = 24;
+	int terminal_size_error = get_terminal_size(ctl_in, &x, &y);
 	struct terminal_info info = {
 		INIT_TERM_EVENT(EV_INIT, x, y, 0),
 		"",
@@ -261,7 +262,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	};
 	unsigned char *ts;
 
-	if (get_terminal_size(ctl_in, &x, &y)) {
+	if (terminal_size_error) {
 		ERROR(G_("Could not get terminal size"));
 		return;
 	}
@@ -290,8 +291,6 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 		set_handlers(sock_in, (void (*)(void *)) in_sock,
 			     NULL, (void (*)(void *)) free_trm, itrm);
 
-	info.event.x = x;
-	info.event.y = y;
 	handle_terminal_resize(ctl_in, resize_terminal);
 
 	ts = getenv("TERM");

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.4 2002/03/18 21:03:13 pasky Exp $ */
+/* $Id: kbd.c,v 1.5 2002/04/16 13:04:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,54 +51,92 @@ void in_sock(struct itrm *);
 
 struct itrm *ditrm = NULL;
 
-int is_blocked()
+
+int
+is_blocked()
 {
 	return ditrm && ditrm->blocked;
 }
 
-void free_all_itrms()
+
+void
+free_all_itrms()
 {
 	if (ditrm) free_trm(ditrm);
 }
 
-void write_ev_queue(struct itrm *itrm)
+
+void
+write_ev_queue(struct itrm *itrm)
 {
 	int l;
-	if (!itrm->eqlen) internal("event queue empty");
-	if ((l = write(itrm->sock_out, itrm->ev_queue, itrm->eqlen > 128 ? 128 : itrm->eqlen)) == -1) {
-		free_trm(itrm);
+	int qlen = itrm->eqlen;
+
+	if (!qlen) internal("event queue empty");
+	if (qlen > 128) qlen = 128;
+
+	l = write(itrm->sock_out, itrm->ev_queue, qlen);
+	if (l < 1) {
+		if (l == -1) free_trm(itrm);
 		return;
 	}
-	memmove(itrm->ev_queue, itrm->ev_queue + l, itrm->eqlen -= l);
-	if (!itrm->eqlen) set_handlers(itrm->sock_out, get_handler(itrm->sock_out, H_READ), NULL, get_handler(itrm->sock_out, H_ERROR), get_handler(itrm->sock_out, H_DATA));
+
+	itrm->eqlen -= l;
+	memmove(itrm->ev_queue, itrm->ev_queue + l, itrm->eqlen);
+	if (!itrm->eqlen) {
+		set_handlers(itrm->sock_out,
+			     get_handler(itrm->sock_out, H_READ),
+			     NULL,
+			     get_handler(itrm->sock_out, H_ERROR),
+			     get_handler(itrm->sock_out, H_DATA));
+	}
 }
 
-void queue_event(struct itrm *itrm, unsigned char *data, int len)
+
+void
+queue_event(struct itrm *itrm, unsigned char *data, int len)
 {
 	int w = 0;
+
 	if (!len) return;
-	if (!itrm->eqlen && can_write(itrm->sock_out) && (w = write(itrm->sock_out, data, len)) <= 0) {
-		/*free_trm(itrm);*/
-		register_bottom_half((void (*)(void *))free_trm, itrm);
-		return;
+
+	if (!itrm->eqlen && can_write(itrm->sock_out)) {
+		w = write(itrm->sock_out, data, len);
+		if (w <= 0) {
+			/* free_trm(itrm); */
+			register_bottom_half((void (*)(void *))free_trm, itrm);
+			return;
+		}
 	}
+
 	if (w < len) {
-		unsigned char *c;
-		if (!(c = mem_realloc(itrm->ev_queue, itrm->eqlen + len - w))) {
+		int left = len - w;
+		unsigned char *c = mem_realloc(itrm->ev_queue,
+					       itrm->eqlen + left);
+
+		if (!c) {
 			free_trm(itrm);
 			return;
 		}
+
 		itrm->ev_queue = c;
-		memcpy(itrm->ev_queue + itrm->eqlen, data + w, len - w);
-		itrm->eqlen += len - w;
-		set_handlers(itrm->sock_out, get_handler(itrm->sock_out, H_READ), (void (*)(void *))write_ev_queue, (void (*)(void *))free_trm, itrm);
+		memcpy(itrm->ev_queue + itrm->eqlen, data + w, left);
+		itrm->eqlen += left;
+		set_handlers(itrm->sock_out,
+			     get_handler(itrm->sock_out, H_READ),
+			     (void (*)(void *)) write_ev_queue,
+			     (void (*)(void *)) free_trm, itrm);
 	}
 }
 
-void kbd_ctrl_c()
+
+void
+kbd_ctrl_c()
 {
 	struct event ev = { EV_KBD, KBD_CTRL_C, 0, 0 };
-	if (ditrm) queue_event(ditrm, (unsigned char *)&ev, sizeof(struct event));
+
+	if (ditrm)
+		queue_event(ditrm, (unsigned char *)&ev, sizeof(struct event));
 }
 
 /*
@@ -115,9 +153,11 @@ unsigned char *term_seq_tw_mouse = "\033[?9l";
 
 /*unsigned char *term_seq = "\033[2J\033[?1000l\0338\b \b";*/
 
-void send_init_sequence(int h,int flags)
+void
+send_init_sequence(int h, int flags)
 {
 	hard_write(h, init_seq, strlen(init_seq));
+
 	if (flags & USE_TWIN_MOUSE) {
 		hard_write(h, init_seq_tw_mouse, strlen(init_seq_tw_mouse));
 	} else {
@@ -125,9 +165,12 @@ void send_init_sequence(int h,int flags)
 	}
 }
 
-void send_term_sequence(int h,int flags)
+
+void
+send_term_sequence(int h, int flags)
 {
 	hard_write(h, term_seq, strlen(term_seq));
+
 	if (flags & USE_TWIN_MOUSE) {
 		hard_write(h, term_seq_tw_mouse, strlen(term_seq_tw_mouse));
 	} else {
@@ -135,22 +178,30 @@ void send_term_sequence(int h,int flags)
 	}
 }
 
-void resize_terminal()
+
+void
+resize_terminal()
 {
 	struct event ev = { EV_RESIZE, 0, 0, 0 };
 	int x, y;
+
 	if (get_terminal_size(ditrm->std_out, &x, &y)) return;
 	ev.x = x;
 	ev.y = y;
 	queue_event(ditrm, (char *)&ev, sizeof(struct event));
 }
 
-int setraw(int fd, struct termios *p)
+
+int
+setraw(int fd, struct termios *p)
 {
 	struct termios t;
+
 	memset(&t, 0, sizeof(struct termios));
 	if (tcgetattr(fd, &t)) return -1;
+
 	if (p) memcpy(p, &t, sizeof(struct termios));
+
 	cfmakeraw(&t);
 	t.c_lflag |= ISIG;
 #ifdef TOSTOP
@@ -158,21 +209,30 @@ int setraw(int fd, struct termios *p)
 #endif
 	t.c_oflag |= OPOST;
 	if (tcsetattr(fd, TCSANOW, &t)) return -1;
+
 	return 0;
 }
 
-void handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in, void *init_string, int init_len)
+
+void
+handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
+	   void *init_string, int init_len)
 {
 	int x, y;
 	struct itrm *itrm;
 	struct event ev = { EV_INIT, 80, 24, 0 };
 	unsigned char *ts;
 	int xwin;
+	int ts_len;
+
 	if (get_terminal_size(ctl_in, &x, &y)) {
 		error("ERROR: could not get terminal size");
 		return;
 	}
-	if (!(itrm = mem_alloc(sizeof(struct itrm)))) return;
+
+	itrm = mem_alloc(sizeof(struct itrm));
+	if (!itrm) return;
+
 	ditrm = itrm;
 	itrm->std_in = std_in;
 	itrm->std_out = std_out;
@@ -184,56 +244,94 @@ void handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in, 
 	itrm->tm = -1;
 	itrm->ev_queue = DUMMY;
 	itrm->eqlen = 0;
+
 	if (ctl_in >= 0) setraw(ctl_in, &itrm->t);
-	set_handlers(std_in, (void (*)(void *))in_kbd, NULL, (void (*)(void *))free_trm, itrm);
-	if (sock_in != std_out) set_handlers(sock_in, (void (*)(void *))in_sock, NULL, (void (*)(void *))free_trm, itrm);
+	set_handlers(std_in, (void (*)(void *)) in_kbd,
+		     NULL, (void (*)(void *)) free_trm, itrm);
+
+	if (sock_in != std_out)
+		set_handlers(sock_in, (void (*)(void *)) in_sock,
+			     NULL, (void (*)(void *)) free_trm, itrm);
+
 	ev.x = x;
 	ev.y = y;
 	handle_terminal_resize(ctl_in, resize_terminal);
 	queue_event(itrm, (char *)&ev, sizeof(struct event));
-	xwin = is_xterm() * ENV_XWIN + can_twterm() * ENV_TWIN + (!!getenv("STY")) * ENV_SCREEN + get_system_env();
+
+	xwin = is_xterm() * ENV_XWIN + can_twterm() * ENV_TWIN
+	       + (!!getenv("STY")) * ENV_SCREEN + get_system_env();
+
 	itrm->flags = 0;
-	if (!(ts = getenv("TERM"))) ts = "";
-	if ((xwin & ENV_TWIN) && !strcmp(ts,"linux")) itrm->flags |= USE_TWIN_MOUSE;
-	if (strlen(ts) >= MAX_TERM_LEN) queue_event(itrm, ts, MAX_TERM_LEN);
-	else {
+
+	ts = getenv("TERM");
+	if (!ts) ts = "";
+
+	if ((xwin & ENV_TWIN) && !strcmp(ts, "linux"))
+		itrm->flags |= USE_TWIN_MOUSE;
+
+	ts_len = strlen(ts);
+	if (ts_len >= MAX_TERM_LEN) {
+		queue_event(itrm, ts, MAX_TERM_LEN);
+	} else {
 		unsigned char *mm;
-		int ll = MAX_TERM_LEN - strlen(ts);
-		queue_event(itrm, ts, strlen(ts));
-		if (!(mm = mem_alloc(ll))) {
+		int ll = MAX_TERM_LEN - ts_len;
+
+		queue_event(itrm, ts, ts_len);
+
+		mm = mem_alloc(ll);
+		if (!mm) {
 			free_trm(itrm);
 			return;
 		}
+
 		memset(mm, 0, ll);
 		queue_event(itrm, mm, ll);
 		mem_free(mm);
 	}
-	if (!(ts = get_cwd()) && !(ts = stracpy(""))) goto neni_pamet;
-	if (strlen(ts) >= MAX_CWD_LEN) queue_event(itrm, ts, MAX_CWD_LEN);
-	else {
+
+	ts = get_cwd();
+	if (!ts) {
+		ts = stracpy("");
+		if (!ts) goto end;
+	}
+
+	/* FIXME: Duplicate code? --pasky */
+
+	ts_len = strlen(ts);
+	if (ts_len >= MAX_CWD_LEN) {
+		queue_event(itrm, ts, MAX_CWD_LEN);
+	} else {
 		unsigned char *mm;
-		int ll = MAX_CWD_LEN - strlen(ts);
-		queue_event(itrm, ts, strlen(ts));
-		if (!(mm = mem_alloc(ll))) {
+		int ll = MAX_CWD_LEN - ts_len;
+
+		queue_event(itrm, ts, ts_len);
+
+		mm = mem_alloc(ll);
+		if (!mm) {
 			free_trm(itrm);
 			return;
 		}
+
 		memset(mm, 0, ll);
 		queue_event(itrm, mm, ll);
 		mem_free(mm);
 	}
+
 	mem_free(ts);
-	neni_pamet:
+
+end:
 	queue_event(itrm, (char *)&xwin, sizeof(int));
 	queue_event(itrm, (char *)&init_len, sizeof(int));
 	queue_event(itrm, (char *)init_string, init_len);
-	itrm->mouse_h = handle_mouse(0, (void (*)(void *, unsigned char *, int))queue_event, itrm);
+	itrm->mouse_h = handle_mouse(0, (void (*)(void *, unsigned char *, int)) queue_event, itrm);
 	itrm->orig_title = get_window_title();
-	set_window_title("Links");
-	send_init_sequence(std_out,itrm->flags);
+	set_window_title("ELinks");
+	send_init_sequence(std_out, itrm->flags);
 }
 
-void unblock_itrm_x(void *h)
+
+void
+unblock_itrm_x(void *h)
 {
 	close_handle(h);
 	if (!ditrm) return;
@@ -241,71 +339,105 @@ void unblock_itrm_x(void *h)
 	resize_terminal();
 }
 
-int unblock_itrm(int fd)
+
+int
+unblock_itrm(int fd)
 {
 	struct itrm *itrm = ditrm;
+
 	if (!itrm) return -1;
-	/*if (ditrm->sock_out != fd) {
+#if 0
+	if (ditrm->sock_out != fd) {
 		internal("unblock_itrm: bad fd: %d", fd);
 		return -1;
-	}*/
+	}
+#endif
 	if (itrm->ctl_in >= 0 && setraw(itrm->ctl_in, NULL)) return -1;
 	itrm->blocked = 0;
-	send_init_sequence(itrm->std_out,itrm->flags);
-	set_handlers(itrm->std_in, (void (*)(void *))in_kbd, NULL, (void (*)(void *))free_trm, itrm);
+	send_init_sequence(itrm->std_out, itrm->flags);
+
+	set_handlers(itrm->std_in, (void (*)(void *)) in_kbd, NULL,
+		     (void (*)(void *)) free_trm, itrm);
+
 	handle_terminal_resize(itrm->ctl_in, resize_terminal);
 	unblock_stdin();
+
 	return 0;
 }
 
-void block_itrm(int fd)
+
+void
+block_itrm(int fd)
 {
 	struct itrm *itrm = ditrm;
+
 	if (!itrm) return;
-	/*if (ditrm->sock_out != fd) {
+#if 0
+	if (ditrm->sock_out != fd) {
 		internal("block_itrm: bad fd: %d", fd);
 		return;
-	}*/
+	}
+#endif
 	itrm->blocked = 1;
 	block_stdin();
 	unhandle_terminal_resize(itrm->ctl_in);
-	send_term_sequence(itrm->std_out,itrm->flags);
+	send_term_sequence(itrm->std_out, itrm->flags);
 	tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
-	set_handlers(itrm->std_in, NULL, NULL, (void (*)(void *))free_trm, itrm);
+	set_handlers(itrm->std_in, NULL, NULL,
+		     (void (*)(void *)) free_trm, itrm);
 }
 
-void free_trm(struct itrm *itrm)
+
+void
+free_trm(struct itrm *itrm)
 {
 	if (!itrm) return;
+
 	set_window_title(itrm->orig_title);
-	if (itrm->orig_title) mem_free(itrm->orig_title), itrm->orig_title = NULL;
+	if (itrm->orig_title) {
+		mem_free(itrm->orig_title);
+		itrm->orig_title = NULL;
+	}
+
 	unhandle_terminal_resize(itrm->ctl_in);
 	send_term_sequence(itrm->std_out,itrm->flags);
 	tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
-	if (itrm->mouse_h) unhandle_mouse(itrm->mouse_h);
+
+	if (itrm->mouse_h)
+		unhandle_mouse(itrm->mouse_h);
+
 	set_handlers(itrm->std_in, NULL, NULL, NULL, NULL);
 	set_handlers(itrm->sock_in, NULL, NULL, NULL, NULL);
 	set_handlers(itrm->std_out, NULL, NULL, NULL, NULL);
 	set_handlers(itrm->sock_out, NULL, NULL, NULL, NULL);
-	if (itrm->tm != -1) kill_timer(itrm->tm);
+
+	if (itrm->tm != -1)
+		kill_timer(itrm->tm);
+
+	if (itrm == ditrm) ditrm = NULL;
 	mem_free(itrm->ev_queue);
 	mem_free(itrm);
-	if (itrm == ditrm) ditrm = NULL;
 }
 
-void resize_terminal_x(unsigned char *text)
+
+void
+resize_terminal_x(unsigned char *text)
 {
 	int x, y;
-	unsigned char *p;
-	if (!(p = strchr(text, ','))) return;
-	*p++ = 0;
+	unsigned char *p = strchr(text, ',');
+
+	if (!p) return;
+
+	*p++ = '\0';
 	x = atoi(text);
 	y = atoi(p);
 	resize_window(x, y);
 	resize_terminal();
 }
 
-void dispatch_special(unsigned char *text)
+
+void
+dispatch_special(unsigned char *text)
 {
 	switch (text[0]) {
 		case TERM_FN_TITLE:
@@ -317,118 +449,167 @@ void dispatch_special(unsigned char *text)
 	}
 }
 
-unsigned char buf[OUT_BUF_SIZE];
 
-/*#define RD ({ char cc; if (p < c) cc = buf[p++]; else if ((dl = hard_read(itrm->sock_in, &cc, 1)) <= 0) {debug("%d %d", dl, errno);goto fr;} cc; })*/
-/*udefine RD ({ char cc; if (p < c) cc = buf[p++]; else if ((hard_read(itrm->sock_in, &cc, 1)) <= 0) goto fr; cc; })*/
-#define RD(xx) { unsigned char cc; if (p < c) cc = buf[p++]; else if ((hard_read(itrm->sock_in, &cc, 1)) <= 0) goto fr; xx = cc; }
+#define RD(xx) { \
+	unsigned char cc; \
+	if (p < c) cc = buf[p++]; \
+	else if ((hard_read(itrm->sock_in, &cc, 1)) <= 0) goto fr; \
+	xx = cc; }
 
-void in_sock(struct itrm *itrm)
+void
+in_sock(struct itrm *itrm)
 {
 	unsigned char *path, *delete;
 	int pl, dl;
 	char ch;
 	int fg;
 	int c, i, p;
-	if ((c = read(itrm->sock_in, buf, OUT_BUF_SIZE)) <= 0) {
-		fr:
+	unsigned char buf[OUT_BUF_SIZE];
+
+	c = read(itrm->sock_in, buf, OUT_BUF_SIZE);
+	if (c <= 0) {
+fr:
 		free_trm(itrm);
 		return;
 	}
-	qwerty:
-	for (i = 0; i < c; i++) if (!buf[i]) goto ex;
+
+qwerty:
+	for (i = 0; i < c; i++)
+		if (!buf[i])
+			goto ex;
+
 	if (!is_blocked()) {
 		want_draw();
 		hard_write(itrm->std_out, buf, c);
 		done_draw();
 	}
 	return;
-	ex:
+
+ex:
 	if (!is_blocked()) {
 		want_draw();
 		hard_write(itrm->std_out, buf, i);
 		done_draw();
 	}
+
 	i++;
 	memmove(buf, buf + i, OUT_BUF_SIZE - i);
 	c -= i;
 	p = 0;
-	/*fg = RD;*/
+
 	RD(fg);
+
 	path = init_str();
 	delete = init_str();
-	pl = dl = 0;
+
+	pl = 0;
 	while (1) {
 		RD(ch);
 		if (!ch) break;
 		add_chr_to_str(&path, &pl, ch);
 	}
+
+	dl = 0;
 	while (1) {
 		RD(ch);
 		if (!ch) break;
 		add_chr_to_str(&delete, &dl, ch);
 	}
+
 	if (!*path) {
 		dispatch_special(delete);
 	} else {
 		int blockh;
 		unsigned char *param;
+		int path_len, del_len, param_len;
+
 		if (is_blocked() && fg) {
 			if (*delete) unlink(delete);
-			goto to_je_ale_hnus;
+			goto nasty_thing;
 		}
-		if (!(param = mem_alloc(strlen(path) + strlen(delete) + 3))) goto to_je_ale_hnus;
+
+		path_len = strlen(path);
+		del_len = strlen(delete);
+		param_len = path_len + del_len + 3;
+
+		param = mem_alloc(param_len);
+		if (!param) goto nasty_thing;
+
 		param[0] = fg;
 		strcpy(param + 1, path);
-		strcpy(param + 1 + strlen(path) + 1, delete);
+		strcpy(param + 1 + path_len + 1, delete);
+
 		if (fg == 1) block_itrm(itrm->ctl_in);
-		if ((blockh = start_thread((void (*)(void *, int))exec_thread, param, strlen(path) + strlen(delete) + 3)) == -1) {
-			if (fg == 1) unblock_itrm(itrm->ctl_in);
+
+		blockh = start_thread((void (*)(void *, int)) exec_thread,
+				      param, param_len);
+		if (blockh == -1) {
+			if (fg == 1)
+				unblock_itrm(itrm->ctl_in);
 			mem_free(param);
-			goto to_je_ale_hnus;
+			goto nasty_thing;
 		}
+
 		mem_free(param);
+
 		if (fg == 1) {
-			set_handlers(blockh, (void (*)(void *))unblock_itrm_x, NULL, (void (*)(void *))unblock_itrm_x, (void *)blockh);
-			/*block_itrm(itrm->ctl_in);*/
+			set_handlers(blockh, (void (*)(void *)) unblock_itrm_x,
+				     NULL, (void (*)(void *)) unblock_itrm_x,
+				     (void *) blockh);
+			/* block_itrm(itrm->ctl_in); */
 		} else {
-			set_handlers(blockh, close_handle, NULL, close_handle, (void *)blockh);
+			set_handlers(blockh, close_handle, NULL, close_handle,
+				     (void *) blockh);
 		}
 	}
-	to_je_ale_hnus:
+
+nasty_thing:
 	mem_free(path);
 	mem_free(delete);
 	memmove(buf, buf + p, OUT_BUF_SIZE - p);
 	c -= p;
+
 	goto qwerty;
 }
 
+
 int process_queue(struct itrm *);
 
-void kbd_timeout(struct itrm *itrm)
+
+void
+kbd_timeout(struct itrm *itrm)
 {
 	struct event ev = {EV_KBD, KBD_ESC, 0, 0};
+
 	itrm->tm = -1;
+
 	if (can_read(itrm->std_in)) {
 		in_kbd(itrm);
 		return;
 	}
+
 	if (!itrm->qlen) {
 		internal("timeout on empty queue");
 		return;
 	}
+
 	queue_event(itrm, (char *)&ev, sizeof(struct event));
-	if (--itrm->qlen) memmove(itrm->kqueue, itrm->kqueue+1, itrm->qlen);
+
+	if (--itrm->qlen)
+		memmove(itrm->kqueue, itrm->kqueue+1, itrm->qlen);
+
 	while (process_queue(itrm));
 }
 
-int get_esc_code(char *str, int len, char *code, int *num, int *el)
+
+int
+get_esc_code(char *str, int len, char *code, int *num, int *el)
 {
 	int pos;
-	
+
 	*num = 0;
 	*code = '\0';
-	
+
 	for (pos = 2; pos < len; pos++) {
 		if (str[pos] < '0' || str[pos] > '9' || pos > 7) {
 			*el = pos + 1;
@@ -440,11 +621,14 @@ int get_esc_code(char *str, int len, char *code, int *num, int *el)
 	return -1;
 }
 
+
 struct key {
 	int x, y;
 };
 
-/* Oh, is anyone going to ever modify this? */
+
+/* Oh, is anyone going to ever modify this? --pasky */
+/* Not me. --Zas */
 
 struct key os2xtd[256] = {
 /* 0 */
@@ -504,9 +688,10 @@ struct key os2xtd[256] = {
 
 int xterm_button = -1;
 
-/* I feeeeeel the neeeed ... to rewrite this ... */
+/* I feeeeeel the neeeed ... to rewrite this ... --pasky */
 
-int process_queue(struct itrm *itrm)
+int
+process_queue(struct itrm *itrm)
 {
 	struct event ev = {EV_KBD, -1, 0, 0};
 	int el = 0;
@@ -554,6 +739,7 @@ int process_queue(struct itrm *itrm)
 					case 222: ev.x = KBD_PAGE_DOWN; break;
 					case 249: ev.x = KBD_DEL; break;
 					} break;
+
 				case '~': switch (v) {
 					case 1: ev.x = KBD_HOME; break;
 					case 2: ev.x = KBD_INS; break;
@@ -571,17 +757,20 @@ int process_queue(struct itrm *itrm)
 					case 23: ev.x = KBD_F11; break;
 					case 24: ev.x = KBD_F12; break;
 					} break;
-				case 'R':
-						  resize_terminal (); break;
+
+				case 'R': resize_terminal(); break;
+
 				case 'M': if (itrm->qlen - el < 3) goto ret;
 					if (v == 5) {
-						if (xterm_button == -1) xterm_button = 0; /* */
-						if (itrm->qlen - el < 5) goto ret;
+						if (xterm_button == -1)
+							xterm_button = 0;
+						if (itrm->qlen - el < 5)
+							goto ret;
 						ev.x = (unsigned char)(itrm->kqueue[el+1]) - ' ' - 1 + ((int)((unsigned char)(itrm->kqueue[el+2]) - ' ' - 1) << 7);
-						if ( ev.x & (1 << 13)) ev.x = 0; /* ev.x |= ~0 << 14; */
+						if (ev.x & (1 << 13)) ev.x = 0; /* ev.x |= ~0 << 14; */
 						ev.y = (unsigned char)(itrm->kqueue[el+3]) - ' ' - 1 + ((int)((unsigned char)(itrm->kqueue[el+4]) - ' ' - 1) << 7);
-						if ( ev.y & (1 << 13)) ev.y = 0; /* ev.y |= ~0 << 14; */
-						switch ((itrm->kqueue[el] - ' ') ^ xterm_button) { /* Every event changhes only one bit */
+						if (ev.y & (1 << 13)) ev.y = 0; /* ev.y |= ~0 << 14; */
+						switch ((itrm->kqueue[el] - ' ') ^ xterm_button) { /* Every event changes only one bit */
 						    case TW_BUTT_LEFT:   ev.b = B_LEFT | ( (xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN ); break;
 						    case TW_BUTT_MIDDLE: ev.b = B_MIDDLE | ( (xterm_button & TW_BUTT_MIDDLE) ? B_UP :  B_DOWN ); break;
 						    case TW_BUTT_RIGHT:  ev.b = B_RIGHT | ( (xterm_button & TW_BUTT_RIGHT) ? B_UP : B_DOWN ); break;
@@ -623,7 +812,8 @@ int process_queue(struct itrm *itrm)
 		goto l1;
 	} else if (itrm->kqueue[0] == 0) {
 		if (itrm->qlen < 2) goto ret;
-		if (!(ev.x = os2xtd[itrm->kqueue[1]].x)) ev.x = -1;
+		ev.x = os2xtd[itrm->kqueue[1]].x;
+		if (!ev.x) ev.x = -1;
 		ev.y = os2xtd[itrm->kqueue[1]].y;
 		el = 2;
 		/*printf("%02x - %02x %02x\n", (int)itrm->kqueue[1], ev.x, ev.y);*/
@@ -631,12 +821,15 @@ int process_queue(struct itrm *itrm)
 	}
 	el = 1;
 	ev.x = itrm->kqueue[0];
-	l2:
-	/*if (ev.x == 1) ev.x = KBD_HOME;
+
+l2:
+#if 0
+	if (ev.x == 1) ev.x = KBD_HOME;
 	if (ev.x == 2) ev.x = KBD_PAGE_UP;
 	if (ev.x == 4) ev.x = KBD_DEL;
 	if (ev.x == 5) ev.x = KBD_END;
-	if (ev.x == 6) ev.x = KBD_PAGE_DOWN;*/
+	if (ev.x == 6) ev.x = KBD_PAGE_DOWN;
+#endif
 	if (ev.x == 8) ev.x = KBD_BS;
 	if (ev.x == 9) ev.x = KBD_TAB;
 	if (ev.x == 10) ev.x = KBD_ENTER, ev.y = KBD_CTRL;
@@ -646,43 +839,67 @@ int process_queue(struct itrm *itrm)
 		ev.x += 'A' - 1;
 		ev.y = KBD_CTRL;
 	}
-	l1:
+
+l1:
 	if (itrm->qlen < el) {
 		internal("event queue underflow");
 		itrm->qlen = el;
 	}
 	if (ev.x != -1) {
 		queue_event(itrm, (char *)&ev, sizeof(struct event));
-		memmove(itrm->kqueue, itrm->kqueue + el, itrm->qlen -= el);
+		itrm->qlen -= el;
+		memmove(itrm->kqueue, itrm->kqueue + el, itrm->qlen);
 	} else {
-		/*printf("%d %d\n", itrm->qlen, el);fflush(stdout);*/
-		memmove(itrm->kqueue, itrm->kqueue + el, itrm->qlen -= el);
+		/*printf("%d %d\n", itrm->qlen, el); fflush(stdout);*/
+		itrm->qlen -= el;
+		memmove(itrm->kqueue, itrm->kqueue + el, itrm->qlen);
 	}
-	end:
-	if (itrm->qlen < IN_BUF_SIZE) set_handlers(itrm->std_in, (void (*)(void *))in_kbd, NULL, (void (*)(void *))free_trm, itrm);
+
+end:
+	if (itrm->qlen < IN_BUF_SIZE)
+		set_handlers(itrm->std_in, (void (*)(void *))in_kbd, NULL,
+			     (void (*)(void *))free_trm, itrm);
 	return el;
-	ret:
-	itrm->tm = install_timer(ESC_TIMEOUT, (void (*)(void *))kbd_timeout, itrm);
+
+ret:
+	itrm->tm = install_timer(ESC_TIMEOUT, (void (*)(void *))kbd_timeout,
+				 itrm);
+
 	return 0;
 }
 
-void in_kbd(struct itrm *itrm)
+
+void
+in_kbd(struct itrm *itrm)
 {
 	int r;
+
 	if (!can_read(itrm->std_in)) return;
-	if (itrm->tm != -1) kill_timer(itrm->tm), itrm->tm = -1;
+
+	if (itrm->tm != -1) {
+		kill_timer(itrm->tm);
+		itrm->tm = -1;
+	}
+
 	if (itrm->qlen >= IN_BUF_SIZE) {
-		set_handlers(itrm->std_in, NULL, NULL, (void (*)(void *))free_trm, itrm);
+		set_handlers(itrm->std_in, NULL, NULL,
+			     (void (*)(void *)) free_trm, itrm);
 		while (process_queue(itrm));
 		return;
 	}
-	if ((r = read(itrm->std_in, itrm->kqueue + itrm->qlen, IN_BUF_SIZE - itrm->qlen)) <= 0) {
+
+	r = read(itrm->std_in, itrm->kqueue + itrm->qlen,
+		 IN_BUF_SIZE - itrm->qlen);
+	if (r <= 0) {
 		free_trm(itrm);
 		return;
 	}
-	if ((itrm->qlen += r) > IN_BUF_SIZE) {
+
+	itrm->qlen += r;
+	if (itrm->qlen > IN_BUF_SIZE) {
 		error("ERROR: too many bytes read");
 		itrm->qlen = IN_BUF_SIZE;
 	}
+
 	while (process_queue(itrm));
 }

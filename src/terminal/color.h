@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.19 2003/09/29 23:07:08 jonas Exp $ */
+/* $Id: color.h,v 1.20 2003/09/30 11:49:44 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -23,14 +23,16 @@
 enum color_type {
 	COLOR_DEFAULT = 0,
 	COLOR_LINK,
-	COLOR_TYPES,
+
+	COLOR_TYPES, /* XXX: Keep last */
 };
 
 enum color_mode {
 	COLOR_MODE_MONO = 0,
 	COLOR_MODE_16,
 	COLOR_MODE_256,
-	COLOR_MODES,
+
+	COLOR_MODES, /* XXX: Keep last */
 };
 	
 /* Mixes the color pair and attributes to a terminal text color. */

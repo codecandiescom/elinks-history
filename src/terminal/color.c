@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.42 2003/09/29 23:36:43 jonas Exp $ */
+/* $Id: color.c,v 1.43 2003/09/30 11:49:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 #include "terminal/color.h"
 #include "terminal/draw.h"
 #include "util/color.h"
+#include "util/error.h"
 
 #include "terminal/palette.inc"
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2004-07-01 22:22+0200\n"
-"PO-Revision-Date: 2004-06-23 22:32+0200\n"
+"PO-Revision-Date: 2004-07-01 22:50+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -150,7 +150,7 @@ msgstr "V políèku musí být èíslo"
 #: src/bfu/inpfield.c:57
 #, c-format
 msgid "Number should be in the range from %d to %d."
-msgstr ""
+msgstr "Èíslo by mìlo být v rozsahu od %d do %d."
 
 #: src/bfu/inpfield.c:77
 msgid "Bad string"
@@ -165,7 +165,6 @@ msgid "Clock"
 msgstr "Hodiny"
 
 #: src/bfu/leds.c:75
-#, fuzzy
 msgid "Digital clock in the status bar."
 msgstr "Digitální hodiny na stavové li¹tì."
 
@@ -414,7 +413,7 @@ msgstr "neplatný"
 
 #: src/cache/dialogs.c:122
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: src/cache/dialogs.c:125 src/config/options.inc:532
 msgid "Header"
@@ -435,7 +434,7 @@ msgstr "Pøíli¹ mnoho parametrù"
 
 #: src/config/cmdline.c:300
 msgid "Remote method not supported"
-msgstr ""
+msgstr "Metoda v uvedeném -remote pøíkazu není podporována"
 
 #: src/config/cmdline.c:352
 msgid "Template option folder"
@@ -529,7 +528,7 @@ msgstr "Výchozí MIME typ, který bych mìl pøedpokládat u neznámých dokumentù."
 
 #: src/config/cmdline.c:636
 msgid "Ignore user-defined keybindings"
-msgstr ""
+msgstr "Ignorovat u¾ivatelské nastavení kláves"
 
 #: src/config/cmdline.c:638
 msgid ""
@@ -608,7 +607,7 @@ msgstr "Zobrazení detailní nápovìdy a ukonèení programu."
 
 #: src/config/cmdline.c:680
 msgid "Only permit local connections"
-msgstr ""
+msgstr "Povolit pouze místní spojení"
 
 #: src/config/cmdline.c:682
 msgid ""
@@ -667,7 +666,7 @@ msgstr ""
 
 #: src/config/cmdline.c:707
 msgid "Control an already running ELinks"
-msgstr ""
+msgstr "Ovládání ji¾ spu¹tìného ELinksu"
 
 #: src/config/cmdline.c:709
 msgid ""
@@ -1077,7 +1076,7 @@ msgstr "Zaèít editovat"
 #. FIXME
 #: src/config/kbdbind.c:480
 msgid "Enter ex-mode (command line)"
-msgstr ""
+msgstr "Vstoupit do ex-mode (pøíkazová øádka)"
 
 #: src/config/kbdbind.c:481
 msgid "Open the File menu"
@@ -1169,7 +1168,7 @@ msgstr "Obnovit stahování cíle odkazu"
 
 #: src/config/kbdbind.c:503
 msgid "Pass URI of current link to external command"
-msgstr ""
+msgstr "Pøedat URI odkazu externímu pøíkazu"
 
 #: src/config/kbdbind.c:504 src/config/kbdbind.c:596 src/config/kbdbind.c:618
 msgid "Follow the current link"
@@ -1229,32 +1228,26 @@ msgid "Move to the start of the document"
 msgstr "Jít na zaèátek dokumentu"
 
 #: src/config/kbdbind.c:521
-#, fuzzy
 msgid "Move one link down"
-msgstr "Pøesunout se o odkaz vý¹e"
+msgstr "Pøesunout se o odkaz ní¾e"
 
 #: src/config/kbdbind.c:522
-#, fuzzy
 msgid "Move one link left"
-msgstr "Pøesunout se o odkaz vý¹e"
+msgstr "Pøesunout se o odkaz vlevo"
 
 #: src/config/kbdbind.c:523
-#, fuzzy
 msgid "Move to the next link"
-msgstr "Pøesunout se na následující polo¾ku"
+msgstr "Pøesunout se na následující odkaz"
 
 #: src/config/kbdbind.c:524
-#, fuzzy
 msgid "Move to the previous link"
-msgstr "Pøesunout se na pøedchozí polo¾ku"
+msgstr "Pøesunout se na pøedchozí odkaz"
 
 #: src/config/kbdbind.c:525
-#, fuzzy
 msgid "Move one link right"
-msgstr "Posunout kurzot doprava"
+msgstr "Pøesunout se o odkaz vpravo"
 
 #: src/config/kbdbind.c:526
-#, fuzzy
 msgid "Move one link up"
 msgstr "Pøesunout se o odkaz vý¹e"
 
@@ -2089,14 +2082,13 @@ msgid "Horizontal step"
 msgstr "Horizontální krok"
 
 #: src/config/options.inc:279
-#, fuzzy
 msgid ""
 "Number of columns to scroll when a key bound to scroll-left or scroll-\n"
 "right is pressed and no prefix was given."
 msgstr ""
-"Poèet øádek, o které by se mìl dokument odscrollovat po stisku klávesy\n"
-"odpovídající akci scroll-up a scroll-down, a nebyl této klávese dán ¾ádný\n"
-"èíselný prefix."
+"Poèet sloupcù, o které by se mìl dokument odscrollovat po stisku klávesy\n"
+"odpovídající akci scroll-left a scroll-right, a nebyl pøed stiskem této\n"
+"klávesy dán poèet opakování."
 
 #: src/config/options.inc:282
 msgid "Margin"
@@ -2112,7 +2104,7 @@ msgstr ""
 
 #: src/config/options.inc:287
 msgid "Vertical step"
-msgstr ""
+msgstr "Vertikální krok"
 
 #: src/config/options.inc:289
 msgid ""
@@ -2409,18 +2401,16 @@ msgid "Image-link color"
 msgstr "Barva obrázkového odkazu"
 
 #: src/config/options.inc:449
-#, fuzzy
 msgid "Default image link color."
-msgstr "Výchozí barva odkazu."
+msgstr "Výchozí barva odkazu na obrázek."
 
 #: src/config/options.inc:451
 msgid "Bookmarked-link color"
 msgstr "Barva zazálo¾kovaného odkazu"
 
 #: src/config/options.inc:453
-#, fuzzy
 msgid "Default bookmarked link color."
-msgstr "Výchozí barva odkazu."
+msgstr "Výchozí barva bookmarknutého odkazu."
 
 #: src/config/options.inc:455
 msgid "Directory color"
@@ -2566,7 +2556,7 @@ msgstr ""
 #: src/config/options.inc:534
 #, c-format
 msgid "Header string used in dumps. %u is substituted by URL."
-msgstr ""
+msgstr "Hlavièka pou¾itá v dump výstupu. %u je nahrazeno URL."
 
 #: src/config/options.inc:536
 msgid "Footer"
@@ -2575,7 +2565,7 @@ msgstr "Patièka"
 #: src/config/options.inc:538
 #, c-format
 msgid "Footer string used in dumps. %u is substituted by URL."
-msgstr ""
+msgstr "Patièka pou¾itá v dump výstupu. %u je nahrazeno URL."
 
 #: src/config/options.inc:540
 msgid "Separator"
@@ -2739,11 +2729,11 @@ msgstr "Slouèit nìkolik prázdných øádkù za sebou v jenom jeden."
 
 #: src/config/options.inc:621
 msgid "URI passing"
-msgstr ""
+msgstr "Pøedávání URI"
 
 #: src/config/options.inc:623
 msgid "Rules for passing URIs to external commands."
-msgstr ""
+msgstr "Pravidla pro pøedávání URI externím pøíkazùm."
 
 #: src/config/options.inc:627
 #, c-format
@@ -3182,7 +3172,6 @@ msgstr ""
 "stromì podle svého systému (napø. unix, unix-xwin, ...)."
 
 #: src/config/options.inc:860
-#, fuzzy
 msgid ""
 "Handler (external program) for this protocol and system.\n"
 "%f in the string means file name to include form data from\n"
@@ -3193,6 +3182,7 @@ msgid ""
 "%u in the string means the whole URL"
 msgstr ""
 "Ovladaè (externí program) pro tento protokol a systém.\n"
+"%f uvnitø øetìzce znamená jméno souboru s údaji z formuláøe\n"
 "%h uvnitø øetìzce znamená jméno hostitele (èi emailovou adresu)\n"
 "%p uvnitø øetìzce znamená port\n"
 "%d uvnitø øetìzce znamená cestu (v¹echno za èíslem portu)\n"
@@ -4355,6 +4345,8 @@ msgid ""
 "Allocated      : %ld bytes\n"
 "Truly allocated: %ld bytes (x%0.2f)"
 msgstr ""
+"Alokováno         : %ld bytù\n"
+"Skuteènì alokováno: %ld bytù (x%0.2f)"
 
 #: src/dialogs/info.c:195
 msgid "Memory info"
@@ -4806,7 +4798,7 @@ msgstr "ETA"
 #: src/dialogs/status.c:230
 #, c-format
 msgid "Cursor position: %dx%d"
-msgstr ""
+msgstr "Pozice kurzoru: %dx%d"
 
 #: src/dialogs/status.c:331
 msgid "Untitled"
@@ -4819,7 +4811,7 @@ msgstr "®ádný dokument"
 #. name:
 #: src/document/css/css.c:29 src/document/css/css.c:157
 msgid "Cascading Style Sheets"
-msgstr ""
+msgstr "Kaskádové styly"
 
 #: src/document/css/css.c:31
 msgid "Options concerning how to use CSS for styling documents."
@@ -5389,7 +5381,7 @@ msgstr ""
 #: src/modules/version.c:81
 #, c-format
 msgid "Built on %s %s"
-msgstr ""
+msgstr "Postaveno: %s %s"
 
 #: src/modules/version.c:85
 msgid "Text WWW browser"
@@ -5398,7 +5390,7 @@ msgstr "Textový WWW browser"
 #: src/modules/version.c:88
 #, c-format
 msgid " (built on %s %s)"
-msgstr ""
+msgstr " (postaveno: %s %s)"
 
 #: src/modules/version.c:95
 msgid "Features:"
@@ -5464,7 +5456,7 @@ msgstr "HTTP Autentikace"
 
 #: src/protocol/auth/dialogs.c:142
 msgid "Realm"
-msgstr ""
+msgstr "Oblast"
 
 #: src/protocol/auth/dialogs.c:143
 msgid "State"
@@ -5481,7 +5473,7 @@ msgstr "Správce HTTP Autentikace"
 #: src/protocol/http/codes.c:106
 #, c-format
 msgid "HTTP error %03d"
-msgstr ""
+msgstr "HTTP chyba %03d"
 
 #: src/protocol/http/codes.c:129
 msgid ""
@@ -5626,7 +5618,7 @@ msgstr ""
 #: src/sched/download.c:500
 #, c-format
 msgid "'%s' is a directory."
-msgstr ""
+msgstr "'%s' je adresáø."
 
 #: src/sched/download.c:536
 msgid "File exists"
@@ -5795,10 +5787,9 @@ msgstr "Nemù¾u zjistit stav socketu"
 
 #: src/sched/error.c:55
 msgid "Only local connections are permitted"
-msgstr ""
+msgstr "Jsou povolena pouze místní spojení"
 
 #: src/sched/error.c:56
-#, fuzzy
 msgid ""
 "This URL contains a protocol not yet known by ELinks.\n"
 "You can configure an external handler for it through\n"
@@ -5876,14 +5867,12 @@ msgid "JavaScript is currently not supported."
 msgstr "JavaScript v souèasnosti není podporován."
 
 #: src/sched/error.c:89
-#, fuzzy
 msgid "This version of ELinks does not contain finger protocol support"
-msgstr "Tato verze ELinksu nepodporuje SSL/TSL"
+msgstr "Tato verze ELinksu nepodporuje protokol finger"
 
 #: src/sched/error.c:93
-#, fuzzy
 msgid "This version of ELinks does not contain SMB protocol support"
-msgstr "Tato verze ELinksu nepodporuje SSL/TSL"
+msgstr "Tato verze ELinksu nepodporuje protokol SMB"
 
 #: src/sched/error.c:123
 msgid "Unknown error"
@@ -5960,6 +5949,8 @@ msgid ""
 "The form data you are about to post might be incomplete.\n"
 "Do you want to post to URL %s?"
 msgstr ""
+"Údaje ve formuláøi, který hodláte odeslat, nejsou kompletní.\n"
+"Chcete opravdu data odeslat na URL %s?"
 
 #: src/sched/task.c:173
 #, c-format
@@ -6139,7 +6130,7 @@ msgstr "hodnota"
 
 #: src/viewer/text/form.c:1402
 msgid "read only"
-msgstr ""
+msgstr "pouze pro ètení"
 
 #: src/viewer/text/form.c:1413
 #, c-format
@@ -6218,7 +6209,6 @@ msgid "Submit form and open in new ~tab"
 msgstr "Poslat formuláø a otevøít v novém ~tabu"
 
 #: src/viewer/text/link.c:1090
-#, fuzzy
 msgid "Submit form and open in new tab in ~background"
 msgstr "Poslat formuláø a otevøít v novém tabu na ~pozadí"
 
@@ -6274,7 +6264,7 @@ msgstr "Nena¹el jsem odkaz obsahující text '%s'."
 
 #: src/viewer/text/search.c:1275
 msgid "No links in current document"
-msgstr ""
+msgstr "V dokumentu nejsou ¾ádné odkazy"
 
 #: src/viewer/text/search.c:1354
 msgid "Search for text"
@@ -6306,7 +6296,7 @@ msgstr "Hledat zpìt"
 
 #: src/viewer/text/textarea.c:363
 msgid "You cannot launch an external editor in the anonymous mode."
-msgstr ""
+msgstr "V anonymním re¾imu nemù¾ete spustit externí editor."
 
 #: src/viewer/text/textarea.c:372
 msgid "You can do this only on the master terminal"

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.148 2004/07/24 07:05:00 miciah Exp $ */
+/* $Id: screen.c,v 1.149 2004/07/28 09:41:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,8 +139,8 @@ static struct screen_driver vt100_screen_driver = {
 				NULL_LIST_HEAD,
 	/* type: */		TERM_VT100,
 	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
-	/* frame: */		frame_vt100,	/* No UTF8 I/O */
-	/* frame_seqs: */	vt100_frame_seqs, /* No UTF8 I/O */
+	/* frame: */		frame_vt100,
+	/* frame_seqs: */	vt100_frame_seqs,
 	/* underline: */	underline_seqs,
 	/* color_mode: */	COLOR_MODE_16,
 	/* transparent: */	1,

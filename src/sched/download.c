@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.137 2003/11/06 22:02:52 jonas Exp $ */
+/* $Id: download.c,v 1.138 2003/11/07 14:21:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -329,28 +329,20 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 
 	int_lower_bound(&w, 0);
 
-	url_len = strlen(file_download->url);
-	url = memacpy(file_download->url, url_len);
+	url = strchr(file_download->url, POST_CHAR);
+	url_len = url ? url - file_download->url : strlen(file_download->url);
+	url = memacpy(file_download->url, url_len > w ? w : url_len);
+
 	if (!url) {
 		done_string(&msg);
 		return;
-	} else {
-		unsigned char *p = strchr(url, POST_CHAR);
-
-		if (p) {
-			url_len = p - url;
-			url[url_len + 1] = '\0';
-		}
-
+	} else if (url_len > w) {
 		/* Truncate too long urls */
-		if (url_len > w) {
-			url_len = w;
-			url[url_len + 1] = '\0';
-			if (url_len > 4) {
-				url[url_len--] = '.';
-				url[url_len--] = '.';
-				url[url_len--] = '.';
-			}
+		url_len = w;
+		if (url_len > 4) {
+			url[--url_len] = '.';
+			url[--url_len] = '.';
+			url[--url_len] = '.';
 		}
 	}
 

@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.70 2004/11/12 22:49:26 zas Exp $ */
+/* $Id: view.h,v 1.71 2005/01/08 03:17:50 miciah Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -60,6 +60,10 @@ enum frame_event_status move_cursor_up(struct session *ses,
 				       struct document_view *view);
 enum frame_event_status move_cursor_down(struct session *ses,
 					 struct document_view *view);
+
+enum frame_event_status move_cursor(struct session *ses,
+				    struct document_view *doc_view,
+				    int x, int y);
 
 /* Used for changing wrapping of text */
 void toggle_wrap_text(struct session *ses, struct document_view *doc_view, int xxxx);

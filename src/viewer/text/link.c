@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.311 2004/12/29 14:25:56 jonas Exp $ */
+/* $Id: link.c,v 1.312 2005/01/08 03:17:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1018,6 +1018,19 @@ jump_to_link_number(struct session *ses, struct document_view *doc_view, int n)
 	if (n < 0 || n >= doc_view->document->nlinks) return;
 	current_link_blur(doc_view);
 	doc_view->vs->current_link = n;
+	if (ses->navigate_mode == NAVIGATE_CURSOR_ROUTING) {
+		struct link *link = get_current_link(doc_view);
+		int offset = get_link_cursor_offset(doc_view, link);
+
+		if (link->npoints > offset) {
+			int x = link->points[offset].x
+				+ doc_view->box.x - doc_view->vs->x;
+			int y = link->points[offset].y
+				+ doc_view->box.y - doc_view->vs->y;
+
+			move_cursor(ses, doc_view, x, y);
+		}
+	}
 	check_vs(doc_view);
 	current_link_hover(doc_view);
 }

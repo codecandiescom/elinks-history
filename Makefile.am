@@ -1,14 +1,65 @@
-codepage_sources=Unicode/gen-cp Unicode/*.cp Unicode/index.txt
-entities_sources=Unicode/gen-ent Unicode/entities.lnx
-uni7b_sources=Unicode/gen-7b Unicode/7bitrepl.lnx
-lang_sources=intl/gen-intl intl/*.lng intl/index.txt
+## Process this file with automake to produce Makefile.in
+## $Id: Makefile.am,v 1.6 2002/03/16 10:30:23 pasky Exp $
 
-man_MANS=links.1
+# codepage_sources = Unicode/gen-cp Unicode/*.cp Unicode/index.txt
+# entities_sources = Unicode/gen-ent Unicode/entities.lnx
+# uni7b_sources = Unicode/gen-7b Unicode/7bitrepl.lnx
+# lang_sources = intl/gen-intl intl/*.lng intl/index.txt
 
-EXTRA_DIST=$(man_MANS) Unicode/* intl/* BUGS TODO SITES mailcap.pl wipe-out-ssl wipe-out-ssl.awk
+man_MANS = links.1
 
-bin_PROGRAMS=links
-links_SOURCES=af_unix.c beos.c bfu.c bookmarks.c cache.c charsets.c connect.c cookies.c default.c dns.c error.c file.c finger.c ftp.c html.c html_r.c html_tbl.c http.c https.c kbd.c kbdbind.c language.c lua.c mailto.c main.c menu.c os_dep.c sched.c select.c session.c terminal.c types.c url.c view.c win32.c links.h os_dep.h os_depx.h setup.h codepage.h lang_defs.h codepage.inc entity.inc uni_7b.inc language.inc rebuild
+EXTRA_DIST = \
+ $(man_MANS) Unicode/* intl/* \
+ BUGS TODO SITES HACKING LUA \
+ wipe-out-ssl wipe-out-ssl.awk
+
+bin_PROGRAMS = links
+links_SOURCES = \
+ af_unix.c \
+ beos.c \
+ bfu.c \
+ bookmarks.c \
+ cache.c \
+ charsets.c \
+ codepage.h \
+ codepage.inc \
+ connect.c \
+ cookies.c \
+ default.c \
+ dns.c \
+ entity.inc \
+ error.c \
+ file.c \
+ finger.c \
+ ftp.c \
+ html.c \
+ html_r.c \
+ html_tbl.c \
+ http.c \
+ https.c \
+ kbd.c \
+ kbdbind.c \
+ lang_defs.h \
+ language.c \
+ language.inc \
+ links.h \
+ lua.c \
+ mailto.c \
+ main.c \
+ menu.c \
+ os_dep.c \
+ os_dep.h \
+ os_depx.h \
+ sched.c \
+ select.c \
+ session.c \
+ setup.h \
+ terminal.c \
+ types.c \
+ uni_7b.inc \
+ url.c \
+ view.c \
+ win32.c
 
 datadir = $(prefix)/@DATADIRNAME@
 LIBS = @LIBS@

@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.40 2003/12/26 12:20:54 zas Exp $ */
+/* $Id: menu.h,v 1.41 2003/12/26 12:55:10 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -85,11 +85,11 @@ struct menu_item {
 	int hotkey_pos;
 };
 
-#define INIT_MENU_ITEM(text, rtext, func, data, flags)			\
+#define INIT_MENU_ITEM(text, rtext, action, func, data, flags)		\
 {									\
 	(unsigned char *) (text),					\
 	(unsigned char *) (rtext),					\
-	ACT_NONE,							\
+	(action),							\
 	(menu_func) (func),						\
 	(void *) (data),						\
 	(flags),							\
@@ -98,17 +98,17 @@ struct menu_item {
 }
 
 #define NULL_MENU_ITEM							\
-	INIT_MENU_ITEM(NULL, NULL, NULL, NULL, 0)
+	INIT_MENU_ITEM(NULL, NULL, ACT_NONE, NULL, NULL, 0)
 
 #define BAR_MENU_ITEM							\
-	INIT_MENU_ITEM("", NULL, NULL, NULL, NO_SELECT)
+	INIT_MENU_ITEM("", NULL, ACT_NONE, NULL, NULL, NO_SELECT)
 
-#define SET_MENU_ITEM(e_, text_, rtext_, func_, data_, flags_,		\
+#define SET_MENU_ITEM(e_, text_, rtext_, action_, func_, data_, flags_,	\
 		      hotkey_state_, hotkey_pos_)			\
 do {									\
 	(e_)->text = (unsigned char *) (text_);				\
 	(e_)->rtext = (unsigned char *) (rtext_);			\
-	(e_)->action = ACT_NONE;					\
+	(e_)->action = (action_);					\
 	(e_)->func = (menu_func) (func_);				\
 	(e_)->data = (void *) (data_);					\
 	(e_)->flags = (flags_);						\
@@ -144,8 +144,8 @@ struct menu {
 
 
 struct menu_item *new_menu(enum menu_item_flags);
-void add_to_menu(struct menu_item **, unsigned char *, unsigned char *, menu_func, void *, enum menu_item_flags flags);
-#define add_separator_to_menu(menu) add_to_menu(menu, "", NULL, NULL, NULL, NO_SELECT)
+void add_to_menu(struct menu_item **, unsigned char *, unsigned char *, enum keyact action, menu_func, void *, enum menu_item_flags flags);
+#define add_separator_to_menu(menu) add_to_menu(menu, "", NULL, ACT_NONE, NULL, NULL, NO_SELECT)
 void do_menu(struct terminal *, struct menu_item *, void *, int);
 void do_menu_selected(struct terminal *, struct menu_item *, void *, int, int);
 void do_mainmenu(struct terminal *, struct menu_item *, void *, int);

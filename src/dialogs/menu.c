@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.224 2003/12/26 09:54:38 zas Exp $ */
+/* $Id: menu.c,v 1.225 2003/12/26 12:55:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -207,13 +207,15 @@ flush_caches(struct terminal *term, void *d, void *e)
 
 
 static void
-go_historywards(struct terminal *term, struct location *target, struct session *ses)
+go_historywards(struct terminal *term, struct location *target,
+		struct session *ses)
 {
 	go_history(ses, target);
 }
 
 static struct menu_item no_hist_menu[] = {
-	INIT_MENU_ITEM(N_("No history"), NULL, NULL, NULL, NO_SELECT),
+	INIT_MENU_ITEM(N_("No history"), NULL, ACT_NONE,
+		       NULL, NULL, NO_SELECT),
 	NULL_MENU_ITEM
 };
 
@@ -238,7 +240,8 @@ name__(struct terminal *term, void *ddd, struct session *ses) \
  \
 		url = get_no_post_url(loc->vs.url, NULL); \
 		if (url) { \
-			add_to_menu(&mi, url, "", (menu_func) go_historywards, \
+			add_to_menu(&mi, url, "", ACT_NONE, \
+				    (menu_func) go_historywards, \
 			    	    (void *) loc, NO_INTL); \
 		} \
 	} \
@@ -322,42 +325,42 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 	menu = new_menu(FREE_LIST);
 	if (!menu) return;
 
-	add_to_menu(&menu, N_("Go ~back"), "<-",
+	add_to_menu(&menu, N_("Go ~back"), "<-", ACT_BACK,
 		    (menu_func) menu_go_back, NULL, 0);
 
-	add_to_menu(&menu, N_("Go for~ward"), "u",
+	add_to_menu(&menu, N_("Go for~ward"), "u", ACT_UNBACK,
 		    (menu_func) menu_go_unback, NULL, 0);
 
 	add_separator_to_menu(&menu);
 
 #ifdef BOOKMARKS
-	add_to_menu(&menu, N_("Bookm~ark document"), "a",
+	add_to_menu(&menu, N_("Bookm~ark document"), "a", ACT_ADD_BOOKMARK,
 		    (menu_func) launch_bm_add_doc_dialog, NULL, 0);
 #endif
 
-	add_to_menu(&menu, N_("~Reload"), "Ctrl-R",
+	add_to_menu(&menu, N_("~Reload"), "Ctrl-R", ACT_RELOAD,
 		    (menu_func) menu_reload, NULL, 0);
 
 	if (ses->doc_view && document_has_frames(ses->doc_view->document))
-		add_to_menu(&menu, N_("Frame at ~full-screen"), "f",
+		add_to_menu(&menu, N_("Frame at ~full-screen"), "f", ACT_ZOOM_FRAME,
 			    (menu_func) menu_for_frame, (void *)set_frame, 0);
 
 	/* Keep tab related operations below this separator */
 	add_separator_to_menu(&menu);
 
 	if (tabs > 1) {
-		add_to_menu(&menu, N_("Nex~t tab"), ">",
+		add_to_menu(&menu, N_("Nex~t tab"), ">", ACT_TAB_NEXT,
 			    (menu_func) menu_next_tab, NULL, 0);
 
-		add_to_menu(&menu, N_("Pre~v tab"), "<",
+		add_to_menu(&menu, N_("Pre~v tab"), "<", ACT_TAB_PREV,
 			    (menu_func) menu_prev_tab, NULL, 0);
 	}
 
-	add_to_menu(&menu, N_("~Close tab"), "c",
+	add_to_menu(&menu, N_("~Close tab"), "c", ACT_TAB_CLOSE,
 		    (menu_func) menu_close_tab, NULL, 0);
 #if 0
 	if (tabs > 1) {
-		add_to_menu(&menu, N_("Close ~all but this"), "c",
+		add_to_menu(&menu, N_("Close ~all but this"), "c", ACT_NONE,
 			    (menu_func) menu_close_other_tabs, d, 0);
 	}
 #endif
@@ -370,41 +373,47 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 
 
 static struct menu_item file_menu11[] = {
-	INIT_MENU_ITEM(N_("Open new ~tab"), "t", open_in_new_tab, (void *) 0, 0),
-	INIT_MENU_ITEM(N_("Open new tab in backgroun~d"), "T", open_in_new_tab_in_background,
-								(void *) 0, 0),
-	INIT_MENU_ITEM(N_("~Go to URL"), "g", menu_goto_url, NULL, 0),
-	INIT_MENU_ITEM(N_("Go ~back"), "<-", menu_go_back, NULL, 0),
-	INIT_MENU_ITEM(N_("Go ~forward"), "u", menu_go_unback, NULL, 0),
-	INIT_MENU_ITEM(N_("~Reload"), "Ctrl-R", menu_reload, NULL, 0),
-	INIT_MENU_ITEM(N_("~History"), NULL, history_menu, NULL, SUBMENU),
-	INIT_MENU_ITEM(N_("~Unhistory"), NULL, unhistory_menu, NULL, SUBMENU),
+	INIT_MENU_ITEM(N_("Open new ~tab"), "t", ACT_OPEN_NEW_TAB, open_in_new_tab, (void *) 0, 0),
+	INIT_MENU_ITEM(N_("Open new tab in backgroun~d"), "T", ACT_OPEN_NEW_TAB_IN_BACKGROUND,
+			open_in_new_tab_in_background,(void *) 0, 0),
+	INIT_MENU_ITEM(N_("~Go to URL"), "g", ACT_GOTO_URL, menu_goto_url, NULL, 0),
+	INIT_MENU_ITEM(N_("Go ~back"), "<-", ACT_BACK, menu_go_back, NULL, 0),
+	INIT_MENU_ITEM(N_("Go ~forward"), "u", ACT_UNBACK, menu_go_unback, NULL, 0),
+	INIT_MENU_ITEM(N_("~Reload"), "Ctrl-R", ACT_RELOAD, menu_reload, NULL, 0),
+	INIT_MENU_ITEM(N_("~History"), NULL, ACT_NONE, history_menu, NULL, SUBMENU),
+	INIT_MENU_ITEM(N_("~Unhistory"), NULL, ACT_NONE, unhistory_menu, NULL, SUBMENU),
 };
 
 static struct menu_item file_menu21[] = {
 	BAR_MENU_ITEM,
-	INIT_MENU_ITEM(N_("~Save as"), "", save_as, NULL, 0),
-	INIT_MENU_ITEM(N_("Save UR~L as"), "", menu_save_url_as, NULL, 0),
-	INIT_MENU_ITEM(N_("Sa~ve formatted document"), "", menu_save_formatted, NULL, 0),
+	INIT_MENU_ITEM(N_("~Save as"), "", ACT_NONE, save_as, NULL, 0),
+	INIT_MENU_ITEM(N_("Save UR~L as"), "", ACT_NONE, menu_save_url_as, NULL, 0),
+	INIT_MENU_ITEM(N_("Sa~ve formatted document"), "", ACT_SAVE_FORMATTED,
+			menu_save_formatted, NULL, 0),
 #ifdef BOOKMARKS
-	INIT_MENU_ITEM(N_("Bookm~ark document"), "a", launch_bm_add_doc_dialog, NULL, 0),
+	INIT_MENU_ITEM(N_("Bookm~ark document"), "a", ACT_ADD_BOOKMARK,
+			launch_bm_add_doc_dialog, NULL, 0),
 #endif
 };
 
 static struct menu_item file_menu22[] = {
 	BAR_MENU_ITEM,
-	INIT_MENU_ITEM(N_("~Kill background connections"), "", menu_kill_background_connections, NULL, 0),
-	INIT_MENU_ITEM(N_("Flush all ~caches"), "", flush_caches, NULL, 0),
-	INIT_MENU_ITEM(N_("Resource ~info"), "", res_inf, NULL, 0),
+	INIT_MENU_ITEM(N_("~Kill background connections"), "", ACT_NONE,
+			menu_kill_background_connections, NULL, 0),
+	INIT_MENU_ITEM(N_("Flush all ~caches"), "", ACT_NONE,
+			flush_caches, NULL, 0),
+	INIT_MENU_ITEM(N_("Resource ~info"), "", ACT_NONE,
+			res_inf, NULL, 0),
 #ifdef LEAK_DEBUG
-	INIT_MENU_ITEM(N_("~Memory info"), "", memory_inf, NULL, 0),
+	INIT_MENU_ITEM(N_("~Memory info"), "", ACT_NONE,
+			memory_inf, NULL, 0),
 #endif
 	BAR_MENU_ITEM,
 };
 
 static struct menu_item file_menu3[] = {
 	BAR_MENU_ITEM,
-	INIT_MENU_ITEM(N_("E~xit"), "q", exit_prog, NULL, 0),
+	INIT_MENU_ITEM(N_("E~xit"), "q", ACT_QUIT, exit_prog, NULL, 0),
 	NULL_MENU_ITEM,
 };
 
@@ -423,7 +432,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	e = file_menu;
 	o = can_open_in_new(term);
 	if (o) {
-		SET_MENU_ITEM(e, N_("~New window"), o - 1 ? NULL : (unsigned char *) "",
+		SET_MENU_ITEM(e, N_("~New window"), NULL, ACT_NONE,
 			      (menu_func) open_in_new_window, send_open_new_window,
 			      (o - 1) ? SUBMENU : 0, 0, HKS_SHOW);
 		e++;
@@ -442,15 +451,17 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	x = 1;
 	if (!anonymous && can_open_os_shell(term->environment)) {
-		SET_MENU_ITEM(e, N_("~OS shell"), "", menu_shell,
-			      NULL, 0, 0, HKS_SHOW);
+		SET_MENU_ITEM(e, N_("~OS shell"), "", ACT_NONE,
+			      menu_shell, NULL,
+			      0, 0, HKS_SHOW);
 		e++;
 		x = 0;
 	}
 
 	if (can_resize_window(term->environment)) {
-		SET_MENU_ITEM(e, N_("Resize t~erminal"), "", dlg_resize_terminal,
-			      NULL, 0, 0, HKS_SHOW);
+		SET_MENU_ITEM(e, N_("Resize t~erminal"), "", ACT_NONE,
+			      dlg_resize_terminal, NULL,
+			      0, 0, HKS_SHOW);
 		e++;
 		x = 0;
 	}
@@ -465,46 +476,46 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 }
 
 static struct menu_item view_menu[] = {
-	INIT_MENU_ITEM(N_("~Search"), "/", menu_for_frame, (void *)search_dlg, 0),
-	INIT_MENU_ITEM(N_("Search ~backward"), "?", menu_for_frame, (void *)search_back_dlg, 0),
-	INIT_MENU_ITEM(N_("Find ~next"), "n", menu_for_frame, (void *)find_next, 0),
-	INIT_MENU_ITEM(N_("Find ~previous"), "N", menu_for_frame, (void *)find_next_back, 0),
+	INIT_MENU_ITEM(N_("~Search"), "/", ACT_SEARCH, menu_for_frame, (void *)search_dlg, 0),
+	INIT_MENU_ITEM(N_("Search ~backward"), "?", ACT_SEARCH_BACK, menu_for_frame, (void *)search_back_dlg, 0),
+	INIT_MENU_ITEM(N_("Find ~next"), "n", ACT_FIND_NEXT, menu_for_frame, (void *)find_next, 0),
+	INIT_MENU_ITEM(N_("Find ~previous"), "N", ACT_FIND_NEXT_BACK, menu_for_frame, (void *)find_next_back, 0),
 	BAR_MENU_ITEM,
-	INIT_MENU_ITEM(N_("Toggle ~html/plain"), "\\", menu_toggle_plain_html, NULL, 0),
-	INIT_MENU_ITEM(N_("Toggle i~mages"), "*", menu_toggle_images, NULL, 0),
-	INIT_MENU_ITEM(N_("Toggle ~link numbering"), ".", menu_toggle_link_numbering, NULL, 0),
-	INIT_MENU_ITEM(N_("Toggle ~document colors"), "%", menu_toggle_document_colors, NULL, 0),
-	INIT_MENU_ITEM(N_("Document ~info"), "=", menu_doc_info, NULL, 0),
-	INIT_MENU_ITEM(N_("H~eader info"), "|", menu_header_info, NULL, 0),
-	INIT_MENU_ITEM(N_("Frame at ~full-screen"), "f", menu_for_frame, (void *)set_frame, 0),
+	INIT_MENU_ITEM(N_("Toggle ~html/plain"), "\\", ACT_TOGGLE_HTML_PLAIN, menu_toggle_plain_html, NULL, 0),
+	INIT_MENU_ITEM(N_("Toggle i~mages"), "*", ACT_TOGGLE_DISPLAY_IMAGES, menu_toggle_images, NULL, 0),
+	INIT_MENU_ITEM(N_("Toggle ~link numbering"), ".", ACT_TOGGLE_NUMBERED_LINKS, menu_toggle_link_numbering, NULL, 0),
+	INIT_MENU_ITEM(N_("Toggle ~document colors"), "%", ACT_TOGGLE_DOCUMENT_COLORS, menu_toggle_document_colors, NULL, 0),
+	INIT_MENU_ITEM(N_("Document ~info"), "=", ACT_DOCUMENT_INFO, menu_doc_info, NULL, 0),
+	INIT_MENU_ITEM(N_("H~eader info"), "|", ACT_HEADER_INFO, menu_header_info, NULL, 0),
+	INIT_MENU_ITEM(N_("Frame at ~full-screen"), "f", ACT_ZOOM_FRAME, menu_for_frame, (void *)set_frame, 0),
 	BAR_MENU_ITEM,
-	INIT_MENU_ITEM(N_("Nex~t tab"), ">", menu_next_tab, NULL, 0),
-	INIT_MENU_ITEM(N_("Pre~v tab"), "<", menu_prev_tab, NULL, 0),
-	INIT_MENU_ITEM(N_("~Close tab"), "c", menu_close_tab, NULL, 0),
+	INIT_MENU_ITEM(N_("Nex~t tab"), ">", ACT_TAB_NEXT, menu_next_tab, NULL, 0),
+	INIT_MENU_ITEM(N_("Pre~v tab"), "<", ACT_TAB_PREV, menu_prev_tab, NULL, 0),
+	INIT_MENU_ITEM(N_("~Close tab"), "c", ACT_TAB_CLOSE, menu_close_tab, NULL, 0),
 	NULL_MENU_ITEM
 };
 
 
 static struct menu_item help_menu[] = {
-	INIT_MENU_ITEM(N_("~ELinks homepage"), "", menu_url_shortcut, ELINKS_HOMEPAGE, 0),
-	INIT_MENU_ITEM(N_("~Documentation"), "", menu_url_shortcut, ELINKS_DOC_URL, 0),
-	INIT_MENU_ITEM(N_("~Keys"), "", menu_keys, NULL, 0),
+	INIT_MENU_ITEM(N_("~ELinks homepage"), "", ACT_NONE, menu_url_shortcut, ELINKS_HOMEPAGE, 0),
+	INIT_MENU_ITEM(N_("~Documentation"), "", ACT_NONE, menu_url_shortcut, ELINKS_DOC_URL, 0),
+	INIT_MENU_ITEM(N_("~Keys"), "", ACT_NONE, menu_keys, NULL, 0),
 	BAR_MENU_ITEM,
 #ifdef DEBUG
-	INIT_MENU_ITEM(N_("~Bugs information"), "", menu_url_shortcut, ELINKS_BUGS_URL, 0),
-	INIT_MENU_ITEM(N_("~ELinks CvsWeb"), "", menu_url_shortcut, ELINKS_CVSWEB_URL, 0),
+	INIT_MENU_ITEM(N_("~Bugs information"), "", ACT_NONE, menu_url_shortcut, ELINKS_BUGS_URL, 0),
+	INIT_MENU_ITEM(N_("~ELinks CvsWeb"), "", ACT_NONE, menu_url_shortcut, ELINKS_CVSWEB_URL, 0),
 	BAR_MENU_ITEM,
 #endif
-	INIT_MENU_ITEM(N_("~Copying"), "", menu_copying, NULL, 0),
-	INIT_MENU_ITEM(N_("~About"), "", menu_about, NULL, 0),
+	INIT_MENU_ITEM(N_("~Copying"), "", ACT_NONE, menu_copying, NULL, 0),
+	INIT_MENU_ITEM(N_("~About"), "", ACT_NONE, menu_about, NULL, 0),
 	NULL_MENU_ITEM
 };
 
 
 static struct menu_item ext_menu[] = {
-	INIT_MENU_ITEM(N_("~Add"), "", menu_add_ext, NULL, 0),
-	INIT_MENU_ITEM(N_("~Modify"), NULL, menu_list_ext, menu_add_ext, SUBMENU),
-	INIT_MENU_ITEM(N_("~Delete"), NULL, menu_list_ext, menu_del_ext, SUBMENU),
+	INIT_MENU_ITEM(N_("~Add"), "", ACT_NONE, menu_add_ext, NULL, 0),
+	INIT_MENU_ITEM(N_("~Modify"), NULL, ACT_NONE, menu_list_ext, menu_add_ext, SUBMENU),
+	INIT_MENU_ITEM(N_("~Delete"), NULL, ACT_NONE, menu_list_ext, menu_del_ext, SUBMENU),
 	NULL_MENU_ITEM
 };
 
@@ -516,39 +527,39 @@ do_ext_menu(struct terminal *term, void *xxx, struct session *ses)
 
 static struct menu_item setup_menu[] = {
 #ifdef ENABLE_NLS
-	INIT_MENU_ITEM(N_("~Language"), NULL, menu_language_list, NULL, SUBMENU),
+	INIT_MENU_ITEM(N_("~Language"), NULL, ACT_NONE, menu_language_list, NULL, SUBMENU),
 #endif
-	INIT_MENU_ITEM(N_("C~haracter set"), NULL, charset_list, NULL, SUBMENU),
-	INIT_MENU_ITEM(N_("~Terminal options"), "", terminal_options, NULL, 0),
-	INIT_MENU_ITEM(N_("File ~extensions"), NULL, do_ext_menu, NULL, SUBMENU),
+	INIT_MENU_ITEM(N_("C~haracter set"), NULL, ACT_NONE, charset_list, NULL, SUBMENU),
+	INIT_MENU_ITEM(N_("~Terminal options"), "", ACT_NONE, terminal_options, NULL, 0),
+	INIT_MENU_ITEM(N_("File ~extensions"), NULL, ACT_NONE, do_ext_menu, NULL, SUBMENU),
 	BAR_MENU_ITEM,
-	INIT_MENU_ITEM(N_("~Options manager"), "o", menu_options_manager, NULL, 0),
-	INIT_MENU_ITEM(N_("~Keybinding manager"), "k", menu_keybinding_manager, NULL, 0),
-	INIT_MENU_ITEM(N_("~Save options"), "", write_config, NULL, 0),
+	INIT_MENU_ITEM(N_("~Options manager"), "o", ACT_OPTIONS_MANAGER, menu_options_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("~Keybinding manager"), "k", ACT_KEYBINDING_MANAGER, menu_keybinding_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("~Save options"), "", ACT_NONE, write_config, NULL, 0),
 	NULL_MENU_ITEM
 };
 
 static struct menu_item setup_menu_anon[] = {
-	INIT_MENU_ITEM(N_("~Language"), NULL, menu_language_list, NULL, SUBMENU),
-	INIT_MENU_ITEM(N_("C~haracter set"), NULL, charset_list, NULL, SUBMENU),
-	INIT_MENU_ITEM(N_("~Terminal options"), "", terminal_options, NULL, 0),
+	INIT_MENU_ITEM(N_("~Language"), NULL, ACT_NONE, menu_language_list, NULL, SUBMENU),
+	INIT_MENU_ITEM(N_("C~haracter set"), NULL, ACT_NONE, charset_list, NULL, SUBMENU),
+	INIT_MENU_ITEM(N_("~Terminal options"), "", ACT_NONE, terminal_options, NULL, 0),
 	NULL_MENU_ITEM
 };
 
 static struct menu_item tools_menu[] = {
 #ifdef GLOBHIST
-	INIT_MENU_ITEM(N_("Global ~history"), "h", menu_history_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("Global ~history"), "h", ACT_HISTORY_MANAGER, menu_history_manager, NULL, 0),
 #endif
 #ifdef BOOKMARKS
-	INIT_MENU_ITEM(N_("~Bookmarks"), "s", menu_bookmark_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("~Bookmarks"), "s", ACT_BOOKMARK_MANAGER, menu_bookmark_manager, NULL, 0),
 #endif
-	INIT_MENU_ITEM(N_("~Cache"), "C", menu_cache_manager, NULL, 0),
-	INIT_MENU_ITEM(N_("~Downloads"), "", menu_download_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("~Cache"), "C", ACT_CACHE_MANAGER, menu_cache_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("~Downloads"), "", ACT_DOWNLOAD_MANAGER, menu_download_manager, NULL, 0),
 #ifdef COOKIES
-	INIT_MENU_ITEM(N_("Coo~kies"), "K", menu_cookie_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("Coo~kies"), "K", ACT_COOKIE_MANAGER, menu_cookie_manager, NULL, 0),
 #endif
 #ifdef FORMS_MEMORY
-	INIT_MENU_ITEM(N_("~Form history"), "", menu_formhist_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("~Form history"), "", ACT_NONE, menu_formhist_manager, NULL, 0),
 #endif
 	NULL_MENU_ITEM
 };
@@ -581,12 +592,12 @@ do_help_menu(struct terminal *term, void *xxx, struct session *ses)
 }
 
 static struct menu_item main_menu[] = {
-	INIT_MENU_ITEM(N_("~File"), "", do_file_menu, NULL, FREE_LIST | SUBMENU),
-	INIT_MENU_ITEM(N_("~View"), "", do_view_menu, NULL, FREE_LIST | SUBMENU),
-	INIT_MENU_ITEM(N_("~Link"), "", link_menu, NULL, FREE_LIST | SUBMENU),
-	INIT_MENU_ITEM(N_("~Tools"), "", do_tools_menu, NULL, FREE_LIST | SUBMENU),
-	INIT_MENU_ITEM(N_("~Setup"), "", do_setup_menu, NULL, FREE_LIST | SUBMENU),
-	INIT_MENU_ITEM(N_("~Help"), "", do_help_menu, NULL, FREE_LIST | SUBMENU),
+	INIT_MENU_ITEM(N_("~File"), "", ACT_NONE, do_file_menu, NULL, FREE_LIST | SUBMENU),
+	INIT_MENU_ITEM(N_("~View"), "", ACT_NONE, do_view_menu, NULL, FREE_LIST | SUBMENU),
+	INIT_MENU_ITEM(N_("~Link"), "", ACT_NONE, link_menu, NULL, FREE_LIST | SUBMENU),
+	INIT_MENU_ITEM(N_("~Tools"), "", ACT_NONE, do_tools_menu, NULL, FREE_LIST | SUBMENU),
+	INIT_MENU_ITEM(N_("~Setup"), "", ACT_NONE, do_setup_menu, NULL, FREE_LIST | SUBMENU),
+	INIT_MENU_ITEM(N_("~Help"), "", ACT_NONE, do_help_menu, NULL, FREE_LIST | SUBMENU),
 	NULL_MENU_ITEM
 };
 

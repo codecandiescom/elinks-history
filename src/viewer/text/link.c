@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.128 2003/12/26 09:54:38 zas Exp $ */
+/* $Id: link.c,v 1.129 2003/12/26 12:55:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -899,37 +899,39 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	if (link->type == LINK_HYPERTEXT && link->where) {
 		if (strlen(link->where) >= 4
 		    && !strncasecmp(link->where, "MAP@", 4))
-			add_to_menu(&mi, N_("Display ~usemap"), NULL,
+			add_to_menu(&mi, N_("Display ~usemap"), NULL, ACT_NONE,
 				    (menu_func) send_enter, NULL, SUBMENU);
 		else {
 			int c = can_open_in_new(term);
 
-			add_to_menu(&mi, N_("~Follow link"), "",
+			add_to_menu(&mi, N_("~Follow link"), "", ACT_NONE,
 				    (menu_func) send_enter, NULL, 0);
 
-			add_to_menu(&mi, N_("Follow link and r~eload"), "",
+			add_to_menu(&mi, N_("Follow link and r~eload"), "", ACT_NONE,
 				    (menu_func) send_enter_reload, NULL, 0);
 
 			add_separator_to_menu(&mi);
 			if (c)
 				add_to_menu(&mi, N_("Open in new ~window"),
-					     c - 1 ? NULL : (unsigned char *) "",
+					     NULL,
+					     ACT_OPEN_LINK_IN_NEW_WINDOW,
 					     (menu_func) open_in_new_window,
 					     send_open_in_new_window, c - 1 ? SUBMENU : 0);
 
-			add_to_menu(&mi, N_("Open in new ~tab"), "",
+			add_to_menu(&mi, N_("Open in new ~tab"), "", ACT_OPEN_LINK_IN_NEW_TAB,
 				     (menu_func) open_in_new_tab, (void *) 1, 0);
 
 			add_to_menu(&mi, N_("Open in new tab in ~background"), "",
+				    ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND,
 				    (menu_func) open_in_new_tab_in_background, (void *) 1, 0);
 
 			if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 				add_separator_to_menu(&mi);
-				add_to_menu(&mi, N_("~Download link"), "d",
+				add_to_menu(&mi, N_("~Download link"), "d", ACT_DOWNLOAD,
 					    (menu_func) send_download, NULL, 0);
 
 #ifdef BOOKMARKS
-				add_to_menu(&mi, N_("~Add link to bookmarks"), "A",
+				add_to_menu(&mi, N_("~Add link to bookmarks"), "A", ACT_ADD_BOOKMARK_LINK,
 					    (menu_func) launch_bm_add_link_dialog,
 					    NULL, 0);
 #endif
@@ -940,48 +942,48 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	if (link->form) {
 		if (link->form->type == FC_RESET) {
-			add_to_menu(&mi, N_("~Reset form"), "",
+			add_to_menu(&mi, N_("~Reset form"), "", ACT_NONE,
 				    (menu_func) send_enter, NULL, 0);
 		} else {
 			int c = can_open_in_new(term);
 
 			if (link->form->type == FC_TEXTAREA && !link->form->ro) {
-				add_to_menu(&mi, N_("Open in ~external editor"), "Ctrl-T",
+				add_to_menu(&mi, N_("Open in ~external editor"), "Ctrl-T", ACT_EDIT,
 					    (menu_func) menu_textarea_edit, NULL, 0);
 			}
 
-			add_to_menu(&mi, N_("~Submit form"), "",
+			add_to_menu(&mi, N_("~Submit form"), "", ACT_NONE,
 				    (menu_func) submit_form, NULL, 0);
 
-			add_to_menu(&mi, N_("Submit form and rel~oad"), "",
+			add_to_menu(&mi, N_("Submit form and rel~oad"), "", ACT_NONE,
 				    (menu_func) submit_form_reload, NULL, 0);
 
 			if (c && link->form->method == FM_GET)
 				add_to_menu(&mi, N_("Submit form and open in new ~window"),
-					    c - 1 ? NULL : (unsigned char *) "",
+					    NULL, ACT_NONE,
 					    (menu_func) open_in_new_window,
 					    send_open_in_new_window, c - 1 ? SUBMENU : 0);
 
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
-				add_to_menu(&mi, N_("Submit form and ~download"), "d",
+				add_to_menu(&mi, N_("Submit form and ~download"), "d", ACT_NONE,
 					    (menu_func) send_download, NULL, 0);
 
-			add_to_menu(&mi, N_("~Reset form"), "",
+			add_to_menu(&mi, N_("~Reset form"), "", ACT_NONE,
 				    (menu_func) reset_form, NULL, 0);
 		}
 	}
 
 	if (link->where_img) {
-		add_to_menu(&mi, N_("V~iew image"), "",
+		add_to_menu(&mi, N_("V~iew image"), "", ACT_NONE,
 			    (menu_func) send_image, NULL, 0);
 		if (!get_opt_int_tree(cmdline_options, "anonymous"))
-			add_to_menu(&mi, N_("Download ima~ge"), "",
+			add_to_menu(&mi, N_("Download ima~ge"), "", ACT_DOWNLOAD_IMAGE,
 				    (menu_func) send_download_image, NULL, 0);
 	}
 
 end:
 	if (!mi->text) {
-		add_to_menu(&mi, N_("No link selected"), NULL,
+		add_to_menu(&mi, N_("No link selected"), NULL, ACT_NONE,
 			    NULL, NULL, NO_SELECT);
 	}
 

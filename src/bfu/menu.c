@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.138 2003/12/26 12:01:16 zas Exp $ */
+/* $Id: menu.c,v 1.139 2003/12/26 12:55:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -853,7 +853,8 @@ new_menu(enum menu_item_flags flags)
 
 void
 add_to_menu(struct menu_item **mi, unsigned char *text, unsigned char *rtext,
-	    menu_func func, void *data, enum menu_item_flags flags)
+	    enum keyact action, menu_func func, void *data,
+	    enum menu_item_flags flags)
 {
 	int n = count_items(*mi);
 	/* XXX: Don't clear the last and special item. */
@@ -867,5 +868,6 @@ add_to_menu(struct menu_item **mi, unsigned char *text, unsigned char *rtext,
 	memcpy(item + 1, item, sizeof(struct menu_item));
 
 	/* Setup the new item. All menu items share the item_free value. */
-	SET_MENU_ITEM(item, text, rtext, func, data, item->flags | flags, HKS_SHOW, 0);
+	SET_MENU_ITEM(item, text, rtext, action, func, data,
+		      item->flags | flags, HKS_SHOW, 0);
 }

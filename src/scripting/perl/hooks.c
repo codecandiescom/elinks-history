@@ -1,5 +1,5 @@
 /* Perl scripting hooks */
-/* $Id: hooks.c,v 1.17 2005/02/08 01:50:29 miciah Exp $ */
+/* $Id: hooks.c,v 1.18 2005/04/01 09:11:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,7 +12,6 @@
 #include "sched/session.h"
 #include "scripting/perl/core.h"
 #include "scripting/perl/hooks.h"
-#include "scripting/scripting.h"
 #include "util/string.h"
 
 #define my_XPUSHs(s, slen) XPUSHs(sv_2mortal(newSVpvn(s, slen)))

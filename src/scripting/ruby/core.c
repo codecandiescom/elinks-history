@@ -1,5 +1,5 @@
 /* Ruby interface (scripting engine) */
-/* $Id: core.c,v 1.9 2005/03/23 13:40:34 zas Exp $ */
+/* $Id: core.c,v 1.10 2005/04/01 09:11:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,6 @@
 #include "scripting/ruby/core.h"
 #include "scripting/ruby/hooks.h"
 #include "scripting/ruby/ruby.h"
-#include "scripting/scripting.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
 #include "util/error.h"

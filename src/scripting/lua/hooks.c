@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.59 2005/03/23 10:10:38 zas Exp $ */
+/* $Id: hooks.c,v 1.60 2005/04/01 09:11:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,7 +12,6 @@
 #include "sched/session.h"
 #include "scripting/lua/core.h"
 #include "scripting/lua/hooks.h"
-#include "scripting/scripting.h"
 #include "util/string.h"
 
 

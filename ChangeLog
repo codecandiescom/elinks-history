@@ -1,3 +1,358 @@
+Sun Nov  9 23:02:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/lua/core.c:
+
+	Populate with get_no_post_url().  
+
+Sun Nov  9 22:56:19 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/menu.c, viewer/text/view.c:
+
+	Populate with get_no_post_url().  
+
+Sun Nov  9 22:50:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Make use of get_no_post_url(), and reflects change in parameters
+	list.  
+
+Sun Nov  9 22:50:07 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	get_no_post_url() has a new int * parameter which may be set to
+	length of the returned url.  
+
+Sun Nov  9 22:41:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Make use of get_no_post_url(), and cleanup.  
+
+Sun Nov  9 22:40:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	A function returning an allocated string from an url, without post
+	data was introduced. Its name may not be well choosen, please
+	propose good name.  
+
+Sun Nov  9 22:27:26 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Part of download_data() was moved to download_data_store().  
+
+Sun Nov  9 15:35:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/info.c:
+
+	Do not print POST part of the url in cache info.  
+
+Sun Nov  9 15:24:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inpfield.h:
+
+	There is no input_field_layouter().  
+
+Sun Nov  9 15:22:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/dialog.h:
+
+	Try to actually make dialog_layout.padding_top description
+	comprehensible :).  
+
+Sun Nov  9 15:19:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: dialog.c, dialog.h:
+
+	Remove nopad_widgets layout member. We always add horizontal space
+	between widgets.  
+
+Sun Nov  9 15:16:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/auth.c:
+
+	Use text widget and the generic dialog layouter.  
+
+Sun Nov  9 15:09:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: dialog.c, dialog.h, inpfield.c:
+
+	Add fit_datalen layout member and use it for input_field() dialog
+	layouting.  
+
+Sun Nov  9 15:07:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/: dialog.c, text.c, text.h:
+
+	layout_text_widget() -> dlg_format_text(). Now text widget's format
+	function is named as all nice widget format functions would always
+	like to be.  
+
+Sun Nov  9 15:05:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/checkbox.c, bfu/inpfield.c, bfu/text.c, bfu/text.h,
+	config/dialogs.c, dialogs/auth.c, sched/download.c:
+
+	dlg_format_text() -> dlg_format_text_do() 
+
+Sun Nov  9 15:01:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/dialog.c:
+
+	layout_widgets() -> format_widgets() 
+
+Sun Nov  9 14:55:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/dialog.h, bfu/hierbox.c, bfu/msgbox.c,
+	dialogs/edit.c, dialogs/mime.c, sched/download.c:
+
+	Replace dlg->align with a dialog_layout bit array.  
+
+Sun Nov  9 14:30:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: dialog.c, msgbox.c:
+
+	Handle text widgets in the generic dialog layouter and make
+	msg_box() use it. Note a small regression in that we do not pad the
+	top of the text box. Will be fixed with layout bitarray.  
+
+Sun Nov  9 14:24:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/msgbox.c:
+
+	Use the text widget.  
+
+Sun Nov  9 14:24:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/widget.h:
+
+	Oops forgot to add text widget info update.  
+
+Sun Nov  9 14:23:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: text.c, text.h:
+
+	Provide text widget layouter. Add align member to text widget info.  
+
+Sun Nov  9 14:09:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.h, msgbox.h:
+
+	Fix typo.  
+
+Sun Nov  9 14:02:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/hierbox.c:
+
+	Compilation fix. Blablabla ;).  
+
+Sun Nov  9 14:02:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/dialog.c:
+
+	Attempt to clarify layout_widget()'s WIDGET_BUTTON case description.  
+
+Sun Nov  9 14:01:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.h:
+
+	Fix grammar .. describe the default close button.  
+
+Sun Nov  9 13:53:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.h:
+
+	Describe hierbox_browser().  
+
+Sun Nov  9 13:44:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/lua/core.c:
+
+	Trivial style fix.  
+
+Sun Nov  9 13:44:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/dialog.c, bfu/dialog.h, bfu/group.c, bfu/inpfield.c,
+	bfu/msgbox.c, config/dialogs.c, dialogs/auth.c, dialogs/options.c,
+	sched/download.c, scripting/lua/core.c, viewer/text/search.c:
+
+	Show me anyone who wouldn't want his dialog to be centered at the
+	screen. He'd be pretty weird, I think. draw_dialog()'s @align
+	parameter dropped, and AL_CENTER alignment made implicit.  
+
+Sun Nov  9 13:40:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/dialog.c:
+
+	Newlines fix.  
+
+Sun Nov  9 13:33:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/: hierbox.c, listbox.c:
+
+	When dealing with listbox_item.expanded, first check whether it is
+	BI_FOLDER. This means some minor optimizations and fix of potential
+	strangeness when clicking with mouse at bad places in the listbox.  
+
+Sun Nov  9 13:31:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	Whitespace tidyup.  
+
+Sun Nov  9 13:28:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/hierbox.c:
+
+	If selected hierbox item is not a folder, pass the space keypress
+	event on. So it behaves like enter and triggers the button. This
+	reinforces the Miciah's muscle reflex in globhist dialog ;-).  
+
+Sun Nov  9 13:23:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/hierbox.c:
+
+	Describe a bit what is going on in hierbox_dialog_event_handler().  
+
+Sun Nov  9 13:10:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	We rely on the fact of listbox being at particular position in the
+	widget list that it's in fact confusing to say that explicitly at
+	one place ;-). (And it's not last anymore anyway.) 
+
+Sun Nov  9 13:07:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/hierbox.c:
+
+	Minor reindentation and tidyup.  
+
+Sun Nov  9 13:04:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Limit dialog data x,y,width and height values. It prevents some
+	assertion failures.  
+
+Sun Nov  9 12:27:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/checkbox.c:
+
+	Prevent an assertion failure and other bad things when width of
+	terminal is very low.  
+
+Sun Nov  9 11:40:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: dialog.c, hierbox.c, listbox.c, listbox.h:
+
+	Use generic layouter for hiebox browsers. This requires to pass down
+	the terminal height which might be usefull for other things later.  
+
+Sun Nov  9 11:23:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/mime.c:
+
+	Use generic dialog layouter.  
+
+Sun Nov  9 11:22:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/edit.c, bfu/dialog.c, bfu/dialog.h:
+
+	Make the edit layouter the generic dialog layouter.  
+
+Sun Nov  9 11:16:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/edit.c:
+
+	Move widget layouting to separate function. We now use not AL_NONE
+	to figure out when to trim width.  
+
+Sun Nov  9 03:55:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/edit.c:
+
+	Cleanup and make the layouter generic to update width if dlg->align
+	is AL_BLOCK.  
+
+Sun Nov  9 03:39:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Cleanup.  
+
+Sun Nov  9 03:30:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.c, hierbox.h:
+
+	Make hierbox layouter and event handler static.  
+
+Sun Nov  9 03:27:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/dialogs.c:
+
+	Use hierbox_browser().  
+
+Sun Nov  9 03:17:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, globhist/dialogs.c:
+
+	Cleanup after the hierbox browser in the event handler and reserve
+	the abort handler for browser specific cleanups.  
+
+Sun Nov  9 03:13:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: dialog.c, text.c, text.h, widget.h:
+
+	Add support for text widgets. Not used yet but it will make a
+	generic layouter much more useful.  
+
+Sun Nov  9 03:12:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/dialogs.c:
+
+	Use generic hierbox event handler. It does the same and more useless
+	stuff but what the hay ...  
+
+Sun Nov  9 02:49:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/dialog.c:
+
+	Fix inf. loop prevention when cycling widgets.  
+
+Sun Nov  9 00:19:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/Makefile.am, bfu/hierbox.c, bfu/hierbox.h,
+	bookmarks/dialogs.c, config/dialogs.c, dialogs/Makefile.am,
+	dialogs/hierbox.c, dialogs/hierbox.h, globhist/dialogs.c:
+
+	Move hierbox.* from dialogs/ to bfu/.  
+
+Sun Nov  9 00:11:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/dialogs.c:
+
+	Use hierbox_browser().  
+
+Sat Nov  8 23:46:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/dialogs.c, bfu/hierbox.c, bfu/hierbox.h,
+	dialogs/hierbox.c, dialogs/hierbox.h:
+
+	hierbox_browser() dialog initializer added. Same idea as for
+	msg_box().  
+
+Sat Nov  8 23:43:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	get_hline_width() contained some weird code since a long time it
+	seems. It was fixed and cleaned up. Behavior should remain the same
+	as before.  
+
 Sat Nov  8 22:36:23 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: bookmarks/dialogs.c, config/dialogs.c, globhist/dialogs.c:

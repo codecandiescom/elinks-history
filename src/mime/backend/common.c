@@ -1,5 +1,5 @@
 /* MIME handling backends multiplexing */
-/* $Id: common.c,v 1.16 2003/10/25 19:16:17 jonas Exp $ */
+/* $Id: common.c,v 1.17 2003/12/01 18:06:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,7 +87,7 @@ get_next_path_filename(unsigned char **path_ptr, unsigned char separator)
 
 	*path_ptr = path;
 
-	if (filenamelen >= 0) {
+	if (filenamelen > 0) {
 		unsigned char *tmp = memacpy(filename, filenamelen);
 
 		if (!tmp) return NULL;

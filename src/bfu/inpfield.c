@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.193 2005/01/15 18:15:18 miciah Exp $ */
+/* $Id: inpfield.c,v 1.194 2005/01/15 19:59:42 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,9 +167,7 @@ input_field_cancel(struct dialog_data *dlg_data, struct widget_data *widget_data
 	void *data = dlg_data->dlg->udata2;
 
 	if (fn) fn(data);
-	cancel_dialog(dlg_data, widget_data);
-
-	return EVENT_PROCESSED;
+	return cancel_dialog(dlg_data, widget_data);
 }
 
 static t_handler_event_status

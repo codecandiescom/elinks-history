@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.35 2002/06/29 22:01:22 pasky Exp $ */
+/* $Id: conf.c,v 1.36 2002/06/30 11:49:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,45 +74,83 @@ skip_white(unsigned char *start, int *line)
 	return start;
 }
 
-/* Parse 'set' command. Returns 0 if error, 1 if ok. */
-int
-parse_set(unsigned char **optname, int *optlen, unsigned char **optval,
-	  int *line)
-{
-	unsigned char *ptr = *optname;
+enum parse_error {
+	ERROR_NONE,
+	ERROR_PARSE,
+	ERROR_OPTION,
+	ERROR_VALUE,
+};
 
-	ptr = skip_white(ptr, line);
-	if (!*ptr) return 0;
+/* Parse a command. Returns error code. */
+enum parse_error
+parse_set(unsigned char **file, int *line)
+{
+	unsigned char *optname;
+	unsigned char bin;
+
+	*file = skip_white(*file, line);
+	if (!*file) return ERROR_PARSE;
 
 	/* Option name */
-	*optname = ptr;
-	while (isA(*ptr) || *ptr == '.') ptr++;
-	*optlen = ptr - *optname;
+	optname = *file;
+	while (isA(**file) || **file == '.') (*file)++;
+
+	bin = **file;
+	**file = '\0';
+	optname = stracpy(optname);
+	**file = bin;
 
 	/* Equal sign */
-	ptr = skip_white(ptr, line);
-	if (*(ptr++) != '=') return 0;
+	*file = skip_white(*file, line);
+	if (**file != '=') { mem_free(optname); return ERROR_PARSE; }
+	(*file)++;
 
 	/* Option value */
-	ptr = skip_white(ptr, line);
-	if (!*ptr) return 0;
-	*optval = ptr;
+	*file = skip_white(*file, line);
+	if (!*file) { mem_free(optname); return ERROR_VALUE; }
 
-	return 1;
+	{
+		struct option *opt;
+		unsigned char *str;
+
+		opt = get_opt_rec(root_options, optname);
+		mem_free(optname);
+
+		if (!opt || (opt->flags & OPT_HIDDEN))
+			return ERROR_OPTION;
+
+		if (!option_types[opt->type].read)
+			return ERROR_VALUE;
+
+		str = option_types[opt->type].read(opt, file);
+		if (!str || !option_types[opt->type].set
+		    || !option_types[opt->type].set(opt, str)) {
+			if (str) mem_free(str);
+			return ERROR_VALUE;
+		}
+		mem_free(str);
+	}
+
+	return ERROR_NONE;
 }
 
+struct parse_handler {
+	unsigned char *command;
+	enum parse_error (*handler)(unsigned char **file, int *line);
+};
+
+struct parse_handler parse_handlers[] = {
+	{ "set", parse_set },
+/*	{ "bind", parse_bind }, */
+	{ NULL, NULL }
+};
+
 void
-parse_config_file(unsigned char *name, unsigned char *file,
-		  struct list_head *opt_tree)
+parse_config_file(unsigned char *name, unsigned char *file)
 {
 	int line = 1;
 	int error_occured = 0;
-	enum {
-		ERROR_NONE,
-		ERROR_PARSE,
-		ERROR_OPTION,
-		ERROR_VALUE,
-	} error = 0;
+	enum parse_error error = 0;
 	unsigned char error_msg[][80] = {
 		"no error",
 		"parse error",
@@ -127,61 +165,33 @@ parse_config_file(unsigned char *name, unsigned char *file,
 		/* Second chance to escape from the hell. */
 		if (!*file) break;
 
-		/* TODO: This should be done in a more generic way, maintaining
-		 * table of handlers for each command. Definitively overkill
-		 * when we support only one command ;-). --pasky */
+		{
+			struct parse_handler *handler;
 
-		if (!strncmp(file, "set", 3) && WHITECHAR(file[3])) {
-			unsigned char *optname = file + 3;
-			int optname_l = 0;
-			unsigned char *optval;
+			for (handler = parse_handlers; handler->command;
+			     handler++) {
+				int len = strlen(handler->command);
 
-			if (parse_set(&optname, &optname_l, &optval, &line)) {
-				unsigned char *oname;
-				struct option *opt;
-				unsigned char *str;
-
-				/* FIXME: By the time when I write it, I
-				 * already dislike it. However I just want to
-				 * get it done now, we should move this stuff
-				 * to separate function Later (tm). --pasky */
-
-				oname = memacpy(optname, optname_l);
-				opt = get_opt_rec(opt_tree, oname);
-
-				if (opt && !(opt->flags & OPT_HIDDEN)) {
-					if (!option_types[opt->type].read) {
-						error = ERROR_VALUE;
-					} else {
-						str = option_types[opt->type].read(opt, &optval);
-						if (!str ||
-						    !option_types[opt->type].set ||
-						    !option_types[opt->type].set(opt, str)) {
-							error = ERROR_VALUE;
-						}
-						if (str) mem_free(str);
-					}
-				} else {
-					error = ERROR_OPTION;
+				if (!strncmp(file, handler->command, len)
+				    && WHITECHAR(file[len])) {
+					file += len;
+					error = handler->handler(&file, &line);
+					goto test_end;
 				}
-				file = optval;
-
-				mem_free(oname);
-			} else {
-				file = optname + optname_l;
-				error = ERROR_PARSE;
 			}
-		} else {
-			error = ERROR_PARSE;
-			/* Jump over this crap we can't understand. */
-			while (!WHITECHAR(*file) && *file != '#' && *file)
-				file++;
 		}
+
+		error = ERROR_OPTION;
+		/* Jump over this crap we can't understand. */
+		while (!WHITECHAR(*file) && *file != '#' && *file)
+			file++;
+
+test_end:
 
 		if (error) {
 			/* TODO: Make this a macro and report error directly
 			 * as it's stumbled upon; line info may not be accurate
-			 * anymore now. --pasky */
+			 * anymore now (?). --pasky */
 			fprintf(stderr, "%s:%d: %s\n",
 				name, line, error_msg[error]);
 			error_occured = 1;
@@ -194,6 +204,8 @@ parse_config_file(unsigned char *name, unsigned char *file,
 		sleep(1);
 	}
 }
+
+
 
 
 unsigned char *
@@ -254,7 +266,7 @@ load_config_file(unsigned char *prefix, unsigned char *name)
 		}
 	}
 
-	parse_config_file(config_file, config_str, root_options);
+	parse_config_file(config_file, config_str);
 
 	mem_free(config_str);
 	mem_free(config_file);

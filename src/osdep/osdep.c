@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.133 2004/06/27 17:19:56 pasky Exp $ */
+/* $Id: osdep.c,v 1.134 2004/07/03 01:21:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -245,6 +245,24 @@ is_xterm(void)
 	static int xt = -1;
 
 	if (xt == -1) {
+		/* Paraphrased from debian bug 228977:
+		 *
+		 * It is not enough to simply check the DISPLAY env variable,
+		 * as it is pretty legal to have a DISPLAY set. While these
+		 * days this practice is pretty uncommon, it still makes sense
+		 * sometimes, especially for people who prefer the text mode
+		 * for some reason. Only relying on DISPLAY will results in bad
+		 * codes being written to the terminal.
+		 *
+		 * Any real xterm derivative sets WINDOWID as well.
+		 * Unfortunately, konsole is an exception, and it needs to be
+		 * checked for separately.
+		 *
+		 * FIXME: The code below still fails to detect some terminals
+		 * that do support a title (like the popular PuTTY ssh client).
+		 * In general, proper xterm detection is a nightmarish task...
+		 *
+		 * -- Adam Borowski <kilobyte@mimuw.edu.pl> */
 		unsigned char *display = getenv("DISPLAY");
 		unsigned char *windowid = getenv("WINDOWID");
 

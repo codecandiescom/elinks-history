@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.616 2004/10/10 04:02:44 miciah Exp $ */
+/* $Id: view.c,v 1.617 2004/10/10 04:40:58 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1056,6 +1056,25 @@ quit:
 			return ses;
 		}
 		get_kbd_modifier(ev) |= KBD_ALT;
+	} else if (!(get_kbd_modifier(ev) & KBD_CTRL)) {
+		switch (get_opt_int("document.browse.search.typeahead")) {
+			case 0:
+				return NULL;
+			case 1:
+				action = ACT_MAIN_SEARCH_TYPEAHEAD_LINK;
+				break;
+			case 2:
+				action = ACT_MAIN_SEARCH_TYPEAHEAD_TEXT;
+				break;
+			default:
+				INTERNAL("invalid value for document.browse.search.typeahead");
+		}
+
+		search_typeahead(ses, doc_view, action);
+
+		/* Cross your fingers -- I'm just asking
+		 * for an infinite loop! -- Miciah */
+		term_send_event(ses->tab->term, ev);
 	}
 
 	return NULL;

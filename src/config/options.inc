@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.140 2004/10/08 13:00:07 zas Exp $ */
+/* $Id: options.inc,v 1.141 2004/10/10 04:40:58 miciah Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -379,6 +379,16 @@ struct option_info config_options_info[] = {
 		"0 means do nothing\n"
 		"1 means beep the terminal\n"
 		"2 means pop up message box")),
+
+	INIT_OPT_INT("document.browse.search", N_("Typeahead searching"),
+		"typeahead", 0, 0, 2, 0,
+		N_("Start typeahead searching when an unbound key is pressed without any modifiers.\n\n"
+		"Note that most keys have default bindings, so this feature will not be useful\n"
+		"unless you unbind them.\n\n"
+		"0 disables this feature; typeahead searching will only be used\n"
+		"  when you press a key bound to search-typeahead or similar\n"
+		"1 automatically starts typeahead searching thru link text\n"
+		"2 automatically starts typeahead searching thru all document text")),
 
 
 	INIT_OPT_INT("document.browse", N_("Horizontal text margin"),

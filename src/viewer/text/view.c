@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.432 2004/06/01 06:40:27 miciah Exp $ */
+/* $Id: view.c,v 1.433 2004/06/01 06:57:06 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -752,8 +752,6 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 		}
 #ifdef CONFIG_MOUSE
 	} else if (ev->ev == EV_MOUSE) {
-		/* TODO: Pop up the tab_menu() when right clicking is not
-		 * handled by anything else here. */
 		struct link *link = choose_mouse_link(doc_view, ev);
 
 		if (check_mouse_wheel(ev)) {

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.86 2004/04/29 23:11:42 jonas Exp $ */
+/* $Id: cmdline.c,v 1.87 2004/05/23 15:47:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -679,7 +679,7 @@ struct option_info cmdline_options_info[] = {
 		"no-numbering", 0, 0,
 		N_("Prevents numbering of links (and showing their list at the end of\n"
 		"the dumped document) in the -dump output; this was the default behaviour\n"
-		"until 0.5pre12. Note that this really affects only --dump, nothing else.")),
+		"until 0.5pre12. Note that this really affects only -dump, nothing else.")),
 
 	INIT_OPT_COMMAND("", N_("Control an already running ELinks"),
 		"remote", 0, remote_cmd,

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.273 2004/04/21 22:19:55 jonas Exp $ */
+/* $Id: download.c,v 1.274 2004/04/21 22:35:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -857,6 +857,36 @@ cancel:
 }
 
 
+static struct tq *
+init_tq(struct session *ses, struct download *download,
+	struct cache_entry *cached)
+{
+	struct tq *tq;
+
+	/* There can be only one ... */
+	foreach (tq, ses->tq)
+		if (tq->uri == ses->loading_uri)
+			return NULL;
+
+	tq = mem_calloc(1, sizeof(struct tq));
+	if (!tq) return NULL;
+
+	tq->uri = get_uri_reference(ses->loading_uri);
+	tq->ses = ses;
+	tq->goto_position = null_or_stracpy(ses->goto_position);
+	tq->target_frame = null_or_stracpy(ses->task.target_frame);
+
+	tq->cached = cached;
+	object_lock(tq->cached);
+
+	change_connection(download, &tq->download, PRI_MAIN, 0);
+	download->state = S_OK;
+
+	add_to_list(ses->tq, tq);
+
+	return tq;
+}
+
 static void
 tp_free(struct tq *tq)
 {
@@ -1048,33 +1078,12 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 	if (!handler && strlen(ctype) >= 4 && !strncasecmp(ctype, "text", 4))
 		goto plaintext_follow;
 
-	foreach (tq, ses->tq)
-		/* There can be only one ... */
-		if (tq->uri == ses->loading_uri)
-			goto do_not_follow;
+	tq = init_tq(ses, loading, cached);
+	if (tq) {
+		ret = 1;
+		type_query(tq, ctype, handler);
+	}
 
-	tq = mem_calloc(1, sizeof(struct tq));
-	if (!tq) goto do_not_follow;
-
-	tq->uri = get_uri_reference(ses->loading_uri);
-
-	add_to_list(ses->tq, tq);
-	ret = 1;
-
-	change_connection(loading, &tq->download, PRI_MAIN, 0);
-	loading->state = S_OK;
-
-	tq->cached = cached;
-	object_lock(tq->cached);
-
-	if (ses->goto_position) tq->goto_position = stracpy(ses->goto_position);
-	if (ses->task.target_frame)
-		tq->target_frame = stracpy(ses->task.target_frame);
-	tq->ses = ses;
-
-	type_query(tq, ctype, handler);
-
-do_not_follow:
 	mem_free(ctype);
 	mem_free_if(handler);
 

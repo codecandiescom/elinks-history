@@ -1,9 +1,7 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.25 2004/05/01 23:31:13 jonas Exp $
+## $Id: Makefile.am,v 1.26 2004/05/02 12:51:42 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
-
-EXTRA_libbfu_a_SOURCES = leds.c leds.h
 
 if CONFIG_LEDS
 ledsobj = leds.o
@@ -11,6 +9,7 @@ endif
 
 noinst_LIBRARIES = libbfu.a
 
+EXTRA_libbfu_a_SOURCES = leds.c leds.h
 libbfu_a_LIBADD = $(ledsobj)
 
 libbfu_a_SOURCES = \

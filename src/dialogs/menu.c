@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.282 2004/01/25 00:21:14 pasky Exp $ */
+/* $Id: menu.c,v 1.283 2004/01/25 00:23:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,7 +235,6 @@ static struct menu_item file_menu11[] = {
 	INIT_MENU_ACTION(N_("~Go to URL"), ACT_GOTO_URL),
 	INIT_MENU_ACTION(N_("Go ~back"), ACT_BACK),
 	INIT_MENU_ACTION(N_("Go ~forward"), ACT_UNBACK),
-	INIT_MENU_ACTION(N_("~Reload"),	ACT_RELOAD),
 	INIT_MENU_ITEM(N_("~History"), NULL, ACT_NONE, history_menu, NULL, SUBMENU),
 	INIT_MENU_ITEM(N_("~Unhistory"), NULL, ACT_NONE, unhistory_menu, NULL, SUBMENU),
 };
@@ -337,6 +336,7 @@ static struct menu_item view_menu[] = {
 	INIT_MENU_ACTION(N_("Toggle ~document colors"), ACT_TOGGLE_DOCUMENT_COLORS),
 	INIT_MENU_ACTION(N_("Document ~info"), ACT_DOCUMENT_INFO),
 	INIT_MENU_ACTION(N_("H~eader info"), ACT_HEADER_INFO),
+	INIT_MENU_ACTION(N_("Rel~oad document"), ACT_RELOAD),
 	INIT_MENU_ACTION(N_("~Rerender document"), ACT_RERENDER),
 	INIT_MENU_ACTION(N_("Frame at ~full-screen"), ACT_ZOOM_FRAME),
 	BAR_MENU_ITEM,

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.107 2003/05/08 23:03:07 zas Exp $ */
+/* $Id: http.c,v 1.108 2003/05/09 17:19:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -407,9 +407,12 @@ http_send_header(struct connection *c)
                 add_to_str(&hdr, &l, "User-Agent: ");
 
 		if (!list_empty(terminals)) {
+			unsigned int tslen = 0;
 			struct terminal *term = terminals.prev;
 
-			snprintf(ts, 64, "%dx%d", term->x, term->y);
+			ulongcat(&ts, &tslen, term->x, 3, 0);
+			ts[tslen++] = 'x';
+			ulongcat(&ts, &tslen, term->y, 3, 0);
 		}
 		ustr = subst_user_agent(optstr, VERSION_STRING, system_name,
 					ts);

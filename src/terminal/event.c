@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.55 2004/06/13 12:18:19 jonas Exp $ */
+/* $Id: event.c,v 1.56 2004/06/13 12:20:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,22 +116,22 @@ term_send_ucs(struct terminal *term, struct term_event *ev, unicode_val u)
 }
 
 static void
-check_terminal_name(struct terminal *term, unsigned char term_name[MAX_TERM_LEN])
+check_terminal_name(struct terminal *term, struct terminal_info *info)
 {
 	unsigned char name[MAX_TERM_LEN + 10];
 	int i;
 
 	/* We check TERM env. var for sanity, and fallback to _template_ if
 	 * needed. This way we prevent elinks.conf potential corruption. */
-	for (i = 0; term_name[i]; i++) {
-		if (!isA(term_name[i])) {
+	for (i = 0; info->name[i]; i++) {
+		if (!isA(info->name[i])) {
 			usrerror(_("Warning: terminal name contains illicit chars.", term));
 			return;
 		}
 	}
 
 	strcpy(name, "terminal.");
-	strcat(name, term_name);
+	strcat(name, info->name);
 
 	/* Unlock the default _template_ option tree that was asigned by
 	 * init_term() and get the correct one. */
@@ -156,7 +156,7 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 			return 0;
 
 		info->name[MAX_TERM_LEN - 1] = 0;
-		check_terminal_name(term, info->name);
+		check_terminal_name(term, info);
 
 		memcpy(term->cwd, info->cwd, MAX_CWD_LEN);
 		term->cwd[MAX_CWD_LEN - 1] = 0;

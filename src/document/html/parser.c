@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.218 2003/10/12 15:28:05 pasky Exp $ */
+/* $Id: parser.c,v 1.219 2003/10/13 12:50:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2189,8 +2189,13 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		} else if (!strcasecmp(wrap_attr, "soft")
 			   || !strcasecmp(wrap_attr, "virtual")) {
 			fc->wrap = 1;
+		} else if (!strcasecmp(wrap_attr, "none")
+			   || !strcasecmp(wrap_attr, "off")) {
+			fc->wrap = 0;
 		}
 		mem_free(wrap_attr);
+	} else {
+		fc->wrap = 1;
 	}
 
 	fc->maxlength = get_num(attr, "maxlength");

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-02-11 22:37+0100\n"
-"PO-Revision-Date: 2005-02-17 00:46+0100\n"
+"PO-Revision-Date: 2005-03-01 23:04+0100\n"
 "Last-Translator: Morten Bo Johansen <mojo@mbjnet.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -7310,11 +7310,11 @@ msgstr "Indsend formular og ~overfør fil"
 
 #: src/viewer/text/link.c:1213
 msgid "V~iew image"
-msgstr "~Vis billede"
+msgstr "V~is billede"
 
 #: src/viewer/text/link.c:1215
 msgid "Download ima~ge"
-msgstr "Hent ~billede"
+msgstr "Hent bille~de"
 
 #: src/viewer/text/link.c:1223
 msgid "No link selected"

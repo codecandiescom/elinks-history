@@ -1,5 +1,5 @@
 /* Format conversion functions */
-/* $Id: conv.c,v 1.2 2002/04/27 21:21:20 pasky Exp $ */
+/* $Id: conv.c,v 1.3 2002/04/28 15:42:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,10 +33,8 @@ add_htmlesc_str(unsigned char **str, int *strl,
 		unsigned char *ostr, int ostrl)
 {
 
-#define accept_char(x) ((upcase((x)) >= 'A' && upcase((x)) <= 'Z') ||\
-		((x) >= '0' && (x) <= '9') || (x) == ' ' ||\
-		(x) == '-' || (x) == '_' || (x) == '.' ||\
-		(x) == ':' || (x) == ';')
+#define accept_char(x) (isA((x)) || (x) == ' ' || (x) == '.' \
+			|| (x) == ':' || (x) == ';')
 
 	for (; ostrl; ostrl--, ostr++) {
 		if (accept_char(*ostr)) {

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.288 2004/07/30 09:46:25 zas Exp $ */
+/* $Id: link.c,v 1.289 2004/08/06 17:03:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,6 +176,9 @@ draw_current_link(struct session *ses, struct document_view *doc_view)
 	assert(term && doc_view && doc_view->vs);
 	if_assert_failed return;
 
+	assert(ses->tab == get_current_tab(term));
+	if_assert_failed return;
+
 	assertm(!doc_view->link_bg, "link background not empty");
 	if_assert_failed mem_free(doc_view->link_bg);
 
@@ -220,7 +223,7 @@ draw_current_link(struct session *ses, struct document_view *doc_view)
 					 && co->color != template->color);
 
 			set_cursor(term, x, y, blockable);
-			set_window_ptr(get_current_tab(term), x, y);
+			set_window_ptr(ses->tab, x, y);
 		}
 
  		template->data = co->data;

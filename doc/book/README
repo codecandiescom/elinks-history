@@ -1,45 +1,50 @@
-			README for ELinks manual
+			README for ELinks Documentation
 
 Introduction:
 -------------
 
-The work on a manual for ELinks has just begun. So now it basicly only contains
-already available documentation. Gradually it will hopefully evolve into a
-complete manual. One reason for this relaxed approach is that a lot of things
-in ELinks is probably going to change during the next major releases so the
-effort might be of better use if it was put into something else. Secondly
-ELinks is pretty straight forward to use so most users will quickly get the
-hang of it.
+The work to provide better documentation for ELinks has just begun. Here you
+will find mostly documentation that has already been made available in some
+other format but has been moved to DocBook. The long term goal is to gradually
+make the documentation evolve into a complete manual.
 
-The manual will hopefully pick up info which enlightens the darker corners of
+- One reason for this relaxed approach is that a lot of things in ELinks is
+  probably going to change during the next major releases so the effort might
+  be of better use if it was put into something else.
+
+- Secondly ELinks is pretty straight forward to use so most users will quickly
+  get the hang of it.
+
+The manual will try to provide info which enlightens the darker sides of
 ELinks. If you have some ideas/tips/info that will help a lost soul or make
 using this great program even better please consider to contribute and make the
 best possible manual for ELinks.
 
-The document type, processing and available formats:
-----------------------------------------------------
+The document type, processing and where to get it:
+--------------------------------------------------
 
-The manual is written using the DocBook DTD. It might be a bit overkill but has
-a few nice features. It is pretty lightweight markup. It is widely used. There
-exists a lot of great tools for processing DocBook documents into various
-formats with the possibility to customize the output.
+The manual is written using the Simplified DocBook DTD basicly this means all
+documents should validate as DocBook/XML. The SGML and XML versions of the DTD
+are almost identical so this is obviously a Good Thing[TM] and it will ensure
+that as many systems as possible will be able to build the documentation.
 
-To make as many systems as possible able to process the manual all documents
-validates as DocBook/XML. The processing can be made using either wrappers like
-the db2*, docbook2* and xmlto or directly calling saxon, xsltproc, jade etc.
-It is the intension to provide a script to test for reasonable defaults and
-take care of the processing so one can just issue make dvidoc or make htmldoc.
+The processing can be made using either wrappers like the db2*, docbook2* and
+xmlto or directly calling saxon, xsltproc, jade etc. A tool has been made to
+work with the buildsystem and make processing easy, but it will only search
+your system for a limited amount of possible installed docbook processing
+tools. Validation will hopefully also be made part of the processing script
+mentioned above.
 
-For systems without the necessary tools check the manuals web page for
-available formats. (http://elinks.or.cz/documentation/manual)
+For systems without the necessary tools check the documentation web page for
+further info. (http://elinks.or.cz/documentation)
 
 License:
 --------
 
-The manual is distributed under the terms of the GNU Free Documentation
-License, Version 1.1 or any later version published by the Free Software
+The documentation is distributed under the terms of the GNU General Public
+License, Version 2 or any later version published by the Free Software
 Foundation. See the legal notice in manual.sgml for further info. The license
-is included in docbook format in the file fdl.sgml
+is available in the COPYING file present in the source root of ELinks.
 
 How to contribute:
 ------------------
@@ -48,21 +53,12 @@ Contributions are very warmly welcomed. Wether it be fixing of typos or bad
 grammar, rewritings or new material. All info relevant to ELinks usage can be
 included in the manual. Including FAQ material, tips and cheats ;)
 
-There is no codingstyle. But please don't limit your use of whitespace and take
-a look at the style used in the current documents to get ideas of what is
-reasonable.
-
-To make as many systems as possible able to process the manual all documents
-should validate as DocBook/XML. The SGML and XML versions of the DTD are almost
-identical so this obviously a Good Thing[TM]. Validation will hopefully also be
-made part of the processing script mentioned above.
+There is no strict codingstyle. But please don't limit your use of whitespace
+and take a look at the style used in the current documents to get ideas of what
+is reasonable.
 
 Contributions should be sent to Jonas Fonseca <fonseca@diku.dk>. If your changing
 something in an existing document please read about how to make unified patches
 in the Patches section of the doc/hacking.txt file.
 
-All contributors will be credited as authors. If you don't want to have your
-email address published then drop a note about it. Contributions of course will
-also be licensed under the GNU FDL.
-
-$Id: README,v 1.1 2002/12/28 19:49:20 jonas Exp $
+$Id: README,v 1.2 2003/05/09 01:25:48 jonas Exp $

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.146 2004/05/31 12:09:17 jonas Exp $ */
+/* $Id: cookies.c,v 1.147 2004/05/31 12:17:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -247,7 +247,6 @@ set_cookie(struct uri *uri, unsigned char *str)
 {
 	unsigned char *date, *secure;
 	struct cookie *cookie;
-	struct c_server *cs;
 	struct cookie_str cstr;
 
 	if (get_cookies_accept_policy() == COOKIES_ACCEPT_NONE)
@@ -281,6 +280,19 @@ set_cookie(struct uri *uri, unsigned char *str)
 		free_cookie(cookie);
 		return;
 	}
+
+#if 0
+	/* We don't actually set ->accept at the moment. But I have kept it
+	 * since it will maybe help to fix bug 77 - Support for more
+	 * finegrained control upon accepting of cookies. */
+	if (!cookie->server->accept) {
+#ifdef COOKIES_DEBUG
+		DBG("Dropped.");
+#endif
+		free_cookie(cookie);
+		return;
+	}
+#endif
 
 	/* Get expiration date */
 
@@ -380,19 +392,6 @@ set_cookie(struct uri *uri, unsigned char *str)
 
 	cookie->id = cookie_id++;
 
-	foreach (cs, c_servers) {
-		if (strlcasecmp(cs->server, -1, uri->host, uri->hostlen))
-			continue;
-
-		if (cs->accept)	goto ok;
-
-#ifdef COOKIES_DEBUG
-		DBG("Dropped.");
-#endif
-		free_cookie(cookie);
-		return;
-	}
-
 	/* We have already check COOKIES_ACCEPT_NONE */
 	if (get_cookies_accept_policy() == COOKIES_ACCEPT_ASK) {
 		add_to_list(cookie_queries, cookie);
@@ -400,7 +399,6 @@ set_cookie(struct uri *uri, unsigned char *str)
 		return;
 	}
 
-ok:
 	accept_cookie(cookie);
 
 	return;

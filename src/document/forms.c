@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: forms.c,v 1.2 2004/12/18 01:42:18 pasky Exp $ */
+/* $Id: forms.c,v 1.3 2004/12/18 01:44:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,14 +53,14 @@ has_form_submit(struct form *form)
 	if_assert_failed return 0;
 
 	foreach (fc, form->items) {
-		found = 1;
 		if (fc->type == FC_SUBMIT || fc->type == FC_IMAGE)
-			break;
+			return 1;
+		found = 1;
 	}
 
 	assertm(found, "form is not on list");
 	/* Return path :-). */
-	return found;
+	return 0;
 }
 
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.432 2004/06/08 13:54:52 jonas Exp $ */
+/* $Id: parser.c,v 1.433 2004/06/08 15:08:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -953,7 +953,7 @@ process_head(unsigned char *head)
 }
 
 static int
-look_for_map(unsigned char **pos, unsigned char *eof, unsigned char *tag)
+look_for_map(unsigned char **pos, unsigned char *eof, struct uri *uri)
 {
 	unsigned char *al, *attr, *name;
 	int namelen;
@@ -976,11 +976,11 @@ look_for_map(unsigned char **pos, unsigned char *eof, unsigned char *tag)
 
 	if (strlcasecmp(name, namelen, "MAP", 3)) return 1;
 
-	if (tag && *tag) {
+	if (uri && uri->fragment) {
 		al = get_attr_val(attr, "name");
 		if (!al) return 1;
 
-		if (strcasecmp(al, tag)) {
+		if (strlcasecmp(al, -1, uri->fragment, uri->fragmentlen)) {
 			mem_free(al);
 			return 1;
 		}
@@ -1041,8 +1041,7 @@ look_for_tag(unsigned char **pos, unsigned char *eof,
 }
 
 static int
-look_for_link(unsigned char **pos, unsigned char *eof,
-	      unsigned char *tag, struct menu_item **menu,
+look_for_link(unsigned char **pos, unsigned char *eof, struct menu_item **menu,
 	      struct memory_list **ml, struct uri *href_base,
 	      unsigned char *target_base, struct conv_table *ct)
 {
@@ -1176,8 +1175,7 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 
 int
 get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
-	      unsigned char *tag, struct menu_item **menu,
-	      struct memory_list **ml, struct uri *href_base,
+	      struct menu_item **menu, struct memory_list **ml, struct uri *uri,
 	      unsigned char *target_base, int to, int def, int hdef)
 {
 	struct conv_table *ct;
@@ -1193,7 +1191,7 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	*menu = mem_calloc(1, sizeof(struct menu_item));
 	if (!*menu) return -1;
 
-	while (look_for_map(&pos, eof, tag));
+	while (look_for_map(&pos, eof, uri));
 
 	if (pos >= eof) {
 		mem_free(*menu);
@@ -1202,8 +1200,7 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 
 	*ml = NULL;
 
-	while (look_for_link(&pos, eof, tag, menu, ml,
-			     href_base, target_base, ct));
+	while (look_for_link(&pos, eof, menu, ml, uri, target_base, ct)) ;
 
 	if (pos >= eof) {
 		freeml(*ml);

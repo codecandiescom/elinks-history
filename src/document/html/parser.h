@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.63 2004/06/05 21:03:18 jonas Exp $ */
+/* $Id: parser.h,v 1.64 2004/06/08 15:08:58 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -162,8 +162,7 @@ void add_fragment_identifier(void *part, unsigned char *attr);
 
 int
 get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
-	      unsigned char *tag, struct menu_item **menu,
-	      struct memory_list **ml, struct uri *href_base,
+	      struct menu_item **menu, struct memory_list **ml, struct uri *uri,
 	      unsigned char *target_base, int to, int def, int hdef);
 
 #endif

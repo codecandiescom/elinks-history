@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.102 2004/06/08 14:51:21 jonas Exp $ */
+/* $Id: task.c,v 1.103 2004/06/08 15:08:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -257,22 +257,18 @@ ses_imgmap(struct session *ses)
 	struct memory_list *ml;
 	struct menu_item *menu;
 	struct uri *uri = ses->loading_uri;
-	unsigned char *pos = NULL;
 
 	if (!cached) {
 		INTERNAL("can't find cache entry");
 		return;
 	}
+
 	defrag_entry(cached);
 	fr = cached->frag.next;
 	if ((void *)fr == &cached->frag) return;
 
-	if (uri && uri->fragment)
-		pos = memacpy(uri->fragment, uri->fragmentlen);
-
 	if (get_image_map(cached->head, fr->data, fr->data + fr->length,
-			  pos, &menu, &ml,
-			  ses->loading_uri, ses->task.target_frame,
+			  &menu, &ml, ses->loading_uri, ses->task.target_frame,
 			  get_opt_int_tree(ses->tab->term->spec, "charset"),
 			  get_opt_int("document.codepage.assume"),
 			  get_opt_int("document.codepage.force_assumed")))

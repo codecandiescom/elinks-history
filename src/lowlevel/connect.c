@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.107 2004/09/14 17:10:09 pasky Exp $ */
+/* $Id: connect.c,v 1.108 2004/09/14 17:14:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -397,6 +397,14 @@ dns_found(void *data, int state)
 				continue;
 			}
 		}
+
+#ifdef CONFIG_IPV6
+		if (family == AF_INET6 && !get_opt_bool("connection.try_ipv6"))
+			continue;
+		else
+#endif
+		if (family == AF_INET && !get_opt_bool("connection.try_ipv4"))
+			continue;
 
 		sock = socket(family, SOCK_STREAM, IPPROTO_TCP);
 		if (sock == -1) {

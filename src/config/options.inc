@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.133 2004/08/18 17:24:16 jonas Exp $ */
+/* $Id: options.inc,v 1.134 2004/09/14 17:14:31 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -93,6 +93,30 @@ struct option_info config_options_info[] = {
 	INIT_OPT_INT("connection", N_("Receive timeout"),
 		"receive_timeout", 0, 1, 1800, 120,
 		N_("Receive timeout (in seconds).")),
+
+#ifdef CONFIG_IPV6
+	INIT_OPT_BOOL("connection", N_("Try IPv4 when connecting"),
+		"try_ipv4", 0, 1,
+		N_("Whether to try to connect to a host over IPv4.\n"
+		"Note that if connection.try_ipv6 is enabled too,\n"
+		"it takes precedence. And better do not touch this\n"
+		"at all unless you are sure what are you doing.")),
+#else
+	INIT_OPT_BOOL("connection", N_("Try IPv4 when connecting"),
+		"try_ipv4", 0, 1,
+		N_("Whether to try to connect to a host over IPv4.\n"
+		"Do not touch this option.")),
+#endif
+
+#ifdef CONFIG_IPV6
+	INIT_OPT_BOOL("connection", N_("Try IPv6 when connecting"),
+		"try_ipv6", 0, 1,
+		N_("Whether to try to connect to a host over IPv6.")),
+#else
+	INIT_OPT_BOOL("connection", N_("Try IPv6 when connecting"),
+		"try_ipv6", 0, 1,
+		N_("Whether to try to connect to a host over IPv6. (DISABLED)"));
+#endif
 
 	INIT_OPT_INT("connection", N_("Timeout for non-restartable connections"),
 		"unrestartable_receive_timeout", 0, 1, 1800, 600,

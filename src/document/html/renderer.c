@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.514 2004/12/19 16:23:22 pasky Exp $ */
+/* $Id: renderer.c,v 1.515 2004/12/20 08:49:26 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -985,14 +985,7 @@ static inline void
 put_link_number(struct part *part)
 {
 	unsigned char s[64];
-	unsigned char *fl = format.link;
-	unsigned char *ft = format.target;
-	unsigned char *fi = format.image;
-	struct form_control *ff = format.form;
 	int slen = 0;
-
-	format.link = format.target = format.image = NULL;
-	format.form = NULL;
 
 	s[slen++] = '[';
 	ulongcat(s, &slen, part->link_num, sizeof(s) - 3, 0);
@@ -1003,16 +996,11 @@ put_link_number(struct part *part)
 	put_chars(part, s, slen);
 	renderer_context.nosearchable = 0;
 
-	if (ff && ff->type == FC_TEXTAREA) line_break(part);
+	if (format.form && format.form->type == FC_TEXTAREA) line_break(part);
 
 	/* We might have ended up on a new line after the line breaking
 	 * or putting the link number chars. */
 	if (part->cx == -1) part->cx = par_format.leftmargin;
-
-	format.link = fl;
-	format.target = ft;
-	format.image = fi;
-	format.form = ff;
 }
 
 #define assert_link_variable(old, new) \
@@ -1229,8 +1217,18 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 		/* For pure spaces reset the link state */
 		if (x_offset == charslen)
 			link_state = LINK_STATE_NONE;
-		else if (global_doc_opts->num_links_display)
-			put_link_number(part);
+		else if (global_doc_opts->num_links_display) {
+			static int putting_link_number;
+
+			if (!putting_link_number) {
+				putting_link_number = 1;
+				put_link_number(part);
+			}
+
+			putting_link_number = 0;
+
+			link_state = get_link_state();
+		}
 	}
 
 	set_hline(part, chars, charslen, link_state);

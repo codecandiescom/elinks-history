@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.32 2003/06/24 14:29:48 zas Exp $ */
+/* $Id: cache.c,v 1.33 2003/06/24 14:47:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -339,6 +339,11 @@ del:
 		}
 		if (f->offset + f->length > off) {
 			f->length = off - f->offset;
+			/* FIXME: quite strange:
+			 * if f->length = off - f->offset
+			 * then -(f->offset + f->length - off) =
+			 * -(f->offset + (off - f->offset) - off) = 0
+			 * Conclusion: it never enlarges ... --Zas */
 			enlarge(e, -(f->offset + f->length - off));
 			if (final) {
 				g = mem_realloc(f, sizeof(struct fragment)

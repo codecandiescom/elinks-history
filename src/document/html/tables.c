@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.260 2004/06/29 02:09:39 jonas Exp $ */
+/* $Id: tables.c,v 1.261 2004/06/29 02:11:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1002,6 +1002,8 @@ get_bordercolor(unsigned char *a, color_t *rgb)
 static void
 parse_table_attributes(struct table *table, unsigned char *attr)
 {
+	table->fragment_id = get_attr_val(attr, "id");
+
 	get_bordercolor(attr, &table->bordercolor);
 }
 
@@ -1035,7 +1037,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	unsigned char *al;
 	struct html_element *state;
 	color_t bgcolor = par_format.bgcolor;
-	unsigned char *fragment_id;
 	int border, cellspacing, vcellpadding, cellpadding, align;
 	int frame, rules, width, has_width;
 	int cye;
@@ -1120,8 +1121,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		mem_free(al);
 	}
 
-	fragment_id = get_attr_val(attr, "id");
-
 	has_width = 0;
 	width = get_width(attr, "width", (part->document || part->box.x));
 	if (width == -1) {
@@ -1147,8 +1146,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	table->rules = rules;
 	table->width = width;
 	/* table->has_width = has_width; not used. */
-	table->fragment_id = fragment_id;
-	fragment_id = NULL;
 
 	format_bad_table_html(table);
 
@@ -1259,6 +1256,5 @@ ret2:
 
 ret0:
 	html_context.table_level--;
-	mem_free_if(fragment_id);
 	if (!html_context.table_level) free_table_cache();
 }

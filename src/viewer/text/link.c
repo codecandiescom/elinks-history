@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.113 2003/11/30 19:45:01 jonas Exp $ */
+/* $Id: link.c,v 1.114 2003/12/01 15:35:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,6 @@
 #include "bookmarks/dialogs.h"
 #include "dialogs/status.h"
 #include "document/document.h"
-#include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "document/options.h"
 #include "intl/gettext/libintl.h"
@@ -37,6 +36,9 @@
 #include "viewer/text/textarea.h"
 #include "viewer/text/view.h"
 #include "viewer/text/vs.h"
+
+/* Unsafe macros */
+#include "document/html/parser.h"
 
 
 /* Perhaps some of these would be more fun to have in viewer/common/, dunno.

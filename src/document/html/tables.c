@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.130 2003/11/27 16:02:58 jonas Exp $ */
+/* $Id: tables.c,v 1.131 2003/12/01 15:35:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,7 +11,6 @@
 
 #include "elinks.h"
 
-#include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "document/html/tables.h"
 #include "document/options.h"
@@ -21,6 +20,9 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
+
+/* Unsafe macros */
+#include "document/html/parser.h"
 
 
 /* Fix namespace clash on MacOS. */

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.263 2003/12/01 13:55:41 pasky Exp $ */
+/* $Id: session.c,v 1.264 2003/12/01 15:35:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,6 @@
 #include "dialogs/menu.h"
 #include "dialogs/status.h"
 #include "document/refresh.h"
-#include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "globhist/globhist.h"
 #include "intl/gettext/libintl.h"
@@ -50,6 +49,9 @@
 #include "viewer/text/form.h"
 #include "viewer/text/link.h"
 #include "viewer/text/view.h"
+
+/* Unsafe macros */
+#include "document/html/parser.h"
 
 
 struct file_to_load {

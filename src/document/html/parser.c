@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.288 2003/12/01 15:30:32 pasky Exp $ */
+/* $Id: parser.c,v 1.289 2003/12/01 15:35:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,6 @@
 #include "config/options.h"
 #include "config/kbdbind.h"
 #include "document/html/frames.h"
-#include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "document/html/tables.h"
 #include "globhist/globhist.h"
@@ -42,6 +41,9 @@
 #include "viewer/text/form.h"
 #include "viewer/text/link.h"
 #include "viewer/text/view.h"
+
+/* Unsafe macros */
+#include "document/html/parser.h"
 
 /* TODO: This needs rewrite. Yes, no kidding. */
 

@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.21 2003/09/16 14:58:53 zas Exp $ */
+/* $Id: hash.c,v 1.22 2003/09/18 19:04:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -307,5 +307,3 @@ strhash(unsigned char *k, /* the key */
 #undef hash_mask
 
 #endif /* MIX_HASH */
-
-

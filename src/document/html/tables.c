@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.51 2003/07/15 12:52:32 jonas Exp $ */
+/* $Id: tables.c,v 1.52 2003/07/20 15:12:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -833,7 +833,7 @@ again:
 	}
 
 	if (w) {
-		if (!lim) internal("bug in dst_width");
+		assertm(lim, "bug in dst_width");
 		lim = NULL;
 		s = 0;
 		goto again;
@@ -924,10 +924,8 @@ get_column_widths(struct table *t)
 
 			if (c->spanned || !c->used) continue;
 
-			if (c->colspan + i > t->x) {
-				internal("colspan out of table");
-				return -1;
-			}
+			assertm(c->colspan + i <= t->x, "colspan out of table");
+			if_assert_failed return -1;
 
 			if (c->colspan == s) {
 				register int k;
@@ -991,8 +989,8 @@ get_table_width(struct table *t)
 
 	t->min_t = min;
 	t->max_t = max;
-	if (min > max)
-		internal("min(%d) > max(%d)", min, max);
+	assertm(min <= max, "min(%d) > max(%d)", min, max);
+	/* XXX: Recovery path? --pasky */
 }
 
 
@@ -1010,9 +1008,7 @@ distribute_widths(struct table *t, int width)
 
 	if (!t->x) return;
 
-	if (d < 0) {
-		internal("too small width %d, required %d", width, t->min_t);
-	}
+	assertm(d >= 0, "too small width %d, required %d", width, t->min_t);
 
 	for (i = 0; i < t->x; i++)
 		if (t->max_c[i] > mmax_c)
@@ -1141,7 +1137,7 @@ a:
 				t->w_c[mii]--;
 				d++;
 			}
-			if (t->w_c[mii] < q) internal("shrinking cell");
+			assertm(t->w_c[mii] >= q, "shrinking cell");
 			wq = 1;
 			if (d) goto a;
 		} else if (!wq) om++;

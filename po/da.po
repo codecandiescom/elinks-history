@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-15 21:21+0100\n"
-"PO-Revision-Date: 2005-01-15 21:24+0100\n"
+"PO-Revision-Date: 2005-01-18 23:37+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -4526,7 +4526,7 @@ msgstr ""
 #: src/dialogs/info.c:200
 #, c-format
 msgid "Memory allocated: %ld bytes, %ld bytes overhead (%0.2f%%)."
-msgstr "Hukommelse allokeret: %ld byte, %ld byte formeget (%0.2f%%)."
+msgstr "Hukommelse allokeret: %ld byte, %ld byte for meget (%0.2f%%)."
 
 #: src/dialogs/info.c:211
 msgid "Resources"
@@ -4566,7 +4566,7 @@ msgstr "Gå ~frem"
 
 #: src/dialogs/menu.c:238 src/dialogs/menu.c:312
 msgid "Bookm~ark document"
-msgstr "Tilføj dokument som bog~mærke"
+msgstr "Tilfø~j dokument som bogmærke"
 
 #: src/dialogs/menu.c:242
 msgid "~Reload"
@@ -4858,11 +4858,11 @@ msgstr "Gem i fil"
 
 #: src/dialogs/menu.c:867
 msgid "~Pass frame URI to external command"
-msgstr "~Videregiv rammens adresse til ekstern kommando"
+msgstr "Videregiv rammens adresse til ekstern ~kommando"
 
 #: src/dialogs/menu.c:872
 msgid "Pass link URI to e~xternal command"
-msgstr "~Videregiv linkadresse til ekstern kommando"
+msgstr "Videregiv linkadresse til ekstern ~kommando"
 
 #: src/dialogs/menu.c:878
 msgid "Pass tab URI to e~xternal command"

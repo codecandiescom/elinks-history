@@ -1,3 +1,17 @@
+Tue Jul  2 22:38:38 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	0.4pre9 
+
+Tue Jul  2 22:38:05 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in, elinkskeys.5, elinkskeys.5.in,
+	contrib/lua/hooks.lua, contrib/lua/hooks.lua.in, src/config/conf.c,
+	src/lua/core.c:
+
+	We now respect sysconfdir and play with it properly ;).  
+
 Tue Jul  2 21:54:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* contrib/conv/old_to_new_bookmarks.sh:

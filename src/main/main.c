@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.11 2002/03/30 21:52:28 pasky Exp $ */
+/* $Id: main.c,v 1.12 2002/04/01 15:52:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,7 @@
 #include <document/cache.h>
 #include <document/download.h>
 #include <document/dump.h>
+#include <document/globhist.h>
 #include <document/session.h>
 #include <document/html/colors.h>
 #include <document/html/renderer.h>
@@ -288,6 +289,7 @@ init()
 	load_config();
 	init_b = 1;
 	read_bookmarks();
+	read_global_history();
 	load_url_history();
 	init_cookies();
 #ifdef HAVE_LUA
@@ -350,6 +352,7 @@ terminate_all_subsystems()
 	shrink_memory(1);
 	if (init_b) save_url_history();
 	free_history_lists();
+	finalize_global_history();
 	free_term_specs();
 	free_types();
 	free_auth();

@@ -170,6 +170,7 @@ Michail Litvak <mci@owl.openwall.com>
 
 Miciah Dashiel <theweirdo@subdimension.com>
 	Document-specific colors usage switch possibility, colourful cleanup
+	Global history
 
 Mike Swieton <pyromage@pyromage.net>
 	Fixed bug: Form is not posted when jumping to field by number
@@ -281,4 +282,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	Big amount of bugfixes and tidyups
 	Referred as 'Zas' or 'zas' in the code
 
-$Id: AUTHORS,v 1.43 2002/03/26 16:50:48 pasky Exp $
+$Id: AUTHORS,v 1.44 2002/04/01 15:52:40 pasky Exp $

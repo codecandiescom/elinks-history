@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.17 2002/03/29 10:56:40 pasky Exp $ */
+/* $Id: session.c,v 1.18 2002/04/01 15:52:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@
 #include <document/location.h>
 #include <document/options.h>
 #include <document/session.h>
+#include <document/globhist.h>
 #include <document/view.h>
 #include <document/html/parser.h>
 #include <document/html/renderer.h>
@@ -675,6 +676,8 @@ void doc_end_load(struct status *stat, struct session *ses)
 	} else if (ses->display_timer == -1) display_timer(ses);
 	check_questions_queue(ses);
 	print_screen_status(ses);
+
+	add_to_global_history(cur_loc(ses)->vs.url, ses->screen->f_data->title, time(NULL));
 }
 
 void file_end_load(struct status *stat, struct file_to_load *ftl)

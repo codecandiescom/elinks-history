@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.11 2002/03/28 21:38:50 pasky Exp $ */
+/* $Id: default.c,v 1.12 2002/04/01 15:52:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1020,6 +1020,8 @@ int links_wraparound = 0;
 int allow_special_files = 0;
 int keep_unhistory = 1;
 
+int enable_global_history = 1;
+
 int default_left_margin = HTML_LEFT_MARGIN;
 
 unsigned char fake_referer[MAX_STR_LEN] = "";
@@ -1256,6 +1258,12 @@ struct option links_options[] = {
 		gen_cmd, str_rd, str_wr,
 	 	0, MAX_STR_LEN, fake_referer,
 		"Fake referer to be sent when http-referer is 3." },
+
+		/* XXX: Disable global history if -anonymous is given? */
+	{	"global-history", "enable_global_history",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &enable_global_history,
+	 	"Enable global history (\"history of all pages visited\")?" },
 
 	{	"keep-unhistory", "keep_unhistory",
 		gen_cmd, num_rd, num_wr,

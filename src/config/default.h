@@ -1,4 +1,4 @@
-/* $Id: default.h,v 1.3 2002/03/18 11:34:02 pasky Exp $ */
+/* $Id: default.h,v 1.4 2002/04/01 15:52:41 pasky Exp $ */
 
 #ifndef EL__CONFIG_DEFAULT_H
 #define EL__CONFIG_DEFAULT_H
@@ -69,6 +69,8 @@ extern int receive_timeout;
 extern int unrestartable_receive_timeout;
 
 extern int keep_unhistory;
+
+extern int enable_global_history;
 
 extern struct document_setup dds;
 

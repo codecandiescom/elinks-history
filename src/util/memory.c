@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.9 2002/11/29 20:59:53 pasky Exp $ */
+/* $Id: memory.c,v 1.10 2002/12/03 22:00:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,7 @@
 #include "util/memory.h"
 
 
-#ifndef LEAK_DEBUG
+#if !defined(LEAK_DEBUG) && defined(DEBUG)
 
 static int alloc_try = 0;
 
@@ -108,4 +108,4 @@ mem_realloc(void *p, size_t size)
 	return p;
 }
 
-#endif /* LEAK_DEBUG */
+#endif /* !LEAK_DEBUG && DEBUG */

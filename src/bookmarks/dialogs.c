@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.186 2004/12/14 01:58:49 miciah Exp $ */
+/* $Id: dialogs.c,v 1.187 2004/12/14 18:25:18 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -337,7 +337,8 @@ do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 		 struct listbox_data *box)
 {
 	struct bookmark *bm, *next;
-	int blind_insert = (destb && desti);
+
+	assert((destb && desti) || (!destb && !desti));
 
 	foreachsafe (bm, next, *src) {
 		if (bm != dest /* prevent moving a folder into itself */
@@ -355,14 +356,14 @@ do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 
 			del_from_list(bm->box_item);
 			del_from_list(bm);
-			add_at_pos((!blind_insert ? dest
+			add_at_pos((!destb ? dest
 						 : (struct bookmark *) destb),
 				   bm);
-			add_at_pos((!blind_insert ? dest->box_item
+			add_at_pos((!desti ? dest->box_item
 						 : (struct listbox_item *) desti),
 				   bm->box_item);
 
-			if (blind_insert) {
+			if (destb) {
 				bm->root = dest;
 			} else {
 				bm->root = dest->root;
@@ -372,7 +373,7 @@ do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 				update_depths(bm->box_item);
 
 			dest = bm;
-			blind_insert = 0;
+			desti = destb = NULL;
 
 			/* We don't want to care about anything marked inside
 			 * of the marked folder, let's move it as a whole
@@ -382,9 +383,7 @@ do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 		}
 
 		if (bm->box_item->type == BI_FOLDER) {
- 			do_move_bookmark(dest, blind_insert ? destb : NULL,
-					 blind_insert ? desti : NULL,
-					 &bm->child, box);
+ 			do_move_bookmark(dest, destb, desti, &bm->child, box);
 		}
 	}
 }

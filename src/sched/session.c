@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.252 2003/11/27 06:56:48 witekfl Exp $ */
+/* $Id: session.c,v 1.253 2003/11/29 16:46:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,43 +85,45 @@ struct file_to_load *request_additional_loading_file(struct session *,
 static unsigned char *
 get_stat_msg(struct download *stat, struct terminal *term)
 {
-	if (stat->state == S_TRANS && stat->prg->elapsed / 100) {
-		struct string msg;
+	struct string msg;
 
-		if (!init_string(&msg)) return NULL;
+	if (stat->state != S_TRANS || !(stat->prg->elapsed / 100)) {
 
-		add_to_string(&msg, _("Received", term));
-		add_char_to_string(&msg, ' ');
-		add_xnum_to_string(&msg, stat->prg->pos + stat->prg->start);
-		if (stat->prg->size >= 0) {
-			add_char_to_string(&msg, ' ');
-			add_to_string(&msg, _("of", term));
-			add_char_to_string(&msg, ' ');
-			add_xnum_to_string(&msg, stat->prg->size);
-		}
-		add_to_string(&msg, ", ");
-		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
-			add_to_string(&msg, _("avg", term));
-			add_char_to_string(&msg, ' ');
-		}
-		add_xnum_to_string(&msg, (longlong)stat->prg->loaded * 10
-					 / (stat->prg->elapsed / 100));
-		add_to_string(&msg, "/s");
-		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
-			add_to_string(&msg, ", ");
-			add_to_string(&msg, _("cur", term));
-			add_char_to_string(&msg, ' '),
-			add_xnum_to_string(&msg, stat->prg->cur_loaded
-						 / (CURRENT_SPD_SEC
-						 * SPD_DISP_TIME / 1000));
-			add_to_string(&msg, "/s");
-		}
-
-		return msg.source;
+		/* debug("%d -> %s", stat->state, _(get_err_msg(stat->state), term)); */
+		return stracpy(get_err_msg(stat->state, term));
 	}
 
-	/* debug("%d -> %s", stat->state, _(get_err_msg(stat->state), term)); */
-	return stracpy(get_err_msg(stat->state, term));
+
+	if (!init_string(&msg)) return NULL;
+
+	add_to_string(&msg, _("Received", term));
+	add_char_to_string(&msg, ' ');
+	add_xnum_to_string(&msg, stat->prg->pos + stat->prg->start);
+	if (stat->prg->size >= 0) {
+		add_char_to_string(&msg, ' ');
+		add_to_string(&msg, _("of", term));
+		add_char_to_string(&msg, ' ');
+		add_xnum_to_string(&msg, stat->prg->size);
+	}
+	add_to_string(&msg, ", ");
+	if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
+		add_to_string(&msg, _("avg", term));
+		add_char_to_string(&msg, ' ');
+	}
+	add_xnum_to_string(&msg, (longlong)stat->prg->loaded * 10
+		/ (stat->prg->elapsed / 100));
+	add_to_string(&msg, "/s");
+	if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
+		add_to_string(&msg, ", ");
+		add_to_string(&msg, _("cur", term));
+		add_char_to_string(&msg, ' '),
+		add_xnum_to_string(&msg, stat->prg->cur_loaded
+			/ (CURRENT_SPD_SEC
+				* SPD_DISP_TIME / 1000));
+		add_to_string(&msg, "/s");
+	}
+
+	return msg.source;
 }
 
 extern struct document_options *global_doc_opts;

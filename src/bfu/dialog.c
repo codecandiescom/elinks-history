@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.31 2003/05/06 13:34:22 zas Exp $ */
+/* $Id: dialog.c,v 1.32 2003/05/06 15:30:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,12 +51,12 @@ do_dialog(struct terminal *term, struct dialog *dlg,
 
 	dd = mem_alloc(sizeof(struct dialog_data) +
 		       sizeof(struct widget_data) * n);
-	if (dd) {
-		dd->dlg = dlg;
-		dd->n = n;
-		dd->ml = ml;
-		add_window(term, dialog_func, dd);
-	}
+	if (!dd) return NULL;
+
+	dd->dlg = dlg;
+	dd->n = n;
+	dd->ml = ml;
+	add_window(term, dialog_func, dd);
 
 	return dd;
 }
@@ -116,7 +116,7 @@ dialog_func(struct window *win, struct event *ev, int fwd)
 		return;
 	}
 
- 	switch (ev->ev) {
+	switch (ev->ev) {
 		case EV_INIT:
 			for (i = 0; i < dlg->n; i++) {
 				struct widget_data *widget = &dlg->items[i];
@@ -281,17 +281,19 @@ check_dialog(struct dialog_data *dlg)
 	int i;
 
 	for (i = 0; i < dlg->n; i++) {
-		if (dlg->dlg->items[i].type == D_CHECKBOX ||
-		    dlg->dlg->items[i].type == D_FIELD ||
-		    dlg->dlg->items[i].type == D_FIELD_PASS) {
-			if (dlg->dlg->items[i].fn &&
-			    dlg->dlg->items[i].fn(dlg, &dlg->items[i])) {
-				dlg->selected = i;
-				redraw_dialog(dlg);
-				return 1;
-			}
+		if (dlg->dlg->items[i].type != D_CHECKBOX &&
+		    dlg->dlg->items[i].type != D_FIELD &&
+		    dlg->dlg->items[i].type != D_FIELD_PASS)
+			continue;
+
+		if (dlg->dlg->items[i].fn &&
+		    dlg->dlg->items[i].fn(dlg, &dlg->items[i])) {
+			dlg->selected = i;
+			redraw_dialog(dlg);
+			return 1;
 		}
 	}
+
 	return 0;
 }
 
@@ -329,19 +331,17 @@ ok_dialog(struct dialog_data *dlg, struct widget_data *di)
 	return cancel_dialog(dlg, di);
 }
 
-/* FIXME? Added to clear fields in bookmarks dialogs, may be broken if used
- * elsewhere. --Zas */
 int
 clear_dialog(struct dialog_data *dlg, struct widget_data *di)
 {
 	int i;
 
 	for (i = 0; i < dlg->n; i++) {
-		if (dlg->dlg->items[i].type == D_FIELD ||
-		    dlg->dlg->items[i].type == D_FIELD_PASS) {
-			memset(dlg->items[i].cdata, 0, dlg->dlg->items[i].dlen);
-			dlg->items[i].cpos = 0;
-		}
+		if (dlg->dlg->items[i].type != D_FIELD &&
+		    dlg->dlg->items[i].type != D_FIELD_PASS)
+			continue;
+		memset(dlg->items[i].cdata, 0, dlg->dlg->items[i].dlen);
+		dlg->items[i].cpos = 0;
 	}
 
 	redraw_dialog(dlg);

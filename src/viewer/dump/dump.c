@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.129 2004/05/14 00:43:27 jonas Exp $ */
+/* $Id: dump.c,v 1.130 2004/05/16 12:11:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -198,52 +198,7 @@ dump_print(unsigned char *option, struct string *url)
 	}
 }
 
-void
-dump_pre_start(struct list_head *url_list)
-{
-	static INIT_LIST_HEAD(todo_list);
-	static INIT_LIST_HEAD(done_list);
-	struct string_list_item *item;
-
-	if (url_list) {
-		/* Steal all them nice list items but keep the same order */
-		while (!list_empty(*url_list)) {
-			item = url_list->next;
-			del_from_list(item);
-			add_to_list_end(todo_list, item);
-		}
-	}
-
-	/* Dump each url list item one at a time */
-	if (!list_empty(todo_list)) {
-		static int first = 1;
-
-		terminate = 0;
-
-		item = todo_list.next;
-		del_from_list(item);
-		add_to_list(done_list, item);
-
-		if (!first) {
-			dump_print("document.dump.separator", NULL);
-		} else {
-			first = 0;
-		}
-
-		dump_print("document.dump.header", &item->string);
-		dump_start(item->string.source);
-		/* XXX: I think it ought to print footer at the end of
-		 * the whole dump (not only this file). Testing required.
-		 * --pasky */
-		dump_print("document.dump.footer", &item->string);
-
-	} else {
-		free_string_list(&done_list);
-		terminate = 1;
-	}
-}
-
-void
+static void
 dump_end(struct download *status, void *p)
 {
 	struct cache_entry *cached = status->cached;
@@ -288,7 +243,7 @@ terminate:
 	dump_pre_start(NULL);
 }
 
-void
+static void
 dump_start(unsigned char *url)
 {
 	unsigned char *wd = get_cwd();
@@ -317,6 +272,51 @@ terminate:
 	}
 
 	if (uri) done_uri(uri);
+}
+
+void
+dump_pre_start(struct list_head *url_list)
+{
+	static INIT_LIST_HEAD(todo_list);
+	static INIT_LIST_HEAD(done_list);
+	struct string_list_item *item;
+
+	if (url_list) {
+		/* Steal all them nice list items but keep the same order */
+		while (!list_empty(*url_list)) {
+			item = url_list->next;
+			del_from_list(item);
+			add_to_list_end(todo_list, item);
+		}
+	}
+
+	/* Dump each url list item one at a time */
+	if (!list_empty(todo_list)) {
+		static int first = 1;
+
+		terminate = 0;
+
+		item = todo_list.next;
+		del_from_list(item);
+		add_to_list(done_list, item);
+
+		if (!first) {
+			dump_print("document.dump.separator", NULL);
+		} else {
+			first = 0;
+		}
+
+		dump_print("document.dump.header", &item->string);
+		dump_start(item->string.source);
+		/* XXX: I think it ought to print footer at the end of
+		 * the whole dump (not only this file). Testing required.
+		 * --pasky */
+		dump_print("document.dump.footer", &item->string);
+
+	} else {
+		free_string_list(&done_list);
+		terminate = 1;
+	}
 }
 
 /* Using this function in dump_to_file() is unfortunately slightly slower than

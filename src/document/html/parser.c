@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.499 2004/09/24 19:14:24 pasky Exp $ */
+/* $Id: parser.c,v 1.500 2004/09/29 15:05:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -477,7 +477,8 @@ not_processed:
 			 * standards mode (and we should just look for CDATA
 			 * end, which is "</"). --pasky */
 			if (eof - *end >= 3 && !strncmp(*end, "-->", 3)) {
-				(*end) += 3;
+				/* Next iteration will jump passed the ending '>' */
+				(*end) += 2;
 				in_comment = 0;
 			}
 			continue;

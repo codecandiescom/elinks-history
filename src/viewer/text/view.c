@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.213 2003/10/02 15:29:52 zas Exp $ */
+/* $Id: view.c,v 1.214 2003/10/05 12:54:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -860,7 +860,7 @@ current_frame(struct session *ses)
 		if (document_has_frames(fd->document)) continue;
 		if (!i--) return fd;
 	}
-	fd = cur_loc(ses)->vs.view;
+	fd = ses->screen;
 
 	assert(fd && fd->document);
 	if_assert_failed return NULL;

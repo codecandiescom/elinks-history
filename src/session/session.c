@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.317 2004/03/22 02:43:48 jonas Exp $ */
+/* $Id: session.c,v 1.318 2004/03/22 02:51:47 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -206,13 +206,12 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 	pos = extract_fragment(url);
 
 	/* strlen(url) without + 1 since vs have already reserved one byte. */
-	frame = mem_alloc(sizeof(struct frame) + strlen(url));
+	frame = mem_calloc(1, sizeof(struct frame) + strlen(url));
 	if (!frame) {
 		mem_free(url);
 		if (pos) mem_free(pos);
 		return;
 	}
-	memset(frame, 0, sizeof(struct frame));
 
 	frame->name = stracpy(name);
 	if (!frame->name) {

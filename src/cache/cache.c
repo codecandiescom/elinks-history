@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.123 2004/04/03 01:35:51 jonas Exp $ */
+/* $Id: cache.c,v 1.124 2004/04/03 02:11:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -490,41 +490,40 @@ delete_cache_entry(struct cache_entry *ce)
 struct uri *
 get_cache_redirect_uri(struct cache_entry *entry)
 {
-	/* XXX: I am a little puzzled whether we should only use the cache
-	 * entry's URI if it is valid. Hopefully always using it won't hurt
-	 * --jonas */
-	struct uri *base = entry->uri;
-	unsigned char *basestring = base ? struri(base) : NULL;
-	unsigned char *uristring = empty_string_or_(basestring);
-	struct uri *uri;
-
-	uristring = join_urls(uristring, entry->redirect);
-	if (!uristring) return NULL;
-
-	/* According to RFC2068 POST must not be redirected to GET,
-	 * but some BUGGY message boards rely on it :-( */
-	if (base
-	    && base->post
-	    && !entry->redirect_get
-	    && !get_opt_int("protocol.http.bugs.broken_302_redirect")) {
-		/* XXX: Add POST_CHAR and post data assuming URI components
-		 * belong to one string. */
-		add_to_strn(&uristring, base->post - 1);
-	}
-
-	uri = get_uri(uristring, -1);
-	mem_free(uristring);
-
-	return uri;
+	return get_uri(entry->redirect, -1);
 }
 
 int
 redirect_cache(struct cache_entry *cache, unsigned char *location,
 	       int get, int incomplete)
 {
+	unsigned char *uristring;
+
+	/* XXX: I am a little puzzled whether we should only use the cache
+	 * entry's URI if it is valid. Hopefully always using it won't hurt.
+	 * Currently we handle direction redirects where "/" should be appended
+	 * special dunno if join_urls() could be made to handle that.
+	 * --jonas */
+	if (location[0] == '/' && location[1] == 0)
+		uristring = straconcat(struri(cache->uri), location, NULL);
+	else
+		uristring = join_urls(struri(cache->uri), location);
+	if (!uristring) return NULL;
+
+	/* According to RFC2068 POST must not be redirected to GET,
+	 * but some BUGGY message boards rely on it :-( */
+	if (cache->uri
+	    && cache->uri->post
+	    && !cache->redirect_get
+	    && !get_opt_int("protocol.http.bugs.broken_302_redirect")) {
+		/* XXX: Add POST_CHAR and post data assuming URI components
+		 * belong to one string. */
+		add_to_strn(&uristring, cache->uri->post - 1);
+	}
+
 	if (cache->redirect) mem_free(cache->redirect);
 
-	cache->redirect = straconcat(struri(cache->uri), location, NULL);
+	cache->redirect = uristring;
 	cache->redirect_get = get;
 	if (incomplete >= 0) cache->incomplete = incomplete;
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.471 2004/07/01 16:29:36 zas Exp $ */
+/* $Id: renderer.c,v 1.472 2004/07/01 18:39:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,6 +46,8 @@
 
 /* Tags are used for ``id''s or anchors in the document referenced by the
  * fragment part of the URI. */
+/* FIXME: This and find_tag() should be part of the general infrastructure
+ * in document/document.*. --pasky */
 struct tag {
 	LIST_HEAD(struct tag);
 

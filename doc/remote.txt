@@ -28,17 +28,17 @@ Limitations and outstanding issues
 
 Remote control is implemented using the intercommunication socket created in
 ~/.elinks/, so the command has to be run on the same machine as the instance
-you want to control. Or put differently: the two ELinks' need to share a file
+you want to control. Or put differently: the two ELinkses need to share a file
 system that supports socket files, which rules out usage of -remote over NFS.
 This also implies that the ELinks instance you want to control should be
-started without passing neither -no-home nor -no-connect.
+started without passing -no-home nor -no-connect.
 
 The built-in -remote support is to some degree compatible with the one Mozilla
-provides (http://www.mozilla.org/unix/remote.html), but with some home brew
-extensions added and a few unsupported features. All support actions are
+provides (http://www.mozilla.org/unix/remote.html), but with some homebrew
+extensions added and few unsupported features. All the supported actions are
 documented below.
 
-Under some circumstances the use of -remote controlling can cause ELinks to
+Under some circumstances, use of the -remote control can cause ELinks to
 become unresponsive. This is cause by the current key press and mouse focus
 being redirected to new tabs or dialogs opened by the -remote action.
 
@@ -93,4 +93,4 @@ new tabs containing slashdot.org, freshmeat.net and a google search of elinks
 will be opened.
 
 
-$Id: remote.txt,v 1.3 2004/12/16 13:51:25 jonas Exp $
+$Id: remote.txt,v 1.4 2004/12/16 19:47:36 pasky Exp $

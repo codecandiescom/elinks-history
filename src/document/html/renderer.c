@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.91 2003/05/28 00:45:46 zas Exp $ */
+/* $Id: renderer.c,v 1.92 2003/05/28 08:41:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -632,6 +632,7 @@ put_chars_conv(struct part *part, unsigned char *c, int l)
 
 	if (!l) put_chars(part, NULL, 0);
 
+	/* FIXME: Code redundancy with convert_string() in charsets.c. --Zas */
 	while (pp < l) {
 		unsigned char *e;
 
@@ -664,7 +665,7 @@ decode:
 			int i = start;
 
 			if (d_opt->plain) goto putc;
-			while (i < l && c[i] != ';'
+			while (i < l
 			       && ((c[i] >= 'A' && c[i] <= 'Z')
 				   || (c[i] >= 'a' && c[i] <= 'z')
 				   || (c[i] >= '0' && c[i] <= '9')

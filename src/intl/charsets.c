@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.30 2003/05/28 00:45:46 zas Exp $ */
+/* $Id: charsets.c,v 1.31 2003/05/28 08:41:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -576,6 +576,8 @@ convert_string(struct conv_table *ct, unsigned char *c, int l)
 xx:;
 	}
 
+	/* FIXME: Code redundancy with put_chars_conv() in renderer.c. --Zas
+	 */
 	buffer = mem_alloc(ALLOC_GR);
 	if (!buffer) return NULL;
 	while (pp < l) {
@@ -618,7 +620,7 @@ decode:
 			int i = start;
 
 			if (d_opt->plain) goto putc;
-			while (i < l && c[i] != ';'
+			while (i < l
 			       && ((c[i] >= 'A' && c[i] <= 'Z')
 				   || (c[i] >= 'a' && c[i] <= 'z')
 				   || (c[i] >= '0' && c[i] <= '9')

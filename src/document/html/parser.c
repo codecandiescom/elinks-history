@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.93 2003/05/15 22:28:19 zas Exp $ */
+/* $Id: parser.c,v 1.94 2003/05/15 22:40:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3118,6 +3118,7 @@ scan_http_equiv(unsigned char *s, unsigned char *eof, unsigned char **head,
 	unsigned char *name, *attr, *he, *c;
 	int namelen;
 	int tlen = 0;
+	int h = 0;
 
 	if (title) {
 		*title = init_str();
@@ -3138,8 +3139,12 @@ sp:
 	if (parse_element(s, eof, &name, &namelen, &attr, &s)) goto sp;
 
 ps:
+	if (namelen == 4 && !strncasecmp(name, "HEAD", 4)) {
+		h = 1;
+		goto se;
+	}
 	if (namelen == 5 && !strncasecmp(name, "/HEAD", 5)) return;
-	if (title && !tlen && namelen == 5 && !strncasecmp(name, "TITLE", 5)) {
+	if (title && h && !tlen && namelen == 5 && !strncasecmp(name, "TITLE", 5)) {
 		unsigned char *s1;
 
 xse:
@@ -3158,7 +3163,7 @@ xsp:
 		clr_spaces(*title);
 		goto ps;
 	}
-	if (namelen != 4 || strncasecmp(name, "META", 4)) goto se;
+	if (!h || namelen != 4 || strncasecmp(name, "META", 4)) goto se;
 
 	he = get_attr_val(attr, "charset");
 	if (he) {

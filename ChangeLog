@@ -1,3 +1,79 @@
+Wed Sep 17 15:43:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/auth.c:
+
+	Ooops, fix for stupid thing in last patch ;).  
+
+Wed Sep 17 15:32:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/auth.c:
+
+	Auth dialog was badly formatted. We now consider sticker text width
+	before drawing it.  
+
+Wed Sep 17 01:30:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/charsets.c:
+
+	convert_string(): Fix potential leak.  
+
+Wed Sep 17 01:14:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/memory.h:
+
+	Purge mem_gralloc() and grmask(). IMHO the idea of aligned
+	allocation much more straight forward than the ALLOC_GR ``oriented''
+	so I hope this is ok.  Move ALLOC_GR and comment the alignment mask.  
+
+Wed Sep 17 01:04:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/: string.c, string.h:
+
+	Use mem_align_alloc().  
+
+Wed Sep 17 00:02:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	format_text(): Use mem_align_alloc().  
+
+Tue Sep 16 23:57:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	get_searched(): Use mem_align_alloc().  
+
+Tue Sep 16 23:54:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	encode_multipart(): Use mem_align_alloc().  
+
+Tue Sep 16 23:38:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	do_html_select(): Use mem_align_alloc().  
+
+Tue Sep 16 23:33:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	add_chr(): Use mem_align_alloc().  
+
+Tue Sep 16 23:27:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inphist.c:
+
+	do_tab_compl(): Use mem_align_alloc(). Never tried it before ..
+	great feature! :) 
+
+Tue Sep 16 23:17:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Use mem_align_alloc() for bad html mem. management.  
+
 Tue Sep 16 18:25:43 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/html/tables.c:

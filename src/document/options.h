@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.50 2004/07/12 18:25:41 jonas Exp $ */
+/* $Id: options.h,v 1.51 2004/07/12 18:32:58 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -82,6 +82,9 @@ struct document_options {
 	struct box box;
 	unsigned int needs_height:1;
 	unsigned int needs_width:1;
+
+	/* Internal flag for rerendering */
+	unsigned int no_cache:1;
 
 	/* Active link coloring */
 	/* This is mostly here to make use of this option cache so link

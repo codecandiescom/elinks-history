@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.142 2003/09/08 23:16:14 jonas Exp $ */
+/* $Id: session.c,v 1.143 2003/09/10 08:16:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -261,13 +261,16 @@ print_screen_status(struct session *ses)
 		for (tab_num = 0; tab_num < tabs_count; tab_num++) {
 			struct color_pair *color;
 			struct window *tab = get_tab_by_number(term, tab_num);
+			struct document_view *fd;
 			int xpos = tab_num * tab_width;
 			int msglen;
 
-			if (tab->data && current_frame(tab->data)) {
-				if (current_frame(tab->data)->document->title &&
-				    *(current_frame(tab->data)->document->title))
-					msg = current_frame(tab->data)->document->title;
+			fd = tab->data ? current_frame(tab->data) : NULL;
+
+			if (fd) {
+				if (fd->document->title
+				    && *(fd->document->title))
+					msg = fd->document->title;
 				else
 					msg = _("Untitled", term);
 			} else {

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.210 2004/04/18 00:28:51 jonas Exp $ */
+/* $Id: menu.c,v 1.211 2004/04/18 00:31:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -955,16 +955,15 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 			menu->selected = menu->size - 1;
 		else if (menu->selected >= menu->size)
 			menu->selected = 0;
-		break;
 
-	default:
-		break;
-	}
+		if (!fwd) break;
 
-	if (fwd && (action == ACT_MENU_LEFT || action == ACT_MENU_RIGHT)) {
 		display_mainmenu(win->term, menu);
 		select_menu(win->term, menu);
 		return;
+
+	default:
+		break;
 	}
 
 	if (ev->x > ' ' && ev->x < 256 &&

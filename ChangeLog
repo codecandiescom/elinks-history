@@ -1,3 +1,146 @@
+Thu Mar  3 17:18:59 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	TODO: move timers related code to lowlevel/timer.h.  
+
+Thu Mar  3 17:16:47 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	Move timers related code from select_info() to new count_timers().  
+
+Thu Mar  3 17:13:26 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	Make |timer_id| static to install_timer().  
+
+Thu Mar  3 17:10:00 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	Pass ttime * to check_timers() and make last_time static to
+	select_loop().  
+
+Thu Mar  3 17:05:54 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	Move code from select_loop() to new get_next_timer_time().  
+
+Thu Mar  3 16:18:26 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	kill_timer(): @tm -> @timer, @tt -> @tmp_timer.  
+
+Thu Mar  3 16:10:21 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	install_timer(): @t -> @time, @tm -> @new_timer, @tt -> @timer.  
+
+Thu Mar  3 15:54:54 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	Simplify check_bottom_halves() code.  
+
+Thu Mar  3 15:49:43 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/: select.c, select.h:
+
+	Rename do_check_bottom_halves() to check_bottom_halves(), moving
+	test from macro of the same name, and make |bottom_halves| static to
+	lowlevel/select.c.  
+
+Thu Mar  3 15:43:26 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, sched/connection.c, sched/connection.h:
+
+	Wrap call to register_bottom_half(check_queue, NULL) in new
+	register_check_queue() and make check_queue() static.  
+
+Thu Mar  3 15:31:57 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, dialogs/download.c, dialogs/menu.c,
+	ecmascript/spidermonkey.c, lowlevel/select.c, lowlevel/select.h,
+	lowlevel/signals.c, sched/connection.c, terminal/kbd.c:
+
+	Rename register_bottom_half() to register_bottom_half_do(), and use
+	a macro named register_bottom_half() to wrap the call and to do
+	needed type casting.  
+
+Thu Mar  3 15:14:20 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: connection.c, connection.h:
+
+	Make |connection_queue| static to sched/connection.c.  
+
+Thu Mar  3 15:11:44 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: cache/cache.c, sched/connection.c, sched/connection.h:
+
+	Move is_entry_used() from cache/cache.c to sched/connection.{c,h}.  
+
+Thu Mar  3 15:06:50 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: cache/cache.c, sched/connection.c, sched/connection.h:
+
+	Rename |queue| to |connection_queue|.  
+
+Thu Mar  3 12:21:12 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.c:
+
+	Prepare indentation for the bittorrent_protocol_handler.  
+
+Thu Mar  3 12:19:45 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/default.c:
+
+	Prepare indentation for .torrent <-> application/x-bittorrent
+	association.  
+
+Thu Mar  3 11:39:09 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/document.c:
+
+	Center the nowhere box text.  
+
+Thu Mar  3 10:48:00 2005  Laurent Monin <zas@norz.org>:
+
+	* po/README:
+
+	README was updated, plural forms handling is now described.  
+
+Thu Mar  3 00:09:44 2005  Laurent Monin <zas@norz.org>:
+
+	* src/intl/gettext/libintl.h:
+
+	Introduce intl_set_charset() to reduce code redundancy. As a side
+	effect it fixes a compilation issue when DEBUG_IT is defined.  
+
+Wed Mar  2 23:59:33 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation cleanup.  
+
+Wed Mar  2 23:15:01 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated (plural forms for info dialogs).  
+
+Wed Mar  2 23:11:19 2005  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/info.c:
+
+	Rework get_resource_info() to make it more i18n compliant, and use
+	plural forms through n_().  
+
 Wed Mar  2 23:02:35 2005  Laurent Monin <zas@norz.org>:
 
 	* src/intl/gettext/libintl.h:

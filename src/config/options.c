@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.220 2003/06/11 08:39:05 miciah Exp $ */
+/* $Id: options.c,v 1.221 2003/06/11 15:35:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -182,7 +182,7 @@ get_opt_(unsigned char *file, int line, struct option *tree,
 	 unsigned char *name)
 #else
 void *
-get_opt(struct option *tree, unsigned char *name)
+get_opt_(struct option *tree, unsigned char *name)
 #endif
 {
 	struct option *opt = get_opt_rec(tree, name);

@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.7 2003/06/08 16:51:08 jonas Exp $ */
+/* $Id: default.c,v 1.8 2003/06/08 17:18:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,32 +26,32 @@ get_content_type_default(unsigned char *url)
 {
 	struct option *opt_tree;
 	struct option *opt;
-	int url_len = strlen(url);
+	unsigned char *urlend = url + strlen(url) - 1;
 
-	if (!url_len) return NULL;
+	if (urlend <= url)
+		return NULL;
 
 	opt_tree = get_opt_rec_real(&root_options, "mime.extension");
 
 	foreach (opt, *((struct list_head *) opt_tree->ptr)) {
-		int namelen = strlen(opt->name) - 1;
+		unsigned char *namepos = opt->name + strlen(opt->name) - 1;
+		unsigned char *extpos = urlend;
 
 		/* Match the longest possible part of URL.. */
 
-		url_len--;
-
 #define star2dot(achar)	((achar) == '*' ? '.' : (achar))
 
-		while (url_len >= 0 && namelen >= 0
-		       && url[url_len] == star2dot(opt->name[namelen])) {
-			url_len--;
-			namelen--;
+		while (url <= extpos && opt->name <= namepos
+		       && *extpos == star2dot(*namepos)) {
+			extpos--;
+			namepos--;
 		}
 
 #undef star2dot
 
 		/* If we matched whole extension and it is really an
 		 * extension.. */
-		if (namelen < 0 && url_len >= 0 && url[url_len] == '.') {
+		if (namepos < opt->name && url < extpos && *extpos == '.') {
 			return stracpy(opt->ptr);
 		}
 	}

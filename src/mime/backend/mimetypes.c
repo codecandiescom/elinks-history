@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.6 2003/06/06 23:14:53 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.7 2003/06/06 23:20:54 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -35,8 +35,10 @@ struct mimetypes_entry {
 };
 
 /* State variables */
-static int mimetypes_map_size = 0;
 static struct hash *mimetypes_map = NULL;
+static int mimetypes_map_size = 0;
+static struct option *mimetypes_tree = NULL;
+
 
 static void
 free_mimetypes_entry(struct mimetypes_entry *entry)
@@ -148,20 +150,29 @@ parse_mimetypes_file(unsigned char *filename)
 
 #undef skip_whitespace
 
+static int
+mimetypes_change_hook(struct session *, struct option *, struct option *);
+
 static void
 init_mimetypes(void)
 {
 	unsigned char *path;
 
-	if (!get_opt_bool("mime.mimetypes.enable"))
-		return; /* and leave mailcap_map = NULL */
+	/* Check and do stuff that should only be done once. */
+	if (!mimetypes_tree) {
+		mimetypes_tree = get_opt_rec(&root_options, "mime.mimetypes");
+		mimetypes_tree->change_hook = mimetypes_change_hook;
+
+		if (!get_opt_bool_tree(mimetypes_tree, "enable"))
+			return;
+	}
 
 	mimetypes_map = init_hash(8, &strhash);
 	if (!mimetypes_map)
 		return;
 
 	/* Determine the path  */
-	path = get_opt_str("mime.mimetypes.path");
+	path = get_opt_str_tree(mimetypes_tree, "path");
 	if (!path || !*path)
 		path = DEFAULT_MIMETYPES_PATH;
 
@@ -195,6 +206,27 @@ done_mimetypes(void)
 	mimetypes_map_size = 0;
 }
 
+static int
+mimetypes_change_hook(struct session *ses, struct option *current,
+		      struct option *changed)
+{
+	if (!strncasecmp(changed->name, "path", 4)) {
+		/* Brute forcing reload! */
+		done_mimetypes();
+		init_mimetypes();
+	} else if (!strncasecmp(changed->name, "enable", 6)) {
+		int enable = *((int *) changed->ptr);
+
+		if(enable && !mimetypes_map)
+			init_mimetypes();
+		else if (!enable && mimetypes_map)
+			done_mimetypes();
+	}
+
+	return 0;
+}
+
+
 static unsigned char *
 get_content_type_mimetypes(unsigned char *url)
 {
@@ -202,13 +234,8 @@ get_content_type_mimetypes(unsigned char *url)
 	struct hash_item *item;
 	int extensionlen;
 
-	/* Check if mailcap support is disabled */
-	if (!get_opt_bool("mime.mimetypes.enable"))
-		return NULL;
-
-	/* If the map was not initialized do it now. */
 	if (!mimetypes_map)
-		init_mimetypes();
+		return NULL;
 
 	extensionlen = get_extension_from_url(url, &extension);
 

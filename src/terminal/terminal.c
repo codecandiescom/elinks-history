@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.47 2003/10/30 15:50:55 zas Exp $ */
+/* $Id: terminal.c,v 1.48 2003/11/27 13:53:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,6 +154,9 @@ init_term(int fdin, int fdout,
 	term->blocked = -1;
 	term->spec = get_opt_rec(config_options, "terminal._template_");
 
+	/* Lock the term specs so it can not be deleted */
+	object_lock(term->spec);
+
 	add_to_list(terminals, term);
 
 	set_handlers(fdin, (void (*)(void *)) in_term, NULL,
@@ -203,6 +206,7 @@ destroy_terminal(struct terminal *term)
 #endif
 	}
 
+	object_unlock(term->spec);
 	mem_free(term);
 	check_if_no_terminal();
 }

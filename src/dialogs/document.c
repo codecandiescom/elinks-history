@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.67 2003/12/01 15:01:28 pasky Exp $ */
+/* $Id: document.c,v 1.68 2003/12/01 15:01:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,8 +15,8 @@
 #include "elinks.h"
 
 #include "bfu/msgbox.h"
-#include "dialogs/document.h"
 #include "cache/cache.h"
+#include "dialogs/document.h"
 #include "document/html/renderer.h"
 #include "document/view.h"
 #include "globhist/globhist.h"

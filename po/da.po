@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-22 14:55+0100\n"
-"PO-Revision-Date: 2005-01-22 15:00+0100\n"
+"PO-Revision-Date: 2005-01-22 18:45+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -235,11 +235,11 @@ msgstr ""
 
 #: src/bfu/leds.c:89
 msgid "LEDs"
-msgstr "LEDs"
+msgstr "LED-indikatorer"
 
 #: src/bfu/leds.c:91
 msgid "LEDs (visual indicators) options."
-msgstr "LEDs (visuelle indikatorer) indstillinger"
+msgstr "Indstillinger for visuelle LED-indikatorer."
 
 #: src/bfu/leds.c:95
 msgid ""
@@ -280,7 +280,7 @@ msgstr ""
 " |       'I' betyder ingen modus, 'i' betyder indsætning aktiveret\n"
 " `------ Om en SSL forbindelse blev brugt\n"
 "\n"
-"'-' i almindelighed betyder at LED-indikatoreren er deaktiveret."
+"'-' i almindelighed betyder at LED-indikatoren er deaktiveret."
 
 #: src/bfu/menu.c:746
 msgid "Search menu/"
@@ -3863,7 +3863,7 @@ msgstr ""
 "Om timeren skal aktiveres eller ej:\n"
 "0 betyder tæl ikke ned\n"
 "1 betyder tæl ned, men vis ikke timeren\n"
-"2 betyder tæl ned og vis timeren ved LEDs statusindikator"
+"2 betyder tæl ned og vis timeren ved LED-indikatorer"
 
 #: src/config/options.inc:1088
 msgid ""
@@ -3875,7 +3875,7 @@ msgstr ""
 "Om timeren skal aktiveres eller ej:\n"
 "0 betyder tæl ikke ned\n"
 "1 betyder tæl ned, men vis ikke timeren\n"
-"2 betyder tæl ned og vis timeren ved LEDs statusindikator (DEAKTIVERET)"
+"2 betyder tæl ned og vis timeren ved LED-indikatorer (DEAKTIVERET)"
 
 #: src/config/options.inc:1094
 msgid "Duration"
@@ -4731,7 +4731,7 @@ msgstr "~Taster"
 
 #: src/dialogs/menu.c:424
 msgid "LED ~indicators"
-msgstr "LED ~indikatorer"
+msgstr "LED-~indikatorer"
 
 #: src/dialogs/menu.c:427
 msgid "~Bugs information"
@@ -5136,9 +5136,9 @@ msgid ""
 "a bug in the script and it could have halted the whole\n"
 "ELinks, so the script execution was interrupted."
 msgstr ""
-"Det indlejrede script i det aktuelle dokument kørte i mrere end %d\n"
+"Det indlejrede script i det aktuelle dokument kørte i mere end %d\n"
 "sekunder. Dette skyldes sikkert en fejl i scriptet og at scriptet\n"
-"kunne have afsluttet hele ELinks, så scriptet eksekveringen bliv\n"
+"kunne have afsluttet hele ELinks, så scriptet eksekveringen blev\n"
 "afbrudt."
 
 #: src/formhist/dialogs.c:67

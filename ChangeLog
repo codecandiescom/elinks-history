@@ -1,3 +1,69 @@
+Fri Dec 10 18:20:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	html_img(): mem_free*() only when needed.  
+
+Fri Dec 10 18:16:33 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	html_img(): use mem_free_set().  
+
+Fri Dec 10 18:14:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	html_img(): drop another FIXME, please check if correct.  
+
+Fri Dec 10 18:12:20 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	html_img(): reorganize code and drop a FIXME.  
+
+Fri Dec 10 18:05:17 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	html_img(): empty lines and comments cleanup. Two FIXME were added.  
+
+Fri Dec 10 18:00:27 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	html_img(): drop goto and obsolete comments.  
+
+Fri Dec 10 17:51:32 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	html_img(): move code to new put_image_label().  
+
+Fri Dec 10 17:44:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	html_img(): simplify code.  
+
+Fri Dec 10 17:39:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	html_img(): @al -> @usemap_attr,@label ; @tmp -> @new_label.  
+
+Fri Dec 10 17:31:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	html_img(): @u -> @url, free @al asap.  
+
+Fri Dec 10 17:28:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	html_img(): get image source once only, code cleanup.  
+
 Wed Dec  8 18:29:52 2004  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/parser/link.c:

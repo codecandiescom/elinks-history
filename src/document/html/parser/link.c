@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.55 2004/12/10 18:20:35 zas Exp $ */
+/* $Id: link.c,v 1.56 2004/12/13 04:12:01 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -225,17 +225,18 @@ html_img(unsigned char *a)
 	unsigned char *usemap_attr = get_attr_val(a, "usemap");
 
 	if (usemap_attr) {
-		unsigned char *url;
+		unsigned char *map_url;
 
-		url = straconcat("MAP@",
-				 join_urls(html_context.base_href, usemap_attr),
-				 NULL);
+		map_url = straconcat("MAP@",
+				     join_urls(html_context.base_href,
+					       usemap_attr),
+				     NULL);
 		mem_free(usemap_attr);
-		if (!url) return;
+		if (!map_url) return;
 
 		html_stack_dup(ELEMENT_KILLABLE);
-		mem_free_set(&format.link, url);
-		mem_free(url);
+		mem_free_set(&format.link, map_url);
+		mem_free(map_url);
 		format.form = NULL;
 		format.attr |= AT_BOLD;
 		usemap = 1;

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.331 2004/06/30 21:42:27 jonas Exp $ */
+/* $Id: tables.c,v 1.332 2004/06/30 22:39:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -349,6 +349,51 @@ get_table_width(struct table *table)
 }
 
 
+/* Stretches the table columns by distributed the @spare_width among them.
+ * Returns how much of @spare_width was actually distributed. */
+static inline int
+stretch_columns(struct table *table, int widths[], int max_widths[],
+		int spare_width, int total_width)
+{
+	int stretch_width, stretch_col, col;
+	int total_spare_width = spare_width;
+
+again:
+	stretch_width = 0;
+	stretch_col = -1;
+
+	for (col = 0; col < table->cols; col++) {
+		int col_spare_width;
+
+		if (!widths[col])
+			continue;
+
+		col_spare_width = total_spare_width * widths[col] / total_width;
+		int_bounds(&col_spare_width, 1, max_widths[col]);
+		if (col_spare_width > stretch_width) {
+			stretch_width = col_spare_width;
+			stretch_col = col;
+		}
+	}
+
+	if (stretch_col != -1) {
+		/* Mark the column as visited */
+		widths[stretch_col] = 0;
+
+		if (stretch_width > spare_width)
+			stretch_width = spare_width;
+		assertm(stretch_width >= 0, "shrinking cell");
+
+		table->cols_widths[stretch_col] += stretch_width;
+		spare_width -= stretch_width;
+
+		if (spare_width)
+			goto again;
+	}
+
+	return total_spare_width - spare_width;
+}
+
 /* This function distributes space evenly between @table columns so that it
  * stretches to @width. */
 /* TODO: understand and rewrite this thing... --Zas */
@@ -382,10 +427,7 @@ distribute_widths(struct table *table, int width)
 	if (!max_widths) goto free_widths;
 
 	while (spare_width) {
-		int stretch_width, stretch_col;
-		int total_width = 0;
-		int did_stretch;
-		int total_spare_width;
+		int stretched, total_width = 0;
 
 		memset(widths, 0, cols_array_size);
 		memset(max_widths, 0, cols_array_size);
@@ -460,44 +502,11 @@ distribute_widths(struct table *table, int width)
 			continue;
 		}
 
-		did_stretch = 0;
-		total_spare_width = spare_width;
-
-again:
-		stretch_width = 0;
-		stretch_col = -1;
-		for (col = 0; col < table->cols; col++) {
-			int col_spare_width;
-
-			if (!widths[col])
-				continue;
-
-			col_spare_width = total_spare_width * widths[col] / total_width;
-			int_bounds(&col_spare_width, 1, max_widths[col]);
-			if (col_spare_width > stretch_width) {
-				stretch_width = col_spare_width;
-				stretch_col = col;
-			}
-		}
-
-		if (stretch_col != -1) {
-			/* Mark the column as visited */
-			widths[stretch_col] = 0;
-
-			if (stretch_width > spare_width)
-				stretch_width = spare_width;
-			assertm(stretch_width >= 0, "shrinking cell");
-
-			table->cols_widths[stretch_col] += stretch_width;
-			spare_width -= stretch_width;
-
-			did_stretch = 1;
-			if (spare_width)
-				goto again;
-
-		} else if (!did_stretch) {
+		stretched = stretch_columns(table, widths, max_widths, spare_width, total_width);
+		if (!stretched)
 			stretch_method++;
-		}
+		else
+			spare_width -= stretched;
 	}
 
 free_all:

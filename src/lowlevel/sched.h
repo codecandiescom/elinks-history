@@ -1,4 +1,4 @@
-/* $Id: sched.h,v 1.17 2002/09/12 14:24:03 zas Exp $ */
+/* $Id: sched.h,v 1.18 2002/09/13 16:05:49 zas Exp $ */
 
 #ifndef EL__LOWLEVEL_SCHED_H
 #define EL__LOWLEVEL_SCHED_H
@@ -85,6 +85,7 @@ struct connection {
 	void *read_func;
 };
 
+/* Connection states */
 #define S_WAIT		0
 #define S_DNS		1
 #define S_CONN		2
@@ -96,37 +97,43 @@ struct connection {
 #define S_TRANS		8
 #define S_QUESTIONS	9
 
-#define S_WAIT_REDIR		-999
-#define S_OK			-1000
-#define S_INTERRUPTED		-1001
-#define S_EXCEPT		-1002
-#define S_INTERNAL		-1003
-#define S_OUT_OF_MEM		-1004
-#define S_NO_DNS		-1005
-#define S_CANT_WRITE		-1006
-#define S_CANT_READ		-1007
-#define S_MODIFIED		-1008
-#define S_BAD_URL		-1009
-#define S_TIMEOUT		-1010
-#define S_RESTART		-1011
-#define S_STATE			-1012
+/* Numbers < 0 and > -10000 are reserved for system errors reported via
+ * errno/strerror(), see session.c and sched.c for further information. */
 
-#define S_HTTP_ERROR		-1100
-#define S_HTTP_100		-1101
-#define S_HTTP_204		-1102
+/* WARNING: an errno value <= -10000 may cause some bad things... */
 
-#define S_FILE_TYPE		-1200
-#define S_FILE_ERROR		-1201
+#define S_OK			-10000
+#define S_INTERRUPTED		-10001
+#define S_EXCEPT		-10002
+#define S_INTERNAL		-10003
+#define S_OUT_OF_MEM		-10004
+#define S_NO_DNS		-10005
+#define S_CANT_WRITE		-10006
+#define S_CANT_READ		-10007
+#define S_MODIFIED		-10008
+#define S_BAD_URL		-10009
+#define S_TIMEOUT		-10010
+#define S_RESTART		-10011
+#define S_STATE			-10012
+#define S_WAIT_REDIR		-10013
 
-#define S_FTP_ERROR		-1300
-#define S_FTP_UNAVAIL		-1301
-#define S_FTP_LOGIN		-1302
-#define S_FTP_PORT		-1303
-#define S_FTP_NO_FILE		-1304
-#define S_FTP_FILE_ERROR	-1305
+#define S_HTTP_ERROR		-10100
+#define S_HTTP_100		-10101
+#define S_HTTP_204		-10102
 
-#define S_SSL_ERROR		-1400
-#define S_NO_SSL		-1401
+#define S_FILE_TYPE		-10200
+#define S_FILE_ERROR		-10201
+
+#define S_FTP_ERROR		-10300
+#define S_FTP_UNAVAIL		-10301
+#define S_FTP_LOGIN		-10302
+#define S_FTP_PORT		-10303
+#define S_FTP_NO_FILE		-10304
+#define S_FTP_FILE_ERROR	-10305
+
+#define S_SSL_ERROR		-10400
+#define S_NO_SSL		-10401
+
 
 extern struct s_msg_dsc {
 	int n;

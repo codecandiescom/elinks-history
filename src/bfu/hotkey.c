@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.11 2003/11/16 14:34:32 zas Exp $ */
+/* $Id: hotkey.c,v 1.12 2003/12/27 15:16:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,8 +50,8 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 		for (i = 0; i < ni; i++) {
 			unsigned char *text = items[i].text;
 
-			if (!*text) continue;
-			if (!(items[i].flags & NO_INTL)) text = _(text, term);
+			if (!mi_has_left_text(items[i])) continue;
+			if (mi_text_translate(items[i])) text = _(text, term);
 			if (!*text) continue;
 
 			if (items[i].hotkey_state != HKS_CACHED && !items[i].hotkey_pos)
@@ -76,7 +76,7 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 	}
 #endif
 
-	for (i = 0; i < ni; i++)
+	for (i = 0; i < ni; i++) {
 		if (!hotkeys) {
 			items[i].hotkey_pos = 0;
 			items[i].hotkey_state = HKS_IGNORE;
@@ -84,8 +84,8 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 			   && !items[i].hotkey_pos) {
 			unsigned char *text = items[i].text;
 
-			if (!*text) continue;
-			if (!(items[i].flags & NO_INTL)) text = _(text, term);
+			if (!mi_has_left_text(items[i])) continue;
+			if (mi_text_translate(items[i])) text = _(text, term);
 			if (!*text) continue;
 
 			items[i].hotkey_pos = find_hotkey_pos(text);
@@ -93,6 +93,7 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 			if (items[i].hotkey_pos)
 				items[i].hotkey_state = HKS_CACHED;
 		}
+	}
 }
 
 #ifdef ENABLE_NLS
@@ -131,10 +132,11 @@ is_hotkey(struct menu_item *item, unsigned char key, struct terminal *term)
 	assert(item);
 	if_assert_failed return 0;
 
+	if (!mi_has_left_text(*item)) return 0;
+
 	text = item->text;
 
-	if (!text || !*text) return 0;
-	if (!(item->flags & NO_INTL)) text = _(text, term);
+	if (mi_text_translate(*item)) text = _(text, term);
 	if (!*text) return 0;
 
 #ifdef DEBUG
@@ -206,7 +208,12 @@ check_not_so_hot_keys(struct menu_head *menu, unsigned char key, struct terminal
 		if (i + 1 == menu->ni) i = 0;
 		else i++;
 
+		if (!mi_has_left_text(menu->items[i])) continue;
+
 		text = menu->items[i].text;
+
+		if (mi_text_translate(menu->items[i])) text = _(text, term);
+		if (!*text) continue;
 
 		if (text && upcase(text[0]) == k) {
 			menu->selected = i;

@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.12 2003/06/27 00:16:59 jonas Exp $ */
+/* $Id: protocol.h,v 1.13 2003/06/28 10:46:31 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -30,9 +30,9 @@ struct protocol_backend {
 	int port;
 	protocol_handler *handler;
 	protocol_external_handler *external_handler;
-	int free_syntax;
-	int need_slashes;
-	int need_slash_after_host;
+	unsigned int free_syntax:1;
+	unsigned int need_slashes:1;
+	unsigned int need_slash_after_host:1;
 };
 
 /* Accessors for the protocol backends. */

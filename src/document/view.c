@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.54 2002/06/17 07:42:30 pasky Exp $ */
+/* $Id: view.c,v 1.55 2002/06/29 15:24:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2563,8 +2563,8 @@ void send_event(struct session *ses, struct event *ev)
 				draw_formatted(ses);
 				goto x;
 			case ACT_TOGGLE_DISPLAY_TABLES:
-				get_opt_int("document.browse.tables.show_as_links") =
-					!get_opt_int("document.browse.images.show_as_links");
+				get_opt_int("document.html.display_tables") =
+					!get_opt_int("document.html.display_tables");
 				html_interpret(ses);
 				draw_formatted(ses);
 				goto x;

@@ -194,6 +194,9 @@ Martin Kavalec <martin@penguin.cz>
 Martin Norback <d95mback@dtek.chalmers.se>
 	Swedish translation
 
+Matthew Mueller <donut@azstarnet.com>
+	Random hacking
+
 Mediavilla David <f4j900zx001@NOSPAMsneakemail.com>
 	Updated Spanish translation
 
@@ -324,4 +327,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.62 2002/06/14 21:41:04 pasky Exp $
+$Id: AUTHORS,v 1.63 2002/06/29 15:24:06 pasky Exp $

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.202 2005/03/19 00:33:22 zas Exp $ */
+/* $Id: dialogs.c,v 1.203 2005/03/19 17:45:31 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -223,22 +223,24 @@ focus_bookmark(struct widget_data *box_widget_data, struct listbox_data *box,
 	} while (box->sel->udata != bm && box->sel != sel2);
 }
 
-/* TODO: merge with bookmark_add_add() ? --Zas */
 static void
 do_add_special_bookmark(struct dialog_data *dlg_data, unsigned char *name, unsigned char *url)
 {
-	struct widget_data *widget_data = dlg_data->widgets_data;
-	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct bookmark *bm = NULL;
 	struct bookmark *selected = NULL;
+	struct listbox_data *box = NULL;
 
-	if (box->sel) {
-		selected = box->sel ? box->sel->udata : NULL;
+	if (dlg_data) {
+		box = get_dlg_listbox_data(dlg_data);
 
-		if (box->sel->type == BI_FOLDER && box->sel->expanded) {
-			bm = selected;
-		} else {
-			bm = selected->root;
+		if (box->sel) {
+			selected = box->sel ? box->sel->udata : NULL;
+
+			if (box->sel->type == BI_FOLDER && box->sel->expanded) {
+				bm = selected;
+			} else {
+				bm = selected->root;
+			}
 		}
 	}
 
@@ -251,9 +253,13 @@ do_add_special_bookmark(struct dialog_data *dlg_data, unsigned char *name, unsig
 	write_bookmarks();
 #endif
 
-	/* We touch only the actual bookmark dialog, not all of them;
-	 * that's right, right? ;-) --pasky */
-	focus_bookmark(widget_data, box, bm);
+	if (dlg_data) {
+		struct widget_data *widget_data = dlg_data->widgets_data;
+
+		/* We touch only the actual bookmark dialog, not all of them;
+		 * that's right, right? ;-) --pasky */
+		focus_bookmark(widget_data, box, bm);
+	}
 }
 
 static void
@@ -502,42 +508,9 @@ static void
 bookmark_add_add(void *data)
 {
 	struct dialog *dlg = data;
-	struct widget_data *widget_data = NULL; /* silence stupid gcc */
-	struct listbox_data *box = NULL;
-	struct bookmark *bm = NULL;
-	struct bookmark *selected = NULL;
+	struct dialog_data *dlg_data = (struct dialog_data *) dlg->udata;
 
-	if (dlg->udata) {
-		struct dialog_data *dlg_data = (struct dialog_data *) dlg->udata;
-
-		widget_data = dlg_data->widgets_data;
-		box = get_dlg_listbox_data(dlg_data);
-
-		if (box->sel) {
-			selected = box->sel->udata;
-
-			if (box->sel->type == BI_FOLDER) {
-				bm = selected;
-			} else {
-				bm = selected->root;
-			}
-		}
-	}
-
-	bm = add_bookmark(bm, 1, dlg->widgets[0].data, dlg->widgets[1].data);
-	if (!bm) return;
-
-	move_bookmark_after_selected(bm, selected);
-
-#ifdef BOOKMARKS_RESAVE
-	write_bookmarks();
-#endif
-
-	if (dlg->udata) {
-		/* We touch only the actual bookmark dialog, not all of them;
-		 * that's right, right? ;-) --pasky */
-		focus_bookmark(widget_data, box, bm);
-	}
+	do_add_special_bookmark(dlg_data, dlg->widgets[0].data, dlg->widgets[1].data);
 }
 
 

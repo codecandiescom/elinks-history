@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.53 2003/05/03 01:55:10 pasky Exp $ */
+/* $Id: terminal.c,v 1.54 2003/05/03 02:36:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,7 +206,7 @@ cls_redraw_all_terminals()
 {
 	struct terminal *term;
 
-	foreach(term, terminals)
+	foreach term, terminals)
 		redraw_terminal_cls(term);
 }
 
@@ -323,8 +323,8 @@ get_parent_ptr(struct window *win, int *x, int *y)
 	struct window *parent = win->next;
 
 #if 0
-	if ((void*)parent == &win->term->windows)
-		parent=NULL;
+	if ((void*) parent == &win->term->windows)
+		parent = NULL;
 	else
 #endif
 	if (parent->type)
@@ -346,7 +346,7 @@ number_of_tabs(struct terminal *term)
 	int result = 0;
 	struct window *win;
 
-	foreach(win, term->windows)
+	foreach (win, term->windows)
 		result += win->type;
 
 	return result;
@@ -361,8 +361,8 @@ get_tab_number(struct window *window)
         int current = 0;
 	int num = 0;
 
-	foreachback(win, term->windows)
-		if(win == window)
+	foreachback (win, term->windows)
+		if (win == window)
 			num = current;
 		else
 			current += win->type;
@@ -376,8 +376,8 @@ get_tab_by_number(struct terminal *term, int num)
 {
 	struct window *win = NULL;
 
-	foreachback(win,term->windows)
-		if(win->type && !num)
+	foreachback (win,term->windows)
+		if (win->type && !num)
 			break;
 		else
                         num -= win->type;
@@ -389,7 +389,7 @@ get_tab_by_number(struct terminal *term, int num)
 struct window *
 get_root_window(struct terminal *term)
 {
-	return (struct window *) get_tab_by_number(term,term->current_tab);
+	return (struct window *) get_tab_by_number(term, term->current_tab);
 }
 
 void

@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.63 2004/05/30 17:51:27 jonas Exp $ */
+/* $Id: dialogs.c,v 1.64 2004/05/30 18:01:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,12 @@ get_cache_entry_info(struct listbox_item *item, struct terminal *term,
 
 	switch (listbox_info) {
 	case LISTBOX_TEXT:
-		return get_uri_string(cached->uri, URI_PUBLIC);
+		if (!init_string(&msg)) return NULL;
+
+		add_uri_to_string(&msg, cached->uri, URI_PUBLIC);
+		if (cached->uri->post)
+			add_to_string(&msg, " (POST DATA)");
+		return msg.source;
 
 	case LISTBOX_URI:
 		return get_uri_string(cached->uri, URI_ORIGINAL);
@@ -146,39 +151,6 @@ delete_cache_entry_item(struct listbox_item *item, int last)
 	delete_cache_entry(cached);
 }
 
-static void
-draw_cache_entry_item(struct listbox_item *item, struct listbox_context *context,
-		      int x, int y, int width)
-{
-	struct cache_entry *cached = item->udata;
-	unsigned char *stylename;
-	struct color_pair *color;
-	struct string msg;
-	int trimmedlen;
-
-	/* We have nothing to work with */
-	if (width < 4) return;
-
-	if (!init_string(&msg)) return;
-
-	add_uri_to_string(&msg, cached->uri, URI_PUBLIC);
-	if (cached->uri->post)
-		add_to_string(&msg, " (POST DATA)");
-
-	stylename = (item == context->box->sel) ? "menu.selected"
-		  : ((item->marked)	        ? "menu.marked"
-					        : "menu.normal");
-
-	color = get_bfu_color(context->term, stylename);
-	trimmedlen = int_min(msg.length, width - 4);
-
-	draw_text(context->term, x, y, msg.source, trimmedlen, 0, color);
-	if (trimmedlen < msg.length)
-		draw_text(context->term, x + trimmedlen, y, " ...", 4, 0, color);
-
-	done_string(&msg);
-}
-
 static struct listbox_ops cache_entry_listbox_ops = {
 	lock_cache_entry,
 	unlock_cache_entry,
@@ -186,7 +158,7 @@ static struct listbox_ops cache_entry_listbox_ops = {
 	get_cache_entry_info,
 	can_delete_cache_entry,
 	delete_cache_entry_item,
-	draw_cache_entry_item,
+	NULL,
 };
 
 static struct hierbox_browser_button cache_buttons[] = {

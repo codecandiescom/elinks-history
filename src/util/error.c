@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.71 2003/07/06 21:49:34 pasky Exp $ */
+/* $Id: error.c,v 1.72 2003/07/23 00:06:31 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -36,6 +36,7 @@ er(int bell, unsigned char *fmt, va_list params)
 	vfprintf(stderr, fmt, params);
 	fputc('\n', stderr);
 	fflush(stderr);
+	sleep(1);
 }
 
 int errline;

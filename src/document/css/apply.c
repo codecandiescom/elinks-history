@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.81 2004/09/21 16:09:22 pasky Exp $ */
+/* $Id: apply.c,v 1.82 2004/09/21 16:15:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,9 +112,6 @@ examine_element(struct css_selector *base,
 		/* Ancestor matches? */ \
 		if ((struct list_head *) element->next != html_stack) { \
 			struct html_element *ancestor; \
-			examine_element(base, CST_ELEMENT, CSR_PARENT, \
-			                &sel->leaves, element->next, \
-			                html_stack); \
 			/* This is less effective than doing reverse iterations,
 			 * first over sel->leaves and then over the HTML stack,
 			 * which shines in the most common case where there are
@@ -127,6 +124,9 @@ examine_element(struct css_selector *base,
 				examine_element(base,CST_ELEMENT,CSR_ANCESTOR, \
 						&sel->leaves, ancestor, \
 						html_stack); \
+			examine_element(base, CST_ELEMENT, CSR_PARENT, \
+			                &sel->leaves, element->next, \
+			                html_stack); \
 		} \
 	}
 

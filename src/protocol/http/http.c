@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.138 2003/06/21 12:10:48 zas Exp $ */
+/* $Id: http.c,v 1.139 2003/06/21 12:12:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1027,7 +1027,7 @@ thats_all_folks:
 
 		str = straconcat("<html><head><title>HTTP error ", errs,
 				 "</title></head><body>HTTP error ", errs,
-				 " : <b>", codestr, "</b>"
+				 " : <b>", codestr, "</b>",
 				 "</body></html>", NULL);
 
 		if (str) {

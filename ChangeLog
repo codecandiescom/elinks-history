@@ -1,3 +1,64 @@
+Tue Oct  8 22:09:55 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/dialogs.c:
+
+	Goto URL now does nothing if it is triggered upon a folder.  
+
+Tue Oct  8 22:07:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/listbox.c, bookmarks/dialogs.c:
+
+	Fixed case when tree is at the end of the root list. Add folder now
+	behaves like folder would be a regular item if folder is not
+	expanded.  
+
+Tue Oct  8 21:20:28 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/dialogs.c:
+
+	Stuff is being moved _inside_ of only expanded folder - imploded
+	ones behave as normal items when selecting destination; enables some
+	previously impossible moves, makes stuff more intuitive hopefully.  
+
+Tue Oct  8 21:18:59 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/dialogs.c:
+
+	Fixed moving of folders around inside of marked folder (or whatever
+	ugly it did to me.. ;).  
+
+Tue Oct  8 21:16:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/dialogs/edit.c:
+
+	Don't require URL being non-empty in bookmark edit dialog.  
+
+Tue Oct  8 21:15:56 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Fixed seeking for URL's end, we don't fail if URL is empty anymore
+	when loading bookmarks.  
+
+Tue Oct  8 20:48:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/listbox.c, bookmarks/dialogs.c:
+
+	Support for moving of bookmarks around.  
+
+Tue Oct  8 18:41:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/listbox.c, dialogs/hierbox.c:
+
+	And then I said, let the insert button work! Also, fixed displaying
+	of the mark. We now move down after marking smt.  
+
+Tue Oct  8 16:56:38 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/listbox.c, bfu/listbox.h, dialogs/hierbox.c:
+
+	Support for marked items (Insert marks them, TODO: keybind that?) 
+
 Mon Oct  7 20:43:12 2002  Petr Baudis <pasky@ji.cz>:
 
 	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,

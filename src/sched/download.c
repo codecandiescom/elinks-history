@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.101 2003/09/25 19:37:05 zas Exp $ */
+/* $Id: download.c,v 1.102 2003/09/26 15:49:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -211,7 +211,7 @@ download_progress_string(struct terminal *term,
 	}
 
 	/* FIXME: The following is a PITA from the l10n standpoint. A *big*
-	 * one, _("of")-like pearls are a nightmare. Format strings needs to
+	 * one, _("of")-like pearls are a nightmare. Format strings need to
 	 * be introduced to this fuggy corner of code as well. --pasky */
 
 	add_to_string(msg, _("Received", term));

@@ -75,16 +75,11 @@ global history.
 List boxes and buttons.
 
 
-Useful Document Display Options
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Toggling color modes, plain/html and image link rendering.
-
-
 Navigation
 ~~~~~~~~~~
 
-ELinks provides various ways to navigate documents.
+ELinks provides various ways to navigate documents. Depending on how documents
+are structured it can be a great help to change navigation style.
 
  - Link Oriented Navigation:
    Directional and Up/Down.
@@ -94,7 +89,16 @@ ELinks provides various ways to navigate documents.
  - Mouse?
 
 
-Searching (TODO)
+Useful Document Display Options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Toggling color modes, plain/html and image link rendering.
+
+Link numbering. 
+
+ - Insert mode in text-input form-fields
+
+Searching
 ~~~~~~~~~
 
  - Text searching using the normal search dialog
@@ -107,6 +111,6 @@ Searching (TODO)
 Hints and Odd Features
 ~~~~~~~~~~~~~~~~~~~~~~
 
- - Command prefixing. Example 3<Down> jumps down three links.
+ - Numerical action prefixes. Example 3<Down> jumps down three links.
 
-$Id: introduction.txt,v 1.2 2004/12/22 20:36:35 jonas Exp $
+$Id: introduction.txt,v 1.3 2004/12/23 02:21:38 jonas Exp $

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.217 2003/10/17 13:58:45 zas Exp $ */
+/* $Id: view.c,v 1.218 2003/10/17 14:10:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -857,7 +857,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 struct document_view *
 current_frame(struct session *ses)
 {
-	struct document_view *fd = NULL;
+	struct document_view *doc_view = NULL;
 	int i;
 
 	assert(ses);
@@ -865,34 +865,34 @@ current_frame(struct session *ses)
 
 	if (!have_location(ses)) return NULL;
 	i = cur_loc(ses)->vs.current_link;
-	foreach (fd, ses->scrn_frames) {
-		if (document_has_frames(fd->document)) continue;
-		if (!i--) return fd;
+	foreach (doc_view, ses->scrn_frames) {
+		if (document_has_frames(doc_view->document)) continue;
+		if (!i--) return doc_view;
 	}
-	fd = ses->screen;
+	doc_view = ses->screen;
 
-	assert(fd && fd->document);
+	assert(doc_view && doc_view->document);
 	if_assert_failed return NULL;
 
-	if (document_has_frames(fd->document)) return NULL;
-	return fd;
+	if (document_has_frames(doc_view->document)) return NULL;
+	return doc_view;
 }
 
 static int
 send_to_frame(struct session *ses, struct term_event *ev)
 {
-	struct document_view *fd;
+	struct document_view *doc_view;
 	int r;
 
 	assert(ses && ses->tab && ses->tab->term && ev);
 	if_assert_failed return 0;
-	fd = current_frame(ses);
-	assertm(fd, "document not formatted");
+	doc_view = current_frame(ses);
+	assertm(doc_view, "document not formatted");
 	if_assert_failed return 0;
 
-	r = frame_ev(ses, fd, ev);
+	r = frame_ev(ses, doc_view, ev);
 	if (r == 1) {
-		draw_doc(ses->tab->term, fd, 1);
+		draw_doc(ses->tab->term, doc_view, 1);
 		print_screen_status(ses);
 		redraw_from_window(ses->tab);
 	}
@@ -903,38 +903,38 @@ send_to_frame(struct session *ses, struct term_event *ev)
 #ifdef USE_MOUSE
 static void
 do_mouse_event(struct session *ses, struct term_event *ev,
-	       struct document_view *fd)
+	       struct document_view *doc_view)
 {
 	struct term_event evv;
-	struct document_view *fdd; /* !!! FIXME: frames */
+	struct document_view *current_doc_view; /* !!! FIXME: frames */
 	struct document_options *o;
 
-	assert(ses && ev && fd && fd->document);
+	assert(ses && ev && doc_view && doc_view->document);
 	if_assert_failed return;
 
-	o = &fd->document->opt;
+	o = &doc_view->document->opt;
 	if (ev->x >= o->xp && ev->x < o->xp + o->xw &&
 	    ev->y >= o->yp && ev->y < o->yp + o->yw) goto ok;
 
 r:
 	next_frame(ses, 1);
-	fdd = current_frame(ses);
-	assert(fdd && fdd->document);
+	current_doc_view = current_frame(ses);
+	assert(current_doc_view && current_doc_view->document);
 	if_assert_failed return;
-	o = &fdd->document->opt;
+	o = &current_doc_view->document->opt;
 	if (ev->x >= o->xp && ev->x < o->xp + o->xw &&
 	    ev->y >= o->yp && ev->y < o->yp + o->yw) {
 		draw_formatted(ses);
-		fd = fdd;
+		doc_view = current_doc_view;
 		goto ok;
 	}
-	if (fdd != fd) goto r;
+	if (current_doc_view != doc_view) goto r;
 	return;
 
 ok:
 	memcpy(&evv, ev, sizeof(struct term_event));
-	evv.x -= fd->xp;
-	evv.y -= fd->yp;
+	evv.x -= doc_view->xp;
+	evv.y -= doc_view->yp;
 	send_to_frame(ses, &evv);
 }
 #endif /* USE_MOUSE */
@@ -944,16 +944,16 @@ void send_open_in_new_xterm(struct terminal *, void (*)(struct terminal *, unsig
 void
 send_event(struct session *ses, struct term_event *ev)
 {
-	struct document_view *fd;
+	struct document_view *doc_view;
 
 	assert(ses && ev);
 	if_assert_failed return;
-	fd = current_frame(ses);
+	doc_view = current_frame(ses);
 
 	if (ev->ev == EV_KBD) {
 		int func_ref;
 
-		if (fd && send_to_frame(ses, ev)) return;
+		if (doc_view && send_to_frame(ses, ev)) return;
 
 		switch (kbd_action(KM_MAIN, ev, &func_ref)) {
 			case ACT_MENU:
@@ -1125,7 +1125,7 @@ quit:
 				open_in_new_window(ses->tab->term, send_open_new_xterm, ses);
 				goto x;
 			case ACT_OPEN_LINK_IN_NEW_WINDOW:
-				if (!fd || fd->vs->current_link == -1) goto x;
+				if (!doc_view || doc_view->vs->current_link == -1) goto x;
 				open_in_new_window(ses->tab->term, send_open_in_new_xterm, ses);
 				goto x;
 			case ACT_TAB_CLOSE:
@@ -1156,11 +1156,11 @@ quit:
 				}
 		}
 
-		if (fd
+		if (doc_view
 		    && get_opt_int("document.browse.accesskey.priority") <= 0
-		    && try_document_key(ses, fd, ev)) {
+		    && try_document_key(ses, doc_view, ev)) {
 			/* The document ate the key! */
-			draw_doc(ses->tab->term, fd, 1);
+			draw_doc(ses->tab->term, doc_view, 1);
 			print_screen_status(ses);
 			redraw_from_window(ses->tab);
 			return;
@@ -1193,7 +1193,7 @@ quit:
 			if (tab != -1) switch_to_tab(ses->tab->term, tab, nb_tabs);
 			goto x;
 		}
-		if (fd) do_mouse_event(ses, ev, fd);
+		if (doc_view) do_mouse_event(ses, ev, doc_view);
 	}
 #endif /* USE_MOUSE */
 	return;
@@ -1231,24 +1231,24 @@ enum dl_type {
 static void
 send_download_do(struct session *ses, enum dl_type dlt)
 {
-	struct document_view *fd;
+	struct document_view *doc_view;
 
 	assert(ses);
 	if_assert_failed return;
-	fd = current_frame(ses);
-	assert(fd && fd->vs && fd->document);
+	doc_view = current_frame(ses);
+	assert(doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	if (fd->vs->current_link == -1) return;
+	if (doc_view->vs->current_link == -1) return;
 	if (ses->dn_url) {
 		mem_free(ses->dn_url);
 		ses->dn_url = NULL;
 	}
 
 	if (dlt == URL) {
-		ses->dn_url = get_link_url(ses, fd, &fd->document->links[fd->vs->current_link]);
+		ses->dn_url = get_link_url(ses, doc_view, &doc_view->document->links[doc_view->vs->current_link]);
 	} else if (dlt == IMAGE) {
-		unsigned char *wi = fd->document->links[fd->vs->current_link].where_img;
+		unsigned char *wi = doc_view->document->links[doc_view->vs->current_link].where_img;
 
 		if (wi) ses->dn_url = stracpy(wi);
 	} else {
@@ -1259,7 +1259,7 @@ send_download_do(struct session *ses, enum dl_type dlt)
 
 	if (ses->dn_url) {
 		if (ses->ref_url) mem_free(ses->ref_url);
-		ses->ref_url = stracpy(fd->document->url);
+		ses->ref_url = stracpy(doc_view->document->url);
 		query_file(ses, ses->dn_url, start_download, NULL, 1);
 	}
 }
@@ -1304,17 +1304,17 @@ send_open_in_new_xterm(struct terminal *term,
 		       void (*open_window)(struct terminal *term, unsigned char *, unsigned char *),
 		       struct session *ses)
 {
-	struct document_view *fd;
+	struct document_view *doc_view;
 
 	assert(term && open_window && ses);
 	if_assert_failed return;
-	fd = current_frame(ses);
-	assert(fd && fd->vs && fd->document);
+	doc_view = current_frame(ses);
+	assert(doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	if (fd->vs->current_link == -1) return;
+	if (doc_view->vs->current_link == -1) return;
 	if (ses->dn_url) mem_free(ses->dn_url);
-	ses->dn_url = get_link_url(ses, fd, &fd->document->links[fd->vs->current_link]);
+	ses->dn_url = get_link_url(ses, doc_view, &doc_view->document->links[doc_view->vs->current_link]);
 	/* FIXME: We can't do this because ses->dn_url isn't alloc'd by init_string(). --pasky */
 	/* if (ses->dn_url) add_session_ring_to_str(&ses->dn_url, &l); */
 	if (ses->dn_url) {
@@ -1382,7 +1382,7 @@ open_in_new_window(struct terminal *term,
 void
 save_url(struct session *ses, unsigned char *url)
 {
-	struct document_view *fd;
+	struct document_view *doc_view;
 	unsigned char *u;
 
 	assert(ses && ses->tab && ses->tab->term && url);
@@ -1405,28 +1405,28 @@ save_url(struct session *ses, unsigned char *url)
 
 	if (ses->ref_url) mem_free(ses->ref_url);
 
-	fd = current_frame(ses);
-	assert(fd && fd->document && fd->document->url);
+	doc_view = current_frame(ses);
+	assert(doc_view && doc_view->document && doc_view->document->url);
 	if_assert_failed return;
 
-	ses->ref_url = stracpy(fd->document->url);
+	ses->ref_url = stracpy(doc_view->document->url);
 	query_file(ses, ses->dn_url, start_download, NULL, 1);
 }
 
 void
 send_image(struct terminal *term, void *xxx, struct session *ses)
 {
-	struct document_view *fd;
+	struct document_view *doc_view;
 	unsigned char *u;
 
 	assert(term && ses);
 	if_assert_failed return;
-	fd = current_frame(ses);
-	assert(fd && fd->document && fd->vs);
+	doc_view = current_frame(ses);
+	assert(doc_view && doc_view->document && doc_view->vs);
 	if_assert_failed return;
 
-	if (fd->vs->current_link == -1) return;
-	u = fd->document->links[fd->vs->current_link].where_img;
+	if (doc_view->vs->current_link == -1) return;
+	u = doc_view->document->links[doc_view->vs->current_link].where_img;
 	if (!u) return;
 	goto_url(ses, u);
 }
@@ -1444,13 +1444,13 @@ save_as(struct terminal *term, void *xxx, struct session *ses)
 	if (ses->dn_url) mem_free(ses->dn_url);
 	ses->dn_url = memacpy(loc->vs.url, loc->vs.url_len);
 	if (ses->dn_url) {
-		struct document_view *fd = current_frame(ses);
+		struct document_view *doc_view = current_frame(ses);
 
-		assert(fd && fd->document && fd->document->url);
+		assert(doc_view && doc_view->document && doc_view->document->url);
 		if_assert_failed return;
 
 		if (ses->ref_url) mem_free(ses->ref_url);
-		ses->ref_url = stracpy(fd->document->url);
+		ses->ref_url = stracpy(doc_view->document->url);
 		query_file(ses, ses->dn_url, start_download, NULL, 1);
 	}
 }
@@ -1477,31 +1477,31 @@ save_formatted_finish(struct terminal *term, int h, void *data, int resume)
 static void
 save_formatted(struct session *ses, unsigned char *file)
 {
-	struct document_view *fd;
+	struct document_view *doc_view;
 
 	assert(ses && ses->tab && ses->tab->term && file);
 	if_assert_failed return;
-	fd = current_frame(ses);
-	assert(fd && fd->document);
+	doc_view = current_frame(ses);
+	assert(doc_view && doc_view->document);
 	if_assert_failed return;
 
 	create_download_file(ses->tab->term, file, NULL, 0, 0,
-			     save_formatted_finish, fd->document);
+			     save_formatted_finish, doc_view->document);
 }
 
 void
 menu_save_formatted(struct terminal *term, void *xxx, struct session *ses)
 {
-	struct document_view *fd;
+	struct document_view *doc_view;
 
 	assert(term && ses);
 	if_assert_failed return;
 	if (!have_location(ses)) return;
-	fd = current_frame(ses);
-	assert(fd && fd->vs);
+	doc_view = current_frame(ses);
+	assert(doc_view && doc_view->vs);
 	if_assert_failed return;
 
-	query_file(ses, fd->vs->url, save_formatted, NULL, !((int) xxx));
+	query_file(ses, doc_view->vs->url, save_formatted, NULL, !((int) xxx));
 }
 
 
@@ -1509,7 +1509,7 @@ menu_save_formatted(struct terminal *term, void *xxx, struct session *ses)
 unsigned char *
 print_current_title(struct session *ses)
 {
-	struct document_view *frame;
+	struct document_view *doc_view;
 	struct document *document;
 	struct string title;
 	unsigned char buf[80];
@@ -1519,28 +1519,29 @@ print_current_title(struct session *ses)
 	assert(ses && ses->tab && ses->tab->term);
 	if_assert_failed return NULL;
 
-	frame = current_frame(ses);
+	doc_view = current_frame(ses);
 
-	assert(frame && frame->document);
+	assert(doc_view && doc_view->document);
 	if_assert_failed return NULL;
 
 	if (!init_string(&title)) return NULL;
 
-	document = frame->document;
+	document = doc_view->document;
 	width = ses->tab->term->x;
 
 	/* Set up the document page info string: '(' %page '/' %pages ')' */
-	if (frame->yw < document->y) {
-		int pos = frame->vs->view_pos + frame->yw;
+	if (doc_view->yw < document->y) {
+		int pos = doc_view->vs->view_pos + doc_view->yw;
 		int page = 1;
-		int pages = frame->yw ? (document->y + frame->yw - 1) / frame->yw
-				      : 1;
+		int pages = doc_view->yw
+			    ? (document->y + doc_view->yw - 1) / doc_view->yw
+			    : 1;
 
 		/* Check if at the end else calculate the page. */
 		if (pos >= document->y) {
 			page = pages;
-		} else if (frame->yw) {
-			page = int_min((pos - frame->yw / 2) / frame->yw + 1,
+		} else if (doc_view->yw) {
+			page = int_min((pos - doc_view->yw / 2) / doc_view->yw + 1,
 				       pages);
 		}
 
@@ -1548,8 +1549,8 @@ print_current_title(struct session *ses)
 		if (buflen < 0) buflen = 0;
 	}
 
-	if (frame->document->title) {
-		add_to_string(&title, frame->document->title);
+	if (doc_view->document->title) {
+		add_to_string(&title, doc_view->document->title);
 
 		if (title.length + buflen > width - 4) {
 			title.length = int_max(width - 4 - buflen, 0);

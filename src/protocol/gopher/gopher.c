@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.8 2004/08/18 18:11:49 jonas Exp $ */
+/* $Id: gopher.c,v 1.9 2004/08/18 18:27:41 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -619,7 +619,14 @@ read_gopher_response_data(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (rb->close == 2) {
-		assert(rb->len == 0);
+		/* If the server suddenly closes the connection there can still
+		 * be some error message that might be useful. */
+		if (rb->len > 0) {
+			add_fragment(conn->cached, conn->from, rb->data, rb->len);
+			conn->received += rb->len;
+			conn->from     += rb->len;
+		}
+
 		end_gopher_connection(conn, S_OK);
 		return;
 	}

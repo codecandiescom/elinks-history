@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.73 2003/12/25 12:11:35 pasky Exp $ */
+/* $Id: form.c,v 1.74 2003/12/25 13:57:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1014,6 +1014,8 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 			x = 0;
 			break;
 	}
+
+	return x;
 }
 
 int

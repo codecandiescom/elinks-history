@@ -1,3 +1,12 @@
+Sun Dec 23 23:21:41 2001  Petr Baudis <pasky@ji.cz>:
+
+	* config2.h, configure, configure.in, default.c, http.c:
+	
+	Releasing elinks-0.2. This release is generally only sync for new
+	development model. Included some language updates and few bug fixes
+	and few code cleanups.	Main fun will come with elinks-0.3, but
+	that's another story.
+
 Sun Dec 23 22:43:32 2001  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c, default.c, dns.c, links.h, url.c:
@@ -36,13 +45,13 @@ Mon Dec 17 13:13:07 2001  Petr Baudis <pasky@ji.cz>:
 
 Sat Dec 15 21:40:56 2001  Petr Baudis <pasky@ji.cz>:
 
-	* ChangeLog, language.inc, intl/french.lng:
+	* language.inc, intl/french.lng:
 	
 	merge from STABLE
 
 Wed Nov  7 13:51:25 2001  Petr Baudis <pasky@ji.cz>:
 
-	* ChangeLog, view.c:
+	* view.c:
 	
 	textarea double encoding fix
 
@@ -78,12 +87,6 @@ Sun Oct 28 16:31:39 2001  Petr Baudis <pasky@ji.cz>:
 	intl/turkish.lng, intl/ukrainian.lng:
 	
 	User-Agent modifiable string (user-agent-0.96-pb2.patch)
-
-Sun Oct 28 16:29:30 2001  Petr Baudis <pasky@ji.cz>:
-
-	* ChangeLog:
-	
-	not two times ;)
 
 Sun Oct 28 14:49:02 2001  Petr Baudis <pasky@ji.cz>:
 
@@ -148,13 +151,13 @@ Sun Oct 28 13:55:30 2001  Petr Baudis <pasky@ji.cz>:
 
 Sun Oct 28 13:50:31 2001  Petr Baudis <pasky@ji.cz>:
 
-	* ChangeLog, config2.h, configure, configure.in:
+	* config2.h, configure, configure.in:
 	
 	going for elinks-0.1
 
 Sun Oct 28 13:39:20 2001  Petr Baudis <pasky@ji.cz>:
 
-	* BUGS, ChangeLog, config2.h, configure, configure.in:
+	* BUGS, config2.h, configure, configure.in:
 	
 	more RR per host, &#13;
 
@@ -314,18 +317,18 @@ Sat Oct 27 21:48:39 2001  Petr Baudis <pasky@ji.cz>:
 
 Sat Oct 27 21:43:43 2001  Petr Baudis <pasky@ji.cz>:
 
-	* AUTHORS, BUGS, COPYING, ChangeLog, INSTALL, Makefile.am,
-	Makefile.gen, Makefile.in, NEWS, README, SITES, TODO, acconfig.h,
-	aclocal.m4, af_unix.c, beos.c, bfu.c, bookmarks.c, cache.c,
-	charsets.c, codepage.h, codepage.inc, config.guess, config.h.in,
-	config.sub, config2.h, configure, configure.in, connect.c,
-	cookies.c, default.c, dns.c, entity.inc, error.c, file.c, finger.c,
-	ftp.c, html.c, html_r.c, html_tbl.c, http.c, https.c, install-sh,
-	kbd.c, kbdbind.c, language.c, language.h, language.inc, links.1,
-	links.h, mailcap.pl, mailto.c, main.c, menu.c, missing,
-	mkinstalldirs, os_dep.c, os_dep.h, os_depx.h, rebuild, sched.c,
-	select.c, session.c, setup.h, stamp-h.in, terminal.c, types.c,
-	uni_7b.inc, url.c, view.c, win32.c, wipe-out-ssl, wipe-out-ssl.awk,
+	* AUTHORS, BUGS, COPYING, INSTALL, Makefile.am, Makefile.gen,
+	Makefile.in, NEWS, README, SITES, TODO, acconfig.h, aclocal.m4,
+	af_unix.c, beos.c, bfu.c, bookmarks.c, cache.c, charsets.c,
+	codepage.h, codepage.inc, config.guess, config.h.in, config.sub,
+	config2.h, configure, configure.in, connect.c, cookies.c,
+	default.c, dns.c, entity.inc, error.c, file.c, finger.c, ftp.c,
+	html.c, html_r.c, html_tbl.c, http.c, https.c, install-sh, kbd.c,
+	kbdbind.c, language.c, language.h, language.inc, links.1, links.h,
+	mailcap.pl, mailto.c, main.c, menu.c, missing, mkinstalldirs,
+	os_dep.c, os_dep.h, os_depx.h, rebuild, sched.c, select.c,
+	session.c, setup.h, stamp-h.in, terminal.c, types.c, uni_7b.inc,
+	url.c, view.c, win32.c, wipe-out-ssl, wipe-out-ssl.awk,
 	Unicode/7bit.cp, Unicode/7bitrepl.lnx, Unicode/8859_1.cp,
 	Unicode/8859_13.cp, Unicode/8859_2.cp, Unicode/8859_4.cp,
 	Unicode/8859_5.cp, Unicode/8859_7.cp, Unicode/8859_9.cp,

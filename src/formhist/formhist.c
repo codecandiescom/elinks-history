@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.57 2003/11/05 13:39:48 fabio Exp $ */
+/* $Id: formhist.c,v 1.58 2003/11/23 23:01:07 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,7 +73,7 @@ free_form_in_list(struct formhist_data *form)
 {
 	struct submitted_value *sv, *svtmp;
 
-	foreach (sv, form->submit) {
+	foreach (sv, *form->submit) {
 		svtmp = sv;
 		sv = sv->prev;
 		del_from_list(svtmp);
@@ -90,8 +90,11 @@ new_form(unsigned char *url)
 	form = mem_calloc(1, sizeof(struct formhist_data) + url_len);
 	if (!form) return NULL;
 
-	memcpy(form->url, url, url_len + 1);
-	init_list(form->submit);
+	memcpy(form->url, url, url_len);
+	form->submit = mem_alloc(sizeof(struct list_head));
+	if (!form->submit) return NULL;
+
+	init_list(*form->submit);
 
 	return form;
 }
@@ -100,6 +103,7 @@ static void
 free_form(struct formhist_data *form)
 {
 	free_form_in_list(form);
+	mem_free(form->submit);
 	mem_free(form);
 }
 
@@ -155,7 +159,7 @@ load_saved_forms(void)
 			mem_free(enc_value);
 			if (!sv) goto fail;
 
-			add_to_list(form->submit, sv);
+			add_to_list(*form->submit, sv);
 		}
 		add_to_list(saved_forms, form);
 	}
@@ -193,7 +197,7 @@ save_saved_forms(void)
 
 		secure_fprintf(ssi, "%s\n", form->url);
 
-		foreach (sv, form->submit) {
+		foreach (sv, *form->submit) {
 			/* Obfuscate the password. If we do
 			 * $ cat ~/.elinks/formhist
 			 * we don't want someone behind our back to read our
@@ -239,12 +243,12 @@ form_already_saved(struct formhist_data *form1)
 		if (strcmp(form->url, form1->url)) continue;
 
 		/* Iterate through submitted entries. */
-		foreach (sv, form1->submit) {
+		foreach (sv, *form1->submit) {
 			struct submitted_value *sv2;
 			unsigned char *value = NULL;
 
 			count++;
-			foreach (sv2, form->submit) {
+			foreach (sv2, *form->submit) {
 				if (!strcmp(sv->name, sv2->name)) {
 					exact++;
 					value = sv2->value;
@@ -300,15 +304,19 @@ never_for_this_site(struct formhist_data *form)
 	int len;
 
 	forget_forms_with_url(form->url);
-	free_form_in_list(form);
 
 	s = straconcat("dontsave,", form->url, NULL);
 	if (!s) return 0;
 	len = strlen(s);
 
 	form = mem_realloc(form, sizeof(struct formhist_data) + len);
+	if (!form) return 0;
+
 	memcpy(form->url, s, len + 1);
 	mem_free(s);
+
+	free_form_in_list(form);
+	init_list(*form->submit);
 
 	add_to_list(saved_forms, form);
 
@@ -328,7 +336,7 @@ get_form_history_value(unsigned char *url, unsigned char *name)
 		if (!strcmp(form->url, url)) {
 			struct submitted_value *sv;
 
-			foreach (sv, form->submit)
+			foreach (sv, *form->submit)
 				if (!strcmp(sv->name, name))
 					return sv->value;
 		}
@@ -364,7 +372,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 			sv2 = new_submitted_value(sv->name, sv->value);
 			if (!sv2) goto fail;
 
-			add_to_list(form->submit, sv2);
+			add_to_list(*form->submit, sv2);
 		}
 	}
 
@@ -392,8 +400,10 @@ done_form_history(struct module *module)
 {
 	struct formhist_data *form;
 
-	foreach(form, saved_forms)
+	foreach(form, saved_forms) {
 		free_form_in_list(form);
+		mem_free(form->submit);
+	}
 
 	free_list(saved_forms);
 }

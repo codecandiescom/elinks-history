@@ -1,4 +1,4 @@
-/* $Id: formhist.h,v 1.19 2003/10/30 01:25:15 jonas Exp $ */
+/* $Id: formhist.h,v 1.20 2003/11/23 23:01:07 fabio Exp $ */
 
 #ifndef EL__FORMHIST_FORMHIST_H
 #define EL__FORMHIST_FORMHIST_H
@@ -12,7 +12,7 @@ struct formhist_data {
 	LIST_HEAD(struct formhist_data);
 
 	/* List of submitted_values for this form */
-	struct list_head submit;
+	struct list_head *submit;
 
 	/* <action> URI for this form. Must be at end of struct. */
 	unsigned char url[1];

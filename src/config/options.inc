@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.126 2004/07/10 13:02:23 jonas Exp $ */
+/* $Id: options.inc,v 1.127 2004/07/14 00:58:31 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1309,6 +1309,7 @@ struct option_info config_options_info[] = {
 	INIT_OPT_STRING("ui.sessions", N_("Auto save and restore session folder name"),
 		"auto_save_foldername", 0, "Auto saved session",
 		N_("Name of the bookmarks folder used for auto saving and restoring session.\n"
+		"The name has to be unique. Any folders with the same name will be deleted.\n"
 		"This only makes sense with bookmark support.")),
 
 	INIT_OPT_STRING("ui.sessions", N_("Homepage URI"),

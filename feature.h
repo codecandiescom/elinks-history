@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.10 2004/01/01 01:06:55 jonas Exp $ */
+/* $Id: feature.h,v 1.11 2004/01/01 01:49:23 pasky Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -136,16 +136,17 @@
  * There are two types of rules: simple and smart ones.
  *
  * Simple rewriting rules are basicly URI abbreviations, making it possible to
- * map a word to the full URI. They can also be used for hierachic navigation
+ * map a word to the full URI. They can also be used for hierarchic navigation
  * to ease moving from some nested directory to the parent directory or doing
  * other stuff with the current URI.
  *
- * Smart rules can take arguments and thus enables more advanced rewriting. The
- * arguments could be search words to google for or look up in a dictionary.
+ * Smart rules can take arguments and therefore enable more advanced rewriting.
+ * The arguments could be search words to google for or a lookup query for a
+ * dictionary.
  *
  * This feature is also available in a more powerful form in the Lua and Guile
- * extensions, so if you plan to or already use those you won't miss anything
- * by disabling this feature, (besides easier and better integrated
+ * extensions, so if you plan to or already use those, you won't miss anything
+ * by disabling this feature (besides easier and better integrated
  * configuration).
  *
  * Default: enabled */
@@ -249,7 +250,7 @@
  * Browsers are scary monsters used for traveling around in an even more scary
  * world where people indifferently throw garbage files at you and threaten
  * your perfect world. Altho' ELinks is a small monster compared to most
- * browsers it can still bite your head off and some might consider running it
+ * browsers, it can still bite your head off and some might consider running it
  * as the root user extremely dangerous. To prevent such usage simply enable
  * this feature.
  *

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.295 2004/06/17 10:02:22 zas Exp $ */
+/* $Id: download.c,v 1.296 2004/06/25 10:52:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -702,7 +702,7 @@ subst_file(unsigned char *prog, unsigned char *file)
 	if (!init_string(&name)) return NULL;
 
 	while (*prog) {
-		register int p;
+		int p;
 
 		for (p = 0; prog[p] && prog[p] != '%'; p++);
 

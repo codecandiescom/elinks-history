@@ -1,5 +1,5 @@
 /* Base64 encode/decode implementation. */
-/* $Id: base64.c,v 1.16 2004/01/01 09:52:52 jonas Exp $ */
+/* $Id: base64.c,v 1.17 2004/06/25 10:52:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,7 @@ static unsigned char base64_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno
 unsigned char *
 base64_encode(register unsigned char *in)
 {
-	register unsigned char *out;
+	unsigned char *out;
 	unsigned char *outstr;
 	int inlen;
 
@@ -63,7 +63,7 @@ base64_decode(register unsigned char *in)
 {
 	static unsigned char is_base64_char[256]; /* static to force initialization at zero */
 	static unsigned char decode[256];
-	register unsigned char *out;
+	unsigned char *out;
 	unsigned char *outstr;
 	int count = 0;
 	unsigned int bits = 0;

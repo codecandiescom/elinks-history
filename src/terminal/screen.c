@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.143 2004/06/13 12:14:36 jonas Exp $ */
+/* $Id: screen.c,v 1.144 2004/06/25 10:52:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -463,7 +463,7 @@ add_char_color(struct string *screen, struct string *seq, unsigned char color)
 {
 	unsigned char color_buf[3];
 	unsigned char *color_pos = color_buf;
-	register int seq_pos = 0;
+	int seq_pos = 0;
        	int color_len = 1;
 
 	check_string_magic(seq);
@@ -474,7 +474,7 @@ add_char_color(struct string *screen, struct string *seq, unsigned char color)
 	if (color < 10) {
 		color_pos += 2;
 	} else {
-		register int color2;
+		int color2;
 
 		++color_len;
 		if (color < 100) {
@@ -558,20 +558,20 @@ add_char256(struct string *screen, struct screen_driver *driver,
 #define add_chars(image_, term_, driver_, state_, ADD_CHAR)			\
 {										\
 	struct terminal_screen *screen = (term_)->screen;			\
-	register int y = screen->dirty_from;					\
+	int y = screen->dirty_from;					\
 	int ypos = y * (term_)->width;						\
 	int prev_y = -1;							\
 	int xmax = (term_)->width - 1;						\
 	int ymax = (term_)->height - 1;						\
-	register struct screen_char *current = &screen->last_image[ypos];	\
-	register struct screen_char *pos = &screen->image[ypos];		\
-	register struct screen_char *prev_pos = NULL; /* Warning prevention. */	\
+	struct screen_char *current = &screen->last_image[ypos];	\
+	struct screen_char *pos = &screen->image[ypos];		\
+	struct screen_char *prev_pos = NULL; /* Warning prevention. */	\
 										\
 	int_upper_bound(&screen->dirty_to, ymax);				\
 										\
 	for (; y <= screen->dirty_to; y++) {					\
 		int is_last_line = (y == ymax);					\
-		register int x = 0;						\
+		int x = 0;						\
 										\
 		for (; x <= xmax; x++, current++, pos++) {			\
 			/*  Workaround for terminals without

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.68 2004/06/20 15:21:01 pasky Exp $ */
+/* $Id: cgi.c,v 1.69 2004/06/25 10:52:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,7 @@ send_post_data(struct connection *conn)
 
 	/* FIXME: Code duplication with protocol/http/http.c! --witekfl */
 	while (post[0] && post[1]) {
-		register int h1, h2;
+		int h1, h2;
 
 		h1 = unhx(post[0]);
 		assert(h1 >= 0 && h1 < 16);

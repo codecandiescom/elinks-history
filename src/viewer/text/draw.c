@@ -1,5 +1,5 @@
 /* Text mode drawing functions */
-/* $Id: draw.c,v 1.4 2004/06/23 08:50:00 jonas Exp $ */
+/* $Id: draw.c,v 1.5 2004/06/25 10:52:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,14 +94,14 @@ draw_frame_lines(struct terminal *term, struct frameset_desc *frameset_desc,
 {
 	/* Optionalize? */
 	struct color_pair colors = INIT_COLOR_PAIR(0x000000, 0xCCCCCC);
-	register int y, j;
+	int y, j;
 
 	assert(term && frameset_desc && frameset_desc->frame_desc);
 	if_assert_failed return;
 
 	y = yp - 1;
 	for (j = 0; j < frameset_desc->box.height; j++) {
-		register int x, i;
+		int x, i;
 		int height = frameset_desc->frame_desc[j * frameset_desc->box.width].height;
 
 		x = xp - 1;
@@ -147,7 +147,7 @@ draw_frame_lines(struct terminal *term, struct frameset_desc *frameset_desc,
 
 	y = yp - 1;
 	for (j = 0; j < frameset_desc->box.height; j++) {
-		register int x, i;
+		int x, i;
 		int pj = j * frameset_desc->box.width;
 		int height = frameset_desc->frame_desc[pj].height;
 

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.88 2004/06/22 06:46:17 miciah Exp $ */
+/* $Id: charsets.c,v 1.89 2004/06/25 10:52:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,7 +81,7 @@ static char *strings[256] = {
 static void
 free_translation_table(struct conv_table *p)
 {
-	register int i;
+	int i;
 
 	for (i = 0; i < 256; i++)
 		if (p[i].t)
@@ -95,7 +95,7 @@ static unsigned char *no_str = "*";
 static void
 new_translation_table(struct conv_table *p)
 {
-	register int i;
+	int i;
 
 	for (i = 0; i < 256; i++)
 		if (p[i].t)
@@ -136,7 +136,7 @@ static const unicode_val strange_chars[32] = {
 unsigned char *
 u2cp_(unicode_val u, int to, int no_nbsp_hack)
 {
-	register int j;
+	int j;
 	int s;
 
 	if (u < 128) return strings[u];
@@ -201,7 +201,7 @@ encode_utf_8(unicode_val u)
 unsigned char *
 cp2utf_8(int from, int c)
 {
-	register int j;
+	int j;
 
 	if (codepages[from].table == table_utf_8 || c < 128)
 		return strings[c];
@@ -249,7 +249,7 @@ int utf_table_init = 1;
 static void
 free_utf_table(void)
 {
-	register int i;
+	int i;
 
 	for (i = 128; i < 256; i++)
 		mem_free(utf_table[i].u.str);
@@ -258,7 +258,7 @@ free_utf_table(void)
 static struct conv_table *
 get_translation_table_to_utf_8(int from)
 {
-	register int i;
+	int i;
 	static int lfr = -1;
 
 	if (from == -1) return NULL;
@@ -331,7 +331,7 @@ get_translation_table(int from, int to)
 	new_translation_table(table);
 
 	if (codepages[from].table == table_utf_8) {
-		register int i;
+		int i;
 
 		for (i = 0; codepages[to].table[i].c; i++)
 			add_utf_8(table, codepages[to].table[i].u,
@@ -343,10 +343,10 @@ get_translation_table(int from, int to)
 					  unicode_7b[i].s);
 
 	} else {
-		register int i;
+		int i;
 
 		for (i = 128; i < 256; i++) {
-			register int j;
+			int j;
 
 			for (j = 0; codepages[from].table[j].c; j++) {
 				if (codepages[from].table[j].c == i) {
@@ -445,7 +445,7 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 	slen = (strlen > 1 && strlen < ENTITY_CACHE_MAXLEN) ? strlen : 0;
 
 	if (strlen < ENTITY_CACHE_MAXLEN && nb_entity_cache[slen] > 0) {
-		register int i;
+		int i;
 
 		for (i = 0; i < nb_entity_cache[slen]; i++) {
 			if (entity_cache[slen][i].encoding == encoding
@@ -625,7 +625,7 @@ convert_string(struct conv_table *convert_table,
 
 		} else {
 			int start = charspos + 1;
-			register int i = start;
+			int i = start;
 
 			while (i < charslen
 			       && ((chars[i] >= 'A' && chars[i] <= 'Z')
@@ -691,7 +691,7 @@ flush:
 int
 get_cp_index(unsigned char *name)
 {
-	register int i, a;
+	int i, a;
 	int syscp = 0;
 
 	if (!strcasecmp(name, "System")) {

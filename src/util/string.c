@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.99 2004/06/20 21:19:30 jonas Exp $ */
+/* $Id: string.c,v 1.100 2004/06/25 10:52:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,7 +164,7 @@ straconcat(unsigned char *str, ...)
 
 
 int
-xstrcmp(register unsigned char *s1, register unsigned char *s2)
+xstrcmp(register unsigned char *s1, unsigned char *s2)
 {
 	if (!s1) return -!!s2;
 	if (!s2) return 1;

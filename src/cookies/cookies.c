@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.151 2004/06/20 21:19:29 jonas Exp $ */
+/* $Id: cookies.c,v 1.152 2004/06/25 10:52:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,7 +177,7 @@ free_cookie(struct cookie *c)
 static int
 check_domain_security(unsigned char *domain, unsigned char *server, int server_len)
 {
-	register int i, j;
+	int i, j;
 	int domain_len;
 	int need_dots;
 

@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.13 2004/04/16 09:20:52 zas Exp $ */
+/* $Id: generic.h,v 1.14 2004/06/25 10:52:30 zas Exp $ */
 
 #ifndef EL__OSDEP_GENERIC_H
 #define EL__OSDEP_GENERIC_H
@@ -51,7 +51,7 @@
 static inline ssize_t
 safe_read(int fd, void *buf, size_t count) {
 	do {
-		register int r = read(fd, buf, count);
+		int r = read(fd, buf, count);
 
 		if (r == -1 && errno == EINTR) continue;
 		return r;
@@ -61,7 +61,7 @@ safe_read(int fd, void *buf, size_t count) {
 static inline ssize_t
 safe_write(int fd, const void *buf, size_t count) {
 	do {
-		register int w = write(fd, buf, count);
+		int w = write(fd, buf, count);
 
 		if (w == -1 && errno == EINTR) continue;
 		return w;

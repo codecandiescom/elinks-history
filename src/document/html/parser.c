@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.466 2004/06/23 12:44:27 jonas Exp $ */
+/* $Id: parser.c,v 1.467 2004/06/25 10:52:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -744,7 +744,7 @@ html_li(unsigned char *a)
 		} else if (t == P_ROMAN || t == P_roman) {
 			roman(n, par_format.list_number);
 			if (t == P_ROMAN) {
-				register unsigned char *x;
+				unsigned char *x;
 
 				for (x = n; *x; x++) *x = toupper(*x);
 			}

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.238 2004/06/25 09:54:46 jonas Exp $ */
+/* $Id: menu.c,v 1.239 2004/06/25 10:52:29 zas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -65,7 +65,7 @@ static inline int
 count_items(struct menu_item *items)
 {
 	struct menu_item *item;
-	register int i = 0;
+	int i = 0;
 
 	if (items)
 		foreach_menu_item (item, items) i++;

@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.23 2003/09/21 14:47:28 jonas Exp $ */
+/* $Id: hash.c,v 1.24 2004/06/25 10:52:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,7 +28,7 @@ struct hash *
 init_hash(unsigned int width, hash_func func)
 {
 	struct hash *hash;
-	register unsigned int i = 0;
+	unsigned int i = 0;
 
 	assert(width > 0 && func);
 	if_assert_failed return NULL;
@@ -51,7 +51,7 @@ init_hash(unsigned int width, hash_func func)
 void
 free_hash(struct hash *hash)
 {
-	register unsigned int i = 0;
+	unsigned int i = 0;
 
 	assert(hash);
 	if_assert_failed return;
@@ -140,8 +140,8 @@ strhash(unsigned char *k, /* the key */
 	hash_value initval /* the previous hash, or an arbitrary value */)
 {
 	const unsigned char *p = (const unsigned char *) k;
-	register hash_value h = initval;
-	register unsigned int i = 0;
+	hash_value h = initval;
+	unsigned int i = 0;
 
 	assert(k && length > 0);
 	if_assert_failed return h;
@@ -260,8 +260,8 @@ strhash(unsigned char *k, /* the key */
 	unsigned int length, /* the length of the key */
 	hash_value initval /* the previous hash, or an arbitrary value */)
 {
-	register int len;
-	register hash_value a, b, c;
+	int len;
+	hash_value a, b, c;
 
 	/* Set up the internal state */
 	len = length;

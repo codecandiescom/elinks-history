@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.34 2004/06/20 21:19:30 jonas Exp $ */
+/* $Id: conv.h,v 1.35 2004/06/25 10:52:31 zas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -140,8 +140,8 @@ int month2num(const unsigned char *month);
 static inline unsigned char *
 trim_chars(unsigned char *s, unsigned char c, int *len)
 {
-	register int l = strlen(s);
-	register unsigned char *p = s;
+	int l = strlen(s);
+	unsigned char *p = s;
 
 	while (*p == c) p++, l--;
 	while (l && p[l - 1] == c) p[--l] = '\0';

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.205 2004/06/25 10:18:50 zas Exp $ */
+/* $Id: tables.c,v 1.206 2004/06/25 10:52:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -265,10 +265,10 @@ expand_cells(struct table *table, int x, int y)
 	if (x >= table->x) {
 		if (table->x) {
 			int tx = table->x - 1;
-			register int i;
+			int i;
 
 			for (i = 0; i < table->y; i++) {
-				register int j;
+				int j;
 				struct table_cell *cellp = CELL(table, tx, i);
 
 				if (cellp->colspan != -1) continue;
@@ -291,10 +291,10 @@ expand_cells(struct table *table, int x, int y)
 	if (y >= table->y) {
 		if (table->y) {
 			int ty = table->y - 1;
-			register int i;
+			int i;
 
 			for (i = 0; i < table->x; i++) {
-				register int j;
+				int j;
 				struct table_cell *cellp = CELL(table, i, ty);
 
 				if (cellp->rowspan != -1) continue;
@@ -323,7 +323,7 @@ new_cell(struct table *table, int x, int y)
 
 	while (1) {
 		struct table new_table;
-		register int i = 0;
+		int i = 0;
 
 		if (x < table->rx && y < table->ry) {
 			expand_cells(table, x, y);
@@ -345,7 +345,7 @@ new_cell(struct table *table, int x, int y)
 		if (!new_table.cells) return NULL;
 
 		while (i < table->x) {
-			register int j = 0;
+			int j = 0;
 
 			while (j < table->y) {
 				memcpy(CELL(&new_table, i, j), CELL(table, i, j),
@@ -397,7 +397,7 @@ set_td_width(struct table *table, int col, int width, int force)
 {
 	if (col >= table->cols_x_count) {
 		int n = table->cols_x_count;
-		register int i;
+		int i;
 		int *new_cols_x;
 
 		while (col >= n) if (!(n <<= 1)) break;
@@ -472,7 +472,7 @@ parse_table(unsigned char *html, unsigned char *eof,
 	int i, j, k;
 	int qqq;
 	int c_al = AL_TR, c_val = VALIGN_TR, c_width = WIDTH_AUTO, c_span = 0;
-	register int x = 0, y = -1;
+	int x = 0, y = -1;
 
 	*end = html;
 
@@ -854,7 +854,7 @@ get_cell_width(unsigned char *start, unsigned char *end,
 static inline void
 check_cell_widths(struct table *table)
 {
-	register int i, j;
+	int i, j;
 
 	for (j = 0; j < table->y; j++) for (i = 0; i < table->x; i++) {
 		int min, max;
@@ -874,7 +874,7 @@ static inline void
 get_cell_widths(struct table *table)
 {
 	int nl = table->part->link_num;
-	register int i, j;
+	int i, j;
 
 	if (!global_doc_opts->table_order)
 		for (j = 0; j < table->y; j++)
@@ -903,7 +903,7 @@ get_cell_widths(struct table *table)
 static inline void
 distribute_values(int *values, int count, int wanted, int *limits)
 {
-	register int i;
+	int i;
 	int sum = 0, d, r, t;
 
 	for (i = 0; i < count; i++) sum += values[i];
@@ -971,7 +971,7 @@ get_hline_width(struct table *table, int row)
 		return -1;
 
 	} else if (table->rules == TABLE_RULE_GROUPS) {
-		register int col;
+		int col;
 
 		for (col = 0; col < table->x; col++)
 			if (CELL(table, col, row)->group) {
@@ -1015,7 +1015,7 @@ get_column_widths(struct table *table)
 
 	colspan = 1;
 	do {
-		register int i = 0, j;
+		int i = 0, j;
 		int new_colspan = MAXINT;
 
 		for (; i < table->x; i++) for (j = 0; j < table->y; j++) {
@@ -1027,7 +1027,7 @@ get_column_widths(struct table *table)
 			if_assert_failed return -1;
 
 			if (cell->colspan == colspan) {
-				register int k, p = 0;
+				int k, p = 0;
 
 				for (k = 1; k < colspan; k++)
 					p += (get_vline_width(table, i + k) >= 0);
@@ -1066,7 +1066,7 @@ get_table_width(struct table *table)
 	struct table_frames table_frames;
 	int min = 0;
 	int max = 0;
-	register int i;
+	int i;
 
 	for (i = 0; i < table->x; i++) {
 		int vl = (get_vline_width(table, i) >= 0);
@@ -1091,7 +1091,7 @@ get_table_width(struct table *table)
 static void
 distribute_widths(struct table *table, int width)
 {
-	register int i;
+	int i;
 	int d = width - table->min_width;
 	int om = 0;
 	char *u;
@@ -1248,7 +1248,7 @@ end:
 static void
 check_table_widths(struct table *table)
 {
-	register int i, j;
+	int i, j;
 	int colspan;
 	int width, new_width;
 	int max, max_index = 0; /* go away, warning! */
@@ -1258,7 +1258,7 @@ check_table_widths(struct table *table)
 
 	for (j = 0; j < table->y; j++) for (i = 0; i < table->x; i++) {
 		struct table_cell *cell = CELL(table, i, j);
-		register int k, p = 0;
+		int k, p = 0;
 
 		if (!cell->start) continue;
 
@@ -1340,7 +1340,7 @@ static void
 get_table_heights(struct table *table)
 {
 	int rowspan;
-	register int i, j;
+	int i, j;
 
 	for (j = 0; j < table->y; j++) {
 		for (i = 0; i < table->x; i++) {
@@ -1376,7 +1376,7 @@ get_table_heights(struct table *table)
 				if (!cell->is_used || cell->is_spanned) continue;
 
 				if (cell->rowspan == rowspan) {
-					register int k, p = 0;
+					int k, p = 0;
 
 					for (k = 1; k < rowspan; k++)
 						p += (get_hline_width(table, j + k) >= 0);
@@ -1412,7 +1412,7 @@ get_table_heights(struct table *table)
 static void
 display_complicated_table(struct table *table, int x, int y, int *yy)
 {
-	register int i, j;
+	int i, j;
 	struct document *document = table->part->document;
 	int xp, yp;
 	int expand_cols = (global_doc_opts && global_doc_opts->table_expand_cols);
@@ -1445,7 +1445,7 @@ display_complicated_table(struct table *table, int x, int y, int *yy)
 			if (cell->start) {
 				int xw = 0;
 				int yw = 0;
-				register int s;
+				int s;
 				struct html_element *state;
 
 				for (s = 0; s < cell->colspan; s++) {
@@ -1562,7 +1562,7 @@ draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
 	signed char right  = H_FRAME_POSITION(table,     i,     j);
 	signed char top    = V_FRAME_POSITION(table,     i, j - 1);
 	signed char bottom = V_FRAME_POSITION(table,     i,     j);
-	register int pos;
+	int pos;
 
 	if (left < 0 && right < 0 && top < 0 && bottom < 0) return;
 
@@ -1611,7 +1611,7 @@ display_table_frames(struct table *table, int x, int y)
 {
 	struct table_frames table_frames;
  	signed char *frame[2];
-  	register int i, j;
+  	int i, j;
   	int cx, cy;
   	int fh_size = (table->x + 2) * (table->y + 1);
   	int fv_size = (table->x + 1) * (table->y + 2);

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.254 2004/06/22 07:10:20 jonas Exp $ */
+/* $Id: uri.c,v 1.255 2004/06/25 10:52:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ check_uri_file(unsigned char *name)
 static inline int
 get_protocol_length(const unsigned char *url)
 {
-	register unsigned char *end = (unsigned char *) url;
+	unsigned char *end = (unsigned char *) url;
 
 	/* Seek the end of the protocol name if any. */
 	/* RFC1738:

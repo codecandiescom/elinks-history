@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.139 2004/06/22 06:46:17 miciah Exp $ */
+/* $Id: ftp.c,v 1.140 2004/06/25 10:52:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,7 +148,7 @@ static int
 get_ftp_response(struct connection *conn, struct read_buffer *rb, int part,
 		 struct sockaddr_storage *sa)
 {
-	register int pos;
+	int pos;
 
 	set_connection_timeout(conn);
 
@@ -690,7 +690,7 @@ static long int
 get_filesize_from_RETR(unsigned char *data, int data_len)
 {
 	long int file_len;
-	register int pos;
+	int pos;
 	int pos_file_len = 0;
 
 	/* Getting file size from text response.. */
@@ -1045,7 +1045,7 @@ ftp_process_dirlist(struct cache_entry *cached, int *pos,
 		struct ftpparse ftp_info;
 		unsigned char *buf = buffer + ret;
 		int bufl = buflen - ret;
-		register int bufp;
+		int bufp;
 		int newline = 0;
 
 		/* Newline quest. */

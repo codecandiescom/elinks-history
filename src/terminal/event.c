@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.60 2004/06/22 06:46:18 miciah Exp $ */
+/* $Id: event.c,v 1.61 2004/06/25 10:52:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -239,7 +239,7 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 
 		} else if ((ev->x & 0xC0) == 0xC0
 			   && (ev->x & 0xFE) != 0xFE) {
-			register unsigned int mask, cov = 0x80;
+			unsigned int mask, cov = 0x80;
 			int len = 0;
 
 			for (mask = 0x80; ev->x & mask; mask >>= 1) {

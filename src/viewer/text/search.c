@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.245 2004/06/23 08:16:23 jonas Exp $ */
+/* $Id: search.c,v 1.246 2004/06/25 10:52:31 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -141,7 +141,7 @@ get_srch(struct document *document)
 	if_assert_failed return 0;
 
 	foreachback (node, document->nodes) {
-		register int x, y;
+		int x, y;
 		int height = int_min(node->box.y + node->box.height, document->height);
 
 		for (y = node->box.y; y < height; y++) {
@@ -211,7 +211,7 @@ static int
 get_range(struct document *document, int y, int height, int l,
 	  struct search **s1, struct search **s2)
 {
-	register int i;
+	int i;
 
 	assert(document && s1 && s2);
 	if_assert_failed return -1;
@@ -255,7 +255,7 @@ is_in_range_regex(struct document *document, int y, int height,
 	int found = 0;
 	int regex_flags = REG_NEWLINE;
 	int regexec_flags = 0;
-	register int i;
+	int i;
 	int reg_err;
 	regex_t regex;
 	regmatch_t regmatch;
@@ -343,7 +343,7 @@ next:
 
 /* Returns an allocated string which is a lowered copy of passed one. */
 static unsigned char *
-lowered_string(unsigned char *text, register int textlen)
+lowered_string(unsigned char *text, int textlen)
 {
 	unsigned char *ret;
 
@@ -382,7 +382,7 @@ is_in_range_plain(struct document *document, int y, int height,
 #define maybe_tolower(c) (case_sensitive ? (c) : tolower(c))
 
 	for (; s1 <= s2; s1++) {
-		register int i;
+		int i;
 
 		if (maybe_tolower(s1->c) != txt[0]) {
 srch_failed:
@@ -463,7 +463,7 @@ get_searched_plain(struct document_view *doc_view, struct point **pt, int *pl,
 #define maybe_tolower(c) (case_sensitive ? (c) : tolower(c))
 
 	for (; s1 <= s2; s1++) {
-		register int i;
+		int i;
 
 		if (maybe_tolower(s1[0].c) != txt[0]) {
 srch_failed:
@@ -475,7 +475,7 @@ srch_failed:
 				goto srch_failed;
 
 		for (i = 0; i < l; i++) {
-			register int j;
+			int j;
 			int y = s1[i].y + yoffset;
 
 			if (!row_is_in_box(box, y))
@@ -518,7 +518,7 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	int regex_flags = REG_NEWLINE;
 	int regexec_flags = 0;
 	int reg_err;
-	register int i;
+	int i;
 	regex_t regex;
 	regmatch_t regmatch;
 	int pos = 0;
@@ -575,7 +575,7 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 
 find_next:
 	while (pos < doclen) {
-		register int y = search_start[pos].y;
+		int y = search_start[pos].y;
 
 		if (y >= y1 && y <= y2) break;
 		pos++;
@@ -584,7 +584,7 @@ find_next:
 	s1 = &search_start[pos];
 
 	while (pos < doclen) {
-		register int y = search_start[pos].y;
+		int y = search_start[pos].y;
 
 		if (y < y1 || y > y2) break;
 		pos++;
@@ -599,7 +599,7 @@ find_next:
 		doctmp += regmatch.rm_so;
 
 		for (i = 0; i < l; i++) {
-			register int j;
+			int j;
 			int y = s1[i].y + yoffset;
 
 			if (!row_is_in_box(box, y))
@@ -681,7 +681,7 @@ draw_searched(struct terminal *term, struct document_view *doc_view)
 
 	get_searched(doc_view, &pt, &len);
 	if (len) {
-		register int i;
+		int i;
 		struct color_pair *color = get_bfu_color(term, "searched");
 		int xoffset = doc_view->box.x - doc_view->vs->x;
 		int yoffset = doc_view->box.y - doc_view->vs->y;
@@ -760,7 +760,7 @@ point_intersect(struct point *p1, int l1, struct point *p2, int l2)
 #define HASH_SIZE	4096
 #define HASH(p) ((((p).y << 6) + (p).x) & (HASH_SIZE - 1))
 
-	register int i;
+	int i;
 	static char hash[HASH_SIZE];
 	static int first_time = 1;
 
@@ -772,7 +772,7 @@ point_intersect(struct point *p1, int l1, struct point *p2, int l2)
 	for (i = 0; i < l1; i++) hash[HASH(p1[i])] = 1;
 
 	for (i = 0; i < l2; i++) {
-		register int j;
+		int j;
 
 		if (!hash[HASH(p2[i])]) continue;
 
@@ -1068,7 +1068,7 @@ draw_link_text(struct terminal *term, struct document_view *doc_view,
 	struct link *link = &doc_view->document->links[current_link];
 	unsigned char *text = link->name ? link->name : link->where;
 	int end = offset + chars;
-	register int i, j;
+	int i, j;
 
 	for (i = 0, j = 0; text[j] && i < end; i++, j++) {
 		int x = link->points[i].x;

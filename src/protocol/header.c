@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.2 2004/06/20 21:19:29 jonas Exp $ */
+/* $Id: header.c,v 1.3 2004/06/25 10:52:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,7 +77,7 @@ cont:
 unsigned char *
 parse_http_header_param(unsigned char *str, unsigned char *name)
 {
-	register unsigned char *p = str;
+	unsigned char *p = str;
 	int namelen, plen = 0;
 
 	assert(str && name && *name);

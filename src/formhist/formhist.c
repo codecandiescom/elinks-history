@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.87 2004/06/17 10:02:21 zas Exp $ */
+/* $Id: formhist.c,v 1.88 2004/06/25 10:52:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,7 +65,7 @@ static struct form_type_name form_type2name[] = {
 int
 str2form_type(unsigned char *s)
 {
-	register int n;
+	int n;
 
 	for (n = 0; n < FORM_TYPE_COUNT; n++)
 		if (!strcmp(form_type2name[n].name, s))
@@ -77,7 +77,7 @@ str2form_type(unsigned char *s)
 unsigned char *
 form_type2str(enum form_type num)
 {
-	register int n;
+	int n;
 
 	for (n = 0; n < FORM_TYPE_COUNT; n++)
 		if (form_type2name[n].num == num)

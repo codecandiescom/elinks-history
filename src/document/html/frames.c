@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.74 2004/06/22 06:46:16 miciah Exp $ */
+/* $Id: frames.c,v 1.75 2004/06/25 10:52:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,7 @@ create_frameset(struct frameset_param *fp)
 	if (!fd) return NULL;
 
 	{
-		register int i;
+		int i;
 
 		for (i = 0; i < size; i++) {
 			fd->frame_desc[i].width = fp->width[i % fp->x];
@@ -204,7 +204,7 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 	      struct document_options *op, int depth)
 {
 	struct document_options o;
-	register int j, n;
+	int j, n;
 
 	assert(ses && fsd && op);
 	if_assert_failed return;
@@ -217,7 +217,7 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 
 	n = 0;
 	for (j = 0; j < fsd->box.height; j++) {
-		register int i;
+		int i;
 
 		o.box.x = op->box.x;
 		for (i = 0; i < fsd->box.width; i++) {
@@ -250,7 +250,7 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 static int
 distribute_rows_or_cols(int *val_, int max_value, int *values, int values_count)
 {
-	register int i;
+	int i;
 	int divisor = 0;
 	int tmp_val;
 	int val = *val_;
@@ -294,7 +294,7 @@ distribute_rows_or_cols(int *val_, int max_value, int *values, int values_count)
 static int
 distribute_rows_or_cols_that_left(int *val_, int max_value, int *values, int values_count)
 {
-	register int i;
+	int i;
 	int val = *val_;
 	int *tmp_values;
 	int divisor = 0;
@@ -411,7 +411,7 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char,
 	int val, ret;
 	int *values;
 	int values_count;
-	register int i;
+	int i;
 
 	*new_values_count = 0;
 
@@ -445,7 +445,7 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char,
 
 	for (i = 0; i < values_count; i++)
 		if (!values[i]) {
-			register int j;
+			int j;
 			int maxval = 0;
 			int maxpos = 0;
 

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.133 2004/06/23 14:02:37 jonas Exp $ */
+/* $Id: textarea.c,v 1.134 2004/06/25 10:52:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,7 +178,7 @@ draw_textarea(struct terminal *term, struct form_state *fs,
 	struct box *box;
 	int vx, vy;
 	int sl, ye;
-	register int x, y;
+	int x, y;
 
 	assert(term && doc_view && doc_view->document && doc_view->vs && link);
 	if_assert_failed return;
@@ -203,7 +203,7 @@ draw_textarea(struct terminal *term, struct form_state *fs,
 	ye = y + fc->rows;
 
 	for (; line->start != -1 && y < ye; line++, y++) {
-		register int i;
+		int i;
 
 		if (!row_is_in_box(box, y)) continue;
 
@@ -225,7 +225,7 @@ draw_textarea(struct terminal *term, struct form_state *fs,
 	}
 
 	for (; y < ye; y++) {
-		register int i;
+		int i;
 
 		if (!row_is_in_box(box, y)) continue;
 
@@ -247,7 +247,7 @@ encode_textarea(struct submitted_value *sv)
 	struct form_control *fc;
 	struct string newtext;
 	void *blabla;
-	register int i;
+	int i;
 
 	assert(sv && sv->value);
 	if_assert_failed return NULL;

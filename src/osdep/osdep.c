@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.129 2004/06/20 15:28:23 pasky Exp $ */
+/* $Id: osdep.c,v 1.130 2004/06/25 10:52:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -295,7 +295,7 @@ set_clipboard_text(unsigned char *data)
 
 		if (!init_string(&str)) return;
 
-		add_to_string(&str, "screen -X register . '");
+		add_to_string(&str, "screen -X . '");
 		for (; *data; ++data)
 			if (*data == '\'')
 				add_to_string(&str, "'\\''");
@@ -316,7 +316,7 @@ set_window_title(unsigned char *title)
 {
 	unsigned char *s;
 	int xsize, ysize;
-	register int j = 0;
+	int j = 0;
 
 	/* Check if we're in a xterm-like terminal. */
 	if (!is_xterm() && !is_gnuscreen()) return;
@@ -333,7 +333,7 @@ set_window_title(unsigned char *title)
 
 	/* Copy title to s if different from NULL */
 	if (title) {
-		register int i;
+		int i;
 
 		/* We limit title length to terminal width and ignore control
 		 * chars if any. Note that in most cases window decoration

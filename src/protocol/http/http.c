@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.293 2004/06/22 06:46:17 miciah Exp $ */
+/* $Id: http.c,v 1.294 2004/06/25 10:52:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -604,7 +604,7 @@ http_send_header(struct connection *conn)
 		int n = 0;
 
 		while (post[0] && post[1]) {
-			register int h1, h2;
+			int h1, h2;
 
 			h1 = unhx(post[0]);
 			assert(h1 >= 0 && h1 < 16);
@@ -767,7 +767,7 @@ uncompress_shutdown(struct connection *conn)
 static int
 is_line_in_buffer(struct read_buffer *rb)
 {
-	register int l;
+	int l;
 
 	for (l = 0; l < rb->len; l++) {
 		unsigned char a0 = rb->data[l];
@@ -974,7 +974,7 @@ thats_all_folks:
 static int
 get_header(struct read_buffer *rb)
 {
-	register int i;
+	int i;
 
 	/* XXX: We will have to do some guess about whether an HTTP header is
 	 * coming or not, in order to support HTTP/0.9 reply correctly. This

@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.52 2004/06/20 21:19:30 jonas Exp $ */
+/* $Id: fastfind.c,v 1.53 2004/06/25 10:52:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -300,7 +300,7 @@ alloc_leafset(struct fastfind_info *info)
 static inline int
 char2idx(unsigned char c, struct fastfind_info *info)
 {
-	register int idx;
+	int idx;
 
 	for (idx = 0; idx < info->uniq_chars_count; idx++)
 		if (info->uniq_chars[idx] == c)
@@ -312,7 +312,7 @@ char2idx(unsigned char c, struct fastfind_info *info)
 static inline void
 init_idxtab(struct fastfind_info *info)
 {
-	register int i;
+	int i;
 
 	for (i = 0; i < FF_MAX_CHARS; i++)
 		info->idxtab[i] = char2idx((unsigned char) i, info);
@@ -336,7 +336,7 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 	(*reset)();
 	while ((p = (*next)())) {
 		int key_len = strlen(p->key);
-		register int i;
+		int i;
 
 		assert(key_len); /* We do not want empty keys. */
 		if_assert_failed goto alloc_error;
@@ -388,7 +388,7 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 	while ((p = (*next)())) {
 		int key_len = strlen(p->key);
 		struct ff_node *leafset = info->root_leafset;
-		register int i;
+		int i;
 
 #if 0
 		fprintf(stderr, "K: %s\n", p->key);
@@ -432,7 +432,7 @@ fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
 {
 	int cnt = 0;
 	int pos = 0;
-	register int i = 0;
+	int i = 0;
 
 	assert(info);
 	if_assert_failed return;
@@ -487,7 +487,7 @@ fastfind_index_compress(struct fastfind_info *info)
 
 /* This macro searchs for the key in indexed list */
 #define FF_SEARCH(what) do {							\
-	register int i = 0;							\
+	int i = 0;							\
 										\
 	for (; i < key_len; i++) {						\
 		int lidx, k = what;						\

@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.76 2004/06/18 14:00:30 jonas Exp $ */
+/* $Id: color.c,v 1.77 2004/06/25 10:52:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,9 +24,9 @@ struct rgb_cache_entry {
 static inline int
 color_distance(struct rgb *c1, struct rgb *c2)
 {
-	register int r = c1->r - c2->r;
-	register int g = c1->g - c2->g;
-	register int b = c1->b - c2->b;
+	int r = c1->r - c2->r;
+	int g = c1->g - c2->g;
+	int b = c1->b - c2->b;
 
 	return (3 * r * r) + (4 * g * g) + (2 * b * b);
 }
@@ -53,7 +53,7 @@ get_color(color_t color, struct rgb *palette, int level)
 		struct rgb rgb = INIT_RGB(color);
 		unsigned char nearest_color = 0;
 		int min_dist = 0xffffff;
-		register int i;
+		int i;
 
 		/* This is a hotspot so maybe this is a bad idea. --jonas */
 		assertm(level, "find_nearest_color() called with @level = 0");

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.246 2004/06/21 11:08:54 miciah Exp $ */
+/* $Id: link.c,v 1.247 2004/06/25 10:52:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -268,7 +268,7 @@ get_first_link(struct document_view *doc_view)
 	struct link *link, *undef;
 	struct document *document;
 	int height;
-	register int i;
+	int i;
 
 	assert(doc_view && doc_view->document);
 	if_assert_failed return NULL;
@@ -297,7 +297,7 @@ get_last_link(struct document_view *doc_view)
 	struct link *link = NULL;
 	struct document *document;
 	int height;
-	register int i;
+	int i;
 
 	assert(doc_view && doc_view->document);
 	if_assert_failed return NULL;
@@ -320,7 +320,7 @@ get_last_link(struct document_view *doc_view)
 static inline int
 in_viewx(struct document_view *doc_view, struct link *link)
 {
-	register int i, dx, width;
+	int i, dx, width;
 
 	assert(doc_view && link);
 	if_assert_failed return 0;
@@ -329,7 +329,7 @@ in_viewx(struct document_view *doc_view, struct link *link)
 	width = doc_view->box.width;
 
 	for (i = 0; i < link->npoints; i++) {
-		register int x = link->points[i].x - dx;
+		int x = link->points[i].x - dx;
 
 		if (x >= 0 && x < width)
 			return 1;
@@ -341,7 +341,7 @@ in_viewx(struct document_view *doc_view, struct link *link)
 int
 in_viewy(struct document_view *doc_view, struct link *link)
 {
-	register int i, dy, height;
+	int i, dy, height;
 
 	assert(doc_view && link);
 	if_assert_failed return 0;
@@ -350,7 +350,7 @@ in_viewy(struct document_view *doc_view, struct link *link)
 	height = doc_view->box.height;
 
 	for (i = 0; i < link->npoints; i++) {
-		register int y = link->points[i].y - dy;
+		int y = link->points[i].y - dy;
 
 		if (y >= 0 && y < height)
 			return 1;
@@ -427,7 +427,7 @@ set_pos_x(struct document_view *doc_view, struct link *link)
 {
 	int xm = 0;
 	int xl = MAXINT;
-	register int i;
+	int i;
 
 	assert(doc_view && link);
 	if_assert_failed return;
@@ -450,7 +450,7 @@ set_pos_y(struct document_view *doc_view, struct link *link)
 {
 	int ym = 0;
 	int yl;
-	register int i;
+	int i;
 
 	assert(doc_view && doc_view->document && doc_view->vs && link);
 	if_assert_failed return;
@@ -678,7 +678,7 @@ struct link *
 get_link_at_coordinates(struct document_view *doc_view, int x, int y)
 {
 	struct link *l1, *l2, *link;
-	register int i, height;
+	int i, height;
 
 	assert(doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return NULL;

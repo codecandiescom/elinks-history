@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.216 2004/06/25 09:54:45 jonas Exp $ */
+/* $Id: form.c,v 1.217 2004/06/25 10:52:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,7 @@ done_submitted_value(struct submitted_value *sv)
 static void
 fixup_select_state(struct form_control *fc, struct form_state *fs)
 {
-	register int i;
+	int i;
 
 	assert(fc && fs);
 	if_assert_failed return;
@@ -300,7 +300,7 @@ draw_form_entry(struct terminal *term, struct document_view *doc_view,
 	switch (fc->type) {
 		unsigned char *s;
 		int len;
-		register int i, x, y;
+		int i, x, y;
 
 		case FC_TEXT:
 		case FC_PASSWORD:
@@ -643,7 +643,7 @@ add_boundary(struct string *data, struct boundary_info *boundary)
 static inline unsigned char *
 increment_boundary_counter(struct boundary_info *boundary)
 {
-	register int j;
+	int j;
 
 	/* This is just a decimal string incrementation */
 	for (j = BOUNDARY_LENGTH - 1; j >= 0; j--) {
@@ -662,7 +662,7 @@ static inline void
 check_boundary(struct string *data, struct boundary_info *boundary)
 {
 	unsigned char *bound = boundary->string;
-	register int i;
+	int i;
 
 	/* Search between all boundaries. There is a starting and an ending
 	 * boundary so only check the range of chars after the current offset
@@ -1011,7 +1011,7 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 	case FM_POST_MP:
 	case FM_POST_TEXT_PLAIN:
 	{
-		register int i;
+		int i;
 
 		add_to_string(&go, fc->action);
 		add_char_to_string(&go, POST_CHAR);

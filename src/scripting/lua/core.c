@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.159 2004/06/22 06:46:18 miciah Exp $ */
+/* $Id: core.c,v 1.160 2004/06/25 10:52:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,7 +117,7 @@ l_current_title(LS)
 		unsigned char *clean_title = stracpy(doc_view->document->title);
 
 		if (clean_title) {
-			register int i = 0;
+			int i = 0;
 
 			while (clean_title[i]) {
 				if (clean_title[i] < ' '

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.254 2004/06/26 21:31:53 pasky Exp $ */
+/* $Id: link.c,v 1.255 2004/06/26 21:53:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -562,6 +562,12 @@ next_in_dir(struct document_view *doc_view, int current, int dir_x, int dir_y)
 			}
 		}
 
+		if (!y || y == document->height) {
+			/* We just stay at the same place, do not invalidate
+			 * the link number. */
+			return 0;
+		}
+
 	} else {
 		/* Horizontal movement */
 
@@ -596,6 +602,9 @@ next_in_dir(struct document_view *doc_view, int current, int dir_x, int dir_y)
 					last++;
 			}
 		}
+
+		/* We just stay  */
+		return 0;
 	}
 
 	vs->current_link = -1;

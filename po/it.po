@@ -3890,9 +3890,9 @@ msgid "Memory info"
 msgstr "Informazioni memoria"
 
 #: src/dialogs/info.c:201
-#, fuzzy, c-format
+#, c-format
 msgid "%ld bytes of memory allocated."
-msgstr "%ld byte di memoria allocati.%s"
+msgstr "%ld byte di memoria allocati."
 
 #: src/dialogs/menu.c:143
 msgid "Exit ELinks"
@@ -4629,7 +4629,7 @@ msgstr ""
 #. name:
 #: src/mime/backend/mimetypes.c:49 src/mime/backend/mimetypes.c:293
 msgid "Mimetypes files"
-msgstr "File tipo mime"
+msgstr "Tipi file MIME"
 
 #: src/mime/backend/mimetypes.c:51
 msgid ""

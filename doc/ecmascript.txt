@@ -1,0 +1,68 @@
+		ECMAScript support?!
+
+Yes, there is some ECMAScript support in ELinks - there isn't anything we could
+call complete, but some bits could help with the most common ECMAScript usage
+cases - help you (and then us ;) get into your banking account, pass through
+those ignorant page redirects done by JavaScript code snippets and so.
+
+ELinks does not have own ECMAScript parser and compiler, instead it reuses
+other people's work (this may eventually change, see the bottom of this file).
+First we aimed at the njs engine, which is easy to install, small, compact, has
+nice naming scheme, horrible calling conventions, very lacking documentation,
+is not actively developed and generally looks broken and extremely clumsy to
+work with. So we instead went the way of SpiderMonkey engine (property of
+Mozilla), which is hard to install, bigger (mind you, it comes from Mozilla ;),
+has ugly naming scheme but nice calling conventions, acceptable documentation,
+is actively developed and ought to work.
+
+
+		Ok, so how to get the ECMAScript support working?
+
+You need to get (and install) SpiderMonkey and then recompile your ELinks (if
+you installed SM properly, ELinks should autodetect it during the configure
+phase) and you are ready to fly.
+
+To get SpiderMonkey source, go at ftp://ftp.mozilla.org/pub/mozilla.org/js/
+and fetch the newest js- tarball there (js-1.5-rc6a.tar.gz at the time of
+writing this; you may try the RPMs, but we didn't test them).
+
+Next, you need to patch it so that you will have any chance to install it as
+you fetched it. Grab it in ELinks at contrib/js-1.5-rc6a+elinks.patch (if you
+have a different version, still try to go ahead, you might have some success),
+then go to SpiderMonkey into the src/ subdir and apply it as
+
+	$ patch -p1 <the-patch-file
+
+Now, edit config.mk and adjust the $PREFIX variable - you probably won't like
+the default value - ELinks will find it there, but your dynamic linker likely
+won't.
+
+Now you can finally go for it:
+
+	$ make -f Makefile.ref
+	$ make -f Makefile.ref export
+	# make -f Makefile.ref install
+
+If all went well, you can proceed to rebuild ELinks now. If something broke,
+see you on #elinks @ FreeNode or in the mailing list.
+
+
+		The ECMAScript support is buggy! Shall I blame Mozilla people?
+
+Likely not. The ECMAScript engine provides only the language compiler and some
+basic builtin objects, and it's more than likely that the problem is on our
+side in implementation of some of the HTML/DOM objects (perhaps we just didn't
+bother to implement it at all yet). So better tell us first, and if we think
+it's not our fault we will tell you to go complain to Mozilla (better yet if
+it does not work in the Mozilla browsers neither ;-).
+
+
+		Now, I would still like njs or a new JS engine from scratch...
+
+...and you don't fear some coding? That's fine then! ELinks is in no way tied
+to SpiderMonkey, in fact the ECMAScript support was carefully implemented so
+that there are no SpiderMonkey references outside of
+src/ecmascript/spidermonkey.*. If you want to implement an alternative
+ECMAScript backend, go ahead - you will just need to write an autoconf
+detection for it and tie it to src/ecmascript/ecmascript.c, which should be
+easy. We await your patches eagerly.

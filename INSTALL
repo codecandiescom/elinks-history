@@ -6,7 +6,8 @@ Elinks installation guidelines
 	./configure && make && make install
 
   Check out the bottom of this file if you're upgrading from Links or an older
-ELinks!
+ELinks! And be sure to look at doc/ecmascript.txt if you want ECMAScript
+(that's JavaScript) support.
 
 ##########
 
@@ -173,5 +174,5 @@ old_to_new_bookmarks.sh.
 
 ##########
 
-$Id: INSTALL,v 1.28 2004/09/22 15:25:41 pasky Exp $
+$Id: INSTALL,v 1.29 2004/09/22 16:17:23 pasky Exp $
 vim: textwidth=80

@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.60 2004/05/03 23:04:08 zas Exp $ */
+/* $Id: dialogs.c,v 1.61 2004/05/30 17:10:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,7 +55,7 @@ get_cache_entry_info(struct listbox_item *item, struct terminal *term,
 	struct string msg;
 
 	if (listbox_info == LISTBOX_URI)
-		return get_uri_string(cached->uri, ~0);
+		return get_uri_string(cached->uri, URI_ORIGINAL);
 
 	if (!init_string(&msg)) return NULL;
 

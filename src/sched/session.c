@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.388 2004/04/23 20:44:29 pasky Exp $ */
+/* $Id: session.c,v 1.389 2004/04/24 00:31:22 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -849,6 +849,10 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 		} else if (info->remote & SES_REMOTE_NEW_WINDOW) {
 			/* FIXME: See the url list loop */
 			open_url_in_new_window(ses, NULL, term_env);
+
+		} else if (info->remote & SES_REMOTE_PROMPT_URL) {
+			/* We can't create new window in EV_INIT handler! */
+			register_bottom_half(dialog_goto_url_open, ses);
 		}
 
 #ifdef CONFIG_BOOKMARKS

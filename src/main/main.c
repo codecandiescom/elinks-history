@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.185 2004/04/14 05:31:56 jonas Exp $ */
+/* $Id: main.c,v 1.186 2004/04/14 05:35:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,9 +169,8 @@ init(void)
 		}
 	} else {
 		int len;
-		void *info = create_session_info(get_opt_int_tree(cmdline_options,
-								  "base-session"),
-						 &url_list, &len);
+		int id = get_opt_int_tree(cmdline_options, "base-session");
+		void *info = create_session_info(id, &url_list, &len);
 
 		if (!info) goto fatal_error;
 

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.108 2003/12/03 18:32:51 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.109 2003/12/13 00:32:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -449,6 +449,7 @@ static struct strtonum action_table[] = {
 	{ "scroll-up", ACT_SCROLL_UP, DACT(N_("Scroll up")) },
 	{ "search", ACT_SEARCH, DACT(N_("Search for a text pattern")) },
 	{ "search-back", ACT_SEARCH_BACK, DACT(N_("Search backwards for a text pattern")) },
+	{ "search-typeahead", ACT_SEARCH_TYPEAHEAD, DACT(N_("Search link text by typing ahead")) },
 	{ "tab-close", ACT_TAB_CLOSE, DACT(N_("Close tab")) },
 	{ "tab-next", ACT_TAB_NEXT, DACT(N_("Next tab")) },
 	{ "tab-prev", ACT_TAB_PREV,DACT( N_("Previous tab")) },
@@ -711,6 +712,7 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_ABORT_CONNECTION, 'z', 0 },
 	{ ACT_SEARCH, '/', 0 },
 	{ ACT_SEARCH_BACK, '?', 0 },
+	{ ACT_SEARCH_TYPEAHEAD, '#' },
 	{ ACT_FIND_NEXT, 'n', 0 },
 	{ ACT_FIND_NEXT_BACK, 'N', 0 },
 	{ ACT_ZOOM_FRAME, 'f', 0 },

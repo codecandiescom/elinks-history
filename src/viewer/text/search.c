@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.134 2003/12/01 16:05:48 jonas Exp $ */
+/* $Id: search.c,v 1.135 2003/12/13 00:32:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,8 @@
 #include "document/view.h"
 #include "intl/gettext/libintl.h"
 #include "sched/session.h"
+#include "terminal/kbd.h"
+#include "terminal/screen.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
 #include "util/error.h"
@@ -921,6 +923,96 @@ find_next_back(struct session *ses, struct document_view *doc_view, int a)
 	ses->search_direction = -ses->search_direction;
 }
 
+
+static inline unsigned char
+get_document_char(struct document *document, int x, int y)
+{
+	if (document->height > y
+	    && document->data[y].length > x)
+		return document->data[y].chars[x].data;
+	return 0;
+}
+
+/* TODO: The escape/control keys should probably be configurable */
+/* XXX: This is a bit hackish for some developers taste. */
+enum typeahead_code
+do_typeahead(struct session *ses, struct document_view *doc_view,
+	     unsigned char *typeahead, unsigned long typed)
+{
+	int i = doc_view->vs->current_link;
+	int charpos = strlen(typeahead);
+	int last_link;
+
+	if (isprint(typed) && charpos < MAX_STR_LEN - 1) {
+		typeahead[charpos++] = typed;
+
+	} else if (typed == KBD_BS) {
+		if (charpos > 0) charpos--;
+		typeahead[charpos] = 0;
+		/* Nothing to match so stay put */
+		if (!charpos) return TYPEAHEAD_MATCHED;
+		i = 0;
+
+	} else if (typed == KBD_TAB) {
+		i++;
+
+	} else {
+		return TYPEAHEAD_ESCAPE;
+	}
+
+	int_bounds(&i, 0, doc_view->document->nlinks);
+	last_link = doc_view->document->nlinks;
+
+	for (; i < last_link; i++) {
+		struct link *link = &doc_view->document->links[i];
+		struct point *linkpos = link->pos;
+		int j;
+
+		if (link->type != LINK_HYPERTEXT
+		    || charpos > link->n) continue;
+
+		for (j = 0; j < charpos; j++, linkpos++) {
+			unsigned char data = get_document_char(doc_view->document,
+							       linkpos->x, linkpos->y);
+
+			if (!data || data != typeahead[j])
+				break;
+
+			if (charpos == j + 1) {
+				doc_view->vs->current_link = i;
+				return TYPEAHEAD_MATCHED;
+			}
+		}
+
+		/* Only wrap around one time */
+		if (i + 1 == last_link
+		    && last_link > doc_view->vs->current_link
+		    && get_opt_bool("document.browse.links.typeahead_wraparound")) {
+			i = 0;
+			last_link = doc_view->vs->current_link;
+		}
+	}
+
+	switch (get_opt_int("document.browse.links.typeahead_error")) {
+		case 1:
+			msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+				N_("Typeahead"), AL_CENTER,
+				msg_text(ses->tab->term,
+					 N_("Link text '%s' not found."),
+					 typeahead),
+				NULL, 1,
+				N_("OK"), NULL, B_ENTER | B_ESC);
+			break;
+
+		case 2:
+			beep_terminal(ses->tab->term);
+
+		default:
+			break;
+	}
+
+	return TYPEAHEAD_STOP;
+}
 
 
 static struct input_history search_history = {

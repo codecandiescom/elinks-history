@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.36 2003/12/04 11:11:04 zas Exp $ */
+/* $Id: options.inc,v 1.37 2003/12/13 00:32:42 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -229,6 +229,17 @@ struct option_info config_options_info[] = {
 	INIT_OPT_BOOL("document.browse.links", N_("Number links"),
 		"numbering", 0, 0,
 		N_("Display numbers next to the links.")),
+
+	INIT_OPT_BOOL("document.browse.links", N_("Wraparound typeahead"),
+		"typeahead_wraparound", 0, 1,
+		N_("Wrap around when searching for the next link matching a typeahead.")),
+
+	INIT_OPT_INT("document.browse.links", N_("Typeahead error handling"),
+		"typeahead_error", 0, 0, 2, 2,
+		N_("How to handler errors when typeahead doesn't match any links:\n"
+		"0 means do nothing\n"
+		"1 means beep the terminal\n"
+		"2 means pop up message box")),
 
 	INIT_OPT_BOOL("document.browse.links", N_("Use tabindex"),
 		"use_tabindex", 0, 1,

@@ -1,10 +1,11 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.294 2003/12/10 16:42:12 jonas Exp $ */
+/* $Id: view.c,v 1.295 2003/12/13 00:32:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 #ifdef HAVE_UNISTD_H
@@ -603,7 +604,6 @@ frm_download(struct session *ses, struct document_view *doc_view, int resume)
 	}
 }
 
-
 /* We return |x| at the end of the function. The value of x
  * should be one of the following:
  *
@@ -663,6 +663,20 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			ses->kbdprefix.rep = 0;
 			ses->kbdprefix.mark = KP_MARK_NOTHING;
 			return 1;
+		} else if (ses->kbdprefix.typeahead) {
+			/* Link typeahead */
+			unsigned char *typeahead = ses->kbdprefix.typeahead;
+			enum typeahead_code code;
+
+			code = do_typeahead(ses, doc_view, typeahead, ev->x);
+			if (code == TYPEAHEAD_MATCHED) return 1;
+
+			mem_free(ses->kbdprefix.typeahead);
+			ses->kbdprefix.typeahead = NULL;
+
+			if (ev->x == KBD_ESC
+			    || code == TYPEAHEAD_STOP)
+				return 1;
 		}
 
 		if (ev->x >= '0' + !ses->kbdprefix.rep && ev->x <= '9'
@@ -751,6 +765,10 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			case ACT_RESUME_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, doc_view, 1); break;
 			case ACT_SEARCH: search_dlg(ses, doc_view, 0); break;
 			case ACT_SEARCH_BACK: search_back_dlg(ses, doc_view, 0); break;
+			case ACT_SEARCH_TYPEAHEAD:
+				ses->kbdprefix.typeahead = mem_calloc(1, MAX_STR_LEN);
+				x = 2;
+				break;
 			case ACT_FIND_NEXT: find_next(ses, doc_view, 0); break;
 			case ACT_FIND_NEXT_BACK: find_next_back(ses, doc_view, 0); break;
 			case ACT_ZOOM_FRAME: set_frame(ses, doc_view, 0), x = 2; break;

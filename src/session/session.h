@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.84 2003/12/10 04:47:21 jonas Exp $ */
+/* $Id: session.h,v 1.85 2003/12/13 00:32:42 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -47,6 +47,10 @@ struct kbdprefix {
 	/* If the previous key was a mark prefix, this describes what kind of
 	 * action are we supposed to do when we receive the next key. */
 	enum { KP_MARK_NOTHING, KP_MARK_SET, KP_MARK_GOTO } mark;
+
+	/* If non NULL we are in typeahead mode and the @typeahead buffer
+	 * has size MAX_STR_LEN. */
+	unsigned char *typeahead;
 };
 
 struct session;

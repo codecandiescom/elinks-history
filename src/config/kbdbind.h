@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.54 2003/12/02 18:38:54 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.55 2003/12/13 00:32:42 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -90,6 +90,7 @@ enum keyact {
 	ACT_SCROLL_UP,
 	ACT_SEARCH,
 	ACT_SEARCH_BACK,
+	ACT_SEARCH_TYPEAHEAD,
 	ACT_TAB_CLOSE,
 	ACT_TAB_NEXT,
 	ACT_TAB_PREV,

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.130 2003/07/28 09:05:26 jonas Exp $ */
+/* $Id: session.c,v 1.131 2003/07/28 16:15:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -356,10 +356,8 @@ print_error_dialog(struct session *ses, struct download *stat)
 static void
 free_task(struct session *ses)
 {
-	if (!ses->task) {
-		internal("Session has no task");
-		return;
-	}
+	assertm(ses->task, "Session has no task");
+	if_assert_failed return;
 
 	if (ses->goto_position) {
 		mem_free(ses->goto_position);
@@ -623,10 +621,8 @@ do_move(struct session *ses, struct download **stat)
 {
 	struct cache_entry *ce = NULL;
 
-	if (!ses->loading_url) {
-		internal("no ses->loading_url");
-		return 0;
-	}
+	assertm(ses->loading_url, "no ses->loading_url");
+	if_assert_failed return 0;
 
 	ce = (*stat)->ce;
 	if (!ce || (ses->task == TASK_IMGMAP && (*stat)->state >= 0)) {
@@ -643,11 +639,10 @@ do_move(struct session *ses, struct download **stat)
 		u = join_urls(ses->loading_url, ce->redirect);
 		if (!u) goto b;
 
-		if (!get_opt_int("protocol.http.bugs.broken_302_redirect")) {
-			if (!ce->redirect_get) {
-				p = strchr(ses->loading_url, POST_CHAR);
-				if (p) add_to_strn(&u, p);
-			}
+		if (!ce->redirect_get &&
+		    !get_opt_int("protocol.http.bugs.broken_302_redirect")) {
+			p = strchr(ses->loading_url, POST_CHAR);
+			if (p) add_to_strn(&u, p);
 		}
 		/* ^^^^ According to RFC2068 POST must not be redirected to GET, but
 			some BUGGY message boards rely on it :-( */
@@ -739,10 +734,8 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 	struct frame *frm;
 	unsigned char *url, *pos;
 
-	if (!have_location(ses)) {
-		internal("request_frame: no location");
-		return;
-	}
+	assertm(have_location(ses), "request_frame: no location");
+	if_assert_failed return;
 
 	foreach (frm, loc->frames) {
 		if (strcasecmp(frm->name, name))
@@ -884,10 +877,9 @@ end_load(struct download *stat, struct session *ses)
 {
 	int d;
 
-	if (!ses->task) {
-		internal("end_load: no ses->task");
-		return;
-	}
+	assertm(ses->task, "end_load: no ses->task");
+	if_assert_failed return;
+
 	d = do_move(ses, &stat);
 	if (!stat) return;
 	if (d == 1) {
@@ -916,19 +908,19 @@ maybe_pre_format_html(struct cache_entry *ce, struct session *ses)
 	unsigned char *s;
 	int len;
 
-	if (ce && !ce->done_pre_format_html_hook) {
-		defrag_entry(ce);
-		fr = ce->frag.next;
-		len = fr->length;
-		s = script_hook_pre_format_html(ses, ce->url, fr->data, &len);
-		if (s) {
-			add_fragment(ce, 0, s, len);
-			truncate_entry(ce, len, 1);
-			ce->incomplete = 0; /* XXX */
-			mem_free(s);
-		}
-		ce->done_pre_format_html_hook = 1;
+	if (!ce || ce->done_pre_format_html_hook) return;
+
+	defrag_entry(ce);
+	fr = ce->frag.next;
+	len = fr->length;
+	s = script_hook_pre_format_html(ses, ce->url, fr->data, &len);
+	if (s) {
+		add_fragment(ce, 0, s, len);
+		truncate_entry(ce, len, 1);
+		ce->incomplete = 0; /* XXX */
+		mem_free(s);
 	}
+	ce->done_pre_format_html_hook = 1;
 }
 #endif
 
@@ -1017,10 +1009,8 @@ request_additional_file(struct session *ses, unsigned char *url, int pri)
 		}
 	}
 
-	ftl = mem_alloc(sizeof(struct file_to_load));
-	if (!ftl) {
-		return NULL;
-	}
+	ftl = mem_calloc(1, sizeof(struct file_to_load));
+	if (!ftl) return NULL;
 
 	ftl->url = stracpy(url);
 	if (!ftl->url) {
@@ -1030,9 +1020,7 @@ request_additional_file(struct session *ses, unsigned char *url, int pri)
 
 	ftl->stat.end = (void (*)(struct download *, void *)) file_end_load;
 	ftl->stat.data = ftl;
-	ftl->req_sent = 0;
 	ftl->pri = pri;
-	ftl->ce = NULL;
 	ftl->ses = ses;
 
 	add_to_list(ses->more_files, ftl);
@@ -1100,12 +1088,8 @@ create_basic_session(struct window *tab)
 	init_list(ses->more_files);
 	ses->tab = tab;
 	ses->id = session_id++;
-	ses->screen = NULL;
 	ses->task = TASK_NONE;
 	ses->display_timer = -1;
-	ses->loading_url = NULL;
-	ses->goto_position = NULL;
-	ses->last_title = NULL;
 
 	add_to_list(sessions, ses);
 
@@ -1224,7 +1208,7 @@ decode_session_info(const void *pdata)
 
 		if (len < 2 * sizeof(int) + url_len) goto url_decoded;
 
-		url = mem_alloc(url_len + 1);
+		url = fmem_alloc(url_len + 1);
 		if (!url) goto url_decoded;
 
 		memcpy(url, data, url_len);
@@ -1232,7 +1216,7 @@ decode_session_info(const void *pdata)
 
 		info->url = decode_shell_safe_url(url);
 
-		mem_free(url);
+		fmem_free(url);
 	}
 url_decoded:
 
@@ -1249,9 +1233,7 @@ free_session_info(struct initial_session_info *info)
 static void
 dialog_goto_url_open(void *data)
 {
-	struct session *ses = data;
-
-	dialog_goto_url(ses, NULL);
+	dialog_goto_url((struct session *) data, NULL);
 }
 
 static int
@@ -1321,7 +1303,8 @@ destroy_session(struct session *ses)
 {
 	struct document_view *fdc;
 
-	if (!ses) return;
+	assert(ses);
+	if_assert_failed return;
 
 	destroy_downloads(ses);
 	abort_loading(ses, 0);
@@ -1388,7 +1371,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 			if (ftl->req_sent && ftl->stat.state >= 0) continue;
 			ftl->stat.data = ftl;
 			ftl->stat.end = (void *)file_end_load;
-			load_url(ftl->url, fd?fd->document?fd->document->url:NULL:NULL,
+			load_url(ftl->url, (fd && fd->document) ? fd->document->url : NULL,
 				 &ftl->stat, PRI_FRAME, cache_mode, -1);
 		}
 	}
@@ -1432,8 +1415,8 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 	u = translate_url(url, ses->tab->term->cwd);
 	if (!u) {
 		struct download stat = { NULL_LIST_HEAD, NULL, NULL,
-				       NULL, NULL, NULL,
-				       S_BAD_URL, PRI_CANCEL, 0 };
+				         NULL, NULL, NULL,
+				         S_BAD_URL, PRI_CANCEL, 0 };
 
 		print_error_dialog(ses, &stat);
 		goto end;
@@ -1564,10 +1547,8 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 	struct frame *frm;
 	size_t url_len = strlen(url);
 
-	if (!have_location(ses)) {
-		internal("ses_change_frame_url: no location yet");
-		return NULL;
-	}
+	assertm(have_location(ses), "ses_change_frame_url: no location yet");
+	if_assert_failed { return NULL; }
 
 	foreachback (frm, l->frames) {
 		if (strcasecmp(frm->name, name)) continue;
@@ -1577,7 +1558,7 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 			struct frame *nf = frm;
 
 			nf = mem_realloc(frm, sizeof(struct frame)
-				      + url_len + 1);
+				         + url_len + 1);
 			if (!nf) return NULL;
 
 			nf->prev->next = nf->next->prev = nf;
@@ -1671,7 +1652,7 @@ get_current_url(struct session *ses, unsigned char *str, size_t str_size)
 	 * because we have to stop at POST_CHAR, not only at
 	 * NULL. */
 	if (url_len >= str_size)
-			url_len = str_size - 1;
+		url_len = str_size - 1;
 
 	return safe_strncpy(str, here, url_len + 1);
 }

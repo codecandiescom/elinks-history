@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.19 2002/06/17 07:42:31 pasky Exp $ */
+/* $Id: connect.c,v 1.20 2002/07/05 01:29:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -268,9 +268,8 @@ void dns_found(void *data, int state)
 		return;
 	}
 
-#ifdef HAVE_SSL
 	if (conn->ssl && ssl_connect(conn, sock) < 0) return;
-#endif
+
 	conn->conn_info = NULL;
 	c_i->func(conn);
 	mem_free(c_i->addr);
@@ -307,9 +306,8 @@ void connected(void *data)
 		return;
 	}
 
-#ifdef HAVE_SSL
 	if (conn->ssl && ssl_connect(conn, *c_i->sock) < 0) return;
-#endif
+
 	conn->conn_info = NULL;
 	func(conn);
 	mem_free(c_i->addr);
@@ -334,15 +332,12 @@ void write_select(struct connection *c)
 	printf("-\n");
 #endif
 
-#ifdef HAVE_SSL
 	if (c->ssl) {
 		wr = ssl_write(c, wb);
 		if (wr <= 0) {
 			return;
 		}
-	} else
-#endif
-	{
+	} else {
 		wr = write(wb->sock, wb->data + wb->pos, wb->len - wb->pos);
 		if (wr <= 0) {
 			setcstate(c, wr ? -errno : S_CANT_WRITE);
@@ -412,15 +407,12 @@ void read_select(struct connection *c)
 	}
 	c->buffer = rb;
 
-#ifdef HAVE_SSL
 	if (c->ssl) {
 		rd = ssl_read(c, rb);
 		if (rd <= 0) {
 			return;
 		}
-	} else
-#endif
-	{
+	} else {
 		rd = read(rb->sock, rb->data + rb->len, READ_SIZE);
 		if (rd <= 0) {
 			if (rb->close && !rd) {

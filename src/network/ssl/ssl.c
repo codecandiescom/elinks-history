@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.3 2002/05/10 09:27:08 zas Exp $ */
+/* $Id: ssl.c,v 1.4 2002/07/05 01:29:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,19 +11,20 @@
 
 #include "links.h"
 
-/* #include "lowlevel/sched.h" */
 #include "ssl/ssl.h"
+
 
 /* FIXME: As you can see, SSL is currently implemented in very, erm,
  * decentralized manner. */
 
 #ifdef HAVE_SSL
-
 SSL_CTX *context = 0;
+#endif
 
-SSL *
+ssl_t *
 getSSL(void)
 {
+#ifdef HAVE_SSL
 	if (!context) {
 		SSLeay_add_ssl_algorithms();
 		context = SSL_CTX_new(SSLv23_client_method());
@@ -32,12 +33,16 @@ getSSL(void)
 	}
 
 	return (SSL_new(context));
+#else
+	return NULL;
+#endif
 }
+
 
 void
 ssl_finish(void)
 {
+#ifdef HAVE_SSL
 	if (context) SSL_CTX_free(context);
-}
-
 #endif
+}

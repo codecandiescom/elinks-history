@@ -1,14 +1,15 @@
-/* $Id: ssl.h,v 1.2 2002/05/08 13:55:06 pasky Exp $ */
+/* $Id: ssl.h,v 1.3 2002/07/05 01:29:10 pasky Exp $ */
 
-#ifndef EL__SSL_H
-#define EL__SSL_H
+#ifndef EL__SSL_SSL_H
+#define EL__SSL_SSL_H
 
 #ifdef HAVE_SSL
-
-/* #include "lowlevel/sched.h" */
+#define	ssl_t	SSL
+#else
+#define	ssl_t	void
+#endif
 
 void ssl_finish(void);
-SSL *getSSL(void);
-#endif
+ssl_t *getSSL(void);
 
 #endif

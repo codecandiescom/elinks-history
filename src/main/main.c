@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.40 2002/07/03 15:03:44 pasky Exp $ */
+/* $Id: main.c,v 1.41 2002/07/05 01:29:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -363,9 +363,7 @@ terminate_all_subsystems()
 	check_bottom_halves();
 	free_all_itrms();
 	abort_all_connections();
-#ifdef HAVE_SSL
 	ssl_finish();
-#endif
 #ifdef HAVE_SCRIPTING
 	if (init_b)
 		script_hook_quit();

@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.9 2002/07/04 01:07:13 pasky Exp $ */
+/* $Id: document.c,v 1.10 2002/07/05 01:29:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,13 +153,11 @@ loc_msg(struct terminal *term, struct location *location,
 			add_to_str(&str, &strl, ": ");
 			add_to_str(&str, &strl, ce->last_modified);
 		}
-#ifdef HAVE_SSL
 		if (ce->ssl_info) {
 			add_to_str(&str, &strl, "\n");
 			add_to_str(&str, &strl, "SSL cipher: ");
 			add_to_str(&str, &strl, ce->ssl_info);
 		}
-#endif
 	}
 
 	a = print_current_link_do(frame, term);

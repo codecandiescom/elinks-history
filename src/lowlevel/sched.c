@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.33 2002/06/21 16:54:59 zas Exp $ */
+/* $Id: sched.c,v 1.34 2002/07/05 01:29:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -527,13 +527,14 @@ sort_queue()
 void
 interrupt_connection(struct connection *c)
 {
-#ifdef HAVE_SSL
 	if (c->ssl == (void *)-1) c->ssl = 0;
 	if (c->ssl) {
+#ifdef HAVE_SSL
 		SSL_free(c->ssl);
+#endif
 		c->ssl=NULL;
 	}
-#endif
+
 	close_socket(&c->sock1);
 	free_connection_data(c);
 }

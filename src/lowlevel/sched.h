@@ -1,4 +1,4 @@
-/* $Id: sched.h,v 1.12 2002/06/17 08:00:16 pasky Exp $ */
+/* $Id: sched.h,v 1.13 2002/07/05 01:29:09 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_SCHED_H
 #define EL__LOWLEVEL_SCHED_H
@@ -6,6 +6,7 @@
 #include "links.h" /* tcount */
 #include "document/cache.h"
 #include "lowlevel/ttime.h"
+#include "ssl/ssl.h"
 #include "util/error.h"
 #include "util/lists.h"
 
@@ -71,10 +72,9 @@ struct connection {
 	struct remaining_info prg;
 	int timer;
 	int detached;
-#ifdef HAVE_SSL
-	SSL *ssl;
+
+	ssl_t *ssl;
 	int no_tsl;
-#endif
 };
 
 #define S_WAIT		0

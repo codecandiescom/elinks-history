@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.25 2002/06/17 07:42:32 pasky Exp $ */
+/* $Id: http.c,v 1.26 2002/07/05 01:29:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,9 +125,7 @@ void http_end_request(struct connection *c)
 		}
 	}
 	if (c->info && !((struct http_connection_info *)c->info)->close
-#ifdef HAVE_SSL
 	&& (!c->ssl) /* We won't keep alive ssl connections */
-#endif
 	&& (!get_opt_int("protocol.http.bugs.post_no_keepalive")
 	    || !strchr(c->url, POST_CHAR))) {
 		add_keepalive_socket(c, HTTP_KEEPALIVE_TIMEOUT);

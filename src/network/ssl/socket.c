@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.6 2002/06/17 07:42:32 pasky Exp $ */
+/* $Id: socket.c,v 1.7 2002/07/05 01:29:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,11 +21,10 @@
 #include "util/memory.h"
 
 
-#ifdef HAVE_SSL
-
 void
 ssl_want_read(struct connection *c)
 {
+#ifdef HAVE_SSL
 	struct conn_info *b = c->conn_info;
 
 	if (c->no_tsl)
@@ -46,12 +45,15 @@ ssl_want_read(struct connection *c)
 			setcstate(c, S_SSL_ERROR);
 			retry_connection(c);
 	}
+#endif
+	return;
 }
 
 /* Return -1 on error, 0 or success. */
 int
 ssl_connect(struct connection *conn, int sock)
 {
+#ifdef HAVE_SSL
         struct conn_info *c_i = (struct conn_info *) conn->buffer;
 
 	conn->ssl = getSSL();
@@ -76,6 +78,7 @@ ssl_connect(struct connection *conn, int sock)
 			dns_found(conn, 0);
 			return -1;
 	}
+#endif
 
 	return 0;
 }
@@ -84,8 +87,9 @@ ssl_connect(struct connection *conn, int sock)
 int
 ssl_write(struct connection *conn, struct write_buffer *wb)
 {
-	int wr;
+	int wr = -1;
 
+#ifdef HAVE_SSL
 	wr = SSL_write(conn->ssl, wb->data + wb->pos,
 		       wb->len - wb->pos);
 
@@ -105,6 +109,7 @@ ssl_write(struct connection *conn, struct write_buffer *wb)
 
 		return -1;
 	}
+#endif
 
 	return wr;
 }
@@ -113,8 +118,9 @@ ssl_write(struct connection *conn, struct write_buffer *wb)
 int
 ssl_read(struct connection *conn, struct read_buffer *rb)
 {
-	int rd;
+	int rd = -1;
 
+#ifdef HAVE_SSL
 	rd = SSL_read(conn->ssl, rb->data + rb->len, READ_SIZE);
 
 	if (rd <= 0) {
@@ -142,8 +148,7 @@ ssl_read(struct connection *conn, struct read_buffer *rb)
 
 		return -1;
 	}
+#endif
 
 	return rd;
 }
-
-#endif

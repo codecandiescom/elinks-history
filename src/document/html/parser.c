@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.120 2003/06/09 10:07:12 zas Exp $ */
+/* $Id: parser.c,v 1.121 2003/06/09 10:24:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,16 +147,15 @@ parse_error:
 	return -1;
 }
 
-#define add_chr(s, l, c) \
-	do {\
-	if (l % ALLOC_GR) { \
-		s[l++] = c; \
-	} else { \
-		unsigned char *_xx_ = mem_realloc(s, l + ALLOC_GR); \
-		if (!_xx_) return NULL; \
-		s = _xx_; \
-		s[l++] = c; \
-	}\
+#define add_chr(s, l, c) 						\
+	do { 								\
+		if (!((l) % ALLOC_GR)) { 				\
+			unsigned char *_xx_;				\
+			_xx_ = mem_realloc((s), (l) + ALLOC_GR);	\
+			if (!_xx_) return NULL; 			\
+			(s) = _xx_; 					\
+		} 							\
+		(s)[(l)++] = (c); 					\
 	} while (0)
 
 

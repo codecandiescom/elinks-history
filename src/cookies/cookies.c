@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.109 2003/12/05 23:45:47 pasky Exp $ */
+/* $Id: cookies.c,v 1.110 2003/12/06 00:02:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -639,12 +639,12 @@ send_cookies(struct uri *uri)
 			continue;
 
 		if (header.length) {
-			add_to_string(header, "; ");
+			add_to_string(&header, "; ");
 		}
 
-		add_to_string(header, c->name);
-		add_char_to_string(header, '=');
-		add_to_string(header, c->value);
+		add_to_string(&header, c->name);
+		add_char_to_string(&header, '=');
+		add_to_string(&header, c->value);
 #ifdef COOKIES_DEBUG
 		debug("Cookie: %s=%s", c->name, c->value);
 #endif

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.38 2003/12/05 23:52:55 pasky Exp $ */
+/* $Id: cgi.c,v 1.39 2003/12/06 00:02:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,9 +231,9 @@ set_vars(struct connection *conn, unsigned char *script)
 
 #ifdef COOKIES
 	{
-		struct string *cookies = send_cookies(url);
+		struct string *cookies = send_cookies(&conn->uri);
 
-		if (cookies) setenv("HTTP_COOKIE", cookies.source, 1);
+		if (cookies) setenv("HTTP_COOKIE", cookies->source, 1);
 	}
 #endif
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.336 2003/10/30 01:53:33 jonas Exp $ */
+/* $Id: renderer.c,v 1.337 2003/10/30 02:25:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1533,17 +1533,43 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 		return;
 	}
 
-	document = get_cached_document(vs->url, options, cache_entry->id_tag);
-	if (!document) return;
+	foreach (document, format_cache) {
+		if (strcmp(document->url, vs->url)
+			|| compare_opt(&document->options, options))
+			continue;
 
-	document_view->document = document;
+		if (cache_entry->id_tag != document->id_tag) {
+			if (!document->refcount) {
+				document = document->prev;
+				done_document(document->next);
+				format_cache_entries--;
+			}
+			continue;
+		}
 
-	if (document->id_tag != cache_entry->id_tag) {
-		cache_entry->refcount++;
-		shrink_memory(0);
-		format_html(cache_entry, document);
+		format_cache_reactivate(document);
+
+		if (!document->refcount++) format_cache_entries--;
+		document_view->document = document;
+
+		goto sx;
 	}
 
+	cache_entry->refcount++;
+	shrink_memory(0);
+
+	document = init_document(vs->url, options);
+	if (!document) {
+		cache_entry->refcount--;
+		return;
+	}
+
+	add_to_list(format_cache, document);
+
+	document_view->document = document;
+	format_html(cache_entry, document);
+
+sx:
 	document_view->width = document->options.xw;
 	document_view->height = document->options.yw;
 	document_view->xp = document->options.xp;

@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.5 2003/10/30 01:53:33 jonas Exp $ */
+/* $Id: document.c,v 1.6 2003/10/30 02:25:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@
 #include "viewer/text/link.h"
 
 
-static INIT_LIST_HEAD(format_cache);
+INIT_LIST_HEAD(format_cache);
 int format_cache_entries = 0;
 
 struct document *

@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.11 2003/10/27 22:44:16 pasky Exp $ */
+/* $Id: os2.c,v 1.12 2003/10/27 22:51:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,7 @@ int winch_thread_running = 0;
 
 #define WINCH_SLEEPTIME 500 /* time in ms for winch thread to sleep */
 
-void
+static void
 winch_thread(void)
 {
 	/* A thread which regularly checks whether the size of

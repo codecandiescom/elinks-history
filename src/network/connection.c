@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.69 2003/07/04 20:45:37 jonas Exp $ */
+/* $Id: connection.c,v 1.70 2003/07/04 21:11:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,6 @@ struct keepalive_connection {
 	LIST_HEAD(struct keepalive_connection);
 
 	protocol_handler *protocol;
-	unsigned char *host;
 
 	ttime timeout;
 	ttime add_time;
@@ -56,6 +55,8 @@ struct keepalive_connection {
 	int port;
 	int pf;
 	int socket;
+
+	unsigned char host[1]; /* Keep last */
 };
 
 
@@ -351,7 +352,6 @@ done_keepalive_connection(struct keepalive_connection *kc)
 {
 	del_from_list(kc);
 	if (kc->socket != -1) close(kc->socket);
-	if (kc->host) mem_free(kc->host);
 	mem_free(kc);
 }
 
@@ -359,16 +359,14 @@ static struct keepalive_connection *
 init_keepalive_connection(struct connection *c, ttime timeout)
 {
 	struct keepalive_connection *k;
+	struct uri *uri = &c->uri;
+	unsigned char *host = uri->user ? uri->user : uri->host;
+	int hostlen  = uri->hostlen + (uri->port ? uri->portlen : 0);
 
-	k = mem_calloc(1, sizeof(struct keepalive_connection));
+	k = mem_alloc(sizeof(struct keepalive_connection) + hostlen);
 	if (!k) return NULL;
 
-	k->host = get_host_and_pass(c->url, 1);
-	if (!k->host) {
-		mem_free(k);
-		return NULL;
-	}
-
+	memcpy(k->host, host, hostlen);
 	k->port = get_uri_port(&c->uri);
 	k->protocol = get_protocol_handler(&c->uri);
 	k->pf = c->pf;
@@ -382,22 +380,19 @@ init_keepalive_connection(struct connection *c, ttime timeout)
 static struct keepalive_connection *
 get_keepalive_connection(struct connection *c)
 {
-	protocol_handler *handler = get_protocol_handler(&c->uri);
-	int port = get_uri_port(&c->uri);
 	struct keepalive_connection *connection;
-	unsigned char *host = get_host_and_pass(c->url, 1);
-
-	if (!host) return NULL;
+	struct uri *uri = &c->uri;
+	unsigned char *host = uri->user ? uri->user : uri->host;
+	int hostlen = uri->hostlen + (uri->port ? uri->portlen : 0);
+	protocol_handler *handler = get_protocol_handler(uri);
+	int port = get_uri_port(uri);
 
 	foreach (connection, keepalive_connections)
 		if (connection->protocol == handler
 		    && connection->port == port
-		    && !strcmp(connection->host, host)) {
-			mem_free(host);
+		    && !strncmp(connection->host, host, hostlen))
 			return connection;
-		}
 
-	mem_free(host);
 	return NULL;
 }
 

@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list.
- * It remplaces bsearch() + strcasecmp() + callback + ...
+ * It replaces bsearch() + strcasecmp() + callback + ...
  *
  * Following conditions should be met:
  *
@@ -14,7 +14,7 @@
  *
  *  (c) 2003 Laurent MONIN (aka Zas)
  * Feel free to do whatever you want with that code. */
-/* $Id: fastfind.c,v 1.2 2003/06/13 17:48:47 zas Exp $ */
+/* $Id: fastfind.c,v 1.3 2003/06/13 18:12:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,10 +25,10 @@
 
 #include "elinks.h"
 
+#include "util/conv.h"
 #include "util/fastfind.h"
 #include "util/memdebug.h"
 #include "util/memory.h"
-#include "util/conv.h"
 
 
 #if 0
@@ -87,7 +87,7 @@ struct fastfind_info {
 
 	unsigned char uniq_chars[128];
 #ifdef FASTFIND_DEBUG
-	unsigned long searchs;
+	unsigned long searches;
 	unsigned long found;
 	unsigned long iterations;
 	unsigned long tests;
@@ -98,7 +98,8 @@ struct fastfind_info {
 
 
 static struct fastfind_info *
-ff_init(int case_sensitive) {
+ff_init(int case_sensitive)
+{
 	struct fastfind_info *ff_info = mem_calloc(1, sizeof(struct fastfind_info));
 
 	if (ff_info) {
@@ -196,7 +197,7 @@ fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void),
 	if (!ff_info) return NULL;
 
 	/* First search min, max, count */
-	(*reset)();
+	reset();
 	while ((p = (*next)())) {
 		int key_len = strlen(p->key);
 
@@ -362,7 +363,7 @@ fastfind_search(unsigned char *key, int key_len, void *ff_info_)
 	struct ff_elt *current;
 
 #ifdef FASTFIND_DEBUG
-	ff_info->searchs++;
+	ff_info->searches++;
 	ff_info->total_key_len += key_len;
 	ff_info->tests++;
    	if (!ff_info) return NULL;
@@ -458,11 +459,11 @@ fastfind_terminate(void *ff_info_)
 #ifdef FASTFIND_DEBUG
 	fprintf(stderr, "Entries     : %d\n", ff_info->pointers_count);
 	fprintf(stderr, "Memory usage: %lu bytes (cost per entry = %0.2f bytes)\n", ff_info->memory_usage, (double) ff_info->memory_usage / ff_info->pointers_count);
-	fprintf(stderr, "Searchs     : %lu\n", ff_info->searchs);
-	fprintf(stderr, "Found       : %lu (%0.2f%%)\n", ff_info->found, 100 * (double) ff_info->found / ff_info->searchs);
-	fprintf(stderr, "Iterations  : %lu (%0.2f per search)\n", ff_info->iterations, (double) ff_info->iterations / ff_info->searchs);
-	fprintf(stderr, "Tests       : %lu (%0.2f per search)\n", ff_info->tests, (double) ff_info->tests / ff_info->searchs);
-	fprintf(stderr, "Total keylen: %lu bytes (%0.2f per search)\n", ff_info->total_key_len, (double) ff_info->total_key_len / ff_info->searchs);
+	fprintf(stderr, "Searchs     : %lu\n", ff_info->searches);
+	fprintf(stderr, "Found       : %lu (%0.2f%%)\n", ff_info->found, 100 * (double) ff_info->found / ff_info->searches);
+	fprintf(stderr, "Iterations  : %lu (%0.2f per search)\n", ff_info->iterations, (double) ff_info->iterations / ff_info->searches);
+	fprintf(stderr, "Tests       : %lu (%0.2f per search)\n", ff_info->tests, (double) ff_info->tests / ff_info->searches);
+	fprintf(stderr, "Total keylen: %lu bytes (%0.2f per search)\n", ff_info->total_key_len, (double) ff_info->total_key_len / ff_info->searches);
 #endif
 
 	if (ff_info->pointers) mem_free(ff_info->pointers);

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.12 2002/04/16 16:56:04 pasky Exp $ */
+/* $Id: cookies.c,v 1.13 2002/04/16 20:53:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,8 +113,8 @@ check_domain_security(unsigned char *server, unsigned char *domain)
 	need_dots = 1;
 
 	if (cookies_paranoid_security) {
-		/* This is somewhat controversial attempt (by the way violating
-		 * RFC) to increase cookies security in national domains done
+		/* This is somehow controversial attempt (by the way violating
+		 * RFC) to increase cookies security in national domains, done
 		 * by Mikulas. As it breaks a lot of sites, I decided to make
 		 * this optional and off by default. I also don't think this
 		 * improves security considerably, as it's SITE'S fault and
@@ -222,11 +222,17 @@ set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 	date = parse_http_header_param(str, "expires");
 	if (date) {
 		cookie->expires = parse_http_date(date);
+#if 0
+		/* I decided not to expire such cookies (possibly ones with
+		 * date we can't parse properly), but instead just keep their
+		 * expire value at zero, thus making them expire on ELinks'
+		 * quit. --pasky */
 		if (!cookie->expires) {
 			/* We use zero for cookies which expire with
 			 * browser shutdown. */
 			cookie->expires = (time_t) 1;
 		}
+#endif
 		mem_free(date);
 
 	} else {

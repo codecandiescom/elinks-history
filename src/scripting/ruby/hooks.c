@@ -1,5 +1,5 @@
 /* Ruby scripting hooks */
-/* $Id: hooks.c,v 1.6 2005/01/21 14:11:07 jonas Exp $ */
+/* $Id: hooks.c,v 1.7 2005/01/21 14:23:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -204,7 +204,7 @@ script_hook_get_proxy(va_list ap, void *data)
 	VALUE args[1];
 	VALUE result;
 
-	if (!new_proxy_url && !url)
+	if (!new_proxy_url || !url)
 		return EVENT_HOOK_STATUS_NEXT;
 
 	args[0] = rb_str_new2(url);

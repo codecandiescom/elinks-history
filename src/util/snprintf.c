@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.15 2003/06/07 10:27:50 pasky Exp $ */
+/* $Id: snprintf.c,v 1.16 2003/06/07 10:34:14 pasky Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -789,7 +789,7 @@ fmtfp(char *buffer, size_t *currlen, size_t maxlen,
 /* yes this really must be a ||. Don't muck with this (tridge) */
 #if !defined(HAVE_VSNPRINTF) || !defined(HAVE_C99_VSNPRINTF)
 int
-vsnprintf(char *str, size_t count, const char *fmt, va_list args)
+elinks_vsnprintf(char *str, size_t count, const char *fmt, va_list args)
 {
 	return dopr(str, count, fmt, args);
 }
@@ -803,16 +803,18 @@ vsnprintf(char *str, size_t count, const char *fmt, va_list args)
  * that doesn't work properly according to the autoconf test.  Perhaps
  * these should really be smb_snprintf to avoid conflicts with buggy
  * linkers? -- mbp
+ *
+ * Now it is elinks_snprintf() ;-). --pasky
  */
 #if !defined(HAVE_SNPRINTF) || !defined(HAVE_C99_SNPRINTF)
 int
-snprintf(char *str, size_t count, const char *fmt, ...)
+elinks_snprintf(char *str, size_t count, const char *fmt, ...)
 {
 	size_t ret;
 	va_list ap;
 
 	va_start(ap, fmt);
-	ret = vsnprintf(str, count, fmt, ap);
+	ret = elinks_vsnprintf(str, count, fmt, ap);
 	va_end(ap);
 
 	return ret;
@@ -824,7 +826,7 @@ snprintf(char *str, size_t count, const char *fmt, ...)
 
 #ifndef HAVE_VASPRINTF
 int
-vasprintf(char **ptr, const char *format, va_list ap)
+elinks_vasprintf(char **ptr, const char *format, va_list ap)
 {
 	int ret;
 	va_list ap2;
@@ -847,7 +849,7 @@ vasprintf(char **ptr, const char *format, va_list ap)
 
 #ifndef HAVE_ASPRINTF
 int
-asprintf(char **ptr, const char *format, ...)
+elinks_asprintf(char **ptr, const char *format, ...)
 {
 	va_list ap;
 	int ret;

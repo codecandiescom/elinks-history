@@ -1,4 +1,4 @@
-/* $Id: snprintf.h,v 1.6 2003/06/07 10:24:47 pasky Exp $ */
+/* $Id: snprintf.h,v 1.7 2003/06/07 10:34:14 pasky Exp $ */
 
 #ifndef EL__UTIL_SNPRINTF_H
 #define EL__UTIL_SNPRINTF_H
@@ -30,19 +30,27 @@
 
 
 #if !defined(HAVE_VSNPRINTF) || !defined(HAVE_C99_VSNPRINTF)
-int vsnprintf(char *str, size_t count, const char *fmt, va_list args);
+#undef vsnprintf
+#define vsnprintf elinks_vsnprintf
+int elinks_vsnprintf(char *str, size_t count, const char *fmt, va_list args);
 #endif
 
 #if !defined(HAVE_SNPRINTF) || !defined(HAVE_C99_SNPRINTF)
-int snprintf(char *str, size_t count, const char *fmt, ...);
+#undef snprintf
+#define snprintf elinks_snprintf
+int elinks_snprintf(char *str, size_t count, const char *fmt, ...);
 #endif
 
 #ifndef HAVE_VASPRINTF
-int vasprintf(char **ptr, const char *format, va_list ap);
+#undef vasprintf
+#define vasprintf elinks_vasprintf
+int elinks_vasprintf(char **ptr, const char *format, va_list ap);
 #endif
 
 #ifndef HAVE_ASPRINTF
-int asprintf(char **ptr, const char *format, ...);
+#undef asprintf
+#define asprintf elinks_asprintf
+int elinks_asprintf(char **ptr, const char *format, ...);
 #endif
 
 #endif

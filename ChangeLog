@@ -1,3 +1,373 @@
+Sat Aug 30 20:51:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Comment the color encoding and try to simplify it (not used yet).  
+
+Sat Aug 30 19:36:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Change octal numbers to hex.  
+
+Sat Aug 30 11:32:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, protocol/file.c, protocol/ftp.c:
+
+	A few cleanups of color option handling.  
+
+Sat Aug 30 11:08:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/widget.c:
+
+	dlg_set_history() was reworked.  
+
+Sat Aug 30 08:34:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/checkbox.c:
+
+	Reverted trivial simplification, it causes a segfault when accessing
+	terminal options, and IMHO, is not faster nor more readable.  
+
+Sat Aug 30 01:15:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/leds.c:
+
+	Get rid of hardcoded colors and use status.status-text instead.  
+	Also don't initialized @fgcolor of unused leds but fallback to
+	default.  
+
+Sat Aug 30 00:27:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: leds.c, leds.h:
+
+	Updated to use the current color handling and terminal drawing.
+	Colors are badly hardcoded.  
+
+Sat Aug 30 00:06:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Add TODOs and small cleanup.  
+
+Fri Aug 29 23:57:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	color_distance(): Fix braindamaged off by 4 error from last patch.  
+
+Fri Aug 29 23:55:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	Update comments and remove test of color arg since it is assert()ed.  
+
+Fri Aug 29 23:28:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: terminal/draw.c, terminal/draw.h, viewer/text/view.c:
+
+	Due to the change moving color mangling out of print_char() drawing
+	of frame lines now requires that a color_pair is specified. Make all
+	helpers take this color arg.  
+
+Fri Aug 29 23:27:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/kbd.c:
+
+	Explain in the source why altscreen isn't used for xwin.  
+
+Fri Aug 29 23:06:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/snprintf.h:
+
+	Fixed bug 244, compilation failures caused by expansion of 'format'
+	tokens (#define'd at document/html/parser.h). Reported by Felix von
+	Leitner <felix@fefe.de>.  
+
+Fri Aug 29 21:39:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/checkbox.c:
+
+	Trivial simplification.  
+
+Fri Aug 29 21:29:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/formhist/: formhist.c, formhist.h:
+
+	Moved descriptions of public functions to the header file.  
+
+Fri Aug 29 21:27:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	A small patch making rendering of tables more correct. Some pages
+	might look a lot different. E.g. www.linux.org has some strange
+	coloring in the bottom while but /. is much better.  
+
+Fri Aug 29 21:26:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/formhist/formhist.c:
+
+	Comments cleanup.  
+
+Fri Aug 29 21:21:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/formhist/formhist.c:
+
+	Normalize (+ minor reindentation and tiny cleanup).  
+
+Fri Aug 29 21:18:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/formhist/formhist.h:
+
+	Normalize.  
+
+Fri Aug 29 21:03:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/leds.h:
+
+	Fixed invalid negation in (my?) comment.  
+
+Fri Aug 29 18:18:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Use INIT_COLOR_PAIR() wrapper.  
+
+Fri Aug 29 17:31:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Remove legacy code and check @dump_pos only in mix_attr_color().  
+
+Fri Aug 29 17:28:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/color.c:
+
+	color_to_string(): Use %06x fragment for converting the @color.  
+
+Fri Aug 29 15:41:26 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Cache intermediate results even more, misc. cleanups and
+	optimizations.  
+
+Fri Aug 29 15:08:34 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/listbox.c:
+
+	Cleanups and optimizations.  
+
+Fri Aug 29 14:38:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inpfield.c:
+
+	Use int_[upper|lower]_bound().  
+
+Fri Aug 29 14:30:24 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/group.c:
+
+	Use a temporary variable to prevent useless calculation, populate
+	with int_max()/int_*/bound().  
+
+Fri Aug 29 14:29:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/checkbox.c:
+
+	Use a temporary variable to prevent useless calculation.  
+
+Fri Aug 29 14:09:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/button.c:
+
+	Various minor optimizations, populate with int_max() and
+	int_[upper|lower]_bound().  
+
+Fri Aug 29 12:16:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	find_nearest_color(): Rename l -> level.  
+
+Fri Aug 29 11:50:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	print_char(): Always add ' ' as fall back.  
+
+Fri Aug 29 11:39:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	redraw_screen(): Use memcmp() for exact matching.  
+
+Fri Aug 29 11:31:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Cleanup the frame table handling to be more generic.  
+
+Fri Aug 29 11:16:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/renderer.c, terminal/color.c,
+	terminal/color.h, terminal/screen.c:
+
+	Move the terminal color handling out of document/html/renderer.* and
+	into terminal/color.* this way find_nearest_color() and fg_color() 
+	can be static inline'd but the real benifit is the last chunk that 
+	moves 3 lines of code outside print_char() which (at least in
+	profiling) gives a small boost or said another way it doesn't hurt
+	performance! ;) 
+	
+	The numbers: 
+	
+	  %   cumulative   self              self     total 
+	 time   seconds   seconds    calls  ms/call  ms/call  name 
+	  9.5       6.14     1.73  9142934     0.00     0.00  print_char
+	  [27] 8.2       7.58     1.53  9107494     0.00     0.00 
+				   print_char [29] ^^^^^^^ This must be because redraw_screen() can
+	more correctly compare colors.  (btw. the case is scrolling up and
+	 down twice on a page cat'd from 20 /. pages and a page of all debian
+	unstables packages. 776 subpages) 
+
+Fri Aug 29 11:13:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/: string.c, string.h:
+
+	Make the ``mostly used'' string utils inlined.  
+
+Fri Aug 29 09:47:05 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	Many minor optimizations and cleanups. Some old staled code was
+	removed. Speed was significantly improved since 0.5pre4.  
+
+Fri Aug 29 04:40:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	mainmenu_func(): Don't propagate the event when calling
+	delete_window_ev(). Fixes bug 33.  
+
+Fri Aug 29 03:33:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: terminal/draw.c, viewer/text/view.c:
+
+	draw_border_char(): Check @color before mixing it. Fixes bug 242.  
+
+Thu Aug 28 23:01:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* SITES:
+
+	*.pld.org.pl -> *.pld-linux.org 
+
+Thu Aug 28 19:48:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	cookies.max_age description cleanup. Changed default to -1 (no
+	preset deadline for the poor little cookies), unless someone will
+	come with a sound reason for keeping it upon 1 year. (IMHO file
+	growth is not an issue..) 
+
+Thu Aug 28 19:43:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	Reduce overflow risk to zero and drop some comments.  
+
+Thu Aug 28 19:31:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Commenting on possible buffer overflow at forcehtml_cmd().  
+
+Thu Aug 28 19:28:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/dns.c:
+
+	assertm() 
+
+Thu Aug 28 19:24:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/frames.c:
+
+	Massive grammar fixes in comment introduced in rev 1.8 and bound the
+	workaround to bug 237.  
+
+Thu Aug 28 19:17:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* Unicode/gen-cp, src/intl/codepage.inc:
+
+	gen.cp tidyup and slight mostly cosmetical altering of the output.
+	If fancy, then fancy. ;-) 
+
+Thu Aug 28 18:17:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	Major optimization in get_searched(), use tolower() and pre-lowered
+	string comparaison instead of expensive strncasecmp(). Some
+	arithmetic operations were moved out of loops, cleanup.  
+
+Thu Aug 28 17:29:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Add missing snprintf.h #include.  
+
+Thu Aug 28 17:22:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: elinks.h, intl/gettext/dcigettext.c,
+	intl/gettext/l10nflist.c, intl/gettext/loadmsgcat.c,
+	intl/gettext/localealias.c:
+
+	#include the stubs via elinks.h. Makes elinks compile on FreeBSD
+	again.  
+
+Thu Aug 28 17:08:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/l10nflist.c:
+
+	Remove useless pop() declaration.  
+
+Thu Aug 28 17:01:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/auth.c:
+
+	Add missing #include.  
+
+Thu Aug 28 17:01:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/loadmsgcat.c:
+
+	source_tree_filename(): Cleanup and rename to
+	add_filename_to_string().  
+
+Thu Aug 28 16:40:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	Typo fix in comment.  
+
+Thu Aug 28 09:19:50 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Thu Aug 28 09:00:38 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	fr.po space fix.  
+
 Wed Aug 27 16:23:09 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/html/tables.c:
@@ -513,6 +883,33 @@ Fri Aug 22 21:43:50 2003  Jonas Fonseca <fonseca@diku.dk>:
 	Fix `tr' usage so "VISCII 1.1" (spaces in aliases) are handled
 	correctly.  
 
+Fri Aug 22 15:13:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	Forms history feature now saves forms in ~/.elinks/formhist file
+	instead of ~/.elinks/password, just move it to new name before
+	starting elinks to update.  
+
+Fri Aug 22 15:07:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/: formhist.c, formhist.h:
+
+	Various variables were renamed, a potential memleak fixed, minor
+	cleanup.  
+
+Fri Aug 22 10:38:50 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	Minor cleanup and bugfixes (potential memleaks).  
+
+Fri Aug 22 10:11:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	Tidyup and sscanf() replacement.  
+
 Thu Aug 21 14:55:27 2003  Laurent Monin <zas@norz.org>:
 
 	* src/util/: memory.h, string.c:
@@ -545,19 +942,19 @@ Thu Aug 21 13:06:47 2003  Laurent Monin <zas@norz.org>:
 	src/elusive/parser/dtd/.cvsignore,
 	src/elusive/parser/html/.cvsignore,
 	src/elusive/renderer/.cvsignore,
-	src/elusive/renderer/text/.cvsignore, src/globhist/.cvsignore,
-	src/intl/.cvsignore, src/intl/gettext/.cvsignore,
-	src/lowlevel/.cvsignore, src/mime/.cvsignore,
-	src/mime/backend/.cvsignore, src/osdep/.cvsignore,
-	src/protocol/.cvsignore, src/protocol/http/.cvsignore,
-	src/sched/.cvsignore, src/scripting/.cvsignore,
-	src/scripting/guile/.cvsignore, src/scripting/lua/.cvsignore,
-	src/ssl/.cvsignore, src/terminal/.cvsignore,
-	src/terminal/graphics/.cvsignore, src/terminal/text/.cvsignore,
-	src/util/.cvsignore, src/viewer/.cvsignore,
-	src/viewer/common/.cvsignore, src/viewer/dump/.cvsignore,
-	src/viewer/graphics/.cvsignore, src/viewer/text/.cvsignore,
-	test/.cvsignore:
+	src/elusive/renderer/text/.cvsignore, src/formhist/.cvsignore,
+	src/globhist/.cvsignore, src/intl/.cvsignore,
+	src/intl/gettext/.cvsignore, src/lowlevel/.cvsignore,
+	src/mime/.cvsignore, src/mime/backend/.cvsignore,
+	src/osdep/.cvsignore, src/protocol/.cvsignore,
+	src/protocol/http/.cvsignore, src/sched/.cvsignore,
+	src/scripting/.cvsignore, src/scripting/guile/.cvsignore,
+	src/scripting/lua/.cvsignore, src/ssl/.cvsignore,
+	src/terminal/.cvsignore, src/terminal/graphics/.cvsignore,
+	src/terminal/text/.cvsignore, src/util/.cvsignore,
+	src/viewer/.cvsignore, src/viewer/common/.cvsignore,
+	src/viewer/dump/.cvsignore, src/viewer/graphics/.cvsignore,
+	src/viewer/text/.cvsignore, test/.cvsignore:
 
 	*.swp files (temporary vim files) are now ignored by cvs.  
 
@@ -615,6 +1012,21 @@ Tue Aug 19 07:26:44 2003  Laurent Monin <zas@norz.org>:
 	* src/util/base64.c:
 
 	A stupid bug was fixed, patch by Zardoz.  
+
+Mon Aug 18 19:46:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.c:
+
+	The first two fixes keep old form data around and avoid crashing on
+	null value fields.  
+	
+	The last fix is my crude attempt to delete forms in and outside of
+	lists without underflow/overflow. There should probably be a
+	free_list_with_callback version that calls a per-element freer on
+	each list member to reduce the number of times that lists are freed
+	incorrectly.  
+	
+	Patch by Zardoz.  
 
 Sun Aug 17 14:49:47 2003  Jonas Fonseca <fonseca@diku.dk>:
 
@@ -715,6 +1127,15 @@ Mon Aug  4 19:49:25 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	file display.c was initially added on branch ELUSION.  
 
+Mon Aug  4 19:32:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/: formhist.c, formhist.h:
+
+	I am rolling form memory back to where it was before I messed it up.
+	Only a few renames + memorize_form() in formhist/ remains. I have
+	kept my changes in the ELUSION branch where I will be doing most of
+	my patches from now on. If I get it fixed we can merge it later.  
+
 Mon Aug  4 18:54:45 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/html/frames.c:
@@ -741,6 +1162,12 @@ Sun Aug  3 03:44:23 2003  Jonas Fonseca <fonseca@diku.dk>:
 	color and attribute in struct screen_char ... which will make us
 	able to support more attributes like underline.  
 
+Sun Aug  3 00:15:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.h:
+
+	Stranded renaming bits.  
+
 Sat Aug  2 20:20:43 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/util/string.c:
@@ -749,33 +1176,127 @@ Sat Aug  2 20:20:43 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 Sat Aug  2 20:17:05 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/util/string.c:
+	* src/: formhist/formhist.c, util/string.c:
 
 	memorize_form(): Possible fix for determining whether to save the
 	form values.  
 
+Sat Aug  2 20:05:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.c:
+
+	Some weird bug forces me to do this weird thing.  
+
+Sat Aug  2 19:03:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.c:
+
+	#define FORM_HISTORY_FILENAME.  
+
+Sat Aug  2 18:58:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.c:
+
+	Do like globhist and be more careful about @elinks_home.  
+
+Sat Aug  2 18:20:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.c:
+
+	write_form_history(): Introduced. Now add_form_history_item() just
+	marks the history dirty. We can always add save timer like globhist
+	later.  
+
+Sat Aug  2 18:10:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.c:
+
+	remember_form(): Rename to add_form_history_item() and use the given
+	@item purging unwanted submitted values instead of allocating new
+	ones.  
+
+Sat Aug  2 17:57:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.h:
+
+	Add more comments.  
+
+Sat Aug  2 17:50:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/: formhist.c, formhist.h:
+
+	init_form_history_item(): Introduced. We now allocate url and item
+	in one chunk.  
+
+Sat Aug  2 17:31:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.c:
+
+	read_item_submit_list(): Introduced to make init_form_history()
+	simpler. Now we even close the file when bailing out.  
+
 Sat Aug  2 17:16:47 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/viewer/text/form.c:
+	* src/: formhist/formhist.c, formhist/formhist.h,
+	viewer/text/form.c:
 
 	get_saved_control_value(): Renamed to get_form_history_value().
 	Comment moved to header.  
 
+Sat Aug  2 17:03:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.c:
+
+	Make @form_history static.  
+
+Sat Aug  2 17:02:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.c:
+
+	Move done_form_history().  
+
+Sat Aug  2 16:06:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/: formhist.c, formhist.c:
+
+	Use ~/.elinks/formhist as filename.  
+
+Sat Aug  2 16:03:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.c:
+
+	Rename: @saved_forms -> @form_history, load_saved_forms() ->
+	init_form_history().  
+
+Sat Aug  2 15:59:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.c:
+
+	done_form_history_item(): Rename @form -> @item.  
+
 Sat Aug  2 15:51:02 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/main.c:
+	* src/: main.c, formhist/formhist.c, formhist/formhist.h:
 
 	Rename: free_formsmemory() -> done_form_history().  
 
 Sat Aug  2 15:46:35 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/viewer/text/form.c:
+	* src/: formhist/formhist.c, formhist/formhist.h,
+	viewer/text/form.c:
 
 	Rename: free_form() -> done_form_history_item() and make it private.  
 
+Sat Aug  2 15:39:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/: formhist.c, formhist.h:
+
+	Removed private'' functions from header and made them static.  
+
 Sat Aug  2 15:35:17 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: Makefile.am, viewer/text/form.c:
+	* src/: Makefile.am, formhist/formhist.c, formhist/formhist.h,
+	viewer/text/form.c:
 
 	memorize_form(): Move to formhist/. Link in correct archive. ;) 
 
@@ -786,15 +1307,25 @@ Sat Aug  2 15:22:20 2003  Jonas Fonseca <fonseca@diku.dk>:
 	memorize_form(): No need to free the form controls just return NULL
 	and let get_form_url() will do it.  
 
-Sat Aug  2 15:03:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+Sat Aug  2 15:16:13 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/viewer/text/form.c:
+	* src/formhist/formhist.o:
+
+	Oops this one shouldn't have been added. Sorry.  
+
+Sat Aug  2 15:03:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: formhist/formhist.c, formhist/formhist.h,
+	formhist/formhist.o, viewer/text/form.c:
 
 	Rename: struct formsmem_data -> struct form_history_item.  
 
 Sat Aug  2 14:59:54 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* configure.in, src/Makefile.am, src/main.c,
+	src/formhist/.cvsignore, src/formhist/.vimrc,
+	src/formhist/Makefile.am, src/formhist/formhist.c,
+	src/formhist/formhist.h, src/formhist/formhist.o,
 	src/viewer/text/form.c:
 
 	s/formsmem/formhist/ 
@@ -1562,7 +2093,7 @@ Mon Jul 28 08:25:21 2003  Jonas Fonseca <fonseca@diku.dk>:
 	* src/terminal/: draw.c, screen.c, screen.h, terminal.c,
 	terminal.h:
 
-	First move towards restructuring the terminal screen layer.  
+	Introduce struct terminal_screen that now holds the screen image.  
 
 Mon Jul 28 07:33:09 2003  Laurent Monin <zas@norz.org>:
 

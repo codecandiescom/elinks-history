@@ -1,3 +1,23 @@
+Thu Mar 11 13:54:09 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/dialogs.c:
+
+	Tidy up.  
+
+Thu Mar 11 13:43:09 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/dialogs.c:
+
+	Do proper check for expires and secure cookies values using
+	strtol().  
+
+Thu Mar 11 04:44:23 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/cookies/: cookies.c, cookies.h, dialogs.c:
+
+	Possibility adding new cookies, but only for "old" servers.  
+	Introduced listbox draw op: draw_cookie.  
+
 Tue Mar  9 17:44:18 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/cookies/dialogs.c:

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.85 2004/11/12 10:06:15 zas Exp $ */
+/* $Id: globhist.c,v 1.86 2004/11/16 10:32:25 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -247,6 +247,7 @@ globhist_simple_search(unsigned char *search_url, unsigned char *search_title)
 	}
 
 	if (!*search_title && !*search_url) {
+		/* No search terms, make all entries visible. */
 		foreach (item, global_history.entries) {
 			item->box_item->visible = 1;
 		}
@@ -254,10 +255,9 @@ globhist_simple_search(unsigned char *search_url, unsigned char *search_title)
 	}
 
 	foreach (item, global_history.entries) {
-		if ((search_title && *search_title
-		     && strcasestr(item->title, search_title)) ||
-		    (search_url && *search_url
-		     && strcasestr(item->url, search_url))) {
+		/* Make matching entries visible, hide others. */
+		if ((*search_title && strcasestr(item->title, search_title))
+		    || (*search_url && strcasestr(item->url, search_url))) {
 			item->box_item->visible = 1;
 		} else {
 			item->box_item->visible = 0;

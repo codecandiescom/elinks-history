@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.269 2003/12/02 23:48:31 zas Exp $ */
+/* $Id: session.c,v 1.270 2003/12/03 11:27:37 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -538,7 +538,7 @@ b:
 }
 
 
-void request_frameset(struct session *, struct frameset_desc *);
+static void request_frameset(struct session *, struct frameset_desc *);
 
 static void
 request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
@@ -612,7 +612,7 @@ found:
 	mem_free(url);
 }
 
-void
+static void
 request_frameset(struct session *ses, struct frameset_desc *frameset_desc)
 {
 	static int depth = 0; /* Inheritation counter (recursion brake ;) */

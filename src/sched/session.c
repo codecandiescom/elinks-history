@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.61 2003/05/09 15:11:39 zas Exp $ */
+/* $Id: session.c,v 1.62 2003/05/09 16:30:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,7 +168,7 @@ add_time_to_str(unsigned char **s, int *l, ttime t)
 		t %= (24 * 3600);
 		ulongcat(&q, &qlen, (t / 3600), 4, 0);
 		q[qlen++] = ':';
-		ulongcat(&q, &qlen, ((t / 60) % 60), 2, 1);
+		ulongcat(&q, &qlen, ((t / 60) % 60), 2, '0');
 	} else {
 		/* Only minutes */
 		ulongcat(&q, &qlen, (t / 60), 2, 0);
@@ -176,7 +176,7 @@ add_time_to_str(unsigned char **s, int *l, ttime t)
 
 	/* Seconds */
 	q[qlen++] = ':';
-	ulongcat(&q, &qlen, (t % 60), 2, 1);
+	ulongcat(&q, &qlen, (t % 60), 2, '0');
 
 	add_to_str(s, l, q);
 }

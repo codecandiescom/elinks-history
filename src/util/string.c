@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.32 2003/05/09 15:36:25 zas Exp $ */
+/* $Id: string.c,v 1.33 2003/05/09 16:30:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -352,8 +352,9 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
  * number will be appended starting at end of previous string. *slen is
  * updated accordingly.
  * Filling is starting at right.
- * So, ulongcat(s, NULL, 12345, 4) will set s to "2345";
- * If zerofill is set, then ulongcat(s, NULL, 123, 5) will set s to "00123"
+ * So, ulongcat(s, NULL, 12345, 4, 0) will set s to "2345";
+ * If fillchar isn't NUL, then ulongcat(s, NULL, 123, 5, '*') will set s to "**123"
+ * A common usage will be: ulongcat(s, NULL, 123, 5, '0') -> "00123"
  *
  * A NUL char is always added at end of string.
  * s should point to a sufficient memory space (size >= width + 1).
@@ -362,7 +363,7 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
 void inline
 elinks_ulongcat(unsigned char *s, unsigned int *slen,
 		unsigned long number, unsigned int width,
-		int zerofill)
+		unsigned char fillchar)
 {
 	unsigned int start = 0;
 	unsigned int pos = 1;
@@ -378,12 +379,14 @@ elinks_ulongcat(unsigned char *s, unsigned int *slen,
 
 	if (slen) start = *slen;
 
-	if (zerofill) {
-		unsigned int pad =  width - pos;
+	if (fillchar) {
+		unsigned int pad = width - pos;
 
 		if (pad) {
-			pos += pad;
-			while (--pad) s[start + pad] = '0';
+			unsigned int tmp = start;
+
+			start += pad;
+			while (pad) s[--pad + tmp] = fillchar;
 		}
 	}
 

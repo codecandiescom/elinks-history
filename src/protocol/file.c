@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.40 2003/04/29 08:30:10 zas Exp $ */
+/* $Id: file.c,v 1.41 2003/05/09 16:30:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,8 +139,9 @@ stat_links(unsigned char **p, int *l, struct stat *stp)
 
 	if (!stp) add_to_str(p, l, "    ");
 	else {
-		sprintf(lnk, "%3d ", (int)stp->st_nlink);
+		ulongcat(lnk, NULL, stp->st_nlink, 3, ' ');
 		add_to_str(p, l, lnk);
+		add_chr_to_str(p, l, ' ');
 	}
 #endif
 }
@@ -174,7 +175,7 @@ stat_user(unsigned char **p, int *l, struct stat *stp, int g)
 
 		pwd = getpwuid(id);
 		if (!pwd || !pwd->pw_name)
-			sprintf(pp, "%d", id);
+			ulongcat(pp, NULL, id, 8, 0);
 		else
 			sprintf(pp, "%.8s", pwd->pw_name);
 		last_uid = id;
@@ -191,7 +192,7 @@ stat_user(unsigned char **p, int *l, struct stat *stp, int g)
 
 		grp = getgrgid(id);
 		if (!grp || !grp->gr_name)
-			sprintf(pp, "%d", id);
+			ulongcat(pp, NULL, id, 8, 0);
 		else
 			sprintf(pp, "%.8s", grp->gr_name);
 		last_gid = id;
@@ -212,10 +213,11 @@ stat_size(unsigned char **p, int *l, struct stat *stp)
 	if (!stp) {
 		add_to_str(p, l, "         ");
 	} else {
-		unsigned char size[32];
+		unsigned char size[9];
 
-		snprintf(size, sizeof(size), "%8ld ", (long)stp->st_size);
+		ulongcat(&size, NULL, stp->st_size, 8, ' ');
 		add_to_str(p, l, size);
+		add_chr_to_str(p, l, ' ');
 	}
 }
 

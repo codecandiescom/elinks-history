@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.20 2002/09/17 16:29:05 zas Exp $ */
+/* $Id: secsave.c,v 1.21 2002/10/12 15:04:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,7 +46,7 @@
  *
  * WARNING: since rename() is used, any symlink called "filename" may be
  * replaced by a regular file. If destination file isn't a regular file,
- * then secsave is disabled for that file.
+  then secsave is disabled for that file.
  *
  * If secure_file_saving is unset:
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -73,7 +73,8 @@ secure_open(unsigned char *file_name, mode_t mask)
 	struct stat st;
 	struct secure_save_info *ssi;
 
-	if (get_opt_bool_tree(cmdline_options, "no-connect")
+	if ((get_opt_bool_tree(cmdline_options, "no-connect")
+	     || get_opt_int_tree(cmdline_options, "session-ring"))
 	    && !get_opt_bool_tree(cmdline_options, "touch-files"))
 		return NULL;
 		

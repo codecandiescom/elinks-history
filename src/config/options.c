@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.106 2002/10/12 14:51:12 pasky Exp $ */
+/* $Id: options.c,v 1.107 2002/10/12 15:04:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1756,7 +1756,8 @@ register_options()
 		"as a user much). Note that you usually don't want to use this except\n"
 	        "you're a developer and you want to do some testing - if you want the\n"
 		"ELinks instances running each one standalone, rather use -no-connect\n"
-		"commandline option.");
+		"commandline option. Also note that normally no runtime state files\n"
+		"are written to the disk with this option on - see also -touch-files.\n");
 
 	add_opt_bool_tree(cmdline_options, "",
 		"source", 0, 0,

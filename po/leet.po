@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre1.CVS\n"
-"POT-Creation-Date: 2003-07-15 19:35+0200\n"
+"POT-Creation-Date: 2003-07-16 10:29+0200\n"
 "PO-Revision-Date: 2003-06-20 16:45+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: |=|4x0rs Un173\n"
@@ -37,7 +37,7 @@ msgstr "|\\|u|V|B3R 3><P3(73|) 1N |=i3|D"
 #: src/sched/download.c:1192 src/sched/download.c:1223
 #: src/sched/download.c:1235 src/sched/session.c:354
 #: src/scripting/lua/core.c:437 src/scripting/lua/core.c:580
-#: src/scripting/lua/core.c:804 src/viewer/text/form.c:628
+#: src/scripting/lua/core.c:804 src/viewer/text/form.c:629
 #: src/viewer/text/search.c:539 src/viewer/text/search.c:588
 #: src/viewer/text/textarea.c:274 src/viewer/text/view.c:736
 #: src/viewer/text/view.c:1489
@@ -369,7 +369,7 @@ msgstr "Invalid |<3`/5troke."
 msgid "Need to select a keymap."
 msgstr "Need 70 53|3(7 a |<3`/map."
 
-#: src/config/dialogs.c:648 src/config/options.c:2581
+#: src/config/dialogs.c:648 src/config/options.c:2598
 msgid "Action"
 msgstr "Action"
 
@@ -727,65 +727,65 @@ msgstr "3RR0R parsing |<3`/5troke"
 msgid "Unrecognised action (internal error)"
 msgstr "Unrecognised action (1|\\|73RN4|_ 3RR0R)"
 
-#: src/config/options.c:546 src/config/options.c:570 src/config/opttypes.c:39
+#: src/config/options.c:547 src/config/options.c:571 src/config/opttypes.c:39
 msgid "Parameter expected"
 msgstr "Parameter expected"
 
-#: src/config/options.c:571
+#: src/config/options.c:572
 msgid "Too many parameters"
 msgstr "70o many parameters"
 
-#: src/config/options.c:576
+#: src/config/options.c:577
 msgid "error"
 msgstr "3RR0R"
 
-#: src/config/options.c:578 src/sched/error.c:45
+#: src/config/options.c:579 src/sched/error.c:45
 msgid "Host not found"
 msgstr "Host |\\|07 f0u|\\|d"
 
-#: src/config/options.c:592
+#: src/config/options.c:593
 msgid "Resolver error"
 msgstr "Resolver 3RR0R"
 
-#: src/config/options.c:614
+#: src/config/options.c:615
 #, c-format
 msgid "ELinks %s - Text WWW browser\n"
 msgstr "E|1N|<s %s - 73><7 WWW browser\n"
 
-#: src/config/options.c:656
+#: src/config/options.c:657
 msgid "Template option folder"
 msgstr "Template 0p710N f0|D4R"
 
-#: src/config/options.c:672
+#: src/config/options.c:673
 #, c-format
 msgid "    %s%s%s %s (default: %d)"
 msgstr "    %s%s%s %s (|)34fU@|7: %d)"
 
-#: src/config/options.c:677 src/config/options.c:702
+#: src/config/options.c:678 src/config/options.c:703
 #, c-format
 msgid "    %s%s%s %s (default: \"%s\")"
 msgstr "    %s%s%s %s (|)34fU@|7: \"%s\")"
 
-#: src/config/options.c:682
+#: src/config/options.c:683
 #, c-format
 msgid "    %s%s%s %s (alias for %s)"
 msgstr "    %s%s%s %s (alias for %s)"
 
-#: src/config/options.c:687
+#: src/config/options.c:688
 #, c-format
 msgid "    %s%s%s %s (default: %s)"
 msgstr "    %s%s%s %s (|)34fU@|7: %s)"
 
-#: src/config/options.c:694
+#: src/config/options.c:695
 #, c-format
 msgid "    %s%s%s %s (default: #%02x%02x%02x)"
 msgstr "    %s%s%s %s (|)34fU@|7: #%02x%02x%02x)"
 
-#: src/config/options.c:809
+#: src/config/options.c:810
 msgid "Configuration options:\n"
 msgstr "Configuration 0p710Ns:\n"
 
-#: src/config/options.c:812
+#: src/config/options.c:813
 msgid ""
 "Usage: elinks [OPTION]... [URL]\n"
 "\n"
@@ -793,20 +793,20 @@ msgstr ""
 "Usage: elinks [OPTION]... [URL]\n"
 "\n"
 
-#: src/config/options.c:813
+#: src/config/options.c:814
 msgid "Options:\n"
 msgstr "0P710|\\|5:\n"
 
 #. TODO: The change hooks should be added more elegantly! --pasky
-#: src/config/options.c:906 src/util/version.c:79
+#: src/config/options.c:907 src/util/version.c:79
 msgid "Bookmarks"
 msgstr "800|<|V|4R|<5"
 
-#: src/config/options.c:908
+#: src/config/options.c:909
 msgid "Bookmark options."
 msgstr "800|<|V|4R|< 0p710Ns."
 
-#: src/config/options.c:913
+#: src/config/options.c:914
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default ELinks (Links 0.9x compatible) format\n"
@@ -816,7 +816,7 @@ msgstr ""
 "0 is the default ELinks (Links 0.9x compatible) format\n"
 "1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
 
-#: src/config/options.c:917
+#: src/config/options.c:918
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default ELinks (Links 0.9x compatible) format\n"
@@ -828,23 +828,23 @@ msgstr ""
 "1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!) "
 "(DISABLED)"
 
-#: src/config/options.c:923
+#: src/config/options.c:924
 msgid "File format"
 msgstr "f1|3 f0|2|V|at"
 
-#: src/config/options.c:929
+#: src/config/options.c:930
 msgid "Configuration system"
 msgstr "Configuration system"
 
-#: src/config/options.c:931
+#: src/config/options.c:932
 msgid "Configuration handling options."
 msgstr "Configuration handling 0p710Ns."
 
-#: src/config/options.c:933
+#: src/config/options.c:934
 msgid "Comments"
 msgstr "Comments"
 
-#: src/config/options.c:935
+#: src/config/options.c:936
 msgid ""
 "Amount of comments automatically written to the config file:\n"
 "0 is no comments are written\n"
@@ -858,11 +858,11 @@ msgstr ""
 "2 is only the description is written\n"
 "3 is full comments are written"
 
-#: src/config/options.c:941
+#: src/config/options.c:942
 msgid "Indentation"
 msgstr "Indentation"
 
-#: src/config/options.c:943
+#: src/config/options.c:944
 msgid ""
 "Shift width of one indentation level in the configuration\n"
 "file. Zero means that no indentation is performed at all\n"
@@ -872,11 +872,11 @@ msgstr ""
 "file. Zero means that no indentation is performed at all\n"
 "when saving the configuration."
 
-#: src/config/options.c:947
+#: src/config/options.c:948
 msgid "Saving style"
 msgstr "5@\\/1N6 style"
 
-#: src/config/options.c:949
+#: src/config/options.c:950
 msgid ""
 "Determines what happens when you tell ELinks to save options:\n"
 "0 is only values of current options are altered\n"
@@ -896,11 +896,11 @@ msgstr ""
 "     CHANGED during this ELinks session are added at the end of\n"
 "     the file"
 
-#: src/config/options.c:958
+#: src/config/options.c:959
 msgid "Saving style warnings"
 msgstr "5@\\/1N6 style VV4RN1N6s"
 
-#: src/config/options.c:960
+#: src/config/options.c:961
 msgid ""
 "This is internal option used when displaying a warning about\n"
 "obsolete config.saving_style. You shouldn't touch it."
@@ -908,11 +908,11 @@ msgstr ""
 "This is internal option used when displaying a warning about\n"
 "obsolete config.saving_style. You shouldn't touch it."
 
-#: src/config/options.c:963
+#: src/config/options.c:964
 msgid "Show template"
 msgstr "Show template"
 
-#: src/config/options.c:965
+#: src/config/options.c:966
 msgid ""
 "Show _template_ options in autocreated trees in the options\n"
 "manager and save them to the configuration file."
@@ -920,27 +920,27 @@ msgstr ""
 "Show _template_ options in autocreated trees in the options\n"
 "manager and save them to the configuration file."
 
-#: src/config/options.c:970
+#: src/config/options.c:971
 msgid "Connections"
 msgstr "(0|\\||\\|3(710N5"
 
-#: src/config/options.c:972
+#: src/config/options.c:973
 msgid "Connection options."
 msgstr "(0|\\||\\|3(710N 0p710Ns."
 
-#: src/config/options.c:976 src/util/version.c:64
+#: src/config/options.c:977 src/util/version.c:64
 msgid "SSL"
 msgstr "SSL"
 
-#: src/config/options.c:978
+#: src/config/options.c:979
 msgid "SSL options."
 msgstr "SSL 0p710Ns."
 
-#: src/config/options.c:981 src/config/options.c:986 src/config/options.c:991
+#: src/config/options.c:982 src/config/options.c:987 src/config/options.c:992
 msgid "Verify certificates"
 msgstr "Verify certificates"
 
-#: src/config/options.c:983
+#: src/config/options.c:984
 msgid ""
 "Verify the peer's SSL certificate. Note that this\n"
 "needs extensive configuration of OpenSSL by the user."
@@ -948,7 +948,7 @@ msgstr ""
 "Verify the peer's SSL certificate. Note that this\n"
 "needs extensive configuration of OpenSSL by the user."
 
-#: src/config/options.c:988
+#: src/config/options.c:989
 msgid ""
 "Verify the peer's SSL certificate. Note that this\n"
 "probably doesn't work properly at all with GnuTLS."
@@ -956,39 +956,39 @@ msgstr ""
 "Verify the peer's SSL certificate. Note that this\n"
 "probably doesn't work properly at all with GnuTLS."
 
-#: src/config/options.c:993
+#: src/config/options.c:994
 msgid "Verify the peer's SSL certificate."
 msgstr "Verify the peer's SSL certificate."
 
-#: src/config/options.c:997
+#: src/config/options.c:998
 msgid "Asynchronous DNS"
 msgstr "Asynchro|\\|0us DNS"
 
-#: src/config/options.c:999
+#: src/config/options.c:1000
 msgid "Use asynchronous DNS resolver?"
 msgstr "|_|53 asynchro|\\|0us DNS resolver?"
 
-#: src/config/options.c:1001
+#: src/config/options.c:1002
 msgid "Maximum connections"
 msgstr "Maximum (0|\\||\\|3(710N5"
 
-#: src/config/options.c:1003
+#: src/config/options.c:1004
 msgid "Maximum number of concurrent connections."
 msgstr "Maximum |\\|U|V|83R of concurrent (0|\\||\\|3(710N5."
 
-#: src/config/options.c:1005
+#: src/config/options.c:1006
 msgid "Maximum connections per host"
 msgstr "Maximum (0|\\||\\|3(710N5 per host"
 
-#: src/config/options.c:1007
+#: src/config/options.c:1008
 msgid "Maximum number of concurrent connections to a given host."
 msgstr "Maximum |\\|U|V|83R of concurrent (0|\\||\\|3(710N5 70 a given host."
 
-#: src/config/options.c:1009
+#: src/config/options.c:1010
 msgid "Connection retries"
 msgstr "(0|\\||\\|3(710N retries"
 
-#: src/config/options.c:1011
+#: src/config/options.c:1012
 msgid ""
 "Number of tries to establish a connection.\n"
 "Zero means try forever."
@@ -996,35 +996,35 @@ msgstr ""
 "Number of tries to establish a connection.\n"
 "Zero means try forever."
 
-#: src/config/options.c:1014 src/sched/error.c:50
+#: src/config/options.c:1015 src/sched/error.c:50
 msgid "Receive timeout"
 msgstr "Receive 71|V|3out"
 
-#: src/config/options.c:1016
+#: src/config/options.c:1017
 msgid "Receive timeout (in seconds)."
 msgstr "Receive 71|V|3out (in seconds)."
 
-#: src/config/options.c:1018
+#: src/config/options.c:1019
 msgid "Timeout for non-restartable connections"
 msgstr "71|V|3out for |\\|0n-restar74|3le (0|\\||\\|3(710N5"
 
-#: src/config/options.c:1020
+#: src/config/options.c:1021
 msgid "Timeout for non-restartable connections (in seconds)."
 msgstr "71|V|3out for |\\|0n-restar74|3le (0|\\||\\|3(710N5 (in seconds)."
 
-#: src/config/options.c:1024 src/util/version.c:82
+#: src/config/options.c:1025 src/util/version.c:82
 msgid "Cookies"
 msgstr "Cookies"
 
-#: src/config/options.c:1026
+#: src/config/options.c:1027
 msgid "Cookies options."
 msgstr "Cookies 0p710Ns."
 
-#: src/config/options.c:1028
+#: src/config/options.c:1029
 msgid "Accept policy"
 msgstr "Accept policy"
 
-#: src/config/options.c:1031
+#: src/config/options.c:1032
 msgid ""
 "Cookies accepting policy:\n"
 "0 is accept no cookies\n"
@@ -1036,11 +1036,11 @@ msgstr ""
 "1 is ask for confirmation before accepting cookie (UNIMPLEMENTED)\n"
 "2 is accept all cookies"
 
-#: src/config/options.c:1036
+#: src/config/options.c:1037
 msgid "Paranoid security"
 msgstr "Para|\\|0id security"
 
-#: src/config/options.c:1038
+#: src/config/options.c:1039
 msgid ""
 "When enabled, we'll require three dots in cookies domain for all\n"
 "non-international domains (instead of just two dots). Please see\n"
@@ -1050,19 +1050,19 @@ msgstr ""
 "non-international domains (instead of just two dots). Please see\n"
 "code (cookies.c:check_domain_security()) for explanation."
 
-#: src/config/options.c:1042
+#: src/config/options.c:1043
 msgid "Saving"
 msgstr "5@\\/1N6"
 
-#: src/config/options.c:1044
+#: src/config/options.c:1045
 msgid "Load/save cookies from/to disk?"
 msgstr "Load/54\\/3 cookies from/70 disk?"
 
-#: src/config/options.c:1046
+#: src/config/options.c:1047
 msgid "Resaving"
 msgstr "Re5@\\/1N6"
 
-#: src/config/options.c:1048
+#: src/config/options.c:1049
 msgid ""
 "Save cookies after each change in cookies list? No effect when\n"
 "cookies_save is off."
@@ -1070,27 +1070,27 @@ msgstr ""
 "Save cookies after each change in cookies list? No effect when\n"
 "cookies_save is off."
 
-#: src/config/options.c:1053
+#: src/config/options.c:1054
 msgid "Document"
 msgstr "|)0(U|V|3N7"
 
-#: src/config/options.c:1055
+#: src/config/options.c:1056
 msgid "Document options."
 msgstr "|)0(U|V|3N7 0p710Ns."
 
-#: src/config/options.c:1057
+#: src/config/options.c:1058
 msgid "Browsing"
 msgstr "Browsing"
 
-#: src/config/options.c:1059
+#: src/config/options.c:1060
 msgid "Document browsing options (mainly interactivity)."
 msgstr "|)0(U|V|3N7 browsing 0p710Ns (|V|41|\\|ly interactivity)."
 
-#: src/config/options.c:1063
+#: src/config/options.c:1064
 msgid "Accesskeys"
 msgstr "Access|<3`/5"
 
-#: src/config/options.c:1065
+#: src/config/options.c:1066
 msgid ""
 "Options for handling of the accesskey attribute of the active\n"
 "HTML elements."
@@ -1098,11 +1098,11 @@ msgstr ""
 "Options for handling of the accesskey attribute of the active\n"
 "HTML elements."
 
-#: src/config/options.c:1068
+#: src/config/options.c:1069
 msgid "Automatic links following"
 msgstr "Au70matic |1N|<s f0110VVing"
 
-#: src/config/options.c:1070
+#: src/config/options.c:1071
 msgid ""
 "Automatically follow a link or submit a form if appropriate\n"
 "accesskey is pressed - this is the standard behaviour, but it's\n"
@@ -1112,11 +1112,11 @@ msgstr ""
 "accesskey is pressed - this is the standard behaviour, but it's\n"
 "considered dangerous."
 
-#: src/config/options.c:1074
+#: src/config/options.c:1075
 msgid "Accesskey priority"
 msgstr "Access|<3`/ priority"
 
-#: src/config/options.c:1076
+#: src/config/options.c:1077
 msgid ""
 "Priority of 'accesskey' HTML attribute:\n"
 "0 is first try all normal bindings; if it fails, check accesskey\n"
@@ -1128,19 +1128,19 @@ msgstr ""
 "1 is first try only frame bindings; if it fails, check accesskey\n"
 "2 is first check accesskey (this can be dangerous)"
 
-#: src/config/options.c:1082
+#: src/config/options.c:1083
 msgid "Forms"
 msgstr "f0|2|V|s"
 
-#: src/config/options.c:1084
+#: src/config/options.c:1085
 msgid "Options for handling of the forms interaction."
 msgstr "0P710|\\|5 for handling of the f0|2|V|s interaction."
 
-#: src/config/options.c:1086
+#: src/config/options.c:1087
 msgid "Submit form automatically"
 msgstr "5U8|/|17 f0|2|V| au70matically"
 
-#: src/config/options.c:1088
+#: src/config/options.c:1089
 msgid ""
 "Automagically submit a form when enter is pressed with a text\n"
 "field selected."
@@ -1148,27 +1148,27 @@ msgstr ""
 "Automagically submit a form when enter is pressed with a text\n"
 "field selected."
 
-#: src/config/options.c:1091
+#: src/config/options.c:1092
 msgid "Confirm submission"
 msgstr "Confirm submission"
 
-#: src/config/options.c:1093
+#: src/config/options.c:1094
 msgid "Ask for confirmation when submitting a form."
 msgstr "Ask for confirmation when 5U8|/|17ting a f0|2|V|."
 
-#: src/config/options.c:1096
+#: src/config/options.c:1097
 msgid "Images"
 msgstr "1|V|463s"
 
-#: src/config/options.c:1098
+#: src/config/options.c:1099
 msgid "Options for handling of images."
 msgstr "0P710|\\|5 for handling of 1|V|463s."
 
-#: src/config/options.c:1100
+#: src/config/options.c:1101
 msgid "Display style for image links"
 msgstr "Display style for 1|V|463 |1N|<s"
 
-#: src/config/options.c:1102
+#: src/config/options.c:1103
 msgid ""
 "Display [target filename] instead of [IMG] as visible image tags:\n"
 "-1    means always display just [IMG]\n"
@@ -1182,11 +1182,11 @@ msgstr ""
 "1-500 means display target filename with this maximal length;\n"
 "      if it is longer, the middle is substituted by an asterisk"
 
-#: src/config/options.c:1108
+#: src/config/options.c:1109
 msgid "Image links tagging"
 msgstr "1|V|463 |1N|<s tagging"
 
-#: src/config/options.c:1110
+#: src/config/options.c:1111
 msgid ""
 "When to enclose image links:\n"
 "0     means never\n"
@@ -1198,59 +1198,59 @@ msgstr ""
 "1     means never if alt or title are provided (old behavior)\n"
 "2     means always"
 
-#: src/config/options.c:1115
+#: src/config/options.c:1116
 msgid "Image link prefix"
 msgstr "1|V|463 |1N|< prefix"
 
-#: src/config/options.c:1117
+#: src/config/options.c:1118
 msgid "Prefix string to use to mark image links."
 msgstr "Prefix 57r1|\\|6 to |_|53 70 mark 1|V|463 |1N|<s."
 
-#: src/config/options.c:1119
+#: src/config/options.c:1120
 msgid "Image link suffix"
 msgstr "1|V|463 |1N|< suffix"
 
-#: src/config/options.c:1121
+#: src/config/options.c:1122
 msgid "Suffix string to use to mark image links."
 msgstr "Suffix 57r1|\\|6 to |_|53 70 mark 1|V|463 |1N|<s."
 
-#: src/config/options.c:1123
+#: src/config/options.c:1124
 msgid "Display image links"
 msgstr "Display 1|V|463 |1N|<s"
 
-#: src/config/options.c:1125
+#: src/config/options.c:1126
 msgid "Display links to images."
 msgstr "Display |1N|<s 70 1|V|463s."
 
-#: src/config/options.c:1128
+#: src/config/options.c:1129
 msgid "Links"
 msgstr "|1N|<s"
 
-#: src/config/options.c:1130
+#: src/config/options.c:1131
 msgid "Options for handling of links to other documents."
 msgstr "0P710|\\|5 for handling of |1N|<s 70 other |)0(U|V|3N7s."
 
-#: src/config/options.c:1132
+#: src/config/options.c:1133
 msgid "Directory highlighting"
 msgstr "Direc70ry highlighting"
 
-#: src/config/options.c:1134
+#: src/config/options.c:1135
 msgid "Highlight links to directories in FTP and local directory listing."
 msgstr "Highlight |1N|<s to directories in FTP and local direc70ry listing."
 
-#: src/config/options.c:1136
+#: src/config/options.c:1137
 msgid "Number links"
 msgstr "|\\|U|V|83R |1N|<s"
 
-#: src/config/options.c:1138
+#: src/config/options.c:1139
 msgid "Display numbers next to the links."
 msgstr "Display |\\|U|V|83Rs |\\|3><7 70 the |1N|<s."
 
-#: src/config/options.c:1140
+#: src/config/options.c:1141
 msgid "Number keys select links"
 msgstr "|\\|U|V|83R |<3`/5 53|3(7 |1N|<s"
 
-#: src/config/options.c:1142
+#: src/config/options.c:1143
 msgid ""
 "Number keys select links rather than specify command prefixes. This\n"
 "is a tristate:\n"
@@ -1266,12 +1266,12 @@ msgstr ""
 
 #. TODO - this is somehow implemented by ff, but disabled
 #. * for now as it doesn't work.
-#: src/config/options.c:1150
+#: src/config/options.c:1151
 msgid "Wrap-around links cycling"
 msgstr "Wrap-around |1N|<s cycling"
 
 #. 0
-#: src/config/options.c:1152
+#: src/config/options.c:1153
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
@@ -1279,19 +1279,19 @@ msgstr ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
 
-#: src/config/options.c:1156
+#: src/config/options.c:1157
 msgid "Horizontal text margin"
 msgstr "Horizontal 73><7 margin"
 
-#: src/config/options.c:1158
+#: src/config/options.c:1159
 msgid "Horizontal text margin."
 msgstr "Horizontal 73><7 margin."
 
-#: src/config/options.c:1160
+#: src/config/options.c:1161
 msgid "Scroll margin"
 msgstr "Scroll margin"
 
-#: src/config/options.c:1162
+#: src/config/options.c:1163
 msgid ""
 "Size of the virtual margin - when you click inside of that margin,\n"
 "document scrolls in that direction."
@@ -1299,11 +1299,11 @@ msgstr ""
 "Size of the virtual margin - when you click inside of that margin,\n"
 "document scrolls in that direction."
 
-#: src/config/options.c:1165
+#: src/config/options.c:1166
 msgid "Scroll step"
 msgstr "Scroll step"
 
-#: src/config/options.c:1167
+#: src/config/options.c:1168
 msgid ""
 "Number of lines to scroll when a key bound to scroll-up or scroll-\n"
 "down is pressed and no prefix was given."
@@ -1311,27 +1311,27 @@ msgstr ""
 "Number of lines to scroll when a key bound to scroll-up or scroll-\n"
 "down is pressed and no prefix was given."
 
-#: src/config/options.c:1170
+#: src/config/options.c:1171
 msgid "Tables navigation order"
 msgstr "74|3les navigation order"
 
-#: src/config/options.c:1172
+#: src/config/options.c:1173
 msgid "Move by columns in table, instead of rows."
 msgstr "Move by columns in 74|3le, instead of rows."
 
-#: src/config/options.c:1176
+#: src/config/options.c:1177
 msgid "Cache"
 msgstr "(4(|-|3"
 
-#: src/config/options.c:1178
+#: src/config/options.c:1179
 msgid "Cache options."
 msgstr "(4(|-|3 0p710Ns."
 
-#: src/config/options.c:1181
+#: src/config/options.c:1182
 msgid "Cache informations about redirects"
 msgstr "(4(|-|3 inf0|2|V|ations 480U7 R3o|1R3(7s"
 
-#: src/config/options.c:1183
+#: src/config/options.c:1184
 msgid ""
 "Cache even redirects sent by server (usually thru HTTP by a 302\n"
 "HTTP code and a Location header). This was the original behaviour\n"
@@ -1369,11 +1369,11 @@ msgstr ""
 "it, even previous redirects will be taken from cache instead of\n"
 "asking the server."
 
-#: src/config/options.c:1201
+#: src/config/options.c:1202
 msgid "Ignore cache-control info from server"
 msgstr "Ig|\\|0re cache-control 1|\\|f0 from 53|2\\/3R"
 
-#: src/config/options.c:1203
+#: src/config/options.c:1204
 msgid ""
 "Ignore Cache-Control and Pragma server headers.\n"
 "When set, the document is cached even with 'Cache-Control: no-cache'."
@@ -1381,205 +1381,205 @@ msgstr ""
 "Ignore Cache-Control and Pragma server headers.\n"
 "When set, the document is cached even with 'Cache-Control: no-cache'."
 
-#: src/config/options.c:1206
+#: src/config/options.c:1207
 msgid "Formatted documents"
 msgstr "f0|2|V|atted |)0(U|V|3N7s"
 
-#: src/config/options.c:1208
+#: src/config/options.c:1209
 msgid "Format cache options."
 msgstr "f0|2|V|at cache 0p710Ns."
 
-#: src/config/options.c:1210
+#: src/config/options.c:1211
 msgid "Number"
 msgstr "|\\|U|V|83R"
 
-#: src/config/options.c:1212
+#: src/config/options.c:1213
 msgid "Number of cached formatted pages."
 msgstr "|\\|U|V|83R of cached f0|2|V|atted pages."
 
-#: src/config/options.c:1214
+#: src/config/options.c:1215
 msgid "Memory cache"
 msgstr "/\\/\\3|V|0R`/ cache"
 
-#: src/config/options.c:1216
+#: src/config/options.c:1217
 msgid "Memory cache options."
 msgstr "/\\/\\3|V|0R`/ cache 0p710Ns."
 
-#: src/config/options.c:1218 src/dialogs/document.c:113
+#: src/config/options.c:1219 src/dialogs/document.c:113
 msgid "Size"
 msgstr "Size"
 
-#: src/config/options.c:1220
+#: src/config/options.c:1221
 msgid "Memory cache size (in kilobytes)."
 msgstr "/\\/\\3|V|0R`/ cache size (in kilobytes)."
 
-#: src/config/options.c:1224
+#: src/config/options.c:1225
 msgid "Charset"
 msgstr "(|-|4R5et"
 
-#: src/config/options.c:1226
+#: src/config/options.c:1227
 msgid "Charset options."
 msgstr "(|-|4R5et 0p710Ns."
 
-#: src/config/options.c:1228
+#: src/config/options.c:1229
 msgid "Default codepage"
 msgstr "|)34fU@|7 codepage"
 
-#: src/config/options.c:1230
+#: src/config/options.c:1231
 msgid "Default document codepage."
 msgstr "|)34fU@|7 |)0(U|V|3N7 codepage."
 
-#: src/config/options.c:1232
+#: src/config/options.c:1233
 msgid "Ignore charset info from server"
 msgstr "Ig|\\|0re (|-|4R5et 1|\\|f0 from 53|2\\/3R"
 
-#: src/config/options.c:1234
+#: src/config/options.c:1235
 msgid "Ignore charset info sent by server."
 msgstr "Ig|\\|0re (|-|4R5et 1|\\|f0 sent by 53|2\\/3R."
 
-#: src/config/options.c:1238
+#: src/config/options.c:1239
 msgid "Default color settings"
 msgstr "|)34fU@|7 (0|_0R 537tings"
 
-#: src/config/options.c:1240
+#: src/config/options.c:1241
 msgid "Default document color settings."
 msgstr "|)34fU@|7 |)0(U|V|3N7 (0|_0R 537tings."
 
-#: src/config/options.c:1243 src/config/options.c:1813
-#: src/config/options.c:1825 src/config/options.c:1845
-#: src/config/options.c:1853 src/config/options.c:1870
-#: src/config/options.c:1882 src/config/options.c:1902
-#: src/config/options.c:1910 src/config/options.c:1922
-#: src/config/options.c:1943 src/config/options.c:1955
-#: src/config/options.c:1967 src/config/options.c:1979
-#: src/config/options.c:1991 src/config/options.c:2003
-#: src/config/options.c:2015 src/config/options.c:2027
-#: src/config/options.c:2039 src/config/options.c:2051
-#: src/config/options.c:2076 src/config/options.c:2088
-#: src/config/options.c:2105 src/config/options.c:2117
-#: src/config/options.c:2134 src/config/options.c:2146
-#: src/config/options.c:2158 src/config/options.c:2181
-#: src/config/options.c:2193 src/config/options.c:2213
-#: src/config/options.c:2221 src/config/options.c:2238
-#: src/config/options.c:2250 src/config/options.c:2270
-#: src/config/options.c:2278 src/config/options.c:2290
-#: src/config/options.c:2311 src/config/options.c:2323
-#: src/config/options.c:2335 src/config/options.c:2347
-#: src/config/options.c:2359 src/config/options.c:2371
-#: src/config/options.c:2383 src/config/options.c:2395
-#: src/config/options.c:2407 src/config/options.c:2419
-#: src/config/options.c:2444 src/config/options.c:2456
-#: src/config/options.c:2473 src/config/options.c:2485
-#: src/config/options.c:2502 src/config/options.c:2514
-#: src/config/options.c:2526
+#: src/config/options.c:1244 src/config/options.c:1830
+#: src/config/options.c:1842 src/config/options.c:1862
+#: src/config/options.c:1870 src/config/options.c:1887
+#: src/config/options.c:1899 src/config/options.c:1919
+#: src/config/options.c:1927 src/config/options.c:1939
+#: src/config/options.c:1960 src/config/options.c:1972
+#: src/config/options.c:1984 src/config/options.c:1996
+#: src/config/options.c:2008 src/config/options.c:2020
+#: src/config/options.c:2032 src/config/options.c:2044
+#: src/config/options.c:2056 src/config/options.c:2068
+#: src/config/options.c:2093 src/config/options.c:2105
+#: src/config/options.c:2122 src/config/options.c:2134
+#: src/config/options.c:2151 src/config/options.c:2163
+#: src/config/options.c:2175 src/config/options.c:2198
+#: src/config/options.c:2210 src/config/options.c:2230
+#: src/config/options.c:2238 src/config/options.c:2255
+#: src/config/options.c:2267 src/config/options.c:2287
+#: src/config/options.c:2295 src/config/options.c:2307
+#: src/config/options.c:2328 src/config/options.c:2340
+#: src/config/options.c:2352 src/config/options.c:2364
+#: src/config/options.c:2376 src/config/options.c:2388
+#: src/config/options.c:2400 src/config/options.c:2412
+#: src/config/options.c:2424 src/config/options.c:2436
+#: src/config/options.c:2461 src/config/options.c:2473
+#: src/config/options.c:2490 src/config/options.c:2502
+#: src/config/options.c:2519 src/config/options.c:2531
+#: src/config/options.c:2543
 msgid "Text color"
 msgstr "73><7 (0|_0R"
 
-#: src/config/options.c:1245 src/config/options.c:1815
-#: src/config/options.c:1827 src/config/options.c:1872
-#: src/config/options.c:1884 src/config/options.c:1924
-#: src/config/options.c:1945 src/config/options.c:1957
-#: src/config/options.c:1969 src/config/options.c:1981
-#: src/config/options.c:1993 src/config/options.c:2005
-#: src/config/options.c:2017 src/config/options.c:2029
-#: src/config/options.c:2041 src/config/options.c:2053
-#: src/config/options.c:2078 src/config/options.c:2090
-#: src/config/options.c:2107 src/config/options.c:2119
-#: src/config/options.c:2136 src/config/options.c:2148
-#: src/config/options.c:2160 src/config/options.c:2183
-#: src/config/options.c:2195 src/config/options.c:2240
-#: src/config/options.c:2252 src/config/options.c:2292
-#: src/config/options.c:2313 src/config/options.c:2325
-#: src/config/options.c:2337 src/config/options.c:2349
-#: src/config/options.c:2361 src/config/options.c:2373
-#: src/config/options.c:2385 src/config/options.c:2397
-#: src/config/options.c:2409 src/config/options.c:2421
-#: src/config/options.c:2446 src/config/options.c:2458
-#: src/config/options.c:2475 src/config/options.c:2487
-#: src/config/options.c:2504 src/config/options.c:2516
-#: src/config/options.c:2528
+#: src/config/options.c:1246 src/config/options.c:1832
+#: src/config/options.c:1844 src/config/options.c:1889
+#: src/config/options.c:1901 src/config/options.c:1941
+#: src/config/options.c:1962 src/config/options.c:1974
+#: src/config/options.c:1986 src/config/options.c:1998
+#: src/config/options.c:2010 src/config/options.c:2022
+#: src/config/options.c:2034 src/config/options.c:2046
+#: src/config/options.c:2058 src/config/options.c:2070
+#: src/config/options.c:2095 src/config/options.c:2107
+#: src/config/options.c:2124 src/config/options.c:2136
+#: src/config/options.c:2153 src/config/options.c:2165
+#: src/config/options.c:2177 src/config/options.c:2200
+#: src/config/options.c:2212 src/config/options.c:2257
+#: src/config/options.c:2269 src/config/options.c:2309
+#: src/config/options.c:2330 src/config/options.c:2342
+#: src/config/options.c:2354 src/config/options.c:2366
+#: src/config/options.c:2378 src/config/options.c:2390
+#: src/config/options.c:2402 src/config/options.c:2414
+#: src/config/options.c:2426 src/config/options.c:2438
+#: src/config/options.c:2463 src/config/options.c:2475
+#: src/config/options.c:2492 src/config/options.c:2504
+#: src/config/options.c:2521 src/config/options.c:2533
+#: src/config/options.c:2545
 msgid "Default text color."
 msgstr "|)34fU@|7 73><7 (0|_0R."
 
-#: src/config/options.c:1247 src/config/options.c:1817
-#: src/config/options.c:1829 src/config/options.c:1849
-#: src/config/options.c:1857 src/config/options.c:1874
-#: src/config/options.c:1886 src/config/options.c:1906
-#: src/config/options.c:1914 src/config/options.c:1926
-#: src/config/options.c:1947 src/config/options.c:1959
-#: src/config/options.c:1971 src/config/options.c:1983
-#: src/config/options.c:1995 src/config/options.c:2007
-#: src/config/options.c:2019 src/config/options.c:2031
-#: src/config/options.c:2043 src/config/options.c:2055
-#: src/config/options.c:2063 src/config/options.c:2080
-#: src/config/options.c:2092 src/config/options.c:2109
-#: src/config/options.c:2121 src/config/options.c:2138
-#: src/config/options.c:2150 src/config/options.c:2162
-#: src/config/options.c:2185 src/config/options.c:2197
-#: src/config/options.c:2217 src/config/options.c:2225
-#: src/config/options.c:2242 src/config/options.c:2254
-#: src/config/options.c:2274 src/config/options.c:2282
-#: src/config/options.c:2294 src/config/options.c:2315
-#: src/config/options.c:2327 src/config/options.c:2339
-#: src/config/options.c:2351 src/config/options.c:2363
-#: src/config/options.c:2375 src/config/options.c:2387
-#: src/config/options.c:2399 src/config/options.c:2411
-#: src/config/options.c:2423 src/config/options.c:2431
-#: src/config/options.c:2448 src/config/options.c:2460
-#: src/config/options.c:2477 src/config/options.c:2489
-#: src/config/options.c:2506 src/config/options.c:2518
-#: src/config/options.c:2530
+#: src/config/options.c:1248 src/config/options.c:1834
+#: src/config/options.c:1846 src/config/options.c:1866
+#: src/config/options.c:1874 src/config/options.c:1891
+#: src/config/options.c:1903 src/config/options.c:1923
+#: src/config/options.c:1931 src/config/options.c:1943
+#: src/config/options.c:1964 src/config/options.c:1976
+#: src/config/options.c:1988 src/config/options.c:2000
+#: src/config/options.c:2012 src/config/options.c:2024
+#: src/config/options.c:2036 src/config/options.c:2048
+#: src/config/options.c:2060 src/config/options.c:2072
+#: src/config/options.c:2080 src/config/options.c:2097
+#: src/config/options.c:2109 src/config/options.c:2126
+#: src/config/options.c:2138 src/config/options.c:2155
+#: src/config/options.c:2167 src/config/options.c:2179
+#: src/config/options.c:2202 src/config/options.c:2214
+#: src/config/options.c:2234 src/config/options.c:2242
+#: src/config/options.c:2259 src/config/options.c:2271
+#: src/config/options.c:2291 src/config/options.c:2299
+#: src/config/options.c:2311 src/config/options.c:2332
+#: src/config/options.c:2344 src/config/options.c:2356
+#: src/config/options.c:2368 src/config/options.c:2380
+#: src/config/options.c:2392 src/config/options.c:2404
+#: src/config/options.c:2416 src/config/options.c:2428
+#: src/config/options.c:2440 src/config/options.c:2448
+#: src/config/options.c:2465 src/config/options.c:2477
+#: src/config/options.c:2494 src/config/options.c:2506
+#: src/config/options.c:2523 src/config/options.c:2535
+#: src/config/options.c:2547
 msgid "Background color"
 msgstr "84(|<6R0Un|) (0|_0R"
 
-#: src/config/options.c:1249 src/config/options.c:1819
-#: src/config/options.c:1831 src/config/options.c:1876
-#: src/config/options.c:1888 src/config/options.c:1928
-#: src/config/options.c:1949 src/config/options.c:1961
-#: src/config/options.c:1973 src/config/options.c:1985
-#: src/config/options.c:1997 src/config/options.c:2009
-#: src/config/options.c:2021 src/config/options.c:2033
-#: src/config/options.c:2045 src/config/options.c:2057
-#: src/config/options.c:2065 src/config/options.c:2082
-#: src/config/options.c:2094 src/config/options.c:2111
-#: src/config/options.c:2123 src/config/options.c:2140
-#: src/config/options.c:2152 src/config/options.c:2164
-#: src/config/options.c:2187 src/config/options.c:2199
-#: src/config/options.c:2244 src/config/options.c:2256
-#: src/config/options.c:2296 src/config/options.c:2317
-#: src/config/options.c:2329 src/config/options.c:2341
-#: src/config/options.c:2353 src/config/options.c:2365
-#: src/config/options.c:2377 src/config/options.c:2389
-#: src/config/options.c:2401 src/config/options.c:2413
-#: src/config/options.c:2425 src/config/options.c:2433
-#: src/config/options.c:2450 src/config/options.c:2462
-#: src/config/options.c:2479 src/config/options.c:2491
-#: src/config/options.c:2508 src/config/options.c:2520
-#: src/config/options.c:2532
+#: src/config/options.c:1250 src/config/options.c:1836
+#: src/config/options.c:1848 src/config/options.c:1893
+#: src/config/options.c:1905 src/config/options.c:1945
+#: src/config/options.c:1966 src/config/options.c:1978
+#: src/config/options.c:1990 src/config/options.c:2002
+#: src/config/options.c:2014 src/config/options.c:2026
+#: src/config/options.c:2038 src/config/options.c:2050
+#: src/config/options.c:2062 src/config/options.c:2074
+#: src/config/options.c:2082 src/config/options.c:2099
+#: src/config/options.c:2111 src/config/options.c:2128
+#: src/config/options.c:2140 src/config/options.c:2157
+#: src/config/options.c:2169 src/config/options.c:2181
+#: src/config/options.c:2204 src/config/options.c:2216
+#: src/config/options.c:2261 src/config/options.c:2273
+#: src/config/options.c:2313 src/config/options.c:2334
+#: src/config/options.c:2346 src/config/options.c:2358
+#: src/config/options.c:2370 src/config/options.c:2382
+#: src/config/options.c:2394 src/config/options.c:2406
+#: src/config/options.c:2418 src/config/options.c:2430
+#: src/config/options.c:2442 src/config/options.c:2450
+#: src/config/options.c:2467 src/config/options.c:2479
+#: src/config/options.c:2496 src/config/options.c:2508
+#: src/config/options.c:2525 src/config/options.c:2537
+#: src/config/options.c:2549
 msgid "Default background color."
 msgstr "|)34fU@|7 84(|<6R0Un|) (0|_0R."
 
-#: src/config/options.c:1251
+#: src/config/options.c:1252
 msgid "Link color"
 msgstr "|1N|< (0|_0R"
 
-#: src/config/options.c:1253
+#: src/config/options.c:1254
 msgid "Default link color."
 msgstr "|)34fU@|7 |1N|< (0|_0R."
 
-#: src/config/options.c:1255
+#: src/config/options.c:1256
 msgid "Visited-link color"
 msgstr "Visited-|1N|< (0|_0R"
 
-#: src/config/options.c:1257
+#: src/config/options.c:1258
 msgid "Default visited link color."
 msgstr "|)34fU@|7 visited |1N|< (0|_0R."
 
-#: src/config/options.c:1259
+#: src/config/options.c:1260
 msgid "Directory color"
 msgstr "Direc70ry (0|_0R"
 
-#: src/config/options.c:1261
+#: src/config/options.c:1262
 msgid ""
 "Default directory color.\n"
 "See document.browse.links.color_dirs option."
@@ -1587,19 +1587,19 @@ msgstr ""
 "Default directory color.\n"
 "See document.browse.links.color_dirs option."
 
-#: src/config/options.c:1264
+#: src/config/options.c:1265
 msgid "Allow dark colors on black background"
 msgstr "Allow dark (0|_0Rs on black 84(|<6R0Un|)"
 
-#: src/config/options.c:1266
+#: src/config/options.c:1267
 msgid "Allow dark colors on black background."
 msgstr "Allow dark (0|_0Rs on black 84(|<6R0Un|)."
 
-#: src/config/options.c:1268
+#: src/config/options.c:1269
 msgid "Use document-specified colors"
 msgstr "|_|53 |)0(U|V|3N7-specified (0|_0Rs"
 
-#: src/config/options.c:1270
+#: src/config/options.c:1271
 msgid ""
 "Use colors specified in document:\n"
 "0 is use always the default settings\n"
@@ -1625,15 +1625,15 @@ msgstr ""
 "  break transparency, if you have it enabled for your terminal\n"
 "  and on your terminal."
 
-#: src/config/options.c:1284
+#: src/config/options.c:1285
 msgid "Downloading"
 msgstr "|)0VVN|04|)ing"
 
-#: src/config/options.c:1286
+#: src/config/options.c:1287
 msgid "Options regarding files downloading and handling."
 msgstr "0P710|\\|5 regarding f1|3s |)0VVN|04|)ing and handling."
 
-#: src/config/options.c:1291
+#: src/config/options.c:1292
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.default_type option instead."
@@ -1641,19 +1641,19 @@ msgstr ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.default_type option instead."
 
-#: src/config/options.c:1294
+#: src/config/options.c:1295
 msgid "Default download directory"
 msgstr "|)34fU@|7 |)0VVN|04|) direc70ry"
 
-#: src/config/options.c:1296
+#: src/config/options.c:1297
 msgid "Default download directory."
 msgstr "|)34fU@|7 |)0VVN|04|) direc70ry."
 
-#: src/config/options.c:1298
+#: src/config/options.c:1299
 msgid "Set original time"
 msgstr "537 original 71|V|3"
 
-#: src/config/options.c:1300
+#: src/config/options.c:1301
 msgid ""
 "Set the timestamp of each downloaded file to the timestamp\n"
 "stored on the server."
@@ -1662,11 +1662,11 @@ msgstr ""
 "stored on the server."
 
 #. Does automatic resuming make sense as an option?
-#: src/config/options.c:1304
+#: src/config/options.c:1305
 msgid "Prevent overwriting"
 msgstr "Pr3\\/3N7 overVV|2171n9"
 
-#: src/config/options.c:1306
+#: src/config/options.c:1307
 msgid ""
 "Prevent overwriting the local files:\n"
 "0 is files will silently be overwritten.\n"
@@ -1678,11 +1678,11 @@ msgstr ""
 "1 is add a suffix .{number} (for example '.1') to the name.\n"
 "2 is ask the user."
 
-#: src/config/options.c:1311
+#: src/config/options.c:1312
 msgid "Notify download completion by bell"
 msgstr "|\\|07ify |)0VVN|04|) completion by bell"
 
-#: src/config/options.c:1313
+#: src/config/options.c:1314
 msgid ""
 "Audio notification when download is completed:\n"
 "0 is never.\n"
@@ -1694,71 +1694,71 @@ msgstr ""
 "1 is when background notification is active.\n"
 "2 is always"
 
-#: src/config/options.c:1319
+#: src/config/options.c:1320
 msgid "Dump output"
 msgstr "Dump output"
 
-#: src/config/options.c:1321
+#: src/config/options.c:1322
 msgid "Dump output options."
 msgstr "Dump output 0p710Ns."
 
-#: src/config/options.c:1323 src/config/options.c:1778
+#: src/config/options.c:1324 src/config/options.c:1795
 #: src/config/opttypes.c:469 src/dialogs/document.c:124
 msgid "Codepage"
 msgstr "Codepage"
 
-#: src/config/options.c:1325 src/config/options.c:2684
+#: src/config/options.c:1326 src/config/options.c:2701
 msgid "Codepage used in dump output."
 msgstr "Codepage |_|53d in dump output."
 
-#: src/config/options.c:1327
+#: src/config/options.c:1328
 msgid "Width"
 msgstr "Width"
 
-#: src/config/options.c:1329
+#: src/config/options.c:1330
 msgid "Width of screen in characters when dumping a HTML document."
 msgstr "Width of screen in (|-|4R4(73Rs when dumping a HTML |)0(U|V|3N7."
 
-#: src/config/options.c:1333
+#: src/config/options.c:1334
 msgid "History"
 msgstr "|-|1570r`/"
 
-#: src/config/options.c:1335
+#: src/config/options.c:1336
 msgid "History options."
 msgstr "|-|1570r`/ 0p710Ns."
 
-#: src/config/options.c:1337 src/globhist/dialogs.c:456
+#: src/config/options.c:1338 src/globhist/dialogs.c:456
 msgid "Global history"
 msgstr "Global |-|1570r`/"
 
-#: src/config/options.c:1339
+#: src/config/options.c:1340
 msgid "Global history options."
 msgstr "Global |-|1570r`/ 0p710Ns."
 
 #. XXX: Disable global history if -anonymous is given?
-#: src/config/options.c:1342 src/config/options.c:1456
-#: src/config/options.c:1491 src/config/options.c:2562
-#: src/config/options.c:2569
+#: src/config/options.c:1343 src/config/options.c:1473
+#: src/config/options.c:1508 src/config/options.c:2579
+#: src/config/options.c:2586
 msgid "Enable"
 msgstr "Enable"
 
-#: src/config/options.c:1344
+#: src/config/options.c:1345
 msgid "Enable global history (\"history of all pages visited\")."
 msgstr "Enable global his70ry (\"|-|1570r`/ of all pages visited\")."
 
-#: src/config/options.c:1346
+#: src/config/options.c:1347
 msgid "Maximum number of entries"
 msgstr "Maximum |\\|U|V|83R of entries"
 
-#: src/config/options.c:1348
+#: src/config/options.c:1349
 msgid "Maximum number of entries in the global history."
 msgstr "Maximum |\\|U|V|83R of entries in the global |-|1570r`/."
 
-#: src/config/options.c:1350
+#: src/config/options.c:1351
 msgid "Display style"
 msgstr "Display style"
 
-#: src/config/options.c:1352
+#: src/config/options.c:1353
 msgid ""
 "What to display in global history dialog:\n"
 "0 is URLs\n"
@@ -1768,67 +1768,92 @@ msgstr ""
 "0 is URLs\n"
 "1 is page titles"
 
-#: src/config/options.c:1356
+#: src/config/options.c:1357
+msgid "Auto-save interval"
+msgstr ""
+
+#: src/config/options.c:1359
+msgid ""
+"Interval at which to write global history to disk if it\n"
+"has changed (seconds; 0 to disable)"
+msgstr ""
+
+#: src/config/options.c:1364
 msgid "Keep unhistory"
 msgstr "Keep un|-|1570r`/"
 
-#: src/config/options.c:1358
+#: src/config/options.c:1366
 msgid "Keep unhistory (\"forward history\")?"
 msgstr "Keep unhis70ry (\"forward |-|1570r`/\")?"
 
-#: src/config/options.c:1362
+#: src/config/options.c:1370
 msgid "HTML rendering"
 msgstr "HTML rendering"
 
-#: src/config/options.c:1364
+#: src/config/options.c:1372
 msgid "Options concerning the display of HTML pages."
 msgstr "0P710|\\|5 concerning the display of HTML pages."
 
-#: src/config/options.c:1367
+#: src/config/options.c:1375
 msgid "Display frames"
 msgstr "Display |=R4|V|35"
 
-#: src/config/options.c:1369
+#: src/config/options.c:1377
 msgid "Display frames."
 msgstr "Display |=R4|V|35."
 
-#: src/config/options.c:1371
+#: src/config/options.c:1379
 msgid "Display tables"
 msgstr "Display 74|3les"
 
-#: src/config/options.c:1373
+#: src/config/options.c:1381
 msgid "Display tables."
 msgstr "Display 74|3les."
 
-#: src/config/options.c:1375
+#: src/config/options.c:1383
 msgid "Display subscripts"
 msgstr "Display subscripts"
 
-#: src/config/options.c:1377
+#: src/config/options.c:1385
 msgid "Display subscripts (as [thing])."
 msgstr "Display subscripts (as [thing])."
 
-#: src/config/options.c:1379
+#: src/config/options.c:1387
 msgid "Display superscripts"
 msgstr "Display superscripts"
 
-#: src/config/options.c:1381
+#: src/config/options.c:1389
 msgid "Display superscripts (as ^thing)."
 msgstr "Display superscripts (as ^thing)."
 
-#: src/config/options.c:1385
+#: src/config/options.c:1391
+msgid "Rendering of hmtl link element"
+msgstr ""
+
+#: src/config/options.c:1393
+msgid ""
+"Html link rendering verbosity:\n"
+"0 nothing\n"
+"1 title\n"
+"2 name in addition\n"
+"3 hreflang in addition\n"
+"4 type in addition\n"
+"5 everything"
+msgstr ""
+
+#: src/config/options.c:1402
 msgid "MIME"
 msgstr "|\\/|1|V|3"
 
-#: src/config/options.c:1387
+#: src/config/options.c:1404
 msgid "MIME-related options (handlers of various MIME types)."
 msgstr "MIME-related 0p710Ns (handlers of various |\\/|1|V|3 7`/P3s)."
 
-#: src/config/options.c:1390
+#: src/config/options.c:1407
 msgid "Default MIME-type"
 msgstr "|)34fU@|7 |\\/|1|V|3-7`/P3"
 
-#: src/config/options.c:1392
+#: src/config/options.c:1409
 msgid ""
 "Document MIME-type to assume by default (when we are unable to\n"
 "guess it properly from known information about the document)."
@@ -1836,45 +1861,45 @@ msgstr ""
 "Document MIME-type to assume by default (when we are unable to\n"
 "guess it properly from known information about the document)."
 
-#: src/config/options.c:1396
+#: src/config/options.c:1413
 msgid "MIME type associations"
 msgstr "|\\/|1|V|3 7`/P3 associations"
 
-#: src/config/options.c:1398
-msgid ""
-"Handler <-> MIME type association. The first sub-tree is the MIME\n"
-"class while the second sub-tree is the MIME type (ie. image/gif\n"
-"handler will reside at mime.type.image.gif). Each MIME type option\n"
-"should contain (case-sensitive) name of the MIME handler (its\n"
-"properties are stored at mime.handler.<name>)."
-msgstr ""
-"Handler <-> MIME type association. The first sub-tree is the MIME\n"
-"class while the second sub-tree is the MIME type (ie. image/gif\n"
-"handler will reside at mime.type.image.gif). Each MIME type option\n"
-"should contain (case-sensitive) name of the MIME handler (its\n"
-"properties are stored at mime.handler.<name>)."
-
-#: src/config/options.c:1406
-msgid ""
-"Handler matching this MIME-type class ('*' is used here in place\n"
-"of '.')."
-msgstr ""
-"Handler matching this MIME-type class ('*' is used here in place\n"
-"of '.')."
-
-#: src/config/options.c:1411
-msgid ""
-"Handler matching this MIME-type name ('*' is used here in place\n"
-"of '.')."
-msgstr ""
-"Handler matching this MIME-type name ('*' is used here in place\n"
-"of '.')."
-
 #: src/config/options.c:1415
+msgid ""
+"Handler <-> MIME type association. The first sub-tree is the MIME\n"
+"class while the second sub-tree is the MIME type (ie. image/gif\n"
+"handler will reside at mime.type.image.gif). Each MIME type option\n"
+"should contain (case-sensitive) name of the MIME handler (its\n"
+"properties are stored at mime.handler.<name>)."
+msgstr ""
+"Handler <-> MIME type association. The first sub-tree is the MIME\n"
+"class while the second sub-tree is the MIME type (ie. image/gif\n"
+"handler will reside at mime.type.image.gif). Each MIME type option\n"
+"should contain (case-sensitive) name of the MIME handler (its\n"
+"properties are stored at mime.handler.<name>)."
+
+#: src/config/options.c:1423
+msgid ""
+"Handler matching this MIME-type class ('*' is used here in place\n"
+"of '.')."
+msgstr ""
+"Handler matching this MIME-type class ('*' is used here in place\n"
+"of '.')."
+
+#: src/config/options.c:1428
+msgid ""
+"Handler matching this MIME-type name ('*' is used here in place\n"
+"of '.')."
+msgstr ""
+"Handler matching this MIME-type name ('*' is used here in place\n"
+"of '.')."
+
+#: src/config/options.c:1432
 msgid "File type handlers"
 msgstr "f1|3 7`/P3 handlers"
 
-#: src/config/options.c:1417
+#: src/config/options.c:1434
 msgid ""
 "Handler for certain MIME types (as specified in mime.type.*).\n"
 "Each handler usually serves family of MIME types (ie. images)."
@@ -1882,35 +1907,35 @@ msgstr ""
 "Handler for certain MIME types (as specified in mime.type.*).\n"
 "Each handler usually serves family of MIME types (ie. images)."
 
-#: src/config/options.c:1422
+#: src/config/options.c:1439
 msgid "Description of this handler."
 msgstr "Description of this handler."
 
-#: src/config/options.c:1426
+#: src/config/options.c:1443
 msgid "System-specific handler description (ie. unix, unix-xwin, ...)."
 msgstr "System-specific handler description (ie. unix, unix-xwin, ...)."
 
-#: src/config/options.c:1428 src/config/options.c:1466
+#: src/config/options.c:1445 src/config/options.c:1483
 msgid "Ask before opening"
 msgstr "Ask before 0p3Ning"
 
-#: src/config/options.c:1430
+#: src/config/options.c:1447
 msgid "Ask before opening."
 msgstr "Ask before 0p3Ning."
 
-#: src/config/options.c:1432
+#: src/config/options.c:1449
 msgid "Block terminal"
 msgstr "Block 73R|V|1|\\|4|"
 
-#: src/config/options.c:1434
+#: src/config/options.c:1451
 msgid "Block the terminal when the handler is running."
 msgstr "Block the 73R|V|1|\\|4| when the handler is running."
 
-#: src/config/options.c:1436
+#: src/config/options.c:1453
 msgid "Program"
 msgstr "Program"
 
-#: src/config/options.c:1438
+#: src/config/options.c:1455
 #, c-format
 msgid ""
 "External viewer for this file type. '%' in this string will be\n"
@@ -1919,15 +1944,15 @@ msgstr ""
 "External viewer for this file type. '%' in this string will be\n"
 "substituted by a file name."
 
-#: src/config/options.c:1442
+#: src/config/options.c:1459
 msgid "File extension associations"
 msgstr "f1|3 3><73|\\|710N associations"
 
-#: src/config/options.c:1444
+#: src/config/options.c:1461
 msgid "Extension <-> MIME type association."
 msgstr "3><73|\\|710N <-> |\\/|1|V|3 7`/P3 association."
 
-#: src/config/options.c:1448
+#: src/config/options.c:1465
 msgid ""
 "MIME-type matching this file extension ('*' is used here in place\n"
 "of '.')."
@@ -1938,23 +1963,23 @@ msgstr ""
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
-#: src/config/options.c:1452 src/config/options.c:1688
+#: src/config/options.c:1469 src/config/options.c:1705
 msgid "Mailcap"
 msgstr "Mailcap"
 
-#: src/config/options.c:1454
+#: src/config/options.c:1471
 msgid "Options for mailcap support."
 msgstr "0P710|\\|5 for mailcap support."
 
-#: src/config/options.c:1458
+#: src/config/options.c:1475
 msgid "Enable mailcap support."
 msgstr "Enable mailcap support."
 
-#: src/config/options.c:1460 src/config/options.c:1495
+#: src/config/options.c:1477 src/config/options.c:1512
 msgid "Path"
 msgstr "Path"
 
-#: src/config/options.c:1462
+#: src/config/options.c:1479
 msgid ""
 "Mailcap search path. Colon-separated list of files.\n"
 "Leave as \"\" to use MAILCAP environment variable or\n"
@@ -1964,15 +1989,15 @@ msgstr ""
 "Leave as \"\" to use MAILCAP environment variable or\n"
 "build-in defaults instead."
 
-#: src/config/options.c:1468
+#: src/config/options.c:1485
 msgid "Ask before using the handlers defined by mailcap."
 msgstr "Ask before using the handlers defined by mailcap."
 
-#: src/config/options.c:1470 src/config/options.c:1708
+#: src/config/options.c:1487 src/config/options.c:1725
 msgid "Type query string"
 msgstr "7`/P3 query 57r1|\\|6"
 
-#: src/config/options.c:1472
+#: src/config/options.c:1489
 msgid ""
 "Type of description to show in \"what shall I do with this file\"\n"
 "query dialog:\n"
@@ -1986,11 +2011,11 @@ msgstr ""
 "1 is show program to be run.\n"
 "2 is show mailcap description field if any; \"mailcap\" otherwise."
 
-#: src/config/options.c:1478
+#: src/config/options.c:1495
 msgid "Prioritize entries by file"
 msgstr "Prioritize entries by f1|3"
 
-#: src/config/options.c:1480
+#: src/config/options.c:1497
 msgid ""
 "Prioritize entries by the order of the files in the mailcap\n"
 "path. This means that wildcard entries (like: image/*) will\n"
@@ -2000,11 +2025,11 @@ msgstr ""
 "path. This means that wildcard entries (like: image/*) will\n"
 "also be checked before deciding the handler."
 
-#: src/config/options.c:1485
+#: src/config/options.c:1502
 msgid "Mimetypes files"
 msgstr "Mime7`/P3s f1|3s"
 
-#: src/config/options.c:1487
+#: src/config/options.c:1504
 msgid ""
 "Options for the support of mimetypes files. Mimetypes files\n"
 "can be used to find the content type of an url by looking at the\n"
@@ -2014,11 +2039,11 @@ msgstr ""
 "can be used to find the content type of an url by looking at the\n"
 "extension of the file name."
 
-#: src/config/options.c:1493
+#: src/config/options.c:1510
 msgid "Enable mime.types support."
 msgstr "Enable mime.7`/P3s support."
 
-#: src/config/options.c:1497
+#: src/config/options.c:1514
 msgid ""
 "Mimetypes search path. Colon-separated list of files.\n"
 "Leave as \"\" to use build-in default instead."
@@ -2026,35 +2051,35 @@ msgstr ""
 "Mimetypes search path. Colon-separated list of files.\n"
 "Leave as \"\" to use build-in default instead."
 
-#: src/config/options.c:1502
+#: src/config/options.c:1519
 msgid "Protocols"
 msgstr "|oR070(0|s"
 
-#: src/config/options.c:1504
+#: src/config/options.c:1521
 msgid "Protocol specific options."
 msgstr "|oR070(0| specific 0p710Ns."
 
-#: src/config/options.c:1506
+#: src/config/options.c:1523
 msgid "HTTP"
 msgstr "HTTP"
 
-#: src/config/options.c:1508
+#: src/config/options.c:1525
 msgid "HTTP-specific options."
 msgstr "HTTP-specific 0p710Ns."
 
-#: src/config/options.c:1511
+#: src/config/options.c:1528
 msgid "Server bug workarounds"
 msgstr "53|2\\/3R bug workarounds"
 
-#: src/config/options.c:1513
+#: src/config/options.c:1530
 msgid "Server-side HTTP bugs workarounds."
 msgstr "53|2\\/3R-side HTTP 80065 workarounds."
 
-#: src/config/options.c:1515
+#: src/config/options.c:1532
 msgid "Do not send Accept-Charset"
 msgstr "Do |\\|07 send Accept-(|-|4R5et"
 
-#: src/config/options.c:1517
+#: src/config/options.c:1534
 msgid ""
 "The Accept-Charset header is quite long and sending it can trigger\n"
 "bugs in some rarely found servers."
@@ -2062,19 +2087,19 @@ msgstr ""
 "The Accept-Charset header is quite long and sending it can trigger\n"
 "bugs in some rarely found servers."
 
-#: src/config/options.c:1520
+#: src/config/options.c:1537
 msgid "Allow blacklisting"
 msgstr "Allow blacklisting"
 
-#: src/config/options.c:1522
+#: src/config/options.c:1539
 msgid "Allow blacklisting of buggy servers."
 msgstr "Allow blacklisting of buggy 53|2\\/3Rs."
 
-#: src/config/options.c:1524
+#: src/config/options.c:1541
 msgid "Broken 302 redirects"
 msgstr "Broken 302 R3o|1R3(7s"
 
-#: src/config/options.c:1526
+#: src/config/options.c:1543
 msgid ""
 "Broken 302 redirect (violates RFC but compatible with Netscape).\n"
 "This is a problem for a lot of web discussion boards and the like.\n"
@@ -2084,35 +2109,35 @@ msgstr ""
 "This is a problem for a lot of web discussion boards and the like.\n"
 "If they will do strange things to you, try to play with this."
 
-#: src/config/options.c:1530
+#: src/config/options.c:1547
 msgid "No keepalive after POST requests"
 msgstr "|\\|0 keepalive @f73R POST |23QU357s"
 
-#: src/config/options.c:1532
+#: src/config/options.c:1549
 msgid "Disable keepalive connection after POST request."
 msgstr "Disable keepalive (0|\\||\\|3(710N @f73R POST |23QU357."
 
-#: src/config/options.c:1534
+#: src/config/options.c:1551
 msgid "Use HTTP/1.0"
 msgstr "|_|53 HTTP/1.0"
 
-#: src/config/options.c:1536
+#: src/config/options.c:1553
 msgid "Use HTTP/1.0 protocol instead of HTTP/1.1."
 msgstr "|_|53 HTTP/1.0 |oR070(0| instead of HTTP/1.1."
 
-#: src/config/options.c:1538 src/config/options.c:1608
+#: src/config/options.c:1555 src/config/options.c:1625
 msgid "Proxy configuration"
 msgstr "Proxy configuration"
 
-#: src/config/options.c:1540
+#: src/config/options.c:1557
 msgid "HTTP proxy configuration."
 msgstr "HTTP proxy configuration."
 
-#: src/config/options.c:1542 src/config/options.c:1612
+#: src/config/options.c:1559 src/config/options.c:1629
 msgid "Host and port-number"
 msgstr "Host and port-|\\|U|V|83R"
 
-#: src/config/options.c:1544
+#: src/config/options.c:1561
 msgid ""
 "Host and port-number (host:port) of the HTTP proxy, or blank.\n"
 "If it's blank, HTTP_PROXY environment variable is checked as well."
@@ -2120,35 +2145,35 @@ msgstr ""
 "Host and port-number (host:port) of the HTTP proxy, or blank.\n"
 "If it's blank, HTTP_PROXY environment variable is checked as well."
 
-#: src/config/options.c:1547
+#: src/config/options.c:1564
 msgid "Username"
 msgstr "|_|53r|\\|4|V|3"
 
-#: src/config/options.c:1549
+#: src/config/options.c:1566
 msgid "Proxy authentication username."
 msgstr "Proxy authentication |_|53r|\\|4|V|3."
 
-#: src/config/options.c:1551 src/dialogs/auth.c:33
+#: src/config/options.c:1568 src/dialogs/auth.c:33
 msgid "Password"
 msgstr "|o455VV0R|)"
 
-#: src/config/options.c:1553
+#: src/config/options.c:1570
 msgid "Proxy authentication password."
 msgstr "Proxy authentication |o455VV0R|)."
 
-#: src/config/options.c:1556
+#: src/config/options.c:1573
 msgid "Referer sending"
 msgstr "Referer sending"
 
-#: src/config/options.c:1558
+#: src/config/options.c:1575
 msgid "HTTP referer sending options."
 msgstr "HTTP referer sending 0p710Ns."
 
-#: src/config/options.c:1560
+#: src/config/options.c:1577
 msgid "Policy"
 msgstr "Policy"
 
-#: src/config/options.c:1563
+#: src/config/options.c:1580
 msgid ""
 "Mode of sending HTTP referer:\n"
 "0 is send no referer\n"
@@ -2162,27 +2187,27 @@ msgstr ""
 "2 is send fixed fake referer\n"
 "3 is send previous URL as referer (correct, but insecure)\n"
 
-#: src/config/options.c:1569
+#: src/config/options.c:1586
 msgid "Fake referer URL"
 msgstr "Fake referer |_|R|_"
 
-#: src/config/options.c:1571
+#: src/config/options.c:1588
 msgid "Fake referer to be sent when policy is 2."
 msgstr "Fake referer 70 be sent when policy is 2."
 
-#: src/config/options.c:1574
+#: src/config/options.c:1591
 msgid "Send Accept-Language header"
 msgstr "Send Accept-|_4|\\|6U493 |-|34|)3R"
 
-#: src/config/options.c:1576
+#: src/config/options.c:1593
 msgid "Send Accept-Language header."
 msgstr "Send Accept-|_4|\\|6U493 |-|34|)3R."
 
-#: src/config/options.c:1578
+#: src/config/options.c:1595
 msgid "Use UI language as Accept-Language"
 msgstr "|_|53 UI language as Accept-|_4|\\|6U493"
 
-#: src/config/options.c:1580
+#: src/config/options.c:1597
 msgid ""
 "Request localised versions of documents from web-servers (using the\n"
 "Accept-Language header) using the language you have configured for\n"
@@ -2194,11 +2219,11 @@ msgstr ""
 "ELinks' user-interface. Note that some see this as a potential security\n"
 "risk because it tells web-masters about your preference in language."
 
-#: src/config/options.c:1585
+#: src/config/options.c:1602
 msgid "Activate HTTP TRACE debugging"
 msgstr "Activate HTTP TRACE debugging"
 
-#: src/config/options.c:1587
+#: src/config/options.c:1604
 msgid ""
 "If active, all HTTP requests are sent with TRACE as their method\n"
 "rather than GET or POST. This is useful for debugging of both ELinks\n"
@@ -2212,11 +2237,11 @@ msgstr ""
 "request back to the client verbatim. Note that this type of request may\n"
 "not be enabled on all servers."
 
-#: src/config/options.c:1593
+#: src/config/options.c:1610
 msgid "User-agent identification"
 msgstr "|_|53r-agent identification"
 
-#: src/config/options.c:1595
+#: src/config/options.c:1612
 msgid ""
 "Change the User Agent ID. That means identification string, which\n"
 "is sent to HTTP server when a document is requested.\n"
@@ -2232,19 +2257,19 @@ msgstr ""
 "%t in the string means size of the terminal\n"
 "Use \" \" if you don't want any User-Agent header to be sent at all."
 
-#: src/config/options.c:1604
+#: src/config/options.c:1621
 msgid "FTP"
 msgstr "FTP"
 
-#: src/config/options.c:1606
+#: src/config/options.c:1623
 msgid "FTP specific options."
 msgstr "FTP specific 0p710Ns."
 
-#: src/config/options.c:1610
+#: src/config/options.c:1627
 msgid "FTP proxy configuration."
 msgstr "FTP proxy configuration."
 
-#: src/config/options.c:1614
+#: src/config/options.c:1631
 msgid ""
 "Host and port-number (host:port) of the FTP proxy, or blank.\n"
 "If it's blank, FTP_PROXY environment variable is checked as well."
@@ -2252,31 +2277,31 @@ msgstr ""
 "Host and port-number (host:port) of the FTP proxy, or blank.\n"
 "If it's blank, FTP_PROXY environment variable is checked as well."
 
-#: src/config/options.c:1617
+#: src/config/options.c:1634
 msgid "Anonymous password"
 msgstr "A|\\|0nymous |o455VV0R|)"
 
-#: src/config/options.c:1619
+#: src/config/options.c:1636
 msgid "FTP anonymous password to be sent."
 msgstr "FTP a|\\|0nymous |o455VV0R|) 70 be sent."
 
-#: src/config/options.c:1621
+#: src/config/options.c:1638
 msgid "Use passive mode (IPv4)"
 msgstr "|_|53 passive mode (IPv4)"
 
-#: src/config/options.c:1623
+#: src/config/options.c:1640
 msgid "Use PASV instead of PORT (passive vs active mode, IPv4 only)."
 msgstr "|_|53 PASV instead of PORT (passive vs active mode, IPv4 only)."
 
-#: src/config/options.c:1625 src/config/options.c:1629
+#: src/config/options.c:1642 src/config/options.c:1646
 msgid "Use passive mode (IPv6)"
 msgstr "|_|53 passive mode (IPv6)"
 
-#: src/config/options.c:1627
+#: src/config/options.c:1644
 msgid "Use EPSV instead of EPRT (passive vs active mode, IPv6 only)."
 msgstr "|_|53 EPSV instead of EPRT (passive vs active mode, IPv6 only)."
 
-#: src/config/options.c:1631
+#: src/config/options.c:1648
 msgid ""
 "Use EPSV instead of EPRT (passive vs active mode, IPv6 only).\n"
 "Works only with IPv6 enabled, so nothing interesting for you."
@@ -2284,19 +2309,19 @@ msgstr ""
 "Use EPSV instead of EPRT (passive vs active mode, IPv6 only).\n"
 "Works only with IPv6 enabled, so nothing interesting for you."
 
-#: src/config/options.c:1637
+#: src/config/options.c:1654
 msgid "Local files"
 msgstr "Local f1|3s"
 
-#: src/config/options.c:1639
+#: src/config/options.c:1656
 msgid "Options specific to local browsing."
 msgstr "0P710|\\|5 specific 70 local browsing."
 
-#: src/config/options.c:1641
+#: src/config/options.c:1658
 msgid "Allow reading special files"
 msgstr "Allow |23@|)ing special f1|3s"
 
-#: src/config/options.c:1643
+#: src/config/options.c:1660
 msgid ""
 "Allow reading from non-regular files? (DANGEROUS - reading\n"
 "/dev/urandom or /dev/zero can ruin your day!)"
@@ -2304,11 +2329,11 @@ msgstr ""
 "Allow reading from non-regular files? (DANGEROUS - reading\n"
 "/dev/urandom or /dev/zero can ruin your day!)"
 
-#: src/config/options.c:1646
+#: src/config/options.c:1663
 msgid "Try encoding extensions"
 msgstr "Try encoding 3><73|\\|710Ns"
 
-#: src/config/options.c:1648
+#: src/config/options.c:1665
 msgid ""
 "When set, if we can't open a file named 'filename', we'll try\n"
 "to open 'filename' with some encoding extension appended\n"
@@ -2318,22 +2343,22 @@ msgstr ""
 "to open 'filename' with some encoding extension appended\n"
 "(ie. 'filename.gz'); it depends on the supported encodings."
 
-#: src/config/options.c:1652
+#: src/config/options.c:1669
 msgid "Show hidden files in directory listing"
 msgstr ""
 
-#: src/config/options.c:1654
+#: src/config/options.c:1671
 msgid ""
 "Show hidden files in directory listing ?\n"
 "If set to false, files with name starting with a dot will be\n"
 "hidden in local directories listing."
 msgstr ""
 
-#: src/config/options.c:1659
+#: src/config/options.c:1676
 msgid "User protocols"
 msgstr "|_|53r |oR070(0|s"
 
-#: src/config/options.c:1661
+#: src/config/options.c:1678
 msgid ""
 "User protocols. Options in this tree specify external\n"
 "handlers for the appropriate protocols. Ie.\n"
@@ -2343,7 +2368,7 @@ msgstr ""
 "handlers for the appropriate protocols. Ie.\n"
 "protocol.user.mailto.unix."
 
-#: src/config/options.c:1672
+#: src/config/options.c:1689
 msgid ""
 "Handler (external program) for this protocol. Name the\n"
 "options in this tree after your system (ie. unix, unix-xwin)."
@@ -2351,7 +2376,7 @@ msgstr ""
 "Handler (external program) for this protocol. Name the\n"
 "options in this tree after your system (ie. unix, unix-xwin)."
 
-#: src/config/options.c:1677
+#: src/config/options.c:1694
 msgid ""
 "Handler (external program) for this protocol and system.\n"
 "%h in the string means hostname (or email address)\n"
@@ -2367,7 +2392,7 @@ msgstr ""
 "%s in the string means subject (?subject=<this>)\n"
 "%u in the string means the whole URL"
 
-#: src/config/options.c:1690
+#: src/config/options.c:1707
 msgid ""
 "Options for mailcap support. (Deprecated. Please use\n"
 "mime.mailcap instead)"
@@ -2375,7 +2400,7 @@ msgstr ""
 "Options for mailcap support. (Deprecated. Please use\n"
 "mime.mailcap instead)"
 
-#: src/config/options.c:1695
+#: src/config/options.c:1712
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.enable option instead."
@@ -2383,7 +2408,7 @@ msgstr ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.enable option instead."
 
-#: src/config/options.c:1700
+#: src/config/options.c:1717
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.path option instead."
@@ -2391,7 +2416,7 @@ msgstr ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.path option instead."
 
-#: src/config/options.c:1705
+#: src/config/options.c:1722
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.ask option instead."
@@ -2399,11 +2424,11 @@ msgstr ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.ask option instead."
 
-#: src/config/options.c:1710
+#: src/config/options.c:1727
 msgid "This option is deprecated and will be removed very soon.\n"
 msgstr "This 0p710N is deprecated and will be removed very soon.\n"
 
-#: src/config/options.c:1714
+#: src/config/options.c:1731
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.prioritize option instead."
@@ -2411,11 +2436,11 @@ msgstr ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.prioritize option instead."
 
-#: src/config/options.c:1718
+#: src/config/options.c:1735
 msgid "No-proxy domains"
 msgstr "|\\|0-proxy do|V|41|\\|s"
 
-#: src/config/options.c:1720
+#: src/config/options.c:1737
 msgid ""
 "Comma separated list of domains for which the proxy (HTTP/FTP)\n"
 "should be disabled. Optionally, a port can be specified for some\n"
@@ -2427,24 +2452,24 @@ msgstr ""
 "domains as well. If it's blank, NO_PROXY environment variable is\n"
 "checked as well."
 
-#: src/config/options.c:1727
+#: src/config/options.c:1744
 msgid "Terminals"
 msgstr "73R|V|1|\\|4|s"
 
-#: src/config/options.c:1729
+#: src/config/options.c:1746
 msgid "Terminal options."
 msgstr "73R|V|1|\\|4| 0p710Ns."
 
-#: src/config/options.c:1734
+#: src/config/options.c:1751
 msgid "Options specific to this terminal type (according to $TERM value)."
 msgstr ""
 "0P710|\\|5 specific to this 73R|V|1|\\|4| 7`/P3 (according 70 $TERM \\/4|U3)."
 
-#: src/config/options.c:1736
+#: src/config/options.c:1753
 msgid "Border type"
 msgstr "Border 7`/P3"
 
-#: src/config/options.c:1738
+#: src/config/options.c:1755
 msgid ""
 "Terminal type; matters mostly only when drawing frames and\n"
 "dialog box borders:\n"
@@ -2460,11 +2485,11 @@ msgstr ""
 "2 is Linux, you get double frames and other goodies\n"
 "3 is KOI-8"
 
-#: src/config/options.c:1745
+#: src/config/options.c:1762
 msgid "Switch fonts for line drawing"
 msgstr "Switch fonts for line drawing"
 
-#: src/config/options.c:1747
+#: src/config/options.c:1764
 msgid ""
 "Switch fonts when drawing lines, enabling both local characters\n"
 "and lines working at the same time. Makes sense only with linux\n"
@@ -2474,11 +2499,11 @@ msgstr ""
 "and lines working at the same time. Makes sense only with linux\n"
 "terminal."
 
-#: src/config/options.c:1751
+#: src/config/options.c:1768
 msgid "I/O in UTF8"
 msgstr "I/O in UTF8"
 
-#: src/config/options.c:1753
+#: src/config/options.c:1770
 msgid ""
 "Enable I/O in UTF8 for Unicode terminals. Note that currently,\n"
 "only the subset of UTF8 according to terminal codepage is used."
@@ -2486,21 +2511,21 @@ msgstr ""
 "Enable I/O in UTF8 for Unicode terminals. Note that currently,\n"
 "only the subset of UTF8 according to terminal codepage is used."
 
-#: src/config/options.c:1756
+#: src/config/options.c:1773
 msgid "Restrict CP852"
 msgstr "Restrict CP852"
 
-#: src/config/options.c:1758
+#: src/config/options.c:1775
 msgid ""
 "Someone who understands this ... ;)) I'm too lazy to think about this now :P."
 msgstr ""
 "Someone who understands this ... ;)) I'm too lazy to think about this now :P."
 
-#: src/config/options.c:1760
+#: src/config/options.c:1777
 msgid "Block cursor"
 msgstr "Block cursor"
 
-#: src/config/options.c:1762
+#: src/config/options.c:1779
 msgid ""
 "Move cursor to bottom right corner when done drawing.\n"
 "This is particularly useful when we have a block cursor,\n"
@@ -2510,19 +2535,19 @@ msgstr ""
 "This is particularly useful when we have a block cursor,\n"
 "so that inversed text is displayed correctly."
 
-#: src/config/options.c:1766
+#: src/config/options.c:1783
 msgid "Use colors"
 msgstr "|_|53 (0|_0Rs"
 
-#: src/config/options.c:1768
+#: src/config/options.c:1785
 msgid "If we should use colors."
 msgstr "If we should |_|53 (0|_0Rs."
 
-#: src/config/options.c:1770
+#: src/config/options.c:1787
 msgid "Enable transparency"
 msgstr "Enable transparency"
 
-#: src/config/options.c:1772
+#: src/config/options.c:1789
 msgid ""
 "If we should not set the background to black. This is particularly\n"
 "useful when we have a terminal (typically in some windowing\n"
@@ -2536,432 +2561,432 @@ msgstr ""
 "it will be visible in ELinks as well. Note that this option makes\n"
 "sense only when colors are enabled."
 
-#: src/config/options.c:1780
+#: src/config/options.c:1797
 msgid "Codepage of charset used for displaying content on terminal."
 msgstr "Codepage of (|-|4R5et |_|53d for displaying content on 73R|V|1|\\|4|."
 
-#: src/config/options.c:1784
+#: src/config/options.c:1801
 msgid "User interface"
 msgstr "|_|53r interface"
 
-#: src/config/options.c:1786
+#: src/config/options.c:1803
 msgid "User interface options."
 msgstr "|_|53r interface 0p710Ns."
 
-#: src/config/options.c:1790
+#: src/config/options.c:1807
 msgid "Color settings"
 msgstr "(0|_0R 537tings"
 
-#: src/config/options.c:1792
+#: src/config/options.c:1809
 msgid "Default user interface color settings."
 msgstr "|)34fU@|7 |_|53r interface (0|_0R 537tings."
 
 #. ==========================================================
 #. ============= BORING PART (colors) START =================
 #. ==========================================================
-#: src/config/options.c:1800
+#: src/config/options.c:1817
 msgid "Color terminals"
 msgstr "(0|_0R 73R|V|1|\\|4|s"
 
-#: src/config/options.c:1802
+#: src/config/options.c:1819
 msgid "Color settings for color terminal."
 msgstr "Color 537tings for (0|_0R 73R|V|1|\\|4|."
 
-#: src/config/options.c:1805 src/config/options.c:2173
+#: src/config/options.c:1822 src/config/options.c:2190
 msgid "Main menu bar"
 msgstr "|V|41|\\| |V|3|\\|U 84|2"
 
-#: src/config/options.c:1807 src/config/options.c:2175
+#: src/config/options.c:1824 src/config/options.c:2192
 msgid "Main menu bar colors."
 msgstr "|V|41|\\| |V|3|\\|U 84|2 (0|_0Rs."
 
-#: src/config/options.c:1809
+#: src/config/options.c:1826
 msgid "Unselected main menu bar item"
 msgstr "Un53|3(73|) |V|41|\\| |V|3|\\|U 84|2 item"
 
-#: src/config/options.c:1811
+#: src/config/options.c:1828
 msgid "Unselected main menu bar item colors."
 msgstr "Un53|3(73|) |V|41|\\| |V|3|\\|U 84|2 item (0|_0Rs."
 
-#: src/config/options.c:1821
+#: src/config/options.c:1838
 msgid "Selected main menu bar item"
 msgstr "53|3(73|) |V|41|\\| |V|3|\\|U 84|2 item"
 
-#: src/config/options.c:1823
+#: src/config/options.c:1840
 msgid "Selected main menu bar item colors."
 msgstr "53|3(73|) |V|41|\\| |V|3|\\|U 84|2 item (0|_0Rs."
 
-#: src/config/options.c:1833 src/config/options.c:1890
-#: src/config/options.c:2201 src/config/options.c:2258
+#: src/config/options.c:1850 src/config/options.c:1907
+#: src/config/options.c:2218 src/config/options.c:2275
 msgid "Hotkey"
 msgstr "Hot|<3`/"
 
-#: src/config/options.c:1835 src/config/options.c:2203
+#: src/config/options.c:1852 src/config/options.c:2220
 msgid "Main menu hotkey colors."
 msgstr "|V|41|\\| |V|3|\\|U hot|<3`/ (0|_0Rs."
 
-#: src/config/options.c:1837 src/config/options.c:1894
-#: src/config/options.c:2205 src/config/options.c:2262
+#: src/config/options.c:1854 src/config/options.c:1911
+#: src/config/options.c:2222 src/config/options.c:2279
 msgid "Unselected hotkey"
 msgstr "Un53|3(73|) hot|<3`/"
 
-#: src/config/options.c:1839 src/config/options.c:2207
+#: src/config/options.c:1856 src/config/options.c:2224
 msgid "Main menu unselected hotkey colors."
 msgstr "|V|41|\\| |V|3|\\|U un53|3(73|) hot|<3`/ (0|_0Rs."
 
-#: src/config/options.c:1841 src/config/options.c:1898
-#: src/config/options.c:2209 src/config/options.c:2266
+#: src/config/options.c:1858 src/config/options.c:1915
+#: src/config/options.c:2226 src/config/options.c:2283
 msgid "Selected hotkey"
 msgstr "53|3(73|) hot|<3`/"
 
-#: src/config/options.c:1843 src/config/options.c:2211
+#: src/config/options.c:1860 src/config/options.c:2228
 msgid "Main menu selected hotkey colors."
 msgstr "|V|41|\\| |V|3|\\|U 53|3(73|) hot|<3`/ (0|_0Rs."
 
-#: src/config/options.c:1847 src/config/options.c:2215
+#: src/config/options.c:1864 src/config/options.c:2232
 msgid "Main menu unselected hotkey default text color."
 msgstr "|V|41|\\| |V|3|\\|U un53|3(73|) hot|<3`/ |)34fU@|7 73><7 (0|_0R."
 
-#: src/config/options.c:1851 src/config/options.c:2219
+#: src/config/options.c:1868 src/config/options.c:2236
 msgid "Main menu unselected hotkey default background color."
 msgstr ""
 "|V|41|\\| |V|3|\\|U un53|3(73|) hot|<3`/ |)34fU@|7 84(|<6R0Un|) (0|_0R."
 
-#: src/config/options.c:1855
+#: src/config/options.c:1872
 msgid "Main menu selected hotkey text color."
 msgstr "|V|41|\\| |V|3|\\|U 53|3(73|) hot|<3`/ 73><7 (0|_0R."
 
-#: src/config/options.c:1859 src/config/options.c:2227
+#: src/config/options.c:1876 src/config/options.c:2244
 msgid "Main menu selected hotkey default background color."
 msgstr "|V|41|\\| |V|3|\\|U 53|3(73|) hot|<3`/ |)34fU@|7 84(|<6R0Un|) (0|_0R."
 
-#: src/config/options.c:1862 src/config/options.c:2230
+#: src/config/options.c:1879 src/config/options.c:2247
 msgid "Menu bar"
 msgstr "|V|3|\\|U 84|2"
 
-#: src/config/options.c:1864 src/config/options.c:2232
+#: src/config/options.c:1881 src/config/options.c:2249
 msgid "Menu bar colors."
 msgstr "|V|3|\\|U 84|2 (0|_0Rs."
 
-#: src/config/options.c:1866 src/config/options.c:2234
+#: src/config/options.c:1883 src/config/options.c:2251
 msgid "Unselected menu item"
 msgstr "Un53|3(73|) |V|3|\\|U item"
 
-#: src/config/options.c:1868 src/config/options.c:2236
+#: src/config/options.c:1885 src/config/options.c:2253
 msgid "Unselected menu item colors."
 msgstr "Un53|3(73|) |V|3|\\|U item (0|_0Rs."
 
-#: src/config/options.c:1878 src/config/options.c:2246
+#: src/config/options.c:1895 src/config/options.c:2263
 msgid "Selected menu item"
 msgstr "53|3(73|) |V|3|\\|U item"
 
-#: src/config/options.c:1880 src/config/options.c:2248
+#: src/config/options.c:1897 src/config/options.c:2265
 msgid "Selected menu item colors."
 msgstr "53|3(73|) |V|3|\\|U item (0|_0Rs."
 
-#: src/config/options.c:1892 src/config/options.c:2260
+#: src/config/options.c:1909 src/config/options.c:2277
 msgid "Menu item hotkey colors."
 msgstr "|V|3|\\|U item hot|<3`/ (0|_0Rs."
 
-#: src/config/options.c:1896
+#: src/config/options.c:1913
 msgid "Menu item unselected hotkey colors."
 msgstr "|V|3|\\|U item un53|3(73|) hot|<3`/ (0|_0Rs."
 
-#: src/config/options.c:1900
+#: src/config/options.c:1917
 msgid "Menu item selected hotkey colors."
 msgstr "|V|3|\\|U item 53|3(73|) hot|<3`/ (0|_0Rs."
 
-#: src/config/options.c:1904
+#: src/config/options.c:1921
 msgid "Menu item unselected hotkey default text color."
 msgstr "|V|3|\\|U item un53|3(73|) hot|<3`/ |)34fU@|7 73><7 (0|_0R."
 
-#: src/config/options.c:1908
+#: src/config/options.c:1925
 msgid "Menu item unselected hotkey default background color."
 msgstr "|V|3|\\|U item un53|3(73|) hot|<3`/ |)34fU@|7 84(|<6R0Un|) (0|_0R."
 
-#: src/config/options.c:1912
+#: src/config/options.c:1929
 msgid "Menu item selected hotkey default text color."
 msgstr "|V|3|\\|U item 53|3(73|) hot|<3`/ |)34fU@|7 73><7 (0|_0R."
 
-#: src/config/options.c:1916
+#: src/config/options.c:1933
 msgid "Menu item selected hotkey background color."
 msgstr "|V|3|\\|U item 53|3(73|) hot|<3`/ 84(|<6R0Un|) (0|_0R."
 
-#: src/config/options.c:1918 src/config/options.c:2286
+#: src/config/options.c:1935 src/config/options.c:2303
 msgid "Menu frame"
 msgstr "|V|3|\\|U f|24|V|3"
 
-#: src/config/options.c:1920 src/config/options.c:2288
+#: src/config/options.c:1937 src/config/options.c:2305
 msgid "Menu frame colors."
 msgstr "|V|3|\\|U f|24|V|3 (0|_0Rs."
 
-#: src/config/options.c:1931 src/config/options.c:2299
+#: src/config/options.c:1948 src/config/options.c:2316
 msgid "Dialog"
 msgstr "Dialog"
 
-#: src/config/options.c:1933 src/config/options.c:2301
+#: src/config/options.c:1950 src/config/options.c:2318
 msgid "Dialog colors."
 msgstr "Dialog (0|_0Rs."
 
-#: src/config/options.c:1935
+#: src/config/options.c:1952
 msgid "Generic background color"
 msgstr "Generic 84(|<6R0Un|) (0|_0R"
 
-#: src/config/options.c:1937 src/config/options.c:2305
+#: src/config/options.c:1954 src/config/options.c:2322
 msgid "Dialog generic background color."
 msgstr "Dialog generic 84(|<6R0Un|) (0|_0R."
 
-#: src/config/options.c:1939 src/config/options.c:2307
+#: src/config/options.c:1956 src/config/options.c:2324
 msgid "Frame"
 msgstr "f|24|V|3"
 
-#: src/config/options.c:1941 src/config/options.c:2309
+#: src/config/options.c:1958 src/config/options.c:2326
 msgid "Dialog frame colors."
 msgstr "Dialog f|24|V|3 (0|_0Rs."
 
-#: src/config/options.c:1951 src/config/options.c:2319
+#: src/config/options.c:1968 src/config/options.c:2336
 #: src/dialogs/document.c:104
 msgid "Title"
 msgstr "717|3"
 
-#: src/config/options.c:1953 src/config/options.c:2321
+#: src/config/options.c:1970 src/config/options.c:2338
 msgid "Dialog title colors."
 msgstr "Dialog 717|3 (0|_0Rs."
 
-#: src/config/options.c:1963 src/config/options.c:2331
+#: src/config/options.c:1980 src/config/options.c:2348
 msgid "Text"
 msgstr "73><7"
 
-#: src/config/options.c:1965 src/config/options.c:2333
+#: src/config/options.c:1982 src/config/options.c:2350
 msgid "Dialog text colors."
 msgstr "Dialog 73><7 (0|_0Rs."
 
-#: src/config/options.c:1975 src/config/options.c:2343
+#: src/config/options.c:1992 src/config/options.c:2360
 #: src/viewer/text/link.c:995
 msgid "Checkbox"
 msgstr "Checkbox"
 
-#: src/config/options.c:1977 src/config/options.c:2345
+#: src/config/options.c:1994 src/config/options.c:2362
 msgid "Dialog checkbox colors."
 msgstr "Dialog checkbox (0|_0Rs."
 
-#: src/config/options.c:1987 src/config/options.c:2355
+#: src/config/options.c:2004 src/config/options.c:2372
 msgid "Checkbox label"
 msgstr "Checkbox label"
 
-#: src/config/options.c:1989 src/config/options.c:2357
+#: src/config/options.c:2006 src/config/options.c:2374
 msgid "Dialog checkbox label colors."
 msgstr "Dialog checkbox label (0|_0Rs."
 
-#: src/config/options.c:1999 src/config/options.c:2367
+#: src/config/options.c:2016 src/config/options.c:2384
 msgid "Button"
 msgstr "8u770|\\|"
 
-#: src/config/options.c:2001 src/config/options.c:2369
+#: src/config/options.c:2018 src/config/options.c:2386
 msgid "Dialog button colors."
 msgstr "Dialog 8u770|\\| (0|_0Rs."
 
-#: src/config/options.c:2011 src/config/options.c:2379
+#: src/config/options.c:2028 src/config/options.c:2396
 msgid "Selected button"
 msgstr "53|3(73|) 8u770|\\|"
 
-#: src/config/options.c:2013 src/config/options.c:2381
+#: src/config/options.c:2030 src/config/options.c:2398
 msgid "Dialog selected button colors."
 msgstr "Dialog 53|3(73|) 8u770|\\| (0|_0Rs."
 
-#: src/config/options.c:2023 src/config/options.c:2391
+#: src/config/options.c:2040 src/config/options.c:2408
 #: src/viewer/text/link.c:1001
 msgid "Text field"
 msgstr "73><7 |=13|d"
 
-#: src/config/options.c:2025
+#: src/config/options.c:2042
 msgid "Dialog text field colors."
 msgstr "Dialog 73><7 |=13|d (0|_0Rs."
 
-#: src/config/options.c:2035 src/config/options.c:2403
+#: src/config/options.c:2052 src/config/options.c:2420
 msgid "Text field text"
 msgstr "73><7 |=13|d 73><7"
 
-#: src/config/options.c:2037 src/config/options.c:2405
+#: src/config/options.c:2054 src/config/options.c:2422
 msgid "Dialog field text colors."
 msgstr "Dialog |=13|d 73><7 (0|_0Rs."
 
-#: src/config/options.c:2047 src/config/options.c:2415
+#: src/config/options.c:2064 src/config/options.c:2432
 msgid "Meter"
 msgstr "Meter"
 
-#: src/config/options.c:2049 src/config/options.c:2417
+#: src/config/options.c:2066 src/config/options.c:2434
 msgid "Dialog meter colors."
 msgstr "Dialog meter (0|_0Rs."
 
-#: src/config/options.c:2059 src/config/options.c:2427
+#: src/config/options.c:2076 src/config/options.c:2444
 msgid "Shadow"
 msgstr "Shadow"
 
-#: src/config/options.c:2061 src/config/options.c:2429
+#: src/config/options.c:2078 src/config/options.c:2446
 msgid "Dialog shadow colors (see ui.shadows option)."
 msgstr "Dialog shadow (0|_0Rs (see ui.shadows 0p710N)."
 
-#: src/config/options.c:2068 src/config/options.c:2436
+#: src/config/options.c:2085 src/config/options.c:2453
 msgid "Title bar"
 msgstr "717|3 84|2"
 
-#: src/config/options.c:2070 src/config/options.c:2438
+#: src/config/options.c:2087 src/config/options.c:2455
 msgid "Title bar colors."
 msgstr "717|3 84|2 (0|_0Rs."
 
-#: src/config/options.c:2072 src/config/options.c:2440
+#: src/config/options.c:2089 src/config/options.c:2457
 msgid "Generic title bar"
 msgstr "Generic 717|3 84|2"
 
-#: src/config/options.c:2074 src/config/options.c:2442
+#: src/config/options.c:2091 src/config/options.c:2459
 msgid "Generic title bar colors."
 msgstr "Generic 717|3 84|2 (0|_0Rs."
 
-#: src/config/options.c:2084
+#: src/config/options.c:2101
 msgid "Title bar text"
 msgstr "717|3 84|2 73><7"
 
-#: src/config/options.c:2086 src/config/options.c:2454
+#: src/config/options.c:2103 src/config/options.c:2471
 msgid "Title bar text colors."
 msgstr "717|3 84|2 73><7 (0|_0Rs."
 
-#: src/config/options.c:2097 src/config/options.c:2465
+#: src/config/options.c:2114 src/config/options.c:2482
 msgid "Status bar"
 msgstr "Status 84|2"
 
-#: src/config/options.c:2099 src/config/options.c:2467
+#: src/config/options.c:2116 src/config/options.c:2484
 msgid "Status bar colors."
 msgstr "Status 84|2 (0|_0Rs."
 
-#: src/config/options.c:2101 src/config/options.c:2469
+#: src/config/options.c:2118 src/config/options.c:2486
 msgid "Generic status bar"
 msgstr "Generic status 84|2"
 
-#: src/config/options.c:2103 src/config/options.c:2471
+#: src/config/options.c:2120 src/config/options.c:2488
 msgid "Generic status bar colors."
 msgstr "Generic status 84|2 (0|_0Rs."
 
-#: src/config/options.c:2113 src/config/options.c:2481
+#: src/config/options.c:2130 src/config/options.c:2498
 msgid "Status bar text"
 msgstr "Status 84|2 73><7"
 
-#: src/config/options.c:2115 src/config/options.c:2483
+#: src/config/options.c:2132 src/config/options.c:2500
 msgid "Status bar text colors."
 msgstr "Status 84|2 73><7 (0|_0Rs."
 
-#: src/config/options.c:2126 src/config/options.c:2494
+#: src/config/options.c:2143 src/config/options.c:2511
 msgid "Tabs bar"
 msgstr "7485 84|2"
 
-#: src/config/options.c:2128 src/config/options.c:2496
+#: src/config/options.c:2145 src/config/options.c:2513
 msgid "Tabs bar colors."
 msgstr "7485 84|2 (0|_0Rs."
 
-#: src/config/options.c:2130 src/config/options.c:2498
+#: src/config/options.c:2147 src/config/options.c:2515
 msgid "Unselected tab"
 msgstr "Un53|3(73|) 74|3"
 
-#: src/config/options.c:2132 src/config/options.c:2500
+#: src/config/options.c:2149 src/config/options.c:2517
 msgid "Unselected tab colors."
 msgstr "Un53|3(73|) 74|3 (0|_0Rs."
 
-#: src/config/options.c:2142 src/config/options.c:2510
+#: src/config/options.c:2159 src/config/options.c:2527
 msgid "Selected tab"
 msgstr "53|3(73|) 74|3"
 
-#: src/config/options.c:2144 src/config/options.c:2512
+#: src/config/options.c:2161 src/config/options.c:2529
 msgid "Selected tab colors."
 msgstr "53|3(73|) 74|3 (0|_0Rs."
 
-#: src/config/options.c:2154 src/config/options.c:2522
+#: src/config/options.c:2171 src/config/options.c:2539
 msgid "Searched strings"
 msgstr "534R(Hed 57r1|\\|6s"
 
-#: src/config/options.c:2156 src/config/options.c:2524
+#: src/config/options.c:2173 src/config/options.c:2541
 msgid "Searched string highlight colors."
 msgstr "534R(Hed 57r1|\\|6 highlight (0|_0Rs."
 
-#: src/config/options.c:2168
+#: src/config/options.c:2185
 msgid "Non-color terminals"
 msgstr "|\\|0n-(0|_0R 73R|V|1|\\|4|s"
 
-#: src/config/options.c:2170
+#: src/config/options.c:2187
 msgid "Color settings for non-color terminal."
 msgstr "Color 537tings for |\\|0n-(0|_0R 73R|V|1|\\|4|."
 
-#: src/config/options.c:2177
+#: src/config/options.c:2194
 msgid "Unselected menu bar item"
 msgstr "Un53|3(73|) |V|3|\\|U 84|2 item"
 
-#: src/config/options.c:2179
+#: src/config/options.c:2196
 msgid "Unselected menu bar item colors."
 msgstr "Un53|3(73|) |V|3|\\|U 84|2 item (0|_0Rs."
 
-#: src/config/options.c:2189
+#: src/config/options.c:2206
 msgid "Selected menu bar item"
 msgstr "53|3(73|) |V|3|\\|U 84|2 item"
 
-#: src/config/options.c:2191
+#: src/config/options.c:2208
 msgid "Selected menu bar item colors."
 msgstr "53|3(73|) |V|3|\\|U 84|2 item (0|_0Rs."
 
-#: src/config/options.c:2223
+#: src/config/options.c:2240
 msgid "Main menu selected hotkey default text color."
 msgstr "|V|41|\\| |V|3|\\|U 53|3(73|) hot|<3`/ |)34fU@|7 73><7 (0|_0R."
 
-#: src/config/options.c:2264
+#: src/config/options.c:2281
 msgid "Menu unselected hotkey colors."
 msgstr "|V|3|\\|U un53|3(73|) hot|<3`/ (0|_0Rs."
 
-#: src/config/options.c:2268
+#: src/config/options.c:2285
 msgid "Menu selected hotkey colors."
 msgstr "|V|3|\\|U 53|3(73|) hot|<3`/ (0|_0Rs."
 
-#: src/config/options.c:2272
+#: src/config/options.c:2289
 msgid "Menu unselected hotkey default text color."
 msgstr "|V|3|\\|U un53|3(73|) hot|<3`/ |)34fU@|7 73><7 (0|_0R."
 
-#: src/config/options.c:2276
+#: src/config/options.c:2293
 msgid "Menu unselected hotkey default background color."
 msgstr "|V|3|\\|U un53|3(73|) hot|<3`/ |)34fU@|7 84(|<6R0Un|) (0|_0R."
 
-#: src/config/options.c:2280
+#: src/config/options.c:2297
 msgid "Menu selected hotkey default text color."
 msgstr "|V|3|\\|U 53|3(73|) hot|<3`/ |)34fU@|7 73><7 (0|_0R."
 
-#: src/config/options.c:2284
+#: src/config/options.c:2301
 msgid "Menu selected hotkey default background color."
 msgstr "|V|3|\\|U 53|3(73|) hot|<3`/ |)34fU@|7 84(|<6R0Un|) (0|_0R."
 
-#: src/config/options.c:2303
+#: src/config/options.c:2320
 msgid "Dialog generic background color"
 msgstr "Dialog generic 84(|<6R0Un|) (0|_0R"
 
-#: src/config/options.c:2393
+#: src/config/options.c:2410
 msgid "Dialog field colors."
 msgstr "Dialog |=13|d (0|_0Rs."
 
-#: src/config/options.c:2452
+#: src/config/options.c:2469
 msgid "Title text"
 msgstr "717|3 73><7"
 
 #. ==========================================================
 #. ============= BORING PART (colors) END ===================
 #. ==========================================================
-#: src/config/options.c:2540
+#: src/config/options.c:2557
 msgid "Dialog settings"
 msgstr "Dialog 537tings"
 
-#: src/config/options.c:2542
+#: src/config/options.c:2559
 msgid "Dialogs-specific appearance and behaviour settings."
 msgstr "Dialogs-specific appearance and behaviour 537tings."
 
-#: src/config/options.c:2544
+#: src/config/options.c:2561
 msgid "Minimal height of listbox widget"
 msgstr "Minimal height of listbox widget"
 
-#: src/config/options.c:2546
+#: src/config/options.c:2563
 msgid ""
 "Minimal height of the listbox widget (used e.g. for bookmarks\n"
 "or global history)."
@@ -2969,11 +2994,11 @@ msgstr ""
 "Minimal height of the listbox widget (used e.g. for bookmarks\n"
 "or global history)."
 
-#: src/config/options.c:2549
+#: src/config/options.c:2566
 msgid "Drop shadows"
 msgstr "Drop shadows"
 
-#: src/config/options.c:2551
+#: src/config/options.c:2568
 msgid ""
 "Make dialogs drop shadows (the shadows are solid, you can\n"
 "adjust their color by ui.colors.*.dialog.shadow). You may\n"
@@ -2983,11 +3008,11 @@ msgstr ""
 "adjust their color by ui.colors.*.dialog.shadow). You may\n"
 "also want to eliminate the wide borders by adjusting setup.h."
 
-#: src/config/options.c:2556
+#: src/config/options.c:2573
 msgid "Timer options"
 msgstr "71|V|3r 0p710Ns"
 
-#: src/config/options.c:2558
+#: src/config/options.c:2575
 msgid ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
@@ -2995,7 +3020,7 @@ msgstr ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
 
-#: src/config/options.c:2564
+#: src/config/options.c:2581
 msgid ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
@@ -3007,7 +3032,7 @@ msgstr ""
 "1 is count down, but don't show the timer\n"
 "2 is count down and show the timer near LEDs"
 
-#: src/config/options.c:2571
+#: src/config/options.c:2588
 msgid ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
@@ -3021,32 +3046,32 @@ msgstr ""
 "2 is count down and show the timer near LEDs (note that this feature is "
 "DISABLED)"
 
-#: src/config/options.c:2577
+#: src/config/options.c:2594
 msgid "Duration"
 msgstr "Duration"
 
-#: src/config/options.c:2579
+#: src/config/options.c:2596
 msgid "Inactivity timeout. One day should be enough for just everyone (TM)."
 msgstr ""
 "Inactivity 71|V|3out. One day should be e|\\|0ugh for just everyone (TM)."
 
-#: src/config/options.c:2583
+#: src/config/options.c:2600
 msgid "Key-binding action to be triggered when timer reaches zero."
 msgstr "|<3`/-81|\\|9 action 70 be triggered when 71|V|3r reaches Z4Rr0."
 
-#: src/config/options.c:2586
+#: src/config/options.c:2603
 msgid "Window tabs"
 msgstr "\\/\\/1N|)0VV 7485"
 
-#: src/config/options.c:2588
+#: src/config/options.c:2605
 msgid "Window tabs settings."
 msgstr "\\/\\/1N|)0VV 7485 537tings."
 
-#: src/config/options.c:2590
+#: src/config/options.c:2607
 msgid "Display tabs bar"
 msgstr "Display 7485 84|2"
 
-#: src/config/options.c:2592
+#: src/config/options.c:2609
 msgid ""
 "Show tabs bar on the screen:\n"
 "0 means never.\n"
@@ -3058,11 +3083,11 @@ msgstr ""
 "1 means only if two or more tabs.\n"
 "2 means always."
 
-#: src/config/options.c:2597
+#: src/config/options.c:2614
 msgid "Wrap-around tabs cycling"
 msgstr "Wrap-around 7485 cycling"
 
-#: src/config/options.c:2599
+#: src/config/options.c:2616
 msgid ""
 "When moving right from the last tab, jump at the first one, and\n"
 "vice versa."
@@ -3070,11 +3095,11 @@ msgstr ""
 "When moving right from the last tab, jump at the first one, and\n"
 "vice versa."
 
-#: src/config/options.c:2604 src/config/opttypes.c:470
+#: src/config/options.c:2621 src/config/opttypes.c:470
 msgid "Language"
 msgstr "|_4|\\|6U493"
 
-#: src/config/options.c:2606
+#: src/config/options.c:2623
 msgid ""
 "Language of user interface. System means that the language will\n"
 "be extracted from the environment dynamically."
@@ -3082,7 +3107,7 @@ msgstr ""
 "Language of user interface. System means that the language will\n"
 "be extracted from the environment dynamically."
 
-#: src/config/options.c:2614
+#: src/config/options.c:2631
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the ui.dialog.shadows option instead."
@@ -3090,35 +3115,35 @@ msgstr ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the ui.dialog.shadows option instead."
 
-#: src/config/options.c:2617
+#: src/config/options.c:2634
 msgid "Display status bar"
 msgstr "Display status 84|2"
 
-#: src/config/options.c:2619
+#: src/config/options.c:2636
 msgid "Show status bar on the screen."
 msgstr "Show status 84|2 on the screen."
 
-#: src/config/options.c:2621
+#: src/config/options.c:2638
 msgid "Display title bar"
 msgstr "Display 717|3 84|2"
 
-#: src/config/options.c:2623
+#: src/config/options.c:2640
 msgid "Show title bar on the screen."
 msgstr "Show 717|3 84|2 on the screen."
 
-#: src/config/options.c:2625
+#: src/config/options.c:2642
 msgid "Display goto dialog on startup"
 msgstr "Display 6070 dialog on startup"
 
-#: src/config/options.c:2627
+#: src/config/options.c:2644
 msgid "Pop up goto dialog on startup when there's no homepage set."
 msgstr "Pop up 6070 dialog on startup when there's |\\|0 homepage 537."
 
-#: src/config/options.c:2630
+#: src/config/options.c:2647
 msgid "Set window title"
 msgstr "537 \\/\\/1N|)0VV 717|3"
 
-#: src/config/options.c:2632
+#: src/config/options.c:2649
 msgid ""
 "Set the window title when running in a windowing environment \n"
 "in an xterm-like terminal. This way the document's title is \n"
@@ -3128,7 +3153,7 @@ msgstr ""
 "in an xterm-like terminal. This way the document's title is \n"
 "shown on the window titlebar."
 
-#: src/config/options.c:2642
+#: src/config/options.c:2659
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the config.saving_style option instead."
@@ -3136,11 +3161,11 @@ msgstr ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the config.saving_style option instead."
 
-#: src/config/options.c:2645
+#: src/config/options.c:2662
 msgid "Use secure file saving"
 msgstr "|_|53 secure f1|3 5@\\/1N6"
 
-#: src/config/options.c:2647
+#: src/config/options.c:2664
 msgid ""
 "First write data to 'file.tmp', then rename to 'file' upon\n"
 "successfully finishing this. Note that this relates only to\n"
@@ -3155,11 +3180,11 @@ msgstr ""
 "Secure file saving is automagically disabled if file is symlink."
 
 #. Commandline options
-#: src/config/options.c:2657
+#: src/config/options.c:2674
 msgid "Restrict to anonymous mode"
 msgstr "Restrict 70 a|\\|0nymous mode"
 
-#: src/config/options.c:2659
+#: src/config/options.c:2676
 msgid ""
 "Restrict ELinks so that it can run on an anonymous account.\n"
 "No local file browsing, no downloads. Execution of viewers\n"
@@ -3171,19 +3196,19 @@ msgstr ""
 "is allowed, but user can't add or modify entries in\n"
 "association table."
 
-#: src/config/options.c:2664
+#: src/config/options.c:2681
 msgid "Autosubmit first form"
 msgstr "Au705U8|/|17 first f0|2|V|"
 
-#: src/config/options.c:2666
+#: src/config/options.c:2683
 msgid "Go and submit the first form you'll stumble upon."
 msgstr "60 and 5U8|/|17 the first f0|2|V| you'll stumble upon."
 
-#: src/config/options.c:2668
+#: src/config/options.c:2685
 msgid "Clone session with given ID"
 msgstr "Clone session with given ID"
 
-#: src/config/options.c:2670
+#: src/config/options.c:2687
 msgid ""
 "ID of session (ELinks instance) which we want to clone.\n"
 "This is internal ELinks option, you don't want to use it."
@@ -3191,21 +3216,21 @@ msgstr ""
 "ID of session (ELinks instance) which we want to clone.\n"
 "This is internal ELinks option, you don't want to use it."
 
-#: src/config/options.c:2673
+#: src/config/options.c:2690
 msgid "MIME type to assume for documents"
 msgstr "|\\/|1|V|3 7`/P3 70 455U|V|3 for |)0(U|V|3N7s"
 
-#: src/config/options.c:2675
+#: src/config/options.c:2692
 msgid "Default MIME type to assume for documents of unknown type."
 msgstr ""
 "|)34fU@|7 |\\/|1|V|3 7`/P3 70 455U|V|3 for |)0(U|V|3N7s of U|\\||<N0VVn 7`/"
 "P3."
 
-#: src/config/options.c:2677
+#: src/config/options.c:2694
 msgid "Write formatted version of given URL to stdout"
 msgstr "VV|2173 f0|2|V|atted version of given |_|R|_ 70 stdout"
 
-#: src/config/options.c:2679
+#: src/config/options.c:2696
 msgid ""
 "Write a plain-text version of the given HTML document to\n"
 "stdout."
@@ -3213,23 +3238,23 @@ msgstr ""
 "Write a plain-text version of the given HTML document to\n"
 "stdout."
 
-#: src/config/options.c:2682
+#: src/config/options.c:2699
 msgid "Codepage to use with -dump"
 msgstr "Codepage 70 |_|53 with -dump"
 
-#: src/config/options.c:2686
+#: src/config/options.c:2703
 msgid "Width of document formatted with -dump"
 msgstr "Width of |)0(U|V|3N7 f0|2|V|atted with -dump"
 
-#: src/config/options.c:2688
+#: src/config/options.c:2705
 msgid "Width of the dump output."
 msgstr "Width of the dump output."
 
-#: src/config/options.c:2690
+#: src/config/options.c:2707
 msgid "Evaluate given configuration option"
 msgstr "Evaluate given configuration 0p710N"
 
-#: src/config/options.c:2692
+#: src/config/options.c:2709
 msgid ""
 "Specify elinks.conf config options on the command-line:\n"
 "  -eval 'set protocol.file.allow_special_files = 1'"
@@ -3238,11 +3263,11 @@ msgstr ""
 "  -eval 'set protocol.file.allow_special_files = 1'"
 
 #. lynx compatibility
-#: src/config/options.c:2696
+#: src/config/options.c:2713
 msgid "Assume the file is HTML"
 msgstr "455U|V|3 the f1|3 is HTML"
 
-#: src/config/options.c:2698
+#: src/config/options.c:2715
 msgid ""
 "This makes ELinks assume that the files it sees are HTML. This is\n"
 "equivalent to -default-mime-type text/html."
@@ -3250,43 +3275,43 @@ msgstr ""
 "This makes ELinks assume that the files it sees are HTML. This is\n"
 "equivalent to -default-mime-type text/html."
 
-#: src/config/options.c:2711
+#: src/config/options.c:2728
 msgid "Print usage help and exit"
 msgstr "Print usage |-|3|_|o and exit"
 
-#: src/config/options.c:2713
+#: src/config/options.c:2730
 msgid "Print usage help and exit."
 msgstr "Print usage |-|3|_|o and exit."
 
-#: src/config/options.c:2715
+#: src/config/options.c:2732
 msgid "Print detailed usage help and exit"
 msgstr "Print detailed usage |-|3|_|o and exit"
 
-#: src/config/options.c:2717
+#: src/config/options.c:2734
 msgid "Print detailed usage help and exit."
 msgstr "Print detailed usage |-|3|_|o and exit."
 
-#: src/config/options.c:2719
+#: src/config/options.c:2736
 msgid "Print help for configuration options"
 msgstr "Print |-|3|_|o for configuration 0p710Ns"
 
-#: src/config/options.c:2721
+#: src/config/options.c:2738
 msgid "Print help on configuration options and exit."
 msgstr "Print |-|3|_|o on configuration 0p710Ns and exit."
 
-#: src/config/options.c:2723
+#: src/config/options.c:2740
 msgid "Look up specified host"
 msgstr "Look up specified host"
 
-#: src/config/options.c:2725
+#: src/config/options.c:2742
 msgid "Look up specified host."
 msgstr "Look up specified host."
 
-#: src/config/options.c:2727
+#: src/config/options.c:2744
 msgid "Run as separate instance"
 msgstr "Run as separate instance"
 
-#: src/config/options.c:2729
+#: src/config/options.c:2746
 msgid ""
 "Run ELinks as a separate instance instead of connecting to an\n"
 "existing instance. Note that normally no runtime state files\n"
@@ -3298,19 +3323,19 @@ msgstr ""
 "(bookmarks, history and so on) are written to the disk when\n"
 "this option is used. See also -touch-files."
 
-#: src/config/options.c:2734
+#: src/config/options.c:2751
 msgid "Don't use files in ~/.elinks"
 msgstr "Don't |_|53 f1|3s in /.e|1N|<s"
 
-#: src/config/options.c:2736
+#: src/config/options.c:2753
 msgid "Don't attempt to create and/or use home rc directory (~/.elinks)."
 msgstr "Don't attempt to create and/or |_|53 home rc direc70ry (/.e|1N|<s)."
 
-#: src/config/options.c:2738
+#: src/config/options.c:2755
 msgid "Connect to session ring with given ID"
 msgstr "(0NN3(7 70 session ring with given ID"
 
-#: src/config/options.c:2740
+#: src/config/options.c:2757
 msgid ""
 "ID of session ring this ELinks session should connect to. ELinks\n"
 "works in so-called session rings, whereby all instances of ELinks\n"
@@ -3342,19 +3367,19 @@ msgstr ""
 "are written to the disk when this option is used. See also\n"
 "-touch-files."
 
-#: src/config/options.c:2755
+#: src/config/options.c:2772
 msgid "Write the source of given URL to stdout"
 msgstr "VV|2173 the source of given |_|R|_ 70 stdout"
 
-#: src/config/options.c:2757
+#: src/config/options.c:2774
 msgid "Write the given HTML document in source form to stdout."
 msgstr "VV|2173 the given HTML |)0(U|V|3N7 in source f0|2|V| 70 stdout."
 
-#: src/config/options.c:2759
+#: src/config/options.c:2776
 msgid "Read document from stdin"
 msgstr "|23@|) |)0(U|V|3N7 from stdin"
 
-#: src/config/options.c:2761
+#: src/config/options.c:2778
 msgid ""
 "Open stdin as an HTML document - this is fully equivalent to:\n"
 " -eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin\n"
@@ -3368,12 +3393,12 @@ msgstr ""
 "stdin WORKS ONLY WHEN YOU USE -dump OR -source!! (I would like to\n"
 "know why you would use -source -stdin, though ;-)"
 
-#: src/config/options.c:2767
+#: src/config/options.c:2784
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
 msgstr ""
 "70uch f1|3s in /.e|1N|<s when running with -|\\|0-(0NN3(7/-session-ring"
 
-#: src/config/options.c:2769
+#: src/config/options.c:2786
 msgid ""
 "Set to 1 to have runtime state files (bookmarks, history, ...)\n"
 "changed even when -no-connect or -session-ring is used; has no\n"
@@ -3383,11 +3408,11 @@ msgstr ""
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 
-#: src/config/options.c:2773
+#: src/config/options.c:2790
 msgid "Print version information and exit"
 msgstr "Print version inf0|2|V|ation and exit"
 
-#: src/config/options.c:2775
+#: src/config/options.c:2792
 msgid "Print ELinks version information and exit."
 msgstr "Print E|1N|<s version inf0|2|V|ation and exit."
 
@@ -4641,11 +4666,11 @@ msgstr "Can't VV|2173 70 stdout."
 msgid "URL expected after %s."
 msgstr "|_|R|_ expected @f73R %s."
 
-#: src/viewer/text/form.c:624
+#: src/viewer/text/form.c:625
 msgid "Error while posting form"
 msgstr "3RR0R while |o057ing f0|2|V|"
 
-#: src/viewer/text/form.c:625
+#: src/viewer/text/form.c:626
 #, c-format
 msgid "Could not get file %s: %s"
 msgstr "(0VL|) |\\|07 get f1|3 %s: %s"

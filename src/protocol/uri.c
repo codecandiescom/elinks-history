@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.196 2004/05/23 14:15:43 jonas Exp $ */
+/* $Id: uri.c,v 1.197 2004/05/23 16:56:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -124,10 +124,10 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	if (lbracket) {
 		rbracket = strchr(lbracket, ']');
 		/* [address] is handled only inside of hostname part (surprisingly). */
-		if (rbracket && prefix_end + strcspn(prefix_end, "/") < rbracket)
-			lbracket = rbracket = NULL;
-		else
+		if (rbracket && rbracket < prefix_end + strcspn(prefix_end, "/"))
 			uri->ipv6 = 1;
+		else
+			lbracket = rbracket = NULL;
 	} else {
 		rbracket = NULL;
 	}

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.220 2004/05/14 08:49:07 zas Exp $ */
+/* $Id: search.c,v 1.221 2004/05/23 16:56:15 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -964,7 +964,7 @@ search_link_text(struct document *document, int current_link, int i,
 		unsigned char *match = link->name ? link->name : link->where;
 		unsigned char *matchpos;
 
-		if (link->type != LINK_HYPERTEXT
+		if ((link->type != LINK_HYPERTEXT && link->type != LINK_MAP)
 		    || textlen > strlen(match)) continue;
 
 		/* Did the text match? */

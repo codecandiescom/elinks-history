@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.439 2004/05/21 11:21:02 jonas Exp $ */
+/* $Id: renderer.c,v 1.440 2004/05/23 16:56:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -768,10 +768,20 @@ new_link(struct document *document, int link_number,
 	link->where_img = null_or_stracpy(format.image);
 
 	if (!format.form) {
-		link->type = LINK_HYPERTEXT;
-		link->where = null_or_stracpy(format.link);
 		link->target = null_or_stracpy(format.target);
 		link->name = memacpy(name, namelen);
+		if (format.link
+		    && ((format.link[0]|32) == 'm')
+		    && ((format.link[1]|32) == 'a')
+		    && ((format.link[2]|32) == 'p')
+		    && 	(format.link[3]     == '@')
+		    &&   format.link[4]) {
+			link->type = LINK_MAP;
+			link->where = stracpy(format.link + 4);
+		} else {
+			link->type = LINK_HYPERTEXT;
+			link->where = null_or_stracpy(format.link);
+		}
 
 	} else {
 		struct form_control *form = format.form;

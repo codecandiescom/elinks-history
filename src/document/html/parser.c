@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.157 2003/07/21 23:37:01 pasky Exp $ */
+/* $Id: parser.c,v 1.158 2003/07/22 01:07:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1907,10 +1907,10 @@ do_html_select(unsigned char *attr, unsigned char *html,
 {
 	struct conv_table *ct = special_f(f, SP_TABLE, NULL);
 	struct form_control *fc;
+	struct string lbl = NULL_STRING;
 	unsigned char **val, **lbls;
-	unsigned char *t_name, *t_attr, *en, *lbl;
+	unsigned char *t_name, *t_attr, *en;
 	int t_namelen;
-	int lbl_l;
 	int nnmi = 0;
 	int order, preselect, group;
 	int i, mw;
@@ -1918,7 +1918,6 @@ do_html_select(unsigned char *attr, unsigned char *html,
 	if (has_attr(attr, "multiple")) return 1;
 	find_form_for_input(attr);
 	html_focusable(attr);
-	lbl = NULL;
 	val = NULL;
 	order = 0, group = 0, preselect = -1;
 	init_menu();
@@ -1935,7 +1934,7 @@ see:
 
 abort:
 		*end = html;
-		if (lbl) mem_free(lbl);
+		if (lbl.source) done_string(&lbl);
 		if (val) {
 			for (j = 0; j < order; j++)
 				if (val[j])
@@ -1947,14 +1946,14 @@ abort:
 		return 0;
 	}
 
-	if (lbl) {
+	if (lbl.source) {
 		unsigned char *q, *s = en;
 		int l = html - en;
 
 		while (l && WHITECHAR(s[0])) s++, l--;
 		while (l && WHITECHAR(s[l-1])) l--;
 		q = convert_string(ct, s, l);
-		if (q) add_to_str(&lbl, &lbl_l, q), mem_free(q);
+		if (q) add_to_string(&lbl, q), mem_free(q);
 	}
 
 	if (html + 2 <= eof && (html[1] == '!' || html[1] == '?')) {
@@ -1967,35 +1966,37 @@ abort:
 		goto se;
 	}
 
+#define add_select_item(string, value, order, dont_add) 			\
+	do {									\
+		if ((string).source) {						\
+			if (!value[(order) - 1])				\
+				value[(order) - 1] = memacpy((string).source,	\
+							     (string).length);	\
+			if (!(dont_add)) {					\
+				new_menu_item((string).source, (order) - 1, 1);	\
+				(string).source = NULL;				\
+				(string).length = 0;				\
+			} else {						\
+				done_string(&(string));				\
+			}							\
+		}								\
+	} while (0)
+
 	if (t_namelen == 7 && !strncasecmp(t_name, "/SELECT", 7)) {
-		if (lbl) {
-			if (!val[order - 1]) val[order - 1] = stracpy(lbl);
-			if (!nnmi) new_menu_item(lbl, order - 1, 1);
-			else mem_free(lbl);
-			lbl = NULL;
-		}
+		add_select_item(lbl, val, order, nnmi);
 		goto end_parse;
 	}
 
 	if (t_namelen == 7 && !strncasecmp(t_name, "/OPTION", 7)) {
-		if (lbl) {
-			if (!val[order - 1]) val[order - 1] = stracpy(lbl);
-			if (!nnmi) new_menu_item(lbl, order - 1, 1);
-			else mem_free(lbl);
-			lbl = NULL;
-		}
+		add_select_item(lbl, val, order, nnmi);
 		goto see;
 	}
 
 	if (t_namelen == 6 && !strncasecmp(t_name, "OPTION", 6)) {
 		unsigned char *v, *vx;
 
-		if (lbl) {
-			if (!val[order - 1]) val[order - 1] = stracpy(lbl);
-			if (!nnmi) new_menu_item(lbl, order - 1, 1);
-			else mem_free(lbl);
-			lbl = NULL;
-		}
+		add_select_item(lbl, val, order, nnmi);
+
 		if (has_attr(t_attr, "disabled")) goto see;
 		if (preselect == -1 && has_attr(t_attr, "selected")) preselect = order;
 		v = get_attr_val(t_attr, "value");
@@ -2009,7 +2010,7 @@ abort:
 		vx = get_attr_val(t_attr, "label");
 		if (vx) new_menu_item(vx, order - 1, 0);
 		if (!v || !vx) {
-			lbl = init_str(), lbl_l = 0;
+			init_string(&lbl);
 			nnmi = !!vx;
 		}
 		goto see;
@@ -2017,14 +2018,12 @@ abort:
 
 	if ((t_namelen == 8 && !strncasecmp(t_name, "OPTGROUP", 8))
 	    || (t_namelen == 9 && !strncasecmp(t_name, "/OPTGROUP", 9))) {
-		if (lbl) {
-			if (!val[order - 1]) val[order - 1] = stracpy(lbl);
-			if (!nnmi) new_menu_item(lbl, order - 1, 1);
-			else mem_free(lbl);
-			lbl = NULL;
-		}
+		add_select_item(lbl, val, order, nnmi);
+
 		if (group) new_menu_item(NULL, -1, 0), group = 0;
 	}
+
+#undef add_select_item
 
 	if (t_namelen == 8 && !strncasecmp(t_name, "OPTGROUP", 8)) {
 		unsigned char *la = get_attr_val(t_attr, "label");

@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.23 2002/05/19 14:12:41 pasky Exp $ */
+/* $Id: options.c,v 1.24 2002/05/19 14:33:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,10 +125,10 @@ done_options()
 	foreach_hash_item (links_options, item, i) {
 		struct option *option = item->value;
 
-		if (option->type & OPT_BOOL ||
-		    option->type & OPT_INT ||
-		    option->type & OPT_LONG ||
-		    option->type & OPT_STRING)
+		if (option->type == OPT_BOOL ||
+		    option->type == OPT_INT ||
+		    option->type == OPT_LONG ||
+		    option->type == OPT_STRING)
 			mem_free(option->ptr);
 	}
 
@@ -240,7 +240,7 @@ unsigned char *num_rd(struct option *o, unsigned char *c)
 		mem_free(tok);
 		return "Out of range";
 	}
-	*(int *)o->ptr = l;
+	*((int *) o->ptr) = l;
 	mem_free(tok);
 	return NULL;
 }
@@ -248,7 +248,7 @@ unsigned char *num_rd(struct option *o, unsigned char *c)
 void num_wr(struct option *o, unsigned char **s, int *l)
 {
 	add_nm(o, s, l);
-	add_knum_to_str(s, l, *(int *)o->ptr);
+	add_knum_to_str(s, l, *((int *) o->ptr));
 }
 
 unsigned char *str_rd(struct option *o, unsigned char *c)
@@ -257,7 +257,7 @@ unsigned char *str_rd(struct option *o, unsigned char *c)
 	unsigned char *e = NULL;
 	if (!tok) return NULL;
 	if (strlen(tok) + 1 > o->max) e = "String too long";
-	else strcpy(o->ptr, tok);
+	else { mem_free(o->ptr); o->ptr = stracpy(tok); }
 	mem_free(tok);
 	return e;
 }
@@ -283,7 +283,7 @@ unsigned char *cp_rd(struct option *o, unsigned char *c)
 	if (!tok) return "Missing argument";
 	/*if (!strcasecmp(c, "none")) i = -1;
 	else */if ((i = get_cp_index(tok)) == -1) e = "Unknown codepage";
-	else *(int *)o->ptr = i;
+	else *((int *) o->ptr) = i;
 	mem_free(tok);
 	return e;
 }
@@ -720,15 +720,6 @@ struct rgb default_bg = { 0, 0, 0 };
 struct rgb default_link = { 0, 0, 255 };
 struct rgb default_vlink = { 255, 255, 0 };
 
-/* These are workarounds for some CGI script bugs */
-struct http_bugs http_bugs = { 0, 1, 0, 0 };
-/*int bug_302_redirect = 0;*/
-	/* When got 301 or 302 from POST request, change it to GET
-	   - this violates RFC2068, but some buggy message board scripts rely on it */
-/*int bug_post_no_keepalive = 0;*/
-	/* No keepalive connection after POST request. Some buggy PHP databases report bad
-	   results if GET wants to retreive data POSTed in the same connection */
-
 void
 register_options()
 {
@@ -875,29 +866,21 @@ register_options()
 		"help", OPT_CMDLINE, printhelp_cmd,
 		"Print usage help and exit.");
 
-
-	/* FIXME: http_bugs need to disappear! */
-
-	add_opt(links_options,
-		"http_bugs.allow_blacklist", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &http_bugs.allow_blacklist,
+	add_opt_bool(links_options,
+		"http_bugs.allow_blacklist", OPT_CMDLINE | OPT_CFGFILE, 1,
 		"Allow blacklist of buggy servers?");
 
-	add_opt(links_options,
-		"http_bugs.bug_302_redirect", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &http_bugs.bug_302_redirect,
+	add_opt_bool(links_options,
+		"http_bugs.bug_302_redirect", OPT_CMDLINE | OPT_CFGFILE, 0,
 		"Broken 302 redirect (violates RFC but compatible with Netscape)?");
 
-	add_opt(links_options,
-		"http_bugs.bug_post_no_keepalive", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &http_bugs.bug_post_no_keepalive,
+	add_opt_bool(links_options,
+		"http_bugs.bug_post_no_keepalive", OPT_CMDLINE | OPT_CFGFILE, 0,
 		"No keepalive connection after POST request?");
 
-	add_opt(links_options,
-		"http_bugs.http10", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &http_bugs.http10,
+	add_opt_bool(links_options,
+		"http_bugs.http10", OPT_CMDLINE | OPT_CFGFILE, 0,
 		"Use HTTP/1.0 protocol?");
-
 
 	add_opt_string(links_options,
 		"http_proxy", OPT_CMDLINE | OPT_CFGFILE, "",

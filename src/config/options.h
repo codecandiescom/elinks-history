@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.13 2002/05/19 14:12:41 pasky Exp $ */
+/* $Id: options.h,v 1.14 2002/05/19 14:33:55 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -126,13 +126,6 @@ enum referer {
 	REFERER_SAME_URL,
 	REFERER_FAKE,
 	REFERER_TRUE,
-};
-
-struct http_bugs {
-	int http10;
-	int allow_blacklist;
-	int bug_302_redirect;
-	int bug_post_no_keepalive;
 };
 
 #endif

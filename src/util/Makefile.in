@@ -64,6 +64,9 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
 
+INCLUDES =   -I$(srcdir)/..
+
+
 noinst_LIBRARIES = libutil.a
 libutil_a_SOURCES =   error.c  error.h
 

@@ -64,6 +64,9 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
 
+INCLUDES =   -I$(srcdir)/..
+
+
 noinst_LIBRARIES = libosdep.a
 libosdep_a_SOURCES =   beos.c  os_dep.c  os_dep.h  os_depx.h  win32.c
 

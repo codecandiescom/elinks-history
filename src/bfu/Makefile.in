@@ -64,6 +64,9 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
 
+INCLUDES =   -I$(srcdir)/..
+
+
 noinst_LIBRARIES = libbfu.a
 libbfu_a_SOURCES =   bfu.c  bfu.h  menu.c  menu.h
 

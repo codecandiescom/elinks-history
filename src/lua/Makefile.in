@@ -64,6 +64,9 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
 
+INCLUDES =   -I$(srcdir)/..
+
+
 noinst_LIBRARIES = liblua.a
 liblua_a_SOURCES =   lua.c  lua.h
 

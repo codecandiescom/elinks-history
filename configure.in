@@ -13,6 +13,7 @@ dnl ===================================================================
 
 AC_PROG_CC
 AC_PROG_AWK
+AC_PROG_RANLIB
 
 dnl gcc specific options
 if test "x$ac_cv_prog_gcc" = "xyes"; then

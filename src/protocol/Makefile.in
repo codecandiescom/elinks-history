@@ -64,6 +64,9 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
 
+INCLUDES =   -I$(srcdir)/..
+
+
 noinst_LIBRARIES = libprotocol.a
 libprotocol_a_SOURCES =   file.c  file.h  finger.c  finger.h  ftp.c  ftp.h  http.c  http.h  https.c  https.h  mailto.c  mailto.h  types.c  types.h  url.c  url.h
 

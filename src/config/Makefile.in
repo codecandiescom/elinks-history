@@ -64,6 +64,9 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
 
+INCLUDES =   -I$(srcdir)/..
+
+
 noinst_LIBRARIES = libconfig.a
 libconfig_a_SOURCES =   default.c  default.h  kbdbind.c  kbdbind.h
 

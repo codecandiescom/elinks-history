@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.62 2004/07/04 13:32:25 jonas Exp $ */
+/* $Id: conv.c,v 1.63 2004/07/05 11:38:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -271,11 +271,7 @@ struct string *
 add_html_to_string(struct string *string, unsigned char *src, int len)
 {
 
-#ifndef HAVE_ISALNUM
-#define isalphanum(q) isA(q)
-#else
 #define isalphanum(q) (isalnum(q) || (q) == '-' || (q) == '_')
-#endif
 
 	for (; len; len--, src++) {
 		if (isalphanum(*src) || *src == ' '

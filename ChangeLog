@@ -1,3 +1,27 @@
+Mon Oct  4 16:48:25 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation was updated.  
+
+Mon Oct  4 14:08:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	When tabbing to some next match while doing a link typeahead with
+	wraparound disabled and only the current link is matching pop up a
+	"No further matches for '%s'." dialog so a ton of 'normal' typeahead
+	dialogs is not displayed. Idea by Miciah in comment to bug 513 which
+	should hopefully be fixed now.  
+
+Mon Oct  4 13:26:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, protocol/http/http.c:
+
+	Move the usage of the protocol.http.bugs.broken_302_redirect option
+	to the HTTP code and limit the lookup to only happen when there is a
+	302. Should hopefully make this thing a bit more clear.  
+
 Sun Oct  3 18:01:54 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/protocol/http/http.c:

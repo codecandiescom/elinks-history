@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.98 2003/10/02 20:13:23 jonas Exp $ */
+/* $Id: screen.c,v 1.99 2003/10/02 21:28:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -512,16 +512,15 @@ redraw_screen(struct terminal *term)
 	    || !init_string(&image)) return;
 
 	switch (driver->color_mode) {
+	case COLOR_MODE_256:
+#ifdef USE_256_COLORS
+		add_chars(&image, term, driver, &state, add_char256);
+		break;
+#endif
 	case COLOR_MODE_MONO:
 	case COLOR_MODE_16:
 		add_chars(&image, term, driver, &state, add_char16);
 		break;
-
-#ifdef USE_256_COLORS
-	case COLOR_MODE_256:
-		add_chars(&image, term, driver, &state, add_char256);
-		break;
-#endif
 	default:
 		internal("Invalid color mode");
 		return;

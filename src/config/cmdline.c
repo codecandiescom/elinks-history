@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.62 2004/04/23 22:05:20 jonas Exp $ */
+/* $Id: cmdline.c,v 1.63 2004/04/23 22:24:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -275,7 +275,7 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 static unsigned char *
 version_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
-	printf(G_("ELinks %s - Text WWW browser\n"), VERSION_STRING);
+	printf("%s\n", full_static_version);
 	fflush(stdout);
 	return "";
 }

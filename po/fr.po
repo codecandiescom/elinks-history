@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"POT-Creation-Date: 2004-10-19 10:06+0200\n"
-"PO-Revision-Date: 2004-10-19 10:07+0200\n"
+"POT-Creation-Date: 2004-10-25 10:59+0200\n"
+"PO-Revision-Date: 2004-10-25 11:02+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -45,21 +45,21 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/dialogs/info.c:44 src/dialogs/info.c:133 src/dialogs/info.c:155
 #: src/dialogs/menu.c:96 src/dialogs/menu.c:505 src/dialogs/menu.c:553
 #: src/dialogs/options.c:176 src/dialogs/options.c:249
-#: src/ecmascript/spidermonkey.c:373 src/ecmascript/spidermonkey.c:861
-#: src/ecmascript/spidermonkey.c:878 src/formhist/dialogs.c:183
+#: src/ecmascript/spidermonkey.c:407 src/ecmascript/spidermonkey.c:934
+#: src/ecmascript/spidermonkey.c:955 src/formhist/dialogs.c:183
 #: src/mime/dialogs.c:134 src/protocol/auth/dialogs.c:92
 #: src/protocol/protocol.c:226 src/protocol/user.c:206
 #: src/sched/download.c:232 src/sched/download.c:328 src/sched/download.c:369
 #: src/sched/download.c:508 src/sched/download.c:602 src/sched/error.c:42
-#: src/sched/session.c:242 src/sched/session.c:694 src/sched/session.c:718
-#: src/sched/session.c:735 src/scripting/lua/core.c:400
+#: src/sched/session.c:242 src/sched/session.c:716 src/sched/session.c:740
+#: src/sched/session.c:757 src/scripting/lua/core.c:400
 #: src/scripting/lua/core.c:482 src/scripting/lua/core.c:599
 #: src/scripting/lua/core.c:723 src/viewer/text/draw.c:66
-#: src/viewer/text/form.c:843 src/viewer/text/search.c:949
+#: src/viewer/text/form.c:847 src/viewer/text/search.c:949
 #: src/viewer/text/search.c:1010 src/viewer/text/search.c:1454
 #: src/viewer/text/search.c:1567 src/viewer/text/textarea.c:365
 #: src/viewer/text/textarea.c:374 src/viewer/text/view.c:694
-#: src/viewer/text/view.c:1218
+#: src/viewer/text/view.c:1223
 msgid "OK"
 msgstr "OK"
 
@@ -169,9 +169,9 @@ msgstr "Nom"
 #: src/dialogs/edit.c:103 src/dialogs/menu.c:96 src/dialogs/menu.c:505
 #: src/dialogs/menu.c:553 src/dialogs/options.c:179 src/dialogs/options.c:250
 #: src/mime/dialogs.c:135 src/protocol/auth/dialogs.c:93
-#: src/sched/download.c:552 src/sched/download.c:1047
-#: src/sched/download.c:1057 src/sched/download.c:1078
-#: src/sched/download.c:1091 src/scripting/lua/core.c:401
+#: src/sched/download.c:552 src/sched/download.c:1018
+#: src/sched/download.c:1028 src/sched/download.c:1049
+#: src/sched/download.c:1062 src/scripting/lua/core.c:401
 #: src/scripting/lua/core.c:483 src/scripting/lua/core.c:723
 #: src/viewer/text/search.c:1568 src/viewer/text/view.c:694
 msgid "Cancel"
@@ -454,8 +454,8 @@ msgstr "Effacer"
 #: src/bookmarks/dialogs.c:460 src/config/dialogs.c:521
 #: src/config/dialogs.c:943 src/cookies/dialogs.c:392
 #: src/dialogs/options.c:178 src/formhist/dialogs.c:220
-#: src/globhist/dialogs.c:240 src/sched/download.c:1044
-#: src/sched/download.c:1075
+#: src/globhist/dialogs.c:240 src/sched/download.c:1015
+#: src/sched/download.c:1046
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -3924,7 +3924,7 @@ msgstr "Texte"
 msgid "Dialog text colors."
 msgstr "Couleurs du texte des dialogues."
 
-#: src/config/options.inc:1175 src/viewer/text/form.c:1409
+#: src/config/options.inc:1175 src/viewer/text/form.c:1417
 msgid "Checkbox"
 msgstr "Case à cocher"
 
@@ -3956,7 +3956,7 @@ msgstr "Bouton sélectionné"
 msgid "Dialog selected button colors."
 msgstr "Couleurs du bouton sélectionné dans les dialogues."
 
-#: src/config/options.inc:1191 src/viewer/text/form.c:1413
+#: src/config/options.inc:1191 src/viewer/text/form.c:1421
 msgid "Text field"
 msgstr "Champ texte"
 
@@ -4437,7 +4437,7 @@ msgid "Folder"
 msgstr "Dossier"
 
 #. name:
-#: src/cookies/cookies.c:80 src/cookies/cookies.c:854
+#: src/cookies/cookies.c:80 src/cookies/cookies.c:853
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -5343,7 +5343,7 @@ msgid "No document"
 msgstr "Aucun document"
 
 #. name:
-#: src/document/css/css.c:29 src/document/css/css.c:154
+#: src/document/css/css.c:29 src/document/css/css.c:157
 msgid "Cascading Style Sheets"
 msgstr "Cascading Style Sheets (CSS)"
 
@@ -5391,7 +5391,7 @@ msgstr ""
 "Laisser à \"\" pour utiliser le style propre au document."
 
 #. name:
-#: src/ecmascript/ecmascript.c:44 src/ecmascript/ecmascript.c:172
+#: src/ecmascript/ecmascript.c:44 src/ecmascript/ecmascript.c:177
 msgid "ECMAScript"
 msgstr "ECMAScript"
 
@@ -5411,47 +5411,47 @@ msgstr "Rapport d'erreur de script"
 msgid "Open a message box when a script reports an error."
 msgstr "Ouvrir une boîte de message quand un script produit une erreur."
 
-#: src/ecmascript/spidermonkey.c:370
+#: src/ecmascript/spidermonkey.c:404
 msgid "JavaScript Alert"
 msgstr "Alerte JavaScript"
 
-#: src/ecmascript/spidermonkey.c:844
+#: src/ecmascript/spidermonkey.c:909
 msgid "JavaScript Error"
 msgstr "Erreur Javascript"
 
-#: src/ecmascript/spidermonkey.c:847
+#: src/ecmascript/spidermonkey.c:912
 #, c-format
 msgid ""
-"A script embedded in the current document raised the following exception: \n"
+"A script embedded in the current document raised the following%s%s%s%s: \n"
 "\n"
 "%s\n"
 "\n"
 "%s\n"
 ".%*s^%*s."
 msgstr ""
-"Un script contenu dans le document courant a levé l'exception suivante: \n"
+"Un script contenu dans le document courant a provoqué %s%s%s%s: \n"
 "\n"
 "%s\n"
 "\n"
 "%s\n"
 ".%*s^%*s."
 
-#: src/ecmascript/spidermonkey.c:855
+#: src/ecmascript/spidermonkey.c:924
 #, c-format
 msgid ""
-"A script embedded in the current document raised the following exception: \n"
+"A script embedded in the current document raised the following%s%s%s%s: \n"
 "\n"
 "%s"
 msgstr ""
-"Un script contenu dans le document courant a levé l'exception suivante: \n"
+"Un script contenu dans le document courant a provoqué%s%s%s%s: \n"
 "\n"
 "%s"
 
-#: src/ecmascript/spidermonkey.c:872
+#: src/ecmascript/spidermonkey.c:949
 msgid "JavaScript Emergency"
 msgstr "Urgence JavaScript"
 
-#: src/ecmascript/spidermonkey.c:873
+#: src/ecmascript/spidermonkey.c:950
 msgid ""
 "A script embedded in the current document was running for more than 5 "
 "seconds in line. This probably means there is a bug in the script and it "
@@ -5868,20 +5868,20 @@ msgstr "%d échecs de select()."
 msgid "Cannot create a pipe for internal communication."
 msgstr "Ne peut créer un pipe pour la communication interne."
 
-#: src/main.c:180
+#: src/main.c:186
 msgid "No running ELinks found."
 msgstr "Aucun ELinks en cours d'éxecution."
 
 #. The remote session(s) can not be created
-#: src/main.c:187
+#: src/main.c:193
 msgid "No remote session to connect to."
 msgstr "Aucune session distante à laquelle se connecter."
 
-#: src/main.c:196
+#: src/main.c:202
 msgid "Unable to encode session info."
 msgstr "Impossible d'encoder les infos de session."
 
-#: src/main.c:213
+#: src/main.c:219
 msgid "Unable to attach_terminal()."
 msgstr "Echec de attach_terminal()."
 
@@ -6643,35 +6643,35 @@ msgstr ""
 "Impossible de créer le fichier '%s':\n"
 "%s"
 
-#: src/sched/download.c:1038 src/sched/download.c:1050
+#: src/sched/download.c:1009 src/sched/download.c:1021
 msgid "Unknown type"
 msgstr "Type inconnu"
 
-#: src/sched/download.c:1039
+#: src/sched/download.c:1010
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr "Voulez-vous sauvegarder le fichier '%s' (type: %s) ou l'afficher ?"
 
-#: src/sched/download.c:1045 src/sched/download.c:1055
-#: src/sched/download.c:1076 src/sched/download.c:1089
+#: src/sched/download.c:1016 src/sched/download.c:1026
+#: src/sched/download.c:1047 src/sched/download.c:1060
 msgid "Display"
 msgstr "Afficher"
 
-#: src/sched/download.c:1046 src/sched/download.c:1056
-#: src/sched/download.c:1077 src/sched/download.c:1090
+#: src/sched/download.c:1017 src/sched/download.c:1027
+#: src/sched/download.c:1048 src/sched/download.c:1061
 msgid "Show header"
 msgstr "Montrer les en-têtes"
 
-#: src/sched/download.c:1051
+#: src/sched/download.c:1022
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr "Voulez-vous afficher le fichier '%s' (type: %s) ?"
 
-#: src/sched/download.c:1067 src/sched/download.c:1081
+#: src/sched/download.c:1038 src/sched/download.c:1052
 msgid "What to do?"
 msgstr "Que faire ?"
 
-#: src/sched/download.c:1068
+#: src/sched/download.c:1039
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -6680,11 +6680,11 @@ msgstr ""
 "Voulez-vous ouvrir le fichier '%s' (type: %s%s%s)\n"
 "avec '%s', l'enregistrer ou l'afficher ?"
 
-#: src/sched/download.c:1074 src/sched/download.c:1088
+#: src/sched/download.c:1045 src/sched/download.c:1059
 msgid "Open"
 msgstr "Ouvrir"
 
-#: src/sched/download.c:1082
+#: src/sched/download.c:1053
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -6885,11 +6885,11 @@ msgstr "Le protocole de carnet d'adresse CSO n'est pas supporté"
 msgid "Unknown error"
 msgstr "Erreur inconnue"
 
-#: src/sched/session.c:682 src/sched/session.c:702 src/sched/task.c:181
+#: src/sched/session.c:704 src/sched/session.c:724 src/sched/task.c:181
 msgid "Warning"
 msgstr "Avertissement"
 
-#: src/sched/session.c:683
+#: src/sched/session.c:705
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -6908,7 +6908,7 @@ msgstr ""
 "défaut sera utilisée. Si vous n'avez aucune idée de quoi nous parlons alors "
 "faites juste ça. Toutes nos excuses pour ce désagrément."
 
-#: src/sched/session.c:703
+#: src/sched/session.c:725
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -6929,11 +6929,11 @@ msgstr ""
 "l'option config.saving_style dans le but d'obtenir un fonctionnement "
 "correct. Toutes nos excuses pour l'éventuel désagrément causé."
 
-#: src/sched/session.c:730
+#: src/sched/session.c:752
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#: src/sched/session.c:731
+#: src/sched/session.c:753
 msgid ""
 "Welcome to ELinks!\n"
 "\n"
@@ -7057,16 +7057,16 @@ msgstr "Options SSL."
 msgid "Bad terminal size: %d, %d"
 msgstr "Mauvaise taille de terminal: %d, %d"
 
-#: src/terminal/event.c:154
+#: src/terminal/event.c:165
 msgid "Warning: terminal name contains illicit chars."
 msgstr "Attention: le nom du terminal contient des caractères illicites."
 
-#: src/terminal/event.c:310
+#: src/terminal/event.c:321
 #, c-format
 msgid "Bad event %d"
 msgstr "Mauvais évenement %d"
 
-#: src/terminal/event.c:350
+#: src/terminal/event.c:361
 #, c-format
 msgid "Could not read event: %d (%s)"
 msgstr "Impossible de lire l'évenement: %d (%s)"
@@ -7111,160 +7111,164 @@ msgstr "Ancre manquante"
 msgid "The requested fragment \"#%s\" doesn't exist."
 msgstr "L'ancre recherchée \"#%s\" n'existe pas."
 
-#: src/viewer/text/form.c:839
+#: src/viewer/text/form.c:843
 msgid "Error while posting form"
 msgstr "Erreur lors de l'envoi du formulaire"
 
-#: src/viewer/text/form.c:840
+#: src/viewer/text/form.c:844
 #, c-format
 msgid "Could not get file %s: %s"
 msgstr "Impossible d'obtenir le fichier %s: %s"
 
-#: src/viewer/text/form.c:1396
+#: src/viewer/text/form.c:1402
 msgid "Reset form"
 msgstr "Réinitialiser le formulaire"
 
 #: src/viewer/text/form.c:1404
+msgid "Harmless button"
+msgstr "Bouton sans impact"
+
+#: src/viewer/text/form.c:1412
 msgid "Submit form to"
 msgstr "Envoi du formulaire à"
 
-#: src/viewer/text/form.c:1405
+#: src/viewer/text/form.c:1413
 msgid "Post form to"
 msgstr "Transfert du formulaire à"
 
-#: src/viewer/text/form.c:1407
+#: src/viewer/text/form.c:1415
 msgid "Radio button"
 msgstr "Bouton radio"
 
-#: src/viewer/text/form.c:1411
+#: src/viewer/text/form.c:1419
 msgid "Select field"
 msgstr "Liste"
 
-#: src/viewer/text/form.c:1415
+#: src/viewer/text/form.c:1423
 msgid "Text area"
 msgstr "Champ texte multiligne"
 
-#: src/viewer/text/form.c:1417
+#: src/viewer/text/form.c:1425
 msgid "File upload"
 msgstr "Envoi de fichier"
 
-#: src/viewer/text/form.c:1419
+#: src/viewer/text/form.c:1427
 msgid "Password field"
 msgstr "Champ mot de passe"
 
-#: src/viewer/text/form.c:1457
+#: src/viewer/text/form.c:1465
 msgid "name"
 msgstr "Nom"
 
-#: src/viewer/text/form.c:1466
+#: src/viewer/text/form.c:1474
 msgid "value"
 msgstr "Valeur"
 
-#: src/viewer/text/form.c:1474
+#: src/viewer/text/form.c:1482
 msgid "read only"
 msgstr "lecture seule"
 
-#: src/viewer/text/form.c:1485
+#: src/viewer/text/form.c:1493
 #, c-format
 msgid "press %s to navigate"
 msgstr "pressez %s pour naviguer"
 
-#: src/viewer/text/form.c:1487
+#: src/viewer/text/form.c:1495
 #, c-format
 msgid "press %s to edit"
 msgstr "pressez %s pour éditer"
 
-#: src/viewer/text/form.c:1509
+#: src/viewer/text/form.c:1517
 #, c-format
 msgid "press %s to submit to"
 msgstr "pressez %s pour soumettre à"
 
-#: src/viewer/text/form.c:1511
+#: src/viewer/text/form.c:1519
 #, c-format
 msgid "press %s to post to"
 msgstr "pressez %s pour poster à"
 
-#: src/viewer/text/link.c:1055
+#: src/viewer/text/link.c:1105
 msgid "Display ~usemap"
 msgstr "Afficher ~usemap"
 
-#: src/viewer/text/link.c:1058
+#: src/viewer/text/link.c:1108
 msgid "~Follow link"
 msgstr "~Suivre le lien"
 
-#: src/viewer/text/link.c:1060
+#: src/viewer/text/link.c:1110
 msgid "Follow link and r~eload"
 msgstr "Suivre le lien et ~recharger"
 
-#: src/viewer/text/link.c:1064
+#: src/viewer/text/link.c:1114
 msgid "Open in new ~window"
 msgstr "Ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:1066
+#: src/viewer/text/link.c:1116
 msgid "Open in new ~tab"
 msgstr "Ouvrir dans un nouvel ongle~t"
 
-#: src/viewer/text/link.c:1068
+#: src/viewer/text/link.c:1118
 msgid "Open in new tab in ~background"
 msgstr "Ouvrir dans un nouvel onglet en arrière-~plan"
 
-#: src/viewer/text/link.c:1073
+#: src/viewer/text/link.c:1123
 msgid "~Download link"
 msgstr "~Enregistrer le lien"
 
-#: src/viewer/text/link.c:1076
+#: src/viewer/text/link.c:1126
 msgid "~Add link to bookmarks"
 msgstr "~Ajouter ce lien aux signets"
 
-#: src/viewer/text/link.c:1088 src/viewer/text/link.c:1122
+#: src/viewer/text/link.c:1138 src/viewer/text/link.c:1172
 msgid "~Reset form"
 msgstr "Remettre à ~zéro le formulaire"
 
-#: src/viewer/text/link.c:1100
+#: src/viewer/text/link.c:1150
 msgid "Open in ~external editor"
 msgstr "Ouvrir dans un ~éditeur externe"
 
-#: src/viewer/text/link.c:1106
+#: src/viewer/text/link.c:1156
 msgid "~Submit form"
 msgstr "~Envoyer le formulaire"
 
-#: src/viewer/text/link.c:1107
+#: src/viewer/text/link.c:1157
 msgid "Submit form and rel~oad"
 msgstr "Envoyer le formulaire et ~recharger"
 
-#: src/viewer/text/link.c:1110
+#: src/viewer/text/link.c:1160
 msgid "Submit form and open in new ~window"
 msgstr "Envoyer le formulaire et ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:1112
+#: src/viewer/text/link.c:1162
 msgid "Submit form and open in new ~tab"
 msgstr "Envoyer le formulaire et ouvrir un ~onglet"
 
-#: src/viewer/text/link.c:1115
+#: src/viewer/text/link.c:1165
 msgid "Submit form and open in new tab in ~background"
 msgstr "Envoyer le formulaire et ouvrir un onglet en ~arrière-plan"
 
-#: src/viewer/text/link.c:1120
+#: src/viewer/text/link.c:1170
 msgid "Submit form and ~download"
 msgstr "Envoyer le formulaire et ~télécharger"
 
-#: src/viewer/text/link.c:1127
+#: src/viewer/text/link.c:1177
 msgid "V~iew image"
 msgstr "~Voir l'image"
 
-#: src/viewer/text/link.c:1129
+#: src/viewer/text/link.c:1179
 msgid "Download ima~ge"
 msgstr "Enregistrer l'~image"
 
-#: src/viewer/text/link.c:1134
+#: src/viewer/text/link.c:1187
 msgid "No link selected"
 msgstr "Aucun lien sélectionné"
 
-#: src/viewer/text/link.c:1184
+#: src/viewer/text/link.c:1239
 msgid "Image"
 msgstr "Image"
 
-#: src/viewer/text/link.c:1189
+#: src/viewer/text/link.c:1244
 msgid "Usemap"
 msgstr "Usemap"
 
@@ -7347,10 +7351,10 @@ msgstr "Aller au lien"
 msgid "Enter link number"
 msgstr "Entrez un numéro de lien"
 
-#: src/viewer/text/view.c:1215
+#: src/viewer/text/view.c:1220
 msgid "Save error"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/viewer/text/view.c:1216
+#: src/viewer/text/view.c:1221
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"

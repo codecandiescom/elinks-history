@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.630 2004/10/17 20:40:34 miciah Exp $ */
+/* $Id: view.c,v 1.631 2004/10/17 20:44:10 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -656,6 +656,9 @@ frame_ev_kbd_number(struct session *ses, struct document_view *doc_view,
 	struct document_options *doc_opts = &document->options;
 	int digit = get_kbd_key(ev) - '0';
 
+	if (!isdigit(get_kbd_key(ev)))
+		return FRAME_EVENT_IGNORED;
+
 	if (get_kbd_modifier(ev)
 	    || !doc_opts->num_links_key
 	    || (doc_opts->num_links_key == 1 && !doc_opts->num_links_display)) {
@@ -718,12 +721,9 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 		}
 	}
 
-	if (isdigit(get_kbd_key(ev))) {
-		status = frame_ev_kbd_number(ses, doc_view, ev);
-
-		if (status != FRAME_EVENT_IGNORED)
-			return status;
-	}
+	status = frame_ev_kbd_number(ses, doc_view, ev);
+	if (status != FRAME_EVENT_IGNORED)
+		return status;
 
 	if (get_opt_int("document.browse.accesskey.priority") == 1) {
 		status = try_document_key(ses, doc_view, ev);

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.15 2003/10/25 19:46:30 jonas Exp $ */
+/* $Id: options.inc,v 1.16 2003/10/25 19:53:48 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -699,22 +699,6 @@ struct option_info config_options_info[] = {
 		"_template_", 0, "",
 		N_("MIME-type matching this file extension ('*' is used here in place\n"
 		"of '.').")),
-
-
-	INIT_OPT_TREE("mime", N_("Mimetypes files"),
-		"mimetypes", 0,
-		N_("Options for the support of mimetypes files. Mimetypes files\n"
-		"can be used to find the content type of an URL by looking at the\n"
-		"extension of the file name.")),
-
-	INIT_OPT_BOOL("mime.mimetypes", N_("Enable"),
-		"enable", 0, 1,
-		N_("Enable mime.types support.")),
-
-	INIT_OPT_STRING("mime.mimetypes", N_("Path"),
-		"path", 0, "",
-		N_("Mimetypes search path. Colon-separated list of files.\n"
-		"Leave as \"\" to use built-in default instead.")),
 
 	/* Keep options in alphabetical order. */
 

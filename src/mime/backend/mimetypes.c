@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.25 2003/10/25 19:17:57 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.26 2003/10/25 19:53:49 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -19,6 +19,7 @@
 #include "setup.h"
 
 #include "config/options.h"
+#include "intl/gettext/libintl.h"
 #include "mime/backend/common.h"
 #include "mime/backend/mimetypes.h"
 #include "mime/mime.h"
@@ -32,6 +33,26 @@
 struct mimetypes_entry {
 	unsigned char *content_type;
 	unsigned char extension[1];
+};
+
+/* Keep options in alphabetical order. */
+static struct option_info mimetypes_options[] = {
+	INIT_OPT_TREE("mime", N_("Mimetypes files"),
+		"mimetypes", 0,
+		N_("Options for the support of mimetypes files. Mimetypes files\n"
+		"can be used to find the content type of an URL by looking at the\n"
+		"extension of the file name.")),
+
+	INIT_OPT_BOOL("mime.mimetypes", N_("Enable"),
+		"enable", 0, 1,
+		N_("Enable mime.types support.")),
+
+	INIT_OPT_STRING("mime.mimetypes", N_("Path"),
+		"path", 0, "",
+		N_("Mimetypes search path. Colon-separated list of files.\n"
+		"Leave as \"\" to use built-in default instead.")),
+
+	NULL_OPTION_INFO,
 };
 
 /* State variables */
@@ -261,7 +282,7 @@ struct mime_backend mimetypes_mime_backend = {
 
 struct module mimetypes_mime_module = INIT_MODULE(
 	/* name: */		"mimetypes",
-	/* options: */		NULL,
+	/* options: */		mimetypes_options,
 	/* submodules: */	NULL,
 	/* init: */		init_mimetypes,
 	/* done: */		done_mimetypes

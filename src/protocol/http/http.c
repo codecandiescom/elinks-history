@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.30 2002/07/09 21:08:09 pasky Exp $ */
+/* $Id: http.c,v 1.31 2002/07/09 21:27:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -566,12 +566,12 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 	/* Number of uncompressed bytes that could be safely get from
 	 * read_encoded().  We can't want to read too much, because if gzread
 	 * "clears" the buffer next time it will return -1. */
-	int ret;
-	int written, r, init = 0, *length_of_block;
+	int ret = 0;
+	int r = 0, *length_of_block;
 	/* If true, all stuff was written to pipe and only uncompression is
 	 * wanted now. */
 	int finishing = 0;
-	unsigned char *output;
+	unsigned char *output = DUMMY; /* for mem_realloc */
 
 	length_of_block = (info->length == LEN_CHUNKED ? &info->chunk_remaining
 						       : &info->length);
@@ -585,46 +585,13 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 
 	if (conn->stream_pipes[0] == -1) {
 		c_pipe(conn->stream_pipes);
-		init = 1;
 		fcntl(conn->stream_pipes[0], F_SETFL, O_NONBLOCK | fcntl(conn->stream_pipes[0], F_GETFL));
 		fcntl(conn->stream_pipes[1], F_SETFL, O_NONBLOCK | fcntl(conn->stream_pipes[1], F_GETFL));
 	}
 
-	written = write(conn->stream_pipes[1], data, len);
-	if (written > 0) {
-		ret = written;
-		data += ret;
-		len -= ret;
-		if (*length_of_block > 0) *length_of_block -= ret;
-		if (!info->length) finishing = 1;
-	} else {
-		/* We assume that this is because pipe is full. */
-		/* FIXME: We should probably handle errors as well. --pasky */
-		ret = 4096; /* capacity of the pipe */
-	}
-
-	if (init)
-		conn->stream = open_encoded(conn->stream_pipes[0],
-					    conn->content_encoding);
-	if (!conn->stream) return NULL;
-
-	if (finishing) ret = 65536;
 	*new_len = 0;
-
-	output = (unsigned char *) mem_alloc(ret);
-	if (!output) goto finish;
-
-	while ((r = read_encoded(conn->stream, output + *new_len, ret))) {
-		if (r < 0) {
-			mem_free(output);
-			output = NULL;
-			break;
-		}
-		*new_len += r;
-
-		if (!len) {
-			if (!finishing) return output;
-		} else {
+	while (r == ret) {
+		if (!finishing) {
 			int written = write(conn->stream_pipes[1], data, len);
 
 			if (written > 0) {
@@ -633,20 +600,43 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 				len -= ret;
 				if (*length_of_block > 0)
 					*length_of_block -= ret;
-				if (!info->length) {
+				if (!info->length)
 					finishing = 1;
-					ret = 65536;
-				}
-			} else {
-				ret = 4096;
 			}
+
+			if (len) {
+				/* We assume that this is because full pipe. */
+				/* FIXME: We should probably handle errors as
+				 * well. --pasky */
+				ret = 4096; /* pipe capacity */
+
+			} else if (ret < 4096) {
+				return (output == DUMMY ? NULL : output);
+			}
+		} else {
+			ret = 65536;
 		}
-		output = mem_realloc(output, *new_len + ret);
+
+		if (!conn->stream) {
+			conn->stream = open_encoded(conn->stream_pipes[0],
+						    conn->content_encoding);
+			if (!conn->stream) return NULL;
+		}
+
+		output = (unsigned char *) mem_realloc(output, *new_len + ret);
 		if (!output) break;
+
+		r = read_encoded(conn->stream, output + *new_len, ret);
+		if (r > 0) *new_len += r;
+	};
+
+	if (r < 0) {
+		mem_free(output);
+		output = NULL;
 	}
 
-finish:
 	close_encoded(conn->stream);
+	conn->stream = NULL;
 	close(conn->stream_pipes[1]);
 	conn->stream_pipes[0] = conn->stream_pipes[1] = -1;
 	return output;

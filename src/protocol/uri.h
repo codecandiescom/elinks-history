@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.132 2004/06/13 14:53:41 jonas Exp $ */
+/* $Id: uri.h,v 1.133 2004/06/21 12:23:48 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -182,7 +182,7 @@ void free_uri_list(struct uri_list *list);
  * which you want to do anyway to resolve relative references or use the
  * get_translated_uri() interface.
  *
- * The remaining support for RFC 2391 section 3.1 is done through get_protocol()
+ * The remaining support for RFC 2396 section 3.1 is done through get_protocol()
  * and get_user_program() which will treat upper case letters
  * as equivalent to lower case in protocol names. */
 

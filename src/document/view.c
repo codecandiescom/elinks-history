@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.42 2002/05/10 17:12:51 pasky Exp $ */
+/* $Id: view.c,v 1.43 2002/05/10 17:16:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2241,8 +2241,10 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 			case ACT_COPY_CLIPBOARD: {
 				char *current_link = print_current_link(ses);
 
-				set_clipboard_text( current_link );
-				mem_free(current_link);
+				if (current_link) {
+					set_clipboard_text( current_link );
+					mem_free(current_link);
+				}
 				break;
 			}
 

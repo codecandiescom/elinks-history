@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.69 2003/07/23 15:57:05 pasky Exp $ */
+/* $Id: string.c,v 1.70 2003/07/23 15:57:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,7 @@
  * thus you can't simply reuse strings allocated by these in add_to_str()-style
  * functions. */
 
-#define string_assert(f, l, x, o, m) \
+#define string_assert(f, l, x, o) \
 	if ((assert_failed = !(x))) { \
 		errfile = f, errline = l, \
 		elinks_internal("[" o "] assertion " #x " failed!"); \

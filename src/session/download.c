@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.302 2004/07/20 07:26:27 miciah Exp $ */
+/* $Id: download.c,v 1.303 2004/07/22 21:28:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -380,10 +380,10 @@ download_data(struct download *download, struct file_download *file_download)
 {
 	struct cache_entry *cached = download->cached;
 
-	if (!cached) goto store;
-
-	if (is_in_queued_state(download->state))
-		goto store;
+	if (!cached || is_in_queued_state(download->state)) {
+		download_data_store(download, file_download);
+		return;
+	}
 
 	if (cached->last_modified)
 		file_download->remotetime = parse_date(cached->last_modified);
@@ -417,8 +417,6 @@ download_data(struct download *download, struct file_download *file_download)
 	}
 
 	detach_connection(download, file_download->last_pos);
-
-store:
 	download_data_store(download, file_download);
 }
 

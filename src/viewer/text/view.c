@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.310 2003/12/26 14:14:43 zas Exp $ */
+/* $Id: view.c,v 1.311 2003/12/27 11:25:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1064,6 +1064,9 @@ quak:
 			case ACT_SAVE_FORMATTED:
 				if (!get_opt_int_tree(cmdline_options, "anonymous"))
 					menu_save_formatted(ses->tab->term, (void *) 1, ses);
+				goto x;
+			case ACT_KILL_BACKGROUNDED_CONNECTIONS:
+				abort_background_connections();
 				goto x;
 			case ACT_ADD_BOOKMARK:
 #ifdef BOOKMARKS

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.63 2003/12/26 14:14:43 zas Exp $ */
+/* $Id: kbdbind.h,v 1.64 2003/12/27 11:25:56 zas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -58,6 +58,7 @@ enum keyact {
 	ACT_HEADER_INFO,
 	ACT_HISTORY_MANAGER,
 	ACT_HOME,
+	ACT_KILL_BACKGROUNDED_CONNECTIONS,
 	ACT_KILL_TO_BOL,
 	ACT_KILL_TO_EOL,
 	ACT_KEYBINDING_MANAGER,

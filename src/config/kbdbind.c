@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.125 2003/12/26 14:14:43 zas Exp $ */
+/* $Id: kbdbind.c,v 1.126 2003/12/27 11:25:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -412,6 +412,7 @@ static struct strtonum action_table[] = {
 	{ "header-info", ACT_HEADER_INFO, DACT(N_("Show information about the current page HTTP headers")) },
 	{ "history-manager", ACT_HISTORY_MANAGER, DACT(N_("Open history manager")) },
 	{ "home", ACT_HOME, DACT(N_("Go to the start of the page/line")) },
+	{ "kill-backgrounded-connections", ACT_KILL_BACKGROUNDED_CONNECTIONS, DACT(N_("Kill all backgrounded connections")) },
 	{ "kill-to-bol", ACT_KILL_TO_BOL, DACT(N_("Delete to beginning of line")) },
 	{ "kill-to-eol", ACT_KILL_TO_EOL, DACT(N_("Delete to end of line")) },
 	{ "keybinding-manager", ACT_KEYBINDING_MANAGER, DACT(N_("Open keybinding manager")) },

@@ -245,9 +245,11 @@ EL_CHECK_OPTIONAL_LIBRARY(CONFIG_GPM, gpm, gpm.h, gpm, Gpm_Open,
 
 EL_CHECK_OPTIONAL_LIBRARY(CONFIG_GZIP, zlib, zlib.h, z, gzdopen,
 	[  --without-zlib          disable zlib support])
+AM_CONDITIONAL(CONFIG_GZIP, test "$CONFIG_GZIP" = yes)
 
 EL_CHECK_OPTIONAL_LIBRARY(CONFIG_BZIP2, bzlib, bzlib.h, bz2, BZ2_bzReadOpen,
 	[  --without-bzlib         disable bzlib support])
+AM_CONDITIONAL(CONFIG_BZIP2, test "$CONFIG_BZIP2" = yes)
 
 EL_CHECK_OPTIONAL_LIBRARY(CONFIG_IDN, idn, idna.h, idn, stringprep_check_version,
 	[  --without-idn           disable international domain names support])

@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.30 2004/05/25 18:08:17 jonas Exp $ */
+/* $Id: encoding.c,v 1.31 2004/05/28 11:55:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,12 +16,6 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#ifdef HAVE_BZLIB_H
-#include <bzlib.h> /* Everything needs this after stdio.h */
-#endif
-#ifdef HAVE_ZLIB_H
-#include <zlib.h>
-#endif
 
 #include "elinks.h"
 
@@ -31,19 +25,6 @@
 #include "sched/connection.h"
 #include "util/memory.h"
 #include "util/string.h"
-
-
-/* TODO: When more decoders will join the game, we should probably move them
- * to separate files, maybe even to separate directory. --pasky */
-
-struct decoding_backend {
-	unsigned char *name;
-	int (*open)(struct stream_encoded *stream, int fd);
-	int (*read)(struct stream_encoded *stream, unsigned char *data, int len);
-	unsigned char *(*decode)(struct stream_encoded *stream, unsigned char *data, int len, int *new_len);
-	void (*close)(struct stream_encoded *stream);
-	unsigned char **extensions;
-};
 
 
 /*************************************************************************
@@ -86,169 +67,25 @@ dummy_close(struct stream_encoded *stream)
 	mem_free(stream->data);
 }
 
-static unsigned char *dummy_extensions[] = { NULL };
-
 static struct decoding_backend dummy_decoding_backend = {
 	"none",
 	dummy_open,
 	dummy_read,
 	dummy_decode,
 	dummy_close,
-	dummy_extensions,
+	{ NULL },
 };
 
 
-/*************************************************************************
-  Gzip encoding (ENCODING_GZIP)
-*************************************************************************/
+/* Dynamic backend area */
 
-#ifdef CONFIG_GZIP
-
-static int
-gzip_open(struct stream_encoded *stream, int fd)
-{
-	stream->data = (void *) gzdopen(fd, "rb");
-	if (!stream->data) return -1;
-
-	return 0;
-}
-
-static int
-gzip_read(struct stream_encoded *stream, unsigned char *data, int len)
-{
-	return gzread((gzFile *) stream->data, data, len);
-}
-
-static unsigned char *
-gzip_decode(struct stream_encoded *stream, unsigned char *data, int len,
-	    int *new_len)
-{
-	*new_len = len;
-	return data;
-}
-
-static void
-gzip_close(struct stream_encoded *stream)
-{
-	gzclose((gzFile *) stream->data);
-}
-
-static unsigned char *gzip_extensions[] = { ".gz", ".tgz", NULL };
-
-static struct decoding_backend gzip_decoding_backend = {
-	"gzip",
-	gzip_open,
-	gzip_read,
-	gzip_decode,
-	gzip_close,
-	gzip_extensions,
-};
-
-#endif
-
-
-/*************************************************************************
-  Bzip2 encoding (ENCODING_BZIP2)
-*************************************************************************/
-
-#ifdef CONFIG_BZIP2
-
-struct bz2_enc_data {
-	FILE *file;
-	BZFILE *bzfile;
-	int last_read; /* If err after last bzRead() was BZ_STREAM_END.. */
-};
-
-/* TODO: When it'll be official, use bzdopen() from Yoshioka Tsuneo. --pasky */
-
-static int
-bzip2_open(struct stream_encoded *stream, int fd)
-{
-	struct bz2_enc_data *data = mem_alloc(sizeof(struct bz2_enc_data));
-	int err;
-
-	if (!data) {
-		return -1;
-	}
-	data->last_read = 0;
-
-	data->file = fdopen(fd, "rb");
-
-	data->bzfile = BZ2_bzReadOpen(&err, data->file, 0, 0, NULL, 0);
-	if (!data->bzfile) {
-		mem_free(data);
-		return -1;
-	}
-
-	stream->data = data;
-
-	return 0;
-}
-
-static int
-bzip2_read(struct stream_encoded *stream, unsigned char *buf, int len)
-{
-	struct bz2_enc_data *data = (struct bz2_enc_data *) stream->data;
-	int err = 0;
-
-	if (data->last_read)
-		return 0;
-
-	len = BZ2_bzRead(&err, data->bzfile, buf, len);
-
-	if (err == BZ_STREAM_END)
-		data->last_read = 1;
-	else if (err)
-		return -1;
-
-	return len;
-}
-
-static unsigned char *
-bzip2_decode(struct stream_encoded *stream, unsigned char *data, int len,
-	     int *new_len)
-{
-	*new_len = len;
-	return data;
-}
-
-static void
-bzip2_close(struct stream_encoded *stream)
-{
-	struct bz2_enc_data *data = (struct bz2_enc_data *) stream->data;
-	int err;
-
-	BZ2_bzReadClose(&err, data->bzfile);
-	fclose(data->file);
-	mem_free(data);
-}
-
-static unsigned char *bzip2_extensions[] = { ".bz2", ".tbz", NULL };
-
-static struct decoding_backend bzip2_decoding_backend = {
-	"bzip2",
-	bzip2_open,
-	bzip2_read,
-	bzip2_decode,
-	bzip2_close,
-	bzip2_extensions,
-};
-
-#endif
-
+#include "encoding/bzip2.h"
+#include "encoding/gzip.h"
 
 static struct decoding_backend *decoding_backends[] = {
 	&dummy_decoding_backend,
-#ifdef HAVE_ZLIB_H
 	&gzip_decoding_backend,
-#else
-	&dummy_decoding_backend,
-#endif
-#ifdef HAVE_BZLIB_H
 	&bzip2_decoding_backend,
-#else
-	&dummy_decoding_backend,
-#endif
 };
 
 

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.182 2003/07/25 22:04:01 zas Exp $ */
+/* $Id: http.c,v 1.183 2003/09/08 15:10:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -641,22 +641,22 @@ http_send_header(struct connection *conn)
 	add_to_string(&header, "\r\n");
 
 	if (uri->post) {
-#define POST_BUFFER_SIZE 4096		
+#define POST_BUFFER_SIZE 4096
 		unsigned char *post = uri->post;
 		unsigned char buffer[POST_BUFFER_SIZE];
 		int n = 0;
-		
+
 		while (post[0] && post[1]) {
 			register int h1, h2;
 
 			h1 = unhx(post[0]);
 			assert(h1 >= 0 && h1 < 16);
 			if_assert_failed h1 = 0;
-		
+
 			h2 = unhx(post[1]);
 			assert(h2 >= 0 && h2 < 16);
 			if_assert_failed h2 = 0;
-	
+
 			buffer[n++] = (h1<<4) + h2;
 			post += 2;
 			if (n == POST_BUFFER_SIZE) {
@@ -664,7 +664,7 @@ http_send_header(struct connection *conn)
 				n = 0;
 			}
 		}
-		
+
 		if (n)
 			add_bytes_to_string(&header, buffer, n);
 #undef POST_BUFFER_SIZE
@@ -811,17 +811,21 @@ uncompress_shutdown(struct connection *conn)
 static int
 is_line_in_buffer(struct read_buffer *rb)
 {
-	int l;
+	register int l;
 
 	for (l = 0; l < rb->len; l++) {
-		if (rb->data[l] == ASCII_LF)
+		unsigned char a0 = rb->data[l];
+
+		if (a0 == ASCII_LF)
 			return l + 1;
-		if (l < rb->len - 1 && rb->data[l] == ASCII_CR
-		    && rb->data[l + 1] == ASCII_LF)
-			return l + 2;
-		if (l == rb->len - 1 && rb->data[l] == ASCII_CR)
-			return 0;
-		if (rb->data[l] < ' ')
+		if (a0 == ASCII_CR) {
+			if (rb->data[l + 1] == ASCII_LF
+			    && l < rb->len - 1)
+				return l + 2;
+			if (l == rb->len - 1)
+				return 0;
+		}
+		if (a0 < ' ')
 			return -1;
 	}
 	return 0;
@@ -938,7 +942,7 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 			len = info->chunk_remaining;
 
 			/* Maybe everything neccessary didn't come yet.. */
-			if (len > rb->len) len = rb->len;
+			int_upper_bound(&len, rb->len);
 			conn->received += len;
 
 			data = uncompress_data(conn, rb->data, len, &data_len);
@@ -1014,7 +1018,7 @@ thats_all_folks:
 static int
 get_header(struct read_buffer *rb)
 {
-	int i;
+	register int i;
 
 	/* XXX: We will have to do some guess about whether an HTTP header is
 	 * coming or not, in order to support HTTP/0.9 reply correctly. This
@@ -1023,15 +1027,16 @@ get_header(struct read_buffer *rb)
 		return -2;
 
 	for (i = 0; i < rb->len; i++) {
-		unsigned char a = rb->data[i];
+		unsigned char a0 = rb->data[i];
+		unsigned char a1 = rb->data[i + 1];
 
-		if (!a) return -1;
-		if (i < rb->len - 1 && a == ASCII_LF
-		    && rb->data[i + 1] == ASCII_LF)
+		if (!a0) return -1;
+		if (a0 == ASCII_LF && a1 == ASCII_LF
+		    && i < rb->len - 1)
 			return i + 2;
-		if (i < rb->len - 3 && a == ASCII_CR) {
-			if (rb->data[i + 1] == ASCII_CR) continue;
-			if (rb->data[i + 1] != ASCII_LF) return -1;
+		if (a0 == ASCII_CR && i < rb->len - 3) {
+			if (a1 == ASCII_CR) continue;
+			if (a1 != ASCII_LF) return -1;
 			if (rb->data[i + 2] == ASCII_CR) {
 				if (rb->data[i + 3] != ASCII_LF) return -1;
 				return i + 4;
@@ -1045,18 +1050,18 @@ get_header(struct read_buffer *rb)
 static void
 http_got_header(struct connection *conn, struct read_buffer *rb)
 {
-	int cf;
-	enum connection_state state = (conn->state != S_PROC ? S_GETH : S_PROC);
+	struct http_connection_info *info = conn->info;
 	unsigned char *head;
 #ifdef COOKIES
 	unsigned char *cookie, *ch;
 #endif
-	int a, h = 200;
-	struct http_version version;
 	unsigned char *d;
-	struct http_connection_info *info = conn->info;
-	struct uri real_uri;
 	struct uri *uri;
+	struct http_version version;
+	struct uri real_uri;
+	enum connection_state state = (conn->state != S_PROC ? S_GETH : S_PROC);
+	int a, h = 200;
+	int cf;
 
 	set_connection_timeout(conn);
 
@@ -1229,7 +1234,7 @@ again:
 	if (d) {
 		if (strlen(d) > 6) {
 			d[5] = 0;
-			if (!(strcasecmp(d, "bytes")) && d[6] >= '0' && d[6] <= '9') {
+			if (d[6] >= '0' && d[6] <= '9' && !strcasecmp(d, "bytes")) {
 				int f;
 
 				errno = 0;
@@ -1283,12 +1288,18 @@ again:
 		mem_free(d);
 	}
 
-	d = parse_http_header(conn->cache->head, "Accept-Ranges", NULL);
-	if (d) {
-		if (!strcasecmp(d, "none") && !conn->unrestartable)
-			conn->unrestartable = 1;
-		mem_free(d);
-	} else if (!conn->unrestartable && !conn->from) conn->unrestartable = 1;
+	if (!conn->unrestartable) {
+		d = parse_http_header(conn->cache->head, "Accept-Ranges", NULL);
+
+		if (d) {
+			if (!strcasecmp(d, "none"))
+				conn->unrestartable = 1;
+			mem_free(d);
+		} else {
+			if (!conn->from)
+				conn->unrestartable = 1;
+		}
+	}
 
 	d = parse_http_header(conn->cache->head, "Transfer-Encoding", NULL);
 	if (d) {

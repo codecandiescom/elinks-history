@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.152 2003/07/04 23:35:05 jonas Exp $ */
+/* $Id: http.c,v 1.153 2003/07/06 02:45:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,6 +34,7 @@
 #include "protocol/http/codes.h"
 #include "protocol/http/header.h"
 #include "protocol/http/http.h"
+#include "protocol/uri.h"
 #include "protocol/url.h"
 #include "sched/connection.h"
 #include "sched/session.h"
@@ -286,7 +287,7 @@ http_end_request(struct connection *conn, enum connection_state state)
 	if (conn->info && !((struct http_connection_info *) conn->info)->close
 	    && (!conn->ssl) /* We won't keep alive ssl connections */
 	    && (!get_opt_int("protocol.http.bugs.post_no_keepalive")
-	        || !strchr(conn->url, POST_CHAR))) {
+	        || !conn->uri.post)) {
 		add_keepalive_connection(conn, HTTP_KEEPALIVE_TIMEOUT);
 	} else {
 		abort_connection(conn);
@@ -302,7 +303,7 @@ http_func(struct connection *conn)
 	set_connection_timeout(conn);
 
 	if (!has_keepalive_connection(conn)) {
-		int p = get_port(conn->url);
+		int p = get_uri_port(&conn->uri);
 
 		if (p == -1) {
 			abort_conn_with_state(conn, S_INTERNAL);
@@ -323,14 +324,14 @@ proxy_func(struct connection *conn)
 
 static void http_get_header(struct connection *);
 
-#define IS_PROXY_URL(x) (upcase((x)[0]) == 'P')
-#define GET_REAL_URL(x) (IS_PROXY_URL((x)) ? get_url_data((x)) : (x))
+#define IS_PROXY_URI(x) ((x).protocollen == 5 && !strncasecmp("proxy", (x).protocol, 5))
+#define GET_REAL_URI(x) (IS_PROXY_URI((x)) ? (x).data : (x).protocol)
 
 static void
 http_send_header(struct connection *conn)
 {
 	static unsigned char *accept_charset = NULL;
-	unsigned char *host = GET_REAL_URL(conn->url);
+	unsigned char *host = GET_REAL_URI(conn->uri);
 	struct http_connection_info *info;
 	int trace = get_opt_bool("protocol.http.trace");
 	unsigned char *post = NULL;
@@ -368,7 +369,7 @@ http_send_header(struct connection *conn)
 		return;
 	}
 
-	post = strchr(conn->url, POST_CHAR);
+	post = conn->uri.post;
 
 	if (trace) {
 		add_to_str(&hdr, &l, "TRACE ");
@@ -379,11 +380,11 @@ http_send_header(struct connection *conn)
 		add_to_str(&hdr, &l, "GET ");
 	}
 
-	if (!IS_PROXY_URL(conn->url)) {
+	if (!IS_PROXY_URI(conn->uri)) {
 		add_chr_to_str(&hdr, &l, '/');
 	}
 
-	url_data = get_url_data(conn->url);
+	url_data = conn->uri.data;
 	if (!url_data) {
 		http_end_request(conn, S_BAD_URL);
 		return;
@@ -514,11 +515,11 @@ http_send_header(struct connection *conn)
 				}
 			}
 
-			if (!IS_PROXY_URL(conn->url) || hdr[l - 1] != '/') {
+			if (!IS_PROXY_URI(conn->uri) || hdr[l - 1] != '/') {
 				add_chr_to_str(&hdr, &l, '/');
 			}
 
-			url_data = get_url_data(extract_proxy(conn->url));
+			url_data = get_url_data(extract_proxy(conn->uri.protocol));
 			if (url_data) {
 				add_url_to_http_str(&hdr, &l, url_data, post);
 			}
@@ -604,7 +605,7 @@ http_send_header(struct connection *conn)
 
 	if (info->sent_version.major == 1 &&
 	    info->sent_version.minor == 1) {
-		if (!IS_PROXY_URL(conn->url)) {
+		if (!IS_PROXY_URI(conn->uri)) {
 			add_to_str(&hdr, &l, "Connection: ");
 		} else {
 			add_to_str(&hdr, &l, "Proxy-Connection: ");
@@ -1080,7 +1081,7 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 	struct http_version version;
 	unsigned char *d;
 	struct http_connection_info *info;
-	unsigned char *host = GET_REAL_URL(conn->url);
+	unsigned char *host = GET_REAL_URI(conn->uri);
 
 	set_connection_timeout(conn);
 	info = conn->info;
@@ -1149,7 +1150,7 @@ out_of_mem:
 #ifdef COOKIES
 	ch = head;
 	while ((cookie = parse_http_header(ch, "Set-Cookie", &ch))) {
-		unsigned char *hstr = GET_REAL_URL(conn->url);
+		unsigned char *hstr = GET_REAL_URI(conn->uri);
 
 		set_cookie(NULL, hstr, cookie);
 		mem_free(cookie);
@@ -1173,7 +1174,7 @@ out_of_mem:
 		http_end_request(conn, S_OK);
 		return;
 	}
-	if (get_cache_entry(conn->url, &conn->cache)) {
+	if (get_cache_entry(conn->uri.protocol, &conn->cache)) {
 		mem_free(head);
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;

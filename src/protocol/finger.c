@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.16 2003/07/04 11:56:24 jonas Exp $ */
+/* $Id: finger.c,v 1.17 2003/07/06 02:45:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 #include "lowlevel/connect.h"
 #include "protocol/finger.h"
 #include "protocol/protocol.h"
+#include "protocol/uri.h"
 #include "protocol/url.h"
 #include "sched/connection.h"
 #include "util/memory.h"
@@ -24,30 +25,22 @@ static void finger_end_request(struct connection *, int);
 static void
 finger_func(struct connection *c)
 {
-	int p;
-
 	set_connection_timeout(c);
-
-	p = get_port(c->url);
-	if (p == -1) {
-		abort_conn_with_state(c, S_INTERNAL);
-		return;
-	}
-
 	c->from = 0;
-	make_connection(c, p, &c->sock1, finger_send_request);
+	make_connection(c, get_uri_port(&c->uri), &c->sock1, finger_send_request);
 }
 
-static void finger_send_request(struct connection *c) { unsigned char *req =
-	init_str(); int rl = 0; unsigned char *user = get_user_name(c->url);
+static void finger_send_request(struct connection *c)
+{
+	unsigned char *req = init_str();
+	int rl = 0;
 
 	if (!req) return;
 	/* add_to_str(&req, &rl, "/W"); */
 
-	if (user) {
+	if (c->uri.user) {
 		add_chr_to_str(&req, &rl, ' ');
-		add_to_str(&req, &rl, user);
-		mem_free(user);
+		add_bytes_to_str(&req, &rl, c->uri.user, c->uri.userlen);
 	}
 	add_to_str(&req, &rl, "\r\n");
 	write_to_socket(c, c->sock1, req, rl, finger_sent_request);
@@ -75,7 +68,7 @@ finger_get_response(struct connection *c, struct read_buffer *rb)
 
 	set_connection_timeout(c);
 
-	if (get_cache_entry(c->url, &e)) {
+	if (get_cache_entry(c->uri.protocol, &e)) {
 		abort_conn_with_state(c, S_OUT_OF_MEM);
 		return;
 	}

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.80 2003/07/06 01:31:59 jonas Exp $ */
+/* $Id: connection.c,v 1.81 2003/07/06 02:45:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,7 +214,6 @@ init_connection(unsigned char *url, unsigned char *ref_url, int start,
 	}
 
 	c->id = connection_id++;
-	c->url = url;
 	c->ref_url = ref_url;
 	c->pri[priority] =  1;
 	c->cache_mode = cache_mode;
@@ -376,7 +375,7 @@ done_connection(struct connection *c)
 {
 	del_from_list(c);
 	send_connection_info(c);
-	if (c->url) mem_free(c->url);
+	mem_free(c->uri.protocol);
 	mem_free(c);
 #ifdef DEBUG
 	check_queue_bugs();
@@ -642,7 +641,7 @@ check_queue_bugs(void)
 
 		assertm(priority >= prev_priority, "queue is not sorted");
 		assertm(d->state >= 0, "interrupted connection on queue "
-			"(conn %s, state %d)", d->url, d->state);
+			"(conn %s, state %d)", d->uri.protocol, d->state);
 
 		cc += d->running;
 		prev_priority = priority;
@@ -762,7 +761,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 		struct download *assigned;
 
 		foreach (assigned, c->downloads)
-			assertm(assigned != download, "Download assigned to '%s'", c->url);
+			assert(assigned != download);
 	}
 #endif
 
@@ -797,7 +796,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 	}
 
 	foreach (c, queue) {
-		if (c->detached || strcmp(c->url, u))
+		if (c->detached || strcmp(c->uri.protocol, u))
 			continue;
 
 		mem_free(u);

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.96 2003/07/05 00:29:41 jonas Exp $ */
+/* $Id: ftp.c,v 1.97 2003/07/06 02:45:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,6 +33,7 @@
 #include "lowlevel/select.h"
 #include "protocol/ftp.h"
 #include "protocol/ftpparse.h"
+#include "protocol/uri.h"
 #include "protocol/url.h"
 #include "sched/connection.h"
 #include "util/conv.h"
@@ -233,12 +234,7 @@ ftp_func(struct connection *conn)
 	set_connection_timeout(conn);
 
 	if (!has_keepalive_connection(conn)) {
-		int port = get_port(conn->url);
-
-		if (port == -1) {
-			abort_conn_with_state(conn, S_INTERNAL);
-			return;
-		}
+		int port = get_uri_port(&conn->uri);
 
 		make_connection(conn, port, &conn->sock1, ftp_login);
 
@@ -277,7 +273,6 @@ send_cmd(struct connection *conn, unsigned char *cmd, int cmdl, void *callback, 
 static void
 ftp_login(struct connection *conn)
 {
-	unsigned char *str;
 	unsigned char *cmd = init_str();
 	int cmdl = 0;
 
@@ -287,13 +282,13 @@ ftp_login(struct connection *conn)
 	}
 
 	add_to_str(&cmd, &cmdl, "USER ");
-	str = get_user_name(conn->url);
-	if (str && *str) {
-		add_to_str(&cmd, &cmdl, str);
+	if (conn->uri.user) {
+		struct uri *uri = &conn->uri;
+
+		add_bytes_to_str(&cmd, &cmdl, uri->user, uri->userlen);
 	} else {
 		add_to_str(&cmd, &cmdl, "anonymous");
 	}
-	if (str) mem_free(str);
 	add_to_str(&cmd, &cmdl, "\r\n");
 
 	send_cmd(conn, cmd, cmdl, (void *) ftp_got_info, S_SENT);
@@ -383,7 +378,6 @@ ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
 static void
 ftp_pass(struct connection *conn)
 {
-	unsigned char *str;
 	unsigned char *cmd;
 	int cmdl = 0;
 
@@ -394,13 +388,13 @@ ftp_pass(struct connection *conn)
 	}
 
 	add_to_str(&cmd, &cmdl, "PASS ");
-	str = get_pass(conn->url);
-	if (str && *str) {
-		add_to_str(&cmd, &cmdl, str);
+	if (conn->uri.password) {
+		struct uri *uri = &conn->uri;
+
+		add_bytes_to_str(&cmd, &cmdl, uri->password, uri->passwordlen);
 	} else {
 		add_to_str(&cmd, &cmdl, get_opt_str("protocol.ftp.anon_passwd"));
 	}
-	if (str) mem_free(str);
 	add_to_str(&cmd, &cmdl, "\r\n");
 
 	send_cmd(conn, cmd, cmdl, (void *) ftp_pass_info, S_LOGIN);
@@ -568,16 +562,16 @@ add_file_cmd_to_str(struct connection *conn)
 		conn->sock2 = data_sock;
 	}
 
-	data = get_url_data(conn->url);
+	data = conn->uri.data;
 	if (!data) {
-		internal("get_url_data failed");
+		internal("conn->uri.data empty");
 		abort_conn_with_state(conn, S_INTERNAL);
 		return NULL;
 	}
 
-	data_end = strchr(data, POST_CHAR);
+	data_end = conn->uri.post;
 	if (!data_end)
-		data_end = data + strlen(data);
+		data_end = data + conn->uri.datalen;
 
 	if (data == data_end || data_end[-1] == '/') {
 		/* Commands to get directory listing. */
@@ -898,7 +892,8 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 		/* Requested action not taken.
 		 * File unavailable (e.g., file not found, no access). */
 
-		if (!conn->cache && get_cache_entry(conn->url, &conn->cache)) {
+		if (!conn->cache
+		    && get_cache_entry(conn->uri.protocol, &conn->cache)) {
 			abort_conn_with_state(conn, S_OUT_OF_MEM);
 			return;
 		}
@@ -906,7 +901,7 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 		if (conn->cache->redirect)
 			mem_free(conn->cache->redirect);
 
-		conn->cache->redirect = stracpy(conn->url);
+		conn->cache->redirect = stracpy(conn->uri.protocol);
 		if (!conn->cache->redirect) {
 			abort_conn_with_state(conn, S_OUT_OF_MEM);
 			return;
@@ -1123,7 +1118,7 @@ conn_error:
 		return;
 	}
 
-	if (!conn->cache && get_cache_entry(conn->url, &conn->cache)) {
+	if (!conn->cache && get_cache_entry(conn->uri.protocol, &conn->cache)) {
 out_of_mem:
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
@@ -1144,7 +1139,7 @@ out_of_mem:
 	conn->from += slen; }
 
 	if (c_i->dir && !conn->from) {
-		unsigned char *url_data = get_url_data(conn->url);
+		unsigned char *url_data = conn->uri.data;
 		unsigned char *postchar;
 		unsigned char *str;
 		int strl = 0;
@@ -1154,7 +1149,7 @@ out_of_mem:
 			return;
 		}
 		
-		url_data = stracpy(url_data);
+		url_data = memacpy(url_data, conn->uri.datalen);
 		if (!url_data) goto out_of_mem;
 
 		str = init_str();

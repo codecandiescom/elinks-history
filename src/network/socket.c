@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.40 2003/07/05 00:47:55 jonas Exp $ */
+/* $Id: socket.c,v 1.41 2003/07/06 02:45:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,10 +35,12 @@
 #include "lowlevel/dns.h"
 #include "lowlevel/select.h"
 #include "protocol/url.h"
+#include "protocol/uri.h"
 #include "sched/connection.h"
 #include "ssl/connect.h"
 #include "util/error.h"
 #include "util/memory.h"
+#include "util/string.h"
 
 /*
 #define LOG_TRANSFER	"/tmp/log"
@@ -95,11 +97,10 @@ void
 make_connection(struct connection *conn, int port, int *sock,
 		void (*func)(struct connection *))
 {
-	unsigned char *host;
+	unsigned char *host = memacpy(conn->uri.host, conn->uri.hostlen);
 	struct conn_info *c_i;
 	int async;
 
-	host = get_host_name(conn->url);
 	if (!host) {
 		abort_conn_with_state(conn, S_INTERNAL);
 		return;

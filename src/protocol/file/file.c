@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.102 2003/07/04 00:25:36 jonas Exp $ */
+/* $Id: file.c,v 1.103 2003/07/06 02:45:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -593,7 +593,7 @@ file_func(struct connection *connection)
 		return;
 	}
 
-	get_filenamepart_from_url(connection->url, &filename, &filenamelen);
+	get_filenamepart_from_url(connection->uri.protocol, &filename, &filenamelen);
 	if (!filename) {
 		abort_conn_with_state(connection, S_OUT_OF_MEM);
 		return;
@@ -605,7 +605,7 @@ file_func(struct connection *connection)
 		 * function properly the directory url must end with a
 		 * directory separator. */
 		if (filename[0] && !dir_sep(filename[filenamelen - 1])) {
-			redirect = straconcat(connection->url, "/", NULL);
+			redirect = straconcat(connection->uri.protocol, "/", NULL);
 			state = S_OK;
 		} else {
 			state = list_directory(directory, filename, &data);
@@ -667,7 +667,7 @@ file_func(struct connection *connection)
 
 		/* Try to add fragment data to the connection cache if either
 		 * file reading or directory listing worked out ok. */
-		if (get_cache_entry(connection->url, &cache)) {
+		if (get_cache_entry(connection->uri.protocol, &cache)) {
 			mem_free(data.fragment);
 			state = S_OUT_OF_MEM;
 

@@ -1,10 +1,11 @@
-/* $Id: globhist.h,v 1.2 2002/04/01 20:48:36 pasky Exp $ */
+/* $Id: globhist.h,v 1.3 2002/04/01 21:47:29 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_GLOBHIST_H
 #define EL__DOCUMENT_GLOBHIST_H
 
 #include <time.h>
 
+#include "links.h" /* list_head */
 
 struct global_history_item {
 	struct global_history_item *next;
@@ -20,6 +21,9 @@ struct global_history_list {
 };
 
 extern struct global_history_list global_history;
+
+extern unsigned char *last_searched_globhist_title;
+extern unsigned char *last_searched_globhist_url;
 
 void read_global_history();
 void write_global_history();

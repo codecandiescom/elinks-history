@@ -1,12 +1,10 @@
 /* Global history dialogs */
-/* $Id: globhist.c,v 1.4 2002/04/01 21:00:43 pasky Exp $ */
+/* $Id: globhist.c,v 1.5 2002/04/01 21:47:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <time.h>
-#include <stdio.h>
 #include <string.h>
 
 #include <bfu/bfu.h>

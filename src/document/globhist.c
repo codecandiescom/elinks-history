@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.2 2002/04/01 20:48:36 pasky Exp $ */
+/* $Id: globhist.c,v 1.3 2002/04/01 21:47:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,10 @@ struct global_history_list global_history = {
 	0,
 	{ &global_history.items, &global_history.items }
 };
+
+/* GUI stuff. Declared here because finalize_global_history() frees it. */
+unsigned char *last_searched_globhist_title = NULL;
+unsigned char *last_searched_globhist_url = NULL;
 
 
 void
@@ -204,4 +208,6 @@ finalize_global_history()
 {
 	write_global_history();
 	free_global_history();
+	if (last_searched_globhist_title) mem_free(last_searched_globhist_title);
+	if (last_searched_globhist_url) mem_free(last_searched_globhist_url);
 }

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.93 2004/11/14 15:49:05 jonas Exp $ */
+/* $Id: auth.c,v 1.94 2004/11/14 18:46:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,11 +53,11 @@ find_auth_entry(struct uri *uri, unsigned char *realm)
 		}
 
 		/* From RFC 2617 section 1.2:
-		 * The realm value (case-sensitive), in combination
-		 * with the canonical root URL (the absolute URI for
-		 * the server whose abs_path is empty; see section
-		 * 5.1.2 of [2]) of the server being accessed, defines
-		 * the protection space. */
+		 *
+		 * The realm value (case-sensitive), in combination with the
+		 * canonical root URL (the absolute URI for the server whose
+		 * abs_path is empty; see section 5.1.2 of [2]) of the server
+		 * being accessed, defines the protection space. */
 		if (entry->realm && !strcmp(entry->realm, realm)) {
 			/* Exact match. */
 			break; /* Stop here. */

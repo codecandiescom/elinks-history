@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.68 2003/11/26 18:17:45 pasky Exp $ */
+/* $Id: formhist.c,v 1.69 2003/11/26 19:39:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,7 +158,7 @@ free_form(struct formhist_data *form)
 }
 
 int
-load_saved_forms(void)
+load_forms_from_file(void)
 {
 	static int loaded = 0;
 	struct formhist_data *form;
@@ -178,18 +178,43 @@ load_saved_forms(void)
 	if (!f) return 0;
 
 	while (safe_fgets(tmp, MAX_STR_LEN, f)) {
+		unsigned char *p;
+		int dontsave = 0;
+
 		if (tmp[0] == '\n' && !tmp[1]) continue;
 
-		/* URL */
-		tmp[strlen(tmp) - 1] = '\0';
+		p = strchr(tmp, '\t');
+		if (p) {
+			*p = '\0';
+			++p;
+			if (!strcmp(tmp, "dontsave"))
+				dontsave = 1;
+		} else {
+			/* Compat. with older file formats. Remove it at some
+			 * time. --Zas */
+			if (!strncmp(tmp, "dontsave,", 9)) {
+				dontsave = 1;
+				p = tmp + 9;
+			} else {
+				p = tmp;
+			}
+		}
 
-		form = new_form(tmp);
+		/* URL */
+		p[strlen(p) - 1] = '\0';
+
+		form = new_form(p);
 		if (!form) continue;
+		if (dontsave) {
+			form->dontsave = 1;
+			add_to_list(saved_forms, form);
+			continue;
+		}
 
 		/* Fields type, name, value */
 		while (safe_fgets(tmp, MAX_STR_LEN, f)) {
 			struct submitted_value *sv;
-			unsigned char *type, *name, *value, *p;
+			unsigned char *type, *name, *value;
 			unsigned char *enc_value;
 			enum form_type ftype;
 			int ret;
@@ -245,6 +270,7 @@ cont:
 
 			add_to_list(*form->submit, sv);
 		}
+
 		add_to_list(saved_forms, form);
 	}
 
@@ -259,7 +285,7 @@ fail:
 }
 
 int
-save_saved_forms(void)
+save_forms_to_file(void)
 {
 	struct secure_save_info *ssi;
 	unsigned char *file;
@@ -279,6 +305,11 @@ save_saved_forms(void)
 
 	foreach (form, saved_forms) {
 		struct submitted_value *sv;
+
+		if (form->dontsave) {
+			secure_fprintf(ssi, "dontsave\t%s\n\n", form->url);
+			continue;
+		}
 
 		secure_fprintf(ssi, "%s\n", form->url);
 
@@ -312,25 +343,19 @@ save_saved_forms(void)
 /* Check whether the form (chain of @submit submitted_values at @url document)
  * is already present in the form history. */
 static int
-form_already_saved(struct formhist_data *form1)
+form_exists(struct formhist_data *form1)
 {
 	struct formhist_data *form;
 
-	if (!load_saved_forms()) return 0;
+	if (!load_forms_from_file()) return 0;
 
 	foreach (form, saved_forms) {
 		int count = 0;
 		int exact = 0;
 		struct submitted_value *sv;
 
-		/* If the URL to be saved is marked with "dontsave," in our
-		 * list we can't check the submitted values, as we don't save
-		 * them. Let's return 1 instead of wasting time */
-		if ((strstr(form->url, "dontsave,") == (char *) form->url)
-		    && !strcmp(form->url + 9, form1->url))
-			return 1;
-
 		if (strcmp(form->url, form1->url)) continue;
+		if (form->dontsave) return 1;
 
 		/* Iterate through submitted entries. */
 		foreach (sv, *form1->submit) {
@@ -385,33 +410,14 @@ remember_form(struct formhist_data *form)
 	forget_forms_with_url(form->url);
 	add_to_list(saved_forms, form);
 
-	return save_saved_forms();
+	return save_forms_to_file();
 }
 
 static int
 never_for_this_site(struct formhist_data *form)
 {
-	unsigned char *s;
-	int len;
-
-	forget_forms_with_url(form->url);
-
-	s = straconcat("dontsave,", form->url, NULL);
-	if (!s) return 0;
-	len = strlen(s);
-
-	form = mem_realloc(form, sizeof(struct formhist_data) + len);
-	if (!form) { mem_free(s); return 0; }
-
-	memcpy(form->url, s, len + 1);
-	mem_free(s);
-
-	free_form_in_list(form);
-	init_list(*form->submit);
-
-	add_to_list(saved_forms, form);
-
-	return save_saved_forms();
+	form->dontsave = 1;
+	return remember_form(form);
 }
 
 unsigned char *
@@ -421,9 +427,11 @@ get_form_history_value(unsigned char *url, unsigned char *name)
 
 	if (!url || !*url || !name || !*name) return NULL;
 
-	if (!load_saved_forms()) return NULL;
+	if (!load_forms_from_file()) return NULL;
 
 	foreach (form, saved_forms) {
+		if (form->dontsave) continue;
+
 		if (!strcmp(form->url, url)) {
 			struct submitted_value *sv;
 
@@ -444,6 +452,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 	struct submitted_value *sv;
 	int save = 0;
 
+	/* XXX: For now, we only save these types of form fields. */
 	foreach (sv, *submit) {
 		if (sv->type == FC_PASSWORD && sv->value && *sv->value) {
 			save = 1;
@@ -453,6 +462,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 
 	if (!save) return;
 
+	/* Create a temporary form. */
 	form = new_form(frm->action);
 	if (!form) return;
 
@@ -467,7 +477,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 		}
 	}
 
-	if (form_already_saved(form)) goto fail;
+	if (form_exists(form)) goto fail;
 
 	msg_box(ses->tab->term, NULL, 0,
 		N_("Forms memory"), AL_CENTER,

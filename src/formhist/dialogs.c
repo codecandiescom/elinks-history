@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.7 2003/11/26 18:21:34 pasky Exp $ */
+/* $Id: dialogs.c,v 1.8 2003/11/26 19:39:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,7 +111,7 @@ static struct listbox_ops formhist_listbox_ops = {
 static int
 push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
-	save_saved_forms();
+	save_forms_to_file();
 	return 0;
 }
 
@@ -159,12 +159,12 @@ menu_formhist_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	struct hierbox_browser *browser;
 
+	load_forms_from_file();
+
 	if (get_opt_int_tree(cmdline_options, "anonymous"))
 		browser = &formhist_browser_anon;
 	else
 		browser = &formhist_browser;
-
-	load_saved_forms();
 
 	hierbox_browser(browser, ses);
 }

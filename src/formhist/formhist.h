@@ -1,4 +1,4 @@
-/* $Id: formhist.h,v 1.23 2003/11/24 23:34:23 zas Exp $ */
+/* $Id: formhist.h,v 1.24 2003/11/26 19:39:31 zas Exp $ */
 
 #ifndef EL__FORMHIST_FORMHIST_H
 #define EL__FORMHIST_FORMHIST_H
@@ -19,6 +19,9 @@ struct formhist_data {
 	struct listbox_item *box_item;
 	int refcount;
 
+	/* Whether to save this form or not. */
+	int dontsave:1;
+
 	/* <action> URI for this form. Must be at end of struct. */
 	unsigned char url[1];
 };
@@ -33,9 +36,9 @@ unsigned char *get_form_history_value(unsigned char *url, unsigned char *name);
 
 void memorize_form(struct session *ses, struct list_head *submit, struct form_control *frm);
 
-int save_saved_forms(void);
+int save_forms_to_file(void);
 void free_form(struct formhist_data *form);
-int load_saved_forms(void);
+int load_forms_from_file(void);
 
 extern struct module forms_history_module;
 

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.92 2003/10/04 01:58:02 jonas Exp $ */
+/* $Id: listbox.c,v 1.93 2003/10/25 11:39:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -243,7 +243,7 @@ struct box_context {
 	struct terminal *term;
 	struct widget_data *listbox_item_data;
 	struct listbox_data *box;
-	struct dialog_data *dlg;
+	struct dialog_data *dlg_data;
 	int dist;
 	int offset;
 };
@@ -406,7 +406,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 
 		/* For blind users: */
 		set_cursor(data->term, x, y, 0);
-		set_window_ptr(data->dlg->win, x, y);
+		set_window_ptr(data->dlg_data->win, x, y);
 	}
 
 	data->offset++;
@@ -416,10 +416,10 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 
 /* Displays a dialog box */
 static void
-display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
+display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg_data,
 		int sel)
 {
-	struct terminal *term = dlg->win->term;
+	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box = (struct listbox_data *) listbox_item_data->item->data;
 	struct box_context *data;
 
@@ -446,7 +446,7 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 		data->term = term;
 		data->listbox_item_data = listbox_item_data;
 		data->box = box;
-		data->dlg = dlg;
+		data->dlg_data = dlg_data;
 
 		traverse_listbox_items_list(box->top, listbox_item_data->h,
 					    1, display_listbox_item, data);
@@ -456,7 +456,7 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 }
 
 static void
-init_listbox(struct widget_data *widget, struct dialog_data *dialog,
+init_listbox(struct widget_data *widget, struct dialog_data *dlg_data,
 	     struct term_event *ev)
 {
 #if 0
@@ -475,7 +475,7 @@ init_listbox(struct widget_data *widget, struct dialog_data *dialog,
 }
 
 static int
-mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
+mouse_listbox(struct widget_data *di, struct dialog_data *dlg_data,
 	      struct term_event *ev)
 {
 #ifdef USE_MOUSE
@@ -487,17 +487,17 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 	}
 
 	if ((ev->b & BM_ACT) == B_DOWN) {
-		struct widget_data *dlg_item = &dlg->items[dlg->n - 1];
+		struct widget_data *dlg_item = &dlg_data->items[dlg_data->n - 1];
 
 		switch (ev->b & BM_BUTT) {
 			case B_WHEEL_DOWN:
 				box_sel_move(dlg_item, 1);
-				display_dlg_item(dlg, dlg_item, 1);
+				display_dlg_item(dlg_data, dlg_item, 1);
 				return EVENT_PROCESSED;
 
 			case B_WHEEL_UP:
 				box_sel_move(dlg_item, -1);
-				display_dlg_item(dlg, dlg_item, 1);
+				display_dlg_item(dlg_data, dlg_item, 1);
 				return EVENT_PROCESSED;
 		}
 	}
@@ -524,7 +524,7 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 					box->sel->expanded = !box->sel->expanded;
 			}
 
-			display_dlg_item(dlg, di, 1);
+			display_dlg_item(dlg_data, di, 1);
 			return EVENT_PROCESSED;
 		}
 	}
@@ -535,11 +535,11 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 }
 
 static int
-kbd_listbox(struct widget_data *di, struct dialog_data *dlg,
+kbd_listbox(struct widget_data *di, struct dialog_data *dlg_data,
 	    struct term_event *ev)
 {
-	int n = dlg->n - 1;
-	struct widget_data *dlg_item = &dlg->items[n];
+	int n = dlg_data->n - 1;
+	struct widget_data *dlg_item = &dlg_data->items[n];
 
 	/* Not a pure listbox, but you're not supposed to use this outside of
 	 * the listbox browser anyway, so what.. */
@@ -552,20 +552,20 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg,
 			/* Catch change focus requests */
 			if (ev->x == KBD_RIGHT || (ev->x == KBD_TAB && !ev->y)) {
 				/* Move right */
-				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
-				if (++dlg->selected >= n)
-					dlg->selected = 0;
-				display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
+				display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 0);
+				if (++dlg_data->selected >= n)
+					dlg_data->selected = 0;
+				display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 1);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (ev->x == KBD_LEFT || (ev->x == KBD_TAB && ev->y)) {
 				/* Move left */
-				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
-				if (--dlg->selected < 0)
-					dlg->selected = n - 1;
-				display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
+				display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 0);
+				if (--dlg_data->selected < 0)
+					dlg_data->selected = n - 1;
+				display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 1);
 
 				return EVENT_PROCESSED;
 			}
@@ -574,7 +574,7 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg,
 			if (ev->x == KBD_DOWN
 			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'N')) {
 				box_sel_move(dlg_item, 1);
-				display_dlg_item(dlg, dlg_item, 1);
+				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
@@ -582,7 +582,7 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg,
 			if (ev->x == KBD_UP
 			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'P')) {
 				box_sel_move(dlg_item, -1);
-				display_dlg_item(dlg, dlg_item, 1);
+				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
@@ -592,7 +592,7 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg,
 			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'F')) {
 				box_sel_move(dlg_item,
 					     dlg_item->h / 2);
-				display_dlg_item(dlg, dlg_item, 1);
+				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
@@ -602,7 +602,7 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg,
 			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'B')) {
 				box_sel_move(dlg_item,
 					     -dlg_item->h / 2);
-				display_dlg_item(dlg, dlg_item, 1);
+				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
@@ -610,7 +610,7 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg,
 			if (ev->x == KBD_HOME
 			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'A')) {
 				box_sel_move(dlg_item, -MAXINT);
-				display_dlg_item(dlg, dlg_item, 1);
+				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
@@ -618,7 +618,7 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg,
 			if (ev->x == KBD_END
 			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'E')) {
 				box_sel_move(dlg_item, MAXINT);
-				display_dlg_item(dlg, dlg_item, 1);
+				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
@@ -631,7 +631,7 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg,
 					box->sel->marked = !box->sel->marked;
 					box_sel_move(dlg_item, 1);
 				}
-				display_dlg_item(dlg, dlg_item, 1);
+				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
@@ -641,7 +641,7 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg,
 
 				box = (struct listbox_data *) dlg_item->item->data;
 				if (box->ops && box->ops->del)
-					box->ops->del(dlg->win->term, box);
+					box->ops->del(dlg_data->win->term, box);
 
 				return EVENT_PROCESSED;
 			}

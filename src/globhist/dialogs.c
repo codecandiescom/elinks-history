@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.45 2003/10/24 23:39:49 pasky Exp $ */
+/* $Id: dialogs.c,v 1.46 2003/10/25 11:46:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,7 @@
 
 struct history_dialog_list_item {
 	LIST_HEAD(struct history_dialog_list_item);
-	struct dialog_data *dlg;
+	struct dialog_data *dlg_data;
 };
 
 static INIT_LIST_HEAD(history_dialog_list);
@@ -50,9 +50,9 @@ update_all_history_dialogs(void)
 
 	foreach (item, history_dialog_list) {
 		struct widget_data *widget_data =
-			&(item->dlg->items[HISTORY_BOX_IND]);
+			&(item->dlg_data->items[HISTORY_BOX_IND]);
 
-		display_dlg_item(item->dlg, widget_data, 1);
+		display_dlg_item(item->dlg_data, widget_data, 1);
 	}
 }
 
@@ -85,7 +85,7 @@ history_dialog_abort_handler(struct dialog_data *dlg_data)
 	box = (struct listbox_data *) widget->data;
 
 	foreach (item, history_dialog_list) {
-		if (item->dlg == dlg_data) {
+		if (item->dlg_data == dlg_data) {
 			del_from_list(item);
 			mem_free(item);
 			break;
@@ -485,7 +485,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	item = mem_alloc(sizeof(struct history_dialog_list_item));
 	if (item) {
-		item->dlg = dlg_data;
+		item->dlg_data = dlg_data;
 		add_to_list(history_dialog_list, item);
 	}
 }

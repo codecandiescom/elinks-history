@@ -1,5 +1,5 @@
 /* Common widget functions. */
-/* $Id: widget.c,v 1.13 2003/08/30 11:08:14 zas Exp $ */
+/* $Id: widget.c,v 1.14 2003/10/25 11:40:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,11 +18,11 @@
 
 
 void
-display_dlg_item(struct dialog_data *dialog, struct widget_data *widget,
+display_dlg_item(struct dialog_data *dlg_data, struct widget_data *widget,
 		 int selected)
 {
 	if (widget->item->ops->display)
-		widget->item->ops->display(widget, dialog, selected);
+		widget->item->ops->display(widget, dlg_data, selected);
 }
 
 void

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.29 2003/10/19 11:31:16 zas Exp $ */
+/* $Id: hierbox.c,v 1.30 2003/10/25 11:42:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,20 +45,20 @@ test_search(struct listbox_item *item, void *data_, int *offset) {
 }
 
 int
-hierbox_dialog_event_handler(struct dialog_data *dlg, struct term_event *ev)
+hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 {
 	switch (ev->ev) {
 		case EV_KBD:
 		{
-			int n = dlg->n - 1;
+			int n = dlg_data->n - 1;
 			struct listbox_data *box;
 
-                        if (dlg->items[n].item->ops->kbd
-			    && dlg->items[n].item->ops->kbd(&dlg->items[n], dlg, ev)
+                        if (dlg_data->items[n].item->ops->kbd
+			    && dlg_data->items[n].item->ops->kbd(&dlg_data->items[n], dlg_data, ev)
 			       == EVENT_PROCESSED)
 				return EVENT_PROCESSED;
 
-			box = (struct listbox_data *) dlg->items[n].item->data;
+			box = (struct listbox_data *) dlg_data->items[n].item->data;
 
 			if (ev->x == ' ') {
 				if (box->sel) {
@@ -83,7 +83,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg, struct term_event *ev)
 									test_search,
 									&ctx);
 							box_sel_move(
-								&dlg->items[n],
+								&dlg_data->items[n],
 								ctx.offset);
 						}
 					} else {
@@ -110,7 +110,7 @@ display_dlg:
 			/* FIXME - move from here to bookmarks/dialogs.c! */
 			bookmarks_dirty = 1;
 #endif
-			display_dlg_item(dlg, &dlg->items[n], 1);
+			display_dlg_item(dlg_data, &dlg_data->items[n], 1);
 
 			return EVENT_PROCESSED;
 		}
@@ -132,20 +132,20 @@ display_dlg:
 
 
 void
-layout_hierbox_browser(struct dialog_data *dlg)
+layout_hierbox_browser(struct dialog_data *dlg_data)
 {
-	struct terminal *term = dlg->win->term;
+	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
-	int n = dlg->n - 1;
+	int n = dlg_data->n - 1;
 
 	/* Find dimensions of dialog */
-	text_width(term, dlg->dlg->title, &min, &max);
+	text_width(term, dlg_data->dlg->title, &min, &max);
 #if 0
 	buttons_width(term, dlg->items + 2, 2, &min, &max);
 #endif
-	buttons_width(term, dlg->items, n, &min, &max);
+	buttons_width(term, dlg_data->items, n, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	/* We ignore this now, as we don't compute with the width of the listbox
@@ -157,22 +157,22 @@ layout_hierbox_browser(struct dialog_data *dlg)
 	rw = w;
 
 	y += 1;	/* Blankline between top and top of box */
-	dlg_format_box(NULL, term, &dlg->items[n], dlg->x + DIALOG_LB,
+	dlg_format_box(NULL, term, &dlg_data->items[n], dlg_data->x + DIALOG_LB,
 		       &y, w, NULL, AL_LEFT);
 	y += 1;	/* Blankline between box and menu */
-	dlg_format_buttons(NULL, term, dlg->items, n, 0,
+	dlg_format_buttons(NULL, term, dlg_data->items, n, 0,
 			   &y, w, &rw, AL_CENTER);
 	w = rw;
-	dlg->xw = w + 2 * DIALOG_LB;
-	dlg->yw = y + 2 * DIALOG_TB;
-	center_dlg(dlg);
-	draw_dlg(dlg);
-	y = dlg->y + DIALOG_TB;
+	dlg_data->xw = w + 2 * DIALOG_LB;
+	dlg_data->yw = y + 2 * DIALOG_TB;
+	center_dlg(dlg_data);
+	draw_dlg(dlg_data);
+	y = dlg_data->y + DIALOG_TB;
 
 	y++;
-	dlg_format_box(term, term, &dlg->items[n], dlg->x + DIALOG_LB,
+	dlg_format_box(term, term, &dlg_data->items[n], dlg_data->x + DIALOG_LB,
 		       &y, w, NULL, AL_LEFT);
 	y++;
-	dlg_format_buttons(term, term, &dlg->items[0], n,
-			   dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
+	dlg_format_buttons(term, term, &dlg_data->items[0], n,
+			   dlg_data->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
 }

@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.36 2005/03/23 22:30:32 miciah Exp $
+-- $Id: hooks.lua.in,v 1.37 2005/03/23 22:48:13 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -329,7 +329,7 @@ function highlight (url, html)
 	local tmp = tmpname ()
 	writeto (tmp) write (html) writeto()
 	html = pipe_read ("(code2html -l patch "..tmp.." - ) 2>/dev/null")
-	remove(tmp)
+	os.remove(tmp)
 	ret = 1
   end
 
@@ -338,7 +338,7 @@ function highlight (url, html)
 	local tmp = tmpname ()
 	writeto (tmp) write (html) writeto()
 	html = pipe_read ("(code2html -l python "..tmp.." - ) 2>/dev/null")
-	remove(tmp)
+	os.remove(tmp)
 	ret = 1
   end
 
@@ -347,7 +347,7 @@ function highlight (url, html)
 	local tmp = tmpname ()
 	writeto (tmp) write (html) writeto()
 	html = pipe_read ("(code2html -l perl "..tmp.." - ) 2>/dev/null")
-	remove(tmp)
+	os.remove(tmp)
 	ret = 1
   end
 
@@ -356,7 +356,7 @@ function highlight (url, html)
 	local tmp = tmpname ()
 	writeto (tmp) write (html) writeto()
 	html = pipe_read ("(code2html -l awk "..tmp.." - ) 2>/dev/null")
-	remove(tmp)
+	os.remove(tmp)
 	ret = 1
   end
 
@@ -365,7 +365,7 @@ function highlight (url, html)
         local tmp = tmpname ()
         writeto (tmp) write (html) writeto ()
         html = pipe_read ("(code2html -l c "..tmp.." - ) 2>/dev/null")
-        remove (tmp)
+        os.remove (tmp)
         ret = 1
     end
 
@@ -374,7 +374,7 @@ function highlight (url, html)
         local tmp = tmpname ()
         writeto (tmp) write (html) writeto ()
         html = pipe_read ("(code2html -l sh "..tmp.." - ) 2>/dev/null")
-        remove (tmp)
+        os.remove (tmp)
         ret = 1
     end
     return ret, html

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.228 2003/09/01 20:38:29 pasky Exp $ */
+/* $Id: renderer.c,v 1.229 2003/09/01 20:46:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -750,7 +750,7 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 
 static void
 put_chars_format_change(struct part *part, unsigned char *color,
-			enum screen_char_attr *attr)
+			enum screen_char_attr *attr, int link)
 {
 	static struct text_attrib_beginning ta_cache = { -1, 0x0, 0x0 };
 	static enum screen_char_attr attr_cache;
@@ -786,7 +786,7 @@ put_chars_format_change(struct part *part, unsigned char *color,
 	}
 
 	memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
-	color_cache = *color = mix_attr_colors(&colors, *attr, 8, 16);
+	color_cache = *color = mix_attr_colors(&colors, *attr, 8, link ? 8 : 16);
 	attr_cache = *attr;
 
 	/* FIXME:
@@ -824,7 +824,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 {
 	unsigned char color;
 	enum screen_char_attr attr = 0;
-	struct link *link;
+	struct link *link = NULL;
 	struct point *pt;
 
 	assert(part);
@@ -851,7 +851,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 		goto process_link;
 no_link:
 
-	put_chars_format_change(part, &color, &attr);
+	put_chars_format_change(part, &color, &attr, !!link);
 
 	if (part->cx == par_format.leftmargin && *chars == ' '
 	    && par_format.align != AL_NONE) {

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.505 2004/11/23 17:12:57 witekfl Exp $ */
+/* $Id: renderer.c,v 1.506 2004/12/17 03:19:35 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1207,20 +1207,20 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 
 	link_state = get_link_state();
 
-	if (global_doc_opts->num_links_display && link_state == LINK_STATE_NEW) {
+	if (link_state == LINK_STATE_NEW) {
 		int x_offset = 0;
 
-		/* Don't add link numbers for non accessible links. It seems
-		 * to be caused by the parser putting a space char after stuff
-		 * like <img>-tags or comments wrapped in <a>-tags. See bug 30
-		 * for test case. */
+		/* Don't add non accessible links. It seems to be caused
+		 * by the parser putting a space char after stuff like
+		 * <img>-tags or comments wrapped in <a>-tags. See bug
+		 * 30 for test case. */
 		while (x_offset < charslen && chars[x_offset] <= ' ')
 			x_offset++;
 
 		/* For pure spaces reset the link state */
 		if (x_offset == charslen)
 			link_state = LINK_STATE_NONE;
-		else
+		else if (global_doc_opts->num_links_display)
 			put_link_number(part);
 	}
 

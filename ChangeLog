@@ -1,3 +1,180 @@
+Sun Nov 16 17:28:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/charsets.c:
+
+	Cleanup.  
+
+Sun Nov 16 17:07:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/charsets.c:
+
+	Cleanup.  
+
+Sun Nov 16 15:46:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: frames.c, frames.h, renderer.c:
+
+	create_frameset(): Don't pass the @document but handle it locally.  
+
+Sun Nov 16 15:25:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: frames.c, frames.h, parser.c, renderer.c:
+
+	Remove frame_param struct. I think we can manage to pass the 3
+	members. Knock out create_frame() and just use add_frameset_entry()
+	directly.  
+
+Sun Nov 16 15:04:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/frames.h:
+
+	document_has_frames() already lives in document.h.  
+
+Sun Nov 16 15:02:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: frames.c, frames.h:
+
+	No need to export format_frame().  
+
+Sun Nov 16 14:34:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/hotkey.c, bfu/inphist.c, bfu/listbox.h, bfu/menu.c,
+	bfu/menu.h, dialogs/menu.c, dialogs/mime.c, dialogs/options.c,
+	document/html/parser.c, viewer/text/link.c, viewer/text/view.c:
+
+	In struct menu_item, enum item_free was replaced by more general
+	enum menu_item_flags, fields item_free, submenu and no_intl are
+	joined in one flags field. Related functions and macros were
+	modified to reflect that change. FREE_NOTHING was replaced by a
+	shorter 0, everywhere. MENU_FULLNAME special case (parser.c) is now
+	handled as other flags.  
+
+Sun Nov 16 13:01:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/frames.c:
+
+	Fixed a logic error regarding the setting of o->plain depending on
+	vs->plain. Now, o->plain is set if vs->plain is _NOT_ -1.  
+
+Sun Nov 16 12:57:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/html/frames.c, sched/download.c:
+
+	Unreverted the witekfl's plain-in-frames patch. Please do not rush
+	so much to revert patches :-).  
+
+Sun Nov 16 12:34:35 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/search.c:
+
+	Reverting my last patch, as the goto is needed :( 
+
+Sun Nov 16 12:11:22 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/search.c:
+
+	Comment the hackish goto, scheduling it for removal :) 
+
+Sun Nov 16 11:41:53 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/frames.c, sched/download.c:
+
+	Patch from Witek was reverted for now. It breaks rendering of html
+	documents in frames.  
+
+Sun Nov 16 06:48:22 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: document/html/frames.c, sched/download.c:
+
+	Rendering of plain documents in existing frames is good now.  
+
+Sun Nov 16 06:28:59 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/sched/: session.c, session.h:
+
+	ses_forward now returns view_state *. vs->plain is preserved, 
+	because is used by renderer.  
+
+Sun Nov 16 06:25:12 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: document/refresh.c, sched/download.c, sched/session.c,
+	sched/session.h:
+
+	Introduction of struct tq.  
+
+Sun Nov 16 03:19:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, dialogs/document.c,
+	document/document.c, document/renderer.c, document/html/frames.c,
+	protocol/file.c, protocol/finger.c, protocol/ftp.c,
+	protocol/http/http.c, sched/connection.c, sched/session.c,
+	scripting/lua/core.c:
+
+	Make find_in_cache() and get_cache_entry() actually return the
+	cache_entry.  
+
+Sun Nov 16 01:23:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Only display known protocol URIs.  
+
+Sun Nov 16 01:11:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Cleanup allocation code.  
+
+Sun Nov 16 01:03:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Making some bit field hacks more explicit.  
+
+Sun Nov 16 01:02:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cookies/cookies.c, cookies/cookies.h, protocol/http/http.c:
+
+	set_cookie(): No need for @term variable or to return anything.  
+
+Sun Nov 16 00:19:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/memlist.c:
+
+	Useless debugging code was removed. It is legal for getml() to be
+	called with NULL as first parameter, so no need to check for that.  
+
+Sun Nov 16 00:14:36 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: elinks.h, config/cmdline.c, config/conf.c,
+	cookies/cookies.c, dialogs/mime.c, globhist/globhist.c,
+	sched/download.c:
+
+	empty_string_or_() macro was introduced.  
+
+Sat Nov 15 23:44:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	getml() will do nothing if first argument is NULL, so this test is
+	useless.  
+
+Sat Nov 15 23:36:04 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt_BR.po, pt.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced and french translation was updated.  
+
+Sat Nov 15 23:17:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/error.c:
+
+	A typo was fixed. Revealed without any will by Tony
+	<falcon611@yahoo.com> on ml.  
+
 Sat Nov 15 22:33:02 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/cookies/cookies.c:

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-12-06 23:56+0100\n"
-"PO-Revision-Date: 2003-12-05 19:47+0100\n"
+"PO-Revision-Date: 2003-12-08 18:51+0100\n"
 "Last-Translator: Peter Samek <samek@upc.uniba.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -231,7 +231,7 @@ msgstr ""
 "Formát súboru so zálo¾kami (ovplyvòuje naèítanie aj ulo¾enie):\n"
 "0 je ¹tandardný Elinks-ový formát (Links 0.9x kompatibilný)\n"
 "1 je XBEL, univerzálny XML-orientovaný formát (BEZ PODPORY DIAKRITIKY!)"
-"(NEFUNGUJE)"
+"(VYPNUTÉ)"
 
 #: src/bookmarks/dialogs.c:76
 #, c-format
@@ -1008,17 +1008,17 @@ msgstr "ELinks %s - Textový WWW prehliadaè\n"
 
 #: src/config/options.c:831
 msgid "Template option folder"
-msgstr ""
+msgstr "©ablónová zlo¾ka"
 
 #: src/config/options.c:854
 #, c-format
 msgid "(default: %ld)"
-msgstr ""
+msgstr "(¹tandardne: %ld)"
 
 #: src/config/options.c:859 src/config/options.c:893
 #, c-format
 msgid "(default: \"%s\")"
-msgstr ""
+msgstr "(¹tandardne: \"%s\")"
 
 #: src/config/options.c:864
 #, c-format
@@ -1028,16 +1028,16 @@ msgstr "(alias pre %s)"
 #: src/config/options.c:869 src/config/options.c:879
 #, c-format
 msgid "(default: %s)"
-msgstr ""
+msgstr "(¹tandardne: %s)"
 
 #: src/config/options.c:883
 #, c-format
 msgid "(default: #%06x)"
-msgstr ""
+msgstr "(¹tandardne: #%06x)"
 
 #: src/config/options.c:1009
 msgid "Configuration options:\n"
-msgstr ""
+msgstr "Konfiguraèné voµby:\n"
 
 #: src/config/options.c:1012
 msgid ""
@@ -1242,11 +1242,11 @@ msgstr "Prístupové klávesy"
 msgid ""
 "Options for handling of the accesskey attribute of the active\n"
 "HTML elements."
-msgstr ""
+msgstr "Nastavenia pre obsluhu atribútu 'accesskey' aktívnych HTML elementov."
 
 #: src/config/options.inc:118
 msgid "Automatic links following"
-msgstr ""
+msgstr "Automatické nasledovanie odkazov"
 
 #: src/config/options.inc:120
 msgid ""
@@ -1254,10 +1254,13 @@ msgid ""
 "accesskey is pressed - this is the standard behaviour, but it's\n"
 "considered dangerous."
 msgstr ""
+"Automaticky nasleduj odkaz alebo odo¹li formulár ak bola stlaèená\n"
+"príslu¹ná prístupová klávesa - toto je ¹tandardné chovanie, ale je\n"
+"pova¾ované za zneu¾iteµné autorom dokumentu."
 
 #: src/config/options.inc:124
 msgid "Accesskey priority"
-msgstr ""
+msgstr "Priorita prístupových kláves"
 
 #: src/config/options.inc:126
 msgid ""
@@ -1266,14 +1269,20 @@ msgid ""
 "1 is first try only frame bindings; if it fails, check accesskey\n"
 "2 is first check accesskey (this can be dangerous)"
 msgstr ""
+"Priorita HTML atribútu 'accesskey':\n"
+"0 znamená vyskú¹a» najskôr v¹etky normálne klávesové skratky: ak pre\n"
+"  klávesu nie sú ¾iadne definované, skúsi» accesskey\n"
+"1 znamená vyskú¹a» najskôr iba klávesové skratky rámcov: ak pre\n"
+"  klávesu nie sú ¾iadne definované, skúsi» accesskey\n"
+"2 znamená najskôr skúsi» accesskey (to mô¾e by» nebezpeèné)"
 
 #: src/config/options.inc:132
 msgid "Forms"
-msgstr ""
+msgstr "Formuláre"
 
 #: src/config/options.inc:134
 msgid "Options for handling of the forms interaction."
-msgstr ""
+msgstr "Nastavenia pre obsluhu formulárov."
 
 #: src/config/options.inc:136
 msgid "Submit form automatically"
@@ -1284,14 +1293,15 @@ msgid ""
 "Automagically submit a form when enter is pressed with a text\n"
 "field selected."
 msgstr ""
+"Automagicky odo¹li formulár ak je stlaèený Enter na textovom políèku."
 
 #: src/config/options.inc:141
 msgid "Confirm submission"
-msgstr ""
+msgstr "Potvrdzova» odosielanie"
 
 #: src/config/options.inc:143
 msgid "Ask for confirmation when submitting a form."
-msgstr "Pýtaj potvrdenie pri posielaní formulára."
+msgstr "Pýta» potvrdenie pri posielaní formulára."
 
 #: src/config/options.inc:146
 msgid "Images"
@@ -1299,11 +1309,11 @@ msgstr "Obrázky"
 
 #: src/config/options.inc:148
 msgid "Options for handling of images."
-msgstr ""
+msgstr "Nastavenia pre narábanie s obrázkami."
 
 #: src/config/options.inc:150
 msgid "Display style for image links"
-msgstr ""
+msgstr "Spôsob zobrazovania odkazov na obrázky"
 
 #: src/config/options.inc:152
 msgid ""
@@ -1313,10 +1323,15 @@ msgid ""
 "1-500 means display target filename with this maximal length;\n"
 "      if it is longer, the middle is substituted by an asterisk"
 msgstr ""
+"Zobrazova» [cieµové meno súboru] namiesto [IMG] ako popisku obrázkov:\n"
+"-1    znamená v¾dy ukazova» iba [IMG]\n"
+"0     znamená v¾dy ukazova» celé meno cieµového súboru\n"
+"1-500 znamená ukazova» cieµové meno súboru s touto maximálnou då¾kou;\n"
+"      ak je väè¹ia, prostriedok je nahradený hviezdièkou"
 
 #: src/config/options.inc:158
 msgid "Image links tagging"
-msgstr ""
+msgstr "Znaèkovanie odkazov na obrázky"
 
 #: src/config/options.inc:160
 msgid ""
@@ -1325,36 +1340,42 @@ msgid ""
 "1 means never if alt or title are provided (old behavior)\n"
 "2 means always"
 msgstr ""
+"Kedy dáva» odkazy na obrázky do zátvoriek:\n"
+"0 znamená nikdy\n"
+"1 znamená iba keï obrázku chýba popiska (alt) alebo titulok\n"
+"2 znamená v¾dy"
 
 #: src/config/options.inc:165
 msgid "Image link prefix"
-msgstr ""
+msgstr "Prefix odkazu na obrázok"
 
 #: src/config/options.inc:167
 msgid "Prefix string to use to mark image links."
-msgstr ""
+msgstr "Re»azec, ktorý sa má vlo¾i» pred odkaz na obrázok."
 
 #: src/config/options.inc:169
 msgid "Image link suffix"
-msgstr ""
+msgstr "Suffix odkazu na obrázok"
 
 #: src/config/options.inc:171
 msgid "Suffix string to use to mark image links."
-msgstr ""
+msgstr "Re»azec, ktorý sa má vlo¾i» za odkaz na obrázok."
 
 #: src/config/options.inc:173
 msgid "Display links to images w/o alt"
-msgstr ""
+msgstr "Zobrazova» odkazy na obrázky bez alt"
 
 #: src/config/options.inc:175
 msgid ""
 "Display links to images without an alt attribute. If this option\n"
 "is off, these images are completely invisible."
 msgstr ""
+"Zobrazova» odkazy na obrázky bez popisky (atribútu 'alt'). Ak je\n"
+"táto voµba vypnutá, také obrázky sú úplne neviditeµné."
 
 #: src/config/options.inc:178
 msgid "Display links to images"
-msgstr "Zobrazi» odkazy na obrázky"
+msgstr "Zobrazova» odkazy na obrázky"
 
 #: src/config/options.inc:180
 msgid ""
@@ -1363,6 +1384,9 @@ msgid ""
 "attribute contents is shown, but as normal text, not selectable\n"
 "as a link."
 msgstr ""
+"Zobrazova» odkazy na akékoµvek obrázky v dokumente, èi u¾ majú popisku\n"
+"(atribút alt) alebo nie. Ak je táto voµba vypnutá, je zobrazný obsah\n"
+"atribútu alt, ale iba ako normálny text, nie je to odkaz."
 
 #: src/config/options.inc:186
 msgid "Links"
@@ -1370,15 +1394,15 @@ msgstr "Odkazy"
 
 #: src/config/options.inc:188
 msgid "Options for handling of links to other documents."
-msgstr ""
+msgstr "Nastavenia pre zaobchádzanie s odkazmi na iné dokumenty."
 
 #: src/config/options.inc:190
 msgid "Active link"
-msgstr ""
+msgstr "Aktívny odkaz"
 
 #: src/config/options.inc:192
 msgid "Options for the active link."
-msgstr ""
+msgstr "Nastavenia aktívneho odkazu."
 
 #: src/config/options.inc:194
 msgid "Colors"
@@ -1456,7 +1480,7 @@ msgstr "Farba pozadia"
 #: src/config/options.inc:1742 src/config/options.inc:1754
 #: src/config/options.inc:1766
 msgid "Default background color."
-msgstr ""
+msgstr "©tandardná farba pozadia."
 
 #: src/config/options.inc:202 src/config/options.inc:378
 #: src/config/options.inc:904 src/config/options.inc:916
@@ -1526,7 +1550,7 @@ msgstr "Farba textu"
 #: src/config/options.inc:1738 src/config/options.inc:1750
 #: src/config/options.inc:1762
 msgid "Default text color."
-msgstr ""
+msgstr "©tandardná farba textu."
 
 #: src/config/options.inc:206
 msgid "Enable color"
@@ -1537,58 +1561,62 @@ msgid ""
 "Enable use of the active link background and text color\n"
 "settings instead of browse.links from the document."
 msgstr ""
+"Zapnú» pou¾itie farby textu a pozadia aktívneho odkazu podµa\n"
+"nastavenia v prehliadaèi namiesto browse.links podµa dokumentu."
 
 #: src/config/options.inc:211
 msgid "Bold"
-msgstr ""
+msgstr "Tuèné"
 
 #: src/config/options.inc:213
 msgid "Make the active link text bold."
-msgstr ""
+msgstr "Nakresli» text aktívneho odkazu tuène."
 
 #: src/config/options.inc:215
 msgid "Invert colors"
-msgstr ""
+msgstr "Inverzné farby"
 
 #: src/config/options.inc:217
 msgid "Invert the fore- and background color so the link stands out."
-msgstr ""
+msgstr "Inverzná farba popredia a pozadia, takze odkaz vystupuje z textu."
 
 #: src/config/options.inc:220 src/dialogs/options.c:186
 msgid "Underline"
-msgstr ""
+msgstr "Podèiarknutie"
 
 #: src/config/options.inc:222
 msgid "Underline the active link."
-msgstr ""
+msgstr "Podèiarknu» aktívny odkaz."
 
 #: src/config/options.inc:225
 msgid "Directory highlighting"
-msgstr ""
+msgstr "Zvýrazni» odkazy na adresáre"
 
 #: src/config/options.inc:227
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr ""
+msgstr "Zvýrazni» odkazy na adresára vo výpisoch FTP a lokálneho disku."
 
 #: src/config/options.inc:229
 msgid "Number links"
-msgstr ""
+msgstr "Èíslova» odkazy"
 
 #: src/config/options.inc:231
 msgid "Display numbers next to the links."
-msgstr ""
+msgstr "Zobrazova» èísla pri odkazoch."
 
 #: src/config/options.inc:233
 msgid "Use tabindex"
-msgstr ""
+msgstr "Pou¾íva» tabindex"
 
 #: src/config/options.inc:235
 msgid "Whether to navigate links using tabindex."
 msgstr ""
+"Urèuje, èi sa má pri presunoch medzi odkazmi bra» ohµad na ¹tandardný HTML\n"
+"atribút 'tabindex'."
 
 #: src/config/options.inc:237
 msgid "Number keys select links"
-msgstr ""
+msgstr "Numerické klávesy vyberajú odkazy"
 
 #: src/config/options.inc:239
 msgid ""
@@ -1598,12 +1626,17 @@ msgid ""
 "1 means if document.browse.links.numbering = 1\n"
 "2 means always"
 msgstr ""
+"Numerické klávesy vyberajú odkazy namiesto toho aby urèovali opakovacie\n"
+"prefixy pre ostatné akcie. Táto voµba ma 3 stavy:\n"
+"0 znamená nikdy\n"
+"1 znamená iba ak document.browse.links.numbering = 1\n"
+"2 znamená v¾dy"
 
 #. TODO - this is somehow implemented by ff, but disabled
 #. * for now as it doesn't work.
 #: src/config/options.inc:247
 msgid "Wrap-around links cycling"
-msgstr ""
+msgstr "Zacyklené prechádzanie medzi odkazmi"
 
 #. 0
 #: src/config/options.inc:249
@@ -1611,24 +1644,27 @@ msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
 msgstr ""
+"Pri stlaèení klávesy 'dole' na poslednom odkaze sa presuò na prvý odkaz\n"
+"a naopak."
 
 #: src/config/options.inc:253
 msgid "Searching"
-msgstr "Hµadám"
+msgstr "Hµada»"
 
 #: src/config/options.inc:255
 msgid "Options for searching."
-msgstr ""
+msgstr "Nastavenie vyhµadávania."
 
 #: src/config/options.inc:257
 msgid "Case sensitivity"
-msgstr ""
+msgstr "Rozli¹ovanie veµkosti písma"
 
 #: src/config/options.inc:259
 msgid ""
 "Whether the search should match the document text while maintaining\n"
 "case sensitivity."
 msgstr ""
+"Urèuje, èi sa má pri hµadaní bra» ohµad na veµkos» písma."
 
 #: src/config/options.inc:263 src/config/options.inc:270
 msgid "Regular expressions"
@@ -1641,6 +1677,10 @@ msgid ""
 "1 for basic regular expression searches.\n"
 "2 for extended regular expression searches."
 msgstr ""
+"Zapnú» hµadanie pomocou regulárnych výrazov.\n"
+"0 znamená hµadanie èistého textu.\n"
+"1 znamená vyhµadávanie základných regulárnych výrazov.\n"
+"2 znamená vyhµadávanie roz¹írených regulárnych výrazov."
 
 #: src/config/options.inc:272
 msgid ""
@@ -1649,28 +1689,34 @@ msgid ""
 "1 for basic regular expression searches. (DISABLED)\n"
 "2 for extended regular expression searches. (DISABLED)"
 msgstr ""
+"Enable searching with regular expressions.\n"
+"0 for plain text searching.\n"
+"1 for basic regular expression searches.(VYPNUTÉ)\n"
+"2 for extended regular expression searches.(VYPNUTÉ)"
 
 #: src/config/options.inc:278
 msgid "Show search hit top or bottom dialogs"
-msgstr ""
+msgstr "Zobrazova» upozornenie o vyhµadávaní, ktoré dosiahlo koniec dokumentu"
 
 #: src/config/options.inc:280
 msgid ""
 "Whether to show a dialog when the search hits top or bottom of the\n"
 "document."
 msgstr ""
+"Povoli» zobrazovanie upozornenia keï vyhµadávanie dosiahne koniec alebo\n"
+"zaèiatok dokumentu."
 
 #: src/config/options.inc:284
 msgid "Horizontal text margin"
-msgstr ""
+msgstr "Horizontálny okraj textu"
 
 #: src/config/options.inc:286
 msgid "Horizontal text margin."
-msgstr ""
+msgstr "Horizontálny okraj textu."
 
 #: src/config/options.inc:288
 msgid "Document meta refresh"
-msgstr ""
+msgstr "Automatické obnovovanie dokumentov"
 
 #: src/config/options.inc:290
 msgid ""
@@ -1678,6 +1724,10 @@ msgid ""
 "refresh' tags). Web-page authors use these to instruct the browser\n"
 "to reload a document at a given interval or to load another page."
 msgstr ""
+"Automaticky nasledova» obnovovacie direktívy ¹pecifikované v dokumente\n"
+"('<meta> refresh' tagy). Autori webových stránok pou¾ívajú tento\n"
+"mechanizmus na automatické znovunatiahnutie dokumentu v danom intervale\n"
+"alebo na presmerovanie na inú stránku."
 
 #: src/config/options.inc:294
 msgid "Scroll margin"
@@ -1954,9 +2004,8 @@ msgid "Width"
 msgstr "©írka"
 
 #: src/config/options.inc:474
-#, fuzzy
 msgid "Width of screen in characters when dumping a HTML document."
-msgstr "©írka obrazovky v znakoch pri"
+msgstr "©írka obrazovky v znakoch pri dumpovaní HTML dokumentu."
 
 #: src/config/options.inc:478
 msgid "History"
@@ -2377,19 +2426,18 @@ msgid "Colon separated list of directories, where CGI scripts are stored."
 msgstr "Zoznam adresárov (oddelených dvojbodkou), kde sú ulo¾ené CGI skripty."
 
 #: src/config/options.inc:725
-#, fuzzy
 msgid "Local CGI specific options. (DISABLED)"
-msgstr "Nastavenie spú¹»ania lokálnych CGI skriptov."
+msgstr "Nastavenie spú¹»ania lokálnych CGI skriptov.(VYPNUTÉ)"
 
 #: src/config/options.inc:729
 msgid "Whether to execute local CGI scripts. (DISABLED)"
 msgstr ""
 
 #: src/config/options.inc:733
-#, fuzzy
 msgid ""
 "Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
-msgstr "Zoznam adresárov (oddelených dvojbodkou), kde sú ulo¾ené CGI skripty."
+msgstr ""
+"Zoznam adresárov (oddelených dvojbodkou), kde sú ulo¾ené CGI skripty.(VYPNUTÉ)"
 
 #: src/config/options.inc:736
 msgid "User protocols"
@@ -3570,9 +3618,8 @@ msgid ""
 msgstr ""
 
 #: src/cookies/cookies.c:560
-#, fuzzy
 msgid "at quit time"
-msgstr "Èas poslednej náv¹tevy"
+msgstr ""
 
 #: src/cookies/cookies.c:561 src/cookies/dialogs.c:83
 msgid "yes"
@@ -3825,7 +3872,7 @@ msgstr "Antihistória"
 #: src/dialogs/menu.c:346
 #, fuzzy
 msgid "Global ~history"
-msgstr "Globálna histórie"
+msgstr "Globálna história"
 
 #: src/dialogs/menu.c:349
 msgid "~Bookmarks"

@@ -1,3 +1,45 @@
+Tue Nov 12 22:33:35 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/url.c:
+
+	Fixed a bug pointed out by Fabio - try to fix up only _broken_ urls
+	;-).  
+
+Tue Nov 12 21:57:04 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/download.c:
+
+	Fixed too frequent displaying of resumed message in the download
+	window.  
+
+Tue Nov 12 21:30:02 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/download.c, document/dump.c, document/session.c,
+	lowlevel/sched.h, protocol/ftp.c, protocol/http/http.c:
+
+	Well, I fix problem you mentioned.  Maybe arise new problems with
+	download resume, but this version is better than was before(tm).  
+	
+	prg->start == -1 means normal session, not download 
+	    -II-   ==  0 means download 
+	    -II-    >  0 means resume 
+	
+	File is not truncated with open.  Thanks of it if one press 'd' and
+	file was already downloaded "nothing happens".  -- witekfl 
+
+Tue Nov 12 21:05:36 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/url.c:
+
+	Fixed some more problems with square brackets inside of URL and IPv6
+	enabled. Inspired by Fabio's patch.  
+
+Tue Nov 12 10:39:15 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/view.c:
+
+	A memleak introduced by last patch was fixed.  
+
 Mon Nov 11 23:05:48 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: bookmarks/dialogs.c, document/session.c,

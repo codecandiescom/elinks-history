@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.280 2003/12/12 07:19:56 fabio Exp $ */
+/* $Id: session.c,v 1.281 2003/12/19 23:37:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -439,6 +439,21 @@ struct file_to_load *
 request_additional_file(struct session *ses, unsigned char *name, unsigned char *url, int pri)
 {
 	struct file_to_load *ftl;
+	enum protocol protocol = known_protocol(url, NULL);
+
+	if (protocol == PROTOCOL_UNKNOWN) {
+		return NULL;
+	}
+
+	/* XXX: We cannot run the external handler here, because
+	 * request_additional_file() is called many times for a single URL
+	 * (normally the foreach() right below catches them all). Anyway,
+	 * having <frame src="mailto:foo"> would be just weird, wouldn't it?
+	 * --pasky */
+	if (protocol != PROTOCOL_INVALID
+	    && get_protocol_external_handler(protocol)) {
+		return NULL;
+	}
 
 	foreach (ftl, ses->more_files) {
 		if (!strcmp(ftl->url, url)) {

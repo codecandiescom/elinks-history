@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.124 2003/11/14 08:40:01 miciah Exp $ */
+/* $Id: tables.c,v 1.125 2003/11/14 15:03:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,6 +65,7 @@
 struct table_cell {
 	unsigned char *start;
 	unsigned char *end;
+	unsigned char *fragment_id;
 	color_t bgcolor;
 	int mx, my;
 	int align;
@@ -94,6 +95,7 @@ struct table {
 	struct part *p;
 	struct table_cell *cells;
 	struct table_column *columns;
+	unsigned char *fragment_id;
 	color_t bgcolor;
 	int *min_c, *max_c;
 	int *columns_width;
@@ -214,6 +216,7 @@ free_table(struct table *t)
 	if (t->max_c) mem_free(t->max_c);
 	if (t->columns_width) mem_free(t->columns_width);
 	if (t->rows_height) mem_free(t->rows_height);
+	if (t->fragment_id) mem_free(t->fragment_id);
 	mem_free(t->columns);
 	if (t->xcols) mem_free(t->xcols);
 	mem_free(t->cells);
@@ -412,6 +415,7 @@ parse_table(unsigned char *html, unsigned char *eof,
 	struct table_cell *cell;
 	unsigned char *t_name, *t_attr, *en;
 	unsigned char *lbhp = NULL;
+	unsigned char *l_fragment_id = NULL;
 	color_t l_col = bgcolor;
 	int t_namelen;
 	int p = 0;
@@ -574,7 +578,8 @@ qwe:
 		get_align(t_attr, &l_al);
 		get_valign(t_attr, &l_val);
 		get_bgcolor(t_attr, &l_col);
-		set_fragment_identifier(t_attr, "id");
+		if (l_fragment_id) mem_free(l_fragment_id);
+		l_fragment_id = get_attr_val(t_attr, "id");
 		y++;
 		x = 0;
 		goto see;
@@ -636,6 +641,11 @@ nc:
 
 	cell->align = l_al;
 	cell->valign = l_val;
+	cell->fragment_id = get_attr_val(t_attr, "id");
+	if (!cell->fragment_id && l_fragment_id) {
+		cell->fragment_id = l_fragment_id;
+		l_fragment_id = NULL;
+	}
 
 	cell->is_header = (upcase(t_name[1]) == 'H');
 	if (cell->is_header) cell->align = AL_CENTER;
@@ -654,7 +664,6 @@ nc:
 	get_align(t_attr, &cell->align);
 	get_valign(t_attr, &cell->valign);
 	get_bgcolor(t_attr, &cell->bgcolor);
-	set_fragment_identifier(t_attr, "id");
 
 	colspan = get_num(t_attr, "colspan");
 	if (colspan == -1) colspan = 1;
@@ -728,6 +737,8 @@ nc:
 
 scan_done:
 	*end = html;
+
+	if (l_fragment_id) mem_free(l_fragment_id);
 
 	for (x = 0; x < t->x; x++) for (y = 0; y < t->y; y++) {
 		struct table_cell *c = CELL(t, x, y);
@@ -1337,6 +1348,9 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 	int xp = x + (t->border && (t->frame & TABLE_FRAME_LHS));
 	int expand_cols = (global_doc_opts && global_doc_opts->table_expand_cols);
 
+	if (t->fragment_id)
+		add_fragment_identifier(t->p, t->fragment_id);
+
 	for (i = 0; i < t->x; i++) {
 		yp = y + (t->border && (t->frame & TABLE_FRAME_ABOVE));
 		for (j = 0; j < t->y; j++) {
@@ -1404,8 +1418,18 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 						expand_lines(t->p, yp + yt);
 						expand_line(t->p, yp + yt, xp + t->columns_width[i]);
 					}
+
+					if (cell->fragment_id)
+						add_fragment_identifier(p, cell->fragment_id);
+
 					mem_free(p);
 				}
+
+				if (cell->fragment_id) {
+					mem_free(cell->fragment_id);
+					cell->fragment_id = NULL;
+				}
+
 
 				done_html_parser_state(state);
 			}
@@ -1640,6 +1664,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	unsigned char *al;
 	struct html_element *state;
 	color_t bgcolor = par_format.bgcolor;
+	unsigned char *fragment_id;
 	int border, cellspacing, vcellpadding, cellpadding, align;
 	int frame, rules, width, wf;
 	int cye;
@@ -1726,6 +1751,8 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		mem_free(al);
 	}
 
+	fragment_id = get_attr_val(attr, "id");
+
 	wf = 0;
 	width = get_width(attr, "width", (p->document || p->x));
 	if (width == -1) {
@@ -1762,6 +1789,8 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	t->rules = rules;
 	t->width = width;
 	t->wf = wf;
+	t->fragment_id = fragment_id;
+	fragment_id = NULL;
 
 	cpd_pass = 0;
 	cpd_last = t->cellpadding;
@@ -1869,5 +1898,6 @@ ret2:
 
 ret0:
 	table_level--;
+	if (fragment_id) mem_free(fragment_id);
 	if (!table_level) free_table_cache();
 }

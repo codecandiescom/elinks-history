@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.50 2003/11/14 08:40:01 miciah Exp $ */
+/* $Id: parser.h,v 1.51 2003/11/14 15:03:48 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -148,6 +148,7 @@ int get_num(unsigned char *, unsigned char *);
 int get_width(unsigned char *, unsigned char *, int);
 int get_bgcolor(unsigned char *, color_t *);
 void set_fragment_identifier(unsigned char *attr_name, unsigned char *attr);
+void add_fragment_identifier(void *part, unsigned char *attr);
 
 unsigned char *skip_comment(unsigned char *, unsigned char *);
 

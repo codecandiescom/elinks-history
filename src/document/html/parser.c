@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.262 2003/11/14 12:49:38 jonas Exp $ */
+/* $Id: parser.c,v 1.263 2003/11/14 15:03:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -663,6 +663,12 @@ set_fragment_identifier(unsigned char *attr_name, unsigned char *attr)
 		special_f(ff, SP_TAG, id_attr);
 		mem_free(id_attr);
 	}
+}
+
+void
+add_fragment_identifier(void *part, unsigned char *attr)
+{
+	special_f(part, SP_TAG, attr);
 }
 
 static struct form form = NULL_STRUCT_FORM;

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.107 2004/12/19 16:42:26 jonas Exp $ */
+/* $Id: cmdline.c,v 1.108 2004/12/28 01:30:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -607,12 +607,13 @@ struct option_info cmdline_options_info[] = {
 
 	INIT_OPT_BOOL("", N_("Autosubmit first form"),
 		"auto-submit", 0, 0,
-		N_("Go and submit the first form you'll stumble upon.")),
+		N_("Automatically submit the first form in the given URLs.")),
 
-	INIT_OPT_INT("", N_("Clone session with given ID"),
+	INIT_OPT_INT("", N_("Clone internal session with given ID"),
 		"base-session", 0, 0, INT_MAX, 0,
-		N_("ID of session (ELinks instance) which we want to clone.\n"
-		"This is internal ELinks option, you don't want to use it.")),
+		N_("Used internally when opening ELinks instances in new windows.\n"
+		"The ID maps to information used when creating the new instance\n"
+		"You don't want to use it.")),
 
 	INIT_OPT_COMMAND("", NULL, "confdir", OPT_HIDDEN, redir_cmd, NULL),
 

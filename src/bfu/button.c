@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.20 2003/05/04 19:30:44 pasky Exp $ */
+/* $Id: button.c,v 1.21 2003/06/07 12:05:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,7 @@ max_buttons_width(struct terminal *term, struct widget_data *butt,
 	int i;
 
 	for (i = 0; i < n; i++)
-		w += strlen(_((butt++)->item->text, term)) + 6;
+		w += strlen((butt++)->item->text) + 6;
 	if (w > *width) *width = w;
 }
 
@@ -37,7 +37,7 @@ min_buttons_width(struct terminal *term, struct widget_data *butt,
 	int i;
 
 	for (i = 0; i < n; i++) {
-		int w = strlen(_((butt++)->item->text, term)) + 4;
+		int w = strlen((butt++)->item->text) + 4;
 
 		if (w > *width) *width = w;
 	}
@@ -75,7 +75,7 @@ dlg_format_buttons(struct terminal *term, struct terminal *t2,
 			for (i = i1; i < i2; i++) {
 				butt[i].x = p;
 				butt[i].y = *y;
-				butt[i].l = strlen(_(butt[i].item->text, t2)) + 4;
+				butt[i].l = strlen(butt[i].item->text) + 4;
 				p += butt[i].l + 2;
 			}
 		}
@@ -91,17 +91,15 @@ display_button(struct widget_data *di, struct dialog_data *dlg, int sel)
 {
 	struct terminal *term = dlg->win->term;
 	int co;
-	unsigned char *text;
 
 	co = sel ? get_bfu_color(term, "dialog.button-selected")
 		: get_bfu_color(term, "dialog.button");
-	text = _(di->item->text, term);
 	{
-		int len = strlen(text);
+		int len = strlen(di->item->text);
 		int x = di->x + 2;
 
 		print_text(term, di->x, di->y, 2, "[ ", co);
-		print_text(term, x, di->y, len, text, co);
+		print_text(term, x, di->y, len, di->item->text, co);
 		print_text(term, x + len, di->y, 2, " ]", co);
 		if (sel) {
 			set_cursor(term, x, di->y, x, di->y);
@@ -114,7 +112,7 @@ static int
 mouse_button(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 {
 	if ((ev->b & BM_BUTT) >= B_WHEEL_UP || ev->y != di->y || ev->x < di->x
-	    || ev->x >= di->x + strlen(_(di->item->text, dlg->win->term)) + 4)
+	    || ev->x >= di->x + strlen(di->item->text) + 4)
 		return EVENT_NOT_PROCESSED;
 
 	display_dlg_item(dlg, &dlg->items[dlg->selected], 0);

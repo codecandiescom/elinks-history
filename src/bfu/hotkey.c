@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.1 2003/05/21 10:08:43 zas Exp $ */
+/* $Id: hotkey.c,v 1.2 2003/06/07 12:05:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,11 +49,9 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 		memset(used_hotkeys, 0, 255);
 
 		for (i = 0; i < ni; i++) {
-			unsigned char *text;
+			unsigned char *text = items[i].text;
 
-			if (!*items[i].text) continue;
-
-			text = _(items[i].text, term);
+			if (!*text) continue;
 
 			if (items[i].ignore_hotkey != 2 && !items[i].hotkey_pos)
 				items[i].hotkey_pos = find_hotkey_pos(text);
@@ -84,7 +82,7 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 			items[i].ignore_hotkey = 1;
 		} else if (items[i].ignore_hotkey != 2 && !items[i].hotkey_pos) {
 			if (!*items[i].text) continue;
-			items[i].hotkey_pos = find_hotkey_pos(_(items[i].text, term));
+			items[i].hotkey_pos = find_hotkey_pos(items[i].text);
 			if (items[i].hotkey_pos) items[i].ignore_hotkey = 2; /* cached */
 		}
 }
@@ -120,11 +118,9 @@ refresh_hotkeys(struct terminal *term, struct menu *menu)
 static inline int
 is_hotkey(struct menu_item *item, unsigned char key, struct terminal *term)
 {
-	unsigned char *text;
+	unsigned char *text = item->text;
 
-	if (!item || !item->text) return 0;
-	text = _(item->text, term);
-	if (!text || !*text) return 0;
+	if (!item || !text || !*text) return 0;
 
 #ifdef DEBUG
 	{

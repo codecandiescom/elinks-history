@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.72 2003/05/21 10:08:42 zas Exp $ */
+/* $Id: menu.c,v 1.73 2003/06/07 12:05:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,12 @@
 #include "terminal/window.h"
 #include "util/conv.h"
 #include "util/memory.h"
+
+
+/* FIXME: Now, all the menu items are translated agressively. There should be
+ * special item in the {struct menu_item} regulating that action. In the
+ * meantime, perhaps an approximation from hotkey usage variable could be
+ * used...? --pasky */
 
 
 /* Types and structures */

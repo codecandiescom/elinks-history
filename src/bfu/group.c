@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.14 2003/05/06 14:11:05 zas Exp $ */
+/* $Id: group.c,v 1.15 2003/06/07 12:05:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@ base_group_width(struct terminal *term, struct widget_data *item)
 		return 4;
 
 	if (item->item->type == D_BUTTON)
-		return strlen(_(item->item->text, term)) + 5;
+		return strlen(item->item->text) + 5;
 
 	return item->item->dlen + 1;
 }
@@ -39,7 +39,7 @@ max_group_width(struct terminal *term, unsigned char **texts,
 	int base = base_group_width(term, item);
 
 	while (n--) {
-		int wx = base + strlen(_(texts[0], term));
+		int wx = base + strlen(texts[0]);
 
 		if (n) wx++;
 		ww += wx;
@@ -58,7 +58,7 @@ min_group_width(struct terminal *term, unsigned char **texts,
 	int wt = 0;
 
 	while (n--) {
-		int wx = strlen(_(texts[0], term));
+		int wx = strlen(texts[0]);
 
 		if (wx > wt) wt = wx;
 		texts++;
@@ -80,7 +80,7 @@ dlg_format_group(struct terminal *term, struct terminal *t2,
 	while (n--) {
 		int sl;
 		int wx = base;
-		unsigned char *text = _(texts[0], t2);
+		unsigned char *text = texts[0];
 
 		if (text[0]) {
 			sl = strlen(text);

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.33 2003/05/17 10:56:00 zas Exp $ */
+/* $Id: dialog.c,v 1.34 2003/06/07 12:05:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,17 +69,16 @@ redraw_dialog(struct dialog_data *dlg)
 	int y = dlg->y + DIALOG_TOP_BORDER;
 	struct terminal *term = dlg->win->term;
 	int dialog_title_color = get_bfu_color(term, "dialog.title");
-	unsigned char *title = _(dlg->dlg->title, term);
 
 	draw_frame(term, x, y,
 		   dlg->xw - 2 * DIALOG_LEFT_BORDER,
 		   dlg->yw - 2 * DIALOG_TOP_BORDER,
 		   get_bfu_color(term, "dialog.frame"), DIALOG_FRAME);
 
-	i = strlen(title);
+	i = strlen(dlg->dlg->title);
 	x = (dlg->xw - i) / 2 + dlg->x;
 	print_text(term, x - 1, y, 1, " ", dialog_title_color);
-	print_text(term, x, y, i, title, dialog_title_color);
+	print_text(term, x, y, i, dlg->dlg->title, dialog_title_color);
 	print_text(term, x + i, y, 1, " ", dialog_title_color);
 
 	for (i = 0; i < dlg->n; i++)
@@ -198,7 +197,7 @@ dialog_func(struct window *win, struct event *ev, int fwd)
 			if (ev->x > ' ' && ev->x < 0x100) {
 				for (i = 0; i < dlg->n; i++)
 					if (dlg->dlg->items[i].type == D_BUTTON
-					    && upcase(_(dlg->dlg->items[i].text, term)[0])
+					    && upcase(dlg->dlg->items[i].text[0])
 					       == upcase(ev->x)) {
 						select_dlg_item(dlg, i);
 						return;

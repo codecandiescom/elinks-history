@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.22 2003/05/04 19:30:45 pasky Exp $ */
+/* $Id: checkbox.c,v 1.23 2003/06/07 12:05:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,8 +42,7 @@ dlg_format_checkboxes(struct terminal *term, struct terminal *t2,
 		      unsigned char **texts)
 {
 	while (n) {
-		dlg_format_checkbox(term, t2, chkb, x, y, w, rw,
-				    _(texts[0], t2));
+		dlg_format_checkbox(term, t2, chkb, x, y, w, rw, texts[0]);
 		texts++;
 		chkb++;
 		n--;
@@ -56,7 +55,7 @@ checkboxes_width(struct terminal *term, unsigned char **texts, int *w,
 {
 	while (texts[0]) {
 		*w -= 4;
-		fn(term, _(texts[0], term), w);
+		fn(term, texts[0], w);
 		*w += 4;
 		texts++;
 	}

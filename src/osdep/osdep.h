@@ -1,4 +1,4 @@
-/* $Id: osdep.h,v 1.24 2003/10/27 02:00:38 pasky Exp $ */
+/* $Id: osdep.h,v 1.25 2003/10/27 02:24:16 pasky Exp $ */
 
 #ifndef EL__OSDEP_OS_DEP_H
 #define EL__OSDEP_OS_DEP_H
@@ -21,19 +21,22 @@
 
 /* hardcoded limit of 10 OSes in default.c */
 
-#if defined(__EMX__)
-#define OS2
-#elif defined(_WIN32)
-#define WIN32
-#ifdef UNIX
 #undef UNIX
-#endif
+#undef OS2
+#undef WIN32
+#undef BEOS
+#undef RISCOS
+
+#if defined(__EMX__)
+# define OS2
+#elif defined(_WIN32)
+# define WIN32
 #elif defined(__BEOS__)
-#define BEOS
+# define BEOS
 #elif defined(__riscos__)
-#define RISCOS
+# define RISCOS
 #else
-#define UNIX
+# define UNIX
 #endif
 
 #ifdef __EMX__

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.115 2003/11/02 21:37:56 zas Exp $ */
+/* $Id: tables.c,v 1.116 2003/11/03 09:32:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1071,21 +1071,25 @@ distribute_widths(struct table *t, int width)
 
 					break;
 				case 1:
-					/* TODO: Weird test. Rewrite. --Zas */
-					if (t->xcols[i] < WIDTH_AUTO && t->xcols[i] != WIDTH_RELATIVE) {
-						if (t->xcols[i] <= WIDTH_RELATIVE) {
-							w[i] = WIDTH_RELATIVE - t->xcols[i];
-						} else {
-							w[i] = 1;
-						}
+					if (t->xcols[i] <= WIDTH_RELATIVE) {
+						w[i] = WIDTH_RELATIVE - t->xcols[i];
 						mx[i] = t->max_c[i] - t->columns_width[i];
 						if (mx[i] <= 0) w[i] = 0;
 					}
 					break;
 				case 2:
-				case 3:
 					if (t->columns_width[i] < t->max_c[i]
-					    && (om == 3 || t->xcols[i] == WIDTH_AUTO)) {
+					    && t->xcols[i] == WIDTH_AUTO) {
+						mx[i] = t->max_c[i] - t->columns_width[i];
+						if (mmax_c) {
+							w[i] = 5 + t->max_c[i] * 10 / mmax_c;
+						} else {
+							w[i] = 1;
+						}
+					}
+					break;
+				case 3:
+					if (t->columns_width[i] < t->max_c[i]) {
 						mx[i] = t->max_c[i] - t->columns_width[i];
 						if (mmax_c) {
 							w[i] = 5 + t->max_c[i] * 10 / mmax_c;
@@ -1104,7 +1108,7 @@ distribute_widths(struct table *t, int width)
 				case 5:
 					if (t->xcols[i] < 0) {
 						if (t->xcols[i] <= WIDTH_RELATIVE) {
-							w[i] =  WIDTH_RELATIVE - t->xcols[i];
+							w[i] = WIDTH_RELATIVE - t->xcols[i];
 						} else {
 							w[i] = 1;
 						}

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.246 2003/07/21 05:55:02 jonas Exp $ */
+/* $Id: options.c,v 1.247 2003/07/21 05:58:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -417,9 +417,9 @@ check_nonempty_tree(struct list_head *options)
 }
 
 void
-smart_config_string(unsigned char **str, int *len, int print_comment,
+smart_config_string(struct string *str, int print_comment,
 		    struct list_head *options, unsigned char *path, int depth,
-		    void (*fn)(unsigned char **, int *, struct option *,
+		    void (*fn)(struct string *, struct option *,
 			       unsigned char *, int, int, int))
 {
 	struct option *option;
@@ -464,37 +464,38 @@ smart_config_string(unsigned char **str, int *len, int print_comment,
 		/* For config file, we ignore do_print_comment everywhere
 		 * except 1, but sometimes we want to skip the option totally.
 		 */
-		fn(str, len, option, path, depth, option->type == OPT_TREE ? print_comment : do_print_comment, 0);
+		fn(str, option, path, depth, option->type == OPT_TREE ? print_comment : do_print_comment, 0);
 
-		fn(str, len, option, path, depth, do_print_comment, 1);
+		fn(str, option, path, depth, do_print_comment, 1);
 
 		/* And the option itself */
 
 		if (option_types[option->type].write) {
-			fn(str, len, option, path, depth, do_print_comment, 2);
+			fn(str, option, path, depth, do_print_comment, 2);
 
 		} else if (option->type == OPT_TREE) {
-			unsigned char *str2 = init_str();
-			int len2 = 0;
+			struct string newpath;
 			int pc = print_comment;
+
+			if (!init_string(&newpath)) continue; /* OK? */
 
 			if (pc == 2 && option->flags & OPT_AUTOCREATE)
 				pc = 1;
 			else if (pc == 1 && strcmp(option->name, "_template_"))
 				pc = 0;
 
-			fn(str, len, option, path, depth, /*pc*/1, 3);
+			fn(str, option, path, depth, /*pc*/1, 3);
 
 			if (path) {
-				add_to_str(&str2, &len2, path);
-				add_chr_to_str(&str2, &len2, '.');
+				add_to_string(&newpath, path);
+				add_char_to_string(&newpath, '.');
 			}
-			add_to_str(&str2, &len2, option->name);
-			smart_config_string(str, len, pc, option->ptr,
-					    str2, depth + 1, fn);
-			mem_free(str2);
+			add_to_string(&newpath, option->name);
+			smart_config_string(str, pc, option->ptr,
+					    newpath.source, depth + 1, fn);
+			done_string(&newpath);
 
-			fn(str, len, option, path, depth, /*pc*/1, 3);
+			fn(str, option, path, depth, /*pc*/1, 3);
 		}
 
 		/* TODO: We should maybe clear the touched flag only when really
@@ -515,7 +516,7 @@ eval_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 	(*argv)++; (*argc)--;	/* Consume next argument */
 
-	parse_config_file(config_options, "-eval", *(*argv - 1), NULL, NULL);
+	parse_config_file(config_options, "-eval", *(*argv - 1), NULL);
 
 	fflush(stdout);
 
@@ -720,29 +721,28 @@ print_short_help()
 {
 #define ALIGN_WIDTH 20
 	struct option *option;
-	unsigned char *saved = "";
-	int savedlen = 0;
+	struct string saved = { "", 0 };
 	unsigned char align[ALIGN_WIDTH];
-	int len = 0;
 
 	/* Initialize @space used to align captions. */
-	while (len < ALIGN_WIDTH - 1) align[len++] = ' ';
-	align[len] = '\0';
+	memset(align, ' ', sizeof(align) - 1);
+	align[sizeof(align) - 1] = 0;
 
 	foreach (option, *((struct list_head *) cmdline_options->ptr)) {
 		unsigned char *capt;
 		unsigned char *help;
-
-		len = strlen(option->name);
+		int len = strlen(option->name);
 
 		/* When no caption is available the option name is 'stacked'
 		 * and the caption is shared with next options that has one. */
 		if (!option->capt) {
-			if (!savedlen)
-				saved = init_str();
+			if (!saved.length && !init_string(&saved)) {
+				saved.source = "";
+				continue;
+			}
 
-			add_to_str(&saved, &savedlen, option->name);
-			add_to_str(&saved, &savedlen, ", -");
+			add_to_string(&saved, option->name);
+			add_to_string(&saved, ", -");
 			continue;
 		}
 
@@ -750,16 +750,16 @@ print_short_help()
 		help = gettext_nonempty(option_types[option->type].help_str);
 
 		/* When @help string is non empty align at least one space. */
-		len = ALIGN_WIDTH - len - strlen(help) - savedlen;
+		len = ALIGN_WIDTH - len - strlen(help) - saved.length;
 		len = (len < 0) ? !!(*help) : len;
 
 		align[len] = '\0';
-		printf("  -%s%s %s%s%s\n", saved, option->name, help, align, capt);
+		printf("  -%s%s %s%s%s\n", saved.source, option->name, help, align, capt);
 		align[len] = ' ';
-		if (savedlen) {
-			mem_free(saved);
-			saved = "";
-			savedlen = 0;
+		if (saved.length) {
+			done_string(&saved);
+			saved.source = "";
+			saved.length = 0;
 		}
 	}
 #undef ALIGN_WIDTH

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.40 2003/10/06 00:27:31 zas Exp $ */
+/* $Id: form.c,v 1.41 2003/10/17 12:35:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -315,21 +315,24 @@ draw_forms(struct terminal *t, struct document_view *f)
 
 
 int
-has_form_submit(struct document *f, struct form_control *frm)
+has_form_submit(struct document *document, struct form_control *frm)
 {
-	struct form_control *i;
-	int q = 0;
+	struct form_control *fc;
+	int found = 0;
 
-	assert(f && frm);
+	assert(document && frm);
 	if_assert_failed return 0;
 
-	foreach (i, f->forms) if (i->form_num == frm->form_num) {
-		if ((i->type == FC_SUBMIT || i->type == FC_IMAGE)) return 1;
-		q = 1;
+	foreach (fc, document->forms) {
+		if (fc->form_num != frm->form_num) continue;
+		found = 1;
+		if (fc->type == FC_SUBMIT || fc->type == FC_IMAGE)
+			break;
 	}
-	assertm(q, "form is not on list");
+	
+	assertm(found, "form is not on list");
 	/* Return path :-). */
-	return 0;
+	return found;
 }
 
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.215 2003/10/06 00:27:31 zas Exp $ */
+/* $Id: view.c,v 1.216 2003/10/17 12:35:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,11 +186,11 @@ detach_formatted(struct document_view *scr)
 }
 
 static inline int
-find_tag(struct document *f, unsigned char *name)
+find_tag(struct document *document, unsigned char *name)
 {
 	struct tag *tag;
 
-	foreach (tag, f->tags)
+	foreach (tag, document->tags)
 		if (!strcasecmp(tag->name, name))
 			return tag->y;
 

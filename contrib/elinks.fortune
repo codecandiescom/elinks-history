@@ -77,3 +77,5 @@ fonseca > Alright.
 %
 To move a bookmark, press <insert> or '*' on it, move the cursor
 above where you'd like it to be, and press the 'Move' button.
+%
+hooks.pl: take THAT hooks.lua - *pimp slap*

@@ -629,11 +629,14 @@ sub quit_hook
 		$line[$#line + 1] = tell if /^%$/;
 	}
 	srand();
-	seek(COOKIES, $line[int rand($#line + 1)], 0);
-	while(<COOKIES>)
+	while (!$fortune)
 	{
-		last if /^%$/;
-		$fortune .= $_;
+		seek(COOKIES, $line[int rand($#line + 1)], 0);
+		while(<COOKIES>)
+		{
+			last if /^%$/;
+			$fortune .= $_;
+		}
 	}
 	close COOKIES;
 	print("\n", $fortune);

@@ -1,3 +1,15 @@
+Wed Mar 24 19:35:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Revert wrong encoding optimization. I must be getting out of shape.  
+
+Wed Mar 24 15:10:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Minor optimization of file encoding guessing.  
+
 Tue Mar 23 20:44:44 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/task.c:

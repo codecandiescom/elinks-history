@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.12 2002/05/08 13:55:04 pasky Exp $ */
+/* $Id: af_unix.c,v 1.13 2002/05/17 19:12:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,7 +130,7 @@ int get_address()
 	}
 
 	sin->sin_family = AF_INET;
-	sin->sin_port = LINKS_PORT;
+	sin->sin_port = htons(LINKS_PORT);
 	sin->sin_addr.s_addr = htonl(0x7f000001); /* localhost */
 
 	s_unix = (struct sockaddr *) sin;

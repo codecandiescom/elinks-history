@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.59 2003/11/29 02:40:55 jonas Exp $ */
+/* $Id: text.c,v 1.60 2003/11/29 04:31:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,6 +185,7 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 		widget_data->widget->info.text.align);
 
 	if (widget_data->widget->info.text.is_label) (*y)--;
+	widget_data->h = (*y) - widget_data->y;
 
 	/* If we scrolled and something was trimmed restore it */
 	if (saved && saved_pos) *saved_pos = saved;
@@ -196,10 +197,35 @@ static void
 display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int sel)
 {
 	struct window *win = dlg_data->win;
+	int x = dlg_data->x + dlg_data->width - DIALOG_LEFT_BORDER - 1;
+	int y = widget_data->y;
+	int height = widget_data->h;
+	int scale;
+
+	if (!text_is_scrollable(widget_data)) return;
+
+	draw_area(win->term, x, y, 1, height, ' ', 0,
+		    get_bfu_color(win->term, "dialog.scrollbar"));
 
 	if (!sel) return;
 
-	set_cursor(win->term, widget_data->x, widget_data->y, 0);
+	/* FIXME: This will require some more tuning to work perfect and smooth
+	 *	  but it's a start --jonas */
+	scale = height * 100 / widget_data->info.text.lines;
+
+	/* Scale the offset of @current */
+	y += (1 + widget_data->info.text.current) * scale / 100;
+
+	/* Scale the number of visible lines */
+	height = int_max(height * scale / 100, 1);
+
+	draw_area(win->term, x, y, 1, height, ' ', 0,
+		  get_bfu_color(win->term, "dialog.scrollbar-selected"));
+
+	/* Hope this is at least a bit reasonable. Set blockable cursor and
+	 * window pointer to start of the first text line. */
+	set_cursor(win->term, widget_data->x, widget_data->y, 1);
+	set_window_ptr(win, widget_data->x, widget_data->y);
 }
 
 static int
@@ -246,6 +272,7 @@ kbd_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 				widget_data->x, &y, widget_data->w, NULL,
 				height);
 
+		display_text(widget_data, dlg_data, 1);
 		redraw_from_window(dlg_data->win);
 	}
 

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.33 2003/11/28 14:47:16 pasky Exp $ */
+/* $Id: options.inc,v 1.34 2003/11/29 04:31:01 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1040,6 +1040,30 @@ struct option_info config_options_info[] = {
 		"background", 0, "white",
 		N_("Default background color.")),
 
+	INIT_OPT_TREE("ui.colors.color.dialog", N_("Scrollbar"),
+		"scrollbar", 0,
+		N_("Scrollbar colors.")),
+
+	INIT_OPT_COLOR("ui.colors.color.dialog.scrollbar", N_("Text color"),
+		"text", 0, "black",
+		N_("Default text color.")),
+
+	INIT_OPT_COLOR("ui.colors.color.dialog.scrollbar", N_("Background color"),
+		"background", 0, "blue",
+		N_("Default background color.")),
+
+	INIT_OPT_TREE("ui.colors.color.dialog", N_("Scrollbar selected"),
+		"scrollbar-selected", 0,
+		N_("Scrollbar selected colors.")),
+
+	INIT_OPT_COLOR("ui.colors.color.dialog.scrollbar-selected", N_("Text color"),
+		"text", 0, "black",
+		N_("Default text color.")),
+
+	INIT_OPT_COLOR("ui.colors.color.dialog.scrollbar-selected", N_("Background color"),
+		"background", 0, "green",
+		N_("Default background color.")),
+
 	INIT_OPT_TREE("ui.colors.color.dialog", N_("Title"),
 		"title", 0,
 		N_("Dialog title colors.")),
@@ -1458,6 +1482,30 @@ struct option_info config_options_info[] = {
 		N_("Default text color.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.dialog.frame", N_("Background color"),
+		"background", 0, "white",
+		N_("Default background color.")),
+
+	INIT_OPT_TREE("ui.colors.mono.dialog", N_("Scrollbar"),
+		"scrollbar", 0,
+		N_("Scrollbar colors.")),
+
+	INIT_OPT_COLOR("ui.colors.mono.dialog.scrollbar", N_("Text color"),
+		"text", 0, "white",
+		N_("Default text color.")),
+
+	INIT_OPT_COLOR("ui.colors.mono.dialog.scrollbar", N_("Background color"),
+		"background", 0, "black",
+		N_("Default background color.")),
+
+	INIT_OPT_TREE("ui.colors.mono.dialog", N_("Scrollbar selected"),
+		"scrollbar-selected", 0,
+		N_("Scrollbar selected colors.")),
+
+	INIT_OPT_COLOR("ui.colors.mono.dialog.scrollbar-selected", N_("Text color"),
+		"text", 0, "black",
+		N_("Default text color.")),
+
+	INIT_OPT_COLOR("ui.colors.mono.dialog.scrollbar-selected", N_("Background color"),
 		"background", 0, "white",
 		N_("Default background color.")),
 

@@ -1,8 +1,8 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.h,v 1.2 2003/06/11 16:20:02 pasky Exp $ */
+/* $Id: hotkey.h,v 1.3 2003/06/18 01:05:55 jonas Exp $ */
 
-#ifndef __EL_HOTKEY_H
-#define __EL_HOTKEY_H
+#ifndef EL__BFU_HOTKEY_H
+#define EL__BFU_HOTKEY_H
 
 #include "bfu/menu.h"
 
@@ -16,4 +16,4 @@ void refresh_hotkeys(struct terminal *term, struct menu *menu);
 int check_hotkeys(struct menu_head *menu, unsigned char hotkey, struct terminal *term);
 int check_not_so_hot_keys(struct menu_head *menu, unsigned char key, struct terminal *term);
 
-#endif /* __EL_HOTKEY_H */
+#endif

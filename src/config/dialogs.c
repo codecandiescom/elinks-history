@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.194 2004/07/22 02:06:02 pasky Exp $ */
+/* $Id: dialogs.c,v 1.195 2004/07/30 16:11:37 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -733,7 +733,7 @@ match_keybinding(struct listbox_item *item, struct terminal *term,
 
 	return LISTBOX_MATCH_NO;
 }
- 
+
 static int
 can_delete_keybinding(struct listbox_item *item)
 {

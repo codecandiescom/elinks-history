@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.107 2005/02/20 21:41:14 miciah Exp $ */
+/* $Id: parse.c,v 1.108 2005/02/20 21:48:37 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -431,7 +431,7 @@ struct element_info {
 
 	/* Element handler. This does the relevant arguments processing and
 	 * formatting (by calling renderer hooks). Note that in a few cases,
-	 * this is just a placeholder and the element is given a special case
+	 * this is just a placeholder and the element is given special care
 	 * in start_element() (which is also where we call these handlers). */
 	void (*func)(unsigned char *);
 

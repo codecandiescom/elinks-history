@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: mime.c,v 1.1 2002/08/08 18:01:46 pasky Exp $ */
+/* $Id: mime.c,v 1.2 2002/08/08 18:12:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,13 +129,13 @@ get_content_type(unsigned char *head, unsigned char *url)
 
 
 
-unsigned char *
+void
 rmdots(unsigned char *tok)
 {
 	while (*tok) {
 		if (*tok == '.') *tok = '*';
+		tok++;
 	}
-	return tok;
 }
 
 unsigned char *
@@ -146,14 +146,14 @@ get_mime_type_name(unsigned char *type)
 
 	class = stracpy(type);
 	if (!class) { return NULL; }
+	rmdots(class);
 
 	id = strchr(class, '/');
 	if (!id) { mem_free(class); return NULL; }
-
 	*(id++) = '\0';
+	rmdots(id);
 
-	name = straconcat("mime.type", ".", rmdots(class), ".", rmdots(id),
-			  NULL);
+	name = straconcat("mime.type", ".", class, ".", id, NULL);
 	mem_free(class);
 
 	return name;

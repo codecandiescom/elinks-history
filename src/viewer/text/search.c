@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.294 2004/10/18 04:18:24 miciah Exp $ */
+/* $Id: search.c,v 1.295 2004/10/18 05:08:40 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1346,13 +1346,20 @@ link_typeahead_handler(struct input_line *line, int action)
 	}
 
 	if (action == ACT_EDIT_REDRAW) {
-		int offset;
-		int current = int_max(doc_view->vs->current_link, 0);
+		int current = doc_view->vs->current_link;
+		int offset, bufferlen;
 
-		if (current == search_link_text(doc_view->document, current,
-						current, buffer, 1, &offset)) {
+		if (current < 0) return INPUT_LINE_PROCEED;
+
+		bufferlen = strlen(buffer);
+		offset = match_link_text(&doc_view->document->links[current],
+					 buffer, bufferlen,
+					 get_opt_bool("document.browse"
+						      ".search.case"));
+
+		if (offset >= 0) {
 			draw_typeahead_match(ses->tab->term, doc_view,
-					     strlen(buffer), offset);
+					     bufferlen, offset);
 		}
 
 		return INPUT_LINE_PROCEED;
@@ -1397,6 +1404,7 @@ link_typeahead_handler(struct input_line *line, int action)
 
 		case TYPEAHEAD_ERROR_NO_FURTHER:
 			typeahead_error(ses, buffer, 1);
+			draw_typeahead_match(ses->tab->term, doc_view, strlen(buffer), offset);
 			return INPUT_LINE_PROCEED;
 
 		case TYPEAHEAD_ERROR:

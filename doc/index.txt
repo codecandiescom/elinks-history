@@ -51,8 +51,9 @@ Man pages (*)
 Developer's Guide
 	Internal Scripting (**)
 		The Lua Scripting Book ................ elinks-lua.texi
-		Events Reference Sheet (***) ............... events.txt
-	The Demented Guide to Source Hacking (****) ....... hacking.txt
+		On the Perl Scripting Interface ........ (***) perl.pod
+		Events Reference Sheet (****) .............. events.txt
+	The Demented Guide to Source Hacking (*****) ...... hacking.txt
 	The Smallest Binary Quest Spoilerbook ............... small.txt
 	A Discursus on Color Models ................... color-model.txt
 
@@ -70,12 +71,20 @@ top-level directory, you can do this by invoking the man program using:
 through embedded Lua, Guile or Perl scripts. ECMAScript scripts
 embedded in documents have nothing to do with that.
 
-(***) De iure, this is not restricted to internal scripting and should
+(***) This document is written in the Plain Old Documentation format,
+traditional for any Perl-related documentation. You can either view
+it directly by the 'perldoc' tool or convert it to a more reading-
+-friendly format by one of the numerous 'pod2' tools, most notably
+'pod2text' and 'pod2html'. All those tools should be part of your
+Perl distribution (some Linux distributions have a separate 'perldoc'
+package).
+
+(****) De iure, this is not restricted to internal scripting and should
 be of general interest. De facto, it is currently interesting almost
 exclusively to hackers in the internal scripting area - and shall it
 be very useful resource for internal scripting power users.
 
-(****) While that file contains great deal about general source code
+(*****) While that file contains great deal about general source code
 structure and especially guidelines regarding coding style, submitting
 patches etc., thus every aspiring developer should take the pains
 to read through it, do not forget to also look for README and similar
@@ -85,7 +94,7 @@ detailed notes regarding given modules/subsystems.
 
 
 
-$Id: index.txt,v 1.15 2005/04/05 19:47:16 jonas Exp $
+$Id: index.txt,v 1.16 2005/04/06 13:41:55 pasky Exp $
 
 (Note: Sometimes, I broke the lines manually earlier than gqap would,
 for greater aesthetical effect. --pasky)

@@ -1,7 +1,9 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.23 2005/04/05 19:47:16 jonas Exp $
+## $Id: Makefile.am,v 1.24 2005/04/06 13:41:55 pasky Exp $
 
 SUBDIRS = man
+
+# TODO: perl.pod should be pod2ized during make install. --pasky
 
 EXTRA_DIST = \
  README \
@@ -19,6 +21,7 @@ EXTRA_DIST = \
  mailcap.txt \
  marks.txt \
  mime.html \
+ perl.pod \
  remote.txt \
  small.txt \
  tabs.txt

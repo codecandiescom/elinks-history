@@ -1,8 +1,13 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.3 2004/11/14 15:27:29 jonas Exp $ */
+/* $Id: digest.c,v 1.4 2004/11/14 15:43:25 jonas Exp $ */
+
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
 #ifdef CONFIG_OPENSSL
 #include <openssl/md5.h>
@@ -10,11 +15,12 @@
 #include <gnutls/openssl.h>
 #endif
 
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
+#include "elinks.h"
+
 #include "protocol/auth/auth.h"
+#include "protocol/auth/digest.h"
 #include "util/memory.h"
+
 
 /* taken from RFC 2617 */
 static unsigned char *

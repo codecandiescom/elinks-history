@@ -1,9 +1,8 @@
-/* $Id: auth.h,v 1.24 2004/11/14 15:37:22 witekfl Exp $ */
+/* $Id: auth.h,v 1.25 2004/11/14 15:43:25 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_AUTH_AUTH_H
 #define EL__PROTOCOL_AUTH_AUTH_H
 
-#include "elinks.h"
 #include "protocol/uri.h"
 #include "util/object.h"
 #include "util/lists.h"

@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.64 2003/11/24 23:11:11 zas Exp $ */
+/* $Id: formhist.c,v 1.65 2003/11/24 23:22:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,7 @@ struct form_type_name {
 	unsigned char *name;
 };
 
-struct form_type_name form_type2name[] = {
+static struct form_type_name form_type2name[] = {
 	{ FC_TEXT, "text" },
 	{ FC_PASSWORD, "password" },
 	{ FC_FILE, "file" },
@@ -61,24 +61,24 @@ struct form_type_name form_type2name[] = {
 	{ FC_HIDDEN, "hidden" },
 };
 
-static inline int
+int
 str2form_type(unsigned char *s)
 {
 	register int n;
 
-	for (n = 0; (sizeof(form_type2name)/sizeof(struct form_type_name)) - 1; n++) {
+	for (n = 0; n < (sizeof(form_type2name)/sizeof(struct form_type_name)); n++) {
 		if (!strcmp(form_type2name[n].name, s)) return form_type2name[n].num;
 	}
 
 	return -1;
 };
 
-static inline unsigned char *
+unsigned char *
 form_type2str(enum form_type num)
 {
 	register int n;
 
-	for (n = 0; (sizeof(form_type2name)/sizeof(struct form_type_name)) - 1; n++) {
+	for (n = 0; n < (sizeof(form_type2name)/sizeof(struct form_type_name)); n++) {
 		if (form_type2name[n].num == num) return form_type2name[n].name;
 	}
 
@@ -337,6 +337,7 @@ form_already_saved(struct formhist_data *form1)
 
 			count++;
 			foreach (sv2, *form->submit) {
+				if (sv->type != sv2->type) continue;
 				if (!strcmp(sv->name, sv2->name)) {
 					exact++;
 					value = sv2->value;

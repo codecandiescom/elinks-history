@@ -1,5 +1,5 @@
 /* Syntax tree utility tools */
-/* $Id: syntree.c,v 1.5 2002/12/28 02:20:21 pasky Exp $ */
+/* $Id: syntree.c,v 1.6 2002/12/29 13:39:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 
 #include "elusive/parser/attrib.h"
 #include "elusive/parser/syntree.h"
+#include "util/memory.h"
 
 
 struct syntree_node *

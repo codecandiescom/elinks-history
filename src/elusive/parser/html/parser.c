@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.11 2002/12/29 12:42:16 pasky Exp $ */
+/* $Id: parser.c,v 1.12 2002/12/29 13:39:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 #include "elinks.h"
 
 #include "elusive/parser/html/parser.h"
+#include "elusive/parser/attrib.h"
 #include "elusive/parser/parser.h"
 #include "elusive/parser/syntree.h"
 #include "util/error.h"
@@ -75,7 +76,7 @@ html_state_pop(struct parser_state *state)
 
 	if (!pstate) {
 		internal("HTML state stack underflow!");
-		return;
+		return NULL;
 	}
 	state->data = pstate->up;
 	mem_free(pstate);
@@ -110,7 +111,7 @@ attrib_add(struct parser_state *state, unsigned char *name, int name_len,
 	attrib = mem_calloc(1, sizeof(struct attribute));
 	attrib->name = name; attrib->namelen = name_len;
 	attrib->value = value; attrib->valuelen = value_len;
-	add_to_list(state->current->attr, attrib);
+	add_to_list(state->current->attrs, attrib);
 }
 
 
@@ -180,7 +181,7 @@ plain_parse(struct parser_state *state, unsigned char **str, int *len)
 	/* If we can't append ourselves to the current node, make up a new
 	 * one for ourselves. */
 	if (state->current->special != NODE_SPEC_TEXT ||
-	    state->current->str + state->current->len != html) {
+	    state->current->str + state->current->strlen != html) {
 		spawn_syntree_node(state);
 
 		state->current->special = NODE_SPEC_TEXT;
@@ -265,7 +266,6 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 	struct html_parser_state *pstate = state->data;
 	unsigned char *html = *str;
 	int html_len = *len;
-	int name_len = 0;
 
 	if (pstate->data.tag.tagname) {
 		/* We've parsed the whole tag and now we're at '>'. */
@@ -358,7 +358,7 @@ tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 		pstate = html_state_pop(state);
 	}
 	if (*html != '=') {
-		add_attr(state,
+		attrib_add(state,
 			pstate->data.attr.attrname, pstate->data.attr.attrlen,
 			html, 0);
 		pstate = html_state_pop(state);
@@ -376,13 +376,13 @@ tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 	attr = html, attr_len = html_len;
 
 	while (html_len) {
-		if ((!WHITESPACE(*html) && *html != '>')
+		if ((!WHITECHAR(*html) && *html != '>')
 		    || (quoted && *html != quoted)) {
 			html++, html_len--;
 			continue;
 		}
 
-		add_attr(state,
+		attrib_add(state,
 			pstate->data.attr.attrname, pstate->data.attr.attrlen,
 			attr, attr_len - html_len);
 
@@ -428,11 +428,11 @@ tag_attr_parse(struct parser_state *state, unsigned char **str, int *len)
 			pstate = html_state_push(state, HPT_TAG_ATTR_VAL);
 			pstate->data.attr.attrname = *str;
 			pstate->data.attr.attrlen = name_len;
-			if (WHITESPACE(*html))
+			if (WHITECHAR(*html))
 				pstate = html_state_push(state, HPT_TAG_WHITE);
 
 		} else {
-			if (*html = '/') {
+			if (*html == '/') {
 				/* The tag isn't paired. */
 				/* FIXME: We should match this only at the end
 				 * of the tag, I think. --pasky */
@@ -518,7 +518,7 @@ tag_name_parse(struct parser_state *state, unsigned char **str, int *len)
 		}
 
 		pstate = html_state_push(state, HPT_TAG_ATTR);
-		if (WHITESPACE(*html)) {
+		if (WHITECHAR(*html)) {
 			pstate = html_state_push(state, HPT_TAG_WHITE);
 		}
 		*str = html, *len = html_len;
@@ -610,8 +610,9 @@ comment_end:
  * 1  on completion of the string (you can't rely on this not being 0, though),
  * 0  on change of the state,
  * -1 when we can't parse further but the string wasn't completed yet. */
-static int (*state_parsers)(struct parser_state *, unsigned char *, int *)
-								[HPT_NO] = {
+typedef int (*parse_func)(struct parser_state *, unsigned char **, int *);
+
+static parse_func state_parsers[HPT_NO] = {
 	plain_parse,
 	entity_parse,
 	tag_parse,
@@ -631,7 +632,7 @@ html_parser(struct parser_state *state, unsigned char **str, int *len)
 	if (!pstate) pstate = html_state_push(state, HPT_PLAIN);
 	if (!pstate) return;
 
-	while (html_len) {
+	while (*len) {
 		if (state_parsers[pstate->state](state, str, len) < 0)
 			return;
 	}

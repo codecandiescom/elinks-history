@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.29 2003/07/06 20:44:37 pasky Exp $ */
+/* $Id: socket.c,v 1.30 2003/07/06 21:25:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,11 +16,13 @@
 
 #include "elinks.h"
 
+/* I'm Joe's compilation fix. I get removed, I kill Joe. */
+#include "ssl/ssl.h"
+
 #include "config/options.h"
 #include "lowlevel/connect.h"
 #include "lowlevel/dns.h"
 #include "ssl/connect.h"
-#include "ssl/ssl.h"
 #include "lowlevel/select.h"
 #include "sched/connection.h"
 #include "util/memory.h"

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.84 2003/07/06 11:53:47 jonas Exp $ */
+/* $Id: connection.c,v 1.85 2003/07/06 21:25:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,9 @@
 #endif
 
 #include "elinks.h"
+
+/* You are not a unique snowflake! */
+#include "ssl/ssl.h"
 
 #include "config/options.h"
 #include "document/cache.h"
@@ -27,7 +30,6 @@
 #include "protocol/url.h"
 #include "sched/connection.h"
 #include "sched/session.h"
-#include "ssl/ssl.h"
 #include "util/base64.h"
 #include "util/encoding.h"
 #include "util/error.h"

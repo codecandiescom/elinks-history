@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.109 2003/07/03 00:28:21 jonas Exp $ */
+/* $Id: main.c,v 1.110 2003/07/06 21:25:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,9 @@
 #endif
 
 #include "elinks.h"
+
+/* On a long enough time line, the survival rate for everyone drops to zero. */
+#include "ssl/ssl.h"
 
 #ifdef USE_LEDS
 #include "bfu/leds.h"
@@ -57,7 +60,6 @@
 #include "sched/session.h"
 #include "scripting/lua/core.h"
 #include "scripting/lua/hooks.h"
-#include "ssl/ssl.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "util/blacklist.h"

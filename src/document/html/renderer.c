@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.139 2003/06/17 14:41:09 pasky Exp $ */
+/* $Id: renderer.c,v 1.140 2003/06/17 14:43:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,7 +180,14 @@ expand_lines(struct part *part, int y)
 static inline int
 xpand_line(struct part *p, int y, int x)
 {
-	assert(p && p->data && p->data->data);
+	assert(p);
+	if (!p->data) {
+		/* It appears that this is a valid situation at the
+		 * display_complicated_table() -> expand_lines() call path. */
+		/* !!! FIXME: p->x (?) */
+		return 0;
+	}
+	assert(p->data->data);
 
 	x += p->xp;
 	y += p->yp;

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.74 2004/01/28 02:25:43 jonas Exp $ */
+/* $Id: renderer.c,v 1.75 2004/01/28 02:29:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,10 +147,10 @@ get_uri_length(unsigned char *line, int length)
 }
 
 static inline int
-add_document_line(struct document *document, int lineno,
-		  unsigned char *line, int width, struct screen_char *template,
-		  struct conv_table *convert_table)
+add_document_line(struct plain_renderer *renderer, int lineno,
+		  unsigned char *line, int width, struct screen_char *template)
 {
+	struct document *document = renderer->document;
 	struct screen_char *pos;
 	int expanded = 0;
 	register int line_pos;
@@ -164,7 +164,7 @@ add_document_line(struct document *document, int lineno,
 			line[line_pos] = '.';
 	}
 
-	line = convert_string(convert_table, line, width, CSM_NONE);
+	line = convert_string(renderer->convert_table, line, width, CSM_NONE);
 	if (!line) return 0;
 
 	/* After conversion, line may have a different length. */
@@ -294,7 +294,6 @@ add_document_lines(struct plain_renderer *renderer)
 	struct document *document = renderer->document;
 	unsigned char *source = renderer->source;
 	int length = renderer->length;
-	struct conv_table *convert_table = renderer->convert_table;
 	struct screen_char template;
 	int lineno;
 	int was_empty_line = 0;
@@ -368,13 +367,12 @@ add_document_lines(struct plain_renderer *renderer)
 		xsource = memacpy(source, width);
 		if (!xsource) continue;
 
-		added = add_document_line(document, lineno, xsource, width, &template,
-					  convert_table);
+		added = add_document_line(renderer, lineno, xsource, width, &template);
 		mem_free(xsource);
 
 		if (added) {
 			/* Add (search) nodes on a line by line basis */
-			add_node(document, 0, lineno, added, 1);
+			add_node(renderer->document, 0, lineno, added, 1);
 		}
 
 		/* Skip end of line chars too. */

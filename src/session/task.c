@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.126 2004/09/28 16:12:20 pasky Exp $ */
+/* $Id: task.c,v 1.127 2004/09/28 16:21:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,7 @@ post_yes(struct task *task)
 
 	abort_preloading(task->ses, 0);
 
-	ses->loading.end = (void (*)(struct download *, void *)) doc_loading_callback;
+	ses->loading.callback = (void (*)(struct download *, void *)) doc_loading_callback;
 	ses->loading.data = task->ses;
 	ses->loading_uri = task->uri; /* XXX: Make the session inherit the URI. */
 
@@ -140,7 +140,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	if (!confirm_submit) {
 		mem_free_if(task);
 
-		ses->loading.end = (void (*)(struct download *, void *)) doc_loading_callback;
+		ses->loading.callback = (void (*)(struct download *, void *)) doc_loading_callback;
 		ses->loading.data = ses;
 		ses->loading_uri = get_uri_reference(uri);
 
@@ -414,7 +414,7 @@ loading_callback(struct download *stat, struct session *ses)
 	if (d == 2) goto end;
 
 	if (d == 1) {
-		stat->end = (void (*)(struct download *, void *)) doc_loading_callback;
+		stat->callback = (void (*)(struct download *, void *)) doc_loading_callback;
 		display_timer(ses);
 	}
 

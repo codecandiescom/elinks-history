@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.322 2004/09/28 16:12:20 pasky Exp $ */
+/* $Id: download.c,v 1.323 2004/09/28 16:21:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,7 +101,7 @@ init_file_download(struct uri *uri, struct session *ses, unsigned char *file, in
 	file_download->file = file;
 	file_download->handle = fd;
 
-	file_download->download.end = (void (*)(struct download *, void *)) download_data;
+	file_download->download.callback = (void (*)(struct download *, void *)) download_data;
 	file_download->download.data = file_download;
 	file_download->ses = ses;
 	/* The tab may be closed, but we will still want to ie. open the
@@ -956,7 +956,7 @@ tp_display(struct type_query *type_query)
 	ses->task.target_frame = target_frame;
 
 	if (!type_query->frame) {
-		cur_loc(ses)->download.end = (void (*)(struct download *, void *))
+		cur_loc(ses)->download.callback = (void (*)(struct download *, void *))
 				     doc_loading_callback;
 		cur_loc(ses)->download.data = ses;
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.565 2004/09/28 16:12:20 pasky Exp $ */
+/* $Id: session.c,v 1.566 2004/09/28 16:21:48 pasky Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -570,7 +570,7 @@ request_additional_file(struct session *ses, unsigned char *name, struct uri *ur
 
 	ftl->uri = get_uri_reference(uri);
 	ftl->target_frame = stracpy(name);
-	ftl->stat.end = (void (*)(struct download *, void *)) file_loading_callback;
+	ftl->stat.callback = (void (*)(struct download *, void *)) file_loading_callback;
 	ftl->stat.data = ftl;
 	ftl->pri = pri;
 	ftl->ses = ses;
@@ -1049,14 +1049,14 @@ reload(struct session *ses, enum cache_mode cache_mode)
 		loc->vs.ecmascript_fragile = 1;
 #endif
 		loc->download.data = ses;
-		loc->download.end = (void *) doc_loading_callback;
+		loc->download.callback = (void *) doc_loading_callback;
 		load_uri(loc->vs.uri, ses->referrer, &loc->download, PRI_MAIN, cache_mode, -1);
 		foreach (ftl, ses->more_files) {
 			if (file_to_load_is_active(ftl))
 				continue;
 
 			ftl->stat.data = ftl;
-			ftl->stat.end = (void *) file_loading_callback;
+			ftl->stat.callback = (void *) file_loading_callback;
 
 			load_additional_file(ftl, doc_view, cache_mode);
 		}

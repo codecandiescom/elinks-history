@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.202 2004/09/26 13:28:51 pasky Exp $ */
+/* $Id: connection.c,v 1.203 2004/09/28 16:21:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -405,8 +405,8 @@ send_connection_info(struct connection *conn)
 
 	foreachsafe (download, next, conn->downloads) {
 		download->cached = conn->cached;
-		if (download->end)
-			download->end(download, download->data);
+		if (download->callback)
+			download->callback(download, download->data);
 		if (is_in_progress_state(state) && connection_disappeared(conn))
 			return;
 	}
@@ -830,7 +830,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 			assertm(assigned != download, "Download assigned to '%s'", struri(conn->uri));
 			if_assert_failed {
 				download->state = S_INTERNAL;
-				if (download->end) download->end(download, download->data);
+				if (download->callback) download->callback(download, download->data);
 				return 0;
 			}
 			/* No recovery path should be necessary. */
@@ -850,8 +850,8 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 			 * probably break in some cases without this, though.
 			 * FIXME: Needs more investigation. --pasky */
 			/* if (stat->prg) stat->prg->start = start; */
-			if (download->end)
-				download->end(download, download->data);
+			if (download->callback)
+				download->callback(download, download->data);
 		}
 		return 0;
 	}
@@ -866,7 +866,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 
 		if (download) {
 			download->state = proxy_uri && proxied_uri ? S_BAD_URL : S_OUT_OF_MEM;
-			download->end(download, download->data);
+			download->callback(download, download->data);
 		}
 		if (proxy_uri) done_uri(proxy_uri);
 		if (proxied_uri) done_uri(proxied_uri);
@@ -895,7 +895,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 			download->conn = conn;
 			download->cached = conn->cached;
 			add_to_list(conn->downloads, download);
-			/* This is likely to call download->end() now! */
+			/* This is likely to call download->callback() now! */
 			set_connection_state(conn, conn->state);
 		}
 		check_queue_bugs();
@@ -906,7 +906,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 	if (!conn) {
 		if (download) {
 			download->state = S_OUT_OF_MEM;
-			download->end(download, download->data);
+			download->callback(download, download->data);
 		}
 		if (proxy_uri) done_uri(proxy_uri);
 		if (proxied_uri) done_uri(proxied_uri);
@@ -949,7 +949,7 @@ change_connection(struct download *old, struct download *new,
 			new->cached = old->cached;
 			new->state = old->state;
 			new->prev_error = old->prev_error;
-			if (new->end) new->end(new, new->data);
+			if (new->callback) new->callback(new, new->data);
 		}
 		return;
 	}

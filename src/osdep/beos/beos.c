@@ -1,5 +1,5 @@
 /* BeOS system-specific routines. */
-/* $Id: beos.c,v 1.19 2004/11/08 15:42:57 jonas Exp $ */
+/* $Id: beos.c,v 1.20 2005/02/28 14:03:28 zas Exp $ */
 
 /* Note that this file is currently unmaintained and basically dead. Noone
  * cares about BeOS support, apparently. This file may yet survive for some
@@ -90,7 +90,7 @@ start_thr(void (*fn)(void *), void *data, unsigned char *name)
 		thr_sem_init = 1;
 	} else if (acquire_sem(thr_sem) < B_NO_ERROR) return -1;
 
-	thrd = malloc(sizeof(struct active_thread));
+	thrd = malloc(sizeof(*thrd));
 	if (!thrd) goto rel;
 	thrd->fn = fn;
 	thrd->data = data;
@@ -136,7 +136,7 @@ start_thread(void (*fn)(void *, int), void *ptr, int l)
 
 	if (c_pipe(p) < 0) return -1;
 
-	t = malloc(sizeof(struct tdata) + l);
+	t = malloc(sizeof(*t) + l);
 	if (!t) return -1;
 	t->fn = fn;
 	t->h = p[1];

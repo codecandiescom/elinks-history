@@ -1,5 +1,5 @@
 /* UNIX system-specific routines. */
-/* $Id: unix.c,v 1.21 2004/11/08 02:43:55 jonas Exp $ */
+/* $Id: unix.c,v 1.22 2005/02/28 14:04:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ gpm_mouse_in(struct gpm_mouse_spec *gms)
 	else
 		return;
 
-	gms->fn(gms->data, (char *) &ev, sizeof(struct term_event));
+	gms->fn(gms->data, (char *) &ev, sizeof(ev));
 }
 
 int
@@ -95,7 +95,7 @@ handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
 	h = init_mouse(cons, 0);
 	if (h < 0) return NULL;
 
-	gms = mem_alloc(sizeof(struct gpm_mouse_spec));
+	gms = mem_alloc(sizeof(*gms));
 	if (!gms) return NULL;
 	gms->h = h;
 	gms->cons = cons;

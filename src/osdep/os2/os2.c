@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.30 2004/12/26 23:36:47 jonas Exp $ */
+/* $Id: os2.c,v 1.31 2005/02/28 14:03:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -513,7 +513,7 @@ mouse_thread(void *p)
 			ev.info.mouse.button = (status & BM_BUTT) | B_UP;
 			status = -1;
 		}
-		if (hard_write(oms->p[1], (unsigned char *) &ev, sizeof(struct term_event)) != sizeof(struct term_event)) break;
+		if (hard_write(oms->p[1], (unsigned char *) &ev, sizeof(ev)) != sizeof(ev)) break;
 	}
 #ifdef HAVE_SYS_FMUTEX_H
 	_fmutex_request(&mouse_mutex, _FMR_IGNINT);
@@ -561,7 +561,7 @@ handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
 	}
 #endif
 		/* This is never freed but it's allocated only once */
-	oms = malloc(sizeof(struct os2_mouse_spec));
+	oms = malloc(sizeof(*oms));
 	if (!oms) return NULL;
 	oms->fn = fn;
 	oms->data = data;
@@ -680,7 +680,7 @@ start_thread(void (*fn)(void *, int), void *ptr, int l)
 	if (set_nonblocking_fd(p[0]) < 0) return -1;
 	if (set_nonblocking_fd(p[1]) < 0) return -1;
 
-	t = malloc(sizeof(struct tdata) + l);
+	t = malloc(sizeof(*t) + l);
 	if (!t) return -1;
 	t->fn = fn;
 	t->h = p[1];

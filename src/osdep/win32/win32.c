@@ -1,5 +1,5 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.23 2005/02/11 20:04:32 jonas Exp $ */
+/* $Id: win32.c,v 1.24 2005/02/28 14:04:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,7 +157,7 @@ start_thread(void (*fn)(void *, int), void *ptr, int l)
 	if (c_pipe(p) < 0)
 		return -1;
 
-	t = malloc(sizeof(struct tdata) + l);
+	t = malloc(sizeof(*t) + l);
 	if (!t)
 		return -1;
 	t->fn = fn;

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.35 2004/01/08 14:25:27 jonas Exp $ */
+/* $Id: action.c,v 1.36 2004/01/08 18:37:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 #include "cookies/dialogs.h"
 #include "dialogs/document.h"
 #include "dialogs/download.h"
+#include "dialogs/info.h"
 #include "dialogs/menu.h"
 #include "dialogs/options.h"
 #include "dialogs/status.h"
@@ -339,6 +340,10 @@ do_action(struct session *ses, enum keyact action, int verbose)
 
 		case ACT_RESET_FORM:
 			do_frame_action(ses, reset_form, 0);
+			break;
+
+		case ACT_RESOURCE_INFO:
+			resource_info(term);
 			break;
 
 		case ACT_RESUME_DOWNLOAD:

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.84 2004/01/01 02:53:39 pasky Exp $ */
+/* $Id: info.c,v 1.85 2004/01/08 18:37:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,7 +165,7 @@ get_ressource_info(struct terminal *term, void *data)
 }
 
 void
-res_inf(struct terminal *term, void *d, struct session *ses)
+resource_info(struct terminal *term)
 {
 	refreshed_msg_box(term, 0, N_("Resources"), AL_LEFT,
 			  get_ressource_info, NULL);

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.44 2003/06/08 10:49:28 zas Exp $ */
+/* $Id: file.c,v 1.45 2003/06/20 15:24:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -256,29 +256,6 @@ stat_date(unsigned char **p, int *l, struct stat *stp)
 	str[sizeof(str) - 1] = '\0';
 	add_to_str(p, l, str);
 	add_chr_to_str(p, l, ' ');
-}
-
-static enum stream_encoding
-guess_encoding(unsigned char *fname)
-{
-	int fname_len = strlen(fname);
-	unsigned char *fname_end = fname + fname_len;
-	unsigned char **ext;
-	int enc;
-
-	for (enc = 1; enc < NB_KNOWN_ENCODING; enc++) {
-		ext = listext_encoded(enc);
-		while (ext && *ext) {
-			int len = strlen(*ext);
-
-			if (fname_len > len
-			    && !strcmp(fname_end - len, *ext))
-				return enc;
-			ext++;
-		}
-	}
-
-	return ENCODING_NONE;
 }
 
 

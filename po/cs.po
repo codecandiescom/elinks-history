@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-09-01 00:24+0200\n"
-"PO-Revision-Date: 2003-07-26 23:12+0100\n"
+"PO-Revision-Date: 2003-09-02 23:11+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -451,15 +451,15 @@ msgstr "Pokus o automatické doplnìní vstupu"
 
 #: src/config/kbdbind.c:374
 msgid "Attempt to unambiguously auto-complete the input"
-msgstr ""
+msgstr "Pokus o automatické doplnìní vstupu nejvhodnìj¹í alternativou"
 
 #: src/config/kbdbind.c:375
 msgid "Return to the previous document in history"
-msgstr ""
+msgstr "Návrat k pøedchozímu dokumentu v historii"
 
 #: src/config/kbdbind.c:376
 msgid "Delete character in front of the cursor"
-msgstr ""
+msgstr "Smazání znaku pøed kurzorem"
 
 #: src/config/kbdbind.c:377
 msgid "Open bookmark manager"
@@ -467,27 +467,27 @@ msgstr "Správce bookmarkù"
 
 #: src/config/kbdbind.c:378
 msgid "Reload cookies file"
-msgstr ""
+msgstr "Znovunahrání souboru s cookies"
 
 #: src/config/kbdbind.c:379
 msgid "Copy text to clipboard"
-msgstr ""
+msgstr "Zkopírování textu do schránky"
 
 #: src/config/kbdbind.c:380
 msgid "Delete text from clipboard"
-msgstr ""
+msgstr "Smazání textu ze schránky"
 
 #: src/config/kbdbind.c:381
 msgid "Delete character under cursor"
-msgstr ""
+msgstr "Smazání znaku pod kurzorem"
 
 #: src/config/kbdbind.c:382
 msgid "Show informations about the current page"
-msgstr ""
+msgstr "Zobrazení informací o souèasné stránce"
 
 #: src/config/kbdbind.c:383
 msgid "Move cursor downwards"
-msgstr ""
+msgstr "Posun kurzoru dolù"
 
 #: src/config/kbdbind.c:384
 msgid "Download the current link"
@@ -501,30 +501,30 @@ msgstr "Stáhnout obrázek"
 msgid "Begin editing"
 msgstr "Zaèít editovat"
 
-#. FIXME
 #: src/config/kbdbind.c:387
 msgid "Go to the end of the page/line"
-msgstr ""
+msgstr "Jít na konec stránky èi øádky"
 
 #: src/config/kbdbind.c:388
 msgid "Follow the current link"
 msgstr "Otevøít link"
 
+# XXX: uh.
 #: src/config/kbdbind.c:389
 msgid "Follow the current link, forcing reload of the target"
-msgstr ""
+msgstr "Následovat linky s donucením znovunahrání cíle"
 
 #: src/config/kbdbind.c:390
 msgid "Open the File menu"
-msgstr ""
+msgstr "Otevøít menu Soubor"
 
 #: src/config/kbdbind.c:391
 msgid "Find the next occurrence of the current search text"
-msgstr ""
+msgstr "Najít dal¹í výskyt právì vyhledávaného textu"
 
 #: src/config/kbdbind.c:392
 msgid "Find the previous occurrence of the current search text"
-msgstr ""
+msgstr "Najít pøedchozí výskyt právì vyhledávaného textu"
 
 #: src/config/kbdbind.c:393
 msgid "Forget authentication credentials"
@@ -532,23 +532,23 @@ msgstr ""
 
 #: src/config/kbdbind.c:394
 msgid "Open \"Go to URL\" dialog box"
-msgstr ""
+msgstr "Otevøít dialog \"Bì¾ na URL\""
 
 #: src/config/kbdbind.c:395
 msgid "Open \"Go to URL\" dialog box containing the current URL"
-msgstr ""
+msgstr "Otevøít dialog \"Bì¾ na URL\" s pøedvyplnìnou souèasnou URL"
 
 #: src/config/kbdbind.c:396
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
+msgstr "Otevøít dialog \"Bì¾ na URL\" s pøedvyplnìnou URL aktuálního linku"
 
 #: src/config/kbdbind.c:397
 msgid "Go to the homepage"
-msgstr ""
+msgstr "Jít na domovskou stránku"
 
 #: src/config/kbdbind.c:398
 msgid "Show informations about the current page HTTP headers"
-msgstr ""
+msgstr "Zobrazit informace o HTTP hlavièkách souèasné stránky"
 
 #: src/config/kbdbind.c:399
 msgid "Open history manager"
@@ -556,7 +556,7 @@ msgstr "Správce historie"
 
 #: src/config/kbdbind.c:400
 msgid "Go to the start of the page/line"
-msgstr ""
+msgstr "Jít na zaèátek øádky èi stránky"
 
 #: src/config/kbdbind.c:401
 msgid "Delete to beginning of line"
@@ -576,7 +576,7 @@ msgstr "Posunout kurzor doleva"
 
 #: src/config/kbdbind.c:405
 msgid "Open the link context menu"
-msgstr ""
+msgstr "Otevøít kontextové menu k odkazu"
 
 #: src/config/kbdbind.c:406
 msgid "Jump to link"
@@ -588,16 +588,16 @@ msgstr "Lua konzole"
 
 #: src/config/kbdbind.c:410
 msgid "Open a Lua console (DISABLED)"
-msgstr ""
+msgstr "Otevøít Lua konzoli (VYPNUTO)"
 
 #. internal use only
 #: src/config/kbdbind.c:413
 msgid "Activate the menu"
-msgstr ""
+msgstr "Aktivovat menu"
 
 #: src/config/kbdbind.c:414
 msgid "Move to the next frame"
-msgstr ""
+msgstr "Pøesnuout se do následujícího rámce"
 
 #: src/config/kbdbind.c:415
 msgid "Open a new window"
@@ -613,11 +613,11 @@ msgstr "Správce nastavení"
 
 #: src/config/kbdbind.c:418
 msgid "Move downwards by a page"
-msgstr ""
+msgstr "Pøesunout se o stránku ní¾e"
 
 #: src/config/kbdbind.c:419
 msgid "Move upwards by a page"
-msgstr ""
+msgstr "Pøesunout se o stránku vý¹e"
 
 #: src/config/kbdbind.c:420
 msgid "Paste text from the clipboard"
@@ -637,7 +637,7 @@ msgstr "Skonèit bez ptaní"
 
 #: src/config/kbdbind.c:424
 msgid "Reload the current page"
-msgstr ""
+msgstr "Obnovit souèasnou stránku"
 
 #: src/config/kbdbind.c:425
 msgid "Attempt to resume download of the current link"

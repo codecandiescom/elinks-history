@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.111 2003/11/22 13:44:19 jonas Exp $ */
+/* $Id: listbox.c,v 1.112 2003/11/24 01:10:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -457,16 +457,12 @@ init_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	     struct term_event *ev)
 {
 	struct hierbox_browser *browser = dlg_data->dlg->udata2;
-	struct listbox_data *box;
-
-	box = mem_calloc(1, sizeof(struct listbox_data));
-	/* FIXME: Cancel the dialog somehow */
-	if (!box) return;
+	struct listbox_data *box =
+		(struct listbox_data *) widget_data->widget->data;
 
 	box->ops = browser->ops;
 	box->items = browser->items;
 	add_to_list(browser->boxes, box);
-	widget_data->widget->data = (void *) box;
 }
 
 static int

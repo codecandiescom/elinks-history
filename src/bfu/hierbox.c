@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.98 2003/11/24 00:33:55 jonas Exp $ */
+/* $Id: hierbox.c,v 1.99 2003/11/24 01:10:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -211,6 +211,8 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 			struct hierbox_dialog_list_item *item;
 			struct listbox_item *litem;
 
+			/* If we fail here it only means automatic updating
+			 * will not be possible so no need to panic. */
 			item = mem_alloc(sizeof(struct hierbox_dialog_list_item));
 			if (item) {
 				item->dlg_data = dlg_data;
@@ -234,7 +236,6 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 
 			/* Delete the box structure */
 			del_from_list(box);
-			mem_free(box);
 
 			/* Delete the dialog list entry */
 			foreach (item, browser->dialogs) {
@@ -257,13 +258,16 @@ struct dialog_data *
 hierbox_browser(struct hierbox_browser *browser, struct session *ses)
 {
 	struct terminal *term = ses->tab->term;
+	struct listbox_data *listbox_data;
 	struct dialog *dlg;
-	int button = 0;
+	int button = browser->buttons_size + 2;
 
 	assert(ses);
 
-	dlg = calloc_dialog(browser->buttons_size + 2, 0);
+	dlg = calloc_dialog(button, sizeof(struct listbox_data));
 	if (!dlg) return NULL;
+
+	listbox_data = (struct listbox_data *) get_dialog_offset(dlg, button);
 
 	dlg->title = _(browser->title, term);
 	dlg->layouter = generic_dialog_layouter;
@@ -273,7 +277,7 @@ hierbox_browser(struct hierbox_browser *browser, struct session *ses)
 	dlg->udata = ses;
 	dlg->udata2 = browser;
 
-	add_dlg_listbox(dlg, 12);
+	add_dlg_listbox(dlg, 12, listbox_data);
 
 	for (button = 0; button < browser->buttons_size; button++) {
 		hierbox_button_handler handler = browser->buttons[button].handler;

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.150 2003/12/30 18:44:55 jonas Exp $ */
+/* $Id: menu.c,v 1.151 2004/01/01 15:54:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -469,7 +469,7 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 			break;
 
 		case EV_MOUSE:
-#ifdef USE_MOUSE
+#ifdef CONFIG_MOUSE
 			switch (ev->b & BM_BUTT) {
 				/* XXX: We return here directly because we
 				 * would just break this switch instead of the
@@ -542,7 +542,7 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 					}
 				}
 			}
-#endif /* USE_MOUSE */
+#endif /* CONFIG_MOUSE */
 			break;
 
 		case EV_KBD:
@@ -831,7 +831,7 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 			break;
 
 		case EV_MOUSE:
-#ifdef USE_MOUSE
+#ifdef CONFIG_MOUSE
 			if ((ev->b & BM_BUTT) >= B_WHEEL_UP)
 				break;
 
@@ -887,7 +887,7 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 					break;
 				}
 			}
-#endif /* USE_MOUSE */
+#endif /* CONFIG_MOUSE */
 			break;
 
 		case EV_KBD:

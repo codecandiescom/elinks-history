@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.43 2003/12/30 00:25:20 zas Exp $ */
+/* $Id: kbd.c,v 1.44 2004/01/01 15:54:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,7 +174,7 @@ send_init_sequence(int h, int flags)
 	if (flags & USE_ALTSCREEN) {
 		write_sequence(h, INIT_ALT_SCREEN_SEQ);
 	}
-#ifdef USE_MOUSE
+#ifdef CONFIG_MOUSE
 	write_sequence(h, INIT_TWIN_MOUSE_SEQ);
 	write_sequence(h, INIT_XWIN_MOUSE_SEQ);
 #endif
@@ -191,7 +191,7 @@ send_done_sequence(int h, int flags)
 {
 	write_sequence(h, DONE_CLS_SEQ);
 
-#ifdef USE_MOUSE
+#ifdef CONFIG_MOUSE
 	/* This is a hack to make xterm + alternate screen working,
 	 * if we send only DONE_XWIN_MOUSE_SEQ, mouse is not totally
 	 * released it seems, in rxvt and xterm... --Zas */
@@ -829,7 +829,7 @@ process_queue(struct itrm *itrm)
 
 				case 'R': resize_terminal(); break;
 				case 'M':
-#ifdef USE_MOUSE
+#ifdef CONFIG_MOUSE
 				{
 					static int xterm_button = -1;
 
@@ -898,7 +898,7 @@ process_queue(struct itrm *itrm)
 					}
 					ev.ev = EV_MOUSE;
 				}
-#endif /* USE_MOUSE */
+#endif /* CONFIG_MOUSE */
 				break;
 			}
 

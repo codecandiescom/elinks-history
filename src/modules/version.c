@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.26 2003/12/31 14:26:50 jonas Exp $ */
+/* $Id: version.c,v 1.27 2004/01/01 15:54:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,7 +102,7 @@ get_dyn_full_version(struct terminal *term, int more)
 #ifdef HAVE_BZLIB_H
 		comma, "bzip2",
 #endif
-#ifndef USE_MOUSE
+#ifndef CONFIG_MOUSE
 		comma, _("No mouse", term),
 #endif
 		comma,

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.120 2003/12/27 13:41:22 zas Exp $ */
+/* $Id: dialog.c,v 1.121 2004/01/01 15:54:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,13 +221,13 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 			break;
 
 		case EV_MOUSE:
-#ifdef USE_MOUSE
+#ifdef CONFIG_MOUSE
 			for (i = 0; i < dlg_data->n; i++)
 				if (dlg_data->widgets_data[i].widget->ops->mouse
 				    && dlg_data->widgets_data[i].widget->ops->mouse(&dlg_data->widgets_data[i], dlg_data, ev)
 				       == EVENT_PROCESSED)
 					break;
-#endif /* USE_MOUSE */
+#endif /* CONFIG_MOUSE */
 			break;
 
 		case EV_KBD:

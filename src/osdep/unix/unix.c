@@ -1,5 +1,5 @@
 /* UNIX system-specific routines. */
-/* $Id: unix.c,v 1.10 2003/10/28 01:25:17 pasky Exp $ */
+/* $Id: unix.c,v 1.11 2004/01/01 15:54:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,7 +23,7 @@
 #include "util/memory.h"
 
 
-#if defined(GPM_MOUSE) && defined(USE_MOUSE)
+#if defined(GPM_MOUSE) && defined(CONFIG_MOUSE)
 
 struct gpm_mouse_spec {
 	int h;

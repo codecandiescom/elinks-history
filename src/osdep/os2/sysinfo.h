@@ -1,4 +1,4 @@
-/* $Id: sysinfo.h,v 1.2 2003/10/28 00:23:53 pasky Exp $ */
+/* $Id: sysinfo.h,v 1.3 2004/01/01 15:54:38 jonas Exp $ */
 
 #ifndef EL__OSDEP_OS2_SYSINFO_H
 #define EL__OSDEP_OS2_SYSINFO_H
@@ -20,7 +20,7 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 #ifdef HAVE_BEGINTHREAD
 #define THREAD_SAFE_LOOKUP
 #endif
-#if defined(HAVE_MOUOPEN) && defined(USE_MOUSE)
+#if defined(HAVE_MOUOPEN) && defined(CONFIG_MOUSE)
 #define OS2_MOUSE
 #endif
 

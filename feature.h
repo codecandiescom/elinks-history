@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.31 2004/01/01 15:50:29 jonas Exp $ */
+/* $Id: feature.h,v 1.32 2004/01/01 15:54:37 jonas Exp $ */
 
 #ifndef EL__DOTDOT_FEATURE_H
 #define EL__DOTDOT_FEATURE_H
@@ -295,7 +295,7 @@
  *
  * Default: enabled */
 
-#define USE_MOUSE
+#define CONFIG_MOUSE
 
 
 /*** Local CGI Support

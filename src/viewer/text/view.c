@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.325 2004/01/01 15:36:19 jonas Exp $ */
+/* $Id: view.c,v 1.326 2004/01/01 15:54:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -831,7 +831,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 					x = 0;
 				}
 		}
-#ifdef USE_MOUSE
+#ifdef CONFIG_MOUSE
 	} else if (ev->ev == EV_MOUSE) {
 		/* TODO: Pop up the tab_menu() when right clicking is not
 		 * handled by anything else here. */
@@ -890,7 +890,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 				rep_ev(ses, doc_view, hscroll, 8);
 			}
 		}
-#endif /* USE_MOUSE */
+#endif /* CONFIG_MOUSE */
 	} else {
 		x = 0;
 	}
@@ -945,7 +945,7 @@ send_to_frame(struct session *ses, struct term_event *ev)
 	return r;
 }
 
-#ifdef USE_MOUSE
+#ifdef CONFIG_MOUSE
 static void
 do_mouse_event(struct session *ses, struct term_event *ev,
 	       struct document_view *doc_view)
@@ -982,7 +982,7 @@ ok:
 	evv.y -= doc_view->y;
 	send_to_frame(ses, &evv);
 }
-#endif /* USE_MOUSE */
+#endif /* CONFIG_MOUSE */
 
 void
 send_event(struct session *ses, struct term_event *ev)
@@ -1267,7 +1267,7 @@ quit:
 			return;
 		}
 	}
-#ifdef USE_MOUSE
+#ifdef CONFIG_MOUSE
 	if (ev->ev == EV_MOUSE) {
 		int bars;
 
@@ -1310,7 +1310,7 @@ quit:
 		}
 		if (doc_view) do_mouse_event(ses, ev, doc_view);
 	}
-#endif /* USE_MOUSE */
+#endif /* CONFIG_MOUSE */
 	return;
 
 x:

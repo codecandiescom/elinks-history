@@ -1968,6 +1968,7 @@ int load_url_history();
 int save_url_history();
 
 extern int anonymous;
+extern unsigned char user_agent[];
 
 extern unsigned char system_name[];
 

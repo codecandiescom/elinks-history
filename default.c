@@ -783,6 +783,11 @@ Options are:\n\
  -version\n\
   Prints the links version number and exit.\n\
 \n\
+ -user-agent <agent>\n\
+  Change the User Agent. That means identification string, which\n\
+  is sent to HTTP server, when a document is requested. Default\n\
+  is \"Links (version; system_id)\".\n\
+\n\
  -help\n\
   Prints this help screen\n\
 \n\
@@ -861,6 +866,8 @@ unsigned char download_dir[MAX_STR_LEN] = "";
 
 unsigned char default_anon_pass[MAX_STR_LEN] = "somebody@host.domain";
 
+unsigned char user_agent[MAX_STR_LEN] = "";
+
 /* These are workarounds for some CGI script bugs */
 struct http_bugs http_bugs = { 0, 1, 0, 0 };
 /*int bug_302_redirect = 0;*/
@@ -879,6 +886,7 @@ struct option links_options[] = {
 	1, version_cmd, NULL, NULL, 0, 0, NULL, NULL, "version",
 	1, no_connect_cmd, NULL, NULL, 0, 0, NULL, NULL, "no-connect",
 	1, anonymous_cmd, NULL, NULL, 0, 0, NULL, NULL, "anonymous",
+	1, gen_cmd, str_rd, str_wr, 0, MAX_STR_LEN, user_agent, "user_agent", "user-agent",
 	1, gen_cmd, num_rd, NULL, 0, MAXINT, &base_session, NULL, "base-session",
 	1, dump_cmd, NULL, NULL, D_DUMP, 0, NULL, NULL, "dump",
 	1, dump_cmd, NULL, NULL, D_SOURCE, 0, NULL, NULL, "source",

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.195 2004/07/30 16:11:37 zas Exp $ */
+/* $Id: dialogs.c,v 1.196 2004/09/23 12:40:27 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -540,7 +540,11 @@ options_manager(struct session *ses)
   Keybinding manager stuff.
 ****************************************************************************/
 
+#ifdef CONFIG_SMALL
+static int keybinding_text_toggle = 1;
+#else
 static int keybinding_text_toggle;
+#endif
 
 /* XXX: ACTION_BOX_SIZE is just a quick hack, we ought to allocate
  * the sub-arrays separately. --pasky */
@@ -589,7 +593,9 @@ init_keybinding_listboxes(struct strtonum *keymaps, struct strtonum *actions[])
 			    || act->num == ACT_MAIN_NONE)
 				continue;
 
+#ifndef CONFIG_SMALL
 			assert(act->desc);
+#endif
 
 			item = add_listbox_item(NULL, keymap, BI_FOLDER, act, -1);
 			if (!item) continue;
@@ -907,8 +913,10 @@ static int
 push_kbdbind_toggle_display_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
+#ifndef CONFIG_SMALL
 	keybinding_text_toggle = !keybinding_text_toggle;
 	clear_dialog(dlg_data, some_useless_info_button);
+#endif
 	return 0;
 }
 

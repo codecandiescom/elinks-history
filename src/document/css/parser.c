@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.108 2004/09/20 22:18:25 pasky Exp $ */
+/* $Id: parser.c,v 1.109 2004/09/20 22:28:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,7 +187,6 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 	while (scanner_has_tokens(scanner)) {
 		struct scanner_token *token = get_scanner_token(scanner);
-		struct scanner_token element;
 		struct css_selector *selector;
 		enum css_selector_relation reltype = CSR_ROOT;
 		enum css_selector_type seltype = CST_ELEMENT;
@@ -258,19 +257,12 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		}
 
 
-		/* Save it */
-
-		memcpy(&element, token, sizeof(struct scanner_token));
-		token = get_next_scanner_token(scanner);
-		if (!token) return;
-
-
 		/* Register the selector */
 
 		if (!pkg) {
 			selector = get_css_base_selector(css, seltype,
-					element.string,
-					element.length);
+					token->string,
+					token->length);
 			if (!selector) continue;
 
 			pkg = mem_calloc(1, sizeof(struct selector_pkg));
@@ -281,8 +273,8 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 			/* We append under the last fragment. */
 			selector = get_css_selector(&pkg->selector->leaves,
 			                            seltype,
-						    element.string,
-						    element.length);
+						    token->string,
+						    token->length);
 			if (!selector) continue;
 
 			selector->relation = reltype;
@@ -292,8 +284,8 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 			 * of the previous selector fragment and reparent
 			 * it to the upcoming one. */
 			selector = get_css_base_selector(css, seltype,
-					element.string,
-					element.length);
+					token->string,
+					token->length);
 			if (!selector) continue;
 
 			del_from_list(pkg->selector);
@@ -305,6 +297,9 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 
 		/* What to do next */
+
+		token = get_next_scanner_token(scanner);
+		if (!token) return;
 
 		if (token->type == ',') {
 			/* Another selector hooked to these properties. */

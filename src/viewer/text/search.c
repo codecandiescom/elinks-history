@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.64 2003/10/24 23:39:50 pasky Exp $ */
+/* $Id: search.c,v 1.65 2003/10/25 12:45:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1090,18 +1090,14 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	hop->data = data;
 
 #define SEARCH_DLG_SIZE 8
-#define SIZEOF_DIALOG (sizeof(struct dialog) + (SEARCH_DLG_SIZE + 1) * sizeof(struct widget))
-
-	dlg = mem_calloc(1, SIZEOF_DIALOG + l);
+	dlg = calloc_dialog(SEARCH_DLG_SIZE, l);
 	if (!dlg) {
 		mem_free(hop);
 		return;
 	}
 
-	field = (unsigned char *) dlg + SIZEOF_DIALOG;
+	field = (unsigned char *) dlg + sizeof_dialog(SEARCH_DLG_SIZE, 0);
 	*field = 0;
-
-#undef SIZEOF_DIALOG
 
 	if (def) {
 		int defsize = strlen(def) + 1;

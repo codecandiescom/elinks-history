@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.46 2003/10/25 11:46:31 zas Exp $ */
+/* $Id: dialogs.c,v 1.47 2003/10/25 12:45:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -454,11 +454,8 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	}
 
 	/* XXX: sizeof(struct global_history_item): why? */
-
-	dlg = mem_calloc(1, sizeof(struct dialog)
-			    + (HISTORY_BOX_IND + 2) * sizeof(struct widget)
-			    + sizeof(struct global_history_item)
-			    + 2 * MAX_STR_LEN);
+	dlg = calloc_dialog(HISTORY_BOX_IND + 1,
+			    sizeof(struct global_history_item) + 2 * MAX_STR_LEN);
 	if (!dlg) return;
 
 	dlg->title = _("Global history", term);

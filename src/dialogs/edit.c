@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.46 2003/10/24 23:39:48 pasky Exp $ */
+/* $Id: edit.c,v 1.47 2003/10/25 12:45:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,20 +105,17 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	       void *done_data,
 	       enum edit_dialog_type dialog_type)
 {
-	/* Number of fields in edit dialog --Zas */
-#define EDIT_DIALOG_FIELDS_NB 5
-
 	unsigned char *name, *url;
 	struct dialog *dlg;
 	int n = 0;
 
 	if (intl) title = _(title, term);
 
+	/* Number of fields in edit dialog --Zas */
+#define EDIT_DIALOG_FIELDS_NB 5
+
 	/* Create the dialog */
-	dlg = mem_calloc(1, sizeof(struct dialog)
-			    + (EDIT_DIALOG_FIELDS_NB + 1)
-			      * sizeof(struct widget)
-			    + 2 * MAX_STR_LEN);
+	dlg = calloc_dialog(EDIT_DIALOG_FIELDS_NB, 2 * MAX_STR_LEN);
 	if (!dlg) return;
 
 	name = (unsigned char *) &dlg->items[EDIT_DIALOG_FIELDS_NB + 1];

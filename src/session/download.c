@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.115 2003/10/24 23:39:49 pasky Exp $ */
+/* $Id: download.c,v 1.116 2003/10/25 12:45:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -423,8 +423,7 @@ display_download(struct terminal *term, struct file_download *down,
 
 #define DOWNLOAD_DLG_SIZE 3
 found:
-	dlg = mem_calloc(1, sizeof(struct dialog)
-			    + (DOWNLOAD_DLG_SIZE + 1) * sizeof(struct widget));
+	dlg = calloc_dialog(DOWNLOAD_DLG_SIZE, 0);
 	if (!dlg) return;
 
 	undisplay_download(down);

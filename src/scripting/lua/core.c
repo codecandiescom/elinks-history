@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.87 2003/10/24 23:39:50 pasky Exp $ */
+/* $Id: core.c,v 1.88 2003/10/25 12:45:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -426,9 +426,7 @@ l_edit_bookmark_dialog(LS)
 	}
 
 #define L_EDIT_BMK_DLG_SIZE 5
-	dlg = mem_calloc(1, sizeof(struct dialog)
-			    + (L_EDIT_BMK_DLG_SIZE + 1) * sizeof(struct widget)
-			    + sizeof *data);
+	dlg = calloc_dialog(L_EDIT_BMK_DLG_SIZE, sizeof(struct lua_dlg_data));
 	if (!dlg) return 0;
 
 	data = (struct lua_dlg_data *)&dlg->items[L_EDIT_BMK_DLG_SIZE + 1];
@@ -559,17 +557,16 @@ l_xdialog(LS)
 
 	nargs = lua_gettop(S);
 	nfields = nargs - 1;
-	nitems = nfields + 3;
+	nitems = nfields + 2;
 
 	if ((nfields < 1) || (nfields > XDIALOG_MAX_FIELDS)) goto lua_error;
 	for (i = 1; i < nargs; i++) if (!lua_isstring(S, i)) goto lua_error;
 	if (!lua_isfunction(S, nargs)) goto lua_error;
 
-	dlg = mem_calloc(1, sizeof(struct dialog) + nitems * sizeof(struct widget)
-			  + sizeof *data);
+	dlg = calloc_dialog(nitems, sizeof(struct lua_xdialog_data));
 	if (!dlg) return 0;
 
-	data = (struct lua_xdialog_data *)&dlg->items[nitems];
+	data = (struct lua_xdialog_data *)&dlg->items[nitems + 1];
 	data->state = S;
 	data->nfields = nfields;
 	for (i = 0; i < nfields; i++)
@@ -594,7 +591,7 @@ l_xdialog(LS)
 
 	add_dlg_end(dlg, i);
 
-	assert(i == nitems - 1);
+	assert(i == nitems);
 
 	do_dialog(lua_ses->tab->term, dlg, getml(dlg, NULL));
 

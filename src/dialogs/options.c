@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.91 2003/10/24 23:39:48 pasky Exp $ */
+/* $Id: options.c,v 1.92 2003/10/25 12:45:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,8 +187,6 @@ terminal_options_fn(struct dialog_data *dlg_data)
 #define TERMOPT_WIDGETS 15
 #endif
 
-#define TERMOPT_WIDGET_SIZE (TERMOPT_WIDGETS * sizeof(struct widget))
-
 void
 terminal_options(struct terminal *term, void *xxx, struct session *ses)
 {
@@ -199,7 +197,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	termopt_hop = mem_calloc(1, sizeof(struct termopt_hop));
 	if (!termopt_hop) return;
 
-	dlg = mem_calloc(1, sizeof(struct dialog) + TERMOPT_WIDGET_SIZE);
+	dlg = calloc_dialog(TERMOPT_WIDGETS, 0);
 	if (!dlg) {
 		mem_free(termopt_hop);
 		return;
@@ -311,8 +309,7 @@ dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 	sprintf(y_str, "%d", y);
 
 #define RESIZE_DLG_SIZE 4
-	dlg = mem_calloc(1, sizeof(struct dialog)
-			    + (RESIZE_DLG_SIZE + 1) * sizeof(struct widget));
+	dlg = calloc_dialog(RESIZE_DLG_SIZE, 0);
 	if (!dlg) return;
 
 	dlg->title = _("Resize terminal", term);

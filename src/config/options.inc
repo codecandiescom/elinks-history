@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.146 2004/11/10 11:06:35 zas Exp $ */
+/* $Id: options.inc,v 1.147 2004/11/11 18:58:02 miciah Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1001,7 +1001,7 @@ static struct option_info config_options_info[] = {
 		"output to the terminal. The color modes are:\n"
 		"0 is mono mode, only 2 colors are used\n"
 		"1 is 16 color mode, uses the common ANSI colors\n"
-		"2 is 256 color mode, requires that xterm-256color TERM is used\n")),
+		"2 is 256 color mode, uses XTerm RGB codes\n")),
 
 	INIT_OPT_BOOL("terminal._template_", N_("Enable transparency"),
 		"transparency", 0, 1,

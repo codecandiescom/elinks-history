@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.18 2002/04/20 12:25:31 zas Exp $ */
+/* $Id: default.c,v 1.19 2002/04/20 12:52:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1533,34 +1533,31 @@ int load_url_history()
 	return 0;
 }
 
-/* Write history list to file */
-int save_url_history()
+/* Write history list to file. It returns a value different from 0 in case of
+ * failure, 0 on success. */
+int
+save_url_history()
 {
 	struct input_history_item* historyitem;
+	struct secure_save_info *ssi;
 	unsigned char *history_file;
 	int i = 0;
-	FILE *fp;
 
 	if (anonymous) return 0;
-	/* Must have been called after init_home */
-	/* if (!links_home) return 0; */ /* straconcat() checks it --Zas */
 
 	history_file = straconcat(links_home, "links.his", NULL);
-	if (!history_file) return 0;
+	if (!history_file) return -1;
 
-	fp = fopen(history_file, "w");
-	if (!fp) {
-		mem_free(history_file);
-		return 0;
-	}
-
+	ssi = secure_open(history_file, 0177);
+	mem_free(history_file);
+	if (!ssi) return -1;
+	
 	foreachback(historyitem, goto_url_history.items) {
 		if (i++ > MAX_HISTORY_ITEMS) break;
-		fputs(historyitem->d, fp);
-		fputc('\n', fp);
+		secure_fputs(ssi, historyitem->d);
+		secure_fputc(ssi, '\n');
+		if (ssi->err) break;
 	}
 
-	fclose(fp);
-	mem_free(history_file);
-	return 0;
+	return secure_close(ssi);
 }

@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.64 2005/03/27 12:21:28 pasky Exp $
+# $Id: hooks.pl,v 1.65 2005/03/27 12:29:38 pasky Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -912,14 +912,35 @@ Rewrites any I<nntp:>/I<news:> URIs to Google Groups HTTP URIs.
 
 
 
-################################################################################
-### pre_format_html_hook #######################################################
+=head1 HTML REWRITING RULES
+
+When an HTML document is downloaded and is about to undergo the final
+rendering, the rewrites described here are done first. This is frequently
+used to get rid of ads, but also various ELinks-unfriendly HTML code and
+HTML snippets which are irrelevant to ELinks but can obfuscate the
+rendered document.
+
+Note well that these rules are applied B<only> before the final rendering, not
+before the gradual rerenderings which happen when only part of the document is
+available yet.
+
+=over 4
+
+=cut
+
 sub pre_format_html_hook
 {
 	my $url = shift;
 	my $html = shift;
 
-	# /. sanitation
+=item Slashdot Sanitation
+
+Kills the Slashdot's Advertisement.
+
+I<This rewrite rule is B<DISABLED> now due to certain weird behaviour
+it caused.>
+
+=cut
 	if ($url =~ 'slashdot\.org')
 	{
 #		$html =~ s/^<!-- Advertisement code. -->.*<!-- end ad code -->$//sm;
@@ -927,33 +948,55 @@ sub pre_format_html_hook
 #		$html =~ s/<B>Advertisement<\/B>//;
 	}
 
-	# Yes, I heard you the first time
+=item Obvious Google Tips Annihilator
+
+Kills some Google tips which are obvious anyway to any ELinks user.
+
+=cut
 	if ($url =~ 'google\.com')
 	{
 		$html =~ s/Teep: In must broosers yuoo cun joost heet zee retoorn key insteed ooff cleecking oon zee seerch boottun\. Bork bork bork!//;
 		$html =~ s/Tip:<\/font> Save time by hitting the return key instead of clicking on "search"/<\/font>/;
 	}
 
-	# SourceForge ad smasher
+=item SourceForge AdSmasher
+
+Wipes out SourceForge's Ads.
+
+=cut
 	if ($url =~ 'sourceforge\.net')
 	{
 		$html =~ s/<!-- AD POSITION \d+ -->.*?<!-- END AD POSITION \d+ -->//smg;
 		$html =~ s/<b>&nbsp\;&nbsp\;&nbsp\;Site Sponsors<\/b>//g;
 	}
 
-	# GMail has obviously never met ELinks
+=item Gmail's Experience
+
+Gmail has obviously never met ELinks to suggest another browser for a better
+Gmail experience.
+
+=cut
 	if ($url =~ 'gmail\.google\.com')
 	{
 		$html =~ s/^<b>For a better Gmail experience, use a.+?Learn more<\/a><\/b>$//sm;
 	}
 
-	# Demoronizer
+=item Source readability improvements
+
+Rewrites some evil characters to entities and vice versa.
+
+=cut
+	# TODO: Line wrapping? --pasky
 	$html =~ s/Ñ/\&mdash;/g;
 	$html =~ s/\&#252/ü/g;
 	$html =~ s/\&#039/'/g;
 
 	return $html;
 }
+
+=back
+
+=cut
 
 
 ################################################################################

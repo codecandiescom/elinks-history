@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.155 2004/06/14 18:53:12 jonas Exp $ */
+/* $Id: form.c,v 1.156 2004/06/14 18:55:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1179,23 +1179,19 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 			fs->state = (int) (text - fs->value);
 			break;
 		case ACT_EDIT_KILL_TO_EOL:
-			if (!frm->ro && fs->value[fs->state]) {
-				unsigned char *rest;
+			if (frm->ro || !fs->value[fs->state])
+				break;
 
-				rest = strchr(fs->value + fs->state,
-					      ASCII_LF);
-
-				if (!rest) {
-					fs->value[fs->state] = '\0';
-					break;
-				}
-
-				if (fs->value[fs->state] == ASCII_LF)
-					++rest;
-
-				memmove(fs->value + fs->state, rest,
-					strlen(rest) + 1);
+			text = strchr(fs->value + fs->state, ASCII_LF);
+			if (!text) {
+				fs->value[fs->state] = '\0';
+				break;
 			}
+
+			if (fs->value[fs->state] == ASCII_LF)
+				++text;
+
+			memmove(fs->value + fs->state, text, strlen(text) + 1);
 			break;
 
 		case ACT_EDIT_REDRAW:

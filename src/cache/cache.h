@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.96 2004/12/19 18:04:39 jonas Exp $ */
+/* $Id: cache.h,v 1.97 2005/02/23 19:09:42 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -110,10 +110,10 @@ int add_fragment(struct cache_entry *cached, int offset,
  * validation of the fragments fails. */
 struct fragment *get_cache_fragment(struct cache_entry *cached);
 
-void truncate_entry(struct cache_entry *, int, int);
-void free_entry_to(struct cache_entry *, int);
-void delete_entry_content(struct cache_entry *);
-void delete_cache_entry(struct cache_entry *);
+void truncate_entry(struct cache_entry *cached, int offset, int final);
+void free_entry_to(struct cache_entry *cached, int offset);
+void delete_entry_content(struct cache_entry *cached);
+void delete_cache_entry(struct cache_entry *cached);
 
 /* Sets up the cache entry to redirect to a new location
  * @location	decides where to redirect to by resolving it relative to the
@@ -134,6 +134,6 @@ void garbage_collection(int whole);
 
 /* Used by the resource and memory info dialogs for getting information about
  * the cache. */
-long cache_info(int);
+long cache_info(int type);
 
 #endif

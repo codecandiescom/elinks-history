@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.12 2003/07/03 00:09:44 zas Exp $ */
+/* $Id: view.h,v 1.13 2003/07/03 00:18:36 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -75,5 +75,7 @@ int goto_link(unsigned char *, unsigned char *, struct session *, int);
 unsigned char *get_form_url(struct session *, struct f_data_c *,
 			    struct form_control *);
 
+void draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l);
+int field_op(struct session *ses, struct f_data_c *f, struct link *l, struct event *ev, int rep);
 
 #endif

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.149 2003/07/03 00:07:02 pasky Exp $ */
+/* $Id: view.c,v 1.150 2003/07/03 00:18:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -523,7 +523,7 @@ find_form_state(struct f_data_c *f, struct form_control *frm)
 	return fs;
 }
 
-static void
+void
 draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 {
 	struct form_state *fs;
@@ -1844,7 +1844,7 @@ get_current_state(struct session *ses)
 }
 
 
-static int
+int
 field_op(struct session *ses, struct f_data_c *f, struct link *l,
 	 struct event *ev, int rep)
 {

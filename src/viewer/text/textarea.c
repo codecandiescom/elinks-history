@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.2 2003/07/03 00:14:31 zas Exp $ */
+/* $Id: textarea.c,v 1.3 2003/07/03 00:18:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,7 +163,7 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 
 	for (; ln->st && y < ye; ln++, y++) {
 		register int i;
-		
+
 		if (y < yp || y >= yp + yw) continue;
 
 		for (i = 0; i < frm->cols; i++) {

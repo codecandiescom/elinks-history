@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.26 2003/07/10 12:38:04 jonas Exp $ */
+/* $Id: auth.c,v 1.27 2003/07/10 12:50:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,7 +106,6 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 {
 	struct http_auth_basic *entry;
 	unsigned char *newurl = get_auth_url(uri);
-	int ret = ADD_AUTH_ERROR;
 
 	if (!newurl) return ADD_AUTH_ERROR;
 
@@ -153,6 +152,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 		entry->realm = stracpy(realm);
 		if (!entry->realm) {
 			mem_free(entry);
+			entry = NULL;
 			goto end;
 		}
 	}
@@ -163,6 +163,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 		if (!entry->uid) {
 			if (entry->realm) mem_free(entry->realm);
 			mem_free(entry);
+			entry = NULL;
 			goto end;
 		}
 		safe_strncpy(entry->uid, uri->user, MAX_UID_LEN);
@@ -172,21 +173,22 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 			if (entry->realm) mem_free(entry->realm);
 			if (entry->uid) mem_free(entry->uid);
 			mem_free(entry);
+			entry = NULL;
 			goto end;
 		}
 		safe_strncpy(entry->passwd, uri->password, MAX_PASSWD_LEN);
-
-		ret = ADD_AUTH_NONE; /* Entry added with user/pass from url. */
 	}
 
 	add_to_list(http_auth_basic_list, entry);
 
-	if (ret != ADD_AUTH_NONE) ret = ADD_AUTH_NEW; /* Entry added. */
-
 end:
-	if (ret == ADD_AUTH_ERROR) mem_free(newurl);
+	if (!entry) {
+		mem_free(newurl);
+		return ADD_AUTH_ERROR;
+	}
 
-	return ret;
+	/* Return whether entry was added with user/pass from url. */
+	return (entry->uid || entry->passwd) ? ADD_AUTH_NONE : ADD_AUTH_NEW;
 }
 
 /* Find an entry in auth list by url. If url contains user/pass information

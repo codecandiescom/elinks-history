@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.116 2003/11/26 03:19:22 jonas Exp $ */
+/* $Id: listbox.c,v 1.117 2003/11/26 12:28:37 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,11 +90,20 @@ dlg_format_box(struct terminal *term, struct widget_data *widget_data,
  *
  */
 
-/* Traverse through the hiearchic tree in specified direction by N items,
- * optionally calling user function for each of the items visited (basically,
- * each of the items we move _through_, that means from the input item to the
- * item _before_ the output item). If N is zero, we traverse thru the list
- * (down) until we reach the end or fn() returns 0. */
+/* Traverse the hierarchic tree @item @offset items, calling @fn,
+ * if it is not NULL, on each item traversed (that is, each of the items
+ * that we move _through_; this means from the passed @item up to,
+ * but not including, the returned item).
+ *
+ * @offset may be negative to indicate that we should traverse upwards.
+ *
+ * Besides the current item, @fn is also passed @d, which is otherwise unused
+ * by traverse_listbox_items_list, and a pointer to @offset, which @fn can set
+ * to 0 to stop traversal or to other values to change the direction in which
+ * or the number of items over which we will traverse.
+ *
+ * If the passed @offset is zero, we set @offset to 1 and traverse thru
+ * the list (down) until either we reach the end or @fn sets @offset to 0. */
 /* From the box structure, we should use only 'items' here. */
 struct listbox_item *
 traverse_listbox_items_list(struct listbox_item *item, struct listbox_data *box,

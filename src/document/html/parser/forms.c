@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.49 2004/11/26 17:27:00 witekfl Exp $ */
+/* $Id: forms.c,v 1.50 2004/12/17 23:42:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,9 +121,9 @@ get_html_form(unsigned char *a, struct form *form)
 static void
 find_form_for_input(unsigned char *i)
 {
-	unsigned char *s, *ss, *name, *attr;
-	unsigned char *lf = NULL;
-	unsigned char *la = NULL;
+	unsigned char *pos, *tag_start_pos, *name, *attr;
+	unsigned char *last_form_start = NULL;
+	unsigned char *last_form_attr = NULL;
 	int namelen;
 
 	done_form();
@@ -137,35 +137,36 @@ find_form_for_input(unsigned char *i)
 		return;
 	}
 	if (html_context.last_input_tag && i > html_context.last_input_tag)
-		s = html_context.last_form_tag;
+		pos = html_context.last_form_tag;
 	else
-		s = html_context.startf;
+		pos = html_context.startf;
 
 se:
-	while (s < i && *s != '<') {
-
+	while (pos < i && *pos != '<') {
 sp:
-		s++;
+		pos++;
 	}
-	if (s >= i) goto end_parse;
-	if (s + 2 < i && (s[1] == '!' || s[1] == '?')) {
-		s = skip_comment(s, i);
+	if (pos >= i) goto end_parse;
+	if (pos + 2 < i && (pos[1] == '!' || pos[1] == '?')) {
+		pos = skip_comment(pos, i);
 		goto se;
 	}
-	ss = s;
-	if (parse_element(s, i, &name, &namelen, &attr, &s)) goto sp;
-	if (strlcasecmp(name, namelen, "FORM", 4)) goto se;
-	lf = ss;
-	la = attr;
+	tag_start_pos = pos;
+	if (parse_element(tag_start_pos, i, &name, &namelen, &attr, &pos))
+		goto sp;
+	if (strlcasecmp(name, namelen, "FORM", 4))
+		goto se;
+	last_form_start = tag_start_pos;
+	last_form_attr = attr;
 	goto se;
 
 
 end_parse:
-	if (lf && la) {
-		html_context.last_form_tag = lf;
-		html_context.last_form_attr = la;
+	if (last_form_start && last_form_attr) {
+		html_context.last_form_tag = last_form_start;
+		html_context.last_form_attr = last_form_attr;
 		html_context.last_input_tag = i;
-		get_html_form(la, &form);
+		get_html_form(last_form_attr, &form);
 	} else {
 		memset(&form, 0, sizeof(struct form));
 	}

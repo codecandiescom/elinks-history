@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.64 2004/10/22 18:49:21 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.65 2004/10/22 23:53:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -535,7 +535,7 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 			if (cookies) {
 				p.string = cookies->source;
-				prop_type = JSPT_STRING;
+				prop_type = JSPT_ASTRING;
 				goto convert;
 			}
 		}

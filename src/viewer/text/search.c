@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.43 2003/10/06 23:35:30 jonas Exp $ */
+/* $Id: search.c,v 1.44 2003/10/07 09:26:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -295,6 +295,7 @@ is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
 				? 0 : REG_ICASE;
 	int matches_may_overlap = get_opt_bool("document.browse.search.overlap");
 	register int i;
+	int reg_err;
 	regex_t regex;
 	regmatch_t regmatch;
 
@@ -302,7 +303,7 @@ is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
 	if (!doclen) return 0;
 	doc = mem_alloc(sizeof(unsigned char) * (doclen + 1));
 	if (!doc) return 0;
-	
+
 	for (i = 0; i < doclen; i++) {
 		if (i > 0 && s1[i - 1].c == ' ' && s1[i - 1].y != s1[i].y) {
 			doc[i - 1] = '\n';
@@ -311,8 +312,11 @@ is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
 	}
 	doc[doclen] = 0;
 
-	if (regcomp(&regex, text,
-		    REG_NEWLINE | case_insensitive | reg_extended)) {
+	reg_err = regcomp(&regex, text,
+			  REG_NEWLINE | case_insensitive | reg_extended);
+	if (reg_err) {
+		/* TODO: error message */
+		regfree(&regex);
 		mem_free(doc);
 		return 0;
 	}
@@ -511,6 +515,7 @@ get_searched_regex(struct document_view *scr, struct point **pt, int *pl,
 	int len = 0;
 	int matches_may_overlap = get_opt_bool("document.browse.search.overlap");
 	int regex_flags = REG_NEWLINE;
+	int reg_err;
 	register int i;
 	regex_t regex;
 	regmatch_t regmatch;
@@ -529,13 +534,21 @@ get_searched_regex(struct document_view *scr, struct point **pt, int *pl,
 	doc[doclen] = 0;
 
 	if (get_opt_int("document.browse.search.regex") == 2)
-		regex_flags |= REG_EXTENDED; 
+		regex_flags |= REG_EXTENDED;
 
 	if (get_opt_bool("document.browse.search.case"))
 		regex_flags |= REG_ICASE;
 
 	/* TODO: show error message */
-	if (regcomp(&regex, *scr->search_word, regex_flags)) {
+	reg_err = regcomp(&regex, *scr->search_word, regex_flags);
+	if (reg_err) {
+#if 0
+		/* Where and how should we display the error dialog ? */
+		unsigned char regerror_string[MAX_STR_LEN];
+
+		regerror(reg_err, &regex, regerror_string, sizeof(regerror_string));
+#endif
+		regfree(&regex);
 		mem_free(doc);
 		goto ret;
 	}
@@ -684,7 +697,7 @@ search_for_do(struct session *ses, unsigned char *str, int direction)
 		}
 		return;
 	}
-	
+
 	if (ses->search_word) mem_free(ses->search_word);
 	ses->search_word = stracpy(str);
 	if (!ses->search_word) return;
@@ -1078,31 +1091,31 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	dlg->items[0].dlen = l;
 	dlg->items[0].data = field;
 
-	dlg->items[1].type = D_CHECKBOX;	
+	dlg->items[1].type = D_CHECKBOX;
 	dlg->items[1].gid = 1;
 	dlg->items[1].gnum = 0;
 	dlg->items[1].dlen = sizeof(int);
 	dlg->items[1].data = (unsigned char *) &hop->whether_regex;
 
-	dlg->items[2].type = D_CHECKBOX;	
+	dlg->items[2].type = D_CHECKBOX;
 	dlg->items[2].gid = 1;
 	dlg->items[2].gnum = 1;
 	dlg->items[2].dlen = sizeof(int);
 	dlg->items[2].data = (unsigned char *) &hop->whether_regex;
 
-	dlg->items[3].type = D_CHECKBOX;	
+	dlg->items[3].type = D_CHECKBOX;
 	dlg->items[3].gid = 1;
 	dlg->items[3].gnum = 2;
 	dlg->items[3].dlen = sizeof(int);
 	dlg->items[3].data = (unsigned char *) &hop->whether_regex;
 
-	dlg->items[4].type = D_CHECKBOX;	
+	dlg->items[4].type = D_CHECKBOX;
 	dlg->items[4].gid = 2;
 	dlg->items[4].gnum = 1;
 	dlg->items[4].dlen = sizeof(int);
 	dlg->items[4].data = (unsigned char *) &hop->cases;
 
-	dlg->items[5].type = D_CHECKBOX;	
+	dlg->items[5].type = D_CHECKBOX;
 	dlg->items[5].gid = 2;
 	dlg->items[5].gnum = 0;
 	dlg->items[5].dlen = sizeof(int);

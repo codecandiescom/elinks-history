@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.115 2004/11/19 17:46:05 zas Exp $ */
+/* $Id: text.c,v 1.116 2004/11/21 17:15:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -452,5 +452,6 @@ struct widget_ops text_ops = {
 	NULL,
 	mouse_text,
 	kbd_text,
+	NULL,
 	NULL,
 };

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.180 2004/11/19 17:46:05 zas Exp $ */
+/* $Id: listbox.c,v 1.181 2004/11/21 17:15:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -691,5 +691,6 @@ struct widget_ops listbox_ops = {
 	init_listbox,
 	mouse_listbox,
 	kbd_listbox,
+	NULL,
 	NULL,
 };

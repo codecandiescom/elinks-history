@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.79 2004/11/21 16:54:30 zas Exp $ */
+/* $Id: button.c,v 1.80 2004/11/21 17:15:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -182,4 +182,5 @@ struct widget_ops button_ops = {
 	mouse_button,
 	NULL,
 	select_button,
+	NULL,
 };

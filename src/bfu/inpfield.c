@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.184 2004/11/21 16:54:30 zas Exp $ */
+/* $Id: inpfield.c,v 1.185 2004/11/21 17:15:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -508,12 +508,25 @@ display_field:
 	return EVENT_PROCESSED;
 }
 
+		
+static t_handler_event_status
+clear_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
+{
+	widget_data->info.field.cpos = 0;
+
+	if (widget_data->widget->datalen)
+		memset(widget_data->cdata, 0, widget_data->widget->datalen);
+
+	return EVENT_PROCESSED;
+}
+
 struct widget_ops field_ops = {
 	display_field,
 	init_field,
 	mouse_field,
 	kbd_field,
 	NULL,
+	clear_field,
 };
 
 struct widget_ops field_pass_ops = {
@@ -522,6 +535,7 @@ struct widget_ops field_pass_ops = {
 	mouse_field,
 	kbd_field,
 	NULL,
+	clear_field,
 };
 
 

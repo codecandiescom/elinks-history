@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.86 2004/11/21 16:54:30 zas Exp $ */
+/* $Id: widget.h,v 1.87 2004/11/21 17:15:51 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -29,6 +29,7 @@ struct widget_ops {
 	t_widget_handler *mouse;
 	t_widget_handler *kbd;
 	t_widget_handler *select;
+	t_widget_handler *clear;
 };
 
 

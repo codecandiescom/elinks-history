@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.183 2004/11/21 16:54:30 zas Exp $ */
+/* $Id: dialog.c,v 1.184 2004/11/21 17:15:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -455,23 +455,15 @@ ok_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return cancel_dialog(dlg_data, widget_data);
 }
 
-/* Clear text fields in dialog. */
-/* TODO: make it work with all widgets perhaps using a per-widget
- * clear callback. */
+/* Clear dialog fields (if widget has clear callback). */
 t_handler_event_status
 clear_dialog(struct dialog_data *dlg_data, struct widget_data *xxx)
 {
 	struct widget_data *widget_data;
 
 	foreach_widget(dlg_data, widget_data) {
-		if (!widget_is_textfield(widget_data))
-			continue;
-		widget_data->info.field.cpos = 0;
-
-		if (!widget_data->widget->datalen)
-			continue;
-	
-		memset(widget_data->cdata, 0, widget_data->widget->datalen);
+		if (widget_data->widget->ops->clear)
+			widget_data->widget->ops->clear(dlg_data, widget_data);
 	}
 
 	redraw_dialog(dlg_data, 0);

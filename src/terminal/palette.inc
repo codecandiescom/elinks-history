@@ -1,5 +1,5 @@
 /* Terminal color palettes. */
-/* $Id: palette.inc,v 1.1 2003/09/06 22:27:29 jonas Exp $ */
+/* $Id: palette.inc,v 1.2 2003/09/06 22:33:36 jonas Exp $ */
 /* TODO: We should probably autogenerate this using xterm's perl script. */
 
 static struct rgb palette16[] = {
@@ -54,6 +54,7 @@ static struct rgb palette16[] = {
 	{0xff, 0x55, 0xff}, /* 13 */
 	{0x55, 0xff, 0xff}, /* 14 */
 	{0xff, 0xff, 0xff}, /* 15 */
+#endif
 };
 
 #ifdef USE_88_COLORS

@@ -1,3 +1,115 @@
+Tue Dec 17 21:27:20 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, Unicode/7bitrepl.lnx, src/intl/uni_7b.inc:
+
+	Updated 7bit transcripts of some esperanto chars. Patch by David
+	Mediavilla.  
+
+Tue Dec 17 21:22:21 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* Unicode/7bitrepl.lnx, src/intl/uni_7b.inc:
+
+	Updated table with 7bit transcriptions of unicode characters from
+	lynx-2.8.5dev11.  
+
+Tue Dec 17 21:00:45 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* Unicode/8859_10.cp, Unicode/8859_14.cp, Unicode/8859_3.cp,
+	Unicode/8859_6.cp, Unicode/8859_8.cp, Unicode/cp1252.cp,
+	Unicode/cp1256.cp, Unicode/index.txt, Unicode/koi8_ru.cp,
+	src/intl/codepage.h, src/intl/codepage.inc:
+
+	Added support for charsets iso-8859-(3,6,8,10,14), cp1252, cp1256
+	and koi8_ru. Ported from Links-2.1pre7.  
+
+Tue Dec 17 15:17:22 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/config/dialogs.c, src/config/kbdbind.c:
+
+	Support for adding of keybindings thru keybinding manager.  
+
+Tue Dec 17 13:48:05 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/backend/xbel.c:
+
+	XBEL segfault introduced by the last changes fixed, patch by Fabio.  
+
+Tue Dec 17 13:47:36 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/italian.lng:
+
+	Italian translation update, patch by Fabio.  
+
+Tue Dec 17 13:29:15 2002  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/document.c:
+
+	Re-ordering of items in dialog.  
+
+Tue Dec 17 12:38:35 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/terminal.c:
+
+	Static + inline + tidyup.  
+
+Tue Dec 17 12:20:11 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	Static + inline + tidyup.  
+
+Tue Dec 17 12:07:37 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/sched.c:
+
+	Static + inline + tidyup.  
+
+Tue Dec 17 11:50:06 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/kbd.c:
+
+	Static + inline + tidyup.  
+
+Tue Dec 17 11:31:50 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/connect.c:
+
+	Minor cleanup.  
+
+Tue Dec 17 11:10:37 2002  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/auth.c:
+
+	Tidy up.  
+
+Mon Dec 16 23:58:53 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/french.lng:
+
+	French translation was updated.  
+
+Mon Dec 16 23:53:04 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/view.c:
+
+	Static + inline.  
+
+Mon Dec 16 23:21:35 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/session.c:
+
+	Static + inline.  
+
 Mon Dec 16 22:59:29 2002  Laurent Monin <zas@norz.org>:
 
 	* src/document/options.c:

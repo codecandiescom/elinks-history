@@ -1,14 +1,18 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.1 2003/07/03 00:47:29 pasky Exp $ */
+/* $Id: form.c,v 1.2 2003/07/03 01:40:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h> /* OS/2 needs this after sys/types.h */
 #endif
@@ -16,9 +20,11 @@
 #include "elinks.h"
 
 #include "bfu/msgbox.h"
+#include "config/kbdbind.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "intl/gettext/libintl.h"
+#include "protocol/url.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"
@@ -26,6 +32,7 @@
 #include "util/memory.h"
 #include "util/string.h"
 #include "viewer/text/form.h"
+#include "viewer/text/link.h"
 #include "viewer/text/textarea.h"
 #include "viewer/text/view.h"
 #include "viewer/text/vs.h"
@@ -145,7 +152,7 @@ find_form_state(struct f_data_c *f, struct form_control *frm)
 	return fs;
 }
 
-static void
+void
 draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 {
 	struct form_state *fs;

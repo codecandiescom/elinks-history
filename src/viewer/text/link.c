@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.1 2003/07/03 01:23:00 pasky Exp $ */
+/* $Id: link.c,v 1.2 2003/07/03 01:40:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,7 +11,7 @@
 #include "elinks.h"
 
 #include "bfu/menu.h"
-#include "bookmarks/dialog.h"
+#include "bookmarks/dialogs.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "intl/gettext/libintl.h"
@@ -229,7 +229,7 @@ draw_current_link(struct terminal *t, struct f_data_c *scr)
 }
 
 
-static struct link *
+struct link *
 get_first_link(struct f_data_c *f)
 {
 	struct link *l;
@@ -250,7 +250,7 @@ get_first_link(struct f_data_c *f)
 	return l;
 }
 
-static struct link *
+struct link *
 get_last_link(struct f_data_c *f)
 {
 	struct link *l = NULL;

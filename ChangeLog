@@ -1,3 +1,296 @@
+Fri Aug  1 21:56:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	memorize_form(): Init the @fm_data->submit list.  
+
+Fri Aug  1 21:49:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/base64.c:
+
+	base64_decode(): Fix warning: comparison is always false due to
+	limited range of data type.  
+
+Fri Aug  1 20:55:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	A bug introduced in my last patch was fixed, we want lower_bound
+	instead of upper_bound... ;).  
+
+Fri Aug  1 20:22:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/base64.c:
+
+	Re-implementation of base64_decode(), to prevent usage of strchr()
+	which may return NULL on bad chars, causing bad things. New version
+	should detect errors. Adapted from a public domain source code.  
+
+Fri Aug  1 19:37:20 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/base64.c:
+
+	Cleanup.  
+
+Fri Aug  1 19:35:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	No need to allocate the submit list_head.  
+
+Fri Aug  1 18:55:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Fix password form detection.  
+
+Fri Aug  1 18:47:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Introduced memorize_form() and moved code from get_form_url() to it.  
+
+Fri Aug  1 18:27:26 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	fmem_data -> fm_data, since fmem_ prefix is already used elsewhere.  
+
+Fri Aug  1 17:32:15 2003  Laurent Monin <zas@norz.org>:
+
+	* .cvsignore:
+
+	Ignore libtool.  
+
+Fri Aug  1 17:28:36 2003  Laurent Monin <zas@norz.org>:
+
+	* acconfig.h, configure.in, src/Makefile.am, src/main.c,
+	src/util/base64.c, src/util/base64.h, src/util/version.c,
+	src/viewer/text/form.c:
+
+	HTML form manager, please improve and tune. Patch by Fabio Bonelli
+	and me.  
+
+Fri Aug  1 15:26:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/leds.h:
+
+	Tidyup and a comment update.  
+
+Fri Aug  1 15:20:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/leds.c:
+
+	init_leds(): Knock out last COL() user. Hinted by Zas.  
+
+Fri Aug  1 15:17:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/leds.c:
+
+	unregister_led(): Use assertm().  
+
+Fri Aug  1 15:14:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/leds.c:
+
+	Sync'ed with the current drawing code.  
+
+Fri Aug  1 14:59:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/listbox.c, document/html/parser.c, terminal/draw.c,
+	terminal/draw.h:
+
+	Purge frame_char and ATTR_FRAME.  
+
+Fri Aug  1 14:46:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/ttime.c:
+
+	Newline fix.  
+
+Fri Aug  1 14:42:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/: select.c, signals.c:
+
+	Assertification.  
+
+Fri Aug  1 14:34:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Populate with int_[upper|lower]_bound() + assertm().  
+
+Fri Aug  1 14:24:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Populate with int_[upper|lower]_bound().  
+
+Fri Aug  1 14:12:34 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/auth.c:
+
+	MIN() -> int_min().  
+
+Fri Aug  1 13:58:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Populate with int_[upper|lower]_bound() and int_max().  
+
+Fri Aug  1 13:13:06 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	Populate with int_[upper|lower]_bound() and int_max().  
+
+Fri Aug  1 13:05:49 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	Populate with int_[upper|lower]_bound() and int_max().  
+
+Fri Aug  1 12:39:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Populate with int_[upper|lower]_bound() and int_max().  
+
+Fri Aug  1 12:32:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Populate with int_[upper|lower]_bound() and int_max().  
+
+Fri Aug  1 12:16:21 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Populate with int_[upper|lower]_bound() and int_max().  
+
+Fri Aug  1 12:03:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Populate with int_[upper|lower]_bound().  
+
+Fri Aug  1 11:51:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/options.c:
+
+	Populate with int_[upper|lower]_bound().  
+
+Fri Aug  1 11:49:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/: auth.c, hierbox.c, mime.c:
+
+	Cleanup.  
+
+Fri Aug  1 11:44:36 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	set_char() compilation failure fixed (reported by pekdon).  
+
+Fri Aug  1 11:41:35 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/mime.c:
+
+	Populate with int_[upper|lower]_bound().  
+
+Fri Aug  1 11:37:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/hierbox.c:
+
+	Populate with int_[upper|lower]_bound().  
+
+Fri Aug  1 11:36:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/edit.c:
+
+	Populate with int_[upper|lower]_bound() and fix a missing bound
+	check.  
+
+Fri Aug  1 11:32:53 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/auth.c:
+
+	Populate with int_[upper|lower]_bound() and fix a missing bound
+	check.  
+
+Fri Aug  1 11:28:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/dialogs.c:
+
+	Populate with int_[upper|lower]_bound().  
+
+Fri Aug  1 11:25:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/opttypes.c:
+
+	Do not memcpy() int or long + use int_upper_bound().  
+
+Fri Aug  1 11:18:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/backend/default.c:
+
+	Populate with int_[upper|lower]_bound().  
+
+Fri Aug  1 11:13:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: checkbox.c, group.c, inpfield.c, inphist.c, listbox.c,
+	menu.c, msgbox.c, widget.c:
+
+	Populate with int_[upper|lower]_bound().  
+
+Fri Aug  1 11:10:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/elinks.h:
+
+	assert() was removed. It forces include error.h, and this is a bad
+	thing, so no check is done for what == NULL, but it shouldnt be a
+	problem.  
+
+Fri Aug  1 11:07:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/elinks.h:
+
+	Use assert().  
+
+Fri Aug  1 10:39:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	Instead of returning on outbound values, just limit them to valid
+	ones, and continue. It makes things nicer with very low terminal
+	size.  
+
+Fri Aug  1 10:38:00 2003  Laurent Monin <zas@norz.org>:
+
+	* src/elinks.h:
+
+	int_upper_bound() and int_lower_bound() were introduced.  
+
+Fri Aug  1 10:11:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inpfield.c, viewer/text/view.c:
+
+	More int_min().  
+
+Fri Aug  1 09:58:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	Make use of int_min().  
+
+Fri Aug  1 09:58:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/elinks.h:
+
+	int_min() and int_max() were introduced, these are better than MIN()
+	and MAX() macros, since arguments are only evaluated once, but they
+	only work for int type.  
+
 Thu Jul 31 21:59:47 2003  Laurent Monin <zas@norz.org>:
 
 	* src/terminal/draw.c:

@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-11-18 10:20+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-11-18 18:34+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:213
 msgid "Close"
@@ -29,12 +29,12 @@ msgstr "Saisir un nombre"
 #. if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty;
 #: src/bfu/inpfield.c:47 src/bfu/inpfield.c:56 src/bfu/inpfield.c:76
 #: src/bookmarks/dialogs.c:132 src/bookmarks/dialogs.c:233
-#: src/bookmarks/dialogs.c:243 src/cache/dialogs.c:162 src/config/dialogs.c:44
+#: src/bookmarks/dialogs.c:243 src/cache/dialogs.c:154 src/config/dialogs.c:44
 #: src/config/dialogs.c:92 src/config/dialogs.c:103 src/config/dialogs.c:155
 #: src/config/dialogs.c:214 src/config/dialogs.c:244 src/config/dialogs.c:279
 #: src/config/dialogs.c:291 src/config/dialogs.c:346 src/config/dialogs.c:361
 #: src/config/dialogs.c:420 src/config/dialogs.c:442 src/config/dialogs.c:469
-#: src/config/dialogs.c:533 src/config/dialogs.c:546 src/cookies/dialogs.c:133
+#: src/config/dialogs.c:533 src/config/dialogs.c:546 src/cookies/dialogs.c:127
 #: src/dialogs/auth.c:79 src/dialogs/document.c:47 src/dialogs/document.c:232
 #: src/dialogs/document.c:302 src/dialogs/document.c:314 src/dialogs/edit.c:99
 #: src/dialogs/info.c:49 src/dialogs/info.c:90 src/dialogs/info.c:110
@@ -52,8 +52,8 @@ msgstr "Saisir un nombre"
 #: src/viewer/text/search.c:849 src/viewer/text/search.c:875
 #: src/viewer/text/search.c:881 src/viewer/text/search.c:903
 #: src/viewer/text/search.c:1069 src/viewer/text/search.c:1080
-#: src/viewer/text/textarea.c:269 src/viewer/text/view.c:729
-#: src/viewer/text/view.c:1413
+#: src/viewer/text/textarea.c:268 src/viewer/text/view.c:727
+#: src/viewer/text/view.c:1411
 msgid "OK"
 msgstr "OK"
 
@@ -150,7 +150,7 @@ msgstr "Nom du dossier"
 #: src/sched/download.c:1281 src/scripting/lua/core.c:385
 #: src/scripting/lua/core.c:468 src/scripting/lua/core.c:700
 #: src/viewer/text/search.c:1069 src/viewer/text/search.c:1080
-#: src/viewer/text/view.c:729
+#: src/viewer/text/view.c:727
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -266,66 +266,66 @@ msgstr "Recherche parmi les signets"
 msgid "Add bookmark"
 msgstr "Ajouter un signet"
 
-#: src/cache/dialogs.c:109 src/dialogs/document.c:65 src/dialogs/edit.c:96
+#: src/cache/dialogs.c:93 src/dialogs/document.c:65 src/dialogs/edit.c:96
 #: src/scripting/lua/core.c:382
 msgid "URL"
 msgstr "URL"
 
-#: src/cache/dialogs.c:114
+#: src/cache/dialogs.c:98
 msgid "Redirect"
 msgstr "Redirection"
 
-#: src/cache/dialogs.c:122 src/config/options.inc:353
+#: src/cache/dialogs.c:106 src/config/options.inc:353
 #: src/dialogs/document.c:92
 msgid "Size"
 msgstr "Taille"
 
-#: src/cache/dialogs.c:123
+#: src/cache/dialogs.c:107
 msgid "Loaded size"
 msgstr "Taille (chargé)"
 
-#: src/cache/dialogs.c:125 src/dialogs/document.c:137
+#: src/cache/dialogs.c:110 src/dialogs/document.c:137
 msgid "Last modified"
 msgstr "Dernière modification"
 
-#: src/cache/dialogs.c:132 src/dialogs/document.c:119
+#: src/cache/dialogs.c:118 src/dialogs/document.c:119
 msgid "SSL Cipher"
 msgstr "Chiffrement SSL"
 
-#: src/cache/dialogs.c:136 src/dialogs/document.c:124
+#: src/cache/dialogs.c:122 src/dialogs/document.c:124
 msgid "Encoding"
 msgstr "Encodage"
 
-#: src/cache/dialogs.c:142
+#: src/cache/dialogs.c:128
 msgid "Flags"
 msgstr "Drapeaux"
 
-#: src/cache/dialogs.c:144 src/dialogs/document.c:95
+#: src/cache/dialogs.c:131 src/dialogs/document.c:95
 msgid "incomplete"
 msgstr "incomplet"
 
-#: src/cache/dialogs.c:146
+#: src/cache/dialogs.c:134
 msgid "invalid"
 msgstr "invalide"
 
-#: src/cache/dialogs.c:153
+#: src/cache/dialogs.c:141
 msgid "ID tag"
 msgstr "ID tag"
 
-#: src/cache/dialogs.c:155
+#: src/cache/dialogs.c:145
 msgid "Header"
 msgstr "Entêtes"
 
-#: src/cache/dialogs.c:159 src/cache/dialogs.c:182 src/config/dialogs.c:82
-#: src/config/dialogs.c:95 src/config/dialogs.c:390 src/cookies/dialogs.c:130
-#: src/cookies/dialogs.c:162 src/dialogs/document.c:41
+#: src/cache/dialogs.c:151 src/cache/dialogs.c:178 src/config/dialogs.c:82
+#: src/config/dialogs.c:95 src/config/dialogs.c:390 src/cookies/dialogs.c:124
+#: src/cookies/dialogs.c:156 src/dialogs/document.c:41
 #: src/dialogs/document.c:229 src/globhist/dialogs.c:356
 #: src/globhist/dialogs.c:426
 msgid "Info"
 msgstr "Info"
 
 #. Keep options in alphabetical order.
-#: src/cache/dialogs.c:179 src/config/options.inc:312
+#: src/cache/dialogs.c:171 src/config/options.inc:312
 msgid "Cache"
 msgstr "Cache"
 
@@ -480,7 +480,7 @@ msgstr ""
 "%s"
 
 #: src/config/dialogs.c:152 src/protocol/protocol.c:57 src/sched/session.c:410
-#: src/sched/session.c:1532 src/viewer/text/textarea.c:266
+#: src/sched/session.c:1532 src/viewer/text/textarea.c:265
 msgid "Error"
 msgstr "Erreur"
 
@@ -540,7 +540,7 @@ msgstr "Réellement supprimer l'option \"%s\" ?"
 msgid "Option manager"
 msgstr "Gestion des options"
 
-#: src/config/dialogs.c:394 src/config/dialogs.c:578 src/cookies/dialogs.c:163
+#: src/config/dialogs.c:394 src/config/dialogs.c:578 src/cookies/dialogs.c:157
 #: src/dialogs/options.c:190 src/sched/download.c:1231
 #: src/sched/download.c:1267
 msgid "Save"
@@ -3746,15 +3746,15 @@ msgstr ""
 "Expiration: %s\n"
 "Securisé: %s\n"
 
-#: src/cookies/cookies.c:576 src/cookies/dialogs.c:97
+#: src/cookies/cookies.c:576 src/cookies/dialogs.c:91
 msgid "unknown"
 msgstr "inconnu"
 
-#: src/cookies/cookies.c:577 src/cookies/dialogs.c:98
+#: src/cookies/cookies.c:577 src/cookies/dialogs.c:92
 msgid "yes"
 msgstr "oui"
 
-#: src/cookies/cookies.c:577 src/cookies/dialogs.c:98
+#: src/cookies/cookies.c:577 src/cookies/dialogs.c:92
 msgid "no"
 msgstr "non"
 
@@ -3766,7 +3766,7 @@ msgstr "Accepter"
 msgid "Reject"
 msgstr "Rejeter"
 
-#: src/cookies/dialogs.c:89
+#: src/cookies/dialogs.c:83
 #, c-format
 msgid ""
 "Server: %s\n"
@@ -3783,7 +3783,7 @@ msgstr ""
 "Expiration: %s\n"
 "Sécurisé: %s"
 
-#: src/cookies/dialogs.c:156
+#: src/cookies/dialogs.c:150
 msgid "Cookie manager"
 msgstr "Gestionnaire de cookies"
 
@@ -5475,23 +5475,23 @@ msgstr "Chercher en arrière"
 msgid "Search for text"
 msgstr "Recherche du texte"
 
-#: src/viewer/text/textarea.c:267
+#: src/viewer/text/textarea.c:266
 msgid "You can do this only on the master terminal"
 msgstr "Vous ne pouvez faire ça que dans le terminal maître"
 
-#: src/viewer/text/view.c:728
+#: src/viewer/text/view.c:726
 msgid "Go to link"
 msgstr "Aller au lien"
 
-#: src/viewer/text/view.c:728
+#: src/viewer/text/view.c:726
 msgid "Enter link number"
 msgstr "Entrez le numéro du lien"
 
-#: src/viewer/text/view.c:1410
+#: src/viewer/text/view.c:1408
 msgid "Save error"
 msgstr "Erreur d'enregistrement"
 
-#: src/viewer/text/view.c:1411
+#: src/viewer/text/view.c:1409
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
 

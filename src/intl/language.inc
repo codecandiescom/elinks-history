@@ -6199,14 +6199,14 @@ struct translation translation_hungarian [] = {
   {T_ACCEPT_UI_LANGUAGE, "A kezelöfelület nyelve legyen Accept-Language-ként elküldve"},
   {T_SSL_CIPHER, "SSL algoritmus"},
   {T_ENCODING, "Kódolás"},
-  {T_BOOKMARK_USED, NULL},
-  {T_ELINKS_HOME, NULL},
+  {T_BOOKMARK_USED, "Sajnos ez a könyvjelzõ már foglalt"},
+  {T_ELINKS_HOME, "Elinks honlap"},
   {T_HK_ELINKS_HOME, NULL},
-  {T_ADD_FOLDER, NULL},
-  {T_FOLDER_NAME, NULL},
-  {T_MOVE, NULL},
-  {T_AFTER_RESUME, NULL},
-  {T_TOGGLE_DISPLAY, NULL},
+  {T_ADD_FOLDER, "Mappa hozzáadása"},
+  {T_FOLDER_NAME, "Mappa neve"},
+  {T_MOVE, "Mozgat"},
+  {T_AFTER_RESUME, "a folytatás után"},
+  {T_TOGGLE_DISPLAY, "Váltás URL/cím"},
   {0, NULL}
 };
 

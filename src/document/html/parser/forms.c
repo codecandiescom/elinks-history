@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.48 2004/11/23 17:12:56 witekfl Exp $ */
+/* $Id: forms.c,v 1.49 2004/11/26 17:27:00 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -289,11 +289,13 @@ no_type_attr:
 	if (fc->maxlength == -1) fc->maxlength = INT_MAX;
 	if (fc->type == FC_CHECKBOX || fc->type == FC_RADIO) fc->default_state = has_attr(a, "checked");
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
-	if (fc->type == FC_HIDDEN) {
+	if (fc->type == FC_HIDDEN) goto hid;
+#if 0 /* wait for better times --witekfl */
 		format.form = fc;
 		process_hidden_link(html_context.part);
 		goto hid;
 	}
+#endif
 
 	put_chrs(" ", 1, html_context.put_chars_f, html_context.part);
 	html_stack_dup(ELEMENT_KILLABLE);

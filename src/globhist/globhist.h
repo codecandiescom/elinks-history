@@ -1,10 +1,10 @@
-/* $Id: globhist.h,v 1.18 2004/01/04 11:57:35 jonas Exp $ */
+/* $Id: globhist.h,v 1.19 2004/01/04 18:13:04 jonas Exp $ */
 
 #ifndef EL__GLOBHIST_GLOBHIST_H
 #define EL__GLOBHIST_GLOBHIST_H
 
-/* #include "bfu/listbox.h" */
 struct listbox_item;
+struct input_history;
 
 #include "util/lists.h"
 #include "util/ttime.h"
@@ -20,7 +20,6 @@ struct global_history_item {
 	ttime last_visit;
 	int refcount; /* No direct access, use provided macros for that. */
 };
-
 
 extern struct input_history global_history;
 

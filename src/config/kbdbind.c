@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.13 2002/05/08 13:55:01 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.14 2002/05/10 16:20:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,8 @@
 #ifndef HAVE_LUA
 #define LUA_NOREF	0
 #endif
+
+#define table table_dirty_workaround_for_name_clash_with_libraries_on_macos
 
 static void add_default_keybindings();
 

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.6 2002/05/10 08:53:37 zas Exp $ */
+/* $Id: charsets.c,v 1.7 2002/05/10 16:20:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,8 @@
 #include "document/options.h"
 #include "intl/charsets.h"
 #include "util/error.h"
+
+#define table table_dirty_workaround_for_name_clash_with_libraries_on_macos
 
 struct table_entry {
 	unsigned char c;

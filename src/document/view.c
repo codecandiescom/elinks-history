@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.40 2002/05/10 13:26:56 pasky Exp $ */
+/* $Id: view.c,v 1.41 2002/05/10 16:20:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1045,6 +1045,8 @@ static void up(struct session *ses, struct f_data_c *fd, int a)
 	}
 }
 
+
+#define scroll scroll_dirty_workaround_for_name_clash_with_libraries_on_macos
 
 void scroll(struct session *ses, struct f_data_c *f, int a)
 {

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.154 2005/03/02 15:39:12 miciah Exp $ */
+/* $Id: task.c,v 1.155 2005/03/02 15:59:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -397,6 +397,58 @@ enum do_move {
 };
 
 static enum do_move
+do_redirect(struct session *ses, struct download **download_p, struct cache_entry *cached)
+{
+	enum task_type task = ses->task.type;
+
+	assertm(compare_uri(cached->uri, ses->loading_uri, URI_BASE),
+		"Redirecting using bad base URI");
+
+	if (cached->redirect->protocol == PROTOCOL_UNKNOWN)
+		return DO_MOVE_ABORT;
+
+	abort_loading(ses, 0);
+	if (have_location(ses))
+		*download_p = &cur_loc(ses)->download;
+	else
+		*download_p = NULL;
+
+	set_session_referrer(ses, cached->uri);
+
+	switch (task) {
+	case TASK_NONE:
+		break;
+	case TASK_FORWARD:
+	{
+		protocol_external_handler *fn;
+		struct uri *uri = cached->redirect;
+
+		fn = get_protocol_external_handler(uri->protocol);
+		if (fn) {
+			fn(ses, uri);
+			*download_p = NULL;
+			return DO_MOVE_ABORT;
+		}
+	}
+	/* Fall through. */
+	case TASK_IMGMAP:
+		ses_goto(ses, cached->redirect, ses->task.target_frame, NULL,
+			 CACHE_MODE_NORMAL, task, 1);
+		return DO_MOVE_DONE;
+	case TASK_HISTORY:
+		ses_goto(ses, cached->redirect, NULL, ses->task.target_location,
+			 CACHE_MODE_NORMAL, TASK_RELOAD, 1);
+		return DO_MOVE_DONE;
+	case TASK_RELOAD:
+		ses_goto(ses, cached->redirect, NULL, NULL,
+			 ses->reloadlevel, TASK_RELOAD, 1);
+		return DO_MOVE_DONE;
+	}
+
+	return DO_MOVE_DISPLAY;
+}
+
+static enum do_move
 do_move(struct session *ses, struct download **download_p)
 {
 	struct cache_entry *cached;
@@ -416,58 +468,13 @@ do_move(struct session *ses, struct download **download_p)
 	cached = (*download_p)->cached;
 	if (!cached) return DO_MOVE_ABORT;
 
-	if (cached->redirect && ses->redirect_cnt++ < MAX_REDIRECTS) {
-		enum task_type task = ses->task.type;
+	if (cached->redirect && ses->redirect_cnt++ < MAX_REDIRECTS
+	    && (ses->task.type != TASK_HISTORY || have_location(ses))) {
+		enum do_move d = do_redirect(ses, download_p, cached);
 
-		if (task == TASK_HISTORY && !have_location(ses))
-			goto b;
-
-		assertm(compare_uri(cached->uri, ses->loading_uri, URI_BASE),
-			"Redirecting using bad base URI");
-
-		if (cached->redirect->protocol == PROTOCOL_UNKNOWN)
-			return DO_MOVE_ABORT;
-
-		abort_loading(ses, 0);
-		if (have_location(ses))
-			*download_p = &cur_loc(ses)->download;
-		else
-			*download_p = NULL;
-
-		set_session_referrer(ses, cached->uri);
-
-		switch (task) {
-		case TASK_NONE:
-			break;
-		case TASK_FORWARD:
-		{
-			protocol_external_handler *fn;
-			struct uri *uri = cached->redirect;
-
-			fn = get_protocol_external_handler(uri->protocol);
-			if (fn) {
-				fn(ses, uri);
-				*download_p = NULL;
-				return DO_MOVE_ABORT;
-			}
-		}
-			/* Fall through. */
-		case TASK_IMGMAP:
-			ses_goto(ses, cached->redirect, ses->task.target_frame, NULL,
-				 CACHE_MODE_NORMAL, task, 1);
-			return DO_MOVE_DONE;
-		case TASK_HISTORY:
-			ses_goto(ses, cached->redirect, NULL, ses->task.target_location,
-				 CACHE_MODE_NORMAL, TASK_RELOAD, 1);
-			return DO_MOVE_DONE;
-		case TASK_RELOAD:
-			ses_goto(ses, cached->redirect, NULL, NULL,
-				 ses->reloadlevel, TASK_RELOAD, 1);
-			return DO_MOVE_DONE;
-		}
+		if (d != DO_MOVE_DISPLAY) return d;
 	}
 
-b:
 	if (ses->display_timer != -1) {
 		kill_timer(ses->display_timer);
 	       	ses->display_timer = -1;

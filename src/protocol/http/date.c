@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.6 2002/03/21 18:39:03 pasky Exp $ */
+/* $Id: date.c,v 1.7 2002/04/03 13:48:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,14 +92,14 @@ static int parse_day(const char **date_p) {
 
 	/* TODO: Use strtol() ? ;)) --pasky */
 
-	c = *date++;
+	c = *date;
 	if (c < '0' || c > '9') return 32;
 	day = c - '0';
 	
-	c = *date++;
+	c = *++date;
 	if (c >= '0' && c <= '9') {
 		day = day * 10 + c - '0';
-		c = *date++;
+		date++;
 	}
 	
 	*date_p = date;
@@ -168,7 +168,8 @@ time_t my_timegm(struct tm tm) {
 #else
 	/* Following code was borrowed from w3m, and its developers probably
 	 * borrowed it from somewhere else as well, altough they didn't bother
-	 * to mention that. */
+	 * to mention that. */ /* Actually, same code appears to be in lynx as
+	 * well.. oh well. :) */
 	/* See README.timegm for explanation about how this works. */
 	tm.tm_mon -= 2;
 	if (tm.tm_mon < 0) {
@@ -221,6 +222,7 @@ time_t parse_http_date(const char *date)
 		tm.tm_mday = parse_day(&date);
 		if (tm.tm_mday > 31) return 0;
 
+		c = *date++;
 		skip_time_sep();
 
 		/* Eat month */

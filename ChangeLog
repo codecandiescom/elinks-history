@@ -1,3 +1,33 @@
+Wed Jun 12 19:32:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/german.lng, intl/italian.lng, src/intl/language.inc:
+
+	Hopefully finally fixed the trigraph problem.  
+
+Wed Jun 12 14:33:44 2002  Laurent Monin <zas@norz.org>:
+
+	* HACKING:
+
+	More about coding style.  
+
+Tue Jun 11 22:48:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/ukrainian.lng, src/intl/language.inc:
+
+	Ukrainian translation update by Dmitry.  
+
+Tue Jun 11 22:47:25 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/german.lng, intl/italian.lng, src/intl/language.inc:
+
+	hmh, fixed trigraphs again.. *shrug* 
+
+Tue Jun 11 22:20:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/german.lng, intl/italian.lng, src/intl/language.inc:
+
+	Get rid of stupid trigraph warnings, reported by yanek.  
+
 Tue Jun 11 20:23:37 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/config/options.c:

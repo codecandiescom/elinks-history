@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.25 2004/07/20 21:39:18 zas Exp $ */
+/* $Id: proxy.c,v 1.26 2004/07/20 21:46:01 zas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -47,6 +47,26 @@ proxy_probe_no_proxy(unsigned char *url, unsigned char *no_proxy)
 
 	if (slash) *slash = '/';
 	return 0;
+}
+
+static struct uri *
+proxy_uri(struct uri *uri, unsigned char *proxy)
+{
+	struct string string;
+
+	if (init_string(&string)
+	    && string_concat(&string, "proxy://", proxy, "/", NULL)
+	    && add_uri_to_string(&string, uri, URI_PROXY)) {
+		/* There is no need to use URI_BASE here since
+		 * URI_PROXY should not add any fragments in the first
+		 * place. */
+		uri = get_uri(string.source, 0);
+	} else {
+		uri = NULL;
+	}
+
+	done_string(&string);
+	return uri;
 }
 
 static struct uri *
@@ -108,21 +128,7 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 	}
 
 	if (proxy) {
-		struct string string;
-
-		if (init_string(&string)
-		    && string_concat(&string, "proxy://", proxy, "/", NULL)
-		    && add_uri_to_string(&string, uri, URI_PROXY)) {
-			/* There is no need to use URI_BASE here since
-			 * URI_PROXY should not add any fragments in the first
-			 * place. */
-			uri = get_uri(string.source, 0);
-		} else {
-			uri = NULL;
-		}
-
-		done_string(&string);
-		return uri;
+		return proxy_uri(uri, proxy);
 	}
 
 	return get_composed_uri(uri, URI_BASE);

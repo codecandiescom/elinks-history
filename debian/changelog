@@ -10,9 +10,15 @@ elinks (0.11-0.0upstream) unstable; urgency=low
     uses the correct width / height when scrolling (closes: #256533)
   * Fix warning on 64-bit architectures (closes: #285684)
   * Change verbose level to show warnings (closes: #303083)
-  * Include FAQ from http://elinks.or.cz/ (closes: #301861) 
+  * Include FAQ from http://elinks.or.cz/ (closes: #301861)
+  * Change FTP directory listing parser to Wget-based one due to licensing
+    issues (closes: #300889)
+  * Be more tolerant when handling values from the no_proxy environment
+    variable (closes: #218451)
+  * Add support for explicitly specifying button shortcuts so that hotkeys
+    in managers do not clash (closes: #270205)
 
- -- Jonas Fonseca <fonseca@diku.dk>  Tue,  5 Apr 2005 21:43:58 +0200
+ -- Jonas Fonseca <fonseca@diku.dk>  Tue,  5 Apr 2005 21:57:02 +0200
 
 elinks (0.10.2-1) unstable; urgency=low
 

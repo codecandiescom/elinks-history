@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.140 2004/04/22 12:38:10 zas Exp $ */
+/* $Id: cache.c,v 1.141 2004/04/22 12:39:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -493,6 +493,10 @@ redirect_cache(struct cache_entry *cached, unsigned char *location,
 	    && !get_opt_int("protocol.http.bugs.broken_302_redirect")) {
 		/* XXX: Add POST_CHAR and post data assuming URI components
 		 * belong to one string. */
+
+		/* To be certain we don't append post data twice in some
+		 * conditions... --Zas */
+		assert(!strchr(uristring, POST_CHAR));
 
 		add_to_strn(&uristring, cached->uri->post - 1);
 	}

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.24 2002/12/15 22:49:10 pasky Exp $ */
+/* $Id: dialogs.c,v 1.25 2002/12/17 15:17:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -404,6 +404,8 @@ invalid_option:
 }
 
 
+/* FIXME: Races here, we need to lock the entry..? --pasky */
+
 static void
 really_delete_option(void *data)
 {
@@ -548,7 +550,7 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 ****************************************************************************/
 
 /* The location of the box in the keybinding manager */
-#define	KB_BOX_IND		3
+#define	KB_BOX_IND		4
 
 /* Creates the box display (holds everything EXCEPT the actual rendering
  * data) */
@@ -581,6 +583,77 @@ kbdbind_dialog_abort_handler(struct dialog_data *dlg)
 	mem_free(box);
 }
 
+
+struct kbdbind_add_hop {
+	struct terminal *term;
+	int action, keymap;
+};
+
+static void
+really_add_keybinding(void *data, unsigned char *keystroke)
+{
+	struct kbdbind_add_hop *hop = data;
+	long key, meta;
+
+	/* TODO: This should maybe rather happen in a validation function? */
+	if (parse_keystroke(keystroke, &key, &meta) < 0) {
+		msg_box(hop->term, NULL,
+			TEXT(T_ADD_KEYBINDING), AL_CENTER,
+			TEXT(T_INVALID_KEYSTROKE),
+			NULL, 1,
+			TEXT(T_CANCEL), NULL, B_ESC | B_ENTER);
+		return;
+	}
+
+	add_keybinding(hop->keymap, hop->action, key, meta, 0);
+}
+
+static int
+push_kbdbind_add_button(struct dialog_data *dlg,
+		struct widget_data *some_useless_info_button)
+{
+	struct terminal *term = dlg->win->term;
+	struct listbox_data *box = (void *) dlg->dlg->items[KB_BOX_IND].data;
+	struct listbox_item *item = box->sel;
+	struct kbdbind_add_hop *hop;
+	unsigned char *text;
+
+	if (!item || !item->depth) {
+		msg_box(term, NULL,
+			TEXT(T_ADD_KEYBINDING), AL_CENTER,
+			TEXT(T_NEED_TO_SELECT_KEYMAP),
+			NULL, 1,
+			TEXT(T_CANCEL), NULL, B_ESC | B_ENTER);
+		return 0;
+	}
+
+	hop = mem_calloc(1, sizeof(struct kbdbind_add_hop));
+	if (!hop) return 0;
+	hop->term = term;
+
+	if (item->depth == 2)
+		item = item->root;
+	hop->keymap = (int) item->udata;
+	hop->action = (int) item->root->udata;
+
+	text = straconcat(_(TEXT(T_ACTION), term), ": ", write_action(hop->action), "\n",
+			  _(TEXT(T_KKEYMAP),term), ": ", write_keymap(hop->keymap), "\n",
+			  "\n", _(TEXT(T_KEYSTROKE_HELP), term), "\n\n",
+			  _(TEXT(T_KEYSTROKE), term), NULL);
+	if (!text) {
+		mem_free(hop);
+		return 0;
+	}
+
+	input_field(term, getml(text, hop, NULL), TEXT(T_ADD_KEYBINDING), text,
+		TEXT(T_OK), TEXT(T_CANCEL), hop, NULL,
+		MAX_STR_LEN, "", 0, 0, NULL,
+		really_add_keybinding, NULL);
+	return 0;
+}
+
+
+/* FIXME: Races here, we need to lock the entry..? --pasky */
 
 static void
 really_delete_keybinding(void *data)
@@ -621,7 +694,7 @@ push_kbdbind_del_button(struct dialog_data *dlg,
 	struct listbox_data *box = (void *) dlg->dlg->items[KB_BOX_IND].data;
 	struct keybinding *keybinding;
 
-	if (!box->sel || !box->sel->udata) {
+	if (!box->sel || box->sel->depth < 2) {
 		msg_box(term, NULL,
 			TEXT(T_DELETE_KEYBINDING), AL_CENTER,
 			TEXT(T_NOT_A_KEYBINDING),
@@ -674,20 +747,26 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	d->items[0].type = D_BUTTON;
 	d->items[0].gid = B_ENTER;
-	d->items[0].fn = push_kbdbind_del_button;
+	d->items[0].fn = push_kbdbind_add_button;
 	d->items[0].udata = ses;
-	d->items[0].text = TEXT(T_DELETE);
+	d->items[0].text = TEXT(T_ADD);
 
 	d->items[1].type = D_BUTTON;
 	d->items[1].gid = B_ENTER;
-	d->items[1].fn = push_kbdbind_save_button;
+	d->items[1].fn = push_kbdbind_del_button;
 	d->items[1].udata = ses;
-	d->items[1].text = TEXT(T_SAVE);
+	d->items[1].text = TEXT(T_DELETE);
 
 	d->items[2].type = D_BUTTON;
-	d->items[2].gid = B_ESC;
-	d->items[2].fn = cancel_dialog;
-	d->items[2].text = TEXT(T_CLOSE);
+	d->items[2].gid = B_ENTER;
+	d->items[2].fn = push_kbdbind_save_button;
+	d->items[2].udata = ses;
+	d->items[2].text = TEXT(T_SAVE);
+
+	d->items[3].type = D_BUTTON;
+	d->items[3].gid = B_ESC;
+	d->items[3].fn = cancel_dialog;
+	d->items[3].text = TEXT(T_CLOSE);
 
 	d->items[KB_BOX_IND].type = D_BOX;
 	d->items[KB_BOX_IND].gid = 12;

@@ -390,3 +390,10 @@ T_DELETE_KEYBINDING, "Delete keybinding",
 T_NOT_A_KEYBINDING, "This item is not a keybinding."
 T_REALLY_DELETE_KEYBINDING, "Really delete the keybinding",
 T_KEYMAP, "keymap",
+T_ADD_KEYBINDING, "Add keybinding",
+T_NEED_TO_SELECT_KEYMAP, "Need to select a keymap."
+T_ACTION, "Action",
+T_KKEYMAP, "Keymap",
+T_KEYSTROKE_HELP, "Keystroke should be written in the format: [Prefix-]Key\nPrefix: Shift, Ctrl, Alt\nKey: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
+T_KEYSTROKE, "Keystroke",
+T_INVALID_KEYSTROKE, "Invalid keystroke.",

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.50 2002/12/15 22:49:10 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.51 2002/12/17 15:17:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,9 +31,9 @@ static struct listbox_item *keyact_box_items[ACT_ZOOM_FRAME + 1];
 
 static struct list_head keymaps[KM_MAX];
 
-static void add_default_keybindings();
-
 static int read_action(unsigned char *);
+
+static void add_default_keybindings();
 
 static void init_action_listboxes();
 static void free_action_listboxes();
@@ -248,7 +248,6 @@ static struct strtonum keymap_table[] = {
 static int
 read_keymap(unsigned char *keymap)
 {
-
 	return strtonum(keymap_table, keymap);
 }
 
@@ -448,7 +447,7 @@ init_action_listboxes()
 		box_item->root = NULL;
 		init_list(box_item->child);
 		box_item->visible = 1;
-		box_item->udata = NULL;
+		box_item->udata = (void *) act->num;
 		box_item->type = BI_FOLDER;
 		box_item->expanded = 0; /* Maybe you would like this being 1? */
 		box_item->depth = 0;
@@ -465,7 +464,7 @@ init_action_listboxes()
 			keymap->root = box_item;
 			init_list(keymap->child);
 			keymap->visible = 1;
-			keymap->udata = NULL;
+			keymap->udata = (void *) i;
 			keymap->type = BI_FOLDER;
 			keymap->expanded = 1;
 			keymap->depth = 1;

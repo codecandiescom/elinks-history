@@ -1,17 +1,17 @@
 /* Config file and commandline proccessing */
-/* $Id: conf.c,v 1.6 2002/04/28 18:03:41 pasky Exp $ */
+/* $Id: conf.c,v 1.7 2002/05/06 14:12:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_FCNTL_H
-#include <fcntl.h>
-#endif
 #include <stdio.h>
 #include <string.h>
-#include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/stat.h> /* OS/2 needs this after sys/types.h */
+#ifdef HAVE_FCNTL_H
+#include <fcntl.h> /* OS/2 needs this after sys/types.h */
+#endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif

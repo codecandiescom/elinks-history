@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.19 2002/04/28 11:48:26 pasky Exp $ */
+/* $Id: cookies.c,v 1.20 2002/05/06 14:12:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,8 +7,8 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/stat.h> /* OS/2 needs this after sys/types.h */
 #ifdef HAVE_TIME_H
 #include <time.h>
 #endif

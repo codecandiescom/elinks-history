@@ -1,18 +1,18 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.14 2002/05/04 08:23:40 pasky Exp $ */
+/* $Id: socket.c,v 1.15 2002/05/06 14:12:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <errno.h>
-#ifdef HAVE_FCNTL_H
-#include <fcntl.h>
-#endif
 #include <netinet/in.h>
 #include <string.h>
-#include <sys/socket.h>
 #include <sys/types.h>
+#include <sys/socket.h> /* OS/2 needs this after sys/types.h */
+#ifdef HAVE_FCNTL_H
+#include <fcntl.h> /* OS/2 needs this after sys/types.h */
+#endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif

@@ -1,13 +1,10 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.13 2002/04/29 22:04:01 pasky Exp $ */
+/* $Id: os_dep.c,v 1.14 2002/05/06 14:12:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_FCNTL_H
-#include <fcntl.h>
-#endif
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,6 +14,10 @@
 #endif
 #ifdef HAVE_SYS_SIGNAL_H
 #include <sys/signal.h>
+#endif
+#include <sys/types.h>
+#ifdef HAVE_FCNTL_H
+#include <fcntl.h> /* OS/2 needs this after sys/types.h */
 #endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>

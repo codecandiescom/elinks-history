@@ -1,12 +1,12 @@
-/* $Id: socket.h,v 1.5 2002/03/18 20:28:06 pasky Exp $ */
+/* $Id: socket.h,v 1.6 2002/05/06 14:12:14 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
 
 /* We MAY have problems with this. If there will be any, just tell me, and
  * I will move it to start of links.h. */
-#include <sys/socket.h>
 #include <sys/types.h>
+#include <sys/socket.h> /* OS/2 needs this after sys/types.h */
 
 #include <lowlevel/sched.h>
 

@@ -1,14 +1,11 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.35 2002/05/05 14:52:53 zas Exp $ */
+/* $Id: view.c,v 1.36 2002/05/06 14:12:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <errno.h>
-#ifdef HAVE_FCNTL_H
-#include <fcntl.h>
-#endif
 #ifdef HAVE_LUA
 #include <lua.h>
 #include <lualib.h>
@@ -16,6 +13,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#ifdef HAVE_FCNTL_H
+#include <fcntl.h> /* OS/2 needs this after sys/types.h */
+#endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif

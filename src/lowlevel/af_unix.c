@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.10 2002/04/28 11:48:26 pasky Exp $ */
+/* $Id: af_unix.c,v 1.11 2002/05/06 14:12:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,10 @@
 
 /* Blame BSD for position of this includes. */
 #include <netinet/in.h>
-#include <sys/socket.h>
+#ifdef HAVE_SYS_SELECT_H
+#include <sys/select.h>
+#endif
+#include <sys/socket.h> /* OS/2 needs this after sys/types.h */
 
 #include <links.h>
 

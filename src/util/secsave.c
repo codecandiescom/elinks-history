@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.3 2002/04/27 13:15:54 pasky Exp $ */
+/* $Id: secsave.c,v 1.4 2002/05/06 14:12:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,7 +7,8 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/stat.h> /* OS/2 needs this after sys/types.h */
 #include <errno.h>
 
 #include <links.h>

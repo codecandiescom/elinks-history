@@ -1,14 +1,11 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.22 2002/04/29 22:23:42 pasky Exp $ */
+/* $Id: main.c,v 1.23 2002/05/06 14:12:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <errno.h>
-#ifdef HAVE_FCNTL_H
-#include <fcntl.h>
-#endif
 #ifdef HAVE_LUA
 #include <lua.h>
 #include <lualib.h>
@@ -18,6 +15,10 @@
 #include <string.h>
 #ifdef HAVE_SYS_SIGNAL_H
 #include <sys/signal.h>
+#endif
+#include <sys/types.h>
+#ifdef HAVE_FCNTL_H
+#include <fcntl.h> /* OS/2 needs this after sys/types.h */
 #endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>

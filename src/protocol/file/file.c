@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.10 2002/04/28 14:51:33 zas Exp $ */
+/* $Id: file.c,v 1.11 2002/05/06 14:12:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,12 +9,12 @@
 #ifdef HAVE_DIRENT_H
 #include <dirent.h>
 #endif
-#ifdef HAVE_FCNTL_H
-#include <fcntl.h>
-#endif
 #include <stdio.h>
-#include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/stat.h> /* OS/2 needs this after sys/types.h */
+#ifdef HAVE_FCNTL_H
+#include <fcntl.h> /* OS/2 needs this after sys/types.h */
+#endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif

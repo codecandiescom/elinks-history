@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.96 2004/12/17 13:58:06 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.97 2004/12/17 13:59:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -399,10 +399,9 @@ static const JSFunctionSpec window_funcs[] = {
 };
 
 static JSBool
-window_alert(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
+window_alert(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 {
 	struct view_state *vs = JS_GetPrivate(ctx, obj);
-	struct document_view *doc_view = vs->doc_view;
 	union jsval_union v;
 	enum prop_type prop_type;
 	union prop_union p;
@@ -416,7 +415,7 @@ window_alert(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 	if (!v.string || !*v.string)
 		goto bye;
 
-	msg_box(doc_view->session->tab->term, NULL, MSGBOX_FREE_TEXT | MSGBOX_NO_INTL,
+	msg_box(vs->doc_view->session->tab->term, NULL, MSGBOX_FREE_TEXT | MSGBOX_NO_INTL,
 		N_("JavaScript Alert"), ALIGN_CENTER,
 		stracpy(v.string),
 		NULL, 1,

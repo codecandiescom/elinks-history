@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.117 2003/11/07 22:36:06 jonas Exp $ */
+/* $Id: core.c,v 1.118 2003/11/07 23:59:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -356,7 +356,6 @@ dialog_layouter(struct dialog_data *dlg_data)
 	int w = 50; /* XXX: Hack alert */
 	int rw = w;
 	int y = -1;
-	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	dlg_format_field(NULL, &dlg_data->widgets_data[0], 0, &y, w, &rw, AL_LEFT);
 	y++;
@@ -386,6 +385,7 @@ dialog_layouter(struct dialog_data *dlg_data)
 static int
 l_edit_bookmark_dialog(LS)
 {
+	struct terminal *term = lua_ses->tab->term;
 	struct dialog *dlg;
 	struct lua_dlg_data *data;
 
@@ -407,7 +407,7 @@ l_edit_bookmark_dialog(LS)
 	lua_pushvalue(S, 4);
 	data->func_ref = lua_ref(S, 1);
 
-	dlg->title = _("Edit bookmark", lua_ses->tab->term);
+	dlg->title = _("Edit bookmark", term);
 	dlg->layouter = dialog_layouter;
 	dlg->refresh = (void (*)(void *))dialog_run_lua;
 	dlg->refresh_data = data;
@@ -421,7 +421,7 @@ l_edit_bookmark_dialog(LS)
 
 	add_dlg_end(dlg, L_EDIT_BMK_WIDGETS_COUNT);
 
-	do_dialog(lua_ses->tab->term, dlg, getml(dlg, NULL));
+	do_dialog(term, dlg, getml(dlg, NULL));
 
 	lua_pushnumber(S, 1);
 	return 1;
@@ -462,13 +462,11 @@ static void
 xdialog_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
-	int max = 0, min = 0;
 	int w = 50; /* XXX: Hack alert */
 	int rw = w;
 	int y = -1;
 	int i;
 	int nfields = 0;
-	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	while (widget_is_textfield(&dlg_data->widgets_data[nfields]))
 		nfields++;
@@ -500,6 +498,7 @@ xdialog_layouter(struct dialog_data *dlg_data)
 static int
 l_xdialog(LS)
 {
+	struct terminal *term = lua_ses->tab->term;
 	struct dialog *dlg;
 	struct lua_xdialog_data *data;
 	int nargs, nfields, nitems;
@@ -525,7 +524,7 @@ l_xdialog(LS)
 	lua_pushvalue(S, nargs);
 	data->func_ref = lua_ref(S, 1);
 
-	dlg->title = _("User dialog", lua_ses->tab->term);
+	dlg->title = _("User dialog", term);
 	dlg->layouter = xdialog_layouter;
 	dlg->refresh = (void (*)(void *))xdialog_run_lua;
 	dlg->refresh_data = data;
@@ -535,12 +534,12 @@ l_xdialog(LS)
 			      data->fields[i], NULL);
 	}
 
-	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);
-	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", lua_ses->tab->term), NULL);
+	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
+	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
 	add_dlg_end(dlg, nitems);
 
-	do_dialog(lua_ses->tab->term, dlg, getml(dlg, NULL));
+	do_dialog(term, dlg, getml(dlg, NULL));
 
 	lua_pushnumber(S, 1);
 	return 1;

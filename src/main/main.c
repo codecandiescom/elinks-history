@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.34 2002/06/07 18:06:26 pasky Exp $ */
+/* $Id: main.c,v 1.35 2002/06/09 10:59:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -370,6 +370,7 @@ terminate_all_subsystems()
 #endif
 	shrink_memory(1);
 	if (init_b) save_url_history();
+	free_table_cache();
 	free_history_lists();
 	finalize_global_history();
 	free_term_specs();

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.172 2004/05/31 17:19:18 jonas Exp $ */
+/* $Id: connection.c,v 1.173 2004/05/31 17:34:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,7 +136,7 @@ struct host_connection {
 	/* XXX: This is just the URI of the connection that registered the
 	 * host connection so only rely on the host part. */
 	struct uri *uri;
-	int connections;
+	struct object object;
 };
 
 static struct host_connection *
@@ -165,9 +165,10 @@ add_host_connection(struct connection *conn)
 		if (!host_conn) return 0;
 
 		host_conn->uri = get_uri_reference(conn->uri);
+		object_nolock(host_conn, "host_connection");
 		add_to_list(host_connections, host_conn);
 	}
-	if (host_conn) host_conn->connections++;
+	if (host_conn) object_lock(host_conn);
 
 	return 1;
 }
@@ -180,8 +181,8 @@ done_host_connection(struct connection *conn)
 
 	if (!host_conn) return;
 
-	host_conn->connections--;
-	if (host_conn->connections > 0) return;
+	object_unlock(host_conn);
+	if (is_object_used(host_conn)) return;
 
 	del_from_list(host_conn);
 	done_uri(host_conn->uri);
@@ -692,7 +693,7 @@ try_connection(struct connection *conn, int max_conns_to_host, int max_conns)
 {
 	struct host_connection *host_conn = get_host_connection(conn);
 
-	if (host_conn && host_conn->connections >= max_conns_to_host)
+	if (host_conn && get_object_refcount(host_conn) >= max_conns_to_host)
 		return try_to_suspend_connection(conn, host_conn->uri) ? 0 : -1;
 
 	if (active_connections >= max_conns)

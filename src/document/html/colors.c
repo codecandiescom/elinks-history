@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.17 2003/06/05 15:28:02 zas Exp $ */
+/* $Id: colors.c,v 1.18 2003/06/15 11:06:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,8 @@
 #include "elinks.h"
 
 #include "document/html/colors.h"
+#include "document/options.h"
+#include "util/fastfind.h"
 #include "util/string.h"
 
 struct color_spec {
@@ -163,42 +165,101 @@ static struct color_spec color_specs[] = {
 	{"whitesmoke",		0xF5F5F5},
 	{"yellow",		0xFFFF00},
 	{"yellowgreen",		0x9ACD32},
+	{NULL,			0}
 };
 
+#ifdef USE_FASTFIND
+static struct fastfind_info *ff_info_colors = NULL;
+static struct color_spec *internal_pointer;
 
-#define endof(T) ((T)+sizeof(T)/sizeof(*(T)))
+/* Reset internal list pointer */
+void
+colors_list_reset(void)
+{
+	internal_pointer = color_specs;
+}
+
+/* Returns a pointer to a struct that contains
+ * current key and data pointers and increment
+ * internal pointer.
+ * It returns NULL when key is NULL. */
+struct fastfind_key_value *
+colors_list_next(void)
+{
+	static struct fastfind_key_value kv;
+
+	if (!internal_pointer->name) return NULL;
+
+	kv.key = (unsigned char *) internal_pointer->name;
+	kv.data = internal_pointer;
+
+	internal_pointer++;
+
+	return &kv;
+}
+#endif /* USE_FASTFIND */
+
+void
+free_colors_lookup(void) /* FIXME: new name for it ;) */
+{
+#ifdef USE_FASTFIND
+	fastfind_terminate(ff_info_colors);
+#endif
+}
+
+#define int2rgb(n, col) (col)->r = (n) / 0x10000,	\
+			(col)->g = (n) / 0x100 % 0x100,	\
+			(col)->b = (n) % 0x100
 
 int
 decode_color(unsigned char *str, struct rgb *col)
 {
-	int ch;
+	int slen = strlen(str);
 
-	if (*str != '#') {
-		struct color_spec *cs;
-
-		for (cs = color_specs; cs < endof(color_specs); cs++)
-			if (!strcasecmp(cs->name, str)) {
-				ch = cs->rgb;
-				goto found;
-			}
-		str--;
-	}
-	str++;
-	if (strlen(str) == 6) {
+	if (*str == '#' && slen == 7) {
 		unsigned char *end;
+		int ch;
 
 		errno = 0;
-		ch = strtoul(str, (char **)&end, 16);
+		ch = strtoul(&str[1], (char **)&end, 16);
 		if (!errno && !*end) {
-found:
-			col->r = ch / 0x10000;
-			col->g = ch / 0x100 % 0x100;
-			col->b = ch % 0x100;
+			int2rgb(ch, col);
 			return 0;
 		}
+	} else {
+#ifndef USE_FASTFIND
+		register struct color_spec *cs = color_specs;
+
+		while (cs->name) {
+			if (!strcasecmp(cs->name, str)) {
+				int2rgb(cs->rgb, col);
+				return 0;
+			}
+			cs++;
+		}
+#else
+		struct color_spec *cs;
+		static int do_index = 1;
+
+		if (do_index) {
+			ff_info_colors = fastfind_index(&colors_list_reset, &colors_list_next, 0);
+			fastfind_index_compress(NULL, ff_info_colors);
+			do_index = 0;
+		}
+
+		cs = (struct color_spec *) fastfind_search(str, slen, ff_info_colors);
+
+		if (cs) {
+			int2rgb(cs->rgb, col);
+			return 0;
+		}
+#endif
 	}
-	return -1;
+
+	return -1; /* Not found */
 }
+
+#undef int2rgb
 
 /* Returns an allocated string containing name of the color or NULL if there's
  * no name for that color. */
@@ -206,16 +267,16 @@ unsigned char *
 get_color_name(struct rgb *col)
 {
 	int color = col->r * 0x10000 + col->g * 0x100 + col->b;
-	struct color_spec *cs;
+	register struct color_spec *cs = color_specs;
 
-	for (cs = color_specs; cs < endof(color_specs); cs++)
+	while (cs->name) {
 		if (cs->rgb == color)
 			return stracpy(cs->name);
+		cs++;
+	}
 
 	return NULL;
 }
-
-#undef endof
 
 /* Translate rgb color to string in #rrggbb format. str should be a pointer to
  * a 8 bytes memory space. */
@@ -224,9 +285,6 @@ color_to_string(struct rgb *color, unsigned char *str)
 {
 	snprintf(str, 8, "#%02x%02x%02x", color->r, color->g, color->b);
 }
-
-
-#include "document/options.h"
 
 static struct rgb palette[] = {
 #if defined(PALA)

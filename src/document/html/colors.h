@@ -1,4 +1,4 @@
-/* $Id: colors.h,v 1.5 2002/09/04 15:43:22 zas Exp $ */
+/* $Id: colors.h,v 1.6 2003/06/15 11:06:02 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_COLORS_H
 #define EL__DOCUMENT_HTML_COLORS_H
@@ -14,5 +14,7 @@ void color_to_string(struct rgb *, unsigned char *);
 
 int find_nearest_color(struct rgb *, int);
 int fg_color(int, int);
+
+void free_colors_lookup(void);
 
 #endif

@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.42 2003/06/18 20:05:12 zas Exp $ */
+/* $Id: af_unix.c,v 1.43 2003/06/18 20:11:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,9 +174,9 @@ free_and_error:
 }
 
 static void
-unlink_unix(void)
+unlink_unix(struct sockaddr *s_addr)
 {
-	unlink(((struct sockaddr_un *) s_unix)->sun_path);
+	unlink(((struct sockaddr_un *) s_addr)->sun_path);
 #if 0
 	if (unlink(((struct sockaddr_un *) s_unix)->sun_path)) {
 		perror("unlink");
@@ -218,7 +218,7 @@ get_address(struct sockaddr **s_addr, int *s_addr_len)
 	return AF_INET;
 }
 
-#define unlink_unix()
+#define unlink_unix(s)
 
 #endif
 
@@ -308,7 +308,7 @@ again:
 			close(s_unix_fd); s_unix_fd = -1;
 
 			if (!unlinked) {
-				unlink_unix();
+				unlink_unix(s_unix);
 				unlinked = 1;
 
 				goto again;
@@ -346,7 +346,7 @@ af_unix_close(void)
 		close(s_unix_fd);
 
 	if (s_unix) {
-		unlink_unix();
+		unlink_unix(s_unix);
 		mem_free(s_unix); s_unix = NULL;
 	}
 

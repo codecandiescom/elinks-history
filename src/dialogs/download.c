@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.48 2004/05/09 21:17:12 zas Exp $ */
+/* $Id: download.c,v 1.49 2004/05/13 09:25:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,7 +115,7 @@ download_progress_bar(struct terminal *term, int x, int y, int width,
 {
 	/* Note : values > 100% are theorically possible and were seen. */
 	int progress = (int) ((longlong) 100 * current / total);
-	int barprogress;
+	struct rect barprogress;
 
 	/* Draw the progress meter part "[###    ]" */
 	if (!text && width > 2) {
@@ -125,8 +125,9 @@ download_progress_bar(struct terminal *term, int x, int y, int width,
 	}
 
 	if (!meter_color) meter_color = get_bfu_color(term, "dialog.meter");
-	barprogress = int_min(width * progress / 100, width);
-	draw_area(term, x, y, barprogress, 1, ' ', 0, meter_color);
+	set_rect(&barprogress,
+		 x, y, int_min(width * progress / 100, width), 1);
+	draw_box(term, &barprogress, ' ', 0, meter_color);
 
 	/* On error, will print '?' only, should not occur. */
 	if (text) {

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.406 2004/05/13 00:19:44 jonas Exp $ */
+/* $Id: view.c,v 1.407 2004/05/13 09:22:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,8 +109,11 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *frameset_desc,
 			int width = frameset_desc->frame_desc[i].width;
 
 			if (i) {
-				draw_area(t, x, y + 1, 1, height, BORDER_SVLINE,
-					  SCREEN_ATTR_FRAME, &colors);
+				struct rect box;
+
+				set_rect(&box, x, y + 1, 1, height);
+				draw_box(t, &box, BORDER_SVLINE, SCREEN_ATTR_FRAME, &colors);
+
 				if (j == frameset_desc->dimensions.height - 1)
 					draw_border_cross(t, x, y + height + 1,
 							  BORDER_X_UP, &colors);
@@ -121,8 +124,11 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *frameset_desc,
 			}
 
 			if (j) {
-				draw_area(t, x + 1, y, width, 1, BORDER_SHLINE,
-					  SCREEN_ATTR_FRAME, &colors);
+				struct rect box;
+				
+				set_rect(&box, x + 1, y, width, 1);
+				draw_box(t, &box, BORDER_SHLINE, SCREEN_ATTR_FRAME, &colors);
+
 				if (i == frameset_desc->dimensions.width - 1
 				    && x + width + 1 < t->width)
 					draw_border_cross(t, x + width + 1, y,
@@ -187,12 +193,12 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 		color.background = doc_view->document->bgcolor;
 
 	if (!doc_view->vs) {
-		draw_area(t, box->x, box->y, box->width, box->height, ' ', 0, &color);
+		draw_box(t, box, ' ', 0, &color);
 		return;
 	}
 
 	if (document_has_frames(doc_view->document)) {
-	 	draw_area(t, box->x, box->y, box->width, box->height, ' ', 0, &color);
+	 	draw_box(t, box, ' ', 0, &color);
 		draw_frame_lines(t, doc_view->document->frame_desc, box->x, box->y);
 		if (doc_view->vs && doc_view->vs->current_link == -1)
 			doc_view->vs->current_link = 0;
@@ -224,7 +230,7 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 	free_link(doc_view);
 	doc_view->last_x = vx;
 	doc_view->last_y = vy;
-	draw_area(t, box->x, box->y, box->width, box->height, ' ', 0, &color);
+	draw_box(t, box, ' ', 0, &color);
 	if (!doc_view->document->height) return;
 
 	while (vs->y >= doc_view->document->height) vs->y -= box->height;
@@ -294,8 +300,12 @@ draw_formatted(struct session *ses, int rerender)
 
 	if (!ses->doc_view || !ses->doc_view->document) {
 		/*INTERNAL("document not formatted");*/
-		draw_area(ses->tab->term, 0, 1, ses->tab->term->width,
-			  ses->tab->term->height - 2, ' ', 0, NULL);
+		struct rect box;
+
+		set_rect(&box, 0, 1,
+			 ses->tab->term->width,
+			 ses->tab->term->height - 2);
+		draw_box(ses->tab->term, &box, ' ', 0, NULL);
 		return;
 	}
 

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.163 2004/09/12 02:30:12 miciah Exp $ */
+/* $Id: listbox.c,v 1.164 2004/09/12 02:33:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -544,12 +544,11 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		int offset = ev->info.mouse.y - widget_data->box.y;
 
 		box->sel_offset = offset;
-		if (offset)
-			box->sel = traverse_listbox_items_list(box->top,
-							       box,
-							       offset, 1,
-							       NULL, NULL);
-		else box->sel = box->top;
+		box->sel = offset ? traverse_listbox_items_list(box->top,
+								box,
+								offset, 1,
+								NULL, NULL)
+				  : box->top;
 
 		if (box->sel && box->sel->type == BI_FOLDER) {
 			int xdepth = widget_data->box.x + box->sel->depth * 5;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.64 2003/05/12 19:06:03 pasky Exp $ */
+/* $Id: session.c,v 1.65 2003/05/12 19:09:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -701,7 +701,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 				 NULL),
 		N_("Warning"), AL_CENTER | AL_EXTD_TEXT,
 		m1, " ", m2, "?", NULL,
-		wtd_data, 3,
+		wtd_data, 2,
 		N_("Yes"), post_yes, B_ENTER,
 		N_("No"), post_no, B_ESC);
 }

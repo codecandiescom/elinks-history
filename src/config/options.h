@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.108 2004/12/16 14:55:30 zas Exp $ */
+/* $Id: options.h,v 1.109 2005/03/05 20:59:13 zas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -105,8 +105,8 @@ union option_value {
 	unsigned char *string;
 };
 
-typedef int (*change_hook)(struct session *, struct option *current,
-			   struct option *changed);
+typedef int (*change_hook_T)(struct session *, struct option *current,
+			     struct option *changed);
 
 struct option {
 	LIST_HEAD(struct option);
@@ -124,7 +124,7 @@ struct option {
 	/* To be called when the option (or sub-option if it's a tree) is
 	 * changed. If it returns zero, we will continue descending the options
 	 * tree checking for change handlers. */
-	change_hook change_hook;
+	change_hook_T change_hook;
 
 	/* This is indeed maintained by bookmarks.c, not dialogs.c; much easier
 	 * and simpler. */
@@ -145,7 +145,7 @@ extern void done_options(void);
 
 struct change_hook_info {
 	unsigned char *name;
-	change_hook change_hook;
+	change_hook_T change_hook;
 };
 
 extern void register_change_hooks(struct change_hook_info *change_hooks);

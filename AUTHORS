@@ -204,6 +204,7 @@ Harold L Hunt II <huntharo@msu.edu>
 
 Hugo Haas <hugo@larve.net>
 	Minor random hacking
+	debian/watch file
 
 Ingo Blechschmidt <iblech@web.de>
 	German translation updates
@@ -538,4 +539,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.184 2005/01/11 00:02:17 jonas Exp $
+$Id: AUTHORS,v 1.185 2005/02/02 12:58:51 jonas Exp $

@@ -1,4 +1,4 @@
-elinks (0.11.CVS-1.1) unstable; urgency=low
+elinks (0.11-cvs.1) unstable; urgency=low
 
   * NMU
   * Only remove CVS files from packaging directory
@@ -28,6 +28,9 @@ elinks (0.11.CVS-1.1) unstable; urgency=low
   * Fix assertion failure when searching in empty documents (closes: #238281)
   * Remove www-browser alternative, thanks Andreas Metzler (closes: #247495)
   * Fix uncompressing of .gz files on download (closes: #221207)
+  * Fix repeatedly and endless refreshing of documents that triggers a
+    download (like sourceforge's download pages) (closes: #293298)
+  * Add watch file, thanks Hugo Haas
 
  -- Jonas Fonseca <fonseca@diku.dk>  Tue, 11 Jan 2005 19:29:31 +0100
 

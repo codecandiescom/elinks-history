@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.68 2003/06/18 17:00:29 zas Exp $ */
+/* $Id: error.c,v 1.69 2003/07/02 02:07:13 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -179,7 +179,11 @@ dump_backtrace(FILE *f, int trouble)
 	free(strings);
 
 #else
-	/* user torturation */
+	/* User torturation. */
+	/* You are worried about what you see here? You don't see anything in
+	 * the first place. Also, be assured that we know what are we doing. */
+	/* (We are killing the user, obviously.) */
+
 	/* TODO: Gettextify? Er, better not. More people (translators) could
 	 * find out what are we doing... ;-) --pasky */
 	/* TODO: Be more cruel when in trouble? ;-) --pasky */

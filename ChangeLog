@@ -1,3 +1,16 @@
+Thu Dec  2 16:34:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inphist.c, bookmarks/bookmarks.c, cookies/cookies.c,
+	dialogs/exmode.c, dialogs/menu.c, dialogs/options.c,
+	formhist/formhist.c, globhist/globhist.c, lowlevel/timer.c,
+	protocol/file/file.c, sched/action.c, sched/download.c,
+	scripting/lua/core.c, viewer/text/form.c, viewer/text/link.c:
+
+	Be more coherent, use get_cmd_opt_bool("anonymous") everywhere
+	instead of mixed get_cmd_opt_bool()/get_cmd_opt_int(). This option
+	has the boolean type, though since bool==int from get_cmd_opt_*()
+	POV, this is just a cosmetic change.  
+
 Wed Dec  1 17:54:22 2004  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

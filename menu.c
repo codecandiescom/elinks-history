@@ -136,41 +136,74 @@ void cache_inf(struct terminal *term, void *d, struct session *ses)
 	unsigned char *a1, *a2, *a3, *a4, *a5, *a6, *a7, *a8, *a9, *a10, *a11, *a12, *a13, *a14, *a15, *a16;
 	int l = 0;
 	struct refresh *r;
-	if (!(r = mem_alloc(sizeof(struct refresh)))) return;
+	
+	r = mem_alloc(sizeof(struct refresh));
+	if (!r)	return;
+	
 	r->term = term;
 	r->win = NULL;
 	r->ses = ses;
 	r->fn = cache_inf;
 	r->data = d;
 	r->timer = -1;
-	l = 0;
-	l = 0, a1 = init_str(); add_to_str(&a1, &l, ": "); add_num_to_str(&a1, &l, select_info(CI_FILES));add_to_str(&a1, &l, " ");
-	l = 0, a2 = init_str(); add_to_str(&a2, &l, ", "); add_num_to_str(&a2, &l, select_info(CI_TIMERS));add_to_str(&a2, &l, " ");
-	l = 0, a3 = init_str(); add_to_str(&a3, &l, ".\n");
+	
+	l = 0; a1 = init_str(); add_to_str(&a1, &l, ": ");
+				add_num_to_str(&a1, &l, select_info(CI_FILES)); add_to_str(&a1, &l, " ");
+	l = 0; a2 = init_str(); add_to_str(&a2, &l, ", ");
+				add_num_to_str(&a2, &l, select_info(CI_TIMERS)); add_to_str(&a2, &l, " ");
+	l = 0; a3 = init_str(); add_to_str(&a3, &l, ".\n");
 
-	l = 0, a4 = init_str(); add_to_str(&a4, &l, ": "); add_num_to_str(&a4, &l, connect_info(CI_FILES));add_to_str(&a4, &l, " ");
-	l = 0, a5 = init_str(); add_to_str(&a5, &l, ", "); add_num_to_str(&a5, &l, connect_info(CI_CONNECTING));add_to_str(&a5, &l, " ");
-	l = 0, a6 = init_str(); add_to_str(&a6, &l, ", "); add_num_to_str(&a6, &l, connect_info(CI_TRANSFER));add_to_str(&a6, &l, " ");
-	l = 0, a7 = init_str(); add_to_str(&a7, &l, ", "); add_num_to_str(&a7, &l, connect_info(CI_KEEP));add_to_str(&a7, &l, " ");
-	l = 0, a8 = init_str(); add_to_str(&a8, &l, ".\n");
+	l = 0; a4 = init_str(); add_to_str(&a4, &l, ": ");
+				add_num_to_str(&a4, &l, connect_info(CI_FILES)); add_to_str(&a4, &l, " ");
+	l = 0; a5 = init_str(); add_to_str(&a5, &l, ", ");
+				add_num_to_str(&a5, &l, connect_info(CI_CONNECTING)); add_to_str(&a5, &l, " ");
+	l = 0; a6 = init_str(); add_to_str(&a6, &l, ", ");
+				add_num_to_str(&a6, &l, connect_info(CI_TRANSFER)); add_to_str(&a6, &l, " ");
+	l = 0; a7 = init_str(); add_to_str(&a7, &l, ", ");
+				add_num_to_str(&a7, &l, connect_info(CI_KEEP)); add_to_str(&a7, &l, " ");
+	l = 0; a8 = init_str(); add_to_str(&a8, &l, ".\n");
 
-	l = 0, a9 = init_str(); add_to_str(&a9, &l, ": "); add_num_to_str(&a9, &l, cache_info(CI_BYTES));add_to_str(&a9, &l, " ");
-	l = 0, a10 = init_str(); add_to_str(&a10, &l, ", "); add_num_to_str(&a10, &l, cache_info(CI_FILES));add_to_str(&a10, &l, " ");
-	l = 0, a11 = init_str(); add_to_str(&a11, &l, ", "); add_num_to_str(&a11, &l, cache_info(CI_LOCKED));add_to_str(&a11, &l, " ");
-	l = 0, a12 = init_str(); add_to_str(&a12, &l, ", "); add_num_to_str(&a12, &l, cache_info(CI_LOADING));add_to_str(&a12, &l, " ");
-	l = 0, a13 = init_str(); add_to_str(&a13, &l, ".\n");
+	l = 0; a9 = init_str(); add_to_str(&a9, &l, ": ");
+				add_num_to_str(&a9, &l, cache_info(CI_BYTES)); add_to_str(&a9, &l, " ");
+	l = 0; a10 =init_str(); add_to_str(&a10, &l, ", ");
+				add_num_to_str(&a10, &l, cache_info(CI_FILES)); add_to_str(&a10, &l, " ");
+	l = 0; a11 =init_str(); add_to_str(&a11, &l, ", ");
+				add_num_to_str(&a11, &l, cache_info(CI_LOCKED)); add_to_str(&a11, &l, " ");
+	l = 0; a12 =init_str(); add_to_str(&a12, &l, ", ");
+				add_num_to_str(&a12, &l, cache_info(CI_LOADING)); add_to_str(&a12, &l, " ");
+	l = 0; a13 =init_str(); add_to_str(&a13, &l, ".\n");
+	
+	l = 0; a14 =init_str(); add_to_str(&a14, &l, ": ");
+				add_num_to_str(&a14, &l, formatted_info(CI_FILES)); add_to_str(&a14, &l, " ");
+	l = 0; a15 =init_str(); add_to_str(&a15, &l, ", ");
+				add_num_to_str(&a15, &l, formatted_info(CI_LOCKED)); add_to_str(&a15, &l, " ");
+	l = 0; a16 =init_str(); add_to_str(&a16, &l, ".");
 
-	l = 0, a14 = init_str(); add_to_str(&a14, &l, ": "); add_num_to_str(&a14, &l, formatted_info(CI_FILES));add_to_str(&a14, &l, " ");
-	l = 0, a15 = init_str(); add_to_str(&a15, &l, ", "); add_num_to_str(&a15, &l, formatted_info(CI_LOCKED));add_to_str(&a15, &l, " ");
-	l = 0, a16 = init_str(); add_to_str(&a16, &l, ".");
-
-	msg_box(term, getml(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, NULL), TEXT(T_RESOURCES), AL_LEFT | AL_EXTD_TEXT, TEXT(T_RESOURCES), a1, TEXT(T_HANDLES), a2, TEXT(T_TIMERS), a3, TEXT(T_CONNECTIONS), a4, TEXT(T_cONNECTIONS), a5, TEXT(T_CONNECTING), a6, TEXT(T_tRANSFERRING), a7, TEXT(T_KEEPALIVE), a8, TEXT(T_MEMORY_CACHE), a9, TEXT(T_BYTES), a10, TEXT(T_FILES), a11, TEXT(T_LOCKED), a12, TEXT(T_LOADING), a13, TEXT(T_FORMATTED_DOCUMENT_CACHE), a14, TEXT(T_DOCUMENTS), a15, TEXT(T_LOCKED), a16, NULL, r, 1, TEXT(T_OK), NULL, B_ENTER | B_ESC);
+	msg_box(term, getml(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, NULL),
+		TEXT(T_RESOURCES), AL_LEFT | AL_EXTD_TEXT,
+		TEXT(T_RESOURCES), a1,
+		TEXT(T_HANDLES), a2,
+		TEXT(T_TIMERS), a3,
+		TEXT(T_CONNECTIONS), a4,
+		TEXT(T_cONNECTIONS), a5,
+		TEXT(T_CONNECTING), a6,
+		TEXT(T_tRANSFERRING), a7,
+		TEXT(T_KEEPALIVE), a8,
+		TEXT(T_MEMORY_CACHE), a9,
+		TEXT(T_BYTES), a10,
+		TEXT(T_FILES), a11,
+		TEXT(T_LOCKED), a12,
+		TEXT(T_LOADING), a13,
+		TEXT(T_FORMATTED_DOCUMENT_CACHE), a14,
+		TEXT(T_DOCUMENTS), a15,
+		TEXT(T_LOCKED), a16,
+		NULL, r, 1,
+		TEXT(T_OK), NULL, B_ENTER | B_ESC);
+	
 	r->win = term->windows.next;
-	((struct dialog_data *)r->win->data)->dlg->abort = refresh_abort;
-	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *))refresh, r);
+	((struct dialog_data *) r->win->data)->dlg->abort = refresh_abort;
+	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *)) refresh, r);
 }
-
-#ifdef DEBUG
 
 /* FIXME! The refresh here is buggy, thus the whole funct is disabled for now. */
 void list_cache(struct terminal *term, void *d, struct session *ses)
@@ -179,29 +212,36 @@ void list_cache(struct terminal *term, void *d, struct session *ses)
 	int l = 0;
 	struct refresh *r;
 	struct cache_entry *ce, *cache;
-	if (!(a = init_str())) return;
-	if (!(r = mem_alloc(sizeof(struct refresh)))) {
-		mem_free(a);
-		return;
-	}
+	
+	r = mem_alloc(sizeof(struct refresh));
+	if (!r)	return;
+	
+	a = init_str();
+
 	r->term = term;
 	r->win = NULL;
 	r->ses = ses;
 	r->fn = list_cache;
 	r->data = d;
 	r->timer = -1;
-	cache = (struct cache_entry *)cache_info(CI_LIST);
+
+	cache = (struct cache_entry *) cache_info(CI_LIST);
 	add_to_str(&a, &l, ":");
 	foreach(ce, *cache) {
 		add_to_str(&a, &l, "\n");
 		add_to_str(&a, &l, ce->url);
 	}
-	msg_box(term, getml(a, NULL), TEXT(T_CACHE_INFO), AL_LEFT | AL_EXTD_TEXT, TEXT(T_CACHE_CONTENT), a, NULL, r, 1, TEXT(T_OK), end_refresh, B_ENTER | B_ESC);
+	
+	msg_box(term, getml(a, NULL),
+		TEXT(T_CACHE_INFO), AL_LEFT | AL_EXTD_TEXT,
+		TEXT(T_CACHE_CONTENT), a,
+		NULL, r, 1,
+		TEXT(T_OK), /*end_refresh*/ NULL, B_ENTER | B_ESC);
+	
 	r->win = term->windows.next;
-	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *))refresh, r);
+	((struct dialog_data *) r->win->data)->dlg->abort = refresh_abort;
+	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *)) refresh, r);
 }
-
-#endif
 
 #ifdef LEAK_DEBUG
 
@@ -218,17 +258,31 @@ void memory_info(struct terminal *term, void *d, struct session *ses)
 	char message[MSG_BUF];
 	char *p;
 	struct refresh *r;
-	if (!(r = mem_alloc(sizeof(struct refresh)))) return;
+	
+	r = mem_alloc(sizeof(struct refresh));
+	if (!r) return;
+	
 	r->term = term;
 	r->win = NULL;
 	r->ses = ses;
 	r->fn = memory_info;
 	r->data = d;
 	r->timer = -1;
+	
 	p = message;
-	sprintf(p, "%ld %s", mem_amount, _(TEXT(T_MEMORY_ALLOCATED), term)), p += strlen(p);
-	if (last_mem_amount != -1) sprintf(p, ", %s %ld, %s %ld", _(TEXT(T_LAST), term), last_mem_amount, _(TEXT(T_DIFFERENCE), term), mem_amount - last_mem_amount), p += strlen(p);
-	sprintf(p, "."), p += strlen(p);
+	sprintf(p, "%ld %s", mem_amount, _(TEXT(T_MEMORY_ALLOCATED), term));
+	p += strlen(p);
+	
+	if (last_mem_amount != -1) {
+		sprintf(p, ", %s %ld, %s %ld", _(TEXT(T_LAST), term),
+			last_mem_amount, _(TEXT(T_DIFFERENCE), term),
+			mem_amount - last_mem_amount);
+		p += strlen(p);
+	}
+	
+	sprintf(p, ".");
+	p += strlen(p);
+	
 #if 0 && defined(MAX_LIST_SIZE)
 	if (last_mem_amount != -1) {
 		long i, j;
@@ -248,14 +302,21 @@ void memory_info(struct terminal *term, void *d, struct session *ses)
 		p += sprintf(p, ".");
 	}
 #endif
-	if (!(p = stracpy(message))) {
+	
+	p = stracpy(message);
+	if (!p) {
 		mem_free(r);
 		return;
 	}
-	msg_box(term, getml(p, NULL), TEXT(T_MEMORY_INFO), AL_CENTER, p, r, 1, TEXT(T_OK), NULL, B_ENTER | B_ESC);
+	
+	msg_box(term, getml(p, NULL),
+		TEXT(T_MEMORY_INFO), AL_CENTER,
+		p, r, 1,
+		TEXT(T_OK), NULL, B_ENTER | B_ESC);
+	
 	r->win = term->windows.next;
-	((struct dialog_data *)r->win->data)->dlg->abort = refresh_abort;
-	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *))refresh, r);
+	((struct dialog_data *) r->win->data)->dlg->abort = refresh_abort;
+	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *)) refresh, r);
 }
 
 #undef MSG_W
@@ -1141,9 +1202,7 @@ struct menu_item file_menu22[] = {
 	{TEXT(T_KILL_BACKGROUND_CONNECTIONS), "", TEXT(T_HK_KILL_BACKGROUND_CONNECTIONS), MENU_FUNC menu_kill_background_connections, (void *)0, 0, 0},
 	{TEXT(T_FLUSH_ALL_CACHES), "", TEXT(T_HK_FLUSH_ALL_CACHES), MENU_FUNC flush_caches, (void *)0, 0, 0},
 	{TEXT(T_RESOURCE_INFO), "", TEXT(T_HK_RESOURCE_INFO), MENU_FUNC cache_inf, (void *)0, 0, 0},
-#if 0
 	{TEXT(T_CACHE_INFO), "", TEXT(T_HK_CACHE_INFO), MENU_FUNC list_cache, (void *)0, 0, 0},
-#endif
 #ifdef LEAK_DEBUG
 	{TEXT(T_MEMORY_INFO), "", TEXT(T_HK_MEMORY_INFO), MENU_FUNC memory_info, (void *)0, 0, 0},
 	{"", "", M_BAR, NULL, NULL, 0, 0},

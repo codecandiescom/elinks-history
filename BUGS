@@ -29,14 +29,9 @@ the previous view.
 	Calling cfmakeraw() in kbd.c:setraw() breaks some exotic terminal
 combinations.
 
-	When doing -dump on broken sites like groups.yahoo.com, links can get
-stuck bouncing in redirects around unhappily, as we don't check for
-MAX_REDIRECTS - AFAIK not an easy AND nice way how to, as we don't have needed
-field in structure passed to end_dump().
-
 	When title/status bar is turned off, there's still a blank line on
 top/bottom of screen.
 
-$Id: BUGS,v 1.14 2002/03/13 19:03:28 pasky Exp $
+$Id: BUGS,v 1.15 2002/03/16 00:37:05 pasky Exp $
 
 vim: textwidth=80

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.112 2003/07/01 19:50:09 zas Exp $ */
+/* $Id: view.c,v 1.113 2003/07/01 20:16:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -794,13 +794,21 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 			if (!l->n) break;
 			x = l->pos[0].x + xp - vx;
 			y = l->pos[0].y + yp - vy;
-			for (i = 0; i < frm->size; i++, x++)
-				if (x >= xp && y >= yp && x < xp+xw && y < yp+yw) {
-					if (fs->value && i >= -fs->vpos
-					    && i < strlen(fs->value) - fs->vpos)
-						set_only_char(t, x, y, frm->type != FC_PASSWORD ? fs->value[i + fs->vpos] : '*');
-					else set_only_char(t, x, y, '_');
+			if (fs->value && y >= yp && y < yp + yw) {
+				int len = strlen(fs->value) - fs->vpos;
+
+				for (i = 0; i < frm->size; i++, x++) {
+					if (x >= xp && x < xp + xw) {
+						if (i >= -fs->vpos && i < len)
+							set_only_char(t, x, y,
+								      frm->type != FC_PASSWORD
+								      ? fs->value[i + fs->vpos]
+								      : '*');
+						else
+							set_only_char(t, x, y, '_');
+					}
 				}
+			}
 			break;
 		case FC_TEXTAREA:
 			if (!l->n) break;

@@ -1,3 +1,94 @@
+Tue Aug 27 19:01:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/http/http.c:
+
+	Now all URL sent (even referer URLs) aren't cleaned only from
+	spaces, but also from tabs, CRs and LFs - security fix, thanks to
+	Ulf Harnhammar.  
+
+Tue Aug 27 17:22:01 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	We send only one Accept-Encoding header now. Temporary fix, should
+	move to encoding.c as a function.  
+
+Tue Aug 27 15:47:25 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/czech.lng, src/intl/language.inc:
+
+	Czech translation update.  
+
+Tue Aug 27 15:45:06 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, protocol/http/http.c:
+
+	protocol.http.user_agent is now format string, similiar to user
+	protocol commands.  
+
+Tue Aug 27 15:38:50 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/romanian.lng, intl/russian.lng,
+	intl/slovak.lng, intl/spanish.lng, intl/swedish.lng,
+	intl/turkish.lng, intl/ukrainian.lng, src/dialogs/document.c,
+	src/intl/lang_defs.h, src/intl/language.inc:
+
+	Translations for SSL cipher and Encoding in document info dialog.  
+
+Tue Aug 27 13:31:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: dialogs/document.c, document/cache.c, document/cache.h,
+	protocol/http/http.c, util/encoding.c, util/encoding.h:
+
+	Show encoding in document info.  
+
+Tue Aug 27 13:02:16 2002  Petr Baudis <pasky@ji.cz>:
+
+	* TODO:
+
+	removed obsolete items 
+
+Tue Aug 27 12:52:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/dialogs/info.c:
+
+	Show gzip/bzip2 support in about dialog.  
+
+Tue Aug 27 12:27:21 2002  Petr Baudis <pasky@ji.cz>:
+
+	* SITES:
+
+	Added new master site, http://elinks.or.cz/, and new master public
+	CVS mirror, cvs.elinks.or.cz.  
+
+Tue Aug 27 10:51:47 2002  Petr Baudis <pasky@ji.cz>:
+
+	* INSTALL, configure.in, src/links.h, src/ssl/connect.c,
+	src/ssl/ssl.c:
+
+	Migration from gnutls-0.4 to gnutls-0.5 - change in included file
+	names.  
+
+Tue Aug 27 10:01:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Unicode/: gen-7b, gen-cp, gen-ent:
+
+	Strictly use 32bit-safe type for unicode values. And tiny SSL
+	improvement.  
+
+Tue Aug 27 07:51:00 2002  Laurent Monin <zas@norz.org>:
+
+	* NEWS:
+
+	Some typos were fixed.  
+
 Tue Aug 27 03:22:27 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: cookies/cookies.c, protocol/http/date.c:

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.455 2004/06/10 21:49:44 jonas Exp $ */
+/* $Id: session.c,v 1.456 2004/06/10 21:55:36 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -64,9 +64,8 @@ struct initial_session_info {
 	/* The session whose state to copy, -1 is none. */
 	struct session *base_session;
 
-	/* The URIs we should load. Multiple URIs are only used when
-	 * initializing a session from the command line. */
-	struct uri_list uri_list;
+	/* The URI we should load. */
+	struct uri *uri;
 };
 
 struct file_to_load {
@@ -719,7 +718,7 @@ init_session_info(struct session *base_session, enum remote_session_flags remote
 
 	info->base_session = base_session;
 
-	if (uri) add_to_uri_list(&info->uri_list, uri);
+	if (uri) info->uri = get_uri_reference(uri);
 
 	return info;
 }
@@ -780,7 +779,7 @@ handle_remote_session(struct session *ses, enum remote_session_flags remote,
 struct initial_session_info *
 decode_session_info(struct terminal *term, int len, const int *data)
 {
-	struct initial_session_info *info;
+	struct initial_session_info *info = NULL;
 	struct session *base_session;
 	enum remote_session_flags remote = 0;
 	struct uri *current_uri, *uri;
@@ -852,15 +851,6 @@ decode_session_info(struct terminal *term, int len, const int *data)
 			len = magic;
 	}
 
-	/* If it is a remote session we return NULL so that the
-	 * terminal of the remote session will be destroyed ASAP. */
-	if (remote) {
-		info = NULL;
-	} else {
-		info = init_session_info(base_session, remote, NULL);
-		if (!info) return NULL;
-	}
-
 	str = (unsigned char *) data;
 
 	/* Extract multiple (possible) NUL terminated URIs */
@@ -875,11 +865,18 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		uri = decoded ? get_hooked_uri(decoded, current_uri, term->cwd) : NULL;
 		mem_free_if(decoded);
 
+		/* If it is a remote session we return NULL so that the
+		 * terminal of the remote session will be destroyed ASAP. */
 		if (uri) {
 			if (remote) {
 				remote = handle_remote_session(base_session, remote, uri);
-			} else if (!info->uri_list.size) {
-				add_to_uri_list(&info->uri_list, uri);
+
+			} else if (!info) {
+				info = init_session_info(base_session, remote, NULL);
+				if (!info) return NULL;
+
+				info->uri = get_uri_reference(uri);
+
 			} else {
 				init_session(base_session, term, uri, 1);
 			}
@@ -897,7 +894,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 static void
 free_session_info(struct initial_session_info *info)
 {
-	free_uri_list(&info->uri_list);
+	if (info->uri) done_uri(info->uri);
 	mem_free(info);
 }
 
@@ -910,19 +907,8 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 		copy_session(info->base_session, ses);
 	}
 
-	if (info->uri_list.size) {
-		int first = 1;
-		struct uri *uri;
-		int index;
-
-		assert(info->uri_list.size == 1);
-		foreach_uri (uri, index, &info->uri_list) {
-			if (first) {
-				/* Open first url. */
-				goto_uri(ses, uri);
-				first = 0;
-			}
-		}
+	if (info->uri) {
+		goto_uri(ses, info->uri);
 
 #ifdef CONFIG_BOOKMARKS
 	} else if (!first_use

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.165 2004/01/23 18:50:10 jonas Exp $ */
+/* $Id: main.c,v 1.166 2004/01/23 19:24:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,10 +89,10 @@ init(void)
 
 	init_charsets_lookup();
 	init_colors_lookup();
+	init_modules(main_modules);
 
 	init_event();
 	init_options();
-	init_modules(main_modules);
 	register_modules_options(main_modules);
 	register_modules_options(builtin_modules);
 	set_sigcld();

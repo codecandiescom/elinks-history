@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.329 2003/10/22 20:56:44 jonas Exp $ */
+/* $Id: options.c,v 1.330 2003/10/22 21:23:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -635,17 +635,15 @@ version_cmd(struct option *o, unsigned char ***argv, int *argc)
 }
 
 
-/* -= Welcome to the help usage printing monster method =-
+/* Below we handle help usage printing.
  *
  * We're trying to achieve several goals here:
- * - Genericly define a function to print option trees iteratively.
- * - Do some non generic fancy stuff like printing semi-aliased'
- *   options (like: -?, -h and -help) on one line when doing
- *   caption oriented usage printing.
  *
- * The caption define wether only the captions should be printed.
- * The level means the level of indentation.
- */
+ * - Genericly define a function to print option trees iteratively.
+ * - Make output parsable for various doc tools (to make manpages).
+ * - Do some non generic fancy stuff like printing semi-aliased
+ *   options (like: -?, -h and -help) on one line when printing
+ *   short help. */
 
 #define gettext_nonempty(x) (*(x) ? gettext(x) : (x))
 
@@ -666,7 +664,7 @@ print_full_help(struct option *tree, unsigned char *path)
 				      ? (unsigned char *) gettext(option->desc)
 				      : (unsigned char *) "N/A";
 
-		/* Don't print autocreated options and deprecated aliases */
+		/* Don't print deprecated aliases and command line options */
 		if (type == OPT_ALIAS && tree != cmdline_options)
 			continue;
 

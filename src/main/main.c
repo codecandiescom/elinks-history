@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.122 2003/09/03 21:17:23 jonas Exp $ */
+/* $Id: main.c,v 1.123 2003/09/19 13:14:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,6 +57,7 @@
 #include "protocol/http/auth.h"
 #include "sched/download.h"
 #include "sched/error.h"
+#include "sched/event.h"
 #include "sched/connection.h"
 #include "sched/session.h"
 #include "scripting/guile/core.h"
@@ -105,6 +106,7 @@ init(void)
 	init_colors_lookup();
 	init_tags_lookup();
 
+	init_event();
 	init_options();
 	set_sigcld();
 	get_system_name();
@@ -244,6 +246,8 @@ terminate_all_subsystems(void)
 	abort_all_connections();
 	done_ssl();
 	done_mime();
+
+	done_event();
 
 	if (init_b) {
 #ifdef HAVE_SCRIPTING

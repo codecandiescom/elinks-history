@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.176 2004/07/07 02:02:42 jonas Exp $ */
+/* $Id: hierbox.c,v 1.177 2004/07/07 02:24:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "bfu/button.h"
 #include "bfu/dialog.h"
 #include "bfu/hierbox.h"
+#include "bfu/inpfield.h"
 #include "bfu/listbox.h"
 #include "bfu/msgbox.h"
 #include "bfu/text.h"
@@ -20,6 +21,7 @@
 #include "intl/gettext/libintl.h"
 #include "protocol/uri.h"
 #include "sched/task.h"
+#include "terminal/screen.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
 
@@ -207,6 +209,13 @@ hierbox_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 			return EVENT_PROCESSED;
 
 		recursively_set_expanded(box->sel, 1);
+
+	} else if (action == ACT_MENU_SEARCH) {
+		if (!box->ops->match)
+			return EVENT_NOT_PROCESSED;
+
+		push_hierbox_search_button(dlg_data, NULL);
+		return EVENT_PROCESSED;
 
 	} else {
 		return EVENT_NOT_PROCESSED;
@@ -869,6 +878,99 @@ push_hierbox_clear_button(struct dialog_data *dlg_data,
 		context, 2,
 		N_("Yes"), do_clear_browser, B_ENTER,
 		N_("No"), NULL, B_ESC);
+
+	return 0;
+}
+
+
+/* Search action */
+
+static int
+scan_for_matches(struct listbox_item *item, void *info_, int *offset)
+{
+	struct listbox_context *context = info_;
+	unsigned char *text = (unsigned char *) context->widget_data;
+
+	if (!*text) {
+		item->visible = 1;
+		return 0;
+	}
+
+	switch (context->box->ops->match(item, context->term, text)) {
+	case LISTBOX_MATCH_OK:
+		/* Mark that we have a match by setting the item to non-NULL */
+		context->item = item;
+		item->visible = 1;
+		break;
+
+	case LISTBOX_MATCH_NO:
+		item->visible = 0;
+		break;
+
+	case LISTBOX_MATCH_IMPOSSIBLE:
+		break;
+	}
+
+	return 0;
+}
+
+
+static void
+search_hierbox_browser(void *data, unsigned char *text)
+{
+	struct dialog_data *dlg_data = data;
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
+	struct terminal *term = dlg_data->win->term;
+	struct listbox_context *context;
+
+	context = init_listbox_context(box, term, box->sel, NULL);
+	if (!context) return;
+
+	/* Eeew :/ */
+	context->widget_data = (void *) text;
+	context->item = NULL;
+
+	traverse_listbox_items_list(box->items->next, box, 0, 0,
+				    scan_for_matches, context);
+
+	if (!context->item && *text) {
+		switch (get_opt_int("document.browse.search.show_not_found")) {
+		case 2:
+			msg_box(term, NULL, MSGBOX_FREE_TEXT,
+				N_("Search"), ALIGN_CENTER,
+				msg_text(term,
+					 N_("Search string '%s' not found"),
+					 text),
+				NULL, 1,
+				N_("OK"), NULL, B_ENTER | B_ESC);
+			break;
+
+		case 1:
+			beep_terminal(term);
+
+		default:
+			break;
+		}
+	}
+
+	mem_free(context);
+}
+
+int
+push_hierbox_search_button(struct dialog_data *dlg_data,
+			   struct widget_data *button)
+{
+	struct terminal *term = dlg_data->win->term;
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
+
+	if (!box->sel) return 0;
+
+	assert(box->ops->match);
+
+	input_field(term, NULL, 1, N_("Search"), N_("Name"),
+		N_("OK"), N_("Cancel"), dlg_data, NULL,
+		MAX_STR_LEN, "", 0, 0, NULL,
+		search_hierbox_browser, NULL);
 
 	return 0;
 }

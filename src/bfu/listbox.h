@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.69 2004/07/06 11:05:03 jonas Exp $ */
+/* $Id: listbox.h,v 1.70 2004/07/07 02:24:49 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -25,6 +25,12 @@ struct uri;
 
 struct listbox_data;
 struct listbox_item;
+
+enum listbox_match {
+	LISTBOX_MATCH_OK,
+	LISTBOX_MATCH_NO,
+	LISTBOX_MATCH_IMPOSSIBLE,
+};
 
 /* Structure that can be used for storing all relevant info when traversing
  * listboxes. */
@@ -78,6 +84,10 @@ struct listbox_ops {
 	unsigned char *(*get_info)(struct listbox_item *, struct terminal *);
 
 	struct uri *(*get_uri)(struct listbox_item *);
+
+	/* Do a search on the item. */
+	enum listbox_match (*match)(struct listbox_item *, struct terminal *,
+				    unsigned char *text);
 
 	/* Before calling delete() thou shall call can_delete(). */
 	int (*can_delete)(struct listbox_item *);

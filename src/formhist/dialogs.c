@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.32 2004/07/06 11:05:04 jonas Exp $ */
+/* $Id: dialogs.c,v 1.33 2004/07/07 02:24:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,6 +147,7 @@ static struct listbox_ops formhist_listbox_ops = {
 	get_formhist_data_text,
 	get_formhist_data_info,
 	get_formhist_data_uri,
+	NULL,
 	can_delete_formhist_data,
 	delete_formhist_data,
 	NULL,

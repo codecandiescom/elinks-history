@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.58 2004/07/02 09:51:20 zas Exp $ */
+/* $Id: hierbox.h,v 1.59 2004/07/07 02:24:49 jonas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -105,5 +105,6 @@ int push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *b
 int push_hierbox_goto_button(struct dialog_data *dlg_data, struct widget_data *button);
 int push_hierbox_delete_button(struct dialog_data *dlg_data, struct widget_data *button);
 int push_hierbox_clear_button(struct dialog_data *dlg_data, struct widget_data *button);
+int push_hierbox_search_button(struct dialog_data *dlg_data, struct widget_data *button);
 
 #endif

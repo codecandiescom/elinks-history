@@ -1,5 +1,9 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.182 2004/07/07 01:37:08 jonas Exp $ */
+/* $Id: dialogs.c,v 1.183 2004/07/07 02:24:49 jonas Exp $ */
+
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
+#endif
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,6 +219,22 @@ get_option_info(struct listbox_item *item, struct terminal *term)
 	return info.source;
 }
 
+static enum listbox_match
+match_option(struct listbox_item *item, struct terminal *term,
+	     unsigned char *text)
+{
+	struct option *option = item->udata;
+
+	if (option->type == OPT_TREE)
+		return LISTBOX_MATCH_IMPOSSIBLE;
+
+	if (strcasestr(option->name, text)
+	    || (option->capt && strcasestr(_(option->capt, term), text)))
+		return LISTBOX_MATCH_OK;
+
+	return LISTBOX_MATCH_NO;
+}
+
 static int
 can_delete_option(struct listbox_item *item)
 {
@@ -249,6 +269,7 @@ static struct listbox_ops options_listbox_ops = {
 	get_option_text,
 	get_option_info,
 	NULL,
+	match_option,
 	can_delete_option,
 	delete_option_item,
 	NULL,
@@ -474,6 +495,7 @@ static struct hierbox_browser_button option_buttons[] = {
 	{ N_("Edit"),		push_edit_button,		0 },
 	{ N_("Add"),		push_add_button,		0 },
 	{ N_("Delete"),		push_hierbox_delete_button,	0 },
+	{ N_("Search"),		push_hierbox_search_button,	1 },
 	{ N_("Save"),		push_save_button,		0 },
 };
 
@@ -565,6 +587,25 @@ get_keybinding_info(struct listbox_item *item, struct terminal *term)
 	return info.source;
 }
 
+static enum listbox_match
+match_keybinding(struct listbox_item *item, struct terminal *term,
+		 unsigned char *text)
+{
+	struct strtonum *strtonum = item->udata;
+	unsigned char *desc;
+
+	if (item->depth != 1)
+		return LISTBOX_MATCH_IMPOSSIBLE;
+
+	desc = keybinding_text_toggle
+	     ? strtonum->str : _(strtonum->desc, term);
+
+	if ((desc && strcasestr(desc, text)))
+		return LISTBOX_MATCH_OK;
+
+	return LISTBOX_MATCH_NO;
+}
+ 
 static int
 can_delete_keybinding(struct listbox_item *item)
 {
@@ -589,6 +630,7 @@ static struct listbox_ops keybinding_listbox_ops = {
 	get_keybinding_text,
 	get_keybinding_info,
 	NULL,
+	match_keybinding,
 	can_delete_keybinding,
 	delete_keybinding_item,
 	NULL,
@@ -751,6 +793,7 @@ static struct hierbox_browser_button keybinding_buttons[] = {
 	{ N_("Add"),		push_kbdbind_add_button,		0 },
 	{ N_("Delete"),		push_hierbox_delete_button,		0 },
 	{ N_("Toggle display"),	push_kbdbind_toggle_display_button,	1 },
+	{ N_("Search"),		push_hierbox_search_button,		1 },
 	{ N_("Save"),		push_kbdbind_save_button,		0 },
 };
 

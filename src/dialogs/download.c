@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.59 2004/07/07 02:02:43 jonas Exp $ */
+/* $Id: download.c,v 1.60 2004/07/07 02:24:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -428,6 +428,7 @@ static struct listbox_ops downloads_listbox_ops = {
 	get_file_download_text,
 	get_file_download_info,
 	get_file_download_uri,
+	NULL,
 	can_delete_file_download,
 	delete_file_download,
 	draw_file_download,

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.171 2004/07/06 11:05:04 jonas Exp $ */
+/* $Id: dialogs.c,v 1.172 2004/07/07 02:24:49 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -146,6 +146,7 @@ static struct listbox_ops bookmarks_listbox_ops = {
 	get_bookmark_text,
 	get_bookmark_info,
 	get_bookmark_uri,
+	NULL,
 	can_delete_bookmark,
 	delete_bookmark_item,
 	NULL,

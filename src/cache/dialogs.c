@@ -1,5 +1,9 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.74 2004/07/06 11:05:04 jonas Exp $ */
+/* $Id: dialogs.c,v 1.75 2004/07/07 02:24:49 jonas Exp $ */
+
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
+#endif
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,6 +154,19 @@ delete_cache_entry_item(struct listbox_item *item, int last)
 	delete_cache_entry(cached);
 }
 
+static enum listbox_match
+match_cache_entry(struct listbox_item *item, struct terminal *term,
+		  unsigned char *text)
+{
+	struct cache_entry *cached = item->udata;
+
+	if (strcasestr(struri(cached->uri), text)
+	    || (cached->head && strcasestr(cached->head, text)))
+		return LISTBOX_MATCH_OK;
+
+	return LISTBOX_MATCH_NO;
+}
+
 static struct listbox_ops_messages cache_messages = {
 	/* cant_delete_item */
 	N_("Sorry, but cache entry \"%s\" cannot be deleted."),
@@ -184,6 +201,7 @@ static struct listbox_ops cache_entry_listbox_ops = {
 	get_cache_entry_text,
 	get_cache_entry_info,
 	get_cache_entry_uri,
+	match_cache_entry,
 	can_delete_cache_entry,
 	delete_cache_entry_item,
 	NULL,
@@ -194,6 +212,7 @@ static struct hierbox_browser_button cache_buttons[] = {
 	{ N_("Info"),		push_hierbox_info_button,	1 },
 	{ N_("Goto"),		push_hierbox_goto_button,	1 },
 	{ N_("Delete"),		push_hierbox_delete_button,	1 },
+	{ N_("Search"),		push_hierbox_search_button,	1 },
 };
 
 struct_hierbox_browser(

@@ -1,3 +1,1254 @@
+Mon Aug 23 17:22:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.h:
+
+	Renumerate.  
+
+Mon Aug 23 17:15:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/protocol.c, protocol/http/http.c,
+	sched/connection.h, sched/error.c:
+
+	Try to simplify connection states by making S_SSL_ERROR be
+	equivalent to S_NO_SSL when CONFIG_SSL is not defined.  
+
+Mon Aug 23 17:04:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.h:
+
+	Remove obsolete S_NO_FINGER and S_NO_SMB states.  
+
+Mon Aug 23 17:03:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/protocol.c, sched/error.c:
+
+	generic_external_protocol_handler(): Handle 'This version of ELinks
+	does not contain X protocol support' in the default case. Also
+	genericly handle no-SSL reporting. Should fix missing error messages
+	for optional data, gopher and nntp protocols.  
+
+Mon Aug 23 02:52:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/data.c:
+
+	Make that atleast 3 chars in the data protocol mediatype.  
+
+Mon Aug 23 02:50:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/data.c:
+
+	Improve data protocol mediatype and base64 attribute checking.  
+
+Mon Aug 23 02:37:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/data.c:
+
+	Rename parse_data_uri_type() to parse_data_protocol_header().  
+
+Mon Aug 23 00:29:35 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/protocol.c:
+
+	Delete a comment that refers to protocol external-handlers, which
+	were removed in revision 1.47.  
+
+Mon Aug 23 00:20:05 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/connection.c:
+
+	Fix a typo in a comment: s/managment/management/ 
+
+Sun Aug 22 15:17:56 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Aug 22 15:14:33 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	Typo fix: reguler -> regular.  
+
+Sun Aug 22 14:31:06 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/data.c:
+
+	Fix compilation issue, @type needs to be initialized.  
+
+Sun Aug 22 00:54:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.c:
+
+	Fix (1.65->1.66) by using integer type for @start and @end since 0
+	<= -1 for enum values.  
+
+Sat Aug 21 21:51:28 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	In process_link, use a switch instead of an if-else and assertion.  
+
+Sat Aug 21 21:47:49 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	In process_link, should link_state be neither LINK_STATE_NEW nor
+	LINK_STATE_SAME, thereby triggering an assertion, provide a recovery
+	path by returning if_assert_fails.  
+
+Sat Aug 21 21:38:13 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Wrap a line.  
+
+Sat Aug 21 21:11:33 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/uri.c:
+
+	Rewrap two lines.  
+
+Sat Aug 21 16:55:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.c:
+
+	get_protocol(): Use almost binary searching. Checking HTTP entry
+	first.  
+
+Sat Aug 21 15:59:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, protocol.h:
+
+	Alphabetize protocol backends.  
+
+Sat Aug 21 15:16:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/generic.h:
+
+	Wrap <stddef.h> #include in HAVE_STDDEF_H.  
+
+Sat Aug 21 14:57:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Remove unused #include.  
+
+Fri Aug 20 23:46:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/parser/parse.c, formhist/formhist.c,
+	sched/connection.c:
+
+	Clean up block trailing semicolons.  
+
+Fri Aug 20 21:41:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/refresh.c:
+
+	Fix starting of multiple document refresh timers. Reported by pasky
+	when he was throwing hand signs at transport tycoon forum (the URI
+	is in the comment).  
+
+Fri Aug 20 21:28:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/refresh.c:
+
+	Remove trailing semicolons.  
+
+Fri Aug 20 21:28:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/document.c:
+
+	Use foreachsafe().  
+
+Fri Aug 20 15:51:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Attempt to fix bug 479 by never updating @last_link_to_move and
+	@last_tag_to_move beyond the current line. For some scenarios it
+	might be a bad assumption but at least all it does is decrease the
+	gain that this position updating optimization provides.  
+
+Fri Aug 20 15:19:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	move_links(): Use while (list_has_next(tags, tag)) looping.  
+
+Fri Aug 20 14:22:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	move_links(): Tidyup.  
+
+Fri Aug 20 04:05:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.c:
+
+	Parse user and custom protocols using free_syntax. I think Miciah
+	mentioned it a few months ago. Fixes an assertion error in
+	check_uri_sanity() with 'entering' mailto links in binary files.  
+
+Fri Aug 20 04:02:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	check_uri_sanity(): Print the URI in the error message.  
+
+Fri Aug 20 03:43:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Fix email address checking so there is stuff on both sides of the
+	'@'-sign.  
+
+Thu Aug 19 20:57:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/vs.h:
+
+	Boolean members should always have unsigned int type.  
+
+Thu Aug 19 14:11:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* features.conf, src/sched/connection.h, src/sched/error.c:
+
+	Make it more clear that the CSO phone-book protocol is non-existent
+	both at compile- and runtime.  
+
+Thu Aug 19 10:32:46 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/download.c:
+
+	Partially revert revision 1.315 and abort the download in
+	download_data_store if |term| is NULL (before 1.315, it was checking
+	whether |ses| was NULL).  
+
+Thu Aug 19 10:24:01 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/download.c:
+
+	Add an #include for util/lists.h 
+
+Thu Aug 19 10:23:19 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/download.c:
+
+	Use foreachsafe in destroy_downloads.  
+
+Thu Aug 19 10:04:24 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/download.c:
+
+	In destroy_downloads, when we find a session with the same terminal
+	as that of the passed session, assign the found session to the |ses|
+	member of the file downloads of passed session to avoid dangling
+	pointers.  
+
+Thu Aug 19 10:02:35 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/download.c:
+
+	In destroy_downloads, in the loop that searches for a session with
+	the same terminal as that of the one for which we are deleting file
+	downloads, replace the if-continue with if-continue-else-return with
+	an inverted condition.  
+
+Thu Aug 19 09:58:27 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/download.c:
+
+	In destroy_downloads, which deletes a session's file downloads, when
+	we skip deletion of file download because it has a NULL |prog|, 
+	assign its |ses| member NULL to avoid a dangling pointer.  
+
+Thu Aug 19 09:44:43 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/download.c:
+
+	In download_data_store, assert |term| and |ses| instead of silently
+	aborting when |ses| is NULL.  
+
+Thu Aug 19 09:41:05 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/download.c:
+
+	Use |file_download->term| instead of |ses->tab->term| with |ses|
+	obtained from |file_download->ses|.  
+
+Thu Aug 19 09:35:58 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/download.c:
+
+	Delete get_download_ses() and instead use |file_download->ses|.  
+
+Thu Aug 19 09:30:44 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/download.c:
+
+	In download_data_store, pass |ses| to |msg_box| instead of passing 
+	|get_download_ses(file_download)|, which is already assigned to
+	|ses|.  
+
+Thu Aug 19 08:58:44 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	In add_document_line, delete the local variable |last_link_end|, 
+	which has been unused since revision 1.128.  
+
+Thu Aug 19 08:52:00 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Fix an overflow in the back-space code: If one has seventeen spaces 
+	(number chosen to avoid memory-alignment from obscuring the problem) 
+	followed by a back-space, we print seventeen characters to the
+	screen before we back-space the last one. The solution is to include 
+	the deleted characters in counting how much memory to allocate for
+	the line.  
+	
+	The overflow was found by Jonas Fonseca in a test-case provided by
+	AprilDL when reporting another problem.  
+
+Thu Aug 19 08:12:52 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Delete a blank line.  
+
+Thu Aug 19 08:12:24 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Rewrap.  
+
+Thu Aug 19 08:08:27 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/: renderer.c, renderer.c:
+
+	If-splice.  
+
+Thu Aug 19 08:01:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Similar change to the code that counts how much memory to allocate
+	for the line.  
+
+Thu Aug 19 07:53:57 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Do not expand tabs that precede back-space characters.  Now, the
+	back-space code will back-space the proper amount: one space, just
+	as for any other character.  
+
+Thu Aug 19 07:43:05 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Use |next_char| in the linkifying code.  
+
+Thu Aug 19 07:41:26 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Move |next_char| and |prev_char| out of the back-space code to the
+	containing loop.  
+
+Thu Aug 19 07:30:34 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	s/ $// 
+
+Thu Aug 19 07:29:02 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Eliminate |saved_char| as |prev_char| supersedes it.  
+
+Thu Aug 19 07:27:09 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Assign |next_char| '\0' if |line[line_pos + 1]| is out of bounds.  
+
+Thu Aug 19 07:24:13 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	In the code in add_document_line to handle backspace characters, 
+	introduce the local variables |next_char| and |prev_char| and use
+	them instead of subscripting |line|.  
+
+Thu Aug 19 07:16:03 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Delete a blank line that should have disappeared along with some
+	other code in revision 1.132.  
+
+Thu Aug 19 07:12:05 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	In add_document_line, check whether |expanded + line_pos| is
+	non-zero rather than maintaining a count of backspaces and checking 
+	whether it doubled is less than |line_pos|.  
+	
+	This will affect the current quirky behaviour on tabs followed by
+	backspaces: Now, we will avoid backspacing beyond the start of the
+	expanded line rather than beyond the start of the line as counted in
+	characters.  I intend eventually to improve backspace handling so
+	that a backspace that immediately follows a tab will backspace the
+	whole tab in the first place.  
+
+Thu Aug 19 06:58:56 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	In add_document_link, substitute a conditional decrement and an
+	unconditional decrement for a conditional decrement-by-two or
+	decrement.  
+
+Thu Aug 19 05:26:33 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	At Jonas' behest, revert revision 1.124 by re-introducing in
+	print_document_link the local variable |x|, but change the name to
+	|screen_column| to better explain the significance of its value.  
+
+Wed Aug 18 21:19:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	get_content_type(): Lowercase the extension always so .JPG gets
+	treated as .jpg .. it is stupid to have to add two entries for this
+	thing. Mostly old files use uppercase anyway (gopher triggered the
+	issue for me).  
+
+Wed Aug 18 20:02:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: encoding/encoding.c, protocol/file/file.c,
+	sched/connection.h, sched/error.c:
+
+	When loading encoded files that are corrupt read_file() would end up 
+	retuning -errno == 0 (which is used for S_WAIT). This patch
+	introduces S_ENCODE_ERROR with the purpose of propagating an error
+	message to the user. I hope this qualifies as a fix for the FIXME.  
+
+Wed Aug 18 19:49:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	Fix CONFIG_BZIP2 check.  
+
+Wed Aug 18 19:24:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/encoding/gzip.c:
+
+	gzip_decode_buffer(): Fix encoding stream leak.  
+
+Wed Aug 18 17:24:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, features.conf, src/config/options.inc,
+	src/protocol/Makefile.am, src/protocol/protocol.c,
+	src/protocol/protocol.h:
+
+	Experimental gopher support ported from Lynx. No CSO for now.  
+
+Wed Aug 18 14:12:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Fix building with marks disabled. This and previous error was
+	reported by lindi- 
+
+Wed Aug 18 14:11:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/data.h:
+
+	Conditionally declare the data_protocol_handler.  
+
+Tue Aug 17 13:38:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/Makefile.am:
+
+	Alphabetize. Why should intl get special treatment.  
+
+Tue Aug 17 08:05:15 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bfu/menu.c, document/html/parser.c:
+
+	Put spaces after type casts.  
+
+Tue Aug 17 08:03:17 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bfu/button.c, ssl/ssl.c, cookies/cookies.c,
+	modules/module.h, document/plain/renderer.c:
+
+	Move end-of-line comments after the semicolons of the statements
+	that they follow.  
+
+Tue Aug 17 07:54:31 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Rather than checking whether the current and the previous characters 
+	are alphabetic and backing up if so when linkifying, check whether 
+	the curent and the next character are alphabetic. This localises the
+	optimisation and makes it trivial to change the code to check for, 
+	say, three or four alphabetic characters in a row.  
+
+Tue Aug 17 07:47:41 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Initialise |was_alpha_char| outside of the loop in add_document_line 
+	to fix the optimisation that I broke in 1.114.  
+
+Tue Aug 17 07:40:45 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Spiff up the comment describing when we check for a URI.  
+
+Tue Aug 17 07:19:11 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Color links.  
+
+Tue Aug 17 07:16:22 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Put the characters to the screen from within print_document_link 
+	rather than from within add_document_link.  
+
+Tue Aug 17 07:09:24 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Pass print_document_link the renderer instead of the document, which
+	it now obtains from the renderer.  
+
+Tue Aug 17 06:59:31 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	In print_document_link, inverse the if condition and swap its return
+	statement with the following one.  
+
+Tue Aug 17 06:57:47 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	In print_document_link, introduce the local variable |link_end|.  
+
+Tue Aug 17 06:55:27 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	In print_document_link, drop the local variable |x| and substitute 
+	the expression previously assigned to it in the one place we used
+	it.  
+
+Tue Aug 17 06:52:11 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	We only check for a link when the current character is alphabetic 
+	and the last character was alphabetic or we are at the beginning of
+	the line; if we are not at the beginning of the line, we must back
+	up and linkify the character before the current.  
+	
+	Back up in add_document_link instead of in print_document_link.  
+
+Tue Aug 17 06:44:29 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Unwrap lines in print_document_link.  
+
+Tue Aug 17 06:43:39 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Move linkifying code from add_document_line to new
+	print_document_link.  
+
+Tue Aug 17 04:54:24 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Add some missing #include directives: termina/color.h, for enum
+	color_flags, enum color_mode, and set_term_color; 
+	document/options.h, for struct document_options and global_doc_opts;
+	and util/color.h, for color_t, struct color_pair, and
+	INIT_COLOR_PAIR().  
+
+Tue Aug 17 04:45:51 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	In add_document_line, save the whole |renderer->template| rather
+	than merely its |attr| member.  
+
+Mon Aug 16 17:03:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/window.c:
+
+	delete_window_ev(): Fix triggering of the assertion in tabwin_func
+	that it is only called for current tab and the event is from
+	keyboard or mouse.  
+	
+	Reproducable when openning two tabs, switching back to the first
+	one, opening the tab menu and then clicking on the tab area with the
+	mouse.  
+
+Mon Aug 16 13:49:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	check_link_word(): Ensure there is <user> before @ in mailto checks.  
+
+Mon Aug 16 12:26:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Splice two if-blocks together.  
+
+Mon Aug 16 12:20:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	No need to set @was_alpha_char if is already set.  
+
+Mon Aug 16 11:05:09 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Rewrap some lines.  
+
+Mon Aug 16 11:03:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	In add_document_line, linkify in the second loop, when we're drawing 
+	the text to the screen, rather than in the first loop, when we're 
+	determining the line's width. This change requires the elimination 
+	of that great chunk of code duplication, '[a] little code redundancy 
+	to improve performance' from zas. Will he complain? 
+
+Mon Aug 16 10:27:16 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	In add_document_line, always set |was_alpha_char = 0| for the
+	backspace character.  
+
+Mon Aug 16 10:14:23 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Revert an unrelated change that snuck in with the last patch.  
+
+Mon Aug 16 10:11:40 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Allow ASCII mark-up: x^Hx for a bold 'x' and _^Hx or x^H_ for an
+	underlined 'x'; combinations are supported.  
+
+Mon Aug 16 10:09:43 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Properly handle backspaces.  
+
+Mon Aug 16 01:05:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	get_content_type(): Try to more correct get the content type by not
+	always trusting the cache header content type when the resource has
+	signs of being encoded. This might break things a bit but now
+	.html.gz should work from any webserver --dump'ing or not. Atleast
+	now gzipped patches can be viewed without scripting.  
+
+Mon Aug 16 01:02:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: renderer.c, html/renderer.c, html/renderer.h,
+	plain/renderer.c, plain/renderer.h:
+
+	Add support for rendering encoded documents (from cache).  
+
+Mon Aug 16 00:59:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/encoding/: bzip2.c, encoding.c, encoding.h, gzip.c:
+
+	Upgrade the encoding module with a decoding buffer routine. That
+	gzip thing went out of proportions since I had to probe three times
+	to find a working solution (and what an ugly one it is). The
+	discarded probes (in order of 'cleanest design') has been out
+	commented. Please somebody check if I made some mistake there.  
+
+Mon Aug 16 00:34:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	get_cache_header_content_type(): Reformat.  
+
+Mon Aug 16 00:33:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	get_content_type(): Split out cache header checking to
+	get_cache_header_content_type().  
+
+Sun Aug 15 16:35:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/de.po:
+
+	German translation update by Thomas Fuchs <antispam17@gmx.de>.  
+
+Sun Aug 15 15:44:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	init_remote_session(): When SES_REMOTE_CURRENT_TAB is masked out and
+	no other flags are defined OR in the SES_REMOTE_NEW_TAB flag. The
+	alternative fix is to always mask in this flag when ORing
+	SES_REMOTE_CURRENT_TAB (don't know which one is cleaner).
+	Reproducable when passing '-remote openURL(...)'. Reported by Thomas
+	Fuchs <tfox@gmx.de>.  
+
+Sun Aug 15 11:56:45 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/hierbox.c:
+
+	In do_delete_item, drop the |delete| parameter and related bad
+	logic, which were introduced (replacing logic that was merely
+	twisted) in revision 1.114 to force recursive deletion of all
+	children The one call to do_delete_item with a non-zero argument for
+	the |delete| parameter was deleted in revision 1.180, which moved
+	responsibility for child-deletion to the listbox delete operator.  
+
+Sun Aug 15 11:52:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, sched/action.c,
+	viewer/text/form.c, viewer/text/form.h, viewer/text/search.c,
+	viewer/text/search.h, viewer/text/view.c, viewer/text/view.h:
+
+	Make frame_action handlers return {enum frame_event_status}.  
+
+Sun Aug 15 10:06:38 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/menu.c:
+
+	In menu_mouse_handler, when handling a right-click event outside the
+	menu, forward the event. Now, when one left-clicks the main menu-bar
+	or right-clicks the document canvas or a link, the new menu opens on
+	mouse-down.  
+
+Sun Aug 15 09:54:25 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	When clicking a listbox item, select it on mouse-button down as well
+	as up.  
+
+Sun Aug 15 09:53:22 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	When right-clicking a link, open the link menu on mouse-button down 
+	as well as on mouse-button up.  
+
+Sun Aug 15 08:28:24 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/status.c:
+
+	In display_status_bar, move the local variable last_current_link to
+	the block in which it is used.  
+
+Sun Aug 15 08:23:09 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: dialogs/status.c, viewer/text/view.c:
+
+	display_status_bar: Print a relevant message if the user has pressed 
+	mark-goto, mark-set, or a numeric prefix.  
+	
+	send_to_frame: Call print_screen_status if we aren't calling
+	refresh_view.  
+
+Sun Aug 15 07:54:38 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	try_jump_to_link_number: Swap the return values so that now it
+	returns 0 if an invalid number was given, 1 otherwise.  
+
+Sun Aug 15 07:38:23 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	In text_typeahead_handler, do not report failure to compile a
+	regular expression and do not rewind on such an error.  
+	
+	This allows one to enter regular expressions without the handler 
+	deleting characters when it tries and fails to compile the partial 
+	regular-expression in the middle of the user typing it.  
+
+Sun Aug 15 07:32:50 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Don't report an error when the user presses search-toggle-regex and
+	we can't find the pattern under the new mode. It isn't too nifty, 
+	and the change eases my next patch.  
+
+Sun Aug 15 07:15:33 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	enum find_error: Add FIND_ERROR_MEMORY and FIND_ERROR_REGEX.  
+	
+	print_find_error: Print an appropriate message for FIND_ERROR_REGEX, 
+	indicating a compilation failure for the regular expression.  Do not
+	print anything for FIND_ERROR_MEMORY as a message box will take
+	memory.  
+	
+	find_next_do: Return FIND_ERROR_MEMORY or FIND_ERROR_REGEX when 
+	is_in_range returns -1 or -2, respectively.  
+	
+	find_next_do will now return FIND_ERROR_MEMORY when the assertion in
+	is_in_range fails. This design may be semantically conspicuous, but
+	it should not cause any problems as print_find_error will not
+	display a message for FIND_ERROR_MEMORY. I assume that the message
+	printed by assert() obviates any need for a message box.  
+
+Sun Aug 15 06:55:20 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	is_in_range_regex: Return -2 for regular-expression compilation
+	failure and -1 for memory allocation failure.  
+	
+	is_in_range_plain: Return -1 for memory allocation failure.  
+	
+	is_in_range (which will return the return value of one of the
+	preceding two routines): Return -1 for assertion failure.  
+	
+	find_next_do: Interpret only values from is_in_range that are
+	greater than 0 as success values.  
+
+Sun Aug 15 06:49:08 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	get_range: Return -1 for assertion failure to distinguish it from no
+	match, in which case we return 1.  
+
+Sun Aug 15 05:51:12 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* Unicode/Makefile.am, contrib/Makefile.am, doc/book/Makefile.am,
+	test/Makefile.am:
+
+	Use explicit file lists or more specific globs than just '*' when
+	setting EXTRA_DIST. This should eliminate the erroneous distribution
+	of CVS and possibly other files.  
+
+Sun Aug 15 05:48:55 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/osdep/: unix/Makefile.am, win32/Makefile.am:
+
+	Use one-space indenting.  
+
+Sun Aug 15 05:46:41 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/Makefile.am:
+
+	Whitespace clean-up.  
+
+Sun Aug 15 00:43:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	EL_CHECK_COMPILER_MACRO upgraded to EL_CHECK_COMPILER_MACROS .. so
+	that we can also check __WIN32__ macro like the gettext code does.  
+
+Sun Aug 15 00:27:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: osdep/osdep.c, osdep/osdep.h, osdep/os2/os2.c,
+	osdep/win32/win32.c, terminal/terminal.c:
+
+	Introduce get_shell() which checks GETSHELL env. variable or falls
+	back to DEFAULT_SHELL. Replaces three implementations.  
+
+Sat Aug 14 23:53:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/: beos/sysinfo.h, os2/sysinfo.h, unix/sysinfo.h:
+
+	Remove unused ASSOC_BLOCK and ASSOC_CONS_XWIN. From looking at
+	links2 code it looks like remaining parts of the dialog code for
+	handling associations between content types and external programs.  
+
+Sat Aug 14 23:48:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/: beos/sysinfo.h, os2/sysinfo.h, riscos/sysinfo.h,
+	unix/sysinfo.h, win32/sysinfo.h:
+
+	Tidyup sysinfo.h files.  
+
+Sat Aug 14 23:36:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/os2/sysinfo.h:
+
+	CONFIG_OS2 is defined by configure on basis of __EMX__ compiler flag
+	and the beos sysinfo.h file is already guarded by #ifdef CONFIG_OS2
+	so no need for this extra #ifdef __EMX__.  
+
+Sat Aug 14 23:34:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/: system.h, beos/sysinfo.h, os2/sysinfo.h,
+	riscos/sysinfo.h, unix/sysinfo.h, win32/sysinfo.h:
+
+	Remove unused system identifiers.  
+
+Sat Aug 14 23:29:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/: newwin.c, osdep.c, system.h, win32/sysinfo.h,
+	win32/win32.c, win32/win32.h:
+
+	Obsolete usage of WIN32 #define in favor of CONFIG_WIN32.  
+
+Sat Aug 14 23:23:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/: osdep.c, system.h, unix/sysinfo.h, unix/unix.c,
+	unix/unix.h:
+
+	Obsolete usage of UNIX #define in favor of CONFIG_UNIX.  
+
+Sat Aug 14 23:18:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: osdep/newwin.c, osdep/osdep.c, osdep/system.h,
+	osdep/os2/os2.c, osdep/os2/os2.h, osdep/os2/sysinfo.h,
+	util/secsave.c:
+
+	Obsolete usage of OS2 #define in favor of CONFIG_OS2.  
+
+Sat Aug 14 23:13:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/system.h:
+
+	Reintroduce CONFIG_<OS> #define sanity checking. This will make sure
+	that config.h is always included before elinks.h 
+
+Sat Aug 14 23:08:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: osdep/newwin.c, osdep/osdep.c, osdep/system.h,
+	osdep/beos/beos.c, osdep/beos/beos.h, osdep/beos/overrides.c,
+	osdep/beos/overrides.h, osdep/beos/sysinfo.h, terminal/terminal.c:
+
+	Obsolete usage of BEOS #define in favor of CONFIG_BEOS.  
+
+Sat Aug 14 23:00:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/: osdep.c, system.h, riscos/riscos.c, riscos/riscos.h,
+	riscos/sysinfo.h:
+
+	Obsolete usage of RISCOS #define in favor of CONFIG_RISCOS.  
+
+Sat Aug 14 21:42:49 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/util/: color.inc, color_s.inc:
+
+	Clarify that color_s.inc is always included and that color.inc is
+	only included if CONFIG_SMALL is undefined.  
+
+Sat Aug 14 21:30:24 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/util/Makefile.am:
+
+	Sort libutil_a_SOURCES.  
+
+Sat Aug 14 21:28:53 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/ssl/Makefile.am:
+
+	Add TODO to EXTRA_DIST.  
+
+Sat Aug 14 21:15:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/osdep/Makefile.am, src/osdep/system.h:
+
+	Move OS compiler macro checks to configure and conditionalize
+	src/osdep/ building.  
+
+Sat Aug 14 21:13:17 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/osdep/unix/Makefile.am:
+
+	Fix some indenting.  
+
+Sat Aug 14 21:12:36 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bookmarks/backend/Makefile.am, document/css/Makefile.am,
+	document/html/Makefile.am, document/html/parser/Makefile.am,
+	mime/backend/Makefile.am, osdep/beos/Makefile.am,
+	osdep/os2/Makefile.am, osdep/riscos/Makefile.am,
+	osdep/unix/Makefile.am, osdep/win32/Makefile.am:
+
+	s/convience/convince/ 
+
+Sat Aug 14 15:59:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/file.c:
+
+	Always update cache_entry->content_type and try to handle allocation
+	failure when the local @type variable is non-NULL.  
+
+Sat Aug 14 15:57:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/Makefile.am:
+
+	The data.[ch] should always be in EXTRA_..._SOURCES. Tak Miciah.  
+
+Sat Aug 14 15:26:26 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	In text_typeahead_handler, return INPUT_LINE_REWIND when
+	search_for_do indicates an error and there is something in the
+	buffer.  
+
+Sat Aug 14 15:22:39 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	search_for_do: return the result of find_next_do.  
+
+Sat Aug 14 15:21:27 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	In search_for_do, to report errors, call print_find_error directly 
+	with the return value of find_next_do, rather than calling find_next 
+	in place of find_next_do.  
+
+Sat Aug 14 15:16:48 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/inpfield.c:
+
+	In input_line_event_handler, after back-spacing when the input-line
+	handler returns INPUT_LINE_REWIND, call update_dialog_data to update 
+	|input_line->buffer| (which is the same as |widget_data->data|).  
+
+Sat Aug 14 13:29:24 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	Expand the descriptions of the save-as and save-formatted actions.  
+
+Sat Aug 14 13:13:56 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/mime/backend/default.c:
+
+	Clarify the description of mime.handler to explain that its
+	sub-options do not refer to MIME types, but rather that one must
+	create options under mime.type that refer to the handlers under
+	mime.handler.  
+
+Sat Aug 14 07:53:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, features.conf, src/setup.h, src/config/options.inc,
+	src/protocol/Makefile.am, src/protocol/protocol.c,
+	src/protocol/protocol.h, src/sched/connection.h, src/sched/error.c,
+	test/href_tests.html:
+
+	Add (experimental) NNTP support. Disabled by default.  
+
+Sat Aug 14 06:57:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/connection.c, sched/connection.h, protocol/ftp/ftp.c,
+	protocol/http/http.c, main.c:
+
+	Add keep-alive connection time-out callback support.  
+
+Sat Aug 14 06:19:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	http_got_header(): Add FIXME about obsolete fake header usage. Fix
+	leak.  
+
+Sat Aug 14 05:59:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: about.c, file/file.c, ftp/ftp.c, http/codes.c,
+	smb/smb.c:
+
+	Prefer using cache_entry->content_type instead of setting up a fake
+	protocol header.  
+
+Sat Aug 14 05:56:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, cache/dialogs.c, mime/mime.c,
+	sched/download.c:
+
+	Add content_type string member to struct cache_entry.
+	get_content_type() 'caches' the type in this member.  
+
+Sat Aug 14 03:49:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS:
+
+	s/Data/data/ .. hmm 
+
+Sat Aug 14 03:32:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS, configure.in, features.conf, src/protocol/Makefile.am,
+	src/protocol/data.c, src/protocol/data.h, src/protocol/protocol.c,
+	src/protocol/protocol.h, test/href_tests.html:
+
+	Experimental support for data URI protocols. Base64 handling not
+	widely tested (the href test isn't working for some reason).  
+
+Fri Aug 13 21:28:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, bfu/inpfield.h, viewer/text/search.c:
+
+	Introduce INPUT_LINE_REWIND which removes last entered char. Use it
+	for typeahead error handling. Text typeahead could use it too but it
+	looks a little harder.  
+
+Fri Aug 13 21:02:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	do_frame_action(..., set_frame, ...): Fix frame maximizing when
+	maximizing a recursive frameset where current_frame() will return
+	NULL (already in bugzilla). Reported by kahmalo and me.  
+
+Fri Aug 13 20:54:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hotkey.c, bfu/widget.c, document/renderer.c,
+	protocol/proxy.c, protocol/smb/smb.c, viewer/text/marks.c:
+
+	Include own header.  
+
+Fri Aug 13 20:32:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/about.c:
+
+	Include about.h header.  
+
+Thu Aug 12 20:54:13 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* Unicode/gen-ent, src/intl/entity.inc:
+
+	Give |struct entity| its name, which is used by the previous patch.  
+
+Thu Aug 12 11:28:14 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: protocol/http/codes.c, intl/charsets.c:
+
+	Use bsearch(3) in http_code_to_string and get_entity_string.  This
+	required the introductions of compare_http_codes and
+	compare_entities, respectively, the latter of which required changes
+	to xxstrcmp so that the second string, rather than the first, is
+	expected to be NULL-terminated.  
+
+Thu Aug 12 08:44:04 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/util/file.c:
+
+	Add a space after the return-type declaration of a function
+	type-cast.  
+
+Thu Aug 12 08:40:28 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bfu/listmenu.c, ssl/connect.c, intl/charsets.c,
+	util/error.h, util/hash.c, util/snprintf.c, cookies/cookies.c,
+	dialogs/info.c, dialogs/options.c, osdep/os2/os2.c, osdep/osdep.c,
+	osdep/stub.c, sched/task.c, terminal/terminal.c,
+	scripting/lua/core.c, document/html/parser.c,
+	document/html/frames.c, util/file.c:
+
+	Add spaces after type casts.  
+
+Thu Aug 12 08:21:51 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/backend/xbel.c:
+
+	In print_xml_entities, do not recur on an empty string when
+	u2cp_no_nbsp returns NULL as this will do approximately nothing.
+	This curious recursion was introduced in revision 1.36, when the
+	NULL-check was introduced.  
+
+Thu Aug 12 07:33:23 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/action.c:
+
+	In do_action, in the ACT_MAIN_TAB_MENU case, factor in whether the
+	status bar is enabled in the arithmetic to place the tab menu on the
+	tab bar.  
+
+Thu Aug 12 05:13:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	In find_next, eliminate the local |flags| variable, which is
+	essentially unused after the last patch.  
+
+Thu Aug 12 05:05:47 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Introduce print_find_error_not_found, and use it in print_find_error 
+	and typeahead_error.  
+
+Thu Aug 12 05:04:30 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Move typeahead_error above print_find_error to decrease the diffage 
+	for the next patch.  
+
+Thu Aug 12 04:41:42 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Introduce print_find_error, which is essentially the same as
+	find_next, except that print_find_error takes an enum find_error
+	instead of calling find_next_do. find_next is now a wrapper that
+	calls find_next_do and passes the result to print_find_error.  
+
+Thu Aug 12 04:35:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	In find_text, replace the local flag |unsigned int free_text| with
+	|enum msgbox_flags flags|.  
+
+Thu Aug 12 04:31:30 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Replace the second space in |N_("Search string '%s' not found"),|, 
+	which I accidently removed in the last revision.  
+
+Thu Aug 12 01:17:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	do_mainmenu(): Use select_menu() instead of sending an Enter
+	keyboard event.  
+
 Mon Aug  9 09:16:02 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/viewer/text/search.c:

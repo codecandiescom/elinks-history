@@ -1,3 +1,16 @@
+Wed Aug 20 11:11:44 2003  Laurent Monin <zas@norz.org>:
+
+	* Unicode/gen-cp, src/intl/codepage.inc:
+
+	gen.cp was improved, so we get fancier codepage.inc. Please review
+	for portability issues.  
+
+Wed Aug 20 10:10:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/charsets.c:
+
+	Cleanup and optimizations.  
+
 Tue Aug 19 16:37:37 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/viewer/text/splash.h:

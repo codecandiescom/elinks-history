@@ -1,6 +1,8 @@
 TODO list for ELinks (sorted approximatelly by priority):
 
-	New options system user interface (URGENT) (WE ARE LAZY).
+	User interface for keys rebinding (URGENT)
+
+	User interface for user protocol and MIME types (URGENT)
 
 	Speed optimalizations
 
@@ -31,10 +33,6 @@ for them; dummy javascript support (just an error message)
 
 	Mouse buttonbinding ;)
 
-	User interface for keys rebinding
-
-	User interface for options changing
-
 	Reorganization of user interface
 
 	Use locale+gettext for translations instead of Mikulas' intl
@@ -60,8 +58,6 @@ current link to external command (?)).
 
 	Copy url to X clipboard (using X selections).
 
-	Support for mailcap when processing MIME types
-
 
 These are more long-term goals:
 
@@ -83,4 +79,4 @@ optionally.
 	Write some more documentation.. docs, a lot of docs!
 
 
-$Id: TODO,v 1.35 2002/12/05 23:43:54 pasky Exp $
+$Id: TODO,v 1.36 2002/12/11 22:14:55 pasky Exp $

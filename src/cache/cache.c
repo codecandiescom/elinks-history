@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.167 2004/07/24 18:32:08 zas Exp $ */
+/* $Id: cache.c,v 1.168 2004/07/24 18:39:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,10 +215,11 @@ remove_overlaps(struct cache_entry *cached, struct fragment *f, int *trunc)
 	/* Iterate thru all fragments we still overlap to. */
 	while (list_has_next(cached->frag, f)
 		&& f_end_offset > f->next->offset) {
-		struct fragment *nf;
 		int end_offset = f->next->offset + f->next->length;
 
 		if (f_end_offset < end_offset) {
+			struct fragment *nf;
+
 			/* We end before end of the following fragment, though.
 			 * So try to append overlapping part of that fragment
 			 * to us. */
@@ -252,10 +253,9 @@ ff:;
 		}
 
 		/* Remove the fragment, it influences our new one! */
-		nf = f->next;
-		enlarge_entry(cached, -nf->length);
-		del_from_list(nf);
-		mem_free(nf);
+		enlarge_entry(cached, -f->next->length);
+		del_from_list(f->next);
+		mem_free(f->next);
 	}
 }
 

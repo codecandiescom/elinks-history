@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre7.CVS\n"
 "POT-Creation-Date: 2003-11-25 09:29+0100\n"
-"PO-Revision-Date: 2003-11-23 07:30+0200\n"
+"PO-Revision-Date: 2003-11-27 07:30+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -105,9 +105,9 @@ msgid "Delete item"
 msgstr "Usuwanie pozycji"
 
 #: src/bfu/hierbox.c:551
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot delete \"%s\""
-msgstr "Nie mo¿na skasowaæ tej opcji."
+msgstr "Nie mo¿na skasowaæ \"%s\""
 
 #: src/bfu/hierbox.c:560
 msgid "Delete folder"
@@ -377,9 +377,8 @@ msgid "Header"
 msgstr "Nag³ówek"
 
 #: src/cache/dialogs.c:150
-#, fuzzy
 msgid "Cache manager"
-msgstr "Otwórz menad¿era pamiêci podrêcznej"
+msgstr "Menad¿er pamiêci podrêcznej"
 
 #: src/config/cmdline.c:57
 #, c-format
@@ -4135,9 +4134,8 @@ msgid "Coo~kies"
 msgstr "Ciastecz~ka"
 
 #: src/dialogs/menu.c:338
-#, fuzzy
 msgid "Form histor~y"
-msgstr "Zapamiêtywanie formularzy"
+msgstr "Historia formularz~y"
 
 #: src/dialogs/menu.c:344
 msgid "Sa~ve as"
@@ -4438,9 +4436,8 @@ msgid "Resize terminal"
 msgstr "Zmieñ rozmiar terminala"
 
 #: src/formhist/dialogs.c:129
-#, fuzzy
 msgid "Form history manager"
-msgstr "Otwórz menad¿era historii"
+msgstr "Menad¿er historii formularzy"
 
 #. TODO: Remember multiple login for the same form.
 #. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
@@ -4507,9 +4504,8 @@ msgid "Bookmark"
 msgstr "Zak³adka"
 
 #: src/globhist/dialogs.c:194
-#, fuzzy
 msgid "Global history manager"
-msgstr "Historia globalna"
+msgstr "Menad¿er historii globalnej"
 
 #: src/globhist/globhist.c:70
 msgid "Global history"
@@ -4518,7 +4514,7 @@ msgstr "Historia globalna"
 #
 #: src/globhist/globhist.c:72
 msgid "Global history options."
-msgstr "Ustawienia historii globalnej"
+msgstr "Ustawienia historii globalnej."
 
 #: src/globhist/globhist.c:77
 msgid "Enable global history (\"history of all pages visited\")."
@@ -5634,9 +5630,3 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1416
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
-
-#~ msgid "Delete option"
-#~ msgstr "Skasuj opcjê"
-
-#~ msgid "Really delete the option \"%s\"?"
-#~ msgstr "Czy na pewno chcesz  skasowaæ opcjê \"%s\"?"

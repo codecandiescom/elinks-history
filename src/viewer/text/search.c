@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.289 2004/10/10 19:31:31 miciah Exp $ */
+/* $Id: search.c,v 1.290 2004/10/18 03:06:45 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1078,16 +1078,15 @@ search_link_text(struct document *document, int current_link, int i,
 		lower_link = -1;
 	}
 
-#define match_link_text(t1, t2)					\
-	(case_sensitive ? strstr(t1, t2) : strcasestr(t1, t2))
-
 	for (; i > lower_link && i < upper_link; i += direction) {
 		struct link *link = &document->links[i];
 		unsigned char *match = get_link_typeahead_text(link);
 
 		if (!link_is_form(link)
 		    && textlen <= strlen(match)) {
-			unsigned char *matchpos = match_link_text(match, text);
+			unsigned char *matchpos = case_sensitive
+						   ? strstr(match, text)
+						   : strcasestr(match, text);
 
 			if (matchpos) {
 				*offset = matchpos - match;
@@ -1116,8 +1115,6 @@ search_link_text(struct document *document, int current_link, int i,
 			}
 		}
 	}
-
-#undef match_link_text
 
 	return -1;
 }

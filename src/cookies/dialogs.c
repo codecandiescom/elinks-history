@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.36 2004/03/11 13:43:09 zas Exp $ */
+/* $Id: dialogs.c,v 1.37 2004/03/11 13:54:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,8 +82,7 @@ get_cookie_info(struct listbox_item *item, struct terminal *term,
 		unsigned char str[13];
 		int wr = strftime(str, sizeof(str), "%b %e %H:%M", when_local);
 
-		if (wr > 0)
-			expires = memacpy(str, wr);
+		if (wr > 0) expires = memacpy(str, wr);
 	}
 #endif
 
@@ -91,11 +90,11 @@ get_cookie_info(struct listbox_item *item, struct terminal *term,
 	add_format_to_string(&string, "\n%s: %s", _("Name", term), cookie->name);
 	add_format_to_string(&string, "\n%s: %s", _("Value", term), cookie->value);
 	add_format_to_string(&string, "\n%s: %s", _("Domain", term), cookie->domain);
-	if (expires) {
+	if (expires)
 		add_format_to_string(&string, "\n%s: %s", _("Expires", term), expires);
-	}
+
 	add_format_to_string(&string, "\n%s: %s", _("Secure", term),
-				_(cookie->secure ? N_("yes") : N_("no"), term));
+			     _(cookie->secure ? N_("yes") : N_("no"), term));
 
 	if (expires) mem_free(expires);
 	return string.source;
@@ -145,9 +144,10 @@ draw_cookie(struct listbox_item *item, struct listbox_context *data,
 	int depth = item->depth + 1;
 	int len;
 	unsigned char *text;
-	unsigned char *stylename = (item == data->box->sel) ? "menu.selected"
-		  : ((item->marked)	     ? "menu.marked"
-					     : "menu.normal");
+	unsigned char *stylename = (item == data->box->sel)
+				   ? "menu.selected"
+				   : (item->marked ? "menu.marked"
+						   : "menu.normal");
 	struct color_pair *color = get_bfu_color(data->term, stylename);
 
 	if (item->type == BI_FOLDER) {
@@ -251,13 +251,12 @@ build_edit_dialog(struct terminal *term, struct cookie *cookie)
 #define EDIT_WIDGETS_COUNT 8
 	struct dialog *dlg;
 	unsigned char *name, *value, *domain, *expires, *secure;
-	unsigned char *dlg_server, *dlg_name, *dlg_value, *dlg_domain, *dlg_expires, *dlg_secure;
+	unsigned char *dlg_server, *dlg_name, *dlg_value, *dlg_domain;
+	unsigned char *dlg_expires, *dlg_secure;
 	int length = 0;
 
 	dlg = calloc_dialog(EDIT_WIDGETS_COUNT, MAX_STR_LEN * 5);
-	if (!dlg) {
-		return;
-	}
+	if (!dlg) return;
 
 	dlg->title = _("Edit", term);
 	dlg->layouter = generic_dialog_layouter;
@@ -269,6 +268,7 @@ build_edit_dialog(struct terminal *term, struct cookie *cookie)
 	domain = value + MAX_STR_LEN;
 	expires = domain + MAX_STR_LEN;
 	secure = expires + MAX_STR_LEN;
+
 	safe_strncpy(name, cookie->name, MAX_STR_LEN);
 	safe_strncpy(value, cookie->value, MAX_STR_LEN);
 	safe_strncpy(domain, cookie->domain, MAX_STR_LEN);
@@ -283,8 +283,8 @@ build_edit_dialog(struct terminal *term, struct cookie *cookie)
 	dlg_expires = straconcat(_("Expires", term), ": ", NULL);
 	dlg_secure = straconcat(_("Secure", term), ": ", NULL);
 
-	if (!dlg_server || !dlg_name || !dlg_value || !dlg_domain ||
-		!dlg_expires || !dlg_secure) {
+	if (!dlg_server || !dlg_name || !dlg_value || !dlg_domain
+	    || !dlg_expires || !dlg_secure) {
 		if (dlg_server) mem_free(dlg_server);
 		if (dlg_name) mem_free(dlg_name);
 		if (dlg_value) mem_free(dlg_value);
@@ -313,7 +313,7 @@ build_edit_dialog(struct terminal *term, struct cookie *cookie)
 	add_dlg_end(dlg, EDIT_WIDGETS_COUNT);
 
 	do_dialog(term, dlg, getml(dlg, dlg_server, dlg_name, dlg_value, dlg_domain,
-		dlg_expires, dlg_secure, NULL));
+		  dlg_expires, dlg_secure, NULL));
 #undef EDIT_WIDGETS_COUNT
 }
 
@@ -340,15 +340,18 @@ push_add_button(struct dialog_data *dlg_data, struct widget_data *button)
 	struct cookie *new_cookie;
 
 	if (!box->sel) return 0;
+
 	new_cookie = mem_calloc(1, sizeof(struct cookie));
 	if (!new_cookie) return 0;
+
 	if (box->sel->type == BI_FOLDER) {
 		new_cookie->server = stracpy(box->sel->text);
-	}	else {
+	} else {
 		struct cookie *cookie = box->sel->udata;
 
-		if (cookie) new_cookie->server = stracpy(cookie->server);
-		else {
+		if (cookie) {
+			new_cookie->server = stracpy(cookie->server);
+		} else {
 			mem_free(new_cookie);
 			return 0;
 		}
@@ -370,8 +373,8 @@ push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 
 static struct hierbox_browser_button cookie_buttons[] = {
 	{ N_("Info"),		push_hierbox_info_button,	1 },
-	{ N_("Add"),		push_add_button, 1 },
-	{ N_("Edit"),		push_edit_button,	1 },
+	{ N_("Add"),		push_add_button,		1 },
+	{ N_("Edit"),		push_edit_button,		1 },
 	{ N_("Delete"),		push_hierbox_delete_button,	1 },
 	{ N_("Clear"),		push_hierbox_clear_button,	1 },
 	{ N_("Save"),		push_save_button,		0 },

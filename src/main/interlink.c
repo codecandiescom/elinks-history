@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.62 2003/07/10 00:59:01 miciah Exp $ */
+/* $Id: interlink.c,v 1.63 2003/07/15 06:07:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -385,7 +385,7 @@ again:
 			error(gettext("bind() failed: %d (%s)"),
 			      errno, (unsigned char *) strerror(errno));
 
-		if (++attempts < MAX_BIND_TRIES) {
+		if (++attempts <= MAX_BIND_TRIES) {
 			elinks_usleep(BIND_TRIES_DELAY * attempts);
 			close(s_info_listen.fd);
 
@@ -447,7 +447,7 @@ again:
 			error(gettext("connect() failed: %d (%s)"),
 			      errno, (unsigned char *) strerror(errno));
 
-		if (++attempts < MAX_CONNECT_TRIES) {
+		if (++attempts <= MAX_CONNECT_TRIES) {
 			elinks_usleep(CONNECT_TRIES_DELAY * attempts);
 			close(s_info_connect.fd);
 

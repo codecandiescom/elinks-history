@@ -1,3 +1,104 @@
+Mon Sep 20 10:02:06 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/css/apply.c:
+
+	Compilation fix. Pasky, please check it.  
+
+Mon Sep 20 08:39:29 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	Abstract an examine_element() code bit to a process_found_selector()
+	macro.  
+
+Mon Sep 20 08:37:35 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	Hm, compilation fix.  
+
+Mon Sep 20 08:36:14 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	examine_element() now takes the list of selectors where it should
+	search.  
+
+Mon Sep 20 08:29:15 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.c:
+
+	Separate stylesheet lookup from css_apply() to examine_element().  
+
+Sun Sep 19 23:00:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.h:
+
+	One of the really puzzling Jonas TODOs...  
+
+Sun Sep 19 22:59:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: parser.c, stylesheet.c, stylesheet.h:
+
+	Support for parsing and storing multi-fragment selectors - that
+	means 'td.foo p#x>a:hover' should be supported now. Note the absence
+	of 'support for applying'. It should be grasped ok but you won't see
+	it in practice because the elements matching code is not there yet.  
+
+Sun Sep 19 22:35:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Trivial reorganization in css_parse_selector().  
+
+Sun Sep 19 22:33:40 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Tidyup the switch of css_parse_selector(). That hex color thing is
+	annoying.  
+
+Sun Sep 19 22:32:30 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Blast off a confusing comment in css_parse_selector().  
+
+Sun Sep 19 22:32:10 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Try to get css_parse_selector() slightly more organized.  
+
+Sun Sep 19 22:30:35 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Eliminate the monstrous switch (token->type) in
+	css_parse_selector().  
+
+Sun Sep 19 22:25:47 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Whew, blasted another stale TODO.  
+
+Sun Sep 19 22:25:28 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	English fix.  
+
+Sun Sep 19 22:11:52 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, parser.c, stylesheet.h:
+
+	Support for non-element selectors - ids, classes and pseudo-classes.
+	Note that mixing them together (i.e. element and class or id and
+	pseudo-class) is not supported yet. Anyway, this means perl sources
+	on scripts.irssi.org are highlighted now and news.google.com is full
+	of bright green dashes :^).  
+
 Sun Sep 19 21:46:21 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/css/stylesheet.h:

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.48 2003/10/22 19:24:45 jonas Exp $ */
+/* $Id: dialogs.c,v 1.49 2003/10/24 16:55:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,9 +42,9 @@ static unsigned char *ext_msg[] = {
 
 
 static void
-add_ext_fn(struct dialog_data *dlg)
+add_ext_fn(struct dialog_data *dlg_data)
 {
-	struct terminal *term = dlg->win->term;
+	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
@@ -52,7 +52,7 @@ add_ext_fn(struct dialog_data *dlg)
 
 	text_width(term, ext_msg[0], &min, &max);
 	text_width(term, ext_msg[1], &min, &max);
-	buttons_width(term, dlg->items + 2, 2, &min, &max);
+	buttons_width(term, dlg_data->items + 2, 2, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	int_bounds(&w, min, max);
@@ -72,41 +72,41 @@ add_ext_fn(struct dialog_data *dlg)
 
 	y += 2;
 	dlg_format_buttons(NULL, term,
-			   dlg->items + 2, 2,
+			   dlg_data->items + 2, 2,
 			   0, &y, w, &rw,
 			   AL_CENTER);
 
 	w = rw;
-	dlg->xw = w + 2 * DIALOG_LB;
-	dlg->yw = y + 2 * DIALOG_TB;
+	dlg_data->xw = w + 2 * DIALOG_LB;
+	dlg_data->yw = y + 2 * DIALOG_TB;
 
-	center_dlg(dlg);
-	draw_dlg(dlg);
+	center_dlg(dlg_data);
+	draw_dlg(dlg_data);
 
-	y = dlg->y + DIALOG_TB;
+	y = dlg_data->y + DIALOG_TB;
 	dlg_format_text(term, term,
 			ext_msg[0],
-			dlg->x + DIALOG_LB, &y, w, NULL,
+			dlg_data->x + DIALOG_LB, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 	dlg_format_field(term, term,
-			 &dlg->items[0],
-			 dlg->x + DIALOG_LB, &y, w, NULL,
+			 &dlg_data->items[0],
+			 dlg_data->x + DIALOG_LB, &y, w, NULL,
 			 AL_LEFT);
 
 	y++;
 	dlg_format_text(term, term,
 			ext_msg[1],
-			dlg->x + DIALOG_LB, &y, w, NULL,
+			dlg_data->x + DIALOG_LB, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 	dlg_format_field(term, term,
-			 &dlg->items[1],
-			 dlg->x + DIALOG_LB, &y, w, NULL,
+			 &dlg_data->items[1],
+			 dlg_data->x + DIALOG_LB, &y, w, NULL,
 			 AL_LEFT);
 
 	y++;
 	dlg_format_buttons(term, term,
-			   &dlg->items[2], 2,
-			   dlg->x + DIALOG_LB, &y, w, NULL,
+			   &dlg_data->items[2], 2,
+			   dlg_data->x + DIALOG_LB, &y, w, NULL,
 			   AL_CENTER);
 }
 
@@ -194,8 +194,9 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	unsigned char *ext;
 	unsigned char *ct;
 	unsigned char *ext_orig;
-	struct dialog *d;
+	struct dialog *dlg;
 	struct string translated;
+	int n = 0;
 
 	if (fcp && init_string(&translated)
 	    && add_optname_to_string(&translated, fcp, strlen(fcp))) {
@@ -204,9 +205,11 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 		opt = NULL;
 	}
 
-	d = mem_calloc(1, sizeof(struct dialog) + 5 * sizeof(struct widget)
-			  + sizeof(struct extension) + 3 * MAX_STR_LEN);
-	if (!d) {
+#define MIME_DLG_SIZE 4
+	dlg = mem_calloc(1, sizeof(struct dialog)
+			    + (MIME_DLG_SIZE + 1) * sizeof(struct widget)
+			    + sizeof(struct extension) + 3 * MAX_STR_LEN);
+	if (!dlg) {
 		if (fcp) {
 			mem_free(fcp);
 			done_string(&translated);
@@ -214,7 +217,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 		return;
 	}
 
-	new = (struct extension *) &d->items[5];
+	new = (struct extension *) &dlg->items[5];
 	new->ext = ext = (unsigned char *) (new + 1);
 	new->ct = ct = ext + MAX_STR_LEN;
 	new->ext_orig = ext_orig = ct + MAX_STR_LEN;
@@ -230,34 +233,39 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 
 	if (fcp) done_string(&translated);
 
-	d->title = _("Extension", term);
-	d->fn = add_ext_fn;
-	d->refresh = (void (*)(void *)) really_add_ext;
-	d->refresh_data = new;
+	dlg->title = _("Extension", term);
+	dlg->fn = add_ext_fn;
+	dlg->refresh = (void (*)(void *)) really_add_ext;
+	dlg->refresh_data = new;
 
-	d->items[0].type = D_FIELD;
-	d->items[0].dlen = MAX_STR_LEN;
-	d->items[0].data = ext;
-	d->items[0].fn = check_nonempty;
+	dlg->items[n].type = D_FIELD;
+	dlg->items[n].dlen = MAX_STR_LEN;
+	dlg->items[n].data = ext;
+	dlg->items[n].fn = check_nonempty;
+	n++;
 
-	d->items[1].type = D_FIELD;
-	d->items[1].dlen = MAX_STR_LEN;
-	d->items[1].data = ct;
-	d->items[1].fn = check_nonempty;
+	dlg->items[n].type = D_FIELD;
+	dlg->items[n].dlen = MAX_STR_LEN;
+	dlg->items[n].data = ct;
+	dlg->items[n].fn = check_nonempty;
+	n++;
 
-	d->items[2].type = D_BUTTON;
-	d->items[2].gid = B_ENTER;
-	d->items[2].fn = ok_dialog;
-	d->items[2].text = _("OK", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = ok_dialog;
+	dlg->items[n].text = _("OK", term);
+	n++;
 
-	d->items[3].type = D_BUTTON;
-	d->items[3].gid = B_ESC;
-	d->items[3].text = _("Cancel", term);
-	d->items[3].fn = cancel_dialog;
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ESC;
+	dlg->items[n].text = _("Cancel", term);
+	dlg->items[n].fn = cancel_dialog;
+	n++;
 
-	d->items[4].type = D_END;
+	assert(n == MIME_DLG_SIZE);
+	dlg->items[n].type = D_END;
 
-	do_dialog(term, d, getml(d, NULL));
+	do_dialog(term, dlg, getml(dlg, NULL));
 
 	if (fcp) mem_free(fcp);
 }

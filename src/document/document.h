@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.26 2003/11/15 16:31:57 pasky Exp $ */
+/* $Id: document.h,v 1.27 2003/11/15 16:35:17 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -130,7 +130,12 @@ struct document {
 #endif
 
 #ifdef DEBUG
-#define doc_sanity_check(doc) do { assert(doc); assertm((doc)->locks >= 0, "Document lock underflow."); } while (0)
+#define doc_sanity_check(doc) \
+do { \
+	assert(doc); \
+	assertm((doc)->locks >= 0, "Document refcount underflow."); \
+	if_assert_failed (doc)->locks = 0; \
+} while (0)
 #else
 #define doc_sanity_check(doc)
 #endif

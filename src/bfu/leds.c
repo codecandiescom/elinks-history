@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.33 2003/11/17 17:01:18 pasky Exp $ */
+/* $Id: leds.c,v 1.34 2003/11/22 19:07:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,6 +52,29 @@ static int drawing = 0;
 
 static void redraw_leds(void *);
 
+enum led_option {
+	LED_TREE,
+
+	LEDS_ENABLE,
+
+	LEDS_OPTIONS,
+};
+
+static struct option_info led_options[] = {
+	INIT_OPT_TREE("ui", N_("LEDs"),
+		"leds", 0,
+		N_("LEDs options.")),
+
+	INIT_OPT_BOOL("ui.leds", N_("Enable"),
+		"enable", 0, 1,
+		N_("Enable LEDs.")),
+
+	NULL_OPTION_INFO,
+};
+
+#define get_opt_leds(which)		led_options[(which)].option.value
+#define get_leds_enable()		get_opt_leds(LEDS_ENABLE).number
+
 void
 init_leds(struct module *module)
 {
@@ -90,6 +113,8 @@ draw_leds(struct session *ses)
 	struct color_pair color;
 	struct color_pair *led_color;
 	int i, xpos, ypos;
+
+	if (!get_leds_enable()) return;
 
 	led_color = get_bfu_color(term, "status.status-text");
 	if (!led_color) {
@@ -136,7 +161,7 @@ draw_leds(struct session *ses)
 		redraw_timer = install_timer(100, redraw_leds, NULL);
 }
 
-/* Determine if leds redrawing if necessary. Returns non-zero if so. */
+/* Determine if leds redrawing is necessary. Returns non-zero if so. */
 static int
 sync_leds(struct session *ses)
 {
@@ -165,6 +190,11 @@ static void
 redraw_leds(void *xxx)
 {
 	struct session *ses;
+
+	if (!get_leds_enable()) {
+		redraw_timer = -1;
+		return;
+	}
 
 	redraw_timer = install_timer(100, redraw_leds, NULL);
 
@@ -205,7 +235,7 @@ unregister_led(struct led *led)
 
 struct module leds_module = struct_module(
 	/* name: */		N_("LED indicators"),
-	/* options: */		NULL,
+	/* options: */		led_options,
 	/* events: */		NULL,
 	/* submodules: */	NULL,
 	/* data: */		NULL,

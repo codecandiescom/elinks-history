@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.84 2003/11/27 18:51:08 jonas Exp $ */
+/* $Id: msgbox.c,v 1.85 2003/11/28 00:17:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,7 +23,7 @@
 #include "util/string.h"
 
 
-void
+struct dialog_data *
 msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 	unsigned char *title, enum format_align align,
 	unsigned char *text, void *udata, int buttons, ...)
@@ -32,7 +32,7 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 	va_list ap;
 
 	/* Check if the info string is valid. */
-	if (!text || buttons < 0) return;
+	if (!text || buttons < 0) return NULL;
 
 	/* Use the @flags to determine whether @text should be free()d. */
 	if (flags & MSGBOX_FREE_TEXT)
@@ -49,7 +49,7 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 	dlg = calloc_dialog(buttons + 1, 0);
 	if (!dlg) {
 		freeml(ml);
-		return;
+		return NULL;
 	}
 
 	add_one_to_ml(&ml, dlg);
@@ -88,7 +88,7 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 
 	add_dlg_end(dlg, buttons + 1);
 
-	do_dialog(term, dlg, ml);
+	return do_dialog(term, dlg, ml);
 }
 
 /* Do not inline this function, because with inline
@@ -141,4 +141,52 @@ msg_text(struct terminal *term, unsigned char *format, ...)
 	va_end(ap);
 
 	return info;
+}
+
+static void
+abort_refreshed_msg_box_handler(struct dialog_data *dlg_data)
+{
+	if (dlg_data->dlg->udata != dlg_data->dlg->widgets->text)
+		mem_free(dlg_data->dlg->widgets->text);
+}
+
+static enum dlg_refresh_code
+refresh_msg_box(struct dialog_data *dlg_data, void *data)
+{
+	unsigned char *(*get_info)(struct terminal *, void *) = data;
+	void *msg_data = dlg_data->dlg->udata2;
+	unsigned char *info = get_info(dlg_data->win->term, msg_data);
+
+	if (!info) return REFRESH_CANCEL;
+
+	abort_refreshed_msg_box_handler(dlg_data);
+
+	dlg_data->dlg->widgets->text = info;
+	return REFRESH_DIALOG;
+}
+
+void
+refreshed_msg_box(struct terminal *term, enum msgbox_flags flags,
+		  unsigned char *title, enum format_align align,
+		  unsigned char *(get_info)(struct terminal *, void *),
+		  void *data)
+{
+	struct dialog_data *dlg_data;
+	unsigned char *info = get_info(term, data);
+
+	if (!info) return;
+
+	dlg_data = msg_box(term, NULL, flags | MSGBOX_FREE_TEXT,
+			   title, align,
+			   info,
+			   data, 1,
+			   N_("OK"), NULL, B_ENTER | B_ESC);
+
+	if (dlg_data) {
+		/* Save the original text to check up on it when the dialog
+		 * is freed. */
+		dlg_data->dlg->udata = info;
+		dlg_data->dlg->abort = abort_refreshed_msg_box_handler;
+		refresh_dialog(dlg_data, refresh_msg_box, get_info);
+	}
 }

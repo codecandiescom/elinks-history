@@ -1,4 +1,4 @@
-/* $Id: msgbox.h,v 1.15 2003/11/09 14:09:38 jonas Exp $ */
+/* $Id: msgbox.h,v 1.16 2003/11/28 00:17:34 jonas Exp $ */
 
 #ifndef EL__BFU_MSGBOX_H
 #define EL__BFU_MSGBOX_H
@@ -81,7 +81,8 @@ enum msgbox_flags {
  *         labelM, handlerM, flagsM);
  *
  * ...no matter that it could fit on one line in case of a tiny message box. */
-void msg_box(struct terminal *term, struct memory_list *mem_list,
+struct dialog_data *
+msg_box(struct terminal *term, struct memory_list *mem_list,
 	enum msgbox_flags flags, unsigned char *title, enum format_align align,
 	unsigned char *text, void *udata, int buttons, ...);
 
@@ -99,5 +100,14 @@ unsigned char *msg_text_ni(unsigned char *format, ...);
  * additional parameters still need to be localized manually at the user's
  * side. */
 unsigned char *msg_text(struct terminal *term, unsigned char *format, ...);
+
+/* A periodically refreshed message box with one OK button. The text in the
+ * message box is updated using the get_info() function. If get_info() returns
+ * NULL the message box is closed. */
+void
+refreshed_msg_box(struct terminal *term, enum msgbox_flags flags,
+		  unsigned char *title, enum format_align align,
+		  unsigned char *(get_info)(struct terminal *, void *),
+		  void *data);
 
 #endif

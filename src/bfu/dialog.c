@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.98 2003/11/27 21:51:56 jonas Exp $ */
+/* $Id: dialog.c,v 1.99 2003/11/28 00:17:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -525,6 +525,7 @@ do_refresh_dialog(struct dialog_data *dlg_data)
 
 	/* We want dialog_has_refresh() to be true while drawing
 	 * so we can not set the timer to -1. */
+	dlg_data->dlg->layouter(dlg_data);
 	redraw_dialog(dlg_data);
 
 	if (refresh_code == REFRESH_NONE) {

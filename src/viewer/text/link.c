@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.259 2004/06/26 22:03:31 pasky Exp $ */
+/* $Id: link.c,v 1.260 2004/06/26 22:34:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -460,10 +460,11 @@ get_link_x_intersect(struct link *link, int y, int min_x, int max_x)
 	int point;
 
 	for (point = 0; point < link->npoints; point++) {
-		if (link->points[0].y != y)
+		if (link->points[point].y != y)
 			continue;
-		if (link->points[0].x >= min_x && link->points[0].x <= max_x)
-			return link->points[0].x + 1;
+		if (link->points[point].x >= min_x
+		    && link->points[point].x <= max_x)
+			return link->points[point].x + 1;
 	}
 
 	return 0;
@@ -477,10 +478,11 @@ get_link_y_intersect(struct link *link, int x, int min_y, int max_y)
 	int point;
 
 	for (point = 0; point < link->npoints; point++) {
-		if (link->points[0].x != x)
+		if (link->points[point].x != x)
 			continue;
-		if (link->points[0].y >= min_y && link->points[0].y <= max_y)
-			return link->points[0].y + 1;
+		if (link->points[point].y >= min_y
+		    && link->points[point].y <= max_y)
+			return link->points[point].y + 1;
 	}
 
 	return 0;

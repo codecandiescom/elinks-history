@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.42 2004/05/07 17:27:46 jonas Exp $ */
+/* $Id: protocol.c,v 1.43 2004/05/07 17:30:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,7 +52,6 @@ static const struct protocol_backend protocol_backends[] = {
 	{ "https",     443, https_protocol_handler,	NULL,	0, 1, 1 },
 	{ "smb",       139, smb_protocol_handler,	NULL,	0, 1, 1 },
 	{ "javascript",	 0, NULL,   dummyjs_protocol_handler,	0, 0, 0 },
-	{ "user",	 0, NULL,			NULL,	0, 0, 0 },
 	{ "proxy",    3128, proxy_protocol_handler,	NULL,	0, 1, 1 },
 
 	/* Keep these two last! */
@@ -61,6 +60,7 @@ static const struct protocol_backend protocol_backends[] = {
 	/* Internal protocol for mapping to protocol.user.* handlers. Placed
 	 * last because it's checked first and else should be ignored. */
 	{ "custom",	 0, NULL,      user_protocol_handler,	0, 0, 0 },
+	{ "user",	 0, NULL,			NULL,	0, 0, 0 },
 };
 
 

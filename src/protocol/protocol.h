@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.26 2004/05/07 01:46:09 jonas Exp $ */
+/* $Id: protocol.h,v 1.27 2004/05/07 17:30:01 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -18,12 +18,12 @@ enum protocol {
 	PROTOCOL_HTTPS,
 	PROTOCOL_SMB,
 	PROTOCOL_JAVASCRIPT,
-	PROTOCOL_LUA,
 	PROTOCOL_PROXY,
 
-	/* Keep these two last! */
+	/* Keep these last! */
 	PROTOCOL_UNKNOWN,
 	PROTOCOL_USER,
+	PROTOCOL_LUA,
 };
 
 #define VALID_PROTOCOL(p) ((p) != PROTOCOL_INVALID)

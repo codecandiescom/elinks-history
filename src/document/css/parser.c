@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.120 2004/09/20 23:33:09 pasky Exp $ */
+/* $Id: parser.c,v 1.121 2004/09/21 00:03:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,6 +186,10 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 	struct css_selector *prev_specific_selector = NULL;
 	struct css_selector *last_chained_selector = NULL;
 	int last_fragment = 0;
+	/* In 'p#x .y', set for 'p' and '.y'. Note that it is always set in
+	 * the previous iteration so it's valid for the current token only
+	 * before "saving" the token. */
+	int selector_start = 1;
 
 	/* FIXME: element can be even '*' --pasky */
 
@@ -213,22 +217,22 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 			case CSS_TOKEN_HASH:
 			case CSS_TOKEN_HEX_COLOR:
 				seltype = CST_ID;
-				if (pkg) reltype = CSR_SPECIFITY;
+				reltype = selector_start ? CSR_ANCESTOR : CSR_SPECIFITY;
 				break;
 
 			case '.':
 				seltype = CST_CLASS;
-				if (pkg) reltype = CSR_SPECIFITY;
+				reltype = selector_start ? CSR_ANCESTOR : CSR_SPECIFITY;
 				break;
 
 			case ':':
 				seltype = CST_PSEUDO;
-				if (pkg) reltype = CSR_SPECIFITY;
+				reltype = selector_start ? CSR_ANCESTOR : CSR_SPECIFITY;
 				break;
 
 			case '>':
 				seltype = CST_ELEMENT;
-				if (pkg) reltype = CSR_PARENT;
+				reltype = CSR_PARENT;
 				break;
 
 			default:
@@ -266,6 +270,16 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		/* Look ahead at what's coming next */
 
 		memcpy(&last_token, token, sizeof(*token));
+		/* Detect whether upcoming tokens are separated by
+		 * whitespace or not (that's important for determining
+		 * whether it's a combinator or specificitier). */
+		if (last_token.string + last_token.length >= scanner->end) {
+			selector_start = last_token.string[last_token.length];
+			selector_start = (selector_start != '#'
+			                  && selector_start != '.'
+			                  && selector_start != ':');
+		} /* else it doesn't matter as we are gonna bail out anyway. */
+
 		token = get_next_scanner_token(scanner);
 		if (!token) break;
 		last_fragment = (token->type == ',' || token->type == '{');
@@ -342,7 +356,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 		if (last_fragment) {
 			/* Next selector coming, clean up. */
-			pkg = NULL; last_fragment = 0;
+			pkg = NULL; last_fragment = 0; selector_start = 1;
 			prev_element_selector = NULL;
 			prev_specific_selector = NULL;
 			last_chained_selector = NULL;

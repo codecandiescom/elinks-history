@@ -1,3 +1,358 @@
+Fri Nov 14 22:55:01 2003  Laurent Monin <zas@norz.org>:
+
+	* configure.in:
+
+	Fix --disable-root.  
+
+Fri Nov 14 21:21:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	ELinks can be ran as root by default.  
+
+Fri Nov 14 20:50:41 2003  Laurent Monin <zas@norz.org>:
+
+	* acconfig.h, configure.in, src/main.c:
+
+	A configure option named enable-root was added. By default, ELinks
+	will refuse to be executed by user root, this option overrides this
+	safe limitation.  
+
+Fri Nov 14 19:42:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.h:
+
+	Fix typo.  
+
+Fri Nov 14 19:22:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/cache/cache.h:
+
+	Compilation fix (debug code): oops, disable debug.  
+
+Fri Nov 14 19:21:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/cache/cache.h:
+
+	Compilation fix (debug code).  
+
+Fri Nov 14 18:30:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, dialogs/info.c,
+	document/html/renderer.c, sched/connection.c, sched/download.c,
+	sched/session.c, viewer/dump/dump.c:
+
+	Add struct uri member to struct cache_entry.  
+
+Fri Nov 14 16:54:10 2003  Laurent Monin <zas@norz.org>:
+
+	* src/mime/mime.c:
+
+	Debugging code was added to get_content_type().  
+
+Fri Nov 14 15:55:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Properly free cell fragment ids. Reported by Zas.  
+
+Fri Nov 14 15:35:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/kbdbind.c:
+
+	Trailing spaces fix.  
+
+Fri Nov 14 15:30:09 2003  Laurent Monin <zas@norz.org>:
+
+	* doc/hacking.txt, src/document/document.h:
+
+	A notice was moved to hacking.txt.  
+
+Fri Nov 14 15:03:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: parser.c, parser.h, tables.c:
+
+	Proper support for table fragment ids. The previous one was
+	completely bogus.  
+
+Fri Nov 14 15:03:06 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/plain/renderer.c:
+
+	Accept [] in url, needed to recognise IPv6 urls.  
+
+Fri Nov 14 15:00:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/color.c:
+
+	An assertion was reintroduced, it checks again negative value of
+	color_mode.  
+
+Fri Nov 14 14:38:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/uri.c:
+
+	Add comments on lines where post data may be copied again in memory.
+	Since post data may be large we should avoid this. Please add
+	comments to lines where you think it may the case.  
+
+Fri Nov 14 14:24:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	No space in URIs.  
+
+Fri Nov 14 13:59:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.inc:
+
+	Disable document.plain.display_links by default.  
+
+Fri Nov 14 13:53:52 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/plain/renderer.c:
+
+	Url in plain text file detection was improved.  
+
+Fri Nov 14 13:44:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Cleanup.  
+
+Fri Nov 14 13:27:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Cleanup to fit line within 80 chars. No need to - 1 on the returned
+	link length.  
+
+Fri Nov 14 13:19:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Split up add_document_link() to improve error handling. Idea by
+	Miciah.  
+
+Fri Nov 14 12:49:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Check @was_xmp rather then ei->func. Idea by Miciah. Fixes last xmp
+	/ plain cleanup patch.  
+
+Fri Nov 14 12:45:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/plain/renderer.c, protocol/uri.c:
+
+	Revert change to parse_uri() to require host or data part.  
+
+Fri Nov 14 12:39:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/uri.c:
+
+	Useless get_no_post_url_length_() was removed.  
+
+Fri Nov 14 12:38:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: protocol/uri.c, sched/session.c, viewer/dump/dump.c:
+
+	Use *post* functions wherever possible. post_data_start() was
+	simplified (am i so dumb ?).  
+
+Fri Nov 14 12:29:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: protocol/uri.c, protocol/uri.h, sched/download.c:
+
+	post_data_start() was introduced.  
+
+Fri Nov 14 12:04:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	add_url_to_http_string() is now using get_no_post_url(), number of
+	parameters was reduce by one.  
+
+Fri Nov 14 12:00:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Compilation fix.  
+
+Fri Nov 14 11:51:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Use get_no_post_url_length() instead of using POST_CHAR directly.  
+
+Fri Nov 14 11:47:00 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/info.c, protocol/uri.c, protocol/uri.h:
+
+	get_post_start() was replaced by get_no_post_url_length(), which is
+	simpler. A bug introduced by get_post_start() patch was fixed in
+	get_no_post_url().  
+
+Fri Nov 14 11:38:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/info.c:
+
+	Use get_post_start() in cache_inf().  
+
+Fri Nov 14 11:31:52 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	get_post_start() was introduced and get_no_post_url() was modified
+	to use it. It will help to reduce occurences of POST_CHAR in various
+	source files.  
+
+Fri Nov 14 11:21:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/document.c:
+
+	Old staled code was removed.  
+
+Fri Nov 14 11:15:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/uri.c:
+
+	Use get_no_post_url() in extract_proxy(). Miciah, please review this
+	one carefully, thanks ;).  
+
+Fri Nov 14 09:26:00 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Nov 14 09:18:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/color.c:
+
+	Some cases where moved at end of switch, idea by Pasky.  
+
+Fri Nov 14 08:40:01 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser.h, tables.c:
+
+	Add the @attr parameter to set_fragment_identifier(), and use
+	set_fragment_identifier() in html_a().  
+
+Fri Nov 14 08:28:44 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, parser.h, tables.c:
+
+	Rename set_id_attribute() to set_fragment_identifier() and its @attr
+	parameter to @attr_name.  
+
+Fri Nov 14 06:16:15 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
+Fri Nov 14 03:39:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Move illicit chars.  
+
+Fri Nov 14 03:27:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Stop when finding illicit URI chars.  
+
+Fri Nov 14 03:17:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Even trim " so href="<uri>" also work better.  
+
+Fri Nov 14 03:12:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Improve error handling. Fix possible leaks.  
+
+Fri Nov 14 03:04:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Add support for mailto URIs. Only allocate link->where.  
+
+Fri Nov 14 02:49:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Move URI parsing to add_document_link().  
+
+Fri Nov 14 02:31:06 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/scripting/lua/core.c:
+
+	Another compilation fix for that patch.  
+
+Fri Nov 14 02:29:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Move uri end finding to separate function.  
+
+Fri Nov 14 02:28:42 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/session.c:
+
+	Compilation fix for my last patch.  
+
+Fri Nov 14 02:20:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Fix indentation and only jump with accepted URIs.  
+
+Fri Nov 14 02:15:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/plain/renderer.c, protocol/uri.c:
+
+	Require valid URIs to have something after the <scheme>':'.  
+
+Fri Nov 14 02:07:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Be more aggressive when looking for URIs. Trim ending ')', '>', ','
+	and '.'.  
+
+Fri Nov 14 02:06:29 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: dialogs/document.c, dialogs/info.c, sched/session.c,
+	scripting/lua/core.c:
+
+	Fix some calls to msg_box() to localise when appropriate and _only_
+	when appropriate.  
+
+Fri Nov 14 01:35:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, document/options.c, document/options.h,
+	document/plain/renderer.c:
+
+	Add support for displaying links in plain pages. Not perfect yet.  
+
+Fri Nov 14 00:25:30 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/ssl/connect.c:
+
+	Resolve a minor compilation error (unused variable) that occurs when
+	OpenSSL is not used.  
+
+Thu Nov 13 23:40:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: renderer.c, html/renderer.c:
+
+	sort_links() in render_document().  
+
 Thu Nov 13 22:56:03 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/refresh.c:

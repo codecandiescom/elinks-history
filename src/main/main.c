@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.167 2004/01/28 00:38:11 jonas Exp $ */
+/* $Id: main.c,v 1.168 2004/01/28 22:03:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,7 +111,7 @@ init(void)
 	if (!url) {
 		retval = RET_SYNTAX;
 		terminate = 1;
-		return;
+		goto end;
 	}
 
 	url = stracpy(url);

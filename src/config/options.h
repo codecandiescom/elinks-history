@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.100 2004/04/29 23:02:41 jonas Exp $ */
+/* $Id: options.h,v 1.101 2004/05/26 13:45:52 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -310,6 +310,14 @@ enum referer {
 	REFERER_SAME_URL,
 	REFERER_FAKE,
 	REFERER_TRUE,
+};
+
+enum verbose_level {
+	VERBOSE_QUIET,
+	VERBOSE_WARNINGS,
+	VERBOSE_ALL,
+
+	VERBOSE_LEVELS,
 };
 
 #endif

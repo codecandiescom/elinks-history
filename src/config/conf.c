@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.138 2004/05/01 18:01:10 miciah Exp $ */
+/* $Id: conf.c,v 1.139 2004/05/26 13:45:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -377,6 +377,7 @@ parse_config_file(struct option *options, unsigned char *name,
 	int line = 1;
 	int error_occured = 0;
 	enum parse_error err = 0;
+	enum verbose_level verbose = get_opt_int_tree(cmdline_options, "verbose");
 	unsigned char error_msg[][80] = {
 		"no error",
 		"parse error",
@@ -416,9 +417,11 @@ parse_config_file(struct option *options, unsigned char *name,
 			/* TODO: Make this a macro and report error directly
 			 * as it's stumbled upon; line info may not be accurate
 			 * anymore now (?). --pasky */
-			fprintf(stderr, "%s:%d: %s\n",
-				name, line, error_msg[err]);
-			error_occured = 1;
+			if (verbose >= VERBOSE_WARNINGS) {
+				fprintf(stderr, "%s:%d: %s\n",
+					name, line, error_msg[err]);
+				error_occured = 1;
+			}
 			err = 0;
 		}
 	}

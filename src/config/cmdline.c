@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.87 2004/05/23 15:47:10 jonas Exp $ */
+/* $Id: cmdline.c,v 1.88 2004/05/26 13:45:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -723,6 +723,14 @@ struct option_info cmdline_options_info[] = {
 		N_("Set to 1 to have runtime state files (bookmarks, history, ...)\n"
 		"changed even when -no-connect or -session-ring is used; has no\n"
 		"effect if not used in connection with any of these options.")),
+
+	INIT_OPT_INT("", N_("Verbose level"),
+		"verbose", 0, 0, VERBOSE_LEVELS - 1, 0,
+		N_("The verbose level controls what messages are shown at\n"
+		"start up and while running:\n"
+		"	0 means only show serious errors\n"
+		"	1 means show serious errors and warnings\n"
+		"	2 means show all messages\n")),
 
 	INIT_OPT_COMMAND("", N_("Print version information and exit"),
 		"version", 0, version_cmd,

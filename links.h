@@ -2015,8 +2015,8 @@ struct sizes {
 extern struct document_options *d_opt;
 extern int margin; /* FIXME: This probably breaks encapsulation of renderer? --pasky */
 
-int xxpand_line(struct part *, int, int);
-int xxpand_lines(struct part *, int);
+int expand_line(struct part *, int, int);
+int expand_lines(struct part *, int);
 void xset_hchar(struct part *, int, int, unsigned);
 void xset_hchars(struct part *, int, int, int, unsigned);
 

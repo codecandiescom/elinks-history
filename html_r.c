@@ -155,26 +155,60 @@ static inline int fg_color(int fg, int bg)
 
 #define ALIGN(x) (((x)+0x7f)&~0x7f)
 
+static int realloc_lines(struct part *p, int y)
+{
+	int i;
+	
+	if (ALIGN(y + 1) >= ALIGN(p->data->y)) {
+		struct line *l;
+		
+		l = mem_realloc(p->data->data, ALIGN(y+1)*sizeof(struct line));
+		if (!l)	return -1;
+		
+		p->data->data = l;
+	}
+	
+	for (i = p->data->y; i <= y; i++) {
+		p->data->data[i].l = 0;
+		p->data->data[i].c = p->bgcolor;
+		p->data->data[i].d = DUMMY;
+	}
+	
+	p->data->y = i;
+
+	return 0;
+}
+
+
 static inline int xpand_lines(struct part *p, int y)
 {
 	/*if (y >= p->y) p->y = y + 1;*/
 	if (!p->data) return 0;
 	y += p->yp;
-	if (y >= p->data->y) {			/* !!! FIXME: out of inline */
-		int i;
-		if (ALIGN(y + 1) >= ALIGN(p->data->y)) {
-			struct line *l;
-			if (!(l = mem_realloc(p->data->data, ALIGN(y+1)*sizeof(struct line))))
-				return -1;
-			p->data->data = l;
-		}
-		for (i = p->data->y; i <= y; i++) {
-			p->data->data[i].l = 0;
-			p->data->data[i].c = p->bgcolor;
-			p->data->data[i].d = DUMMY;
-		}
-		p->data->y = i;
+	if (y >= p->data->y) return realloc_lines(p, y);
+	return 0;
+}
+
+static int realloc_line(struct part *p, int y, int x)
+{
+	int i;
+	
+	if (ALIGN(x + 1) >= ALIGN(p->data->data[y].l)) {
+		chr *l;
+		
+		l = mem_realloc(p->data->data[y].d, ALIGN(x+1)*sizeof(chr));
+		if (!l)	return -1;
+		
+		p->data->data[y].d = l;
 	}
+	
+	for (i = p->data->data[y].l; i <= x; i++) {
+		p->data->data[y].d[i] = (p->data->data[y].c << 11) | ' ';
+	}
+	
+	p->data->data[y].c = p->bgcolor;
+	p->data->data[y].l = i;
+
 	return 0;
 }
 
@@ -189,35 +223,27 @@ static inline int xpand_line(struct part *p, int y, int x)
 		return -1;
 	}
 #endif
-	if (x >= p->data->data[y].l) {		/* !!! FIXME: out of inline */
-		int i;
-		if (ALIGN(x+1) >= ALIGN(p->data->data[y].l)) {
-			chr *l;
-			if (!(l = mem_realloc(p->data->data[y].d, ALIGN(x+1)*sizeof(chr))))
-				return -1;
-			p->data->data[y].d = l;
-		}
-		for (i = p->data->data[y].l; i <= x; i++)
-			p->data->data[y].d[i] = (p->data->data[y].c << 11) | ' ';
-		p->data->data[y].c = p->bgcolor;
-		p->data->data[y].l = i;
-	}
+	if (x >= p->data->data[y].l) return realloc_line(p, y, x);
 	return 0;
 }
 
-int r_xpand_spaces(struct part *p, int l)
+int realloc_spaces(struct part *p, int l)
 {
 	unsigned char *c;
-	if (!(c = mem_realloc(p->spaces, l + 1))) return -1;
+	
+	c = mem_realloc(p->spaces, l + 1);
+	if (!c) return -1;
 	memset(c + p->spl, 0, l - p->spl + 1);
+	
 	p->spl = l + 1;
 	p->spaces = c;
+	
 	return 0;
 }
 
 static inline int xpand_spaces(struct part *p, int l)
 {
-	if (l >= p->spl) return r_xpand_spaces(p, l);
+	if (l >= p->spl) return realloc_spaces(p, l);
 	return 0;
 }
 
@@ -237,7 +263,7 @@ static inline void set_hchar(struct part *part, int x, int y, unsigned c)
 static inline void set_hchars(struct part *part, int x, int y, int xl, unsigned c)
 {
 	if (xpand_lines(part, y)) return;
-	if (xpand_line(part, y, x+xl-1)) return;
+	if (xpand_line(part, y, x + xl - 1)) return;
 	for (; xl; xl--, x++) POS(x, y) = c;
 }
 
@@ -251,12 +277,12 @@ void xset_hchars(struct part *part, int x, int y, int xl, unsigned c)
 	set_hchars(part, x, y, xl, c);
 }
 
-int xxpand_lines(struct part *part, int y)
+int expand_lines(struct part *part, int y)
 {
 	return xpand_lines(part, y);
 }
 
-int xxpand_line(struct part *part, int y, int x)
+int expand_line(struct part *part, int y, int x)
 {
 	return xpand_line(part, y, x);
 }

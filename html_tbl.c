@@ -950,8 +950,8 @@ void display_complicated_table(struct table *t, int x, int y, int *yy)
 				cell->xw = xw;
 				cell->yw = yw;
 				for (yt = 0; yt < p->y; yt++) {
-					xxpand_lines(t->p, yp + yt);
-					xxpand_line(t->p, yp + yt, xp + t->w_c[i]);
+					expand_lines(t->p, yp + yt);
+					expand_line(t->p, yp + yt, xp + t->w_c[i]);
 				}
 				kill_html_stack_item(&html_top);
 				mem_free(p);
@@ -1068,7 +1068,7 @@ void display_table_frames(struct table *t, int x, int y)
 			}
 		}
 		if (j < t->y) cy += t->r_heights[j];
-		/*for (cyy = cy1; cyy < cy; cyy++) xxpand_line(t->p, cyy, cx - 1);*/
+		/*for (cyy = cy1; cyy < cy; cyy++) expand_line(t->p, cyy, cx - 1);*/
 	}
 	mem_free(fh);
 	mem_free(fv);

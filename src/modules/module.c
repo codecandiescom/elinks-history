@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.12 2003/10/26 18:41:24 jonas Exp $ */
+/* $Id: module.c,v 1.13 2003/10/26 19:37:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,9 +41,9 @@ static struct module *builtin_modules[] = {
 #ifdef HAVE_SCRIPTING
 	&scripting_module,
 #endif
-	NULL,
 };
 
+#define BUILTIN_MODULES_COUNT (sizeof(builtin_modules) / sizeof(struct module *))
 
 /* Interface for handling single modules. */
 
@@ -116,21 +116,17 @@ register_modules_options(void)
 {
 	int i;
 
-	for (i = 0; builtin_modules[i]; i++)
+	for (i = 0; i < BUILTIN_MODULES_COUNT; i++)
 		register_module_options(builtin_modules[i]);
 }
 
 void
 unregister_modules_options(void)
 {
-	int i = 0;
+	int i;
 
 	/* Cleanups backward to initialization. */
-	/* TODO: We can probably figure out the number of modules by looking at
-	 *	 sizeof(builtin_modules). --jonas */
-	while (builtin_modules[i]) i++;
-
-	for (i--; i >= 0; i--)
+	for (i = BUILTIN_MODULES_COUNT - 1; i >= 0; i--)
 		unregister_module_options(builtin_modules[i]);
 }
 
@@ -143,20 +139,16 @@ init_modules(void)
 {
 	int i;
 
-	for (i = 0; builtin_modules[i]; i++)
+	for (i = 0; i < BUILTIN_MODULES_COUNT; i++)
 		init_module(builtin_modules[i]);
 }
 
 void
 done_modules(void)
 {
-	int i = 0;
+	int i;
 
 	/* Cleanups backward to initialization. */
-	/* TODO: We can probably figure out the number of modules by looking at
-	 *	 sizeof(builtin_modules). --jonas */
-	while (builtin_modules[i]) i++;
-
-	for (i--; i >= 0; i--)
+	for (i = BUILTIN_MODULES_COUNT - 1; i >= 0; i--)
 		done_module(builtin_modules[i]);
 }

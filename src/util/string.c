@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.54 2003/07/21 14:18:57 zas Exp $ */
+/* $Id: string.c,v 1.55 2003/07/21 16:22:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -523,7 +523,7 @@ init_string(struct string *string)
 	if (!string->source) return NULL;
 
 	*string->source = 0;
-	set_magic(string);
+	set_string_magic(string);
 
 	return string;
 }
@@ -534,7 +534,7 @@ done_string(struct string *string)
 	assert(string);
 	if_assert_failed { return; }
 
-	check_magic(string);
+	check_string_magic(string);
 	if (string->source) {
 		mem_free(string->source);
 		string->source = NULL;
@@ -560,7 +560,7 @@ add_bytes_to_string(struct string *string, unsigned char *bytes, int length)
 	assert(string && bytes && length);
 	if_assert_failed { return NULL; }
 
-	check_magic(string);
+	check_string_magic(string);
 
 	newlength = string->length + length;
 	realloc_string(string, newlength);
@@ -578,7 +578,7 @@ add_to_string(struct string *string, unsigned char *source)
 	assert(string && source);
 	if_assert_failed { return NULL; }
 
-	check_magic(string);
+	check_string_magic(string);
 
 	return (*source ? add_bytes_to_string(string, source, strlen(source))
 			: string);
@@ -590,8 +590,8 @@ add_string_to_string(struct string *string, struct string *from)
 	assert(string && from);
 	if_assert_failed { return NULL; }
 
-	check_magic(string);
-	check_magic(from);
+	check_string_magic(string);
+	check_string_magic(from);
 
 	return (*from->source
 		? add_bytes_to_string(string, from->source, from->length)
@@ -607,7 +607,7 @@ string_concat(struct string *string, ...)
 	assert(string);
 	if_assert_failed { return NULL; }
 
-	check_magic(string);
+	check_string_magic(string);
 
 	va_start(ap, string);
 	while ((source = va_arg(ap, unsigned char *)))
@@ -625,7 +625,7 @@ add_char_to_string(struct string *string, unsigned char character)
 	assert(string && character);
 	if_assert_failed { return NULL; }
 
-	check_magic(string);
+	check_string_magic(string);
 
 	return add_bytes_to_string(string, &character, 1);
 }
@@ -638,7 +638,7 @@ add_xchar_to_string(struct string *string, unsigned char character, int times)
 	assert(string && character && times > 0);
 	if_assert_failed { return NULL; }
 
-	check_magic(string);
+	check_string_magic(string);
 
 	if (times > MAX_STR_LEN - 1) return NULL;
 
@@ -659,7 +659,7 @@ add_format_to_string(struct string *string, unsigned char *format, ...)
 	assert(string && format);
 	if_assert_failed { return NULL; }
 
-	check_magic(string);
+	check_string_magic(string);
 
 	va_start(ap, format);
 	VA_COPY(ap2, ap);

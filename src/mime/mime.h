@@ -1,4 +1,4 @@
-/* $Id: mime.h,v 1.4 2003/06/07 21:56:54 jonas Exp $ */
+/* $Id: mime.h,v 1.5 2003/06/07 22:18:20 jonas Exp $ */
 
 #ifndef EL__MIME_MIME_H
 #define EL__MIME_MIME_H
@@ -11,8 +11,8 @@ struct mime_handler {
 	unsigned char *program;
 	unsigned char *description;
 	unsigned char *backend_name;
-	int ask:1;
-	int block:1;
+	unsigned int ask:1;
+	unsigned int block:1;
 };
 
 /* Start up and teardown of mime system. */

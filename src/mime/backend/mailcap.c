@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.29 2003/06/07 21:56:54 jonas Exp $ */
+/* $Id: mailcap.c,v 1.30 2003/06/07 22:18:20 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -68,12 +68,12 @@ struct mailcap_entry {
 	unsigned int priority;
 
 	/* Wether the program "blocks" the term. */
-	int needsterminal:1;
+	unsigned int needsterminal:1;
 
 	/* If "| ${PAGER}" should be added. It would of course be better to
 	 * pipe the output into a buffer and let ELinks display it but this
 	 * will have to do for now. */
-	int copiousoutput:1;
+	unsigned int copiousoutput:1;
 };
 
 /* State variables */

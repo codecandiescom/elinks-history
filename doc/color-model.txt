@@ -182,6 +182,59 @@ Maybe the option system can be made to handle it even though it might not be opt
 
 Rather hostile but quite usable for testing.
 
+
+Hmmm, since we use colors to render text attributes, i (zas) think we need to
+integrate them in the process.
+Ie. italics are rendered by color, so let the user tells which color to use.
+
+(bg, fg, type) triplet can be used for that. In constraint definition, we'll
+have H, S, L and type (T) variables.
+Type is (link|normal) and/or italic and/or bold and/or underline and/or
+(subscript|supscript) etc...
+Note link is not a text attribute (in the terminal sense of it), that's all the
+magic.
+
+In solution we'll have (bg, fg, attributes), where bg and fg are colors.
+Attributes are the ones supported by displaying device (ie normal bold underline
+for now).
+
+So constraints will take the form of:
+link hue != blue : link hue = blue, link attr = bold 
+link hue >< italic hue
+fg hue in !red 
+fg ligthness > bg lightness
+!(fg hue == yellow && bg hue == white)
+fg hue >< bg hue
+fg saturation < 90%
+bg saturation < 90%
+
+Hey, this language is better than the one before ;)
+
+More about hues or "what is red ?":
+
+Defining hues is not as easy it seems, the main problem here is to know what
+we talk about when using red name.
+
+Where is start and end of red ? Applying KISS principe, let's say that in HLS
+system S° < H < E° where S is starting hue, and E ending one.
+For each hue we want to express let use a similar non-overlapping interval.
+Take a circle, divide it in 3 parts for primary hues RGB:
+Make R starts at 0 (hmm, in HLS it's not exactly the case, but nm).
+Red is [0, 1*360/3[  (no, not a typo, 120 is not red)
+Green is [1*360/3, 2*360/3[
+Blue is [2*360/3, 0[
+
+It will be convenient to have intermediate hues, between red and green ;)
+So just let divide by a value greater than 3, and name each part.
+Using 12 subdivisions seems to be sufficient, since we want to keep it simple.
+Eeach subdivision should be equal but it may not reflect reality of human color
+perception, using "uniform" color models instead of HLS may help here.
+
+
+
+
+
+
 Implementation
 --------------
 
@@ -243,5 +296,5 @@ http://www.lighthouse.org/color_contrast.htm
 
 	Basic introduction to usage of HSL colors.
 
-$Id: color-model.txt,v 1.7 2003/10/07 23:24:36 jonas Exp $
+$Id: color-model.txt,v 1.8 2003/10/08 10:45:31 zas Exp $
 vim: textwidth=80

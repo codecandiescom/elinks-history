@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.49 2004/01/20 16:40:03 jonas Exp $ */
+/* $Id: scanner.c,v 1.50 2004/01/20 17:15:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,10 +85,21 @@ get_number_identifier(unsigned char *ident, int length)
 
 
 /* Check whéther it is safe to skip the char @c when looking for @skipto */
-#define check_css_precedence(c, skipto)					\
-	!(((skipto) == ':' && ((c) == ';' || (c) == '{' || (c) == '}'))	\
-	  || ((skipto) == ';' && ((c) == '{' || (c) == '}'))		\
+#define check_css_precedence(c, skipto)						\
+	!(((skipto) == ':' && ((c) == ';' || (c) == '{' || (c) == '}'))		\
+	  || ((skipto) == ')' && ((c) == ';' || (c) == '{' || (c) == '}'))	\
+	  || ((skipto) == ';' && ((c) == '{' || (c) == '}'))			\
 	  || ((skipto) == '{' && (c) == '}'))
+
+#define	skip_css(s, skipto) \
+	while (*(s) && check_css_precedence(*(s), skipto)) {			\
+		if (*(s) == '"' || *(s) == '\'') {				\
+			unsigned char *end = strchr(s + 1, *(s));		\
+										\
+			if (end) (s) = end;					\
+		}								\
+		(s)++;								\
+	}
 
 /* TODO: CSS_TOKEN_HASH:.it conflicts a bit with hex color token. Color should
  * have precedens and the selector parser will just have to treat
@@ -187,11 +198,13 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 				type = CSS_TOKEN_RGB;
 
 			} else {
-				unsigned char *function_end = strchr(string, ')');
+				unsigned char *function_end = string + 1;
+
+				skip_css(function_end, ')');
 
 				/* Try to skip to the end so we do not generate
 				 * tokens for every argument. */
-				if (function_end) {
+				if (*function_end == ')') {
 					type = CSS_TOKEN_FUNCTION;
 					string = function_end;
 				}

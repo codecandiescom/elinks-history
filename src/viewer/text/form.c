@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.78 2004/01/08 03:28:07 jonas Exp $ */
+/* $Id: form.c,v 1.79 2004/01/08 03:44:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -786,45 +786,17 @@ get_form_url(struct session *ses, struct document_view *doc_view,
 #undef BL
 
 
-/* This is common backend for submit_form() and submit_form_reload(). */
-static int
-submit_form_do(struct terminal *term, void *xxx, struct session *ses,
-	       int do_reload)
+void
+submit_form(struct session *ses, struct document_view *doc_view, int do_reload)
 {
-	struct document_view *doc_view;
 	struct link *link;
 	unsigned char *url;
 
-	assert(term && ses);
-	if_assert_failed return 1;
-
-	doc_view = current_frame(ses);
-
-	assert(doc_view && doc_view->vs && doc_view->document);
-	if_assert_failed return 1;
-
-	if (doc_view->vs->current_link == -1) return 1;
+	if (doc_view->vs->current_link == -1) return;
 
 	link = &doc_view->document->links[doc_view->vs->current_link];
 	url = get_form_url(ses, doc_view, link->form);
-
-	return goto_link(url, link->target, ses, do_reload);
-}
-
-int
-submit_form(struct terminal *term, void *xxx, struct session *ses)
-{
-	assert(term && ses);
-	if_assert_failed return 1;
-	return submit_form_do(term, xxx, ses, 0);
-}
-
-int
-submit_form_reload(struct terminal *term, void *xxx, struct session *ses)
-{
-	assert(term && ses);
-	if_assert_failed return 1;
-	return submit_form_do(term, xxx, ses, 1);
+	if (url) goto_link(url, link->target, ses, do_reload);
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.13 2004/01/08 03:28:07 jonas Exp $ */
+/* $Id: form.h,v 1.14 2004/01/08 03:44:01 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -98,9 +98,8 @@ void draw_forms(struct terminal *t, struct document_view *doc_view);
 
 int has_form_submit(struct document *document, struct form_control *frm);
 
-int submit_form(struct terminal *term, void *xxx, struct session *ses);
 void reset_form(struct session *ses, struct document_view *doc_view, int a);
-int submit_form_reload(struct terminal *term, void *xxx, struct session *ses);
+void submit_form(struct session *ses, struct document_view *doc_view, int do_reload);
 
 void done_form_control(struct form_control *fc);
 

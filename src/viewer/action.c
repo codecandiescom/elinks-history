@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.30 2004/01/08 03:28:06 jonas Exp $ */
+/* $Id: action.c,v 1.31 2004/01/08 03:44:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -383,6 +383,14 @@ do_action(struct session *ses, enum keyact action, int verbose)
 
 		case ACT_SHOW_TERM_OPTIONS:
 			terminal_options(term, NULL, ses);
+			break;
+
+		case ACT_SUBMIT_FORM:
+			do_frame_action(ses, submit_form, 0);
+			break;
+
+		case ACT_SUBMIT_FORM_RELOAD:
+			do_frame_action(ses, submit_form, 1);
 			break;
 
 		case ACT_TAB_NEXT:

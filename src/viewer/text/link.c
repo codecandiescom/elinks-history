@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.148 2004/01/08 03:28:07 jonas Exp $ */
+/* $Id: link.c,v 1.149 2004/01/08 03:44:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -868,11 +868,8 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 					    (menu_func) menu_textarea_edit, NULL, 0);
 			}
 
-			add_to_menu(&mi, N_("~Submit form"), NULL, ACT_NONE,
-				    (menu_func) submit_form, NULL, 0);
-
-			add_to_menu(&mi, N_("Submit form and rel~oad"), NULL, ACT_NONE,
-				    (menu_func) submit_form_reload, NULL, 0);
+			add_menu_action(&mi, N_("~Submit form"), ACT_SUBMIT_FORM);
+			add_menu_action(&mi, N_("Submit form and rel~oad"), ACT_SUBMIT_FORM_RELOAD);
 
 			if (c && link->form->method == FM_GET)
 				add_to_menu(&mi, N_("Submit form and open in new ~window"),

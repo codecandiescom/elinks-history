@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.2 2004/01/17 16:23:07 pasky Exp $ */
+/* $Id: parser.h,v 1.3 2004/01/18 01:50:41 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PARSER_H
 #define EL__DOCUMENT_CSS_PARSER_H
@@ -17,6 +17,6 @@
  * of the following declarations. Then it returns success in case at least one
  * css_parse_decl() run succeeded. In case of failure, it tries to do an error
  * recovery by simply looking at the nearest semicolon ahead. */
-int css_parse_decl(struct list_head *props, unsigned char *string);
+void css_parse_decl(struct list_head *props, unsigned char *string);
 
 #endif

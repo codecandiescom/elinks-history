@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.6 2004/01/18 01:48:27 jonas Exp $ */
+/* $Id: parser.c,v 1.7 2004/01/18 01:50:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@ struct css_property_info css_property_info[] = {
 	CSS_PROPERTY("", CSS_DP_NONE),
 };
 
-int
+void
 css_parse_decl(struct list_head *props, unsigned char *string)
 {
 	enum css_decl_property property = CSS_DP_NONE;
@@ -70,9 +70,7 @@ css_parse_decl(struct list_head *props, unsigned char *string)
 	if (string[pos] == ';') {
 		return css_parse_decl(props, string + pos + 1);
 	}
-	if (string[pos] == 0) {
-		return 0;
-	}
+	if (string[pos] == 0) return;
 
 	for (i = 0; css_property_info[i].namelen; i++) {
 		struct css_property_info *info = &css_property_info[i];
@@ -92,7 +90,7 @@ ride_on:
 		if (string[pos] == ';') {
 			return css_parse_decl(props, string + pos + 1);
 		} else {
-			return 0;
+			return;
 		}
 	}
 
@@ -116,5 +114,4 @@ ride_on:
 	if (string[pos] == ';') {
 		css_parse_decl(props, string + pos + 1);
 	}
-	return 1;
 }

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.8 2003/07/22 00:05:49 jonas Exp $ */
+/* $Id: screen.c,v 1.9 2003/07/22 00:07:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,6 +149,8 @@ print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 	else if (!c || c == 1) add_chr_to_str(a, l, ' ');
 	else add_chr_to_str(a, l, '.');
 }
+
+/* TODO An optimized add_term_escape_to_string() would be nice. --jonas */
 
 void
 redraw_screen(struct terminal *term)

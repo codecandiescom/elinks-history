@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.62 2004/08/01 09:51:35 jonas Exp $ */
+/* $Id: socket.c,v 1.63 2004/08/01 10:00:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,7 +185,7 @@ ssl_want_read(struct connection *conn)
 
 /* Return -1 on error, 0 or success. */
 int
-ssl_connect(struct connection *conn, int sock)
+ssl_connect(struct connection *conn, struct connection_socket *socket)
 {
 	int ret;
 
@@ -195,7 +195,7 @@ ssl_connect(struct connection *conn, int sock)
 		ssl_set_no_tls(conn);
 
 #ifdef CONFIG_OPENSSL
-	SSL_set_fd(conn->ssl, sock);
+	SSL_set_fd(conn->ssl, socket->fd);
 
 	if (get_opt_bool("connection.ssl.cert_verify"))
 		SSL_set_verify(conn->ssl, SSL_VERIFY_PEER
@@ -222,7 +222,8 @@ ssl_connect(struct connection *conn, int sock)
 	}
 
 #elif defined(CONFIG_GNUTLS)
-	gnutls_transport_set_ptr(*((ssl_t *) conn->ssl), (gnutls_transport_ptr) sock);
+	gnutls_transport_set_ptr(*((ssl_t *) conn->ssl),
+				 (gnutls_transport_ptr) socket->fd);
 
 	/* TODO: Some certificates fuss. --pasky */
 #endif
@@ -233,7 +234,7 @@ ssl_connect(struct connection *conn, int sock)
 		case SSL_ERROR_WANT_READ:
 		case SSL_ERROR_WANT_READ2:
 			set_connection_state(conn, S_SSL_NEG);
-			set_handlers(sock, (void (*)(void *)) ssl_want_read,
+			set_handlers(socket->fd, (void (*)(void *)) ssl_want_read,
 				     NULL, dns_exception, conn);
 			return -1;
 

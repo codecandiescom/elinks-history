@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.91 2004/08/01 09:51:35 jonas Exp $ */
+/* $Id: connect.c,v 1.92 2004/08/01 10:00:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -439,7 +439,7 @@ dns_found(void *data, int state)
 	}
 
 #ifdef CONFIG_SSL
-	if (conn->ssl && ssl_connect(conn, sock) < 0) return;
+	if (conn->ssl && ssl_connect(conn, c_i->socket) < 0) return;
 #endif
 
 	conn->conn_info = NULL;
@@ -481,7 +481,7 @@ connected(void *data)
 	}
 
 #ifdef CONFIG_SSL
-	if (conn->ssl && ssl_connect(conn, socket->fd) < 0) return;
+	if (conn->ssl && ssl_connect(conn, socket) < 0) return;
 #endif
 
 	conn->conn_info = NULL;

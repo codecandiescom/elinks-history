@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.132 2003/11/26 21:27:52 pasky Exp $ */
+/* $Id: search.c,v 1.133 2003/11/27 01:55:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -989,8 +989,8 @@ search_dlg_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	add_to_input_history(dlg_data->dlg->widgets->info.field.history, text, 1);
 
 	if (fn) fn(data, text);
-	ok_dialog(dlg_data, widget_data);
-	return 0;
+
+	return cancel_dialog(dlg_data, widget_data);
 }
 
 /* XXX: @data is ignored. */

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.61 2003/11/06 23:49:01 zas Exp $ */
+/* $Id: cache.c,v 1.62 2003/11/08 01:06:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -499,10 +499,10 @@ garbage_collection(int whole)
 			goto g;
 		if (ce->refcount || is_entry_used(ce)) {
 			no = 1;
-			ce->tgc = 0;
+			ce->gc_target = 0;
 			continue;
 		}
-		ce->tgc = 1;
+		ce->gc_target = 1;
 		ncs -= ce->data_size;
 
 		assertm(ncs >= 0, "cache_size underflow: %ld", ncs);
@@ -522,14 +522,14 @@ g:
 
 			if (newncs <= opt_cache_gc_size) {
 				ncs = newncs;
-				entry->tgc = 0;
+				entry->gc_target = 0;
 			}
 		}
 	}
 
 	for (entry = ce; (void *)entry != &cache;) {
 		entry = entry->next;
-		if (entry->prev->tgc)
+		if (entry->prev->gc_target)
 			delete_cache_entry(entry->prev);
 	}
 

@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.25 2003/10/30 17:01:37 pasky Exp $ */
+/* $Id: cache.h,v 1.26 2003/11/08 01:06:32 pasky Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -31,12 +31,18 @@ struct cache_entry {
 	int length;
 	int data_size;
 	int refcount;
+
 #ifdef HAVE_SCRIPTING
 	unsigned int done_pre_format_html_hook:1;
 #endif
 	unsigned int redirect_get:1;
 	unsigned int incomplete:1;
-	unsigned int tgc:1;
+
+	/* This is a mark for internal workings of garbage_collector(), whether
+	 * the cache_entry should be busted or not. You are not likely to see
+	 * an entry with this set to 1 in wild nature ;-). */
+	unsigned int gc_target:1;
+
 	enum cache_mode cache_mode;
 };
 

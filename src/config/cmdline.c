@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.25 2003/12/22 11:45:31 pasky Exp $ */
+/* $Id: cmdline.c,v 1.26 2003/12/22 11:54:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,6 +51,19 @@ _parse_options(int argc, unsigned char *argv[], struct option *opt)
 
 			option = get_opt_rec(opt, argname);
 			if (!option) option = get_opt_rec(opt, oname);
+			if (!option) {
+				unsigned char *pos;
+
+				oname++; /* the '-' */
+				/* Substitute '-' by '_'. This helps
+				 * compatibility with that very wicked browser
+				 * called 'lynx'. */
+				for (pos = strchr(oname, '-'); pos;
+				     pos = strchr(pos, '-'))
+					*pos = '_';
+				option = get_opt_rec(opt, oname);
+				oname--;
+			}
 
 			mem_free(oname);
 

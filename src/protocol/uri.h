@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.56 2004/03/21 01:45:55 jonas Exp $ */
+/* $Id: uri.h,v 1.57 2004/03/21 02:22:23 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -34,10 +34,6 @@ struct uri {
 	struct string user;
 	struct string password;
 	struct string host;
-
-	unsigned char *hoststr;
-	int hostlen;
-
 	struct string port;
 
 	/* @data can contain both the path and query uri fields.

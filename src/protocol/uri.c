@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.92 2004/03/21 01:41:11 jonas Exp $ */
+/* $Id: uri.c,v 1.93 2004/03/21 02:22:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,13 +175,13 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 			"this, it is a security bug!", addrlen, uristring);
 		if_assert_failed return 0;
 
-		uri->host.source = uri->hoststr = lbracket + 1;
-		uri->host.length = uri->hostlen = addrlen;
+		uri->host.source = lbracket + 1;
+		uri->host.length = addrlen;
 	} else
 #endif
 	{
-		uri->host.source = uri->hoststr = prefix_end;
-		uri->host.length = uri->hostlen = host_end - prefix_end;
+		uri->host.source = prefix_end;
+		uri->host.length = host_end - prefix_end;
 	}
 
 	if (*host_end == ':') { /* we have port here */

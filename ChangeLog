@@ -1,3 +1,169 @@
+Wed Jan  5 19:54:29 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, viewer/text/view.c:
+
+	Add support for disabling this extended horizontal scheme we
+	currently have, so it works more like vertical scrolling. Requested
+	by Russ Rowan and he shall have it because he made so many good
+	error reports lately ;).  
+
+Wed Jan  5 18:27:29 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* THANKS:
+
+	m33p.  
+
+Wed Jan  5 18:02:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* m4/gettext.m4, po/Makefile.in:
+
+	Fix build issue reported by zas.  
+
+Wed Jan  5 16:54:58 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/task.c:
+
+	Fix some get_opt_*() calls.  
+
+Wed Jan  5 16:48:55 2005  Laurent Monin <zas@norz.org>:
+
+	* doc/introduction.txt:
+
+	Minor typo fixes (that i hope correct, Miciah will proof-read at
+	some time).  
+
+Wed Jan  5 16:26:37 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/introduction.txt:
+
+	Write a little about searching.  
+
+Wed Jan  5 16:25:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Wire in the search history also for incremental link text searching.
+	With the improved error handling it works quite well, but it also
+	reveals some redrawing bugs.  
+
+Wed Jan  5 14:53:52 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* THANKS:
+
+	Make it a bit more readable.  
+
+Wed Jan  5 14:37:43 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* m4/gettext.m4, po/Makefile.in, src/main.c, src/bfu/hotkey.c,
+	src/bfu/hotkey.h, src/bfu/menu.c, src/bfu/menu.h,
+	src/config/cmdline.c, src/config/options.c, src/config/opttypes.c,
+	src/dialogs/menu.c, src/dialogs/options.c,
+	src/ecmascript/spidermonkey.c, src/intl/Makefile.am,
+	src/intl/gettext/libgettext.h, src/intl/gettext/libintl.h,
+	src/protocol/file/cgi.c, src/protocol/http/http.c:
+
+	Just use CONFIG_NLS instead of USE_NLS and ENABLE_NLS. Simplify
+	Makefile so the 'all' target depends directly on CATALOGS which are
+	only defined to something when NLS is enabled.  
+
+Wed Jan  5 13:56:14 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, m4/os2.m4:
+
+	Only check OS/2 stuff if CONFIG_OS2=yes.  
+
+Wed Jan  5 12:37:51 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Update Danish translation.  
+
+Wed Jan  5 11:00:06 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Display leds info dialogp when leds (at bottom right of screen) are
+	clicked. Cleanup send_mouse_event() a bit.  
+
+Wed Jan  5 10:09:06 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Drop trailing spaces.  
+
+Wed Jan  5 10:07:02 2005  Laurent Monin <zas@norz.org>:
+
+	* configure.in:
+
+	Display [=DIR] instead of =DIR since specifying directory is
+	optionnal for --with-gnutls and --with-openssl. Configure help
+	output looks better.  
+
+Wed Jan  5 09:54:57 2005  Laurent Monin <zas@norz.org>:
+
+	* configure.in:
+
+	LEDs are now enabled by default, so let configure script display
+	--disable-leds instead of --enable-leds.  
+
+Wed Jan  5 09:48:34 2005  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	Fix compilation when --disable-leds is used.  
+
+Wed Jan  5 09:42:37 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Jan  5 05:08:25 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/user.css:
+
+	Add an example user style-sheet.  
+
+Wed Jan  5 04:32:58 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/bookmarks.c:
+
+	In delete_bookmark, delete the bookmark from the hash table before
+	triggering the bookmark-delete event.  
+
+Wed Jan  5 03:33:55 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/leds.c:
+
+	Minor fixes in the 'LED indicators' help text.  
+
+Wed Jan  5 03:02:31 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: css/apply.c, css/apply.h, html/parser/parse.c:
+
+	Make css_apply() functionality available as a two-step execution, so
+	that applying CSS in start_element() will only require the
+	assembling of an element style selector once. Patch by Miciah and
+	me.  
+
+Wed Jan  5 02:13:20 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser.c:
+
+	In init_html_parser, swap the arguments to mirror_css_stylesheet so
+	that the default stylesheet is copied to the HTML context. This
+	fixes a bug where the stylesheet referenced by
+	document.css.stylesheet was not used.  
+
+Wed Jan  5 00:51:44 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/leds.c, bfu/leds.h, bfu/widget.h, dialogs/menu.c:
+
+	An info dialog for LED indicators. Dunno if that ASCII art is to
+	ugly and we should instead just number the LEDs. That would also
+	make it possible to elaborate a bit more; mention relevant options
+	and so.  
+
 Tue Jan  4 10:08:28 2005  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.46 2004/01/30 19:13:29 jonas Exp $ */
+/* $Id: kbd.c,v 1.47 2004/03/26 17:42:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -459,6 +459,15 @@ dispatch_special(unsigned char *text)
 	}
 }
 
+static void inline
+safe_hard_write(int fd, unsigned char *buf, int len)
+{
+	if (is_blocked()) return;
+
+	want_draw();
+	hard_write(fd, buf, len);
+	done_draw();
+}
 
 #define RD(xx) { \
 	unsigned char cc; \
@@ -488,19 +497,11 @@ qwerty:
 		if (!buf[i])
 			goto ex;
 
-	if (!is_blocked()) {
-		want_draw();
-		hard_write(itrm->std_out, buf, c);
-		done_draw();
-	}
+	safe_hard_write(itrm->std_out, buf, c);
 	return;
 
 ex:
-	if (!is_blocked()) {
-		want_draw();
-		hard_write(itrm->std_out, buf, i);
-		done_draw();
-	}
+	safe_hard_write(itrm->std_out, buf, i);
 
 	i++;
 	assert(OUT_BUF_SIZE - i > 0);

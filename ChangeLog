@@ -1,3 +1,467 @@
+Wed Nov 26 23:03:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Rename delete_info -> context.  
+
+Wed Nov 26 23:02:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Rename action_info -> context.  
+
+Wed Nov 26 23:01:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Replace hierbox_action_info structure with listbox_context.  
+
+Wed Nov 26 22:55:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listbox.h:
+
+	Add listbox_item and fix comment.  
+
+Wed Nov 26 22:44:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Use listbox_context in test_search() when moving to parent box.  
+
+Wed Nov 26 22:42:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Initialize html_top.invisible to 1, not ELEMENT_DONT_KILL.  
+
+Wed Nov 26 22:35:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: listbox.c, listbox.h:
+
+	Move box_context to header and rename to listbox_context. This
+	should be shared so we don't end up with 30 context data structure.  
+
+Wed Nov 26 22:31:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/formhist/dialogs.c:
+
+	Make it explicit in the info dialog that forms are saved for the
+	given URL. I'm getting a bit tired'n'sleepy so maybe this isn't 100%
+	best, but it looks like a good idea now :).  
+
+Wed Nov 26 22:30:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/formhist/dialogs.c:
+
+	Dontsave button label changed from 'Toggle enable' to 'Toggle
+	saving'.  
+
+Wed Nov 26 22:27:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	Do not permit adding of new keybindings in anonymous mode.  
+
+Wed Nov 26 22:26:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/protocol.c:
+
+	Update the includes, we moved stuff.  
+
+Wed Nov 26 22:25:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/dialogs.c:
+
+	Disallow bookmarks changes in anonymous mode.  
+
+Wed Nov 26 22:21:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listbox.c:
+
+	dislpay_listbox_item(): Minor simplification.  
+
+Wed Nov 26 22:16:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/Makefile.am, src/protocol/Makefile.am,
+	src/protocol/file.c, src/protocol/file.h,
+	src/protocol/file/Makefile.am, src/protocol/file/file.c,
+	src/protocol/file/file.h:
+
+	protocol/file.* -> protocol/file/file.* 
+
+Wed Nov 26 22:14:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/Makefile.am, src/protocol/Makefile.am,
+	src/protocol/ftp.c, src/protocol/ftp.h, src/protocol/ftpparse.c,
+	src/protocol/ftpparse.h, src/protocol/ftp/Makefile.am,
+	src/protocol/ftp/ftp.c, src/protocol/ftp/ftp.h,
+	src/protocol/ftp/ftpparse.c, src/protocol/ftp/ftpparse.h:
+
+	src/protocol/ftp(parse).* -> src/protocol/ftp/ftp(parse).* 
+
+Wed Nov 26 22:10:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/: ftpparse.c, ftp/ftpparse.c:
+
+	Reindentations, to keep the indentation at least a little in
+	control.  
+
+Wed Nov 26 22:06:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/dialog.c:
+
+	Remove useless prototype.  
+
+Wed Nov 26 22:05:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/: ftpparse.c, ftp/ftpparse.c:
+
+	Correct protocol/ftpparse.h inclusion.  
+
+Wed Nov 26 22:01:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/: file/.cvsignore, file/.vimrc, ftp/.cvsignore,
+	ftp/.vimrc:
+
+	Added fairies.  
+
+Wed Nov 26 21:59:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Fix error introduced in parser.c (1.270 -> 1.271). Spotted by pasky.  
+
+Wed Nov 26 21:58:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Complete SP_FRAMESET root frameset setting condition, being lost in
+	Jonas' not passing of @document to create_frameset(). (r1.379) 
+
+Wed Nov 26 21:52:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/dialogs.c:
+
+	Add button to toggle formhist_data->dontsave requested by zas (and
+	also fix call to ensure that form history has been loaded when the
+	manager is opened.  
+
+Wed Nov 26 21:48:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/: ftp.c, ftp/ftp.c:
+
+	Reindent some tiny bits more intelligently than Jonas ;-).  
+
+Wed Nov 26 21:39:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, bookmarks/dialogs.c,
+	cache/dialogs.c, config/dialogs.c, cookies/dialogs.c,
+	formhist/dialogs.c, globhist/dialogs.c:
+
+	Add flag member to hierbox_button to signal whether the button
+	should be shown when elinks runs in anonymous mode. This is (IMHO) a
+	more proper fix compared to paskys previous (buggy ;-) patch that
+	dublicated code since hierbox_browser() will take care of the logics
+	for us.  
+
+Wed Nov 26 21:33:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/hacking.txt:
+
+	Do not optimize-thru-group structures if that would break logical
+	structure.  
+
+Wed Nov 26 21:27:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/search.c:
+
+	Minor fix_next_link_in_search() tidyup.  
+
+Wed Nov 26 21:27:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/search.c:
+
+	Localize the variables to an inner loop in
+	fix_next_link_in_search().  
+
+Wed Nov 26 21:15:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS:
+
+	Mention mimetypes file support as part of new MIME subsystem. Add
+	download manager and displaying of URIs in plain text documents.  
+
+Wed Nov 26 21:08:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cookies/cookies.c:
+
+	When !cookies.expire, its more usual meaning is just that the cookie
+	should not be saved and expires with ELinks quitting.  
+
+Wed Nov 26 20:58:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	Skip fields lines if any, even if dontsave is set.  
+
+Wed Nov 26 20:35:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: protocol/uri.c, protocol/uri.h, sched/session.c:
+
+	extract_position() -> extract_fragment() 
+
+Wed Nov 26 20:34:25 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Nov 26 20:30:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/dialogs.c:
+
+	Info about save/dontsave was added to dialog.  
+
+Wed Nov 26 19:39:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/: dialogs.c, formhist.c, formhist.h:
+
+	Formhist was fixed.  A field dontsave was added to struct
+	formhist_data.  Load/save functions are now named
+	load_forms_from_file() and save_forms_to_file(),
+	form_already_saved() was renamed to form_exists(), old names were
+	ambiguous (save to memory or file).  Cleanup and simplifications.  
+
+Wed Nov 26 18:27:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/lua/core.c:
+
+	Do not show the lua console in anonymous mode.  
+
+Wed Nov 26 18:24:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cookies/cookies.c:
+
+	Do not save cookies in anonymous mode.  
+
+Wed Nov 26 18:21:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: formhist/dialogs.c, cookies/dialogs.c:
+
+	Do not offer the [ Save ] button in anonymous mode.  
+
+Wed Nov 26 18:17:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/formhist/formhist.c:
+
+	Never save formhist to disk in anonymous mode.  
+
+Wed Nov 26 18:17:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Fix wrong error message order.  
+
+Wed Nov 26 18:14:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bookmarks/bookmarks.c, viewer/text/view.c:
+
+	Enable bookmark manager even for anonymous users, but never actually
+	save anything to disk. Useful for having some predefined bookmarks
+	for the anonymous users.  
+
+Wed Nov 26 18:09:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/globhist/globhist.c:
+
+	Do not read/write globhist when anonymous.  
+
+Wed Nov 26 17:59:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Paranoia: disallow anonymous users to save formatted.  
+
+Wed Nov 26 17:59:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Make delete error printing more generic and handle undeletability
+	(;/) even tho' it is a corner case.  
+
+Wed Nov 26 17:41:15 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Nov 26 17:35:54 2003  Peter Samek <samek@upc.uniba.sk>:
+
+	* po/sk.po:
+
+	Slovak translation update.  
+
+Wed Nov 26 16:44:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	Minor clarification of traverse_listbox_items_list() description.  
+
+Wed Nov 26 16:19:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/dialogs.c:
+
+	Recovery path for assertm().  
+
+Wed Nov 26 14:31:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Don't center hierbox message boxes that contains additional item
+	info.  
+
+Wed Nov 26 14:23:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listbox.c:
+
+	Don't allocate the box_context but use a local one.  
+
+Wed Nov 26 14:10:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Add missing NULL_MENU_ITEM in the tools menu.  
+
+Wed Nov 26 13:39:40 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/util/memlist.c:
+
+	Clarify freeml's second comment.  
+
+Wed Nov 26 13:13:23 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/form.c:
+
+	In get_form_url, fix a memory leak that could occur if malloc
+	failed.  
+
+Wed Nov 26 13:00:39 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/: file.c, file/file.c:
+
+	In try_encoding_extensions, use memcpy instead of safe_strncpy as we
+	already have the length of the string.  
+
+Wed Nov 26 12:44:16 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/dialogs.c:
+
+	In bookmark_search_do, use assertm() instead of if and internal().  
+
+Wed Nov 26 12:33:13 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Fix an omission in my last commit: Explain the significance of @fn's
+	return value.  
+
+Wed Nov 26 12:28:37 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/listbox.c:
+
+	Rewrite traverse_listbox_items_list's comment for clarity and
+	accuracy.  
+
+Wed Nov 26 11:45:24 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/download.c:
+
+	Give tp_cancel() and tp_free() the static keyword.  
+
+Wed Nov 26 11:34:52 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/menu.c:
+
+	Now that the items have their own menu with many keyboard
+	accellerators free, change the accellerators for the items on the
+	Tools menu to be more intuitive. This also fixes a conflict between
+	Global histor~y and Form histor~y that was introduced in
+	src/dialogs/menu.c:1.196->1.197.  
+
+Wed Nov 26 11:29:40 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, cookies/cookies.c,
+	cache/cache.c, formhist/formhist.c, globhist/globhist.c,
+	sched/download.c:
+
+	Rename init_browser_box to init_browser_box_item and rename its @box
+	variable to @item.  
+
+Wed Nov 26 11:19:15 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/formhist/formhist.c:
+
+	Fix some memory leaks that could occur if malloc failed.  
+
+Wed Nov 26 04:47:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	The download main menu item has been made obsolete by the download
+	manager.  
+
+Wed Nov 26 04:43:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/download.c, dialogs/download.h, dialogs/menu.c,
+	sched/download.c, sched/download.h:
+
+	More tools. Presenting a new and shiny download manager using under
+	132 lines of code. The managers sure are cheap these days. :) 
+
+Wed Nov 26 04:28:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Fix leak when deleting by proceeding even if msg is NULL.  
+
+Wed Nov 26 04:10:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Compile fix.  
+
+Wed Nov 26 04:07:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	object_nolock(cookie) when initializing.  
+
+Wed Nov 26 03:19:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listbox.c:
+
+	Rename all widget_data variables to widget_data.  
+
+Wed Nov 26 01:29:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/Makefile.am, dialogs/download.c,
+	dialogs/download.h, dialogs/menu.c, sched/download.c,
+	sched/download.h:
+
+	Move download dialog to separate file.  
+
+Wed Nov 26 01:27:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/error.c:
+
+	Include own header.  
+
+Wed Nov 26 00:18:18 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/dialogs/menu.c:
+
+	Moved the managers to the Tools menu.  
+
 Tue Nov 25 22:59:45 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* NEWS:

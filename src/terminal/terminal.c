@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.7 2003/05/04 19:36:42 pasky Exp $ */
+/* $Id: terminal.c,v 1.8 2003/05/04 19:38:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,16 +126,6 @@ redraw_terminal_all(struct terminal *term)
 	redraw_terminal_ev(term, EV_RESIZE);
 }
 #endif
-
-static inline void
-erase_screen(struct terminal *term)
-{
-	if (!term->master || !is_blocked()) {
-		if (term->master) want_draw();
-		hard_write(term->fdout, "\033[2J\033[1;1H", 10);
-		if (term->master) done_draw();
-	}
-}
 
 void
 redraw_terminal_cls(struct terminal *term)

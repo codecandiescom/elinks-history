@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.77 2004/01/21 17:02:57 jonas Exp $ */
+/* $Id: scanner.c,v 1.78 2004/01/21 17:39:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,8 +32,9 @@ enum css_char_group {
 	CSS_CHAR_IDENT_START	= (1 << 4),
 	CSS_CHAR_NEWLINE	= (1 << 5),
 	CSS_CHAR_NON_ASCII	= (1 << 6),
-	CSS_CHAR_TOKEN		= (1 << 7),
-	CSS_CHAR_WHITESPACE	= (1 << 8),
+	CSS_CHAR_SGML_MARKUP	= (1 << 7),
+	CSS_CHAR_TOKEN		= (1 << 8),
+	CSS_CHAR_WHITESPACE	= (1 << 9),
 };
 
 #define	check_css_table(c, bit)	(css_scan_table[(c)] & (bit))
@@ -202,12 +203,6 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			type = CSS_TOKEN_STRING;
 		}
 
-	} else if ((first_char == '-' && *string == '-' && string[1] == '>')
-		   || (first_char == '<' && strlen(string) > 2 && !strncmp(string, "!--", 3))) {
-		/* Skip SGML left and right comments */
-		string += 2 + (first_char == '<');
-		type = CSS_TOKEN_SKIP;
-
 	} else if (is_css_ident_start(first_char)) {
 		scan_css(string, CSS_CHAR_IDENT);
 
@@ -237,9 +232,27 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			type = CSS_TOKEN_IDENT;
 		}
 
-	} else if (first_char == '<' && *string == '/') {
-		/* Some kind of SGML tag end ... better bail out screaming */
-		type = CSS_TOKEN_NONE;
+	} else if (first_char == '<' && first_char == '-') {
+		/* Try to navigate SGML tagsoup */
+
+		if (*string == '/') {
+			/* Some kind of SGML tag end ... better bail out screaming */
+			type = CSS_TOKEN_NONE;
+
+		} else {
+			unsigned char *sgml = string;
+
+			/* Skip anything looking like SGML "<!--" and "-->"
+			 * comments */
+			scan_css(sgml, CSS_CHAR_SGML_MARKUP);
+
+			if (sgml - string >= 2
+			    && (first_char == '<' && *string == '!'
+				|| first_char == '-' && *sgml == '>')) {
+				type == CSS_TOKEN_SKIP;
+				string = sgml + 1;
+			}
+		}
 
 	} else if (first_char == '/' && *string == '*') {
 		/* Comments */
@@ -449,6 +462,7 @@ static struct scan_table_info css_scan_table_info[] = {
 	/* This should contain mostly used char tokens like ':' and maybe a few
 	 * garbage chars that people might put in their CSS code */
 	SCAN_TABLE_STRING("({});:,",	 CSS_CHAR_TOKEN),
+	SCAN_TABLE_STRING("<!->",	 CSS_CHAR_SGML_MARKUP),
 
 	SCAN_TABLE_END,
 };

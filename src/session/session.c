@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.517 2004/06/14 03:58:57 jonas Exp $ */
+/* $Id: session.c,v 1.518 2004/06/14 17:39:54 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -164,7 +164,7 @@ add_session_info(struct session *ses, struct uri *uri)
 	info->timer = install_timer(10000, (void (*)(void *))session_info_timeout,
 					   (void *) info->id);
 	info->ses = ses;
-	info->uri = get_uri_reference(uri);
+	if (uri) info->uri = get_uri_reference(uri);
 	add_to_list(session_info, info);
 
 	return info->id;

@@ -24,6 +24,8 @@ top/bottom of screen.
 
 	Handling of textareas splitted to two pages is just weird.
 
-$Id: BUGS,v 1.27 2002/08/11 17:18:27 pasky Exp $
+	Call to OS Shell doesn't release mouse handler.
+
+$Id: BUGS,v 1.28 2002/12/01 12:52:36 pasky Exp $
 
 vim: textwidth=80

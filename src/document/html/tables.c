@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.188 2004/06/24 15:16:38 zas Exp $ */
+/* $Id: tables.c,v 1.189 2004/06/24 15:22:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1269,7 +1269,7 @@ check_table_widths(struct table *table)
 				for (k = 1; k < s; k++)
 					p += (get_vline_width(table, i + k) >= 0);
 
-				dst_width(&widths[i], s, cell->width - p, table->max_c + i);
+				dst_width(&widths[i], s, cell->width - p, &table->max_c[i]);
 
 			} else if (cell->colspan > s && cell->colspan < ns) {
 				ns = cell->colspan;

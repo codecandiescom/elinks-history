@@ -1,3 +1,184 @@
+Thu Jan 17 19:14:37 2002  Petr Baudis <pasky@ji.cz>:
+
+	* autocommit.sh:
+	
+	more sane passing of parameters ;)
+
+Thu Jan 17 19:14:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* links.h, os_dep.h:
+	
+	moved sockaddr_storage emergency stub
+
+Thu Jan 17 19:13:18 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
+	configure.in, stamp-h.in:
+	
+	Cleaned checks for unused functions, added check for timegm(), some
+	dummy comments for rest of acconfig.h
+
+Thu Jan 17 18:26:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, session.c:
+	
+	mktime() takes struct tm in localtime, not GMT - fix by Christian
+	Haggstrom <c00chm@cs.umu.se>
+
+Thu Jan 17 14:05:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* url.c:
+	
+	Skip ':' even when \!need_slashes (otherwise i.e. mailto doesn't
+	dig user correctly)
+
+Thu Jan 17 09:18:58 2002  Petr Baudis <pasky@ji.cz>:
+
+	* menu.c:
+	
+	display IPv6 in features list
+
+Thu Jan 17 09:17:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* os_dep.h:
+	
+	remove IPV6 defining, moved to autoconf suite
+
+Thu Jan 17 09:15:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
+	configure.in, stamp-h.in:
+	
+	[no log message]
+
+Sun Jan  6 21:28:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* url.c:
+	
+	fix of silly mistake in properly joining relative urls containing
+	query_str
+
+Sun Jan  6 18:56:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* default.c:
+	
+	remove chmod(home_links, 0700) everytime, just do it only in
+	mkdir()
+
+Sat Jan  5 22:12:44 2002  Petr Baudis <pasky@ji.cz>:
+
+	* error.c:
+	
+	flush stderr when whining
+
+Sat Jan  5 22:05:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* cookies.c:
+	
+	more cookies debug :)
+
+Sat Jan  5 21:53:13 2002  Petr Baudis <pasky@ji.cz>:
+
+	* cookies.c:
+	
+	cookies debug code
+
+Sat Jan  5 21:39:41 2002  Petr Baudis <pasky@ji.cz>:
+
+	* default.c:
+	
+	first stage of get_home() cleanup - needs to be done w/o so much
+	gotos probably
+
+Wed Jan  2 23:01:37 2002  Petr Baudis <pasky@ji.cz>:
+
+	* default.c, file.c, links.h:
+	
+	Option for highlight of directories
+
+Wed Jan  2 19:29:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* autocommit.sh, autogen.sh:
+	
+	some my autoshit tools - will be probably better to have them in
+	CVS
+
+Wed Jan  2 19:05:56 2002  Petr Baudis <pasky@ji.cz>:
+
+	* HACKING:
+	
+	success testing note
+
+Wed Jan  2 18:20:42 2002  Petr Baudis <pasky@ji.cz>:
+
+	* mailcap.pl, contrib/mailcap.pl:
+	
+	Moved mailcap.pl to contrib/
+
+Wed Jan  2 18:17:28 2002  Petr Baudis <pasky@ji.cz>:
+
+	* url.c:
+	
+	Correct guessing of http:// for IPv6 address
+
+Wed Jan  2 17:49:55 2002  Petr Baudis <pasky@ji.cz>:
+
+	* url.c:
+	
+	Cleanup of translate_url()
+
+Wed Jan  2 17:00:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* connect.c, http.c, url.c:
+	
+	IPv6 support various fixes, support for parsing of IPv6 URL
+
+Wed Jan  2 13:43:35 2002  Petr Baudis <pasky@ji.cz>:
+
+	* connect.c, default.c, dns.c, sched.c:
+	
+	IPv6 connections support (not yet URL parsing fixes)
+
+Tue Jan  1 17:55:52 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
+	configure.in, stamp-h.in, os_dep.h:
+	
+	Add test for struct sockaddr_in6
+
+Tue Jan  1 17:23:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* dns.c, links.h, os_dep.h:
+	
+	Use sockaddr_storage instead of sockaddr, where appropriate.
+
+Tue Jan  1 01:19:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* acconfig.h, config.h.in, configure, configure.in, Makefile.in,
+	acconfig.h, aclocal.m4, config.h.in, configure, configure.in,
+	stamp-h.in:
+	
+	grrr.. test for automated autoshit autocomit autofixing autobroken
+	autobuild; also added test for getaddrinfo()
+
+Tue Jan  1 00:57:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.in:
+	
+	added check for sockaddr_storage
+
+Tue Jan  1 00:54:16 2002  Petr Baudis <pasky@ji.cz>:
+
+	* aclocal.m4, configure:
+	
+	added check for sockaddr_storage
+
+Tue Jan  1 00:51:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* acconfig.h, config.h.in, configure, configure.in, stamp-h.in:
+	
+	added check for sockaddr_storage
+
 Mon Dec 31 19:59:46 2001  Petr Baudis <pasky@ji.cz>:
 
 	* url.c:

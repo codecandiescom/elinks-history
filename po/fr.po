@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-03-03 00:06+0100\n"
-"PO-Revision-Date: 2005-03-02 23:45+0100\n"
+"PO-Revision-Date: 2005-03-03 00:08+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -4525,15 +4525,15 @@ msgstr[1] "%d connexions"
 #, c-format
 msgid "%d connecting"
 msgid_plural "%d connecting"
-msgstr[0] "%d en cours de connexion"
-msgstr[1] "%d en cours de connexion"
+msgstr[0] "%d en cours"
+msgstr[1] "%d en cours"
 
 #: src/dialogs/info.c:205
 #, c-format
 msgid "%d transferring"
 msgid_plural "%d transferring"
-msgstr[0] "%d en cours de transfert"
-msgstr[1] "%d en cours de transfert"
+msgstr[0] "%d en transfert"
+msgstr[1] "%d en transfert"
 
 #: src/dialogs/info.c:209
 #, c-format
@@ -7519,44 +7519,3 @@ msgstr "Erreur lors de la sauvegarde"
 #: src/viewer/text/view.c:1309
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
-
-#~ msgid "Memory allocated: %ld bytes, %ld bytes overhead (%0.2f%%)."
-#~ msgstr "Mémoire allouée: %ld octets, %ld octets surconsommés (%0.2f%%)."
-
-#~ msgid "master"
-#~ msgstr "maître"
-
-#~ msgid "slave"
-#~ msgstr "esclave"
-
-#~ msgid ""
-#~ "Resources: %d handles, %d timers.\n"
-#~ "Connections: %d connections, %d connecting, %d transferring, %d "
-#~ "keepalive.\n"
-#~ "Memory cache: %d bytes, %d files, %d locked, %d loading.\n"
-#~ "Document cache: %d formatted, %d locked, %d refreshing.\n"
-#~ "Interlinking: %s terminal, %d terminals, %d sessions."
-#~ msgstr ""
-#~ "Ressources: %d descripteurs, %d timers.\n"
-#~ "Connexions: %d connexions, %d en établiss., %d en transfert, %d en "
-#~ "maintien.\n"
-#~ "Cache mémoire: %d octets, %d fichiers, %d verrouillés, %d en chargement.\n"
-#~ "Cache documents: %d formattés, %d verrouillés, %d en rafraîchissement.\n"
-#~ "Com. interne: terminal %s, %d terminals, %d sessions."
-
-#~ msgid "Would you like to save the file '%s' (type: %s) or display it?"
-#~ msgstr "Voulez-vous sauvegarder le fichier '%s' (type: %s) ou l'afficher ?"
-
-#~ msgid ""
-#~ "Would you like to open the file '%s' (type: %s%s%s)\n"
-#~ "with '%s', save it or display it?"
-#~ msgstr ""
-#~ "Voulez-vous ouvrir le fichier '%s' (type: %s%s%s)\n"
-#~ "avec '%s', l'enregistrer ou l'afficher ?"
-
-#~ msgid ""
-#~ "Would you like to open the file '%s' (type: %s%s%s)\n"
-#~ "with '%s', or display it?"
-#~ msgstr ""
-#~ "Voulez-vous ouvrir le fichier '%s' (type: %s%s%s)\n"
-#~ "avec '%s', ou l'afficher ?"

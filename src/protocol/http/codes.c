@@ -1,7 +1,5 @@
-/* HTTP response codes
- * source: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
- */
-/* $Id: codes.c,v 1.1 2003/06/21 12:10:48 zas Exp $ */
+/* HTTP response codes */
+/* $Id: codes.c,v 1.2 2003/06/21 12:28:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +14,7 @@ struct http_code {
 	unsigned char *str;
 };
 
+/* Source: http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html */
 static struct http_code http_code[] = {
 	{ 100, "Continue" },
 	{ 101, "Switching Protocols" },

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.58 2004/04/23 19:26:46 pasky Exp $ */
+/* $Id: cmdline.c,v 1.59 2004/04/23 19:30:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,6 +47,7 @@ _parse_options(int argc, unsigned char *argv[], struct option *opt, struct list_
 			struct option *option;
 			unsigned char *argname = &argv[-1][1];
 			unsigned char *oname = stracpy(argname);
+			unsigned char *err;
 
 			if (!oname) continue;
 
@@ -71,37 +72,36 @@ _parse_options(int argc, unsigned char *argv[], struct option *opt, struct list_
 
 			mem_free(oname);
 
-			if (!option) {
-unknown_option:
-				usrerror(G_("Unknown option %s"), argv[-1]);
-				return 1;
-			}
+			if (!option) goto unknown_option;
 
-			if (option_types[option->type].cmdline
-			    && !(option->flags & OPT_HIDDEN)) {
-				unsigned char *err;
-
-				err = option_types[option->type].cmdline(option, &argv, &argc);
-
-				if (err) {
-					if (err[0])
-						usrerror(G_("Cannot parse option %s: %s"), argv[-1], err);
-
-					return 1;
-				} else if (remote_url) {
-					if (url_list) add_to_string_list(url_list, remote_url, -1);
-					mem_free(remote_url);
-					remote_url = NULL;
-				}
-			} else {
+			if (!option_types[option->type].cmdline
+			    || (option->flags & OPT_HIDDEN))
 				goto unknown_option;
+
+			err = option_types[option->type].cmdline(option, &argv, &argc);
+
+			if (err) {
+				if (err[0])
+					usrerror(G_("Cannot parse option %s: %s"), argv[-1], err);
+
+				return 1;
+
+			} else if (remote_url) {
+				if (url_list) add_to_string_list(url_list, remote_url, -1);
+				mem_free(remote_url);
+				remote_url = NULL;
 			}
 
 		} else if (url_list) {
 			add_to_string_list(url_list, argv[-1], -1);
 		}
 	}
+
 	return 0;
+
+unknown_option:
+	usrerror(G_("Unknown option %s"), argv[-1]);
+	return 1;
 }
 
 int

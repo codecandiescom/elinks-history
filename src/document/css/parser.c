@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.115 2004/09/20 23:01:11 pasky Exp $ */
+/* $Id: parser.c,v 1.116 2004/09/20 23:11:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -264,9 +264,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 		memcpy(&last_token, token, sizeof(*token));
 		token = get_next_scanner_token(scanner);
-		/* FIXME: This could create possible leaks with very broken
-		 * stylesheets ending in the middle of selector? --pasky */
-		if (!token) return;
+		if (!token) break;
 		last_fragment = (token->type == ',' || token->type == '{');
 
 
@@ -318,8 +316,16 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 			pkg = NULL; last_fragment = 0;
 		} else if (token->type == '{') {
 			/* End of selector list. */
+			pkg = NULL; last_fragment = 0;
 			break;
 		} /* else Another selector fragment probably coming up. */
+	}
+
+	/* Wipe the selector we were currently composing, if any. */
+	if (pkg) {
+		done_css_selector(pkg->selector);
+		del_from_list(pkg);
+		mem_free(pkg);
 	}
 }
 

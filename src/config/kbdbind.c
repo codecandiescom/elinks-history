@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.57 2003/01/04 20:14:23 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.58 2003/01/04 20:41:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -405,7 +405,6 @@ static struct strtonum action_table[] = {
 #else
 	{ "lua-console", ACT_LUA_CONSOLE, N_("Open a Lua console (DISABLED)") },
 #endif
-	},
 	{ " *lua-function*", ACT_LUA_FUNCTION, NULL }, /* internal use only */
 	{ "menu", ACT_MENU, N_("Activate the menu") },
 	{ "next-frame", ACT_NEXT_FRAME, N_("Move to the next frame") },

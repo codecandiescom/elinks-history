@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.146 2004/01/06 23:26:57 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.147 2004/01/06 23:59:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -401,7 +401,7 @@ static struct strtonum action_table[] = {
 	{ "beginning-of-buffer", ACT_BEGINNING_OF_BUFFER, DACT(N_("Go to the first line of the buffer.")) },
 	{ "bookmark-manager", ACT_BOOKMARK_MANAGER, DACT(N_("Open bookmark manager")) },
 	{ "cache-manager", ACT_CACHE_MANAGER, DACT(N_("Open cache manager")) },
-	{ "cache-shrink", ACT_CACHE_SHRINK, DACT(N_("Free unused cache entries")) },
+	{ "cache-minimize", ACT_CACHE_MINIMIZE, DACT(N_("Free unused cache entries")) },
 	{ "cancel", ACT_CANCEL, DACT(N_("Cancel current state")) },
 	{ "cookie-manager", ACT_COOKIE_MANAGER, DACT(N_("Open cookie manager")) },
 	{ "cookies-load", ACT_COOKIES_LOAD, DACT(N_("Reload cookies file")) },

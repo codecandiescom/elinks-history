@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.120 2004/12/19 01:41:48 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.121 2004/12/19 02:04:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1222,7 +1222,7 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
 	struct form_view *fv;
 	union jsval_union v;
-	int counter = 0;
+	int counter = -1;
 	int index;
 	VALUE_TO_JSVAL_START;
 

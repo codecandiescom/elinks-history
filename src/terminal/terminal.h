@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.6 2003/05/04 19:30:54 pasky Exp $ */
+/* $Id: terminal.h,v 1.7 2003/05/04 19:39:51 pasky Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -27,8 +27,6 @@ struct event {
 
 #define MAX_TERM_LEN	32	/* this must be multiple of 8! (alignment problems) */
 #define MAX_CWD_LEN	256	/* this must be multiple of 8! (alignment problems) */
-
-#define ATTR_FRAME	0x8000
 
 enum term_mode_type {
 	TERM_DUMB,

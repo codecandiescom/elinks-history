@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.2 2003/05/04 19:36:42 pasky Exp $ */
+/* $Id: draw.h,v 1.3 2003/05/04 19:39:51 pasky Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -6,6 +6,8 @@
 #include "terminal/terminal.h"
 
 typedef unsigned short chr;
+
+#define ATTR_FRAME      0x8000
 
 /* Linux frame symbols table (it's magically converted to other terminals when
  * needed). */

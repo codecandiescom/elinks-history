@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.185 2004/06/16 15:20:15 zas Exp $ */
+/* $Id: form.c,v 1.186 2004/06/16 15:26:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -417,16 +417,17 @@ has_form_submit(struct document *document, struct form_control *frm)
 static inline void
 free_succesful_controls(struct list_head *submit)
 {
-	struct submitted_value *v;
+	struct submitted_value *sv, *svtmp;
 
 	assert(submit);
 	if_assert_failed return;
 
-	foreach (v, *submit) {
-		mem_free_if(v->name);
-		mem_free_if(v->value);
+	foreach (sv, *submit) {
+		svtmp = sv;
+		sv = sv->prev;
+		del_from_list(svtmp);
+		free_submitted_value(svtmp);
 	}
-	free_list(*submit);
 }
 
 static void

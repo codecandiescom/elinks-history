@@ -1,4 +1,4 @@
-## $Id: Makefile.doc,v 1.4 2003/06/10 02:12:51 jonas Exp $
+## $Id: Makefile.doc,v 1.5 2003/06/10 17:26:44 jonas Exp $
 
 SUFFIXES = .xml .1 .5
 HTMLDOCTOOL = @HTMLDOCTOOL@
@@ -8,12 +8,16 @@ DOCBUILDDIR = $(top_srcdir)/doc/
 
 %.html: %.xml
 	$(mkinstalldirs) $(DOCBUILDDIR)/html
-	$(HTMLDOCTOOL) -o $(DOCBUILDDIR)/html/`basename $< .xml`.html $<
+	test -n "$(HTMLDOCTOOL)" && $(HTMLDOCTOOL) -o $(DOCBUILDDIR)/html/`basename $< .xml` $<
 
 %.1: %.1.xml
 	$(mkinstalldirs) $(DOCBUILDDIR)/man/man1
-	$(MANDOCTOOL) -o $(DOCBUILDDIR)/man/man1 $<
+	test -n "$(MANDOCTOOL)" && $(MANDOCTOOL) -o $(DOCBUILDDIR)/man/man1 $<
 
 %.5: %.5.xml
 	$(mkinstalldirs) $(DOCBUILDDIR)/man/man5
-	$(MANDOCTOOL) -o $(DOCBUILDDIR)/man/man5 $<
+	test -n "$(MANDOCTOOL)" && $(MANDOCTOOL) -o $(DOCBUILDDIR)/man/man5 $<
+
+manpages-html: $(manpages_HTMLFORMAT)
+manpages-man: $(manpages_MANFORMAT)
+manpages: manpages-man manpages-html

@@ -1,9 +1,520 @@
-Sun Nov 30 19:45:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+Mon Dec  1 21:50:05 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: config/options.c, dialogs/Makefile.am, dialogs/download.c,
-	dialogs/status.c, dialogs/status.h, document/renderer.c,
-	sched/history.c, sched/session.c, sched/session.h,
-	viewer/text/link.c, viewer/text/view.c:
+	* src/dialogs/status.c:
+
+	Cleanup.  
+
+Mon Dec  1 21:47:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Don't be so optimistic.  
+
+Mon Dec  1 21:46:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Move window title code to display_window_title().  
+
+Mon Dec  1 21:06:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Cleanup title trimming.  
+
+Mon Dec  1 20:55:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Merge print_current_title() with other title tab displaying and
+	rename it display_tab_bar().  
+
+Mon Dec  1 20:44:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/status.c, viewer/text/link.h, viewer/text/view.c:
+
+	Move print_current_title() to the status dialog file.  
+
+Mon Dec  1 20:42:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	Fix IP address detection to be less naive and drastically reduce
+	false positives (triggered ie. by elinks -dump links-2.1pre14 bug
+	reported by Jonas).  
+
+Mon Dec  1 20:31:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, dialogs/status.c, sched/session.c,
+	sched/session.h:
+
+	Cache ui.window_title option in the session struct so we don't check
+	in the status updating hotspot.  
+
+Mon Dec  1 19:49:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/status.c, terminal/kbd.c:
+
+	We cannot check option values in slaves because their option system
+	may be out of sync. This was done for the ui.window_title option.
+	Instead check it at the top level in print_screen_status().  
+	
+	Fixes debian bug #209303: "window_title gets ignored by secondary
+	instances".  
+
+Mon Dec  1 19:04:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.c:
+
+	When I say fix, I mean fix.  
+
+Mon Dec  1 19:03:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.c:
+
+	Whoops, fixed typo fix introduced in the latest patch. Spotted by
+	Jonas.  
+
+Mon Dec  1 19:01:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.c:
+
+	Revert part of rev. 1.13 Jonas' merge of shrink_format_cache() and
+	delete_unused_format_cache_entries(). The two-phase cache cleanup
+	was reintroduced, thus hopefully fixing huge memory leaks
+	(basically, almost no documents were voluntarily freed from the
+	cache. This could also somehow affect bug 297, but probably not.  
+
+Mon Dec  1 18:55:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.c:
+
+	Reverted latest shrink_format_cache() change, it is still wrong.  
+
+Mon Dec  1 18:42:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/document.c:
+
+	Do not break when the format cache size is within the value of
+	format.size but keep looping to also check out of sync entries. This
+	is more in the spirit of the original cache shrinking code.  
+
+Mon Dec  1 18:28:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Typo fix.  
+
+Mon Dec  1 18:28:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Fixed trying to run already running connection.  
+
+Mon Dec  1 18:23:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, document/document.c, document/document.h:
+
+	Check that format_cache_entries is in sync and do not allow
+	recalculation.  
+
+Mon Dec  1 18:13:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: document.c, document.h, renderer.c:
+
+	Pass cache_entry to init_document() so cache locking is handled in
+	the document lifecycle functions. Also move global document option
+	re-initialization.  
+
+Mon Dec  1 18:06:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/mime/backend/common.c:
+
+	If @filenamelen is zero in get_next_path_filename(), return NULL.
+	This fixes infinite loop in protocol/file/cgi.c:test_path().  
+
+Mon Dec  1 16:33:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/lua/core.c:
+
+	Added missing includes.  
+
+Mon Dec  1 16:08:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Use horizontal border line as tab separator.  
+
+Mon Dec  1 16:05:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/document.c, document/refresh.c,
+	document/renderer.c, document/plain/renderer.c,
+	protocol/protocol.c, protocol/user.c, sched/session.c,
+	terminal/event.c, terminal/tab.c, viewer/dump/dump.c,
+	viewer/text/form.c, viewer/text/search.c, viewer/text/textarea.c,
+	viewer/text/view.c, viewer/text/vs.c:
+
+	Fsck #includes.  
+
+Mon Dec  1 15:45:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Minor simplifications.  
+
+Mon Dec  1 15:35:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/document.c, document/html/parser.c,
+	document/html/renderer.c, document/html/tables.c, sched/session.c,
+	viewer/text/form.c, viewer/text/link.c, viewer/text/textarea.c:
+
+	Defer inclusion of document/html/parser.h because of introduced
+	unsafe macros (ie. 'format').  
+
+Mon Dec  1 15:30:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Include document/html/frames.h for struct frameset_param.  
+
+Mon Dec  1 15:29:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/document.c:
+
+	Added missing include terminal/window.h.  
+
+Mon Dec  1 15:28:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/widget.c:
+
+	Added missing include bfu/inphist.h.  
+
+Mon Dec  1 15:26:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/hotkey.h:
+
+	Declare struct menu_head.  
+
+Mon Dec  1 15:26:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/: button.c, dialog.h:
+
+	Include terminal/window.h in bfu/dialog.h, dlg_data->win->term is so
+	common that...  
+
+Mon Dec  1 15:23:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/button.c:
+
+	Added missing include terminal/window.h.  
+
+Mon Dec  1 15:23:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/widget.h:
+
+	Added missing struct term_event decl.  
+
+Mon Dec  1 15:21:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/status.c:
+
+	Added missing includes.  
+
+Mon Dec  1 15:20:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/form.h:
+
+	Fixed missing struct doucment declaration.  
+
+Mon Dec  1 15:19:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/: button.h, checkbox.h, dialog.h, group.h, hierbox.h,
+	hotkey.h, inpfield.h, inphist.h, listbox.h, menu.h, msgbox.h,
+	text.h, widget.h:
+
+	Substitute includes by necessary struct declarations.  
+
+Mon Dec  1 15:11:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/search.h:
+
+	Reinclude document/view.h, we dereference struct document_view.  
+
+Mon Dec  1 15:09:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.h:
+
+	Re-include document/document.h because of enum cp_status.  
+
+Mon Dec  1 15:06:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/document.c:
+
+	Added missing include document/document.h.  
+
+Mon Dec  1 15:04:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/dialogs.h:
+
+	Substitute includes by necessary struct declarations.  
+
+Mon Dec  1 15:02:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/leds.c:
+
+	Added missing include terminal/window.h.  
+
+Mon Dec  1 15:01:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/document.c:
+
+	Restore alphabetical order of includes.  
+
+Mon Dec  1 15:01:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/document.c:
+
+	Added missing include document/view.h.  
+
+Mon Dec  1 15:00:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/session.h, document/plain/renderer.h:
+
+	Substitute includes by necessary struct declarations.  
+
+Mon Dec  1 14:55:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.h:
+
+	Revert accidentally committed incomplete patch.  
+
+Mon Dec  1 14:51:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/options.c, sched/session.h:
+
+	Fixed missing include document/document.h.  
+
+Mon Dec  1 14:51:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: connection.h, download.h:
+
+	Substitute includes by necessary struct declarations.  
+
+Mon Dec  1 14:41:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/style.c:
+
+	Added missing include terminal/terminal.h.  
+
+Mon Dec  1 14:40:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/: frames.h, parser.h, renderer.h:
+
+	Substitute includes by necessary struct declarations.  
+
+Mon Dec  1 14:36:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/style.h:
+
+	Substitute includes by necessary struct declarations.  
+
+Mon Dec  1 14:33:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: refresh.h, renderer.h, view.h:
+
+	Substitute includes by necessary struct declarations.  
+
+Mon Dec  1 14:31:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/terminal.h:
+
+	Typo fix.  
+
+Mon Dec  1 14:31:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/terminal.h:
+
+	Include config/option.h instead of declaring struct option. We
+	rename it to option_elinks.  
+
+Mon Dec  1 14:24:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/: color.h, draw.h, screen.h, tab.h, terminal.h,
+	window.h:
+
+	Substitute includes by necessary struct declarations.  
+
+Mon Dec  1 14:21:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/date.h:
+
+	lowlevel/ttime.* -> util/ttime.* 
+
+Mon Dec  1 14:17:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.h:
+
+	Declare struct screen_char instead of including terminal/draw.h.  
+
+Mon Dec  1 14:15:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: cookies/cookies.c, cookies/cookies.h,
+	document/html/frames.c, document/html/frames.h,
+	document/html/renderer.c, document/html/renderer.h, lowlevel/dns.c,
+	lowlevel/select.c, protocol/http/date.c:
+
+	lowlevel/ttime.* -> util/ttime.* 
+
+Mon Dec  1 14:13:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/libintl.h:
+
+	Include util/error.h only when debugging.  
+
+Mon Dec  1 14:11:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/protocol.h:
+
+	Substitute includes by necessary struct declarations.  
+
+Mon Dec  1 14:10:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.h:
+
+	Declare struct string instead of including util/string.h.  
+
+Mon Dec  1 14:10:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.h:
+
+	TODO about using string fields for the struct uri members.  
+
+Mon Dec  1 14:08:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/: form.h, link.h, search.h, textarea.h, view.h:
+
+	Substitute includes by necessary struct declarations.  
+
+Mon Dec  1 14:02:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/dump/dump.h:
+
+	Substitute includes by necessary struct declarations.  
+
+Mon Dec  1 14:01:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/select.h:
+
+	lowlevel/ttime.* -> util/ttime.* 
+
+Mon Dec  1 14:00:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/connect.h:
+
+	Declare struct connection instead of including sched/connection.h.  
+
+Mon Dec  1 14:00:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/: connect.h, dns.h:
+
+	Removed ancient comment.  
+
+Mon Dec  1 13:56:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/conv.h:
+
+	Added missing include <string.h>.  
+
+Mon Dec  1 13:55:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/download.c, globhist/globhist.c,
+	globhist/globhist.h, lowlevel/Makefile.am, lowlevel/ttime.c,
+	lowlevel/ttime.h, sched/connection.c, sched/connection.h,
+	sched/download.c, sched/download.h, sched/session.c,
+	util/Makefile.am, util/conv.h, util/ttime.c, util/ttime.h:
+
+	lowlevel/ttime.* -> util/ttime.* 
+
+Mon Dec  1 13:50:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: protocol/file/cgi.c, sched/connection.c,
+	sched/connection.h:
+
+	Merge connection.cgi_* to connection.cgi_pipes.  
+
+Mon Dec  1 12:30:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Minor tidyup.  
+
+Mon Dec  1 11:28:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Move tab bar updating to display_tab_bar().  
+
+Mon Dec  1 11:23:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Move status bar updating to display_status_bar().  
+
+Mon Dec  1 11:15:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/cgi.c:
+
+	Remove unused variable.  
+
+Mon Dec  1 10:57:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/cgi.c:
+
+	Replace ugly usage of strchr with scriptlen.  
+
+Mon Dec  1 10:51:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/cgi.c:
+
+	Don't mangle conn->uri but use memacpy and length variable instead.  
+
+Mon Dec  1 10:43:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/cgi.c:
+
+	Fix last patch.  
+
+Mon Dec  1 10:42:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/cgi.c:
+
+	Make test path take the path length and don't do any string
+	mangling.  
+
+Mon Dec  1 09:16:38 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Dec  1 06:23:46 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: config/options.inc, protocol/file/Makefile.am,
+	protocol/file/cgi.c, protocol/file/cgi.h, protocol/file/file.c,
+	sched/connection.c, sched/connection.h, sched/error.c:
+
+	Buggy CGI support.  
+
+Mon Dec  1 05:58:28 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
+Sun Nov 30 19:45:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/renderer.c, sched/history.c, sched/session.c,
+	sched/session.h, viewer/text/link.c, viewer/text/view.c:
 
 	Move session status management to separate file.  
 

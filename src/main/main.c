@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.129 2003/10/02 15:51:52 zas Exp $ */
+/* $Id: main.c,v 1.130 2003/10/02 16:25:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,12 +80,9 @@ static int ac;
 static unsigned char **av;
 static int init_b = 0;
 
-
 void
 init(void)
 {
-	void *info;
-	int len;
 	unsigned char *u = NULL;
 
 	init_static_version();
@@ -123,6 +120,7 @@ init(void)
 		terminate = 1;
 		return;
 	}
+
 	u = stracpy(u);
 	if (!u) goto fatal_error;
 
@@ -135,7 +133,8 @@ init(void)
 	while (!get_opt_bool_tree(cmdline_options, "no-connect")
 		&& !get_opt_bool_tree(cmdline_options, "dump")
 		&& !get_opt_bool_tree(cmdline_options, "source")) {
-
+		void *info;
+		int len;
 		int fd = af_unix_open();
 
 		if (fd == -1) break;
@@ -145,12 +144,7 @@ init(void)
 		info = create_session_info(get_opt_int_tree(cmdline_options,
 							    "base-session"),
 					   u, &len);
-		mem_free(u), u = NULL;
-		if (!info) {
-			retval = RET_FATAL;
-			terminate = 1;
-			return;
-		}
+		if (!info) goto fatal_error;
 
 		handle_trm(get_input_handle(), get_output_handle(),
 			   fd, fd, get_ctl_handle(), info, len);
@@ -160,7 +154,7 @@ init(void)
 		handle_basic_signals(NULL);
 		mem_free(info);
 
-		return;
+		goto end;
 	}
 
 	load_config();
@@ -198,18 +192,17 @@ init(void)
 			dump_start(u);
 		}
 
-		mem_free(u), u = NULL;
 		if (terminate) {
 			/* XXX? */
 			close_terminal_pipes();
 		}
-		return;
-
 	} else {
 		int attached;
+		int len;
+		void *info = create_session_info(get_opt_int_tree(cmdline_options,
+								  "base-session"),
+						 u, &len);
 
-		info = create_session_info(get_opt_int_tree(cmdline_options, "base-session"), u, &len);
-		mem_free(u), u = NULL;
 		if (!info) goto fatal_error;
 
 		attached = attach_terminal(get_input_handle(),
@@ -218,12 +211,13 @@ init(void)
 
 		if (attached == -1) {
 fatal_error:
-			if (u) mem_free(u), u = NULL; /* Just in case... */
 			retval = RET_FATAL;
 			terminate = 1;
-			return;
 		}
 	}
+
+end:
+	if (u) mem_free(u);
 }
 
 

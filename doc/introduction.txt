@@ -23,7 +23,10 @@ zones.
 Overview of the User Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-TODO: Title, Tab and Status bar.
+The main user interface of ELinks consists of the document view and dialog
+bars displaying the information such as the title of the currently viewed
+document, all opened tabs and the browsing status. The 3 bars are elaborated
+further below.
 
 The most important dialogs, that you will meet, include the Main, Link and Tab
 menus and the different managers. The menus serve as entry points to the
@@ -49,11 +52,23 @@ introduction to the most common keybindings.
 The Title, Tab and Status bar
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+The title bars main purpose is to display the title of the current document.
 Documents bigger than can be displayed with the current screen size are
 divided into subpages. In this case the current document position is indicated
 in the far right of the title bar as a suffix to the actual document title.
 The syntax is: ( <current subpage> / <number of subpages> ), an example is
 "(4/9)" that indicates the 4th subpage of 9 subpages.
+
+The tab bar by default is only visible when 2 or more tabs are open. It is
+divided into slots containing the trimmed title of the tabs loaded document.
+Between each tab is a separator. The current tab is highlighted and all
+tabs that has not been viewed after being loaded are highlighted as fresh.
+Tabs are explained in details in the tabs.txt file.
+
+The status bar has multiple purposes. Most of the time it will contain the URI
+(and title) of the currently selected link. If a link is followed connection
+information is shown in the status bar. When using cursor routing the status
+bar will show the coordinates of the cursor when a link is not followed.
 
 
 The Main, Link and Tab Menus
@@ -238,4 +253,4 @@ Hints and Odd Features
 
  - How to move forward in the document history ('u').
 
-$Id: introduction.txt,v 1.5 2004/12/25 19:05:15 jonas Exp $
+$Id: introduction.txt,v 1.6 2004/12/25 23:39:32 jonas Exp $

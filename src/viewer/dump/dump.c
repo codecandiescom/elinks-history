@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.64 2003/11/20 21:27:12 zas Exp $ */
+/* $Id: dump.c,v 1.65 2003/11/21 10:22:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -275,20 +275,8 @@ dump_to_file(struct document *document, int fd)
 
 				c = document->data[y].chars[x].data;
 
-				/* This line looks weird and hacky,
-				 * it's equivalent to:
-				 * if (c == 1) c = ' ';
-				 * I disable it, since i think it's a remain of an old hack,
-				 * i did'nt find yet if this char is especially set to 1 in
-				 * current code. Please tell me if you find such a thing.
-				 * Note i already removed some similar stuff in clr_spaces():
-				 * --- elinks/src/document/html/parser.c   2003/11/14 15:03:48     1.263
-				 * +++ elinks/src/document/html/parser.c   2003/11/15 14:00:33     1.264
-				 * */
-				/* if (c == 1) c += ' ' - 1; */
-				/* I re-add it since it causes ^A to be inserted in dumps (ie. www.yahoo.com),
-				 * but i would like to know where and why this special char is set. */
-				if (c == 1) c = ' ';
+				/* &nbsp; was replaced by a special char. */
+				if (c == NBSP_CHAR) c = ' ';
 
 				if ((attr & SCREEN_ATTR_FRAME)
 				    && c >= 176 && c < 224)

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.283 2003/11/18 22:41:39 pasky Exp $ */
+/* $Id: parser.c,v 1.284 2003/11/21 10:22:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1800,7 +1800,7 @@ clr_spaces(unsigned char *name)
 	assert(name);
 
 	for (nm = name; *nm; nm++)
-		if (*nm < ' ') *nm = ' ';
+		if (*nm < ' ' || *nm == NBSP_CHAR) *nm = ' ';
 	for (nm = name; *nm; nm++) {
 		if (nm[0] == ' ' && (second == name || nm[1] == ' ' || !nm[1]))
 			continue;

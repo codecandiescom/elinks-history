@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.69 2003/11/16 17:28:17 jonas Exp $ */
+/* $Id: charsets.c,v 1.70 2003/11/21 10:22:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,7 +135,8 @@ u2cp(unicode_val u, int to)
 	int s;
 
 	if (u < 128) return strings[u];
-	if (u == 0xa0) return "\001";
+	/* To mark non breaking spaces, we use a special char NBSP_CHAR. */
+	if (u == 0xa0) return NBSP_CHAR_STRING;
 	if (u == 0xad) return "";
 
 	if (u < 0xa0) {

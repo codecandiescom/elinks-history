@@ -1,4 +1,4 @@
-/* $Id: charsets.h,v 1.10 2003/10/29 13:26:45 zas Exp $ */
+/* $Id: charsets.h,v 1.11 2003/11/21 10:22:20 zas Exp $ */
 
 #ifndef EL__CHARSETS_H
 #define EL__CHARSETS_H
@@ -8,8 +8,12 @@
 
 typedef uint32_t unicode_val;
 
-/* UCS/Unicode replacement character */
+/* UCS/Unicode replacement character. */
 #define UCS_NO_CHAR ((unicode_val) 0xFFFD)
+
+/* &nbsp; replacement character. See u2cp(). */
+#define NBSP_CHAR ((unsigned char) 1)
+#define NBSP_CHAR_STRING "\001"
 
 struct conv_table {
 	int t;

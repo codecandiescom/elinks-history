@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.173 2003/10/24 21:05:41 pasky Exp $ */
+/* $Id: menu.c,v 1.174 2003/10/24 21:11:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,6 +170,7 @@ flush_caches(struct terminal *term, void *d, void *e)
 	shrink_memory(1);
 }
 
+
 static void
 go_historywards(struct terminal *term, struct location *target, struct session *ses)
 {
@@ -180,76 +181,45 @@ static struct menu_item no_hist_menu[] = {
 	INIT_MENU_ITEM(N_("No history"), M_BAR, NULL, NULL, FREE_NOTHING, 0),
 	NULL_MENU_ITEM
 };
-
-static void
-history_menu(struct terminal *term, void *ddd, struct session *ses)
-{
-	struct location *loc;
-	struct menu_item *mi = NULL;
-
-	if (!have_location(ses)) goto loop_done;
-
-	for (loc = cur_loc(ses)->prev;
-	     loc != (struct location *) &ses->history.history;
-	     loc = loc->prev) {
-		unsigned char *url;
-
-		if (!mi) {
-			mi = new_menu(FREE_LIST | FREE_TEXT);
-			if (!mi) return;
-		}
-
-		url = memacpy(loc->vs.url, loc->vs.url_len);
-		if (url) {
-			unsigned char *pc = strchr(url, POST_CHAR);
-			if (pc) *pc = '\0';
-
-			add_to_menu(&mi, url, "", (menu_func) go_historywards,
-			    	    (void *) loc, 0, 1);
-		}
-	}
-loop_done:
-
-	if (!mi)
-		do_menu(term, no_hist_menu, ses, 0);
-	else
-		do_menu(term, mi, ses, 0);
+	
+#define history_menu_model(name__, dir__) \
+static void \
+name__(struct terminal *term, void *ddd, struct session *ses) \
+{ \
+	struct location *loc; \
+	struct menu_item *mi = NULL; \
+ \
+	if (!have_location(ses)) goto loop_done; \
+ \
+	for (loc = cur_loc(ses)->dir__; \
+	     loc != (struct location *) &ses->history.history; \
+	     loc = loc->dir__) { \
+		unsigned char *url; \
+ \
+		if (!mi) { \
+			mi = new_menu(FREE_LIST | FREE_TEXT); \
+			if (!mi) return; \
+		} \
+ \
+		url = memacpy(loc->vs.url, loc->vs.url_len); \
+		if (url) { \
+			unsigned char *pc = strchr(url, POST_CHAR); \
+			if (pc) *pc = '\0'; \
+ \
+			add_to_menu(&mi, url, "", (menu_func) go_historywards, \
+			    	    (void *) loc, 0, 1); \
+		} \
+	} \
+loop_done: \
+ \
+	if (!mi) \
+		do_menu(term, no_hist_menu, ses, 0); \
+	else \
+		do_menu(term, mi, ses, 0); \
 }
 
-static void
-unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
-{
-	struct location *loc;
-	struct menu_item *mi = NULL;
-
-	if (!have_location(ses)) goto loop_done;
-
-	for (loc = cur_loc(ses)->next;
-	     loc != (struct location *) &ses->history.history;
-	     loc = loc->next) {
-		unsigned char *url;
-
-		if (!mi) {
-			mi = new_menu(FREE_LIST | FREE_TEXT);
-			if (!mi) return;
-		}
-
-		url = memacpy(loc->vs.url, loc->vs.url_len);
-		if (url) {
-			unsigned char *pc = strchr(url, POST_CHAR);
-			if (pc) *pc = '\0';
-
-			add_to_menu(&mi, url, "", (menu_func) go_historywards,
-			    	    (void *) loc, 0, 1);
-		}
-	}
-loop_done:
-
-	if (!mi)
-		do_menu(term, no_hist_menu, ses, 0);
-	else
-		do_menu(term, mi, ses, 0);
-}
+history_menu_model(history_menu, prev);
+history_menu_model(unhistory_menu, next);
 
 
 static struct menu_item no_downloads_menu[] = {

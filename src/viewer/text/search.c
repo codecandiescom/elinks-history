@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.20 2003/10/04 18:26:51 kuser Exp $ */
+/* $Id: search.c,v 1.21 2003/10/04 19:53:17 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -271,28 +271,14 @@ lowered_string(unsigned char *s, int l)
 }
 
 static int
-is_in_range(struct document *f, int y, int yw, unsigned char *text,
-	    int *min, int *max)
+is_in_range_plain(struct document *f, int y, int yy, unsigned char *text, int l,
+		  int *min, int *max, struct search *s1, struct search *s2)
 {
 	unsigned char *txt;
-	struct search *s1, *s2;
 	int found = 0;
-	int l;
-	int yy;
-
-	assert(f && text && min && max);
-	if_assert_failed return 0;
-
-	*min = MAXINT, *max = 0;
-	l = strlen(text);
-
-	if (get_range(f, y, yw, l, &s1, &s2))
-		return 0;
 
 	txt = lowered_string(text, l);
 	if (!txt) return 0;
-
-	yy = y + yw;
 
 	for (; s1 <= s2; s1++) {
 		register int i;
@@ -322,6 +308,25 @@ srch_failed:
 	mem_free(txt);
 
 	return found;
+}
+
+static int
+is_in_range(struct document *f, int y, int yw, unsigned char *text,
+	    int *min, int *max)
+{
+	struct search *s1, *s2;
+	int l;
+
+	assert(f && text && min && max);
+	if_assert_failed return 0;
+
+	*min = MAXINT, *max = 0;
+	l = strlen(text);
+
+	if (get_range(f, y, yw, l, &s1, &s2))
+		return 0;
+
+	return is_in_range_plain(f, y, y + yw, text, l, min, max, s1, s2);
 }
 
 #define realloc_points(pts, size) \

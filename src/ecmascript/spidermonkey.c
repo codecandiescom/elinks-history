@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.145 2004/12/19 16:53:49 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.146 2004/12/19 19:28:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -354,6 +354,7 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		break;
 
 found_parent:
+		some_domain_security_check();
 		if (doc_view->vs.ecmascript_fragile)
 			ecmascript_reset_state(&doc_view->vs);
 		assert(doc_view->ecmascript);
@@ -365,12 +366,27 @@ found_parent:
 	{
 		struct document_view *doc_view = vs->doc_view;
 		struct document_view *top_view = doc_view->session->doc_view;
+		JSObject *newjsframe;
 
 		assert(top_view && top_view->vs);
 		if (top_view->vs->ecmascript_fragile)
 			ecmascript_reset_state(top_view->vs);
 		if (!top_view->vs->ecmascript) break;
-		P_OBJECT(JS_GetGlobalObject(top_view->vs->ecmascript->backend_data));
+		newjsframe = JS_GetGlobalObject(top_view->vs->ecmascript->backend_data);
+
+		/* Keep this unrolled this way. Will have to check document.domain
+		 * JS property. */
+		/* Note that this check is perhaps overparanoid. If top windows
+		 * is alien but some other child window is not, we should still
+		 * let the script walk thru. That'd mean moving the check to
+		 * other individual properties in this switch. */
+		if (compare_uri(vs->uri, top_view->vs->uri, URI_HOST))
+			P_OBJECT(newjsframe);
+		else
+			/****X*X*X*** SECURITY VIOLATION! RED ALERT, SHIELDS UP! ***X*X*X****\
+			|* (Pasky was apparently looking at the Links2 JS code   .  ___ ^.^ *|
+			\* for too long.)                                        `.(,_,)\o/ */
+			P_UNDEF();
 		break;
 	}
 	default:

@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.14 2003/08/02 17:31:40 jonas Exp $ */
+/* $Id: formhist.c,v 1.15 2003/08/02 17:50:10 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -34,8 +34,6 @@ static int loaded = 0;
 static void
 done_form_history_item(struct form_history_item *item)
 {
-	if (item->url) mem_free(item->url);
-
 	while (!list_empty(item->submit)) {
 		struct submitted_value *sv = item->submit.next;
 
@@ -46,6 +44,21 @@ done_form_history_item(struct form_history_item *item)
 	}
 
         mem_free(item);
+}
+
+static struct form_history_item *
+init_form_history_item(unsigned char *url)
+{
+	struct form_history_item *item;
+	int urllen = strlen(url) + 1;
+
+	item = mem_calloc(1, sizeof(struct form_history_item) + urllen);
+	if (!item) return NULL;
+
+	init_list(item->submit);
+	memcpy(item->url, url, urllen);
+
+	return item;
 }
 
 void
@@ -114,13 +127,10 @@ init_form_history(void)
 
 		tmp[strlen(tmp) - 1] = '\0';
 
-		form = mem_alloc(sizeof(struct form_history_item));
+		form = init_form_history_item(tmp);
 		if (!form) return 0;
 
-		init_list(*form);
-		init_list(form->submit);
-		form->url = stracpy(tmp);
-		if (!form->url || !read_item_submit_list(form, f)) {
+		if (!read_item_submit_list(form, f)) {
 			done_form_history_item(form);
 			ret = 0;
 			break;
@@ -203,13 +213,8 @@ remember_form(struct form_history_item *fmem_data)
 	struct secure_save_info *ssi;
 	unsigned char *file;
 
-	form = mem_calloc(1, sizeof(struct form_history_item));
+	form = init_form_history_item(fmem_data->url);
 	if (!form) return 0;
-
-	init_list(*form);
-	init_list(form->submit);
-	form->url = stracpy(fmem_data->url);
-	if (!form->url) goto fail;
 
 	file = straconcat(elinks_home, "formhist", NULL);
 	if (!file) goto fail;
@@ -293,10 +298,8 @@ memorize_form(struct session *ses, struct list_head *submit,
 
 	if (!save || form_already_saved(frm->action, submit)) return NULL;
 
-	fm_data = mem_alloc(sizeof(struct form_history_item));
+	fm_data = init_form_history_item(frm->action);
 	if (!fm_data) return NULL;
-
-	init_list(fm_data->submit);
 
 	/* Set up a new list_head, as @submit will be destroyed as soon as
 	 * get_form_url() returns */
@@ -305,12 +308,6 @@ memorize_form(struct session *ses, struct list_head *submit,
 	sb->prev = submit->prev;
 	((struct submitted_value *) sb->next)->prev = (struct submitted_value *) sb;
 	((struct submitted_value *) sb->prev)->next = (struct submitted_value *) sb;
-
-	fm_data->url = stracpy(frm->action);
-	if (!fm_data->url) {
-		mem_free(fm_data);
-		return NULL;
-	}
 
 	msg_box(ses->tab->term, NULL, 0,
 		N_("Form history"), AL_CENTER,

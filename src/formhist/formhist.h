@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.h,v 1.7 2003/08/02 17:16:47 jonas Exp $ */
+/* $Id: formhist.h,v 1.8 2003/08/02 17:50:10 jonas Exp $ */
 
 #ifndef EL__FORMSMEM_FORMSMEM_H
 #define EL__FORMSMEM_FORMSMEM_H
@@ -13,7 +13,7 @@ struct form_history_item {
 	struct list_head submit;
 
 	/* <action> URI for this form. Keep last! */
-	unsigned char *url;
+	unsigned char url[1];
 };
 
 /* Queries the form history for the form control value with the given @name on

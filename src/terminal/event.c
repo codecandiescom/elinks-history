@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.77 2004/10/25 19:10:14 pasky Exp $ */
+/* $Id: event.c,v 1.78 2004/11/08 15:52:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,6 +220,12 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 		 * are doing a remote session so quit.*/
 		if (!decode_session_info(term, info)) {
 			destroy_terminal(term);
+			/* Make sure the user is notified if the initialization
+			 * of the first session fails. */
+			if (terminate) {
+				usrerror(_("Failed to create session.", term));
+				retval = RET_FATAL;
+			}
 			return 0;
 		}
 

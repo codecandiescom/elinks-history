@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.322 2004/06/30 01:07:32 jonas Exp $ */
+/* $Id: tables.c,v 1.323 2004/06/30 01:31:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -864,8 +864,7 @@ draw_table_cells(struct table *table, int x, int y)
 
 			draw_table_cell(table, col, row, xp, yp);
 
-			yp += table->rows_heights[row] +
-			      (row < table->rows - 1 && has_hline_width(table, row + 1));
+			yp += row_height;
 		}
 
 		if (col < table->cols - 1) {

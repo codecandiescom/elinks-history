@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.132 2003/12/26 09:54:38 zas Exp $ */
+/* $Id: menu.c,v 1.133 2003/12/26 10:19:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -232,6 +232,25 @@ scroll_menu(struct menu *menu, int d)
 	int_bounds(&menu->view, 0, menu->ni - w);
 }
 
+static inline void
+draw_menu_right_text(struct terminal *term, unsigned char *text, int len,
+		     int x, int y, int width, struct color_pair *color)
+{
+	unsigned char c;
+	int xbase;
+
+	if (len < 0) len = strlen(text);
+	if (!len) return;
+
+	xbase = x + width - len;
+
+	for (x = len - 1;
+	     (x >= 0) && (width - 2 >= len - x)
+	     && (c = text[x]);
+	     x--)
+		draw_char(term, xbase + x, y, c, 0, color);
+}
+
 static void
 display_menu(struct terminal *term, struct menu *menu)
 {
@@ -241,17 +260,17 @@ display_menu(struct terminal *term, struct menu *menu)
 	struct color_pair *hotkey_color = get_bfu_color(term, "menu.hotkey.normal");
 	struct color_pair *selected_hotkey_color = get_bfu_color(term, "menu.hotkey.selected");
 	int mx = menu->x + 1;
-	int mxw = menu->width - 2;
+	int mwidth = menu->width - 2;
 	int my = menu->y + 1;
-	int myw = menu->height - 2;
-	int p, s;
+	int mheight = menu->height - 2;
+	int p, y;
 
-	draw_area(term,	mx, my, mxw, myw, ' ', 0, normal_color);
+	draw_area(term,	mx, my, mwidth, mheight, ' ', 0, normal_color);
 	draw_border(term, menu->x, menu->y, menu->width, menu->height, frame_color, 1);
 
-	for (p = menu->view, s = my;
-	     p < menu->ni && p < menu->view + myw;
-	     p++, s++) {
+	for (p = menu->view, y = my;
+	     p < menu->ni && p < menu->view + mheight;
+	     p++, y++) {
 		struct color_pair *color = normal_color;
 		struct color_pair *hkcolor = hotkey_color;
 #ifdef DEBUG
@@ -265,20 +284,20 @@ display_menu(struct terminal *term, struct menu *menu)
 			color = selected_color;
 			hkcolor = selected_hotkey_color;
 
-			set_cursor(term, mx, s, 1);
-			set_window_ptr(menu->win, menu->x + menu->width, s);
-			draw_area(term, mx, s, mxw, 1, ' ', 0, color);
+			set_cursor(term, mx, y, 1);
+			set_window_ptr(menu->win, menu->x + menu->width, y);
+			draw_area(term, mx, y, mwidth, 1, ' ', 0, color);
 		}
 
 		if (mi_is_horizontal_bar(menu->items[p])) {
 			/* Horizontal separator */
-			draw_border_char(term, menu->x, s,
+			draw_border_char(term, menu->x, y,
 					 BORDER_SRTEE, frame_color);
 
-			draw_area(term, mx, s, mxw, 1,
+			draw_area(term, mx, y, mwidth, 1,
 				  BORDER_SHLINE, SCREEN_ATTR_FRAME, frame_color);
 
-			draw_border_char(term, mx + mxw, s,
+			draw_border_char(term, mx + mwidth, y,
 					 BORDER_SLTEE, frame_color);
 
 		} else {
@@ -306,7 +325,7 @@ display_menu(struct terminal *term, struct menu *menu)
 					if (l < 0) l = -l, double_hk = 1;
 #endif
 					for (x = 0;
-					     x < mxw - 2
+					     x < mwidth - 2
 					     && (c = text[x]);
 					     x++) {
 						if (!hk && l
@@ -317,14 +336,14 @@ display_menu(struct terminal *term, struct menu *menu)
 
 						if (hk == 1) {
 #ifdef DEBUG
-							draw_char(term, xbase + x - 1, s, c, 0,
+							draw_char(term, xbase + x - 1, y, c, 0,
 								  (double_hk ? selected_hotkey_color : hkcolor));
 #else
-							draw_char(term, xbase + x - 1, s, c, 0, hkcolor);
+							draw_char(term, xbase + x - 1, y, c, 0, hkcolor);
 #endif
 							hk = 2;
 						} else {
-							draw_char(term, xbase + x - !!hk, s, c, 0, color);
+							draw_char(term, xbase + x - !!hk, y, c, 0, color);
 						}
 					}
 
@@ -333,29 +352,16 @@ display_menu(struct terminal *term, struct menu *menu)
 
 					/* No hotkey, just left text. */
 					for (x = 0;
-				     	     x < mxw - 2
+				     	     x < mwidth - 2
 				     	     && (c = text[x]);
 				     	     x++)
-						draw_char(term, xbase + x, s, c, 0, color);
+						draw_char(term, xbase + x, y, c, 0, color);
 				}
 			}
 
 			if (mi_is_submenu(menu->items[p])) {
-				unsigned char *rtext = menu->items[p].rtext;
-
-				if (mi_text_translate(menu->items[p]))
-					rtext = _(rtext, term);
-
-				if (m_submenu_len) {
-					int l = m_submenu_len;
-					int xbase = menu->x + mxw - l;
-
-					for (x = l - 1;
-					     (x >= 0) && (mxw - 2 >= l - x)
-					     && (c = m_submenu[x]);
-				    	     x--)
-						draw_char(term, xbase + x, s, c, 0, color);
-				}
+				draw_menu_right_text(term, m_submenu, m_submenu_len,
+						     menu->x, y, mwidth, color);
 
 			} else if (mi_has_right_text(menu->items[p])) {
 				unsigned char *rtext = menu->items[p].rtext;
@@ -365,14 +371,8 @@ display_menu(struct terminal *term, struct menu *menu)
 
 				if (*rtext) {
 					/* There's a right text, so print it */
-					int l = strlen(rtext);
-					int xbase = menu->x + mxw - l;
-
-					for (x = l - 1;
-					     (x >= 0) && (mxw - 2 >= l - x)
-					     && (c = rtext[x]);
-				    	     x--)
-						draw_char(term, xbase + x, s, c, 0, color);
+					draw_menu_right_text(term, rtext, -1,
+							     menu->x, y, mwidth, color);
 				}
 			}
 		}

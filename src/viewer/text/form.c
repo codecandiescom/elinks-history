@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.236 2004/07/24 05:12:16 miciah Exp $ */
+/* $Id: form.c,v 1.237 2004/07/27 16:26:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1358,7 +1358,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 			break;
 
 		default:
-			if (ev->y || ev->x < 32 || ev->x >= 256) {
+			if (!check_kbd_textinput_key(ev)) {
 				status = FRAME_EVENT_IGNORED;
 				break;
 			}

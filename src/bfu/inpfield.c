@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.152 2004/07/27 16:11:42 jonas Exp $ */
+/* $Id: inpfield.c,v 1.153 2004/07/27 16:26:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -465,7 +465,7 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			return EVENT_PROCESSED;
 
 		default:
-			if (ev->x >= ' ' && ev->x < 0x100 && !ev->y) {
+			if (check_kbd_textinput_key(ev)) {
 				int cdata_len = strlen(widget_data->cdata);
 
 				if (cdata_len >= widget_data->widget->datalen - 1)

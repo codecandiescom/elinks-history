@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.20 2002/06/21 14:11:05 pasky Exp $ */
+/* $Id: options.c,v 1.21 2002/06/21 16:54:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -690,8 +690,8 @@ unsigned char doc_str[4];
 void
 cache_refresh(void *xxx)
 {
-	get_opt_long("document.cache.memory_cache_size") = atoi(mc_str) * 1024;
-	get_opt_int("document.cache.format_cache_size") = atoi(doc_str);
+	get_opt_long("document.cache.memory.size") = atoi(mc_str) * 1024;
+	get_opt_int("document.cache.format.size") = atoi(doc_str);
 	count_format_cache();
 	shrink_memory(0);
 }
@@ -707,8 +707,8 @@ cache_opt(struct terminal *term, void *xxx, void *yyy)
 {
 	struct dialog *d;
 
-	snprint(mc_str, 8, get_opt_long("document.cache.memory_cache_size") / 1024);
-	snprint(doc_str, 4, get_opt_int("document.cache.format_cache_size"));
+	snprint(mc_str, 8, get_opt_long("document.cache.memory.size") / 1024);
+	snprint(doc_str, 4, get_opt_int("document.cache.format.size"));
 
 	d = mem_alloc(sizeof(struct dialog) + 5 * sizeof(struct dialog_item));
 	if (!d) return;

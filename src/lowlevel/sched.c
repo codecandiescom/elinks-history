@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.32 2002/06/17 07:42:31 pasky Exp $ */
+/* $Id: sched.c,v 1.33 2002/06/21 16:54:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1013,7 +1013,7 @@ detach_connection(struct status *stat, int pos)
 
 		l = (c->est_length == -1) ? c->from : c->est_length;
 
-		if (l < get_opt_long("document.cache.memory_cache_size") * MAX_CACHED_OBJECT)
+		if (l < get_opt_long("document.cache.memory.size") * MAX_CACHED_OBJECT)
 			return;
 
 		l = 0;

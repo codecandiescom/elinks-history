@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.14 2003/07/03 00:15:09 pasky Exp $ */
+/* $Id: connection.h,v 1.15 2003/07/03 01:11:53 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -170,16 +170,13 @@ extern struct list_head queue;
 
 void check_queue(void);
 long connect_info(int);
-/* void send_connection_info(struct connection *c); */
 void setcstate(struct connection *, int);
 
 int get_keepalive_socket(struct connection *);
 void add_keepalive_socket(struct connection *, ttime);
 
-/* void run_connection(struct connection *); */
 void retry_connection(struct connection *);
 void abort_connection(struct connection *);
-/* void end_connection(struct connection *); */
 
 void abort_conn_with_state(struct connection *, int);
 void retry_conn_with_state(struct connection *, int);
@@ -191,7 +188,6 @@ void detach_connection(struct status *, int);
 void abort_all_connections(void);
 void abort_background_connections(void);
 
-/* void connection_timeout(struct connection *); */
 void set_timeout(struct connection *);
 
 #endif

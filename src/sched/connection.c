@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.33 2003/07/03 00:15:09 pasky Exp $ */
+/* $Id: connection.c,v 1.34 2003/07/03 01:11:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1172,17 +1172,3 @@ abort_background_connections(void)
 			i++;
 	}
 }
-
-/* FIXME: trash it ? --Zas */
-#if 0
-/* Not used for now. */
-void
-reset_timeout(struct connection *c)
-{
-	if (c->timer != -1) {
-		kill_timer(c->timer);
-		c->timer = -1;
-	}
-}
-#endif
-

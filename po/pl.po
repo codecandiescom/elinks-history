@@ -4871,8 +4871,8 @@ msgid ""
 "Cache size     : %ld bytes\n"
 msgstr ""
 "Zaalokowane               : %ld bajtów\n"
-"Naprawdê zaalokowane      : %ld bajtów (x%0.2f)Rozmiar pamiêci podrêcznej: %"
-"ld bajtów\n"
+"Naprawdê zaalokowane      : %ld bajtów (x%0.2f)\n"
+"Rozmiar pamiêci podrêcznej: %ld bajtów\n"
 
 #: src/dialogs/info.c:194
 #, c-format

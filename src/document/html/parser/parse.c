@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.98 2004/10/27 22:35:05 zas Exp $ */
+/* $Id: parse.c,v 1.99 2004/11/08 02:57:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -277,7 +277,7 @@ get_width(unsigned char *a, unsigned char *name, int limited)
 	unsigned char *end;
 	int percentage = 0;
 	int len;
-	int width;
+	long width;
 
 	if (!value) return -1;
 
@@ -308,7 +308,7 @@ get_width(unsigned char *a, unsigned char *name, int limited)
 
 	/* @end points into the @value string so check @end position
 	 * before freeing @value. */
-	if (errno || *end) {
+	if (errno || *end || width >= INT_MAX) {
 		/* Not a valid number. */
 		mem_free(value);
 		return -1;
@@ -329,7 +329,8 @@ get_width(unsigned char *a, unsigned char *name, int limited)
 			width = WIDTH_PIXELS2CHARS(width);
 		}
 
-		int_upper_bound(&width, maxwidth);
+		if (width > maxwidth)
+			width = maxwidth;
 
 	} else {
 		if (percentage) {
@@ -344,7 +345,8 @@ get_width(unsigned char *a, unsigned char *name, int limited)
 
 #undef WIDTH_PIXELS2CHARS
 
-	int_lower_bound(&width, 0);
+	if (width < 0)
+		width = 0;
 
 	return width;
 }

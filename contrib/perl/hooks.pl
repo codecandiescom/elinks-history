@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.75 2005/03/27 23:01:07 rrowan Exp $
+# $Id: hooks.pl,v 1.76 2005/03/30 20:20:53 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -653,11 +653,11 @@ sub goto_url_hook
 	}
 
 	if ($url =~ '^(zip|usps)(| .*)$'
-	    or $url =~ '^ip(| .*)$'
-	    or $url =~ '^whois(| .*)$'
-	    or $url =~ '^rfc(| .*)$'
-	    or $url =~ '^(weather|w)(| .*)$'
-	    or $url =~ '^(whatis|uptime)(| .*)$') {
+		or $url =~ '^ip(| .*)$'
+		or $url =~ '^whois(| .*)$'
+		or $url =~ '^rfc(| .*)$'
+		or $url =~ '^(weather|w)(| .*)$'
+		or $url =~ '^(whatis|uptime)(| .*)$') {
 		my ($thingy) = $url =~ /^[a-z]* (.*)/;
 		my ($domain) = $current_url =~ /([a-z0-9-]+\.(com|net|org|edu|gov|mil))/;
 
@@ -744,8 +744,8 @@ sub goto_url_hook
 
 	# Babelfish ("babelfish german english"  or  "bf de en")
 	if (($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]* [a-zA-Z]*)$')
-	    or ($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]*(| [a-zA-Z]*))$'
-	        and loadrc("language") and $current_url))
+		or ($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]*(| [a-zA-Z]*))$'
+		and loadrc("language") and $current_url))
 	{
 		$url = 'http://babelfish.altavista.com' if ($url =~ /^[a-z]*$/);
 		if ($url =~ /^[a-z]* /)
@@ -811,6 +811,12 @@ sub goto_url_hook
 		if ($url =~ '^b')
 		{
 			my $bugzilla = 'http://bugzilla.elinks.or.cz';
+			if (loadrc("email"))
+			{
+				$bugzilla = $bugzilla .
+					'/buglist.cgi?bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&email1='
+					. loadrc("email") . '&emailtype1=exact&emailassigned_to1=1&emailreporter1=1';
+			}
 			if (not $bug)
 			{
 				return $bugzilla;

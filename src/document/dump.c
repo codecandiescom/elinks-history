@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.17 2002/05/26 18:54:24 pasky Exp $ */
+/* $Id: dump.c,v 1.18 2002/06/07 18:06:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,10 +108,10 @@ nextfrag:
 		
 		o.xp = 0;
 		o.yp = 1;
-		o.xw = get_opt_int_tree(cmdline_options, "document.dump_width");
+		o.xw = get_opt_int("document.dump.width");
 		o.yw = 25;
 		o.col = 0;
-		o.cp = 0;
+		o.cp = get_opt_int("document.dump.codepage");
 		mk_document_options(&o);
 		o.plain = 0;
 		o.frames = 0;

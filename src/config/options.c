@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.40 2002/06/07 17:03:55 pasky Exp $ */
+/* $Id: options.c,v 1.41 2002/06/07 18:06:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #include "config/options.h"
 #include "config/opttypes.h"
 #include "document/html/colors.h"
+#include "intl/charsets.h"
 #include "intl/language.h"
 #include "lowlevel/dns.h"
 #include "protocol/types.h"
@@ -582,6 +583,20 @@ register_options()
 
 
 	add_opt_tree("document",
+		"dump", 0,
+		"Dump output options.");
+
+	add_opt_codepage("document.dump",
+		"codepage", 0, get_cp_index("us-ascii"),
+		"Codepage used in dump output.");
+
+	add_opt_int("document.dump",
+		"width", 0, 40, 512, 80,
+		"Size of screen in characters, when dumping a HTML document.");
+
+
+
+	add_opt_tree("document",
 		"history", 0,
 		"History options.");
 
@@ -611,16 +626,12 @@ register_options()
 
 
 	add_opt_codepage("document",
-		"assume_codepage", 0, 0,
+		"assume_codepage", 0, get_cp_index("ISO-8859-1"),
 		"Default document codepage.");
 
 	add_opt_bool("document",
 		"force_assume_codepage", 0, 0,
 		"Ignore charset info sent by server.");
-
-	add_opt_int("document",
-		"dump_width", 0, 40, 512, 80,
-		"Size of screen in characters, when dumping a HTML document.");
 
 
 

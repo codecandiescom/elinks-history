@@ -13,15 +13,7 @@ dnl Load feature configuration file.
 dnl ===================================================================
 
 features="$srcdir/features.conf"
-
-AC_MSG_CHECKING([for features.conf])
-if test -e "$features"; then
-	. $features
-	AC_MSG_RESULT($features)
-else
-	AC_MSG_RESULT(not found)
-fi
-
+AC_CHECK_FILE("$features", [ . $features ])
 
 dnl ===================================================================
 dnl Checks for programs.
@@ -188,7 +180,7 @@ AC_DEFUN([EL_MSG_CONFIG],
 	if test "$dots" = "$DOTS"; then
 		dots=""
 	fi
-		
+
 	if test -z "$value"; then
 		value="[$]$1"
 	fi

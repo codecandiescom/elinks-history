@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.106 2003/11/29 01:46:26 jonas Exp $ */
+/* $Id: dialog.c,v 1.107 2003/11/29 19:03:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,14 +61,26 @@ do_dialog(struct terminal *term, struct dialog *dlg,
 	return dlg_data;
 }
 
-static void
-redraw_dialog(struct dialog_data *dlg_data)
+static inline void cycle_widget_focus(struct dialog_data *dlg_data, int direction);
+
+void
+redraw_dialog(struct dialog_data *dlg_data, int layout)
 {
 	int i;
 	int x = dlg_data->x + DIALOG_LEFT_BORDER;
 	int y = dlg_data->y + DIALOG_TOP_BORDER;
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *title_color;
+
+	if (layout) {
+		dlg_data->dlg->layouter(dlg_data);
+		/* This might not be the best place. We need to be able
+		 * to make focusability of widgets dynamic so widgets
+		 * like scrollable text don't receive focus when there
+		 * is nothing to scroll. */
+		if (!widget_is_focusable(selected_widget(dlg_data)))
+			cycle_widget_focus(dlg_data, 1);
+	}
 
 	draw_border(term, x, y,
 		    dlg_data->width - 2 * DIALOG_LEFT_BORDER,
@@ -200,14 +212,7 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 
 		case EV_RESIZE:
 		case EV_REDRAW:
-			dlg_data->dlg->layouter(dlg_data);
-			/* This might not be the best place. We need to be able
-			 * to make focusability of widgets dynamic so widgets
-			 * like scrollable text don't receive focus when there
-			 * is nothing to scroll. */
-			if (!widget_is_focusable(selected_widget(dlg_data)))
-				cycle_widget_focus(dlg_data, 1);
-			redraw_dialog(dlg_data);
+			redraw_dialog(dlg_data, 1);
 			break;
 
 		case EV_MOUSE:
@@ -326,7 +331,7 @@ check_dialog(struct dialog_data *dlg_data)
 		if (widget_data->widget->fn &&
 		    widget_data->widget->fn(dlg_data, widget_data)) {
 			dlg_data->selected = i;
-			redraw_dialog(dlg_data);
+			redraw_dialog(dlg_data, 0);
 			return 1;
 		}
 	}
@@ -383,7 +388,7 @@ clear_dialog(struct dialog_data *dlg_data, struct widget_data *unused)
 		widget_data->info.field.cpos = 0;
 	}
 
-	redraw_dialog(dlg_data);
+	redraw_dialog(dlg_data, 0);
 	return 0;
 }
 
@@ -531,8 +536,7 @@ do_refresh_dialog(struct dialog_data *dlg_data)
 	/* We want dialog_has_refresh() to be true while drawing
 	 * so we can not set the timer to -1. */
 	if (refresh_code == REFRESH_DIALOG) {
-		dlg_data->dlg->layouter(dlg_data);
-		redraw_dialog(dlg_data);
+		redraw_dialog(dlg_data, 1);
 	}
 
 	refresh->timer = install_timer(RESOURCE_INFO_REFRESH,

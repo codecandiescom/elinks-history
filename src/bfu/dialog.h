@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.32 2003/11/28 20:53:13 jonas Exp $ */
+/* $Id: dialog.h,v 1.33 2003/11/29 19:03:49 jonas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -115,7 +115,12 @@ struct dialog_data *do_dialog(struct terminal *, struct dialog *,
 
 void dialog_func(struct window *, struct term_event *, int);
 
+/* Draws the dialog background and shadow */
 void draw_dialog(struct dialog_data *dlg_data, int width, int height);
+
+/* Draws the dialog borders and layouter if @layout is non zerro. Finally all
+ * dialog items are redisplayed. */
+void redraw_dialog(struct dialog_data *dlg_data, int layout);
 
 int ok_dialog(struct dialog_data *, struct widget_data *);
 int cancel_dialog(struct dialog_data *, struct widget_data *);

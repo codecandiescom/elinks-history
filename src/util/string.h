@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.5 2002/06/21 20:28:25 pasky Exp $ */
+/* $Id: string.h,v 1.6 2002/06/22 21:20:53 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -6,6 +6,7 @@
 /* To these two functions, same remark applies as to copy_string() or
  * straconcat(). */
 
+#include <string.h>
 #include "util/memdebug.h"
 #include "util/memory.h"
 

@@ -1,11 +1,12 @@
 /* This routines represent handling of struct memory_list. */
-/* $Id: memlist.c,v 1.4 2002/06/17 07:42:32 pasky Exp $ */
+/* $Id: memlist.c,v 1.5 2002/06/22 21:20:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <stdarg.h>
+#include <stdlib.h>
 
 #include "links.h"
 

@@ -1,11 +1,12 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.29 2002/06/21 13:58:44 pasky Exp $ */
+/* $Id: cookies.c,v 1.30 2002/06/22 21:20:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h> /* OS/2 needs this after sys/types.h */

@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.8 2002/06/21 17:32:48 pasky Exp $ */
+/* $Id: conv.c,v 1.9 2002/06/22 21:20:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 #ifdef HAVE_LIMITS_H
 #include <limits.h>
 #endif
+#include <stdlib.h>
 #include <string.h>
 
 #include "links.h"

@@ -1,11 +1,12 @@
 /* This routines are the bones of user interface. */
-/* $Id: bfu.c,v 1.23 2002/06/17 07:42:28 pasky Exp $ */
+/* $Id: bfu.c,v 1.24 2002/06/22 21:20:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <stdarg.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "links.h"

@@ -1,9 +1,11 @@
 /* Locations handling */
-/* $Id: location.c,v 1.7 2002/06/21 19:25:09 pasky Exp $ */
+/* $Id: location.c,v 1.8 2002/06/22 21:20:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include <stdlib.h>
 
 #include "links.h"
 

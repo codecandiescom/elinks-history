@@ -1,9 +1,11 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.10 2002/06/17 07:42:31 pasky Exp $ */
+/* $Id: charsets.c,v 1.11 2002/06/22 21:20:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include <stdlib.h>
 
 #include "links.h"
 

@@ -1,11 +1,12 @@
 /* Get home directory */
-/* $Id: home.c,v 1.8 2002/06/17 07:42:31 pasky Exp $ */
+/* $Id: home.c,v 1.9 2002/06/22 21:20:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h> /* OS/2 needs this after sys/types.h */

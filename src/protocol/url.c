@@ -1,11 +1,12 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.23 2002/06/17 07:42:32 pasky Exp $ */
+/* $Id: url.c,v 1.24 2002/06/22 21:20:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #include <netdb.h> /* OS/2 needs this after sys/types.h */

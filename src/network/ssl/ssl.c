@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.8 2002/07/05 02:02:19 pasky Exp $ */
+/* $Id: ssl.c,v 1.9 2002/07/05 02:24:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,9 +65,11 @@ free_ssl(ssl_t *ssl)
 
 unsigned char *
 get_ssl_cipher_str(ssl_t *ssl) {
-	unsigned char *str = init_str();
+	unsigned char *str = NULL;
+#ifdef HAVE_SSL
 	int l = 0;
 
+	str = init_str();
 	if (!str) return NULL;
 
 	add_num_to_str(&str, &l, SSL_get_cipher_bits(ssl, NULL));
@@ -75,6 +77,7 @@ get_ssl_cipher_str(ssl_t *ssl) {
 	add_to_str(&str, &l, SSL_get_cipher_version(ssl));
 	add_to_str(&str, &l, " ");
 	add_to_str(&str, &l, (unsigned char *) SSL_get_cipher_name(ssl));
+#endif
 
 	return str;
 }

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.81 2004/01/22 06:49:48 jonas Exp $ */
+/* $Id: scanner.c,v 1.82 2004/01/22 07:25:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,6 +156,35 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			type = ident2type(ident, string, CSS_TOKEN_DIMENSION);
 		}
 
+	} else if (is_css_ident_start(first_char)) {
+		scan_css(string, CSS_CHAR_IDENT);
+
+		if (*string == '(') {
+			unsigned char *function_end = string + 1;
+
+			/* Make sure that we have an ending ')' */
+			skip_css(function_end, ')');
+			if (*function_end == ')') {
+				type = ident2type(token->string, string,
+						  CSS_TOKEN_FUNCTION);
+
+				/* If it is not a known function just skip the
+				 * how arg stuff so we don't end up generating
+				 * a lot of useless tokens. */
+				if (type == CSS_TOKEN_FUNCTION) {
+					string = function_end;
+				}
+
+				assert(type != CSS_TOKEN_RGB || *string == '(');
+				assert(type != CSS_TOKEN_FUNCTION || *string == ')');
+			}
+
+			string++;
+
+		} else {
+			type = CSS_TOKEN_IDENT;
+		}
+
 	} else if (first_char == '#') {
 		/* Check wether hexcolor or hash token */
 		if (is_css_hexdigit(*string)) {
@@ -201,35 +230,6 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		if (string_end) {
 			string = string_end + 1;
 			type = CSS_TOKEN_STRING;
-		}
-
-	} else if (is_css_ident_start(first_char)) {
-		scan_css(string, CSS_CHAR_IDENT);
-
-		if (*string == '(') {
-			unsigned char *function_end = string + 1;
-
-			/* Make sure that we have an ending ')' */
-			skip_css(function_end, ')');
-			if (*function_end == ')') {
-				type = ident2type(token->string, string,
-						  CSS_TOKEN_FUNCTION);
-
-				/* If it is not a known function just skip the
-				 * how arg stuff so we don't end up generating
-				 * a lot of useless tokens. */
-				if (type == CSS_TOKEN_FUNCTION) {
-					string = function_end;
-				}
-
-				assert(type != CSS_TOKEN_RGB || *string == '(');
-				assert(type != CSS_TOKEN_FUNCTION || *string == ')');
-			}
-
-			string++;
-
-		} else {
-			type = CSS_TOKEN_IDENT;
 		}
 
 	} else if (first_char == '<' || first_char == '-') {

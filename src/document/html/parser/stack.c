@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.7 2004/04/23 23:16:54 pasky Exp $ */
+/* $Id: stack.c,v 1.8 2004/04/23 23:18:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,6 +50,7 @@ dump_html_stack(void)
 }
 #endif
 
+
 struct html_element *
 search_html_stack(unsigned char *name)
 {
@@ -73,6 +74,7 @@ search_html_stack(unsigned char *name)
 
 	return NULL;
 }
+
 
 void
 kill_html_stack_item(struct html_element *e)
@@ -99,6 +101,7 @@ kill_html_stack_item(struct html_element *e)
 	}
 #endif
 }
+
 
 void
 html_stack_dup(enum html_element_type type)
@@ -141,6 +144,7 @@ html_stack_dup(enum html_element_type type)
 	add_to_list(html_stack, e);
 }
 
+
 void
 kill_html_stack_until(int ls, ...)
 {
@@ -173,9 +177,12 @@ kill_html_stack_until(int ls, ...)
 				if (e->type < ELEMENT_KILLABLE) break;
 				va_end(arg);
 				goto killll;
+
 			} else if (sk == 1) {
 				va_end(arg);
-				goto killl;
+				e = e->prev;
+				goto killll;
+
 			} else {
 				break;
 			}
@@ -197,9 +204,6 @@ kill_html_stack_until(int ls, ...)
 	}
 
 	return;
-
-killl:
-	e = e->prev;
 
 killll:
 	l = 0;

@@ -34,7 +34,7 @@
 #ifdef _AIX
 #pragma alloca
 #else
-#ifndef alloca
+#ifndef HAVE_ALLOCA
 unsigned char *alloca();
 #endif
 #endif

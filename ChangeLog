@@ -1,3 +1,260 @@
+Fri Apr 26 15:48:13 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, src/protocol/http/http.c:
+	
+	Better ' ' -> %20 code, patch by Witold Filipczyk.
+
+Fri Apr 26 13:25:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/dialogs/globhist.c:
+	
+	Global history clear button cleanup by Miciah.
+
+Fri Apr 26 13:23:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+	
+	AC_SEARCH_LIBS fixes for ssl and lua checks, it was completely
+	broken..
+
+Fri Apr 26 13:03:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+	
+	SSL detection fixes. It was not used when first lib search
+	succeeded. Silly.
+
+Wed Apr 24 19:20:00 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/sched.c, protocol/http/http.c:
+	
+	Almost complete http authentification rewriting.
+	
+	- Fix a bug (memleak) occuring with urls with port and no path
+	(:901/ bug).	Accessing to http://www.some.site:901 do not failed
+	anymore.  - Fix a major design error, realms concept wasn't
+	respected. So when accessing   to two directories at the same depth
+	on the same host and in the same realm,   authentification dialog
+	do not pop up anymore.	- Fix urls handling. WWW.some.site,
+	www.some.site and www.Some.Site:80 are now   equivalent in concern
+	of authentification.  - Added support for
+	http://user:pass@www.some.site/ syntax.
+
+Wed Apr 24 14:49:48 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+	
+	Fix a potential buffer overflow in proxy authorization code.
+
+Wed Apr 24 14:14:17 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/sched.c:
+	
+	HTTP auth related functions small tidy up.
+
+Wed Apr 24 08:06:24 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/url.h:
+	
+	get_protocol_name() prototype added.
+
+Tue Apr 23 20:47:29 2002  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/Makefile.am:
+	
+	Some recently added lines may cause compilation to fail, disabled
+	for now.
+
+Tue Apr 23 12:17:09 2002  Petr Baudis <pasky@ji.cz>:
+
+	* TODO:
+	
+	Typo fixes
+
+Tue Apr 23 08:46:11 2002  Laurent Monin <zas@norz.org>:
+
+	* TODO:
+	
+	TODO: Passive FTP mode support
+
+Tue Apr 23 08:31:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/cookies/parser.c:
+	
+	Cookies parsing fixes, partially by <len@reeltwo.com>.
+
+Tue Apr 23 08:25:45 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/cookies/parsetst.c:
+	
+	Terminate name and value with \0.
+
+Tue Apr 23 08:14:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/cookies/parsetst.c:
+	
+	Empty string really quits the creature now :).
+
+Tue Apr 23 08:08:29 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/cookies/parsetst.c:
+	
+	Ehm, minor fixes ;).
+
+Tue Apr 23 08:06:21 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/cookies/: Makefile.am, cookies.c, parser.c, parser.h,
+	parsetst.c:
+	
+	Moved parse_cookie_str() to parser.*, added parsetst.c for testing
+	the parser standalone.
+
+Tue Apr 23 07:48:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/cookies/cookies.c:
+	
+	Move cookies parsing to parse_cookie_str().
+
+Mon Apr 22 15:39:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, configure.in:
+	
+	Lua/OpenSSL compile fixes - on RedHats it apparently needs -ldl
+	magical word in final link, and we did it wrong way because me ;).
+	Patch by <zimon@iki.fi>.
+
+Sun Apr 21 19:12:35 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, lowlevel/sched.c, lowlevel/sched.h,
+	protocol/http/http.c, util/Makefile.am, util/blacklist.c,
+	util/blacklist.h:
+	
+	Moved blacklist managment to util/blacklist.*. It's also possible I
+	made some very minor cleanups there.
+
+Sat Apr 20 19:55:55 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/url.c:
+	
+	Another bit of cleanup of bottom part of join_urls(). Also fixed
+	another bug reported by kon@iki.fi and Peter Gervai
+	<grin@tolna.net>. Now, we sometimes add slash by ourselves in
+	join_urls(), if it's reasonable. Also left commented out debug()
+	things for future use ;).
+
+Sat Apr 20 19:28:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/url.c:
+	
+	Tiny cleanup of bottom part of join_urls(). Also partially fixed
+	one bug reported by kon@iki.fi and Peter Gervai <grin@tolna.net>.
+
+Sat Apr 20 16:53:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/url.c:
+	
+	Add .biz to our HTTP guessing code.
+
+Sat Apr 20 16:48:25 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/url.c:
+	
+	Minor clarification.
+
+Sat Apr 20 15:13:30 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+	
+	A segfault occuring when listing certain FTP directories is now
+	fixed. This bug was introduced by Pasky while a goto-hunting after
+	0.3.0 release.
+
+Sat Apr 20 12:52:13 2002  Laurent Monin <zas@norz.org>:
+
+	* src/config/default.c:
+	
+	Read/write for user only and secure saving for links.his file.
+
+Sat Apr 20 12:25:31 2002  Laurent Monin <zas@norz.org>:
+
+	* src/config/default.c:
+	
+	Secure saving and r/w access for user only spread to *.cfg files.
+
+Sat Apr 20 11:34:10 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/globhist.c:
+	
+	History file secure saving and r/w access mode for user only.
+
+Sat Apr 20 11:26:29 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/bookmarks.c:
+	
+	Bookmarks file mode is now restricted to r/w for user only.
+
+Sat Apr 20 11:21:01 2002  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+	
+	Secure saving for cookies file.
+
+Sat Apr 20 10:16:36 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: Makefile.am, bookmarks/bookmarks.c, config/default.c:
+	
+	Bookmarks file secure saving is now activated as is secure_save
+	option.
+
+Sat Apr 20 09:49:43 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: links.h, bookmarks/bookmarks.c, config/default.c,
+	cookies/cookies.c, document/globhist.c, util/secsave.c:
+	
+	Small change to straconcat() description and spread its use to more
+	places. Minor changes to still unused secure_open() function.
+
+Sat Apr 20 09:15:30 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/osdep/os_dep.c:
+	
+	More error handling in get_window_title(), thanks Peter :).
+
+Sat Apr 20 09:13:56 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/links.h:
+	
+	Include <stdarg.h> in links.h, thanks Miciah :).
+
+Fri Apr 19 16:15:04 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, intl/danish.lng, intl/index.txt, src/intl/lang_defs.h,
+	src/intl/language.inc:
+	
+	Danish translation by Jonas Fonseca <fonseca@diku.dk>.
+
+Fri Apr 19 14:28:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/default.c, config/default.h, util/Makefile.am,
+	util/secsave.c, util/secsave.h:
+	
+	Base stone of common secure save support. Introduced secure_save
+	option (not active yet), and added some utils for secure saving
+	inside util/secsave.*. Patch by Zas and me.
+
+Fri Apr 19 14:03:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/links.h:
+	
+	straconcat(), patch by Zas (will be used soon). Note that I
+	invented such a silly name :).
+
+Fri Apr 19 14:02:16 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/bfu.c:
+	
+	Return NULL upon allocation failure in do_dialog().
+
 Fri Apr 19 12:45:02 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: bfu/bfu.c, bfu/bfu.h, dialogs/globhist.c,

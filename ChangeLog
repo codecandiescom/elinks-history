@@ -1,3 +1,155 @@
+Sat May 24 22:07:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/lists.h:
+
+	Somehow, we all of sudden have plenty of completely redundant code
+	at the both sides of the magic border. So took it outside and
+	unified. John visits Junior, introduces himself as Sally's good
+	friend and praises for a lend. As Junior goes to the city to get
+	some money, John seduces Gloria, steals some precious stuff at
+	Junior's mansion and changes his name back to Richard. They catch a
+	fly to Texas.  
+
+Sat May 24 21:50:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/lists.h:
+
+	Moved the del_from_list() (x) clearing hack to list_del_enforce(),
+	non-magic counterpart introduced together with the dummy call in the
+	non-magic del_from_list(). Sally meets Simon and discuss his
+	attitude to John, together with Thomas and Fred's father Alan.
+	Eventually, Sally discovers that John is in fact Richard. In the
+	meantime, John arrives to L.A.  
+
+Sat May 24 21:41:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/lists.h:
+
+	Introduced harmless list_magic_*() macro calls to the list handling
+	routines on the non-magic side. Junior takes Gloria to his maison
+	and they spend a night together.  
+
+Sat May 24 21:35:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/lists.h:
+
+	Moved list_magic_error() to a better place, introduced dummy
+	counterpart of it at the nonmagic side. Sally catches flight to
+	Texas.  
+
+Sat May 24 21:32:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/lists.h:
+
+	List magic checks encapsulated to a suite of macros
+	(list_magic_check() and list_magic_chkbool(), wrapping up
+	list_magic_correct()). In non-magic part, same named dummy macros
+	are introduced. Simon discovered that Junior didn't abide the
+	agreement they had and sold his part of the HBRCOPOITA Ltd. As John
+	tells Sally about his visit at Simon's, tension starts to slowly
+	develop and Sally is about to call Simon.  
+
+Sat May 24 21:15:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/lists.h:
+
+	Unified magic setting to list_magic_set(), LIST_SET_MAGIC() now
+	wraps list_magic_set(). list_magic_set() exists both in magic and
+	non-magic scenario (then it's empty). Sally meets John, who was
+	previously introduced to Fred by Thomas in the airplane, when they
+	were flying to Texas in order to visit Sally's mother (real,
+	although none of them know) and Simon on their ranch.  
+
+Sat May 24 21:08:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/lists.h:
+
+	Tidyup. Hopeless attempt to orient myself inside ;-).  
+
+Sat May 24 20:26:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/: select.c, select.h, signals.c:
+
+	Removed that terrible CHK_BH; thing, check_bottom_halves() now acts
+	like CHK_BH and wraps do_check_bottom_halves() (original
+	check_bottom_halves() ;). dcbh() is now slightly optimized. Sally
+	goes after Richard, who she believes to secretly married her
+	lately-divorced mother-in-law, daughter of Simon's nephew who went
+	to Vietnam. In the meantime, Junior meets Gloria and something
+	seemingly starts to develop between them.  
+
+Sat May 24 20:16:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: lowlevel/signals.c, lowlevel/signals.h, main.c:
+
+	Move cleanup.  
+
+Sat May 24 14:48:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/setup.h:
+
+	ELINKS_DOC_URL now points to http://elinks.or.cz/docmentation 
+
+Sat May 24 13:52:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/terminal.c:
+
+	Fix crash caused by resizing with multiple tabs, closes bug 163.
+	Patch by Witek (and me). Note that the comment may not be 100% true
+	yet (and there may be some out-of-tabs drawing problems), but it
+	will be true VERY soon ;). Stay tuned.  
+
+Sat May 24 13:44:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/tab.h:
+
+	Oops, stale argument forgotten there.  
+
+Sat May 24 13:38:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/: tab.h, terminal.c, window.c:
+
+	Removed IF_ACTIVE and intrudced inactive_tab() instead, which has
+	simpler usage and expands to a boolean expression with effect
+	opposite to IF_ACTIVE. Hrm.. Oh, and some more minor whitespace
+	cleanups could slip through.  
+
+Sat May 24 13:30:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/terminal.c:
+
+	Whitespaces cleanup. Er.. ;) 
+
+Sat May 24 11:38:34 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/charsets.c:
+
+	get_entity_string() cleanup, optimization, comments.  
+
+Sat May 24 10:24:17 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.po files were resynced. French translation was updated.  
+
+Sat May 24 09:38:52 2003  Laurent Monin <zas@norz.org>:
+
+	* configure.in, src/version.c:
+
+	Configure option --disable-backtrace is now fixed. An information
+	about it was added in version info (only when disable). It closes
+	bug 103.  
+
+Sat May 24 08:55:58 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/charsets.c:
+
+	Entities decoding was fixed and improved. It closes bug 175. Patch
+	by Zardoz and me.  
+
 Fri May 23 21:22:20 2003  Laurent Monin <zas@norz.org>:
 
 	* src/: main.c, main.h, lowlevel/Makefile.am, lowlevel/select.c,

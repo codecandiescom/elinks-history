@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.151 2002/12/12 17:01:55 pasky Exp $ */
+/* $Id: options.c,v 1.152 2002/12/12 17:15:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -426,7 +426,7 @@ smart_config_string(unsigned char **str, int *len, int print_comment,
 {
 	struct option *option;
 
-	foreachback (option, *options) {
+	foreach (option, *options) {
 		int do_print_comment = 1;
 
 		if (option->flags & OPT_HIDDEN ||

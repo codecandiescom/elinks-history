@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.139 2003/11/07 14:32:25 jonas Exp $ */
+/* $Id: download.c,v 1.140 2003/11/07 14:35:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -311,8 +311,8 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 {
 	struct file_download *file_download = dlg_data->dlg->udata;
 	struct terminal *term = dlg_data->win->term;
-	int max = 0, min = 0;
-	int rw, w = dialog_max_width(term);
+	int w = dialog_max_width(term);
+	int rw = w;
 	int x, y = 0;
 	int t = 0;
 	int url_len;
@@ -344,18 +344,9 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 		}
 	}
 
-	text_width(term, url, &min, &max);
-	text_width(term, msg.source, &min, &max);
-	buttons_width(dlg_data->widgets_data, dlg_data->n, &min, &max);
-
-	int_bounds(&w, min, term->width - 2 * DIALOG_LB);
 	if (t && download->prg->size >= 0) {
 		int_lower_bound(&w, DOWN_DLG_MIN);
-	} else {
-		int_upper_bound(&w, max);
 	}
-	int_lower_bound(&w, 1);
-	rw = w;
 
 	dlg_format_text(NULL, url, 0, &y, w, &rw,
 			dialog_text_color, AL_LEFT);

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.219 2004/04/20 23:23:15 jonas Exp $ */
+/* $Id: menu.c,v 1.220 2004/04/20 23:32:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -287,7 +287,6 @@ static inline void
 draw_menu_left_text(struct terminal *term, unsigned char *text, int len,
 		    int x, int y, int width, struct color_pair *color)
 {
-	int xbase = x + L_TEXT_SPACE;
 	int w = width - (L_TEXT_SPACE + R_TEXT_SPACE);
 
 	if (w <= 0) return;
@@ -296,7 +295,7 @@ draw_menu_left_text(struct terminal *term, unsigned char *text, int len,
 	if (!len) return;
 	if (len > w) len = w;
 
-	draw_text(term, xbase, y, text, len, 0, color);
+	draw_text(term, x + L_TEXT_SPACE, y, text, len, 0, color);
 }
 
 
@@ -329,10 +328,7 @@ draw_menu_left_text_hk(struct terminal *term, unsigned char *text,
 		hk_color_sel = tmp;
 	}
 
-	for (x = 0;
-	     x < w + !!hk
-	     && (c = text[x]);
-	     x++) {
+	for (x = 0; x < w + !!hk && (c = text[x]); x++) {
 		if (!hk && x == hotkey_pos - 1) {
 			hk = 1;
 			continue;
@@ -356,7 +352,6 @@ static inline void
 draw_menu_right_text(struct terminal *term, unsigned char *text, int len,
 		     int x, int y, int width, struct color_pair *color)
 {
-	int xbase = x;
 	int w = width - (L_RTEXT_SPACE + R_RTEXT_SPACE);
 
 	if (w <= 0) return;
@@ -365,10 +360,9 @@ draw_menu_right_text(struct terminal *term, unsigned char *text, int len,
 	if (!len) return;
 	if (len > w) len = w;
 
-	xbase += w - len + L_RTEXT_SPACE + L_TEXT_SPACE;
+	x += w - len + L_RTEXT_SPACE + L_TEXT_SPACE;
 
-	for (x = 0; len; x++, len--)
-		draw_char(term, xbase + x, y, text[x], 0, color);
+	draw_text(term, x, y, text, len, 0, color);
 }
 
 static void

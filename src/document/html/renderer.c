@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.98 2003/06/16 09:06:38 zas Exp $ */
+/* $Id: renderer.c,v 1.99 2003/06/16 14:07:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -417,7 +417,8 @@ split_line(struct part *part)
 			goto split;
 #endif
 
-	if (part->cx + par_format.rightmargin > part->x) part->x = part->cx + par_format.rightmargin;
+	if (part->cx + par_format.rightmargin > part->x)
+		part->x = part->cx + par_format.rightmargin;
 
 #if 0
 	if (part->y < part->cy + 1) part->y = part->cy + 1;
@@ -441,7 +442,11 @@ split:
 		del_chars(part, i, part->cy);
 	}
 
-	if (part->spl - i - 1 > 0) /* 0 is possible and i'm paranoiac ... --Zas */
+	/* FYI, witekfl has an optimization of this pending in my patch queue.
+	 * I want to review it since it's kinda arcane and error here would
+	 * probably mean some quite interesting random bugs. --pasky */
+
+	if (part->spl - i - 1 > 0) /* 0 is possible and i'm paranoic ... --Zas */
 		memmove(part->spaces, part->spaces + i + 1, part->spl - i - 1);
 
 	memset(part->spaces + part->spl - i - 1, 0, i + 1);

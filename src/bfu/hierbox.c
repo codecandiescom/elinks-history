@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.113 2003/11/27 13:09:52 jonas Exp $ */
+/* $Id: hierbox.c,v 1.114 2003/11/27 13:59:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -471,18 +471,15 @@ print_delete_error(struct listbox_item *item, struct terminal *term,
 
 static void
 do_delete_item(struct listbox_item *item, struct listbox_context *info,
-	       int last)
+	       int last, int delete)
 {
 	struct listbox_ops *ops = info->box->ops;
-	enum delete_error delete_error;
 
 	assert(item && item->udata);
 
-	delete_error = !ops->can_delete(item)
-		     ? DELETE_IMPOSSIBLE : DELETE_LOCKED;
-
-	if (delete_error == DELETE_IMPOSSIBLE || ops->is_used(item)) {
-		print_delete_error(item, info->term, ops, delete_error);
+	if ((!delete && !ops->can_delete(item)) || ops->is_used(item)) {
+		print_delete_error(item, info->term, ops,
+				   delete ? DELETE_LOCKED : DELETE_IMPOSSIBLE);
 		return;
 	}
 
@@ -491,7 +488,10 @@ do_delete_item(struct listbox_item *item, struct listbox_context *info,
 
 		while (child != (void *) &item->child) {
 			child = child->next;
-			do_delete_item(child->prev, info, 0);
+			/* Propagate the ``delete'' property down to children
+			 * since if a parent can be deleted the child should
+			 * just delete itself too. */
+			do_delete_item(child->prev, info, 0, 1);
 		}
 	}
 
@@ -509,7 +509,7 @@ delete_marked(struct listbox_item *item, void *data_, int *offset)
 		if (!context->item) {
 			context->item = item;
 		} else {
-			do_delete_item(item, context, 0);
+			do_delete_item(item, context, 0, 0);
 		}
 
 		return 1;
@@ -533,7 +533,7 @@ push_ok_delete_button(void *context_)
 	}
 
 	/* Delete the last one (traversal should save one to delete) */
-	do_delete_item(context->item, context, 1);
+	do_delete_item(context->item, context, 1, 0);
 }
 
 int
@@ -604,7 +604,7 @@ delete_unused(struct listbox_item *item, void *data_, int *offset)
 
 	if (context->box->ops->is_used(item)) return 0;
 
-	do_delete_item(item, context, 0);
+	do_delete_item(item, context, 0, 0);
 	return 1;
 }
 

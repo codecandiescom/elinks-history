@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.48 2003/09/21 13:00:13 zas Exp $ */
+/* $Id: conv.c,v 1.49 2003/09/21 14:13:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,9 +47,9 @@
  * there, if it had to be truncated. A negative value signs an error. */
 int inline
 elinks_ulongcat(unsigned char *s, unsigned int *slen,
-		   unsigned long number, unsigned int width,
-		   unsigned char fillchar, unsigned int base,
-		   unsigned int upper)
+		unsigned long number, unsigned int width,
+		unsigned char fillchar, unsigned int base,
+		unsigned int upper)
 {
 	static unsigned char unum[]= "0123456789ABCDEF";
 	static unsigned char lnum[]= "0123456789abcdef";
@@ -174,19 +174,19 @@ add_xnum_to_string(struct string *string, int xnum)
 	/* Mebi (Mi), 2^20 */
 	if (xnum >= 1024*1024)  {
 		suff[0] = 'M';
-	       	d = (xnum / (int)((int)(1024*1024)/(int)10)) % 10;
-	       	xnum /= 1024*1024;
+		d = (xnum / (int)((int)(1024*1024)/(int)10)) % 10;
+		xnum /= 1024*1024;
 	/* Kibi (Ki), 2^10 */
 	} else if (xnum >= 1024) {
 		suff[0] = 'K';
-	       	d = (xnum / (int)((int)1024/(int)10)) % 10;
+		d = (xnum / (int)((int)1024/(int)10)) % 10;
 		xnum /= 1024;
 	}
 	add_long_to_string(string, xnum);
 
 	if (xnum < 10 && d != -1) {
 		add_char_to_string(string, '.');
-	       	add_long_to_string(string, d);
+		add_long_to_string(string, d);
 	}
 	add_char_to_string(string, ' ');
 
@@ -349,7 +349,7 @@ encode_shell_safe_url(unsigned char *url)
 		else {
 			add_char_to_string(&u, '=');
 			add_char_to_string(&u, hx(*url >> 4));
-		       	add_char_to_string(&u, hx(*url & 0xf));
+			add_char_to_string(&u, hx(*url & 0xf));
 			add_char_to_string(&u, '=');
 		}
 	}
@@ -373,7 +373,7 @@ decode_shell_safe_url(unsigned char *url)
 			add_char_to_string(&u, *url);
 		} else {
 			add_char_to_string(&u, (unhx(url[1]) << 4) + unhx(url[2]));
-		       	url += 3;
+			url += 3;
 			url_len -= 3;
 		}
 	}

@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.14 2004/09/26 17:21:57 jonas Exp $ */
+/* $Id: renderer.c,v 1.15 2004/09/27 12:28:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -365,9 +365,7 @@ add_dom_link(struct dom_renderer *renderer, unsigned char *string, int length)
 	link->color.background = document->options.default_bg;
 	link->color.foreground = fgcolor;
 
-	set_term_color(&template, &link->color,
-		       document->options.color_flags,
-		       document->options.color_mode);
+	init_template(&template, link->color.background, link->color.foreground);
 
 	render_dom_text(renderer, &template, string, length);
 

@@ -1,5 +1,5 @@
-/* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.1 2003/11/24 16:23:39 jonas Exp $ */
+/* Form history related dialogs */
+/* $Id: dialogs.c,v 1.2 2003/11/24 16:34:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

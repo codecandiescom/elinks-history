@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.38 2003/11/07 16:14:02 jonas Exp $ */
+/* $Id: text.c,v 1.39 2003/11/07 16:17:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,7 +93,13 @@ dlg_format_text(struct terminal *term,
 		if (rw) int_lower_bound(rw, line_width);
 		if (!term || !line_width) continue;
 
-		shift = (align == AL_CENTER ? int_max((w - line_width) / 2, 0) : 0);
+		/* Calculate the number of chars to indent */
+		if (align == AL_CENTER)
+			shift = (dlg_width - split) / 2;
+		else if (align == AL_RIGHT)
+			shift = dlg_width - split;
+		else
+			shift = 0;
 
 		assert(line_width - x <= w && shift < w);
 

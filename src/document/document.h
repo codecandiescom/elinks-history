@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.1 2003/10/29 16:10:29 jonas Exp $ */
+/* $Id: document.h,v 1.2 2003/10/29 16:14:12 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -27,8 +27,44 @@ struct document_refresh {
 	unsigned char url[1]; /* XXX: Keep last! */
 };
 
-struct link;
-struct search;
+enum link_type {
+	L_LINK,
+	L_BUTTON,
+	L_CHECKBOX,
+	L_SELECT,
+	L_FIELD,
+	L_AREA,
+};
+
+struct point {
+	int x, y;
+};
+
+struct link {
+	long accesskey;
+
+	enum link_type type;
+
+	unsigned char *where;
+	unsigned char *target;
+	unsigned char *where_img;
+	unsigned char *title;
+	unsigned char *name;
+
+	struct form_control *form;
+	struct point *pos;
+
+	int n;
+	int num;
+
+	struct color_pair color;
+};
+
+struct search {
+	int x, y;
+	signed int n:24;	/* This structure is size-critical */
+	unsigned char c;
+};
 
 struct document {
 	LIST_HEAD(struct document);

@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.44 2003/10/23 21:43:29 pasky Exp $ */
+/* $Id: renderer.h,v 1.45 2003/10/29 16:14:12 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -45,53 +45,10 @@ struct node {
 };
 
 
-/* For struct link */
-enum link_type {
-	L_LINK,
-	L_BUTTON,
-	L_CHECKBOX,
-	L_SELECT,
-	L_FIELD,
-	L_AREA,
-};
-
-/* For struct link */
-struct point {
-	int x, y;
-};
-
-/* For struct document */
-struct link {
-	long accesskey;
-
-	enum link_type type;
-
-	unsigned char *where;
-	unsigned char *target;
-	unsigned char *where_img;
-	unsigned char *title;
-	unsigned char *name;
-
-	struct form_control *form;
-	struct point *pos;
-
-	int n;
-	int num;
-
-	struct color_pair color;
-};
-
 /* For struct document_view */
 struct link_bg {
 	int x, y;
 	struct screen_char c;
-};
-
-/* For struct document */
-struct search {
-	int x, y;
-	signed int n:24;	/* This structure is size-critical */
-	unsigned char c;
 };
 
 

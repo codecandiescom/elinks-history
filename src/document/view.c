@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.24 2002/04/06 22:10:18 pasky Exp $ */
+/* $Id: view.c,v 1.25 2002/04/16 12:34:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2819,40 +2819,67 @@ end:
 }
 
 
-unsigned char *print_current_titlex(struct f_data_c *fd, int w)
+/* Print page's title and numbering at window top. */
+unsigned char *
+print_current_titlex(struct f_data_c *fd, int w)
 {
 	int ml = 0, pl = 0;
 	unsigned char *m, *p;
 
 	if (!fd) return NULL;
+
 	w -= 1;
+
 	p = init_str();
+	if (!p) return NULL;
+
 	if (fd->yw < fd->f_data->y) {
-		int pp, pe;
+		int pp = 1;
+		int pe = 1;
+
 		if (fd->yw) {
 			pp = (fd->vs->view_pos + fd->yw / 2) / fd->yw + 1;
 			pe = (fd->f_data->y + fd->yw - 1) / fd->yw;
-		} else pp = pe = 1;
-		if (pp > pe) pp = pe;
-		if (fd->vs->view_pos + fd->yw >= fd->f_data->y) pp = pe;
-		if (fd->f_data->title) add_chr_to_str(&p, &pl, ' ');
-		add_to_str(&p, &pl, "(p");
+			if (pp > pe) pp = pe;
+		}
+
+		if (fd->vs->view_pos + fd->yw >= fd->f_data->y)
+			pp = pe;
+		if (fd->f_data->title)
+			add_chr_to_str(&p, &pl, ' ');
+
+		add_to_str(&p, &pl, "(");
 		add_num_to_str(&p, &pl, pp);
-		add_to_str(&p, &pl, " of ");
+		add_to_str(&p, &pl, "/");
 		add_num_to_str(&p, &pl, pe);
 		add_chr_to_str(&p, &pl, ')');
 	}
+
 	if (!fd->f_data->title) return p;
+
 	m = init_str();
+	if (!m) {
+		mem_free(p);
+		return NULL;
+	}
+
 	add_to_str(&m, &ml, fd->f_data->title);
-	if (ml + pl > w) if ((ml = w - pl) < 0) ml = 0;
+
+	if (ml + pl > w - 3) {
+		ml = w - 3 - pl;
+		if (ml < 0) ml = 0;
+		add_to_str(&m, &ml, "...");
+
+	}
+
 	add_to_str(&m, &ml, p);
 	mem_free(p);
+
 	return m;
 }
 
-unsigned char *print_current_link_do(struct f_data_c *fd,
-				     struct terminal *term)
+unsigned char *
+print_current_link_do(struct f_data_c *fd, struct terminal *term)
 {
 	struct link *link;
 	unsigned char *url;

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.12 2002/08/18 13:04:47 pasky Exp $ */
+/* $Id: charsets.c,v 1.13 2002/08/27 00:43:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,9 +103,9 @@ new_translation_table(struct conv_table *p)
 
 #define BIN_SEARCH(table, entry, entries, key, result)					\
 {											\
-	unsigned int _s = 0, _e = (entries) - 1;					\
+	long _s = 0, _e = (entries) - 1;						\
 	while (_s <= _e || !((result) = -1)) {						\
-		unsigned int _m = (_s + _e) / 2;					\
+		long _m = (_s + _e) / 2;						\
 		if ((table)[_m].entry == (key)) {					\
 			(result) = _m;							\
 			break;								\
@@ -403,11 +403,11 @@ get_entity_string(unsigned char *st, int l, int encoding)
 			} while (--l);
 		}
 	} else {
-		unsigned int s = 0, e = N_ENTITIES - 1;
+		long s = 0, e = N_ENTITIES - 1;
 
 		while (s <= e) {
 			int c;
-			unsigned int m = (s + e) / 2;
+			long m = (s + e) / 2;
 
 			c = xxstrcmp(entities[m].s, st, l);
 			if (!c) {

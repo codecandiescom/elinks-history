@@ -1,3 +1,22 @@
+Tue Nov 23 17:12:56 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: document/html/parser/forms.c, document/renderer.c,
+	document/html/renderer.c, document/html/renderer.h,
+	ecmascript/spidermonkey.c, viewer/text/form.c, viewer/text/form.h:
+
+	Don't beat me. Links navigation is broken because of hidden links, 
+	which are internally "visible" now. They should be skiped somehow in
+	navigation (not done yet). Hidden form is used by eg.
+	https://www.mbank.com.pl/. My long term goal is make this site work
+	with ELinks.  
+
+Tue Nov 23 13:08:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/dialog.c, bfu/hierbox.c, bfu/listbox.c, bfu/listbox.h,
+	bfu/widget.h, bookmarks/dialogs.c:
+
+	box -> listbox.  
+
 Mon Nov 22 17:07:37 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/auth/digest.c:

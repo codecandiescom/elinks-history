@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.54 2002/10/13 15:49:24 pasky Exp $ */
+/* $Id: http.c,v 1.55 2002/10/13 16:10:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1064,7 +1064,9 @@ again:
 		mem_free(d);
 	}
 	if (cf && !c->from && !c->unrestartable) c->unrestartable = 1;
-	if (c->from > cf || c->from < 0) {
+	if ((!c->prg.start && c->from > cf) || c->from < 0) {
+		/* We don't want this if c->prg.start because then c->from will
+		 * be probably value of c->prg.start, while cf is 0. */
 		abort_conn_with_state(c, S_HTTP_ERROR);
 		return;
 	}

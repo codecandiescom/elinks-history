@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.301 2003/10/18 16:02:36 jonas Exp $ */
+/* $Id: renderer.c,v 1.302 2003/10/18 16:07:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,11 +210,14 @@ clear_hchars(struct part *part, int x, int y, int xl)
 	}
 }
 
-/* If @bgcolor is NULL don't touch any color. */
-static inline void
-set_hchars(struct part *part, int x, int y, int xl,
-	   unsigned char data, color_t *bgcolor, enum screen_char_attr attr)
+/* xset_hchar() and xset_vchars() are used for rendering table frames. */
+
+void
+xset_hchars(struct part *part, int x, int y, int xl, unsigned char data)
 {
+	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
+	struct screen_char *template;
+
 	assert(part && part->document && xl > 0);
 	if_assert_failed return;
 
@@ -224,32 +227,16 @@ set_hchars(struct part *part, int x, int y, int xl,
 	assert(part->document->data);
 	if_assert_failed return;
 
-	if (bgcolor) {
-		struct color_pair colors = INIT_COLOR_PAIR(*bgcolor, 0x0);
-		struct screen_char *template = &POS(x, y);
+	template = &POS(x, y);
+	template->data = data;
+	template->attr = SCREEN_ATTR_FRAME;
 
-		template->data = data;
-		template->attr = attr;
-		set_term_color(template, &colors, 0,
-			       part->document->opt.color_mode);
+	/* TODO: We need to acquire color flags from the document options. */
+	set_term_color(template, &colors, 0, part->document->opt.color_mode);
 
-		for (xl -= 1, x += 1; xl; xl--, x++) {
-			copy_screen_chars(&POS(x, y), template, 1);
-		}
-	} else {
-		for (; xl; xl--, x++) {
-			POS(x, y).data = data;
-			POS(x, y).attr = attr;
-		}
+	for (xl -= 1, x += 1; xl; xl--, x++) {
+		copy_screen_chars(&POS(x, y), template, 1);
 	}
-}
-
-/* xset_hchar() and xset_vchars() are used for rendering table frames. */
-
-void
-xset_hchars(struct part *part, int x, int y, int xl, unsigned char data)
-{
-	set_hchars(part, x, y, xl, data, &par_format.bgcolor, SCREEN_ATTR_FRAME);
 }
 
 void

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.88 2003/10/25 12:45:09 zas Exp $ */
+/* $Id: core.c,v 1.89 2003/10/25 12:59:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -648,6 +648,7 @@ init_lua(void)
 static void
 cleanup_lua(void)
 {
+	free_lua_console_history(NULL, NULL);
 	lua_close(L);
 }
 

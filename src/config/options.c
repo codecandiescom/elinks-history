@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.152 2002/12/12 17:15:20 pasky Exp $ */
+/* $Id: options.c,v 1.153 2002/12/12 21:33:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -484,7 +484,7 @@ smart_config_string(unsigned char **str, int *len, int print_comment,
 			else if (pc == 1 && strcmp(option->name, "_template_"))
 				pc = 0;
 
-			fn(str, len, option, path, depth, pc, 3);
+			fn(str, len, option, path, depth, /*pc*/1, 3);
 
 			if (path) {
 				add_to_str(&str2, &len2, path);
@@ -495,7 +495,7 @@ smart_config_string(unsigned char **str, int *len, int print_comment,
 					    str2, depth + 1, fn);
 			mem_free(str2);
 
-			fn(str, len, option, path, depth, pc, 3);
+			fn(str, len, option, path, depth, /*pc*/1, 3);
 		}
 
 		/* TODO: We should maybe clear the touched flag only when really

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.69 2002/12/11 22:02:38 pasky Exp $ */
+/* $Id: conf.c,v 1.70 2002/12/12 21:33:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -449,7 +449,9 @@ smart_config_output_fn(unsigned char **str, int *len, struct option *option,
 {
 	int i, j, l;
 
-	if (!option_types[option->type].write)
+	/* When we're OPT_TREE, we won't get called with action 2 anyway and
+	 * we want to pop out a comment. */
+	if (option->type != OPT_TREE && !option_types[option->type].write)
 		return;
 
 	/* XXX: OPT_LANGUAGE shouldn't have any bussiness here, but we're just

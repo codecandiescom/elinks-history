@@ -1,11 +1,10 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.28 2003/12/18 17:05:44 zas Exp $ */
+/* $Id: status.c,v 1.29 2003/12/18 20:52:34 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <math.h>
 #include <string.h>
 
 #include "elinks.h"
@@ -265,7 +264,7 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 	int tab_width = int_max(1, term->width / tabs_count);
 	int tab_total_width = tab_width * tabs_count;
 	int tab_remain_width = int_max(0, term->width - tab_total_width);
-	int tab_add = int_max(1, (rint((double) tab_remain_width / tabs_count)));
+	int tab_add = int_max(1, (tab_remain_width / tabs_count));
 	int tab_num;
 	int ypos = term->height - (status->show_status_bar ? 2 : 1);
 	int xpos = 0;

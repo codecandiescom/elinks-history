@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.71 2004/09/20 22:24:30 pasky Exp $ */
+/* $Id: apply.c,v 1.72 2004/09/21 00:08:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,32 +84,41 @@ static css_applier_t css_appliers[CSS_PT_LAST] = {
 
 /* This looks for a match in list of selectors. */
 static void
-examine_element(struct css_selector *base, struct list_head *selectors,
-                struct html_element *element)
+examine_element(struct css_selector *base,
+		enum css_selector_type seltype, enum css_selector_relation rel,
+                struct list_head *selectors, struct html_element *element)
 {
 	struct css_selector *selector;
 	unsigned char *code;
 
-#define process_found_selector(sel, base) \
-	if (selector) merge_css_selectors(base, sel);
+#define process_found_selector(sel, type, base) \
+	if (selector) { \
+		/* More specific matches? */ \
+		examine_element(sel, type + 1, CSR_SPECIFITY, \
+		                &sel->leaves, element); \
+		/* TODO: HTML stack lookup. */ \
+		merge_css_selectors(base, sel); \
+	}
 
-	selector = find_css_selector(selectors, CST_ELEMENT,
-	                           element->name, element->namelen);
-	process_found_selector(selector, base);
+	if (seltype <= CST_ELEMENT) {
+		selector = find_css_selector(selectors, CST_ELEMENT,
+		                             element->name, element->namelen);
+		process_found_selector(selector, CST_ELEMENT, base);
+	}
 
 	code = get_attr_val(element->options, "id");
-	if (code) {
+	if (code && seltype <= CST_ID) {
 		selector = find_css_selector(selectors, CST_ID, code, -1);
-		process_found_selector(selector, base);
-		mem_free(code);
+		process_found_selector(selector, CST_ID, base);
 	}
+	if (code) mem_free(code);
 
 	code = get_attr_val(element->options, "class");
-	if (code) {
+	if (code && seltype <= CST_CLASS) {
 		selector = find_css_selector(selectors, CST_CLASS, code, -1);
-		process_found_selector(selector, base);
-		mem_free(code);
+		process_found_selector(selector, CST_CLASS, base);
 	}
+	if (code) mem_free(code);
 
 	/* TODO: Somehow handle pseudo-classess. The css_apply() caller will
 	 * have to tell us about those. --pasky */
@@ -131,7 +140,8 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 	if (!selector)
 		return;
 
-	examine_element(selector, &css->selectors, element);
+	examine_element(selector, CST_ELEMENT, CSR_ROOT,
+	                &css->selectors, element);
 
 	code = get_attr_val(element->options, "style");
 	if (code) {

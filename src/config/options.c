@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.56 2002/06/21 13:58:44 pasky Exp $ */
+/* $Id: options.c,v 1.57 2002/06/21 14:04:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -594,20 +594,6 @@ register_options()
 		"Horizontal text margin.");
 
 	add_opt_bool("document.browse",
-		"show_status_bar", 0, 1,
-		"Show status bar on the screen.");
-
-	add_opt_bool("document.browse",
-		"show_title_bar", 0, 1,
-		"Show title bar on the screen.");
-
-	/* TODO - this is implemented, but disabled for now as
-	 * it's buggy. */
-	add_opt_bool("document.browse",
-		"startup_goto_dialog", /* 0 */ 0, 1,
-		"Pop up goto dialog on startup when there's no homepage.");
-
-	add_opt_bool("document.browse",
 		"table_move_order", 0, 0,
 		"Move by columns in table.");
 
@@ -966,6 +952,20 @@ register_options()
 	add_opt_ptr("ui",
 		"language", 0, OPT_LANGUAGE, &current_language,
 		"Language of user interface.");
+
+	add_opt_bool("ui",
+		"show_status_bar", 0, 1,
+		"Show status bar on the screen.");
+
+	add_opt_bool("ui",
+		"show_title_bar", 0, 1,
+		"Show title bar on the screen.");
+
+	/* TODO - this is implemented, but disabled for now as
+	 * it's buggy. */
+	add_opt_bool("ui",
+		"startup_goto_dialog", 0, 1,
+		"Pop up goto dialog on startup when there's no homepage.");
 
 	add_opt_bool("ui",
 		"window_title", 0, 1,

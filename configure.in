@@ -864,7 +864,8 @@ AC_ARG_ENABLE(small,
 
 AC_ARG_ENABLE(root,
 	      [  --disable-root          do not permit execution of ELinks as root user],
-	      [if test "$enableval" = yes; then AC_DEFINE(ELINKS_ROOT_EXEC) fi])
+	      [if test "$enableval" = yes; then AC_DEFINE(ELINKS_ROOT_EXEC) fi],
+	      AC_DEFINE(ELINKS_ROOT_EXEC))
 
 dnl == EMX hack
 

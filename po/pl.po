@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-23 14:42+0200\n"
+"POT-Creation-Date: 2004-11-04 14:11+0100\n"
 "PO-Revision-Date: 2004-10-23 15:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -39,7 +39,7 @@ msgstr "Wci¶nij spacjê by rozwin±æ ten folder."
 #. if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty;
 #: src/bfu/hierbox.c:444 src/bfu/hierbox.c:455 src/bfu/hierbox.c:633
 #: src/bfu/hierbox.c:932 src/bfu/hierbox.c:958 src/bfu/inpfield.c:49
-#: src/bfu/inpfield.c:60 src/bfu/inpfield.c:80 src/bfu/msgbox.c:172
+#: src/bfu/inpfield.c:60 src/bfu/inpfield.c:80 src/bfu/msgbox.c:174
 #: src/bookmarks/dialogs.c:269 src/bookmarks/dialogs.c:669
 #: src/config/dialogs.c:63 src/config/dialogs.c:108 src/config/dialogs.c:339
 #: src/config/dialogs.c:409 src/config/dialogs.c:439 src/config/dialogs.c:477
@@ -50,19 +50,19 @@ msgstr "Wci¶nij spacjê by rozwin±æ ten folder."
 #: src/dialogs/info.c:44 src/dialogs/info.c:133 src/dialogs/info.c:155
 #: src/dialogs/menu.c:96 src/dialogs/menu.c:505 src/dialogs/menu.c:553
 #: src/dialogs/options.c:176 src/dialogs/options.c:249
-#: src/ecmascript/spidermonkey.c:407 src/ecmascript/spidermonkey.c:934
-#: src/ecmascript/spidermonkey.c:955 src/formhist/dialogs.c:183
+#: src/ecmascript/spidermonkey.c:407 src/ecmascript/spidermonkey.c:933
+#: src/ecmascript/spidermonkey.c:954 src/formhist/dialogs.c:183
 #: src/mime/dialogs.c:134 src/protocol/auth/dialogs.c:92
 #: src/protocol/protocol.c:226 src/protocol/user.c:206
 #: src/sched/download.c:232 src/sched/download.c:328 src/sched/download.c:369
 #: src/sched/download.c:508 src/sched/download.c:602 src/sched/error.c:42
-#: src/sched/session.c:242 src/sched/session.c:694 src/sched/session.c:718
-#: src/sched/session.c:735 src/scripting/lua/core.c:400
+#: src/sched/session.c:242 src/sched/session.c:716 src/sched/session.c:740
+#: src/sched/session.c:757 src/scripting/lua/core.c:400
 #: src/scripting/lua/core.c:482 src/scripting/lua/core.c:599
 #: src/scripting/lua/core.c:723 src/viewer/text/draw.c:66
 #: src/viewer/text/form.c:847 src/viewer/text/search.c:949
-#: src/viewer/text/search.c:1010 src/viewer/text/search.c:1454
-#: src/viewer/text/search.c:1567 src/viewer/text/textarea.c:365
+#: src/viewer/text/search.c:1010 src/viewer/text/search.c:1456
+#: src/viewer/text/search.c:1569 src/viewer/text/textarea.c:365
 #: src/viewer/text/textarea.c:374 src/viewer/text/view.c:694
 #: src/viewer/text/view.c:1223
 msgid "OK"
@@ -151,7 +151,7 @@ msgstr "Czy na pewno chcesz skasowaæ wszystkie pozycje?"
 #: src/cache/dialogs.c:227 src/config/dialogs.c:520 src/config/dialogs.c:942
 #: src/globhist/dialogs.c:235 src/viewer/text/search.c:982
 #: src/viewer/text/search.c:990 src/viewer/text/search.c:1007
-#: src/viewer/text/search.c:1586
+#: src/viewer/text/search.c:1588
 msgid "Search"
 msgstr "Szukaj"
 
@@ -178,7 +178,7 @@ msgstr "Nazwa"
 #: src/sched/download.c:1028 src/sched/download.c:1049
 #: src/sched/download.c:1062 src/scripting/lua/core.c:401
 #: src/scripting/lua/core.c:483 src/scripting/lua/core.c:723
-#: src/viewer/text/search.c:1568 src/viewer/text/view.c:694
+#: src/viewer/text/search.c:1570 src/viewer/text/view.c:694
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -3989,7 +3989,7 @@ msgstr "Tekst"
 msgid "Dialog text colors."
 msgstr "Kolory tekstu w oknie dialogowym."
 
-#: src/config/options.inc:1175 src/viewer/text/form.c:1417
+#: src/config/options.inc:1175 src/viewer/text/form.c:1418
 msgid "Checkbox"
 msgstr "Przycisk wyboru"
 
@@ -4023,7 +4023,7 @@ msgstr "Wybrany przycisk"
 msgid "Dialog selected button colors."
 msgstr "Kolory wybranego przycisku."
 
-#: src/config/options.inc:1191 src/viewer/text/form.c:1421
+#: src/config/options.inc:1191 src/viewer/text/form.c:1422
 msgid "Text field"
 msgstr "Pole tekstowe"
 
@@ -5435,7 +5435,7 @@ msgid "No document"
 msgstr "Brak dokumentu"
 
 #. name:
-#: src/document/css/css.c:29 src/document/css/css.c:154
+#: src/document/css/css.c:29 src/document/css/css.c:157
 msgid "Cascading Style Sheets"
 msgstr "Kaskadowe szablony stylów CSS"
 
@@ -5510,11 +5510,11 @@ msgstr "Czy otwieraæ okienko dialogowe z raportem o b³êdzie skryptu?"
 msgid "JavaScript Alert"
 msgstr "Alert JavaScriptu"
 
-#: src/ecmascript/spidermonkey.c:909
+#: src/ecmascript/spidermonkey.c:908
 msgid "JavaScript Error"
 msgstr "B³±d JavaScriptu"
 
-#: src/ecmascript/spidermonkey.c:912
+#: src/ecmascript/spidermonkey.c:911
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following%s%s%s%s: \n"
@@ -5531,7 +5531,7 @@ msgstr ""
 "%s\n"
 ".%*s^%*s."
 
-#: src/ecmascript/spidermonkey.c:924
+#: src/ecmascript/spidermonkey.c:923
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following%s%s%s%s: \n"
@@ -5542,11 +5542,11 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/ecmascript/spidermonkey.c:949
+#: src/ecmascript/spidermonkey.c:948
 msgid "JavaScript Emergency"
 msgstr "Wypadek JavaScriptu"
 
-#: src/ecmascript/spidermonkey.c:950
+#: src/ecmascript/spidermonkey.c:949
 msgid ""
 "A script embedded in the current document was running for more than 5 "
 "seconds in line. This probably means there is a bug in the script and it "
@@ -5632,8 +5632,6 @@ msgstr "Prze³±cz zapisywanie"
 msgid "Form history manager"
 msgstr "Menad¿er historii formularzy"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:34
 msgid "Show forms history dialog"
 msgstr "Poka¿ okno dialogowe historii formularzy"
@@ -6106,6 +6104,7 @@ msgstr "System konfiguracyjny"
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
+#. name:
 #: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:126
 #: src/mime/backend/mailcap.c:685
 msgid "Mailcap"
@@ -6964,11 +6963,11 @@ msgstr "Protokó³ CSO phone-book nie jest obs³ugiwany."
 msgid "Unknown error"
 msgstr "Nieznany b³±d"
 
-#: src/sched/session.c:682 src/sched/session.c:702 src/sched/task.c:181
+#: src/sched/session.c:704 src/sched/session.c:724 src/sched/task.c:181
 msgid "Warning"
 msgstr "Ostrze¿enie"
 
-#: src/sched/session.c:683
+#: src/sched/session.c:705
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -6986,7 +6985,7 @@ msgstr ""
 "co mi chodzi, po prostu to zrób), tak ¿e domy¶lne ustawienie bêdzie u¿ywane. "
 "Przepraszamy za wszelkie niedogodno¶ci."
 
-#: src/sched/session.c:703
+#: src/sched/session.c:725
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -7008,11 +7007,11 @@ msgstr ""
 "saving_style na 3, by uzyskaæ \"w³a¶ciwe\" zachowanie. Przepraszamy za "
 "wszelkie niedogodno¶ci."
 
-#: src/sched/session.c:730
+#: src/sched/session.c:752
 msgid "Welcome"
 msgstr "Powitanie"
 
-#: src/sched/session.c:731
+#: src/sched/session.c:753
 msgid ""
 "Welcome to ELinks!\n"
 "\n"
@@ -7197,71 +7196,71 @@ msgstr "Wyst±pi³ b³±d podczas wysy³ania formularza"
 msgid "Could not get file %s: %s"
 msgstr "Nie mo¿na pobraæ pliku %s: %s"
 
-#: src/viewer/text/form.c:1402
+#: src/viewer/text/form.c:1403
 msgid "Reset form"
 msgstr "Wyczy¶æ formularz"
 
 #
-#: src/viewer/text/form.c:1404
+#: src/viewer/text/form.c:1405
 msgid "Harmless button"
 msgstr "Nieszkodliwy przycisk"
 
-#: src/viewer/text/form.c:1412
+#: src/viewer/text/form.c:1413
 msgid "Submit form to"
 msgstr "Prze¶lij formularz do"
 
-#: src/viewer/text/form.c:1413
+#: src/viewer/text/form.c:1414
 msgid "Post form to"
 msgstr "Wy¶lij formularz do"
 
-#: src/viewer/text/form.c:1415
+#: src/viewer/text/form.c:1416
 msgid "Radio button"
 msgstr "Okr±g³y przycisk"
 
-#: src/viewer/text/form.c:1419
+#: src/viewer/text/form.c:1420
 msgid "Select field"
 msgstr "Pole wyboru"
 
-#: src/viewer/text/form.c:1423
+#: src/viewer/text/form.c:1424
 msgid "Text area"
 msgstr "Pole tekstowe"
 
-#: src/viewer/text/form.c:1425
+#: src/viewer/text/form.c:1426
 msgid "File upload"
 msgstr "£adowanie pliku"
 
-#: src/viewer/text/form.c:1427
+#: src/viewer/text/form.c:1428
 msgid "Password field"
 msgstr "Pole has³a"
 
-#: src/viewer/text/form.c:1465
+#: src/viewer/text/form.c:1466
 msgid "name"
 msgstr "nazwa"
 
-#: src/viewer/text/form.c:1474
+#: src/viewer/text/form.c:1475
 msgid "value"
 msgstr "warto¶æ"
 
-#: src/viewer/text/form.c:1482
+#: src/viewer/text/form.c:1483
 msgid "read only"
 msgstr "tylko do odczytu"
 
-#: src/viewer/text/form.c:1493
+#: src/viewer/text/form.c:1494
 #, c-format
 msgid "press %s to navigate"
 msgstr "wci¶nij %s aby nawigowaæ"
 
-#: src/viewer/text/form.c:1495
+#: src/viewer/text/form.c:1496
 #, c-format
 msgid "press %s to edit"
 msgstr "wci¶nij %s aby edytowaæ"
 
-#: src/viewer/text/form.c:1517
+#: src/viewer/text/form.c:1518
 #, c-format
 msgid "press %s to submit to"
 msgstr "wci¶nij %s aby wys³aæ do"
 
-#: src/viewer/text/form.c:1519
+#: src/viewer/text/form.c:1520
 #, c-format
 msgid "press %s to post to"
 msgstr "wci¶nij %s aby wys³aæ do"
@@ -7377,39 +7376,39 @@ msgstr "Brak dalszych trafieñ dla '%s'."
 msgid "Could not find a link with the text '%s'."
 msgstr "Nie mo¿na znale¼æ odno¶nika z tekstem '%s'."
 
-#: src/viewer/text/search.c:1042 src/viewer/text/search.c:1450
+#: src/viewer/text/search.c:1042 src/viewer/text/search.c:1452
 msgid "Typeahead"
 msgstr "Szukanie z wyprzedzeniem"
 
-#: src/viewer/text/search.c:1452
+#: src/viewer/text/search.c:1454
 msgid "No links in current document"
 msgstr "Brak odno¶ników w bie¿±cym dokumencie"
 
-#: src/viewer/text/search.c:1532
+#: src/viewer/text/search.c:1534
 msgid "Search for text"
 msgstr "Znajd¼ tekst"
 
-#: src/viewer/text/search.c:1561
+#: src/viewer/text/search.c:1563
 msgid "Normal search"
 msgstr "Zwyk³e szukanie"
 
-#: src/viewer/text/search.c:1562
+#: src/viewer/text/search.c:1564
 msgid "Regexp search"
 msgstr "Szukanie z u¿yciem wyra¿eñ regularnych"
 
-#: src/viewer/text/search.c:1563
+#: src/viewer/text/search.c:1565
 msgid "Extended regexp search"
 msgstr "Szukanie z u¿yciem rozszerzonych wyra¿eñ regularnych"
 
-#: src/viewer/text/search.c:1564
+#: src/viewer/text/search.c:1566
 msgid "Case sensitive"
 msgstr "Rozró¿nianie wielko¶ci liter"
 
-#: src/viewer/text/search.c:1565
+#: src/viewer/text/search.c:1567
 msgid "Case insensitive"
 msgstr "Nierozró¿nianie wielko¶ci liter"
 
-#: src/viewer/text/search.c:1589
+#: src/viewer/text/search.c:1591
 msgid "Search backward"
 msgstr "Szukaj wstecz"
 

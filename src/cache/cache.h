@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.23 2003/10/17 11:12:47 zas Exp $ */
+/* $Id: cache.h,v 1.24 2003/10/17 11:39:30 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CACHE_H
 #define EL__DOCUMENT_CACHE_H
@@ -32,11 +32,11 @@ struct cache_entry {
 	int data_size;
 	int refcount;
 #ifdef HAVE_SCRIPTING
-	int done_pre_format_html_hook:1;
+	unsigned int done_pre_format_html_hook:1;
 #endif
-	int redirect_get:1;
-	int incomplete:1;
-	int tgc:1;
+	unsigned int redirect_get:1;
+	unsigned int incomplete:1;
+	unsigned int tgc:1;
 	enum cache_mode cache_mode;
 };
 

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.108 2004/01/02 21:58:53 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.109 2004/01/02 22:06:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -302,12 +302,6 @@ update_bookmark(struct bookmark *bm, unsigned char *title,
 	}
 
 	if (title2) {
-		struct listbox_item *b2;
-		struct list_head *orig_child;
-		int title_size = strlen(title2) + 1;
-
-		orig_child = &bm->box_item->child;
-
 		mem_free(bm->title);
 		bm->title = title2;
 		bm->box_item->text = bm->title;

@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.45 2004/01/08 13:37:08 zas Exp $ */
+/* $Id: options.c,v 1.46 2004/01/08 13:47:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@ init_document_options(struct document_options *doo)
 	doo->assume_cp = get_opt_int("document.codepage.assume");
 	doo->hard_assume = get_opt_int("document.codepage.force_assumed");
 
-	doo->use_document_colours = get_opt_int("document.colors.use_document_colors");
+	doo->use_document_colors = get_opt_int("document.colors.use_document_colors");
 	doo->margin = get_opt_int("document.browse.margin_width");
 	doo->num_links_key = get_opt_int("document.browse.links.number_keys_select_link");
 	doo->meta_link_display = get_opt_int("document.html.link_display");

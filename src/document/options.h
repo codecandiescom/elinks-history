@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.39 2003/12/30 19:37:16 jonas Exp $ */
+/* $Id: options.h,v 1.40 2004/01/08 13:47:05 zas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -14,7 +14,7 @@ struct document_options {
 	int cp, assume_cp, hard_assume;
 	int margin;
 	int num_links_key;
-	int use_document_colours;
+	int use_document_colors;
 	int meta_link_display;
 	int default_form_input_size;
 

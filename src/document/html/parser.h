@@ -1,11 +1,11 @@
-/* $Id: parser.h,v 1.45 2003/10/30 22:04:00 jonas Exp $ */
+/* $Id: parser.h,v 1.46 2003/10/30 22:57:41 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
 
 #include "bfu/dialog.h"
 #include "bfu/style.h"
-#include "document/document.h"
+#include "document/options.h"
 #include "util/color.h"
 #include "util/lists.h"
 #include "util/memlist.h"
@@ -136,7 +136,7 @@ init_html_parser(unsigned char *url, struct document_options *options,
 		 void *(*special)(void *, enum html_special_type, ...));
 
 void done_html_parser(void);
-struct html_element *init_html_parser_state(int align, int margin, int width);
+struct html_element *init_html_parser_state(int dontkill, int align, int margin, int width);
 void done_html_parser_state(struct html_element *element);
 
 /* Interface for the table handling */
@@ -149,8 +149,6 @@ int get_num(unsigned char *, unsigned char *);
 int get_width(unsigned char *, unsigned char *, int);
 int get_bgcolor(unsigned char *, color_t *);
 
-void html_stack_dup(int dontkill);
-void kill_html_stack_item(struct html_element *);
 unsigned char *skip_comment(unsigned char *, unsigned char *);
 
 /* Interface for the viewer */

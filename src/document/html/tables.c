@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.113 2003/10/30 22:04:00 jonas Exp $ */
+/* $Id: tables.c,v 1.114 2003/10/30 22:57:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1350,6 +1350,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 				int xw = 0;
 				int yw = 0;
 				register int s;
+				struct html_element *state;
 
 				for (s = 0; s < cell->colspan; s++) {
 					xw += t->columns_width[i + s] +
@@ -1375,7 +1376,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 					}
 				}
 
-				html_stack_dup(1);
+				state = init_html_parser_state(1, par_format.align, 0, 0);
 
 				if (cell->is_header) format.attr |= AT_BOLD;
 
@@ -1409,7 +1410,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 					mem_free(p);
 				}
 
-				kill_html_stack_item(&html_top);
+				done_html_parser_state(state);
 			}
 
 			yp += t->rows_height[j] +
@@ -1640,6 +1641,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	struct html_start_end *bad_html;
 	struct node *node, *new_node;
 	unsigned char *al;
+	struct html_element *state;
 	color_t bgcolor = par_format.bgcolor;
 	int border, cellspacing, vcellpadding, cellpadding, align;
 	int frame, rules, width, wf;
@@ -1751,8 +1753,9 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	}
 
 	if (bad_html) mem_free(bad_html);
-	html_stack_dup(1);
-	par_format.align = AL_LEFT;
+
+	state = init_html_parser_state(1, AL_LEFT, 0, 0);
+
 	t->p = p;
 	t->border = border;
 	t->cellpadding = cellpadding;
@@ -1865,7 +1868,7 @@ ret2:
 	p->link_num = t->link_num;
 	p->height = int_max(p->height, p->cy);
 	free_table(t);
-	kill_html_stack_item(&html_top);
+	done_html_parser_state(state);
 
 ret0:
 	table_level--;

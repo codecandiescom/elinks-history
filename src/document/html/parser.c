@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.243 2003/10/30 22:04:00 jonas Exp $ */
+/* $Id: parser.c,v 1.244 2003/10/30 22:57:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -375,7 +375,7 @@ get_target(unsigned char *a)
 	return v;
 }
 
-void
+static void
 kill_html_stack_item(struct html_element *e)
 {
 	assert(e);
@@ -433,7 +433,7 @@ debug_stack(void)
 }
 #endif
 
-void
+static void
 html_stack_dup(int dontkill)
 {
 	struct html_element *e;
@@ -3653,21 +3653,24 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 }
 
 struct html_element *
-init_html_parser_state(int align, int margin, int width)
+init_html_parser_state(int dontkill, int align, int margin, int width)
 {
 	struct html_element *element;
 
-	html_stack_dup(2);
+	html_stack_dup(dontkill);
 	element = &html_top;
-	html_top.namelen = 0;
 
 	par_format.align = align;
-	par_format.leftmargin = margin;
-	par_format.rightmargin = margin;
-	par_format.width = width;
-	par_format.list_level = 0;
-	par_format.list_number = 0;
-	par_format.dd_margin = 0;
+
+	if (dontkill == 2) {
+		par_format.leftmargin = margin;
+		par_format.rightmargin = margin;
+		par_format.width = width;
+		par_format.list_level = 0;
+		par_format.list_number = 0;
+		par_format.dd_margin = 0;
+		html_top.namelen = 0;
+	}
 
 	return element;
 }

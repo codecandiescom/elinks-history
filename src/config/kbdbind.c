@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.233 2004/06/25 17:05:55 zas Exp $ */
+/* $Id: kbdbind.c,v 1.234 2004/06/25 18:49:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -348,13 +348,13 @@ read_key(unsigned char *key)
 int
 parse_keystroke(unsigned char *s, long *key, long *meta)
 {
-	if ((s[5] == '-' || s[5] == '+') && !strncasecmp(s, "Shift", 5)) {
+	if (!strncasecmp(s, "Shift", 5) && (s[5] == '-' || s[5] == '+')) {
 		/* Shift+a == shiFt-a == Shift-a */
 		memcpy(s, "Shift-", 6);
 		*meta = KBD_SHIFT;
 		s += 6;
 
-	} else if ((s[4] == '-' || s[4] == '+') && !strncasecmp(s, "Ctrl", 4)) {
+	} else if (!strncasecmp(s, "Ctrl", 4) && (s[4] == '-' || s[4] == '+')) {
 		/* Ctrl+a == ctRl-a == Ctrl-a */
 		memcpy(s, "Ctrl-", 5);
 		*meta = KBD_CTRL;
@@ -362,7 +362,7 @@ parse_keystroke(unsigned char *s, long *key, long *meta)
 		/* Ctrl-a == Ctrl-A */
 		if (s[0] && !s[1]) s[0] = toupper(s[0]);
 
-	} else if ((s[3] == '-' || s[3] == '+') && !strncasecmp(s, "Alt", 3)) {
+	} else if (!strncasecmp(s, "Alt", 3) && (s[3] == '-' || s[3] == '+')) {
 		/* Alt+a == aLt-a == Alt-a */
 		memcpy(s, "Alt-", 4);
 		*meta = KBD_ALT;

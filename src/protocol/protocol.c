@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.58 2004/07/12 13:52:33 jonas Exp $ */
+/* $Id: protocol.c,v 1.59 2004/07/12 14:03:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,15 +75,15 @@ get_protocol(unsigned char *name, int namelen)
 	if (get_user_program(NULL, name, namelen))
 		return PROTOCOL_USER;
 
-	/* Abuse that we iterate until protocol is PROTOCOL_UNKNOWN */
-	for (protocol = 0; protocol < PROTOCOL_UNKNOWN; protocol++) {
+	/* Check until @protocol is PROTOCOL_UNKNOWN */
+	for (protocol = 0; protocol_backends[protocol].name; protocol++) {
 		unsigned char *pname = protocol_backends[protocol].name;
 
-		if (pname && !strlcasecmp(pname, -1, name, namelen))
-			break;
+		if (!strlcasecmp(pname, -1, name, namelen))
+			return protocol;
 	}
 
-	return protocol;
+	return PROTOCOL_UNKNOWN;
 }
 
 

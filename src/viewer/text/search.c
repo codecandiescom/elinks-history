@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.270 2004/08/12 04:41:42 miciah Exp $ */
+/* $Id: search.c,v 1.271 2004/08/12 05:04:30 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -922,6 +922,28 @@ find_next_do(struct session *ses, struct document_view *doc_view, int direction)
 }
 
 static void
+typeahead_error(struct session *ses, unsigned char *typeahead)
+{
+	switch (get_opt_int("document.browse.search.show_not_found")) {
+		case 2:
+			msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+				N_("Typeahead"), ALIGN_CENTER,
+				msg_text(ses->tab->term, N_("Could not find "
+					 "a link with the text '%s'."),
+					 typeahead),
+				NULL, 1,
+				N_("OK"), NULL, B_ENTER | B_ESC);
+			break;
+
+		case 1:
+			beep_terminal(ses->tab->term);
+
+		default:
+			break;
+	}
+}
+
+static void
 print_find_error(struct session *ses, enum find_error find_error)
 {
 	int hit_top = 0;
@@ -989,28 +1011,6 @@ enum typeahead_code {
 	TYPEAHEAD_ERROR,
 	TYPEAHEAD_CANCEL,
 };
-
-static void
-typeahead_error(struct session *ses, unsigned char *typeahead)
-{
-	switch (get_opt_int("document.browse.search.show_not_found")) {
-		case 2:
-			msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-				N_("Typeahead"), ALIGN_CENTER,
-				msg_text(ses->tab->term, N_("Could not find "
-					 "a link with the text '%s'."),
-					 typeahead),
-				NULL, 1,
-				N_("OK"), NULL, B_ENTER | B_ESC);
-			break;
-
-		case 1:
-			beep_terminal(ses->tab->term);
-
-		default:
-			break;
-	}
-}
 
 static inline unsigned char *
 get_link_typeahead_text(struct link *link)

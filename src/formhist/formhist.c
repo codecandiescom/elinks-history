@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.20 2003/08/02 20:05:48 jonas Exp $ */
+/* $Id: formhist.c,v 1.21 2003/08/02 20:17:05 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -291,16 +291,28 @@ memorize_form(struct session *ses, struct list_head *submit,
 	struct form_history_item *fm_data;
 	struct list_head *sb;
 	struct submitted_value *sv;
-	int save = 0;
+	int has_username = 0;
+	int has_password = 0;
+ 
+	/* Require that at least one FC_TEXT field and a password field are non
+	 * empty. Hopefully the FC_TEXT field is the username field. */
+ 	foreach (sv, *submit) {
+		if (sv->value && *sv->value) {
+			if (sv->type == FC_TEXT) {
+				has_username++;
+			} else if (sv->type == FC_PASSWORD) {
+				has_password++;
+			}
 
-	foreach (sv, *submit) {
-		if (sv->type == FC_PASSWORD && sv->value && *sv->value) {
-			save = 1;
-			break;
+			if (has_password && has_username)
+				break;
 		}
-	}
-
-	if (!save || form_already_saved(frm->action, submit)) return NULL;
+ 	}
+ 
+	if (!has_username
+	    || !has_password
+	    || form_already_saved(frm->action, submit))
+		return NULL;
 
 	fm_data = init_form_history_item(frm->action);
 	if (!fm_data) return NULL;

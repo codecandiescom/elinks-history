@@ -1,5 +1,5 @@
 /* Base64 encode/decode implementation. */
-/* $Id: base64.c,v 1.10 2003/08/01 20:22:17 zas Exp $ */
+/* $Id: base64.c,v 1.11 2003/08/01 21:49:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,7 @@ base64_decode(register unsigned char *in)
 
 	while (*in) {
 		if (*in == '=') break;
-        	if (*in > 255 || !is_base64_char[*in])
+        	if (!is_base64_char[*in])
 			goto decode_error;
 
         	bits += decode[*in];

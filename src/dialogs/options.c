@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.165 2004/12/29 22:35:54 jonas Exp $ */
+/* $Id: options.c,v 1.166 2004/12/30 23:42:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,11 +228,14 @@ push_resize_button(void *data)
 
 /* menu_func */
 void
-dlg_resize_terminal(struct terminal *term, void *xxx, void *xxxx)
+resize_terminal_dialog(struct terminal *term)
 {
 	struct dialog *dlg;
 	int width = int_min(term->width, 999);
 	int height = int_min(term->height, 999);
+
+	if (!can_resize_window(term->environment))
+		return;
 
 	ulongcat(width_str, NULL, width, 3, ' ');
 	ulongcat(height_str, NULL, height, 3, ' ');

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.381 2004/12/17 22:59:00 jonas Exp $ */
+/* $Id: menu.c,v 1.382 2004/12/30 23:42:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -373,9 +373,8 @@ do_file_menu(struct terminal *term, void *xxx, void *ses_)
 	}
 
 	if (can_resize_window(term->environment)) {
-		SET_MENU_ITEM(e, N_("Resize t~erminal"), NULL, ACT_MAIN_NONE,
-			      dlg_resize_terminal, NULL,
-			      0, 0, HKS_SHOW);
+		SET_MENU_ITEM(e, N_("Resize t~erminal"), NULL, ACT_MAIN_TERMINAL_RESIZE,
+			      NULL, NULL, 0, 0, HKS_SHOW);
 		e++;
 		x = 0;
 	}

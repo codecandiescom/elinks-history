@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.129 2004/12/02 16:34:01 zas Exp $ */
+/* $Id: action.c,v 1.130 2004/12/30 23:42:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -645,6 +645,10 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_TAB_PREV:
 			switch_current_tab(ses, -1);
+			break;
+
+		case ACT_MAIN_TERMINAL_RESIZE:
+			resize_terminal_dialog(term);
 			break;
 
 		case ACT_MAIN_TOGGLE_CSS:

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.7 2004/11/22 13:27:41 zas Exp $ */
+/* $Id: options.h,v 1.8 2004/12/30 23:42:02 jonas Exp $ */
 
 #ifndef EL__DIALOGS_OPTIONS_H
 #define EL__DIALOGS_OPTIONS_H
@@ -9,6 +9,6 @@
 void charset_list(struct terminal *, void *, void *);
 void terminal_options(struct terminal *, void *, struct session *);
 void menu_language_list(struct terminal *, void *, void *);
-void dlg_resize_terminal(struct terminal *term, void *xxx, void *xxxx);
+void resize_terminal_dialog(struct terminal *term);
 
 #endif

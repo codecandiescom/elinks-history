@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.261 2004/11/19 16:42:35 zas Exp $ */
+/* $Id: kbdbind.c,v 1.262 2004/12/30 23:42:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -532,6 +532,7 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "tab-move-right", ACT_MAIN_TAB_MOVE_RIGHT, DACT(N_("Move the current tab to the right")) },
 	{ "tab-next", ACT_MAIN_TAB_NEXT, DACT(N_("Next tab")) },
 	{ "tab-prev", ACT_MAIN_TAB_PREV, DACT(N_("Previous tab")) },
+	{ "terminal-resize", ACT_MAIN_TERMINAL_RESIZE, DACT(N_("Open the terminal resize dialog")) },
 	{ "toggle-css", ACT_MAIN_TOGGLE_CSS, DACT(N_("Toggle rendering of page using CSS")) },
 	{ "toggle-display-images", ACT_MAIN_TOGGLE_DISPLAY_IMAGES, DACT(N_("Toggle displaying of links to images")) },
 	{ "toggle-display-tables", ACT_MAIN_TOGGLE_DISPLAY_TABLES, DACT(N_("Toggle rendering of tables")) },

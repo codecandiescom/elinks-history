@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.10 2003/10/23 22:39:56 pasky Exp $ */
+/* $Id: options.inc,v 1.11 2003/10/24 00:58:48 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -112,7 +112,7 @@ struct option_info config_options_info[] = {
 	INIT_OPT_BOOL("connection.ssl", N_("Verify certificates"),
 		"cert_verify", 0, 0,
 		N_("Verify the peer's SSL certificate.")),
-	#endif
+#endif
 
 
 	INIT_OPT_BOOL("connection", N_("Asynchronous DNS"),
@@ -229,6 +229,12 @@ struct option_info config_options_info[] = {
 		N_("Ask if a login form should be saved to file or not.\n"
 		"This option only disables the dialog, already saved login\n"
 		"forms are unaffected.")),
+#else
+	INIT_OPT_BOOL("document.browse.forms", N_("Show forms history dialog"),
+		"show_formhist", 0, 1,
+		N_("Ask if a login form should be saved to file or not.\n"
+		"This option only disables the dialog, already saved login\n"
+		"forms are unaffected. (DISABLED)")),
 #endif
 
 	INIT_OPT_TREE("document.browse", N_("Images"),

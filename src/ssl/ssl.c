@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.14 2002/07/11 21:30:20 pasky Exp $ */
+/* $Id: ssl.c,v 1.15 2002/08/27 10:51:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,7 @@
 #ifdef HAVE_OPENSSL
 #include <openssl/ssl.h>
 #elif defined(HAVE_GNUTLS)
-#include <gnutls.h>
+#include <gnutls/gnutls.h>
 #endif
 #endif
 

@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.12 2002/08/27 03:00:08 pasky Exp $ */
+/* $Id: socket.c,v 1.13 2002/08/27 10:51:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,7 +10,7 @@
 #ifdef HAVE_OPENSSL
 #include <openssl/ssl.h>
 #elif defined(HAVE_GNUTLS)
-#include <gnutls.h>
+#include <gnutls/gnutls.h>
 #endif
 #endif
 

@@ -71,9 +71,10 @@ distribute such a binary, as it's breaking GPL 2(b), if they like to have
 everything legally perfect (like Debian people ;).  As a semi-solution to this
 for these people, GNUTLS support was introduced; if you want to distribute
 ELinks binary with HTTPS support, compile ELinks with --with-gnutls configure
-option (assuming that you have GNUTLS installed). However, as GNUTLS is not yet
-100% stable and also its support in ELinks is not so well tested, it's
-recommended for users to give strong preference to OpenSSL, whenever possible.
+option (assuming that you have GNUTLS 0.5.0 or later [tested with 0.5.4]
+installed). However, as GNUTLS is not yet 100% stable and also its support in
+ELinks is not so well tested, it's recommended for users to give strong
+preference to OpenSSL, whenever possible.
 
   The basic compilation looks like:
 
@@ -148,5 +149,5 @@ old_to_new_bookmarks.sh.
 
 ##########
 
-$Id: INSTALL,v 1.16 2002/08/06 23:19:49 pasky Exp $
+$Id: INSTALL,v 1.17 2002/08/27 10:51:47 pasky Exp $
 vim: textwidth=80

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-05 20:53+0100\n"
-"PO-Revision-Date: 2005-02-05 20:56+0100\n"
+"POT-Creation-Date: 2005-02-11 22:37+0100\n"
+"PO-Revision-Date: 2005-02-11 23:31+0100\n"
 "Last-Translator: Morten Bo Johansen <mojo@mbjnet.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr "Luk"
 #: src/bfu/hierbox.c:444 src/bfu/hierbox.c:455 src/cache/dialogs.c:219
 #: src/config/dialogs.c:516 src/cookies/dialogs.c:421
 #: src/dialogs/document.c:44 src/dialogs/document.c:223
-#: src/dialogs/download.c:470 src/formhist/dialogs.c:212
+#: src/dialogs/download.c:476 src/formhist/dialogs.c:212
 #: src/globhist/dialogs.c:225 src/protocol/auth/dialogs.c:254
 msgid "Info"
 msgstr "Info"
@@ -48,8 +48,8 @@ msgstr "Tast mellemrum for at åbne denne mappe."
 #: src/ecmascript/spidermonkey.c:1963 src/formhist/dialogs.c:179
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
 #: src/protocol/nntp/codes.c:132 src/protocol/protocol.c:227
-#: src/protocol/user.c:268 src/sched/download.c:231 src/sched/download.c:327
-#: src/sched/download.c:368 src/sched/download.c:507 src/sched/download.c:601
+#: src/protocol/user.c:268 src/sched/download.c:229 src/sched/download.c:325
+#: src/sched/download.c:366 src/sched/download.c:505 src/sched/download.c:599
 #: src/sched/error.c:42 src/sched/session.c:239 src/sched/session.c:706
 #: src/sched/session.c:730 src/sched/session.c:747
 #: src/scripting/lua/core.c:395 src/scripting/lua/core.c:476
@@ -171,8 +171,8 @@ msgstr "Navn"
 #: src/dialogs/edit.c:102 src/dialogs/edit.c:105 src/dialogs/menu.c:97
 #: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:205
 #: src/dialogs/options.c:283 src/mime/dialogs.c:131
-#: src/protocol/auth/dialogs.c:109 src/sched/download.c:551
-#: src/sched/download.c:1130 src/scripting/lua/core.c:396
+#: src/protocol/auth/dialogs.c:109 src/sched/download.c:549
+#: src/sched/download.c:1134 src/scripting/lua/core.c:396
 #: src/scripting/lua/core.c:477 src/scripting/lua/core.c:717
 #: src/viewer/text/search.c:1571 src/viewer/text/view.c:730
 msgid "Cancel"
@@ -462,7 +462,7 @@ msgid "Add"
 msgstr "Tilføj"
 
 #: src/bookmarks/dialogs.c:452 src/cookies/dialogs.c:425
-#: src/dialogs/download.c:476 src/dialogs/edit.c:99 src/formhist/dialogs.c:215
+#: src/dialogs/download.c:482 src/dialogs/edit.c:99 src/formhist/dialogs.c:215
 #: src/globhist/dialogs.c:232 src/protocol/auth/dialogs.c:256
 msgid "Clear"
 msgstr "Ryd"
@@ -471,7 +471,7 @@ msgstr "Ryd"
 #: src/bookmarks/dialogs.c:455 src/config/dialogs.c:521
 #: src/config/dialogs.c:946 src/cookies/dialogs.c:426
 #: src/dialogs/options.c:204 src/formhist/dialogs.c:216
-#: src/globhist/dialogs.c:235 src/sched/download.c:1114
+#: src/globhist/dialogs.c:235 src/sched/download.c:1118
 msgid "Save"
 msgstr "Gem"
 
@@ -4397,7 +4397,7 @@ msgstr "Intern serverinformation om side"
 msgid "No header info."
 msgstr "Ingen serverinformation om side"
 
-#: src/dialogs/download.c:253 src/dialogs/menu.c:570 src/sched/download.c:365
+#: src/dialogs/download.c:253 src/dialogs/menu.c:570 src/sched/download.c:363
 msgid "Download"
 msgstr "Download"
 
@@ -4409,58 +4409,58 @@ msgstr "Baggrund"
 msgid "Background with notify"
 msgstr "Udfør i baggrunden og underret"
 
-#: src/dialogs/download.c:262 src/dialogs/download.c:471
+#: src/dialogs/download.c:262 src/dialogs/download.c:477
 msgid "Abort"
 msgstr "Afbryd"
 
 #. This requires more work to make locking work and query the user
-#: src/dialogs/download.c:263 src/dialogs/download.c:474
+#: src/dialogs/download.c:267 src/dialogs/download.c:480
 msgid "Abort and delete file"
 msgstr "Afbryd og slet fil"
 
 #. cant_delete_item
-#: src/dialogs/download.c:402
+#: src/dialogs/download.c:408
 #, c-format
 msgid "Sorry, but download \"%s\" cannot be interrupted."
 msgstr "Desværre, denne filoverførsel \"%s\" kan ikke afbrydes."
 
 #. cant_delete_used_item
-#: src/dialogs/download.c:404
+#: src/dialogs/download.c:410
 #, c-format
 msgid "Sorry, but download \"%s\" is being used by something else."
 msgstr "Desværre, denne filoverførsel \"%s\" er optaget af en anden proces."
 
 #. delete_marked_items_title
-#: src/dialogs/download.c:410
+#: src/dialogs/download.c:416
 msgid "Interrupt marked downloads"
 msgstr "Afbryd markerede filoverførelser"
 
 #. delete_marked_items
-#: src/dialogs/download.c:412
+#: src/dialogs/download.c:418
 msgid "Interrupt marked downloads?"
 msgstr "Afbryd markerede filoverførelser?"
 
 #. delete_item_title
-#: src/dialogs/download.c:418
+#: src/dialogs/download.c:424
 msgid "Interrupt download"
 msgstr "Afbryd filoverførsel"
 
 #. delete_item
-#: src/dialogs/download.c:420
+#: src/dialogs/download.c:426
 msgid "Interrupt this download?"
 msgstr "Afbryd denne filoverførsel?"
 
 #. clear_all_items_title
-#: src/dialogs/download.c:422
+#: src/dialogs/download.c:428
 msgid "Interrupt all downloads"
 msgstr "Afbryd alle filoverførsler?"
 
 #. clear_all_items_title
-#: src/dialogs/download.c:424
+#: src/dialogs/download.c:430
 msgid "Do you really want to interrupt all downloads?"
 msgstr "Vil du virkelig afbryde alle filoverførsler?"
 
-#: src/dialogs/download.c:481
+#: src/dialogs/download.c:487
 msgid "Download manager"
 msgstr "Downloadhåndtering"
 
@@ -5532,29 +5532,29 @@ msgstr "Kaldet til %s fejlede: %d (%s)"
 msgid "%d select() failures."
 msgstr "%d select() fejl."
 
-#: src/main.c:144
+#: src/main.c:138
 msgid "Cannot create a pipe for internal communication."
 msgstr "Kan ikke oprette datakanal til intern kommunikation."
 
-#: src/main.c:204
+#: src/main.c:198
 #, c-format
 msgid "URL expected after -%s"
 msgstr "Adresse forventes efter -%s."
 
-#: src/main.c:212
+#: src/main.c:206
 msgid "No running ELinks found."
 msgstr "Ingen eksisterende ELinks blev fundet."
 
 #. The remote session(s) can not be created
-#: src/main.c:219
+#: src/main.c:213
 msgid "No remote session to connect to."
 msgstr "Ingen fjernsession at forbinde til."
 
-#: src/main.c:228
+#: src/main.c:222
 msgid "Unable to encode session info."
 msgstr "Kunne ikke indkode sessionsinformation."
 
-#: src/main.c:245
+#: src/main.c:239
 msgid "Unable to attach_terminal()."
 msgstr "Kunne ikke forbinde til terminal med attach_terminal()."
 
@@ -6604,12 +6604,12 @@ msgstr "Intet program"
 msgid "No program specified for protocol %s."
 msgstr "Intet program angivet for protokol %s"
 
-#: src/sched/download.c:227 src/sched/download.c:324 src/sched/download.c:503
-#: src/sched/download.c:597
+#: src/sched/download.c:225 src/sched/download.c:322 src/sched/download.c:501
+#: src/sched/download.c:595
 msgid "Download error"
 msgstr "Downloadfejl"
 
-#: src/sched/download.c:228 src/sched/download.c:598
+#: src/sched/download.c:226 src/sched/download.c:596
 #, c-format
 msgid ""
 "Could not create file '%s':\n"
@@ -6618,7 +6618,7 @@ msgstr ""
 "Kunne ikke oprette filen \"%s\":\n"
 "%s"
 
-#: src/sched/download.c:325
+#: src/sched/download.c:323
 #, c-format
 msgid ""
 "Error downloading %s:\n"
@@ -6629,7 +6629,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/sched/download.c:366
+#: src/sched/download.c:364
 #, c-format
 msgid ""
 "Download complete:\n"
@@ -6638,16 +6638,16 @@ msgstr ""
 "Filoverførsel fuldført:\n"
 "%s"
 
-#: src/sched/download.c:504
+#: src/sched/download.c:502
 #, c-format
 msgid "'%s' is a directory."
 msgstr "'%s' er et katalog."
 
-#: src/sched/download.c:540
+#: src/sched/download.c:538
 msgid "File exists"
 msgstr "Fil eksisterer"
 
-#: src/sched/download.c:541
+#: src/sched/download.c:539
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -6662,50 +6662,50 @@ msgstr ""
 "Det alternative filenavn er:\n"
 "%s"
 
-#: src/sched/download.c:548
+#: src/sched/download.c:546
 msgid "Save under the alternative name"
 msgstr "Gem under det alternative navn"
 
-#: src/sched/download.c:549
+#: src/sched/download.c:547
 msgid "Overwrite the original file"
 msgstr "Overskriv originalfilen"
 
-#: src/sched/download.c:550
+#: src/sched/download.c:548
 msgid "Resume download of the original file"
 msgstr "Genoptag overførsel af originalfilen"
 
-#: src/sched/download.c:1033
+#: src/sched/download.c:1037
 msgid "What to do?"
 msgstr "Hvad skal der ske med filen?"
 
-#: src/sched/download.c:1036
+#: src/sched/download.c:1040
 msgid "Unknown type"
 msgstr "Ukendt type"
 
-#: src/sched/download.c:1053
+#: src/sched/download.c:1057
 #, c-format
 msgid "What would you like to do with the file '%s' (type: %s%s%s)?"
 msgstr "Hvad vil du gøre med filen \"%s\" (type: %s%s%s)?"
 
-#: src/sched/download.c:1083
+#: src/sched/download.c:1087
 #, no-c-format
 msgid "Program ('%' will be replaced by the filename)"
 msgstr "Program (\"%\" vil blive erstattet med filnavnet)"
 
-#: src/sched/download.c:1090
+#: src/sched/download.c:1094
 #, c-format
 msgid "The file will be opened with the program '%s'."
 msgstr "Filen vil blive åbnet med programmet \"%s\"."
 
-#: src/sched/download.c:1107
+#: src/sched/download.c:1111
 msgid "Open"
 msgstr "Åbn"
 
-#: src/sched/download.c:1120
+#: src/sched/download.c:1124
 msgid "Display"
 msgstr "Vis"
 
-#: src/sched/download.c:1124
+#: src/sched/download.c:1128
 msgid "Show header"
 msgstr "Vis protokolhoved"
 
@@ -6900,19 +6900,27 @@ msgstr "Telefonbogsprotokollen CSO understøttes ikke."
 
 #: src/sched/error.c:105
 msgid ""
-"The proxy configuration encountered an error.\n"
-"This usually means that either an environment\n"
-"variable with proxy info or a proxy scripting\n"
-"hook did not provide proxy configuration info\n"
-"in the correct format."
+"Configuration of the proxy server failed.\n"
+"This might be caused by an incorrect proxy\n"
+"setting specified by an environment variable\n"
+"or returned by a scripting proxy hook.\n"
+"\n"
+"The correct syntax for proxy settings are\n"
+"a host name optionally followed by a colon\n"
+"and a port number. Example: 'localhost:8080'."
 msgstr ""
-"Der opstod en fejl under proxy-konfigureringen.\n"
-"Dette betyder ofte enten at en miljøvariabel med\n"
-"proxy-information eller at en proxy-script-kald\n"
-"ikke returnerede proxy-konfigurerings information\n"
-"i det korrekte format."
+"Opsætning af proxy-serveren mislykkedes.\n"
+"Dette skyldes måske at en forkert proxy\n"
+"indstilling er angivet med en miljøvariabel\n"
+"eller er blevet returneret af et\n"
+"proxy-script-kald.\n"
+"\n"
+"Det korrekte format for proxy-indstillinger\n"
+"er et værtsmaskinenavn eventuelt efterfulgt\n"
+"af et kolon og et portnummer, f.eks.\n"
+"\"localhost:8080\"."
 
-#: src/sched/error.c:132
+#: src/sched/error.c:135
 msgid "Unknown error"
 msgstr "Ukendt fejl"
 

@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.7 2003/12/31 22:01:24 pasky Exp $ */
+/* $Id: feature.h,v 1.8 2003/12/31 22:02:40 pasky Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -77,8 +77,8 @@
  * Default: enabled if libexpat (required library) found */
 
 #ifdef HAVE_LIBEXPAT
-/* Comment out the following line if you want to always have this disabled: */
-#undef HAVE_LIBEXPAT
+/* Uncomment the following line if you want to always have this disabled: */
+/* #undef HAVE_LIBEXPAT */
 #endif
 
 
@@ -211,8 +211,8 @@
  * Default: enabled if the libc supports it (only glibc) */
 
 #ifdef BACKTRACE
-/* Comment out the following line if you want to always have this disabled: */
-#undef BACKTRACE
+/* Uncomment the following line if you want to always have this disabled: */
+/* #undef BACKTRACE */
 #endif
 
 

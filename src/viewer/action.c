@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.26 2004/01/08 02:20:36 jonas Exp $ */
+/* $Id: action.c,v 1.27 2004/01/08 02:23:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,11 +186,13 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			break;
 
 		case ACT_DOWNLOAD:
-			do_frame_action(ses, download_link, action);
+			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+				do_frame_action(ses, download_link, action);
 			break;
 
 		case ACT_DOWNLOAD_IMAGE:
-			do_frame_action(ses, download_link, action);
+			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+				do_frame_action(ses, download_link, action);
 			break;
 
 		case ACT_DOWNLOAD_MANAGER:

@@ -4,7 +4,7 @@
 " Last Change:	Dec 12th 2002
 " Description:	This file covers elinks version 0.4pre15
 
-" $Id: elinks.vim,v 1.7 2003/09/30 23:18:35 jonas Exp $
+" $Id: elinks.vim,v 1.8 2003/12/22 00:10:42 jonas Exp $
 
 " For version 5.x: Clear all syntax items
 " For version 6.x: Quit when a syntax file was already loaded
@@ -52,22 +52,26 @@ syn match	elinksActStr	/=\s*"[^"]*"/ contains=elinksAssign,elinksAction
 syn keyword	elinksAction	contained abort-connection add-bookmark add-bookmark-link
 syn keyword	elinksAction	contained auto-complete auto-complete-unambiguous
 syn keyword	elinksAction	contained back backspace bookmark-manager
+syn keyword	elinksAction	contained cache-manager cancel cookie-manager
 syn keyword	elinksAction	contained cookies-load copy-clipboard cut-clipboard
 syn keyword	elinksAction	contained delete document-info down download download-image
-syn keyword	elinksAction	contained edit end enter enter-reload
+syn keyword	elinksAction	contained download-manager
+syn keyword	elinksAction	contained edit end enter enter-reload expand
 syn keyword	elinksAction	contained file-menu find-next find-next-back follow-link forget-credentials
 syn keyword	elinksAction	contained goto-url goto-url-current goto-url-current-link goto-url-home
 syn keyword	elinksAction	contained header-info history-manager home jump-to-link
 syn keyword	elinksAction	contained keybinding-manager kill-to-bol kill-to-eol
-syn keyword	elinksAction	contained left link-menu lua-console menu next-frame none
+syn keyword	elinksAction	contained left link-menu lua-console
+syn keyword	elinksAction	contained mark-item mark-set mark-goto menu next-frame none next-item
+syn keyword	elinksAction	contained open-new-tab open-link-in-new-tab
 syn keyword	elinksAction	contained open-link-in-new-window open-new-window options-manager
 syn keyword	elinksAction	contained page-down page-up paste-clipboard previous-frame quit
-syn keyword	elinksAction	contained really-quit reload resume-download right
+syn keyword	elinksAction	contained really-quit redraw reload resume-download right
 syn keyword	elinksAction	contained save-formatted scroll-down scroll-left
-syn keyword	elinksAction	contained scroll-right scroll-up search search-back
+syn keyword	elinksAction	contained scroll-right scroll-up search search-back search-typeahead select
 syn keyword	elinksAction	contained tab-close tab-next tab-prev toggle-display-images toggle-document-colors
 syn keyword	elinksAction	contained toggle-numbered-links toggle-display-tables toggle-html-plain
-syn keyword	elinksAction	contained unback up view-image zoom-frame
+syn keyword	elinksAction	contained unback unexpand up view-image zoom-frame
 
 " Include statements
 syn match	elinksInclude	/^\s*include\s/ skipwhite nextgroup=elinksValue

@@ -1,4 +1,4 @@
-/* $Id: colors.h,v 1.2 2002/07/05 21:50:45 pasky Exp $ */
+/* $Id: colors.h,v 1.3 2002/07/05 22:13:09 pasky Exp $ */
 
 #ifndef EL__BFU_COLORS_H
 #define EL__BFU_COLORS_H
@@ -19,6 +19,41 @@
  * there's additional '1' digit between 0 and B, it means that F is bright. */
 
 #ifdef COLOR_UI
+
+/* This is TurboVision-like color scheme, still a lot of gray, decent and not
+ * agressive to eyes. The one available when you will uncomment DECENT is more
+ * colourful, but ugly and agressive on eyes; useful for maniacs ;). */
+#define DECENT
+
+#ifdef DECENT
+
+#define COLOR_MENU			COL(070)
+#define COLOR_MENU_FRAME		COL(070)
+#define COLOR_MENU_SELECTED		COL(020)
+#define COLOR_MENU_HOTKEY		COL(071)
+
+#define COLOR_MAINMENU			COL(070)
+#define COLOR_MAINMENU_SELECTED		COL(020)
+#define COLOR_MAINMENU_HOTKEY		COL(071)
+
+#define COLOR_DIALOG			COL(070)
+#define COLOR_DIALOG_FRAME		COL(070)
+#define COLOR_DIALOG_TITLE		COL(071)
+#define COLOR_DIALOG_TEXT		COL(070)
+#define COLOR_DIALOG_CHECKBOX		COL(071)
+#define COLOR_DIALOG_CHECKBOX_TEXT	COL(070)
+#define COLOR_DIALOG_BUTTON		COL(0147)
+#define COLOR_DIALOG_BUTTON_SELECTED	COL(0123)
+#define COLOR_DIALOG_FIELD		COL(047)
+#define COLOR_DIALOG_FIELD_TEXT		COL(0143)
+#define COLOR_DIALOG_METER		COL(047)
+
+#define COLOR_TITLE			COL(070)
+#define COLOR_TITLE_BG			COL(070)
+#define COLOR_STATUS			COL(070)
+#define COLOR_STATUS_BG			COL(070)
+
+#else
 
 #define COLOR_MENU			COL(060)
 #define COLOR_MENU_FRAME		COL(0160)
@@ -45,6 +80,8 @@
 #define COLOR_TITLE_BG			COL(0143)
 #define COLOR_STATUS			COL(0143)
 #define COLOR_STATUS_BG			COL(0143)
+
+#endif
 
 #else
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.112 2003/06/16 15:17:45 pasky Exp $ */
+/* $Id: renderer.c,v 1.113 2003/06/16 15:36:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -431,6 +431,14 @@ split_line_at(struct part *part, register int x)
 	}
 }
 
+/* Here, we scan the line for a possible place where we could split it into two
+ * (breaking it, because it is too long), if it is overlapping from the maximal
+ * box width. */
+/* Returns 0 if there was found no spot suitable for breaking the line.
+ *         1 if the line was split into two.
+ *         2 if the (second) splitted line is blank (that is useful to determine
+ *           ie. if the next line_break() should really break the line; we don't
+ *           want to see any blank lines to pop up, do we?). */
 static int
 split_line(struct part *part)
 {
@@ -445,6 +453,8 @@ split_line(struct part *part)
 			return split_line_at(part, x);
 
 	{
+		/* Make sure that we count the right margin to the total
+		 * actual box width. */
 		int new_x = part->cx + par_format.rightmargin;
 
 		if (new_x > part->x)

@@ -1,5 +1,5 @@
 /* The DOM tree navigation interface */
-/* $Id: navigator.c,v 1.4 2004/10/13 15:34:46 zas Exp $ */
+/* $Id: navigator.c,v 1.5 2004/10/14 23:16:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,6 +119,7 @@ push_dom_node(struct dom_navigator *navigator, struct dom_node *node)
 		if (!node) {
 			memset(state, 0, sizeof(struct dom_navigator_state));
 			navigator->depth--;
+			assert(navigator->depth >= 0);
 		}
 	}
 
@@ -140,6 +141,7 @@ do_pop_dom_node(struct dom_navigator *navigator, struct dom_navigator_state *par
 	}
 
 	navigator->depth--;
+	assert(navigator->depth >= 0);
 
 	if (navigator->object_size && state->data) {
 		size_t offset = navigator->depth * navigator->object_size;

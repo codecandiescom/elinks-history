@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.465 2004/06/10 23:55:36 jonas Exp $ */
+/* $Id: session.c,v 1.466 2004/06/11 00:10:21 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -580,9 +580,11 @@ dialog_goto_url_open(void *data)
 }
 
 static void
-setup_first_session(struct session *ses)
+setup_first_session(struct session *ses, struct uri *uri)
 {
 	struct terminal *term = ses->tab->term;
+
+	if (uri) goto_uri(ses, uri);
 
 	if (first_use) {
 		msg_box(term, NULL, 0,
@@ -592,6 +594,11 @@ setup_first_session(struct session *ses)
 			"Help menu."),
 			ses, 1,
 			N_("OK"), dialog_goto_url_open_first, B_ENTER | B_ESC);
+
+#ifdef CONFIG_BOOKMARKS
+	} else if (!uri && get_opt_bool("ui.sessions.auto_restore")) {
+		open_bookmark_folder(ses, get_opt_str("ui.sessions.auto_save_foldername"));
+#endif
 	}
 
 	if (!*get_opt_str("protocol.http.user_agent")) {
@@ -651,13 +658,6 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 	if (info->uri) {
 		goto_uri(ses, info->uri);
 
-#ifdef CONFIG_BOOKMARKS
-	} else if (!first_use
-		   && number_of_tabs(ses->tab->term) < 2
-		   && get_opt_bool("ui.sessions.auto_restore")) {
-		open_bookmark_folder(ses, get_opt_str("ui.sessions.auto_save_foldername"));
-
-#endif
 	} else {
 		if (!goto_url_home(ses)) {
 			if ((get_opt_int("ui.startup_goto_dialog")
@@ -675,6 +675,7 @@ create_session(struct window *tab, struct initial_session_info *info)
 {
 	struct session *ses = mem_calloc(1, sizeof(struct session));
 	struct session *base_session = info->base_session;
+	struct uri *uri = info->uri;
 
 	if (!ses) return NULL;
 
@@ -694,17 +695,17 @@ create_session(struct window *tab, struct initial_session_info *info)
 
 	/* Only do the setup for the first tab */
 	if (list_empty(sessions)) {
-		setup_first_session(ses);
+		setup_first_session(ses, uri);
 
 	} else {
 		if (base_session) {
 			copy_session(base_session, ses);
 		}
+
+		process_session_info(ses, info);
 	}
 
 	add_to_list(sessions, ses);
-
-	process_session_info(ses, info);
 
 	return ses;
 }

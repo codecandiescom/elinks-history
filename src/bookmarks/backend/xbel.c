@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.18 2003/04/17 17:48:56 zas Exp $ */
+/* $Id: xbel.c,v 1.19 2003/04/19 17:11:16 zas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -96,9 +96,8 @@ read_bookmarks_xbel(FILE *f)
 
 	p = XML_ParserCreate(NULL);
 	if (!p) {
-		/* %c is BELL (\a) */
-		fprintf(stderr, gettext("read_bookmarks_xbel(): "
-					"Error in XML_ParserCreate()%c\n"), '\a');
+		error(gettext("read_bookmarks_xbel(): "
+			      "Error in XML_ParserCreate()\n"));
 		return;
 	}
 
@@ -109,26 +108,22 @@ read_bookmarks_xbel(FILE *f)
 		int len = fread(in_buffer, 1, BUFSIZ, f);
 
 		if (ferror(f)) {
-			/* %c is BELL (\a) */
-			fprintf(stderr, gettext("read_bookmarks_xbel(): "
-						"Error reading %s%c\n"),
-					filename_bookmarks_xbel(0), '\a');
+			error(gettext("read_bookmarks_xbel(): "
+				      "Error reading %s\n"),
+			      filename_bookmarks_xbel(0));
 			err = 1;
 		} else {
 
 			done = feof(f);
 
 			if (!err && !XML_Parse(p, in_buffer, len, done)) {
-				/* %c is BELL (\a) */
-				fprintf(stderr,
-					gettext("read_bookmarks_xbel(): "
-						"Parse error in %s at line %d "
-						"column %d:\n%s%c\n"),
-					filename_bookmarks_xbel(0),
-					XML_GetCurrentLineNumber(p),
-					XML_GetCurrentColumnNumber(p),
-					XML_ErrorString(XML_GetErrorCode(p)),
-					'\a');
+				error(gettext("read_bookmarks_xbel(): "
+					      "Parse error in %s at line %d "
+					      "column %d:\n%s%c\n"),
+				      filename_bookmarks_xbel(0),
+				      XML_GetCurrentLineNumber(p),
+				      XML_GetCurrentColumnNumber(p),
+				      XML_ErrorString(XML_GetErrorCode(p)));
 				err = 1;
 			}
 		}

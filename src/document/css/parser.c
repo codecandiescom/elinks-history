@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.124 2004/09/21 00:30:12 pasky Exp $ */
+/* $Id: parser.c,v 1.125 2004/09/21 00:30:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -380,7 +380,8 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 	/* Wipe the selector we were currently composing, if any. */
 	if (pkg) {
-		done_css_selector(pkg->selector);
+		if (prev_element_selector)
+			done_css_selector(prev_element_selector);
 		del_from_list(pkg);
 		mem_free(pkg);
 	}

@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.16 2005/03/28 22:19:58 zas Exp $ */
+/* $Id: parse.c,v 1.17 2005/03/28 22:23:01 zas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -342,6 +342,8 @@ parse_ftp_unix_response(struct ftp_file_info *info, unsigned char *src, int len)
 				/* Get the current time.  */
 				time_t timenow = time(NULL);
 				struct tm *now = localtime(&timenow);
+				
+				mtime.tm_year = now->tm_year;
 
 				/* Some listings will not specify the year if it
 				 * is "obvious" that the file was from the
@@ -350,9 +352,7 @@ parse_ftp_unix_response(struct ftp_file_info *info, unsigned char *src, int len)
 				 * not 1997. Thanks to Vladimir Volovich for
 				 * mentioning this! */
 				if (mtime.tm_mon > now->tm_mon)
-					mtime.tm_year = now->tm_year - 1;
-				else
-					mtime.tm_year = now->tm_year;
+					mtime.tm_year--;
 			}
 
 			if (mtime.tm_year >= 1900)

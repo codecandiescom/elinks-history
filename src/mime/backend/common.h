@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.17 2003/10/20 15:15:07 jonas Exp $ */
+/* $Id: common.h,v 1.18 2003/10/25 19:16:17 jonas Exp $ */
 
 #ifndef EL__MIME_BACKEND_COMMON_H
 #define EL__MIME_BACKEND_COMMON_H
@@ -8,13 +8,6 @@
 #include "mime/mime.h"
 
 struct mime_backend {
-	/* String to identify the backend. */
-	unsigned char *name;
-
-	/* Startup and teardown. */
-	void (*init)(void);
-	void (*done)(void);
-
 	/* Resolve the content type from the @extension. */
 	unsigned char *(*get_content_type)(unsigned char *extension);
 
@@ -24,10 +17,6 @@ struct mime_backend {
 };
 
 /* Multiplexor functions for the backends. */
-
-void init_mime_backends(void);
-
-void done_mime_backends(void);
 
 unsigned char *get_content_type_backends(unsigned char *extension);
 

@@ -1,5 +1,5 @@
 /* MIME handling backends multiplexing */
-/* $Id: common.c,v 1.15 2003/10/20 14:54:55 jonas Exp $ */
+/* $Id: common.c,v 1.16 2003/10/25 19:16:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,26 +35,6 @@ static struct mime_backend *mime_backends[] = {
 	NULL,
 
 };
-
-void
-init_mime_backends(void)
-{
-	struct mime_backend **backend;
-
-	for (backend = mime_backends; *backend; backend++)
-		if ((*backend)->init)
-			(*backend)->init();
-}
-
-void
-done_mime_backends(void)
-{
-	struct mime_backend **backend;
-
-	for (backend = mime_backends; *backend; backend++)
-		if ((*backend)->done)
-			(*backend)->done();
-}
 
 unsigned char *
 get_content_type_backends(unsigned char *extension)

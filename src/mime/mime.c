@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.26 2003/10/25 19:10:18 jonas Exp $ */
+/* $Id: mime.c,v 1.27 2003/10/25 19:16:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,18 +19,6 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-
-static void
-init_mime(struct module *module)
-{
-	init_mime_backends();
-}
-
-static void
-done_mime(struct module *module)
-{
-	done_mime_backends();
-}
 
 /* Checks if application/x-<extension> has any handlers. */
 static inline unsigned char *
@@ -140,10 +128,27 @@ get_mime_type_handler(unsigned char *content_type, int xwin)
 	return get_mime_handler_backends(content_type, xwin);
 }
 
+/* Backends dynamic area: */
+
+#include "mime/backend/default.h"
+#include "mime/backend/mailcap.h"
+#include "mime/backend/mimetypes.h"
+
+static struct module *mime_submodules[] = {
+	&default_mime_module,
+#ifdef MAILCAP
+	&mailcap_mime_module,
+#endif
+#ifdef MIMETYPES
+	&mimetypes_mime_module,
+#endif
+	NULL,
+};
+
 struct module mime_module = INIT_MODULE(
 	/* name: */		"mime",
 	/* options: */		NULL,
-	/* submodules: */	NULL,
-	/* init: */		init_mime,
-	/* done: */		done_mime
+	/* submodules: */	mime_submodules,
+	/* init: */		NULL,
+	/* done: */		NULL
 );

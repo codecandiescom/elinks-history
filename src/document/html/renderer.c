@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.113 2003/06/16 15:36:32 pasky Exp $ */
+/* $Id: renderer.c,v 1.114 2003/06/16 15:37:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -390,10 +390,6 @@ split_line_at(struct part *part, register int x)
 {
 	register int tmp;
 
-	tmp = x + par_format.rightmargin;
-	if (tmp > part->x)
-		part->x = tmp;
-
 	if (part->data) {
 #ifdef DEBUG
 		if ((POS(x, part->cy) & 0xff) != ' ')
@@ -444,14 +440,6 @@ split_line(struct part *part)
 {
 	register int x;
 
-	for (x = overlap(par_format); x >= par_format.leftmargin; x--)
-		if (x < part->spaces_len && part->spaces[x])
-			return split_line_at(part, x);
-
-	for (x = par_format.leftmargin; x < part->cx ; x++)
-		if (x < part->spaces_len && part->spaces[x])
-			return split_line_at(part, x);
-
 	{
 		/* Make sure that we count the right margin to the total
 		 * actual box width. */
@@ -460,6 +448,14 @@ split_line(struct part *part)
 		if (new_x > part->x)
 			part->x = new_x;
 	}
+
+	for (x = overlap(par_format); x >= par_format.leftmargin; x--)
+		if (x < part->spaces_len && part->spaces[x])
+			return split_line_at(part, x);
+
+	for (x = par_format.leftmargin; x < part->cx ; x++)
+		if (x < part->spaces_len && part->spaces[x])
+			return split_line_at(part, x);
 
 	return 0;
 }

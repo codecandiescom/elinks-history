@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.34 2002/08/27 00:17:23 pasky Exp $ */
+/* $Id: download.c,v 1.35 2002/09/08 19:12:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1005,7 +1005,7 @@ ses_chktype(struct session *ses, struct status **stat, struct cache_entry *ce)
 	if (!strcasecmp(ct, "text/plain")) goto free_ct;
 
 	assoc = get_mime_type_handler(ses->term, ct);
-	if (!assoc && strlen(ct) >= 4 && !casecmp(ct, "text", 4)) goto free_ct;
+	if (!assoc && strlen(ct) >= 4 && !strncasecmp(ct, "text", 4)) goto free_ct;
 
 	if (ses->tq_url)
 		internal("Type query to %s already in progress.", ses->tq_url);

@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.7 2002/06/18 19:52:22 zas Exp $ */
+/* $Id: header.c,v 1.8 2002/09/08 19:12:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ a:
 	if (!y) return NULL;
 	while (*y && (*y == ';' || *y <= ' ')) y++;
 	if (strlen(y) < le) return NULL;
-	if (casecmp(y, e, le)) goto a;
+	if (strncasecmp(y, e, le)) goto a;
 	y += le;
 	while (*y && (*y <= ' ' || *y == '=')) y++;
 	if (!*y) return stracpy("");

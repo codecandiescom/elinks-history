@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.33 2002/09/07 09:32:50 zas Exp $ */
+/* $Id: cookies.c,v 1.34 2002/09/08 19:12:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,7 +142,7 @@ check_domain_security(unsigned char *server, unsigned char *domain)
 						 "gov", "mil", "int", NULL };
 
 			for (i = 0; tld[i]; i++) {
-				if (!casecmp(tld[i], &domain[domain_len - 3], 3)) {
+				if (!strncasecmp(tld[i], &domain[domain_len - 3], 3)) {
 					need_dots = 1;
 					break;
 				}
@@ -437,7 +437,7 @@ is_in_domain(unsigned char *d, unsigned char *s)
 	if (dl == sl) return !strcasecmp(d, s);
 	if (s[sl - dl - 1] != '.') return 0;
 
-	return !casecmp(d, s + sl - dl, dl);
+	return !strncasecmp(d, s + sl - dl, dl);
 }
 
 

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.30 2002/08/25 20:15:32 pasky Exp $ */
+/* $Id: url.c,v 1.31 2002/09/08 19:12:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,7 @@ check_protocol(unsigned char *p, int l)
 	int i;
 
 	for (i = 0; protocols[i].prot; i++)
-		if (!casecmp(protocols[i].prot, p, l)) {
+		if (!strncasecmp(protocols[i].prot, p, l)) {
 			return i;
 		}
 
@@ -523,7 +523,7 @@ translate_directories(unsigned char *url)
 {
 	unsigned char *url_data = get_url_data(url);
 	unsigned char *src, *dest;
-	int lo = !casecmp(url, "file://", 7); /* dsep() *hint* *hint* */
+	int lo = !strncasecmp(url, "file://", 7); /* dsep() *hint* *hint* */
 
 	if (!url_data || url_data == url/* || *--url_data != '/'*/) return;
 	if (!dsep(*url_data)) url_data--;
@@ -591,7 +591,7 @@ insert_wd(unsigned char **up, unsigned char *cwd)
 	int cwdlen;
 
 	if (!url || !cwd || !*cwd) return;
-	if (casecmp(url, "file://", 7)) return;
+	if (strncasecmp(url, "file://", 7)) return;
 	if (dir_sep(url[7])) return;
 #ifdef DOS_FS
 	if (upcase(url[7]) >= 'A' && upcase(url[7]) <= 'Z' && url[8] == ':' && dir_sep(url[9])) return;
@@ -617,7 +617,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 {
 	unsigned char *p, *n, *path;
 	int l;
-	int lo = !casecmp(base, "file://", 7); /* dsep() *hint* *hint* */
+	int lo = !strncasecmp(base, "file://", 7); /* dsep() *hint* *hint* */
 	int add_slash = 0;
 
 	/* See RFC 1808 */
@@ -662,7 +662,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 		return n;
 	}
 
-	if (!casecmp("proxy://", rel, 8)) goto prx;
+	if (!strncasecmp("proxy://", rel, 8)) goto prx;
 
 	if (!parse_url(rel, &l,
 		       NULL, NULL,
@@ -767,7 +767,7 @@ translate_url(unsigned char *url, unsigned char *cwd)
 	while (*url == ' ') url++;
 
 	/* XXX: Why?! */
-	if (!casecmp("proxy://", url, 8)) goto proxy;
+	if (!strncasecmp("proxy://", url, 8)) goto proxy;
 
 	/* Ordinary parse */
 	if (!parse_url(url, NULL,
@@ -817,7 +817,7 @@ proxy:
 		 * but it would result in confusing mix of ifdefs ;-). */
 
 		if (*ch == '@' || (*ch == ':' && *url != '[')
-		    || !casecmp(url, "ftp.", 4)) {
+		    || !strncasecmp(url, "ftp.", 4)) {
 			/* Contains user/password/ftp-hostname */
 			prefix = "ftp://";
 			not_file = 1;
@@ -870,7 +870,7 @@ http:				prefix = "http://";
 
 				for (i = 0; tld[i]; i++)
 					if (host_end - domain == strlen(tld[i])
-					    && !casecmp(tld[i], domain,
+					    && !strncasecmp(tld[i], domain,
 						        host_end - domain))
 						goto http;
 			}
@@ -964,7 +964,7 @@ extract_proxy(unsigned char *url)
 {
 	char *a;
 
-	if (strlen(url) < 8 || casecmp(url, "proxy://", 8))
+	if (strlen(url) < 8 || strncasecmp(url, "proxy://", 8))
 		return url;
 
 	a = strchr(url + 8, '/');
@@ -976,7 +976,7 @@ extract_proxy(unsigned char *url)
 void
 get_filename_from_url(unsigned char *url, unsigned char **s, int *l)
 {
-	int lo = !casecmp(url, "file://", 7); /* dsep() *hint* *hint* */
+	int lo = !strncasecmp(url, "file://", 7); /* dsep() *hint* *hint* */
 	unsigned char *uu = get_url_data(url);
 
 	if (uu) url = uu;

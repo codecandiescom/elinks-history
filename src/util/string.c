@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.6 2002/06/21 20:28:25 pasky Exp $ */
+/* $Id: string.c,v 1.7 2002/09/08 19:12:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,8 +168,9 @@ xstrcmp(unsigned char *s1, unsigned char *s2)
 	return strcmp(s1, s2);
 }
 
+#ifndef HAVE_STRNCASECMP
 int
-casecmp(unsigned char *c1, unsigned char *c2, int len)
+strncasecmp(unsigned char *c1, unsigned char *c2, int len)
 {
 	int i;
 
@@ -179,6 +180,7 @@ casecmp(unsigned char *c1, unsigned char *c2, int len)
 
 	return 0;
 }
+#endif /* !HAVE_STRNCASECMP */
 
 #ifndef HAVE_STRCASESTR
 /* Stub for strcasestr(), GNU extension */

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.26 2002/09/04 16:43:37 zas Exp $ */
+/* $Id: ftp.c,v 1.27 2002/09/08 19:12:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -575,7 +575,7 @@ next:
 	if (pos + 4 > data_len)
 		return -1;
 
-	if (casecmp(&data[pos], "byte", 4))
+	if (strncasecmp(&data[pos], "byte", 4))
 		return -1;
 
 	file_len = strtol(&data[pos_file_len], NULL, 10);
@@ -836,7 +836,7 @@ direntry:
 			int symlinkpos;
 
 			if (bufp > strlen("total") &&
-			    !casecmp(buf, "total", 5))
+			    !strncasecmp(buf, "total", 5))
 				goto rawentry;
 
 			for (symlinkpos = bufp - 1; symlinkpos >= 0;

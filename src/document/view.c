@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.73 2002/09/07 09:32:51 zas Exp $ */
+/* $Id: view.c,v 1.74 2002/09/08 19:12:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -430,7 +430,7 @@ inline			/* solaris CC bug */
 #endif
 int srch_cmp(unsigned char c1, unsigned char c2)
 {
-	return casecmp(&c1, &c2, 1);
+	return strncasecmp(&c1, &c2, 1);
 }
 
 int get_range(struct f_data *f, int y, int yw, int l,
@@ -1615,7 +1615,7 @@ goto_link(unsigned char *url, unsigned char *target, struct session *ses,
 {
 	if (!url) return 1;
 
-	if (strlen(url) >= 4 && !casecmp(url, "MAP@", 4)) {
+	if (strlen(url) >= 4 && !strncasecmp(url, "MAP@", 4)) {
 		/* TODO: Test reload? */
 		goto_imgmap(ses, url + 4, stracpy(url + 4),
 			    stracpy(target));
@@ -2875,7 +2875,7 @@ void frm_download(struct session *ses, struct f_data_c *fd)
 	if (link->type != L_LINK && link->type != L_BUTTON) return;
 	ses->dn_url = get_link_url(ses, fd, link);
 	if (ses->dn_url) {
-		if (!casecmp(ses->dn_url, "MAP@", 4)) {
+		if (!strncasecmp(ses->dn_url, "MAP@", 4)) {
 			mem_free(ses->dn_url);
 			ses->dn_url = NULL;
 			return;
@@ -3086,7 +3086,7 @@ void link_menu(struct terminal *term, void *xxx, struct session *ses)
 	if (link->type == L_LINK && link->where) {
 		l = 1;
 		if (strlen(link->where) >= 4
-		    && !casecmp(link->where, "MAP@", 4))
+		    && !strncasecmp(link->where, "MAP@", 4))
 			add_to_menu(&mi, TEXT(T_DISPLAY_USEMAP),
 				    ">", TEXT(T_HK_DISPLAY_USEMAP),
 				    MENU_FUNC send_enter, NULL, 1);
@@ -3225,7 +3225,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 		}
 
 		if (strlen(link->where) >= 4
-		    && !casecmp(link->where, "MAP@", 4)) {
+		    && !strncasecmp(link->where, "MAP@", 4)) {
 			str = init_str();
 			strl = 0;
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.39 2002/09/07 10:01:54 zas Exp $ */
+/* $Id: parser.c,v 1.40 2002/09/08 19:12:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -346,7 +346,7 @@ static inline void
 kill_elem(char *e)
 {
 	if (html_top.namelen == strlen(e)
-	    && !casecmp(html_top.name, e, html_top.namelen))
+	    && !strncasecmp(html_top.name, e, html_top.namelen))
 		kill_html_stack_item(&html_top);
 }
 
@@ -480,7 +480,7 @@ kill_until(int ls, ...)
 				int slen = strlen(s);
 
 				if (e->namelen == slen
-				    && !casecmp(e->name, s, slen)) {
+				    && !strncasecmp(e->name, s, slen)) {
 					if (!sk) {
 						if (e->dontkill) break;
 						va_end(arg);
@@ -495,7 +495,7 @@ kill_until(int ls, ...)
 			}
 		}
 		va_end(arg);
-		if (e->dontkill || (e->namelen == 5 && !casecmp(e->name, "TABLE", 5))) break;
+		if (e->dontkill || (e->namelen == 5 && !strncasecmp(e->name, "TABLE", 5))) break;
 		if (e->namelen == 2 && upcase(e->name[0]) == 'T') {
 			unsigned char c = upcase(e->name[1]);
 
@@ -1350,7 +1350,7 @@ se:
 	}
 	ss = s;
 	if (parse_element(s, i, &name, &namelen, &attr, &s)) goto sp;
-	if (namelen != 4 || casecmp(name, "FORM", 4)) goto se;
+	if (namelen != 4 || strncasecmp(name, "FORM", 4)) goto se;
 	lf = ss;
 	la = attr;
 	goto se;
@@ -1609,12 +1609,12 @@ pppp:
 			goto rrrr;
 		}
 		if (parse_element(r, eoff, &name, &namelen, NULL, &p)) goto pppp;
-		if (!((namelen == 6 && !casecmp(name, "OPTION", 6)) ||
-		    (namelen == 7 && !casecmp(name, "/OPTION", 7)) ||
-		    (namelen == 6 && !casecmp(name, "SELECT", 6)) ||
-		    (namelen == 7 && !casecmp(name, "/SELECT", 7)) ||
-		    (namelen == 8 && !casecmp(name, "OPTGROUP", 8)) ||
-		    (namelen == 9 && !casecmp(name, "/OPTGROUP", 9)))) goto rrrr;
+		if (!((namelen == 6 && !strncasecmp(name, "OPTION", 6)) ||
+		    (namelen == 7 && !strncasecmp(name, "/OPTION", 7)) ||
+		    (namelen == 6 && !strncasecmp(name, "SELECT", 6)) ||
+		    (namelen == 7 && !strncasecmp(name, "/SELECT", 7)) ||
+		    (namelen == 8 && !strncasecmp(name, "OPTGROUP", 8)) ||
+		    (namelen == 9 && !strncasecmp(name, "/OPTGROUP", 9)))) goto rrrr;
 	}
 
 x:
@@ -1874,7 +1874,7 @@ abort:
 		goto se;
 	}
 
-	if (t_namelen == 7 && !casecmp(t_name, "/SELECT", 7)) {
+	if (t_namelen == 7 && !strncasecmp(t_name, "/SELECT", 7)) {
 		if (lbl) {
 			if (!val[order - 1]) val[order - 1] = stracpy(lbl);
 			if (!nnmi) new_menu_item(lbl, order - 1, 1);
@@ -1884,7 +1884,7 @@ abort:
 		goto end_parse;
 	}
 
-	if (t_namelen == 7 && !casecmp(t_name, "/OPTION", 7)) {
+	if (t_namelen == 7 && !strncasecmp(t_name, "/OPTION", 7)) {
 		if (lbl) {
 			if (!val[order - 1]) val[order - 1] = stracpy(lbl);
 			if (!nnmi) new_menu_item(lbl, order - 1, 1);
@@ -1894,7 +1894,7 @@ abort:
 		goto see;
 	}
 
-	if (t_namelen == 6 && !casecmp(t_name, "OPTION", 6)) {
+	if (t_namelen == 6 && !strncasecmp(t_name, "OPTION", 6)) {
 		unsigned char *v, *vx;
 
 		if (lbl) {
@@ -1921,8 +1921,8 @@ abort:
 		goto see;
 	}
 
-	if ((t_namelen == 8 && !casecmp(t_name, "OPTGROUP", 8))
-	    || (t_namelen == 9 && !casecmp(t_name, "/OPTGROUP", 9))) {
+	if ((t_namelen == 8 && !strncasecmp(t_name, "OPTGROUP", 8))
+	    || (t_namelen == 9 && !strncasecmp(t_name, "/OPTGROUP", 9))) {
 		if (lbl) {
 			if (!val[order - 1]) val[order - 1] = stracpy(lbl);
 			if (!nnmi) new_menu_item(lbl, order - 1, 1);
@@ -1932,7 +1932,7 @@ abort:
 		if (group) new_menu_item(NULL, -1, 0), group = 0;
 	}
 
-	if (t_namelen == 8 && !casecmp(t_name, "OPTGROUP", 8)) {
+	if (t_namelen == 8 && !strncasecmp(t_name, "OPTGROUP", 8)) {
 		char *la = get_attr_val(t_attr, "label");
 
 		if (!la) {
@@ -2026,7 +2026,7 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		return;
 	}
 	if (parse_element(p, eof, &t_name, &t_namelen, NULL, end)) goto pp;
-	if (t_namelen != 9 || casecmp(t_name, "/TEXTAREA", 9)) goto pp;
+	if (t_namelen != 9 || strncasecmp(t_name, "/TEXTAREA", 9)) goto pp;
 
 	fc = mem_alloc(sizeof(struct form_control));
 	if (!fc) return;
@@ -2354,7 +2354,7 @@ html_link(unsigned char *a)
 		/* FIXME? Shouldn't we cmp with 'name' here? I'm really
 		 * confused from this now, I'd like an explanation. Thanks ;).
 		 * --pasky */
-		if (casecmp(a, "text/css", 8)) {
+		if (strncasecmp(a, "text/css", 8)) {
 			mem_free(name);
 			return;
 		}
@@ -2644,7 +2644,7 @@ ng:;
 		html = end;
 		for (ei = elements; ei->name; ei++) {
 			if (ei->name &&
-			   (strlen(ei->name) != namelen || casecmp(ei->name, name, namelen)))
+			   (strlen(ei->name) != namelen || strncasecmp(ei->name, name, namelen)))
 				continue;
 			if (!inv) {
 				char *a;
@@ -2682,9 +2682,9 @@ ng:;
 						} else foreach(e, html_stack) {
 							if (e->linebreak && !ei->linebreak) break;
 							if (e->dontkill) break;
-							if (e->namelen == namelen && !casecmp(e->name, name, e->namelen)) break;
+							if (e->namelen == namelen && !strncasecmp(e->name, name, e->namelen)) break;
 						}
-						if (e->namelen == namelen && !casecmp(e->name, name, e->namelen)) {
+						if (e->namelen == namelen && !strncasecmp(e->name, name, e->namelen)) {
 							while (e->prev != (void *)&html_stack) kill_html_stack_item(e->prev);
 							if (e->dontkill != 2) kill_html_stack_item(e);
 						}
@@ -2710,7 +2710,7 @@ ng:;
 				/*debug_stack();*/
 				foreach(e, html_stack) {
 					if (e->linebreak && !ei->linebreak && ei->name) xxx = 1;
-					if (e->namelen != namelen || casecmp(e->name, name, e->namelen)) {
+					if (e->namelen != namelen || strncasecmp(e->name, name, e->namelen)) {
 						if (e->dontkill)
 							break;
 						else
@@ -2788,7 +2788,7 @@ look_for_map:
 		goto look_for_map;
 	}
 
-	if (namelen != 3 || casecmp(name, "MAP", 3)) {
+	if (namelen != 3 || strncasecmp(name, "MAP", 3)) {
 		goto look_for_map;
 	}
 
@@ -2827,7 +2827,7 @@ look_for_link:
 		goto look_for_link;
 	}
 
-	if (namelen == 1 && !casecmp(name, "A", 1)) {
+	if (namelen == 1 && !strncasecmp(name, "A", 1)) {
 		unsigned char *pos2;
 
 		label = init_str();
@@ -2859,17 +2859,17 @@ look_for_tag:
 			goto look_for_tag;
 		}
 
-		if (!((namelen == 1 && !casecmp(name, "A", 1)) ||
-		      (namelen == 2 && !casecmp(name, "/A", 2)) ||
-		      (namelen == 3 && !casecmp(name, "MAP", 3)) ||
-		      (namelen == 4 && !casecmp(name, "/MAP", 4)) ||
-		      (namelen == 4 && !casecmp(name, "AREA", 4)) ||
-		      (namelen == 5 && !casecmp(name, "/AREA", 5)))) {
+		if (!((namelen == 1 && !strncasecmp(name, "A", 1)) ||
+		      (namelen == 2 && !strncasecmp(name, "/A", 2)) ||
+		      (namelen == 3 && !strncasecmp(name, "MAP", 3)) ||
+		      (namelen == 4 && !strncasecmp(name, "/MAP", 4)) ||
+		      (namelen == 4 && !strncasecmp(name, "AREA", 4)) ||
+		      (namelen == 5 && !strncasecmp(name, "/AREA", 5)))) {
 			pos = pos2;
 			goto look_for_tag;
 		}
 
-	} else if (namelen == 4 && !casecmp(name, "AREA", 4)) {
+	} else if (namelen == 4 && !strncasecmp(name, "AREA", 4)) {
 		unsigned char *alt = get_attr_val(attr, "alt");
 
 		if (alt) {
@@ -2879,7 +2879,7 @@ look_for_tag:
 			label = NULL;
 		}
 
-	} else if (namelen == 4 && !casecmp(name, "/MAP", 4)) {
+	} else if (namelen == 4 && !strncasecmp(name, "/MAP", 4)) {
 		/* This is the only successful return from here! */
 		add_to_ml(ml, *menu, NULL);
 		return 0;
@@ -2991,8 +2991,8 @@ sp:
 	if (parse_element(s, eof, &name, &namelen, &attr, &s)) goto sp;
 
 ps:
-	if (namelen == 5 && !casecmp(name, "/HEAD", 5)) return;
-	if (title && !tlen && namelen == 5 && !casecmp(name, "TITLE", 5)) {
+	if (namelen == 5 && !strncasecmp(name, "/HEAD", 5)) return;
+	if (title && !tlen && namelen == 5 && !strncasecmp(name, "TITLE", 5)) {
 		unsigned char *s1;
 
 xse:
@@ -3011,7 +3011,7 @@ xsp:
 		clr_spaces(*title);
 		goto ps;
 	}
-	if (namelen != 4 || casecmp(name, "META", 4)) goto se;
+	if (namelen != 4 || strncasecmp(name, "META", 4)) goto se;
 
 	he = get_attr_val(attr, "charset");
 	if (he) {

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.14 2002/06/17 07:42:30 pasky Exp $ */
+/* $Id: tables.c,v 1.15 2002/09/08 19:12:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -397,8 +397,8 @@ unsigned char *skip_table(unsigned char *html, unsigned char *eof)
 			html++;
 
 		if (html >= eof) return eof;
-		if (namelen == 5 && !casecmp(name, "TABLE", 5)) level++;
-		if (namelen == 6 && !casecmp(name, "/TABLE", 6)) {
+		if (namelen == 5 && !strncasecmp(name, "TABLE", 5)) level++;
+		if (namelen == 6 && !strncasecmp(name, "/TABLE", 6)) {
 			level--;
 			if (!level) return html;
 		}
@@ -473,19 +473,19 @@ qwe:
 		goto se;
 	}
 
-	if (t_namelen == 5 && !casecmp(t_name, "TABLE", 5)) {
+	if (t_namelen == 5 && !strncasecmp(t_name, "TABLE", 5)) {
 		en = skip_table(en, eof);
 		goto see;
 	}
 
-	if (t_namelen == 6 && !casecmp(t_name, "/TABLE", 6)) {
+	if (t_namelen == 6 && !strncasecmp(t_name, "/TABLE", 6)) {
 		if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);
 		if (p) CELL(t, x, y)->end = html;
 		if (lbhp) (*bad_html)[*bhp-1].e = html;
 		goto scan_done;
 	}
 
-	if (t_namelen == 8 && !casecmp(t_name, "COLGROUP", 8)) {
+	if (t_namelen == 8 && !strncasecmp(t_name, "COLGROUP", 8)) {
 		if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);
 		if (lbhp) {
 			(*bad_html)[*bhp-1].e = html;
@@ -502,7 +502,7 @@ qwe:
 		goto see;
 	}
 
-	if (t_namelen == 9 && !casecmp(t_name, "/COLGROUP", 9)) {
+	if (t_namelen == 9 && !strncasecmp(t_name, "/COLGROUP", 9)) {
 		if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);
 		if (lbhp) {
 			(*bad_html)[*bhp-1].e = html;
@@ -515,7 +515,7 @@ qwe:
 		goto see;
 	}
 
-	if (t_namelen == 3 && !casecmp(t_name, "COL", 3)) {
+	if (t_namelen == 3 && !strncasecmp(t_name, "COL", 3)) {
 		int sp, wi, al, val;
 
 		if (lbhp) {
@@ -538,8 +538,8 @@ qwe:
 	}
 
 	if (t_namelen == 3
-	    && (!casecmp(t_name, "/TR", 3) || !casecmp(t_name, "/TD", 3) ||
-		!casecmp(t_name, "/TH", 3))) {
+	    && (!strncasecmp(t_name, "/TR", 3) || !strncasecmp(t_name, "/TD", 3) ||
+		!strncasecmp(t_name, "/TH", 3))) {
 		if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);
 		if (p) {
 			CELL(t, x, y)->end = html;
@@ -551,7 +551,7 @@ qwe:
 		}
 	}
 
-	if (t_namelen == 2 && !casecmp(t_name, "TR", 2)) {
+	if (t_namelen == 2 && !strncasecmp(t_name, "TR", 2)) {
 		if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);
 
 		if (p) {
@@ -576,9 +576,9 @@ qwe:
 	}
 
 	if (t_namelen == 5
-	    && ((!casecmp(t_name, "THEAD", 5)) ||
-		(!casecmp(t_name, "TBODY", 5)) ||
-		(!casecmp(t_name, "TFOOT", 5)))) {
+	    && ((!strncasecmp(t_name, "THEAD", 5)) ||
+		(!strncasecmp(t_name, "TBODY", 5)) ||
+		(!strncasecmp(t_name, "TFOOT", 5)))) {
 		if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);
 
 		if (lbhp) {
@@ -589,7 +589,7 @@ qwe:
 		group = 2;
 	}
 
-	if (t_namelen != 2 || (casecmp(t_name, "TD", 2) && casecmp(t_name, "TH", 2)))
+	if (t_namelen != 2 || (strncasecmp(t_name, "TD", 2) && strncasecmp(t_name, "TH", 2)))
 		goto see;
 
 	if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);

@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.6 2002/06/22 21:20:53 pasky Exp $ */
+/* $Id: string.h,v 1.7 2002/09/08 19:12:23 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -48,7 +48,9 @@ void add_to_str(unsigned char **, int *, unsigned char *);
 void add_bytes_to_str(unsigned char **, int *, unsigned char *, int);
 void add_chr_to_str(unsigned char **, int *, unsigned char);
 int xstrcmp(unsigned char *, unsigned char *);
-int casecmp(unsigned char *, unsigned char *, int);
+#ifndef HAVE_STRNCASECMP
+int strncasecmp(unsigned char *, unsigned char *, int);
+#endif /* !HAVE_STRNCASECMP */
 
 #ifndef HAVE_STRCASESTR
 unsigned char *strcasestr(unsigned char *, unsigned char *);

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.66 2003/10/19 11:10:23 zas Exp $ */
+/* $Id: options.h,v 1.67 2003/10/19 12:50:08 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -67,9 +67,10 @@ enum option_type {
 };
 
 struct session;
-struct option;
 
 #if 0
+struct option;
+
 /* TODO: Sometime in the distant future somene will use this or similar
  * approach to store option values. It could be you? --jonas */
 union option_value {

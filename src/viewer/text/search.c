@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.290 2004/10/18 03:06:45 miciah Exp $ */
+/* $Id: search.c,v 1.291 2004/10/18 03:12:23 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1054,6 +1054,26 @@ get_link_typeahead_text(struct link *link)
 	return "";
 }
 
+static int
+match_link_text(struct link *link, unsigned char *text, int textlen,
+		int case_sensitive)
+{
+	unsigned char *match = get_link_typeahead_text(link);
+
+	if (!link_is_form(link)
+	    && textlen <= strlen(match)) {
+		unsigned char *matchpos = case_sensitive
+					   ? strstr(match, text)
+					   : strcasestr(match, text);
+
+		if (matchpos) {
+			return matchpos - match;
+		}
+	}
+
+	return -1;
+}
+
 /* Searches the @document for a link with the given @text. takes the
  * current_link in the view, the link to start searching from @i and the
  * direction to search (1 is forward, -1 is back). */
@@ -1080,18 +1100,12 @@ search_link_text(struct document *document, int current_link, int i,
 
 	for (; i > lower_link && i < upper_link; i += direction) {
 		struct link *link = &document->links[i];
-		unsigned char *match = get_link_typeahead_text(link);
+		int match_offset = match_link_text(link, text, textlen,
+						   case_sensitive);
 
-		if (!link_is_form(link)
-		    && textlen <= strlen(match)) {
-			unsigned char *matchpos = case_sensitive
-						   ? strstr(match, text)
-						   : strcasestr(match, text);
-
-			if (matchpos) {
-				*offset = matchpos - match;
-				return i;
-			}
+		if (match_offset >= 0) {
+			*offset = match_offset;
+			return i;
 		}
 
 		if (!wraparound) continue;

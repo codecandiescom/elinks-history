@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.195 2003/04/20 08:33:41 zas Exp $ */
+/* $Id: options.c,v 1.196 2003/04/20 08:35:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1430,7 +1430,7 @@ register_options()
 	add_opt_bool("protocol.http.bugs", N_("Broken 302 redirects"),
 		"broken_302_redirect", 0, 1,
 		N_("Broken 302 redirect (violates RFC but compatible with Netscape).\n"
-		"This is a problem for a lot of web discussion boards and the like."
+		"This is a problem for a lot of web discussion boards and the like.\n"
 		"If they will do strange things to you, try to play with this."));
 
 	add_opt_bool("protocol.http.bugs", N_("No keepalive after POST requests"),

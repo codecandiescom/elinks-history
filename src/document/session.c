@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.62 2002/10/12 14:51:13 pasky Exp $ */
+/* $Id: session.c,v 1.63 2002/10/12 16:34:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1494,7 +1494,7 @@ win_func(struct window *win, struct event *ev, int fw)
 
 	switch (ev->ev) {
 		case EV_ABORT:
-			destroy_session(ses);
+			if (ses) destroy_session(ses);
 			break;
 		case EV_INIT:
 			ses = win->data = create_session(win);
@@ -1506,6 +1506,7 @@ win_func(struct window *win, struct event *ev, int fw)
 				return;
 			}
 		case EV_RESIZE:
+			if (!ses) break;
 			html_interpret(ses);
 			draw_formatted(ses);
 			load_frames(ses, ses->screen);
@@ -1513,11 +1514,13 @@ win_func(struct window *win, struct event *ev, int fw)
 			print_screen_status(ses);
 			break;
 		case EV_REDRAW:
+			if (!ses) break;
 			draw_formatted(ses);
 			print_screen_status(ses);
 			break;
 		case EV_KBD:
 		case EV_MOUSE:
+			if (!ses) break;
 			send_event(ses, ev);
 			break;
 		default:

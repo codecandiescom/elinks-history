@@ -1,10 +1,11 @@
-/* $Id: form.h,v 1.11 2003/12/01 14:08:20 pasky Exp $ */
+/* $Id: form.h,v 1.12 2003/12/01 15:20:38 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
 
 #include "util/lists.h" /* LIST_HEAD */
 
+struct document;
 struct document_view;
 struct link;
 struct menu_item;

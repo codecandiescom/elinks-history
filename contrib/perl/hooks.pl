@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.46 2005/03/26 22:48:31 rrowan Exp $
+# $Id: hooks.pl,v 1.47 2005/03/26 23:03:04 rrowan Exp $
 #
 # This file is (c) Russ Rowan and GPL'd.
 
@@ -190,10 +190,10 @@ sub goto_url_hook
 	}
 
 	# Random URL generator
-	if ($url =~ '^bored$' || $url =~ '^random$') {
+	if ($url =~ '^bored$' || $url =~ '^random$')
+	{
 		my $word; # You can say *that* again...
 		srand();
-
 		open FILE, '</usr/share/dict/words'
 			or open FILE, '</usr/share/dict/linux.words'
 			or open FILE, '</usr/dict/words'
@@ -203,7 +203,6 @@ sub goto_url_hook
 			or return 'http://google.com/webhp?hl=xx-bork';
 		rand($.) < 1 && ($word = $_) while <FILE>;
 		close FILE;
-
 		($word) = $word =~ /(.*)/;
 		$url = 'http://' . lc($word) . '.com';
 		return $url;
@@ -211,30 +210,34 @@ sub goto_url_hook
 
 	# Search engines
 	my ($search) = $url =~ /^\S+\s+(.*)/;
-
-	if ($url =~ /^(search|find|www|web|s|f|go)(| .*)$/) {
+	if ($url =~ /^(search|find|www|web|s|f|go)(| .*)$/)
+	{
 		return search(loadrc('search'), $search);
 	}
-	if ($url =~ s/^("|\'|')(.+)$/$2/) {
+	if ($url =~ s/^("|\'|')(.+)$/$2/)
+	{
 		return search(loadrc('search'), $url);
 	}
-
-	foreach my $prefix (keys %search_prefixes_) {
+	foreach my $prefix (keys %search_prefixes_)
+	{
 		next unless $url =~ /$prefix/;
 		return search($search_prefixes_{$prefix}, $search);
 	}
 
 	# News
-	if ($url =~ /^(news|n)(| .*)$/) {
+	if ($url =~ /^(news|n)(| .*)$/)
+	{
 		return news(loadrc('news'), $search);
 	}
-	foreach my $prefix (keys %news_prefixes_) {
+	foreach my $prefix (keys %news_prefixes_)
+	{
 		next unless $url =~ /$prefix/;
 		return news($news_prefixes_{$prefix}, $search);
 	}
 
 	# Locators
-	foreach my $prefix (keys %locator_prefixes_) {
+	foreach my $prefix (keys %locator_prefixes_)
+	{
 		next unless $url =~ /$prefix/;
 		return location($locator_prefixes_{$prefix}, $search, $current_url);
 	}
@@ -282,16 +285,19 @@ sub goto_url_hook
 	}
 
 	# Google Groups (DejaNews)
-	if ($url =~ '^(deja|gg|groups|gr|nntp|usenet|nn)(| .*)$') {
+	if ($url =~ '^(deja|gg|groups|gr|nntp|usenet|nn)(| .*)$')
+	{
 		my ($search) = $url =~ /^[a-z]* (.*)/;
 		my $beta = "groups.google.co.uk";
 		$beta = "groups-beta.google.com" unless (loadrc("googlebeta") ne "yes");
-
 		my $bork = "";
-		if ($search) {
+		if ($search)
+		{
 			$bork = "&hl=xx-bork" unless (loadrc("bork") ne "yes");
 			$url = 'http://' . $beta . '/groups?q=' . $search . $bork;
-		} else {
+		}
+		else
+		{
 			$bork = "/groups?hl=xx-bork" unless (loadrc("bork") ne "yes");
 			$url = 'http://' . $beta . $bork;
 		}
@@ -299,24 +305,30 @@ sub goto_url_hook
 	}
 
 	# MirrorDot
-	if ($url =~ '^(mirrordot|md)(| .*)$') {
+	if ($url =~ '^(mirrordot|md)(| .*)$')
+	{
 		my ($slashdotted) = $url =~ /^[a-z]* (.*)/;
-		if ($slashdotted) {
+		if ($slashdotted)
+		{
 			$url = 'http://mirrordot.com/find-mirror.html?' . $slashdotted;
-		} else {
+		}
+		else
+		{
 			$url = 'http://mirrordot.com';
 		}
 		return $url;
 	}
 
 	# The Bastard Operator from Hell
-	if ($url =~ '^bofh$') {
+	if ($url =~ '^bofh$')
+	{
 		$url = 'http://prime-mover.cc.waikato.ac.nz/Bastard.html';
 		return $url;
 	}
 
 	# Coral cache <URL>
-	if ($url =~ '^(coral|cc|nyud)( .*)$') {
+	if ($url =~ '^(coral|cc|nyud)( .*)$')
+	{
 		my ($cache) = $url =~ /^[a-z]* (.*)/;
 		$cache =~ s/^http:\/\///;
 		($url) = $cache =~ s/\//.nyud.net:8090\//;
@@ -326,11 +338,12 @@ sub goto_url_hook
 
 	# Babelfish ("babelfish german english"  or  "bf de en")
 	if (($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]* [a-zA-Z]*)$')
-	    or ($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]*(| [a-zA-Z]*))$'
-	        and loadrc("language") and $current_url))
+		or ($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]*(| [a-zA-Z]*))$'
+		and loadrc("language") and $current_url))
 	{
 		$url = 'http://babelfish.altavista.com' if ($url =~ /^[a-z]*$/);
-		if ($url =~ /^[a-z]* /) {
+		if ($url =~ /^[a-z]* /)
+		{
 			my $tongue = loadrc("language");
 			$url = $url . " " . $tongue if ($tongue ne "no" and $url !~ /^[a-z]* [a-zA-Z]* [a-zA-Z]*$/);
 			$url =~ s/ chinese/ zt/i;
@@ -349,13 +362,14 @@ sub goto_url_hook
 			my ($from_language, $to_language) = $url =~ /^[a-z]* (.*) (.*)$/;
 			($current_url) = $current_url =~ /^.*:\/\/(.*)/;
 			$url = 'http://babelfish.altavista.com/babelfish/urltrurl?lp='
-			       . $from_language . '_' . $to_language . '&url=' . $current_url;
+				. $from_language . '_' . $to_language . '&url=' . $current_url;
 		}
 		return $url;
 	}
 
 	# XYZZY
-	if ($url =~ '^xyzzy$') {
+	if ($url =~ '^xyzzy$')
+	{
 		# $url = 'http://sundae.triumf.ca/pub2/cave/node001.html';
 		srand();
 		my $yzzyx;
@@ -371,13 +385,15 @@ sub goto_url_hook
 	}
 
 	# ...and now, Deep Thoughts.  by Jack Handey
-	if ($url =~ '^(jack|handey)$') {
+	if ($url =~ '^(jack|handey)$')
+	{
 		$url = 'http://glug.com/handey';
 		return $url;
 	}
 
 	# Page validators [<URL>]
-	if ($url =~ '^vhtml(| .*)$' or $url =~ '^vcss(| .*)$') {
+	if ($url =~ '^vhtml(| .*)$' or $url =~ '^vcss(| .*)$')
+	{
 		my ($page) = $url =~ /^.* (.*)/;
 		$page = $current_url unless $page;
 		$url = 'http://validator.w3.org/check?uri=' . $page if $url =~ 'html';
@@ -386,18 +402,27 @@ sub goto_url_hook
 	}
 
 	# There's no place like home
-	if ($url =~ '^(el(|inks)|b(ug(|s)|z)(| .*)|doc(|umentation|s)|faq)$') {
+	if ($url =~ '^(el(|inks)|b(ug(|s)|z)(| .*)|doc(|umentation|s)|faq)$')
+	{
 		my ($bug) = $url =~ /^.* (.*)/;
-		if ($url =~ '^b') {
+		if ($url =~ '^b')
+		{
 			my $bugzilla = 'http://bugzilla.elinks.or.cz';
-			if (not $bug) {
+			if (not $bug)
+			{
 				$url = $bugzilla;
-			} elsif ($bug =~ '^[0-9]*$') {
+			}
+			elsif ($bug =~ '^[0-9]*$')
+			{
 				$url = $bugzilla . '/show_bug.cgi?id=' . $bug;
-			} else {
+			}
+			else
+			{
 				$url = $bugzilla . '/buglist.cgi?short_desc_type=allwordssubstr&short_desc=' . $bug;
 			}
-		} else {
+		}
+		else
+		{
 			my $doc = '';
 			$doc = '/documentation' if $url =~ '^doc';
 			$doc = '/faq.html' if $url =~ '^faq$';
@@ -407,7 +432,8 @@ sub goto_url_hook
 	}
 
 	# Anything not otherwise useful could be a search
-	if ($current_url and loadrc("gotosearch") eq "yes") {
+	if ($current_url and loadrc("gotosearch") eq "yes")
+	{
 		$url = search(loadrc("search"), $url);
 	}
 	return $url;

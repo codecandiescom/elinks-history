@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.28 2003/06/26 21:07:04 pasky Exp $ */
+/* $Id: user.c,v 1.29 2003/07/08 18:46:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,18 +22,24 @@
 
 
 unsigned char *
-get_prog(struct terminal *term, unsigned char *progid)
+get_user_program(struct terminal *term, unsigned char *progid, int progidlen)
 {
 	struct option *opt;
 	unsigned char *system_str =
 		get_system_str(term ? term->environment & ENV_XWIN : 0);
 	unsigned char *name;
+	int namelen = 0;
 
 	if (!system_str) return NULL;
-	name = straconcat("protocol.user.", progid, ".",
-			  system_str, NULL);
-	mem_free(system_str);
+
+	name = init_str();
 	if (!name) return NULL;
+
+	add_to_str(&name, &namelen, "protocol.user.");
+	add_bytes_to_str(&name, &namelen, progid, progidlen);
+	add_chr_to_str(&name, &namelen, '.');
+	add_to_str(&name, &namelen, system_str);
+	mem_free(system_str);
 
 	opt = get_opt_rec_real(&root_options, name);
 
@@ -95,7 +101,7 @@ prog_func(struct terminal *term, unsigned char *url, unsigned char *proto,
 	  unsigned char *subj)
 {
 	unsigned char *cmd;
-	unsigned char *prog = get_prog(term, proto);
+	unsigned char *prog = get_user_program(term, proto, strlen(proto));
 
 	if (!prog || !*prog) {
 		/* Shouldn't ever happen, but be paranoid. */

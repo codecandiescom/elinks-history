@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.18 2003/07/06 23:17:35 pasky Exp $ */
+/* $Id: protocol.c,v 1.19 2003/07/08 18:46:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,7 @@
 #include "bfu/msgbox.h"
 #include "intl/gettext/libintl.h"
 #include "protocol/protocol.h"
-#include "protocol/url.h"
+#include "protocol/uri.h"
 #include "sched/connection.h"
 #include "sched/session.h"
 #include "util/memory.h"
@@ -91,18 +91,17 @@ check_protocol(unsigned char *name, int namelen)
 	 * has higher precedence than builtin handlers. */
 	/* TODO: In order to fully give higher precedence to user chosen
 	 *	 protocols we have to get some terminal to pass along. */
-	name[namelen] = 0;
-	if (get_prog(NULL, name)) {
-		name[namelen] = ':';
+	if (get_user_program(NULL, name, namelen))
 		return PROTOCOL_USER;
-	}
 
 	/* Abuse that we iterate until protocol is PROTOCOL_UNKNOWN */
-	for (protocol = 0; protocol < PROTOCOL_UNKNOWN; protocol++)
-		if (!strcasecmp(protocol_backends[protocol]->name, name))
-			break;
+	for (protocol = 0; protocol < PROTOCOL_UNKNOWN; protocol++) {
+		unsigned char *pname = protocol_backends[protocol]->name;
 
-	name[namelen] = ':';
+		if (strlen(pname) == namelen && !memcmp(pname, name, namelen))
+			break;
+	}
+
 	return protocol;
 }
 
@@ -153,12 +152,12 @@ get_protocol_handler(struct uri *uri)
 protocol_external_handler *
 get_protocol_external_handler(unsigned char *url)
 {
-	unsigned char *name = get_protocol_name(url);
+	/* Seek the end of the protocol name. */
+	unsigned char *end = strchr(url, ':');
 
-	if (name) {
-		enum protocol protocol = check_protocol(name, strlen(name));
+	if (end) {
+		enum protocol protocol = check_protocol(url, end - url);
 
-		mem_free(name);
 		if (protocol != PROTOCOL_UNKNOWN)
 			return protocol_backends[protocol]->external_handler;
 	}

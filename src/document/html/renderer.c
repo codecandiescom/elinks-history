@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.275 2003/09/15 21:29:58 jonas Exp $ */
+/* $Id: renderer.c,v 1.276 2003/09/19 13:48:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -815,12 +815,14 @@ enum link_state {
 	LINK_STATE_SAME,
 };
 
+#define realloc_points(link, size) \
+	mem_align_alloc(&(link)->pos, (link)->n, size, sizeof(struct point), 0)
+
 static inline void
 process_link(struct part *part, enum link_state link_state,
 	     unsigned char *chars, int charslen)
 {
 	struct link *link;
-	struct point *pt;
 
 	if (link_state == LINK_STATE_SAME) {
 		if (!part->document) return;
@@ -847,16 +849,17 @@ process_link(struct part *part, enum link_state link_state,
 	}
 
 	/* Add new canvas positions to the link. */
-	pt = mem_realloc(link->pos, (link->n + charslen) * sizeof(struct point));
-	if (pt) {
-		register int i;
+	if (realloc_points(link, link->n + charslen)) {
+		struct point *point = &link->pos[link->n];
+		int x = X(part->cx);
+		int y = Y(part->cy);
 
-		link->pos = pt;
-		for (i = 0; i < charslen; i++) {
-			pt[link->n + i].x = X(part->cx) + i;
-			pt[link->n + i].y = Y(part->cy);
+		link->n += charslen;
+
+		for (; charslen > 0; charslen--, point++, x++) {
+			point->x = x;
+			point->y = y;
 		}
-		link->n += i;
 	}
 }
 

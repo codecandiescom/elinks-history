@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.63 2003/10/22 19:24:45 jonas Exp $ */
+/* $Id: opttypes.c,v 1.64 2003/10/22 19:57:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -287,14 +287,13 @@ str_wr(struct option *o, struct string *s)
 	add_optstring_to_string(s, o->value.string, len);
 }
 
-static void *
+static void
 str_dup(struct option *opt, struct option *template)
 {
 	unsigned char *new = mem_alloc(MAX_STR_LEN);
 
 	if (new) safe_strncpy(new, template->value.string, MAX_STR_LEN);
 	opt->value.string = new;
-	return new;
 }
 
 
@@ -369,14 +368,14 @@ color_wr(struct option *opt, struct string *str)
 	if (strcolor != hexcolor) mem_free(strcolor);
 }
 
-static void *
+static void
 tree_dup(struct option *opt, struct option *template)
 {
 	struct list_head *new = mem_alloc(sizeof(struct list_head));
 	struct list_head *tree = template->value.tree;
 	struct option *option;
 
-	if (!new) return NULL;
+	if (!new) return;
 	init_list(*new);
 	opt->value.tree = new;
 
@@ -402,8 +401,6 @@ tree_dup(struct option *opt, struct option *template)
 		}
 		new_opt->box_item->root = opt->box_item;
 	}
-
-	return new;
 }
 
 

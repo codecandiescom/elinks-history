@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.128 2004/06/11 19:04:34 jonas Exp $ */
+/* $Id: form.c,v 1.129 2004/06/11 19:05:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -569,20 +569,20 @@ check_boundary(struct string *data, unsigned char *bound,
 	memset(bound, '0', BL);
 
 again:
-	for (pos = data->source; pos <= end; pos++) {
-		register int j;
+		for (pos = data->source; pos <= end; pos++) {
+			register int j;
 
-		if (memcmp(pos, bound, BL))
-			continue;
+			if (memcmp(pos, bound, BL))
+				continue;
 
-		for (j = BL - 1; j >= 0; j--)
-			if (bound[j]++ >= '9')
-				bound[j] = '0';
-			else
-				goto again;
+			for (j = BL - 1; j >= 0; j--)
+				if (bound[j]++ >= '9')
+					bound[j] = '0';
+				else
+					goto again;
 
-		INTERNAL("Could not assing boundary");
-	}
+			INTERNAL("Could not assing boundary");
+		}
 
 	for (i = 0; i < nbound_ptrs; i++)
 		memcpy(data->source + bound_ptrs[i], bound, BL);

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.101 2003/11/05 20:28:12 jonas Exp $ */
+/* $Id: listbox.c,v 1.102 2003/11/08 00:17:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -335,7 +335,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 		text = _(text, data->term);
 
 	len = strlen(text);
-	int_upper_bound(&len, data->listbox_item_data->w - depth * 5);
+	int_upper_bound(&len, int_max(0, data->listbox_item_data->w - depth * 5));
 
 	stylename = (item == data->box->sel) ? "menu.selected"
 		  : ((item->marked)	     ? "menu.marked"

@@ -249,7 +249,7 @@ AC_DEFUN([AC_SAVE_FLAGS],
 	CFLAGS_X="$CFLAGS";
 	CPPFLAGS_X="$CPPFLAGS";
 	LDFLAGS_X="$LDFLAGS";
-	LIBS_X="$LIBS"
+	LIBS_X="$LIBS";
 ])
 
 AC_DEFUN([AC_RESTORE_FLAGS],
@@ -257,7 +257,7 @@ AC_DEFUN([AC_RESTORE_FLAGS],
 	CFLAGS="$CFLAGS_X";
 	CPPFLAGS="$CPPFLAGS_X";
 	LDFLAGS="$LDFLAGS_X";
-	LIBS="$LIBS_X"
+	LIBS="$LIBS_X";
 ])
 
 dnl ===================================================================

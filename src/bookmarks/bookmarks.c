@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.130 2004/07/14 00:31:09 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.131 2004/07/14 00:44:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -378,24 +378,10 @@ void
 bookmark_terminal_tabs(struct terminal *term, unsigned char *foldername)
 {
 	unsigned char title[MAX_STR_LEN], url[MAX_STR_LEN];
-	struct bookmark *folder = NULL;
-	struct bookmark *bookmark;
+	struct bookmark *folder = add_bookmark(NULL, 1, foldername, NULL);
 	struct window *tab;
 
-	foreach (bookmark, bookmarks) {
-		if (strcmp(bookmark->title, foldername))
-			continue;
-		folder = bookmark;
-		break;
-	}
-
-	if (!folder) {
-		folder = add_bookmark(NULL, 1, foldername, NULL);
-		if (!folder) return;
-	} else {
-		while (!list_empty(folder->child))
-			delete_bookmark(folder->child.next);
-	}
+	if (!folder) return;
 
 	foreachback_tab (tab, term->windows) {
 		struct session *ses = tab->data;
@@ -414,12 +400,25 @@ void
 bookmark_auto_save_tabs(struct terminal *term)
 {
 	unsigned char *foldername;
+	struct bookmark *bookmark, *next;
 
 	if (get_cmd_opt_bool("anonymous")
 	    || !get_opt_bool("ui.sessions.auto_save"))
 		return;
 
 	foldername = get_opt_str("ui.sessions.auto_save_foldername");
+	if (!*foldername) return;
+
+	/* Ensure uniqueness of the auto save folder, so it is possible to
+	 * restore the (correct) session when starting up. */
+	foreachsafe (bookmark, next, bookmarks) {
+		if (strcmp(bookmark->title, foldername)
+		    || !bookmark->url
+		    || !*bookmark->url)
+			continue;
+
+		delete_bookmark(bookmark);
+	}
 
 	bookmark_terminal_tabs(term, foldername);
 }

@@ -1,5 +1,5 @@
 /* Attributes utility tools */
-/* $Id: attrib.c,v 1.2 2002/12/30 23:55:18 pasky Exp $ */
+/* $Id: attrib.c,v 1.3 2002/12/31 00:30:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,7 @@ add_attrib(struct list_head attrs, unsigned char *name, int namelen,
 	if (!attrib) return NULL;
 
 	attrib->name = name, attrib->namelen = namelen;
-	attrib->value = valuae, attrib->valuelen = valuelen;
+	attrib->value = value, attrib->valuelen = valuelen;
 	add_to_list(attrs, attrib);
 
 	return attrib;

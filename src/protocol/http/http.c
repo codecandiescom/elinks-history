@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.339 2004/10/04 13:26:39 jonas Exp $ */
+/* $Id: http.c,v 1.340 2004/10/08 16:12:17 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -769,7 +769,10 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 		else if (did_read == -1) break; /* Loop prevention (bug 517), is this correct ? --Zas */
 	} while (!(!len && did_read != to_read));
 
-	if (did_read < 0) mem_free_set(&output, NULL);
+	if (did_read < 0) {
+		mem_free_set(&output, NULL);
+		*new_len = 0;
+	}
 
 	uncompress_shutdown(conn);
 	return output;

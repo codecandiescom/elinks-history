@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.29 2003/08/02 15:46:35 jonas Exp $ */
+/* $Id: form.c,v 1.30 2003/08/02 17:16:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -272,16 +272,16 @@ draw_forms(struct terminal *t, struct document_view *f)
 #ifdef FORMS_MEMORY
 		if (l1->form->type == FC_TEXT
 		    || l1->form->type == FC_PASSWORD) {
-			unsigned char *saved;
+			unsigned char *value;
 
-			saved = get_saved_control_value(l1->form->action,
-							l1->form->name);
+			value = get_form_history_value(l1->form->action,
+						       l1->form->name);
 
-			if (saved) {
+			if (value) {
 				if (l1->form->default_value)
 					mem_free(l1->form->default_value);
 
-				l1->form->default_value = stracpy(saved);
+				l1->form->default_value = stracpy(value);
 			}
 		}
 #endif /* FORMS_MEMORY */

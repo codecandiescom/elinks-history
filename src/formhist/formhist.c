@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.12 2003/08/02 17:03:48 jonas Exp $ */
+/* $Id: formhist.c,v 1.13 2003/08/02 17:16:47 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -51,10 +51,10 @@ done_form_history_item(struct form_history_item *item)
 void
 done_form_history(void)
 {
-	struct form_history_item *form;
+	struct form_history_item *item;
 
-	foreach(form, form_history)
-		done_form_history_item(form);
+	foreach(item, form_history)
+		done_form_history_item(item);
 }
 
 static int
@@ -125,13 +125,8 @@ fail:
 	return 0;
 }
 
-/*
- * @url is the URL of the site
- * @name is the name of the form control
- * returns the saved value if present
- *	   or NULL */
 unsigned char *
-get_saved_control_value(unsigned char *url, unsigned char *name)
+get_form_history_value(unsigned char *url, unsigned char *name)
 {
 	struct form_history_item *form;
 	struct submitted_value *sv;
@@ -308,7 +303,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 	}
 
 	msg_box(ses->tab->term, NULL, 0,
-		N_("Form memory"), AL_CENTER,
+		N_("Form history"), AL_CENTER,
 		N_("Should I remember this login?\n\n"
 		   "Please note that passwords will be stored "
 		   "obscured (i.e. unencrypted) in a file on your disk.\n\n"

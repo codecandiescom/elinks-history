@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.209 2003/11/08 12:48:34 pasky Exp $ */
+/* $Id: session.c,v 1.210 2003/11/08 16:58:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -262,7 +262,7 @@ print_screen_status(struct session *ses)
 		struct color_pair *selected_color = get_bfu_color(term, "tabs.selected");
 		struct color_pair *loading_color = get_bfu_color(term, "tabs.loading");
 		struct color_pair *tabsep_color = get_bfu_color(term, "tabs.separator");
-		int tab_width = term->width / tabs_count;
+		int tab_width = int_max(1, term->width / tabs_count);
 		int tab_total_width = tab_width * tabs_count;
 		int tab_remain_width = int_max(0, term->width - tab_total_width);
 		int tab_num;
@@ -297,10 +297,6 @@ print_screen_status(struct session *ses)
 				msg = _("No document", term);
 			}
 
-			msglen = strlen(msg);
-			if (msglen >= actual_tab_width)
-				msglen = actual_tab_width - 1;
-
 			if (tab_num) {
 				draw_text(term, xpos, ypos, "|", 1, 0, tabsep_color);
 				xpos += 1;
@@ -322,6 +318,11 @@ print_screen_status(struct session *ses)
 			}
 
 			draw_area(term, xpos, ypos, actual_tab_width, 1, ' ', 0, color);
+
+			msglen = strlen(msg);
+			if (msglen >= actual_tab_width)
+				msglen = actual_tab_width - 1;
+
 			draw_text(term, xpos, ypos, msg, msglen, 0, color);
 			tab->xpos = xpos;
 			tab->width = actual_tab_width;

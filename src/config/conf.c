@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.19 2002/05/23 18:50:36 pasky Exp $ */
+/* $Id: conf.c,v 1.20 2002/05/23 18:53:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -271,7 +271,11 @@ create_config_string(struct hash *options)
 
 		if (option_types[option->type].write
 		    && option->flags & OPT_CFGFILE) {
+			add_to_str(&str, &len, "set ");
+			add_to_str(&str, &len, option->name);
+			add_to_str(&str, &len, " = ");
 			option_types[option->type].write(option, &str, &len);
+			add_to_str(&str, &len, NEWLINE);
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.8 2004/09/26 01:46:53 jonas Exp $ */
+/* $Id: renderer.c,v 1.9 2004/09/26 09:50:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -575,7 +575,7 @@ render_dom_attribute_source(struct dom_navigator *navigator, struct dom_node *no
 
 	/* The attributes are sorted but we want them in the original order */
 	foreach_dom_node(i, node, state->list) {
-		if (node->string > renderer->position
+		if (node->string >= renderer->position
 		    && (!attribute || node->string < attribute->string))
 			attribute = node;
 	}

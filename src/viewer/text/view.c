@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.221 2003/10/18 21:14:26 pasky Exp $ */
+/* $Id: view.c,v 1.222 2003/10/18 22:13:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -685,6 +685,8 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			case ACT_LINK_MENU:
 			case ACT_JUMP_TO_LINK:
 			case ACT_OPEN_LINK_IN_NEW_WINDOW:
+			case ACT_OPEN_LINK_IN_NEW_TAB:
+			case ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
 				if (!ses->kbdprefix.rep) break;
 
 				if (ses->kbdprefix.rep_num
@@ -1125,6 +1127,18 @@ quit:
 			case ACT_OPEN_LINK_IN_NEW_WINDOW:
 				if (!doc_view || doc_view->vs->current_link == -1) goto x;
 				open_in_new_window(ses->tab->term, send_open_in_new_window, ses);
+				goto x;
+			case ACT_OPEN_NEW_TAB:
+				open_in_new_tab(ses->tab->term, 0, ses);
+				goto x;
+			case ACT_OPEN_NEW_TAB_IN_BACKGROUND:
+				open_in_new_tab_in_background(ses->tab->term, 0, ses);
+				goto x;
+			case ACT_OPEN_LINK_IN_NEW_TAB:
+				open_in_new_tab(ses->tab->term, 1, ses);
+				goto x;
+			case ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
+				open_in_new_tab_in_background(ses->tab->term, 1, ses);
 				goto x;
 			case ACT_TAB_CLOSE:
 				close_tab(ses->tab->term);

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.83 2003/10/02 20:49:55 kuser Exp $ */
+/* $Id: kbdbind.c,v 1.84 2003/10/18 22:13:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -409,7 +409,12 @@ static struct strtonum action_table[] = {
 	{ " *scripting-function*", ACT_SCRIPTING_FUNCTION, NULL }, /* internal use only */
 	{ "menu", ACT_MENU, N_("Activate the menu") },
 	{ "next-frame", ACT_NEXT_FRAME, N_("Move to the next frame") },
+	{ "open-new-tab", ACT_OPEN_NEW_TAB, N_("Open a new tab") },
+	{ "open-new-tab-in-background", ACT_OPEN_NEW_TAB_IN_BACKGROUND, N_("Open a new tab in background") },
 	{ "open-new-window", ACT_OPEN_NEW_WINDOW, N_("Open a new window") },
+	{ "open-link-in-new-tab", ACT_OPEN_LINK_IN_NEW_TAB, N_("Open the current link in a new tab") },
+	{ "open-link-in-new-tab-in-background", ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND,
+							N_("Open the current link a new tab in background") },
 	{ "open-link-in-new-window", ACT_OPEN_LINK_IN_NEW_WINDOW, N_("Open the current link in a new window") },
 	{ "options-manager", ACT_OPTIONS_MANAGER, N_("Open options manager") },
 	{ "page-down", ACT_PAGE_DOWN, N_("Move downwards by a page") },

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.4 2002/12/10 23:23:51 pasky Exp $ */
+/* $Id: mailcap.c,v 1.5 2002/12/13 20:12:27 jonas Exp $ */
 
 /*
  * This file contains various functions for implementing a fair subset of
@@ -45,6 +45,7 @@ struct mailcap_entry {
 	unsigned int needsterminal :1;	/* Assigned to "block" */
 	unsigned int copiousoutput :1;	/* If "| ${PAGER}" should be added */
 	unsigned int testneedsfile :1;	/* If testing requires a filename */
+	unsigned int priority;		/* Increased for each sourced file */
 	struct mailcap_entry *next;	/* If several handlers for one type */
 };
 
@@ -250,7 +251,7 @@ get_field_text(unsigned char *field,
  */
 
 static void
-mailcap_parse(unsigned char *filename)
+mailcap_parse(unsigned char *filename, unsigned int priority)
 {
 	FILE *file;
 	unsigned char *line = NULL;
@@ -322,6 +323,13 @@ mailcap_parse(unsigned char *filename)
 						break;
 					}
 				}
+			} else if (!strncasecmp(field, "description", 11)) {
+				field = get_field_text(field + 11, entry->type,
+					               filename, lineno);
+				if (!field) continue;
+
+				entry->description = field;
+
 			}
 			/* Other optional fields are not currently useful */
 		}
@@ -329,6 +337,8 @@ mailcap_parse(unsigned char *filename)
 		/* Keep after parsing of optional fields (hint: copiousoutput) */
 		entry->command = convert_command(entry->command,
 						 entry->copiousoutput);
+
+		entry->priority = priority;
 
 		/* Time to get the entry into the mailcap_map */
 		if (entry->command) {
@@ -383,6 +393,7 @@ void
 mailcap_init()
 {
 	unsigned char *path = NULL;
+	unsigned int priority = 0;
 
 	if(!get_opt_bool("protocol.mailcap.enable"))
 		return; /* and leave mailcap_map = NULL */
@@ -416,7 +427,7 @@ mailcap_init()
 			mem_free(expanded);
 		}
 
-		mailcap_parse(file);
+		mailcap_parse(file, priority++);
 	}
 }
 
@@ -496,7 +507,20 @@ convert2option(struct mailcap_entry *entry, unsigned char *type)
 	if (!association) return NULL;
 
 	init_list(*association);
-	association->name     = stracpy("mailcap");
+	switch (get_opt_bool("protocol.mailcap.description")) {
+		case 1:
+			association->name = stracpy(entry->command);
+			break;
+		case 2:
+			if (entry->description) {
+				association->name = stracpy(entry->description);
+				break;
+			}
+		default:
+			/* XXX: Possibly fall through to provide fallback */
+			association->name = stracpy("mailcap");
+	}
+
 	association->box_item = NULL;
 	association->type     = OPT_TREE;
 	association->ptr      = init_options_tree();
@@ -580,29 +604,37 @@ mailcap_lookup(unsigned char *type, unsigned char *file)
 	/* Check list of entries */
 	if (item && item->value) entry = check_entries(item->value, file);
 
-	if (!entry) {
-		/* The type lookup has failed so try to get wildcard handler */
-		unsigned char alttype[256];
+	if (!entry || get_opt_bool("protocol.mailcap.prioritize")) {
+		/* The type lookup has either failed or we need to check
+		 * the priorities so get the wild card handler */
 		unsigned char *ptr;
-		int alttypelen;
-
 
 		/* Find length of basetype */
 		ptr = strchr(type, '/');
-		if (ptr == NULL) return NULL; /* This should not happen */
+		if (ptr) {
+			struct mailcap_entry *wildcard = NULL;
+			unsigned char wildcardtype[256];
+			int wildcardlen;
 
-		alttypelen = ptr - type + 1; /* including '/' */
-		safe_strncpy(alttype, type, alttypelen + 1);
+			wildcardlen = ptr - type + 1; /* including '/' */
+			safe_strncpy(wildcardtype, type, wildcardlen + 1);
 
-		alttype[alttypelen++] = '*';
-		alttype[alttypelen] = '\0';
+			wildcardtype[wildcardlen++] = '*';
+			wildcardtype[wildcardlen] = '\0';
 
-		item = get_hash_item(mailcap_map, alttype, alttypelen);
+			item = get_hash_item(mailcap_map, wildcardtype, wildcardlen);
 
-		/* Check list of entries */
-		if (item && item->value)
-			entry = check_entries(item->value, file);
+			if (item && item->value)
+				wildcard = check_entries(item->value, file);
+
+			if (entry && wildcard) {
+				/* Do the actual prioritizing */
+				if (wildcard->priority < entry->priority)
+					entry = wildcard;
+			} else {
+				entry = wildcard;
+			}
+		}
 	}
-
 	return convert2option(entry, type);
 }

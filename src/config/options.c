@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.154 2002/12/13 18:08:19 pasky Exp $ */
+/* $Id: options.c,v 1.155 2002/12/13 20:12:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1366,10 +1366,23 @@ register_options()
 
 	add_opt_bool("protocol.mailcap",
 		"ask", 0, 1,
-		"Wether to perform query when using handlers provided from\n"
+		"Whether to perform query when using handlers provided from\n"
 		"mailcap entries.");
 
-	
+	add_opt_int("protocol.mailcap",
+		"description", 0, 0, 2, 2,
+		"Type of description to show in query dialog\n"
+		"0 is show \"mailcap\"\n"
+		"1 is show program to be run\n"
+		"2 is show mailcap description field if any else like 0");
+
+	add_opt_bool("protocol.mailcap",
+		"prioritize", 0, 1,
+		"Prioritize entries by the order of the files in the mailcap\n"
+		"path. This means that wildcard entries (like: image/*) will\n"
+		"also be checked before deciding the handler.");
+
+
 	add_opt_string("protocol",
 		"no_proxy", 0, "",
 		"Comma separated list of domains for which the proxy (HTTP/FTP)\n"

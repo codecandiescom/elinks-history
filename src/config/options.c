@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.112 2002/11/19 21:53:23 zas Exp $ */
+/* $Id: options.c,v 1.113 2002/11/20 09:15:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -602,7 +602,7 @@ register_options()
 		"is a tristate:\n"
 		"0 never\n"
 		"1 if document.browse.links.numbering = 1\n"
-		"2 always\n");
+		"2 always");
 
 	/* TODO - this is somehow implemented by ff, but disabled
 	 * for now as it doesn't work. */
@@ -619,7 +619,7 @@ register_options()
 	add_opt_int("document.browse",
 		"scroll_margin", 0, 0, 20, 3,
 		"Size of the virtual margin - when you click inside of that margin,\n"
-		"document scrolls in that direction.\n");
+		"document scrolls in that direction.");
 
 	add_opt_bool("document.browse",
 		"table_move_order", 0, 0,
@@ -632,9 +632,9 @@ register_options()
 		"Cache options.");
 
 	add_opt_bool("document.cache",
-		"ignorecachecontrol", 0, 0,
+		"ignore_cache_control", 0, 0,
 		"Ignore Cache-Control and Pragma server headers.\n"
-		"When set, document is cached even with 'Cache-Control: no-cache'");
+		"When set, the document is cached even with 'Cache-Control: no-cache'.");
 	
 	add_opt_tree("document.cache",
 		"format", 0,

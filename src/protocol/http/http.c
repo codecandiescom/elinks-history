@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.64 2002/11/19 22:00:42 zas Exp $ */
+/* $Id: http.c,v 1.65 2002/11/20 09:15:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1009,7 +1009,7 @@ again:
 	if (e->head) mem_free(e->head);
 	e->head = head;
 
-	if (!get_opt_bool("document.cache.ignorecachecontrol")) {
+	if (!get_opt_bool("document.cache.ignore_cache_control")) {
 		if ((d = parse_http_header(e->head, "Cache-Control", NULL))
 		    || (d = parse_http_header(e->head, "Pragma", NULL)))
 		{

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.222 2004/04/21 00:00:33 jonas Exp $ */
+/* $Id: menu.c,v 1.223 2004/04/21 00:21:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -853,7 +853,8 @@ static void
 mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 {
 	struct window *win = menu->win;
-	int i, p = L_MAINMENU_SPACE;
+	struct menu_item *item;
+	int p = L_MAINMENU_SPACE;
 
 	if (check_mouse_wheel(ev))
 		return;
@@ -867,18 +868,18 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 
 	/* We don't initialize to menu->first here, since it breaks horizontal
 	 * scrolling using mouse in some cases. --Zas */
-	for (i = 0; i < menu->size; i++) {
+	foreach_menu_item (item, menu->items) {
 		int o = p;
 
-		if (mi_has_left_text(menu->items[i])) {
-			unsigned char *text = menu->items[i].text;
+		if (mi_has_left_text(*item)) {
+			unsigned char *text = item->text;
 
-			if (mi_text_translate(menu->items[i]))
+			if (mi_text_translate(*item))
 				text = _(text, win->term);
 
 			p += L_MAINTEXT_SPACE + L_TEXT_SPACE
 				+ strlen(text)
-				- !!menu->items[i].hotkey_pos
+				- !!item->hotkey_pos
 				+ R_TEXT_SPACE + R_MAINTEXT_SPACE;
 		}
 
@@ -895,13 +896,13 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 			scroll_menu(menu, 1);
 
 		} else {
-			menu->selected = i;
+			scroll_menu(menu, (item - menu->items) - menu->selected);
 		}
 
 		display_mainmenu(win->term, menu);
 
 		if (check_mouse_action(ev, B_UP)
-			|| mi_is_submenu(menu->items[menu->selected])) {
+		    || mi_is_submenu(*item)) {
 			select_menu(win->term, menu);
 		}
 		break;

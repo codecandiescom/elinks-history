@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.109 2004/11/14 01:02:52 jonas Exp $ */
+/* $Id: info.c,v 1.110 2004/11/14 01:14:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,6 +178,30 @@ get_ressource_info(struct terminal *term, void *data)
 		cache_info(INFO_LOCKED), cache_info(INFO_LOADING),
 		formatted_info(INFO_FILES), formatted_info(INFO_LOCKED));
 
+#ifdef DEBUG_MEMLEAK
+	add_to_string(&info, "\n\n");
+	add_to_string(&info, _("Memory info", term));
+	add_to_string(&info, "\n");
+
+	add_format_to_string(&info,
+#ifdef HAVE_MMAP
+			_("Allocated      : %ld bytes\n"
+			  "Truly allocated: %ld bytes (x%0.2f)\n"
+			  "Cache size     : %ld bytes\n", term)
+#else
+			_("Allocated      : %ld bytes\n"
+			  "Truly allocated: %ld bytes (x%0.2f)", term)
+#endif
+			,
+			mem_stats.amount, mem_stats.true_amount,
+			(double) mem_stats.true_amount / (double) mem_stats.amount
+#ifdef HAVE_MMAP
+			, cache_info(INFO_BYTES)
+#endif
+			);
+
+#endif /* DEBUG_MEMLEAK */
+
 	return info.source;
 }
 
@@ -187,35 +211,3 @@ resource_info(struct terminal *term)
 	refreshed_msg_box(term, 0, N_("Resources"), ALIGN_LEFT,
 			  get_ressource_info, NULL);
 }
-
-#ifdef DEBUG_MEMLEAK
-
-static unsigned char *
-get_memory_info(struct terminal *term, void *data)
-{
-	return msg_text(term,
-#ifdef HAVE_MMAP
-			N_("Allocated      : %ld bytes\n"
-			   "Truly allocated: %ld bytes (x%0.2f)\n"
-			   "Cache size     : %ld bytes\n")
-#else
-			N_("Allocated      : %ld bytes\n"
-			   "Truly allocated: %ld bytes (x%0.2f)")
-#endif
-			,
-			mem_stats.amount, mem_stats.true_amount,
-			(double) mem_stats.true_amount / (double) mem_stats.amount
-#ifdef HAVE_MMAP
-			, cache_info(INFO_BYTES)
-#endif
-			);
-}
-
-void
-memory_inf(struct terminal *term, void *d, struct session *ses)
-{
-	refreshed_msg_box(term, 0, N_("Memory info"), ALIGN_LEFT,
-			  get_memory_info, NULL);
-}
-
-#endif

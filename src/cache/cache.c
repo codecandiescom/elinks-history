@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.187 2004/10/14 20:00:44 jonas Exp $ */
+/* $Id: cache.c,v 1.188 2004/10/14 20:23:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -408,10 +408,16 @@ defrag_entry(struct cache_entry *cached)
 	struct fragment *first_frag, *adj_frag, *frag, *new_frag;
 	int new_frag_len;
 
-	if (list_empty(cached->frag)) return;
-	first_frag = cached->frag.next;
-	if (first_frag->offset) return;
+	if (list_empty(cached->frag))
+		return;
 
+	first_frag = cached->frag.next;
+	if (first_frag->offset)
+		return;
+
+	/* Find the first pair of fragments that overlap. It will be used to
+	 * figure out what sequence of fragments to include in the
+	 * defragmentation. */
 	for (adj_frag = first_frag->next; adj_frag != (void *) &cached->frag;
 	     adj_frag = adj_frag->next) {
 		long overlay = adj_frag->offset
@@ -425,8 +431,11 @@ defrag_entry(struct cache_entry *cached)
 		return;
 	}
 
-	if (adj_frag == first_frag->next) return;
+	/* Only one fragment so no defragmentation is needed */
+	if (adj_frag == first_frag->next)
+		return;
 
+	/* Calculate the length of the defragmented fragment. */
 	for (new_frag_len = 0, frag = first_frag;
 	     frag != adj_frag;
 	     frag = frag->next)
@@ -434,7 +443,9 @@ defrag_entry(struct cache_entry *cached)
 
 	/* One byte is reserved for data in struct fragment. */
 	new_frag = frag_alloc(new_frag_len);
-	if (!new_frag) return;
+	if (!new_frag)
+		return;
+
 	new_frag->length = new_frag_len;
 	new_frag->real_length = new_frag_len;
 

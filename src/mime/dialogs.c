@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.90 2004/04/11 17:23:09 jonas Exp $ */
+/* $Id: dialogs.c,v 1.91 2004/04/11 22:58:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,44 +49,33 @@ menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 {
 	struct string translated;
 	struct option *opt = NULL;
-	struct string str;
+	unsigned char *extension = fcp;
 
-	if (!fcp) return;
-
-	if (!init_string(&str)) {
-		mem_free(fcp);
-		return;
-	}
-
-	add_to_string(&str, (unsigned char *) fcp);
-	mem_free(fcp);
+	if (!extension) return;
 
 	if (!init_string(&translated)) {
-		done_string(&str);
+		mem_free(extension);
 		return;
 	}
 
-	if (add_optname_to_string(&translated, str.source, str.length))
+	if (add_optname_to_string(&translated, extension, strlen(extension)))
 		opt = get_real_opt("mime.extension", translated.source);
 
 	if (!opt) {
 		done_string(&translated);
-		done_string(&str);
+		mem_free(extension);
 		return;
 	}
 
-	/* Finally add */
-	add_to_string(&str, " -> ");
-	add_to_string(&str, opt->value.string);
-
 	msg_box(term, getml(translated.source, NULL), MSGBOX_FREE_TEXT,
 		N_("Delete extension"), AL_CENTER,
-		msg_text(term, N_("Delete extension %s?"), str.source),
+		msg_text(term, N_("Delete extension %s -> %s?"),
+			 extension, opt->value.string),
 		translated.source, 2,
 		N_("Yes"), really_del_ext, B_ENTER,
 		N_("No"), NULL, B_ESC);
 
-	done_string(&str);
+	mem_free(extension);
 }
 
 

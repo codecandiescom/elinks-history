@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.24 2003/06/14 22:36:57 pasky Exp $ */
+/* $Id: fastfind.c,v 1.25 2003/06/15 10:48:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,11 +54,12 @@
  *
  * (the ending nodes are upcased just for this drawing, not in real)
  *
- * To optimize this for speed, leafs of nodes are organized in per-node arrays,
- * indexed by symbol value of the key's next character. But to optimize that
- * for memory, we first compose own alphabet consisting only from the chars we
- * ever use in the key strings. @uniq_chars holds that alphabet and @idxtab is
- * used to translate between it and ASCII.
+ * To optimize this for speed, leafs of nodes are organized in per-node arrays
+ * (so-called 'trampolines'; er, well, if you have better name for them, go
+ * ahead and share yourself... ;-), indexed by symbol value of the key's next
+ * character. But to optimize that for memory, we first compose own alphabet
+ * consisting only from the chars we ever use in the key strings. @uniq_chars
+ * holds that alphabet and @idxtab is used to translate between it and ASCII.
  *
  * Tree building: O((L+M)*N)
  * 			(L: mean key length, M: alphabet size,
@@ -85,12 +86,12 @@
 /* Adequate for ELinks tags search. */
 
 #define POINTER_INDEX_BITS	9	/* 512 */
-#define LINE_INDEX_BITS		14	/* 16384 */
+#define TRAMPOLINE_INDEX_BITS	14	/* 16384 */
 #define COMP_CHAR_INDEX_BITS	7	/* 128	*/
 
 #define ff_elt ff_elt_c /* Both are 32 bits long. */
 
-#if (POINTER_INDEX_BITS + LINE_INDEX_BITS + \
+#if (POINTER_INDEX_BITS + TRAMPOLINE_INDEX_BITS + \
      COMP_CHAR_INDEX_BITS + END_LEAF_BITS + \
      COMPRESSED_BITS) > 32
 #error Over 32 bits in struct ff_elt !!
@@ -105,10 +106,10 @@
 /* This will make struct ff_elt_c use 64 bits. */
 
 #define POINTER_INDEX_BITS	12
-#define LINE_INDEX_BITS		18
+#define TRAMPOLINE_INDEX_BITS	18
 #define COMP_CHAR_INDEX_BITS	8
 
-#if (POINTER_INDEX_BITS + LINE_INDEX_BITS + \
+#if (POINTER_INDEX_BITS + TRAMPOLINE_INDEX_BITS + \
      + END_LEAF_BITS + COMPRESSED_BITS) > 32
 #error Over 32 bits in struct ff_elt !!
 #endif
@@ -123,7 +124,7 @@ struct ff_elt {
 	/* Index in pointers */
 	unsigned int p:POINTER_INDEX_BITS;
 
-	/* Index in lines */
+	/* Index in trampolines */
 	unsigned int l:LINE_INDEX_BITS;
 };
 
@@ -131,7 +132,7 @@ struct ff_elt {
 
 
 #define FF_MAX_KEYS  (1  << POINTER_INDEX_BITS)
-#define FF_MAX_LINES ((1 << LINE_INDEX_BITS) - 1)
+#define FF_MAX_TLINES ((1 << TRAMPOLINE_INDEX_BITS) - 1)
 #define FF_MAX_CHARS (1  << COMP_CHAR_INDEX_BITS)
 
 
@@ -139,7 +140,7 @@ struct ff_elt_c {
 	unsigned int e:END_LEAF_BITS;
 	unsigned int c:COMPRESSED_BITS;
 	unsigned int p:POINTER_INDEX_BITS;
-	unsigned int l:LINE_INDEX_BITS;
+	unsigned int l:TRAMPOLINE_INDEX_BITS;
 
 	/* Index of char when compressed. */
 	unsigned int ch:COMP_CHAR_INDEX_BITS;
@@ -150,8 +151,8 @@ struct fastfind_info {
 	void **pointers;
 	int *keylen_list;
 
-	struct ff_elt **lines;
-	struct ff_elt *root_line;
+	struct ff_elt **trampolines;
+	struct ff_elt *root_trampoline;
 
 	int uniq_chars_count;
 	int min_key_len;
@@ -161,7 +162,7 @@ struct fastfind_info {
 	int idxtab[FF_MAX_CHARS];
 
 	int pointers_count;
-	int lines_count;
+	int trampolines_count;
 
 #ifdef FASTFIND_DEBUG
 	unsigned long searches;
@@ -253,28 +254,29 @@ add_to_pointers(void *p, int key_len, struct fastfind_info *info)
 
 /* Return 1 on success, 0 on allocation failure */
 static int
-alloc_line(struct fastfind_info *info)
+alloc_trampoline(struct fastfind_info *info)
 {
-	struct ff_elt **lines;
-	struct ff_elt *line;
+	struct ff_elt **trampolines;
+	struct ff_elt *trampoline;
 
-	assert(info->lines_count < FF_MAX_LINES);
+	assert(info->trampolines_count < FF_MAX_TLINES);
 
-	/* info->lines[0] is never used since l=0 marks no leaf
+	/* info->trampolines[0] is never used since l=0 marks no leaf
 	 * in struct ff_elt. That's the reason of that + 2. */
-	lines = mem_realloc(info->lines, sizeof(struct ff_elt *)
-					 * (info->lines_count + 2));
-	if (!lines) return 0;
-	info->lines = lines;
+	trampolines = mem_realloc(info->trampolines,
+				  sizeof(struct ff_elt *)
+				  * (info->trampolines_count + 2));
+	if (!trampolines) return 0;
+	info->trampolines = trampolines;
 
-	line = mem_calloc(info->uniq_chars_count, sizeof(struct ff_elt));
-	if (!line) return 0;
+	trampoline = mem_calloc(info->uniq_chars_count, sizeof(struct ff_elt));
+	if (!trampoline) return 0;
 
 	meminc(info, sizeof(struct ff_elt *));
 	meminc(info, sizeof(struct ff_elt) * info->uniq_chars_count);
 
-	info->lines_count++;
-	info->lines[info->lines_count] = line;
+	info->trampolines_count++;
+	info->trampolines[info->trampolines_count] = trampoline;
 
 	return 1;
 }
@@ -352,16 +354,16 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 
 	init_idxtab(info);
 
-	/* Root line allocation */
-	if (!alloc_line(info)) goto alloc_error;
+	/* Root trampoline allocation */
+	if (!alloc_trampoline(info)) goto alloc_error;
 
-	info->root_line = info->lines[info->lines_count];
+	info->root_trampoline = info->trampolines[info->trampolines_count];
 
 	/* Do it */
 	(*reset)();
 	while ((p = (*next)())) {
 		int key_len = strlen(p->key);
-		struct ff_elt *current = info->root_line;
+		struct ff_elt *current = info->root_trampoline;
 		register int i;
 
 #if 0
@@ -371,13 +373,14 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 			/* Convert char to its index value */
 			int idx = info->idxtab[ifcase(p->key[i])];
 
-			if (current[idx].l == 0) { /* There's no leaf line yet */
-				if (!alloc_line(info)) goto alloc_error;
-				current[idx].l = info->lines_count;
+			if (current[idx].l == 0) {
+				/* There's no leaf trampoline yet */
+				if (!alloc_trampoline(info)) goto alloc_error;
+				current[idx].l = info->trampolines_count;
 			}
 
-			/* Descend to leaf line */
-			current = info->lines[current[idx].l];
+			/* Descend to leaf trampoline */
+			current = info->trampolines[current[idx].l];
 		}
 
 		/* Index final leaf */
@@ -408,13 +411,16 @@ fastfind_index_compress(void *current_elt, struct fastfind_info *info)
 
 	assert(info);
 
-	if (!current) current = info->root_line;
+	if (!current) current = info->root_trampoline;
 
 	for (; i < info->uniq_chars_count; i++) {
 		if (current[i].c) continue;
 
-		if (current[i].l) /* There's a leaf line, descend to it, and recurse */
-			fastfind_index_compress(info->lines[current[i].l], info);
+		if (current[i].l) {
+			/* There's a leaf trampoline, descend to it, and recurse */
+			fastfind_index_compress(info->trampolines[current[i].l],
+						info);
+		}
 
 		if (current[i].l || current[i].e) {
 			cnt++;
@@ -425,11 +431,11 @@ fastfind_index_compress(void *current_elt, struct fastfind_info *info)
 	if (pos == -1 || cnt >= 2 || current[pos].c) return;
 
 	/* Compress if possible ;) */
-	for (i = 1; i < info->lines_count; i++)
-		if (info->lines[i] == current)
+	for (i = 1; i < info->trampolines_count; i++)
+		if (info->trampolines[i] == current)
 			break;
 
-	if (i < info->lines_count) {
+	if (i < info->trampolines_count) {
 		struct ff_elt_c *new = mem_alloc(sizeof(struct ff_elt_c));
 
 		if (!new) return;
@@ -440,8 +446,8 @@ fastfind_index_compress(void *current_elt, struct fastfind_info *info)
 		new->l = current[pos].l;
 		new->ch = pos;
 
-		mem_free(info->lines[i]);
-		info->lines[i] = (struct ff_elt *) new;
+		mem_free(info->trampolines[i]);
+		info->trampolines[i] = (struct ff_elt *) new;
 		meminc(info, sizeof(struct ff_elt_c));
 		meminc(info, sizeof(struct ff_elt) * -info->uniq_chars_count);
 	}
@@ -466,7 +472,7 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 	accif(info) (key_len > info->max_key_len) return NULL;
 	accif(info) (key_len < info->min_key_len) return NULL;
 
-	current = info->root_line;
+	current = info->root_trampoline;
 
 	testinc(info); /* We count one test for case sensitivity (in loop for now). */
 
@@ -481,7 +487,7 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 		accif(info) (lidx < 0) return NULL;
 
 		accif(info) (current->c) {
-			/* It is a compressed line. */
+			/* It is a compressed trampoline. */
 			accif(info) (((struct ff_elt_c *) current)->ch != lidx)
 				return NULL;
 		} else {
@@ -498,7 +504,7 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 		accif(info) (!current->l)
 			return NULL;
 
-		current = (struct ff_elt *) info->lines[current->l];
+		current = (struct ff_elt *) info->trampolines[current->l];
 	}
 
 	return NULL;
@@ -516,7 +522,7 @@ fastfind_terminate(struct fastfind_info *info)
 	fprintf(stderr, "Min_key_len : %d\n", info->min_key_len);
 	fprintf(stderr, "Max_key_len : %d\n", info->max_key_len);
 	fprintf(stderr, "Entries     : %d/%d max.\n", info->pointers_count, FF_MAX_KEYS);
-	fprintf(stderr, "FFlines     : %d/%d max.\n", info->lines_count, FF_MAX_LINES);
+	fprintf(stderr, "FFtlines    : %d/%d max.\n", info->trampolines_count, FF_MAX_TLINES);
 	fprintf(stderr, "Memory usage: %lu bytes (cost per entry = %0.2f bytes)\n",
 		info->memory_usage, (double) info->memory_usage / info->pointers_count);
 	fprintf(stderr, "Struct elt  : %d bytes (normal) , %d bytes (compressed)\n",
@@ -538,12 +544,12 @@ fastfind_terminate(struct fastfind_info *info)
 
 	if (info->pointers) mem_free(info->pointers);
 	if (info->keylen_list) mem_free(info->keylen_list);
-	while (info->lines_count) {
-		if (info->lines[info->lines_count])
-			mem_free(info->lines[info->lines_count]);
-		info->lines_count--;
+	while (info->trampolines_count) {
+		if (info->trampolines[info->trampolines_count])
+			mem_free(info->trampolines[info->trampolines_count]);
+		info->trampolines_count--;
 	}
-	if (info->lines) mem_free(info->lines);
+	if (info->trampolines) mem_free(info->trampolines);
 	mem_free(info);
 }
 

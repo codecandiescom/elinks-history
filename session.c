@@ -517,8 +517,33 @@ time_t parse_http_date(const char *date)
 	date += 3;
 	
 	tm.tm_sec = (date[0] - '0') * 10 + date[1] - '0';
-	
-	t = mktime(&tm);
+
+#ifdef HAVE_TIMEGM
+	t = timegm(&tm);
+#else
+	/* Since mktime thinks we have localtime, we need a wrapper
+	 * to handle GMT. */
+	{	
+		char *tz = getenv("TZ");
+ 		
+		if (tz && *tz) {
+			/* Temporary disable timezone in-place. */
+			char tmp = *tz;
+ 			
+			*tz = '\0';
+			tzset();
+			
+			t = mktime(&tm);
+			
+			*tz = tmp;
+			tzset();
+			
+		} else {
+			t = mktime(&tm);
+		}
+	}
+#endif
+       
 	if (t == (time_t) - 1)
 		return 0;
 	else

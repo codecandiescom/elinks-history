@@ -51,6 +51,9 @@ Benjamin Michotte <binny@baby-linux.net>
 Carles Sadurni Anguita <isard@ctv.es>
 	Catalan translation
 
+Christian Häggström <c00chm@cs.umu.se>
+	Fixes in parse_http_date()
+
 Cliff Cunnington <cliff@ccnet.demon.nl>
 	Links' website at http://links.sf.net/
 	User's manual at http://links.sf.net/docs/manual-0.82-en/

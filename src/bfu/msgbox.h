@@ -1,4 +1,4 @@
-/* $Id: msgbox.h,v 1.4 2003/06/07 01:45:54 jonas Exp $ */
+/* $Id: msgbox.h,v 1.5 2003/06/07 12:15:23 pasky Exp $ */
 
 #ifndef EL__BFU_MSGBOX_H
 #define EL__BFU_MSGBOX_H
@@ -37,8 +37,7 @@
  *			o Second the functions pointer to the handler.
  *			o Third any flags.
  */
-void
-msg_box(struct terminal *term, struct memory_list *mem_list,
+void msg_box(struct terminal *term, struct memory_list *mem_list,
 	unsigned char *title, enum format_align align,
 	unsigned char *text, void *udata, int buttons, ...);
 

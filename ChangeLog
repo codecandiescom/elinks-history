@@ -1,3 +1,284 @@
+Sun Mar 17 14:05:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure, configure.in, Unicode/README, Unicode/gen-7b,
+	Unicode/gen-cp, Unicode/gen-ent, intl/README, intl/gen-intl,
+	intl/intl.txt, src/Makefile.am, src/Makefile.in, src/main.c,
+	src/bfu/bfu.c, src/bfu/menu.c, src/bookmarks/bookmarks.c,
+	src/config/default.c, src/document/session.c, src/document/view.c,
+	src/document/html/parser.c, src/document/html/renderer.c,
+	src/document/html/renderer.h, src/intl/Makefile.am,
+	src/intl/Makefile.in, src/intl/charsets.c, src/intl/charsets.h,
+	src/intl/codepage.h, src/intl/codepage.inc, src/intl/entity.inc,
+	src/intl/lang_defs.h, src/intl/language.c, src/intl/language.h,
+	src/intl/language.inc, src/intl/uni_7b.inc, src/lowlevel/sched.c,
+	src/lua/lua.c, src/osdep/os_dep.c, src/protocol/http.c,
+	src/protocol/mailto.c, src/protocol/types.c, Makefile.in,
+	acconfig.h, aclocal.m4, config.h.in, configure, configure.in,
+	stamp-h.in, src/Makefile.in, src/bfu/Makefile.in,
+	src/bookmarks/Makefile.in, src/config/Makefile.in,
+	src/cookies/Makefile.in, src/document/Makefile.in,
+	src/intl/Makefile.in, src/lowlevel/Makefile.in,
+	src/lua/Makefile.in, src/osdep/Makefile.in,
+	src/protocol/Makefile.in, src/util/Makefile.in,
+	src/document/html/Makefile.in:
+	
+	src/internat/ -> src/intl/
+
+Sun Mar 17 13:54:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* TODO, src/links.h, src/main.c, src/main.h, src/bfu/bfu.c,
+	src/bfu/bfu.h, src/bfu/menu.c, src/bfu/menu.h,
+	src/bookmarks/bookmarks.c, src/bookmarks/bookmarks.h,
+	src/config/default.c, src/config/default.h, src/config/kbdbind.c,
+	src/cookies/cookies.c, src/cookies/cookies.h, src/document/cache.c,
+	src/document/cache.h, src/document/session.c,
+	src/document/session.h, src/document/view.c, src/document/view.h,
+	src/document/html/Makefile.am, src/document/html/Makefile.in,
+	src/document/html/colors.c, src/document/html/colors.h,
+	src/document/html/parser.c, src/document/html/parser.h,
+	src/document/html/renderer.c, src/document/html/renderer.h,
+	src/document/html/tables.c, src/document/html/tables.h,
+	src/lowlevel/af_unix.c, src/lowlevel/connect.c,
+	src/lowlevel/connect.h, src/lowlevel/dns.c, src/lowlevel/kbd.c,
+	src/lowlevel/sched.c, src/lowlevel/sched.h, src/lowlevel/select.c,
+	src/lowlevel/terminal.c, src/lowlevel/terminal.h, src/lua/lua.c,
+	src/lua/lua.h, src/osdep/os_dep.c, src/protocol/file.c,
+	src/protocol/file.h, src/protocol/finger.c, src/protocol/finger.h,
+	src/protocol/ftp.c, src/protocol/http.c, src/protocol/http.h,
+	src/protocol/https.c, src/protocol/https.h, src/protocol/mailto.c,
+	src/protocol/mailto.h, src/protocol/types.c, src/protocol/types.h,
+	src/protocol/url.c, src/protocol/url.h, src/util/error.c:
+	
+	Part III. of source layout change, stage 2. Changed #includes so
+	that we're now again compiling and working ok, already under the
+	new source layout. But still more to come, stay tuned ;).
+
+Sun Mar 17 12:24:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
+	configure.in, stamp-h.in, src/Makefile.in, src/bfu/Makefile.in,
+	src/bookmarks/Makefile.in, src/config/Makefile.in,
+	src/cookies/Makefile.in, src/document/Makefile.in,
+	src/lowlevel/Makefile.in, src/lua/Makefile.in,
+	src/osdep/Makefile.in, src/document/html/Makefile.in,
+	src/protocol/Makefile.in, src/util/Makefile.in, src/Makefile.am,
+	src/bfu/Makefile.am, src/bookmarks/Makefile.am,
+	src/config/Makefile.am, src/cookies/Makefile.am,
+	src/document/Makefile.am, src/document/html/Makefile.am,
+	src/lowlevel/Makefile.am, src/lua/Makefile.am,
+	src/osdep/Makefile.am, src/protocol/Makefile.am,
+	src/util/Makefile.am:
+	
+	okay, more fun with INCLUDE ;)
+
+Sun Mar 17 12:04:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: Makefile.am, Makefile.in, bfu/Makefile.am, bfu/Makefile.in,
+	bookmarks/Makefile.am, config/Makefile.am, cookies/Makefile.am,
+	document/Makefile.am, document/html/Makefile.am,
+	lowlevel/Makefile.am, lua/Makefile.am, osdep/Makefile.am,
+	protocol/Makefile.am, util/Makefile.am:
+	
+	added INCLUDE to Makefiles.am
+
+Sun Mar 17 11:54:41 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.in, autocommit.sh, configure, configure.in,
+	wipe-out-ssl, src/Makefile.am, src/bfu/Makefile.am,
+	src/bookmarks/Makefile.am, src/config/Makefile.am,
+	src/cookies/Makefile.am, src/document/Makefile.am,
+	src/document/html/Makefile.am, src/lowlevel/Makefile.am,
+	src/lua/Makefile.am, src/osdep/Makefile.am,
+	src/protocol/Makefile.am, src/util/Makefile.am, Makefile.in,
+	acconfig.h, aclocal.m4, config.h.in, configure, configure.in,
+	stamp-h.in, src/Makefile.in, src/bfu/Makefile.in,
+	src/bookmarks/Makefile.in, src/config/Makefile.in,
+	src/cookies/Makefile.in, src/document/Makefile.in,
+	src/lowlevel/Makefile.in, src/lua/Makefile.in,
+	src/osdep/Makefile.in, src/document/html/Makefile.in,
+	src/protocol/Makefile.in, src/util/Makefile.in:
+	
+	Part III. of source layout change, stage 2. Improved autofiles, so
+	that ./autogen actually works now ;)
+
+Sun Mar 17 11:28:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.am, af_unix.c, af_unix.h, beos.c, bfu.c, bfu.h,
+	bookmarks.c, bookmarks.h, cache.c, cache.h, charsets.c, charsets.h,
+	codepage.h, codepage.inc, colors.c, colors.h, configure.in,
+	connect.c, connect.h, cookies.c, cookies.h, default.c, default.h,
+	dns.c, dns.h, error.c, error.h, file.c, file.h, finger.c, finger.h,
+	ftp.c, ftp.h, html.c, html.h, html_r.c, html_r.h, html_tbl.c,
+	html_tbl.h, http.c, http.h, https.c, https.h, kbd.c, kbd.h,
+	kbdbind.c, kbdbind.h, lang_defs.h, language.c, language.h,
+	language.inc, links.h, lua.c, lua.h, mailto.c, mailto.h, main.c,
+	main.h, menu.c, menu.h, os_dep.c, os_dep.h, os_depx.h, sched.c,
+	sched.h, select.c, select.h, session.c, session.h, setup.h,
+	terminal.c, terminal.h, types.c, types.h, uni_7b.inc, url.c, url.h,
+	view.c, view.h, win32.c, wipe-out-ssl, Unicode/gen-7b,
+	Unicode/gen-cp, Unicode/gen-ent, intl/gen-intl, src/Makefile.am,
+	src/links.h, src/main.c, src/main.h, src/setup.h,
+	src/bfu/Makefile.am, src/bfu/bfu.c, src/bfu/bfu.h, src/bfu/menu.c,
+	src/bfu/menu.h, src/bookmarks/Makefile.am,
+	src/bookmarks/bookmarks.c, src/bookmarks/bookmarks.h,
+	src/cookies/Makefile.am, src/cookies/cookies.c,
+	src/cookies/cookies.h, src/document/Makefile.am,
+	src/document/cache.c, src/document/cache.h, src/document/session.c,
+	src/document/session.h, src/document/view.c, src/document/view.h,
+	src/document/html/Makefile.am, src/document/html/colors.c,
+	src/document/html/colors.h, src/document/html/parser.c,
+	src/document/html/parser.h, src/document/html/renderer.c,
+	src/document/html/renderer.h, src/document/html/tables.c,
+	src/document/html/tables.h, src/lowlevel/Makefile.am,
+	src/lowlevel/af_unix.c, src/lowlevel/af_unix.h,
+	src/lowlevel/connect.c, src/lowlevel/connect.h, src/lowlevel/dns.c,
+	src/lowlevel/dns.h, src/lowlevel/kbd.c, src/lowlevel/kbd.h,
+	src/lowlevel/sched.c, src/lowlevel/sched.h, src/lowlevel/select.c,
+	src/lowlevel/select.h, src/lowlevel/terminal.c,
+	src/lowlevel/terminal.h, src/lua/Makefile.am, src/lua/lua.c,
+	src/lua/lua.h, src/osdep/Makefile.am, src/osdep/beos.c,
+	src/osdep/os_dep.c, src/osdep/os_dep.h, src/osdep/os_depx.h,
+	src/osdep/win32.c, src/protocol/Makefile.am, src/protocol/file.c,
+	src/protocol/file.h, src/protocol/finger.c, src/protocol/finger.h,
+	src/protocol/ftp.c, src/protocol/ftp.h, src/protocol/http.c,
+	src/protocol/http.h, src/protocol/https.c, src/protocol/https.h,
+	src/protocol/mailto.c, src/protocol/mailto.h, src/protocol/types.c,
+	src/protocol/types.h, src/protocol/url.c, src/protocol/url.h,
+	src/util/Makefile.am, src/util/error.c, src/util/error.h,
+	src/config/Makefile.am, src/config/default.c, src/config/default.h,
+	src/config/kbdbind.c, src/config/kbdbind.h:
+	
+	Part III. of source layout change, stage 1. Moving source files to
+	subdirectories, sorted by the department they belong to. Also
+	several renaming.  Obviously not yet complete, this commit is here
+	just to record outgoing work :). And definitively not compilable
+	now.
+	
+	Please update by cvs update -d, so that new directories will be
+	created properly.
+
+Sat Mar 16 23:25:49 2002  Petr Baudis <pasky@ji.cz>:
+
+	* http.c, sched.h:
+	
+	fixed bug introduced with one enum, that we wasn't able to connect
+	to blacklisted servers
+
+Sat Mar 16 23:05:50 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.am, Makefile.in, acconfig.h, aclocal.m4, config.h.in,
+	configure, configure.in, stamp-h.in:
+	
+	oh well, added that colors.c ;)
+
+Sat Mar 16 23:02:36 2002  Petr Baudis <pasky@ji.cz>:
+
+	* bfu.h, bookmarks.c, cache.c, colors.c, colors.h, cookies.c,
+	default.c, default.h, html.c, html.h, html_r.c, html_r.h,
+	html_tbl.c, http.c, kbdbind.h, links.h, main.c, menu.c, os_dep.c,
+	sched.c, sched.h, session.c, session.h, terminal.c, terminal.h,
+	view.h:
+	
+	various compilation fixes; had to fork colors parsing to
+	colors.[ch], it wasn't possible to arrange it so that it compiles
+	otherwise
+
+Sat Mar 16 22:03:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* af_unix.c, af_unix.h, bfu.c, bfu.h, bookmarks.c, bookmarks.h,
+	cache.h, charsets.h, connect.h, cookies.h, default.c, default.h,
+	dns.c, dns.h, error.c, error.h, file.c, file.h, finger.h, ftp.c,
+	ftp.h, html.c, html.h, html_r.h, html_tbl.h, http.c, http.h,
+	https.h, kbd.c, kbd.h, kbdbind.c, kbdbind.h, language.c,
+	language.h, links.h, lua.c, lua.h, mailto.c, mailto.h, main.c,
+	main.h, menu.c, menu.h, os_dep.c, sched.c, sched.h, select.h,
+	session.c, session.h, terminal.c, terminal.h, types.c, types.h,
+	url.h, view.c, view.h:
+	
+	Part II. of source layout change, stage 4. This should be the last
+	stage of this part, everything is moved into specific files
+	(there're exceptions, but we've to leave something to future,
+	haven't we?). However, compilation fixes will follow yet ;).
+
+Sat Mar 16 21:02:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* HACKING:
+	
+	lua scripting description, taken from mail by peter wang
+
+Sat Mar 16 20:07:58 2002  Petr Baudis <pasky@ji.cz>:
+
+	* af_unix.c, bfu.c, bookmarks.c, cache.c, connect.c, connect.h,
+	cookies.c, cookies.h, default.c, dns.h, file.c, file.h, finger.c,
+	finger.h, ftp.c, ftp.h, html.c, html.h, html_r.c, html_r.h, http.c,
+	http.h, https.c, https.h, kbd.c, language.c, links.h, lua.c,
+	mailto.c, mailto.h, main.c, main.h, menu.c, os_dep.c, sched.c,
+	select.c, select.h, session.c, session.h, terminal.c, types.c,
+	url.c, url.h, view.c, view.h, sched.h, terminal.h:
+	
+	Part II. of source layout change, stage 3. More .h files forked.
+
+Sat Mar 16 17:51:49 2002  Petr Baudis <pasky@ji.cz>:
+
+	* main.c, view.c:
+	
+	oh well.. compilation fixes ;)
+
+Sat Mar 16 17:44:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* af_unix.c, bfu.c, bookmarks.c, charsets.c, charsets.h, cookies.c,
+	default.c, html.c, html.h, html_r.c, html_r.h, html_tbl.c,
+	html_tbl.h, http.c, language.c, links.h, lua.c, main.c, menu.c,
+	sched.c, session.c, session.h, view.c, view.h:
+	
+	Part II. of source layout change, stage 2. HTML hell and Session
+	oggre hopefully handled (it'll need more work, though); I wonder if
+	it's compilable ;)
+
+Sat Mar 16 15:17:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* af_unix.c, af_unix.h, bfu.c, bookmarks.c, cache.c, cache.h,
+	charsets.c, connect.c, connect.h, cookies.c, cookies.h, default.c,
+	dns.c, dns.h, error.c, error.h, file.c, file.h, finger.c, finger.h,
+	ftp.c, ftp.h, html.c, html_r.c, html_tbl.c, http.c, http.h,
+	https.c, https.h, kbd.c, language.c, links.h, lua.c, mailto.c,
+	mailto.h, main.c, main.h, menu.c, os_dep.c, os_dep.h, os_depx.h,
+	sched.c, select.c, select.h, session.c, setup.h, terminal.c,
+	types.c, url.c, url.h, view.c:
+	
+	Part II. of source layout change, stage 1. Moving interface of the
+	'modules' to specific header files. Obviously not yet complete,
+	this commit is here just to record outgoing work :).
+
+Sat Mar 16 12:31:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* BUGS:
+	
+	another bug added.. (old one, inherited from links ;)
+
+Sat Mar 16 11:49:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* menu.c:
+	
+	added superambiguous feature Default, removed version of Lua patch,
+	removed the ifdef around Features line
+
+Sat Mar 16 10:30:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.am, Makefile.in, acconfig.h, aclocal.m4, config.h.in,
+	configure, configure.in, stamp-h.in:
+	
+	beautified Makefile.am ;)
+
+Sat Mar 16 09:55:34 2002  Petr Baudis <pasky@ji.cz>:
+
+	* HACKING, Makefile.am, lang_defs.h, language.h, links.h,
+	intl/gen-intl, Makefile.in, acconfig.h, aclocal.m4, config.h.in,
+	configure, configure.in, stamp-h.in:
+	
+	language.h -> lang_defs.h, preparation bit for next part of source
+	layout change
+
 Sat Mar 16 09:51:15 2002  Petr Baudis <pasky@ji.cz>:
 
 	* .vimrc:

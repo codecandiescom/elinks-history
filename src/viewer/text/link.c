@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.49 2003/09/08 17:27:57 jonas Exp $ */
+/* $Id: link.c,v 1.50 2003/09/08 19:24:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,12 +118,13 @@ sort_links(struct document *f)
 static void
 draw_link(struct terminal *t, struct document_view *scr, int l)
 {
+	unsigned char space[MAX_SCREEN_CHAR_SIZE];
+	struct screen_char *template = (struct screen_char *)space; /* Ew ;) */
 	struct link *link;
 	int xmax, ymax;
 	int xpos, ypos;
 	int i;
 	int cursor_offset = 0;
-	struct screen_char link_char = INIT_SCREEN_CHAR(0, SCREEN_ATTR_STANDOUT, 0);
 
 	assert(t && scr && scr->vs);
 	if_assert_failed return;
@@ -168,11 +169,13 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 	if (!scr->link_bg) return;
 	scr->link_bg_n = link->n;
 
+	template->attr = 0;
+	set_term_color(template, &link->color, COLOR_LINK);
+
 	xmax = scr->xp + scr->xw;
 	ymax = scr->yp + scr->yw;
 	xpos = scr->xp - scr->vs->view_posx;
 	ypos = scr->yp - scr->vs->view_pos;
-	set_term_color(&link_char, &link->color, COLOR_LINK);
 
 	for (i = 0; i < link->n; i++) {
 		int x = link->pos[i].x + xpos;
@@ -195,7 +198,7 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 			int blockable;
 
 			if (link->type != L_FIELD && link->type != L_AREA
-			    && co->color != link_char.color) {
+			    && memcmp(co->color, template->color, 1)) {
 				blockable = 1;
 			} else {
 				blockable = 0;
@@ -205,8 +208,8 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 			set_window_ptr(get_current_tab(t), x, y);
 		}
 
-		co->color = link_char.color;
-		co->attr = link_char.attr;
+		template->data = co->data;
+		memcpy(co, template, sizeof(struct screen_char));
 	}
 }
 

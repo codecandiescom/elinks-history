@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.80 2003/10/02 17:12:11 jonas Exp $ */
+/* $Id: options.c,v 1.81 2003/10/05 18:17:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -262,7 +262,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	set_term_opt_button(d, pos, B_ENTER, terminal_options_save, _("Save", term));
 	set_term_opt_button(d, pos, B_ESC, cancel_dialog, _("Cancel", term));
 
-	assertm(pos == TERMOPT_WIDGETS);
+	assert(pos == TERMOPT_WIDGETS);
 	d->items[pos].type = D_END;
 
 	do_dialog(term, d, getml(d, termopt_hop, NULL));

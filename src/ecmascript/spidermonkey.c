@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.179 2004/12/27 13:20:32 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.180 2004/12/27 13:39:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1362,6 +1362,8 @@ forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *r
 
 	if (argc != 1)
 		return JS_TRUE;
+
+	undef_to_jsval(ctx, rval);
 
 	string = jsval_to_string(ctx, &argv[0]);
 	if (!*string)

@@ -1,3 +1,75 @@
+Sat Jan 31 14:10:41 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Translation update.  
+
+Sat Jan 31 06:00:05 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/file/cgi.c:
+
+	First parameter should be basename not full path.  
+
+Sat Jan 31 00:58:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Cleanup.  
+
+Sat Jan 31 00:43:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: css.c, stylesheet.h:
+
+	Ensure that the CSS @import can only be nested < MAX_REDIRECTS.  
+
+Sat Jan 31 00:40:47 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/connect.c:
+
+	Dropped @not_local_count, instead fail with S_LOCAL_ONLY only if the
+	last attempt was local, because we do not have errno of previous
+	non-local attempts.  
+
+Sat Jan 31 00:37:28 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/connect.c:
+
+	Tidyup.  
+
+Sat Jan 31 00:36:29 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/connect.c:
+
+	Do all the @local-testing things only if @only_local.  
+
+Sat Jan 31 00:30:34 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/dialog.c:
+
+	ACT_MENU_PREVIOUS_ITEM support, instead of the previous horrid
+	ev->y+ACT_MENU_NEXT_ITEM hack.  
+
+Sat Jan 31 00:29:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/search.c:
+
+	ACT_EDIT_PREVIOUS_ITEM support.  
+
+Sat Jan 31 00:28:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: config/cmdline.c, lowlevel/connect.c, sched/connection.h,
+	sched/error.c:
+
+	A new commandline option was introduced: -localhost, it limits
+	elinks connections to loopback addresses for now, and with your help
+	will limit to local addresses soon.  
+
+Sat Jan 31 00:23:08 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Compilation fix....  
+
 Fri Jan 30 23:01:08 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/config/kbdbind.c:

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.341 2004/07/04 14:03:37 jonas Exp $ */
+/* $Id: menu.c,v 1.342 2004/07/14 22:00:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -621,15 +621,15 @@ send_open_new_window(struct terminal *term, const struct open_in_new *open,
 
 void
 open_in_new_window(struct terminal *term,
-		   void (*xxx)(struct terminal *,
-			       const struct open_in_new *,
-			       struct session *ses),
+		   void (*func)(struct terminal *,
+			        const struct open_in_new *,
+			        struct session *ses),
 		   struct session *ses)
 {
 	struct menu_item *mi;
 	int posibilities;
 
-	assert(term && ses && xxx);
+	assert(term && ses && func);
 	if_assert_failed return;
 
 	switch (can_open_in_new(term)) {
@@ -649,10 +649,10 @@ open_in_new_window(struct terminal *term,
 		const struct open_in_new *oi = &open_in_new[posibilities];
 
 		if (mi == NULL) {
-			xxx(term, oi, ses);
+			func(term, oi, ses);
 			return;
 		}
-		add_to_menu(&mi, oi->text, NULL, ACT_MAIN_NONE, (menu_func) xxx, (void *) oi, 0);
+		add_to_menu(&mi, oi->text, NULL, ACT_MAIN_NONE, (menu_func) func, (void *) oi, 0);
 	}
 
 	do_menu(term, mi, ses, 1);

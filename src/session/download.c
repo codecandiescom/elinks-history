@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.110 2003/10/24 11:21:20 zas Exp $ */
+/* $Id: download.c,v 1.111 2003/10/24 17:25:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,12 +119,12 @@ abort_download(struct file_download *down, int stop)
 static void
 kill_downloads_to_file(unsigned char *file)
 {
-	struct file_download *down;
+	struct file_download *file_download;
 
-	foreach (down, downloads) {
-		if (!strcmp(down->file, file)) {
-			down = down->prev;
-			abort_download(down->next, 0);
+	foreach (file_download, downloads) {
+		if (!strcmp(file_download->file, file)) {
+			file_download = file_download->prev;
+			abort_download(file_download->next, 0);
 		}
 	}
 }
@@ -141,64 +141,64 @@ abort_all_downloads(void)
 void
 destroy_downloads(struct session *ses)
 {
-	struct file_download *d;
+	struct file_download *file_download;
 
-	foreach (d, downloads) {
-		if (d->ses == ses && d->prog) {
-			d = d->prev;
-			abort_download(d->next, 0);
+	foreach (file_download, downloads) {
+		if (file_download->ses == ses && file_download->prog) {
+			file_download = file_download->prev;
+			abort_download(file_download->next, 0);
 		}
 	}
 }
 
 
 static void
-undisplay_download(struct file_download *down)
+undisplay_download(struct file_download *file_download)
 {
-	if (down->win) delete_window(down->win);
+	if (file_download->win) delete_window(file_download->win);
 }
 
 static void
-do_abort_download(struct file_download *down)
+do_abort_download(struct file_download *file_download)
 {
-	abort_download(down, 1);
+	abort_download(file_download, 1);
 }
 
 
 static int
-dlg_set_notify(struct dialog_data *dlg, struct widget_data *di)
+dlg_set_notify(struct dialog_data *dlg_data, struct widget_data *di)
 {
-	struct file_download *down = dlg->dlg->udata;
+	struct file_download *file_download = dlg_data->dlg->udata;
 
-	down->notify = 1;
-	undisplay_download(down);
+	file_download->notify = 1;
+	undisplay_download(file_download);
 	return 0;
 }
 
 static int
-dlg_abort_download(struct dialog_data *dlg, struct widget_data *di)
+dlg_abort_download(struct dialog_data *dlg_data, struct widget_data *di)
 {
 	register_bottom_half((void (*)(void *)) do_abort_download,
-			     dlg->dlg->udata);
+			     dlg_data->dlg->udata);
 	return 0;
 }
 
 
 static int
-dlg_undisplay_download(struct dialog_data *dlg, struct widget_data *di)
+dlg_undisplay_download(struct dialog_data *dlg_data, struct widget_data *di)
 {
 	register_bottom_half((void (*)(void *)) undisplay_download,
-			     dlg->dlg->udata);
+			     dlg_data->dlg->udata);
 	return 0;
 }
 
 
 static void
-download_abort_function(struct dialog_data *dlg)
+download_abort_function(struct dialog_data *dlg_data)
 {
-	struct file_download *down = dlg->dlg->udata;
+	struct file_download *file_download = dlg_data->dlg->udata;
 
-	down->win = NULL;
+	file_download->win = NULL;
 }
 
 static int
@@ -307,10 +307,10 @@ download_progress_bar(struct terminal *term, struct download *download,
 }
 
 static void
-download_window_function(struct dialog_data *dlg)
+download_window_function(struct dialog_data *dlg_data)
 {
-	struct file_download *file_download = dlg->dlg->udata;
-	struct terminal *term = dlg->win->term;
+	struct file_download *file_download = dlg_data->dlg->udata;
+	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
 	int w, x, y;
 	int t = 0;
@@ -320,8 +320,8 @@ download_window_function(struct dialog_data *dlg)
 	struct download *download = &file_download->download;
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 
-	redraw_below_window(dlg->win);
-	file_download->win = dlg->win;
+	redraw_below_window(dlg_data->win);
+	file_download->win = dlg_data->win;
 
 	if (!init_string(&msg)) return;
 	t = download_progress_string(term, download, &msg);
@@ -356,7 +356,7 @@ download_window_function(struct dialog_data *dlg)
 
 	text_width(term, url, &min, &max);
 	text_width(term, msg.source, &min, &max);
-	buttons_width(term, dlg->items, dlg->n, &min, &max);
+	buttons_width(term, dlg_data->items, dlg_data->n, &min, &max);
 
 	int_bounds(&w, min, term->x - 2 * DIALOG_LB);
 	if (t && download->prg->size >= 0) {
@@ -376,17 +376,17 @@ download_window_function(struct dialog_data *dlg)
 			dialog_text_color, AL_LEFT);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg->items, dlg->n, 0, &y, w,
+	dlg_format_buttons(NULL, term, dlg_data->items, dlg_data->n, 0, &y, w,
 			   NULL, AL_CENTER);
 
-	dlg->xw = w + 2 * DIALOG_LB;
-	dlg->yw = y + 2 * DIALOG_TB;
+	dlg_data->xw = w + 2 * DIALOG_LB;
+	dlg_data->yw = y + 2 * DIALOG_TB;
 
-	center_dlg(dlg);
-	draw_dlg(dlg);
+	center_dlg(dlg_data);
+	draw_dlg(dlg_data);
 
-	y = dlg->y + DIALOG_TB + 1;
-	x = dlg->x + DIALOG_LB;
+	y = dlg_data->y + DIALOG_TB + 1;
+	x = dlg_data->x + DIALOG_LB;
 	dlg_format_text(term, term, url, x, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 
@@ -400,7 +400,7 @@ download_window_function(struct dialog_data *dlg)
 			dialog_text_color, AL_LEFT);
 
 	y++;
-	dlg_format_buttons(term, term, dlg->items, dlg->n, x, &y, w,
+	dlg_format_buttons(term, term, dlg_data->items, dlg_data->n, x, &y, w,
 			   NULL, AL_CENTER);
 
 	mem_free(url);
@@ -413,15 +413,18 @@ display_download(struct terminal *term, struct file_download *down,
 		 struct session *ses)
 {
 	struct dialog *dlg;
-	struct file_download *dd;
+	struct file_download *file_download;
+	int n = 0;
 
-	foreach (dd, downloads)
-		if (dd == down)
+	foreach (file_download, downloads)
+		if (file_download == down)
 			goto found;
 	return;
 
+#define DOWNLOAD_DLG_SIZE 3
 found:
-	dlg = mem_calloc(1, sizeof(struct dialog) + 3 * sizeof(struct widget));
+	dlg = mem_calloc(1, sizeof(struct dialog)
+			    + (DOWNLOAD_DLG_SIZE + 1) * sizeof(struct widget));
 	if (!dlg) return;
 
 	undisplay_download(down);
@@ -432,22 +435,27 @@ found:
 	dlg->udata = down;
 	dlg->align = AL_CENTER;
 
-	dlg->items[0].type = D_BUTTON;
-	dlg->items[0].gid = B_ENTER | B_ESC;
-	dlg->items[0].fn = dlg_undisplay_download;
-	dlg->items[0].text = _("Background", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER | B_ESC;
+	dlg->items[n].fn = dlg_undisplay_download;
+	dlg->items[n].text = _("Background", term);
+	n++;
 
-	dlg->items[1].type = D_BUTTON;
-	dlg->items[1].gid = B_ENTER | B_ESC;
-	dlg->items[1].fn = dlg_set_notify;
-	dlg->items[1].text = _("Background with notify", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER | B_ESC;
+	dlg->items[n].fn = dlg_set_notify;
+	dlg->items[n].text = _("Background with notify", term);
+	n++;
 
-	dlg->items[2].type = D_BUTTON;
-	dlg->items[2].gid = 0;
-	dlg->items[2].fn = dlg_abort_download;
-	dlg->items[2].text = _("Abort", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = 0;
+	dlg->items[n].fn = dlg_abort_download;
+	dlg->items[n].text = _("Abort", term);
+	n++;
 
-	dlg->items[3].type = D_END;
+	assert(n == DOWNLOAD_DLG_SIZE);
+
+	dlg->items[n].type = D_END;
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }
@@ -983,41 +991,41 @@ static void
 common_download_do(struct terminal *term, int fd, void *data, int resume)
 {
 	struct cmdw_hop *cmdw_hop = data;
-	struct file_download *down = NULL;
+	struct file_download *file_download = NULL;
 	unsigned char *url = cmdw_hop->ses->dn_url;
 	struct stat buf;
 
 	if (!cmdw_hop->real_file) goto download_error;
 
-	down = mem_calloc(1, sizeof(struct file_download));
-	if (!down) goto download_error;
+	file_download = mem_calloc(1, sizeof(struct file_download));
+	if (!file_download) goto download_error;
 
-	down->url = stracpy(url);
-	if (!down->url) goto download_error;
+	file_download->url = stracpy(url);
+	if (!file_download->url) goto download_error;
 
-	down->file = cmdw_hop->real_file;
+	file_download->file = cmdw_hop->real_file;
 
 	if (fstat(fd, &buf)) goto download_error;
-	down->last_pos = resume ? (int) buf.st_size : 0;
+	file_download->last_pos = resume ? (int) buf.st_size : 0;
 
-	down->download.end = (void (*)(struct download *, void *)) download_data;
-	down->download.data = down;
-	down->handle = fd;
-	down->ses = cmdw_hop->ses;
-	down->remotetime = 0;
+	file_download->download.end = (void (*)(struct download *, void *)) download_data;
+	file_download->download.data = file_download;
+	file_download->handle = fd;
+	file_download->ses = cmdw_hop->ses;
+	file_download->remotetime = 0;
 
-	add_to_list(downloads, down);
-	load_url(url, cmdw_hop->ses->ref_url, &down->download, PRI_DOWNLOAD, NC_CACHE,
-		 (resume ? down->last_pos : 0));
-	display_download(cmdw_hop->ses->tab->term, down, cmdw_hop->ses);
+	add_to_list(downloads, file_download);
+	load_url(url, cmdw_hop->ses->ref_url, &file_download->download, PRI_DOWNLOAD, NC_CACHE,
+		 (resume ? file_download->last_pos : 0));
+	display_download(cmdw_hop->ses->tab->term, file_download, cmdw_hop->ses);
 
 	mem_free(cmdw_hop);
 	return;
 
 download_error:
-	if (down) {
-		if (down->url) mem_free(down->url);
-		mem_free(down);
+	if (file_download) {
+		if (file_download->url) mem_free(file_download->url);
+		mem_free(file_download);
 	}
 	mem_free(cmdw_hop);
 }
@@ -1079,37 +1087,37 @@ static void
 continue_download_do(struct terminal *term, int fd, void *data, int resume)
 {
 	struct codw_hop *codw_hop = data;
-	struct file_download *down = NULL;
+	struct file_download *file_download = NULL;
 	unsigned char *url = codw_hop->ses->tq_url;
 
 	if (!codw_hop->real_file) goto cancel;
 
-	down = mem_calloc(1, sizeof(struct file_download));
-	if (!down) goto cancel;
+	file_download = mem_calloc(1, sizeof(struct file_download));
+	if (!file_download) goto cancel;
 
-	down->url = stracpy(url);
-	if (!down->url) goto cancel;
+	file_download->url = stracpy(url);
+	if (!file_download->url) goto cancel;
 
-	down->file = codw_hop->real_file;
+	file_download->file = codw_hop->real_file;
 
-	down->download.end = (void (*)(struct download *, void *)) download_data;
-	down->download.data = down;
-	down->last_pos = 0;
-	down->handle = fd;
-	down->ses = codw_hop->ses;
+	file_download->download.end = (void (*)(struct download *, void *)) download_data;
+	file_download->download.data = file_download;
+	file_download->last_pos = 0;
+	file_download->handle = fd;
+	file_download->ses = codw_hop->ses;
 
 	if (codw_hop->ses->tq_prog) {
-		down->prog = subst_file(codw_hop->ses->tq_prog, codw_hop->file);
+		file_download->prog = subst_file(codw_hop->ses->tq_prog, codw_hop->file);
 		mem_free(codw_hop->file);
 		mem_free(codw_hop->ses->tq_prog);
 		codw_hop->ses->tq_prog = NULL;
 	}
 
-	down->prog_flags = codw_hop->ses->tq_prog_flags;
-	add_to_list(downloads, down);
-	change_connection(&codw_hop->ses->tq, &down->download, PRI_DOWNLOAD, 0);
+	file_download->prog_flags = codw_hop->ses->tq_prog_flags;
+	add_to_list(downloads, file_download);
+	change_connection(&codw_hop->ses->tq, &file_download->download, PRI_DOWNLOAD, 0);
 	tp_free(codw_hop->ses);
-	display_download(codw_hop->ses->tab->term, down, codw_hop->ses);
+	display_download(codw_hop->ses->tab->term, file_download, codw_hop->ses);
 
 	mem_free(codw_hop);
 	return;
@@ -1117,9 +1125,9 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 cancel:
 	tp_cancel(codw_hop->ses);
 	if (codw_hop->ses->tq_prog && codw_hop->file) mem_free(codw_hop->file);
-	if (down) {
-		if (down->url) mem_free(down->url);
-		mem_free(down);
+	if (file_download) {
+		if (file_download->url) mem_free(file_download->url);
+		mem_free(file_download);
 	}
 	mem_free(codw_hop);
 }

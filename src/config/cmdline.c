@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.82 2004/04/24 02:11:44 jonas Exp $ */
+/* $Id: cmdline.c,v 1.83 2004/04/24 02:13:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -689,13 +689,13 @@ struct option_info cmdline_options_info[] = {
 		"For ease of use the additional method argument can be omitted in which\n"
 		"case any URL arguments will be opened in new tabs in the remote instance.\n"
 		"Following is a list of the methods that are supported:\n"
-		"  ping()                                   -- check for remote instance\n"
-		"  openURL()                                -- prompt URL in current tab\n"
-		"  openURL(http://elinks.or.cz)             -- open URL in current tab\n"
-		"  openURL(http://elinks.or.cz, new-tab)    -- open URL in new tab\n"
-		"  openURL(http://elinks.or.cz, new-window) -- open URL in new window\n"
-		"  bookmark(http://elinks.or.cz)            -- bookmark URL\n"
-		"  xfeDoCommand(openBrowser)                -- open new window")),
+		"  ping()                    -- check for remote instance\n"
+		"  openURL()                 -- prompt URL in current tab\n"
+		"  openURL(URL)              -- open URL in current tab\n"
+		"  openURL(URL, new-tab)     -- open URL in new tab\n"
+		"  openURL(URL, new-window)  -- open URL in new window\n"
+		"  bookmark(URL)             -- bookmark URL\n"
+		"  xfeDoCommand(openBrowser) -- open new window")),
 
 	INIT_OPT_INT("", N_("Connect to session ring with given ID"),
 		"session-ring", 0, 0, MAXINT, 0,

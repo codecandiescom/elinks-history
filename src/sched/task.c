@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.99 2004/06/08 13:54:52 jonas Exp $ */
+/* $Id: task.c,v 1.100 2004/06/08 14:15:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,11 +39,6 @@ free_task(struct session *ses)
 	assertm(ses->task.type, "Session has no task");
 	if_assert_failed return;
 
-	if (ses->goto_uri) {
-		done_uri(ses->goto_uri);
-		ses->goto_uri = NULL;
-	}
-
 	if (ses->loading_uri) {
 		done_uri(ses->loading_uri);
 		ses->loading_uri = NULL;
@@ -64,7 +59,6 @@ abort_preloading(struct session *ses, int interrupt)
 struct task {
 	struct session *ses;
 	struct uri *uri;
-	struct uri *goto_uri;
 	enum cache_mode cache_mode;
 	enum task_type type;
 	unsigned char *target_frame;
@@ -81,7 +75,6 @@ post_yes(struct task *task)
 	ses->loading.end = (void (*)(struct download *, void *)) end_load;
 	ses->loading.data = task->ses;
 	ses->loading_uri = task->uri; /* XXX: Make the session inherit the URI. */
-	ses->goto_uri = task->goto_uri; /* XXX: Make the session inherit the URI. */
 
 	ses->task.type = task->type;
 	ses->task.target_frame = task->target_frame;
@@ -96,7 +89,6 @@ post_no(struct task *task)
 {
 	reload(task->ses, CACHE_MODE_NORMAL);
 	done_uri(task->uri);
-	done_uri(task->goto_uri);
 }
 
 void
@@ -150,8 +142,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 
 		ses->loading.end = (void (*)(struct download *, void *)) end_load;
 		ses->loading.data = ses;
-		ses->loading_uri = get_composed_uri(uri, URI_BASE);
-		ses->goto_uri = get_uri_reference(uri);
+		ses->loading_uri = get_uri_reference(uri);
 
 		ses->task.type = task_type;
 		ses->task.target_frame = target_frame;
@@ -164,8 +155,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	}
 
 	task->ses = ses;
-	task->uri = get_composed_uri(uri, URI_BASE);
-	task->goto_uri = get_uri_reference(uri);
+	task->uri = get_uri_reference(uri);
 	task->cache_mode = cache_mode;
 	task->type = task_type;
 	task->target_frame = target_frame;
@@ -238,15 +228,15 @@ x:
 
 		vs = &frame->vs;
 		done_uri(vs->uri);
-		vs->uri = get_uri_reference(ses->goto_uri);
+		vs->uri = get_uri_reference(ses->loading_uri);
 		if (!loaded_in_frame) {
 			destroy_vs(vs);
-			init_vs(vs, ses->goto_uri, vs->plain);
+			init_vs(vs, ses->loading_uri, vs->plain);
 		}
 	} else {
 		init_list(loc->frames);
 		vs = &loc->vs;
-		init_vs(vs, ses->goto_uri, vs->plain);
+		init_vs(vs, ses->loading_uri, vs->plain);
 		add_to_history(&ses->history, loc);
 	}
 
@@ -266,7 +256,7 @@ ses_imgmap(struct session *ses)
 	struct fragment *fr;
 	struct memory_list *ml;
 	struct menu_item *menu;
-	struct uri *uri = ses->goto_uri;
+	struct uri *uri = ses->loading_uri;
 	unsigned char *pos = NULL;
 
 	if (!cached) {
@@ -461,7 +451,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	ses->reloadlevel = cache_mode;
 
 	if (ses->task.type == task) {
-		if (compare_uri(ses->goto_uri, uri, 0)) {
+		if (compare_uri(ses->loading_uri, uri, 0)) {
 			/* We're already loading the URL. */
 			done_uri(uri);
 			return;

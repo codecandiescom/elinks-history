@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.155 2004/06/08 13:49:09 jonas Exp $ */
+/* $Id: cache.c,v 1.156 2004/06/08 14:15:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "config/options.h"
 #include "main.h"
 #include "protocol/protocol.h"
+#include "protocol/proxy.h"
 #include "protocol/uri.h"
 #include "sched/connection.h"
 #include "util/error.h"
@@ -137,7 +138,12 @@ get_cache_entry(struct uri *uri)
 		return NULL;
 	}
 
-	cached->proxy_uri = get_uri_reference(uri);
+	cached->proxy_uri = get_proxy_uri(uri);
+	if (!cached->proxy_uri) {
+		done_uri(cached->uri);
+		mem_free(cached);
+		return NULL;
+	}
 	cached->incomplete = 1;
 	cached->valid = 1;
 

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.291 2004/06/08 13:49:09 jonas Exp $ */
+/* $Id: download.c,v 1.292 2004/06/08 14:15:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -879,7 +879,6 @@ init_type_query(struct session *ses, struct download *download,
 	if (!type_query) return NULL;
 
 	type_query->uri = get_uri_reference(ses->loading_uri);
-	type_query->goto_uri = get_uri_reference(ses->goto_uri);
 	type_query->ses = ses;
 	type_query->target_frame = null_or_stracpy(ses->task.target_frame);
 
@@ -903,7 +902,6 @@ done_type_query(struct type_query *type_query)
 
 	object_unlock(type_query->cached);
 	done_uri(type_query->uri);
-	done_uri(type_query->goto_uri);
 	mem_free_if(type_query->prog);
 	mem_free_if(type_query->target_frame);
 	del_from_list(type_query);
@@ -945,15 +943,12 @@ tp_display(struct type_query *type_query)
 	struct view_state *vs;
 	struct session *ses = type_query->ses;
 	struct uri *loading_uri = ses->loading_uri;
-	struct uri *goto_uri = ses->goto_uri;
 	unsigned char *target_frame = ses->task.target_frame;
 
-	ses->goto_uri = type_query->goto_uri;
 	ses->loading_uri = type_query->uri;
 	ses->task.target_frame = type_query->target_frame;
 	vs = ses_forward(ses, type_query->frame);
 	if (vs) vs->plain = 1;
-	ses->goto_uri = goto_uri;
 	ses->loading_uri = loading_uri;
 	ses->task.target_frame = target_frame;
 

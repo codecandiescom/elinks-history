@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.41 2004/06/08 13:49:09 jonas Exp $ */
+/* $Id: download.h,v 1.42 2004/06/08 14:15:27 jonas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -24,7 +24,6 @@ struct type_query {
 	struct cache_entry *cached;
 	struct session *ses;
 	struct uri *uri;
-	struct uri *goto_uri;
 	unsigned char *target_frame;
 	unsigned char *prog;
 	int prog_flags;

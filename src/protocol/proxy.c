@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.19 2004/06/08 00:04:19 jonas Exp $ */
+/* $Id: proxy.c,v 1.20 2004/06/08 14:15:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,6 +110,9 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 		if (init_string(&string)
 		    && string_concat(&string, "proxy://", proxy, "/", NULL)
 		    && add_uri_to_string(&string, uri, URI_PROXY)) {
+			/* There is no need to use URI_BASE here since
+			 * URI_PROXY should not add any fragments in the first
+			 * place. */
 			uri = get_uri(string.source, 0);
 		} else {
 			uri = NULL;
@@ -119,7 +122,7 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 		return uri;
 	}
 
-	return get_uri_reference(uri);
+	return get_composed_uri(uri, URI_BASE);
 }
 
 struct uri *

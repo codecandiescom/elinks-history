@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.131 2004/06/08 13:49:10 jonas Exp $ */
+/* $Id: session.h,v 1.132 2004/06/08 14:15:27 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -125,7 +125,6 @@ struct session {
 
 	struct download loading;
 	struct uri *loading_uri;
-	struct uri *goto_uri;
 
 	enum cache_mode reloadlevel;
 	int redirect_cnt;

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.78 2003/12/21 14:56:55 zas Exp $ */
+/* $Id: uri.c,v 1.79 2003/12/21 20:50:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "protocol/uri.h"
 #include "util/conv.h"
 #include "util/error.h"
+#include "util/file.h"
 #include "util/memory.h"
 #include "util/string.h"
 
@@ -714,8 +715,18 @@ http:				prefix = "http://";
 
 		newurl = stracpy(prefix);
 		if (!newurl) return NULL;
-		if (!not_file && !dir_sep(*url)) add_to_strn(&newurl, "./");
-		add_to_strn(&newurl, url); /* XXX: Post data copy. */
+		if (!not_file) {
+			unsigned char *expanded = expand_tilde(url);
+
+			if (!expanded) return NULL;
+
+			if (!dir_sep(*expanded)) add_to_strn(&newurl, "./");
+			add_to_strn(&newurl, expanded);
+			mem_free(expanded);
+		} else {
+			add_to_strn(&newurl, url); /* XXX: Post data copy. */
+		}
+
 		if (not_file && !strchr(url, '/')) add_to_strn(&newurl, "/");
 
 		if (parse_uri(&uri, newurl)) {

@@ -2,7 +2,6 @@ english
 croatian
 estonian
 finnish
-galician
 icelandic
 lithuanian
 norwegian

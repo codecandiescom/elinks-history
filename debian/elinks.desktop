@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=/usr/bin/elinks %u
+Name=ELinks
+Terminal=1
+Comment=ELinks
+Icon=html
+MimeType=text/html
+XClassHintResName=ELinks

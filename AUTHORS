@@ -392,6 +392,7 @@ Omar Khayam <omark@cyentec.com>
 Peter Gervai <grin@tolna.net>
 	Manpage updates
 	Mailcap to links.cfg convertor
+	Debian package files
 
 Peter Naulls <peter@chocky.org>
 	RISC OS port
@@ -537,4 +538,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.183 2005/01/05 23:55:24 jonas Exp $
+$Id: AUTHORS,v 1.184 2005/01/11 00:02:17 jonas Exp $

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.287 2003/10/06 21:35:48 pasky Exp $ */
+/* $Id: options.c,v 1.288 2003/10/06 21:36:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1160,15 +1160,6 @@ register_options(void)
 		N_("When pressing 'down' on the last link, jump at the first one, and\n"
 		"vice versa."));
 
-	add_opt_int("document.browse", N_("Horizontal text margin"),
-		"margin_width", 0, 0, 9, 3,
-		N_("Horizontal text margin."));
-
-	add_opt_bool("document.browse", N_("Document meta refresh"),
-		"refresh", 0, 0,
-		N_("Automatically follow document-specified refresh directives ('<meta>\n"
-		"refresh' tags). Web-page authors use these to instruct the browser\n"
-		"to reload a document at a given interval or to load another page."));
 
 	add_opt_tree("document.browse", N_("Searching"),
 		"search", 0,
@@ -1201,6 +1192,17 @@ register_options(void)
 		"1 for basic regular expression searches. (DISABLED)\n"
 		"2 for extended regular expression searches. (DISABLED)"));
 #endif
+
+
+	add_opt_int("document.browse", N_("Horizontal text margin"),
+		"margin_width", 0, 0, 9, 3,
+		N_("Horizontal text margin."));
+
+	add_opt_bool("document.browse", N_("Document meta refresh"),
+		"refresh", 0, 0,
+		N_("Automatically follow document-specified refresh directives ('<meta>\n"
+		"refresh' tags). Web-page authors use these to instruct the browser\n"
+		"to reload a document at a given interval or to load another page."));
 
 	add_opt_int("document.browse", N_("Scroll margin"),
 		"scroll_margin", 0, 0, 20, 3,

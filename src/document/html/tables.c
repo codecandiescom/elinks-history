@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.222 2004/06/26 19:20:36 zas Exp $ */
+/* $Id: tables.c,v 1.223 2004/06/26 19:23:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1099,7 +1099,7 @@ distribute_widths(struct table *table, int width)
 	int om = 0;
 	char *u;
 	int *w, *mx;
-	int mmax_c = 0;
+	int max_cols_width = 0;
 	int cols_size;
 
 	if (!table->cols) return;
@@ -1107,7 +1107,7 @@ distribute_widths(struct table *table, int width)
 	assertm(d >= 0, "too small width %d, required %d", width, table->min_width);
 
 	for (i = 0; i < table->cols; i++)
-		int_lower_bound(&mmax_c, table->max_cols_widths[i]);
+		int_lower_bound(&max_cols_width, table->max_cols_widths[i]);
 
 	cols_size = table->cols * sizeof(int);
 	memcpy(table->cols_widths, table->min_cols_widths, cols_size);
@@ -1159,8 +1159,8 @@ distribute_widths(struct table *table, int width)
 					if (table->cols_widths[i] < table->max_cols_widths[i]) {
 						mx[i] = table->max_cols_widths[i]
 							- table->cols_widths[i];
-						if (mmax_c) {
-							w[i] = 5 + table->max_cols_widths[i] * 10 / mmax_c;
+						if (max_cols_width) {
+							w[i] = 5 + table->max_cols_widths[i] * 10 / max_cols_width;
 						} else {
 							w[i] = 1;
 						}

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.105 2003/10/19 17:57:49 pasky Exp $ */
+/* $Id: connection.c,v 1.106 2003/10/21 13:26:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -609,6 +609,8 @@ static void
 run_connection(struct connection *c)
 {
 	protocol_handler *func = get_protocol_handler(c->uri.protocol);
+
+	assert(func);
 
 	assertm(!c->running, "connection already running");
 	if_assert_failed return;

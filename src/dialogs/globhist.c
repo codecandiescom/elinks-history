@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: globhist.c,v 1.12 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: globhist.c,v 1.13 2002/06/11 15:20:38 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -21,7 +21,7 @@
 
 #ifdef GLOBHIST
 
-#define HISTORY_BOX_IND 5
+#define HISTORY_BOX_IND 6
 
 struct history_dialog_list_item {
 	struct history_dialog_list_item *next;
@@ -50,7 +50,7 @@ history_dialog_list_update(struct list_head *list)
 	/* Empty the list */
 	history_dialog_list_clear(list);
 
-	foreach (historyitem, global_history.items) {
+	foreachback (historyitem, global_history.items) {
 		if ((gh_last_searched_title && *gh_last_searched_title
 		     && !strcasestr(historyitem->title, gh_last_searched_title))
 		    || (gh_last_searched_url && *gh_last_searched_url
@@ -167,20 +167,20 @@ history_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 			if (ev->x == KBD_RIGHT || (ev->x == KBD_TAB && !ev->y)) {
 				/* MP: dirty crap!!! this should be done in bfu.c */
 				/* Move right */
-        		        display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
+				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
 				if (++dlg->selected >= HISTORY_BOX_IND)
 					dlg->selected = 0;
-		                display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
+				display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (ev->x == KBD_LEFT || (ev->x == KBD_TAB && ev->y)) {
 				/* Move left */
-                		display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
+				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
 				if (--dlg->selected < 0)
 					dlg->selected = HISTORY_BOX_IND - 1;
-                		display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
+				display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
 
 				return EVENT_PROCESSED;
 			}
@@ -404,6 +404,33 @@ push_clear_button(struct dialog_data *dlg,
 	return 0;
 }
 
+static int
+push_info_button(struct dialog_data *dlg,
+		  struct dialog_item_data *some_useless_info_button)
+{
+	struct terminal *term = dlg->win->term;
+	struct global_history_item *historyitem;
+	struct dlg_data_item_data_box *box;
+
+	box = (struct dlg_data_item_data_box *)
+	      dlg->dlg->items[HISTORY_BOX_IND].data;
+
+	/* Show history item info */
+	historyitem = history_dialog_get_selected_history_item(box);
+	if (historyitem) {
+		msg_box(term, NULL,
+			TEXT(T_INFO), AL_LEFT | AL_EXTD_TEXT,
+			TEXT(T_TITLE), ": ", historyitem->title, "\n",
+			TEXT(T_URL), ": ", historyitem->url, "\n",
+			TEXT(T_LAST_VISIT_TIME), ": ", ctime(&historyitem->last_visit), NULL,
+			historyitem, 1,
+			TEXT(T_OK), NULL, B_ESC | B_ENTER);
+	}
+
+	return 0;
+}
+
+
 
 void
 menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
@@ -448,23 +475,28 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	d->items[1].type = D_BUTTON;
 	d->items[1].gid = B_ENTER;
-	d->items[1].fn = push_delete_button;
-	d->items[1].text = TEXT(T_DELETE);
+	d->items[1].fn = push_info_button;
+	d->items[1].text = TEXT(T_INFO);
 
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
-	d->items[2].fn = push_search_button;
-	d->items[2].text = TEXT(T_SEARCH);
+	d->items[2].fn = push_delete_button;
+	d->items[2].text = TEXT(T_DELETE);
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ENTER;
-	d->items[3].fn = push_clear_button;
-	d->items[3].text = TEXT(T_CLEAR);
+	d->items[3].fn = push_search_button;
+	d->items[3].text = TEXT(T_SEARCH);
 
 	d->items[4].type = D_BUTTON;
-	d->items[4].gid = B_ESC;
-	d->items[4].fn = cancel_dialog;
-	d->items[4].text = TEXT(T_CLOSE);
+	d->items[4].gid = B_ENTER;
+	d->items[4].fn = push_clear_button;
+	d->items[4].text = TEXT(T_CLEAR);
+
+	d->items[5].type = D_BUTTON;
+	d->items[5].gid = B_ESC;
+	d->items[5].fn = cancel_dialog;
+	d->items[5].text = TEXT(T_CLOSE);
 
 	d->items[HISTORY_BOX_IND].type = D_BOX;
 	d->items[HISTORY_BOX_IND].gid = 12;

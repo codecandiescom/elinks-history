@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.7 2002/10/11 15:32:10 pasky Exp $ */
+/* $Id: hierbox.c,v 1.8 2002/12/06 19:10:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,34 +19,25 @@
 #include "intl/language.h"
 
 
-/* The location of the box in the bookmark manager */
-/* Duplicated with bookmarks/dialogs.c now. */
-#define	BM_BOX_IND		8
-
-
-/* This is still a lot bookmarks-specific. Will be generalized as a need for
- * that will arise. --pasky */
-
-
 int
 hierbox_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 {
 	switch (ev->ev) {
 		case EV_KBD:
-                        if (dlg->items[BM_BOX_IND].item->ops->kbd
-			    && dlg->items[BM_BOX_IND].item->ops->kbd(&dlg->items[BM_BOX_IND], dlg, ev)
+                        if (dlg->items[dlg->n - 1].item->ops->kbd
+			    && dlg->items[dlg->n - 1].item->ops->kbd(&dlg->items[dlg->n - 1], dlg, ev)
 			       == EVENT_PROCESSED)
 				return EVENT_PROCESSED;
 
 			if (ev->x == ' ') {
 				struct listbox_data *box;
 
-				box = (struct listbox_data *) dlg->items[BM_BOX_IND].item->data;
+				box = (struct listbox_data *) dlg->items[dlg->n - 1].item->data;
 				if (box->sel) {
 					box->sel->expanded = !box->sel->expanded;
 					bookmarks_dirty = 1;
 				}
-				display_dlg_item(dlg, &dlg->items[BM_BOX_IND], 1);
+				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
 
 				return EVENT_PROCESSED;
 			}
@@ -82,8 +73,8 @@ layout_hierbox_browser(struct dialog_data *dlg)
 	term = dlg->win->term;
 
 	/* Find dimensions of dialog */
-	max_text_width(term, bookmark_dialog_msg[0], &max);
-	min_text_width(term, bookmark_dialog_msg[0], &min);
+	max_text_width(term, dlg->dlg->title, &max);
+	min_text_width(term, dlg->dlg->title, &min);
 	max_buttons_width(term, dlg->items + 2, 2, &max);
 	min_buttons_width(term, dlg->items + 2, 2, &min);
 
@@ -102,10 +93,10 @@ layout_hierbox_browser(struct dialog_data *dlg)
 	rw = w;
 
 	y += 1;	/* Blankline between top and top of box */
-	dlg_format_box(NULL, term, &dlg->items[BM_BOX_IND], dlg->x + DIALOG_LB,
+	dlg_format_box(NULL, term, &dlg->items[dlg->n - 1], dlg->x + DIALOG_LB,
 		       &y, w, NULL, AL_LEFT);
 	y += 1;	/* Blankline between box and menu */
-	dlg_format_buttons(NULL, term, dlg->items, BM_BOX_IND, 0,
+	dlg_format_buttons(NULL, term, dlg->items, dlg->n - 1, 0,
 			   &y, w, &rw, AL_CENTER);
 	w = rw;
 	dlg->xw = w + 2 * DIALOG_LB;
@@ -115,9 +106,9 @@ layout_hierbox_browser(struct dialog_data *dlg)
 	y = dlg->y + DIALOG_TB;
 
 	y++;
-	dlg_format_box(term, term, &dlg->items[BM_BOX_IND], dlg->x + DIALOG_LB,
+	dlg_format_box(term, term, &dlg->items[dlg->n - 1], dlg->x + DIALOG_LB,
 		       &y, w, NULL, AL_LEFT);
 	y++;
-	dlg_format_buttons(term, term, &dlg->items[0], BM_BOX_IND,
+	dlg_format_buttons(term, term, &dlg->items[0], dlg->n - 1,
 			   dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
 }

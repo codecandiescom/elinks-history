@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.54 2002/12/06 18:56:02 pasky Exp $ */
+/* $Id: dialogs.c,v 1.55 2002/12/06 19:10:11 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -38,7 +38,6 @@
 #define BOOKMARKS_RESAVE	1
 
 /* The location of the box in the bookmark manager */
-/* Duplicate with dialogs/hierbox.c. */
 #define	BM_BOX_IND		8
 
 
@@ -82,12 +81,6 @@ bookmark_dialog_abort_handler(struct dialog_data *dlg)
 	/* Delete the box structure */
 	mem_free(box);
 }
-
-
-/* The titles to appear in the bookmark manager */
-unsigned char *bookmark_dialog_msg[] = {
-	TEXT(T_BOOKMARKS),
-};
 
 
 void launch_bm_add_doc_dialog(struct terminal *, struct dialog_data *,

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.10 2002/03/22 18:08:50 pasky Exp $ */
+/* $Id: socket.c,v 1.11 2002/03/25 18:38:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -331,13 +331,20 @@ void write_select(struct connection *c)
 #endif
 
 #ifdef HAVE_SSL
-	if (ssl_write(c, wb) <= 0) return;
+	if (c->ssl) {
+		wr = ssl_write(c, wb);
+		if (wr <= 0) {
+			return;
+		}
+	} else
 #endif
-	wr = write(wb->sock, wb->data + wb->pos, wb->len - wb->pos);
-	if (wr <= 0) {
-		setcstate(c, wr ? -errno : S_CANT_WRITE);
-		retry_connection(c);
-		return;
+	{
+		wr = write(wb->sock, wb->data + wb->pos, wb->len - wb->pos);
+		if (wr <= 0) {
+			setcstate(c, wr ? -errno : S_CANT_WRITE);
+			retry_connection(c);
+			return;
+		}
 	}
 
 	/*printf("wr: %d\n", wr);*/
@@ -402,20 +409,26 @@ void read_select(struct connection *c)
 	c->buffer = rb;
 
 #ifdef HAVE_SSL
-	if (ssl_read(c, rb) <= 0) return;
-#endif
-
-	rd = read(rb->sock, rb->data + rb->len, READ_SIZE);
-	if (rd <= 0) {
-		if (rb->close && !rd) {
-			rb->close = 2;
-			rb->done(c, rb);
+	if (c->ssl) {
+		rd = ssl_read(c, rb);
+		if (rd <= 0) {
 			return;
 		}
-		setcstate(c, rd ? -errno : S_CANT_READ);
-		/*mem_free(rb);*/
-		retry_connection(c);
-		return;
+	} else
+#endif
+	{
+		rd = read(rb->sock, rb->data + rb->len, READ_SIZE);
+		if (rd <= 0) {
+			if (rb->close && !rd) {
+				rb->close = 2;
+				rb->done(c, rb);
+				return;
+			}
+			setcstate(c, rd ? -errno : S_CANT_READ);
+			/* mem_free(rb); */
+			retry_connection(c);
+			return;
+		}
 	}
 
 	log_data(rb->data + rb->len, rd);

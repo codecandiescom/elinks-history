@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.41 2002/12/01 17:45:11 pasky Exp $ */
+/* $Id: url.c,v 1.42 2002/12/01 17:51:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,15 +39,15 @@ struct {
 	int need_slash_after_host;
 } protocols[] =
 {
-		{"custom", 0, NULL, user_func, 0, 0, 0}, /* protocol.user.* */ /* DO NOT MOVE! */
-		{"file", 0, file_func, NULL, 1, 1, 0},
-		{"http", 80, http_func, NULL, 0, 1, 1},
-		{"https", 443, https_func, NULL, 0, 1, 1},
-		{"proxy", 3128, proxy_func, NULL, 0, 1, 1},
-		{"ftp", 21, ftp_func, NULL, 0, 1, 1},
-		{"finger", 79, finger_func, NULL, 0, 1, 1},
-		{"user", 0, NULL, NULL, 0, 0, 0}, /* lua */
-		{NULL, 0, NULL}
+	{"custom", 0, NULL, user_func, 0, 0, 0}, /* protocol.user.* */ /* DO NOT MOVE! */
+	{"file", 0, file_func, NULL, 1, 1, 0},
+	{"http", 80, http_func, NULL, 0, 1, 1},
+	{"https", 443, https_func, NULL, 0, 1, 1},
+	{"proxy", 3128, proxy_func, NULL, 0, 1, 1},
+	{"ftp", 21, ftp_func, NULL, 0, 1, 1},
+	{"finger", 79, finger_func, NULL, 0, 1, 1},
+	{"user", 0, NULL, NULL, 0, 0, 0}, /* lua */
+	{NULL, 0, NULL}
 };
 
 
@@ -65,13 +65,14 @@ check_protocol(unsigned char *p, int l)
 		 * protocols table. */
 		return 0;
 	}
-	p[l] = ':';
 
 	for (i = 0; protocols[i].prot; i++)
-		if (!strncasecmp(protocols[i].prot, p, l)) {
+		if (!strcasecmp(protocols[i].prot, p)) {
+			p[l] = ':';
 			return i;
 		}
 
+	p[l] = ':';
 	return -1;
 }
 
@@ -449,61 +450,51 @@ strip_url_password(unsigned char *url)
 	if (!str) return NULL;
 
 	if (parse_url(url, &prlen, &user, &uslen, &pass, &palen, &host, &holen,
-			   &port, &polen, &data, &dalen, NULL)) {
+			   &port, &polen, &data, &dalen, NULL)
+	    || !prlen) {
+		/* Unknown protocol or mangled URL; keep the URL untouched. */
 		mem_free(str);
 		return stracpy(url);
 	}
 
-	if (prlen) {
-		/* We've some protocol specified. */
+	protocol = check_protocol(url, prlen);
+	if (protocol <= 0 || protocols[protocol].free_syntax) {
+		/* Custom or unknown or free-syntax protocol;
+		 * keep the URL untouched. */
+		mem_free(str);
+		return stracpy(url);
+	}
 
-		protocol = check_protocol(url, prlen);
-		if (!protocol) {
-			/* Custom protocol; keep the URL untouched. */
-			mem_free(str);
-			return stracpy(url);
-		}
+	add_bytes_to_str(&str, &l, url, prlen);
+	add_chr_to_str(&str, &l, ':');
 
-		add_bytes_to_str(&str, &l, url, prlen);
+	if (protocols[protocol].need_slashes)
+		add_to_str(&str, &l, "//");
+
+	if (user) {
+		add_bytes_to_str(&str, &l, user, uslen);
+		add_chr_to_str(&str, &l, '@');
+	}
+
+	if (host) {
+#ifdef IPV6
+		int brackets = !!memchr(host, ':', holen);
+
+		if (brackets) add_chr_to_str(&str, &l, '[');
+#endif
+		add_bytes_to_str(&str, &l, host, holen);
+#ifdef IPV6
+		if (brackets) add_chr_to_str(&str, &l, ']');
+#endif
+	}
+
+	if (port) {
 		add_chr_to_str(&str, &l, ':');
-
-		if (protocol > 0) {
-			if (protocols[protocol].need_slashes)
-				add_to_str(&str, &l, "//");
-
-			if (!protocols[protocol].free_syntax) {
-				if (user) {
-					add_bytes_to_str(&str, &l, user, uslen);
-					add_chr_to_str(&str, &l, '@');
-				}
-
-				if (host) {
-#ifdef IPV6
-					int brackets = !!memchr(host, ':', holen);
-
-					if (brackets) add_chr_to_str(&str, &l, '[');
-#endif
-					add_bytes_to_str(&str, &l, host, holen);
-#ifdef IPV6
-					if (brackets) add_chr_to_str(&str, &l, ']');
-#endif
-				}
-
-				if (port) {
-					add_chr_to_str(&str, &l, ':');
-					add_bytes_to_str(&str, &l, port, polen);
-				}
-
-				if (protocols[protocol].need_slash_after_host)
-					add_chr_to_str(&str, &l, '/');
-			}
-		}
-	} else {
-		/* Unknown protocol. Keep the URL untouched. */
-		/* We probably never get here, but let's be safe. */
-		mem_free(str);
-		return stracpy(url);
+		add_bytes_to_str(&str, &l, port, polen);
 	}
+
+	if (protocols[protocol].need_slash_after_host)
+		add_chr_to_str(&str, &l, '/');
 
 	if (dalen) {
 		add_bytes_to_str(&str, &l, data, dalen);

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.120 2003/11/11 13:19:51 jonas Exp $ */
+/* $Id: options.c,v 1.121 2003/11/11 13:32:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,7 +80,6 @@ enum termopt {
 };
 
 struct termopt_hop {
-	struct terminal *term;
 	int values[TERM_OPTIONS];
 };
 
@@ -100,13 +99,15 @@ static struct termopt_info termopt_info[] = {
 	{ TERM_OPT_UNDERLINE,	 "underline"	},
 };
 
-static void
-terminal_options_ok(void *p)
+static int
+push_ok_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
-	struct termopt_hop *termopt_hop = p;
-	struct terminal *term = termopt_hop->term;
+	struct termopt_hop *termopt_hop = dlg_data->dlg->udata;
+	struct terminal *term = dlg_data->win->term;
 	int touched = 0;
 	int i;
+
+	update_dialog_data(dlg_data, button);
 
 	for (i = 0; i < TERM_OPTIONS; i++) {
 		unsigned char *name = termopt_info[i].name;
@@ -124,14 +125,15 @@ terminal_options_ok(void *p)
 		term->spec->change_hook(NULL, term->spec, NULL);
 
 	cls_redraw_all_terminals();
+	if (button->widget->fn == push_ok_button)
+		cancel_dialog(dlg_data, button);
+	return 0;
 }
 
 static int
-terminal_options_save(struct dialog_data *dlg_data,
-		      struct widget_data *some_useless_info_button)
+push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
-	update_dialog_data(dlg_data, some_useless_info_button);
-	terminal_options_ok(dlg_data->dlg->udata);
+	push_ok_button(dlg_data, button);
 	if (!get_opt_int_tree(cmdline_options, "anonymous"))
 	        write_config(dlg_data->win->term);
         return 0;
@@ -159,7 +161,6 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 		return;
 	}
 
-	termopt_hop->term = term;
 	for (i = 0; i < TERM_OPTIONS; i++) {
 		unsigned char *name = termopt_info[i].name;
 
@@ -170,8 +171,6 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	dlg->layouter = generic_dialog_layouter;
 	dlg->layout.padding_top = 1;
 	dlg->udata = termopt_hop;
-	dlg->refresh = (void (*)(void *)) terminal_options_ok;
-	dlg->refresh_data = termopt_hop;
 
 	add_dlg_text(dlg, _("Frame handling:", term), AL_LEFT, 1);
 	add_dlg_radio(dlg, _("No frames", term), 1, TERM_DUMB, termopt_hop->values[TERM_OPT_TYPE]);
@@ -193,8 +192,8 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	add_dlg_checkbox(dlg, _("Underline", term), termopt_hop->values[TERM_OPT_UNDERLINE]);
 	add_dlg_checkbox(dlg, _("UTF-8 I/O", term), termopt_hop->values[TERM_OPT_UTF_8_IO]);
 
-	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
-	add_dlg_button(dlg, B_ENTER, terminal_options_save, _("Save", term), NULL);
+	add_dlg_button(dlg, B_ENTER, push_ok_button, _("OK", term), NULL);
+	add_dlg_button(dlg, B_ENTER, push_save_button, _("Save", term), NULL);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
 	add_dlg_end(dlg, TERMOPT_WIDGETS_COUNT);

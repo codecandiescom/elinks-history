@@ -1,9 +1,11 @@
 [Desktop Entry]
-Type=Application
-Exec=/usr/bin/elinks %u
 Name=ELinks
+Categories=Application;Network
+GenericName=Web Browser
+Comment=Browse the World Wide Web in Text-Mode
+Exec=/usr/bin/elinks %u
 Terminal=1
-Comment=ELinks
+Type=Application
 Icon=html
 MimeType=text/html
 XClassHintResName=ELinks

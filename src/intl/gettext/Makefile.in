@@ -101,12 +101,7 @@ LTV_AGE=0
 	mv t-$@ $@
 
 # ../../.. -> config.h
-INCLUDES = -I$(top_srcdir)/src/intl/gettext -I../../..
-
-# Duh.. see Makefile.base. But we want -I. here for now anyway.
-
-# CONFIG_HEADER = ../../../config.h
-# COMPILE = $(CC) -DHAVE_CONFIG_H -I`dirname $(CONFIG_HEADER)` $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+INCLUDES = -I../../.. -I$(top_srcdir)/src -I$(top_srcdir)/src/intl/gettext
 
 
 all: all-@USE_INCLUDED_LIBINTL@

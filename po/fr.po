@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"POT-Creation-Date: 2004-12-16 11:31+0100\n"
-"PO-Revision-Date: 2004-12-16 11:21+0100\n"
+"POT-Creation-Date: 2004-12-16 17:01+0100\n"
+"PO-Revision-Date: 2004-12-16 17:02+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -911,7 +911,7 @@ msgstr ""
 "les arguments de type URL seront ouverts dans de nouveaux onglets dans\n"
 "l'instance distante.\n"
 "Liste des méthodes supportées:\n"
-"  ping()                    -- test l'existence d'une instance distante\n"
+"  ping()                    -- teste l'existence d'une instance distante\n"
 "  openURL()                 -- demande l'URL dans l'onglet courant\n"
 "  openURL(URL)              -- ouvre l'URL dans l'onglet courant\n"
 "  openURL(URL, new-tab)     -- ouvre l'URL dans un nouvel onglet\n"
@@ -2975,7 +2975,7 @@ msgid "Dump output options."
 msgstr "Options de sortie (dump)."
 
 #: src/config/options.inc:616 src/config/options.inc:1038
-#: src/config/opttypes.c:365 src/dialogs/document.c:99
+#: src/config/opttypes.c:364 src/dialogs/document.c:99
 msgid "Codepage"
 msgstr "Jeu de caractères"
 
@@ -4288,7 +4288,7 @@ msgstr "Confirmer la fermeture d'onglet"
 msgid "When closing a tab show confirmation dialog."
 msgstr "Lors de la fermeture d'un onglet, afficher un dialogue de confirmation"
 
-#: src/config/options.inc:1367 src/config/opttypes.c:366
+#: src/config/options.inc:1367 src/config/opttypes.c:365
 msgid "Language"
 msgstr "Langue"
 
@@ -4431,60 +4431,60 @@ msgstr ""
 msgid "Read error"
 msgstr "Erreur de lecture"
 
-#: src/config/opttypes.c:360
+#: src/config/opttypes.c:359
 msgid "Boolean"
 msgstr "Booléen"
 
-#: src/config/opttypes.c:360
+#: src/config/opttypes.c:359
 msgid "[0|1]"
 msgstr "[0|1]"
 
-#: src/config/opttypes.c:361
+#: src/config/opttypes.c:360
 msgid "Integer"
 msgstr "Entier"
 
-#: src/config/opttypes.c:361 src/config/opttypes.c:362
+#: src/config/opttypes.c:360 src/config/opttypes.c:361
 msgid "<num>"
 msgstr "<nombre>"
 
-#: src/config/opttypes.c:362
+#: src/config/opttypes.c:361
 msgid "Longint"
 msgstr "Entier long"
 
-#: src/config/opttypes.c:363
+#: src/config/opttypes.c:362
 msgid "String"
 msgstr "Chaîne"
 
-#: src/config/opttypes.c:363
+#: src/config/opttypes.c:362
 msgid "<str>"
 msgstr "<chaîne>"
 
-#: src/config/opttypes.c:365
+#: src/config/opttypes.c:364
 msgid "<codepage>"
 msgstr "<jeu de caractères>"
 
-#: src/config/opttypes.c:366
+#: src/config/opttypes.c:365
 msgid "<language>"
 msgstr "<langue>"
 
-#: src/config/opttypes.c:367
+#: src/config/opttypes.c:366
 msgid "Color"
 msgstr "Couleur"
 
-#: src/config/opttypes.c:367
+#: src/config/opttypes.c:366
 msgid "<color|#rrggbb>"
 msgstr "<couleur|#rrvvbb>"
 
-#: src/config/opttypes.c:369
+#: src/config/opttypes.c:368
 msgid "Special"
 msgstr "Spécial"
 
-#: src/config/opttypes.c:371
+#: src/config/opttypes.c:370
 msgid "Alias"
 msgstr "Alias"
 
 #. tree
-#: src/config/opttypes.c:374
+#: src/config/opttypes.c:373
 msgid "Folder"
 msgstr "Dossier"
 

@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.29 2003/09/25 00:41:45 jonas Exp $ */
+/* $Id: hooks.c,v 1.30 2003/09/25 00:46:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,14 +17,6 @@
 #include "util/string.h"
 
 
-/* Theoretically, you should be able to implement a links-lua style
- * interface with another scripting language library by reimplementing
- * these functions.  In practice... not likely. --pw */
-
-/* The "in practice" part ought to be changed. We need to continue in
- * generalization of scripting and moving everything Lua-related to lua/.
- * --pasky */
-
 static inline int
 str_event_code(unsigned char **retval, unsigned char *value)
 {
@@ -32,10 +24,9 @@ str_event_code(unsigned char **retval, unsigned char *value)
 	return !!value;
 }
 
-/* Triggerred when user entered something into the goto URL dialog. */
-/* Returns NULL if the original @url should be followed, or dynamically
- * allocated new URL to be followed instead ("" means that no URL should be
- * followed at all). */
+/* The events that will trigger the functions below and what they are expected
+ * to do is explained in doc/events.txt */
+
 static enum evhook_status
 script_hook_goto_url(va_list ap)
 {
@@ -79,13 +70,6 @@ script_hook_goto_url(va_list ap)
 	return str_event_code(new_url, value);
 }
 
-
-/* Triggerred when user decided to let some document to load (followed a link,
- * entered URL in the goto URL dialog, is loading frames from a frameset (?)
- * or whatever). */
-/* Returns NULL if the original @url should be followed, or dynamically
- * allocated new URL to be followed instead ("" means that no URL should be
- * followed at all). */
 static enum evhook_status
 script_hook_follow_url(va_list ap)
 {
@@ -122,14 +106,6 @@ script_hook_follow_url(va_list ap)
 
 	return str_event_code(new_url, value);
 }
-
-
-/*
- * pre_format_html:
- *
- * This function can return either new content in a dynamically
- * allocated string, or NULL to keep the content unchanged.
- */
 
 static enum evhook_status
 script_hook_pre_format_html(va_list ap)
@@ -170,21 +146,10 @@ script_hook_pre_format_html(va_list ap)
 	return str_event_code(new_html_src, value);
 }
 
-
-/*
- * get_proxy:
- *
- * The Lua function can return:
+/* The Lua function can return:
  *  - "PROXY:PORT" to use the specified proxy
  *  - ""           to not use any proxy
- *  - nil          to use the default proxies
- *
- * The implementor of this function should return one of:
- *  - a dynamically allocated string containing the proxy:port
- *  - an empty string (dynamically allocated!) to use no proxy
- *  - NULL to use default proxies
- */
-
+ *  - nil          to use the default proxies */
 static enum evhook_status
 script_hook_get_proxy(va_list ap)
 {
@@ -218,9 +183,6 @@ script_hook_get_proxy(va_list ap)
 	return str_event_code(new_proxy_url, value);
 }
 
-
-/* This function should allow the user to do whatever clean up is
- * required when ELinks quits. */
 static enum evhook_status
 script_hook_quit(va_list ap)
 {

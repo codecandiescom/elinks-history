@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.25 2004/08/06 09:11:01 zas Exp $ */
+/* $Id: link.c,v 1.26 2004/09/03 11:17:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -388,7 +388,10 @@ html_embed(unsigned char *a)
 	 * <img> and <iframe> etc. */
 
 	object_src = get_url_val(a, "src");
-	if (!object_src) return;
+	if (!object_src || !*object_src) {
+		mem_free_set(&object_src, NULL);
+		return;
+	}
 
 	/* If there is no extension we want to get the default mime/type
 	 * anyway? */
@@ -404,8 +407,7 @@ html_embed(unsigned char *a)
 	}
 
 	mem_free_if(type);
-	mem_free(object_src);
-	object_src = NULL;
+	mem_free_set(&object_src, NULL);
 }
 
 

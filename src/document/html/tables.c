@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.288 2004/06/29 09:20:51 zas Exp $ */
+/* $Id: tables.c,v 1.289 2004/06/29 10:24:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1072,13 +1072,14 @@ cont2:
 }
 
 static void
-format_table_bad_html(struct table *table)
+format_table_bad_html(struct table *table, int x, int y)
 {
 	int i;
 
 	for (i = 0; i < table->bad_html_size; i++) {
 		unsigned char *start = table->bad_html[i].start;
 		unsigned char *end = table->bad_html[i].end;
+		struct part *part;
 
 		while (start < end && isspace(*start))
 			start++;
@@ -1086,8 +1087,18 @@ format_table_bad_html(struct table *table)
 		while (start < end && isspace(end[-1]))
 			end--;
 
-		if (start < end)
-			parse_html(start, end, table->part, NULL);
+		if (start >= end) continue;
+
+		part = format_html_part(start, end, table->align,
+			0, table->real_width, table->part->document, x, y,
+			NULL, table->link_num);
+
+		if (part) {
+			table->part->cy += part->box.height;
+			table->part->cx = -1;
+			table->part->link_num = part->link_num;
+			mem_free(part);
+		}
 	}
 }
 
@@ -1108,8 +1119,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	if (!table) goto ret0;
 
 	table->part = part;
-
-	format_table_bad_html(table);
 
 	state = init_html_parser_state(ELEMENT_DONT_KILL, ALIGN_LEFT, 0, 0);
 
@@ -1151,6 +1160,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	x = get_table_margin(table);
 
+	format_table_bad_html(table, x, part->cy);
 	display_complicated_table(table, x, part->cy);
 	display_table_frames(table, x, part->cy);
 

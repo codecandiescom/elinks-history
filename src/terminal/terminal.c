@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.32 2003/06/08 22:11:48 pasky Exp $ */
+/* $Id: terminal.c,v 1.33 2003/06/14 13:15:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,7 +173,7 @@ init_term(int fdin, int fdout,
 
 	init_list(term->windows);
 
-	win = init_tab(term);
+	win = init_tab(term, 1);
 	if (!win) {
 		del_from_list(term);
 		mem_free(term);

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.72 2003/06/08 15:20:30 jonas Exp $ */
+/* $Id: os_dep.c,v 1.73 2003/06/14 13:15:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1791,14 +1791,14 @@ exec_new_elinks(struct terminal *term, unsigned char *xterm,
 }
 
 static void
-open_in_new_tab(struct terminal *term, unsigned char *exe_name,
-                unsigned char *param)
+do_open_in_new_tab(struct terminal *term, unsigned char *exe_name,
+	           unsigned char *param, int stay_here)
 {
 	struct window *tab;
 	struct initial_session_info *info;
 	struct event ev = {EV_INIT, 0, 0, 0};
 
-	tab = init_tab(term);
+	tab = init_tab(term, stay_here);
 	if (!tab) return;
 
 	info = mem_calloc(1, sizeof(struct initial_session_info));
@@ -1821,6 +1821,21 @@ open_in_new_tab(struct terminal *term, unsigned char *exe_name,
 
 	ev.b = (long) info;
 	tab->handler(tab, &ev, 0);
+}
+
+static void
+open_in_new_tab(struct terminal *term, unsigned char *exe_name,
+                unsigned char *param)
+{
+	do_open_in_new_tab(term, exe_name, param, 0);
+}
+
+static void
+open_in_new_tab_and_stay(struct terminal *term,
+			 unsigned char *exe_name,
+                	 unsigned char *param)
+{
+	do_open_in_new_tab(term, exe_name, param, 1);
 }
 
 static void
@@ -1893,6 +1908,7 @@ struct {
 	void (*fn)(struct terminal *term, unsigned char *, unsigned char *);
 	unsigned char *text;
 } oinw[] = {
+	{ENV_CONSOLE, open_in_new_tab_and_stay, N_("~Tab (but stay here)")},
 	{ENV_CONSOLE, open_in_new_tab, N_("~Tab")},
 	{ENV_XWIN, open_in_new_xterm, N_("~Xterm")},
 	{ENV_TWIN, open_in_new_twterm, N_("T~wterm")},

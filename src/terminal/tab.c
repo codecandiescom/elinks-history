@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.10 2003/05/21 11:32:38 zas Exp $ */
+/* $Id: tab.c,v 1.11 2003/06/14 13:15:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,7 @@
 
 
 struct window *
-init_tab(struct terminal *term)
+init_tab(struct terminal *term, int stay_here)
 {
 	struct window *win = mem_calloc(1, sizeof(struct window));
 	struct window *current_tab = get_current_tab(term);
@@ -29,7 +29,8 @@ init_tab(struct terminal *term)
 	win->type = WT_TAB;
 
 	add_to_list(term->windows, win);
-	term->current_tab = get_tab_number(win);
+	if (!stay_here && current_tab)
+		term->current_tab = get_tab_number(win);
 
 	return win;
 }

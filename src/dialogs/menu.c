@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.352 2004/07/15 10:42:55 jonas Exp $ */
+/* $Id: menu.c,v 1.353 2004/07/16 18:53:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -543,7 +543,6 @@ query_file(struct session *ses, struct uri *uri, void *data,
 void
 free_history_lists(void)
 {
-	free_list(goto_url_history.entries);
 	free_list(file_history.entries);
 #ifdef CONFIG_SCRIPTING
 	trigger_event_name("free-history");

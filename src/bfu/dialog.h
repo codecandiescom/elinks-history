@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.49 2004/11/19 09:39:25 zas Exp $ */
+/* $Id: dialog.h,v 1.50 2004/11/19 10:04:45 zas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -58,7 +58,7 @@ struct dialog {
 
 	struct dialog_layout layout;
 
-	size_t widgets_size;
+	int number_of_widgets;
 	struct widget widgets[1]; /* must be at end of struct */
 };
 

@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.90 2004/11/02 09:34:09 zas Exp $ */
+/* $Id: msgbox.c,v 1.91 2004/11/19 10:04:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,7 +65,7 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 
 	va_start(ap, buttons);
 
-	while (dlg->widgets_size < buttons + 1) {
+	while (dlg->number_of_widgets < buttons + 1) {
 		unsigned char *label;
 		void (*fn)(void *);
 		int bflags;

@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.77 2004/11/17 19:12:40 zas Exp $ */
+/* $Id: edit.c,v 1.78 2004/11/19 10:04:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,19 +89,22 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	dlg->udata = parent;
 	dlg->udata2 = done_data;
 
-	add_dlg_field(dlg, _("Name", term), 0, 0, NULL, MAX_STR_LEN, name, NULL);
 	if (dialog_type == EDIT_DLG_ADD)
-		dlg->widgets[dlg->widgets_size - 1].fn = check_nonempty;
+		add_dlg_field(dlg, _("Name", term), 0, 0, check_nonempty, MAX_STR_LEN, name, NULL);
+	else
+		add_dlg_field(dlg, _("Name", term), 0, 0, NULL, MAX_STR_LEN, name, NULL);
 
 	add_dlg_field(dlg, _("URL", term), 0, 0, NULL, MAX_STR_LEN, url, NULL);
-	/* if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty; */
 
 	add_dlg_ok_button(dlg, B_ENTER, _("OK", term), when_done, dlg);
 	add_dlg_button(dlg, 0, clear_dialog, _("Clear", term), NULL);
 
-	add_dlg_button(dlg, B_ESC, when_cancel ? my_cancel_dialog : cancel_dialog,
+	if (when_cancel)
+		add_dlg_button(dlg, B_ESC, my_cancel_dialog,
+			_("Cancel", term), when_cancel);
+	else
+		add_dlg_button(dlg, B_ESC, cancel_dialog,
 			_("Cancel", term), NULL);
-	dlg->widgets[dlg->widgets_size - 1].data = (void *) when_cancel;
 
 	add_dlg_end(dlg, EDIT_WIDGETS_COUNT);
 

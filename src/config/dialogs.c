@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.197 2004/11/17 19:11:49 zas Exp $ */
+/* $Id: dialogs.c,v 1.198 2004/11/19 10:04:45 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -401,8 +401,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 
 	/* FIXME: Compute some meaningful maximal width. --pasky */
 	add_dlg_text(dlg, name, ALIGN_LEFT, 0);
-	add_dlg_field(dlg, _("Value", term), 0, 0, check_valid_option, MAX_STR_LEN, value, NULL);
-	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
+	add_dlg_field_float(dlg, _("Value", term), 0, 0, check_valid_option, MAX_STR_LEN, value, NULL);
 
 	add_dlg_text(dlg, desc, ALIGN_LEFT, 0);
 

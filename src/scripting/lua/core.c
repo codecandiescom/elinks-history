@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.168 2004/09/23 08:40:59 zas Exp $ */
+/* $Id: core.c,v 1.169 2004/11/19 10:04:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -473,11 +473,9 @@ l_xdialog(LS)
 	dlg->layouter = generic_dialog_layouter;
 	dlg->layout.maximize_width = 1;
 
-	i = 0;
-	while (dlg->widgets_size < nfields) {
+	for (i = 0; i < nfields; i++)
 		add_dlg_field(dlg, _("Name", term), 0, 0, NULL, MAX_STR_LEN,
-			      data->fields[i++], NULL);
-	}
+			      data->fields[i], NULL);
 
 	add_dlg_ok_button(dlg, B_ENTER, _("OK", term), xdialog_run_lua, data);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);

@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.66 2004/11/18 21:39:33 zas Exp $ */
+/* $Id: widget.h,v 1.67 2004/11/19 10:04:45 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -25,7 +25,7 @@ enum widget_type {
 
 #define add_dlg_end(dlg, n)						\
 	do {								\
-		assert(n == (dlg)->widgets_size);			\
+		assert(n == (dlg)->number_of_widgets);			\
 	} while (0)
 
 

@@ -1,4 +1,4 @@
-/* $Id: text.h,v 1.21 2004/07/02 16:00:46 zas Exp $ */
+/* $Id: text.h,v 1.22 2004/11/19 10:04:45 zas Exp $ */
 
 #ifndef EL__BFU_TEXT_H
 #define EL__BFU_TEXT_H
@@ -13,7 +13,7 @@ struct terminal;
 	do {								\
 		struct widget *widget;					\
 									\
-		widget = &(dlg)->widgets[(dlg)->widgets_size++];	\
+		widget = &(dlg)->widgets[(dlg)->number_of_widgets++];	\
 		widget->type = WIDGET_TEXT;				\
 		widget->text = (text_);					\
 		widget->info.text.align = (align_);			\

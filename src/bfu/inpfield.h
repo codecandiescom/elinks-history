@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.38 2004/11/17 19:10:13 zas Exp $ */
+/* $Id: inpfield.h,v 1.39 2004/11/19 10:04:45 zas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -12,11 +12,11 @@ struct input_history;
 struct session;
 struct terminal;
 
-#define add_dlg_field_do(dlg, t, label, min_, max_, handler, dlen, d, hist)\
+#define add_dlg_field_do(dlg, t, label, min_, max_, handler, dlen, d, hist, float_)\
 	do {								\
 		struct widget *widget;					\
 									\
-		widget = &(dlg)->widgets[(dlg)->widgets_size++];	\
+		widget = &(dlg)->widgets[(dlg)->number_of_widgets++];	\
 		widget->type = (t);					\
 		widget->text = (label);					\
 		widget->info.field.min = (min_);			\
@@ -25,13 +25,21 @@ struct terminal;
 		widget->datalen = (dlen);				\
 		widget->data = (d);					\
 		widget->info.field.history = (hist);			\
+		widget->info.field.float_label = (float_);		\
 	} while (0)
 
 #define add_dlg_field(dlg, label, min, max, handler, len, field, history)	\
-	add_dlg_field_do(dlg, WIDGET_FIELD, label, min, max, handler, len, field, history)
+	add_dlg_field_do(dlg, WIDGET_FIELD, label, min, max, handler, len, field, history, 0)
+
+#define add_dlg_field_float(dlg, label, min, max, handler, len, field, history)	\
+	add_dlg_field_do(dlg, WIDGET_FIELD, label, min, max, handler, len, field, history, 1)
 
 #define add_dlg_field_pass(dlg, label, min, max, handler, len, field)	\
-	add_dlg_field_do(dlg, WIDGET_FIELD_PASS, label, min, max, handler, len, field, NULL)
+	add_dlg_field_do(dlg, WIDGET_FIELD_PASS, label, min, max, handler, len, field, NULL, 0)
+
+#define add_dlg_field_float_pass(dlg, label, min, max, handler, len, field)	\
+	add_dlg_field_do(dlg, WIDGET_FIELD_PASS, label, min, max, handler, len, field, NULL, 1)
+
 
 extern struct widget_ops field_ops;
 extern struct widget_ops field_pass_ops;

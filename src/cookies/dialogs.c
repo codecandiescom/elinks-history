@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.72 2004/11/17 19:12:02 zas Exp $ */
+/* $Id: dialogs.c,v 1.73 2004/11/19 10:04:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -308,16 +308,11 @@ build_edit_dialog(struct terminal *term, struct cookie *cookie)
 	}
 
 	add_dlg_text(dlg, dlg_server, ALIGN_LEFT, 0);
-	add_dlg_field(dlg, _("Name", term), 0, 0, set_cookie_name, MAX_STR_LEN, name, NULL);
-	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
-	add_dlg_field(dlg, _("Value", term), 0, 0, set_cookie_value, MAX_STR_LEN, value, NULL);
-	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
-	add_dlg_field(dlg, _("Domain", term), 0, 0, set_cookie_domain, MAX_STR_LEN, domain, NULL);
-	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
-	add_dlg_field(dlg, _("Expires", term), 0, 0, set_cookie_expires, MAX_STR_LEN, expires, NULL);
-	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
-	add_dlg_field(dlg, _("Secure", term), 0, 0, set_cookie_secure, MAX_STR_LEN, secure, NULL);
-	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
+	add_dlg_field_float(dlg, _("Name", term), 0, 0, set_cookie_name, MAX_STR_LEN, name, NULL);
+	add_dlg_field_float(dlg, _("Value", term), 0, 0, set_cookie_value, MAX_STR_LEN, value, NULL);
+	add_dlg_field_float(dlg, _("Domain", term), 0, 0, set_cookie_domain, MAX_STR_LEN, domain, NULL);
+	add_dlg_field_float(dlg, _("Expires", term), 0, 0, set_cookie_expires, MAX_STR_LEN, expires, NULL);
+	add_dlg_field_float(dlg, _("Secure", term), 0, 0, set_cookie_secure, MAX_STR_LEN, secure, NULL);
 
 	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);

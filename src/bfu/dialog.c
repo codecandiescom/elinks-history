@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.177 2004/11/19 09:39:25 zas Exp $ */
+/* $Id: dialog.c,v 1.178 2004/11/19 10:04:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,7 @@ do_dialog(struct terminal *term, struct dialog *dlg,
 	struct dialog_data *dlg_data;
 
 	dlg_data = mem_calloc(1, sizeof(struct dialog_data) +
-			      sizeof(struct widget_data) * dlg->widgets_size);
+			      sizeof(struct widget_data) * dlg->number_of_widgets);
 	if (!dlg_data) {
 		/* Worry not: freeml() checks whether its argument is NULL. */
 		freeml(ml);
@@ -56,7 +56,7 @@ do_dialog(struct terminal *term, struct dialog *dlg,
 	}
 
 	dlg_data->dlg = dlg;
-	dlg_data->number_of_widgets = dlg->widgets_size;
+	dlg_data->number_of_widgets = dlg->number_of_widgets;
 	dlg_data->ml = ml;
 	add_window(term, dialog_func, dlg_data);
 

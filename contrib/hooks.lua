@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.links/ as hooks.lua.
--- $Id: hooks.lua,v 1.1 2001/12/28 17:25:34 pasky Exp $
+-- $Id: hooks.lua,v 1.2 2002/04/17 08:13:08 pasky Exp $
 
 ----------------------------------------------------------------------
 --  Local configuration
@@ -236,8 +236,7 @@ function pre_format_html_hook (url, html)
         return gsub (html, "<CENTER>.-</center>", "", 1)
 
     -- dictionary.com
-    else
-    if sstrfind (url, "dictionary.com/cgi-bin/dict.pl") then
+    elseif sstrfind (url, "dictionary.com/cgi-bin/dict.pl") then
 	local t = { t = "" }
 	local _, n = gsub (html, "resultItemStart %-%-%>(.-)%<%!%-%- resultItemEnd",
 			   function (x) %t.t = %t.t.."<tr><td>"..x.."</td></tr>" end)

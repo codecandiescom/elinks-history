@@ -1,3 +1,10 @@
+Fri Jan 24 23:20:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	When sysconfdir is set explicitly, don't append the elinks/ part.
+	Idea by DervishD <raul@pleyades.net>.  
+
 Fri Jan 24 15:55:09 2003  Laurent Monin <zas@norz.org>:
 
 	* po/be.po, po/bg.po, po/ca.po, po/cs.po, po/da.po, po/de.po,

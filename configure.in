@@ -329,6 +329,7 @@ AC_OUTPUT([ \
  src/lua/Makefile \
  src/osdep/Makefile \
  src/protocol/Makefile \
+ src/protocol/http/Makefile \
  src/util/Makefile \
 ])
 

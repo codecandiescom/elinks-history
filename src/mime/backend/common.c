@@ -1,5 +1,5 @@
 /* MIME handling backends multiplexing */
-/* $Id: common.c,v 1.7 2003/06/05 14:18:37 zas Exp $ */
+/* $Id: common.c,v 1.8 2003/06/07 23:42:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,42 +25,34 @@
 #include "mime/backend/mailcap.h"
 #include "mime/backend/mimetypes.h"
 
-static struct mime_backend *mime_backends[] = {
-	&default_mime_backend,
-#ifdef MAILCAP
-	&mailcap_mime_backend,
-#endif
-#ifdef MIMETYPES
-	&mimetypes_mime_backend,
-#endif
-	NULL
-};
-
+static INIT_LIST_HEAD(mime_backends);
 
 void
 init_mime_backends(void)
 {
-	int backend_index = 0;
+	struct mime_backend *backend;
 
-	for (; mime_backends[backend_index]; backend_index++) {
-		struct mime_backend *backend = mime_backends[backend_index];
+	add_to_list(mime_backends, &default_mime_backend);
+#ifdef MAILCAP
+	add_to_list_bottom(mime_backends, &mailcap_mime_backend);
+#endif
+#ifdef MIMETYPES
+	add_to_list_bottom(mime_backends, &mimetypes_mime_backend);
+#endif
 
+	foreach (backend, mime_backends)
 		if (backend->init)
 			backend->init();
-	}
 }
 
 void
 done_mime_backends(void)
 {
-	int backend_index = 0;
+	struct mime_backend *backend;
 
-	for (; mime_backends[backend_index]; backend_index++) {
-		struct mime_backend *backend = mime_backends[backend_index];
-
+	foreach (backend, mime_backends)
 		if (backend->done)
 			backend->done();
-	}
 }
 
 /* TODO Make backend selection scheme configurable */
@@ -68,18 +60,15 @@ done_mime_backends(void)
 unsigned char *
 get_content_type_backends(unsigned char *uri)
 {
-	int backend_index = 0;
+	struct mime_backend *backend;
 
-	for (; mime_backends[backend_index]; backend_index++) {
-		struct mime_backend *backend = mime_backends[backend_index];
-
+	foreach (backend, mime_backends)
 		if (backend->get_content_type) {
 			unsigned char *content_type;
 
 			content_type = backend->get_content_type(uri);
 			if (content_type) return content_type;
 		}
-	}
 
 	return NULL;
 }
@@ -87,18 +76,15 @@ get_content_type_backends(unsigned char *uri)
 struct mime_handler *
 get_mime_handler_backends(unsigned char *ctype, int have_x)
 {
-	int backend_index = 0;
+	struct mime_backend *backend;
 
-	for (; mime_backends[backend_index]; backend_index++) {
-		struct mime_backend *backend = mime_backends[backend_index];
-
+	foreach (backend, mime_backends)
 		if (backend->get_mime_handler) {
 			struct mime_handler *handler;
 
 			handler = backend->get_mime_handler(ctype, have_x);
 			if (handler) return handler;
 		}
-	}
 
 	return NULL;
 }

@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.8 2003/06/07 22:13:41 jonas Exp $ */
+/* $Id: common.h,v 1.9 2003/06/07 23:42:31 jonas Exp $ */
 
 #ifndef EL__MIME_BACKEND_COMMON_H
 #define EL__MIME_BACKEND_COMMON_H
@@ -9,6 +9,8 @@
 #include "util/lists.h"
 
 struct mime_backend {
+	LIST_HEAD(struct mime_backend);
+
 	/* String to identify the backend. */
 	unsigned char *name;
 

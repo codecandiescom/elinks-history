@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.109 2004/12/29 19:37:19 jonas Exp $ */
+/* $Id: cmdline.c,v 1.110 2004/12/29 22:07:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -600,10 +600,10 @@ redir_cmd(struct option *option, unsigned char ***argv, int *argc)
 struct option_info cmdline_options_info[] = {
 	INIT_OPT_BOOL("", N_("Restrict to anonymous mode"),
 		"anonymous", 0, 0,
-		N_("Restrict ELinks so that it can run on an anonymous account.\n"
-		"No local file browsing, no downloads. Execution of viewers\n"
-		"is allowed, but user can't add or modify entries in\n"
-		"association table.")),
+		N_("Restricts ELinks so it can run on an anonymous account.\n"
+		"Local file browsing, downloads, and modification of option and\n"
+		"will be disabled. Execution of viewers is allowed, but entries\n"
+		"in the association table can't be added or modified.")),
 
 	INIT_OPT_BOOL("", N_("Autosubmit first form"),
 		"auto-submit", 0, 0,
@@ -612,62 +612,65 @@ struct option_info cmdline_options_info[] = {
 	INIT_OPT_INT("", N_("Clone internal session with given ID"),
 		"base-session", 0, 0, INT_MAX, 0,
 		N_("Used internally when opening ELinks instances in new windows.\n"
-		"The ID maps to information used when creating the new instance\n"
-		"You don't want to use it.")),
+		"The ID maps to information that will be used when creating the\n"
+		"new instance. You don't want to use it.")),
 
 	INIT_OPT_COMMAND("", NULL, "confdir", OPT_HIDDEN, redir_cmd, NULL),
 
 	INIT_OPT_STRING("", N_("Name of directory with configuration file"),
 		"config-dir", 0, "",
-		N_("ELinks will read and write its config files to the given\n"
-		"directory instead of ~/.elinks. If the path begins with\n"
-		"a '/' its used as an absolute path. Else it is assumed to\n"
-		"be relative to your HOME dir.")),
+		N_("Path of the directory ELinks will read and write its\n"
+		"config and runtime state files to instead of ~/.elinks.\n"
+		"If the path does not begin with a '/' it is assumed to be\n"
+		"relative to your HOME directory.")),
 
 	INIT_OPT_COMMAND("", NULL, "conffile", OPT_HIDDEN, redir_cmd, NULL),
 
 	INIT_OPT_STRING("", N_("Name of configuration file"),
 		"config-file", 0, "elinks.conf",
-		N_("Name of the file with configuration, from which and to\n"
-		"which all the configuration shall be written. It should be\n"
+		N_("Name of the configuration file that all configuration\n"
+		"options will be read from and written to. It should be\n"
 		"relative to config-dir.")),
 
 	INIT_OPT_COMMAND("", N_("Print help for configuration options"),
 		"config-help", 0, printhelp_cmd,
-		N_("Print help on configuration options and exit.")),
+		N_("Print help for configuration options and exit.")),
 
-	INIT_OPT_CMDALIAS("", N_("MIME type to assume for documents"),
+	INIT_OPT_CMDALIAS("", N_("MIME type assumed for unknown document types"),
 		"default-mime-type", 0, "mime.default_type",
-		N_("Default MIME type to assume for documents of unknown type.")),
+		N_("The default MIME type used for documents of unknown type.")),
 
 	INIT_OPT_BOOL("", N_("Ignore user-defined keybindings"),
 		"default-keys", 0, 0,
-		N_("If set, parse but don't set keybindings from configuration\n"
-		   "file. It forces use of default keybindings and will reset\n"
-		   "user-defined ones on save.")),
+		N_("When set, all keybindings from configuration files will be\n"
+		"ignored. It forces use of default keybindings and will reset\n"
+		"user-defined ones on save.")),
 
-	INIT_OPT_BOOL("", N_("Write formatted versions of given URLs to stdout"),
+	INIT_OPT_BOOL("", N_("Print formatted versions of given URLs to stdout"),
 		"dump", 0, 0,
-		N_("Write formatted plain-text versions of the given URLs to stdout.")),
+		N_("Print formatted plain-text versions of given URLs to stdout.")),
 
 	INIT_OPT_CMDALIAS("", N_("Codepage to use with -dump"),
 		"dump-charset", 0, "document.dump.codepage",
-		N_("Codepage used in dump output.")),
+		N_("Codepage used when formatting dump output.")),
 
 	INIT_OPT_CMDALIAS("", N_("Width of document formatted with -dump"),
 		"dump-width", 0, "document.dump.width",
 		N_("Width of the dump output.")),
 
-	INIT_OPT_COMMAND("", N_("Evaluate given configuration option"),
+	INIT_OPT_COMMAND("", N_("Evaluate configuration file directive"),
 		"eval", 0, eval_cmd,
-		N_("Specify elinks.conf config options on the command-line:\n"
-		"  -eval 'set protocol.file.allow_special_files = 1'")),
+		N_("Specify configuration file directives on the command-line\n"
+		"which will be evaluated after all configuration files has been\n"
+		"read. Example usage:\n"
+		"	-eval 'set protocol.file.allow_special_files = 1'")),
 
 	/* lynx compatibility */
-	INIT_OPT_COMMAND("", N_("Assume the file is HTML"),
+	INIT_OPT_COMMAND("", N_("Interpret documents of unknown types as HTML"),
 		"force-html", 0, forcehtml_cmd,
-		N_("This makes ELinks assume that the files it sees are HTML. This is\n"
-		"equivalent to -default-mime-type text/html.")),
+		N_("Makes ELinks assume documents of unknown types are HTML.\n"
+		"Useful when using ELinks as an external viewer from MUAs.\n"
+		"This is equivalent to -default-mime-type text/html.")),
 
 	/* XXX: -?, -h and -help share the same caption and should be kept in
 	 * the current order for usage help printing to be ok */
@@ -681,9 +684,9 @@ struct option_info cmdline_options_info[] = {
 
 	INIT_OPT_BOOL("", N_("Only permit local connections"),
 		"localhost", 0, 0,
-		N_("Restrict ELinks so that it can only open connections to\n"
-		"local addresses (ie. 127.0.0.1), it will prevent any connection\n"
-		"to distant servers.")),
+		N_("Restricts ELinks to work offline and only connect to servers\n"
+		"with local addresses (ie. 127.0.0.1). No connections to remote\n"
+		"servers will be permitted.")),
 
 	INIT_OPT_COMMAND("", N_("Print detailed usage help and exit"),
 		"long-help", 0, printhelp_cmd,
@@ -697,25 +700,25 @@ struct option_info cmdline_options_info[] = {
 		"no-connect", 0, 0,
 		N_("Run ELinks as a separate instance instead of connecting to an\n"
 		"existing instance. Note that normally no runtime state files\n"
-		"(bookmarks, history and so on) are written to the disk when\n"
-		"this option is used. See also -touch-files.")),
+		"(bookmarks, history, etc.) are written to the disk when this\n"
+		"option is used. See also -touch-files.")),
 
-	INIT_OPT_BOOL("", N_("Don't use files in ~/.elinks"),
+	INIT_OPT_BOOL("", N_("Disable use of files in ~/.elinks"),
 		"no-home", 0, 0,
 		N_("Disables creation and use of files in the user specific home\n"
 		"configuration directory (~/.elinks). It forces default configuration\n"
 		"values to be used and disables saving of runtime state files.")),
 
-	INIT_OPT_BOOL("", N_("Do not number links in dump output"),
+	INIT_OPT_BOOL("", N_("Disable link numbering in dump output"),
 		"no-numbering", 0, 0,
-		N_("Prevents numbering of links in the -dump output; this was the\n"
-		   "default behaviour until 0.5pre12.\n"
-		   "Note that this really affects only -dump, nothing else.")),
+		N_("Prevents printing of link number in dump output.\n"
+		"Note that this really affects only -dump, nothing else.")),
 
-	INIT_OPT_BOOL("", N_("Do not dump links references in dump output"),
+	INIT_OPT_BOOL("", N_("Disable printing of link references in dump output"),
 		"no-references", 0, 0,
-		N_("Prevents dumping of links references (URIs) in the -dump output.\n"
-		   "Note that this really affects only -dump, nothing else.")),
+		N_("Prevents printing of references (URIs) of document links\n"
+		"in dump output.\n"
+		"Note that this really affects only -dump, nothing else.")),
 
 	INIT_OPT_COMMAND("", N_("Control an already running ELinks"),
 		"remote", 0, remote_cmd,
@@ -725,13 +728,13 @@ struct option_info cmdline_options_info[] = {
 		"For ease of use the additional method argument can be omitted in which\n"
 		"case any URL arguments will be opened in new tabs in the remote instance.\n"
 		"Following is a list of the methods that are supported:\n"
-		"  ping()                    -- check for remote instance\n"
-		"  openURL()                 -- prompt URL in current tab\n"
-		"  openURL(URL)              -- open URL in current tab\n"
-		"  openURL(URL, new-tab)     -- open URL in new tab\n"
-		"  openURL(URL, new-window)  -- open URL in new window\n"
-		"  addBookmark(URL)          -- bookmark URL\n"
-		"  xfeDoCommand(openBrowser) -- open new window")),
+		"	ping()                    -- check for remote instance\n"
+		"	openURL()                 -- prompt URL in current tab\n"
+		"	openURL(URL)              -- open URL in current tab\n"
+		"	openURL(URL, new-tab)     -- open URL in new tab\n"
+		"	openURL(URL, new-window)  -- open URL in new window\n"
+		"	addBookmark(URL)          -- bookmark URL\n"
+		"	xfeDoCommand(openBrowser) -- open new window")),
 
 	INIT_OPT_INT("", N_("Connect to session ring with given ID"),
 		"session-ring", 0, 0, INT_MAX, 0,
@@ -750,17 +753,17 @@ struct option_info cmdline_options_info[] = {
 		"are written to the disk when this option is used. See also\n"
 		"-touch-files.")),
 
-	INIT_OPT_BOOL("", N_("Write the source of given URL to stdout"),
+	INIT_OPT_BOOL("", N_("Print the source of given URLs to stdout"),
 		"source", 0, 0,
-		N_("Write the given HTML document in source form to stdout.")),
+		N_("Print given URLs in source form to stdout.")),
 
 	INIT_OPT_COMMAND("", NULL, "stdin", OPT_HIDDEN, redir_cmd, NULL),
 
 	INIT_OPT_BOOL("", N_("Touch files in ~/.elinks when running with -no-connect/-session-ring"),
 		"touch-files", 0, 0,
-		N_("Set to 1 to have runtime state files (bookmarks, history, ...)\n"
-		"changed even when -no-connect or -session-ring is used; has no\n"
-		"effect if not used in connection with any of these options.")),
+		N_("When enabled, runtime state files (bookmarks, history, etc.) are\n"
+		"written to disk, even when -no-connect or -session-ring is used.\n"
+		"It has no effect if not used in connection with any of these options.")),
 
 	INIT_OPT_INT("", N_("Verbose level"),
 		"verbose", 0, 0, VERBOSE_LEVELS - 1, 0,

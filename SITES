@@ -16,7 +16,7 @@ Cygwin binaries:
 CVS root:
 	:pserver:anonymous@cvs.elinks.or.cz:/var/cvs/elinks
 	:pserver:anonymous@cvs.pld.org.pl:/cvsroot
-	:pserver:anoncvs@pasky.ji.cz:/home/cvs/elinks (master, DEPRECATED)
+	:pserver:anoncvs@pasky.or.cz:/home/cvs/elinks (master, DEPRECATED)
 
 Mailing list:
 	http://elinks.or.cz/community.html#mailinglist
@@ -43,4 +43,4 @@ RPMs:
 	http://ftp.nest.pld-linux.org/pool/l/links/
 	http://ftp.pld-linux.org/pool/l/links/
 
-$Id: SITES,v 1.18 2003/10/05 14:07:10 pasky Exp $
+$Id: SITES,v 1.19 2004/01/04 20:36:26 pasky Exp $

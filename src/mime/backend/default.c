@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.36 2004/12/19 01:47:17 miciah Exp $ */
+/* $Id: default.c,v 1.37 2004/12/26 18:58:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,6 +71,7 @@ static struct option_info default_mime_options[] = {
 
 	INIT_OPT_STRING("mime.handler._template_._template_", N_("Program"),
 		"program", 0, "",
+		/* xgettext:no-c-format */
 		N_("External viewer for this file type. '%' in this string will be\n"
 		"substituted by a file name.")),
 

@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.37 2004/09/23 16:14:19 jonas Exp $ */
+/* $Id: rewrite.c,v 1.38 2004/12/26 18:58:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,6 +71,7 @@ static struct option_info uri_rewrite_options[] = {
 
 	INIT_OPT_STRING("protocol.rewrite.dumb", NULL,
 		"_template_", 0, "",
+		/* xgettext:no-c-format */
 		N_("Replacement URI for this dumbprefix.\n"
 		"%c in the string means the current URL\n"
 		"%% in the string means '%'")),

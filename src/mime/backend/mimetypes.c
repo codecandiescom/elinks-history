@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.5 2003/06/06 21:18:07 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.6 2003/06/06 23:14:53 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -18,9 +18,11 @@
 #include "elinks.h"
 #include "setup.h"
 
+#include "config/options.h"
 #include "mime/backend/common.h"
 #include "mime/backend/mimetypes.h"
 #include "mime/mime.h"
+#include "sched/session.h"
 #include "util/hash.h"
 #include "util/lists.h"
 #include "util/memory.h"
@@ -155,6 +157,8 @@ init_mimetypes(void)
 		return; /* and leave mailcap_map = NULL */
 
 	mimetypes_map = init_hash(8, &strhash);
+	if (!mimetypes_map)
+		return;
 
 	/* Determine the path  */
 	path = get_opt_str("mime.mimetypes.path");
@@ -173,21 +177,22 @@ init_mimetypes(void)
 static void
 done_mimetypes(void)
 {
-	if (mimetypes_map) {
-		struct hash_item *item;
-		int i;
+	struct hash_item *item;
+	int i;
 
-		foreach_hash_item(item, *mimetypes_map, i)
-			if (item->value) {
-				struct mimetypes_entry *entry = item->value;
+	if (!mimetypes_map)
+		return;
 
-				free_mimetypes_entry(entry);
-			}
+	foreach_hash_item(item, *mimetypes_map, i)
+		if (item->value) {
+			struct mimetypes_entry *entry = item->value;
 
-		free_hash(mimetypes_map);
-		mimetypes_map = NULL;
-		mimetypes_map_size = 0;
-	}
+			free_mimetypes_entry(entry);
+		}
+
+	free_hash(mimetypes_map);
+	mimetypes_map = NULL;
+	mimetypes_map_size = 0;
 }
 
 static unsigned char *

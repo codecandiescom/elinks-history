@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.131 2004/12/19 13:47:45 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.132 2004/12/19 13:49:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,6 +50,7 @@
 #include "viewer/text/form.h"
 #include "viewer/text/link.h"
 #include "viewer/text/vs.h"
+
 
 
 /*** Global methods */
@@ -1966,6 +1967,7 @@ navigator_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 	VALUE_TO_JSVAL_END(vp);
 }
+
 
 
 /*** The ELinks interface */

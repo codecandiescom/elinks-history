@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.47 2003/10/03 11:51:19 jonas Exp $ */
+/* $Id: mailcap.c,v 1.48 2003/10/03 11:53:16 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -608,7 +608,7 @@ get_mime_handler_mailcap(unsigned char *type, int options)
 	program = format_command(entry->command, type, entry->copiousoutput);
 	if (!program) return NULL;
 
-	handler = mem_alloc(sizeof(struct mime_handler));
+	handler = mem_calloc(1, sizeof(struct mime_handler));
 	if (!handler) {
 		mem_free(program);
 		return NULL;

@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.71 2005/03/24 10:03:59 zas Exp $ */
+/* $Id: group.c,v 1.72 2005/03/24 11:44:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,74 +17,73 @@
 #include "terminal/terminal.h"
 #include "util/color.h"
 
-static inline int
-base_group_width(struct widget_data *widget_data)
-{
-	if (widget_data->widget->type == WIDGET_CHECKBOX)
-		return 3;	/* [X] */
-
-	if (widget_data->widget->type == WIDGET_BUTTON)
-		return strlen(widget_data->widget->text) + 4;	/* [ button ] */
-
-	if (widget_is_textfield(widget_data))
-		return widget_data->widget->datalen;	/* width of input field */
-
-	return 0;	/* Should not occur */
-}
-
 void
 dlg_format_group(struct terminal *term,
 		 struct widget_data *widget_data,
 		 int n, int x, int *y, int w, int *rw)
 {
-	int nx = 0;
-	int base = base_group_width(widget_data) + 1;	/* TODO: drop this +1 ? --Zas */
+	int space_between_widgets = 1;
+	int line_width = 0;
+	int xpos;
 	struct color_pair *color = get_bfu_color(term, "dialog.text");
 
 	assert(n > 0);
 	if_assert_failed return;
 
 	while (n--) {
-		int wx = base;
+		int widget_width;
+		int width;
 		unsigned char *text = widget_data->widget->text;
-		int sl = (text && *text) ? strlen(text) : -1;
+		int label_length = (text && *text) ? strlen(text) : 0;
+		int label_padding = (label_length > 0);
 
-		wx += sl;
+		if (widget_data->widget->type == WIDGET_CHECKBOX) {
+			width = 3;
+		} else if (widget_is_textfield(widget_data)) {
+			width = widget_data->widget->datalen;
+		} else {
+			/* TODO: handle all widget types. */
+			widget_data++;
+			continue;
+		}
 
-		if (nx && nx + wx > w) {
-			nx = 0;
+		int_bounds(&label_length, 0, w - width - label_padding);
+
+		widget_width = width + label_padding + label_length;
+		if (line_width + widget_width > w) {
+			line_width = 0;
 			(*y) += 2;	/* Next line */
 		}
 
+		xpos = x + line_width;
+
 		if (term) {
-			int xnx = x + nx;
-
 			if (widget_data->widget->type == WIDGET_CHECKBOX) {
-				if (sl > 0) {
-					/* Draw text at right of checkbox. */
-					draw_text(term, xnx + 4, *y,
-						  text, sl,
+				/* Draw text at right of checkbox. */
+				if (label_length)
+					draw_text(term, xpos + width + label_padding, *y,
+						  text, label_length,
 						  0, color);
-				}
 
-				set_box(&widget_data->box, xnx, *y, 3, 1);
+				set_box(&widget_data->box, xpos, *y, width, 1);
 
 			} else if (widget_is_textfield(widget_data)) {
-				if (sl > 0) {
-					/* Draw label at left of widget. */
-					draw_text(term, xnx, *y,
-						  text, sl,
+				/* Draw label at left of widget. */
+				if (label_length)
+					draw_text(term, xpos, *y,
+						  text, label_length,
 						  0, color);
-				}
 
-				set_box(&widget_data->box, xnx + sl + 1, *y,
-					widget_data->widget->datalen, 1);
+				set_box(&widget_data->box,
+					xpos + label_padding + label_length, *y,
+					width, 1);
 			}
 		}
 
-		if (rw) int_bounds(rw, nx + wx, w);
+		line_width += widget_width;
+		if (rw) int_bounds(rw, line_width, w);
+		line_width += space_between_widgets;
 
-		nx += wx + 1;
 		widget_data++;
 	}
 	(*y)++;

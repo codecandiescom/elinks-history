@@ -1,10 +1,3 @@
-# translation of hu.po to 
-# translation of hu.po to
-# translation of hu.po to
-# translation of hu.po to
-# translation of hu.po to
-# translation of hu.po to
-# translation of hu.po to
 # translation of hu.po to Hungarian
 # ELinks Hungarian translation.
 # Suveg Gabor <gsuveg@sgmobil2000.hu>
@@ -14,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
-"POT-Creation-Date: 2003-10-15 14:13+0200\n"
+"POT-Creation-Date: 2003-10-16 15:15+0200\n"
 "PO-Revision-Date: 2003-10-14 21:57+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <@li.org>\n"
@@ -1450,7 +1443,7 @@ msgid ""
 "don't receive an auth cookie, the login page then gives you the\n"
 "cookie and redirects you back to the original page, but there you\n"
 "have already cached redirect back to the login page! If this\n"
-"option has value of 0, this malfunction is fixed, but occassionally\n"
+"option has value of 0, this malfunction is fixed, but occasionally\n"
 "you may get superfluous (depends on how you take it ;-) requests to\n"
 "the server. If this option has value of 1, experienced users can\n"
 "still workaround it by clever combination of usage of reload,\n"
@@ -1501,9 +1494,8 @@ msgid "Size"
 msgstr "Méret"
 
 #: src/config/options.c:1269
-#, fuzzy
 msgid "Memory cache size (in bytes)."
-msgstr "Gyorsítómemória mérete (kilobyte-ban)"
+msgstr "Gyorsítómemória mérete (byte-ban)"
 
 #: src/config/options.c:1273
 msgid "Charset"

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.147 2004/06/12 19:28:57 jonas Exp $ */
+/* $Id: form.c,v 1.148 2004/06/12 19:29:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1280,58 +1280,58 @@ get_form_info(struct document_view *doc_view, struct terminal *term)
 	    && !link_is_textinput(link))
 		return NULL;
 
-		switch (fc->type) {
-		case FC_RADIO:
-			label = _("Radio button", term); break;
-		case FC_CHECKBOX:
-			label = _("Checkbox", term); break;
-		case FC_SELECT:
-			label = _("Select field", term); break;
-		case FC_TEXT:
-			label = _("Text field", term); break;
-		case FC_TEXTAREA:
-			label = _("Text area", term); break;
-		case FC_FILE:
-			label = _("File upload", term); break;
-		case FC_PASSWORD:
-			label = _("Password field", term); break;
-		default:
-			return NULL;
-		}
+	switch (fc->type) {
+	case FC_RADIO:
+		label = _("Radio button", term); break;
+	case FC_CHECKBOX:
+		label = _("Checkbox", term); break;
+	case FC_SELECT:
+		label = _("Select field", term); break;
+	case FC_TEXT:
+		label = _("Text field", term); break;
+	case FC_TEXTAREA:
+		label = _("Text area", term); break;
+	case FC_FILE:
+		label = _("File upload", term); break;
+	case FC_PASSWORD:
+		label = _("Password field", term); break;
+	default:
+		return NULL;
+	}
 
-		if (!init_string(&str)) return NULL;
+	if (!init_string(&str)) return NULL;
 
-		add_to_string(&str, label);
+	add_to_string(&str, label);
 
-		if (fc->name && fc->name[0]) {
-			add_to_string(&str, ", ");
-			add_to_string(&str, _("name", term));
-			add_char_to_string(&str, ' ');
-			add_to_string(&str, fc->name);
-		}
+	if (fc->name && fc->name[0]) {
+		add_to_string(&str, ", ");
+		add_to_string(&str, _("name", term));
+		add_char_to_string(&str, ' ');
+		add_to_string(&str, fc->name);
+	}
 
-		if ((fc->type == FC_CHECKBOX || fc->type == FC_RADIO)
-		    && fc->default_value && fc->default_value[0]) {
-			add_to_string(&str, ", ");
-			add_to_string(&str, _("value", term));
-			add_char_to_string(&str, ' ');
-			add_to_string(&str, fc->default_value);
-		}
+	if ((fc->type == FC_CHECKBOX || fc->type == FC_RADIO)
+		&& fc->default_value && fc->default_value[0]) {
+		add_to_string(&str, ", ");
+		add_to_string(&str, _("value", term));
+		add_char_to_string(&str, ' ');
+		add_to_string(&str, fc->default_value);
+	}
 
-		if (link->type == LINK_FIELD && fc->action
-		    && !has_form_submit(doc_view->document, fc)) {
-			add_to_string(&str, ", ");
-			add_to_string(&str, _("hit ENTER to", term));
-			add_char_to_string(&str, ' ');
-			if (fc->method == FM_GET)
-				add_to_string(&str, _("submit to", term));
-			else
-				add_to_string(&str, _("post to", term));
-			add_char_to_string(&str, ' ');
+	if (link->type == LINK_FIELD && fc->action
+		&& !has_form_submit(doc_view->document, fc)) {
+		add_to_string(&str, ", ");
+		add_to_string(&str, _("hit ENTER to", term));
+		add_char_to_string(&str, ' ');
+		if (fc->method == FM_GET)
+			add_to_string(&str, _("submit to", term));
+		else
+			add_to_string(&str, _("post to", term));
+		add_char_to_string(&str, ' ');
 
-			/* Add the uri with password and post info stripped */
-			add_string_uri_to_string(&str, fc->action, URI_PUBLIC);
-		}
+		/* Add the uri with password and post info stripped */
+		add_string_uri_to_string(&str, fc->action, URI_PUBLIC);
+	}
 
-		return str.source;
+	return str.source;
 }

@@ -11,7 +11,23 @@
 
 void menu_about(struct terminal *term, void *d, struct session *ses)
 {
-	msg_box(term, NULL, TEXT(T_ABOUT), AL_CENTER, TEXT(T_LINKS__LYNX_LIKE), NULL, 1, TEXT(T_OK), NULL, B_ENTER | B_ESC);
+	unsigned char *s = stracpy(_(TEXT(T_LINKS__LYNX_LIKE), term));
+	/* XXX this is very dodgy and displays wrong when in the middle
+	 * of a transfer */
+#if defined HAVE_SSL || defined HAVE_LUA
+	add_to_strn(&s, "\n\n");
+	add_to_strn(&s, _(TEXT(T_FEATURES), term));
+	add_to_strn(&s, ":"
+#ifdef HAVE_SSL
+			" SSL"
+#endif
+#ifdef HAVE_LUA
+			" Lua (patch 11)"
+#endif
+	);
+#endif
+	msg_box(term, NULL, TEXT(T_ABOUT), AL_CENTER, s, NULL, 1, TEXT(T_OK), NULL, B_ENTER | B_ESC);
+	mem_free(s);
 }
 
 void menu_keys(struct terminal *term, void *d, struct session *ses)
@@ -1160,9 +1176,39 @@ void activate_bfu_technology(struct session *ses, int item)
 
 struct history goto_url_history = { 0, &goto_url_history.items, &goto_url_history.items };
 
+void goto_url_with_hook(struct session *ses, unsigned char *url)
+{
+#ifndef HAVE_LUA
+	goto_url(ses, url);
+#else
+	lua_State *L = lua_state;
+	int err;
+
+	lua_getglobal(L, "goto_url_hook");
+	if (lua_isnil(L, -1)) {
+		lua_pop(L, 1);
+		goto_url(ses, url);
+		return;
+	}
+	
+	lua_pushstring(L, url);
+	if (list_empty(ses->history)) lua_pushnil(L);
+	else lua_pushstring(L, cur_loc(ses)->vs.url);
+	
+	if (prepare_lua(ses)) return;
+	err = lua_call(L, 2, 1);
+	finish_lua();
+	if (err) return;
+
+	if (lua_isstring(L, -1)) goto_url(ses, (unsigned char *) lua_tostring(L, -1)); 
+	else if (!lua_isnil(L, -1)) alert_lua_error("goto_url_hook must return a string or nil");
+	lua_pop(L, 1);
+#endif
+}
+
 void dialog_goto_url(struct session *ses, char *url)
 {
-	input_field(ses->term, NULL, TEXT(T_GOTO_URL), TEXT(T_ENTER_URL), TEXT(T_OK), TEXT(T_CANCEL), ses, &goto_url_history, MAX_INPUT_URL_LEN, url, 0, 0, NULL, (void (*)(void *, unsigned char *)) goto_url, NULL);
+	input_field(ses->term, NULL, TEXT(T_GOTO_URL), TEXT(T_ENTER_URL), TEXT(T_OK), TEXT(T_CANCEL), ses, &goto_url_history, MAX_INPUT_URL_LEN, url, 0, 0, NULL, (void (*)(void *, unsigned char *)) goto_url_with_hook, NULL);
 }
 
 void dialog_save_url(struct session *ses)
@@ -1198,11 +1244,25 @@ void search_dlg(struct session *ses, struct f_data_c *f, int a)
 	input_field(ses->term, NULL, TEXT(T_SEARCH), TEXT(T_SEARCH_FOR_TEXT), TEXT(T_OK), TEXT(T_CANCEL), ses, &search_history, MAX_INPUT_URL_LEN, "", 0, 0, NULL, (void (*)(void *, unsigned char *)) search_for, NULL);
 }
 
+#ifdef HAVE_LUA
+
+struct history lua_console_history = { 0, &lua_console_history.items, &lua_console_history.items };
+
+void dialog_lua_console(struct session *ses)
+{
+	input_field(ses->term, NULL, TEXT(T_LUA_CONSOLE), TEXT(T_ENTER_EXPRESSION), TEXT(T_OK), TEXT(T_CANCEL), ses, &lua_console_history, MAX_INPUT_LUA_LEN, "", 0, 0, NULL, (void (*)(void *, unsigned char *)) lua_console, NULL);
+}
+
+#endif
+
 void free_history_lists()
 {
 	free_list(goto_url_history.items);
 	free_list(file_history.items);
 	free_list(search_history.items);
+#ifdef HAVE_LUA
+	free_list(lua_console_history.items);
+#endif
 }
 
 void auth_layout(struct dialog_data *dlg)

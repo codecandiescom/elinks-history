@@ -216,7 +216,7 @@ void menu_func(struct window *win, struct event *ev, int fwd)
 			}
 			break;
 		case EV_KBD:
-			switch (kbd_action(KM_MENU, ev)) {
+			switch (kbd_action(KM_MENU, ev, NULL)) {
 				case ACT_LEFT:
 				case ACT_RIGHT:
 					if ((void *)win->next != &win->term->windows && win->next->handler == mainmenu_func) goto mm;
@@ -224,7 +224,7 @@ void menu_func(struct window *win, struct event *ev, int fwd)
 						if (w1->handler == mainmenu_func) goto mm;
 						if (w1->handler != menu_func) break;
 					}*/
-					if (kbd_action(KM_MENU, ev) == ACT_RIGHT) goto enter;
+					if (kbd_action(KM_MENU, ev, NULL) == ACT_RIGHT) goto enter;
 					delete_window(win);
 					goto break2;
 				case ACT_UP: scroll_menu(menu, -1); break;
@@ -690,7 +690,7 @@ void dialog_func(struct window *win, struct event *ev, int fwd)
 		case EV_KBD:
 			di = &dlg->items[dlg->selected];
 			if (di->item->type == D_FIELD || di->item->type == D_FIELD_PASS) {
-				switch (kbd_action(KM_EDIT, ev)) {
+				switch (kbd_action(KM_EDIT, ev, NULL)) {
 					case ACT_UP:
 						if ((void *)di->cur_hist->prev != &di->history) {
 							di->cur_hist = di->cur_hist->prev;

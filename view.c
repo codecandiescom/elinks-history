@@ -1462,7 +1462,7 @@ int field_op(struct session *ses, struct f_data_c *f, struct link *l, struct eve
 	if (!(fs = find_form_state(f, form))) return 0;
 	if (!fs->value) return 0;
 	if (ev->ev == EV_KBD) {
-		switch (kbd_action(KM_EDIT, ev)) {
+		switch (kbd_action(KM_EDIT, ev, NULL)) {
 			case ACT_LEFT: fs->state = fs->state ? fs->state - 1 : 0; break;
 			case ACT_RIGHT: fs->state = fs->state < strlen(fs->value) ? fs->state + 1 : strlen(fs->value); break;
 			case ACT_HOME:
@@ -1791,7 +1791,7 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 		return 1;
 	}
 	if (ev->ev == EV_KBD) {
-		switch (kbd_action(KM_MAIN, ev)) {
+		switch (kbd_action(KM_MAIN, ev, NULL)) {
 			case ACT_PAGE_DOWN: rep_ev(ses, fd, page_down, 0); break;
 			case ACT_PAGE_UP: rep_ev(ses, fd, page_up, 0); break;
 			case ACT_DOWN: rep_ev(ses, fd, down, 0); break;
@@ -1961,11 +1961,30 @@ void do_mouse_event(struct session *ses, struct event *ev)
 
 void head_msg(struct session *ses);
 
+#ifdef HAVE_LUA
+void run_lua_func(struct session *ses, int func_ref)
+{
+	lua_State *L = lua_state;
+	int err;
+	if (func_ref == LUA_NOREF) {
+		alert_lua_error("key bound to nothing (internal error)");
+		return;
+	}
+	if (lua_getref(L, func_ref)) {
+		if (prepare_lua(ses)) return;
+		err = lua_call(L, 0, 2);
+		finish_lua();
+		if (!err) handle_standard_lua_returns("keyboard function");
+	}
+}
+#endif
+
 void send_event(struct session *ses, struct event *ev)
 {
 	if (ev->ev == EV_KBD) {
+		int func_ref;
 		if (send_to_frame(ses, ev)) return;
-		switch (kbd_action(KM_MAIN, ev)) {
+		switch (kbd_action(KM_MAIN, ev, &func_ref)) {
 			case ACT_MENU:
 				activate_bfu_technology(ses, -1);
 				goto x;
@@ -2018,6 +2037,16 @@ void send_event(struct session *ses, struct event *ev)
 				reallyquit:
 				exit_prog(ses->term, (void *)1, ses);
 				goto x;
+			case ACT_LUA_CONSOLE:
+#ifdef HAVE_LUA
+				dialog_lua_console(ses);
+#endif
+				goto x;
+			case ACT_LUA_FUNCTION:
+#ifdef HAVE_LUA
+				run_lua_func(ses, func_ref);
+#endif
+				break;
 			case ACT_QUIT:
 		  		quit:
 				exit_prog(ses->term, (void *)(ev->x == KBD_CTRL_C), ses);

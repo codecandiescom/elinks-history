@@ -1077,9 +1077,57 @@ void end_load(struct status *stat, struct session *ses)
 	print_screen_status(ses);
 }
 
+#ifdef HAVE_LUA
+unsigned char *pre_format_html_hook(struct session *ses, unsigned char *url, unsigned char *html, int *len)
+{
+	lua_State *L = lua_state;
+	unsigned char *s = NULL;
+	int err;
+
+	lua_getglobal(L, "pre_format_html_hook");
+	if (lua_isnil(L, -1)) {
+		lua_pop(L, 1);
+		return NULL;
+	}
+
+	lua_pushstring(L, url);
+	lua_pushlstring(L, html, *len);
+	
+	if (prepare_lua(ses)) return NULL;
+	err = lua_call(L, 2, 1);
+	finish_lua();
+	if (err) return NULL;
+
+	if (lua_isstring(L, -1)) {
+		*len = lua_strlen(L, -1);
+		s = memacpy((unsigned char *) lua_tostring(L, -1), *len);
+	}	
+	else if (!lua_isnil(L, -1)) alert_lua_error("pre_format_html_hook must return a string or nil");
+	lua_pop(L, 1);
+	return s;
+}
+#endif
+
 void doc_end_load(struct status *stat, struct session *ses)
 {
 	if (stat->state < 0) {
+#ifdef HAVE_LUA 
+		struct view_state *vs = &cur_loc(ses)->vs;
+		struct cache_entry *ce;
+		struct fragment *fr;
+		unsigned char *s;
+		int len;
+		if (!get_cache_entry(vs->url, &ce)) {
+			defrag_entry(ce);
+			fr = ce->frag.next;
+			len = fr->length;
+			if ((s = pre_format_html_hook(ses, ce->url, fr->data, &len))) {
+				add_fragment(ce, 0, s, len);
+				truncate_entry(ce, len, 1);
+				mem_free(s);
+			}
+		}
+#endif
 		if (ses->display_timer != -1) kill_timer(ses->display_timer), ses->display_timer = -1;
 		html_interpret(ses);
 		draw_formatted(ses);
@@ -1413,21 +1461,49 @@ void go_back(struct session *ses)
 	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_BACK, NULL, end_load, 0);
 }
 
+#ifdef HAVE_LUA
+unsigned char *follow_url_hook(struct session *ses, unsigned char *url)
+{
+	lua_State *L = lua_state;
+	unsigned char *s = NULL;
+	int err;
+	lua_getglobal(L, "follow_url_hook");
+	if (lua_isnil(L, -1)) return stracpy(url);
+	lua_pushstring(L, url);
+	if (prepare_lua(ses)) return NULL;
+	err = lua_call(L, 1, 1);
+	finish_lua();
+	if (err) return NULL;
+	if (lua_isstring(L, -1)) {
+		int len = lua_strlen(L, -1);
+		s = memacpy((unsigned char *)lua_tostring(L, -1), len);
+	}
+	else if (!lua_isnil(L, -1)) alert_lua_error("follow_url_hook must return a string or nil");
+	lua_pop(L, 1);
+	return s;
+}
+#endif
+
 void goto_url_w(struct session *ses, unsigned char *url, unsigned char *target, int wtd)
 {
 	unsigned char *u;
 	unsigned char *pos;
 	void (*fn)(struct session *, unsigned char *);
+#ifdef HAVE_LUA
+	unsigned char *tofree = NULL;
+	if (!(url = follow_url_hook(ses, url))) goto end;
+	tofree = url;
+#endif
 	if ((fn = get_external_protocol_function(url))) {
 		fn(ses, url);
-		return;
+		goto end;
 	}
 	ses->reloadlevel = NC_CACHE;
 	/*struct location *l = ses->history.next;*/
 	if (!(u = translate_url(url, ses->term->cwd))) {
 		struct status stat = { NULL, NULL, NULL, NULL, S_BAD_URL, PRI_CANCEL, 0, NULL, NULL };
 		print_error_dialog(ses, &stat, TEXT(T_ERROR));
-		return;
+		goto end;
 	}
 	pos = extract_position(u);
 	if (ses->wtd == wtd) {
@@ -1435,12 +1511,16 @@ void goto_url_w(struct session *ses, unsigned char *url, unsigned char *target, 
 			mem_free(u);
 			if (ses->goto_position) mem_free(ses->goto_position);
 			ses->goto_position = pos;
-			return;
+			goto end;
 		}
 	}
 	abort_loading(ses);
 	ses_goto(ses, u, target, PRI_MAIN, NC_CACHE, wtd, pos, end_load, 0);
 	/*abort_loading(ses);*/
+	end:
+#ifdef HAVE_LUA
+	if (tofree) mem_free(tofree);
+#endif
 }
 
 void goto_url_f(struct session *ses, unsigned char *url, unsigned char *target)

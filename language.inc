@@ -365,6 +365,10 @@ struct translation translation_english [] = {
   T_HK_FULL_SCREEN, "F",
   T_HK_BEOS_TERMINAL, "B",
   T_HK_NEW_WINDOW, "N",
+  T_FEATURES, "Features",
+  T_LUA_ERROR, "Lua Error",
+  T_LUA_CONSOLE, "Lua Console",
+  T_ENTER_EXPRESSION, "Enter expression",
   0, NULL
 };
 
@@ -733,6 +737,10 @@ struct translation translation_brazilian_portuguese [] = {
   T_HK_FULL_SCREEN, "F",
   T_HK_BEOS_TERMINAL, "B",
   T_HK_NEW_WINDOW, "N",
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 
@@ -1101,6 +1109,10 @@ struct translation translation_bulgarian [] = {
   T_HK_FULL_SCREEN, NULL,
   T_HK_BEOS_TERMINAL, NULL,
   T_HK_NEW_WINDOW, NULL,
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 
@@ -1469,6 +1481,10 @@ struct translation translation_czech [] = {
   T_HK_FULL_SCREEN, "C",
   T_HK_BEOS_TERMINAL, "B",
   T_HK_NEW_WINDOW, "N",
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 
@@ -1837,6 +1853,10 @@ struct translation translation_estonian [] = {
   T_HK_FULL_SCREEN, "F",
   T_HK_BEOS_TERMINAL, "B",
   T_HK_NEW_WINDOW, "N",
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 
@@ -2205,6 +2225,10 @@ struct translation translation_french [] = {
   T_HK_FULL_SCREEN, "F",
   T_HK_BEOS_TERMINAL, "B",
   T_HK_NEW_WINDOW, "N",
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 
@@ -2573,6 +2597,10 @@ struct translation translation_galician [] = {
   T_HK_FULL_SCREEN, "F",
   T_HK_BEOS_TERMINAL, "B",
   T_HK_NEW_WINDOW, "N",
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 
@@ -2941,6 +2969,10 @@ struct translation translation_german [] = {
   T_HK_FULL_SCREEN, "F",
   T_HK_BEOS_TERMINAL, "B",
   T_HK_NEW_WINDOW, "N",
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 
@@ -3309,6 +3341,10 @@ struct translation translation_greek [] = {
   T_HK_FULL_SCREEN, "F",
   T_HK_BEOS_TERMINAL, "B",
   T_HK_NEW_WINDOW, "N",
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 
@@ -3677,6 +3713,10 @@ struct translation translation_hungarian [] = {
   T_HK_FULL_SCREEN, "F",
   T_HK_BEOS_TERMINAL, "B",
   T_HK_NEW_WINDOW, "N",
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 
@@ -4045,6 +4085,10 @@ struct translation translation_icelandic [] = {
   T_HK_FULL_SCREEN, "F",
   T_HK_BEOS_TERMINAL, "B",
   T_HK_NEW_WINDOW, "N",
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 
@@ -4413,6 +4457,10 @@ struct translation translation_italian [] = {
   T_HK_FULL_SCREEN, "F",
   T_HK_BEOS_TERMINAL, "B",
   T_HK_NEW_WINDOW, "N",
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 
@@ -4781,6 +4829,10 @@ struct translation translation_lithuanian [] = {
   T_HK_FULL_SCREEN, "F",
   T_HK_BEOS_TERMINAL, "B",
   T_HK_NEW_WINDOW, "N",
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 
@@ -5149,6 +5201,10 @@ struct translation translation_polish [] = {
   T_HK_FULL_SCREEN, NULL,
   T_HK_BEOS_TERMINAL, NULL,
   T_HK_NEW_WINDOW, NULL,
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 
@@ -5517,6 +5573,10 @@ struct translation translation_russian [] = {
   T_HK_FULL_SCREEN, NULL,
   T_HK_BEOS_TERMINAL, NULL,
   T_HK_NEW_WINDOW, NULL,
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 
@@ -5885,6 +5945,10 @@ struct translation translation_slovak [] = {
   T_HK_FULL_SCREEN, "C",
   T_HK_BEOS_TERMINAL, "B",
   T_HK_NEW_WINDOW, "N",
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 
@@ -6253,6 +6317,10 @@ struct translation translation_spanish [] = {
   T_HK_FULL_SCREEN, "F",
   T_HK_BEOS_TERMINAL, "B",
   T_HK_NEW_WINDOW, "N",
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 
@@ -6621,6 +6689,10 @@ struct translation translation_swedish [] = {
   T_HK_FULL_SCREEN, "F",
   T_HK_BEOS_TERMINAL, "B",
   T_HK_NEW_WINDOW, "N",
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 
@@ -6989,6 +7061,10 @@ struct translation translation_turkish [] = {
   T_HK_FULL_SCREEN, "T",
   T_HK_BEOS_TERMINAL, "B",
   T_HK_NEW_WINDOW, "Y",
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 
@@ -7357,6 +7433,10 @@ struct translation translation_ukrainian [] = {
   T_HK_FULL_SCREEN, NULL,
   T_HK_BEOS_TERMINAL, NULL,
   T_HK_NEW_WINDOW, NULL,
+  T_FEATURES, NULL,
+  T_LUA_ERROR, NULL,
+  T_LUA_CONSOLE, NULL,
+  T_ENTER_EXPRESSION, NULL,
   0, NULL
 };
 

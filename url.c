@@ -18,6 +18,7 @@ struct {
 		{"mailto", 0, NULL, mailto_func, 0, 0, 0},
 		{"telnet", 0, NULL, telnet_func, 0, 0, 0},
 		{"tn3270", 0, NULL, tn3270_func, 0, 0, 0},
+		{"user", 0, NULL, NULL, 0, 0, 0},
 		{NULL, 0, NULL}
 };
 

@@ -365,4 +365,8 @@
 #define T_HK_FULL_SCREEN    361	
 #define T_HK_BEOS_TERMINAL    362	
 #define T_HK_NEW_WINDOW    363	
-#define T__N_TEXTS    364	
+#define T_FEATURES    364	
+#define T_LUA_ERROR    365	
+#define T_LUA_CONSOLE    366	
+#define T_ENTER_EXPRESSION    367	
+#define T__N_TEXTS    368	

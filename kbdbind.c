@@ -1,5 +1,9 @@
 #include "links.h"
 
+#ifndef HAVE_LUA
+#define LUA_NOREF	0
+#endif
+
 static void add_default_keybindings();
 
 struct keybinding {
@@ -8,39 +12,35 @@ struct keybinding {
 	int act;
 	long x;
 	long y;
+	int func_ref;
 };
 
 static struct list_head keymaps[KM_MAX];
 
-static void add_keybinding(int km, int act, long x, long y)
-{
-	struct keybinding *kb;
-
-	foreach(kb, keymaps[km])
-		if (kb->x == x && kb->y == y) {
-			/* want at top of list */
-			del_from_list(kb);
-			goto add;
-		}
-	
-	if ((kb = mem_alloc(sizeof(struct keybinding)))) {
-		add:
-		kb->act = act;
-		kb->x = x;
-		kb->y = y;
-		add_to_list(keymaps[km], kb);
-	}
-}
-
 static void delete_keybinding(int km, long x, long y)
 {
 	struct keybinding *kb;
-	foreach(kb, keymaps[km]) 
-		if (kb->x == x && kb->y == y) {
-			del_from_list(kb);
-			mem_free(kb);
-			break;
-		}
+	foreach(kb, keymaps[km]) if (kb->x == x && kb->y == y) {
+#ifdef HAVE_LUA
+		if (kb->func_ref != LUA_NOREF) lua_unref(lua_state, kb->func_ref);
+#endif
+		del_from_list(kb);
+		mem_free(kb);
+		break;
+	}
+}
+
+static void add_keybinding(int km, int act, long x, long y, int func_ref)
+{
+	struct keybinding *kb;
+	delete_keybinding(km, x, y);
+	if ((kb = mem_alloc(sizeof(struct keybinding)))) {
+		kb->act = act;
+		kb->x = x;
+		kb->y = y;
+		kb->func_ref = func_ref;
+		add_to_list(keymaps[km], kb);
+	}
 }
 
 void init_keymaps()
@@ -56,12 +56,15 @@ void free_keymaps()
 	for (i = 0; i < KM_MAX; i++) free_list(keymaps[i]);
 }
 
-int kbd_action(int kmap, struct event *ev)
+int kbd_action(int kmap, struct event *ev, int *func_ref)
 {
 	struct keybinding *kb;
-	if (ev->ev == EV_KBD)
-		foreach(kb, keymaps[kmap]) 
-			if (ev->x == kb->x && ev->y == kb->y) return kb->act;
+	if (ev->ev == EV_KBD) foreach(kb, keymaps[kmap])
+		if (ev->x == kb->x && ev->y == kb->y) {
+			if (kb->act == ACT_LUA_FUNCTION && func_ref)
+				*func_ref = kb->func_ref;
+			return kb->act;
+		}
 	return -1;
 }
 
@@ -164,6 +167,8 @@ static int parse_act(unsigned char *s)
 		"kill-to-bol",
 		"kill-to-eol",
 		"left",
+		"lua-console",
+		" *lua-function*", /* internal use only */
 		"menu",
 		"next-frame",
 		"open-new-window",
@@ -221,7 +226,7 @@ unsigned char *bind_rd(struct option *o, unsigned char *line)
 	else if ((act = parse_act(cact)) < 0)
 		err = "Unrecognised action"; 
 	else 
-		add_keybinding(kmap, act, x, y);
+		add_keybinding(kmap, act, x, y, LUA_NOREF);
 
 	if (cact) mem_free(cact);
 	if (ckey) mem_free(ckey);
@@ -254,6 +259,31 @@ unsigned char *unbind_rd(struct option *o, unsigned char *line)
 	if (ckmap) mem_free(ckmap);
 	return err;
 }
+
+/*
+ * Bind to Lua function.
+ */
+
+#ifdef HAVE_LUA
+unsigned char *bind_lua_func(unsigned char *ckmap, unsigned char *ckey, int func_ref)
+{
+	unsigned char *err = NULL;
+	int kmap;
+	long x, y;
+	int act;
+
+	if ((kmap = parse_keymap(ckmap)) < 0)
+		err = "Unrecognised keymap";
+	else if (parse_keystroke(ckey, &x, &y) < 0)
+		err = "Error parsing keystroke";
+	else if ((act = parse_act(" *lua-function*")) < 0)
+		err = "Unrecognised action (internal error)"; 
+	else 
+		add_keybinding(kmap, act, x, y, func_ref);
+
+	return err;
+}
+#endif
 
 /*
  * Default keybindings.
@@ -315,6 +345,7 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_MENU, KBD_ESC },
 	{ ACT_MENU, KBD_F9 },
 	{ ACT_FILE_MENU, KBD_F10 },
+	{ ACT_LUA_CONSOLE, ',' },
 	{ 0, 0, 0 }
 };
 
@@ -362,7 +393,7 @@ static struct default_kb default_menu_keymap[] = {
 static void add_default_keybindings()
 {
 	struct default_kb *kb;
-	for (kb = default_main_keymap; kb->x; kb++) add_keybinding(KM_MAIN, kb->act, kb->x, kb->y);
-    	for (kb = default_edit_keymap; kb->x; kb++) add_keybinding(KM_EDIT, kb->act, kb->x, kb->y);
-    	for (kb = default_menu_keymap; kb->x; kb++) add_keybinding(KM_MENU, kb->act, kb->x, kb->y);
+	for (kb = default_main_keymap; kb->x; kb++) add_keybinding(KM_MAIN, kb->act, kb->x, kb->y, LUA_NOREF);
+    	for (kb = default_edit_keymap; kb->x; kb++) add_keybinding(KM_EDIT, kb->act, kb->x, kb->y, LUA_NOREF);
+    	for (kb = default_menu_keymap; kb->x; kb++) add_keybinding(KM_MENU, kb->act, kb->x, kb->y, LUA_NOREF);
 }

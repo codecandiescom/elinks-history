@@ -50,6 +50,9 @@
 #undef HAVE_PTHREADS
 
 /* */
+#undef HAVE_LUA
+
+/* */
 #undef HAVE_SSL
 
 /* */

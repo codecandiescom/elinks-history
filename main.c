@@ -259,6 +259,9 @@ void init()
 	read_bookmarks();
 	load_url_history();
 	init_cookies();
+#ifdef HAVE_LUA
+    	init_lua();
+#endif
 	u = parse_options(ac - 1, av + 1);
 	if (!u) {
 		ttt:
@@ -299,6 +302,12 @@ void terminate_all_subsystems()
 	abort_all_connections();
 #ifdef HAVE_SSL
 	ssl_finish();
+#endif
+#ifdef HAVE_LUA
+	if (init_b && !prepare_lua(NULL)) {
+		lua_dostring(lua_state, "if quit_hook then quit_hook() end");
+		finish_lua();
+	}
 #endif
 	shrink_memory(1);
 	if (init_b) save_url_history();

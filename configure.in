@@ -126,6 +126,35 @@ else
 fi
 AC_MSG_RESULT($cf_result)
 
+dnl Check for Lua, optional even if installed.
+dnl Do this the long way, as FreeBSD reportedly needs -L<dir> for anything
+dnl other than /usr/lib, and Lua is very often in /usr/local/lib.
+AC_ARG_WITH(lua, [  --without-lua           disable Lua support], [if test "$withval" = no; then disable_lua=yes; fi])
+AC_MSG_CHECKING([for Lua])
+CFLAGS_X="$CFLAGS"
+LIBS_X="$LIBS"
+cf_result=no
+if test -z "$disable_lua"; then
+	for luadir in "" /usr /usr/local; do
+		if test "$cf_result" = no; then
+			if test ! -z "$luadir"; then
+				LIBS="-L$luadir/lib -llua -llualib -lm $LIBS_X"
+				CFLAGS="$CFLAGS_X -I$luadir/include"
+			else
+				LIBS="-llua -llualib -lm $LIBS_X"
+			fi
+			AC_TRY_LINK([#include <lua.h>], [lua_open(0)], cf_result=yes, cf_result=no)
+		fi
+	done
+fi
+if test "$cf_result" != yes; then
+	CFLAGS="$CFLAGS_X"
+	LIBS="$LIBS_X"
+else
+	AC_DEFINE(HAVE_LUA)
+fi
+AC_MSG_RESULT($cf_result)
+
 #ifdef HAVE_SSL
 AC_ARG_WITH(ssl, [  --without-ssl           disable SSL support], [if test "$withval" = no; then disable_ssl=yes; fi])
 AC_MSG_CHECKING([for OpenSSL])

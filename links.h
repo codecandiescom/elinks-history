@@ -75,6 +75,11 @@
 
 #include <termios.h>
 
+#ifdef HAVE_LUA
+#include <lua.h>
+#include <lualib.h>
+#endif
+
 #ifdef HAVE_SSL
 #include <openssl/ssl.h>
 #endif
@@ -1675,12 +1680,14 @@ void box_sel_set_visible(struct dialog_item_data *, int );
 void activate_bfu_technology(struct session *, int);
 void dialog_goto_url(struct session *ses, char *url);
 void dialog_save_url(struct session *ses);
+void dialog_lua_console(struct session *ses);
 void free_history_lists();
 void query_file(struct session *, unsigned char *, void (*)(struct session *, unsigned char *), void (*)(struct session *));
 void search_dlg(struct session *, struct f_data_c *, int);
 void search_back_dlg(struct session *, struct f_data_c *, int);
 void exit_prog(struct terminal *, void *, struct session *);
 void do_auth_dialog(struct session *);
+
 /* charsets.c */
 
 #include "codepage.h"
@@ -2118,6 +2125,8 @@ enum {
 	ACT_KILL_TO_BOL,
 	ACT_KILL_TO_EOL,
 	ACT_LEFT,
+	ACT_LUA_CONSOLE,
+	ACT_LUA_FUNCTION,
 	ACT_MENU,
 	ACT_NEXT_FRAME,
 	ACT_OPEN_NEW_WINDOW,
@@ -2146,6 +2155,25 @@ enum {
 
 void init_keymaps();
 void free_keymaps();
-int kbd_action(int, struct event *);
+int kbd_action(int, struct event *, int *);
 unsigned char *bind_rd(struct option *, unsigned char *);
 unsigned char *unbind_rd(struct option *, unsigned char *);
+#ifdef HAVE_LUA
+unsigned char *bind_lua_func(unsigned char *, unsigned char *, int);
+#endif
+
+/* lua.c */
+
+#ifdef HAVE_LUA
+
+extern lua_State *lua_state;
+
+void init_lua();
+void alert_lua_error(unsigned char *);
+void alert_lua_error2(unsigned char *, unsigned char *);
+int prepare_lua(struct session *);
+void finish_lua();
+void lua_console(struct session *, unsigned char *);
+void handle_standard_lua_returns(unsigned char *);
+
+#endif

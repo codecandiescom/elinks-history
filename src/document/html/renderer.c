@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.371 2003/11/13 14:25:33 jonas Exp $ */
+/* $Id: renderer.c,v 1.372 2003/11/13 17:22:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -593,6 +593,9 @@ split_line(struct part *part)
 	return 0;
 }
 
+#define realloc_points(link, size) \
+	mem_align_alloc(&(link)->pos, (link)->n, size, sizeof(struct point), 0)
+
 /* This function is very rare exemplary of clean and beautyful code here.
  * Please handle with care. --pasky */
 static void
@@ -675,8 +678,32 @@ justify_line(struct part *part, int y)
 
 			/* There are now (new_start - prev_end) spaces before
 			 * the word. */
-			if (word)
+			if (word) {
+				int new_spaces = new_start - prev_end - 1;
+				struct link *link = part->document->nlinks > 0
+					? &part->document->links[part->document->nlinks - 1]
+					: NULL;
+
 				move_links(part, prev_end + 1, y, new_start, y);
+
+				/* FIXME: Move to move_links() --jonas */
+				if (new_spaces
+				    && link
+				    && link->pos[link->n - 1].x < new_start
+				    && link->pos[link->n - 1].y >= y
+				    && realloc_points(link, link->n + new_spaces)) {
+					struct point *point = &link->pos[link->n];
+					int x = prev_end + 1;
+
+					link->n += new_spaces;
+
+					for (; new_spaces > 0; new_spaces--, point++, x++) {
+						point->x = x;
+						point->y = y;
+					}
+				}
+
+			}
 
 			prev_end = new_start + word_len;
 		}
@@ -852,9 +879,6 @@ put_link_number(struct part *part)
 	format.image = fi;
 	format.form = ff;
 }
-
-#define realloc_points(link, size) \
-	mem_align_alloc(&(link)->pos, (link)->n, size, sizeof(struct point), 0)
 
 static inline void
 process_link(struct part *part, enum link_state link_state,

@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.20 2004/09/25 19:07:56 jonas Exp $ */
+/* $Id: memory.c,v 1.21 2004/09/25 20:37:15 jonas Exp $ */
 
 #define _GNU_SOURCE /* MREMAP_MAYMOVE */
 
@@ -120,8 +120,10 @@ static int page_size;
 static size_t
 round_size(size_t size)
 {
+#ifdef HAVE_SC_PAGE_SIZE
 	if (!page_size) page_size = sysconf(_SC_PAGE_SIZE);
-	if (!page_size || page_size == -1) page_size = 4096;
+#endif
+	if (page_size <= 0) page_size = 1;
 	return (size / page_size + 1) * page_size;
 }
 

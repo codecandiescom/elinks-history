@@ -180,6 +180,14 @@ if test x"$el_cv_HAVE_VA_COPY" = x"yes"; then
 	EL_DEFINE(HAVE_VA_COPY, __va_copy)
 fi
 
+AC_CACHE_CHECK([for sysconf(_SC_PAGE_SIZE)],el_cv_HAVE_SC_PAGE_SIZE,[
+AC_TRY_LINK([#include <unistd.h>
+], [int page_size = sysconf(_SC_PAGE_SIZE);],
+el_cv_HAVE_SC_PAGE_SIZE=yes,el_cv_HAVE_SC_PAGE_SIZE=no)])
+if test x"$el_cv_HAVE_SC_PAGE_SIZE" = x"yes"; then
+	EL_DEFINE(HAVE_SC_PAGE_SIZE, _SC_PAGE_SIZE)
+fi
+
 AC_CACHE_CHECK([for C99 vsnprintf],el_cv_HAVE_C99_VSNPRINTF,[
 AC_TRY_RUN([
 #include <sys/types.h>

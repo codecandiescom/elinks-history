@@ -75,6 +75,9 @@ Carles Sadurní Anguita <isard@ctv.es>
 Csaba Raduly <csaba.raduly@sophos.com>
 	Random fixes
 
+Christian Cornelssen <ccorn@cs.tu-berlin.de>
+	Lua5 support
+
 Christian Häggström <c00chm@cs.umu.se>
 	Fixes in parse_http_date()
 
@@ -466,4 +469,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.151 2003/12/20 21:57:21 pasky Exp $
+$Id: AUTHORS,v 1.152 2003/12/20 22:42:53 pasky Exp $

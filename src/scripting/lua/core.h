@@ -1,11 +1,21 @@
-/* $Id: core.h,v 1.12 2003/10/26 14:02:35 jonas Exp $ */
+/* $Id: core.h,v 1.13 2003/12/20 22:42:54 pasky Exp $ */
 
 #ifndef EL__SCRIPTING_LUA_CORE_H
 #define EL__SCRIPTING_LUA_CORE_H
 
 #ifdef HAVE_LUA
 
-#include <lua.h> /* This is standart include. */
+#include <lua.h>	/* This is standard include. */
+#ifdef HAVE_LAUXLIB_H
+#include <lauxlib.h>	/* needed for lua_ref, lua_unref */
+#endif
+#ifdef HAVE_LUA_PCALL
+#define lua_call(L,nargs,nresults)     lua_pcall(L,nargs,nresults,0)
+#define lua_open(x)    (lua_open)()
+#endif
+#ifndef LUA_ALERT
+#define LUA_ALERT      "alert"
+#endif
 
 #include "modules/module.h"
 #include "sched/event.h"

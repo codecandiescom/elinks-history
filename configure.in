@@ -511,11 +511,13 @@ if test -z "$disable_lua"; then
 			CFLAGS="$CFLAGS_X $LUA_CFLAGS"
 
 			AC_TRY_LINK([#include <lua.h>],
-				    [lua_open(0)],
+				    [lua_close(0)],
 				    cf_result=yes, cf_result=no)
 		fi
 	done
 fi
+
+AC_MSG_RESULT($cf_result)
 
 if test "$cf_result" != yes; then
 	CFLAGS="$CFLAGS_X"
@@ -523,12 +525,13 @@ if test "$cf_result" != yes; then
 else
 	AC_DEFINE(HAVE_LUA)
 	AC_DEFINE(HAVE_SCRIPTING)
+	AC_CHECK_HEADERS(lauxlib.h)
+	AC_CHECK_FUNCS(lua_pcall)
 fi
 
 AC_SUBST(LUA_LIBS)
 AC_SUBST(LUA_CFLAGS)
 
-AC_MSG_RESULT($cf_result)
 
 dnl ===================================================================
 dnl Check for SSL support.

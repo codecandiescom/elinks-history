@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.111 2004/09/30 21:08:28 pasky Exp $ */
+/* $Id: renderer.c,v 1.112 2004/09/30 21:09:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -224,12 +224,6 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 #endif
 	vs->doc_view = doc_view;
 
-#ifdef CONFIG_ECMASCRIPT
-	if (vs->ecmascript_fragile)
-		ecmascript_reset_state(vs);
-	assert(vs->ecmascript);
-#endif
-
 	cached = find_in_cache(vs->uri);
 	if (!cached) {
 		INTERNAL("document %s to format not found", struri(vs->uri));
@@ -268,6 +262,10 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 #ifdef CONFIG_ECMASCRIPT
 	assert(vs->ecmascript);
 	if (!options->gradual_rerendering) {
+		if (vs->ecmascript_fragile)
+			ecmascript_reset_state(vs);
+		assert(vs->ecmascript);
+
 		/* Passing of the onload_snippets pointers gives *_snippets()
 		 * some feeling of universality, shall we ever get any other
 		 * snippets (?). */

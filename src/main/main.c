@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.48 2002/08/28 23:20:41 pasky Exp $ */
+/* $Id: main.c,v 1.49 2002/08/29 12:19:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -326,15 +326,15 @@ init()
 #endif
 	/* Parse commandline options again, in order to override any config
 	 * file options. */
-	u = parse_options(ac - 1, av + 1);
-	if (!u) {
-		retval = RET_SYNTAX;
-		terminate = 1;
-		return;
-	}
-	
+	parse_options(ac - 1, av + 1);
+
 	if (get_opt_int_tree(cmdline_options, "dump") ||
 	    get_opt_int_tree(cmdline_options, "source")) {
+		if (get_opt_bool_tree(cmdline_options, "stdin")) {
+			get_opt_bool("protocol.file.allow_special_files") = 1;
+			u = "file:///dev/stdin";
+		}
+
 		dump_start(u);
 		if (terminate) {
 			/* XXX? */
@@ -348,11 +348,11 @@ init()
 
 		info = create_session_info(get_opt_int_tree(cmdline_options, "base-session"), u, &len);
 		if (!info) goto fatal_error;
-		
+
 		attached = attach_terminal(get_input_handle(),
 					   get_output_handle(),
 					   get_ctl_handle(), info, len);
-		
+
 		if (attached == -1) {
 fatal_error:
 			retval = RET_FATAL;

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.93 2002/08/29 00:36:42 pasky Exp $ */
+/* $Id: options.c,v 1.94 2002/08/29 12:19:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1688,6 +1688,14 @@ register_options()
 	add_opt_bool_tree(cmdline_options, "",
 		"source", 0, 0,
 		"Write the given HTML document in source form to stdout.");
+
+	add_opt_bool_tree(cmdline_options, "",
+		"stdin", 0, 0,
+		"Open stdin as HTML document - it is fully equivalent to:\n"
+		" -eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin\n"
+		"Use whichever suits you more ;-). Note that reading document from\n"
+		"stdin WORKS ONLY WHEN YOU USE -dump OR -source!! (I would like to\n"
+		"know why you would use -source -stdin, though ;-)");
 
 	add_opt_command_tree(cmdline_options, "",
 		"version", 0, version_cmd,

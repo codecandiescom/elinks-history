@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.356 2003/10/31 17:32:02 jonas Exp $ */
+/* $Id: renderer.c,v 1.357 2003/10/31 18:03:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1044,13 +1044,6 @@ end:
 }
 
 static void
-html_init(struct part *part)
-{
-	assert(part);
-	/* !!! FIXME: background */
-}
-
-static void
 html_form_control(struct part *part, struct form_control *fc)
 {
 	assert(part && fc);
@@ -1174,8 +1167,7 @@ html_special(struct part *part, enum html_special_type c, ...)
 static inline void
 do_format(char *start, char *end, struct part *part, unsigned char *head)
 {
-	parse_html(start, end,
-		   part, head);
+	parse_html(start, end, part, head);
 }
 
 void
@@ -1436,7 +1428,6 @@ render_html_document(struct document *document, struct cache_entry *ce)
 	init_html_parser(ce->url, &document->options, start, end, &head, &title,
 			 (void (*)(void *, unsigned char *, int)) put_chars_conv,
 			 (void (*)(void *)) line_break,
-			 (void (*)(void *)) html_init,
 			 (void *(*)(void *, enum html_special_type, ...)) html_special);
 
 	convert_table = get_convert_table(head.source, document->options.cp,

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.245 2003/10/31 12:42:42 jonas Exp $ */
+/* $Id: parser.c,v 1.246 2003/10/31 18:03:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -473,7 +473,6 @@ html_stack_dup(int dontkill)
 void *ff;
 void (*put_chars_f)(void *, unsigned char *, int);
 void (*line_break_f)(void *);
-void (*init_f)(void *);
 void *(*special_f)(void *, enum html_special_type, ...);
 
 static unsigned char *eoff;
@@ -3704,7 +3703,6 @@ init_html_parser(unsigned char *url, struct document_options *options,
 		 struct string *head, struct string *title,
 		 void (*put_chars)(void *, unsigned char *, int),
 		 void (*line_break)(void *),
-		 void (*init)(void *),
 		 void *(*special)(void *, enum html_special_type, ...))
 {
 	struct html_element *e;
@@ -3718,7 +3716,6 @@ init_html_parser(unsigned char *url, struct document_options *options,
 	eofff = end;
 	put_chars_f = put_chars;
 	line_break_f = line_break;
-	init_f = init;
 	special_f = special;
 	scan_http_equiv(start, end, head, title);
 

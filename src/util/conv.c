@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.35 2003/05/14 15:03:18 pasky Exp $ */
+/* $Id: conv.c,v 1.36 2003/05/14 15:11:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,6 +34,11 @@
  * ulongcat(s, NULL, 12345, 4, 0) : s = "2345"
  *
  * ulongcat(s, NULL, 123, 5, '0') : s = "00123"
+ *
+ * Note that this function exists to provide a fast and effecient, however
+ * still quite powerful alternative to sprintf(). It is optimized for speed and
+ * is *MUCH* faster than sprintf(). If you can use it, use it ;-). But do not
+ * get too enthusiastic, do not use it in cases where it would break i18n.
  */
 /* The function returns 0 if OK or width needed for the whole number to fit
  * there, if it had to be truncated. A negative value signs an error. */
@@ -72,7 +77,7 @@ elinks_ulongcat(unsigned char *s, unsigned int *slen,
 		unsigned int pad = width - nlen;
 
 		if (pad) {
-			/* Relocate the number's start. */
+			/* Relocate the start of number. */
 			if (slen) *slen += pad;
 			pos += pad;
 

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.317 2004/05/29 15:36:39 jonas Exp $ */
+/* $Id: menu.c,v 1.318 2004/05/29 15:41:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -674,6 +674,10 @@ do_pass_uri_to_command(struct terminal *term, unsigned char *command,
 	mem_free(command);
 }
 
+/* TODO:
+ * - Support for passing MIME type
+ * - Merge this function with rewrite_uri(), subst_cmd(), subst_file()
+ *   and subst_url(). */
 static unsigned char *
 format_command(unsigned char *format, struct uri *uri)
 {

@@ -1,12 +1,12 @@
-/* $Id: link.h,v 1.3 2003/07/03 02:18:54 jonas Exp $ */
+/* $Id: link.h,v 1.4 2003/07/09 23:03:11 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_LINK_H
 #define EL__VIEWER_TEXT_LINK_H
 
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
-#include "terminal/terminal.h"
 #include "sched/session.h"
+#include "terminal/terminal.h"
 
 void sort_links(struct f_data *);
 

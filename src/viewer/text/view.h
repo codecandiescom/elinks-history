@@ -1,12 +1,12 @@
-/* $Id: view.h,v 1.16 2003/07/03 02:18:54 jonas Exp $ */
+/* $Id: view.h,v 1.17 2003/07/09 23:03:11 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
 
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
-#include "terminal/terminal.h"
 #include "sched/session.h"
+#include "terminal/terminal.h"
 
 
 void open_in_new_window(struct terminal *, void (*)(struct terminal *, void (*)(struct terminal *, unsigned char *, unsigned char *), struct session *), struct session *);

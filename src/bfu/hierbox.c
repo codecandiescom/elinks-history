@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.19 2003/06/27 20:42:38 zas Exp $ */
+/* $Id: hierbox.c,v 1.20 2003/07/09 23:03:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,16 +8,16 @@
 #include "elinks.h"
 
 #include "bfu/align.h"
-#include "bfu/dialog.h"
 #include "bfu/button.h"
+#include "bfu/dialog.h"
 #include "bfu/listbox.h"
 #include "bfu/text.h"
 #include "bookmarks/bookmarks.h"
 #include "bookmarks/dialogs.h"
 #include "dialogs/hierbox.h"
+#include "intl/gettext/libintl.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
-#include "intl/gettext/libintl.h"
 
 
 int

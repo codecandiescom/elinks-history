@@ -1,5 +1,5 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.5 2003/06/05 14:38:17 zas Exp $ */
+/* $Id: timer.c,v 1.6 2003/07/09 23:03:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,8 +10,8 @@
 #include "config/kbdbind.h"
 #include "config/options.h"
 #include "lowlevel/select.h"
-#include "terminal/terminal.h"
 #include "lowlevel/timer.h"
+#include "terminal/terminal.h"
 
 
 static int countdown = -1;

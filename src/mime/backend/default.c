@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.15 2003/07/08 12:18:41 jonas Exp $ */
+/* $Id: default.c,v 1.16 2003/07/09 23:03:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,11 +10,11 @@
 #include "elinks.h"
 
 #include "config/options.h"
-#include "terminal/terminal.h"
 #include "mime/backend/common.h"
 #include "mime/backend/default.h"
 #include "mime/mime.h"
 #include "osdep/os_dep.h"		/* For get_system_str() */
+#include "terminal/terminal.h"
 #include "util/memory.h"
 #include "util/string.h"
 

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.118 2003/07/05 10:24:40 zas Exp $ */
+/* $Id: menu.c,v 1.119 2003/07/09 23:03:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,18 +27,18 @@
 #include "dialogs/options.h"
 #include "globhist/dialogs.h"
 #include "intl/gettext/libintl.h"
-#include "terminal/kbd.h"
-#include "terminal/tab.h"
 #include "lowlevel/select.h"
-#include "terminal/terminal.h"
 #include "protocol/url.h"
+#include "sched/connection.h"
 #include "sched/download.h"
 #include "sched/history.h"
 #include "sched/location.h"
-#include "sched/connection.h"
 #include "sched/session.h"
 #include "scripting/lua/core.h"
 #include "scripting/lua/hooks.h"
+#include "terminal/kbd.h"
+#include "terminal/tab.h"
+#include "terminal/terminal.h"
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"

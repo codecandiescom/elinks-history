@@ -1,10 +1,10 @@
-/* $Id: dialogs.h,v 1.7 2003/06/04 20:05:55 zas Exp $ */
+/* $Id: dialogs.h,v 1.8 2003/07/09 23:03:09 jonas Exp $ */
 
 #ifndef EL__CONFIG_DIALOGS_H
 #define EL__CONFIG_DIALOGS_H
 
-#include "terminal/terminal.h"
 #include "sched/session.h"
+#include "terminal/terminal.h"
 
 void write_config_error(struct terminal *term, struct memory_list *ml, unsigned char *config_file, unsigned char *strerr);
 void menu_options_manager(struct terminal *, void *, struct session *);

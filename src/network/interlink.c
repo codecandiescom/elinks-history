@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.60 2003/07/07 15:04:12 pasky Exp $ */
+/* $Id: interlink.c,v 1.61 2003/07/09 23:03:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,8 +33,8 @@
 #include "lowlevel/home.h"
 #include "lowlevel/interlink.h"
 #include "lowlevel/select.h"
-#include "terminal/terminal.h"
 #include "sched/session.h"
+#include "terminal/terminal.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"

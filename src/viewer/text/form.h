@@ -1,13 +1,12 @@
-/* $Id: form.h,v 1.1 2003/07/03 00:47:29 pasky Exp $ */
+/* $Id: form.h,v 1.2 2003/07/09 23:03:11 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
 
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
-#include "terminal/terminal.h"
 #include "sched/session.h"
-
+#include "terminal/terminal.h"
 #include "util/lists.h" /* LIST_HEAD */
 
 struct submitted_value {

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.55 2003/07/08 18:00:34 jonas Exp $ */
+/* $Id: core.c,v 1.56 2003/07/09 23:03:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,8 +21,8 @@
 #include "elinks.h"
 
 #include "bfu/align.h"
-#include "bfu/dialog.h"
 #include "bfu/button.h"
+#include "bfu/dialog.h"
 #include "bfu/inpfield.h"
 #include "bfu/inphist.h"
 #include "bfu/msgbox.h"
@@ -33,10 +33,10 @@
 #include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
 #include "lowlevel/signals.h"
-#include "terminal/terminal.h"
 #include "protocol/uri.h"
 #include "sched/session.h"
 #include "scripting/lua/core.h"
+#include "terminal/terminal.h"
 #include "util/memory.h"
 #include "util/string.h"
 #include "viewer/text/view.h"

@@ -1,11 +1,11 @@
-/* $Id: edit.h,v 1.7 2003/06/07 15:34:42 pasky Exp $ */
+/* $Id: edit.h,v 1.8 2003/07/09 23:03:09 jonas Exp $ */
 
 #ifndef EL__DIALOGS_EDIT_H
 #define EL__DIALOGS_EDIT_H
 
 #include "bfu/dialog.h"
-#include "terminal/terminal.h"
 #include "sched/session.h"
+#include "terminal/terminal.h"
 
 void do_edit_dialog(struct terminal *, int, unsigned char *,
 		    const unsigned char *, const unsigned char *,

@@ -415,8 +415,8 @@ msgstr ""
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
-"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap \"%"
-"s\")?"
+"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap "
+"\"%s\")?"
 
 #: src/config/dialogs.c:762
 msgid "Keybinding manager"
@@ -1298,6 +1298,8 @@ msgid ""
 "Display links to images without an alt attribute. If this option\n"
 "is off, these images are completely invisible."
 msgstr ""
+"Mostra collegamenti alle immagini senza un attributo ALT. Se questa\n"
+"opzione è disattivata, queste immagini saranno completamente invisibili."
 
 #: src/config/options.c:1126
 #, fuzzy
@@ -1311,6 +1313,10 @@ msgid ""
 "attribute contents is shown, but as normal text, not selectable\n"
 "as a link."
 msgstr ""
+"Mostra i collegamenti a qualsiasi immagine nel documento, sia che\n"
+"abbiano l'attributo ALT o no. Se questa opzione è disattivata, il\n"
+"contenuto delll'attributo ALT sarà mostrato, ma come normale testo,\n"
+"non selezionabile come lo sarebbe invece un collegamento."
 
 #: src/config/options.c:1134
 msgid "Links"
@@ -1322,7 +1328,7 @@ msgstr "Opzioni per la gestione del collegamenti ad altri documenti."
 
 #: src/config/options.c:1138
 msgid "Active link"
-msgstr ""
+msgstr "Collegamento attivo"
 
 #: src/config/options.c:1140
 #, fuzzy
@@ -1485,7 +1491,7 @@ msgstr "Cartella"
 
 #: src/config/options.c:1161
 msgid "Make the active link text bold."
-msgstr ""
+msgstr "Usa grassetto per il testo del collegamento attivo."
 
 #: src/config/options.c:1163
 #, fuzzy
@@ -1502,7 +1508,7 @@ msgstr "Sottolineature"
 
 #: src/config/options.c:1170
 msgid "Underline the active link."
-msgstr ""
+msgstr "Sottolinea il collegamento attivo."
 
 #: src/config/options.c:1173
 msgid "Directory highlighting"
@@ -1850,11 +1856,11 @@ msgstr "Consente colori scuri su sfondo nero."
 
 #: src/config/options.c:1355
 msgid "Ensure contrast"
-msgstr ""
+msgstr "Assicura contrasto."
 
 #: src/config/options.c:1357
 msgid "Makes sure that the back- and foreground color is never equal."
-msgstr ""
+msgstr "Si assicura che il colore di sfondo e del testo non sia mai uguale."
 
 #. If you change this please also change ACT_DOCUMENT_COLORS action
 #. * handling.
@@ -2695,8 +2701,8 @@ msgid ""
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 "Gestore (programma esterno) per questo protocollo. Chiama\n"
-"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, unix-"
-"xwin)."
+"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, "
+"unix-xwin)."
 
 #: src/config/options.c:1812
 msgid ""
@@ -3094,7 +3100,7 @@ msgstr ""
 
 #: src/config/options.c:2103 src/config/options.c:2512
 msgid "Generic"
-msgstr ""
+msgstr "Generico"
 
 #: src/config/options.c:2105 src/config/options.c:2514
 #, fuzzy
@@ -3396,8 +3402,9 @@ msgid ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
 msgstr ""
-"Azioni temporizzate dopo un certo intervallo di inattività dell'utente."
-"Qualcuno lo può trovare persino utile, anche se puoi non crederci."
+"Azioni temporizzate dopo un certo intervallo di inattività "
+"dell'utente.Qualcuno lo può trovare persino utile, anche se puoi non "
+"crederci."
 
 #: src/config/options.c:2787
 msgid ""
@@ -3806,8 +3813,8 @@ msgid ""
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
-"Impostare a 1 per modificare i file runtime di stato (bookmark, "
-"storico, ...)\n"
+"Impostare a 1 per modificare i file runtime di stato (bookmark, storico, "
+"...)\n"
 "anche quando si usano -no-connect o -session-ring; non ha effetto\n"
 "se non è usato in connessione con una di queste opzioni."
 
@@ -4983,9 +4990,9 @@ msgid ""
 "saved to the configuration file, instead of just all the options. This "
 "simplifies our situation greatly when we see that some option has "
 "inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of config."
-"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
-"for any inconvience caused."
+"a subtle way. Thus, we recommend you to change the value of "
+"config.saving_style option to 3 in order to get the \"right\" behaviour. "
+"Apologies for any inconvience caused."
 msgstr ""
 "Hai l'opzione config.saving_style impostata a un valore obsoleto. Gli "
 "algoritmi di salvataggio della configurazione di ELinks sono stati cambiati "
@@ -4993,9 +5000,9 @@ msgstr ""
 "sono salvate nel file di configurazione, invece di tutte quante. Questo "
 "semplifica molto la situazione quando vediamo che delle opzioni hanno un "
 "valore predefinito inappropriato o abbiamo bisogno di cambiarne la "
-"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione config."
-"saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le mie "
-"scuse per qualsiasi inconveniente causato."
+"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione "
+"config.saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le "
+"mie scuse per qualsiasi inconveniente causato."
 
 #: src/sched/session.c:1687
 msgid "Unknown event."
@@ -5305,34 +5312,3 @@ msgstr "Errore salvataggio"
 #: src/viewer/text/view.c:1482
 msgid "Error writing to file"
 msgstr "Errore scrittura del file"
-
-#~ msgid "Display image links"
-#~ msgstr "Mostra collegamenti alle immagini"
-
-#~ msgid "Generic background color"
-#~ msgstr "Colore generico di sfondo"
-
-#~ msgid "Dialog generic background color."
-#~ msgstr "Colore sfondo dialogo generico."
-
-#~ msgid "Dialog generic background color"
-#~ msgstr "Colore di sfondo per le finestre di dialogo"
-
-#~ msgid ""
-#~ "Whether to enable the timer or not:\n"
-#~ "0 is don't count down anything\n"
-#~ "1 is count down, but don't show the timer\n"
-#~ "2 is count down and show the timer near LEDs (note that this feature is "
-#~ "DISABLED)"
-#~ msgstr ""
-#~ "Abilitare o no il timer:\n"
-#~ "0 è non fare il conto alla rovescia\n"
-#~ "1 è fare il conto alla rovescia, ma non mostrare il timer\n"
-#~ "2 è fare il conto alla rovescia e mostrare il timer accanto ai LED "
-#~ "(questa     caratteristica è DISABILITATA)"
-
-#~ msgid "~Tab"
-#~ msgstr "~Scheda"
-
-#~ msgid "HTTP referer sending options."
-#~ msgstr "Opzioni di invio referer HTTP"

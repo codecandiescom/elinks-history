@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.32 2004/01/19 00:56:04 jonas Exp $ */
+/* $Id: apply.c,v 1.33 2004/01/19 13:35:02 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 #include "document/css/parser.h"
 #include "document/css/property.h"
 #include "document/html/parser.h"
+#include "document/options.h"
 #include "util/color.h"
 #include "util/lists.h"
 #include "util/error.h"
@@ -32,7 +33,9 @@ static void
 css_apply_color(struct html_element *element, struct css_property *prop)
 {
 	assert(prop->value_type == CSS_VT_COLOR);
-	element->attr.fg = prop->value.color;
+
+	if (global_doc_opts->use_document_colors != 0)
+		element->attr.fg = prop->value.color;
 }
 
 static void
@@ -40,7 +43,9 @@ css_apply_background_color(struct html_element *element,
 			   struct css_property *prop)
 {
 	assert(prop->value_type == CSS_VT_COLOR);
-	element->attr.bg = prop->value.color;
+
+	if (global_doc_opts->use_document_colors != 0)
+		element->attr.bg = prop->value.color;
 }
 
 static void

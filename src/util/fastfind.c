@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.61 2004/10/26 21:32:35 zas Exp $ */
+/* $Id: fastfind.c,v 1.62 2004/10/26 21:36:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -307,7 +307,8 @@ alloc_pointers(struct fastfind_info *info)
 	return 1;
 }
 
-/* Add pointer and its key length to array at position @pos. */
+/* Add pointer and its key length to correspondant arrays, incrementing
+ * internal counter. */
 static void
 add_to_pointers(void *p, int key_len, struct fastfind_info *info)
 {

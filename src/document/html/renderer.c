@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.269 2003/09/15 20:17:52 jonas Exp $ */
+/* $Id: renderer.c,v 1.270 2003/09/15 20:22:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,6 +220,7 @@ xset_hchar(struct part *part, int x, int y,
 	   unsigned char data, color_t bgcolor, enum screen_char_attr attr)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(bgcolor, 0x0);
+	struct screen_char *position;
 
 	assert(part && part->document);
 	if_assert_failed return;
@@ -230,9 +231,10 @@ xset_hchar(struct part *part, int x, int y,
 	assert(part->document->data);
 	if_assert_failed return;
 
-	POS(x, y).data = data;
-	POS(x, y).attr = attr;
-	set_term_color(&POS(x, y), &colors, COLOR_DEFAULT);
+	position = &POS(x, y);
+	position->data = data;
+	position->attr = attr;
+	set_term_color(position, &colors, COLOR_DEFAULT);
 }
 
 void

@@ -1,3 +1,31 @@
+Fri Oct 15 02:39:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Always separate the ETA part using ', ' to make it stand out.  
+
+Fri Oct 15 01:34:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Fix the '#if 0' -> '#ifndef BUG_517' change in 1.343 to be '#ifdef
+	BUG_517' since BUG_517 is undefined.  
+
+Fri Oct 15 00:59:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Crudely add guarding checks around code updating local state
+	variables. This is sledgehammer-hacks of the highest quality that
+	will make your mama cry. ELinks should now not crash when rendering
+	2.avi from bug 515. A lot of assertions was also added.  
+
+Thu Oct 14 23:16:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/navigator.c:
+
+	Assert navigator->depth >= 0.  
+
 Thu Oct 14 20:28:24 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/cache/: cache.c, cache.h:

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.125 2004/02/04 12:59:33 pasky Exp $ */
+/* $Id: conf.c,v 1.126 2004/02/04 13:00:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -396,18 +396,17 @@ parse_config_file(struct option *options, unsigned char *name,
 		if (!*file) break;
 
 		err = parse_config_command(options, file, &line, mirror);
-		if (err != ERROR_COMMAND)
-			goto test_end;
 
-		orig_pos = file;
-		/* Jump over this crap we can't understand. */
-		while (!isspace(*file) && *file != '#' && *file)
-			file++;
+		if (err == ERROR_COMMAND) {
+			orig_pos = file;
+			/* Jump over this crap we can't understand. */
+			while (!isspace(*file) && *file != '#' && *file)
+				file++;
 
-		/* Mirror what we already have */
-		if (mirror) add_bytes_to_string(mirror, orig_pos, file - orig_pos);
-
-test_end:
+			/* Mirror what we already have */
+			if (mirror) add_bytes_to_string(mirror, orig_pos,
+							file - orig_pos);
+		}
 
 		if (!mirror && err) {
 			/* TODO: Make this a macro and report error directly

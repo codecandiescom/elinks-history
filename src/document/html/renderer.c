@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.260 2003/09/10 15:49:16 jonas Exp $ */
+/* $Id: renderer.c,v 1.261 2003/09/10 16:06:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,10 +91,12 @@ void put_chars(struct part *, unsigned char *, int);
 
 #define LINES_GRANULARITY	0x7F
 #define LINE_GRANULARITY	0x0F
+#define LINK_GRANULARITY	0x7F
 
 #define ALIGN(x, gr)	(((x) + (gr)) & ~(gr))
 #define ALIGN_LINES(x)	ALIGN(x, LINES_GRANULARITY)
 #define ALIGN_LINE(x)	ALIGN(x, LINE_GRANULARITY)
+#define ALIGN_LINK(x)	ALIGN(x, LINK_GRANULARITY)
 
 static int nowrap = 0; /* Activated/deactivated by SP_NOWRAP. */
 
@@ -749,17 +751,16 @@ static struct link *
 new_link(struct document *f, int link_number, unsigned char *name, int namelen)
 {
 	struct link *link;
+	size_t newsize;
 
 	assert(f);
 	if_assert_failed return NULL;
 
-	if (!(f->nlinks & (ALLOC_GR - 1))) {
-		struct link *l = mem_realloc(f->links,
-					     (f->nlinks + ALLOC_GR)
-					     * sizeof(struct link));
-
-		if (!l) return NULL;
-		f->links = l;
+	newsize = ALIGN_LINK(f->nlinks + 1);
+	if (ALIGN_LINK(f->nlinks) < newsize) {
+		link = mem_realloc(f->links, newsize * sizeof(struct link));
+		if (!link) return NULL;
+		f->links = link;
 	}
 
 	link = &f->links[f->nlinks++];

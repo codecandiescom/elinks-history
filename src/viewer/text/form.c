@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.114 2004/05/30 18:02:45 zas Exp $ */
+/* $Id: form.c,v 1.115 2004/05/30 18:25:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,69 +185,66 @@ find_form_state(struct document_view *doc_view, struct form_control *frm)
 }
 
 void
-draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link *l)
+draw_form_entry(struct terminal *term, struct document_view *doc_view,
+		struct link *link)
 {
 	struct form_state *fs;
 	struct form_control *frm;
 	struct view_state *vs;
 	struct box *box;
-	int vx, vy;
+	int dx, dy;
 
-	assert(t && doc_view && doc_view->document && doc_view->vs && l);
+	assert(term && doc_view && doc_view->document && doc_view->vs && link);
 	if_assert_failed return;
-	frm = l->form;
-	assertm(frm, "link %d has no form", (int)(l - doc_view->document->links));
+
+	frm = link->form;
+	assertm(frm, "link %d has no form", (int)(link - doc_view->document->links));
 	if_assert_failed return;
 
 	fs = find_form_state(doc_view, frm);
 	if (!fs) return;
 
 	box = &doc_view->box;
-
 	vs = doc_view->vs;
-	vx = vs->x;
-	vy = vs->y;
-
+	dx = box->x - vs->x;
+	dy = box->y - vs->y;
 	switch (frm->type) {
 		unsigned char *s;
-		int sl;
+		int len;
 		register int i, x, y;
 
 		case FC_TEXT:
 		case FC_PASSWORD:
 		case FC_FILE:
 			int_bounds(&fs->vpos, fs->state - frm->size + 1, fs->state);
-			if (!l->n) break;
+			if (!link->n) break;
 
-			y = l->pos[0].y + box->y - vy;
+			y = link->pos[0].y + dy;
 			if (row_is_in_box(box, y)) {
-				int len = strlen(fs->value) - fs->vpos;
-
-				x = l->pos[0].x + box->x - vx;
+				len = strlen(fs->value) - fs->vpos;
+				x = link->pos[0].x + dx;
 				for (i = 0; i < frm->size; i++, x++) {
-					if (col_is_in_box(box, x)) {
-						if (fs->value &&
-						    i >= -fs->vpos && i < len)
-							draw_char_data(t, x, y,
-								       frm->type != FC_PASSWORD
-								       ? fs->value[i + fs->vpos]
-								       : '*');
-						else
-							draw_char_data(t, x, y, '_');
-					}
+					if (!col_is_in_box(box, x)) continue;
+					if (fs->value && i >= -fs->vpos && i < len)
+						draw_char_data(term, x, y,
+							       frm->type != FC_PASSWORD
+							       ? fs->value[i + fs->vpos]
+							       : '*');
+					else
+						draw_char_data(term, x, y, '_');
 				}
 			}
 			break;
 		case FC_TEXTAREA:
-			draw_textarea(t, fs, doc_view, l);
+			draw_textarea(term, fs, doc_view, link);
 			break;
 		case FC_CHECKBOX:
 		case FC_RADIO:
-			if (l->n < 2) break;
-			x = l->pos[1].x + box->x - vx;
-			y = l->pos[1].y + box->y - vy;
+			if (link->n < 2) break;
+			x = link->pos[1].x + dx;
+			y = link->pos[1].y + dy;
 			if (is_in_box(box, x, y))
-				draw_char_data(t, x, y, fs->state ? 'X' : ' ');
+				draw_char_data(term, x, y, fs->state ? 'X' : ' ');
 			break;
 		case FC_SELECT:
 			fixup_select_state(frm, fs);
@@ -256,12 +253,12 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 			else
 				/* XXX: when can this happen? --pasky */
 				s = "";
-			sl = s ? strlen(s) : 0;
-			for (i = 0; i < l->n; i++) {
-				x = l->pos[i].x + box->x - vx;
-				y = l->pos[i].y + box->y - vy;
+			len = s ? strlen(s) : 0;
+			for (i = 0; i < link->n; i++) {
+				x = link->pos[i].x + dx;
+				y = link->pos[i].y + dy;
 				if (is_in_box(box, x, y))
-					draw_char_data(t, x, y, i < sl ? s[i] : '_');
+					draw_char_data(term, x, y, i < len ? s[i] : '_');
 			}
 			break;
 		case FC_SUBMIT:

@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.38 2003/06/07 13:42:31 pasky Exp $ */
+/* $Id: msgbox.c,v 1.39 2003/06/07 13:54:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,21 +154,20 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 	do_dialog(term, dlg, ml);
 }
 
-unsigned char *
-msg_text(unsigned char *format, ...)
+
+static inline unsigned char *
+msg_text_do(unsigned char *format, va_list ap)
 {
 	unsigned char *info;
 	int infolen;
-	va_list ap;
 	va_list ap2;
 
-	va_start(ap, format);
 	VA_COPY(ap2, ap);
 
 	infolen = vsnprintf(NULL, 0, format, ap2);
 	info = mem_alloc(infolen + 1);
 	if (info) {
-		if (vsnprintf((char *)info, infolen + 1, format, ap) != infolen) {
+		if (vsnprintf((char *) info, infolen + 1, format, ap) != infolen) {
 			mem_free(info);
 			info = NULL;
 		} else {
@@ -177,6 +176,30 @@ msg_text(unsigned char *format, ...)
 		}
 	}
 
+	return info;
+}
+
+unsigned char *
+msg_text_ni(unsigned char *format, ...)
+{
+	unsigned char *info;
+	va_list ap;
+
+	va_start(ap, format);
+	info = msg_text_do(format, ap);
+	va_end(ap);
+
+	return info;
+}
+
+unsigned char *
+msg_text(struct terminal *term, unsigned char *format, ...)
+{
+	unsigned char *info;
+	va_list ap;
+
+	va_start(ap, format);
+	info = msg_text_do(_(format, term), ap);
 	va_end(ap);
 
 	return info;

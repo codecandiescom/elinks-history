@@ -1,4 +1,4 @@
-/* $Id: msgbox.h,v 1.11 2003/06/07 13:45:08 pasky Exp $ */
+/* $Id: msgbox.h,v 1.12 2003/06/07 13:54:28 pasky Exp $ */
 
 #ifndef EL__BFU_MSGBOX_H
 #define EL__BFU_MSGBOX_H
@@ -85,11 +85,19 @@ void msg_box(struct terminal *term, struct memory_list *mem_list,
 	enum msgbox_flags flags, unsigned char *title, enum format_align align,
 	unsigned char *text, void *udata, int buttons, ...);
 
-/* This is basically an equivalent to asprintf(), specifically to be used
+
+/* msg_text() is basically an equivalent to asprintf(), specifically to be used
  * inside of message boxes. Please always use msg_text() instead of asprintf()
  * in msg_box() parameters (ie. own format conversions can be introduced later
  * specifically crafted for message boxes, and so on). */
 /* The returned string is allocated and may be NULL! */
-unsigned char *msg_text(unsigned char *format, ...);
+
+/* This variant does not perform any localization upon its parameters. */
+unsigned char *msg_text_ni(unsigned char *format, ...);
+
+/* This variant also automagically localizes the format string. The possible
+ * additional parameters still need to be localized manually at the user's
+ * side. */
+unsigned char *msg_text(struct terminal *term, unsigned char *format, ...);
 
 #endif

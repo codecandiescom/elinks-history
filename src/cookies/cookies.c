@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.108 2003/12/05 22:58:11 pasky Exp $ */
+/* $Id: cookies.c,v 1.109 2003/12/05 23:45:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -594,13 +594,13 @@ is_path_prefix(unsigned char *d, unsigned char *s, int sl)
 #define is_dead(t) (!(t) || (t) <= time(NULL))
 
 struct string *
-send_cookies(struct string *header, struct uri *uri)
+send_cookies(struct uri *uri)
 {
-	int nc = 0;
 	struct c_domain *cd;
 	struct cookie *c, *d;
 	unsigned char *data = NULL;
 	int datalen = uri->datalen + 1;
+	static struct string header;
 
 	if (!uri->host || !uri->data)
 		return NULL;
@@ -612,6 +612,8 @@ send_cookies(struct string *header, struct uri *uri)
 		}
 
 	if (!data) return NULL;
+
+	init_string(&header);
 
 	foreach (c, cookies) {
 		if (!is_in_domain(c->domain, uri->host, uri->hostlen)
@@ -636,10 +638,7 @@ send_cookies(struct string *header, struct uri *uri)
 		if (c->secure && strncmp("https://", struri(*uri), 8))
 			continue;
 
-		if (!nc) {
-			add_to_string(header, "Cookie: ");
-			nc = 1;
-		} else {
+		if (header.length) {
 			add_to_string(header, "; ");
 		}
 
@@ -651,13 +650,13 @@ send_cookies(struct string *header, struct uri *uri)
 #endif
 	}
 
-	if (nc)
-		add_to_string(header, "\r\n");
-
 	if (cookies_dirty && get_cookies_save() && get_cookies_resave())
 		save_cookies();
 
-	return nc ? header : NULL;
+	if (!header.length)
+		done_string(&header);
+
+	return header.length ? &header : NULL;
 }
 
 static void done_cookies(struct module *module);

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.47 2003/07/12 16:51:25 jonas Exp $ */
+/* $Id: auth.c,v 1.48 2003/07/12 17:17:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,13 +158,13 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 			}
 		}
 
-		if (!entry->valid || strlen(entry->uid) != uri->userlen
+		if (!*entry->uid || strlen(entry->uid) != uri->userlen
 		    || strncmp(entry->uid, uri->user, uri->userlen)) {
 			entry->valid = 0;
 			set_auth_uid(entry, uri);
 		}
 
-		if (!entry->valid || strlen(entry->passwd) != uri->passwordlen
+		if (!*entry->passwd || strlen(entry->passwd) != uri->passwordlen
 		    || strncmp(entry->passwd, uri->password, uri->passwordlen)) {
 			entry->valid = 0;
 			set_auth_passwd(entry, uri);
@@ -183,8 +183,6 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 
 		add_to_list(http_auth_basic_list, entry);
 	}
-
-	entry->valid = (*entry->uid && *entry->passwd);
 
 	/* Return whether entry was added with user/pass from url. */
 	return entry;
@@ -217,16 +215,13 @@ find_auth(struct uri *uri)
 		 * user and password from the uri. */
 		/* XXX BOOLEAN OVERLOAD! */
 		if (!entry
-		    || !entry->valid
-		    || strlen(entry->passwd) != uri->passwordlen
-		    || strlen(entry->uid) != uri->userlen
-		    || strncmp(entry->passwd, uri->password, uri->passwordlen)
-		    || strncmp(entry->uid, uri->user, uri->userlen)) {
+		    || (auth_entry_has_userinfo(entry)
+			&& strlen(entry->passwd) == uri->passwordlen
+		        && strlen(entry->uid) == uri->userlen
+		        && !strncmp(entry->passwd, uri->password, uri->passwordlen)
+		        && !strncmp(entry->uid, uri->user, uri->userlen))) {
 
 			entry = add_auth_entry(uri, NULL);
-
-			if (entry && !entry->valid)
-				return NULL;
 		}
 	}
 
@@ -234,7 +229,7 @@ find_auth(struct uri *uri)
 	if (!entry) return NULL;
 
 	/* Sanity check. */
-	if (!entry->passwd || !entry->uid) {
+	if (!auth_entry_has_userinfo(entry)) {
 		del_auth_entry(entry);
 		return NULL;
 	}

@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.38 2003/07/12 16:51:25 jonas Exp $ */
+/* $Id: dialogs.c,v 1.39 2003/07/12 17:17:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,7 +97,7 @@ auth_ok(struct dialog_data *dlg, struct widget_data *di)
 	struct http_auth_basic *entry = dlg->dlg->udata2;
 
 	entry->blocked = 0;
-	entry->valid = (*entry->uid && *entry->passwd);
+	entry->valid = auth_entry_has_userinfo(entry);
 	reload(dlg->dlg->refresh_data, -1);
 	return ok_dialog(dlg, di);
 }
@@ -122,17 +122,14 @@ do_auth_dialog(struct session *ses)
 	if (!a || a->blocked) return;
 	a->blocked = 1;
 
-	snprintf(sticker, MAX_STR_LEN,
-		_("Authentication required for %s at %s", term),
+	snprintf(sticker, sizeof(sticker),
+		_("Authentication required for %s at %s\n", term),
 		a->realm, a->url);
 
 #define DLG_SIZE sizeof(struct dialog) + 5 * sizeof(struct widget)
 
 	d = mem_calloc(1, DLG_SIZE + strlen(sticker) + 1);
-	if (!d) {
-		a->valid = 0;
-		return;
-	}
+	if (!d) return;
 
 	d->title = _("HTTP Authentication", term);
 	d->fn = auth_layout;
@@ -168,5 +165,4 @@ do_auth_dialog(struct session *ses)
 	 * the password. */
 	if (a->uid[0] && !a->passwd[0])
 		dd->selected = 1;
-	a->blocked = 0;
 }

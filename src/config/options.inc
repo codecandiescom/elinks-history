@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.43 2003/12/21 22:15:43 miciah Exp $ */
+/* $Id: options.inc,v 1.44 2003/12/21 22:20:58 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -809,8 +809,8 @@ struct option_info config_options_info[] = {
 		"0 is dumb terminal type, ASCII art\n"
 		"1 is VT100, simple but portable\n"
 		"2 is Linux, you get double frames and other goodies\n"
-		"3 is FreeBSD\n"
-		"4 is KOI-8")),
+		"3 is KOI-8\n"
+		"4 is FreeBSD")),
 
 	INIT_OPT_BOOL("terminal._template_", N_("Switch fonts for line drawing"),
 		"m11_hack", 0, 0,

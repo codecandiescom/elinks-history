@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.30 2003/12/07 21:03:16 pasky Exp $ */
+/* $Id: terminal.h,v 1.31 2003/12/21 22:20:59 pasky Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -19,8 +19,8 @@ enum term_mode_type {
 	TERM_DUMB = 0,
 	TERM_VT100,
 	TERM_LINUX,
-	TERM_FREEBSD,
 	TERM_KOI8,
+	TERM_FREEBSD,
 };
 
 /* This is a bitmask describing the environment we are living in,

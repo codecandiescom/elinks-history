@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.122 2003/12/21 14:56:56 zas Exp $ */
+/* $Id: screen.c,v 1.123 2003/12/21 22:20:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,17 +156,6 @@ static struct screen_driver linux_screen_driver = {
 	/* trans: */		1,
 };
 
-static struct screen_driver freebsd_screen_driver = {
-				NULL_LIST_HEAD,
-	/* type: */		TERM_FREEBSD,
-	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
-	/* frame: */		frame_freebsd,
-	/* frame_seqs: */	NULL,		/* No m11_hack */
-	/* underline: */	underline_seqs,
-	/* color_mode: */	COLOR_MODE_16,
-	/* trans: */		1,
-};
-
 static struct screen_driver koi8_screen_driver = {
 				NULL_LIST_HEAD,
 	/* type: */		TERM_KOI8,
@@ -178,13 +167,24 @@ static struct screen_driver koi8_screen_driver = {
 	/* trans: */		1,
 };
 
+static struct screen_driver freebsd_screen_driver = {
+				NULL_LIST_HEAD,
+	/* type: */		TERM_FREEBSD,
+	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
+	/* frame: */		frame_freebsd,
+	/* frame_seqs: */	NULL,		/* No m11_hack */
+	/* underline: */	underline_seqs,
+	/* color_mode: */	COLOR_MODE_16,
+	/* trans: */		1,
+};
+
 /* XXX: Keep in sync with enum term_mode_type. */
 static struct screen_driver *screen_drivers[] = {
 	/* TERM_DUMB: */	&dumb_screen_driver,
 	/* TERM_VT100: */	&vt100_screen_driver,
 	/* TERM_LINUX: */	&linux_screen_driver,
-	/* TERM_FREEBSD: */	&freebsd_screen_driver,
 	/* TERM_KOI8: */	&koi8_screen_driver,
+	/* TERM_FREEBSD: */	&freebsd_screen_driver,
 };
 
 static INIT_LIST_HEAD(active_screen_drivers);

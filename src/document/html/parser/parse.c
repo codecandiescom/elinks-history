@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.45 2004/06/21 13:56:16 pasky Exp $ */
+/* $Id: parse.c,v 1.46 2004/06/21 14:19:21 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -310,7 +310,7 @@ get_width(unsigned char *a, unsigned char *name, int limit_it)
 			width = WIDTH_PIXELS2CHARS(width);
 		}
 
-		if (width > maxwidth) width = maxwidth;
+		int_upper_bound(&width, maxwidth);
 
 	} else {
 		if (percentage) {

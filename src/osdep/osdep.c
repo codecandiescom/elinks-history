@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.18 2002/05/19 19:34:59 pasky Exp $ */
+/* $Id: osdep.c,v 1.19 2002/06/13 10:25:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,24 +46,30 @@
 #include <X11/Xutil.h>
 #endif
 
-int is_safe_in_shell(unsigned char c)
+int
+is_safe_in_shell(unsigned char c)
 {
-	return c == '@' || c == '+' || c == '-' || c == '.' || (c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || c == '_' || (c >= 'a' && c <= 'z');
+	return c == '@' || c == '+' || c == '.' || isA(c);
 }
 
-void check_shell_security(unsigned char **cmd)
+void
+check_shell_security(unsigned char **cmd)
 {
 	unsigned char *c = *cmd;
+
 	while (*c) {
 		if (!is_safe_in_shell(*c)) *c = '_';
 		c++;
 	}
 }
 
-int get_e(char *env)
+int
+get_e(char *env)
 {
-	char *v;
-	if ((v = getenv(env))) return atoi(v);
+	char *v = getenv(env);
+
+	if (v) return atoi(v);
+
 	return 0;
 }
 
@@ -95,24 +101,29 @@ int get_e(char *env)
 
 #if defined(UNIX) || defined(BEOS) || defined(RISCOS) || defined(WIN32)
 
-void sigwinch(void *s)
+void
+sigwinch(void *s)
 {
 	((void (*)())s)();
 }
 
-void handle_terminal_resize(int fd, void (*fn)())
+void
+handle_terminal_resize(int fd, void (*fn)())
 {
 	install_signal_handler(SIGWINCH, sigwinch, fn, 0);
 }
 
-void unhandle_terminal_resize(int fd)
+void
+unhandle_terminal_resize(int fd)
 {
 	install_signal_handler(SIGWINCH, NULL, NULL, 0);
 }
 
-int get_terminal_size(int fd, int *x, int *y)
+int
+get_terminal_size(int fd, int *x, int *y)
 {
 	struct winsize ws;
+
 	if (!x || !y) return -1;
 	if (ioctl(1, TIOCGWINSZ, &ws) != -1) {
 		if (!(*x = ws.ws_col) && !(*x = get_e("COLUMNS"))) *x = 80;
@@ -122,6 +133,7 @@ int get_terminal_size(int fd, int *x, int *y)
 		if (!(*x = get_e("COLUMNS"))) *x = 80;
 		if (!(*y = get_e("LINES"))) *y = 24;
 	}
+
 	return 0;
 }
 
@@ -129,10 +141,13 @@ int get_terminal_size(int fd, int *x, int *y)
 
 #define A_DECL(type, var) type var##1, var##2, *var = _THUNK_PTR_STRUCT_OK(&var##1) ? &var##1 : &var##2
 
-int is_xterm(void)
+int
+is_xterm(void)
 {
 	static int xt = -1;
+
 	if (xt == -1) xt = !!getenv("WINDOWID");
+
 	return xt;
 }
 
@@ -141,7 +156,8 @@ int winch_thread_running = 0;
 
 #define WINCH_SLEEPTIME 500 /* time in ms for winch thread to sleep */
 
-void winch_thread(void)
+void
+winch_thread(void)
 {
 	/* A thread which regularly checks whether the size of
 	   window has changed. Then raise SIGWINCH or notifiy
@@ -160,20 +176,23 @@ void winch_thread(void)
 			/* Resizing may take some time. So don't send a flood
                      of requests?! */
 			_sleep2(2*WINCH_SLEEPTIME);
-		}
-		else
+		} else {
 			_sleep2(WINCH_SLEEPTIME);
+		}
 	}
 }
 
-void winch(void *s)
+void
+winch(void *s)
 {
 	char c;
+
 	while (can_read(winch_pipe[0]) && read(winch_pipe[0], &c, 1) == 1);
 	((void (*)())s)();
 }
 
-void handle_terminal_resize(int fd, void (*fn)())
+void
+handle_terminal_resize(int fd, void (*fn)())
 {
 	if (!is_xterm()) return;
 	if (!winch_thread_running) {
@@ -184,12 +203,14 @@ void handle_terminal_resize(int fd, void (*fn)())
 	set_handlers(winch_pipe[0], winch, NULL, NULL, fn);
 }
 
-void unhandle_terminal_resize(int fd)
+void
+unhandle_terminal_resize(int fd)
 {
 	set_handlers(winch_pipe[0], NULL, NULL, NULL, NULL);
 }
 
-int get_terminal_size(int fd, int *x, int *y)
+int
+get_terminal_size(int fd, int *x, int *y)
 {
 	if (!x || !y) return -1;
 	if (is_xterm()) {
@@ -216,11 +237,13 @@ int get_terminal_size(int fd, int *x, int *y)
 
 		return 0;
 #else
-		*x = 80; *y = 24;
+		*x = 80;
+		*y = 24;
 		return 0;
 #endif
 	} else {
 		int a[2] = { 0, 0 };
+
 		_scrsize(a);
 		*x = a[0];
 		*y = a[1];
@@ -233,6 +256,7 @@ int get_terminal_size(int fd, int *x, int *y)
 			if (*y == 0) *y = 24;
 		}
 	}
+
 	return 0;
 }
 
@@ -244,26 +268,35 @@ int get_terminal_size(int fd, int *x, int *y)
 
 #if defined(UNIX) || defined(BEOS) || defined(RISCOS)
 
-void set_bin(int fd)
+void
+set_bin(int fd)
 {
 }
 
-int c_pipe(int *fd)
+int
+c_pipe(int *fd)
 {
 	return pipe(fd);
 }
 
 #elif defined(OS2) || defined(WIN32)
 
-void set_bin(int fd)
+void
+set_bin(int fd)
 {
 	setmode(fd, O_BINARY);
 }
 
-int c_pipe(int *fd)
+int
+c_pipe(int *fd)
 {
 	int r = pipe(fd);
-	if (!r) set_bin(fd[0]), set_bin(fd[1]);
+
+	if (!r) {
+		set_bin(fd[0]);
+		set_bin(fd[1]);
+	}
+
 	return r;
 }
 
@@ -271,40 +304,49 @@ int c_pipe(int *fd)
 
 /* Filename */
 
-int check_file_name(unsigned char *file)
+int
+check_file_name(unsigned char *file)
 {
 	return 1;		/* !!! FIXME */
 }
 
 /* Exec */
 
-int can_twterm() /* Check if it make sense to call a twterm. */
+int
+can_twterm() /* Check if it make sense to call a twterm. */
 {
 	static int xt = -1;
+
 	if (xt == -1) xt = !!getenv("TWDISPLAY");
+
 	return xt;
 }
 
 
 #if defined(UNIX) || defined(WIN32)
 
-int is_xterm()
+int
+is_xterm()
 {
 	static int xt = -1;
+
 	if (xt == -1) xt = (getenv("DISPLAY") && *getenv("DISPLAY"));
+
 	return xt;
 }
 
 #elif defined(BEOS)
 
-int is_xterm()
+int
+is_xterm()
 {
 	return 0;
 }
 
 #elif defined(RISCOS)
 
-int is_xterm()
+int
+is_xterm()
 {
        return 1;
 }
@@ -317,23 +359,30 @@ tcount resize_count = 0;
 
 #if defined(BEOS) && defined(HAVE_SETPGID)
 
-int exe(char *path)
+int
+exe(char *path)
 {
-	int p;
 	int s;
-	if (!(p = fork())) {
+	int p = fork();
+
+	if (!p) {
 		setpgid(0, 0);
 		system(path);
 		_exit(0);
 	}
-	if (p > 0) waitpid(p, &s, 0);
-	else return system(path);
+
+	if (p > 0)
+		waitpid(p, &s, 0);
+	else
+		return system(path);
+
 	return 0;
 }
 
 #elif defined(WIN32)
 
-int exe(char *path)
+int
+exe(char *path)
 {
 	int r;
 	unsigned char *x1 = !GETSHELL ? DEFAULT_SHELL : GETSHELL;
@@ -346,37 +395,47 @@ int exe(char *path)
 	strcat(p, path);
 	x = p;
 	while (*x) {
-		if (*x == '\\') memmove(x + 1, x, strlen(x) + 1), x++;
+		if (*x == '\\') {
+			memmove(x + 1, x, strlen(x) + 1);
+			x++;
+		}
 		x++;
 	}
 	r = system(p);
 	free(p);
+
 	return r;
 }
 
 #else
 
-int exe(char *path)
+int
+exe(char *path)
 {
 	return system(path);
 }
 
 #endif
 
-char *get_clipboard_text()	/* !!! FIXME */
+char *
+get_clipboard_text()	/* !!! FIXME */
 {
-	char *ret = 0;
-	if ((ret = mem_alloc(1))) ret[0] = 0;
+	char *ret = mem_alloc(1);
+
+	if (ret) ret[0] = 0;
+
 	return ret;
 }
 
-void set_clipboard_text(char *data)
+void
+set_clipboard_text(char *data)
 {
 	/* !!! FIXME */
 }
 
 /* Set xterm-like term window's title. */
-void set_window_title(unsigned char *title)
+void
+set_window_title(unsigned char *title)
 {
 	unsigned char *s;
 	int xsize, ysize;
@@ -403,8 +462,10 @@ void set_window_title(unsigned char *title)
 		 * chars if any. Note that in most cases window decoration
 		 * reduces printable width, so it's just a precaution. */
 		for (i = 0; title[i] && i < xsize; i++) {
-			if (title[i] >= ' ') s[j++] = title[i];
-			else s[j++] = ' ';
+			if (title[i] >= ' ')
+				s[j++] = title[i];
+			else
+				s[j++] = ' ';
 		}
 
 		/* If title is truncated, add "..." */
@@ -425,14 +486,17 @@ void set_window_title(unsigned char *title)
 
 #ifdef HAVE_X11
 static int x_error = 0;
-static int catch_x_error()
+
+static int
+catch_x_error()
 {
 	x_error = 1;
 	return 0;
 }
 #endif
 
-unsigned char *get_window_title()
+unsigned char *
+get_window_title()
 {
 #ifdef HAVE_X11
 	/* Following code is stolen from our beloved vim. */
@@ -476,27 +540,36 @@ unsigned char *get_window_title()
 #endif
 }
 
-int resize_window(int x, int y)
+int
+resize_window(int x, int y)
 {
 	return -1;
 }
 
 #elif defined(OS2)
 
-int exe(char *path)
+int
+exe(char *path)
 {
 	int flags = P_SESSION;
 	int pid, ret;
 	char *shell;
-	if (!(shell = GETSHELL)) shell = DEFAULT_SHELL;
+
+	shell = GETSHELL;
+	if (!shell) shell = DEFAULT_SHELL;
 	if (is_xterm()) flags |= P_BACKGROUND;
-	if ((pid = spawnlp(flags, shell, shell, "/c", path, NULL)) != -1)
+
+	pid = spawnlp(flags, shell, shell, "/c", path, NULL);
+	if (pid != -1)
 		waitpid(pid, &ret, 0);
-	else ret = -1;
+	else
+		ret = -1;
+
 	return ret;
 }
 
-char *get_clipboard_text()
+char *
+get_clipboard_text()
 {
 	PTIB tib;
 	PPIB pib;
@@ -511,8 +584,10 @@ char *get_clipboard_text()
 
 	pib->pib_ultype = 3;
 
-	if ((hab = WinInitialize(0)) != NULLHANDLE) {
-		if ((hmq = WinCreateMsgQueue(hab, 0)) != NULLHANDLE) {
+	hab = WinInitialize(0);
+	if (hab != NULLHANDLE) {
+		hmq = WinCreateMsgQueue(hab, 0);
+		if (hmq != NULLHANDLE) {
 
 			if (WinOpenClipbrd(hab)) {
 				ULONG fmtInfo = 0;
@@ -524,8 +599,8 @@ char *get_clipboard_text()
 					if (selClipText)
 					{
 						PCHAR pchClipText = (PCHAR)selClipText;
-						if ((ret = mem_alloc(strlen(pchClipText)+1)))
-							strcpy(ret, pchClipText);
+
+						ret = stracpy(pchClipText);
 					}
 				}
 
@@ -542,7 +617,8 @@ char *get_clipboard_text()
 	return ret;
 }
 
-void set_clipboard_text(char *data)
+void
+set_clipboard_text(char *data)
 {
 	PTIB tib;
 	PPIB pib;
@@ -556,11 +632,13 @@ void set_clipboard_text(char *data)
 
 	pib->pib_ultype = 3;
 
-	if ((hab = WinInitialize(0)) != NULLHANDLE) {
-		if ((hmq = WinCreateMsgQueue(hab, 0)) != NULLHANDLE) {
+	hab = WinInitialize(0);
+	if (hab != NULLHANDLE) {
+		hmq = WinCreateMsgQueue(hab, 0);
+		if (hmq != NULLHANDLE) {
 			if(WinOpenClipbrd(hab)) {
 				PVOID pvShrObject = NULL;
-				if (DosAllocSharedMem(&pvShrObject, NULL, strlen(data)+1, PAG_COMMIT | PAG_WRITE | OBJ_GIVEABLE) == NO_ERROR) {
+				if (DosAllocSharedMem(&pvShrObject, NULL, strlen(data) + 1, PAG_COMMIT | PAG_WRITE | OBJ_GIVEABLE) == NO_ERROR) {
 					strcpy(pvShrObject, data);
 					WinSetClipbrdData(hab, (ULONG)pvShrObject, CF_TEXT, CFI_POINTER);
 				}
@@ -574,7 +652,8 @@ void set_clipboard_text(char *data)
 	pib->pib_ultype = oldType;
 }
 
-unsigned char *get_window_title()
+unsigned char *
+get_window_title()
 {
 #ifndef OS2_DEBUG
 	char *org_switch_title;
@@ -593,15 +672,20 @@ unsigned char *get_window_title()
 	oldType = pib->pib_ultype;
 	memset(&swData, 0, sizeof swData);
 	if (hSw == NULLHANDLE) hSw = WinQuerySwitchHandle(0, pib->pib_ulpid);
-	if (hSw!=NULLHANDLE && !WinQuerySwitchEntry(hSw, &swData)) {
+	if (hSw != NULLHANDLE && !WinQuerySwitchEntry(hSw, &swData)) {
 		/*org_switch_title = mem_alloc(strlen(swData.szSwtitle)+1);
 		strcpy(org_switch_title, swData.szSwtitle);*/
 		/* Go to PM */
 		pib->pib_ultype = 3;
-		if ((hab = WinInitialize(0)) != NULLHANDLE) {
-			if ((hmq = WinCreateMsgQueue(hab, 0)) != NULLHANDLE) {
-				if ((org_win_title = mem_alloc(MAXNAMEL+1)))
-					WinQueryWindowText(swData.hwnd, MAXNAMEL+1, org_win_title);
+		hab = WinInitialize(0);
+		if (hab != NULLHANDLE) {
+			hmq = WinCreateMsgQueue(hab, 0);
+			if (hmq != NULLHANDLE) {
+				org_win_title = mem_alloc(MAXNAMEL + 1);
+				if (org_win_title)
+					WinQueryWindowText(swData.hwnd,
+							   MAXNAMEL + 1,
+							   org_win_title);
 					org_win_title[MAXNAMEL] = 0;
 				/* back From PM */
 				WinDestroyMsgQueue(hmq);
@@ -616,7 +700,8 @@ unsigned char *get_window_title()
 #endif
 }
 
-void set_window_title(unsigned char *title)
+void
+set_window_title(unsigned char *title)
 {
 #ifndef OS2_DEBUG
 	static PTIB tib;
@@ -627,24 +712,28 @@ void set_window_title(unsigned char *title)
 	HAB hab;
 	HMQ hmq;
 	char new_title[MAXNAMEL];
+
 	if (!title) return;
 	if (!pib) DosGetInfoBlocks(&tib, &pib);
 	oldType = pib->pib_ultype;
 	memset(&swData, 0, sizeof swData);
 	if (hSw == NULLHANDLE) hSw = WinQuerySwitchHandle(0, pib->pib_ulpid);
-	if (hSw!=NULLHANDLE && !WinQuerySwitchEntry(hSw, &swData)) {
+	if (hSw != NULLHANDLE && !WinQuerySwitchEntry(hSw, &swData)) {
 		char *p;
+
 		safe_strncpy(new_title, title, MAXNAMEL - 1);
 		while ((p = strchr(new_title, 1))) *p = ' ';
 		safe_strncpy(swData.szSwtitle, new_title, MAXNAMEL - 1);
 		WinChangeSwitchEntry(hSw, &swData);
 		/* Go to PM */
 		pib->pib_ultype = 3;
-		if ((hab = WinInitialize(0)) != NULLHANDLE) {
-			if ((hmq = WinCreateMsgQueue(hab, 0)) != NULLHANDLE) {
+		hab = WinInitialize(0);
+		if (hab != NULLHANDLE) {
+			hmq = WinCreateMsgQueue(hab, 0);
+			if (hmq != NULLHANDLE) {
 				if(swData.hwnd)
 					WinSetWindowText(swData.hwnd, new_title);
-					/* back From PM */
+				/* back From PM */
 				WinDestroyMsgQueue(hmq);
 			}
 			WinTerminate(hab);
@@ -654,7 +743,7 @@ void set_window_title(unsigned char *title)
 #endif
 }
 
-/*
+#if 0
 void set_window_title(int init, const char *url)
 {
 	static char *org_switch_title;
@@ -733,11 +822,13 @@ void set_window_title(int init, const char *url)
 		break;
 	}
 }
-*/
+#endif
 
-int resize_window(int x, int y)
+int
+resize_window(int x, int y)
 {
 	A_DECL(VIOMODEINFO, vmi);
+
 	resize_count++;
 	if (is_xterm()) return -1;
 	vmi->cb = sizeof(*vmi);
@@ -767,7 +858,8 @@ struct tdata {
 	unsigned char data[1];
 };
 
-void bgt(struct tdata *t)
+void
+bgt(struct tdata *t)
 {
 	signal(SIGPIPE, SIG_IGN);
 	t->fn(t->data, t->h);
@@ -777,7 +869,8 @@ void bgt(struct tdata *t)
 }
 
 #ifdef HAVE_PTHREADS
-void *bgpt(struct tdata *t)
+void *
+bgpt(struct tdata *t)
 {
 	bgt(t);
 	return NULL;
@@ -788,14 +881,24 @@ void *bgpt(struct tdata *t)
 
 #if defined(UNIX) || defined(OS2) || defined(RISCOS)
 
-void terminate_osdep() {}
+void
+terminate_osdep()
+{
+}
 
 #endif
 
 #ifndef BEOS
 
-void block_stdin() {}
-void unblock_stdin() {}
+void
+block_stdin()
+{
+}
+
+void
+unblock_stdin()
+{
+}
 
 #endif
 
@@ -816,46 +919,63 @@ struct active_thread {
 	void *data;
 };
 
-int32 started_thr(void *data)
+int32
+started_thr(void *data)
 {
 	struct active_thread *thrd = data;
+
 	thrd->fn(thrd->data);
 	if (acquire_sem(thr_sem) < B_NO_ERROR) return 0;
 	del_from_list(thrd);
 	free(thrd);
 	release_sem(thr_sem);
+
 	return 0;
 }
 
-int start_thr(void (*fn)(void *), void *data, unsigned char *name)
+int
+start_thr(void (*fn)(void *), void *data, unsigned char *name)
 {
 	struct active_thread *thrd;
 	int tid;
+
 	if (!thr_sem_init) {
-		if ((thr_sem = create_sem(0, "thread_sem")) < B_NO_ERROR) return -1;
+		thr_sem = create_sem(0, "thread_sem");
+		if (thr_sem < B_NO_ERROR) return -1;
 		thr_sem_init = 1;
 	} else if (acquire_sem(thr_sem) < B_NO_ERROR) return -1;
-	if (!(thrd = malloc(sizeof(struct active_thread)))) goto rel;
+
+	thrd = malloc(sizeof(struct active_thread));
+	if (!thrd) goto rel;
 	thrd->fn = fn;
 	thrd->data = data;
-	if ((tid = thrd->tid = spawn_thread(started_thr, name, B_NORMAL_PRIORITY, thrd)) < B_NO_ERROR) {
+	thrd->tid = spawn_thread(started_thr, name, B_NORMAL_PRIORITY, thrd);
+	tid = thrd->tid;
+
+	if (tid < B_NO_ERROR) {
 		free(thrd);
-		rel:
+
+rel:
 		release_sem(thr_sem);
 		return -1;
 	}
+
 	resume_thread(thrd->tid);
 	add_to_list(active_threads, thrd);
 	release_sem(thr_sem);
+
 	return tid;
 }
 
-void terminate_osdep()
+void
+terminate_osdep()
 {
 	struct list_head *p;
 	struct active_thread *thrd;
+
 	if (acquire_sem(thr_sem) < B_NO_ERROR) return;
 	foreach(thrd, active_threads) kill_thread(thrd->tid);
+
 	while ((p = active_threads.next) != &active_threads) {
 		del_from_list(p);
 		free(p);
@@ -863,12 +983,16 @@ void terminate_osdep()
 	release_sem(thr_sem);
 }
 
-int start_thread(void (*fn)(void *, int), void *ptr, int l)
+int
+start_thread(void (*fn)(void *, int), void *ptr, int l)
 {
 	int p[2];
 	struct tdata *t;
+
 	if (c_pipe(p) < 0) return -1;
-	if (!(t = malloc(sizeof(struct tdata) + l))) return -1;
+
+	t = malloc(sizeof(struct tdata) + l);
+	if (!t) return -1;
 	t->fn = fn;
 	t->h = p[1];
 	memcpy(t->data, ptr, l);
@@ -878,20 +1002,25 @@ int start_thread(void (*fn)(void *, int), void *ptr, int l)
 		mem_free(t);
 		return -1;
 	}
+
 	return p[0];
 }
 
 
 #elif defined(HAVE_BEGINTHREAD)
 
-int start_thread(void (*fn)(void *, int), void *ptr, int l)
+int
+start_thread(void (*fn)(void *, int), void *ptr, int l)
 {
 	int p[2];
 	struct tdata *t;
+
 	if (c_pipe(p) < 0) return -1;
 	fcntl(p[0], F_SETFL, O_NONBLOCK);
 	fcntl(p[1], F_SETFL, O_NONBLOCK);
-	if (!(t = malloc(sizeof(struct tdata) + l))) return -1;
+
+	t = malloc(sizeof(struct tdata) + l);
+	if (!t) return -1;
 	t->fn = fn;
 	t->h = p[1];
 	memcpy(t->data, ptr, l);
@@ -901,6 +1030,7 @@ int start_thread(void (*fn)(void *, int), void *ptr, int l)
 		mem_free(t);
 		return -1;
 	}
+
 	return p[0];
 }
 
@@ -909,10 +1039,12 @@ int start_thread(void (*fn)(void *, int), void *ptr, int l)
 int tp = -1;
 int ti = -1;
 
-void input_thread(void *p)
+void
+input_thread(void *p)
 {
 	char c[2];
 	int h = (int)p;
+
 	signal(SIGPIPE, SIG_IGN);
 	while (1) {
 		/*c[0] = _read_kbd(0, 1, 1);
@@ -960,7 +1092,8 @@ struct os2_mouse_spec {
 	int terminate;
 };
 
-void mouse_thread(void *p)
+void
+mouse_thread(void *p)
 {
 	int status;
 	struct os2_mouse_spec *oms = p;
@@ -969,6 +1102,7 @@ void mouse_thread(void *p)
 	A_DECL(USHORT, rd);
 	A_DECL(USHORT, mask);
 	struct event ev;
+
 	signal(SIGPIPE, SIG_IGN);
 	ev.ev = EV_MOUSE;
 	if (MouOpen(NULL, mh)) goto ret;
@@ -980,8 +1114,10 @@ void mouse_thread(void *p)
 	MouSetEventMask(mask, *mh);
 	*rd = MOU_WAIT;
 	status = -1;
+
 	while (1) {
 		int w, ww;
+
 		if (MouReadEventQue(ms, rd, *mh)) break;
 #ifdef HAVE_SYS_FMUTEX_H
 		_fmutex_request(&mouse_mutex, _FMR_IGNINT);
@@ -993,14 +1129,17 @@ void mouse_thread(void *p)
 		ev.x = ms->col;
 		ev.y = ms->row;
 		/*debug("status: %d %d %d", ms->col, ms->row, ms->fs);*/
-		if (ms->fs & (MOUSE_BN1_DOWN | MOUSE_BN2_DOWN | MOUSE_BN3_DOWN)) ev.b = status = B_DOWN | (ms->fs & MOUSE_BN1_DOWN ? B_LEFT : ms->fs & MOUSE_BN2_DOWN ? B_MIDDLE : B_RIGHT);
+		if (ms->fs & (MOUSE_BN1_DOWN | MOUSE_BN2_DOWN | MOUSE_BN3_DOWN))
+			ev.b = status = B_DOWN | (ms->fs & MOUSE_BN1_DOWN ? B_LEFT : ms->fs & MOUSE_BN2_DOWN ? B_MIDDLE : B_RIGHT);
 		else if (ms->fs & (MOUSE_MOTION_WITH_BN1_DOWN | MOUSE_MOTION_WITH_BN2_DOWN | MOUSE_MOTION_WITH_BN3_DOWN)) {
 			int b = ms->fs & MOUSE_MOTION_WITH_BN1_DOWN ? B_LEFT : ms->fs & MOUSE_MOTION_WITH_BN2_DOWN ? B_MIDDLE : B_RIGHT;
-			if (status == -1) b |= B_DOWN;
-			else b |= B_DRAG;
+
+			if (status == -1)
+				b |= B_DOWN;
+			else
+				b |= B_DRAG;
 			ev.b = status = b;
-		}
-		else {
+		} else {
 			if (status == -1) continue;
 			ev.b = (status & BM_BUTT) | B_UP;
 			status = -1;
@@ -1015,27 +1154,36 @@ void mouse_thread(void *p)
 #ifdef HAVE_SYS_FMUTEX_H
 	_fmutex_release(&mouse_mutex);
 #endif
-	ret:
+
+ret:
 	close(oms->p[1]);
 	/*free(oms);*/
 }
 
-void mouse_handle(struct os2_mouse_spec *oms)
+void
+mouse_handle(struct os2_mouse_spec *oms)
 {
-	int r;
-	if ((r = read(oms->p[0], oms->buffer + oms->bufptr, sizeof(struct event) - oms->bufptr)) <= 0) {
+	int r = read(oms->p[0], oms->buffer + oms->bufptr,
+		     sizeof(struct event) - oms->bufptr);
+
+	if (r <= 0) {
 		unhandle_mouse(oms);
 		return;
 	}
-	if ((oms->bufptr += r) == sizeof(struct event)) {
+
+	oms->bufptr += r;
+	if (oms->bufptr == sizeof(struct event)) {
 		oms->bufptr = 0;
 		oms->fn(oms->data, oms->buffer, sizeof(struct event));
 	}
 }
 
-void *handle_mouse(int cons, void (*fn)(void *, unsigned char *, int), void *data)
+void *
+handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
+	     void *data)
 {
 	struct os2_mouse_spec *oms;
+
 	if (is_xterm()) return NULL;
 #ifdef HAVE_SYS_FMUTEX_H
 	if (!mouse_mutex_init) {
@@ -1044,7 +1192,8 @@ void *handle_mouse(int cons, void (*fn)(void *, unsigned char *, int), void *dat
 	}
 #endif
 		/* This is never freed but it's allocated only once */
-	if (!(oms = malloc(sizeof(struct os2_mouse_spec)))) return NULL;
+	oms = malloc(sizeof(struct os2_mouse_spec));
+	if (!oms) return NULL;
 	oms->fn = fn;
 	oms->data = data;
 	oms->bufptr = 0;
@@ -1055,12 +1204,15 @@ void *handle_mouse(int cons, void (*fn)(void *, unsigned char *, int), void *dat
 	}
 	_beginthread(mouse_thread, NULL, 0x10000, (void *)oms);
 	set_handlers(oms->p[0], (void (*)(void *))mouse_handle, NULL, NULL, oms);
+
 	return oms;
 }
 
-void unhandle_mouse(void *om)
+void
+unhandle_mouse(void *om)
 {
 	struct os2_mouse_spec *oms = om;
+
 	want_draw();
 	oms->terminate = 1;
 	set_handlers(oms->p[0], NULL, NULL, NULL, NULL);
@@ -1068,7 +1220,8 @@ void unhandle_mouse(void *om)
 	done_draw();
 }
 
-void want_draw()
+void
+want_draw()
 {
 	A_DECL(NOPTRRECT, pa);
 #ifdef HAVE_SYS_FMUTEX_H
@@ -1077,7 +1230,12 @@ void want_draw()
 	if (mouse_h != -1) {
 		static int x = -1, y = -1;
 		static tcount c = -1;
-		if (x == -1 || y == -1 || (c != resize_count)) get_terminal_size(1, &x, &y), c = resize_count;
+
+		if (x == -1 || y == -1 || (c != resize_count)) {
+			get_terminal_size(1, &x, &y);
+			c = resize_count;
+		}
+
 		pa->row = 0;
 		pa->col = 0;
 		pa->cRow = y - 1;
@@ -1086,7 +1244,8 @@ void want_draw()
 	}
 }
 
-void done_draw()
+void
+done_draw()
 {
 #ifdef HAVE_SYS_FMUTEX_H
 	if (mouse_mutex_init) _fmutex_release(&mouse_mutex);
@@ -1112,7 +1271,8 @@ struct thread_stack {
 	unsigned char data[1];
 };
 
-void bglt(struct thread_stack *ts)
+void
+bglt(struct thread_stack *ts)
 {
 	ts->fn(ts->data, ts->h);
 	write(ts->h, "x", 1);
@@ -1121,11 +1281,13 @@ void bglt(struct thread_stack *ts)
 
 struct list_head thread_stacks = { &thread_stacks, &thread_stacks };
 
-int start_thread(void (*fn)(void *, int), void *ptr, int l)
+int
+start_thread(void (*fn)(void *, int), void *ptr, int l)
 {
 	struct thread_stack *ts;
 	int p[2];
 	int f;
+
 	if (c_pipe(p) < 0) return -1;
 	fcntl(p[0], F_SETFL, O_NONBLOCK);
 	fcntl(p[1], F_SETFL, O_NONBLOCK);
@@ -1135,31 +1297,45 @@ int start_thread(void (*fn)(void *, int), void *ptr, int l)
 	memcpy(t->data, ptr, l);*/
 	foreach(ts, thread_stacks) {
 		if (ts->pid == -1 || kill(ts->pid, 0)) {
-			if (ts->l >= l) goto ts_ok;
-			else {
+			if (ts->l >= l) {
+				goto ts_ok;
+			} else {
 				struct thread_stack *tts = ts;
+
 				ts = ts->prev;
 				del_from_list(tts); free(tts->stack); free(tts);
 			}
 		}
 	}
-	if (!(ts = malloc(sizeof(struct thread_stack) + l))) goto fail;
-	if (!(ts->stack = malloc(0x10000))) {
+
+	ts = malloc(sizeof(struct thread_stack) + l);
+	if (!ts) goto fail;
+
+	ts->stack = malloc(0x10000);
+	if (!ts->stack) {
 		free(ts);
 		goto fail;
 	}
+
 	ts->l = l;
 	add_to_list(thread_stacks, ts);
-	ts_ok:
+
+ts_ok:
 	ts->fn = fn;
 	ts->h = p[1];
 	memcpy(ts->data, ptr, l);
-	if ((ts->pid = __clone((int (*)(void *))bglt, (char *)ts->stack + 0x8000, CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND | SIGCHLD, ts)) == -1) {
-		fail:
+
+	ts->pid = __clone((int (*)(void *))bglt, (char *)ts->stack + 0x8000,
+			  CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND | SIGCHLD,
+			  ts);
+	if (ts->pid == -1) {
+
+fail:
 		close(p[0]);
 		close(p[1]);
 		return -1;
 	}
+
 	return p[0];
 }
 
@@ -1167,16 +1343,21 @@ int start_thread(void (*fn)(void *, int), void *ptr, int l)
 
 #include <pthread.h>
 
-int start_thread(void (*fn)(void *, int), void *ptr, int l)
+int
+start_thread(void (*fn)(void *, int), void *ptr, int l)
 {
 	pthread_t thread;
 	struct tdata *t;
 	int p[2];
 	int f;
+
 	if (c_pipe(p) < 0) return -1;
 	fcntl(p[0], F_SETFL, O_NONBLOCK);
 	fcntl(p[1], F_SETFL, O_NONBLOCK);
-	if (!(t = malloc(sizeof(struct tdata) + l))) return -1;
+
+	t = malloc(sizeof(struct tdata) + l);
+	if (!t) return -1;
+
 	t->fn = fn;
 	t->h = p[1];
 	memcpy(t->data, ptr, l);
@@ -1186,19 +1367,24 @@ int start_thread(void (*fn)(void *, int), void *ptr, int l)
 		mem_free(t);
 		return -1;
 	}
+
 	return p[0];
 }
 
 #else /* HAVE_BEGINTHREAD */
 
-int start_thread(void (*fn)(void *, int), void *ptr, int l)
+int
+start_thread(void (*fn)(void *, int), void *ptr, int l)
 {
 	int p[2];
 	int f;
+
 	if (c_pipe(p) < 0) return -1;
 	fcntl(p[0], F_SETFL, O_NONBLOCK);
 	fcntl(p[1], F_SETFL, O_NONBLOCK);
-	if (!(f = fork())) {
+
+	f = fork();
+	if (!f) {
 		close(p[0]);
 		fn(ptr, p[1]);
 		write(p[1], "x", 1);
@@ -1210,6 +1396,7 @@ int start_thread(void (*fn)(void *, int), void *ptr, int l)
 		close(p[1]);
 		return -1;
 	}
+
 	close(p[1]);
 	return p[0];
 }
@@ -1217,28 +1404,49 @@ int start_thread(void (*fn)(void *, int), void *ptr, int l)
 #endif
 
 #ifndef USING_OS2_MOUSE
-void want_draw() {}
-void done_draw() {}
+void
+want_draw()
+{
+}
+
+void
+done_draw()
+{
+}
 #endif
 
-int get_output_handle() { return 1; }
+int
+get_output_handle()
+{
+	return 1;
+}
 
 #if defined(OS2)
 
-int get_ctl_handle() { return get_input_handle(); }
+int
+get_ctl_handle()
+{
+	return get_input_handle();
+}
 
 #else
 
-int get_ctl_handle() { return 0; }
+int
+get_ctl_handle()
+{
+	return 0;
+}
 
 #endif
 
 #if defined(BEOS)
 
 #elif defined(HAVE_BEGINTHREAD) && defined(HAVE_READ_KBD)
-int get_input_handle()
+int
+get_input_handle()
 {
 	int fd[2];
+
 	if (ti != -1) return ti;
 	if (is_xterm()) return 0;
 	if (c_pipe(fd) < 0) return 0;
@@ -1258,7 +1466,8 @@ int get_input_handle()
 void input_function(int fd);
 void set_proc_id(int id);
 
-int get_input_handle()
+int
+get_input_handle()
 {
 	int	fd[2];
 	static int ti = -1, tp = -1;
@@ -1268,18 +1477,20 @@ int get_input_handle()
 	if (c_pipe (fd) < 0) return 0;
 	ti = fd[0];
 	tp = fd[1];
-	if (!(pid = fork()))
-	{
+
+	pid = fork();
+	if (!pid)
 		input_function (tp);
-	}
 	else
 		set_proc_id (pid);
+
 	return ti;
 }
 
 #else
 
-int get_input_handle()
+int
+get_input_handle()
 {
 	return 0;
 }
@@ -1288,7 +1499,8 @@ int get_input_handle()
 
 
 #ifndef HAVE_CFMAKERAW
-void cfmakeraw(struct termios *t)
+void
+cfmakeraw(struct termios *t)
 {
 	t->c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
 	t->c_oflag &= ~OPOST;
@@ -1308,49 +1520,72 @@ struct gpm_mouse_spec {
 	void *data;
 };
 
-void gpm_mouse_in(struct gpm_mouse_spec *gms)
+void
+gpm_mouse_in(struct gpm_mouse_spec *gms)
 {
 	Gpm_Event gev;
 	struct event ev;
+
 	if (Gpm_GetEvent(&gev) <= 0) {
 		set_handlers(gms->h, NULL, NULL, NULL, NULL);
 		return;
 	}
+
 	ev.ev = EV_MOUSE;
 	ev.x = gev.x - 1;
 	ev.y = gev.y - 1;
-	if (gev.buttons & GPM_B_LEFT) ev.b = B_LEFT;
-	else if (gev.buttons & GPM_B_MIDDLE) ev.b = B_MIDDLE;
-	else if (gev.buttons & GPM_B_RIGHT) ev.b = B_RIGHT;
-	else return;
-	if (gev.type & GPM_DOWN) ev.b |= B_DOWN;
-	else if (gev.type & GPM_UP) ev.b |= B_UP;
-	else if (gev.type & GPM_DRAG) ev.b |= B_DRAG;
-	else return;
+	if (gev.buttons & GPM_B_LEFT)
+		ev.b = B_LEFT;
+	else if (gev.buttons & GPM_B_MIDDLE)
+		ev.b = B_MIDDLE;
+	else if (gev.buttons & GPM_B_RIGHT)
+		ev.b = B_RIGHT;
+	else
+		return;
+
+	if (gev.type & GPM_DOWN)
+		ev.b |= B_DOWN;
+	else if (gev.type & GPM_UP)
+		ev.b |= B_UP;
+	else if (gev.type & GPM_DRAG)
+		ev.b |= B_DRAG;
+	else
+		return;
+
 	gms->fn(gms->data, (char *)&ev, sizeof(struct event));
 }
 
-void *handle_mouse(int cons, void (*fn)(void *, unsigned char *, int), void *data)
+void *
+handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
+	     void *data)
 {
 	int h;
 	Gpm_Connect conn;
 	struct gpm_mouse_spec *gms;
+
 	conn.eventMask = ~GPM_MOVE;
 	conn.defaultMask = GPM_MOVE;
 	conn.minMod = 0;
 	conn.maxMod = 0;
-	if ((h = Gpm_Open(&conn, cons)) < 0) return NULL;
-	if (!(gms = mem_alloc(sizeof(struct gpm_mouse_spec)))) return NULL;
+
+	h = Gpm_Open(&conn, cons);
+	if (h < 0) return NULL;
+
+	gms = mem_alloc(sizeof(struct gpm_mouse_spec));
+	if (!gms) return NULL;
 	gms->h = h;
 	gms->fn = fn;
 	gms->data = data;
 	set_handlers(h, (void (*)(void *))gpm_mouse_in, NULL, NULL, gms);
+
 	return gms;
 }
 
-void unhandle_mouse(void *h)
+void
+unhandle_mouse(void *h)
 {
 	struct gpm_mouse_spec *gms = h;
+
 	set_handlers(gms->h, NULL, NULL, NULL, NULL);
 	Gpm_Close();
 	mem_free(gms);
@@ -1358,14 +1593,24 @@ void unhandle_mouse(void *h)
 
 #elif !defined(USING_OS2_MOUSE)
 
-void *handle_mouse(int cons, void (*fn)(void *, unsigned char *, int), void *data) { return NULL; }
-void unhandle_mouse(void *data) { }
+void *
+handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
+	     void *data)
+{
+	return NULL;
+}
+
+void
+unhandle_mouse(void *data)
+{
+}
 
 #endif /* #ifdef USE_GPM */
 
 #if defined(OS2)
 
-int get_system_env()
+int
+get_system_env()
 {
 	if (is_xterm()) return 0;
 	return ENV_OS2VIO;		/* !!! FIXME: telnet */
@@ -1373,82 +1618,106 @@ int get_system_env()
 
 #elif defined(BEOS)
 
-int get_system_env()
+int
+get_system_env()
 {
 	unsigned char *term = getenv("TERM");
-	if (!term || (upcase(term[0]) == 'B' && upcase(term[1]) == 'E')) return ENV_BE;
+
+	if (!term || (upcase(term[0]) == 'B' && upcase(term[1]) == 'E'))
+		return ENV_BE;
+
 	return 0;
 }
 
 #elif defined(WIN32)
 
-int get_system_env()
+int
+get_system_env()
 {
 	return ENV_WIN32;
 }
 
 #else
 
-int get_system_env()
+int
+get_system_env()
 {
 	return 0;
 }
 
 #endif
 
-void exec_new_elinks(struct terminal *term, unsigned char *xterm, unsigned char *exe, unsigned char *param)
+void
+exec_new_elinks(struct terminal *term, unsigned char *xterm,
+		unsigned char *exe, unsigned char *param)
 {
-	unsigned char *str;
-	if (!(str = mem_alloc(strlen(xterm) + 1 + strlen(exe) + 1 + strlen(param) + 1))) return;
-	sprintf(str, "%s %s %s", xterm, exe, param);
+	unsigned char *str = straconcat(xterm, " ", exe, " ", param, NULL);
+
+	if (!str) return;
 	exec_on_terminal(term, str, "", 2);
 	mem_free(str);
 }
 
-void open_in_new_twterm(struct terminal *term, unsigned char *exe, unsigned char *param)
+void
+open_in_new_twterm(struct terminal *term, unsigned char *exe,
+		   unsigned char *param)
 {
 	unsigned char *twterm;
+
 	twterm = getenv("ELINKS_TWTERM");
 	if (!twterm) twterm = getenv("LINKS_TWTERM");
 	if (!twterm) twterm = "twterm -e";
 	exec_new_elinks(term, twterm, exe, param);
 }
 
-void open_in_new_xterm(struct terminal *term, unsigned char *exe, unsigned char *param)
+void
+open_in_new_xterm(struct terminal *term, unsigned char *exe,
+		  unsigned char *param)
 {
 	unsigned char *xterm;
+
 	xterm = getenv("ELINKS_XTERM");
 	if (!xterm) xterm = getenv("LINKS_XTERM");
 	if (!xterm) xterm = "xterm -e";
 	exec_new_elinks(term, xterm, exe, param);
 }
 
-void open_in_new_screen(struct terminal *term, unsigned char *exe, unsigned char *param)
+void
+open_in_new_screen(struct terminal *term, unsigned char *exe,
+		   unsigned char *param)
 {
 	exec_new_elinks(term, "screen", exe, param);
 }
 
 #ifdef OS2
-void open_in_new_vio(struct terminal *term, unsigned char *exe, unsigned char *param)
+void
+open_in_new_vio(struct terminal *term, unsigned char *exe,
+		unsigned char *param)
 {
 	exec_new_elinks(term, "cmd /c start /c /f /win", exe, param);
 }
 
-void open_in_new_fullscreen(struct terminal *term, unsigned char *exe, unsigned char *param)
+void
+open_in_new_fullscreen(struct terminal *term, unsigned char *exe,
+		       unsigned char *param)
 {
 	exec_new_elinks(term, "cmd /c start /c /f /fs", exe, param);
 }
 #endif
 
 #ifdef WIN32
-void open_in_new_win32(struct terminal *term, unsigned char *exe, unsigned char *param)
+void
+open_in_new_win32(struct terminal *term, unsigned char *exe,
+		  unsigned char *param)
 {
 	exec_new_elinks(term, "", exe, param);
 }
 #endif
 
 #ifdef BEOS
-void open_in_new_be(struct terminal *term, unsigned char *exe, unsigned char *param)
+void
+open_in_new_be(struct terminal *term, unsigned char *exe,
+	       unsigned char *param)
 {
 	exec_new_elinks(term, "Terminal", exe, param);
 }
@@ -1476,34 +1745,44 @@ struct {
 	{0, NULL, NULL}
 };
 
-struct open_in_new *get_open_in_new(int environment)
+struct open_in_new *
+get_open_in_new(int environment)
 {
 	int i;
 	struct open_in_new *oin = DUMMY;
 	int noin = 0;
-	for (i = 0; oinw[i].env; i++) if ((environment & oinw[i].env) == oinw[i].env) {
-		struct open_in_new *x;
-		if (!(x = mem_realloc(oin, (noin + 2) * sizeof(struct open_in_new)))) continue;
-		oin = x;
-		oin[noin].text = oinw[i].text;
-		oin[noin].hk = oinw[i].hk;
-		oin[noin].fn = oinw[i].fn;
-		noin++;
-		oin[noin].text = NULL;
-		oin[noin].hk = NULL;
-		oin[noin].fn = NULL;
-	}
+
+	for (i = 0; oinw[i].env; i++)
+		if ((environment & oinw[i].env) == oinw[i].env) {
+			struct open_in_new *x;
+
+			x = mem_realloc(oin, (noin + 2) * sizeof(struct open_in_new));
+
+			if (!x) continue;
+			oin = x;
+			oin[noin].text = oinw[i].text;
+			oin[noin].hk = oinw[i].hk;
+			oin[noin].fn = oinw[i].fn;
+			noin++;
+			oin[noin].text = NULL;
+			oin[noin].hk = NULL;
+			oin[noin].fn = NULL;
+		}
+
 	if (oin == DUMMY) return NULL;
+
 	return oin;
 }
 
-int can_resize_window(int environment)
+int
+can_resize_window(int environment)
 {
 	if (environment & ENV_OS2VIO) return 1;
 	return 0;
 }
 
-int can_open_os_shell(int environment)
+int
+can_open_os_shell(int environment)
 {
 #ifdef OS2
 	if (environment & ENV_XWIN) return 0;
@@ -1512,11 +1791,14 @@ int can_open_os_shell(int environment)
 }
 
 #ifndef OS2
-void set_highpri()
+void
+set_highpri()
 {
 }
+
 #else
-void set_highpri()
+void
+set_highpri()
 {
 	DosSetPriority(PRTYS_PROCESS, PRTYC_FOREGROUNDSERVER, 0, 0);
 }

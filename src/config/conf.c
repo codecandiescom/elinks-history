@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.148 2004/10/07 02:54:06 jonas Exp $ */
+/* $Id: conf.c,v 1.149 2004/11/27 01:12:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -532,6 +532,14 @@ conf_i18n(unsigned char *s, int i18n)
 }
 
 static void
+add_indent_to_string(struct string *string, int depth)
+{
+	if (!depth) return;
+
+	add_xchar_to_string(string, ' ', depth * indentation);
+}
+
+static void
 smart_config_output_fn(struct string *string, struct option *option,
 		       unsigned char *path, int depth, int do_print_comment,
 		       int action, int i18n)
@@ -550,9 +558,8 @@ smart_config_output_fn(struct string *string, struct option *option,
 	switch (action) {
 		case 0:
 			if (!(comments & 1)) break;
-			if (depth)
-				add_xchar_to_string(string, ' ',
-						    depth * indentation);
+
+			add_indent_to_string(string, depth);
 
 			add_to_string(string, "## ");
 			if (path) {
@@ -573,16 +580,16 @@ smart_config_output_fn(struct string *string, struct option *option,
 
 			desc_i18n = conf_i18n(option->desc, i18n);
 
-			if (depth)
-				add_xchar_to_string(string, ' ',
-						    depth * indentation);
-			add_to_string(string, "# ");
+			if (!*desc_i18n) break;
+
+			add_indent_to_string(string, depth);
+			add_to_string(string, "#  ");
 			{
 				unsigned char *i = desc_i18n;
 				unsigned char *j = i;
 				unsigned char *last_space = NULL;
 				int config_width = 80;
-				int n = depth * indentation + 2;
+				int n = depth * indentation + 3;
 
 				for (; *i; i++, n++) {
 					if (*i == '\n') {
@@ -596,11 +603,10 @@ smart_config_output_fn(struct string *string, struct option *option,
 split:
 						add_bytes_to_string(string, j, last_space - j);
 						add_char_to_string(string, '\n');
-						if (depth)
-							add_xchar_to_string(string, ' ', depth * indentation);
-						add_to_string(string, "# ");
+						add_indent_to_string(string, depth);
+						add_to_string(string, "#  ");
 						j = last_space + 1;
-						n = depth * indentation + 1 + i - last_space;
+						n = depth * indentation + 2 + i - last_space;
 						last_space = NULL;
 					}
 				}
@@ -610,9 +616,8 @@ split:
 			break;
 
 		case 2:
-			if (depth)
-				add_xchar_to_string(string, ' ',
-						    depth * indentation);
+
+			add_indent_to_string(string, depth);
 			if (option->flags & OPT_DELETED) {
 				add_to_string(string, "un");
 			}
@@ -639,6 +644,21 @@ split:
 				add_char_to_string(string, '\n');
 			break;
 	}
+}
+
+
+static void
+add_cfg_header_to_string(struct string *string, unsigned char *text)
+{
+	int n = strlen(text) + 2;
+
+	int_bounds(&n, 10, 80);
+
+	add_to_string(string, "\n\n\n");
+	add_xchar_to_string(string, '#', n);
+	add_to_string(string, "\n# ");
+	add_to_string(string, text);
+	add_to_string(string, "#\n\n");
 }
 
 static unsigned char *
@@ -717,11 +737,8 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 
 	if (!init_string(&tmpstring)) goto get_me_out;
 
-	add_to_string(&tmpstring, "\n\n\n");
-	add_to_string(&tmpstring, "#####################################\n");
-	add_to_string(&tmpstring, "# ");
-	add_to_string(&tmpstring, conf_i18n(N_("Automatically saved options\n"), i18n));
-	add_to_string(&tmpstring, "#\n\n");
+	add_cfg_header_to_string(&tmpstring,
+				 conf_i18n(N_("Automatically saved options\n"), i18n));
 
 	origlen = tmpstring.length;
 	smart_config_string(&tmpstring, 2, i18n, options->value.tree, NULL, 0,
@@ -732,11 +749,8 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 
 	if (!init_string(&tmpstring)) goto get_me_out;
 
-	add_to_string(&tmpstring, "\n\n\n");
-	add_to_string(&tmpstring, "#####################################\n");
-	add_to_string(&tmpstring, "# ");
-	add_to_string(&tmpstring, conf_i18n(N_("Automatically saved keybindings\n"), i18n));
-	add_to_string(&tmpstring, "#\n\n");
+	add_cfg_header_to_string(&tmpstring,
+				 conf_i18n(N_("Automatically saved keybindings\n"), i18n));
 
 	origlen = tmpstring.length;
 	bind_config_string(&tmpstring);

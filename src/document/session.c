@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.37 2002/05/18 19:23:51 pasky Exp $ */
+/* $Id: session.c,v 1.38 2002/05/19 16:06:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -987,6 +987,8 @@ create_session(struct window *win)
 	struct session *ses = mem_alloc(sizeof(struct session));
 
 	if (ses) {
+		struct document_setup dds;
+
 		memset(ses, 0, sizeof(struct session));
 		create_history(ses);
 		init_list(ses->scrn_frames);
@@ -999,7 +1001,19 @@ create_session(struct window *win)
 		ses->display_timer = -1;
 		ses->loading_url = NULL;
 		ses->goto_position = NULL;
+
+		dds.assume_cp = get_opt_int("html_assume_codepage");
+		dds.hard_assume = get_opt_int("html_hard_assume");
+		dds.use_document_colours = get_opt_int("html_use_document_colours");
+		dds.avoid_dark_on_black = get_opt_int("html_avoid_dark_on_black");
+		dds.tables = get_opt_int("html_tables");
+		dds.frames = get_opt_int("html_frames");
+		dds.images = get_opt_int("html_images");
+		dds.margin = get_opt_int("html_margin");
+		dds.num_links = get_opt_int("html_numbered_links");
+		dds.table_order = get_opt_int("html_table_order");
 		memcpy(&ses->ds, &dds, sizeof(struct document_setup));
+
 		add_to_list(sessions, ses);
 	}
 

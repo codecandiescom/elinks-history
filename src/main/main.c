@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.29 2002/05/19 11:05:57 pasky Exp $ */
+/* $Id: main.c,v 1.30 2002/05/19 16:06:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -302,8 +302,9 @@ init()
 	/* Default codepage settings may be overridden by config file or
 	 * command line, so we need to setup them now. XXX: This is a hack,
 	 * as we can't do this while initializing the options array. */
-	dds.assume_cp = get_cp_index("ISO-8859-1");
-	if (dds.assume_cp == -1) dds.assume_cp = 0;
+	get_opt_int("html_assume_codepage") = get_cp_index("ISO-8859-1");
+	if (get_opt_int("html_assume_codepage") == -1)
+		get_opt_int("html_assume_codepage") = 0;
 
 	load_config();
 	init_b = 1;

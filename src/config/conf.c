@@ -1,5 +1,5 @@
 /* Config file and commandline proccessing */
-/* $Id: conf.c,v 1.11 2002/05/18 23:01:33 pasky Exp $ */
+/* $Id: conf.c,v 1.12 2002/05/19 16:06:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,7 @@
 #include "util/secsave.h"
 
 
-unsigned char *_parse_options(int argc, unsigned char *argv[], struct hash **opt)
+unsigned char *_parse_options(int argc, unsigned char *argv[], struct hash *opt)
 {
 	unsigned char *location = NULL;
 
@@ -38,38 +38,34 @@ unsigned char *_parse_options(int argc, unsigned char *argv[], struct hash **opt
 		argv++, argc--;
 
 		if (argv[-1][0] == '-') {
-			struct hash **oplist;
+			struct option *option;
 			unsigned char *argname = &argv[-1][1];
+			unsigned char *oname = opt_name(argname);
 
 			/* Treat --foo same as -foo. */
 			if (argname[0] == '-') argname++;
 
-			for (oplist = opt; *oplist; oplist++) {
-				struct option *option;
-				unsigned char *oname = opt_name(argname);
+			option = get_opt_rec(opt, argname);
+			if (!option && oname)
+				option = get_opt_rec(opt, oname);
 
-				option = get_opt_rec(*oplist, argname);
-				if (!option && oname)
-					option = get_opt_rec(*oplist, oname);
+			mem_free(oname);
 
-				mem_free(oname);
+			if (!option)
+				continue;
 
-				if (!option)
-					continue;
+			if (option_types[option->type].rd_cmd &&
+			    option->flags & OPT_CMDLINE) {
+				unsigned char *err = option_types[option->type].rd_cmd(option, &argv, &argc);
 
-				if (option_types[option->type].rd_cmd &&
-				    option->flags & OPT_CMDLINE) {
-					unsigned char *err = option_types[option->type].rd_cmd(option, &argv, &argc);
+				if (err) {
+					if (err[0])
+						fprintf(stderr, "Error parsing option %s: %s\n", argv[-1], err);
 
-					if (err) {
-						if (err[0])
-							fprintf(stderr, "Error parsing option %s: %s\n", argv[-1], err);
-
-						return NULL;
-					}
-
-					goto found;
+					return NULL;
 				}
+
+				goto found;
 			}
 
 			goto unknown_option;
@@ -91,7 +87,7 @@ found:
 
 unsigned char *parse_options(int argc, unsigned char *argv[])
 {
-	return _parse_options(argc, argv, all_options);
+	return _parse_options(argc, argv, links_options);
 }
 
 unsigned char *get_token(unsigned char **line)
@@ -122,13 +118,14 @@ unsigned char *get_token(unsigned char **line)
 	return s;
 }
 
-void parse_config_file(unsigned char *name, unsigned char *file, struct hash **opt)
+void parse_config_file(unsigned char *name, unsigned char *file, struct hash *opt)
 {
 	int error = 0;
 	int line = 0;
 
 	while (file[0]) {
-		struct hash **optlist;
+		struct option *option;
+		unsigned char *oname;
 		unsigned char *id, *val, *tok = NULL;
 		int id_len, val_len, tok_len;
 
@@ -169,34 +166,27 @@ void parse_config_file(unsigned char *name, unsigned char *file, struct hash **o
 		if (!tok) continue;
 
 		tok_len = strlen(tok);
+		oname = mem_alloc(tok_len + 1);
+		safe_strncpy(oname, tok, tok_len + 1);
+		option = get_opt_rec(opt, oname);
+		mem_free(oname);
 
-		for (optlist = opt; *optlist; optlist++) {
-			struct option *option;
-			unsigned char *oname = mem_alloc(tok_len + 1);
+		if (!option)
+			continue;
 
-			safe_strncpy(oname, tok, tok_len + 1);
+		if (option->flags & OPT_CFGFILE) {
+			unsigned char *value = memacpy(val, val_len);
+			unsigned char *err = option_types[option->type].rd_cfg(option, value);
 
-			option = get_opt_rec(*optlist, oname);
-
-			mem_free(oname);
-
-			if (!option)
-				continue;
-
-			if (option->flags & OPT_CFGFILE) {
-				unsigned char *value = memacpy(val, val_len);
-				unsigned char *err = option_types[option->type].rd_cfg(option, value);
-
-				if (err) {
-					if (err[0])
-						fprintf(stderr, "Error parsing config file %s, line %d: %s\n",
-							name, line, err);
-					error = 1;
-				}
-
-				mem_free(value);
-				goto next;
+			if (err) {
+				if (err[0])
+					fprintf(stderr, "Error parsing config file %s, line %d: %s\n",
+						name, line, err);
+				error = 1;
 			}
+
+			mem_free(value);
+			goto next;
 		}
 
 		fprintf(stderr, "Unknown option in config file %s, line %d\n", name, line);
@@ -284,7 +274,7 @@ load_config_file(unsigned char *prefix, unsigned char *name)
 	return;
 
 ok:
-	parse_config_file(config_file, c, all_options);
+	parse_config_file(config_file, c, links_options);
 	mem_free(c);
 	mem_free(config_file);
 }
@@ -293,7 +283,7 @@ void load_config()
 {
 	load_config_file("/etc/", "links.cfg");
 	load_config_file(links_home, "links.cfg");
-	load_config_file(links_home, "html.cfg");
+	load_config_file(links_home, "html.cfg"); /* for legacy stuff */
 	load_config_file(links_home, "user.cfg");
 }
 
@@ -338,9 +328,4 @@ free_cfg_str:
 void write_config(struct terminal *term)
 {
 	write_config_file(links_home, "links.cfg", links_options, term);
-}
-
-void write_html_config(struct terminal *term)
-{
-	write_config_file(links_home, "html.cfg", html_options, term);
 }

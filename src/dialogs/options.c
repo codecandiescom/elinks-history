@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.9 2002/05/18 19:23:51 pasky Exp $ */
+/* $Id: options.c,v 1.10 2002/05/19 16:06:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -734,8 +734,20 @@ cache_opt(struct terminal *term, void *xxx, void *yyy)
 void
 menu_save_html_options(struct terminal *term, void *xxx, struct session *ses)
 {
+	struct document_setup dds;
+
 	memcpy(&dds, &ses->ds, sizeof(struct document_setup));
-	write_html_config(term);
+	get_opt_int("html_assume_codepage") = dds.assume_cp;
+	get_opt_int("html_hard_assume") = dds.hard_assume;
+	get_opt_int("html_use_document_colours") = dds.use_document_colours;
+	get_opt_int("html_avoid_dark_on_black") = dds.avoid_dark_on_black;
+	get_opt_int("html_tables") = dds.tables;
+	get_opt_int("html_frames") = dds.frames;
+	get_opt_int("html_images") = dds.images;
+	get_opt_int("html_margin") = dds.margin;
+	get_opt_int("html_numbered_links") = dds.num_links;
+	get_opt_int("html_table_order") = dds.table_order;
+	write_config(term);
 }
 
 unsigned char marg_str[2];

@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.24 2002/05/19 14:33:55 pasky Exp $ */
+/* $Id: options.c,v 1.25 2002/05/19 16:06:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,10 +34,6 @@
 
 
 struct hash *links_options;
-struct hash *html_options;
-
-struct hash *all_options[] = { /*links_options*/ NULL, /*html_options*/ NULL, NULL, };
-
 
 /**********************************************************************
  Options interface
@@ -46,6 +42,10 @@ struct hash *all_options[] = { /*links_options*/ NULL, /*html_options*/ NULL, NU
 /* Note that this is only a base for hiearchical options, which will be much
  * more fun. This part of code is under heavy development, so please treat
  * with care. --pasky, 20020428 ;) */
+
+/* If option name contains dots, they are created as "categories" - first,
+ * first category is retrieeved from hash, taken as a hash, second category
+ * is retrieved etc. */
 
 /* Get record of option of given name, or NULL if there's no such option. */
 struct option *
@@ -108,10 +108,6 @@ init_options()
 	/* 6 bits == 64 entries; I guess it's the best number for options
 	 * hash. --pasky */
 	links_options = init_hash(6);
-	html_options = init_hash(6);
-
-	all_options[0] = links_options;
-	all_options[1] = html_options;
 
 	register_options();
 }
@@ -128,20 +124,12 @@ done_options()
 		if (option->type == OPT_BOOL ||
 		    option->type == OPT_INT ||
 		    option->type == OPT_LONG ||
-		    option->type == OPT_STRING)
+		    option->type == OPT_STRING ||
+		    option->type == OPT_CODEPAGE)
 			mem_free(option->ptr);
 	}
 
-#if 0
-	foreach_hash_item (html_options, item, i) {
-		struct option *option = item->value;
-
-		mem_free(option->ptr);
-	}
-#endif
-
 	free_hash(links_options);
-	free_hash(html_options);
 }
 
 
@@ -713,8 +701,6 @@ struct option_type_info option_types[] = {
  Options values
 **********************************************************************/
 
-struct document_setup dds = { 0, 0, 1, 1, 1, 1, 0, 3, 0, 0 };
-
 struct rgb default_fg = { 191, 191, 191 };
 struct rgb default_bg = { 0, 0, 0 };
 struct rgb default_link = { 0, 0, 255 };
@@ -751,11 +737,14 @@ register_options()
 		"is allowed, but user can't add or modify entries in\n"
 		"association table.");
 
+	/* TODO: We should re-implement this! */
+#if 0
 	add_opt_ptr(links_options,
 		"assume_codepage", OPT_CMDLINE | OPT_CFGFILE, OPT_CODEPAGE, &dds.assume_cp,
 		"Use the given codepage when the webpage did not specify\n"
 		"its codepage.\n"
 		"Default: ISO 8859-1");
+#endif
 
 	add_opt_bool(links_options,
 		"async_dns", OPT_CMDLINE | OPT_CFGFILE, 1,
@@ -1037,53 +1026,43 @@ register_options()
 
 	/* HTML options */
 
-	add_opt(html_options,
-		"html_assume_codepage", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_CODEPAGE, 0, 0, &dds.assume_cp,
+	add_opt_codepage(links_options,
+		"html_assume_codepage", OPT_CMDLINE | OPT_CFGFILE, 0,
 		"Default document codepage.");
 
-	add_opt(html_options,
-		"html_avoid_dark_on_black", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &dds.avoid_dark_on_black,
+	add_opt_bool(links_options,
+		"html_avoid_dark_on_black", OPT_CMDLINE | OPT_CFGFILE, 1,
 		"Avoid dark colors on black background.");
 
-	add_opt(html_options,
-		"html_frames", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &dds.frames,
+	add_opt_bool(links_options,
+		"html_frames", OPT_CMDLINE | OPT_CFGFILE, 1,
 		"Display frames.");
 
-	add_opt(html_options,
-		"html_hard_assume", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &dds.hard_assume,
+	add_opt_bool(links_options,
+		"html_hard_assume", OPT_CMDLINE | OPT_CFGFILE, 0,
 		"Ignore charset info sent by server.");
 
-	add_opt(html_options,
-		"html_images", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &dds.images,
+	add_opt_bool(links_options,
+		"html_images", OPT_CMDLINE | OPT_CFGFILE, 0,
 		"Display links to images.");
 
-	add_opt(html_options,
-		"html_margin", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT, 0, 9, &dds.margin,
+	add_opt_int(links_options,
+		"html_margin", OPT_CMDLINE | OPT_CFGFILE, 0, 9, 3,
 		"Text margin.");
 
-	add_opt(html_options,
-		"html_numbered_links", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &dds.num_links,
+	add_opt_bool(links_options,
+		"html_numbered_links", OPT_CMDLINE | OPT_CFGFILE, 0,
 		"Display links numbered.");
 
-	add_opt(html_options,
-		"html_tables", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &dds.tables,
+	add_opt_bool(links_options,
+		"html_tables", OPT_CMDLINE | OPT_CFGFILE, 1,
 		"Display tables.");
 
-	add_opt(html_options,
-		"html_table_order", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &dds.table_order,
+	add_opt_bool(links_options,
+		"html_table_order", OPT_CMDLINE | OPT_CFGFILE, 0,
 		"Move by columns in table.");
-
-	add_opt(html_options,
-		"html_use_document_colours", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &dds.use_document_colours,
+	
+	add_opt_bool(links_options,
+		"html_use_document_colours", OPT_CMDLINE | OPT_CFGFILE, 1,
 		"Use colors specified in document.");
 }

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.14 2002/05/19 14:33:55 pasky Exp $ */
+/* $Id: options.h,v 1.15 2002/05/19 16:06:43 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -58,8 +58,6 @@ extern struct option_type_info option_types[];
 
 
 extern struct hash *links_options;
-extern struct hash *html_options;
-extern struct hash *all_options[];
 
 
 extern void init_options();
@@ -94,6 +92,10 @@ extern void add_opt(struct hash *, unsigned char *name, enum option_flags flags,
 #define add_opt_string(hash, name, flags, def, desc) \
 	add_opt(hash, name, flags, OPT_STRING, 0, MAX_STR_LEN, stracpy(def), desc);
 
+#define add_opt_codepage(hash, name, flags, def, desc) do { \
+	add_opt(hash, name, flags, OPT_CODEPAGE, 0, 0, mem_alloc(sizeof(int)), desc); \
+	*((int *) get_opt(hash, name)) = def; } while (0)
+
 #define add_opt_ptr(hash, name, flags, type, def, desc) \
 	add_opt(hash, name, flags, type, 0, 0, def, desc);
 
@@ -113,8 +115,6 @@ enum cookies_accept {
 	COOKIES_ACCEPT_ASK,
 	COOKIES_ACCEPT_ALL
 };
-
-extern struct document_setup dds;
 
 extern struct rgb default_fg;
 extern struct rgb default_bg;

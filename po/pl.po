@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.11.CVS\n"
 "POT-Creation-Date: 2005-03-24 08:55+0100\n"
-"PO-Revision-Date: 2005-02-17 08:20+0100\n"
-"Last-Translator: Adam Golebiowski <adamg@pld-linux.org>\n"
+"PO-Revision-Date: 2005-03-24 16:20+0100\n"
+"Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
@@ -40,9 +40,8 @@ msgstr "Wci¶nij spacjê by rozwin±æ ten folder."
 #: src/protocol/auth/dialogs.c:108 src/protocol/protocol.c:227
 #: src/sched/session.c:737 src/scripting/lua/core.c:395
 #: src/scripting/lua/core.c:476 src/viewer/text/search.c:1562
-#, fuzzy
 msgid "~OK"
-msgstr "OK"
+msgstr "~OK"
 
 #: src/bfu/hierbox.c:566
 #, c-format
@@ -82,17 +81,15 @@ msgstr "Czy usun±æ zaznaczone elementy?"
 #: src/bfu/hierbox.c:872 src/config/dialogs.c:817 src/dialogs/menu.c:126
 #: src/formhist/formhist.c:457 src/mime/dialogs.c:70 src/sched/task.c:267
 #: src/terminal/tab.c:191 src/terminal/tab.c:227
-#, fuzzy
 msgid "~Yes"
-msgstr "Tak"
+msgstr "~Tak"
 
 #: src/bfu/hierbox.c:745 src/bfu/hierbox.c:781 src/bfu/hierbox.c:802
 #: src/bfu/hierbox.c:873 src/config/dialogs.c:818 src/dialogs/menu.c:127
 #: src/formhist/formhist.c:458 src/mime/dialogs.c:71 src/sched/task.c:268
 #: src/terminal/tab.c:192 src/terminal/tab.c:228
-#, fuzzy
 msgid "~No"
-msgstr "Nie"
+msgstr "~Nie"
 
 #. delete_folder_title
 #: src/bfu/hierbox.c:765 src/bookmarks/dialogs.c:132
@@ -172,9 +169,8 @@ msgstr "Musisz wpisaæ jakie¶ wyra¿enie"
 #: src/protocol/auth/dialogs.c:109 src/sched/download.c:539
 #: src/sched/download.c:1122 src/scripting/lua/core.c:396
 #: src/scripting/lua/core.c:477 src/viewer/text/search.c:1563
-#, fuzzy
 msgid "~Cancel"
-msgstr "Anuluj"
+msgstr "~Anuluj"
 
 #: src/bfu/leds.c:73
 msgid "Clock"
@@ -230,7 +226,6 @@ msgid "LED indicators"
 msgstr "Wska¼niki LED"
 
 #: src/bfu/leds.c:264
-#, fuzzy
 msgid ""
 "What the different LEDs indicate:\n"
 "\n"
@@ -251,7 +246,7 @@ msgstr ""
 " |||||`- nieu¿ywane\n"
 " ||||`-- nieu¿ywane\n"
 " |||`--- okienko pop-up JavaScriptu zosta³o zablokowane\n"
-" ||`---- wyst±pi³ b³±d JavaScript\n"
+" ||`---- wyst±pi³ b³±d JavaScriptu\n"
 " |`----- Stan trybu wpisania dla pól tekstowych formularza\n"
 " |       'I' oznacza wy³±czony, 'i' w³±czony\n"
 " `------ Czy u¿yte jest po³±czenie szyfrowane SSL\n"
@@ -326,9 +321,8 @@ msgstr ""
 "1 - XBEL uniwersalny format XML (BEZ OBS£UGI ZNAKÓW NARODOWYCH!) (WY£¡CZONE)"
 
 #: src/bookmarks/bookmarks.c:67
-#, fuzzy
 msgid "Save folder state"
-msgstr "Wpisz nazwê folderu"
+msgstr "Zapisz stan folderu"
 
 #: src/bookmarks/bookmarks.c:69
 msgid ""
@@ -337,6 +331,11 @@ msgid ""
 "kept across ELinks sessions. If disabled all folders will\n"
 "appear unexpanded next time ELinks is run."
 msgstr ""
+"Przy zapisywaniu zak³adek zapisz tak¿e czy foldery s±\n"
+"rozwijane czy nie, tak ¿eby wygl±d okien dialogowych\n"
+"zak³adek by³ zachowany pomiêdzy sesjami ELinksa. Gdy\n"
+"wy³±czone, wszystkie foldery bêd± zwiniête przy nastêpnym\n"
+"uruchomieniu ELinksa."
 
 #: src/bookmarks/bookmarks.c:74
 msgid "Periodic snapshotting"
@@ -430,15 +429,13 @@ msgstr "Edytuj zak³adkê"
 
 #: src/bookmarks/dialogs.c:467 src/cache/dialogs.c:220
 #: src/globhist/dialogs.c:224 src/protocol/auth/dialogs.c:253
-#, fuzzy
 msgid "~Goto"
-msgstr "Przejd¼ do"
+msgstr "~Przejd¼ do"
 
 #: src/bookmarks/dialogs.c:468 src/config/dialogs.c:509
 #: src/cookies/dialogs.c:423
-#, fuzzy
 msgid "~Edit"
-msgstr "Edytuj"
+msgstr "~Edytuj"
 
 #: src/bookmarks/dialogs.c:469 src/cache/dialogs.c:221
 #: src/config/dialogs.c:511 src/config/dialogs.c:932 src/cookies/dialogs.c:424
@@ -453,19 +450,16 @@ msgid "~Add"
 msgstr "~Dodaj"
 
 #: src/bookmarks/dialogs.c:471
-#, fuzzy
 msgid "Add se~parator"
-msgstr "Separator kart"
+msgstr "~Separator kart"
 
 #: src/bookmarks/dialogs.c:472
-#, fuzzy
 msgid "Add ~folder"
-msgstr "Dodaj folder"
+msgstr "Dodaj ~folder"
 
 #: src/bookmarks/dialogs.c:473
-#, fuzzy
 msgid "~Move"
-msgstr "Przenie¶"
+msgstr "~Przenie¶"
 
 #: src/bookmarks/dialogs.c:474 src/cache/dialogs.c:222
 #: src/config/dialogs.c:512 src/config/dialogs.c:934 src/dialogs/menu.c:397
@@ -596,9 +590,8 @@ msgstr "Czy usun±æ zaznaczony wpis cache?"
 #: src/cache/dialogs.c:219 src/config/dialogs.c:508 src/cookies/dialogs.c:421
 #: src/dialogs/download.c:472 src/formhist/dialogs.c:210
 #: src/globhist/dialogs.c:225 src/protocol/auth/dialogs.c:254
-#, fuzzy
 msgid "~Info"
-msgstr "Informacja"
+msgstr "~Informacja"
 
 #: src/cache/dialogs.c:227
 msgid "Cache manager"
@@ -1122,9 +1115,8 @@ msgid "Options were saved successfully to config file %s."
 msgstr "Ustawienia zosta³y zapisane pomy¶lnie do pliku konfiguracyjnego %s."
 
 #: src/config/dialogs.c:57
-#, fuzzy
 msgid "~Do not show anymore"
-msgstr "Nie pokazuj wiêcej"
+msgstr "~Nie pokazuj wiêcej"
 
 #: src/config/dialogs.c:63
 msgid "Cannot read the file"
@@ -1244,9 +1236,8 @@ msgstr "Nie mo¿na dodaæ tu opcji."
 #: src/config/dialogs.c:513 src/config/dialogs.c:935 src/cookies/dialogs.c:426
 #: src/dialogs/options.c:211 src/formhist/dialogs.c:214
 #: src/sched/download.c:1106
-#, fuzzy
 msgid "Sa~ve"
-msgstr "Zapisz"
+msgstr "~Zapisz"
 
 #: src/config/dialogs.c:518
 msgid "Option manager"
@@ -1290,9 +1281,8 @@ msgid "Need to select a keymap."
 msgstr "Trzeba wybraæ mapowanie klawiatury."
 
 #: src/config/dialogs.c:933 src/dialogs/info.c:134 src/globhist/dialogs.c:231
-#, fuzzy
 msgid "~Toggle display"
-msgstr "Krótki/d³ugi opis"
+msgstr "Krótki/d³ugi ~opis"
 
 #: src/config/dialogs.c:940
 msgid "Keybinding manager"
@@ -3317,9 +3307,8 @@ msgstr ""
 "pewno¶æ zapisu."
 
 #: src/config/options.inc:732
-#, fuzzy
 msgid "Use fsync(3) with secure file saving"
-msgstr "U¿ywanie bezpiecznego zapisu plików"
+msgstr "U¿ywanie fsync(3) przy bezpiecznym zapisie plików"
 
 #: src/config/options.inc:734
 msgid ""
@@ -3328,6 +3317,10 @@ msgid ""
 "to permanent storage. This is optional for those who wish\n"
 "to avoid excessive disk I/O."
 msgstr ""
+"Gdy u¿ywasz bezpiecznego zapisu plików, wywo³aj fsync(3),\n"
+"je¶li wspiera go system operacyjny, ¿eby wymusiæ niezw³oczne\n"
+"zapisanie danych. To jest opcjonalne, poniewa¿ niektórzy chc±\n"
+"unikn±æ nadmiernego u¿ycia dysku."
 
 #
 #. Keep options in alphabetical order.
@@ -3669,14 +3662,12 @@ msgstr "Kolory przycisku wyboru."
 
 #
 #: src/config/options.inc:954
-#, fuzzy
 msgid "Selected checkbox"
-msgstr "Wybrana karta"
+msgstr "Wybrany przycisk wyboru"
 
 #: src/config/options.inc:956
-#, fuzzy
 msgid "Dialog selected checkbox colors."
-msgstr "Kolory wybranego przycisku."
+msgstr "Kolory wybranego przycisku wyboru."
 
 #
 #: src/config/options.inc:958
@@ -4351,14 +4342,12 @@ msgid "Accept cookie?"
 msgstr "Akceptujesz ciasteczko?"
 
 #: src/cookies/dialogs.c:81
-#, fuzzy
 msgid "~Accept"
-msgstr "Akceptacja"
+msgstr "~Akceptacja"
 
 #: src/cookies/dialogs.c:82
-#, fuzzy
 msgid "~Reject"
-msgstr "Odrzucenie"
+msgstr "Od~rzucenie"
 
 #: src/cookies/dialogs.c:149 src/cookies/dialogs.c:342
 #: src/dialogs/document.c:110
@@ -4432,9 +4421,8 @@ msgid "Do you really want to remove all cookies?"
 msgstr "Czy na pewno chcesz skasowaæ wszystkie ciasteczka?"
 
 #: src/cookies/dialogs.c:425
-#, fuzzy
 msgid "~Clear"
-msgstr "Wyczy¶æ"
+msgstr "Wy~czy¶æ"
 
 #: src/cookies/dialogs.c:431
 msgid "Cookie manager"
@@ -4498,24 +4486,20 @@ msgid "Download"
 msgstr "Pobieranie"
 
 #: src/dialogs/download.c:257
-#, fuzzy
 msgid "~Background"
-msgstr "W tle"
+msgstr "W ~tle"
 
 #: src/dialogs/download.c:258
-#, fuzzy
 msgid "Background with ~notify"
-msgstr "W tle z powiadomieniem"
+msgstr "W tle z powiadomie~niem"
 
 #: src/dialogs/download.c:259 src/dialogs/download.c:473
-#, fuzzy
 msgid "~Abort"
-msgstr "Przerwij"
+msgstr "~Przerwij"
 
 #: src/dialogs/download.c:264
-#, fuzzy
 msgid "Abort and ~delete file"
-msgstr "Przerwij i skasuj plik"
+msgstr "Przerwij i ~skasuj plik"
 
 #. cant_delete_item
 #: src/dialogs/download.c:404
@@ -4566,9 +4550,8 @@ msgstr "Przerwij i skasuj plik"
 
 #: src/dialogs/download.c:478 src/dialogs/edit.c:99 src/globhist/dialogs.c:232
 #: src/protocol/auth/dialogs.c:256
-#, fuzzy
 msgid "C~lear"
-msgstr "Wyczy¶æ"
+msgstr "Wy~czy¶æ"
 
 #: src/dialogs/download.c:483
 msgid "Download manager"
@@ -4620,134 +4603,129 @@ msgstr "Zasoby"
 #, c-format
 msgid "%d handle"
 msgid_plural "%d handles"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d uchwyt"
+msgstr[1] "%d uchwytów"
 
 #: src/dialogs/info.c:177
-#, fuzzy, c-format
+#, c-format
 msgid "%d timer"
 msgid_plural "%d timers"
-msgstr[0] "up³ynê³o"
-msgstr[1] "up³ynê³o"
+msgstr[0] "%d zegar"
+msgstr[1] "%d zegarów"
 
 #: src/dialogs/info.c:184
-#, fuzzy, c-format
+#, c-format
 msgid "%d connection"
 msgid_plural "%d connections"
-msgstr[0] "Przerwij po³±czenie"
-msgstr[1] "Przerwij po³±czenie"
+msgstr[0] "%d po³±czenie"
+msgstr[1] "%d po³±czeñ"
 
 #: src/dialogs/info.c:188
-#, fuzzy, c-format
+#, c-format
 msgid "%d connecting"
 msgid_plural "%d connecting"
-msgstr[0] "Przerwij po³±czenie"
-msgstr[1] "Przerwij po³±czenie"
+msgstr[0] "%d ³±cz±ce siê"
+msgstr[1] "%d ³±cz±cych siê"
 
 #: src/dialogs/info.c:192
-#, fuzzy, c-format
+#, c-format
 msgid "%d transferring"
 msgid_plural "%d transferring"
-msgstr[0] "Przesy³anie"
-msgstr[1] "Przesy³anie"
+msgstr[0] "%d przesy³aj±ce"
+msgstr[1] "%d przysy³aj±cych"
 
 #: src/dialogs/info.c:196
 #, c-format
 msgid "%d keepalive"
 msgid_plural "%d keepalive"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d trwa³e"
+msgstr[1] "%d trwa³ych"
 
 #: src/dialogs/info.c:203 src/dialogs/info.c:255
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d bajt"
+msgstr[1] "%d bajtów"
 
 #: src/dialogs/info.c:207
 #, c-format
 msgid "%d file"
 msgid_plural "%d files"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d plik"
+msgstr[1] "%d plików"
 
 #: src/dialogs/info.c:211 src/dialogs/info.c:226
 #, c-format
 msgid "%d locked"
 msgid_plural "%d locked"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d zablokowany"
+msgstr[1] "%d zablokowanych"
 
 #
 #: src/dialogs/info.c:215
-#, fuzzy, c-format
+#, c-format
 msgid "%d loading"
 msgid_plural "%d loading"
-msgstr[0] "Pobieranie"
-msgstr[1] "Pobieranie"
+msgstr[0] "%d pobierany"
+msgstr[1] "%d pobieranych"
 
 #
 #: src/dialogs/info.c:218
-#, fuzzy
 msgid "Document cache"
-msgstr "Dokument"
+msgstr "Pamiêæ podrêczna dokumentu"
 
 #
 #: src/dialogs/info.c:222
-#, fuzzy, c-format
+#, c-format
 msgid "%d formatted"
 msgid_plural "%d formatted"
-msgstr[0] "Format pliku"
-msgstr[1] "Format pliku"
+msgstr[0] "%d sformatowany"
+msgstr[1] "%d sformatowanych"
 
 #: src/dialogs/info.c:230
 #, c-format
 msgid "%d refreshing"
 msgid_plural "%d refreshing"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d od¶wie¿aj±cy"
+msgstr[1] "%d od¶wie¿aj±cych"
 
 #: src/dialogs/info.c:233
-#, fuzzy
 msgid "Interlinking"
-msgstr "Wprowad¼ numer odno¶nika"
+msgstr "Po³±czenie wewnêtrzne"
 
 #: src/dialogs/info.c:236
-#, fuzzy
 msgid "master terminal"
-msgstr "Zmieñ rozmiar terminala"
+msgstr "terminal g³ówny"
 
 #: src/dialogs/info.c:238
-#, fuzzy
 msgid "slave terminal"
-msgstr "Zmieñ rozmiar terminala"
+msgstr "terminal podrzêdny"
 
 #: src/dialogs/info.c:242
-#, fuzzy, c-format
+#, c-format
 msgid "%d terminal"
 msgid_plural "%d terminals"
-msgstr[0] "Terminal ~BeOS"
-msgstr[1] "Terminal ~BeOS"
+msgstr[0] "%d terminal"
+msgstr[1] "%d terminali"
 
 #: src/dialogs/info.c:246
-#, fuzzy, c-format
+#, c-format
 msgid "%d session"
 msgid_plural "%d sessions"
-msgstr[0] "Zapisana sesja"
-msgstr[1] "Zapisana sesja"
+msgstr[0] "%d sesja"
+msgstr[1] "%d sesji"
 
 #: src/dialogs/info.c:251
-#, fuzzy
 msgid "Memory allocated"
-msgstr "Pamiêæ podrêczna"
+msgstr "Pamiêæ zaalokowana"
 
 #: src/dialogs/info.c:259
 #, c-format
 msgid "%d byte overhead"
 msgid_plural "%d bytes overhead"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d bajtów na kupie"
+msgstr[1] "%d bajtów na kupie"
 
 #: src/dialogs/menu.c:96
 msgid "Save URL"
@@ -5431,19 +5409,16 @@ msgstr ""
 "\"Prze³±cz zapisywanie\"."
 
 #: src/formhist/dialogs.c:209
-#, fuzzy
 msgid "~Login"
-msgstr "Nazwa u¿ytkownika"
+msgstr "Nazwa ~u¿ytkownika"
 
 #: src/formhist/dialogs.c:212
-#, fuzzy
 msgid "~Toggle saving"
-msgstr "Prze³±cz zapisywanie"
+msgstr "Prze³±cz ~zapisywanie"
 
 #: src/formhist/dialogs.c:213
-#, fuzzy
 msgid "Clea~r"
-msgstr "Wyczy¶æ"
+msgstr "Wy~czy¶æ"
 
 #: src/formhist/dialogs.c:219
 msgid "Form history manager"
@@ -5485,9 +5460,8 @@ msgstr ""
 "Je¶li u¿ywasz istotnych hase³ odpowiedz NIE."
 
 #: src/formhist/formhist.c:459
-#, fuzzy
 msgid "Ne~ver for this site"
-msgstr "Nigdy dla tego miejsca"
+msgstr "Nigdy dla tego ~miejsca"
 
 #. name:
 #: src/formhist/formhist.c:484
@@ -5542,7 +5516,6 @@ msgstr "Przeszukaj historiê"
 
 #
 #: src/globhist/dialogs.c:227
-#, fuzzy
 msgid "~Bookmark"
 msgstr "~Zak³adki"
 
@@ -6892,19 +6865,16 @@ msgstr ""
 "%s"
 
 #: src/sched/download.c:536
-#, fuzzy
 msgid "Sa~ve under the alternative name"
-msgstr "Zapisz pod alternatywn± nazw±"
+msgstr "Zap~isz pod alternatywn± nazw±"
 
 #: src/sched/download.c:537
-#, fuzzy
 msgid "~Overwrite the original file"
-msgstr "Nadpisz oryginalny plik"
+msgstr "Nadpisz ~oryginalny plik"
 
 #: src/sched/download.c:538
-#, fuzzy
 msgid "~Resume download of the original file"
-msgstr "Wznów pobieranie oryginalnego pliku"
+msgstr "Wznów pobie~ranie oryginalnego pliku"
 
 #: src/sched/download.c:1025
 msgid "What to do?"
@@ -6930,19 +6900,16 @@ msgid "The file will be opened with the program '%s'."
 msgstr "Plik zostanie otwarty przy u¿yciu programu '%s'."
 
 #: src/sched/download.c:1099
-#, fuzzy
 msgid "~Open"
-msgstr "Otwórz"
+msgstr "~Otwórz"
 
 #: src/sched/download.c:1112
-#, fuzzy
 msgid "~Display"
-msgstr "Wy¶wietl"
+msgstr "~Wy¶wietl"
 
 #: src/sched/download.c:1116
-#, fuzzy
 msgid "Show ~header"
-msgstr "Poka¿ nag³ówek"
+msgstr "Poka¿ ~nag³ówek"
 
 #: src/sched/error.c:31
 msgid "Waiting in queue"

@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.28 2005/03/02 23:02:35 zas Exp $ */
+/* $Id: libintl.h,v 1.29 2005/03/03 00:09:44 zas Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -52,6 +52,19 @@ extern int current_charset;
 /* Define it to find redundant useless calls */
 /* #define DEBUG_IT */
 
+static inline void
+intl_set_charset(struct terminal *term)
+{
+	int new_charset = get_opt_codepage_tree(term->spec, "charset");
+
+	/* Prevent useless switching. */
+	if (current_charset != new_charset) {
+		bind_textdomain_codeset( /* PACKAGE */ "elinks",
+					get_cp_mime_name(new_charset));
+		current_charset = new_charset;
+	}
+}
+
 /* TODO: Ideally, we should internally work only in Unicode - then the need for
  * charsets multiplexing would cease. That'll take some work yet, though.
  * --pasky */
@@ -64,23 +77,12 @@ extern int current_charset;
 static inline unsigned char *
 _(unsigned char *msg, struct terminal *term)
 {
-	int new_charset;
-
 	/* Prevent useless (and possibly dangerous) calls. */
 	if (!msg || !*msg)
 		return msg;
 
-	if (!term) goto do_lookup;
+	if (term) intl_set_charset(term);
 
-	new_charset = get_opt_codepage_tree(term->spec, "charset");
-	/* Prevent useless switching. */
-	if (current_charset != new_charset) {
-		bind_textdomain_codeset( /* PACKAGE */ "elinks",
-					get_cp_mime_name(new_charset));
-		current_charset = new_charset;
-	}
-
-do_lookup:
 	return (unsigned char *) gettext(msg);
 }
 
@@ -105,7 +107,6 @@ __(unsigned char *file, unsigned int line, unsigned char *func,
 	static unsigned int last_line = 0;
 	static unsigned char last_func[1024] = "";
 	static unsigned char last_result[16384] = "";
-	int new_charset;
 	unsigned char *result;
 
 	/* Prevent useless (and possibly dangerous) calls. */
@@ -114,17 +115,8 @@ __(unsigned char *file, unsigned int line, unsigned char *func,
 		return msg;
 	}
 
-	if (!term) goto do_lookup;
+	if (term) intl_set_charset(term);
 
-	/* Prevent useless switching. */
-	new_charset = get_opt_int_tree(term->spec, "charset");
-	if (el_gettext_current_charset != new_charset) {
-		bind_textdomain_codeset( /* PACKAGE */ "elinks",
-					get_cp_mime_name(new_charset));
-		el_gettext_current_charset = new_charset;
-	}
-
-do_lookup:
 	result = (unsigned char *) gettext(msg);
 
 	if (!strcmp(result, last_result)
@@ -152,23 +144,12 @@ do_lookup:
 static inline unsigned char *
 n_(unsigned char *msg1, unsigned char *msg2, unsigned long int n, struct terminal *term)
 {
-	int new_charset;
-
 	/* Prevent useless (and possibly dangerous) calls. */
 	if (!msg1 || !*msg1)
 		return msg1;
 
-	if (!term) goto do_lookup;
+	if (term) intl_set_charset(term);
 
-	new_charset = get_opt_codepage_tree(term->spec, "charset");
-	/* Prevent useless switching. */
-	if (current_charset != new_charset) {
-		bind_textdomain_codeset( /* PACKAGE */ "elinks",
-					get_cp_mime_name(new_charset));
-		current_charset = new_charset;
-	}
-
-do_lookup:
 	return (unsigned char *) ngettext(msg1, msg2, n);
 }
 

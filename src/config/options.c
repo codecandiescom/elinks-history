@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.325 2003/10/22 19:44:22 jonas Exp $ */
+/* $Id: options.c,v 1.326 2003/10/22 19:46:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -315,7 +315,7 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
  * completely filled (struct option *) have long name and functions which take
  * only option specs have short name. */
 
-void
+static void
 free_option_value(struct option *option)
 {
 	switch (option->type) {

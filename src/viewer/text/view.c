@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.495 2004/06/20 11:22:24 jonas Exp $ */
+/* $Id: view.c,v 1.496 2004/06/20 11:24:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -454,7 +454,7 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 			move_up(ses, doc_view, 1);
 	}
 
-	if (current_link != doc_view->vs->current_link) {
+	if (current_link != -1 && current_link != doc_view->vs->current_link) {
 		set_textarea(doc_view, -direction);
 	}
 }

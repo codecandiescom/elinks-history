@@ -1,5 +1,5 @@
 /* This routines are the bones of user interface. */
-/* $Id: bfu.c,v 1.18 2002/05/10 17:14:40 pasky Exp $ */
+/* $Id: bfu.c,v 1.19 2002/05/10 17:32:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -339,7 +339,7 @@ void do_tab_compl(struct terminal *term, struct list_head *history,
 
 	if (n) {
 		memset(&items[n], 0, sizeof(struct menu_item));
-		do_menu(term, items, win);
+		do_menu_selected(term, items, win, n - 1);
 	}
 }
 

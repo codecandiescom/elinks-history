@@ -1,3 +1,21 @@
+Wed Oct  9 13:01:29 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	We now use set_nonblocking_fd() instead of fnctl() call.  
+
+Wed Oct  9 08:26:58 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/french.lng, src/intl/language.inc:
+
+	French translation was updated.  
+
+Tue Oct  8 22:13:03 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	0.4pre18.CVS 
+
 Tue Oct  8 22:10:49 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.122 2003/06/17 11:29:41 zas Exp $ */
+/* $Id: renderer.c,v 1.123 2003/06/17 11:34:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -286,7 +286,7 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 	int nlink;
 	int matched = 0;
 
-	if (!part->data) return;
+	assert(part && part->data);
 	xpand_lines(part, yt);
 
 	for (nlink = last_link_to_move; nlink < part->data->nlinks; nlink++) {
@@ -347,10 +347,12 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 static inline void
 copy_chars(struct part *part, int x, int y, int xl, chr *d)
 {
-	if (xl <= 0
-	    || xpand_lines(part, y)
+	assert(xl > 0 && part && part->data);
+
+	if (xpand_lines(part, y)
 	    || xpand_line(part, y, x + xl - 1))
 		return;
+
 	for (; xl; xl--, x++, d++) POS(x, y) = *d;
 }
 

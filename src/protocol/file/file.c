@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.183 2004/12/19 12:04:43 jonas Exp $ */
+/* $Id: file.c,v 1.184 2004/12/19 12:08:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,9 +34,60 @@
 #include "util/string.h"
 
 
+struct option_info file_options[] = {
+	INIT_OPT_TREE("protocol", N_("Local files"),
+		"file", 0,
+		N_("Options specific to local browsing.")),
+
+#ifdef CONFIG_CGI
+	INIT_OPT_TREE("protocol.file", N_("Local CGI"),
+		"cgi", 0,
+		N_("Local CGI specific options.")),
+
+	INIT_OPT_STRING("protocol.file.cgi", N_("Path"),
+		"path", 0, "",
+		N_("Colon separated list of directories, where CGI scripts are stored.")),
+
+	INIT_OPT_BOOL("protocol.file.cgi", N_("Allow local CGI"),
+		"policy", 0, 0,
+		N_("Whether to execute local CGI scripts.")),
+#else
+	INIT_OPT_TREE("protocol.file", N_("Local CGI"),
+		"cgi", 0,
+		N_("Local CGI specific options. (DISABLED)")),
+
+	INIT_OPT_STRING("protocol.file.cgi", N_("Path"),
+		"path", 0, "",
+		N_("Colon separated list of directories, where CGI scripts are stored. (DISABLED)")),
+
+	INIT_OPT_BOOL("protocol.file.cgi", N_("Allow local CGI"),
+		"policy", 0, 0,
+		N_("Whether to execute local CGI scripts. (DISABLED)")),
+#endif /* CONFIG_CGI */
+
+	INIT_OPT_BOOL("protocol.file", N_("Allow reading special files"),
+		"allow_special_files", 0, 0,
+		N_("Allow reading from non-regular files? (DANGEROUS - reading\n"
+		"/dev/urandom or /dev/zero can ruin your day!)")),
+
+	INIT_OPT_BOOL("protocol.file", N_("Show hidden files in directory listing"),
+		"show_hidden_files", 0, 1,
+		N_("Show hidden files in directory listing ?\n"
+		   "If set to false, files with name starting with a dot will be\n"
+		   "hidden in local directories listing.")),
+
+	INIT_OPT_BOOL("protocol.file", N_("Try encoding extensions"),
+		"try_encoding_extensions", 0, 1,
+		N_("When set, if we can't open a file named 'filename', we'll try\n"
+		"to open 'filename' with some encoding extension appended\n"
+		"(ie. 'filename.gz'); it depends on the supported encodings.")),
+
+	NULL_OPTION_INFO,
+};
+
 struct module file_protocol_module = struct_module(
 	/* name: */		N_("File"),
-	/* options: */		NULL,
+	/* options: */		file_options,
 	/* hooks: */		NULL,
 	/* submodules: */	NULL,
 	/* data: */		NULL,

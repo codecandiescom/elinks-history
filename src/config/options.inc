@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.164 2004/12/19 02:27:33 miciah Exp $ */
+/* $Id: options.inc,v 1.165 2004/12/19 12:08:10 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -744,53 +744,6 @@ static struct option_info config_options_info[] = {
 	INIT_OPT_TREE("", N_("Protocols"),
 		"protocol", OPT_SORT,
 		N_("Protocol specific options.")),
-
-	INIT_OPT_TREE("protocol", N_("Local files"),
-		"file", 0,
-		N_("Options specific to local browsing.")),
-
-#ifdef CONFIG_CGI
-	INIT_OPT_TREE("protocol.file", N_("Local CGI"),
-		"cgi", 0,
-		N_("Local CGI specific options.")),
-
-	INIT_OPT_STRING("protocol.file.cgi", N_("Path"),
-		"path", 0, "",
-		N_("Colon separated list of directories, where CGI scripts are stored.")),
-
-	INIT_OPT_BOOL("protocol.file.cgi", N_("Allow local CGI"),
-		"policy", 0, 0,
-		N_("Whether to execute local CGI scripts.")),
-#else
-	INIT_OPT_TREE("protocol.file", N_("Local CGI"),
-		"cgi", 0,
-		N_("Local CGI specific options. (DISABLED)")),
-
-	INIT_OPT_STRING("protocol.file.cgi", N_("Path"),
-		"path", 0, "",
-		N_("Colon separated list of directories, where CGI scripts are stored. (DISABLED)")),
-
-	INIT_OPT_BOOL("protocol.file.cgi", N_("Allow local CGI"),
-		"policy", 0, 0,
-		N_("Whether to execute local CGI scripts. (DISABLED)")),
-#endif /* CONFIG_CGI */
-
-	INIT_OPT_BOOL("protocol.file", N_("Allow reading special files"),
-		"allow_special_files", 0, 0,
-		N_("Allow reading from non-regular files? (DANGEROUS - reading\n"
-		"/dev/urandom or /dev/zero can ruin your day!)")),
-
-	INIT_OPT_BOOL("protocol.file", N_("Show hidden files in directory listing"),
-		"show_hidden_files", 0, 1,
-		N_("Show hidden files in directory listing ?\n"
-		   "If set to false, files with name starting with a dot will be\n"
-		   "hidden in local directories listing.")),
-
-	INIT_OPT_BOOL("protocol.file", N_("Try encoding extensions"),
-		"try_encoding_extensions", 0, 1,
-		N_("When set, if we can't open a file named 'filename', we'll try\n"
-		"to open 'filename' with some encoding extension appended\n"
-		"(ie. 'filename.gz'); it depends on the supported encodings.")),
 
 	INIT_OPT_TREE("protocol", N_("User protocols"),
 		"user", OPT_AUTOCREATE,

@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.45 2004/05/07 17:40:26 jonas Exp $ */
+/* $Id: protocol.c,v 1.46 2004/05/07 17:53:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,18 @@
 #include "protocol/smb/smb.h"
 #include "protocol/user.h"
 
+
+struct protocol_backend {
+	unsigned char *name;
+	int port;
+	protocol_handler *handler;
+	protocol_external_handler *external_handler;
+	unsigned int free_syntax:1;
+	unsigned int need_slashes:1;
+	unsigned int need_slash_after_host:1;
+};
+
+
 static void
 unknown_protocol_handler(struct session *ses, struct uri *uri)
 {
@@ -51,7 +63,6 @@ unknown_protocol_handler(struct session *ses, struct uri *uri)
 
 	print_error_dialog(ses, state, PRI_CANCEL);
 }
-
 
 static const struct protocol_backend protocol_backends[] = {
 	{ "file",	 0, file_protocol_handler,	NULL,	1, 1, 0 },

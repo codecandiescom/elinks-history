@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.303 2004/01/25 09:55:08 jonas Exp $ */
+/* $Id: session.c,v 1.304 2004/02/02 09:52:01 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -115,7 +115,8 @@ print_error_dialog(struct session *ses, struct download *stat)
 {
 	unsigned char *t = get_err_msg(stat->state, ses->tab->term);
 
-	if (!t) return;
+	/* Don't show error dialogs for missing CSS stylesheets */
+	if (!t || stat->pri == PRI_CSS) return;
 	msg_box(ses->tab->term, NULL, MSGBOX_NO_INTL,
 		_("Error", ses->tab->term), AL_CENTER,
 		t,

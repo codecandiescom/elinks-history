@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.6 2004/08/18 18:07:32 jonas Exp $ */
+/* $Id: gopher.c,v 1.7 2004/08/18 18:09:55 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -715,7 +715,7 @@ gopher_protocol_handler(struct connection *conn)
 		 * - FM */
 		if (uri->datalen == 1 && *uri->data == GOPHER_CSO) {
 			/* FIXME: redirect_cache() */
-			end_gopher_connection(conn, S_OK);
+			end_gopher_connection(conn, S_UNKNOWN_PROTOCOL);
 		}
 		break;
 

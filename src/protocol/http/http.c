@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.244 2004/03/21 00:21:13 jonas Exp $ */
+/* $Id: http.c,v 1.245 2004/03/21 01:37:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,7 +235,7 @@ check_http_server_bugs(struct uri *uri, struct http_connection_info *info,
 
 	for (s = buggy_servers; *s; s++) {
 		if (strstr(server, *s)) {
-			add_blacklist_entry(uri->hoststr, uri->hostlen, BL_HTTP10);
+			add_blacklist_entry(&uri->host, BL_HTTP10);
 			break;
 		}
 	}
@@ -341,7 +341,7 @@ http_send_header(struct connection *conn)
 	conn->info = info;
 	info->sent_version.major = 1;
 	info->sent_version.minor = 1;
-	info->bl_flags = get_blacklist_flags(uri->hoststr, uri->hostlen);
+	info->bl_flags = get_blacklist_flags(&uri->host);
 
 	if (info->bl_flags & BL_HTTP10
 	    || get_opt_int("protocol.http.bugs.http10")) {
@@ -1075,13 +1075,10 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 
 	if (rb->close == 2) {
 		if (!conn->tries && uri->hoststr) {
-			unsigned char *hstr = uri->hoststr;
-			int len = uri->hostlen;
-
 			if (info->bl_flags & BL_NO_CHARSET) {
-				del_blacklist_entry(hstr, len, BL_NO_CHARSET);
+				del_blacklist_entry(&uri->host, BL_NO_CHARSET);
 			} else {
-				add_blacklist_entry(hstr, len, BL_NO_CHARSET);
+				add_blacklist_entry(&uri->host, BL_NO_CHARSET);
 				conn->tries = -1;
 			}
 		}

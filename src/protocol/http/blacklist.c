@@ -1,5 +1,5 @@
 /* Blacklist manager */
-/* $Id: blacklist.c,v 1.15 2004/01/28 00:38:11 jonas Exp $ */
+/* $Id: blacklist.c,v 1.16 2004/03/21 01:37:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,38 +25,38 @@ struct blacklist_entry {
 INIT_LIST_HEAD(blacklist);
 
 void
-add_blacklist_entry(unsigned char *host, int hostlen, enum blacklist_flags flags)
+add_blacklist_entry(struct string *host, enum blacklist_flags flags)
 {
 	struct blacklist_entry *b;
 
-	assert(host && hostlen > 0);
+	assert(!string_is_empty(host));
 	if_assert_failed return;
 
 	foreach (b, blacklist) {
-		if (strncasecmp(b->host, host, hostlen)) continue;
+		if (string_strcasecmp(host, b->host)) continue;
 
 		b->flags |= flags;
 		return;
 	}
 
-	b = mem_alloc(sizeof(struct blacklist_entry) + hostlen);
+	b = mem_alloc(sizeof(struct blacklist_entry) + host->length);
 	if (!b) return;
 
 	b->flags = flags;
-	memcpy(b->host, host, hostlen);
+	string_copy(b->host, host);
 	add_to_list(blacklist, b);
 }
 
 void
-del_blacklist_entry(unsigned char *host, int hostlen, enum blacklist_flags flags)
+del_blacklist_entry(struct string *host, enum blacklist_flags flags)
 {
 	struct blacklist_entry *b;
 
-	assert(host && hostlen > 0);
+	assert(!string_is_empty(host));
 	if_assert_failed return;
 
 	foreach (b, blacklist) {
-		if (strncasecmp(b->host, host, hostlen)) continue;
+		if (string_strcasecmp(host, b->host)) continue;
 
 		b->flags &= ~flags;
 		if (!b->flags) {
@@ -68,15 +68,15 @@ del_blacklist_entry(unsigned char *host, int hostlen, enum blacklist_flags flags
 }
 
 int
-get_blacklist_flags(unsigned char *host, int hostlen)
+get_blacklist_flags(struct string *host)
 {
 	struct blacklist_entry *b;
 
-	assert(host && hostlen > 0);
+	assert(!string_is_empty(host));
 	if_assert_failed return 0;
 
 	foreach (b, blacklist)
-		if (!strncasecmp(b->host, host, hostlen))
+		if (!string_strcasecmp(host, b->host))
 			return b->flags;
 	return 0;
 }

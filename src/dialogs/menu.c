@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.56 2002/12/03 22:09:28 zas Exp $ */
+/* $Id: menu.c,v 1.57 2002/12/05 17:29:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -340,6 +340,12 @@ menu_doc_info(struct terminal *term, void *ddd, struct session *ses)
 }
 
 void
+menu_header_info(struct terminal *term, void *ddd, struct session *ses)
+{
+	head_msg(ses);
+}
+
+void
 menu_toggle(struct terminal *term, void *ddd, struct session *ses)
 {
 	toggle(ses, ses->screen, 0);
@@ -493,6 +499,7 @@ struct menu_item view_menu[] = {
 	{"", "", M_BAR, NULL, NULL, 0, 0},
 	{TEXT(T_TOGGLE_HTML_PLAIN), "\\", TEXT(T_HK_TOGGLE_HTML_PLAIN), MENU_FUNC menu_toggle, NULL, 0, 0},
 	{TEXT(T_DOCUMENT_INFO), "=", TEXT(T_HK_DOCUMENT_INFO), MENU_FUNC menu_doc_info, NULL, 0, 0},
+	{TEXT(T_HEADER_INFO), "|", TEXT(T_HK_HEADER_INFO), MENU_FUNC menu_header_info, NULL, 0, 0},
 	{TEXT(T_FRAME_AT_FULL_SCREEN), "f", TEXT(T_HK_FRAME_AT_FULL_SCREEN), MENU_FUNC menu_for_frame, (void *)set_frame, 0, 0},
 	{"", "", M_BAR, NULL, NULL, 0, 0},
 	{TEXT(T_HTML_OPTIONS), "", TEXT(T_HK_HTML_OPTIONS), MENU_FUNC menu_html_options, (void *)0, 0, 0},

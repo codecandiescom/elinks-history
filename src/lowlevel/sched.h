@@ -1,4 +1,4 @@
-/* $Id: sched.h,v 1.19 2002/10/10 21:40:24 pasky Exp $ */
+/* $Id: sched.h,v 1.20 2002/10/13 13:27:45 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_SCHED_H
 #define EL__LOWLEVEL_SCHED_H
@@ -37,13 +37,21 @@ enum cache_mode {
 struct remaining_info {
 	int valid;
 	int size, loaded, last_loaded, cur_loaded;
+
+	/* This is offset where the download was resumed possibly */
+	int start;
+	/* This is absolute position in the stream
+	 * (relative_position = pos - start) (maybe our fictional
+	 * relative_position is equiv to loaded, but I'd rather not rely on it
+	 * --pasky). */
 	int pos;
+
 	ttime elapsed;
 	ttime last_time;
 	ttime dis_b;
+
 	int data_in_secs[CURRENT_SPD_SEC];
 	int timer;
-	int start;
 };
 
 struct connection {

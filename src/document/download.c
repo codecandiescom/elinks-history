@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.44 2002/10/13 13:06:26 pasky Exp $ */
+/* $Id: download.c,v 1.45 2002/10/13 13:27:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,7 +214,7 @@ download_window_function(struct dialog_data *dlg)
 		t = 1;
 		add_to_str(&m, &l, _(TEXT(T_RECEIVED), term));
 		add_to_str(&m, &l, " ");
-		add_xnum_to_str(&m, &l, stat->prg->pos + stat->prg->start);
+		add_xnum_to_str(&m, &l, stat->prg->pos);
 
 		if (stat->prg->size >= 0) {
 			add_to_str(&m, &l, " ");
@@ -225,7 +225,8 @@ download_window_function(struct dialog_data *dlg)
 		}
 		if (stat->prg->start) {
 			add_to_str(&m, &l, "(");
-			add_xnum_to_str(&m, &l, stat->prg->pos);
+			add_xnum_to_str(&m, &l, stat->prg->pos
+						- stat->prg->start);
 			add_to_str(&m, &l, " ");
 			add_to_str(&m, &l, _(TEXT(T_AFTER_RESUME), term));
 			add_to_str(&m, &l, ")");
@@ -266,7 +267,7 @@ download_window_function(struct dialog_data *dlg)
 						/ 1000 * stat->prg->loaded
 						- stat->prg->elapsed);
 #endif
-			add_time_to_str(&m, &l, (stat->prg->size - stat->prg->pos - stat->prg->start)
+			add_time_to_str(&m, &l, (stat->prg->size - (stat->prg->pos - stat->prg->start))
 						/ ((longlong) stat->prg->loaded * 10
 						   / (stat->prg->elapsed / 100))
 						* 1000);
@@ -336,11 +337,11 @@ download_window_function(struct dialog_data *dlg)
 		set_only_char(term, x, y, '[');
 		set_only_char(term, x + w - 5, y, ']');
 		fill_area(term, x + 1, y,
-			  (int) ((longlong) p * (longlong) (stat->prg->pos + stat->prg->start)
+			  (int) ((longlong) p * (longlong) stat->prg->pos
 				 / (longlong) stat->prg->size),
 			  1, get_bfu_color(term, "dialog.meter"));
 		sprintf(q, "%3d%%",
-			  (int) ((longlong) 100 * (longlong) (stat->prg->pos + stat->prg->start)
+			  (int) ((longlong) 100 * (longlong) stat->prg->pos
 				 / (longlong) stat->prg->size));
 		print_text(term, x + w - 4, y, strlen(q), q, dialog_text_color);
 		y++;

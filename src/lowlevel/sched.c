@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.48 2002/10/13 12:44:50 pasky Exp $ */
+/* $Id: sched.c,v 1.49 2002/10/13 13:27:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -834,7 +834,6 @@ load_url(unsigned char *url, unsigned char *prev_url,
 			if (st == stat) {
 				internal("status already assigned to '%s'", c->url);
 				stat->state = S_INTERNAL;
-				c->prg.start = start;
 				if (stat->end) stat->end(stat, stat->data);
 				return 0;
 			}
@@ -884,7 +883,6 @@ load_url(unsigned char *url, unsigned char *prev_url,
 			c->pri[pri]++;
 		}
 
-		c->prg.start = start;
 		if (stat) {
 			stat->prg = &c->prg;
 			stat->c = c;

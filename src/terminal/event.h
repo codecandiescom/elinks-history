@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.15 2004/07/27 21:32:11 jonas Exp $ */
+/* $Id: event.h,v 1.16 2004/07/28 10:19:12 jonas Exp $ */
 
 #ifndef EL__TERMINAL_EVENT_H
 #define EL__TERMINAL_EVENT_H
@@ -25,8 +25,15 @@ struct term_event {
 	enum term_event_type ev;
 	long x;
 	long y;
-	long b;
+
+	union {
+		struct term_event_mouse {
+			unsigned int button;
+		} mouse;
+	} info;
 };
+
+#define INIT_TERM_EVENT(type, x, y, b) { (type), (x), (y), { { (b) } } }
 
 /* This holds the information used when handling the initial connection between
  * a dumb and master terminal. */
@@ -63,8 +70,6 @@ struct terminal_info {
 
 void term_send_event(struct terminal *, struct term_event *);
 void in_term(struct terminal *);
-
-#define INIT_TERM_EVENT(type, x, y, b) { (type), (x), (y), (b) }
 
 #define check_kbd_textinput_key(event)	((event)->x >= ' ' && (event)->x < 256 && !(event->y)) 
 #define check_kbd_label_key(event)	((event)->x > ' ' && (event)->x < 256) 

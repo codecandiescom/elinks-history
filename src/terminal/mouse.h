@@ -1,4 +1,4 @@
-/* $Id: mouse.h,v 1.2 2004/07/27 16:11:43 jonas Exp $ */
+/* $Id: mouse.h,v 1.3 2004/07/28 10:19:12 jonas Exp $ */
 
 #ifndef EL__TERMINAL_MOUSE_H
 #define EL__TERMINAL_MOUSE_H
@@ -89,10 +89,10 @@
 #define BM_DRAG		64
 #define B_DRAG		64
 
-#define get_mouse_action(event)		 ((event)->b & BM_ACT)
+#define get_mouse_action(event)		 ((event)->info.mouse.button & BM_ACT)
 #define check_mouse_action(event, value) (get_mouse_action(event) == (value))
 
-#define get_mouse_button(event)		 ((event)->b & BM_BUTT)
+#define get_mouse_button(event)		 ((event)->info.mouse.button & BM_BUTT)
 #define check_mouse_button(event, value) (get_mouse_button(event) == (value))
 #define check_mouse_wheel(event)	 (get_mouse_button(event) >= B_WHEEL_UP)
 

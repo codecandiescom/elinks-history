@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.84 2004/07/27 21:32:11 jonas Exp $ */
+/* $Id: kbd.c,v 1.85 2004/07/28 10:19:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -756,6 +756,7 @@ process_queue(struct itrm *itrm)
 #ifdef CONFIG_MOUSE
 				{
 					static int xterm_button = -1;
+					struct term_event_mouse *mouse = &ev.info.mouse;
 
 					if (itrm->qlen - el < 3) goto ret;
 					if (v == 5) {
@@ -775,10 +776,10 @@ process_queue(struct itrm *itrm)
 						if (ev.y & (1 << 13)) ev.y = 0; /* ev.y |= ~0 << 14; */
 
 						switch ((itrm->kqueue[el] - ' ') ^ xterm_button) { /* Every event changes only one bit */
-						    case TW_BUTT_LEFT:   ev.b = B_LEFT | ( (xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN ); break;
-						    case TW_BUTT_MIDDLE: ev.b = B_MIDDLE | ( (xterm_button & TW_BUTT_MIDDLE) ? B_UP :  B_DOWN ); break;
-						    case TW_BUTT_RIGHT:  ev.b = B_RIGHT | ( (xterm_button & TW_BUTT_RIGHT) ? B_UP : B_DOWN ); break;
-						    case 0: ev.b = B_DRAG;
+						    case TW_BUTT_LEFT:   mouse->button = B_LEFT | ( (xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN ); break;
+						    case TW_BUTT_MIDDLE: mouse->button = B_MIDDLE | ( (xterm_button & TW_BUTT_MIDDLE) ? B_UP :  B_DOWN ); break;
+						    case TW_BUTT_RIGHT:  mouse->button = B_RIGHT | ( (xterm_button & TW_BUTT_RIGHT) ? B_UP : B_DOWN ); break;
+						    case 0: ev.info.mouse.button = B_DRAG;
 						    /* default : Twin protocol error */
 						}
 						xterm_button = itrm->kqueue[el] - ' ';
@@ -795,14 +796,14 @@ process_queue(struct itrm *itrm)
 						 * supposed to work and it conflicts with wheels. So I removed
 						 * the last remnants of the code as well. --pasky */
 
-						ev.b = (itrm->kqueue[el] & 7) | B_DOWN;
+						mouse->button = (itrm->kqueue[el] & 7) | B_DOWN;
 						/* smartglasses1 - rxvt wheel: */
-						if (ev.b == 3 && xterm_button != -1) {
-							ev.b = xterm_button | B_UP;
+						if (mouse->button == 3 && xterm_button != -1) {
+							mouse->button = xterm_button | B_UP;
 						}
 						/* xterm wheel: */
 						if ((itrm->kqueue[el] & 96) == 96) {
-							ev.b = (itrm->kqueue[el] & 1) ? B_WHEEL_DOWN : B_WHEEL_UP;
+							mouse->button = (itrm->kqueue[el] & 1) ? B_WHEEL_DOWN : B_WHEEL_UP;
 						}
 
 						xterm_button = -1;

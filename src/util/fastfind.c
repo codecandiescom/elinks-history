@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.69 2004/10/27 22:35:05 zas Exp $ */
+/* $Id: fastfind.c,v 1.70 2004/10/28 16:20:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,10 +146,13 @@ struct ff_node_c {
 	unsigned int ch:COMP_CHAR_INDEX_BITS;
 };
 
+struct ff_data {
+	void *pointer;
+	int keylen;
+};
 
 struct fastfind_info {
-	void **pointers;
-	int *keylen_list;
+	struct ff_data *data;
 
 	struct ff_node **leafsets;
 	struct ff_node *root_leafset;
@@ -272,6 +275,8 @@ static struct fastfind_info *
 init_fastfind(struct fastfind_index *index, enum fastfind_flags flags)
 {
 	struct fastfind_info *info = mem_calloc(1, sizeof(struct fastfind_info));
+
+	index->handle = info;
 	if (!info) return NULL;
 
 	info->min_key_len = FF_MAX_KEYLEN;
@@ -281,31 +286,24 @@ init_fastfind(struct fastfind_index *index, enum fastfind_flags flags)
 	FF_DBG_mem(info, sizeof(struct fastfind_info) - sizeof(info->debug));
 	FF_DBG_comment(info, index->comment);
 
-	index->handle = info;
 	return info;
 }
 
 /* Return 1 on success, 0 on allocation failure */
 static int
-alloc_pointers(struct fastfind_info *info)
+alloc_ff_data(struct fastfind_info *info)
 {
-	void **pointers;
-	int *keylen_list;
+	struct ff_data *data;
 
 	assert(info->count < FF_MAX_KEYS);
 	if_assert_failed return 0;
 
 	/* On error, cleanup is done by fastfind_done(). */
 
-	pointers = mem_calloc(info->count, sizeof(void *));
-	if (!pointers) return 0;
-	info->pointers = pointers;
-	FF_DBG_mem(info, info->count * sizeof(void *));
-
-	keylen_list = mem_calloc(info->count, sizeof(int));
-	if (!keylen_list) return 0;
-	info->keylen_list = keylen_list;
-	FF_DBG_mem(info, info->count * sizeof(int));
+	data = mem_calloc(info->count, sizeof(struct ff_data));
+	if (!data) return 0;
+	info->data = data;
+	FF_DBG_mem(info, info->count * sizeof(struct ff_data));
 
 	return 1;
 }
@@ -313,12 +311,13 @@ alloc_pointers(struct fastfind_info *info)
 /* Add pointer and its key length to correspondant arrays, incrementing
  * internal counter. */
 static void
-add_to_pointers(void *p, int key_len, struct fastfind_info *info)
+add_to_ff_data(void *p, int key_len, struct fastfind_info *info)
 {
+	struct ff_data *data = &info->data[info->pointers_count++];
+
 	/* Record new pointer and key len, used in search */
-	info->pointers[info->pointers_count] = p;
-	info->keylen_list[info->pointers_count] = key_len;
-	info->pointers_count++;
+	data->pointer = p;
+	data->keylen = key_len;
 }
 
 /* Return 1 on success, 0 on allocation failure */
@@ -481,7 +480,7 @@ fastfind_index(struct fastfind_index *index, enum fastfind_flags flags)
 
 	info->root_leafset = info->leafsets[info->leafsets_count];
 
-	if (!alloc_pointers(info)) goto return_error;
+	if (!alloc_ff_data(info)) goto return_error;
 
 	/* Build the tree */
 	index->reset();
@@ -517,7 +516,7 @@ fastfind_index(struct fastfind_index *index, enum fastfind_flags flags)
 
 		/* Memorize pointer to data */
 		leafset[i].p = info->pointers_count;
-		add_to_pointers(p->data, key_len, info);
+		add_to_ff_data(p->data, key_len, info);
 	}
 
 	if (info->compress)
@@ -560,10 +559,14 @@ return_error:
 		}								\
 										\
 		FF_DBG_test(info);						\
-		if (current->e && key_len == info->keylen_list[current->p]) {	\
+		if (current->e) {						\
+			struct ff_data *data = &info->data[current->p];		\
+										\
 			FF_DBG_test(info);					\
-			FF_DBG_found(info);					\
-			return info->pointers[current->p];			\
+			if (key_len == data->keylen) {				\
+				FF_DBG_found(info);				\
+				return data->pointer;				\
+			}							\
 		}								\
 										\
 		FF_DBG_test(info);						\
@@ -624,8 +627,7 @@ fastfind_done(struct fastfind_index *index)
 
 	FF_DBG_dump_stats(info);
 
-	mem_free_if(info->pointers);
-	mem_free_if(info->keylen_list);
+	mem_free_if(info->data);
 	while (info->leafsets_count) {
 		mem_free_if(info->leafsets[info->leafsets_count]);
 		info->leafsets_count--;

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.107 2003/11/09 13:31:07 pasky Exp $ */
+/* $Id: listbox.c,v 1.108 2003/11/09 13:33:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -512,7 +512,7 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 								       NULL, NULL);
 			else box->sel = box->top;
 
-			if (box->sel) {
+			if (box->sel && box->sel->type == BI_FOLDER) {
 				int xdepth = widget_data->x + box->sel->depth * 5;
 
 			       	if (ev->x >= xdepth && ev->x <= xdepth + 2)

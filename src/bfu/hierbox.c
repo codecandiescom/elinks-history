@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.53 2003/11/09 13:28:32 pasky Exp $ */
+/* $Id: hierbox.c,v 1.54 2003/11/09 13:33:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,9 @@ static void
 recursively_set_expanded(struct listbox_item *box, int expanded)
 {
 	struct listbox_item *child;
+
+	if (box->sel->type != BI_FOLDER)
+		return;
 
 	box->expanded = expanded;
 
@@ -83,7 +86,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 
 			/* Recursively unexpand all folders */
 			if (ev->x == '[' || ev->x == '-' || ev->x == '_') {
-				if (box->sel) {
+				if (box->sel && box->sel->type == BI_FOLDER) {
 					/* Special trick: if the folder is
 					 * already folded, jump at the parent
 					 * folder, so the next time when user
@@ -115,7 +118,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 
 			/* Recursively expand all folders */
 			if (ev->x == ']' || ev->x == '+' || ev->x == '=') {
-				if (box->sel) {
+				if (box->sel && box->sel->type == BI_FOLDER) {
 					recursively_set_expanded(box->sel, 1);
 					goto display_dlg;
 				}

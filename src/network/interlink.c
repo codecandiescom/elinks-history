@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.56 2003/06/20 18:21:59 pasky Exp $ */
+/* $Id: interlink.c,v 1.57 2003/06/21 08:48:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,8 +48,10 @@
 
 #ifdef DONT_USE_AF_UNIX
 
+/*** No internal communication. ***/
+
 int
-bind_to_af_unix(void)
+af_unix_open(void)
 {
 	return -1;
 }
@@ -59,14 +61,10 @@ af_unix_close(void)
 {
 }
 
-#else
 
-/* Rest of the file is #else... */
+#else /* DONT_USE_AF_UNIX */
 
-#ifdef USE_AF_UNIX
-#include <sys/un.h>
-#endif
-
+/* Common to both AF_UNIX and AF_INET stuff. */
 struct socket_info {
 	struct sockaddr *addr;
 	int size;
@@ -82,14 +80,19 @@ static struct socket_info s_info_listen;
 /* Connect socket info */
 static struct socket_info s_info_connect;
 
+/* Type of address requested (for get_address()) */
 enum addr_type {
-	ADDR_LOCAL,
 	ADDR_IP_CLIENT,
 	ADDR_IP_SERVER,
 	ADDR_ANY_SERVER,
 };
 
+
 #ifdef USE_AF_UNIX
+
+/*** Unix file socket for internal communication. ***/
+
+#include <sys/un.h>
 
 /* Compute socket file path and allocate space for it.
  * It returns 0 on error (in this case, there's no need
@@ -109,12 +112,13 @@ get_sun_path(unsigned char **sun_path, int *sun_path_len)
 
 	add_to_str(sun_path, sun_path_len, elinks_home);
 	add_to_str(sun_path, sun_path_len, ELINKS_SOCK_NAME);
-	add_num_to_str(sun_path, sun_path_len, get_opt_int_tree(&cmdline_options, "session-ring"));
+	add_num_to_str(sun_path, sun_path_len,
+		       get_opt_int_tree(&cmdline_options, "session-ring"));
 
 	return 1;
 }
 
-/* type is ignored here => always local */
+/* @type is ignored here => always local. */
 static int
 get_address(struct socket_info *info, enum addr_type type)
 {
@@ -215,7 +219,10 @@ unlink_unix(struct sockaddr *addr)
 #define setsock_reuse_addr(fd)
 
 
-#else /* AF_INET */
+#else /* USE_AF_UNIX */
+
+/*** TCP socket for internal communication. ***/
+/* FIXME: IPv6 support. */
 
 #include <arpa/inet.h>
 
@@ -228,14 +235,13 @@ unlink_unix(struct sockaddr *addr)
 #define IPPORT_USERRESERVED	5000
 #endif
 
-/* FIXME: IPv6 support. */
-
+/* @type is not used for now, and is ignored, it will
+ * be used in remote mode feature. */
 static int
 get_address(struct socket_info *info, enum addr_type type)
 {
 	struct sockaddr_in *sin;
 	unsigned short port;
-	struct in_addr ip;
 
 	assert(info);
 
@@ -245,30 +251,12 @@ get_address(struct socket_info *info, enum addr_type type)
 	if (port < IPPORT_USERRESERVED || port > 65535)
 		return -1; /* Just in case of... */
 
-	switch (type) {
-#ifdef ELINKS_REMOTE
-		/* Testing purpose only. */
-		case ADDR_ANY_SERVER:
-			ip.s_addr = htonl(INADDR_ANY); break;
-		case ADDR_IP_CLIENT:
-			if (!inet_aton("192.168.1.1", &ip))
-				return -1;
-			break;
-		case ADDR_IP_SERVER:
-			if (!inet_aton("192.168.1.1", &ip))
-				return -1;
-			break;
-#endif
-		default:
-			ip.s_addr = htonl(INADDR_LOOPBACK);
-	}
-
 	sin = mem_calloc(1, sizeof(struct sockaddr_in));
 	if (!sin) return -1;
 
 	sin->sin_family = AF_INET;
 	sin->sin_port = htons(port);
-	sin->sin_addr.s_addr = ip.s_addr;
+	sin->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 
 	info->addr = (struct sockaddr *) sin;
 	info->size = sizeof(struct sockaddr_in);
@@ -308,7 +296,22 @@ setsock_reuse_addr(int fd)
 
 #define unlink_unix(s)
 
-#endif
+#endif /* USE_AF_UNIX */
+
+/* Max. number of bind attempts. */
+#define MAX_BIND_TRIES			3
+/* Base delay in useconds between bind attempts.
+ * We will sleep that time on first attempt, then
+ * 2 * delay, then 3 * delay .... */
+#define BIND_TRIES_DELAY		100000
+/* Number of connections in listen backlog. */
+#define LISTEN_BACKLOG			100
+
+/* Max. number of connect attempts. */
+#define MAX_CONNECT_TRIES		3
+/* Base delay in useconds between connect attempts. */
+#define CONNECT_TRIES_DELAY		50000
+
 
 /* Called when we receive a connection on listening socket. */
 static void
@@ -378,7 +381,7 @@ again:
 			      errno, (unsigned char *) strerror(errno));
 
 		if (++attempts < MAX_BIND_TRIES) {
-			elinks_usleep(100000 * attempts);
+			elinks_usleep(BIND_TRIES_DELAY * attempts);
 			close(s_info_listen.fd);
 
 			goto again;
@@ -393,7 +396,7 @@ again:
 
 	s_info_accept.fd = s_info_listen.fd;
 
-	if (listen(s_info_listen.fd, 100)) {
+	if (listen(s_info_listen.fd, LISTEN_BACKLOG)) {
 		error(gettext("listen() failed: %d (%s)"),
 		      errno, (unsigned char *) strerror(errno));
 		goto free_and_error;
@@ -429,16 +432,18 @@ again:
 		goto free_and_error;
 	}
 
+#if 0
 	/* Is this of any use on connect socket ?? */
 	setsock_reuse_addr(s_info_connect.fd);
-
-	if (connect(s_info_connect.fd, s_info_connect.addr, s_info_connect.size) < 0) {
+#endif
+	if (connect(s_info_connect.fd, s_info_connect.addr,
+		    s_info_connect.size) < 0) {
 		if (errno != ECONNREFUSED && errno != ENOENT)
 			error(gettext("connect() failed: %d (%s)"),
 			      errno, (unsigned char *) strerror(errno));
 
-		if (++attempts < MAX_BIND_TRIES) {
-			elinks_usleep(100000 * attempts);
+		if (++attempts < MAX_CONNECT_TRIES) {
+			elinks_usleep(CONNECT_TRIES_DELAY * attempts);
 			close(s_info_connect.fd);
 
 			goto again;
@@ -518,4 +523,11 @@ af_unix_open(void)
 	return -1;
 }
 
-#endif
+
+#undef MAX_BIND_TRIES
+#undef BIND_TRIES_DELAY
+#undef LISTEN_BACKLOG
+#undef MAX_CONNECT_TRIES
+#undef CONNECT_TRIES_DELAY
+
+#endif /* DONT_USE_AF_UNIX */

@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.11 2002/05/08 13:55:01 pasky Exp $ */
+/* $Id: options.c,v 1.12 2002/05/08 13:59:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,8 +7,8 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <sys/socket.h>
 #include <sys/types.h>
+#include <sys/socket.h> /* OS/2 needs this after sys/types.h */
 #include <sys/stat.h> /* OS/2 needs this after sys/types.h */
 #include <netdb.h>
 

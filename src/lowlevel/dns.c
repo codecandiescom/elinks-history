@@ -1,14 +1,14 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.11 2002/05/08 13:55:04 pasky Exp $ */
+/* $Id: dns.c,v 1.12 2002/05/08 13:59:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <netdb.h>
 #include <string.h>
-#include <sys/socket.h>
 #include <sys/types.h>
+#include <netdb.h> /* OS/2 needs this after sys/types.h */
+#include <sys/socket.h> /* OS/2 needs this after sys/types.h */
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h> /* OS/2 needs this after sys/types.h */
 #endif

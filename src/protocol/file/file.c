@@ -1,16 +1,16 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.12 2002/05/08 13:55:05 pasky Exp $ */
+/* $Id: file.c,v 1.13 2002/05/08 13:59:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <errno.h>
-#ifdef HAVE_DIRENT_H
-#include <dirent.h>
-#endif
 #include <stdio.h>
 #include <sys/types.h>
+#ifdef HAVE_DIRENT_H
+#include <dirent.h> /* OS/2 needs this after sys/types.h */
+#endif
 #include <sys/stat.h> /* OS/2 needs this after sys/types.h */
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h> /* OS/2 needs this after sys/types.h */

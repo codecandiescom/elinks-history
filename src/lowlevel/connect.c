@@ -1,14 +1,14 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.16 2002/05/08 13:55:04 pasky Exp $ */
+/* $Id: connect.c,v 1.17 2002/05/08 13:59:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <errno.h>
-#include <netinet/in.h>
 #include <string.h>
 #include <sys/types.h>
+#include <netinet/in.h> /* OS/2 needs this after sys/types.h */
 #include <sys/socket.h> /* OS/2 needs this after sys/types.h */
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h> /* OS/2 needs this after sys/types.h */

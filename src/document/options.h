@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.34 2003/12/27 22:58:19 zas Exp $ */
+/* $Id: options.h,v 1.35 2003/12/30 12:45:14 zas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -62,13 +62,16 @@ struct document_options {
 	/* This controls how wide tables can be rendered and so on. It is thus
 	 * also to blame for the extra memory consumption when resizing because
 	 * all documents has to be rerendered. */
-	/* Placed here because we only need to compare it if not @plain. */
+	/* Placed here because we only need to compare it if @needs_width is
+	 * set. */
 	int width;
 
 	/* The height of the window */
 	/* It is placed here because only documents containing textarea or
 	 * frames uses it and we only compare it if @needs_height is set. */
 	int height;
+
+	unsigned int needs_width:1;
 	unsigned int needs_height:1;
 
 	/* Active link coloring */

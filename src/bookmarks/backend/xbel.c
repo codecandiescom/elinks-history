@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.49 2005/03/18 13:30:54 zas Exp $ */
+/* $Id: xbel.c,v 1.50 2005/03/18 13:39:16 zas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -247,7 +247,7 @@ write_bookmarks_list(struct secure_save_info *ssi,
 			secure_fputs(ssi, "</bookmark>\n\n");
 
 		} else if (bm->box_item->type == BI_SEPARATOR) {
-			secure_fputs(ssi, "<separator/>\n");
+			secure_fputs(ssi, "<separator/>\n\n");
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.64 2003/11/14 02:06:29 miciah Exp $ */
+/* $Id: document.c,v 1.65 2003/11/14 11:21:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,19 +74,6 @@ loc_msg(struct terminal *term, struct location *location,
 		add_char_to_string(&msg, '#');
 		add_to_string(&msg, location->vs.goto_position);
 	}
-
-#if 0
-	/* strip_url_password() takes care about this now */
-	if (strchr(location->vs.url, POST_CHAR)) {
-		add_bytes_to_string(&msg, location->vs.url,
-				 (unsigned char *) strchr(location->vs.url,
-							  POST_CHAR)
-				 - (unsigned char *) location->vs.url);
-
-	} else {
-		add_to_string(&msg, location->vs.url);
-	}
-#endif
 
 	add_char_to_string(&msg, '\n');
 

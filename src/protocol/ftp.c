@@ -1,10 +1,11 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.47 2002/10/02 15:29:55 zas Exp $ */
+/* $Id: ftp.c,v 1.48 2002/10/04 17:50:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <stdio.h>
 #include <ctype.h>
 #include <errno.h>
 #include <stdlib.h>

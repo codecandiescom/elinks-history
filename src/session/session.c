@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.318 2004/03/22 02:51:47 jonas Exp $ */
+/* $Id: session.c,v 1.319 2004/03/22 03:23:14 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -662,7 +662,7 @@ copy_session(struct session *old, struct session *new)
 {
 	if (!have_location(old)) return;
 
-	goto_url(new, cur_loc(old)->vs.url);
+	goto_url(new, get_location_url(cur_loc(old)));
 }
 
 void *
@@ -905,7 +905,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 
 		l->download.data = ses;
 		l->download.end = (void *)doc_end_load;
-		load_url(l->vs.url, ses->referrer, &l->download, PRI_MAIN, cache_mode, -1);
+		load_url(get_location_url(l), ses->referrer, &l->download, PRI_MAIN, cache_mode, -1);
 		foreach (ftl, ses->more_files) {
 			struct uri *referer = NULL;
 
@@ -1079,7 +1079,7 @@ get_current_url(struct session *ses, unsigned char *str, size_t str_size)
 	if (!have_location(ses))
 		return NULL;
 
-	here = cur_loc(ses)->vs.url;
+	here = get_location_url(cur_loc(ses));
 	url_len = get_no_post_url_length(here);
 
 	/* Ensure that the url size is not greater than str_size.

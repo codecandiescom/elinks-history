@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.23 2004/03/21 23:55:19 jonas Exp $ */
+/* $Id: task.c,v 1.24 2004/03/22 03:23:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,7 +191,7 @@ x:
 	if (!loaded_in_frame) {
 		len = strlen(ses->loading_url);
 		if (have_location(ses))
-			int_lower_bound(&len, strlen(cur_loc(ses)->vs.url));
+			int_lower_bound(&len, cur_loc(ses)->vs.url_len);
 
 	/* struct view_state reserves one byte, so len is sufficient. */
 		loc = mem_alloc(sizeof(struct location) + len);

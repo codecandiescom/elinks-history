@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.68 2004/05/14 00:18:40 jonas Exp $ */
+/* $Id: status.c,v 1.69 2004/05/14 08:49:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,7 +202,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 	struct color_pair *text_color = NULL;
 	int msglen;
 	struct box box;
-	
+
 	if (stat) {
 		/* Show S_INTERRUPTED message *once* but then show links
 		 * again as usual. */
@@ -290,7 +290,7 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 	struct box box;
 
 	set_box(&box, 0, term->height - (status->show_status_bar ? 2 : 1), 0, 1);
-	
+
 	for (tab_num = 0; tab_num < tabs_count; tab_num++) {
 		struct download *stat = NULL;
 		struct color_pair *color = normal_color;
@@ -379,7 +379,7 @@ display_title_bar(struct session *ses, struct terminal *term)
 	int buflen = 0;
 	int height;
 	struct box box;
-	
+
 	/* Clear the old title */
 	set_box(&box, 0, 0, term->width, 1);
 	draw_box(term, &box, ' ', 0, get_bfu_color(term, "title.title-bar"));

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.219 2004/05/14 00:18:41 jonas Exp $ */
+/* $Id: search.c,v 1.220 2004/05/14 08:49:07 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -521,7 +521,7 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	struct search *search_start = s1;
 	unsigned char save_c;
 	struct box *box;
-	
+
 	if (get_opt_int("document.browse.search.regex") == 2)
 		regex_flags |= REG_EXTENDED;
 
@@ -824,7 +824,7 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 	int step, hit_bottom = 0, hit_top = 0;
 	int show_hit_top_bottom = get_opt_bool("document.browse.search.show_hit_top_bottom");
 	int height;
-	
+
 	assert(ses && ses->tab && ses->tab->term && doc_view && doc_view->vs && direction);
 	if_assert_failed return;
 

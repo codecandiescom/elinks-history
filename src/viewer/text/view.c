@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.409 2004/05/14 00:43:27 jonas Exp $ */
+/* $Id: view.c,v 1.410 2004/05/14 08:49:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,7 +125,7 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *frameset_desc,
 
 			if (j) {
 				struct box box;
-				
+
 				set_box(&box, x + 1, y, width, 1);
 				draw_box(t, &box, BORDER_SHLINE, SCREEN_ATTR_FRAME, &colors);
 
@@ -171,7 +171,7 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 {
 	struct color_pair color = INIT_COLOR_PAIR(0, 0);
 	struct view_state *vs;
-	struct box *box;	
+	struct box *box;
 	int vx, vy;
 	int y;
 

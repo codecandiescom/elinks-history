@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.166 2004/05/14 00:18:40 jonas Exp $ */
+/* $Id: tables.c,v 1.167 2004/05/14 08:49:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,14 +219,14 @@ new_table(void)
 		mem_free(t);
 		return NULL;
 	}
-	
+
 	t->columns = mem_calloc(INIT_X, sizeof(struct table_column));
 	if (!t->columns) {
 		mem_free(t->cells);
 		mem_free(t);
 		return NULL;
 	}
-	
+
 	t->rx = INIT_X;
 	t->ry = INIT_Y;
 	t->real_columns_count = INIT_X;
@@ -371,7 +371,7 @@ new_columns(struct table *t, int span, int width, int align,
 
 	while (span--) {
 		struct table_column *column = &t->columns[t->columns_count++];
-		
+
 		column->align = align;
 		column->valign = valign;
 		column->width = width;

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.47 2004/05/14 08:42:09 zas Exp $ */
+/* $Id: renderer.c,v 1.48 2004/05/14 08:49:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,7 +87,7 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	}
 
 	doc_view->document = document;
-	
+
 	/* If we do not care about the height and width of the document
 	 * just use the setup values. */
 

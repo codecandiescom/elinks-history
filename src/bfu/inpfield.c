@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.142 2004/05/14 00:18:40 jonas Exp $ */
+/* $Id: inpfield.c,v 1.143 2004/05/14 08:49:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,7 +251,7 @@ display_field_do(struct widget_data *widget_data, struct dialog_data *dlg_data,
 
 			copy_box(&box, &widget_data->box);
 			box.width = w;
-		       	
+
 			draw_box(term, &box, '*', 0, color);
 		}
 	}

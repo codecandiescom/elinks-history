@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.62 2004/05/14 00:18:40 jonas Exp $ */
+/* $Id: menu.h,v 1.63 2004/05/14 08:49:07 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -145,7 +145,7 @@ struct menu {
 
 	int selected;		/* The current selected item. -1 means none */
 	int first, last;	/* The first and last visible menu items */
-	
+
 	struct box box;		/* The visible area of the menu */
 	int parent_x, parent_y;	/* The coordinates of the parent window */
 

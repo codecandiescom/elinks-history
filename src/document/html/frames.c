@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.70 2004/05/14 00:43:26 jonas Exp $ */
+/* $Id: frames.c,v 1.71 2004/05/14 08:49:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,7 +115,7 @@ add_frame_to_list(struct session *ses, struct document_view *doc_view)
 		int sy = ses_doc_view->box.y;
 		int x = doc_view->box.x;
 		int y = doc_view->box.y;
-		
+
 		if (sy > y || (sy == y && sx > x)) {
 			add_at_pos(ses_doc_view->prev, doc_view);
 			return;

@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.9 2002/12/29 11:30:34 pasky Exp $ */
+/* $Id: parser.c,v 1.10 2002/12/29 12:18:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@ enum state_code {
 	HPT_TAG,
 	HPT_TAG_WHITE,
 	HPT_TAG_NAME,
+	HPT_TAG_ATTR,
 	HPT_TAG_COMMENT,
 	HPT_NO,
 };
@@ -36,17 +37,18 @@ struct html_parser_state {
 	enum state_code state;
 
 	union {
-		/* HPT_TAG */
+		/* HPT_TAG, HPT_TAG_NAME, HPT_TAG_COMMENT */
 		struct {
 			unsigned char *tagname;
 			int taglen;
 			/* / -> ending, !,? -> comment */
 			unsigned char type;
 		} tag;
-		/* HPT_TAG_ATTR */
+		/* HPT_TAG_ATTR, HPT_TAG_ATTR_VAL */
 		struct {
 			unsigned char *attrname;
 			int attrlen;
+			int val_end;
 		} attr;
 	} data;
 };
@@ -103,6 +105,10 @@ spawn_syntree_node(struct parser_state *state)
  * large-block (state-wise blocks) performance, but it'll get worse with
  * heavily fragmented string with a lot of state changes, counting in the
  * function call overhead. But that should be really rare. */
+
+/* We are built to be able to parse even small fragments of source at once,
+ * thus we don't maintain per-function state in stack but generic state. That
+ * brings some overhead, but I believe that it should be almost seamless. */
 
 /* TODO: We should investigate if it's ever possible to get into parser routine
  * with zero len - that'd give us some trouble. --pasky */
@@ -317,6 +323,68 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 	return 0;
 }
 
+/* This eats tag attributes and adds them to the syntax tree node. */
+static int
+tag_attr_parse(struct parser_state *state, unsigned char **str, int *len)
+{
+	struct html_parser_state *pstate = state->data;
+	unsigned char *html = *str;
+	int html_len = *len;
+
+	if (WHITECHAR(*html)) {
+		pstate = html_state_push(state, HPT_TAG_WHITE);
+		return 0;
+	}
+
+	if (*html == '>') {
+		pstate = html_state_pop(state);
+		return 0;
+	}
+
+	while (html_len) {
+		if (isA(*html)) {
+			html++, html_len--;
+			continue;
+		}
+
+		if (*len - html_len) {
+			int name_len = *len - html_len;
+
+			pstate->data.attr.attrname = *str;
+			pstate->data.attr.attrlen = name_len;
+			pstate = html_state_push(state, HPT_TAG_ATTR_VAL);
+			pstate->data.attr.attrname = *str;
+			pstate->data.attr.attrlen = name_len;
+			if (WHITESPACE(*html))
+				pstate = html_state_push(state, HPT_TAG_WHITE);
+
+#if 0
+			struct attribute *attrib;
+
+			attrib = mem_calloc(1, sizeof(struct attribute));
+			attrib->name = *str; attrib->namelen = name_len;
+			attrib->value = *html; attrib->valuelen = 0;
+			add_to_list(state->current->attr, attrib);
+#endif
+
+		} else {
+			if (*html = '/') {
+				/* The tag isn't pair. */
+				/* FIXME: We should match this only at the end
+				 * of the tag, I think. --pasky */
+				if (state->root == state->current)
+					state->root = state->current->root;
+			}
+			/* TODO: State switch or while() here. --pasky */
+			html++, html_len--;
+		}
+
+		*str = html, *len = html_len;
+		return 0;
+	}
+
+	return -1;
+}
 /* This eats name of the tag. Also, it maintains the corresponding struct
  * syntree_node. */
 static int
@@ -473,102 +541,6 @@ comment_end:
 	}
 }
 
-#if 0
-/* This handles a sign of the allmighty tag, determines what the tag is about. */
-static int
-tag_parse(struct parser_state *state, unsigned char **str, int *len)
-{
-	struct html_parser_state *pstate = state->data;
-	unsigned char *html = *str;
-	int html_len = *len;
-	int name_len = 0;
-
-	html++, html_len--; /* < */
-
-	if (!html_len) return -1;
-
-	/* Closing tag fun. */
-	if (*html == '/') {
-		html++, html_len--; /* / */
-		while (name_len < html_len) {
-			int end_bracket;
-
-			if (isA(html[name_len])) {
-				name_len++;
-				continue;
-			}
-
-			end_bracket = name_len;
-			while (end_bracket < html_len) {
-				struct syntree_node *node = state->root;
-
-				if (html[end_bracket] != '>') {
-					end_bracket++;
-					continue;
-				}
-
-				while (node) {
-					/* XXX: We rely on the fact that all
-					 * non-leaf nodes are tags here. */
-					if (node->str &&
-					    !strncmp(node->str, html,
-						name_len > node->strlen
-							? node->strlen
-							: name_len))
-						break;
-					node = node->root;
-				}
-
-				if (node) {
-					if (node->root) {
-						state->current = node->root;
-					} else {
-						/* The root node is special. */
-						state->current = node;
-					}
-					state->root = state->current->root;
-				}
-
-				*str = html + end_bracket, *len = html_len - end_bracket;
-				return 0;
-			}
-			break;
-		}
-		return -1;
-	}
-
-	/* Comment fun...? */
-	if (*html == '?' || *html == '!') {
-		pstate->state = HPT_COMMENT;
-		return 0;
-	}
-
-	while (name_len < html_len) {
-		unsigned char *name = html;
-
-		if (isA(html[name_len])) {
-			name_len++;
-			continue;
-		}
-
-		html += name_len;
-		html_len -= name_len--;
-
-		while (html_len) {
-			if (!isA(*html)) {
-				html++, html_len--;
-				continue;
-			}
-
-			
-		}
-		break;
-	}
-
-	return -1;
-}
-#endif
-
 /* State parser returns:
  * 1  on completion of the string (you can't rely on this not being 0, though),
  * 0  on change of the state,
@@ -580,6 +552,7 @@ static int (*state_parsers)(struct parser_state *, unsigned char *, int *)
 	tag_parse,
 	tag_white_parse,
 	tag_name_parse,
+	tag_attr_parse,
 	comment_parse,
 };
 

@@ -1,3 +1,16 @@
+Wed Dec 26 00:19:15 2001  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, session.c:
+	
+	Proper parsing of set-cookie expires atribute, patch by Stepan Roh
+	<stepan@srnet.cz>, blank lines by me
+
+Tue Dec 25 21:55:49 2001  Petr Baudis <pasky@ji.cz>:
+
+	* bfu.c:
+	
+	bfu.c partial cleanup
+
 Tue Dec 25 18:42:00 2001  Petr Baudis <pasky@ji.cz>:
 
 	* default.c:

@@ -1,5 +1,5 @@
 /* Ruby scripting hooks */
-/* $Id: hooks.c,v 1.1 2005/01/18 10:29:40 jonas Exp $ */
+/* $Id: hooks.c,v 1.2 2005/01/18 15:07:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,7 +73,7 @@ script_hook_goto_url(va_list ap, void *data)
 
 	result = erb_protected_method_call("goto_url_hook", 2, args, &error);
 	if (error) {
-		erb_report_error(error);
+		erb_report_error(ses, error);
 		return EVENT_HOOK_STATUS_NEXT;
 	}
 
@@ -93,7 +93,7 @@ script_hook_goto_url(va_list ap, void *data)
 		break;
 
 	default:
-		alert_ruby_error("goto_url_hook must return a string or nil");
+		alert_ruby_error(ses, "goto_url_hook must return a string or nil");
 	}
 
 	return EVENT_HOOK_STATUS_NEXT;
@@ -117,7 +117,7 @@ script_hook_follow_url(va_list ap, void *data)
 
 	result = erb_protected_method_call("follow_url_hook", 1, args, &error);
 	if (error) {
-		erb_report_error(error);
+		erb_report_error(ses, error);
 		return EVENT_HOOK_STATUS_NEXT;
 	}
 
@@ -137,7 +137,7 @@ script_hook_follow_url(va_list ap, void *data)
 		break;
 
 	default:
-		alert_ruby_error("follow_url_hook must return a string or nil");
+		alert_ruby_error(ses, "follow_url_hook must return a string or nil");
 	}
 
 	return EVENT_HOOK_STATUS_NEXT;
@@ -165,7 +165,7 @@ script_hook_pre_format_html(va_list ap, void *data)
 
 	result = erb_protected_method_call("pre_format_html_hook", 2, args, &error);
 	if (error) {
-		erb_report_error(error);
+		erb_report_error(ses, error);
 		return EVENT_HOOK_STATUS_NEXT;
 	}
 
@@ -185,7 +185,7 @@ script_hook_pre_format_html(va_list ap, void *data)
 		break;
 
 	default:
-		alert_ruby_error("pre_format_html_hook must return a string or nil");
+		alert_ruby_error(ses, "pre_format_html_hook must return a string or nil");
 	}
 
 	return EVENT_HOOK_STATUS_NEXT;
@@ -211,7 +211,7 @@ script_hook_get_proxy(va_list ap, void *data)
 
 	result = erb_protected_method_call("proxy_hook", 1, args, &error);
 	if (error) {
-		erb_report_error(error);
+		erb_report_error(NULL, error);
 		return EVENT_HOOK_STATUS_NEXT;
 	}
 
@@ -230,7 +230,7 @@ script_hook_get_proxy(va_list ap, void *data)
 		break;
 
 	default:
-		alert_ruby_error("proxy_hook must return a string or nil");
+		alert_ruby_error(NULL, "proxy_hook must return a string or nil");
 	}
 
 	return EVENT_HOOK_STATUS_NEXT;
@@ -245,7 +245,7 @@ script_hook_quit(va_list ap, void *data)
 			       &error);
 
 	if (error)
-		erb_report_error(error);
+		erb_report_error(NULL, error);
 
 	return EVENT_HOOK_STATUS_NEXT;
 }

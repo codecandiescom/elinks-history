@@ -1,5 +1,5 @@
 /* Ruby interface (scripting engine) */
-/* $Id: core.c,v 1.1 2005/01/18 10:29:40 jonas Exp $ */
+/* $Id: core.c,v 1.2 2005/01/18 15:07:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,11 +15,13 @@
 #include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
 #include "modules/module.h"
+#include "sched/session.h"
 #include "scripting/ruby/core.h"
 #include "scripting/ruby/hooks.h"
 #include "scripting/ruby/ruby.h"
 #include "scripting/scripting.h"
 #include "terminal/terminal.h"
+#include "terminal/window.h"
 #include "util/error.h"
 #include "util/file.h"
 #include "util/string.h"
@@ -35,17 +37,26 @@ VALUE erb_module;
 /* Error reporting. */
 
 void
-alert_ruby_error(unsigned char *msg)
+alert_ruby_error(struct session *ses, unsigned char *msg)
 {
-	if (list_empty(terminals)) {
-		usrerror("Ruby: %s", msg);
-		return;
+	struct terminal *term;
+
+	if (!ses) {
+		if (list_empty(terminals)) {
+			usrerror("Ruby: %s", msg);
+			return;
+		}
+
+		term = terminals.next;
+
+	} else {
+		term = ses->tab->term;
 	}
 
 	msg = stracpy(msg);
 	if (!msg) return;
 
-	msg_box(terminals.next, NULL, MSGBOX_NO_TEXT_INTL | MSGBOX_FREE_TEXT,
+	msg_box(term, NULL, MSGBOX_NO_TEXT_INTL | MSGBOX_FREE_TEXT,
 		N_("Ruby Error"), ALIGN_LEFT,
 		msg,
 		NULL, 1,
@@ -54,7 +65,7 @@ alert_ruby_error(unsigned char *msg)
 
 /* Another Vim treat. */
 void
-erb_report_error(int error)
+erb_report_error(struct session *ses, int error)
 {
 	VALUE eclass;
 	VALUE einfo;
@@ -115,7 +126,7 @@ erb_report_error(int error)
 		break;
 	}
 
-	alert_ruby_error(msg);
+	alert_ruby_error(ses, msg);
 }
 
 
@@ -225,7 +236,7 @@ init_ruby(struct module *module)
 		//rb_load_file(path);
 		rb_load_protect(rb_str_new2(path), 0, &error);
 		if (error)
-			erb_report_error(error);
+			erb_report_error(NULL, error);
 	}
 
 	mem_free(path);

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.74 2003/06/23 21:14:55 jonas Exp $ */
+/* $Id: file.c,v 1.75 2003/06/23 21:53:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,20 +260,20 @@ stat_date(unsigned char **p, int *l, struct stat *stp)
 }
 
 
-struct dirs {
-	unsigned char *s;
-	unsigned char *f;
+struct directory_entry {
+	unsigned char *attrib;
+	unsigned char *name;
 };
 
 
 static int
-comp_de(struct dirs *d1, struct dirs *d2)
+comp_de(struct directory_entry *d1, struct directory_entry *d2)
 {
-	if (d1->f[0] == '.' && d1->f[1] == '.' && !d1->f[2]) return -1;
-	if (d2->f[0] == '.' && d2->f[1] == '.' && !d2->f[2]) return 1;
-	if (d1->s[0] == 'd' && d2->s[0] != 'd') return -1;
-	if (d1->s[0] != 'd' && d2->s[0] == 'd') return 1;
-	return strcmp(d1->f, d2->f);
+	if (d1->name[0] == '.' && d1->name[1] == '.' && !d1->name[2]) return -1;
+	if (d2->name[0] == '.' && d2->name[1] == '.' && !d2->name[2]) return 1;
+	if (d1->attrib[0] == 'd' && d2->attrib[0] != 'd') return -1;
+	if (d1->attrib[0] != 'd' && d2->attrib[0] == 'd') return 1;
+	return strcmp(d1->name, d2->name);
 }
 
 struct file_info {
@@ -289,7 +289,7 @@ struct file_info {
 static int
 list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 {
-	struct dirs *dir = NULL;
+	struct directory_entry *dir = NULL;
 	int dirl = 0;
 	int i;
 	struct dirent *de;
@@ -336,7 +336,7 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 		struct stat st, *stp;
 		unsigned char **p;
 		int l;
-		struct dirs *nd;
+		struct directory_entry *nd;
 		unsigned char *n;
 
 		/* Always show "..", always hide ".", others like ".x" are shown if
@@ -344,14 +344,14 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 		if (de->d_name[0] == '.' && !(de->d_name[1] == '.' && de->d_name[2] == '\0'))
 			if (!show_hidden_files || de->d_name[1] == '\0') continue;
 
-		nd = mem_realloc(dir, (dirl + 1) * sizeof(struct dirs));
+		nd = mem_realloc(dir, (dirl + 1) * sizeof(struct directory_entry));
 		if (!nd) continue;
 
 		dir = nd;
-		dir[dirl].f = stracpy(de->d_name);
-		if (!dir[dirl].f) continue;
+		dir[dirl].name = stracpy(de->d_name);
+		if (!dir[dirl].name) continue;
 
-		p = &dir[dirl++].s;
+		p = &dir[dirl++].attrib;
 		*p = init_str();
 		if (!*p) continue;
 
@@ -378,14 +378,14 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 		stat_date(p, &l, stp);
 	}
 
-	if (dirl) qsort(dir, dirl, sizeof(struct dirs),
+	if (dirl) qsort(dir, dirl, sizeof(struct directory_entry),
 		(int(*)(const void *, const void *))comp_de);
 
 	for (i = 0; i < dirl; i++) {
 		unsigned char *lnk = NULL;
 
 #ifdef FS_UNIX_SOFTLINKS
-		if (dir[i].s[0] == 'l') {
+		if (dir[i].attrib[0] == 'l') {
 			unsigned char *buf = NULL;
 			int size = 0;
 			int rl = -1;
@@ -395,7 +395,7 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 			if (!n) continue;
 			add_to_str(&n, &nl, filename);
 			add_htmlesc_str(&n, &nl,
-				dir[i].f, strlen(dir[i].f));
+				dir[i].name, strlen(dir[i].name));
 			do {
 				if (buf) mem_free(buf);
 				size += ALLOC_GR;
@@ -418,11 +418,11 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 #endif
 		/* add_to_str(&fragment, &fragmentlen, "   "); */
 		add_htmlesc_str(&fragment, &fragmentlen,
-			dir[i].s, strlen(dir[i].s));
+			dir[i].attrib, strlen(dir[i].attrib));
 		add_to_str(&fragment, &fragmentlen, "<a href=\"");
 		add_htmlesc_str(&fragment, &fragmentlen,
-			dir[i].f, strlen(dir[i].f));
-		if (dir[i].s[0] == 'd') {
+			dir[i].name, strlen(dir[i].name));
+		if (dir[i].attrib[0] == 'd') {
 			add_chr_to_str(&fragment, &fragmentlen, '/');
 		} else if (lnk) {
 			struct stat st;
@@ -432,7 +432,7 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 			if (n) {
 				add_to_str(&n, &nl, filename);
 				add_htmlesc_str(&n, &nl,
-					dir[i].f, strlen(dir[i].f));
+					dir[i].name, strlen(dir[i].name));
 				if (!stat(n, &st) && S_ISDIR(st.st_mode))
 					add_chr_to_str(&fragment, &fragmentlen, '/');
 				mem_free(n);
@@ -440,7 +440,7 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 		}
 		add_to_str(&fragment, &fragmentlen, "\">");
 
-		if (dir[i].s[0] == 'd' && colorize_dir) {
+		if (dir[i].attrib[0] == 'd' && colorize_dir) {
 			/* The <b> is here for the case when we've
 			 * use_document_colors off. */
 			add_to_str(&fragment, &fragmentlen, "<font color=\"");
@@ -449,9 +449,9 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 		}
 
 		add_htmlesc_str(&fragment, &fragmentlen,
-			dir[i].f, strlen(dir[i].f));
+			dir[i].name, strlen(dir[i].name));
 
-		if (dir[i].s[0] == 'd' && colorize_dir) {
+		if (dir[i].attrib[0] == 'd' && colorize_dir) {
 			add_to_str(&fragment, &fragmentlen, "</b></font>");
 		}
 
@@ -466,8 +466,8 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 	}
 
 	for (i = 0; i < dirl; i++) {
-		if (dir[i].s) mem_free(dir[i].s);
-		if (dir[i].f) mem_free(dir[i].f);
+		if (dir[i].attrib) mem_free(dir[i].attrib);
+		if (dir[i].name) mem_free(dir[i].name);
 	}
 	mem_free(dir);
 

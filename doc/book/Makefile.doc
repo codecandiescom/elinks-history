@@ -1,27 +1,17 @@
-## $Id: Makefile.doc,v 1.1 2003/06/09 19:43:22 jonas Exp $
+## $Id: Makefile.doc,v 1.2 2003/06/09 22:11:42 jonas Exp $
 
-# Assumes the following variables are set:
-#
-# BOOKDIR	The docbook root dir
-# WORKDIR	Directory for the generated docs
-# TOOLDIR	The multiplexor script
-#
-# The tool for generating docs can be controlled by
-# setting the DOCTOOL variable
+# Assumes the variabel $(DOCBUILDDIR) is set by the includers
 
 SUFFIXES = .xml .1 .5
 
 HTMLDOCTOOL	 = @HTMLDOCTOOL@
-HTMLDOCTOOLFLAGS = @HTMLDOCTOOLFLAGS@
-
 MANDOCTOOL	 = @MANDOCTOOL@
-MANDOCTOOLFLAGS	 = @MANDOCTOOLFLAGS@
 
-.xml.html:
-	$(HTMLDOCTOOL) $(HTMLDOCTOOLFLAGS) $<
+%.html: %.xml
+	$(HTMLDOCTOOL) -o $(DOCBUILDDIR) $<
 
-.xml.1:
-	$(MANDOCTOOL) $(MANDOCTOOLFLAGS) $<
+%.1: %.1.xml
+	$(MANDOCTOOL) -o $(DOCBUILDDIR)/man/man1 $<
 
-.xml.5:
-	$(MANDOCTOOL) $(MANDOCTOOLFLAGS) $<
+%.5: %.5.xml
+	$(MANDOCTOOL) -o $(DOCBUILDDIR)/man/man5 $<

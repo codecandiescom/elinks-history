@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.52 2004/06/07 15:58:07 jonas Exp $ */
+/* $Id: hooks.c,v 1.53 2004/06/08 10:54:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@ script_hook_goto_url(va_list ap, void *data)
 		lua_pushstring(L, struri(current_uri));
 	}
 
-	if (prepare_lua(ses)) return EHS_NEXT;
+	if (prepare_lua(NULL)) return EHS_NEXT;
 
 	err = lua_call(L, 2, 1);
 	finish_lua();

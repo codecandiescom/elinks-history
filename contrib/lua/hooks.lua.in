@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.31 2005/03/23 05:40:41 miciah Exp $
+-- $Id: hooks.lua.in,v 1.32 2005/03/23 15:49:06 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -25,7 +25,7 @@ end
 function write (...)
   local f = _OUTPUT
   if type(arg[1]) == 'userdata' then
-    f = tab.remove(arg, 1)
+    f = table.remove(arg, 1)
   end
   return f:write(unpack(arg))
 end

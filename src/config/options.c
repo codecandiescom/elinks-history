@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.430 2004/01/07 23:53:30 jonas Exp $ */
+/* $Id: options.c,v 1.431 2004/01/08 17:14:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,6 +72,9 @@ static void free_options_tree(struct list_head *, int recursive);
 #ifdef DEBUG
 /* Detect ending '.' (and some others) in options captions.
  * It will emit a message in debug mode only. --Zas */
+
+#define bad_punct(c) (c != ')' && c != '\'' && c != '"' && ispunct(c))
+	
 void
 check_caption(unsigned char *caption)
 {
@@ -84,9 +87,21 @@ check_caption(unsigned char *caption)
 	if (!len) return;
 
 	c = caption[len - 1];
-	if (isspace(c) || (c != ')' && ispunct(c)))
+	if (isspace(c) || bad_punct(c))
 		DBG("bad char at end of caption [%s]", caption);
+
+#ifdef ENABLE_NLS
+	caption = gettext(caption);
+	len = strlen(caption);
+	if (!len) return;
+
+	c = caption[len - 1];
+	if (isspace(c) || bad_punct(c))
+		DBG("bad char at end of i18n caption [%s]", caption);
+#endif
 }
+
+#undef bad_punct
 #else
 #define check_caption(caption)
 #endif

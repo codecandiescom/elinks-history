@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.41 2003/05/04 21:36:56 pasky Exp $ */
+/* $Id: error.c,v 1.42 2003/05/04 21:45:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,6 +119,7 @@ debug_msg(unsigned char *fmt, ...)
 /* The backtrace corner. */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #ifdef HAVE_EXECINFO_H
 #include <execinfo.h>
@@ -142,7 +143,7 @@ dump_backtrace(FILE *f, int trouble)
 	size_t i;
 
 	size = backtrace(stack, 30);
-	
+
 	if (trouble) {
 		/* Let's hope fileno() is safe. */
 		backtrace_symbols_fd(stack, size, fileno(f));
@@ -152,7 +153,7 @@ dump_backtrace(FILE *f, int trouble)
 
 	strings = backtrace_symbols(stack, size);
 
-	printf("Obtained %zd stack frames:\n", size);
+	printf("Obtained %d stack frames:\n", size);
 
 	for (i = 0; i < size; i++)
 		printf("[%p] %s\n", stack[i], strings[i]);

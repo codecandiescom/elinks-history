@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.8 2003/05/04 21:36:56 pasky Exp $ */
+/* $Id: error.h,v 1.9 2003/05/04 21:45:38 pasky Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -21,7 +21,7 @@ void int_error(unsigned char *, ...);
 
 #ifdef BACKTRACE
 #include <stdio.h>
-void dump_backtrace(FILE *);
+void dump_backtrace(FILE *, int);
 #endif
 
 #endif

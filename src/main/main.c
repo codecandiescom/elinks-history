@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.83 2003/05/04 21:36:55 pasky Exp $ */
+/* $Id: main.c,v 1.84 2003/05/04 21:45:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,7 +151,7 @@ sig_segv(struct terminal *t)
 	fprintf(stderr,"Thanks a lot for your cooperation!\n\n");
 
 	/* Backtrace. */
-	dump_backtrace(stderr);
+	dump_backtrace(stderr, 1);
 
 	/* TODO: Perhaps offer launching of gdb? Or trying to continue w/
 	 * program execution? --pasky */

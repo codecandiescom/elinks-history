@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.257 2004/12/18 00:43:45 pasky Exp $ */
+/* $Id: form.c,v 1.258 2004/12/18 00:45:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,7 +215,6 @@ find_form_state(struct document_view *doc_view, struct form_control *fc)
 	fs = &vs->form_info[n];
 
 	if (fs->form_num == fc->form_num
-	    && fs->ctrl_num == fc->ctrl_num
 	    && fs->g_ctrl_num == fc->g_ctrl_num
 	    && fs->position == fc->position
 	    && fs->type == fc->type)
@@ -224,7 +223,6 @@ find_form_state(struct document_view *doc_view, struct form_control *fc)
 	mem_free_if(fs->value);
 	memset(fs, 0, sizeof(struct form_state));
 	fs->form_num = fc->form_num;
-	fs->ctrl_num = fc->ctrl_num;
 	fs->g_ctrl_num = fc->g_ctrl_num;
 	fs->position = fc->position;
 	fs->type = fc->type;

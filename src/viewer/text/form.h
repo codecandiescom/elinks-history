@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.42 2004/12/18 00:27:54 pasky Exp $ */
+/* $Id: form.h,v 1.43 2004/12/18 00:45:29 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -15,7 +15,6 @@ struct terminal;
 
 struct form_state {
 	int form_num;
-	int ctrl_num;
 	int g_ctrl_num;
 	int position;
 	enum form_type type;

@@ -16,6 +16,12 @@ Mon Aug 30 03:08:04 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	Space.  
 
+Mon Aug 30 03:08:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Space.  
+
 Mon Aug 30 03:06:48 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/uri.c:

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.6 2003/01/23 02:47:41 pasky Exp $ */
+/* $Id: download.c,v 1.7 2003/01/23 13:03:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -681,7 +681,7 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 
 	msg_box(term, NULL,
 		N_("File exists"), AL_CENTER | AL_EXTD_TEXT,
-		N_("This file already exists:\n"), ofile, "\n\n",
+		N_("This file already exists:\n"), lun_hop->ofile, "\n\n",
 		N_("The alternative filename is:\n"), file, NULL,
 		lun_hop, 3,
 		N_("Save under the alternative name"), lun_alternate, B_ENTER,

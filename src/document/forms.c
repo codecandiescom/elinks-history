@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: forms.c,v 1.8 2005/01/12 02:35:20 jonas Exp $ */
+/* $Id: forms.c,v 1.9 2005/01/28 13:13:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,7 +85,9 @@ get_form_control_link(struct document *document, struct form_control *fc)
 		if (fc == get_link_form_control(&document->links[link]))
 			return link;
 
-	assertm(0, "Form control has no link.");
+	/* Hidden form fields have no links. */
+	assertm(fc->type == FC_HIDDEN, "Form control has no link.");
+
 	return -1;
 }
 

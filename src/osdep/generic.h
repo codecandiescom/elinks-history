@@ -1,4 +1,6 @@
-/* $Id: generic.h,v 1.15 2004/06/27 18:34:31 pasky Exp $ */
+/* $Id: generic.h,v 1.16 2004/07/20 09:01:45 pasky Exp $ */
+
+/* This is... er, the OS-independent part of osdep/ ;-). */
 
 #ifndef EL__OSDEP_GENERIC_H
 #define EL__OSDEP_GENERIC_H

@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.32 2004/01/07 19:18:01 jonas Exp $ */
+/* $Id: terminal.h,v 1.33 2004/04/14 05:50:10 jonas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -171,6 +171,6 @@ void do_terminal_function(struct terminal *, unsigned char, unsigned char *);
 
 int check_terminal_pipes(void);
 void close_terminal_pipes(void);
-int attach_terminal(int in, int out, int ctl, void *info, int len);
+struct terminal *attach_terminal(int in, int out, int ctl, void *info, int len);
 
 #endif /* EL__TERMINAL_TERMINAL_H */

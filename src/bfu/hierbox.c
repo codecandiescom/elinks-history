@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.161 2004/05/31 03:27:06 jonas Exp $ */
+/* $Id: hierbox.c,v 1.162 2004/05/31 03:33:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -568,8 +568,8 @@ print_delete_error(struct listbox_item *item, struct terminal *term,
 	unsigned char *errmsg = delete_messages[(item->type == BI_FOLDER)][err];
 	unsigned char *text = ops->get_info(item, term, LISTBOX_TEXT);
 
-	if (!name || !init_string(&msg)) {
-		mem_free_if(name);
+	if (!text || !init_string(&msg)) {
+		mem_free_if(text);
 		return;
 	}
 

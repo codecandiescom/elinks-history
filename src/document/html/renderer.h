@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.37 2003/08/23 06:19:25 jonas Exp $ */
+/* $Id: renderer.h,v 1.38 2003/08/23 16:53:39 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -62,7 +62,7 @@ struct point {
 	int x, y;
 };
 
-/* For struct f_data */
+/* For struct document */
 struct link {
 	long accesskey;
 
@@ -112,7 +112,7 @@ void format_cache_reactivate(struct document *);
 void cached_format_html(struct view_state *, struct document_view *, struct document_options *);
 void html_interpret(struct session *);
 
-/* Interface with html_tbl.c */
+/* Interface with tables.c */
 
 struct part {
 	struct document *document;
@@ -138,7 +138,7 @@ void free_table_cache(void);
 
 struct part *format_html_part(unsigned char *, unsigned char *, int, int, int, struct document *, int, int, unsigned char *, int);
 
-/* Interface with html.c */
+/* Interface with parser.c */
 
 /* FIXME: Following probably breaks encapsulation of renderer? --pasky */
 extern int margin;

@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.29 2003/08/23 16:44:41 jonas Exp $ */
+/* $Id: button.c,v 1.30 2003/08/23 16:53:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,8 +114,6 @@ display_button(struct widget_data *di, struct dialog_data *dlg, int sel)
 	color = get_bfu_color(term, sel ? "dialog.button-selected"
 					: "dialog.button");
 	if (!color) return;
-
-	/* XXX: Call fg_color() ? --pasky */
 
 	draw_text(term, di->x, di->y, "[ ", 2, 0, color);
 	draw_text(term, x, di->y, di->item->text, len, 0, color);

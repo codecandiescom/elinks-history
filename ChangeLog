@@ -1,3 +1,33 @@
+Fri Oct 11 19:24:20 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Link to upper directory is now "..".  
+
+Fri Oct 11 18:32:17 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	A link to upper directory was added in ftp directory listing.  
+
+Fri Oct 11 15:51:17 2002  Laurent Monin <zas@norz.org>:
+
+	* configure.in, src/main.c:
+
+	We now take care of locale settings for error messages.  
+
+Fri Oct 11 15:32:10 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/dialogs/hierbox.c:
+
+	The bookmarks dialog has now maximal possible width.  
+
+Fri Oct 11 07:37:40 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/french.lng, src/intl/language.inc:
+
+	French translation was updated.  
+
 Thu Oct 10 21:40:21 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, intl/brazilian_portuguese.lng, intl/bulgarian.lng,

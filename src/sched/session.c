@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.464 2004/06/10 23:52:12 jonas Exp $ */
+/* $Id: session.c,v 1.465 2004/06/10 23:55:36 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -648,10 +648,6 @@ copy_session(struct session *old, struct session *new)
 static void 
 process_session_info(struct session *ses, struct initial_session_info *info)
 {
-	if (info->base_session) {
-		copy_session(info->base_session, ses);
-	}
-
 	if (info->uri) {
 		goto_uri(ses, info->uri);
 
@@ -678,6 +674,7 @@ static struct session *
 create_session(struct window *tab, struct initial_session_info *info)
 {
 	struct session *ses = mem_calloc(1, sizeof(struct session));
+	struct session *base_session = info->base_session;
 
 	if (!ses) return NULL;
 
@@ -696,8 +693,14 @@ create_session(struct window *tab, struct initial_session_info *info)
 #endif
 
 	/* Only do the setup for the first tab */
-	if (list_empty(sessions))
+	if (list_empty(sessions)) {
 		setup_first_session(ses);
+
+	} else {
+		if (base_session) {
+			copy_session(base_session, ses);
+		}
+	}
 
 	add_to_list(sessions, ses);
 

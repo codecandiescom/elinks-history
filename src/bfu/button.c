@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.93 2005/03/24 14:49:33 zas Exp $ */
+/* $Id: button.c,v 1.94 2005/03/24 14:56:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,9 @@
 #include "terminal/mouse.h"
 #include "terminal/terminal.h"
 #include "util/align.h"
+
+/* Height of a button. */
+#define BUTTON_HEIGHT 1
 
 /* Vertical spacing between buttons. */
 #define BUTTON_VSPACING	1
@@ -126,13 +129,13 @@ dlg_format_buttons(struct terminal *term,
 				set_box(&widget_data[i].box,
 					 p, *y,
 					 widget_data[i].widget->info.button.textlen
-					 + BUTTON_LR_LEN, 1);
+					 + BUTTON_LR_LEN, BUTTON_HEIGHT);
 
 				p += widget_data[i].box.width + BUTTON_HSPACING;
 			}
 		}
 
-		*y += BUTTON_VSPACING + 1; /* height of button */
+		*y += BUTTON_VSPACING + BUTTON_HEIGHT;
 		i1 = i2;
 	}
 }

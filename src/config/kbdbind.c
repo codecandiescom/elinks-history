@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.235 2004/06/26 21:29:57 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.236 2004/06/27 09:41:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -910,6 +910,26 @@ static struct default_kb default_menu_keymap[] = {
 	{ 0, 0, 0}
 };
 
+static int
+keybinding_is_default(struct keybinding *kb)
+{
+	struct default_kb keybinding = { kb->key, kb->meta, kb->action };
+	struct default_kb *defaults, *pos;
+
+	switch (kb->keymap) {
+	case KM_MAIN: defaults = default_main_keymap; break;
+	case KM_EDIT: defaults = default_edit_keymap; break;
+	case KM_MENU: defaults = default_menu_keymap; break;
+	default: return 0;
+	}
+
+	for (pos = defaults; pos->key; pos++)
+		if (!memcmp(&keybinding, pos, sizeof(struct default_kb)))
+			return 1;
+
+	return 0;
+}
+
 static inline void
 add_keymap_default_keybindings(enum keymap keymap, struct default_kb *defaults)
 {
@@ -1063,8 +1083,10 @@ bind_config_string(struct string *file)
 		foreach (keybinding, keymaps[keymap]) {
 			/* Don't save default keybindings that has not been
 			 * deleted (rebound to none action) (Bug 337). */
-			if (keybinding->flags & KBDB_DEFAULT
-			    && keybinding->action != ACT_MAIN_NONE)
+			/* We cannot simply check the KBDB_DEFAULT flag and
+			 * whether the action is not ``none'' since it
+			 * apparently is used for something else. */
+			if (keybinding_is_default(keybinding))
 				continue;
 
 			single_bind_config_string(file, keymap, keybinding);

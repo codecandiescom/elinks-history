@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.124 2004/06/08 14:15:27 jonas Exp $ */
+/* $Id: uri.h,v 1.125 2004/06/08 14:20:55 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -200,10 +200,6 @@ get_uri_reference(struct uri *uri)
 #define get_proxied_uri(uri)					\
 	(((uri)->protocol == PROTOCOL_PROXY)			\
 	? get_uri((uri)->data, URI_BASE) : get_composed_uri(uri, URI_BASE))
-
-#define get_proxy_uri(uri)					\
-	(((uri)->protocol != PROTOCOL_PROXY)			\
-	? get_proxy(uri) : get_composed_uri(uri, URI_BASE))
 
 /* Get URI using the string returned by get_uri_string(@uri, @components) */
 struct uri *get_composed_uri(struct uri *uri, enum uri_component components);

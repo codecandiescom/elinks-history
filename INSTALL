@@ -1,52 +1,84 @@
 Elinks installation guidelines
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+##########
+  In order to check out the latest tree from CVS:
 
-CVS:
-
-If you don't want to use tarball but CVS, do this:
-export CVSROOT=:pserver:anoncvs@pasky.ji.cz:/home/cvs/elinks
-cvs login
+$ export CVSROOT=check_file_SITES_for_value_of_this
+$ cvs login
 (empty password)
-cvs co elinks
-cd elinks
+$ cvs -z3 co elinks
+$ cd elinks
 ...
 
+  To update your checkouted tree to latest version in CVS, do:
 
-Compile:
+$ cvs -z3 update -dP
 
-Unix - use ./configure; make
-	in some FreeBSD 3 distributions you have to set CFLAGS=-aout before
-	running ./configure.
-	Tested on Linux, FreeBSD, Solaris, IRIX
-	If counfigure fails, you can try generic makefile: make -f Makefile.gen
-
-OS/2 - you can use ./configure. If it fails or if you don't have bash, use
-	make -f Makefile.gen
-	The only supported compiler is EMX, you probably won't be able to
-	compile it with anything else
-
-	configure under OS/2 needs to know paths to gcc, make anb bash. Set (for
-	example):
-	SET HOSTTYPE=i586
-	SET MACHTYPE=i586-pc-os2
-	SET CONFIG_SHELL=d:/prg/gnu/bin/bash.exe
-	SET CC=d:/prg/emx/bin/gcc.exe
-	SET MAKE=d:/prg/emx/bin/make.exe
-	SET EMXOPT=-h100
-
-Dos, Windows - port it yourself
+  If you downloaded nightly snapshot, it already contains CVS/ directories etc.
+Thus you should be able to update your tree like if you would checkout the
+latest tree from CVS.
 
 
-Install:
+##########
+  If you'll want to compile elinks, first check directory contrib/, if it
+doesn't contain some patches which would be interesting for you. If you're
+excited by one, try to apply it by doing
 
-Unix - make install
+$ patch -p0 <contrib/that-pach
 
-OS/2 - copy file links.exe somewhere to your path or create CMD file that runs
-	links
+  It may not apply - I don't update patches in contrib/ regularily - if you
+want, feel free to go and update the patch for current tree and send me the new
+version. Then,
 
-WARNING: EMX has nasty limit of open files. Links will work badly or won't work
-	with default settings. Set variable EMXOPT=-h100 before you run links.
+  Unix - just doing:
 
-$Id: INSTALL,v 1.5 2002/01/26 15:21:47 pasky Exp $
+         $ ./configure
+         $ make
+         # make install
 
+	 should be enough. However, in some FreeBSD 3 distributions you have to
+	 set CFLAGS=-aout before running ./configure.
+	
+	 If configure fails, you can try generic makefile: make -f Makefile.gen
+	 (it won't probably work, though, as it's not maintained anymore).
+
+  OS/2 - you can use ./configure. If it fails or if you don't have bash, use
+	 make -f Makefile.gen
+
+	 The only supported compiler is EMX, you probably won't be able to
+	 compile it with anything else.
+
+	 configure under OS/2 needs to know paths to gcc, make anb bash. Set
+	 (for example):
+
+	 SET HOSTTYPE=i586
+	 SET MACHTYPE=i586-pc-os2
+	 SET CONFIG_SHELL=d:/prg/gnu/bin/bash.exe
+	 SET CC=d:/prg/emx/bin/gcc.exe
+	 SET MAKE=d:/prg/emx/bin/make.exe
+	 SET EMXOPT=-h100
+
+  Dos, Windows - port it by yourself
+
+
+##########
+  Ok, now let's install it:
+
+  Unix - # make install
+
+  OS/2 - Copy file links.exe somewhere to your path or create CMD file that runs
+	 links.
+
+	 WARNING: EMX has nasty limit of open files. Links will work badly or
+	 won't work with default settings. Set variable EMXOPT=-h100 before you
+	 run links.
+
+  Now, check the contrib/ directory again. There may be some useful configfile
+examples there, along with few support tools and some Lua scripts - you probably
+want them ;) so just copy the hooks.lua to ~/.links, and edit the configuration
+part - it adds various nice functionality to elinks, like decompression of
+gzipped files or user-defined protocols.
+
+$Id: INSTALL,v 1.6 2002/03/07 12:54:13 pasky Exp $
 vim: textwidth=80

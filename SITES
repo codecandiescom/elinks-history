@@ -1,4 +1,20 @@
 Primary site:
+	http://pasky.ji.cz/elinks/
+
+CVS root:
+	:pserver:anoncvs@pasky.ji.cz:/home/cvs/elinks
+
+Mailing list:
+	http://links.sf.net/mailing.html
+	links-list@linuxfromscratch.org (bug reports, announcements)
+	links-discuss@linuxfromscratch.org (feature requests, development)
+	listar@linuxfromscratch.org (Subject: subscribe links-list)
+
+
+
+If you want to see the original Links as well, try:
+
+Primary site:
 	http://artax.karlin.mff.cuni.cz/~mikulas/links/
 
 Mirrors:
@@ -20,13 +36,4 @@ RPMs:
 	ftp://ftp.scripty.com/pub/redhat/6.x/i386/links-0.95-1.i386.rpm
 	ftp://ftp.scripty.com/pub/redhat/6.x/SRPMS/links-0.95-1.src.rpm
 
-Mailing list:
-	http://links.sf.net/mailing.html
-	links-list@linuxfromscratch.org (bug reports, announcements)
-	links-discuss@linuxfromscratch.org (feature requests, development)
-	listar@linuxfromscratch.org (Subject: subscribe links-list)
-
-elinks site:
-	http://pasky.ji.cz/elinks/
-
-$Id: SITES,v 1.5 2002/01/29 21:51:56 pasky Exp $
+$Id: SITES,v 1.6 2002/03/07 12:54:13 pasky Exp $

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.319 2003/10/20 15:50:53 pasky Exp $ */
+/* $Id: options.c,v 1.320 2003/10/20 15:51:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1920,7 +1920,7 @@ register_options(void)
 		"output to the terminal. The color modes are:\n"
 		"0 is mono mode, only 2 colors are used\n"
 		"1 is 16 color mode, uses the common ANSI colors\n"
-		"2 is 256 color mode, requires that xterm256 is used\n"));
+		"2 is 256 color mode, requires that xterm-256color TERM is used\n"));
 
 	add_opt_bool("terminal._template_", N_("Enable transparency"),
 		"transparency", 0, 1,

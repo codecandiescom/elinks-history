@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.310 2004/07/23 15:42:41 zas Exp $ */
+/* $Id: http.c,v 1.311 2004/08/01 08:45:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -278,7 +278,7 @@ http_protocol_handler(struct connection *conn)
 			return;
 		}
 
-		make_connection(conn, p, &conn->socket, http_send_header);
+		make_connection(conn, p, &conn->socket.fd, http_send_header);
 	} else {
 		http_send_header(conn);
 	}
@@ -635,7 +635,7 @@ http_send_header(struct connection *conn)
 #undef POST_BUFFER_SIZE
 	}
 
-	write_to_socket(conn, conn->socket, header.source, header.length,
+	write_to_socket(conn, conn->socket.fd, header.source, header.length,
 			http_get_header);
 	done_string(&header);
 
@@ -800,7 +800,7 @@ static void read_http_data(struct connection *conn, struct read_buffer *rb);
 static void
 read_more_http_data(struct connection *conn, struct read_buffer *rb)
 {
-	read_from_socket(conn, conn->socket, rb, read_http_data);
+	read_from_socket(conn, conn->socket.fd, rb, read_http_data);
 	set_connection_state(conn, S_TRANS);
 }
 
@@ -1097,7 +1097,7 @@ again:
 		return;
 	}
 	if (!a) {
-		read_from_socket(conn, conn->socket, rb, http_got_header);
+		read_from_socket(conn, conn->socket.fd, rb, http_got_header);
 		set_connection_state(conn, state);
 		return;
 	}
@@ -1179,8 +1179,8 @@ again:
 			return;
 		}
 		conn->conn_info->func = http_send_header;
-		conn->conn_info->sock = &conn->socket;
-		if (ssl_connect(conn, conn->socket) == -1) return;
+		conn->conn_info->sock = &conn->socket.fd;
+		if (ssl_connect(conn, conn->socket.fd) == -1) return;
 #else
 		abort_conn_with_state(conn, S_NO_SSL);
 #endif
@@ -1422,5 +1422,5 @@ http_get_header(struct connection *conn)
 	if (!rb) return;
 	set_connection_timeout(conn);
 	rb->close = 1;
-	read_from_socket(conn, conn->socket, rb, http_got_header);
+	read_from_socket(conn, conn->socket.fd, rb, http_got_header);
 }

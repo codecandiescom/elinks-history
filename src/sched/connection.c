@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.189 2004/07/30 14:31:25 jonas Exp $ */
+/* $Id: connection.c,v 1.190 2004/08/01 08:45:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -239,7 +239,7 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 	conn->id = connection_id++;
 	conn->pri[priority] =  1;
 	conn->cache_mode = cache_mode;
-	conn->socket = conn->data_socket = -1;
+	conn->socket.fd = conn->data_socket.fd = -1;
 	conn->content_encoding = ENCODING_NONE;
 	conn->stream_pipes[0] = conn->stream_pipes[1] = -1;
 	conn->cgi_pipes[0] = conn->cgi_pipes[1] = -1;
@@ -349,9 +349,11 @@ free_connection_data(struct connection *conn)
 	 * at least active_connections underflows along the way. --pasky */
 	conn->running = 0;
 
-	if (conn->socket != -1) set_handlers(conn->socket, NULL, NULL, NULL, NULL);
-	if (conn->data_socket != -1) set_handlers(conn->data_socket, NULL, NULL, NULL, NULL);
-	close_socket(NULL, &conn->data_socket);
+	if (conn->socket.fd != -1)
+		set_handlers(conn->socket.fd, NULL, NULL, NULL, NULL);
+	if (conn->data_socket.fd != -1)
+		set_handlers(conn->data_socket.fd, NULL, NULL, NULL, NULL);
+	close_socket(NULL, &conn->data_socket.fd);
 
 	/* XXX: See also protocol/http/http.c:uncompress_shutdown(). */
 	if (conn->stream) {
@@ -444,7 +446,7 @@ init_keepalive_connection(struct connection *conn, ttime timeout)
 
 	keep_conn->uri = get_uri_reference(uri);
 	keep_conn->pf = conn->pf;
-	keep_conn->socket = conn->socket;
+	keep_conn->socket = conn->socket.fd;
 	keep_conn->timeout = timeout;
 	keep_conn->add_time = get_time();
 
@@ -472,7 +474,7 @@ has_keepalive_connection(struct connection *conn)
 
 	if (!keep_conn) return 0;
 
-	conn->socket = keep_conn->socket;
+	conn->socket.fd = keep_conn->socket;
 	conn->pf = keep_conn->pf;
 
 	/* Mark that the socket should not be closed */
@@ -488,14 +490,14 @@ add_keepalive_connection(struct connection *conn, ttime timeout)
 	struct keepalive_connection *keep_conn;
 
 	free_connection_data(conn);
-	assertm(conn->socket != -1, "keepalive connection not connected");
+	assertm(conn->socket.fd != -1, "keepalive connection not connected");
 	if_assert_failed goto done;
 
 	keep_conn = init_keepalive_connection(conn, timeout);
 	if (keep_conn)
 		add_to_list(keepalive_connections, keep_conn);
 	else
-		close(conn->socket);
+		close(conn->socket.fd);
 
 done:
 	done_connection(conn);
@@ -594,7 +596,7 @@ interrupt_connection(struct connection *conn)
 	if (conn->ssl) done_ssl_connection(conn);
 #endif
 
-	close_socket(conn, &conn->socket);
+	close_socket(conn, &conn->socket.fd);
 	free_connection_data(conn);
 }
 

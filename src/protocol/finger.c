@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.34 2004/05/07 17:27:46 jonas Exp $ */
+/* $Id: finger.c,v 1.35 2004/08/01 08:45:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,7 @@ finger_get_response(struct connection *conn, struct read_buffer *rb)
 
 	conn->from += l;
 	kill_buffer_data(rb, l);
-	read_from_socket(conn, conn->socket, rb, finger_get_response);
+	read_from_socket(conn, conn->socket.fd, rb, finger_get_response);
 	set_connection_state(conn, S_TRANS);
 }
 
@@ -71,7 +71,7 @@ finger_sent_request(struct connection *conn)
 	rb = alloc_read_buffer(conn);
 	if (!rb) return;
 	rb->close = 1;
-	read_from_socket(conn, conn->socket, rb, finger_get_response);
+	read_from_socket(conn, conn->socket.fd, rb, finger_get_response);
 }
 
 static void
@@ -87,7 +87,7 @@ finger_send_request(struct connection *conn)
 		add_bytes_to_string(&req, conn->uri->user, conn->uri->userlen);
 	}
 	add_to_string(&req, "\r\n");
-	write_to_socket(conn, conn->socket, req.source, req.length, finger_sent_request);
+	write_to_socket(conn, conn->socket.fd, req.source, req.length, finger_sent_request);
 	done_string(&req);
 	set_connection_state(conn, S_SENT);
 }
@@ -97,5 +97,5 @@ finger_protocol_handler(struct connection *conn)
 {
 	set_connection_timeout(conn);
 	conn->from = 0;
-	make_connection(conn, get_uri_port(conn->uri), &conn->socket, finger_send_request);
+	make_connection(conn, get_uri_port(conn->uri), &conn->socket.fd, finger_send_request);
 }

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.66 2004/05/09 23:33:14 jonas Exp $ */
+/* $Id: connection.h,v 1.67 2004/08/01 08:45:55 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -122,6 +122,11 @@ struct remaining_info {
 	int data_in_secs[CURRENT_SPD_SEC];
 };
 
+struct connection_socket {
+	/* The socket descriptor */
+	int fd;
+};
+
 struct connection {
 	LIST_HEAD(struct connection);
 
@@ -154,11 +159,11 @@ struct connection {
 	int from;
 
 	/* The communication socket with the other side. */
-	int socket;
+	struct connection_socket socket;
 	/* The data socket. It is used, when @socket is used for the control,
 	 * and the actual data is transmitted through a different channel (so
 	 * the only user now is FTP ;-). */
-	int data_socket;
+	struct connection_socket data_socket;
 
 	int tries;
 	int received;

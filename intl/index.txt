@@ -14,4 +14,3 @@ norwegian
 romanian
 russian
 swedish
-turkish

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.30 2002/11/29 16:26:13 zas Exp $ */
+/* $Id: file.c,v 1.31 2002/12/02 16:31:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -365,6 +365,12 @@ file_func(struct connection *c)
 				unsigned char *tname = init_str();
 				int tname_len = 0;
 
+				if (!tname) {
+					mem_free(name);
+					abort_conn_with_state(c, S_OUT_OF_MEM);
+					return;
+				}
+
 				add_to_str(&tname, &tname_len, name);
 				add_to_str(&tname, &tname_len, *ext);
 
@@ -435,9 +441,9 @@ dir:
 			c->cache = e;
 
 			if (e->redirect) mem_free(e->redirect);
-			e->redirect = stracpy(c->url);
 			e->redirect_get = 1;
-			add_to_strn(&e->redirect, "/");
+			e->redirect = stracpy(c->url);
+			if (e->redirect) add_to_strn(&e->redirect, "/");
 			mem_free(name);
 			closedir(d);
 
@@ -448,6 +454,12 @@ dir:
 		last_gid = -1;
 		file = init_str();
 		fl = 0;
+
+		if (!file) {
+			close(h);
+			abort_conn_with_state(c, S_OUT_OF_MEM);
+			return;
+		}
 
 		add_to_str(&file, &fl, "<html>\n<head><title>");
 		add_htmlesc_str(&file, &fl, name, strlen(name));
@@ -469,11 +481,16 @@ dir:
 
 			dir = nd;
 			dir[dirl].f = stracpy(de->d_name);
-
-			*(p = &dir[dirl++].s) = init_str();
+			if (!dir[dirl].f) continue;
+				
+			p = &dir[dirl++].s;
+			*p = init_str();
+			if (!*p) continue;
 
 			l = 0;
 			n = stracpy(name);
+			if (!n) continue;
+
 			add_to_strn(&n, de->d_name);
 #ifdef FS_UNIX_SOFTLINKS
 			if (lstat(n, &stt))
@@ -510,6 +527,7 @@ dir:
 				unsigned char *n = init_str();
 				int nl = 0;
 
+				if (!n) continue;
 				add_to_str(&n, &nl, name);
 				add_htmlesc_str(&n, &nl,
 						dir[i].f, strlen(dir[i].f));
@@ -545,14 +563,16 @@ dir:
 				struct stat st;
 				unsigned char *n = init_str();
 				int nl = 0;
-
-				add_to_str(&n, &nl, name);
-				add_htmlesc_str(&n, &nl,
-						dir[i].f, strlen(dir[i].f));
-				if (!stat(n, &st))
-					if (S_ISDIR(st.st_mode))
-						add_to_str(&file, &fl, "/");
-				mem_free(n);
+				
+				if (n) {
+					add_to_str(&n, &nl, name);
+					add_htmlesc_str(&n, &nl,
+							dir[i].f, strlen(dir[i].f));
+					if (!stat(n, &st))
+						if (S_ISDIR(st.st_mode))
+							add_to_str(&file, &fl, "/");
+					mem_free(n);
+				}
 			}
 			add_to_str(&file, &fl, "\">");
 
@@ -583,8 +603,8 @@ dir:
 
 		mem_free(name);
 		for (i = 0; i < dirl; i++) {
-			mem_free(dir[i].s);
-		       	mem_free(dir[i].f);
+			if (dir[i].s) mem_free(dir[i].s);
+		       	if (dir[i].f) mem_free(dir[i].f);
 		}
 		mem_free(dir);
 

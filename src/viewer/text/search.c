@@ -1,11 +1,12 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.28 2003/10/04 22:31:31 kuser Exp $ */
+/* $Id: search.c,v 1.29 2003/10/05 15:40:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <ctype.h> /* tolower() */
+#include <sys/types.h> /* FreeBSD needs this before regex.h */
 #ifdef HAVE_REGEX_H
 #include <regex.h>
 #endif

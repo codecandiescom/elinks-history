@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.91 2003/05/14 22:48:56 pasky Exp $ */
+/* $Id: menu.c,v 1.92 2003/05/16 19:42:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,40 +42,26 @@
 #include "util/string.h"
 #include "viewer/text/view.h"
 
-#ifdef HAVE_LUA
-static void
-menu_lua_manual(struct terminal *term, void *d, struct session *ses)
-{
-	unsigned char *u = stracpy(LUA_MANUAL_URL);
+/* Helper for url items in help menu. */
+#define menu_url(func_name, url) \
+static void \
+func_name(struct terminal *term, void *d, struct session *ses)\
+{ \
+	unsigned char *u = stracpy(url);\
+ \
+	if (u) { \
+		goto_url(ses, u); \
+		mem_free(u); \
+	} \
+} \
 
-	if (u) {
-		goto_url(ses, u);
-		mem_free(u);
-	}
-}
+menu_url(menu_elinks_home, ELINKS_HOMEPAGE);
+menu_url(menu_documentation, ELINKS_DOC_URL);
+#ifdef DEBUG
+/* Developpers shortcuts ;) */
+menu_url(menu_bugs, ELINKS_BUGS_URL);
+menu_url(menu_cvsweb, ELINKS_CVSWEB_URL);
 #endif
-
-static void
-menu_elinks_home(struct terminal *term, void *d, struct session *ses)
-{
-	unsigned char *u = stracpy(ELINKS_HOMEPAGE);
-
-	if (u) {
-		goto_url(ses, u);
-		mem_free(u);
-	}
-}
-
-static void
-menu_manual(struct terminal *term, void *d, struct session *ses)
-{
-	unsigned char *u = stracpy(ELINKS_DOC_URL);
-
-	if (u) {
-		goto_url(ses, u);
-		mem_free(u);
-	}
-}
 
 static inline void
 menu_for_frame(struct terminal *term,
@@ -531,14 +517,15 @@ static struct menu_item view_menu_anon[] = {
 };
 
 static struct menu_item help_menu[] = {
-	{N_("~About"), "", MENU_FUNC menu_about, (void *)0, 0, 0},
 	{N_("~Keys"), "", MENU_FUNC menu_keys, (void *)0, 0, 0},
-	{N_("User's ~manual"), "", MENU_FUNC menu_manual, (void *)0, 0, 0},
-#ifdef HAVE_LUA
-	{N_("~Lua Reference manual"), "", MENU_FUNC menu_lua_manual, (void *)0, 0, 0},
+	{N_("~Documentation"), "", MENU_FUNC menu_documentation, (void *)0, 0, 0},
+	{N_("~ELinks homepage"), "", MENU_FUNC menu_elinks_home, (void *)0, 0, 0},
+#ifdef DEBUG
+	{N_("~Bugs information"), "", MENU_FUNC menu_bugs, (void *)0, 0, 0},
+	{N_("~ELinks CvsWeb"), "", MENU_FUNC menu_cvsweb, (void *)0, 0, 0},
 #endif
 	{N_("~Copying"), "", MENU_FUNC menu_copying, (void *)0, 0, 0},
-	{N_("~ELinks homepage"), "", MENU_FUNC menu_elinks_home, (void *)0, 0, 0},
+	{N_("~About"), "", MENU_FUNC menu_about, (void *)0, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 

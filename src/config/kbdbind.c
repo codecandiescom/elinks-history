@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.164 2004/01/21 10:09:01 witekfl Exp $ */
+/* $Id: kbdbind.c,v 1.165 2004/01/24 18:24:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -418,6 +418,7 @@ static struct strtonum action_table[KEYACTS + 1] = {
 	{ "end-of-buffer", ACT_END_OF_BUFFER, DACT(N_("Go to the last line of the buffer")) },
 	{ "enter", ACT_ENTER, DACT(N_("Follow the current link")) },
 	{ "enter-reload", ACT_ENTER_RELOAD, DACT(N_("Follow the current link, forcing reload of the target")) },
+	{ "exmode", ACT_EXMODE, DACT(N_("Enter ex-mode (command line)")) },
 	{ "expand", ACT_EXPAND, DACT(N_("Expand item")) },
 	{ "file-menu", ACT_FILE_MENU, DACT(N_("Open the File menu")) },
 	{ "find-next", ACT_FIND_NEXT, DACT(N_("Find the next occurrence of the current search text")) },
@@ -734,6 +735,7 @@ static struct default_kb default_main_keymap[] = {
 	{ ',',		 0,		ACT_LUA_CONSOLE },
 	{ '.',		 0,		ACT_TOGGLE_NUMBERED_LINKS },
 	{ '/',		 0,		ACT_SEARCH },
+	{ ':',		 0,		ACT_EXMODE },
 	{ '<',		 0,		ACT_TAB_PREV },
 	{ '=',		 0,		ACT_DOCUMENT_INFO },
 	{ '>',		 0,		ACT_TAB_NEXT },

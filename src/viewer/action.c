@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.42 2004/01/21 10:09:02 witekfl Exp $ */
+/* $Id: action.c,v 1.43 2004/01/24 18:24:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 #include "cookies/dialogs.h"
 #include "dialogs/document.h"
 #include "dialogs/download.h"
+#include "dialogs/exmode.h"
 #include "dialogs/info.h"
 #include "dialogs/menu.h"
 #include "dialogs/options.h"
@@ -211,6 +212,10 @@ do_action(struct session *ses, enum action action, int verbose)
 
 		case ACT_ENTER_RELOAD:
 			do_frame_action(ses, (frame_action) enter, 1);
+			break;
+
+		case ACT_EXMODE:
+			exmode_start(ses);
 			break;
 
 		case ACT_FILE_MENU:

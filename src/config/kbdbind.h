@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.86 2004/01/21 10:09:01 witekfl Exp $ */
+/* $Id: kbdbind.h,v 1.87 2004/01/24 18:24:12 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -50,6 +50,7 @@ enum action {
 	ACT_END_OF_BUFFER,
 	ACT_ENTER,
 	ACT_ENTER_RELOAD,
+	ACT_EXMODE,
 	ACT_EXPAND,
 	ACT_FILE_MENU,
 	ACT_FIND_NEXT,

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.134 2004/06/25 15:31:19 jonas Exp $ */
+/* $Id: uri.h,v 1.135 2004/07/23 06:09:39 miciah Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -234,7 +234,7 @@ unsigned char *get_uri_string(struct uri *uri, enum uri_component components);
 int get_uri_port(struct uri *uri);
 
 
-void encode_uri_string(struct string *, unsigned char *);
+void encode_uri_string(struct string *, unsigned char *, int);
 void decode_uri_string(unsigned char *);
 
 

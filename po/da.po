@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-09 02:54+0100\n"
-"PO-Revision-Date: 2005-01-09 03:24+0100\n"
+"PO-Revision-Date: 2005-01-12 04:44+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -4548,15 +4548,15 @@ msgstr "Gå ~frem"
 
 #: src/dialogs/menu.c:238 src/dialogs/menu.c:311
 msgid "Bookm~ark document"
-msgstr "Tilføj dokument som ~bogmærke"
+msgstr "Tilføj dokument som bog~mærke"
 
 #: src/dialogs/menu.c:242
 msgid "~Reload"
-msgstr "Genind~læs"
+msgstr "Gen~indlæs"
 
 #: src/dialogs/menu.c:245 src/dialogs/menu.c:409
 msgid "Frame at ~full-screen"
-msgstr "Maksimer ~ramme"
+msgstr "~Maksimer ramme"
 
 #: src/dialogs/menu.c:253 src/dialogs/menu.c:411
 msgid "Nex~t tab"
@@ -4600,7 +4600,7 @@ msgstr "~Historik"
 
 #: src/dialogs/menu.c:302
 msgid "~Unhistory"
-msgstr "Forlæns his~torik"
+msgstr "For~læns historik"
 
 #: src/dialogs/menu.c:307
 msgid "~Save as"
@@ -4636,11 +4636,11 @@ msgstr "~Nyt vindue"
 
 #: src/dialogs/menu.c:370
 msgid "~OS shell"
-msgstr "K~ommandofortolker"
+msgstr "~Kommandofortolker"
 
 #: src/dialogs/menu.c:377
 msgid "Resize t~erminal"
-msgstr "Ændr ~terminalstørrelse"
+msgstr "Ændr t~erminalstørrelse"
 
 #: src/dialogs/menu.c:393
 msgid "~Search"
@@ -4680,7 +4680,7 @@ msgstr "Dokumentf~arver fra/til"
 
 #: src/dialogs/menu.c:403
 msgid "~Wrap text on/off"
-msgstr "~Ombryd tekst fra/til"
+msgstr "Ombr~yd tekst fra/til"
 
 #: src/dialogs/menu.c:405
 msgid "Document ~info"
@@ -4696,7 +4696,7 @@ msgstr "~Genindlæs dokument"
 
 #: src/dialogs/menu.c:408
 msgid "~Rerender document"
-msgstr "Genf~ormater dokument"
+msgstr "Genfo~rmater dokument"
 
 #: src/dialogs/menu.c:419
 msgid "~ELinks homepage"
@@ -4800,7 +4800,7 @@ msgstr "Coo~kier"
 
 #: src/dialogs/menu.c:480
 msgid "~Form history"
-msgstr "~Formularhistorik"
+msgstr "F~ormularhistorik"
 
 #: src/dialogs/menu.c:482
 msgid "~Authentication"
@@ -7234,11 +7234,11 @@ msgstr "Indsend formular og åbn i nyt ~vindue"
 
 #: src/viewer/text/link.c:1198
 msgid "Submit form and open in new ~tab"
-msgstr "Indsend formular og åbn i ~nyt faneblad"
+msgstr "Indsend formular og åbn i nyt ~faneblad"
 
 #: src/viewer/text/link.c:1201
 msgid "Submit form and open in new tab in ~background"
-msgstr "Indsend formular og åben i nyt faneblad i ba~ggrunden"
+msgstr "Indsend formular og åben i nyt faneblad i ~baggrunden"
 
 #: src/viewer/text/link.c:1206
 msgid "Submit form and ~download"

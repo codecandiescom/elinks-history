@@ -1,3 +1,56 @@
+Sat Jan  8 23:08:14 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/Makefile.in:
+
+	Create $(datadir)/locale dir instead of just $(datadir). Reported by
+	Russ Rowan.  CCMAIL: rrowan@dandy.net 
+
+Sat Jan  8 21:45:28 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* .cvsignore, Makefile.am, autogen.sh:
+
+	Who needs acinclude.m4 for generating aclocal.m4 when you can tell
+	aclocal where to get the .m4 files.  
+
+Sat Jan  8 21:39:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Fix wrong comment spotted by Miciah.  
+
+Sat Jan  8 21:23:01 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* Makefile.am, configure.in:
+
+	Fix issues with make dist. Now all the lovely files in config/
+	needed by configure will be added. Cleanup the top-level Makefile.am
+	a bit.  
+
+Sat Jan  8 21:20:11 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/Makefile.in:
+
+	This convenient shortcut doesn't seem to be needed. Anyway I expect
+	this to fix the 'dist' rule that depends on elinks.pot which was
+	first created later.  
+
+Sat Jan  8 04:08:08 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In move_cursor, scroll the document as many rows or columns as
+	necessary rather than only be one row or one column.  
+
+Sat Jan  8 03:17:49 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/: link.c, view.c, view.h:
+
+	In jump_to_link_number, when in cursor-routing mode, call
+	move_cursor to position the cursor on the newly selected link.  
+	
+	This should fix bug 607, "goto link number doesn't move cursor if
+	cursor already moved".  
+
 Fri Jan  7 22:47:44 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* Makefile.am:

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.87 2003/11/22 16:48:45 jonas Exp $ */
+/* $Id: hierbox.c,v 1.88 2003/11/22 17:04:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -541,9 +541,8 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 		return 0;
 	}
 
-	box->ops->lock(delete_info->item);
-
 	if (delete_info->item->type == BI_FOLDER) {
+		box->ops->lock(delete_info->item);
 		msg_box(term, getml(delete_info, NULL), MSGBOX_FREE_TEXT,
 			N_("Delete folder"), AL_CENTER,
 			msg_text(term, N_("Delete the folder \"%s\" and its content?"),
@@ -555,6 +554,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 		unsigned char *msg = box->ops->get_info(delete_info->item, term);
 
 		if (!msg) return 0;
+		box->ops->lock(delete_info->item);
 
 		msg_box(term, getml(delete_info, msg, NULL), MSGBOX_FREE_TEXT,
 			N_("Delete item"), AL_CENTER,

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.283 2004/04/25 17:32:44 zas Exp $ */
+/* $Id: download.c,v 1.284 2004/04/26 15:48:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -480,6 +480,20 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 	if (!overwrite) {
 		/* Nothing special to do... */
 		callback(term, ofile, data, resume);
+		return;
+	}
+
+	/* Check if file is a directory, and use a default name if it's the
+	 * case. */
+	if (file_is_dir(ofile)) {
+		msg_box(term, NULL, MSGBOX_FREE_TEXT,
+			N_("Download error"), AL_CENTER,
+			msg_text(term, N_("'%s' is a directory."),
+				 ofile),
+			NULL, 1,
+			N_("OK"), NULL, B_ENTER | B_ESC);
+		mem_free(ofile);
+		callback(term, NULL, data, 0);
 		return;
 	}
 

@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.23 2004/04/23 18:44:00 jonas Exp $ */
+/* $Id: file.c,v 1.24 2004/04/26 15:48:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,8 +10,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
-#ifndef HAVE_ACCESS
 #include <sys/stat.h> /* OS/2 needs this after sys/types.h */
+#ifdef HAVE_FCNTL_H
+#include <fcntl.h> /* OS/2 needs this after sys/types.h */
 #endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -56,6 +57,18 @@ file_can_read(const unsigned char *filename)
 #endif
 }
 
+/* Returns 1 if filename is a directory, 0 else. */
+int
+file_is_dir(const unsigned char *filename)
+{
+	struct stat st;
+	int fd = open(filename, O_RDONLY);
+
+	if (fd == -1 || fstat(fd, &st) || !S_ISDIR(st.st_mode))
+		return 0;
+
+	return 1;
+}
 
 unsigned char *
 get_filename_position(unsigned char *filename)

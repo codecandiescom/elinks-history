@@ -1,4 +1,4 @@
-/* $Id: file.h,v 1.10 2004/04/23 18:44:00 jonas Exp $ */
+/* $Id: file.h,v 1.11 2004/04/26 15:48:28 zas Exp $ */
 
 #ifndef EL__UTIL_FILE_H
 #define EL__UTIL_FILE_H
@@ -7,6 +7,7 @@
 
 int file_exists(const unsigned char *filename);
 int file_can_read(const unsigned char *filename);
+int file_is_dir(const unsigned char *filename);
 
 /* Strips all directory stuff from @filename and returns the
  * position of where the actual filename starts */

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-07-23 17:12+0200\n"
+"POT-Creation-Date: 2003-07-23 17:23+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -32,7 +32,7 @@ msgstr "Saisir un nombre"
 #: src/dialogs/menu.c:635 src/dialogs/menu.c:661 src/dialogs/menu.c:679
 #: src/dialogs/menu.c:690 src/dialogs/mime.c:256 src/dialogs/options.c:265
 #: src/dialogs/options.c:362 src/globhist/dialogs.c:241
-#: src/protocol/protocol.c:60 src/protocol/user.c:152 src/protocol/user.c:168
+#: src/protocol/protocol.c:60 src/protocol/user.c:156 src/protocol/user.c:172
 #: src/sched/download.c:526 src/sched/download.c:560 src/sched/download.c:721
 #: src/sched/download.c:807 src/sched/download.c:1191
 #: src/sched/download.c:1200 src/sched/download.c:1227
@@ -4154,19 +4154,19 @@ msgstr "Terminal ~BeOS"
 msgid "JavaScript is currently not supported."
 msgstr "Javascript n'est pas implémenté pour l'instant."
 
-#: src/protocol/user.c:149 src/sched/error.c:49
+#: src/protocol/user.c:153 src/sched/error.c:49
 msgid "Bad URL syntax"
 msgstr "Erreur de syntaxe dans l'URL"
 
-#: src/protocol/user.c:150
+#: src/protocol/user.c:154
 msgid "Bad user protocol URL"
 msgstr "Mauvaise URL (protocole utilisateur)"
 
-#: src/protocol/user.c:163
+#: src/protocol/user.c:167
 msgid "No program"
 msgstr "Aucun programme"
 
-#: src/protocol/user.c:165
+#: src/protocol/user.c:169
 #, c-format
 msgid "No program specified for protocol %s."
 msgstr "Aucun programme spécifié pour le protocole %s."

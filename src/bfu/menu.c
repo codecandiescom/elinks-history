@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.268 2004/09/12 03:34:26 miciah Exp $ */
+/* $Id: menu.c,v 1.269 2004/09/12 03:43:14 miciah Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -459,7 +459,7 @@ display_menu(struct terminal *term, struct menu *menu)
 			/* This entry is selected. */
 			color = selected_color;
 
-			set_cursor(term, box.x, nbox.y, 1);
+			set_cursor(term, nbox.x, nbox.y, 1);
 			set_window_ptr(menu->win, menu->box.x + menu->box.width, nbox.y);
 			draw_box(term, &nbox, ' ', 0, color);
 		}
@@ -472,7 +472,7 @@ display_menu(struct terminal *term, struct menu *menu)
 			draw_box(term, &nbox, BORDER_SHLINE,
 				 SCREEN_ATTR_FRAME, frame_color);
 
-			draw_border_char(term, box.x + box.width, nbox.y,
+			draw_border_char(term, nbox.x + nbox.width, nbox.y,
 					 BORDER_SLTEE, frame_color);
 
 		} else {
@@ -488,18 +488,18 @@ display_menu(struct terminal *term, struct menu *menu)
 
 				if (l) {
 					draw_menu_left_text_hk(term, text, l,
-							       box.x, nbox.y, box.width, color,
+							       nbox.x, nbox.y, nbox.width, color,
 							       selected);
 
 				} else {
 					draw_menu_left_text(term, text, -1,
-							    box.x, nbox.y, box.width, color);
+							    nbox.x, nbox.y, nbox.width, color);
 		  		}
 			}
 
 			if (mi_is_submenu(mi)) {
 				draw_menu_right_text(term, m_submenu, m_submenu_len,
-						     menu->box.x, nbox.y, box.width, color);
+						     menu->box.x, nbox.y, nbox.width, color);
 			} else if (mi->action != ACT_MAIN_NONE) {
 				struct string keystroke;
 
@@ -520,7 +520,7 @@ display_menu(struct terminal *term, struct menu *menu)
 					draw_menu_right_text(term, keystroke.source,
 							     keystroke.length,
 							     menu->box.x, nbox.y,
-							     box.width, color);
+							     nbox.width, color);
 					done_string(&keystroke);
 				}
 
@@ -534,7 +534,7 @@ display_menu(struct terminal *term, struct menu *menu)
 					/* There's a right text, so print it */
 					draw_menu_right_text(term, rtext, -1,
 							     menu->box.x,
-							     nbox.y, box.width, color);
+							     nbox.y, nbox.width, color);
 				}
 			}
 		}

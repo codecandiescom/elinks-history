@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.122 2004/06/27 18:34:30 pasky Exp $ */
+/* $Id: options.inc,v 1.123 2004/07/01 20:40:51 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -149,11 +149,12 @@ struct option_info config_options_info[] = {
 
 	INIT_OPT_BOOL("document.browse.forms", N_("Insert mode"),
 		"insert_mode", 0, 0,
-		N_("The setting for this option affects how key presses are handled when one selects\n"
-		"a text-input form-field. When enabled, one must explicitly 'enter' a selected\n"
-		"text-field to edit it; this prevents a text field from capturing key presses,\n"
-		"such as presses of a scroll key, when it is inadvertently selected.\n"
-		"When disabled, key presses are always inserted into a selected text field.")),
+		N_("The setting for this option affects how key presses are handled\n"
+		"when one selects a text-input form-field. When enabled, one must\n"
+		"explicitly 'enter' a selected text-field to edit it; this prevents\n"
+		"a text field from capturing key presses, such as presses of a scroll key,\n"
+		"when it is inadvertently selected. When disabled, key presses are always\n"
+		"inserted into a selected text field.")),
 
 
 	INIT_OPT_TREE("document.browse", N_("Images"),

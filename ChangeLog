@@ -1,3 +1,259 @@
+Wed Jun 30 21:42:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): Mark visited columns by setting the
+	@widths[col] entry to zero so the ending stretch looping will skip
+	it. Removes need for @visited_cols array.  
+
+Wed Jun 30 21:11:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): Allocate visited_cols last and simplify the
+	error path.  
+
+Wed Jun 30 16:56:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser.h:
+
+	Move ln_break() prototype from document/html/internal.h to
+	document/html/parser.h, and drop inline from its declaration (?).  
+
+Wed Jun 30 16:46:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	line_break(): @t -> @tag.  
+
+Wed Jun 30 16:44:56 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	set_pos_y(): @yl -> @height.  
+
+Wed Jun 30 16:10:26 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: document/document.h, document/html/renderer.c,
+	document/html/renderer.h, viewer/text/draw.c:
+
+	Move find_tag() from viewer/text/draw.c to document/html/renderer.c,
+	do not export struct tag anymore (removed from document/document.h),
+	export find_tag() instead.  
+
+Wed Jun 30 15:35:46 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	@xl -> @width, @yl -> @height.  
+
+Wed Jun 30 14:38:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/td-width.html:
+
+	Add test for spacer cells.  
+
+Wed Jun 30 14:03:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Tidy up comment. Move split TODO.  
+
+Wed Jun 30 08:43:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	Keep only functions with a reasonable speed_sensitivity/size factor
+	inline.  
+
+Wed Jun 30 06:00:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/value.c:
+
+	Support 'white-space: normal' too.  
+
+Wed Jun 30 05:51:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/apply.c, src/document/css/property.c,
+	src/document/css/property.h, src/document/css/value.c,
+	src/document/css/value.h, test/css/simplefont.html:
+
+	Add support for 'white-space: pre' CSS property.  
+
+Wed Jun 30 05:33:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/style.h, document/html/internal.h,
+	document/html/parser.c, document/html/parser.h,
+	document/html/renderer.c, document/html/tables.c,
+	document/html/parser/parse.c:
+
+	Replace ALIGN_NONE enum format_align value with AT_PREFORMATTED enum
+	format_attr flag. Also make it possible to align preformatted text.
+	Fixes bug 472.  
+
+Wed Jun 30 03:26:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: document.c, document.h, renderer.c:
+
+	Introduce doucment->css_magic variable. It is calculated from the
+	ids of all the imported cache entries that is imported. Fixes
+	rerendering triggered by available CSS import. Hope this hack will
+	do until we get CSS stylesheet cache or something even more scary.  
+
+Wed Jun 30 03:00:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_table_cell(): Fix line expansion to cover the whole cell height
+	and not just the one containing formatted text. This is done by
+	using already calculated @height variable. Fixes various background
+	table glitches. Most note worthy the cell backgrounds on
+	http://www.videohelp.com/capturecards.php now looks ok.  
+
+Wed Jun 30 02:11:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: renderer.c, renderer.h, tables.c:
+
+	Reintroduce usefull expand_lines() that does and replaces the
+	expand_line() looping.  
+
+Wed Jun 30 01:52:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: renderer.c, renderer.h, tables.c:
+
+	Drop useless expand_lines(). It is implied by expand_line(). Drop
+	return value from expand_line() since it is not used.  
+
+Wed Jun 30 01:31:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_table_cells(): Use already calculated @row_height.  
+
+Wed Jun 30 01:09:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/table.c:
+
+	Trivial space tidyup.  
+
+Wed Jun 30 01:07:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Trivial space tidyup. Describe draw_table_bad_html().  
+
+Wed Jun 30 00:47:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Missing part of @u -> @visited_cols renaming.  
+
+Wed Jun 30 00:28:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Cleanup SSL configuring. OpenSSL don't need to disallow yes dir but
+	GNUTLS does because the ssldir is not actually used.  
+
+Tue Jun 29 23:15:45 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	@margin -> @indent in get_table_margin() and format_table(),
+	get_table_margin() -> get_table_indent().  
+
+Tue Jun 29 23:13:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	format_table(): @ww -> @total_width 
+
+Tue Jun 29 23:12:58 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	@x -> @margin in get_table_margin() and format_table().  
+
+Tue Jun 29 23:08:35 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	Move has_*line_width() below get_hline_width().  
+
+Tue Jun 29 23:04:34 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): @max -> @stretch_width, @max_index ->
+	@stretch_col, @max_width -> @col_spare_width 
+
+Tue Jun 29 22:58:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): @cols_size -> @cols_array_size 
+
+Tue Jun 29 22:55:14 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): Tidyup.  
+
+Tue Jun 29 22:54:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): @wq -> @did_stretch, @om -> @stretch_method 
+
+Tue Jun 29 22:51:38 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	@u -> @visited_cols 
+
+Tue Jun 29 22:49:54 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): @d -> @spare_width, @dd -> @total_spare_width 
+
+Tue Jun 29 22:48:07 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): Correct the description.  
+
+Tue Jun 29 22:47:02 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): Describe what does it do (hopefully).  
+
+Tue Jun 29 22:45:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths() tail: Tidyup.  
+
+Tue Jun 29 22:45:07 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths() tail: Remove now redundant @q and thus simplify
+	the assertm().  
+
+Tue Jun 29 22:44:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	More simplifications of distribute_widths() tail.  
+
+Tue Jun 29 22:41:11 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	Minor simplification of distribute_widths().  
+
 Tue Jun 29 21:28:53 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

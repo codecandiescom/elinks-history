@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.193 2005/03/08 15:34:00 zas Exp $ */
+/* $Id: ftp.c,v 1.194 2005/03/08 15:51:56 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -188,84 +188,83 @@ static int
 get_ftp_response(struct connection *conn, struct read_buffer *rb, int part,
 		 struct sockaddr_storage *sa)
 {
+	unsigned char *eol;
+	unsigned char *num_end;
+	int response;
 	int pos;
 
 	set_connection_timeout(conn);
 
 again:
-	for (pos = 0; pos < rb->len; pos++) {
-		unsigned char *num_end;
-		int response;
+	eol = memchr(rb->data, ASCII_LF, rb->len);
+	if (!eol) return 0;
 
-		if (rb->data[pos] != ASCII_LF) continue;
+	pos = eol - rb->data;
 
-		errno = 0;
-		response = strtoul(rb->data, (char **) &num_end, 10);
+	errno = 0;
+	response = strtoul(rb->data, (char **) &num_end, 10);
 
-		if (errno || num_end != rb->data + 3 || response < 100)
+	if (errno || num_end != rb->data + 3 || response < 100)
+		return -1;
+
+	if (sa && response == 227) { /* PASV response parsing. */
+		struct sockaddr_in *s = (struct sockaddr_in *) sa;
+		int n[6];
+
+		if (parse_psv_resp(num_end, (int *) &n, 255) != 6)
 			return -1;
 
-		if (sa && response == 227) { /* PASV response parsing. */
-			struct sockaddr_in *s = (struct sockaddr_in *) sa;
-			int n[6];
-
-			if (parse_psv_resp(num_end, (int *) &n, 255) != 6)
-				return -1;
-
-			memset(s, 0, sizeof(*s));
-			s->sin_family = AF_INET;
-			s->sin_addr.s_addr = htonl((n[0] << 24) + (n[1] << 16) + (n[2] << 8) + n[3]);
-			s->sin_port = htons((n[4] << 8) + n[5]);
-		}
-
-#ifdef CONFIG_IPV6
-		if (sa && response == 229) { /* EPSV response parsing. */
-			/* See RFC 2428 */
-			struct sockaddr_in6 *s = (struct sockaddr_in6 *) sa;
-			int sal = sizeof(*s);
-			int n[6];
-
-			if (parse_psv_resp(num_end, (int *) &n, 65535) != 1) {
-				return -1;
-			}
-
-			memset(s, 0, sizeof(*s));
-			if (getpeername(conn->socket.fd, (struct sockaddr *) sa, &sal)) {
-				return -1;
-			}
-			s->sin6_family = AF_INET6;
-			s->sin6_port = htons(n[5]);
-		}
-#endif
-
-		if (*num_end == '-') {
-			int i;
-
-			for (i = 0; i < rb->len - 5; i++)
-				if (rb->data[i] == ASCII_LF
-				    && !memcmp(rb->data+i+1, rb->data, 3)
-				    && rb->data[i+4] == ' ') {
-					for (i++; i < rb->len; i++)
-						if (rb->data[i] == ASCII_LF)
-							goto ok;
-					return 0;
-				}
-			return 0;
-ok:
-			pos = i;
-		}
-
-		if (part != 2)
-			kill_buffer_data(rb, pos + 1);
-
-		if (!part && response >= 100 && response < 200) {
-			goto again;
-		}
-
-		return response;
+		memset(s, 0, sizeof(*s));
+		s->sin_family = AF_INET;
+		s->sin_addr.s_addr = htonl((n[0] << 24) + (n[1] << 16) + (n[2] << 8) + n[3]);
+		s->sin_port = htons((n[4] << 8) + n[5]);
 	}
 
-	return 0;
+#ifdef CONFIG_IPV6
+	if (sa && response == 229) { /* EPSV response parsing. */
+		/* See RFC 2428 */
+		struct sockaddr_in6 *s = (struct sockaddr_in6 *) sa;
+		int sal = sizeof(*s);
+		int n[6];
+
+		if (parse_psv_resp(num_end, (int *) &n, 65535) != 1) {
+			return -1;
+		}
+
+		memset(s, 0, sizeof(*s));
+		if (getpeername(conn->socket.fd, (struct sockaddr *) sa, &sal)) {
+			return -1;
+		}
+		s->sin6_family = AF_INET6;
+		s->sin6_port = htons(n[5]);
+	}
+#endif
+
+	if (*num_end == '-') {
+		int i;
+
+		for (i = 0; i < rb->len - 5; i++)
+			if (rb->data[i] == ASCII_LF
+			    && !memcmp(rb->data+i+1, rb->data, 3)
+			    && rb->data[i+4] == ' ') {
+				for (i++; i < rb->len; i++)
+					if (rb->data[i] == ASCII_LF)
+						goto ok;
+				return 0;
+			}
+		return 0;
+ok:
+		pos = i;
+	}
+
+	if (part != 2)
+		kill_buffer_data(rb, pos + 1);
+
+	if (!part && response >= 100 && response < 200) {
+		goto again;
+	}
+
+	return response;
 }
 
 

@@ -1,5 +1,5 @@
 /* The DOM tree navigation interface */
-/* $Id: navigator.c,v 1.6 2004/11/04 14:22:06 jonas Exp $ */
+/* $Id: navigator.c,v 1.7 2004/11/04 17:14:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,7 +82,6 @@ push_dom_node(struct dom_navigator *navigator, struct dom_node *node)
 	assert(0 < node->type && node->type < DOM_NODES);
 
 	if (navigator->depth > DOM_NAVIGATOR_MAX_DEPTH) {
-		done_dom_node(node);
 		return NULL;
 	}
 

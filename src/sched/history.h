@@ -1,4 +1,4 @@
-/* $Id: history.h,v 1.5 2003/10/23 21:54:38 pasky Exp $ */
+/* $Id: history.h,v 1.6 2003/10/23 22:05:17 pasky Exp $ */
 
 #ifndef EL__SCHED_HISTORY_H
 #define EL__SCHED_HISTORY_H
@@ -16,9 +16,6 @@ struct ses_history {
 	struct list_head unhistory; /* -> struct location */
 
 	/* The current location. */
-	/* Historical note: this used to be @history.next, but that had to be
-	 * changed in order to generalize and greatly simplify the (un)history
-	 * handling. --pasky */
 	/* TODO: This is not actually used now ;-). */
 	struct location *current;
 };

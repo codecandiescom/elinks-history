@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.115 2003/11/27 14:08:17 jonas Exp $ */
+/* $Id: hierbox.c,v 1.116 2003/11/27 14:17:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -543,6 +543,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct listbox_context *context;
+	enum delete_error delete;
 
 	if (!box->sel || !box->sel->udata) return 0;
 
@@ -561,14 +562,16 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 		return 0;
 	}
 
-	if (!box->ops->can_delete(context->item)
-	    || box->ops->is_used(context->item)) {
-		print_delete_error(context->item, term, box->ops,
-				   DELETE_IMPOSSIBLE);
+	delete = box->ops->can_delete(context->item)
+		? DELETE_LOCKED : DELETE_IMPOSSIBLE;
+
+	if (delete == DELETE_IMPOSSIBLE || box->ops->is_used(context->item)) {
+		print_delete_error(context->item, term, box->ops, delete);
 		mem_free(context);
 		return 0;
+	}
 
-	} else if (context->item->type == BI_FOLDER) {
+	if (context->item->type == BI_FOLDER) {
 		box->ops->lock(context->item);
 		msg_box(term, getml(context, NULL), MSGBOX_FREE_TEXT,
 			N_("Delete folder"), AL_CENTER,

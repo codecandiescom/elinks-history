@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.141 2004/10/10 04:40:58 miciah Exp $ */
+/* $Id: options.inc,v 1.142 2004/10/12 14:26:47 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -850,7 +850,7 @@ struct option_info config_options_info[] = {
 		N_("Host and port-number (host:port) of the HTTPS CONNECT proxy, or blank.\n"
 		"If it's blank, HTTPS_PROXY environment variable is checked as well.")),
 
-
+#ifdef CONFIG_FTP
 	INIT_OPT_TREE("protocol", N_("FTP"),
 		"ftp", 0,
 		N_("FTP specific options.")),
@@ -882,7 +882,7 @@ struct option_info config_options_info[] = {
 		"Works only with IPv6 enabled, so nothing interesting for you.")),
 #endif
 
-
+#endif /* CONFIG_FTP */
 
 	INIT_OPT_TREE("protocol", N_("Local files"),
 		"file", 0,

@@ -867,6 +867,10 @@ EL_ARG_ENABLE(CONFIG_FINGER, finger, [Finger protocol],
 	      [  --enable-finger         enable finger protocol support])
 AM_CONDITIONAL(CONFIG_FINGER, test "$CONFIG_FINGER" = yes)
 
+EL_ARG_ENABLE(CONFIG_FTP, ftp, [FTP protocol],
+	      [  --disable-ftp           disable ftp protocol support])
+AM_CONDITIONAL(CONFIG_FTP, test "$CONFIG_FTP" = yes)
+
 EL_ARG_ENABLE(CONFIG_GOPHER, gopher, [Gopher protocol],
 	      [  --enable-gopher         enable gopher protocol support])
 AM_CONDITIONAL(CONFIG_GOPHER, test "$CONFIG_GOPHER" = yes)

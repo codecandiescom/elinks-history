@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.174 2004/10/08 16:54:57 zas Exp $ */
+/* $Id: ftp.c,v 1.175 2004/10/12 14:26:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,8 +33,10 @@
 
 #include "config/options.h"
 #include "cache/cache.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/connect.h"
 #include "lowlevel/select.h"
+#include "modules/module.h"
 #include "osdep/osdep.h"
 #include "protocol/auth/auth.h"
 #include "protocol/ftp/ftp.h"
@@ -45,6 +47,20 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
+
+
+/* TODO: move ftp options here. */
+
+struct module ftp_protocol_module = struct_module(
+	/* name: */		N_("FTP"),
+	/* options: */		NULL,
+	/* hooks: */		NULL,
+	/* submodules: */	NULL,
+	/* data: */		NULL,
+	/* init: */		NULL,
+	/* done: */		NULL
+);
+
 
 /* Constants */
 

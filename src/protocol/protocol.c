@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.78 2004/10/08 17:19:25 zas Exp $ */
+/* $Id: protocol.c,v 1.79 2004/10/12 14:26:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -249,6 +249,9 @@ get_protocol_external_handler(enum protocol protocol)
 static struct module *protocol_submodules[] = {
 #ifdef CONFIG_FINGER
 	&finger_protocol_module,
+#endif
+#ifdef CONFIG_FTP
+	&ftp_protocol_module,
 #endif
 #ifdef CONFIG_GOPHER
 	&gopher_protocol_module,

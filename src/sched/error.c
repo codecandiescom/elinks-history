@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: error.c,v 1.34 2004/08/23 17:15:07 jonas Exp $ */
+/* $Id: error.c,v 1.35 2004/10/12 14:26:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,12 +74,14 @@ struct s_msg_dsc {
 	{S_FILE_ERROR,		N_("Error opening file")},
 	{S_FILE_CGI_BAD_PATH,	N_("CGI script not in CGI path")},
 
+#ifdef CONFIG_FTP
 	{S_FTP_ERROR,		N_("Bad FTP response")},
 	{S_FTP_UNAVAIL,		N_("FTP service unavailable")},
 	{S_FTP_LOGIN,		N_("Bad FTP login")},
 	{S_FTP_PORT,		N_("FTP PORT command failed")},
 	{S_FTP_NO_FILE,		N_("File not found")},
 	{S_FTP_FILE_ERROR,	N_("FTP file error")},
+#endif
 
 #ifdef CONFIG_SSL
 	{S_SSL_ERROR,		N_("SSL error")},

@@ -1740,20 +1740,19 @@ unsigned char *get_current_url(struct session *ses, unsigned char *str, size_t s
 	here = cur_loc(ses)->vs.url;
 
 	/* Find the length of the url */
-    if (end_of_url = strchr(here, POST_CHAR)) {
+	if (end_of_url = strchr(here, POST_CHAR)) {
 		url_len = (size_t)(end_of_url - (unsigned char *)here);
 	} else {
 		url_len = strlen(here);
 	}
 
-	/* Ensure that the url size is not greater than str_size */ 
+	/* Ensure that the url size is not greater than str_size. We can't just
+	 * happily strncpy(str, here, str_size) because we have to stop at
+	 * POST_CHAR, not only at NULL. */
 	if (url_len > str_size)
 			url_len = str_size - 1;
 
-	strncpy(str, here, url_len);
-
-	/* Ensure null termination */
-	str[url_len] = '\0';
+	safe_strncpy(str, here, url_len);
 	
 	return str;
 }

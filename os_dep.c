@@ -480,11 +480,9 @@ void set_window_title(unsigned char *title)
 	if (hSw == NULLHANDLE) hSw = WinQuerySwitchHandle(0, pib->pib_ulpid);
 	if (hSw!=NULLHANDLE && !WinQuerySwitchEntry(hSw, &swData)) {
 		char *p;
-		strncpy(new_title, title, MAXNAMEL-1);
-		new_title[MAXNAMEL-1] = 0;
+		safe_strncpy(new_title, title, MAXNAMEL - 1);
 		while ((p = strchr(new_title, 1))) *p = ' ';
-		strncpy(swData.szSwtitle, new_title, MAXNAMEL-1);
-		swData.szSwtitle[MAXNAMEL-1] = 0;
+		safe_strncpy(swData.szSwtitle, new_title, MAXNAMEL - 1);
 		WinChangeSwitchEntry(hSw, &swData);
 		/* Go to PM */
 		pib->pib_ultype = 3;
@@ -546,8 +544,7 @@ void set_window_title(int init, const char *url)
 		hmq = WinCreateMsgQueue( hab, 0 );
 		if( hSw!=NULLHANDLE && hab!=NULLHANDLE && hmq!=NULLHANDLE )
 		{
-			strncpy( swData.szSwtitle, org_switch_title, MAXNAMEL );
-			swData.szSwtitle[MAXNAMEL] = 0;
+			safe_strncpy( swData.szSwtitle, org_switch_title, MAXNAMEL );
 			WinChangeSwitchEntry( hSw, &swData );
 
 			if( swData.hwnd )
@@ -562,16 +559,14 @@ void set_window_title(int init, const char *url)
 	case 0:
 		if ( url != NULL && *url )
 		{
-			strncpy(new_title, url, MAXNAMEL-10);
-			new_title[MAXNAMEL-10] = 0;
+			safe_strncpy(new_title, url, MAXNAMEL - 10);
 			strcat(new_title, " - Links");
 			pib->pib_ultype = 3;
 			hab = WinInitialize( 0 );
 			hmq = WinCreateMsgQueue( hab, 0 );
 			if( hSw!=NULLHANDLE && hab!=NULLHANDLE && hmq!=NULLHANDLE )
 			{
-				strncpy( swData.szSwtitle, new_title, MAXNAMEL );
-				swData.szSwtitle[MAXNAMEL] = 0;
+				safe_strncpy( swData.szSwtitle, new_title, MAXNAMEL );
 				WinChangeSwitchEntry( hSw, &swData );
 
 				if( swData.hwnd )

@@ -394,23 +394,26 @@ static inline unsigned char *copy_string(unsigned char **dst, unsigned char *src
 
 /* Copies at most dst_size chars into dst. Ensures null termination of dst. */
 static inline unsigned char *safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size) {
-/*	size_t to_copy;
+#if 0
+	size_t to_copy;
 
 	to_copy = strlen(src);
 
-	/ Ensure that the url size is not greater than str_size / 
+	/* Ensure that the url size is not greater than str_size */
 	if (dst_size < to_copy)
 		to_copy = dst_size - 1;
 
 	strncpy(dst, src, to_copy);
 
-	/ Ensure null termination /
+	/* Ensure null termination */
 	dst[to_copy] = '\0';
 	
-	return dst;*/
+	return dst;
+#endif
 
 	strncpy(dst, src, dst_size);
-	if (strlen(src) >= dst_size) dst[dst_size - 1] = 0;
+	dst[dst_size - 1] = 0;
+	
 	return dst;
 }
 

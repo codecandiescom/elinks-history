@@ -945,8 +945,7 @@ void dialog_func(struct window *win, struct event *ev, int fwd)
 					case ACT_PASTE_CLIPBOARD: {
 						/* Paste from clipboard */
 						unsigned char * clipboard = get_clipboard_text();
-						strncpy(di->cdata , clipboard, di->item->dlen);
-						di->cdata[di->item->dlen - 1] = 0;
+						safe_strncpy(di->cdata, clipboard, di->item->dlen);
 						di->cpos = strlen(di->cdata);
 						mem_free(clipboard);
 						goto dsp_f;

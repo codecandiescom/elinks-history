@@ -140,8 +140,7 @@ int parse_url(unsigned char *url, int *prlen,
 
 #ifdef IPV6
 	if (lbracket && rbracket) {
-		strncpy(hostbuf, lbracket + 1, rbracket - lbracket - 1);
-		hostbuf[rbracket - lbracket - 1] = 0;
+		safe_strncpy(hostbuf, lbracket + 1, rbracket - lbracket - 1);
 	}
 #endif
 	if (host) {

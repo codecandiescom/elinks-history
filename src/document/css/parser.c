@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.114 2004/09/20 22:58:31 pasky Exp $ */
+/* $Id: parser.c,v 1.115 2004/09/20 23:01:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -182,6 +182,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		   struct list_head *selectors)
 {
 	struct selector_pkg *pkg = NULL;
+	int last_fragment = 0;
 
 	/* FIXME: element can be even '*' --pasky */
 
@@ -191,9 +192,9 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		struct css_selector *selector;
 		enum css_selector_relation reltype = CSR_ROOT;
 		enum css_selector_type seltype = CST_ELEMENT;
-		int last_fragment;
 
 		assert(token);
+		assert(!last_fragment);
 
 
 		if (token->type == '{'
@@ -314,7 +315,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		if (token->type == ',') {
 			/* Another selector hooked to these properties. */
 			skip_scanner_token(scanner);
-			pkg = NULL;
+			pkg = NULL; last_fragment = 0;
 		} else if (token->type == '{') {
 			/* End of selector list. */
 			break;

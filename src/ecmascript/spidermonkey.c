@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.169 2004/12/27 01:11:45 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.170 2004/12/27 01:14:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1062,14 +1062,13 @@ form_elements_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval
 	struct form_control *fc;
 	int counter = -1;
 	int index;
-	struct jsval_property prop;
-
-	set_prop_undef(&prop);
 
 	if (argc != 1)
 		return JS_TRUE;
 
 	index = atol(jsval_to_string(ctx, &argv[0]));
+
+	undef_to_jsval(ctx, rval);
 
 	foreach (fc, form->items) {
 		counter++;
@@ -1077,13 +1076,9 @@ form_elements_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval
 			JSObject *fcobj = get_form_control_object(ctx, parent_form, fc->type, find_form_state(doc_view, fc));
 
 			if (fcobj) {
-				set_prop_object(&prop, fcobj);
-			} else {
-				set_prop_undef(&prop);
+				object_to_jsval(ctx, rval, fcobj);
 			}
-
-			value_to_jsval(ctx, rval, &prop);
-			return JS_TRUE;
+			break;
 		}
 	}
 

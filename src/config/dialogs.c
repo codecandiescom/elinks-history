@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.128 2003/11/25 01:07:30 jonas Exp $ */
+/* $Id: dialogs.c,v 1.129 2003/11/25 01:12:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -329,53 +329,6 @@ invalid_option:
 }
 
 
-/* FIXME: Races here, we need to lock the entry..? --pasky */
-
-static void
-really_delete_option(void *data)
-{
-	struct option *option = data;
-
-	delete_option(option);
-}
-
-static int
-push_del_button(struct dialog_data *dlg_data,
-		struct widget_data *some_useless_info_button)
-{
-	struct terminal *term = dlg_data->win->term;
-	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
-	struct option *option;
-
-	if (!box->sel || !box->sel->udata) {
-
-invalid_option:
-		msg_box(term, NULL, 0,
-			N_("Delete option"), AL_CENTER,
-			N_("Cannot delete this option."),
-			NULL, 1,
-			N_("OK"), NULL, B_ESC | B_ENTER);
-		return 0;
-	}
-
-	option = box->sel->udata;
-	if (!box->sel->root ||
-	    !(((struct option *) box->sel->root->udata)->flags & OPT_AUTOCREATE)) {
-		goto invalid_option;
-	}
-
-	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("Delete option"), AL_CENTER,
-		msg_text(term, N_("Really delete the option \"%s\"?"),
-			option->name),
-		option, 2,
-		N_("OK"), really_delete_option, B_ENTER,
-		N_("Cancel"), NULL, B_ESC);
-
-	return 0;
-}
-
-
 static int
 push_save_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
@@ -390,7 +343,7 @@ static struct hierbox_browser_button option_buttons[] = {
 	{ N_("Info"),		push_hierbox_info_button	},
 	{ N_("Edit"),		push_edit_button		},
 	{ N_("Add"),		push_add_button			},
-	{ N_("Delete"),		push_del_button			},
+	{ N_("Delete"),		push_hierbox_delete_button	},
 	{ N_("Save"),		push_save_button		},
 };
 
@@ -413,7 +366,6 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	hierbox_browser(&option_browser, ses);
 }
-
 
 
 /****************************************************************************

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.257 2004/07/16 12:20:04 jonas Exp $ */
+/* $Id: search.c,v 1.258 2004/07/16 12:27:18 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1073,8 +1073,7 @@ draw_typeahead_match(struct terminal *term, struct document_view *doc_view,
 	struct color_pair *color = get_bfu_color(term, "searched");
 	int xoffset = doc_view->box.x - doc_view->vs->x;
 	int yoffset = doc_view->box.y - doc_view->vs->y;
-	int current_link = doc_view->vs->current_link;
-	struct link *link = &doc_view->document->links[current_link];
+	struct link *link = get_current_link(doc_view);
 	unsigned char *text = get_link_typeahead_text(link);
 	int end = offset + chars;
 	int i, j;

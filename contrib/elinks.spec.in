@@ -20,7 +20,7 @@
 #
 # Spec file format from < http://www.rpm.org/RPM-HOWTO/build.html >
 #
-# $Id: elinks.spec.in,v 1.14 2003/10/25 05:39:33 witekfl Exp $
+# $Id: elinks.spec.in,v 1.15 2003/10/26 07:35:15 witekfl Exp $
 
 Summary:	Enhanced version of Links (Lynx-like text WWW browser)
 Name:		elinks
@@ -32,13 +32,9 @@ Packager:	Petr Baudis <pasky@ucw.cz>
 Group:		Applications/Internet
 Source:		http://elinks.or.cz/download/%{name}-%{version}.tar.bz2
 URL:		http://elinks.or.cz/
-BuildRequires:	autoconf
-BuildRequires:	automake
 BuildRequires:	bzip2-devel
 BuildRequires:	expat-devel
-BuildRequires:	gettext-devel
 BuildRequires:	gpm-devel
-BuildRequires:	libtool
 BuildRequires:	openssl-devel
 BuildRequires:	zlib-devel
 BuildRequires:	/usr/bin/texi2html
@@ -114,6 +110,9 @@ rm -rf $RPM_BUILD_ROOT
 
 # date +"%a %b %d %Y"
 %changelog
+* Sun 0ct 26 2003 Witold Filipczyk <witekfl@pld-linux.org>
+- revert to version from 5 October
+
 * Sat Oct 25 2003 Witold Filipczyk <witekfl@pld-linux.org>
 - more BRs. gettext should be enough for most cases, but
   gettext-devel shouldn't hurt.

@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.42 2003/12/27 04:14:03 miciah Exp $ */
+/* $Id: hierbox.h,v 1.43 2003/12/27 23:33:39 jonas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -33,6 +33,10 @@ struct hierbox_browser {
 	struct list_head *items;
 	struct list_head dialogs;
 	struct listbox_ops *ops;
+
+	/* Offset of the selected item of the latest browser against the box
+	 * top. */
+	int sel_offset;
 };
 
 struct listbox_item *

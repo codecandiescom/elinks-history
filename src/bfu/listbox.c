@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.132 2003/12/21 14:51:18 zas Exp $ */
+/* $Id: listbox.c,v 1.133 2003/12/27 23:33:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -473,6 +473,14 @@ init_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 
 	box->ops = browser->ops;
 	box->items = browser->items;
+
+	/* Try to restore the position from last time */
+	if (browser->sel_offset) {
+		box_sel_move(widget_data, browser->sel_offset);
+		box->sel_offset = browser->sel_offset;
+		box->top = NULL;
+	}
+
 	add_to_list(browser->boxes, box);
 }
 

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.129 2003/12/27 19:35:27 jonas Exp $ */
+/* $Id: hierbox.c,v 1.130 2003/12/27 23:33:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -237,7 +237,8 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 			struct hierbox_browser *browser = dlg_data->dlg->udata2;
 			struct hierbox_dialog_list_item *item;
 
-			/* Delete the box structure */
+			/* Save state and delete the box structure */
+			browser->sel_offset = box->sel_offset;
 			del_from_list(box);
 
 			/* Delete the dialog list entry */

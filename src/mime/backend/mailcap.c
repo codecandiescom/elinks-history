@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.6 2003/06/05 13:06:55 jonas Exp $ */
+/* $Id: mailcap.c,v 1.7 2003/06/05 13:49:56 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -212,10 +212,7 @@ get_field(unsigned char **next)
  * fails. */
 
 static unsigned char *
-get_field_text(unsigned char *field,
-	       unsigned char *type,
-	       unsigned char *filename,
-	       int lineno)
+get_field_text(unsigned char *field)
 {
 	/* Skip whitespace */
 	while (*field && isspace(*field)) field++;
@@ -228,9 +225,6 @@ get_field_text(unsigned char *field,
 
 		return stracpy(field);
 	}
-
-	error("Bad formated entry for type %s in \"%s\" line %d\n",
-	      type, filename, lineno);
 
 	return NULL;
 }
@@ -253,6 +247,8 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 	if (!file) return;
 
 	while ((line = file_read_line(line, &linelen, file, &lineno))) {
+		int error_free;
+
 		/* Ignore comments */
 		if (*line == '#') continue;
 
@@ -282,6 +278,7 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 		if (!field) continue;
 		entry->command = field;
 
+		error_free = 1;
 		/* Parse the optional fields */
 		while (field) {
 			field = get_field(&next);
@@ -294,14 +291,16 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 				entry->copiousoutput = 1;
 
 			} else if (!strncasecmp(field, "test", 4)) {
-				field = get_field_text(field + 4, entry->type,
-					               filename, lineno);
-				if (!field) continue;
+				field = get_field_text(field + 4);
+				if (!field) {
+					error_free = 0;
+					continue;
+				}
 
 				entry->testcommand = convert_command(field, 0);
 				mem_free(field);
 
-				/* Find out wether testing requires filenam */
+				/* Find out wether testing requires filename */
 				field = entry->testcommand;
 				for (field = entry->testcommand; *field; field++) {
 					if (*field == '%') {
@@ -310,14 +309,21 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 					}
 				}
 			} else if (!strncasecmp(field, "description", 11)) {
-				field = get_field_text(field + 11, entry->type,
-					               filename, lineno);
-				if (!field) continue;
+				field = get_field_text(field + 11);
+				if (!field) {
+					error_free = 0;
+					continue;
+				}
 
 				entry->description = field;
 
 			}
 			/* Other optional fields are not currently useful */
+		}
+
+		if (!error_free) {
+			error("Bad formated entry for type %s in \"%s\" line %d",
+			      entry->type, filename, lineno);
 		}
 
 		/* Keep after parsing of optional fields (hint: copiousoutput) */

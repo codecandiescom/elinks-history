@@ -1,28 +1,31 @@
-#!/bin/sh
+#! /bin/sh
 # ELinks old bookmarks format to new format converter.
 
 # WARNING: Close all ELinks sessions before running this script.
 # This script converts ELinks bookmarks file with '|' as separator to new
-# bookmarks format where separator is '\t'. It saves old file to
+# bookmarks format where separator is tab char. It saves old file to
 # ~/.links/bookmarks.with_pipes. --Zas
 
+# Script by Stephane Chazelas :)
 
-if [ ! -e ~/.links/bookmarks ]; then
-	echo "~/.links/bookmarks does not exist !"
+BMFILE=$HOME/.links/bookmarks
+if [ ! -r "$BMFILE" ]; then
+	echo "$BMFILE does not exist or is not readable!" >&2
 	exit 1
 fi
 
-if [ -e ~/.links/bookmarks.with_pipes ]; then
-	echo "It seems you already ran this script."
-	echo "Remove ~/.links/bookmarks.with_pipes to force execution."
+if [ -f "${BMFILE}.with_pipes" ]; then
+	echo "It seems you already ran this script." >&2
+	echo "Remove ${BMFILE}.with_pipes to force execution." >&2
 	exit 1
 fi
  
-cat ~/.links/bookmarks | tr '|' '\t' > ~/.links/bookmarks.with_tabs \
-&& cp -f ~/.links/bookmarks ~/.links/bookmarks.with_pipes \
-&& mv -f ~/.links/bookmarks.with_tabs ~/.links/bookmarks && \
-echo -e "Bookmarks file converted.\nOld file was saved as
-~/.links/bookmarks.with_pipes." && exit 0
-
-echo "Conversion failure"
-exit 1
+if cp -f "$BMFILE" "${BMFILE}.with_pipes" \
+     && tr '|' '\011' < ${BMFILE}.with_pipes > $BMFILE
+then
+  echo "Bookmarks file converted."
+  echo "Old file was saved as ${BMFILE}.with_pipes."
+else
+  echo "Conversion failure" >&2
+  exit 1
+fi

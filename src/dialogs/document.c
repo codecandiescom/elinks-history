@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.81 2004/04/02 17:45:28 jonas Exp $ */
+/* $Id: document.c,v 1.82 2004/04/02 21:21:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -249,7 +249,7 @@ head_msg(struct session *ses)
 		return;
 	}
 
-	ce = find_in_cache(struri(cur_loc(ses)->vs.uri));
+	ce = find_in_cache(cur_loc(ses)->vs.uri);
 	if (ce && ce->head) {
 		unsigned char *headers = stracpy(ce->head);
 

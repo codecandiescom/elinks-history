@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.47 2004/04/02 18:15:11 jonas Exp $ */
+/* $Id: task.c,v 1.48 2004/04/02 21:22:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,7 +123,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	    || !uri->post
 	    || !get_opt_int("document.browse.forms.confirm_submit")
 	    || (cache_mode == CACHE_MODE_ALWAYS
-		&& (e = find_in_cache(struri(uri)))
+		&& (e = find_in_cache(uri))
 		&& !e->incomplete)) {
 
 		if (task) mem_free(task);
@@ -261,7 +261,7 @@ x:
 static void
 ses_imgmap(struct session *ses)
 {
-	struct cache_entry *ce = find_in_cache(struri(ses->loading_uri));
+	struct cache_entry *ce = find_in_cache(ses->loading_uri);
 	struct fragment *fr;
 	struct memory_list *ml;
 	struct menu_item *menu;

@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.72 2004/04/02 17:45:28 jonas Exp $ */
+/* $Id: cache.h,v 1.73 2004/04/02 21:21:59 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -82,7 +82,7 @@ long cache_info(int);
 
 /* Searches the cache for an entry matching the URI. Returns NULL if no one
  * matches. */
-struct cache_entry *find_in_cache(unsigned char *uri);
+struct cache_entry *find_in_cache(struct uri *uri);
 
 /* Searches the cache for a matching entry else a new one is added. Returns
  * NULL if allocation fails. */

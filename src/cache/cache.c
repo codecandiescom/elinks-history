@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.118 2004/04/02 18:15:11 jonas Exp $ */
+/* $Id: cache.c,v 1.119 2004/04/02 21:21:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,11 +96,12 @@ cache_info(int type)
 }
 
 struct cache_entry *
-find_in_cache(unsigned char *url)
+find_in_cache(struct uri *uri)
 {
 	struct cache_entry *ce;
+	unsigned char *url;
 
-	url = extract_proxy(url);
+	url = extract_proxy(struri(uri));
 
 	foreach (ce, cache) {
 		assert(get_cache_uri(ce) && url);
@@ -119,7 +120,7 @@ find_in_cache(unsigned char *url)
 struct cache_entry *
 get_cache_entry(struct uri *uri)
 {
-	struct cache_entry *ce = find_in_cache(struri(uri));
+	struct cache_entry *ce = find_in_cache(uri);
 
 	if (ce) return ce;
 

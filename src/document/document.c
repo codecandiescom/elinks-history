@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.56 2004/04/01 05:09:58 jonas Exp $ */
+/* $Id: document.c,v 1.57 2004/04/02 21:21:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ done_document(struct document *document)
 	assertm(!is_object_used(document), "Attempt to free locked formatted data.");
 	if_assert_failed return;
 
-	ce = find_in_cache(struri(document->uri));
+	ce = find_in_cache(document->uri);
 	if (!ce)
 		INTERNAL("no cache entry for document");
 	else
@@ -235,7 +235,7 @@ shrink_format_cache(int whole)
 
 		/* Destroy obsolete renderer documents which are already
 		 * out-of-sync. */
-		ce = find_in_cache(struri(document->uri));
+		ce = find_in_cache(document->uri);
 		assertm(ce, "cached formatted document has no cache entry");
 		if (ce->id_tag == document->id_tag) continue;
 

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.152 2004/04/01 18:34:14 jonas Exp $ */
+/* $Id: connection.c,v 1.153 2004/04/02 21:22:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -786,7 +786,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 #endif
 
 	if (cache_mode <= CACHE_MODE_NORMAL
-	    && (ce = find_in_cache(struri(uri)))
+	    && (ce = find_in_cache(uri))
 	    && !ce->incomplete) {
 		if (!is_object_used(ce) &&
 		    ((ce->cache_mode == CACHE_MODE_NEVER && cache_mode != CACHE_MODE_ALWAYS)

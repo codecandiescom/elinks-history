@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.103 2003/10/27 01:38:55 pasky Exp $ */
+/* $Id: os_dep.c,v 1.104 2003/10/27 01:59:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -461,92 +461,6 @@ unblock_stdin(void)
 #if defined(BEOS)
 
 #elif defined(HAVE_BEGINTHREAD)
-
-#elif defined(HAVE_CLONE)
-
-/* This is maybe buggy... */
-
-#include <sched.h>
-
-struct thread_stack {
-	LIST_HEAD(struct thread_stack);
-
-	int pid;
-	void *stack;
-	void (*fn)(void *, int);
-	int h;
-	int l;
-	unsigned char data[1];
-};
-
-void
-bglt(struct thread_stack *ts)
-{
-	ts->fn(ts->data, ts->h);
-	write(ts->h, "x", 1);
-	close(ts->h);
-}
-
-INIT_LIST_HEAD(thread_stacks);
-
-int
-start_thread(void (*fn)(void *, int), void *ptr, int l)
-{
-	struct thread_stack *ts;
-	int p[2];
-	int f;
-
-	if (c_pipe(p) < 0) return -1;
-	if (set_nonblocking_fd(p[0]) < 0) return -1;
-	if (set_nonblocking_fd(p[1]) < 0) return -1;
-
-	/*if (!(t = malloc(sizeof(struct tdata) + l))) return -1;
-	t->fn = fn;
-	t->h = p[1];
-	memcpy(t->data, ptr, l);*/
-	foreach (ts, thread_stacks) {
-		if (ts->pid == -1 || kill(ts->pid, 0)) {
-			if (ts->l >= l) {
-				goto ts_ok;
-			} else {
-				struct thread_stack *tts = ts;
-
-				ts = ts->prev;
-				del_from_list(tts); free(tts->stack); free(tts);
-			}
-		}
-	}
-
-	ts = malloc(sizeof(struct thread_stack) + l);
-	if (!ts) goto fail;
-
-	ts->stack = malloc(0x10000);
-	if (!ts->stack) {
-		free(ts);
-		goto fail;
-	}
-
-	ts->l = l;
-	add_to_list(thread_stacks, ts);
-
-ts_ok:
-	ts->fn = fn;
-	ts->h = p[1];
-	memcpy(ts->data, ptr, l);
-
-	ts->pid = __clone((int (*)(void *))bglt, (char *)ts->stack + 0x8000,
-			  CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND | SIGCHLD,
-			  ts);
-	if (ts->pid == -1) {
-
-fail:
-		close(p[0]);
-		close(p[1]);
-		return -1;
-	}
-
-	return p[0];
-}
 
 #elif defined(HAVE_PTHREADS)
 

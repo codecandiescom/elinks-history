@@ -3,7 +3,7 @@
 Glad to see you again, mortal. Now, we are going to learn about bookmarks - how
 to use them, how to maintain them, and also something more about the file
 formats and maybe even about the code structure later. But don't fear, we won't
-burden you with it, just stop reading when you know enough already.
+burden you with it, just stop reading when you already know enough.
 
 In order to read this, you need some common sense, the ability to start ELinks and
 some idea about what's a Web document, a URL address and knowledge like that.
@@ -12,7 +12,7 @@ If we ever mention some keys here, please note that you can rebind almost
 any action to another key which you like more - then you must obviously imagine
 your own key in place of that. Below, we will list all actions, options and so
 on related to bookmarks. We won't tell you how to rebind the keys, though;
-another document will describe that.
+another document will take on that.
 
 Somewhat out-of-order, a very frequent FAQ: In order to move bookmarks around,
 you need to mark them first - press Insert or '*' (if you use the default
@@ -198,11 +198,11 @@ configuration again and cause ELinks to resave the bookmarks.
 
 Agreed, this all strange dances are quite clumsy, likely some simple
 wizard-like interface for switching the bookmarks formats will be introduced
-in the future. So far, we have had no reports from our users that anyone would be
-switching their bookmarks format frequently, so this is not too high on our
-TODO list. So be sure to tell us if you would like this process to be
+in the future. So far, we have had no reports from our users that anyone
+wants to switch their bookmarks format frequently, so this is not too high
+on our TODO list. So be sure to tell us if you would like this process to be
 simplified rather sooner than later.
 
 
 
-$Id: bookmarks.txt,v 1.12 2005/01/03 08:12:57 miciah Exp $
+$Id: bookmarks.txt,v 1.13 2005/01/03 21:51:40 pasky Exp $

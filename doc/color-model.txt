@@ -121,8 +121,8 @@ This last couple satisfies all constraints, so we are done ;)
 How to cache the result and integrate it with the current color system
 ----------------------------------------------------------------------
 
-In previous example, we supposed we were using a true color palette, but most
-cases, we have a limited number of usable colors.
+In the previous example, we supposed we were using a true color palette, but in
+the most cases, we have a limited number of usable colors.
 We need to convert (fg, bg) to the nearest available color _before_ constraints
 satisfaction and at each step of it.
 When a valid transformation has been found we cache the initial (fg, bg) and the
@@ -296,5 +296,5 @@ http://www.lighthouse.org/color_contrast.htm
 
 
 
-$Id: color-model.txt,v 1.17 2005/01/03 08:12:57 miciah Exp $
+$Id: color-model.txt,v 1.18 2005/01/03 21:51:40 pasky Exp $
 vim: textwidth=80

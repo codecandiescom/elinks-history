@@ -25,8 +25,11 @@ file at the time of placing the mark.
 You can place a mark by the "m" key followed by the mark character. You can go
 to a mark by the "'" (apostrophe) key followed by the mark character. E.g., you
 can place a mark named "a" in the file by pressing "ma", then return to it
-at any time by typing "'a". You can of course change those shortcuts at any
+anytime later by typing "'a". You can of course change those shortcuts at any
 time to anything you wish in the keybindings manager.
+
+Short summary: you can place a mark (e.g. 'z') in a document by pressing "mz"
+and then go back to it anytime later by pressing "'z".
 
 
 Restrictions
@@ -82,4 +85,4 @@ under a single user on a single system, they "join" together and you must quit
 
 
 
-$Id: marks.txt,v 1.7 2005/01/03 08:12:57 miciah Exp $
+$Id: marks.txt,v 1.8 2005/01/03 21:51:40 pasky Exp $

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.111 2003/06/08 17:41:07 zas Exp $ */
+/* $Id: parser.c,v 1.112 2003/06/08 23:27:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,17 +40,18 @@
 
 INIT_LIST_HEAD(html_stack);
 
-static inline int
-atchr(unsigned char c)
-{
-	/* Attribute names are strings that follow the same rules as element
-        names. That is, attribute names must contain one or more characters,
-        and the first character must be a letter or the underscore (_).
-        Subsequent characters in the name may include letters, digits,
-        underscores, hyphens, and periods. They may not include white space
-        or other punctuation marks. */
-	return isA(c) || c == '.';
-}
+/* Attribute names are strings that follow the same rules as element
+ * names. That is, attribute names must contain one or more characters,
+ * and the first character must be a letter or the underscore (_).
+ * Subsequent characters in the name may include letters, digits,
+ * underscores, hyphens, and periods. They may not include white space
+ * or other punctuation marks. */
+#define ATTR_CHAR(c) (isA(c) || (c) == '.')
+
+#define TAG_END(e)  ((e)[0] == '>')
+#define TAG_END_XML(e) ((e)[0] == '/' && (e)[1] == '>')
+#define TAG_START(e)  ((e)[0] == '<')
+#define TAG_DELIM(e) (TAG_END(e) || TAG_END_XML(e) || TAG_START(e))
 
 /* This function eats one html element. */
 /* - e is pointer to the begining of the element (*e must be '<')
@@ -60,10 +61,6 @@ atchr(unsigned char c)
  * - end points to first character behind the html element */
 /* It returns -1 when it failed (returned values in pointers are invalid) and
  * 0 for success. */
-#define TAG_END(e)  ((e)[0] == '>')
-#define TAG_END_XML(e) ((e)[0] == '/' && (e)[1] == '>')
-#define TAG_START(e)  ((e)[0] == '<')
-#define TAG_DELIM(e) (TAG_END(e) || TAG_END_XML(e) || TAG_START(e))
 int
 parse_element(register unsigned char *e, unsigned char *eof,
 	      unsigned char **name, int *namelen,
@@ -86,16 +83,16 @@ parse_element(register unsigned char *e, unsigned char *eof,
 	if (name && namelen) *namelen = e - *name;
 
 	while (WHITECHAR(*e) || *e == '/' || *e == ':') e++;
-	if (!atchr(*e) && !TAG_DELIM(e)) goto end_1;
+	if (!ATTR_CHAR(*e) && !TAG_DELIM(e)) goto end_1;
 
 	if (attr) *attr = e;
 
 nextattr:
 	while (WHITECHAR(*e)) e++;
 	if (TAG_DELIM(e)) goto end;
-	if (!atchr(*e)) goto end_1;
+	if (!ATTR_CHAR(*e)) goto end_1;
 
-	while (atchr(*e)) e++;
+	while (ATTR_CHAR(*e)) e++;
 	while (WHITECHAR(*e)) e++;
 	if (*e != '=') goto endattr;
 	e++;
@@ -169,7 +166,7 @@ aa:
 
 	while (*n && upcase(*e) == upcase(*n)) e++, n++;
 	found = !*n;
-	while (atchr(*e)) found = 0, e++;
+	while (ATTR_CHAR(*e)) found = 0, e++;
 	while (WHITECHAR(*e)) e++;
 	if (*e != '=') goto ea;
 	e++;

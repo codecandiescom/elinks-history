@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.248 2004/04/04 01:40:20 jonas Exp $ */
+/* $Id: download.c,v 1.249 2004/04/04 03:37:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -681,7 +681,7 @@ common_download(struct session *ses, unsigned char *file, int resume)
 {
 	struct cmdw_hop *cmdw_hop;
 
-	if (!ses->dn_url) return;
+	if (!ses->download_uri) return;
 
 	cmdw_hop = mem_calloc(1, sizeof(struct cmdw_hop));
 	if (!cmdw_hop) return;
@@ -698,7 +698,7 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 {
 	struct cmdw_hop *cmdw_hop = data;
 	struct file_download *file_download = NULL;
-	unsigned char *url = cmdw_hop->ses->dn_url;
+	struct session *ses = cmdw_hop->ses;
 	struct stat buf;
 
 	if (!cmdw_hop->real_file) goto download_error;
@@ -706,7 +706,7 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download = mem_calloc(1, sizeof(struct file_download));
 	if (!file_download) goto download_error;
 
-	file_download->uri = get_uri(url, -1);
+	file_download->uri = get_uri_reference(ses->download_uri);
 	if (!file_download->uri) goto download_error;
 
 	file_download->file = cmdw_hop->real_file;
@@ -720,12 +720,12 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download->ses = cmdw_hop->ses;
 	/* The tab may be closed, but we will still want to ie. open the
 	 * handler on that terminal. */
-	file_download->term = cmdw_hop->ses->tab->term;
+	file_download->term = ses->tab->term;
 	file_download->remotetime = 0;
 
 	object_nolock(file_download, "file_download");
 	add_to_list(downloads, file_download);
-	load_uri(file_download->uri, cmdw_hop->ses->referrer, &file_download->download, PRI_DOWNLOAD, CACHE_MODE_NORMAL,
+	load_uri(file_download->uri, ses->referrer, &file_download->download, PRI_DOWNLOAD, CACHE_MODE_NORMAL,
 		 (resume ? file_download->last_pos : 0));
 
 	if (is_in_downloads_list(file_download))
@@ -733,7 +733,7 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 							   struri(file_download->uri),
 							   file_download);
 
-	display_download(cmdw_hop->ses->tab->term, file_download, cmdw_hop->ses);
+	display_download(ses->tab->term, file_download, ses);
 
 	mem_free(cmdw_hop);
 	return;
@@ -747,12 +747,11 @@ download_error:
 }
 
 void
-start_download(void *ses, unsigned char *file)
+start_download(void *ses_, unsigned char *file)
 {
-        enum protocol protocol = known_protocol(((struct session *)ses)->dn_url,
-						NULL);
+	struct session *ses = ses_;
 
-        if (protocol == PROTOCOL_UNKNOWN) {
+        if (ses->download_uri->protocol == PROTOCOL_UNKNOWN) {
                 print_error_dialog(ses, S_UNKNOWN_PROTOCOL, PRI_CANCEL);
                 return;
         }

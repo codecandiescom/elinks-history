@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.391 2004/04/04 03:18:25 jonas Exp $ */
+/* $Id: view.c,v 1.392 2004/04/04 03:37:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1007,9 +1007,9 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 
 	if (!link) return;
 
-	if (ses->dn_url) {
-		mem_free(ses->dn_url);
-		ses->dn_url = NULL;
+	if (ses->download_uri) {
+		done_uri(ses->download_uri);
+		ses->download_uri = NULL;
 	}
 
 	switch (action) {
@@ -1033,9 +1033,12 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 		return;
 	}
 
-	ses->dn_url = url;
+	ses->download_uri = get_uri(url, -1);
+	mem_free(url);
+	if (!ses->download_uri) return;
+
 	set_session_referrer(ses, doc_view->document->uri);
-	query_file(ses, ses->dn_url, ses, download, NULL, 1);
+	query_file(ses, struri(ses->download_uri), ses, download, NULL, 1);
 }
 
 static struct string *
@@ -1137,27 +1140,32 @@ void
 save_url(struct session *ses, unsigned char *url)
 {
 	struct document_view *doc_view;
+	struct uri *uri = NULL;
 	unsigned char *u;
 
 	assert(ses && ses->tab && ses->tab->term && url);
 	if_assert_failed return;
 	if (!*url) return;
 	u = translate_url(url, ses->tab->term->cwd);
+	uri = (u ? get_uri(u, -1) : NULL);
+	if (u) mem_free(u);
 
-	if (!u) {
-		print_error_dialog(ses, S_BAD_URL, PRI_CANCEL);
+	if (!u || !uri) {
+		int state = (uri == NULL) ? S_OUT_OF_MEM : S_BAD_URL;
+
+		print_error_dialog(ses, state, PRI_CANCEL);
 		return;
 	}
 
-	if (ses->dn_url) mem_free(ses->dn_url);
-	ses->dn_url = u;
+	if (ses->download_uri) done_uri(ses->download_uri);
+	ses->download_uri = uri;
 
 	doc_view = current_frame(ses);
 	assert(doc_view && doc_view->document && doc_view->document->uri);
 	if_assert_failed return;
 
 	set_session_referrer(ses, doc_view->document->uri);
-	query_file(ses, ses->dn_url, ses, start_download, NULL, 1);
+	query_file(ses, struri(ses->download_uri), ses, start_download, NULL, 1);
 }
 
 void
@@ -1179,16 +1187,16 @@ save_as(struct terminal *term, void *xxx, struct session *ses)
 
 	if (!have_location(ses)) return;
 	loc = cur_loc(ses);
-	if (ses->dn_url) mem_free(ses->dn_url);
-	ses->dn_url = stracpy(struri(loc->vs.uri));
-	if (ses->dn_url) {
+	if (ses->download_uri) done_uri(ses->download_uri);
+	ses->download_uri = get_uri_reference(loc->vs.uri);
+	if (ses->download_uri) {
 		struct document_view *doc_view = current_frame(ses);
 
 		assert(doc_view && doc_view->document && doc_view->document->uri);
 		if_assert_failed return;
 
 		set_session_referrer(ses, doc_view->document->uri);
-		query_file(ses, ses->dn_url, ses, start_download, NULL, 1);
+		query_file(ses, struri(ses->download_uri), ses, start_download, NULL, 1);
 	}
 }
 

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.114 2004/04/04 01:40:20 jonas Exp $ */
+/* $Id: session.h,v 1.115 2004/04/04 03:37:01 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -133,7 +133,7 @@ struct session {
 	struct document_view *doc_view;
 	struct list_head scrn_frames; /* -> struct document_view */
 
-	unsigned char *dn_url;
+	struct uri *download_uri;
 
 	struct uri *referrer;
 

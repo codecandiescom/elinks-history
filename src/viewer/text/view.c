@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.268 2003/11/18 11:40:52 kuser Exp $ */
+/* $Id: view.c,v 1.269 2003/11/18 20:54:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #include "config/kbdbind.h"
 #include "config/options.h"
 #include "cookies/cookies.h"
+#include "cookies/dialogs.h"
 #include "dialogs/document.h"
 #include "dialogs/menu.h"
 #include "document/document.h"
@@ -989,6 +990,11 @@ quak:
 				goto x;
 			case ACT_CACHE_MANAGER:
 				menu_cache_manager(ses->tab->term, NULL, ses);
+				goto x;
+			case ACT_COOKIE_MANAGER:
+#ifdef COOKIES
+				menu_cookie_manager(ses->tab->term, NULL, ses);
+#endif
 				goto x;
 			case ACT_HISTORY_MANAGER:
 #ifdef GLOBHIST

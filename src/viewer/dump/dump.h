@@ -1,7 +1,7 @@
-/* $Id: dump.h,v 1.3 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: dump.h,v 1.1 2003/01/01 17:48:46 pasky Exp $ */
 
-#ifndef EL__DOCUMENT_DUMP_H
-#define EL__DOCUMENT_DUMP_C
+#ifndef EL__VIEWER_DUMP_DUMP_H
+#define EL__VIEWER_DUMP_DUMP_H
 
 #include "lowlevel/sched.h"
 

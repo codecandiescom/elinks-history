@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.474 2004/06/15 22:56:42 jonas Exp $ */
+/* $Id: view.c,v 1.475 2004/06/16 03:07:47 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -939,7 +939,6 @@ frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_
 }
 #endif /* CONFIG_MOUSE */
 
-/* We return |x| at the end of the function. */
 static enum frame_event_status
 frame_ev(struct session *ses, struct document_view *doc_view, struct term_event *ev)
 {

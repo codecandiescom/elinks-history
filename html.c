@@ -717,7 +717,7 @@ void html_img(unsigned char *a)
 		mem_free(al);
 	}
 	ismap = format.link && has_attr(a, "ismap") && !usemap;
-	if (!(al = get_attr_val(a, "alt")) || !*al) {
+	if ((!(al = get_attr_val(a, "alt")) && !(al = get_attr_val(a, "title"))) || !*al) {
 		if (al) mem_free(al);
 		if (!d_opt->images && !format.link) return;
 		if (usemap) al = stracpy("[USEMAP]");

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.66 2003/09/21 11:08:11 zas Exp $ */
+/* $Id: core.c,v 1.67 2003/09/21 11:24:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,27 +113,30 @@ l_current_title(LS)
 {
 	struct document_view *fd = current_frame(lua_ses);
 
-	if (fd && fd->document->title)
+	if (fd && fd->document->title) {
 		lua_pushstring(S, fd->document->title);
-	else
-		lua_pushnil(S);
+		return 1;
+	}
 
+	lua_pushnil(S);
 	return 1;
 }
 
 static int
 l_current_document(LS)
 {
-	unsigned char *url;
-	struct cache_entry *ce;
-	struct fragment *f;
+	if (lua_ses) {
+		unsigned char *url = cur_loc(lua_ses)->vs.url;
+		struct cache_entry *ce;
+		struct fragment *f;
 
-	if (lua_ses && (url = cur_loc(lua_ses)->vs.url)
-	    && find_in_cache(url, &ce) && (f = ce->frag.next))
-		lua_pushlstring(S, f->data, f->length);
-	else
-		lua_pushnil(S);
+		if (url && find_in_cache(url, &ce) && (f = ce->frag.next)) {
+			lua_pushlstring(S, f->data, f->length);
+			return 1;
+		}
+	}
 
+	lua_pushnil(S);
 	return 1;
 }
 
@@ -141,12 +144,9 @@ l_current_document(LS)
 static int
 l_current_document_formatted(LS)
 {
-	extern unsigned char frame_dumb[];
-	int width, old_width = 0;
 	struct document_view *f;
-	struct document *fd;
-	int x, y;
 	struct string buffer;
+	int width, old_width = 0;
 
 	if (lua_gettop(S) == 0) width = -1;
 	else if (!lua_isnumber(S, 1)) goto lua_error;
@@ -157,8 +157,12 @@ l_current_document_formatted(LS)
 		old_width = lua_ses->tab->term->x, lua_ses->tab->term->x = width;
 		html_interpret(lua_ses);
 	}
-	fd = f->document;
+
 	if (init_string(&buffer)) {
+		extern unsigned char frame_dumb[];
+		struct document *fd = f->document;
+		int x, y;
+
 		for (y = 0; y < fd->y; y++) for (x = 0; x <= fd->data[y].l; x++) {
 			unsigned char c;
 
@@ -168,9 +172,7 @@ l_current_document_formatted(LS)
 				unsigned char attr = fd->data[y].d[x].attr;
 
 				c = fd->data[y].d[x].data;
-
-				if (c == 1)
-					c += ' ' - 1;
+				if (c == 1) c += ' ' - 1;
 
 				if ((attr & SCREEN_ATTR_FRAME)
 				    && c >= 176 && c < 224)
@@ -181,6 +183,7 @@ l_current_document_formatted(LS)
 		lua_pushlstring(S, buffer.source, buffer.length);
 		done_string(&buffer);
 	}
+
 	if (width > 0) {
 		lua_ses->tab->term->x = old_width;
 		html_interpret(lua_ses);
@@ -236,10 +239,10 @@ l_execute(LS)
 	if (lua_isstring(S, 1)) {
 		exec_on_terminal(lua_ses->tab->term, (uchar *)lua_tostring(S, 1), "", 0);
 		lua_pushnumber(S, 0);
-	} else {
-		lua_pushnil(L);
+		return 1;
 	}
 
+	lua_pushnil(L);
 	return 1;
 }
 
@@ -251,11 +254,11 @@ l_tmpname(LS)
 	if (fn) {
 		lua_pushstring(S, fn);
 		free(fn);
-	} else {
-		alert_lua_error("Error generating temporary file name");
-		lua_pushnil(S);
+		return 1;
 	}
 
+	alert_lua_error("Error generating temporary file name");
+	lua_pushnil(S);
 	return 1;
 }
 
@@ -605,8 +608,8 @@ lua_error:
 static void
 do_hooks_file(LS, unsigned char *prefix, unsigned char *filename)
 {
-	int oldtop = lua_gettop(S);
 	unsigned char *file = straconcat(prefix, "/", filename, NULL);
+	int oldtop = lua_gettop(S);
 
 	lua_dofile(S, file);
 	mem_free(file);
@@ -687,10 +690,11 @@ alert_lua_error(unsigned char *msg)
 			msg,
 			NULL, 1,
 			N_("OK"), NULL, B_ENTER | B_ESC);
-	} else {
-		error("Lua: %s", msg);
-		sleep(3);
+		return;
 	}
+
+	error("Lua: %s", msg);
+	sleep(3);
 }
 
 void
@@ -698,11 +702,10 @@ alert_lua_error2(unsigned char *msg, unsigned char *msg2)
 {
 	unsigned char *tmp = stracpy(msg);
 
-	if (tmp) {
-		add_to_strn(&tmp, msg2);
-		alert_lua_error(tmp);
-		mem_free(tmp);
-	}
+	if (!tmp) return;
+	add_to_strn(&tmp, msg2);
+	alert_lua_error(tmp);
+	mem_free(tmp);
 }
 
 
@@ -716,19 +719,19 @@ static void
 handle_ret_eval(struct session *ses)
 {
 	const unsigned char *expr = lua_tostring(L, -1);
-	int oldtop;
 
-	if (!expr) {
-		alert_lua_error("bad argument for eval");
+	if (expr) {
+		int oldtop = lua_gettop(L);
+
+		if (prepare_lua(ses) == 0) {
+			lua_dostring(L, expr);
+			lua_settop(L, oldtop);
+			finish_lua();
+		}
 		return;
 	}
 
-	oldtop = lua_gettop(L);
-	if (prepare_lua(ses) == 0) {
-		lua_dostring(L, expr);
-		lua_settop(L, oldtop);
-		finish_lua();
-	}
+	alert_lua_error("bad argument for eval");
 }
 
 static void
@@ -736,10 +739,12 @@ handle_ret_run(struct session *ses)
 {
 	unsigned char *cmd = (uchar *)lua_tostring(L, -1);
 
-	if (!cmd)
-		alert_lua_error("bad argument for run");
-	else
+	if (cmd) {
 		exec_on_terminal(ses->tab->term, cmd, "", 1);
+		return;
+	}
+
+	alert_lua_error("bad argument for run");
 }
 
 static void
@@ -747,10 +752,12 @@ handle_ret_goto_url(struct session *ses)
 {
 	unsigned char *url = (uchar *)lua_tostring(L, -1);
 
-	if (!url)
-		alert_lua_error("bad argument for goto_url");
-	else
+	if (url) {
 		goto_url(ses, url);
+		return;
+	}
+
+	alert_lua_error("bad argument for goto_url");
 }
 
 static void
@@ -796,8 +803,7 @@ lua_console(struct session *ses, unsigned char *expr)
 		int err = lua_call(L, 1, 2);
 
 		finish_lua();
-		if (!err)
-			handle_standard_lua_returns("lua_console_hook");
+		if (!err) handle_standard_lua_returns("lua_console_hook");
 	}
 }
 
@@ -833,12 +839,10 @@ run_lua_func(struct session *ses, int func_ref)
 	}
 
 	lua_getref(L, func_ref);
-	if (prepare_lua(ses))
-		return;
+	if (prepare_lua(ses)) return;
 	err = lua_call(L, 0, 2);
 	finish_lua();
-	if (!err)
-		handle_standard_lua_returns("keyboard function");
+	if (!err) handle_standard_lua_returns("keyboard function");
 }
 
 

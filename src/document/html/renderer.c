@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.196 2003/08/21 13:03:55 zas Exp $ */
+/* $Id: renderer.c,v 1.197 2003/08/23 01:01:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -708,6 +708,9 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen,
 	assert(part && chars);
 	if_assert_failed return;
 
+	if (format.attr & AT_UNDERLINE)
+		attr |= SCREEN_ATTR_UNDERLINE;
+
 	if (format.attr & AT_GRAPHICS) {
 		put_chars(part, chars, charslen, attr);
 		return;
@@ -758,6 +761,9 @@ put_chars(struct part *part, unsigned char *chars, int charslen,
 		last_tag_for_newline = (void *)&part->document->tags;
 	}
 	if (part->cx == -1) part->cx = par_format.leftmargin;
+
+	if (format.attr & AT_UNDERLINE)
+		attr |= SCREEN_ATTR_UNDERLINE;
 
 	if (last_link || last_image || last_form || format.link
 	    || format.image || format.form)

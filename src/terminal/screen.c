@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.45 2003/08/03 03:44:24 jonas Exp $ */
+/* $Id: screen.c,v 1.46 2003/08/23 01:01:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,21 +64,28 @@ struct rs_opt_cache {
 	int type, m11_hack, utf_8_io, colors, charset, restrict_852, cp437, koi8r, trans;
 };
 
+struct screen_state {
+	unsigned char color;
+	unsigned char border;
+	unsigned char underline;
+};
+
 /* Time critical section. */
 static inline void
 print_char(struct string *screen, struct rs_opt_cache *opt_cache,
-	   struct screen_char *ch, int *prev_mode, int *prev_attrib)
+	   struct screen_char *ch, struct screen_state *state)
 {
 	unsigned char c = ch->data;
-	unsigned char attrib = ch->color;
-	unsigned char mode = (ch->attr & SCREEN_ATTR_FRAME);
+	unsigned char color = ch->color;
+	unsigned char underline = (ch->attr & SCREEN_ATTR_UNDERLINE);
+	unsigned char border = (ch->attr & SCREEN_ATTR_FRAME);
 
 	if (opt_cache->type == TERM_LINUX) {
 		if (opt_cache->m11_hack && !opt_cache->utf_8_io) {
-			if (mode != *prev_mode) {
-				*prev_mode = mode;
+			if (border != state->border) {
+				state->border = border;
 
-				if (!mode) {
+				if (!border) {
 					add_bytes_to_string(screen, "\033[10m", 5);
 				} else {
 					add_bytes_to_string(screen, "\033[11m", 5);
@@ -86,26 +93,27 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 			}
 		}
 
-		if (opt_cache->restrict_852 && mode && c >= 176 && c < 224
+		if (opt_cache->restrict_852 && border && c >= 176 && c < 224
 		    && frame_restrict[c - 176]) {
 			c = frame_restrict[c - 176];
 		}
 
 	} else if (opt_cache->type == TERM_VT100 && !opt_cache->utf_8_io) {
-		if (mode != *prev_mode) {
-			*prev_mode = mode;
-			if (!mode) {
+		if (border != state->border) {
+			state->border = border;
+
+			if (!border) {
 				add_char_to_string(screen, '\x0f');
 			} else {
 				add_char_to_string(screen, '\x0e');
 			}
 		}
 
-		if (mode && c >= 176 && c < 224) {
+		if (border && c >= 176 && c < 224) {
 			c = frame_vt100[c - 176];
 		}
 
-	} else if (mode && c >= 176 && c < 224) {
+	} else if (border && c >= 176 && c < 224) {
 		if (opt_cache->type == TERM_VT100) {
 			c = frame_vt100_u[c - 176];
 		} else if (opt_cache->type == TERM_KOI8) {
@@ -115,15 +123,15 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 		}
 	}
 
-	if (!(attrib & 0100) && (attrib >> 3) == (attrib & 7)) {
-		attrib = (attrib & 070) | 7 * !(attrib & 020);
+	if (!(color & 0100) && (color >> 3) == (color & 7)) {
+		color = (color & 070) | 7 * !(color & 020);
 	}
 
-	if (attrib != *prev_attrib) {
+	if (color != state->color) {
 		unsigned char code[11];
 		int length;
 
-		*prev_attrib = attrib;
+		state->color = color;
 
 		code[0] = '\033';
 		code[1] = '[';
@@ -132,9 +140,9 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 		if (opt_cache->colors) {
 			code[3] = ';';
 			code[4] = '3';
-			code[5] = (attrib & 7) + '0';
+			code[5] = (color & 7) + '0';
 
-			code[8] = (attrib >> 3 & 7) + '0';
+			code[8] = (color >> 3 & 7) + '0';
 			if (!opt_cache->trans || code[8] != '0') {
 				code[6] = ';';
 				code[7] = '4';
@@ -145,7 +153,7 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 
 #define getcompcode(c) ((int)((int)(c)<<1 | ((int)(c)&4)>>2) & 7)
 
-		} else if (getcompcode(attrib & 7) < getcompcode(attrib >> 3 & 7)) {
+		} else if (getcompcode(color & 7) < getcompcode(color >> 3 & 7)) {
 			code[3] = ';';
 			code[4] = '7';
 			length = 5;
@@ -153,7 +161,7 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 			length = 3;
 		}
 
-		if (attrib & 0100) {
+		if (color & 0100) {
 			code[length++] = ';';
 			code[length++] = '1';
 		}
@@ -163,11 +171,23 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 		add_bytes_to_string(screen, code, length);
 	}
 
+	if (opt_cache->type == TERM_VT100) {
+		if (underline != state->underline) {
+			state->underline = underline;
+
+			if (underline) {
+				add_bytes_to_string(screen, "\033[4m", 4);
+			} else {
+				add_bytes_to_string(screen, "\033[24m", 5);
+			}
+		}
+	}
+
 	if (c >= ' ' && c != ASCII_DEL /* && c != 155*/) {
 		if (opt_cache->utf_8_io) {
 			int charset;
 
-			if (mode) {
+			if (border) {
 				switch (opt_cache->type) {
 					case TERM_LINUX:
 					case TERM_VT100:
@@ -187,7 +207,7 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 		} else {
 			add_char_to_string(screen, c);
 		}
-	} else if (c == 0 || c == 1) {
+	} else if (c <= 1) {
 		add_char_to_string(screen, ' ');
 	} else {
 		add_char_to_string(screen, '.');
@@ -261,8 +281,7 @@ redraw_screen(struct terminal *term)
 	struct string image;
 	register int y = 0;
 	int prev_y = -1;
-	int attrib = -1;
-	int mode = -1;
+	struct screen_state state = { -1, -1, -1 };
 	struct terminal_screen *screen = term->screen;
  	register struct screen_char *current;
  	register struct screen_char *pos;
@@ -305,7 +324,7 @@ redraw_screen(struct terminal *term)
 			}
 
 			for (; prev_pos <= pos ; prev_pos++)
-				print_char(&image, &opt_cache, prev_pos, &mode, &attrib);
+				print_char(&image, &opt_cache, prev_pos, &state);
 		}
 	}
 

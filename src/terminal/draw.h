@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.19 2003/08/03 03:44:24 jonas Exp $ */
+/* $Id: draw.h,v 1.20 2003/08/23 01:01:07 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -71,9 +71,9 @@ void draw_area(struct terminal *, int, int, int, int, unsigned char, unsigned ch
 void draw_frame(struct terminal *, int, int, int, int, unsigned char, int);
 void draw_text(struct terminal *, int, int, int, unsigned char *, unsigned char, unsigned char color);
 
-#define set_char(t, x, y, data, attr) draw_char(t, x, y, data, attr, attr)
-#define fill_area(t, x, y, xw, yw, d, c) draw_area(t, x, y, xw, yw, d, c, c)
-#define print_text(t, x, y, l, txt, c) draw_text(t, x, y, l, txt, c, c)
+#define set_char(t, x, y, data, attr) draw_char(t, x, y, data, attr, (attr) & SCREEN_ATTR_FRAME)
+#define fill_area(t, x, y, xw, yw, d, c) draw_area(t, x, y, xw, yw, d, c, (c) & SCREEN_ATTR_FRAME)
+#define print_text(t, x, y, l, txt, c) draw_text(t, x, y, l, txt, c, (c) & SCREEN_ATTR_FRAME)
 
 #define draw_border_area(t, x, y, xw, yw, d, c) do { \
 		draw_area(t, x, y, xw, yw, d, c, SCREEN_ATTR_FRAME); \

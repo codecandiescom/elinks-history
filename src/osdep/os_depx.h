@@ -1,4 +1,4 @@
-/* $Id: os_depx.h,v 1.6 2003/10/05 12:37:37 pasky Exp $ */
+/* $Id: os_depx.h,v 1.7 2003/10/23 22:37:41 pasky Exp $ */
 
 #ifndef EL__OS_DEPX_H
 #define EL__OS_DEPX_H
@@ -12,6 +12,14 @@
 #define MAXINT INT_MAX
 #else
 #define MAXINT 0x7fffffff
+#endif
+#endif
+
+#ifndef MAXLONG
+#ifdef LONG_MAX
+#define MAXLONG LONG_MAX
+#else
+#define MAXLONG 0x7fffffff
 #endif
 #endif
 

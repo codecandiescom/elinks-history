@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.242 2004/06/12 00:35:09 jonas Exp $ */
+/* $Id: uri.c,v 1.243 2004/06/12 00:43:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -712,14 +712,17 @@ join_urls(struct uri *base, unsigned char *rel)
 	/* See RFC 1808 */
 	/* TODO: Support for ';' ? (see the RFC) --pasky */
 
+	/* For '#' and '?' we could use get_uri_string() but it might be too
+	 * expensive since it uses granular allocation scheme. I wouldn't
+	 * personally mind tho' because it would be cleaner. --jonas */
 	if (rel[0] == '#') {
-		/* FIXME: When uri->fragment have been added use
-		 * get_uri_string(base, URI_JOIN_FRAGMENT */
-		n = stracpy(struri(base));
+		int length = base->fragment
+			   ? base->fragment - struri(base) - 1
+			   : get_real_uri_length(base);
+
+		n = memacpy(struri(base), length);
 		if (!n) return NULL;
 
-		for (p = n; *p && *p != POST_CHAR && *p != '#'; p++);
-		*p = '\0';
 		add_to_strn(&n, rel);
 
 		return normalize_uri_reparse(&uri, n);

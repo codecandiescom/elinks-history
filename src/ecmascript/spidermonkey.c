@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.41 2004/09/25 17:52:46 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.42 2004/09/25 18:07:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,6 +251,9 @@ window_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		if (!strcmp(v.string, "location")) {
 			JSVAL_REQUIRE(vp, STRING);
 			location_goto(doc_view, v.string);
+			/* Do NOT touch our .location property, evil
+			 * SpiderMonkey!! */
+			return JS_FALSE;
 		}
 		goto bye;
 	} else if (!JSVAL_IS_INT(id))

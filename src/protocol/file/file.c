@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.177 2004/08/14 15:59:01 jonas Exp $ */
+/* $Id: file.c,v 1.178 2004/08/18 20:02:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,6 +228,8 @@ file_protocol_handler(struct connection *connection)
 
 	} else {
 		state = read_encoded_file(&name, &page);
+		/* FIXME: If state is now S_ENCODE_ERROR we should try loading
+		 * the file undecoded. --jonas */
 	}
 
 	done_string(&name);

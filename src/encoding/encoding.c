@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.36 2004/08/16 00:59:09 jonas Exp $ */
+/* $Id: encoding.c,v 1.37 2004/08/18 20:02:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -247,11 +247,18 @@ read_file(struct stream_encoded *stream, int readsize, struct string *page)
 		int readlen = read_encoded(stream, string_pos, readsize);
 
 		if (readlen < 0) {
-			/* FIXME: We should get the correct error value.
-			 * But it's I/O error in 90% of cases anyway.. ;)
-			 * --pasky */
 			done_string(page);
-			return (enum connection_state) -errno;
+
+			/* If it is some I/O error (and errno is set) that will
+			 * do. Since errno == 0 == S_WAIT and we cannot have
+			 * that. */
+			if (errno)
+				return (enum connection_state) -errno;
+
+			/* FIXME: This is indeed an internal error. If readed from a
+			 * corrupted encoded file nothing or only some of the
+			 * data will be read. */
+			return S_ENCODE_ERROR;
 
 		} else if (readlen == 0) {
 			/* NUL-terminate just in case */

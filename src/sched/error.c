@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: error.c,v 1.30 2004/08/14 07:53:16 jonas Exp $ */
+/* $Id: error.c,v 1.31 2004/08/18 20:02:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,6 +53,10 @@ struct s_msg_dsc {
 	{S_RESTART,		N_("Request must be restarted")},
 	{S_STATE,		N_("Can't get socket state")},
 	{S_LOCAL_ONLY,		N_("Only local connections are permitted")},
+#if defined(CONFIG_GZIP) || defined(CONFIG_BZIP2)
+	{S_ENCODE_ERROR,	N_("Error while decoding file. This might be caused\n"
+				   "by the encoded file being corrupt.") },
+#endif
 	{S_UNKNOWN_PROTOCOL,	N_("This URL contains a protocol not yet known by ELinks.\n"
 				   "You can configure an external handler for it through\n"
 				   "the options system.")},

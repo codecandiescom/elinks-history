@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.111 2003/07/01 19:47:12 zas Exp $ */
+/* $Id: view.c,v 1.112 2003/07/01 19:50:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -645,14 +645,18 @@ get_first_link(struct f_data_c *f)
 static struct link *
 get_last_link(struct f_data_c *f)
 {
-	int i;
 	struct link *l = NULL;
 
 	if (!f->f_data->lines2) return NULL;
 
-	for (i = f->vs->view_pos; i < f->vs->view_pos + f->yw; i++)
-		if (i >= 0 && i < f->f_data->y && f->f_data->lines2[i] > l)
-			l = f->f_data->lines2[i];
+	if (f->vs->view_pos >= 0 && f->f_data->y < f->vs->view_pos + f->yw) {
+		int i;
+
+		for (i = f->vs->view_pos; i < f->vs->view_pos + f->yw; i++)
+			if (f->f_data->lines2[i] > l)
+				l = f->f_data->lines2[i];
+	}
+
 	return l;
 }
 

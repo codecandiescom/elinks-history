@@ -1,5 +1,5 @@
 /* This routines are the bones of user interface. */
-/* $Id: bfu.c,v 1.24 2002/06/22 21:20:51 pasky Exp $ */
+/* $Id: bfu.c,v 1.25 2002/07/03 21:55:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -601,7 +601,7 @@ dsp_f:
 				break;
 			}
 
-			if ((ev->x == KBD_ENTER && di->item->type == D_BUTTON) || ev->x == ' ') {
+			if ((ev->x == KBD_ENTER && di->item->type == D_BUTTON) || ev->x == KBD_ENTER) {
 				dlg_select_item(dlg, di);
 				break;
 			}
@@ -622,7 +622,7 @@ sel:
 					}
 			}
 
-			if (ev->x == KBD_ENTER) {
+			if (ev->x == ' '/*KBD_ENTER*/) {
 				for (i = 0; i < dlg->n; i++)
 					if (dlg->dlg->items[i].type == D_BUTTON
 					    && dlg->dlg->items[i].gid & B_ENTER)

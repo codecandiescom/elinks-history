@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.65 2003/12/01 16:05:48 jonas Exp $ */
+/* $Id: form.c,v 1.66 2003/12/03 07:23:28 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -726,15 +726,21 @@ get_form_url(struct session *ses, struct document_view *doc_view,
 	else
 		encode_multipart(ses, &submit, &data, bound, cp_from, cp_to);
 
-	if (!data.source || !init_string(&go)) {
-		free_succesful_controls(&submit);
-		return NULL;
-	}
-
 #ifdef FORMS_MEMORY
-	if (get_opt_bool("document.browse.forms.show_formhist"))
+	/* XXX: We check data.source here because a NULL value can indicate
+	 * not only a memory allocation failure, but also an error reading
+	 * a file that is to be uploaded. TODO: Distinguish between
+	 * these two classes of errors (is it worth it?). -- Miciah */
+	if (data.source
+	    && get_opt_bool("document.browse.forms.show_formhist"))
 		memorize_form(ses, &submit, frm);
 #endif
+
+	free_succesful_controls(&submit);
+
+	if (!data.source) return NULL;
+
+	if (!init_string(&go)) return NULL;
 
 	if (frm->method == FM_GET) {
 		unsigned char *pos = strchr(frm->action, '#');
@@ -774,8 +780,6 @@ get_form_url(struct session *ses, struct document_view *doc_view,
 	}
 
 	done_string(&data);
-
-	free_succesful_controls(&submit);
 
 	return go.source;
 }

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.38 2004/04/01 06:06:20 jonas Exp $ */
+/* $Id: task.c,v 1.39 2004/04/01 15:59:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,7 +185,6 @@ ses_forward(struct session *ses, int loaded_in_frame)
 {
 	struct location *loc = NULL;
 	struct view_state *vs;
-	int len;
 
 	if (!loaded_in_frame) {
 		free_files(ses);
@@ -198,17 +197,8 @@ ses_forward(struct session *ses, int loaded_in_frame)
 
 x:
 	if (!loaded_in_frame) {
-		/* The new location will either be pointing to the URL
-		 * of the current location or the loading URL so make
-		 * it big enough. */
-		len = strlen(struri(ses->loading_uri));
-		if (have_location(ses))
-			int_lower_bound(&len, cur_loc(ses)->vs.url_len);
-
-		/* struct view_state reserves one byte, so len is sufficient. */
-		loc = mem_alloc(sizeof(struct location) + len);
+		loc = mem_calloc(1, sizeof(struct location));
 		if (!loc) return NULL;
-		memset(loc, 0, sizeof(struct location));
 		memcpy(&loc->download, &ses->loading, sizeof(struct download));
 	}
 

@@ -1,4 +1,4 @@
-/* $Id: location.h,v 1.13 2004/03/22 14:35:40 jonas Exp $ */
+/* $Id: location.h,v 1.14 2004/04/01 15:59:52 jonas Exp $ */
 
 #ifndef EL__SCHED_LOCATION_H
 #define EL__SCHED_LOCATION_H
@@ -12,7 +12,7 @@ struct location {
 
 	struct list_head frames;
 	struct download download;
-	struct view_state vs; /* has to be last */
+	struct view_state vs;
 };
 
 

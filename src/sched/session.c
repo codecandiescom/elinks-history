@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.338 2004/04/01 14:56:09 jonas Exp $ */
+/* $Id: session.c,v 1.339 2004/04/01 15:59:52 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -974,7 +974,6 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 {
 	struct location *loc = cur_loc(ses);
 	struct frame *frame;
-	size_t url_len = strlen(url);
 
 	assertm(have_location(ses), "ses_change_frame_url: no location yet");
 	if_assert_failed { return NULL; }
@@ -984,32 +983,11 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 
 		if (strcasecmp(frame->name, name)) continue;
 
-		if (url_len > frame->vs.url_len) {
-			struct document_view *doc_view;
-			struct frame *new_frame = frame;
-
-			/* struct view_state reserves 1 byte for url, so
-			 * url_len is sufficient. */
-			new_frame = mem_realloc(frame, sizeof(struct frame) + url_len);
-			if (!new_frame) return NULL;
-
-			new_frame->prev->next = new_frame->next->prev = new_frame;
-
-			foreach (doc_view, ses->scrn_frames)
-				if (doc_view->vs == &frame->vs)
-					doc_view->vs = &new_frame->vs;
-
-			frame = new_frame;
-		}
-
 		uri = get_uri(url);
 		if (!uri) return NULL;
 
 		done_uri(frame->vs.uri);
 		frame->vs.uri = uri;
-
-		memcpy(frame->vs.url, url, url_len + 1);
-		frame->vs.url_len = url_len;
 
 		return frame;
 	}

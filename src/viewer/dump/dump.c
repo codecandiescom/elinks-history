@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.98 2004/04/01 06:06:20 jonas Exp $ */
+/* $Id: dump.c,v 1.99 2004/04/01 15:59:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,16 +101,11 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 {
 	struct document_options o;
 	struct document_view formatted;
-	struct view_state *vs;
+	struct view_state vs;
 
 	if (!ce) return 0;
 
-	/* No need to add a byte for the \0 to the result of strlen():
-	 * struct view_state has an unsigned char url[1]. -- Miciah */
-	vs = mem_alloc(sizeof(struct view_state) + strlen(get_cache_uri(ce)));
-	if (!vs) return 1;
-
-	memset(vs, 0, sizeof(struct view_state));
+	memset(&vs, 0, sizeof(struct view_state));
 	memset(&formatted, 0, sizeof(struct document_view));
 
 	get_opt_bool("document.browse.links.numbering") =
@@ -126,14 +121,13 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 	o.plain = 0;
 	o.frames = 0;
 
-	init_vs(vs, get_cache_uri(ce), -1);
+	init_vs(&vs, get_cache_uri(ce), -1);
 
-	render_document(vs, &formatted, &o);
+	render_document(&vs, &formatted, &o);
 	dump_to_file(formatted.document, fd);
 
 	detach_formatted(&formatted);
-	destroy_vs(vs);
-	mem_free(vs);
+	destroy_vs(&vs);
 
 	return 0;
 }

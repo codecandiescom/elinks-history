@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.30 2004/04/01 05:01:47 jonas Exp $ */
+/* $Id: vs.c,v 1.31 2004/04/01 15:59:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,16 +25,10 @@
 void
 init_vs(struct view_state *vs, unsigned char *url, int plain)
 {
-	int url_len = strlen(url);
-
-	/* No need to add a byte for the \0 to url_len:
-	 * struct view_state has an unsigned char url[1]. -- Miciah */
-	memset(vs, 0, sizeof(struct view_state) + url_len);
+	memset(vs, 0, sizeof(struct view_state));
 	vs->current_link = -1;
 	vs->plain = plain;
 	vs->uri = get_uri(url);
-	memcpy(vs->url, url, url_len);
-	vs->url_len = url_len;
 }
 
 void
@@ -58,16 +52,6 @@ void
 copy_vs(struct view_state *dst, struct view_state *src)
 {
 	memcpy(dst, src, sizeof(struct view_state));
-
-	/* XXX: Beware @dst should point to a large enough memory space
-	 * to copy @src _and_ @src->url string. If it's not the case
-	 * an overflow will occur inducing a totally unexpected behavior
-	 * and a crash sooner or later.
-	 * I warned you. --Zas */
-	assert(dst->url_len >= src->url_len);
-	if_assert_failed return;
-
-	memcpy(dst->url, src->url, src->url_len + 1);
 
 	dst->uri = get_uri_reference(src->uri);
 	dst->goto_position = src->goto_position ?

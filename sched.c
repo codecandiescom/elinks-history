@@ -705,6 +705,7 @@ void connection_timeout(struct connection *c)
 	c->timer = -1;
 	setcstate(c, S_TIMEOUT);
 	if (c->dnsquery) abort_connection(c);
+	else if (c->conn_info) dns_found(c, 0);
 	else retry_connection(c);
 }
 

@@ -19,13 +19,21 @@ void log_data(unsigned char *data, int len)
 #define log_data(x, y)
 #endif
 
-void exception(void *data)
-{
-        struct connection *c = (struct connection *) data;
-	
-	setcstate(c, S_EXCEPT);
-	retry_connection(c);
-}
+struct conn_info {
+	/* Note that we MUST start with addr - free_connection_info() relies on it */
+	/* TODO: Remove this hack when we will have .h for each .c */
+	struct sockaddr *addr; /* array of addresses */
+	int addrno; /* array len / sizeof(sockaddr) */
+	int triedno; /* index of last tried address */
+	int port;
+	struct sockaddr_in sa;
+	int *sock;
+	void (*func)(struct connection *);
+};
+
+void dns_found(/* struct connection */ void *, int);
+
+void connected(/* struct connection */ void *);
 
 void close_socket(int *s)
 {
@@ -35,20 +43,23 @@ void close_socket(int *s)
 	*s = -1;
 }
 
-void connected(/* struct connection */ void *);
+void dns_exception(void *data)
+{
+        struct connection *conn = (struct connection *) data;
+        struct conn_info *c_i = (struct conn_info *) conn->buffer;
+	
+	setcstate(conn, S_EXCEPT);
+	close_socket(c_i->sock);
+	dns_found(conn, 0);
+}
 
-struct conn_info {
-	/* Note that we MUST start with addr - free_connection_info() relies on it */
-	/* TODO: Remove this hack when we will have .h for each .c */
-	struct sockaddr *addr; /* array of addresses */
-	int addrno; /* array len / sizeof(sockaddr) */
-	int port;
-	struct sockaddr_in sa;
-	int *sock;
-	void (*func)(struct connection *);
-};
-
-void dns_found(/* struct connection */ void *, int);
+void exception(void *data)
+{
+        struct connection *c = (struct connection *) data;
+	
+	setcstate(c, S_EXCEPT);
+	retry_connection(c);
+}
 
 void make_connection(struct connection *conn, int port, int *sock,
 		     void (*func)(struct connection *))
@@ -75,6 +86,7 @@ void make_connection(struct connection *conn, int port, int *sock,
 	c_i->func = func;
 	c_i->sock = sock;
 	c_i->port = port;
+	c_i->triedno = -1;
 	conn->conn_info = c_i;
 	
 	log_data("\nCONNECTION: ", 13);
@@ -150,6 +162,8 @@ void ssl_want_read(struct connection *c)
 #ifdef HAVE_SSL
 int ssl_connect(struct connection *conn, int sock)
 {
+        struct conn_info *c_i = (struct conn_info *) conn->buffer;
+	
 	if (conn->ssl) {
 		conn->ssl = getSSL();
 		SSL_set_fd(conn->ssl, sock);
@@ -159,7 +173,7 @@ int ssl_connect(struct connection *conn, int sock)
 			case SSL_ERROR_WANT_READ:
 				setcstate(conn, S_SSL_NEG);
 				set_handlers(sock, (void (*)(void *)) ssl_want_read,
-					     NULL, exception, conn);
+					     NULL, dns_exception, conn);
 				return -1;
 				
 			case SSL_ERROR_NONE:
@@ -168,7 +182,8 @@ int ssl_connect(struct connection *conn, int sock)
 			default:
 				conn->no_tsl++;
 				setcstate(conn, S_SSL_ERROR);
-				retry_connection(conn);
+				close_socket(c_i->sock);
+				dns_found(conn, 0);
 				return -1;
 		}
 	}
@@ -183,47 +198,49 @@ void dns_found(void *data, int state)
 	struct connection *conn = (struct connection *) data;
 	struct conn_info *c_i = conn->conn_info;
 	int i;
+	int trno = c_i->triedno;
 	
 	if (state < 0) {
 		setcstate(conn, S_NO_DNS);
 		retry_connection(conn);
 		return;
 	}
-	
-	sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (sock == -1) {
-		setcstate(conn, -errno);
-		retry_connection(conn);
-		return;
-	}
-	
-	*c_i->sock = sock;
-	fcntl(sock, F_SETFL, O_NONBLOCK);
 
-	memset(&c_i->sa, 0, sizeof(struct sockaddr_in));
-	c_i->sa.sin_port = htons(c_i->port);
-
-	for (i = 0; i < c_i->addrno; i++) {
+	for (i = c_i->triedno + 1; i < c_i->addrno; i++) {
 		struct sockaddr_in addr = *((struct sockaddr_in *) &c_i->addr[i]);
+
+		c_i->triedno++;
 		
+		sock = socket(addr.sin_family, SOCK_STREAM, IPPROTO_TCP);
+		if (sock == -1) continue;
+		
+		*c_i->sock = sock;
+		fcntl(sock, F_SETFL, O_NONBLOCK);
+
+		memset(&c_i->sa, 0, sizeof(struct sockaddr_in));
+		c_i->sa.sin_port = htons(c_i->port);
 		c_i->sa.sin_family = addr.sin_family;
 		c_i->sa.sin_addr.s_addr = addr.sin_addr.s_addr;
 		
 		if (connect(sock, (struct sockaddr *) &c_i->sa, sizeof(c_i->sa)) == 0)
 			break; /* success */
+
+		if (errno == EALREADY || errno == EINPROGRESS) {
+			/* It will take some more time... */
+			set_handlers(sock, NULL, connected, dns_exception, conn);
+			setcstate(conn, S_CONN);
+			return;
+		}
+
+		close(sock);
 	}
 
 	if (i == c_i->addrno) {
-		/* tried everything, but didn't help :( */
-
-		if (errno != EALREADY && errno != EINPROGRESS) {
-			setcstate(conn, -errno);
-			retry_connection(conn);
-		} else {
-			set_handlers(sock, NULL, connected, exception, conn);
-			setcstate(conn, S_CONN);
-		}
-		
+		/* Tried everything, but it didn't help :(. */
+	
+		/* We set new state only if we already tried something new. */
+		if (trno != c_i->triedno) setcstate(conn, -errno);
+		retry_connection(conn);
 		return;
 	}
 
@@ -254,7 +271,12 @@ void connected(void *data)
 skiperrdec:
 	if (err > 0) {
 		setcstate(conn, -err);
-		retry_connection(conn);
+		
+		if (c_i->triedno < c_i->addrno) {
+			/* There are still some more candidates. */
+			close_socket(c_i->sock);
+			dns_found(conn, 0);
+		}
 		
 	} else {
 		void (*func)(struct connection *) = c_i->func;

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.80 2003/11/22 13:42:58 jonas Exp $ */
+/* $Id: hierbox.c,v 1.81 2003/11/22 14:02:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -303,13 +303,23 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 	return do_dialog(term, dlg, getml(dlg, NULL));
 }
 
-/* Delete operation */
+/* Action info management */
+
+struct hierbox_action_info {
+	/* The item (and especially its ->udata) to delete. If NULL it means we
+	 * should destroy marked items instead. */
+	struct listbox_item *item;
+	struct listbox_data *box;
+	struct terminal *term;
+};
+
+/* Delete action */
 
 static int
 scan_for_marks(struct listbox_item *item, void *info, int *offset)
 {
 	if (item->marked) {
-		struct delete_hierbox_item_info *delete_info = info;
+		struct hierbox_action_info *delete_info = info;
 
 		delete_info->item = NULL;
 		*offset = 0;
@@ -318,12 +328,12 @@ scan_for_marks(struct listbox_item *item, void *info, int *offset)
 	return 0;
 }
 
-struct delete_hierbox_item_info *
+struct hierbox_action_info *
 get_hierbox_delete_info(struct listbox_data *box, struct terminal *term)
 {
-	struct delete_hierbox_item_info *delete_info;
+	struct hierbox_action_info *delete_info;
 
-	delete_info = mem_alloc(sizeof(struct delete_hierbox_item_info));
+	delete_info = mem_alloc(sizeof(struct hierbox_action_info));
 	if (!delete_info) return NULL;
 
 	delete_info->item = box->sel;
@@ -339,7 +349,7 @@ get_hierbox_delete_info(struct listbox_data *box, struct terminal *term)
 }
 
 static void
-do_delete_item(struct listbox_item *item, struct delete_hierbox_item_info *info,
+do_delete_item(struct listbox_item *item, struct hierbox_action_info *info,
 	       int last)
 {
 	struct listbox_ops *ops = info->box->ops;
@@ -392,7 +402,7 @@ do_delete_item(struct listbox_item *item, struct delete_hierbox_item_info *info,
 static int
 delete_marked(struct listbox_item *item, void *data_, int *offset)
 {
-	struct delete_hierbox_item_info *delete_info = data_;
+	struct hierbox_action_info *delete_info = data_;
 
 	if (item->marked && !delete_info->box->ops->is_used(item)) {
 		/* Save the first marked so it can be deleted last */
@@ -411,7 +421,7 @@ delete_marked(struct listbox_item *item, void *data_, int *offset)
 static void
 push_ok_delete_button(void *delete_info_)
 {
-	struct delete_hierbox_item_info *delete_info = delete_info_;
+	struct hierbox_action_info *delete_info = delete_info_;
 
 	if (delete_info->item) {
 		delete_info->box->ops->unlock(delete_info->item);
@@ -428,7 +438,7 @@ push_ok_delete_button(void *delete_info_)
 static void
 push_cancel_delete_button(void *delete_info_)
 {
-	struct delete_hierbox_item_info *delete_info = delete_info_;
+	struct hierbox_action_info *delete_info = delete_info_;
 
 	if (delete_info->item)
 		delete_info->box->ops->unlock(delete_info->item);
@@ -440,7 +450,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 {
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
-	struct delete_hierbox_item_info *delete_info;
+	struct hierbox_action_info *delete_info;
 
 	if (!box->sel || !box->sel->udata) return 0;
 

@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.47 2005/03/26 23:03:04 rrowan Exp $
+# $Id: hooks.pl,v 1.48 2005/03/26 23:05:51 pasky Exp $
 #
 # This file is (c) Russ Rowan and GPL'd.
 
@@ -113,7 +113,7 @@ elinks: el / elinks, bz / bug (# or search optional), doc(|s|umentation), faq
 
 ################################################################################
 ### prefixes ###################################################################
-my %search_prefixes_ = (
+my %search_prefixes = (
 	'^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$' => 'elgoog',
 	'^(g|google)(| .*)$' => 'google',
 	'^(y|yahoo)(| .*)$' => 'yahoo',
@@ -131,7 +131,7 @@ my %search_prefixes_ = (
 	'^(ex|excite)(| .*)$' => 'excite',
 );
 
-my %news_prefixes_ = (
+my %news_prefixes = (
 	'^bbc(| .*)$' => 'bbc',
 	'^msnbc(| .*)$' => 'msnbc',
 	'^cnn(| .*)$' => 'cnn',
@@ -149,7 +149,7 @@ my %news_prefixes_ = (
 	'^(sa|sciam)(| .*)$' => 'sciam',
 );
 
-my %locator_prefixes_ = (
+my %locator_prefixes = (
 	'^(imdb|movie|flick)(| .*)$' => 'imdb',
 	'^(stock|ticker|quote)(| .*)$' => 'stock',
 	'^(urban|legend|ul)(| .*)$' => 'bs',
@@ -164,7 +164,7 @@ my %locator_prefixes_ = (
 	'^ipl(| .*)$' => 'ipl',
 );
 
-my %weather_locators_ = (
+my %weather_locators = (
 	'weather underground' => 'http://wunderground.com/cgi-bin/findweather/getForecast?query=!query!',
 	'google' => 'http://google.com/search?q=weather+"!query!"',
 	'yahoo' => 'http://search.yahoo.com/search?p=weather+"!query!"',
@@ -218,10 +218,10 @@ sub goto_url_hook
 	{
 		return search(loadrc('search'), $url);
 	}
-	foreach my $prefix (keys %search_prefixes_)
+	foreach my $prefix (keys %search_prefixes)
 	{
 		next unless $url =~ /$prefix/;
-		return search($search_prefixes_{$prefix}, $search);
+		return search($search_prefixes{$prefix}, $search);
 	}
 
 	# News
@@ -229,17 +229,17 @@ sub goto_url_hook
 	{
 		return news(loadrc('news'), $search);
 	}
-	foreach my $prefix (keys %news_prefixes_)
+	foreach my $prefix (keys %news_prefixes)
 	{
 		next unless $url =~ /$prefix/;
-		return news($news_prefixes_{$prefix}, $search);
+		return news($news_prefixes{$prefix}, $search);
 	}
 
 	# Locators
-	foreach my $prefix (keys %locator_prefixes_)
+	foreach my $prefix (keys %locator_prefixes)
 	{
 		next unless $url =~ /$prefix/;
-		return location($locator_prefixes_{$prefix}, $search, $current_url);
+		return location($locator_prefixes{$prefix}, $search, $current_url);
 	}
 
 	if ($url =~ '^(zip|usps)(| .*)$'
@@ -270,8 +270,8 @@ sub goto_url_hook
 			$locator_rfc         = 'http://rfc-editor.org/cgi-bin/rfcsearch.pl?num=37&searchwords=' . $thingy;
 				$locator_rfc     = 'http://ietf.org/rfc/rfc' . $thingy . '.txt' unless $thingy !~ '^[0-9]*$';
 			my $weather          = loadrc("weather");
-				$locator_weather     = $weather_locators_{$weather};
-				$locator_weather   ||= $weather_locators_{'weather underground'};
+				$locator_weather     = $weather_locators{$weather};
+				$locator_weather   ||= $weather_locators{'weather underground'};
 				$locator_weather     =~ s/!query!/$thingy/;
 			$locator_whatis      = 'http://uptime.netcraft.com/up/graph/?host=' . $thingy;
 		}
@@ -617,7 +617,7 @@ sub loadrc
 
 ################################################################################
 ### Search engines #############################################################
-my %search_engines_ = (
+my %search_engines = (
 	"elgoog" => {
 		home => 'http://alltooflat.com/geeky/elgoog/m/index.cgi',
 		search => 'http://alltooflat.com/geeky/elgoog/m/index.cgi?page=%2fsearch&cgi=get&q='
@@ -686,9 +686,9 @@ sub search
 	my $key = $search ? 'search' : 'home';
 
 	# Google is the default, Google is the best!
-	$engine = 'google' unless $search_engines_{$engine}
-	                          and $search_engines_{$engine}->{$key};
-	my $url = $search_engines_{$engine}->{$key};
+	$engine = 'google' unless $search_engines{$engine}
+	                          and $search_engines{$engine}->{$key};
+	my $url = $search_engines{$engine}->{$key};
 
 	if ($engine eq 'google') {
 		my $bork = '';
@@ -709,7 +709,7 @@ sub search
 
 ################################################################################
 ### News servers ###############################################################
-my %news_servers_ = (
+my %news_servers = (
 	"bbc" => {
 		home => 'http://news.bbc.co.uk',
 		search => 'http://newssearch.bbc.co.uk/cgi-bin/search/results.pl?q=',
@@ -779,9 +779,9 @@ sub news
 	my $key = $search ? 'search' : 'home';
 
 	# Google is the default, Google is the best!
-	$server = 'bbc' unless $news_servers_{$server}
-	                          and $news_servers_{$server}->{$key};
-	my $url = $news_servers_{$server}->{$key};
+	$server = 'bbc' unless $news_servers{$server}
+	                          and $news_servers{$server}->{$key};
+	my $url = $news_servers{$server}->{$key};
 	$url .= $search if $search;
 	return $url;
 }
@@ -789,7 +789,7 @@ sub news
 
 ################################################################################
 ### Locators ###################################################################
-my %locators_ = (
+my %locators = (
 	'imdb' => {
 		home => 'http://imdb.com',
 		search => 'http://imdb.com/Find?select=All&for=',
@@ -845,9 +845,9 @@ sub location
 	my ($server, $search, $current_url) = @_;
 	my $key = $search ? 'search' : 'home';
 
-	croak 'Unknown URL!' unless $locators_{$server}
-	                            and $locators_{$server}->{$key};
-	my $url = $locators_{$server}->{$key};
+	croak 'Unknown URL!' unless $locators{$server}
+	                            and $locators{$server}->{$key};
+	my $url = $locators{$server}->{$key};
 
 	my $bork = ""; $bork = "&hl=xx-bork" unless (loadrc("bork") ne "yes");
 	$url =~ s/!bork!/$bork/g;

@@ -1,3 +1,10 @@
+Sat Jun  1 18:46:41 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: cmdline.c, conf.c, options.c, opttypes.c:
+
+	Ignore options with OPT_HIDDEN flag on some places. Fix bool options
+	commandline handling, thanks to Zaroz <zaroz@users.sf.net>.  
+
 Sun May 26 18:59:16 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/config/: conf.c, opttypes.c:

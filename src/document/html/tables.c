@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.333 2004/06/30 22:44:35 jonas Exp $ */
+/* $Id: tables.c,v 1.334 2004/06/30 23:17:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -349,6 +349,81 @@ get_table_width(struct table *table)
 }
 
 
+/* Initialize @width and @max_width arrays depending on the @stretch_method */
+static inline int
+apply_stretch_method(struct table *table, int widths[], int max_widths[],
+		     int stretch_method, int max_cols_width)
+{
+	int col, total_width = 0;
+
+	for (col = 0; col < table->cols; col++) {
+		switch (stretch_method) {
+		case 0:
+			if (table->cols_widths[col] >= table->cols_x[col])
+				break;
+
+			widths[col] = 1;
+			max_widths[col] = int_min(table->cols_x[col],
+						  table->max_cols_widths[col])
+					  - table->cols_widths[col];
+			if (max_widths[col] <= 0) widths[col] = 0;
+			break;
+		case 1:
+			if (table->cols_x[col] > WIDTH_RELATIVE)
+				break;
+
+			widths[col] = WIDTH_RELATIVE - table->cols_x[col];
+			max_widths[col] = table->max_cols_widths[col]
+					  - table->cols_widths[col];
+			if (max_widths[col] <= 0) widths[col] = 0;
+			break;
+		case 2:
+			if (table->cols_x[col] != WIDTH_AUTO)
+				break;
+			/* Fall-through */
+		case 3:
+			if (table->cols_widths[col] >= table->max_cols_widths[col])
+				break;
+			max_widths[col] = table->max_cols_widths[col]
+					  - table->cols_widths[col];
+			if (max_cols_width) {
+				widths[col] = 5 + table->max_cols_widths[col] * 10 / max_cols_width;
+			} else {
+				widths[col] = 1;
+			}
+			break;
+		case 4:
+			if (table->cols_x[col] < 0)
+				break;
+			widths[col] = 1;
+			max_widths[col] = table->cols_x[col]
+					  - table->cols_widths[col];
+			if (max_widths[col] <= 0) widths[col] = 0;
+			break;
+		case 5:
+			if (table->cols_x[col] >= 0)
+				break;
+			if (table->cols_x[col] <= WIDTH_RELATIVE) {
+				widths[col] = WIDTH_RELATIVE - table->cols_x[col];
+			} else {
+				widths[col] = 1;
+			}
+			max_widths[col] = INT_MAX;
+			break;
+		case 6:
+			widths[col] = 1;
+			max_widths[col] = INT_MAX;
+			break;
+		default:
+			return -1;
+		}
+
+		total_width += widths[col];
+	}
+
+	return total_width;
+}
+
 /* Stretches the table columns by distributed the @spare_width among them.
  * Returns how much of @spare_width was actually distributed. */
 static inline int
@@ -427,74 +502,15 @@ distribute_widths(struct table *table, int width)
 	if (!max_widths) goto free_widths;
 
 	while (spare_width) {
-		int stretched, total_width = 0;
+		int stretched, total_width;
 
 		memset(widths, 0, cols_array_size);
 		memset(max_widths, 0, cols_array_size);
 
-		for (col = 0; col < table->cols; col++) {
-			switch (stretch_method) {
-				case 0:
-					if (table->cols_widths[col] >= table->cols_x[col])
-						break;
-
-					widths[col] = 1;
-					max_widths[col] = int_min(table->cols_x[col],
-								  table->max_cols_widths[col])
-							  - table->cols_widths[col];
-					if (max_widths[col] <= 0) widths[col] = 0;
-					break;
-				case 1:
-					if (table->cols_x[col] > WIDTH_RELATIVE)
-						break;
-
-					widths[col] = WIDTH_RELATIVE - table->cols_x[col];
-					max_widths[col] = table->max_cols_widths[col]
-							  - table->cols_widths[col];
-					if (max_widths[col] <= 0) widths[col] = 0;
-					break;
-				case 2:
-					if (table->cols_x[col] != WIDTH_AUTO)
-						break;
-					/* Fall-through */
-				case 3:
-					if (table->cols_widths[col] >= table->max_cols_widths[col])
-						break;
-					max_widths[col] = table->max_cols_widths[col]
-							  - table->cols_widths[col];
-					if (max_cols_width) {
-						widths[col] = 5 + table->max_cols_widths[col] * 10 / max_cols_width;
-					} else {
-						widths[col] = 1;
-					}
-					break;
-				case 4:
-					if (table->cols_x[col] < 0)
-						break;
-					widths[col] = 1;
-					max_widths[col] = table->cols_x[col]
-							  - table->cols_widths[col];
-					if (max_widths[col] <= 0) widths[col] = 0;
-					break;
-				case 5:
-					if (table->cols_x[col] >= 0)
-						break;
-					if (table->cols_x[col] <= WIDTH_RELATIVE) {
-						widths[col] = WIDTH_RELATIVE - table->cols_x[col];
-					} else {
-						widths[col] = 1;
-					}
-					max_widths[col] = INT_MAX;
-					break;
-				case 6:
-					widths[col] = 1;
-					max_widths[col] = INT_MAX;
-					break;
-				default:
-					INTERNAL("could not expand table");
-					goto free_all;
-			}
-			total_width += widths[col];
+		total_width = apply_stretch_method(table, widths, max_widths, stretch_method, max_cols_width);
+		if (total_width == -1) {
+			INTERNAL("could not expand table");
+			goto free_all;
 		}
 
 		if (!total_width) {

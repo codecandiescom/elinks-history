@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.5 2004/04/24 01:05:54 pasky Exp $ */
+/* $Id: parse.c,v 1.6 2004/04/24 01:07:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -566,7 +566,7 @@ void
 parse_html(unsigned char *html, unsigned char *eof,
 	   void *f, unsigned char *head)
 {
-	unsigned char *lt;
+	unsigned char *base_pos;
 
 	putsp = -1;
 	line_breax = table_level ? 2 : 1;
@@ -580,7 +580,7 @@ parse_html(unsigned char *html, unsigned char *eof,
 set_lt:
 	ff = f;
 	eoff = eof;
-	lt = html;
+	base_pos = html;
 	while (html < eof) {
 		struct element_info *ei;
 		unsigned char *name, *attr, *end, *prev_html;
@@ -595,22 +595,22 @@ set_lt:
 				h++;
 			if (h + 1 < eof && h[0] == '<' && h[1] == '/') {
 				if (!parse_element(h, eof, &name, &namelen, &attr, &end)) {
-					put_chrs(lt, html - lt, put_chars_f, f);
-					lt = html = h;
+					put_chrs(base_pos, html - base_pos, put_chars_f, f);
+					base_pos = html = h;
 					putsp = 1;
 					goto element;
 				}
 			}
 			html++;
-			if (!(position + (html - lt - 1)))
+			if (!(position + (html - base_pos - 1)))
 				goto skip_w; /* ??? */
 			if (isspace(*(html - 1))) {
 				/* BIG performance win; not sure if it doesn't cause any bug */
 				if (html < eof && !isspace(*html))
 					continue;
-				put_chrs(lt, html - lt, put_chars_f, f);
+				put_chrs(base_pos, html - base_pos, put_chars_f, f);
 			} else {
-				put_chrs(lt, html - 1 - lt, put_chars_f, f);
+				put_chrs(base_pos, html - base_pos - 1, put_chars_f, f);
 				put_chrs(" ", 1, put_chars_f, f);
 			}
 
@@ -626,13 +626,13 @@ put_sp:
 		if (par_format.align == AL_NONE) {
 			putsp = 0;
 			if (*html == ASCII_TAB) {
-				put_chrs(lt, html - lt, put_chars_f, f);
+				put_chrs(base_pos, html - base_pos, put_chars_f, f);
 				put_chrs("        ", 8 - (position % 8), put_chars_f, f);
 				html++;
 				goto set_lt;
 
 			} else if (*html == ASCII_CR || *html == ASCII_LF) {
-				put_chrs(lt, html - lt, put_chars_f, f);
+				put_chrs(base_pos, html - base_pos, put_chars_f, f);
 
 next_break:
 				if (*html == ASCII_CR && html < eof - 1
@@ -649,9 +649,9 @@ next_break:
 		}
 
 		while (*html < ' ') {
-			if (html - lt) put_chrs(lt, html - lt, put_chars_f, f);
+			if (html - base_pos) put_chrs(base_pos, html - base_pos, put_chars_f, f);
 			dotcounter++;
-			html++; lt = html;
+			html++; base_pos = html;
 			if (*html >= ' ' || isspace(*html) || html >= eof) {
 				unsigned char *dots = fmem_alloc(dotcounter);
 
@@ -665,7 +665,7 @@ next_break:
 		}
 
 		if (html + 2 <= eof && html[0] == '<' && (html[1] == '!' || html[1] == '?') && !was_xmp) {
-			put_chrs(lt, html - lt, put_chars_f, f);
+			put_chrs(base_pos, html - base_pos, put_chars_f, f);
 			html = skip_comment(html, eof);
 			goto set_lt;
 		}
@@ -679,7 +679,7 @@ element:
 		inv = *name == '/'; name += inv; namelen -= inv;
 		if (!inv && putsp == 1 && !html_top.invisible)
 			goto put_sp;
-		put_chrs(lt, html - lt, put_chars_f, f);
+		put_chrs(base_pos, html - base_pos, put_chars_f, f);
 		if (par_format.align != AL_NONE && !inv && !putsp) {
 			unsigned char *ee = end;
 			unsigned char *nm;
@@ -865,7 +865,7 @@ ng:;
 		goto set_lt;
 	}
 
-	put_chrs(lt, html - lt, put_chars_f, f);
+	put_chrs(base_pos, html - base_pos, put_chars_f, f);
 	ln_break(1, line_break_f, f);
 	putsp = -1;
 	position = 0;

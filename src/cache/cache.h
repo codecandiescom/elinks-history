@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.90 2004/10/14 18:32:32 jonas Exp $ */
+/* $Id: cache.h,v 1.91 2004/10/14 18:50:37 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -73,8 +73,6 @@ struct fragment {
 	unsigned char data[1]; /* Must be last */
 };
 
-#define get_cache_uri(cache_entry) \
-	((cache_entry)->valid ? (cache_entry)->uri : NULL)
 
 /* Searches the cache for an entry matching the URI. Returns NULL if no one
  * matches. */

@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.69 2004/09/29 11:49:13 jonas Exp $ */
+/* $Id: mime.c,v 1.70 2004/10/14 18:50:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,7 +173,6 @@ get_extension_content_type(unsigned char *extension)
 unsigned char *
 get_cache_header_content_type(struct cache_entry *cached)
 {
-	struct uri *uri = get_cache_uri(cached);
 	unsigned char *extension, *ctype;
 
 	ctype = parse_header(cached->head, "Content-Type", NULL);
@@ -197,7 +196,7 @@ get_cache_header_content_type(struct cache_entry *cached)
 	}
 
 	/* This searches cached->head for filename so put here */
-	extension = uri ? get_content_filename(uri, cached) : NULL;
+	extension = get_content_filename(cached->uri, cached);
 	debug_extension(extension);
 	if (extension) {
 		ctype = get_extension_content_type(extension);
@@ -213,7 +212,6 @@ get_cache_header_content_type(struct cache_entry *cached)
 unsigned char *
 get_content_type(struct cache_entry *cached)
 {
-	struct uri *uri = get_cache_uri(cached);
 	unsigned char *extension, *ctype;
 
 	debug_get_content_type_params(cached);
@@ -235,7 +233,7 @@ get_content_type(struct cache_entry *cached)
 	 * want to support also things like "ps.gz" - that'd never work, as we
 	 * would always compare only to "gz". */
 	/* Guess type accordingly to the extension */
-	extension = uri ? get_extension_from_uri(uri) : NULL;
+	extension = get_extension_from_uri(cached->uri);
 	debug_extension(extension);
 
 	if (extension) {

@@ -1,4 +1,4 @@
-/* $Id: stub.h,v 1.11 2004/11/18 17:59:32 witekfl Exp $ */
+/* $Id: stub.h,v 1.12 2005/02/05 05:22:07 jonas Exp $ */
 
 #ifndef EL__OSDEP_STUB_H
 #define EL__OSDEP_STUB_H
@@ -25,6 +25,7 @@
 #undef HAVE_STRERROR
 #undef HAVE_STRNCASECMP
 #undef HAVE_STRSTR
+#undef HAVE_INET_NTOP
 
 #endif /* CONFIG_OWN_LIBC */
 
@@ -136,6 +137,13 @@ void *elinks_memrchr(const void *s, int c, size_t n);
 #undef raise
 #define raise(signal) elinks_raise(signal)
 int elinks_raise(int signal);
+#endif
+
+/* inet_ntop() */
+#ifndef HAVE_INET_NTOP
+#undef inet_ntop
+#define inet_ntop(af, src, dst, size) elinks_inet_ntop(af, src, dst, size)
+const char *elinks_inet_ntop(int af, const void *src, char *dst, size_t size);
 #endif
 
 #endif

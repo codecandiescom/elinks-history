@@ -1,5 +1,5 @@
 /* Libc stub functions */
-/* $Id: stub.c,v 1.18 2004/11/17 19:04:01 witekfl Exp $ */
+/* $Id: stub.c,v 1.19 2005/02/05 05:22:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -222,3 +222,148 @@ elinks_raise(int signal)
 	return(kill(getpid(), signal));
 }
 #endif
+
+#ifndef HAVE_INET_NTOP
+/* Original code by Paul Vixie. Modified by Gisle Vanem. */
+
+#define	IN6ADDRSZ	16
+#define	INADDRSZ	 4
+#define	INT16SZ		 2
+
+/* TODO: Move and populate. --jonas */
+#ifdef CONFIG_WIN32
+#define SET_ERRNO(e)    WSASetLastError(errno = (e))
+#else
+#define SET_ERRNO(e)    errno = e
+#endif
+
+/* Format an IPv4 address, more or less like inet_ntoa().
+ *
+ * Returns `dst' (as a const)
+ * Note:
+ *  - uses no statics
+ *  - takes a unsigned char * not an in_addr as input */
+static const char *
+elinks_inet_ntop4(const unsigned char *src, unsigned char *dst, size_t size)
+{
+	const unsigned char *addr = inet_ntoa(*(struct in_addr*)src);
+
+	if (strlen(addr) >= size) {
+		SET_ERRNO(ENOSPC);
+		return NULL;
+	}
+
+	return strcpy(dst, addr);
+}
+
+#ifdef CONFIG_IPV6
+/* Convert IPv6 binary address into presentation (printable) format. */
+static const char *
+elinks_inet_ntop6(const unsigned char *src, char *dst, size_t size)
+{
+	/* Note that int32_t and int16_t need only be "at least" large enough
+	 * to contain a value of the specified size.  On some systems, like
+	 * Crays, there is no such thing as an integer variable with 16 bits.
+	 * Keep this in mind if you think this function should have been coded
+	 * to use pointer overlays.  All the world's not a VAX. */
+	unsigned char tmp[sizeof("ffff:ffff:ffff:ffff:ffff:ffff:255.255.255.255")];
+	unsigned char *tp;
+	struct {
+		long base;
+		long len;
+	} best, cur;
+	unsigned long words[IN6ADDRSZ / INT16SZ];
+	int i;
+
+	/* Preprocess:
+	 *  Copy the input (bytewise) array into a wordwise array.
+	 *  Find the longest run of 0x00's in src[] for :: shorthanding. */
+	memset(words, 0, sizeof(words));
+	for (i = 0; i < IN6ADDRSZ; i++)
+		words[i/2] |= (src[i] << ((1 - (i % 2)) << 3));
+
+	best.base = -1;
+	cur.base  = -1;
+	for (i = 0; i < (IN6ADDRSZ / INT16SZ); i++) {
+		if (words[i] == 0) {
+			if (cur.base == -1)
+				cur.base = i, cur.len = 1;
+			else
+				cur.len++;
+
+		} else if (cur.base != -1) {
+			if (best.base == -1 || cur.len > best.len)
+				best = cur;
+			cur.base = -1;
+		}
+	}
+
+	if ((cur.base != -1) && (best.base == -1 || cur.len > best.len))
+		best = cur;
+	if (best.base != -1 && best.len < 2)
+		best.base = -1;
+
+	/* Format the result. */
+	for (tp = tmp, i = 0; i < (IN6ADDRSZ / INT16SZ); i++) {
+		/* Are we inside the best run of 0x00's? */
+		if (best.base != -1 && i >= best.base && i < (best.base + best.len)) {
+			if (i == best.base)
+				*tp++ = ':';
+			continue;
+		}
+
+		/* Are we following an initial run of 0x00s or any real hex? */
+		if (i != 0) *tp++ = ':';
+
+		/* Is this address an encapsulated IPv4? */
+		if (i == 6 && best.base == 0
+		    && (best.len == 6 || (best.len == 5 && words[5] == 0xffff))) {
+
+			if (!inet_ntop4(src+12, tp, sizeof(tmp) - (tp - tmp))) {
+				SET_ERRNO(ENOSPC);
+				return NULL;
+			}
+
+			tp += strlen(tp);
+			break;
+		}
+
+		tp += snprintf(tp, 5, "%lx", words[i]);
+	}
+
+	/* Was it a trailing run of 0x00's? */
+	if (best.base != -1 && (best.base + best.len) == (IN6ADDRSZ / INT16SZ))
+		*tp++ = ':';
+	*tp++ = '\0';
+
+	/* Check for overflow, copy, and we're done. */
+	if ((size_t)(tp - tmp) > size) {
+		SET_ERRNO(ENOSPC);
+		return NULL;
+	}
+
+	return strcpy (dst, tmp);
+}
+#endif  /* CONFIG_IPV6 */
+
+/* Convert a network format address to presentation format.
+ *
+ * Returns pointer to presentation format address (`dst'),
+ * Returns NULL on error (see errno). */
+const char *
+elinks_inet_ntop(int af, const void *src, char *dst, size_t size)
+
+{
+	switch (af) {
+	case AF_INET:
+		return elinks_inet_ntop4((const unsigned char *) src, dst, size);
+#ifdef CONFIG_IPV6
+	case AF_INET6:
+		return elinks_inet_ntop6((const unsigned char *) src, dst, size);
+#endif
+	default:
+		SET_ERRNO(EAFNOSUPPORT);
+		return NULL;
+	}
+}
+#endif /* HAVE_INET_NTOP */

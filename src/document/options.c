@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.20 2003/09/26 23:06:06 jonas Exp $ */
+/* $Id: options.c,v 1.21 2003/09/27 00:32:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,14 +30,15 @@ mk_document_options(struct document_options *doo)
 	doo->assume_cp = get_opt_int("document.codepage.assume");
 	doo->hard_assume = get_opt_int("document.codepage.force_assumed");
 	doo->use_document_colours = get_opt_int("document.colors.use_document_colors");
-	doo->allow_dark_on_black = get_opt_int("document.colors.allow_dark_on_black");
-	doo->tables = get_opt_int("document.html.display_tables");
-	doo->frames = get_opt_int("document.html.display_frames");
-	doo->images = get_opt_int("document.browse.images.show_as_links");
 	doo->margin = get_opt_int("document.browse.margin_width");
-	doo->num_links_display = get_opt_bool("document.browse.links.numbering");
 	doo->num_links_key = get_opt_int("document.browse.links.number_keys_select_link");
-	doo->table_order = get_opt_int("document.browse.table_move_order");
+
+	doo->num_links_display = get_opt_bool("document.browse.links.numbering");
+	doo->allow_dark_on_black = get_opt_bool("document.colors.allow_dark_on_black");
+	doo->table_order = get_opt_bool("document.browse.table_move_order");
+	doo->tables = get_opt_bool("document.html.display_tables");
+	doo->frames = get_opt_bool("document.html.display_frames");
+	doo->images = get_opt_bool("document.browse.images.show_as_links");
 	doo->display_subs = get_opt_bool("document.html.display_subs");
 	doo->display_sups = get_opt_bool("document.html.display_sups");
 }

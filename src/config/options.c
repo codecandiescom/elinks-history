@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.55 2002/06/21 13:51:20 pasky Exp $ */
+/* $Id: options.c,v 1.56 2002/06/21 13:58:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -488,7 +488,7 @@ register_options()
 		"Cookies options.");
 
 	add_opt_int("cookies",
-		"policy", 0,
+		"accept_policy", 0,
 		COOKIES_ACCEPT_NONE, COOKIES_ACCEPT_ALL, COOKIES_ACCEPT_ALL,
 		"Mode of accepting cookies:\n"
 		"0 is accept no cookies\n"
@@ -499,7 +499,7 @@ register_options()
 		"paranoid_security", 0, 0,
 		"When enabled, we'll require three dots in cookies domain for all\n"
 		"non-international domains (instead of just two dots). Please see\n"
-		"code (cookies.c:check_domain_security()) for further description");
+		"code (cookies.c:check_domain_security()) for further description.");
 
 	add_opt_bool("cookies",
 		"save", 0, 1,

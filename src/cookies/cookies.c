@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.28 2002/06/17 07:42:29 pasky Exp $ */
+/* $Id: cookies.c,v 1.29 2002/06/21 13:58:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,7 +164,7 @@ set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 	struct c_server *cs;
 	struct cookie_str cstr;
 
-	if (get_opt_int("cookies.policy") == COOKIES_ACCEPT_NONE)
+	if (get_opt_int("cookies.accept_policy") == COOKIES_ACCEPT_NONE)
 		return 0;
 
 #ifdef COOKIES_DEBUG
@@ -288,7 +288,7 @@ set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 		return 0;
 	}
 
-	if (get_opt_int("cookies.policy") != COOKIES_ACCEPT_ALL) {
+	if (get_opt_int("cookies.accept_policy") != COOKIES_ACCEPT_ALL) {
 		/* TODO */
 		free_cookie(cookie);
 		mem_free(cookie);

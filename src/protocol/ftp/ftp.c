@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.135 2004/05/29 17:29:55 jonas Exp $ */
+/* $Id: ftp.c,v 1.136 2004/05/29 17:37:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1142,13 +1142,11 @@ out_of_mem:
 	}
 
 	if (c_i->dir && !conn->from) {
-		unsigned char *path = conn->uri->data;
-		int pathlen = conn->uri->datalen;
 		struct string string;
 		unsigned char *url = struri(conn->uri);
 		int url_len = strlen(url);
 
-		if (!path) {
+		if (!conn->uri->data) {
 			abort_conn_with_state(conn, S_FTP_ERROR);
 			return;
 		}
@@ -1174,7 +1172,7 @@ out_of_mem:
 
 		done_string(&string);
 
-		if (pathlen) {
+		if (conn->uri->datalen) {
 			struct ftpparse ftp_info;
 
 			ftp_info.name = "..";

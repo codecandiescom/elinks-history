@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.134 2004/12/19 13:53:02 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.135 2004/12/19 13:53:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1920,7 +1920,7 @@ navigator_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	case JSP_NAVIGATOR_APP_NAME:
 		/* This evil hack makes the compatibility checking .indexOf()
 		 * code find what it's looking for. */
-		P_STRING("ELinks (roughly compatible with Netscape Navigator, Mozilla and Microsoft Explorer)");
+		P_STRING("ELinks (roughly compatible with Netscape Navigator, Mozilla and Microsoft Internet Explorer)");
 		break;
 	case JSP_NAVIGATOR_APP_VERSION:
 		P_STRING(VERSION);
@@ -1955,7 +1955,6 @@ navigator_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 				P_UNDEF();
 			}
 		}
-
 	}
 		break;
 	default:

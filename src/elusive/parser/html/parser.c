@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.10 2002/12/29 12:18:02 pasky Exp $ */
+/* $Id: parser.c,v 1.11 2002/12/29 12:42:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@ enum state_code {
 	HPT_TAG_WHITE,
 	HPT_TAG_NAME,
 	HPT_TAG_ATTR,
+	HPT_TAG_ATTR_VAL,
 	HPT_TAG_COMMENT,
 	HPT_NO,
 };
@@ -98,6 +99,18 @@ spawn_syntree_node(struct parser_state *state)
 	state->current = node;
 
 	return node;
+}
+
+static void
+attrib_add(struct parser_state *state, unsigned char *name, int name_len,
+	   unsigned char *value, int value_len)
+{
+	struct attribute *attrib;
+
+	attrib = mem_calloc(1, sizeof(struct attribute));
+	attrib->name = name; attrib->namelen = name_len;
+	attrib->value = value; attrib->valuelen = value_len;
+	add_to_list(state->current->attr, attrib);
 }
 
 
@@ -323,7 +336,67 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 	return 0;
 }
 
-/* This eats tag attributes and adds them to the syntax tree node. */
+/* This eats tag value, if there is any. It also adds the attribute to the
+ * syntax tree node. */
+/* TODO: Parse entities inside of the attribute values! --pasky */
+static int
+tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
+{
+	struct html_parser_state *pstate = state->data;
+	unsigned char *html = *str;
+	int html_len = *len;
+	unsigned char quoted = 0;
+	unsigned char *attr; int attr_len;
+
+	if (WHITECHAR(*html)) {
+		pstate = html_state_push(state, HPT_TAG_WHITE);
+		return 0;
+	}
+
+	if (*html == '>') {
+		/* Shortcut. */
+		pstate = html_state_pop(state);
+	}
+	if (*html != '=') {
+		add_attr(state,
+			pstate->data.attr.attrname, pstate->data.attr.attrlen,
+			html, 0);
+		pstate = html_state_pop(state);
+		return 0;
+	}
+
+	html++, html_len--; /* = */
+	if (!html_len) return -1;
+
+	if (*html == '"' || *html == '\'') {
+		quoted = *html;
+		html++, html_len--;
+	}
+
+	attr = html, attr_len = html_len;
+
+	while (html_len) {
+		if ((!WHITESPACE(*html) && *html != '>')
+		    || (quoted && *html != quoted)) {
+			html++, html_len--;
+			continue;
+		}
+
+		add_attr(state,
+			pstate->data.attr.attrname, pstate->data.attr.attrlen,
+			attr, attr_len - html_len);
+
+		if (quoted)
+			html++, html_len--;
+
+		*str = html, *len = html_len;
+		return 0;
+	}
+
+	return -1;
+}
+
+/* This eats tag attributes names. */
 static int
 tag_attr_parse(struct parser_state *state, unsigned char **str, int *len)
 {
@@ -358,18 +431,9 @@ tag_attr_parse(struct parser_state *state, unsigned char **str, int *len)
 			if (WHITESPACE(*html))
 				pstate = html_state_push(state, HPT_TAG_WHITE);
 
-#if 0
-			struct attribute *attrib;
-
-			attrib = mem_calloc(1, sizeof(struct attribute));
-			attrib->name = *str; attrib->namelen = name_len;
-			attrib->value = *html; attrib->valuelen = 0;
-			add_to_list(state->current->attr, attrib);
-#endif
-
 		} else {
 			if (*html = '/') {
-				/* The tag isn't pair. */
+				/* The tag isn't paired. */
 				/* FIXME: We should match this only at the end
 				 * of the tag, I think. --pasky */
 				if (state->root == state->current)
@@ -385,6 +449,7 @@ tag_attr_parse(struct parser_state *state, unsigned char **str, int *len)
 
 	return -1;
 }
+
 /* This eats name of the tag. Also, it maintains the corresponding struct
  * syntree_node. */
 static int
@@ -553,6 +618,7 @@ static int (*state_parsers)(struct parser_state *, unsigned char *, int *)
 	tag_white_parse,
 	tag_name_parse,
 	tag_attr_parse,
+	tag_attr_val_parse,
 	comment_parse,
 };
 
@@ -566,11 +632,8 @@ html_parser(struct parser_state *state, unsigned char **str, int *len)
 	if (!pstate) return;
 
 	while (html_len) {
-		if (state_parsers[pstate->state](state, str, len) < 0) {
-			*str = html;
-			*len = html_len;
+		if (state_parsers[pstate->state](state, str, len) < 0)
 			return;
-		}
 	}
 }
 

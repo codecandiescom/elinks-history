@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.31 2002/09/12 17:07:54 pasky Exp $ */
+/* $Id: dialogs.c,v 1.32 2002/09/13 15:17:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -525,23 +525,27 @@ void
 bookmark_add_add(struct dialog *d)
 {
 	struct bookmark *bm;
-	struct listbox_data *box;
+	struct widget_data *box_widget_data;
 
 	bm = add_bookmark(NULL, d->items[0].data, d->items[1].data);
-	foreach (box, *bm->box_item->box) {
-		box->sel = bm->box_item;
-
-		/* FIXME: This is *BAD*, we should find some way how to extend
-		 * the chain of references to gid of the box to this struct
-		 * dialog *, so that we can update the box->top properly by the
-		 * traverse(). --pasky */
-
-		box->top = bm->box_item;
-	}
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
 #endif
+
+	if (!d->udata) return;
+
+	box_widget_data =
+		&((struct dialog_data *) d->udata)->items[BM_BOX_IND];
+
+	/* We touch only the actual bookmark dialog, not all of them;
+	 * that's right, right? ;-) --pasky */
+
+	/* And as the bookmark is supposed to be placed at the bottom of the
+	 * list, we just move as down as possible. This is done so that
+	 * box->top is adjusted correctly. */
+
+	box_sel_move(box_widget_data, 32000); /* That is stuuupid. */
 }
 
 

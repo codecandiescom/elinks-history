@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.60 2004/06/27 18:34:31 pasky Exp $ */
+/* $Id: conv.c,v 1.61 2004/07/04 01:10:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -359,8 +359,10 @@ strtolx(unsigned char *str, unsigned char **end)
 }
 
 int
-month2num(const unsigned char *month)
+month2num(const unsigned char *str)
 {
+	unsigned char month[3] = { str[0]|32, str[1]|32, str[2]|32 };
+
 	switch (month[0]) {
 	case 'j': /* jan, jun, jul */
 		if (month[1] == 'a') {

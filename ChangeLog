@@ -1,3 +1,43 @@
+Thu Oct  7 16:44:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	add_document_line(): Never let @expanded underflow when
+	approximating the line length. Should fix bug 515 for the
+	http://starosek.com/elinks/1.avi test case.  
+
+Thu Oct  7 10:08:33 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Oct  7 10:01:30 2004  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Little italian update.  
+
+Thu Oct  7 03:15:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/dns.h:
+
+	Other places #includes <sys/types.h> first required by OS/2.  
+
+Thu Oct  7 02:54:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/cmdline.c, lowlevel/connect.c, lowlevel/connect.h,
+	lowlevel/dns.c, lowlevel/dns.h, lowlevel/interlink.c,
+	osdep/osdep.c, protocol/uri.c, protocol/ftp/ftp.c:
+
+	Add guards around 'exotic' #includes.  
+
+Thu Oct  7 02:54:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/conf.c, lowlevel/home.c:
+
+	Add missing #includes.  
+
 Wed Oct  6 19:59:29 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* configure.in:

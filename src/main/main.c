@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.179 2004/04/09 13:34:36 jonas Exp $ */
+/* $Id: main.c,v 1.180 2004/04/09 16:33:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,6 +119,15 @@ init(void)
 	if (!isatty(STDIN_FILENO)) {
 		add_to_string_list(&url_list, "file:///dev/stdin", 17);
 		no_connect = 1;
+	}
+
+	/* If called for outputting to a pipe without -dump or -source
+	 * specified default to using dump viewer. */
+	if (!isatty(STDOUT_FILENO)) {
+		int *dump = &get_opt_bool_tree(cmdline_options, "dump");
+
+		if (!*dump && !get_opt_bool_tree(cmdline_options, "source"))
+			*dump = 1;
 	}
 
 	if (!get_opt_bool_tree(cmdline_options, "no-home")) {

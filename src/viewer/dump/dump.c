@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.112 2004/04/06 07:46:30 witekfl Exp $ */
+/* $Id: dump.c,v 1.113 2004/04/06 07:59:48 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,6 +228,7 @@ dump_pre_start(struct list_head *url_list)
 		dump_print("document.dump.footer", item->string.source, item->string.length);
 	} else {
 		free_string_list(&done_list);
+		terminate = 1;
 	}
 }
 

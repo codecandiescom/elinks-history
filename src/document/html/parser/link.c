@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.30 2004/09/21 16:49:14 pasky Exp $ */
+/* $Id: link.c,v 1.31 2004/09/21 17:07:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -694,7 +694,9 @@ html_link(unsigned char *a)
 	int name_neq_title = 0;
 	int first = 1;
 
+#ifndef CONFIG_CSS
 	if (!link_display) return;
+#endif
 	if (!html_link_parse(a, &link)) return;
 	if (!link.href) goto free_and_return;
 
@@ -704,6 +706,8 @@ html_link(unsigned char *a)
 
 		import_css_stylesheet(&html_context.css_styles, link.href, len);
 	}
+
+	if (!link_display) goto free_and_return;
 #endif
 
 	/* Ignore few annoying links.. */

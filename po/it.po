@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-04-18 09:51+0200\n"
+"POT-Creation-Date: 2003-04-19 19:29+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Fabio Bonelli <fabiobonelli@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -57,26 +57,23 @@ msgstr "Stringa sbagliata"
 msgid "Empty string not allowed"
 msgstr "Stringa vuota non consentita"
 
-#. %c is BELL (\a)
-#: src/bookmarks/backend/xbel.c:100
-#, c-format
-msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()%c\n"
+#: src/bookmarks/backend/xbel.c:99
+msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()"
 msgstr ""
 
-#. %c is BELL (\a)
-#: src/bookmarks/backend/xbel.c:113
+#: src/bookmarks/backend/xbel.c:111
 #, c-format
-msgid "read_bookmarks_xbel(): Error reading %s%c\n"
+msgid "read_bookmarks_xbel(): Error reading %s"
 msgstr ""
 
-#: src/bookmarks/backend/xbel.c:124
+#: src/bookmarks/backend/xbel.c:120
 #, c-format
 msgid ""
 "read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
-"%s%c\n"
+"%s"
 msgstr ""
 
-#: src/bookmarks/backend/xbel.c:386 src/bookmarks/backend/xbel.c:403
+#: src/bookmarks/backend/xbel.c:381 src/bookmarks/backend/xbel.c:398
 #, fuzzy
 msgid "No title"
 msgstr "Titolo del link"

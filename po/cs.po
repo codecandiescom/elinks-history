@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-04-18 09:51+0200\n"
+"POT-Creation-Date: 2003-04-19 19:29+0200\n"
 "PO-Revision-Date: 2003-01-04 23:39+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
@@ -56,30 +56,28 @@ msgstr "Vadný øetìzec"
 msgid "Empty string not allowed"
 msgstr "Napi¹ øetìzec, vole!"
 
-#. %c is BELL (\a)
-#: src/bookmarks/backend/xbel.c:100
-#, c-format
-msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()%c\n"
+#: src/bookmarks/backend/xbel.c:99
+#, fuzzy
+msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()"
 msgstr "read_bookmarks_xbel(): Chyba v XML_ParserCreate()%c\n"
 
-#. %c is BELL (\a)
-#: src/bookmarks/backend/xbel.c:113
-#, c-format
-msgid "read_bookmarks_xbel(): Error reading %s%c\n"
+#: src/bookmarks/backend/xbel.c:111
+#, fuzzy, c-format
+msgid "read_bookmarks_xbel(): Error reading %s"
 msgstr "read_bookmarks_xbel(): Chyba pøi naèítání %s%c\n"
 
 #  This translation was based on idea by Jakub Suchy.
-#: src/bookmarks/backend/xbel.c:124
-#, c-format
+#: src/bookmarks/backend/xbel.c:120
+#, fuzzy, c-format
 msgid ""
 "read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
-"%s%c\n"
+"%s"
 msgstr ""
 "read_bookmarks_xbel(): Chyba syntaxe v souboru %s na øádku %d ve sloupci %"
 "d:\n"
 "%s%c\n"
 
-#: src/bookmarks/backend/xbel.c:386 src/bookmarks/backend/xbel.c:403
+#: src/bookmarks/backend/xbel.c:381 src/bookmarks/backend/xbel.c:398
 #, fuzzy
 msgid "No title"
 msgstr "Popiska linku"

@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-04-18 09:51+0200\n"
+"POT-Creation-Date: 2003-04-19 19:29+0200\n"
 "PO-Revision-Date: 2003-01-04 12:06+0100\n"
 "Last-Translator: Witold Filipczyk <witekfl@poczta.onet.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -60,29 +60,27 @@ msgstr "Nieprawid³owe wyra¿enie"
 msgid "Empty string not allowed"
 msgstr "Musisz wpisaæ jakie¶ wyra¿enie"
 
-#. %c is BELL (\a)
-#: src/bookmarks/backend/xbel.c:100
-#, c-format
-msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()%c\n"
+#: src/bookmarks/backend/xbel.c:99
+#, fuzzy
+msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()"
 msgstr "read_bookmarks_xbel(): B³±d w XML_ParserCreate()%c\n"
 
-#. %c is BELL (\a)
-#: src/bookmarks/backend/xbel.c:113
-#, c-format
-msgid "read_bookmarks_xbel(): Error reading %s%c\n"
+#: src/bookmarks/backend/xbel.c:111
+#, fuzzy, c-format
+msgid "read_bookmarks_xbel(): Error reading %s"
 msgstr "read_bookmarks_xbel(): B³±d podczas czytania %s%c\n"
 
-#: src/bookmarks/backend/xbel.c:124
-#, c-format
+#: src/bookmarks/backend/xbel.c:120
+#, fuzzy, c-format
 msgid ""
 "read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
-"%s%c\n"
+"%s"
 msgstr ""
 "read_bookmarks_xbel(): B³±d sk³adni w %s w linii %d kolumnie %d:\n"
 "%s%c\n"
 
 #
-#: src/bookmarks/backend/xbel.c:386 src/bookmarks/backend/xbel.c:403
+#: src/bookmarks/backend/xbel.c:381 src/bookmarks/backend/xbel.c:398
 msgid "No title"
 msgstr "Bez tytu³u"
 

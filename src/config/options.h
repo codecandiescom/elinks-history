@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.1 2002/04/27 13:15:52 pasky Exp $ */
+/* $Id: options.h,v 1.2 2002/04/28 11:48:25 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -26,13 +26,6 @@ extern struct option *all_options[];
 
 extern int anonymous;
 extern unsigned char user_agent[];
-
-extern unsigned char system_name[];
-
-extern unsigned char *links_home;
-extern int first_use;
-
-/* extern int created_home; */
 
 extern int no_connect;
 extern int base_session;

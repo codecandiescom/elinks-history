@@ -1,5 +1,5 @@
 /* Options list and handlers */
-/* $Id: options.c,v 1.2 2002/04/27 21:43:48 pasky Exp $ */
+/* $Id: options.c,v 1.3 2002/04/28 11:48:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -547,12 +547,6 @@ unsigned char *printhelp_cmd(struct option *o, unsigned char ***argv, int *argc)
 **********************************************************************/
 
 int anonymous = 0;
-
-unsigned char system_name[MAX_STR_LEN];
-
-unsigned char *links_home = NULL;
-int first_use = 0;
-int created_home = 0;
 
 int no_connect = 0;
 int base_session = 0;

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: lua.c,v 1.10 2002/04/27 13:15:53 pasky Exp $ */
+/* $Id: lua.c,v 1.11 2002/04/28 11:48:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,6 @@
 #include <bfu/align.h>
 #include <bfu/bfu.h>
 #include <config/kbdbind.h>
-#include <config/options.h>
 #include <document/cache.h>
 #include <document/history.h>
 #include <document/location.h>
@@ -26,6 +25,7 @@
 #include <document/vs.h>
 #include <document/html/renderer.h>
 #include <intl/language.h>
+#include <lowlevel/home.h>
 #include <lowlevel/select.h>
 #include <lowlevel/terminal.h>
 #include <lua/lua.h>

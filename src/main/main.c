@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.17 2002/04/27 13:15:51 pasky Exp $ */
+/* $Id: main.c,v 1.18 2002/04/28 11:48:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,9 +42,11 @@
 #include <intl/language.h>
 #include <lowlevel/af_unix.h>
 #include <lowlevel/dns.h>
+#include <lowlevel/home.h>
 #include <lowlevel/kbd.h>
 #include <lowlevel/sched.h>
 #include <lowlevel/select.h>
+#include <lowlevel/sysname.h>
 #include <lowlevel/terminal.h>
 #include <lua/lua.h>
 #include <protocol/types.h>
@@ -247,6 +249,7 @@ init()
 	
 	init_trans();
 	set_sigcld();
+	get_system_name();
 	init_home();
 	init_keymaps();
 

@@ -1,4 +1,4 @@
-/* $Id: leds.h,v 1.6 2003/08/01 15:26:02 jonas Exp $ */
+/* $Id: leds.h,v 1.7 2003/08/29 21:03:49 pasky Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
@@ -21,7 +21,7 @@ struct led {
 	int number;
 	unsigned char value;
 
-	/* Use find_nearest_color() to set up color. Note that you shouldn't
+	/* Use find_nearest_color() to set up color. Note that you should
 	 * use color only as additional indication, as the terminal can be
 	 * monochrome. */
 	int color;

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.39 2003/04/30 17:34:55 zas Exp $ */
+/* $Id: menu.c,v 1.40 2003/04/30 21:06:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,7 +28,9 @@ struct menu {
 	int x, y, xw, yw;
 	int ni;
 	int hotkeys;
+#ifdef ENABLE_NLS
 	int lang;
+#endif
 	void *data;
 	struct window *win;
 	struct menu_item *items;
@@ -91,6 +93,7 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni, int hotkeys
 		}
 }
 
+#ifdef ENABLE_NLS
 static void
 clear_hotkeys_cache(struct menu_item *items, int ni, int hotkeys)
 {
@@ -101,16 +104,22 @@ clear_hotkeys_cache(struct menu_item *items, int ni, int hotkeys)
 		items[i].hotkey_pos = 0;
 	}
 }
+#endif
 
 static void
 refresh_hotkeys(struct terminal *term, struct menu *menu)
 {
+#ifdef ENABLE_NLS
  	if (current_language != menu->lang) {
 		clear_hotkeys_cache(menu->items, menu->ni, menu->hotkeys);
 		init_hotkeys(term, menu->items, menu->ni, menu->hotkeys);
 		menu->lang = current_language;
 	}
+#else
+	init_hotkeys(term, menu->items, menu->ni, menu->hotkeys);
+#endif
 }
+
 
 static inline int
 is_hotkey(struct menu_item *item, unsigned char hotkey, struct terminal *term)
@@ -155,7 +164,9 @@ do_menu_selected(struct terminal *term, struct menu_item *items,
 		menu->data = data;
 		menu->ni = count_items(items);
 		menu->hotkeys = hotkeys;
+#ifdef ENABLE_NLS
 		menu->lang = -1;
+#endif
 		refresh_hotkeys(term, menu);
 		add_window(term, menu_func, menu);
 	} else if (items->item_free & ~(1<<8)) {
@@ -665,7 +676,9 @@ do_mainmenu(struct terminal *term, struct menu_item *items,
 	menu->items = items;
 	menu->data = data;
 	menu->ni = count_items(items);
+#ifdef ENABLE_NLS
 	clear_hotkeys_cache(items, menu->ni, 1);
+#endif
 	init_hotkeys(term, items, menu->ni, 1);
 	add_window(term, mainmenu_func, menu);
 

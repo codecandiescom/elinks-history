@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.82 2003/04/30 16:59:38 zas Exp $ */
+/* $Id: menu.c,v 1.83 2003/04/30 21:06:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -561,12 +561,20 @@ static struct menu_item ext_menu[] = {
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
+static inline void
+do_ext_menu(struct terminal *term, void *xxx, struct session *ses)
+{
+	do_menu(term, ext_menu, ses, 1);
+}
+
 static struct menu_item setup_menu[] = {
+#ifdef ENABLE_NLS
 	{N_("~Language"), SUBMENU_INDICATOR, MENU_FUNC menu_language_list, NULL, 1, 0},
+#endif
 	{N_("C~haracter set"), SUBMENU_INDICATOR, MENU_FUNC charset_list, (void *)1, 1, 0},
 	{N_("~Terminal options"), NULL, MENU_FUNC terminal_options, NULL, 0, 0},
 /*	{N_("~Associations"), SUBMENU_INDICATOR, MENU_FUNC do_menu, assoc_menu, 1, 0}, */
-	{N_("File ~extensions"), SUBMENU_INDICATOR, MENU_FUNC do_menu, ext_menu, 1, 0},
+	{N_("File ~extensions"), SUBMENU_INDICATOR, MENU_FUNC do_ext_menu, NULL, 1, 0},
 	{"", NULL, NULL, NULL, 0, 0},
 	{N_("~Options manager"), "o", MENU_FUNC menu_options_manager, NULL, 0, 0},
 	{N_("~Keybinding manager"), "k", MENU_FUNC menu_keybinding_manager, NULL, 0, 0},
@@ -604,6 +612,8 @@ do_help_menu(struct terminal *term, void *xxx, struct session *ses)
 {
 	do_menu(term, help_menu, ses, 1);
 }
+
+
 
 static struct menu_item main_menu[] = {
 	{N_("~File"), NULL, MENU_FUNC do_file_menu, NULL, 1, 1},

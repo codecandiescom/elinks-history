@@ -1,3 +1,35 @@
+Wed Jul 10 19:04:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/dialog.c:
+
+	Space behaves as enter in dialogs now. Ctrl/Alt+Enter behaves as
+	space. >:) 
+
+Wed Jul 10 10:08:39 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/http/http.c:
+
+	Messed up cleanup by me, fixed by Witold ;).  
+
+Tue Jul  9 23:01:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/: button.c, checkbox.c, dialog.c, inpfield.c, listbox.c,
+	widget.c, widget.h:
+
+	Moved EV_MOUSE handler to widget-specific files.  
+
+Tue Jul  9 22:42:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/: checkbox.c, dialog.c, inpfield.c, listbox.c, widget.h:
+
+	Removed fwd parameter from init handler.  
+
+Tue Jul  9 22:18:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	0.4pre12.CVS 
+
 Tue Jul  9 22:09:09 2002  Petr Baudis <pasky@ji.cz>:
 
 	* NEWS, configure.in:

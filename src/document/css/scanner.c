@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.65 2004/01/21 04:17:42 jonas Exp $ */
+/* $Id: scanner.c,v 1.66 2004/01/21 04:25:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,7 +176,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		if (is_css_ident_start(*string)) {
 			/* Scan both ident start and ident */
 			scan_css(string, CSS_CHAR_IDENT);
-			type = CSS_TOKEN_ATRULE;
+			type = CSS_TOKEN_AT_KEYWORD;
 		}
 
 	} else if (first_char == '!') {

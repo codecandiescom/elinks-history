@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.313 2004/06/29 22:54:18 pasky Exp $ */
+/* $Id: tables.c,v 1.314 2004/06/29 22:55:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -362,7 +362,8 @@ distribute_widths(struct table *table, int width)
 	int max_cols_width = 0;
 	int cols_size;
 
-	if (!table->cols) return;
+	if (!table->cols)
+		return;
 
 	assertm(spare_width >= 0, "too small width %d, required %d",
 	        width, table->min_width);
@@ -472,8 +473,10 @@ again:
 		for (col = 0; col < table->cols; col++) {
 			int max_width;
 
-			if (!widths[col]) continue;
-			if (visited_cols && visited_cols[col]) continue;
+			if (!widths[col])
+				continue;
+			if (visited_cols && visited_cols[col])
+				continue;
 
 			max_width = total_spare_width * widths[col] / total_width;
 			int_bounds(&max_width, 1, max_widths[col]);
@@ -493,7 +496,8 @@ again:
 			spare_width -= max;
 
 			did_stretch = 1;
-			if (spare_width) goto again;
+			if (spare_width)
+				goto again;
 
 		} else if (!did_stretch) {
 			stretch_method++;

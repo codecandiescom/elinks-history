@@ -1,3 +1,196 @@
+Sat Dec  6 23:00:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre11 
+
+Sat Dec  6 22:59:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Sat Dec  6 22:58:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Sat Dec  6 22:37:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Fixed parsing of the Status HTTP header.  
+
+Sat Dec  6 21:58:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/hierbox.c:
+
+	Removed useless include.  
+
+Sat Dec  6 21:58:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: session.c, task.c:
+
+	Bunch of compilation fixes.  
+
+Sat Dec  6 21:57:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/lua/core.c:
+
+	Compilation fix.  
+
+Sat Dec  6 21:57:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/hierbox.c:
+
+	Reverted Jonas' removal of setting @bookmark_dirty when a folder
+	expansion was changed.  
+
+Sat Dec  6 21:04:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.h:
+
+	Fixed names of members of struct session_task.  
+
+Sat Dec  6 21:03:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Compilation fix.  
+
+Sat Dec  6 17:10:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Removed useless include left there by Jonas ;-).  
+
+Sat Dec  6 17:05:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.h:
+
+	Compilation fix.  
+
+Sat Dec  6 17:04:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: download.c, history.c, session.c, session.h, task.c,
+	task.h:
+
+	More task-related routines were moved from sched/session.* to
+	sched/task.*.  
+
+Sat Dec  6 16:44:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Trivial tidyup.  
+
+Sat Dec  6 16:44:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: download.c, history.c, session.c, session.h, task.c:
+
+	Introduced struct session_task, session.task* moved there,
+	session.task is now of that type.  
+
+Sat Dec  6 16:34:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/task.h:
+
+	Declare struct terminal instead of including terminal/terminal.h.  
+
+Sat Dec  6 09:52:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Fixed leaking of @d if Status: 101 header occurs. Introduced by me,
+	reported by Jonas. So the edification is not to write new code when
+	sleeping.  
+
+Sat Dec  6 09:50:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Fixed REFERER_SAME_URL HTTP_REFERER-related leak introduced by me,
+	reported by Jonas.  
+
+Sat Dec  6 09:48:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/: file/cgi.c, http/http.c:
+
+	Fixed send_cookies()-related leaks introduced by me, reported by
+	Jonas.  
+
+Sat Dec  6 02:57:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Fix typo.  
+
+Sat Dec  6 02:56:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, dialogs/menu.c, document/refresh.c,
+	document/html/parser.c, sched/Makefile.am, sched/session.c,
+	sched/session.h, sched/task.c, sched/task.h, viewer/text/link.c,
+	viewer/text/view.c:
+
+	Move the goto family to task oriented file.  
+
+Sat Dec  6 02:53:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/string.h:
+
+	This is unfortunately necessary since we have a few leaks.  
+
+Sat Dec  6 02:27:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Minor simplification to use uri.protocol instead of string
+	comparing.  
+
+Sat Dec  6 00:30:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	SERVER_PROTOCOL is now HTTP/1.1. Hmm, I think the CGI environment is
+	more-or-less complete now, modulo some really tiny details.  
+
+Sat Dec  6 00:25:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Added support for the 'Status' HTTP header. It can get there from a
+	CGI script.  
+
+Sat Dec  6 00:04:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Typo fix.  
+
+Sat Dec  6 00:02:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: cookies/cookies.c, protocol/file/cgi.c:
+
+	Compilation fixes.  
+
+Fri Dec  5 23:52:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Set HTTP_COOKIE.  
+
+Fri Dec  5 23:45:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: cookies/cookies.c, cookies/cookies.h, protocol/http/http.c:
+
+	send_cookies() now does not take the @header argument anymore and
+	returns a string on its own, without leading 'Cookie: ' and trailing
+	'\r\n'.  
+
 Fri Dec  5 22:58:11 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/cookies/: cookies.c, cookies.h:

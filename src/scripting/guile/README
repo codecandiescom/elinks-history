@@ -1,7 +1,6 @@
 Installation:
 
-You might need to configure --without-lua.  You'll need internal-hooks.scm and
-user-hooks.scm in $HOME/.elinks
+You'll need internal-hooks.scm and user-hooks.scm in $HOME/.elinks
 
 I used Guile 1.5.6, in case that matters.
 
@@ -20,4 +19,4 @@ think there is a manual yet.
 
 -- Peter Wang, 2002-12-06
 
-$Id: README,v 1.1 2003/07/24 15:33:33 pasky Exp $
+$Id: README,v 1.2 2003/11/05 15:09:21 pasky Exp $

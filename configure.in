@@ -416,17 +416,18 @@ dnl ===================================================================
 
 enable_guile="no";
 
-AC_ARG_WITH(guile, [  --with-guile            enable Guile support (don't!)],
+AC_ARG_WITH(guile, [  --with-guile            enable Guile support],
             [
 if test "$withval" = yes; then
 	withval="";
 	enable_guile=yes;
 	cat <<EOF
 ***********************************************************************
-It was BAD idea to enable Guile, you know! It is incomplete and not
-well integrated to ELinks yet. That means, ie., that you can NOT use
-Guile and Lua at one time. And you have no Guile console. And so on.
-See src/scripting/guile/README for further details and hints.
+The Guile support is incomplete and not so well integrated to ELinks
+yet. That means, ie., that you have no Guile console and there might
+not be all the necessary hooks. Also, the Guile interface is not too
+well tested (success stories heartily welcomed!).  See
+src/scripting/guile/README for further details and hints.
 ***********************************************************************
 EOF
 fi

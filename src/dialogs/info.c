@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.17 2002/07/23 10:01:23 zas Exp $ */
+/* $Id: info.c,v 1.18 2002/08/27 12:52:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,6 +67,12 @@ void menu_about(struct terminal *term, void *d, struct session *ses)
 #endif
 #ifdef GLOBHIST
 			" GlobHist"
+#endif
+#ifdef HAVE_ZLIB_H
+			" gzip"
+#endif
+#ifdef HAVE_BZLIB_H
+			" bzip2"
 #endif
 	);
 	msg_box(term, getml(s, NULL),

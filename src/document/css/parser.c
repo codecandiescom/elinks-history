@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.92 2004/03/30 00:47:27 jonas Exp $ */
+/* $Id: parser.c,v 1.93 2004/09/17 23:17:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,8 +253,6 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 		/* Check if we have already encountered the selector */
 
-		/* FIXME: This is totally broken because we have to do this _after_
-		 * scanning for id/class/pseudo. --pasky */
 		selector = get_css_selector(css, element.string, element.length);
 		if (!selector) continue;
 
@@ -262,10 +260,6 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		if (!pkg) continue;
 		pkg->selector = selector;
 
-		/* This is a temporary measure, so that overly specific selectors won't
-		 * spoil our whole stylesheet until we support them, and we always
-		 * favour the general selectors instead. Keep just the add_to_list()
-		 * when we will start supporting the id/class/pseudo. */
 		add_to_list(*selectors, pkg);
 
 		/* Multiple elements hooked up to this ruleset. */

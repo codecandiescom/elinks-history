@@ -1,4 +1,4 @@
-/* $Id: osdep.h,v 1.3 2002/05/10 17:09:21 pasky Exp $ */
+/* $Id: osdep.h,v 1.4 2002/06/11 20:22:20 pasky Exp $ */
 
 #ifndef EL__OS_DEP_H
 #define EL__OS_DEP_H
@@ -45,6 +45,7 @@ static inline int dir_sep(char x) { return x == '/'; }
 #include <grp.h>
 #define SYSTEM_ID SYS_UNIX
 #define SYSTEM_NAME "Unix"
+#define SYSTEM_STR "unix"
 #define DEFAULT_SHELL "/bin/sh"
 #define GETSHELL getenv("SHELL")
 #ifdef HAVE_SYS_UN_H
@@ -62,6 +63,7 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 /*#define NO_ASYNC_LOOKUP*/
 #define SYSTEM_ID SYS_OS2
 #define SYSTEM_NAME "OS/2"
+#define SYSTEM_STR "os2"
 #define DEFAULT_SHELL "cmd.exe"
 #define GETSHELL getenv("COMSPEC")
 #define NO_FG_EXEC
@@ -77,6 +79,7 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 /*#define NO_ASYNC_LOOKUP*/
 #define SYSTEM_ID SYS_WIN32
 #define SYSTEM_NAME "Win32"
+#define SYSTEM_STR "win32"
 #define DEFAULT_SHELL "cmd.exe"
 #define GETSHELL getenv("COMSPEC")
 #define NO_FG_EXEC
@@ -94,6 +97,7 @@ static inline int dir_sep(char x) { return x == '/'; }
 #include <grp.h>
 #define SYSTEM_ID SYS_BEOS
 #define SYSTEM_NAME "BeOS"
+#define SYSTEM_STR "beos"
 #define DEFAULT_SHELL "/bin/sh"
 #define GETSHELL getenv("SHELL")
 #define NO_FORK_ON_EXIT
@@ -123,6 +127,7 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 #define NEWLINE        "\n"
 #define SYSTEM_ID SYS_RISCOS
 #define SYSTEM_NAME "RISC OS"
+#define SYSTEM_STR "riscos"
 #define DEFAULT_SHELL "gos"
 #define GETSHELL getenv("SHELL")
 #define NO_FG_EXEC

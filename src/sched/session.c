@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.167 2003/10/05 12:40:44 pasky Exp $ */
+/* $Id: session.c,v 1.168 2003/10/05 13:16:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -789,13 +789,19 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 			continue;
 
 		url = memacpy(frm->vs.url, frm->vs.url_len);
-		if (!url
-		    || (frm->vs.view && frm->vs.view->document
-		        && frm->vs.view->document->frame_desc)) {
+		if (!url) return;
+#if 0
+		/* This seems not to be needed anymore, it looks like this
+		 * condition should never happen. It's apparently what Mikulas
+		 * thought, at least. I'll review this more carefully when I
+		 * will understand this stuff better ;-). --pasky */
+		if (frm->vs.view && frm->vs.view->document
+		    && frm->vs.view->document->frame_desc)) {
 			request_frameset(ses, frm->vs.view->document->frame_desc);
 			if (url) mem_free(url);
 			return;
 		}
+#endif
 		goto found;
 	}
 

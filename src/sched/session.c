@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.489 2004/06/12 11:00:08 jonas Exp $ */
+/* $Id: session.c,v 1.490 2004/06/12 11:19:29 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -656,8 +656,6 @@ init_session(struct session *base_session, struct terminal *term,
 	ses->tab = init_tab(term, ses, tabwin_func);
 	if (!ses->tab) {
 		mem_free(ses);
-		if (list_empty(term->windows))
-			destroy_terminal(term);
 		return NULL;
 	}
 

@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.40 2003/07/21 18:34:00 zas Exp $ */
+/* $Id: string.h,v 1.41 2003/07/22 00:20:33 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -178,11 +178,11 @@ struct string {
 
 
 #ifdef DEBUG_STRING
-#define STR_MAGIC 0x2E5BF271
-#define check_string_magic(x) assertm((x)->magic == STR_MAGIC, "String magic check failed.")
-#define set_string_magic(x) do { (x)->magic = STR_MAGIC; } while (0)
-#define NULL_STRING { STR_MAGIC, NULL, 0 }
-#define INIT_STRING(s, l) { STR_MAGIC, s, l }
+#define STRING_MAGIC 0x2E5BF271
+#define check_string_magic(x) assertm((x)->magic == STRING_MAGIC, "String magic check failed.")
+#define set_string_magic(x) do { (x)->magic = STRING_MAGIC; } while (0)
+#define NULL_STRING { STRING_MAGIC, NULL, 0 }
+#define INIT_STRING(s, l) { STRING_MAGIC, s, l }
 #else
 #define check_string_magic(x)
 #define set_string_magic(x)

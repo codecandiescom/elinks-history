@@ -327,8 +327,8 @@ msgid ""
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
 "## Ovviamente, se non ti piace quello che ELinks farà di questo file,\n"
-"## puoi cambiare il comportamento modificando l'opzione config."
-"saving_style.\n"
+"## puoi cambiare il comportamento modificando l'opzione "
+"config.saving_style.\n"
 "## Dai, siamo dei bravi ragazzi dopo tutto.\n"
 
 #: src/config/conf.c:649
@@ -542,8 +542,8 @@ msgstr ""
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
-"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap \"%"
-"s\")?"
+"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap "
+"\"%s\")?"
 
 #: src/config/dialogs.c:600
 msgid "Keybinding manager"
@@ -2072,24 +2072,20 @@ msgid "Underline links."
 msgstr "Sottolinea collegamenti."
 
 #: src/config/options.inc:531
-#, fuzzy
 msgid "Plain rendering"
-msgstr "Rendering HTML"
+msgstr "Rendering solo testo"
 
 #: src/config/options.inc:533
-#, fuzzy
 msgid "Options concerning the display of plain text pages."
-msgstr "Opzioni riguardanti la visualizzazione delle pagine HTML."
+msgstr "Opzioni riguardanti la visualizzazione delle pagine di solo testo."
 
 #: src/config/options.inc:535
-#, fuzzy
 msgid "Display URIs"
-msgstr "Visualizza"
+msgstr "Visualizza URI"
 
 #: src/config/options.inc:537
-#, fuzzy
 msgid "Display URIs in the document as links."
-msgstr "Stile di visualizzazione per i collegamenti alle immagini"
+msgstr "Visualizza come collegamenti gli URI nel documento."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:543
@@ -2433,8 +2429,8 @@ msgid ""
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 "Gestore (programma esterno) per questo protocollo. Chiama\n"
-"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, unix-"
-"xwin)."
+"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, "
+"unix-xwin)."
 
 #: src/config/options.inc:723
 msgid ""
@@ -3235,14 +3231,12 @@ msgstr ""
 "viceversa."
 
 #: src/config/options.inc:1759
-#, fuzzy
 msgid "Confirm tab closing"
-msgstr "Conferma sottomissione"
+msgstr "Conferma chiusura delle schede."
 
 #: src/config/options.inc:1761
-#, fuzzy
 msgid "When closing a tab show confirmation dialog."
-msgstr "Apri la conferma di uscita"
+msgstr "Mostrare la finestra di conferma quando si chiude una scheda. "
 
 #: src/config/options.inc:1765 src/config/opttypes.c:396
 msgid "Language"
@@ -3575,8 +3569,8 @@ msgid ""
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
-"Impostare a 1 per modificare i file runtime di stato (bookmark, "
-"storico, ...)\n"
+"Impostare a 1 per modificare i file runtime di stato (bookmark, storico, "
+"...)\n"
 "anche quando si usano -no-connect o -session-ring; non ha effetto\n"
 "se non è usato in combinazione con una di queste opzioni."
 
@@ -3663,7 +3657,6 @@ msgid "Accept policy"
 msgstr "Politica di accettazione"
 
 #: src/cookies/cookies.c:105
-#, fuzzy
 msgid ""
 "Cookies accepting policy:\n"
 "0 is accept no cookies\n"
@@ -3672,7 +3665,7 @@ msgid ""
 msgstr ""
 "Politica per i cookie:\n"
 "0 è non accettare i cookie\n"
-"1 è chiedi conferma prima di accettare cookie (NON IMPLEMENTATA)\n"
+"1 è chiedi conferma prima di accettare cookie\n"
 "2 è accetta tutti i cookie"
 
 #: src/cookies/cookies.c:110
@@ -3729,9 +3722,8 @@ msgstr ""
 "effetto quando cookie_save è disattivata"
 
 #: src/cookies/cookies.c:562
-#, fuzzy
 msgid "Accept cookie?"
-msgstr "Politica di accettazione"
+msgstr "Accettare il cookie?"
 
 #: src/cookies/cookies.c:563
 #, c-format
@@ -3744,30 +3736,33 @@ msgid ""
 "Expires: %s\n"
 "Secure: %s\n"
 msgstr ""
+"Si desidera accettare un cookie da %s?\n"
+"\n"
+"Nome: %s\n"
+"Valore: %s\n"
+"Dominio: %s\n"
+"Scade: %s\n"
+"Sicuro: %s\n"
 
 #: src/cookies/cookies.c:572
-#, fuzzy
 msgid "unknown"
-msgstr "Sconosciuto"
+msgstr "sconosciuto"
 
 #: src/cookies/cookies.c:573
-#, fuzzy
 msgid "yes"
-msgstr "Sì"
+msgstr "sì"
 
 #: src/cookies/cookies.c:573
-#, fuzzy
 msgid "no"
-msgstr "Info"
+msgstr "no"
 
 #: src/cookies/cookies.c:575
-#, fuzzy
 msgid "Accept"
-msgstr "Politica di accettazione"
+msgstr "Accetta"
 
 #: src/cookies/cookies.c:576
 msgid "Reject"
-msgstr ""
+msgstr "Respingi"
 
 #: src/dialogs/auth.c:59
 #, c-format
@@ -4534,8 +4529,8 @@ msgstr ""
 "Associazione Gestore <-> tipo MIME. Il primo sotto albero è la\n"
 "classe MIME, mentre il secondo sotto albero è il tipo MIME (il\n"
 "gestore di image/gif risiedera in mime.type.image.gif). Ogni opzione\n"
-"del tipo MIME dovrebbe contenere il nome (considerando le maiuscole/"
-"minuscole)\n"
+"del tipo MIME dovrebbe contenere il nome (considerando le "
+"maiuscole/minuscole)\n"
 "del gestore MIME (le sue proprietà sono memorizzate in mime.handler.<nome>)."
 
 #: src/mime/backend/default.c:35
@@ -4679,8 +4674,8 @@ msgid ""
 "also be checked before deciding the handler."
 msgstr ""
 "Dà priorità alle voci per l'ordine dei file nel percorso di\n"
-"mailcap. Questo significa che anche le voci con metacaratteri (come image/"
-"*)\n"
+"mailcap. Questo significa che anche le voci con metacaratteri (come "
+"image/*)\n"
 "saranno controllate prima di decidere il gestore."
 
 #. name:
@@ -5090,7 +5085,6 @@ msgid "SSL error"
 msgstr "errore SSL"
 
 #: src/sched/error.c:70
-#, fuzzy
 msgid "This version of ELinks does not contain SSL/TLS support"
 msgstr "Questa versione di ELinks non contiene il supporto SSL/TSL"
 
@@ -5173,9 +5167,9 @@ msgid ""
 "saved to the configuration file, instead of just all the options. This "
 "simplifies our situation greatly when we see that some option has "
 "inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of config."
-"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
-"for any inconvience caused."
+"a subtle way. Thus, we recommend you to change the value of "
+"config.saving_style option to 3 in order to get the \"right\" behaviour. "
+"Apologies for any inconvience caused."
 msgstr ""
 "Hai l'opzione config.saving_style impostata a un valore obsoleto. Gli "
 "algoritmi di salvataggio della configurazione di ELinks sono stati cambiati "
@@ -5183,9 +5177,9 @@ msgstr ""
 "sono salvate nel file di configurazione, invece di tutte quante. Questo "
 "semplifica molto la situazione quando vediamo che delle opzioni hanno un "
 "valore predefinito inappropriato o abbiamo bisogno di cambiarne la "
-"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione config."
-"saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le mie "
-"scuse per qualsiasi inconveniente causato."
+"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione "
+"config.saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le "
+"mie scuse per qualsiasi inconveniente causato."
 
 #: src/sched/session.c:1504
 msgid ""
@@ -5305,9 +5299,8 @@ msgid "Too many bytes read from the itrm!"
 msgstr "Troppi byte letti da itrm!"
 
 #: src/terminal/tab.c:193
-#, fuzzy
 msgid "Do you really want to close the current tab?"
-msgstr "Vuoi veramente uscire da ELinks?"
+msgstr "Vuoi veramente chiudere la scheda corrente?"
 
 #: src/viewer/dump/dump.c:77
 #, c-format

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.141 2003/12/25 08:06:03 jonas Exp $ */
+/* $Id: search.c,v 1.142 2003/12/25 08:09:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -980,12 +980,24 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 		case ACT_UP:
 			direction = -1;
 			i--;
+			if (i < 0) {
+				if (!get_opt_bool("document.browse.links.typeahead_wraparound"))
+					return typeahead_error(ses, typeahead);
+
+				i = doc_view->document->nlinks - 1;
+			}
 			break;
 
 		case ACT_NEXT_ITEM:
 		case ACT_DOWN:
 			direction = 1;
 			i++;
+			if (i >= doc_view->document->nlinks) {
+				if (!get_opt_bool("document.browse.links.typeahead_wraparound"))
+					return typeahead_error(ses, typeahead);
+
+				i = 0;
+			}
 			break;
 
 		case ACT_KILL_TO_BOL:
@@ -1009,7 +1021,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 
 	assert(direction);
 
-	int_bounds(&i, 0, doc_view->document->nlinks - 1);
+	assert(i >= 0 && i < doc_view->document->nlinks);
 	upper_link = (direction > 0) ? doc_view->document->nlinks : i + 1;
 	lower_link = (direction > 0) ? i - 1: -1;
 

@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.62 2004/07/01 11:58:24 jonas Exp $ */
+/* $Id: event.c,v 1.63 2004/07/01 15:20:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 
 #include "intl/gettext/libintl.h"
 #include "lowlevel/timer.h"
+#include "main.h"			/* terminate */
 #include "sched/session.h"
 #include "terminal/draw.h"
 #include "terminal/event.h"
@@ -221,9 +222,7 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 			break;
 
 		} else if (ev->x == KBD_CTRL_C) {
-			struct window *win = term->windows.prev;
-
-			win->handler(win, ev, 0);
+			terminate = 1;
 			break;
 		}
 

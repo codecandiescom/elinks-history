@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.53 2003/11/16 14:34:32 zas Exp $ */
+/* $Id: inphist.c,v 1.54 2003/11/18 09:12:57 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,33 +99,30 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 {
 	struct dialog_data *dlg_data = (struct dialog_data *) win->data;
 	struct widget_data *widget_data = selected_widget(dlg_data);
-	int cdata_len = strlen(widget_data->cdata);
-	int match_len = cdata_len;
-	/* Maximum number of characters in a match. Characters after this
-	 * position are varying in other matches. Zero means that no max has
-	 * been set yet. */
-	int max = 0;
-	unsigned char *match = NULL;
+	int starting_len = strlen(widget_data->cdata);
+	int last_match_len = starting_len;
+	int shortest_match_len = 0;
+	unsigned char *last_match = NULL;
 	struct input_history_entry *entry;
 
 	foreach (entry, *history) {
-		unsigned char *c = entry->data - 1;
-		unsigned char *m = (match ? match : widget_data->cdata) - 1;
-		int len = 0;
+		unsigned char *cur = entry->data - 1;
+		unsigned char *last = (last_match ? last_match : widget_data->cdata) - 1;
+		int cur_len = 0;
 
-		while (*++m && *++c && *m == *c && (++len, !max || len < max));
-		if (len < cdata_len)
+		while (*++last && *++cur && *last == *cur && (++cur_len, !shortest_match_len || cur_len < shortest_match_len));
+		if (cur_len < starting_len)
 			continue;
-		if (len < match_len || (*c && m != widget_data->cdata + len))
-			max = len;
-		match = entry->data;
-		match_len = (m == widget_data->cdata + len && !*m)
-			    ? strlen(entry->data) : len;
+		if (cur_len < last_match_len || (*cur && last != widget_data->cdata + cur_len))
+			shortest_match_len = cur_len;
+		last_match = entry->data;
+		last_match_len = (last == widget_data->cdata + cur_len && !*last)
+				 ? strlen(entry->data) : cur_len;
 	}
 
-	if (!match) return;
+	if (!last_match) return;
 
-	tab_compl_n(term, match, match_len, win);
+	tab_compl_n(term, last_match, last_match_len, win);
 }
 
 

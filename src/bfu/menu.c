@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.176 2004/01/09 21:30:58 zas Exp $ */
+/* $Id: menu.c,v 1.177 2004/01/13 14:26:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,15 +31,15 @@
 
 /* Left and right padding spaces around labels in main menu. */
 #define L_MAINTEXT_SPACE	1
-#define R_MAINTEXT_SPACE	2
+#define R_MAINTEXT_SPACE	1
 
 /* Spaces before and after right text of submenu. */
-#define L_RTEXT_SPACE		2
+#define L_RTEXT_SPACE		1
 #define R_RTEXT_SPACE		1
 
 /* Spaces before and after left text of submenu. */
 #define L_TEXT_SPACE		1
-#define R_TEXT_SPACE		0
+#define R_TEXT_SPACE		1
 
 /* Border size in submenu. */
 #define MENU_BORDER_SIZE	1
@@ -831,9 +831,11 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		if (i == menu->selected) {
 			menu->sp = p;
 			color = selected_color;
-			draw_area(term, p, 0, L_MAINTEXT_SPACE + L_TEXT_SPACE, 1, ' ', 0, color);
-			draw_area(term, p + textlen + L_MAINTEXT_SPACE + L_TEXT_SPACE, 0,
-				  R_MAINTEXT_SPACE + R_TEXT_SPACE, 1, ' ', 0, color);
+			draw_area(term, p, 0,
+				  L_MAINTEXT_SPACE + L_TEXT_SPACE
+				  + textlen
+				  + R_TEXT_SPACE + R_MAINTEXT_SPACE,
+				  1, ' ', 0, color);
 			set_cursor(term, p, 0, 1);
 			set_window_ptr(menu->win, p, 1);
 		}
@@ -842,11 +844,11 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 
 		if (l) {
 			draw_menu_left_text_hk(term, text, l,
-					       p, 0, textlen + R_MAINTEXT_SPACE,
+					       p, 0, textlen + R_TEXT_SPACE + L_TEXT_SPACE,
 					       color, (i == menu->selected));
 		} else {
 			draw_menu_left_text(term, text, textlen,
-					    p, 0, textlen + R_MAINTEXT_SPACE,
+					    p, 0, textlen + R_TEXT_SPACE + L_TEXT_SPACE,
 					    color);
 		}
 
@@ -855,7 +857,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		if (p >= term->width - R_MAINMENU_SPACE)
 			break;
 
-		p += R_MAINTEXT_SPACE;
+		p += R_MAINTEXT_SPACE + R_TEXT_SPACE + L_TEXT_SPACE;
 	}
 
 	menu->last_displayed = i - 1;

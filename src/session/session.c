@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.413 2004/05/29 17:44:44 jonas Exp $ */
+/* $Id: session.c,v 1.414 2004/05/30 15:27:36 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1034,15 +1034,18 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 			update_status();
 			/* fall-through */
 		case EV_RESIZE:
-			if (!ses) break;
-			draw_formatted(ses, 1);
-			load_frames(ses, ses->doc_view);
-			process_file_requests(ses);
-			print_screen_status(ses);
-			break;
+			tab->resize = 1;
+			/* fall-through */
 		case EV_REDRAW:
-			if (!ses) break;
-			draw_formatted(ses, 0);
+			if (!ses || ses->tab != get_current_tab(ses->tab->term))
+				break;
+
+			draw_formatted(ses, tab->resize);
+			if (tab->resize) {
+				load_frames(ses, ses->doc_view);
+				process_file_requests(ses);
+				tab->resize = 0;
+			}
 			print_screen_status(ses);
 			break;
 		case EV_KBD:

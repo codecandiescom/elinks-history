@@ -1,4 +1,4 @@
-/* $Id: window.h,v 1.7 2003/12/02 19:07:52 jonas Exp $ */
+/* $Id: window.h,v 1.8 2004/05/30 15:27:36 jonas Exp $ */
 
 #ifndef EL__TERMINAL_WINDOW_H
 #define EL__TERMINAL_WINDOW_H
@@ -40,6 +40,9 @@ struct window {
 	/* Used for tabs focus detection. */
 	int xpos, width;
 	int x, y;
+
+	/* For delayed tab resizing */
+	unsigned int resize:1;
 };
 
 void redraw_from_window(struct window *);

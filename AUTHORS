@@ -1,8 +1,8 @@
 Unicode2ascii replacement and entity name tables taken from lynx.
 
 
-People who contributed to links, in alphabetical order (if you are missing here
-or some of your contributions is, tell me):
+People who contributed to Links/ELinks, in alphabetical order (if you are
+missing here or some of your contributions is, tell me):
 
 
 Adam Harvey <matlhdam@iinet.net.au>
@@ -446,4 +446,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.131 2003/07/24 15:33:30 pasky Exp $
+$Id: AUTHORS,v 1.132 2003/09/05 10:47:27 pasky Exp $

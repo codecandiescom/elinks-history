@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.54 2003/07/04 00:46:04 jonas Exp $ */
+/* $Id: connection.c,v 1.55 2003/07/04 01:49:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,7 +196,7 @@ stat_timer(struct connection *c)
 void
 set_connection_state(struct connection *c, enum connection_state state)
 {
-	struct status *stat;
+	struct download *download;
 	struct remaining_info *prg = &c->prg;
 
 	if (is_in_result_state(c->state) && is_in_progress_state(state))
@@ -226,9 +226,9 @@ set_connection_state(struct connection *c, enum connection_state state)
 		prg->timer = -1;
 	}
 
-	foreach (stat, c->statuss) {
-		stat->state = state;
-		stat->prev_error = c->prev_error;
+	foreach (download, c->downloads) {
+		download->state = state;
+		download->prev_error = c->prev_error;
 	}
 
 	if (is_in_progress_state(state)) send_connection_info(c);
@@ -298,13 +298,13 @@ void
 send_connection_info(struct connection *c)
 {
 	enum connection_state state = c->state;
-	struct status *stat = c->statuss.next;
+	struct download *download = c->downloads.next;
 
-	while ((void *)stat != &c->statuss) {
-		stat->ce = c->cache;
-		stat = stat->next;
-		if (stat->prev->end)
-			stat->prev->end(stat->prev, stat->prev->data);
+	while ((void *)download != &c->downloads) {
+		download->ce = c->cache;
+		download = download->next;
+		if (download->prev->end)
+			download->prev->end(download->prev, download->prev->data);
 		if (is_in_progress_state(state) && connection_disappeared(c))
 			return;
 	}
@@ -826,27 +826,27 @@ get_proxy(unsigned char *url)
 }
 
 int
-load_url(unsigned char *url, unsigned char *ref_url, struct status *stat,
+load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 	 enum connection_priority pri, enum cache_mode cache_mode, int start)
 {
 	struct cache_entry *e = NULL;
 	struct connection *c;
 	unsigned char *u;
 
-	if (stat) {
-		stat->c = NULL;
-		stat->ce = NULL;
-		stat->pri = pri;
-		stat->state = S_OUT_OF_MEM;
-		stat->prev_error = 0;
+	if (download) {
+		download->c = NULL;
+		download->ce = NULL;
+		download->pri = pri;
+		download->state = S_OUT_OF_MEM;
+		download->prev_error = 0;
 	}
 
 #ifdef DEBUG
 	foreach (c, queue) {
-		struct status *st;
+		struct download *assigned;
 
-		foreach (st, c->statuss)
-			assertm(st != stat, "Status assigned to '%s'", c->url);
+		foreach (assigned, c->downloads)
+			assertm(assigned != download, "Download assigned to '%s'", c->url);
 	}
 #endif
 
@@ -857,9 +857,9 @@ load_url(unsigned char *url, unsigned char *ref_url, struct status *stat,
 			delete_cache_entry(e);
 			e = NULL;
 		} else {
-			if (stat) {
-				stat->ce = e;
-				stat->state = S_OK;
+			if (download) {
+				download->ce = e;
+				download->state = S_OK;
 			/* XXX: This doesn't work since sometimes stat->prg is
 			 * undefined and contains random memory locations. It's
 			 * not supposed to point on anything here since stat
@@ -867,7 +867,8 @@ load_url(unsigned char *url, unsigned char *ref_url, struct status *stat,
 			 * probably break in some cases without this, though.
 			 * FIXME: Needs more investigation. --pasky */
 			/* if (stat->prg) stat->prg->start = start; */
-				if (stat->end) stat->end(stat, stat->data);
+				if (download->end)
+					download->end(download, download->data);
 			}
 			return 0;
 		}
@@ -875,7 +876,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct status *stat,
 
 	u = get_proxy(url);
 	if (!u) {
-		if (stat) stat->end(stat, stat->data);
+		if (download) download->end(download, download->data);
 		return -1;
 	}
 
@@ -894,11 +895,11 @@ load_url(unsigned char *url, unsigned char *ref_url, struct status *stat,
 			c->pri[pri]++;
 		}
 
-		if (stat) {
-			stat->prg = &c->prg;
-			stat->c = c;
-			stat->ce = c->cache;
-			add_to_list(c->statuss, stat);
+		if (download) {
+			download->prg = &c->prg;
+			download->c = c;
+			download->ce = c->cache;
+			add_to_list(c->downloads, download);
 			set_connection_state(c, c->state);
 		}
 #ifdef DEBUG
@@ -909,7 +910,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct status *stat,
 
 	c = mem_calloc(1, sizeof(struct connection));
 	if (!c) {
-		if (stat) stat->end(stat, stat->data);
+		if (download) download->end(download, download->data);
 		mem_free(u);
 		return -1;
 	}
@@ -927,17 +928,17 @@ load_url(unsigned char *url, unsigned char *ref_url, struct status *stat,
 	c->sock1 = c->sock2 = -1;
 	c->content_encoding = ENCODING_NONE;
 	c->stream_pipes[0] = c->stream_pipes[1] = -1;
-	init_list(c->statuss);
+	init_list(c->downloads);
 	c->est_length = -1;
 	c->prg.start = start;
 	c->prg.timer = -1;
 	c->timer = -1;
 
-	if (stat) {
-		stat->prg = &c->prg;
-		stat->c = c;
-		stat->ce = NULL;
-		add_to_list(c->statuss, stat);
+	if (download) {
+		download->prg = &c->prg;
+		download->c = c;
+		download->ce = NULL;
+		add_to_list(c->downloads, download);
 	}
 
 	add_to_queue(c);
@@ -954,19 +955,19 @@ load_url(unsigned char *url, unsigned char *ref_url, struct status *stat,
 
 /* FIXME: one object in more connections */
 void
-change_connection(struct status *oldstat, struct status *newstat,
+change_connection(struct download *old, struct download *new,
 		  int newpri, int interrupt)
 {
 	struct connection *c;
 
-	assertm(oldstat, "change_connection: oldstat == NULL");
+	assert(old);
 
-	if (is_in_result_state(oldstat->state)) {
-		if (newstat) {
-			newstat->ce = oldstat->ce;
-			newstat->state = oldstat->state;
-			newstat->prev_error = oldstat->prev_error;
-			if (newstat->end) newstat->end(newstat, newstat->data);
+	if (is_in_result_state(old->state)) {
+		if (new) {
+			new->ce = old->ce;
+			new->state = old->state;
+			new->prev_error = old->prev_error;
+			if (new->end) new->end(new, new->data);
 		}
 		return;
 	}
@@ -975,23 +976,23 @@ change_connection(struct status *oldstat, struct status *newstat,
 	check_queue_bugs();
 #endif
 
-	c = oldstat->c;
+	c = old->c;
 
-	c->pri[oldstat->pri]--;
-	assertm(c->pri[oldstat->pri] >= 0, "priority counter underflow");
+	c->pri[old->pri]--;
+	assertm(c->pri[old->pri] >= 0, "priority counter underflow");
 
 	c->pri[newpri]++;
-	del_from_list(oldstat);
-	oldstat->state = S_INTERRUPTED;
+	del_from_list(old);
+	old->state = S_INTERRUPTED;
 
-	if (newstat) {
-		newstat->prg = &c->prg;
-		add_to_list(c->statuss, newstat);
-		newstat->state = c->state;
-		newstat->prev_error = c->prev_error;
-		newstat->pri = newpri;
-		newstat->c = c;
-		newstat->ce = c->cache;
+	if (new) {
+		new->prg = &c->prg;
+		add_to_list(c->downloads, new);
+		new->state = c->state;
+		new->prev_error = c->prev_error;
+		new->pri = newpri;
+		new->c = c;
+		new->ce = c->cache;
 
 	} else if (c->detached || interrupt) {
 		abort_conn_with_state(c, S_INTERRUPTED);
@@ -1009,13 +1010,13 @@ change_connection(struct status *oldstat, struct status *newstat,
 /* This will remove 'pos' bytes from the start of the cache for the specified
  * connection, if the cached object is already too big. */
 void
-detach_connection(struct status *stat, int pos)
+detach_connection(struct download *download, int pos)
 {
 	struct connection *conn;
 
-	if (is_in_result_state(stat->state)) return;
+	if (is_in_result_state(download->state)) return;
 
-	conn = stat->c;
+	conn = download->c;
 	if (!conn->detached) {
 		int total_len;
 		int i, total_pri = 0;

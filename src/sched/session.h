@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.35 2003/07/03 01:03:35 jonas Exp $ */
+/* $Id: session.h,v 1.36 2003/07/04 01:49:03 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -97,7 +97,7 @@ struct session {
 
 	struct list_head more_files; /* -> struct file_to_load */
 
-	struct status loading;
+	struct download loading;
 	unsigned char *loading_url;
 
 	int reloadlevel;
@@ -135,7 +135,7 @@ struct session {
 
 	/* The possibly running type query (what-to-do-with-that-file?) */
 
-	struct status tq;
+	struct download tq;
 	struct cache_entry *tq_ce;
 	unsigned char *tq_url;
 	unsigned char *tq_goto_position;
@@ -166,7 +166,7 @@ have_location(struct session *ses) {
 
 
 void print_screen_status(struct session *);
-void print_error_dialog(struct session *, struct status *);
+void print_error_dialog(struct session *, struct download *);
 
 void process_file_requests(struct session *);
 
@@ -187,10 +187,10 @@ void goto_imgmap(struct session *, unsigned char *, unsigned char *, unsigned ch
 void ses_forward(struct session *);
 void ses_goto(struct session *, unsigned char *, unsigned char *, int,
 	      enum cache_mode, enum task_type, unsigned char *,
-	      void (*)(struct status *, struct session *), int);
+	      void (*)(struct download *, struct session *), int);
 
-void end_load(struct status *, struct session *);
-void doc_end_load(struct status *, struct session *);
+void end_load(struct download *, struct session *);
+void doc_end_load(struct download *, struct session *);
 
 void abort_loading(struct session *, int);
 void reload(struct session *, enum cache_mode);

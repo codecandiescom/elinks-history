@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.72 2003/07/04 00:54:10 jonas Exp $ */
+/* $Id: download.c,v 1.73 2003/07/04 01:49:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,8 +94,8 @@ abort_download(struct file_download *down, int stop)
 {
 	if (down->win) delete_window(down->win);
 	if (down->ask) delete_window(down->ask);
-	if (down->stat.state >= 0)
-		change_connection(&down->stat, NULL, PRI_CANCEL, stop);
+	if (down->download.state >= 0)
+		change_connection(&down->download, NULL, PRI_CANCEL, stop);
 	if (down->url) mem_free(down->url);
 
 	if (down->handle != -1) {
@@ -203,19 +203,19 @@ download_abort_function(struct dialog_data *dlg)
 static void
 download_window_function(struct dialog_data *dlg)
 {
-	struct file_download *down = dlg->dlg->udata;
+	struct file_download *file_download = dlg->dlg->udata;
 	struct terminal *term = dlg->win->term;
 	int max = 0, min = 0;
 	int w, x, y;
 	int t = 0;
 	unsigned char *m, *u;
-	struct status *status = &down->stat;
+	struct download *download = &file_download->download;
 	int dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	redraw_below_window(dlg->win);
-	down->win = dlg->win;
+	file_download->win = dlg->win;
 
-	if (status->state == S_TRANS && status->prg->elapsed / 100) {
+	if (download->state == S_TRANS && download->prg->elapsed / 100) {
 		int l = 0;
 
 		m = init_str();
@@ -224,39 +224,39 @@ download_window_function(struct dialog_data *dlg)
 		t = 1;
 		add_to_str(&m, &l, _("Received", term));
 		add_chr_to_str(&m, &l, ' ');
-		add_xnum_to_str(&m, &l, status->prg->pos);
+		add_xnum_to_str(&m, &l, download->prg->pos);
 
-		if (status->prg->size >= 0) {
+		if (download->prg->size >= 0) {
 			add_chr_to_str(&m, &l, ' ');
 			add_to_str(&m, &l, _("of",term));
 			add_chr_to_str(&m, &l, ' ');
-			add_xnum_to_str(&m, &l, status->prg->size);
+			add_xnum_to_str(&m, &l, download->prg->size);
 			add_chr_to_str(&m, &l, ' ');
 		}
-		if (status->prg->start > 0) {
+		if (download->prg->start > 0) {
 			add_chr_to_str(&m, &l, '(');
-			add_xnum_to_str(&m, &l, status->prg->pos
-						- status->prg->start);
+			add_xnum_to_str(&m, &l, download->prg->pos
+						- download->prg->start);
 			add_chr_to_str(&m, &l, ' ');
 			add_to_str(&m, &l, _("after resume", term));
 			add_chr_to_str(&m, &l, ')');
 		}
 		add_chr_to_str(&m, &l, '\n');
 
-		if (status->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
+		if (download->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
 			add_to_str(&m, &l, _("Average speed", term));
 		else add_to_str(&m, &l, _("Speed", term));
 
 		add_chr_to_str(&m, &l, ' ');
-		add_xnum_to_str(&m, &l, (longlong) status->prg->loaded * 10
-					/ (status->prg->elapsed / 100));
+		add_xnum_to_str(&m, &l, (longlong) download->prg->loaded * 10
+					/ (download->prg->elapsed / 100));
 		add_to_str(&m, &l, "/s");
 
-		if (status->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
+		if (download->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 			add_to_str(&m, &l, ", ");
 			add_to_str(&m, &l, _("current speed", term));
 			add_chr_to_str(&m, &l, ' ');
-			add_xnum_to_str(&m, &l, status->prg->cur_loaded
+			add_xnum_to_str(&m, &l, download->prg->cur_loaded
 						/ (CURRENT_SPD_SEC *
 						   SPD_DISP_TIME / 1000));
 			add_to_str(&m, &l, "/s");
@@ -265,9 +265,9 @@ download_window_function(struct dialog_data *dlg)
 		add_chr_to_str(&m, &l, '\n');
 		add_to_str(&m, &l, _("Elapsed time", term));
 		add_chr_to_str(&m, &l, ' ');
-		add_time_to_str(&m, &l, status->prg->elapsed);
+		add_time_to_str(&m, &l, download->prg->elapsed);
 
-		if (status->prg->size >= 0 && status->prg->loaded > 0) {
+		if (download->prg->size >= 0 && download->prg->loaded > 0) {
 			add_to_str(&m, &l, ", ");
 			add_to_str(&m, &l, _("estimated time", term));
 			add_chr_to_str(&m, &l, ' ');
@@ -277,17 +277,17 @@ download_window_function(struct dialog_data *dlg)
 						/ 1000 * stat->prg->loaded
 						- stat->prg->elapsed);
 #endif
-			add_time_to_str(&m, &l, (status->prg->size - status->prg->pos)
-						/ ((longlong) status->prg->loaded * 10
-						   / (status->prg->elapsed / 100))
+			add_time_to_str(&m, &l, (download->prg->size - download->prg->pos)
+						/ ((longlong) download->prg->loaded * 10
+						   / (download->prg->elapsed / 100))
 						* 1000);
 		}
 
-	} else m = stracpy(get_err_msg(status->state, term));
+	} else m = stracpy(get_err_msg(download->state, term));
 
 	if (!m) return;
 
-	u = stracpy(down->url);
+	u = stracpy(file_download->url);
 	if (!u) {
 		mem_free(m);
 		return;
@@ -305,7 +305,7 @@ download_window_function(struct dialog_data *dlg)
 	if (w < min) w = min;
 	if (w > dlg->win->term->x - 2 * DIALOG_LB)
 		w = dlg->win->term->x - 2 * DIALOG_LB;
-	if (t && status->prg->size >= 0) {
+	if (t && download->prg->size >= 0) {
 		if (w < DOWN_DLG_MIN) w = DOWN_DLG_MIN;
 	} else {
 		if (w > max) w = max;
@@ -317,7 +317,7 @@ download_window_function(struct dialog_data *dlg)
 			dialog_text_color, AL_LEFT);
 
 	y++;
-	if (t && status->prg->size >= 0) y += 2;
+	if (t && download->prg->size >= 0) y += 2;
 	dlg_format_text(NULL, term, m, 0, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 
@@ -336,15 +336,15 @@ download_window_function(struct dialog_data *dlg)
 	dlg_format_text(term, term, u, x, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 
-	if (t && status->prg->size >= 0) {
+	if (t && download->prg->size >= 0) {
 		/* FIXME: not yet perfect, pasky will improve it later. --Zas */
 		/* Note : values > 100% are theorically possible and were seen. */
 		unsigned char q[] = "XXXX%"; /* Reduce or enlarge at will. */
 		const unsigned int qwidth = sizeof(q) - 1;
 		unsigned int qlen = 0;
 		int p = w - qwidth; /* width for gauge meter */
-		int progress = (int) ((longlong) 100 * (longlong) status->prg->pos
-				      / (longlong) status->prg->size);
+		int progress = (int) ((longlong) 100 * (longlong) download->prg->pos
+				      / (longlong) download->prg->size);
 		int barprogress = p * progress / 100;
 
 		if (barprogress > p) barprogress = p; /* Limit to preserve display. */
@@ -423,84 +423,84 @@ found:
 
 
 static void
-download_data(struct status *status, struct file_download *down)
+download_data(struct download *download, struct file_download *file_download)
 {
 	struct cache_entry *ce;
 	struct fragment *frag;
 
-	if (status->state >= S_WAIT && status->state < S_TRANS)
+	if (download->state >= S_WAIT && download->state < S_TRANS)
 		goto end_store;
 
-	ce = status->ce;
+	ce = download->ce;
 	if (!ce) goto end_store;
 
 	if (ce->last_modified)
-		down->remotetime = parse_http_date(ce->last_modified);
+		file_download->remotetime = parse_http_date(ce->last_modified);
 
-	while (ce->redirect && down->redirect_cnt++ < MAX_REDIRECTS) {
+	while (ce->redirect && file_download->redirect_cnt++ < MAX_REDIRECTS) {
 		unsigned char *u;
 
-		if (status->state >= 0)
-			change_connection(&down->stat, NULL, PRI_CANCEL, 0);
+		if (download->state >= 0)
+			change_connection(&file_download->download, NULL, PRI_CANCEL, 0);
 
-		u = join_urls(down->url, ce->redirect);
+		u = join_urls(file_download->url, ce->redirect);
 		if (!u) break;
 
 		if (!get_opt_int("protocol.http.bugs.broken_302_redirect")
 		    && !ce->redirect_get) {
-			unsigned char *p = strchr(down->url, POST_CHAR);
+			unsigned char *p = strchr(file_download->url, POST_CHAR);
 
 			if (p) add_to_strn(&u, p);
 		}
 
-		mem_free(down->url);
+		mem_free(file_download->url);
 
-		down->url = u;
-		down->stat.state = S_WAIT_REDIR;
+		file_download->url = u;
+		file_download->download.state = S_WAIT_REDIR;
 
-		if (down->win) {
+		if (file_download->win) {
 			struct event ev = { EV_REDRAW, 0, 0, 0 };
 
-			ev.x = down->win->term->x;
-			ev.y = down->win->term->y;
-			down->win->handler(down->win, &ev, 0);
+			ev.x = file_download->win->term->x;
+			ev.y = file_download->win->term->y;
+			file_download->win->handler(file_download->win, &ev, 0);
 		}
 
-		load_url(down->url, ce->url, &down->stat, PRI_DOWNLOAD,
-			 NC_CACHE, status->prg ? status->prg->start : 0);
+		load_url(file_download->url, ce->url, &file_download->download, PRI_DOWNLOAD,
+			 NC_CACHE, download->prg ? download->prg->start : 0);
 
 		return;
 	}
 
-	if (down->stat.prg && down->stat.prg->seek) {
-		down->last_pos = down->stat.prg->seek;
-		down->stat.prg->seek = 0;
+	if (file_download->download.prg && file_download->download.prg->seek) {
+		file_download->last_pos = file_download->download.prg->seek;
+		file_download->download.prg->seek = 0;
 		/* This is exclusive with the prealloc, thus we can perform
 		 * this in front of that thing safely. */
-		if (lseek(down->handle, down->last_pos, SEEK_SET) < 0)
+		if (lseek(file_download->handle, file_download->last_pos, SEEK_SET) < 0)
 			goto write_error;
 	}
 
 	foreach (frag, ce->frag) {
 		/* TODO: Separate function? --pasky */
-		int remain = down->last_pos - frag->offset;
+		int remain = file_download->last_pos - frag->offset;
 
 		if (remain >= 0 && frag->length > remain) {
 			int w;
 
 #ifdef USE_OPEN_PREALLOC
-			if (!down->last_pos && (!down->stat.prg
-						|| down->stat.prg->size > 0)) {
-				close(down->handle);
-				down->handle = open_prealloc(down->file, O_CREAT|O_WRONLY|O_TRUNC, 0666,
-							     down->stat.prg ? down->stat.prg->size : ce->length);
-				if (down->handle == -1)
+			if (!file_download->last_pos && (!file_download->stat.prg
+						|| file_download->stat.prg->size > 0)) {
+				close(file_download->handle);
+				file_download->handle = open_prealloc(file_download->file, O_CREAT|O_WRONLY|O_TRUNC, 0666,
+							     file_download->stat.prg ? file_download->stat.prg->size : ce->length);
+				if (file_download->handle == -1)
 					goto write_error;
-				set_bin(down->handle);
+				set_bin(file_download->handle);
 			}
 #endif
 
-			w = write(down->handle, frag->data + remain,
+			w = write(file_download->handle, frag->data + remain,
 				  frag->length - remain);
 			if (w == -1) {
 				int saved_errno;
@@ -508,13 +508,13 @@ download_data(struct status *status, struct file_download *down)
 write_error:
 				saved_errno = errno; /* Saved in case of ... --Zas */
 
-				detach_connection(status, down->last_pos);
+				detach_connection(download, file_download->last_pos);
 				if (!list_empty(sessions)) {
-					unsigned char *msg = stracpy(down->file);
+					unsigned char *msg = stracpy(file_download->file);
 					unsigned char *emsg = stracpy((unsigned char *) strerror(saved_errno));
 
 					if (msg && emsg) {
-						struct terminal *term = get_download_ses(down)->tab->term;
+						struct terminal *term = get_download_ses(file_download)->tab->term;
 
 						msg_box(term, getml(msg, emsg, NULL), MSGBOX_FREE_TEXT,
 							N_("Download error"), AL_CENTER,
@@ -527,24 +527,24 @@ write_error:
 					}
 				}
 
-				abort_download(down, 0);
+				abort_download(file_download, 0);
 				return;
 			}
-			down->last_pos += w;
+			file_download->last_pos += w;
 		}
 	}
 
-	detach_connection(status, down->last_pos);
+	detach_connection(download, file_download->last_pos);
 
 end_store:
-	if (status->state < 0) {
-		struct terminal *term = get_download_ses(down)->tab->term;
+	if (download->state < 0) {
+		struct terminal *term = get_download_ses(file_download)->tab->term;
 
-		if (status->state != S_OK) {
-			unsigned char *t = get_err_msg(status->state, term);
+		if (download->state != S_OK) {
+			unsigned char *t = get_err_msg(download->state, term);
 
 			if (t) {
-				unsigned char *tt = stracpy(down->url);
+				unsigned char *tt = stracpy(file_download->url);
 
 				if (tt) {
 					unsigned char *p = strchr(tt, POST_CHAR);
@@ -553,58 +553,58 @@ end_store:
 					msg_box(term, getml(tt, NULL), MSGBOX_FREE_TEXT,
 						N_("Download error"), AL_CENTER,
 						msg_text(term, N_("Error downloading %s:\n\n%s"), tt, t),
-						get_download_ses(down), 1,
+						get_download_ses(file_download), 1,
 						N_("Cancel"), NULL, B_ENTER | B_ESC /*,
 						N_(T_RETRY), NULL, 0 */ /* FIXME: retry */);
 				}
 			}
 
 		} else {
-			if (down->prog) {
-				prealloc_truncate(down->handle,
-						  down->last_pos);
-				close(down->handle);
-				down->handle = -1;
-				exec_on_terminal(get_download_ses(down)->tab->term,
-						 down->prog, down->file,
-						 !!down->prog_flags);
-				mem_free(down->prog);
-				down->prog = NULL;
+			if (file_download->prog) {
+				prealloc_truncate(file_download->handle,
+						  file_download->last_pos);
+				close(file_download->handle);
+				file_download->handle = -1;
+				exec_on_terminal(get_download_ses(file_download)->tab->term,
+						 file_download->prog, file_download->file,
+						 !!file_download->prog_flags);
+				mem_free(file_download->prog);
+				file_download->prog = NULL;
 
 			} else {
-				if (down->notify) {
-					unsigned char *url = stracpy(down->url);
+				if (file_download->notify) {
+					unsigned char *url = stracpy(file_download->url);
 
 					msg_box(term, getml(url, NULL), MSGBOX_FREE_TEXT,
 						N_("Download"), AL_CENTER,
 						msg_text(term, N_("Download complete:\n%s"), url),
-						get_download_ses(down), 1,
+						get_download_ses(file_download), 1,
 						N_("OK"), NULL, B_ENTER | B_ESC);
 				}
 
-				if (get_opt_int("document.download.notify_bell") + down->notify >= 2) {
-					beep_terminal(get_download_ses(down)->tab->term);
+				if (get_opt_int("document.download.notify_bell") + file_download->notify >= 2) {
+					beep_terminal(get_download_ses(file_download)->tab->term);
 				}
 
-				if (down->remotetime && get_opt_int("document.download.set_original_time")) {
+				if (file_download->remotetime && get_opt_int("document.download.set_original_time")) {
 					struct utimbuf foo;
 
-					foo.actime = foo.modtime = down->remotetime;
-					utime(down->file, &foo);
+					foo.actime = foo.modtime = file_download->remotetime;
+					utime(file_download->file, &foo);
 				}
 			}
 		}
 
-		abort_download(down, 0);
+		abort_download(file_download, 0);
 		return;
 	}
 
-	if (down->win) {
+	if (file_download->win) {
 		struct event ev = { EV_REDRAW, 0, 0, 0 };
 
-		ev.x = down->win->term->x;
-		ev.y = down->win->term->y;
-		down->win->handler(down->win, &ev, 0);
+		ev.x = file_download->win->term->x;
+		ev.y = file_download->win->term->y;
+		file_download->win->handler(file_download->win, &ev, 0);
 	}
 }
 
@@ -953,14 +953,14 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	if (fstat(fd, &buf)) goto download_error;
 	down->last_pos = resume ? (int) buf.st_size : 0;
 
-	down->stat.end = (void (*)(struct status *, void *)) download_data;
-	down->stat.data = down;
+	down->download.end = (void (*)(struct download *, void *)) download_data;
+	down->download.data = down;
 	down->handle = fd;
 	down->ses = cmdw_hop->ses;
 	down->remotetime = 0;
 
 	add_to_list(downloads, down);
-	load_url(url, cmdw_hop->ses->ref_url, &down->stat, PRI_DOWNLOAD, NC_CACHE,
+	load_url(url, cmdw_hop->ses->ref_url, &down->download, PRI_DOWNLOAD, NC_CACHE,
 		 (resume ? down->last_pos : 0));
 	display_download(cmdw_hop->ses->tab->term, down, cmdw_hop->ses);
 
@@ -1044,8 +1044,8 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	down->file = codw_hop->real_file;
 
-	down->stat.end = (void (*)(struct status *, void *)) download_data;
-	down->stat.data = down;
+	down->download.end = (void (*)(struct download *, void *)) download_data;
+	down->download.data = down;
 	down->last_pos = 0;
 	down->handle = fd;
 	down->ses = codw_hop->ses;
@@ -1059,7 +1059,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	down->prog_flags = codw_hop->ses->tq_prog_flags;
 	add_to_list(downloads, down);
-	change_connection(&codw_hop->ses->tq, &down->stat, PRI_DOWNLOAD, 0);
+	change_connection(&codw_hop->ses->tq, &down->download, PRI_DOWNLOAD, 0);
 	tp_free(codw_hop->ses);
 	display_download(codw_hop->ses->tab->term, down, codw_hop->ses);
 
@@ -1132,7 +1132,7 @@ tp_display(struct session *ses)
 	memset(l, 0, sizeof(struct location));
 
 	init_list(l->frames);
-	memcpy(&l->stat, &ses->tq, sizeof(struct status));
+	memcpy(&l->download, &ses->tq, sizeof(struct download));
 
 	init_vs(&l->vs, ses->tq_url);
 	if (ses->tq_goto_position) {
@@ -1141,14 +1141,14 @@ tp_display(struct session *ses)
 	}
 
 	add_to_history(ses, l);
-	cur_loc(ses)->stat.end = (void (*)(struct status *, void *))
+	cur_loc(ses)->download.end = (void (*)(struct download *, void *))
 				 doc_end_load;
-	cur_loc(ses)->stat.data = ses;
+	cur_loc(ses)->download.data = ses;
 
 	if (ses->tq.state >= 0)
-		change_connection(&ses->tq, &cur_loc(ses)->stat, PRI_MAIN, 0);
+		change_connection(&ses->tq, &cur_loc(ses)->download, PRI_MAIN, 0);
 	else
-		cur_loc(ses)->stat.state = ses->tq.state;
+		cur_loc(ses)->download.state = ses->tq.state;
 
 	do_not_optimize_here_gcc_3_3(ses);
 	cur_loc(ses)->vs.plain = 1;
@@ -1248,7 +1248,7 @@ type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
 
 
 int
-ses_chktype(struct session *ses, struct status **status, struct cache_entry *ce)
+ses_chktype(struct session *ses, struct download **download, struct cache_entry *ce)
 {
 	struct mime_handler *handler;
 	int plaintext = 0;
@@ -1267,7 +1267,6 @@ ses_chktype(struct session *ses, struct status **status, struct cache_entry *ce)
 	xwin = ses->tab->term->environment & ENV_XWIN;
 	handler = get_mime_type_handler(ctype, xwin);
 
-
 	if (!handler && strlen(ctype) >= 4 && !strncasecmp(ctype, "text", 4))
 		goto free_ct;
 
@@ -1275,8 +1274,8 @@ ses_chktype(struct session *ses, struct status **status, struct cache_entry *ce)
 		internal("Type query to %s already in progress.", ses->tq_url);
 
 	ses->tq_url = stracpy(ses->loading_url);
-	*status = &ses->tq;
-	change_connection(&ses->loading, *status, PRI_MAIN, 0);
+	*download = &ses->tq;
+	change_connection(&ses->loading, *download, PRI_MAIN, 0);
 
 	ses->tq_ce = ce;
 	ses->tq_ce->refcount++;

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.22 2003/07/04 00:25:36 jonas Exp $ */
+/* $Id: connection.h,v 1.23 2003/07/04 01:49:03 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -106,7 +106,7 @@ struct remaining_info {
 struct connection {
 	LIST_HEAD(struct connection);
 
-	struct list_head statuss;
+	struct list_head downloads;
 	struct remaining_info prg;
 
 	unsigned char *url;
@@ -145,7 +145,7 @@ struct connection {
 	 * connection to the host already exists before creating a new one.  If
 	 * it finds out that something had that idea earlier and connection for
 	 * download of the very same URL is active already, it just attaches
-	 * the struct status it got to the connection, _and_ updates its @pri
+	 * the struct download it got to the connection, _and_ updates its @pri
 	 * array by the priority it has thus, sum of values in all fields of
 	 * @pri is also kinda refcount of the connection. */
 	int pri[PRIORITIES];
@@ -155,14 +155,14 @@ struct connection {
 };
 
 
-struct status {
+struct download {
 	/* XXX: order matters there, there's some hard initialization in
 	 * src/sched/session.c and src/viewer/text/view.c */
-	LIST_HEAD(struct status);
+	LIST_HEAD(struct download);
 
 	struct connection *c;
 	struct cache_entry *ce;
-	void (*end)(struct status *, void *);
+	void (*end)(struct download *, void *);
 	void *data;
 	struct remaining_info *prg;
 
@@ -186,8 +186,8 @@ void abort_connection(struct connection *);
 void abort_conn_with_state(struct connection *, int);
 void retry_conn_with_state(struct connection *, int);
 
-void change_connection(struct status *, struct status *, int, int);
-void detach_connection(struct status *, int);
+void change_connection(struct download *, struct download *, int, int);
+void detach_connection(struct download *, int);
 void abort_all_connections(void);
 void abort_background_connections(void);
 
@@ -197,7 +197,7 @@ void set_timeout(struct connection *);
 /* Note that stat's data _MUST_ be struct download * if start > 0! Yes, that
  * should be probably something else than data, but... ;-) */
 /* Returns 0 on success and -1 on failure. */
-int load_url(unsigned char *url, unsigned char *ref_url, struct status *stat,
+int load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 	     enum connection_priority pri, enum cache_mode cache_mode, int start);
 
 #endif

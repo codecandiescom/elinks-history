@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.26 2003/07/03 00:28:23 jonas Exp $ */
+/* $Id: dump.c,v 1.27 2003/07/04 01:49:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,7 +43,7 @@
 
 int dump_pos;
 
-static struct status dump_stat;
+static struct download dump_download;
 static int dump_redir_count = 0;
 
 
@@ -51,7 +51,7 @@ static int dump_redir_count = 0;
  * all went fine and 1 if something isn't quite right and we should terminate
  * ourselves ASAP. */
 static int
-dump_source(int fd, struct status *status, struct cache_entry *ce)
+dump_source(int fd, struct download *status, struct cache_entry *ce)
 {
 	struct fragment *frag;
 
@@ -93,7 +93,7 @@ nextfrag:
  * went fine and 1 if something isn't quite right and we should terminate
  * ourselves ASAP. */
 static int
-dump_formatted(int fd, struct status *status, struct cache_entry *ce)
+dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 {
 	struct document_options o;
 	struct f_data_c formatted;
@@ -134,7 +134,7 @@ dump_formatted(int fd, struct status *status, struct cache_entry *ce)
 }
 
 void
-dump_end(struct status *status, void *p)
+dump_end(struct download *status, void *p)
 {
 	struct cache_entry *ce = status->ce;
 	int fd = get_output_handle();
@@ -200,7 +200,7 @@ dump_start(unsigned char *url)
 		goto terminate;
 	}
 
-	dump_stat.end = dump_end;
+	dump_download.end = dump_end;
 	dump_pos = 0;
 
 	wd = get_cwd();
@@ -208,7 +208,7 @@ dump_start(unsigned char *url)
 	if (!real_url) real_url = stracpy(url);
 	if (!real_url) goto terminate;
 
-	if (load_url(real_url, NULL, &dump_stat, PRI_MAIN, 0, -1))
+	if (load_url(real_url, NULL, &dump_download, PRI_MAIN, 0, -1))
 		goto terminate;
 
 	mem_free(real_url);

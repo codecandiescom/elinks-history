@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.153 2003/07/03 02:18:54 jonas Exp $ */
+/* $Id: view.c,v 1.154 2003/07/04 01:49:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1354,9 +1354,10 @@ save_url(struct session *ses, unsigned char *url)
 	u = translate_url(url, ses->tab->term->cwd);
 
 	if (!u) {
-		struct status stat = { NULL_LIST_HEAD, NULL, NULL,
-				       NULL, NULL, NULL,
-				       S_BAD_URL, PRI_CANCEL, 0 };
+		struct download stat = {
+			NULL_LIST_HEAD, NULL, NULL, NULL, NULL, NULL,
+			S_BAD_URL, PRI_CANCEL, 0
+		};
 
 		print_error_dialog(ses, &stat);
 		return;

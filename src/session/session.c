@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.116 2003/07/03 01:40:45 jonas Exp $ */
+/* $Id: session.c,v 1.117 2003/07/04 01:49:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,7 @@ struct file_to_load {
 	int pri;
 	struct cache_entry *ce;
 	unsigned char *url;
-	struct status stat;
+	struct download stat;
 };
 
 
@@ -72,11 +72,11 @@ struct file_to_load * request_additional_file(struct session *,
 					      unsigned char *, int);
 struct file_to_load *request_additional_loading_file(struct session *,
 						     unsigned char *,
-						     struct status *, int);
+						     struct download *, int);
 
 
 static unsigned char *
-get_stat_msg(struct status *stat, struct terminal *term)
+get_stat_msg(struct download *stat, struct terminal *term)
 {
 	if (stat->state == S_TRANS && stat->prg->elapsed / 100) {
 		unsigned char *m = init_str();
@@ -179,12 +179,12 @@ print_screen_status(struct session *ses)
 	if (ses->visible_status_bar && ses_tab_is_current) {
 		static int last_current_link;
 		unsigned int tab_info_len = 0;
-		struct status *stat = NULL;
+		struct download *stat = NULL;
 
 		if (ses->task)
 			stat = &ses->loading;
 		else if (have_location(ses))
-			stat = &cur_loc(ses)->stat;
+			stat = &cur_loc(ses)->download;
 
 		if (stat) {
 			if (stat->state == S_OK) {
@@ -342,7 +342,7 @@ title_set:
 }
 
 void
-print_error_dialog(struct session *ses, struct status *stat)
+print_error_dialog(struct session *ses, struct download *stat)
 {
 	unsigned char *t = get_err_msg(stat->state, ses->tab->term);
 
@@ -439,7 +439,7 @@ x:
 	l = mem_alloc(sizeof(struct location) + len + 1);
 	if (!l) return;
 	memset(l, 0, sizeof(struct location));
-	memcpy(&l->stat, &ses->loading, sizeof(struct status));
+	memcpy(&l->download, &ses->loading, sizeof(struct download));
 
 	if (ses->task_target && *ses->task_target) {
 		struct frame *frm;
@@ -519,7 +519,7 @@ map_selected(struct terminal *term, struct link_def *ld, struct session *ses)
 }
 
 
-void file_end_load(struct status *, struct file_to_load *);
+void file_end_load(struct download *, struct file_to_load *);
 void abort_preloading(struct session *, int);
 
 struct task {
@@ -530,7 +530,7 @@ struct task {
 	enum task_type type;
 	unsigned char *target;
 	unsigned char *pos;
-	void (*fn)(struct status *, struct session *);
+	void (*fn)(struct download *, struct session *);
 };
 
 
@@ -543,7 +543,7 @@ post_yes(struct task *task)
 	if (task->ses->goto_position) mem_free(task->ses->goto_position);
 
 	ses->goto_position = task->pos ? stracpy(task->pos) : NULL;
-	ses->loading.end = (void (*)(struct status *, void *))task->fn;
+	ses->loading.end = (void (*)(struct download *, void *))task->fn;
 	ses->loading.data = task->ses;
 	ses->loading_url = stracpy(task->url);
 	ses->task = task->type;
@@ -563,7 +563,7 @@ void
 ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 	 int pri, enum cache_mode cache_mode, enum task_type task_type,
 	 unsigned char *pos,
-	 void (*fn)(struct status *, struct session *),
+	 void (*fn)(struct download *, struct session *),
 	 int redir)
 {
 	struct task *task = mem_alloc(sizeof(struct task));
@@ -581,7 +581,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 		if (ses->goto_position) mem_free(ses->goto_position);
 		ses->goto_position = pos;
 
-		ses->loading.end = (void (*)(struct status *, void *))fn;
+		ses->loading.end = (void (*)(struct download *, void *))fn;
 		ses->loading.data = ses;
 		ses->loading_url = url;
 		ses->task = task_type;
@@ -621,7 +621,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 }
 
 static int
-do_move(struct session *ses, struct status **stat)
+do_move(struct session *ses, struct download **stat)
 {
 	struct cache_entry *ce = NULL;
 
@@ -656,7 +656,7 @@ do_move(struct session *ses, struct status **stat)
 
 		abort_loading(ses, 0);
 		if (have_location(ses))
-			*stat = &cur_loc(ses)->stat;
+			*stat = &cur_loc(ses)->download;
 		else
 			*stat = NULL;
 
@@ -711,10 +711,10 @@ b:
 	}
 
 	if ((*stat)->state >= 0) {
-		*stat = &cur_loc(ses)->stat;
+		*stat = &cur_loc(ses)->download;
 		change_connection(&ses->loading, *stat, PRI_MAIN, 0);
 	} else {
-		cur_loc(ses)->stat.state = ses->loading.state;
+		cur_loc(ses)->download.state = ses->loading.state;
 	}
 
 	free_task(ses);
@@ -872,7 +872,7 @@ add_questions_entry(void *callback)
 }
 
 void
-end_load(struct status *stat, struct session *ses)
+end_load(struct download *stat, struct session *ses)
 {
 	int d;
 
@@ -883,7 +883,7 @@ end_load(struct status *stat, struct session *ses)
 	d = do_move(ses, &stat);
 	if (!stat) return;
 	if (d == 1) {
-		stat->end = (void (*)(struct status *, void *))doc_end_load;
+		stat->end = (void (*)(struct download *, void *))doc_end_load;
 		display_timer(ses);
 	}
 	if (stat->state < 0) {
@@ -925,7 +925,7 @@ maybe_pre_format_html(struct cache_entry *ce, struct session *ses)
 #endif
 
 void
-doc_end_load(struct status *stat, struct session *ses)
+doc_end_load(struct download *stat, struct session *ses)
 {
 	int submit = 0;
 	struct form_control *fc = NULL;
@@ -971,7 +971,7 @@ doc_end_load(struct status *stat, struct session *ses)
 }
 
 void
-file_end_load(struct status *stat, struct file_to_load *ftl)
+file_end_load(struct download *stat, struct file_to_load *ftl)
 {
 	if (ftl->stat.ce) {
 		if (ftl->ce) ftl->ce->refcount--;
@@ -1020,7 +1020,7 @@ request_additional_file(struct session *ses, unsigned char *url, int pri)
 		return NULL;
 	}
 
-	ftl->stat.end = (void (*)(struct status *, void *)) file_end_load;
+	ftl->stat.end = (void (*)(struct download *, void *)) file_end_load;
 	ftl->stat.data = ftl;
 	ftl->req_sent = 0;
 	ftl->pri = pri;
@@ -1034,7 +1034,7 @@ request_additional_file(struct session *ses, unsigned char *url, int pri)
 
 struct file_to_load *
 request_additional_loading_file(struct session *ses, unsigned char *url,
-				struct status *stat, int pri)
+				struct download *stat, int pri)
 {
 	struct file_to_load *ftl;
 
@@ -1301,8 +1301,8 @@ abort_loading(struct session *ses, int interrupt)
 	if (have_location(ses)) {
 		struct location *l = cur_loc(ses);
 
-		if (l->stat.state >= 0)
-			change_connection(&l->stat, NULL, PRI_CANCEL, interrupt);
+		if (l->download.state >= 0)
+			change_connection(&l->download, NULL, PRI_CANCEL, interrupt);
 		abort_files_load(ses, interrupt);
 	}
 	abort_preloading(ses, interrupt);
@@ -1373,9 +1373,9 @@ reload(struct session *ses, enum cache_mode cache_mode)
 		struct file_to_load *ftl;
 		struct f_data_c *fd = current_frame(ses);
 
-		l->stat.data = ses;
-		l->stat.end = (void *)doc_end_load;
-		load_url(l->vs.url, ses->ref_url, &l->stat, PRI_MAIN, cache_mode, -1);
+		l->download.data = ses;
+		l->download.end = (void *)doc_end_load;
+		load_url(l->vs.url, ses->ref_url, &l->download, PRI_MAIN, cache_mode, -1);
 		foreach (ftl, ses->more_files) {
 			if (ftl->req_sent && ftl->stat.state >= 0) continue;
 			ftl->stat.data = ftl;
@@ -1388,10 +1388,10 @@ reload(struct session *ses, enum cache_mode cache_mode)
 
 #if 0
 void
-ses_load_notify(struct status *stat, struct session *ses)
+ses_load_notify(struct download *stat, struct session *ses)
 {
 	if (stat->state == S_TRANS || stat->state == S_OK) {
-		stat->end = (void (*)(struct status *, void *))end_load;
+		stat->end = (void (*)(struct download *, void *))end_load;
 		ses->wtd = WTD_NO;
 		mem_free(ses->loading_url);
 		if (ses->wtd == WTD_FORWARD) {
@@ -1423,7 +1423,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 
 	u = translate_url(url, ses->tab->term->cwd);
 	if (!u) {
-		struct status stat = { NULL_LIST_HEAD, NULL, NULL,
+		struct download stat = { NULL_LIST_HEAD, NULL, NULL,
 				       NULL, NULL, NULL,
 				       S_BAD_URL, PRI_CANCEL, 0 };
 

@@ -1,3 +1,21 @@
+Sun May 19 17:03:34 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	Oops. Memory leak introduced by last commit fixed.  
+
+Sun May 19 17:02:18 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: options.c, options.h:
+
+	Hopefully last piece from first stage of options rewrite -
+	preliminary hiearchic options support. It is not used anywhere yet,
+	and it is probably buggy, but who cares. As a separator, | instead
+	of . is used now, as we mis-use . in names of some options. Stay
+	tuned, more to come. Note that you probably don't want to do any big
+	changes in configuration now, as in next set of commits, new config
+	format is going to come VERY soon.  
+
 Sun May 19 16:06:43 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: main.c, config/conf.c, config/conf.h, config/options.c,

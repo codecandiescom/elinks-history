@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.74 2003/07/23 12:46:33 pasky Exp $ */
+/* $Id: cookies.c,v 1.75 2003/07/23 15:20:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,7 +173,7 @@ set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 		return 0;
 
 #ifdef COOKIES_DEBUG
-	debug("set_cookie -> (%s) %s", uri->protocol, str);
+	debug("set_cookie -> (%s) %s", struri(*uri), str);
 #endif
 
 	cstr.str = str;
@@ -528,7 +528,7 @@ send_cookies(struct string *header, struct uri *uri)
 		}
 
 		/* Not sure if this is 100% right..? --pasky */
-		if (c->secure && strncmp("https://", uri->protocol, 8))
+		if (c->secure && strncmp("https://", struri(*uri), 8))
 			continue;
 
 		if (!nc) {

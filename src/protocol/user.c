@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.44 2003/07/21 16:24:53 jonas Exp $ */
+/* $Id: user.c,v 1.45 2003/07/23 15:20:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,9 +69,13 @@ subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj)
 		cmd++;
 		switch (*cmd) {
 			case 'u':
-				add_shell_safe_to_string(&string, uri->protocol,
-							 strlen(uri->protocol));
+			{
+				unsigned char *url = struri(*uri);
+
+				add_shell_safe_to_string(&string, url,
+							 strlen(url));
 				break;
+			}
 			case 'h':
 				/* TODO	For some user protocols it would be
 				 *	better if substitution of each uri

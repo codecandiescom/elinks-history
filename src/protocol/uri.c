@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.34 2003/07/23 14:49:23 pasky Exp $ */
+/* $Id: uri.c,v 1.35 2003/07/23 15:20:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	if (get_protocol_free_syntax(protocol)) {
 		uri->data = prefix_end;
 		uri->datalen = strlen(prefix_end);
-		return strlen(uri->protocol);
+		return strlen(struri(*uri));
 	}
 
 	/* Isolate host */
@@ -156,7 +156,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	uri->datalen = prefix_end ? (prefix_end - host_end) : strlen(host_end);
 	uri->post = prefix_end ? (prefix_end + 1) : NULL;
 
-	return strlen(uri->protocol);
+	return strlen(struri(*uri));
 }
 
 int
@@ -200,7 +200,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
  	    || get_protocol_free_syntax(protocol)) {
  		/* Custom or unknown or free-syntax protocol;
  		 * keep the URI untouched. */
-		add_to_string(string, uri->protocol);
+		add_to_string(string, struri(*uri));
 
 		return string;
  	}

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.177 2003/07/21 04:57:08 jonas Exp $ */
+/* $Id: http.c,v 1.178 2003/07/23 15:20:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1154,7 +1154,7 @@ again:
 		http_end_request(conn, S_OK);
 		return;
 	}
-	if (get_cache_entry(conn->uri.protocol, &conn->cache)) {
+	if (get_cache_entry(struri(conn->uri), &conn->cache)) {
 		mem_free(head);
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;

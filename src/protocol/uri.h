@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.25 2003/07/23 15:11:13 pasky Exp $ */
+/* $Id: uri.h,v 1.26 2003/07/23 15:20:49 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -37,6 +37,12 @@ struct uri {
  * is zero so instead of testing *uri-><component> do uri-><component>len */
 /* Returns the length of the parsed uri or 0 if some error was found. */
 int parse_uri(struct uri *uri, unsigned char *uristring);
+
+
+/* Returns the raw zero-terminated URI string the (struct uri) is associated
+ * with. Thus, chances are high that it is the original URI received, not any
+ * cheap reconstruction. */
+#define struri(uri) ((uri).protocol)
 
 
 enum uri_component {

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.99 2003/07/23 13:08:07 jonas Exp $ */
+/* $Id: connection.c,v 1.100 2003/07/23 15:20:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -209,7 +209,7 @@ check_queue_bugs(void)
 
 		assertm(priority >= prev_priority, "queue is not sorted");
 		assertm(d->state >= 0, "interrupted connection on queue "
-			"(conn %s, state %d)", d->uri.protocol, d->state);
+			"(conn %s, state %d)", struri(d->uri), d->state);
 		prev_priority = priority;
 	}
 
@@ -402,7 +402,8 @@ done_connection(struct connection *c)
 {
 	del_from_list(c);
 	send_connection_info(c);
-	mem_free(c->uri.protocol);
+	/* TODO: Some free_uri(). */
+	mem_free(struri(c->uri));
 	mem_free(c);
 	check_queue_bugs();
 }
@@ -768,7 +769,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 		struct download *assigned;
 
 		foreach (assigned, c->downloads) {
-			assertm(assigned != download, "Download assigned to '%s'", c->uri.protocol);
+			assertm(assigned != download, "Download assigned to '%s'", struri(c->uri));
 			if_assert_failed {
 				download->state = S_INTERNAL;
 				if (download->end) download->end(download, download->data);
@@ -810,7 +811,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 	}
 
 	foreach (c, queue) {
-		if (c->detached || strcmp(c->uri.protocol, u))
+		if (c->detached || strcmp(struri(c->uri), u))
 			continue;
 
 		mem_free(u);

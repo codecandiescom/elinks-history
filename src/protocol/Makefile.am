@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.30 2004/05/21 12:03:52 jonas Exp $
+## $Id: Makefile.am,v 1.31 2004/06/27 21:36:20 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -50,6 +50,8 @@ libprotocol_a_LIBADD = \
  $(smbobj)
 
 libprotocol_a_SOURCES = \
+ about.c \
+ about.h \
  date.c \
  date.h \
  header.c \

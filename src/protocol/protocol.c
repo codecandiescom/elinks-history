@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.53 2004/06/27 20:43:47 jonas Exp $ */
+/* $Id: protocol.c,v 1.54 2004/06/27 21:36:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 
 /* Backends dynamic area: */
 
+#include "protocol/about.h"
 #include "protocol/file/file.h"
 #include "protocol/finger.h"
 #include "protocol/ftp/ftp.h"
@@ -39,24 +40,6 @@ struct protocol_backend {
 	unsigned int need_slashes:1;
 	unsigned int need_slash_after_host:1;
 };
-
-static void
-about_protocol_handler(struct connection *conn)
-{
-	conn->cached = get_cache_entry(conn->uri);
-
-	/* Only do this the first time */
-	if (conn->cached && !conn->cached->head) {
-		struct cache_entry *cached = conn->cached;
-
-		cached->incomplete = 0;
-
-		/* Set content to known type */
-		cached->head = stracpy("\r\nContent-Type: text/html\r\n");
-	}
-
-	abort_conn_with_state(conn, S_OK);
-}
 
 static const struct protocol_backend protocol_backends[] = {
 	{ "about",	   0, about_protocol_handler,	0, 0 },

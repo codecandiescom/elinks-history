@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.35 2003/06/07 08:30:20 zas Exp $ */
+/* $Id: string.h,v 1.36 2003/06/08 14:45:55 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -51,15 +51,10 @@ unsigned char *trim_chars(unsigned char *, unsigned char, int *);
 
 #define WHITECHAR(x) ((x) == ' ' || ((x) >= ASCII_TAB && (x) <= ASCII_CR))
 #define IS_QUOTE(x) ((x) == '"' || (x) == '\'')
-
-static inline int
-isA(unsigned char c)
-{
-	return (c >= 'A' && c <= 'Z')
-		|| (c >= 'a' && c <= 'z')
-		|| (c >= '0' && c <= '9')
-		|| c == '_' || c == '-';
-}
+#define isA(c) ((c >= 'A' && c <= 'Z') \
+		|| (c >= 'a' && c <= 'z') \
+		|| (c >= '0' && c <= '9') \
+		|| c == '_' || c == '-')
 
 
 /*** Our libc... */

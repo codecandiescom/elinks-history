@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.624 2004/10/17 20:20:16 miciah Exp $ */
+/* $Id: view.c,v 1.625 2004/10/17 20:21:14 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -711,8 +711,7 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 	}
 
 	if (isdigit(get_kbd_key(ev))) {
-		status = frame_ev_kbd_number(ses, doc_view,
-					     ev);
+		status = frame_ev_kbd_number(ses, doc_view, ev);
 
 		if (status != FRAME_EVENT_IGNORED)
 			return status;

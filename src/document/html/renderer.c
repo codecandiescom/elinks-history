@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.478 2004/07/08 15:29:19 jonas Exp $ */
+/* $Id: renderer.c,v 1.479 2004/07/08 15:39:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,6 +174,9 @@ expand_lines(struct part *part, int x, int y, int lines, color_t bgcolor)
 
 	assert(part && part->document);
 	if_assert_failed return;
+
+	if (!use_document_bg_colors(&part->document->options))
+		return;
 
 	par_format.bgcolor = bgcolor;
 

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.45 2004/04/22 18:02:09 pasky Exp $ */
+/* $Id: leds.c,v 1.46 2004/04/22 18:05:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,11 +149,12 @@ draw_leds(struct session *ses)
 		time_t curtime = time(NULL);
 		struct tm *loctime = localtime(&curtime);
 		int i, length;
+		int basepos = xpos - timerlen - 1;
 
 		length = strftime(s, 30, get_opt_str("ui.clock.format"), loctime);
 		s[length] = '\0';
 		for (i = length - 1; i >= 0; i--)
-			draw_char(term, xpos - timerlen - 1 - (length - i), ypos, s[i], 0, led_color);
+			draw_char(term, basepos - (length - i), ypos, s[i], 0, led_color);
 	}
 #endif
 

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.170 2004/06/15 02:10:14 jonas Exp $ */
+/* $Id: form.c,v 1.171 2004/06/15 12:14:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1055,10 +1055,12 @@ field_op(struct session *ses, struct document_view *doc_view,
 
 	action = kbd_action(KM_EDIT, ev, NULL);
 	if (ses->insert_mode == INSERT_MODE_OFF) {
-		if (action == ACT_EDIT_ENTER)
+		if (action == ACT_EDIT_ENTER) {
 			ses->insert_mode = INSERT_MODE_ON;
+			return 1;
+		}
 
-		return ses->insert_mode != INSERT_MODE_OFF;
+		return 0;
 	}
 
 	fs = find_form_state(doc_view, frm);
@@ -1138,7 +1140,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 
 			text = get_clipboard_text();
 			if (!text) break;
-			
+
 			length = strlen(text);
 			if (length <= frm->maxlength) {
 				unsigned char *v = mem_realloc(fs->value, length + 1);

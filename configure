@@ -1,7 +1,0 @@
-#!/bin/sh
-#
-# (c) 2004 Petr Baudis <pasky@ucw.cz>
-#
-# This is ELinks' autoconf/feature.h wrapper.
-
-./configure $*

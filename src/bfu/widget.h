@@ -1,11 +1,11 @@
-/* $Id: widget.h,v 1.81 2004/11/19 17:46:05 zas Exp $ */
+/* $Id: widget.h,v 1.82 2004/11/19 18:59:36 jonas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
 
+/* XXX: Include common definitions first */
 #include "bfu/common.h"
 
-/* Dynamic widget #include area */
 #include "bfu/button.h"
 #include "bfu/checkbox.h"
 #include "bfu/group.h"

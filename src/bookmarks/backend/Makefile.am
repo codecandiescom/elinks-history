@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.2 2002/12/10 22:52:15 pasky Exp $
+## $Id: Makefile.am,v 1.3 2004/05/02 12:59:42 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -10,11 +10,17 @@ include $(top_srcdir)/Makefile.base
 # However, we apparently need to create the library in order to convience
 # automake to compile the objects :/. We DON'T use libbackend.a ANYWHERE.
 
+if CONFIG_XBEL_BOOKMARKS
+xbelobj = xbel.o
+endif
+
 noinst_LIBRARIES = libbackend.a
+
+EXTRA_libbackend_a_SOURCES = xbel.c xbel.h
+libbackend_a_LIBADD = $(xbelobj)
+
 libbackend_a_SOURCES = \
  common.c \
  common.h \
  default.c \
- default.h \
- xbel.c \
- xbel.h
+ default.h

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.27 2003/09/25 19:22:51 zas Exp $ */
+/* $Id: hierbox.c,v 1.28 2003/10/08 07:49:13 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,21 @@ recursively_set_expanded(struct listbox_item *box, int expanded)
 		recursively_set_expanded(child, expanded);
 }
 
+struct ctx {
+	struct listbox_item *item;
+	int offset;
+};
+
+static int
+test_search(struct listbox_item *item, void *data_, int *offset) {
+	struct ctx *ctx = data_;
+
+	ctx->offset--;
+
+	if (item == ctx->item) *offset = 0;
+	return 0;
+}
+
 int
 hierbox_dialog_event_handler(struct dialog_data *dlg, struct term_event *ev)
 {
@@ -55,7 +70,26 @@ hierbox_dialog_event_handler(struct dialog_data *dlg, struct term_event *ev)
 
 			if (ev->x == '[' || ev->x == '-' || ev->x == '_') {
 				if (box->sel) {
-					recursively_set_expanded(box->sel, 0);
+					if (list_empty(box->sel->child)
+					    || !box->sel->expanded) {
+						if (box->sel->root) {
+							struct ctx ctx =
+								{ box->sel, 1 };
+						
+							traverse_listbox_items_list(
+									box->sel
+									 ->root,
+									0, 0,
+									test_search,
+									&ctx);
+							box_sel_move(
+								&dlg->items[n],
+								ctx.offset);
+						}
+					} else { 
+						recursively_set_expanded(
+								box->sel, 0);
+					}
 					goto display_dlg;
 				}
 				return EVENT_PROCESSED;

@@ -1,3 +1,59 @@
+Mon Nov 25 14:40:51 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Last patch was fixed. ;) 
+
+Mon Nov 25 14:24:49 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inpfield.c, protocol/ftp.c, protocol/url.c,
+	protocol/http/http.c, util/conv.c:
+
+	More error checking around strtol().  
+
+Mon Nov 25 13:56:46 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: user.c, http/http.c:
+
+	Better handling of some return values.  
+
+Mon Nov 25 13:49:04 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/auth.c:
+
+	Some (now) useless lines were removed.  
+
+Mon Nov 25 13:44:18 2002  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Better handling of memory allocation failures.  
+
+Mon Nov 25 13:28:53 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: url.c, http/auth.c:
+
+	get_protocol_name() handling tidy up.  
+
+Mon Nov 25 13:21:21 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: url.c, http/http.c:
+
+	Fix an issue with some url.c functions.  
+
+Mon Nov 25 12:04:56 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/: memdebug.c, memory.c, memory.h:
+
+	On failure, allocations are retried after a delay.  
+
+Mon Nov 25 10:21:42 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: protocol/url.c, util/string.c:
+
+	memacpy behavior is cleaner now. It should fix some reported issues
+	with get_host_name().  
+
 Sat Nov 23 19:49:52 2002  Laurent Monin <zas@norz.org>:
 
 	* src/util/: string.c, string.h:

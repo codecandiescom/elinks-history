@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.32 2004/02/07 01:04:52 zas Exp $ */
+/* $Id: secsave.c,v 1.33 2004/02/09 09:29:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,57 +212,51 @@ secure_close(struct secure_save_info *ssi)
 	if (!ssi) return ret;
 	if (!ssi->fp) goto free;
 
-	if (ssi->secure_save) {
-		/* Ensure data is effectively written to disk, we first flush libc buffers
-		 * using fflush(), then fsync() to flush kernel buffers, and finally call
-		 * fclose() (which call fflush() again, but the first one is needed since
-		 * it doesn't make much sense to flush kernel buffers and then libc buffers,
-		 * while closing file releases file descriptor we need to call fsync(). */
-		if (fflush(ssi->fp) == EOF	/* Flush related libc buffers. */
-		    || fsync(fileno(ssi->fp))	/* Flush related kernel buffers. */
-		    || fclose(ssi->fp) == EOF) {
-			ret = errno;
-			secsave_errno = SS_ERR_OTHER;
-			goto free;
-		}
-
-		if (ssi->err) {
-			ret = ssi->err;
-			goto free;
-		}
-
-		if (ssi->file_name && ssi->tmp_file_name) {
-#ifdef OS2
-			/* OS/2 needs this, however it breaks atomicity on
-			 * UN*X. */
-			unlink(ssi->file_name);
-#endif
-			/* FIXME: Race condition on ssi->file_name. The file
-			 * named ssi->file_name may have changed since
-			 * secure_open() call (where we stat() file and
-			 * more..).  */
-			if (rename(ssi->tmp_file_name, ssi->file_name) == -1) {
-				ret = errno;
-				secsave_errno = SS_ERR_RENAME;
-			} else {
-				/* Return 0 if file is successfully written. */
-				ret = 0;
-			}
-		}
-	} else {
-		if (fclose(ssi->fp) == EOF) {
-			ret = errno;
-			secsave_errno = SS_ERR_OTHER;
-			goto free;
-		}
-
-		if (ssi->err) {
-			ret = ssi->err;
-			goto free;
-		}
-
-		ret = 0;
+	if (ssi->err) {	/* Keep previous errno. */
+		ret = ssi->err;
+		fclose(ssi->fp); /* Close file */
+		goto free;
 	}
+
+	/* Ensure data is effectively written to disk, we first flush libc buffers
+	 * using fflush(), then fsync() to flush kernel buffers, and finally call
+	 * fclose() (which call fflush() again, but the first one is needed since
+	 * it doesn't make much sense to flush kernel buffers and then libc buffers,
+	 * while closing file releases file descriptor we need to call fsync(). */
+
+	if (ssi->secure_save && (fflush(ssi->fp) == EOF || fsync(fileno(ssi->fp)))) {
+		ret = errno;
+		secsave_errno = SS_ERR_OTHER;
+
+		fclose(ssi->fp); /* Close file, ignore errors. */
+		goto free;
+	}
+
+	/* Close file. */
+	if (fclose(ssi->fp) == EOF) {
+		ret = errno;
+		secsave_errno = SS_ERR_OTHER;
+		goto free;
+	}
+
+	if (ssi->secure_save && ssi->file_name && ssi->tmp_file_name) {
+#ifdef OS2
+		/* OS/2 needs this, however it breaks atomicity on
+		 * UN*X. */
+		unlink(ssi->file_name);
+#endif
+		/* FIXME: Race condition on ssi->file_name. The file
+		 * named ssi->file_name may have changed since
+		 * secure_open() call (where we stat() file and
+		 * more..).  */
+		if (rename(ssi->tmp_file_name, ssi->file_name) == -1) {
+			ret = errno;
+			secsave_errno = SS_ERR_RENAME;
+			goto free;
+		}
+	}
+
+	ret = 0;	/* Success. */
 
 free:
 	if (ssi->tmp_file_name) mem_free(ssi->tmp_file_name);

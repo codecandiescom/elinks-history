@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.52 2003/11/25 22:55:02 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.53 2003/11/29 01:06:19 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -39,6 +39,7 @@ enum keyact {
 	ACT_DOWN,
 	ACT_DOWNLOAD,
 	ACT_DOWNLOAD_IMAGE,
+	ACT_DOWNLOAD_MANAGER,
 	ACT_EDIT,
 	ACT_END,
 	ACT_ENTER,

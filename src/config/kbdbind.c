@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.105 2003/11/27 13:16:06 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.106 2003/11/29 01:06:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -393,6 +393,7 @@ static struct strtonum action_table[] = {
 	{ "down", ACT_DOWN, DACT(N_("Move cursor downwards")) },
 	{ "download", ACT_DOWNLOAD, DACT(N_("Download the current link")) },
 	{ "download-image", ACT_DOWNLOAD_IMAGE, DACT(N_("Download the current image")) },
+	{ "download-manager", ACT_DOWNLOAD_MANAGER, DACT(N_("Open download manager")) },
 	{ "edit", ACT_EDIT, DACT(N_("Begin editing")) }, /* FIXME */
 	{ "end", ACT_END, DACT(N_("Go to the end of the page/line")) },
 	{ "enter", ACT_ENTER, DACT(N_("Follow the current link")) },
@@ -723,6 +724,7 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_BOOKMARK_MANAGER, 's' },
 	{ ACT_CACHE_MANAGER, 'C' },
 	{ ACT_COOKIE_MANAGER, 'K' },
+	{ ACT_DOWNLOAD_MANAGER, 'D' },
 	{ ACT_HISTORY_MANAGER, 'h' },
 	{ ACT_OPTIONS_MANAGER, 'o' },
 	{ ACT_KEYBINDING_MANAGER, 'k' },

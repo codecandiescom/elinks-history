@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.277 2003/11/28 18:05:26 jonas Exp $ */
+/* $Id: view.c,v 1.278 2003/11/29 01:06:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,6 +25,7 @@
 #include "cookies/cookies.h"
 #include "cookies/dialogs.h"
 #include "dialogs/document.h"
+#include "dialogs/download.h"
 #include "dialogs/menu.h"
 #include "document/document.h"
 #include "document/options.h"
@@ -1055,6 +1056,9 @@ quak:
 #ifdef COOKIES
 				menu_cookie_manager(ses->tab->term, NULL, ses);
 #endif
+				goto x;
+			case ACT_DOWNLOAD_MANAGER:
+				menu_download_manager(ses->tab->term, NULL, ses);
 				goto x;
 			case ACT_HISTORY_MANAGER:
 #ifdef GLOBHIST

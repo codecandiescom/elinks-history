@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.14 2004/01/26 06:24:40 jonas Exp $ */
+/* $Id: exmode.c,v 1.15 2004/01/26 06:26:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,6 +119,8 @@ exmode_exec(struct exmode_data *data)
 	unsigned char *command = data->dlg_data->widgets_data->cdata;
 	unsigned char *args = command;
 	int i;
+
+	while (*command == ':') command++;
 
 	if (!*command) return;
 

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.149 2003/10/18 23:14:21 pasky Exp $ */
+/* $Id: menu.c,v 1.150 2003/10/23 13:44:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,9 +175,16 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 {
 	int steps = (int) psteps;
 
+	/* FIXME: The naive thing would be to call go_back() n times, but the
+	 * problem is that the main going back is done in a bottom-half
+	 * handler, so there will be effectively only one go_back() executed.
+	 * (The same applies to unhistory as well.) --pasky */
+
+	/* TODO: Have all the stuff in _one_ list, not two. --pasky */
+
 	abort_loading(ses, 0);
 
-	/* Move all intermediate items to unhistory... */
+	/* Move all intermediate items to unhistory. */
 
 	while (steps-- > 0) {
 		struct location *loc = ses->history.next;
@@ -201,7 +208,7 @@ go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 
 	abort_loading(ses, 0);
 
-	/* Move all intermediate items to history... */
+	/* Move all intermediate items to history. */
 
 	while (steps-- > 0) {
 	    	struct location *loc = ses->unhistory.next;

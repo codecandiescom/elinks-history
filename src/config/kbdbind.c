@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.249 2004/07/20 22:31:51 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.250 2004/07/20 22:46:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -557,12 +557,12 @@ static struct strtonum edit_action_table[EDIT_ACTIONS + 1] = {
 	{ "end", ACT_EDIT_END, DACT(N_("Go to the end of the page/line")) },
 	{ "end-of-buffer", ACT_EDIT_END_OF_BUFFER, DACT(N_("Go to the last line of the buffer")) },
 	{ "enter", ACT_EDIT_ENTER, DACT(N_("Follow the current link")) },
-	{ "open-external", ACT_EDIT_OPEN_EXTERNAL, DACT(N_("Open in external editor")) },
 	{ "home", ACT_EDIT_HOME, DACT(N_("Go to the start of the page/line")) },
 	{ "kill-to-bol", ACT_EDIT_KILL_TO_BOL, DACT(N_("Delete to beginning of line")) },
 	{ "kill-to-eol", ACT_EDIT_KILL_TO_EOL, DACT(N_("Delete to end of line")) },
 	{ "left", ACT_EDIT_LEFT,DACT( N_("Move the cursor left")) },
 	{ "next-item", ACT_EDIT_NEXT_ITEM, DACT(N_("Move to the next item")) },
+	{ "open-external", ACT_EDIT_OPEN_EXTERNAL, DACT(N_("Open in external editor")) },
 	{ "paste-clipboard", ACT_EDIT_PASTE_CLIPBOARD, DACT(N_("Paste text from the clipboard")) },
 	{ "previous-item", ACT_EDIT_PREVIOUS_ITEM, DACT(N_("Move to the previous item")) },
 	{ "redraw", ACT_EDIT_REDRAW, DACT(N_("Redraw the terminal")) },

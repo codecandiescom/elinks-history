@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-21 23:13+0200\n"
-"PO-Revision-Date: 2004-09-15 10:19+0200\n"
+"POT-Creation-Date: 2004-09-22 09:46+0200\n"
+"PO-Revision-Date: 2004-09-22 09:50+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:345
 msgid "Close"
@@ -57,7 +57,7 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/viewer/text/search.c:949 src/viewer/text/search.c:1010
 #: src/viewer/text/search.c:1398 src/viewer/text/search.c:1511
 #: src/viewer/text/textarea.c:363 src/viewer/text/textarea.c:372
-#: src/viewer/text/view.c:580 src/viewer/text/view.c:1187
+#: src/viewer/text/view.c:585 src/viewer/text/view.c:1192
 msgid "OK"
 msgstr "OK"
 
@@ -171,7 +171,7 @@ msgstr "Nom"
 #: src/sched/download.c:1013 src/sched/download.c:1033
 #: src/sched/download.c:1045 src/scripting/lua/core.c:401
 #: src/scripting/lua/core.c:483 src/scripting/lua/core.c:722
-#: src/viewer/text/search.c:1512 src/viewer/text/view.c:580
+#: src/viewer/text/search.c:1512 src/viewer/text/view.c:585
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -206,8 +206,9 @@ msgstr "Horloge digitale dans la barre de status."
 
 #: src/bfu/leds.c:79 src/bfu/leds.c:85 src/bfu/leds.c:105
 #: src/config/options.inc:1300 src/config/options.inc:1307
-#: src/globhist/globhist.c:65 src/mime/backend/mailcap.c:94
-#: src/mime/backend/mimetypes.c:52 src/ssl/ssl.c:81
+#: src/ecmascript/ecmascript.c:31 src/globhist/globhist.c:65
+#: src/mime/backend/mailcap.c:94 src/mime/backend/mimetypes.c:52
+#: src/ssl/ssl.c:81
 msgid "Enable"
 msgstr "Activation"
 
@@ -267,21 +268,6 @@ msgstr "Indicateurs LED"
 #: src/bfu/menu.c:736
 msgid "Search menu/"
 msgstr "Chercher menu/"
-
-#: src/bfu/msgline.c:168 src/util/formatter.c:87
-#, fuzzy
-msgid "Is the current link bookmarked"
-msgstr "Voir l'image courante"
-
-#: src/bfu/msgline.c:169 src/util/formatter.c:88
-#, fuzzy
-msgid "Is the current location bookmarked"
-msgstr "Sauver le document courant sous la forme formatée"
-
-#: src/bfu/msgline.c:170 src/util/formatter.c:89
-#, fuzzy
-msgid "Is the current link is the history"
-msgstr "Ouvrir le lien courant dans un nouvel onglet"
 
 #: src/bookmarks/backend/xbel.c:98
 msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()"
@@ -5378,6 +5364,19 @@ msgstr ""
 "configuration propre à ELinks.\n"
 "Laisser à \"\" pour utiliser le style propre au document."
 
+#. name:
+#: src/ecmascript/ecmascript.c:27 src/ecmascript/ecmascript.c:67
+msgid "ECMAScript"
+msgstr "ECMAScript"
+
+#: src/ecmascript/ecmascript.c:29
+msgid "ECMAScript options."
+msgstr "Options d'ECMAScript."
+
+#: src/ecmascript/ecmascript.c:33
+msgid "Whether to run those scripts inside of documents."
+msgstr "Exécuter ou non ces scripts présents dans les documents."
+
 #: src/formhist/dialogs.c:71
 msgid "Forms are never saved for this URL."
 msgstr "Les formulaires ne sont jamais sauvés pour cette URL."
@@ -5454,6 +5453,8 @@ msgstr "Bascule sauvegarde"
 msgid "Form history manager"
 msgstr "Gestionnaire d'historique de formulaires"
 
+#. TODO: Remember multiple login for the same form.
+#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:34
 msgid "Show forms history dialog"
 msgstr "Dialogue de mémorisation de formulaires"
@@ -5923,7 +5924,6 @@ msgstr "Système de configuration"
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
-#. name:
 #: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:126
 #: src/mime/backend/mailcap.c:685
 msgid "Mailcap"
@@ -7178,18 +7178,30 @@ msgstr "Vous ne pouvez utiliser un éditeur externe en mode anonyme."
 msgid "You can do this only on the master terminal"
 msgstr "Vous ne pouvez faire ça que dans le terminal maître"
 
-#: src/viewer/text/view.c:579
+#: src/viewer/text/view.c:584
 msgid "Go to link"
 msgstr "Aller au lien"
 
-#: src/viewer/text/view.c:579
+#: src/viewer/text/view.c:584
 msgid "Enter link number"
 msgstr "Entrez un numéro de lien"
 
-#: src/viewer/text/view.c:1184
+#: src/viewer/text/view.c:1189
 msgid "Save error"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/viewer/text/view.c:1185
+#: src/viewer/text/view.c:1190
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
+
+#, fuzzy
+#~ msgid "Is the current link bookmarked"
+#~ msgstr "Voir l'image courante"
+
+#, fuzzy
+#~ msgid "Is the current location bookmarked"
+#~ msgstr "Sauver le document courant sous la forme formatée"
+
+#, fuzzy
+#~ msgid "Is the current link is the history"
+#~ msgstr "Ouvrir le lien courant dans un nouvel onglet"

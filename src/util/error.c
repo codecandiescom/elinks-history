@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.80 2004/01/06 21:43:06 pasky Exp $ */
+/* $Id: error.c,v 1.81 2004/01/24 10:09:45 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -143,8 +143,10 @@ force_dump(void)
 	      "Also, noting the EXACT error you got above is crucial for hunting the problem\n"
 	      "down. Thanks, and please get in touch with us.\n",
 	      stderr);
+#ifndef CONFIG_BACKTRACE
 	fputs(full_static_version, stderr);
 	fputc('\n', stderr);
+#endif
 	fflush(stderr);
 	raise(SIGSEGV);
 }

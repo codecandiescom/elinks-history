@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.24 2002/12/14 18:36:50 zas Exp $ */
+/* $Id: tables.c,v 1.25 2002/12/17 23:09:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -714,7 +714,7 @@ scan_done:
 	}
 
 	t->r_heights = mem_calloc(t->y, sizeof(int));
-	if (!t->r_heights) {
+	if (t->y && !t->r_heights) {
 		free_table(t);
 		return NULL;
 	}

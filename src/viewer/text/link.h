@@ -1,7 +1,9 @@
-/* $Id: link.h,v 1.25 2004/06/09 21:05:53 zas Exp $ */
+/* $Id: link.h,v 1.26 2004/06/09 22:12:28 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_LINK_H
 #define EL__VIEWER_TEXT_LINK_H
+
+#include "sched/action.h"
 
 struct document;
 struct document_view;
@@ -40,7 +42,7 @@ struct link *goto_current_link(struct session *, struct document_view *, int);
 void goto_link_number(struct session *ses, unsigned char *num);
 
 /* Bruteforce compilation fixes */
-int enter(struct session *ses, struct document_view *doc_view, int a);
+enum frame_event_status enter(struct session *ses, struct document_view *doc_view, int a);
 int try_document_key(struct session *ses, struct document_view *doc_view, struct term_event *ev);
 int in_viewy(struct document_view *doc_view, struct link *l);
 

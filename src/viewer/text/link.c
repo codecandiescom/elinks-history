@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.188 2004/06/09 21:13:19 jonas Exp $ */
+/* $Id: link.c,v 1.189 2004/06/09 22:12:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -529,16 +529,16 @@ goto_current_link(struct session *ses, struct document_view *doc_view, int do_re
 }
 
 
-int
+enum frame_event_status
 enter(struct session *ses, struct document_view *doc_view, int a)
 {
 	struct link *link;
 
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
-	if_assert_failed return 1;
+	if_assert_failed return FRAME_EVENT_REFRESH;
 
 	link = get_current_link(doc_view);
-	if (!link) return 1;
+	if (!link) return FRAME_EVENT_REFRESH;
 
 	if (!link_is_form(link)
 	    || link->type == LINK_BUTTON
@@ -547,7 +547,7 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 		&& (link_is_textinput(link)))) {
 
 		if (goto_current_link(ses, doc_view, a))
-			return 2;
+			return FRAME_EVENT_OK;
 
 	} else if (link_is_textinput(link)) {
 		/* We won't get here if (has_form_submit() ||
@@ -557,7 +557,7 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 	} else if (link->type == LINK_CHECKBOX) {
 		struct form_state *fs = find_form_state(doc_view, link->form);
 
-		if (link->form->ro) return 1;
+		if (link->form->ro) return FRAME_EVENT_REFRESH;
 
 		if (link->form->type == FC_CHECKBOX) {
 			fs->state = !fs->state;
@@ -580,7 +580,7 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 
 	} else if (link->type == LINK_SELECT) {
 		if (link->form->ro)
-			return 1;
+			return FRAME_EVENT_REFRESH;
 
 		object_lock(doc_view->document);
 		add_empty_window(ses->tab->term,
@@ -592,7 +592,7 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 		INTERNAL("bad link type %d", link->type);
 	}
 
-	return 1;
+	return FRAME_EVENT_REFRESH;
 }
 
 int

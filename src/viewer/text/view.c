@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.448 2004/06/09 21:42:19 zas Exp $ */
+/* $Id: view.c,v 1.449 2004/06/09 22:12:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -558,30 +558,22 @@ rep_ev(struct session *ses, struct document_view *doc_view,
 	while (i--) f(ses, doc_view, a);
 }
 
-
-/* We return |x| at the end of the function. The value of x
- * should be one of the following:
- *
- * value  signifies
- * 0      the event was not handled
- * 1      the event was handled, and the screen should be redrawn
- * 2      the event was handled, and the screen should _not_ be redrawn
- */
-static int
+/* We return |x| at the end of the function. */
+static enum frame_event_status
 frame_ev(struct session *ses, struct document_view *doc_view, struct term_event *ev)
 {
 	struct link *link;
-	int x = 1;
+	enum frame_event_status status = FRAME_EVENT_REFRESH;
 
 	assert(ses && doc_view && doc_view->document && doc_view->vs && ev);
-	if_assert_failed return 1;
+	if_assert_failed return FRAME_EVENT_IGNORED;
 
 	link = get_current_link(doc_view);
 
 	if (link
 	    && link_is_textinput(link)
 	    && field_op(ses, doc_view, link, ev, 0))
-		return 1;
+		return FRAME_EVENT_REFRESH;
 
 	if (ev->ev == EV_KBD) {
 #ifdef CONFIG_MARKS
@@ -607,7 +599,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 
 			ses->kbdprefix.rep = 0;
 			ses->kbdprefix.mark = KP_MARK_NOTHING;
-			return 1;
+			return FRAME_EVENT_REFRESH;
 		}
 #endif
 
@@ -628,13 +620,13 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			int_upper_bound(&ses->kbdprefix.rep_num, 65536);
 
 			ses->kbdprefix.rep = 1;
-			return 2;
+			return FRAME_EVENT_OK;
 		}
 
 		if (get_opt_int("document.browse.accesskey.priority") >= 2
 		    && try_document_key(ses, doc_view, ev)) {
 			/* The document ate the key! */
-			return 1;
+			return FRAME_EVENT_REFRESH;
 		}
 
 		switch (kbd_action(KM_MAIN, ev, NULL)) {
@@ -655,7 +647,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 				if (ses->kbdprefix.rep_num
 				    > doc_view->document->nlinks) {
 					ses->kbdprefix.rep = 0;
-					return 2;
+					return FRAME_EVENT_OK;
 				}
 
 				jump_to_link_number(ses,
@@ -693,14 +685,14 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 
 			case ACT_MAIN_HOME: rep_ev(ses, doc_view, home, 0); break;
 			case ACT_MAIN_END:  rep_ev(ses, doc_view, x_end, 0); break;
-			case ACT_MAIN_ENTER: x = enter(ses, doc_view, 0); break;
-			case ACT_MAIN_ENTER_RELOAD: x = enter(ses, doc_view, 1); break;
-			case ACT_MAIN_JUMP_TO_LINK: x = 2; break;
+			case ACT_MAIN_ENTER: status = enter(ses, doc_view, 0); break;
+			case ACT_MAIN_ENTER_RELOAD: status = enter(ses, doc_view, 1); break;
+			case ACT_MAIN_JUMP_TO_LINK: status = FRAME_EVENT_OK; break;
 			case ACT_MAIN_MARK_SET:
 #ifdef CONFIG_MARKS
 				ses->kbdprefix.mark = KP_MARK_SET;
 #endif
-				x = 2;
+				status = FRAME_EVENT_OK;
 				break;
 			case ACT_MAIN_MARK_GOTO:
 #ifdef CONFIG_MARKS
@@ -709,7 +701,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 				 * still choose a mark directly! --pasky */
 				ses->kbdprefix.mark = KP_MARK_GOTO;
 #endif
-				x = 2;
+				status = FRAME_EVENT_OK;
 				break;
 			default:
 				if (ev->x >= '1' && ev->x <= '9' && !ev->y) {
@@ -733,10 +725,10 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 				} else if (get_opt_int("document.browse.accesskey.priority") == 1
 					   && try_document_key(ses, doc_view, ev)) {
 					/* The document ate the key! */
-					return 1;
+					return FRAME_EVENT_OK;
 
 				} else {
-					x = 0;
+					status = FRAME_EVENT_IGNORED;
 				}
 		}
 #ifdef CONFIG_MOUSE
@@ -758,12 +750,12 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			if (!link_is_textinput(link)
 			    && check_mouse_action(ev, B_UP)) {
 
-				x = 2;
+				status = FRAME_EVENT_OK;
 
 				refresh_view(ses, doc_view, 0);
 
 				if (check_mouse_button(ev, B_LEFT))
-					x = enter(ses, doc_view, 0);
+					status = enter(ses, doc_view, 0);
 				else if (check_mouse_button(ev, B_MIDDLE))
 					open_current_link_in_new_tab(ses, 1);
 				else
@@ -791,15 +783,15 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 				rep_ev(ses, doc_view, hscroll, 8);
 			}
 		} else {
-			x = 0;
+			status = FRAME_EVENT_IGNORED;
 		}
 #endif /* CONFIG_MOUSE */
 	} else {
-		x = 0;
+		status = FRAME_EVENT_IGNORED;
 	}
 
 	ses->kbdprefix.rep = 0;
-	return x;
+	return status;
 }
 
 struct document_view *
@@ -830,23 +822,24 @@ current_frame(struct session *ses)
 	return doc_view;
 }
 
-static int
+static enum frame_event_status
 send_to_frame(struct session *ses, struct term_event *ev)
 {
 	struct document_view *doc_view;
-	int r;
+	enum frame_event_status status;
 
 	assert(ses && ses->tab && ses->tab->term && ev);
-	if_assert_failed return 0;
+	if_assert_failed return FRAME_EVENT_IGNORED;
 	doc_view = current_frame(ses);
 	assertm(doc_view, "document not formatted");
-	if_assert_failed return 0;
+	if_assert_failed return FRAME_EVENT_IGNORED;
 
-	r = frame_ev(ses, doc_view, ev);
-	if (r == 1)
+	status = frame_ev(ses, doc_view, ev);
+
+	if (status == FRAME_EVENT_REFRESH)
 		refresh_view(ses, doc_view, 0);
 
-	return r;
+	return status;
 }
 
 #ifdef CONFIG_MOUSE
@@ -902,7 +895,8 @@ send_event(struct session *ses, struct term_event *ev)
 		int func_ref;
 		enum main_action action;
 
-		if (doc_view && send_to_frame(ses, ev)) return;
+		if (doc_view && send_to_frame(ses, ev) != FRAME_EVENT_IGNORED)
+			return;
 
 		action = kbd_action(KM_MAIN, ev, &func_ref);
 

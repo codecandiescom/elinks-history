@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.174 2004/02/13 08:03:57 witekfl Exp $ */
+/* $Id: main.c,v 1.175 2004/02/15 06:57:09 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,6 +73,7 @@ static int init_b = 0;
 void
 init(void)
 {
+	int no_connect = 0;
 	INIT_LIST_HEAD(url_list);
 
 	init_static_version();
@@ -108,7 +109,10 @@ init(void)
 	/* Parsing command line options */
 	parse_options(ac - 1, av + 1, &url_list);
 
-	if (!isatty(0)) add_to_string_list(&url_list, "file:///dev/stdin", 17);
+	if (!isatty(0)) {
+		add_to_string_list(&url_list, "file:///dev/stdin", 17);
+		no_connect = 1;
+	}
 
 	if (!get_opt_bool_tree(cmdline_options, "no-home")) {
 		init_home();
@@ -116,7 +120,7 @@ init(void)
 
 	/* If there's no -no-connect option, check if there's no other ELinks
 	 * running. If we found any, open socket and act as a slave for it. */
-	while (!get_opt_bool_tree(cmdline_options, "no-connect")
+	while (!no_connect && !get_opt_bool_tree(cmdline_options, "no-connect")
 		&& !get_opt_bool_tree(cmdline_options, "dump")
 		&& !get_opt_bool_tree(cmdline_options, "source")) {
 		void *info;

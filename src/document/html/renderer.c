@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.262 2003/09/10 18:12:53 jonas Exp $ */
+/* $Id: renderer.c,v 1.263 2003/09/10 18:43:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,10 +100,12 @@ realloc_lines(struct document *document, int y)
 	assert(document);
 	if_assert_failed return 0;
 
-	if (!ALIGN_LINES(&document->data, document->y, y + 1))
-		return -1;
+	if (document->y <= y) {
+		if (!ALIGN_LINES(&document->data, document->y, y + 1))
+			return -1;
 
-	document->y = y + 1;
+		document->y = y + 1;
+	}
 
 	return 0;
 }
@@ -135,22 +137,13 @@ realloc_line(struct document *document, int y, int x)
 	return 0;
 }
 
-static inline int
-xpand_lines(struct part *p, int y)
-{
-	assert(p && p->document);
-	if_assert_failed return 0;
-
-	y += p->yp;
-	if (y >= p->document->y) return realloc_lines(p->document, y);
-
-	return 0;
-}
-
 int
 expand_lines(struct part *part, int y)
 {
-	return xpand_lines(part, y);
+	assert(part && part->document);
+	if_assert_failed return -1;
+
+	return realloc_lines(part->document, part->y + y);
 }
 
 static inline int
@@ -216,7 +209,7 @@ set_hchars(struct part *part, int x, int y, int xl,
 	assert(part && part->document);
 	if_assert_failed return;
 
-	if (xpand_lines(part, y)
+	if (realloc_lines(part->document, part->yp + y)
 	    || xpand_line(part, y, x + xl - 1))
 		return;
 
@@ -249,7 +242,7 @@ xset_hchar(struct part *part, int x, int y,
 	assert(part && part->document);
 	if_assert_failed return;
 
-	if (xpand_lines(part, y)
+	if (realloc_lines(part->document, part->yp + y)
 	    || xpand_line(part, y, x))
 		return;
 
@@ -278,7 +271,7 @@ xset_vchars(struct part *part, int x, int y, int yl,
 	assert(part && part->document);
 	if_assert_failed return;
 
-	if (xpand_lines(part, y + yl - 1))
+	if (realloc_lines(part->document, part->yp + y + yl - 1))
 		return;
 
 	assert(part->document->data);
@@ -375,7 +368,7 @@ set_hline(struct part *part, unsigned char *chars, int charslen)
 		return;
 
 	if (part->document) {
-		if (xpand_lines(part, y)
+		if (realloc_lines(part->document, part->y + y)
 		    || xpand_line(part, y, x + charslen - 1))
 			return;
 
@@ -400,7 +393,9 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 
 	assert(part && part->document);
 	if_assert_failed return;
-	xpand_lines(part, yt);
+
+	if (realloc_lines(part->document, part->yp + yt))
+		return;
 
 	for (; nlink < part->document->nlinks; nlink++) {
 		struct link *link = &part->document->links[nlink];
@@ -456,7 +451,7 @@ copy_chars(struct part *part, int x, int y, int xl, struct screen_char *d)
 	assert(xl > 0 && part && part->document && part->document->data);
 	if_assert_failed return;
 
-	if (xpand_lines(part, y)
+	if (realloc_lines(part->document, part->y + y)
 	    || xpand_line(part, y, x + xl - 1))
 		return;
 
@@ -1025,7 +1020,9 @@ line_break(struct part *part)
 
 	if (!part->document || !part->document->data) goto end;
 
-	xpand_lines(part, part->cy + 1);
+	if (realloc_lines(part->document, part->y + part->cy + 1))
+		return;
+
 	if (part->cx > par_format.leftmargin && LEN(part->cy) > part->cx - 1
 	    && POS(part->cx - 1, part->cy).data == ' ') {
 		del_chars(part, part->cx - 1, part->cy);

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.557 2004/07/20 21:55:58 miciah Exp $ */
+/* $Id: view.c,v 1.558 2004/07/20 22:26:01 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -986,7 +986,7 @@ quit:
 			} else {
 				goto x;
 			}
-			ev->y |= ~KBD_ALT;
+			ev->y |= KBD_ALT;
 		}
 	}
 #ifdef CONFIG_MOUSE

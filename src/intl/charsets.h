@@ -1,4 +1,4 @@
-/* $Id: charsets.h,v 1.20 2004/09/15 23:37:45 pasky Exp $ */
+/* $Id: charsets.h,v 1.21 2004/09/15 23:42:57 pasky Exp $ */
 
 #ifndef EL__INTL_CHARSETS_H
 #define EL__INTL_CHARSETS_H
@@ -39,6 +39,12 @@ struct conv_table *get_translation_table(int, int);
 #undef convert_string
 #define convert_string convert_string_elinks
 
+/* This routine converts a string from one charset to another according to the
+ * passed @convert_table, potentially also decoding SGML (HTML) entities along
+ * the way (according to @mode). It either returns dynamically allocated
+ * converted string of length @length, or if the @callback is non-NULL it calls
+ * it each few bytes instead and always returns NULL (@length is undefined).
+ * Note that it's ok not to care and pass NULL as @length. */
 unsigned char *convert_string(struct conv_table *convert_table,
 			      unsigned char *chars, int charslen,
 			      enum convert_string_mode mode, int *length,

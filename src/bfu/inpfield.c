@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.78 2003/10/29 14:56:27 zas Exp $ */
+/* $Id: inpfield.c,v 1.79 2003/10/29 15:01:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -281,7 +281,7 @@ init_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		struct input_history_entry *entry;
 
 		foreach (entry, widget_data->widget->info.field.history->entries) {
-			int datalen = strlen(entry->d);
+			int datalen = strlen(entry->data);
 			struct input_history_entry *new_entry;
 
 			/* One byte is reserved in struct input_history_entry. */
@@ -289,7 +289,7 @@ init_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 					      + datalen);
 			if (!new_entry) continue;
 
-			memcpy(new_entry->d, entry->d, datalen + 1);
+			memcpy(new_entry->data, entry->data, datalen + 1);
 			add_to_list(widget_data->info.field.history, new_entry);
 		}
 	}

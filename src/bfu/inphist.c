@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.49 2003/10/29 14:56:27 zas Exp $ */
+/* $Id: inphist.c,v 1.50 2003/10/29 15:01:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,14 +64,16 @@ do_tab_compl(struct terminal *term, struct list_head *history,
 	struct menu_item *items = NULL;
 
 	foreach (entry, *history) {
-		if (strncmp(widget_data->cdata, entry->d, cdata_len)) continue;
+		if (strncmp(widget_data->cdata, entry->data, cdata_len))
+			continue;
 
 		if (!realloc_menu_items(&items, n)) {
 			if (items) mem_free(items);
 			return;
 		}
 
-		SET_MENU_ITEM(&items[n], entry->d, "", tab_compl, entry->d, FREE_LIST, 0, 1, HKS_SHOW, 0);
+		SET_MENU_ITEM(&items[n], entry->data, "", tab_compl,
+			      entry->data, FREE_LIST, 0, 1, HKS_SHOW, 0);
 		n++;
 	}
 
@@ -107,7 +109,7 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 	struct input_history_entry *entry;
 
 	foreach (entry, *history) {
-		unsigned char *c = entry->d - 1;
+		unsigned char *c = entry->data - 1;
 		unsigned char *m = (match ? match : widget_data->cdata) - 1;
 		int len = 0;
 
@@ -116,8 +118,9 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 			continue;
 		if (len < match_len || (*c && m != widget_data->cdata + len))
 			max = len;
-		match = entry->d;
-		match_len = (m == widget_data->cdata + len && !*m) ? strlen(entry->d) : len;
+		match = entry->data;
+		match_len = (m == widget_data->cdata + len && !*m)
+			    ? strlen(entry->data) : len;
 	}
 
 	if (!match) return;
@@ -138,7 +141,7 @@ check_duplicate_entries(struct input_history *history, unsigned char *data)
 	foreach (entry, history->entries) {
 		struct input_history_entry *duplicate;
 
-		if (strcmp(entry->d, data)) continue;
+		if (strcmp(entry->data, data)) continue;
 
 		/* Found a duplicate -> remove it from history list */
 
@@ -189,7 +192,7 @@ add_to_input_history(struct input_history *history, unsigned char *data,
 	entry = mem_alloc(sizeof(struct input_history_entry) + length);
 	if (!entry) return;
 
-	memcpy(entry->d, data, length + 1);
+	memcpy(entry->data, data, length + 1);
 
 	/* add new entry to history list */
 	add_to_list(history->entries, entry);
@@ -268,7 +271,7 @@ save_input_history(struct input_history *history, unsigned char *filename)
 
 	foreachback (entry, history->entries) {
 		if (i++ > MAX_HISTORY_ITEMS) break;
-		secure_fputs(ssi, entry->d);
+		secure_fputs(ssi, entry->data);
 		secure_fputc(ssi, '\n');
 		if (ssi->err) break;
 	}

@@ -1,4 +1,4 @@
-/* $Id: inphist.h,v 1.12 2003/10/29 14:56:27 zas Exp $ */
+/* $Id: inphist.h,v 1.13 2003/10/29 15:01:32 zas Exp $ */
 
 #ifndef EL__BFU_INPHIST_H
 #define EL__BFU_INPHIST_H
@@ -10,7 +10,7 @@
 
 struct input_history_entry {
 	LIST_HEAD(struct input_history_entry);
-	unsigned char d[1]; /* Must be last. */
+	unsigned char data[1]; /* Must be last. */
 };
 
 struct input_history {

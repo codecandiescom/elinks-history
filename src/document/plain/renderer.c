@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.141 2004/08/19 07:30:34 miciah Exp $ */
+/* $Id: renderer.c,v 1.142 2004/08/19 07:41:26 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -262,6 +262,11 @@ add_document_line(struct plain_renderer *renderer,
 	expanded = last_link_end = 0;
 	for (line_pos = 0; line_pos < width; line_pos++) {
 		unsigned char line_char = line[line_pos];
+		unsigned char next_char, prev_char;
+
+		prev_char = line[line_pos - 1];
+		next_char = (line_pos + 1 < width) ? line[line_pos + 1]
+						   : '\0';
 
 		if (line_char == ASCII_TAB) {
 			int tab_width = 7 - ((line_pos + expanded) & 7);
@@ -276,18 +281,12 @@ add_document_line(struct plain_renderer *renderer,
 			*template = saved_renderer_template;
 
 		} else if (line_char == ASCII_BS) {
-			unsigned char next_char, prev_char;
-
 			if (!(expanded + line_pos)) {
 				/* We've backspaced to the start
 				 * of the line */
 				expanded--; /* Don't count it */
 				continue;
 			}
-
-			prev_char = line[line_pos - 1];
-			next_char = (line_pos + 1 < width) ? line[line_pos + 1]
-							   : '\0';
 
 			pos--;  /* Backspace */
 

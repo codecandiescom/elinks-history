@@ -327,74 +327,68 @@ msgstr "URL"
 
 #. cant_delete_item
 #: src/bookmarks/dialogs.c:125
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but bookmark \"%s\" cannot be deleted."
-msgstr "A \"%s\" mappát nem lehet törölni."
+msgstr "A \"%s\" könyvjelzõt nem lehet törölni."
 
 #. cant_delete_used_item
 #: src/bookmarks/dialogs.c:127
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but bookmark \"%s\" is being used by something else."
-msgstr "A \"%s\" mappát már valami használja."
+msgstr "A \"%s\" könyvjelzõt már valami használja."
 
 #. cant_delete_folder
 #: src/bookmarks/dialogs.c:129
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but bookmark's folder \"%s\" cannot be deleted."
-msgstr "A \"%s\" mappát nem lehet törölni."
+msgstr "A \"%s\" könyvjelzõ mappát nem lehet törölni."
 
 #. cant_delete_used_folder
 #: src/bookmarks/dialogs.c:131
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but bookmark's folder \"%s\" is being used by something else."
-msgstr "A \"%s\" mappát már valami használja."
+msgstr "A \"%s\" könyvjelzõ mappát már valami használja."
 
 #. delete_marked_items_title
 #: src/bookmarks/dialogs.c:133
-#, fuzzy
 msgid "Delete marked bookmarks"
-msgstr "A kijelölt bejegyzések törlése"
+msgstr "A kijelölt könyvjelzõ törlése"
 
 #. delete_marked_items
 #: src/bookmarks/dialogs.c:135
-#, fuzzy
 msgid "Delete marked bookmarks?"
-msgstr "A kijelölt bejegyzések törlése?"
+msgstr "A kijelölt könyvjelzõk törlése?"
 
 #. delete_folder_title
 #: src/bookmarks/dialogs.c:137
-#, fuzzy
 msgid "Delete bookmark's folder"
-msgstr "Mappa törlése"
+msgstr "Könyvjelzõ mappa törlése"
 
 #. delete_folder
 #: src/bookmarks/dialogs.c:139
-#, fuzzy, c-format
+#, c-format
 msgid "Delete folder \"%s\" and all bookmarks in it?"
-msgstr "Töröljem a \"%s\" mappát és a tartalmát?"
+msgstr "Töröljem a \"%s\" mappát és a benne lévõ könyvjelzõket?"
 
 #. delete_item_title
 #: src/bookmarks/dialogs.c:141
-#, fuzzy
 msgid "Delete bookmark"
-msgstr "Könyvjelzõ szerkesztése"
+msgstr "Könyvjelzõ törlése"
 
 #. delete_item
 #: src/bookmarks/dialogs.c:143
 msgid "Delete this bookmark?"
-msgstr ""
+msgstr "Töröljem ezt a könyvjelzõt?"
 
 #. clear_all_items_title
 #: src/bookmarks/dialogs.c:145
-#, fuzzy
 msgid "Clear all bookmarks"
-msgstr "Keresés a könyvjelzõkben"
+msgstr "Az összes könyvjelzõk törlése"
 
 #. clear_all_items_title
 #: src/bookmarks/dialogs.c:147
-#, fuzzy
 msgid "Do you really want to remove all bookmarks?"
-msgstr "Töröljük az összes bejegyzést?"
+msgstr "Töröljük az összes könyvjelzõt?"
 
 #: src/bookmarks/dialogs.c:247 src/bookmarks/dialogs.c:433
 msgid "Add folder"
@@ -525,39 +519,35 @@ msgstr "Fejléc"
 
 #. cant_delete_item
 #: src/cache/dialogs.c:178
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but cache entry \"%s\" cannot be deleted."
-msgstr "A \"%s\" mappát nem lehet törölni."
+msgstr "A \"%s\" gyorsítótár bejegyzést nem lehet törölni."
 
 #. cant_delete_used_item
 #: src/cache/dialogs.c:180
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but cache entry \"%s\" is being used by something else."
-msgstr "A \"%s\" mappát már valami használja."
+msgstr "A \"%s\" gyorsítótár bejegyzést már valami használja."
 
 #. delete_marked_items_title
 #: src/cache/dialogs.c:186
-#, fuzzy
 msgid "Delete marked cache entries"
-msgstr "A kijelölt bejegyzések törlése"
+msgstr "A kijelölt gyorsítótár bejegyzések törlése"
 
 #. delete_marked_items
 #: src/cache/dialogs.c:188
-#, fuzzy
 msgid "Delete marked cache entries?"
-msgstr "A kijelölt bejegyzések törlése?"
+msgstr "A kijelölt gyorsítótár bejegyzések törlése?"
 
 #. delete_item_title
 #: src/cache/dialogs.c:194
-#, fuzzy
 msgid "Delete cache entry"
-msgstr "Szabad gyorsítótár elemek"
+msgstr "Gyorsítótár elem törlése"
 
 #. delete_item
 #: src/cache/dialogs.c:196
-#, fuzzy
 msgid "Delete this cache entry?"
-msgstr "Szabad gyorsítótár elemek"
+msgstr "Töröljem a gyorsítótár elemet?"
 
 #: src/cache/dialogs.c:227
 msgid "Cache manager"
@@ -668,8 +658,7 @@ msgstr "Az ismeretlen dokumentumok alapértelmezett MIME típusa."
 
 #: src/config/cmdline.c:638
 msgid "Ignore user-defined keybindings"
-msgstr ""
-"A felhasználó által definiált billentyûkombinációk figyelmen kívül hagyása"
+msgstr "A felhasználó által definiált billentyûkombinációk figyelmen kívül hagyása"
 
 #: src/config/cmdline.c:640
 msgid ""
@@ -846,8 +835,7 @@ msgstr ""
 
 #: src/config/cmdline.c:725
 msgid "Connect to session ring with given ID"
-msgstr ""
-"Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
+msgstr "Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
 
 #: src/config/cmdline.c:727
 msgid ""
@@ -1266,8 +1254,7 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:456
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
-"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:457
 msgid "Go to the homepage"
@@ -1507,15 +1494,15 @@ msgstr "Szöveg keresése visszafelé"
 
 #: src/config/kbdbind.c:519 src/config/kbdbind.c:520
 msgid "Search link text by typing ahead"
-msgstr ""
+msgstr "Link keresése gépeléssel"
 
 #: src/config/kbdbind.c:521
 msgid "Search document text by typing ahead"
-msgstr ""
+msgstr "Szöveg keresése gépeléssel"
 
 #: src/config/kbdbind.c:522
 msgid "Search document text backwards by typing ahead"
-msgstr ""
+msgstr "Szöveg keresése gépeléssel visszafelé"
 
 #: src/config/kbdbind.c:523
 msgid "Show terminal options dialog"
@@ -1864,8 +1851,7 @@ msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
 #: src/config/options.inc:99
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr ""
-"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:105
@@ -1972,6 +1958,11 @@ msgid ""
 "when it is inadvertently selected. When disabled, key presses are always\n"
 "inserted into a selected text field."
 msgstr ""
+"Ez a beállítás a szövegbeviteli mezõk viselkedését határozza meg.\n"
+"Ha be van kapcsolva, a mezõkbe való szövegbevitel elõtt ki kell azokat választani.\n"
+"Ez megakadályozza hogy a beviteli mezõbe kerüljenek olyan billentyûlenyomások\n"
+"amiket például az oldal lapozására szeretnénk használni.\n"
+"Ha le van tiltva, akkor minden bevitel a szövegmezõbe kerül."
 
 #: src/config/options.inc:160
 msgid "Images"
@@ -2135,8 +2126,7 @@ msgstr "Színek invertálása"
 
 #: src/config/options.inc:231
 msgid "Invert the fore- and background color so the link stands out."
-msgstr ""
-"Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
+msgstr "Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
 
 #: src/config/options.inc:234 src/dialogs/options.c:173
 msgid "Underline"
@@ -2152,8 +2142,7 @@ msgstr "Alkönyvtárak kiemelése"
 
 #: src/config/options.inc:241
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr ""
-"Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
+msgstr "Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
 
 #: src/config/options.inc:243
 msgid "Number links"
@@ -2200,8 +2189,7 @@ msgstr "Linkek kiválasztása"
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
-msgstr ""
-"Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
+msgstr "Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.inc:274
 msgid "Scrolling"
@@ -2261,8 +2249,7 @@ msgstr "Kis/nagybetû érzékenység"
 msgid ""
 "Whether the search should match the document text while maintaining\n"
 "case sensitivity."
-msgstr ""
-"A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
+msgstr "A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
 
 #: src/config/options.inc:304 src/config/options.inc:311
 msgid "Regular expressions"
@@ -2415,8 +2402,7 @@ msgstr ""
 
 #: src/config/options.inc:389
 msgid "Ignore cache-control info from server"
-msgstr ""
-"A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
+msgstr "A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
 
 #: src/config/options.inc:391
 msgid ""
@@ -2856,27 +2842,23 @@ msgstr ""
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:634
-#, fuzzy
 msgid "Information files"
-msgstr "A konfigurációs fájl neve"
+msgstr "Információs fájlok"
 
 #: src/config/options.inc:636
-#, fuzzy
 msgid "Options for information files in ~/.elinks."
-msgstr "Az aktív linkek beállításai."
+msgstr "A ~/.elinks információs fájljainak beállításai."
 
 #: src/config/options.inc:638
-#, fuzzy
 msgid "Save interval"
-msgstr "Automatikus mentés"
+msgstr "Mentés idõköze"
 
 #: src/config/options.inc:640
-#, fuzzy
 msgid ""
 "Interval at which to trigger information files in ~/.elinks\n"
 "to be saved to disk if they has changed (seconds; 0 to disable)"
 msgstr ""
-"Ennyi idõnként menti a lemezre a listát, ha változott\n"
+"Ennyi idõnként menti a lemezre a ~/.elinks információs állományai ha változtak\n"
 "(másodpercekben, 0 - letiltás)"
 
 #. Keep options in alphabetical order.
@@ -3229,8 +3211,7 @@ msgid "Local CGI specific options. (DISABLED)"
 msgstr "Helyi CGI-vel kapcsolatos beállítások. (LETILTVA)"
 
 #: src/config/options.inc:829
-msgid ""
-"Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
+msgid "Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
 msgstr ""
 "A CGI scriptek tárolására használt könyvtárak felsorolása, kettõsponttal "
 "elválasztva. (LETILTVA)"
@@ -4017,7 +3998,6 @@ msgstr ""
 "felugrik a címbeviteli dialógusablak."
 
 #: src/config/options.inc:1300
-#, fuzzy
 msgid "Show a message box when file is saved successfully"
 msgstr "Üzenetablak megjelenítése sikeres állománymentéskor"
 
@@ -4069,15 +4049,15 @@ msgstr ""
 "neve"
 
 #: src/config/options.inc:1323
-#, fuzzy
 msgid ""
 "Name of the bookmarks folder used for auto saving and restoring session.\n"
 "The name has to be unique. Any folders with the same name will be deleted.\n"
 "This only makes sense with bookmark support."
 msgstr ""
-"Annak a könyvjelzõmappának a neve, ahova az automatikus munkafolyamat "
-"mentés\n"
-"és visszaállítás funkció dolgozik. Csak könyvjelzõtámogatásnál van értelme."
+"Annak a könyvjelzõmappának a neve, ahova az automatikus munkafolyamat\n"
+"mentés és visszaállítás funkció dolgozik. A névnek egyedinek kell lennie, minden\n"
+"olyan könyvtár ami ilyen néven létezik, felülíródik.\n"
+"Csak könyvjelzõtámogatásnál van értelme."
 
 #: src/config/options.inc:1327
 msgid "Homepage URI"
@@ -4344,75 +4324,68 @@ msgstr "Biztonságos"
 
 #. cant_delete_item
 #: src/cookies/dialogs.c:163
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but cookie \"%s\" cannot be deleted."
-msgstr "A \"%s\" bejegyzést nem lehet törölni."
+msgstr "A \"%s\" sütit nem lehet törölni."
 
 #. cant_delete_used_item
 #: src/cookies/dialogs.c:165
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but cookie \"%s\" is being used by something else."
-msgstr "A \"%s\" már használatban van."
+msgstr "A \"%s\" süti már használatban van."
 
 #. cant_delete_folder
 #: src/cookies/dialogs.c:167
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but cookie's folder \"%s\" cannot be deleted."
-msgstr "A \"%s\" mappát nem lehet törölni."
+msgstr "A \"%s\" süti mappát nem lehet törölni."
 
 #. cant_delete_used_folder
 #: src/cookies/dialogs.c:169
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but cookie's folder \"%s\" is being used by something else."
-msgstr "A \"%s\" mappát már valami használja."
+msgstr "A \"%s\" süti mappát már valami használja."
 
 #. delete_marked_items_title
 #: src/cookies/dialogs.c:171
-#, fuzzy
 msgid "Delete marked cookies"
-msgstr "A kijelölt bejegyzések törlése"
+msgstr "A kijelölt sütikk törlése"
 
 #. delete_marked_items
 #: src/cookies/dialogs.c:173
-#, fuzzy
 msgid "Delete marked cookies?"
-msgstr "A kijelölt bejegyzések törlése?"
+msgstr "A kijelölt sütik törlése?"
 
 #. delete_folder_title
 #: src/cookies/dialogs.c:175
-#, fuzzy
 msgid "Delete domain's cookies"
-msgstr "A kijelölt bejegyzések törlése"
+msgstr "A domain sütijeinek törlése"
 
 #. delete_folder
 #: src/cookies/dialogs.c:177
 #, c-format
 msgid "Delete all cookies from domain \"%s\"?"
-msgstr ""
+msgstr "Töröljem a \"%s\" domain összes sütijét?"
 
 #. delete_item_title
 #: src/cookies/dialogs.c:179
-#, fuzzy
 msgid "Delete cookie"
-msgstr "Bejegyzés törlése"
+msgstr "Süti törlése"
 
 #. delete_item
 #: src/cookies/dialogs.c:181
-#, fuzzy
 msgid "Delete this cookie?"
-msgstr "Elfogadjuk a cookie-t?"
+msgstr "Elfogadjuk a sütit?"
 
 #. clear_all_items_title
 #: src/cookies/dialogs.c:183
-#, fuzzy
 msgid "Clear all cookies"
-msgstr "Az összes bejegyzés törlése"
+msgstr "Az összes süti törlése"
 
 #. clear_all_items_title
 #: src/cookies/dialogs.c:185
-#, fuzzy
 msgid "Do you really want to remove all cookies?"
-msgstr "Töröljük az összes bejegyzést?"
+msgstr "Töröljem az összes sütit?"
 
 #: src/cookies/dialogs.c:397
 msgid "Cookie manager"
@@ -4490,47 +4463,45 @@ msgstr "Megszakítás, és a fájl törlése"
 
 #. cant_delete_item
 #: src/dialogs/download.c:406
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but download \"%s\" cannot be interrupted."
-msgstr "A \"%s\" mappát nem lehet törölni."
+msgstr "A \"%s\" letöltést nem lehet megszakítani."
 
 #. cant_delete_used_item
 #: src/dialogs/download.c:408
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but download \"%s\" is being used by something else."
-msgstr "A \"%s\" mappát már valami használja."
+msgstr "A \"%s\" letöltést már valami használja."
 
 #. delete_marked_items_title
 #: src/dialogs/download.c:414
 msgid "Interrupt marked downloads"
-msgstr ""
+msgstr "A kijelölt letöltések megszakítása"
 
 #. delete_marked_items
 #: src/dialogs/download.c:416
 msgid "Interrupt marked downloads?"
-msgstr ""
+msgstr "Szakítsuk meg a kijelölt letöltéseket?"
 
 #. delete_item_title
 #: src/dialogs/download.c:422
-#, fuzzy
 msgid "Interrupt download"
-msgstr "Megszakítva"
+msgstr "Letöltés megszakítása"
 
 #. delete_item
 #: src/dialogs/download.c:424
 msgid "Interrupt this download?"
-msgstr ""
+msgstr "Mgszakítsam a letöltést?"
 
 #. clear_all_items_title
 #: src/dialogs/download.c:426
 msgid "Interrupt all downloads"
-msgstr ""
+msgstr "Az összes letöltés megszakítása"
 
 #. clear_all_items_title
 #: src/dialogs/download.c:428
-#, fuzzy
 msgid "Do you really want to interrupt all downloads?"
-msgstr "Biztos, hogy kilépsz az ELinksbõl (és megszakítod a letöltéseket)?"
+msgstr "Biztos, hogy megszakítod az összes letöltést?"
 
 #: src/dialogs/download.c:485
 msgid "Download manager"
@@ -4921,12 +4892,11 @@ msgstr "URI átadása külsõ programnak"
 
 #: src/dialogs/menu.c:867
 msgid "Directories:"
-msgstr ""
+msgstr "Könyvtárak:"
 
 #: src/dialogs/menu.c:880
-#, fuzzy
 msgid "Files:"
-msgstr "~Fájl"
+msgstr "Állományok:"
 
 #: src/dialogs/options.c:150
 msgid "Terminal options"
@@ -5115,51 +5085,45 @@ msgstr "Form-ok elmentve ehhez az URL-hez."
 
 #. cant_delete_item
 #: src/formhist/dialogs.c:124
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but form \"%s\" cannot be deleted."
-msgstr "A \"%s\" mappát nem lehet törölni."
+msgstr "A \"%s\" bejegyzést nem lehet törölni."
 
 #. cant_delete_used_item
 #: src/formhist/dialogs.c:126
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but form \"%s\" is being used by something else."
-msgstr "A \"%s\" mappát már valami használja."
+msgstr "A \"%s\" bejegyzést már valami használja."
 
 #. delete_marked_items_title
 #: src/formhist/dialogs.c:132
-#, fuzzy
 msgid "Delete marked forms"
-msgstr "A kijelölt bejegyzések törlése"
+msgstr "A kijelölt ûrlapok törlése"
 
 #. delete_marked_items
 #: src/formhist/dialogs.c:134
-#, fuzzy
 msgid "Delete marked forms?"
-msgstr "A kijelölt bejegyzések törlése?"
+msgstr "Töröljem a kijelölt úrlapokat?"
 
 #. delete_item_title
 #: src/formhist/dialogs.c:140
-#, fuzzy
 msgid "Delete form"
-msgstr "Mappa törlése"
+msgstr "Ûrlap törlése"
 
 #. delete_item
 #: src/formhist/dialogs.c:142
-#, fuzzy
 msgid "Delete this form?"
-msgstr "Mappa törlése"
+msgstr "Töröljem az ûrlapot?"
 
 #. clear_all_items_title
 #: src/formhist/dialogs.c:144
-#, fuzzy
 msgid "Clear all forms"
-msgstr "Az összes bejegyzés törlése"
+msgstr "Az összes ûrlap törlése"
 
 #. clear_all_items_title
 #: src/formhist/dialogs.c:146
-#, fuzzy
 msgid "Do you really want to remove all forms?"
-msgstr "Töröljük az összes bejegyzést?"
+msgstr "Töröljük az összes ûrlapot?"
 
 #: src/formhist/dialogs.c:177
 msgid "Form not saved"
@@ -5233,13 +5197,13 @@ msgstr "Ûrlap lista"
 
 #. cant_delete_item
 #: src/globhist/dialogs.c:111
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but history entry \"%s\" cannot be deleted."
 msgstr "A \"%s\" bejegyzést nem lehet törölni."
 
 #. cant_delete_used_item
 #: src/globhist/dialogs.c:113
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but history entry \"%s\" is being used by something else."
 msgstr "A \"%s\" már használatban van."
 
@@ -5459,8 +5423,7 @@ msgstr "Ukrán"
 
 #: src/lowlevel/home.c:121
 #, c-format
-msgid ""
-"Commandline options -config-dir set to %s, but could not create directory %s."
+msgid "Commandline options -config-dir set to %s, but could not create directory %s."
 msgstr ""
 "Parancssori opciók -konfig könyvtár %s, de nem lehet létrehozni a %s "
 "könyvtárat."
@@ -6447,12 +6410,12 @@ msgstr "Tényleg be szeretnéd zárni az összes fület az aktuális kivételével?"
 
 #: src/viewer/text/draw.c:61
 msgid "Missing fragment"
-msgstr ""
+msgstr "Hiányzó töredék"
 
 #: src/viewer/text/draw.c:62
 #, c-format
 msgid "The requested fragment \"#%s\" doesn't exist."
-msgstr ""
+msgstr "A kért töredék \"#%s\" nem létezik."
 
 #: src/viewer/text/form.c:831
 msgid "Error while posting form"
@@ -6510,12 +6473,12 @@ msgstr "csak olvasható"
 #: src/viewer/text/form.c:1469
 #, c-format
 msgid "press %s to navigate"
-msgstr ""
+msgstr "nyomj %s billentyût a navigáláshoz"
 
 #: src/viewer/text/form.c:1471
 #, c-format
 msgid "press %s to edit"
-msgstr ""
+msgstr "nyomj %s billentyût a szerkesztéshez"
 
 #: src/viewer/text/form.c:1491
 #, c-format
@@ -6525,7 +6488,7 @@ msgstr "nyomj %s-t a továbbításhoz"
 #: src/viewer/text/form.c:1493
 #, c-format
 msgid "press %s to post to"
-msgstr ""
+msgstr "nyomj %s billentyût a küldéshez"
 
 #: src/viewer/text/link.c:1047
 msgid "Display ~usemap"
@@ -6634,7 +6597,7 @@ msgstr "Nem található link '%s' szöveggel."
 
 #: src/viewer/text/search.c:1284
 msgid "No links in current document"
-msgstr ""
+msgstr "Az aktuális dokumentum nem tartalmaz linkeket"
 
 #: src/viewer/text/search.c:1363
 msgid "Search for text"
@@ -6687,3 +6650,4 @@ msgstr "Mentési hiba"
 #: src/viewer/text/view.c:1128
 msgid "Error writing to file"
 msgstr "Hiba a fájl irása közben"
+

@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.91 2005/02/28 11:14:57 zas Exp $ */
+/* $Id: document.c,v 1.92 2005/03/04 02:05:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -299,8 +299,7 @@ formatted_info(int type)
 
 	switch (type) {
 		case INFO_FILES:
-			foreach (document, format_cache) i++;
-			return i;
+			return list_size(&format_cache);
 		case INFO_LOCKED:
 			foreach (document, format_cache)
 				i += is_object_used(document);

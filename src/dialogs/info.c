@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.124 2005/03/02 23:11:19 zas Exp $ */
+/* $Id: info.c,v 1.125 2005/03/04 02:05:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,19 +162,10 @@ static unsigned char *
 get_resource_info(struct terminal *term, void *data)
 {
 	struct string info;
-	int terminal_count = 0, session_count = 0;
-	struct terminal *terminal;
-	struct session *ses;
 	long val;
 
 	if (!init_string(&info))
 		return NULL;
-
-	foreach (terminal, terminals)
-		terminal_count++;
-
-	foreach (ses, sessions)
-		session_count++;
 
 #define val_add(text) \
 	add_format_to_string(&info, text, val);
@@ -251,11 +242,11 @@ get_resource_info(struct terminal *term, void *data)
 		add_to_string(&info, _("slave terminal", term));
 	add_to_string(&info, ", ");
 
-	val = terminal_count;
+	val = list_size(&terminals);
 	val_add(n_("%d terminal", "%d terminals", val, term));
 	add_to_string(&info, ", ");
 
-	val = session_count;
+	val = list_size(&sessions);
 	val_add(n_("%d session", "%d sessions", val, term));
 	add_char_to_string(&info, '.');
 

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.199 2005/03/03 15:11:44 zas Exp $ */
+/* $Id: cache.c,v 1.200 2005/03/04 02:05:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,8 +69,7 @@ cache_info(int type)
 		case INFO_BYTES:
 			return cache_size;
 		case INFO_FILES:
-			foreach (cached, cache_entries) i++;
-			return i;
+			return list_size(&cache_entries);
 		case INFO_LOCKED:
 			foreach (cached, cache_entries)
 				i += is_object_used(cached);

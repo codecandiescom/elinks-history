@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.44 2004/12/24 02:33:14 jonas Exp $ */
+/* $Id: lists.h,v 1.45 2005/03/04 02:05:57 jonas Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -197,5 +197,16 @@ do { \
 	do_not_optimize_here_gcc_2_7(&l); \
 } while (0)
 
+static inline int
+list_size(struct list_head *list)
+{
+	struct list_head *item;
+	int size = 0;
+
+	foreach (item, *list)
+		size++;
+
+	return size;
+}
 
 #endif /* EL__UTIL_LISTS_H */

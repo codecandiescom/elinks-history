@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.220 2005/03/03 15:43:26 zas Exp $ */
+/* $Id: connection.c,v 1.221 2005/03/04 02:05:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,12 +87,10 @@ connect_info(int type)
 {
 	long info = 0;
 	struct connection *conn;
-	struct keepalive_connection *keep_conn;
 
 	switch (type) {
 		case INFO_FILES:
-			foreach (conn, connection_queue) info++;
-			break;
+			return list_size(&connection_queue);
 		case INFO_CONNECTING:
 			foreach (conn, connection_queue)
 				info += is_in_connecting_state(conn->state);
@@ -102,8 +100,7 @@ connect_info(int type)
 				info += is_in_transfering_state(conn->state);
 			break;
 		case INFO_KEEP:
-			foreach (keep_conn, keepalive_connections) info++;
-			break;
+			return list_size(&keepalive_connections);
 	}
 
 	return info;

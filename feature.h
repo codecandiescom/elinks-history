@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.18 2004/01/01 09:42:54 jonas Exp $ */
+/* $Id: feature.h,v 1.19 2004/01/01 09:52:51 jonas Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -274,7 +274,7 @@
  *
  * Default: enabled */
 
-#define FORMS_MEMORY
+#define CONFIG_FORMHIST
 
 
 /*** Mouse Support

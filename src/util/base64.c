@@ -1,5 +1,5 @@
 /* Base64 encode/decode implementation. */
-/* $Id: base64.c,v 1.15 2003/09/21 14:47:28 jonas Exp $ */
+/* $Id: base64.c,v 1.16 2004/01/01 09:52:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,8 +53,8 @@ base64_encode(register unsigned char *in)
 	return outstr;
 }
 
-/* Base64 decoding is used only with the FORMS_MEMORY feature, so i'll #ifdef it */
-#ifdef FORMS_MEMORY
+/* Base64 decoding is used only with the CONFIG_FORMHIST feature, so i'll #ifdef it */
+#ifdef CONFIG_FORMHIST
 
 /* base64_decode:  @in string to decode
  *		   returns the string decoded (must be freed by the caller) */
@@ -131,4 +131,4 @@ decode_error:
 	return NULL;
 }
 
-#endif /* FORMS_MEMORY */
+#endif /* CONFIG_FORMHIST */

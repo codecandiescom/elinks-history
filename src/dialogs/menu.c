@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.245 2003/12/31 12:53:39 pasky Exp $ */
+/* $Id: menu.c,v 1.246 2004/01/01 09:52:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -549,7 +549,7 @@ static struct menu_item tools_menu[] = {
 #ifdef COOKIES
 	INIT_MENU_ITEM(N_("Coo~kies"), NULL, ACT_COOKIE_MANAGER, menu_cookie_manager, NULL, 0),
 #endif
-#ifdef FORMS_MEMORY
+#ifdef CONFIG_FORMHIST
 	INIT_MENU_ITEM(N_("~Form history"), NULL, ACT_FORMHIST_MANAGER, menu_formhist_manager, NULL, 0),
 #endif
 	NULL_MENU_ITEM

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.321 2003/12/30 16:38:01 jonas Exp $ */
+/* $Id: view.c,v 1.322 2004/01/01 09:52:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1113,7 +1113,7 @@ quak:
 				menu_download_manager(ses->tab->term, NULL, ses);
 				goto x;
 			case ACT_FORMHIST_MANAGER:
-#ifdef FORMS_MEMORY
+#ifdef CONFIG_FORMHIST
 				menu_formhist_manager(ses->tab->term, NULL, ses);
 #endif
 				goto x;

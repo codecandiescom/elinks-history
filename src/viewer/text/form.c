@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.75 2004/01/01 07:16:49 miciah Exp $ */
+/* $Id: form.c,v 1.76 2004/01/01 09:52:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -294,7 +294,7 @@ draw_forms(struct terminal *t, struct document_view *doc_view)
 	}
 	do {
 		if (l1->type == LINK_HYPERTEXT) continue;
-#ifdef FORMS_MEMORY
+#ifdef CONFIG_FORMHIST
 		if (l1->form->type == FC_TEXT
 		    || l1->form->type == FC_PASSWORD) {
 			unsigned char *value;
@@ -309,7 +309,7 @@ draw_forms(struct terminal *t, struct document_view *doc_view)
 				l1->form->default_value = stracpy(value);
 			}
 		}
-#endif /* FORMS_MEMORY */
+#endif /* CONFIG_FORMHIST */
 		draw_form_entry(t, doc_view, l1);
 
 	} while (l1++ < l2);
@@ -734,7 +734,7 @@ get_form_url(struct session *ses, struct document_view *doc_view,
 	else
 		encode_multipart(ses, &submit, &data, bound, cp_from, cp_to);
 
-#ifdef FORMS_MEMORY
+#ifdef CONFIG_FORMHIST
 	/* XXX: We check data.source here because a NULL value can indicate
 	 * not only a memory allocation failure, but also an error reading
 	 * a file that is to be uploaded. TODO: Distinguish between

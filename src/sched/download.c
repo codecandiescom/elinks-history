@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.18 2003/05/02 08:25:30 zas Exp $ */
+/* $Id: download.c,v 1.19 2003/05/02 22:20:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,12 +87,12 @@ get_download_ses(struct download *down)
 
 
 static void
-abort_download(struct download *down, int abrt)
+abort_download(struct download *down, int stop)
 {
 	if (down->win) delete_window(down->win);
 	if (down->ask) delete_window(down->ask);
 	if (down->stat.state >= 0)
-		change_connection(&down->stat, NULL, PRI_CANCEL, abrt);
+		change_connection(&down->stat, NULL, PRI_CANCEL, stop);
 	if (down->url) mem_free(down->url);
 
 	if (down->handle != -1) {
@@ -206,13 +206,13 @@ download_window_function(struct dialog_data *dlg)
 	int w, x, y;
 	int t = 0;
 	unsigned char *m, *u;
-	struct status *sts = &down->stat;
+	struct status *status = &down->stat;
 	int dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	redraw_below_window(dlg->win);
 	down->win = dlg->win;
 
-	if (sts->state == S_TRANS && sts->prg->elapsed / 100) {
+	if (status->state == S_TRANS && status->prg->elapsed / 100) {
 		int l = 0;
 
 		m = init_str();
@@ -221,39 +221,39 @@ download_window_function(struct dialog_data *dlg)
 		t = 1;
 		add_to_str(&m, &l, _("Received", term));
 		add_to_str(&m, &l, " ");
-		add_xnum_to_str(&m, &l, sts->prg->pos);
+		add_xnum_to_str(&m, &l, status->prg->pos);
 
-		if (sts->prg->size >= 0) {
+		if (status->prg->size >= 0) {
 			add_to_str(&m, &l, " ");
 			add_to_str(&m, &l, _("of",term));
 			add_to_str(&m, &l, " ");
-			add_xnum_to_str(&m, &l, sts->prg->size);
+			add_xnum_to_str(&m, &l, status->prg->size);
 			add_to_str(&m, &l, " ");
 		}
-		if (sts->prg->start > 0) {
+		if (status->prg->start > 0) {
 			add_to_str(&m, &l, "(");
-			add_xnum_to_str(&m, &l, sts->prg->pos
-						- sts->prg->start);
+			add_xnum_to_str(&m, &l, status->prg->pos
+						- status->prg->start);
 			add_to_str(&m, &l, " ");
 			add_to_str(&m, &l, _("after resume", term));
 			add_to_str(&m, &l, ")");
 		}
 		add_to_str(&m, &l, "\n");
 
-		if (sts->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
+		if (status->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
 			add_to_str(&m, &l, _("Average speed", term));
 		else add_to_str(&m, &l, _("Speed", term));
 
 		add_to_str(&m, &l, " ");
-		add_xnum_to_str(&m, &l, (longlong) sts->prg->loaded * 10
-					/ (sts->prg->elapsed / 100));
+		add_xnum_to_str(&m, &l, (longlong) status->prg->loaded * 10
+					/ (status->prg->elapsed / 100));
 		add_to_str(&m, &l, "/s");
 
-		if (sts->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
+		if (status->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 			add_to_str(&m, &l, ", ");
 			add_to_str(&m, &l, _("current speed", term));
 			add_to_str(&m, &l, " ");
-			add_xnum_to_str(&m, &l, sts->prg->cur_loaded
+			add_xnum_to_str(&m, &l, status->prg->cur_loaded
 						/ (CURRENT_SPD_SEC *
 						   SPD_DISP_TIME / 1000));
 			add_to_str(&m, &l, "/s");
@@ -262,9 +262,9 @@ download_window_function(struct dialog_data *dlg)
 		add_to_str(&m, &l, "\n");
 		add_to_str(&m, &l, _("Elapsed time", term));
 		add_to_str(&m, &l, " ");
-		add_time_to_str(&m, &l, sts->prg->elapsed);
+		add_time_to_str(&m, &l, status->prg->elapsed);
 
-		if (sts->prg->size >= 0 && sts->prg->loaded > 0) {
+		if (status->prg->size >= 0 && status->prg->loaded > 0) {
 			add_to_str(&m, &l, ", ");
 			add_to_str(&m, &l, _("estimated time", term));
 			add_to_str(&m, &l, " ");
@@ -274,13 +274,13 @@ download_window_function(struct dialog_data *dlg)
 						/ 1000 * stat->prg->loaded
 						- stat->prg->elapsed);
 #endif
-			add_time_to_str(&m, &l, (sts->prg->size - sts->prg->pos)
-						/ ((longlong) sts->prg->loaded * 10
-						   / (sts->prg->elapsed / 100))
+			add_time_to_str(&m, &l, (status->prg->size - status->prg->pos)
+						/ ((longlong) status->prg->loaded * 10
+						   / (status->prg->elapsed / 100))
 						* 1000);
 		}
 
-	} else m = stracpy(_(get_err_msg(sts->state), term));
+	} else m = stracpy(_(get_err_msg(status->state), term));
 
 	if (!m) return;
 
@@ -305,7 +305,7 @@ download_window_function(struct dialog_data *dlg)
 	if (w < min) w = min;
 	if (w > dlg->win->term->x - 2 * DIALOG_LB)
 		w = dlg->win->term->x - 2 * DIALOG_LB;
-	if (t && sts->prg->size >= 0) {
+	if (t && status->prg->size >= 0) {
 		if (w < DOWN_DLG_MIN) w = DOWN_DLG_MIN;
 	} else {
 		if (w > max) w = max;
@@ -317,7 +317,7 @@ download_window_function(struct dialog_data *dlg)
 			dialog_text_color, AL_LEFT);
 
 	y++;
-	if (t && sts->prg->size >= 0) y += 2;
+	if (t && status->prg->size >= 0) y += 2;
 	dlg_format_text(NULL, term, m, 0, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 
@@ -336,7 +336,7 @@ download_window_function(struct dialog_data *dlg)
 	dlg_format_text(term, term, u, x, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 
-	if (t && sts->prg->size >= 0) {
+	if (t && status->prg->size >= 0) {
 		unsigned char q[64];
 		int p = w - 6;
 
@@ -344,12 +344,12 @@ download_window_function(struct dialog_data *dlg)
 		set_only_char(term, x, y, '[');
 		set_only_char(term, x + w - 5, y, ']');
 		fill_area(term, x + 1, y,
-			  (int) ((longlong) p * (longlong) sts->prg->pos
-				 / (longlong) sts->prg->size),
+			  (int) ((longlong) p * (longlong) status->prg->pos
+				 / (longlong) status->prg->size),
 			  1, get_bfu_color(term, "dialog.meter"));
 		sprintf(q, "%3d%%",
-			  (int) ((longlong) 100 * (longlong) sts->prg->pos
-				 / (longlong) sts->prg->size));
+			  (int) ((longlong) 100 * (longlong) status->prg->pos
+				 / (longlong) status->prg->size));
 		print_text(term, x + w - 4, y, strlen(q), q, dialog_text_color);
 		y++;
 	}
@@ -413,15 +413,15 @@ found:
 
 
 static void
-download_data(struct status *sts, struct download *down)
+download_data(struct status *status, struct download *down)
 {
 	struct cache_entry *ce;
 	struct fragment *frag;
 
-	if (sts->state >= S_WAIT && sts->state < S_TRANS)
+	if (status->state >= S_WAIT && status->state < S_TRANS)
 		goto end_store;
 
-	ce = sts->ce;
+	ce = status->ce;
 	if (!ce) goto end_store;
 
 	if (ce->last_modified)
@@ -430,7 +430,7 @@ download_data(struct status *sts, struct download *down)
 	while (ce->redirect && down->redirect_cnt++ < MAX_REDIRECTS) {
 		unsigned char *u;
 
-		if (sts->state >= 0)
+		if (status->state >= 0)
 			change_connection(&down->stat, NULL, PRI_CANCEL, 0);
 
 		u = join_urls(down->url, ce->redirect);
@@ -457,7 +457,7 @@ download_data(struct status *sts, struct download *down)
 		}
 
 		load_url(down->url, ce->url, &down->stat, PRI_DOWNLOAD,
-			 NC_CACHE, sts->prg ? sts->prg->start : 0);
+			 NC_CACHE, status->prg ? status->prg->start : 0);
 
 		return;
 	}
@@ -498,7 +498,7 @@ download_data(struct status *sts, struct download *down)
 write_error:
 				saved_errno = errno; /* Saved in case of ... --Zas */
 
-				detach_connection(sts, down->last_pos);
+				detach_connection(status, down->last_pos);
 				if (!list_empty(sessions)) {
 					unsigned char *msg = stracpy(down->file);
 					unsigned char *emsg = stracpy((unsigned char *) strerror(saved_errno));
@@ -523,12 +523,12 @@ write_error:
 		}
 	}
 
-	detach_connection(sts, down->last_pos);
+	detach_connection(status, down->last_pos);
 
 end_store:
-	if (sts->state < 0) {
-		if (sts->state != S_OK) {
-			unsigned char *t = get_err_msg(sts->state);
+	if (status->state < 0) {
+		if (status->state != S_OK) {
+			unsigned char *t = get_err_msg(status->state);
 
 			if (t) {
 				unsigned char *tt = stracpy(down->url);
@@ -1232,7 +1232,7 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 
 
 int
-ses_chktype(struct session *ses, struct status **sts, struct cache_entry *ce)
+ses_chktype(struct session *ses, struct status **status, struct cache_entry *ce)
 {
 	struct option *assoc;
 #ifdef MAILCAP
@@ -1273,8 +1273,8 @@ ses_chktype(struct session *ses, struct status **sts, struct cache_entry *ce)
 		internal("Type query to %s already in progress.", ses->tq_url);
 
 	ses->tq_url = stracpy(ses->loading_url);
-	*sts = &ses->tq;
-	change_connection(&ses->loading, *sts, PRI_MAIN, 0);
+	*status = &ses->tq;
+	change_connection(&ses->loading, *status, PRI_MAIN, 0);
 
 	ses->tq_ce = ce;
 	ses->tq_ce->refcount++;

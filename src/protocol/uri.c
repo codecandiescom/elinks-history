@@ -1,10 +1,11 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.76 2003/11/29 21:40:24 pasky Exp $ */
+/* $Id: uri.c,v 1.77 2003/12/01 20:42:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <ctype.h>
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -681,7 +682,7 @@ proxy:
 		} else if (*url != '.' && *ch == '.') {
 			/* Contains domain name? */
 			unsigned char *host_end, *domain;
-			int i;
+			unsigned char *ipscan;
 
 			/* Process the hostname */
 			for (domain = ch + 1;
@@ -689,9 +690,10 @@ proxy:
 			     domain = host_end + 1);
 
 			/* It's IP? */
-			for (i = 0; i < host_end - domain; i++)
-				if (domain[i] >= '0' && domain[i] <= '9')
-					goto http;
+			for (ipscan = ch; isdigit(*ipscan) || *ipscan == '.';
+			     ipscan++);
+			if (!*ipscan || *ipscan == ':' || *ipscan == '/')
+				goto http;
 
 			/* FIXME: Following is completely braindead.
 			 * TODO: Remove it. We should rather first try file:// and

@@ -1,3 +1,51 @@
+Mon Jan 31 22:28:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	A few fixes.  
+
+Mon Jan 31 18:35:21 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Mon Jan 31 18:32:36 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Fix a conflicting hotkey.  
+
+Mon Jan 31 13:21:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS:
+
+	'14:16 < rtega> you can use debuild -uc -us too' when building a
+	Debian package.  
+
+Mon Jan 31 13:12:31 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS:
+
+	Propose to run 'fakeroot dpkg-buildpackage -uc -us' when building a
+	Debian package.  
+
+Mon Jan 31 10:28:20 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Jan 30 23:42:34 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/forms.c:
+
+	The HTML specification at 
+	http://www.w3.org/TR/REC-html40/interact/forms.html#h-17.3 states 
+	that the behavior of an empty action attribute should be undefined.  
+	Mozilla handles action="" as action="<current-URI>" which seems 
+	reasonable. (bug 615) 
+
 Sun Jan 30 22:03:59 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* NEWS:

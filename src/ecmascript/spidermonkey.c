@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.132 2004/12/19 13:49:00 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.133 2004/12/19 13:50:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1909,7 +1909,6 @@ static JSBool
 navigator_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	JSObject *parent = JS_GetParent(ctx, obj);
-	struct view_state *vs = JS_GetPrivate(ctx, parent);
 	VALUE_TO_JSVAL_START;
 
 	if (!JSVAL_IS_INT(id))

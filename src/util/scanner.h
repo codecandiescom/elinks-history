@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.6 2004/01/28 01:32:42 jonas Exp $ */
+/* $Id: scanner.h,v 1.7 2004/01/29 13:21:39 jonas Exp $ */
 
 #ifndef EL__UTIL_SCANNER_H
 #define EL__UTIL_SCANNER_H
@@ -163,6 +163,9 @@ get_next_scanner_token(struct scanner *scanner)
 		&& (++(scanner)->current + 1 >= (scanner)->table + (scanner)->tokens)
 		? scanner->info->scan(scanner) : get_scanner_token(scanner));
 }
+
+/* This should just make the code more understandable .. hopefully */
+#define skip_scanner_token(scanner) get_next_scanner_token(scanner)
 
 /* Removes tokens from the scanner until it meets a token of the given type.
  * This token will then also be skipped. */

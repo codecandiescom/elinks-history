@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.83 2004/01/29 13:08:29 jonas Exp $ */
+/* $Id: parser.c,v 1.84 2004/01/29 13:21:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -262,7 +262,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		add_to_list(*selectors, pkg);
 
 		/* Multiple elements hooked up to this ruleset. */
-		if (token->type == ',') skip_css_tokens(scanner, ',');
+		if (token->type == ',') skip_scanner_token(scanner);
 	}
 }
 

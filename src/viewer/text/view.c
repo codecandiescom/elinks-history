@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.245 2003/10/30 13:30:32 zas Exp $ */
+/* $Id: view.c,v 1.246 2003/10/30 13:43:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -886,8 +886,8 @@ do_mouse_event(struct session *ses, struct term_event *ev,
 	if_assert_failed return;
 
 	o = &doc_view->document->options;
-	if (ev->x >= o->xp && ev->x < o->xp + o->width &&
-	    ev->y >= o->yp && ev->y < o->yp + o->height) goto ok;
+	if (ev->x >= o->x && ev->x < o->x + o->width &&
+	    ev->y >= o->y && ev->y < o->y + o->height) goto ok;
 
 r:
 	next_frame(ses, 1);
@@ -895,8 +895,8 @@ r:
 	assert(current_doc_view && current_doc_view->document);
 	if_assert_failed return;
 	o = &current_doc_view->document->options;
-	if (ev->x >= o->xp && ev->x < o->xp + o->width &&
-	    ev->y >= o->yp && ev->y < o->yp + o->height) {
+	if (ev->x >= o->x && ev->x < o->x + o->width &&
+	    ev->y >= o->y && ev->y < o->y + o->height) {
 		draw_formatted(ses);
 		doc_view = current_doc_view;
 		goto ok;

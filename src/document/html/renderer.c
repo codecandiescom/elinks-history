@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.340 2003/10/30 13:30:32 zas Exp $ */
+/* $Id: renderer.c,v 1.341 2003/10/30 13:43:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1572,8 +1572,8 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 sx:
 	document_view->width = document->options.width;
 	document_view->height = document->options.height;
-	document_view->x = document->options.xp;
-	document_view->y = document->options.yp;
+	document_view->x = document->options.x;
+	document_view->y = document->options.y;
 }
 
 

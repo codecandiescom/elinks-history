@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.26 2003/10/30 13:30:32 zas Exp $ */
+/* $Id: options.h,v 1.27 2003/10/30 13:43:11 zas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -22,6 +22,11 @@ struct document_options {
 	color_t default_bg;
 	color_t default_link;
 	color_t default_vlink;
+
+	/* The position of the window. */
+	/* This is not compared at all since it doesn't make any difference
+	 * what position the document will fit into a frameset or so. */
+	int x, y;
 
 	/* The size of the window. */
 	/* This controls how wide tables can be rendered and so on thus also is
@@ -52,11 +57,6 @@ struct document_options {
 
 	/* XXX: Everything past this comment is specialy handled by compare_opt() */
 	unsigned char *framename;
-
-	/* The position of the window. */
-	/* This is not compared at all since it doesn't make any difference
-	 * what position the document will fit into a frameset or so. */
-	int xp, yp;
 
 	/* Active link coloring */
 	/* This is mostly here to make use of this option cache so link

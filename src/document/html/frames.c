@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.29 2003/10/30 13:30:32 zas Exp $ */
+/* $Id: frames.c,v 1.30 2003/10/30 13:43:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,7 +197,7 @@ repeat:
 		}
 	}
 
-	doc_view = find_fd(ses, name, depth, o->xp, o->yp);
+	doc_view = find_fd(ses, name, depth, o->x, o->y);
 	if (doc_view) cached_format_html(vs, doc_view, o);
 
 	return doc_view;
@@ -223,7 +223,7 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 	for (j = 0; j < fsd->height; j++) {
 		register int i;
 
-		o.xp = op->xp;
+		o.x = op->x;
 		for (i = 0; i < fsd->width; i++) {
 			struct frame_desc *frame_desc = &fsd->frame_desc[n];
 
@@ -240,9 +240,9 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 					format_frames(ses, doc_view->document->frame_desc,
 						      &o, depth + 1);
 			}
-			o.xp += o.width + 1;
+			o.x += o.width + 1;
 			n++;
 		}
-		o.yp += o.height + 1;
+		o.y += o.height + 1;
 	}
 }

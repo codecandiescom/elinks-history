@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.47 2003/10/30 13:30:32 zas Exp $ */
+/* $Id: dump.c,v 1.48 2003/10/30 13:43:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,8 +111,8 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 	memset(&formatted, 0, sizeof(struct document_view));
 
 	init_document_options(&o);
-	o.xp = 0;
-	o.yp = 1;
+	o.x = 0;
+	o.y = 1;
 	o.width = get_opt_int("document.dump.width");
 	o.height = 25;
 	o.cp = get_opt_int("document.dump.codepage");

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.60 2003/09/02 13:42:54 jonas Exp $ */
+/* $Id: screen.c,v 1.61 2003/09/02 18:26:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -270,59 +270,35 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 	return add_bytes_to_string(screen, code, length);
 }
 
-#if 0
-/* Performance testing utility */
-#define fill_option_cache(c, t) do { \
-		(c).type	 = 2; \
-		(c).m11_hack	 = 1; \
-		(c).utf_8_io	 = 0; \
-		(c).colors	 = 1; \
-		(c).charset	 = 3; \
-		(c).restrict_852 = 0; \
-		(c).trans	 = 1; \
-		(c).underline	 = 1; \
-		(c).cp437	 = 1; \
-		(c).koi8r	 = 1; \
-	} while (0)
-#else
-/* Fill the cache */
-#define fill_option_cache(c, t) do { \
-		(c).type	 = get_opt_int_tree((t)->spec,	"type"); \
-		(c).m11_hack	 = get_opt_bool_tree((t)->spec,	"m11_hack"); \
-		(c).utf_8_io	 = get_opt_bool_tree((t)->spec,	"utf_8_io"); \
-		(c).colors	 = get_opt_bool_tree((t)->spec,	"colors"); \
-		(c).charset	 = get_opt_int_tree((t)->spec,	"charset"); \
-		(c).restrict_852 = get_opt_bool_tree((t)->spec,	"restrict_852"); \
-		(c).trans	 = get_opt_bool_tree((t)->spec,	"transparency"); \
-		(c).underline	 = get_opt_bool_tree((t)->spec,	"underline"); \
-		\
-		/* Cache these values as they don't change and
-		 * get_cp_index() is pretty CPU-intensive. */ \
-		(c).cp437	 = get_cp_index("cp437"); \
-		(c).koi8r	 = get_cp_index("koi8-r"); \
-	} while (0)
-#endif
-
-static inline unsigned char *
-get_frame_table(struct screen_driver *driver)
+static inline void
+init_screen_driver(struct screen_driver *driver, struct terminal *term)
 {
-	switch (driver->type) {
-		case TERM_LINUX:
-			return frame_restrict;
+	driver->type = get_opt_int_tree(term->spec, "type");
+	driver->m11_hack = get_opt_bool_tree(term->spec, "m11_hack");
+	driver->utf_8_io = get_opt_bool_tree(term->spec, "utf_8_io");
+	driver->colors = get_opt_bool_tree(term->spec, "colors");
+	driver->charset	= get_opt_int_tree(term->spec, "charset");
+	driver->restrict_852 = get_opt_bool_tree(term->spec, "restrict_852");
+	driver->trans = get_opt_bool_tree(term->spec, "transparency");
+	driver->underline = get_opt_bool_tree(term->spec, "underline");
 
-		case TERM_VT100:
-			return (driver->utf_8_io)
-				? frame_vt100_u : frame_vt100;
+	/* Cache these values as they don't change and
+	 * get_cp_index() is pretty CPU-intensive. */
+	driver->cp437 = get_cp_index("cp437");
+	driver->koi8r = get_cp_index("koi8-r");
 
-		case TERM_KOI8:
-			return frame_koi;
-
-		default:
-			return frame_dumb;
+	if (driver->type == TERM_LINUX) {
+		driver->frame = frame_restrict;
+	} else if (driver->type == TERM_VT100) {
+		driver->frame = (driver->utf_8_io) ? frame_vt100_u : frame_vt100;
+	} else if (driver->type == TERM_KOI8) {
+		driver->frame = frame_koi;
+	} else {
+		driver->frame = frame_dumb;
 	}
 }
 
-/* Updating of the terminal screen is done by checking what needs to be updated
+/* Updating of the driverinal screen is done by checking what needs to be updated
  * using the last screen. */
 void
 redraw_screen(struct terminal *term)
@@ -342,8 +318,7 @@ redraw_screen(struct terminal *term)
 	    || (term->master && is_blocked())
 	    || !init_string(&image)) return;
 
- 	fill_option_cache(driver, term);
-	driver.frame = get_frame_table(&driver);
+ 	init_screen_driver(&driver, term);
 
 	current = screen->last_image;
  	pos = screen->image;

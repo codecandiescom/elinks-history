@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.58 2002/12/10 21:43:34 pasky Exp $ */
+/* $Id: download.c,v 1.59 2002/12/10 22:40:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1073,7 +1073,11 @@ ses_chktype(struct session *ses, struct status **stat, struct cache_entry *ce)
 	if (ses->tq_goto_position) mem_free(ses->tq_goto_position);
 
 	ses->tq_goto_position = ses->goto_position ? stracpy(ses->goto_position) : NULL;
+#ifdef MAILCAP
 	type_query(ses, ce, ct, assoc, !!mailcap);
+#else
+	type_query(ses, ce, ct, assoc, 0);
+#endif
 	mem_free(ct);
 #ifdef MAILCAP
 	if (mailcap) delete_option(mailcap);

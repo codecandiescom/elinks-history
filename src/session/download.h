@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.4 2003/04/24 08:23:40 zas Exp $ */
+/* $Id: download.h,v 1.5 2003/04/29 08:44:45 zas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -41,11 +41,14 @@ int are_there_downloads();
 void start_download(struct session *, unsigned char *);
 void resume_download(struct session *, unsigned char *);
 void display_download(struct terminal *, struct download *, struct session *);
-void create_download_file(struct terminal *, unsigned char *, unsigned char **, int, int, void (*)(struct terminal *, int, void *, int), void *);
+void create_download_file(struct terminal *, unsigned char *, unsigned char **,
+			  int, int,
+			  void (*)(struct terminal *, int, void *, int),
+			  void *);
 
 void abort_all_downloads();
 void destroy_downloads(struct session *);
 
-int ses_chktype(struct session *ses, struct status **stat, struct cache_entry *ce);
+int ses_chktype(struct session *, struct status **, struct cache_entry *);
 
 #endif

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.86 2004/12/17 11:05:55 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.87 2004/12/17 11:09:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -259,8 +259,8 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	 * everything's fine. */
 	if (JSVAL_IS_STRING(id)) {
 		JSObject *obj;
-
 		JSVAL_TO_VALUE_START;
+
 		JSVAL_REQUIRE(&id, STRING);
 		obj = try_resolve_frame(doc_view, v.string);
 		/* TODO: Try other lookups (mainly element lookup) until
@@ -349,8 +349,8 @@ window_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	struct view_state *vs = JS_GetPrivate(ctx, obj);
 	struct document_view *doc_view = vs->doc_view;
-
 	JSVAL_TO_VALUE_START;
+
 	if (JSVAL_IS_STRING(id)) {
 		JSVAL_REQUIRE(&id, STRING);
 		if (!strcmp(v.string, "location")) {
@@ -584,7 +584,6 @@ static JSBool
 form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	struct form_control *fc = JS_GetPrivate(ctx, obj);
-
 	JSVAL_TO_VALUE_START;
 
 	assert(fc);
@@ -844,8 +843,8 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 	if (JSVAL_IS_STRING(id)) {
 		struct form_control *fc;
-
 		JSVAL_TO_VALUE_START;
+
 		JSVAL_REQUIRE(&id, STRING);
 #ifdef CONFIG_COOKIES
 		if (!strcmp(v.string, "cookie")) {
@@ -922,8 +921,8 @@ document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct view_state *vs = JS_GetPrivate(ctx, parent);
 	struct document_view *doc_view = vs->doc_view;
 	struct document *document = doc_view->document;
-
 	JSVAL_TO_VALUE_START;
+
 	if (JSVAL_IS_STRING(id)) {
 		JSVAL_REQUIRE(&id, STRING);
 #ifdef CONFIG_COOKIES
@@ -1036,8 +1035,8 @@ location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	JSObject *parent = JS_GetParent(ctx, obj);
 	struct view_state *vs = JS_GetPrivate(ctx, parent);
 	struct document_view *doc_view = vs->doc_view;
-
 	JSVAL_TO_VALUE_START;
+
 	if (!JSVAL_IS_INT(id))
 		goto bye;
 
@@ -1186,8 +1185,8 @@ unibar_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct document_view *doc_view = vs->doc_view;
 	struct session_status *status = &doc_view->session->status;
 	unsigned char *bar = JS_GetPrivate(ctx, obj);
-
 	JSVAL_TO_VALUE_START;
+
 	if (!JSVAL_IS_INT(id))
 		goto bye;
 

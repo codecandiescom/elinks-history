@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.13 2003/01/20 14:56:32 pasky Exp $ */
+/* $Id: string.h,v 1.14 2003/01/20 15:08:52 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -25,14 +25,14 @@ char *strerror(int);
 #endif
 
 #ifndef HAVE_STRSTR
-char *strstr(char *, char *);
+char *strstr(const char *, const char *);
 #endif
 
 #ifndef HAVE_MEMMOVE
 #ifdef HAVE_BCOPY
 # define memmove(dst, src, n) bcopy(src, dst, n)
 #else
-char *memmove(char *, char *, int);
+char *memmove(char *, const char *, size_t);
 #endif
 #endif
 
@@ -71,16 +71,16 @@ void add_chr_to_str(unsigned char **, int *, unsigned char);
 int xstrcmp(unsigned char *, unsigned char *);
 
 /* #ifndef HAVE_STRCASECMP */
-int strcasecmp(unsigned char *, unsigned char *);
+int strcasecmp(const unsigned char *, const unsigned char *);
 /* #endif */
 /* #ifndef HAVE_STRNCASECMP */
-int strncasecmp(unsigned char *, unsigned char *, int);
+int strncasecmp(const unsigned char *, const unsigned char *, size_t);
 /* #endif */
 /* #ifndef HAVE_STRCASESTR */
-unsigned char *strcasestr(unsigned char *, unsigned char *);
+unsigned char *strcasestr(const unsigned char *, const unsigned char *);
 /* #endif */
 /* #ifndef HAVE_STRDUP */
-unsigned char *strdup(unsigned char *);
+unsigned char *strdup(const unsigned char *);
 /* #endif */
 
 unsigned char *safe_strncpy(unsigned char *, const unsigned char *, size_t);

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.22 2003/01/20 14:56:32 pasky Exp $ */
+/* $Id: string.c,v 1.23 2003/01/20 15:08:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -311,7 +311,7 @@ xstrcmp(unsigned char *s1, unsigned char *s2)
 
 #ifndef HAVE_STRCASECMP
 int
-strcasecmp(unsigned char *c1, unsigned char *c2)
+strcasecmp(const unsigned char *c1, const unsigned char *c2)
 {
 	for (; *c1 && *c2; c1++, c2++)
 		if (upcase(*c1) != upcase(*c2))
@@ -323,7 +323,7 @@ strcasecmp(unsigned char *c1, unsigned char *c2)
 
 #ifndef HAVE_STRNCASECMP
 int
-strncasecmp(unsigned char *c1, unsigned char *c2, int len)
+strncasecmp(const unsigned char *c1, const unsigned char *c2, size_t len)
 {
 	int i;
 
@@ -338,7 +338,7 @@ strncasecmp(unsigned char *c1, unsigned char *c2, int len)
 #ifndef HAVE_STRCASESTR
 /* Stub for strcasestr(), GNU extension */
 unsigned char *
-strcasestr(unsigned char *haystack, unsigned char *needle)
+strcasestr(const unsigned char *haystack, const unsigned char *needle)
 {
 	size_t haystack_length = strlen(haystack);
 	size_t needle_length = strlen(needle);
@@ -376,7 +376,7 @@ safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 
 #ifndef HAVE_STRDUP
 unsigned char *
-strdup(unsigned char *str)
+strdup(const unsigned char *str)
 {
 	int str_len = strlen(str);
 	unsigned char *new = malloc(str_len + 1);
@@ -406,7 +406,7 @@ strerror(int errno)
 #ifndef HAVE_STRSTR
 /* From http://www.unixpapa.com/incnote/string.html */
 char *
-strstr(char *s, char *p)
+strstr(const char *s, const char *p)
 {
 	char *sp, *pp;
 
@@ -435,7 +435,7 @@ strstr(char *s, char *p)
  * From http://www.unixpapa.com/incnote/string.html */
 /* XXX: Perhaps not the best place for it. --Zas */
 inline char *
-memmove(char *dst, char *src, int n)
+memmove(char *dst, const char *src, size_t n)
 {
 	if (src > dst)
 		for ( ; n > 0; n--)

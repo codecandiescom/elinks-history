@@ -1,5 +1,5 @@
 /* CSS micro-engine */
-/* $Id: css.c,v 1.3 2004/01/17 02:24:10 jonas Exp $ */
+/* $Id: css.c,v 1.4 2004/01/17 07:23:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,6 +43,7 @@ struct css_property {
 		CSS_DP_NONE,
 		CSS_DP_BACKGROUND_COLOR,
 		CSS_DP_COLOR,
+		CSS_DP_FONT_WEIGHT,
 		CSS_DP_LAST,
 	} property;
 
@@ -52,11 +53,13 @@ struct css_property {
 	enum css_decl_valtype {
 		CSS_DV_NONE,
 		CSS_DV_COLOR,
+		CSS_DV_FONT_ATTRIBUTE,
 		CSS_DV_LAST,
 	} value_type;
 	union css_decl_value {
 		void *dummy;
 		color_t color;
+		enum format_attr font_attribute;
 		/* TODO:
 		 * Generic numbers
 		 * Percentages
@@ -72,6 +75,7 @@ static enum css_decl_valtype prop2valtype[CSS_DP_LAST] = {
 	/* CSS_DP_NONE */		CSS_DV_NONE,
 	/* CSS_DP_BACKGROUND_COLOR */	CSS_DV_COLOR,
 	/* CSS_DP_COLOR */		CSS_DV_COLOR,
+	/* CSS_DP_FONT_WEIGHT */	CSS_DV_FONT_ATTRIBUTE,
 };
 
 
@@ -174,6 +178,29 @@ css_parse_value(enum css_decl_valtype valtype, union css_decl_value *value,
 		}
 		string += pos;
 		return 1;
+	} else if (valtype == CSS_DV_FONT_ATTRIBUTE) {
+		unsigned char *nstring;
+		int weight;
+
+		skip_whitespace(*string);
+		if (!strlcasecmp(*string, -1, "bold", 4)) {
+			(*string) += 4;
+			value->font_attribute |= AT_BOLD;
+			return 1;
+		}
+
+		/* TODO: Comma separated list of weights?! */
+		weight = strtol(*string, (char **) &nstring, 10);
+		if (*string == nstring) {
+			return 0;
+		}
+
+		*string = nstring;
+
+		/* Weights can run from 100 to 900. If 100 is normal and we
+		 * favor normal size by letting it run to 500, bold is > 500 */
+		if (weight > 500) value->font_attribute |= AT_BOLD;
+		return 1;
 	}
 
 	INTERNAL("Uh-oh. I the %d am not supposed to be here.", valtype);
@@ -217,6 +244,8 @@ css_parse_decl(struct list_head *props, unsigned char *string)
 		property = CSS_DP_COLOR;
 	} else if (!strlcasecmp(string, pos, "background-color", 16)) {
 		property = CSS_DP_BACKGROUND_COLOR;
+	} else if (!strlcasecmp(string, pos, "font-weight", 11)) {
+		property = CSS_DP_FONT_WEIGHT;
 	}
 
 	string += pos + 1;
@@ -283,6 +312,10 @@ css_apply(struct html_element *element)
 			case CSS_DP_COLOR:
 				assert(prop->value_type == CSS_DV_COLOR);
 				element->attr.fg = prop->value.color;
+				break;
+			case CSS_DP_FONT_WEIGHT:
+				assert(prop->value_type == CSS_DV_FONT_ATTRIBUTE);
+				element->attr.attr |= prop->value.font_attribute;
 				break;
 			default:
 				INTERNAL("Unknown property %d!",

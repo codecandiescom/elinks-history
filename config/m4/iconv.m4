@@ -65,5 +65,4 @@ size_t iconv();
   if test "$am_cv_lib_iconv" = yes; then
     LIBICONV="-liconv"
   fi
-  AC_SUBST(LIBICONV)
 ])

@@ -83,8 +83,9 @@ dnl      AC_MSG_RESULT($nls_cv_force_use_gnu_gettext)
       BUILD_INCLUDED_LIBINTL=yes
       USE_INCLUDED_LIBINTL=yes
       CATOBJEXT=.gmo
-      INTLLIBS="ifelse([$3],[],\$(top_builddir)/src/intl/gettext,[$3])/libintl.ifelse([$1], use-libtool, [l], [])a $LIBICONV"
+      INTLLIBS="ifelse([$3],[],\$(top_builddir)/src/intl/gettext,[$3])/libintl.ifelse([$1], use-libtool, [l], [])a"
       LIBS=`echo " $LIBS " | sed -e 's/ -lintl / /' -e 's/^ //' -e 's/ $//'`
+      LIBS="$LIBS $LIBICONV"
 
       dnl This could go away some day; the PATH_PROG_WITH_TEST already does it.
       dnl Test whether we really found GNU msgfmt.

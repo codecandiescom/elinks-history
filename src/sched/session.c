@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.427 2004/06/09 21:13:18 jonas Exp $ */
+/* $Id: session.c,v 1.428 2004/06/10 13:16:21 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -647,21 +647,36 @@ create_session_info(struct string *info, int cp, struct list_head *url_list)
 	return NULL;
 }
 
+static struct initial_session_info *
+init_session_info(int base_session, enum remote_session_flags remote,
+		  unsigned char *uri, int len)
+{
+	struct initial_session_info *info;
+
+	info = mem_calloc(1, sizeof(struct initial_session_info));
+	if (!info) return NULL;
+
+	info->base_session = base_session;
+	info->remote = remote;
+
+	init_list(info->url_list);
+
+	if (uri) add_to_string_list(&info->url_list, uri, len);
+
+	return info;
+}
+
 struct initial_session_info *
 decode_session_info(int len, const int *data)
 {
 	struct initial_session_info *info;
 	unsigned char *str;
-	int magic;
+	int magic, base_session;
 
 	if (len < 2 * sizeof(int)) return NULL;
 
-	info = mem_calloc(1, sizeof(struct initial_session_info));
-	if (!info) return NULL;
-	init_list(info->url_list);
-
-	info->base_session = *(data++);
-	magic		   = *(data++);
+	base_session = *(data++);
+	magic = *(data++);
 
 	switch (magic) {
 	case SESSION_MAGIC(1, 0):
@@ -675,7 +690,8 @@ decode_session_info(int len, const int *data)
 		 */
 		if (len < 3 * sizeof(int)) break;
 
-		info->remote = *(data++);
+		info = init_session_info(base_session, *(data++), NULL, 0);
+		if (!info) return NULL;
 
 		str = (unsigned char *) data;
 		len -= 3 * sizeof(int);
@@ -706,16 +722,13 @@ decode_session_info(int len, const int *data)
 		str = (unsigned char *) data;
 		len -= 2 * sizeof(int);
 
-		if (magic <= 0 || len <= 0 || magic > len)
-			return info;
-
 		/* Extract URI containing @magic bytes */
-		add_to_string_list(&info->url_list, str, magic);
+		if (magic <= 0 || len <= 0 || magic > len)
+			str = NULL;
 
-		return info;
+		return init_session_info(base_session, 0, str, magic);
 	}
 
-	mem_free(info);
 	return NULL;
 }
 

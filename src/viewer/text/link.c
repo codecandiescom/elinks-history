@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.146 2004/01/08 02:02:07 jonas Exp $ */
+/* $Id: link.c,v 1.147 2004/01/08 03:15:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -822,16 +822,14 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	if (link->type == LINK_HYPERTEXT && link->where) {
 		if (strlen(link->where) >= 4
 		    && !strncasecmp(link->where, "MAP@", 4))
-			add_to_menu(&mi, N_("Display ~usemap"), NULL, ACT_NONE,
-				    (menu_func) send_enter, NULL, SUBMENU);
+			add_to_menu(&mi, N_("Display ~usemap"), NULL, ACT_ENTER,
+				    NULL, NULL, SUBMENU);
 		else {
 			int c = can_open_in_new(term);
 
-			add_to_menu(&mi, N_("~Follow link"), NULL, ACT_ENTER,
-				    (menu_func) send_enter, NULL, 0);
+			add_menu_action(&mi, N_("~Follow link"), ACT_ENTER);
 
-			add_to_menu(&mi, N_("Follow link and r~eload"), NULL, ACT_ENTER_RELOAD,
-				    (menu_func) send_enter_reload, NULL, 0);
+			add_menu_action(&mi, N_("Follow link and r~eload"), ACT_ENTER_RELOAD);
 
 			add_separator_to_menu(&mi);
 			if (c)

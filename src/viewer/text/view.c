@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.351 2004/01/08 02:50:21 jonas Exp $ */
+/* $Id: view.c,v 1.352 2004/01/08 03:15:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -989,16 +989,6 @@ void
 send_enter(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct term_event ev = INIT_TERM_EVENT(EV_KBD, KBD_ENTER, 0, 0);
-
-	assert(ses);
-	if_assert_failed return;
-	send_event(ses, &ev);
-}
-
-void
-send_enter_reload(struct terminal *term, void *xxx, struct session *ses)
-{
-	struct term_event ev = INIT_TERM_EVENT(EV_KBD, KBD_ENTER, KBD_CTRL, 0);
 
 	assert(ses);
 	if_assert_failed return;

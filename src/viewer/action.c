@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.28 2004/01/08 02:34:46 jonas Exp $ */
+/* $Id: action.c,v 1.29 2004/01/08 03:15:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,6 +197,14 @@ do_action(struct session *ses, enum keyact action, int verbose)
 
 		case ACT_DOWNLOAD_MANAGER:
 			download_manager(ses);
+			break;
+
+		case ACT_ENTER:
+			enter(ses, doc_view, 0);
+			break;
+
+		case ACT_ENTER_RELOAD:
+			enter(ses, doc_view, 1);
 			break;
 
 		case ACT_FILE_MENU:
@@ -447,8 +455,6 @@ do_action(struct session *ses, enum keyact action, int verbose)
 		case ACT_EDIT:
 		case ACT_END:
 		case ACT_END_OF_BUFFER:
-		case ACT_ENTER:
-		case ACT_ENTER_RELOAD:
 		case ACT_EXPAND:
 		case ACT_HOME:
 		case ACT_KILL_TO_BOL:

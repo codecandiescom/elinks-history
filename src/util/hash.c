@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.28 2005/02/28 10:06:57 zas Exp $ */
+/* $Id: hash.c,v 1.29 2005/03/05 21:14:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,7 @@ struct hash_item *
 add_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen,
 	      void *value)
 {
-	hash_value hashval;
+	hash_value_T hashval;
 	struct hash_item *item = mem_alloc(sizeof(*item));
 
 	if (!item) return NULL;
@@ -93,7 +93,7 @@ get_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen)
 {
 	struct list_head *list;
 	struct hash_item *item;
-	hash_value hashval;
+	hash_value_T hashval;
 
 	hashval = hash->func(key, keylen, HASH_MAGIC) & hash_mask(hash->width);
 	list    = &hash->hash[hashval];
@@ -134,13 +134,13 @@ del_hash_item(struct hash *hash, struct hash_item *item)
 #ifdef X31_HASH
 
 /* Fast string hashing. */
-hash_value
+hash_value_T
 strhash(unsigned char *k, /* the key */
 	unsigned int length, /* the length of the key */
-	hash_value initval /* the previous hash, or an arbitrary value */)
+	hash_value_T initval /* the previous hash, or an arbitrary value */)
 {
 	const unsigned char *p = (const unsigned char *) k;
-	hash_value h = initval;
+	hash_value_T h = initval;
 	unsigned int i = 0;
 
 	assert(k && length > 0);
@@ -251,17 +251,17 @@ strhash(unsigned char *k, /* the key */
  */
 
 #define keycompute(a) ((k[(a)]) \
-			+ ((hash_value) (k[(a)+1])<<8) \
-			+ ((hash_value) (k[(a)+2])<<16) \
-			+ ((hash_value) (k[(a)+3])<<24))
+			+ ((hash_value_T) (k[(a)+1])<<8) \
+			+ ((hash_value_T) (k[(a)+2])<<16) \
+			+ ((hash_value_T) (k[(a)+3])<<24))
 
-hash_value
+hash_value_T
 strhash(unsigned char *k, /* the key */
 	unsigned int length, /* the length of the key */
-	hash_value initval /* the previous hash, or an arbitrary value */)
+	hash_value_T initval /* the previous hash, or an arbitrary value */)
 {
 	int len;
-	hash_value a, b, c;
+	hash_value_T a, b, c;
 
 	/* Set up the internal state */
 	len = length;
@@ -281,17 +281,17 @@ strhash(unsigned char *k, /* the key */
 	/*------------------------------------- handle the last 11 bytes */
 	c += length;
 	switch (len) {	/* all the case statements fall through */
-		case 11: c += ((hash_value) (k[10])<<24);
-		case 10: c += ((hash_value) (k[9])<<16);
-		case 9 : c += ((hash_value) (k[8])<<8);
+		case 11: c += ((hash_value_T) (k[10])<<24);
+		case 10: c += ((hash_value_T) (k[9])<<16);
+		case 9 : c += ((hash_value_T) (k[8])<<8);
 			/* the first byte of c is reserved for the length */
-		case 8 : b += ((hash_value) (k[7])<<24);
-		case 7 : b += ((hash_value) (k[6])<<16);
-		case 6 : b += ((hash_value) (k[5])<<8);
+		case 8 : b += ((hash_value_T) (k[7])<<24);
+		case 7 : b += ((hash_value_T) (k[6])<<16);
+		case 6 : b += ((hash_value_T) (k[5])<<8);
 		case 5 : b += (k[4]);
-		case 4 : a += ((hash_value) (k[3])<<24);
-		case 3 : a += ((hash_value) (k[2])<<16);
-		case 2 : a += ((hash_value) (k[1])<<8);
+		case 4 : a += ((hash_value_T) (k[3])<<24);
+		case 3 : a += ((hash_value_T) (k[2])<<16);
+		case 2 : a += ((hash_value_T) (k[1])<<8);
 		case 1 : a += (k[0]);
 			/* case 0: nothing left to add */
 	}

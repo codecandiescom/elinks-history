@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.116 2004/08/16 12:20:53 jonas Exp $ */
+/* $Id: renderer.c,v 1.117 2004/08/16 12:26:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -294,8 +294,8 @@ add_document_line(struct plain_renderer *renderer,
 				 * It improves performance a bit. --Zas */
 				int is_alpha_char = isalpha(line_char);
 
-				if (is_alpha_char && was_alpha_char) {
-					if (line_pos > last_link_end) {
+				if (is_alpha_char && was_alpha_char
+				    && line_pos > last_link_end) {
 					int pos = int_max(0, line_pos - 1);
 					unsigned char *start = &line[pos];
 					int len = get_uri_length(start,
@@ -307,7 +307,6 @@ add_document_line(struct plain_renderer *renderer,
 								   len, x,
 								   lineno))
 						last_link_end = line_pos + len;
-					}
 
 				} else {
 					was_alpha_char = is_alpha_char;

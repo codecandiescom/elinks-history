@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.37 2003/11/18 22:23:11 pasky Exp $ */
+/* $Id: renderer.c,v 1.38 2003/11/18 23:07:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -218,7 +218,7 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 
 	for (lineno = 0; length > 0; lineno++) {
 		unsigned char *xsource;
-		int width = source + strcspn(source, "\n");
+		int width = strcspn(source, "\n") - source;
 		int added;
 
 		/* We will touch the supplied source, so better replicate it. */

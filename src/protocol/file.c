@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.85 2003/06/24 01:29:18 jonas Exp $ */
+/* $Id: file.c,v 1.86 2003/06/24 01:35:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -295,27 +295,25 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 {
 	unsigned char *lnk = NULL;
 	unsigned char *htmlname = init_str();
-	unsigned char *name = entry->name;
-	int namelen = strlen(name);
-	unsigned char *attrib = entry->attrib;
-	int attriblen = strlen(attrib);
 	unsigned char *fragment = data->fragment;
 	int fragmentlen = data->fragmentlen;
 	int htmlnamelen = 0;
 
 	if (!htmlname) return;
-	add_htmlesc_str(&htmlname, &htmlnamelen, entry->name, namelen);
+	add_htmlesc_str(&htmlname, &htmlnamelen,
+			entry->name, strlen(entry->name));
 
 	/* add_to_str(&fragment, &fragmentlen, "   "); */
-	add_htmlesc_str(&fragment, &fragmentlen, attrib, attriblen);
+	add_htmlesc_str(&fragment, &fragmentlen,
+			entry->attrib, strlen(entry->attrib));
 	add_to_str(&fragment, &fragmentlen, "<a href=\"");
 	add_to_str(&fragment, &fragmentlen, htmlname);
 
-	if (attrib[0] == 'd') {
+	if (entry->attrib[0] == 'd') {
 		add_chr_to_str(&fragment, &fragmentlen, '/');
 
 #ifdef FS_UNIX_SOFTLINKS
-	} else if (attrib[0] == 'l') {
+	} else if (entry->attrib[0] == 'l') {
 		unsigned char *linkname = straconcat(path, htmlname, NULL);
 
 		/* It doesn't make sense to return here so indent! */
@@ -339,7 +337,7 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 
 	add_to_str(&fragment, &fragmentlen, "\">");
 
-	if (attrib[0] == 'd' && *dircolor) {
+	if (entry->attrib[0] == 'd' && *dircolor) {
 		/* The <b> is here for the case when we've
 		 * use_document_colors off. */
 		add_to_str(&fragment, &fragmentlen, "<font color=\"");
@@ -350,7 +348,7 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 	add_to_str(&fragment, &fragmentlen, htmlname);
 	mem_free(htmlname);
 
-	if (attrib[0] == 'd' && *dircolor) {
+	if (entry->attrib[0] == 'd' && *dircolor) {
 		add_to_str(&fragment, &fragmentlen, "</b></font>");
 	}
 

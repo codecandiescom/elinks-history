@@ -336,7 +336,10 @@ Miciah Dashiel Butler Masters <miciah@myrealbox.com>
 	Document-specific colors usage switch possibility
 	Global history
 	Unambiguous autocompletion
-	Random hacking
+	ASCII "markup" support in the plaintext renderer
+	Magnificently elaborate fixes all over the map
+	Truly random hacking
+	The official native English speaker of our team
 
 Mike Swieton <pyromage@pyromage.net>
 	Fixed bug: Form is not posted when jumping to field by number
@@ -509,4 +512,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.168 2004/09/19 17:30:19 pasky Exp $
+$Id: AUTHORS,v 1.169 2004/09/19 17:35:23 pasky Exp $

@@ -13,7 +13,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: elinks-dev@linuxfromscratch.org\n"
 
 #: src/bfu/inpfield.c:43 src/bfu/inpfield.c:52
 msgid "Bad number"
@@ -79,7 +79,7 @@ msgid ""
 "read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
 "%s"
 msgstr ""
-"read_bookmarks_xbel(): Errore analizzando %s alla linea %d colonna %d:\n"
+"read_bookmarks_xbel(): Errore nell'analisi di %s alla linea %d colonna %d:\n"
 "%s"
 
 #: src/bookmarks/backend/xbel.c:381 src/bookmarks/backend/xbel.c:398
@@ -110,13 +110,13 @@ msgstr "Annulla"
 
 #: src/bookmarks/dialogs.c:236 src/scripting/lua/core.c:462
 msgid "Edit bookmark"
-msgstr "Modifica bookmark"
+msgstr "Modifica segnalibro"
 
 #: src/bookmarks/dialogs.c:264 src/bookmarks/dialogs.c:273
 #: src/bookmarks/dialogs.c:407 src/bookmarks/dialogs.c:414
 #: src/bookmarks/dialogs.c:422
 msgid "Delete bookmark"
-msgstr "Cancellazione bookmark"
+msgstr "Elimina segnalibro"
 
 #: src/bookmarks/dialogs.c:265
 #, c-format
@@ -143,7 +143,7 @@ msgstr ""
 
 #: src/bookmarks/dialogs.c:408
 msgid "Delete marked bookmarks?"
-msgstr "Cancellare i bookmark selezionati?"
+msgstr "Cancellare i segnalibri selezionati?"
 
 #: src/bookmarks/dialogs.c:410 src/bookmarks/dialogs.c:418
 #: src/bookmarks/dialogs.c:427 src/dialogs/menu.c:147 src/dialogs/mime.c:162
@@ -217,11 +217,11 @@ msgstr "Chiudi"
 
 #: src/bookmarks/dialogs.c:787 src/bookmarks/dialogs.c:814
 msgid "Add bookmark"
-msgstr "Aggiungi bookmark"
+msgstr "Aggiungi segnalibro"
 
 #: src/bookmarks/dialogs.c:799
 msgid "Search bookmarks"
-msgstr "Ricerca bookmark"
+msgstr "Ricerca segnalibro"
 
 #: src/config/cmdline.c:57
 #, c-format
@@ -442,11 +442,11 @@ msgstr "Abortisci connessione"
 
 #: src/config/kbdbind.c:368
 msgid "Add a new bookmark"
-msgstr "Aggiungi nuovo bookmark"
+msgstr "Aggiungi nuovo segnalibro"
 
 #: src/config/kbdbind.c:369
 msgid "Add a new bookmark using current link"
-msgstr "Aggiungi un nuovo bookmark usando il link corrente"
+msgstr "Aggiungi nuovo segnalibro usando il collegamento corrente"
 
 #: src/config/kbdbind.c:370
 msgid "Attempt to auto-complete the input"
@@ -494,7 +494,7 @@ msgstr "Sposta il cursore il basso"
 
 #: src/config/kbdbind.c:381
 msgid "Download the current link"
-msgstr "Scarica link corrente"
+msgstr "Scarica collegamento corrente"
 
 #: src/config/kbdbind.c:382
 msgid "Download the current image"
@@ -511,11 +511,11 @@ msgstr "Vai alla fine della pagina/linea"
 
 #: src/config/kbdbind.c:385
 msgid "Follow the current link"
-msgstr "Segui link corrente"
+msgstr "Segui collegamento corrente"
 
 #: src/config/kbdbind.c:386
 msgid "Follow the current link, forcing reload of the target"
-msgstr "Segui il link corrente, forzando l'aggiornamento della destinazione"
+msgstr "Segui il collegamento corrente, forzando l'aggiornamento della destinazione"
 
 #: src/config/kbdbind.c:387
 msgid "Open the File menu"
@@ -580,11 +580,11 @@ msgstr "Sposta il cursore a sinistra"
 
 #: src/config/kbdbind.c:402
 msgid "Open the link context menu"
-msgstr "Apri il menu contestuale del link"
+msgstr "Apri il menu contestuale del collegamento"
 
 #: src/config/kbdbind.c:403
 msgid "Jump to link"
-msgstr "Vai al link"
+msgstr "Vai al collegamento"
 
 #: src/config/kbdbind.c:405
 msgid "Open a Lua console"
@@ -605,11 +605,11 @@ msgstr "Passa al frame successivo"
 
 #: src/config/kbdbind.c:412
 msgid "Open a new window"
-msgstr "Apre in una nuova finestra"
+msgstr "Apri nuova finestra"
 
 #: src/config/kbdbind.c:413
 msgid "Open the current link in a new window"
-msgstr "Apri il link corrente in una nuova finestra"
+msgstr "Apri collegamento corrente in una nuova finestra"
 
 #: src/config/kbdbind.c:414
 msgid "Open options manager"
@@ -645,7 +645,7 @@ msgstr "Ricarica la pagina corrente"
 
 #: src/config/kbdbind.c:422
 msgid "Attempt to resume download of the current link"
-msgstr "Prova a riprendere il download del link corrente"
+msgstr "Prova a continuare download del collegamento corrente"
 
 #: src/config/kbdbind.c:423
 msgid "Move the cursor right"
@@ -705,7 +705,7 @@ msgstr "Cambia tra rendering della pagina tra HTML/testo"
 
 #: src/config/kbdbind.c:437
 msgid "Toggle displaying of links numbers"
-msgstr "Abilita/disabilita i link numerati"
+msgstr "Abilita/disabilita i collegamenti numerati"
 
 #: src/config/kbdbind.c:438
 msgid "Toggle usage of document specific colors"
@@ -1135,7 +1135,7 @@ msgstr ""
 
 #: src/config/options.c:1066
 msgid "Automatic links following"
-msgstr "Apertura automatica di link"
+msgstr "Apertura automatica di collgamenti"
 
 #: src/config/options.c:1068
 msgid ""
@@ -1233,7 +1233,7 @@ msgstr ""
 
 #: src/config/options.c:1112
 msgid "Image links tagging"
-msgstr "Configurazione link a immagini"
+msgstr "Configurazione collegamenti a immagini"
 
 #: src/config/options.c:1114
 msgid ""
@@ -1253,15 +1253,15 @@ msgstr "Prefisso del collegamento a immagini"
 
 #: src/config/options.c:1121
 msgid "Prefix string to use to mark image links."
-msgstr "Stringa di prefisso da usare per indicare link a immagini."
+msgstr "Stringa di prefisso da usare per indicare collegamenti a immagini."
 
 #: src/config/options.c:1123
 msgid "Image link suffix"
-msgstr "Suffisso per i link a immagini"
+msgstr "Suffisso per i collegamenti a immagini"
 
 #: src/config/options.c:1125
 msgid "Suffix string to use to mark image links."
-msgstr "Stringa di suffisso da usare per indicare link a immagini."
+msgstr "Stringa di suffisso da usare per indicare collegamenti a immagini."
 
 #: src/config/options.c:1127
 msgid "Display image links"
@@ -1305,7 +1305,7 @@ msgstr "Naviga tra i collegamenti usando tabindex."
 
 #: src/config/options.c:1148
 msgid "Number keys select links"
-msgstr "Tasti numerici selezionano i link"
+msgstr "Tasti numerici selezionano i collegamenti"
 
 #: src/config/options.c:1150
 msgid ""
@@ -1326,7 +1326,7 @@ msgstr ""
 #. * for now as it doesn't work.
 #: src/config/options.c:1158
 msgid "Wrap-around links cycling"
-msgstr "Cicla i link (ultimo->primo)"
+msgstr "Cicla i collegamenti (ultimo->primo)"
 
 #. 0
 #: src/config/options.c:1160
@@ -1709,19 +1709,19 @@ msgstr "Colore di sfondo predefinito."
 
 #: src/config/options.c:1300
 msgid "Link color"
-msgstr "Colore dei link"
+msgstr "Colore dei collegamenti"
 
 #: src/config/options.c:1302
 msgid "Default link color."
-msgstr "Colore predefinito per i link."
+msgstr "Colore predefinito per i collegamenti."
 
 #: src/config/options.c:1304
 msgid "Visited-link color"
-msgstr "Colore link visitato"
+msgstr "Colore collegamento visitato"
 
 #: src/config/options.c:1306
 msgid "Default visited link color."
-msgstr "Colore predefinito link visitato."
+msgstr "Colore predefinito collegamento visitato."
 
 #: src/config/options.c:1308
 msgid "Directory color"
@@ -3559,7 +3559,7 @@ msgstr "Non usare i file in ~/.elinks"
 
 #: src/config/options.c:2879
 msgid "Don't attempt to create and/or use home rc directory (~/.elinks)."
-msgstr "Non provare a creare o usare la directory home rc (~/.elinks)."
+msgstr "Non provare a creare o usare la directory di configurazione (~/.elinks)."
 
 #: src/config/options.c:2881
 msgid "Connect to session ring with given ID"
@@ -3782,7 +3782,7 @@ msgstr "Link"
 
 #: src/dialogs/document.c:199
 msgid "Link title"
-msgstr "Titolo del link"
+msgstr "Titolo del collegamento"
 
 #: src/dialogs/document.c:227 src/dialogs/document.c:274
 #: src/dialogs/document.c:286
@@ -4950,11 +4950,11 @@ msgstr "Visualizza ~usemap"
 
 #: src/viewer/text/link.c:846
 msgid "~Follow link"
-msgstr "Segui link"
+msgstr "Segui collegamento"
 
 #: src/viewer/text/link.c:849
 msgid "Follow link and r~eload"
-msgstr "Segui link ~e ricarica"
+msgstr "Segui collegamento ~e ricarica"
 
 #: src/viewer/text/link.c:853
 msgid "Open in new ~window"
@@ -4962,11 +4962,11 @@ msgstr "Apri in una nuova finestra"
 
 #: src/viewer/text/link.c:859
 msgid "~Download link"
-msgstr "Scarica link"
+msgstr "Scarica collegamento "
 
 #: src/viewer/text/link.c:863
 msgid "~Add link to bookmarks"
-msgstr "~Aggiungi questo collegamento ai bookmark"
+msgstr "~Aggiungi collegamento ai segnalibri"
 
 #: src/viewer/text/link.c:874
 msgid "~Reset form"
@@ -4998,7 +4998,7 @@ msgstr "Scarica imma~gine"
 
 #: src/viewer/text/link.c:907
 msgid "No link selected"
-msgstr "Nessun link selezionato"
+msgstr "Nessun collegamento selezionato"
 
 #: src/viewer/text/link.c:959
 msgid "Image"
@@ -5103,11 +5103,11 @@ msgstr "Questo è possibile solo sul terminale principale"
 
 #: src/viewer/text/view.c:744
 msgid "Go to link"
-msgstr "vai al link"
+msgstr "Vai al collegamento"
 
 #: src/viewer/text/view.c:744
 msgid "Enter link number"
-msgstr "Inserisci il numero del link"
+msgstr "Inserisci il numero del collegamento"
 
 #: src/viewer/text/view.c:1460
 msgid "Save error"

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.443 2004/06/22 21:43:47 zas Exp $ */
+/* $Id: parser.c,v 1.444 2004/06/22 21:47:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,7 +158,6 @@ struct html_context html_context;
 unsigned char *eofff;
 unsigned char *startf;
 
-int position;
 int putsp;
 
 int was_br;
@@ -174,7 +173,7 @@ ln_break(int n, void (*line_break)(void *), void *f)
 		html_context.line_breax++;
 		line_break(f);
 	}
-	position = 0;
+	html_context.position = 0;
 	putsp = -1;
 }
 
@@ -184,7 +183,11 @@ put_chrs(unsigned char *start, int len,
 {
 	if (par_format.align == AL_NONE) putsp = 0;
 	if (!len || html_top.invisible) return;
-	if (putsp == 1) put_chars(f, " ", 1), position++, putsp = -1;
+	if (putsp == 1) {
+		put_chars(f, " ", 1);
+		html_context.position++;
+		putsp = -1;
+	}
 	if (putsp == -1) {
 		if (isspace(start[0])) start++, len--;
 		putsp = 0;
@@ -198,7 +201,7 @@ put_chrs(unsigned char *start, int len,
 	if (par_format.align == AL_NONE) putsp = 0;
 	was_br = 0;
 	put_chars(f, start, len);
-	position += len;
+	html_context.position += len;
 	html_context.line_breax = 0;
 	if (was_li > 0) was_li--;
 }

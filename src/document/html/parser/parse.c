@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.52 2004/06/22 21:43:47 zas Exp $ */
+/* $Id: parse.c,v 1.53 2004/06/22 21:47:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -574,7 +574,7 @@ parse_html(unsigned char *html, unsigned char *eof,
 
 	putsp = -1;
 	html_context.line_breax = table_level ? 2 : 1;
-	position = 0;
+	html_context.position = 0;
 	was_br = 0;
 	was_li = 0;
 	ff = f;
@@ -609,7 +609,7 @@ main_loop:
 				}
 			}
 			html++;
-			if (!(position + (html - base_pos - 1)))
+			if (!(html_context.position + (html - base_pos - 1)))
 				goto skip_w; /* ??? */
 			if (*(html - 1) == ' ') {	/* Do not replace with isspace() ! --Zas */
 				/* BIG performance win; not sure if it doesn't cause any bug */
@@ -636,7 +636,8 @@ put_sp:
 			putsp = 0;
 			if (*html == ASCII_TAB) {
 				put_chrs(base_pos, html - base_pos, put_chars_f, f);
-				put_chrs("        ", 8 - (position % 8), put_chars_f, f);
+				put_chrs("        ", 8 - (html_context.position % 8),
+					 put_chars_f, f);
 				html++;
 				continue;
 
@@ -715,7 +716,7 @@ ng:;
 	if (noupdate) put_chrs(base_pos, html - base_pos, put_chars_f, f);
 	ln_break(1, line_break_f, f);
 	putsp = -1;
-	position = 0;
+	html_context.position = 0;
 	was_br = 0;
 }
 

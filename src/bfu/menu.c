@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.182 2004/01/15 16:11:18 zas Exp $ */
+/* $Id: menu.c,v 1.183 2004/01/15 17:02:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -581,56 +581,39 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 static void
 menu_page_up(struct menu *menu)
 {
-	int i = menu->selected - 2;
-	int found = 0;
-	int step = -1;
+	int current = int_max(0, int_min(menu->selected, menu->ni - 1));
+	int step;
+	int i;
+	int next_sep = 0;
 
-	for (; i >= 0; i--) {
+	for (i = current - 1; i > 0; i--)
 		if (mi_is_horizontal_bar(menu->items[i])) {
-			found = 1;
+			next_sep = i;
 			break;
 		}
-	}
 
-	if (found) {
-		step = i + 1 - menu->selected;
-	} else {
-		step = -DIST;
-	}
+	step = current - next_sep + 1;
+	int_bounds(&step, 0, int_min(current, DIST));
 
-	if (menu->selected + step < 0)
-		step = -menu->selected;
-
-	if (step < -DIST) step = DIST;
-	if (step > 0)
-		step = menu->selected - menu->ni - 1;
-
-	scroll_menu(menu, step);
+	scroll_menu(menu, -step);
 }
 
 static void
 menu_page_down(struct menu *menu)
 {
-	int i = int_max(0, menu->selected);
-	int found = 0;
-	int step = 1;
+	int current = int_max(0, int_min(menu->selected, menu->ni - 1));
+	int step;
+	int i;
+	int next_sep = menu->ni - 1;
 
-	for (; i < menu->ni; i++) {
+	for (i = current + 1; i < menu->ni; i++)
 		if (mi_is_horizontal_bar(menu->items[i])) {
-			found = 1;
+			next_sep = i;
 			break;
 		}
-	}
 
-	if (found) {
-		step = i + 1 - menu->selected;
-	} else {
-		step = DIST;
-	}
-
-	int_upper_bound(&step, menu->ni - menu->selected - 1);
-	int_upper_bound(&step, DIST);
-	int_upper_bound(&step, menu->ni - 1);
+	step = next_sep - current + 1;
+	int_bounds(&step, 0, int_min(menu->ni - 1 - current, DIST));
 
 	scroll_menu(menu, step);
 }

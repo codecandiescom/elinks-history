@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.34 2002/07/11 16:14:57 pasky Exp $ */
+/* $Id: http.c,v 1.35 2002/08/06 10:07:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -368,27 +368,34 @@ void http_send_header(struct connection *c)
 			break;
 
 		case REFERER_SAME_URL:
-			add_to_str(&hdr, &l, "Referer: http://");
-			if ((host_data = get_host_name(host))) {
+			add_to_str(&hdr, &l, "Referer: ");
+
+			add_to_str(&hdr, &l, "http://");
+			host_data = get_host_name(extract_proxy(host));
+			if (host_data) {
 				add_to_str(&hdr, &l, host_data);
 				mem_free(host_data);
 
-				if ((host_data = get_port_str(host))) {
+				host_data = get_port_str(extract_proxy(host));
+				if (host_data) {
 					add_to_str(&hdr, &l, ":");
 					add_to_str(&hdr, &l, host_data);
 					mem_free(host_data);
 				}
 			}
 
-			if (upcase(c->url[0]) != 'P') {
+			if (upcase(c->url[0]) != 'P' || hdr[l - 1] != '/') {
 				add_to_str(&hdr, &l, "/");
 			}
 
-			if (!post) {
-				add_to_str(&hdr, &l, url_data);
-			} else {
-				add_bytes_to_str(&hdr, &l, url_data,
-						 post - url_data - 1);
+			url_data = get_url_data(extract_proxy(c->url));
+			if (url_data) {
+				if (!post) {
+					add_to_str(&hdr, &l, url_data);
+				} else {
+					add_bytes_to_str(&hdr, &l, url_data,
+							 post - url_data - 1);
+				}
 			}
 
 			add_to_str(&hdr, &l, "\r\n");

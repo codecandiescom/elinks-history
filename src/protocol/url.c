@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.27 2002/07/03 22:39:18 pasky Exp $ */
+/* $Id: url.c,v 1.28 2002/08/06 10:07:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -959,6 +959,19 @@ extract_position(unsigned char *url)
 	return r;
 }
 
+unsigned char *
+extract_proxy(unsigned char *url)
+{
+	char *a;
+
+	if (strlen(url) < 8 || casecmp(url, "proxy://", 8))
+		return url;
+
+	a = strchr(url + 8, '/');
+	if (!a) return url;
+
+	return a + 1;
+}
 
 void
 get_filename_from_url(unsigned char *url, unsigned char **s, int *l)

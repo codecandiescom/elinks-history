@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.18 2002/07/09 20:28:05 pasky Exp $ */
+/* $Id: cache.c,v 1.19 2002/08/06 10:07:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 #include "config/options.h"
 #include "document/cache.h"
 #include "lowlevel/sched.h"
+#include "protocol/url.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -48,20 +49,6 @@ cache_info(int type)
 			internal("cache_info: bad request");
 	}
 	return 0;
-}
-
-unsigned char *
-extract_proxy(unsigned char *url)
-{
-	char *a;
-
-	if (strlen(url) < 8 || casecmp(url, "proxy://", 8))
-		return url;
-
-	a = strchr(url + 8, '/');
-	if (!a) return url;
-
-	return a + 1;
 }
 
 /* Return 1 and save cache entry to 'f' if there's matching one, otherwise

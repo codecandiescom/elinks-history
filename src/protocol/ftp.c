@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.86 2003/06/26 20:04:39 jonas Exp $ */
+/* $Id: ftp.c,v 1.87 2003/06/26 21:07:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1273,8 +1273,8 @@ ftp_end_request(struct connection *conn, int state)
 struct protocol_backend ftp_protocol_backend = {
 	/* name: */			"ftp",
 	/* port: */			21,
-	/* func: */			ftp_func,
-	/* nc_func: */			NULL,
+	/* handler */			ftp_func,
+	/* external_handler: */		NULL,
 	/* free_syntax: */		0,
 	/* need_slashes: */		1,
 	/* need_slash_after_host: */	1,

@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.11 2003/06/26 20:04:39 jonas Exp $ */
+/* $Id: finger.c,v 1.12 2003/06/26 21:07:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,8 +119,8 @@ finger_end_request(struct connection *c, int state)
 struct protocol_backend finger_protocol_backend = {
 	/* name: */			"finger",
 	/* port: */			79,
-	/* func: */			finger_func,
-	/* nc_func: */			NULL,
+	/* handler: */			finger_func,
+	/* external_handler: */		NULL,
 	/* free_syntax: */		0,
 	/* need_slashes: */		1,
 	/* need_slash_after_host: */	1,

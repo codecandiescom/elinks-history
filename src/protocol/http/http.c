@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.143 2003/06/26 20:04:40 jonas Exp $ */
+/* $Id: http.c,v 1.144 2003/06/26 21:07:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1402,8 +1402,8 @@ http_get_header(struct connection *conn)
 struct protocol_backend http_protocol_backend = {
 	/* name: */			"http",
 	/* port: */			80,
-	/* func: */			http_func,
-	/* nc_func: */			NULL,
+	/* handler: */			http_func,
+	/* external_handler: */		NULL,
 	/* free_syntax: */		0,
 	/* need_slashes: */		1,
 	/* need_slash_after_host: */	1,
@@ -1412,8 +1412,8 @@ struct protocol_backend http_protocol_backend = {
 struct protocol_backend proxy_protocol_backend = {
 	/* name: */			"proxy",
 	/* port: */			3128,
-	/* func: */			proxy_func,
-	/* nc_func: */			NULL,
+	/* handler: */			proxy_func,
+	/* external_handler: */		NULL,
 	/* free_syntax: */		0,
 	/* need_slashes: */		1,
 	/* need_slash_after_host: */	1,

@@ -1,5 +1,5 @@
 /* Internal "https" protocol implementation */
-/* $Id: https.c,v 1.10 2003/06/26 20:04:40 jonas Exp $ */
+/* $Id: https.c,v 1.11 2003/06/26 21:07:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,8 +26,8 @@ https_func(struct connection *c)
 struct protocol_backend https_protocol_backend = {
 	/* name: */			"https",
 	/* port: */			443,
-	/* func: */			https_func,
-	/* nc_func: */			NULL,
+	/* handler: */			https_func,
+	/* external_handler: */		NULL,
 	/* free_syntax: */		0,
 	/* need_slashes: */		1,
 	/* need_slash_after_host: */	1,

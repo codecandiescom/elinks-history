@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.5 2003/06/26 20:19:50 jonas Exp $ */
+/* $Id: protocol.h,v 1.6 2003/06/26 21:07:04 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -24,8 +24,8 @@ enum uri_scheme {
 struct protocol_backend {
 	unsigned char *name;
 	int port;
-	void (*func)(struct connection *);
-	void (*nc_func)(struct session *, unsigned char *);
+	void (*handler)(struct connection *);
+	void (*external_handler)(struct session *, unsigned char *);
 	int free_syntax;
 	int need_slashes;
 	int need_slash_after_host;
@@ -41,7 +41,7 @@ int get_protocol_need_slashes(enum uri_scheme scheme);
 int get_protocol_need_slash_after_host(enum uri_scheme scheme);
 
 int get_prot_info(unsigned char *prot, int *port,
-		  void (**func)(struct connection *),
-		  void (**nc_func)(struct session *ses, unsigned char *));
+		  void (**handler)(struct connection *),
+		  void (**external_handler)(struct session *ses, unsigned char *));
 
 #endif

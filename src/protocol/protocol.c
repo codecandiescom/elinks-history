@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.7 2003/06/26 20:57:46 pasky Exp $ */
+/* $Id: protocol.c,v 1.8 2003/06/26 21:07:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,8 +63,8 @@ dummyjs_func(struct session *ses, unsigned char *url)
 static struct protocol_backend dummyjs_protocol_backend = {
 	/* name: */			"javascript",
 	/* port: */			0,
-	/* func: */			NULL,
-	/* nc_func: */			dummyjs_func,
+	/* handler: */			NULL,
+	/* external_handler: */		dummyjs_func,
 	/* free_syntax: */		0,
 	/* need_slashes: */		0,
 	/* need_slash_after_host: */	0,
@@ -74,8 +74,8 @@ static struct protocol_backend dummyjs_protocol_backend = {
 static struct protocol_backend lua_protocol_backend = {
 	/* name: */			"user",
 	/* port: */			0,
-	/* func: */			NULL,
-	/* nc_func: */			NULL,
+	/* handler: */			NULL,
+	/* external_handler: */		NULL,
 	/* free_syntax: */		0,
 	/* need_slashes: */		0,
 	/* need_slash_after_host: */	0,
@@ -112,16 +112,20 @@ check_protocol(unsigned char *p, int l)
 
 int
 get_prot_info(unsigned char *prot, int *port,
-	      void (**func)(struct connection *),
-	      void (**nc_func)(struct session *ses, unsigned char *))
+	      void (**handler)(struct connection *),
+	      void (**external_handler)(struct session *ses, unsigned char *))
 {
 	enum uri_scheme scheme = check_protocol(prot, strlen(prot));
 
-	if (scheme == SCHEME_UNKNOWN) return -1;
+	if (scheme == SCHEME_UNKNOWN)
+		return -1;
 
-	if (port) *port = protocol_backends[scheme]->port;
-	if (func) *func = protocol_backends[scheme]->func;
-	if (nc_func) *nc_func = protocol_backends[scheme]->nc_func;
+	if (port)
+		*port = protocol_backends[scheme]->port;
+	if (handler)
+		*handler = protocol_backends[scheme]->handler;
+	if (external_handler)
+		*external_handler = protocol_backends[scheme]->external_handler;
 	return 0;
 }
 

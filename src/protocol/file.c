@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.99 2003/06/26 20:04:39 jonas Exp $ */
+/* $Id: file.c,v 1.100 2003/06/26 21:07:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -698,8 +698,8 @@ file_func(struct connection *connection)
 struct protocol_backend file_protocol_backend = {
 	/* name: */			"file",
 	/* port: */			0,
-	/* func: */			file_func,
-	/* nc_func: */			NULL,
+	/* handler: */			file_func,
+	/* external_handler: */		NULL,
 	/* free_syntax: */		1,
 	/* need_slashes: */		1,
 	/* need_slash_after_host: */	0,

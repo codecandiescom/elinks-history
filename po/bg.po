@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-06-24 22:50+0200\n"
+"POT-Creation-Date: 2003-06-26 09:52+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Dimitar Dimitrov <mitaka_ddd@yahoo.com>\n"
 "Language-Team: Bulgarian <bg-team@bash.info>\n"
@@ -41,10 +41,10 @@ msgstr "В това поле трябва да има число"
 #: src/sched/download.c:1195 src/sched/download.c:1204
 #: src/sched/download.c:1235 src/sched/download.c:1247 src/sched/session.c:335
 #: src/scripting/lua/core.c:440 src/scripting/lua/core.c:584
-#: src/scripting/lua/core.c:808 src/viewer/text/view.c:1688
-#: src/viewer/text/view.c:2032 src/viewer/text/view.c:2465
-#: src/viewer/text/view.c:2514 src/viewer/text/view.c:2756
-#: src/viewer/text/view.c:3434
+#: src/scripting/lua/core.c:808 src/viewer/text/view.c:1693
+#: src/viewer/text/view.c:2037 src/viewer/text/view.c:2470
+#: src/viewer/text/view.c:2519 src/viewer/text/view.c:2761
+#: src/viewer/text/view.c:3439
 msgid "Cancel"
 msgstr "Отказ"
 
@@ -106,7 +106,7 @@ msgstr "Име на папка"
 #: src/sched/session.c:1119 src/sched/session.c:1143
 #: src/scripting/lua/core.c:436 src/scripting/lua/core.c:579
 #: src/scripting/lua/core.c:688 src/scripting/lua/core.c:808
-#: src/viewer/text/view.c:2756
+#: src/viewer/text/view.c:2761
 msgid "OK"
 msgstr "ОК"
 
@@ -128,8 +128,8 @@ msgid ""
 "Title: \"%s\""
 msgstr ""
 "За съжаление тази отметка се използва от нещо в момента\n"
-"Заглавие: \"%s\"\n"
-"URL: \"%s\""
+"\n"
+"Заглавие: \"%s\""
 
 #: src/bookmarks/dialogs.c:279
 #, fuzzy, c-format
@@ -140,6 +140,7 @@ msgid ""
 "URL: \"%s\""
 msgstr ""
 "За съжаление тази отметка се използва от нещо в момента\n"
+"\n"
 "Заглавие: \"%s\"\n"
 "URL: \"%s\""
 
@@ -202,8 +203,8 @@ msgid "Add"
 msgstr "Добави"
 
 #: src/bookmarks/dialogs.c:651 src/dialogs/menu.c:689
-#: src/globhist/dialogs.c:480 src/viewer/text/view.c:2462
-#: src/viewer/text/view.c:2510
+#: src/globhist/dialogs.c:480 src/viewer/text/view.c:2467
+#: src/viewer/text/view.c:2515
 msgid "Search"
 msgstr "Търсене"
 
@@ -298,7 +299,7 @@ msgstr ""
 "%s"
 
 #: src/config/dialogs.c:189 src/protocol/url.c:64 src/sched/session.c:332
-#: src/viewer/text/view.c:2029
+#: src/viewer/text/view.c:2034
 msgid "Error"
 msgstr "Грешка"
 
@@ -2599,7 +2600,7 @@ msgid "Dialog text colors."
 msgstr ""
 
 #: src/config/options.c:1944 src/config/options.c:2312
-#: src/viewer/text/view.c:3661
+#: src/viewer/text/view.c:3666
 msgid "Checkbox"
 msgstr "Контролна кутийка (checkbox)"
 
@@ -2633,7 +2634,7 @@ msgid "Dialog selected button colors."
 msgstr ""
 
 #: src/config/options.c:1992 src/config/options.c:2360
-#: src/viewer/text/view.c:3667
+#: src/viewer/text/view.c:3672
 msgid "Text field"
 msgstr "Текстово поле"
 
@@ -4416,163 +4417,155 @@ msgstr ""
 msgid "URL expected after %s."
 msgstr ""
 
-#: src/viewer/text/view.c:1684
+#: src/viewer/text/view.c:1689
 msgid "Error while posting form"
 msgstr "Грешка при изпращане на формуляра"
 
-#: src/viewer/text/view.c:1685
+#: src/viewer/text/view.c:1690
 #, fuzzy, c-format
 msgid "Could not get file %s: %s"
 msgstr "Файлът не може да бъде получен"
 
-#: src/viewer/text/view.c:2030
+#: src/viewer/text/view.c:2035
 msgid "You can do this only on the master terminal"
 msgstr "Това е позволено само в главния терминал"
 
-#: src/viewer/text/view.c:2463
+#: src/viewer/text/view.c:2468
 msgid "No previous search"
 msgstr "Няма предишно търсене"
 
-#: src/viewer/text/view.c:2511
+#: src/viewer/text/view.c:2516
 #, fuzzy, c-format
 msgid "Search string '%s' not found"
 msgstr "Търсеният символен низ '%s' не е открит"
 
-#: src/viewer/text/view.c:2755
+#: src/viewer/text/view.c:2760
 msgid "Go to link"
 msgstr "Отвори връзка"
 
-#: src/viewer/text/view.c:2755
+#: src/viewer/text/view.c:2760
 msgid "Enter link number"
 msgstr "Въведете номер на връзка"
 
-#: src/viewer/text/view.c:3431
+#: src/viewer/text/view.c:3436
 msgid "Save error"
 msgstr "Грешка при запазване"
 
-#: src/viewer/text/view.c:3432
+#: src/viewer/text/view.c:3437
 msgid "Error writing to file"
 msgstr "Грешка при запис във файл"
 
-#: src/viewer/text/view.c:3476
+#: src/viewer/text/view.c:3481
 msgid "Display ~usemap"
 msgstr "Покажи картата"
 
-#: src/viewer/text/view.c:3481
+#: src/viewer/text/view.c:3486
 msgid "~Follow link"
 msgstr "Проследи връзка"
 
-#: src/viewer/text/view.c:3484
+#: src/viewer/text/view.c:3489
 msgid "Follow link and r~eload"
 msgstr "Проследи връзката и презареди"
 
-#: src/viewer/text/view.c:3488
+#: src/viewer/text/view.c:3493
 msgid "Open in new ~window"
 msgstr "Отвори в нов прозорец"
 
-#: src/viewer/text/view.c:3494
+#: src/viewer/text/view.c:3499
 msgid "~Download link"
 msgstr "Свали (дръпни, изтегли) връзка"
 
-#: src/viewer/text/view.c:3498
+#: src/viewer/text/view.c:3503
 msgid "~Add link to bookmarks"
 msgstr "Добави връзката към отметките"
 
-#: src/viewer/text/view.c:3510 src/viewer/text/view.c:3629
+#: src/viewer/text/view.c:3515 src/viewer/text/view.c:3634
 msgid "~Reset form"
 msgstr "Изчисти формуляр"
 
-#: src/viewer/text/view.c:3515
+#: src/viewer/text/view.c:3520
 msgid "~Submit form"
 msgstr "Потвърди формуляр"
 
-#: src/viewer/text/view.c:3518
+#: src/viewer/text/view.c:3523
 msgid "Submit form and rel~oad"
 msgstr "Потвърди формуляр и презареди"
 
-#: src/viewer/text/view.c:3522
+#: src/viewer/text/view.c:3527
 msgid "Submit form and open in new ~window"
 msgstr "Потвърди формуляра и отвори в нов прозорец"
 
-#: src/viewer/text/view.c:3528
+#: src/viewer/text/view.c:3533
 msgid "Submit form and ~download"
 msgstr "Потвърди формуляра и свали (дръпни, изтегли)"
 
-#: src/viewer/text/view.c:3535
+#: src/viewer/text/view.c:3540
 msgid "V~iew image"
 msgstr "Покажи изображение"
 
-#: src/viewer/text/view.c:3538
+#: src/viewer/text/view.c:3543
 msgid "Download ima~ge"
 msgstr "Свали изображение"
 
-#: src/viewer/text/view.c:3544
+#: src/viewer/text/view.c:3549
 msgid "No link selected"
 msgstr "Не е избрана връзка"
 
-#: src/viewer/text/view.c:3590
+#: src/viewer/text/view.c:3595
 msgid "Image"
 msgstr "Изображение"
 
-#: src/viewer/text/view.c:3608
+#: src/viewer/text/view.c:3613
 msgid "Usemap"
 msgstr "Карта на връзките"
 
-#: src/viewer/text/view.c:3637
+#: src/viewer/text/view.c:3642
 msgid "Submit form to"
 msgstr "Потвърди формуляр към адрес"
 
-#: src/viewer/text/view.c:3639
+#: src/viewer/text/view.c:3644
 msgid "Post form to"
 msgstr "Изпрати формуляр към адрес"
 
-#: src/viewer/text/view.c:3658
+#: src/viewer/text/view.c:3663
 msgid "Radio button"
 msgstr "Радио-бутон"
 
-#: src/viewer/text/view.c:3664
+#: src/viewer/text/view.c:3669
 msgid "Select field"
 msgstr "Поле за избор"
 
-#: src/viewer/text/view.c:3670
+#: src/viewer/text/view.c:3675
 msgid "Text area"
 msgstr "Текстова област"
 
-#: src/viewer/text/view.c:3673
+#: src/viewer/text/view.c:3678
 msgid "File upload"
 msgstr "Качване (upload) на файл"
 
-#: src/viewer/text/view.c:3676
+#: src/viewer/text/view.c:3681
 msgid "Password field"
 msgstr "Поле за парола"
 
-#: src/viewer/text/view.c:3685
+#: src/viewer/text/view.c:3690
 msgid "name"
 msgstr "име"
 
-#: src/viewer/text/view.c:3695
+#: src/viewer/text/view.c:3700
 msgid "value"
 msgstr "стойност"
 
-#: src/viewer/text/view.c:3706
+#: src/viewer/text/view.c:3711
 msgid "hit ENTER to"
 msgstr "натиснете ENTER, за да"
 
-#: src/viewer/text/view.c:3709
+#: src/viewer/text/view.c:3714
 msgid "submit to"
 msgstr "потвърдете към адрес"
 
-#: src/viewer/text/view.c:3711
+#: src/viewer/text/view.c:3716
 msgid "post to"
 msgstr "изпратете към адрес"
-
-#, fuzzy
-#~ msgid ""
-#~ "Sorry, but this bookmark is already being used by something right now.\n"
-#~ "\n"
-#~ "Title: \"%s\"\n"
-#~ "Заглавие: \"%s\""
-#~ msgstr "За съжаление тази отметка се използва от нещо в момента"
 
 #, fuzzy
 #~ msgid "GlobHist"

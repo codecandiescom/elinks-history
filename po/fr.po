@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-06-22 14:13+0200\n"
+"POT-Creation-Date: 2003-06-26 09:52+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -34,13 +34,13 @@ msgstr "Saisir un nombre"
 #: src/dialogs/options.c:364 src/globhist/dialogs.c:240 src/protocol/url.c:67
 #: src/protocol/user.c:109 src/protocol/user.c:137 src/sched/download.c:526
 #: src/sched/download.c:560 src/sched/download.c:721 src/sched/download.c:807
-#: src/sched/download.c:1194 src/sched/download.c:1203
-#: src/sched/download.c:1234 src/sched/download.c:1246 src/sched/session.c:335
+#: src/sched/download.c:1195 src/sched/download.c:1204
+#: src/sched/download.c:1235 src/sched/download.c:1247 src/sched/session.c:335
 #: src/scripting/lua/core.c:440 src/scripting/lua/core.c:584
-#: src/scripting/lua/core.c:808 src/viewer/text/view.c:1688
-#: src/viewer/text/view.c:2032 src/viewer/text/view.c:2465
-#: src/viewer/text/view.c:2514 src/viewer/text/view.c:2756
-#: src/viewer/text/view.c:3434
+#: src/scripting/lua/core.c:808 src/viewer/text/view.c:1693
+#: src/viewer/text/view.c:2037 src/viewer/text/view.c:2470
+#: src/viewer/text/view.c:2519 src/viewer/text/view.c:2761
+#: src/viewer/text/view.c:3439
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -101,7 +101,7 @@ msgstr "Nom du dossier"
 #: src/sched/session.c:1119 src/sched/session.c:1143
 #: src/scripting/lua/core.c:436 src/scripting/lua/core.c:579
 #: src/scripting/lua/core.c:688 src/scripting/lua/core.c:808
-#: src/viewer/text/view.c:2756
+#: src/viewer/text/view.c:2761
 msgid "OK"
 msgstr "OK"
 
@@ -201,8 +201,8 @@ msgid "Add"
 msgstr "Ajouter"
 
 #: src/bookmarks/dialogs.c:651 src/dialogs/menu.c:689
-#: src/globhist/dialogs.c:480 src/viewer/text/view.c:2462
-#: src/viewer/text/view.c:2510
+#: src/globhist/dialogs.c:480 src/viewer/text/view.c:2467
+#: src/viewer/text/view.c:2515
 msgid "Search"
 msgstr "Chercher"
 
@@ -295,7 +295,7 @@ msgstr ""
 "%s"
 
 #: src/config/dialogs.c:189 src/protocol/url.c:64 src/sched/session.c:332
-#: src/viewer/text/view.c:2029
+#: src/viewer/text/view.c:2034
 msgid "Error"
 msgstr "Erreur"
 
@@ -355,7 +355,7 @@ msgid "Options manager"
 msgstr "Gestion des options"
 
 #: src/config/dialogs.c:544 src/config/dialogs.c:798 src/dialogs/options.c:262
-#: src/sched/download.c:1192 src/sched/download.c:1232
+#: src/sched/download.c:1193 src/sched/download.c:1233
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -2729,7 +2729,7 @@ msgid "Dialog text colors."
 msgstr "Couleurs du texte des dialogues."
 
 #: src/config/options.c:1944 src/config/options.c:2312
-#: src/viewer/text/view.c:3661
+#: src/viewer/text/view.c:3666
 msgid "Checkbox"
 msgstr "Case à cocher"
 
@@ -2762,7 +2762,7 @@ msgid "Dialog selected button colors."
 msgstr "Couleurs du bouton sélectionné dans les dialogues."
 
 #: src/config/options.c:1992 src/config/options.c:2360
-#: src/viewer/text/view.c:3667
+#: src/viewer/text/view.c:3672
 msgid "Text field"
 msgstr "Champ texte"
 
@@ -4252,11 +4252,11 @@ msgstr ""
 "Impossible de créer le fichier '%s':\n"
 "%s"
 
-#: src/sched/download.c:1187 src/sched/download.c:1197
+#: src/sched/download.c:1188 src/sched/download.c:1198
 msgid "Unknown type"
 msgstr "Type inconnu"
 
-#: src/sched/download.c:1188
+#: src/sched/download.c:1189
 #, c-format
 msgid ""
 "Content type is %s.\n"
@@ -4265,12 +4265,12 @@ msgstr ""
 "Le type de contenu est %s.\n"
 "Voulez-vous sauver ou voir ce fichier ?"
 
-#: src/sched/download.c:1193 src/sched/download.c:1202
-#: src/sched/download.c:1233 src/sched/download.c:1245
+#: src/sched/download.c:1194 src/sched/download.c:1203
+#: src/sched/download.c:1234 src/sched/download.c:1246
 msgid "Display"
 msgstr "Afficher"
 
-#: src/sched/download.c:1198
+#: src/sched/download.c:1199
 #, c-format
 msgid ""
 "Content type is %s.\n"
@@ -4279,11 +4279,11 @@ msgstr ""
 "Le type de contenu est %s.\n"
 "Voulez-vous visualiser ce fichier ?"
 
-#: src/sched/download.c:1224 src/sched/download.c:1237
+#: src/sched/download.c:1225 src/sched/download.c:1238
 msgid "What to do?"
 msgstr "Que faire ?"
 
-#: src/sched/download.c:1225
+#: src/sched/download.c:1226
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -4292,11 +4292,11 @@ msgstr ""
 "Voulez-vous ouvrir le fichier '%s' (type: %s%s%s)\n"
 "avec '%s', l'enregistrer ou l'afficher ?"
 
-#: src/sched/download.c:1231 src/sched/download.c:1244
+#: src/sched/download.c:1232 src/sched/download.c:1245
 msgid "Open"
 msgstr "Ouvrir"
 
-#: src/sched/download.c:1238
+#: src/sched/download.c:1239
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -4620,153 +4620,153 @@ msgstr "Ne peut écrire sur la sortie standard."
 msgid "URL expected after %s."
 msgstr "URL attendue après %s."
 
-#: src/viewer/text/view.c:1684
+#: src/viewer/text/view.c:1689
 msgid "Error while posting form"
 msgstr "Erreur lors de l'envoi du formulaire"
 
-#: src/viewer/text/view.c:1685
+#: src/viewer/text/view.c:1690
 #, c-format
 msgid "Could not get file %s: %s"
 msgstr "Impossible d'obtenir le fichier %s: %s"
 
-#: src/viewer/text/view.c:2030
+#: src/viewer/text/view.c:2035
 msgid "You can do this only on the master terminal"
 msgstr "Vous ne pouvez faire ça que dans le terminal maître"
 
-#: src/viewer/text/view.c:2463
+#: src/viewer/text/view.c:2468
 msgid "No previous search"
 msgstr "Aucune clef de recherche"
 
-#: src/viewer/text/view.c:2511
+#: src/viewer/text/view.c:2516
 #, c-format
 msgid "Search string '%s' not found"
 msgstr "Chaîne recherchée '%s' introuvable"
 
-#: src/viewer/text/view.c:2755
+#: src/viewer/text/view.c:2760
 msgid "Go to link"
 msgstr "Aller au lien"
 
-#: src/viewer/text/view.c:2755
+#: src/viewer/text/view.c:2760
 msgid "Enter link number"
 msgstr "Indiquer le numéro du lien"
 
-#: src/viewer/text/view.c:3431
+#: src/viewer/text/view.c:3436
 msgid "Save error"
 msgstr "Erreur d'enregistrement"
 
-#: src/viewer/text/view.c:3432
+#: src/viewer/text/view.c:3437
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
 
-#: src/viewer/text/view.c:3476
+#: src/viewer/text/view.c:3481
 msgid "Display ~usemap"
 msgstr "Afficher ~USEMAP"
 
-#: src/viewer/text/view.c:3481
+#: src/viewer/text/view.c:3486
 msgid "~Follow link"
 msgstr "~Suivre le lien"
 
-#: src/viewer/text/view.c:3484
+#: src/viewer/text/view.c:3489
 msgid "Follow link and r~eload"
 msgstr "Suivre le lien et ~recharger"
 
-#: src/viewer/text/view.c:3488
+#: src/viewer/text/view.c:3493
 msgid "Open in new ~window"
 msgstr "Ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/view.c:3494
+#: src/viewer/text/view.c:3499
 msgid "~Download link"
 msgstr "~Enregistrer le lien"
 
-#: src/viewer/text/view.c:3498
+#: src/viewer/text/view.c:3503
 msgid "~Add link to bookmarks"
 msgstr "~Ajouter ce lien aux signets"
 
-#: src/viewer/text/view.c:3510 src/viewer/text/view.c:3629
+#: src/viewer/text/view.c:3515 src/viewer/text/view.c:3634
 msgid "~Reset form"
 msgstr "~Remettre à zéro le formulaire"
 
-#: src/viewer/text/view.c:3515
+#: src/viewer/text/view.c:3520
 msgid "~Submit form"
 msgstr "~Envoyer le formulaire"
 
-#: src/viewer/text/view.c:3518
+#: src/viewer/text/view.c:3523
 msgid "Submit form and rel~oad"
 msgstr "Envoyer le formulaire et ~recharger"
 
-#: src/viewer/text/view.c:3522
+#: src/viewer/text/view.c:3527
 msgid "Submit form and open in new ~window"
 msgstr "Envoyer le formulaire et ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/view.c:3528
+#: src/viewer/text/view.c:3533
 msgid "Submit form and ~download"
 msgstr "Envoyer le formulaire et ~télécharger"
 
-#: src/viewer/text/view.c:3535
+#: src/viewer/text/view.c:3540
 msgid "V~iew image"
 msgstr "~Voir l'image"
 
-#: src/viewer/text/view.c:3538
+#: src/viewer/text/view.c:3543
 msgid "Download ima~ge"
 msgstr "Enregistrer l'~image"
 
-#: src/viewer/text/view.c:3544
+#: src/viewer/text/view.c:3549
 msgid "No link selected"
 msgstr "Aucun lien sélectionné"
 
-#: src/viewer/text/view.c:3590
+#: src/viewer/text/view.c:3595
 msgid "Image"
 msgstr "Image"
 
-#: src/viewer/text/view.c:3608
+#: src/viewer/text/view.c:3613
 msgid "Usemap"
 msgstr "Usemap"
 
-#: src/viewer/text/view.c:3637
+#: src/viewer/text/view.c:3642
 msgid "Submit form to"
 msgstr "Envoi du formulaire à"
 
-#: src/viewer/text/view.c:3639
+#: src/viewer/text/view.c:3644
 msgid "Post form to"
 msgstr "Transfert du formulaire à"
 
-#: src/viewer/text/view.c:3658
+#: src/viewer/text/view.c:3663
 msgid "Radio button"
 msgstr "Bouton radio"
 
-#: src/viewer/text/view.c:3664
+#: src/viewer/text/view.c:3669
 msgid "Select field"
 msgstr "Liste"
 
-#: src/viewer/text/view.c:3670
+#: src/viewer/text/view.c:3675
 msgid "Text area"
 msgstr "Champ texte multiligne"
 
-#: src/viewer/text/view.c:3673
+#: src/viewer/text/view.c:3678
 msgid "File upload"
 msgstr "Envoi de fichier"
 
-#: src/viewer/text/view.c:3676
+#: src/viewer/text/view.c:3681
 msgid "Password field"
 msgstr "Champ mot de passe"
 
-#: src/viewer/text/view.c:3685
+#: src/viewer/text/view.c:3690
 msgid "name"
 msgstr "Nom"
 
-#: src/viewer/text/view.c:3695
+#: src/viewer/text/view.c:3700
 msgid "value"
 msgstr "Valeur"
 
-#: src/viewer/text/view.c:3706
+#: src/viewer/text/view.c:3711
 msgid "hit ENTER to"
 msgstr "Pressez Entrée pour"
 
-#: src/viewer/text/view.c:3709
+#: src/viewer/text/view.c:3714
 msgid "submit to"
 msgstr "Envoi à"
 
-#: src/viewer/text/view.c:3711
+#: src/viewer/text/view.c:3716
 msgid "post to"
 msgstr "Transfert à"
 

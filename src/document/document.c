@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.75 2004/07/16 06:55:19 miciah Exp $ */
+/* $Id: document.c,v 1.76 2004/08/20 21:28:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,9 +189,9 @@ get_document_css_magic(struct document *document)
 struct document *
 get_cached_document(struct cache_entry *cached, struct document_options *options)
 {
-	struct document *document;
+	struct document *document, *next;
 
-	foreach (document, format_cache) {
+	foreachsafe (document, next, format_cache) {
 		if (!compare_uri(document->uri, cached->uri, 0)
 		    || compare_opt(&document->options, options))
 			continue;
@@ -200,8 +200,7 @@ get_cached_document(struct cache_entry *cached, struct document_options *options
 		    || cached->id != document->id
 		    || document->css_magic != get_document_css_magic(document)) {
 			if (!is_object_used(document)) {
-				document = document->prev;
-				done_document(document->next);
+				done_document(document);
 				format_cache_entries--;
 			}
 			continue;
@@ -225,7 +224,7 @@ get_cached_document(struct cache_entry *cached, struct document_options *options
 void
 shrink_format_cache(int whole)
 {
-	struct document *document;
+	struct document *document, *next;
 	int format_cache_size = get_opt_int("document.cache.format.size");
 
 #ifdef CONFIG_DEBUG
@@ -241,7 +240,7 @@ shrink_format_cache(int whole)
 	}
 #endif
 
-	foreach (document, format_cache) {
+	foreachsafe (document, next, format_cache) {
 		struct cache_entry *cached;
 
 		if (is_object_used(document)) continue;
@@ -252,8 +251,7 @@ shrink_format_cache(int whole)
 		assertm(cached, "cached formatted document has no cache entry");
 		if (cached->id == document->id) continue;
 
-		document = document->prev;
-		done_document(document->next);
+		done_document(document);
 		format_cache_entries--;
 	}
 

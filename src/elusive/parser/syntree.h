@@ -1,4 +1,4 @@
-/* $Id: syntree.h,v 1.5 2002/12/27 01:19:06 pasky Exp $ */
+/* $Id: syntree.h,v 1.6 2002/12/27 02:23:41 pasky Exp $ */
 
 #ifndef EL__USIVE_PARSER_SYNTREE_H
 #define EL__USIVE_PARSER_SYNTREE_H
@@ -35,17 +35,6 @@ struct syntree_node {
 	struct syntree_node *root;
 	struct list_head leafs; /* -> struct syntree_node */
 
-	/* Credentials of this node. Who are we and what do we live for? */
-	/* In fact, ideally we shouldn't need this ie. for HTML, since
-	 * everything relevant for us will be stored as attributes. Sure
-	 * there are some magic elements - these are described below. */
-	/* Note that name can be NULL - that's the case for the text special,
-	 * which is a terminal token - the text itself. It can be then taken
-	 * from src/srclen. */
-
-	unsigned char *name;
-	int namelen;
-
 	/* Sometimes it'd be too expensive to describe something generically.
 	 * Imagine tables or frames or some head stuff or even forms or so. */
 	enum syntree_node_special special;
@@ -66,13 +55,19 @@ struct syntree_node {
 
 	struct list_head attrs; /* -> struct attribute */
 
-	/* Pointer to the HTML source. Srclen determines the length of the
-	 * whole element, including the opening/closing tags. */
-	/* Well, this doesn't have to be HTML source - just some already
-	 * allocated memory which we aren't going to free. */
+	/* This is a string container of the node - this is usually pointer to
+	 * the tag name, but that can vary for specials (ie. for NODE_SPEC_TEXT
+	 * this is the text). */
+
+	unsigned char *str;
+	int strlen;
+
+	/* This is a pointer to the source string containing the place of
+	 * occurence of this tag. This is only needed when str doesn't
+	 * point there. Thus, if src is non-NULL, str will be mem_free()'d,
+	 * otherwise it won't. Fun stuff. */
 
 	unsigned char *src;
-	int srclen;
 };
 
 

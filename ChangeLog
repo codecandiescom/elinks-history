@@ -1,3 +1,44 @@
+Sun Feb  8 20:36:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inpfield.c:
+
+	Expand the switch noodling to make it easy to add handlers for other
+	terminal events. Yes I know it is not properly indented the elinks
+	hacking.txt way, but I think that the extra indentation is just
+	plain stupid and punishes the use of switch statments.  
+
+Sun Feb  8 20:29:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, bfu/inpfield.h, viewer/text/search.c:
+
+	Remove the prompt member of the input_line struct. All we need is
+	the data member.  
+
+Sun Feb  8 20:20:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inpfield.c:
+
+	Remove stupid test.  
+
+Sun Feb  8 20:15:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inpfield.c:
+
+	Use local widget_data variable to shorten lines.  
+
+Sun Feb  8 17:37:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	No need to allocate another cache entry header. Just use existing
+	one or empty string.  
+
+Sun Feb  8 00:17:09 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/config/options.inc:
+
+	s/ELINKS_LOCAL_CGI/CONFIG_CGI/ 
+
 Sat Feb  7 10:58:01 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/download.c:

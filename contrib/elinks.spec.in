@@ -28,7 +28,7 @@
 #
 # Spec file format from < http://www.rpm.org/RPM-HOWTO/build.html >
 #
-# $Id: elinks.spec.in,v 1.17 2004/03/25 17:34:59 witekfl Exp $
+# $Id: elinks.spec.in,v 1.18 2004/09/27 12:24:34 witekfl Exp $
 
 Summary:	Enhanced version of Links (Lynx-like text WWW browser)
 Name:		elinks
@@ -78,12 +78,19 @@ provide good rock-solid releases inside stable branches.
 %{?_without_gpm: --without-gpm} \
 %{?_without_openssl: --without-openssl} \
 %{?_with_guile: --with-guile} \
-%{?_with_perl: --with-perl}
+%{?_with_perl: --with-perl} \
+%{?_without_lua: --without-lua} \
+%{!?_without_leds: --enable-leds} \
+%{!?_without_256:	--enable-256-colors} \
+%{?_without_smb: --disable-smb} \
+%{!?_without_cgi: --enable-cgi} \
+	--enable-exmode \
+	--enable-html-highlight \
+	--enable-gopher \
+	--enable-finger \
+	--enable-nntp \
+%{?_without_spidermonkey: --without-spidermonkey}
 
-%{!?_without_leds: echo "#define CONFIG_LEDS" >> feature.h}
-%{!?_without_256:	echo "#define CONFIG_256_COLORS" >> feature.h}
-%{?_without_smb: echo "#undef CONFIG_SMB" >> feature.h}
-%{!?_without_cgi: echo -e "#ifdef HAVE_SETENV\n#define CONFIG_CGI\n#endif" >> feature.h}
 
 %{__make}
 
@@ -133,6 +140,9 @@ rm -rf $RPM_BUILD_ROOT
 
 # date +"%a %b %d %Y"
 %changelog
+*Mon Sep 27 2004 Witold Filipczyk <witekfl@pld-linux.org>
+- by default build feature rich ELinks
+
 * Thu Mar 25 2004 Witold Filipczyk <witekfl@pld-linux.org>
 - a lot of bconds
 - added hooks.pl

@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.69 2003/11/26 19:39:31 zas Exp $ */
+/* $Id: formhist.c,v 1.70 2003/11/26 20:58:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,11 +205,7 @@ load_forms_from_file(void)
 
 		form = new_form(p);
 		if (!form) continue;
-		if (dontsave) {
-			form->dontsave = 1;
-			add_to_list(saved_forms, form);
-			continue;
-		}
+		if (dontsave) form->dontsave = 1;
 
 		/* Fields type, name, value */
 		while (safe_fgets(tmp, MAX_STR_LEN, f)) {
@@ -257,6 +253,8 @@ cont:
 			ret = str2form_type(type);
 			if (ret == -1) goto fail;
 			ftype = ret;
+
+			if (form->dontsave) continue;
 
 			enc_value = *value ? base64_decode(value)
 					   : stracpy(value);

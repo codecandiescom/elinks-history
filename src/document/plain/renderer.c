@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.134 2004/08/19 05:26:33 miciah Exp $ */
+/* $Id: renderer.c,v 1.135 2004/08/19 06:58:56 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -250,10 +250,9 @@ add_document_line(struct plain_renderer *renderer,
 		} else if (line_char == ASCII_BS) {
 			if (backspaces * 2 < line_pos) {
 				backspaces++;
-				expanded -= 2;
-			} else {
 				expanded--;
 			}
+			expanded--;
 		}
 	}
 

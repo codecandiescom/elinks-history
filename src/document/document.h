@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.68 2004/06/26 14:27:27 pasky Exp $ */
+/* $Id: document.h,v 1.69 2004/06/26 20:33:43 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -89,6 +89,9 @@ struct link {
 
 	struct color_pair color;
 };
+
+#define get_link_index(document, link) \
+	(link - document->links) / sizeof(struct link)
 
 #define link_is_textinput(link) \
 	((link)->type == LINK_FIELD || (link)->type == LINK_AREA)

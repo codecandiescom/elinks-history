@@ -1,3 +1,311 @@
+Sun Jun 20 21:37:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Oops no need to declare redir_cmd() anymore.  
+
+Sun Jun 20 21:36:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Mark command line aliases with OPT_HIDDEN flags and ignore them when
+	printing full help.  
+
+Sun Jun 20 21:19:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/hotkey.c, cookies/cookies.c,
+	document/html/parser.c, document/html/tables.c,
+	document/html/parser/parse.c, document/html/parser/stack.c,
+	protocol/header.c, protocol/http/http.c, terminal/event.c,
+	util/conv.c, util/conv.h, util/fastfind.c, util/string.c,
+	viewer/text/link.c:
+
+	upcase() -> toupper().  
+
+Sun Jun 20 21:08:56 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	parse_table(): replace a goto/label by a for() loop.  
+
+Sun Jun 20 21:02:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/info.c,
+	dialogs/menu.c, sched/action.c, viewer/text/link.c,
+	viewer/text/view.c:
+
+	
+	{download,download-image,enter,enter-reload,resume-download,pass-uri} -> link-{download,download-image,follow,follow-reload,download-resume,external-command}. No alias for pass-uri added since it hasn't been released yet.
+
+Sun Jun 20 20:11:23 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/: man/man5/elinks.conf.5, tools/help2doc:
+
+	Fixed trailing comma in the SEE ALSO section, by Solar Designer.  
+
+Sun Jun 20 19:22:16 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Entry for Solar Designer.  
+
+Sun Jun 20 18:26:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/auth/auth.h:
+
+	Fix HTTP auth to work if either the username or the password is
+	empty. Reported by yanek.  
+
+Sun Jun 20 18:22:10 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ssl/: connect.c, ssl.c:
+
+	Merged Debian's GNUTLS tweaks to make it work with newer versions.
+	They should know what are they doing, being probably the only GNUTLS
+	users in the world ;-).  
+
+Sun Jun 20 18:08:08 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Tidyup witek's 1.131 (support for saving deleted options).  
+	CCMAIL:witekfl@poczta.gazeta.pl 
+
+Sun Jun 20 18:00:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/info.c,
+	dialogs/menu.c, sched/action.c:
+
+	{back,unback} -> history-move-{back,forward} 
+
+Sun Jun 20 17:23:48 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/cmdline.c:
+
+	Fix core dump for 'elinks -stdin' and double-printing of the
+	warning.  
+
+Sun Jun 20 16:15:37 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/cmdline.c:
+
+	Fixed -stdin emulation, spotted by Jonas' gcc.  
+
+Sun Jun 20 16:12:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Rename {page_up, page_down, home, x_end} -> {move_page_up,
+	move_page_down, move_document_start, move_document_end}.  
+
+Sun Jun 20 16:08:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/info.c,
+	sched/action.c, viewer/text/view.c:
+
+	Introduce keybinding action aliases. {up,down} ->
+	move-link-{up,down}, home/end -> move-document-{start,end},
+	page-{up,down} -> move-page-{up,down}.  
+
+Sun Jun 20 15:57:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	kbd_text(): Use menu mapping.  
+
+Sun Jun 20 15:49:27 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	Revert 1.81 - lousy workaround for buggy wget -r which prevented
+	decoding of %7E (~).  
+
+Sun Jun 20 15:44:30 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/cmdline.c:
+
+	Reintroduce -stdin as a compatibility measure. Beeps and annoys the
+	user so that she removes it, but doesn't trigger fatal error.  
+
+Sun Jun 20 15:28:23 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/osdep.c:
+
+	get_input_handle() returns the same as get_ctl_handle() 
+
+Sun Jun 20 15:25:07 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: main.c, viewer/dump/dump.c, viewer/dump/dump.h:
+
+	dump_pre_start() -> dump_next() 
+
+Sun Jun 20 15:21:01 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Complement witekfl's 1.49 (first parameter is just basename) by
+	chdir()ing to the script's directory first. This makes that
+	behaviour correct and mirrors w3m's behaviour.  
+
+Sun Jun 20 15:10:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, sched/action.c:
+
+	Remove unused ACT_MAIN_{LEFT,RIGHT}.  
+
+Sun Jun 20 15:08:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Remove unused ACT_MAIN_DELETE.  
+
+Sun Jun 20 13:57:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Partially revert last patch and allow readonly buttons to be
+	'entered'. Check return value of find_form_state().  
+
+Sun Jun 20 13:30:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	enter(): Even buttons can be disabled so we have to check if form
+	field is readonly. Return FRAME_EVENT_OK if it is readonly since
+	there is no need to redraw anything.  
+
+Sun Jun 20 13:29:39 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Don't change navigation mode when the user presses home or end.  
+
+Sun Jun 20 13:13:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: view.c, view.h:
+
+	Make down() static.  
+
+Sun Jun 20 13:11:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, link.c:
+
+	Do all the submit handling in field_op() and don't fall back to
+	enter(). ACT_EDIT_ENTER and ACT_MAIN_ENTER might not be bound to the
+	same thing, so this is more correct. However we should probably add
+	ACT_EDIT_ENTER_RELOAD to keep the feature set complete.  
+
+Sun Jun 20 12:43:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Abandon rep_ev(), page_up()/page_down()/up()/down() now handle
+	repeat_count.  
+
+Sun Jun 20 12:37:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Don't use rep_ev() for mouse scrolling. They already move using
+	value of option.  
+
+Sun Jun 20 12:35:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	rep_ev() is a non sense for home/end actions. Dropped.  
+
+Sun Jun 20 12:22:16 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Do not use rep_ev() for scroll_right()/scroll_left(). Spotted by
+	Miciah.  
+
+Sun Jun 20 11:58:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Don't change navigation mode when scrolling. Idea by Miciah.  
+
+Sun Jun 20 11:27:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	set_textarea(): Decrease indentation.  
+
+Sun Jun 20 11:24:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	move_link(): Fix wraparound of cursor position in textareas when it
+	is either first or last link.  
+
+Sun Jun 20 11:22:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Introduce move_link(). Common backend for up() and down().  
+
+Sun Jun 20 10:24:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	get_width(): free @str on error, and improve parsing by
+	re-introducing @end, now parsing string like "  12a45 %" will fail
+	instead of using 12 as width.  
+
+Sun Jun 20 10:10:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	Merge parse_width() and get_width().  
+
+Sun Jun 20 10:06:16 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	get_column_width(): decrease indentation level.  
+
+Sun Jun 20 09:59:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	parse_width(): drop @end, we dont use it.  
+
+Sun Jun 20 09:55:14 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	parse_width(): fix comment and undefine macro as it should.  
+
+Sun Jun 20 09:51:05 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	get_width(), parse_width(): @trunc -> @limit_it, perhaps more
+	explicit.  
+
+Sun Jun 20 09:44:19 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	parse_width(): @value -> @width, improve comments.  
+
+Sun Jun 20 09:31:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	parse_width(): only calculate @maxwidth if @trunc is set, introduce
+	WIDTH_PIXELS2CHARS(), make function inlined since used by only one
+	caller.  
+
+Sun Jun 20 09:08:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	parse_width(), get_width(): variables were renamed.  
+
 Sat Jun 19 21:27:11 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/viewer/text/view.c:

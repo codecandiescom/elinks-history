@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.91 2004/01/25 00:11:47 pasky Exp $ */
+/* $Id: info.c,v 1.92 2004/01/25 09:48:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,7 +125,7 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 	msg_box(term, getml(info, NULL), MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
 		N_("Keys"), AL_LEFT,
 		keys.source,
-		info, 2,
+		info, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC
 #if 0
 		, N_("Toggle display"), push_toggle_keys_display_button, B_ENTER

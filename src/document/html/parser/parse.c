@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.18 2004/04/24 14:39:13 pasky Exp $ */
+/* $Id: parse.c,v 1.19 2004/04/24 14:44:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -567,7 +567,7 @@ free_tags_lookup(void)
 }
 
 
-static void process_element(unsigned char *name, int namelen, int endingtag,
+static unsigned char *process_element(unsigned char *name, int namelen, int endingtag,
                 unsigned char *html, unsigned char *prev_html,
                 unsigned char *eof, unsigned char *attr, void *f);
 
@@ -712,7 +712,7 @@ ng:;
 		prev_html = html;
 		html = end;
 
-		process_element(name, namelen, endingtag, html, prev_html, eof, attr, f);
+		html = process_element(name, namelen, endingtag, html, prev_html, eof, attr, f);
 	}
 
 	put_chrs(base_pos, html - base_pos, put_chars_f, f);
@@ -722,7 +722,7 @@ ng:;
 	was_br = 0;
 }
 
-static void
+static unsigned char *
 start_element(struct element_info *ei,
               unsigned char *name, int namelen, int endingtag,
               unsigned char *html, unsigned char *prev_html,
@@ -735,7 +735,7 @@ start_element(struct element_info *ei,
 	if (was_xmp) {
 		put_chrs("<", 1, put_chars_f, f);
 		html = prev_html + 1;
-		return;
+		return html;
 	}
 
 	ln_break(ei->linebreak, line_break_f, f);
@@ -750,7 +750,7 @@ start_element(struct element_info *ei,
 	}
 
 	if (html_top.invisible) {
-		return;
+		return html;
 	}
 
 	restore_format = (par_format.align == AL_NONE);
@@ -760,15 +760,15 @@ start_element(struct element_info *ei,
 	    && table_level < HTML_MAX_TABLE_LEVEL) {
 		format_table(attr, html, eof, &html, f);
 		ln_break(2, line_break_f, f);
-		return;
+		return html;
 	}
 	if (ei->func == html_select) {
 		if (!do_html_select(attr, html, eof, &html, f))
-			return;
+			return html;
 	}
 	if (ei->func == html_textarea) {
 		do_html_textarea(attr, html, eof, &html, f);
-		return;
+		return html;
 	}
 	if (ei->func == html_style && global_doc_opts->css_enable) {
 		css_parse_stylesheet(&css_styles, html, eof);
@@ -824,9 +824,11 @@ start_element(struct element_info *ei,
 	if (ei->func != html_br) was_br = 0;
 
 	if (restore_format) par_format = old_format;
+
+	return html;
 }
 
-static void
+static unsigned char *
 end_element(struct element_info *ei,
             unsigned char *name, int namelen, int endingtag,
             unsigned char *html, unsigned char *prev_html,
@@ -838,13 +840,13 @@ end_element(struct element_info *ei,
 
 	if (was_xmp) {
 		if (ei->func != html_xmp)
-			return;
+			return html;
 		was_xmp = 0;
 	}
 
 	was_br = 0;
 	if (ei->nopair == 1 || ei->nopair == 3)
-		return;
+		return html;
 
 	/* dump_html_stack(); */
 	foreach (e, html_stack) {
@@ -870,9 +872,11 @@ end_element(struct element_info *ei,
 		break;
 	}
 	/* dump_html_stack(); */
+
+	return html;
 }
 
-static void
+static unsigned char *
 process_element(unsigned char *name, int namelen, int endingtag,
                 unsigned char *html, unsigned char *prev_html,
                 unsigned char *eof, unsigned char *attr, void *f)
@@ -900,12 +904,12 @@ process_element(unsigned char *name, int namelen, int endingtag,
 #else
 	ei = (struct element_info *) fastfind_search(name, namelen, ff_info_tags);
 #endif
-	if (!ei) return;
+	if (!ei) return html;
 
 	if (!endingtag) {
-		start_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, f);
+		return start_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, f);
 	} else {
-		end_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, f);
+		return end_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, f);
 	}
 }	
 

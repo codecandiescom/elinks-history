@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.292 2003/10/15 19:39:26 pasky Exp $ */
+/* $Id: options.c,v 1.293 2003/10/15 20:25:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2930,6 +2930,9 @@ register_options(void)
 	get_opt_int("terminal.xterm-color.type") = 1;
 	get_opt_bool("terminal.xterm-color.colors") = 1;
 	get_opt_int("terminal.xterm-color.underline") = 1;
+	get_opt_int("terminal.xterm-256color.type") = 1;
+	get_opt_bool("terminal.xterm-256color.colors") = 2;
+	get_opt_int("terminal.xterm-256color.underline") = 1;
 
 	strcpy(get_opt_str("mime.extension.gif"), "image/gif");
 	strcpy(get_opt_str("mime.extension.jpg"), "image/jpeg");

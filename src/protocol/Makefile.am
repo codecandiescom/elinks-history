@@ -1,9 +1,9 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.22 2003/12/07 16:45:16 pasky Exp $
+## $Id: Makefile.am,v 1.23 2003/12/20 18:30:17 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
-SUBDIRS = file ftp http rewrite smb
+SUBDIRS = auth file ftp http rewrite smb
 
 noinst_LIBRARIES = libprotocol.a
 libprotocol_a_SOURCES = \

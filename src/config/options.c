@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.452 2004/06/25 00:48:31 jonas Exp $ */
+/* $Id: options.c,v 1.453 2004/06/25 01:06:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -307,9 +307,23 @@ append:
 			    && pos->type == OPT_TREE)
 				continue;
 
-			/* The (struct option) add_at_pos() can mess
-			 * up the order so that we add the box_item
-			 * to itself, so better do it first. */
+			/* The (struct option) add_at_pos() can mess up the
+			 * order so that we add the box_item to itself, so
+			 * better do it first. */
+
+			/* Always ensure that them _template_ options are
+			 * before anything else so a lonely autocreated option
+			 * (with _template_ options set to invisible) will be
+			 * connected with an upper corner (ascii: `-) instead
+			 * of a rotated T (ascii: +-) when displaying it. */
+			if (option->type == pos->type
+			    && *option->name <= '_'
+			    && !strcmp(pos->name, "_template_")) {
+				if (abi) add_at_pos(bpos, option->box_item);
+				add_at_pos(pos, option);
+				break;
+			}
+
 			if (abi) add_at_pos(bpos->prev, option->box_item);
 			add_at_pos(pos->prev, option);
 			break;

@@ -1,7 +1,9 @@
-/* $Id: uri.h,v 1.16 2003/07/20 15:44:24 pasky Exp $ */
+/* $Id: uri.h,v 1.17 2003/07/22 02:28:11 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
+
+#include "util/string.h"
 
 #define POST_CHAR 1
 
@@ -75,7 +77,7 @@ unsigned char *get_extension_from_url(unsigned char *url);
 /* Returns an URI string with any password removed. ;) */
 unsigned char *strip_uri_password(unsigned char *unstripped_uri);
 
-void encode_uri_string(unsigned char *, unsigned char **, int *);
+void encode_uri_string(struct string *, unsigned char *);
 void decode_uri_string(unsigned char *);
 
 #endif

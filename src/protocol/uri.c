@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.24 2003/07/21 18:34:00 zas Exp $ */
+/* $Id: uri.c,v 1.25 2003/07/22 02:28:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -751,10 +751,9 @@ safe_char(unsigned char c)
 }
 
 void
-encode_uri_string(unsigned char *name, unsigned char **data, int *len)
+encode_uri_string(struct string *string, unsigned char *name)
 {
 	unsigned char n[4];
-	struct string string = INIT_STRING(*data, *len);
 
 	n[0] = '%';
 	n[3] = '\0';
@@ -774,8 +773,6 @@ encode_uri_string(unsigned char *name, unsigned char **data, int *len)
 			add_to_string(&string, n);
 		}
 	}
-	*data = string.source;
-	*len = string.length;
 }
 
 /* This function is evil, it modifies its parameter. */

@@ -1,5 +1,5 @@
 /* BeOS system-specific routines. */
-/* $Id: beos.c,v 1.7 2003/10/27 01:03:21 pasky Exp $ */
+/* $Id: beos.c,v 1.8 2003/10/27 01:24:24 pasky Exp $ */
 
 /* Note that this file is currently unmaintained and basically dead. Noone
  * cares about BeOS support, apparently. This file may yet survive for some
@@ -232,6 +232,31 @@ get_output_handle(void)
 }
 #endif
 
+
+#if defined(HAVE_SETPGID)
+
+int
+exe(unsigned char *path)
+{
+	int p = fork();
+
+	if (!p) {
+		setpgid(0, 0);
+		system(path);
+		_exit(0);
+	}
+
+	if (p > 0) {
+		int s;
+
+		waitpid(p, &s, 0);
+	} else
+		return system(path);
+
+	return 0;
+}
+
+#endif
 
 
 

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.99 2003/10/27 01:21:24 pasky Exp $ */
+/* $Id: os_dep.c,v 1.100 2003/10/27 01:24:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -265,27 +265,6 @@ unsigned int resize_count = 0;
 #if defined(UNIX) || defined(WIN32) || defined(BEOS) || defined(RISCOS)
 
 #if defined(BEOS) && defined(HAVE_SETPGID)
-
-int
-exe(unsigned char *path)
-{
-	int p = fork();
-
-	if (!p) {
-		setpgid(0, 0);
-		system(path);
-		_exit(0);
-	}
-
-	if (p > 0) {
-		int s;
-
-		waitpid(p, &s, 0);
-	} else
-		return system(path);
-
-	return 0;
-}
 
 #elif defined(WIN32)
 

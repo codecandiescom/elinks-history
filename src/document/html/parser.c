@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.491 2004/09/24 01:37:32 pasky Exp $ */
+/* $Id: parser.c,v 1.492 2004/09/24 01:43:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -417,7 +417,6 @@ html_html(unsigned char *a)
 	/* Modify the root HTML element - format_html_part() will take
 	 * this from there. */
 	struct html_element *e = html_context.stack.prev;
-	DBG("Here?");
 
 	e->parattr.bgcolor = e->attr.bg = par_format.bgcolor = format.bg;
 }

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.74 2004/06/19 12:04:37 jonas Exp $ */
+/* $Id: kbd.c,v 1.75 2004/06/19 12:14:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,17 +47,22 @@ struct itrm {
 	int sock_in;
 	int sock_out;
 	int ctl_in;
-	struct termios t;
+
+	/* Input queue */
 	unsigned char kqueue[IN_BUF_SIZE];
 	int qlen;
-	int timer;
+
+	/* Output queue */
 	unsigned char *ev_queue;
 	int eqlen;
-	void *mouse_h;
-	unsigned char *orig_title;
 
-	unsigned int blocked:1;
-	unsigned int altscreen:1;
+	int timer;			/* ESC timeout timer */
+	struct termios t;		/* For restoring original attributes */
+	void *mouse_h;			/* Mouse handle */
+	unsigned char *orig_title;	/* For restoring window title */
+
+	unsigned int blocked:1;		/* Whether it was blocked */
+	unsigned int altscreen:1;	/* Whether to use alternate screen */
 };
 
 static struct itrm *ditrm = NULL;

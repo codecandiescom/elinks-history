@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.56 2003/05/03 22:46:28 zas Exp $ */
+/* $Id: menu.c,v 1.57 2003/05/04 14:08:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,6 +84,11 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 	     int hotkeys)
 {
 	int i;
+#ifdef DEBUG
+	unsigned char used_hotkeys[255];
+
+	memset(used_hotkeys, 0, 255);
+#endif
 
 	for (i = 0; i < ni; i++)
 		if (!hotkeys) {
@@ -91,6 +96,30 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 			items[i].ignore_hotkey = 1;
 		} else if (items[i].ignore_hotkey != 2 && !items[i].hotkey_pos) {
 			items[i].hotkey_pos = find_hotkey_pos(_(items[i].text, term));
+#ifdef DEBUG
+			/* negative value for hotkey_pos means the key is already
+			 * used by another entry. We mark it to be able to highlight
+			 * this hotkey in menus. --Zas */
+			if (items[i].hotkey_pos) {
+				unsigned char *text = _(items[i].text, term);
+				unsigned char *used = &used_hotkeys[text[items[i].hotkey_pos]];
+
+				switch (*used) {
+					case 0: *used = 1; break;
+					case 1: *used = 2;
+					case 2: items[i].hotkey_pos = -items[i].hotkey_pos;
+					   break;
+				}
+#if 0
+				/* Print an error. */
+				if (*used == 2)
+					error("'%s' at pos %d,  %c is already used.", text,
+					      -items[i].hotkey_pos, text[-items[i].hotkey_pos]);
+#endif
+
+			}
+#endif
+
 			items[i].ignore_hotkey = 2; /* cached */
 		}
 }
@@ -127,9 +156,17 @@ static inline int
 is_hotkey(struct menu_item *item, unsigned char hotkey, struct terminal *term)
 {
 	unsigned char *text = _(item->text, term);
-	
+
+#ifdef DEBUG
+	int key_pos = item->hotkey_pos;
+
+	if (key_pos < 0) key_pos = -key_pos;
+	return (key_pos && text
+		&& (upcase(text[key_pos]) == upcase(hotkey)));
+#else
 	return (item->hotkey_pos && text
 		&& (upcase(text[item->hotkey_pos]) == upcase(hotkey)));
+#endif
 }
 
 static void
@@ -347,19 +384,27 @@ display_menu(struct terminal *term, struct menu *menu)
 
 			if (l) {
 				int hk = 0;
+#ifdef DEBUG
+				int double_hk = 0;
 
+				if (l < 0) l = -l, double_hk = 1;
+#endif
 				for (x = 0;
 				     x < menu->xw - 4
 				     && (c = _(menu->items[p].text, term)[x]);
 				     x++) {
-					if (!hk && menu->items[p].hotkey_pos
-					    && x == menu->items[p].hotkey_pos - 1) {
+					if (!hk && l
+					    && x == l - 1) {
 						hk = 1;
 						continue;
 					}
 					if (hk == 1) {
+#ifdef DEBUG
 						set_char(term, menu->x + x - 1 + 2,
-							 s, hkco | c);
+							 s, (double_hk ?  menu_selected_hotkey_color : hkco) | c);
+#else
+						set_char(term, menu->x + x - 1 + 2, s, hkco | c);
+#endif
 						hk = 2;
 					} else {
 						set_char(term, menu->x + x - (hk ? 1 : 0) + 2,
@@ -699,10 +744,15 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		int hk = 0;
 		unsigned char c;
 		unsigned char *tmptext = _(menu->items[i].text, term);
+		int key_pos = menu->items[i].hotkey_pos;
 
+#ifdef DEBUG
+		int double_hk = 0;
+		if (key_pos < 0) key_pos = -key_pos, double_hk = 1;
+#endif
 		if (i == menu->selected) {
 			int tmptextlen = strlen(tmptext)
-					 - (menu->items[i].hotkey_pos ? 1 : 0);
+					 - (key_pos ? 1 : 0);
 
 			co = mainmenu_selected_color;
 			hkco = mainmenu_selected_hotkey_color;
@@ -717,14 +767,19 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		p += 2;
 
 		for (j = 0; (c = tmptext[j]); j++, p++) {
-			if (!hk && menu->items[i].hotkey_pos
-			    && j == menu->items[i].hotkey_pos - 1) {
+			if (!hk && key_pos
+			    && j == key_pos - 1) {
 				hk = 1;
 				p--;
 				continue;
 			}
+
 			if (hk == 1) {
+#ifdef DEBUG
+				set_char(term, p, 0, (double_hk ? mainmenu_selected_hotkey_color : hkco) | c);
+#else
 				set_char(term, p, 0, hkco | c);
+#endif
 				hk = 2;
 			} else {
 				set_char(term, p, 0, co | c);

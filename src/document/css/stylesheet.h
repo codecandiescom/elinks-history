@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.33 2004/09/19 22:59:09 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.34 2004/09/19 23:00:51 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -26,6 +26,9 @@
  * to overwrite any document provided stylesheet using "!important" so we need
  * to keep track in some table what properties was already applied so we only
  * overwrite when we have to. --jonas */
+/* XXX: This is one of the TODOs where I have no clue what is it talking about
+ * in particular. Is it obsolete now when we grok 'td.foo p#x>a:hover' without
+ * hesitation? --pasky */
 
 
 /* The {struct css_selector} is used for mapping elements (or nodes) in the

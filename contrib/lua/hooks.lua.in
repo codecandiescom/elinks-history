@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.45 2005/03/24 21:45:28 miciah Exp $
+-- $Id: hooks.lua.in,v 1.46 2005/03/24 21:50:09 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -527,28 +527,26 @@ end
 table.insert(pre_format_html_hooks, mangle_allmusic_dot_com)
 
 
-function pre_format_html_hook_ (url, html)
-    local ret = nil
+-- Handle gzip'd files within reasonable size.
+-- Note that this is not needed anymore since we have a support for this
+-- in core ELinks. I still keep it here for a reference (as an example),
+-- though. If you will add something similiar using pipe_read(), feel free
+-- to remove this. --pasky
+function decompress_html (url, html)
+    local tmp
 
-    -- Handle gzip'd files within reasonable size.
-    -- Note that this is not needed anymore since we have a support for this
-    -- in core ELinks. I still keep it here for a reference (as an example),
-    -- though. If you will add something similiar using pipe_read(), feel free
-    -- to remove this. --pasky
---    if string.find (url, "%.gz$") and string.len (html) < 65536 then
---        local tmp = tmpname ()
---        writeto (tmp) write (html) writeto ()
---        html = pipe_read ("(gzip -dc "..tmp.." || cat "..tmp..") 2>/dev/null")
---        os.remove (tmp)
---        ret = 1
---    end
+    if not string.find (url, "%.gz$") or string.len (html) >= 65536 then
+	return nil,nil
+    end
 
-    -- These quick 'n dirty patterns don't maintain proper HTML.
+    tmp = tmpname ()
+    writeto (tmp) write (html) writeto ()
+    html = pipe_read ("(gzip -dc "..tmp.." || cat "..tmp..") 2>/dev/null")
+    os.remove (tmp)
 
-    return ret and html or nil
+    return html,nil
 end
-
-table.insert(pre_format_html_hooks, pre_format_html_hook_)
+--table.insert(pre_format_html_hooks, decompress_html)
 
 ----------------------------------------------------------------------
 --  Miscellaneous functions, accessed with the Lua Console.

@@ -65,8 +65,9 @@ typedef unsigned long nls_uint32;
 #endif
 #endif
 #endif
+
 /* Header for binary .mo file format.  */
-	struct mo_file_header {
+struct mo_file_header {
 	/* The magic number.  */
 	nls_uint32 magic;
 	/* The revision number of the file format.  */

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.165 2004/01/24 18:24:12 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.166 2004/01/24 19:53:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -609,7 +609,7 @@ toggle_display_action_listboxes(void)
 
 
 /*
- * Config file readers.
+ * Config file tools.
  */
 
 /* Return 0 when ok, something strange otherwise. */

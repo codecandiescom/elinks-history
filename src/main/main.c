@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.193 2004/04/14 19:04:12 jonas Exp $ */
+/* $Id: main.c,v 1.194 2004/04/14 19:40:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,9 +73,8 @@ static int init_b = 0;
 void
 init(void)
 {
-	int ret, fd = -1;
-
 	INIT_LIST_HEAD(url_list);
+	int ret, fd = -1;
 
 	init_static_version();
 
@@ -137,17 +136,17 @@ init(void)
 		init_home();
 	}
 
-	/* If there's no -no-connect option, check if there's no other ELinks
-	 * running. If we found any, open socket and act as a slave for it. */
-
+	/* If there's no -no-connect, -dump or -source option, check if there's
+	 * no other ELinks running. If we found any, by-pass initialization of
+	 * non critical subsystems, open socket and act as a slave for it. */
 	if (get_opt_bool_tree(cmdline_options, "no-connect")
 	    || get_opt_bool_tree(cmdline_options, "dump")
 	    || get_opt_bool_tree(cmdline_options, "source")
 	    || (fd = af_unix_open()) == -1) {
 
 		load_config();
-		/* Parse commandline options again, in order to override any config
-		 * file options. */
+		/* Parse commandline options again, in order to override any
+		 * config file options. */
 		parse_options(ac - 1, av + 1, NULL);
 
 		init_b = 1;
@@ -157,13 +156,11 @@ init(void)
 		init_search_history();
 	}
 
-	if (get_opt_int_tree(cmdline_options, "dump") ||
-	    get_opt_int_tree(cmdline_options, "source")) {
+	if (get_opt_int_tree(cmdline_options, "dump")
+	    || get_opt_int_tree(cmdline_options, "source")) {
+		/* Dump the URL list */
 		dump_pre_start(&url_list);
-		if (terminate) {
-			/* XXX? */
-			close_terminal_pipes();
-		}
+
 	} else {
 		int id = get_opt_int_tree(cmdline_options, "base-session");
 		struct string info;
@@ -174,12 +171,15 @@ init(void)
 			terminate = 1;
 
 		} else if (fd != -1) {
+			/* Attach to already running ELinks and act as a slave
+			 * for it. */
 			close_terminal_pipes();
 
 			handle_trm(get_input_handle(), get_output_handle(),
 				   fd, fd, get_ctl_handle(), info.source, info.length);
 
 		} else {
+			/* Setup a master terminal */
 			term = attach_terminal(get_input_handle(), get_output_handle(),
 					       get_ctl_handle(), info.source, info.length);
 			if (!term) {
@@ -194,6 +194,7 @@ init(void)
 		done_string(&info);
 	}
 
+	if (terminate) close_terminal_pipes();
 	free_string_list(&url_list);
 }
 

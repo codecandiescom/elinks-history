@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.25 2002/06/07 19:53:45 pasky Exp $ */
+/* $Id: renderer.c,v 1.26 2002/06/08 11:28:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@
 #include "protocol/http/header.h"
 #include "protocol/url.h"
 #include "util/error.h"
+#include "util/hash.h"
 
 /* This is here in order not to break the cross-deps. */
 #include "document/history.h"
@@ -96,9 +97,8 @@ struct rgb_cache_entry {
 	struct rgb rgb;
 };
 
-struct table_cache_entry {
-	struct table_cache_entry *next;
-	struct table_cache_entry *prev;
+
+struct table_cache_entry_key {
 	unsigned char *start;
 	unsigned char *end;
 	int align;
@@ -106,12 +106,20 @@ struct table_cache_entry {
 	int width;
 	int xs;
 	int link_num;
-	unsigned int cache_hits;
+};
+
+struct table_cache_entry {
+	struct table_cache_entry_key key;
+	struct table_cache_entry *next;
+	struct table_cache_entry *prev;
 	struct part part;
 };
 
+/* Max. entries in table cache used for nested tables. */
+#define MAX_TABLE_CACHE_ENTRIES 16384
 
 /* Global variables */
+int table_cache_entries = 0;
 int last_link_to_move;
 struct tag *last_tag_to_move;
 struct tag *last_tag_for_newline;
@@ -126,7 +134,7 @@ int margin;
 int empty_format;
 int format_cache_entries = 0;
 
-struct list_head table_cache = { &table_cache, &table_cache };
+struct hash *table_cache = NULL;
 struct list_head format_cache = {&format_cache, &format_cache};
 
 
@@ -1290,7 +1298,19 @@ void do_format(char *start, char *end, struct part *part, unsigned char *head)
 /* free_table_cache() */
 void free_table_cache()
 {
-	free_list(table_cache);
+	if (table_cache) {
+		struct hash_item *item;
+		int i;
+		
+		/* We do not free key here. */
+		foreach_hash_item(item, *table_cache, i)
+			if (item->value) mem_free(item->value);
+
+		free_hash(table_cache);
+	}
+	
+	table_cache = NULL;
+	table_cache_entries = 0;
 }
 
 
@@ -1309,39 +1329,37 @@ struct part *format_html_part(unsigned char *start, unsigned char *end,
 	int ef = empty_format;
 	struct form_control *fc;
 	struct table_cache_entry *tce;
-	struct table_cache_entry *unused_tce = NULL;
-	int table_cache_entries = 0;
-	
-	if (!data) {
-		/* Search for cached entry. */
-		foreach(tce, table_cache) {
-			if (tce->start == start && tce->end == end
-			    && tce->align == align && tce->m == m
-			    && tce->width == width && tce->xs == xs
-			    && tce->link_num == link_num) {
-				/* Add one to hit cache counter. */
-				tce->cache_hits++;
 
-				/* Copy and return part. */
-				part = mem_alloc(sizeof(struct part));
-				if (!part) continue;
-				memcpy(part, &tce->part, sizeof(struct part));
-				return part;
-			}
-			
-			/* Memorize most unused entry as first candidate to
-			 * replacement when maximum number of entries in cache
-			 * is attained. */
-			if (!unused_tce)
-				unused_tce = tce;
-			else if (tce->cache_hits < unused_tce->cache_hits)
-				unused_tce = tce; 
-			
-			/* Count number of entries in cache. */
-			table_cache_entries++;
+	/* Hash creation if needed. */
+	if (!table_cache) table_cache = init_hash(8, &strhash);
+	
+	if (!data && table_cache) {
+		/* Search for cached entry. */
+		struct table_cache_entry_key key;
+		struct hash_item *item;
+		
+		key.start = start;
+		key.end = end;
+		key.align = align;
+		key.m = m;
+		key.width = width;
+		key.xs = xs;
+		key.link_num = link_num;
+		
+		item = get_hash_item(table_cache, (unsigned char *)&key,
+				     sizeof(struct table_cache_entry_key));
+		if (item) { /* We found it in cache, so just copy and return. */
+			part = mem_alloc(sizeof(struct part));
+			if (!part) goto uncached;
+			memcpy(part,
+			       &((struct table_cache_entry *)item->value)->part,
+			       sizeof(struct part));
+			return part;
 		}
 	}
 	
+uncached:
+
 	if (ys < 0) {
 		internal("format_html_part: ys == %d", ys);
 		return NULL;
@@ -1444,35 +1462,29 @@ ret:
 	margin = lm;
 	empty_format = ef;
 
-	if (table_level > 1 && !data) {
-		int replace = 0;
-		
-		/* Limit number of cache entries. */
-		if (table_cache_entries >= 64 && unused_tce) {
-			/* Replace an unused entry. */
-			tce = unused_tce;
-			replace = 1;
-		} else {
-			/* Create a new entry. */
-			tce = mem_alloc(sizeof(struct table_cache_entry));
-			/* A goto is used here to prevent a test or code
-			 * redundancy. */
-			if (!tce) goto end;
-		}
-		
-		tce->start = start;
-		tce->end = end;
-		tce->align = align;
-		tce->m = m;
-		tce->width = width;
-		tce->xs = xs;
-		tce->link_num = link_num;
-		tce->cache_hits = 0;
+	if (table_level > 1 && !data && table_cache
+	    && table_cache_entries < MAX_TABLE_CACHE_ENTRIES) {
+		/* Create a new entry. */
+		tce = mem_alloc(sizeof(struct table_cache_entry));
+		/* A goto is used here to prevent a test or code
+		 * redundancy. */
+		if (!tce) goto end;
+
+		tce->key.start = start;
+		tce->key.end = end;
+		tce->key.align = align;
+		tce->key.m = m;
+		tce->key.width = width;
+		tce->key.xs = xs;
+		tce->key.link_num = link_num;
 		memcpy(&tce->part, part, sizeof(struct part));
 		
-		/* Add to list if it's an entry creation. */
-		if (!replace) add_to_list(table_cache, tce);
-		
+		if (!add_hash_item(table_cache, (unsigned char *)&tce->key,
+				   sizeof(struct table_cache_entry_key), tce)) {
+			mem_free(tce);
+		} else {
+			table_cache_entries++;
+		}
 	}
 
 end:

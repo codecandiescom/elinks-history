@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.79 2003/07/21 23:43:45 jonas Exp $ */
+/* $Id: download.c,v 1.80 2003/07/21 23:48:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -862,17 +862,16 @@ get_temp_name(unsigned char *url)
 unsigned char *
 subst_file(unsigned char *prog, unsigned char *file)
 {
-	unsigned char *n = init_str();
-	int l = 0;
+	struct string name;
 
-	if (!n) return NULL;
+	if (!init_string(&name)) return NULL;
 
 	while (*prog) {
 		int p;
 
 		for (p = 0; prog[p] && prog[p] != '%'; p++);
 
-		add_bytes_to_str(&n, &l, prog, p);
+		add_bytes_to_string(&name, prog, p);
 		prog += p;
 
 		if (*prog == '%') {
@@ -884,15 +883,15 @@ subst_file(unsigned char *prog, unsigned char *file)
 #endif
 
 			cygwin_conv_to_full_win32_path(file, new_path);
-			add_to_str(&n, &l, new_path);
+			add_to_string(&name, new_path);
 #else
-			add_to_str(&n, &l, file);
+			add_to_string(&name, file);
 #endif
 			prog++;
 		}
 	}
 
-	return n;
+	return name.source;
 }
 
 

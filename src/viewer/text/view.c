@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.385 2004/04/04 02:34:52 jonas Exp $ */
+/* $Id: view.c,v 1.386 2004/04/04 02:44:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1039,20 +1039,16 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 }
 
 static struct string *
-add_session_ring_to_string(struct string *str)
+init_session_info_string(struct string *parameters, struct session *ses)
 {
-	int ring;
+	int ring = get_opt_int_tree(cmdline_options, "session-ring");
 
-	assert(str);
-	if_assert_failed return NULL;
+	if (!init_string(parameters)) return NULL;
 
-	ring = get_opt_int_tree(cmdline_options, "session-ring");
-	if (ring) {
-		add_to_string(str, " -session-ring ");
-		add_long_to_string(str, ring);
-	}
+	add_format_to_string(parameters, "-base-session %d ", ses->id);
+	if (ring) add_format_to_string(parameters, " -session-ring %d ", ring);
 
-	return str;
+	return parameters;
 }
 
 /* open a link in a new xterm */
@@ -1095,11 +1091,7 @@ send_open_new_window(struct terminal *term,
 	assert(term && open_window && ses);
 	if_assert_failed return;
 
-	if (!init_string(&parameters)) return;
-
-	add_to_string(&parameters, "-base-session ");
-	add_long_to_string(&parameters, ses->id);
-	add_session_ring_to_string(&parameters);
+	if (!init_session_info_string(&parameters, ses)) return;
 
 	open_window(term, path_to_exe, parameters.source);
 	done_string(&parameters);

@@ -1,5 +1,5 @@
 /* Text mode drawing functions */
-/* $Id: draw.c,v 1.7 2004/06/30 16:10:27 zas Exp $ */
+/* $Id: draw.c,v 1.8 2004/07/04 10:54:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,8 +161,10 @@ draw_view_status(struct session *ses, struct document_view *doc_view, int active
 	struct terminal *term = ses->tab->term;
 
 	draw_forms(term, doc_view);
-	draw_searched(term, doc_view);
-	if (active) draw_current_link(ses, doc_view);
+	if (active) {
+		draw_searched(term, doc_view);
+		draw_current_link(ses, doc_view);
+	}
 }
 
 /* @active indicates whether the document is focused -- i.e.,

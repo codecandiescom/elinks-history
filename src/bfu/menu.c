@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.106 2003/09/28 15:16:39 zas Exp $ */
+/* $Id: menu.c,v 1.107 2003/09/28 15:33:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -835,14 +835,13 @@ add_to_menu(struct menu_item **mi, unsigned char *text,
 	mii = mem_realloc(*mi, (n + 2) * sizeof(struct menu_item));
 	if (!mii) return;
 
-	*mi = mii;
+	/* Shift current last item by one place. */
 	memcpy(mii + n + 1, mii + n, sizeof(struct menu_item));
-	mii[n].text = text;
-	mii[n].rtext = rtext;
-	mii[n].func = func;
-	mii[n].data = data;
-	mii[n].submenu = submenu;
-	mii[n].no_intl = no_intl;
-	mii[n].hotkey_pos = 0;
-	mii[n].hotkey_state = HKS_SHOW;
+
+	/* Set new item, keeping item_free value of previous item. */
+	SET_MENU_ITEM(&mii[n], text, rtext, func, data, mii[n + 1].item_free,
+		      submenu, no_intl, HKS_SHOW, 0);
+
+	/* Update pointer to new address (if any). */
+	*mi = mii;
 }

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.46 2003/06/02 17:05:34 pasky Exp $ */
+/* $Id: string.c,v 1.47 2003/06/03 20:23:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -419,18 +419,23 @@ elinks_strstr(const char *s, const char *p)
  * Note that bcopy() has the order of the source and destination
  * arguments reversed.
  * From http://www.unixpapa.com/incnote/string.html */
-/* XXX: Perhaps not the best place for it. --Zas */
+/* Modified for ELinks by Zas. */
 inline void *
-elinks_memmove(void *dst, const void *src, size_t n)
+elinks_memmove(void *d, const void *s, size_t n)
 {
+	register unsigned char *dst = (unsigned char *) d;
+	register unsigned char *src = (unsigned char *) s;
+
 	if (src > dst)
 		for (; n > 0; n--)
 			*(dst++) = *(src++);
 	else
-		for (dst += n - 1, src+= n - 1;
+		for (dst += n - 1, src += n - 1;
 		     n > 0;
 		     n--)
 			*(dst--) = *(src--);
+
+	return (void *) dst;
 }
 #endif
 

@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.13 2004/01/26 06:20:51 jonas Exp $ */
+/* $Id: exmode.c,v 1.14 2004/01/26 06:24:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,18 +117,18 @@ exmode_exec(struct exmode_data *data)
 	 * least pop up an error. */
 	struct session *ses = data->dlg_data->dlg->udata2;
 	unsigned char *command = data->dlg_data->widgets_data->cdata;
-	unsigned char *end = command;
+	unsigned char *args = command;
 	int i;
 
 	if (!*command) return;
 
 	add_to_input_history(&exmode_history, command, 1);
 
-	while (*end && !isspace(*end)) end++;
-	if (*end) *end++ = 0;
+	while (*args && !isspace(*args)) args++;
+	if (*args) *args++ = 0;
 
 	for (i = 0; exmode_handlers[i]; i++) {
-		if (exmode_handlers[i](ses, command, end))
+		if (exmode_handlers[i](ses, command, args))
 			break;
 	}
 }

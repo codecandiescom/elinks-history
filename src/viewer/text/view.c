@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.124 2003/07/02 16:46:03 zas Exp $ */
+/* $Id: view.c,v 1.125 2003/07/02 17:02:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -620,7 +620,9 @@ draw_searched(struct terminal *term, struct f_data_c *scr)
 	struct point *pt = NULL;
 	int color = 0;
 	int len = 0;
-	int i;
+	register int i;
+
+	assert(term && scr);
 
 	if (!scr->search_word || !*scr->search_word || !(*scr->search_word)[0])
 		return;
@@ -647,6 +649,8 @@ draw_searched(struct terminal *term, struct f_data_c *scr)
 static inline void
 draw_current_link(struct terminal *t, struct f_data_c *scr)
 {
+	assert(t && scr && scr->vs);
+
 	draw_link(t, scr, scr->vs->current_link);
 	draw_searched(t, scr);
 }
@@ -654,15 +658,20 @@ draw_current_link(struct terminal *t, struct f_data_c *scr)
 static struct link *
 get_first_link(struct f_data_c *f)
 {
-	int i;
-	struct link *l = f->f_data->links + f->f_data->nlinks;
+	struct link *l;
+	register int i;
+
+	assert(f && f->f_data);
 
 	if (!f->f_data->lines1) return NULL;
+
+	l = f->f_data->links + f->f_data->nlinks;
 
 	for (i = f->vs->view_pos; i < f->vs->view_pos + f->yw; i++)
 		if (i >= 0 && i < f->f_data->y && f->f_data->lines1[i]
 		    && f->f_data->lines1[i] < l)
 			l = f->f_data->lines1[i];
+
 	if (l == f->f_data->links + f->f_data->nlinks) l = NULL;
 	return l;
 }
@@ -670,8 +679,10 @@ get_first_link(struct f_data_c *f)
 static struct link *
 get_last_link(struct f_data_c *f)
 {
-	int i;
 	struct link *l = NULL;
+	register int i;
+
+	assert(f && f->f_data);
 
 	if (!f->f_data->lines2) return NULL;
 
@@ -684,32 +695,36 @@ get_last_link(struct f_data_c *f)
 static void
 fixup_select_state(struct form_control *fc, struct form_state *fs)
 {
-	int i;
+	register int i = 0;
+
+	assert(fc && fs);
 
 	if (fs->state >= 0
 	    && fs->state < fc->nvalues
 	    && !strcmp(fc->values[fs->state], fs->value))
 		return;
 
-	for (i = 0; i < fc->nvalues; i++) {
+	while (i < fc->nvalues) {
 		if (!strcmp(fc->values[i], fs->value)) {
 			fs->state = i;
 			return;
 		}
+		i++;
 	}
-	fs->state = 0;
-	if (fs->value) mem_free(fs->value);
 
+	fs->state = 0;
+
+	if (fs->value) mem_free(fs->value);
 	fs->value = stracpy(fc->nvalues ? fc->values[0] : (unsigned char *) "");
 }
 
 static void
 init_ctrl(struct form_control *frm, struct form_state *fs)
 {
-	if (fs->value) {
-		mem_free(fs->value);
-		fs->value = NULL;
-	}
+	assert(frm && fs);
+
+	if (fs->value) mem_free(fs->value), fs->value = NULL;
+
 	switch (frm->type) {
 		case FC_TEXT:
 		case FC_PASSWORD:
@@ -738,15 +753,22 @@ init_ctrl(struct form_control *frm, struct form_state *fs)
 		case FC_HIDDEN:
 			/* Silence compiler warnings. */
 			break;
+		default:
+			internal("unknown form field type");
 	}
 }
 
 struct form_state *
 find_form_state(struct f_data_c *f, struct form_control *frm)
 {
-	struct view_state *vs = f->vs;
+	struct view_state *vs;
 	struct form_state *fs;
-	int n = frm->g_ctrl_num;
+	int n;
+
+	assert(f && f->vs && frm);
+
+	vs = f->vs;
+	n = frm->g_ctrl_num;
 
 	if (n < vs->form_info_len) fs = &vs->form_info[n];
 	else {

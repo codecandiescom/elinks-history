@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.239 2004/06/11 23:48:06 jonas Exp $ */
+/* $Id: uri.c,v 1.240 2004/06/12 00:09:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -453,12 +453,11 @@ add_uri_to_string(struct string *string, struct uri *uri,
 		unsigned char *filename = uri->data;
 		unsigned char *pos;
 
-		assertm(!wants(URI_PATH) || components == URI_PATH,
-			"URI_PATH should be used alone %d", components);
 		assertm(!wants(URI_FILENAME) || components == URI_FILENAME,
 			"URI_FILENAME should be used alone %d", components);
 
-		if (wants(URI_PATH) && !is_uri_dir_sep(uri, *filename)) {
+		if (components == wants(URI_PATH)
+		    && !is_uri_dir_sep(uri, *filename)) {
 			/* FIXME: Add correct separator */
 			add_char_to_string(string, '/');
 		}

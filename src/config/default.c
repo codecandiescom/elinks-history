@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.9 2002/03/26 17:11:55 pasky Exp $ */
+/* $Id: default.c,v 1.10 2002/03/28 02:42:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1018,7 +1018,7 @@ int accesskey_priority = 1;
 int links_wraparound = 0;
 
 int allow_special_files = 0;
-int keep_unhistory = 0;
+int keep_unhistory = 1;
 
 int default_left_margin = HTML_LEFT_MARGIN;
 

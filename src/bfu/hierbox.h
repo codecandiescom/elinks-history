@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.19 2003/11/20 12:33:09 jonas Exp $ */
+/* $Id: hierbox.h,v 1.20 2003/11/20 12:37:09 jonas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -30,8 +30,9 @@ void update_hierbox_browser(struct hierbox_browser *browser);
  *
  * @add_size	The size of extra data to be allocated with the dialog.
  *
- * @listbox_data
- *		The data used for the listbox widget.
+ * @browser	The browser structure that contains info to setup listbox data
+ *		and manage the dialog list to keep instances of the browser in
+ *		sync on various terminals.
  *
  * @udata	Is a reference to any data that the dialog could use.
  *

@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.53 2003/11/26 22:35:28 jonas Exp $ */
+/* $Id: listbox.h,v 1.54 2003/11/26 22:55:59 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -29,10 +29,15 @@ enum listbox_info {
 	LISTBOX_ALL,
 };
 
-/* Structure used for storing all relevant info when traversing listboxes */
+/* Structure that can be used for storing all relevant info when traversing
+ * listboxes. */
 struct listbox_context {
 	/* The terminal we are running on */
 	struct terminal *term;
+
+	/* Used for saving a specific item that should be used later when
+	 * traversing listboxes has ended. */
+	struct listbox_item *item;
 
 	/* The current listbox widgets data */
 	struct listbox_data *box;
@@ -41,7 +46,7 @@ struct listbox_context {
 	struct dialog_data *dlg_data;
 	struct widget_data *widget_data;
 
-	/* The offset of the current box from the top */
+	/* Used when distributing? the current selected to another position */
 	int dist;
 
 	/* The offset of the current box from the top */

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.110 2003/10/30 17:43:57 zas Exp $ */
+/* $Id: tables.c,v 1.111 2003/10/30 17:49:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,7 +79,7 @@ struct table_cell {
 
 	unsigned int used:1;
 	unsigned int spanned:1;
-	unsigned int b:1;
+	unsigned int is_header:1;
 };
 
 struct table_column {
@@ -636,8 +636,8 @@ nc:
 	cell->align = l_al;
 	cell->valign = l_val;
 
-	cell->b = (upcase(t_name[1]) == 'H');
-	if (cell->b) cell->align = AL_CENTER;
+	cell->is_header = (upcase(t_name[1]) == 'H');
+	if (cell->is_header) cell->align = AL_CENTER;
 
 	if (group == 1) cell->group = 1;
 
@@ -1378,7 +1378,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 				html_stack_dup();
 				html_top.dontkill = 1;
 
-				if (cell->b) format.attr |= AT_BOLD;
+				if (cell->is_header) format.attr |= AT_BOLD;
 
 				format.bg = cell->bgcolor;
 				par_format.bgcolor = cell->bgcolor;

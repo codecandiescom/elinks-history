@@ -1,3 +1,29 @@
+Thu Jan 24 01:36:59 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, file.c:
+	
+	allow reading of special non-regular files - patch by Len Lattanzi
+	<Len_Lattanzi@StanfordAlumni.org>
+
+Thu Jan 24 00:58:04 2002  Petr Baudis <pasky@ji.cz>:
+
+	* connect.c:
+	
+	tiny fix, just to force everything is really sane
+
+Wed Jan 23 22:43:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* bfu.c, links.h:
+	
+	clear_dialog() by Zas <zas@norz.org>
+
+Wed Jan 23 21:57:31 2002  Petr Baudis <pasky@ji.cz>:
+
+	* bfu.c:
+	
+	selection by leading letter - patch by Ami Fischman
+	<usenet@fischman.org>
+
 Wed Jan 23 21:30:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, bfu.c:

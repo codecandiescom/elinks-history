@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.647 2004/11/12 16:48:30 zas Exp $ */
+/* $Id: view.c,v 1.648 2004/11/12 17:03:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -352,36 +352,44 @@ scroll_right(struct session *ses, struct document_view *doc_view)
 }
 
 #ifdef CONFIG_MOUSE
-static void
+static enum frame_event_status
 scroll_mouse_up(struct session *ses, struct document_view *doc_view)
 {
 	int steps = get_opt_int("document.browse.scrolling.vertical_step");
 
 	vertical_scroll(ses, doc_view, -steps);
+
+	return FRAME_EVENT_REFRESH;
 }
 
-static void
+static enum frame_event_status
 scroll_mouse_down(struct session *ses, struct document_view *doc_view)
 {
 	int steps = get_opt_int("document.browse.scrolling.vertical_step");
 
 	vertical_scroll(ses, doc_view, steps);
+
+	return FRAME_EVENT_REFRESH;
 }
 
-static void
+static enum frame_event_status
 scroll_mouse_left(struct session *ses, struct document_view *doc_view)
 {
 	int steps = get_opt_int("document.browse.scrolling.horizontal_step");
 
 	horizontal_scroll(ses, doc_view, -steps);
+
+	return FRAME_EVENT_REFRESH;
 }
 
-static void
+static enum frame_event_status
 scroll_mouse_right(struct session *ses, struct document_view *doc_view)
 {
 	int steps = get_opt_int("document.browse.scrolling.horizontal_step");
 
 	horizontal_scroll(ses, doc_view, steps);
+
+	return FRAME_EVENT_REFRESH;
 }
 #endif /* CONFIG_MOUSE */
 
@@ -769,12 +777,12 @@ frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_
 		if (!check_mouse_action(ev, B_DOWN)) {
 			/* We handle only B_DOWN case... */
 		} else if (check_mouse_button(ev, B_WHEEL_UP)) {
-			scroll_mouse_up(ses, doc_view);
+			return scroll_mouse_up(ses, doc_view);
 		} else if (check_mouse_button(ev, B_WHEEL_DOWN)) {
-			scroll_mouse_down(ses, doc_view);
+			return scroll_mouse_down(ses, doc_view);
 		}
 
-		return FRAME_EVENT_REFRESH;
+		return FRAME_EVENT_OK;
 	}
 
 	link = get_link_at_coordinates(doc_view, x, y);
@@ -814,20 +822,20 @@ frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_
 		 * repeatcount-free here. */
 
 		if (y < scrollmargin) {
-			scroll_mouse_up(ses, doc_view);
+			return scroll_mouse_up(ses, doc_view);
 		}
 		if (y >= doc_view->box.height - scrollmargin) {
-			scroll_mouse_down(ses, doc_view);
+			return scroll_mouse_down(ses, doc_view);
 		}
 
 		if (x < scrollmargin * 2) {
-			scroll_mouse_left(ses, doc_view);
+			return scroll_mouse_left(ses, doc_view);
 		}
 		if (x >= doc_view->box.width - scrollmargin * 2) {
-			scroll_mouse_right(ses, doc_view);
+			return scroll_mouse_right(ses, doc_view);
 		}
 
-		return FRAME_EVENT_REFRESH;
+		return FRAME_EVENT_OK;
 	}
 
 	return FRAME_EVENT_IGNORED;

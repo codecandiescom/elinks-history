@@ -1,3 +1,52 @@
+Thu Dec 18 22:37:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/: dialog.c, menu.c:
+
+	Removed some strange redundant kbd event tests *puzzlement*.  
+
+Thu Dec 18 20:55:15 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* configure.in:
+
+	Reverted last modification, it is useless now.  
+
+Thu Dec 18 20:52:34 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/dialogs/status.c:
+
+	Fabio, tell me, what is this rint() thing for? 
+
+Thu Dec 18 20:38:08 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Thu Dec 18 20:34:18 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/config/options.inc:
+
+	Typo fix.  
+
+Thu Dec 18 20:25:30 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* configure.in:
+
+	Link against libm even if we don't compile LUA stuff.  Spotted by
+	Zardoz@users.sourceforge.net.  
+
+Thu Dec 18 17:05:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/status.c:
+
+	Simplify fabio's last patch by using int_max().  
+
+Thu Dec 18 13:47:58 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/dialogs/status.c:
+
+	Distribute tab size in a more uniform way.  
+
 Wed Dec 17 20:28:46 2003  Varga Balázs <vinnui@ent.hu>:
 
 	* po/hu.po:

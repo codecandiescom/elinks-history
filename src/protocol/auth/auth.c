@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.81 2004/05/21 12:22:09 jonas Exp $ */
+/* $Id: auth.c,v 1.82 2004/05/29 04:25:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 
 #include "elinks.h"
 
+#include "bfu/hierbox.h"
 #include "intl/gettext/libintl.h"
 #include "protocol/auth/auth.h"
 #include "protocol/auth/dialogs.h"
@@ -110,6 +111,8 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 
 	set_auth_user(entry, uri);
 	set_auth_password(entry, uri);
+
+	entry->box_item = add_listbox_item(&auth_browser, entry->url, entry);
 
 	return entry;
 }
@@ -255,6 +258,8 @@ del_auth_entry(struct http_auth_basic *entry)
 	      entry->url, entry->realm, entry->user);
 #endif
 
+	if (entry->box_item)
+		done_listbox_item(&auth_browser, entry->box_item);
 	mem_free_if(entry->url);
 	mem_free_if(entry->realm);
 

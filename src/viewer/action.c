@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.65 2004/05/25 07:14:50 jonas Exp $ */
+/* $Id: action.c,v 1.66 2004/05/29 04:25:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,7 @@
 #include "formhist/dialogs.h"
 #include "globhist/dialogs.h"
 #include "protocol/auth/auth.h"
+#include "protocol/auth/dialogs.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
@@ -146,6 +147,10 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				bookmark_terminal_tabs_dialog(term);
 #endif
+			break;
+
+		case ACT_MAIN_AUTH_MANAGER:
+			auth_manager(ses);
 			break;
 
 		case ACT_MAIN_BACK:

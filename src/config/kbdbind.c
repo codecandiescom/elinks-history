@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.208 2004/05/23 15:43:16 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.209 2004/05/29 04:25:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -455,6 +455,7 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "add-bookmark", ACT_MAIN_ADD_BOOKMARK, DACT(N_("Add a new bookmark")) },
 	{ "add-bookmark-link", ACT_MAIN_ADD_BOOKMARK_LINK, DACT(N_("Add a new bookmark using current link")) },
 	{ "add-bookmark-tabs", ACT_MAIN_ADD_BOOKMARK_TABS, DACT(N_("Bookmark all open tabs")) },
+	{ "auth-manager", ACT_MAIN_AUTH_MANAGER, DACT(N_("Open authentication manager")) },
 	{ "back", ACT_MAIN_BACK, DACT(N_("Return to the previous document in history")) },
 	{ "bookmark-manager", ACT_MAIN_BOOKMARK_MANAGER, DACT(N_("Open bookmark manager")) },
 	{ "cache-manager", ACT_MAIN_CACHE_MANAGER, DACT(N_("Open cache manager")) },

@@ -1,15 +1,22 @@
-/* $Id: auth.h,v 1.16 2004/05/09 00:59:51 jonas Exp $ */
+/* $Id: auth.h,v 1.17 2004/05/29 04:25:24 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_AUTH_AUTH_H
 #define EL__PROTOCOL_AUTH_AUTH_H
 
 #include "protocol/uri.h"
+#include "util/object.h"
+
+struct listbox_item;
 
 struct http_auth_basic {
 	LIST_HEAD(struct http_auth_basic);
 
 	unsigned char *url;
 	unsigned char *realm;
+
+	struct listbox_item *box_item;
+	struct object object;
+
 	unsigned char user[HTTP_AUTH_USER_MAXLEN];
 	unsigned char password[HTTP_AUTH_PASSWORD_MAXLEN];
 	unsigned int blocked:1;

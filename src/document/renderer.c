@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.72 2004/09/21 22:37:37 jonas Exp $ */
+/* $Id: renderer.c,v 1.73 2004/09/23 00:07:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,6 +163,7 @@ render_document_frames(struct session *ses, int no_cache)
 	if (!ses->doc_view) {
 		ses->doc_view = mem_calloc(1, sizeof(struct document_view));
 		if (!ses->doc_view) return;
+		ses->doc_view->session = ses;
 		ses->doc_view->search_word = &ses->search_word;
 	}
 

@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.23 2004/09/21 22:37:37 jonas Exp $ */
+/* $Id: view.h,v 1.24 2004/09/23 00:07:21 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_VIEW_H
 #define EL__DOCUMENT_VIEW_H
@@ -23,6 +23,7 @@ struct document_view {
 	unsigned char *name;
 	unsigned char **search_word;
 
+	struct session *session;
 	struct document *document;
 	struct view_state *vs;
 	struct link_bg *link_bg;

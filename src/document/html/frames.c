@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.82 2004/09/21 22:37:37 jonas Exp $ */
+/* $Id: frames.c,v 1.83 2004/09/23 00:07:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,6 +156,7 @@ find_fd(struct session *ses, unsigned char *name,
 		return NULL;
 	}
 	doc_view->depth = depth;
+	doc_view->session = ses;
 	doc_view->search_word = &ses->search_word;
 	set_box(&doc_view->box, x, y, 0, 0);
 

@@ -39,10 +39,11 @@ DEBs:
 	ftp://yikes.tolna.net/pub/linux/release/debian/
 
 RPMs:
-	ftp://ftp.pld.org.pl/stable/i{3,4,5,6}86/
+	http://ftp.pld.org.pl/pool/l/links/
+	http://ftp.pld.org.pl/pool/l/links2/
 	http://www.binary.is/links.php
 	http://adis.on.ca/pub/Projects/MyRPMS/
 	ftp://ftp.scripty.com/pub/redhat/6.x/i386/links-0.95-1.i386.rpm
 	ftp://ftp.scripty.com/pub/redhat/6.x/SRPMS/links-0.95-1.src.rpm
 
-$Id: SITES,v 1.12 2002/12/04 16:29:58 pasky Exp $
+$Id: SITES,v 1.13 2003/01/01 19:54:44 pasky Exp $

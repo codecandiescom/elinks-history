@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.111 2003/11/15 18:51:08 kuser Exp $ */
+/* $Id: search.c,v 1.112 2003/11/15 19:01:16 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -278,6 +278,9 @@ is_in_range_regex(struct document *document, int y, int yy,
 	int reg_err;
 	regex_t regex;
 	regmatch_t regmatch;
+	int pos = 0;
+	struct search *s1v = s1;
+	unsigned char save_c;
 
 	if (get_opt_int("document.browse.search.regex") == 2)
 		regex_flags |= REG_EXTENDED;
@@ -312,6 +315,15 @@ is_in_range_regex(struct document *document, int y, int yy,
 	doc[doclen] = 0;
 
 	doctmp = doc;
+
+find_next:
+	while (pos < doclen && (s1v[pos].y < y-1 || s1v[pos].y > yy)) pos++;
+	doctmp = &doc[pos];
+	s1 = &s1v[pos];
+	while (pos < doclen && (s1v[pos].y >= y-1 && s1v[pos].y <= yy)) pos++;
+	save_c = doc[pos];
+	doc[pos] = 0;
+
 	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, regexec_flags)) {
 		regexec_flags = REG_NOTBOL;
 		l = regmatch.rm_eo - regmatch.rm_so;
@@ -334,6 +346,10 @@ next:
 		doctmp += int_max(l, 1);
 		s1 += int_max(l, 1);
 	}
+
+	doc[pos] = save_c;
+	if (pos < doclen)
+		goto find_next;
 
 	regfree(&regex);
 	mem_free(doc);
@@ -506,6 +522,9 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	register int i;
 	regex_t regex;
 	regmatch_t regmatch;
+	int pos = 0;
+	struct search *s1v = s1;
+	unsigned char save_c;
 
 	if (get_opt_int("document.browse.search.regex") == 2)
 		regex_flags |= REG_EXTENDED;
@@ -553,6 +572,14 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	ypv= yp - doc_view->vs->y;
 
 	doctmp = doc;
+
+	while (pos < doclen && (s1v[pos].y+ypv < yp-1 || s1v[pos].y+ypv > yy)) pos++;
+	doctmp = &doc[pos];
+	s1 = &s1v[pos];
+	while (pos < doclen && (s1v[pos].y+ypv >= yp-1 && s1v[pos].y+ypv <= yy)) pos++;
+	save_c = doc[pos];
+	doc[pos] = 0;
+
 	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, regexec_flags)) {
 		regexec_flags = REG_NOTBOL;
 		l = regmatch.rm_eo - regmatch.rm_so;
@@ -584,6 +611,10 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 		doctmp += int_max(l, 1);
 		s1 += int_max(l, 1);
 	}
+
+	doc[pos] = save_c;
+	if (pos < doclen)
+		goto find_next;
 
 	regfree(&regex);
 	mem_free(doc);

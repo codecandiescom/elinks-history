@@ -1,3 +1,79 @@
+Mon Sep  8 21:16:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	set_term_color(): Bail out if !d_opt.  
+
+Mon Sep  8 21:07:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/options.c, document/options.h,
+	document/html/renderer.c, terminal/screen.c, terminal/screen.h:
+
+	Add color_size to the document option structure.  
+
+Mon Sep  8 20:54:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Add (kindof) support for the color array.  
+
+Mon Sep  8 20:37:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Fix spurious redraws because of bad color comparison.  
+
+Mon Sep  8 19:24:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/renderer.c, elusive/renderer/text/renderer.c,
+	terminal/color.c, terminal/draw.c, terminal/draw.h,
+	terminal/screen.c, viewer/text/link.c:
+
+	Make the screen_char color an array. This will be necessary when
+	moving towards support for 256. The patch contains a few hacks for
+	when a local screen_char stack variable are needed because the color
+	array can have various sizes. Also set_hline() is now responsible
+	for making the format change in the renderer.  
+
+Mon Sep  8 17:27:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Fix set_term_color() type.  
+
+Mon Sep  8 15:44:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.h:
+
+	Oops fix comment.  
+
+Mon Sep  8 15:43:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/renderer.c, terminal/color.c,
+	terminal/color.h, terminal/draw.c, viewer/text/link.c:
+
+	Encapsulate the fg and bg color levels + drop 8 from
+	set_term_color8().  
+
+Mon Sep  8 15:22:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.h:
+
+	Move comment about color encoding to header.  
+
+Mon Sep  8 15:10:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Minor optimizations (mainly tests reordering and intermediate
+	results caching).  
+
+Mon Sep  8 12:32:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/frames.c:
+
+	Minor cleanup and optimization in format_frames().  
+
 Sun Sep  7 21:41:50 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/lowlevel/sysname.c:

@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.33 2004/01/19 13:35:02 fabio Exp $ */
+/* $Id: apply.c,v 1.34 2004/01/19 16:55:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,7 +80,8 @@ css_apply(struct html_element *element)
 {
 	INIT_LIST_HEAD(props);
 	unsigned char *code;
-	struct css_property *prop;
+	struct css_property *property;
+	struct list_head *properties = &props;
 
 	assert(element && element->options);
 
@@ -91,19 +92,18 @@ css_apply(struct html_element *element)
 	css_parse_properties(&props, code);
 	mem_free(code);
 
-	foreach (prop, props) {
-		assert(prop->type < CSS_PT_LAST);
+	foreach (property, *properties) {
+		assert(property->type < CSS_PT_LAST);
 		/* We don't assert general prop->value_type here because I
 		 * don't want hinder properties' ability to potentially make
 		 * use of multiple value types. */
-		assert(css_appliers[prop->type]);
-		css_appliers[prop->type](element, prop);
+		assert(css_appliers[property->type]);
+		css_appliers[property->type](element, property);
 	}
 
-	while (!list_empty(props)) {
-		struct css_property *prop = props.next;
-
-		del_from_list(prop);
-		mem_free(prop);
+	while (!list_empty(properties)) {
+		property = properties.next;
+		del_from_list(property);
+		mem_free(property);
 	}
 }

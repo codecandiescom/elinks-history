@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.21 2005/03/28 23:21:28 zas Exp $ */
+/* $Id: parse.c,v 1.22 2005/03/28 23:24:11 zas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -370,9 +370,9 @@ parse_ftp_unix_response(struct ftp_file_info *info, unsigned char *src, int len)
 						info->symlink.length = end - pos - 4;
 						info->name.length = pos - src;
 						break;
-					} else {
-						pos = memchr(pos, ' ', end - pos);
 					}
+		
+					pos = memchr(pos, ' ', end - pos);
 				}
 
 				if (!info->symlink.source)

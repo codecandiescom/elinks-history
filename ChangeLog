@@ -1,3 +1,249 @@
+Thu Sep 16 00:32:37 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/charsets.c:
+
+	Fix probable off-by-one overflow in convert_string() non-callback
+	usage. No clue how old it is nor whether it can be ever dangerous
+	nor why didn't our debugger detect it.  
+
+Wed Sep 15 23:45:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/charsets.c:
+
+	Call convert_string() @callback only if the buffer would be of
+	non-zero length.  
+
+Wed Sep 15 23:42:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/charsets.h:
+
+	Document convert_string().  
+
+Wed Sep 15 23:37:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: cache/cache.c, document/html/parser.c,
+	document/html/renderer.c, document/html/parser/forms.c,
+	document/html/parser/parse.c, document/plain/renderer.c,
+	intl/charsets.c, intl/charsets.h, viewer/text/form.c:
+
+	Potentially fix the convert_string() call from HTML renderer
+	duplicating the whole rendered document in memory (which can be
+	_SLOW_ for big documents due to low granularity used in
+	convert_string(), which is right for most of the other uses). Now it
+	takes a @callback argument which is called instead of reallocations
+	if non-NULL, convert_string() then always returning NULL.  
+
+Wed Sep 15 14:55:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/cgi.c:
+
+	set_vars(): Rewrap referrer code.  
+
+Wed Sep 15 14:53:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/cgi.c:
+
+	set_vars(): Switch in.  
+
+Wed Sep 15 14:51:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/cgi.c:
+
+	set_vars(): Make same referrer setting saner.  
+
+Wed Sep 15 14:50:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/cgi.c:
+
+	set_vars(): Rename optstr -> str and rewrap.  
+
+Wed Sep 15 14:40:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Use add_long_to_string() when adding the IP family to the URI
+	string.  
+
+Wed Sep 15 10:13:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	add_document_line(): Move assertion of pos[-1].data which can
+	potentially access out of bound. Most likely the cause is the plain
+	text mark-up. Closes bug 498.  
+
+Wed Sep 15 09:12:44 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/file/cgi.c:
+
+	Sent referrer only when there is one.  
+
+Wed Sep 15 08:27:05 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Tue Sep 14 23:28:48 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/info.c:
+
+	Display Cache size in get_memory_info() if HAVE_MMAP as it isn't
+	counted in the Allocated field.  
+
+Tue Sep 14 23:09:28 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/cache/cache.c, src/cache/cache.h,
+	src/util/memory.c, src/util/memory.h:
+
+	Introduced mem_mmap_(alloc|free|realloc)() which covers mmap(),
+	munmap() and potentially mremap() (and just reverts to the normal
+	heap if the system doesn't provide mmap()). And we use this new
+	allocator right away in the cache code for the cache fragments,
+	which amounts some small overhead per cache entry but should prevent
+	the infamous pathological cases where the ELinks gets fat to 50M and
+	doesn't shrink even after a cache flush. Full rationale in a comment
+	inside. It crashes surprisingly seldom so there must be some
+	kickback. ;-) 
+
+Tue Sep 14 22:31:40 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	Abstracted out memory manipulation on fragments to
+	frag_(alloc|realloc|free)().  
+
+Tue Sep 14 20:58:51 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/file/cgi.c:
+
+	Scripts with .cgi extension are not secure in multiuser environment.  
+
+Tue Sep 14 20:56:36 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/file/cgi.c:
+
+	Fix for bug 373. PATH_TRANSLATED does the trick.  
+
+Tue Sep 14 20:24:42 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/task.c:
+
+	Handle URI parsing failures properly even with scripting support.  
+
+Tue Sep 14 20:23:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Fixed [ipv6addyURInotation] parsing.  
+
+Tue Sep 14 20:05:07 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* features.conf:
+
+	Slightly elaborated on CONFIG_IPV6.  
+
+Tue Sep 14 19:48:59 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/options.inc, lowlevel/connect.c, protocol/uri.c,
+	protocol/uri.h:
+
+	Added support for a 4/6 postfix to the protocol scheme (i.e.
+	http4://, http6://).  
+
+Tue Sep 14 17:14:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/options.inc, lowlevel/connect.c:
+
+	Introduced connection.try_ipv[46], which controls whether to use
+	IPv4/IPv6 at runtime on a global basis.  
+
+Tue Sep 14 17:10:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/connect.c:
+
+	Move the (sin6|sin)_family logic from socket() call to setting a
+	separate @family variable. Purpose will be clear soon.  
+
+Tue Sep 14 07:23:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/encoding/gzip.c:
+
+	Remove all the alternative versions of gzip_decode_buffer().  
+
+Tue Sep 14 07:21:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/encoding/gzip.c:
+
+	Implement gzip header skipping and switch to do all decoding in
+	memory.  
+	
+	Thanks goes out to lindi- for digging into the problem where I gave
+	up and for sstar for enlightening us both.  
+
+Tue Sep 14 06:47:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/encoding/gzip.c:
+
+	gzip_decode_buffer(): Like the bzip2 backend check stream.avail_in
+	in the decoding loop condition.  
+
+Tue Sep 14 06:46:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/encoding/gzip.c:
+
+	gzip_decode_buffer(): Use Z_NO_FLUSH when calling inflate().  
+
+Mon Sep 13 20:04:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/encoding/bzip2.c:
+
+	bzip2_decode_buffer(): Check stream.avail_in > 0 in the loop
+	condition. lindi- reported that it could cause an infinite loop.  
+
+Mon Sep 13 15:27:18 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/data.c:
+
+	Grammar and spelling fixes in the comment that Jonas just added.  
+
+Mon Sep 13 14:16:57 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Sep 13 11:35:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listbox.c:
+
+	Introduce VERTICAL_LISTBOX_MARGIN macro to make the height
+	calculation less cryptic.  
+
+Mon Sep 13 11:17:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/data.c:
+
+	Add FIXME about redirecting.  
+
+Mon Sep 13 01:11:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/gopher/gopher.c:
+
+	Fix chopping of junk after port string. Spotted by Miciah.  
+
+Mon Sep 13 00:18:47 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/gopher/gopher.c:
+
+	Revise the comment describing the gopher_entity_info table.  
+
+Sun Sep 12 23:34:20 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/gopher/gopher.c:
+
+	Indentation fixes.  
+
 Sun Sep 12 22:03:21 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/protocol/gopher/gopher.c:
@@ -326,8 +572,6 @@ Sat Sep 11 18:02:08 2004  Jonas Fonseca <fonseca@diku.dk>:
 	* configure.in:
 
 	0.10pre0.CVS 
-	
-	omg im such a better maintainer then pasky lol 
 
 Sat Sep 11 17:30:10 2004  Jonas Fonseca <fonseca@diku.dk>:
 

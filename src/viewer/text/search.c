@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.279 2004/08/15 06:55:20 miciah Exp $ */
+/* $Id: search.c,v 1.280 2004/08/15 07:15:33 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -714,6 +714,8 @@ enum find_error {
 	FIND_ERROR_HIT_TOP,
 	FIND_ERROR_HIT_BOTTOM,
 	FIND_ERROR_NOT_FOUND,
+	FIND_ERROR_MEMORY,
+	FIND_ERROR_REGEX,
 };
 
 static enum find_error find_next_do(struct session *ses,
@@ -893,8 +895,12 @@ find_next_do(struct session *ses, struct document_view *doc_view, int direction)
 	get_search_data(doc_view->document);
 
 	do {
-		if (is_in_range(doc_view->document, p, height, ses->search_word,
-				&min, &max) > 0) {
+		int in_range = is_in_range(doc_view->document, p, height,
+					   ses->search_word, &min, &max);
+
+		if (in_range == -1) return FIND_ERROR_MEMORY;
+		if (in_range == -2) return FIND_ERROR_REGEX;
+		if (in_range) {
 			doc_view->vs->y = p;
 			if (max >= min)
 				doc_view->vs->x = int_min(int_max(doc_view->vs->x,
@@ -980,6 +986,18 @@ print_find_error(struct session *ses, enum find_error find_error)
 
 			break;
 
+		case FIND_ERROR_REGEX:
+			print_find_error_not_found(ses, N_("Search"),
+						   N_("Could not compile"
+						      " reguler expression"
+						      " '%s'"),
+						   ses->search_word);
+
+			break;
+
+		case FIND_ERROR_MEMORY:
+			/* Why bother trying to create a msg_box?
+			 * We probably don't have the memory... */
 		case FIND_ERROR_NONE:
 			break;
 	}

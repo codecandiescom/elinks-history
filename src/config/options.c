@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.411 2003/12/01 18:23:37 jonas Exp $ */
+/* $Id: options.c,v 1.412 2003/12/01 20:31:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1072,6 +1072,7 @@ change_hook_ui(struct session *ses, struct option *current, struct option *chang
 {
 	int show_title_bar = get_opt_int("ui.show_title_bar");
 	int show_status_bar = get_opt_int("ui.show_status_bar");
+	int set_window_title = get_opt_bool("ui.window_title");
 
 	foreach (ses, sessions) {
 		int dirty = 0;
@@ -1085,6 +1086,8 @@ change_hook_ui(struct session *ses, struct option *current, struct option *chang
 			ses->visible_status_bar = show_status_bar;
 			dirty = 1;
 		}
+
+		ses->set_window_title = set_window_title;
 
 		if (!dirty) continue;
 

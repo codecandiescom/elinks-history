@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.7 2003/12/01 19:49:11 jonas Exp $ */
+/* $Id: status.c,v 1.8 2003/12/01 20:31:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -320,8 +320,7 @@ print_screen_status(struct session *ses)
 		}
 	}
 
-	if (!ses_tab_is_current
-	    || !get_opt_bool("ui.window_title"))
+	if (!ses_tab_is_current || !ses->set_window_title)
 		goto title_set;
 
 	msg = stracpy("ELinks");

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.265 2003/12/01 16:05:48 jonas Exp $ */
+/* $Id: session.c,v 1.266 2003/12/01 20:31:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -951,6 +951,7 @@ create_basic_session(struct window *tab)
 	/* Further updating of these is handled using change hooks */
 	ses->visible_title_bar = get_opt_int("ui.show_title_bar");
 	ses->visible_status_bar = get_opt_int("ui.show_status_bar");
+	ses->set_window_title = get_opt_int("ui.window_title");
 
 #ifdef USE_LEDS
 	init_led_panel(&ses->leds);

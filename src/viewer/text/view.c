@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.80 2003/05/25 09:35:22 zas Exp $ */
+/* $Id: view.c,v 1.81 2003/06/01 11:37:47 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2682,12 +2682,18 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 			case ACT_LINK_MENU:
 			case ACT_JUMP_TO_LINK:
 			case ACT_OPEN_LINK_IN_NEW_WINDOW:
-				if (ses->kbdprefix.rep
-					&& ses->kbdprefix.rep_num
-						<= fd->f_data->nlinks)
-					jump_to_link_number(ses,
-						current_frame(ses),
-						ses->kbdprefix.rep_num - 1);
+				if (!ses->kbdprefix.rep) break;
+
+				if (ses->kbdprefix.rep_num
+						> fd->f_data->nlinks) {
+					ses->kbdprefix.rep = 0;
+					return 2;
+				}
+
+				jump_to_link_number(ses,
+						    current_frame(ses),
+						    ses->kbdprefix.rep_num
+						     - 1);
 		}
 
 		switch (kbd_action(KM_MAIN, ev, NULL)) {

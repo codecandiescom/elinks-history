@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.55 2002/10/13 16:10:43 pasky Exp $ */
+/* $Id: http.c,v 1.56 2002/10/13 16:17:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1086,13 +1086,17 @@ again:
 		/* I'm not really sure about this. --pasky */
 		struct download *down = ((struct status *) c->statuss.next)->data;
 
+		/* Update to the real value which we've got from Content-Range. */
+		/* This is certainly not the best place to do it, the struct
+		 * download looks alien here, but I'm not aware about any other
+		 * place where we could do this elegantly. */
+
 		if (!down)
 			internal("Eek! We've NULL down (c->stat->data) even when "
 				 "we got c->prg.start! Call pasky@ji.cz immediatelly, "
 				 "please. And expect segfault right now.");
 		lseek(down->handle, c->from, SEEK_SET);
-		/* Update to the real value which we've got from Content-Range. */
-		c->prg.start = c->from;
+		c->prg.start = down->last_pos = c->from;
 	}
 
 	d = parse_http_header(e->head, "Content-Length", NULL);

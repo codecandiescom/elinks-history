@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.15 2003/09/22 15:08:46 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.16 2003/10/03 12:35:23 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -143,22 +143,13 @@ parse_mimetypes_file(unsigned char *filename)
 
 #undef skip_whitespace
 
-static int
-mimetypes_change_hook(struct session *, struct option *, struct option *);
-
 static void
-init_mimetypes(void)
+init_mimetypes_map(void)
 {
 	unsigned char *path;
 
-	/* Check and do stuff that should only be done once. */
-	if (!mimetypes_tree) {
-		mimetypes_tree = get_opt_rec(config_options, "mime.mimetypes");
-		mimetypes_tree->change_hook = mimetypes_change_hook;
-
-		if (!get_opt_bool_tree(mimetypes_tree, "enable"))
-			return;
-	}
+	if (!get_opt_bool_tree(mimetypes_tree, "enable"))
+		return;
 
 	mimetypes_map = init_hash(8, &strhash);
 	if (!mimetypes_map)
@@ -206,17 +197,25 @@ mimetypes_change_hook(struct session *ses, struct option *current,
 	if (!strncasecmp(changed->name, "path", 4)) {
 		/* Brute forcing reload! */
 		done_mimetypes();
-		init_mimetypes();
+		init_mimetypes_map();
 	} else if (!strncasecmp(changed->name, "enable", 6)) {
 		int enable = *((int *) changed->ptr);
 
 		if (enable && !mimetypes_map)
-			init_mimetypes();
+			init_mimetypes_map();
 		else if (!enable && mimetypes_map)
 			done_mimetypes();
 	}
 
 	return 0;
+}
+
+static void
+init_mimetypes(void)
+{
+	mimetypes_tree = get_opt_rec(config_options, "mime.mimetypes");
+	mimetypes_tree->change_hook = mimetypes_change_hook;
+	init_mimetypes_map();
 }
 
 

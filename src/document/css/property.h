@@ -1,8 +1,9 @@
-/* $Id: property.h,v 1.3 2004/01/17 20:24:09 pasky Exp $ */
+/* $Id: property.h,v 1.4 2004/01/17 21:17:22 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PROPERTY_H
 #define EL__DOCUMENT_CSS_PROPERTY_H
 
+#include "bfu/style.h"
 #include "document/html/parser.h"
 #include "util/color.h"
 #include "util/lists.h"
@@ -22,6 +23,7 @@ struct css_property {
 		CSS_DP_COLOR,
 		CSS_DP_FONT_STYLE,
 		CSS_DP_FONT_WEIGHT,
+		CSS_DP_TEXT_ALIGN,
 		CSS_DP_LAST,
 	} property;
 
@@ -32,14 +34,16 @@ struct css_property {
 		CSS_DV_NONE,
 		CSS_DV_COLOR,
 		CSS_DV_FONT_ATTRIBUTE,
+		CSS_DV_TEXT_ALIGN,
 		CSS_DV_LAST,
 	} value_type;
 	union css_decl_value {
-		void *dummy;
+		void *none;
 		color_t color;
 		struct {
 			enum format_attr add, rem;
 		} font_attribute;
+		enum format_align text_align;
 		/* TODO:
 		 * Generic numbers
 		 * Percentages

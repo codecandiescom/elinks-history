@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.24 2004/01/17 20:24:09 pasky Exp $ */
+/* $Id: apply.c,v 1.25 2004/01/17 21:17:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,6 +51,13 @@ css_apply_font_attribute(struct html_element *element, struct css_property *prop
 	element->attr.attr &= ~prop->value.font_attribute.rem;
 }
 
+static void
+css_apply_text_align(struct html_element *element, struct css_property *prop)
+{
+	assert(prop->value_type == CSS_DV_TEXT_ALIGN);
+	element->parattr.align = prop->value.text_align;
+}
+
 /* XXX: Sort like the css_decl_property */
 static css_applier_t css_appliers[CSS_DP_LAST] = {
 	/* CSS_DP_NONE */		NULL,
@@ -58,6 +65,7 @@ static css_applier_t css_appliers[CSS_DP_LAST] = {
 	/* CSS_DP_COLOR */		css_apply_color,
 	/* CSS_DP_FONT_STYLE */		css_apply_font_attribute,
 	/* CSS_DP_FONT_WEIGHT */	css_apply_font_attribute,
+	/* CSS_DP_TEXT_ALIGN */		css_apply_text_align,
 };
 
 void

@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.8 2004/01/17 20:24:09 pasky Exp $ */
+/* $Id: value.c,v 1.9 2004/01/17 21:17:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,10 +157,43 @@ css_parse_font_attribute_value(union css_decl_value *value,
 }
 
 
+static int
+css_parse_font_attribute_value(union css_decl_value *value,
+				unsigned char **string)
+{
+	if (!strlcasecmp(*string, -1, "left", 4)) {
+		(*string) += 4;
+		value->text_align = AL_LEFT;
+		return 1;
+	}
+
+	if (!strlcasecmp(*string, -1, "right", 5)) {
+		(*string) += 4;
+		value->text_align = AL_RIGHT;
+		return 1;
+	}
+
+	if (!strlcasecmp(*string, -1, "center", 6)) {
+		(*string) += 4;
+		value->text_align = AL_CENTER;
+		return 1;
+	}
+
+	if (!strlcasecmp(*string, -1, "justify", 7)) {
+		(*string) += 4;
+		value->text_align = AL_BLOCK;
+		return 1;
+	}
+
+	return 0;
+}
+
+
 static css_value_parser_t css_value_parsers[CSS_DV_LAST] = {
 	/* CSS_DV_NONE */		NULL,
 	/* CSS_DV_COLOR */		css_parse_color_value,
 	/* CSS_DV_FONT_ATTRIBUTE */	css_parse_font_attribute_value,
+	/* CSS_DV_TEXT_ALIGN */		css_parse_text_align_value,
 };
 
 int

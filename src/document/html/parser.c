@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.332 2004/01/17 14:18:14 pasky Exp $ */
+/* $Id: parser.c,v 1.333 2004/01/17 14:44:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1058,14 +1058,17 @@ html_body(unsigned char *a)
 	get_color(a, "link", &format.clink);
 	get_color(a, "vlink", &format.vlink);
 
-	get_bgcolor(a, &par_format.bgcolor);
-	if (get_bgcolor(a, &format.bg) >= 0) {
+	get_bgcolor(a, &format.bg);
+	/* If there are any CSS twaks regarding bgcolor, make sure we will get
+	 * it _and_ prefer it over bgcolor attribute. */
+	css_apply(&html_top);
+
+	if (par_format.bgcolor != format.bg) {
 		/* Modify the root HTML element - format_html_part() will take
 		 * this from there. */
 		struct html_element *e = html_stack.prev;
 
-		e->parattr.bgcolor = par_format.bgcolor;
-		e->attr.bg = format.bg;
+		e->parattr.bgcolor = e->attr.bg = par_format.bgcolor = format.bg;
 	}
 
 	if (has_link_lines

@@ -73,6 +73,7 @@ Cliff Cunnington <cliff@ccnet.demon.nl>
 
 Cristiano Guadagnino <cris@geppo.cmb2000.it>
 	Updated italian translation
+	OS/2 compilation fixes
 
 Dakshinamurthy Karra <kd@blr.vsnl.net.in>
 	Win NT port
@@ -280,4 +281,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	Big amount of bugfixes and tidyups
 	Referred as 'Zas' or 'zas' in the code
 
-$Id: AUTHORS,v 1.42 2002/03/22 18:05:05 pasky Exp $
+$Id: AUTHORS,v 1.43 2002/03/26 16:50:48 pasky Exp $

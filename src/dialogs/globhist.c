@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: globhist.c,v 1.7 2002/04/02 16:00:22 pasky Exp $ */
+/* $Id: globhist.c,v 1.8 2002/04/02 17:09:32 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -386,8 +386,8 @@ push_delete_button(struct dialog_data *dlg,
 
 	msg_box(term, getml(hop, NULL),
 		TEXT(T_DELETE_HISTORY_ITEM), AL_CENTER | AL_EXTD_TEXT,
-		TEXT(T_DELETE_HISTORY_ITEM), " \"", historyitem->title, "\" (",
-		TEXT(T_URL), ": \"", historyitem->url, "\")?", NULL,
+		TEXT(T_DELETE_HISTORY_ITEM), " \"", historyitem->title, "\" ?\n\n",
+		TEXT(T_URL), ": \"", historyitem->url, "\"", NULL,
 		hop, 2,
 		TEXT(T_YES), really_del_history, B_ENTER,
 		TEXT(T_NO), NULL, B_ESC);

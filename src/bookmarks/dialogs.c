@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.4 2002/04/02 15:58:32 pasky Exp $ */
+/* $Id: dialogs.c,v 1.5 2002/04/02 17:09:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -442,8 +442,8 @@ push_delete_button(struct dialog_data *dlg,
 
 	msg_box(term, getml(hop, NULL),
 		TEXT(T_DELETE_BOOKMARK), AL_CENTER | AL_EXTD_TEXT,
-		TEXT(T_DELETE_BOOKMARK), " \"", bm->title, "\" (",
-		TEXT(T_url), ": \"", bm->url, "\")?", NULL,
+		TEXT(T_DELETE_BOOKMARK), " \"", bm->title, "\" ?\n\n",
+		TEXT(T_URL), ": \"", bm->url, "\"", NULL,
 		hop, 2,
 		TEXT(T_YES), really_del_bookmark, B_ENTER,
 		TEXT(T_NO), NULL, B_ESC);

@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.67 2003/11/24 23:06:40 pasky Exp $ */
+/* $Id: dump.c,v 1.68 2003/11/24 23:22:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,14 +122,11 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 	o.frames = 0;
 
 	init_vs(vs, get_cache_uri(ce), -1);
-	object_lock(vs);
 
 	render_document(vs, &formatted, &o);
 	dump_to_file(formatted.document, fd);
 	detach_formatted(&formatted);
 
-	object_unlock(vs);
-	assert(!is_object_used(vs));
 	destroy_vs(vs);
 	mem_free(vs);
 

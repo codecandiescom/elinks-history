@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.66 2003/11/16 03:19:47 jonas Exp $ */
+/* $Id: document.c,v 1.67 2003/12/01 15:01:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "dialogs/document.h"
 #include "cache/cache.h"
 #include "document/html/renderer.h"
+#include "document/view.h"
 #include "globhist/globhist.h"
 #include "intl/gettext/libintl.h"
 #include "protocol/http/header.h"

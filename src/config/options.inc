@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.50 2003/12/26 10:10:09 jonas Exp $ */
+/* $Id: options.inc,v 1.51 2003/12/26 11:11:31 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -885,7 +885,7 @@ struct option_info config_options_info[] = {
 		"color", 0,
 		N_("Color settings for color terminal.")),
 
-
+	/* FIXME: obsolete, how to alias them correctly ? --Zas */
 	INIT_OPT_TREE("ui.colors.color", N_("Main menu bar"),
 		"mainmenu", 0,
 		N_("Main menu bar colors.")),
@@ -1344,6 +1344,7 @@ struct option_info config_options_info[] = {
 		N_("Color settings for non-color terminal.")),
 
 
+	/* FIXME: obsolete. --Zas */
 	INIT_OPT_TREE("ui.colors.mono", N_("Main menu bar"),
 		"mainmenu", 0,
 		N_("Main menu bar colors.")),

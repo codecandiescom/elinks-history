@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.135 2003/12/26 10:55:32 zas Exp $ */
+/* $Id: menu.c,v 1.136 2003/12/26 11:11:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -675,10 +675,10 @@ do_mainmenu(struct terminal *term, struct menu_item *items,
 static void
 display_mainmenu(struct terminal *term, struct mainmenu *menu)
 {
-	struct color_pair *normal_color = get_bfu_color(term, "mainmenu.normal");
-	struct color_pair *selected_color = get_bfu_color(term, "mainmenu.selected");
-	struct color_pair *hotkey_color = get_bfu_color(term, "mainmenu.hotkey.normal");
-	struct color_pair *selected_hotkey_color = get_bfu_color(term, "mainmenu.hotkey.selected");
+	struct color_pair *normal_color = get_bfu_color(term, "menu.normal");
+	struct color_pair *selected_color = get_bfu_color(term, "menu.selected");
+	struct color_pair *hotkey_color = get_bfu_color(term, "menu.hotkey.normal");
+	struct color_pair *selected_hotkey_color = get_bfu_color(term, "menu.hotkey.selected");
 	int p = 2;
 	int i;
 
@@ -687,7 +687,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 	for (i = 0; i < menu->ni; i++) {
 		struct color_pair *co = normal_color;
 		struct color_pair *hkco = hotkey_color;
-		unsigned char *tmptext = menu->items[i].text;
+		unsigned char *text = menu->items[i].text;
 		int key_pos = menu->items[i].hotkey_pos;
 		int hk = 0;
 		int j;
@@ -701,16 +701,16 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 #endif
 
 		if (mi_text_translate(menu->items[i]))
-			tmptext = _(tmptext, term);
+			text = _(text, term);
 
 		if (i == menu->selected) {
-			int tmptextlen = strlen(tmptext) - !!key_pos;
+			int textlen = strlen(text) - !!key_pos;
 
 			co = selected_color;
 			hkco = selected_hotkey_color;
 
 			draw_area(term, p, 0, 2, 1, ' ', 0, co);
-			draw_area(term, p + tmptextlen + 2, 0, 2, 1, ' ', 0, co);
+			draw_area(term, p + textlen + 2, 0, 2, 1, ' ', 0, co);
 			menu->sp = p;
 			set_cursor(term, p, 0, 1);
 			set_window_ptr(menu->win, p, 1);
@@ -718,7 +718,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 
 		p += 2;
 
-		for (j = 0; (c = tmptext[j]); j++, p++) {
+		for (j = 0; (c = text[j]); j++, p++) {
 			if (!hk && key_pos && j == key_pos - 1) {
 				hk = 1;
 				p--;

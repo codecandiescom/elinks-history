@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.262 2004/08/09 05:58:46 miciah Exp $ */
+/* $Id: search.c,v 1.263 2004/08/09 06:19:46 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -915,6 +915,8 @@ void
 find_next(struct session *ses, struct document_view *doc_view, int direction)
 {
 	int hit_top = 0;
+	unsigned char *message = NULL;
+	unsigned int free_text = 0;
 
 	switch (find_next_do(ses, doc_view, direction)) {
 		case FIND_ERROR_HIT_TOP:
@@ -923,30 +925,20 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 			if (!get_opt_bool("document.browse.search.show_hit_top_bottom"))
 				break;
 
-			msg_box(ses->tab->term, NULL, 0,
-				N_("Search"), ALIGN_CENTER,
-				hit_top ? N_("Search hit top, continuing at bottom.")
-					: N_("Search hit bottom, continuing at top."),
-				NULL, 1,
-				N_("OK"), NULL, B_ENTER | B_ESC);
+			message = hit_top
+				 ? N_("Search hit top, continuing at bottom.")
+				 : N_("Search hit bottom, continuing at top.");
 			break;
 		case FIND_ERROR_NO_PREVIOUS_SEARCH:
-			msg_box(ses->tab->term, NULL, 0,
-				N_("Search"), ALIGN_CENTER,
-				N_("No previous search"),
-				NULL, 1,
-				N_("OK"), NULL, B_ENTER | B_ESC);
+			message = N_("No previous search");
 			break;
 		case FIND_ERROR_NOT_FOUND:
 			switch (get_opt_int("document.browse.search.show_not_found")) {
 				case 2:
-					msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-						N_("Search"), ALIGN_CENTER,
-						msg_text(ses->tab->term,
-							 N_("Search string '%s' not found"),
-							 ses->search_word),
-						ses, 1,
-						N_("OK"), NULL, B_ENTER | B_ESC);
+					message = msg_text(ses->tab->term,
+							   N_("Search string '%s' not found"),
+							   ses->search_word);
+					free_text = 1;
 					break;
 
 				case 1:
@@ -961,6 +953,13 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 		case FIND_ERROR_NONE:
 			break;
 	}
+
+	if (message)
+		msg_box(ses->tab->term, NULL, free_text ? MSGBOX_FREE_TEXT : 0,
+			N_("Search"), ALIGN_CENTER,
+			message,
+			NULL, 1,
+			N_("OK"), NULL, B_ENTER | B_ESC);
 }
 
 

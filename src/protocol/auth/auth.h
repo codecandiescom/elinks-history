@@ -1,4 +1,4 @@
-/* $Id: auth.h,v 1.27 2004/11/14 18:57:00 jonas Exp $ */
+/* $Id: auth.h,v 1.28 2004/11/14 19:42:25 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_AUTH_AUTH_H
 #define EL__PROTOCOL_AUTH_AUTH_H
@@ -27,9 +27,10 @@ struct auth_entry {
 
 	unsigned char user[HTTP_AUTH_USER_MAXLEN];
 	unsigned char password[HTTP_AUTH_PASSWORD_MAXLEN];
-	unsigned int blocked:1;
-	unsigned int valid:1;
-	unsigned int digest:1;
+
+	unsigned int blocked:1;	/* A dialog is asking user for validation */
+	unsigned int valid:1;	/* The entry has been validated by user */
+	unsigned int digest:1;	/* It is an HTTP Digest entry */
 };
 
 #define auth_entry_has_userinfo(_entry_) \

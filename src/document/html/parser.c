@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.361 2004/01/18 16:29:44 zas Exp $ */
+/* $Id: parser.c,v 1.362 2004/01/18 16:35:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2353,7 +2353,7 @@ extract_rows_or_cols_values(unsigned char *str, int max_value, int pixels_per_ch
 	while (1) {
 		int *tmp_values;
 		unsigned long number;
-		int val;
+		int val = -1;	/* Wildcard */
 
 		while (isspace(*str)) str++;
 
@@ -2362,15 +2362,12 @@ extract_rows_or_cols_values(unsigned char *str, int max_value, int pixels_per_ch
 		number = strtoul(str, (char **)&str, 10);
 		if (errno) return 0;
 
-		val = number;
 		if (*str == '%')	/* Percentage */
-			val = val * max_value / 100;
+			val = number * max_value / 100;
 		else if (*str != '*')	/* Pixels */
-			val = (val + (pixels_per_char - 1) / 2) / pixels_per_char;
-		else if (!val)		/* wildcard */
-			val = -1;
-		else			/* Fraction, marked by negative value. */
-			val = -val;
+			val = (number + (pixels_per_char - 1) / 2) / pixels_per_char;
+		else if (number)	/* Fraction, marked by negative value. */
+			val = -number;
 
 		/* Save value. */
 		tmp_values = mem_realloc(values, (values_count + 1) * sizeof(int));

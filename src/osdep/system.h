@@ -1,4 +1,4 @@
-/* $Id: system.h,v 1.14 2004/08/14 23:08:22 jonas Exp $ */
+/* $Id: system.h,v 1.15 2004/08/14 23:13:26 jonas Exp $ */
 
 #ifndef EL__OSDEP_SYSTEM_H
 #define EL__OSDEP_SYSTEM_H
@@ -23,6 +23,14 @@
 # define WIN32
 #elif defined(CONFIG_UNIX)
 # define UNIX
+#endif
+
+#if !defined(CONFIG_BEOS) \
+     && !defined(CONFIG_OS2) \
+     && !defined(CONFIG_RISCOS) \
+     && !defined(CONFIG_UNIX) \
+     && !defined(CONFIG_WIN32)
+#warning No OS platform defined, maybe config.h was not included
 #endif
 
 #include "osdep/beos/overrides.h"

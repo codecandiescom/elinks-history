@@ -4222,7 +4222,7 @@ struct translation translation_french [] = {
   {T_ENTER_URL, "Entrez l'URL"},
   {T_SAVE_URL, "Enregistrer l'URL"},
   {T_DOWNLOAD, "Téléchargement"},
-  {T_DOWNLOAD_COMPLETE, NULL},
+  {T_DOWNLOAD_COMPLETE, "Téléchargement terminé"},
   {T_SAVE_TO_FILE, "Enregistrer dans le fichier"},
   {T_SEARCH_FOR_TEXT, "Recherche du texte"},
   {T_WAITING_IN_QUEUE, "en liste d'attente"},
@@ -4274,7 +4274,7 @@ struct translation translation_french [] = {
   {T_ELAPSED_TIME, "Temps écoulé"},
   {T_ESTIMATED_TIME, "temps restant estimé"},
   {T_BACKGROUND, "Arrière-plan"},
-  {T_BACKGROUND_NOTIFY, NULL},
+  {T_BACKGROUND_NOTIFY, "Arrière-plan et notifier"},
   {T_ABORT, "Annuler"},
   {T_YES, "Oui"},
   {T_NO, "Non"},
@@ -4506,7 +4506,7 @@ struct translation translation_french [] = {
   {T_ADD_BOOKMARK_LINK, "Ajouter ce lien aux signets"},
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "Langues préférées (liste de codes ISO séparés par une virgule)"},
-  {T_ACCEPT_UI_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, "Langue de l'interface pour Accept-Language"},
   {0, NULL}
 };
 

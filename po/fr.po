@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-28 10:56+0100\n"
-"PO-Revision-Date: 2004-12-28 10:59+0100\n"
+"POT-Creation-Date: 2004-12-28 17:55+0100\n"
+"PO-Revision-Date: 2004-12-28 17:56+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -43,7 +43,7 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/dialogs/document.c:243 src/dialogs/document.c:301 src/dialogs/edit.c:95
 #: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
 #: src/dialogs/menu.c:96 src/dialogs/menu.c:516 src/dialogs/menu.c:567
-#: src/dialogs/options.c:172 src/dialogs/options.c:249
+#: src/dialogs/options.c:173 src/dialogs/options.c:250
 #: src/ecmascript/spidermonkey.c:371 src/ecmascript/spidermonkey.c:1931
 #: src/ecmascript/spidermonkey.c:1958 src/formhist/dialogs.c:179
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
@@ -168,8 +168,8 @@ msgstr "Nom"
 #: src/bookmarks/dialogs.c:666 src/config/dialogs.c:411
 #: src/config/dialogs.c:498 src/config/dialogs.c:908 src/cookies/dialogs.c:356
 #: src/dialogs/edit.c:99 src/dialogs/edit.c:102 src/dialogs/menu.c:96
-#: src/dialogs/menu.c:516 src/dialogs/menu.c:567 src/dialogs/options.c:175
-#: src/dialogs/options.c:250 src/mime/dialogs.c:131
+#: src/dialogs/menu.c:516 src/dialogs/menu.c:567 src/dialogs/options.c:176
+#: src/dialogs/options.c:251 src/mime/dialogs.c:131
 #: src/protocol/auth/dialogs.c:109 src/sched/download.c:551
 #: src/sched/download.c:1022 src/sched/download.c:1032
 #: src/sched/download.c:1053 src/sched/download.c:1066
@@ -444,7 +444,7 @@ msgstr "Effacer"
 #. TODO: Would this be useful? --jonas
 #: src/bookmarks/dialogs.c:455 src/config/dialogs.c:524
 #: src/config/dialogs.c:946 src/cookies/dialogs.c:425
-#: src/dialogs/options.c:174 src/formhist/dialogs.c:216
+#: src/dialogs/options.c:175 src/formhist/dialogs.c:216
 #: src/globhist/dialogs.c:235 src/sched/download.c:1019
 #: src/sched/download.c:1050
 msgid "Save"
@@ -2377,7 +2377,7 @@ msgid "Invert the fore- and background color so the link stands out."
 msgstr ""
 "Inverser les couleurs de fond et de texte pour mettre le lien en évidence."
 
-#: src/config/options.inc:293 src/dialogs/options.c:169
+#: src/config/options.inc:293 src/dialogs/options.c:170
 msgid "Underline"
 msgstr "Souligné"
 
@@ -3298,7 +3298,7 @@ msgstr ""
 "seulement une partie de l'UTF8 est utilisée, en accord avec le jeu de "
 "caractères du terminal."
 
-#: src/config/options.inc:773 src/dialogs/options.c:166
+#: src/config/options.inc:773 src/dialogs/options.c:167
 msgid "Restrict frames in cp850/852"
 msgstr "Limiter les cadres dans cp850/852"
 
@@ -4844,69 +4844,77 @@ msgstr "Répertoires:"
 msgid "Files:"
 msgstr "Fichiers:"
 
-#: src/dialogs/options.c:146
+#: src/dialogs/options.c:147
 msgid "Terminal options"
 msgstr "Options du terminal"
 
-#: src/dialogs/options.c:151
+#: src/dialogs/options.c:152
 msgid "Frame handling:"
 msgstr "Gestion des cadres:"
 
-#: src/dialogs/options.c:152
+#: src/dialogs/options.c:153
 msgid "No frames"
 msgstr "Aucun cadre"
 
-#: src/dialogs/options.c:153
+#: src/dialogs/options.c:154
 msgid "VT 100 frames"
 msgstr "Cadres VT 100"
 
-#: src/dialogs/options.c:154
+#: src/dialogs/options.c:155
 msgid "Linux or OS/2 frames"
 msgstr "Cadres Linux ou OS/2"
 
-#: src/dialogs/options.c:155
+#: src/dialogs/options.c:156
 msgid "FreeBSD frames"
 msgstr "Cadres FreeBSD"
 
-#: src/dialogs/options.c:156
+#: src/dialogs/options.c:157
 msgid "KOI8-R frames"
 msgstr "Cadres KOI8-R"
 
-#: src/dialogs/options.c:158
+#: src/dialogs/options.c:159
 msgid "Color mode:"
 msgstr "Mode couleurs:"
 
-#: src/dialogs/options.c:159
+#: src/dialogs/options.c:160
 msgid "No colors (mono)"
 msgstr "Monochrome"
 
-#: src/dialogs/options.c:160
+#: src/dialogs/options.c:161
 msgid "16 colors"
 msgstr "16 couleurs"
 
-#: src/dialogs/options.c:162
+#: src/dialogs/options.c:163
 msgid "256 colors"
 msgstr "256 couleurs"
 
-#: src/dialogs/options.c:165
+#: src/dialogs/options.c:166
 msgid "Use ^[[11m"
 msgstr "Utiliser ^[[11m"
 
-#: src/dialogs/options.c:167
+#: src/dialogs/options.c:168
 msgid "Block the cursor"
 msgstr "Bloquer le curseur"
 
-#: src/dialogs/options.c:168
+#: src/dialogs/options.c:169
 msgid "Transparency"
 msgstr "Transparence"
 
-#: src/dialogs/options.c:170
+#: src/dialogs/options.c:171
 msgid "UTF-8 I/O"
 msgstr "E/S UTF-8"
 
-#: src/dialogs/options.c:243
+#: src/dialogs/options.c:244
 msgid "Resize terminal"
 msgstr "Redimensionner le terminal"
+
+#: src/dialogs/options.c:247
+msgid "Width="
+msgstr "Largeur="
+
+#: src/dialogs/options.c:248
+msgid "Height="
+msgstr "Hauteur="
 
 #. FIXME: The following is a PITA from the l10n standpoint. A *big*
 #. * one, _("of")-like pearls are a nightmare. Format strings need to

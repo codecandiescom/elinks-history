@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.23 2004/07/12 18:16:31 jonas Exp $ */
+/* $Id: table.c,v 1.24 2004/10/19 09:23:50 zas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -715,10 +715,12 @@ see:
 	colspan = get_num(t_attr, "colspan");
 	if (colspan == -1) colspan = 1;
 	else if (!colspan) colspan = -1;
+	else if (colspan > HTML_MAX_COLSPAN) colspan = HTML_MAX_COLSPAN;
 
 	rowspan = get_num(t_attr, "rowspan");
 	if (rowspan == -1) rowspan = 1;
 	else if (!rowspan) rowspan = -1;
+	else if (rowspan > HTML_MAX_ROWSPAN) rowspan = HTML_MAX_ROWSPAN;
 
 	cell->colspan = colspan;
 	cell->rowspan = rowspan;

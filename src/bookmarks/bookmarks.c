@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.43 2002/09/14 21:24:46 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.44 2002/09/14 21:58:33 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -101,7 +101,6 @@ add_bookmark(struct bookmark *root, const unsigned char *title,
 	bm->box_item->depth = root ? root->box_item->depth + 1 : 0;
 	init_list(bm->box_item->child);
 	bm->box_item->visible = 1;
-	bm->box_item->expanded = 1; /* XXX: Temporary hack. */
 
 	bm->box_item->text = ((unsigned char *) bm->box_item
 			      + sizeof(struct listbox_item));

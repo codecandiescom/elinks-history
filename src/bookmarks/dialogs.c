@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.34 2002/09/14 20:53:18 pasky Exp $ */
+/* $Id: dialogs.c,v 1.35 2002/09/14 21:58:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,6 +85,7 @@ bookmark_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 			di = &dlg->items[dlg->selected];
 			/* Catch change focus requests */
 			/* MP: dirty crap!!! This should be done in bfu.c! */
+			/* TODO: Agreed! --pasky */
 
 			if (ev->x == KBD_RIGHT
 			    || (ev->x == KBD_TAB && !ev->y)) {
@@ -134,6 +135,17 @@ bookmark_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 			if (ev->x == KBD_PAGE_UP) {
 				box_sel_move(&dlg->items[BM_BOX_IND],
 					     -dlg->items[BM_BOX_IND].item->gid / 2);
+				display_dlg_item(dlg, &dlg->items[BM_BOX_IND], 1);
+
+				return EVENT_PROCESSED;
+			}
+
+			if (ev->x == ' ') {
+				struct listbox_data *box;
+			
+				box = (struct listbox_data *) dlg->items[BM_BOX_IND].item->data;
+				if (box->sel)
+					box->sel->expanded = !box->sel->expanded;
 				display_dlg_item(dlg, &dlg->items[BM_BOX_IND], 1);
 
 				return EVENT_PROCESSED;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.380 2004/04/22 16:13:08 jonas Exp $ */
+/* $Id: session.c,v 1.381 2004/04/22 21:12:45 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -340,7 +340,7 @@ maybe_pre_format_html(struct cache_entry *cached, struct session *ses)
 	int len;
 	static int pre_format_html_event = EVENT_NONE;
 
-	if (!cached || cached->done_pre_format_html_hook || list_empty(cached->frag))
+	if (!cached || cached->preformatted || list_empty(cached->frag))
 		return;
 
 	defrag_entry(cached);
@@ -359,7 +359,7 @@ maybe_pre_format_html(struct cache_entry *cached, struct session *ses)
 		mem_free(src);
 	}
 
-	cached->done_pre_format_html_hook = 1;
+	cached->preformatted = 1;
 }
 #endif
 

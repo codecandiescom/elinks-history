@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.83 2004/04/22 21:04:34 jonas Exp $ */
+/* $Id: cache.h,v 1.84 2004/04/22 21:12:45 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -47,12 +47,10 @@ struct cache_entry {
 	struct listbox_item *box_item;	/* Dialog data for cache manager */
 	struct object object;		/* Usage refcount object */
 
-#ifdef HAVE_SCRIPTING
-	unsigned int done_pre_format_html_hook:1; /* Did scripting? */
-#endif
-	unsigned int redirect_get:1;	/* Follow redirect using get method */
-	unsigned int incomplete:1;	/* Has all data been downloaded */
-	unsigned int valid:1;		/* Is cache entry usable */
+	unsigned int preformatted:1;	/* Has content been preformatted? */
+	unsigned int redirect_get:1;	/* Follow redirect using get method? */
+	unsigned int incomplete:1;	/* Has all data been downloaded? */
+	unsigned int valid:1;		/* Is cache entry usable? */
 
 	/* This is a mark for internal workings of garbage_collection(), whether
 	 * the cache_entry should be busted or not. You are not likely to see

@@ -1,16 +1,16 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.8 2002/04/29 18:40:40 pasky Exp $ */
+/* $Id: options.c,v 1.9 2002/05/01 12:41:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <netdb.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
-#include <sys/types.h>
+#include <netdb.h>
 
 /* We need to have it here. Stupid BSD. */
 #include <netinet/in.h>

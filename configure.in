@@ -555,7 +555,7 @@ dnl ===================================================================
 dnl Gettext grey zone. Beware.
 dnl ===================================================================
 
-ALL_LINGUAS="cs da de fr id it pl pt"
+ALL_LINGUAS="cs da de fr id it pl pt pt_BR"
 
 AM_GNU_GETTEXT
 

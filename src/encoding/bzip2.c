@@ -1,5 +1,5 @@
 /* Bzip2 encoding (ENCODING_BZIP2) backend */
-/* $Id: bzip2.c,v 1.1 2004/05/28 11:55:26 jonas Exp $ */
+/* $Id: bzip2.c,v 1.2 2004/05/28 13:02:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,11 +91,13 @@ bzip2_close(struct stream_encoded *stream)
 	mem_free(data);
 }
 
+static unsigned char *bzip2_extensions[] = { ".bz2", ".tbz", NULL };
+
 struct decoding_backend bzip2_decoding_backend = {
 	"bzip2",
+	bzip2_extensions,
 	bzip2_open,
 	bzip2_read,
 	bzip2_decode,
 	bzip2_close,
-	{ ".bz2", ".tbz", NULL },
 };

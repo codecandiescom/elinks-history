@@ -1,4 +1,4 @@
-/* $Id: encoding.h,v 1.13 2004/05/28 11:55:26 jonas Exp $ */
+/* $Id: encoding.h,v 1.14 2004/05/28 13:02:30 jonas Exp $ */
 
 #ifndef EL__ENCODING_ENCODING_H
 #define EL__ENCODING_ENCODING_H
@@ -21,11 +21,11 @@ struct stream_encoded {
 
 struct decoding_backend {
 	unsigned char *name;
+	unsigned char **extensions;
 	int (*open)(struct stream_encoded *stream, int fd);
 	int (*read)(struct stream_encoded *stream, unsigned char *data, int len);
 	unsigned char *(*decode)(struct stream_encoded *stream, unsigned char *data, int len, int *new_len);
 	void (*close)(struct stream_encoded *stream);
-	unsigned char *extensions[];
 };
 
 struct stream_encoded *open_encoded(int, enum stream_encoding);

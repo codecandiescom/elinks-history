@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.31 2004/05/28 11:55:26 jonas Exp $ */
+/* $Id: encoding.c,v 1.32 2004/05/28 13:02:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,13 +67,15 @@ dummy_close(struct stream_encoded *stream)
 	mem_free(stream->data);
 }
 
+static unsigned char *dummy_extensions[] = { NULL };
+
 static struct decoding_backend dummy_decoding_backend = {
 	"none",
+	dummy_extensions,
 	dummy_open,
 	dummy_read,
 	dummy_decode,
 	dummy_close,
-	{ NULL },
 };
 
 

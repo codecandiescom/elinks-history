@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.20 2002/08/29 17:20:15 pasky Exp $ */
+/* $Id: listbox.c,v 1.21 2002/08/29 21:14:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,7 @@ dlg_format_box(struct terminal *term, struct terminal *t2,
 /* From the box structure, we should use only 'items' here. */
 struct listbox_item *
 traverse_listbox_items_list(struct listbox_item *item, int offset,
-			    void (*fn)(struct listbox_item *, void *), void *d)
+			    int (*fn)(struct listbox_item *, void *, int), void *d)
 {
 	struct listbox_data *box;
 
@@ -80,7 +80,7 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 	box = (struct listbox_data *) item->data;
 
 	while (offset) {
-		if (fn) fn (item, d);
+		if (fn) offset = fn(item, d, offset);
 
 		if (offset > 0) {
 			/* Direction UP. */
@@ -151,8 +151,8 @@ struct box_context {
 };
 
 /* Takes care about listbox top moving. */
-void
-box_sel_move_do(struct listbox_item *item, void *data_)
+int
+box_sel_move_do(struct listbox_item *item, void *data_, int offset)
 {
 	struct box_context *data = data_;
 
@@ -177,6 +177,8 @@ box_sel_move_do(struct listbox_item *item, void *data_)
 							    NULL, NULL);
 		}
 	}
+
+	return offset;
 }
 
 /* Moves the selected item by [dist] items. If [dist] is out of the current
@@ -211,8 +213,8 @@ box_sel_move(struct widget_data *listbox_item_data, int dist)
 
 
 /* Takes care about rendering of each listbox item. */
-void
-display_listbox_item(struct listbox_item *item, void *data_)
+int
+display_listbox_item(struct listbox_item *item, void *data_, int offset)
 {
 	struct box_context *data = data_;
 	int len; /* Length of the current text field. */
@@ -234,6 +236,8 @@ display_listbox_item(struct listbox_item *item, void *data_)
 		   len, item->text, color);
 
 	data->offset++;
+
+	return offset;
 }
 
 /* Displays a dialog box */

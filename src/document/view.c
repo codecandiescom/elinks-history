@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.112 2002/12/16 23:53:04 zas Exp $ */
+/* $Id: view.c,v 1.113 2002/12/20 22:14:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3076,16 +3076,23 @@ _send_download(struct terminal *term, void *xxx, struct session *ses, enum dl_ty
 
 	if (!fd) return;
 	if (fd->vs->current_link == -1) return;
-	if (ses->dn_url) mem_free(ses->dn_url);
-	if (dlt == URL)
+	if (ses->dn_url) {
+		mem_free(ses->dn_url);
+		ses->dn_url = NULL;
+	}
+
+	if (dlt == URL) {
 		ses->dn_url = get_link_url(ses, fd, &fd->f_data->links[fd->vs->current_link]);
-	else if (dlt == IMAGE)
-		ses->dn_url = stracpy(fd->f_data->links[fd->vs->current_link].where_img);
-	else {
+	} else if (dlt == IMAGE) {
+		unsigned char *wi = fd->f_data->links[fd->vs->current_link].where_img;
+
+		if (wi) ses->dn_url = stracpy(wi);
+	} else {
 		internal("Unknown dl_type");
 		ses->dn_url = NULL;
 		return;
 	}
+
 	if (ses->dn_url) {
 		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = init_str();

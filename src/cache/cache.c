@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.16 2002/07/05 18:57:48 pasky Exp $ */
+/* $Id: cache.c,v 1.17 2002/07/09 20:16:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,107 +131,156 @@ int get_cache_data(struct cache_entry *e, unsigned char **d, int *l)
 }
 #endif
 
-#define sf(x) e->data_size += x, cache_size += x
+#define enlarge(e, x) e->data_size += x, cache_size += x
 
-#define C_ALIGN(x) (((x) | 0x3fff) + 1)
+#define CACHE_PAD(x) (((x) | 0x3fff) + 1)
 
+/* Add fragment to cache. Returns -1 upon error, 0 when nothing was added (?),
+ * 1 otherwise. */
+/* Note that this function is maybe overcommented, but I'm certainly not
+ * unhappy from that. */
 int
 add_fragment(struct cache_entry *e, int offset,
 	     unsigned char *data, int length)
 {
+	int end_offset, f_end_offset;
 	struct fragment *f;
 	struct fragment *nf;
-	int a = 0;
+	int ret = 0;
 	int trunc = 0;
 
 	if (!length) return 0;
-	if (e->length < offset + length) e->length = offset + length;
 
+	if (e->length < offset + length)
+		e->length = offset + length;
+
+	/* XXX: This is probably some magic strange thing for HTML renderer. */
 	e->count = cache_count++;
-	foreach(f, e->frag) {
-		if (f->offset > offset) break;
-		else if (f->offset + f->length >= offset) {
-			if (offset + length > f->offset + f->length) {
-				if (memcmp(f->data + offset - f->offset, data,
-					   f->offset + f->length - offset))
-					trunc = 1;
 
-				a = 1; /* !!! FIXME */
-				if (offset - f->offset + length <= f->real_length) {
-					sf((offset + length) - (f->offset + f->length));
-					f->length = offset - f->offset + length;
-				} else {
-					f->length = offset - f->offset;
-					f = f->next;
-					break;
-				}
+	/* Possibly insert the new data in the middle of existing fragment. */
+
+	end_offset = offset + length;
+	foreach (f, e->frag) {
+		f_end_offset = f->offset + f->length;
+
+		/* No intersection? */
+		if (f->offset > offset) break;
+		if (f_end_offset < offset) continue;
+
+		if (end_offset > f_end_offset) {
+			/* Overlap - we end further than original fragment. */
+
+			/* Is intersected area same? Truncate it if not, dunno
+			 * why though :). */
+			if (memcmp(f->data + offset - f->offset, data,
+				   f_end_offset - offset))
+				trunc = 1;
+
+			ret = 1; /* !!! FIXME */
+
+			if (end_offset - f->offset <= f->real_length) {
+				/* We fit here, so let's enlarge it by delta of
+				 * old and new end.. */
+				enlarge(e, end_offset - f_end_offset);
+				/* ..and length is now total length. */
+				f->length = end_offset - f->offset;
 			} else {
-				if (memcmp(f->data + offset - f->offset, data, length))
-					trunc = 1;
+				/* We will reduce fragment length only to the
+				 * starting non-interjecting size and add new
+				 * fragment directly after this one. */
+				f->length = offset - f->offset;
+				f = f->next;
+				break;
 			}
 
-			memcpy(f->data + offset - f->offset, data, length);
-			goto ch_o;
+		} else {
+			/* We are subset of original fragment. */
+			if (memcmp(f->data + offset - f->offset, data, length))
+				trunc = 1;
 		}
+
+		/* Copy the stuff over there. */
+		memcpy(f->data + offset - f->offset, data, length);
+		goto remove_overlaps;
 	}
 
-	nf = mem_alloc(sizeof(struct fragment) + C_ALIGN(length));
+	/* Make up new fragment. */
+
+	nf = mem_alloc(sizeof(struct fragment) + CACHE_PAD(length));
 	if (!nf) return -1;
 
-	a = 1;
-	sf(length);
+	ret = 1;
+	enlarge(e, length);
 	nf->offset = offset;
 	nf->length = length;
-	nf->real_length = C_ALIGN(length);
+	nf->real_length = CACHE_PAD(length);
 	memcpy(nf->data, data, length);
 	add_at_pos(f->prev, nf);
 	f = nf;
 
-ch_o:
-	while ((void *)f->next != &e->frag
-		&& f->offset + f->length > f->next->offset) {
-		if (f->offset + f->length < f->next->offset + f->next->length) {
+remove_overlaps:
+	/* Contatenate overlapping fragments. */
+
+	f_end_offset = f->offset + f->length;
+	/* Iterate thru all fragments we still overlap to. */
+	while ((void *) f->next != &e->frag
+		&& f_end_offset > f->next->offset) {
+
+		end_offset = f->next->offset + f->next->length;
+
+		if (f_end_offset < end_offset) {
+			/* We end before end of the following fragment, though.
+			 * So try to append overlapping part of that fragment
+			 * to us. */
 			nf = mem_realloc(f, sizeof(struct fragment)
-					    + f->next->offset
-					    - f->offset
-					    + f->next->length);
+					    + end_offset - f->offset);
 			if (!nf) goto ff;
 			nf->prev->next = nf;
 			nf->next->prev = nf;
 			f = nf;
+
 			if (memcmp(f->data + f->next->offset - f->offset,
 				   f->next->data,
 				   f->offset + f->length - f->next->offset))
 				trunc = 1;
-			memcpy(f->data + f->length,
-			       f->next->data + f->offset + f->length - f->next->offset,
-			       f->next->offset + f->next->length - f->offset - f->length);
 
-			sf(f->next->offset + f->next->length - f->offset - f->length);
-			f->length = f->real_length = f->next->offset + f->next->length - f->offset;
+			memcpy(f->data + f->length,
+			       f->next->data + f_end_offset - f->next->offset,
+			       end_offset - f_end_offset);
+
+			enlarge(e, end_offset - f_end_offset);
+			f->length = f->real_length = end_offset - f->offset;
 
 ff:;
 		} else {
+			/* We will just discard this, it's complete subset of
+			 * our new fragment. */
 			if (memcmp(f->data + f->next->offset - f->offset,
 				   f->next->data,
 				   f->next->length))
 				trunc = 1;
 		}
 
+		/* Remove the fragment, it influences our new one! */
 		nf = f->next;
 		del_from_list(nf);
-		sf(-nf->length);
+		enlarge(e, -nf->length);
 		mem_free(nf);
 	}
+
 	if (trunc) truncate_entry(e, offset + length, 0);
+
 #if 0
-	{
-		foreach(f, e->frag) fprintf(stderr, "%d, %d, %d\n", f->offset, f->length, f->real_length);
-		debug("a-");
-	}
+	foreach(f, e->frag)
+		fprintf(stderr, "%d, %d, %d\n",
+			f->offset, f->length, f->real_length);
+	debug("ret-");
 #endif
-	return a;
+
+	return ret;
 }
+
+#undef CACHE_PAD
 
 void
 defrag_entry(struct cache_entry *e)
@@ -299,7 +348,7 @@ truncate_entry(struct cache_entry *e, int off, int final)
 
 del:
 			while ((void *)f != &e->frag) {
-				sf(-f->length);
+				enlarge(e, -f->length);
 				g = f->next;
 				del_from_list(f);
 				mem_free(f);
@@ -309,7 +358,7 @@ del:
 		}
 		if (f->offset + f->length > off) {
 			f->length = off - f->offset;
-			sf(-(f->offset + f->length - off));
+			enlarge(e, -(f->offset + f->length - off));
 			if (final) {
 				g = mem_realloc(f, sizeof(struct fragment)
 						   + f->length);
@@ -333,13 +382,13 @@ free_entry_to(struct cache_entry *e, int off)
 
 	foreach(f, e->frag) {
 		if (f->offset + f->length <= off) {
-			sf(-f->length);
+			enlarge(e, -f->length);
 			g = f;
 			f = f->prev;
 			del_from_list(g);
 			mem_free(g);
 		} else if (f->offset < off) {
-			sf(f->offset - off);
+			enlarge(e, f->offset - off);
 			f->length -= off - f->offset;
 			memmove(f->data, f->data + off - f->offset, f->length);
 			f->offset = off;

@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.27 2003/01/02 16:17:21 pasky Exp $
+## $Id: Makefile.am,v 1.28 2003/01/02 17:41:28 pasky Exp $
 
-SUBDIRS = Unicode contrib doc intl src test
+SUBDIRS = Unicode contrib doc intl po src test
 
 man_MANS = elinks.1 elinkskeys.5 elinks.conf.5
 

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.40 2003/07/25 02:59:32 jonas Exp $ */
+/* $Id: uri.c,v 1.41 2003/07/25 15:58:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	/* Nothing to do for an empty url. */
 	if_assert_failed return 0;
 	if (!*uristring) return 0;
-	uri->protocol = uristring;
+	uri->string = uristring;
 
 	/* Isolate prefix */
 
@@ -173,7 +173,7 @@ get_uri_port(struct uri *uri)
 	if (port == -1) {
 		enum protocol protocol;
 
-		protocol = check_protocol(uri->protocol, uri->protocollen);
+		protocol = check_protocol(uri->string, uri->protocollen);
 		if (protocol != PROTOCOL_UNKNOWN)
 			port = get_protocol_port(protocol);
 	}
@@ -188,10 +188,10 @@ struct string *
 add_uri_to_string(struct string *string, struct uri *uri,
 		  enum uri_component components)
 {
-	enum protocol protocol = check_protocol(uri->protocol,
+	enum protocol protocol = check_protocol(uri->string,
  						uri->protocollen);
 
- 	assert(uri->protocol && uri->protocollen);
+ 	assert(uri->string && uri->protocollen);
 	if_assert_failed { return NULL; }
 
  	if (protocol == PROTOCOL_UNKNOWN
@@ -206,7 +206,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
 #define wants(x) (components & (x))
 
  	if (wants(URI_PROTOCOL)) {
-		add_bytes_to_string(string, uri->protocol, uri->protocollen);
+		add_bytes_to_string(string, uri->string, uri->protocollen);
 		add_char_to_string(string, ':');
  		if (get_protocol_need_slashes(protocol))
 			add_to_string(string, "//");
@@ -714,7 +714,7 @@ add_string_uri_filename_to_string(struct string *string, unsigned char *uristrin
 		return NULL;
 
 	assert(uri.data);
-	lo = !strlcasecmp("file", -1, uri.protocol, uri.protocollen);
+	lo = !strlcasecmp("file", -1, uri.string, uri.protocollen);
 
 	for (pos = filename = uri.data; *pos && !end_of_dir(*pos); pos++)
 		if (dsep(*pos))

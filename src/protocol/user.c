@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.45 2003/07/23 15:20:49 pasky Exp $ */
+/* $Id: user.c,v 1.46 2003/07/25 15:58:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,9 +157,9 @@ user_func(struct session *ses, unsigned char *url)
 		return;
 	}
 
-	prog = get_user_program(ses->tab->term, uri.protocol, uri.protocollen);
+	prog = get_user_program(ses->tab->term, uri.string, uri.protocollen);
 	if (!prog || !*prog) {
-		unsigned char *protocol = memacpy(uri.protocol, uri.protocollen);
+		unsigned char *protocol = memacpy(uri.string, uri.protocollen);
 
 		/* Shouldn't ever happen, but be paranoid. */
 		/* Happens when you're in X11 and you've no handler for it. */

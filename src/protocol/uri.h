@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.27 2003/07/25 14:28:52 jonas Exp $ */
+/* $Id: uri.h,v 1.28 2003/07/25 15:58:35 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -18,7 +18,7 @@
  * take a length parameter. */
 /* TODO We should probably add path+query members instead of data. */
 struct uri {
-	unsigned char *protocol;
+	unsigned char *string;
 	int protocollen;
 
 	unsigned char *user;
@@ -50,7 +50,7 @@ int parse_uri(struct uri *uri, unsigned char *uristring);
 /* Returns the raw zero-terminated URI string the (struct uri) is associated
  * with. Thus, chances are high that it is the original URI received, not any
  * cheap reconstruction. */
-#define struri(uri) ((uri).protocol)
+#define struri(uri) ((uri).string)
 
 
 enum uri_component {

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.178 2003/07/23 15:20:49 pasky Exp $ */
+/* $Id: http.c,v 1.179 2003/07/25 15:58:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -332,7 +332,7 @@ add_uri_host_to_string(struct string *header, struct uri *uri)
 }
 
 #define IS_PROXY_URI(x) \
-	((x).protocollen == 5 && !strncasecmp("proxy", (x).protocol, 5))
+	((x).protocollen == 5 && !strncasecmp("proxy", (x).string, 5))
 
 static void
 http_send_header(struct connection *conn)

@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.48 2004/05/20 12:49:45 jonas Exp $ */
+/* $Id: connect.c,v 1.49 2004/05/22 13:44:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,16 +253,14 @@ ssl_error:
 
 /* Return -1 on error, wr or success. */
 int
-ssl_write(struct connection *conn, struct write_buffer *wb)
+ssl_write(struct connection *conn, unsigned char *data, int len)
 {
 	int wr = -1;
 
 #ifdef CONFIG_OPENSSL
-	wr = SSL_write(conn->ssl, wb->data + wb->pos,
-		       wb->len - wb->pos);
+	wr = SSL_write(conn->ssl, data, len);
 #elif defined(CONFIG_GNUTLS)
-	wr = gnutls_record_send(*((ssl_t *) conn->ssl), wb->data + wb->pos,
-				wb->len - wb->pos);
+	wr = gnutls_record_send(*((ssl_t *) conn->ssl), data, len);
 #endif
 
 	if (wr <= 0) {

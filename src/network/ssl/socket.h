@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.8 2004/04/29 23:22:15 jonas Exp $ */
+/* $Id: socket.h,v 1.9 2004/05/22 13:44:26 jonas Exp $ */
 
 #ifndef EL__SSL_CONNECT_H
 #define EL__SSL_CONNECT_H
@@ -9,7 +9,7 @@
 #include "sched/connection.h"
 
 int ssl_connect(struct connection *, int);
-int ssl_write(struct connection *, struct write_buffer *);
+int ssl_write(struct connection *conn, unsigned char *data, int len);
 int ssl_read(struct connection *, struct read_buffer *);
 int ssl_close(struct connection *);
 

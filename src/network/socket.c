@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.73 2004/05/09 00:56:24 jonas Exp $ */
+/* $Id: socket.c,v 1.74 2004/05/22 13:44:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -531,7 +531,7 @@ write_select(struct connection *conn)
 
 #ifdef CONFIG_SSL
 	if (conn->ssl) {
-		wr = ssl_write(conn, wb);
+		wr = ssl_write(conn, wb->data + wb->pos, wb->len - wb->pos);
 		if (wr <= 0) return;
 	} else
 #endif

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.212 2003/10/02 14:05:09 jonas Exp $ */
+/* $Id: view.c,v 1.213 2003/10/02 15:29:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,7 +169,6 @@ detach_formatted(struct document_view *scr)
 		format_cache_reactivate(scr->document);
 		if (!--scr->document->refcount) {
 			format_cache_entries++;
-			/*shrink_format_cache();*/
 		}
 		assertm(scr->document->refcount >= 0,
 			"format_cache refcount underflow");

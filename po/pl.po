@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre7.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-12-03 01:53+0100\n"
-"PO-Revision-Date: 2003-12-01 07:00+0200\n"
+"PO-Revision-Date: 2003-12-03 02:06+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -57,7 +57,7 @@ msgid "OK"
 msgstr "OK"
 
 #: src/bfu/hierbox.c:437
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the item \"%s\" cannot be deleted."
 msgstr "Przykro mi, ale element \"%s\" nie mo¿e byæ usuniêty."
 
@@ -67,7 +67,7 @@ msgid "Sorry, but the item \"%s\" is being used by something else."
 msgstr "Przykro mi, ale element \"%s\" jest u¿ywany przez co¶ innego."
 
 #: src/bfu/hierbox.c:441
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the folder \"%s\" cannot be deleted."
 msgstr "Przykro mi, ale folder \"%s\" nie mo¿e byæ usuniêty."
 
@@ -725,9 +725,8 @@ msgid "Download the current image"
 msgstr "Pobierz obrazek"
 
 #: src/config/kbdbind.c:396
-#, fuzzy
 msgid "Open download manager"
-msgstr "Menad¿er pobierania"
+msgstr "Otwórz menad¿era pobierania"
 
 #: src/config/kbdbind.c:397
 msgid "Begin editing"
@@ -2568,22 +2567,20 @@ msgstr ""
 
 #
 #: src/config/options.inc:710
-#, fuzzy
 msgid "Local CGI"
-msgstr "Lokalne pliki"
+msgstr "Lokalne CGI"
 
 #: src/config/options.inc:712
-#, fuzzy
 msgid "Local CGI specific options."
-msgstr "Ustawienia dotycz±ce protoko³ów."
+msgstr "Ustawienia dotycz±ce lokalnych skryptów CGI."
 
 #: src/config/options.inc:714
 msgid "Allow local CGI"
-msgstr ""
+msgstr "Pozwolenie na wykonywanie skryptów CGI"
 
 #: src/config/options.inc:716
 msgid "Whether to execute local CGI scripts."
-msgstr ""
+msgstr "Czy uruchamiaæ skrypty CGI."
 
 #: src/config/options.inc:718 src/mime/backend/mailcap.c:102
 #: src/mime/backend/mimetypes.c:59
@@ -2592,7 +2589,8 @@ msgstr "¦cie¿ka"
 
 #: src/config/options.inc:720
 msgid "Colon separated list of directories, where CGI scripts are stored."
-msgstr ""
+msgstr "Oddzielona dwukropkami lista katalogów, z których mo¿na wykonywaæ\n"
+"skrypty CGI."
 
 #
 #: src/config/options.inc:722
@@ -3053,24 +3051,20 @@ msgid "Dialog frame colors."
 msgstr "Kolory ramki okna dialogowego."
 
 #: src/config/options.inc:1054 src/config/options.inc:1499
-#, fuzzy
 msgid "Scrollbar"
-msgstr "Margines przy przewijaniu"
+msgstr "Pasek przewijania"
 
 #: src/config/options.inc:1056 src/config/options.inc:1501
-#, fuzzy
 msgid "Scrollbar colors."
-msgstr "Kolory paska tytu³owego."
+msgstr "Kolory paska przewijania."
 
 #: src/config/options.inc:1066 src/config/options.inc:1511
-#, fuzzy
 msgid "Scrollbar selected"
-msgstr "Przewiñ w lewo"
+msgstr "Pasek przewijania wybrany"
 
 #: src/config/options.inc:1068 src/config/options.inc:1513
-#, fuzzy
 msgid "Scrollbar selected colors."
-msgstr "Kolory wybranego taba."
+msgstr "Kolory wybranego paska przewijania."
 
 #: src/config/options.inc:1078 src/config/options.inc:1523
 #: src/dialogs/document.c:84
@@ -4110,9 +4104,8 @@ msgstr "Przerwij"
 
 #. This requires more work to make locking work and query the user
 #: src/dialogs/download.c:250 src/dialogs/download.c:417
-#, fuzzy
 msgid "Abort and delete file"
-msgstr "B³±d odczytu z pliku"
+msgstr "Przerwij i skasuj plik"
 
 #: src/dialogs/download.c:423
 msgid "Download manager"
@@ -4561,9 +4554,8 @@ msgid "Average speed"
 msgstr "¦rednia prêdko¶æ"
 
 #: src/dialogs/status.c:85
-#, fuzzy
 msgid "average speed"
-msgstr "¦rednia prêdko¶æ"
+msgstr "¶rednia prêdko¶æ"
 
 #: src/dialogs/status.c:86
 msgid "avg"
@@ -4574,9 +4566,8 @@ msgid "Speed"
 msgstr "Prêdko¶æ"
 
 #: src/dialogs/status.c:89
-#, fuzzy
 msgid "speed"
-msgstr "Prêdko¶æ"
+msgstr "prêdko¶æ"
 
 #: src/dialogs/status.c:100
 msgid "current speed"
@@ -4591,9 +4582,8 @@ msgid "Elapsed time"
 msgstr "Up³ynê³o"
 
 #: src/dialogs/status.c:112
-#, fuzzy
 msgid "elapsed time"
-msgstr "Up³ynê³o"
+msgstr "up³ynê³o"
 
 #: src/dialogs/status.c:119
 msgid "estimated time"
@@ -5302,7 +5292,7 @@ msgstr "B³±d przy otwieraniu pliku"
 
 #: src/sched/error.c:62
 msgid "CGI script not in CGI path"
-msgstr ""
+msgstr "Skrypt CGI nie znajduje siê na ¶cie¿ce CGI"
 
 #: src/sched/error.c:64
 msgid "Bad FTP response"
@@ -5568,7 +5558,7 @@ msgstr "Wybierz od~no¶nik"
 
 #: src/viewer/text/link.c:896
 msgid "Follow link and r~eload"
-msgstr "Wybierz odno¶nik i prz~e³aduj"
+msgstr "Wybierz odno¶nik i p~rze³aduj"
 
 #: src/viewer/text/link.c:900
 msgid "Open in new ~window"
@@ -5596,7 +5586,7 @@ msgstr "Wy~czy¶æ formularz"
 
 #: src/viewer/text/link.c:933
 msgid "Open in ~external editor"
-msgstr ""
+msgstr "Otwórz w zewnêtrznym ~edytorze"
 
 #: src/viewer/text/link.c:937
 msgid "~Submit form"
@@ -5750,12 +5740,3 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1475
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
-
-#~ msgid "after resume"
-#~ msgstr "po wznowieniu"
-
-#~ msgid "Stop"
-#~ msgstr "Zatrzymaj"
-
-#~ msgid "Bad signal number: %d"
-#~ msgstr "Nieprawid³owy numer sygna³u: %d"

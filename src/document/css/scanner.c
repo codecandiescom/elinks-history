@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.103 2004/01/26 23:01:41 jonas Exp $ */
+/* $Id: scanner.c,v 1.104 2004/01/26 23:30:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,12 @@ struct scan_table_info {
 		struct { long start, end; } range;
 	} data;
 	int bits;
+};
+
+struct scanner_string_mapping {
+	unsigned char *name;
+	int type;
+	int base_type;
 };
 
 struct scanner_info {
@@ -135,17 +141,11 @@ static struct scanner_info css_scanner_info = {
 #define	is_css_token_start(c)	check_css_table(c, CSS_CHAR_TOKEN_START)
 
 
-struct css_identifier {
-	unsigned char *name;
-	enum css_token_type type;
-	enum css_token_type base_type;
-};
-
 static enum css_token_type
 ident2type(unsigned char *ident, unsigned char *end,
 	       enum css_token_type base_type)
 {
-	static struct css_identifier identifiers2type[] = {
+	static struct scanner_string_mapping identifiers2type[] = {
 		{ "Hz",		CSS_TOKEN_FREQUENCY,	CSS_TOKEN_DIMENSION },
 		{ "cm",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
 		{ "deg",	CSS_TOKEN_ANGLE,	CSS_TOKEN_DIMENSION },
@@ -173,7 +173,8 @@ ident2type(unsigned char *ident, unsigned char *end,
 
 		{ NULL, CSS_TOKEN_NONE, CSS_TOKEN_NONE },
 	};
-	struct css_identifier *ident2type = identifiers2type;
+
+	struct scanner_string_mapping *ident2type = identifiers2type;
 	int length = end - ident;
 
 	for (; ident2type->name; ident2type++) {

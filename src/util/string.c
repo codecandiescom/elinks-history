@@ -1,11 +1,10 @@
 /* String handling functions */
-/* $Id: string.c,v 1.11 2002/11/25 10:21:43 zas Exp $ */
+/* $Id: string.c,v 1.12 2002/11/26 10:02:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,17 +20,14 @@
 #ifdef DEBUG
 #define fatalfl(x) errfile = f, errline = l, int_error(x)
 #define fatal(x) internal(x)
-#define warnfl(x) fprintf(stderr, "%s:%d %s\n", f, l, x)
-#define warn(x) fprintf(stderr, "%s:%d %s\n", __FILE__, __LINE__, x)
+#define warnfl(x) error("%s:%d %s\n", f, l, x)
+#define warn(x) error("%s:%d %s\n", __FILE__, __LINE__, x)
 #else
-#define fatalfl(x) fprintf(stderr, "%s:%d %s\n", f, l, x) 
-#define fatal(x) fprintf(stderr, "%s:%d %s\n", __FILE__, __LINE__, x) 
+#define fatalfl(x) error("%s:%d %s\n", f, l, x)
+#define fatal(x) error("%s:%d %s\n", __FILE__, __LINE__, x)
 #define warnfl(x)
 #define warn(x)
 #endif
-
-#define _return_NULL { fatal(); return NULL; }
-#define _return { fatal(); return; }
 
 
 /* Autoallocation string constructors */
@@ -50,7 +46,7 @@ debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
 
 	m = debug_mem_alloc(f, l, len + 1);
 	if (!m) return NULL;
-		
+
 	if (src && len) memcpy(m, src, len);
 	m[len] = 0;
 
@@ -73,7 +69,7 @@ debug_copy_string(unsigned char *f, int l, unsigned char **dst,
 		warnfl("copy_string src=NULL");
 		*dst = NULL;
 		return NULL;
-	} 
+	}
 
 	*dst = mem_alloc(strlen(src) + 1);
 	if (*dst) strcpy(*dst, src);
@@ -95,13 +91,13 @@ memacpy(unsigned char *src, int len)
 	unsigned char *m;
 
 	if (len < 0) { warn("memacpy len < 0"); len = 0; }
-	
+
 	m = mem_alloc(len + 1);
 	if (!m) return NULL;
-		
+
 	if (src && len) memcpy(m, src, len);
 	m[len] = 0;
-	
+
 	return m;
 }
 
@@ -120,11 +116,11 @@ copy_string(unsigned char **dst, unsigned char *src)
 		warn("copy_string src=NULL");
 		*dst = NULL;
 		return NULL;
-	} 
+	}
 
 	*dst = mem_alloc(strlen(src) + 1);
 	if (*dst) strcpy(*dst, src);
-	
+
 	return *dst;
 }
 #endif /* LEAK_DEBUG */
@@ -134,7 +130,7 @@ void
 add_to_strn(unsigned char **s, unsigned char *a)
 {
 	unsigned char *p;
-	
+
 	if (!*s) { fatal("add_to_strn *s=NULL"); return; }
 	if (!a) { fatal("add_to_strn a=NULL"); return; }
 
@@ -170,7 +166,7 @@ straconcat(unsigned char *str, ...)
 
 	s = stracpy(str);
 	if (!s) return NULL;
-	
+
 	len = strlen(s) + 1;
 
 	va_start(ap, str);
@@ -200,9 +196,9 @@ inline unsigned char *
 debug_init_str(unsigned char *file, int line)
 {
 	unsigned char *p = debug_mem_alloc(file, line, ALLOC_GR);
-	
+
 	if (!p) return NULL;
-	
+
 	*p = 0;
 	return p;
 }
@@ -213,20 +209,21 @@ init_str()
 	unsigned char *p = mem_alloc(ALLOC_GR);
 
 	if (!p) return NULL;
-	
+
 	*p = 0;
 	return p;
 }
-#endif 
+#endif
 
 void
 add_to_str(unsigned char **s, int *l, unsigned char *a)
 {
-	int ll; 
-	
+	int ll;
+
 	if (!*s) { fatal("add_to_str *s=NULL"); return; }
 	if (!a) { fatal("add_to_str a=NULL"); return; }
-	
+	if (!*a) return;
+
 	ll = strlen(a);
 
 	if ((*l & ~(ALLOC_GR - 1)) != ((*l + ll) & ~(ALLOC_GR - 1))) {
@@ -246,8 +243,9 @@ add_bytes_to_str(unsigned char **s, int *l, unsigned char *a, int ll)
 {
 	if (!*s) { fatal("add_bytes_to_str *s=NULL"); return; }
 	if (!a) { fatal("add_bytes_to_str a=NULL"); return; }
+	if (ll < 0) { fatal("add_bytes_to_str ll < 0"); return; }
+	if (!ll) return;
 
-	
 	if ((*l & ~(ALLOC_GR - 1)) != ((*l + ll) & ~(ALLOC_GR - 1))) {
 		unsigned char *p = mem_realloc(*s, (*l + ll + ALLOC_GR)
 			                      & ~(ALLOC_GR - 1));
@@ -272,7 +270,7 @@ add_chr_to_str(unsigned char **s, int *l, unsigned char a)
 					      & ~(ALLOC_GR - 1));
 
 		if (!p) return;
-		
+
 		*s = p;
 	}
 
@@ -336,7 +334,8 @@ safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 {
 	if (!dst) { fatal("safe_strncpy dst=NULL"); return NULL; }
 	if (!src) { fatal("safe_strncpy src=NULL"); return NULL; }
-	
+	if (dst_size <= 0) { fatal("safe_strncpy dst_size <= 0"); return NULL; }
+
 	strncpy(dst, src, dst_size);
 	dst[dst_size - 1] = 0;
 

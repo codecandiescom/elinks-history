@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.122 2004/12/19 11:26:12 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.123 2004/12/19 11:26:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -869,7 +869,8 @@ get_input_object(JSContext *ctx, JSObject *jsform, struct form_state *fs)
 		 * should be its parent, but gimme DOM first. --pasky */
 		JSObject *jsinput = JS_NewObject(ctx, (JSClass *) &input_class, NULL, jsform);
 
-		JS_DefineFunctions(ctx, jsinput, (JSFunctionSpec *)&input_funcs);
+		JS_DefineProperties(ctx, jsinput, (JSPropertySpec *) input_props);
+		JS_DefineFunctions(ctx, jsinput, (JSFunctionSpec *) input_funcs);
 		JS_SetPrivate(ctx, jsinput, fs);
 		fs->ecmascript_obj = jsinput;
 	}
@@ -1134,7 +1135,8 @@ get_form_object(JSContext *ctx, JSObject *jsdoc, struct form_view *fv)
 		 * should be its parent, but gimme DOM first. --pasky */
 		JSObject *jsform = JS_NewObject(ctx, (JSClass *) &form_class, NULL, jsdoc);
 
-		JS_DefineFunctions(ctx, jsform, (JSFunctionSpec *)&form_funcs);
+		JS_DefineProperties(ctx, jsform, (JSPropertySpec *) form_props);
+		JS_DefineFunctions(ctx, jsform, (JSFunctionSpec *) form_funcs);
 		JS_SetPrivate(ctx, jsform, fv);
 		fv->ecmascript_obj = jsform;
 	}

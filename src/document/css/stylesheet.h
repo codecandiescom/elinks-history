@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.12 2004/01/26 23:23:26 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.13 2004/01/27 00:14:38 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -86,5 +86,13 @@ get_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen);
  * stylesheet @css. */
 struct css_selector *
 find_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen);
+
+/* Initialize the selector structure. This is a rather low-level function from
+ * your POV. */
+struct css_selector *
+init_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen);
+
+/* Destroy a selector. done_css_stylesheet() normally does that for you. */
+void done_css_selector(struct css_selector *selector);
 
 #endif

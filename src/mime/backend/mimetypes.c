@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.16 2003/10/03 12:35:23 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.17 2003/10/03 12:50:48 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -143,17 +143,17 @@ parse_mimetypes_file(unsigned char *filename)
 
 #undef skip_whitespace
 
-static void
+static struct hash *
 init_mimetypes_map(void)
 {
 	unsigned char *path;
 
 	if (!get_opt_bool_tree(mimetypes_tree, "enable"))
-		return;
+		return NULL;
 
 	mimetypes_map = init_hash(8, &strhash);
 	if (!mimetypes_map)
-		return;
+		return NULL;
 
 	/* Determine the path  */
 	path = get_opt_str_tree(mimetypes_tree, "path");
@@ -167,6 +167,8 @@ init_mimetypes_map(void)
 		parse_mimetypes_file(filename);
 		mem_free(filename);
 	}
+
+	return mimetypes_map;
 }
 
 static void
@@ -215,7 +217,6 @@ init_mimetypes(void)
 {
 	mimetypes_tree = get_opt_rec(config_options, "mime.mimetypes");
 	mimetypes_tree->change_hook = mimetypes_change_hook;
-	init_mimetypes_map();
 }
 
 
@@ -225,7 +226,7 @@ get_content_type_mimetypes(unsigned char *extension)
 	struct hash_item *item;
 	int extensionlen;
 
-	if (!mimetypes_map)
+	if (!mimetypes_map && !init_mimetypes_map())
 		return NULL;
 
 	extensionlen = strlen(extension);

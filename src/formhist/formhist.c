@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.23 2003/08/18 19:46:22 jonas Exp $ */
+/* $Id: formhist.c,v 1.24 2003/08/22 10:11:04 zas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -33,14 +33,13 @@ static int
 load_saved_forms(void)
 {
 	struct formsmem_data *form;
-	struct submitted_value *sv;
-	unsigned char name[MAX_STR_LEN], value[MAX_STR_LEN];
-	unsigned char tmp[MAX_STR_LEN], *file;
+	unsigned char tmp[MAX_STR_LEN];
+       	unsigned char *file;
 	FILE *f;
 
 	file = straconcat(elinks_home, "password", NULL);
 	if (!file) return 0;
-	
+
 	f = fopen(file, "r");
 	mem_free(file);
 	if (!f) return 0;
@@ -65,11 +64,19 @@ load_saved_forms(void)
 		if (!form->url) goto fail;
 
 		while (safe_fgets(tmp, MAX_STR_LEN, f)) {
+			struct submitted_value *sv;
+			unsigned char *name, *value, *p;
+
 			if (tmp[0] == '\n' && !tmp[1]) break;
 
-			/* FIXME: i don't like sscanf()... --Zas */
-			if (sscanf(tmp, "%s\t%s%*[\n]", name, value) != 2)
-				goto fail;
+			name = tmp;
+			p = strchr(name, '\t');
+			if (!p) goto fail;
+			*p = '\0';
+
+			value = ++p;
+			p = strchr(p, '\n');
+			if (p) *p = '\0';
 
 			sv = mem_alloc(sizeof(struct submitted_value));
 			if (!sv) goto fail;

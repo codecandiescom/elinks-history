@@ -1,3 +1,28 @@
+Sat May  8 13:40:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/memdebug.c:
+
+	Include the full copyright header here because this file can be
+	frequently distributed separately from the rest of ELinks.  
+
+Sat May  8 01:18:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/css/scanner.c, util/scanner.c, util/scanner.h:
+
+	Make scanner mapping and scan table info const.  
+
+Sat May  8 01:17:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/exmode.c:
+
+	Make exmode handler table const.  
+
+Fri May  7 23:33:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Fix adding of -Werror when CONFIG_DEBUG is set.  
+
 Fri May  7 18:14:47 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/protocol.c:

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.235 2003/10/29 17:51:07 zas Exp $ */
+/* $Id: view.c,v 1.236 2003/10/29 19:43:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -330,7 +330,7 @@ page_down(struct session *ses, struct document_view *doc_view, int a)
 	assert(ses && doc_view && doc_view->vs);
 	if_assert_failed return;
 
-	newpos = doc_view->vs->view_pos + doc_view->document->opt.yw;
+	newpos = doc_view->vs->view_pos + doc_view->document->options.yw;
 	if (newpos < doc_view->document->height) {
 		doc_view->vs->view_pos = newpos;
 		find_link(doc_view, 1, a);
@@ -418,11 +418,11 @@ scroll(struct session *ses, struct document_view *doc_view, int a)
 	if_assert_failed return;
 
 	/* XXX:zas: use intermediate variable here. */
-	if (a > 0 && doc_view->vs->view_pos >= doc_view->document->height - doc_view->document->opt.yw)
+	if (a > 0 && doc_view->vs->view_pos >= doc_view->document->height - doc_view->document->options.yw)
 		return;
 	doc_view->vs->view_pos += a;
 	if (a > 0)
-		int_upper_bound(&doc_view->vs->view_pos, doc_view->document->height - doc_view->document->opt.yw);
+		int_upper_bound(&doc_view->vs->view_pos, doc_view->document->height - doc_view->document->options.yw);
 	int_lower_bound(&doc_view->vs->view_pos, 0);
 	if (c_in_view(doc_view)) return;
 	find_link(doc_view, a < 0 ? -1 : 1, 0);
@@ -459,7 +459,7 @@ x_end(struct session *ses, struct document_view *doc_view, int a)
 	if_assert_failed return;
 
 	doc_view->vs->view_posx = 0;
-	int_lower_bound(&doc_view->vs->view_pos, doc_view->document->height - doc_view->document->opt.yw);
+	int_lower_bound(&doc_view->vs->view_pos, doc_view->document->height - doc_view->document->options.yw);
 	int_lower_bound(&doc_view->vs->view_pos, 0);
 	find_link(doc_view, -1, 0);
 }
@@ -615,9 +615,9 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 	if (ev->ev == EV_KBD) {
 		if (ev->x >= '0' + !ses->kbdprefix.rep && ev->x <= '9'
 		    && (ev->y
-			|| !doc_view->document->opt.num_links_key
-			|| (doc_view->document->opt.num_links_key == 1
-			    && !doc_view->document->opt.num_links_display))) {
+			|| !doc_view->document->options.num_links_key
+			|| (doc_view->document->options.num_links_key == 1
+			    && !doc_view->document->options.num_links_display))) {
 			/* Repeat count */
 
 			if (!ses->kbdprefix.rep) {
@@ -879,7 +879,7 @@ do_mouse_event(struct session *ses, struct term_event *ev,
 	assert(ses && ev && doc_view && doc_view->document);
 	if_assert_failed return;
 
-	o = &doc_view->document->opt;
+	o = &doc_view->document->options;
 	if (ev->x >= o->xp && ev->x < o->xp + o->xw &&
 	    ev->y >= o->yp && ev->y < o->yp + o->yw) goto ok;
 
@@ -888,7 +888,7 @@ r:
 	current_doc_view = current_frame(ses);
 	assert(current_doc_view && current_doc_view->document);
 	if_assert_failed return;
-	o = &current_doc_view->document->opt;
+	o = &current_doc_view->document->options;
 	if (ev->x >= o->xp && ev->x < o->xp + o->xw &&
 	    ev->y >= o->yp && ev->y < o->yp + o->yw) {
 		draw_formatted(ses);

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.325 2003/10/29 19:29:47 jonas Exp $ */
+/* $Id: renderer.c,v 1.326 2003/10/29 19:43:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,7 +143,7 @@ realloc_line(struct document *document, int y, int x)
 	 * other members. */
 	end = &line->d[x];
 	end->data = ' ';
-	set_term_color(end, &colors, 0, document->opt.color_mode);
+	set_term_color(end, &colors, 0, document->options.color_mode);
 
 	for (pos = &line->d[line->l]; pos < end; pos++) {
 		copy_screen_chars(pos, end, 1);
@@ -238,8 +238,8 @@ get_frame_char(struct part *part, int x, int y, unsigned char data)
 	template->data = data;
 	template->attr = SCREEN_ATTR_FRAME;
 
-	color_mode = part->document->opt.color_mode;
-	color_flags = part->document->opt.color_flags;
+	color_mode = part->document->options.color_mode;
+	color_flags = part->document->options.color_flags;
 
 	set_term_color(template, &colors, color_flags, color_mode);
 
@@ -731,7 +731,7 @@ new_link(struct document *document, int link_number,
 
 	link = &document->links[document->nlinks++];
 	link->num = link_number - 1;
-	if (document->opt.use_tabindex) link->num += format.tabindex;
+	if (document->options.use_tabindex) link->num += format.tabindex;
 	link->accesskey = format.accesskey;
 	link->title = format.title ? stracpy(format.title) : NULL;
 	link->where_img = format.image ? stracpy(format.image) : NULL;
@@ -1091,8 +1091,8 @@ static inline void
 color_link_lines(struct document *document)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
-	enum color_mode color_mode = document->opt.color_mode;
-	enum color_flags color_flags = document->opt.color_flags;
+	enum color_mode color_mode = document->options.color_mode;
+	enum color_flags color_flags = document->options.color_flags;
 	int y;
 
 	for (y = 0; y < document->height; y++) {
@@ -1167,7 +1167,7 @@ html_special(struct part *part, enum html_special_type c, ...)
 			break;
 		case SP_COLOR_LINK_LINES:
 			va_end(l);
-			if (document && document->opt.use_document_colours == 2)
+			if (document && document->options.use_document_colours == 2)
 				color_link_lines(document);
 			break;
 		default:
@@ -1389,11 +1389,11 @@ end:
 }
 
 static void
-push_base_format(unsigned char *url, struct document_options *opt)
+push_base_format(unsigned char *url, struct document_options *options)
 {
 	struct html_element *e;
 
-	assert(url && opt);
+	assert(url && options);
 	if_assert_failed return;
 	assertm(list_empty(html_stack), "something on html stack");
 	if_assert_failed init_list(html_stack);
@@ -1410,30 +1410,30 @@ push_base_format(unsigned char *url, struct document_options *opt)
 	format.form = NULL;
 	format.title = NULL;
 
-	format.fg = opt->default_fg;
-	format.bg = opt->default_bg;
-	format.clink = opt->default_link;
-	format.vlink = opt->default_vlink;
+	format.fg = options->default_fg;
+	format.bg = options->default_bg;
+	format.clink = options->default_link;
+	format.vlink = options->default_vlink;
 
 	format.href_base = stracpy(url);
-	format.target_base = opt->framename ? stracpy(opt->framename) : NULL;
+	format.target_base = options->framename ? stracpy(options->framename) : NULL;
 
-	if (opt->plain) {
+	if (options->plain) {
 		par_format.align = AL_NONE;
 		par_format.leftmargin = 0;
 		par_format.rightmargin = 0;
 	} else {
 		par_format.align = AL_LEFT;
-		par_format.leftmargin = opt->margin;
-		par_format.rightmargin = opt->margin;
+		par_format.leftmargin = options->margin;
+		par_format.rightmargin = options->margin;
 	}
 
-	par_format.width = opt->xw;
+	par_format.width = options->xw;
 	par_format.list_level = par_format.list_number = 0;
-	par_format.dd_margin = opt->margin;
+	par_format.dd_margin = options->margin;
 	par_format.flags = P_NONE;
 
-	par_format.bgcolor = opt->default_bg;
+	par_format.bgcolor = options->default_bg;
 
 	html_top.invisible = 0;
 	html_top.name = NULL;
@@ -1518,7 +1518,7 @@ format_html(struct cache_entry *ce, struct document *document)
 	if (!init_string(&head)) return;
 
 	url = ce->url;
-	d_opt = &document->opt;
+	d_opt = &document->options;
 	document->id_tag = ce->id_tag;
 	defrag_entry(ce);
 	fr = ce->frag.next;
@@ -1535,17 +1535,17 @@ format_html(struct cache_entry *ce, struct document *document)
 
 	i = d_opt->plain;
 	scan_http_equiv(start, end, &head, &title);
-	convert_table = get_convert_table(head.source, document->opt.cp,
-					  document->opt.assume_cp,
+	convert_table = get_convert_table(head.source, document->options.cp,
+					  document->options.assume_cp,
 					  &document->cp,
 					  &document->cp_status,
-					  document->opt.hard_assume);
+					  document->options.hard_assume);
 	d_opt->plain = 0;
 	document->title = convert_string(convert_table, title.source, title.length, CSM_DEFAULT);
 	d_opt->plain = i;
 	done_string(&title);
 
-	push_base_format(url, &document->opt);
+	push_base_format(url, &document->options);
 
 	table_level = 0;
 	g_ctrl_num = 0;
@@ -1554,7 +1554,7 @@ format_html(struct cache_entry *ce, struct document *document)
 	last_input_tag = NULL;
 
 	rp = format_html_part(start, end, par_format.align,
-			      par_format.leftmargin, document->opt.xw, document,
+			      par_format.leftmargin, document->options.xw, document,
 			      0, 0, head.source, 1);
 	if (rp) mem_free(rp);
 
@@ -1702,7 +1702,7 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 
 	foreach (document, format_cache) {
 		if (strcmp(document->url, vs->url)
-		    || compare_opt(&document->opt, options))
+		    || compare_opt(&document->options, options))
 			continue;
 
 		if (cache_entry->id_tag != document->id_tag) {
@@ -1737,10 +1737,10 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 	format_html(cache_entry, document);
 
 sx:
-	document_view->xw = document->opt.xw;
-	document_view->yw = document->opt.yw;
-	document_view->xp = document->opt.xp;
-	document_view->yp = document->opt.yp;
+	document_view->xw = document->options.xw;
+	document_view->yw = document->options.yw;
+	document_view->xp = document->options.xp;
+	document_view->yp = document->options.yp;
 }
 
 long

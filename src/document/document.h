@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.6 2003/10/29 19:17:57 jonas Exp $ */
+/* $Id: document.h,v 1.7 2003/10/29 19:43:37 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -101,7 +101,7 @@ struct search {
 struct document {
 	LIST_HEAD(struct document);
 
-	struct document_options opt;
+	struct document_options options;
 
 	struct list_head forms;
 	struct list_head tags;

@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.3 2003/10/29 17:51:06 zas Exp $ */
+/* $Id: document.c,v 1.4 2003/10/29 19:43:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@ init_document(unsigned char *uristring, struct document_options *options)
 
 	document->refcount = 1;
 
-	copy_opt(&document->opt, options);
+	copy_opt(&document->options, options);
 
 	return document;
 }
@@ -103,7 +103,7 @@ done_document(struct document *document)
 
 	if (document->lines1) mem_free(document->lines1);
 	if (document->lines2) mem_free(document->lines2);
-	if (document->opt.framename) mem_free(document->opt.framename);
+	if (document->options.framename) mem_free(document->options.framename);
 
 	foreach (fc, document->forms) {
 		done_form_control(fc);

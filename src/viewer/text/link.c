@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.86 2003/10/29 17:51:07 zas Exp $ */
+/* $Id: link.c,v 1.87 2003/10/29 19:43:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,7 +189,7 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	/* We prefer to use the global d_opt since it is kept up to date by
 	 * an option change hook. However if it is not available fall back to
 	 * use the options from the viewed document. */
-	doc_opts = (d_opt) ? d_opt : &doc_view->document->opt;
+	doc_opts = (d_opt) ? d_opt : &doc_view->document->options;
 
 	color_flags = doc_opts->color_flags;
 
@@ -490,9 +490,9 @@ set_pos_y(struct document_view *doc_view, struct link *link)
 		if (link->pos[i].y >= ym) ym = link->pos[i].y + 1;
 		yl = int_min(yl, link->pos[i].y);
 	}
-	doc_view->vs->view_pos = (ym + yl) / 2 - doc_view->document->opt.yw / 2;
+	doc_view->vs->view_pos = (ym + yl) / 2 - doc_view->document->options.yw / 2;
 	int_bounds(&doc_view->vs->view_pos, 0,
-		   doc_view->document->height - doc_view->document->opt.yw);
+		   doc_view->document->height - doc_view->document->options.yw);
 }
 
 void
@@ -528,7 +528,7 @@ find_link(struct document_view *doc_view, int p, int s)
 		y += p;
 	} while (!(y < 0
 		   || y < doc_view->vs->view_pos
-		   || y >= doc_view->vs->view_pos + doc_view->document->opt.yw
+		   || y >= doc_view->vs->view_pos + doc_view->document->options.yw
 		   || y >= doc_view->document->height));
 
 	if (!link) goto nolink;

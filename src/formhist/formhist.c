@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.83 2004/06/16 14:47:44 zas Exp $ */
+/* $Id: formhist.c,v 1.84 2004/06/16 14:51:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -236,7 +236,7 @@ cont:
 			if (!enc_value) goto fail;
 
 			sv = new_submitted_value(name, enc_value,
-						 ftype);
+						 ftype, NULL, 0);
 
 			mem_free(enc_value);
 			if (!sv) goto fail;
@@ -447,7 +447,8 @@ memorize_form(struct session *ses, struct list_head *submit,
 		if ((sv->type == FC_TEXT) || (sv->type == FC_PASSWORD)) {
 			struct submitted_value *sv2;
 
-			sv2 = new_submitted_value(sv->name, sv->value, sv->type);
+			sv2 = new_submitted_value(sv->name, sv->value,
+					 	  sv->type, NULL, 0);
 			if (!sv2) goto fail;
 
 			add_to_list(*form->submit, sv2);

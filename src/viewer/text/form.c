@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.183 2004/06/16 14:47:44 zas Exp $ */
+/* $Id: form.c,v 1.184 2004/06/16 14:51:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,7 +53,8 @@
 /* FIXME: Add comments!! --Zas */
 
 struct submitted_value *
-new_submitted_value(unsigned char *name, unsigned char *value, enum form_type type)
+new_submitted_value(unsigned char *name, unsigned char *value, enum form_type type,
+		    struct form_control *fc, int position)
 {
 	struct submitted_value *sv;
 
@@ -67,7 +68,9 @@ new_submitted_value(unsigned char *name, unsigned char *value, enum form_type ty
 	if (!sv->name) { mem_free(sv->value); mem_free(sv); return NULL; }
 
 	sv->type = type;
-
+	sv->frm = fc;
+	sv->position = position;
+	
 	return sv;
 }
 

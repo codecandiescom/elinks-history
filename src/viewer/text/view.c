@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.484 2004/06/17 13:10:58 jonas Exp $ */
+/* $Id: view.c,v 1.485 2004/06/17 21:25:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,7 +205,8 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 	if (doc_view->document->height)
 		color.background = doc_view->document->bgcolor;
 
-	if (!doc_view->vs) {
+	vs = doc_view->vs;
+	if (!vs) {
 		draw_box(term, box, ' ', 0, &color);
 		return;
 	}
@@ -213,12 +214,12 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 	if (document_has_frames(doc_view->document)) {
 	 	draw_box(term, box, ' ', 0, &color);
 		draw_frame_lines(term, doc_view->document->frame_desc, box->x, box->y);
-		if (doc_view->vs && doc_view->vs->current_link == -1)
-			doc_view->vs->current_link = 0;
+		if (vs->current_link == -1)
+			vs->current_link = 0;
 		return;
 	}
+
 	check_vs(doc_view);
-	vs = doc_view->vs;
 
 	if (!vs->did_fragment) {
 		unsigned char *tag = vs->uri->fragment;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.121 2003/07/01 22:06:34 zas Exp $ */
+/* $Id: view.c,v 1.122 2003/07/02 16:18:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,7 +97,8 @@ clear_formatted(struct f_data *scr)
 	struct cache_entry *ce;
 	struct form_control *fc;
 
-	if (!scr) return;
+	assert(scr);
+
 	if (!find_in_cache(scr->url, &ce) || !ce)
 		internal("no cache entry for document");
 	else
@@ -139,10 +140,9 @@ clear_formatted(struct f_data *scr)
 void
 destroy_formatted(struct f_data *scr)
 {
-	if (scr->refcount) {
-		internal("trying to free locked formatted data");
-		return;
-	}
+	assert(scr);
+	assertm(!scr->refcount, "Attempt to free locked formatted data.");
+
 	clear_formatted(scr);
 	del_from_list(scr);
 	mem_free(scr);
@@ -151,27 +151,25 @@ destroy_formatted(struct f_data *scr)
 void
 detach_formatted(struct f_data_c *scr)
 {
+	assert(scr);
+
 	if (scr->f_data) {
 		format_cache_reactivate(scr->f_data);
 		if (!--scr->f_data->refcount) {
 			format_cache_entries++;
 			/*shrink_format_cache();*/
 		}
-		if (scr->f_data->refcount < 0) {
-			internal("format_cache refcount underflow");
-			scr->f_data->refcount = 0;
-		}
+		assertm(scr->f_data->refcount >= 0,
+			"format_cache refcount underflow");
 		scr->f_data = NULL;
 	}
 	scr->vs = NULL;
 	if (scr->link_bg) {
-		mem_free(scr->link_bg);
-		scr->link_bg = NULL;
+		mem_free(scr->link_bg), scr->link_bg = NULL;
 		scr->link_bg_n = 0;
 	}
 	if (scr->name) {
-		mem_free(scr->name);
-		scr->name = NULL;
+		mem_free(scr->name), scr->name = NULL;
 	}
 }
 
@@ -205,7 +203,10 @@ sort_links(struct f_data *f)
 {
 	int i;
 
+	assert(f);
 	if (!f->nlinks) return;
+
+	assert(f->links);
 
 	qsort(f->links, f->nlinks, sizeof(struct link),
 	      (void *) comp_links);

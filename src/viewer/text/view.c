@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.266 2003/11/17 21:40:46 pasky Exp $ */
+/* $Id: view.c,v 1.267 2003/11/17 21:41:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,25 +13,25 @@
 
 #include "elinks.h"
 
-#include "main.h"
 #include "bfu/inpfield.h"
 #include "bfu/menu.h"
 #include "bfu/msgbox.h"
-#include "dialogs/menu.h"
 #include "bookmarks/dialogs.h"
+#include "cache/cache.h"
 #include "cache/dialogs.h"
-#include "cookies/cookies.h"
 #include "config/dialogs.h"
 #include "config/kbdbind.h"
 #include "config/options.h"
+#include "cookies/cookies.h"
 #include "dialogs/document.h"
-#include "cache/cache.h"
+#include "dialogs/menu.h"
 #include "document/document.h"
 #include "document/options.h"
 #include "document/renderer.h"
 #include "globhist/dialogs.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
+#include "main.h"
 #include "osdep/newwin.h"
 #include "osdep/osdep.h"
 #include "protocol/http/auth.h"

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.18 2002/07/05 20:42:13 pasky Exp $
+## $Id: Makefile.am,v 1.19 2002/07/06 21:08:43 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -19,6 +19,8 @@ libbfu_a_SOURCES = \
  inpfield.h \
  inphist.c \
  inphist.h \
+ leds.c \
+ leds.h \
  listbox.c \
  listbox.h \
  menu.c \

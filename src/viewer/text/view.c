@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.129 2003/07/02 17:26:07 pasky Exp $ */
+/* $Id: view.c,v 1.130 2003/07/02 17:54:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -985,6 +985,8 @@ set_xchar(struct terminal *t, int x, int y, enum xchar_dir dir)
 {
        unsigned int c, d;
 
+       assert(t);
+
        if (x < 0 || x >= t->x || y < 0 || y >= t->y) return;
 
        c = get_char(t, x, y);
@@ -1004,7 +1006,7 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 {
 	register int y, j;
 
-	if (!fsd) return;
+	assert(t && fsd && fsd->f);
 
 	y = yp - 1;
 	for (j = 0; j < fsd->y; j++) {
@@ -1062,13 +1064,18 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 static void
 draw_doc(struct terminal *t, struct f_data_c *scr, int active)
 {
-	int y;
-	int xp = scr->xp;
-	int yp = scr->yp;
-	int xw = scr->xw;
-	int yw = scr->yw;
 	struct view_state *vs;
+	int xp, yp;
+	int xw, yw;
 	int vx, vy;
+	int y;
+
+	assert(t && scr && scr->vs);
+
+	xp = scr->xp;
+	yp = scr->yp;
+	xw = scr->xw;
+	yw = scr->yw;
 
 	if (active) {
 		set_cursor(t, xp + xw - 1, yp + yw - 1, xp + xw - 1, yp + yw - 1);

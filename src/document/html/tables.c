@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.197 2004/06/25 08:25:17 zas Exp $ */
+/* $Id: tables.c,v 1.198 2004/06/25 09:03:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -976,7 +976,7 @@ get_hline_width(struct table *table, int row)
 static int
 get_column_widths(struct table *table)
 {
-	int s = 1;
+	int colspan;
 
 	if (!table->x) return -1; /* prevents calloc(0, sizeof(int)) calls */
 
@@ -1002,9 +1002,10 @@ get_column_widths(struct table *table)
 		}
 	}
 
+	colspan = 1;
 	do {
 		register int i = 0, j;
-		int ns = MAXINT;
+		int new_colspan = MAXINT;
 
 		for (; i < table->x; i++) for (j = 0; j < table->y; j++) {
 			struct table_cell *cell = CELL(table, i, j);
@@ -1014,32 +1015,33 @@ get_column_widths(struct table *table)
 			assertm(cell->colspan + i <= table->x, "colspan out of table");
 			if_assert_failed return -1;
 
-			if (cell->colspan == s) {
+			if (cell->colspan == colspan) {
 				register int k, p = 0;
 
-				for (k = 1; k < s; k++)
+				for (k = 1; k < colspan; k++)
 					p += (get_vline_width(table, i + k) >= 0);
 
-				dst_width(&table->min_c[i], s,
+				dst_width(&table->min_c[i], colspan,
 				  	  cell->min_width - p,
 					  &table->max_c[i]);
 
-				dst_width(&table->max_c[i], s,
+				dst_width(&table->max_c[i], colspan,
 				  	  cell->max_width - p,
 					  NULL);
 
-				for (k = 0; k < s; k++) {
+				for (k = 0; k < colspan; k++) {
 					int tmp = i + k;
 
 					int_lower_bound(&table->max_c[tmp], table->min_c[tmp]);
 				}
 
-			} else if (cell->colspan > s && cell->colspan < ns) {
-				ns = cell->colspan;
+			} else if (cell->colspan > colspan
+				   && cell->colspan < new_colspan) {
+				new_colspan = cell->colspan;
 			}
 		}
-		s = ns;
-	} while (s != MAXINT);
+		colspan = new_colspan;
+	} while (colspan != MAXINT);
 
 	return 0;
 }

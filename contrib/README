@@ -15,8 +15,13 @@ Files not listed here have description included in their header.
 	Handler for few simple javascript functions.
 	[!UPDATEME!]
 
+* colws.diff - <ard@waikato.ac.nz>
+	Show two spaces after full stops/periods, especially when HTML It
+	shouldn't adversely affect web pages.  Two spaces will only appear
+	where the HTML contains them.
+
 * hpux-pipe.diff - Stephane Chazelas <Stephane_Chazelas@Yahoo.fr>
 	Fix for arcane (appears to me that everything under HPUX is somewhat
 	arcane ;) handling of pipes in HPUX
 
-$Id: README,v 1.4 2002/04/03 17:32:12 pasky Exp $
+$Id: README,v 1.5 2002/04/26 17:49:46 pasky Exp $

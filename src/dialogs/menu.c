@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.156 2003/10/23 23:09:41 jonas Exp $ */
+/* $Id: menu.c,v 1.157 2003/10/23 23:48:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,24 +180,13 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 	 * handler, so there will be effectively only one go_back() executed.
 	 * (The same applies to unhistory as well.) --pasky */
 
-	/* TODO: Have all the stuff in _one_ list, not two. --pasky */
-
 	abort_loading(ses, 0);
 
 	/* Move all intermediate items to unhistory. */
 
-	while (steps-- > 0) {
-		struct location *loc = cur_loc(ses);
-
-		if (!have_location(ses)) return;
-
-		/* First item in history/unhistory is something special and
-		 * precious... like... like... the current location? */
-
-		loc = loc->next;
-		if ((void *) loc == &ses->history.history) return;
-
+	while (steps > 0 && cur_loc(ses) != &ses->history.history->next) {
 		go_back(ses);
+		steps--;
 	}
 }
 
@@ -210,12 +199,9 @@ go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 
 	/* Move all intermediate items to history. */
 
-	while (steps-- > 0) {
-	    	struct location *loc = ses->history.unhistory.next;
-
-		if ((void *) loc == &ses->history.unhistory) return;
-
+	while (steps > 0 && cur_loc(ses) != &ses->history.history->prev) {
 		go_unback(ses);
+		steps--;
 	}
 }
 
@@ -231,7 +217,11 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 	struct menu_item *mi = NULL;
 	int n = 0;
 
-	foreach (loc, ses->history.history) {
+	if (!have_location(ses)) goto loop_done;
+
+	for (loc = ses->history.history->next;
+	     loc != &ses->history.history && loc != cur_loc(ses);
+	     loc = loc->next) {
 		unsigned char *url;
 
 		if (!n) {
@@ -254,6 +244,7 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 		}
 		n++;
 	}
+loop_done:
 
 	if (n <= 1)
 		do_menu(term, no_hist_menu, ses, 0);
@@ -268,7 +259,11 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 	struct menu_item *mi = NULL;
 	int n = 0;
 
-	foreach (loc, ses->history.unhistory) {
+	if (!have_location(ses)) goto loop_done;
+
+	for (loc = cur_loc(ses)->next;
+	     loc != &ses->history.history;
+	     loc = loc->next) {
 		unsigned char *url;
 
 		if (!mi) {
@@ -286,6 +281,7 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 		}
 		n++;
 	}
+loop_done:
 
 	if (!n)
 		do_menu(term, no_hist_menu, ses, 0);

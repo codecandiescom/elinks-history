@@ -1,4 +1,4 @@
-/* $Id: history.h,v 1.9 2003/10/23 22:29:54 pasky Exp $ */
+/* $Id: history.h,v 1.10 2003/10/23 23:48:01 pasky Exp $ */
 
 #ifndef EL__SCHED_HISTORY_H
 #define EL__SCHED_HISTORY_H
@@ -8,14 +8,13 @@
 struct session;
 
 struct ses_history {
-	/* The _last_ visited location is always stored _first_ in the list.
-	 * Thus, after visiting A B C D E and then going back to C, in history
-	 * will be (in this order, from list.next through ->nexts) B A and in
-	 * unhistory will be D E. */
+	/* The first list item is the first visited location. The last list
+	 * item is the last location in the unhistory. The @current location is
+	 * included in this list. */
 	struct list_head history; /* -> struct location */
-	struct list_head unhistory; /* -> struct location */
 
-	/* The current location. */
+	/* The current location. This is moveable pivot pointing somewhere at
+	 * the middle of @history. */
 	struct location *current;
 };
 
@@ -26,7 +25,10 @@ void clean_unhistory(struct ses_history *history);
 
 static inline void
 add_to_history(struct ses_history *history, struct location *loc) {
-	add_to_list(history->history, loc);
+	if (!history->current)
+		add_to_list(history->history, loc);
+	else
+		add_at_pos(history->current, loc);
 	history->current = loc;
 }
 

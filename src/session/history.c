@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.35 2003/10/23 22:50:42 pasky Exp $ */
+/* $Id: history.c,v 1.36 2003/10/23 23:48:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,16 +18,6 @@
 #include "util/string.h"
 #include "viewer/text/view.h"
 
-/* The history itself is stored in struct session as field history,
- * surprisingly. It's a list containing all locations visited in the current
- * session, including the one being visited just now! So the location on the
- * top of the list is the current location.
- *
- * The unhistory is reverse of history, it contains locations which you
- * visited, but then got bored and went back. The fields pushed away from
- * history are moved to unhistory. There's nothing special on the first item of
- * unhistory. */
-
 
 static inline void
 free_history(struct list_head *history)
@@ -45,7 +35,6 @@ void
 create_history(struct ses_history *history)
 {
 	init_list(history->history);
-	init_list(history->unhistory);
 	history->current = NULL;
 }
 
@@ -53,14 +42,20 @@ void
 destroy_history(struct ses_history *history)
 {
 	free_history(&history->history);
-	free_history(&history->unhistory);
 	history->current = NULL;
 }
 
 void
 clean_unhistory(struct ses_history *history)
 {
-	free_history(&history->unhistory);
+	if (!history->current) return;
+
+	while (history->current->next != &ses->history) {
+		struct location *loc = history->current->next;
+
+		del_from_list(loc);
+		destroy_location(loc);
+	}
 }
 
 
@@ -94,14 +89,13 @@ ses_back(struct session *ses)
 		return;
 
 	/* This is the current location. */
+
 	loc = cur_loc(ses);
-    	del_from_history(&ses->history, loc);
-
-	add_to_list(ses->history.unhistory, loc);
-
-	if (!have_location(ses)) return;
+	if (loc->prev == &ses->history.history) return;
+	ses->history.current = ses->history.current->prev;
 
 	/* This was the previous location (where we came back now). */
+
 	loc = cur_loc(ses);
 
 	if (!strcmp(loc->vs.url, ses->loading_url)) return;
@@ -120,14 +114,15 @@ ses_unback(struct session *ses)
 	if (ses_leave_location(ses, 1) < 1)
 		return;
 
-	if (list_empty(ses->history.unhistory))
-		return;
+	/* This is the current location. */
 
-	loc = ses->history.unhistory.next;
+	loc = cur_loc(ses);
+	if (loc->next == &ses->history.history) return;
+	ses->history.current = ses->history.current->next;
 
-    	del_from_history(&ses->history, loc);
-	/* Save it as the current location! */
-	add_to_list(ses->history.history, loc);
+	/* This will be the next location (where we came back now). */
+
+	loc = cur_loc(ses);
 
 	if (!strcmp(loc->vs.url, ses->loading_url)) return;
 
@@ -146,8 +141,6 @@ static int
 go_away(struct session *ses, int dir)
 {
 	struct document_view *doc_view = current_frame(ses);
-	struct list_head *history = (dir == 1	? &ses->history.unhistory
-						: &ses->history.history);
 
 	ses->reloadlevel = NC_CACHE;
 
@@ -159,8 +152,9 @@ go_away(struct session *ses, int dir)
 	}
 
 	if (!have_location(ses)
-	    || (dir == -1 && history->prev == history->next)
-	    || (dir == 1 && list_empty(*history))) {
+	    || ses->history.current
+		  == (dir == -1 ? ses->history.history->next
+				: ses->history.history->prev)) {
 		/* There's no history, at most only the current location. */
 		return 0;
 	}
@@ -187,7 +181,7 @@ go_back(struct session *ses)
 	if (go_away(ses, -1) < 1)
 		return;
 
-	loc = cur_loc(ses)->next;
+	loc = cur_loc(ses)->prev;
 	url = memacpy(loc->vs.url, loc->vs.url_len);
 	if (!url) return;
 
@@ -204,7 +198,7 @@ go_unback(struct session *ses)
 	if (go_away(ses, 1) < 1)
 		return;
 
-	loc = (struct location *) ses->history.unhistory.next;
+	loc = cur_loc(ses)->next;
 	url = memacpy(loc->vs.url, loc->vs.url_len);
 	if (!url) return;
 

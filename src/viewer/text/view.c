@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.522 2004/06/25 16:09:48 pasky Exp $ */
+/* $Id: view.c,v 1.523 2004/06/25 21:03:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,53 +147,46 @@ static inline void
 move_link(struct session *ses, struct document_view *doc_view, int direction,
 	  int wraparound_bound, int wraparound_link)
 {
-	int current_link;
+	int count;
 
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
 	ses->navigate_mode = NAVIGATE_LINKWISE;
 
-	current_link = doc_view->vs->current_link;
+	count = int_max(ses->kbdprefix.repeat_count, 1);
 
-	if (current_link == wraparound_bound) {
-		if (get_opt_int("document.browse.links.wraparound")) {
+	while (count--) {
+		int current_link = doc_view->vs->current_link;
+
+		if (current_link == wraparound_bound
+		    && get_opt_int("document.browse.links.wraparound")) {
 			jump_to_link_number(ses, doc_view, wraparound_link);
 			/* FIXME: This needs further work, we should call
 			 * page_down() and set_textarea() under some conditions
 			 * as well. --pasky */
-			return;
+			continue;
+		}
+
+		if (current_link != wraparound_bound
+		    && next_in_view(doc_view, current_link + direction, direction, in_viewy, set_pos_x))
+			continue;
+
+		if (direction > 0) {
+			move_down(ses, doc_view, 1);
+		} else {
+			move_up(ses, doc_view, 1);
+		}
+
+		if (current_link != wraparound_bound
+		    && current_link != doc_view->vs->current_link) {
+			set_textarea(doc_view, -direction);
 		}
 	}
-
-	if (current_link == wraparound_bound
-	    || !next_in_view(doc_view, current_link + direction, direction, in_viewy, set_pos_x)) {
-		if (direction > 0)
-			move_down(ses, doc_view, 1);
-		else
-			move_up(ses, doc_view, 1);
-	}
-
-	if (current_link != wraparound_bound
-	    && current_link != doc_view->vs->current_link) {
-		set_textarea(doc_view, -direction);
-	}
 }
 
-#define move_link_factory(postfix, exec) \
-static void \
-move_link_##postfix(struct session *ses, struct document_view *doc_view) \
-{ \
-	int count = ses->kbdprefix.repeat_count; \
- \
-	if (!count) count = 1; \
- \
-	while (count--) \
-		exec; \
-}
-
-move_link_factory(next, move_link(ses, doc_view,  1, doc_view->document->nlinks - 1, 0))
-move_link_factory(prev, move_link(ses, doc_view, -1, doc_view->document->nlinks - 1, 0))
+#define move_link_next(ses, doc_view) move_link(ses, doc_view,  1, doc_view->document->nlinks - 1, 0)
+#define move_link_prev(ses, doc_view) move_link(ses, doc_view, -1, 0, doc_view->document->nlinks - 1)
 
 /* @steps > 0 -> down */
 static void

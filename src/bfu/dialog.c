@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.169 2004/11/17 22:03:48 zas Exp $ */
+/* $Id: dialog.c,v 1.170 2004/11/17 22:07:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,7 +165,7 @@ init_widget(struct dialog_data *dlg_data, struct term_event *ev, int i)
 	}
 
 	if (widget_data->widget->ops->init)
-		widget_data->widget->ops->init(widget_data, dlg_data, ev);
+		widget_data->widget->ops->init(dlg_data, widget_data, ev);
 
 	return widget_data;
 }

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.24 2003/07/26 02:14:01 jonas Exp $ */
+/* $Id: screen.c,v 1.25 2003/07/27 21:22:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,8 +25,8 @@
 void
 alloc_screen(struct terminal *term, int x, int y)
 {
-	int space = x * y * sizeof(unsigned);
-	unsigned *screen = mem_realloc(term->screen, space);
+	int space = x * y * sizeof(struct screen_char);
+	struct screen_char *screen = mem_realloc(term->screen, space);
 
 	if (!screen) return;
 
@@ -91,12 +91,12 @@ struct rs_opt_cache {
 
 /* Time critical section. */
 static inline void
-print_char(struct string *screen, struct rs_opt_cache *opt_cache, unsigned ch,
-	   int *prev_mode, int *prev_attrib)
+print_char(struct string *screen, struct rs_opt_cache *opt_cache,
+	   struct screen_char *ch, int *prev_mode, int *prev_attrib)
 {
-	unsigned char c = ch & 0xff;
-	unsigned char attrib = ch >> 8 & 0x7f;
-	unsigned char mode = ch >> 15;
+	unsigned char c = ch->data;
+	unsigned char attrib = ch->attr & 0x7f;
+	unsigned char mode = ch->attr & 0x80;
 
 	if (opt_cache->type == TERM_LINUX) {
 		if (opt_cache->m11_hack && !opt_cache->utf_8_io) {
@@ -293,15 +293,16 @@ redraw_screen(struct terminal *term)
 		register int x = 0;
 
 		for (; x < term->x; x++, p++) {
-			register unsigned tsp = term->screen[p];
-			register unsigned tlsp = term->last_screen[p];
+			register struct screen_char *tsp = &term->screen[p];
+			register struct screen_char *tlsp = &term->last_screen[p];
 
-			if (tsp == tlsp) continue;
-			if ((tsp & 0x3800) == (tlsp & 0x3800)) {
-				int a = (tsp & 0xff);
+			if (tsp->data == tlsp->data
+			    && tsp->attr == tlsp->attr) continue;
+			if ((tsp->attr & 0x38) == (tlsp->attr & 0x38)) {
+				int a = tsp->data;
 
 				if (a == 0 || a == 1 || a == ' ') {
-					a = (tlsp & 0xff);
+					a = tlsp->data;
 
 					if (a == 0 || a == 1 || a == ' ')
 						continue;
@@ -317,7 +318,7 @@ redraw_screen(struct terminal *term)
 
 				for (; i >= 0; i--) {
 					print_char(&screen, &opt_cache,
-						   term->screen[p - i],
+						   &term->screen[p - i],
 						   &mode, &attrib);
 					cx++;
 				}

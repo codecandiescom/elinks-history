@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.12 2003/07/27 19:39:33 jonas Exp $ */
+/* $Id: draw.c,v 1.13 2003/07/27 21:22:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,16 +9,20 @@
 
 #include "config/options.h"
 #include "terminal/draw.h"
+#include "terminal/screen.h"
 #include "terminal/terminal.h"
 
 
 void
 set_char(struct terminal *t, int x, int y, unsigned c)
 {
+	int position = x + t->x * y;
+
 	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
 	if_assert_failed { return; }
 
-	t->screen[x + t->x * y] = c;
+	t->screen[position].data = get_screen_char_data(c);
+	t->screen[position].attr = get_screen_char_attr(c);
 	t->dirty = 1;
 }
 
@@ -28,7 +32,7 @@ get_char(struct terminal *t, int x, int y)
 	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
 	if_assert_failed { return 0; }
 
-	return t->screen[x + t->x * y];
+	return encode_screen_char(t->screen[x + t->x * y]);
 }
 
 void
@@ -40,7 +44,7 @@ set_color(struct terminal *t, int x, int y, unsigned c)
 	if_assert_failed { return; }
 
 	position = x + t->x * y;
-	t->screen[position] = (t->screen[position] & 0x80ff) | (c & ~0x80ff);
+	t->screen[position].attr = (t->screen[position].attr & 0x80) | (get_screen_char_attr(c) & ~0x80);
 	t->dirty = 1;
 }
 
@@ -53,7 +57,7 @@ set_only_char(struct terminal *t, int x, int y, unsigned c)
 	if_assert_failed { return; }
 
 	position = x + t->x * y;
-	t->screen[position] = (t->screen[position] & ~0x80ff) | (c & 0x80ff);
+	t->screen[position].data = get_screen_char_data(c);
 	t->dirty = 1;
 }
 
@@ -74,8 +78,12 @@ set_line(struct terminal *t, int x, int y, int l, chr *line)
 	assert(line);
 	if_assert_failed { return; }
 
-	for (i = 0; i < end; i++)
-		t->screen[i + offset] = line[i];
+	for (i = 0; i < end; i++) {
+		int position = i + offset;
+
+		t->screen[position].data = get_screen_char_data(line[i]);
+		t->screen[position].attr = get_screen_char_attr(line[i]);
+	}
 	t->dirty = 1;
 }
 
@@ -105,7 +113,7 @@ fill_area(struct terminal *t, int x, int y, int xw, int yw, unsigned c)
 	int startx = (x >= 0) ? 0 : -x;
 	int endy = (yw < t->y - y) ? yw : t->y - y;
 	int endx = (xw < t->x - x) ? xw : t->x - x;
-	int offset_base =  x + t->x * y;
+	int offset_base = x + t->x * y;
 	register int j;
 
 	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
@@ -118,8 +126,12 @@ fill_area(struct terminal *t, int x, int y, int xw, int yw, unsigned c)
 		/* No, we can't use memset() here :(. It's int, not char. */
 		/* TODO: Make screen two arrays actually. Enables various
 		 * optimalizations, consumes nearly same memory. --pasky */
-		for (i = startx; i < endx; i++)
-			t->screen[i + offset] = c;
+		for (i = startx; i < endx; i++) {
+			int position = i + offset;
+
+			t->screen[position].data = get_screen_char_data(c);
+			t->screen[position].attr = get_screen_char_attr(c);
+		}
 	}
 	t->dirty = 1;
 }

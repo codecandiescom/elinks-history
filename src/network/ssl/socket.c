@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.54 2004/06/27 13:03:42 pasky Exp $ */
+/* $Id: socket.c,v 1.55 2004/06/27 13:09:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,10 +44,19 @@
 #endif
 
 #ifdef CONFIG_OPENSSL
-#define ssl_do_connect(conn) SSL_get_error(conn->ssl, SSL_connect(conn->ssl))
+
+#define ssl_do_connect(conn)		SSL_get_error(conn->ssl, SSL_connect(conn->ssl))
+#define ssl_do_write(conn, data, len)	SSL_write(conn->ssl, data, len)
+#define ssl_do_read(conn, rb)		SSL_read(conn->ssl, rb->data + rb->len, rb->freespace)
+
 #elif defined(CONFIG_GNUTLS)
-#define ssl_do_connect(conn) gnutls_handshake(*((ssl_t *) conn->ssl))
+
+#define ssl_do_connect(conn)		gnutls_handshake(*((ssl_t *) conn->ssl))
+#define ssl_do_write(conn, data, len)	gnutls_record_send(*((ssl_t *) conn->ssl), data, len)
+#define ssl_do_read(conn, rb)		gnutls_record_recv(*((ssl_t *) conn->ssl), rb->data + rb->len, rb->freespace)
+
 #endif
+
 
 static void
 ssl_set_no_tls(struct connection *conn)
@@ -251,13 +260,7 @@ ssl_error:
 int
 ssl_write(struct connection *conn, unsigned char *data, int len)
 {
-	int wr = -1;
-
-#ifdef CONFIG_OPENSSL
-	wr = SSL_write(conn->ssl, data, len);
-#elif defined(CONFIG_GNUTLS)
-	wr = gnutls_record_send(*((ssl_t *) conn->ssl), data, len);
-#endif
+	int wr = ssl_do_write(conn, data, len);
 
 	if (wr <= 0) {
 #ifdef CONFIG_OPENSSL
@@ -290,13 +293,7 @@ ssl_write(struct connection *conn, unsigned char *data, int len)
 int
 ssl_read(struct connection *conn, struct read_buffer *rb)
 {
-	int rd = -1;
-
-#ifdef CONFIG_OPENSSL
-	rd = SSL_read(conn->ssl, rb->data + rb->len, rb->freespace);
-#elif defined(CONFIG_GNUTLS)
-	rd = gnutls_record_recv(*((ssl_t *) conn->ssl), rb->data + rb->len, rb->freespace);
-#endif
+	int rd = ssl_do_read(conn, rb);
 
 	if (rd <= 0) {
 #ifdef CONFIG_OPENSSL

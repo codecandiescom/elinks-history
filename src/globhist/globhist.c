@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.82 2004/07/22 01:18:17 pasky Exp $ */
+/* $Id: globhist.c,v 1.83 2004/11/12 09:42:22 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -272,7 +272,7 @@ read_global_history(void)
 {
 	unsigned char in_buffer[MAX_STR_LEN];
 	unsigned char *file_name = GLOBAL_HISTORY_FILENAME;
-	unsigned char *title, *url, *last_visit;
+	unsigned char *title;
 	FILE *f;
 
 	if (!get_globhist_enable()
@@ -291,28 +291,27 @@ read_global_history(void)
 	global_history.nosave = 1;
 
 	while (fgets(in_buffer, MAX_STR_LEN, f)) {
-		/* Drop ending '\n'. */
-		if (*in_buffer) in_buffer[strlen(in_buffer) - 1] = 0;
+		unsigned char *url, *last_visit, *eol;
 
-		url = strchr(in_buffer, '\t');
-		if (!url)
-			continue;
-		*url = '\0';
-		url++; /* Now url points to the character after \t. */
+		url = strchr(title, '\t');
+		if (!url) continue;
+		*url++ = '\0'; /* Now url points to the character after \t. */
 
 		last_visit = strchr(url, '\t');
-		if (!last_visit)
-			continue;
-		*last_visit = '\0';
-		last_visit++;
+		if (!last_visit) continue;
+		*last_visit++ = '\0';
+
+		eol = strchr(last_visit, '\n');
+		if (!eol) continue;
+		*eol = '\0'; /* Drop ending '\n'. */
 
 		/* Is using atol() in this way acceptable? It seems
 		 * non-portable to me; ttime might not be a long. -- Miciah */
 		add_global_history_item(url, title, atol(last_visit));
 	}
 
-	fclose(f);
 	global_history.nosave = 0;
+	fclose(f);
 }
 
 static void

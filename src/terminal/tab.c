@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.22 2003/10/18 21:44:27 pasky Exp $ */
+/* $Id: tab.c,v 1.23 2003/10/18 21:45:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,7 +214,7 @@ open_in_new_tab_in_background(struct terminal *term, void *xxx,
 
 	do_open_in_new_tab(term, ses,
 			   doc_view && doc_view->vs->current_link != -1
-			   	? get_link_url(ses, doc_view->document->links[doc_view->vs->current_link])
+			   	? get_link_url(ses, doc_view, &doc_view->document->links[doc_view->vs->current_link])
 				: NULL,
 			   1);
 }

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.12 2002/04/01 15:52:41 pasky Exp $ */
+/* $Id: main.c,v 1.13 2002/04/06 17:38:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,34 +196,32 @@ unhandle_basic_signals(struct terminal *term)
 }
 
 
+/* TODO: I'd like to have this rather somewhere in lowlevel/. --pasky */
+
+int terminal_pipe[2];
+
 int
 attach_terminal(int in, int out, int ctl, void *info, int len)
 {
 	struct terminal *term;
-	int fd[2];
-	
-	if (c_pipe(fd)) {
-		mem_free(info);
-		error("ERROR: can't create pipe for internal communication");
-		return -1;
-	}
 
-	fcntl(fd[0], F_SETFL, O_NONBLOCK);
-	fcntl(fd[1], F_SETFL, O_NONBLOCK);
-	handle_trm(in, out, out, fd[1], ctl, info, len);
+	fcntl(terminal_pipe[0], F_SETFL, O_NONBLOCK);
+	fcntl(terminal_pipe[1], F_SETFL, O_NONBLOCK);
+	handle_trm(in, out, out, terminal_pipe[1], ctl, info, len);
+
 	mem_free(info);
 
-	term = init_term(fd[0], out, win_func);
+	term = init_term(terminal_pipe[0], out, win_func);
 	if (term) {
 		/* OK, this is race condition, but it must be so; GPM installs
 		 * it's own buggy TSTP handler. */
 		handle_basic_signals(term);
 
-		return fd[1];
+		return terminal_pipe[1];
 	}
 
-	close(fd[0]);
-	close(fd[1]);
+	close(terminal_pipe[0]);
+	close(terminal_pipe[1]);
 
 	return -1;
 }
@@ -248,6 +246,13 @@ init()
 	init_home();
 	init_keymaps();
 
+	/* XXX: OS/2 has some stupid bug and the pipe must be created before
+	 * socket :-/. -- Mikulas */
+	if (c_pipe(terminal_pipe)) {
+		error("ERROR: can't create pipe for internal communication");
+		goto fatal_error;
+	}
+
 	/* Parsing command line options */
 	u = parse_options(ac - 1, av + 1);
 	if (!u) {
@@ -258,7 +263,10 @@ init()
 	
 	/* If there's no -no-connect option, check if there's no other ELinks
 	 * running. If we found any, open socket and act as a slave for it. */
-	if (!no_connect) { 
+	if (!no_connect) {
+		close(terminal_pipe[0]);
+		close(terminal_pipe[1]);
+
 		uh = bind_to_af_unix();
 		if (uh != -1) {
 			info = create_session_info(base_session, u, &len);
@@ -306,6 +314,11 @@ init()
 	
 	if (dmp) {
 		dump_start(u);
+		if (terminate) {
+			/* XXX? */
+			close(terminal_pipe[0]);
+			close(terminal_pipe[1]);
+		}
 		return;
 
 	} else {

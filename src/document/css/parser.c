@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.103 2004/09/19 22:32:30 pasky Exp $ */
+/* $Id: parser.c,v 1.104 2004/09/19 22:33:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -209,9 +209,17 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 			switch (token->type) {
 			case CSS_TOKEN_HASH:
 			case CSS_TOKEN_HEX_COLOR:
-				seltype = CST_ID; break;
-			case '.': seltype = CST_CLASS; break;
-			case ':': seltype = CST_PSEUDO; break;
+				seltype = CST_ID;
+				break;
+
+			case '.':
+				seltype = CST_CLASS;
+				break;
+
+			case ':':
+				seltype = CST_PSEUDO;
+				break;
+
 			default:
 				/* FIXME: Temporary fix for this weird CSS
 				 * precedence thing. ')' has higher than ','

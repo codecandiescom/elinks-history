@@ -1,7 +1,5 @@
 * Remove plural.c from CVS.
 
-* Use terminal-specific charset.
-
 * Use our own charset routines instead of iconv.
 
 * Don't require make install in order to have ELinks using the updated

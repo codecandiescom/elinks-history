@@ -1,6 +1,6 @@
 -- Check MD5 sums of download files automagically (it expects them in
 -- downloadedfile.txt).
--- $Id: md5check.lua,v 1.1 2001/12/31 18:01:03 pasky Exp $
+-- $Id: md5check.lua,v 1.2 2002/05/19 19:34:56 pasky Exp $
 
 ----------------------------------------------------------------------
 -- Installation
@@ -18,7 +18,7 @@
 --	}
 --
 -- 3. Edit the second last line of this file to point to your
--- download directory.  Sorry, but links-lua can't get this 
+-- download directory.  Sorry, but ELinks can't get this 
 -- information automatically (yet?).
 
 function file_exists(filename)

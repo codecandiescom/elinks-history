@@ -4,11 +4,11 @@
 # WARNING: Close all ELinks sessions before running this script.
 # This script converts ELinks bookmarks file with '|' as separator to new
 # bookmarks format where separator is tab char. It saves old file to
-# ~/.links/bookmarks.with_pipes. --Zas
+# ~/.elinks/bookmarks.with_pipes. --Zas
 
 # Script by Stephane Chazelas :)
 
-BMFILE=$HOME/.links/bookmarks
+BMFILE=$HOME/.elinks/bookmarks
 if [ ! -r "$BMFILE" ]; then
 	echo "$BMFILE does not exist or is not readable!" >&2
 	exit 1

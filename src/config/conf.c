@@ -1,5 +1,5 @@
 /* Config file and commandline proccessing */
-/* $Id: conf.c,v 1.12 2002/05/19 16:06:43 pasky Exp $ */
+/* $Id: conf.c,v 1.13 2002/05/19 19:34:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,7 +87,7 @@ found:
 
 unsigned char *parse_options(int argc, unsigned char *argv[])
 {
-	return _parse_options(argc, argv, links_options);
+	return _parse_options(argc, argv, root_options);
 }
 
 unsigned char *get_token(unsigned char **line)
@@ -274,17 +274,16 @@ load_config_file(unsigned char *prefix, unsigned char *name)
 	return;
 
 ok:
-	parse_config_file(config_file, c, links_options);
+	parse_config_file(config_file, c, root_options);
 	mem_free(c);
 	mem_free(config_file);
 }
 
 void load_config()
 {
-	load_config_file("/etc/", "links.cfg");
-	load_config_file(links_home, "links.cfg");
-	load_config_file(links_home, "html.cfg"); /* for legacy stuff */
-	load_config_file(links_home, "user.cfg");
+	load_config_file("/etc/elinks/", "elinks.cfg");
+	load_config_file(elinks_home, "elinks.cfg");
+	load_config_file(elinks_home, "user.cfg");
 }
 
 int
@@ -327,5 +326,5 @@ free_cfg_str:
 
 void write_config(struct terminal *term)
 {
-	write_config_file(links_home, "links.cfg", links_options, term);
+	write_config_file(elinks_home, "elinks.cfg", root_options, term);
 }

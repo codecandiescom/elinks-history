@@ -6,6 +6,8 @@
 # <yanek@yankuv.koniec.sk>.
 #
 # Spec file format from < http://www.rpm.org/RPM-HOWTO/build.html >
+#
+# $Id: elinks.spec.in,v 1.2 2002/05/19 19:34:56 pasky Exp $
 
 Summary: Enhanced version of Links (Lynx-like text WWW browser)
 Name: elinks
@@ -18,7 +20,6 @@ Vendor: ELinks project <pasky@ji.cz>
 Group: Applications/Internet
 Source: http://elinks.pld.org.pl/download/%{name}-%{version}.tar.bz2
 URL: http://elinks.pld.org.pl/
-Conflicts: links
 BuildRoot: /tmp/%{name}-%{version}-root
 
 %description
@@ -46,8 +47,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files 
 %doc AUTHORS* BUGS* ChangeLog* COPYING* HACKING* LUA* README* SITES* TODO*
-%{prefix}/bin/links
-%{_mandir}/man1/links.1.gz
+%{prefix}/bin/elinks
+%{_mandir}/man1/elinks.1.gz
+%{_mandir}/man1/elinkskeys.5.gz
 
 # date +"%a %b %d %Y"
 %changelog

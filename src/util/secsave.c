@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.12 2002/05/18 12:19:35 zas Exp $ */
+/* $Id: secsave.c,v 1.13 2002/05/19 19:34:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,8 +23,8 @@
 /* If secure_save is set:
  * ~~~~~~~~~~~~~~~~~~~~~
  *
- * A call to secure_open("/home/me/.links/filename", mask) will open a file
- * named "filename.tmp_XXXXXX" in /home/me/.links/ and return a pointer to a
+ * A call to secure_open("/home/me/.elinks/filename", mask) will open a file
+ * named "filename.tmp_XXXXXX" in /home/me/.elinks/ and return a pointer to a
  * structure secure_save_info on success or NULL on error.
  *
  * filename.tmp_XXXXXX can't conflict with any file since it's created using

@@ -1,5 +1,5 @@
 This directory contains unsorted stuff contributed by other people, which is
-not incorporated to main links distribution, however may be still interesting
+not incorporated to main ELinks distribution, however may be still interesting
 for someone. You will find here i.e. example configuration files or patches,
 which weren't (possibly yet) for some reason applied. Note that this stuff is
 mostly unmaintained and is not guaranteed to work, apply, compile etc. However,
@@ -23,4 +23,4 @@ Files not listed here have description included in their header.
 	Fix for arcane (appears to me that everything under HPUX is somewhat
 	arcane ;) handling of pipes in HPUX
 
-$Id: README,v 1.7 2002/05/19 17:40:35 pasky Exp $
+$Id: README,v 1.8 2002/05/19 19:34:56 pasky Exp $

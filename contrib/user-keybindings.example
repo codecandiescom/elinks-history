@@ -10,7 +10,7 @@
 #
 # Simple HOWTO for keybinding by Peter Wang:
 #
-# Create a `user.cfg' file wherever your `links.cfg' usually goes.
+# Create a `user.cfg' file wherever your `elinks.cfg' usually goes.
 # This file will be read by Links but not written, so feel free to put
 # in comments.
 # 

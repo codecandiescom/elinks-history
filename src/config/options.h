@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.16 2002/05/19 17:02:18 pasky Exp $ */
+/* $Id: options.h,v 1.17 2002/05/19 19:34:57 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -59,7 +59,7 @@ struct option_type_info {
 extern struct option_type_info option_types[];
 
 
-extern struct hash *links_options;
+extern struct hash *root_options;
 
 
 extern void init_options();
@@ -71,11 +71,11 @@ extern void free_options_hash(struct hash *);
 extern struct option *get_opt_rec(struct hash *, unsigned char *);
 extern void *get_opt(struct hash *, unsigned char *);
 
-#define get_opt_int(name) *((int *) get_opt(links_options, name))
-#define get_opt_long(name) *((long *) get_opt(links_options, name))
-#define get_opt_char(name) *((unsigned char *) get_opt(links_options, name))
-#define get_opt_str(name) ((unsigned char *) get_opt(links_options, name))
-#define get_opt_ptr(name) ((void *) get_opt(links_options, name))
+#define get_opt_int(name) *((int *) get_opt(root_options, name))
+#define get_opt_long(name) *((long *) get_opt(root_options, name))
+#define get_opt_char(name) *((unsigned char *) get_opt(root_options, name))
+#define get_opt_str(name) ((unsigned char *) get_opt(root_options, name))
+#define get_opt_ptr(name) ((void *) get_opt(root_options, name))
 
 extern void add_opt_rec(struct hash *, unsigned char *path, struct option *);
 extern void add_opt(struct hash *, unsigned char *path, unsigned char *name,
@@ -84,35 +84,35 @@ extern void add_opt(struct hash *, unsigned char *path, unsigned char *name,
 		    unsigned char *desc);
 
 #define add_opt_bool(path, name, flags, def, desc) do { \
-	add_opt(links_options, path, name, flags, OPT_BOOL, 0, 1, mem_alloc(sizeof(int)), desc); \
+	add_opt(root_options, path, name, flags, OPT_BOOL, 0, 1, mem_alloc(sizeof(int)), desc); \
 	get_opt_int(name) = def; } while (0)
 
 #define add_opt_int(path, name, flags, min, max, def, desc) do { \
-	add_opt(links_options, path, name, flags, OPT_INT, min, max, mem_alloc(sizeof(int)), desc); \
+	add_opt(root_options, path, name, flags, OPT_INT, min, max, mem_alloc(sizeof(int)), desc); \
 	get_opt_int(name) = def; } while (0)
 
 #define add_opt_long(path, name, flags, min, max, def, desc) do { \
-	add_opt(links_options, path, name, flags, OPT_LONG, min, max, mem_alloc(sizeof(long)), desc); \
+	add_opt(root_options, path, name, flags, OPT_LONG, min, max, mem_alloc(sizeof(long)), desc); \
 	get_opt_long(name) = def; } while (0)
 
 #define add_opt_string(path, name, flags, def, desc) \
-	add_opt(links_options, path, name, flags, OPT_STRING, 0, MAX_STR_LEN, stracpy(def), desc);
+	add_opt(root_options, path, name, flags, OPT_STRING, 0, MAX_STR_LEN, stracpy(def), desc);
 
 #define add_opt_codepage(path, name, flags, def, desc) do { \
-	add_opt(links_options, path, name, flags, OPT_CODEPAGE, 0, 0, mem_alloc(sizeof(int)), desc); \
+	add_opt(root_options, path, name, flags, OPT_CODEPAGE, 0, 0, mem_alloc(sizeof(int)), desc); \
 	get_opt_int(name) = def; } while (0)
 
 #define add_opt_ptr(path, name, flags, type, def, desc) \
-	add_opt(links_options, path, name, flags, type, 0, 0, def, desc);
+	add_opt(root_options, path, name, flags, type, 0, 0, def, desc);
 
 #define add_opt_void(path, name, flags, type, desc) \
-	add_opt(links_options, path, name, flags, type, 0, 0, NULL, desc);
+	add_opt(root_options, path, name, flags, type, 0, 0, NULL, desc);
 
 #define add_opt_command(path, name, flags, cmd, desc) \
-	add_opt(links_options, path, name, flags, OPT_COMMAND, 0, 0, cmd, desc);
+	add_opt(root_options, path, name, flags, OPT_COMMAND, 0, 0, cmd, desc);
 
 #define add_opt_hash(path, name, flags, desc) \
-	add_opt(links_options, path, name, flags, OPT_HASH, 0, 0, init_options_hash(), desc);
+	add_opt(root_options, path, name, flags, OPT_HASH, 0, 0, init_options_hash(), desc);
 
 
 extern unsigned char *cmd_name(unsigned char *);

@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.13 2002/05/17 19:12:48 pasky Exp $ */
+/* $Id: interlink.c,v 1.14 2002/05/19 19:34:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,9 +72,9 @@ int get_address()
 	struct sockaddr_un *addr;
 	unsigned char *path;
 
-	if (!links_home) return -1;
+	if (!elinks_home) return -1;
 
-	path = stracpy(links_home);
+	path = stracpy(elinks_home);
 
 	addr = mem_alloc(sizeof(struct sockaddr_un) + strlen(path) + 1);
 	if (!addr) {

@@ -1,9 +1,9 @@
-/* $Id: home.h,v 1.2 2002/04/28 12:00:28 pasky Exp $ */
+/* $Id: home.h,v 1.3 2002/05/19 19:34:58 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_HOME_H
 #define EL__LOWLEVEL_HOME_H
 
-extern unsigned char *links_home;
+extern unsigned char *elinks_home;
 extern int first_use;
 
 void init_home();

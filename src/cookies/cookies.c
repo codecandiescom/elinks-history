@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.22 2002/05/17 21:59:58 pasky Exp $ */
+/* $Id: cookies.c,v 1.23 2002/05/19 19:34:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -528,9 +528,9 @@ load_cookies() {
 	struct cookie *c;
 
 	/* Must be called after init_home */
-	/* if (!links_home) return; */ /* straconcat() checks that --Zas */
+	/* if (!elinks_home) return; */ /* straconcat() checks that --Zas */
 
-	cookfile = straconcat(links_home, "cookies", NULL);
+	cookfile = straconcat(elinks_home, "cookies", NULL);
 	if (!cookfile) return;
 
 	/* Do it here, as we will delete whole cookies list if the file was
@@ -616,7 +616,7 @@ save_cookies() {
 
 	if (cookies_nosave) return;
 
-	cookfile = straconcat(links_home, "cookies", NULL);
+	cookfile = straconcat(elinks_home, "cookies", NULL);
 	if (!cookfile) return;
 
 	ssi = secure_open(cookfile, 0177); /* rw for user only */

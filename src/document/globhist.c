@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.12 2002/05/17 22:31:47 pasky Exp $ */
+/* $Id: globhist.c,v 1.13 2002/05/19 19:34:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,7 +125,7 @@ read_global_history()
 	if (!get_opt_int("enable_global_history"))
 		return; 
 
-	file_name = straconcat(links_home, "history", NULL);
+	file_name = straconcat(elinks_home, "globhist", NULL);
 	if (!file_name) return;
 
 	f = fopen(file_name, "r");
@@ -166,7 +166,7 @@ write_global_history()
 	if (!get_opt_int("enable_global_history"))
 		return; 
 
-	file_name = straconcat(links_home, "history", NULL);
+	file_name = straconcat(elinks_home, "globhist", NULL);
 	if (!file_name) return;
 
 	ssi = secure_open(file_name, 0177); /* rw for user only */

@@ -1,5 +1,5 @@
--- Example hooks.lua file, put in ~/.links/ as hooks.lua.
--- $Id: hooks.lua,v 1.4 2002/05/05 15:10:20 pasky Exp $
+-- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
+-- $Id: hooks.lua,v 1.5 2002/05/19 19:34:56 pasky Exp $
 
 ----------------------------------------------------------------------
 --  Local configuration
@@ -27,7 +27,7 @@
 -- need to set the following to your home directory.
 
     home_dir = (getenv and getenv ("HOME")) or "/home/MYSELF"
-    hooks_file = home_dir.."/.links/hooks.lua"
+    hooks_file = home_dir.."/.elinks/hooks.lua"
 
 -- Pausing: When external programs are run, sometimes we need to pause
 -- to see the output.  This is the string we append to the command
@@ -47,14 +47,14 @@
 -- If you set this to non-`nil', the bookmark addon will be loaded,
 -- and actions will be bound to my key bindings.  Change them at the
 -- bottom of the file.
--- Note that you need to copy bm.lua (from contrib/) to ~/.links/ directory
+-- Note that you need to copy bm.lua (from contrib/) to ~/.elinks/ directory
 -- as well.
 
     bookmark_addon = nil
 
 -- For any other lua script to be loaded, clone following line:
 
-    dofile (home_dir.."/.links/script.lua")
+    dofile (home_dir.."/.elinks/script.lua")
 
 
 ----------------------------------------------------------------------
@@ -349,7 +349,7 @@ end
 
 if bookmark_addon then
 
-    dofile (home_dir.."/.links/bm.lua")
+    dofile (home_dir.."/.elinks/bm.lua")
 
     -- Add/change any bookmark options here.
 

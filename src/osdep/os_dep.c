@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.17 2002/05/11 12:05:24 pasky Exp $ */
+/* $Id: os_dep.c,v 1.18 2002/05/19 19:34:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -872,7 +872,7 @@ int start_thread(void (*fn)(void *, int), void *ptr, int l)
 	t->fn = fn;
 	t->h = p[1];
 	memcpy(t->data, ptr, l);
-	if (start_thr((void (*)(void *))bgt, t, "links_thread") < 0) {
+	if (start_thr((void (*)(void *))bgt, t, "elinks_thread") < 0) {
 		close(p[0]);
 		close(p[1]);
 		mem_free(t);
@@ -1396,7 +1396,7 @@ int get_system_env()
 
 #endif
 
-void exec_new_links(struct terminal *term, unsigned char *xterm, unsigned char *exe, unsigned char *param)
+void exec_new_elinks(struct terminal *term, unsigned char *xterm, unsigned char *exe, unsigned char *param)
 {
 	unsigned char *str;
 	if (!(str = mem_alloc(strlen(xterm) + 1 + strlen(exe) + 1 + strlen(param) + 1))) return;
@@ -1408,45 +1408,49 @@ void exec_new_links(struct terminal *term, unsigned char *xterm, unsigned char *
 void open_in_new_twterm(struct terminal *term, unsigned char *exe, unsigned char *param)
 {
 	unsigned char *twterm;
-	if (!(twterm = getenv("LINKS_TWTERM"))) twterm = "twterm -e";
-	exec_new_links(term, twterm, exe, param);
+	twterm = getenv("ELINKS_TWTERM");
+	if (!twterm) twterm = getenv("LINKS_TWTERM");
+	if (!twterm) twterm = "twterm -e";
+	exec_new_elinks(term, twterm, exe, param);
 }
 
 void open_in_new_xterm(struct terminal *term, unsigned char *exe, unsigned char *param)
 {
 	unsigned char *xterm;
-	if (!(xterm = getenv("LINKS_XTERM"))) xterm = "xterm -e";
-	exec_new_links(term, xterm, exe, param);
+	xterm = getenv("ELINKS_XTERM");
+	if (!xterm) xterm = getenv("LINKS_XTERM");
+	if (!xterm) xterm = "xterm -e";
+	exec_new_elinks(term, xterm, exe, param);
 }
 
 void open_in_new_screen(struct terminal *term, unsigned char *exe, unsigned char *param)
 {
-	exec_new_links(term, "screen", exe, param);
+	exec_new_elinks(term, "screen", exe, param);
 }
 
 #ifdef OS2
 void open_in_new_vio(struct terminal *term, unsigned char *exe, unsigned char *param)
 {
-	exec_new_links(term, "cmd /c start /c /f /win", exe, param);
+	exec_new_elinks(term, "cmd /c start /c /f /win", exe, param);
 }
 
 void open_in_new_fullscreen(struct terminal *term, unsigned char *exe, unsigned char *param)
 {
-	exec_new_links(term, "cmd /c start /c /f /fs", exe, param);
+	exec_new_elinks(term, "cmd /c start /c /f /fs", exe, param);
 }
 #endif
 
 #ifdef WIN32
 void open_in_new_win32(struct terminal *term, unsigned char *exe, unsigned char *param)
 {
-	exec_new_links(term, "", exe, param);
+	exec_new_elinks(term, "", exe, param);
 }
 #endif
 
 #ifdef BEOS
 void open_in_new_be(struct terminal *term, unsigned char *exe, unsigned char *param)
 {
-	exec_new_links(term, "Terminal", exe, param);
+	exec_new_elinks(term, "Terminal", exe, param);
 }
 #endif
 

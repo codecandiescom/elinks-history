@@ -1,18 +1,18 @@
-.\" Process this file with groff -man -Tascii links.1
-.TH LINKS 1 "Oct, 2001"
+.\" Process this file with groff -man -Tascii elinks.1
+.TH ELINKS 1 "Oct, 2001"
 
 
 .SH NAME
-links \- lynx-like alternative character mode WWW browser
+elinks \- lynx-like alternative character mode WWW browser
 
 
 .SH SYNOPSIS
-.B links
+.B elinks
 .I "[options] URL"
 
 
 .SH DESCRIPTION
-.B links
+.B ELinks
 is a text mode WWW browser, supporting
 colors, correct table rendering, background downloading, menu
 driven configuration interface and slim code.
@@ -21,19 +21,22 @@ Frames are supported. You can have different file formats
 associated with external viewers. mailto: and telnet:
 are supported via external clients.
 .P
-.I links
+.I ELinks
 can handle local (file://) or remote (http://, ftp:// or https://
-if there's compiled-in SSL support) URLs.
+if there's compiled-in SSL support) URLs. It has also basic support for
+finger:.
 .PP
 
 
 .SH OPTIONS
 Most options can be set in the user
-interface or config file, so usually you do not need to care about them.
+interface or config file, so usually you do not need to care about them. Note
+that this list is by no means complete and it is not kept up-to-date. To get
+complete list of commandline options, start ELinks with parameter \f3--help\f1.
 
 .TP
 \f3-anonymous\f1
-Restrict links so that it can run on an anonymous account.
+Restrict ELinks so that it can run on an anonymous account.
 No local file browsing. No downloads. Executing of viewers
 is allowed, but user can't add or modify entries in
 association table.
@@ -137,7 +140,7 @@ Cache memory in Kilobytes.
 
 .TP
 \f3-no-connect\f1
-Runs links as a separate instance - instead of connecting to
+Runs ELinks as a separate instance - instead of connecting to
 existing instance. Prevents him to connecting to an existing session.
 See also \f3-base-session\f1 option.
 
@@ -169,14 +172,14 @@ is "Links (version; system_id)".
 .TP
 \f3-version\f1
 Print the 
-.I links
+.I ELinks
 version number and exit.
 
 
 .SH NAVIGATION KEYS
 You may optionally prefix each of this keys with a number, telling its
 repeat count (how much times to do it). You can also re-bind those keys.
-See \fBlinkskeys\fP(5) for complete documentation about keybindings and
+See \fBelinkskeys\fP(5) for complete documentation about keybindings and
 more complete list of keys bound by default.
 The keys you may use for navigation are:
 .TP
@@ -292,7 +295,7 @@ bookmark manager
 bookmark manager
 .TP
 .B ^K
-reload cookies from ~/.links/cookies
+reload cookies from ~/.elinks/cookies
 .TP
 .B q
 quit
@@ -387,19 +390,19 @@ auto complete line
 .TP
 
 .IP CONFIG_DIR
-The location of ".links/"
+The location of ".elinks/"
 
 .IP WWW_HOME
 Homepage location (as in 
 .B lynx
 )
 
-.IP LINKS_XTERM
+.IP ELINKS_XTERM, LINKS_XTERM
 The command to run when selecting "File/New window" and if
 .B DISPLAY
 is defined (default "xterm -e")
 
-.IP LINKS_TWTERM
+.IP ELINKS_TWTERM, LINKS_TWTERM
 The command to run when selecting "File/New window" and if
 .B TWDISPLAY
 is defined (default "twterm -e")
@@ -414,68 +417,54 @@ Used for "File/OS Shell" menu in DOS/Windows
 .SH FILES
 .TP
 
-.IP "~/.links/links.cfg"
+.IP "~/.elinks/elinks.cfg"
 Per-user config file, automatically created by
-.B links. 
+.B ELinks. 
 Its format is same as the one of
 .I user.cfg.
 
-.IP "~/.links/html.cfg"
-Per-user config file, automatically created by
-.B links.
-It contains HTML rendering options. Its format is same as the one of
-.I user.cfg.
-
-.IP "~/.links/user.cfg"
+.IP "~/.elinks/user.cfg"
 Per-user config file, not overwritten while saving
-.B links
+.B ELinks
 configuration. You can add your own options there (e.g. keybindings).
 Each line consists from option name (same as the command-line one,
 but without leading dash and with dashes converted to underscores),
 space, and its value, in quotes if it's a string. Lines which start
 with # are considered as comments and skipped.
 
-.IP "~/.links/bookmarks"
+.IP "~/.elinks/bookmarks"
 Bookmarks file
 
-.IP "~/.links/cookies"
+.IP "~/.elinks/cookies"
 Cookies file
 
-.IP "~/.links/links.his"
-Sites history file
+.IP "~/.elinks/gotohist"
+GoTo URL dialog history file
 
-.IP "~/.links/socket"
-Internal links socket for communication between its instances.
+.IP "~/.elinks/globhist"
+History file containing last 4096 URLs visited
+
+.IP "~/.elinks/socket"
+Internal ELinks socket for communication between its instances.
 
 
 .SH PLATFORMS
-.B links
+.B ELinks
 is known to work on Linux, FreeBSD, OpenBSD, Solaris, IRIX, HPUX, Digital Unix, AIX,
 OS/2, BeOS and RISC OS.
 Port for Win32 is in state of beta testing.
 
 
 .SH BUGS
-Can't connect to some FTP servers (Novell, NT). Connection stays in "Request
-sent" state.
-.PP
-Frames don't work if there're more frames with same name. Turn them off in such
-case.
-.PP
-You can't upload large files; it takes _lots_ of memory.
-.PP
-You shouldn't press '^Z' when you are in a viewer
+See BUGS file coming with ELinks distribution tarball for list of known bugs.
 .PP
 Please report any other bugs you find to
-.B Mikulas Patocka
-.BI <mikulas@artax.karlin.mff.cuni.cz>
-or to
-.B links mailing list
+.B (E)Links mailing list
 .BI <links-list@linuxfromscratch.org>.
 
 
 .SH LICENSE
-.B links
+.B ELinks
 is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
@@ -483,20 +472,26 @@ the Free Software Foundation; either version 2 of the License, or
 
 
 .SH AUTHOR
-.I links
+.I Links
 was written by 
 .B Mikulas Patocka 
 .BI <mikulas@artax.karlin.mff.cuni.cz>.
+.I ELinks
+- which is based on
+.I Links
+ - was written by
+.B Petr Baudis
+.BI <pasky@ji.cz>.
 See file 
 .I AUTHORS
 in the source tree for a list of people contributing to this project.
 .P
-The homepage of links can be found at
-.BI http://links.browser.org/
+The homepage of ELinks can be found at
+.BI http://elinks.pld.org.pl/
 .P
 This manual page was written by Peter Gervai <grin@tolna.net>,
 using excerpts from a (yet?) unknown
-.I links
+.I Links
 fan
 for the Debian GNU/Linux system (but may be used by others).
 Contributions from Francis A. Holop. Extended, clarified
@@ -504,7 +499,8 @@ and made more up-to-date by Petr Baudis <pasky@ji.cz>.
 
 
 .SH "SEE ALSO"
-.BR linkskeys (5),
+.BR elinkskeys (5),
+.BR links (1),
 .BR lynx (1),
 .BR w3m (1),
 .BR wget (1)

@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.27 2002/05/19 17:03:34 pasky Exp $ */
+/* $Id: options.c,v 1.28 2002/05/19 19:34:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,7 @@
 #include "util/hash.h"
 
 
-struct hash *links_options;
+struct hash *root_options;
 
 /**********************************************************************
  Options interface
@@ -163,7 +163,7 @@ init_options_hash()
 void
 init_options()
 {
-	links_options = init_options_hash();
+	root_options = init_options_hash();
 	register_options();
 }
 
@@ -193,7 +193,7 @@ free_options_hash(struct hash *hash)
 void
 done_options()
 {
-	free_options_hash(links_options);
+	free_options_hash(root_options);
 }
 
 
@@ -673,11 +673,11 @@ printhelp_cmd(struct option *o, unsigned char ***argv, int *argc)
 	version_cmd(NULL, NULL, NULL);
 	printf("\n");
 
-	printf("Usage: links [OPTION]... [URL]\n\n");
+	printf("Usage: elinks [OPTION]... [URL]\n\n");
 	printf("Options:\n\n");
 
 	/* TODO: Alphabetical order! */
-	foreach_hash_item (links_options, item, i) {
+	foreach_hash_item (root_options, item, i) {
 		struct option *option = item->value;
 
 		if (option->flags & OPT_CMDLINE) {
@@ -796,7 +796,7 @@ register_options()
 
 	add_opt_bool("",
 		"anonymous", OPT_CMDLINE, 0,
-		"Restrict links so that it can run on an anonymous account.\n"
+		"Restrict ELinks so that it can run on an anonymous account.\n"
 		"No local file browsing, no downloads. Executing of viewers\n"
 		"is allowed, but user can't add or modify entries in\n"
 		"association table.");
@@ -816,7 +816,7 @@ register_options()
 
 	add_opt_int("",
 		"base_session", OPT_CMDLINE, 0, MAXINT, 0,
-		"Run this links in separate session - instances of links with\n"
+		"Run this ELinks in separate session - instances of ELinks with\n"
 		"same base_session will connect together and share runtime\n"
 		"informations. By default, base_session is 0.");
 
@@ -991,7 +991,7 @@ register_options()
 
 	add_opt_bool("",
 		"no_connect", OPT_CMDLINE, 0,
-		"Run links as a separate instance - instead of connecting to\n"
+		"Run ELinks as a separate instance - instead of connecting to\n"
 		"existing instance.");
 
 	add_opt_string("",
@@ -1048,7 +1048,7 @@ register_options()
 			
 	add_opt_command("",
 		"version", OPT_CMDLINE, version_cmd,
-		"Print links version information and exit.");
+		"Print ELinks version information and exit.");
 
 	/* config-file-only options */
 

@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.5 2002/05/08 13:55:04 pasky Exp $ */
+/* $Id: home.c,v 1.6 2002/05/19 19:34:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@
 #include "lowlevel/home.h"
 
 
-unsigned char *links_home = NULL;
+unsigned char *elinks_home = NULL;
 int first_use = 0;
 
 unsigned char *
@@ -27,8 +27,11 @@ get_home(int *new)
 {
 	struct stat st;
 	unsigned char *home = stracpy(getenv("HOME"));
-	unsigned char *home_links;
+	unsigned char *home_elinks;
 	unsigned char *config_dir = stracpy(getenv("CONFIG_DIR"));
+
+	/* TODO: We want to use commandline option instead of environment
+	 * variable, especially one with so common name. */
 
 	if (new) *new = 1;
 
@@ -56,36 +59,36 @@ get_home(int *new)
 
 	if (home[0]) add_to_strn(&home, "/");
 
-	home_links = stracpy(home);
+	home_elinks = stracpy(home);
 
 	if (config_dir) {
-		add_to_strn(&home_links, config_dir);
+		add_to_strn(&home_elinks, config_dir);
 
-		while (home_links[0]
-		       && dir_sep(home_links[strlen(home_links) - 1]))
-			home_links[strlen(home_links) - 1] = 0;
+		while (home_elinks[0]
+		       && dir_sep(home_elinks[strlen(home_elinks) - 1]))
+			home_elinks[strlen(home_elinks) - 1] = 0;
 
-		if (stat(home_links, &st) != -1 && S_ISDIR(st.st_mode)) {
-			add_to_strn(&home_links, "/links");
+		if (stat(home_elinks, &st) != -1 && S_ISDIR(st.st_mode)) {
+			add_to_strn(&home_elinks, "/elinks");
 
 	    	} else {
 			fprintf(stderr, "CONFIG_DIR set to %s. But directory "
 					"%s doesn't exist.\n\007",
-				config_dir, home_links);
+				config_dir, home_elinks);
 			sleep(3);
-			mem_free(home_links);
-			home_links = stracpy(home);
-			add_to_strn(&home_links, ".links");
+			mem_free(home_elinks);
+			home_elinks = stracpy(home);
+			add_to_strn(&home_elinks, ".elinks");
 		}
 
 		mem_free(config_dir);
 
 	} else {
-		add_to_strn(&home_links, ".links");
+		add_to_strn(&home_elinks, ".elinks");
 	}
 
-	if (stat(home_links, &st)) {
-		if (!mkdir(home_links, 0700))
+	if (stat(home_elinks, &st)) {
+		if (!mkdir(home_elinks, 0700))
 			goto home_creat;
 		if (config_dir)
 			goto failed;
@@ -96,14 +99,14 @@ get_home(int *new)
 		goto home_ok;
 
 first_failed:
-	mem_free(home_links);
+	mem_free(home_elinks);
 
-	/* FIXME: home_links == NULL case --Zas */
-	home_links = stracpy(home);
-	add_to_strn(&home_links, "links");
+	/* FIXME: home_elinks == NULL case --Zas */
+	home_elinks = stracpy(home);
+	add_to_strn(&home_elinks, "elinks");
 
-	if (stat(home_links, &st)) {
-		if (mkdir(home_links, 0700) == 0)
+	if (stat(home_elinks, &st)) {
+		if (mkdir(home_elinks, 0700) == 0)
 			goto home_creat;
 		goto failed;
 	}
@@ -112,7 +115,7 @@ first_failed:
 		goto home_ok;
 
 failed:
-	mem_free(home_links);
+	mem_free(home_elinks);
 	mem_free(home);
 
 	return NULL;
@@ -125,23 +128,23 @@ home_creat:
 	/* I've no idea if following is needed for newly created directories.
 	 * It's bad thing to do it everytime. --pasky */
 #ifdef HAVE_CHMOD
-	chmod(home_links, 0700);
+	chmod(home_elinks, 0700);
 #endif
 #endif
-	add_to_strn(&home_links, "/");
+	add_to_strn(&home_elinks, "/");
 	mem_free(home);
 
-	return home_links;
+	return home_elinks;
 }
 
 void
 init_home()
 {
-	links_home = get_home(&first_use);
-	if (!links_home) {
-		fprintf(stderr, "Unable to find or create links config "
-				"directory. Please check, that you have $HOME "
-				"variable set correctly and that you have "
+	elinks_home = get_home(&first_use);
+	if (!elinks_home) {
+		fprintf(stderr, "Unable to find or create ELinks config "
+				"directory. Please check if you have $HOME "
+				"variable set correctly and if you have "
 				"write permission to your home directory."
 				"\n\007");
 		sleep(3);
@@ -152,5 +155,5 @@ init_home()
 void
 free_home()
 {
-	if (links_home) mem_free(links_home);
+	if (elinks_home) mem_free(elinks_home);
 }

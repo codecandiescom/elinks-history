@@ -1,19 +1,19 @@
-.\" Process this file with groff -man -Tascii linkskeys.5
-.TH LINKSKEYS 5 "May, 2002"
+.\" Process this file with groff -man -Tascii elinkskeys.5
+.TH ELINKSKEYS 5 "May, 2002"
 
 
 .SH NAME
-linkskeys \- links WWW browser key bindings
+elinkskeys \- ELinks WWW browser key bindings
 
 
 .SH SYNOPSIS
-.B ~/.links/user.cfg
+.B ~/.elinks/user.cfg
 
 
 .SH DESCRIPTION
 Key bindings for 
-.I links
-should be placed in a file called \fB~/.links/user.cfg\fP.  This file
+.I elinks
+should be placed in a file called \fB~/.elinks/user.cfg\fP.  This file
 will be read from but not written to, so you may put comments in
 there.
 
@@ -166,11 +166,11 @@ Move to the next frame.
 
 .TP
 .B open-new-window
-Open a new instace of \fIlinks\fP in a new window.
+Open a new instace of \fIELinks\fP in a new window.
 
 .TP
 .B open-link-in-new-window
-Open the current link in a new instance of \fIlinks\fP in a new
+Open the current link in a new instance of \fIELinks\fP in a new
 window.
 
 .TP
@@ -195,7 +195,7 @@ Open a quit confirmation dialog box.
 
 .TP
 .B really-quit
-Quit without confirmation.  Not in \fIlinks\fP 0.96.
+Quit without confirmation.
 
 .TP
 .B reload
@@ -430,11 +430,11 @@ bind main ,             lua-console
 .SH FILES
 
 .TR
-.B /etc/links.cfg
+.B /etc/elinks/elinks.cfg
 Site-wide configuration file.
 
 .TR
-.B ~/.links/user.cfg
+.B ~/.elinks/user.cfg
 Per-user configuration file, loaded after site-wide configuration.
 
 
@@ -447,4 +447,4 @@ documentation. Updated by Zas.
 
 
 .SH "SEE ALSO"
-.BR links (1)
+.BR elinks (1)

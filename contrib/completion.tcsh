@@ -1,8 +1,9 @@
 #!/bin/tcsh
 # Completions for Elinks.
 # Contributed by Jonas Fonseca <fonseca@diku.dk>.
+# $Id: completion.tcsh,v 1.3 2002/05/19 19:34:56 pasky Exp $
 
-set linksoptions = \
+set elinksoptions = \
 	(accesskey-enter accesskey-priority allow-special-files		\
 	anonymous assume-codepage async-dns base-session color-dirs	\
 	cookies-accept cookies-paranoid-security cookies-save		\
@@ -18,14 +19,14 @@ set linksoptions = \
 	secure-save show-status-bar show-title-bar source 		\
 	unrestartable-receive-timeout user-agent version)
 
-set linkslanguages = \
+set elinkslanguages = \
 	(bulgarian catalan czech danish dutch english estonian finnish	\
 	french galician german	greek hungarian	icelandic indonesian	\
 	italian lithuanian polish romanian russian slovak spanish	\
 	swedish turkish ukrainian)
 
 complete {e,}links \
-	c/-{-,}/'$linksoptions'/					\
+	c/-{-,}/'$elinksoptions'/					\
 	n/-{-,}accesskey-enter/'(0 1)'/					\
 	n/-{-,}accesskey-priority/'(0 1 2)'/				\
 	n/-{-,}allow-special-files/'(0 1)'/				\
@@ -40,5 +41,5 @@ complete {e,}links \
 	n/-{-,}{ftp,http}-proxy/x:'<host:port>'/			\
 	n/-{-,}http-referer/'(0 1 2 3)'/				\
 	n/-{-,}http-bugs.\*/'(0 1)'/ 					\
-	n/-{-,}language/'$linkslanguages'/				\
+	n/-{-,}language/'$elinkslanguages'/				\
 	n/-{-,}{secure-save,show-status-bar,show-title-bar}/'(0 1)'/

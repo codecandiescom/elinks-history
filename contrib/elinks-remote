@@ -6,11 +6,11 @@
 # URL to be loaded.
 #
 # You can also press 'X' to save URL of currently selected link back to
-# ~/.links/external.url.
+# ~/.elinks/external.url.
 #
 # Note that you also need remote.lua loaded in ELinks.
 #
 # These two scripts were contributed by Len Trigg <len@reeltwo.com>.
 #
 
-echo $* >$HOME/.links/external.url
+echo $* >$HOME/.elinks/external.url

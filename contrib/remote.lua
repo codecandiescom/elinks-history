@@ -1,14 +1,14 @@
--- ELinks-side part of links-remote
--- $Id: remote.lua,v 1.2 2002/05/08 14:06:35 pasky Exp $
+-- ELinks-side part of elinks-remote
+-- $Id: remote.lua,v 1.3 2002/05/19 19:34:56 pasky Exp $
 
--- See script links-remote for explanation what's this about.
+-- See script elinks-remote for explanation what's this about.
 
 ----------------------------------------------------------------------
 --  User options
 ----------------------------------------------------------------------
 
 -- File to look in for external url to jump to
-   external_url_file = home_dir.."/.links/external.url"
+   external_url_file = home_dir.."/.elinks/external.url"
 
 
 ----------------------------------------------------------------------

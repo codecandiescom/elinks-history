@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.66 2004/01/21 04:25:34 jonas Exp $ */
+/* $Id: scanner.c,v 1.67 2004/01/21 04:29:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,21 +28,22 @@ enum css_char_group {
 	CSS_CHAR_ALPHA		= (1 << 0),
 	CSS_CHAR_DIGIT		= (1 << 1),
 	CSS_CHAR_HEX_DIGIT	= (1 << 2),
-	CSS_CHAR_IDENT_START	= (1 << 3),
-	CSS_CHAR_IDENT		= (1 << 4),
-	CSS_CHAR_WHITESPACE	= (1 << 5),
-	CSS_CHAR_NEWLINE	= (1 << 6),
-	CSS_CHAR_NON_ASCII	= (1 << 7),
-	CSS_CHAR_TOKEN		= (1 << 8),
+	CSS_CHAR_IDENT		= (1 << 3),
+	CSS_CHAR_IDENT_START	= (1 << 4),
+	CSS_CHAR_NEWLINE	= (1 << 5),
+	CSS_CHAR_NON_ASCII	= (1 << 6),
+	CSS_CHAR_TOKEN		= (1 << 7),
+	CSS_CHAR_WHITESPACE	= (1 << 8),
 };
 
 #define	check_css_table(c, bit)	(css_scan_table[(c)] & (bit))
+#define	scan_css(s, bit)	while (check_css_table(*(s), bit)) (s)++;
+
 #define	is_css_ident_start(c)	check_css_table(c, CSS_CHAR_IDENT_START)
 #define	is_css_ident(c)		check_css_table(c, CSS_CHAR_IDENT)
 #define	is_css_digit(c)		check_css_table(c, CSS_CHAR_DIGIT)
 #define	is_css_hexdigit(c)	check_css_table(c, CSS_CHAR_HEX_DIGIT)
 #define	is_css_char_token(c)	check_css_table(c, CSS_CHAR_TOKEN)
-#define	scan_css(s, bit)	while (check_css_table(*(s), bit)) (s)++;
 
 struct css_number_identifier {
 	unsigned char *name;
@@ -423,12 +424,12 @@ struct scan_table_info {
 #define SCAN_TABLE_END			 SCAN_TABLE_INFO(SCAN_END, 0, 0, 0)
 
 static struct scan_table_info css_scan_table_info[] = {
-	SCAN_TABLE_RANGE(161, 255, CSS_CHAR_NON_ASCII | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
 	SCAN_TABLE_RANGE('0', '9', CSS_CHAR_DIGIT | CSS_CHAR_HEX_DIGIT | CSS_CHAR_IDENT),
-	SCAN_TABLE_RANGE('a', 'z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+	SCAN_TABLE_RANGE('A', 'F', CSS_CHAR_HEX_DIGIT),
 	SCAN_TABLE_RANGE('A', 'Z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
 	SCAN_TABLE_RANGE('a', 'f', CSS_CHAR_HEX_DIGIT),
-	SCAN_TABLE_RANGE('A', 'F', CSS_CHAR_HEX_DIGIT),
+	SCAN_TABLE_RANGE('a', 'z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+	SCAN_TABLE_RANGE(161, 255, CSS_CHAR_NON_ASCII | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
 
 	SCAN_TABLE_STRING(" \f\n\r\t\v", CSS_CHAR_WHITESPACE),
 	SCAN_TABLE_STRING("\f\n\r",	 CSS_CHAR_NEWLINE),

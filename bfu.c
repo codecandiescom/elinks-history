@@ -1498,13 +1498,25 @@ void add_to_history(struct history *historylist, unsigned char *url, int check_d
 	struct history_item *newhistoryitem;
 	int url_len;
 	
-	if (!historylist || !url || !*url) return;
-	url_len = strlen(url) + 1;
+	if (!historylist || !url) return;
+
+	/* Strip spaces at the margins */
+
+	while (*url == ' ') url++;
+	if (!*url) return;
+
+	url_len = strlen(url);
+
+	while (url_len > 0 && url[url_len - 1] == ' ') url_len--;
+	if (!url_len) return;
+
+	/* Copy it all etc. */
 	
-	newhistoryitem = mem_alloc(sizeof(struct history_item) + url_len);
+	newhistoryitem = mem_alloc(sizeof(struct history_item) + url_len + 1);
 	
 	if (!newhistoryitem) return;
 	memcpy(newhistoryitem->d, url, url_len);
+	newhistoryitem->d[url_len] = 0;
 	
 	if (check_duplicate) remove_duplicate_from_history(historylist, url);
 	

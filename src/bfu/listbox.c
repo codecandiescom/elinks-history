@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.37 2002/10/08 16:56:38 pasky Exp $ */
+/* $Id: listbox.c,v 1.38 2002/10/08 18:41:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -309,7 +309,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int offset)
 			}
 		}
 
-		if (item->marked) str[5] = '*';
+		if (item->marked) str[4] = '*';
 
 		print_text(data->term,
 			   data->listbox_item_data->x + (depth - 1) * 5,
@@ -482,7 +482,20 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 				return EVENT_PROCESSED;
 			}
 
-			/* Selecting a button */
+			if (ev->x == KBD_INS) {
+				struct listbox_data *box;
+
+				box = (struct listbox_data *) dlg->items[dlg->n - 1].item->data;
+				if (box->sel) {
+					box->sel->marked = !box->sel->marked;
+					box_sel_move(&dlg->items[dlg->n - 1], 1);
+				}
+				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
+
+				return EVENT_PROCESSED;
+			}
+
+			/* Selecting a button; most probably ;). */
 			break;
 
 		case EV_INIT:

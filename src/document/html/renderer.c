@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.261 2003/09/10 16:06:56 jonas Exp $ */
+/* $Id: renderer.c,v 1.262 2003/09/10 18:12:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,6 +72,7 @@ static unsigned char *last_target;
 static unsigned char *last_image;
 static struct form_control *last_form;
 static int nobreak;
+static int nowrap = 0; /* Activated/deactivated by SP_NOWRAP. */
 static struct conv_table *convert_table;
 static int g_ctrl_num;
 static int empty_format;
@@ -85,42 +86,22 @@ void line_break(struct part *);
 void put_chars(struct part *, unsigned char *, int);
 
 
-#ifdef ALIGN
-#undef ALIGN
-#endif
-
 #define LINES_GRANULARITY	0x7F
 #define LINE_GRANULARITY	0x0F
 #define LINK_GRANULARITY	0x7F
 
-#define ALIGN(x, gr)	(((x) + (gr)) & ~(gr))
-#define ALIGN_LINES(x)	ALIGN(x, LINES_GRANULARITY)
-#define ALIGN_LINE(x)	ALIGN(x, LINE_GRANULARITY)
-#define ALIGN_LINK(x)	ALIGN(x, LINK_GRANULARITY)
-
-static int nowrap = 0; /* Activated/deactivated by SP_NOWRAP. */
-
+#define ALIGN_LINES(x, o, n) mem_align_alloc(x, o, n, sizeof(struct line), LINES_GRANULARITY)
+#define ALIGN_LINE(x, o, n)  mem_align_alloc(x, o, n, sizeof(struct screen_char), LINE_GRANULARITY)
+#define ALIGN_LINK(x, o, n)  mem_align_alloc(x, o, n, sizeof(struct link), LINK_GRANULARITY)
 
 static int
 realloc_lines(struct document *document, int y)
 {
-	int newsize = ALIGN_LINES(y + 1);
-	int oldsize = ALIGN_LINES(document->y);
-	struct line *lines;
-
 	assert(document);
 	if_assert_failed return 0;
 
-	lines = document->data;
-
-	if (newsize > oldsize) {
-		lines = mem_realloc(lines, newsize * sizeof(struct line));
-		if (!lines) return -1;
-
-		document->data = lines;
-		memset(&lines[oldsize], 0,
-		       (newsize - oldsize) * sizeof(struct line));
-	}
+	if (!ALIGN_LINES(&document->data, document->y, y + 1))
+		return -1;
 
 	document->y = y + 1;
 
@@ -131,7 +112,6 @@ static int
 realloc_line(struct document *document, int y, int x)
 {
 	int i;
-	int newsize = ALIGN_LINE(x + 1);
 	struct line *line;
 	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
 	struct screen_char schar = INIT_SCREEN_CHAR(' ', 0, 0);
@@ -141,14 +121,8 @@ realloc_line(struct document *document, int y, int x)
 
 	line = &document->data[y];
 
-	if (newsize > ALIGN_LINE(line->l)) {
-		struct screen_char *l;
-
-		l = mem_realloc(line->d, newsize * sizeof(struct screen_char));
-		if (!l)	return -1;
-
-		line->d = l;
-	}
+	if (!ALIGN_LINE(&line->d, line->l, x + 1))
+		return -1;
 
 	set_term_color(&schar, &colors, COLOR_DEFAULT);
 
@@ -751,21 +725,14 @@ static struct link *
 new_link(struct document *f, int link_number, unsigned char *name, int namelen)
 {
 	struct link *link;
-	size_t newsize;
 
 	assert(f);
 	if_assert_failed return NULL;
 
-	newsize = ALIGN_LINK(f->nlinks + 1);
-	if (ALIGN_LINK(f->nlinks) < newsize) {
-		link = mem_realloc(f->links, newsize * sizeof(struct link));
-		if (!link) return NULL;
-		f->links = link;
-	}
+	if (!ALIGN_LINK(&f->links, f->nlinks, f->nlinks + 1))
+		return NULL;
 
 	link = &f->links[f->nlinks++];
-	memset(link, 0, sizeof(struct link));
-
 	link->num = format.tabindex + link_number - 1;
 	link->accesskey = format.accesskey;
 	link->title = format.title ? stracpy(format.title) : NULL;

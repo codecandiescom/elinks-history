@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.12 2003/09/04 16:58:01 jonas Exp $ */
+/* $Id: memory.h,v 1.13 2003/09/10 18:12:54 jonas Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -84,6 +84,11 @@ void *mem_realloc(void *, size_t);
 
 #endif /* LEAK_DEBUG */
 
+
+/* Granular memory allocation. */
+
+#include <string.h> /* for memset() */
+
 #define grmask(x, gr)	((x) & ~((gr) - 1))
 
 #define mem_gralloc(pointer, type, oldsize, newsize, gr)				\
@@ -93,5 +98,31 @@ void *mem_realloc(void *, size_t);
 		if (!_tmp_) return NULL;						\
 		(pointer) = _tmp_;							\
 	}
+
+#ifdef MEM_ALIGN_SIZE
+#undef MEM_ALIGN_SIZE
+#endif
+
+#define MEM_ALIGN_SIZE(x, gr) (((x) + (gr)) & ~(gr))
+
+static inline void *
+__mem_align_alloc(void **ptr, size_t old, size_t new, size_t objsize, int mask)
+{
+	size_t newsize = MEM_ALIGN_SIZE(new, mask);
+	size_t oldsize = MEM_ALIGN_SIZE(old, mask);
+
+	if (newsize > oldsize) {
+		unsigned char *data = mem_realloc(*ptr, newsize * objsize);
+		if (!data) return NULL;
+
+		*ptr = (void *)data;
+		memset(&data[oldsize * objsize], 0, (newsize - oldsize) * objsize);
+	}
+
+	return *ptr;
+}
+
+#define mem_align_alloc(ptr, old, new, objsize, mask) \
+	__mem_align_alloc((void **)ptr, old, new, objsize, mask)
 
 #endif

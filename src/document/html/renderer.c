@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.249 2003/09/09 19:45:26 jonas Exp $ */
+/* $Id: renderer.c,v 1.250 2003/09/09 20:07:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -970,12 +970,6 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 
 	if (part->cx == -1) part->cx = par_format.leftmargin;
 
-	if (last_link || last_image || last_form || format.link
-	    || format.image || format.form)
-		process_link(part, chars, charslen);
-
-	schar = get_format_screen_char(part);
-
 	if (part->cx == par_format.leftmargin && *chars == ' '
 	    && par_format.align != AL_NONE) {
 		chars++;
@@ -989,7 +983,13 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	if (nowrap && part->cx + charslen > overlap(par_format))
 		return;
 
+	schar = get_format_screen_char(part);
 	set_hline(part, part->cx, part->cy, chars, charslen, schar);
+
+	if (last_link || last_image || last_form || format.link
+	    || format.image || format.form)
+		process_link(part, chars, charslen);
+
 	part->cx += charslen;
 	nobreak = 0;
 

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.59 2003/09/02 13:38:50 jonas Exp $ */
+/* $Id: screen.c,v 1.60 2003/09/02 13:42:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,6 +67,7 @@ struct screen_driver {
 	int charset;
 	int cp437;
 	int koi8r;
+	unsigned char *frame;
 	unsigned int m11_hack:1;
 	unsigned int utf_8_io:1;
 	unsigned int colors:1;
@@ -76,7 +77,6 @@ struct screen_driver {
 };
 
 struct screen_state {
-	unsigned char *frame;
 	unsigned char color;
 	unsigned char border;
 	unsigned char underline;
@@ -112,11 +112,11 @@ print_char(struct string *screen, struct screen_driver *driver,
 		}
 
 		if (driver->restrict_852 && border && c >= 176 && c < 224) {
-			c = state->frame[c - 176];
+			c = driver->frame[c - 176];
 		}
 
 	} else {
-		if (state->frame == frame_vt100 && border != state->border) {
+		if (driver->frame == frame_vt100 && border != state->border) {
 			state->border = border;
 
 			if (!border) {
@@ -127,7 +127,7 @@ print_char(struct string *screen, struct screen_driver *driver,
 		}
 
 		if (border && c >= 176 && c < 224) {
-			c = state->frame[c - 176];
+			c = driver->frame[c - 176];
 		}
 	}
 
@@ -331,7 +331,7 @@ redraw_screen(struct terminal *term)
 	struct string image;
 	register int y = 0;
 	int prev_y = -1;
-	struct screen_state state = { NULL, 0xFF, 0xFF, 0xFF };
+	struct screen_state state = { 0xFF, 0xFF, 0xFF };
 	struct terminal_screen *screen = term->screen;
  	register struct screen_char *current;
  	register struct screen_char *pos;
@@ -343,7 +343,7 @@ redraw_screen(struct terminal *term)
 	    || !init_string(&image)) return;
 
  	fill_option_cache(driver, term);
-	state.frame = get_frame_table(&driver);
+	driver.frame = get_frame_table(&driver);
 
 	current = screen->last_image;
  	pos = screen->image;

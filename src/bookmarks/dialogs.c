@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.46 2002/10/08 20:48:01 pasky Exp $ */
+/* $Id: dialogs.c,v 1.47 2002/10/08 21:18:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -372,14 +372,14 @@ do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 		bm = bm_next;
 		bm_next = bm->next;
 
-		if (bm == dest || bm == move_cache_root_avoid) {
+		if (bm == dest) {
 			/* We WON'T ever try to proceed ourselves - saves us
 			 * from insanities like moving a folder into itself
 			 * and so on. */
 			continue;
 		}
 
-		if (bm->box_item->marked) {
+		if (bm->box_item->marked && bm != move_cache_root_avoid) {
 			bm->box_item->marked = 0;
 
 			if (box->top == bm->box_item) {

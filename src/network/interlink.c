@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.53 2003/06/20 16:33:07 zas Exp $ */
+/* $Id: interlink.c,v 1.54 2003/06/20 16:45:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,21 +67,20 @@ af_unix_close(void)
 #include <sys/un.h>
 #endif
 
-/* FIXME: Separate client and server code. --Zas */
-struct addr_info {
+struct socket_info {
 	struct sockaddr *addr;
 	int size;
 	int fd;
 };
 
 /* Accepted socket info */
-static struct addr_info s_info_accept;
+static struct socket_info s_info_accept;
 
 /* Listening socket info */
-static struct addr_info s_info_listen;
+static struct socket_info s_info_listen;
 
 /* Connect socket info */
-static struct addr_info s_info_connect;
+static struct socket_info s_info_connect;
 
 enum addr_type {
 	ADDR_LOCAL,
@@ -117,7 +116,7 @@ get_sun_path(unsigned char **sun_path, int *sun_path_len)
 
 /* type is ignored here => always local */
 static int
-get_address(struct addr_info *info, enum addr_type type)
+get_address(struct socket_info *info, enum addr_type type)
 {
 	struct sockaddr_un *addr = NULL;
 	int sun_path_freespace;
@@ -189,7 +188,7 @@ free_and_error:
 }
 
 static int
-alloc_address(struct addr_info *info)
+alloc_address(struct socket_info *info)
 {
 	struct sockaddr_un *sa;
 
@@ -232,7 +231,7 @@ unlink_unix(struct sockaddr *addr)
 /* FIXME: IPv6 support. */
 
 static int
-get_address(struct addr_info *info, enum addr_type type)
+get_address(struct socket_info *info, enum addr_type type)
 {
 	struct sockaddr_in *sin;
 	unsigned short port;
@@ -278,7 +277,7 @@ get_address(struct addr_info *info, enum addr_type type)
 }
 
 static int
-alloc_address(struct addr_info *info)
+alloc_address(struct socket_info *info)
 {
 	struct sockaddr_in *sa;
 
@@ -307,14 +306,13 @@ setsock_reuse_addr(int fd)
 #define setsock_reuse_addr(fd)
 #endif
 
-
 #define unlink_unix(s)
 
 #endif
 
 /* Called when we receive a connection on listening socket. */
 static void
-af_unix_connection(struct addr_info *info)
+af_unix_connection(struct socket_info *info)
 {
 	int ns;
 	int l = info->size;

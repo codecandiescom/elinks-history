@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.48 2004/06/20 18:22:10 pasky Exp $ */
+/* $Id: ssl.c,v 1.49 2004/08/02 22:13:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,8 +205,8 @@ int
 init_ssl_connection(struct connection *conn)
 {
 #ifdef CONFIG_OPENSSL
-	conn->ssl = SSL_new(context);
-	if (!conn->ssl) return S_SSL_ERROR;
+	conn->socket.ssl /* FIXME: Assuming ssl handle */ = SSL_new(context);
+	if (!conn->socket.ssl /* FIXME: Assuming ssl handle */) return S_SSL_ERROR;
 #elif defined(CONFIG_GNUTLS)
 	const unsigned char server_name[] = "localhost";
 	ssl_t *state = mem_alloc(sizeof(GNUTLS_STATE));
@@ -243,7 +243,7 @@ init_ssl_connection(struct connection *conn)
 	gnutls_set_server_name(*state, GNUTLS_NAME_DNS, server_name,
 			       sizeof(server_name) - 1);
 
-	conn->ssl = state;
+	conn->socket.ssl /* FIXME: Assuming ssl handle */ = state;
 #endif
 
 	return S_OK;
@@ -252,7 +252,7 @@ init_ssl_connection(struct connection *conn)
 void
 done_ssl_connection(struct connection *conn)
 {
-	ssl_t *ssl = conn->ssl;
+	ssl_t *ssl = conn->socket.ssl /* FIXME: Assuming ssl handle */;
 
 	if (!ssl) return;
 #ifdef CONFIG_OPENSSL
@@ -261,13 +261,13 @@ done_ssl_connection(struct connection *conn)
 	gnutls_deinit(*ssl);
 	mem_free(ssl);
 #endif
-	conn->ssl = NULL;
+	conn->socket.ssl /* FIXME: Assuming ssl handle */ = NULL;
 }
 
 unsigned char *
 get_ssl_connection_cipher(struct connection *conn)
 {
-	ssl_t *ssl = conn->ssl;
+	ssl_t *ssl = conn->socket.ssl /* FIXME: Assuming ssl handle */;
 	struct string str;
 
 	if (!init_string(&str)) return NULL;

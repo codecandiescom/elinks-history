@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.63 2004/08/01 10:00:28 jonas Exp $ */
+/* $Id: connect.c,v 1.64 2004/08/02 22:13:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,18 +45,18 @@
 
 #ifdef CONFIG_OPENSSL
 
-#define ssl_do_connect(conn)		SSL_get_error(conn->ssl, SSL_connect(conn->ssl))
-#define ssl_do_write(conn, data, len)	SSL_write(conn->ssl, data, len)
-#define ssl_do_read(conn, rb)		SSL_read(conn->ssl, rb->data + rb->len, rb->freespace)
+#define ssl_do_connect(conn)		SSL_get_error(conn->socket.ssl /* FIXME: Assuming ssl handle */, SSL_connect(conn->socket.ssl /* FIXME: Assuming ssl handle */))
+#define ssl_do_write(conn, data, len)	SSL_write(conn->socket.ssl /* FIXME: Assuming ssl handle */, data, len)
+#define ssl_do_read(conn, rb)		SSL_read(conn->socket.ssl /* FIXME: Assuming ssl handle */, rb->data + rb->len, rb->freespace)
 #define ssl_do_close(conn)		/* Hmh? No idea.. */
 
 #elif defined(CONFIG_GNUTLS)
 
-#define ssl_do_connect(conn)		gnutls_handshake(*((ssl_t *) conn->ssl))
-#define ssl_do_write(conn, data, len)	gnutls_record_send(*((ssl_t *) conn->ssl), data, len)
-#define ssl_do_read(conn, rb)		gnutls_record_recv(*((ssl_t *) conn->ssl), rb->data + rb->len, rb->freespace)
+#define ssl_do_connect(conn)		gnutls_handshake(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */))
+#define ssl_do_write(conn, data, len)	gnutls_record_send(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), data, len)
+#define ssl_do_read(conn, rb)		gnutls_record_recv(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), rb->data + rb->len, rb->freespace)
 /* We probably don't handle this entirely correctly.. */
-#define ssl_do_close(conn)		gnutls_bye(*((ssl_t *) conn->ssl), GNUTLS_SHUT_RDWR);
+#define ssl_do_close(conn)		gnutls_bye(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), GNUTLS_SHUT_RDWR);
 
 #endif
 
@@ -65,7 +65,7 @@ static void
 ssl_set_no_tls(struct connection *conn)
 {
 #ifdef CONFIG_OPENSSL
-	((ssl_t *) conn->ssl)->options |= SSL_OP_NO_TLSv1;
+	((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */)->options |= SSL_OP_NO_TLSv1;
 #elif defined(CONFIG_GNUTLS)
 	/* We do a little more work here, setting up all these priorities (like
 	 * they couldn't have some reasonable defaults there).. */
@@ -79,7 +79,7 @@ ssl_set_no_tls(struct connection *conn)
 		protocol_priority[i++] = GNUTLS_SSL3;
 		protocol_priority[i++] = 0;
 
-		gnutls_protocol_set_priority(*((ssl_t *) conn->ssl), protocol_priority);
+		gnutls_protocol_set_priority(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), protocol_priority);
 	}
 
 	/* Note that I have no clue about these; I just put all I found here
@@ -96,7 +96,7 @@ ssl_set_no_tls(struct connection *conn)
 			0
 		};
 
-		gnutls_cipher_set_priority(*((ssl_t *) conn->ssl), cipher_priority);
+		gnutls_cipher_set_priority(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), cipher_priority);
 	}
 
 	{
@@ -107,7 +107,7 @@ ssl_set_no_tls(struct connection *conn)
 			0
 		};
 
-		gnutls_compression_set_priority(*((ssl_t *) conn->ssl), comp_priority);
+		gnutls_compression_set_priority(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), comp_priority);
 	}
 
 	{
@@ -120,7 +120,7 @@ ssl_set_no_tls(struct connection *conn)
 			0
 		};
 
-		gnutls_kx_set_priority(*((ssl_t *) conn->ssl), kx_priority);
+		gnutls_kx_set_priority(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), kx_priority);
 	}
 
 	{
@@ -130,7 +130,7 @@ ssl_set_no_tls(struct connection *conn)
 			0
 		};
 
-		gnutls_mac_set_priority(*((ssl_t *) conn->ssl), mac_priority);
+		gnutls_mac_set_priority(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), mac_priority);
 	}
 
 	{
@@ -141,10 +141,10 @@ ssl_set_no_tls(struct connection *conn)
 			0
 		};
 
-		gnutls_cert_type_set_priority(*((ssl_t *) conn->ssl), cert_type_priority);
+		gnutls_cert_type_set_priority(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), cert_type_priority);
 	}
 
-	gnutls_dh_set_prime_bits(*((ssl_t *) conn->ssl), 1024);
+	gnutls_dh_set_prime_bits(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), 1024);
 #endif
 }
 
@@ -162,7 +162,7 @@ ssl_want_read(struct connection *conn)
 		case SSL_ERROR_NONE:
 #ifdef CONFIG_GNUTLS
 			if (get_opt_bool("connection.ssl.cert_verify")
-			    && gnutls_certificate_verify_peers(*((ssl_t *) conn->ssl))) {
+			    && gnutls_certificate_verify_peers(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */))) {
 				retry_conn_with_state(conn, S_SSL_ERROR);
 				return;
 			}
@@ -189,16 +189,16 @@ ssl_connect(struct connection *conn, struct connection_socket *socket)
 {
 	int ret;
 
-	assertm(conn->ssl, "No ssl handle");
+	assertm(conn->socket.ssl /* FIXME: Assuming ssl handle */, "No ssl handle");
 	if_assert_failed goto ssl_error;
 	if (conn->no_tsl)
 		ssl_set_no_tls(conn);
 
 #ifdef CONFIG_OPENSSL
-	SSL_set_fd(conn->ssl, socket->fd);
+	SSL_set_fd(conn->socket.ssl /* FIXME: Assuming ssl handle */, socket->fd);
 
 	if (get_opt_bool("connection.ssl.cert_verify"))
-		SSL_set_verify(conn->ssl, SSL_VERIFY_PEER
+		SSL_set_verify(conn->socket.ssl /* FIXME: Assuming ssl handle */, SSL_VERIFY_PEER
 					  | SSL_VERIFY_FAIL_IF_NO_PEER_CERT,
 				NULL);
 
@@ -213,7 +213,7 @@ ssl_connect(struct connection *conn, struct connection_socket *socket)
 		}
 
 		if (client_cert) {
-			SSL_CTX *ctx = ((SSL *)conn->ssl)->ctx;
+			SSL_CTX *ctx = ((SSL *)conn->socket.ssl /* FIXME: Assuming ssl handle */)->ctx;
 
 			SSL_CTX_use_certificate_chain_file(ctx, client_cert);
 			SSL_CTX_use_PrivateKey_file(ctx, client_cert,
@@ -222,7 +222,7 @@ ssl_connect(struct connection *conn, struct connection_socket *socket)
 	}
 
 #elif defined(CONFIG_GNUTLS)
-	gnutls_transport_set_ptr(*((ssl_t *) conn->ssl),
+	gnutls_transport_set_ptr(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */),
 				 (gnutls_transport_ptr) socket->fd);
 
 	/* TODO: Some certificates fuss. --pasky */
@@ -241,7 +241,7 @@ ssl_connect(struct connection *conn, struct connection_socket *socket)
 		case SSL_ERROR_NONE:
 #ifdef CONFIG_GNUTLS
 			if (get_opt_bool("connection.ssl.cert_verify"))
-				if (gnutls_certificate_verify_peers(*((ssl_t *) conn->ssl)))
+				if (gnutls_certificate_verify_peers(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */)))
 					goto ssl_error;
 #endif
 			break;
@@ -267,7 +267,7 @@ ssl_write(struct connection *conn, unsigned char *data, int len)
 
 	if (wr <= 0) {
 #ifdef CONFIG_OPENSSL
-		int err = SSL_get_error(conn->ssl, wr);
+		int err = SSL_get_error(conn->socket.ssl /* FIXME: Assuming ssl handle */, wr);
 #elif defined(CONFIG_GNUTLS)
 		int err = wr;
 #endif
@@ -300,7 +300,7 @@ ssl_read(struct connection *conn, struct read_buffer *rb)
 
 	if (rd <= 0) {
 #ifdef CONFIG_OPENSSL
-		int err = SSL_get_error(conn->ssl, rd);
+		int err = SSL_get_error(conn->socket.ssl /* FIXME: Assuming ssl handle */, rd);
 #elif defined(CONFIG_GNUTLS)
 		int err = rd;
 #endif

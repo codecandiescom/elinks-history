@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.68 2004/08/01 09:08:40 jonas Exp $ */
+/* $Id: connection.h,v 1.69 2004/08/02 22:13:24 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -125,6 +125,11 @@ struct remaining_info {
 struct connection_socket {
 	/* The socket descriptor */
 	int fd;
+
+	/* For connections using SSL this is in fact (ssl_t *), but we don't
+	 * want to know. Noone cares and ssl.h inclusion costs a lot of
+	 * compilation time. --pasky */
+	void *ssl;
 };
 
 struct connection {
@@ -142,9 +147,6 @@ struct connection {
 	void *info;
 	void *buffer;
 	struct cache_entry *cached;
-	/* This is in fact (ssl_t *), but we don't want to know. Noone cares
-	 * and ssl.h inclusion costs a lot of compilation time. --pasky */
-	void *ssl;
 	struct stream_encoded *stream;
 
 	/* Only used by ftp in send_cmd/get_resp. Put here

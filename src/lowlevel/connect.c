@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.92 2004/08/01 10:00:28 jonas Exp $ */
+/* $Id: connect.c,v 1.93 2004/08/02 22:13:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,7 +73,7 @@ close_socket(struct connection *conn, struct connection_socket *socket)
 {
 	if (socket->fd == -1) return;
 #ifdef CONFIG_SSL
-	if (conn && conn->ssl) ssl_close(conn);
+	if (conn && conn->socket.ssl /* FIXME: Assuming ssl handle */) ssl_close(conn);
 #endif
 	close(socket->fd);
 	set_handlers(socket->fd, NULL, NULL, NULL, NULL);
@@ -439,7 +439,7 @@ dns_found(void *data, int state)
 	}
 
 #ifdef CONFIG_SSL
-	if (conn->ssl && ssl_connect(conn, c_i->socket) < 0) return;
+	if (conn->socket.ssl /* FIXME: Assuming ssl handle */ && ssl_connect(conn, c_i->socket) < 0) return;
 #endif
 
 	conn->conn_info = NULL;
@@ -481,7 +481,7 @@ connected(void *data)
 	}
 
 #ifdef CONFIG_SSL
-	if (conn->ssl && ssl_connect(conn, socket) < 0) return;
+	if (conn->socket.ssl /* FIXME: Assuming ssl handle */ && ssl_connect(conn, socket) < 0) return;
 #endif
 
 	conn->conn_info = NULL;
@@ -532,7 +532,7 @@ write_select(struct connection *conn)
 #endif
 
 #ifdef CONFIG_SSL
-	if (conn->ssl) {
+	if (conn->socket.ssl /* FIXME: Assuming ssl handle */) {
 		wr = ssl_write(conn, wb->data + wb->pos, wb->len - wb->pos);
 		if (wr <= 0) return;
 	} else
@@ -619,7 +619,7 @@ read_select(struct connection *conn)
 	}
 
 #ifdef CONFIG_SSL
-	if (conn->ssl) {
+	if (conn->socket.ssl /* FIXME: Assuming ssl handle */) {
 		rd = ssl_read(conn, rb);
 		if (rd <= 0) return;
 	} else

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.307 2003/10/18 19:49:48 pasky Exp $ */
+/* $Id: options.c,v 1.308 2003/10/18 22:31:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1112,9 +1112,9 @@ register_options(void)
 	add_opt_int("document.browse.images", N_("Image links tagging"),
 		"image_link_tagging", 0, 0, 2, 1,
 		N_("When to enclose image links:\n"
-		"0     means never\n"
-		"1     means never if alt or title are provided (old behavior)\n"
-		"2     means always"));
+		"0 means never\n"
+		"1 means never if alt or title are provided (old behavior)\n"
+		"2 means always"));
 
 	add_opt_str("document.browse.images", N_("Image link prefix"),
 		"image_link_prefix", 0, "[",

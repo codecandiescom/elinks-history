@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.86 2004/09/21 20:15:14 pasky Exp $ */
+/* $Id: apply.c,v 1.87 2004/09/21 20:16:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,20 +143,6 @@ examine_element(struct css_selector *base,
 	if (!element->options)
 		return;
 
-	code = get_attr_val(element->options, "id");
-	if (code && seltype <= CST_ID) {
-		selector = find_css_selector(selectors, CST_ID, rel, code, -1);
-		process_found_selector(selector, CST_ID, base);
-	}
-	if (code) mem_free(code);
-
-	code = get_attr_val(element->options, "class");
-	if (code && seltype <= CST_CLASS) {
-		selector = find_css_selector(selectors, CST_CLASS, rel, code, -1);
-		process_found_selector(selector, CST_CLASS, base);
-	}
-	if (code) mem_free(code);
-
 	/* TODO: More pseudo-classess. --pasky */
 	if (element->pseudo_class & ELEMENT_LINK) {
 		selector = find_css_selector(selectors, CST_PSEUDO, rel, "link", -1);
@@ -166,6 +152,20 @@ examine_element(struct css_selector *base,
 		selector = find_css_selector(selectors, CST_PSEUDO, rel, "visited", -1);
 		process_found_selector(selector, CST_PSEUDO, base);
 	}
+
+	code = get_attr_val(element->options, "class");
+	if (code && seltype <= CST_CLASS) {
+		selector = find_css_selector(selectors, CST_CLASS, rel, code, -1);
+		process_found_selector(selector, CST_CLASS, base);
+	}
+	if (code) mem_free(code);
+
+	code = get_attr_val(element->options, "id");
+	if (code && seltype <= CST_ID) {
+		selector = find_css_selector(selectors, CST_ID, rel, code, -1);
+		process_found_selector(selector, CST_ID, base);
+	}
+	if (code) mem_free(code);
 
 #undef process_found_selector
 #undef dbginfo

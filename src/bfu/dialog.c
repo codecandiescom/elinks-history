@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.14 2002/09/17 18:42:57 pasky Exp $ */
+/* $Id: dialog.c,v 1.15 2002/09/17 20:33:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,10 +149,10 @@ dialog_func(struct window *win, struct event *ev, int fwd)
 
 		case EV_MOUSE:
 			for (i = 0; i < dlg->n; i++)
-				if (dlg->items[i].item->ops->mouse)
-					if (dlg->items[i].item->ops->mouse(&dlg->items[i], dlg, ev)
-					    == EVENT_PROCESSED)
-						break;
+				if (dlg->items[i].item->ops->mouse
+				    && dlg->items[i].item->ops->mouse(&dlg->items[i], dlg, ev)
+				       == EVENT_PROCESSED)
+					break;
 			break;
 
 		case EV_KBD:
@@ -160,131 +160,16 @@ dialog_func(struct window *win, struct event *ev, int fwd)
 			struct widget_data *di;
 
 			di = &dlg->items[dlg->selected];
-			if (di->item->type == D_FIELD ||
-			    di->item->type == D_FIELD_PASS) {
-				switch (kbd_action(KM_EDIT, ev, NULL)) {
-					case ACT_UP:
-						if ((void *) di->cur_hist->prev != &di->history) {
-							di->cur_hist = di->cur_hist->prev;
-							dlg_set_history(di);
-							goto dsp_f;
-						}
-						break;
-
-					case ACT_DOWN:
-						if ((void *) di->cur_hist != &di->history) {
-							di->cur_hist = di->cur_hist->next;
-							dlg_set_history(di);
-							goto dsp_f;
-						}
-						break;
-
-					case ACT_RIGHT:
-						if (di->cpos < strlen(di->cdata)) di->cpos++;
-						goto dsp_f;
-
-					case ACT_LEFT:
-						if (di->cpos > 0) di->cpos--;
-						goto dsp_f;
-
-					case ACT_HOME:
-						di->cpos = 0;
-						goto dsp_f;
-
-					case ACT_END:
-						di->cpos = strlen(di->cdata);
-						goto dsp_f;
-
-					case ACT_BACKSPACE:
-						if (di->cpos) {
-							memmove(di->cdata + di->cpos - 1,
-								di->cdata + di->cpos,
-								strlen(di->cdata) - di->cpos + 1);
-							di->cpos--;
-						}
-						goto dsp_f;
-
-					case ACT_DELETE:
-						{
-						int cdata_len = strlen(di->cdata);
-
-						if (di->cpos < cdata_len)
-							memmove(di->cdata + di->cpos,
-								di->cdata + di->cpos + 1,
-								cdata_len - di->cpos + 1);
-						goto dsp_f;
-						}
-
-					case ACT_KILL_TO_BOL:
-						memmove(di->cdata,
-							di->cdata + di->cpos,
-							strlen(di->cdata + di->cpos) + 1);
-						di->cpos = 0;
-						goto dsp_f;
-
-					case ACT_KILL_TO_EOL:
-						di->cdata[di->cpos] = 0;
-						goto dsp_f;
-
-					case ACT_COPY_CLIPBOARD:
- 						/* Copy to clipboard */
-						set_clipboard_text(di->cdata);
-						break;	/* We don't need to redraw */
-
-					case ACT_CUT_CLIPBOARD:
- 						/* Cut to clipboard */
-						set_clipboard_text(di->cdata);
-						di->cdata[0] = 0;
-						di->cpos = 0;
-						goto dsp_f;
-
-					case ACT_PASTE_CLIPBOARD: {
-						/* Paste from clipboard */
-						unsigned char *clipboard = get_clipboard_text();
-
-						if (clipboard) {
-							safe_strncpy(di->cdata, clipboard, di->item->dlen);
-							di->cpos = strlen(di->cdata);
-							mem_free(clipboard);
-						}
-						goto dsp_f;
-					}
-
-					case ACT_AUTO_COMPLETE:
-						do_tab_compl(term, &di->history, win);
-						goto dsp_f;
-
-					case ACT_AUTO_COMPLETE_UNAMBIGUOUS:
-						do_tab_compl_unambiguous(term, &di->history, win);
-						goto dsp_f;
-
-					default:
-						if (ev->x >= ' ' && ev->x < 0x100 && !ev->y) {
-							int cdata_len = strlen(di->cdata);
-
-							if (cdata_len < di->item->dlen - 1) {
-								memmove(di->cdata + di->cpos + 1,
-									di->cdata + di->cpos,
-									cdata_len - di->cpos + 1);
-								di->cdata[di->cpos++] = ev->x;
-							}
-							goto dsp_f;
-						}
-				}
-				goto gh;
-
-dsp_f:
-				display_dlg_item(dlg, di, 1);
-				redraw_from_window(dlg->win);
+			if (di->item->ops->kbd
+			    && di->item->ops->kbd(di, dlg, ev) == EVENT_PROCESSED)
 				break;
-			}
 
-			if ((ev->x == KBD_ENTER && di->item->type == D_BUTTON)
-			    || ev->x == KBD_ENTER || ev->x == ' ') {
+			if ((ev->x == KBD_ENTER || ev->x == KBD_ENTER || ev->x == ' ')
+			    && (di->item->type == D_BUTTON || di->item->type == D_CHECKBOX)) {
 				dlg_select_item(dlg, di);
 				break;
 			}
-gh:
+
 			if (ev->x > ' ' && ev->x < 0x100) {
 				for (i = 0; i < dlg->n; i++)
 					if (dlg->dlg->items[i].type == D_BUTTON

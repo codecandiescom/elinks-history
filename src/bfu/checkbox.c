@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.12 2002/09/17 18:42:57 pasky Exp $ */
+/* $Id: checkbox.c,v 1.13 2002/09/17 20:33:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -160,4 +160,5 @@ struct widget_ops checkbox_ops = {
 	display_checkbox,
 	init_checkbox,
 	mouse_checkbox,
+	NULL,
 };

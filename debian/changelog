@@ -1,4 +1,4 @@
-elinks (0.11-cvs.1) unstable; urgency=low
+elinks (0.11-0.0upstream) unstable; urgency=low
 
   * NMU
   * Only read from /dev/stdin if no URL was given on the command line and
@@ -8,8 +8,11 @@ elinks (0.11-cvs.1) unstable; urgency=low
   * Add watch file, thanks Hugo Haas
   * Scrolling was heavily reworked during the 0.10 development phase and now
     uses the correct width / height when scrolling (closes: #256533)
+  * Fix warning on 64-bit architectures (closes: #285684)
+  * Change verbose level to show warnings (closes: #303083)
+  * Include FAQ from http://elinks.or.cz/ (closes: #301861) 
 
- -- Jonas Fonseca <fonseca@diku.dk>  Tue, 22 Mar 2005 12:09:29 +0100
+ -- Jonas Fonseca <fonseca@diku.dk>  Tue,  5 Apr 2005 21:43:58 +0200
 
 elinks (0.10.2-1) unstable; urgency=low
 

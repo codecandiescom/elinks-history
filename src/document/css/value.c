@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.24 2004/01/18 16:59:58 pasky Exp $ */
+/* $Id: value.c,v 1.25 2004/01/18 17:20:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 #include "elinks.h"
 
 #include "document/css/property.h"
+#include "document/css/scanner.h"
 #include "document/css/value.h"
 #include "document/html/parser.h"
 #include "util/color.h"
@@ -228,13 +229,20 @@ css_parse_text_align_value(struct css_property_info *propinfo,
 int
 css_parse_value(struct css_property_info *propinfo,
 		union css_property_value *value,
-		unsigned char **string)
+		struct css_scanner *scanner)
 {
-	assert(string && value && propinfo);
+	struct css_token *token;
+	unsigned char *string;
+
+	assert(scanner && value && propinfo);
 	assert(propinfo->parser);
 
-	/* Skip the leading whitespaces. */
-	skip_whitespace(*string);
+	token = get_css_token(scanner);
+	if (!token) return 0;
 
-	return propinfo->parser(propinfo, value, string);
+	string = token->string;
+	/* Skip the leading whitespaces. */
+	skip_whitespace(string);
+
+	return propinfo->parser(propinfo, value, &string);
 }

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.19 2004/01/18 15:41:04 jonas Exp $ */
+/* $Id: parser.c,v 1.20 2004/01/18 17:20:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,9 +61,7 @@ css_parse_properties(struct list_head *props, unsigned char *string)
 			goto ride_on;
 		}
 
-		token = get_css_token(&scanner);
-
-		if (!property_info || !token) {
+		if (!property_info) {
  			/* Unknown property, check the next one. */
  			goto ride_on;
  		}
@@ -76,8 +74,7 @@ css_parse_properties(struct list_head *props, unsigned char *string)
 		}
 		prop->type = property_info->type;
 		prop->value_type = property_info->value_type;
-		string = token->string;
-		if (!css_parse_value(property_info, &prop->value, &string)) {
+		if (!css_parse_value(property_info, &prop->value, &scanner)) {
 			mem_free(prop);
 			goto ride_on;
 		}

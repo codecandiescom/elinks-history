@@ -85,8 +85,8 @@ int get_terminal_size(int fd, int *x, int *y)
 		if (!(*y = ws.ws_row) && !(*y = get_e("LINES"))) *y = 24;
 		return 0;
 	} else {
-		!(*x = get_e("COLUMNS")) && (*x = 80);
-		!(*y = get_e("LINES")) && (*y = 24);
+		if (!(*x = get_e("COLUMNS"))) *x = 80;
+		if (!(*y = get_e("LINES"))) *y = 24;
 	}
 	return 0;
 }
@@ -1292,15 +1292,15 @@ struct {
 	unsigned char *text;
 	unsigned char *hk;
 } oinw[] = {
-	ENV_XWIN, open_in_new_xterm, TEXT(T_XTERM), TEXT(T_HK_XTERM),
-	ENV_TWIN, open_in_new_twterm, TEXT(T_TWTERM), TEXT(T_HK_TWTERM),
-	ENV_SCREEN, open_in_new_screen, TEXT(T_SCREEN), TEXT(T_HK_SCREEN),
+	{ENV_XWIN, open_in_new_xterm, TEXT(T_XTERM), TEXT(T_HK_XTERM)},
+	{ENV_TWIN, open_in_new_twterm, TEXT(T_TWTERM), TEXT(T_HK_TWTERM)},
+	{ENV_SCREEN, open_in_new_screen, TEXT(T_SCREEN), TEXT(T_HK_SCREEN)},
 #ifdef OS2
-	ENV_OS2VIO, open_in_new_vio, TEXT(T_WINDOW), TEXT(T_HK_WINDOW),
-	ENV_OS2VIO, open_in_new_fullscreen, TEXT(T_FULL_SCREEN), TEXT(T_HK_FULL_SCREEN),
+	{ENV_OS2VIO, open_in_new_vio, TEXT(T_WINDOW), TEXT(T_HK_WINDOW)},
+	{ENV_OS2VIO, open_in_new_fullscreen, TEXT(T_FULL_SCREEN), TEXT(T_HK_FULL_SCREEN)},
 #endif
 #ifdef BEOS
-	ENV_BE, open_in_new_be, TEXT(T_BEOS_TERMINAL), TEXT(T_HK_BEOS_TERMINAL),
+	{ENV_BE, open_in_new_be, TEXT(T_BEOS_TERMINAL), TEXT(T_HK_BEOS_TERMINAL)},
 #endif
 	0, NULL, NULL
 };

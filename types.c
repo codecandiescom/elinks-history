@@ -315,8 +315,8 @@ void menu_add_ct(struct terminal *term, void *fcp, void *xxx2)
 }
 
 struct menu_item mi_no_assoc[] = {
-	TEXT(T_NO_ASSOCIATIONS), "", M_BAR, NULL, NULL, 0, 0,
-	NULL, NULL, 0, NULL, NULL, 0, 0
+	{TEXT(T_NO_ASSOCIATIONS), "", M_BAR, NULL, NULL, 0, 0},
+	{NULL, NULL, 0, NULL, NULL, 0, 0}
 };
 
 void menu_list_assoc(struct terminal *term, void *fn, void *xxx)
@@ -470,8 +470,8 @@ void menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 }
 
 struct menu_item mi_no_ext[] = {
-	TEXT(T_NO_EXTENSIONS), "", M_BAR, NULL, NULL, 0, 0,
-	NULL, NULL, 0, NULL, NULL, 0, 0
+	{TEXT(T_NO_EXTENSIONS), "", M_BAR, NULL, NULL, 0, 0},
+	{NULL, NULL, 0, NULL, NULL, 0, 0}
 };
 
 void menu_list_ext(struct terminal *term, void *fn, void *xxx)

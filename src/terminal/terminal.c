@@ -1,11 +1,10 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.60 2004/04/14 22:47:51 jonas Exp $ */
+/* $Id: terminal.c,v 1.61 2004/04/14 23:35:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
@@ -35,35 +34,6 @@
 #include "util/object.h"
 #include "util/string.h"
 #include "viewer/text/textarea.h"
-
-
-/* TODO: move this function elsewhere... -- Zas */
-unsigned char *
-get_cwd(void)
-{
-	int bufsize = 128;
-	unsigned char *buf;
-
-	while (1) {
-		buf = mem_alloc(bufsize);
-		if (!buf) return NULL;
-		if (getcwd(buf, bufsize)) return buf;
-		mem_free(buf);
-
-		if (errno == EINTR) continue;
-		if (errno != ERANGE) return NULL;
-		bufsize += 128;
-	}
-
-	return NULL;
-}
-
-/* TODO: move this function elsewhere... -- Zas */
-void
-set_cwd(unsigned char *path)
-{
-	if (path) while (chdir(path) && errno == EINTR);
-}
 
 
 INIT_LIST_HEAD(terminals);

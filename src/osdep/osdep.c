@@ -1,10 +1,11 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.124 2004/02/10 18:45:47 witekfl Exp $ */
+/* $Id: osdep.c,v 1.125 2004/04/14 23:35:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <errno.h>
 #ifdef HAVE_IO_H
 #include <io.h> /* For win32 && set_bin(). */
 #endif
@@ -101,6 +102,33 @@ get_e(unsigned char *env)
 
 	return (v ? atoi(v) : 0);
 }
+
+unsigned char *
+get_cwd(void)
+{
+	int bufsize = 128;
+	unsigned char *buf;
+
+	while (1) {
+		buf = mem_alloc(bufsize);
+		if (!buf) return NULL;
+		if (getcwd(buf, bufsize)) return buf;
+		mem_free(buf);
+
+		if (errno == EINTR) continue;
+		if (errno != ERANGE) return NULL;
+		bufsize += 128;
+	}
+
+	return NULL;
+}
+
+void
+set_cwd(unsigned char *path)
+{
+	if (path) while (chdir(path) && errno == EINTR);
+}
+
 
 
 /* Terminal size */

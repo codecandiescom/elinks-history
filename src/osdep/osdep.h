@@ -1,4 +1,4 @@
-/* $Id: osdep.h,v 1.37 2003/10/28 01:18:31 pasky Exp $ */
+/* $Id: osdep.h,v 1.38 2004/04/14 23:35:54 jonas Exp $ */
 
 #ifndef EL__OSDEP_OSDEP_H
 #define EL__OSDEP_OSDEP_H
@@ -52,6 +52,9 @@ unsigned char *get_system_str(int);
 
 int set_nonblocking_fd(int);
 int set_blocking_fd(int);
+
+unsigned char *get_cwd(void);
+void set_cwd(unsigned char *);
 
 /* We define own cfmakeraw() wrapper because cfmakeraw() is broken on AIX,
  * thus we fix it right away. We can also emulate cfmakeraw() if it is not

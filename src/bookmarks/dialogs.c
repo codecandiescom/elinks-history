@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.139 2003/11/26 12:44:16 miciah Exp $ */
+/* $Id: dialogs.c,v 1.140 2003/11/26 16:19:10 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -506,6 +506,7 @@ bookmark_search_do(struct dialog *dlg)
 		return;
 
 	assertm(dlg->udata, "Bookmark search with NULL udata in dialog");
+	if_assert_failed return;
 
 	dlg_data = (struct dialog_data *) dlg->udata;
 	widget_data = dlg_data->widgets_data;

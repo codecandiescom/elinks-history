@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.81 2003/11/22 12:28:31 jonas Exp $ */
+/* $Id: dialogs.c,v 1.82 2003/11/22 13:45:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,9 +28,6 @@
 
 
 #ifdef GLOBHIST
-
-static void listbox_delete_historyitem(struct terminal *,
-				       struct listbox_data *);
 
 static void lock_globhist_item(struct listbox_item *item)
 {
@@ -76,7 +73,6 @@ done_globhist_item(struct listbox_item *item, int last)
 }
 
 static struct listbox_ops gh_listbox_ops = {
-	listbox_delete_historyitem,
 	lock_globhist_item,
 	unlock_globhist_item,
 	is_globhist_item_used,
@@ -163,102 +159,6 @@ push_goto_button(struct dialog_data *dlg_data, struct widget_data *goto_btn)
 	/* Close the history dialog */
 	delete_window(dlg_data->win);
 	return 0;
-}
-
-
-static void
-do_delete_global_history_item(struct terminal *term,
-			      struct global_history_item *historyitem)
-{
-	if (is_object_used(historyitem)) {
-		msg_box(term, NULL, MSGBOX_FREE_TEXT,
-			N_("Delete history item"), AL_CENTER,
-			msg_text(term, N_("Sorry, but this history entry is "
-				"already being used by something right now.\n\n"
-				"Title: \"%s\"\n"
-				"URL: \"%s\"\n"),
-				historyitem->title, historyitem->url),
- 			NULL, 1,
- 			N_("OK"), NULL, B_ENTER | B_ESC);
- 		return;
- 	}
-
-	delete_global_history_item(historyitem);
-}
-
-static int
-delete_marked(struct listbox_item *item, void *data_, int *offset)
-{
-	struct delete_hierbox_item_info *vhop = data_;
-
-	if (item->marked) {
-		do_delete_global_history_item(vhop->term,
-				(struct global_history_item *) item->udata);
-		return 1;
-	}
-	return 0;
-}
-
-static void
-really_delete_global_history_item(void *vhop)
-{
-	struct delete_hierbox_item_info *ctx = vhop;
-
-	if (ctx->item) {
-		struct global_history_item *item = ctx->item->udata;
-
-		if (is_object_used(item))
-			object_unlock(item);
-		do_delete_global_history_item(ctx->term, item);
-	} else {
-		traverse_listbox_items_list(gh_box_items.next, 0, 0,
-						delete_marked, ctx);
-	}
-}
-
-static void
-cancel_delete_globhist_item(void *vhop)
-{
-	struct delete_hierbox_item_info *ctx = vhop;
-
-	if (ctx->item)
-		object_unlock((struct global_history_item *)ctx->item->udata);
-}
-
-static void
-listbox_delete_historyitem(struct terminal *term, struct listbox_data *box)
-{
-	struct delete_hierbox_item_info *ctx;
-
-	if (!box->sel || !box->sel->udata) return;
-
- 	ctx = get_hierbox_delete_info(box, term);
-
-	if (!ctx->item) {
-		msg_box(term, getml(ctx, NULL), 0,
-			N_("Delete history item"), AL_CENTER,
-			N_("Delete marked history items?"),
-			ctx, 2,
-			N_("Yes"), really_delete_global_history_item, B_ENTER,
-			N_("No"), cancel_delete_globhist_item, B_ESC);
-	/* XXX: When we add tree-history, remember to add a check for
-	 * historyitem->box_item->type == BI_FOLDER here. -- Miciah */
-	} else {
-		struct global_history_item *historyitem = ctx->item->udata;
-
-		object_lock(historyitem);
-
-		msg_box(term, getml(ctx, NULL), MSGBOX_FREE_TEXT,
-			N_("Delete history item"), AL_CENTER,
-			msg_text(term, N_("Delete history item \"%s\"?\n\n"
-				"URL: \"%s\""),
-				historyitem->title, historyitem->url),
-			ctx, 2,
-			N_("Yes"), really_delete_global_history_item, B_ENTER,
-			N_("No"), cancel_delete_globhist_item, B_ESC);
-	}
-
-	return;
 }
 
 

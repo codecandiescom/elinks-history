@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.12 2002/12/03 19:31:46 zas Exp $ */
+/* $Id: hash.c,v 1.13 2002/12/07 12:59:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,13 +13,16 @@
 #include "util/memory.h"
 
 
+/* String hashes functions chooser. */
+/* #define MIX_HASH */ /* Far more better but slower */
+#define X31_HASH /* Weaker but faster */
+
+
 /* We provide common infrastructure for hashing - each hash consists from one
  * particularly large array full of small lists of keys with same index in the
  * array (same hash value). */
 /* Each key and value provided to the hash infrastructure MUST be dynamically
  * allocated, as it's being free()d when entry is destroyed. */
-
-/* TODO: This should be universal, not string-centric. */
 
 #define hash_mask(n) (hash_size(n) - 1)
 
@@ -116,6 +119,8 @@ del_hash_item(struct hash *hash, struct hash_item *item)
 	mem_free(item);
 }
 
+
+#ifdef MIX_HASH
 
 /* String hashing function follows; it is not written by me, somewhere below
  * are credits. I only hacked it a bit. --pasky */
@@ -250,3 +255,23 @@ strhash(unsigned char *k, /* the key */
 #undef keycompute
 #undef mix
 #undef hash_mask
+
+#endif /* MIX_HASH */
+
+
+#ifdef X31_HASH
+hash_value
+strhash(unsigned char *k, /* the key */
+	unsigned int length, /* the length of the key */
+	hash_value initval /* the previous hash, or an arbitrary value */)
+{
+	const unsigned char *p = (const unsigned char *)k;
+	hash_value h = initval;
+	unsigned int i;
+
+	for (i = 0; i < length; i++)
+		h = (h << 5) - h + p[i];
+
+	return h;
+}
+#endif /* X31_HASH */

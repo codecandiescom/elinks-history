@@ -20,6 +20,12 @@ elinks (0.11-0.0upstream) unstable; urgency=low
 
  -- Jonas Fonseca <fonseca@diku.dk>  Tue,  5 Apr 2005 21:57:02 +0200
 
+elinks (0.10.2-2) unstable; urgency=low
+
+  * Fixed bookmark problem (Closes: #296679)
+
+ -- Peter Gervai <grin@tolna.net>  Fri, 25 Feb 2005 11:48:03 +0100
+
 elinks (0.10.2-1) unstable; urgency=low
 
   * New upstream version v0.10.2

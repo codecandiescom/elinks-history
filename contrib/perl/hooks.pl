@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.19 2005/03/26 13:13:42 pasky Exp $
+# $Id: hooks.pl,v 1.20 2005/03/26 13:26:46 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -117,16 +117,14 @@ sub goto_url_hook
 	my $current_url = shift;
 
 	# "bugmenot" (no blood today, thank you)
-	if ($url =~ '^bugmenot$' && $current_url)
-	{
+	if ($url =~ '^bugmenot$' && $current_url) {
 		(undef, $current_url) = $current_url =~ /^(.*):\/\/(.*)/;
 		$url = 'http://bugmenot.com/view.php?url=' . $current_url;
 		return $url;
 	}
 
 	# Random URL generator
-	if ($url =~ '^bored$' || $url =~ '^random$')
-	{
+	if ($url =~ '^bored$' || $url =~ '^random$') {
 		my $word; # You can say *that* again...
 		srand();
 
@@ -147,23 +145,22 @@ sub goto_url_hook
 
 	# Search engines
 	if ($url =~ '^(search|find|www|web|s|f|go)(| .*)$'
-		or $url =~ '^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$'
-		or $url =~ '^(g|google)(| .*)$'
-		or $url =~ '^(y|yahoo)(| .*)$'
-		or $url =~ '^(ask|jeeves)(| .*)$'
-		or $url =~ '^a9(| .*)$'
-		or $url =~ '^(av|altavista)(| .*)$'
-		or $url =~ '^(msn|microsoft)(| .*)$'
-		or $url =~ '^(dmoz|odp|mozilla)(| .*)$'
-		or $url =~ '^(dp|dogpile|dp)(| .*)$'
-		or $url =~ '^(ma|mamma)(| .*)$'
-		or $url =~ '^(wc|webcrawler)(| .*)$'
-		or $url =~ '^(ns|netscape)(| .*)$'
-		or $url =~ '^(ly|lycos)(| .*)$'
-		or $url =~ '^(hb|hotbot)(| .*)$'
-		or $url =~ '^(ex|excite)(| .*)$'
-		or $url =~ '^("|\'|`).+$')
-	{
+	    or $url =~ '^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$'
+	    or $url =~ '^(g|google)(| .*)$'
+	    or $url =~ '^(y|yahoo)(| .*)$'
+	    or $url =~ '^(ask|jeeves)(| .*)$'
+	    or $url =~ '^a9(| .*)$'
+	    or $url =~ '^(av|altavista)(| .*)$'
+	    or $url =~ '^(msn|microsoft)(| .*)$'
+	    or $url =~ '^(dmoz|odp|mozilla)(| .*)$'
+	    or $url =~ '^(dp|dogpile|dp)(| .*)$'
+	    or $url =~ '^(ma|mamma)(| .*)$'
+	    or $url =~ '^(wc|webcrawler)(| .*)$'
+	    or $url =~ '^(ns|netscape)(| .*)$'
+	    or $url =~ '^(ly|lycos)(| .*)$'
+	    or $url =~ '^(hb|hotbot)(| .*)$'
+	    or $url =~ '^(ex|excite)(| .*)$'
+	    or $url =~ '^("|\'|`).+$') {
 		my $engine = $url;
 		my ($search) = $url =~ /^[a-z0-9]* (.*)/;
 
@@ -188,19 +185,16 @@ sub goto_url_hook
 	}
 
 	# Google Groups (DejaNews)
-	if ($url =~ '^(deja|gg|groups|gr|nntp|usenet|nn)(| .*)$')
-	{
+	if ($url =~ '^(deja|gg|groups|gr|nntp|usenet|nn)(| .*)$') {
 		my ($search) = $url =~ /^[a-z]* (.*)/;
 		my $beta = "groups.google.co.uk";
 		$beta = "groups-beta.google.com" unless (loadrc("googlebeta") ne "yes");
+
 		my $bork = "";
-		if ($search)
-		{
+		if ($search) {
 			$bork = "&hl=xx-bork" unless (loadrc("bork") ne "yes");
 			$url = 'http://' . $beta . '/groups?q=' . $search . $bork;
-		}
-		else
-		{
+		} else {
 			$bork = "/groups?hl=xx-bork" unless (loadrc("bork") ne "yes");
 			$url = 'http://' . $beta . $bork;
 		}
@@ -208,30 +202,24 @@ sub goto_url_hook
 	}
 
 	# MirrorDot
-	if ($url =~ '^(mirrordot|md)(| .*)$')
-	{
+	if ($url =~ '^(mirrordot|md)(| .*)$') {
 		my ($slashdotted) = $url =~ /^[a-z]* (.*)/;
-		if ($slashdotted)
-		{
+		if ($slashdotted) {
 			$url = 'http://mirrordot.com/find-mirror.html?' . $slashdotted;
-		}
-		else
-		{
+		} else {
 			$url = 'http://mirrordot.com';
 		}
 		return $url;
 	}
 
 	# The Bastard Operator from Hell
-	if ($url =~ '^bofh$')
-	{
+	if ($url =~ '^bofh$') {
 		$url = 'http://prime-mover.cc.waikato.ac.nz/Bastard.html';
 		return $url;
 	}
 
 	# Coral cache <URL>
-	if ($url =~ '^(coral|cc|nyud)( .*)$')
-	{
+	if ($url =~ '^(coral|cc|nyud)( .*)$') {
 		my ($cache) = $url =~ /^[a-z]* (.*)/;
 		$cache =~ s/^http:\/\///;
 		($url) = $cache =~ s/\//.nyud.net:8090\//;
@@ -240,13 +228,12 @@ sub goto_url_hook
 	}
 
 	# Babelfish ("babelfish german english"  or  "bf de en")
-	if (($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]* [a-zA-Z]*)$') or
-		($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]*(| [a-zA-Z]*))$' and
-		(loadrc("language") ne "no")) and $current_url)
+	if (($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]* [a-zA-Z]*)$')
+	    or ($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]*(| [a-zA-Z]*))$'
+	        and (loadrc("language") ne "no") and $current_url))
 	{
-		$url = 'http://babelfish.altavista.com' if ($url =~ '^[a-z]*$');
-		if ($url =~ '^[a-z]* ')
-		{
+		$url = 'http://babelfish.altavista.com' if ($url =~ /^[a-z]*$/);
+		if ($url =~ /^[a-z]* /) {
 			my $tongue = loadrc("language");
 			$url = $url . " " . $tongue if ($tongue ne "no" and $url !~ /^[a-z]* [a-zA-Z]* [a-zA-Z]*$/);
 			$url =~ s/ chinese/ zt/i;
@@ -261,16 +248,17 @@ sub goto_url_hook
 			$url =~ s/ portugese/ pt/i;
 			$url =~ s/ russian/ ru/i;
 			$url =~ s/ spanish/ es/i;
+
 			my ($from_language, $to_language) = $url =~ /^[a-z]* (.*) (.*)$/;
 			($current_url) = $current_url =~ /^.*:\/\/(.*)/;
-			$url = 'http://babelfish.altavista.com/babelfish/urltrurl?lp=' . $from_language . '_' . $to_language . '&url=' . $current_url;
+			$url = 'http://babelfish.altavista.com/babelfish/urltrurl?lp='
+			       . $from_language . '_' . $to_language . '&url=' . $current_url;
 		}
 		return $url;
 	}
 
 	# XYZZY
-	if ($url =~ '^xyzzy$')
-	{
+	if ($url =~ '^xyzzy$') {
 		# $url = 'http://sundae.triumf.ca/pub2/cave/node001.html';
 		srand();
 		my $yzzyx;
@@ -287,26 +275,27 @@ sub goto_url_hook
 
 	# News
 	if ($url =~ '^(news|n)(| .*)$'
-		or $url =~ '^bbc(| .*)$'
-		or $url =~ '^msnbc(| .*)$'
-		or $url =~ '^cnn(| .*)$'
-		or $url =~ '^fox(| .*)$'
-		or $url =~ '^gn(| .*)$'
-		or $url =~ '^yn(| .*)$'
-		or $url =~ '^(reuters|rs)(| .*)$'
-		or $url =~ '^eff(| .*)$'
-		or $url =~ '^(wired|wd)(| .*)$'
-		or $url =~ '^(\/\.|slashdot|sd)(| .*)$'
-		or $url =~ '^(newsforge|nf)(| .*)$'
-		or $url =~ '^(us|usnews)(| .*)$'
-		or $url =~ '^(nsci|newsci)(| .*)$'
-		or $url =~ '^dm(| .*)$'
-		or $url =~ '^(sa|sciam)(| .*)$')
+	    or $url =~ '^bbc(| .*)$'
+	    or $url =~ '^msnbc(| .*)$'
+	    or $url =~ '^cnn(| .*)$'
+	    or $url =~ '^fox(| .*)$'
+	    or $url =~ '^gn(| .*)$'
+	    or $url =~ '^yn(| .*)$'
+	    or $url =~ '^(reuters|rs)(| .*)$'
+	    or $url =~ '^eff(| .*)$'
+	    or $url =~ '^(wired|wd)(| .*)$'
+	    or $url =~ '^(\/\.|slashdot|sd)(| .*)$'
+	    or $url =~ '^(newsforge|nf)(| .*)$'
+	    or $url =~ '^(us|usnews)(| .*)$'
+	    or $url =~ '^(nsci|newsci)(| .*)$'
+	    or $url =~ '^dm(| .*)$'
+	    or $url =~ '^(sa|sciam)(| .*)$')
 	{
 		my ($search) = $url =~ /^[a-z0-9\/\.]* (.*)/;
 		my (%news_, $news_);
 		$news_{"bbc"}       = 'http://news.bbc.co.uk';
-		$news_{"msnbc"}     = 'http://msnbc.com'; # the bastard child of Microsoft and the National Broadcasting Corporation
+		# The bastard child of Microsoft and the National Broadcasting Corporation
+		$news_{"msnbc"}     = 'http://msnbc.com';
 		$news_{"cnn"}       = 'http://cnn.com';
 		$news_{"fox"}       = 'http://foxnews.com';
 		$news_{"google"}    = 'http://news.google.com';
@@ -320,12 +309,13 @@ sub goto_url_hook
 		$news_{"newsci"}    = 'http://newscientist.com';
 		$news_{"discover"}  = 'http://discover.com';
 		$news_{"sciam"}     = 'http://sciam.com';
-		if ($search)
-		{
+
+		if ($search) {
 			$news_{"bbc"}       = 'http://newssearch.bbc.co.uk/cgi-bin/search/results.pl?q=' . $search;
 			$news_{"msnbc"}     = 'http://msnbc.msn.com/?id=3053419&action=fulltext&querytext=' . $search;
 			$news_{"cnn"}       = 'http://search.cnn.com/pages/search.jsp?query=' . $search;
-			$news_{"fox"}       = 'http://search.foxnews.com/info.foxnws/redirs_all.htm?pgtarg=wbsdogpile&qkw=' . $search;
+			$news_{"fox"}       = 'http://search.foxnews.com/info.foxnws/redirs_all.htm?pgtarg=wbsdogpile&qkw='
+			                      . $search;
 			$news_{"google"}    = 'http://news.google.com/news?q=' . $search;
 			$news_{"yahoo"}     = 'http://news.search.yahoo.com/search/news/?p=' . $search;
 			$news_{"reuters"}   = 'http://reuters.com/newsSearchResultsHome.jhtml?query=' . $search;
@@ -334,10 +324,12 @@ sub goto_url_hook
 			$news_{"slashdot"}  = 'http://slashdot.org/search.pl?query=' . $search;
 			$news_{"newsforge"} = 'http://newsforge.com/search.pl?query=' . $search;
 			$news_{"usnews"}    = 'http://www.usnews.com/search/Search?keywords=' . $search;
-			$news_{"newsci"}    = 'http://www.newscientist.com/search.ns?doSearch=true&articleQuery.queryString=' . $search;
+			$news_{"newsci"}    = 'http://www.newscientist.com/search.ns?doSearch=true&articleQuery.queryString='
+			                      . $search;
 			$news_{"discover"}  = 'http://www.discover.com/search-results/?searchStr=' . $search;
 			$news_{"sciam"}     = 'http://sciam.com/search/index.cfm?QT=Q&SC=Q&Q=' . $search;
 		}
+
 		my $agency = $url;
 		$url = $news_{"bbc"}; # default
 		$url = $news_{loadrc("news")} if $news_{loadrc("news")};
@@ -360,39 +352,38 @@ sub goto_url_hook
 	}
 
 	# ...and now, Deep Thoughts.  by Jack Handey
-	if ($url =~ '^(jack|handey)$')
-	{
+	if ($url =~ '^(jack|handey)$') {
 		$url = 'http://glug.com/handey';
 		return $url;
 	}
 
 	# Locators
-	if (   $url =~ '^(imdb|movie|flick)(| .*)$'
-		or $url =~ '^(zip|usps)(| .*)$'
-		or $url =~ '^ip(| .*)$'
-		or $url =~ '^whois(| .*)$'
-		or $url =~ '^rfc(| .*)$'
-		or $url =~ '^(weather|w)(| .*)$'
-		or $url =~ '^(stock|ticker|quote)(| .*)$'
-		or $url =~ '^(urban|legend|ul)(| .*)$'
-		or $url =~ '^(bittorrent|torrent|bt)(| .*)$'
-		or $url =~ '^(archive|arc|ar|ia)(| .*)$'
-		or $url =~ '^(freshmeat|fm)(| .*)$'
-		or $url =~ '^(sourceforge|sf)(| .*)$'
-		or $url =~ '^(savannah|sv)(| .*)$'
-		or $url =~ '^gna(| .*)$'
-		or $url =~ '^(whatis|uptime)(| .*)$'
-		or $url =~ '^(alive|dead)(| .*)$'
-		or $url =~ '^(book|read)(| .*)$'
-		or $url =~ '^ipl(| .*)$')
-	{
+	if ($url =~ '^(imdb|movie|flick)(| .*)$'
+	    or $url =~ '^(zip|usps)(| .*)$'
+	    or $url =~ '^ip(| .*)$'
+	    or $url =~ '^whois(| .*)$'
+	    or $url =~ '^rfc(| .*)$'
+	    or $url =~ '^(weather|w)(| .*)$'
+	    or $url =~ '^(stock|ticker|quote)(| .*)$'
+	    or $url =~ '^(urban|legend|ul)(| .*)$'
+	    or $url =~ '^(bittorrent|torrent|bt)(| .*)$'
+	    or $url =~ '^(archive|arc|ar|ia)(| .*)$'
+	    or $url =~ '^(freshmeat|fm)(| .*)$'
+	    or $url =~ '^(sourceforge|sf)(| .*)$'
+	    or $url =~ '^(savannah|sv)(| .*)$'
+	    or $url =~ '^gna(| .*)$'
+	    or $url =~ '^(whatis|uptime)(| .*)$'
+	    or $url =~ '^(alive|dead)(| .*)$'
+	    or $url =~ '^(book|read)(| .*)$'
+	    or $url =~ '^ipl(| .*)$') {
 		my ($thingy) = $url =~ /^[a-z]* (.*)/;
 		my ($domain) = $current_url =~ /([a-z0-9-]+\.(com|net|org|edu|gov|mil))/;
+
 		my $whois = 'http://reports.internic.net/cgi/whois?type=domain&whois_nic=';
 		my $locator_imdb        = 'http://imdb.com';
 		my $locator_zip         = 'http://usps.com';
 		my $ipv                 = "ipv4-address-space"; $ipv = "ipv6-address-space" if loadrc("ipv6") eq "yes";
-			my $locator_ip      = 'http://www.iana.org/assignments/' . $ipv;
+			my $locator_ip  = 'http://www.iana.org/assignments/' . $ipv;
 		my $locator_whois       = 'http://www.iana.org/cctld/cctld-whois.htm';
 			$locator_whois      = $whois . $domain if $domain;
 		my $locator_rfc         = 'http://ietf.org';
@@ -410,8 +401,8 @@ sub goto_url_hook
 		my $locator_dead        = 'http://www.whosaliveandwhosdead.com';
 		my $locator_book        = 'http://gutenberg.org';
 		my $locator_ipl         = 'http://ipl.org';
-		if ($thingy)
-		{
+
+		if ($thingy) {
 			$locator_imdb        = 'http://imdb.com/Find?select=All&for=' . $thingy;
 			$locator_zip         = 'http://zip4.usps.com/zip4/zip_responseA.jsp?zipcode=' . $thingy;
 				$locator_zip     = 'http://zipinfo.com/cgi-local/zipsrch.exe?zip=' . $thingy if $thingy !~ '^[0-9]*$';
@@ -462,8 +453,7 @@ sub goto_url_hook
 	}
 
 	# Page validators [<URL>]
-	if ($url =~ '^vhtml(| .*)$' or $url =~ '^vcss(| .*)$')
-	{
+	if ($url =~ '^vhtml(| .*)$' or $url =~ '^vcss(| .*)$') {
 		my ($page) = $url =~ /^.* (.*)/;
 		$page = $current_url unless $page;
 		$url = 'http://validator.w3.org/check?uri=' . $page if $url =~ 'html';
@@ -472,27 +462,18 @@ sub goto_url_hook
 	}
 
 	# There's no place like home
-	if ($url =~ '^(el(|inks)|b(ug(|s)|z)(| .*)|doc(|umentation|s)|faq)$')
-	{
+	if ($url =~ '^(el(|inks)|b(ug(|s)|z)(| .*)|doc(|umentation|s)|faq)$') {
 		my ($bug) = $url =~ /^.* (.*)/;
-		if ($url =~ '^b')
-		{
+		if ($url =~ '^b') {
 			my $bugzilla = 'http://bugzilla.elinks.or.cz';
-			if (!$bug)
-			{
+			if (not $bug) {
 				$url = $bugzilla;
-			}
-			elsif ($bug =~ '^[0-9]*$')
-			{
+			} elsif ($bug =~ '^[0-9]*$') {
 				$url = $bugzilla . '/show_bug.cgi?id=' . $bug;
-			}
-			else
-			{
+			} else {
 				$url = $bugzilla . '/buglist.cgi?short_desc_type=allwordssubstr&short_desc=' . $bug;
 			}
-		}
-		else
-		{
+		} else {
 			my $doc = '';
 			$doc = '/documentation' if $url =~ '^doc';
 			$doc = '/faq.html' if $url =~ '^faq$';
@@ -502,8 +483,7 @@ sub goto_url_hook
 	}
 
 	# Anything not otherwise useful could be a search
-	if ($current_url and loadrc("gotosearch") eq "yes")
-	{
+	if ($current_url and loadrc("gotosearch") eq "yes") {
 		$url = search(loadrc("search"), $url);
 	}
 	return $url;
@@ -517,17 +497,12 @@ sub follow_url_hook
 	my $url = shift;
 
 	# Bork! Bork! Bork!
-	if ($url =~ 'google\.com')
-	{
-		if (loadrc("bork") eq "yes")
-		{
-			if ($url =~ '^http://(|www\.|search\.)google\.com(|/search)(|/)$')
-			{
+	if ($url =~ 'google\.com') {
+		if (loadrc("bork") eq "yes") {
+			if ($url =~ '^http://(|www\.|search\.)google\.com(|/search)(|/)$') {
 				$url = 'http://google.com/webhp?hl=xx-bork';
-			}
-			elsif ($url =~ '^http://(|www\.)groups\.google\.com(|/groups)(|/)$'
-				or $url =~ '^http://(|www\.|search\.)google\.com/groups(|/)$')
-			{
+			} elsif ($url =~ '^http://(|www\.)groups\.google\.com(|/groups)(|/)$'
+			         or $url =~ '^http://(|www\.|search\.)google\.com/groups(|/)$') {
 				$url = 'http://google.com/groups?hl=xx-bork';
 			}
 		}
@@ -535,8 +510,7 @@ sub follow_url_hook
 	}
 
 	# NNTP?  Try Google Groups
-	if ($url =~ '^(nntp|news):' and loadrc("usenet") ne "standard")
-	{
+	if ($url =~ '^(nntp|news):' and loadrc("usenet") ne "standard") {
 		my $beta = "groups.google.co.uk";
 		$beta = "groups-beta.google.com" unless (loadrc("googlebeta") ne "yes");
 		$url =~ s/\///g;
@@ -559,35 +533,30 @@ sub pre_format_html_hook
 	my $html = shift;
 
 	# /. sanitation
-	if ($url =~ 'slashdot\.org')
-	{
+	if ($url =~ 'slashdot\.org') {
 #		$html =~ s/^<!-- Advertisement code. -->.*<!-- end ad code -->$//sm;
 #		$html =~ s/<iframe.*><\/iframe>//g;
 #		$html =~ s/<B>Advertisement<\/B>//;
 	}
 
 	# Yes, I heard you the first time
-	if ($url =~ 'google\.com')
-	{
+	if ($url =~ 'google\.com') {
 		$html =~ s/Teep: In must broosers yuoo cun joost heet zee retoorn key insteed ooff cleecking oon zee seerch boottun\. Bork bork bork!//;
 		$html =~ s/Tip:<\/font> Save time by hitting the return key instead of clicking on "search"/<\/font>/;
 	}
 
 	# SourceForge ad smasher
-	if ($url =~ 'sourceforge\.net')
-	{
+	if ($url =~ 'sourceforge\.net') {
 		$html =~ s/<!-- AD POSITION \d+ -->.*?<!-- END AD POSITION \d+ -->//smg;
 		$html =~ s/<b>&nbsp\;&nbsp\;&nbsp\;Site Sponsors<\/b>//g;
 	}
 
 	# GMail has obviously never met ELinks
-	if ($url =~ 'gmail\.google\.com')
-	{
+	if ($url =~ 'gmail\.google\.com') {
 		$html =~ s/^<b>For a better Gmail experience, use a.+?Learn more<\/a><\/b>$//sm;
 	}
 
-
-	# demoronizer
+	# Demoronizer
 	$html =~ s/Ñ/\&mdash;/g;
 	$html =~ s/\&#252/ü/g;
 	$html =~ s/\&#039/'/g;
@@ -603,8 +572,7 @@ sub proxy_for_hook
 	my $url = shift;
 
 	# no proxy for local files
-	if ($url =~ '^(file://|(http://|)(localhost|127\.0\.0\.1)(/|:|$))')
-	{
+	if ($url =~ '^(file://|(http://|)(localhost|127\.0\.0\.1)(/|:|$))') {
 		return "";
 	}
 
@@ -616,14 +584,13 @@ sub proxy_for_hook
 ### quit_hook ##################################################################
 sub quit_hook
 {
-	# collapse XBEL bookmark folders (obsoleted by bookmarks.folder_state)
+	# Collapse XBEL bookmark folders (obsoleted by bookmarks.folder_state)
+
 	my $bookmarkfile = $ENV{"HOME"} . '/.elinks/bookmarks.xbel';
-	if (-f $bookmarkfile and loadrc("collapse") eq "yes")
-	{
+	if (-f $bookmarkfile and loadrc("collapse") eq "yes") {
 		open(BOOKMARKS, "+<$bookmarkfile");
 		my $bookmark;
-		while (<BOOKMARKS>)
-		{
+		while (<BOOKMARKS>) {
 			s/<folder folded="no">/<folder folded="yes">/;
 			$bookmark .= $_;
 		}
@@ -633,13 +600,14 @@ sub quit_hook
 		close(BOOKMARKS);
 	}
 
-	# words of wisdom from ELinks the Sage
-	if (loadrc("fortune") eq "fortune")
-	{
+	# Words of wisdom from ELinks the Sage
+
+	if (loadrc("fortune") eq "fortune") {
 		system('echo ""; fortune -sa 2>/dev/null');
 		die
 	}
 	die if (loadrc("fortune") =~ '^(none|quiet)$');
+
 	my $cookiejar = 'elinks.fortune';
 	my $ohwhynot = `ls /usr/share/doc/elinks*/$cookiejar 2>/dev/null`;
 	open COOKIES, $ENV{"HOME"} . '/.elinks/' . $cookiejar
@@ -647,18 +615,16 @@ sub quit_hook
 		or open COOKIES, '/usr/share/elinks/' . $cookiejar
 		or open COOKIES, $ohwhynot
 		or die system('echo ""; fortune -sa 2>/dev/null');
+
 	my (@line, $fortune);
 	$line[0] = 0;
-	while(<COOKIES>)
-	{
+	while(<COOKIES>) {
 		$line[$#line + 1] = tell if /^%$/;
 	}
 	srand();
-	while (!$fortune)
-	{
+	while (not $fortune) {
 		seek(COOKIES, $line[int rand($#line + 1)], 0);
-		while (<COOKIES>)
-		{
+		while (<COOKIES>) {
 			last if /^%$/;
 			$fortune .= $_;
 		}
@@ -675,27 +641,19 @@ sub loadrc
 	my ($preference) = @_;
 	my $configperl = $ENV{"HOME"} . '/.elinks/config.pl';
 	my $answer = "no";
-	if (-f $configperl)
-	{
+	if (-f $configperl) {
 		open RC, "<$configperl";
-		while (<RC>)
-		{
+		while (<RC>) {
 			next if (m/^\#.*/);
-			next if (!m/(.*):\s*(.*)/);
+			next unless (m/(.*):\s*(.*)/);
 			my $setting = $1;
 			my $switch = $2;
-			if ($setting eq $preference)
-			{
-				if ($switch =~ '^(yes|1|on|yea|yep|sure|ok|okay|yeah|why.*not)$')
-				{
+			if ($setting eq $preference) {
+				if ($switch =~ '^(yes|1|on|yea|yep|sure|ok|okay|yeah|why.*not)$') {
 					$answer = "yes";
-				}
-				elsif ($switch =~ '^(no|0|off|nay|nope|nah|hell.*no)$')
-				{
+				} elsif ($switch =~ '^(no|0|off|nay|nope|nah|hell.*no)$') {
 					$answer = "no";
-				}
-				else
-				{
+				} else {
 					$answer = lc($switch);
 				}
 			}

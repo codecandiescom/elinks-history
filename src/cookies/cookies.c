@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.179 2004/11/10 22:10:04 zas Exp $ */
+/* $Id: cookies.c,v 1.180 2004/11/10 22:17:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -398,7 +398,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 #ifdef DEBUG_COOKIES
 	{
 		DBG("Got cookie %s = %s from %s, domain %s, "
-		      "expires at %d, secure %d\n", cookie->name,
+		      "expires at %d, secure %d", cookie->name,
 		      cookie->value, cookie->server->host, cookie->domain,
 		      cookie->expires, cookie->secure);
 	}
@@ -425,15 +425,15 @@ set_cookie(struct uri *uri, unsigned char *str)
 
 
 void
-accept_cookie(struct cookie *c)
+accept_cookie(struct cookie *cookie)
 {
 	struct c_domain *cd;
-	struct listbox_item *root = c->server->box_item;
+	struct listbox_item *root = cookie->server->box_item;
 	struct cookie *d, *e;
 	int domain_len;
 
 	if (root)
-		c->box_item = add_listbox_leaf(&cookie_browser, root, c);
+		cookie->box_item = add_listbox_leaf(&cookie_browser, root, cookie);
 
 	/* Do not weed out duplicates when loading the cookie file. It doesn't
 	 * scale at all, being O(N^2) and taking about 2s with my 500 cookies
@@ -441,8 +441,8 @@ accept_cookie(struct cookie *c)
 	 * not an argument). --pasky */
 	if (!cookies_nosave) {
 		foreach (d, cookies) {
-			if (strcasecmp(d->name, c->name)
-			    || strcasecmp(d->domain, c->domain))
+			if (strcasecmp(d->name, cookie->name)
+			    || strcasecmp(d->domain, cookie->domain))
 				continue;
 			e = d;
 			d = d->prev;
@@ -451,20 +451,20 @@ accept_cookie(struct cookie *c)
 		}
 	}
 
-	add_to_list(cookies, c);
+	add_to_list(cookies, cookie);
 	cookies_dirty = 1;
 
 	/* XXX: This crunches CPU too. --pasky */
 	foreach (cd, c_domains)
-		if (!strcasecmp(cd->domain, c->domain))
+		if (!strcasecmp(cd->domain, cookie->domain))
 			return;
 
-	domain_len = strlen(c->domain);
+	domain_len = strlen(cookie->domain);
 	/* One byte is reserved for domain in struct c_domain. */
 	cd = mem_alloc(sizeof(struct c_domain) + domain_len);
 	if (!cd) return;
 
-	memcpy(cd->domain, c->domain, domain_len + 1);
+	memcpy(cd->domain, cookie->domain, domain_len + 1);
 	add_to_list(c_domains, cd);
 
 	if (get_cookies_save() && get_cookies_resave())

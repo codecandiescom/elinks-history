@@ -753,6 +753,12 @@ void html_img(unsigned char *a)
 	if (format.image) mem_free(format.image), format.image = NULL;
 	if (al) {
 		unsigned char *s;
+		
+		/* This is not 100% appropriate for <img>, but well, accepting
+		 * accesskey and tabindex near <img> is just our little
+		 * extension to the standart. After all, it makes sense. */
+		html_focusable(a);
+		
 		if ((s = get_url_val(a, "src")) || (s = get_attr_val(a, "dynsrc"))) {
 			format.image = join_urls(format.href_base, s);
 			mem_free(s);

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.56 2003/09/15 20:42:54 jonas Exp $ */
+/* $Id: link.c,v 1.57 2003/09/15 20:43:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -261,13 +261,13 @@ clear_link(struct terminal *t, struct document_view *scr)
 
 
 void
-draw_current_link(struct terminal *t, struct document_view *scr)
+draw_current_link(struct terminal *term, struct document_view *view)
 {
-	assert(t && scr && scr->vs);
+	assert(term && view && view->vs);
 	if_assert_failed return;
 
-	draw_link(t, scr, scr->vs->current_link);
-	draw_searched(t, scr);
+	draw_link(term, view, view->vs->current_link);
+	draw_searched(term, view);
 }
 
 

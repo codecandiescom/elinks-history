@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.5 2004/08/18 17:43:03 jonas Exp $ */
+/* $Id: gopher.c,v 1.6 2004/08/18 18:07:32 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -720,6 +720,10 @@ gopher_protocol_handler(struct connection *conn)
 		break;
 
 	case 79:
+#if 0
+		/* This is outcommented because it apparently means that the
+		 * finger protocol handler needs to be extended for handling
+		 * this the way Lynx does. --jonas */
 		/* If it's a port 79/0[/...] URL, use the finger gateway.
 		 * - FM */
 		if (uri->datalen >= 1 && *uri->data == GOPHER_FILE) {
@@ -727,7 +731,7 @@ gopher_protocol_handler(struct connection *conn)
 			end_gopher_connection(conn, S_OK);
 		}
 		break;
-
+#endif
 	default:
 		state = init_gopher_connection_info(conn);
 		if (state != S_CONN) {

@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.75 2003/09/28 23:31:53 zas Exp $ */
+/* $Id: error.c,v 1.76 2003/10/27 02:17:52 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -26,8 +26,9 @@
 #include "util/memory.h"
 #include "util/snprintf.h"
 #include "util/string.h"
-#include "util/version.h"
 
+
+unsigned char full_static_version[1024] = "ELinks " VERSION_STRING;
 
 static void
 er(int bell, unsigned char *fmt, va_list params)

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.60 2003/10/06 18:49:57 fabio Exp $ */
+/* $Id: info.c,v 1.61 2003/10/27 02:17:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 #include "document/html/renderer.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
+#include "modules/version.h"
 #include "sched/connection.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
@@ -32,7 +33,6 @@
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"
-#include "util/version.h"
 
 void
 menu_about(struct terminal *term, void *d, struct session *ses)

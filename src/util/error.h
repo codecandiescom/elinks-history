@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.34 2003/09/28 23:31:53 zas Exp $ */
+/* $Id: error.h,v 1.35 2003/10/27 02:17:52 jonas Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -177,5 +177,8 @@ void do_not_optimize_here(void *x);
 #include <stdio.h>
 void dump_backtrace(FILE *f, int trouble);
 #endif
+
+/* This is needed for providing info about features when dumping core */
+extern unsigned char full_static_version[1024];
 
 #endif

@@ -1,14 +1,11 @@
-/* $Id: version.h,v 1.5 2003/06/18 01:55:24 jonas Exp $ */
+/* $Id: version.h,v 1.6 2003/10/27 02:17:52 jonas Exp $ */
 
-#ifndef EL__UTIL_VERSION_H
-#define EL__UTIL_VERSION_H
+#ifndef EL__MODULES_VERSION_H
+#define EL__MODULES_VERSION_H
 
 struct terminal;
 
-unsigned char *get_version(void);
 unsigned char *get_dyn_full_version(struct terminal *term, int more);
 void init_static_version(void);
 
-extern unsigned char full_static_version[];
-
-#endif /* EL__UTIL_VERSION_H */
+#endif /* EL__MODULES_VERSION_H */

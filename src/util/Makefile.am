@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.28 2003/10/14 14:15:31 zas Exp $
+## $Id: Makefile.am,v 1.29 2003/10/27 02:17:52 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -39,7 +39,5 @@ libutil_a_SOURCES = \
  string.h \
  stub.c \
  stub.h \
- types.h \
- version.c \
- version.h
+ types.h
 

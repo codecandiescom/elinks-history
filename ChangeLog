@@ -1,3 +1,56 @@
+Thu Feb 26 17:35:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	Compile fix. Reported by Zardoz.  
+
+Thu Feb 26 16:48:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	Group similar action handler calling using a magic variable. Don't
+	know if this kind of optimization is stupid.  
+
+Thu Feb 26 16:12:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, sched/action.c,
+	terminal/tab.c, terminal/tab.h:
+
+	Add support for moving the current tab back and forth. Requested by
+	Zellner.  
+
+Thu Feb 26 01:13:47 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/status.c:
+
+	In display_tab_bar, increment |tab->width| if it is the last tab so
+	that the space at the end of the tab bar is counted as part of the
+	last tab.  
+
+Thu Feb 26 01:02:59 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/status.c:
+
+	Preparatory clean-up: In display_tab_bar, store the actual tab width
+	in |actual_tab_width|.  
+
+Thu Feb 26 00:59:39 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/status.c:
+
+	Trivial clean-up: In display_tab_bar, use @tab_ses instead of
+	tab->data, as the latter has previously been assigned to the former.  
+
+Thu Feb 26 00:50:56 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/terminal/tab.c:
+
+	Fix behaviour when clicking on the tab-bar: ignore clicks on
+	separators, and select the correct tab when clicking on the first
+	character of a tab. Thanks to Quazgaa for taking my initial attempt
+	at fixing this and making it work correctly when I was too stupid.
+	This fixes bug 389.  
+
 Mon Feb 23 11:20:33 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/: main.c, config/cmdline.c, config/cmdline.h:

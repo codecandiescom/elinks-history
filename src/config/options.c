@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.348 2003/10/23 22:22:49 pasky Exp $ */
+/* $Id: options.c,v 1.349 2003/10/23 23:23:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,8 +25,8 @@
 #include "config/conf.h"
 #include "config/options.h"
 #include "config/opttypes.h"
-#include "document/html/parser.h"
 #include "document/cache.h"
+#include "document/html/parser.h"
 #include "globhist/globhist.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
@@ -335,9 +335,11 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
  * completely filled (struct option *) have long name and functions which take
  * only option specs have short name. */
 
-static void
-free_option_value(struct option *option)
+void
+delete_option(struct option *option)
 {
+	if (option->next) del_from_list(option);
+
 	switch (option->type) {
 		case OPT_STRING:
 			if (option->value.string)
@@ -352,26 +354,16 @@ free_option_value(struct option *option)
 		default:
 			break;
 	}
-}
 
-static void
-free_option(struct option *option)
-{
-	free_option_value(option);
-	if ((option->flags & OPT_ALLOC) && option->name)
-		mem_free(option->name);
 	if (option->box_item) {
 		del_from_list(option->box_item);
 		mem_free(option->box_item);
 	}
-}
 
-void
-delete_option(struct option *option)
-{
-	free_option(option);
-	if (option->next) del_from_list(option);
-	if ((option->flags & OPT_ALLOC)) mem_free(option);
+	if (option->flags & OPT_ALLOC) {
+		if (option->name) mem_free(option->name);
+		mem_free(option);
+	}
 }
 
 struct option *

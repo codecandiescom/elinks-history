@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.516 2004/06/14 03:46:16 jonas Exp $ */
+/* $Id: session.c,v 1.517 2004/06/14 03:58:57 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -726,8 +726,7 @@ setup_session(struct session *ses, struct uri *uri, struct session *base)
 
 	} else if (!goto_url_home(ses)) {
 		if (get_opt_int("ui.startup_goto_dialog")) {
-			/* We can't create new window in EV_INIT handler! */
-			register_bottom_half(dialog_goto_url_open, ses);
+			dialog_goto_url_open(ses);
 		}
 	}
 }
@@ -794,8 +793,7 @@ init_remote_session(struct session *ses, enum remote_session_flags *remote_ptr,
 		open_uri_in_new_tab(ses, uri, 0);
 
 		if (remote & SES_REMOTE_PROMPT_URL) {
-			/* We can't create new window in EV_INIT handler! */
-			register_bottom_half(dialog_goto_url_open, ses);
+			dialog_goto_url_open(ses);
 		}
 
 	} else if (remote & SES_REMOTE_NEW_WINDOW) {
@@ -814,8 +812,7 @@ init_remote_session(struct session *ses, enum remote_session_flags *remote_ptr,
 #endif
 
 	} else if (remote & SES_REMOTE_PROMPT_URL) {
-		/* We can't create new window in EV_INIT handler! */
-		register_bottom_half(dialog_goto_url_open, ses);
+		dialog_goto_url_open(ses);
 	}
 }
 

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-11-18 18:34+0100\n"
-"PO-Revision-Date: 2003-11-15 18:05+0100\n"
+"PO-Revision-Date: 2003-11-18 21:38+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -274,7 +274,7 @@ msgstr "URL"
 
 #: src/cache/dialogs.c:98
 msgid "Redirect"
-msgstr ""
+msgstr "Pøesmìrování"
 
 #: src/cache/dialogs.c:106 src/config/options.inc:353
 #: src/dialogs/document.c:92
@@ -283,7 +283,7 @@ msgstr "Velikost"
 
 #: src/cache/dialogs.c:107
 msgid "Loaded size"
-msgstr ""
+msgstr "Souèasná velikost"
 
 #: src/cache/dialogs.c:110 src/dialogs/document.c:137
 msgid "Last modified"
@@ -298,9 +298,8 @@ msgid "Encoding"
 msgstr "Kódování"
 
 #: src/cache/dialogs.c:128
-#, fuzzy
 msgid "Flags"
-msgstr "Alias"
+msgstr "Pøíznaky"
 
 #: src/cache/dialogs.c:131 src/dialogs/document.c:95
 msgid "incomplete"
@@ -308,16 +307,15 @@ msgstr "neúplný"
 
 #: src/cache/dialogs.c:134
 msgid "invalid"
-msgstr ""
+msgstr "neplatný"
 
 #: src/cache/dialogs.c:141
 msgid "ID tag"
-msgstr ""
+msgstr "ID znaèka"
 
 #: src/cache/dialogs.c:145
-#, fuzzy
 msgid "Header"
-msgstr "Informace o hlavièce"
+msgstr "Hlavièka"
 
 #: src/cache/dialogs.c:151 src/cache/dialogs.c:178 src/config/dialogs.c:82
 #: src/config/dialogs.c:95 src/config/dialogs.c:390 src/cookies/dialogs.c:124
@@ -654,9 +652,8 @@ msgid "Open bookmark manager"
 msgstr "Správce bookmarkù"
 
 #: src/config/kbdbind.c:390
-#, fuzzy
 msgid "Open cache manager"
-msgstr "Správce historie"
+msgstr "Správce cache"
 
 #: src/config/kbdbind.c:391
 msgid "Reload cookies file"
@@ -3708,7 +3705,6 @@ msgid "Accept policy"
 msgstr "Politika pøijímání"
 
 #: src/cookies/cookies.c:97
-#, fuzzy
 msgid ""
 "Cookies accepting policy:\n"
 "0 is accept no cookies\n"
@@ -3717,7 +3713,7 @@ msgid ""
 msgstr ""
 "Re¾im pøijímání cookies:\n"
 "0 je nepøijímat cookies\n"
-"1 je po¾ádat o potvrzení pøed akceptováním cookie (NEIMPLEMENTOVÁNO)\n"
+"1 je po¾ádat o potvrzení pøed akceptováním cookie\n"
 "2 je pøijímat v¹echny cookies"
 
 #: src/cookies/cookies.c:102
@@ -3776,9 +3772,8 @@ msgstr ""
 "Tato volba nemá ¾ádný vliv, pokud je vypnuto ukládání cookies."
 
 #: src/cookies/cookies.c:566
-#, fuzzy
 msgid "Accept cookie?"
-msgstr "Politika pøijímání"
+msgstr "Pøijmout cookie?"
 
 #: src/cookies/cookies.c:567
 #, c-format
@@ -3791,30 +3786,33 @@ msgid ""
 "Expires: %s\n"
 "Secure: %s\n"
 msgstr ""
+"Chcete pøijmout cookie od serveru %s?\n"
+"\n"
+"Jméno: %s\n"
+"Hodnota: %s\n"
+"Doména: %s\n"
+"Vypr¹í: %s\n"
+"Zabezpeèení %s\n"
 
 #: src/cookies/cookies.c:576 src/cookies/dialogs.c:91
-#, fuzzy
 msgid "unknown"
 msgstr "neznámý"
 
 #: src/cookies/cookies.c:577 src/cookies/dialogs.c:92
-#, fuzzy
 msgid "yes"
-msgstr "Ano"
+msgstr "ano"
 
 #: src/cookies/cookies.c:577 src/cookies/dialogs.c:92
-#, fuzzy
 msgid "no"
-msgstr "Informace"
+msgstr "ne"
 
 #: src/cookies/cookies.c:579
-#, fuzzy
 msgid "Accept"
-msgstr "Politika pøijímání"
+msgstr "Pøijmout"
 
 #: src/cookies/cookies.c:580
 msgid "Reject"
-msgstr ""
+msgstr "Odmítnout"
 
 #: src/cookies/dialogs.c:83
 #, c-format
@@ -3826,11 +3824,16 @@ msgid ""
 "Expires: %s\n"
 "Secure: %s"
 msgstr ""
+"Server: %s\n"
+"Jméno: %s\n"
+"Hodnota: %s\n"
+"Doména: %s\n"
+"Vypr¹í: %s\n"
+"Zabezpeèení %s\n"
 
 #: src/cookies/dialogs.c:150
-#, fuzzy
 msgid "Cookie manager"
-msgstr "Správce bookmarkù"
+msgstr "Správce cookies"
 
 #: src/dialogs/auth.c:59
 #, c-format
@@ -4020,9 +4023,8 @@ msgid "Bookmark~s"
 msgstr "Bookmark~y"
 
 #: src/dialogs/menu.c:332
-#, fuzzy
 msgid "~Cache"
-msgstr "Cache"
+msgstr "~Cache"
 
 #: src/dialogs/menu.c:338
 msgid "Sa~ve as"
@@ -5107,7 +5109,6 @@ msgid "SSL error"
 msgstr "Chyba SSL"
 
 #: src/sched/error.c:70
-#, fuzzy
 msgid "This version of ELinks does not contain SSL/TLS support"
 msgstr "Tato verze ELinksu nepodporuje SSL/TSL"
 

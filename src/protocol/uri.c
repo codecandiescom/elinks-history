@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.277 2004/09/14 20:23:25 pasky Exp $ */
+/* $Id: uri.c,v 1.278 2004/09/15 14:40:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -385,7 +385,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
  	if (wants(URI_PROTOCOL)) {
 		add_bytes_to_string(string, uri->string, uri->protocollen);
 		if (wants(URI_IP_FAMILY) && uri->ip_family)
-			add_format_to_string(string, "%d", uri->ip_family);
+			add_long_to_string(string, uri->ip_family);
 		add_char_to_string(string, ':');
  		if (get_protocol_need_slashes(uri->protocol))
 			add_to_string(string, "//");

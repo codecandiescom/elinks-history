@@ -1,9 +1,11 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.168 2003/07/22 10:03:16 zas Exp $ */
+/* $Id: parser.c,v 1.169 2003/07/22 10:27:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#define _GNU_SOURCE /* strcasestr() */
 
 #include <errno.h>
 #include <stdarg.h>
@@ -2431,7 +2433,6 @@ free_cd:
 	mem_free(d);
 }
 
-#if 0
 /* Link types
 
 Alternate
@@ -2528,6 +2529,32 @@ enum hlink_type {
 	LT_STYLESHEET,
 };
 
+enum hlink_direction {
+	LD_UNKNOWN = 0,
+	LD_REV,
+	LD_REL,
+};
+
+struct hlink {
+	enum hlink_type type;
+	enum hlink_direction direction;
+	unsigned char *content_type;
+	unsigned char *media;
+	unsigned char *href;
+	unsigned char *hreflang;
+	unsigned char *title;
+	unsigned char *lang;
+	unsigned char *name;
+/* Not used implemented.
+	unsigned char *charset;
+	unsigned char *target;
+	unsigned char *id;
+	unsigned char *class;
+	unsigned char *dir;
+*/
+};
+
+#if 0
 struct lt_default_name {
 	enum hlink_type type;
 	unsigned char *str;
@@ -2562,31 +2589,6 @@ static struct lt_default_name lt_names[] = {
 	{ LT_UNKNOWN, NULL }
 };
 
-enum hlink_direction {
-	LD_UNKNOWN = 0,
-	LD_REV,
-	LD_REL,
-};
-
-struct hlink {
-	enum hlink_type type;
-	enum hlink_direction direction;
-	unsigned char *content_type;
-	unsigned char *media;
-	unsigned char *href;
-	unsigned char *hreflang;
-	unsigned char *title;
-	unsigned char *lang;
-	unsigned char *name;
-/* Not used implemented.
-	unsigned char *charset;
-	unsigned char *target;
-	unsigned char *id;
-	unsigned char *class;
-	unsigned char *dir;
-*/
-};
-
 /* Search for default name for this link type. */
 static unsigned char *
 get_lt_default_name(enum hlink_type type)
@@ -2600,6 +2602,8 @@ get_lt_default_name(enum hlink_type type)
 
 	return "unknown";
 }
+
+#endif
 
 static void
 html_link_clear(struct hlink *link)
@@ -2683,7 +2687,7 @@ html_link_parse(unsigned char *a, struct hlink *link)
 	else if (strcasestr(link->name, "icon") ||
 		 (link->content_type && strcasestr(link->content_type, "icon")))
 		link->type = LT_ICON;
-	if (!strcasecmp(link->name, "stylesheet") ||
+	else if (!strcasecmp(link->name, "stylesheet") ||
 		 (link->content_type && strcasestr(link->content_type, "css")))
 		link->type = LT_STYLESHEET;
 	else if (strcasestr(link->name, "alternate")) {
@@ -2700,96 +2704,63 @@ html_link_parse(unsigned char *a, struct hlink *link)
 	return 1;
 }
 
-#endif
-
 static void
 html_link(unsigned char *a)
 {
 	int link_display = get_opt_int("document.html.link_display");
-	unsigned char *name = NULL;
-	unsigned char *type = NULL;
-	unsigned char *url;
+	struct hlink link;
 
 	if (!link_display) return;
-
-	url = get_url_val(a, "href");
-	if (!url) return;
-
-	type = get_attr_val(a, "type");
-	if (type) {
-		/* Ignore links of type:
-		 * - text/css...
-		 * - image/x-icon...
-		 * */
-		if (!strncasecmp(type, "text/css", 8) ||
-		    !strncasecmp(type, "image/x-icon", 12))
-			if (link_display < 5) goto free_and_return;
-	}
-
-	name = get_attr_val(a, "rel");
-	if (!name) name = get_attr_val(a, "rev");
-	if (!name) name = stracpy(url);
+	if (!html_link_parse(a, &link)) return;
 
 	/* Ignore few annoying links.. */
-	if (name &&
-	    (link_display >= 5 ||
-	     (strcasecmp(name, "STYLESHEET") &&
-	      strcasecmp(name, "made") &&
-	      strcasecmp(name, "icon") &&
-	      strcasecmp(name, "SHORTCUT ICON")))) {
+	if (link_display < 5 &&
+	    (link.type == LT_ICON ||
+	     link.type == LT_STYLESHEET ||
+	     link.type == LT_ALTERNATE_STYLESHEET)) goto free_and_return;
+
+	if (link.name && link.href) {
 		struct string text;
-		unsigned char *title;
-		unsigned char *hreflang;
 
 		if (!init_string(&text)) goto free_and_return;
 
 		html_focusable(a);
 
-		title = get_attr_val(a, "title");
-		if (title) {
-			add_to_string(&text, title);
-			mem_free(title);
+		if (link.title) {
+			add_to_string(&text, link.title);
 		}
 
 		if (link_display == 1) goto only_title;
 
 		add_to_string(&text, " (");
-		add_to_string(&text, name);
+		add_to_string(&text, link.name);
 
-		if (link_display >= 3) {
-			hreflang = get_attr_val(a, "hreflang");
-			if (hreflang) {
-				add_to_string(&text, ", ");
-				add_to_string(&text, hreflang);
-				mem_free(hreflang);
-			}
+		if (link_display >= 3 && link.hreflang) {
+			add_to_string(&text, ", ");
+			add_to_string(&text, link.hreflang);
 		}
 
-		if (link_display >= 4) {
-			if (type) {
-				add_to_string(&text, ", ");
-				add_to_string(&text, type);
-			}
+		if (link_display >= 4 && link.content_type) {
+			add_to_string(&text, ", ");
+			add_to_string(&text, link.content_type);
 		}
 		add_char_to_string(&text, ')');
 
 only_title:
 		if (text.source) {
 			if (text.length)
-				put_link_line("Link: ", text.source, url, format.target_base);
+				put_link_line("Link: ", text.source, link.href, format.target_base);
 			else
-				put_link_line("Link: ", name, url, format.target_base);
+				put_link_line("Link: ", link.name, link.href, format.target_base);
 			done_string(&text);
 
 		} else {
-			put_link_line("Link: ", name, url, format.target_base);
+			put_link_line("Link: ", link.name, link.href, format.target_base);
 		}
 	}
 
 free_and_return:
-	if (type) mem_free(type);
-	if (name) mem_free(name);
-	mem_free(url);
+	html_link_clear(&link);
 }
 
 struct element_info {

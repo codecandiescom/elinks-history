@@ -1,3 +1,118 @@
+Mon May  6 15:27:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/czech.lng, src/intl/language.inc:
+
+	Czech translation stylistical correction.  
+
+Mon May  6 15:24:46 2002  Petr Baudis <pasky@ji.cz>:
+
+	* test/javascript_broken.html:
+
+	Broken page due to braindead HTML parser and <td> inside <script>
+	inside <table>.  
+
+Mon May  6 15:19:36 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/view.c:
+
+	Use mkstemp() instead of tmpname() in textarea_edit().  
+
+Mon May  6 14:12:12 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, config/conf.c, config/options.c, cookies/cookies.c,
+	document/download.c, document/dump.c, document/view.c,
+	lowlevel/af_unix.c, lowlevel/connect.c, lowlevel/connect.h,
+	lowlevel/dns.c, lowlevel/home.c, osdep/os_dep.c, protocol/file.c,
+	protocol/url.c, util/secsave.c:
+
+	OS/2 compilation fixes by Cris. IIRC only #includes swapping.  
+
+Mon May  6 11:45:11 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/secsave.h:
+
+	Include stdio.h and sys/types.h in util/secfile.h. Broke compilation
+	on OS/2 otherwise.  
+
+Sun May  5 16:43:01 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/kbdbind.c:
+
+	Repair of zas' broken tidyup.  
+
+Sun May  5 16:19:40 2002  Laurent Monin <zas@norz.org>:
+
+	* src/config/kbdbind.c:
+
+	Tidy up. Table in parse_act() is now an strtonum array.  
+
+Sun May  5 15:10:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/: hooks.lua, links-remote, remote.lua:
+
+	Semi-support from passing URLs from remote programs to ELinks (like
+	'netscape -remote'), contributed by Len Trigg <len@reeltwo.com>.  
+
+Sun May  5 15:07:30 2002  Laurent Monin <zas@norz.org>:
+
+	* linkskeys.5:
+
+	Updated for link-menu action.  
+
+Sun May  5 14:52:53 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, document/view.c:
+
+	A new configurable keyboard shortcut was added. It has the same
+	effect than a right mouse button click on a link/image/form, it
+	popups a contextual menu with possible actions for it. It's bound to
+	'l' or 'L' keys by default and corresponds to action named
+	ACT_LINK_MENU.  
+
+Sun May  5 14:23:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	Lua RedHat-specific -I fix by Len Trigg <len@reeltwo.com>.  
+
+Sun May  5 12:40:09 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: lowlevel/home.c, protocol/ftp.h:
+
+	OS/2 compilation fixes by Cris.  
+
+Sun May  5 12:36:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/sched.c:
+
+	Minor tidyup in check_queue_bugs() by Cris.  
+
+Sat May  4 17:06:15 2002  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/document.c:
+
+	Tidy up. head_msg() was partially rewritten. Now it replaces control
+	chars in headers with '*' if needed, '\r' is ignored, ending '\n'
+	are removed.  
+
+Sat May  4 15:12:24 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/french.lng, src/intl/language.inc:
+
+	Updated french translation by Zas.  
+
+Sat May  4 12:55:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/italian.lng, src/intl/language.inc:
+
+	Updated italian translation by Cris.  
+
+Sat May  4 12:50:49 2002  Petr Baudis <pasky@ji.cz>:
+
+	* INSTALL:
+
+	Added note about versions of automake and autoconf.  
+
 Sat May  4 09:14:00 2002  Petr Baudis <pasky@ji.cz>:
 
 	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,

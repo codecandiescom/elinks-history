@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-22 19:19+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-12-22 22:06+0100\n"
 "PO-Revision-Date: 2003-12-22 21:38+0100\n"
 "Last-Translator: Peter Samek <samek@upc.uniba.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:306
 msgid "Close"
@@ -538,7 +538,8 @@ msgstr "Vypísa» formátovanú verziu daného URL na ¹tandardný výstup"
 msgid ""
 "Write a plain-text version of the given HTML document to\n"
 "stdout."
-msgstr "Vypísa» plaintextovú verziu daného HTML dokumentu na ¹tandardný výstup."
+msgstr ""
+"Vypísa» plaintextovú verziu daného HTML dokumentu na ¹tandardný výstup."
 
 #: src/config/cmdline.c:463
 msgid "Codepage to use with -dump"
@@ -578,8 +579,8 @@ msgid ""
 "This makes ELinks assume that the files it sees are HTML. This is\n"
 "equivalent to -default-mime-type text/html."
 msgstr ""
-"Voµba prinúti ELinks predpoklada», ¾e súbory, ktoré vidí sú v HTML."
-"Je to ekvivalentné voµbe -default-mime-type text/html ."
+"Voµba prinúti ELinks predpoklada», ¾e súbory, ktoré vidí sú v HTML.Je to "
+"ekvivalentné voµbe -default-mime-type text/html ."
 
 #: src/config/cmdline.c:488
 msgid "Print usage help and exit"
@@ -635,7 +636,8 @@ msgstr "Nepou¾íva» súbory v ~/.elinks"
 
 #: src/config/cmdline.c:513
 msgid "Don't attempt to create and/or use home rc directory (~/.elinks)."
-msgstr "Nepokú¹a» sa vytvori»/pou¾i» domovský konfiguraèný adresár (~/.elinks/)."
+msgstr ""
+"Nepokú¹a» sa vytvori»/pou¾i» domovský konfiguraèný adresár (~/.elinks/)."
 
 #: src/config/cmdline.c:515
 msgid "Connect to session ring with given ID"
@@ -697,12 +699,14 @@ msgid ""
 "until 0.5pre12. Note that this really affects only --dump, nothing else."
 msgstr ""
 "Zabráni èíslovaniu odkazov (a zobrazovanie ich zoznamu na konci dokumentu)\n"
-"pri -dump výstupe; to bolo ¹tandardné chovanie a¾ po 0.5pre12. Pamätajte ale\n"
+"pri -dump výstupe; to bolo ¹tandardné chovanie a¾ po 0.5pre12. Pamätajte "
+"ale\n"
 "¾e sa to týka iba parametra --dump a nièoho iného."
 
 #: src/config/cmdline.c:550
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
-msgstr "Pou¾íva» súbory v ~/.elinks aj pri spustení s -no-connect/-session-ring"
+msgstr ""
+"Pou¾íva» súbory v ~/.elinks aj pri spustení s -no-connect/-session-ring"
 
 #: src/config/cmdline.c:552
 msgid ""
@@ -2736,7 +2740,8 @@ msgstr "Pou¾íva» pasívny re¾im (IPv4)"
 
 #: src/config/options.inc:700
 msgid "Use PASV instead of PORT (passive vs active mode, IPv4 only)."
-msgstr "Pou¾i» príkaz PASV namiesto PORT (pasívny vs. aktívny re¾im, iba IPv4)."
+msgstr ""
+"Pou¾i» príkaz PASV namiesto PORT (pasívny vs. aktívny re¾im, iba IPv4)."
 
 #: src/config/options.inc:702 src/config/options.inc:706
 msgid "Use passive mode (IPv6)"
@@ -2744,7 +2749,8 @@ msgstr "Pou¾íva» pasívny re¾im (IPv6)"
 
 #: src/config/options.inc:704
 msgid "Use EPSV instead of EPRT (passive vs active mode, IPv6 only)."
-msgstr "Pou¾i» príkaz EPSV namiesto EPRT (pasívny vs. aktívny re¾im, iba IPv6)."
+msgstr ""
+"Pou¾i» príkaz EPSV namiesto EPRT (pasívny vs. aktívny re¾im, iba IPv6)."
 
 #: src/config/options.inc:708
 msgid ""
@@ -2772,9 +2778,8 @@ msgid ""
 "Allow reading from non-regular files? (DANGEROUS - reading\n"
 "/dev/urandom or /dev/zero can ruin your day!)"
 msgstr ""
-"Povoli» èítanie zo ¹peciálnych súborov? (NEBEZPEÈNÉ - èítanie"
-"zo súborov ako /dev/urandom alebo /dev/zero vám spôsobí dos»"
-"veµké problémy"
+"Povoli» èítanie zo ¹peciálnych súborov? (NEBEZPEÈNÉ - èítaniezo súborov ako /"
+"dev/urandom alebo /dev/zero vám spôsobí dos»veµké problémy"
 
 #: src/config/options.inc:723
 msgid "Try encoding extensions"
@@ -2785,10 +2790,7 @@ msgid ""
 "When set, if we can't open a file named 'filename', we'll try\n"
 "to open 'filename' with some encoding extension appended\n"
 "(ie. 'filename.gz'); it depends on the supported encodings."
-msgstr ""
-"Ak je táto voµba zapnutá "
-""
-""
+msgstr "Ak je táto voµba zapnutá "
 
 #: src/config/options.inc:729
 msgid "Show hidden files in directory listing"
@@ -4520,6 +4522,138 @@ msgstr ""
 msgid "Global History"
 msgstr "Globálna história"
 
+#: src/intl/gettext/libintl.c:24
+msgid "System"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:25
+msgid "English"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:26
+msgid "Belarusian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:27
+msgid "Brazilian Portuguese"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:28
+msgid "Bulgarian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:29
+msgid "Catalan"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:30
+msgid "Croatian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:31
+#, fuzzy
+msgid "Czech"
+msgstr "Ke¹ (doèasná pamä»)"
+
+#: src/intl/gettext/libintl.c:32
+msgid "Danish"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:33
+msgid "Dutch"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:34
+msgid "Estonian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:35
+msgid "Finnish"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:36
+msgid "French"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:37
+msgid "Galician"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:38
+msgid "German"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:39
+msgid "Greek"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:40
+msgid "Hungarian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:41
+msgid "Icelandic"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:42
+msgid "Indonesian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:43
+msgid "Italian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:44
+#, fuzzy
+msgid "Leet"
+msgstr "Zmaza»"
+
+#: src/intl/gettext/libintl.c:45
+msgid "Lithuanian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:46
+msgid "Norwegian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:47
+#, fuzzy
+msgid "Polish"
+msgstr "Politika"
+
+#: src/intl/gettext/libintl.c:48
+msgid "Portuguese"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:49
+#, fuzzy
+msgid "Romanian"
+msgstr "~Dokumentácia"
+
+#: src/intl/gettext/libintl.c:50
+msgid "Russian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:51
+msgid "Slovak"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:52
+msgid "Spanish"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:53
+msgid "Swedish"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:54
+msgid "Turkish"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:55
+msgid "Ukrainian"
+msgstr ""
+
 #: src/lowlevel/home.c:121
 #, c-format
 msgid ""
@@ -4907,7 +5041,6 @@ msgid "Dumb prefixes."
 msgstr ""
 
 #: src/protocol/rewrite/rewrite.c:64
-#, c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
 "%c in the string means the current URL\n"

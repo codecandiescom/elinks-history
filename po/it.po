@@ -6,14 +6,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-22 19:19+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-12-22 22:06+0100\n"
 "PO-Revision-Date: 2003-07-21 00:32+0200\n"
 "Last-Translator: Fabio Bonelli <fabiobonelli@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:306
 msgid "Close"
@@ -4716,6 +4716,140 @@ msgstr ""
 msgid "Global History"
 msgstr "Storico"
 
+#: src/intl/gettext/libintl.c:24
+#, fuzzy
+msgid "System"
+msgstr "Fastmem"
+
+#: src/intl/gettext/libintl.c:25
+msgid "English"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:26
+msgid "Belarusian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:27
+msgid "Brazilian Portuguese"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:28
+msgid "Bulgarian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:29
+msgid "Catalan"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:30
+#, fuzzy
+msgid "Croatian"
+msgstr "Durata"
+
+#: src/intl/gettext/libintl.c:31
+#, fuzzy
+msgid "Czech"
+msgstr "Cache"
+
+#: src/intl/gettext/libintl.c:32
+msgid "Danish"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:33
+msgid "Dutch"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:34
+msgid "Estonian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:35
+msgid "Finnish"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:36
+msgid "French"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:37
+msgid "Galician"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:38
+msgid "German"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:39
+msgid "Greek"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:40
+msgid "Hungarian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:41
+msgid "Icelandic"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:42
+msgid "Indonesian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:43
+msgid "Italian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:44
+#, fuzzy
+msgid "Leet"
+msgstr "Respingi"
+
+#: src/intl/gettext/libintl.c:45
+msgid "Lithuanian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:46
+msgid "Norwegian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:47
+#, fuzzy
+msgid "Polish"
+msgstr "Politica"
+
+#: src/intl/gettext/libintl.c:48
+msgid "Portuguese"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:49
+#, fuzzy
+msgid "Romanian"
+msgstr "Documentazione"
+
+#: src/intl/gettext/libintl.c:50
+msgid "Russian"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:51
+msgid "Slovak"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:52
+msgid "Spanish"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:53
+msgid "Swedish"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:54
+msgid "Turkish"
+msgstr ""
+
+#: src/intl/gettext/libintl.c:55
+msgid "Ukrainian"
+msgstr ""
+
 #: src/lowlevel/home.c:121
 #, c-format
 msgid ""
@@ -5163,7 +5297,6 @@ msgid "Dumb prefixes."
 msgstr "Prefissi semplici."
 
 #: src/protocol/rewrite/rewrite.c:64
-#, c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
 "%c in the string means the current URL\n"

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.14 2003/05/03 02:36:48 pasky Exp $ */
+/* $Id: session.c,v 1.15 2003/05/03 12:12:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -267,8 +267,8 @@ print_screen_status(struct session *ses)
 		}
 	}
 
-        if (show_tab_bar > 0) {
-                int number = number_of_tabs(term);
+	if (show_tab_bar > 0) {
+		int number = number_of_tabs(term);
 		int tab_width = term->x / number;
 		int tab;
 		int msglen;
@@ -304,8 +304,8 @@ print_screen_status(struct session *ses)
 				   (tab == term->current_tab) ? selected_color
 							      : normal_color);
 		}
+	}
 tabs_shown:
-        }
 
 	if (show_title_bar) {
 		msg = print_current_title(ses);

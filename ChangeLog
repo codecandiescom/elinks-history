@@ -1,3 +1,393 @@
+Sat Dec 27 23:06:07 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sat Dec 27 22:58:19 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.inc, document/options.c, document/options.h,
+	document/plain/renderer.c:
+
+	Option document.plain.compress_empty_lines was added. It makes
+	successive empty lines appear as one. Try
+	http://pasky.ji.cz/~pasky/dev/links/README for a demo. This option
+	is off by default.  
+
+Sat Dec 27 22:18:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, terminal/tab.c, terminal/tab.h:
+
+	Confirm close also when attempting to close all tabs but the current
+	one.  
+
+Sat Dec 27 22:05:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/color.c:
+
+	Silent a possible warning under Cygwin.  
+
+Sat Dec 27 22:03:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/file/file.c:
+
+	Use explicit type casting to quiet gcc 3.3.1 under Cygwin. It should
+	not harm.  
+
+Sat Dec 27 21:57:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/tab.c:
+
+	Use really_close_tab() function always.  
+
+Sat Dec 27 21:56:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/cmdline.c:
+
+	Type cast color_t to unsigned int in order to prevent a compiler
+	warning, notably on Cygwin. Reported by fredlwm.  
+
+Sat Dec 27 21:51:07 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Horizontal main menu scrolling was fixed, now part of last visible
+	option may be printed, it gives a smoother effect.  
+
+Sat Dec 27 20:03:45 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/text.c:
+
+	In display_text, eliminate a superfluous int_max().  
+
+Sat Dec 27 19:35:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, terminal/tab.c, terminal/tab.h:
+
+	Make the open in new tab take backend work on url strings and add
+	open_url_in_new_tab().  
+
+Sat Dec 27 18:21:07 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated. 1162 messages ;).  
+
+Sat Dec 27 17:36:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/dialogs.c:
+
+	Do not show Description: in option info dialog if there is no
+	description text.  
+
+Sat Dec 27 17:31:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/bookmarks.c, bookmarks/bookmarks.h,
+	bookmarks/dialogs.c, bookmarks/dialogs.h, config/kbdbind.c,
+	config/kbdbind.h, dialogs/menu.c:
+
+	Add support for bookmarking all tabs for a terminal. Entry was added
+	to tab menu. ACT_ADD_BOOKMARK_TABS also added with no default value
+	bound.  
+
+Sat Dec 27 17:18:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Attempt to fix division by zero problem reported by zas caused by
+	paskys 'wide' hacking using evil gotos to bypass essentiel tests.
+	;-) 
+
+Sat Dec 27 17:02:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Translation fix.  
+
+Sat Dec 27 16:11:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Fix tab-close-all-but-current action name.  
+
+Sat Dec 27 15:52:44 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sat Dec 27 15:46:26 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/menu.c,
+	viewer/text/view.c:
+
+	ACT_SAVE_OPTIONS was added. No default keystroke.  
+
+Sat Dec 27 15:38:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/menu.c,
+	viewer/text/view.c:
+
+	ACT_SHOW_TERM_OPTIONS was added. No default keystroke.  
+
+Sat Dec 27 15:16:20 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/hotkey.c:
+
+	Populate with menu_item macros, and correctly handle i18n regarding
+	hotkeys. It fixes incorrect not so hot keys behavior in translated
+	language menu.  
+
+Sat Dec 27 14:59:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/options.c:
+
+	Display iso639 code at right of language menu, as proposed by Jonas.
+	As a side effect it displays which code is associated with the
+	system language.  
+
+Sat Dec 27 14:49:36 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sat Dec 27 14:33:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/: dialogs.c, kbdbind.c, kbdbind.h:
+
+	A confirmation dialog was added when attempting to bind a keystroke
+	which is already used elsewhere.  
+
+Sat Dec 27 14:28:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/tab.c:
+
+	Oops we only need @term non NULL.  
+
+Sat Dec 27 14:27:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: terminal/tab.c, viewer/text/view.c:
+
+	close_all_tabs_but_current(): NULL current means look it up your
+	damn self. ;) 
+
+Sat Dec 27 14:14:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, viewer/text/view.c:
+
+	Add close all but current tab action. By default bound to 'i'.  
+
+Sat Dec 27 14:13:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, terminal/tab.c, terminal/tab.h:
+
+	Move close all but current function to tab file.  
+
+Sat Dec 27 13:55:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, viewer/text/view.c:
+
+	Add ACT_TAB_MENU action bound to 'e' by default.  
+
+Sat Dec 27 13:41:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Dialog width takes now in account title length. Long dialog titles
+	were displayed outside message box before (ie. in "Invalid
+	keystroke" message box).  
+
+Sat Dec 27 13:35:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Finally got the close all but current menu action working.  
+
+Sat Dec 27 13:21:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/tab.c:
+
+	Cleanup the naming. No need for two variables for the same thing.  
+
+Sat Dec 27 13:08:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: tab.c, tab.h:
+
+	Introduce tab iterator macros.  
+
+Sat Dec 27 12:50:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/leds.h:
+
+	Raised LEDS_COUNT to 6, so that the progress meter will look nicer.  
+
+Sat Dec 27 12:50:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/status.c:
+
+	Now, if not @full, show ETT instead of elapsed time and ETA instead
+	of estimated time.  
+
+Sat Dec 27 12:47:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/status.c:
+
+	Swapped @wide and @full in get_stat_msg(). So now if @wide, we
+	already show avg/cur, but we show the full strings only if @full.  
+
+Sat Dec 27 12:44:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/: bookmarks.c, dialogs.c, backend/xbel.c:
+
+	add_bookmark(): Set the box_item to BI_FOLDER if url is NULL or "".  
+
+Sat Dec 27 12:36:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/status.c:
+
+	get_stat_msg()'s @full behaviour changed. Now, when showing it in
+	the statusbar, it is set only if > 130 (empirical value) and it now
+	prevents from displaying the current/average speed (it always
+	displays just the speed) and elapsed time (it displays just the
+	estimated time).  
+
+Sat Dec 27 12:27:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/: leds.c, leds.h:
+
+	Removed support for leds coloring. We'll do things like progress-bar
+	on the background and this would interfere.  
+
+Sat Dec 27 12:17:20 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated. Hotkeys conflict were fixed.  
+
+Sat Dec 27 12:14:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/menu.c,
+	dialogs/menu.h, viewer/text/view.c:
+
+	ACT_OPEN_OS_SHELL was added. Minor changes to make it working. No
+	default keystroke.  
+
+Sat Dec 27 11:45:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/menu.c,
+	dialogs/menu.h, viewer/text/view.c:
+
+	ACT_SAVE_URL_AS was added. No default keystroke.  
+
+Sat Dec 27 11:37:07 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/menu.c,
+	viewer/text/view.c:
+
+	ACT_SAVE_AS was added. No default key for now.  
+
+Sat Dec 27 11:29:52 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	Show kill all backgrounded connections keystroke in menu.  
+
+Sat Dec 27 11:25:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, viewer/text/view.c:
+
+	ACT_KILL_BACKGROUNDED_CONNECTIONS keyact was added. No default key
+	for now (idea?).  
+
+Sat Dec 27 08:13:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/download.c:
+
+	Shift percentage text 1 to the right because it looks better.  
+
+Sat Dec 27 07:41:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Only do progress stuff when size > 0.  
+
+Sat Dec 27 04:34:33 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/msgbox.h:
+
+	Include bfu/dialog.h for struct dialog_data.  
+
+Sat Dec 27 04:29:58 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/menu.h:
+
+	Declare struct window.  
+
+Sat Dec 27 04:14:03 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/hierbox.h:
+
+	Include bfu/widget.h for struct widget_data.  
+
+Sat Dec 27 04:09:46 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/dialog.h:
+
+	Declare struct term_event.  
+
+Sat Dec 27 03:27:31 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/checkbox.h:
+
+	Alphabetise those includes. (Whoops!) 
+
+Sat Dec 27 03:21:16 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/checkbox.h:
+
+	Include bfu/style.h for enum format_align.  
+
+Sat Dec 27 03:12:12 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/session.h:
+
+	Declare struct link.  
+
+Sat Dec 27 01:38:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Main menu horizontal scrolling was improved a bit. It still doesnt
+	work very well when resizing terminal while menus are opened.  
+
+Sat Dec 27 01:26:20 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser.h:
+
+	Declare struct list_head and remove extra declarations of struct
+	session and struct menu_item.  
+
+Sat Dec 27 00:56:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Various calculations were tuned. Display is improved.  
+
+Fri Dec 26 23:53:24 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: protocol/proxy.c, protocol/http/http.c, sched/download.c,
+	terminal/kbd.c:
+
+	Trailing spaces were removed.  
+
+Fri Dec 26 23:16:42 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.h:
+
+	Declare struct terminal (forgotten when removing the #include for
+	terminal/terminal.h in 1.9->1.10).  
+
 Fri Dec 26 17:23:20 2003  Laurent Monin <zas@norz.org>:
 
 	* src/viewer/text/link.c:

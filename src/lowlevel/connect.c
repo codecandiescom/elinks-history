@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.111 2004/10/08 16:04:12 zas Exp $ */
+/* $Id: connect.c,v 1.112 2004/10/14 12:34:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,26 +49,28 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-/*
-#define LOG_TRANSFER	"/tmp/log"
-*/
+/* To enable logging of tranfers, for debugging purposes. */
+#if 0
 
-#ifdef LOG_TRANSFER
+#define DEBUG_TRANSFER_LOGFILE "/tmp/log"
+
 static void
-log_data(unsigned char *data, int len)
+debug_transfer_log(unsigned char *data, int len)
 {
-	int fd = open(LOG_TRANSFER, O_WRONLY | O_APPEND | O_CREAT, 0622);
+	int fd = open(DEBUG_TRANSFER_LOGFILE, O_WRONLY | O_APPEND | O_CREAT, 0622);
 
-	if (fd = -1) return;
+	if (fd == -1) return;
 
 	set_bin(fd);
-	write(fd, data, len);
+	write(fd, data, len < 0 ? strlen(data) : len);
 	close(fd);
 }
+#undef DEBUG_TRANSFER_LOGFILE
 
 #else
-#define log_data(data, len)
+#define debug_transfer_log(data, len)
 #endif
+
 
 void dns_found(/* struct connection */ void *, int);
 static void connected(/* struct connection */ void *);
@@ -154,9 +156,9 @@ make_connection(struct connection *conn, struct connection_socket *socket,
 
 	conn->conn_info = conn_info;
 
-	log_data("\nCONNECTION: ", 13);
-	log_data(host, strlen(host));
-	log_data("\n", 1);
+	debug_transfer_log("\nCONNECTION: ", -1);
+	debug_transfer_log(host, -1);
+	debug_transfer_log("\n", -1);
 
 	if (conn->cache_mode >= CACHE_MODE_FORCE_RELOAD)
 		async = find_host_no_cache(host, &conn_info->addr, &conn_info->addrno,
@@ -278,9 +280,7 @@ sock_error:
 
 	return sock;
 }
-#endif
 
-#ifdef CONFIG_IPV6
 static inline int
 check_if_local_address6(struct sockaddr_in6 *addr)
 {
@@ -316,7 +316,7 @@ check_if_local_address6(struct sockaddr_in6 *addr)
 
 	return local;
 }
-#endif
+#endif /* CONFIG_IPV6 */
 
 static inline int
 check_if_local_address4(struct sockaddr_in *addr)
@@ -615,7 +615,7 @@ write_to_socket(struct connection *conn, struct connection_socket *socket,
 {
 	struct write_buffer *wb;
 
-	log_data(data, len);
+	debug_transfer_log(data, len);
 
 	assert(len > 0);
 	if_assert_failed return;
@@ -689,7 +689,7 @@ read_select(struct connection *conn)
 		}
 	}
 
-	log_data(rb->data + rb->len, rd);
+	debug_transfer_log(rb->data + rb->len, rd);
 
 	rb->len += rd;
 	rb->freespace -= rd;

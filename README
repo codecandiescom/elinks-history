@@ -1,24 +1,35 @@
-Enhanced/Extended/Experimental Links (elinks)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Enhanced/Extended Links (ELinks)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Development version of Links (Lynx-like text WWW browser), with more liberal
 features policy and development style.
 
-This is the elinks tree - intended to provide feature-rich version of links.
-Its purpuose is to make alternative to links, and to test and tune various
-patches for Mikulas to be able to include them in the official links releases.
+This is the ELinks tree - intended to provide feature-rich version of Links.
+Its purpuose is to make alternative to Links, and to test and tune various new
+features, but still provide good rock-solid releases inside stable branches.
 
-See the manpage for detailed description of elinks and its features.  If you are
-more interested, you can examine links website at http://links.sf.net/. For new
-links/elinks versions announcements and bug reports, please see links-list
+See the manpage for detailed description of ELinks and its features.  If you are
+more interested, you can examine Links website at http://links.sf.net/. For new
+Links/ELinks versions announcements and bug reports, please see links-list
 mailing list at linuxfromscratch.org.  If you have any feature request or hint
 for developers, please post it at links-discuss mailing list at the same place.
 
-The elinks site with some basic information is available at
-http://pasky.ji.cz/elinks/. Please see SITES file for mirrors or other
-recommended sites. If you want even to install elinks on your computer, see
+The ELinks site with some basic information is available at
+http://elinks.pld.org.pl/. Please see SITES file for mirrors or other
+recommended sites. If you want even to install ELinks on your computer, see
 INSTALL file for instructions.
 
-$Id: README,v 1.7 2002/03/07 12:54:13 pasky Exp $
+Why not contribute to Links instead? Well, first I made a bunch of patches for
+original Links, but significant number of them got refused, because Mikulas did
+not like them, as he just wouldn't have use for them himself. He wants to keep
+Links with relatively closed feature set and merge only new features which he
+itself needs. It has advantages that the tree is very narrow and the code is
+small and only very little bloated. ELinks, on the contrary, aims to provide
+full-featured web browser, superior to both lynx and w3m and with possibilites
+of konqueror and similiar browser. However, to prevent drastical bloating of the
+code, the development is driven in the course of modularization and separation
+of add-on modules (like cookies, bookmarks, ssl, lua etc).
+
+$Id: README,v 1.8 2002/05/10 22:06:54 pasky Exp $
 
 vim: textwidth=80

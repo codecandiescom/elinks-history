@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.281 2004/06/29 04:06:26 jonas Exp $ */
+/* $Id: tables.c,v 1.282 2004/06/29 07:20:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1053,7 +1053,7 @@ cont2:
 }
 
 static void
-format_bad_table_html(struct table *table)
+format_table_bad_html(struct table *table)
 {
 	int i;
 
@@ -1090,7 +1090,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	table->part = part;
 
-	format_bad_table_html(table);
+	format_table_bad_html(table);
 
 	state = init_html_parser_state(ELEMENT_DONT_KILL, ALIGN_LEFT, 0, 0);
 

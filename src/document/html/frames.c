@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.26 2003/10/30 11:51:18 zas Exp $ */
+/* $Id: frames.c,v 1.27 2003/10/30 11:57:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,8 +84,8 @@ create_frameset(struct document *document, struct frameset_param *fp)
 		register int i;
 
 		for (i = 0; i < size; i++) {
-			fd->frame_desc[i].width = fp->xw[i % fp->x];
-			fd->frame_desc[i].height = fp->yw[i / fp->x];
+			fd->frame_desc[i].width = fp->width[i % fp->x];
+			fd->frame_desc[i].height = fp->height[i / fp->x];
 		}
 	}
 

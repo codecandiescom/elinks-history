@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.23 2003/10/30 11:51:18 zas Exp $ */
+/* $Id: frames.h,v 1.24 2003/10/30 11:57:07 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -56,7 +56,7 @@ struct document_view {
 struct frameset_param {
 	struct frameset_desc *parent;
 	int x, y;
-	int *xw, *yw;
+	int *width, *height;
 };
 
 struct frame_param {

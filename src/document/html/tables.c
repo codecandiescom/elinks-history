@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.41 2003/06/30 20:32:21 zas Exp $ */
+/* $Id: tables.c,v 1.42 2003/06/30 21:00:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1007,7 +1007,7 @@ distribute_widths(struct table *t, int width)
 	int tx_size;
 
 	if (!t->x) return;
-	
+
 	if (d < 0) {
 		internal("too small width %d, required %d", width, t->min_t);
 	}
@@ -1161,7 +1161,7 @@ end:
 static void
 check_table_widths(struct table *t)
 {
-	int i, j;
+	register int i, j;
 	int s, ns;
 	int m, mi = 0; /* go away, warning! */
 	int *w = mem_calloc(t->x, sizeof(int));
@@ -1174,39 +1174,19 @@ check_table_widths(struct table *t)
 
 		if (!c->start) continue;
 
-#if 1
-		for (k = 1; k < c->colspan; k++) p += get_vline_width(t, i + k) >= 0;
-		for (k = 0; k < c->colspan; k++) p += t->w_c[i + k];
-#else
-		/* TODO: This needs to be tested */
 		for (k = 0; k < c->colspan; k++) {
-			p += t->w_c[i + k];
-			if (k > 0 && get_vline_width(t, i + k) >= 0)
-				p++;
+			p += t->w_c[i + k] +
+			     (k && get_vline_width(t, i + k) >= 0);
 		}
-#endif
 
 		get_cell_width(c->start, c->end, t->cellpd, p, 1, &c->x_width,
 			       NULL, c->link_num, NULL);
 
-		if (c->x_width > p) {
-#if 0
-			/* Good bye, internal() - you catched for me a lot of
-			 * errors in table proccessing, but now it's simply
-			 * time to go :-(. */
-			int min, max;
-
-			get_cell_width(c->start, c->end, t->cellpd, 0, 0, &min,
-				       &max, c->link_num, NULL);
-			internal("cell is now wider (%d > %d) min = %d, max = %d, now_min = %d, now_max = %d",
-				 c->x_width, p, t->min_c[i], t->max_c[i], min, max);
-#endif
+		if (c->x_width > p)
 			c->x_width = p;
-		}
 	}
 
 	s = 1;
-
 	do {
 		ns = MAXINT;
 		for (i = 0; i < t->x; i++) for (j = 0; j < t->y; j++) {
@@ -1216,70 +1196,41 @@ check_table_widths(struct table *t)
 
 			if (c->colspan + i > t->x) {
 				internal("colspan out of table");
-				mem_free(w);
-				return;
+				goto end;
 			}
 
 			if (c->colspan == s) {
 				int k, p = 0;
 
 				for (k = 1; k < s; k++)
-					if (get_vline_width(t, i + k) >= 0)
-						p++;
+					p += (get_vline_width(t, i + k) >= 0);
 
 				dst_width(w + i, s, c->x_width - p, t->max_c + i);
-#if 0
-				for (k = i; k < i + s; k++) if (w[k] > t->w_c[k]) {
-					int l;
-					int c;
-					ag:
-					c = 0;
-					for (l = i; l < i + s; l++) if (w[l] < t->w_c[k]) w[l]++, w[k]--, c = 1;
-					if (w[k] > t->w_c[k]) {
-						if (!c) internal("can't shrink cell");
-						else goto ag;
-					}
-				}
-#endif
+
 			} else if (c->colspan > s && c->colspan < ns) {
 				ns = c->colspan;
 			}
 		}
-	} while ((s = ns) != MAXINT);
+		s = ns;
+	} while (s != MAXINT);
 
-	s = 0;
-	ns = 0;
-
+	s = ns = 0;
 	for (i = 0; i < t->x; i++) {
 		s += t->w_c[i];
 		ns += w[i];
-#if 0
-		if (w[i] > t->w_c[i]) {
-			int k;
-			for (k = 0; k < t->x; k++) debug("%d, %d", t->w_c[k], w[k]);
-			debug("column %d: new width(%d) is larger than previous(%d)", i, w[i], t->w_c[i]);
-		}
-#endif
 	}
 
 	if (ns > s) {
 		/* internal("new width(%d) is larger than previous(%d)", ns, s); */
-		mem_free(w);
-		return;
+		goto end;
 	}
 
 	m = -1;
-
-	for (i = 0; i < t->x; i++) {
-#if 0
-		if (table_level == 1)
-			debug("%d: %d %d %d %d", i, t->max_c[i], t->min_c[i],
-						 t->w_c[i], w[i]);
-#endif
-		if (t->max_c[i] > m) m = t->max_c[i], mi = i;
-	}
-
-	/* if (table_level == 1) debug("%d %d", mi, s - ns); */
+	for (i = 0; i < t->x; i++)
+		if (t->max_c[i] > m) {
+			m = t->max_c[i];
+			mi = i;
+		}
 
 	if (m != -1) {
 		w[mi] += s - ns;
@@ -1290,6 +1241,7 @@ check_table_widths(struct table *t)
 		}
 	}
 
+end:
 	mem_free(w);
 }
 #endif

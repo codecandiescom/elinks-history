@@ -1,3 +1,29 @@
+Thu Jan 16 21:56:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/main.c:
+
+	Fixed segfault when -stdin was passed to ELinks. Evil.  
+
+Thu Jan 16 14:35:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, config/opttypes.c, dialogs/options.c,
+	protocol/http/http.c, viewer/dump/dump.c:
+
+	Compilation with --disable-nls was fixed. Need more work.  
+
+Thu Jan 16 11:34:16 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated and fixed.  
+
+Thu Jan 16 10:06:33 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po, src/config/options.c, src/viewer/dump/dump.c:
+
+	Issue concerning call to gettext() with empty string as parameter
+	was fixed.  
+
 Tue Jan 14 11:54:01 2003  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.9 2003/06/07 08:30:20 zas Exp $ */
+/* $Id: version.c,v 1.10 2003/06/08 11:38:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"
-#include "version.h"
+#include "util/version.h"
 
 unsigned char full_static_version[1024];
 

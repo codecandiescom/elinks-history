@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.51 2003/06/05 14:38:18 zas Exp $ */
+/* $Id: error.c,v 1.52 2003/06/08 11:38:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,7 @@
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"
-#include "version.h"
+#include "util/version.h"
 
 void
 list_magic_error_(unsigned char *where, unsigned char *what, unsigned char *file, int line)

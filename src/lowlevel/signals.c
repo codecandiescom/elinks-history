@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.5 2003/06/05 15:28:03 zas Exp $ */
+/* $Id: signals.c,v 1.6 2003/06/08 11:38:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@
 #include "lowlevel/signals.h"
 #include "terminal/kbd.c"
 #include "util/error.h"
-#include "version.h"
+#include "util/version.h"
 
 
 static void unhandle_basic_signals(struct terminal *term);

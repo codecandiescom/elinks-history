@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.94 2003/06/07 14:37:16 pasky Exp $ */
+/* $Id: main.c,v 1.95 2003/06/08 11:38:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,7 +64,7 @@
 #include "util/error.h"
 #include "util/memdebug.h"
 #include "util/memory.h"
-#include "version.h"
+#include "util/version.h"
 #include "viewer/dump/dump.h"
 
 int terminate = 0;

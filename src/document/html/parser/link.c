@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.11 2004/06/18 23:53:17 pasky Exp $ */
+/* $Id: link.c,v 1.12 2004/06/22 22:18:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -264,7 +264,7 @@ void
 put_link_line(unsigned char *prefix, unsigned char *linkname,
 	      unsigned char *link, unsigned char *target)
 {
-	has_link_lines = 1;
+	html_context.has_link_lines = 1;
 	html_stack_dup(ELEMENT_KILLABLE);
 	ln_break(1, line_break_f, ff);
 	mem_free_set(&format.link, NULL);

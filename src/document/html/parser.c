@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.448 2004/06/22 22:13:50 zas Exp $ */
+/* $Id: parser.c,v 1.449 2004/06/22 22:18:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,8 +157,6 @@ struct html_context html_context;
 
 unsigned char *eofff;
 unsigned char *startf;
-
-int has_link_lines;
 
 inline void
 ln_break(int n, void (*line_break)(void *), void *f)
@@ -384,7 +382,7 @@ html_body(unsigned char *a)
 		e->parattr.bgcolor = e->attr.bg = par_format.bgcolor = format.bg;
 	}
 
-	if (has_link_lines
+	if (html_context.has_link_lines
 	    && par_format.bgcolor
 	    && !search_html_stack("BODY")) {
 		special_f(ff, SP_COLOR_LINK_LINES);
@@ -1338,7 +1336,7 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	html_top.linebreak = 1;
 	html_top.type = ELEMENT_DONT_KILL;
 
-	has_link_lines = 0;
+	html_context.has_link_lines = 0;
 	table_level = 0;
 	last_form_tag = NULL;
 	last_form_attr = NULL;

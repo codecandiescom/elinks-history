@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.14 2004/06/22 22:13:50 zas Exp $ */
+/* $Id: internal.h,v 1.15 2004/06/22 22:18:52 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -26,13 +26,17 @@ void process_head(unsigned char *head);
 void put_chrs(unsigned char *start, int len, void (*put_chars)(void *, unsigned char *, int), void *f);
 
 struct html_context {
-	unsigned char *eoff;
+	/* For parser/parse.c: */
+	unsigned char *eoff; /* For parser/forms.c too */
 	int line_breax;
 	int position;
 	int putsp;
-	int was_br;
+	int was_br; /* For parser/forms.c too */
 	int was_li;
 	int was_xmp;
+
+	/* For parser/link.c: */
+	int has_link_lines;
 };
 
 extern struct html_context html_context;
@@ -40,8 +44,6 @@ extern struct html_context html_context;
 extern struct css_stylesheet css_styles;
 
 /* For parser/link.c: */
-
-extern int has_link_lines;
 
 void html_focusable(unsigned char *a);
 void html_skip(unsigned char *a);

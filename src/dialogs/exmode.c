@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.8 2004/01/26 04:47:58 jonas Exp $ */
+/* $Id: exmode.c,v 1.9 2004/01/26 05:45:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,11 +38,8 @@
 #define EXMODE_BUFFER_SIZE 80
 
 struct exmode_data {
-	struct widget_data *inpfield_data;
-	struct widget *inpfield;
-	struct dialog_data dlg_data;
+	struct dialog_data *dlg_data;
 	struct dialog dlg;
-	struct session *ses;
 	unsigned char buffer[EXMODE_BUFFER_SIZE];
 };
 
@@ -54,8 +51,9 @@ exmode_exec(struct exmode_data *data)
 	 * part should be thought out somehow yet, I s'pose... let's leave it
 	 * off for now). Then try to evaluate it as configfile command. Then at
 	 * least pop up an error. */
+	struct session *ses = data->dlg_data->dlg->udata2;
 	enum main_action action;
-	unsigned char *command = data->inpfield->data;
+	unsigned char *command = data->dlg_data->widgets_data->cdata;
 	unsigned char *end = command;
 	unsigned char end_char = 0;
 
@@ -73,7 +71,7 @@ exmode_exec(struct exmode_data *data)
 		return;
 
 	} else if (!*end) {
-		if (do_action(data->ses, action, 0) != action) {
+		if (do_action(ses, action, 0) != action) {
 			/* TODO; A timed error message */
 		}
 		return;
@@ -81,7 +79,7 @@ exmode_exec(struct exmode_data *data)
 
 	switch (action) {
 		case ACT_MAIN_GOTO_URL:
-			goto_url_with_hook(data->ses, end + 1);
+			goto_url_with_hook(ses, end + 1);
 			break;
 		default:
 			break;
@@ -89,44 +87,34 @@ exmode_exec(struct exmode_data *data)
 }
 
 static void
-exmode_display(struct window *win, struct exmode_data *data)
+exmode_layouter(struct dialog_data *dlg_data)
 {
-	field_ops.display(data->inpfield_data, &data->dlg_data, 1);
-	redraw_from_window(win);
+	struct window *win = dlg_data->win;
+	struct session *ses = dlg_data->dlg->udata2;
+	int y = win->term->height - 1
+		- ses->status.show_status_bar
+		- ses->status.show_tabs_bar;
+
+	dlg_format_field(win->term, dlg_data->widgets_data, 0,
+			 &y, win->term->width, NULL, AL_LEFT);
 }
 
-static void
-exmode_func(struct window *win, struct term_event *ev, int fwd)
+static int
+exmode_handle_event(struct dialog_data *dlg_data, struct term_event *ev)
 {
-	struct exmode_data *data = win->data;
-	struct session *ses = data->ses;
-
-	data->dlg_data.win = win;
+	struct window *win = dlg_data->win;
+	struct exmode_data *data = dlg_data->dlg->udata;
 
 	switch (ev->ev) {
 		case EV_INIT:
-			{
-			int y = win->term->height - 1
-				- ses->status.show_status_bar
-				- ses->status.show_tabs_bar;
-
-			field_ops.init(data->inpfield_data, &data->dlg_data, NULL);
-			dlg_format_field(win->term, data->inpfield_data, 0,
-					 &y, win->term->width, NULL, AL_LEFT);
-			}
 		case EV_RESIZE:
 		case EV_REDRAW:
-			exmode_display(win, data);
-			break;
-
 		case EV_MOUSE:
-#ifdef CONFIG_MOUSE
-			field_ops.mouse(data->inpfield_data, &data->dlg_data, ev);
-#endif /* CONFIG_MOUSE */
+		case EV_ABORT:
+			/* dialog_func() handles these for use */
 			break;
 
 		case EV_KBD:
-			field_ops.kbd(data->inpfield_data, &data->dlg_data, ev);
 			switch (kbd_action(KM_EDIT, ev, NULL)) {
 				case ACT_EDIT_ENTER:
 					exmode_exec(data);
@@ -135,13 +123,14 @@ exmode_func(struct window *win, struct term_event *ev, int fwd)
 					delete_window(win);
 					break;
 				default:
-					break;
+					return EVENT_NOT_PROCESSED;
 			}
-			break;
 
-		case EV_ABORT:
-			break;
+			/* Let the input field handle it */
+			return EVENT_PROCESSED;
 	}
+
+	return EVENT_NOT_PROCESSED;
 }
 
 
@@ -149,6 +138,7 @@ void
 exmode_start(struct session *ses)
 {
 	struct exmode_data *data;
+	struct dialog_data *dlg_data;
 
 	assert(ses);
 
@@ -157,16 +147,15 @@ exmode_start(struct session *ses)
 	data = mem_calloc(1, sizeof(struct exmode_data));
 	if (!data) return;
 
-	data->ses = ses;
+	data->dlg.handle_event = exmode_handle_event;
+	data->dlg.layouter = exmode_layouter;
+	data->dlg.layout.only_widgets = 1;
+	data->dlg.udata = data;
+	data->dlg.udata2 = ses;
+	data->dlg.widgets->info.field.float_label = 1;
 
-	data->inpfield = data->dlg.widgets;
-	data->inpfield->ops = &field_ops;
-	data->inpfield->info.field.float_label = 1;
 	add_dlg_field(&data->dlg, ":", 0, 0, NULL, 80, data->buffer, NULL);
 
-	data->inpfield_data = selected_widget(&data->dlg_data);
-	data->inpfield_data->widget = data->inpfield;
-	data->inpfield_data->cdata = data->inpfield->data;
-
-	add_window(ses->tab->term, exmode_func, data);
+	dlg_data = do_dialog(ses->tab->term, &data->dlg, getml(data, NULL));
+	if (dlg_data) data->dlg_data = dlg_data;
 }

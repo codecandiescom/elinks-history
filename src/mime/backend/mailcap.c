@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.40 2003/06/11 14:59:24 jonas Exp $ */
+/* $Id: mailcap.c,v 1.41 2003/06/16 00:40:51 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -44,11 +44,11 @@
 #define BACKEND_NAME	"mailcap"
 
 struct mailcap_hash_item {
-	/* The content type of all @entries */
-	unsigned char *type;
-
 	/* The entries associated with the type */
 	struct list_head entries; /* -> struct mailcap_entry */
+
+	/* The content type of all @entries. Must be last! */
+	unsigned char type[1];
 };
 
 struct mailcap_entry {
@@ -122,19 +122,13 @@ add_mailcap_entry(struct mailcap_entry *entry, unsigned char *type, int typelen)
 	/* First check if the type is already checked in */
 	item = get_hash_item(mailcap_map, type, typelen);
 	if (!item) {
-
-#define MAILCAP_HASH_ITEM_SIZE sizeof(struct mailcap_hash_item)
-
-		mitem = mem_alloc(MAILCAP_HASH_ITEM_SIZE + typelen + 1);
+		mitem = mem_alloc(sizeof(struct mailcap_hash_item) + typelen);
 		if (!mitem) {
 			done_mailcap_entry(entry);
 			return;
 		}
 
-		mitem->type = (unsigned char *)mitem + MAILCAP_HASH_ITEM_SIZE;
 		safe_strncpy(mitem->type, type, typelen + 1);
-
-#undef MAILCAP_HASH_ITEM_SIZE
 
 		init_list(mitem->entries);
 

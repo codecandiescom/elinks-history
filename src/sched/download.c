@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.120 2003/10/27 10:35:26 jonas Exp $ */
+/* $Id: download.c,v 1.121 2003/10/27 23:58:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,6 +36,7 @@
 #include "lowlevel/select.h"
 #include "lowlevel/ttime.h"
 #include "mime/mime.h"
+#include "osdep/osdep.h"
 #include "protocol/http/date.h"
 #include "protocol/uri.h"
 #include "sched/connection.h"

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.129 2003/06/17 13:04:01 zas Exp $ */
+/* $Id: renderer.c,v 1.130 2003/06/17 13:06:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -828,12 +828,12 @@ end_format_change:
 	return;
 
 process_link:
-	if ((last_link /*|| last_target*/ || last_image || last_form)
+	if (part->data
+	    && (last_link /*|| last_target*/ || last_image || last_form)
 	    && !xstrcmp(format.link, last_link)
 	    && !xstrcmp(format.target, last_target)
 	    && !xstrcmp(format.image, last_image)
 	    && format.form == last_form) {
-		if (!part->data) goto x;
 		link = &part->data->links[part->data->nlinks - 1];
 		if (!part->data->nlinks) { /* if this is occur,
 					      then link = &part->data->links[-1];
@@ -844,7 +844,6 @@ process_link:
 			goto no_l;
 		}
 		goto set_link;
-x:;
 	} else {
 		if (last_link) mem_free(last_link);	/* !!! FIXME: optimize */
 		if (last_target) mem_free(last_target);

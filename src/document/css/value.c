@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.17 2004/01/18 15:18:55 pasky Exp $ */
+/* $Id: value.c,v 1.18 2004/01/18 15:19:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,11 +17,6 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
-
-
-typedef int (*css_value_parser_t)(struct css_property_info *propinfo,
-				  union css_property_value *value,
-				  unsigned char **string);
 
 
 static int
@@ -194,7 +189,7 @@ css_parse_text_align_value(struct css_property_info *propinfo,
 }
 
 
-static css_value_parser_t css_value_parsers[CSS_VT_LAST] = {
+static css_property_value_parser css_value_parsers[CSS_VT_LAST] = {
 	/* CSS_VT_NONE */		NULL,
 	/* CSS_VT_COLOR */		css_parse_color_value,
 	/* CSS_VT_FONT_ATTRIBUTE */	css_parse_font_attribute_value,

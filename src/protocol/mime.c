@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: mime.c,v 1.3 2002/08/29 00:36:42 pasky Exp $ */
+/* $Id: mime.c,v 1.4 2002/11/19 22:41:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,7 +23,7 @@ unsigned char *
 get_content_type(unsigned char *head, unsigned char *url)
 {
 	unsigned char *pos, *extension;
-	int ext_len, url_len;
+	int ext_len;
 
 	/* If there's one in header, it's simple.. */
 
@@ -51,8 +51,6 @@ get_content_type(unsigned char *head, unsigned char *url)
 	 * would always compare only to "gz". */
 
 	/* Guess type accordingly to the extension */
-
-	url_len = strlen(url);
 
 	{
 		struct option *opt_tree = get_opt_rec_real(root_options,

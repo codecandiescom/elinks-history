@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.42 2004/04/14 03:04:19 jonas Exp $ */
+/* $Id: select.c,v 1.43 2004/04/14 03:14:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,20 +145,20 @@ check_timers(void)
 {
 	ttime now = get_time();
 	ttime interval = now - last_time;
-	struct timer *t;
+	struct timer *timer;
 
-	foreach (t, timers) t->interval -= interval;
+	foreach (timer, timers) timer->interval -= interval;
 
-ch:
-	foreach (t, timers) if (t->interval <= 0) {
-		struct timer *tt = t;
+	while (!list_empty(timers)) {
+		timer = timers.next;
 
-		del_from_list(tt);
-		tt->func(tt->data);
-		mem_free(tt);
+		if (timer->interval > 0) break;
+
+		del_from_list(timer);
+		timer->func(timer->data);
+		mem_free(timer);
 		check_bottom_halves();
-		goto ch;
-	} else break;
+	}
 
 	last_time = now;
 }

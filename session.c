@@ -445,7 +445,7 @@ void download_window_function(struct dialog_data *dlg)
 	x = dlg->x + DIALOG_LB;
 	dlg_format_text(term, term, u, x, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
 	if (t && stat->prg->size >= 0) {
-		unsigned char q[5];
+		unsigned char q[64];
 		int p = w - 6;
 		y++;
 		set_only_char(term, x, y, '[');

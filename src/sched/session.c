@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.459 2004/06/10 22:28:06 jonas Exp $ */
+/* $Id: session.c,v 1.460 2004/06/10 22:56:45 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -648,8 +648,8 @@ copy_session(struct session *old, struct session *new)
 }
 
 static struct initial_session_info *
-init_session_info(struct session *base_session, enum remote_session_flags remote,
-		  struct uri *uri);
+init_session_info(struct session *base_session, struct uri *uri);
+
 void
 init_session(struct session *ses, struct terminal *term,
 	     struct uri *uri, int in_background)
@@ -660,7 +660,7 @@ init_session(struct session *ses, struct terminal *term,
 	tab = init_tab(term, in_background);
 	if (!tab) return;
 
-	ev.b = (long) init_session_info(ses, 0, uri);
+	ev.b = (long) init_session_info(ses, uri);
 	if (!ev.b) {
 		mem_free(tab);
 		return;
@@ -708,8 +708,7 @@ create_session_info(struct string *info, int cp, struct list_head *url_list)
 }
 
 static struct initial_session_info *
-init_session_info(struct session *base_session, enum remote_session_flags remote,
-		  struct uri *uri)
+init_session_info(struct session *base_session, struct uri *uri)
 {
 	struct initial_session_info *info;
 
@@ -843,7 +842,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 
 	if (len <= 0) {
 		if (!remote)
-			return init_session_info(base_session, remote, NULL);
+			return init_session_info(base_session, NULL);
 
 		/* Even though there are no URIs we still have to
 		 * handle remote stuff. */
@@ -877,7 +876,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 				remote = handle_remote_session(base_session, remote, uri);
 
 			} else if (!info) {
-				info = init_session_info(base_session, remote, uri);
+				info = init_session_info(base_session, uri);
 				if (!info) return NULL;
 
 			} else {

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.63 2005/03/04 13:19:37 zas Exp $ */
+/* $Id: leds.c,v 1.64 2005/03/04 13:25:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,7 +149,7 @@ draw_leds(struct session *ses)
 	if (get_opt_int("ui.timer.enable") == 2) {
 		char s[256];
 
-		snprintf(s, 256, "[%d]", timer_duration);
+		snprintf(s, 256, "[%d]", get_timer_duration());
 		timerlen = strlen(s);
 		led_color = get_bfu_color(term, "status.status-text");
 		if (!led_color) goto end;
@@ -209,6 +209,7 @@ sync_leds(struct session *ses)
 {
 	int resync = 0;
 	int i;
+	int timer_duration = get_timer_duration();
 
 	if (timer_duration_backup != timer_duration) {
 		timer_duration_backup = timer_duration;

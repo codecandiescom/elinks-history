@@ -1,5 +1,5 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.16 2005/03/04 13:19:37 zas Exp $ */
+/* $Id: timer.c,v 1.17 2005/03/04 13:25:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,8 +22,13 @@ static int periodic_save_timer = -1;
 
 static int countdown = -1;
 
-int timer_duration = 0;
+static int timer_duration = 0;
 
+int
+get_timer_duration(void)
+{
+	return timer_duration;
+}
 
 static void
 count_down(void *xxx)

@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.4 2003/10/26 13:26:34 jonas Exp $ */
+/* $Id: module.c,v 1.5 2003/10/26 13:47:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,11 +15,15 @@
 
 #include "bookmarks/bookmarks.h"
 #include "mime/mime.h"
+#include "scripting/scripting.h"
 
 static struct module *builtin_modules[] = {
 	&mime_module,
 #ifdef BOOKMARKS
 	&bookmarks_module,
+#endif
+#ifdef HAVE_SCRIPTING
+	&scripting_module,
 #endif
 	NULL,
 };

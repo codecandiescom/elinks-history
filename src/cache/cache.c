@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.91 2003/11/15 15:38:12 jonas Exp $ */
+/* $Id: cache.c,v 1.92 2003/11/15 15:47:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,7 +100,7 @@ find_in_cache(unsigned char *url, struct cache_entry **cep)
 
 	foreach (ce, cache) {
 		assert(get_cache_uri(ce) && url);
-		if (strcmp(get_cache_uri(ce), url)) continue;
+		if (!ce->valid || strcmp(get_cache_uri(ce), url)) continue;
 
 		/* Move it on the top of the list. */
 		del_from_list(ce);
@@ -133,6 +133,7 @@ get_cache_entry(unsigned char *url, struct cache_entry **cep)
 	}
 
 	ce->incomplete = 1;
+	ce->valid = 1;
 	init_list(ce->frag);
 	ce->id_tag = id_tag_counter++;
 	cache_entry_nolock(ce); /* Debugging purpose. */

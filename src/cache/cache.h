@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.47 2003/11/15 15:38:12 jonas Exp $ */
+/* $Id: cache.h,v 1.48 2003/11/15 15:47:13 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -45,6 +45,7 @@ struct cache_entry {
 #endif
 	unsigned int redirect_get:1;
 	unsigned int incomplete:1;
+	unsigned int valid:1;
 
 	/* This is a mark for internal workings of garbage_collection(), whether
 	 * the cache_entry should be busted or not. You are not likely to see
@@ -74,7 +75,8 @@ struct cache_entry {
 /* Please keep this one. It serves for debugging. --Zas */
 #define cache_entry_nolock(ce) do { ce_sanity_check(ce); ce_lock_debug(ce, "0"); } while (0)
 
-#define get_cache_uri(cache_entry) struri((cache_entry)->uri)
+#define get_cache_uri(cache_entry) \
+	((cache_entry)->valid ? struri((cache_entry)->uri) : (unsigned char *) "")
 
 struct fragment {
 	LIST_HEAD(struct fragment);

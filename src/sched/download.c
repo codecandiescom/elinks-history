@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.203 2003/12/19 12:03:40 pasky Exp $ */
+/* $Id: download.c,v 1.204 2003/12/22 02:07:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,6 +143,16 @@ void
 destroy_downloads(struct session *ses)
 {
 	struct file_download *file_download;
+	struct session *s;
+
+	/* We are supposed to blat all downloads to external handlers belonging
+	 * to @ses, but we will refuse to do so if there is another session
+	 * bound to this terminal. That looks like the reasonable thing to do,
+	 * fulfilling the principle of least astonishment. */
+	foreach (s, sessions) {
+		if (s != ses && s->tab->term == ses->tab->term)
+			return;
+	}
 
 	foreach (file_download, downloads) {
 		if (file_download->ses != ses || !file_download->prog)

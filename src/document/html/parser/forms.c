@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.46 2004/10/23 09:53:02 pasky Exp $ */
+/* $Id: forms.c,v 1.47 2004/11/08 00:31:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -353,13 +353,14 @@ html_select(unsigned char *a)
 {
 	/* Note I haven't seen this code in use, do_html_select() seems to take
 	 * care of bussiness. --FF */
+	/* It gets called when the "multiple" attribute is set. --jonas */
 
 	unsigned char *al = get_attr_val(a, "name");
 
 	if (!al) return;
 	html_focusable(a);
 	html_top.type = ELEMENT_DONT_KILL;
-	format.select = al;
+	mem_free_set(&format.select, al);
 	format.select_disabled = has_attr(a, "disabled") ? FORM_MODE_DISABLED : FORM_MODE_NORMAL;
 }
 

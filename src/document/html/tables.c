@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.315 2004/06/29 22:58:53 pasky Exp $ */
+/* $Id: tables.c,v 1.316 2004/06/29 23:04:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -385,7 +385,7 @@ distribute_widths(struct table *table, int width)
 	if (!max_widths) goto end1;
 
 	while (spare_width) {
-		int max, max_index;
+		int stretch_width, stretch_col;
 		int total_width = 0;
 		int did_stretch;
 		int total_spare_width;
@@ -468,32 +468,33 @@ distribute_widths(struct table *table, int width)
 		total_spare_width = spare_width;
 
 again:
-		max = 0;
-		max_index = -1;
+		stretch_width = 0;
+		stretch_col = -1;
 		for (col = 0; col < table->cols; col++) {
-			int max_width;
+			int col_spare_width;
 
 			if (!widths[col])
 				continue;
 			if (visited_cols && visited_cols[col])
 				continue;
 
-			max_width = total_spare_width * widths[col] / total_width;
-			int_bounds(&max_width, 1, max_widths[col]);
-			if (max_width > max) {
-				max = max_width;
-				max_index = col;
+			col_spare_width = total_spare_width * widths[col] / total_width;
+			int_bounds(&col_spare_width, 1, max_widths[col]);
+			if (col_spare_width > stretch_width) {
+				stretch_width = col_spare_width;
+				stretch_col = col;
 			}
 		}
 
-		if (max_index != -1) {
-			if (visited_cols) visited_cols[max_index] = 1;
+		if (stretch_col != -1) {
+			if (visited_cols) visited_cols[stretch_col] = 1;
 
-			if (max > spare_width) max = spare_width;
-			assertm(max >= 0, "shrinking cell");
+			if (stretch_width > spare_width)
+				stretch_width = spare_width;
+			assertm(stretch_width >= 0, "shrinking cell");
 
-			table->cols_widths[max_index] += max;
-			spare_width -= max;
+			table->cols_widths[stretch_col] += stretch_width;
+			spare_width -= stretch_width;
 
 			did_stretch = 1;
 			if (spare_width)

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.187 2003/07/28 21:45:57 zas Exp $ */
+/* $Id: parser.c,v 1.188 2003/08/01 12:03:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1016,8 +1016,8 @@ html_form(unsigned char *a)
 static void
 html_p(unsigned char *a)
 {
-	if (par_format.leftmargin < margin) par_format.leftmargin = margin;
-	if (par_format.rightmargin < margin) par_format.rightmargin = margin;
+	int_lower_bound(&par_format.leftmargin, margin);
+	int_lower_bound(&par_format.rightmargin, margin);
 	/*par_format.align = AL_LEFT;*/
 	html_linebrk(a);
 }
@@ -1249,8 +1249,9 @@ html_ol(unsigned char *a)
 	}
 
 	par_format.leftmargin += (par_format.list_level > 1);
-	if (!table_level && par_format.leftmargin > par_format.width / 2)
-		par_format.leftmargin = par_format.width / 2;
+	if (!table_level)
+		int_upper_bound(&par_format.leftmargin, par_format.width / 2);
+
 	par_format.align = AL_LEFT;
 	html_top.dontkill = 1;
 }
@@ -1339,8 +1340,8 @@ html_dd(unsigned char *a)
 	kill_until(0, "", "DL", NULL);
 
 	par_format.leftmargin = par_format.dd_margin + (table_level ? 3 : 8);
-	if (!table_level && par_format.leftmargin > par_format.width / 2)
-		par_format.leftmargin = par_format.width / 2;
+	if (!table_level)
+		int_upper_bound(&par_format.leftmargin, par_format.width / 2);
 	par_format.align = AL_LEFT;
 }
 
@@ -1570,7 +1571,8 @@ xxx:
 	if (fc->size == -1) fc->size = HTML_DEFAULT_INPUT_SIZE;
 	fc->size++;
 	if (fc->size > d_opt->xw) fc->size = d_opt->xw;
-	if ((fc->maxlength = get_num(a, "maxlength")) == -1) fc->maxlength = MAXINT;
+	fc->maxlength = get_num(a, "maxlength");
+	if (fc->maxlength == -1) fc->maxlength = MAXINT;
 	if (fc->type == FC_CHECKBOX || fc->type == FC_RADIO) fc->default_state = has_attr(a, "checked");
 	fc->ro = has_attr(a, "disabled") ? 2 : has_attr(a, "readonly") ? 1 : 0;
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");

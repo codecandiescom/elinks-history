@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.85 2002/10/12 15:12:13 pasky Exp $ */
+/* $Id: view.c,v 1.86 2002/10/12 15:39:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3059,7 +3059,6 @@ send_open_new_xterm(struct terminal *term,
 		    struct session *ses)
 {
 	int l = 0;
-	int ring;
 
 	if (ses->dn_url) mem_free(ses->dn_url);
 	ses->dn_url = init_str();

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.42 2004/02/04 16:24:55 jonas Exp $ */
+/* $Id: cmdline.c,v 1.43 2004/02/06 12:31:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -245,7 +245,9 @@ print_full_help(struct option *tree, unsigned char *path)
 			case OPT_INT:
 			case OPT_LONG:
 				printf(gettext("(default: %ld)"),
-					(long) option->value.number);
+					type == OPT_LONG
+					? option->value.big_number
+					: (long) option->value.number);
 				break;
 
 			case OPT_STRING:

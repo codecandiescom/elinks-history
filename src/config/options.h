@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.95 2004/01/30 19:54:58 jonas Exp $ */
+/* $Id: options.h,v 1.96 2004/02/06 12:31:08 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -83,9 +83,11 @@ union option_value {
 	/* The OPT_TREE list_head is allocated. */
 	struct list_head *tree;
 
-	/* Used by OPT_BOOL, OPT_INT, OPT_LONG, OPT_CODEPAGE and
-	 * OPT_LANGUAGE */
-	long number;
+	/* Used by OPT_BOOL, OPT_INT, OPT_CODEPAGE and OPT_LANGUAGE */
+	int number;
+
+	/* Used by OPT_LONG */
+	long big_number;
 
 	/* The OPT_COLOR value */
 	color_t color;
@@ -188,7 +190,7 @@ extern union option_value *get_opt_(struct option *, unsigned char *);
 
 #define get_opt_bool_tree(tree, name)	get_opt(tree, name)->number
 #define get_opt_int_tree(tree, name)	get_opt(tree, name)->number
-#define get_opt_long_tree(tree, name)	get_opt(tree, name)->number
+#define get_opt_long_tree(tree, name)	get_opt(tree, name)->big_number
 #define get_opt_str_tree(tree, name)	get_opt(tree, name)->string
 #define get_opt_color_tree(tree, name)	get_opt(tree, name)->color
 #define get_opt_tree_tree(tree_, name)	get_opt(tree_, name)->tree

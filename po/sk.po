@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2004-01-04 18:14+0100\n"
-"PO-Revision-Date: 2003-12-23 14:42+0100\n"
+"PO-Revision-Date: 2004-01-08 18:52+0100\n"
 "Last-Translator: Peter Samek <samek@upc.uniba.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,7 @@ msgstr "Informácie"
 
 #: src/bfu/hierbox.c:445
 msgid "Press space to expand this folder."
-msgstr ""
+msgstr "Na rozbalenie tejto zlo¾ky stlaè medzeru."
 
 #. if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty;
 #: src/bfu/hierbox.c:447 src/bfu/hierbox.c:469 src/bfu/hierbox.c:607
@@ -336,19 +336,16 @@ msgid "Add bookmark"
 msgstr "Prida» zálo¾ku"
 
 #: src/bookmarks/dialogs.c:583
-#, fuzzy
 msgid "Saved session"
-msgstr "Ulo¾ na~stavenia"
+msgstr "Ulo¾ené sedenie"
 
 #: src/bookmarks/dialogs.c:604
-#, fuzzy
 msgid "Bookmark tabs"
-msgstr "Zálo¾ky"
+msgstr "Ulo¾i» taby do zálo¾iek"
 
 #: src/bookmarks/dialogs.c:604
-#, fuzzy
 msgid "Enter folder name"
-msgstr "Názov zlo¾ky"
+msgstr "Zadaj názov zlo¾ky"
 
 #: src/cache/dialogs.c:65
 msgid "Redirect"
@@ -458,9 +455,9 @@ msgid "(default: %s)"
 msgstr "(¹tandardne: %s)"
 
 #: src/config/cmdline.c:275
-#, fuzzy, c-format
+#, c-format
 msgid "(default: #%06lx)"
-msgstr "(¹tandardne: #%06x)"
+msgstr "(¹tandardne: #%06lx)"
 
 #: src/config/cmdline.c:401
 msgid "Configuration options:\n"
@@ -846,20 +843,21 @@ msgid "Cannot write the file"
 msgstr "Nemô¾em zapisova» do súboru"
 
 #: src/config/dialogs.c:41
-#, fuzzy
 msgid "Write config error"
-msgstr "Chyba v konfigurácii"
+msgstr "Chyba pri zápise konfigurácie"
 
 #: src/config/dialogs.c:42
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to write to config file %s.\n"
 "%s"
-msgstr "Nemô¾em zapísa» do konfiguraèného súboru %s: %s"
+msgstr ""
+"Nemô¾em zapísa» do konfiguraèného súboru %s.\n"
+"%s"
 
 #: src/config/dialogs.c:53
 msgid "Write config success"
-msgstr ""
+msgstr "Zapísanie konfigurácie prebehlo úspe¹ne"
 
 #: src/config/dialogs.c:54
 #, c-format
@@ -1017,9 +1015,8 @@ msgid "Add a new bookmark using current link"
 msgstr "Prida» novú zalo¾ku na aktuálny odkaz"
 
 #: src/config/kbdbind.c:396
-#, fuzzy
 msgid "Bookmark all open tabs"
-msgstr "Nastavenie zálo¾iek."
+msgstr "Ulo¾i» do zálo¾iek v¹etky otvorené taby"
 
 #: src/config/kbdbind.c:397
 msgid "Attempt to auto-complete the input"
@@ -1137,9 +1134,8 @@ msgid "Forget authentication credentials"
 msgstr "Vymaza» z pamäti prihlasovacie informácie HTTP Autentizácie"
 
 #: src/config/kbdbind.c:425
-#, fuzzy
 msgid "Open form history manager"
-msgstr "Otvori» správcu histórie"
+msgstr "Otvori» správcu histórie formulárov"
 
 #: src/config/kbdbind.c:426
 msgid "Open \"Go to URL\" dialog box"
@@ -1256,9 +1252,8 @@ msgid "Open the current link in a new window"
 msgstr "Otvori» aktuálny odkaz v novom okne"
 
 #: src/config/kbdbind.c:459
-#, fuzzy
 msgid "Open an OS shell"
-msgstr "~Odskoè do shell-u"
+msgstr "Otvori» OS shell"
 
 #: src/config/kbdbind.c:460
 msgid "Open options manager"
@@ -1305,23 +1300,20 @@ msgid "Move the cursor right"
 msgstr "Posunú» kurzor doprava"
 
 #: src/config/kbdbind.c:471
-#, fuzzy
 msgid "Save as"
 msgstr "Ulo¾i» ako"
 
 #: src/config/kbdbind.c:472
-#, fuzzy
 msgid "Save URL as"
-msgstr "Ulo¾i» ~URL ako"
+msgstr "Ulo¾i» URL ako"
 
 #: src/config/kbdbind.c:473
 msgid "Save formatted document"
 msgstr "Ulo¾i» formátovaný dokument"
 
 #: src/config/kbdbind.c:474
-#, fuzzy
 msgid "Save options"
-msgstr "Ulo¾ na~stavenia"
+msgstr "Ulo¾i» nastavenia"
 
 #: src/config/kbdbind.c:475
 msgid "Scroll down"
@@ -1365,14 +1357,12 @@ msgid "Close tab"
 msgstr "Zavrie» tab"
 
 #: src/config/kbdbind.c:485
-#, fuzzy
 msgid "Close all tabs but the current one"
-msgstr "Zobrazi» informácie o aktuálnej stránke"
+msgstr "Zavrie» v¹etky taby okrem aktuálneho"
 
 #: src/config/kbdbind.c:486
-#, fuzzy
 msgid "Open the tab menu"
-msgstr "Otvori» menu Súbor"
+msgstr "Otvori» menu tabov"
 
 #: src/config/kbdbind.c:487
 msgid "Next tab"
@@ -2462,9 +2452,8 @@ msgstr ""
 "horizontálne skrolova» pri ich pozeraní."
 
 #: src/config/options.inc:558
-#, fuzzy
 msgid "Default form input size"
-msgstr "©tandardné nastavenie farieb"
+msgstr "©tandardná veµkos» vstupného políèka formulára"
 
 #: src/config/options.inc:560
 msgid "Default form input size if none is specified."
@@ -3368,16 +3357,16 @@ msgid "Tabs bar colors."
 msgstr "Farby li¹ty s tabmi."
 
 #: src/config/options.inc:1088
-#, fuzzy
 msgid "Unvisited tab"
-msgstr "Nevybratý tab"
+msgstr "Nenav¹tívený tab"
 
 #: src/config/options.inc:1090
-#, fuzzy
 msgid ""
 "Tab colors for tabs that have not been\n"
 "selected since they completed loading."
-msgstr "Farby tabu, ktorý sa práve nahráva na pozadí."
+msgstr ""
+"Farby tabu, ktorý e¹te nebol nav¹tívený, ale u¾ je\n"
+"kompletne natiahnutý."
 
 #: src/config/options.inc:1093
 msgid "Unselected tab"
@@ -3453,9 +3442,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.inc:1137
-#, fuzzy
 msgid "Underline hotkeys"
-msgstr "Podèiarkova» odkazy"
+msgstr "Podèiarkova» horúce klávesy"
 
 #: src/config/options.inc:1139
 msgid ""
@@ -3585,14 +3573,12 @@ msgid ""
 msgstr ""
 
 #: src/config/options.inc:1219
-#, fuzzy
 msgid "Sessions"
-msgstr "Prípona(y)"
+msgstr "Sedenia"
 
 #: src/config/options.inc:1221
-#, fuzzy
 msgid "Sessions settings."
-msgstr "Nastavenie farieb"
+msgstr "Nastavenie sedení"
 
 #: src/config/options.inc:1223
 msgid "Auto save session"
@@ -3821,9 +3807,8 @@ msgid "Expires"
 msgstr "Expiruje"
 
 #: src/cookies/dialogs.c:92
-#, fuzzy
 msgid "Secure"
-msgstr "momentálne"
+msgstr "Bezpeèný"
 
 #: src/cookies/dialogs.c:156 src/dialogs/download.c:424 src/dialogs/edit.c:100
 #: src/formhist/dialogs.c:168 src/globhist/dialogs.c:189
@@ -3921,7 +3906,7 @@ msgid "Copying"
 msgstr "Kopírovanie"
 
 #: src/dialogs/info.c:134
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "ELinks %s\n"
 "\n"
@@ -3936,12 +3921,12 @@ msgstr ""
 "ELinks %s\n"
 "\n"
 "(C) 1999 - 2002 Mikulá¹ Patoèka\n"
-"(C) 2001 - 2003 Petr Baudi¹\n"
+"(C) 2001 - 2004 Petr Baudi¹ a ostatní\n"
 "\n"
-"Tento program je voµné softvér; mô¾ete ho ¹íri» a/ modifikova» "
-"podµapodmienok GNU V¹eobecnej verejnej licencie vydanej Nadáciou "
-"voµnéhosoftvéru (Free Software Foundation); a to buï verzie 2 alebo "
-"(podµava¹ej voµby) hociktorej neskor¹ej verzie."
+"Tento program je voµný softvér; mô¾ete ho ¹íri» a/aj modifikova» "
+"podµa podmienok GNU V¹eobecnej verejnej licencie vydanej Nadáciou "
+"voµného softvéru (Free Software Foundation); a to buï verzie 2 alebo "
+"(podµa va¹ej voµby) hociktorej neskor¹ej verzie."
 
 #: src/dialogs/info.c:153
 #, c-format
@@ -4526,7 +4511,7 @@ msgstr ""
 
 #: src/globhist/globhist.c:89
 msgid "Auto-save interval"
-msgstr ""
+msgstr "Interval automatického ukladania"
 
 #: src/globhist/globhist.c:91
 msgid ""
@@ -4545,7 +4530,7 @@ msgstr ""
 
 #: src/intl/gettext/libintl.c:25
 msgid "English"
-msgstr ""
+msgstr "angliètina"
 
 #: src/intl/gettext/libintl.c:27
 msgid "Belarusian"
@@ -4553,44 +4538,43 @@ msgstr ""
 
 #: src/intl/gettext/libintl.c:28
 msgid "Brazilian Portuguese"
-msgstr ""
+msgstr "brazílska portugalèina"
 
 #: src/intl/gettext/libintl.c:29
 msgid "Bulgarian"
-msgstr ""
+msgstr "bulharèina"
 
 #: src/intl/gettext/libintl.c:30
 msgid "Catalan"
-msgstr ""
+msgstr "katalánèina"
 
 #: src/intl/gettext/libintl.c:31
 msgid "Croatian"
-msgstr ""
+msgstr "chorvátèina"
 
 #: src/intl/gettext/libintl.c:32
-#, fuzzy
 msgid "Czech"
-msgstr "Ke¹ (doèasná pamä»)"
+msgstr "èe¹tina"
 
 #: src/intl/gettext/libintl.c:33
 msgid "Danish"
-msgstr ""
+msgstr "dánèina"
 
 #: src/intl/gettext/libintl.c:34
 msgid "Dutch"
-msgstr ""
+msgstr "holandèina"
 
 #: src/intl/gettext/libintl.c:35
 msgid "Estonian"
-msgstr ""
+msgstr "estónèina"
 
 #: src/intl/gettext/libintl.c:36
 msgid "Finnish"
-msgstr ""
+msgstr "fínèina"
 
 #: src/intl/gettext/libintl.c:37
 msgid "French"
-msgstr ""
+msgstr "francúz¹tina"
 
 #: src/intl/gettext/libintl.c:38
 msgid "Galician"
@@ -4598,15 +4582,15 @@ msgstr ""
 
 #: src/intl/gettext/libintl.c:39
 msgid "German"
-msgstr ""
+msgstr "nemèina"
 
 #: src/intl/gettext/libintl.c:40
 msgid "Greek"
-msgstr ""
+msgstr "gréètina"
 
 #: src/intl/gettext/libintl.c:41
 msgid "Hungarian"
-msgstr ""
+msgstr "maïarèina"
 
 #: src/intl/gettext/libintl.c:42
 msgid "Icelandic"
@@ -4614,62 +4598,59 @@ msgstr ""
 
 #: src/intl/gettext/libintl.c:43
 msgid "Indonesian"
-msgstr ""
+msgstr "indonéz¹tina"
 
 #: src/intl/gettext/libintl.c:44
 msgid "Italian"
-msgstr ""
+msgstr "talianèina"
 
 #: src/intl/gettext/libintl.c:45
-#, fuzzy
 msgid "Leet"
-msgstr "Zmaza»"
+msgstr ""
 
 #: src/intl/gettext/libintl.c:46
 msgid "Lithuanian"
-msgstr ""
+msgstr "litovèina"
 
 #: src/intl/gettext/libintl.c:47
 msgid "Norwegian"
-msgstr ""
+msgstr "nórèina"
 
 #: src/intl/gettext/libintl.c:48
-#, fuzzy
 msgid "Polish"
-msgstr "Politika"
+msgstr "poµ¹tina"
 
 #: src/intl/gettext/libintl.c:49
 msgid "Portuguese"
-msgstr ""
+msgstr "portugalèina"
 
 #: src/intl/gettext/libintl.c:50
-#, fuzzy
 msgid "Romanian"
-msgstr "~Dokumentácia"
+msgstr "rumunèina"
 
 #: src/intl/gettext/libintl.c:51
 msgid "Russian"
-msgstr ""
+msgstr "ru¹tina"
 
 #: src/intl/gettext/libintl.c:52
 msgid "Slovak"
-msgstr ""
+msgstr "slovenèina"
 
 #: src/intl/gettext/libintl.c:53
 msgid "Spanish"
-msgstr ""
+msgstr "¹panielèina"
 
 #: src/intl/gettext/libintl.c:54
 msgid "Swedish"
-msgstr ""
+msgstr "¹védèina"
 
 #: src/intl/gettext/libintl.c:55
 msgid "Turkish"
-msgstr ""
+msgstr "tureètina"
 
 #: src/intl/gettext/libintl.c:56
 msgid "Ukrainian"
-msgstr ""
+msgstr "ukrajinèina"
 
 #: src/lowlevel/home.c:121
 #, c-format

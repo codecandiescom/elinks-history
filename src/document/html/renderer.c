@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.121 2003/06/17 11:26:18 zas Exp $ */
+/* $Id: renderer.c,v 1.122 2003/06/17 11:29:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,6 +227,8 @@ xpand_spaces(struct part *p, int l)
 static inline void
 set_hchar(struct part *part, int x, int y, unsigned c)
 {
+	assert(part && part->data);
+
 	if (xpand_lines(part, y)
 	    || xpand_line(part, y, x))
 		return;
@@ -236,6 +238,8 @@ set_hchar(struct part *part, int x, int y, unsigned c)
 static inline void
 set_hchars(struct part *part, int x, int y, int xl, unsigned c)
 {
+	assert(part && part->data);
+
 	if (xpand_lines(part, y)
 	    || xpand_line(part, y, x + xl - 1))
 		return;

@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.12 2002/12/29 13:39:35 pasky Exp $ */
+/* $Id: parser.c,v 1.13 2002/12/29 17:36:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -635,6 +635,7 @@ html_parser(struct parser_state *state, unsigned char **str, int *len)
 	while (*len) {
 		if (state_parsers[pstate->state](state, str, len) < 0)
 			return;
+		pstate = state->data; /* update to the top of the stack */
 	}
 }
 

@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.10 2003/11/29 19:09:12 jonas Exp $ */
+/* $Id: download.c,v 1.11 2003/11/29 20:39:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -302,16 +302,26 @@ refresh_file_download(struct dialog_data *dlg_data, void *data)
 	return are_there_downloads() ? REFRESH_DIALOG : REFRESH_STOP;
 }
 
+/* TODO: Make it configurable */
+#define DOWNLOAD_METER_WIDTH 15
+#define DOWNLOAD_URI_PERCENTAGE 50
+
 static void
 draw_file_download(struct listbox_item *item, struct listbox_context *context,
 		   int x, int y, int width)
 {
 	struct file_download *file_download = item->udata;
+	struct download *download = &file_download->download;
 	unsigned char *stylename;
 	struct color_pair *color;
 	unsigned char *text = file_download->url;
 	int length = strlen(text);
-	int trim = 0;
+	int trimmedlen;
+	int meter = DOWNLOAD_METER_WIDTH;
+	int temp_y;
+
+	/* We have nothing to work with */
+	if (width < 4) return;
 
 	stylename = (item == context->box->sel) ? "menu.selected"
 		  : ((item->marked)	        ? "menu.marked"
@@ -319,37 +329,39 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 
 	color = get_bfu_color(context->term, stylename);
 
-	if (length > width) {
-		trim = 1;
-		length = width - 3;
+	/* Show atleast the required percentage of the URI */
+	if (length * DOWNLOAD_URI_PERCENTAGE / 100 < width - meter - 4) {
+		trimmedlen = int_min(length, width - meter - 4);
+	} else {
+		trimmedlen = int_min(length, width - 3);
 	}
 
-	draw_text(context->term, x, y, text, length, 0, color);
-	if (trim) {
-		draw_text(context->term, x + length, y, "...", 3, 0, color);
-
-	} else if (file_download->download.prg->size >= 0
-		   && length + 4 < width) {
-		longlong pos = file_download->download.prg->pos;
-		longlong size = file_download->download.prg->size;
-		unsigned char percent[] = "XXXX%";
-		const unsigned int percent_width = sizeof(percent) - 1;
-		unsigned int percent_len = 0;
-		int progress = (int) ((longlong) 100 * pos / size);
-
-		if (ulongcat(percent, &percent_len, progress, percent_width - 1, 0) > 0)
-			memset(percent, '?', percent_len);
-
-		percent[percent_len++] = '%';
-		percent[percent_len] = '\0';
-
-		/* Draw percentage */
-		draw_text(context->term, x + length + 1, y,
-			  percent, percent_len, 0, color);
-
-		if (!dialog_has_refresh(context->dlg_data))
-			refresh_dialog(context->dlg_data, refresh_file_download, NULL);
+	draw_text(context->term, x, y, text, trimmedlen, 0, color);
+	if (trimmedlen < length) {
+		draw_text(context->term, x + trimmedlen, y, "...", 3, 0, color);
+		trimmedlen += 3;
 	}
+
+	if (download->prg->size < 0
+	    || download->state != S_TRANS
+	    || !(download->prg->elapsed / 100)) {
+		/* TODO: Show trimmed error message. */
+		return;
+	}
+
+	if (!dialog_has_refresh(context->dlg_data))
+		refresh_dialog(context->dlg_data, refresh_file_download, NULL);
+
+	if (trimmedlen + meter >= width) return;
+
+	temp_y = y - 1;
+	x += width - meter;
+
+	download_progress_bar(context->term, x, &temp_y, meter,
+			      get_bfu_color(context->term, "dialog.text"),
+			      get_bfu_color(context->term, "dialog.meter"),
+			      download->prg->pos,
+			      download->prg->size);
 }
 
 static struct listbox_ops downloads_listbox_ops = {
@@ -390,8 +402,6 @@ static INIT_LIST_HEAD(download_box_items);
  * - Resume or something that will use some goto like handler
  * - Open button that can be used to set file_download->prog.
  * - Toggle notify button
- * - Introduce listbox_ops->draw() so we can get a meter in the manager
- *   dialog ;)
  */
 static struct hierbox_browser_button download_buttons[] = {
 	{ N_("Info"),			push_info_button		},

@@ -1,3 +1,171 @@
+Fri May  9 22:06:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/.vimrc:
+
+	Added missing fairy 
+
+Fri May  9 22:04:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Generate doc/man/man1/elinks.1 with info about sysconfdir 
+
+Fri May  9 21:59:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Added man pages as EXTRA_DISTS.  
+
+Fri May  9 18:18:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/: info.c, menu.c:
+
+	Cleanup and cache info menu was re-enabled. A limit to the number of
+	printed entries was added.  
+
+Fri May  9 17:40:19 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/info.c:
+
+	snprintf() -> ulongcat().  
+
+Fri May  9 17:27:29 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	snprintf() -> ulongcat().  
+
+Fri May  9 17:19:10 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	snprintf() -> ulongcat() for terminal size in user agent string.  
+
+Fri May  9 17:11:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Another snprintf() -> ulongcat(): it concerns percentage info in the
+	download progress dialog.  
+
+Fri May  9 17:09:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	ulongcat() fix: returned length was one less than it should with
+	fillchar set.  
+
+Fri May  9 16:49:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/: string.c, string.h:
+
+	longcat() was introduced (identical to ulongcat() but accepts
+	negative numbers (as long).  
+
+Fri May  9 16:30:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: protocol/file.c, sched/session.c, util/string.c,
+	util/string.h:
+
+	ulongcat() fix (padding error) and behavior change. Now if fillchar
+	parameter is not a NUL char, then padding is done with that char,
+	one application can be seen in file.c.  
+
+Fri May  9 15:36:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	The memset() call in ulongcat() was removed, since most times we'll
+	use that function with less than 10 zero padding, gain is not
+	significant imho.  
+
+Fri May  9 15:11:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/parser.c, sched/session.c, util/string.c,
+	util/string.h:
+
+	ulongcat() function is now able to print zeros before a number
+	(00123), a macro wrapper is used to enforce correct typecasting, and
+	it now replaces more snprintf() calls.  
+
+Fri May  9 15:11:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/.vimrc:
+
+	More fairies 
+
+Fri May  9 15:03:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/README:
+
+	A few words to doc seekers ...  
+
+Fri May  9 14:23:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/: authors.xml, bookmarks.xml, configuration.xml,
+	fdl.xml, installation.xml, introduction.xml, mailcap.xml,
+	manual.xml, mime.xml, misc.xml, options-reference.xml, preface.xml,
+	revision.xml, sample-configfile.xml, style.css, wordlist.xml,
+	scripts/installcss, scripts/make-manual:
+
+	Giving doc/book/ a facelift. It will involve restructuring documents
+	and introduce them one by one later when they are actually done.
+	Hopefully it'll make it easier to get the buildsystem right.  
+
+Fri May  9 13:43:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Fixed missing typecast.  
+
+Fri May  9 13:23:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/session.c, sched/session.h, terminal/terminal.c:
+
+	decode_session_info() now actually works properly (hopefully). It
+	doesn't take len parameter but takes it from the first int in the
+	session info data (which was not anticipated before, thus the whole
+	decoding went tragical). It should fix various problems with elinks
+	<url>, opening document in a new window and so on.  
+
+Fri May  9 12:42:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: util/string.c, util/string.h, document/html/parser.c:
+
+	An sprintf(foo, "%d", bar) was replaced by an ulongcat() call.  
+
+Fri May  9 01:25:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/README:
+
+	Rewritten a bit 
+
+Fri May  9 00:57:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/VERSION:
+
+	Version will be maintained as an entity 
+
+Thu May  8 23:03:06 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: main.h, config/urlhist.c, dialogs/document.c,
+	dialogs/hierbox.c, dialogs/menu.h, document/html/renderer.c,
+	intl/charsets.c, intl/gettext/localcharset.c, lowlevel/af_unix.c,
+	lowlevel/connect.c, lowlevel/dns.c, lowlevel/home.c,
+	lowlevel/timer.c, lua/hooks.c, osdep/os_dep.c, protocol/url.c,
+	protocol/http/auth.c, protocol/http/date.c, protocol/http/http.c,
+	sched/download.c, sched/sched.c, sched/session.c, ssl/connect.c,
+	util/encoding.c, util/error.c, util/memdebug.h, util/snprintf.c,
+	viewer/text/view.c, viewer/text/view.h:
+
+	Many missing declarations + static. Big patch, sorry.  
+
+Thu May  8 22:24:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/tab.h:
+
+	win->type is enum.  
+
 Thu May  8 21:50:07 2003  Laurent Monin <zas@norz.org>:
 
 	* src/: main.c, main.h, cookies/cookies.c, cookies/cookies.h,

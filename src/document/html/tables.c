@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.316 2004/06/29 23:04:34 pasky Exp $ */
+/* $Id: tables.c,v 1.317 2004/06/29 23:08:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -218,9 +218,6 @@ get_vline_width(struct table *table, int col)
 	return width;
 }
 
-#define has_vline_width(table, col) (get_vline_width(table, col) >= 0)
-#define has_hline_width(table, row) (get_hline_width(table, row) >= 0)
-
 static int
 get_hline_width(struct table *table, int row)
 {
@@ -244,6 +241,10 @@ get_hline_width(struct table *table, int row)
 
 	return table->vcellpadding ? 0 : -1;
 }
+
+#define has_vline_width(table, col) (get_vline_width(table, col) >= 0)
+#define has_hline_width(table, row) (get_hline_width(table, row) >= 0)
+
 
 static int
 get_column_widths(struct table *table)

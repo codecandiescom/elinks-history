@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.38 2003/09/08 22:19:38 jonas Exp $ */
+/* $Id: color.c,v 1.39 2003/09/29 22:13:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,7 +167,7 @@ static struct color_level levels[] = {
 
 void
 set_term_color(struct screen_char *schar, struct color_pair *pair,
-	       enum color_type type)
+	       enum color_type type, enum color_mode mode)
 {
 	register unsigned char fg;
 	register unsigned char bg;

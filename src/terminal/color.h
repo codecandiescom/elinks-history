@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.16 2003/09/08 15:44:09 jonas Exp $ */
+/* $Id: color.h,v 1.17 2003/09/29 22:13:50 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -25,10 +25,16 @@ enum color_type {
 	COLOR_LINK,
 };
 
+enum color_mode {
+	COLOR_MODE_MONO = 0,
+	COLOR_MODE_16,
+	COLOR_MODES,
+};
+	
 /* Mixes the color pair and attributes to a terminal text color. */
 /* If @allow_dark_on_black is non zero the foreground color will be adjusted.
  * XXX: @schar may not be NULL and is modified adding stuff like boldness. */
 void set_term_color(struct screen_char *schar, struct color_pair *pair,
-		    enum color_type type);
+		    enum color_type type, enum color_mode mode);
 
 #endif

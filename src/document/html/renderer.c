@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.283 2003/09/28 23:32:30 jonas Exp $ */
+/* $Id: renderer.c,v 1.284 2003/09/29 22:13:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,7 +136,7 @@ realloc_line(struct document *document, int y, int x)
 	 * other members. */
 	end = &line->d[x];
 	end->data = ' ';
-	set_term_color(end, &colors, COLOR_DEFAULT);
+	set_term_color(end, &colors, COLOR_DEFAULT, document->opt.col);
 
 	for (pos = &line->d[line->l]; pos < end; pos++) {
 		copy_screen_chars(pos, end, 1);
@@ -202,7 +202,8 @@ set_hchars(struct part *part, int x, int y, int xl,
 
 		template->data = data;
 		template->attr = attr;
-		set_term_color(template, &colors, COLOR_DEFAULT);
+		set_term_color(template, &colors, COLOR_DEFAULT,
+			       part->document->opt.col);
 
 		for (xl -= 1, x += 1; xl; xl--, x++) {
 			copy_screen_chars(&POS(x, y), template, 1);
@@ -242,7 +243,8 @@ xset_vchars(struct part *part, int x, int y, int yl, unsigned char data)
 			template = &POS(x, y);
 			template->data = data;
 			template->attr = SCREEN_ATTR_FRAME;
-			set_term_color(template, &colors, COLOR_DEFAULT);
+			set_term_color(template, &colors, COLOR_DEFAULT,
+				       part->document->opt.col);
 		}
 	}
 }
@@ -276,7 +278,8 @@ get_format_screen_char(struct part *part)
 		}
 
 		memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
-		set_term_color(&schar_cache, &colors, COLOR_DEFAULT);
+		set_term_color(&schar_cache, &colors, COLOR_DEFAULT,
+			       part->document ? part->document->opt.col : 0);
 
 		if (d_opt->display_subs) {
 			static int sub = 0;
@@ -1719,7 +1722,7 @@ html_interpret(struct session *ses)
 	/* XXX: Sets 0.yw and 0.xw so keep after init_document_options(). */
 	init_bars_status(ses, NULL, &o);
 
-	o.col = get_opt_bool_tree(ses->tab->term->spec, "colors");
+	o.col = get_opt_int_tree(ses->tab->term->spec, "colors");
 	o.cp = get_opt_int_tree(ses->tab->term->spec, "charset");
 
 	if (l) {

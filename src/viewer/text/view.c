@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.41 2003/05/03 02:18:13 pasky Exp $ */
+/* $Id: view.c,v 1.42 2003/05/03 02:43:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3442,7 +3442,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 			if (c)
 				add_to_menu(&mi, N_("Open in new ~window"),
-					     c - 1 ? M_SUBMENU : "",
+					     c - 1 ? M_SUBMENU : (unsigned char *) "",
 					     MENU_FUNC open_in_new_window,
 					     send_open_in_new_xterm, c - 1);
 
@@ -3475,7 +3475,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 			if (c && link->form->method == FM_GET)
 				add_to_menu(&mi, N_("Submit form and open in new ~window"),
-					    c - 1 ? M_SUBMENU : "",
+					    c - 1 ? M_SUBMENU : (unsigned char *) "",
 					    MENU_FUNC open_in_new_window,
 					    send_open_in_new_xterm, c - 1);
 

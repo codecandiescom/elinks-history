@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.58 2003/07/04 12:58:16 jonas Exp $ */
+/* $Id: connection.c,v 1.59 2003/07/04 13:14:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -411,7 +411,7 @@ close:
 }
 
 static inline void
-del_keepalive_socket(struct keepalive_connection *kc)
+done_keepalive_connection(struct keepalive_connection *kc)
 {
 	del_from_list(kc);
 	close(kc->conn);
@@ -441,7 +441,7 @@ check_keepalive_connections(void)
 	foreach (kc, keepalive_connections) {
 		if (can_read(kc->conn) || ct - kc->add_time > kc->timeout) {
 			kc = kc->prev;
-			del_keepalive_socket(kc->next);
+			done_keepalive_connection(kc->next);
 		} else {
 			p++;
 		}
@@ -449,7 +449,7 @@ check_keepalive_connections(void)
 
 	for (; p > MAX_KEEPALIVE_CONNECTIONS; p--) {
 		assert(!list_empty(keepalive_connections));
-		del_keepalive_socket(keepalive_connections.prev);
+		done_keepalive_connection(keepalive_connections.prev);
 	}
 
 	if (!list_empty(keepalive_connections))
@@ -460,13 +460,9 @@ check_keepalive_connections(void)
 static inline void
 abort_all_keepalive_connections(void)
 {
-	struct keepalive_connection *k;
+	while (!list_empty(keepalive_connections))
+		done_keepalive_connection(keepalive_connections.next);
 
-	foreach (k, keepalive_connections) {
-		mem_free(k->host);
-		close(k->conn);
-	}
-	free_list(keepalive_connections);
 	check_keepalive_connections();
 }
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.35 2002/07/05 17:24:31 zas Exp $ */
+/* $Id: renderer.c,v 1.36 2002/07/23 12:58:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -942,7 +942,7 @@ x:;
 
 		if (!(format.link || format.image || format.form)) goto no_l;
 
-		if (d_opt->num_links) {
+		if (d_opt->num_links_display) {
 			unsigned char s[64];
 			unsigned char *fl = format.link;
 			unsigned char *ft = format.target;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.63 2002/07/11 21:12:14 pasky Exp $ */
+/* $Id: view.c,v 1.64 2002/07/23 12:58:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2229,7 +2229,7 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 
 	if (ev->ev == EV_KBD) {
 		if (ev->x >= '0' + !ses->kbdprefix.rep && ev->x <= '9'
-		    && (!fd->f_data->opt.num_links || ev->y)) {
+		    && (!fd->f_data->opt.num_links_key || ev->y)) {
 			/* Repeat count */
 
 			if (!ses->kbdprefix.rep)

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.4 2002/07/05 17:24:31 zas Exp $ */
+/* $Id: options.h,v 1.5 2002/07/23 12:58:12 zas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -14,7 +14,9 @@ struct document_options {
 	/* if you add anything, fix it in compare_opt */
 	int tables, frames, images, margin;
 	int plain;
-	int num_links, table_order;
+	int num_links_display;
+	int num_links_key;
+	int table_order;
 	struct rgb default_fg;
 	struct rgb default_bg;
 	struct rgb default_link;

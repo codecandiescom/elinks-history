@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.74 2002/07/23 12:30:28 zas Exp $ */
+/* $Id: options.c,v 1.75 2002/07/23 12:58:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -560,6 +560,10 @@ register_options()
 		"numbering", 0, 0,
 		"Display links numbered.");
 
+	add_opt_bool("document.browse.links",
+		"number_keys_select_link", 0, 0,
+		"Number keys select links rather than specify command prefixes.");
+	
 	/* TODO - this is somehow implemented by ff, but disabled
 	 * for now as it doesn't work. */
 	add_opt_bool("document.browse.links",

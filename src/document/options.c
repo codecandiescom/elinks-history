@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.7 2002/07/05 17:24:31 zas Exp $ */
+/* $Id: options.c,v 1.8 2002/07/23 12:58:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,8 @@ mk_document_options(struct document_options *doo)
 	doo->frames = get_opt_int("document.html.display_frames");
 	doo->images = get_opt_int("document.browse.images.show_as_links");
 	doo->margin = get_opt_int("document.browse.margin_width");
-	doo->num_links = get_opt_int("document.browse.links.numbering");
+	doo->num_links_display = get_opt_int("document.browse.links.numbering");
+	doo->num_links_key = get_opt_int("document.browse.links.number_keys_select_link");
 	doo->table_order = get_opt_int("document.browse.table_move_order");
 }
 
@@ -55,7 +56,7 @@ compare_opt(struct document_options *o1, struct document_options *o2)
 	    !memcmp(&o1->default_bg, &o2->default_bg, sizeof(struct rgb)) &&
 	    !memcmp(&o1->default_link, &o2->default_link, sizeof(struct rgb)) &&
 	    !memcmp(&o1->default_vlink, &o2->default_vlink, sizeof(struct rgb)) &&
-	    o1->num_links == o2->num_links &&
+	    o1->num_links_display == o2->num_links_display &&
 	    o1->table_order == o2->table_order &&
 	    !strcasecmp(o1->framename, o2->framename)) return 0;
 	return 1;

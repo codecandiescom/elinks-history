@@ -1,3 +1,25 @@
+Sun May 26 18:59:16 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: conf.c, opttypes.c:
+
+	Do not save aliases.  
+
+Sun May 26 18:54:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, config/cmdline.c, config/options.c,
+	config/urlhist.c, dialogs/menu.c, document/download.c,
+	document/dump.c, document/view.c, protocol/file.c:
+
+	Divided options tree to root_options and cmdline_options.  
+
+Sun May 26 17:56:21 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: cmdline.c, conf.c, options.c, options.h, opttypes.c:
+
+	Removed OPT_CFGFILE and OPT_CMDLINE flags. Introduced OPT_HIDDEN and
+	OPT_AUTOCREATE flags (unimplemented yet). Preparations for
+	commandline options in separate tree. Introduced OPT_ALIAS type.  
+
 Sat May 25 22:55:49 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/config/opttypes.c:

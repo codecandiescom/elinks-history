@@ -516,7 +516,7 @@ msgstr ""
 
 #: src/config/cmdline.c:441
 msgid "Name of directory with configuration file"
-msgstr ""
+msgstr "Nome della directori con il file di configurazione"
 
 #: src/config/cmdline.c:443
 #, fuzzy
@@ -532,7 +532,6 @@ msgstr ""
 "si assume essere relativo alla propria HOME directory."
 
 #: src/config/cmdline.c:448
-#, fuzzy
 msgid "Name of configuration file"
 msgstr "Nome del file di configurazione"
 
@@ -821,8 +820,8 @@ msgid ""
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
 "## Ovviamente, se non ti piace quello che ELinks farà di questo file,\n"
-"## puoi cambiare il comportamento modificando l'opzione config."
-"saving_style.\n"
+"## puoi cambiare il comportamento modificando l'opzione "
+"config.saving_style.\n"
 "## Dai, siamo dei bravi ragazzi dopo tutto.\n"
 
 #: src/config/conf.c:648
@@ -1015,8 +1014,8 @@ msgstr ""
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
-"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap \"%"
-"s\")?"
+"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap "
+"\"%s\")?"
 
 #: src/config/dialogs.c:634 src/dialogs/info.c:126 src/globhist/dialogs.c:188
 msgid "Toggle display"
@@ -1039,9 +1038,8 @@ msgid "Menu mapping"
 msgstr "Associazione nel menu"
 
 #: src/config/kbdbind.c:392
-#, fuzzy
 msgid "Do nothing"
-msgstr "Scaricamento"
+msgstr "Non fare niente"
 
 #: src/config/kbdbind.c:393
 msgid "Abort connection"
@@ -1076,9 +1074,8 @@ msgid "Delete character in front of the cursor"
 msgstr "Cancella il carattere prima del cursore"
 
 #: src/config/kbdbind.c:401
-#, fuzzy
 msgid "Go to the first line of the buffer"
-msgstr "Vai alla prima riga del buffer."
+msgstr "Vai alla prima riga del buffer"
 
 #: src/config/kbdbind.c:402
 msgid "Open bookmark manager"
@@ -1146,9 +1143,8 @@ msgid "Go to the end of the page/line"
 msgstr "Vai alla fine della pagina/riga"
 
 #: src/config/kbdbind.c:418
-#, fuzzy
 msgid "Go to the last line of the buffer"
-msgstr "Vai all'ultima riga del buffer."
+msgstr "Vai all'ultima riga del buffer"
 
 #: src/config/kbdbind.c:419
 msgid "Follow the current link"
@@ -2988,8 +2984,8 @@ msgid ""
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 "Gestore (programma esterno) per questo protocollo. Chiama\n"
-"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, unix-"
-"xwin)."
+"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, "
+"unix-xwin)."
 
 #: src/config/options.inc:803
 msgid ""
@@ -4101,7 +4097,7 @@ msgid "Copying"
 msgstr "Licenza"
 
 #: src/dialogs/info.c:134
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "ELinks %s\n"
 "\n"
@@ -4119,8 +4115,7 @@ msgstr ""
 "\n"
 "Questo programma è software libero; lo puoi ridistribuire e/o modificare nei "
 "termini della GNU General Public License come pubblicato dalla Free Software "
-"Foundation; sia la versione 2 della Licenza, o (a tua scelta) ogni altra "
-"versione successiva."
+"Foundation; sia la versione 2 della Licenza."
 
 #: src/dialogs/info.c:152
 #, c-format
@@ -4600,8 +4595,8 @@ msgstr "Form non salvato"
 #: src/formhist/dialogs.c:128
 msgid ""
 "No saved information for this URL.\n"
-"If you want to save passwords for this URL, enable it by the \"Toggle saving"
-"\" button."
+"If you want to save passwords for this URL, enable it by the \"Toggle "
+"saving\" button."
 msgstr ""
 "Non ci sono informazioni salvate per questo URL.\n"
 "Se desideri salvare le password per questo URL, abilitale tramite il "
@@ -4934,8 +4929,8 @@ msgstr ""
 "Associazione Gestore <-> tipo MIME. Il primo sotto albero è la\n"
 "classe MIME, mentre il secondo sotto albero è il tipo MIME (il\n"
 "gestore di image/gif risiedera in mime.type.image.gif). Ogni opzione\n"
-"del tipo MIME dovrebbe contenere il nome (considerando le maiuscole/"
-"minuscole)\n"
+"del tipo MIME dovrebbe contenere il nome (considerando le "
+"maiuscole/minuscole)\n"
 "del gestore MIME (le sue proprietà sono memorizzate in mime.handler.<nome>)."
 
 #: src/mime/backend/default.c:35
@@ -5087,8 +5082,8 @@ msgid ""
 "also be checked before deciding the handler."
 msgstr ""
 "Dà priorità alle voci per l'ordine dei file nel percorso di\n"
-"mailcap. Questo significa che anche le voci con metacaratteri (come image/"
-"*)\n"
+"mailcap. Questo significa che anche le voci con metacaratteri (come "
+"image/*)\n"
 "saranno controllate prima di decidere il gestore."
 
 #: src/mime/backend/mailcap.c:130
@@ -5630,9 +5625,9 @@ msgid ""
 "saved to the configuration file, instead of just all the options. This "
 "simplifies our situation greatly when we see that some option has "
 "inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of config."
-"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
-"for any inconvience caused."
+"a subtle way. Thus, we recommend you to change the value of "
+"config.saving_style option to 3 in order to get the \"right\" behaviour. "
+"Apologies for any inconvience caused."
 msgstr ""
 "Hai l'opzione config.saving_style impostata a un valore obsoleto. Gli "
 "algoritmi di salvataggio della configurazione di ELinks sono stati cambiati "
@@ -5640,9 +5635,9 @@ msgstr ""
 "sono salvate nel file di configurazione, invece di tutte quante. Questo "
 "semplifica molto la situazione quando vediamo che delle opzioni hanno un "
 "valore predefinito inappropriato o abbiamo bisogno di cambiarne la "
-"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione config."
-"saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le mie "
-"scuse per qualsiasi inconveniente causato."
+"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione "
+"config.saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le "
+"mie scuse per qualsiasi inconveniente causato."
 
 #: src/sched/session.c:929
 msgid ""

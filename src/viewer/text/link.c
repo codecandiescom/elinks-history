@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.175 2004/05/25 00:16:40 jonas Exp $ */
+/* $Id: link.c,v 1.176 2004/05/25 00:19:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -495,25 +495,25 @@ get_link_uri(struct session *ses, struct document_view *doc_view,
 
 /* This is common backend for submit_form_do() and enter(). */
 int
-goto_link(unsigned char *url, unsigned char *target, struct session *ses,
+goto_link(struct uri *uri, unsigned char *target, struct session *ses,
 	  int do_reload, int is_map)
 {
-	assert(url && ses);
+	assert(uri && ses);
 	if_assert_failed return 1;
 
 	if (is_map) {
 		/* TODO: Test reload? */
-		unsigned char *s = stracpy(url);
+		unsigned char *s = stracpy(struri(uri));
 
 		if (!s) return 1;
 
-		goto_imgmap(ses, url, s, null_or_stracpy(target));
+		goto_imgmap(ses, struri(uri), s, null_or_stracpy(target));
 
 	} else {
 		if (do_reload) {
-			goto_url_frame_reload(ses, url, target);
+			goto_url_frame_reload(ses, struri(uri), target);
 		} else {
-			goto_url_frame(ses, url, target);
+			goto_url_frame(ses, struri(uri), target);
 		}
 	}
 
@@ -542,7 +542,7 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 		int is_map = link->type == LINK_MAP;
 
 		if (uri) {
-			int retval = goto_link(struri(uri), link->target, ses, a, is_map);
+			int retval = goto_link(uri, link->target, ses, a, is_map);
 
 			done_uri(uri);
 			return retval;

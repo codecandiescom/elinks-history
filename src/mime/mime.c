@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.42 2004/03/22 14:35:39 jonas Exp $ */
+/* $Id: mime.c,v 1.43 2004/04/02 17:17:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ check_encoding_type(unsigned char *extension)
 
 #ifdef DEBUG_CONTENT_TYPE
 #define debug_get_content_type_params(head__, url__) \
-	DBG("get_content_type(head, url)\n=== head ===\n%s\n=== url ===\n%s\n", head__, url__)
+	DBG("get_content_type(head, url)\n=== head ===\n%s\n=== url ===\n%s\n", head__, struri(url__))
 #define debug_ctype(ctype__) DBG("ctype= %s", (ctype__))
 #define debug_extension(extension__) DBG("extension= %s", (extension__))
 #else
@@ -117,11 +117,11 @@ check_encoding_type(unsigned char *extension)
 #endif
 
 unsigned char *
-get_content_type(unsigned char *head, unsigned char *url)
+get_content_type(unsigned char *head, struct uri *uri)
 {
 	unsigned char *extension, *ctype;
 
-	debug_get_content_type_params(head, url);
+	debug_get_content_type_params(head, uri);
 
 	/* If there's one in header, it's simple.. */
 	if (head) {
@@ -146,7 +146,7 @@ get_content_type(unsigned char *head, unsigned char *url)
 	 * want to support also things like "ps.gz" - that'd never work, as we
 	 * would always compare only to "gz". */
 	/* Guess type accordingly to the extension */
-	extension = get_extension_from_url(url);
+	extension = uri ? get_extension_from_url(struri(uri)) : NULL;
 	debug_extension(extension);
 	if (extension) {
 

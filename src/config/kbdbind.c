@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.207 2004/05/06 22:06:30 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.208 2004/05/23 15:43:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,7 +112,13 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 	kb->box_item->root = box_item;
 	init_list(kb->box_item->child);
 	kb->box_item->visible = 1;
+#if 0
+	/* This is not the right way to do it. Trying to translating stuff like
+	 * 'k', ':' or 'Ctrl-Delete' makes no sense. The only thing it will
+	 * translate is string like 'Delete' already used in other parts of
+	 * ELinks. Question is should we translate Insert etc? --jonas */
 	kb->box_item->translated = 1;
+#endif
 	kb->box_item->udata = kb;
 	kb->box_item->type = BI_LEAF;
 	kb->box_item->depth = box_item->depth + 1;

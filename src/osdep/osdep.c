@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.101 2003/10/27 01:30:01 pasky Exp $ */
+/* $Id: osdep.c,v 1.102 2003/10/27 01:33:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,7 +103,7 @@ set_blocking_fd(int fd)
 #endif
 }
 
-static int
+int
 get_e(unsigned char *env)
 {
 	char *v = getenv(env);

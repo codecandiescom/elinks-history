@@ -1,4 +1,4 @@
-/* $Id: os_dep.h,v 1.21 2003/10/27 01:17:08 pasky Exp $ */
+/* $Id: os_dep.h,v 1.22 2003/10/27 01:33:35 pasky Exp $ */
 
 #ifndef EL__OSDEP_OS_DEP_H
 #define EL__OSDEP_OS_DEP_H
@@ -173,6 +173,7 @@ struct open_in_new {
 };
 
 int get_system_env(void);
+int get_e(unsigned char *env);
 int is_xterm(void);
 int is_twterm(void);
 int get_terminal_size(int, int *, int *);

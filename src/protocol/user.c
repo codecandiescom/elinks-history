@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.8 2002/12/01 17:28:53 pasky Exp $ */
+/* $Id: user.c,v 1.9 2002/12/01 17:42:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,8 +100,7 @@ user_func(struct session *ses, unsigned char *url)
 	/* I know this may be NULL and I don't care. --pasky */
 	proto = get_protocol_name(url);
 
-	/* FIXME: We have port in here as well! Is that *BAD*? --pasky */
-	host = get_host_and_pass(url);
+	host = get_host_and_pass(url, 0);
 	if (!host) {
 		if (proto) mem_free(proto);
 		msg_box(ses->term, NULL,

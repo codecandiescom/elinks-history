@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.39 2002/12/01 17:28:53 pasky Exp $ */
+/* $Id: url.c,v 1.40 2002/12/01 17:42:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -263,7 +263,7 @@ get_protocol_name(unsigned char *url)
 
 
 unsigned char *
-get_host_and_pass(unsigned char *url)
+get_host_and_pass(unsigned char *url, int include_port)
 {
 	unsigned char *user, *host, *port, *start, *end;
 	int hostlen, portlen;
@@ -277,7 +277,7 @@ get_host_and_pass(unsigned char *url)
 		      NULL)) return NULL;
 	
 	start = user ? user : host;
-	end = port ? port + portlen : host + hostlen;
+	end = (port && include_port) ? port + portlen : host + hostlen;
 	return memacpy(start, end - start);
 }
 

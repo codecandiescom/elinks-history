@@ -1,4 +1,4 @@
-/* $Id: url.h,v 1.7 2002/08/06 10:07:19 pasky Exp $ */
+/* $Id: url.h,v 1.8 2002/12/01 17:42:59 pasky Exp $ */
 
 #ifndef EL__URL_H
 #define EL__URL_H
@@ -18,7 +18,7 @@ int parse_url(unsigned char *, int *, unsigned char **, int *, unsigned char **,
 
 unsigned char *get_protocol_name(unsigned char *);
 unsigned char *get_host_name(unsigned char *);
-unsigned char *get_host_and_pass(unsigned char *);
+unsigned char *get_host_and_pass(unsigned char *, int);
 unsigned char *get_user_name(unsigned char *);
 unsigned char *get_pass(unsigned char *);
 unsigned char *get_port_str(unsigned char *);

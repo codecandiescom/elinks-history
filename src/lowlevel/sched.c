@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.54 2002/12/01 14:39:42 zas Exp $ */
+/* $Id: sched.c,v 1.55 2002/12/01 17:42:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -276,7 +276,7 @@ is_host_on_keepalive_list(struct connection *c)
 	po = get_port(c->url);
 	if (po == -1) return NULL;
 	
-	ho = get_host_and_pass(c->url);
+	ho = get_host_and_pass(c->url, 1);
 	if (!ho) return NULL;
 
 	foreach(h, keepalive_connections)
@@ -421,7 +421,7 @@ add_keepalive_socket(struct connection *c, ttime timeout)
 	k->protocol = get_protocol_handle(c->url);
 	if (!k->protocol) goto free_and_close;
 
-	k->host = get_host_and_pass(c->url);
+	k->host = get_host_and_pass(c->url, 1);
 	if (!k->host) {
 
 free_and_close:

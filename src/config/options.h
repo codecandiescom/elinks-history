@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.103 2004/06/17 10:02:20 zas Exp $ */
+/* $Id: options.h,v 1.104 2004/06/24 06:35:32 miciah Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -167,6 +167,10 @@ struct option_resolver {
 	int id;
 	unsigned char *name;
 };
+
+/* Update the visibility of the box item of each option
+ * in config_options to honour the value of config.show_template. */
+void update_options_visibility(void);
 
 extern int commit_option_values(struct option_resolver *resolvers,
 				struct option *root,

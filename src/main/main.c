@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.216 2004/06/22 06:46:15 miciah Exp $ */
+/* $Id: main.c,v 1.217 2004/06/24 06:35:32 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,6 +146,7 @@ init(void)
 	    || (fd = af_unix_open()) == -1) {
 
 		load_config();
+		update_options_visibility();
 		/* Parse commandline options again, in order to override any
 		 * config file options. */
 		parse_options(ac - 1, av + 1, NULL);

@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.11 2004/06/29 02:46:15 jonas Exp $ */
+/* $Id: table.c,v 1.12 2004/06/29 03:23:55 jonas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -75,6 +75,62 @@ get_bordercolor(unsigned char *a, color_t *rgb)
 
 	return r;
 }
+
+static void
+get_align(unsigned char *attr, int *a)
+{
+	unsigned char *al = get_attr_val(attr, "align");
+
+	if (al) {
+		if (!(strcasecmp(al, "left"))) *a = ALIGN_LEFT;
+		else if (!(strcasecmp(al, "right"))) *a = ALIGN_RIGHT;
+		else if (!(strcasecmp(al, "center"))) *a = ALIGN_CENTER;
+		else if (!(strcasecmp(al, "justify"))) *a = ALIGN_JUSTIFY;
+		else if (!(strcasecmp(al, "char"))) *a = ALIGN_RIGHT; /* NOT IMPLEMENTED */
+		mem_free(al);
+	}
+}
+
+static void
+get_valign(unsigned char *attr, int *a)
+{
+	unsigned char *al = get_attr_val(attr, "valign");
+
+	if (al) {
+		if (!(strcasecmp(al, "top"))) *a = VALIGN_TOP;
+		else if (!(strcasecmp(al, "middle"))) *a = VALIGN_MIDDLE;
+		else if (!(strcasecmp(al, "bottom"))) *a = VALIGN_BOTTOM;
+		else if (!(strcasecmp(al, "baseline"))) *a = VALIGN_BASELINE; /* NOT IMPLEMENTED */
+		mem_free(al);
+	}
+}
+
+static void
+get_column_width(unsigned char *attr, int *width, int sh)
+{
+	unsigned char *al = get_attr_val(attr, "width");
+	int len;
+
+	if (!al) return;
+
+	len = strlen(al);
+	if (len && al[len - 1] == '*') {
+		unsigned char *en;
+		int n;
+
+		al[len - 1] = '\0';
+		errno = 0;
+		n = strtoul(al, (char **) &en, 10);
+		if (!errno && n >= 0 && !*en)
+			*width = WIDTH_RELATIVE - n;
+	} else {
+		int w = get_width(attr, "width", sh);
+
+		if (w >= 0) *width = w;
+	}
+	mem_free(al);
+}
+
 
 static void
 parse_table_attributes(struct table *table, unsigned char *attr, int real)
@@ -153,64 +209,8 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real)
 		else if (!strcasecmp(al, "all")) table->rules = TABLE_RULE_ALL;
 		mem_free(al);
 	}
-
 }
 
-
-static void
-get_align(unsigned char *attr, int *a)
-{
-	unsigned char *al = get_attr_val(attr, "align");
-
-	if (al) {
-		if (!(strcasecmp(al, "left"))) *a = ALIGN_LEFT;
-		else if (!(strcasecmp(al, "right"))) *a = ALIGN_RIGHT;
-		else if (!(strcasecmp(al, "center"))) *a = ALIGN_CENTER;
-		else if (!(strcasecmp(al, "justify"))) *a = ALIGN_JUSTIFY;
-		else if (!(strcasecmp(al, "char"))) *a = ALIGN_RIGHT; /* NOT IMPLEMENTED */
-		mem_free(al);
-	}
-}
-
-static void
-get_valign(unsigned char *attr, int *a)
-{
-	unsigned char *al = get_attr_val(attr, "valign");
-
-	if (al) {
-		if (!(strcasecmp(al, "top"))) *a = VALIGN_TOP;
-		else if (!(strcasecmp(al, "middle"))) *a = VALIGN_MIDDLE;
-		else if (!(strcasecmp(al, "bottom"))) *a = VALIGN_BOTTOM;
-		else if (!(strcasecmp(al, "baseline"))) *a = VALIGN_BASELINE; /* NOT IMPLEMENTED */
-		mem_free(al);
-	}
-}
-
-static void
-get_column_width(unsigned char *attr, int *width, int sh)
-{
-	unsigned char *al = get_attr_val(attr, "width");
-	int len;
-
-	if (!al) return;
-
-	len = strlen(al);
-	if (len && al[len - 1] == '*') {
-		unsigned char *en;
-		int n;
-
-		al[len - 1] = '\0';
-		errno = 0;
-		n = strtoul(al, (char **) &en, 10);
-		if (!errno && n >= 0 && !*en)
-			*width = WIDTH_RELATIVE - n;
-	} else {
-		int w = get_width(attr, "width", sh);
-
-		if (w >= 0) *width = w;
-	}
-	mem_free(al);
-}
 
 static struct table *
 new_table(void)

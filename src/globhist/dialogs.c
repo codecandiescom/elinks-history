@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.59 2003/11/08 05:23:39 miciah Exp $ */
+/* $Id: dialogs.c,v 1.60 2003/11/08 21:25:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,7 @@ update_all_history_dialogs(void)
 
 	foreach (item, history_dialog_list) {
 		struct widget_data *widget_data =
-			&(item->dlg_data->widgets_data[HISTORY_WIDGETS_COUNT]);
+			item->dlg_data->widgets_data;
 
 		display_dlg_item(item->dlg_data, widget_data, 1);
 	}
@@ -85,11 +85,8 @@ history_dialog_box_build(void)
 static void
 history_dialog_abort_handler(struct dialog_data *dlg_data)
 {
-	struct listbox_data *box;
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct history_dialog_list_item *item;
-	struct widget *widget = &(dlg_data->dlg->widgets[HISTORY_WIDGETS_COUNT]);
-
-	box = (struct listbox_data *) widget->data;
 
 	foreach (item, history_dialog_list) {
 		if (item->dlg_data == dlg_data) {
@@ -110,9 +107,10 @@ history_dialog_event_handler(struct dialog_data *dlg_data,
 	switch (ev->ev) {
 		case EV_KBD:
 		{
-			struct widget_data *widget_data = &(dlg_data->widgets_data[HISTORY_WIDGETS_COUNT]);
-			struct widget *widget = widget_data->widget;
+			struct widget_data *widget_data = dlg_data->widgets_data;
+			struct widget *widget = dlg_data->dlg->widgets;
 
+			assert(widget->type == WIDGET_LISTBOX);
 			if (widget->ops->kbd)
 				return widget->ops->kbd(widget_data, dlg_data, ev);
 			break;
@@ -213,11 +211,8 @@ push_toggle_display_button(struct dialog_data *dlg_data, struct widget_data *wid
 static int
 push_goto_button(struct dialog_data *dlg_data, struct widget_data *goto_btn)
 {
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct global_history_item *historyitem;
-	struct listbox_data *box;
-	struct widget *widget = &(dlg_data->dlg->widgets[HISTORY_WIDGETS_COUNT]);
-
-	box = (struct listbox_data *) widget->data;
 
 	/* Follow the history item */
 	if (box->sel) {
@@ -355,11 +350,9 @@ static int
 push_delete_button(struct dialog_data *dlg_data,
 		   struct widget_data *some_useless_delete_button)
 {
-	struct listbox_data *box;
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct terminal *term = dlg_data->win->term;
-	struct widget *widget = &(dlg_data->dlg->widgets[HISTORY_WIDGETS_COUNT]);
 
-	box = (struct listbox_data *) widget->data;
 	listbox_delete_historyitem(term, box);
 	return 0;
 }
@@ -380,11 +373,8 @@ static int
 push_clear_button(struct dialog_data *dlg_data,
 		  struct widget_data *some_useless_clear_button)
 {
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct terminal *term = dlg_data->win->term;
-	struct listbox_data *box;
-	struct widget *widget = &(dlg_data->dlg->widgets[HISTORY_WIDGETS_COUNT]);
-
-	box = (struct listbox_data *) widget->data;
 
 	msg_box(term, NULL, 0,
 		N_("Clear global history"), AL_CENTER,
@@ -409,12 +399,9 @@ static int
 push_info_button(struct dialog_data *dlg_data,
 		  struct widget_data *some_useless_info_button)
 {
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct terminal *term = dlg_data->win->term;
 	struct global_history_item *historyitem;
-	struct listbox_data *box;
-	struct widget *widget = &(dlg_data->dlg->widgets[HISTORY_WIDGETS_COUNT]);
-
-	box = (struct listbox_data *) widget->data;
 
 	/* Show history item info */
 	if (!box->sel) return 0;
@@ -441,12 +428,9 @@ static int
 push_bookmark_button(struct dialog_data *dlg_data,
 		     struct widget_data *some_useless_info_button)
 {
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct terminal *term = dlg_data->win->term;
 	struct global_history_item *historyitem;
-	struct listbox_data *box;
-	struct widget *widget = &(dlg_data->dlg->widgets[HISTORY_WIDGETS_COUNT]);
-
-	box = (struct listbox_data *) widget->data;
 
 	if (!box->sel) return 0;
 
@@ -495,6 +479,8 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->abort = history_dialog_abort_handler;
 	dlg->udata = ses;
 
+	add_dlg_listbox(dlg, 12, history_dialog_box_build());
+
 	add_dlg_button(dlg, B_ENTER, push_goto_button, _("Goto", term), ses);
 	add_dlg_button(dlg, B_ENTER, push_info_button, _("Info", term), NULL);
 #ifdef BOOKMARKS
@@ -505,8 +491,6 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	add_dlg_button(dlg, B_ENTER, push_toggle_display_button, _("Toggle display", term), NULL);
 	add_dlg_button(dlg, B_ENTER, push_clear_button, _("Clear", term), NULL);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
-
-	add_dlg_listbox(dlg, 12, history_dialog_box_build());
 
 	add_dlg_end(dlg, HISTORY_WIDGETS_COUNT + 1);
 

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.42 2003/11/07 13:33:46 jonas Exp $ */
+/* $Id: hierbox.c,v 1.43 2003/11/08 21:25:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,15 +50,14 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 	switch (ev->ev) {
 		case EV_KBD:
 		{
-			int n = dlg_data->n - 1;
 			struct listbox_data *box;
 
-                        if (dlg_data->widgets_data[n].widget->ops->kbd
-			    && dlg_data->widgets_data[n].widget->ops->kbd(&dlg_data->widgets_data[n], dlg_data, ev)
+                        if (dlg_data->widgets_data->widget->ops->kbd
+			    && dlg_data->widgets_data->widget->ops->kbd(dlg_data->widgets_data, dlg_data, ev)
 			       == EVENT_PROCESSED)
 				return EVENT_PROCESSED;
 
-			box = (struct listbox_data *) dlg_data->widgets_data[n].widget->data;
+			box = get_dlg_listbox_data(dlg_data);
 
 			if (ev->x == ' ') {
 				if (box->sel) {
@@ -83,7 +82,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 									test_search,
 									&ctx);
 							box_sel_move(
-								&dlg_data->widgets_data[n],
+								dlg_data->widgets_data,
 								ctx.offset);
 						}
 					} else {
@@ -110,7 +109,7 @@ display_dlg:
 			/* FIXME - move from here to bookmarks/dialogs.c! */
 			bookmarks_dirty = 1;
 #endif
-			display_dlg_item(dlg_data, &dlg_data->widgets_data[n], 1);
+			display_dlg_item(dlg_data, dlg_data->widgets_data, 1);
 
 			return EVENT_PROCESSED;
 		}
@@ -143,10 +142,10 @@ hierbox_browser_layouter(struct dialog_data *dlg_data)
 	/* Find dimensions of dialog */
 
 	y += 1;	/* Blankline between top and top of box */
-	dlg_format_box(term, &dlg_data->widgets_data[n], dlg_data->x + DIALOG_LB,
+	dlg_format_box(term, dlg_data->widgets_data, dlg_data->x + DIALOG_LB,
 		       &y, w, NULL, AL_LEFT);
 	y += 1;	/* Blankline between box and menu */
-	dlg_format_buttons(NULL, dlg_data->widgets_data, n, 0,
+	dlg_format_buttons(NULL, dlg_data->widgets_data + 1, n, 0,
 			   &y, w, &rw, AL_CENTER);
 	w = rw;
 
@@ -154,9 +153,9 @@ hierbox_browser_layouter(struct dialog_data *dlg_data)
 
 	y = dlg_data->y + DIALOG_TB;
 	y++;
-	dlg_format_box(term, &dlg_data->widgets_data[n], dlg_data->x + DIALOG_LB,
+	dlg_format_box(term, dlg_data->widgets_data, dlg_data->x + DIALOG_LB,
 		       &y, w, NULL, AL_LEFT);
 	y++;
-	dlg_format_buttons(term, &dlg_data->widgets_data[0], n,
+	dlg_format_buttons(term, dlg_data->widgets_data + 1, n,
 			   dlg_data->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
 }

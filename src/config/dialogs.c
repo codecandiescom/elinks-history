@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.106 2003/11/08 00:13:01 jonas Exp $ */
+/* $Id: dialogs.c,v 1.107 2003/11/08 21:25:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,9 +75,7 @@ option_dlg_box_build(void)
 static void
 option_dialog_abort_handler(struct dialog_data *dlg_data)
 {
-	struct listbox_data *box;
-
-	box = (struct listbox_data *) dlg_data->dlg->widgets[OP_WIDGETS_COUNT].data;
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 
 	del_from_list(box);
 	/* Delete the box structure */
@@ -99,10 +97,8 @@ push_info_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
 	struct terminal *term = dlg_data->win->term;
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct option *option;
-	struct listbox_data *box;
-
-	box = (struct listbox_data *) dlg_data->dlg->widgets[OP_WIDGETS_COUNT].data;
 
 	/* Show history item info */
 	if (!box->sel || !box->sel->udata) return 0;
@@ -303,10 +299,8 @@ push_edit_button(struct dialog_data *dlg_data,
 		 struct widget_data *some_useless_info_button)
 {
 	struct terminal *term = dlg_data->win->term;
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct option *option;
-	struct listbox_data *box;
-
-	box = (struct listbox_data *) dlg_data->dlg->widgets[OP_WIDGETS_COUNT].data;
 
 	/* Show history item info */
 	if (!box->sel || !box->sel->udata) return 0;
@@ -346,8 +340,7 @@ push_add_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
 	struct terminal *term = dlg_data->win->term;
-	struct listbox_data *box =
-		(struct listbox_data *) dlg_data->dlg->widgets[OP_WIDGETS_COUNT].data;
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct option *option;
 
 	if (!box->sel || !box->sel->udata) {
@@ -414,8 +407,7 @@ push_del_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
 	struct terminal *term = dlg_data->win->term;
-	struct listbox_data *box =
-		(struct listbox_data *) dlg_data->dlg->widgets[OP_WIDGETS_COUNT].data;
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct option *option;
 
 	if (!box->sel || !box->sel->udata) {
@@ -472,14 +464,14 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->abort = option_dialog_abort_handler;
 	dlg->udata = ses;
 
+	add_dlg_listbox(dlg, 12, option_dlg_box_build());
+
 	add_dlg_button(dlg, B_ENTER, push_info_button, _("Info", term), ses);
 	add_dlg_button(dlg, B_ENTER, push_edit_button, _("Edit", term), ses);
 	add_dlg_button(dlg, B_ENTER, push_add_button, _("Add", term), ses);
 	add_dlg_button(dlg, B_ENTER, push_del_button, _("Delete", term), ses);
 	add_dlg_button(dlg, B_ENTER, push_save_button, _("Save", term), ses);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
-
-	add_dlg_listbox(dlg, 12, option_dlg_box_build());
 
 	add_dlg_end(dlg, OP_WIDGETS_COUNT + 1);
 
@@ -517,9 +509,7 @@ kbdbind_dlg_box_build(void)
 static void
 kbdbind_dialog_abort_handler(struct dialog_data *dlg_data)
 {
-	struct listbox_data *box;
-
-	box = (struct listbox_data *) dlg_data->dlg->widgets[KB_WIDGETS_COUNT].data;
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 
 	del_from_list(box);
 	/* Delete the box structure */
@@ -556,8 +546,7 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
 	struct terminal *term = dlg_data->win->term;
-	struct listbox_data *box
-		= (struct listbox_data *) dlg_data->dlg->widgets[KB_WIDGETS_COUNT].data;
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct listbox_item *item = box->sel;
 	struct kbdbind_add_hop *hop;
 	unsigned char *text;
@@ -649,8 +638,7 @@ push_kbdbind_del_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
 	struct terminal *term = dlg_data->win->term;
-	struct listbox_data *box =
-		(struct listbox_data *) dlg_data->dlg->widgets[KB_WIDGETS_COUNT].data;
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct keybinding *keybinding;
 
 	if (!box->sel || box->sel->depth < 2) {
@@ -703,13 +691,13 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->abort = kbdbind_dialog_abort_handler;
 	dlg->udata = ses;
 
+	add_dlg_listbox(dlg, 12, kbdbind_dlg_box_build());
+
 	add_dlg_button(dlg, B_ENTER, push_kbdbind_add_button, _("Add", term), ses);
 	add_dlg_button(dlg, B_ENTER, push_kbdbind_del_button, _("Delete", term), ses);
 	add_dlg_button(dlg, B_ENTER, push_kbdbind_toggle_display_button, _("Toggle display", term), ses);
 	add_dlg_button(dlg, B_ENTER, push_kbdbind_save_button, _("Save", term), ses);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
-
-	add_dlg_listbox(dlg, 12, kbdbind_dlg_box_build());
 
 	add_dlg_end(dlg, KB_WIDGETS_COUNT + 1);
 

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.74 2003/11/08 19:07:21 jonas Exp $ */
+/* $Id: dialog.c,v 1.75 2003/11/08 21:25:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,9 +186,16 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 
 	switch (ev->ev) {
 		case EV_INIT:
-			for (i = 0; i < dlg_data->n; i++)
-				init_widget(dlg_data, ev, i);
-			dlg_data->selected = 0;
+			for (i = dlg_data->n - 1; i >= 0; i--) {
+				struct widget_data *widget_data;
+
+				widget_data = init_widget(dlg_data, ev, i);
+
+				/* Make sure the selected widget is focusable */
+				if (widget_data
+				    && widget_is_focusable(widget_data))
+					dlg_data->selected = i;
+			}
 
 		case EV_RESIZE:
 		case EV_REDRAW:

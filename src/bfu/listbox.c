@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.103 2003/11/08 19:07:21 jonas Exp $ */
+/* $Id: listbox.c,v 1.104 2003/11/08 21:25:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -285,9 +285,8 @@ box_sel_move_do(struct listbox_item *item, void *data_, int *offset)
 void
 box_sel_move(struct widget_data *listbox_item_data, int dist)
 {
-	struct listbox_data *box;
+	struct listbox_data *box = get_listbox_widget_data(listbox_item_data);
 
-	box = (struct listbox_data *) listbox_item_data->widget->data;
 	if (!list_empty(*box->items)) {
 		if (!box->top) box->top = box->items->next;
 		if (!box->sel) box->sel = box->top;
@@ -421,7 +420,7 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg_d
 		int sel)
 {
 	struct terminal *term = dlg_data->win->term;
-	struct listbox_data *box = (struct listbox_data *) listbox_item_data->widget->data;
+	struct listbox_data *box = get_listbox_widget_data(listbox_item_data);
 	struct box_context *data;
 
 	if (!list_empty(*box->items)) {
@@ -480,7 +479,7 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	      struct term_event *ev)
 {
 #ifdef USE_MOUSE
-	struct listbox_data *box = (struct listbox_data *) widget_data->widget->data;
+	struct listbox_data *box = get_listbox_widget_data(widget_data);
 
 	if (!list_empty(*box->items)) {
 		if (!box->top) box->top = box->items->next;
@@ -488,7 +487,7 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	}
 
 	if ((ev->b & BM_ACT) == B_DOWN) {
-		struct widget_data *dlg_item = &dlg_data->widgets_data[dlg_data->n - 1];
+		struct widget_data *dlg_item = dlg_data->widgets_data;
 
 		switch (ev->b & BM_BUTT) {
 			case B_WHEEL_DOWN:
@@ -539,8 +538,7 @@ static int
 kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	    struct term_event *ev)
 {
-	int n = dlg_data->n - 1;
-	struct widget_data *dlg_item = &dlg_data->widgets_data[n];
+	struct widget_data *dlg_item = dlg_data->widgets_data;
 
 	/* Not a pure listbox, but you're not supposed to use this outside of
 	 * the listbox browser anyway, so what.. */
@@ -606,7 +604,7 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			if (ev->x == KBD_INS || ev->x == '*') {
 				struct listbox_data *box;
 
-				box = (struct listbox_data *) dlg_item->widget->data;
+				box = get_listbox_widget_data(dlg_item);
 				if (box->sel) {
 					box->sel->marked = !box->sel->marked;
 					box_sel_move(dlg_item, 1);
@@ -619,7 +617,7 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			if (ev->x == KBD_DEL) {
 				struct listbox_data *box;
 
-				box = (struct listbox_data *) dlg_item->widget->data;
+				box = get_listbox_widget_data(dlg_item);
 				if (box->ops && box->ops->del)
 					box->ops->del(dlg_data->win->term, box);
 

@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.12 2003/01/04 13:14:08 pasky Exp $
+-- $Id: hooks.lua.in,v 1.13 2003/01/23 03:13:34 pasky Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -183,6 +183,66 @@ function sstrfind (s, pattern)
     return strfind (s, pattern, 1, 1)
 end
 
+function highlight (url, html)
+  local ret=nil
+
+-- highlight patches
+  if strfind (url, "%.patch$") then
+	local tmp = tmpname ()
+	writeto (tmp) write (html) writeto()
+	html = pipe_read ("(code2html -l patch "..tmp.." - ) 2>/dev/null")
+	remove(tmp)
+	ret = 1
+  end
+
+-- Python
+  if strfind (url, "%.py$") then
+	local tmp = tmpname ()
+	writeto (tmp) write (html) writeto()
+	html = pipe_read ("(code2html -l python "..tmp.." - ) 2>/dev/null")
+	remove(tmp)
+	ret = 1
+  end
+
+-- Perl
+  if strfind (url, "%.pl$") then
+	local tmp = tmpname ()
+	writeto (tmp) write (html) writeto()
+	html = pipe_read ("(code2html -l perl "..tmp.." - ) 2>/dev/null")
+	remove(tmp)
+	ret = 1
+  end
+
+-- awk
+  if strfind (url, "%.awk$") then
+	local tmp = tmpname ()
+	writeto (tmp) write (html) writeto()
+	html = pipe_read ("(code2html -l awk "..tmp.." - ) 2>/dev/null")
+	remove(tmp)
+	ret = 1
+  end
+
+-- hightlight C code
+    if strfind (url, "%.[ch]$") then
+        local tmp = tmpname ()
+        writeto (tmp) write (html) writeto ()
+        html = pipe_read ("(code2html -l c "..tmp.." - ) 2>/dev/null")
+        remove (tmp)
+        ret = 1
+    end
+
+-- shell
+    if strfind (url, "%.sh$") then
+        local tmp = tmpname ()
+        writeto (tmp) write (html) writeto ()
+        html = pipe_read ("(code2html -l sh "..tmp.." - ) 2>/dev/null")
+        remove (tmp)
+        ret = 1
+    end
+    return ret, html
+end
+
+
 function pre_format_html_hook (url, html)
     local ret = nil
 
@@ -198,6 +258,11 @@ function pre_format_html_hook (url, html)
 --        remove (tmp)
 --        ret = 1
 --    end
+
+    -- Highlightn the source code
+    if highlight_enable then
+        ret, html = highlight(url, html)
+    end
 
     -- Mangle ALT="" in IMG tags.
     if mangle_blank_alt then

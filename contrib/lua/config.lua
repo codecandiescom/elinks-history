@@ -1,5 +1,5 @@
 -- Configuration for hooks.lua file, put in ~/.elinks/ as config.lua.
--- $Id: config.lua,v 1.2 2002/10/16 15:16:54 pasky Exp $
+-- $Id: config.lua,v 1.3 2003/01/23 03:13:34 pasky Exp $
 
 -- ** IMPORTANT **
 -- For security reasons, systems functions are not enabled by default.
@@ -30,6 +30,13 @@
 -- line to do that.  You may customise it if you wish.
 
     pause = '; echo -ne "\\n\\e[1;32mPress ENTER to continue...\\e[0m"; read'
+
+-- Highlightning: Set highlight_enable = 1 if you want to see highligted
+-- source code.  You need to have installed code2html and set text/html
+-- as mime-type for .c, .h, .pl, .py, .sh, .awk, .patch extensions in Options
+-- Manager or in elinks.conf
+
+    highlight_enable = nil
 
 -- Make ALT="" into ALT="&nbsp;": Makes web pages with superfluous
 -- images look better.  However, even if you disable the "Display links

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.27 2003/07/28 02:57:55 jonas Exp $ */
+/* $Id: screen.c,v 1.28 2003/07/28 03:57:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -275,65 +275,50 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 	} while (0)
 #endif
 
+/* Updates the terminal screen. */
 void
 redraw_screen(struct terminal *term)
 {
 	struct rs_opt_cache opt_cache;
 	struct string screen;
 	register int y = 0;
-	register int p = 0;
-	int cx = -1;
-	int cy = -1;
+	int prev_y = -1;
 	int attrib = -1;
 	int mode = -1;
+ 	register struct screen_char *pos;
+ 	register struct screen_char *current = term->last_screen;
+ 	register struct screen_char *prev_pos = NULL;
 
-	if (!term->dirty || (term->master && is_blocked())) return;
+	if (!term->dirty
+	    || (term->master && is_blocked())
+	    || !init_string(&screen)) return;
 
-	if (!init_string(&screen)) return;
+ 	fill_option_cache(opt_cache, term);
 
-	fill_option_cache(opt_cache, term);
-
-	for (; y < term->y; y++) {
-		register int x = 0;
-
-		for (; x < term->x; x++, p++) {
-			register struct screen_char *tsp = &term->screen[p];
-			register struct screen_char *tlsp = &term->last_screen[p];
-
-			if (tsp->data == tlsp->data
-			    && tsp->attr == tlsp->attr) continue;
-			if ((tsp->attr & 0x38) == (tlsp->attr & 0x38)) {
-				int a = tsp->data;
-
-				if (a == 0 || a == 1 || a == ' ') {
-					a = tlsp->data;
-
-					if (a == 0 || a == 1 || a == ' ')
-						continue;
-				}
+ 	for (pos = term->screen; y < term->y; y++) {
+ 		register int x = 0;
+ 
+ 		for (; x < term->x; x++, current++, pos++) {
+ 
+			/* No update for exact match. */
+ 			if (pos->data == current->data
+ 			    && pos->attr == current->attr)
+				continue;
+ 
+			/* Else if the color match and the data is ``space''. */
+ 			if ((pos->attr & 0x38) == (current->attr & 0x38)
+			    && (pos->data <= 1 || pos->data == ' ')
+			    && (current->data <= 1 || current->data == ' '))
+				continue;
+ 
+			/* Avoid cursor moves if there are only 10 chars away. */
+ 			if (prev_y != y || prev_pos + 10 <= pos) {
+ 				add_cursor_move_to_string(&screen, y + 1, x + 1);
+ 				prev_pos = pos; prev_y = y;
 			}
 
-			if (cx == x && cy == y) {
-				print_char(&screen, &opt_cache, tsp,
-					   &mode, &attrib);
-				cx++;
-			} else if (cy == y && x - cx < 10) {
-				register int i = x - cx;
-
-				for (; i >= 0; i--) {
-					print_char(&screen, &opt_cache,
-						   &term->screen[p - i],
-						   &mode, &attrib);
-					cx++;
-				}
-			} else {
-				add_cursor_move_to_string(&screen, y + 1, x + 1);
-
-				cx = x; cy = y;
-				print_char(&screen, &opt_cache, tsp,
-					   &mode, &attrib);
-				cx++;
-			}
+			for (; prev_pos <= pos ; prev_pos++)
+				print_char(&screen, &opt_cache, prev_pos, &mode, &attrib);
 		}
 	}
 

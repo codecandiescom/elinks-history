@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.70 2004/01/21 05:17:42 jonas Exp $ */
+/* $Id: scanner.c,v 1.71 2004/01/21 05:20:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@ struct css_identifier {
 	enum css_token_type base_type;
 };
 
-static inline enum css_token_type
+static enum css_token_type
 get_css_identifier_type(unsigned char *ident, int length,
 			enum css_token_type base_type)
 {
@@ -83,14 +83,12 @@ get_css_identifier_type(unsigned char *ident, int length,
 
 		{ NULL, CSS_TOKEN_NONE, CSS_TOKEN_NONE },
 	};
-	int i;
+	struct css_identifier *ident2type = identifiers2type;
 
-	for (i = 0; identifiers2type[i].name; i++) {
-		struct css_identifier *ident = &identifiers2type[i];
-
-		if (ident->base_type == base_type
-		    && !strncasecmp(ident->name, ident, length))
-			return identifiers2type[i].type;
+	for (; ident2type->name; ident2type++) {
+		if (ident2type->base_type == base_type
+		    && !strncasecmp(ident2type->name, ident, length))
+			return ident2type->type;
 	}
 
 	return base_type;

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.330 2004/06/14 18:13:03 jonas Exp $ */
+/* $Id: menu.c,v 1.331 2004/06/14 22:15:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -311,7 +311,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	if (!file_menu) return;
 
 	e = file_menu;
-	o = can_open_in_new(term);
+	o = !anonymous && can_open_in_new(term);
 	if (o) {
 		SET_MENU_ITEM(e, N_("~New window"), NULL, ACT_MAIN_OPEN_NEW_WINDOW,
 			      (menu_func) open_in_new_window, send_open_new_window,
@@ -650,10 +650,13 @@ add_new_win_to_menu(struct menu_item **mi, unsigned char *text,
 {
 	int c = can_open_in_new(term);
 
+	if (!c) return;
+
 	/* The URI is saved as session info in the master and not sent to the
 	 * instance in the new window so with -no-connect enabled it is not
 	 * possible to open links URIs. */
-	if (!c || get_opt_bool_tree(cmdline_options, "no-connect"))
+	if (get_opt_bool_tree(cmdline_options, "no-connect")
+	    || get_opt_bool_tree(cmdline_options, "anonymous"))
 		return;
 
 	add_to_menu(mi, text, NULL, ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND,

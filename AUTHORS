@@ -141,6 +141,9 @@ Karel Kulhavy <clock@atrey.karlin.mff.cuni.cz>
 Karvinen Ilkka <ik@iki.fi>
 	Finnish translation
 
+Kevin Keverets <keverets@users.sourceforge.net>
+	Show actual document's URL in xterm title bar
+
 Laurent Monin <zas@norz.org>
 	Updated French translation
 	Bookmarks hacking
@@ -174,6 +177,9 @@ Mediavilla David <f4j900zx001@NOSPAMsneakemail.com>
 
 Michail Litvak <mci@owl.openwall.com>
 	Patch configure.in to force error if OpenSSL not found
+
+Michal Maruska <mmc@maruska.dyndns.org>
+	Show actual document's URL in xterm title bar
 
 Miciah Dashiel <theweirdo@subdimension.com>
 	Document-specific colors usage switch possibility, colourful cleanup
@@ -282,4 +288,4 @@ Wojtek Bojdo/l <wojboj@lp.net.pl>
 Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	Updated Russian localization
 
-$Id: AUTHORS,v 1.45 2002/04/02 13:21:36 pasky Exp $
+$Id: AUTHORS,v 1.46 2002/04/02 13:46:06 pasky Exp $

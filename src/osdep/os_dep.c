@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.5 2002/03/27 23:47:12 pasky Exp $ */
+/* $Id: os_dep.c,v 1.6 2002/04/02 13:46:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -342,7 +342,9 @@ void set_clipboard_text(char *data)
 
 void set_window_title(unsigned char *url)
 {
-	/* !!! FIXME */
+	if (!is_xterm()) return;
+	printf("\033]0;%s\a", url);
+	fflush(stdout);
 }
 
 unsigned char *get_window_title()

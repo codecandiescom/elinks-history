@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.42 2004/09/25 18:07:23 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.43 2004/09/25 20:23:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,7 @@
 #include "bfu/msgbox.h"
 #include "bfu/style.h"
 #include "dialogs/status.h"
+#include "document/html/frames.h"
 #include "document/document.h"
 #include "document/view.h"
 #include "ecmascript/ecmascript.h"
@@ -185,6 +186,7 @@ static const JSClass window_class = {
 
 enum window_prop {
 	JSP_WIN_CLOSED,
+	JSP_WIN_PARENT,
 	JSP_WIN_SELF,
 	JSP_WIN_TOP,
 };
@@ -196,11 +198,34 @@ enum window_prop {
  * comparing. */
 static const JSPropertySpec window_props[] = {
 	{ "closed",	JSP_WIN_CLOSED,	JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "parent",	JSP_WIN_PARENT,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "self",	JSP_WIN_SELF,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "top",	JSP_WIN_TOP,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "window",	JSP_WIN_SELF,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ NULL }
 };
+
+
+#if 0
+static struct frame_desc *
+find_child_frame(struct document_view *doc_view, struct frame_desc *tframe)
+{
+	struct frameset_desc *frameset = doc_view->document->frame_desc;
+	int i;
+
+	if (!frameset)
+		return NULL;
+
+	for (i = 0; i < frameset->n; i++) {
+		struct frame_desc *frame = &frameset->frame_desc[i];
+
+		if (frame == tframe)
+			return frame;
+	}
+
+	return NULL;
+}
+#endif
 
 static JSBool
 window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
@@ -221,6 +246,47 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		 * for (struct session)? Still... --pasky */
 		p.boolean = 0; prop_type = JSPT_BOOLEAN; break;
 	case JSP_WIN_SELF: p.object = obj; prop_type = JSPT_OBJECT; break;
+	case JSP_WIN_PARENT:
+		/* XXX: It would be nice if the following worked, yes.
+		 * The problem is that we get called at the point where
+		 * document.frame properties are going to be mostly NULL.
+		 * But the problem is deeper because at that time we are
+		 * yet building scrn_frames so our parent might not be there
+		 * yet (XXX: is this true?). The true solution will be to just
+		 * have struct document_view *(document_view.parent). --pasky */
+		/* FIXME: So now we alias window.parent to window.top, which is
+		 * INCORRECT but works for the most common cases of just two
+		 * frames. Better something than nothing. */
+#if 0
+	{
+		/* This is horrible. */
+		struct session *ses = doc_view->session;
+		struct frame_desc *frame = doc_view->document->frame;
+
+		if (!ses->doc_view->document->frame_desc) {
+			INTERNAL("Looking for parent but there're no frames.");
+			prop_type = JSPT_UNDEF;
+			break;
+		}
+		assert(frame);
+		doc_view = ses->doc_view;
+		if (find_child_frame(doc_view, frame))
+			goto found_parent;
+		foreach (doc_view, ses->scrn_frames) {
+			if (find_child_frame(doc_view, frame))
+				goto found_parent;
+		}
+		INTERNAL("Cannot find frame %s parent.",doc_view->name);
+		prop_type = JSPT_UNDEF;
+		break;
+
+found_parent:
+		assert(doc_view->ecmascript);
+		p.object=JS_GetGlobalObject(doc_view->ecmascript->backend_data);
+		prop_type = JSPT_OBJECT;
+		break;
+	}
+#endif
 	case JSP_WIN_TOP:
 	{
 		struct document_view *top_view = doc_view->session->doc_view;

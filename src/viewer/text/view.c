@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.20 2003/04/20 10:35:02 pasky Exp $ */
+/* $Id: view.c,v 1.21 2003/04/20 12:30:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -888,8 +888,6 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 		for (i = 0; i < fsd->x; i++) {
 			int wwx = fsd->f[i].xw;
 
-			if (i && j) set_char(t, x, y, FRAMES_CROSS);
-
 			if (i) {
 				fill_area(t, x, y + 1, 1, wwy, FRAMES_VLINE);
 				if (j == fsd->y - 1) set_xchar(t, x, y + wwy + 1, 3);
@@ -904,7 +902,8 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 				set_xchar(t, x, y, 2);
 			}
 
-			if (fsd->f[j * fsd->x + i].subframe) {
+			if (i && j) set_char(t, x, y, FRAMES_CROSS);
+
 			x += wwx + 1;
 		}
 		y += wwy + 1;
@@ -918,6 +917,7 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 		for (i = 0; i < fsd->x; i++) {
 			int wwx = fsd->f[i].xw;
 
+			if (fsd->f[j * fsd->x + i].subframe) {
 				draw_frame_lines(t, fsd->f[j * fsd->x + i].subframe, x + 1, y + 1);
 			}
 			x += wwx + 1;

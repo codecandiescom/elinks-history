@@ -2,32 +2,34 @@ TODO list for links (partially sorted by importance):
 
 	HTTP Auth (User/password) (URGENT) (being worked on)
 
-	Resuming of downloads
-
-	&#13; broken in <pre>
+	Resuming of downloads (URGENT)
 
 	Support for <xmp>
 
-	Disk cache
+	Support for vlink
 
 	User interface for keys rebinding
+
+	User interface for options changing
 
 	Reorganization of user interface
 
 	Cookies manager
 
-	Rewrite html parser
+	Passing url to external command
+
+	Multiple windows in one console
 
 	Generic code cleanup
 
 	Write some more documentation
 
-	Passing url to external command
+	Disk cache (?)
 
-	Multiple windows in one console
+	Rewrite html parser (?)
 
 	EcmaScript (?)
 
 	CSS (?)
 
-$Id: TODO,v 1.7 2002/01/26 19:42:35 pasky Exp $
+$Id: TODO,v 1.8 2002/02/01 21:49:59 pasky Exp $

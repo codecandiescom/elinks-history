@@ -12,6 +12,10 @@ You shouldn't press '^Z' when you are in a viewer
 
 Handling of &#13; is not lynx-compatible in <pre> tag (should be newline).
 
-$Id: BUGS,v 1.6 2002/01/26 19:42:35 pasky Exp $
+Tags inside <XMP> are still interpreted.
+
+DNS lookups / IPv6 support may not be yet entirely stable.
+
+$Id: BUGS,v 1.7 2002/02/01 21:49:59 pasky Exp $
 
 vim: textwidth=80

@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"POT-Creation-Date: 2004-07-02 18:50+0200\n"
-"PO-Revision-Date: 2004-07-01 23:03+0200\n"
+"POT-Creation-Date: 2004-07-02 19:06+0200\n"
+"PO-Revision-Date: 2004-07-02 19:07+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -329,8 +329,9 @@ msgstr "Supprimer un dossier de signets"
 
 #. delete_folder
 #: src/bookmarks/dialogs.c:132
-msgid "Delete this folder and all bookmarks in it?"
-msgstr "Supprimer le dossier et tous les signets qu'il contient ?"
+#, c-format
+msgid "Delete folder \"%s\" and all bookmarks in it?"
+msgstr "Supprimer le dossier \"%s\" et tous les signets qu'il contient ?"
 
 #. delete_item_title
 #: src/bookmarks/dialogs.c:134
@@ -4382,13 +4383,14 @@ msgstr "Supprimer les cookies sélectionnés ?"
 
 #. delete_folder_title
 #: src/cookies/dialogs.c:153
-msgid "Delete cookie's folder"
-msgstr "Supprimer un dossier de cookies"
+msgid "Delete domain's cookies"
+msgstr "Supprimer les cookies du domaine"
 
 #. delete_folder
 #: src/cookies/dialogs.c:155
-msgid "Delete this folder and all cookies in it?"
-msgstr "Supprimer le dossier \"%s\" et tous les cookies qu'il contient ?"
+#, c-format
+msgid "Delete all cookies from domain \"%s\"?"
+msgstr "Supprimer tous les cookies du domaine \"%s\" ?"
 
 #. delete_item_title
 #: src/cookies/dialogs.c:157
@@ -6723,7 +6725,3 @@ msgstr "Erreur lors de la sauvegarde"
 #: src/viewer/text/view.c:1121
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
-
-#, fuzzy
-#~ msgid "Delete cache history"
-#~ msgstr "Recherche dans l'historique"

@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.3 2003/08/02 15:35:17 jonas Exp $ */
+/* $Id: formhist.c,v 1.4 2003/08/02 15:39:41 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -126,7 +126,7 @@ get_saved_control_value(unsigned char *url, unsigned char *name)
  * @submit is the list of submitted_values
  * returns 1 if the form is already saved in
  *	   0 if not */
-int
+static int
 form_already_saved(unsigned char *url, struct list_head *submit)
 {
 	struct form_history_item *form;
@@ -163,7 +163,7 @@ form_already_saved(unsigned char *url, struct list_head *submit)
  * (form data is url+submitted_value(s))
  * returns 1 on success
  *         0 on failure */
-int
+static int
 remember_form(struct form_history_item *fmem_data)
 {
 	struct form_history_item *form, *tmpform;

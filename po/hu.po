@@ -204,7 +204,7 @@ msgstr "Nincs cím"
 #. name:
 #: src/bookmarks/bookmarks.c:42 src/bookmarks/bookmarks.c:99
 msgid "Bookmarks"
-msgstr "Könyvjelzõk"
+msgstr "~Könyvjelzõk"
 
 #: src/bookmarks/bookmarks.c:44
 msgid "Bookmark options."
@@ -335,7 +335,7 @@ msgstr "Méret"
 
 #: src/cache/dialogs.c:74
 msgid "Loaded size"
-msgstr ""
+msgstr "Betöltõdött méret"
 
 #: src/cache/dialogs.c:77 src/dialogs/document.c:140
 msgid "Last modified"
@@ -569,7 +569,7 @@ msgstr "Ide nem lehet beállítást hozzáadni."
 
 #: src/config/dialogs.c:365
 msgid "Option manager"
-msgstr "Beállítások"
+msgstr "~Beállítások"
 
 #: src/config/dialogs.c:403 src/config/dialogs.c:425 src/config/dialogs.c:454
 msgid "Add keybinding"
@@ -831,11 +831,11 @@ msgstr "Ugrás a következõ keretre"
 
 #: src/config/kbdbind.c:428
 msgid "Open a new tab"
-msgstr "Új fül megnyitása"
+msgstr "Új ~fül megnyitása"
 
 #: src/config/kbdbind.c:429
 msgid "Open a new tab in background"
-msgstr "Egy új fül megnyitása a háttérben"
+msgstr "Egy új ~fül megnyitása a háttérben"
 
 #: src/config/kbdbind.c:430
 msgid "Open a new window"
@@ -1234,13 +1234,13 @@ msgstr "Dokumentum böngészési beállítások (fõként interaktivitás)."
 
 #: src/config/options.inc:113
 msgid "Accesskeys"
-msgstr ""
+msgstr "\"Accesskey\" attribútum kezelése"
 
 #: src/config/options.inc:115
 msgid ""
 "Options for handling of the accesskey attribute of the active\n"
 "HTML elements."
-msgstr ""
+msgstr "Az aktív HTML elemek \"accesskey\" attribútumának kezelése."
 
 #: src/config/options.inc:118
 msgid "Automatic links following"
@@ -1252,12 +1252,13 @@ msgid ""
 "accesskey is pressed - this is the standard behaviour, but it's\n"
 "considered dangerous."
 msgstr ""
-"Automatikusan követi a linket, vagy elküld egy adatlapot.\n"
-"Ez az alapértelmezett üzemmód, de veszélyes lehet."
+"Automatikusan követi a linket, vagy elküld egy adatlapot, ha az elemhez\n"
+"tartozó accesskey lett lenyomva. Ez az alapértelmezett üzemmód, \n"
+"de veszélyes lehet."
 
 #: src/config/options.inc:124
 msgid "Accesskey priority"
-msgstr ""
+msgstr "\"Accesskey\" prioritás"
 
 #: src/config/options.inc:126
 msgid ""
@@ -1266,6 +1267,10 @@ msgid ""
 "1 is first try only frame bindings; if it fails, check accesskey\n"
 "2 is first check accesskey (this can be dangerous)"
 msgstr ""
+"Az \"accesskey\" HTML attribútum prioritása:\n"
+"0 - a normál bilentyûhozzárendelések érvényesek, és csak azután az accesskey\n"
+"1 - csak a keret billentyûhozzárendelései, aztán az accesskey\n"
+"2 - az accesskey az elsõdleges (veszélyes lehet)"
 
 #: src/config/options.inc:132
 msgid "Forms"
@@ -1595,11 +1600,11 @@ msgstr "Számok megjelenításe a linek mellett."
 
 #: src/config/options.inc:233
 msgid "Use tabindex"
-msgstr ""
+msgstr "A \"tabindex\" attribútum használata"
 
 #: src/config/options.inc:235
 msgid "Whether to navigate links using tabindex."
-msgstr ""
+msgstr "A linkek közötti mozgás a \"tabindex\" attribútum figyelembevételével."
 
 #: src/config/options.inc:237
 msgid "Number keys select links"
@@ -1643,7 +1648,7 @@ msgstr "Kis/nagybetû érzékenység"
 msgid ""
 "Whether the search should match the document text while maintaining\n"
 "case sensitivity."
-msgstr ""
+msgstr "A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
 
 #: src/config/options.inc:263 src/config/options.inc:270
 msgid "Regular expressions"
@@ -4062,9 +4067,8 @@ msgid "Open new ~tab"
 msgstr "Új fül megnyitása"
 
 #: src/dialogs/menu.c:335
-#, fuzzy
 msgid "Open new tab in backgroun~d"
-msgstr "Új fül megnyitása a háttérben"
+msgstr "Ú~j fül megnyitása a háttérben"
 
 #: src/dialogs/menu.c:337
 msgid "~Go to URL"
@@ -4091,31 +4095,26 @@ msgid "~Save as"
 msgstr "Menté~s másként"
 
 #: src/dialogs/menu.c:347
-#, fuzzy
 msgid "Save UR~L as"
-msgstr "U~RL mentése másként"
+msgstr "~URL mentése másként"
 
 #: src/dialogs/menu.c:348
 msgid "Save formatted ~document"
 msgstr "Formázott ~dokumentum mentése"
 
 #: src/dialogs/menu.c:350
-#, fuzzy
 msgid "Bookm~ark document"
-msgstr "Nincs dokumentum"
+msgstr "Az aktuális ~lap felvétele a könyvjelzõkhöz"
 
 #: src/dialogs/menu.c:356
-#, fuzzy
 msgid "~Kill background connections"
 msgstr "~Háttérben futó kapcsolatok megszakítása"
 
 #: src/dialogs/menu.c:357
-#, fuzzy
 msgid "Flush all ~caches"
 msgstr "Gyorsí~tó memória kiürítése"
 
 #: src/dialogs/menu.c:358
-#, fuzzy
 msgid "Resource ~info"
 msgstr "Erõforrás ~információ"
 
@@ -4361,9 +4360,8 @@ msgid "Linux or OS/2 frames"
 msgstr "Linux vagy OS/2 keretek"
 
 #: src/dialogs/options.c:173
-#, fuzzy
 msgid "FreeBSD frames"
-msgstr "Nincs keret"
+msgstr "FreeBSD keretek"
 
 #: src/dialogs/options.c:174
 msgid "KOI8-R frames"
@@ -5462,11 +5460,11 @@ msgstr "Link követése és újratöltés"
 
 #: src/viewer/text/link.c:916
 msgid "Open in new ~window"
-msgstr "~Megnyitás új ablakban"
+msgstr "Megnyitás új ~ablakban"
 
 #: src/viewer/text/link.c:921
 msgid "Open in new ~tab"
-msgstr "Megnyitás új fülben"
+msgstr "Megnyitás új ~fülben"
 
 #: src/viewer/text/link.c:924
 msgid "Open in new tab in ~background"

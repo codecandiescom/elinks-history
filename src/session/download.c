@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.95 2003/09/12 21:14:24 miciah Exp $ */
+/* $Id: download.c,v 1.96 2003/09/12 21:46:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,6 +200,110 @@ download_abort_function(struct dialog_data *dlg)
 	down->win = NULL;
 }
 
+static int
+download_progress_string(struct terminal *term,
+			 struct download *download,
+			 struct string *msg)
+{
+	if (download->state != S_TRANS || !(download->prg->elapsed / 100)) {
+		add_to_string(msg, get_err_msg(download->state, term));
+		return 0;
+	}
+
+	/* FIXME: The following is a PITA from the l10n standpoint. A *big*
+	 * one, _("of")-like pearls are a nightmare. Format strings needs to
+	 * be introduced to this fuggy corner of code as well. --pasky */
+
+	add_to_string(msg, _("Received", term));
+	add_char_to_string(msg, ' ');
+	add_xnum_to_string(msg, download->prg->pos);
+
+	if (download->prg->size >= 0) {
+		add_char_to_string(msg, ' ');
+		add_to_string(msg, _("of",term));
+		add_char_to_string(msg, ' ');
+		add_xnum_to_string(msg, download->prg->size);
+		add_char_to_string(msg, ' ');
+	}
+	if (download->prg->start > 0) {
+		add_char_to_string(msg, '(');
+		add_xnum_to_string(msg, download->prg->pos
+					- download->prg->start);
+		add_char_to_string(msg, ' ');
+		add_to_string(msg, _("after resume", term));
+		add_char_to_string(msg, ')');
+	}
+	add_char_to_string(msg, '\n');
+
+	if (download->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
+		add_to_string(msg, _("Average speed", term));
+	else
+		add_to_string(msg, _("Speed", term));
+
+	add_char_to_string(msg, ' ');
+	add_xnum_to_string(msg, (longlong) download->prg->loaded * 10
+			        / (download->prg->elapsed / 100));
+	add_to_string(msg, "/s");
+
+	if (download->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
+		add_to_string(msg, ", ");
+		add_to_string(msg, _("current speed", term));
+		add_char_to_string(msg, ' ');
+		add_xnum_to_string(msg, download->prg->cur_loaded
+					/ (CURRENT_SPD_SEC *
+					   SPD_DISP_TIME / 1000));
+		add_to_string(msg, "/s");
+	}
+
+	add_char_to_string(msg, '\n');
+	add_to_string(msg, _("Elapsed time", term));
+	add_char_to_string(msg, ' ');
+	add_time_to_string(msg, download->prg->elapsed);
+
+	if (download->prg->size >= 0 && download->prg->loaded > 0) {
+		add_to_string(msg, ", ");
+		add_to_string(msg, _("estimated time", term));
+		add_char_to_string(msg, ' ');
+		add_time_to_string(msg, (download->prg->size - download->prg->pos)
+					/ ((longlong) download->prg->loaded * 10
+					   / (download->prg->elapsed / 100))
+					* 1000);
+	}
+
+	return 1;
+}
+
+static void
+download_progress_bar(struct terminal *term, struct download *download,
+	     	      int x, int *y, int w,
+		      struct color_pair *text_color,
+		      struct color_pair *meter_color)
+{
+	/* FIXME: not yet perfect, pasky will improve it later. --Zas */
+	/* Note : values > 100% are theorically possible and were seen. */
+	unsigned char q[] = "XXXX%"; /* Reduce or enlarge at will. */
+	const unsigned int qwidth = sizeof(q) - 1;
+	unsigned int qlen = 0;
+	int p = w - qwidth; /* width for gauge meter */
+	int progress = (int) ((longlong) 100 * (longlong) download->prg->pos
+			      / (longlong) download->prg->size);
+	int barprogress = p * progress / 100;
+
+	int_upper_bound(&barprogress, p); /* Limit to preserve display. */
+
+	if (ulongcat(q, &qlen, progress, qwidth - 1, 0) > 0)
+		memset(q, '?', qlen); /* Too long, we limit to preserve display. */
+
+	q[qlen++] = '%'; /* on error, will print '%' only, should not occur. */
+	q[qlen] = '\0';
+
+	(*y)++;
+	draw_char_data(term, x, *y, '[');
+	draw_char_data(term, x + w - qwidth, *y, ']');
+	draw_area(term, x + 1, *y, barprogress, 1, ' ', 0, meter_color);
+	draw_text(term, x + w - qlen + 1, *y, q, qlen, 0, text_color);
+	(*y)++;
+}
 
 static void
 download_window_function(struct dialog_data *dlg)
@@ -218,78 +322,7 @@ download_window_function(struct dialog_data *dlg)
 	file_download->win = dlg->win;
 
 	if (!init_string(&msg)) return;
-
-	/* FIXME: The following is a PITA from the l10n standpoint. A *big*
-	 * one, _("of")-like pearls are a nightmare. Format strings needs to
-	 * be introduced to this fuggy corner of code as well. --pasky */
-
-	if (download->state == S_TRANS && download->prg->elapsed / 100) {
-		t = 1;
-		add_to_string(&msg, _("Received", term));
-		add_char_to_string(&msg, ' ');
-		add_xnum_to_string(&msg, download->prg->pos);
-
-		if (download->prg->size >= 0) {
-			add_char_to_string(&msg, ' ');
-			add_to_string(&msg, _("of",term));
-			add_char_to_string(&msg, ' ');
-			add_xnum_to_string(&msg, download->prg->size);
-			add_char_to_string(&msg, ' ');
-		}
-		if (download->prg->start > 0) {
-			add_char_to_string(&msg, '(');
-			add_xnum_to_string(&msg, download->prg->pos
-						- download->prg->start);
-			add_char_to_string(&msg, ' ');
-			add_to_string(&msg, _("after resume", term));
-			add_char_to_string(&msg, ')');
-		}
-		add_char_to_string(&msg, '\n');
-
-		if (download->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
-			add_to_string(&msg, _("Average speed", term));
-		else
-			add_to_string(&msg, _("Speed", term));
-
-		add_char_to_string(&msg, ' ');
-		add_xnum_to_string(&msg, (longlong) download->prg->loaded * 10
-					  / (download->prg->elapsed / 100));
-		add_to_string(&msg, "/s");
-
-		if (download->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
-			add_to_string(&msg, ", ");
-			add_to_string(&msg, _("current speed", term));
-			add_char_to_string(&msg, ' ');
-			add_xnum_to_string(&msg, download->prg->cur_loaded
-						/ (CURRENT_SPD_SEC *
-						   SPD_DISP_TIME / 1000));
-			add_to_string(&msg, "/s");
-		}
-
-		add_char_to_string(&msg, '\n');
-		add_to_string(&msg, _("Elapsed time", term));
-		add_char_to_string(&msg, ' ');
-		add_time_to_string(&msg, download->prg->elapsed);
-
-		if (download->prg->size >= 0 && download->prg->loaded > 0) {
-			add_to_string(&msg, ", ");
-			add_to_string(&msg, _("estimated time", term));
-			add_char_to_string(&msg, ' ');
-#if 0
-			add_time_to_string(&msg, stat->prg->elapsed
-						/ 1000 * stat->prg->size
-						/ 1000 * stat->prg->loaded
-						- stat->prg->elapsed);
-#endif
-			add_time_to_string(&msg, (download->prg->size - download->prg->pos)
-						/ ((longlong) download->prg->loaded * 10
-						   / (download->prg->elapsed / 100))
-						* 1000);
-		}
-
-	} else {
-		add_to_string(&msg, get_err_msg(download->state, term));
-	}
+	t = download_progress_string(term, download, &msg);
 
 	u = stracpy(file_download->url);
 	if (!u) {
@@ -338,33 +371,10 @@ download_window_function(struct dialog_data *dlg)
 	dlg_format_text(term, term, u, x, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 
-	if (t && download->prg->size >= 0) {
-		/* FIXME: not yet perfect, pasky will improve it later. --Zas */
-		/* Note : values > 100% are theorically possible and were seen. */
-		unsigned char q[] = "XXXX%"; /* Reduce or enlarge at will. */
-		const unsigned int qwidth = sizeof(q) - 1;
-		unsigned int qlen = 0;
-		int p = w - qwidth; /* width for gauge meter */
-		int progress = (int) ((longlong) 100 * (longlong) download->prg->pos
-				      / (longlong) download->prg->size);
-		int barprogress = p * progress / 100;
-
-		int_upper_bound(&barprogress, p); /* Limit to preserve display. */
-
-		if (ulongcat(q, &qlen, progress, qwidth - 1, 0) > 0)
-			memset(q, '?', qlen); /* Too long, we limit to preserve display. */
-
-		q[qlen++] = '%'; /* on error, will print '%' only, should not occur. */
-		q[qlen] = '\0';
-
-		y++;
-		draw_char_data(term, x, y, '[');
-		draw_char_data(term, x + w - qwidth, y, ']');
-		draw_area(term, x + 1, y, barprogress, 1, ' ', 0,
-			  get_bfu_color(term, "dialog.meter"));
-		draw_text(term, x + w - qlen + 1, y, q, qlen, 0, dialog_text_color);
-		y++;
-	}
+	if (t && download->prg->size >= 0)
+		download_progress_bar(term, download, x, &y, w,
+				      dialog_text_color,
+			     	      get_bfu_color(term, "dialog.meter"));
 
 	y++;
 	dlg_format_text(term, term, msg.source, x, &y, w, NULL,

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.218 2004/06/28 11:07:11 jonas Exp $ */
+/* $Id: form.c,v 1.219 2004/07/01 22:29:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1289,6 +1289,8 @@ field_op(struct session *ses, struct document_view *doc_view,
 		case ACT_EDIT_CANCEL:
 			if (ses->insert_mode == INSERT_MODE_ON)
 				ses->insert_mode = INSERT_MODE_OFF;
+			else
+				status = FRAME_EVENT_IGNORED;
 			break;
 
 		case ACT_EDIT_REDRAW:

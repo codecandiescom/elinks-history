@@ -1,3 +1,179 @@
+Mon Nov 24 23:06:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/dump/dump.c:
+
+	lock/unlock @vs we create for render_document() just in case we'd do
+	something with it refcounting-wise along the way.  
+
+Mon Nov 24 22:58:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/vs.h:
+
+	Introduced release_vs(), which unlocks view_state and destroy it if
+	it becomes unused.  
+
+Mon Nov 24 22:56:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/: vs.c, vs.h:
+
+	Added view_state.refcount.  
+
+Mon Nov 24 22:39:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Finally fixed segfault on <frameset rows="200,*"> on FreeBSD (and
+	maybe other BSD flavours). This was reported by various people,
+	especially thanks to #linux.cz staff and guli for providing account
+	on FBSD so that I could fix this. The fix was inspired by a patch
+	(http://www.freebsd.org/cgi/query-pr.cgi?pr=3Dports/56668) by Mário
+	Freitas <sub_0@netcabo.pt> included in the FreeBSD port, but it is
+	slightly more paranoid.  
+
+Mon Nov 24 20:46:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Mon Nov 24 18:22:21 2003  Peter Samek <samek@upc.uniba.sk>:
+
+	* po/sk.po:
+
+	Slovak translation update.  
+
+Mon Nov 24 17:35:48 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/formhist/formhist.c:
+
+	Mark the password entry in formhist file. This is a format change,
+	please add a '*' at the beginning of each password entry in the
+	file.  
+
+Mon Nov 24 17:07:09 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/formhist/: dialogs.c, formhist.c, formhist.h:
+
+	Load saved forms on formhist dialog opening.  
+
+Mon Nov 24 17:01:17 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/formhist/formhist.c:
+
+	Fix a memory leak.  
+
+Mon Nov 24 16:42:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/dialogs.c:
+
+	Add login button to the form history manager. It uses the generic
+	hierbox goto handler.  
+
+Mon Nov 24 16:35:00 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/sched/: download.c, session.c, session.h:
+
+	Fix a crash when trying to download from a unknown protocol.  
+
+Mon Nov 24 16:34:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/dialogs.c:
+
+	Fix comment.  
+
+Mon Nov 24 16:34:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.h:
+
+	Fix off by one error that caused the last button to be hidden.  
+
+Mon Nov 24 16:23:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, formhist/Makefile.am, formhist/dialogs.c,
+	formhist/dialogs.h, formhist/formhist.c, formhist/formhist.h:
+
+	Add form history manager.  
+
+Mon Nov 24 13:30:01 2003  Laurent Monin <zas@norz.org>:
+
+	* contrib/lua/: bm.lua, hooks.lua.in, md5check.lua:
+
+	Dumbprefix "bug" now exists and is a synonym of "bz", linked to
+	"http://bugzilla.elinks.or.cz". Trailing spaces were removed.  
+
+Mon Nov 24 13:15:48 2003  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/lua/core.c:
+
+	Elinksification.  
+
+Mon Nov 24 12:00:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: setup.h, bookmarks/backend/default.c,
+	bookmarks/backend/xbel.c, config/conf.c, config/urlhist.c,
+	cookies/cookies.c, formhist/formhist.c, globhist/globhist.c,
+	scripting/lua/core.c, viewer/text/search.c:
+
+	Macros are now used for all filenames.  
+
+Mon Nov 24 08:18:45 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Nov 24 06:54:13 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Back to previous version.  
+
+Mon Nov 24 06:46:36 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Grammar fix.  
+
+Mon Nov 24 04:45:15 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/viewer/text/link.c:
+
+	Links are sorted horizontally. See bug 11 for reasons.  
+
+Mon Nov 24 01:22:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, config/dialogs.c, dialogs/auth.c,
+	dialogs/edit.c, dialogs/mime.c, dialogs/options.c,
+	scripting/lua/core.c, viewer/text/search.c:
+
+	Use get_dialog_offset() all over the place to get added dialog
+	memory.  
+
+Mon Nov 24 01:10:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: dialog.h, hierbox.c, listbox.c, listbox.h:
+
+	Allocate listbox_data as 'add_size' when creating the hierbox
+	browser.  
+
+Mon Nov 24 00:33:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, bookmarks/dialogs.c,
+	cache/dialogs.c, config/dialogs.c, cookies/dialogs.c,
+	globhist/dialogs.c:
+
+	Store the number of buttons in the hierbox browser. A little faster
+	and a little smaller.  
+
+Mon Nov 24 00:23:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, bookmarks/dialogs.c,
+	cache/dialogs.c, config/dialogs.c, cookies/dialogs.c,
+	globhist/dialogs.c:
+
+	Remove add size usage from hierbox browsers. It seems to be pure
+	legacy code not in use by anything anymore.  
+
 Sun Nov 23 23:07:53 2003  Fabio Bonelli <fabiobonelli@libero.it>:
 
 	* po/it.po:

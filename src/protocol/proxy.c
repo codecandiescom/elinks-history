@@ -1,7 +1,9 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.46 2004/09/28 11:57:15 jonas Exp $ */
+/* $Id: proxy.c,v 1.47 2004/10/01 16:03:47 pasky Exp $ */
 
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
+#endif
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

@@ -1,11 +1,13 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.242 2004/09/23 15:40:33 zas Exp $ */
+/* $Id: form.c,v 1.243 2004/10/01 16:03:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we want memrchr() ! */
+#endif
 
 #include <errno.h>
 #include <stdio.h>

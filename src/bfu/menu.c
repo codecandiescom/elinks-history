@@ -1,7 +1,9 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.278 2004/09/12 06:03:05 miciah Exp $ */
+/* $Id: menu.c,v 1.279 2004/10/01 16:03:47 pasky Exp $ */
 
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
+#endif
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

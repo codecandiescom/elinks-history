@@ -1,7 +1,9 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.21 2004/09/25 20:37:15 jonas Exp $ */
+/* $Id: memory.c,v 1.22 2004/10/01 16:03:47 pasky Exp $ */
 
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* MREMAP_MAYMOVE */
+#endif
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

@@ -1,11 +1,13 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.138 2004/07/31 11:01:42 miciah Exp $ */
+/* $Id: textarea.c,v 1.139 2004/10/01 16:03:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we want memrchr() ! */
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>

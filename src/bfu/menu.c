@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.277 2004/09/12 06:02:18 miciah Exp $ */
+/* $Id: menu.c,v 1.278 2004/09/12 06:03:05 miciah Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -1002,7 +1002,6 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 {
 	struct window *win = menu->win;
 	struct menu_item *item;
-	int p = L_MAINMENU_SPACE;
 	int scroll = 0;
 
 	if (check_mouse_wheel(ev))
@@ -1026,6 +1025,8 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 		scroll = 1;
 
 	} else {
+		int p = L_MAINMENU_SPACE;
+
 		/* We don't initialize to menu->first here, since it breaks
 		 * horizontal scrolling using mouse in some cases. --Zas */
 		foreach_menu_item (item, menu->items) {

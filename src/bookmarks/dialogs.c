@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.92 2003/10/24 15:37:51 zas Exp $ */
+/* $Id: dialogs.c,v 1.93 2003/10/24 16:14:36 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -577,6 +577,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	struct bookmark *new_bm;
 	struct dialog *dlg;
+	int n = 0;
 
 	/* Show all bookmarks */
 	foreach (new_bm, bookmarks) {
@@ -606,53 +607,65 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->abort = bookmark_dialog_abort_handler;
 	dlg->udata = ses;
 
-	dlg->items[0].type = D_BUTTON;
-	dlg->items[0].gid = B_ENTER;
-	dlg->items[0].fn = push_goto_button;
-	dlg->items[0].udata = ses;
-	dlg->items[0].text = _("Goto", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_goto_button;
+	dlg->items[n].udata = ses;
+	dlg->items[n].text = _("Goto", term);
+	n++;
 
-	dlg->items[1].type = D_BUTTON;
-	dlg->items[1].gid = B_ENTER;
-	dlg->items[1].fn = push_edit_button;
-	dlg->items[1].udata = ses;
-	dlg->items[1].text = _("Edit", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_edit_button;
+	dlg->items[n].udata = ses;
+	dlg->items[n].text = _("Edit", term);
+	n++;
 
-	dlg->items[2].type = D_BUTTON;
-	dlg->items[2].gid = B_ENTER;
-	dlg->items[2].fn = push_delete_button;
-	dlg->items[2].text = _("Delete", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_delete_button;
+	dlg->items[n].text = _("Delete", term);
+	n++;
 
-	dlg->items[3].type = D_BUTTON;
-	dlg->items[3].gid = B_ENTER;
-	dlg->items[3].fn = push_move_button;
-	dlg->items[3].text = _("Move", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_move_button;
+	dlg->items[n].text = _("Move", term);
+	n++;
 
-	dlg->items[4].type = D_BUTTON;
-	dlg->items[4].gid = B_ENTER;
-	dlg->items[4].fn = push_add_folder_button;
-	dlg->items[4].text = _("Add folder", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_add_folder_button;
+	dlg->items[n].text = _("Add folder", term);
+	n++;
 
-	dlg->items[5].type = D_BUTTON;
-	dlg->items[5].gid = B_ENTER;
-	dlg->items[5].fn = push_add_button;
-	dlg->items[5].text = _("Add", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_add_button;
+	dlg->items[n].text = _("Add", term);
+	n++;
 
-	dlg->items[6].type = D_BUTTON;
-	dlg->items[6].gid = B_ENTER;
-	dlg->items[6].fn = push_search_button;
-	dlg->items[6].text = _("Search", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_search_button;
+	dlg->items[n].text = _("Search", term);
+	n++;
 
-	dlg->items[7].type = D_BUTTON;
-	dlg->items[7].gid = B_ESC;
-	dlg->items[7].fn = cancel_dialog;
-	dlg->items[7].text = _("Close", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ESC;
+	dlg->items[n].fn = cancel_dialog;
+	dlg->items[n].text = _("Close", term);
+	n++;
 
-	dlg->items[BM_BOX_IND].type = D_BOX;
-	dlg->items[BM_BOX_IND].gid = 12;
-	dlg->items[BM_BOX_IND].data = (void *) bookmark_dlg_box_build();
+	assert(n == BM_BOX_IND);
 
-	dlg->items[BM_BOX_IND + 1].type = D_END;
+	dlg->items[n].type = D_BOX;
+	dlg->items[n].gid = 12;
+	dlg->items[n].data = (void *) bookmark_dlg_box_build();
+	n++;
+
+	dlg->items[n].type = D_END;
+
 	do_dialog(term, dlg, getml(dlg, NULL));
 }
 

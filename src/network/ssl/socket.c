@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.80 2004/08/03 09:18:34 jonas Exp $ */
+/* $Id: socket.c,v 1.81 2004/08/03 10:31:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,10 +169,7 @@ ssl_want_read(struct connection *conn)
 			}
 #endif
 
-			conn->conn_info = NULL;
-			conn_info->done(conn);
-			mem_free_if(conn_info->addr);
-			mem_free(conn_info);
+			done_connection_info(conn);
 
 		case SSL_ERROR_WANT_READ:
 		case SSL_ERROR_WANT_READ2:

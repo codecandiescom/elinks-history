@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.104 2004/08/03 10:04:04 jonas Exp $ */
+/* $Id: connect.c,v 1.105 2004/08/03 10:31:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,6 +114,18 @@ init_connection_info(struct uri *uri, struct connection_socket *socket,
 	return conn_info;
 }
 
+void
+done_connection_info(struct connection *conn)
+{
+	struct conn_info *conn_info = conn->conn_info;
+
+	conn->conn_info = NULL;
+
+	if (conn_info->done) conn_info->done(conn);
+
+	mem_free_if(conn_info->addr);
+	mem_free(conn_info);
+}
 
 void
 make_connection(struct connection *conn, struct connection_socket *socket,
@@ -458,10 +470,7 @@ dns_found(void *data, int state)
 		return;
 #endif
 
-	conn->conn_info = NULL;
-	conn_info->done(conn);
-	mem_free_if(conn_info->addr);
-	mem_free(conn_info);
+	done_connection_info(conn);
 }
 
 static void
@@ -500,10 +509,7 @@ connected(void *data)
 	if (socket->ssl && ssl_connect(conn, socket) < 0) return;
 #endif
 
-	conn->conn_info = NULL;
-	conn_info->done(conn);
-	mem_free_if(conn_info->addr);
-	mem_free(conn_info);
+	done_connection_info(conn);
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.27 2004/08/03 10:04:04 jonas Exp $ */
+/* $Id: connect.h,v 1.28 2004/08/03 10:31:16 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -39,6 +39,8 @@ struct read_buffer {
 struct conn_info *
 init_connection_info(struct uri *uri, struct connection_socket *socket,
 		     void (*done)(struct connection *));
+
+void done_connection_info(struct connection *conn);
 
 
 void close_socket(struct connection *conn, struct connection_socket *socket);

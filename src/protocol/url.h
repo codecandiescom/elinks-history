@@ -1,10 +1,10 @@
-/* $Id: url.h,v 1.10 2002/12/07 11:45:18 zas Exp $ */
+/* $Id: url.h,v 1.11 2003/01/01 20:30:34 pasky Exp $ */
 
 #ifndef EL__URL_H
 #define EL__URL_H
 
 #include "document/session.h"
-#include "lowlevel/sched.h"
+#include "sched/sched.h"
 
 #define POST_CHAR 1
 

@@ -1,9 +1,9 @@
-/* $Id: https.h,v 1.5 2002/05/08 13:55:06 pasky Exp $ */
+/* $Id: https.h,v 1.6 2003/01/01 20:30:35 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_HTTPS_H
 #define EL__PROTOCOL_HTTPS_H
 
-#include "lowlevel/sched.h"
+#include "sched/sched.h"
 
 void https_func(struct connection *c);
 

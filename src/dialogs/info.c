@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.21 2002/12/13 19:38:01 zas Exp $ */
+/* $Id: info.c,v 1.22 2003/01/01 20:30:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,9 +22,9 @@
 #include "document/session.h"
 #include "document/html/renderer.h"
 #include "intl/language.h"
-#include "lowlevel/sched.h"
 #include "lowlevel/select.h"
 #include "lowlevel/terminal.h"
+#include "sched/sched.h"
 #include "util/conv.h"
 #ifdef LEAK_DEBUG
 #include "util/memdebug.h"

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.70 2003/01/01 17:48:45 pasky Exp $ */
+/* $Id: main.c,v 1.71 2003/01/01 20:30:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,6 @@
 #include "lowlevel/dns.h"
 #include "lowlevel/home.h"
 #include "lowlevel/kbd.h"
-#include "lowlevel/sched.h"
 #include "lowlevel/select.h"
 #include "lowlevel/sysname.h"
 #include "lowlevel/terminal.h"
@@ -61,6 +60,7 @@
 #include "protocol/mailcap.h"
 #include "protocol/mime.h"
 #include "protocol/http/auth.h"
+#include "sched/sched.h"
 #include "ssl/ssl.h"
 #include "util/blacklist.h"
 #include "util/error.h"

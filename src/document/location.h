@@ -1,9 +1,9 @@
-/* $Id: location.h,v 1.7 2003/01/01 18:19:52 pasky Exp $ */
+/* $Id: location.h,v 1.8 2003/01/01 20:30:34 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_LOCATION_H
 #define EL__DOCUMENT_LOCATION_H
 
-#include "lowlevel/sched.h"
+#include "sched/sched.h"
 #include "util/lists.h"
 #include "viewer/text/vs.h"
 

@@ -1,7 +1,7 @@
-/* $Id: sched.h,v 1.24 2002/12/07 20:05:56 pasky Exp $ */
+/* $Id: connection.h,v 1.1 2003/01/01 20:30:36 pasky Exp $ */
 
-#ifndef EL__LOWLEVEL_SCHED_H
-#define EL__LOWLEVEL_SCHED_H
+#ifndef EL__SCHED_SCHED_H
+#define EL__SCHED_SCHED_H
 
 #include "elinks.h" /* tcount */
 #include "document/cache.h"

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.11 2002/08/09 12:55:17 pasky Exp $
+## $Id: Makefile.am,v 1.12 2003/01/01 20:30:34 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -15,8 +15,6 @@ liblowlevel_a_SOURCES = \
  home.h \
  kbd.c \
  kbd.h \
- sched.c \
- sched.h \
  select.c \
  select.h \
  sysname.c \

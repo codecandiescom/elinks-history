@@ -1,10 +1,10 @@
-/* $Id: connect.h,v 1.4 2002/07/05 03:59:40 pasky Exp $ */
+/* $Id: connect.h,v 1.5 2003/01/01 20:30:36 pasky Exp $ */
 
 #ifndef EL__SSL_CONNECT_H
 #define EL__SSL_CONNECT_H
 
 #include "lowlevel/connect.h"
-#include "lowlevel/sched.h"
+#include "sched/sched.h"
 
 int ssl_connect(struct connection *, int);
 int ssl_write(struct connection *, struct write_buffer *);

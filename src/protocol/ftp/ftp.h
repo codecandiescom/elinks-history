@@ -1,9 +1,9 @@
-/* $Id: ftp.h,v 1.3 2002/05/08 13:55:05 pasky Exp $ */
+/* $Id: ftp.h,v 1.4 2003/01/01 20:30:34 pasky Exp $ */
 
 #ifndef EL__FTP_H
 #define EL__FTP_H
 
-#include "lowlevel/sched.h"
+#include "sched/sched.h"
 
 void ftp_func(struct connection *);
 

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.49 2002/12/21 19:19:56 zas Exp $ */
+/* $Id: url.c,v 1.50 2003/01/01 20:30:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,6 @@
 #include "config/options.h"
 #include "document/session.h"
 #include "intl/language.h"
-#include "lowlevel/sched.h"
 #include "protocol/file.h"
 #include "protocol/finger.h"
 #include "protocol/ftp.h"
@@ -26,6 +25,7 @@
 #include "protocol/http/https.h"
 #include "protocol/url.h"
 #include "protocol/user.h"
+#include "sched/sched.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"

@@ -1,9 +1,9 @@
-/* $Id: file.h,v 1.3 2002/05/08 13:55:05 pasky Exp $ */
+/* $Id: file.h,v 1.4 2003/01/01 20:30:34 pasky Exp $ */
 
 #ifndef EL__FILE_H
 #define EL__FILE_H
 
-#include "lowlevel/sched.h"
+#include "sched/sched.h"
 
 void file_func(struct connection *);
 

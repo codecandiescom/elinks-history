@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.7 2002/12/24 00:05:23 pasky Exp $ */
+/* $Id: download.h,v 1.8 2003/01/01 20:30:34 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOWNLOAD_H
 #define EL__DOCUMENT_DOWNLOAD_H
@@ -7,9 +7,9 @@
 
 #include "document/cache.h"
 #include "document/session.h"
-#include "lowlevel/sched.h"
 #include "lowlevel/terminal.h"
 #include "lowlevel/ttime.h"
+#include "sched/sched.h"
 #include "util/lists.h"
 
 struct download {

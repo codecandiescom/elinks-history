@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.68 2003/01/01 18:19:51 pasky Exp $ */
+/* $Id: menu.c,v 1.69 2003/01/01 20:30:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,12 +31,12 @@
 #include "globhist/dialogs.h"
 #include "intl/language.h"
 #include "lowlevel/kbd.h"
-#include "lowlevel/sched.h"
 #include "lowlevel/select.h"
 #include "lowlevel/terminal.h"
 #include "lua/core.h"
 #include "lua/hooks.h"
 #include "protocol/url.h"
+#include "sched/sched.h"
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"

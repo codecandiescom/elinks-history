@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.104 2004/05/28 23:42:45 jonas Exp $ */
+/* $Id: uri.h,v 1.105 2004/05/29 17:12:57 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -101,16 +101,25 @@ enum uri_component {
 	 * should never be exposed to the user. */
 	URI_IDN			= (1 << 8),
 
+	/* Add stuff from uri->data and up and prefixes a '/'  */
+	URI_PATH		= (1 << 9),
+
 	/* Some predefined classes for formatting of URIs */
 
+	/* Special flags */
+	URI_SPECIAL		= URI_DEFAULT_PORT | URI_PATH,
+
+	/* The usual suspects */
+	URI_RARE		= URI_SPECIAL | URI_POST | URI_IDN,
+
 	/* Used for public display either in dialogs or sent over the Net */
-	URI_PUBLIC		= ~(URI_PASSWORD | URI_DEFAULT_PORT | URI_POST | URI_IDN),
+	URI_PUBLIC		= ~(URI_PASSWORD | URI_RARE),
 
 	/* Used for getting the original URI with no internal encoding */
-	URI_ORIGINAL		= ~(URI_DEFAULT_PORT | URI_POST | URI_IDN),
+	URI_ORIGINAL		= ~(URI_DEFAULT_PORT | URI_RARE),
 
 	/* Used in the HTTP Auth code for ma*/
-	URI_HTTP_AUTH		= ~(URI_DEFAULT_PORT | URI_DATA | URI_POST | URI_IDN),
+	URI_HTTP_AUTH		= ~(URI_DEFAULT_PORT | URI_RARE),
 
 	/* Used for the value of HTTP "Host" header info */
 	URI_HTTP_HOST		= URI_HOST | URI_PORT,
@@ -125,7 +134,7 @@ enum uri_component {
 	URI_DNS_HOST		= URI_HOST | URI_IDN,
 
 	/* Used for adding the proxied URI after the '/' in the proxy URI */
-	URI_PROXY		= ~URI_DEFAULT_PORT,
+	URI_PROXY		= ~URI_SPECIAL,
 };
 
 

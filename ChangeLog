@@ -1,3 +1,9 @@
+Tue Jul  9 22:09:09 2002  Petr Baudis <pasky@ji.cz>:
+
+	* NEWS, configure.in:
+
+	0.4pre12 
+
 Tue Jul  9 22:03:50 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/http/http.c:

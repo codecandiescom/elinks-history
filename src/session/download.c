@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.158 2003/11/13 22:31:48 pasky Exp $ */
+/* $Id: download.c,v 1.159 2003/11/13 22:33:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -509,70 +509,70 @@ write_error:
 static void
 download_data_store(struct download *download, struct file_download *file_download)
 {
-	if (download->state < 0) {
-		struct terminal *term = get_download_ses(file_download)->tab->term;
+	struct terminal *term = get_download_ses(file_download)->tab->term;
 
-		if (download->state != S_OK) {
-			unsigned char *errmsg = get_err_msg(download->state, term);
+	if (download->state >= 0) {
+		set_file_download_win_handler(file_download);
+		return;
+	}
 
-			if (errmsg) {
+	if (download->state != S_OK) {
+		unsigned char *errmsg = get_err_msg(download->state, term);
+
+		if (errmsg) {
+			unsigned char *url = get_no_post_url(file_download->url, NULL);
+
+			if (url) {
+				msg_box(term, getml(url, NULL), MSGBOX_FREE_TEXT,
+					N_("Download error"), AL_CENTER,
+					msg_text(term, N_("Error downloading %s:\n\n%s"), url, errmsg),
+					get_download_ses(file_download), 1,
+					N_("OK"), NULL, B_ENTER | B_ESC /*,
+					N_(T_RETRY), NULL, 0 */ /* FIXME: retry */);
+			}
+		}
+
+	} else {
+		if (file_download->prog) {
+			prealloc_truncate(file_download->handle,
+					  file_download->last_pos);
+			close(file_download->handle);
+			file_download->handle = -1;
+			exec_on_terminal(get_download_ses(file_download)->tab->term,
+					 file_download->prog, file_download->file,
+					 !!file_download->prog_flags);
+			mem_free(file_download->prog);
+			file_download->prog = NULL;
+
+		} else {
+			if (file_download->notify) {
 				unsigned char *url = get_no_post_url(file_download->url, NULL);
 
 				if (url) {
 					msg_box(term, getml(url, NULL), MSGBOX_FREE_TEXT,
-						N_("Download error"), AL_CENTER,
-						msg_text(term, N_("Error downloading %s:\n\n%s"), url, errmsg),
+						N_("Download"), AL_CENTER,
+						msg_text(term, N_("Download complete:\n%s"), url),
 						get_download_ses(file_download), 1,
-						N_("OK"), NULL, B_ENTER | B_ESC /*,
-						N_(T_RETRY), NULL, 0 */ /* FIXME: retry */);
+						N_("OK"), NULL, B_ENTER | B_ESC);
 				}
 			}
 
-		} else {
-			if (file_download->prog) {
-				prealloc_truncate(file_download->handle,
-						  file_download->last_pos);
-				close(file_download->handle);
-				file_download->handle = -1;
-				exec_on_terminal(get_download_ses(file_download)->tab->term,
-						 file_download->prog, file_download->file,
-						 !!file_download->prog_flags);
-				mem_free(file_download->prog);
-				file_download->prog = NULL;
+			if (get_opt_int("document.download.notify_bell")
+			    + file_download->notify >= 2) {
+				beep_terminal(get_download_ses(file_download)->tab->term);
+			}
 
-			} else {
-				if (file_download->notify) {
-					unsigned char *url = get_no_post_url(file_download->url, NULL);
+			if (file_download->remotetime
+			    && get_opt_int("document.download.set_original_time")) {
+				struct utimbuf foo;
 
-					if (url) {
-						msg_box(term, getml(url, NULL), MSGBOX_FREE_TEXT,
-							N_("Download"), AL_CENTER,
-							msg_text(term, N_("Download complete:\n%s"), url),
-							get_download_ses(file_download), 1,
-							N_("OK"), NULL, B_ENTER | B_ESC);
-					}
-				}
-
-				if (get_opt_int("document.download.notify_bell")
-				    + file_download->notify >= 2) {
-					beep_terminal(get_download_ses(file_download)->tab->term);
-				}
-
-				if (file_download->remotetime
-				    && get_opt_int("document.download.set_original_time")) {
-					struct utimbuf foo;
-
-					foo.actime = foo.modtime = file_download->remotetime;
-					utime(file_download->file, &foo);
-				}
+				foo.actime = foo.modtime = file_download->remotetime;
+				utime(file_download->file, &foo);
 			}
 		}
-
-		abort_download(file_download, 0);
-		return;
 	}
 
-	set_file_download_win_handler(file_download);
+	abort_download(file_download, 0);
 }
 
 static void

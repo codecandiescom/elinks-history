@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.33 2004/07/16 18:53:08 jonas Exp $ */
+/* $Id: urlhist.c,v 1.34 2004/07/16 18:55:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 #include "config/urlhist.h"
 #include "sched/event.h"
 #include "util/lists.h"
+#include "util/memory.h"
 
 #define GOTO_HISTORY_FILENAME		"gotohist"
 

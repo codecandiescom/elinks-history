@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.17 2004/11/19 23:46:43 jonas Exp $ */
+/* $Id: digest.c,v 1.18 2004/11/20 00:09:03 jonas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ random_cnonce(void)
 }
 
 static unsigned char *
-digest_calc_ha1(struct auth_entry *entry, unsigned char *cnounce)
+digest_calc_ha1(struct auth_entry *entry)
 {
 	MD5_CTX MD5Ctx;
 	unsigned char skey[MD5_DIGEST_LENGTH + 1];
@@ -123,7 +123,7 @@ get_http_auth_digest_response(struct auth_entry *entry, struct uri *uri)
 		return NULL;
 
 	cnonce = random_cnonce();
-	ha1 = digest_calc_ha1(entry, cnonce);
+	ha1 = digest_calc_ha1(entry);
 	response = digest_calc_response(entry, uri, ha1, cnonce);
 	mem_free_if(ha1);
 

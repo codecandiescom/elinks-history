@@ -1,3 +1,10 @@
+Wed Oct 23 12:16:42 2002  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/os_dep.c:
+
+	exit() -> _exit(). Thanks to Sven Neumann <sven@convergence.de> for
+	reporting that error.  
+
 Fri Oct 18 19:39:46 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/view.c:

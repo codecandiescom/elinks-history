@@ -1,3 +1,258 @@
+Thu Jul 22 22:07:14 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	write_cache_entry_to_file(): drop gotos/label |write_error|.  
+
+Thu Jul 22 22:04:16 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	get_download_ses(): test for list_empty(sessions) before any
+	foreach().  
+
+Thu Jul 22 22:02:05 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	write_cache_entry_to_file(): drop list_empty(sessions) test,
+	get_download_ses(() will do it and it is called by
+	download_error_dialog().  
+
+Thu Jul 22 21:56:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	download_data_store(): drop last goto and label |abort|.  
+
+Thu Jul 22 21:54:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	download_data_store(): assuming get_err_msg() can not return NULL,
+	simplify code and drop some gotos.  
+
+Thu Jul 22 21:50:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/error.c:
+
+	get_err_msg(): drop goto/label.  
+
+Thu Jul 22 21:39:56 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	download_data_store(): move some code to new
+	abort_download_and_beep() and drop spome gotos.  
+
+Thu Jul 22 21:28:38 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	download_data(): drop gotos and label |store|.  
+
+Thu Jul 22 17:25:23 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/connect.c:
+
+	Fix large files uploads timing out (by Mikulas; from 1.00pre2).  
+
+Thu Jul 22 17:15:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/: connect.c, connect.h:
+
+	Describe {read,write}_buffer.done.  
+
+Thu Jul 22 17:04:30 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/task.c:
+
+	Fix entities sometimes wrongly decoded in imgmaps (by Mikulas; from
+	1.00pre1). @global_doc_opts looks like a gross mess, it should be
+	put into @html_context and usage out of the HTML engine eradicated.  
+
+Thu Jul 22 15:50:12 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/form.c:
+
+	When uploading files in anonymous mode, fix wrong error code (by
+	Mikulas; from 1.00pre1).  
+
+Thu Jul 22 15:49:50 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/form.c:
+
+	When uploading files, fix fd leak on read() error (by Mikulas; from
+	1.00pre1).  
+
+Thu Jul 22 08:07:46 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/proxy.c:
+
+	Clarify the comment with further help from Timo Lindfors: The
+	communication between ELinks and the proxy is never encrypted, altho
+	the proxy may be used to transfer encrypted data between ELinks and
+	the Web server.  
+
+Thu Jul 22 07:51:25 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Jul 22 07:45:32 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/proxy.c:
+
+	Revert a change that snuck in with revision 1.40: Don't check
+	whether the URI for the proxy to be used for https:// URIs begins
+	with "https://", but rather check for "http://". This is because
+	ELinks uses HTTP to communicate with the proxy, even if the proxy
+	opens a TLS connection on the client's behalf.  
+	
+	Thanks to Timo Lindfors for explaining to me the situation, which I
+	attempt to explain in a new comment.  
+
+Thu Jul 22 06:09:35 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/proxy.c:
+
+	Eliminate a useless assignment and if-statement in get_proxy_worker.  
+
+Thu Jul 22 02:26:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/conv.c:
+
+	Describe #include "intl/charsets.h" 
+
+Thu Jul 22 02:25:06 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/secsave.c:
+
+	Jonas noticed get_opt() usage in util/. :( 
+
+Thu Jul 22 02:19:03 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inpfield.c:
+
+	kbd_field(): Does not seem as a goto cleanup candidate anymore.  
+
+Thu Jul 22 02:16:59 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inphist.c:
+
+	Sanitize comment.  
+
+Thu Jul 22 02:06:02 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/hierbox.c, bookmarks/dialogs.c, cache/dialogs.c,
+	config/dialogs.c, formhist/dialogs.c, globhist/dialogs.c,
+	protocol/auth/dialogs.c:
+
+	The default hierbox info button handler now gives a chance to the
+	get_info() listbox op even if a folder is concerned and prints the
+	'use space to expand the folder' only if that op returns NULL. This
+	fixes options folders not showing up.  
+
+Thu Jul 22 02:02:14 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/secsave.c:
+
+	secure_file_saving -> infofiles.secure_save 
+
+Thu Jul 22 01:59:35 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Reply to Miciah.  
+
+Thu Jul 22 01:58:06 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	The gr smart prefix now searches the Google Groups.  
+
+Thu Jul 22 01:56:50 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Improve dumb/smart prefixes options descriptions.  
+
+Thu Jul 22 01:49:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	secure_file_saving -> infofiles.secure_save 
+
+Thu Jul 22 01:47:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Blank lines.  
+
+Thu Jul 22 01:18:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/globhist/globhist.c:
+
+	Noted when was document.history.global.write_interval aliased.  
+
+Thu Jul 22 00:17:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/proxy.c:
+
+	get_protocol_proxy(): @protocol_proxy -> @proxy. I'll probably leave
+	the rest to our cleanup and URI team ;-).  
+
+Thu Jul 22 00:15:55 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/proxy.c:
+
+	get_proxy_worker(): split and unify the redundant code to
+	get_protocol_proxy(), with extremely crude calling notation etc.  
+
+Thu Jul 22 00:05:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/proxy.c:
+
+	get_proxy_worker(): Whoops, fix b0rked getenv()s.  
+
+Thu Jul 22 00:00:47 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/proxy.c:
+
+	get_proxy_worker(): if chain -> switch 
+
+Wed Jul 21 23:48:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/proxy.c:
+
+	get_proxy_worker(): use @protocol_proxy everywhere instead of
+	<protocol>_proxy.  
+
+Wed Jul 21 23:27:38 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/dialogs.c:
+
+	add_bookmark_after_selected() -> move_bookmark_after_selected() 
+
+Wed Jul 21 23:25:07 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/link.c:
+
+	When highlighting a link, globhist should have more priority than
+	bookmarks, being more tentative and likely also more relevant at the
+	time.  
+
+Wed Jul 21 23:15:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/: internal.h, parser.c, parser.h,
+	parser/forms.c, parser/link.c, parser/stack.c:
+
+	html_format.{href_base,target_base} are not per-element properties,
+	therefore let's move them to html_context. This fixes a bug of <base
+	target> broken by the last <title> fix of mine, generously tracked
+	down by zas.  
+
 Wed Jul 21 19:39:25 2004  Laurent Monin <zas@norz.org>:
 
 	* src/sched/task.c:

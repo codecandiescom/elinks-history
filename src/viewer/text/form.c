@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.30 2003/08/02 17:16:47 jonas Exp $ */
+/* $Id: form.c,v 1.31 2003/08/21 13:03:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -477,7 +477,7 @@ encode_controls(struct list_head *l, struct string *data,
 					convert_table = get_translation_table(cp_from, cp_to);
 
 				p2 = convert_string(convert_table, p,
-						    strlen(p));
+						    strlen(p), CSM_QUERY);
 				mem_free(p);
 			}
 		} else if (sv->type == FC_TEXT ||
@@ -486,7 +486,7 @@ encode_controls(struct list_head *l, struct string *data,
 				convert_table = get_translation_table(cp_from, cp_to);
 
 			p2 = convert_string(convert_table, sv->value,
-					    strlen(sv->value));
+					    strlen(sv->value), CSM_QUERY);
 		} else {
 			p2 = stracpy(sv->value);
 		}
@@ -585,7 +585,7 @@ xx:
 									      cp_to);
 
 				p = convert_string(convert_table, sv->value,
-						   strlen(sv->value));
+						   strlen(sv->value), CSM_QUERY);
 				if (p) {
 					add_to_string(data, p);
 					mem_free(p);

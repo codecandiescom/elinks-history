@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.56 2003/08/20 10:10:31 zas Exp $ */
+/* $Id: charsets.c,v 1.57 2003/08/21 13:03:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -566,7 +566,8 @@ end:
 }
 
 unsigned char *
-convert_string(struct conv_table *convert_table, unsigned char *chars, int charslen)
+convert_string(struct conv_table *convert_table, unsigned char *chars,
+	       int charslen, enum convert_string_mode mode)
 {
 	unsigned char *buffer;
 	int bufferpos = 0;
@@ -632,7 +633,7 @@ decode:
 			 * in URL query strings. */
 			/* XXX: But this disables &nbsp&nbsp usage, which
 			 * appears to be relatively common! --pasky */
-			if (chars[i] != '&' && chars[i] != '='
+			if ((mode != CSM_QUERY || (chars[i] != '&' && chars[i] != '='))
 			    && i > start && !isalnum(chars[i])) {
 				e = get_entity_string(&chars[start], i - start,
 						      d_opt->cp);

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.190 2003/08/03 04:55:41 jonas Exp $ */
+/* $Id: parser.c,v 1.191 2003/08/21 13:03:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -209,7 +209,7 @@ found_endattr:
 		if (memchr(attr, '&', attrlen)) {
 			unsigned char *saved_attr = attr;
 
-			attr = convert_string(NULL, saved_attr, attrlen);
+			attr = convert_string(NULL, saved_attr, attrlen, CSM_QUERY);
 			mem_free(saved_attr);
 		}
 
@@ -1960,7 +1960,7 @@ abort:
 
 		while (l && WHITECHAR(s[0])) s++, l--;
 		while (l && WHITECHAR(s[l-1])) l--;
-		q = convert_string(ct, s, l);
+		q = convert_string(ct, s, l, CSM_DEFAULT);
 		if (q) add_to_string(&lbl, q), mem_free(q);
 	}
 
@@ -3395,7 +3395,7 @@ look_for_tag:
 		unsigned char *alt = get_attr_val(attr, "alt");
 
 		if (alt) {
-			label = convert_string(ct, alt, strlen(alt));
+			label = convert_string(ct, alt, strlen(alt), CSM_DEFAULT);
 			mem_free(alt);
 		} else {
 			label = NULL;

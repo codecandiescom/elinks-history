@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.195 2003/08/03 04:55:42 jonas Exp $ */
+/* $Id: renderer.c,v 1.196 2003/08/21 13:03:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -721,7 +721,7 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen,
 	/* XXX: Perhaps doing the whole string at once could be an ugly memory
 	 * hit? Dunno, someone should measure that. --pasky */
 
-	buffer = convert_string(convert_table, chars, charslen);
+	buffer = convert_string(convert_table, chars, charslen, CSM_DEFAULT);
 	if (buffer) {
 		put_chars(part, buffer, strlen(buffer), attr);
 		mem_free(buffer);
@@ -1077,7 +1077,7 @@ html_form_control(struct part *part, struct form_control *fc)
 	    fc->type == FC_TEXTAREA) {
 		unsigned char *dv = convert_string(convert_table,
 						   fc->default_value,
-						   strlen(fc->default_value));
+						   strlen(fc->default_value), CSM_QUERY);
 
 		if (dv) {
 			if (fc->default_value) mem_free(fc->default_value);
@@ -1509,7 +1509,7 @@ format_html(struct cache_entry *ce, struct document *screen)
 					  &screen->cp_status,
 					  screen->opt.hard_assume);
 	d_opt->plain = 0;
-	screen->title = convert_string(convert_table, title.source, title.length);
+	screen->title = convert_string(convert_table, title.source, title.length, CSM_DEFAULT);
 	d_opt->plain = i;
 	done_string(&title);
 

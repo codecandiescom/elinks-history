@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.24 2003/08/25 07:28:14 jonas Exp $ */
+/* $Id: kbd.c,v 1.25 2003/08/29 23:27:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -315,7 +315,9 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	if ((env & ENV_TWIN) && !strcmp(ts, "linux"))
 		itrm->flags |= USE_TWIN_MOUSE;
 
-	if (env & ENV_SCREEN)
+	/* FIXME: Combination altscreen + xwin does not work as it should,
+	 * mouse clicks are reportedly partially ignored. */
+	if (env & (ENV_SCREEN /* | ENV_XWIN */))
 		itrm->flags |= USE_ALTSCREEN;
 
 	if (queue_ts(itrm, ts, strlen(ts), MAX_TERM_LEN)) {

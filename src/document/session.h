@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.7 2002/03/28 22:53:35 pasky Exp $ */
+/* $Id: session.h,v 1.8 2002/03/29 10:36:56 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_SESSION_H
 #define EL__DOCUMENT_SESSION_H
@@ -35,26 +35,6 @@ struct kbdprefix {
 	int rep_num;
 	int prefix;
 };
-
-struct download {
-	struct download *next;
-	struct download *prev;
-	unsigned char *url;
-	struct status stat;
-	unsigned char *file;
-	int last_pos;
-	int handle;
-	int redirect_cnt;
-	unsigned char *prog;
-	int prog_flags;
-	time_t remotetime;
-	struct session *ses;
-	struct window *win;
-	struct window *ask;
-};
-
-/* Stack of all running downloads */
-extern struct list_head downloads;
 
 /* This should be used only internally */
 enum session_wtd {
@@ -103,16 +83,13 @@ struct session {
 	int exit_query;
 };
 
-/* extern struct list_head sessions; */
+extern struct list_head sessions;
 
 unsigned char *encode_url(unsigned char *);
 /* unsigned char *decode_url(unsigned char *); */
 
-unsigned char *subst_file(unsigned char *, unsigned char *);
-
-void free_files(struct session *);
-
-int are_there_downloads();
+void add_xnum_to_str(unsigned char **, int *, int);
+void add_time_to_str(unsigned char **, int *, ttime);
 
 void free_strerror_buf();
 unsigned char *get_err_msg(int);
@@ -120,9 +97,6 @@ unsigned char *get_err_msg(int);
 void print_screen_status(struct session *);
 void print_error_dialog(struct session *, struct status *, unsigned char *);
 
-void start_download(struct session *, unsigned char *);
-void display_download(struct terminal *, struct download *, struct session *);
-int create_download_file(struct terminal *, unsigned char *, int);
 void process_file_requests(struct session *);
 
 /* int read_session_info(int, struct session *, void *, int); */
@@ -140,6 +114,7 @@ void ses_goto(struct session *, unsigned char *, unsigned char *, int, int,
 		      struct session *), int);
 
 void end_load(struct status *, struct session *);
+void doc_end_load(struct status *, struct session *);
 
 void abort_loading(struct session *);
 void reload(struct session*, int);
@@ -152,7 +127,10 @@ void map_selected(struct terminal *, struct link_def *, struct session *);
 
 /* void destroy_session(struct session *); */
 void destroy_all_sessions();
-void abort_all_downloads();
+
+void free_files(struct session *);
+
+void display_timer(struct session *ses);
 
 /* Information about the current document */
 unsigned char *get_current_url(struct session *, unsigned char *, size_t);

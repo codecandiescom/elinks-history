@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.17 2002/03/28 22:59:17 pasky Exp $ */
+/* $Id: view.c,v 1.18 2002/03/29 10:36:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,6 +32,7 @@
 #include <config/default.h>
 #include <config/kbdbind.h>
 #include <document/cache.h>
+#include <document/download.h>
 #include <document/dump.h>
 #include <document/history.h>
 #include <document/location.h>

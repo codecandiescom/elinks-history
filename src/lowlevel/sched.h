@@ -1,4 +1,4 @@
-/* $Id: sched.h,v 1.5 2002/03/28 17:35:57 pasky Exp $ */
+/* $Id: sched.h,v 1.6 2002/03/29 10:36:57 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_SCHED_H
 #define EL__LOWLEVEL_SCHED_H
@@ -16,6 +16,12 @@
 #define PRI_PRELOAD	4
 #define PRI_CANCEL	5
 #define N_PRI		6
+
+#ifdef HAVE_LONG_LONG
+#define longlong long long
+#else
+#define longlong long
+#endif
 
 struct remaining_info {
 	int valid;

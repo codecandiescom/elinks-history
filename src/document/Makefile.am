@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.12 2002/03/28 22:53:35 pasky Exp $
+## $Id: Makefile.am,v 1.13 2002/03/29 10:36:56 pasky Exp $
 
 INCLUDES = \
  -I$(srcdir)/..
@@ -10,6 +10,8 @@ noinst_LIBRARIES = libdocument.a
 libdocument_a_SOURCES = \
  cache.c \
  cache.h \
+ download.c \
+ download.h \
  dump.c \
  dump.h \
  history.c \

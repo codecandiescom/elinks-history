@@ -1,4 +1,4 @@
-/* $Id: stub.h,v 1.9 2004/11/08 16:15:07 jonas Exp $ */
+/* $Id: stub.h,v 1.10 2004/11/13 13:31:54 witekfl Exp $ */
 
 #ifndef EL__OSDEP_STUB_H
 #define EL__OSDEP_STUB_H
@@ -13,6 +13,7 @@
 #ifdef CONFIG_OWN_LIBC
 
 #undef HAVE_BCOPY /* prevent using bcopy() stub for memmove() */
+#undef HAVE_ISDIGIT
 #undef HAVE_MEMMOVE
 #undef HAVE_MEMPCPY
 #undef HAVE_RAISE
@@ -48,6 +49,12 @@
 # error You have neither strchr() nor index() function. Please go upgrade your system.
 #endif /* HAVE_INDEX */
 #endif /* HAVE_STRCHR */
+
+#ifndef HAVE_ISDIGIT
+#undef isdigit
+#define isdigit(a) elinks_isdigit(a)
+inline int elinks_isdigit(int);
+#endif
 
 /** strerror() */
 #ifndef HAVE_STRERROR

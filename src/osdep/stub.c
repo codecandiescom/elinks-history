@@ -1,5 +1,5 @@
 /* Libc stub functions */
-/* $Id: stub.c,v 1.16 2004/11/08 16:15:07 jonas Exp $ */
+/* $Id: stub.c,v 1.17 2004/11/13 13:31:54 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,6 +178,14 @@ inline void *
 elinks_mempcpy(void *dest, const void *src, size_t n)
 {
 	return (void *) ((char *) memcpy(dest, src, n) + n);
+}
+#endif
+
+#ifndef HAVE_ISDIGIT
+inline int
+elinks_isdigit(int i)
+{
+	return i >= '0' && i <= '9';
 }
 #endif
 

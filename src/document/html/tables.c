@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.104 2003/10/30 16:44:59 zas Exp $ */
+/* $Id: tables.c,v 1.105 2003/10/30 16:48:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,7 +151,7 @@ get_valign(unsigned char *attr, int *a)
 }
 
 static inline void
-get_c_width(unsigned char *attr, int *w, int sh)
+get_column_width(unsigned char *attr, int *width, int sh)
 {
 	unsigned char *al = get_attr_val(attr, "width");
 
@@ -165,11 +165,12 @@ get_c_width(unsigned char *attr, int *w, int sh)
 			al[len - 1] = '\0';
 			errno = 0;
 			n = strtoul(al, (char **)&en, 10);
-			if (!errno && n >= 0 && !*en) *w = W_REL - n;
+			if (!errno && n >= 0 && !*en)
+				*width = W_REL - n;
 		} else {
-			int p = get_width(attr, "width", sh);
+			int w = get_width(attr, "width", sh);
 
-			if (p >= 0) *w = p;
+			if (w >= 0) *width = w;
 		}
 		mem_free(al);
 	}
@@ -484,7 +485,7 @@ qwe:
 		c_width = W_AUTO;
 		get_align(t_attr, &c_al);
 		get_valign(t_attr, &c_val);
-		get_c_width(t_attr, &c_width, sh);
+		get_column_width(t_attr, &c_width, sh);
 		c_span = get_num(t_attr, "span");
 		if (c_span == -1) c_span = 1;
 		goto see;
@@ -519,7 +520,7 @@ qwe:
 		val = c_val;
 		get_align(t_attr, &al);
 		get_valign(t_attr, &val);
-		get_c_width(t_attr, &wi, sh);
+		get_column_width(t_attr, &wi, sh);
 		new_columns(t, sp, wi, al, val, !!c_span);
 		c_span = 0;
 		goto see;
@@ -663,7 +664,7 @@ nc:
 	if (csp == 1) {
 		int w = W_AUTO;
 
-		get_c_width(t_attr, &w, sh);
+		get_column_width(t_attr, &w, sh);
 		if (w != W_AUTO) set_td_width(t, x, w, 0);
 	}
 

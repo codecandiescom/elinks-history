@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.47 2004/01/27 00:16:22 pasky Exp $ */
+/* $Id: apply.c,v 1.48 2004/01/27 00:23:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,35 +85,31 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 	INIT_LIST_HEAD(props);
 	unsigned char *code;
 	struct css_property *property;
-	struct css_selector *selector;
-	int shall_free_sel = 0;
+	struct css_selector *selector, *altsel;
 
 	assert(element && element->options && css);
+
+	selector = init_css_selector(NULL, NULL, NULL);
+	if (!selector)
+		return;
 
 	code = get_attr_val(element->options, "style");
 	if (code) {
 		struct css_scanner scanner;
 
-		selector = init_css_selector(NULL, NULL, NULL);
-		shall_free_sel = 1;
-
 		init_css_scanner(&scanner, code);
 		css_parse_properties(&selector->properties, &scanner);
 		mem_free(code);
-
-	} else {
-		if (!list_empty(css->selectors))
-			selector = find_css_selector(css, element->name,
-						    element->namelen);
-
-		if (!selector && !list_empty(default_stylesheet.selectors))
-			selector = find_css_selector(&default_stylesheet,
-						    element->name,
-						    element->namelen);
-
-		if (!selector)
-			return;
 	}
+
+	altsel = find_css_selector(css, element->name,
+				   element->namelen);
+	if (altsel) merge_css_selectors(selector, altsel);
+
+	altsel = find_css_selector(&default_stylesheet,
+				   element->name,
+				   element->namelen);
+	if (altsel) merge_css_selectors(selector, altsel);
 
 	foreach (property, selector->properties) {
 		assert(property->type < CSS_PT_LAST);
@@ -124,6 +120,5 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 		css_appliers[property->type](element, property);
 	}
 
-	if (shall_free_sel)
-		done_css_selector(selector);
+	done_css_selector(selector);
 }

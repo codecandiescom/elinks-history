@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.12 2004/01/27 00:14:38 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.13 2004/01/27 00:23:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 
 #include "document/css/property.h"
 #include "document/css/stylesheet.h"
+#include "util/error.h"
 #include "util/lists.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -73,6 +74,73 @@ get_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
 		return selector;
 
 	return NULL;
+}
+
+static struct css_selector *
+copy_css_selector(struct css_stylesheet *css, struct css_selector *orig)
+{
+	struct css_selector *copy;
+
+	assert(css && orig);
+
+	copy = init_css_selector(css, orig->element, strlen(orig->element));
+	if (!copy)
+		return NULL;
+
+	if (orig->id) copy->id = stracpy(orig->id);
+	if (orig->class) copy->class = stracpy(orig->class);
+	if (orig->pseudo) copy->pseudo = stracpy(orig->pseudo);
+
+	return copy;
+}
+
+static struct css_selector *
+clone_css_selector(struct css_stylesheet *css, struct css_selector *orig)
+{
+	struct css_selector *copy;
+	struct css_property *prop;
+
+	assert(css && orig);
+
+	copy = copy_css_selector(css, orig);
+	if (!copy)
+		return NULL;
+
+	foreach (prop, orig->properties) {
+		struct css_property *newprop;
+
+		newprop = mem_calloc(1, sizeof(struct css_property));
+		if (!newprop)
+			continue;
+		*newprop = *prop;
+		add_to_list(copy->properties, newprop);
+	}
+
+	return copy;
+}
+
+void
+merge_css_selectors(struct css_selector *sel1, struct css_selector *sel2)
+{
+	struct css_property *prop;
+
+	foreach (prop, sel2->properties) {
+		struct css_property *origprop;
+
+		foreach (origprop, sel1->properties)
+			if (origprop->type == prop->type)
+				goto found;
+
+		/* Not there yet, let's add it. */
+		origprop = mem_calloc(1, sizeof(struct css_property));
+		if (!origprop)
+			continue;
+		*origprop = *prop;
+		add_to_list(sel1->properties, origprop);
+
+found:
+		continue;
+	}
 }
 
 void

@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.13 2004/01/27 00:14:38 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.14 2004/01/27 00:23:46 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -91,6 +91,9 @@ find_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen);
  * your POV. */
 struct css_selector *
 init_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen);
+
+/* Join @sel2 to @sel1, @sel1 taking precedence in all conflicts. */
+void merge_css_selectors(struct css_selector *sel1, struct css_selector *sel2);
 
 /* Destroy a selector. done_css_stylesheet() normally does that for you. */
 void done_css_selector(struct css_selector *selector);

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.131 2003/07/02 17:55:41 zas Exp $ */
+/* $Id: view.c,v 1.132 2003/07/02 18:05:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1138,10 +1138,11 @@ draw_doc(struct terminal *t, struct f_data_c *scr, int active)
 static void
 draw_frames(struct session *ses)
 {
-	int n;
-	int i, d, more;
-	int *l;
 	struct f_data_c *f, *cf;
+	int *l;
+	int n, i, d, more;
+
+	assert(ses && ses->screen && ses->screen->f_data);
 
 	if (!ses->screen->f_data->frame) return;
 	n = 0;
@@ -1168,6 +1169,8 @@ draw_frames(struct session *ses)
 void
 draw_formatted(struct session *ses)
 {
+	assert(ses && ses->tab);
+
 	if (ses->tab != get_current_tab(ses->tab->term))
 		return;
 
@@ -1189,7 +1192,9 @@ draw_formatted(struct session *ses)
 static int
 in_viewx(struct f_data_c *f, struct link *l)
 {
-	int i;
+	register int i;
+
+	assert(f && l);
 
 	for (i = 0; i < l->n; i++) {
 		if (l->pos[i].x >= f->vs->view_posx
@@ -1202,7 +1207,9 @@ in_viewx(struct f_data_c *f, struct link *l)
 static int
 in_viewy(struct f_data_c *f, struct link *l)
 {
-	int i;
+	register int i;
+
+	assert(f && l);
 
 	for (i = 0; i < l->n; i++) {
 		if (l->pos[i].y >= f->vs->view_pos
@@ -1215,12 +1222,14 @@ in_viewy(struct f_data_c *f, struct link *l)
 static inline int
 in_view(struct f_data_c *f, struct link *l)
 {
+	assert(f && l);
 	return in_viewy(f, l) && in_viewx(f, l);
 }
 
 int
 c_in_view(struct f_data_c *f)
 {
+	assert(f && f->vs);
 	return (f->vs->current_link != -1
 		&& in_view(f, &f->f_data->links[f->vs->current_link]));
 }
@@ -1230,10 +1239,13 @@ next_in_view(struct f_data_c *f, int p, int d,
 	     int (*fn)(struct f_data_c *, struct link *),
 	     void (*cntr)(struct f_data_c *, struct link *))
 {
-	int p1 = f->f_data->nlinks - 1;
-	int p2 = 0;
-	int y;
-	int yl = f->vs->view_pos + f->yw;
+	int p1, p2 = 0;
+	int y, yl;
+
+	assert(f && f->f_data && f->vs && fn);
+
+	p1 = f->f_data->nlinks - 1;
+	yl = f->vs->view_pos + f->yw;
 
 	if (yl > f->f_data->y) yl = f->f_data->y;
 	for (y = f->vs->view_pos < 0 ? 0 : f->vs->view_pos; y < yl; y++) {
@@ -1258,9 +1270,11 @@ next_in_view(struct f_data_c *f, int p, int d,
 void
 set_pos_x(struct f_data_c *f, struct link *l)
 {
-	int i;
 	int xm = 0;
 	int xl = MAXINT;
+	register int i;
+
+	assert(f && l);
 
 	for (i = 0; i < l->n; i++) {
 		if (l->pos[i].y >= f->vs->view_pos
@@ -1278,10 +1292,13 @@ set_pos_x(struct f_data_c *f, struct link *l)
 void
 set_pos_y(struct f_data_c *f, struct link *l)
 {
-	int i;
 	int ym = 0;
-	int yl = f->f_data->y;
+	int yl;
+	register int i;
 
+	assert(f && f->f_data && f->vs && l);
+
+	yl = f->f_data->y;
 	for (i = 0; i < l->n; i++) {
 		if (l->pos[i].y >= ym) ym = l->pos[i].y + 1;
 		if (l->pos[i].y < yl) yl = l->pos[i].y;
@@ -1295,18 +1312,21 @@ set_pos_y(struct f_data_c *f, struct link *l)
 void
 find_link(struct f_data_c *f, int p, int s)
 { /* p=1 - top, p=-1 - bottom, s=0 - pgdn, s=1 - down */
-	int y;
-	int l;
+	struct link **line;
 	struct link *link;
-	struct link **line = (p == -1) ? f->f_data->lines2 : f->f_data->lines1;
+	int y, l;
 
-	if (!line) goto nolink;
+	assert(f && f->f_data && f->vs);
 
 	if (p == -1) {
+		line = f->f_data->lines2;
+		if (!line) goto nolink;
 		y = f->vs->view_pos + f->yw - 1;
 		if (y >= f->f_data->y) y = f->f_data->y - 1;
 		if (y < 0) goto nolink;
 	} else {
+		line = f->f_data->lines1;
+		if (!line) goto nolink;
 		y = f->vs->view_pos;
 		if (y < 0) y = 0;
 		if (y >= f->f_data->y) goto nolink;

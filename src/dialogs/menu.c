@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.299 2004/04/15 16:44:57 jonas Exp $ */
+/* $Id: menu.c,v 1.300 2004/04/15 16:57:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -517,10 +517,13 @@ open_url_in_new_window(struct session *ses, unsigned char *url,
 {
 	struct string parameters;
 
-	assert(open_window && ses && url);
+	assert(open_window && ses);
 	if_assert_failed return;
 
 	if (!init_session_info_string(&parameters, ses)) return;
+
+	/* TODO: Possibly preload the link URI so it will be ready when
+	 * the new ELinks instance requests it. --jonas */
 	if (url) add_encoded_shell_safe_url(&parameters, url);
 
 	open_window(ses->tab->term, path_to_exe, parameters.source);
@@ -535,7 +538,6 @@ send_open_in_new_window(struct terminal *term,
 {
 	struct document_view *doc_view;
 	struct link *link;
-	struct string parameters;
 	unsigned char *url;
 
 	assert(term && open_window && ses);
@@ -550,15 +552,8 @@ send_open_in_new_window(struct terminal *term,
 	url = get_link_url(ses, doc_view, link);
 	if (!url) return;
 
-	if (init_session_info_string(&parameters, ses)
-	    && add_encoded_shell_safe_url(&parameters, url)) {
-		open_window(term, path_to_exe, parameters.source);
-	}
-
-	/* TODO: Possibly preload the link URI so it will be ready when
-	 * the new ELinks instance requests it. --jonas */
+	open_url_in_new_window(ses, url, open_window);
 	mem_free(url);
-	done_string(&parameters);
 }
 
 void
@@ -566,15 +561,7 @@ send_open_new_window(struct terminal *term,
 		    void (*open_window)(struct terminal *, unsigned char *, unsigned char *),
 		    struct session *ses)
 {
-	struct string parameters;
-
-	assert(term && open_window && ses);
-	if_assert_failed return;
-
-	if (!init_session_info_string(&parameters, ses)) return;
-
-	open_window(term, path_to_exe, parameters.source);
-	done_string(&parameters);
+	open_url_in_new_window(ses, NULL, open_window);
 }
 
 

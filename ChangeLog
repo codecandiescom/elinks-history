@@ -1,3 +1,28 @@
+Wed May  5 17:52:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	More CONFIG_CSS tuning.  
+
+Wed May  5 12:39:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* features.conf:
+
+	m11p 
+
+Wed May  5 12:37:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* features.conf:
+
+	Don't assume anything is simple, elaborate on CONFIG_CSS
+	description.  
+
+Wed May  5 12:26:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	More CONFIG_CSS stuff.  
+
 Tue May  4 11:45:29 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/: options.c, options.h:

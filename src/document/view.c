@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.25 2002/04/16 12:34:55 pasky Exp $ */
+/* $Id: view.c,v 1.26 2002/04/19 12:23:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2436,7 +2436,7 @@ void send_event(struct session *ses, struct event *ev)
 			case ACT_COOKIES_LOAD:
 				if (!anonymous && cookies_save) load_cookies();
 				goto x;
-			case ACT_REALLYQUIT:
+			case ACT_REALLY_QUIT:
 				exit_prog(ses->term, (void *)1, ses);
 				goto x;
 			case ACT_LUA_CONSOLE:

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.2 2002/04/01 20:28:54 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.3 2002/04/19 12:23:20 pasky Exp $ */
 
 #ifndef EL__KBDBIND_H
 #define EL__KBDBIND_H
@@ -53,7 +53,7 @@ enum keyact {
 	ACT_PASTE_CLIPBOARD,
 	ACT_PREVIOUS_FRAME,
 	ACT_QUIT,
-	ACT_REALLYQUIT,
+	ACT_REALLY_QUIT,
 	ACT_RELOAD,
 	ACT_RIGHT,
 	ACT_SCROLL_DOWN,

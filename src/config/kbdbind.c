@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.197 2004/01/28 09:18:56 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.198 2004/01/30 23:01:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -840,6 +840,7 @@ static struct default_kb default_main_keymap[] = {
 	{ KBD_RIGHT,	 0,		ACT_MAIN_ENTER },
 	{ KBD_RIGHT,	 KBD_CTRL,	ACT_MAIN_ENTER_RELOAD },
 	{ KBD_TAB,	 0,		ACT_MAIN_NEXT_FRAME },
+	{ KBD_TAB,	 KBD_ALT,	ACT_MAIN_PREVIOUS_FRAME },
 	{ KBD_UP,	 0,		ACT_MAIN_UP },
 	{ 0, 0, 0 }
 };
@@ -871,6 +872,7 @@ static struct default_kb default_edit_keymap[] = {
 	{ KBD_LEFT,	 0,		ACT_EDIT_LEFT },
 	{ KBD_RIGHT,	 0,		ACT_EDIT_RIGHT },
 	{ KBD_TAB,	 0,		ACT_EDIT_NEXT_ITEM },
+	{ KBD_TAB,	 KBD_ALT,	ACT_MAIN_PREVIOUS_ITEM },
 	{ KBD_UP,	 0,		ACT_EDIT_UP },
 	{ 0, 0, 0 }
 };
@@ -905,6 +907,7 @@ static struct default_kb default_menu_keymap[] = {
 	{ KBD_PAGE_UP,	 0,		ACT_MENU_PAGE_UP },
 	{ KBD_RIGHT,	 0,		ACT_MENU_RIGHT },
 	{ KBD_TAB,	 0,		ACT_MENU_NEXT_ITEM },
+	{ KBD_TAB,	 KBD_ALT,	ACT_MAIN_PREVIOUS_ITEM },
 	{ KBD_UP,	 0,		ACT_MENU_UP },
 	{ 0, 0, 0}
 };

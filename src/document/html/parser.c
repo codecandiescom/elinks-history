@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.338 2004/01/18 00:17:15 pasky Exp $ */
+/* $Id: parser.c,v 1.339 2004/01/18 14:50:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2262,7 +2262,7 @@ parse_frame_widths(unsigned char *a, int ww, int www, int **op, int *olp)
 {
 	unsigned char *aa;
 	unsigned long n;
-	int q, qq, d, nn;
+	int q, qq, divisor, nn;
 	int *oo;
 	int *o = NULL;
 	int ol = 0;
@@ -2304,14 +2304,14 @@ new_ch:
 distribute:
 		for (i = 0; i < ol; i++) if (o[i] < 1) o[i] = 1;
 		q -= ww;
-		d = 0;
-		for (i = 0; i < ol; i++) d += o[i];
+		divisor = 0;
+		for (i = 0; i < ol; i++) divisor += o[i];
 		qq = q;
 		for (i = 0; i < ol; i++) {
-			q -= o[i] - o[i] * (d - qq) / d;
+			q -= o[i] - o[i] * (divisor - qq) / divisor;
 			/* SIGH! gcc 2.7.2.* has an optimizer bug! */
-			do_not_optimize_here_gcc_2_7(&d);
-			o[i] = o[i] * (d - qq) / d;
+			do_not_optimize_here_gcc_2_7(&divisor);
+			o[i] = o[i] * (divisor - qq) / divisor;
 		}
 		while (q) {
 			nn = 0;
@@ -2336,12 +2336,12 @@ distribute:
 		memcpy(oo, o, ol * sizeof(int));
 		for (i = 0; i < ol; i++) if (o[i] < 1) o[i] = 1;
 		q = ww - q;
-		d = 0;
-		for (i = 0; i < ol; i++) if (oo[i] < 0) d += -oo[i];
+		divisor = 0;
+		for (i = 0; i < ol; i++) if (oo[i] < 0) divisor += -oo[i];
 		qq = q;
 		for (i = 0; i < ol; i++) if (oo[i] < 0) {
-			o[i] += (-oo[i] * qq / d);
-			q -= (-oo[i] * qq / d);
+			o[i] += (-oo[i] * qq / divisor);
+			q -= (-oo[i] * qq / divisor);
 		}
 		assertm(q >= 0, "parse_frame_widths: q < 0");
 		if_assert_failed q = 0;

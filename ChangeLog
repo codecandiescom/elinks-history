@@ -1,3 +1,9 @@
+Sun Dec  1 23:29:10 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.4pre21 
+
 Sun Dec  1 20:04:37 2002  Laurent Monin <zas@norz.org>:
 
 	* src/document/view.c:

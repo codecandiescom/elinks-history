@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.79 2003/06/23 23:29:56 jonas Exp $ */
+/* $Id: file.c,v 1.80 2003/06/23 23:36:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -276,14 +276,14 @@ comp_de(struct directory_entry *d1, struct directory_entry *d2)
 	return strcmp(d1->name, d2->name);
 }
 
-struct file_info {
+struct file_data {
 	unsigned char *head;
 	unsigned char *fragment;
 	int fragmentlen;
 };
 
 static void
-add_dir_entry(struct directory_entry *entry, struct file_info *info,
+add_dir_entry(struct directory_entry *entry, struct file_data *data,
 	      unsigned char *path, unsigned char *dircolor)
 {
 	unsigned char *lnk = NULL;
@@ -291,8 +291,8 @@ add_dir_entry(struct directory_entry *entry, struct file_info *info,
 	int namelen = strlen(name);
 	unsigned char *attrib = entry->attrib;
 	int attriblen = strlen(attrib);
-	unsigned char *fragment = info->fragment;
-	int fragmentlen = info->fragmentlen;
+	unsigned char *fragment = data->fragment;
+	int fragmentlen = data->fragmentlen;
 
 #ifdef FS_UNIX_SOFTLINKS
 	if (attrib[0] == 'l') {
@@ -369,15 +369,15 @@ add_dir_entry(struct directory_entry *entry, struct file_info *info,
 
 	add_chr_to_str(&fragment, &fragmentlen, '\n');
 
-	info->fragment = fragment;
-	info->fragmentlen = fragmentlen;
+	data->fragment = fragment;
+	data->fragmentlen = fragmentlen;
 }
 
 /* First information such as permissions is gathered for each directory entry.
  * All entries are then sorted and finally the sorted entries are added to the
  * fragment one by one. */
 static void
-add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_info *info)
+add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 {
 	struct directory_entry *entries = NULL;
 	int size = 0;
@@ -452,7 +452,7 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_info *info)
 	}
 
 	for (i = 0; i < size; i++) {
-		add_dir_entry(&entries[i], info, dirpath, dircolor);
+		add_dir_entry(&entries[i], data, dirpath, dircolor);
 		if (entries[i].attrib) mem_free(entries[i].attrib);
 		if (entries[i].name) mem_free(entries[i].name);
 	}
@@ -463,9 +463,8 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_info *info)
 /* Generates a HTML page listing the content of @directory with the path
  * @dirpath. */
 /* Returns a connection state. S_OK if all is well. */
-/* TODO comment and split up this function; possibly the two loops. --jonas */
 static int
-list_directory(DIR *directory, unsigned char *dirpath, struct file_info *info)
+list_directory(DIR *directory, unsigned char *dirpath, struct file_data *data)
 {
 	unsigned char *fragment = init_str();
 	int fragmentlen = 0;
@@ -495,14 +494,14 @@ list_directory(DIR *directory, unsigned char *dirpath, struct file_info *info)
 	}
 	add_to_str(&fragment, &fragmentlen, "</h2>\n<pre>");
 
-	info->fragment = fragment;
-	info->fragmentlen = fragmentlen;
+	data->fragment = fragment;
+	data->fragmentlen = fragmentlen;
 
-	add_dir_entries(directory, dirpath, info);
+	add_dir_entries(directory, dirpath, data);
 
-	add_to_str(&info->fragment, &info->fragmentlen, "</pre>\n<hr>\n</body>\n</html>\n");
+	add_to_str(&data->fragment, &data->fragmentlen, "</pre>\n<hr>\n</body>\n</html>\n");
 
-	info->head = stracpy("\r\nContent-Type: text/html\r\n");
+	data->head = stracpy("\r\nContent-Type: text/html\r\n");
 	return S_OK;
 }
 
@@ -544,7 +543,7 @@ try_encoding_extensions(unsigned char *prefixname, int *fd)
 /* Reads the file from @stream in chunks of size @readsize. */
 /* Returns a connection state. S_OK if all is well. */
 static int
-read_file(struct stream_encoded *stream, int readsize, struct file_info *info)
+read_file(struct stream_encoded *stream, int readsize, struct file_data *data)
 {
 	/* + 1 is there because of bug in Linux. Read returns -EACCES when
 	 * reading 0 bytes to invalid address */
@@ -595,9 +594,9 @@ read_file(struct stream_encoded *stream, int readsize, struct file_info *info)
 
 	fragment[fragmentlen] = '\0'; /* NULL-terminate just in case */
 
-	info->fragment = fragment;
-	info->fragmentlen = fragmentlen;
-	info->head = stracpy("");
+	data->fragment = fragment;
+	data->fragmentlen = fragmentlen;
+	data->head = stracpy("");
 	return S_OK;
 }
 
@@ -614,7 +613,7 @@ file_func(struct connection *connection)
 	unsigned char *filename;
 	int filenamelen;
 	DIR *directory;
-	struct file_info info;
+	struct file_data data;
 	int state;
 
 	if (get_opt_int_tree(&cmdline_options, "anonymous")) {
@@ -637,7 +636,7 @@ file_func(struct connection *connection)
 			redirect = straconcat(connection->url, "/", NULL);
 			state = S_OK;
 		} else {
-			state = list_directory(directory, filename, &info);
+			state = list_directory(directory, filename, &data);
 		}
 
 		closedir(directory);
@@ -684,7 +683,7 @@ file_func(struct connection *connection)
 			state = S_OUT_OF_MEM;
 
 		} else {
-			state = read_file(stream, stt.st_size, &info);
+			state = read_file(stream, stt.st_size, &data);
 			close_encoded(stream);
 		}
 
@@ -697,7 +696,7 @@ file_func(struct connection *connection)
 		/* Try to add fragment data to the connection cache if either
 		 * file reading or directory listing worked out ok. */
 		if (get_cache_entry(connection->url, &cache)) {
-			mem_free(info.fragment);
+			mem_free(data.fragment);
 			state = S_OUT_OF_MEM;
 
 		} else if (redirect) {
@@ -711,13 +710,13 @@ file_func(struct connection *connection)
 		} else {
 			/* Setup file read or directory listing for viewing. */
 			if (cache->head) mem_free(cache->head);
-			cache->head = info.head;
+			cache->head = data.head;
 			cache->incomplete = 0;
 			connection->cache = cache;
 
-			add_fragment(cache, 0, info.fragment, info.fragmentlen);
-			truncate_entry(cache, info.fragmentlen, 1);
-			mem_free(info.fragment);
+			add_fragment(cache, 0, data.fragment, data.fragmentlen);
+			truncate_entry(cache, data.fragmentlen, 1);
+			mem_free(data.fragment);
 		}
 	}
 

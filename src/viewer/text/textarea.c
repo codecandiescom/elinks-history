@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.33 2003/11/28 00:53:30 pasky Exp $ */
+/* $Id: textarea.c,v 1.34 2003/11/28 04:57:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -547,9 +547,8 @@ set_textarea(struct session *ses, struct document_view *doc_view, int kbd)
 
 	if (doc_view->vs->current_link != -1
 	    && doc_view->document->links[doc_view->vs->current_link].type == LINK_AREA) {
-		struct term_event ev = INIT_TERM_EVENT(EV_KBD, 0, 0, 0);
+		struct term_event ev = INIT_TERM_EVENT(EV_KBD, kbd, 0, 0);
 
-		ev.x = kbd;
 		field_op(ses, doc_view, &doc_view->document->links[doc_view->vs->current_link], &ev, 1);
 	}
 }

@@ -4347,7 +4347,7 @@ msgstr ""
 
 #: src/formhist/formhist.c:382
 msgid "Never for this site"
-msgstr ""
+msgstr "Nigdy dla tego miejsca"
 
 #. name:
 #: src/formhist/formhist.c:402

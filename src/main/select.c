@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.58 2005/03/03 17:10:00 zas Exp $ */
+/* $Id: select.c,v 1.59 2005/03/03 17:13:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,8 +72,6 @@ static fd_set x_write;
 static fd_set x_error;
 
 static int w_max;
-static int timer_id = 0;
-
 
 
 long
@@ -165,6 +163,7 @@ check_timers(ttime *last_time)
 int
 install_timer(ttime time, void (*func)(void *), void *data)
 {
+	static int timer_id = 0;
 	struct timer *new_timer, *timer;
 
 	new_timer = mem_alloc(sizeof(*new_timer));

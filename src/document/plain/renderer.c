@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.3 2003/11/11 21:13:42 jonas Exp $ */
+/* $Id: renderer.c,v 1.4 2003/11/11 21:25:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,6 +130,8 @@ add_document_lines(struct document *document, unsigned char *source)
 				node->width = added;
 				add_to_list(document->nodes, node);
 			}
+
+			int_lower_bound(&document->width, added);
 		}
 
 		/* Skip the newline too. */

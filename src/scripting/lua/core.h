@@ -1,4 +1,4 @@
-/* $Id: core.h,v 1.17 2005/04/01 09:41:37 zas Exp $ */
+/* $Id: core.h,v 1.18 2005/04/01 17:42:56 zas Exp $ */
 
 #ifndef EL__SCRIPTING_LUA_CORE_H
 #define EL__SCRIPTING_LUA_CORE_H
@@ -11,10 +11,8 @@
 #define LUA_ALERT      "alert"
 #endif
 
-#include "sched/event.h"
-#include "sched/session.h"
-
 struct module;
+struct session;
 
 extern lua_State *lua_state;
 

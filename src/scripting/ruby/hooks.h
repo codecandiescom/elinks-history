@@ -1,14 +1,10 @@
-/* $Id: hooks.h,v 1.1 2005/01/18 10:29:40 jonas Exp $ */
+/* $Id: hooks.h,v 1.2 2005/04/01 17:42:56 zas Exp $ */
 
 #ifndef EL__SCRIPTING_RUBY_HOOKS_H
 #define EL__SCRIPTING_RUBY_HOOKS_H
 
-#ifdef CONFIG_RUBY
-
-#include "sched/event.h"
+struct event_hook_info;
 
 extern struct event_hook_info ruby_scripting_hooks[];
-
-#endif
 
 #endif

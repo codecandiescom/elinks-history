@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.100 2003/09/22 16:23:36 jonas Exp $ */
+/* $Id: download.c,v 1.101 2003/09/25 19:37:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -437,10 +437,11 @@ static void
 set_file_download_win_handler(struct file_download *file_download)
 {
 	if (file_download->win) {
-		struct event ev = { EV_REDRAW,
-				    file_download->win->term->x,
-				    file_download->win->term->y,
-				    0 };
+		struct term_event ev = INIT_TERM_EVENT(
+					EV_REDRAW,
+				   	file_download->win->term->x,
+				    	file_download->win->term->y,
+				    	0);
 
 		file_download->win->handler(file_download->win, &ev, 0);
 	}

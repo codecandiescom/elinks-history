@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.43 2003/09/12 22:49:58 zas Exp $ */
+/* $Id: session.h,v 1.44 2003/09/25 19:37:05 zas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -176,7 +176,7 @@ struct session *create_basic_session(struct window *);
 
 void init_bars_status(struct session *, int *, struct document_options *);
 
-void tabwin_func(struct window *, struct event *, int);
+void tabwin_func(struct window *, struct term_event *, int);
 
 void goto_url_frame_reload(struct session *, unsigned char *, unsigned char *);
 void goto_url_frame(struct session *, unsigned char *, unsigned char *);

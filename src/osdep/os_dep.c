@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.84 2003/09/21 14:47:27 jonas Exp $ */
+/* $Id: os_dep.c,v 1.85 2003/09/25 19:34:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1612,7 +1612,7 @@ static void
 gpm_mouse_in(struct gpm_mouse_spec *gms)
 {
 	Gpm_Event gev;
-	struct event ev;
+	struct term_event ev;
 
 	if (Gpm_GetEvent(&gev) <= 0) {
 		set_handlers(gms->h, NULL, NULL, NULL, NULL);
@@ -1640,7 +1640,7 @@ gpm_mouse_in(struct gpm_mouse_spec *gms)
 	else
 		return;
 
-	gms->fn(gms->data, (char *)&ev, sizeof(struct event));
+	gms->fn(gms->data, (char *)&ev, sizeof(struct term_event));
 }
 
 void *
@@ -1783,7 +1783,7 @@ do_open_in_new_tab(struct terminal *term, unsigned char *exe_name,
 {
 	struct window *tab;
 	struct initial_session_info *info;
-	struct event ev = {EV_INIT, 0, 0, 0};
+	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 0, 0, 0);
 
 	tab = init_tab(term, in_background);
 	if (!tab) return;

@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.33 2004/10/25 10:20:35 zas Exp $ */
+/* $Id: table.c,v 1.34 2004/10/25 10:29:55 zas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -353,7 +353,9 @@ copy_table(struct table *table_src, struct table *table_dst)
 	int row;
 	int size = sizeof(struct table_cell) * table_src->cols;
 
-	for (row = 0; size > 0 && row < table_src->rows; row++) {
+	if (!size) return;
+
+	for (row = 0; row < table_src->rows; row++) {
 		memcpy(&table_dst->cells[row * table_dst->real_cols],
 		       &table_src->cells[row * table_src->real_cols],
 		       size);

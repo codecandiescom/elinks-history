@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.7 2002/07/09 23:01:07 pasky Exp $ */
+/* $Id: inpfield.c,v 1.8 2002/08/07 02:56:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,7 +136,7 @@ void input_field_fn(struct dialog_data *dlg)
 
 	rw = 0; /* !!! FIXME: input field */
 	dlg_format_text(NULL, term, dlg->dlg->udata, 0, &y, w, &rw,
-			COLOR_DIALOG_TEXT, AL_LEFT);
+			get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(NULL, term, dlg->items, 0, &y, w, &rw,
 			 AL_LEFT);
 
@@ -153,7 +153,7 @@ void input_field_fn(struct dialog_data *dlg)
 
 	y = dlg->y + DIALOG_TB;
 	dlg_format_text(term, term, dlg->dlg->udata, dlg->x + DIALOG_LB,
-			&y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+			&y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(term, term, dlg->items, dlg->x + DIALOG_LB,
 			 &y, w, NULL, AL_LEFT);
 
@@ -243,7 +243,7 @@ display_field_do(struct widget_data *di, struct dialog_data *dlg, int sel,
 		di->vpos = 0;
 
 	fill_area(term, di->x, di->y, di->l, 1,
-			COLOR_DIALOG_FIELD);
+			get_bfu_color(term, "dialog.field"));
 	{
 		int len = strlen(di->cdata + di->vpos);
 
@@ -251,11 +251,11 @@ display_field_do(struct widget_data *di, struct dialog_data *dlg, int sel,
 			print_text(term, di->x, di->y,
 					len <= di->l ? len : di->l,
 					di->cdata + di->vpos,
-					COLOR_DIALOG_FIELD_TEXT);
+					get_bfu_color(term, "dialog.field-text"));
 		} else {
 			fill_area(term, di->x, di->y,
 					len <= di->l ? len : di->l, 1,
-					COLOR_DIALOG_FIELD_TEXT | '*');
+					get_bfu_color(term, "dialog.field-text") | '*');
 		}
 	}
 	if (sel) {

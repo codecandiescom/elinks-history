@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.29 2002/07/11 16:14:56 pasky Exp $ */
+/* $Id: options.c,v 1.30 2002/08/07 02:56:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -229,11 +229,11 @@ httpopt_fn(struct dialog_data *dlg)
 	rw = 0;
 	dlg_format_checkboxes(NULL, term, dlg->items, dlg->n - 4, 0, &y, w, &rw, dlg->dlg->udata);
 	y++;
-	dlg_format_text(NULL, term, http_labels[9], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(NULL, term, http_labels[9], 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	y+=2;
-	dlg_format_text(NULL, term, http_labels[10], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(NULL, term, http_labels[10], 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	y+=2;
-	dlg_format_text(NULL, term, http_labels[11], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(NULL, term, http_labels[11], 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	y+=2;
 	dlg_format_buttons(NULL, term, dlg->items + dlg->n - 2, 2, 0, &y, w, &rw, AL_CENTER);
 	w = rw;
@@ -244,11 +244,11 @@ httpopt_fn(struct dialog_data *dlg)
 	y = dlg->y + DIALOG_TB + 1;
 	dlg_format_checkboxes(term, term, dlg->items, dlg->n - 5, dlg->x + DIALOG_LB, &y, w, NULL, dlg->dlg->udata);
 	y++;
-	dlg_format_text(term, term, http_labels[9], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(term, term, http_labels[9], dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(term, term, dlg->items + 9, dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
-	dlg_format_text(term, term, http_labels[10], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(term, term, http_labels[10], dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(term, term, dlg->items + 10, dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
-	dlg_format_text(term, term, http_labels[11], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(term, term, http_labels[11], dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(term, term, dlg->items + 11, dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_buttons(term, term, dlg->items + dlg->n - 2, 2, dlg->x + DIALOG_LB, &y, w, &rw, AL_CENTER);
@@ -443,9 +443,9 @@ netopt_fn(struct dialog_data *dlg)
 	if (w > dlg->win->term->x - 2 * DIALOG_LB) w = dlg->win->term->x - 2 * DIALOG_LB;
 	if (w < 1) w = 1;
 	rw = 0;
-	dlg_format_text(NULL, term, net_msg[0], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(NULL, term, net_msg[0], 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	y += 2;
-	dlg_format_text(NULL, term, net_msg[1], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(NULL, term, net_msg[1], 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	y += 2;
 	dlg_format_group(NULL, term, net_msg + 2, dlg->items + 2, 9, 0, &y, w, &rw);
 	y++;
@@ -456,10 +456,10 @@ netopt_fn(struct dialog_data *dlg)
 	center_dlg(dlg);
 	draw_dlg(dlg);
 	y = dlg->y + DIALOG_TB;
-	dlg_format_text(term, term, net_msg[0], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(term, term, net_msg[0], dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(term, term, &dlg->items[0], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
-	dlg_format_text(term, term, net_msg[1], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(term, term, net_msg[1], dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(term, term, &dlg->items[1], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_group(term, term, net_msg + 2, &dlg->items[2], 9, dlg->x + DIALOG_LB, &y, w, NULL);
@@ -600,11 +600,11 @@ netprog_fn(struct dialog_data *dlg)
 	if (w > dlg->win->term->x - 2 * DIALOG_LB) w = dlg->win->term->x - 2 * DIALOG_LB;
 	if (w < 1) w = 1;
 	rw = 0;
-	dlg_format_text(NULL, term, prg_msg[0], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(NULL, term, prg_msg[0], 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	y += 2;
-	dlg_format_text(NULL, term, prg_msg[1], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(NULL, term, prg_msg[1], 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	y += 2;
-	dlg_format_text(NULL, term, prg_msg[2], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(NULL, term, prg_msg[2], 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	y += 2;
 	dlg_format_buttons(NULL, term, dlg->items + 3, 2, 0, &y, w, &rw, AL_CENTER);
 	w = rw;
@@ -613,13 +613,13 @@ netprog_fn(struct dialog_data *dlg)
 	center_dlg(dlg);
 	draw_dlg(dlg);
 	y = dlg->y + DIALOG_TB;
-	dlg_format_text(term, term, prg_msg[0], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(term, term, prg_msg[0], dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(term, term, &dlg->items[0], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
-	dlg_format_text(term, term, prg_msg[1], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(term, term, prg_msg[1], dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(term, term, &dlg->items[1], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
-	dlg_format_text(term, term, prg_msg[2], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(term, term, prg_msg[2], dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(term, term, &dlg->items[2], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_buttons(term, term, &dlg->items[3], 2, dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);

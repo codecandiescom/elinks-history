@@ -1,4 +1,6 @@
-/* $Id: colors.h,v 1.3 2002/07/05 22:13:09 pasky Exp $ */
+/* $Id: colors.h,v 1.4 2002/08/07 02:56:58 pasky Exp $ */
+
+#if 0
 
 #ifndef EL__BFU_COLORS_H
 #define EL__BFU_COLORS_H
@@ -110,6 +112,8 @@
 #define COLOR_TITLE_BG			COL(007)
 #define COLOR_STATUS			COL(070)
 #define COLOR_STATUS_BG			COL(007)
+
+#endif
 
 #endif
 

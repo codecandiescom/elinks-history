@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.11 2002/07/05 20:42:13 pasky Exp $ */
+/* $Id: menu.c,v 1.12 2002/08/07 02:56:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 
 #include "links.h"
 
+#include "bfu/align.h"
 #include "bfu/colors.h"
 #include "bfu/menu.h"
 #include "config/kbdbind.h"
@@ -202,21 +203,21 @@ void display_menu(struct terminal *term, struct menu *menu)
 	int p, s;
 
 	fill_area(term,	menu->x + 1, menu->y + 1, menu->xw - 2, menu->yw - 2,
-		  COLOR_MENU);
+		  get_bfu_color(term, "menu.normal"));
 
 	draw_frame(term, menu->x, menu->y, menu->xw, menu->yw,
-		   COLOR_MENU_FRAME, 1);
+		   get_bfu_color(term, "menu.frame"), 1);
 
 	for (p = menu->view, s = menu->y + 1;
 	     p < menu->ni && p < menu->view + menu->yw - 2;
 	     p++, s++) {
 		unsigned char *tmptext = _(menu->items[p].text, term);
 		int h = 0;
-		int co = COLOR_MENU;
+		int co = get_bfu_color(term, "menu.normal");
 
 		if (p == menu->selected) {
 			h = 1;
-			co = COLOR_MENU_SELECTED;
+			co = get_bfu_color(term, "menu.selected");
 		}
 
 		if (h) {
@@ -245,7 +246,7 @@ void display_menu(struct terminal *term, struct menu *menu)
 				    && strchr(_(menu->items[p].hotkey, term),
 					      upcase(c))) {
 					h = 1;
-					ch = COLOR_MENU_HOTKEY;
+					ch = get_bfu_color(term, "menu.hotkey");
 				}
 
 				set_char(term, menu->x + x + 2, s, ch | c);
@@ -253,13 +254,13 @@ void display_menu(struct terminal *term, struct menu *menu)
 
 		} else {
 			set_char(term, menu->x, s,
-				 COLOR_MENU_FRAME | ATTR_FRAME | 0xc3);
+				 get_bfu_color(term, "menu.frame") | ATTR_FRAME | 0xc3);
 
 			fill_area(term, menu->x + 1, s, menu->xw - 2, 1,
-				  COLOR_MENU_FRAME | ATTR_FRAME | 0xc4);
+				  get_bfu_color(term, "menu.frame") | ATTR_FRAME | 0xc4);
 
 			set_char(term, menu->x + menu->xw - 1, s,
-				 COLOR_MENU_FRAME | ATTR_FRAME | 0xb4);
+				 get_bfu_color(term, "menu.frame") | ATTR_FRAME | 0xb4);
 		}
 	}
 
@@ -491,7 +492,7 @@ void display_mainmenu(struct terminal *term, struct mainmenu *menu)
 	int i;
 	int p = 2;
 
-	fill_area(term, 0, 0, term->x, 1, COLOR_MAINMENU | ' ');
+	fill_area(term, 0, 0, term->x, 1, get_bfu_color(term, "mainmenu.normal") | ' ');
 	for (i = 0; menu->items[i].text; i++) {
 		int s = 0;
 		int j;
@@ -501,9 +502,9 @@ void display_mainmenu(struct terminal *term, struct mainmenu *menu)
 
 		if (i == menu->selected) {
 			s = 1;
-			co = COLOR_MAINMENU_SELECTED;
+			co = get_bfu_color(term, "mainmenu.selected");
 		} else {
-			co = COLOR_MAINMENU;
+			co = get_bfu_color(term, "mainmenu.normal");
 		}
 
 		if (s) {
@@ -521,7 +522,7 @@ void display_mainmenu(struct terminal *term, struct mainmenu *menu)
 					 upcase(c))) {
 				s = 1;
 				set_char(term, p, 0,
-					 COLOR_MAINMENU_HOTKEY | c);
+					 get_bfu_color(term, "mainmenu.hotkey") | c);
 			} else {
 				set_char(term, p, 0,
 					 co | c);

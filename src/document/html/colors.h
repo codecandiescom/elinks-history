@@ -1,4 +1,4 @@
-/* $Id: colors.h,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
+/* $Id: colors.h,v 1.3 2002/08/07 02:56:59 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_COLORS_H
 #define EL__DOCUMENT_HTML_COLORS_H
@@ -9,5 +9,8 @@ struct rgb {
 };
 
 int decode_color(unsigned char *, struct rgb *);
+
+int find_nearest_color(struct rgb *, int);
+int fg_color(int, int);
 
 #endif

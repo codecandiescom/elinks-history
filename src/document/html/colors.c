@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.4 2002/05/08 13:55:03 pasky Exp $ */
+/* $Id: colors.c,v 1.5 2002/08/07 02:56:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,10 +161,10 @@ struct color_spec color_specs[] = {
 	{"yellowgreen",		0x9ACD32},
 };
 
-#define endof(T) ((T)+sizeof(T)/sizeof(*(T)))
-
 int decode_color(unsigned char *str, struct rgb *col)
 {
+#define endof(T) ((T)+sizeof(T)/sizeof(*(T)))
+
 	int ch;
 
 	if (*str != '#') {
@@ -191,6 +191,187 @@ found:
 		}
 	}
 	return -1;
-}
 
 #undef endof
+}
+
+
+
+#include "document/options.h"
+
+struct rgb palette[] = {
+#if 0
+	{0x00, 0x00, 0x00},
+	{0x80, 0x00, 0x00},
+	{0x00, 0x80, 0x00},
+	{0x80, 0x80, 0x00},
+	{0x00, 0x00, 0x80},
+	{0x80, 0x00, 0x80},
+	{0x00, 0x80, 0x80},
+	{0xC0, 0xC0, 0xC0},
+	{0x80, 0x80, 0x80},
+	{0xff, 0x00, 0x00},
+	{0x00, 0xff, 0x00},
+	{0xff, 0xff, 0x00},
+	{0x00, 0x00, 0xff},
+	{0xff, 0x00, 0xff},
+	{0x00, 0xff, 0xff},
+	{0xff, 0xff, 0xff},
+#endif
+#if 0
+	{0x00, 0x00, 0x00},
+	{0xaa, 0x00, 0x00},
+	{0x00, 0xaa, 0x00},
+	{0xaa, 0x55, 0x00},
+	{0x00, 0x00, 0xaa},
+	{0xaa, 0x00, 0xaa},
+	{0x00, 0xaa, 0xaa},
+	{0xaa, 0xaa, 0xaa},
+	{0x55, 0x55, 0x55},
+	{0xff, 0x55, 0x55},
+	{0x55, 0xff, 0x55},
+	{0xff, 0xff, 0x55},
+	{0x55, 0x55, 0xff},
+	{0xff, 0x55, 0xff},
+	{0x55, 0xff, 0xff},
+	{0xff, 0xff, 0xff},
+#endif
+	{0x00, 0x00, 0x00},
+	{0x80, 0x00, 0x00},
+	{0x00, 0x80, 0x00},
+	{0xaa, 0x55, 0x00},
+	{0x00, 0x00, 0x80},
+	{0x80, 0x00, 0x80},
+	{0x00, 0x80, 0x80},
+	{0xaa, 0xaa, 0xaa},
+	{0x55, 0x55, 0x55},
+	{0xff, 0x55, 0x55},
+	{0x55, 0xff, 0x55},
+	{0xff, 0xff, 0x55},
+	{0x55, 0x55, 0xff},
+	{0xff, 0x55, 0xff},
+	{0x55, 0xff, 0xff},
+	{0xff, 0xff, 0xff},
+	{-1, -1, -1}
+};
+
+struct rgb_cache_entry {
+	int color;
+	int l;
+	struct rgb rgb;
+};
+
+
+#if 0
+struct rgb rgbcache = {0, 0, 0};
+int rgbcache_c = 0;
+
+static inline int find_nearest_color(struct rgb *r, int l)
+{
+	int dist, dst, min, i;
+	if (r->r == rgbcache.r && r->g == rgbcache.g && r->b == rgbcache.b) return rgbcache_c;
+	dist = 0xffffff;
+	min = 0;
+	for (i = 0; i < l; i++) if ((dst = color_distance(r, &palette[i])) < dist)
+		dist = dst, min = i;
+	return min;
+}
+#endif
+
+/* color_distance() */
+static int
+color_distance(struct rgb *c1, struct rgb *c2)
+{
+	return 3 * (c1->r - c2->r) * (c1->r - c2->r) +
+	       4 * (c1->g - c2->g) * (c1->g - c2->g) +
+	       2 * (c1->b - c2->b) * (c1->b - c2->b);
+}
+
+/* find_nearest_color() */
+int
+find_nearest_color(struct rgb *r, int l)
+{
+#define RGB_HASH_SIZE 4096
+#define HASH_RGB(r, l) ((((r)->r << 3) + ((r)->g << 2) + (r)->b + (l)) & (RGB_HASH_SIZE - 1))
+
+	int dist, dst, min, i;
+	static struct rgb_cache_entry rgb_cache[RGB_HASH_SIZE];
+	static int cache_init = 0;
+	int h;
+
+	if (!cache_init) {
+		for (h = 0; h < RGB_HASH_SIZE; h++)
+			rgb_cache[h].color = -1;
+		cache_init = 1;
+	}
+
+	h = HASH_RGB(r, l);
+
+	if (rgb_cache[h].color != -1 && rgb_cache[h].l == l
+			&& rgb_cache[h].rgb.r == r->r && rgb_cache[h].rgb.g == r->g
+			&& rgb_cache[h].rgb.b == r->b) return rgb_cache[h].color;
+
+	dist = 0xffffff;
+	min = 0;
+
+	for (i = 0; i < l; i++) {
+		dst = color_distance(r, &palette[i]);
+		if (dst < dist) {
+			dist = dst;
+			min = i;
+		}
+	}
+
+	rgb_cache[h].color = min;
+	rgb_cache[h].l = l;
+	rgb_cache[h].rgb.r = r->r;
+	rgb_cache[h].rgb.g = r->g;
+	rgb_cache[h].rgb.b = r->b;
+	return min;
+
+#undef HAHS_RGB
+#undef RGB_HASH_SIZE
+}
+
+/* fg_color() */
+int
+fg_color(int fg, int bg)
+{
+	/* 0 == brightgrey  6 == cyan        12 == brightblue
+	 * 1 == red         7 == brightgrey  13 == brightmagenta
+	 * 2 == green       8 == black       14 == brightcyan
+	 * 3 == red         9 == brightred   15 == brightwhite
+	 * 4 == blue       10 == brightgreen
+	 * 5 == magenta    11 == brightyellow
+	 */
+
+	/* This looks like it should be more efficient. It results in
+	 * different machine-code, but the same number of instructions:
+	 * int l, h;
+	 * if (bg < fg) l = bg, h = fg; else l = fg, h = bg;
+	 */
+	int l = bg < fg ? bg : fg;
+	int h = bg < fg ? fg : bg;
+
+	if (l == h
+		/* Check for clashing colours. For example, 3 (red) clashes
+		 * with 5 (magenta) and 12 (brightblue). */
+		|| (l == 0 && (h == 8))
+		|| (l == 1 && (h == 3 || h == 5 || h == 12))
+		|| (l == 2 && (h == 6))
+		|| (l == 3 && (h == 5 || h == 12))
+		|| ((l == 4 || l == 5) && (h == 8 || h == 12))
+		|| (!d_opt->allow_dark_on_black &&
+			/* ^- FIXME: when possibility to change bg color... */
+			   ((l == 0 && (h == 4 || h == 12)) ||
+			    (l == 1 && (h == 8)))
+		   )
+	   )
+		return (fg == 4 || fg == 12)
+			&& (bg == 0 || bg == 8) ? 6
+						: (7 - 7 * (bg == 2 ||
+							    bg == 6 ||
+							    bg == 7));
+
+	return fg;
+}

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.30 2002/07/09 15:43:47 pasky Exp $ */
+/* $Id: download.c,v 1.31 2002/08/07 02:56:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -296,11 +296,11 @@ download_window_function(struct dialog_data *dlg)
 	if (w < 1) w = 1;
 
 	y = 0;
-	dlg_format_text(NULL, term, u, 0, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(NULL, term, u, 0, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 
 	y++;
 	if (t && stat->prg->size >= 0) y += 2;
-	dlg_format_text(NULL, term, m, 0, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(NULL, term, m, 0, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 
 	y++;
 	dlg_format_buttons(NULL, term, dlg->items, dlg->n, 0, &y, w, NULL, AL_CENTER);
@@ -313,7 +313,7 @@ download_window_function(struct dialog_data *dlg)
 
 	y = dlg->y + DIALOG_TB + 1;
 	x = dlg->x + DIALOG_LB;
-	dlg_format_text(term, term, u, x, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(term, term, u, x, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 
 	if (t && stat->prg->size >= 0) {
 		unsigned char q[64];
@@ -325,16 +325,16 @@ download_window_function(struct dialog_data *dlg)
 		fill_area(term, x + 1, y,
 			  (int) ((longlong) p * (longlong) stat->prg->pos
 			         / (longlong) stat->prg->size),
-			  1, COLOR_DIALOG_METER);
+			  1, get_bfu_color(term, "dialog.meter"));
 		sprintf(q, "%3d%%",
 			  (int) ((longlong) 100 * (longlong) stat->prg->pos
 			         / (longlong) stat->prg->size));
-		print_text(term, x + w - 4, y, strlen(q), q, COLOR_DIALOG_TEXT);
+		print_text(term, x + w - 4, y, strlen(q), q, get_bfu_color(term, "dialog.text"));
 		y++;
 	}
 
 	y++;
-	dlg_format_text(term, term, m, x, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(term, term, m, x, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 
 	y++;
 	dlg_format_buttons(term, term, dlg->items, dlg->n, x, &y, w, NULL, AL_CENTER);

@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.10 2002/07/05 20:42:13 pasky Exp $ */
+/* $Id: edit.c,v 1.11 2002/08/07 02:56:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,10 +57,10 @@ layout_add_dialog(struct dialog_data *dlg)
 	w = rw = 50;
 
 	dlg_format_text(NULL, term, edit_add_msg[0], 0, &y,
-			w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+			w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	y += 2;
 	dlg_format_text(NULL, term, edit_add_msg[1], 0, &y,
-			w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+			w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	y += 2;
 	dlg_format_buttons(NULL, term, dlg->items + 2, 2, 0,
 			   &y, w, &rw, AL_CENTER);
@@ -71,12 +71,12 @@ layout_add_dialog(struct dialog_data *dlg)
 	draw_dlg(dlg);
 	y = dlg->y + DIALOG_TB;
 	dlg_format_text(term, term, edit_add_msg[0], dlg->x + DIALOG_LB,
-			&y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+			&y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(NULL, term, &dlg->items[0], dlg->x + DIALOG_LB,
 			 &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_text(term, term, edit_add_msg[1], dlg->x + DIALOG_LB,
-			&y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+			&y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(term, term, &dlg->items[1], dlg->x + DIALOG_LB,
 			 &y, w, NULL, AL_LEFT);
 	y++;

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.10 2002/07/23 09:28:26 zas Exp $ */
+/* $Id: dialog.c,v 1.11 2002/08/07 02:56:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,13 +69,13 @@ void redraw_dialog(struct dialog_data *dlg)
 	draw_frame(term, x, y,
 		   dlg->xw - 2 * DIALOG_LEFT_BORDER,
 		   dlg->yw - 2 * DIALOG_TOP_BORDER,
-		   COLOR_DIALOG_FRAME, DIALOG_FRAME);
+		   get_bfu_color(term, "dialog.frame"), DIALOG_FRAME);
 
 	i = strlen(_(dlg->dlg->title, term));
 	x = (dlg->xw - i) / 2 + dlg->x;
-	print_text(term, x - 1, y, 1, " ", COLOR_DIALOG_TITLE);
-	print_text(term, x, y, i, _(dlg->dlg->title, term), COLOR_DIALOG_TITLE);
-	print_text(term, x + i, y, 1, " ", COLOR_DIALOG_TITLE);
+	print_text(term, x - 1, y, 1, " ", get_bfu_color(term, "dialog.title"));
+	print_text(term, x, y, i, _(dlg->dlg->title, term), get_bfu_color(term, "dialog.title"));
+	print_text(term, x + i, y, 1, " ", get_bfu_color(term, "dialog.title"));
 
 	for (i = 0; i < dlg->n; i++)
 		display_dlg_item(dlg, &dlg->items[i], i == dlg->selected);
@@ -437,5 +437,5 @@ void center_dlg(struct dialog_data *dlg)
 void draw_dlg(struct dialog_data *dlg)
 {
 	fill_area(dlg->win->term, dlg->x, dlg->y, dlg->xw, dlg->yw,
-		  COLOR_DIALOG);
+		  get_bfu_color(dlg->win->term, "=dialog"));
 }

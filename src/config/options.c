@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.80 2002/08/07 00:57:22 pasky Exp $ */
+/* $Id: options.c,v 1.81 2002/08/07 02:56:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -962,15 +962,583 @@ register_options()
 		"User interface options.");
 
 
-#if 0
+
 	add_opt_tree("ui",
 		"colors", 0,
 		"Default user interface color settings.");
 
-	add_opt_color("ui.colors",
-		"text", 0, "#bfbfbf",
+
+	add_opt_tree("ui.colors",
+		"color", 0,
+		"Color settings for color terminal.");
+
+
+	add_opt_tree("ui.colors.color",
+		"mainmenu", 0,
+		"Main menu bar colors.");
+
+	add_opt_tree("ui.colors.color.mainmenu",
+		"normal", 0,
+		"Unselected menu bar item colors.");
+
+	add_opt_color("ui.colors.color.mainmenu.normal",
+		"text", 0, "black",
 		"Default text color.");
-#endif
+
+	add_opt_color("ui.colors.color.mainmenu.normal",
+		"background", 0, "white",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.color.mainmenu",
+		"selected", 0,
+		"Unselected menu bar item colors.");
+
+	add_opt_color("ui.colors.color.mainmenu.selected",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.mainmenu.selected",
+		"background", 0, "green",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.color.mainmenu",
+		"hotkey", 0,
+		"Unselected menu bar item hotkey colors.");
+
+	add_opt_color("ui.colors.color.mainmenu.hotkey",
+		"text", 0, "darkred",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.mainmenu.hotkey",
+		"background", 0, "white",
+		"Default background color.");
+
+
+	add_opt_tree("ui.colors.color",
+		"menu", 0,
+		"Menu bar colors.");
+
+	add_opt_tree("ui.colors.color.menu",
+		"normal", 0,
+		"Unselected menu item colors.");
+
+	add_opt_color("ui.colors.color.menu.normal",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.menu.normal",
+		"background", 0, "white",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.color.menu",
+		"selected", 0,
+		"Selected menu item colors.");
+
+	add_opt_color("ui.colors.color.menu.selected",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.menu.selected",
+		"background", 0, "green",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.color.menu",
+		"hotkey", 0,
+		"Unselected menu item hotkey colors.");
+
+	add_opt_color("ui.colors.color.menu.hotkey",
+		"text", 0, "darkred",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.menu.hotkey",
+		"background", 0, "white",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.color.menu",
+		"frame", 0,
+		"Menu frame colors.");
+
+	add_opt_color("ui.colors.color.menu.frame",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.menu.frame",
+		"background", 0, "white",
+		"Default background color.");
+
+
+	add_opt_tree("ui.colors.color",
+		"dialog", 0,
+		"Dialog colors.");
+
+	add_opt_color("ui.colors.color.dialog",
+		"background", 0, "white",
+		"Dialog generic background color.");
+
+	add_opt_tree("ui.colors.color.dialog",
+		"frame", 0,
+		"Dialog frame colors.");
+
+	add_opt_color("ui.colors.color.dialog.frame",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.dialog.frame",
+		"background", 0, "white",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.color.dialog",
+		"title", 0,
+		"Dialog title colors.");
+
+	add_opt_color("ui.colors.color.dialog.title",
+		"text", 0, "darkred",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.dialog.title",
+		"background", 0, "white",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.color.dialog",
+		"text", 0,
+		"Dialog text colors.");
+
+	add_opt_color("ui.colors.color.dialog.text",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.dialog.text",
+		"background", 0, "white",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.color.dialog",
+		"checkbox", 0,
+		"Dialog checkbox colors.");
+
+	add_opt_color("ui.colors.color.dialog.checkbox",
+		"text", 0, "darkred",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.dialog.checkbox",
+		"background", 0, "white",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.color.dialog",
+		"checkbox-label", 0,
+		"Dialog checkbox label colors.");
+
+	add_opt_color("ui.colors.color.dialog.checkbox-label",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.dialog.checkbox-label",
+		"background", 0, "white",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.color.dialog",
+		"button", 0,
+		"Dialog button colors.");
+
+	add_opt_color("ui.colors.color.dialog.button",
+		"text", 0, "white",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.dialog.button",
+		"background", 0, "blue",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.color.dialog",
+		"button-selected", 0,
+		"Dialog selected button colors.");
+
+	add_opt_color("ui.colors.color.dialog.button-selected",
+		"text", 0, "yellow",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.dialog.button-selected",
+		"background", 0, "green",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.color.dialog",
+		"field", 0,
+		"Dialog field colors.");
+
+	add_opt_color("ui.colors.color.dialog.field",
+		"text", 0, "white",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.dialog.field",
+		"background", 0, "blue",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.color.dialog",
+		"field-text", 0,
+		"Dialog field text colors.");
+
+	add_opt_color("ui.colors.color.dialog.field-text",
+		"text", 0, "yellow",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.dialog.field-text",
+		"background", 0, "blue",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.color.dialog",
+		"meter", 0,
+		"Dialog meter colors.");
+
+	add_opt_color("ui.colors.color.dialog.meter",
+		"text", 0, "white",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.dialog.meter",
+		"background", 0, "blue",
+		"Default background color.");
+
+
+	add_opt_tree("ui.colors.color",
+		"title", 0,
+		"Title bar colors.");
+
+	add_opt_tree("ui.colors.color.title",
+		"title-bar", 0,
+		"Generic title bar colors.");
+
+	add_opt_color("ui.colors.color.title.title-bar",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.title.title-bar",
+		"background", 0, "white",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.color.title",
+		"title-text", 0,
+		"Title bar text colors.");
+
+	add_opt_color("ui.colors.color.title.title-text",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.title.title-text",
+		"background", 0, "white",
+		"Default background color.");
+
+
+	add_opt_tree("ui.colors.color",
+		"status", 0,
+		"Status bar colors.");
+
+	add_opt_tree("ui.colors.color.status",
+		"status-bar", 0,
+		"Generic status bar colors.");
+
+	add_opt_color("ui.colors.color.status.status-bar",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.status.status-bar",
+		"background", 0, "white",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.color.status",
+		"status-text", 0,
+		"Status bar text colors.");
+
+	add_opt_color("ui.colors.color.status.status-text",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.color.status.status-text",
+		"background", 0, "white",
+		"Default background color.");
+
+
+	add_opt_tree("ui.colors",
+		"mono", 0,
+		"Color settings for non-color terminal.");
+
+
+	add_opt_tree("ui.colors.mono",
+		"mainmenu", 0,
+		"Main menu bar colors.");
+
+	add_opt_tree("ui.colors.mono.mainmenu",
+		"normal", 0,
+		"Unselected menu bar item colors.");
+
+	add_opt_color("ui.colors.mono.mainmenu.normal",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.mainmenu.normal",
+		"background", 0, "white",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.mono.mainmenu",
+		"selected", 0,
+		"Unselected menu bar item colors.");
+
+	add_opt_color("ui.colors.mono.mainmenu.selected",
+		"text", 0, "gray",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.mainmenu.selected",
+		"background", 0, "black",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.mono.mainmenu",
+		"hotkey", 0,
+		"Unselected menu bar item hotkey colors.");
+
+	add_opt_color("ui.colors.mono.mainmenu.hotkey",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.mainmenu.hotkey",
+		"background", 0, "white",
+		"Default background color.");
+
+
+	add_opt_tree("ui.colors.mono",
+		"menu", 0,
+		"Menu bar colors.");
+
+	add_opt_tree("ui.colors.mono.menu",
+		"normal", 0,
+		"Unselected menu item colors.");
+
+	add_opt_color("ui.colors.mono.menu.normal",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.menu.normal",
+		"background", 0, "white",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.mono.menu",
+		"selected", 0,
+		"Selected menu item colors.");
+
+	add_opt_color("ui.colors.mono.menu.selected",
+		"text", 0, "gray",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.menu.selected",
+		"background", 0, "black",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.mono.menu",
+		"hotkey", 0,
+		"Unselected menu item hotkey colors.");
+
+	add_opt_color("ui.colors.mono.menu.hotkey",
+		"text", 0, "gray",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.menu.hotkey",
+		"background", 0, "black",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.mono.menu",
+		"frame", 0,
+		"Menu frame colors.");
+
+	add_opt_color("ui.colors.mono.menu.frame",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.menu.frame",
+		"background", 0, "white",
+		"Default background color.");
+
+
+	add_opt_tree("ui.colors.mono",
+		"dialog", 0,
+		"Dialog colors.");
+
+	add_opt_color("ui.colors.mono.dialog",
+		"background", 0, "white",
+		"Dialog generic background color.");
+
+	add_opt_tree("ui.colors.mono.dialog",
+		"frame", 0,
+		"Dialog frame colors.");
+
+	add_opt_color("ui.colors.mono.dialog.frame",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.dialog.frame",
+		"background", 0, "white",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.mono.dialog",
+		"title", 0,
+		"Dialog title colors.");
+
+	add_opt_color("ui.colors.mono.dialog.title",
+		"text", 0, "gray",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.dialog.title",
+		"background", 0, "black",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.mono.dialog",
+		"text", 0,
+		"Dialog text colors.");
+
+	add_opt_color("ui.colors.mono.dialog.text",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.dialog.text",
+		"background", 0, "white",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.mono.dialog",
+		"checkbox", 0,
+		"Dialog checkbox colors.");
+
+	add_opt_color("ui.colors.mono.dialog.checkbox",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.dialog.checkbox",
+		"background", 0, "white",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.mono.dialog",
+		"checkbox-label", 0,
+		"Dialog checkbox label colors.");
+
+	add_opt_color("ui.colors.mono.dialog.checkbox-label",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.dialog.checkbox-label",
+		"background", 0, "white",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.mono.dialog",
+		"button", 0,
+		"Dialog button colors.");
+
+	add_opt_color("ui.colors.mono.dialog.button",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.dialog.button",
+		"background", 0, "white",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.mono.dialog",
+		"button-selected", 0,
+		"Dialog selected button colors.");
+
+	add_opt_color("ui.colors.mono.dialog.button-selected",
+		"text", 0, "white",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.dialog.button-selected",
+		"background", 0, "black",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.mono.dialog",
+		"field", 0,
+		"Dialog field colors.");
+
+	add_opt_color("ui.colors.mono.dialog.field",
+		"text", 0, "gray",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.dialog.field",
+		"background", 0, "black",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.mono.dialog",
+		"field-text", 0,
+		"Dialog field text colors.");
+
+	add_opt_color("ui.colors.mono.dialog.field-text",
+		"text", 0, "gray",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.dialog.field-text",
+		"background", 0, "black",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.mono.dialog",
+		"meter", 0,
+		"Dialog meter colors.");
+
+	add_opt_color("ui.colors.mono.dialog.meter",
+		"text", 0, "gray",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.dialog.meter",
+		"background", 0, "black",
+		"Default background color.");
+
+
+	add_opt_tree("ui.colors.mono",
+		"title", 0,
+		"Title bar colors.");
+
+	add_opt_tree("ui.colors.mono.title",
+		"title-bar", 0,
+		"Generic title bar colors.");
+
+	add_opt_color("ui.colors.mono.title.title-bar",
+		"text", 0, "gray",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.title.title-bar",
+		"background", 0, "black",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.mono.title",
+		"title-text", 0,
+		"Title bar text colors.");
+
+	add_opt_color("ui.colors.mono.title.title-text",
+		"text", 0, "gray",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.title.title-text",
+		"background", 0, "black",
+		"Default background color.");
+
+
+	add_opt_tree("ui.colors.mono",
+		"status", 0,
+		"Status bar colors.");
+
+	add_opt_tree("ui.colors.mono.status",
+		"status-bar", 0,
+		"Generic status bar colors.");
+
+	add_opt_color("ui.colors.mono.status.status-bar",
+		"text", 0, "gray",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.status.status-bar",
+		"background", 0, "black",
+		"Default background color.");
+
+	add_opt_tree("ui.colors.mono.status",
+		"status-text", 0,
+		"Status bar text colors.");
+
+	add_opt_color("ui.colors.mono.status.status-text",
+		"text", 0, "black",
+		"Default text color.");
+
+	add_opt_color("ui.colors.mono.status.status-text",
+		"background", 0, "white",
+		"Default background color.");
+
 
 
 	add_opt_ptr("ui",

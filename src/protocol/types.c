@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.42 2002/08/06 22:54:17 pasky Exp $ */
+/* $Id: types.c,v 1.43 2002/08/07 02:57:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -283,19 +283,19 @@ add_ct_fn(struct dialog_data *dlg)
 	dlg_format_text(NULL, term,
 		       	_(ct_msg[0], term),
 			0, &y, w, &rw,
-			COLOR_DIALOG_TEXT, AL_LEFT);
+			get_bfu_color(term, "dialog.text"), AL_LEFT);
 
 	y += 2;
 	dlg_format_text(NULL, term,
 			_(ct_msg[1], term),
 			0, &y, w, &rw,
-			COLOR_DIALOG_TEXT, AL_LEFT);
+			get_bfu_color(term, "dialog.text"), AL_LEFT);
 
 	y += 2;
 	dlg_format_text(NULL, term,
 			_(ct_msg[2], term),
 			0, &y, w, &rw,
-			COLOR_DIALOG_TEXT, AL_LEFT);
+			get_bfu_color(term, "dialog.text"), AL_LEFT);
 
 	y += 2;
 	dlg_format_group(NULL, term,
@@ -319,7 +319,7 @@ add_ct_fn(struct dialog_data *dlg)
 	dlg_format_text(term, term,
 			ct_msg[0],
 			dlg->x + DIALOG_LB, &y, w, NULL,
-			COLOR_DIALOG_TEXT, AL_LEFT);
+			get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(term, term,
 			 &dlg->items[0],
 			 dlg->x + DIALOG_LB, &y, w, NULL,
@@ -329,7 +329,7 @@ add_ct_fn(struct dialog_data *dlg)
 	dlg_format_text(term, term,
 			ct_msg[1],
 			dlg->x + DIALOG_LB, &y, w, NULL,
-			COLOR_DIALOG_TEXT, AL_LEFT);
+			get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(term, term,
 			 &dlg->items[1],
 			 dlg->x + DIALOG_LB, &y, w, NULL,
@@ -339,7 +339,7 @@ add_ct_fn(struct dialog_data *dlg)
 	dlg_format_text(term, term,
 			ct_msg[2],
 			dlg->x + DIALOG_LB, &y, w, NULL,
-			COLOR_DIALOG_TEXT, AL_LEFT);
+			get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(term, term,
 			 &dlg->items[2],
 			 dlg->x + DIALOG_LB, &y, w, NULL,
@@ -611,13 +611,13 @@ add_ext_fn(struct dialog_data *dlg)
 	dlg_format_text(NULL, term,
 			ext_msg[0],
 			0, &y, w, &rw,
-			COLOR_DIALOG_TEXT, AL_LEFT);
+			get_bfu_color(term, "dialog.text"), AL_LEFT);
 
 	y += 2;
 	dlg_format_text(NULL, term,
 			ext_msg[1],
 			0, &y, w, &rw,
-			COLOR_DIALOG_TEXT, AL_LEFT);
+			get_bfu_color(term, "dialog.text"), AL_LEFT);
 
 	y += 2;
 	dlg_format_buttons(NULL, term,
@@ -636,7 +636,7 @@ add_ext_fn(struct dialog_data *dlg)
 	dlg_format_text(term, term,
 			ext_msg[0],
 			dlg->x + DIALOG_LB, &y, w, NULL,
-			COLOR_DIALOG_TEXT, AL_LEFT);
+			get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(term, term,
 			 &dlg->items[0],
 			 dlg->x + DIALOG_LB, &y, w, NULL,
@@ -646,7 +646,7 @@ add_ext_fn(struct dialog_data *dlg)
 	dlg_format_text(term, term,
 			ext_msg[1],
 			dlg->x + DIALOG_LB, &y, w, NULL,
-			COLOR_DIALOG_TEXT, AL_LEFT);
+			get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(term, term,
 			 &dlg->items[1],
 			 dlg->x + DIALOG_LB, &y, w, NULL,

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.15 2002/07/05 20:42:14 pasky Exp $ */
+/* $Id: core.c,v 1.16 2002/08/07 02:57:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -328,11 +328,11 @@ dialog_fn(struct dialog_data *dlg)
 	if (w < 1) w = 1;
 	rw = 0;
 	/*HACK*/ w = rw = 50;
-	dlg_format_text(NULL, term, dlg_msg[0], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(NULL, term, dlg_msg[0], 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	y += 2;
-	dlg_format_text(NULL, term, dlg_msg[1], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(NULL, term, dlg_msg[1], 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	y += 2;
-	dlg_format_text(NULL, term, dlg_msg[2], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(NULL, term, dlg_msg[2], 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	y += 2;
 	dlg_format_buttons(NULL, term, dlg->items + 3, 2, 0, &y, w, &rw, AL_CENTER);
 	w = rw;
@@ -341,13 +341,13 @@ dialog_fn(struct dialog_data *dlg)
 	center_dlg(dlg);
 	draw_dlg(dlg);
 	y = dlg->y + DIALOG_TB;
-	dlg_format_text(term, term, dlg_msg[0], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(term, term, dlg_msg[0], dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(term, term, &dlg->items[0], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
-	dlg_format_text(term, term, dlg_msg[1], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(term, term, dlg_msg[1], dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(term, term, &dlg->items[1], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
-	dlg_format_text(term, term, dlg_msg[2], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(term, term, dlg_msg[2], dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	dlg_format_field(term, term, &dlg->items[2], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_buttons(term, term, &dlg->items[3], 2, dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
@@ -467,7 +467,7 @@ xdialog_fn(struct dialog_data *dlg)
 	rw = 0;
 	/*HACK*/ w = rw = 50;
 	for (i = 0; i < nfields; i++) {
-	    dlg_format_text(NULL, term, dlg_msg[0], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+	    dlg_format_text(NULL, term, dlg_msg[0], 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	    y += 2;
 	}
 	dlg_format_buttons(NULL, term, dlg->items + nfields, 2, 0, &y, w, &rw, AL_CENTER);
@@ -478,7 +478,7 @@ xdialog_fn(struct dialog_data *dlg)
 	draw_dlg(dlg);
 	y = dlg->y + DIALOG_TB;
 	for (i = 0; i < nfields; i++) {
-	    dlg_format_text(term, term, dlg_msg[0], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	    dlg_format_text(term, term, dlg_msg[0], dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
 	    dlg_format_field(term, term, &dlg->items[i], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	    y++;
 	}

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.52 2002/08/05 19:53:32 pasky Exp $ */
+/* $Id: session.c,v 1.53 2002/08/07 02:56:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,9 +220,9 @@ print_screen_status(struct session *ses)
 	/* TODO: Make this optionally switchable off. */
 
 	if (get_opt_int("ui.show_title_bar"))
-		fill_area(term, 0, 0, term->x, 1, COLOR_TITLE_BG);
+		fill_area(term, 0, 0, term->x, 1, get_bfu_color(term, "title.title-bar"));
 	if (get_opt_int("ui.show_status_bar"))
-		fill_area(term, 0, term->y - 1, term->x, 1, COLOR_STATUS_BG);
+		fill_area(term, 0, term->y - 1, term->x, 1, get_bfu_color(term, "status.status-bar"));
 
 	if (ses->wtd)
 		stat = &ses->loading;
@@ -248,7 +248,7 @@ print_screen_status(struct session *ses)
 				msg = get_stat_msg(stat, term);
 			if (msg) {
 				print_text(term, 0, term->y - 1, strlen(msg),
-					   msg, COLOR_STATUS);
+					   msg, get_bfu_color(term, "status.status-text"));
 				mem_free(msg);
 			}
 		}
@@ -260,7 +260,7 @@ print_screen_status(struct session *ses)
 
 				if (pos < 0) pos = 0;
 				print_text(term, pos, 0, strlen(msg),
-					   msg, COLOR_TITLE);
+					   msg, get_bfu_color(term, "title.title-text"));
 				mem_free(msg);
 			}
 		}

@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.8 2002/07/05 20:42:13 pasky Exp $ */ 
+/* $Id: auth.c,v 1.9 2002/08/07 02:56:59 pasky Exp $ */ 
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,13 +42,13 @@ auth_layout(struct dialog_data *dlg)
         if (w < 1) w = 1;
         rw = 0;
         if (dlg->dlg->udata) {
-                dlg_format_text(NULL, term, dlg->dlg->udata, 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+                dlg_format_text(NULL, term, dlg->dlg->udata, 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
                 y++;
         }
 
-        dlg_format_text(NULL, term, TEXT(T_USERID), 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+        dlg_format_text(NULL, term, TEXT(T_USERID), 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
         y += 2;
-        dlg_format_text(NULL, term, TEXT(T_PASSWORD), 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+        dlg_format_text(NULL, term, TEXT(T_PASSWORD), 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
         y += 2;
         dlg_format_buttons(NULL, term, dlg->items + 2, 2, 0, &y, w, &rw, AL_CENTER);
         w = rw;
@@ -58,13 +58,13 @@ auth_layout(struct dialog_data *dlg)
         draw_dlg(dlg);
         y = dlg->y + DIALOG_TB;
         if (dlg->dlg->udata) {
-                dlg_format_text(term, term, dlg->dlg->udata, dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+                dlg_format_text(term, term, dlg->dlg->udata, dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
                 y++;
         }
-        dlg_format_text(term, term, TEXT(T_USERID), dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+        dlg_format_text(term, term, TEXT(T_USERID), dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
         dlg_format_field(term, term, &dlg->items[0], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
         y++;
-        dlg_format_text(term, term, TEXT(T_PASSWORD), dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+        dlg_format_text(term, term, TEXT(T_PASSWORD), dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
         dlg_format_field(term, term, &dlg->items[1], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
         y++;
         dlg_format_buttons(term, term, &dlg->items[2], 2, dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);

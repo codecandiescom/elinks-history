@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.3 2002/07/05 20:42:13 pasky Exp $ */
+/* $Id: group.c,v 1.4 2002/08/07 02:56:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,7 +101,7 @@ void dlg_format_group(struct terminal *term, struct terminal *t2,
 		if (term) {
 			print_text(term, x + nx + 4 * (item->item->type == D_CHECKBOX),
 				   *y, strlen(_(texts[0], t2)),	_(texts[0], t2),
-				   COLOR_DIALOG_TEXT);
+				   get_bfu_color(term, "dialog.text"));
 			item->x = x + nx + (sl + 1) * (item->item->type != D_CHECKBOX);
 			item->y = *y;
 			if (item->item->type == D_FIELD ||

@@ -403,55 +403,74 @@ int split_line(struct part *part)
 	return 1 + (part->cx == -1);
 }
 
+/* This function is very rare exemplary of clean and beautyful code here.
+ * Please handle with care. --pasky */
 static void justify_line(struct part *part, int y)
 {
 	chr *line; /* we save original line here */
-	int shift;
 	int len = LEN(y);
-	int i = 0;
+	int pos;
 	int *space_list;
-	int spaces = 1;
-	int prev_end = 0;
-
-	shift = overlap(par_format) - len;
+	int spaces;
 	
 	line = mem_alloc(len * sizeof(chr));
 	if (!line) return;
-	space_list = mem_alloc(len * sizeof(int));
+
+	/* It may sometimes happen that the line is only one char long and that
+	 * char is space - then we're going to write to both [0] and [1], but
+	 * we allocated only one field. Thus, we've to do (len + 1). --pasky */
+	space_list = mem_alloc((len + 1) * sizeof(int));
 	if (!space_list) return;
 
 	memcpy(line, &POS(0, y), len * sizeof(chr));
 	
-	while ((line[i] & 0xff) == ' ')
-		i++; /* skip leading spaces*/
+	/* Skip leading spaces */
+
+	spaces = 0;
+	pos = 0;
 	
-	space_list[0] = i - 1;
+	while ((line[pos] & 0xff) == ' ')
+		pos++;
 	
-	for (; i < len; i++)
-		if ((line[i] & 0xff) == ' ')
-			space_list[spaces++] = i;
+	/* Yes, this can be negative, we know. But we add one to it always
+	 * anyway, so it's ok. */
+	space_list[spaces++] = pos - 1;
+
+	/* Count spaces */
+	
+	for (; pos < len; pos++)
+		if ((line[pos] & 0xff) == ' ')
+			space_list[spaces++] = pos;
 
 	space_list[spaces] = len;
 
+	/* Realign line */
+	
 	if (spaces > 1) {
+		int insert = 1; //overlap(par_format) - len;
+		int prev_end = 0;
+		int word;
+
 		set_hchars(part, 0, y, overlap(par_format),
 			   (part->data->data[y].c << 11) | ' ');
 		
-		for (i = 0; i < spaces; i++) {
-			int new_start, word_len, word_start, word_shift;
+		for (word = 0; word < spaces; word++) {
+			/* We have to increase line length by 'insert' num. of
+			 * characters, so we move 'word'th word 'word_shift'
+			 * characters right. */
 			
-			/* We have to increase line length by shift characters
-			 * so we move i-th word word_shift characters right. */
-			word_start = space_list[i] + 1;
-			word_len = space_list[i + 1] - word_start;
-			word_shift = (i * shift) / (spaces - 1);
+			int word_start = space_list[word] + 1;
+			int word_len = space_list[word + 1] - word_start;
+			int word_shift = (word * insert) / (spaces - 1);
+			int new_start = word_start + word_shift; 
+			
+			copy_chars(part, new_start, y, word_len,
+				   &line[word_start]);
 
-			new_start = word_start + word_shift; 
-
-			copy_chars(part, new_start, y, word_len, &line[word_start]);
-
-			/* There are now (new_start - prev_end) spaces before the word. */
-			if (i != 0) move_links(part, prev_end + 1, y, new_start, y);
+			/* There are now (new_start - prev_end) spaces before
+			 * the word. */
+			if (word != 0)
+				move_links(part, prev_end + 1, y, new_start, y);
 			
 			prev_end = new_start + word_len;
 		}

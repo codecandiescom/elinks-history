@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.66 2003/08/27 16:23:09 jonas Exp $ */
+/* $Id: tables.c,v 1.67 2003/08/29 21:27:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,6 +87,7 @@ struct table {
 	struct part *p;
 	struct table_cell *cells;
 	struct table_column *cols;
+	color_t bgcolor;
 	int *min_c, *max_c;
 	int *w_c;
 	int *xcols;
@@ -440,6 +441,7 @@ parse_table(unsigned char *html, unsigned char *eof,
 	t = new_table();
 	if (!t) return NULL;
 
+	t->bgcolor = bgcolor;
 se:
 	en = html;
 
@@ -1370,6 +1372,12 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 					yw += t->r_heights[j + s] +
 					      (s < cell->rowspan - 1 &&
 					       get_hline_width(t, j + s + 1) >= 0);
+				}
+
+				par_format.bgcolor = t->bgcolor;
+				for (s = yp; s < yp + yw; s++) {
+					expand_lines(t->p, s);
+					expand_line(t->p, s, MAX(xp - 1, 0));
 				}
 
 				html_stack_dup();

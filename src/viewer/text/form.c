@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.232 2004/07/22 15:49:50 pasky Exp $ */
+/* $Id: form.c,v 1.233 2004/07/22 15:50:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -766,8 +766,10 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 			if (*sv->value) {
 				unsigned char *filename;
 
-				if (get_cmd_opt_int("anonymous"))
+				if (get_cmd_opt_int("anonymous")) {
+					errno = EPERM;
 					goto encode_error;
+				}
 
 				/* FIXME: DO NOT COPY FILE IN MEMORY !! --Zas */
 				filename = expand_tilde(sv->value);

@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.16 2003/10/19 12:41:12 pasky Exp $ */
+/* $Id: codes.c,v 1.17 2004/02/20 16:01:44 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -11,14 +11,16 @@
 
 #include "elinks.h"
 
+#include "cache/cache.h"
+#include "intl/gettext/libintl.h"
 #include "protocol/http/codes.h"
+#include "sched/connection.h"
+#include "sched/session.h"
+#include "sched/task.h"
+#include "terminal/terminal.h"
+#include "terminal/window.h"
 #include "util/snprintf.h"
-
-
-/* TODO: Somehow, this should be l10n'd. I don't know how, though. Perhaps some
- * clever Accept-Language tricks? We're in trouble in these parts of code
- * because it is detached from terminal and we could have different language on
- * each terminal. --pasky */
+#include "viewer/text/view.h"
 
 
 struct http_code {
@@ -95,25 +97,15 @@ http_code_to_string(int code)
 }
 
 
-unsigned char *
-http_error_document(int code)
+/* TODO: Some short intermediate document for the 3xx messages? --pasky */
+static unsigned char *
+get_http_error_document(struct terminal *term, int code)
 {
-	unsigned char *codestr;
+	unsigned char *codestr = http_code_to_string(code);
 
-	if (code < 400) {
-		/* This is not an error, thus fine. No need generate any
-		 * document, as this may be empty and it's not a problem.
-		 * In case of 3xx, we're probably just getting kicked to
-		 * another page anyway. And in case of 2xx, the document
-		 * may indeed be empty and thus the user should see it so. */
-		/* TODO: Some short intermediate document for the 3xx
-		 * messages? --pasky */
-		return NULL;
-	}
-
-	codestr = http_code_to_string(code);
 	if (!codestr) codestr = "Unknown error";
 
+	/* TODO: l10n this but without all the HTML code. --pasky */
 	return asprintfa(
 "<html>\n"
 " <head>\n"
@@ -140,4 +132,53 @@ http_error_document(int code)
 " </body>\n"
 "</html>\n",
 			code, code, codestr);
+}
+
+struct http_error_info {
+	int code;
+	unsigned char url[1];
+};
+
+static void
+show_http_error_document(struct session *ses, void *data)
+{
+	struct http_error_info *info = data;
+	struct terminal *term = ses->tab->term;
+	struct cache_entry *cached = find_in_cache(info->url);
+	struct cache_entry *cache = cached ? cached : get_cache_entry(info->url);
+	unsigned char *str = NULL;
+
+	if (cache) str = get_http_error_document(term, info->code);
+
+	if (str) {
+		if (cached) delete_entry_content(cache);
+		if (cache->head) mem_free(cache->head);
+		cache->head = stracpy("\r\nContent-type: text/html\r\n");
+		add_fragment(cache, 0, str, strlen(str));
+		mem_free(str);
+
+		draw_formatted(ses, 1);
+	}
+
+	mem_free(info);
+}
+
+
+void
+http_error_document(struct connection *conn, int code)
+{
+	struct http_error_info *info;
+	int urllen;
+
+	assert(conn && struri(conn->uri));
+
+	urllen = strlen(struri(conn->uri));
+
+	info = mem_calloc(1, sizeof(struct http_error_info) + urllen);
+	if (!info) return;
+
+	info->code = code;
+	memcpy(info->url, struri(conn->uri), urllen);
+
+	add_questions_entry(show_http_error_document, info);
 }

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.236 2004/02/20 15:19:15 jonas Exp $ */
+/* $Id: http.c,v 1.237 2004/02/20 16:01:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -993,16 +993,16 @@ read_more:
 thats_all_folks:
 	/* There's no content but an error so just print
 	 * that instead of nothing. */
-	/* TODO: Make sure that Content-type is text/html. --pasky */
 	if (!conn->from) {
-		unsigned char *str = http_error_document(info->http_code);
+		if (info->http_code >= 400) {
+			http_error_document(conn, info->http_code);
 
-		if (str) {
-			int strl = strlen(str);
-
-			add_fragment(conn->cache, conn->from, str, strl);
-			conn->from += strl;
-			mem_free(str);
+		} else {
+			/* This is not an error, thus fine. No need generate any
+			 * document, as this may be empty and it's not a problem.
+			 * In case of 3xx, we're probably just getting kicked to
+			 * another page anyway. And in case of 2xx, the document
+			 * may indeed be empty and thus the user should see it so. */
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.15 2003/12/09 13:38:34 pasky Exp $ */
+/* $Id: smb.c,v 1.16 2003/12/09 13:38:59 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -498,7 +498,7 @@ smb_func(struct connection *conn)
 
 		v[n++] = "smbclient";
 
-		/* FIXME: handle alloc failures and overflow risks. */
+		/* FIXME: handle alloc failures. */
 
 		if (!*share) {
 			v[n++] = "-L";	/* get a list of shares available on a host */

@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.34 2004/10/25 10:29:55 zas Exp $ */
+/* $Id: table.c,v 1.35 2004/12/21 01:53:19 pasky Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -362,6 +362,27 @@ copy_table(struct table *table_src, struct table *table_dst)
 	}
 }
 
+
+#define SMART_RAISE_LIMIT 256*1024
+static inline int
+smart_raise(int target, int base, int unit, int limit)
+{
+	while (target > base) {
+		int orig_base = base;
+
+		/* Until we reach 256kb we go fast. Then we raise
+		 * by 256kb amounts. */
+		if (base < limit / unit) {
+			base <<= 1;
+		} else {
+			base += limit / unit;
+		}
+		/* Overflow? */
+		if (base <= orig_base) return 0;
+	}
+	return base;
+}
+
 static struct table_cell *
 new_cell(struct table *table, int dest_col, int dest_row)
 {
@@ -376,15 +397,10 @@ new_cell(struct table *table, int dest_col, int dest_row)
 			return CELL(table, dest_col, dest_row);
 		}
 
-		new_table.real_cols = table->real_cols;
-		new_table.real_rows = table->real_rows;
-
-		while (dest_col >= new_table.real_cols)
-			if (!(new_table.real_cols <<= 1))
-				return NULL;
-		while (dest_row >= new_table.real_rows)
-			if (!(new_table.real_rows <<= 1))
-				return NULL;
+		new_table.real_cols = smart_raise(dest_col + 1, table->real_cols, sizeof(struct table_cell), SMART_RAISE_LIMIT/2 /* assume square distribution of cols/rows */);
+		if (!new_table.real_cols) return NULL;
+		new_table.real_rows = smart_raise(dest_row + 1, table->real_rows, sizeof(struct table_cell), MAX(SMART_RAISE_LIMIT - sizeof(struct table_cell) * new_table.real_cols, SMART_RAISE_LIMIT/2));
+		if (!new_table.real_rows) return NULL;
 
 		new_table.cells = mem_calloc(new_table.real_cols * new_table.real_rows,
 					     sizeof(struct table_cell));
@@ -407,9 +423,8 @@ new_columns(struct table *table, int span, int width, int align,
 		int n = table->real_columns_count;
 		struct table_column *new_columns;
 
-		while (table->columns_count + span > n)
-			if (!(n <<= 1))
-				return;
+		n = smart_raise(table->columns_count + span, n, sizeof(struct table_column), SMART_RAISE_LIMIT);
+		if (!n) return;
 
 		new_columns = mem_realloc(table->columns, n * sizeof(struct table_column));
 		if (!new_columns) return;
@@ -437,7 +452,7 @@ set_td_width(struct table *table, int col, int width, int force)
 		int i;
 		int *new_cols_x;
 
-		while (col >= n) if (!(n <<= 1)) break;
+		n = smart_raise(col + 1, n, sizeof(int), SMART_RAISE_LIMIT);
 		if (!n && table->cols_x_count) return;
 		if (!n) n = col + 1;
 

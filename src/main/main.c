@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.192 2004/04/14 06:30:06 jonas Exp $ */
+/* $Id: main.c,v 1.193 2004/04/14 19:04:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,12 +165,11 @@ init(void)
 			close_terminal_pipes();
 		}
 	} else {
-		int len;
 		int id = get_opt_int_tree(cmdline_options, "base-session");
-		void *info = create_session_info(id, &url_list, &len);
+		struct string info;
 		struct terminal *term = NULL;
 
-		if (!info) {
+		if (!create_session_info(&info, id, &url_list)) {
 			retval = RET_FATAL;
 			terminate = 1;
 
@@ -178,11 +177,11 @@ init(void)
 			close_terminal_pipes();
 
 			handle_trm(get_input_handle(), get_output_handle(),
-				   fd, fd, get_ctl_handle(), info, len);
+				   fd, fd, get_ctl_handle(), info.source, info.length);
 
 		} else {
 			term = attach_terminal(get_input_handle(), get_output_handle(),
-					       get_ctl_handle(), info, len);
+					       get_ctl_handle(), info.source, info.length);
 			if (!term) {
 				retval = RET_FATAL;
 				terminate = 1;
@@ -192,7 +191,7 @@ init(void)
 		/* OK, this is race condition, but it must be so; GPM installs
 		 * it's own buggy TSTP handler. */
 		if (!terminate) handle_basic_signals(term);
-		if (info) mem_free(info);
+		done_string(&info);
 	}
 
 	free_string_list(&url_list);

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.365 2004/04/14 18:55:46 jonas Exp $ */
+/* $Id: session.c,v 1.366 2004/04/14 19:04:12 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -658,28 +658,26 @@ copy_session(struct session *old, struct session *new)
  *	3: NUL terminated URIs <unsigned char>+
  */
 
-void *
-create_session_info(int cp, struct list_head *url_list, int *ll)
+struct string *
+create_session_info(struct string *info, int cp, struct list_head *url_list)
 {
-	struct string info;
 	int numbers[2] = { cp, SESSION_MAGIC(1, 0) };
 	unsigned char *number_chars = (unsigned char *) numbers;
 
-	if (init_string(&info)
-	    && add_bytes_to_string(&info, number_chars, sizeof(numbers))) {
+	if (init_string(info)
+	    && add_bytes_to_string(info, number_chars, sizeof(numbers))) {
 		struct string_list_item *url;
 
 		foreach (url, *url_list) {
 			struct string *str = &url->string;
 
-			add_bytes_to_string(&info, str->source, str->length + 1);
+			add_bytes_to_string(info, str->source, str->length + 1);
 		}
 
-		*ll = info.length;
-		return info.source;
+		return info;
 	}
 
-	done_string(&info);
+	done_string(info);
 	return NULL;
 }
 

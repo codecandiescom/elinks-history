@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.636 2004/10/17 21:33:27 miciah Exp $ */
+/* $Id: view.c,v 1.637 2004/10/17 21:34:56 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -716,11 +716,9 @@ try_form_action(struct session *ses, struct document_view *doc_view,
 		if (ses->insert_mode == INSERT_MODE_ON) {
 			assert(link == get_current_link(doc_view));
 		}
-
-		return status;
 	}
 
-	return FRAME_EVENT_IGNORED;
+	return status;
 }
 
 static enum frame_event_status

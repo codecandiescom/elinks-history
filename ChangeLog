@@ -1,3 +1,131 @@
+Thu Sep 12 21:54:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* README:
+
+	Readibility improvements, based on a patch by Vallimar
+	<vallimar@sexorcisto.net>.  
+
+Thu Sep 12 21:12:39 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, src/config/options.c, src/ssl/TODO, src/ssl/connect.c:
+
+	Some paranoia introduced by a patch base on work and suggestions of
+	Mario Lorenz <ml@vdazone.org> - introduced option
+	connection.ssl.cert_verify (by default off), optionally allowing
+	OpenSSL to verify the peer (always fails without proper
+	configuration of OpenSSL :/ ) - attempts to fight against the SSL
+	chaining vulnerability.  
+
+Thu Sep 12 20:11:24 2002  Laurent Monin <zas@norz.org>:
+
+	* README:
+
+	Minor fixes and additions.  
+
+Thu Sep 12 17:55:59 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/: README, elinks-vim.diff, elinks.vim:
+
+	Added elinks.conf vim syntax file by Jonas.  
+
+Thu Sep 12 17:16:04 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/colors.c, AUTHORS:
+
+	Typo fix by Jonas.  
+
+Thu Sep 12 17:07:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/dialogs.c:
+
+	When deleting a bookmark, move the pointer to the item below rather
+	than above => much more intuitive and natural (tm) ;-).  
+
+Thu Sep 12 17:02:46 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/: bookmarks.c, bookmarks.h, dialogs.c:
+
+	Some preparation steps for the hiearchical bookmarks.  
+
+Thu Sep 12 16:42:45 2002  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/beos.c:
+
+	Minor tidyup.  
+
+Thu Sep 12 16:38:33 2002  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/win32.c:
+
+	Minor tidyup.  
+
+Thu Sep 12 16:33:53 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lua/core.c:
+
+	Tidyup, minor optimizations, conformance to HACKING document.  
+
+Thu Sep 12 14:46:28 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	ftp_end_request() now accepts connection state as second parameter.  
+
+Thu Sep 12 14:40:37 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Most functions are now static. Some useless prototypes were removed.  
+
+Thu Sep 12 14:24:03 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/sched.h, protocol/ftp.c:
+
+	Code redundancy was reduced by adding a generic get_resp() function
+	and passing callback function in struct connection.  
+
+Thu Sep 12 13:11:13 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/connect.c:
+
+	Function declarations are now conform to HACKING document.  
+
+Thu Sep 12 13:00:14 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/sched.c, protocol/http/http.c:
+
+	Populate with abort|retry_conn_with_state().  
+
+Thu Sep 12 12:54:34 2002  Laurent Monin <zas@norz.org>:
+
+	* src/ssl/connect.c:
+
+	Populate with abort|retry_conn_with_state().  
+
+Thu Sep 12 12:50:20 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: http/http.c, ftp.c:
+
+	Populate with abort|retry_conn_with_state().  
+
+Thu Sep 12 12:46:57 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/connect.c:
+
+	Populate with abort|retry_conn_with_state().  
+
+Thu Sep 12 12:37:59 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/: sched.c, sched.h:
+
+	retry_conn_with_state() was introduced.  
+
+Thu Sep 12 12:05:58 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/ftp.c:
+
+	Fixed compilation problem when ipv6 support is disabled.  
+
 Wed Sep 11 21:04:54 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: lowlevel/connect.c, lowlevel/connect.h, lowlevel/sched.c,

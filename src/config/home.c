@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.36 2003/10/03 17:03:32 kuser Exp $ */
+/* $Id: home.c,v 1.37 2003/10/03 17:06:59 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,15 +61,11 @@ test_confdir(unsigned char *home, unsigned char *path,
 			return confdir;
 		}
 
-		goto fail;
-	}
-
-	if (S_ISDIR(st.st_mode)) {
+	} else if (S_ISDIR(st.st_mode)) {
 		first_use = 0;
 		return confdir;
 	}
 
-fail:
 	if (error_message) {
 		error(error_message, path, confdir);
 		sleep(3);

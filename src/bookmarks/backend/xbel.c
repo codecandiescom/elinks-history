@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.44 2004/07/15 00:45:33 jonas Exp $ */
+/* $Id: xbel.c,v 1.45 2004/08/12 08:21:51 miciah Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -197,8 +197,7 @@ print_xml_entities(struct secure_save_info *ssi, const unsigned char *str)
 			else {
 				unsigned char *s = u2cp_no_nbsp(*str, cp);
 
-				print_xml_entities(ssi, s ? s
-							  : (unsigned char *) "");
+				if (s) print_xml_entities(ssi, s);
 			}
 		}
 	}

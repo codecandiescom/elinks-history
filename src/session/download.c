@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.10 2003/01/23 19:03:29 pasky Exp $ */
+/* $Id: download.c,v 1.11 2003/01/23 23:15:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -934,7 +934,7 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	down->file = cmdw_hop->real_file;
 
 	if (fstat(fd, &buf)) goto error;
-	down->last_pos = (int) buf.st_size;
+	down->last_pos = resume ? (int) buf.st_size : 0;
 
 	down->stat.end = (void (*)(struct status *, void *)) download_data;
 	down->stat.data = down;

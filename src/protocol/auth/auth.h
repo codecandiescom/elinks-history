@@ -1,4 +1,4 @@
-/* $Id: auth.h,v 1.21 2004/11/14 10:32:55 witekfl Exp $ */
+/* $Id: auth.h,v 1.22 2004/11/14 11:02:16 witekfl Exp $ */
 
 #ifndef EL__PROTOCOL_AUTH_AUTH_H
 #define EL__PROTOCOL_AUTH_AUTH_H
@@ -31,7 +31,8 @@ struct http_auth_basic {
 
 unsigned char *find_auth(struct uri *);
 struct http_auth_basic *find_auth_entry(struct uri *uri, unsigned char *realm);
-struct http_auth_basic *add_auth_entry(struct uri *, unsigned char *);
+struct http_auth_basic *add_auth_entry(struct uri *, unsigned char *,
+	unsigned char *, unsigned char *, unsigned int);
 void del_auth_entry(struct http_auth_basic *);
 void free_auth(void);
 struct http_auth_basic *get_invalid_auth_entry(void);

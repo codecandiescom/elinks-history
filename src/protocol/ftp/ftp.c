@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.178 2004/11/10 15:47:31 jonas Exp $ */
+/* $Id: ftp.c,v 1.179 2004/11/14 11:02:16 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -338,7 +338,7 @@ prompt_username_pw(struct connection *conn)
 		return;
 	}
 
-	add_auth_entry(conn->uri, "FTP Login");
+	add_auth_entry(conn->uri, "FTP Login", NULL, NULL, 0);
 
 	abort_conn_with_state(conn, S_OK);
 }

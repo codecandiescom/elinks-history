@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.351 2004/11/11 00:07:43 jonas Exp $ */
+/* $Id: http.c,v 1.352 2004/11/14 11:02:16 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1278,7 +1278,7 @@ again:
 				unsigned char *realm = get_header_param(d, "realm");
 
 				if (realm) {
-					add_auth_entry(uri, realm);
+					add_auth_entry(uri, realm, NULL, NULL, 0);
 					mem_free(realm);
 				}
 			}

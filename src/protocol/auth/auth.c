@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.89 2004/11/14 10:32:55 witekfl Exp $ */
+/* $Id: auth.c,v 1.90 2004/11/14 11:02:16 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,7 +126,8 @@ init_auth_entry(struct uri *uri, unsigned char *realm)
 /* Returns the new entry or updates an existing one. Sets the @valid member if
  * updating is required so it can be tested if the user should be queried. */
 struct http_auth_basic *
-add_auth_entry(struct uri *uri, unsigned char *realm)
+add_auth_entry(struct uri *uri, unsigned char *realm, unsigned char *nonce,
+	unsigned char *opaque, unsigned int digest)
 {
 	struct http_auth_basic *entry;
 
@@ -155,6 +156,21 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 					del_auth_entry(entry);
 					return NULL;
 				}
+				if (nonce) {
+					entry->nonce = stracpy(nonce);
+					if (!entry->nonce) {
+						del_auth_entry(entry);
+						return NULL;
+					}
+				}
+				if (opaque) {
+					entry->opaque = stracpy(opaque);
+					if (!entry->opaque) {
+						del_auth_entry(entry);
+						return NULL;
+					}
+				}
+				entry->digest = digest;
 			}
 		}
 
@@ -176,8 +192,22 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 		/* Create a new entry. */
 		entry = init_auth_entry(uri, realm);
 		if (!entry) return NULL;
-
 		add_to_list(http_auth_basic_list, entry);
+		if (nonce) {
+			entry->nonce = stracpy(nonce);
+			if (!entry->nonce) {
+				del_auth_entry(entry);
+				return NULL;
+			}
+		}
+		if (opaque) {
+			entry->opaque = stracpy(opaque);
+			if (!entry->opaque) {
+				del_auth_entry(entry);
+				return NULL;
+			}
+		}
+		entry->digest = digest;
 	}
 
 	/* Only pop up question if one of the protocols requested it */
@@ -215,7 +245,7 @@ find_auth(struct uri *uri)
 		        && !strlcmp(entry->password, -1, uri->password, uri->passwordlen)
 		        && !strlcmp(entry->user, -1, uri->user, uri->userlen))) {
 
-			entry = add_auth_entry(uri, NULL);
+			entry = add_auth_entry(uri, NULL, NULL, NULL, 0);
 		}
 	}
 

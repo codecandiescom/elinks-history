@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.60 2002/12/14 17:57:01 zas Exp $ */
+/* $Id: parser.c,v 1.61 2002/12/15 11:23:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,9 +10,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef HAVE_UNISTD_H
-#include <unistd.h> /* XXX: only for debug_stack() */
-#endif
 
 #include "elinks.h"
 
@@ -371,6 +368,9 @@ kill_elem(unsigned char *e)
 }
 
 #if 0
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 /* Never called */
 void
 debug_stack()

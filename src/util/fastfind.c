@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.34 2003/06/15 11:55:54 pasky Exp $ */
+/* $Id: fastfind.c,v 1.35 2003/06/15 12:20:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -407,7 +407,7 @@ void
 fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
 {
 	int cnt = 0;
-	int pos;
+	int pos = 0;
 	register int i = 0;
 
 	assert(info);

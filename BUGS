@@ -26,7 +26,7 @@ Known bugs:
 
 - You can't upload large files; it takes _lots_ of memory.
 
-- You shouldn't press '^Z' when you are in a viewer
+- You shouldn't press '^Z' when you are in external program (viewer, editor, mailer, ...)
 
 + Handling of &#13; is not lynx-compatible in <pre> tag (should be newline).
 
@@ -56,4 +56,4 @@ Known bugs:
 Key: - nothing done + work in progress * almost fixed
      (reflects only what is already committed to CVS)
 
-$Id: BUGS,v 1.51 2003/05/06 22:39:28 zas Exp $
+$Id: BUGS,v 1.52 2003/05/06 23:07:37 pasky Exp $

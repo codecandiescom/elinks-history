@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.48 2003/06/07 14:16:56 pasky Exp $ */
+/* $Id: dialogs.c,v 1.49 2003/06/07 14:44:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -204,7 +204,7 @@ layout_edit_dialog(struct dialog_data *dlg)
 	name = straconcat(_("Name", term), ": ", option->name, NULL);
 	type = straconcat(_("Type", term), ": ",
 			  _(option_types[option->type].name, term), NULL);
-	value= straconcat(_("value", term), ": ", NULL);
+	value= straconcat(_("Value", term), ": ", NULL);
 	desc = straconcat(_("Description", term), ": \n",
 			  _(option->desc, term), NULL);
 

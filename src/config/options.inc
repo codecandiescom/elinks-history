@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.99 2004/02/15 12:48:48 witekfl Exp $ */
+/* $Id: options.inc,v 1.100 2004/02/15 16:33:40 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -503,11 +503,11 @@ struct option_info config_options_info[] = {
 
 	INIT_OPT_STRING("document.dump", N_("Header"),
 		"header", 0, "",
-		N_("Header string used in dumps. \%u is substituted by URL.")),
+		N_("Header string used in dumps. %u is substituted by URL.")),
 
 	INIT_OPT_STRING("document.dump", N_("Footer"),
 		"footer", 0, "",
-		N_("Footer string used in dumps. \%u is substituted by URL.")),
+		N_("Footer string used in dumps. %u is substituted by URL.")),
 
 	INIT_OPT_STRING("document.dump", N_("Separator"),
 		"separator", 0, "\n\n",

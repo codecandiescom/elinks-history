@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.322 2004/03/22 14:35:40 jonas Exp $ */
+/* $Id: session.c,v 1.323 2004/03/30 23:05:25 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -859,7 +859,7 @@ destroy_session(struct session *ses)
 	free_list(ses->scrn_frames);
 
 	destroy_history(&ses->history);
-	set_referrer(ses, NULL);
+	set_session_referrer(ses, NULL);
 
 	if (ses->loading_url) mem_free(ses->loading_url);
 	if (ses->display_timer != -1) kill_timer(ses->display_timer);
@@ -1007,6 +1007,20 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 
 	return NULL;
 
+}
+
+void
+set_session_referrer(struct session *ses, unsigned char *referrer)
+{
+	if (ses->ref_url) mem_free(ses->ref_url);
+
+	if (referrer) {
+		/* Don't set referrer for file protocol */
+		referrer = strncasecmp("file:", referrer, 5)
+			 ? stracpy(referrer) : NULL;
+	}
+
+	ses->ref_url = referrer;
 }
 
 void

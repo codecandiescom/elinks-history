@@ -1,5 +1,5 @@
 /* Some ELinks' auxiliary routines (ELinks<->gettext support) */
-/* $Id: libintl.c,v 1.5 2003/01/20 14:17:27 pasky Exp $ */
+/* $Id: libintl.c,v 1.6 2003/04/14 15:44:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,9 +120,19 @@ iso639_to_language(unsigned char *iso639)
 	return 1;
 }
 
+int system_language = 0;
+
 unsigned char *
 language_to_iso639(int language)
 {
+	/* Language is "system", we need to extract the index from
+	 * the environment */
+	if (language == 0) {
+		return system_language ?
+		       languages[system_language].iso639 :
+		       languages[get_system_language_index()].iso639;
+	}
+
 	return languages[language].iso639;
 }
 
@@ -146,7 +156,20 @@ language_to_name(int language)
 }
 
 
-int system_language = 0;
+int
+get_system_language_index()
+{
+	unsigned char *l;
+
+	/* At this point current_language must be "system" yet. */
+	l = getenv("LANGUAGE");
+	if (!l) l = getenv("LC_ALL");
+	if (!l) l = getenv("LC_MESSAGES");
+	if (!l) l = getenv("LANG");
+
+	return (l) ? iso639_to_language(l) : 1;
+}
+
 int current_language = 0;
 
 void
@@ -154,21 +177,8 @@ set_language(int language)
 {
 	unsigned char *_;
 
-	if (!system_language) {
-		unsigned char *l;
-
-		/* At this point current_language must be "system" yet. */
-		l = getenv("LANGUAGE");
-		if (!l) l = getenv("LC_ALL");
-		if (!l) l = getenv("LC_MESSAGES");
-		if (!l) l = getenv("LANG");
-
-		if (l) {
-			system_language = iso639_to_language(l);
-		} else {
-			system_language = 1;
-		}
-	}
+	if (!system_language)
+		system_language = get_system_language_index();
 
 	if (language == current_language) {
 		/* Nothing to do. */

@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.7 2003/01/04 16:45:30 pasky Exp $ */
+/* $Id: libintl.h,v 1.8 2003/04/14 15:44:26 zas Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -65,6 +65,7 @@ extern int iso639_to_language(unsigned char *iso639);
 extern unsigned char *language_to_name(int language);
 extern unsigned char *language_to_iso639(int language);
 
+extern int get_system_language_index();
 
 /* The current state. The state should be initialized a by set_language(0)
  * call. */

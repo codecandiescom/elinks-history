@@ -1,3 +1,292 @@
+Wed Jun 23 20:33:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update again, so that I beat the feeble pl.po.  
+
+Wed Jun 23 20:31:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Fix goto-url event hook for all the cool people using scriptingless
+	URI rewriting. :) 
+
+Wed Jun 23 20:24:50 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Wed Jun 23 20:17:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/leds.c:
+
+	We usually say 'status bar' to the user, not 'statusbar'.  
+
+Wed Jun 23 20:16:03 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c, src/scripting/lua/hooks.c,
+	src/scripting/perl/hooks.c, doc/events.txt:
+
+	Fix up the goto-url event hooks to accept NULL @ses (and described
+	that case in the documentation) and clean up remnants of current_uri
+	passing in decode_session_info(). Motivated by zas.  
+
+Wed Jun 23 15:14:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Tidy up.  
+
+Wed Jun 23 15:09:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Remaining global variables were moved to renderer_context struct.  
+
+Wed Jun 23 14:54:24 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	struct renderer_context was introduced. @table_cache_entries,
+	@last_link_to_move, @last_tag_to_move, @last_tag_for_newline,
+	@link_state_info were moved to it.  
+
+Wed Jun 23 14:51:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/forms.c:
+
+	Introduce init_form_control().  
+
+Wed Jun 23 14:02:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, textarea.c, textarea.h:
+
+	Revert last patch.  
+
+Wed Jun 23 13:18:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, textarea.c, textarea.h:
+
+	textarea_edit(): Take session arg.  
+
+Wed Jun 23 12:44:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: internal.h, parser.c, parser/forms.c:
+
+	Remove eofff from struct html_context. It is only used by
+	find_form_for_input() which already uses @i variable as eof pointer.
+	@i is passed by html_*() form field handlers and is a pointer to the
+	current form field's attributes and find_form_for_input() is
+	supposed to search for previous <form> tag and load values into the
+	struct form variable so it should be ok.  
+
+Wed Jun 23 12:29:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/menu.c,
+	sched/action.c:
+
+	{next,previous,zoom}-frame -> frame-{next,prev,maxmize} 
+
+Wed Jun 23 12:13:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: internal.h, parser.c, parser/forms.c,
+	parser/link.c, parser/parse.c, parser/stack.c:
+
+	html_context.ff -> html_context.part 
+
+Wed Jun 23 10:53:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: css/css.c, css/stylesheet.h, html/internal.h,
+	html/parser.c, html/parser/link.c, html/parser/parse.c:
+
+	Add css_styles to struct html_context.  
+
+Wed Jun 23 10:33:06 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/parse.c,
+	parser/stack.c:
+
+	struct html_context: @html_stack -> @stack.  
+
+Wed Jun 23 10:28:12 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/menu.c, document/html/parser.c:
+
+	Fix trailing spaces.  
+
+Wed Jun 23 10:26:16 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/parse.c,
+	parser/stack.c:
+
+	@html_stack was added to struct html_context.  
+
+Wed Jun 23 10:07:33 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, renderer.c, renderer.h:
+
+	@margin was added to struct html_context.  
+
+Wed Jun 23 08:50:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/draw.c:
+
+	check_document_fragment(): Complete make over.  
+
+Wed Jun 23 08:46:44 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Fix an off-by-one error in insert_spaces_in_link that could result 
+	in a leading added space being erroneously marked as a part of a
+	link.  Thanks to Jonas for finding the problem and pointing out the
+	fix.  
+
+Wed Jun 23 08:41:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/draw.c:
+
+	draw_doc(): Split out fragment handling to
+	check_document_fragment().  
+
+Wed Jun 23 08:18:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/draw.c:
+
+	Fix title.  
+
+Wed Jun 23 08:16:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, document/css/css.c,
+	protocol/http/codes.c, sched/action.c, sched/session.c,
+	viewer/text/Makefile.am, viewer/text/draw.c, viewer/text/draw.h,
+	viewer/text/form.c, viewer/text/search.c, viewer/text/view.c,
+	viewer/text/view.h:
+
+	Move drawing functions.  
+
+Wed Jun 23 08:01:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/stub.c:
+
+	Cleanup.  
+
+Wed Jun 23 07:50:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	move_link(): Don't set @current_link local variable to -1 but test
+	against @wraparound_bound instead. So set_textarea() will again be
+	called when no link is selected and we move to one in the view.  
+
+Wed Jun 23 07:38:26 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/task.c:
+
+	Compilation fix.  
+
+Wed Jun 23 04:43:31 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Fix bug 60: Spaces inserted by align="justify" get bad attributes.  
+	The function insert_spaces_in_link is introduced.  
+
+Tue Jun 22 23:24:16 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/forms.c,
+	parser/parse.c:
+
+	@special_f was added to struct html_parser.  
+
+Tue Jun 22 23:16:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/forms.c,
+	parser/link.c, parser/parse.c, parser/stack.c:
+
+	@line_break_f was added to struct html_parser.  
+
+Tue Jun 22 23:11:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/events.txt, src/protocol/rewrite/rewrite.c,
+	src/sched/session.c, src/sched/task.c, src/sched/task.h,
+	src/scripting/guile/hooks.c, src/scripting/lua/hooks.c,
+	src/scripting/perl/hooks.c:
+
+	Revert Jonas' change of passing current URI to goto-url event hooks
+	instead of session. Hope that gets him more motivated for making
+	some patches today... ;-) 
+
+Tue Jun 22 23:08:32 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/forms.c,
+	parser/link.c, parser/parse.c:
+
+	@put_chars_f was added to struct html_parser.  
+
+Tue Jun 22 22:56:51 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/forms.c,
+	parser/link.c, parser/parse.c, parser/stack.c:
+
+	@ff was added to struct html_parser.  
+
+Tue Jun 22 22:42:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, renderer.c, tables.c,
+	tables.h, parser/parse.c:
+
+	@table_level was added to struct html_parser.  
+
+Tue Jun 22 22:33:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/forms.c:
+
+	@last_input_tag was added to struct html_parser.  
+
+Tue Jun 22 22:30:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/forms.c:
+
+	@last_form_attr was added to struct html_parser.  
+
+Tue Jun 22 22:28:24 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/forms.c:
+
+	@last_form_tag was added to struct html_parser.  
+
+Tue Jun 22 22:24:18 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/forms.c:
+
+	@startf was added to struct html_parser.  
+
+Tue Jun 22 22:21:08 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/forms.c:
+
+	@eofff was added to struct html_parser.  
+
+Tue Jun 22 22:18:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/link.c:
+
+	@has_link_lines was added to struct html_parser.  
+
+Tue Jun 22 22:13:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/parse.c:
+
+	@was_xmp was added to struct html_parser.  
+
+Tue Jun 22 22:11:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/parse.c:
+
+	@was_li was added to struct html_parser.  
+
 Tue Jun 22 22:05:29 2004  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/: internal.h, parser.c, parser/forms.c,

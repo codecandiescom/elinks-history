@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.155 2004/05/26 20:35:28 zas Exp $ */
+/* $Id: hierbox.c,v 1.156 2004/05/31 02:22:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,6 +75,30 @@ do_add_listbox_item(struct listbox_item *root, unsigned char *text, void *data,
 	/* TODO: Sort? */
 	add_to_list(root->child, item);
 
+	return item;
+}
+
+struct listbox_item *
+add_listbox_folder(struct hierbox_browser *browser, struct listbox_item *root, unsigned char *text, void *data)
+{
+	struct listbox_item *item;
+
+	if (!root) root = &browser->root;
+
+	item = do_add_listbox_item(root, text, data, 0, BI_FOLDER);
+	update_hierbox_browser(browser);
+	return item;
+}
+
+struct listbox_item *
+add_listbox_item_at_pos(struct hierbox_browser *browser,  struct listbox_item *root, unsigned char *text, void *data)
+{
+	struct listbox_item *item;
+
+	if (!root) root = &browser->root;
+
+	item = do_add_listbox_item(root, text, data, 0, BI_LEAF);
+	update_hierbox_browser(browser);
 	return item;
 }
 

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.142 2004/05/31 01:24:32 jonas Exp $ */
+/* $Id: cookies.c,v 1.143 2004/05/31 02:22:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,13 +64,6 @@ struct c_domain {
 
 static INIT_LIST_HEAD(c_domains);
 
-struct c_server {
-	LIST_HEAD(struct c_server);
-
-	int accept;
-	unsigned char server[1]; /* Must be at end of struct. */
-};
-
 static INIT_LIST_HEAD(c_servers);
 
 static int cookies_dirty = 0;
@@ -133,17 +126,50 @@ static struct option_info cookies_options[] = {
 #define get_cookies_resave()		get_opt_cookies(COOKIES_RESAVE).number
 
 struct c_server *
-get_cookie_server(struct uri *uri)
+get_cookie_server(unsigned char *host, int hostlen)
 {
+	struct c_server *cs;
+
+	foreach (cs, c_servers) {
+		if (strlcasecmp(cs->server, -1, host, hostlen))
+			continue;
+
+		object_lock(cs);
+		return cs;
+	}
+
+	cs = mem_calloc(1, sizeof(struct c_server) + hostlen);
+	if (!cs) return NULL;
+
+	memcpy(cs->server, host, hostlen);
+	object_nolock(cs, "cookie_server");
+
+	cs->box_item = add_listbox_folder(&cookie_browser, NULL, cs->server, cs);
+
+	object_lock(cs);
+	add_to_list(c_servers, cs);
+
+	return cs;
+}
+
+static void
+done_cookie_server(struct c_server *cs)
+{
+	object_unlock(cs);
+	if (is_object_used(cs)) return;
+
+	if (cs->box_item) done_listbox_item(&cookie_browser, cs->box_item);
+	del_from_list(cs);
+	mem_free(cs);
 }
 
 void
 free_cookie(struct cookie *c)
 {
 	if (c->box_item) done_listbox_item(&cookie_browser, c->box_item);
+	if (c->server) done_cookie_server(c->server);
 	mem_free_if(c->name);
 	mem_free_if(c->value);
-	mem_free_if(c->server);
 	mem_free_if(c->path);
 	mem_free_if(c->domain);
 	mem_free(c);
@@ -243,7 +269,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 
 	cookie->name = memacpy(str, cstr.nam_end - str);
 	cookie->value = memacpy(cstr.val_start, cstr.val_end - cstr.val_start);
-	cookie->server = memacpy(uri->host, uri->hostlen);
+	cookie->server = get_cookie_server(uri->host, uri->hostlen);
 	cookie->domain = parse_http_header_param(str, "domain");
 	if (!cookie->domain) cookie->domain = memacpy(uri->host, uri->hostlen);
 
@@ -388,7 +414,7 @@ accept_cookie(struct cookie *c)
 	struct cookie *d, *e;
 	int domain_len;
 
-	c->box_item = add_listbox_items(&cookie_browser, c, 1, c->server, c->name, NULL);
+	c->box_item = add_listbox_item_at_pos(&cookie_browser, c->server->box_item, c->name, c);
 
 	foreach (d, cookies) {
 		if (strcasecmp(d->name, c->name)
@@ -708,6 +734,19 @@ load_cookies(void) {
 		/* Prepare cookie if all members and fields was read. */
 		cookie = (p ? mem_calloc(1, sizeof(struct cookie)) : NULL);
 
+		if (cookie) {
+			unsigned char *host = members[SERVER];
+			int hostlen = strlen(host);
+
+			cookie->server = get_cookie_server(host, hostlen);
+			if (cookie->server) {
+				mem_free(members[SERVER]);
+			} else {
+				mem_free(cookie);
+				cookie = NULL;
+			}
+		}
+
 		if (!cookie) {
 			/* Something went wrong so clean up. */
 			for (member = NAME; member < MEMBERS; member++)
@@ -718,7 +757,6 @@ load_cookies(void) {
 
 		cookie->name	= members[NAME];
 		cookie->value	= members[VALUE];
-		cookie->server	= members[SERVER];
 		cookie->path	= members[PATH];
 		cookie->domain	= members[DOMAIN];
 

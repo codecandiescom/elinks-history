@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.51 2004/05/30 22:56:23 miciah Exp $ */
+/* $Id: dialogs.c,v 1.52 2004/05/31 02:22:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,13 +38,19 @@
 static void
 lock_cookie(struct listbox_item *item)
 {
-	if (item->udata) object_lock((struct cookie *)item->udata);
+	if (item->type == BI_LEAF)
+		object_lock((struct cookie *)item->udata);
+	else
+		object_lock((struct c_server *)item->udata);
 }
 
 static void
 unlock_cookie(struct listbox_item *item)
 {
-	if (item->udata) object_unlock((struct cookie *)item->udata);
+	if (item->type == BI_LEAF)
+		object_unlock((struct cookie *)item->udata);
+	else
+		object_unlock((struct c_server *)item->udata);
 }
 
 static int
@@ -73,14 +79,10 @@ get_cookie_info(struct listbox_item *item, struct terminal *term,
 	switch (listbox_info) {
 	case LISTBOX_TEXT:
 		/* Are we dealing with a folder? */
-		if (!cookie) {
-			/* Shouldn't happen but still */
-			if (list_empty(item->child))
-				 return NULL;
-			item = item->child.next;
-			cookie = item->udata;
+		if (item->type == BI_FOLDER) {
+			struct c_server *server = item->udata;
 
-			return cookie ? stracpy(cookie->server) : NULL;
+			return stracpy(server->server);
 		}
 
 		return stracpy(cookie->name);
@@ -89,12 +91,13 @@ get_cookie_info(struct listbox_item *item, struct terminal *term,
 		return NULL;
 
 	case LISTBOX_ALL:
+		if (item->type == BI_FOLDER) return NULL;
 		break;
 	}
 
 	if (!init_string(&string)) return NULL;
 
-	add_format_to_string(&string, "%s: %s", _("Server", term), cookie->server);
+	add_format_to_string(&string, "%s: %s", _("Server", term), cookie->server->server);
 	add_format_to_string(&string, "\n%s: %s", _("Name", term), cookie->name);
 	add_format_to_string(&string, "\n%s: %s", _("Value", term), cookie->value);
 	add_format_to_string(&string, "\n%s: %s", _("Domain", term), cookie->domain);
@@ -124,7 +127,7 @@ delete_cookie(struct listbox_item *item, int last)
 {
 	struct cookie *cookie = item->udata;
 
-	if (!cookie) return;
+	if (item->type == BI_FOLDER) return;
 
 	assert(!is_object_used(cookie));
 
@@ -298,24 +301,25 @@ push_add_button(struct dialog_data *dlg_data, struct widget_data *button)
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct terminal *term = dlg_data->win->term;
 	struct cookie *new_cookie;
+	struct c_server *server;
 
-	if (!box->sel) return 0;
+	if (!box->sel && box->sel->udata) return 0;
 
 	new_cookie = mem_calloc(1, sizeof(struct cookie));
 	if (!new_cookie) return 0;
 
 	if (box->sel->type == BI_FOLDER) {
-		new_cookie->server = stracpy(box->sel->text);
+		assert(box->sel->depth == 0);
+		server = box->sel->udata;
 	} else {
 		struct cookie *cookie = box->sel->udata;
 
-		if (cookie) {
-			new_cookie->server = stracpy(cookie->server);
-		} else {
-			mem_free(new_cookie);
-			return 0;
-		}
+		server = cookie->server;
 	}
+
+	object_lock(server);
+	new_cookie->server = server;
+
 	new_cookie->name = stracpy("");
 	new_cookie->value = stracpy("");
 	new_cookie->domain = stracpy("");

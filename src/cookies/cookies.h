@@ -1,4 +1,4 @@
-/* $Id: cookies.h,v 1.21 2004/04/03 17:40:53 jonas Exp $ */
+/* $Id: cookies.h,v 1.22 2004/05/31 02:22:37 jonas Exp $ */
 
 #ifndef EL__COOKIES_COOKIES_H
 #define EL__COOKIES_COOKIES_H
@@ -16,11 +16,20 @@ enum cookies_accept {
 	COOKIES_ACCEPT_ALL
 };
 
+struct c_server {
+	LIST_HEAD(struct c_server);
+
+	struct listbox_item *box_item;
+	struct object object;
+	int accept;
+	unsigned char server[1]; /* Must be at end of struct. */
+};
+
 struct cookie {
 	LIST_HEAD(struct cookie);
 
 	unsigned char *name, *value;
-	unsigned char *server;
+	struct c_server *server;
 	unsigned char *path, *domain;
 	ttime expires; /* zero means undefined */
 	int secure;
@@ -32,6 +41,7 @@ struct cookie {
 	struct object object;
 };
 
+struct c_server *get_cookie_server(unsigned char *host, int hostlen);
 void accept_cookie(struct cookie *);
 void free_cookie(struct cookie *);
 void set_cookie(struct uri *, unsigned char *);

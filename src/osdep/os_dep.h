@@ -1,4 +1,4 @@
-/* $Id: os_dep.h,v 1.25 2003/10/27 02:24:16 pasky Exp $ */
+/* $Id: os_dep.h,v 1.26 2003/10/27 02:25:36 pasky Exp $ */
 
 #ifndef EL__OSDEP_OS_DEP_H
 #define EL__OSDEP_OS_DEP_H
@@ -18,8 +18,6 @@
 #define SYS_WIN32	3
 #define SYS_BEOS	4
 #define SYS_RISCOS	5
-
-/* hardcoded limit of 10 OSes in default.c */
 
 #undef UNIX
 #undef OS2

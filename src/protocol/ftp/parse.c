@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.36 2005/04/05 12:35:51 jonas Exp $ */
+/* $Id: parse.c,v 1.37 2005/04/05 12:45:16 jonas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -592,10 +592,6 @@ parse_ftp_winnt_response(struct ftp_file_info *info, unsigned char *src, int len
 	mtime.tm_year = parse_year((const unsigned char **) &src, end);
 	if (src >= end || mtime.tm_year == -1)
 		return NULL;
-
-	/* Assuming the epoch starting at 1.1.1970 */
-	if (mtime.tm_year <= 70)
-		mtime.tm_year += 100;
 
 	skip_space_end(src, end);
 	if (src >= end) return NULL;

@@ -1,5 +1,5 @@
 /* Common widget functions. */
-/* $Id: widget.c,v 1.20 2003/10/26 16:11:14 zas Exp $ */
+/* $Id: widget.c,v 1.21 2003/10/28 09:29:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,9 +25,11 @@ display_dlg_item(struct dialog_data *dlg_data, struct widget_data *widget_data,
 		widget_data->widget->ops->display(widget_data, dlg_data, selected);
 }
 
+/* XXX: Should we move it to inphist.c since it only concerns fields with history ? --Zas */
 void
 dlg_set_history(struct widget_data *widget_data)
 {
+	assert(widget_has_history(widget_data));
 	assert(widget_data->widget->datalen > 0);
 
 	if ((void *) widget_data->info.field.cur_hist != &widget_data->info.field.history) {

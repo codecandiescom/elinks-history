@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.24 2003/10/26 19:49:00 zas Exp $ */
+/* $Id: widget.h,v 1.25 2003/10/28 09:29:02 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -92,5 +92,11 @@ void display_dlg_item(struct dialog_data *, struct widget_data *, int);
 void dlg_set_history(struct widget_data *);
 
 #define selected_widget(dlg_data) (&(dlg_data)->widgets_data[(dlg_data)->selected])
+
+#define widget_has_history(widget_data) ((widget_data)->widget->type == D_FIELD \
+					 && (widget_data)->widget->info.field.history)
+
+#define widget_is_textfield(widget_data) ((widget_data)->widget->type == D_FIELD \
+					  || (widget_data)->widget->type == D_FIELD_PASS)
 
 #endif

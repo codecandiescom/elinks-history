@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.58 2003/10/26 19:49:00 zas Exp $ */
+/* $Id: dialog.c,v 1.59 2003/10/28 09:29:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,8 +138,7 @@ init_widget(struct dialog_data *dlg_data, struct term_event *ev, int i)
 
 	widget_data->widget->ops = widget_type_to_ops[widget_data->widget->type];
 
-	if (widget_data->widget->type == D_FIELD
-	    || widget_data->widget->type == D_FIELD_PASS) {
+	if (widget_has_history(widget_data)) {
 		init_list(widget_data->info.field.history);
 		widget_data->info.field.cur_hist =
 			(struct input_history_item *) &widget_data->info.field.history;
@@ -218,8 +217,7 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 
 			/* Submit button. */
 			if (ev->x == KBD_ENTER
-			    && (widget_data->widget->type == D_FIELD
-				|| widget_data->widget->type == D_FIELD_PASS
+			    && (widget_is_textfield(widget_data)
 				|| ev->y == KBD_CTRL || ev->y == KBD_ALT)) {
 				for (i = 0; i < dlg_data->n; i++)
 					if (dlg_data->dlg->widgets[i].type == D_BUTTON
@@ -280,10 +278,8 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 				struct widget_data *widget_data = &dlg_data->widgets_data[i];
 
 				if (widget_data->cdata) mem_free(widget_data->cdata);
-				if (widget_data->widget->type == D_FIELD
-	    			    || widget_data->widget->type == D_FIELD_PASS) {
+				if (widget_has_history(widget_data))
 					free_list(widget_data->info.field.history);
-				}
 			}
 
 			freeml(dlg_data->ml);
@@ -296,13 +292,14 @@ check_dialog(struct dialog_data *dlg_data)
 	int i;
 
 	for (i = 0; i < dlg_data->n; i++) {
-		if (dlg_data->dlg->widgets[i].type != D_CHECKBOX &&
-		    dlg_data->dlg->widgets[i].type != D_FIELD &&
-		    dlg_data->dlg->widgets[i].type != D_FIELD_PASS)
+		struct widget_data *widget_data = &dlg_data->widgets_data[i];
+
+		if (widget_data->widget->type != D_CHECKBOX &&
+		    !widget_is_textfield(widget_data))
 			continue;
 
-		if (dlg_data->dlg->widgets[i].fn &&
-		    dlg_data->dlg->widgets[i].fn(dlg_data, &dlg_data->widgets_data[i])) {
+		if (widget_data->widget->fn &&
+		    widget_data->widget->fn(dlg_data, widget_data)) {
 			dlg_data->selected = i;
 			redraw_dialog(dlg_data);
 			return 1;
@@ -348,16 +345,17 @@ ok_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 /* FIXME: rename it. --Zas */
 int
-clear_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
+clear_dialog(struct dialog_data *dlg_data, struct widget_data *unused)
 {
 	int i;
 
 	for (i = 0; i < dlg_data->n; i++) {
-		if (dlg_data->dlg->widgets[i].type != D_FIELD &&
-		    dlg_data->dlg->widgets[i].type != D_FIELD_PASS)
+		struct widget_data *widget_data = &dlg_data->widgets_data[i];
+
+		if (!widget_is_textfield(widget_data))
 			continue;
-		memset(dlg_data->widgets_data[i].cdata, 0, dlg_data->dlg->widgets[i].datalen);
-		dlg_data->widgets_data[i].info.field.cpos = 0;
+		memset(widget_data->cdata, 0, widget_data->widget->datalen);
+		widget_data->info.field.cpos = 0;
 	}
 
 	redraw_dialog(dlg_data);

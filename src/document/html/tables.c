@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.200 2004/06/25 09:20:23 zas Exp $ */
+/* $Id: tables.c,v 1.201 2004/06/25 09:27:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -393,16 +393,16 @@ new_columns(struct table *table, int span, int width, int align,
 }
 
 static void
-set_td_width(struct table *table, int x, int width, int f)
+set_td_width(struct table *table, int col, int width, int force)
 {
-	if (x >= table->cols_x_count) {
+	if (col >= table->cols_x_count) {
 		int n = table->cols_x_count;
 		register int i;
 		int *new_cols_x;
 
-		while (x >= n) if (!(n <<= 1)) break;
+		while (col >= n) if (!(n <<= 1)) break;
 		if (!n && table->cols_x_count) return;
-		if (!n) n = x + 1;
+		if (!n) n = col + 1;
 
 		new_cols_x = mem_realloc(table->cols_x, n * sizeof(int));
 		if (!new_cols_x) return;
@@ -413,20 +413,20 @@ set_td_width(struct table *table, int x, int width, int f)
 		table->cols_x = new_cols_x;
 	}
 
-	if (table->cols_x[x] == WIDTH_AUTO || f) {
-		table->cols_x[x] = width;
+	if (force || table->cols_x[col] == WIDTH_AUTO) {
+		table->cols_x[col] = width;
 		return;
 	}
 
 	if (width == WIDTH_AUTO) return;
 
-	if (width < 0 && table->cols_x[x] >= 0) {
-		table->cols_x[x] = width;
+	if (width < 0 && table->cols_x[col] >= 0) {
+		table->cols_x[col] = width;
 		return;
 	}
 
-	if (width >= 0 && table->cols_x[x] < 0) return;
-	table->cols_x[x] = (table->cols_x[x] + width) >> 1;
+	if (width >= 0 && table->cols_x[col] < 0) return;
+	table->cols_x[col] = (table->cols_x[col] + width) >> 1;
 }
 
 static unsigned char *

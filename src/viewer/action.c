@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.87 2004/07/15 08:13:16 miciah Exp $ */
+/* $Id: action.c,v 1.88 2004/07/15 10:42:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -433,10 +433,10 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			assert(ses->tab == get_current_tab(term));
 
 			if (ses->status.show_tabs_bar)
-				tab_menu(term, ses, ses->tab->xpos,
+				tab_menu(ses, ses->tab->xpos,
 					 term->height - 2, 1);
 			else
-				tab_menu(term, ses, 0, 0, 0);
+				tab_menu(ses, 0, 0, 0);
 
 			break;
 

@@ -5,6 +5,7 @@ catalan
 czech
 dutch
 estonian
+finnish
 french
 galician
 german

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.196 2005/03/05 20:14:24 zas Exp $ */
+/* $Id: dialog.c,v 1.197 2005/03/05 20:19:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -616,7 +616,7 @@ do_refresh_dialog(struct dialog_data *dlg_data)
 }
 
 void
-refresh_dialog(struct dialog_data *dlg_data, dialog_refresh_handler handler, void *data)
+refresh_dialog(struct dialog_data *dlg_data, dialog_refresh_handler_T handler, void *data)
 {
 	struct dialog_refresh *refresh = dlg_data->dlg->refresh;
 

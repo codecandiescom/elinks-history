@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.54 2005/03/04 17:36:29 zas Exp $ */
+/* $Id: dialog.h,v 1.55 2005/03/05 20:19:19 zas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -39,10 +39,10 @@ enum dlg_refresh_code {
 	REFRESH_STOP,
 };
 
-typedef enum dlg_refresh_code (*dialog_refresh_handler)(struct dialog_data *, void *);
+typedef enum dlg_refresh_code (*dialog_refresh_handler_T)(struct dialog_data *, void *);
 
 struct dialog_refresh {
-	dialog_refresh_handler handler;
+	dialog_refresh_handler_T handler;
 	void *data;
 	timer_id_T timer;
 };
@@ -126,7 +126,7 @@ t_handler_event_status clear_dialog(struct dialog_data *, struct widget_data *);
 int check_dialog(struct dialog_data *);
 int update_dialog_data(struct dialog_data *);
 void generic_dialog_layouter(struct dialog_data *dlg_data);
-void refresh_dialog(struct dialog_data *, dialog_refresh_handler handler, void *data);
+void refresh_dialog(struct dialog_data *, dialog_refresh_handler_T handler, void *data);
 
 #define selected_widget(dlg_data) (&(dlg_data)->widgets_data[(dlg_data)->selected_widget_id])
 

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.181 2004/11/10 22:19:42 zas Exp $ */
+/* $Id: cookies.c,v 1.182 2004/11/10 22:41:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -423,6 +423,15 @@ set_cookie(struct uri *uri, unsigned char *str)
 	accept_cookie(cookie);
 }
 
+static void
+del_from_cookie_list(struct cookie **cookie)
+{
+	struct cookie *tmp = *cookie;
+
+	*cookie = (*cookie)->prev;
+	del_from_list(tmp);
+	free_cookie(tmp);
+}
 
 void
 accept_cookie(struct cookie *cookie)
@@ -440,17 +449,13 @@ accept_cookie(struct cookie *cookie)
 	 * not an argument). --pasky */
 	if (!cookies_nosave) {
 		struct cookie *c;
-		
+
 		foreach (c, cookies) {
-			struct cookie *tmp;
-			
 			if (strcasecmp(c->name, cookie->name)
 			    || strcasecmp(c->domain, cookie->domain))
 				continue;
-			tmp = c;
-			c = c->prev;
-			del_from_list(tmp);
-			free_cookie(tmp);
+
+			del_from_cookie_list(&c);
 		}
 	}
 
@@ -664,16 +669,11 @@ send_cookies(struct uri *uri)
 			continue;
 
 		if (is_expired(c->expires)) {
-			struct cookie *tmp;
-
 #ifdef DEBUG_COOKIES
 			DBG("Cookie %s=%s (exp %d) expired.",
 			    c->name, c->value, c->expires);
 #endif
-			tmp = c;
-			c = c->prev;
-			del_from_list(tmp);
-			free_cookie(tmp);
+			del_from_cookie_list(&c);
 
 			cookies_dirty = 1;
 			continue;

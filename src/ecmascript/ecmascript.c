@@ -1,5 +1,5 @@
 /* Base ECMAScript file. Mostly a proxy for specific library backends. */
-/* $Id: ecmascript.c,v 1.14 2004/09/25 00:59:50 pasky Exp $ */
+/* $Id: ecmascript.c,v 1.15 2004/09/25 01:31:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,12 @@
 #include "viewer/text/view.h" /* current_frame() */
 #include "viewer/text/vs.h"
 
+
+/* TODO: We should have some kind of ACL for the scripts - i.e. ability to
+ * disallow the scripts to open new windows (or so that the windows are always
+ * directed to tabs, this particular option would be a tristate), disallow
+ * messing with your menubar/statusbar visibility, disallow changing the
+ * statusbar content etc. --pasky */
 
 enum ecmascript_option {
 	ECMASCRIPT_TREE,

@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.26 2005/03/26 13:45:38 pasky Exp $
+# $Id: hooks.pl,v 1.27 2005/03/26 13:47:10 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -624,7 +624,9 @@ sub quit_hook
 	}
 	srand();
 	while (not $fortune) {
-		seek(COOKIES, $line[int rand($#line + 1)], 0);
+		# We don't want the last element of the $line array since that
+		# is the trailing % in the fortunes file.
+		seek(COOKIES, $line[int rand($#line)], 0);
 		while (<COOKIES>) {
 			last if /^%$/;
 			$fortune .= $_;

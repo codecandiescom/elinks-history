@@ -2,34 +2,31 @@ See ChangeLog for recent changes, bugfixes and new features.
 
 ELinks-0.4pre:
 
-* Merged HTTP_AUTH
-* Rewritten part of cookies parsing
+* merged HTTP_AUTH
+* basic proxy auth support
 * cookies parser rewritten
 * support for tabindex,accesskey,title attribute
-* source layout was dramatically reorganized
-* FTP works now even with servers not requiring/supporting PASS command and
-  servers not able to process more commands at once (Novell, MS IIS, ..)
-* Global history support (+vlink support)
-* show URL being visited in xterm title bar
-* make some modules (cookies,bookmarks,globhistm,,) optional at compile time
-* basic proxy auth support
+* FTP support dramatically improved (bugfixes, interoperability fixes, passive
+  mode support, ...)
+* global history support (+vlink support)
+* make some modules (cookies,bookmarks,globhist,..) optional at compile time
 * secure saving support (see secure_save option desc. if you're doing weird
   things with your links files like symlinking or nonstandart permissions!!!)
 * support for utf8 i/o
-* clicking on the edges of screen will make the document scroll in that dir
-* win32/cygwin support enhancements
-* parsing/rendering performance enhancements
+* mouse wheel support
+* portability enhancements
+* performance enhancements
 * file/http gzip/bzip2 decompression support
-* ELinks binary has now name elinks
+* mailcap support
+* hiearchic bookmarks support, XBEL bookmarks support
+* source layout was dramatically reorganized
 * relocated ELinks configuration files, changed format (if you are upgrading
   from Links or older ELinks version, read INSTALL file to see how to convert
   your old config files!!!)
-* options are now in tree hiearchy
-* performance improvements (especially when rendering tables)
-* unambiguous completion support
-* colorful user interface support
+* options are now in tree hiearchy and are configurable generically
+* colorful user interface
 * tiny useless LED-like indicators support
-* GNUTLS support paralel to the OpenSSL support (due to license issues)
+* GNUTLS support paralel to the OpenSSL support (fixes some license issues)
 * extensive memory debugging support
 
 ELinks-0.3.0:

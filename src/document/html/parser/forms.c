@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.25 2004/06/22 22:24:18 zas Exp $ */
+/* $Id: forms.c,v 1.26 2004/06/22 22:28:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,12 +128,13 @@ find_form_for_input(unsigned char *i)
 
 	if (!special_f(ff, SP_USED, NULL)) return;
 
-	if (last_input_tag && i <= last_input_tag && i > last_form_tag) {
+	if (last_input_tag && i <= last_input_tag
+	    && i > html_context.last_form_tag) {
 		get_html_form(last_form_attr, &form);
 		return;
 	}
 	if (last_input_tag && i > last_input_tag)
-		s = last_form_tag;
+		s = html_context.last_form_tag;
 	else
 		s = html_context.startf;
 
@@ -158,7 +159,7 @@ sp:
 
 end_parse:
 	if (lf && la) {
-		last_form_tag = lf;
+		html_context.last_form_tag = lf;
 		last_form_attr = la;
 		last_input_tag = i;
 		get_html_form(la, &form);
@@ -226,8 +227,8 @@ no_type_attr:
 	if (!fc) return;
 
 	fc->type = type;
-	fc->form_num = last_form_tag - html_context.startf;
-	fc->ctrl_num = a - last_form_tag;
+	fc->form_num = html_context.last_form_tag - html_context.startf;
+	fc->ctrl_num = a - html_context.last_form_tag;
 	fc->position = a - html_context.startf;
 	fc->method = form.method;
 	fc->action = null_or_stracpy(form.action);
@@ -282,8 +283,8 @@ no_type_attr:
 	if (!fc) return;
 
 	fc->type = type;
-	fc->form_num = last_form_tag - html_context.startf;
-	fc->ctrl_num = a - last_form_tag;
+	fc->form_num = html_context.last_form_tag - html_context.startf;
+	fc->ctrl_num = a - html_context.last_form_tag;
 	fc->position = a - html_context.startf;
 	fc->method = form.method;
 	fc->action = null_or_stracpy(form.action);
@@ -438,8 +439,8 @@ sp:
 	}
 
 end_parse:
-	fc->form_num = last_form_tag - html_context.startf;
-	fc->ctrl_num = a - last_form_tag;
+	fc->form_num = html_context.last_form_tag - html_context.startf;
+	fc->ctrl_num = a - html_context.last_form_tag;
 	fc->position = a - html_context.startf;
 	fc->method = form.method;
 	fc->action = null_or_stracpy(form.action);
@@ -591,8 +592,8 @@ end_parse:
 		goto abort;
 	}
 
-	fc->form_num = last_form_tag - html_context.startf;
-	fc->ctrl_num = attr - last_form_tag;
+	fc->form_num = html_context.last_form_tag - html_context.startf;
+	fc->ctrl_num = attr - html_context.last_form_tag;
 	fc->position = attr - html_context.startf;
 	fc->method = form.method;
 	fc->action = null_or_stracpy(form.action);
@@ -663,8 +664,8 @@ pp:
 	fc = mem_calloc(1, sizeof(struct form_control));
 	if (!fc) return;
 
-	fc->form_num = last_form_tag - html_context.startf;
-	fc->ctrl_num = attr - last_form_tag;
+	fc->form_num = html_context.last_form_tag - html_context.startf;
+	fc->ctrl_num = attr - html_context.last_form_tag;
 	fc->position = attr - html_context.startf;
 	fc->method = form.method;
 	fc->action = null_or_stracpy(form.action);

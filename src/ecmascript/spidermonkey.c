@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.61 2004/10/22 07:36:40 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.62 2004/10/22 09:56:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -895,7 +895,7 @@ error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 	       && interpreter->vs->doc_view->session
 	       && interpreter->vs->doc_view->session->tab);
 	if_assert_failed return;
-	
+
 	term = interpreter->vs->doc_view->session->tab->term;
 
 #ifdef CONFIG_LEDS

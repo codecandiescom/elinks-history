@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.40 2005/03/26 17:49:17 pasky Exp $
+# $Id: hooks.pl,v 1.41 2005/03/26 18:06:52 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -131,6 +131,24 @@ my %search_prefixes_ = (
 	'^(ex|excite)(| .*)$' => 'excite',
 );
 
+my %news_prefixes_ = (
+	'^bbc(| .*)$' => 'bbc',
+	'^msnbc(| .*)$' => 'msnbc',
+	'^cnn(| .*)$' => 'cnn',
+	'^fox(| .*)$' => 'fox',
+	'^gn(| .*)$' => 'google',
+	'^yn(| .*)$' => 'yahoo',
+	'^(reuters|rs)(| .*)$' => 'reuters',
+	'^eff(| .*)$' => 'eff',
+	'^(wired|wd)(| .*)$' => 'wired',
+	'^(\/\.|slashdot|sd)(| .*)$' => 'slashdot',
+	'^(newsforge|nf)(| .*)$' => 'newsforge',
+	'^(us|usnews)(| .*)$' => 'usnews',
+	'^(nsci|newsci)(| .*)$' => 'newsci',
+	'^dm(| .*)$' => 'discover',
+	'^(sa|sciam)(| .*)$' => 'sciam',
+);
+
 my %weather_locators_ = (
 	'weather underground' => 'http://wunderground.com/cgi-bin/findweather/getForecast?query=!query!',
 	'google' => 'http://google.com/search?q=weather+"!query!"',
@@ -173,9 +191,9 @@ sub goto_url_hook
 	}
 
 
-	# Search engines
+	my ($search) = $url =~ /^\S+\s+(.*)/;
 
-	my ($search) = $url =~ /^[a-z0-9]+\s+(.*)/;
+	# Search engines
 
 	if ($url =~ /^(search|find|www|web|s|f|go)(| .*)$/) {
 		return search(loadrc('search'), $search);
@@ -192,45 +210,14 @@ sub goto_url_hook
 
 	# News
 
-	if ($url =~ '^(news|n)(| .*)$'
-	    or $url =~ '^bbc(| .*)$'
-	    or $url =~ '^msnbc(| .*)$'
-	    or $url =~ '^cnn(| .*)$'
-	    or $url =~ '^fox(| .*)$'
-	    or $url =~ '^gn(| .*)$'
-	    or $url =~ '^yn(| .*)$'
-	    or $url =~ '^(reuters|rs)(| .*)$'
-	    or $url =~ '^eff(| .*)$'
-	    or $url =~ '^(wired|wd)(| .*)$'
-	    or $url =~ '^(\/\.|slashdot|sd)(| .*)$'
-	    or $url =~ '^(newsforge|nf)(| .*)$'
-	    or $url =~ '^(us|usnews)(| .*)$'
-	    or $url =~ '^(nsci|newsci)(| .*)$'
-	    or $url =~ '^dm(| .*)$'
-	    or $url =~ '^(sa|sciam)(| .*)$')
-	{
-		my ($search) = $url =~ /^[a-z0-9\/\.]* (.*)/;
-		my $key;
-
-		my $agency = $url;
-		$key = loadrc("news");
-		$key = "bbc"          if ($agency =~ '^bbc(| .*)$');
-		$key = "msnbc"        if ($agency =~ '^msnbc(| .*)$');
-		$key = "cnn"          if ($agency =~ '^cnn(| .*)$');
-		$key = "fox"          if ($agency =~ '^fox(| .*)$');
-		$key = "google"       if ($agency =~ '^gn(| .*)$');
-		$key = "yahoo"        if ($agency =~ '^yn(| .*)$');
-		$key = "reuters"      if ($agency =~ '^(reuters|rs)(| .*)$');
-		$key = "eff"          if ($agency =~ '^eff(| .*)$');
-		$key = "wired"        if ($agency =~ '^(wired|wd)(| .*)$');
-		$key = "slashdot"     if ($agency =~ '^(\/\.|slashdot|sd)(| .*)$');
-		$key = "newsforge"    if ($agency =~ '^(newsforge|nf)(| .*)$');
-		$key = "usnews"       if ($agency =~ '^(us|usnews)(| .*)$');
-		$key = "newsci"       if ($agency =~ '^(nsci|newsci)(| .*)$');
-		$key = "discover"     if ($agency =~ '^dm(| .*)$');
-		$key = "sciam"        if ($agency =~ '^(sa|sciam)(| .*)$');
-		return news($key, $search);
+	if ($url =~ /^(news|n)(| .*)$/) {
+		return news(loadrc('news'), $search);
 	}
+	foreach my $prefix (keys %news_prefixes_) {
+		next unless $url =~ /$prefix/;
+		return news($news_prefixes_{$prefix}, $search);
+	}
+
 
 	# Locators
 

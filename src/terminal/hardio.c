@@ -1,5 +1,5 @@
 /* Low-level terminal-suitable I/O routines */
-/* $Id: hardio.c,v 1.4 2003/05/07 20:57:20 zas Exp $ */
+/* $Id: hardio.c,v 1.5 2003/05/07 23:04:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,13 +16,19 @@
 
 #include "terminal/hardio.h"
 
+/* Define it to have data written to stderr */
+#undef HW_DEBUG
+
+
 int
 hard_write(int fd, unsigned char *p, int l)
 {
 	int w = 1;
 	int t = 0;
 
-	fprintf(stderr,"[hard_write(fd=%d, p=%p, l=%d)]\n", fd, p, l);
+#ifdef HW_DEBUG
+	fprintf(stderr, "[hard_write(fd=%d, p=%p, l=%d)]\n", fd, p, l);
+#endif
 
 	while (l > 0 && w) {
 		w = write(fd, p, l);
@@ -30,50 +36,52 @@ hard_write(int fd, unsigned char *p, int l)
 			if (errno == EINTR) continue;
 			return -1;
 		}
-#if 1
-			if (w) {
-				int hex = 0;
-				int i = 0;
+#ifdef HW_DEBUG
+		if (w) {
+			int hex = 0;
+			int i = 0;
 
-				for (; i < w; i++) {
-					if (p[i] == ' ') {
-						int c = i;
+			for (; i < w; i++) {
+				if (p[i] == ' ') {
+					int c = i;
 
-						while (i < w && p[++i] == ' ');
+					while (i < w && p[++i] == ' ');
 
-						if (i - c > 2) {
-							fprintf(stderr,"[+ %d spaces]\n", i - c - 1);
-							if (i == w) break;
-							c = 0;
-							continue;
-						}
+					if (i - c - 1 > 1) {
+						fprintf(stderr, "[+ %d spaces]\n", i - c - 1);
+						if (i == w) break;
 						c = 0;
-						i--;
-
+						continue;
 					}
-
-					if (p[i] >= ' ' && p[i] < 127 && p[i] != '|') {
-						if (hex) {
-							fputc('|', stderr);
-							hex = 0;
-						}
-						fputc(p[i], stderr);
-					} else {
-						if (!hex) {
-							fputc('|', stderr);
-							hex = 1;
-						}
-						fprintf(stderr,"%02x", p[i]);
-					}
+					c = 0;
+					i--;
 				}
-				fflush(stderr);
+
+				if (p[i] >= ' ' && p[i] < 127 && p[i] != '|') {
+					if (hex) {
+						fputc('|', stderr);
+						hex = 0;
+					}
+					fputc(p[i], stderr);
+				} else {
+					if (!hex) {
+						fputc('|', stderr);
+						hex = 1;
+					}
+					fprintf(stderr,"%02x", p[i]);
+				}
 			}
+		}
 #endif
 		t += w;
 		p += w;
 		l -= w;
 	}
+
+#ifdef HW_DEBUG
 	fputs("\n\n", stderr);
+	fflush(stderr);
+#endif
 	return t;
 }
 

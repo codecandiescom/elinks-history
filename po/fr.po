@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-04-20 10:52+0200\n"
+"POT-Creation-Date: 2003-04-21 11:37+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -28,19 +28,19 @@ msgstr "Saisir un nombre"
 #: src/config/dialogs.c:390 src/config/dialogs.c:402 src/config/dialogs.c:457
 #: src/config/dialogs.c:472 src/config/dialogs.c:606 src/config/dialogs.c:628
 #: src/config/dialogs.c:654 src/config/dialogs.c:718 src/config/dialogs.c:731
-#: src/dialogs/auth.c:191 src/dialogs/edit.c:173 src/dialogs/menu.c:621
+#: src/dialogs/auth.c:193 src/dialogs/edit.c:173 src/dialogs/menu.c:621
 #: src/dialogs/menu.c:631 src/dialogs/menu.c:660 src/dialogs/menu.c:678
-#: src/dialogs/menu.c:688 src/dialogs/mime.c:269 src/dialogs/options.c:267
+#: src/dialogs/menu.c:688 src/dialogs/mime.c:279 src/dialogs/options.c:267
 #: src/dialogs/options.c:364 src/globhist/dialogs.c:242 src/lua/core.c:443
 #: src/lua/core.c:587 src/lua/core.c:812 src/protocol/url.c:67
 #: src/protocol/user.c:107 src/protocol/user.c:135 src/sched/download.c:512
 #: src/sched/download.c:545 src/sched/download.c:700 src/sched/download.c:786
 #: src/sched/download.c:1173 src/sched/download.c:1181
 #: src/sched/download.c:1216 src/sched/download.c:1226 src/sched/session.c:313
-#: src/sched/session.c:585 src/viewer/text/view.c:1580
-#: src/viewer/text/view.c:1914 src/viewer/text/view.c:2352
-#: src/viewer/text/view.c:2398 src/viewer/text/view.c:2635
-#: src/viewer/text/view.c:3296
+#: src/sched/session.c:585 src/viewer/text/view.c:1627
+#: src/viewer/text/view.c:1961 src/viewer/text/view.c:2399
+#: src/viewer/text/view.c:2445 src/viewer/text/view.c:2682
+#: src/viewer/text/view.c:3343
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -89,18 +89,18 @@ msgstr "Nom du dossier"
 #: src/bookmarks/dialogs.c:170 src/config/dialogs.c:124
 #: src/config/dialogs.c:132 src/config/dialogs.c:319 src/config/dialogs.c:402
 #: src/config/dialogs.c:471 src/config/dialogs.c:654 src/config/dialogs.c:730
-#: src/dialogs/auth.c:187 src/dialogs/document.c:52 src/dialogs/document.c:207
+#: src/dialogs/auth.c:189 src/dialogs/document.c:52 src/dialogs/document.c:207
 #: src/dialogs/document.c:230 src/dialogs/document.c:277
 #: src/dialogs/document.c:289 src/dialogs/edit.c:164 src/dialogs/info.c:109
 #: src/dialogs/info.c:136 src/dialogs/info.c:155 src/dialogs/info.c:216
 #: src/dialogs/info.c:248 src/dialogs/info.c:277 src/dialogs/menu.c:621
 #: src/dialogs/menu.c:631 src/dialogs/menu.c:659 src/dialogs/menu.c:678
-#: src/dialogs/menu.c:688 src/dialogs/mime.c:265 src/dialogs/options.c:257
+#: src/dialogs/menu.c:688 src/dialogs/mime.c:275 src/dialogs/options.c:257
 #: src/dialogs/options.c:359 src/globhist/dialogs.c:415 src/lua/core.c:439
 #: src/lua/core.c:582 src/lua/core.c:691 src/lua/core.c:811
 #: src/sched/download.c:570 src/sched/sched.c:70 src/sched/session.c:1076
 #: src/sched/session.c:1093 src/sched/session.c:1117
-#: src/viewer/text/view.c:2634
+#: src/viewer/text/view.c:2681
 msgid "OK"
 msgstr "OK"
 
@@ -137,14 +137,14 @@ msgid "Delete marked bookmarks?"
 msgstr "Effacer les signets sélectionnés ?"
 
 #: src/bookmarks/dialogs.c:408 src/bookmarks/dialogs.c:415
-#: src/bookmarks/dialogs.c:423 src/dialogs/menu.c:137 src/dialogs/mime.c:163
+#: src/bookmarks/dialogs.c:423 src/dialogs/menu.c:137 src/dialogs/mime.c:181
 #: src/globhist/dialogs.c:322 src/globhist/dialogs.c:332
 #: src/globhist/dialogs.c:377 src/sched/session.c:583
 msgid "Yes"
 msgstr "Oui"
 
 #: src/bookmarks/dialogs.c:409 src/bookmarks/dialogs.c:416
-#: src/bookmarks/dialogs.c:424 src/dialogs/menu.c:138 src/dialogs/mime.c:164
+#: src/bookmarks/dialogs.c:424 src/dialogs/menu.c:138 src/dialogs/mime.c:182
 #: src/globhist/dialogs.c:323 src/globhist/dialogs.c:333
 #: src/globhist/dialogs.c:378 src/sched/session.c:584
 msgid "No"
@@ -182,8 +182,8 @@ msgid "Add"
 msgstr "Ajouter"
 
 #: src/bookmarks/dialogs.c:648 src/dialogs/menu.c:687
-#: src/globhist/dialogs.c:477 src/viewer/text/view.c:2349
-#: src/viewer/text/view.c:2395
+#: src/globhist/dialogs.c:477 src/viewer/text/view.c:2396
+#: src/viewer/text/view.c:2442
 msgid "Search"
 msgstr "Chercher"
 
@@ -225,7 +225,7 @@ msgid "Type"
 msgstr "Type"
 
 #: src/config/dialogs.c:121 src/config/dialogs.c:202
-#: src/viewer/text/view.c:3558
+#: src/viewer/text/view.c:3605
 msgid "value"
 msgstr "Valeur"
 
@@ -235,7 +235,7 @@ msgstr "Description"
 
 #: src/config/dialogs.c:181 src/protocol/url.c:64 src/sched/session.c:856
 #: src/sched/session.c:918 src/sched/session.c:1396
-#: src/viewer/text/view.c:1911 src/viewer/text/view.c:3241
+#: src/viewer/text/view.c:1958 src/viewer/text/view.c:3288
 msgid "Error"
 msgstr "Erreur"
 
@@ -1616,8 +1616,7 @@ msgstr "Nom d'utilisateur"
 msgid "Proxy authentication username."
 msgstr "Nom d'utilisateur pour l'authentification proxy"
 
-#: src/config/options.c:1458 src/dialogs/auth.c:35 src/dialogs/auth.c:36
-#: src/dialogs/auth.c:56 src/dialogs/auth.c:82
+#: src/config/options.c:1458 src/dialogs/auth.c:33
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -2173,7 +2172,7 @@ msgid "Dialog text colors."
 msgstr "Couleurs du texte des dialogues."
 
 #: src/config/options.c:1844 src/config/options.c:2138
-#: src/viewer/text/view.c:3524
+#: src/viewer/text/view.c:3571
 msgid "Checkbox"
 msgstr "Case à cocher"
 
@@ -2206,7 +2205,7 @@ msgid "Dialog selected button colors."
 msgstr "Couleurs du bouton sélectionné dans les dialogues."
 
 #: src/config/options.c:1892 src/config/options.c:2186
-#: src/viewer/text/view.c:3530
+#: src/viewer/text/view.c:3577
 msgid "Text field"
 msgstr "Champ texte"
 
@@ -2775,20 +2774,19 @@ msgstr "Alias"
 msgid "Folder"
 msgstr "Répertoire"
 
-#: src/dialogs/auth.c:33 src/dialogs/auth.c:34 src/dialogs/auth.c:52
-#: src/dialogs/auth.c:75
+#: src/dialogs/auth.c:32
 msgid "Login"
 msgstr "Utilisateur"
 
-#: src/dialogs/auth.c:147 src/dialogs/auth.c:166
+#: src/dialogs/auth.c:149 src/dialogs/auth.c:168
 msgid "Authentication required for "
 msgstr "Entrez le nom d'utilisateur pour "
 
-#: src/dialogs/auth.c:149 src/dialogs/auth.c:168
+#: src/dialogs/auth.c:151 src/dialogs/auth.c:170
 msgid " at "
 msgstr " à "
 
-#: src/dialogs/auth.c:162
+#: src/dialogs/auth.c:164
 msgid "HTTP Authentication"
 msgstr "Authentification HTTP"
 
@@ -3307,15 +3305,15 @@ msgstr "Extension(s)"
 msgid "Content-Type"
 msgstr "Type de contenu"
 
-#: src/dialogs/mime.c:160 src/dialogs/mime.c:161
+#: src/dialogs/mime.c:178 src/dialogs/mime.c:179
 msgid "Delete extension"
 msgstr "Supprimer l'extension"
 
-#: src/dialogs/mime.c:247
+#: src/dialogs/mime.c:257
 msgid "Extension"
 msgstr "Extension"
 
-#: src/dialogs/mime.c:281
+#: src/dialogs/mime.c:291
 msgid "No extensions"
 msgstr "Aucune extension"
 
@@ -3798,146 +3796,146 @@ msgstr "Ne peut écrire sur stdout."
 msgid "URL expected after %s."
 msgstr "URL attendue après %s."
 
-#: src/viewer/text/view.c:1577
+#: src/viewer/text/view.c:1624
 msgid "Error while posting form"
 msgstr "Erreur lors de l'envoi du formulaire"
 
-#: src/viewer/text/view.c:1578
+#: src/viewer/text/view.c:1625
 msgid "Could not get file"
 msgstr "Impossible d'obtenir le fichier"
 
-#: src/viewer/text/view.c:1912
+#: src/viewer/text/view.c:1959
 msgid "You can do this only on the master terminal"
 msgstr "Vous ne pouvez faire ça que dans le terminal maître"
 
-#: src/viewer/text/view.c:2350
+#: src/viewer/text/view.c:2397
 msgid "No previous search"
 msgstr "Aucune clef de recherche"
 
-#: src/viewer/text/view.c:2396
+#: src/viewer/text/view.c:2443
 msgid "Search string not found"
 msgstr "Texte introuvable"
 
-#: src/viewer/text/view.c:2633
+#: src/viewer/text/view.c:2680
 msgid "Go to link"
 msgstr "Aller au lien"
 
-#: src/viewer/text/view.c:2634
+#: src/viewer/text/view.c:2681
 msgid "Enter link number"
 msgstr "Indiquer le numéro du lien"
 
-#: src/viewer/text/view.c:3293
+#: src/viewer/text/view.c:3340
 msgid "Save error"
 msgstr "Erreur d'enregistrement"
 
-#: src/viewer/text/view.c:3294
+#: src/viewer/text/view.c:3341
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
 
-#: src/viewer/text/view.c:3338
+#: src/viewer/text/view.c:3385
 msgid "Display ~usemap"
 msgstr "Afficher ~USEMAP"
 
-#: src/viewer/text/view.c:3343
+#: src/viewer/text/view.c:3390
 msgid "~Follow link"
 msgstr "~Suivre le lien"
 
-#: src/viewer/text/view.c:3346
+#: src/viewer/text/view.c:3393
 msgid "Follow link and r~eload"
 msgstr "Suivre le lien et ~recharger"
 
-#: src/viewer/text/view.c:3350
+#: src/viewer/text/view.c:3397
 msgid "Open in new ~window"
 msgstr "Ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/view.c:3356
+#: src/viewer/text/view.c:3403
 msgid "~Download link"
 msgstr "~Enregistrer le lien"
 
-#: src/viewer/text/view.c:3360
+#: src/viewer/text/view.c:3407
 msgid "~Add link to bookmarks"
 msgstr "~Ajouter ce lien aux signets"
 
-#: src/viewer/text/view.c:3371 src/viewer/text/view.c:3488
+#: src/viewer/text/view.c:3418 src/viewer/text/view.c:3535
 msgid "~Reset form"
 msgstr "~Remettre à zéro le formulaire"
 
-#: src/viewer/text/view.c:3376
+#: src/viewer/text/view.c:3423
 msgid "~Submit form"
 msgstr "~Envoyer le formulaire"
 
-#: src/viewer/text/view.c:3379
+#: src/viewer/text/view.c:3426
 msgid "Submit form and rel~oad"
 msgstr "Envoyer le formulaire et ~recharger"
 
-#: src/viewer/text/view.c:3383
+#: src/viewer/text/view.c:3430
 msgid "Submit form and open in new ~window"
 msgstr "Envoyer le formulaire et ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/view.c:3389
+#: src/viewer/text/view.c:3436
 msgid "Submit form and ~download"
 msgstr "Envoyer le formulaire et ~télécharger"
 
-#: src/viewer/text/view.c:3396
+#: src/viewer/text/view.c:3443
 msgid "V~iew image"
 msgstr "~Voir l'image"
 
-#: src/viewer/text/view.c:3399
+#: src/viewer/text/view.c:3446
 msgid "Download ima~ge"
 msgstr "~Enregistrer l'image"
 
-#: src/viewer/text/view.c:3405
+#: src/viewer/text/view.c:3452
 msgid "No link selected"
 msgstr "Aucun lien sélectionné"
 
-#: src/viewer/text/view.c:3452
+#: src/viewer/text/view.c:3499
 msgid "Image"
 msgstr "Image"
 
-#: src/viewer/text/view.c:3468
+#: src/viewer/text/view.c:3515
 msgid "Usemap"
 msgstr "Usemap"
 
-#: src/viewer/text/view.c:3501
+#: src/viewer/text/view.c:3548
 msgid "Submit form to"
 msgstr "Envoi du formulaire à"
 
-#: src/viewer/text/view.c:3503
+#: src/viewer/text/view.c:3550
 msgid "Post form to"
 msgstr "Transfert du formulaire à"
 
-#: src/viewer/text/view.c:3521
+#: src/viewer/text/view.c:3568
 msgid "Radio button"
 msgstr "Bouton radio"
 
-#: src/viewer/text/view.c:3527
+#: src/viewer/text/view.c:3574
 msgid "Select field"
 msgstr "Liste"
 
-#: src/viewer/text/view.c:3533
+#: src/viewer/text/view.c:3580
 msgid "Text area"
 msgstr "Champ texte multiligne"
 
-#: src/viewer/text/view.c:3536
+#: src/viewer/text/view.c:3583
 msgid "File upload"
 msgstr "Envoi de fichier"
 
-#: src/viewer/text/view.c:3539
+#: src/viewer/text/view.c:3586
 msgid "Password field"
 msgstr "Champ mot de passe"
 
-#: src/viewer/text/view.c:3548
+#: src/viewer/text/view.c:3595
 msgid "name"
 msgstr "Nom"
 
-#: src/viewer/text/view.c:3567
+#: src/viewer/text/view.c:3614
 msgid "hit ENTER to"
 msgstr "Pressez Entrée pour"
 
-#: src/viewer/text/view.c:3570
+#: src/viewer/text/view.c:3617
 msgid "submit to"
 msgstr "Envoi à"
 
-#: src/viewer/text/view.c:3572
+#: src/viewer/text/view.c:3619
 msgid "post to"
 msgstr "Transfert à"

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.108 2004/06/08 23:05:21 jonas Exp $ */
+/* $Id: task.c,v 1.109 2004/06/09 00:22:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -424,11 +424,10 @@ end:
 
 
 static void
-do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
+do_follow_url(struct session *ses, struct uri *uri, unsigned char *target,
 	      enum task_type task, enum cache_mode cache_mode, int do_referrer)
 {
 	struct uri *referrer = NULL;
-	struct uri *uri = get_translated_uri(url, ses->tab->term->cwd);
 	protocol_external_handler *external_handler;
 
 	if (!uri) {
@@ -439,7 +438,6 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	external_handler = get_protocol_external_handler(uri->protocol);
 	if (external_handler) {
 		external_handler(ses, uri);
-		done_uri(uri);
 		return;
 	}
 
@@ -448,7 +446,6 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	if (ses->task.type == task) {
 		if (compare_uri(ses->loading_uri, uri, 0)) {
 			/* We're already loading the URL. */
-			done_uri(uri);
 			return;
 		}
 	}
@@ -465,29 +462,35 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	set_session_referrer(ses, referrer);
 
 	ses_goto(ses, uri, target, NULL, cache_mode, task, 0);
-	done_uri(uri);
 }
 
 static void
-follow_url(struct session *ses, unsigned char *url, unsigned char *target,
+follow_url(struct session *ses, struct uri *uri, unsigned char *target,
 	   enum task_type task, enum cache_mode cache_mode, int referrer)
 {
 #ifdef CONFIG_SCRIPTING
 	static int follow_url_event_id = EVENT_NONE;
+	unsigned char *uristring = get_uri_string(uri, URI_ORIGINAL);
 
-	url = stracpy(url);
-	if (!url) return;
+	if (!uristring) return;
 
 	set_event_id(follow_url_event_id, "follow-url");
-	trigger_event(follow_url_event_id, &url, ses);
-	if (!url) return;
+	trigger_event(follow_url_event_id, &uristring, ses);
+
+	if (!uristring || !*uristring) {
+		mem_free_if(uristring);
+		return;
+	}
+
+	/* FIXME: Compare if uristring and struri(uri) are equal */
+	uri = get_translated_uri(uristring, ses->tab->term->cwd);
+	mem_free(uristring);
 #endif
 
-	if (*url)
-		do_follow_url(ses, url, target, task, cache_mode, referrer);
+	do_follow_url(ses, uri, target, task, cache_mode, referrer);
 
 #ifdef CONFIG_SCRIPTING
-	mem_free(url);
+	if (uri) done_uri(uri);
 #endif
 }
 
@@ -495,7 +498,7 @@ void
 goto_url_frame(struct session *ses, struct uri *uri,
 	       unsigned char *target, enum cache_mode cache_mode)
 {
-	follow_url(ses, struri(uri), target, TASK_FORWARD, cache_mode, 1);
+	follow_url(ses, uri, target, TASK_FORWARD, cache_mode, 1);
 }
 
 void
@@ -503,16 +506,17 @@ map_selected(struct terminal *term, struct link_def *ld, struct session *ses)
 {
 	struct uri *uri = get_uri(ld->link, 0);
 
-	if (uri) {
-		goto_url_frame(ses, uri, ld->target, CACHE_MODE_NORMAL);
-		done_uri(uri);
-	}
+	goto_url_frame(ses, uri, ld->target, CACHE_MODE_NORMAL);
+	if (uri) done_uri(uri);
 }
 
 void
 goto_url(struct session *ses, unsigned char *url)
 {
-	follow_url(ses, url, NULL, TASK_FORWARD, CACHE_MODE_NORMAL, 0);
+	struct uri *uri = get_uri(url, 0);
+
+	follow_url(ses, uri, NULL, TASK_FORWARD, CACHE_MODE_NORMAL, 0);
+	if (uri) done_uri(uri);
 }
 
 struct uri *
@@ -546,10 +550,8 @@ goto_url_with_hook(struct session *ses, unsigned char *url)
 {
 	struct uri *uri = get_hooked_uri(ses, url);
 
-	if (uri) {
-		goto_url_frame(ses, uri, NULL, CACHE_MODE_NORMAL);
-		done_uri(uri);
-	}
+	goto_url_frame(ses, uri, NULL, CACHE_MODE_NORMAL);
+	if (uri) done_uri(uri);
 }
 
 int
@@ -571,5 +573,5 @@ goto_url_home(struct session *ses)
 void
 goto_imgmap(struct session *ses, struct uri *uri, unsigned char *target)
 {
-	follow_url(ses, struri(uri), target, TASK_IMGMAP, CACHE_MODE_NORMAL, 1);
+	follow_url(ses, uri, target, TASK_IMGMAP, CACHE_MODE_NORMAL, 1);
 }

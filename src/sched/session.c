@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.381 2004/04/22 21:12:45 jonas Exp $ */
+/* $Id: session.c,v 1.382 2004/04/22 22:09:14 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -64,13 +64,15 @@ struct file_to_load {
 	LIST_HEAD(struct file_to_load);
 
 	struct session *ses;
-	int req_sent;
+	unsigned int req_sent:1;
 	int pri;
 	struct cache_entry *cached;
 	unsigned char *target_frame;
 	struct uri *uri;
 	struct download stat;
 };
+
+#define file_to_load_is_active(ftl) ((ftl)->req_sent && is_in_progress_state((ftl)->stat.state))
 
 
 INIT_LIST_HEAD(sessions);
@@ -99,7 +101,7 @@ get_current_download(struct session *ses)
 		struct file_to_load *ftl;
 
 		foreach (ftl, ses->more_files)
-			if (ftl->req_sent && ftl->stat.state >= 0)
+			if (file_to_load_is_active(ftl))
 				return &ftl->stat;
 	}
 
@@ -133,10 +135,11 @@ abort_files_load(struct session *ses, int interrupt)
 	do {
 		q = 0;
 		foreach (ftl, ses->more_files) {
-			if (ftl->stat.state >= 0 && ftl->req_sent) {
-				q = 1;
-				change_connection(&ftl->stat, NULL, PRI_CANCEL, interrupt);
-			}
+			if (!file_to_load_is_active(ftl))
+				continue;
+
+			q = 1;
+			change_connection(&ftl->stat, NULL, PRI_CANCEL, interrupt);
 		}
 	} while (q);
 }
@@ -957,7 +960,9 @@ reload(struct session *ses, enum cache_mode cache_mode)
 		foreach (ftl, ses->more_files) {
 			struct uri *referer = NULL;
 
-			if (ftl->req_sent && ftl->stat.state >= 0) continue;
+			if (file_to_load_is_active(ftl))
+				continue;
+
 			ftl->stat.data = ftl;
 			ftl->stat.end = (void *)file_end_load;
 

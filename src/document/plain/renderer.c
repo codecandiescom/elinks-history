@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.2 2003/11/11 21:00:54 jonas Exp $ */
+/* $Id: renderer.c,v 1.3 2003/11/11 21:13:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,17 +63,33 @@ realloc_line(struct document *document, int y, int x)
 
 static inline int
 add_document_line(struct document *document, int lineno,
-		  unsigned char *source, int width, struct screen_char *template)
+		  unsigned char *line, int width, struct screen_char *template)
 {
 	struct screen_char *pos, *end;
+	unsigned char *source;
+
+	for (source = line + width - 1; source >= line; source--) {
+		if (*source == ASCII_TAB)
+			width += 7;
+		else if (*source < ' ' || *source == ASCII_ESC)
+			*source = ' ';
+	}
 
 	pos = realloc_line(document, lineno, width);
 	if (!pos) return 0;
 
-	for (end = pos + width; pos < end; pos++, source++) {
-		template->data = (*source < ' ' || *source == ASCII_ESC)
-			? ' ' : *source;
-		copy_screen_chars(pos, template, 1);
+	for (end = pos + width; pos < end; pos++, line++) {
+		if (*line == ASCII_TAB) {
+			int tab_width = 7;
+
+			template->data = ' ';
+
+			for (; tab_width; tab_width--, pos++)
+				copy_screen_chars(pos, template, 1);
+		} else {
+			template->data = *line;
+			copy_screen_chars(pos, template, 1);
+		}
 	}
 
 	return width;

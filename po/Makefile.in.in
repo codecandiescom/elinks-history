@@ -81,6 +81,10 @@ all-no:
 # otherwise packages like GCC can not be built if only parts of the source
 # have been downloaded.
 
+# Note 2: We aren't gcc, we are ELinks. And I want that dependency ;-). --pasky
+
+$(CATALOGS): $(srcdir)/$(PACKAGE).pot
+
 $(srcdir)/$(PACKAGE).pot: $(POTFILES) $(srcdir)/POTFILES.in
 	$(XGETTEXT) --default-domain=$(PACKAGE) --directory=$(top_srcdir) \
 	  --add-comments --keyword=_ --keyword=N_ \
@@ -88,6 +92,8 @@ $(srcdir)/$(PACKAGE).pot: $(POTFILES) $(srcdir)/POTFILES.in
 	&& test ! -f $(PACKAGE).po \
 	   || ( rm -f $(srcdir)/$(PACKAGE).pot \
 		&& mv $(PACKAGE).po $(srcdir)/$(PACKAGE).pot )
+	# Now update the .po files.
+	$(MAKE) update-po
 
 
 install: install-exec install-data
@@ -143,7 +149,7 @@ maintainer-clean: distclean
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 dist distdir:
-	$(MAKE) update-po
+	$(MAKE) $(srcdir)/$(PACKAGE).pot
 	@$(MAKE) dist2
 # This is a separate target because 'update-po' must be executed before.
 dist2: $(DISTFILES)
@@ -154,7 +160,6 @@ dist2: $(DISTFILES)
 	done
 
 update-po: Makefile
-	$(MAKE) $(PACKAGE).pot
 	cd $(srcdir); \
 	catalogs='$(GMOFILES)'; \
 	for cat in $$catalogs; do \

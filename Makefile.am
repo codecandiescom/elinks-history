@@ -1,9 +1,9 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.35 2004/01/09 12:38:30 pasky Exp $
+## $Id: Makefile.am,v 1.36 2004/01/18 00:16:11 pasky Exp $
 
 SUBDIRS = Unicode contrib doc intl po src test
 
-EXTRA_DIST = ABOUT-NLS BUGS TODO SITES Makefile.base autogen.sh feature.h m4/*
+EXTRA_DIST = ABOUT-NLS BUGS TODO SITES Makefile.base autogen.sh configure-do feature.h m4/*
 
 install-exec-hook:
 	@echo "**************************************************************"

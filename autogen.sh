@@ -16,6 +16,9 @@ automake -a -c
 echo autoconf...
 autoconf
 
+echo 'configure -> configure-do...'
+mv configure configure-do
+
 echo config.cache...
 rm -f config.cache
 

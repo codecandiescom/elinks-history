@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.71 2004/08/03 00:10:49 jonas Exp $ */
+/* $Id: connect.c,v 1.72 2004/08/03 00:33:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,10 +62,10 @@
 
 
 static void
-ssl_set_no_tls(struct connection *conn)
+ssl_set_no_tls(struct connection_socket *socket)
 {
 #ifdef CONFIG_OPENSSL
-	((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */)->options |= SSL_OP_NO_TLSv1;
+	((ssl_t *) socket->ssl)->options |= SSL_OP_NO_TLSv1;
 #elif defined(CONFIG_GNUTLS)
 	/* We do a little more work here, setting up all these priorities (like
 	 * they couldn't have some reasonable defaults there).. */
@@ -79,7 +79,7 @@ ssl_set_no_tls(struct connection *conn)
 		protocol_priority[i++] = GNUTLS_SSL3;
 		protocol_priority[i++] = 0;
 
-		gnutls_protocol_set_priority(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), protocol_priority);
+		gnutls_protocol_set_priority(*((ssl_t *) socket->ssl), protocol_priority);
 	}
 
 	/* Note that I have no clue about these; I just put all I found here
@@ -96,7 +96,7 @@ ssl_set_no_tls(struct connection *conn)
 			0
 		};
 
-		gnutls_cipher_set_priority(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), cipher_priority);
+		gnutls_cipher_set_priority(*((ssl_t *) socket->ssl), cipher_priority);
 	}
 
 	{
@@ -107,7 +107,7 @@ ssl_set_no_tls(struct connection *conn)
 			0
 		};
 
-		gnutls_compression_set_priority(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), comp_priority);
+		gnutls_compression_set_priority(*((ssl_t *) socket->ssl), comp_priority);
 	}
 
 	{
@@ -120,7 +120,7 @@ ssl_set_no_tls(struct connection *conn)
 			0
 		};
 
-		gnutls_kx_set_priority(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), kx_priority);
+		gnutls_kx_set_priority(*((ssl_t *) socket->ssl), kx_priority);
 	}
 
 	{
@@ -130,7 +130,7 @@ ssl_set_no_tls(struct connection *conn)
 			0
 		};
 
-		gnutls_mac_set_priority(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), mac_priority);
+		gnutls_mac_set_priority(*((ssl_t *) socket->ssl), mac_priority);
 	}
 
 	{
@@ -141,10 +141,10 @@ ssl_set_no_tls(struct connection *conn)
 			0
 		};
 
-		gnutls_cert_type_set_priority(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), cert_type_priority);
+		gnutls_cert_type_set_priority(*((ssl_t *) socket->ssl), cert_type_priority);
 	}
 
-	gnutls_dh_set_prime_bits(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), 1024);
+	gnutls_dh_set_prime_bits(*((ssl_t *) socket->ssl), 1024);
 #endif
 }
 
@@ -156,7 +156,7 @@ ssl_want_read(struct connection *conn)
 	if (!b) return;
 
 	if (conn->no_tsl)
-		ssl_set_no_tls(conn);
+		ssl_set_no_tls(b->socket);
 
 	switch (ssl_do_connect(conn)) {
 		case SSL_ERROR_NONE:
@@ -192,7 +192,7 @@ ssl_connect(struct connection *conn, struct connection_socket *socket)
 	assertm(socket->ssl, "No ssl handle");
 	if_assert_failed goto ssl_error;
 	if (conn->no_tsl)
-		ssl_set_no_tls(conn);
+		ssl_set_no_tls(socket);
 
 #ifdef CONFIG_OPENSSL
 	SSL_set_fd(socket->ssl, socket->fd);

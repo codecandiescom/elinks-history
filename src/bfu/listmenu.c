@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.10 2004/04/17 14:17:59 jonas Exp $ */
+/* $Id: listmenu.c,v 1.11 2004/04/17 14:20:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,13 +184,11 @@ menu_labels(struct menu_item *items, unsigned char *base, unsigned char **lbls)
 
 	foreach_menu_item (item, items) {
 		if (item->func == (menu_func) do_select_submenu) {
-			bs = stracpy(base);
-			if (bs) {
-				add_to_strn(&bs, item->text);
-				add_to_strn(&bs, " ");
-				menu_labels(item->data, bs, lbls);
-				mem_free(bs);
-			}
+			bs = straconcat(base, item->text, " ", NULL);
+			if (!bs) continue;
+
+			menu_labels(item->data, bs, lbls);
+			mem_free(bs);
 		} else {
 			assert(item->func == (menu_func) selected_item);
 			bs = stracpy((item->flags & MENU_FULLNAME)

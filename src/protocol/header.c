@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.4 2004/06/26 18:39:24 jonas Exp $ */
+/* $Id: header.c,v 1.5 2004/07/02 23:03:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,7 +114,6 @@ unsigned char *
 get_http_header_param(unsigned char *e, unsigned char *name)
 {
 	unsigned char *n, *start;
-	int i = 0;
 
 again:
 	while (*e && toupper(*e++) != toupper(*name));
@@ -147,14 +146,15 @@ again:
 	if (start == e) return NULL;
 
 	n = mem_alloc(e - start + 1);
-	if (!n) return NULL;
+	if (n) {
+		int i = 0;
 
-	while (start < e) {
-		if (*start < ' ') n[i] = '.';
-		else n[i] = *start;
-		i++; start++;
+		while (start < e) {
+			n[i++] = (*start < ' ') ? '.' : *start;
+			start++;
+		}
+		n[i] = '\0';
 	}
-	n[i] = '\0';
 
 	return n;
 }

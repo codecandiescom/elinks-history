@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.38 2003/10/24 00:18:24 pasky Exp $ */
+/* $Id: history.c,v 1.39 2003/10/24 00:33:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ clean_unhistory(struct ses_history *history)
 {
 	if (!history->current) return;
 
-	while (history->current->next != &ses->history) {
+	while (history->current->next != history) {
 		struct location *loc = history->current->next;
 
 		del_from_list(loc);
@@ -91,7 +91,7 @@ ses_back(struct session *ses)
 	/* This is the current location. */
 
 	loc = cur_loc(ses);
-	if (loc->prev == &ses->history.history) return;
+	if (loc->prev == (struct location *) &ses->history.history) return;
 	ses->history.current = ses->history.current->prev;
 
 	/* This was the previous location (where we came back now). */
@@ -117,7 +117,7 @@ ses_unback(struct session *ses)
 	/* This is the current location. */
 
 	loc = cur_loc(ses);
-	if (loc->next == &ses->history.history) return;
+	if (loc->next == (struct location *) &ses->history.history) return;
 	ses->history.current = ses->history.current->next;
 
 	/* This will be the next location (where we came back now). */
@@ -149,7 +149,8 @@ go_away(struct session *ses, struct location *loc, int dir)
 		return 0;
 	}
 
-	if (!have_location(ses) || loc == &ses->history.history) {
+	if (!have_location(ses)
+	    || loc == (struct location *) &ses->history.history) {
 		/* There's no history, at most only the current location. */
 		return 0;
 	}
@@ -168,7 +169,6 @@ void
 go_back(struct session *ses, struct location *loc)
 {
 	unsigned char *url;
-	struct location *loc;
 
 	if (go_away(ses, loc, -1) < 1)
 		return;
@@ -184,7 +184,6 @@ void
 go_unback(struct session *ses, struct location *loc)
 {
 	unsigned char *url;
-	struct location *loc;
 
 	if (go_away(ses, loc, 1) < 1)
 		return;

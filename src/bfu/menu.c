@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.203 2004/04/17 11:39:38 jonas Exp $ */
+/* $Id: menu.c,v 1.204 2004/04/17 11:47:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -860,15 +860,6 @@ display_mainmenu(struct terminal *term, struct menu *menu)
 	redraw_from_window(menu->win);
 }
 
-static inline void
-select_mainmenu(struct terminal *term, struct menu *menu)
-{
-	if (menu->selected < 0 || menu->selected >= menu->ni)
-		return;
-
-	select_menu_item(term, &menu->items[menu->selected], menu->data);
-}
-
 
 #ifdef CONFIG_MOUSE
 static void
@@ -930,8 +921,7 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 
 			if (check_mouse_action(ev, B_UP)
 			    || mi_is_submenu(menu->items[menu->selected])) {
-				select_mainmenu(win->term,
-						menu);
+				select_menu(win->term, menu);
 			}
 			break;
 		}
@@ -951,7 +941,7 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 	    || action == ACT_MENU_UP
 	    || action == ACT_MENU_PAGE_UP
 	    || action == ACT_MENU_PAGE_DOWN) {
-		select_mainmenu(win->term, menu);
+		select_menu(win->term, menu);
 		return;
 	}
 
@@ -970,7 +960,7 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 
 	if (fwd && (action == ACT_MENU_LEFT || action == ACT_MENU_RIGHT)) {
 		display_mainmenu(win->term, menu);
-		select_mainmenu(win->term, menu);
+		select_menu(win->term, menu);
 		return;
 	}
 
@@ -984,7 +974,7 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 	} else {
 		display_mainmenu(win->term, menu);
 		if (s == 2)
-			select_mainmenu(win->term, menu);
+			select_menu(win->term, menu);
 	}
 }
 

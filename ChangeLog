@@ -1,3 +1,89 @@
+Sun May 25 11:29:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: setup.h, sched/session.c:
+
+	Internationalized TERM_TITLE_DEFAULT.  
+
+Sun May 25 11:28:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: setup.h, sched/session.c:
+
+	Reverted TERM_TITLE_DEFAULT removal.  
+
+Sun May 25 10:01:29 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, terminal/terminal.c, terminal/terminal.h:
+
+	attach_terminal() was moved from main.c to terminal.{c,h},
+	check_terminal_pipes() and close_terminal_pipes() were introduced.  
+
+Sun May 25 09:41:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/: signals.c, signals.h:
+
+	Typo fixes. I prefer sizeof(var) against sizeof var, more consistent
+	notation imho.  
+
+Sun May 25 09:35:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: osdep/os_dep.c, sched/session.c, sched/session.h,
+	util/conv.c, util/conv.h, viewer/text/view.c:
+
+	[encode|decode]_url() were renamed to
+	[encode|decode]_shell_safe_url() and moved from session.{c,h} to
+	conv.{c,h}.  
+
+Sun May 25 09:22:53 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/session.c, sched/session.h, util/conv.c, util/conv.h:
+
+	add_xnum_to_str() and add_time_to_str() were moved from
+	session.{c,h} to conv{c,h}.  
+
+Sun May 25 01:55:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: setup.h, sched/session.c:
+
+	TERM_TITLE_DEFAULT was dropped and replaced by a gettextized string
+	in session.c.  
+
+Sun May 25 01:39:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: setup.h, dialogs/options.c, sched/session.c,
+	sched/session.h, terminal/terminal.c, terminal/terminal.h:
+
+	set_terminal_title() was rewritten, now it belongs to session.c
+	since it depends on session title, do_terminal_title is kept in
+	terminal.c and was slightly modified. Now prefix, default title, and
+	suffix are macros in setup.h, feel free to adapt them to your taste.
+	These changes fix bug 178.  
+
+Sat May 24 23:40:14 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	Remove the space before the question mark in the 'Delete keybinding'
+	confirmation box.  
+
+Sat May 24 22:55:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/terminal.h:
+
+	At least partially documented terminal-related structures. Doesn't
+	feel bad to have structures look like this, does it? ;-) 
+
+Sat May 24 22:32:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/html/renderer.c, bookmarks/bookmarks.c,
+	config/kbdbind.c, config/options.c, util/lists.h:
+
+	Introduced add_to_list_bottom(), which inserts stuff at the list's
+	bottom, surprisingly. Use that instead of the ugly add_at_pos()
+	hacks. Gloria turns out to be a KGB secret agent and blows up
+	everything when she reaches the Simon's ranch, accompanied by
+	John/Richard. Junior is kidnapped, frozen and his genotype is
+	inserted into unnamed web browser's source.  
+
 Sat May 24 22:07:24 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/util/lists.h:

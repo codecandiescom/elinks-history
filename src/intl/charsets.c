@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.48 2003/07/20 23:42:10 pasky Exp $ */
+/* $Id: charsets.c,v 1.49 2003/07/20 23:43:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -557,7 +557,6 @@ unsigned char *
 convert_string(struct conv_table *convert_table, unsigned char *chars, int charslen)
 {
 	unsigned char *buffer;
-	unsigned char *b;
 	int bufferpos = 0;
 	int charspos = 0;
 
@@ -652,6 +651,8 @@ flush:
 			buffer[bufferpos++] = *(e++);
 flush1:
 			if (!(bufferpos & (ALLOC_GR - 1))) {
+				unsigned char *b;
+
 				b = mem_realloc(buffer, bufferpos + ALLOC_GR);
 				if (b)
 					buffer = b;

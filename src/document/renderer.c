@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.126 2004/10/16 23:12:51 jonas Exp $ */
+/* $Id: renderer.c,v 1.127 2004/10/17 00:41:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,27 +148,26 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 			 * that it went away because unused and the cache was
 			 * already too full. */
 #if 0
-			Disabled because gradual rerendering can be triggered
-			by numerous events other than a ecmascript reference
-			completing like the original document and CSS. Problem
-			is that we should never continue this loop but rather
-			break out if that is the case. Somehow we need to
-			be able to derive URI loading problems at this point
-			or maybe remove reference snippets if they fail to load.
-
-			This FIFO queue handling should be used for also CSS
-			imports so it would be cool if it could be general
-			enough for that. Using it for frames with the FIFOing
-			disabled probably wouldn't hurt either.
-
-			To top this thing off it would be nice if it also
-			handled dependency tracking between references so that
-			CSS documents will not disappear from the cache
-			before all referencing HTML documents has been deleted
-			from it.
-
-			Reported as bug 533.
-
+			/* Disabled because gradual rerendering can be triggered
+			 * by numerous events other than a ecmascript reference
+			 * completing like the original document and CSS. Problem
+			 * is that we should never continue this loop but rather
+			 * break out if that is the case. Somehow we need to
+			 * be able to derive URI loading problems at this point
+			 * or maybe remove reference snippets if they fail to load.
+			 * 
+			 * This FIFO queue handling should be used for also CSS
+			 * imports so it would be cool if it could be general
+			 * enough for that. Using it for frames with the FIFOing
+			 * disabled probably wouldn't hurt either.
+			 * 
+			 * To top this thing off it would be nice if it also
+			 * handled dependency tracking between references so that
+			 * CSS documents will not disappear from the cache
+			 * before all referencing HTML documents has been deleted
+			 * from it.
+			 * 
+			 * Reported as bug 533. */
 			ERROR("The script of %s was lost in too full a cache!",
 			      uristring);
 #endif

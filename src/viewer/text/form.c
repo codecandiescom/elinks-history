@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.146 2004/06/12 19:24:55 jonas Exp $ */
+/* $Id: form.c,v 1.147 2004/06/12 19:28:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1248,35 +1248,37 @@ unsigned char *
 get_form_info(struct document_view *doc_view, struct terminal *term)
 {
 	struct link *link = get_current_link(doc_view);
+	struct form_control *fc;
+	unsigned char *label;
+	struct string str;
 
 	assert(link);
 
-	if (link->type == LINK_BUTTON) {
-		struct string str;
+	fc = link->form_control;
 
-		if (link->form_control->type == FC_RESET)
+	if (link->type == LINK_BUTTON) {
+		if (fc->type == FC_RESET)
 			return stracpy(_("Reset form", term));
 
-		if (!link->form_control->action) return NULL;
+		if (!fc->action) return NULL;
 
 		if (!init_string(&str)) return NULL;
 
-		if (link->form_control->method == FM_GET)
+		if (fc->method == FM_GET)
 			add_to_string(&str, _("Submit form to", term));
 		else
 			add_to_string(&str, _("Post form to", term));
 		add_char_to_string(&str, ' ');
 
 		/* Add the uri with password and post info stripped */
-		add_string_uri_to_string(&str, link->form_control->action, URI_PUBLIC);
+		add_string_uri_to_string(&str, fc->action, URI_PUBLIC);
 		return str.source;
 	}
 
-	if (link->type == LINK_CHECKBOX || link->type == LINK_SELECT
-	    || link_is_textinput(link)) {
-		struct form_control *fc = link->form_control;
-		unsigned char *label;
-		struct string str;
+	if (link->type != LINK_CHECKBOX
+	    && link->type != LINK_SELECT
+	    && !link_is_textinput(link))
+		return NULL;
 
 		switch (fc->type) {
 		case FC_RADIO:
@@ -1332,8 +1334,4 @@ get_form_info(struct document_view *doc_view, struct terminal *term)
 		}
 
 		return str.source;
-	}
-
-	/* Uh-oh? */
-	return NULL;
 }

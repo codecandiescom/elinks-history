@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.32 2004/01/01 14:47:34 jonas Exp $ */
+/* $Id: xbel.c,v 1.33 2004/01/01 15:12:12 pasky Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -11,7 +11,7 @@
 #include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#ifdef CONFIG_XBEL_BOOKMARKS
+#if defined(HAVE_LIBEXPAT) && defined(CONFIG_BOOKMARKS)
 
 #include <ctype.h>
 #include <expat.h>
@@ -539,4 +539,14 @@ struct bookmarks_backend xbel_bookmarks_backend = {
 	write_bookmarks_xbel,
 };
 
-#endif /* CONFIG_XBEL_BOOKMARKS */
+#else
+
+#include "bookmarks/backend/common.h"
+
+struct bookmarks_backend xbel_bookmarks_backend = {
+	NULL,
+	NULL,
+	NULL,
+};
+
+#endif /* HAVE_LIBEXPAT */

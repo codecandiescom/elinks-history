@@ -1,26 +1,26 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.10 2005/01/18 10:29:40 jonas Exp $
+## $Id: Makefile.am,v 1.11 2005/04/06 22:33:41 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
 if CONFIG_GUILE
 guiledir = guile
-guileobj = $(guiledir)/core.o $(guiledir)/hooks.o
+guileobj = $(guiledir)/core.o $(guiledir)/guile.o $(guiledir)/hooks.o
 endif
 
 if CONFIG_LUA
 luadir = lua
-luaobj = $(luadir)/core.o $(luadir)/hooks.o
+luaobj = $(luadir)/core.o $(luadir)/hooks.o $(luadir)/lua.o
 endif
 
 if CONFIG_PERL
 perldir = perl
-perlobj = $(perldir)/core.o $(perldir)/hooks.o
+perlobj = $(perldir)/core.o $(perldir)/hooks.o $(perldir)/perl.o
 endif
 
 if CONFIG_RUBY
 rubydir = ruby
-rubyobj = $(rubydir)/core.o $(rubydir)/hooks.o
+rubyobj = $(rubydir)/core.o $(rubydir)/hooks.o $(rubydir)/ruby.o
 endif
 
 SUBDIRS = $(guiledir) $(luadir) $(perldir) $(rubydir)

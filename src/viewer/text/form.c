@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.269 2005/02/21 23:26:33 miciah Exp $ */
+/* $Id: form.c,v 1.270 2005/02/21 23:29:34 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1162,25 +1162,6 @@ file_form_menu(struct terminal *term, void *path_, void *fs_)
 }
 
 
-static enum frame_event_status
-try_form_insert_mode(struct session *ses, struct document_view *doc_view,
-		     struct link *link, struct term_event *ev)
-{
-	enum frame_event_status status = FRAME_EVENT_IGNORED;
-	enum edit_action action;
-
-	action = kbd_action(KEYMAP_EDIT, ev, NULL);
-
-	if (ses->insert_mode == INSERT_MODE_OFF) {
-		if (action == ACT_EDIT_ENTER) {
-			ses->insert_mode = INSERT_MODE_ON;
-			status = FRAME_EVENT_REFRESH;
-		}
-	}
-
-	return status;
-}
-
 enum frame_event_status
 field_op(struct session *ses, struct document_view *doc_view,
 	 struct link *link, struct term_event *ev)
@@ -1201,10 +1182,6 @@ field_op(struct session *ses, struct document_view *doc_view,
 
 	if (fc->mode == FORM_MODE_DISABLED || ev->ev != EVENT_KBD)
 		return FRAME_EVENT_IGNORED;
-
-	status = try_form_insert_mode(ses, doc_view, link, ev);
-	if (status != FRAME_EVENT_IGNORED) return status;
-	status = FRAME_EVENT_REFRESH;
 
 	action = kbd_action(KEYMAP_EDIT, ev, NULL);
 	if (ses->insert_mode == INSERT_MODE_OFF) {

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.679 2005/02/21 22:52:34 miciah Exp $ */
+/* $Id: view.c,v 1.680 2005/02/21 23:29:34 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -738,6 +738,25 @@ try_prefix_key(struct session *ses, struct document_view *doc_view,
 }
 
 static enum frame_event_status
+try_form_insert_mode(struct session *ses, struct document_view *doc_view,
+		     struct link *link, struct term_event *ev)
+{
+	enum frame_event_status status = FRAME_EVENT_IGNORED;
+	enum edit_action action;
+
+	action = kbd_action(KEYMAP_EDIT, ev, NULL);
+
+	if (ses->insert_mode == INSERT_MODE_OFF) {
+		if (action == ACT_EDIT_ENTER) {
+			ses->insert_mode = INSERT_MODE_ON;
+			status = FRAME_EVENT_REFRESH;
+		}
+	}
+
+	return status;
+}
+
+static enum frame_event_status
 try_form_action(struct session *ses, struct document_view *doc_view,
 		struct link *link, struct term_event *ev)
 {
@@ -747,6 +766,10 @@ try_form_action(struct session *ses, struct document_view *doc_view,
 
 	if (!link_is_textinput(link))
 		return FRAME_EVENT_IGNORED;
+
+	status = try_form_insert_mode(ses, doc_view, link, ev);
+	if (status != FRAME_EVENT_IGNORED)
+		return status;
 
 	status = field_op(ses, doc_view, link, ev);
 

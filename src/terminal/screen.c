@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.38 2003/07/28 10:14:41 jonas Exp $ */
+/* $Id: screen.c,v 1.39 2003/07/28 19:29:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -338,6 +338,7 @@ redraw_screen(struct terminal *term)
 	screen->dirty = 0;
 }
 
+/* Erase entire screen and move curosr to upper left corner. */
 void
 erase_screen(struct terminal *term)
 {
@@ -345,6 +346,7 @@ erase_screen(struct terminal *term)
 		if (is_blocked()) return;
 		want_draw();
 	}
+
 	hard_write(term->fdout, "\033[2J\033[1;1H", 10);
 	if (term->master) done_draw();
 }

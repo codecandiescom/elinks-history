@@ -1,4 +1,4 @@
-/* $Id: os_dep.h,v 1.29 2003/10/27 03:13:52 pasky Exp $ */
+/* $Id: os_dep.h,v 1.30 2003/10/27 03:18:56 pasky Exp $ */
 
 #ifndef EL__OSDEP_OS_DEP_H
 #define EL__OSDEP_OS_DEP_H
@@ -54,5 +54,11 @@ unsigned char *get_system_str(int);
 
 int set_nonblocking_fd(int);
 int set_blocking_fd(int);
+
+/* We define own cfmakeraw() wrapper because cfmakeraw() is broken on AIX,
+ * thus we fix it right away. We can also emulate cfmakeraw() if it is not
+ * available at all. Face it, we are just cool. */
+#include <termios.h>
+void elinks_cfmakeraw(struct termios *t);
 
 #endif

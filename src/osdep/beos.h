@@ -1,4 +1,4 @@
-/* $Id: beos.h,v 1.2 2003/10/27 02:41:55 pasky Exp $ */
+/* $Id: beos.h,v 1.3 2003/10/27 03:18:56 pasky Exp $ */
 
 #ifndef EL__OSDEP_BEOS_H
 #define EL__OSDEP_BEOS_H
@@ -37,6 +37,26 @@ int be_write(int, void *, int);
 int be_close(int);
 int be_select(int, struct fd_set *, struct fd_set *, struct fd_set *, struct timeval *);
 int be_getsockopt(int, int, int, void *, int *);
+
+#ifndef BEOS_SELF
+#define socket be_socket
+#define connect be_connect
+#define getpeername be_getpeername
+#define getsockname be_getsockname
+#define listen be_listen
+#define accept be_accept
+#define bind be_bind
+#define pipe be_pipe
+#define read be_read
+#define write be_write
+#define close be_close
+#define select be_select
+#define getsockopt be_getsockopt
+#ifdef errno
+#undef errno
+#endif
+#define errno 1
+#endif
 
 #endif
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.290 2004/01/06 19:35:09 jonas Exp $ */
+/* $Id: session.c,v 1.291 2004/01/08 09:53:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -707,6 +707,23 @@ dialog_goto_url_open(void *data)
 	dialog_goto_url((struct session *) data, NULL);
 }
 
+unsigned char *
+get_homepage_url(void)
+{
+	unsigned char *h = NULL;
+
+	if (!get_opt_bool("ui.sessions.ignore_www_home"))
+		h = getenv("WWW_HOME");
+
+	if (!h || !*h)
+		h = get_opt_str("ui.sessions.homepage_url");
+
+	if (h && *h)
+		return h;
+
+	return NULL;
+}
+
 static int
 process_session_info(struct session *ses, struct initial_session_info *info)
 {
@@ -736,11 +753,9 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 
 #endif
 	} else {
-		unsigned char *h = getenv("WWW_HOME");
+		unsigned char *h = get_homepage_url();
 
-		if (!h || !*h)
-			h = WWW_HOME_URL;
-		if (!h || !*h) {
+		if (!h) {
 			if (get_opt_int("ui.startup_goto_dialog")
 			    && !first_use) {
 				/* We can't create new window in EV_INIT

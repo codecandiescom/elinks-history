@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.32 2004/01/08 09:09:35 zas Exp $ */
+/* $Id: action.c,v 1.33 2004/01/08 09:53:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,12 +94,9 @@ do_frame_action(struct session *ses,
 void
 goto_url_home(struct session *ses)
 {
-	/* FIXME: No option for the homepage .. and this is supposed to be a
-	 * feature rich browser. --jonas */
-	unsigned char *url = getenv("WWW_HOME");
+	unsigned char *url = get_homepage_url();
 
-	if (!url || !*url) url = WWW_HOME_URL;
-	goto_url_with_hook(ses, url);
+	if (url) goto_url_with_hook(ses, url);
 }
 
 static void

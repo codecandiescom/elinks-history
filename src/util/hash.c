@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.4 2002/05/18 19:25:34 pasky Exp $ */
+/* $Id: hash.c,v 1.5 2002/05/19 15:01:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ free_hash(struct hash *hash)
 	for (i = 0; i < hash_size(hash->width); i++) {
 		foreach (item, hash->hash[i]) {
 			mem_free(item->key);
-			mem_free(item->value);
+			if (item->value) mem_free(item->value);
 		}
 
 		free_list(hash->hash[i]);
@@ -113,7 +113,7 @@ del_hash_item(struct hash *hash, struct hash_item *item)
 
 	del_from_list(item);
 	mem_free(item->key);
-	mem_free(item->value);
+	if (item->value) mem_free(item->value);
 	mem_free(item);
 }
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.257 2003/09/10 03:19:45 jonas Exp $ */
+/* $Id: renderer.c,v 1.258 2003/09/10 03:41:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -775,8 +775,8 @@ new_link(struct document *f, int link_number, unsigned char *name, int namelen)
 
 	if (!format.form) {
 		link->type = L_LINK;
-		link->where = last_link ? stracpy(last_link) : NULL;
-		link->target = last_target ? stracpy(last_target) : NULL;
+		link->where = format.link ? stracpy(format.link) : NULL;
+		link->target = format.target ? stracpy(format.target) : NULL;
 		link->name = memacpy(name, namelen);
 
 	} else {
@@ -805,7 +805,7 @@ new_link(struct document *f, int link_number, unsigned char *name, int namelen)
 		link->target = form->target ? stracpy(form->target) : NULL;
 	}
 
-	link->where_img = last_image ? stracpy(last_image) : NULL;
+	link->where_img = format.image ? stracpy(format.image) : NULL;
 
 	if (link->type != L_FIELD && link->type != L_AREA) {
 		link->color.background = format.clink;
@@ -915,7 +915,22 @@ process_link(struct part *part, unsigned char *chars, int charslen)
 		link = &part->document->links[part->document->nlinks - 1];
 
 	} else {
-		if (last_link) mem_free(last_link);	/* !!! FIXME: optimize */
+		/* TODO: A possible way to avoid allocating and freeing these
+		 * three variables is to make last_link type struct link *
+		 * and point into document->links[]. We can then use
+		 *
+		 *	last_link->where instead of last_link (the current one)
+		 *	last_link->target instead of last_target
+		 *	last_link->where_img instead of last_image
+		 *
+		 * Maybe we could even avoid last_form also since that is just
+		 * last_link->form. Checking validity of last_link, that:
+		 *	document->links =< last_link
+		 *	&& last_link < &document->links[document->nlinks]
+		 *
+		 * would probably be required. I had it sort of working but the
+		 * patch got too big and now it is too late ;) --jonas */
+		if (last_link) mem_free(last_link);
 		if (last_target) mem_free(last_target);
 		if (last_image) mem_free(last_image);
 
@@ -936,6 +951,7 @@ process_link(struct part *part, unsigned char *chars, int charslen)
 		if (!link) return;
 	}
 
+	/* Add new canvas positions to the link. */
 	pt = mem_realloc(link->pos, (link->n + charslen) * sizeof(struct point));
 	if (pt) {
 		register int i;

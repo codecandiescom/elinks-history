@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.90 2003/05/09 18:18:57 zas Exp $ */
+/* $Id: menu.c,v 1.91 2003/05/14 22:48:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,8 +226,7 @@ go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 		if ((void *) loc == &ses->unhistory) return;
 
 		del_from_list(loc);
-		/* Skip the first entry, which is current location. */
-		add_to_list(cur_loc(ses)->next, loc);
+		add_to_list(ses->history, loc);
 	}
 
 	/* ..and now go unback in unhistory by one as usual. */

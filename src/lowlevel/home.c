@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.35 2003/10/03 16:45:26 kuser Exp $ */
+/* $Id: home.c,v 1.36 2003/10/03 17:03:32 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,10 +39,11 @@ strip_trailing_dir_sep(unsigned char *path)
 }
 
 static unsigned char *
-test_confdir(unsigned char *home, unsigned char *path)
+test_confdir(unsigned char *home, unsigned char *path,
+	     unsigned char *error_message)
 {
 	struct stat st;
-	unsigned char *confdir = straconcat(home, "/", path);
+	unsigned char *confdir = straconcat(home, "/", path, NULL);
 
 	if (!confdir) return NULL;
 
@@ -60,14 +61,18 @@ test_confdir(unsigned char *home, unsigned char *path)
 			return confdir;
 		}
 
-		mem_free(confdir);
-
-		return NULL;
+		goto fail;
 	}
 
 	if (S_ISDIR(st.st_mode)) {
 		first_use = 0;
 		return confdir;
+	}
+
+fail:
+	if (error_message) {
+		error(error_message, path, confdir);
+		sleep(3);
 	}
 
 	mem_free(confdir);
@@ -113,22 +118,18 @@ get_home(void)
 	strip_trailing_dir_sep(home);
 
 	if (envconfdir) {
-		home_elinks = test_confdir(home, envconfdir);
-		if (home_elinks) {
+		home_elinks = test_confdir(home, envconfdir,
+					   gettext("ELINKS_CONFDIR set to %s, but "
+						   "could not create directory %s."));
+		if (home_elinks)
 			goto end;
 
-	    	} else {
-			error(gettext("ELINKS_CONFDIR set to %s, but "
-				      "could not create directory %s/%s."),
-			      envconfdir, home, envconfdir);
-			sleep(3);
-		}
 	}
 
-	home_elinks = test_confdir(home, ".elinks");
+	home_elinks = test_confdir(home, ".elinks", NULL);
 	if (home_elinks) goto end;
 
-	home_elinks = test_confdir(home, "elinks");
+	home_elinks = test_confdir(home, "elinks", NULL);
 	if (home_elinks) goto end;
 
 end:

@@ -1,3 +1,345 @@
+Fri Nov 29 22:53:20 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/hash.c:
+
+	Notice about our second biggest CPU hog ;p.  
+
+Fri Nov 29 22:46:38 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/charsets.c:
+
+	Optimize get_cp_index(). We no longer look for longest substring of
+	all aliases, but for the full match.  
+
+Fri Nov 29 22:18:42 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/hash.c:
+
+	Let's try to make time-critical get_hash_item() inline.  
+
+Fri Nov 29 22:00:45 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/globhist/globhist.c:
+
+	Minor cleanup, optimization.  
+
+Fri Nov 29 21:47:50 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Make default document.history.global.max_items 1024 instead of 4096.  
+
+Fri Nov 29 21:29:28 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.c:
+
+	Compilation fix. Ghosts all around.  
+
+Fri Nov 29 21:01:09 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/memdebug.c:
+
+	Some more bits inlined.  
+
+Fri Nov 29 20:59:53 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: memory.c, string.c:
+
+	Bunch of functions inlined. Do some sanity tests only with DEBUG
+	enabled (those functions are highly time critical).  
+
+Fri Nov 29 20:53:13 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Fixed NULL stracpy(form.action).  
+
+Fri Nov 29 20:39:51 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/terminal.c:
+
+	Trivial changes, comment added.  
+
+Fri Nov 29 20:28:27 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/menu.c, config/options.c:
+
+	Introduced ui.menu_scroll_wraparound, Dmitry asked for it :). By
+	default off, though.  
+
+Fri Nov 29 20:21:44 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Pasky's compile fix of the day.  
+
+Fri Nov 29 20:20:18 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Revisited the NULL testing.  
+
+Fri Nov 29 19:52:51 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/kbd.c:
+
+	A mem_free(NULL) was fixed.  
+
+Fri Nov 29 19:32:19 2002  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/options.c:
+
+	Tests for memory allocation failures.  
+
+Fri Nov 29 19:27:03 2002  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	Test for memory allocation failure.  
+
+Fri Nov 29 19:23:19 2002  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Some comments were added about untested return values. Should be
+	fixed later.  
+
+Fri Nov 29 19:16:16 2002  Laurent Monin <zas@norz.org>:
+
+	* src/config/opttypes.c:
+
+	Tests for memory allocation failures and free(NULL).  
+
+Fri Nov 29 19:11:52 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/terminal.c:
+
+	Use add_chr_to_str() instead of add_to_str() where appropriate.  
+
+Fri Nov 29 19:11:35 2002  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	Tests for memory allocation failures and free(NULL).  
+
+Fri Nov 29 19:06:16 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Fixed terrible performance hog (large number of NUL characters in
+	line), reported by José Luis González González
+	<jlg80@mi.madritel.es>.  
+
+Fri Nov 29 19:04:58 2002  Laurent Monin <zas@norz.org>:
+
+	* src/config/conf.c:
+
+	Tests for memory allocation failures and free(NULL).  
+
+Fri Nov 29 18:56:08 2002  Laurent Monin <zas@norz.org>:
+
+	* src/config/cmdline.c:
+
+	Test for allocation failure.  
+
+Fri Nov 29 18:43:09 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Oh, how can this happen ? ;) free() -> mem_free().  
+
+Fri Nov 29 18:39:07 2002  Laurent Monin <zas@norz.org>:
+
+	* src/intl/language.c:
+
+	Indentation fix.  
+
+Fri Nov 29 18:34:00 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/msgbox.c:
+
+	Some useless code was removed.  
+
+Fri Nov 29 18:28:57 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/msgbox.c:
+
+	Test for NULL before freeing, minor changes.  
+
+Fri Nov 29 18:25:51 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Test for NULL before freeing.  
+
+Fri Nov 29 18:22:22 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/listbox.c:
+
+	Test for allocation failure.  
+
+Fri Nov 29 18:20:11 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inphist.c:
+
+	Test for NULL before freeing.  
+
+Fri Nov 29 18:16:43 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/align.h:
+
+	Test for allocation failure.  
+
+Fri Nov 29 18:01:52 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	Fixed potential NULL mem_free()s resulting from DUMMY removal.  
+
+Fri Nov 29 17:52:20 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: renderer.c, renderer.h:
+
+	Prevention of (many) useless calls to realloc().  
+
+Fri Nov 29 17:51:02 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* LUA, src/lua/TODO:
+
+	Removed /LUA, now redundant.  
+
+Fri Nov 29 17:37:33 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/: terminal.c, terminal.h:
+
+	Prevention of useless calls to realloc() and better memory handling.  
+
+Fri Nov 29 16:35:24 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/view.c:
+
+	Fixed search for something not occuring anywhere. We were free()ing
+	NULL.  
+
+Fri Nov 29 16:26:12 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inphist.c, bfu/msgbox.c, document/view.c,
+	document/vs.c, document/html/parser.c, document/html/renderer.c,
+	document/html/tables.c, lowlevel/kbd.c, lowlevel/terminal.c,
+	osdep/os_dep.c, protocol/file.c, protocol/http/http.c,
+	util/memdebug.c, util/memory.c, util/memory.h, util/string.c:
+
+	DUMMY was dropped since NULL is sufficient. Related stuff was
+	removed too. Please report any issue if any.  
+
+Fri Nov 29 15:02:46 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/: view.c, vs.c, html/renderer.c:
+
+	More tests, preparation to DUMMY eradication.  
+
+Fri Nov 29 14:22:42 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/view.c:
+
+	An hidden bug was fixed. Some tests were missing...  
+
+Fri Nov 29 13:58:25 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	A bug was fixed. We do not want to copy anything at DUMMY address...  
+
+Fri Nov 29 13:08:27 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/elinks-lua.texi:
+
+	ELinksified.  
+
+Fri Nov 29 12:39:53 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO, doc/elinks-lua.texi:
+
+	Added doc/links-lua.texi, documenting the elinks' lua interface.
+	Thanks to Peter Wang and Cliff Cunnington.  
+
+Fri Nov 29 12:02:20 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/dialog.c, config/options.c:
+
+	Optionally (ui.shadows, off by default) make dialogs drop shadows.
+	Patch by Fabio and me.  
+
+Fri Nov 29 11:42:45 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/memdebug.c:
+
+	An optionnal check was added to track useless realloc calls (oldsize
+	= newsize), see CHECK_USELESS_REALLOC in memdebug.c 
+
+Fri Nov 29 11:20:13 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/globhist/globhist.c:
+
+	document.history.global.enable is a bool, so use get_opt_bool()
+	instead of get_opt_int(). Patch by Miciah.  
+
+Fri Nov 29 11:17:57 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.h:
+
+	Make text the last item of struct listbox_item.  
+
+Fri Nov 29 11:16:09 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/globhist/globhist.c:
+
+	Fix one memory allocation check, thanks Miciah.  
+
+Fri Nov 29 11:15:34 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: memdebug.c, memory.c:
+
+	Fixed realloc retries.  
+
+Fri Nov 29 11:13:21 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: memdebug.c, memory.c:
+
+	Introduced patience routines to memdebug.c as well. Some stuff make
+	static.  
+
+Fri Nov 29 10:18:07 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Updated Cliff Cunnington's email address.  
+
+Fri Nov 29 09:49:03 2002  Laurent Monin <zas@norz.org>:
+
+	* src/globhist/globhist.c:
+
+	If an url contains bad chars, we now skip it at write time. More
+	return values are tested.  
+
+Fri Nov 29 09:48:03 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/bookmarks.c:
+
+	If an url contains bad chars, we now skip it at write time.  
+
+Fri Nov 29 09:36:56 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/bookmarks.c:
+
+	More return values are tested.  
+
+Fri Nov 29 01:10:19 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.4pre19.CVS 
+
 Fri Nov 29 01:08:53 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

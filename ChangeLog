@@ -1,3 +1,101 @@
+Thu Nov 11 20:31:38 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/text.c:
+
+	#undef is_unsplitable after it has fulfilled its purpose.  
+
+Thu Nov 11 20:29:40 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/menu.c:
+
+	In draw_menu_left_text_hk, transform |x < w + !!hk_state| to |x -
+	!!hk_state < w| to better represent the abstract condition: the
+	co-ordinate of the character to be printed must be less than the
+	width of the available space, and if there was a hotkey marker, do
+	not count it towards that co-ordinate.  
+
+Thu Nov 11 20:20:39 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/menu.c:
+
+	In draw_menu_left_text_hk, rename the local variable hk to hk_state 
+	to better indicate its usage.  
+
+Thu Nov 11 19:50:38 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Nov 11 19:40:08 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/inpfield.c:
+
+	In kbd_field, after handling the copy-clipboard action, return
+	EVENT_PROCESSED rather than EVENT_NOT_PROCESSED.  
+
+Thu Nov 11 19:31:09 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation was updated.  
+
+Thu Nov 11 19:05:30 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cookies/cookies.c:
+
+	In del_from_cookie_list, drop the local variable tmp and instead
+	operate directly on the passed pointer.  
+
+Thu Nov 11 19:04:39 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cookies/cookies.c:
+
+	Halve the indirection to the cookie passed to del_from_cookie_list.  
+
+Thu Nov 11 19:02:26 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cookies/cookies.c:
+
+	Substitute foreachsafe for foreach where the loop calls
+	del_from_cookie_list.  
+
+Thu Nov 11 18:59:00 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.inc:
+
+	Drop an extra newline at the end of the same option description.  
+
+Thu Nov 11 18:58:02 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.inc:
+
+	Change the description of terminal._template_.colors not to
+	erroneously indicate that the environment variable TERM must have a
+	certain value for 256 color support and instead just to say that
+	ELinks will use XTerm RGB codes.  
+
+Thu Nov 11 00:07:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	How embarressing that these ancient encoding macros are still in
+	use. Vive la CONFIG_*.  
+
+Wed Nov 10 23:49:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Add some probation code for detecting infinite loops in URI
+	translation. Idea by lindi-, which apparently doesn't trust the
+	current code much. ;) 
+
+Wed Nov 10 23:16:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Rearrange the code where the strange bug 559 fails.  
+
 Wed Nov 10 22:41:39 2004  Laurent Monin <zas@norz.org>:
 
 	* src/cookies/cookies.c:

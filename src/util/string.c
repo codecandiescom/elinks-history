@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.56 2003/07/21 23:01:00 pasky Exp $ */
+/* $Id: string.c,v 1.57 2003/07/21 23:04:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,14 @@
 #include "util/memory.h"
 #include "util/string.h"
 #include "util/snprintf.h"
+
+
+/* This file looks to be slowly being overloaded by a lot of various stuff,
+ * like memory managment, stubs, tools, granular and non-granular strings,
+ * struct string object... Perhaps util/memory.* and util/stubs.* (stubs.h
+ * probably included in elinks.h, it's important enough) would be nice to
+ * have. --pasky */
+
 
 #define fatalfl(x) errfile = f, errline = l, elinks_internal(x)
 #define fatal(x) internal(x)

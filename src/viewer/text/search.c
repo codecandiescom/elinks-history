@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.177 2004/01/29 11:09:34 jonas Exp $ */
+/* $Id: search.c,v 1.178 2004/01/30 22:38:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1180,9 +1180,21 @@ search_typeahead(struct session *ses, struct document_view *doc_view, int a)
  * etc. The useless cruft should be blasted out. And it's quite ugly anyway,
  * a nice cleanup target ;-). --pasky */
 
+enum search_option {
+	SEARCH_OPT_REGEX,
+	SEARCH_OPT_CASE,
+
+	SEARCH_OPTIONS,
+};
+
+static struct option_resolver resolvers[] = {
+	{ SEARCH_OPT_CASE,	"document.browse.search.regex" },
+	{ SEARCH_OPT_REGEX,	"document.browse.search.case" },
+};
+
 struct search_dlg_hop {
 	void *data;
-	int whether_regex, cases;
+	union option_value values[SEARCH_OPTIONS];
 };
 
 static int
@@ -1208,27 +1220,8 @@ search_dlg_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 	update_dialog_data(dlg_data, widget_data);
 
-	/* TODO: Some generic update_opt() or so. --pasky */
-
-	{
-		struct option *o = get_opt_rec(config_options,
-					       "document.browse.search.regex");
-
-		if (o->value.number != hop->whether_regex) {
-			o->value.number = hop->whether_regex;
-			o->flags |= OPT_TOUCHED;
-		}
-	}
-
-	{
-		struct option *o = get_opt_rec(config_options,
-					       "document.browse.search.case");
-
-		if (o->value.number != hop->cases) {
-			o->value.number = hop->cases;
-			o->flags |= OPT_TOUCHED;
-		}
-	}
+	commit_option_values(resolvers, config_options,
+			     hop->values, SEARCH_OPTIONS);
 
 	if (check_dialog(dlg_data)) return 1;
 
@@ -1265,8 +1258,9 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 
 	hop = mem_calloc(1, sizeof(struct search_dlg_hop));
 	if (!hop) return;
-	hop->whether_regex = get_opt_int("document.browse.search.regex");
-	hop->cases = get_opt_int("document.browse.search.case");
+
+	checkout_option_values(resolvers, config_options,
+			       hop->values, SEARCH_OPTIONS);
 	hop->data = data;
 
 #define SEARCH_WIDGETS_COUNT 8
@@ -1296,11 +1290,11 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 
 	add_dlg_field(dlg, text, min, max, check, l, field, history);
 
-	add_dlg_radio(dlg, _("Normal search", term), 1, 0, hop->whether_regex);
-	add_dlg_radio(dlg, _("Regexp search", term), 1, 1, hop->whether_regex);
-	add_dlg_radio(dlg, _("Extended regexp search", term), 1, 2, hop->whether_regex);
-	add_dlg_radio(dlg, _("Case sensitive", term), 2, 1, hop->cases);
-	add_dlg_radio(dlg, _("Case insensitive", term), 2, 0, hop->cases);
+	add_dlg_radio(dlg, _("Normal search", term), 1, 0, hop->values[SEARCH_OPT_REGEX].number);
+	add_dlg_radio(dlg, _("Regexp search", term), 1, 1, hop->values[SEARCH_OPT_REGEX].number);
+	add_dlg_radio(dlg, _("Extended regexp search", term), 1, 2, hop->values[SEARCH_OPT_REGEX].number);
+	add_dlg_radio(dlg, _("Case sensitive", term), 2, 1, hop->values[SEARCH_OPT_CASE].number);
+	add_dlg_radio(dlg, _("Case insensitive", term), 2, 0, hop->values[SEARCH_OPT_CASE].number);
 
 	add_dlg_button(dlg, B_ENTER, search_dlg_ok, okbutton, fn);
 	add_dlg_button(dlg, B_ESC, search_dlg_cancel, cancelbutton, cancelfn);

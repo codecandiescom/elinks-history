@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.141 2004/05/31 01:21:20 jonas Exp $ */
+/* $Id: cookies.c,v 1.142 2004/05/31 01:24:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,6 +131,11 @@ static struct option_info cookies_options[] = {
 #define get_cookies_paranoid_security()	get_opt_cookies(COOKIES_PARANOID_SECURITY).number
 #define get_cookies_save()		get_opt_cookies(COOKIES_SAVE).number
 #define get_cookies_resave()		get_opt_cookies(COOKIES_RESAVE).number
+
+struct c_server *
+get_cookie_server(struct uri *uri)
+{
+}
 
 void
 free_cookie(struct cookie *c)
@@ -331,13 +336,10 @@ set_cookie(struct uri *uri, unsigned char *str)
 
 #ifdef COOKIES_DEBUG
 	{
-		unsigned char *server = memacpy(uri->host, uri->hostlen);
-
-		DBG("Got cookie %s = %s from %s (%s), domain %s, "
+		DBG("Got cookie %s = %s from %s, domain %s, "
 		      "expires at %d, secure %d\n", cookie->name,
-		      cookie->value, cookie->server, server, cookie->domain,
+		      cookie->value, cookie->server, cookie->domain,
 		      cookie->expires, cookie->secure);
-		mem_free_if(server);
 	}
 #endif
 

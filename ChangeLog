@@ -1,3 +1,227 @@
+Sun Jul 18 18:29:54 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	Compilation fix: |quoted_value| is no more used due to change in
+	parse.c (1.81 -> 1.82).  
+
+Sun Jul 18 16:34:45 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	Disable handling of <foo id='a''b'> (well, it is handled as <foo
+	id='a'> now) in favour of handling <foo id='a''>. Motivated by lindi
+	and the Astalavista's Babelfish.  
+
+Sun Jul 18 16:00:33 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Jul 18 15:53:58 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/interlink.c:
+
+	connect_to_af_unix(): no need to set @s_info_connect.fd to -1, since
+	on error @s_info_connect.addr is set to NULL.  
+
+Sun Jul 18 15:52:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/interlink.c:
+
+	connect_to_af_unix(): drop |free_and_return| label.  
+
+Sun Jul 18 15:50:28 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/interlink.c:
+
+	connect_to_af_unix(): break loop instead of gotos.  
+
+Sun Jul 18 15:48:56 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/interlink.c:
+
+	connect_to_af_unix(): move @saved_errno declaration in while() loop.  
+
+Sun Jul 18 15:47:46 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/interlink.c:
+
+	connect_to_af_unix(): drop |again| label and use a while() loop
+	instead.  
+
+Sun Jul 18 15:46:08 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/interlink.c:
+
+	connect_to_af_unix(): add a goto free_and_error.  
+
+Sun Jul 18 15:43:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/interlink.c:
+
+	connect_to_af_unix(): reindent code.  
+
+Sun Jul 18 15:42:16 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/interlink.c:
+
+	connect_to_af_unix(): introduce @saved_errno, and close file
+	descriptor immediatly after connect() error.  
+
+Sun Jul 18 15:38:48 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/interlink.c:
+
+	connect_to_af_unix(): drop one goto free_and_error.  
+
+Sun Jul 18 14:06:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/perl/hooks.c:
+
+	EHS_NEXT -> EVENT_HOOK_STATUS_NEXT for now.  
+
+Sun Jul 18 13:57:49 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation updated.  
+
+Sun Jul 18 13:33:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bookmarks/dialogs.c, cookies/dialogs.c:
+
+	Annihilate  expressions from listbox messages.  
+
+Sun Jul 18 12:40:23 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/interlink.c:
+
+	Dropped unreviewable 1.79 (and depending 1.80) - please don't mix
+	reindenting code with anything else. You're my cosmo-girl, you're in
+	my mind...  
+
+Sun Jul 18 12:36:04 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced. You're my hearth, you're my soul...  
+
+Sun Jul 18 11:00:34 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Jul 18 10:51:19 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	complete_file_menu(): optimize entries loop. Drop @i for @entry,
+	drop useless initialization of @entries to NULL, free @entry->attrib
+	as soon as possible, and reorder tests.  
+
+Sun Jul 18 04:44:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Add a few comments.  
+
+Sun Jul 18 04:38:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	form_file_menu(): Disable the no elevator hack for now.  
+
+Sun Jul 18 04:33:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/optgroup.html:
+
+	Add file completion test.  
+
+Sun Jul 18 04:28:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/file.c:
+
+	Update comments a bit.  
+
+Sun Jul 18 04:01:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, viewer/text/form.c:
+
+	Add menu style file completion to upload file form fields (Bug 294).
+	It's quite cool but there is still room for improvements. It should
+	be easily extended for usage by other filename inputs widgets.  
+
+Sun Jul 18 02:21:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/file/file.c, util/file.c:
+
+	Looks like these #includes might belong to the dir entry stat()ing.  
+
+Sun Jul 18 02:20:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/file/file.c, util/file.c, util/file.h:
+
+	Use file_is_dir() in file_protocol_handler() and move the opendir()
+	call to get_directory_entries().  
+
+Sun Jul 18 01:50:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/file/file.c, util/file.c, util/file.h:
+
+	Move the directory entry table factory to util/file.* so it can be
+	used for file text-input form-field completion and maybe file input
+	widgets. I don't particularly like the system headers exposed in
+	util/file.h the alternative is to move the opendir() call to it and
+	just do an fstat() in file_protocol_handler().  
+
+Sun Jul 18 01:32:37 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/uri.c:
+
+	Use assertm and if_assert_failed instead of INTERNAL in join_urls.  
+
+Sun Jul 18 00:58:45 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.inc:
+
+	Fix a typo in the caption for ui.success_msgbox: s/sucess/success/.  
+
+Sat Jul 17 22:57:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/interlink.c:
+
+	connect_to_af_unix(): drop another goto/label.  
+
+Sat Jul 17 22:53:39 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/interlink.c:
+
+	connect_to_af_unix(): drop goto/label and simplify code.  
+
+Sat Jul 17 22:28:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/interlink.c:
+
+	connect_to_af_unix(): drop commented out code.  
+
+Sat Jul 17 22:27:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/interlink.c:
+
+	connect_to_af_unix(): use mem_free_set().  
+
+Sat Jul 17 22:21:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/interlink.c:
+
+	Introduce safe_close() and slightly reduce code redundancy.  
+
 Sat Jul 17 20:22:17 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: bfu/inpfield.h, config/conf.c, dialogs/status.c:

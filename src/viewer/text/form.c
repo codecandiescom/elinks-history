@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.265 2004/12/29 19:25:49 jonas Exp $ */
+/* $Id: form.c,v 1.266 2005/01/07 21:51:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -851,7 +851,7 @@ encode_error:
 	/* XXX: This error message should move elsewhere. --Zas */
 	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 		N_("Error while posting form"), ALIGN_CENTER,
-		msg_text(ses->tab->term, N_("Could not get file %s: %s"),
+		msg_text(ses->tab->term, N_("Could not load file %s: %s"),
 			 sv->value, strerror(errno)),
 		ses, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);

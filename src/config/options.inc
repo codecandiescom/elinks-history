@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.181 2005/01/05 19:54:29 jonas Exp $ */
+/* $Id: options.inc,v 1.182 2005/01/07 21:51:46 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -549,7 +549,7 @@ static struct option_info config_options_info[] = {
 
 	INIT_OPT_BOOL("document.colors", N_("Ensure contrast"),
 		"ensure_contrast", 0, 1,
-		N_("Makes sure that the back- and foreground color is never "
+		N_("Makes sure that the back- and foreground color are never "
 		"equal.")),
 
 	/* If you change this please also change ACT_MAIN_DOCUMENT_COLORS action
@@ -923,7 +923,7 @@ static struct option_info config_options_info[] = {
 		"scrollbar", "black", "blue", "white", "black",
 		N_("Scrollbar colors.")),
 
-	INIT_OPT_COLORS(".dialog", N_("Scrollbar selected"),
+	INIT_OPT_COLORS(".dialog", N_("Selected scrollbar"),
 		"scrollbar-selected", "black", "green", "black", "white",
 		N_("Scrollbar selected colors.")),
 

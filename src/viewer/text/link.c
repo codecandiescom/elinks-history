@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.222 2004/06/14 13:16:50 zas Exp $ */
+/* $Id: link.c,v 1.223 2004/06/14 19:58:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -600,7 +600,7 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 	    || link->type == LINK_BUTTON
 	    || ((has_form_submit(doc_view->document, link->form_control)
 		 || get_opt_int("document.browse.forms.auto_submit"))
-		&& (link_is_textinput(link)))) {
+		&& link_is_textinput(link))) {
 
 		if (goto_current_link(ses, doc_view, a))
 			return FRAME_EVENT_OK;

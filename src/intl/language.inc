@@ -416,7 +416,7 @@ struct translation translation_english [] = {
 struct translation translation_brazilian_portuguese [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-1"},
-  {T__ISO_639_CODE, "pr"},
+  {T__ISO_639_CODE, "pt-BR"},
   {T__LANGUAGE, "Brazilian Portuguese"},
   {T_BAD_NUMBER, "Número inválido"},
   {T_NUMBER_EXPECTED, "Espera-se número no campo"},
@@ -8676,7 +8676,7 @@ struct translation translation_polish [] = {
 struct translation translation_portuguese [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-1"},
-  {T__ISO_639_CODE, "pr"},
+  {T__ISO_639_CODE, "pt"},
   {T__LANGUAGE, "Portuguese"},
   {T_BAD_NUMBER, "Número inválido"},
   {T_NUMBER_EXPECTED, "Espera-se número no campo"},

@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.32 2003/08/28 19:28:18 pasky Exp $ */
+/* $Id: dns.c,v 1.33 2003/09/22 21:46:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -285,7 +285,7 @@ do_queued_lookup(struct dnsquery *query)
 }
 
 static int
-find_in_dns_cache(char *name, struct dnsentry **dnsentry)
+find_in_dns_cache(unsigned char *name, struct dnsentry **dnsentry)
 {
 	struct dnsentry *e;
 
@@ -354,17 +354,17 @@ end_dns_lookup(struct dnsquery *q, int res)
 	if (res < 0) goto done;
 
 	namelen = strlen(q->name);
-	dnsentry = mem_calloc(1, sizeof(struct dnsentry) + namelen + 1);
+	dnsentry = mem_calloc(1, sizeof(struct dnsentry) + namelen);
 
 	if (dnsentry) {
-		memcpy(dnsentry->name, q->name, namelen);
+		memcpy(dnsentry->name, q->name, namelen); /* calloc() sets nul char for us. */
 
 		assert(*q->addrno > 0);
 
 		dnsentry->addr = mem_calloc(*q->addrno, sizeof(struct sockaddr_storage));
 		if (!dnsentry->addr) goto done;
 
-		memcpy(dnsentry->addr, *q->addr, sizeof(struct sockaddr_storage) * *q->addrno);
+		memcpy(dnsentry->addr, *q->addr, *q->addrno * sizeof(struct sockaddr_storage));
 
 		dnsentry->addrno = *q->addrno;
 
@@ -390,7 +390,7 @@ find_host_no_cache(unsigned char *name, struct sockaddr_storage **addr, int *add
 	struct dnsquery *query;
 	int namelen = strlen(name);
 
-	query = mem_calloc(1, sizeof(struct dnsquery) + namelen + 1);
+	query = mem_calloc(1, sizeof(struct dnsquery) + namelen);
 	if (!query) {
 		fn(data, -1);
 		return 0;
@@ -401,7 +401,7 @@ find_host_no_cache(unsigned char *name, struct sockaddr_storage **addr, int *add
 	query->s = (struct dnsquery **) query_p;
 	query->addr = addr;
 	query->addrno = addrno;
-	memcpy(query->name, name, namelen);
+	memcpy(query->name, name, namelen); /* calloc() sets nul char for us. */
 
 	if (query_p) *((struct dnsquery **) query_p) = query;
 	query->xfn = end_dns_lookup;
@@ -447,20 +447,31 @@ kill_dns_request(void **qp)
 	*qp = NULL;
 }
 
+static void
+del_dns_cache_entry(struct dnsentry **d)
+{
+	struct dnsentry *e = *d;
+
+	*d = (*d)->prev;
+	del_from_list(e);
+	if (e->addr) mem_free(e->addr);
+	mem_free(e);
+}
+
 void
 shrink_dns_cache(int whole)
 {
-	struct dnsentry *d, *e;
+	struct dnsentry *d;
 
-	foreach (d, dns_cache) {
-		if (!whole && d->get_time + DNS_TIMEOUT >= get_time())
-			continue;
+	if (whole) {
+		foreach (d, dns_cache)
+			del_dns_cache_entry(&d);
 
-		e = d;
-		d = d->prev;
-		del_from_list(e);
+	} else {
+		ttime oldest = get_time() - DNS_TIMEOUT;
 
-		if (e->addr) mem_free(e->addr);
-		mem_free(e);
+		foreach (d, dns_cache)
+			if (d->get_time < oldest)
+				del_dns_cache_entry(&d);
 	}
 }

@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: forms.c,v 1.4 2004/12/18 02:17:50 pasky Exp $ */
+/* $Id: forms.c,v 1.5 2004/12/18 15:54:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,7 +23,7 @@ struct form *
 init_form(void)
 {
 	struct form *form = mem_calloc(1, sizeof(struct form));
-	
+
 	if (!form) return NULL;
 	init_list(form->items);
 	return form;

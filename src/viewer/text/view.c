@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.67 2003/05/08 11:46:43 miciah Exp $ */
+/* $Id: view.c,v 1.68 2003/05/08 14:02:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2478,13 +2478,16 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 		}
 	} while ((c += f->yw) < f->f_data->y + f->yw);
 
-	/*draw_doc(ses->tab->term, f, 1);
+#if 0
+	draw_doc(ses->tab->term, f, 1);
 	print_screen_status(ses);
-	redraw_from_window(ses->tab);*/
+	redraw_from_window(ses->tab);
+#endif
 	msg_box(ses->tab->term, NULL,
-		N_("Search"), AL_CENTER,
-		N_("Search string not found"),
-		NULL, 1,
+		N_("Search"), AL_CENTER | AL_EXTD_TEXT,
+		"'", ses->search_word, "'\n",
+		N_("Search string not found"), NULL,
+		ses, 1,
 		N_("Cancel"), NULL, B_ENTER | B_ESC);
 }
 

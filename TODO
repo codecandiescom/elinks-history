@@ -59,7 +59,7 @@ Text HTML viewer:
 - Alert user when he attempts to follow a broken link to a fragment on the
   current page
 
-- Include search string in 'Search string not found' error box
+* Include search string in 'Search string not found' error box
 
 - Incremental-search
 
@@ -207,4 +207,4 @@ Permanent goals:
 Key: - nothing done + work in progress * almost ready
      (reflects only what is already committed to CVS)
 
-$Id: TODO,v 1.54 2003/05/08 12:44:12 pasky Exp $
+$Id: TODO,v 1.55 2003/05/08 14:02:29 zas Exp $

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.190 2005/03/08 15:20:29 miciah Exp $ */
+/* $Id: ftp.c,v 1.191 2005/03/08 15:21:39 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -255,13 +255,12 @@ ok:
 			pos = i;
 		}
 
-		if (!part && response >= 100 && response < 200) {
-			kill_buffer_data(rb, pos + 1);
-			goto again;
-		}
-
 		if (part != 2)
 			kill_buffer_data(rb, pos + 1);
+
+		if (!part && response >= 100 && response < 200) {
+			goto again;
+		}
 
 		return response;
 	}

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.87 2003/06/24 01:51:24 jonas Exp $ */
+/* $Id: file.c,v 1.88 2003/06/24 12:08:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -299,10 +299,11 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 	unsigned char *fragment = data->fragment;
 	int fragmentlen = data->fragmentlen;
 	int htmlnamelen = 0;
+	int pathlen = strlen(path);
 
 	if (!htmlname) return;
 	add_htmlesc_str(&htmlname, &htmlnamelen,
-			entry->name, strlen(entry->name));
+			&entry->name[pathlen], strlen(entry->name) - pathlen);
 
 	/* add_to_str(&fragment, &fragmentlen, "   "); */
 	add_htmlesc_str(&fragment, &fragmentlen,
@@ -315,24 +316,17 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 
 #ifdef FS_UNIX_SOFTLINKS
 	} else if (entry->attrib[0] == 'l') {
-		unsigned char *linkname = straconcat(path, htmlname, NULL);
+		struct stat st;
+		unsigned char buf[MAX_STR_LEN];
+		int readlen = readlink(entry->name, buf, MAX_STR_LEN);
 
-		/* It doesn't make sense to return here so indent! */
-		if (linkname) {
-			struct stat st;
-			unsigned char buf[MAX_STR_LEN];
-			int readlen = readlink(linkname, buf, MAX_STR_LEN);
-
-			if (readlen != MAX_STR_LEN) {
-				buf[readlen] = '\0';
-				lnk = straconcat(" -> ", buf, NULL);
-			}
-
-			if (!stat(linkname, &st) && S_ISDIR(st.st_mode))
-				add_chr_to_str(&fragment, &fragmentlen, '/');
-
-			mem_free(linkname);
+		if (readlen != MAX_STR_LEN) {
+			buf[readlen] = '\0';
+			lnk = straconcat(" -> ", buf, NULL);
 		}
+
+		if (!stat(entry->name, &st) && S_ISDIR(st.st_mode))
+			add_chr_to_str(&fragment, &fragmentlen, '/');
 #endif
 	}
 
@@ -391,10 +385,10 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 
 	while ((entry = readdir(directory))) {
 		struct stat st, *stp;
-		unsigned char **p;
-		int l;
 		struct directory_entry *new_entries;
 		unsigned char *name;
+		unsigned char *attrib;
+		int attriblen;
 
 		/* Always show "..", always hide ".", others like ".x" are shown if
 		 * show_hidden_files = 1 */
@@ -409,15 +403,14 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 		if (!new_entries) continue;
 		entries = new_entries;
 
-		entries[size].name = stracpy(entry->d_name);
-		if (!entries[size].name) continue;
-
-		p = &entries[size++].attrib;
-		*p = init_str();
-		if (!*p) continue;
-
 		name = straconcat(dirpath, entry->d_name, NULL);
 		if (!name) continue;
+
+		attrib = init_str();
+		if (!attrib) {
+			mem_free(name);
+			continue;
+		}
 
 #ifdef FS_UNIX_SOFTLINKS
 		if (lstat(name, &st))
@@ -428,14 +421,16 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 		else
 			stp = &st;
 
-		mem_free(name);
-		l = 0;
-		stat_mode(p, &l, stp);
-		stat_links(p, &l, stp);
-		stat_user(p, &l, stp, 0);
-		stat_user(p, &l, stp, 1);
-		stat_size(p, &l, stp);
-		stat_date(p, &l, stp);
+		attriblen = 0;
+		stat_mode(&attrib, &attriblen, stp);
+		stat_links(&attrib, &attriblen, stp);
+		stat_user(&attrib, &attriblen, stp, 0);
+		stat_user(&attrib, &attriblen, stp, 1);
+		stat_size(&attrib, &attriblen, stp);
+		stat_date(&attrib, &attriblen, stp);
+		entries[size].name = name;
+		entries[size].attrib = attrib;
+		size++;
 	}
 
 	if (size) {

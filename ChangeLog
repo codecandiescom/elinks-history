@@ -1,3 +1,157 @@
+Tue Dec  3 22:09:28 2002  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	We should _always_ test returned values.  
+
+Tue Dec  3 22:00:55 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/: memory.c, memory.h:
+
+	Now, if DEBUG and LEAK_DEBUG are undefined, we use native malloc(),
+	realloc(), calloc(), free() functions instead of wrappers.
+	Performance should increase. Developpers should always use
+	--enable-debug, this enables wrappers that check consistency and
+	detect many errors concerning memory allocation.  
+
+Tue Dec  3 22:00:50 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Fixed segfault for elinks homepage and links manual from help menu,
+	reported by Jose.  
+
+Tue Dec  3 19:31:44 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, bfu/dialog.c, bfu/inpfield.c, bfu/msgbox.c,
+	config/conf.c, config/options.c, config/opttypes.c,
+	cookies/cookies.c, dialogs/menu.c, dialogs/options.c,
+	dialogs/refresh.c, document/download.c, document/dump.c,
+	document/location.c, document/session.c, document/html/parser.c,
+	document/html/tables.c, intl/charsets.c, intl/lang_defs.h,
+	lowlevel/af_unix.c, lowlevel/dns.c, lowlevel/home.c,
+	lowlevel/sched.c, osdep/os_dep.c, protocol/file.c, protocol/ftp.c,
+	protocol/url.c, protocol/http/auth.c, protocol/http/http.c,
+	ssl/connect.c, ssl/ssl.c, util/conv.c, util/file.c, util/hash.c,
+	util/memdebug.c, util/secsave.c:
+
+	Ending whitespaces cleanup.  
+
+Tue Dec  3 15:14:55 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/dump.c:
+
+	Fixed source/dump missing URL error msg.  
+
+Tue Dec  3 00:14:52 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Fixed mem_free(NULL), thanks Miciah. And now I should really go
+	sleep.  
+
+Mon Dec  2 23:40:11 2002  Laurent Monin <zas@norz.org>:
+
+	* configure.in, src/util/conv.c:
+
+	An issue with localization of directory listings was fixed.  
+
+Mon Dec  2 16:44:03 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/file.c:
+
+	mem_free(NULL) tests, memory allocation checks, tidy up.  
+
+Mon Dec  2 16:39:05 2002  Laurent Monin <zas@norz.org>:
+
+	* src/ssl/: connect.c, ssl.c:
+
+	mem_free(NULL) tests, memory allocation checks, tidy up.  
+
+Mon Dec  2 16:31:51 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/file.c:
+
+	mem_free(NULL) tests, memory allocation checks, tidy up.  
+
+Mon Dec  2 15:50:17 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	mem_free(NULL) tests, memory allocation checks, tidy up.  
+
+Mon Dec  2 15:41:11 2002  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/os_dep.c:
+
+	mem_free(NULL) tests, memory allocation checks, tidy up.  
+
+Mon Dec  2 15:37:44 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/terminal.c:
+
+	mem_free(NULL) tests, memory allocation checks, tidy up.  
+
+Mon Dec  2 14:55:26 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/sched.c:
+
+	mem_free(NULL) tests, memory allocation checks, tidy up.  
+
+Mon Dec  2 14:48:13 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/kbd.c:
+
+	mem_free(NULL) tests, memory allocation checks, tidy up.  
+
+Mon Dec  2 14:43:11 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/home.c:
+
+	mem_free(NULL) tests, memory allocation checks, tidy up.  
+
+Mon Dec  2 14:43:01 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/charsets.c:
+
+	Fixed subtle missing-negation mistake ;-).  
+
+Mon Dec  2 14:41:11 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/af_unix.c:
+
+	Fixed possible memory leak and removed one bad test.  
+
+Mon Dec  2 14:36:45 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/dns.c:
+
+	mem_free(NULL) tests, memory allocation checks, tidy up.  
+
+Mon Dec  2 14:30:25 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/connect.c:
+
+	mem_free(NULL) tests, memory allocation checks, tidy up.  
+
+Mon Dec  2 14:25:58 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/af_unix.c:
+
+	mem_free(NULL) tests, memory allocation checks, tidy up.  
+
+Mon Dec  2 14:20:41 2002  Laurent Monin <zas@norz.org>:
+
+	* src/intl/charsets.c:
+
+	mem_free(NULL) tests, memory allocation checks, tidy up.  
+
+Sun Dec  1 23:29:56 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.4pre21.CVS 
+
 Sun Dec  1 23:29:10 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

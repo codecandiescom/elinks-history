@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.45 2003/11/19 01:45:06 jonas Exp $ */
+/* $Id: globhist.c,v 1.46 2003/11/19 02:29:58 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -295,22 +295,9 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 	if (!*text) text = history_item->url;
 
 	/* Deleted in history_dialog_clear_list() */
-	history_item->box_item = mem_calloc(1, sizeof(struct listbox_item)
-					       + strlen(text) + 1);
+	history_item->box_item = init_browser_box(&globhist_browser, text,
+						  history_item);
 	if (!history_item->box_item) return;
-	init_list(history_item->box_item->child);
-	history_item->box_item->visible = 1;
-
-	history_item->box_item->text = ((unsigned char *) history_item->box_item
-					+ sizeof(struct listbox_item));
-	history_item->box_item->box = &gh_boxes;
-	history_item->box_item->udata = (void *) history_item;
-
-	strcpy(history_item->box_item->text, text);
-
-	add_to_list(gh_box_items, history_item->box_item);
-
-	update_hierbox_browser(&globhist_browser);
 
 	if (!globhist_nosave) globhist_dirty = 1;
 

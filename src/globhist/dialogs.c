@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.71 2003/11/19 02:09:19 jonas Exp $ */
+/* $Id: dialogs.c,v 1.72 2003/11/19 02:29:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,34 +88,10 @@ push_toggle_display_button(struct dialog_data *dlg_data, struct widget_data *wid
 	*display_type = !*display_type;
 
 	foreach (item, global_history.items) {
-		struct listbox_item *b2;
 		unsigned char *text = *display_type ? item->title : item->url;
 
 		if (!*text) text = item->url;
-
-		b2 = mem_realloc(item->box_item,
-				sizeof(struct listbox_item) + strlen(text) + 1);
-		if (!b2) continue;
-
-		if (b2 != item->box_item) {
-			struct listbox_data *box;
-
-			/* We are being relocated, so update everything. */
-			/* If there'll be ever any hiearchy, this will have to
-			 * be extended by root/child handling. */
-			b2->next->prev = b2;
-			b2->prev->next = b2;
-			foreach (box, *b2->box) {
-				if (box->sel == item->box_item) box->sel = b2;
-				if (box->top == item->box_item) box->top = b2;
-			}
-			item->box_item = b2;
-			item->box_item->text =
-				((unsigned char *) item->box_item
-				 + sizeof(struct listbox_item));
-		}
-
-		strcpy(item->box_item->text, text);
+		item->box_item->text = text;
 	}
 
 	update_hierbox_browser(&globhist_browser);

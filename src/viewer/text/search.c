@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.115 2003/11/15 20:05:43 kuser Exp $ */
+/* $Id: search.c,v 1.116 2003/11/15 20:11:38 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -446,7 +446,7 @@ get_searched_plain(struct document_view *doc_view, struct point **pt, int *pl,
 	struct point *points = NULL;
 	int xp, yp;
 	int xx, yy;
-	int xpv, ypv;
+	int xoffset, yoffset;
 	int len = 0;
 	int case_sensitive = get_opt_int("document.browse.search.case");
 
@@ -458,8 +458,8 @@ get_searched_plain(struct document_view *doc_view, struct point **pt, int *pl,
 	yp = doc_view->y;
 	xx = xp + doc_view->width;
 	yy = yp + doc_view->height;
-	xpv= xp - doc_view->vs->x;
-	ypv= yp - doc_view->vs->y;
+	xoffset = xp - doc_view->vs->x;
+	yoffset = yp - doc_view->vs->y;
 
 #define maybe_tolower(c) (case_sensitive ? (c) : tolower(c))
 
@@ -477,14 +477,14 @@ srch_failed:
 
 		for (i = 0; i < l; i++) {
 			register int j;
-			int y = s1[i].y + ypv;
+			int y = s1[i].y + yoffset;
 
 			if (y < yp || y >= yy)
 				continue;
 
 			for (j = 0; j < s1[i].n; j++) {
 				int sx = s1[i].x + j;
-				int x = sx + xpv;
+				int x = sx + xoffset;
 
 				if (x < xp || x >= xx)
 					continue;
@@ -516,7 +516,7 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	struct point *points = NULL;
 	int xp, yp;
 	int xx, yy;
-	int xpv, ypv;
+	int xoffset, yoffset;
 	int len = 0;
 	int regex_flags = REG_NEWLINE;
 	int regexec_flags = 0;
@@ -570,18 +570,18 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	yp = doc_view->y;
 	xx = xp + doc_view->width;
 	yy = yp + doc_view->height;
-	xpv= xp - doc_view->vs->x;
-	ypv= yp - doc_view->vs->y;
+	xoffset = xp - doc_view->vs->x;
+	yoffset = yp - doc_view->vs->y;
 
 	doctmp = doc;
 
 find_next:
-	while (pos < doclen && (search_start[pos].y+ypv < yp-1
-				|| search_start[pos].y+ypv > yy)) pos++;
+	while (pos < doclen && (search_start[pos].y + yoffset < yp-1
+				|| search_start[pos].y + yoffset > yy)) pos++;
 	doctmp = &doc[pos];
 	s1 = &search_start[pos];
-	while (pos < doclen && search_start[pos].y+ypv >= yp-1
-			    && search_start[pos].y+ypv <= yy) pos++;
+	while (pos < doclen && search_start[pos].y + yoffset >= yp-1
+			    && search_start[pos].y + yoffset <= yy) pos++;
 	save_c = doc[pos];
 	doc[pos] = 0;
 
@@ -593,14 +593,14 @@ find_next:
 
 		for (i = 0; i < l; i++) {
 			register int j;
-			int y = s1[i].y + ypv;
+			int y = s1[i].y + yoffset;
 
 			if (y < yp || y >= yy)
 				continue;
 
 			for (j = 0; j < s1[i].n; j++) {
 				int sx = s1[i].x + j;
-				int x = sx + xpv;
+				int x = sx + xoffset;
 
 				if (x < xp || x >= xx)
 					continue;

@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.6 2003/06/08 21:52:03 pasky Exp $ */
+/* $Id: history.c,v 1.7 2003/06/08 22:35:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,11 +121,15 @@ ses_unback(struct session *ses)
 }
 
 
+/* Common part of go_(un)back(). dir 1 == forward (unback), dir -1 == back */
 /* Returns > 0 upon error, 0 if we should abort the movement and 1 if we should
  * proceed fearlessly. */
 static int
-go_away(struct session *ses)
+go_away(struct session *ses, int dir)
 {
+	struct list_head *history = (dir == 1	? &ses->unhistory
+						: &ses->history);
+
 	ses->reloadlevel = NC_CACHE;
 
 	if (ses->wtd) {
@@ -133,6 +137,26 @@ go_away(struct session *ses)
 		print_screen_status(ses);
 		reload(ses, NC_CACHE);
 		return 0;
+	}
+
+	if (!have_location(ses) || list_empty(*history)) {
+		/* There's no history, at most only the current location. */
+		return 0;
+	}
+
+	abort_loading(ses, 0);
+
+	if (ses->ref_url) {
+		mem_free(ses->ref_url);
+		ses->ref_url = NULL;
+	}
+
+	if (fd && fd->f_data && fd->f_data->url) {
+		int l = 0;
+
+		ses->ref_url = init_str();
+		if (ses->ref_url)
+			add_to_str(&ses->ref_url, &l, fd->f_data->url);
 	}
 
 	return 1;
@@ -144,30 +168,11 @@ go_back(struct session *ses)
 	unsigned char *url;
 	struct f_data_c *fd = current_frame(ses);
 
-	if (go_away(ses) < 1)
+	if (go_away(ses, -1) < 1)
 		return;
-
-	if (!have_location(ses) || ses->history.next == ses->history.prev)
-		/* There's no history, maximally only current location. */
-		return;
-
-	abort_loading(ses, 0);
 
 	url = stracpy(((struct location *)ses->history.next)->next->vs.url);
 	if (!url) return;
-
-	if (ses->ref_url) {
-		mem_free(ses->ref_url);
-		ses->ref_url = NULL;
-	}
-
-	if (fd && fd->f_data && fd->f_data->url) {
-		int l = 0;
-
-		ses->ref_url = init_str();
-		if (ses->ref_url)
-			add_to_str(&ses->ref_url, &l, fd->f_data->url);
-	}
 
 	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_BACK, NULL,
 		 end_load, 0);
@@ -179,28 +184,11 @@ go_unback(struct session *ses)
 	unsigned char *url;
 	struct f_data_c *fd = current_frame(ses);
 
-	if (go_away(ses) < 1)
+	if (go_away(ses, 1) < 1)
 		return;
-
-	if (list_empty(ses->unhistory)) return;
-
-	abort_loading(ses, 0);
 
 	url = stracpy(((struct location *)ses->unhistory.next)->vs.url);
 	if (!url) return;
-
-	if (ses->ref_url) {
-		mem_free(ses->ref_url);
-		ses->ref_url = NULL;
-	}
-
-	if (fd && fd->f_data && fd->f_data->url) {
-		int l = 0;
-
-		ses->ref_url = init_str();
-		if (ses->ref_url)
-			add_to_str(&ses->ref_url, &l, fd->f_data->url);
-	}
 
 	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_UNBACK, NULL,
 		 end_load, 1);

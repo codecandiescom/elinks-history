@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.307 2004/06/29 22:45:07 pasky Exp $ */
+/* $Id: tables.c,v 1.308 2004/06/29 22:45:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -491,7 +491,10 @@ again:
 
 			wq = 1;
 			if (d) goto again;
-		} else if (!wq) om++;
+
+		} else if (!wq) {
+			om++;
+		}
 	}
 
 end2:

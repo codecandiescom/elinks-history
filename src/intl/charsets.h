@@ -1,12 +1,15 @@
-/* $Id: charsets.h,v 1.4 2002/08/18 13:04:47 pasky Exp $ */
+/* $Id: charsets.h,v 1.5 2002/08/27 03:00:08 pasky Exp $ */
 
 #ifndef EL__CHARSETS_H
 #define EL__CHARSETS_H
 
-/* UCS/Unicode replacement character */
-#define UCS_NO_CHAR 0xFFFD
-
 #include "intl/codepage.h"
+#include "util/types.h"
+
+typedef uint32_t unicode_val;
+
+/* UCS/Unicode replacement character */
+#define UCS_NO_CHAR ((unicode_val) 0xFFFD)
 
 struct conv_table {
 	int t;
@@ -25,6 +28,6 @@ unsigned char *get_cp_mime_name(int);
 int is_cp_special(int);
 void free_conv_table();
 unsigned char *cp2utf_8(int, int);
-unsigned char *u2cp(unsigned int, int);
+unsigned char *u2cp(unicode_val, int);
 
 #endif

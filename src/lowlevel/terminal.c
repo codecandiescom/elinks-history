@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.22 2002/08/09 12:55:17 pasky Exp $ */
+/* $Id: terminal.c,v 1.23 2002/08/27 03:00:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -449,7 +449,7 @@ term_send_event(struct terminal *term, struct event *ev)
 							  ev, 0);
 }
 
-static inline void term_send_ucs(struct terminal *term, struct event *ev, int u)
+static inline void term_send_ucs(struct terminal *term, struct event *ev, unicode_val u)
 {
 	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
 	unsigned char *recoded;
@@ -604,7 +604,7 @@ send_redraw:
 					term->utf_8.ucs <<= 6;
 					term->utf_8.ucs |= ev->x & 0x3F;
 					if (! --term->utf_8.len) {
-						int u = term->utf_8.ucs;
+						unicode_val u = term->utf_8.ucs;
 
 						if (u < term->utf_8.min) u = UCS_NO_CHAR;
 						term_send_ucs(term, ev, u);

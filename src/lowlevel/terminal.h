@@ -1,9 +1,10 @@
-/* $Id: terminal.h,v 1.15 2002/08/09 12:55:17 pasky Exp $ */
+/* $Id: terminal.h,v 1.16 2002/08/27 03:00:08 pasky Exp $ */
 
-#ifndef EL__TERMINAL_H
-#define EL__TERMINAL_H
+#ifndef EL__LOWLEVEL_TERMINAL_H
+#define EL__LOWLEVEL_TERMINAL_H
 
 #include "config/options.h"
+#include "intl/charsets.h"
 #include "util/lists.h"
 
 typedef unsigned short chr;
@@ -71,7 +72,7 @@ struct terminal {
 	struct list_head windows;
 	unsigned char *title;
 	struct {
-		int ucs;
+		unicode_val ucs;
 		int len;
 		int min;
 	} utf_8;

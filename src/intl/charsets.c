@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.13 2002/08/27 00:43:34 pasky Exp $ */
+/* $Id: charsets.c,v 1.14 2002/08/27 03:00:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,12 +15,13 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "util/types.h"
 
 #define table table_dirty_workaround_for_name_clash_with_libraries_on_macos
 
 struct table_entry {
 	unsigned char c;
-	unsigned int u;
+	unicode_val u;
 };
 
 struct codepage_desc {
@@ -115,7 +116,7 @@ new_translation_table(struct conv_table *p)
 	}										\
 }											\
 
-unsigned int strange_chars[32] = {
+unicode_val strange_chars[32] = {
 0x20ac, 0x0000, 0x002a, 0x0000, 0x201e, 0x2026, 0x2020, 0x2021,
 0x005e, 0x2030, 0x0160, 0x003c, 0x0152, 0x0000, 0x0000, 0x0000,
 0x0000, 0x0060, 0x0027, 0x0022, 0x0022, 0x002a, 0x2013, 0x2014,
@@ -123,7 +124,7 @@ unsigned int strange_chars[32] = {
 };
 
 unsigned char *
-u2cp(unsigned int u, int to)
+u2cp(unicode_val u, int to)
 {
 	int j, s;
 
@@ -150,7 +151,7 @@ u2cp(unsigned int u, int to)
 unsigned char utf_buffer[7];
 
 unsigned char *
-encode_utf_8(unsigned int u)
+encode_utf_8(unicode_val u)
 {
 	memset(utf_buffer, 0, 7);
 
@@ -204,7 +205,7 @@ cp2utf_8(int from, int c)
 }
 
 void
-add_utf_8(struct conv_table *ct, unsigned int u, unsigned char *str)
+add_utf_8(struct conv_table *ct, unicode_val u, unsigned char *str)
 {
 	unsigned char *p = encode_utf_8(u);
 
@@ -270,7 +271,7 @@ get_translation_table_to_utf_8(int from)
 
 	for (i = 128; i < 256; i++) utf_table[i].u.str = NULL;
 	for (i = 0; codepages[from].table[i].c; i++) {
-		int u = codepages[from].table[i].u;
+		unicode_val u = codepages[from].table[i].u;
 
 		if (!utf_table[codepages[from].table[i].c].u.str)
 			utf_table[codepages[from].table[i].c].u.str =
@@ -364,7 +365,7 @@ xxstrcmp(unsigned char *s1, unsigned char *s2, int l2)
 unsigned char *
 get_entity_string(unsigned char *st, int l, int encoding)
 {
-	unsigned int n;
+	unicode_val n;
 
 	if (l <= 0) return NULL;
 	if (st[0] == '#') {

@@ -1,3 +1,375 @@
+Wed Jan 28 22:03:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/main.c:
+
+	Fixed memory leak in case of wrong option.  
+
+Wed Jan 28 20:06:50 2004  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Translation update.  
+
+Wed Jan 28 19:38:30 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Experimental support for the 'unset' command. It is useful in order
+	to be able to get rid of the default external protocol handlers.  
+
+Wed Jan 28 18:41:59 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/textarea.c:
+
+	Fixed a hole in the anonymous mode - user could launch the external
+	editor and obviously then do whatever he wants there. Discovered by
+	Solar Designer <solar@openwall.com>.  
+
+Wed Jan 28 13:35:07 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
+Wed Jan 28 10:39:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	A happy hacking verion of typeahead for text searches. Type '#/' and
+	pray that you will never have to typeahead to a link text starting
+	with /. :P 
+
+Wed Jan 28 09:18:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, sched/action.c:
+
+	Add a toggle-css action so it is easier to see what it actually adds
+	to the rendering. By default bound to '_' but maybe it shouldn't
+	have one.  
+
+Wed Jan 28 08:23:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Fix backspacing when typing ahead.  
+
+Wed Jan 28 08:13:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, bfu/inpfield.h, dialogs/exmode.c,
+	viewer/text/search.c:
+
+	Use enum for return values of input line handlers.  
+
+Wed Jan 28 07:57:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	A few comments. Thanks for cheering Quazgaa ;) 
+
+Wed Jan 28 07:53:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, viewer/text/search.c:
+
+	Move error function calling to typeahead input event handler.  
+
+Wed Jan 28 07:39:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Check if there is typeahead text in the input handler.  
+
+Wed Jan 28 07:35:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	When backspacing we just stay with the current link so let.s not
+	waste any effort on it.  
+
+Wed Jan 28 07:32:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Minor cleanup.  
+
+Wed Jan 28 07:30:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Remove some more events that kbd_field() takes care of.  
+
+Wed Jan 28 07:28:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, dialogs/exmode.c, viewer/text/search.c:
+
+	Handle ACT_EDIT_CANCEL at top level.  
+
+Wed Jan 28 07:24:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Bail out earlier if there is no chars to search for.  
+
+Wed Jan 28 07:18:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, dialogs/exmode.c:
+
+	Handle basic input line events. We have to do them before calling
+	kbd_field().  
+
+Wed Jan 28 06:43:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/status.c, sched/session.h, viewer/text/search.c,
+	viewer/text/search.h, viewer/text/view.c:
+
+	Use input line interface for link typeahead. Removing all the cheap
+	hacks and nicely encapsulates typeahead functions. Basicly the code
+	from frame_ev() is now the input line handler that just grabs
+	current doc_view and uses do_typeahead() as backend. All buffer
+	management was purged from do_typeahead() but it should still be
+	cleaned up and fine tuned.  
+
+Wed Jan 28 06:34:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inpfield.c:
+
+	Fix logic.  
+
+Wed Jan 28 06:16:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Revert typeahead part of last patch.  
+
+Wed Jan 28 06:14:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, bfu/inpfield.h, dialogs/exmode.c,
+	viewer/text/search.c:
+
+	Make the input line dialog inteface handle the low level event
+	stuff.  
+
+Wed Jan 28 05:44:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, bfu/inpfield.h, dialogs/exmode.c:
+
+	Move generic input line stuff to bfu/.  
+
+Wed Jan 28 05:40:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/exmode.c:
+
+	Also pass the event handler to the input line initializer.  
+
+Wed Jan 28 05:30:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/exmode.c:
+
+	A few exmode -> input_line renames.  
+
+Wed Jan 28 05:22:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/exmode.c:
+
+	Move generic input line stuff to separate function which
+	exmode_start() wraps.  
+
+Wed Jan 28 05:18:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/exmode.c:
+
+	Get rid of the exmode_data struct and just allocate like all other
+	dialogs.  
+
+Wed Jan 28 05:07:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/exmode.c:
+
+	Make exmode_exec() take only session and command buffer.  
+
+Wed Jan 28 05:05:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/exmode.c:
+
+	Remove unused exmode data member.  
+
+Wed Jan 28 02:56:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	add_document_node() now takes renderer as arg. Add compress as
+	renderer member.  
+
+Wed Jan 28 02:39:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Describe other plain_renderer members.  
+
+Wed Jan 28 02:37:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Maintain current line number in struct plain_renderer.  
+
+Wed Jan 28 02:32:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Make the template char part of struct plain_renderer.  
+
+Wed Jan 28 02:29:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Pass renderer struct on to add_document_line().  
+
+Wed Jan 28 02:25:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Bail out if there is no fragment data .. add_document_lines()
+	asserts(!length).  
+
+Wed Jan 28 02:18:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Add max_width member to struct plain_renderer used for doc_width
+	calculation.  
+
+Wed Jan 28 02:13:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Minor cleanups.  
+
+Wed Jan 28 02:09:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Introduce a plain renderer struct.  
+
+Wed Jan 28 01:34:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/scanner.c:
+
+	Move init_scanner_info() to initializers and inline it.  
+
+Wed Jan 28 01:32:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/css/scanner.c, util/scanner.c, util/scanner.h:
+
+	map_scanner_string(): Now just takes the scanner as arg.  
+
+Wed Jan 28 01:26:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/css/apply.c, document/css/parser.c,
+	document/css/scanner.c, document/css/scanner.h, util/scanner.c,
+	util/scanner.h:
+
+	init_css_scanner() -> init_scanner() .. and move to util/.  
+
+Wed Jan 28 01:23:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/css/apply.c, document/css/parser.c,
+	document/css/scanner.c, document/css/scanner.h, util/scanner.h:
+
+	Add initialized flag to struct scanner_info. Pass scanner_info to
+	scanner initializer.  
+
+Wed Jan 28 01:16:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/css/scanner.c, util/scanner.h:
+
+	Make the scanner struct reference the scanner_info struct and move
+	the scan() function to struct scanner_info.  
+
+Wed Jan 28 01:12:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/scanner.h:
+
+	Move scanner info stuff up before struct scanner.  
+
+Wed Jan 28 00:57:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/css/scanner.c, document/css/scanner.h,
+	util/Makefile.am, util/scanner.c, util/scanner.h:
+
+	Give the generic scanner utilities a temporary home in util/.  
+
+Wed Jan 28 00:42:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: elinks.h, osdep/Makefile.am, osdep/stub.c,
+	util/Makefile.am, util/stub.c, util/stub.h:
+
+	util/stub.* -> osdep/stub.* 
+
+Wed Jan 28 00:38:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, protocol/http/Makefile.am,
+	protocol/http/blacklist.c, protocol/http/http.h, util/Makefile.am,
+	util/blacklist.c, util/blacklist.h:
+
+	util/blacklist.* -> protocol/http/blacklist.* 
+
+Wed Jan 28 00:35:22 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: osdep/stub.c, util/stub.c:
+
+	Blank lines.  
+
+Wed Jan 28 00:27:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Groups scanner c file in a generic part and a CSS part. Moving
+	macros to header.  
+
+Wed Jan 28 00:20:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	Groups scanner head in a generic part and a CSS part.  
+
+Wed Jan 28 00:15:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Make the language specific token scanner part of the scanner struct
+	so it is well hidden.  
+
+Wed Jan 28 00:11:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: parser.c, scanner.c, scanner.h, value.c:
+
+	css_token functions -> scanner_token.  
+
+Wed Jan 28 00:04:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: apply.c, parser.c, parser.h, property.h,
+	scanner.c, scanner.h, value.c, value.h:
+
+	css_scanner -> scanner.  
+
+Wed Jan 28 00:00:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: parser.c, scanner.c, scanner.h, value.c:
+
+	struct css_token -> struct scanner_token.  
+
+Tue Jan 27 23:54:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	CSS_SCANNER_* -> SCANNER_*.  
+
+Tue Jan 27 23:51:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Make precedence checking more generalized. It is now a member of the
+	token struct and should be passed to the skip function.  
+
 Tue Jan 27 23:08:28 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/css/parser.c:

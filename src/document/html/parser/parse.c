@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.13 2004/04/24 11:27:11 pasky Exp $ */
+/* $Id: parse.c,v 1.14 2004/04/24 11:29:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -724,6 +724,8 @@ start_element(struct element_info *ei,
               unsigned char *eof, unsigned char *attr, void *f)
 {
 	unsigned char *a;
+	struct par_attrib pa;
+	int ali;
 
 	if (was_xmp) {
 		put_chrs("<", 1, put_chars_f, f);
@@ -742,81 +744,80 @@ start_element(struct element_info *ei,
 		kill_html_stack_item(&html_top);
 	}
 
-	if (!html_top.invisible) {
-		int ali = (par_format.align == AL_NONE);
-		struct par_attrib pa = par_format;
-
-		if (ei->func == html_table && global_doc_opts->tables
-		    && table_level < HTML_MAX_TABLE_LEVEL) {
-			format_table(attr, html, eof, &html, f);
-			ln_break(2, line_break_f, f);
-			return;
-		}
-		if (ei->func == html_select) {
-			if (!do_html_select(attr, html, eof, &html, f))
-				return;
-		}
-		if (ei->func == html_textarea) {
-			do_html_textarea(attr, html, eof, &html, f);
-			return;
-		}
-		if (ei->func == html_style && global_doc_opts->css_enable) {
-			css_parse_stylesheet(&css_styles, html, eof);
-		}
-
-		if (ei->nopair == 2 || ei->nopair == 3) {
-			struct html_element *e;
-
-			if (ei->nopair == 2) {
-				foreach (e, html_stack) {
-					if (e->type < ELEMENT_KILLABLE) break;
-					if (e->linebreak || !ei->linebreak) break;
-				}
-			} else foreach (e, html_stack) {
-				if (e->linebreak && !ei->linebreak) break;
-				if (e->type < ELEMENT_KILLABLE) break;
-				if (!strlcasecmp(e->name, e->namelen, name, namelen)) break;
-			}
-			if (!strlcasecmp(e->name, e->namelen, name, namelen)) {
-				while (e->prev != (void *) &html_stack)
-					kill_html_stack_item(e->prev);
-
-				if (e->type > ELEMENT_IMMORTAL)
-					kill_html_stack_item(e);
-			}
-		}
-
-		if (ei->nopair != 1) {
-			html_stack_dup(ELEMENT_KILLABLE);
-			html_top.name = name;
-			html_top.namelen = namelen;
-			html_top.options = attr;
-			html_top.linebreak = ei->linebreak;
-		}
-
-		if (html_top.options && global_doc_opts->css_enable) {
-			/* XXX: We should apply CSS otherwise as well,
-			 * but that'll need some deeper changes in
-			 * order to have options filled etc. Probably
-			 * just calling css_apply() from more places,
-			 * since we usually have nopair set when we
-			 * either (1) rescan on your own from somewhere
-			 * else (2) html_stack_dup() in our own way.
-			 * --pasky */
-			/* Call it now to gain some of the stuff which
-			 * might affect formatting of some elements. */
-			css_apply(&html_top, &css_styles);
-		}
-		if (ei->func) ei->func(attr);
-		if (html_top.options && global_doc_opts->css_enable) {
-			/* Call it now to override default colors of
-			 * the elements. */
-			css_apply(&html_top, &css_styles);
-		}
-
-		if (ei->func != html_br) was_br = 0;
-		if (ali) par_format = pa;
+	if (html_top.invisible) {
+		return;
 	}
+
+	ali = (par_format.align == AL_NONE);
+	pa = par_format;
+
+	if (ei->func == html_table && global_doc_opts->tables
+	    && table_level < HTML_MAX_TABLE_LEVEL) {
+		format_table(attr, html, eof, &html, f);
+		ln_break(2, line_break_f, f);
+		return;
+	}
+	if (ei->func == html_select) {
+		if (!do_html_select(attr, html, eof, &html, f))
+			return;
+	}
+	if (ei->func == html_textarea) {
+		do_html_textarea(attr, html, eof, &html, f);
+		return;
+	}
+	if (ei->func == html_style && global_doc_opts->css_enable) {
+		css_parse_stylesheet(&css_styles, html, eof);
+	}
+
+	if (ei->nopair == 2 || ei->nopair == 3) {
+		struct html_element *e;
+
+		if (ei->nopair == 2) {
+			foreach (e, html_stack) {
+				if (e->type < ELEMENT_KILLABLE) break;
+				if (e->linebreak || !ei->linebreak) break;
+			}
+		} else foreach (e, html_stack) {
+			if (e->linebreak && !ei->linebreak) break;
+			if (e->type < ELEMENT_KILLABLE) break;
+			if (!strlcasecmp(e->name, e->namelen, name, namelen)) break;
+		}
+		if (!strlcasecmp(e->name, e->namelen, name, namelen)) {
+			while (e->prev != (void *) &html_stack)
+				kill_html_stack_item(e->prev);
+
+			if (e->type > ELEMENT_IMMORTAL)
+				kill_html_stack_item(e);
+		}
+	}
+
+	if (ei->nopair != 1) {
+		html_stack_dup(ELEMENT_KILLABLE);
+		html_top.name = name;
+		html_top.namelen = namelen;
+		html_top.options = attr;
+		html_top.linebreak = ei->linebreak;
+	}
+
+	if (html_top.options && global_doc_opts->css_enable) {
+		/* XXX: We should apply CSS otherwise as well, but that'll need
+		 * some deeper changes in order to have options filled etc.
+		 * Probably just calling css_apply() from more places, since we
+		 * usually have nopair set when we either (1) rescan on your
+		 * own from somewhere else (2) html_stack_dup() in our own way.
+		 * --pasky */
+		/* Call it now to gain some of the stuff which might affect
+		 * formatting of some elements. */
+		css_apply(&html_top, &css_styles);
+	}
+	if (ei->func) ei->func(attr);
+	if (html_top.options && global_doc_opts->css_enable) {
+		/* Call it now to override default colors of the elements. */
+		css_apply(&html_top, &css_styles);
+	}
+
+	if (ei->func != html_br) was_br = 0;
+	if (ali) par_format = pa;
 }
 
 static void

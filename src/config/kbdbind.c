@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.4 2002/03/27 23:49:24 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.5 2002/04/01 20:28:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,6 +186,7 @@ static int parse_act(unsigned char *s)
 		"goto-url-current",
 		"goto-url-current-link",
 		"header-info",
+		"history-manager",
 		"home",
 		"kill-to-bol",
 		"kill-to-eol",
@@ -361,6 +362,8 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_ADD_BOOKMARK, 'A' },
 	{ ACT_BOOKMARK_MANAGER, 's' },
 	{ ACT_BOOKMARK_MANAGER, 'S' },
+	{ ACT_HISTORY_MANAGER, 'h' },
+	{ ACT_HISTORY_MANAGER, 'H' },
 	{ ACT_COOKIES_LOAD, 'K', KBD_CTRL },
 	{ ACT_QUIT, 'q' },
 	{ ACT_REALLYQUIT, 'Q' },

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.20 2002/03/30 21:23:48 pasky Exp $ */
+/* $Id: view.c,v 1.21 2002/04/01 20:28:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,7 @@
 #include <cookies/cookies.h>
 #include <config/default.h>
 #include <config/kbdbind.h>
+#include <dialogs/globhist.h>
 #include <document/cache.h>
 #include <document/download.h>
 #include <document/dump.h>
@@ -2426,6 +2427,9 @@ void send_event(struct session *ses, struct event *ev)
 				goto x;
 			case ACT_BOOKMARK_MANAGER:
 				if (!anonymous) menu_bookmark_manager(ses->term, NULL, ses);
+				goto x;
+			case ACT_HISTORY_MANAGER:
+				if (!anonymous) menu_history_manager(ses->term, NULL, ses);
 				goto x;
 			case ACT_COOKIES_LOAD:
 				if (!anonymous && cookies_save) load_cookies();

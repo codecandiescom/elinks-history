@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.1 2002/03/17 11:30:06 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.2 2002/04/01 20:28:54 pasky Exp $ */
 
 #ifndef EL__KBDBIND_H
 #define EL__KBDBIND_H
@@ -37,6 +37,7 @@ enum keyact {
 	ACT_GOTO_URL_CURRENT,
 	ACT_GOTO_URL_CURRENT_LINK,
 	ACT_HEADER_INFO,
+	ACT_HISTORY_MANAGER,
 	ACT_HOME,
 	ACT_KILL_TO_BOL,
 	ACT_KILL_TO_EOL,

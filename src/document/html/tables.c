@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.109 2003/10/30 17:38:10 zas Exp $ */
+/* $Id: tables.c,v 1.110 2003/10/30 17:43:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@
 #define INIT_Y		2
 
 #define realloc_bad_html(bad_html, size) \
-	mem_align_alloc(bad_html, size, (size) + 1, sizeof(struct s_e), 0xFF)
+	mem_align_alloc(bad_html, size, (size) + 1, sizeof(struct html_start_end), 0xFF)
 
 #define CELL(t, x, y) (&(t)->cells[(y) * (t)->rx + (x)])
 
@@ -114,10 +114,9 @@ struct table {
 	int link_num;
 };
 
-struct s_e {
-	unsigned char *s, *e;
+struct html_start_end {
+	unsigned char *start, *end;
 };
-
 
 
 /* Global variables */
@@ -407,7 +406,7 @@ skip_table(unsigned char *html, unsigned char *eof)
 static struct table *
 parse_table(unsigned char *html, unsigned char *eof,
 	    unsigned char **end, color_t bgcolor,
-	    int sh, struct s_e **bad_html, int *bhp)
+	    int sh, struct html_start_end **bad_html, int *bhp)
 {
 	struct table *t;
 	struct table_cell *cell;
@@ -445,7 +444,7 @@ see:
 			goto qwe;
 		}
 		lbhp = html;
-		(*bad_html)[(*bhp)++].s = html;
+		(*bad_html)[(*bhp)++].start = html;
 	}
 
 qwe:
@@ -453,7 +452,7 @@ qwe:
 
 	if (html >= eof) {
 		if (p) CELL(t, x, y)->end = html;
-		if (lbhp) (*bad_html)[*bhp-1].e = html;
+		if (lbhp) (*bad_html)[*bhp-1].end = html;
 		goto scan_done;
 	}
 
@@ -475,14 +474,14 @@ qwe:
 	if (t_namelen == 6 && !strncasecmp(t_name, "/TABLE", 6)) {
 		if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);
 		if (p) CELL(t, x, y)->end = html;
-		if (lbhp) (*bad_html)[*bhp-1].e = html;
+		if (lbhp) (*bad_html)[*bhp-1].end = html;
 		goto scan_done;
 	}
 
 	if (t_namelen == 8 && !strncasecmp(t_name, "COLGROUP", 8)) {
 		if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);
 		if (lbhp) {
-			(*bad_html)[*bhp-1].e = html;
+			(*bad_html)[*bhp-1].end = html;
 			lbhp = NULL;
 		}
 		c_al = AL_TR;
@@ -499,7 +498,7 @@ qwe:
 	if (t_namelen == 9 && !strncasecmp(t_name, "/COLGROUP", 9)) {
 		if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);
 		if (lbhp) {
-			(*bad_html)[*bhp-1].e = html;
+			(*bad_html)[*bhp-1].end = html;
 			lbhp = NULL;
 		}
 		c_span = 0;
@@ -513,7 +512,7 @@ qwe:
 		int sp, width, al, val;
 
 		if (lbhp) {
-			(*bad_html)[*bhp-1].e = html;
+			(*bad_html)[*bhp-1].end = html;
 			lbhp = NULL;
 		}
 
@@ -546,7 +545,7 @@ qwe:
 				p = 0;
 			}
 			if (lbhp) {
-				(*bad_html)[*bhp-1].e = html;
+				(*bad_html)[*bhp-1].end = html;
 				lbhp = NULL;
 			}
 		}
@@ -564,7 +563,7 @@ qwe:
 			p = 0;
 		}
 		if (lbhp) {
-			(*bad_html)[*bhp-1].e = html;
+			(*bad_html)[*bhp-1].end = html;
 			lbhp = NULL;
 		}
 
@@ -588,7 +587,7 @@ qwe:
 		if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);
 
 		if (lbhp) {
-			(*bad_html)[*bhp-1].e = html;
+			(*bad_html)[*bhp-1].end = html;
 			lbhp = NULL;
 		}
 
@@ -604,7 +603,7 @@ qwe:
 	if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);
 
 	if (lbhp) {
-		(*bad_html)[*bhp-1].e = html;
+		(*bad_html)[*bhp-1].end = html;
 		lbhp = NULL;
 	}
 	if (p) {
@@ -1639,7 +1638,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 {
 	struct part *p = f;
 	struct table *t;
-	struct s_e *bad_html;
+	struct html_start_end *bad_html;
 	struct node *node, *new_node;
 	unsigned char *al;
 	color_t bgcolor = par_format.bgcolor;
@@ -1744,12 +1743,12 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	}
 
 	for (i = 0; i < bad_html_n; i++) {
-		while (bad_html[i].s < bad_html[i].e && WHITECHAR(*bad_html[i].s))
-			bad_html[i].s++;
-		while (bad_html[i].s < bad_html[i].e && WHITECHAR(bad_html[i].e[-1]))
-			bad_html[i].e--;
-		if (bad_html[i].s < bad_html[i].e)
-			parse_html(bad_html[i].s, bad_html[i].e, p, NULL);
+		while (bad_html[i].start < bad_html[i].end && WHITECHAR(*bad_html[i].start))
+			bad_html[i].start++;
+		while (bad_html[i].start < bad_html[i].end && WHITECHAR(bad_html[i].end[-1]))
+			bad_html[i].end--;
+		if (bad_html[i].start < bad_html[i].end)
+			parse_html(bad_html[i].start, bad_html[i].end, p, NULL);
 	}
 
 	if (bad_html) mem_free(bad_html);

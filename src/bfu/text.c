@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.97 2004/06/14 00:53:47 jonas Exp $ */
+/* $Id: text.c,v 1.98 2004/06/20 15:57:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -326,30 +326,28 @@ kbd_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 {
 	int current = widget_data->info.text.current;
 
-	switch (kbd_action(KM_MAIN, ev, NULL)) {
-		case ACT_MAIN_UP:
-		case ACT_MAIN_SCROLL_UP:
+	switch (kbd_action(KM_MENU, ev, NULL)) {
+		case ACT_MENU_UP:
 			current--;
 			break;
 
-		case ACT_MAIN_DOWN:
-		case ACT_MAIN_SCROLL_DOWN:
+		case ACT_MENU_DOWN:
 			current++;
 			break;
 
-		case ACT_MAIN_PAGE_UP:
+		case ACT_MENU_PAGE_UP:
 			current -= widget_data->box.height;
 			break;
 
-		case ACT_MAIN_PAGE_DOWN:
+		case ACT_MENU_PAGE_DOWN:
 			current += widget_data->box.height;
 			break;
 
-		case ACT_MAIN_HOME:
+		case ACT_MENU_HOME:
 			current = 0;
 			break;
 
-		case ACT_MAIN_END:
+		case ACT_MENU_END:
 			current = widget_data->info.text.lines;
 			break;
 

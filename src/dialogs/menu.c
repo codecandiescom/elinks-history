@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.17 2002/04/27 13:15:52 pasky Exp $ */
+/* $Id: menu.c,v 1.18 2002/04/27 20:56:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -540,13 +540,13 @@ goto_url_with_hook(struct session *ses, unsigned char *url)
 void
 dialog_goto_url(struct session *ses, char *url)
 {
-	input_field(ses->term, NULL, TEXT(T_GOTO_URL), TEXT(T_ENTER_URL), TEXT(T_OK), TEXT(T_CANCEL), ses, &goto_url_history, MAX_INPUT_URL_LEN, url, 0, 0, NULL, (void (*)(void *, unsigned char *)) goto_url_with_hook, NULL);
+	input_field(ses->term, NULL, TEXT(T_GOTO_URL), TEXT(T_ENTER_URL), TEXT(T_OK), TEXT(T_CANCEL), ses, &goto_url_history, MAX_STR_LEN, url, 0, 0, NULL, (void (*)(void *, unsigned char *)) goto_url_with_hook, NULL);
 }
 
 void
 dialog_save_url(struct session *ses)
 {
-	input_field(ses->term, NULL, TEXT(T_SAVE_URL), TEXT(T_ENTER_URL), TEXT(T_OK), TEXT(T_CANCEL), ses, &goto_url_history, MAX_INPUT_URL_LEN, "", 0, 0, NULL, (void (*)(void *, unsigned char *)) save_url, NULL);
+	input_field(ses->term, NULL, TEXT(T_SAVE_URL), TEXT(T_ENTER_URL), TEXT(T_OK), TEXT(T_CANCEL), ses, &goto_url_history, MAX_STR_LEN, "", 0, 0, NULL, (void (*)(void *, unsigned char *)) save_url, NULL);
 }
 
 struct input_history file_history = { 0, {&file_history.items, &file_history.items} };
@@ -562,7 +562,7 @@ query_file(struct session *ses, unsigned char *url, void (*std)(struct session *
 	add_to_str(&def, &dfl, download_dir);
 	if (*def && !dir_sep(def[strlen(def) - 1])) add_chr_to_str(&def, &dfl, '/');
 	add_bytes_to_str(&def, &dfl, file, l);
-	input_field(ses->term, NULL, TEXT(T_DOWNLOAD), TEXT(T_SAVE_TO_FILE), TEXT(T_OK), TEXT(T_CANCEL), ses, &file_history, MAX_INPUT_URL_LEN, def, 0, 0, NULL, (void (*)(void *, unsigned char *))std, (void (*)(void *))cancel);
+	input_field(ses->term, NULL, TEXT(T_DOWNLOAD), TEXT(T_SAVE_TO_FILE), TEXT(T_OK), TEXT(T_CANCEL), ses, &file_history, MAX_STR_LEN, def, 0, 0, NULL, (void (*)(void *, unsigned char *))std, (void (*)(void *))cancel);
 	mem_free(def);
 }
 
@@ -571,13 +571,13 @@ struct input_history search_history = { 0, {&search_history.items, &search_histo
 void
 search_back_dlg(struct session *ses, struct f_data_c *f, int a)
 {
-	input_field(ses->term, NULL, TEXT(T_SEARCH_BACK), TEXT(T_SEARCH_FOR_TEXT), TEXT(T_OK), TEXT(T_CANCEL), ses, &search_history, MAX_INPUT_URL_LEN, "", 0, 0, NULL, (void (*)(void *, unsigned char *)) search_for_back, NULL);
+	input_field(ses->term, NULL, TEXT(T_SEARCH_BACK), TEXT(T_SEARCH_FOR_TEXT), TEXT(T_OK), TEXT(T_CANCEL), ses, &search_history, MAX_STR_LEN, "", 0, 0, NULL, (void (*)(void *, unsigned char *)) search_for_back, NULL);
 }
 
 void
 search_dlg(struct session *ses, struct f_data_c *f, int a)
 {
-	input_field(ses->term, NULL, TEXT(T_SEARCH), TEXT(T_SEARCH_FOR_TEXT), TEXT(T_OK), TEXT(T_CANCEL), ses, &search_history, MAX_INPUT_URL_LEN, "", 0, 0, NULL, (void (*)(void *, unsigned char *)) search_for, NULL);
+	input_field(ses->term, NULL, TEXT(T_SEARCH), TEXT(T_SEARCH_FOR_TEXT), TEXT(T_OK), TEXT(T_CANCEL), ses, &search_history, MAX_STR_LEN, "", 0, 0, NULL, (void (*)(void *, unsigned char *)) search_for, NULL);
 }
 
 #ifdef HAVE_LUA
@@ -587,7 +587,7 @@ struct input_history lua_console_history = { 0, {&lua_console_history.items, &lu
 void
 dialog_lua_console(struct session *ses)
 {
-	input_field(ses->term, NULL, TEXT(T_LUA_CONSOLE), TEXT(T_ENTER_EXPRESSION), TEXT(T_OK), TEXT(T_CANCEL), ses, &lua_console_history, MAX_INPUT_LUA_LEN, "", 0, 0, NULL, (void (*)(void *, unsigned char *)) lua_console, NULL);
+	input_field(ses->term, NULL, TEXT(T_LUA_CONSOLE), TEXT(T_ENTER_EXPRESSION), TEXT(T_OK), TEXT(T_CANCEL), ses, &lua_console_history, MAX_STR_LEN, "", 0, 0, NULL, (void (*)(void *, unsigned char *)) lua_console, NULL);
 }
 
 #endif

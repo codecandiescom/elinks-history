@@ -1,5 +1,5 @@
 /* Config file and commandline proccessing */
-/* $Id: conf.c,v 1.1 2002/04/27 13:15:51 pasky Exp $ */
+/* $Id: conf.c,v 1.2 2002/04/27 20:56:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -475,7 +475,7 @@ int load_url_history()
 {
 	FILE *fp;
 	unsigned char *history_file;
-	unsigned char url[MAX_INPUT_URL_LEN];
+	unsigned char url[MAX_STR_LEN];
 
 	if (anonymous) return 0;
 	/* Must have been called after init_home */
@@ -490,7 +490,7 @@ int load_url_history()
 		return 0;
 	}
 
-	while (fgets(url, MAX_INPUT_URL_LEN, fp)) {
+	while (fgets(url, MAX_STR_LEN, fp)) {
 		url[strlen(url) - 1] = 0;
 		add_to_input_history(&goto_url_history, url, 0);
 	}

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.121 2003/11/09 23:02:56 zas Exp $ */
+/* $Id: core.c,v 1.122 2003/11/09 23:54:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -346,39 +346,6 @@ dialog_run_lua(struct lua_dlg_data *data)
 	handle_standard_lua_returns("post dialog function");
 }
 
-static void
-dialog_layouter(struct dialog_data *dlg_data)
-{
-	struct terminal *term = dlg_data->win->term;
-	int w = 50; /* XXX: Hack alert */
-	int rw = w;
-	int y = -1;
-
-	dlg_format_field(NULL, &dlg_data->widgets_data[0], 0, &y, w, &rw, AL_LEFT);
-	y++;
-	dlg_format_field(NULL, &dlg_data->widgets_data[1], 0, &y, w, &rw, AL_LEFT);
-	y++;
-	dlg_format_field(NULL, &dlg_data->widgets_data[2], 0, &y, w, &rw, AL_LEFT);
-	y++;
-	dlg_format_buttons(NULL, dlg_data->widgets_data + 3, 2, 0, &y, w, &rw,
-			   AL_CENTER);
-	w = rw;
-	draw_dialog(dlg_data, w, y);
-
-	y = dlg_data->y + DIALOG_TB;
-	dlg_format_field(term, &dlg_data->widgets_data[0], dlg_data->x + DIALOG_LB, &y, w,
-			 NULL, AL_LEFT);
-	y++;
-	dlg_format_field(term, &dlg_data->widgets_data[1], dlg_data->x + DIALOG_LB, &y, w,
-			 NULL, AL_LEFT);
-	y++;
-	dlg_format_field(term, &dlg_data->widgets_data[2], dlg_data->x + DIALOG_LB, &y, w,
-			 NULL, AL_LEFT);
-	y++;
-	dlg_format_buttons(term, &dlg_data->widgets_data[3], 2, dlg_data->x + DIALOG_LB,
-			   &y, w, NULL, AL_CENTER);
-}
-
 static int
 l_edit_bookmark_dialog(LS)
 {
@@ -405,7 +372,7 @@ l_edit_bookmark_dialog(LS)
 	data->func_ref = lua_ref(S, 1);
 
 	dlg->title = _("Edit bookmark", term);
-	dlg->layouter = dialog_layouter;
+	dlg->layouter = generic_dialog_layouter;
 	dlg->refresh = (void (*)(void *))dialog_run_lua;
 	dlg->refresh_data = data;
 
@@ -455,43 +422,6 @@ xdialog_run_lua(struct lua_xdialog_data *data)
 	handle_standard_lua_returns("post xdialog function");
 }
 
-static void
-xdialog_layouter(struct dialog_data *dlg_data)
-{
-	struct terminal *term = dlg_data->win->term;
-	int w = 50; /* XXX: Hack alert */
-	int rw = w;
-	int y = -1;
-	int i;
-	int nfields = 0;
-
-	while (widget_is_textfield(&dlg_data->widgets_data[nfields]))
-		nfields++;
-
-	for (i = 0; i < nfields; i++) {
-		dlg_format_field(NULL, &dlg_data->widgets_data[i],
-				 0, &y, w, &rw, AL_LEFT);
-		y++;
-	}
-
-	dlg_format_buttons(NULL, dlg_data->widgets_data + nfields, 2,
-			   0, &y, w, &rw, AL_CENTER);
-
-	w = rw;
-	draw_dialog(dlg_data, w, y);
-
-	y = dlg_data->y + DIALOG_TB;
-	for (i = 0; i < nfields; i++) {
-		dlg_format_field(term, &dlg_data->widgets_data[i],
-				 dlg_data->x + DIALOG_LB, &y, w,
-				 NULL, AL_LEFT);
-		y++;
-	}
-	dlg_format_buttons(term, &dlg_data->widgets_data[nfields],
-			   2, dlg_data->x + DIALOG_LB, &y, w,
-			   NULL, AL_CENTER);
-}
-
 static int
 l_xdialog(LS)
 {
@@ -522,7 +452,7 @@ l_xdialog(LS)
 	data->func_ref = lua_ref(S, 1);
 
 	dlg->title = _("User dialog", term);
-	dlg->layouter = xdialog_layouter;
+	dlg->layouter = generic_dialog_layouter;
 	dlg->refresh = (void (*)(void *))xdialog_run_lua;
 	dlg->refresh_data = data;
 

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.32 2003/01/04 01:07:35 pasky Exp $
+## $Id: Makefile.am,v 1.33 2003/01/04 12:20:37 pasky Exp $
 
 SUBDIRS = Unicode contrib doc intl po src test
 
@@ -20,6 +20,8 @@ DISTCLEANFILES = acinclude.m4 $(srcdir)/acinclude.m4
 
 # The aclocal.m4 dependency genereated by automake is broken - it depends on
 # acinclude.m4 instead of $(srcdir)/acinclude.m4. We try to workaround it.
+# The workaround sometimes generates a circular dependency and make complains
+# then - you just have to survive that.
 
 acinclude.m4: $(srcdir)/acinclude.m4
 	@echo "dnl This is never used. Look at $(srcdir)/acinclude.m4." > acinclude.m4

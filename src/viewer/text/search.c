@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.107 2003/11/08 00:56:22 jonas Exp $ */
+/* $Id: search.c,v 1.108 2003/11/09 13:44:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -989,7 +989,7 @@ search_dialog_layouter(struct dialog_data *dlg_data)
 	int_lower_bound(&rw, dlg_data->dlg->widgets->datalen);
 	int_upper_bound(&w, rw);
 
-	draw_dialog(dlg_data, w, y, AL_CENTER);
+	draw_dialog(dlg_data, w, y);
 
 	y = dlg_data->y + DIALOG_TB;
 

@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.48 2003/11/07 18:45:39 jonas Exp $ */
+/* $Id: group.c,v 1.49 2003/11/09 13:44:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,7 +96,7 @@ group_layouter(struct dialog_data *dlg_data)
 
 	w = rw;
 
-	draw_dialog(dlg_data, w, y, AL_CENTER);
+	draw_dialog(dlg_data, w, y);
 
 	y = dlg_data->y + DIALOG_TB + 1;
 	dlg_format_group(term, dlg_data->widgets_data, n,

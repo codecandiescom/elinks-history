@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.81 2003/11/09 13:40:38 pasky Exp $ */
+/* $Id: dialog.c,v 1.82 2003/11/09 13:44:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -423,7 +423,7 @@ generic_dialog_layouter(struct dialog_data *dlg_data)
 	/* Update the width to respond to the required minimum width */
 	if (dlg_data->dlg->align != AL_NONE) w = rw;
 
-	draw_dialog(dlg_data, w, y, AL_CENTER);
+	draw_dialog(dlg_data, w, y);
 
 	y = dlg_data->y + DIALOG_TB;
 	x = dlg_data->x + DIALOG_LB;
@@ -434,18 +434,15 @@ generic_dialog_layouter(struct dialog_data *dlg_data)
 
 
 void
-draw_dialog(struct dialog_data *dlg_data, int width, int height,
-	    enum format_align align)
+draw_dialog(struct dialog_data *dlg_data, int width, int height)
 {
 	struct terminal *term = dlg_data->win->term;
 
 	dlg_data->width = int_min(term->width, width + 2 * DIALOG_LB);
 	dlg_data->height = int_min(term->height, height + 2 * DIALOG_TB);
 
-	if (align == AL_CENTER) {
-		dlg_data->x = (term->width - int_min(term->width, dlg_data->width)) / 2;
-		dlg_data->y = (term->height - int_min(term->height, dlg_data->height)) / 2;
-	}
+	dlg_data->x = (term->width - int_min(term->width, dlg_data->width)) / 2;
+	dlg_data->y = (term->height - int_min(term->height, dlg_data->height)) / 2;
 
 	draw_area(term, dlg_data->x, dlg_data->y,
 		  dlg_data->width, dlg_data->height, ' ', 0,

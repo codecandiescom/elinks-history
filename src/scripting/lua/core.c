@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.118 2003/11/07 23:59:02 jonas Exp $ */
+/* $Id: core.c,v 1.119 2003/11/09 13:44:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -366,7 +366,7 @@ dialog_layouter(struct dialog_data *dlg_data)
 	dlg_format_buttons(NULL, dlg_data->widgets_data + 3, 2, 0, &y, w, &rw,
 			   AL_CENTER);
 	w = rw;
-	draw_dialog(dlg_data, w, y, AL_CENTER);
+	draw_dialog(dlg_data, w, y);
 
 	y = dlg_data->y + DIALOG_TB;
 	dlg_format_field(term, &dlg_data->widgets_data[0], dlg_data->x + DIALOG_LB, &y, w,
@@ -481,7 +481,7 @@ xdialog_layouter(struct dialog_data *dlg_data)
 			   0, &y, w, &rw, AL_CENTER);
 
 	w = rw;
-	draw_dialog(dlg_data, w ,y, AL_CENTER);
+	draw_dialog(dlg_data, w ,y);
 
 	y = dlg_data->y + DIALOG_TB;
 	for (i = 0; i < nfields; i++) {

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.97 2003/11/08 00:49:19 jonas Exp $ */
+/* $Id: inpfield.c,v 1.98 2003/11/09 13:44:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,7 +163,7 @@ input_field_layouter(struct dialog_data *dlg_data)
 	int_lower_bound(&rw, dlg_data->dlg->widgets->datalen);
 	int_upper_bound(&w, rw);
 
-	draw_dialog(dlg_data, w, y, AL_CENTER);
+	draw_dialog(dlg_data, w, y);
 
 	y = dlg_data->y + DIALOG_TB;
 

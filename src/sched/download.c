@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.144 2003/11/08 12:48:34 pasky Exp $ */
+/* $Id: download.c,v 1.145 2003/11/09 13:44:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -352,7 +352,7 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 	dlg_format_buttons(NULL, dlg_data->widgets_data, dlg_data->n, 0, &y, w,
 			   &rw, AL_CENTER);
 
-	draw_dialog(dlg_data, w, y, AL_CENTER);
+	draw_dialog(dlg_data, w, y);
 
 	w = rw;
 	if (url_len > w) {

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.145 2004/05/29 13:21:08 jonas Exp $ */
+/* $Id: cache.c,v 1.146 2004/05/29 13:26:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,17 +165,18 @@ get_validated_cache_entry(struct uri *uri, enum cache_mode cache_mode)
 	if (cache_mode > CACHE_MODE_NORMAL)
 		return NULL;
 
+	/* We only consider complete entries */
 	cached = find_in_cache(uri);
 	if (!cached || cached->incomplete)
 		return NULL;
 
-	/* Check if the entry should be deleted */
+	/* Check if the entry can be deleted */
 	if (is_object_used(cached))
 		return cached;
 
-	/* A bit of a gray zone. Removed cached redirects if we have to and if
-	 * the entry has the stricktest cache mode and we don't want the most
-	 * aggressive mode. Please enlighten me. --jonas */
+	/* A bit of a gray zone. Delete the entry if the it has the stricktest
+	 * cache mode and we don't want the most aggressive mode or we have to
+	 * remove the redirect. Please enlighten me. --jonas */
 	if ((cached->cache_mode == CACHE_MODE_NEVER && cache_mode != CACHE_MODE_ALWAYS)
 	    || (cached->redirect && !get_opt_int("document.cache.cache_redirects"))) {
 		delete_cache_entry(cached);

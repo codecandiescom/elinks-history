@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.352 2004/07/08 11:00:09 jonas Exp $ */
+/* $Id: tables.c,v 1.353 2004/07/08 11:09:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -801,8 +801,7 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 		expand_lines(table->part, x - 1, y, height);
 	}
 
-	state = init_html_parser_state(ELEMENT_DONT_KILL,
-				       par_format.align, 0, 0);
+	state = init_html_parser_state(ELEMENT_DONT_KILL, cell->align, 0, 0);
 
 	if (cell->is_header) format.attr |= AT_BOLD;
 

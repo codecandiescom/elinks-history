@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.243 2003/12/28 05:58:35 miciah Exp $ */
+/* $Id: menu.c,v 1.244 2003/12/30 19:58:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -349,7 +349,7 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 			    ACT_TAB_CLOSE_ALL_BUT_CURRENT,
 			    (menu_func) close_all_tabs_but_current, NULL, 0);
 #ifdef BOOKMARKS
-		add_to_menu(&menu, N_("~Bookmark all tabs"), "", ACT_ADD_BOOKMARK_TABS,
+		add_to_menu(&menu, N_("B~ookmark all tabs"), "", ACT_ADD_BOOKMARK_TABS,
 			    (menu_func) menu_bookmark_terminal_tabs, NULL, 0);
 #endif
 	}

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.54 2003/12/29 11:28:44 miciah Exp $ */
+/* $Id: renderer.c,v 1.55 2003/12/29 11:33:21 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,7 +175,7 @@ add_document_line(struct document *document, int lineno,
 			if (!len) continue;
 
 			if (check_link_word(document, start, len, x, lineno))
-				line_pos += len;
+				line_pos += len - 1;
 		}
 	}
 

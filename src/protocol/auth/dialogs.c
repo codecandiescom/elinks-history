@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.113 2004/11/15 02:20:44 jonas Exp $ */
+/* $Id: dialogs.c,v 1.114 2004/11/15 15:08:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,8 +45,12 @@ auth_ok(struct dialog *dlg)
 		struct location *loc = cur_loc(ses);
 		struct uri *uri = loc->vs.uri;
 
+		/* Make a 'fake' redirect to a URI without user/password so that
+		 * the user/password from the URI will not override what the
+		 * user just entered in the dialog. */
 		if ((uri->userlen && strlcmp(entry->user, -1, uri->user, uri->userlen))
 		    || (uri->password && strlcmp(entry->password, -1, uri->password, uri->passwordlen))) {
+
 			uri = get_composed_uri(uri, URI_HTTP_AUTH | URI_DATA | URI_POST);
 			if (uri) {
 				goto_uri_frame(ses, uri, NULL, CACHE_MODE_INCREMENT);

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.34 2004/01/21 04:44:29 jonas Exp $ */
+/* $Id: parser.c,v 1.35 2004/01/22 18:27:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,7 +127,7 @@ css_parse_atrule(struct css_stylesheet *css, struct css_scanner *scanner)
 }
 
 static void
-css_parse_selector(struct css_stylesheet *css, struct css_scanner *scanner)
+css_parse_ruleset(struct css_stylesheet *css, struct css_scanner *scanner)
 {
 	struct css_token *token = get_css_token(scanner);
 	struct css_selector *selector;
@@ -189,7 +189,7 @@ css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string)
 
 		if (token->type == CSS_TOKEN_IDENT) {
 			/* Handle more selectors like '*' ':<ident>' to start */
-			css_parse_selector(css, &scanner);
+			css_parse_ruleset(css, &scanner);
 
 		} else if (token->type == CSS_TOKEN_AT_KEYWORD) {
 			css_parse_atrule(css, &scanner);

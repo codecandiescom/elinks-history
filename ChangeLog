@@ -1,3 +1,96 @@
+Sun Jul 27 21:47:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Whitespace and formatting fixed.  
+
+Sun Jul 27 21:28:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: screen.c, terminal.h:
+
+	Get rid of screen_char padding.  
+
+Sun Jul 27 21:22:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: draw.c, screen.c, screen.h, terminal.h:
+
+	Introduce struct screen_char that is now used for
+	terminal->(last_)screen.  
+
+Sun Jul 27 20:20:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Fix issue where set_char() was called with @x = @y = -1 from
+	clear_link().  
+
+Sun Jul 27 19:59:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Fix issue where set_line() was called with negative @l from
+	draw_doc(). Triggered when scrolling from link navigation.  
+
+Sun Jul 27 19:39:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	Fix bug cause by @l being wider than t->x - x triggering assertion
+	in set_char() called from print_text().  
+
+Sun Jul 27 17:51:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Removed set_cursor assertion. I've removed setting of the blocked
+	cursor in the active frame it seems. Was that a feature? Anyway it's
+	much faster not to.  
+
+Sun Jul 27 17:47:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	Assertion that x == 0 removed. When drawing frame lines x can be
+	positive and < t->x.  
+
+Sun Jul 27 17:43:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/header.c:
+
+	Variables renaming, cleanup, assertification, and comments
+	concerning parse_http_header_param() which should be renamed since
+	current name is not representative of what it does, imho. Any idea ? 
+
+Sun Jul 27 17:23:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/inpfield.c,
+	bfu/listbox.c, bfu/menu.c, terminal/draw.c, terminal/draw.h,
+	viewer/text/link.c, viewer/text/view.c:
+
+	Make set_cursor() only take hint whether cursor can be blocked. It
+	will save us a get_opt* calls. Also only dirty the terminal when the
+	positions are new.  
+
+Sun Jul 27 15:49:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	A few formatting and whitespace fixes.  
+
+Sun Jul 27 15:24:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: draw.c, draw.h:
+
+	Outcommented set_line_color().  
+
+Sun Jul 27 15:19:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	Replaced a lot of test with assertions. I need to reason about this
+	code and there are some suspicious things I'd like to get rid off.
+	Please report failures to me.  
+
 Sat Jul 26 21:24:33 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

@@ -1,3 +1,208 @@
+Sat Sep 13 21:32:24 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/document.c:
+
+	Move some variable declarations closer to where the variables are
+	used.  
+
+Sat Sep 13 21:25:08 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/document.c:
+
+	loc_msg: Check the return value of ctime(). Use a constant instead
+	of calling strlen() on the string returned by ctime(). Add comments.
+	Bleh.  
+
+Sat Sep 13 06:55:55 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/hierbox.c:
+
+	One can now recursively collapse or expand a folder in a
+	hierarchical listbox using '-', '_', or '[' (collapse) or '+', '=',
+	or ']' (expand). This closes bug 37 (until pasky reverts the patch).  
+	
+	I used gotos because: 
+	 - similar code elsewhere uses gotos (of course there are TODOs; 
+	   in that code indicating a desire to eliminate those gotos...) 
+	 - they make the code more efficient, shorter, and thus--IMO--easier
+	 to read; 
+	- they bug pasky and Jonas.  
+	
+	Zas will love me, pasky will hate me, and Jonas will be ticked until
+	I remind him about ui.colors.color.tabs.loading.{text,background}.  
+
+Sat Sep 13 05:03:46 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Mangling pattern those JavaScript URLs on allmusic.com.  
+
+Sat Sep 13 04:58:03 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Typo fix.  
+
+Sat Sep 13 04:57:06 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Smartprefixes for the Open Directory Project and Cambridge's
+	dictionary.  
+
+Sat Sep 13 04:50:36 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Allow lambdas for smartprefixes, and add three examples. I'm a bit
+	proud of the CVSweb smartprefix, and less proud of the Debian
+	package contents smartprefix and Gmane.org smartprefix. They all are
+	a bit hackish, tho.  
+
+Sat Sep 13 04:41:08 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	New dumb- and smartprefixes, and updated URL for the 'dict'
+	smartprefix (the old URL still works, but as it forwards to the new
+	URL, we might as well use the new URL in the first place).  
+
+Sat Sep 13 00:51:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/memory.c:
+
+	Inline is a non sense here -> dropped.  
+
+Sat Sep 13 00:32:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/: stub.c, stub.h:
+
+	Two headers were added to ease compilation with dietlibc.  
+
+Sat Sep 13 00:30:48 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/gettext/loadmsgcat.c:
+
+	Use of caddr_t type was dropped for simpler (void *) casts in
+	loadmsgcat.c.  
+
+Fri Sep 12 23:41:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/vs.c:
+
+	Ooops, off by one error ;).  
+
+Fri Sep 12 23:37:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/location.c, viewer/text/vs.c, viewer/text/vs.h:
+
+	A field url_len was added to struct view_state, and an assertion in
+	copy_vs() now protects against bad things.  
+
+Fri Sep 12 23:23:35 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/vs.c:
+
+	A note about an overflow risk was added in copy_vs().  
+
+Fri Sep 12 22:49:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: viewer/text/vs.h, sched/session.h:
+
+	It seems safer to move struct view_state at end of struct frame,
+	copy_vs() called from copy_location() let us think there s a risk to
+	corrupt redirect_cnt.  
+
+Fri Sep 12 22:22:24 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: download.c, download.h:
+
+	Minor cleanup.  
+
+Fri Sep 12 22:00:20 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Some variables declarations were moved near their use.  
+
+Fri Sep 12 21:46:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Some code from download_window_function() was moved to new functions
+	download_progress_bar() and download_progress_string().  
+
+Fri Sep 12 21:40:33 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced. French translation was updated.  
+
+Fri Sep 12 21:14:24 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: sched/download.c, util/error.h:
+
+	Add a do_not_optimize_here_gcc_3_x() macro and use it instead of
+	do_not_optimize_here_gcc_3_3() in tp_display(). This works around a
+	bug that I experience with GCC 3.2.3-6 on Debian whereby ELinks 
+	crashes when I tell it to display a file of an unknown file-type.  
+
+Fri Sep 12 20:59:52 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.c:
+
+	Stupid Miciah forgot to commit src/config/options.c, which actually
+	adds the ui.colors.color.tabs.loading.{text,background} options.
+	Thanks, zas! No more black tabs.  
+
+Fri Sep 12 18:51:01 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/session.c:
+
+	New ui.colors.color.tabs.loading.{text,background} options: Colours
+	for tabs that are loading in the background.  
+	
+	I have this vague memory of pasky telling to commit only small
+	changes, passing larger patches by him before committing; or maybe
+	it was all just a beautiful dream... I'm hoping just now that it was
+	the latter.  
+
+Fri Sep 12 15:15:05 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Use int_max() instead ... ;) Thanks to Jonas.  
+
+Fri Sep 12 12:56:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Some stains do not appear anymore, thanks to Jonas. Minor
+	optimizations by me.  
+
+Fri Sep 12 10:48:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/backend/default.c, config/dialogs.c,
+	dialogs/document.c, dialogs/mime.c, elusive/parser/stack.h,
+	elusive/parser/css/atrule.c, elusive/parser/css/parser.c,
+	elusive/parser/css/ruleset.c, elusive/parser/css/test.c,
+	elusive/parser/css/test.h, elusive/parser/css/tree.h,
+	protocol/http/header.c, scripting/guile/hooks.c, ssl/ssl.h,
+	terminal/screen.c:
+
+	Whitespace fixes.  
+
+Fri Sep 12 10:40:21 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Some of download_data() code was moved to new
+	write_cache_entry_to_file() and set_file_download_win_handler().
+	Tidyup.  
+
 Wed Sep 10 19:23:57 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/html/renderer.c:

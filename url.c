@@ -195,14 +195,12 @@ int parse_url(unsigned char *url, int *prlen,
 		unsigned char *post_chr = strchr(host_end, POST_CHAR);
 		int len = post_chr ? (post_chr - host_end) : strlen(host_end);
 
-		debug("[%d] url -> '%s'", len, url);
 		while (len > 0 && WHITECHAR(host_end[len])) {
 			len--;
 			/* FIXME: uneffective */
 			if (post_chr)
 				memmove(host_end + len, host_end + len + 1,
 					strlen(host_end + len + 1) + 1);
-			debug("[%d] url -> '%s'", len, url);
 		}
 	}
 	

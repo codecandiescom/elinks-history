@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.191 2003/11/28 01:31:40 pasky Exp $ */
+/* $Id: download.c,v 1.192 2003/11/28 01:46:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -155,20 +155,6 @@ destroy_downloads(struct session *ses)
 
 
 static void
-set_file_download_win_handler(struct file_download *file_download)
-{
-	if (file_download->win) {
-		struct term_event ev = INIT_TERM_EVENT(
-					EV_REDRAW,
-				   	file_download->win->term->width,
-				    	file_download->win->term->height,
-				    	0);
-
-		file_download->win->handler(file_download->win, &ev, 0);
-	}
-}
-
-static void
 download_error_dialog(struct file_download *file_download, int saved_errno)
 {
 	unsigned char *msg = stracpy(file_download->file);
@@ -245,10 +231,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 {
 	struct terminal *term = get_download_ses(file_download)->tab->term;
 
-	if (download->state >= 0) {
-		set_file_download_win_handler(file_download);
-		return;
-	}
+	if (download->state >= 0) return;
 
 	if (download->state != S_OK) {
 		unsigned char *errmsg = get_err_msg(download->state, term);
@@ -348,8 +331,6 @@ download_data(struct download *download, struct file_download *file_download)
 
 		file_download->url = u;
 		file_download->download.state = S_WAIT_REDIR;
-
-		set_file_download_win_handler(file_download);
 
 		load_url(file_download->url, get_cache_uri(ce), &file_download->download,
 			 PRI_DOWNLOAD, CACHE_MODE_NORMAL,

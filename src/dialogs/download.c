@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.4 2003/11/27 21:52:56 jonas Exp $ */
+/* $Id: download.c,v 1.5 2003/11/28 01:46:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -275,12 +275,18 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 	done_string(&msg);
 }
 
+static enum dlg_refresh_code
+download_refresh_handler(struct dialog_data *dlg_data, void *data)
+{
+	return REFRESH_DIALOG;
+}
 
 void
 display_download(struct terminal *term, struct file_download *down,
 		 struct session *ses)
 {
 	struct dialog *dlg;
+	struct dialog_data *dlg_data;
 	struct file_download *file_download;
 
 	foreach (file_download, downloads)
@@ -308,7 +314,9 @@ found:
 
 	add_dlg_end(dlg, DOWNLOAD_WIDGETS_COUNT);
 
-	do_dialog(term, dlg, getml(dlg, NULL));
+	dlg_data = do_dialog(term, dlg, getml(dlg, NULL));
+
+	if (dlg_data) refresh_dialog(dlg_data, download_refresh_handler, down);
 }
 
 

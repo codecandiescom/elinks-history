@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.112 2003/11/27 03:47:03 jonas Exp $ */
+/* $Id: hierbox.c,v 1.113 2003/11/27 13:09:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -478,9 +478,6 @@ do_delete_item(struct listbox_item *item, struct listbox_context *info,
 
 	assert(item && item->udata);
 
-	/* FIXME: Hmm maybe this silent treatment is not optimal. Ideally we
-	 * should probably combine the delete error message to also be usable
-	 * for this. --jonas */
 	delete_error = !ops->can_delete(item)
 		     ? DELETE_IMPOSSIBLE : DELETE_LOCKED;
 

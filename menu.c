@@ -454,7 +454,7 @@ void terminal_options(struct terminal *term, void *xxx, struct session *ses)
  	do_dialog(term, d, getml(d, NULL));
 }
 
-unsigned char *http_labels[] = { TEXT(T_USE_HTTP_10), TEXT(T_ALLOW_SERVER_BLACKLIST), TEXT(T_BROKEN_302_REDIRECT), TEXT(T_NO_KEEPALIVE_AFTER_POST_REQUEST), TEXT(T_REFERER_NONE), TEXT(T_REFERER_SAME_URL), TEXT(T_REFERER_FAKE), TEXT(T_FAKE_REFERER) };
+unsigned char *http_labels[] = { TEXT(T_USE_HTTP_10), TEXT(T_ALLOW_SERVER_BLACKLIST), TEXT(T_BROKEN_302_REDIRECT), TEXT(T_NO_KEEPALIVE_AFTER_POST_REQUEST), TEXT(T_REFERER_NONE), TEXT(T_REFERER_TRUE), TEXT(T_REFERER_SAME_URL), TEXT(T_REFERER_FAKE), TEXT(T_FAKE_REFERER) };
 
 void httpopt_fn(struct dialog_data *dlg)
 {
@@ -464,8 +464,8 @@ void httpopt_fn(struct dialog_data *dlg)
 	int y = 0;
 	checkboxes_width(term, dlg->dlg->udata, &max, max_text_width);
 	checkboxes_width(term, dlg->dlg->udata, &min, min_text_width);
-	max_text_width(term, http_labels[7], &max);
-	min_text_width(term, http_labels[7], &min);
+	max_text_width(term, http_labels[8], &max);
+	min_text_width(term, http_labels[8], &min);
 	max_buttons_width(term, dlg->items + dlg->n - 2, 2, &max);
 	min_buttons_width(term, dlg->items + dlg->n - 2, 2, &min);
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
@@ -476,7 +476,7 @@ void httpopt_fn(struct dialog_data *dlg)
 	rw = 0;
 	dlg_format_checkboxes(NULL, term, dlg->items, dlg->n - 3, 0, &y, w, &rw, dlg->dlg->udata);
 	y++;
-	dlg_format_text(NULL, term, http_labels[7], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_text(NULL, term, http_labels[8], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
 	y+=2;
 	dlg_format_buttons(NULL, term, dlg->items + dlg->n - 2, 2, 0, &y, w, &rw, AL_CENTER);
 	w = rw;
@@ -487,8 +487,8 @@ void httpopt_fn(struct dialog_data *dlg)
 	y = dlg->y + DIALOG_TB + 1;
 	dlg_format_checkboxes(term, term, dlg->items, dlg->n - 3, dlg->x + DIALOG_LB, &y, w, NULL, dlg->dlg->udata);
 	y++;
-	dlg_format_text(term, term, http_labels[7], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
-	dlg_format_field(term, term, dlg->items + 7, dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
+	dlg_format_text(term, term, http_labels[8], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_field(term, term, dlg->items + 8, dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_buttons(term, term, dlg->items + dlg->n - 2, 2, dlg->x + DIALOG_LB, &y, w, &rw, AL_CENTER);
 }
@@ -498,8 +498,8 @@ int dlg_http_options(struct dialog_data *dlg, struct dialog_item_data *di)
 {
 	struct http_bugs *bugs = (struct http_bugs *)di->cdata;
 	struct dialog *d;
-	if (!(d = mem_alloc(sizeof(struct dialog) + 11 * sizeof(struct dialog_item)))) return 0;
-	memset(d, 0, sizeof(struct dialog) + 11 * sizeof(struct dialog_item));
+	if (!(d = mem_alloc(sizeof(struct dialog) + 12 * sizeof(struct dialog_item)))) return 0;
+	memset(d, 0, sizeof(struct dialog) + 12 * sizeof(struct dialog_item));
 	d->title = TEXT(T_HTTP_BUG_WORKAROUNDS);
 	d->fn = httpopt_fn;
 	d->udata = http_labels;
@@ -526,26 +526,31 @@ int dlg_http_options(struct dialog_data *dlg, struct dialog_item_data *di)
 	d->items[4].data = (void *)&referer;
 	d->items[5].type = D_CHECKBOX;
 	d->items[5].gid = 1;
-	d->items[5].gnum = REFERER_SAME_URL;
+	d->items[5].gnum = REFERER_TRUE;
 	d->items[5].dlen = sizeof(int);
 	d->items[5].data = (void *)&referer;
 	d->items[6].type = D_CHECKBOX;
 	d->items[6].gid = 1;
-	d->items[6].gnum = REFERER_FAKE;
+	d->items[6].gnum = REFERER_SAME_URL;
 	d->items[6].dlen = sizeof(int);
 	d->items[6].data = (void *)&referer;
-	d->items[7].type = D_FIELD;
-	d->items[7].dlen = MAX_STR_LEN;
-	d->items[7].data = fake_referer;
-	d->items[8].type = D_BUTTON;
-	d->items[8].gid = B_ENTER;
-	d->items[8].fn = ok_dialog;
-	d->items[8].text = TEXT(T_OK);
+	d->items[7].type = D_CHECKBOX;
+	d->items[7].gid = 1;
+	d->items[7].gnum = REFERER_FAKE;
+	d->items[7].dlen = sizeof(int);
+	d->items[7].data = (void *)&referer;
+	d->items[8].type = D_FIELD;
+	d->items[8].dlen = MAX_STR_LEN;
+	d->items[8].data = fake_referer;
 	d->items[9].type = D_BUTTON;
-	d->items[9].gid = B_ESC;
-	d->items[9].fn = cancel_dialog;
-	d->items[9].text = TEXT(T_CANCEL);
-	d->items[10].type = D_END;
+	d->items[9].gid = B_ENTER;
+	d->items[9].fn = ok_dialog;
+	d->items[9].text = TEXT(T_OK);
+	d->items[10].type = D_BUTTON;
+	d->items[10].gid = B_ESC;
+	d->items[10].fn = cancel_dialog;
+	d->items[10].text = TEXT(T_CANCEL);
+	d->items[11].type = D_END;
  	do_dialog(dlg->win->term, d, getml(d, NULL));
 	return 0;
 }

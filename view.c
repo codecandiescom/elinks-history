@@ -2115,6 +2115,8 @@ void send_enter(struct terminal *term, void *xxx, struct session *ses)
 void frm_download(struct session *ses, struct f_data_c *fd)
 {
 	struct link *link;
+	int l = 0;
+	
 	if (fd->vs->current_link == -1) return;
 	if (ses->dn_url) mem_free(ses->dn_url), ses->dn_url = NULL;
 	link = &fd->f_data->links[fd->vs->current_link];
@@ -2125,6 +2127,9 @@ void frm_download(struct session *ses, struct f_data_c *fd)
 			ses->dn_url = NULL;
 			return;
 		}
+		if (ses->ref_url) mem_free(ses->ref_url);
+		ses->ref_url = init_str();
+		add_to_str(&ses->ref_url, &l, fd->f_data->url);
 		query_file(ses, ses->dn_url, start_download, NULL);
 	}
 }
@@ -2132,21 +2137,33 @@ void frm_download(struct session *ses, struct f_data_c *fd)
 void send_download_image(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct f_data_c *fd = current_frame(ses);
+	int l = 0;
+	
 	if (!fd) return;
 	if (fd->vs->current_link == -1) return;
 	if (ses->dn_url) mem_free(ses->dn_url);
-	if ((ses->dn_url = stracpy(fd->f_data->links[fd->vs->current_link].where_img)))
+	if ((ses->dn_url = stracpy(fd->f_data->links[fd->vs->current_link].where_img))) {
+		if (ses->ref_url) mem_free(ses->ref_url);
+		ses->ref_url = init_str();
+		add_to_str(&ses->ref_url, &l, fd->f_data->url);
 		query_file(ses, ses->dn_url, start_download, NULL);
+	}
 }
 
 void send_download(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct f_data_c *fd = current_frame(ses);
+	int l = 0;
+	
 	if (!fd) return;
 	if (fd->vs->current_link == -1) return;
 	if (ses->dn_url) mem_free(ses->dn_url);
-	if ((ses->dn_url = get_link_url(ses, fd, &fd->f_data->links[fd->vs->current_link])))
+	if ((ses->dn_url = get_link_url(ses, fd, &fd->f_data->links[fd->vs->current_link]))) {
+		if (ses->ref_url) mem_free(ses->ref_url);
+		ses->ref_url = init_str();
+		add_to_str(&ses->ref_url, &l, fd->f_data->url);
 		query_file(ses, ses->dn_url, start_download, NULL);
+	}
 }
 
 /* open a link in a new xterm */
@@ -2209,14 +2226,20 @@ int can_open_in_new(struct terminal *term)
 
 void save_url(struct session *ses, unsigned char *url)
 {
+	struct f_data_c *fd = current_frame(ses);
 	unsigned char *u;
+	int l = 0;
+	
 	if (!(u = translate_url(url, ses->term->cwd))) {
 		struct status stat = { NULL, NULL, NULL, NULL, S_BAD_URL, PRI_CANCEL, 0, NULL, NULL };
 		print_error_dialog(ses, &stat, TEXT(T_ERROR));
 		return;
 	}
 	if (ses->dn_url) mem_free(ses->dn_url);
+	if (ses->ref_url) mem_free(ses->ref_url);
 	ses->dn_url = u;
+	ses->ref_url = init_str();
+	add_to_str(&ses->ref_url, &l, fd->f_data->url);
 	query_file(ses, ses->dn_url, start_download, NULL);
 }
 
@@ -2232,12 +2255,19 @@ void send_image(struct terminal *term, void *xxx, struct session *ses)
 
 void save_as(struct terminal *term, void *xxx, struct session *ses)
 {
+	struct f_data_c *fd = current_frame(ses);
 	struct location *l;
+	int len = 0;
+	
 	if (list_empty(ses->history)) return;
 	l = cur_loc(ses);
 	if (ses->dn_url) mem_free(ses->dn_url);
-	if ((ses->dn_url = stracpy(l->vs.url)))
+	if ((ses->dn_url = stracpy(l->vs.url))) {
+		if (ses->ref_url) mem_free(ses->ref_url);
+		ses->ref_url = init_str();
+		add_to_str(&ses->ref_url, &len, fd->f_data->url);
 		query_file(ses, ses->dn_url, start_download, NULL);
+	}
 }
 
 void save_formatted(struct session *ses, unsigned char *file)

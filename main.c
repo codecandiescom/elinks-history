@@ -163,7 +163,7 @@ void end_dump(struct status *stat, void *p)
 		if (stat->state >= 0) change_connection(stat, NULL, PRI_CANCEL);
 		u = stracpy(ce->redirect);
 		if (!http_bugs.bug_302_redirect) if (!ce->redirect_get && (p = strchr(ce->url, POST_CHAR))) add_to_strn(&u, p);
-		load_url(u, stat, PRI_MAIN, 0);
+		load_url(u, ce->url, stat, PRI_MAIN, 0);
 		mem_free(u);
 		return;
 	}
@@ -283,7 +283,7 @@ void init()
 		dump_stat.end = end_dump;
 		dump_pos = 0;
 		if (!(uu = translate_url(u, wd = get_cwd()))) uu = stracpy(u);
-		if (load_url(uu, &dump_stat, PRI_MAIN, 0)) goto ttt;
+		if (load_url(uu, NULL, &dump_stat, PRI_MAIN, 0)) goto ttt;
 		mem_free(uu);
 		if (wd) mem_free(wd);
 	}

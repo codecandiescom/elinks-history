@@ -527,7 +527,7 @@ unsigned char *get_proxy(unsigned char *url)
 	return u;
 }
 
-int load_url(unsigned char *url, struct status *stat, int pri, int no_cache)
+int load_url(unsigned char *url, unsigned char *prev_url, struct status *stat, int pri, int no_cache)
 {
 	struct cache_entry *e = NULL;
 	struct connection *c;
@@ -587,6 +587,7 @@ int load_url(unsigned char *url, struct status *stat, int pri, int no_cache)
 	memset(c, 0, sizeof(struct connection));
 	c->count = connection_count++;
 	c->url = u;
+	c->prev_url = prev_url;
 	c->running = 0;
 	c->prev_error = 0;
 	c->from = no_cache >= NC_RELOAD || !e || e->frag.next == &e->frag || ((struct fragment *)e->frag.next)->offset ? 0 : ((struct fragment *)e->frag.next)->length;

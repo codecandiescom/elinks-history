@@ -640,6 +640,7 @@ struct connection {
 	struct connection *prev;
 	tcount count;
 	unsigned char *url;
+	unsigned char *prev_url;
 	int running;
 	int state;
 	int prev_error;
@@ -762,7 +763,7 @@ void run_connection(struct connection *c);
 void retry_connection(struct connection *c);
 void abort_connection(struct connection *c);
 void end_connection(struct connection *c);
-int load_url(unsigned char *, struct status *, int, int);
+int load_url(unsigned char *, unsigned char *, struct status *, int, int);
 void change_connection(struct status *, struct status *, int);
 void detach_connection(struct status *, int);
 void abort_all_connections();
@@ -1474,6 +1475,7 @@ struct session {
 	unsigned char *tq_prog;
 	int tq_prog_flags;
 	unsigned char *dn_url;
+	unsigned char *ref_url;
 	unsigned char *search_word;
 	unsigned char *last_search_word;
 	int search_direction;
@@ -2001,6 +2003,7 @@ extern struct rgb default_vlink;
 #define REFERER_NONE 0
 #define REFERER_SAME_URL 1
 #define REFERER_FAKE 2
+#define REFERER_TRUE 3
 
 extern unsigned char http_proxy[];
 extern unsigned char ftp_proxy[];

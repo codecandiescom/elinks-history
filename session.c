@@ -518,7 +518,7 @@ void download_data(struct status *stat, struct download *down)
 			down->win->handler(down->win, &ev, 0);
 		}
 		/*if (!strchr(down->url, POST_CHAR)) {*/
-			load_url(down->url, &down->stat, PRI_DOWNLOAD, NC_CACHE);
+			load_url(down->url, ce->url, &down->stat, PRI_DOWNLOAD, NC_CACHE);
 			return;
 		/*} else {
 			unsigned char *msg = init_str();
@@ -676,7 +676,7 @@ void start_download(struct session *ses, unsigned char *file)
 	down->ses = ses;
 	down->remotetime = 0;
 	add_to_list(downloads, down);
-	load_url(url, &down->stat, PRI_DOWNLOAD, NC_CACHE);
+	load_url(url, ses->ref_url, &down->stat, PRI_DOWNLOAD, NC_CACHE);
 	display_download(ses->term, down, ses);
 }
 
@@ -849,7 +849,7 @@ void post_yes(struct wtd_data *w)
 	w->ses->loading_url = stracpy(w->url);
 	w->ses->wtd = w->wtd;
 	w->ses->wtd_target = w->target;
-	load_url(w->ses->loading_url, &w->ses->loading, w->pri, w->cache);
+	load_url(w->ses->loading_url, w->ses->ref_url, &w->ses->loading, w->pri, w->cache);
 }
 
 void post_no(struct wtd_data *w)
@@ -876,7 +876,7 @@ void ses_goto(struct session *ses, unsigned char *url, unsigned char *target, in
 		ses->loading_url = url;
 		ses->wtd = wtd;
 		ses->wtd_target = target;
-		load_url(url, &ses->loading, pri, cache);
+		load_url(url, ses->ref_url, &ses->loading, pri, cache);
 		return;
 	}
 	w->ses = ses;
@@ -897,6 +897,7 @@ void ses_goto(struct session *ses, unsigned char *url, unsigned char *target, in
 int do_move(struct session *ses, struct status **stat)
 {
 	struct cache_entry *ce = NULL;
+	int l = 0;
 	if (!ses->loading_url) {
 		internal("no ses->loading_url");
 		return 0;
@@ -917,6 +918,9 @@ int do_move(struct session *ses, struct status **stat)
 		abort_loading(ses);
 		if (!list_empty(ses->history)) *stat = &cur_loc(ses)->stat;
 		else *stat = NULL;
+		if (ses->ref_url) mem_free(ses->ref_url);
+		ses->ref_url = init_str();
+		add_to_str(&ses->ref_url, &l, ce->url);
 		if (w == WTD_FORWARD || w == WTD_IMGMAP) {
 			ses_goto(ses, u, ses->wtd_target, PRI_MAIN, NC_CACHE, w, gp, end_load, 1);
 			return 2;
@@ -1191,6 +1195,7 @@ void process_file_requests(struct session *ses)
 {
 	static int stop_recursion = 0;
 	struct file_to_load *ftl;
+	struct f_data_c *fd = current_frame(ses);
 	int more;
 	if (stop_recursion) return;
 	stop_recursion = 1;
@@ -1198,7 +1203,7 @@ void process_file_requests(struct session *ses)
 		more = 0;
 		foreach(ftl, ses->more_files) if (!ftl->req_sent) {
 			ftl->req_sent = 1;
-			load_url(ftl->url, &ftl->stat, ftl->pri, NC_CACHE);
+			load_url(ftl->url, fd?fd->f_data?fd->f_data->url:NULL:NULL, &ftl->stat, ftl->pri, NC_CACHE);
 			more = 1;
 		}
 	} while (more);
@@ -1389,6 +1394,7 @@ void destroy_session(struct session *ses)
 	if (ses->tq_goto_position) mem_free(ses->tq_goto_position);
 	if (ses->tq_prog) mem_free(ses->tq_prog);
 	if (ses->dn_url) mem_free(ses->dn_url);
+	if (ses->ref_url) mem_free(ses->ref_url),ses->ref_url=NULL;
 	if (ses->search_word) mem_free(ses->search_word);
 	if (ses->last_search_word) mem_free(ses->last_search_word);
 	del_from_list(ses);
@@ -1408,6 +1414,7 @@ void abort_all_downloads()
 void reload(struct session *ses, int no_cache)
 {
 	struct location *l;
+	struct f_data_c *fd = current_frame(ses);
 	abort_loading(ses);
 	if (no_cache == -1) no_cache = ++ses->reloadlevel;
 	else ses->reloadlevel = no_cache;
@@ -1415,12 +1422,12 @@ void reload(struct session *ses, int no_cache)
 		struct file_to_load *ftl;
 		l->stat.data = ses;
 		l->stat.end = (void *)doc_end_load;
-		load_url(l->vs.url, &l->stat, PRI_MAIN, no_cache);
+		load_url(l->vs.url, ses->ref_url, &l->stat, PRI_MAIN, no_cache);
 		foreach(ftl, ses->more_files) {
 			if (ftl->req_sent && ftl->stat.state >= 0) continue;
 			ftl->stat.data = ftl;
 			ftl->stat.end = (void *)file_end_load;
-			load_url(ftl->url, &ftl->stat, PRI_FRAME, no_cache);
+			load_url(ftl->url, fd?fd->f_data?fd->f_data->url:NULL:NULL, &ftl->stat, PRI_FRAME, no_cache);
 		}
 	}
 }
@@ -1443,6 +1450,9 @@ void reload(struct session *ses, int no_cache)
 void go_back(struct session *ses)
 {
 	unsigned char *url;
+	struct f_data_c *fd = current_frame(ses);
+	int l = 0;
+	
 	ses->reloadlevel = NC_CACHE;
 	if (ses->wtd) {
 		if (1 || ses->wtd != WTD_BACK) {
@@ -1457,6 +1467,11 @@ void go_back(struct session *ses)
 	abort_loading(ses);
 	if (!(url = stracpy(((struct location *)ses->history.next)->next->vs.url)))
 		return;
+	if (ses->ref_url) mem_free(ses->ref_url),ses->ref_url=NULL;
+	if (fd && fd->f_data && fd->f_data->url) {
+		ses->ref_url = init_str();
+		add_to_str(&ses->ref_url, &l, fd->f_data->url);
+	}
 	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_BACK, NULL, end_load, 0);
 }
 
@@ -1488,6 +1503,9 @@ void goto_url_w(struct session *ses, unsigned char *url, unsigned char *target, 
 	unsigned char *u;
 	unsigned char *pos;
 	void (*fn)(struct session *, unsigned char *);
+	struct f_data_c *fd = current_frame(ses);
+	int l = 0;
+	
 #ifdef HAVE_LUA
 	unsigned char *tofree = NULL;
 	if (!(url = follow_url_hook(ses, url))) goto end;
@@ -1514,6 +1532,11 @@ void goto_url_w(struct session *ses, unsigned char *url, unsigned char *target, 
 		}
 	}
 	abort_loading(ses);
+	if (ses->ref_url) mem_free(ses->ref_url), ses->ref_url=NULL;
+	if (fd && fd->f_data && fd->f_data->url) {
+ 		ses->ref_url = init_str();
+		add_to_str(&ses->ref_url, &l, fd->f_data->url);
+	}
 	ses_goto(ses, u, target, PRI_MAIN, NC_CACHE, wtd, pos, end_load, 0);
 	/*abort_loading(ses);*/
 	end:

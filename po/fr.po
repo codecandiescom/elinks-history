@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-19 18:08+0100\n"
+"POT-Creation-Date: 2004-12-20 00:14+0100\n"
 "PO-Revision-Date: 2004-12-19 18:09+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
@@ -44,14 +44,14 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
 #: src/dialogs/menu.c:96 src/dialogs/menu.c:516 src/dialogs/menu.c:567
 #: src/dialogs/options.c:172 src/dialogs/options.c:249
-#: src/ecmascript/spidermonkey.c:444 src/ecmascript/spidermonkey.c:2038
-#: src/ecmascript/spidermonkey.c:2065 src/formhist/dialogs.c:179
+#: src/ecmascript/spidermonkey.c:460 src/ecmascript/spidermonkey.c:2054
+#: src/ecmascript/spidermonkey.c:2081 src/formhist/dialogs.c:179
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
 #: src/protocol/protocol.c:227 src/protocol/user.c:268
 #: src/sched/download.c:231 src/sched/download.c:327 src/sched/download.c:368
 #: src/sched/download.c:507 src/sched/download.c:601 src/sched/error.c:42
-#: src/sched/session.c:240 src/sched/session.c:711 src/sched/session.c:735
-#: src/sched/session.c:752 src/scripting/lua/core.c:395
+#: src/sched/session.c:240 src/sched/session.c:707 src/sched/session.c:731
+#: src/sched/session.c:748 src/scripting/lua/core.c:395
 #: src/scripting/lua/core.c:476 src/scripting/lua/core.c:593
 #: src/scripting/lua/core.c:717 src/viewer/text/draw.c:67
 #: src/viewer/text/form.c:857 src/viewer/text/search.c:953
@@ -5017,7 +5017,7 @@ msgid "No document"
 msgstr "Aucun document"
 
 #. name:
-#: src/document/css/css.c:29 src/document/css/css.c:157
+#: src/document/css/css.c:29 src/document/css/css.c:156
 msgid "Cascading Style Sheets"
 msgstr "Cascading Style Sheets (CSS)"
 
@@ -5093,11 +5093,11 @@ msgstr "Temps max. d'exécution"
 msgid "Maximum execution time in seconds for a script."
 msgstr "Temps maximal pour l'exécution d'un script, en secondes."
 
-#: src/ecmascript/spidermonkey.c:441
+#: src/ecmascript/spidermonkey.c:457
 msgid "JavaScript Alert"
 msgstr "Alerte JavaScript"
 
-#: src/ecmascript/spidermonkey.c:2021
+#: src/ecmascript/spidermonkey.c:2037
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following%s%s%s%s: \n"
@@ -5114,7 +5114,7 @@ msgstr ""
 "%s\n"
 ".%*s^%*s."
 
-#: src/ecmascript/spidermonkey.c:2029
+#: src/ecmascript/spidermonkey.c:2045
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following%s%s%s%s: \n"
@@ -5125,15 +5125,15 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/ecmascript/spidermonkey.c:2036
+#: src/ecmascript/spidermonkey.c:2052
 msgid "JavaScript Error"
 msgstr "Erreur Javascript"
 
-#: src/ecmascript/spidermonkey.c:2056
+#: src/ecmascript/spidermonkey.c:2072
 msgid "JavaScript Emergency"
 msgstr "Urgence JavaScript"
 
-#: src/ecmascript/spidermonkey.c:2058
+#: src/ecmascript/spidermonkey.c:2074
 #, c-format
 msgid ""
 "A script embedded in the current document was running for more than %d "
@@ -6993,11 +6993,11 @@ msgstr "Le protocole de carnet d'adresse CSO n'est pas supporté"
 msgid "Unknown error"
 msgstr "Erreur inconnue"
 
-#: src/sched/session.c:699 src/sched/session.c:719 src/sched/task.c:271
+#: src/sched/session.c:695 src/sched/session.c:715 src/sched/task.c:271
 msgid "Warning"
 msgstr "Avertissement"
 
-#: src/sched/session.c:700
+#: src/sched/session.c:696
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -7016,7 +7016,7 @@ msgstr ""
 "défaut sera utilisée. Si vous n'avez aucune idée de quoi nous parlons alors "
 "faites juste ça. Toutes nos excuses pour ce désagrément."
 
-#: src/sched/session.c:720
+#: src/sched/session.c:716
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -7037,11 +7037,11 @@ msgstr ""
 "l'option config.saving_style dans le but d'obtenir un fonctionnement "
 "correct. Toutes nos excuses pour l'éventuel désagrément causé."
 
-#: src/sched/session.c:747
+#: src/sched/session.c:743
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#: src/sched/session.c:748
+#: src/sched/session.c:744
 msgid ""
 "Welcome to ELinks!\n"
 "\n"

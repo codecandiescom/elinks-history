@@ -1,10 +1,11 @@
-/* $Id: listbox.h,v 1.2 2002/07/04 21:19:44 pasky Exp $ */
+/* $Id: listbox.h,v 1.3 2002/07/05 00:29:57 pasky Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
 
 #include "bfu/align.h"
 #include "bfu/dialog.h"
+#include "bfu/widget.h"
 #include "lowlevel/terminal.h"
 #include "util/lists.h"
 
@@ -40,11 +41,11 @@ struct box_item {
 	enum box_item_free free_i;
 };
 
+extern struct widget_ops listbox_ops;
 
 void dlg_format_box(struct terminal *, struct terminal *, struct widget_data *, int, int *, int, int *, enum format_align);
 
 void box_sel_move(struct widget_data *, int);
-void show_dlg_item_box(struct dialog_data *, struct widget_data *);
 void box_sel_set_visible(struct widget_data *, int);
 
 #endif

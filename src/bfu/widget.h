@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.2 2002/07/04 22:25:38 pasky Exp $ */
+/* $Id: widget.h,v 1.3 2002/07/05 00:29:57 pasky Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -20,18 +20,28 @@ enum widget_type {
 	D_BOX,
 };
 
+struct widget_ops {
+	void (*display)(struct widget_data *, struct dialog_data *, int);
+	/* void (*event)(struct widget_data *, struct window *, struct event *, int); */
+};
+
 struct widget {
 	enum widget_type type;
-	/* for buttons:	gid - flags B_XXX
-	 * for fields:	min/max
-	 * for box:	gid is box height */
+	struct widget_ops *ops;
+
+	/* for buttons: gid - flags B_XXX
+	 * for fields:  min/max
+	 * for box:     gid is box height */
 	int gid, gnum;
-	int (*fn)(struct dialog_data *, struct widget_data *);
 	struct input_history *history;
+	/* void *widget_data; */
+
+	void *udata;
+
+	int (*fn)(struct dialog_data *, struct widget_data *);
+
 	int dlen;
 	unsigned char *data;
-	/* for box:	holds list */
-	void *udata;
 	unsigned char *text;
 };
 

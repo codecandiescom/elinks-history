@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.2 2002/07/04 21:19:44 pasky Exp $ */
+/* $Id: inpfield.c,v 1.3 2002/07/05 00:29:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,3 +226,61 @@ void input_field(struct terminal *term, struct memory_list *ml,
 	add_to_ml(&ml, dlg, NULL);
 	do_dialog(term, dlg, ml);
 }
+
+
+static inline void
+display_field_do(struct widget_data *di, struct dialog_data *dlg, int sel,
+		 int hide)
+{
+	struct terminal *term = dlg->win->term;
+
+	if (di->vpos + di->l <= di->cpos)
+		di->vpos = di->cpos - di->l + 1;
+	if (di->vpos > di->cpos)
+		di->vpos = di->cpos;
+	if (di->vpos < 0)
+		di->vpos = 0;
+
+	fill_area(term, di->x, di->y, di->l, 1,
+			COLOR_DIALOG_FIELD);
+	{
+		int len = strlen(di->cdata + di->vpos);
+
+		if (!hide) {
+			print_text(term, di->x, di->y,
+					len <= di->l ? len : di->l,
+					di->cdata + di->vpos,
+					COLOR_DIALOG_FIELD_TEXT);
+		} else {
+			fill_area(term, di->x, di->y,
+					len <= di->l ? len : di->l, 1,
+					COLOR_DIALOG_FIELD_TEXT | '*');
+		}
+	}
+	if (sel) {
+		int x = di->x + di->cpos - di->vpos;
+
+		set_cursor(term, x, di->y, x, di->y);
+		set_window_ptr(dlg->win, di->x, di->y);
+	}
+}
+
+void
+display_field(struct widget_data *di, struct dialog_data *dlg, int sel)
+{
+	display_field_do(di, dlg, sel, 0);
+}
+
+void
+display_field_pass(struct widget_data *di, struct dialog_data *dlg, int sel)
+{
+	display_field_do(di, dlg, sel, 1);
+}
+
+struct widget_ops field_ops = {
+	display_field,
+};
+
+struct widget_ops field_pass_ops = {
+	display_field_pass,
+};

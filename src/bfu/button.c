@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.2 2002/07/04 21:19:44 pasky Exp $ */
+/* $Id: button.c,v 1.3 2002/07/05 00:29:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,3 +82,32 @@ void dlg_format_buttons(struct terminal *term, struct terminal *t2,
 		i1 = i2;
 	}
 }
+
+
+void
+display_button(struct widget_data *di, struct dialog_data *dlg, int sel)
+{
+	struct terminal *term = dlg->win->term;
+	int co;
+	unsigned char *text;
+
+	co = sel ? COLOR_DIALOG_BUTTON_SELECTED
+		: COLOR_DIALOG_BUTTON;
+	text = _(di->item->text, term);
+	{
+		int len = strlen(text);
+		int x = di->x + 2;
+
+		print_text(term, di->x, di->y, 2, "[ ", co);
+		print_text(term, x, di->y, len, text, co);
+		print_text(term, x + len, di->y, 2, " ]", co);
+		if (sel) {
+			set_cursor(term, x, di->y, x, di->y);
+			set_window_ptr(dlg->win, di->x, di->y);
+		}
+	}
+}
+
+struct widget_ops button_ops = {
+	display_button,
+};

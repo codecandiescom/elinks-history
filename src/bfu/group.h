@@ -1,9 +1,10 @@
-/* $Id: group.h,v 1.2 2002/07/04 21:19:44 pasky Exp $ */
+/* $Id: group.h,v 1.3 2002/07/05 00:29:57 pasky Exp $ */
 
 #ifndef EL__BFU_GROUP_H
 #define EL__BFU_GROUP_H
 
 #include "bfu/dialog.h"
+#include "bfu/widget.h"
 #include "lowlevel/terminal.h"
 
 

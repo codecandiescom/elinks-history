@@ -1,5 +1,5 @@
 /* Common widget functions. */
-/* $Id: widget.c,v 1.2 2002/07/04 21:19:44 pasky Exp $ */
+/* $Id: widget.c,v 1.3 2002/07/05 00:29:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,92 +17,10 @@
 #include "util/error.h"
 
 
-/* display_dlg_item() */
-void display_dlg_item(struct dialog_data *dlg, struct widget_data *di,
-		      int sel)
+void
+display_dlg_item(struct dialog_data *dlg, struct widget_data *di, int sel)
 {
-	struct terminal *term = dlg->win->term;
-
-	switch(di->item->type) {
-		int co;
-		unsigned char *text;
-
-		case D_CHECKBOX:
-			if (di->checked) {
-				print_text(term, di->x, di->y, 3,
-					   (!di->item->gid) ? "[X]" : "(X)",
-					   COLOR_DIALOG_CHECKBOX);
-			} else {
-				print_text(term, di->x,	di->y, 3,
-					   (!di->item->gid) ? "[ ]" : "( )",
-					   COLOR_DIALOG_CHECKBOX);
-			}
-			if (sel) {
-				set_cursor(term, di->x + 1, di->y, di->x + 1,
-					   di->y);
-				set_window_ptr(dlg->win, di->x, di->y);
-			}
-			break;
-
-		case D_FIELD_PASS:
-		case D_FIELD:
-			if (di->vpos + di->l <= di->cpos)
-				di->vpos = di->cpos - di->l + 1;
-			if (di->vpos > di->cpos)
-				di->vpos = di->cpos;
-			if (di->vpos < 0)
-				di->vpos = 0;
-
-			fill_area(term, di->x, di->y, di->l, 1,
-				  COLOR_DIALOG_FIELD);
-			{
-				int len = strlen(di->cdata + di->vpos);
-
-				if (di->item->type == D_FIELD) {
-					print_text(term, di->x, di->y,
-						   len <= di->l ? len : di->l,
-						   di->cdata + di->vpos,
-						   COLOR_DIALOG_FIELD_TEXT);
-				} else {
-					fill_area(term, di->x, di->y,
-						  len <= di->l ? len : di->l, 1,
-						  COLOR_DIALOG_FIELD_TEXT | '*');
-				}
-			}
-			if (sel) {
-				int x = di->x + di->cpos - di->vpos;
-
-				set_cursor(term, x, di->y, x, di->y);
-				set_window_ptr(dlg->win, di->x, di->y);
-			}
-			break;
-
-		case D_BUTTON:
-			co = sel ? COLOR_DIALOG_BUTTON_SELECTED
-				 : COLOR_DIALOG_BUTTON;
-			text = _(di->item->text, term);
-			{
-				int len = strlen(text);
-				int x = di->x + 2;
-
-				print_text(term, di->x, di->y, 2, "[ ", co);
-				print_text(term, x, di->y, len, text, co);
-				print_text(term, x + len, di->y, 2, " ]", co);
-				if (sel) {
-					set_cursor(term, x, di->y, x, di->y);
-					set_window_ptr(dlg->win, di->x, di->y);
-				}
-			}
-			break;
-
-		case D_BOX:
-			/* Draw a hierarchy box */
-			show_dlg_item_box(dlg, di);
-			break;
-
-		default:
-			debug("Tried to draw unknown ");
-	}
+	di->item->ops->display(di, dlg, sel);
 }
 
 /* dlg_select_item() */

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.3 2002/07/04 22:25:38 pasky Exp $ */
+/* $Id: dialog.c,v 1.4 2002/07/05 00:29:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,10 +10,11 @@
 
 #include "links.h"
 
-#include "bfu/dialog.h"
 #include "bfu/button.h"
+#include "bfu/dialog.h"
 #include "bfu/inphist.h"
 #include "bfu/listbox.h"
+#include "bfu/widget.h"
 #include "config/kbdbind.h"
 #include "intl/language.h"
 #include "lowlevel/kbd.h"
@@ -23,6 +24,11 @@
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"
+
+#include "bfu/button.h"
+#include "bfu/checkbox.h"
+#include "bfu/inpfield.h"
+#include "bfu/listbox.h"
 
 
 /* Prototypes */
@@ -106,6 +112,20 @@ void dialog_func(struct window *win, struct event *ev, int fwd)
 					       di->item->dlen);
 				} else {
 					continue;
+				}
+
+				/* XXX: REMOVE THIS! --pasky */
+				{
+					struct widget_ops *w_o[] = {
+						NULL,
+						&checkbox_ops,
+						&field_ops,
+						&field_pass_ops,
+						&button_ops,
+						&listbox_ops,
+					};
+
+					di->item->ops = w_o[di->item->type];
 				}
 
 				if (di->item->type == D_CHECKBOX) {

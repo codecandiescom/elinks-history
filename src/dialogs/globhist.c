@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: globhist.c,v 1.23 2002/07/04 21:19:45 pasky Exp $ */
+/* $Id: globhist.c,v 1.24 2002/07/05 00:29:57 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -95,8 +95,8 @@ update_all_history_dialogs(void)
 				item->dlg->dlg->items[HISTORY_BOX_IND].data;
 
 		history_dialog_list_update(&(box->items));
-		show_dlg_item_box(item->dlg,
-				&(item->dlg->items[HISTORY_BOX_IND]));
+		display_dlg_item(item->dlg,
+				 &(item->dlg->items[HISTORY_BOX_IND]), 1);
 	}
 }
 
@@ -196,14 +196,14 @@ history_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 			/* Moving the box */
 			if (ev->x == KBD_DOWN) {
 				box_sel_move(&dlg->items[HISTORY_BOX_IND], 1);
-				show_dlg_item_box(dlg, &dlg->items[HISTORY_BOX_IND]);
+				display_dlg_item(dlg, &dlg->items[HISTORY_BOX_IND], 1);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (ev->x == KBD_UP) {
 				box_sel_move(&dlg->items[HISTORY_BOX_IND], -1);
-				show_dlg_item_box(dlg, &dlg->items[HISTORY_BOX_IND]);
+				display_dlg_item(dlg, &dlg->items[HISTORY_BOX_IND], 1);
 
 				return EVENT_PROCESSED;
 			}
@@ -211,7 +211,7 @@ history_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 			if (ev->x == KBD_PAGE_DOWN) {
 				box_sel_move(&dlg->items[HISTORY_BOX_IND],
 					     dlg->items[HISTORY_BOX_IND].item->gid / 2);
-				show_dlg_item_box(dlg, &dlg->items[HISTORY_BOX_IND]);
+				display_dlg_item(dlg, &dlg->items[HISTORY_BOX_IND], 1);
 
 				return EVENT_PROCESSED;
 			}
@@ -219,7 +219,7 @@ history_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 			if (ev->x == KBD_PAGE_UP) {
 				box_sel_move(&dlg->items[HISTORY_BOX_IND],
 					     -dlg->items[HISTORY_BOX_IND].item->gid / 2);
-				show_dlg_item_box(dlg, &dlg->items[HISTORY_BOX_IND]);
+				display_dlg_item(dlg, &dlg->items[HISTORY_BOX_IND], 1);
 
 				return EVENT_PROCESSED;
 			}

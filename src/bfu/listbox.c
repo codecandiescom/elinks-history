@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.2 2002/07/04 21:19:44 pasky Exp $ */
+/* $Id: listbox.c,v 1.3 2002/07/05 00:29:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,8 +90,9 @@ void box_sel_move(struct widget_data *box_item_data, int dist)
 
 
 /* Displays a dialog box */
-void show_dlg_item_box(struct dialog_data *dlg,
-		       struct widget_data *box_item_data)
+void
+display_listbox(struct widget_data *box_item_data, struct dialog_data *dlg,
+		int sel)
 {
 	struct terminal *term = dlg->win->term;
 	struct dlg_data_item_data_box *box;
@@ -127,3 +128,7 @@ void show_dlg_item_box(struct dialog_data *dlg,
 
 	box->list_len = n;
 }
+
+struct widget_ops listbox_ops = {
+	display_listbox,
+};

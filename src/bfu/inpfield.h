@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.2 2002/07/04 21:19:44 pasky Exp $ */
+/* $Id: inpfield.h,v 1.3 2002/07/05 00:29:57 pasky Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -6,8 +6,12 @@
 #include "bfu/align.h"
 #include "bfu/dialog.h"
 #include "bfu/inphist.h"
+#include "bfu/widget.h"
 #include "lowlevel/terminal.h"
 #include "util/memlist.h"
+
+extern struct widget_ops field_ops;
+extern struct widget_ops field_pass_ops;
 
 int check_number(struct dialog_data *, struct widget_data *);
 int check_nonempty(struct dialog_data *, struct widget_data *);

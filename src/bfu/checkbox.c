@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.2 2002/07/04 21:19:44 pasky Exp $ */
+/* $Id: checkbox.c,v 1.3 2002/07/05 00:29:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,3 +104,29 @@ void checkbox_list_fn(struct dialog_data *dlg)
 			   dlg->x + DIALOG_LB, &y, w, &rw,
 			   AL_CENTER);
 }
+
+
+void
+display_checkbox(struct widget_data *di, struct dialog_data *dlg, int sel)
+{
+	struct terminal *term = dlg->win->term;
+
+	if (di->checked) {
+		print_text(term, di->x, di->y, 3,
+				(!di->item->gid) ? "[X]" : "(X)",
+				COLOR_DIALOG_CHECKBOX);
+	} else {
+		print_text(term, di->x,	di->y, 3,
+				(!di->item->gid) ? "[ ]" : "( )",
+				COLOR_DIALOG_CHECKBOX);
+	}
+	if (sel) {
+		set_cursor(term, di->x + 1, di->y, di->x + 1,
+				di->y);
+		set_window_ptr(dlg->win, di->x, di->y);
+	}
+}
+
+struct widget_ops checkbox_ops = {
+	display_checkbox,
+};

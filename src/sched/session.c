@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.425 2004/06/08 23:22:22 jonas Exp $ */
+/* $Id: session.c,v 1.426 2004/06/08 23:26:45 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -792,7 +792,7 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 				 * take the first possibility and should maybe
 				 * make it possible to specify new-screen etc
 				 * via -remote "openURL(..., new-*)" --jonas */
-				open_url_in_new_window(ses, struri(uri), term_env);
+				open_uri_in_new_window(ses, uri, term_env);
 
 			} else {
 				/* Open next ones. */
@@ -819,7 +819,7 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 
 		} else if (info->remote & SES_REMOTE_NEW_WINDOW) {
 			/* FIXME: See the url list loop */
-			open_url_in_new_window(ses, NULL, term_env);
+			open_uri_in_new_window(ses, NULL, term_env);
 
 		} else if (info->remote & SES_REMOTE_PROMPT_URL) {
 			/* We can't create new window in EV_INIT handler! */

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.320 2004/06/08 13:54:52 jonas Exp $ */
+/* $Id: menu.c,v 1.321 2004/06/08 23:26:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -564,7 +564,7 @@ init_session_info_string(struct string *parameters, struct session *ses)
 
 
 void
-open_url_in_new_window(struct session *ses, unsigned char *url,
+open_uri_in_new_window(struct session *ses, struct uri *uri,
 		       enum term_env_type env)
 {
 	struct string parameters;
@@ -576,7 +576,7 @@ open_url_in_new_window(struct session *ses, unsigned char *url,
 
 	/* TODO: Possibly preload the link URI so it will be ready when
 	 * the new ELinks instance requests it. --jonas */
-	if (url) add_encoded_shell_safe_url(&parameters, url);
+	if (uri) add_encoded_shell_safe_url(&parameters, struri(uri));
 
 	open_new_window(ses->tab->term, path_to_exe, env, parameters.source);
 	done_string(&parameters);
@@ -603,7 +603,7 @@ send_open_in_new_window(struct terminal *term, const struct open_in_new *open,
 	uri = get_link_uri(ses, doc_view, link);
 	if (!uri) return;
 
-	open_url_in_new_window(ses, struri(uri), open->env);
+	open_uri_in_new_window(ses, uri, open->env);
 	done_uri(uri);
 }
 
@@ -611,7 +611,7 @@ void
 send_open_new_window(struct terminal *term, const struct open_in_new *open,
 		    struct session *ses)
 {
-	open_url_in_new_window(ses, NULL, open->env);
+	open_uri_in_new_window(ses, NULL, open->env);
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.36 2004/05/29 15:36:39 jonas Exp $ */
+/* $Id: menu.h,v 1.37 2004/06/08 23:26:45 jonas Exp $ */
 
 #ifndef EL__DIALOG_MENU_H
 #define EL__DIALOG_MENU_H
@@ -27,7 +27,7 @@ void exit_prog(struct session *ses, int query);
 
 void save_url_as(struct session *ses);
 
-void open_url_in_new_window(struct session *ses, unsigned char *url, enum term_env_type);
+void open_uri_in_new_window(struct session *ses, struct uri *uri, enum term_env_type);
 
 void send_open_new_window(struct terminal *term, const struct open_in_new *open, struct session *ses);
 void send_open_in_new_window(struct terminal *term, const struct open_in_new *open, struct session *ses);

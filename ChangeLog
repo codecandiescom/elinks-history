@@ -1,3 +1,22 @@
+Fri Feb  1 21:49:59 2002  Petr Baudis <pasky@ji.cz>:
+
+	* BUGS, TODO:
+	
+	changes and moves etc
+
+Fri Feb  1 21:46:10 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, default.c, contrib/README, contrib/color_config.diff:
+	
+	Added possibility to change default colors settings - original
+	patch by Peter Wang, disabled default_bg && default_vlink for now
+
+Fri Feb  1 17:33:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* bfu.c, links.h, os_dep.c, session.c, url.c:
+	
+	Cleanup safe_strncpy and spread its use to more places.
+
 Fri Feb  1 13:49:13 2002  Petr Baudis <pasky@ji.cz>:
 
 	* links.h:

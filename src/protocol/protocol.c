@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.47 2004/05/07 18:01:19 jonas Exp $ */
+/* $Id: protocol.c,v 1.48 2004/05/07 18:05:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,28 +40,6 @@ struct protocol_backend {
 	unsigned int need_slashes:1;
 	unsigned int need_slash_after_host:1;
 };
-
-
-static void
-unknown_protocol_handler(struct session *ses, struct uri *uri)
-{
-	enum connection_state state;
-
-	switch (uri->protocol) {
-	case PROTOCOL_JAVASCRIPT:
-		state = S_NO_JAVASCRIPT;
-		break;
-#ifndef CONFIG_SSL
-	case PROTOCOL_HTTPS:
-		state = S_NO_SSL;
-		break;
-#endif
-	default:
-		state = S_UNKNOWN_PROTOCOL;
-	}
-
-	print_error_dialog(ses, state, PRI_CANCEL);
-}
 
 static const struct protocol_backend protocol_backends[] = {
 	{ "file",	 0, file_protocol_handler,	1, 1, 0 },
@@ -146,6 +124,28 @@ get_protocol_handler(enum protocol protocol)
 	return protocol_backends[protocol].handler;
 }
 
+
+static void
+generic_external_protocol_handler(struct session *ses, struct uri *uri)
+{
+	enum connection_state state;
+
+	switch (uri->protocol) {
+	case PROTOCOL_JAVASCRIPT:
+		state = S_NO_JAVASCRIPT;
+		break;
+#ifndef CONFIG_SSL
+	case PROTOCOL_HTTPS:
+		state = S_NO_SSL;
+		break;
+#endif
+	default:
+		state = S_UNKNOWN_PROTOCOL;
+	}
+
+	print_error_dialog(ses, state, PRI_CANCEL);
+}
+
 protocol_external_handler *
 get_protocol_external_handler(enum protocol protocol)
 {
@@ -158,7 +158,7 @@ get_protocol_external_handler(enum protocol protocol)
 	/* If both external and regular protocol handler is NULL return
 	 * default handler */
 	if (!protocol_backends[protocol].handler)
-		return unknown_protocol_handler;
+		return generic_external_protocol_handler;
 
 	return NULL;
 }

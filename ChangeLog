@@ -1,3 +1,111 @@
+Sun Dec 15 22:49:09 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/config/dialogs.c, src/config/kbdbind.c, src/config/kbdbind.h:
+
+	Removed info button from the keybinding manager, added delte button
+	to the keybinding manager.  
+
+Sun Dec 15 15:05:47 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/: brazilian_portuguese.lng, bulgarian.lng, catalan.lng,
+	croatian.lng, czech.lng, danish.lng, dutch.lng, english.lng,
+	estonian.lng, finnish.lng, french.lng, galician.lng, german.lng,
+	greek.lng, hungarian.lng, icelandic.lng, indonesian.lng,
+	italian.lng, lithuanian.lng, norwegian.lng, polish.lng,
+	portuguese.lng, romanian.lng, russian.lng, slovak.lng, spanish.lng,
+	swedish.lng, turkish.lng, ukrainian.lng:
+
+	Last patch broke compilation. Fixed.  
+
+Sun Dec 15 14:26:29 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/: brazilian_portuguese.lng, bulgarian.lng, catalan.lng,
+	croatian.lng, czech.lng, danish.lng, dutch.lng, english.lng,
+	estonian.lng, finnish.lng, french.lng, galician.lng, german.lng,
+	greek.lng, hungarian.lng, icelandic.lng, indonesian.lng,
+	italian.lng, lithuanian.lng, norwegian.lng, polish.lng,
+	portuguese.lng, romanian.lng, russian.lng, slovak.lng, spanish.lng,
+	swedish.lng, turkish.lng, ukrainian.lng:
+
+	Unused entries were commented.  
+
+Sun Dec 15 11:32:06 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Spelling fixes by Miciah.  
+
+Sun Dec 15 11:23:30 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Removed one useless include, thanks Miciah.  
+
+Sun Dec 15 02:27:49 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/find_unused_translations.sh:
+
+	The Shorter Fix of the Night ;) 
+
+Sun Dec 15 02:18:35 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/find_unused_translations.sh:
+
+	Polished by Miciah.  
+
+Sun Dec 15 02:14:04 2002  Laurent Monin <zas@norz.org>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Some dumb/smart prefixes for babelfish. b, bb word, bb_fr_en french,
+	bb_en_fr english. Feel free to add some according to your needs.  
+
+Sun Dec 15 01:51:21 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/sched.c:
+
+	A cache handling issue was causing segfaults. Fixed. (i hope...) 
+
+Sun Dec 15 01:16:13 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/: README, find_unused_translations.sh:
+
+	patch option now only generates one patch against english.lng, apply
+	and run ./synclang and ./gen-intl. README document was updated.  
+
+Sun Dec 15 00:48:59 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/find_unused_translations.sh:
+
+	Typo and bug fix.  
+
+Sun Dec 15 00:38:10 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/: find_unused_translations.sh, gen-intl, synclang.awk:
+
+	Support for comment by adding # before T_...,
+	find_unused_translations.sh simple now generate a unique patch
+	against english.lng. Just apply to comment unused entries, then run
+	./synclang and ./gen-intl.  
+
+Sun Dec 15 00:02:01 2002  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	New command line option (-long-help) added. This will print the
+	(old) detailed help usage. -?, -h and -help now prints a brief help
+	usage based on option captions.  
+
 Sat Dec 14 18:36:50 2002  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/tables.c:

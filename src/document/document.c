@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.38 2003/12/01 18:42:24 jonas Exp $ */
+/* $Id: document.c,v 1.39 2003/12/01 18:55:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,16 +226,17 @@ shrink_format_cache(int whole)
 		if (is_object_used(document)) continue;
 
 		if (!whole) {
-			struct cache_entry *ce = find_in_cache(document->url);
-			int id_tag = ce ? ce->id_tag : document->id_tag + 1;
+			struct cache_entry *ce;
 
-			if (!ce) internal("no cache entry for document");
+			/* If we are not purging the whole format cache, stop
+			 * once we are below the maximum number of entries. */
+			if (format_cache_entries <= format_cache_size)
+				break;
 
-			/* If we are not purging the whole format cache, only
-			 * keep documents that are in sync with the cache
-			 * entry and within the format max size. */
-			if (id_tag == document->id_tag
-			    && format_cache_entries <= format_cache_size)
+			/* Keep unreferenced documents that are in sync with
+			 * the (resource) cache entry. */
+			ce = find_in_cache(document->url);
+			if (ce && ce->id_tag == document->id_tag)
 				continue;
 		}
 

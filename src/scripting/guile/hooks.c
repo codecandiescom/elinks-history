@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.14 2003/10/01 11:31:51 jonas Exp $ */
+/* $Id: hooks.c,v 1.15 2003/10/01 14:52:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,9 @@ static enum evhook_status
 script_hook_goto_url(va_list ap)
 {
 	unsigned char **url = va_arg(ap, unsigned char **);
+#if 0 /* This event argument is still not used by this backend */
 	struct session *ses = va_arg(ap, struct session *);
+#endif
 	SCM proc;
 	SCM x;
 
@@ -54,7 +56,9 @@ static enum evhook_status
 script_hook_follow_url(va_list ap)
 {
 	unsigned char **url = va_arg(ap, unsigned char **);
+#if 0 /* This event argument is still not used by this backend */
 	struct session *ses = va_arg(ap, struct session *);
+#endif
 	SCM proc;
 	SCM x;
 
@@ -76,7 +80,9 @@ script_hook_pre_format_html(va_list ap)
 {
 	unsigned char **html = va_arg(ap, unsigned char **);
 	int *html_len = va_arg(ap, int *);
+#if 0 /* This event argument is still not used by this backend */
 	struct session *ses = va_arg(ap, struct session *);
+#endif
 	unsigned char *url = va_arg(ap, unsigned char *);
 	SCM proc;
 	SCM x;

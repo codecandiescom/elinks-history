@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.145 2004/03/28 18:00:41 zas Exp $ */
+/* $Id: tables.c,v 1.146 2004/03/28 18:21:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -124,11 +124,31 @@ struct html_start_end {
 	unsigned char *start, *end;
 };
 
+struct table_frames {
+	int top;
+	int bottom;
+	int left;
+	int right;
+};
 
 /* Global variables */
 
 int table_level;
 
+static void
+get_table_frames(struct table *t, struct table_frames *result)
+{
+	assert(t);
+
+	if (t->border) {
+		result->top = !!(t->frame & TABLE_FRAME_ABOVE);
+		result->bottom = !!(t->frame & TABLE_FRAME_BELOW);
+		result->left = !!(t->frame & TABLE_FRAME_LHS);
+		result->right = !!(t->frame & TABLE_FRAME_RHS);
+	} else {
+		memset(result, 0, sizeof(struct table_frames));
+	}
+}
 
 static inline void
 get_align(unsigned char *attr, int *a)
@@ -1354,15 +1374,15 @@ get_table_heights(struct table *t)
 		s = ns;
 	} while (s != MAXINT);
 
-	t->rh = 0;
-	if (t->border) {
-		if (t->frame & TABLE_FRAME_ABOVE) t->rh++;
-		if (t->frame & TABLE_FRAME_BELOW) t->rh++;
-	}
+	{
+		struct table_frames tf;
 
-	for (j = 0; j < t->y; j++) {
-		t->rh += t->rows_height[j] +
-			 (j && get_hline_width(t, j) >= 0);
+		get_table_frames(t, &tf);
+		t->rh = tf.top + tf.bottom;
+		for (j = 0; j < t->y; j++) {
+			t->rh += t->rows_height[j] +
+				 (j && get_hline_width(t, j) >= 0);
+		}
 	}
 }
 
@@ -1374,22 +1394,16 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 	int xp, yp;
 	int expand_cols = (global_doc_opts && global_doc_opts->table_expand_cols);
 	color_t default_bgcolor = par_format.bgcolor;
-	int top_frame = 0;
-	int bottom_frame = 0;
-	int left_frame = 0;
+	struct table_frames tf;
 
-	if (t->border) {
-		top_frame = !!(t->frame & TABLE_FRAME_ABOVE);
-		bottom_frame = !!(t->frame & TABLE_FRAME_BELOW);
-		left_frame = !!(t->frame & TABLE_FRAME_LHS);
-	}
+	get_table_frames(t, &tf);
 
 	if (t->fragment_id)
 		add_fragment_identifier(t->p, t->fragment_id);
 
-	xp = x + left_frame;
+	xp = x + tf.left;
 	for (i = 0; i < t->x; i++) {
-		yp = y + top_frame;
+		yp = y + tf.top;
 
 		for (j = 0; j < t->y; j++) {
 			struct table_cell *cell = CELL(t, i, j);
@@ -1398,7 +1412,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 			int row;
 
 			par_format.bgcolor = default_bgcolor;
-			for (row = t->p->cy; row < yp + rows_height + top_frame; row++) {
+			for (row = t->p->cy; row < yp + rows_height + tf.top; row++) {
 				expand_lines(t->p, row);
 				expand_line(t->p, row, x - 1);
 			}
@@ -1484,7 +1498,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 		      (j < t->y - 1 && get_hline_width(t, j + 1) >= 0);
 	}
 
-	*yy = yp + top_frame + bottom_frame;
+	*yy = yp + tf.top + tf.bottom;
 }
 
 
@@ -1568,10 +1582,10 @@ draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
 static void
 display_table_frames(struct table *t, int x, int y)
 {
+	struct table_frames tf;
  	signed char *frame[2];
   	register int i, j;
   	int cx, cy;
-  	int fa = 0, fb = 0, fl = 0, fr = 0;
   	int fh_size = (t->x + 2) * (t->y + 1);
   	int fv_size = (t->x + 1) * (t->y + 2);
 
@@ -1620,26 +1634,20 @@ cont:;
 	}
 
 cont2:
-	if (t->border) {
-		fa = !!(t->frame & TABLE_FRAME_ABOVE);
-		fb = !!(t->frame & TABLE_FRAME_BELOW);
-		fl = !!(t->frame & TABLE_FRAME_LHS);
-		fr = !!(t->frame & TABLE_FRAME_RHS);
-	}
 
-	memset(&H_FRAME_POSITION(t, 0, 0), fa, t->x);
-	memset(&H_FRAME_POSITION(t, 0, t->y), fb, t->x);
-
-	memset(&V_FRAME_POSITION(t, 0, 0), fl, t->y);
-	memset(&V_FRAME_POSITION(t, t->x, 0), fr, t->y);
+	get_table_frames(t, &tf);
+	memset(&H_FRAME_POSITION(t, 0, 0), tf.top, t->x);
+	memset(&H_FRAME_POSITION(t, 0, t->y), tf.bottom, t->x);
+	memset(&V_FRAME_POSITION(t, 0, 0), tf.left, t->y);
+	memset(&V_FRAME_POSITION(t, t->x, 0), tf.right, t->y);
 
 	cy = y;
 	for (j = 0; j <= t->y; j++) {
 		cx = x;
 		if ((j > 0 && j < t->y && get_hline_width(t, j) >= 0)
-		    || (j == 0 && fa)
-		    || (j == t->y && fb)) {
-			int w = fl ? t->border : -1;
+		    || (j == 0 && tf.top)
+		    || (j == t->y && tf.bottom)) {
+			int w = tf.left ? t->border : -1;
 
 			for (i = 0; i < t->x; i++) {
 				if (i > 0)
@@ -1656,7 +1664,7 @@ cont2:
 				cx += t->columns_width[i];
 			}
 
-			if (fr) {
+			if (tf.right) {
 				draw_frame_point(t, frame, cx, cy, i, j, par_format.bgcolor, t->bordercolor);
 				if (j < t->y)
 					draw_frame_vline(t, frame, cx, cy + 1, i, j, par_format.bgcolor, t->bordercolor);
@@ -1668,8 +1676,8 @@ cont2:
 		} else if (j < t->y) {
 			for (i = 0; i <= t->x; i++) {
 				if ((i > 0 && i < t->x && get_vline_width(t, i) >= 0)
-				    || (i == 0 && fl)
-				    || (i == t->x && fr)) {
+				    || (i == 0 && tf.left)
+				    || (i == t->x && tf.right)) {
 					draw_frame_vline(t, frame, cx, cy, i, j, par_format.bgcolor, t->bordercolor);
 					cx++;
 				}

@@ -420,7 +420,7 @@ msgstr "ID"
 
 #: src/cache/dialogs.c:125 src/config/options.inc:523
 msgid "Header"
-msgstr "Entête"
+msgstr "En-tête"
 
 #: src/cache/dialogs.c:176
 msgid "Cache manager"
@@ -1163,7 +1163,7 @@ msgstr "Aller à la page d'accueil"
 
 #: src/config/kbdbind.c:455
 msgid "Show information about the current page HTTP headers"
-msgstr "Informations sur les entêtes HTTP"
+msgstr "Informations sur les en-têtes HTTP"
 
 #: src/config/kbdbind.c:456
 msgid "Open history manager"
@@ -2239,7 +2239,7 @@ msgid ""
 "asking the server."
 msgstr ""
 "Cacher aussi les pages redirigées par le serveur (habituellement\n"
-"grâce au code HTTP 302 et un entête Location). Ceci était le\n"
+"grâce au code HTTP 302 et un en-tête Location). Ceci était le\n"
 "fonctionnement initial, mais il pose des problèmes pour les\n"
 "pages web comportant un système d'authentification."
 
@@ -2252,9 +2252,9 @@ msgid ""
 "Ignore Cache-Control and Pragma server headers.\n"
 "When set, the document is cached even with 'Cache-Control: no-cache'."
 msgstr ""
-"Ignorer les entêtes Cache-Control et Pragma.\n"
+"Ignorer les en-têtes Cache-Control et Pragma.\n"
 "Si activé, le document sera mis en cache même si le serveur spécifie un\n"
-"entête 'Cache-Control: no-cache'."
+"en-tête 'Cache-Control: no-cache'."
 
 #: src/config/options.inc:384
 msgid "Formatted documents"
@@ -2498,7 +2498,7 @@ msgstr ""
 #, c-format
 msgid "Header string used in dumps. %u is substituted by URL."
 msgstr ""
-"Chaîne d'entête utilisée lors des dumps.\n"
+"Chaîne d'en-tête utilisée lors des dumps.\n"
 "%u est remplacé par l'URL du document."
 
 #: src/config/options.inc:527
@@ -2725,7 +2725,7 @@ msgid ""
 "The Accept-Charset header is quite long and sending it can trigger\n"
 "bugs in some rarely found servers."
 msgstr ""
-"L'entête Accept-Charset est plutôt long et l'envoyer peut\n"
+"L'en-tête Accept-Charset est plutôt long et l'envoyer peut\n"
 "déclencher des bogues dans quelques rares serveurs."
 
 #: src/config/options.inc:645
@@ -2816,7 +2816,7 @@ msgid ""
 "can unfortunately considerably affect privacy and can lead even to a\n"
 "security problem on some badly designed web pages."
 msgstr ""
-"Options d'envoi de référent HTTP. Un référent HTTP est un entête spécial\n"
+"Options d'envoi de référent HTTP. Un référent HTTP est un en-tête spécial\n"
 "envoyé dans les requêtes HTTP, qui est supposé contenir l'URL de la page\n"
 "précédemment visitée par le navigateur. Par ce moyen, le serveur peut\n"
 "connaitre quel lien vous avez suivi pour accéder à cette page. Toutefois,\n"
@@ -2850,11 +2850,11 @@ msgstr "Référent fixe à envoyer lorsque la politique 2 est choisie."
 
 #: src/config/options.inc:704
 msgid "Send Accept-Language header"
-msgstr "Envoyer l'entête Accept-Language"
+msgstr "Envoyer l'en-tête Accept-Language"
 
 #: src/config/options.inc:706
 msgid "Send Accept-Language header."
-msgstr "Envoyer l'entête Accept-Language."
+msgstr "Envoyer l'en-tête Accept-Language."
 
 #: src/config/options.inc:708
 msgid "Use UI language as Accept-Language"
@@ -2868,7 +2868,7 @@ msgid ""
 "risk because it tells web-masters about your preference in language."
 msgstr ""
 "Demander des versions localisées des documents aux serveurs web (à l'aide\n"
-"de l'entête Accept-Language et du langage sélectionné pour l'interface\n"
+"de l'en-tête Accept-Language et du langage sélectionné pour l'interface\n"
 "utilisateur d'ELinks). Notez que certains voient ici un risque potentiel\n"
 "car les webmasters auront connaissance de votre langue préférée ..."
 
@@ -2910,7 +2910,7 @@ msgid ""
 "Use \" \" if you don't want any User-Agent header to be sent at all."
 msgstr ""
 "Change l'identification du navigateur.\n"
-"Il s'agit de l'entête User-Agent envoyé aux serveurs lors d'une\n"
+"Il s'agit de l'en-tête User-Agent envoyé aux serveurs lors d'une\n"
 "requête. Le mot clé 'textmode' dans le premier champ est notre\n"
 "tentative silencieuse d'établir un standart pour les nouveaux\n"
 "navigateurs en mode texte, ainsi les webmasters ont juste\n"
@@ -2920,7 +2920,7 @@ msgstr ""
 "%s dans la chaîne insère l'identifiant du système\n"
 "%t dans la chaîne insère les dimensions du terminal\n"
 "%b dans la chaîne insère le nombre de barres affichées par ELinks\n"
-"Utilisez \" \" si vous ne voulez aucun entête User-Agent."
+"Utilisez \" \" si vous ne voulez aucun en-tête User-Agent."
 
 #: src/config/options.inc:739
 msgid "HTTPS"
@@ -4200,11 +4200,11 @@ msgstr "Titre du lien (historique)"
 #: src/dialogs/document.c:236 src/dialogs/document.c:284
 #: src/dialogs/document.c:296
 msgid "Header info"
-msgstr "Info. entêtes"
+msgstr "Info. en-têtes"
 
 #: src/dialogs/document.c:297
 msgid "No header info."
-msgstr "Aucune information d'entête."
+msgstr "Aucune information d'en-tête."
 
 #: src/dialogs/download.c:256 src/dialogs/menu.c:525 src/sched/download.c:353
 msgid "Download"
@@ -4473,7 +4473,7 @@ msgstr "Infos sur le doc~ument"
 
 #: src/dialogs/menu.c:372
 msgid "H~eader info"
-msgstr "In~fo. entêtes"
+msgstr "In~fo. en-têtes"
 
 #: src/dialogs/menu.c:373
 msgid "Rel~oad document"
@@ -5697,7 +5697,7 @@ msgstr "Authentification"
 
 #: src/sched/error.c:37
 msgid "Getting headers"
-msgstr "Réception des entêtes"
+msgstr "Réception des en-têtes"
 
 #: src/sched/error.c:38
 msgid "Server is processing request"
@@ -5866,7 +5866,7 @@ msgstr ""
 "L'option protocol.http.user_agent contient une chaîne vide - c'était la "
 "valeur qui, dans le passé, était remplacée par la chaîne d'identification de "
 "client par défaut d'ELinks (User-Agent string). Toutefois, maintenant cela "
-"signifie qu'AUCUN entête User-Agent ne doit être envoyé - si c'est vraiment "
+"signifie qu'AUCUN en-tête User-Agent ne doit être envoyé - si c'est vraiment "
 "ce que vous désirez, utilisez la valeur \" \", sinon effacer la ligne "
 "concernée dans le fichier de configuration, ainsi la configuration par "
 "défaut sera utilisée. Si vous n'avez aucune idée de quoi nous parlons alors "

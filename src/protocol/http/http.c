@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.381 2004/12/19 04:46:21 miciah Exp $ */
+/* $Id: http.c,v 1.382 2004/12/19 10:05:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -195,7 +195,8 @@ static void decompress_shutdown(struct connection *);
 static void
 done_http()
 {
-	if (accept_charset) free(accept_charset);
+	if (accept_charset)
+		mem_free(accept_charset);
 }
 
 static void
@@ -220,13 +221,7 @@ init_accept_charset()
 		add_crlf_to_string(&ac);
 	}
 
-	/* Do not use mem_alloc() here. */
-	accept_charset = malloc(ac.length + 1);
-	if (accept_charset) {
-		memcpy(accept_charset, ac.source, ac.length + 1);
-	} else {
-		accept_charset = "";
-	}
+	accept_charset = squeezastring(&ac);
 
 	done_string(&ac);
 }
@@ -704,7 +699,8 @@ http_send_header(struct connection *conn)
 	}
 
 	if (!(info->bl_flags & SERVER_BLACKLIST_NO_CHARSET)
-	    && !get_opt_bool("protocol.http.bugs.accept_charset")) {
+	    && !get_opt_bool("protocol.http.bugs.accept_charset")
+	    && accept_charset) {
 		add_to_string(&header, accept_charset);
 	}
 

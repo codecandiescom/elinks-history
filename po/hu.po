@@ -1,18 +1,19 @@
-# translation of hu.po to 
+# translation of hu.po to
 # translation of hu.po to
 # translation of hu.po to Hungarian
 # ELinks Hungarian translation.
 # Suveg Gabor <gsuveg@sgmobil2000.hu>
 # Varga Balázs <vinnui@broadband.hu>
 # Varga Balazs <vinnui@ent.hu>, 2003.
+# Varga Balazs <vinnui@freemail.hu>, 2003.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2003-10-20 18:18+0200\n"
-"PO-Revision-Date: 2003-10-17 21:49+0200\n"
-"Last-Translator: \n"
-"Language-Team:  <@li.org>\n"
+"PO-Revision-Date: 2003-10-20 19:44+0200\n"
+"Last-Translator: Varga Balazs <vinnui@freemail.hu>\n"
+"Language-Team: Hungarian <@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -275,14 +276,12 @@ msgid ""
 msgstr ""
 
 #: src/config/conf.c:635
-#, fuzzy
 msgid "Automatically saved options\n"
-msgstr "Formázó gyorsítótár beállítások."
+msgstr "Autómatikusan mentett beállítások\n"
 
 #: src/config/conf.c:649
-#, fuzzy
 msgid "Automatically saved keybindings\n"
-msgstr "Formázó gyorsítótár beállítások."
+msgstr "Autómatikusan mentett billentyûparancsok\n"
 
 #: src/config/conf.c:691
 msgid "File saving disabled by option"
@@ -463,8 +462,7 @@ msgstr ""
 #: src/config/dialogs.c:730
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr ""
-"Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
+msgstr "Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
 
 #: src/config/dialogs.c:762
 msgid "Keybinding manager"
@@ -593,8 +591,7 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:398
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
-"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:399
 msgid "Go to the homepage"
@@ -654,28 +651,24 @@ msgid "Move to the next frame"
 msgstr "Ugrás a következõ keretre"
 
 #: src/config/kbdbind.c:417
-#, fuzzy
 msgid "Open a new tab"
-msgstr "Új ablak megnyitása"
+msgstr "Új fül megnyitása"
 
 #: src/config/kbdbind.c:418
-#, fuzzy
 msgid "Open a new tab in background"
-msgstr "Fül háttérbe"
+msgstr "Egy új fül megnyitása a háttérben"
 
 #: src/config/kbdbind.c:419
 msgid "Open a new window"
 msgstr "Új ablak megnyitása"
 
 #: src/config/kbdbind.c:420
-#, fuzzy
 msgid "Open the current link in a new tab"
-msgstr "A kijelölt link megnyitása új ablakban"
+msgstr "A kijelölt link megnyitása új fülre"
 
 #: src/config/kbdbind.c:422
-#, fuzzy
 msgid "Open the current link a new tab in background"
-msgstr "A kijelölt link megnyitása új ablakban"
+msgstr "A kijelölt link megnyitása a háttérben, új fülre"
 
 #: src/config/kbdbind.c:423
 msgid "Open the current link in a new window"
@@ -1106,8 +1099,7 @@ msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
 #: src/config/options.c:1012
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr ""
-"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1018 src/util/version.c:86
@@ -1310,7 +1302,6 @@ msgid "Image links tagging"
 msgstr "A képek linkjeinek jelölése"
 
 #: src/config/options.c:1119
-#, fuzzy
 msgid ""
 "When to enclose image links:\n"
 "0 means never\n"
@@ -1339,20 +1330,20 @@ msgid "Suffix string to use to mark image links."
 msgstr "Szöveg ami a képek linkjeinek megjelölésére szolgál."
 
 #: src/config/options.c:1132
-#, fuzzy
 msgid "Display links to images w/o alt"
-msgstr "A képekre mutató linkek megjelenítésének váltogatása"
+msgstr "Az alt tag nélküli képekre mutató linkek megjelenítése"
 
 #: src/config/options.c:1134
 msgid ""
 "Display links to images without an alt attribute. If this option\n"
 "is off, these images are completely invisible."
 msgstr ""
+"Az alt tag nélküli képekre mutató linkek megjelenítése. Ha ez\n"
+"a beállítás ki van kapcsolva, ezek a képek teljesen láthatatlanok."
 
 #: src/config/options.c:1137
-#, fuzzy
 msgid "Display links to images"
-msgstr "A képekre mutató linkek megjelenítésének váltogatása"
+msgstr "A képekre mutató linkek megjelenítése"
 
 #: src/config/options.c:1139
 msgid ""
@@ -1361,6 +1352,10 @@ msgid ""
 "attribute contents is shown, but as normal text, not selectable\n"
 "as a link."
 msgstr ""
+"A képekre mutató linkek megjelenítése, attól függetlenül hogy\n"
+"van-e alt attribútuma vagy sem. Ha ez a beállítás ki van kapcsolva,\n"
+"az alt tag tartalma jelenik meg, de csak normál szövegként,\n"
+"és nem kiválasztható linkként."
 
 #: src/config/options.c:1145
 msgid "Links"
@@ -1372,22 +1367,19 @@ msgstr "Más dokumentumokra mutató linkek kezelése."
 
 #: src/config/options.c:1149
 msgid "Active link"
-msgstr ""
+msgstr "Aktív linkek"
 
 #: src/config/options.c:1151
-#, fuzzy
 msgid "Options for the active link."
-msgstr "Keresési beállítások."
+msgstr "Az aktív linkek beállításai."
 
 #: src/config/options.c:1153
-#, fuzzy
 msgid "Colors"
-msgstr "Szín"
+msgstr "Színek"
 
 #: src/config/options.c:1155
-#, fuzzy
 msgid "Active link colors."
-msgstr "Alapértelmezett link szín."
+msgstr "Aktív link színei."
 
 #: src/config/options.c:1157 src/config/options.c:1345
 #: src/config/options.c:1980 src/config/options.c:1992
@@ -1518,9 +1510,8 @@ msgid "Default text color."
 msgstr "Alapértelmezett szövegszín."
 
 #: src/config/options.c:1165
-#, fuzzy
 msgid "Enable color"
-msgstr "Engedélyezés"
+msgstr "Színek engedélyezése"
 
 #: src/config/options.c:1167
 msgid ""
@@ -1529,22 +1520,20 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1170
-#, fuzzy
 msgid "Bold"
-msgstr "Mappa"
+msgstr "Félkövér"
 
 #: src/config/options.c:1172
 msgid "Make the active link text bold."
-msgstr ""
+msgstr "Az aktív link legyen félkövér."
 
 #: src/config/options.c:1174
-#, fuzzy
 msgid "Invert colors"
-msgstr "Szövegszín"
+msgstr "Színek invertálása"
 
 #: src/config/options.c:1176
 msgid "Invert the fore- and background color so the link stands out."
-msgstr ""
+msgstr "Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
 
 #: src/config/options.c:1179 src/dialogs/options.c:137
 msgid "Underline"
@@ -1552,7 +1541,7 @@ msgstr "Aláhúzás"
 
 #: src/config/options.c:1181
 msgid "Underline the active link."
-msgstr ""
+msgstr "Az aktív link aláhúzása."
 
 #: src/config/options.c:1184
 msgid "Directory highlighting"
@@ -1560,8 +1549,7 @@ msgstr "Alkönyvtárak kiemelése"
 
 #: src/config/options.c:1186
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr ""
-"Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
+msgstr "Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
 
 #: src/config/options.c:1188
 msgid "Number links"
@@ -1603,8 +1591,7 @@ msgstr "Linkek kiválasztása"
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
-msgstr ""
-"Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
+msgstr "Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.c:1212
 msgid "Searching"
@@ -1753,8 +1740,7 @@ msgstr ""
 
 #: src/config/options.c:1298
 msgid "Ignore cache-control info from server"
-msgstr ""
-"A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
+msgstr "A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
 
 #: src/config/options.c:1300
 msgid ""
@@ -1868,11 +1854,11 @@ msgstr "Fekete háttéren mutassa a sötét színeket."
 
 #: src/config/options.c:1366
 msgid "Ensure contrast"
-msgstr ""
+msgstr "A kontraszt biztosítása"
 
 #: src/config/options.c:1368
 msgid "Makes sure that the back- and foreground color is never equal."
-msgstr ""
+msgstr "A háttérszín és a betûszín sose legyen egyforma."
 
 #. If you change this please also change ACT_DOCUMENT_COLORS action
 #. * handling.
@@ -2148,14 +2134,12 @@ msgstr ""
 "5 - minden"
 
 #: src/config/options.c:1518
-#, fuzzy
 msgid "Underline links"
-msgstr "Aláhúzás"
+msgstr "Linkek aláhúzása"
 
 #: src/config/options.c:1520
-#, fuzzy
 msgid "Underline links."
-msgstr "Aláhúzás"
+msgstr "Linkek aláhúzása."
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1526
@@ -2870,7 +2854,6 @@ msgid "Color mode"
 msgstr "Szín üzemmód"
 
 #: src/config/options.c:1919
-#, fuzzy
 msgid ""
 "The color mode controls what colors are used and how they are\n"
 "output to the terminal. The color modes are:\n"
@@ -3088,22 +3071,20 @@ msgid "Dialog colors."
 msgstr "A dialógusablak színei."
 
 #: src/config/options.c:2113
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use ui.colors.color.dialog.generic.background instead."
 msgstr ""
 "Ez a beállítás elavult, nemsokára eltávolításra kerül.\n"
-"Használt a ui.dialog.shadows opciót helyette."
+"Használt a ui.colors.color.dialog.generic.background opciót helyette."
 
 #: src/config/options.c:2116 src/config/options.c:2525
 msgid "Generic"
-msgstr ""
+msgstr "Általános"
 
 #: src/config/options.c:2118 src/config/options.c:2527
-#, fuzzy
 msgid "Generic dialog colors."
-msgstr "Általános címsor színei."
+msgstr "Általános dialógusablak színei."
 
 #: src/config/options.c:2128 src/config/options.c:2537
 msgid "Frame"
@@ -3337,13 +3318,12 @@ msgid "Menu selected hotkey default background color."
 msgstr ""
 
 #: src/config/options.c:2522
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use ui.colors.mono.dialog.generic.background instead."
 msgstr ""
 "Ez a beállítás elavult, nemsokára eltávolításra kerül.\n"
-"Használt a ui.dialog.shadows opciót helyette."
+"Használt a ui.colors.mono.dialog.generic.background opciót helyette."
 
 #: src/config/options.c:2623
 msgid "Dialog field colors."
@@ -3411,10 +3391,9 @@ msgstr ""
 "Az idõzítõ engedélyezése vagy tiltása:\n"
 "0 - ne legyen idõzítõ\n"
 "1 - legyen idõzítõ, de ne mutassa az állapotát\n"
-"2 - legyen idõzítõ, és mutassa hol jár"
+"2 - legyen idõzítõ, és mutassa az állapotát a LED-ek mellett"
 
 #: src/config/options.c:2807
-#, fuzzy
 msgid ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
@@ -3424,7 +3403,7 @@ msgstr ""
 "Az idõzítõ engedélyezése vagy tiltása:\n"
 "0 - ne legyen idõzítõ\n"
 "1 - legyen idõzítõ, de ne mutassa az állapotát\n"
-"2 - legyen idõzítõ, és mutassa hol jár"
+"2 - legyen idõzítõ, és mutassa az állapotát a LED-ek mellett (LETILTVA)"
 
 #: src/config/options.c:2813
 msgid "Duration"
@@ -3523,7 +3502,6 @@ msgid "Set window title"
 msgstr "Ablakfejléc címének beállítása"
 
 #: src/config/options.c:2868
-#, fuzzy
 msgid ""
 "Set the window title when running in a windowing environment\n"
 "in an xterm-like terminal. This way the document's title is\n"
@@ -3723,8 +3701,7 @@ msgstr "Ne próbálja irni/használni a fáljokat a ~/.elinks könyvtárban."
 
 #: src/config/options.c:2983
 msgid "Connect to session ring with given ID"
-msgstr ""
-"Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
+msgstr "Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
 
 #: src/config/options.c:2985
 msgid ""
@@ -4058,8 +4035,7 @@ msgstr "Kilépés"
 
 #: src/dialogs/menu.c:143
 msgid "Do you really want to exit ELinks (and terminate all downloads)?"
-msgstr ""
-"Biztos, hogy kilépsz a Links-böl, (és megszakítod az aktiv letöltéseket)?"
+msgstr "Biztos, hogy kilépsz a Links-böl, (és megszakítod az aktiv letöltéseket)?"
 
 #: src/dialogs/menu.c:145
 msgid "Do you really want to exit ELinks?"
@@ -4074,14 +4050,12 @@ msgid "No downloads"
 msgstr "Nincs letöltés"
 
 #: src/dialogs/menu.c:362
-#, fuzzy
 msgid "Open new ~tab"
-msgstr "Megnyitás új ablakban."
+msgstr "Új fül megnyitása"
 
 #: src/dialogs/menu.c:363
-#, fuzzy
 msgid "Open new tab in ~background"
-msgstr "Fül háttérbe"
+msgstr "Fül megnyitása a háttérben"
 
 #: src/dialogs/menu.c:365
 msgid "~Go to URL"
@@ -4100,7 +4074,6 @@ msgid "~History"
 msgstr "~Látogatott lapok"
 
 #: src/dialogs/menu.c:369
-#, fuzzy
 msgid "Unh~istory"
 msgstr "~Visszalépések"
 
@@ -4133,7 +4106,6 @@ msgid "~Flush all caches"
 msgstr "Gyorsí~tó memória kiürítése"
 
 #: src/dialogs/menu.c:392
-#, fuzzy
 msgid "Resource in~fo"
 msgstr "Erõforrás ~információ"
 
@@ -4158,7 +4130,6 @@ msgid "~OS shell"
 msgstr "Parancss~or"
 
 #: src/dialogs/menu.c:453
-#, fuzzy
 msgid "Resize t~erminal"
 msgstr "~Terminál átméretezése"
 
@@ -4480,8 +4451,7 @@ msgstr ""
 
 #: src/lowlevel/home.c:121
 #, c-format
-msgid ""
-"Commandline options -confdir set to %s, but could not create directory %s."
+msgid "Commandline options -confdir set to %s, but could not create directory %s."
 msgstr ""
 "Parancssori opciók -konfig könyvtár %s, de nem lehet létrehozni a %s "
 "könyvtárat."
@@ -5089,14 +5059,12 @@ msgid "Open in new ~window"
 msgstr "Megnyitás új ablakban."
 
 #: src/viewer/text/link.c:894
-#, fuzzy
 msgid "Open in new ~tab"
-msgstr "Megnyitás új ablakban."
+msgstr "Megnyitás új fülben"
 
 #: src/viewer/text/link.c:897
-#, fuzzy
 msgid "Open in new tab in ~background"
-msgstr "Fül háttérbe"
+msgstr "Új fül megnyitása a háttérben"
 
 #: src/viewer/text/link.c:901
 msgid "~Download link"
@@ -5379,3 +5347,4 @@ msgstr "Hiba a fájl irása közben"
 #, fuzzy
 #~ msgid "Cache redirect information"
 #~ msgstr "Várakozás az átirányítás elfogadására"
+

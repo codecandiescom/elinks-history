@@ -8,6 +8,9 @@ missing here or some of your contributions is, tell me):
 Adam Borowski <kilobyte@mimuw.edu.pl>
 	Fixed xterm detection
 
+Adam Golebiowski <adamg@pld-linux.org>
+	Polish translation updates
+
 Adam Harvey <matlhdam@iinet.net.au>
 	Fixed sometimes badly posted form
 
@@ -202,7 +205,7 @@ Ionel Mugurel Ciobica <I.M.Ciobica@TUe.nl>
 Jacek Fedorynski <jfedor@jfedor.org>
 	Fixed segfault when posting large forms
 
-Jakub Bogusz <qboosh@pld.org.pl>
+Jakub Bogusz <qboosh@pld-linux.org>
 	Minor bugfixes
 	Polish translation updates
 
@@ -334,6 +337,9 @@ Miciah Dashiel Butler Masters <miciah@myrealbox.com>
 
 Mike Swieton <pyromage@pyromage.net>
 	Fixed bug: Form is not posted when jumping to field by number
+
+Mikolaj Machowski <mikmach@wp.pl>
+	Polish translation updates
 
 Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
 	Original Links author
@@ -497,4 +503,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.164 2004/09/03 02:14:36 jonas Exp $
+$Id: AUTHORS,v 1.165 2004/09/03 02:31:53 jonas Exp $

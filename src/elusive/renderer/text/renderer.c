@@ -1,5 +1,5 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.32 2003/09/09 17:50:22 jonas Exp $ */
+/* $Id: renderer.c,v 1.33 2003/09/15 20:32:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,7 +85,7 @@ realloc_line(struct document *document, int y, int x)
 {
 	int i;
 	int newsize = ALIGN(x + 1);
-	struct screen_char schar = INIT_SCREEN_CHAR(' ', 0, 0);
+	struct screen_char schar = { ' ', 0, 0 };
 
 	if (newsize >= ALIGN(document->data[y].l)
 	    && (!document->data[y].d || ALIGN(document->data[y].l) < newsize)) {

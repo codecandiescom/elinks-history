@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.194 2005/02/20 20:24:50 witekfl Exp $ */
+/* $Id: spidermonkey.c,v 1.195 2005/02/20 22:45:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1563,6 +1563,7 @@ document_write(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rv
 
 
 static JSBool history_back(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
+static JSBool history_forward(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
 
 static const JSClass history_class = {
 	"history",
@@ -1574,6 +1575,7 @@ static const JSClass history_class = {
 
 static const JSFunctionSpec history_funcs[] = {
 	{ "back",		history_back,		0 },
+	{ "forward",		history_forward,	0 },
 	{ NULL }
 };
 
@@ -1585,6 +1587,18 @@ history_back(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval
 	struct session *ses = doc_view->session;
 
 	go_back(ses);
+
+	return 2;
+}
+
+static JSBool
+history_forward(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
+{
+	struct ecmascript_interpreter *interpreter = JS_GetContextPrivate(ctx);
+	struct document_view *doc_view = interpreter->vs->doc_view;
+	struct session *ses = doc_view->session;
+
+	go_unback(ses);
 
 	return 2;
 }

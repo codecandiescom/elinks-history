@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.38 2003/09/02 14:04:58 zas Exp $ */
+/* $Id: formhist.c,v 1.39 2003/09/03 09:22:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -236,17 +236,23 @@ form_already_saved(struct formhist_data *form1)
 	return 0;
 }
 
-static struct formhist_data *
-get_form_with_url(unsigned char *url)
+static int
+forget_forms_with_url(unsigned char *url)
 {
-	struct formhist_data *form;
+	struct formhist_data *form, *tmpform;
+	int count = 0;
 
-	foreachback (form, saved_forms) {
-		if (!strcmp(form->url, url))
-			return form;
+	foreach (form, saved_forms) {
+		if (strcmp(form->url, url)) continue;
+
+		tmpform = form;
+		form = form->prev;
+		del_from_list(tmpform);
+		free_form(tmpform);
+		count++;
 	}
 
-	return NULL;
+	return count;
 }
 
 /* Appends form data @form1 (url and submitted_value(s)) to the password file.
@@ -254,13 +260,7 @@ get_form_with_url(unsigned char *url)
 static int
 remember_form(struct formhist_data *form)
 {
-	struct formhist_data *form1;
-
-	/* Ensure we have only one entry for that url. */
-	while ((form1 = get_form_with_url(form->url))) {
-		del_from_list(form1);
-		free_form(form1);
-	}
+	forget_forms_with_url(form->url);
 	add_to_list(saved_forms, form);
 
 	if (!save_saved_forms()) return 0;

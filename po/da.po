@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-31 03:40+0100\n"
-"PO-Revision-Date: 2004-12-31 04:11+0100\n"
+"POT-Creation-Date: 2004-12-31 12:44+0100\n"
+"PO-Revision-Date: 2004-12-31 13:06+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -42,9 +42,9 @@ msgstr "Tryk mellemrum for at åbne denne mappe."
 #: src/dialogs/document.c:243 src/dialogs/document.c:301 src/dialogs/edit.c:95
 #: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
 #: src/dialogs/menu.c:96 src/dialogs/menu.c:515 src/dialogs/menu.c:566
-#: src/dialogs/options.c:173 src/dialogs/options.c:253
-#: src/ecmascript/spidermonkey.c:371 src/ecmascript/spidermonkey.c:1931
-#: src/ecmascript/spidermonkey.c:1958 src/formhist/dialogs.c:179
+#: src/dialogs/options.c:174 src/dialogs/options.c:254
+#: src/ecmascript/spidermonkey.c:371 src/ecmascript/spidermonkey.c:1929
+#: src/ecmascript/spidermonkey.c:1956 src/formhist/dialogs.c:179
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
 #: src/protocol/nntp/codes.c:132 src/protocol/protocol.c:227
 #: src/protocol/user.c:268 src/sched/download.c:231 src/sched/download.c:327
@@ -167,8 +167,8 @@ msgstr "Navn"
 #: src/bookmarks/dialogs.c:666 src/config/dialogs.c:411
 #: src/config/dialogs.c:498 src/config/dialogs.c:908 src/cookies/dialogs.c:356
 #: src/dialogs/edit.c:99 src/dialogs/edit.c:102 src/dialogs/menu.c:96
-#: src/dialogs/menu.c:515 src/dialogs/menu.c:566 src/dialogs/options.c:176
-#: src/dialogs/options.c:254 src/mime/dialogs.c:131
+#: src/dialogs/menu.c:515 src/dialogs/menu.c:566 src/dialogs/options.c:177
+#: src/dialogs/options.c:255 src/mime/dialogs.c:131
 #: src/protocol/auth/dialogs.c:109 src/sched/download.c:551
 #: src/sched/download.c:1022 src/sched/download.c:1032
 #: src/sched/download.c:1053 src/sched/download.c:1066
@@ -444,7 +444,7 @@ msgstr "Ryd"
 #. TODO: Would this be useful? --jonas
 #: src/bookmarks/dialogs.c:455 src/config/dialogs.c:524
 #: src/config/dialogs.c:946 src/cookies/dialogs.c:425
-#: src/dialogs/options.c:175 src/formhist/dialogs.c:216
+#: src/dialogs/options.c:176 src/formhist/dialogs.c:216
 #: src/globhist/dialogs.c:235 src/sched/download.c:1019
 #: src/sched/download.c:1050
 msgid "Save"
@@ -2314,7 +2314,7 @@ msgid "Invert the fore- and background color so the link stands out."
 msgstr "Inverter for- og baggrundsfarven så henvisninger fremhæves."
 
 #: src/config/options.inc:286 src/config/options.inc:785
-#: src/dialogs/options.c:170
+#: src/dialogs/options.c:171
 msgid "Underline"
 msgstr "Understregning"
 
@@ -2543,6 +2543,15 @@ msgid ""
 "1 automatically starts typeahead searching thru link text\n"
 "2 automatically starts typeahead searching thru all document text"
 msgstr ""
+"Begynd inkrementel søgning ved tryk af en ubundet tast hvis hverken\n"
+"Shift eller Alt er tastet. Bemærk, at de fleste taster som standard\n"
+"er bruges i tasteturgenveje, så denne egenskab er ikke brugbar med\n"
+"mindre du sletter dem.\n"
+"0 betyder deaktiver denne egenskab, dvs. inkrementel søgning vil kun\n"
+"  anvendes, når du trykker en tast bundet til search-typeahead eller\n"
+"  lignende\n"
+"1 betyder begynd automatisk inkrementel søgning af henvisningstekst\n"
+"2 betyder begynd automatisk inkrementel søgning af dokumenttekst"
 
 #: src/config/options.inc:404
 msgid "Horizontal text margin"
@@ -2565,6 +2574,13 @@ msgid ""
 "Use the document.browse.minimum_refresh_time to control the minimum\n"
 "number of seconds a refresh will take."
 msgstr ""
+"Opfrisk automatisk dokumentet når dette specificeres af elementer\n"
+"(såsom '<meta>' tags). Webudgivere bruger disse til at fortælle\n"
+"en browser om at genindlæse det samme dokument eller et nyt efter\n"
+"et givent interval. URIen som vil blive genindlæst er tilgængelig\n"
+"som en henvisning lige meget hvordan denne indstillinge sættes.\n"
+"Anvend indstillingen document.browse.minimum_refresh_time til at\n"
+"sætte det minimale antal sekunder en genopfriskning må tage."
 
 #: src/config/options.inc:417
 msgid "Document meta refresh minimum time"
@@ -2577,6 +2593,10 @@ msgid ""
 "unchanged. It can fix going back in history for some sites that\n"
 "use refreshing with zero values."
 msgstr ""
+"Det minimale antal millisekunder som der skal gå før en opfriskning\n"
+"begyndes. Hvis sat til nul vil tiden specificeret i dokumentet blive\n"
+"brugt. Kan hjælpe med at gå tilbage i historikken for websteder, som\n"
+"anvender genopfriskningstider på nul millisekunder."
 
 #: src/config/options.inc:424
 msgid "Tables navigation order"
@@ -2978,6 +2998,13 @@ msgid ""
 "4 is type in addition\n"
 "5 is everything"
 msgstr ""
+"Hvad der vises fra henvisninger i HTML dokumenthovedet:\n"
+"0 betyder intet\n"
+"1 betyder titel\n"
+"2 betyder titel og navn\n"
+"3 betyder titel, navn og hfreflang\n"
+"4 betyder titel, navn, hreflang og type\n"
+"5 betyder alting"
 
 #: src/config/options.inc:665
 msgid "Underline links"
@@ -2997,6 +3024,11 @@ msgid ""
 "but allow to wrap the text. This can help keeping the width\n"
 "of documents down so no horizontal scrolling is needed."
 msgstr ""
+"Hvis aktiveret vil mellemrunstegn angivet som ikke ombrydelige\n"
+"(eksempelvis entiteten nbsp i HTML-dokumenter) blive ombrydt\n"
+"alligevel som almindelig tekst. Dette kan hjælpe med at undgå\n"
+"dokumenter bliver breddere end skærmen, således at det ikke\n"
+"er nødvendigt at rulled horisontalt."
 
 #: src/config/options.inc:676
 msgid "Plain rendering"
@@ -3039,6 +3071,12 @@ msgid ""
 "\n"
 "Do _not_ put single- or double-quotes around %c."
 msgstr ""
+"En regel for at sende en URI til en ekstern kommando.\n"
+"Formatteringen er følgende:\n"
+"%c erstattes med den nuværende URL\n"
+"%% erstattes med '%'\n"
+"\n"
+"Omring _ikke_ %c med enkelt- eller dobbelt-citationstegn."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:705
@@ -3102,7 +3140,7 @@ msgid ""
 "4 is FreeBSD"
 msgstr ""
 
-#: src/config/options.inc:747 src/dialogs/options.c:166
+#: src/config/options.inc:747 src/dialogs/options.c:167
 msgid "Switch fonts for line drawing"
 msgstr "Skift skrifttype ved linjetegning"
 
@@ -3128,7 +3166,7 @@ msgstr ""
 "Aktiver UTF-8 I/O for terminaler der understøtter Unicode. Bemærk,\n"
 "at der på nuværende tidspunkt kun bruges en delmængde af UTF-8."
 
-#: src/config/options.inc:758 src/dialogs/options.c:167
+#: src/config/options.inc:758 src/dialogs/options.c:168
 msgid "Restrict frames in cp850/852"
 msgstr "Begræns rammer i cp850/852"
 
@@ -3140,7 +3178,7 @@ msgstr ""
 "Begræns hvilke tegn der bruges ved tegning af linjer. Er kun\n"
 "meningsfuld for linux terminaler, der bruger cp850/852 tegnsæt."
 
-#: src/config/options.inc:763 src/dialogs/options.c:168
+#: src/config/options.inc:763 src/dialogs/options.c:169
 msgid "Block cursor"
 msgstr "Udfyld markør"
 
@@ -3167,7 +3205,7 @@ msgid ""
 "2 is 256 color mode, uses XTerm RGB codes"
 msgstr ""
 
-#: src/config/options.inc:777 src/dialogs/options.c:169
+#: src/config/options.inc:777 src/dialogs/options.c:170
 msgid "Transparency"
 msgstr "Gennemsigtig"
 
@@ -4588,63 +4626,63 @@ msgstr "Mapper:"
 msgid "Files:"
 msgstr "Filer:"
 
-#: src/dialogs/options.c:147
+#: src/dialogs/options.c:148
 msgid "Terminal options"
 msgstr "Terminalindstillinger"
 
-#: src/dialogs/options.c:152
+#: src/dialogs/options.c:153
 msgid "Frame handling:"
 msgstr "Håndtering af rammer:"
 
-#: src/dialogs/options.c:153
+#: src/dialogs/options.c:154
 msgid "No frames"
 msgstr "Ingen rammer"
 
-#: src/dialogs/options.c:154
+#: src/dialogs/options.c:155
 msgid "VT 100 frames"
 msgstr "VT100-rammer"
 
-#: src/dialogs/options.c:155
+#: src/dialogs/options.c:156
 msgid "Linux or OS/2 frames"
 msgstr "Linux- eller OS/2-rammer"
 
-#: src/dialogs/options.c:156
+#: src/dialogs/options.c:157
 msgid "FreeBSD frames"
 msgstr "FreeBSD-rammer"
 
-#: src/dialogs/options.c:157
+#: src/dialogs/options.c:158
 msgid "KOI8-R frames"
 msgstr "KOI8-R-rammer"
 
-#: src/dialogs/options.c:159
+#: src/dialogs/options.c:160
 msgid "Color mode:"
 msgstr "Farvetilstand:"
 
-#: src/dialogs/options.c:160
+#: src/dialogs/options.c:161
 msgid "No colors (mono)"
 msgstr "Ingen farver (mono)"
 
-#: src/dialogs/options.c:161
+#: src/dialogs/options.c:162
 msgid "16 colors"
 msgstr "16 farver"
 
-#: src/dialogs/options.c:163
+#: src/dialogs/options.c:164
 msgid "256 colors"
 msgstr "256 farver"
 
-#: src/dialogs/options.c:171
+#: src/dialogs/options.c:172
 msgid "UTF-8 I/O"
 msgstr "UTF-8 I/O"
 
-#: src/dialogs/options.c:247
+#: src/dialogs/options.c:248
 msgid "Resize terminal"
 msgstr "Ændr terminalstørrelse"
 
-#: src/dialogs/options.c:250
+#: src/dialogs/options.c:251
 msgid "Width="
 msgstr "Bredde="
 
-#: src/dialogs/options.c:251
+#: src/dialogs/options.c:252
 msgid "Height="
 msgstr "Højde="
 
@@ -4807,7 +4845,7 @@ msgstr "Antal sekunder som et skript maksimalt må eksekveres."
 msgid "JavaScript Alert"
 msgstr "JavaScript advarsel"
 
-#: src/ecmascript/spidermonkey.c:1914
+#: src/ecmascript/spidermonkey.c:1912
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following%s%s%s%s: \n"
@@ -4818,7 +4856,7 @@ msgid ""
 ".%*s^%*s."
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:1922
+#: src/ecmascript/spidermonkey.c:1920
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following%s%s%s%s: \n"
@@ -4826,15 +4864,15 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:1929
+#: src/ecmascript/spidermonkey.c:1927
 msgid "JavaScript Error"
 msgstr "JavaScript fejl"
 
-#: src/ecmascript/spidermonkey.c:1949
+#: src/ecmascript/spidermonkey.c:1947
 msgid "JavaScript Emergency"
 msgstr "JavaScript nødssituation"
 
-#: src/ecmascript/spidermonkey.c:1951
+#: src/ecmascript/spidermonkey.c:1949
 #, c-format
 msgid ""
 "A script embedded in the current document was running for more than %d "
@@ -5269,7 +5307,7 @@ msgstr "Beskrivelse af dette program"
 msgid "System-specific handler description (ie. unix, unix-xwin, ...)."
 msgstr ""
 
-#: src/mime/backend/default.c:64 src/mime/backend/mailcap.c:104
+#: src/mime/backend/default.c:64 src/mime/backend/mailcap.c:103
 msgid "Ask before opening"
 msgstr "Spørg før programmet startes"
 
@@ -5294,7 +5332,7 @@ msgstr "Program"
 msgid ""
 "External viewer for this file type. '%' in this string will be\n"
 "substituted by a file name."
-msgstr ""
+msgstr "Ekstern fremviser for denne filtype. '%' erstattes med filnavn."
 
 #: src/mime/backend/default.c:79
 msgid "File extension associations"
@@ -5309,6 +5347,8 @@ msgid ""
 "MIME-type matching this file extension ('*' is used here in place\n"
 "of '.')."
 msgstr ""
+"MIME-typen som antages for denne filendelse ('*' anvendes som erstatning\n"
+"for '.')."
 
 #. name:
 #: src/mime/backend/default.c:221
@@ -5316,7 +5356,7 @@ msgid "Option system"
 msgstr "Indstillingssystem"
 
 #. name:
-#: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:670
+#: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:669
 msgid "Mailcap"
 msgstr "Mailcap"
 
@@ -5331,64 +5371,77 @@ msgstr "Aktiver mailcap"
 #: src/mime/backend/mailcap.c:100
 msgid ""
 "Mailcap search path. Colon-separated list of files.\n"
-"Leave as \"\" to use MAILCAP environment variable or\n"
-"built-in defaults instead."
+"Leave as \"\" to use MAILCAP environment variable instead."
 msgstr ""
+"Stien angivet som en kolon-separeret liste af filer, der vil\n"
+"blive anvendt til søgning af mailcapfiler. Sæt til \"\" for\n"
+"at benytte miljøvariablen MAILCAP i stedet."
 
-#: src/mime/backend/mailcap.c:106
+#: src/mime/backend/mailcap.c:105
 msgid "Ask before using the handlers defined by mailcap."
 msgstr "Spørg før eksterne programmer bruges"
 
-#: src/mime/backend/mailcap.c:108
+#: src/mime/backend/mailcap.c:107
 msgid "Type query string"
-msgstr ""
+msgstr "Typeforespørgelsesstreng"
 
-#: src/mime/backend/mailcap.c:110
+#: src/mime/backend/mailcap.c:109
 msgid ""
 "Type of description to show in \"what shall I do with this file\"\n"
 "query dialog:\n"
-"0 is show \"mailcap\".\n"
-"1 is show program to be run.\n"
-"2 is show mailcap description field if any; \"mailcap\" otherwise."
+"0 is show \"mailcap\"\n"
+"1 is show program to be run\n"
+"2 is show mailcap description field if any; \"mailcap\" otherwise"
 msgstr ""
+"Hvilken beskrivelse der vises i dialogvinduet, som foresørger om hvordan\n"
+"eksterne filtype håndteres:\n"
+"0 betyder vis \"mailcap\"\n"
+"1 betyder vis det program som vil blive kørt\n"
+"2 betyder vis beskrivelse fra mailcapfilen hvis muligt ellers \"mailcap\""
 
-#: src/mime/backend/mailcap.c:116
+#: src/mime/backend/mailcap.c:115
 msgid "Prioritize entries by file"
-msgstr "Prioter indgange mht. fil rækkefølge"
+msgstr "Prioter indgange efter filrækkefølge"
 
-#: src/mime/backend/mailcap.c:118
+#: src/mime/backend/mailcap.c:117
 msgid ""
 "Prioritize entries by the order of the files in the mailcap\n"
 "path. This means that wildcard entries (like: image/*) will\n"
 "also be checked before deciding the handler."
 msgstr ""
+"Prioriter indgange i forhold til rækkefølgen af filer i mailcap\n"
+"søgestien. Dette betyder at indgange med wildcards (såsom: image/*)\n"
+"vil også anvendes før en passende håndtering bestemmes."
 
-#: src/mime/backend/mailcap.c:353
+#: src/mime/backend/mailcap.c:352
 #, c-format
 msgid "Badly formated mailcap entry for type %s in \"%s\" line %d"
-msgstr ""
+msgstr "Syntaksfejl for typen %s i filen \"%s\" linje %d"
 
 #. name:
-#: src/mime/backend/mimetypes.c:47 src/mime/backend/mimetypes.c:287
+#: src/mime/backend/mimetypes.c:47 src/mime/backend/mimetypes.c:286
 msgid "Mimetypes files"
-msgstr ""
+msgstr "Mimetypes-filer"
 
 #: src/mime/backend/mimetypes.c:49
 msgid ""
-"Options for the support of mimetypes files. Mimetypes files\n"
-"can be used to find the content type of an URL by looking at the\n"
-"extension of the file name."
+"Options for the support of mime.types files. These files\n"
+"can be used to find the content type of an URL by looking at\n"
+"the extension of the file name."
 msgstr ""
+"Indstilinger for mime.types filer. Disse filer kan anvendes til\n"
+"at nå frem til en content-type (type for indholde) for URLer ved\n"
+"(hvis muligt) at kigge på filnavnets endelse."
 
 #: src/mime/backend/mimetypes.c:55
 msgid "Enable mime.types support."
-msgstr ""
+msgstr "Anvend understøttelse af mime.types filer"
 
 #: src/mime/backend/mimetypes.c:59
-msgid ""
-"Mimetypes search path. Colon-separated list of files.\n"
-"Leave as \"\" to use built-in default instead."
+msgid "The search path for mime.types files. Colon-separated list of files."
 msgstr ""
+"Stien angivet som en kolon-separeret liste af filer, der vil\n"
+"blive anvendt til søgning af mime.types filer."
 
 #: src/mime/dialogs.c:66
 msgid "Delete extension"
@@ -5422,17 +5475,19 @@ msgstr "MIME"
 
 #: src/mime/mime.c:37
 msgid "MIME-related options (handlers of various MIME types)."
-msgstr ""
+msgstr "Indstillinger for håndtering af forskellige MIME-typer."
 
 #: src/mime/mime.c:39
 msgid "Default MIME-type"
-msgstr ""
+msgstr "Standard MIME-type"
 
 #: src/mime/mime.c:41
 msgid ""
 "Document MIME-type to assume by default (when we are unable to\n"
 "guess it properly from known information about the document)."
 msgstr ""
+"MIME-typen der som standard antages for dokumenter, når typen\n"
+"ikke kunne sættes ved brug af kendt information om dokumentet."
 
 #: src/modules/version.c:80
 #, c-format
@@ -5610,20 +5665,25 @@ msgstr "Tillad at læse specielle filer"
 
 #: src/protocol/file/file.c:58
 msgid ""
-"Allow reading from non-regular files? (DANGEROUS - reading\n"
-"/dev/urandom or /dev/zero can ruin your day!)"
+"Whether to allow reading from non-regular files.\n"
+"Note this can be dangerous; reading /dev/urandom or\n"
+"/dev/zero can ruin your day!"
 msgstr ""
+"Tillad læsning fra ikke-regulære filer. Bemærk, at dette kan\n"
+"være farligt, da læsning fra /dev/urandom eller /dev/zero kan\n"
+"ødelægge din dag!"
 
-#: src/protocol/file/file.c:61
+#: src/protocol/file/file.c:62
 msgid "Show hidden files in directory listing"
 msgstr "Vis gemte filer i mappe visning"
 
-#: src/protocol/file/file.c:63
+#: src/protocol/file/file.c:64
 msgid ""
-"Show hidden files in directory listing ?\n"
-"If set to false, files with name starting with a dot will be\n"
+"When set to false, files with name starting with a dot will be\n"
 "hidden in local directories listing."
 msgstr ""
+"Hvis deaktiveret vil filer hvis navn begynder med et punktum\n"
+"ikke blive vist i listning af mapper."
 
 #: src/protocol/file/file.c:67
 msgid "Try encoding extensions"
@@ -5635,6 +5695,10 @@ msgid ""
 "to open 'filename' with some encoding extension appended\n"
 "(ie. 'filename.gz'); it depends on the supported encodings."
 msgstr ""
+"Hvis aktiveret og det ikke er muligt at åbne filen 'filnavn',\n"
+"vil det også blive forsøgt at åbne 'filnavn' med diverse kendte\n"
+"endelser for indkodning tilføjet (såsom 'filnavn.gz'). Dette\n"
+"afhænger af understøttede indkodninger."
 
 #. name:
 #: src/protocol/file/file.c:77
@@ -5647,7 +5711,7 @@ msgid "Finger"
 msgstr "Finger-protokol"
 
 #. name:
-#: src/protocol/ftp/ftp.c:53 src/protocol/ftp/ftp.c:88
+#: src/protocol/ftp/ftp.c:53 src/protocol/ftp/ftp.c:83
 msgid "FTP"
 msgstr "FTP"
 
@@ -5674,6 +5738,8 @@ msgid ""
 "Host and port-number (host:port) of the FTP proxy, or blank.\n"
 "If it's blank, FTP_PROXY environment variable is checked as well."
 msgstr ""
+"Værtsmaskine og portnummer (host:port) for FTP-proxyen eller tom.\n"
+"Hvis tom anvendes i stedet miljøvariablen FTP_PROXY."
 
 #: src/protocol/ftp/ftp.c:66
 msgid "Anonymous password"
@@ -5691,19 +5757,13 @@ msgstr "Anvend passiv modus (IPv4)"
 msgid "Use PASV instead of PORT (passive vs active mode, IPv4 only)."
 msgstr "Anvend PASV i stedet for PORT (passiv vs aktiv modus, kun IPv4)."
 
-#: src/protocol/ftp/ftp.c:74 src/protocol/ftp/ftp.c:78
+#: src/protocol/ftp/ftp.c:74
 msgid "Use passive mode (IPv6)"
 msgstr "Anvend passiv modus (IPv6)"
 
 #: src/protocol/ftp/ftp.c:76
 msgid "Use EPSV instead of EPRT (passive vs active mode, IPv6 only)."
 msgstr "Anvend EPSV i stedet for EPRT (passiv vs aktiv modus, kun IPv6)."
-
-#: src/protocol/ftp/ftp.c:80
-msgid ""
-"Use EPSV instead of EPRT (passive vs active mode, IPv6 only).\n"
-"Works only with IPv6 enabled, so nothing interesting for you."
-msgstr ""
 
 #. name:
 #: src/protocol/gopher/gopher.c:47
@@ -5754,6 +5814,8 @@ msgid ""
 "The Accept-Charset header is quite long and sending it can trigger\n"
 "bugs in some rarely found servers."
 msgstr ""
+"Protokolhovedindgangen Accept-Charser er forholdsvis lang og afsendelse\n"
+"af den kan forårsage fejl i sjældne server."
 
 #: src/protocol/http/http.c:72
 msgid "Allow blacklisting"
@@ -5773,6 +5835,10 @@ msgid ""
 "This is a problem for a lot of web discussion boards and the like.\n"
 "If they will do strange things to you, try to play with this."
 msgstr ""
+"Fejlbehæftigede 302 omdirigering (bryde med RFCen men er kompatibelt\n"
+"med Netscape). Dette problem er relevant for flere webdiskussionsfora\n"
+"og lignende websider. Hvis de forårsager underlige ting prøv at leg\n"
+"med denne indstilling."
 
 #: src/protocol/http/http.c:82
 msgid "No keepalive after POST requests"
@@ -5780,7 +5846,7 @@ msgstr "Hold ikke forbindelser i live efter POST forespørgelser"
 
 #: src/protocol/http/http.c:84
 msgid "Disable keepalive connection after POST request."
-msgstr ""
+msgstr "Afslut forbindelse efter en POST forespørgelse."
 
 #: src/protocol/http/http.c:86
 msgid "Use HTTP/1.0"
@@ -5799,6 +5865,8 @@ msgid ""
 "Host and port-number (host:port) of the HTTP proxy, or blank.\n"
 "If it's blank, HTTP_PROXY environment variable is checked as well."
 msgstr ""
+"Værtsmaskine og portnummer (host:port) for HTTP-proxyen eller tom.\n"
+"Hvis tom anvendes i stedet miljøvariablen HTTP_PROXY."
 
 #: src/protocol/http/http.c:99
 msgid "Username"
@@ -5828,7 +5896,7 @@ msgstr ""
 
 #: src/protocol/http/http.c:117
 msgid "Policy"
-msgstr "Politik"
+msgstr "Retningslinje"
 
 #: src/protocol/http/http.c:120
 msgid ""
@@ -5838,14 +5906,19 @@ msgid ""
 "2 is send fixed fake referer\n"
 "3 is send previous URL as referer (correct, but insecure)"
 msgstr ""
+"Metode for afsending af HTTP henviser:\n"
+"0 betyder send ingen henviser\n"
+"1 betyder send nuværende URL som henviser\n"
+"2 betyder send falsk henviser\n"
+"3 betyder send forrige URL som henviser (korrekt, men usikker)"
 
 #: src/protocol/http/http.c:126
 msgid "Fake referer URL"
-msgstr ""
+msgstr "Falsk henviser URL"
 
 #: src/protocol/http/http.c:128
 msgid "Fake referer to be sent when policy is 2."
-msgstr ""
+msgstr "Den falske henviser URL der sendes når retningslinjen 2 anvendes."
 
 #: src/protocol/http/http.c:131
 msgid "Send Accept-Language header"
@@ -5919,6 +5992,8 @@ msgid ""
 "Host and port-number (host:port) of the HTTPS CONNECT proxy, or blank.\n"
 "If it's blank, HTTPS_PROXY environment variable is checked as well."
 msgstr ""
+"Værtsmaskine og portnummer (host:port) for HTTPS CONNECT proxyen eller tom.\n"
+"Hvis tom anvendes i stedet miljøvariablen HTTPS_PROXY."
 
 #: src/protocol/nntp/codes.c:124
 msgid "NNTP error"
@@ -5932,6 +6007,10 @@ msgid ""
 "\n"
 "The error message is: %s"
 msgstr ""
+"En fejl opstod under overførelse af dokumentet du\n"
+"forespurgte fra %s\n"
+"\n"
+"Fejlbeskeden er: %s"
 
 #. name:
 #: src/protocol/nntp/nntp.c:33 src/protocol/nntp/nntp.c:66
@@ -5951,6 +6030,9 @@ msgid ""
 "Used when resolving news: URIs. If set to the empty string\n"
 "the value of the NNTPSERVER environment variable will be used."
 msgstr ""
+"Anvendes ved håndtering af news: URIer til at omskrive til\n"
+"nntp: URI. Hvis sat til den tomme streng vil miljøvariablen\n"
+"NNTPSERVER anvendes i stedet."
 
 #: src/protocol/nntp/nntp.c:42
 msgid "Message header entries"
@@ -5962,6 +6044,9 @@ msgid ""
 "to show. E.g. 'Subject' and 'From'.\n"
 "All header entries can be read in the header info dialog."
 msgstr ""
+"Komma separeret list af indgange som skal vises fra artiklens\n"
+"protokolhoved. Eksempelvis 'Subject' eller 'From'.\n"
+"Hele protokolhovedet kan læses via et separat dialogvindue."
 
 #: src/protocol/protocol.c:223
 #, c-format
@@ -5987,6 +6072,9 @@ msgid ""
 "domains as well. If it's blank, NO_PROXY environment variable is\n"
 "checked as well."
 msgstr ""
+"Komma separeret liste a domæner som der ikke skal anvendes proxy\n"
+"for. Alternativt kan en port også angives for domæner. Hvis tom\n"
+"anvendes miljøvariablen NO_PROXY i stedet."
 
 #. name:
 #: src/protocol/protocol.c:290
@@ -6036,8 +6124,8 @@ msgid "Dumb Prefixes"
 msgstr "Simple præfikser"
 
 #: src/protocol/rewrite/rewrite.c:70
-msgid "Dumb prefixes, see enable-dumb description for details."
-msgstr ""
+msgid "Dumb prefikser, see enable-dumb description for details."
+msgstr "Definerede simple præfikser, se enable-dump beskrivelse for detaljer"
 
 #: src/protocol/rewrite/rewrite.c:75
 #, no-c-format
@@ -6046,6 +6134,9 @@ msgid ""
 "%c in the string means the current URL\n"
 "%% in the string means '%'"
 msgstr ""
+"Omskrevet URI for dette simple præfiks.\n"
+"%c erstattes med af den nuværende URL\n"
+"%% betyder '%'"
 
 #: src/protocol/rewrite/rewrite.c:79
 msgid "Smart Prefixes"
@@ -6053,7 +6144,7 @@ msgstr "Smarte præfikser"
 
 #: src/protocol/rewrite/rewrite.c:81
 msgid "Smart prefixes, see enable-smart description for details."
-msgstr ""
+msgstr "Smarte præfikser, se enable-smart beskrivelse for detaljer."
 
 #: src/protocol/rewrite/rewrite.c:87
 msgid ""
@@ -6114,6 +6205,13 @@ msgid ""
 "%s in the string means subject (?subject=<this>)\n"
 "%u in the string means the whole URL"
 msgstr ""
+"Ekstern program til at håndtere denne protokol under det givne system.\n"
+"%f angviver hvilket filnavn formulardata skal inkluderes fra\n"
+"%h erstattes med værtsmaskinen (eller email addressen)\n"
+"%p erstattes med portnummeret\n"
+"%d erstattes med stien fra URLen (alt efter portnummeret)\n"
+"%s erstattes med emnestreng (?subject=<emne streng>)\n"
+"%u erstattes med hele URLen"
 
 #: src/protocol/user.c:263
 msgid "No program"
@@ -6161,7 +6259,7 @@ msgstr ""
 #: src/sched/download.c:504
 #, c-format
 msgid "'%s' is a directory."
-msgstr ""
+msgstr "'%s' er en mappe."
 
 #: src/sched/download.c:540
 msgid "File exists"
@@ -6176,6 +6274,11 @@ msgid ""
 "The alternative filename is:\n"
 "%s"
 msgstr ""
+"Denne fil eksisterer allerede:\n"
+"%s\n"
+"\n"
+"Det foreslåede filnavn er:\n"
+"%s"
 
 #: src/sched/download.c:548
 msgid "Save under the alternative name"
@@ -6196,7 +6299,7 @@ msgstr "Ukendt type"
 #: src/sched/download.c:1014
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
-msgstr ""
+msgstr "Ønsker du at gemme filen '%s' (type: %s) eller vise den?"
 
 #: src/sched/download.c:1020 src/sched/download.c:1030
 #: src/sched/download.c:1051 src/sched/download.c:1064
@@ -6211,7 +6314,7 @@ msgstr "Vis protokolhoved"
 #: src/sched/download.c:1026
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
-msgstr ""
+msgstr "Ønsker du at vise filen '%s' (type: %s)?"
 
 #: src/sched/download.c:1042 src/sched/download.c:1056
 msgid "What to do?"
@@ -6701,11 +6804,11 @@ msgstr "Adgangskodefelt"
 
 #: src/viewer/text/form.c:1490
 msgid "name"
-msgstr "Navn"
+msgstr "navn"
 
 #: src/viewer/text/form.c:1502
 msgid "value"
-msgstr "Værdi"
+msgstr "værdi"
 
 #: src/viewer/text/form.c:1515
 msgid "read only"

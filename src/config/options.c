@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.285 2003/10/06 19:17:33 pasky Exp $ */
+/* $Id: options.c,v 1.286 2003/10/06 20:07:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -886,6 +886,8 @@ register_options(void)
 {
 	/* TODO: The change hooks should be added more elegantly! --pasky */
 
+	/* Keep options in alphabetical order. */
+
 	add_opt_tree("", N_("Bookmarks"),
 		"bookmarks", 0,
 		N_("Bookmark options."));
@@ -949,6 +951,8 @@ register_options(void)
 		"manager and save them to the configuration file."));
 	get_opt_rec(config_options, "config.show_template")->change_hook = change_hook_stemplate;
 
+	/* Keep options in alphabetical order. */
+
 
 	add_opt_tree("", N_("Connections"),
 		"connection", 0,
@@ -1002,6 +1006,8 @@ register_options(void)
 		"unrestartable_receive_timeout", 0, 1, 1800, 600,
 		N_("Timeout for non-restartable connections (in seconds)."));
 
+	/* Keep options in alphabetical order. */
+
 
 
 	add_opt_tree("", N_("Cookies"),
@@ -1037,6 +1043,8 @@ register_options(void)
 		"resave", 0, 1,
 		N_("Save cookies after each change in cookies list? No effect when\n"
 		"cookies_save is off."));
+
+	/* Keep options in alphabetical order. */
 
 
 
@@ -1152,9 +1160,26 @@ register_options(void)
 		N_("When pressing 'down' on the last link, jump at the first one, and\n"
 		"vice versa."));
 
+	add_opt_int("document.browse", N_("Horizontal text margin"),
+		"margin_width", 0, 0, 9, 3,
+		N_("Horizontal text margin."));
+
+	add_opt_bool("document.browse", N_("Document meta refresh"),
+		"refresh", 0, 0,
+		N_("Automatically follow document-specified refresh directives ('<meta>\n"
+		"refresh' tags). Web-page authors use these to instruct the browser\n"
+		"to reload a document at a given interval or to load another page."));
+
 	add_opt_tree("document.browse", N_("Searching"),
 		"search", 0,
 		N_("Options for searching."));
+
+	add_opt_bool("document.browse.search", N_("Overlapping matches"),
+		"overlap", 0, 0,
+		N_("Let matches overlap (only relevant to regex search).\n"
+		"0 means matches should not overlap.\n"
+		"1 means matches can overlap (CAUTION: can be cpu intensive with\n"
+		"  some expressions!)"));
 
 #ifdef HAVE_REGEX_H
 	add_opt_int("document.browse.search", N_("Regular expressions"),
@@ -1172,23 +1197,6 @@ register_options(void)
 		"2 for extended regular expression searches. (DISABLED)"));
 #endif
 
-	add_opt_bool("document.browse.search", N_("Overlapping matches"),
-		"overlap", 0, 0,
-		N_("Let matches overlap (only relevant to regex search).\n"
-		"0 means matches should not overlap.\n"
-		"1 means matches can overlap (CAUTION: can be cpu intensive with\n"
-		"  some expressions!)"));
-
-	add_opt_bool("document.browse", N_("Document meta refresh"),
-		"refresh", 0, 0,
-		N_("Automatically follow document-specified refresh directives ('<meta>\n"
-		"refresh' tags). Web-page authors use these to instruct the browser\n"
-		"to reload a document at a given interval or to load another page."));
-
-	add_opt_int("document.browse", N_("Horizontal text margin"),
-		"margin_width", 0, 0, 9, 3,
-		N_("Horizontal text margin."));
-
 	add_opt_int("document.browse", N_("Scroll margin"),
 		"scroll_margin", 0, 0, 20, 3,
 		N_("Size of the virtual margin - when you click inside of that margin,\n"
@@ -1202,6 +1210,8 @@ register_options(void)
 	add_opt_bool("document.browse", N_("Tables navigation order"),
 		"table_move_order", 0, 0,
 		N_("Move by columns in table, instead of rows."));
+
+	/* Keep options in alphabetical order. */
 
 
 
@@ -1312,6 +1322,8 @@ register_options(void)
 		"  that obviously if the background isn't black, it will\n"
 		"  break transparency, if you have it enabled for your terminal\n"
 		"  and on your terminal."));
+
+	/* Keep options in alphabetical order. */
 
 
 
@@ -1431,6 +1443,9 @@ register_options(void)
 		"4 is type in addition\n"
 		"5 is everything"));
 
+	/* Keep options in alphabetical order. */
+
+
 
 	add_opt_tree("", N_("MIME"),
 		"mime", 0,
@@ -1546,6 +1561,8 @@ register_options(void)
 		"path", 0, "",
 		N_("Mimetypes search path. Colon-separated list of files.\n"
 		"Leave as \"\" to use built-in default instead."));
+
+	/* Keep options in alphabetical order. */
 
 
 
@@ -1772,6 +1789,8 @@ register_options(void)
 		"domains as well. If it's blank, NO_PROXY environment variable is\n"
 	        "checked as well."));
 
+	/* Keep options in alphabetical order. */
+
 
 
 	add_opt_tree("", N_("Terminals"),
@@ -1837,6 +1856,8 @@ register_options(void)
 	add_opt_codepage("terminal._template_", N_("Codepage"),
 		"charset", 0, get_cp_index("us-ascii"),
 		N_("Codepage of charset used for displaying content on terminal."));
+
+	/* Keep options in alphabetical order. */
 
 
 
@@ -2640,6 +2661,8 @@ register_options(void)
 	/* ============= BORING PART (colors) END =================== */
 	/* ========================================================== */
 
+	/* Keep options in alphabetical order. */
+
 
 	add_opt_tree("ui", N_("Dialog settings"),
 		"dialogs", 0,
@@ -2753,6 +2776,8 @@ register_options(void)
 		"config files, not downloaded files. You may want to disable\n"
 		"it, if you want some config file with some exotic permissions.\n"
 		"Secure file saving is automagically disabled if file is symlink."));
+
+	/* Keep options in alphabetical order. */
 
 
 

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.26 2004/05/07 08:42:47 zas Exp $ */
+/* $Id: parse.c,v 1.27 2004/05/07 08:45:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,8 +135,8 @@ end:
  * - name is searched attribute */
 /* Returns allocated string containing the attribute, or NULL on unsuccess. */
 static inline unsigned char *
-get_attr_val_(register unsigned char *e, unsigned char *name,
-	      enum html_attr_flags flags)
+get_attr_value(register unsigned char *e, unsigned char *name,
+	       enum html_attr_flags flags)
 {
 	unsigned char *n;
 	unsigned char *name_start;
@@ -234,19 +234,19 @@ parse_error:
 unsigned char *
 get_attr_val(register unsigned char *e, unsigned char *name)
 {
-	return get_attr_val_(e, name, HTML_ATTR_NONE);
+	return get_attr_value(e, name, HTML_ATTR_NONE);
 }
 
 unsigned char *
 get_url_val(unsigned char *e, unsigned char *name)
 {
-	return get_attr_val_(e, name, HTML_ATTR_EAT_NL);
+	return get_attr_value(e, name, HTML_ATTR_EAT_NL);
 }
 
 int
 has_attr(unsigned char *e, unsigned char *name)
 {
-	return !!get_attr_val_(e, name, HTML_ATTR_TEST);
+	return !!get_attr_value(e, name, HTML_ATTR_TEST);
 }
 
 

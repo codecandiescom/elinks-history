@@ -1,11 +1,11 @@
-/* $Id: parse.h,v 1.4 2004/05/07 08:42:47 zas Exp $ */
+/* $Id: parse.h,v 1.5 2004/05/07 08:45:35 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_PARSE_H
 #define EL__DOCUMENT_HTML_PARSER_PARSE_H
 
 struct string;
 
-/* Flags for get_attr_val_(). */
+/* Flags for get_attr_value(). */
 enum html_attr_flags {
 	HTML_ATTR_NONE = 0,
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.92 2004/09/27 02:27:29 pasky Exp $ */
+/* $Id: renderer.c,v 1.93 2004/09/27 09:31:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,25 +48,26 @@ process_snippets(struct ecmascript_interpreter *interpreter,
                  struct string_list_item **current)
 {
 	struct string_list_item *doc_current = NULL;
+	struct string_list_item *queue_end = queued_snippets->prev;
 
 #ifdef CONFIG_LEDS
-	if (!*current && interpreter->vs->doc_view->session)
+	if (list_empty(*queued_snippets) && interpreter->vs->doc_view->session)
 		interpreter->vs->doc_view->session->status.ecmascript_led->value = '-';
 #endif
 
 	if (list_empty(*doc_snippets))
 		return;
 
-	/* Position @doc_current in @doc_snippet analogously to @*current in
+	/* Position @doc_current in @doc_snippet to match the end of
 	 * @queued_snippets. */
-	if (!*current) {
+	if (list_empty(*queued_snippets)) {
 		doc_current = doc_snippets->next;
 	} else {
 		struct string_list_item *iterator = queued_snippets->next;
 
 		doc_current = doc_snippets->next;
 		assert(!list_empty(*queued_snippets));
-		while (iterator != *current) {
+		while (iterator != queue_end) {
 			assert(!strlcmp(iterator->string.source,
 			                iterator->string.length,
 					doc_current->string.source,
@@ -75,16 +76,13 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 			doc_current = doc_current->next;
 			iterator = iterator->next;
 
-			if (iterator == (struct string_list_item *) queued_snippets) {
-				INTERNAL("process_snippets(): current (%p) got off queued_snippets!", *current);
-				return;
-			}
+			assert(iterator != (struct string_list_item *) queued_snippets);
 			if (doc_current == (struct string_list_item *) doc_snippets) {
 				INTERNAL("process_snippets(): doc_snippets shorter than queued_snippets!");
 				return;
 			}
 		}
-		/* Ok, so that's current. We want the new ones. */
+		/* Ok, so that's the end of the queued part. We want the new ones. */
 		doc_current = doc_current->next;
 	}
 
@@ -95,11 +93,6 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 		                   doc_current->string.length);
 		/* TODO: Support for external references. --pasky */
 		ecmascript_eval(interpreter, &doc_current->string);
-		if (*current) {
-			*current = (*current)->next;
-		} else {
-			*current = queued_snippets->next;
-		}
 	}
 }
 #endif

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.136 2003/07/02 20:47:50 zas Exp $ */
+/* $Id: view.c,v 1.137 2003/07/02 22:00:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2161,12 +2161,16 @@ toggle(struct session *ses, struct f_data_c *f, int a)
 void
 selected_item(struct terminal *term, void *pitem, struct session *ses)
 {
-	int item = (int)pitem;
-	struct f_data_c *f = current_frame(ses);
+	int item = (int) pitem;
+	struct f_data_c *f;
 	struct link *l;
 	struct form_state *fs;
 
-	if (!f || f->vs->current_link == -1) return;
+	assert(term && ses);
+	f = current_frame(ses);
+
+	assert(f && f->vs && f->f_data);
+	if (f->vs->current_link == -1) return;
 	l = &f->f_data->links[f->vs->current_link];
 	if (l->type != L_SELECT) return;
 
@@ -2185,19 +2189,25 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 	draw_doc(ses->tab->term, f, 1);
 	print_screen_status(ses);
 	redraw_from_window(ses->tab);
-	/*if (!has_form_submit(f->f_data, l->form)) {
+#if 0
+	if (!has_form_submit(f->f_data, l->form)) {
 		goto_form(ses, f, l->form, l->target);
-	}*/
+	}
+#endif
 }
 
 int
 get_current_state(struct session *ses)
 {
-	struct f_data_c *f = current_frame(ses);
+	struct f_data_c *f;
 	struct link *l;
 	struct form_state *fs;
 
-	if (!f || f->vs->current_link == -1) return -1;
+	assert(ses);
+	f = current_frame(ses);
+
+	assert(f && f->vs && f->f_data);
+	if (f->vs->current_link == -1) return -1;
 	l = &f->f_data->links[f->vs->current_link];
 	if (l->type != L_SELECT) return -1;
 	fs = find_form_state(f, l->form);
@@ -2338,14 +2348,14 @@ static int
 field_op(struct session *ses, struct f_data_c *f, struct link *l,
 	 struct event *ev, int rep)
 {
-	struct form_control *frm = l->form;
+	struct form_control *frm;
 	struct form_state *fs;
 	int x = 1;
 
-	if (!frm) {
-		internal("link has no form control");
-		return 0;
-	}
+	assert(ses && f && l && ev);
+	frm = l->form;
+	assertm(frm, "link has no form control");
+
 	if (l->form->ro == 2) return 0;
 	fs = find_form_state(f, frm);
 	if (!fs || !fs->value) return 0;
@@ -2562,6 +2572,8 @@ b:
 static void
 set_textarea(struct session *ses, struct f_data_c *f, int kbd)
 {
+	assert(ses && f && f->vs && f->f_data);
+
 	if (f->vs->current_link != -1
 	    && f->f_data->links[f->vs->current_link].type == L_AREA) {
 		struct event ev = { EV_KBD, 0, 0, 0 };
@@ -2574,9 +2586,14 @@ set_textarea(struct session *ses, struct f_data_c *f, int kbd)
 static void
 _search_for(struct session *ses, unsigned char *str, int direction)
 {
-	struct f_data_c *f = current_frame(ses);
+	struct f_data_c *f;
 
-	if (!f || !str || !str[0]) return;
+	assert(ses && str);
+
+	if (!*str) return;
+	f = current_frame(ses);
+	assert(f);
+
 	if (ses->search_word) mem_free(ses->search_word);
 	ses->search_word = stracpy(str);
 	if (!ses->search_word) return;
@@ -2594,12 +2611,14 @@ _search_for(struct session *ses, unsigned char *str, int direction)
 void
 search_for_back(struct session *ses, unsigned char *str)
 {
+	assert(ses && str);
 	_search_for(ses, str, -1);
 }
 
 void
 search_for(struct session *ses, unsigned char *str)
 {
+	assert(ses && str);
 	_search_for(ses, str, 1);
 }
 
@@ -2609,9 +2628,11 @@ point_intersect(struct point *p1, int l1, struct point *p2, int l2)
 #define HASH_SIZE	4096
 #define HASH(p) (((p.y << 6) + p.x) & (HASH_SIZE - 1))
 
-	int i, j;
+	register int i, j;
 	static char hash[HASH_SIZE];
 	static int first_time = 1;
+
+	assert(p1 && p2);
 
 	if (first_time) memset(hash, 0, HASH_SIZE), first_time = 0;
 
@@ -2636,8 +2657,10 @@ static int
 find_next_link_in_search(struct f_data_c *f, int d)
 {
 	struct point *pt = NULL;
-	int len;
 	struct link *link;
+	int len;
+
+	assert(f && f->vs);
 
 	if (d == -2 || d == 2) {
 		d /= 2;
@@ -2661,9 +2684,11 @@ find_next_link_in_search(struct f_data_c *f, int d)
 void
 find_next(struct session *ses, struct f_data_c *f, int a)
 {
-	int min, max;
-	int c = 0;
-	int p = f->vs->view_pos;
+	int p, min, max, c = 0;
+
+	assert(ses && ses->tab && ses->tab->term && f && f->vs);
+
+	p = f->vs->view_pos;
 
 	if (!a && ses->search_word) {
 		if (!(find_next_link_in_search(f, ses->search_direction))) return;
@@ -2730,9 +2755,11 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 void
 find_next_back(struct session *ses, struct f_data_c *f, int a)
 {
-	ses->search_direction = - ses->search_direction;
+	assert(ses && f);
+
+	ses->search_direction = -ses->search_direction;
 	find_next(ses, f, a);
-	ses->search_direction = - ses->search_direction;
+	ses->search_direction = -ses->search_direction;
 }
 
 static inline void
@@ -2740,18 +2767,24 @@ rep_ev(struct session *ses, struct f_data_c *fd,
        void (*f)(struct session *, struct f_data_c *, int),
        int a)
 {
-	int i = ses->kbdprefix.rep ? ses->kbdprefix.rep_num : 1;
+	register int i;
 
+	assert(ses && fd && f);
+
+	i = ses->kbdprefix.rep ? ses->kbdprefix.rep_num : 1;
 	while (i--) f(ses, fd, a);
 }
 
 static struct link *
 choose_mouse_link(struct f_data_c *f, struct event *ev)
 {
-	struct link *l1 = f->f_data->links + f->f_data->nlinks;
-	struct link *l2 = f->f_data->links;
-	struct link *l;
-	int i;
+	struct link *l1, *l2, *l;
+	register int i;
+
+	assert(f && f->vs && f->f_data && ev);
+
+	l1 = f->f_data->links + f->f_data->nlinks;
+	l2 = f->f_data->links;
 
 	if (!f->f_data->nlinks
 	    || ev->x < 0 || ev->y < 0 || ev->x >= f->xw || ev->y >= f->yw)
@@ -2780,6 +2813,8 @@ choose_mouse_link(struct f_data_c *f, struct event *ev)
 static void
 jump_to_link_number(struct session *ses, struct f_data_c *fd, int n)
 {
+	assert(ses && fd && fd->vs);
+
 	if (n < 0 || n > fd->f_data->nlinks) return;
 	fd->vs->current_link = n;
 	check_vs(fd);
@@ -2789,10 +2824,13 @@ jump_to_link_number(struct session *ses, struct f_data_c *fd, int n)
 static void
 goto_link_number_do(struct session *ses, struct f_data_c *fd, int n)
 {
-	struct link *link = &fd->f_data->links[n];
+	struct link *link;
 
+	assert(ses && fd && fd->f_data);
+	if (n < 0 || n > fd->f_data->nlinks) return;
 	jump_to_link_number(ses, fd, n);
 
+	link = &fd->f_data->links[n];
 	if (link->type != L_AREA
 	    && link->type != L_FIELD
 	    && get_opt_int("document.browse.accesskey.auto_follow"))
@@ -2802,9 +2840,11 @@ goto_link_number_do(struct session *ses, struct f_data_c *fd, int n)
 static void
 goto_link_number(struct session *ses, unsigned char *num)
 {
-	struct f_data_c *fd = current_frame(ses);
+	struct f_data_c *fd;
 
-	if (!fd) return;
+	assert(ses && num);
+	fd = current_frame(ses);
+	assert(fd);
 	goto_link_number_do(ses, fd, atoi(num) - 1);
 }
 
@@ -2813,10 +2853,13 @@ static int
 try_document_key(struct session *ses, struct f_data_c *fd,
 		 struct event *ev)
 {
-	int i; /* GOD I HATE C! --FF */ /* YEAH, BRAINFUCK RULEZ! --pasky */
-	long x = (ev->x < 0x100) ? upcase(ev->x) : ev->x;
+	long x;
 	int passed = -1;
+	int i; /* GOD I HATE C! --FF */ /* YEAH, BRAINFUCK RULEZ! --pasky */
 
+	assert(ses && fd && fd->f_data && fd->vs && ev);
+
+	x = (ev->x < 0x100) ? upcase(ev->x) : ev->x;
 	if (x >= 'A' && x <= 'Z' && ev->y != KBD_ALT) {
 		/* We accept those only in alt-combo. */
 		return 0;
@@ -2856,6 +2899,8 @@ static int
 frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 {
 	int x = 1;
+
+	assert(ses && fd && fd->f_data && fd->vs && ev);
 
 	if (fd->vs->current_link >= 0
 	    && (fd->f_data->links[fd->vs->current_link].type == L_FIELD ||
@@ -3075,6 +3120,8 @@ current_frame(struct session *ses)
 	struct f_data_c *fd = NULL;
 	int i;
 
+	assert(ses);
+
 	if (!have_location(ses)) return NULL;
 	i = cur_loc(ses)->vs.current_link;
 	foreach (fd, ses->scrn_frames) {
@@ -3090,13 +3137,13 @@ current_frame(struct session *ses)
 static int
 send_to_frame(struct session *ses, struct event *ev)
 {
+	struct f_data_c *fd;
 	int r;
-	struct f_data_c *fd = current_frame(ses);
 
-	if (!fd) {
-		/*internal("document not formatted");*/
-		return 0;
-	}
+	assert(ses && ses->tab && ses->tab->term && ev);
+	fd = current_frame(ses);
+	assertm(fd, "document not formatted");
+
 	r = frame_ev(ses, fd, ev);
 	if (r == 1) {
 		draw_doc(ses->tab->term, fd, 1);
@@ -3112,12 +3159,11 @@ do_for_frame(struct session *ses,
 	     void (*f)(struct session *, struct f_data_c *, int),
 	     int a)
 {
-	struct f_data_c *fd = current_frame(ses);
+	struct f_data_c *fd;
 
-	if (!fd) {
-		/*internal("document not formatted");*/
-		return;
-	}
+	assert(ses && f);
+	fd = current_frame(ses);
+	assertm(fd, "document not formatted");
 
 	f(ses, fd, a);
 }
@@ -3126,10 +3172,13 @@ static void
 do_mouse_event(struct session *ses, struct event *ev)
 {
 	struct event evv;
-	struct f_data_c *fdd, *fd = current_frame(ses);	/* !!! FIXME: frames */
+	struct f_data_c *fdd, *fd; /* !!! FIXME: frames */
 	struct document_options *o;
 
-	if (!fd) return;
+	assert(ses && ev);
+	fd = current_frame(ses);
+	assert(fd && fd->f_data);
+
 	o = &fd->f_data->opt;
 	if (ev->x >= o->xp && ev->x < o->xp + o->xw &&
 	    ev->y >= o->yp && ev->y < o->yp + o->yw) goto ok;
@@ -3137,6 +3186,7 @@ do_mouse_event(struct session *ses, struct event *ev)
 r:
 	next_frame(ses, 1);
 	fdd = current_frame(ses);
+	assert(fdd && fdd->f_data);
 	o = &fdd->f_data->opt;
 	if (ev->x >= o->xp && ev->x < o->xp + o->xw &&
 	    ev->y >= o->yp && ev->y < o->yp + o->yw) {
@@ -3159,10 +3209,15 @@ void send_open_in_new_xterm(struct terminal *, void (*)(struct terminal *, unsig
 void
 send_event(struct session *ses, struct event *ev)
 {
+	struct f_data_c *fd;
+
+	assert(ses && ev);
+	fd = current_frame(ses);
+
 	if (ev->ev == EV_KBD) {
 		int func_ref;
 
-		if (send_to_frame(ses, ev)) return;
+		if (fd && send_to_frame(ses, ev)) return;
 
 		switch (kbd_action(KM_MAIN, ev, &func_ref)) {
 			case ACT_MENU:
@@ -3321,14 +3376,10 @@ quit:
 			case ACT_OPEN_NEW_WINDOW:
 				open_in_new_window(ses->tab->term, send_open_new_xterm, ses);
 				goto x;
-			case ACT_OPEN_LINK_IN_NEW_WINDOW: {
-				struct f_data_c *fd = current_frame(ses);
-
+			case ACT_OPEN_LINK_IN_NEW_WINDOW:
 				if (!fd || fd->vs->current_link == -1) goto x;
 				open_in_new_window(ses->tab->term, send_open_in_new_xterm, ses);
 				goto x;
-			}
-
 			case ACT_TAB_CLOSE:
 				close_tab(ses->tab->term);
 				ses = NULL; /* Disappeared in EV_ABORT handler. */
@@ -3357,11 +3408,11 @@ quit:
 				}
 		}
 
-		if (get_opt_int("document.browse.accesskey.priority") <= 0
-		    && current_frame(ses)
-		    && try_document_key(ses, current_frame(ses), ev)) {
+		if (fd
+		    && get_opt_int("document.browse.accesskey.priority") <= 0
+		    && try_document_key(ses, fd, ev)) {
 			/* The document ate the key! */
-			draw_doc(ses->tab->term, current_frame(ses), 1);
+			draw_doc(ses->tab->term, fd, 1);
 			print_screen_status(ses);
 			redraw_from_window(ses->tab);
 			return;
@@ -3399,7 +3450,7 @@ quit:
 			switch_to_tab(ses->tab->term, tab, nb_tabs);
 			goto x;
 		}
-		do_mouse_event(ses, ev);
+		if (fd) do_mouse_event(ses, ev);
 	}
 
 	return;
@@ -3416,6 +3467,7 @@ send_enter(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct event ev = { EV_KBD, KBD_ENTER, 0, 0 };
 
+	assert(ses);
 	send_event(ses, &ev);
 }
 
@@ -3424,6 +3476,7 @@ send_enter_reload(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct event ev = { EV_KBD, KBD_ENTER, KBD_CTRL, 0 };
 
+	assert(ses);
 	send_event(ses, &ev);
 }
 
@@ -3431,6 +3484,8 @@ void
 frm_download(struct session *ses, struct f_data_c *fd, int resume)
 {
 	struct link *link;
+
+	assert(ses && fd && fd->vs && fd->f_data);
 
 	if (fd->vs->current_link == -1) return;
 	if (ses->dn_url) {
@@ -3462,9 +3517,13 @@ static void
 send_download_do(struct terminal *term, void *xxx, struct session *ses,
 		enum dl_type dlt)
 {
-	struct f_data_c *fd = current_frame(ses);
+	struct f_data_c *fd;
 
-	if (!fd || fd->vs->current_link == -1) return;
+	assert(term && ses);
+	fd = current_frame(ses);
+	assert(fd && fd->vs && fd->f_data);
+
+	if (fd->vs->current_link == -1) return;
 	if (ses->dn_url) {
 		mem_free(ses->dn_url);
 		ses->dn_url = NULL;
@@ -3493,20 +3552,25 @@ send_download_do(struct terminal *term, void *xxx, struct session *ses,
 void
 send_download_image(struct terminal *term, void *xxx, struct session *ses)
 {
+	assert(term && ses);
 	send_download_do(term, xxx, ses, IMAGE);
 }
 
 static void
 send_download(struct terminal *term, void *xxx, struct session *ses)
 {
+	assert(term && ses);
 	send_download_do(term, xxx, ses, URL);
 }
 
 static int
 add_session_ring_to_str(unsigned char **str, int *len)
 {
-	int ring = get_opt_int_tree(&cmdline_options, "session-ring");
+	int ring;
 
+	assert(str && len);
+
+	ring = get_opt_int_tree(&cmdline_options, "session-ring");
 	if (ring) {
 		add_to_str(str, len, " -session-ring ");
 		add_num_to_str(str, len, ring);
@@ -3521,9 +3585,13 @@ send_open_in_new_xterm(struct terminal *term,
 		       void (*open_window)(struct terminal *term, unsigned char *, unsigned char *),
 		       struct session *ses)
 {
-	struct f_data_c *fd = current_frame(ses);
+	struct f_data_c *fd;
 
-	if (!fd || fd->vs->current_link == -1) return;
+	assert(term && open_window && ses);
+	fd = current_frame(ses);
+	assert(fd && fd->vs && fd->f_data);
+
+	if (fd->vs->current_link == -1) return;
 	if (ses->dn_url) mem_free(ses->dn_url);
 	ses->dn_url = get_link_url(ses, fd, &fd->f_data->links[fd->vs->current_link]);
 	/* FIXME: We can't do this because ses->dn_url isn't alloc'd by init_str(). --pasky */
@@ -3543,6 +3611,8 @@ send_open_new_xterm(struct terminal *term,
 {
 	int l = 0;
 
+	assert(term && open_window && ses);
+
 	if (ses->dn_url) mem_free(ses->dn_url);
 	ses->dn_url = init_str();
 	if (!ses->dn_url) return;
@@ -3560,9 +3630,11 @@ open_in_new_window(struct terminal *term,
 		   struct session *ses)
 {
 	struct menu_item *mi;
-	struct open_in_new *oi;
-	struct open_in_new *oin = get_open_in_new(term->environment);
+	struct open_in_new *oi, *oin;
 
+	assert(term && ses && xxx);
+
+	oin = get_open_in_new(term->environment);
 	if (!oin) return;
 	if (!oin[1].text) {
 		xxx(term, oin[0].fn, ses);
@@ -3584,8 +3656,11 @@ open_in_new_window(struct terminal *term,
 void
 save_url(struct session *ses, unsigned char *url)
 {
-	struct f_data_c *fd = current_frame(ses);
-	unsigned char *u = translate_url(url, ses->tab->term->cwd);
+	struct f_data_c *fd;
+	unsigned char *u;
+
+	assert(ses && ses->tab && ses->tab->term && url);
+	u = translate_url(url, ses->tab->term->cwd);
 
 	if (!u) {
 		struct status stat = { NULL_LIST_HEAD, NULL, NULL,
@@ -3600,6 +3675,10 @@ save_url(struct session *ses, unsigned char *url)
 	ses->dn_url = u;
 
 	if (ses->ref_url) mem_free(ses->ref_url);
+
+	fd = current_frame(ses);
+	assert(fd && fd->f_data && fd->f_data->url);
+
 	ses->ref_url = stracpy(fd->f_data->url);
 	query_file(ses, ses->dn_url, start_download, NULL, 1);
 }
@@ -3607,10 +3686,14 @@ save_url(struct session *ses, unsigned char *url)
 void
 send_image(struct terminal *term, void *xxx, struct session *ses)
 {
+	struct f_data_c *fd;
 	unsigned char *u;
-	struct f_data_c *fd = current_frame(ses);
 
-	if (!fd || fd->vs->current_link == -1) return;
+	assert(term && ses);
+	fd = current_frame(ses);
+	assert(fd && fd->f_data && fd->vs);
+
+	if (fd->vs->current_link == -1) return;
 	u = fd->f_data->links[fd->vs->current_link].where_img;
 	if (!u) return;
 	goto_url(ses, u);
@@ -3619,14 +3702,19 @@ send_image(struct terminal *term, void *xxx, struct session *ses)
 void
 save_as(struct terminal *term, void *xxx, struct session *ses)
 {
-	struct f_data_c *fd = current_frame(ses);
 	struct location *l;
+
+	assert(term && ses);
 
 	if (!have_location(ses)) return;
 	l = cur_loc(ses);
 	if (ses->dn_url) mem_free(ses->dn_url);
 	ses->dn_url = stracpy(l->vs.url);
 	if (ses->dn_url) {
+		struct f_data_c *fd = current_frame(ses);
+
+		assert(fd && fd->f_data && fd->f_data->url);
+
 		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = stracpy(fd->f_data->url);
 		query_file(ses, ses->dn_url, start_download, NULL, 1);
@@ -3637,6 +3725,8 @@ static void
 save_formatted_finish(struct terminal *term, int h, void *data, int resume)
 {
 	struct f_data *f_data = data;
+
+	assert(term && f_data);
 
 	if (h == -1) return;
 	if (dump_to_file(f_data, h)) {
@@ -3652,20 +3742,26 @@ save_formatted_finish(struct terminal *term, int h, void *data, int resume)
 static void
 save_formatted(struct session *ses, unsigned char *file)
 {
-	struct f_data_c *f = current_frame(ses);
+	struct f_data_c *fd;
 
-	if (!f || !f->f_data) return;
+	assert(ses && ses->tab && ses->tab->term && file);
+	fd = current_frame(ses);
+	assert(fd && fd->f_data);
+
 	create_download_file(ses->tab->term, file, NULL, 0, 0,
-			     save_formatted_finish, f->f_data);
+			     save_formatted_finish, fd->f_data);
 }
 
 void
 menu_save_formatted(struct terminal *term, void *xxx, struct session *ses)
 {
-	struct f_data_c *f = current_frame(ses);
+	struct f_data_c *fd;
 
-	if (!f || !f->f_data) return;
-	query_file(ses, f->vs->url, save_formatted, NULL, !((int) xxx));
+	assert(term && ses);
+	fd = current_frame(ses);
+	assert(fd && fd->vs);
+
+	query_file(ses, fd->vs->url, save_formatted, NULL, !((int) xxx));
 }
 
 /* Open a contextual menu on a link, form or image element. */
@@ -3673,15 +3769,22 @@ menu_save_formatted(struct terminal *term, void *xxx, struct session *ses)
 void
 link_menu(struct terminal *term, void *xxx, struct session *ses)
 {
-	struct f_data_c *f = current_frame(ses);
+	struct f_data_c *fd;
 	struct link *link;
-	struct menu_item *mi = new_menu(FREE_LIST);
+	struct menu_item *mi;
 	int l = 0;
 
-	if (!mi) return;
-	if (!f || f->vs->current_link < 0) goto end;
+	assert(term && ses);
 
-	link = &f->f_data->links[f->vs->current_link];
+	fd = current_frame(ses);
+	mi = new_menu(FREE_LIST);
+	if (!mi) return;
+	if (!fd) goto end;
+
+	assert(fd->vs && fd->f_data);
+	if (fd->vs->current_link < 0) goto end;
+
+	link = &fd->f_data->links[fd->vs->current_link];
 	if (link->type == L_LINK && link->where) {
 		l = 1;
 		if (strlen(link->where) >= 4
@@ -3765,16 +3868,18 @@ end:
 unsigned char *
 print_current_link_title_do(struct f_data_c *fd, struct terminal *term)
 {
-	struct link *lnk;
+	struct link *link;
 
-	if (!fd || fd->f_data->frame || fd->vs->current_link == -1
+	assert(term && fd && fd->f_data && fd->vs);
+
+	if (fd->f_data->frame || fd->vs->current_link == -1
 	    || fd->vs->current_link >= fd->f_data->nlinks)
 		return NULL;
 
-	lnk = &fd->f_data->links[fd->vs->current_link];
+	link = &fd->f_data->links[fd->vs->current_link];
 
-	if (lnk->title)
-		return stracpy(lnk->title);
+	if (link->title)
+		return stracpy(link->title);
 
 	return NULL;
 }
@@ -3785,7 +3890,9 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 {
 	struct link *link;
 
-	if (!fd || fd->f_data->frame || fd->vs->current_link == -1
+	assert(term && fd && fd->f_data && fd->vs);
+
+	if (fd->f_data->frame || fd->vs->current_link == -1
 	    || fd->vs->current_link >= fd->f_data->nlinks) {
 		return NULL;
 	}
@@ -3940,7 +4047,13 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 unsigned char *
 print_current_link(struct session *ses)
 {
-	return print_current_link_do(current_frame(ses), ses->tab->term);
+	struct f_data_c *fd;
+
+	assert(ses && ses->tab && ses->tab->term);
+	fd = current_frame(ses);
+	assert(fd);
+
+	return print_current_link_do(fd, ses->tab->term);
 }
 
 
@@ -3952,7 +4065,7 @@ print_current_titlex(struct f_data_c *fd, int w)
 	unsigned char *m;
 	unsigned char *p;
 
-	if (!fd) return NULL;
+	assert(fd);
 
 	p = init_str();
 	if (!p) return NULL;
@@ -4004,5 +4117,11 @@ end:
 unsigned char *
 print_current_title(struct session *ses)
 {
-	return print_current_titlex(current_frame(ses), ses->tab->term->x);
+	struct f_data_c *fd;
+
+	assert(ses && ses->tab && ses->tab->term);
+	fd = current_frame(ses);
+	assert(fd);
+
+	return print_current_titlex(fd, ses->tab->term->x);
 }

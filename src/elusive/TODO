@@ -95,11 +95,14 @@
 
     STATUS:
 
-      Being worked on by pasky.
+      The basic support is there. Rather very simplistic yet, in fact for
+      testing of basic capabilities of renderer rather than for displaying of
+      the syntax tree ;-).
 
     TODO:
 
-      - Format raw syntax tree data to a tree-like structure.
+      - Support for indentation - that's kinda requirement ;-).
+      - Nicer rendering, utilizing various text decorations and similiars.
       - Support for CSS specifying details about formatting of such tree.
 
 

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.82 2004/10/08 16:57:52 zas Exp $ */
+/* $Id: connection.h,v 1.83 2004/12/24 02:34:48 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -35,6 +35,9 @@ enum connection_priority {
 #define is_in_connecting_state(state)	(S_WAIT < (state) && (state) < S_TRANS)
 #define is_in_transfering_state(state)	((state) >= S_TRANS)
 #define is_in_queued_state(state)	(is_in_connecting_state(state) || (state) == S_WAIT)
+
+/* FIXME: Namespace clash with Windows headers. */
+#undef S_OK
 
 enum connection_state {
 	/* States >= 0 are used for connections still in progress. */

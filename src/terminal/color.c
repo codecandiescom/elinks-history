@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.77 2004/06/25 10:52:31 zas Exp $ */
+/* $Id: color.c,v 1.78 2004/12/24 02:34:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,9 @@ color_distance(struct rgb *c1, struct rgb *c2)
 
 	return (3 * r * r) + (4 * g * g) + (2 * b * b);
 }
+
+/* FIXME: Namespace clash with <wingdi.h> */
+#undef RGB
 
 #define RED(color)	(RED_COLOR(color)   << 3)
 #define GREEN(color)	(GREEN_COLOR(color) << 2)

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.97 2003/10/02 17:14:44 jonas Exp $ */
+/* $Id: screen.c,v 1.98 2003/10/02 20:13:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -327,12 +327,32 @@ struct screen_state {
 
 #define use_utf8_io(driver)	((driver)->charsets[0] != -1)
 
+static inline void
+add_char_data(struct string *screen, struct screen_driver *driver,
+	      unsigned char data, unsigned char border)
+{
+	if (data >= ' ' && data != ASCII_DEL /* && c != 155*/) {
+		if (border && driver->frame && data >= 176 && data < 224) {
+			data = driver->frame[data - 176];
+		}
+
+		if (use_utf8_io(driver)) {
+			int charset = driver->charsets[!!border];
+
+			add_to_string(screen, cp2utf_8(charset, data));
+		} else {
+			add_char_to_string(screen, data);
+		}
+	} else {
+		add_char_to_string(screen, ' ');
+	}
+}
+
 /* Time critical section. */
 static inline void
 add_char16(struct string *screen, struct screen_driver *driver,
 	   struct screen_char *ch, struct screen_state *state)
 {
-	unsigned char c = ch->data;
 	unsigned char border = (ch->attr & SCREEN_ATTR_FRAME);
 	unsigned char underline = (ch->attr & SCREEN_ATTR_UNDERLINE);
 
@@ -383,21 +403,7 @@ add_char16(struct string *screen, struct screen_driver *driver,
 		add_bytes_to_string(screen, "m", 1);
 	}
 
-	if (c >= ' ' && c != ASCII_DEL /* && c != 155*/) {
-		if (border && driver->frame && c >= 176 && c < 224) {
-			c = driver->frame[c - 176];
-		}
-
-		if (use_utf8_io(driver)) {
-			int charset = driver->charsets[!!border];
-
-			add_to_string(screen, cp2utf_8(charset, c));
-		} else {
-			add_char_to_string(screen, c);
-		}
-	} else {
-		add_char_to_string(screen, ' ');
-	}
+	add_char_data(screen, driver, ch->data, border);
 }
 
 #ifdef USE_256_COLORS
@@ -406,7 +412,6 @@ static inline void
 add_char256(struct string *screen, struct screen_driver *driver,
 	    struct screen_char *ch, struct screen_state *state)
 {
-	unsigned char c = ch->data;
 	unsigned char attr_delta = (ch->attr ^ state->attr);
 
 	if (attr_delta) {
@@ -416,8 +421,6 @@ add_char256(struct string *screen, struct screen_driver *driver,
 		}
 
 		if (attr_delta & SCREEN_ATTR_BOLD) {
-			/* Completely handle the underlining. */
-
 			if (ch->attr & SCREEN_ATTR_BOLD) {
 				add_bytes_to_string(screen, "\033[1m", 4);
 			} else {
@@ -448,27 +451,11 @@ add_char256(struct string *screen, struct screen_driver *driver,
 		add_term_string(screen, driver->underline[!!pos]);
 	}
 
-	if (c >= ' ' && c != ASCII_DEL /* && c != 155*/) {
-		unsigned char border = (ch->attr & SCREEN_ATTR_FRAME);
-
-		if (border && driver->frame && c >= 176 && c < 224) {
-			c = driver->frame[c - 176];
-		}
-
-		if (use_utf8_io(driver)) {
-			int charset = driver->charsets[state->border];
-
-			add_to_string(screen, cp2utf_8(charset, c));
-		} else {
-			add_char_to_string(screen, c);
-		}
-	} else {
-		add_char_to_string(screen, ' ');
-	}
+	add_char_data(screen, driver, ch->data, ch->attr & SCREEN_ATTR_FRAME);
 }
 #endif
 
-#define add_chars(image_, term_, driver_, state_, ADD_CHAR)				\
+#define add_chars(image_, term_, driver_, state_, ADD_CHAR)			\
 {										\
 	register struct screen_char *current = (term_)->screen->last_image;	\
 	register struct screen_char *pos = (term_)->screen->image;		\

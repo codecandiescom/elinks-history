@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.110 2003/11/08 22:23:32 jonas Exp $ */
+/* $Id: dialogs.c,v 1.111 2003/11/08 22:36:23 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -34,9 +34,6 @@
 /* Whether to save bookmarks after each modification of their list
  * (add/modify/delete). */
 #define BOOKMARKS_RESAVE	1
-
-/* Number of widgets excluding the listbox. */
-#define	BM_WIDGETS_COUNT		8
 
 
 #ifdef BOOKMARKS
@@ -553,6 +550,9 @@ push_move_button(struct dialog_data *dlg_data,
 
 /**** MANAGEMENT *****************************************************/
 
+/* Number of widgets */
+#define	BOOKMARK_WIDGETS	9
+
 /* Builds the "Bookmark manager" dialog */
 void
 menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
@@ -577,7 +577,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	}
 
 	/* Create the dialog */
-	dlg = calloc_dialog(BM_WIDGETS_COUNT + 1, sizeof(struct bookmark) + 2 * MAX_STR_LEN);
+	dlg = calloc_dialog(BOOKMARK_WIDGETS, sizeof(struct bookmark) + 2 * MAX_STR_LEN);
 	if (!dlg) return;
 
 	dlg->title = _("Bookmark manager", term);
@@ -597,7 +597,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	add_dlg_button(dlg, B_ENTER, push_search_button, _("Search", term), NULL);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
 
-	add_dlg_end(dlg, BM_WIDGETS_COUNT + 1);
+	add_dlg_end(dlg, BOOKMARK_WIDGETS);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }

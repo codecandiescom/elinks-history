@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.108 2003/11/08 22:23:33 jonas Exp $ */
+/* $Id: dialogs.c,v 1.109 2003/11/08 22:36:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,9 +49,6 @@ write_config_error(struct terminal *term, struct memory_list *ml,
 /****************************************************************************
   Option manager stuff.
 ****************************************************************************/
-
-/* The location of the box in the options manager */
-#define	OP_WIDGETS_COUNT	6
 
 /* Creates the box display (holds everything EXCEPT the actual rendering
  * data) */
@@ -435,6 +432,7 @@ push_save_button(struct dialog_data *dlg_data,
 	return 0;
 }
 
+#define	OPTION_WIDGETS	7
 
 /* Builds the "Options manager" dialog */
 void
@@ -443,7 +441,7 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	struct dialog *dlg;
 
 	/* Create the dialog */
-	dlg = calloc_dialog(OP_WIDGETS_COUNT + 1, sizeof(struct option) + 2 * MAX_STR_LEN);
+	dlg = calloc_dialog(OPTION_WIDGETS, sizeof(struct option) + 2 * MAX_STR_LEN);
 	if (!dlg) return;
 
 	dlg->title = _("Options manager", term);
@@ -461,7 +459,7 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	add_dlg_button(dlg, B_ENTER, push_save_button, _("Save", term), ses);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
 
-	add_dlg_end(dlg, OP_WIDGETS_COUNT + 1);
+	add_dlg_end(dlg, OPTION_WIDGETS);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }
@@ -471,9 +469,6 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 /****************************************************************************
   Keybinding manager stuff.
 ****************************************************************************/
-
-/* The location of the box in the keybinding manager */
-#define	KB_WIDGETS_COUNT		5
 
 /* Creates the box display (holds everything EXCEPT the actual rendering
  * data) */
@@ -651,6 +646,8 @@ push_kbdbind_save_button(struct dialog_data *dlg_data,
 	return 0;
 }
 
+#define	KEYBINDING_WIDGETS	6
+
 /* Builds the "Keybinding manager" dialog */
 void
 menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
@@ -658,7 +655,7 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 	struct dialog *dlg;
 
 	/* Create the dialog */
-	dlg = calloc_dialog(KB_WIDGETS_COUNT + 1, sizeof(struct option) + 2 * MAX_STR_LEN);
+	dlg = calloc_dialog(KEYBINDING_WIDGETS, sizeof(struct option) + 2 * MAX_STR_LEN);
 	if (!dlg) return;
 
 	dlg->title = _("Keybinding manager", term);
@@ -675,7 +672,7 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 	add_dlg_button(dlg, B_ENTER, push_kbdbind_save_button, _("Save", term), ses);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
 
-	add_dlg_end(dlg, KB_WIDGETS_COUNT + 1);
+	add_dlg_end(dlg, KEYBINDING_WIDGETS);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.60 2003/11/08 21:25:26 jonas Exp $ */
+/* $Id: dialogs.c,v 1.61 2003/11/08 22:36:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,14 +27,6 @@
 
 
 #ifdef GLOBHIST
-
-/* Number of widgets in dialog excluding the listbox. */
-#define HISTORY_WIDGETS_COUNT_ 7
-#ifdef BOOKMARKS
-# define HISTORY_WIDGETS_COUNT (HISTORY_WIDGETS_COUNT_+1)
-#else
-# define HISTORY_WIDGETS_COUNT (HISTORY_WIDGETS_COUNT_)
-#endif
 
 struct history_dialog_list_item {
 	LIST_HEAD(struct history_dialog_list_item);
@@ -444,7 +436,11 @@ push_bookmark_button(struct dialog_data *dlg_data,
 }
 #endif
 
-
+#ifdef BOOKMARKS
+# define GLOBHIST_WIDGETS	9
+#else
+# define GLOBHIST_WIDGETS	8
+#endif
 
 void
 menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
@@ -469,7 +465,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	}
 
 	/* XXX: sizeof(struct global_history_item): why? */
-	dlg = calloc_dialog(HISTORY_WIDGETS_COUNT + 1,
+	dlg = calloc_dialog(GLOBHIST_WIDGETS,
 			    sizeof(struct global_history_item) + 2 * MAX_STR_LEN);
 	if (!dlg) return;
 
@@ -492,7 +488,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	add_dlg_button(dlg, B_ENTER, push_clear_button, _("Clear", term), NULL);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
 
-	add_dlg_end(dlg, HISTORY_WIDGETS_COUNT + 1);
+	add_dlg_end(dlg, GLOBHIST_WIDGETS);
 
 
 	dlg_data = do_dialog(term, dlg, getml(dlg, NULL));

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.267 2004/04/05 17:38:21 jonas Exp $ */
+/* $Id: http.c,v 1.268 2004/04/05 17:41:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -308,7 +308,7 @@ http_send_header(struct connection *conn)
 	struct http_connection_info *info;
 	int trace = get_opt_bool("protocol.http.trace");
 	struct string header;
-	unsigned char *host_data;
+	unsigned char *host_data, *post_data = NULL;
 	struct uri *uri = conn->proxied_uri; /* Set to the real uri */
 	unsigned char *optstr;
 	int use_connect;
@@ -589,15 +589,16 @@ http_send_header(struct connection *conn)
 
 	if (uri->post) {
 		unsigned char *postend = strchr(uri->post, '\n');
-		unsigned char *poststart = postend ? postend + 1 : uri->post;
 
 		if (postend) {
 			add_to_string(&header, "Content-Type: ");
 			add_bytes_to_string(&header, uri->post, postend - uri->post);
 			add_to_string(&header, "\r\n");
 		}
+
+		post_data = postend ? postend + 1 : uri->post;
 		add_to_string(&header, "Content-Length: ");
-		add_long_to_string(&header, strlen(poststart) / 2);
+		add_long_to_string(&header, strlen(post_data) / 2);
 		add_to_string(&header, "\r\n");
 	}
 
@@ -616,9 +617,9 @@ http_send_header(struct connection *conn)
 
 	add_to_string(&header, "\r\n");
 
-	if (uri->post) {
+	if (post_data) {
 #define POST_BUFFER_SIZE 4096
-		unsigned char *post = uri->post;
+		unsigned char *post = post_data;
 		unsigned char buffer[POST_BUFFER_SIZE];
 		int n = 0;
 

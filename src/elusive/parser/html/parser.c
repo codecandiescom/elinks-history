@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.2 2002/12/27 17:52:35 pasky Exp $ */
+/* $Id: parser.c,v 1.3 2002/12/27 22:29:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,9 +15,14 @@
 #include "util/error.h"
 
 
+/* TODO: Unicode...? --pasky */
+#define whitespace(x) (x <= 32)
+
+
 enum state_code {
 	HPT_PLAIN,
 	HTP_ENTITY,
+	HPT_TAG,
 	HPT_NO,
 };
 
@@ -27,12 +32,18 @@ struct html_parser_state {
 	enum state_code state;
 
 	union {
-		/* HPT_TAG_NAME */
-		unsigned char *tagname;
+		/* HPT_TAG */
+		struct {
+			unsigned char *tagname;
+			int taglen;
+			/* / -> ending, !,? -> comment */
+			unsigned char type;
+		} tag;
 		/* HPT_TAG_ATTR */
-		unsigned char *attrname;
-		/* HPT_COMMENT (not for children but for resuming) */
-		int comment_type;
+		struct {
+			unsigned char *attrname;
+			int attrlen;
+		} attr;
 	} data;
 };
 
@@ -65,6 +76,25 @@ html_state_remove(struct parser_state *state)
 }
 
 
+static struct syntree_node *
+spawn_syntree_node(struct parser_state *state)
+{
+	struct syntree_node *node = init_syntree_node();
+
+	node->root = state->root;
+	if (state->root != state->current) {
+		add_at_pos(state->current, node);
+	} else {
+		/* We've spawned non-leaf node right before. So we will fit
+		 * under it (not along it) nicely. */
+		add_to_list(state->root, node);
+	}
+	state->current = node;
+
+	return node;
+}
+
+
 /* The scheme of state-specific parser subroutines gives us considerably better
  * large-block (state-wise blocks) performance, but it'll get worse with
  * heavily fragmented string with a lot of state changes, counting in the
@@ -72,6 +102,43 @@ html_state_remove(struct parser_state *state)
 
 /* TODO: We should investigate if it's ever possible to get into parser routine
  * with zero len - that'd give us some trouble. --pasky */
+
+
+/* The state machine scheme (don't confuse grammar and syntax - the state stack
+ * doesn't depend on the elements inheritance, just on the markups).
+ *
+ * +> is adding of STATE to the stack
+ * -> is removing of ourselves from the stack and STATE is on the top
+ * => is exchanging of ourselves and STATE on the top of the stack
+ * passes in parenthesis happen without intermediate state parser calls or they
+ * are otherwise "hidden"
+ *
+ * PLAIN +> TAG
+ * PLAIN +> ENTITY
+ * ENTITY -> PLAIN
+ *
+ * TAG -> PLAIN
+ * TAG +> TAG_COMMENT
+ * TAG +> TAG_NAME
+ *
+ * TAG_COMMENT -> TAG
+ *
+ * TAG_NAME => TAG_ATTR ( +> TAG_WHITE -> TAG_ATTR )
+ * TAG_NAME -> TAG [2]
+ *
+ * TAG_ATTR +> TAG_ATTR_VAL
+ * TAG_ATTR => TAG_ATTR ( +> TAG_WHITE -> TAG_ATTR )
+ * TAG_ATTR -> TAG [2]
+ *
+ * TAG_ATTR_VAL +> ENTITY
+ * TAG_ATTR_VAL -> TAG_ATTR ( +> TAG_WHITE -> TAG_ATTR )
+ * TAG_ATTR_VAL -> ( TAG_ATTR -> ) TAG [2]
+ *
+ * ENTITY -> PLAIN
+ * ENTITY -> TAG_ATTR_VAL
+ *
+ * TAG [2] is TAG with non-NULL tagname.
+ */
 
 
 /* This just eats plain HTML text until it hits something neat. */
@@ -84,18 +151,17 @@ plain_parse(struct parser_state *state, unsigned char **str, int *len)
 	unsigned char *html = *str;
 	int html_len = *len;
 
+	/* TODO: Don't create zero-length text nodes, if the pass will be at
+	 * the first char. */
+
 	/* If we can't append ourselves to the current node, make up a new
 	 * one for ourselves. */
 	if (state->current->special != NODE_SPEC_TEXT ||
 	    state->current->str + state->current->len != html) {
-		struct syntree_node *node = init_syntree_node();
+		spawn_syntree_node(state);
 
-		node->special = NODE_SPEC_TEXT;
-		node->str = html;
-
-		node->root = state->root;
-		add_at_pos(state->current, node);
-		state->current = node;
+		state->current->special = NODE_SPEC_TEXT;
+		state->current->str = html;
 	}
 
 	while (html_len) {
@@ -138,6 +204,9 @@ entity_parse(struct parser_state *state, unsigned char **str, int *len)
 	html++, html_len--; /* & */
 
 	while (html_len) {
+		/* We aren't so strict and don't require the entity to end by
+		 * a semicolon if we can be sure that it's over already. */
+
 		if (isA(*html)) {
 			html++, html_len--;
 			continue;
@@ -151,15 +220,11 @@ entity_parse(struct parser_state *state, unsigned char **str, int *len)
 		 * get_entity_string() call. */
 
 		{
-			struct syntree_node *node = init_syntree_node();
+			spawn_syntree_node(state);
 
-			node->special = NODE_SPEC_TEXT;
-			node->str = *str;
-			node->strlen = *len - html_len;
-
-			node->root = state->root;
-			add_at_pos(state->current, node);
-			state->current = node;
+			state->current->special = NODE_SPEC_TEXT;
+			state->current->str = *str;
+			state->current->strlen = *len - html_len;
 		}
 
 		pstate = html_state_remove(state);
@@ -171,10 +236,70 @@ entity_parse(struct parser_state *state, unsigned char **str, int *len)
 	return -1;
 }
 
+/* This handles a sign of the allmighty tag, determines what the tag is about. */
+static int
+tag_parse(struct parser_state *state, unsigned char **str, int *len)
+{
+	struct html_parser_state *pstate = state->data;
+	unsigned char *html = *str;
+	int html_len = *len;
+	int name_len = 0;
+
+	if (pstate->data.tag.tagname) {
+		/* We've parsed the whole tag and now we're at '>'. */
+		/* We don't have anything to do for now. So just retire. */
+		pstate = html_state_remove(state);
+#ifdef DEBUG
+		if (pstate->state != HTP_PLAIN)
+			internal("At HTP_TAG [2], pstate->state is %d! That means corrupted HTML stack. Fear.", pstate->state);
+#endif
+
+		html++, html_len--; /* > */
+		*str = html, *len = html_len;
+		return 0;
+	}
+
+	html++, html_len--; /* < */
+
+	if (!html_len) return -1;
+
+	/* Closing tag fun! */
+	if (*html == '/') {
+		pstate->data.tag.type = *html;
+		pstate = html_state_insert(state, HPT_TAG_NAME);
+
+		html++, html_len--;
+		*str = html, *len = html_len;
+		return 0;
+	}
+
+	/* Comment fun...? */
+	if (*html == '!' && html_len < 3) {
+		/* We must be sure. */
+		return -1;
+	}
+	if (*html == '?' || (*html == '!' && !strncmp(html + 1, "--", 2))) {
+		pstate->data.tag.type = *html;
+		pstate = html_state_insert(state, HPT_TAG_COMMENT);
+		pstate->data.tag.type = *html;
+
+		html++, html_len--;
+		*str = html, *len = html_len;
+		return 0;
+	}
+
+	/* Ordinary tag. *yawn* */
+	pstate = html_state_insert(state, HPT_TAG_NAME);
+	/* Let's save one parser round: */
+	if (whitespace(*html)) {
+		pstate = html_state_insert(state, HPT_TAG_WHITE);
+	}
+
+	return 0;
+}
+
 #if 0
-/* This handles a sign of the allmighty tag. We have to make sure all the time
- * that we have the whole tag available. I'm pedantic about CPU time here, so
- * we will do it all one-pass. */
+/* This handles a sign of the allmighty tag, determines what the tag is about. */
 static int
 tag_parse(struct parser_state *state, unsigned char **str, int *len)
 {
@@ -277,6 +402,7 @@ static int (*state_parsers)(struct parser_state *, unsigned char *, int *)
 								[HPT_NO] = {
 	plain_parse,
 	entity_parse,
+	tag_parse,
 };
 
 

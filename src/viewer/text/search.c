@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.162 2004/01/28 07:28:03 jonas Exp $ */
+/* $Id: search.c,v 1.163 2004/01/28 07:30:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1008,13 +1008,6 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 				i = 0;
 			}
 			break;
-
-		case ACT_EDIT_KILL_TO_BOL:
-			return TYPEAHEAD_MATCHED;
-
-		case ACT_EDIT_REDRAW:
-			redraw_terminal_cls(ses->tab->term);
-			return TYPEAHEAD_MATCHED;
 
  		case ACT_EDIT_ENTER:
 			send_enter(ses->tab->term, NULL, ses);

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.34 2004/01/08 13:28:53 jonas Exp $ */
+/* $Id: action.c,v 1.35 2004/01/08 14:25:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,14 +68,14 @@ toggle_document_option(struct session *ses, unsigned char *option_name)
 	draw_formatted(ses, 1);
 }
 
+typedef void (*frame_action)(struct session *, struct document_view *, int);
+
 static void
-do_frame_action(struct session *ses,
-	       void (*func)(struct session *, struct document_view *, int),
-	       int magic)
+do_frame_action(struct session *ses, frame_action action, int magic)
 {
 	struct document_view *doc_view;
 
-	assert(ses && func);
+	assert(ses && action);
 	if_assert_failed return;
 
 	if (!have_location(ses)) return;
@@ -88,7 +88,7 @@ do_frame_action(struct session *ses,
 	assertm(doc_view->vs, "document view has no state");
 	if_assert_failed return;
 
-	func(ses, doc_view, magic);
+	action(ses, doc_view, magic);
 }
 
 void
@@ -198,11 +198,11 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			break;
 
 		case ACT_ENTER:
-			enter(ses, doc_view, 0);
+			do_frame_action(ses, (frame_action) enter, 0);
 			break;
 
 		case ACT_ENTER_RELOAD:
-			enter(ses, doc_view, 1);
+			do_frame_action(ses, (frame_action) enter, 1);
 			break;
 
 		case ACT_FILE_MENU:

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.282 2003/11/18 17:23:14 zas Exp $ */
+/* $Id: parser.c,v 1.283 2003/11/18 22:41:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3294,7 +3294,13 @@ ng:;
 				int lnb = 0;
 				int xxx = 0;
 
-				if (was_xmp) was_xmp = 0;
+				if (was_xmp) {
+					if (ei->func == html_xmp)
+						was_xmp = 0;
+					else
+						break;
+				}
+
 				was_br = 0;
 				if (ei->nopair == 1 || ei->nopair == 3) break;
 				/*debug_stack();*/

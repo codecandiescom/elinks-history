@@ -1,4 +1,4 @@
-/* $Id: property.h,v 1.12 2004/01/18 14:53:43 pasky Exp $ */
+/* $Id: property.h,v 1.13 2004/01/18 16:44:36 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PROPERTY_H
 #define EL__DOCUMENT_CSS_PROPERTY_H
@@ -20,6 +20,7 @@ struct css_property {
 
 	enum css_property_type {
 		CSS_PT_NONE,
+		CSS_PT_BACKGROUND,
 		CSS_PT_BACKGROUND_COLOR,
 		CSS_PT_COLOR,
 		CSS_PT_FONT_STYLE,

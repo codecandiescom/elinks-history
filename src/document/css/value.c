@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.22 2004/01/18 15:32:54 pasky Exp $ */
+/* $Id: value.c,v 1.23 2004/01/18 16:44:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,10 +83,34 @@ css_parse_color_value(struct css_property_info *propinfo,
 	
 	pos = strcspn(*string, ",; \t\r\n");
 	if (decode_color(*string, pos, &value->color) < 0) {
+		(*string) += pos;
 		return 0;
 	}
-	string += pos;
+	(*string) += pos;
 	return 1;
+}
+
+
+int
+css_parse_background_value(struct css_property_info *propinfo,
+			   union css_property_value *value,
+			   unsigned char **string)
+{
+	int success = 0;
+
+	assert(propinfo->value_type == CSS_VT_COLOR);
+
+	/* This is pretty naive, we just jump space by space, trying to parse
+	 * each token as a color. */
+
+	while (**string && **string != ';') {
+		success += css_parse_color_value(propinfo, value, string);
+		if (**string == ',')
+			(*string)++; /* Uh. */
+		skip_whitespace(*string);
+	}
+
+	return success;
 }
 
 

@@ -1,5 +1,5 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.6 2003/07/09 23:03:09 jonas Exp $ */
+/* $Id: timer.c,v 1.7 2003/07/25 13:21:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 #include "config/options.h"
 #include "lowlevel/select.h"
 #include "lowlevel/timer.h"
+#include "terminal/event.h"
 #include "terminal/terminal.h"
 
 

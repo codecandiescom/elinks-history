@@ -1,29 +1,12 @@
-/* $Id: terminal.h,v 1.17 2003/05/27 21:57:53 pasky Exp $ */
+/* $Id: terminal.h,v 1.18 2003/07/25 13:21:11 pasky Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
 
 #include "config/options.h"
 #include "intl/charsets.h"
+#include "terminal/event.h"
 #include "util/lists.h"
-
-
-enum event_type {
-	EV_INIT,
-	EV_KBD,
-	EV_MOUSE,
-	EV_REDRAW,
-	EV_RESIZE,
-	EV_ABORT,
-};
-
-/* XXX: do not change order of fields. --Zas */
-struct event {
-	enum event_type ev;
-	long x;
-	long y;
-	long b;
-};
 
 
 /* Some constants for the strings inside of {struct terminal}. */
@@ -188,8 +171,6 @@ void close_handle(void *);
 void exec_on_terminal(struct terminal *, unsigned char *, unsigned char *, int);
 void set_terminal_title(struct terminal *, unsigned char *);
 void do_terminal_function(struct terminal *, unsigned char, unsigned char *);
-
-void term_send_event(struct terminal *, struct event *);
 
 int check_terminal_pipes(void);
 void close_terminal_pipes(void);

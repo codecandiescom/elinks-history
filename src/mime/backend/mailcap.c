@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.36 2003/06/11 05:12:15 miciah Exp $ */
+/* $Id: mailcap.c,v 1.37 2003/06/11 10:44:18 miciah Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -67,7 +67,7 @@ struct mailcap_entry {
 	 * is better. Increased for each sourced file. */
 	unsigned int priority;
 
-	/* Wether the program "blocks" the term. */
+	/* Whether the program "blocks" the term. */
 	unsigned int needsterminal:1;
 
 	/* If "| ${PAGER}" should be added. It would of course be better to
@@ -91,9 +91,9 @@ done_mailcap_entry(struct mailcap_entry *entry)
 	mem_free(entry);
 }
 
-/* Takes care of all initialization of mailcap entries including adding it to
- * the map. Clear memory to make freeing it safer later and we get
- * needsterminal and copiousoutput inialized for free. */
+/* Takes care of all initialization of mailcap entries.
+ * Clear memory to make freeing it safer later and we get
+ * needsterminal and copiousoutput initialized for free. */
 static inline struct mailcap_entry *
 init_mailcap_entry(unsigned char *command, int priority)
 {
@@ -156,14 +156,14 @@ add_mailcap_entry(struct mailcap_entry *entry, unsigned char *type)
 	mailcap_map_size++;
 }
 
-/* Parsing of a rfc1524 mailcap file */
+/* Parsing of a RFC1524 mailcap file */
 /* The format is:
  *
  *	base/type; command; extradefs
  *
- * type can be * for matching all base with no /type is an implicit
- * wild command contains a %s for the filename to pass, default to pipe on
- * stdin extradefs are of the form:
+ * type can be * for matching all; base with no /type is an implicit
+ * wildcard; command contains a %s for the filename to pass, default to pipe on
+ * stdin; extradefs are of the form:
  *
  *	def1="definition"; def2="define \;";
  *
@@ -172,7 +172,7 @@ add_mailcap_entry(struct mailcap_entry *entry, unsigned char *type)
 #define skip_whitespace(S) \
 	do { while (*(S) && isspace(*(S))) (S)++; } while (0)
 
-/* Returns a NULL terminated rfc 1524 field, while modifying <next> to point
+/* Returns a NULL terminated RFC 1524 field, while modifying @next to point
  * to the next field. */
 static unsigned char *
 get_field(unsigned char **next)
@@ -184,7 +184,7 @@ get_field(unsigned char **next)
 
 	field = *next;
 
-	/* End field at the next occurence of ; */
+	/* End field at the next occurrence of ; */
 	fieldend = strchr(field, ';');
 	if (fieldend) {
 		*fieldend = '\0';
@@ -205,7 +205,7 @@ get_field(unsigned char **next)
 }
 
 /* Parses specific fields (ex: the '=TestCommand' part of 'test=TestCommand').
- * Expects that <field> is pointing right after the specifier (ex: 'test'
+ * Expects that @field is pointing right after the specifier (ex: 'test'
  * above). Allocates and returns a NULL terminated token, or NULL if parsing
  * fails. */
 
@@ -263,7 +263,7 @@ parse_optional_fields(struct mailcap_entry *entry, unsigned char *line)
 	return 1;
 }
 
-/* Parses hole mailcap files line by line adding entries to the map
+/* Parses whole mailcap files line-by-line adding entries to the map
  * assigning them the given @priority */
 static void
 parse_mailcap_file(unsigned char *filename, unsigned int priority)
@@ -312,9 +312,9 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 
 
 /* When initializing mailcap subsystem we read, parse and build a hash mapping
- * content type to handlers. Map is build from a list of mailcap files.
+ * content type to handlers. Map is built from a list of mailcap files.
  *
- * The rfc1524 specifies that a path of mailcap files should be used.
+ * The RFC1524 specifies that a path of mailcap files should be used.
  *	o First we check to see if the user supplied any in mime.mailcap.path
  *	o Then we check the MAILCAP environment variable.
  *	o Finally fall back to reasonable default
@@ -414,14 +414,14 @@ mailcap_change_hook(struct session *ses, struct option *current,
  *		field
  * \%		is %
  *
- * Unsupported rfc1524 parameters: these would probably require some doing
- * by mutt, and can probably just be done by piping the message to metamail:
+ * Unsupported RFC1524 parameters: these would probably require some doing
+ * by Mutt, and can probably just be done by piping the message to metamail:
  *
  * %n		is the integer number of sub-parts in the multipart
  * %F		is "content-type filename" repeated for each sub-part
  * Only % is supported by subst_file() which is equivalent to %s. */
 
-/* The formating is prosponed to when the command is needed. This means
+/* The formatting is postponed until the command is needed. This means
  * @type can be NULL. If '%t' is used in command we bail out. */
 static unsigned char *
 format_command(unsigned char *command, unsigned char *type, int copiousoutput)
@@ -525,8 +525,8 @@ check_entries(struct mailcap_hash_item *item)
  * wildcard '*' (ex: 'text/<star>'). For each lookup all the associated
  * entries are checked/tested.
  *
- * The lookup support testing on files. If no file is given (NULL) any tests
- * that needs a file will be taken as failed. */
+ * The lookup supports testing on files. If no file is given (NULL) any tests
+ * that need a file will be taken as failed. */
 
 static struct mime_handler *
 get_mime_handler_mailcap(unsigned char *type, int options)

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.51 2003/07/19 23:12:38 pasky Exp $ */
+/* $Id: options.h,v 1.52 2003/07/19 23:40:06 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -163,7 +163,7 @@ extern struct option *add_opt(struct option *, unsigned char *, unsigned char *,
 	add_opt(tree, path, capt, name, flags, OPT_LONG, min, max, ptr, desc); \
 	*ptr = def; } while (0)
 
-#define add_opt_string_tree(tree, path, capt, name, flags, def, desc) do { \
+#define add_opt_str_tree(tree, path, capt, name, flags, def, desc) do { \
 	unsigned char *ptr = mem_alloc(MAX_STR_LEN); \
 	add_opt(tree, path, capt, name, flags, OPT_STRING, 0, MAX_STR_LEN, ptr, desc); \
 	safe_strncpy(ptr, def, MAX_STR_LEN); } while (0)
@@ -211,8 +211,8 @@ extern int color_set(struct option *, unsigned char *); /* XXX */
 #define add_opt_long(path, capt, name, flags, min, max, def, desc) \
 	add_opt_long_tree(config_options, path, capt, name, flags, min, max, def, desc)
 
-#define add_opt_string(path, capt, name, flags, def, desc) \
-	add_opt_string_tree(config_options, path, capt, name, flags, def, desc)
+#define add_opt_str(path, capt, name, flags, def, desc) \
+	add_opt_str_tree(config_options, path, capt, name, flags, def, desc)
 
 #define add_opt_codepage(path, capt, name, flags, def, desc) \
 	add_opt_codepage_tree(config_options, path, capt, name, flags, def, desc)

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.242 2003/07/17 08:56:30 zas Exp $ */
+/* $Id: options.c,v 1.243 2003/07/19 23:40:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1111,11 +1111,11 @@ register_options(void)
 		"1     means never if alt or title are provided (old behavior)\n"
 		"2     means always"));
 
-	add_opt_string("document.browse.images", N_("Image link prefix"),
+	add_opt_str("document.browse.images", N_("Image link prefix"),
 		"image_link_prefix", 0, "[",
 		N_("Prefix string to use to mark image links."));
 
-	add_opt_string("document.browse.images", N_("Image link suffix"),
+	add_opt_str("document.browse.images", N_("Image link suffix"),
 		"image_link_suffix", 0, "]",
 		N_("Suffix string to use to mark image links."));
 
@@ -1290,7 +1290,7 @@ register_options(void)
 		N_("This option is deprecated and will be removed very soon.\n"
 		"Please use the mime.default_type option instead."));
 
-	add_opt_string("document.download", N_("Default download directory"),
+	add_opt_str("document.download", N_("Default download directory"),
 		"directory", 0, "./",
 		N_("Default download directory."));
 
@@ -1402,7 +1402,7 @@ register_options(void)
 		N_("MIME-related options (handlers of various MIME types)."));
 
 
-	add_opt_string("mime", N_("Default MIME-type"),
+	add_opt_str("mime", N_("Default MIME-type"),
 		"default_type", 0, "application/octet-stream",
 		N_("Document MIME-type to assume by default (when we are unable to\n"
 		"guess it properly from known information about the document)."));
@@ -1421,7 +1421,7 @@ register_options(void)
 		N_("Handler matching this MIME-type class ('*' is used here in place\n"
 		"of '.')."));
 
-	add_opt_string("mime.type._template_", NULL,
+	add_opt_str("mime.type._template_", NULL,
 		"_template_", 0, "",
 		N_("Handler matching this MIME-type name ('*' is used here in place\n"
 		"of '.')."));
@@ -1448,7 +1448,7 @@ register_options(void)
 		"block", 0, 1,
 		N_("Block the terminal when the handler is running."));
 
-	add_opt_string("mime.handler._template_._template_", N_("Program"),
+	add_opt_str("mime.handler._template_._template_", N_("Program"),
 		"program", 0, "",
 		N_("External viewer for this file type. '%' in this string will be\n"
 		"substituted by a file name."));
@@ -1458,7 +1458,7 @@ register_options(void)
 		"extension", OPT_AUTOCREATE,
 		N_("Extension <-> MIME type association."));
 
-	add_opt_string("mime.extension", NULL,
+	add_opt_str("mime.extension", NULL,
 		"_template_", 0, "",
 		N_("MIME-type matching this file extension ('*' is used here in place\n"
 		"of '.')."));
@@ -1472,7 +1472,7 @@ register_options(void)
 		"enable", 0, 1,
 		N_("Enable mailcap support."));
 
-	add_opt_string("mime.mailcap", N_("Path"),
+	add_opt_str("mime.mailcap", N_("Path"),
 		"path", 0, "",
 		N_("Mailcap search path. Colon-separated list of files.\n"
 		"Leave as \"\" to use MAILCAP environment variable or\n"
@@ -1507,7 +1507,7 @@ register_options(void)
 		"enable", 0, 1,
 		N_("Enable mime.types support."));
 
-	add_opt_string("mime.mimetypes", N_("Path"),
+	add_opt_str("mime.mimetypes", N_("Path"),
 		"path", 0, "",
 		N_("Mimetypes search path. Colon-separated list of files.\n"
 		"Leave as \"\" to use build-in default instead."));
@@ -1554,16 +1554,16 @@ register_options(void)
 		"proxy", 0,
 		N_("HTTP proxy configuration."));
 
-	add_opt_string("protocol.http.proxy", N_("Host and port-number"),
+	add_opt_str("protocol.http.proxy", N_("Host and port-number"),
 		"host", 0, "",
 		N_("Host and port-number (host:port) of the HTTP proxy, or blank.\n"
 		"If it's blank, HTTP_PROXY environment variable is checked as well."));
 
-	add_opt_string("protocol.http.proxy", N_("Username"),
+	add_opt_str("protocol.http.proxy", N_("Username"),
 		"user", 0, "",
 		N_("Proxy authentication username."));
 
-	add_opt_string("protocol.http.proxy", N_("Password"),
+	add_opt_str("protocol.http.proxy", N_("Password"),
 		"passwd", 0, "",
 		N_("Proxy authentication password."));
 
@@ -1581,12 +1581,12 @@ register_options(void)
 		"2 is send fixed fake referer\n"
 		"3 is send previous URL as referer (correct, but insecure)\n"));
 
-	add_opt_string("protocol.http.referer", N_("Fake referer URL"),
+	add_opt_str("protocol.http.referer", N_("Fake referer URL"),
 		"fake", 0, "",
 		N_("Fake referer to be sent when policy is 2."));
 
 
-	add_opt_string("protocol.http", N_("Send Accept-Language header"),
+	add_opt_str("protocol.http", N_("Send Accept-Language header"),
 		"accept_language", 0, "",
 		N_("Send Accept-Language header."));
 
@@ -1605,7 +1605,7 @@ register_options(void)
 		"request back to the client verbatim. Note that this type of request may\n"
 		"not be enabled on all servers."));
 
-	add_opt_string("protocol.http", N_("User-agent identification"),
+	add_opt_str("protocol.http", N_("User-agent identification"),
 		"user_agent", 0, "ELinks (%v; %s; %t)",
 		N_("Change the User Agent ID. That means identification string, which\n"
 		"is sent to HTTP server when a document is requested.\n"
@@ -1624,12 +1624,12 @@ register_options(void)
 		"proxy", 0,
 		N_("FTP proxy configuration."));
 
-	add_opt_string("protocol.ftp.proxy", N_("Host and port-number"),
+	add_opt_str("protocol.ftp.proxy", N_("Host and port-number"),
 		"host", 0, "",
 		N_("Host and port-number (host:port) of the FTP proxy, or blank.\n"
 		"If it's blank, FTP_PROXY environment variable is checked as well."));
 
-	add_opt_string("protocol.ftp", N_("Anonymous password"),
+	add_opt_str("protocol.ftp", N_("Anonymous password"),
 		"anon_passwd", 0, "some@host.domain",
 		N_("FTP anonymous password to be sent."));
 
@@ -1687,7 +1687,7 @@ register_options(void)
 		N_("Handler (external program) for this protocol. Name the\n"
 		"options in this tree after your system (ie. unix, unix-xwin)."));
 
-	add_opt_string("protocol.user._template_", NULL,
+	add_opt_str("protocol.user._template_", NULL,
 		"_template_", 0, "",
 		N_("Handler (external program) for this protocol and system.\n"
 		"%h in the string means hostname (or email address)\n"
@@ -1730,7 +1730,7 @@ register_options(void)
 		"Please use the mime.mailcap.prioritize option instead."));
 
 
-	add_opt_string("protocol", N_("No-proxy domains"),
+	add_opt_str("protocol", N_("No-proxy domains"),
 		"no_proxy", 0, "",
 		N_("Comma separated list of domains for which the proxy (HTTP/FTP)\n"
 		"should be disabled. Optionally, a port can be specified for some\n"
@@ -2593,7 +2593,7 @@ register_options(void)
 		"duration", 0, 1, 86400, 86400,
 		N_("Inactivity timeout. One day should be enough for just everyone (TM)."));
 
-	add_opt_string("ui.timer", N_("Action"),
+	add_opt_str("ui.timer", N_("Action"),
 		"action", 0, "",
 		N_("Key-binding action to be triggered when timer reaches zero."));
 

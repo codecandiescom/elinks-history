@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.9 2003/01/01 20:30:34 pasky Exp $ */
+/* $Id: finger.c,v 1.10 2003/06/04 10:17:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,7 @@ finger_send_request(struct connection *c)
 	/* add_to_str(&req, &rl, "/W"); */
 
 	if (user) {
-		add_to_str(&req, &rl, " ");
+		add_chr_to_str(&req, &rl, ' ');
 		add_to_str(&req, &rl, user);
 		mem_free(user);
 	}

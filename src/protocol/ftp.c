@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.82 2003/05/02 21:59:50 pasky Exp $ */
+/* $Id: ftp.c,v 1.83 2003/06/04 10:18:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,10 +150,10 @@ again:
 		if (rb->data[pos] == 10) {
 			unsigned char *num_end;
 			int response;
-			
+
 			errno = 0;
 			response = strtoul(rb->data, (char **) &num_end, 10);
-			
+
 			if (errno || num_end != rb->data + 3 || response < 100)
 				return -1;
 
@@ -969,7 +969,7 @@ display_dir_entry(struct cache_entry *c_e, int *pos, int *tries,
 		add_bytes_to_str(&str, &strl, ftp_info->perm, ftp_info->permlen);
 	else
 		add_to_str(&str, &strl, "-        ");
-	add_to_str(&str, &strl, " ");
+	add_chr_to_str(&str, &strl, ' ');
 
 
 	if (ftp_info->mtime) {

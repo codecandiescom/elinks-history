@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.78 2003/07/03 20:38:09 jonas Exp $ */
+/* $Id: osdep.c,v 1.79 2003/07/05 12:45:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1843,7 +1843,7 @@ open_in_new_twterm(struct terminal *term, unsigned char *exe_name,
 	unsigned char *twterm = getenv("ELINKS_TWTERM");
 
 	if (!twterm) twterm = getenv("LINKS_TWTERM");
-	if (!twterm) twterm = "twterm -e";
+	if (!twterm) twterm = DEFAULT_TWTERM_CMD;
 	exec_new_elinks(term, twterm, exe_name, param);
 }
 
@@ -1854,7 +1854,7 @@ open_in_new_xterm(struct terminal *term, unsigned char *exe_name,
 	unsigned char *xterm = getenv("ELINKS_XTERM");
 
 	if (!xterm) xterm = getenv("LINKS_XTERM");
-	if (!xterm) xterm = "xterm -e";
+	if (!xterm) xterm = DEFAULT_XTERM_CMD;
 	exec_new_elinks(term, xterm, exe_name, param);
 }
 
@@ -1862,7 +1862,7 @@ static void
 open_in_new_screen(struct terminal *term, unsigned char *exe_name,
 		   unsigned char *param)
 {
-	exec_new_elinks(term, "screen", exe_name, param);
+	exec_new_elinks(term, DEFAULT_SCREEN_CMD, exe_name, param);
 }
 
 #ifdef OS2
@@ -1870,14 +1870,14 @@ void
 open_in_new_vio(struct terminal *term, unsigned char *exe_name,
 		unsigned char *param)
 {
-	exec_new_elinks(term, "cmd /c start /c /f /win", exe_name, param);
+	exec_new_elinks(term, DEFAULT_OS2_WINDOW_CMD, exe_name, param);
 }
 
 void
 open_in_new_fullscreen(struct terminal *term, unsigned char *exe_name,
 		       unsigned char *param)
 {
-	exec_new_elinks(term, "cmd /c start /c /f /fs", exe_name, param);
+	exec_new_elinks(term, DEFAULT_OS2_FULLSCREEN_CMD, exe_name, param);
 }
 #endif
 
@@ -1895,7 +1895,7 @@ void
 open_in_new_be(struct terminal *term, unsigned char *exe_name,
 	       unsigned char *param)
 {
-	exec_new_elinks(term, "Terminal", exe_name, param);
+	exec_new_elinks(term, DEFAULT_BEOS_TERM_CMD, exe_name, param);
 }
 #endif
 

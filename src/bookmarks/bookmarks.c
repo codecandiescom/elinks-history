@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.162 2005/03/20 10:40:54 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.163 2005/03/22 05:09:39 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,9 +119,31 @@ bookmark_write_hook(va_list ap, void *data)
 }
 
 
+void bookmarks_set_dirty(void);
+
+static int
+change_hook_folder_state(struct session *ses, struct option *current,
+			 struct option *changed)
+{
+	if (!changed->value.number) {
+		/* We are to collapse all folders on exit; mark bookmarks dirty
+		 * to ensure that this will happen. */
+		bookmarks_set_dirty();
+	}
+
+	return 0;
+}
+
 static void
 init_bookmarks(struct module *module)
 {
+	struct change_hook_info bookmarks_change_hooks[] = {
+		{ "bookmarks.folder_state", change_hook_folder_state },
+		{ NULL,			    NULL },
+	};
+
+	register_change_hooks(bookmarks_change_hooks);
+
 	read_bookmarks();
 }
 

@@ -1,3 +1,138 @@
+Wed Sep 22 22:06:23 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	ecmascript_put_interpreter() in detach_formatted() only if we have
+	any.  
+
+Wed Sep 22 21:59:58 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/modules/module.c:
+
+	Oops, added @ecmascript_module to the list of builtin modules.  
+
+Wed Sep 22 21:57:55 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: ecmascript/ecmascript.c, ecmascript/ecmascript.h,
+	ecmascript/spidermonkey.c, ecmascript/spidermonkey.h,
+	protocol/protocol.c:
+
+	Introduced ecmascript_eval_stringback() and used it in the
+	javascript: protocol handling - so that's the first point where we
+	support real ECMAScript.  
+
+Wed Sep 22 21:36:29 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/ecmascript.txt:
+
+	Disclaimer ad other programs working with such an SpiderMonkey
+	installation (we need to set the XP_ #define manually and other
+	software probably won't bother).  
+
+Wed Sep 22 21:21:42 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Some preliminary implementation of the document class, with the
+	'title' and 'URL' properties. This also introduces the relevant
+	infrastructure of macros and other code obfuscators.  
+
+Wed Sep 22 19:11:51 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Trying to fix displaying after resuming status.  
+
+Wed Sep 22 17:01:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	get_http_code(): reduce code redundancy a bit.  
+
+Wed Sep 22 16:17:23 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* INSTALL, contrib/js-1.5-rc6a+elinks.patch, doc/ecmascript.txt:
+
+	Added doc/ecmascript.txt and corresponding
+	contrib/js-1.5-rc6a+elinks.patch, which should guide users through
+	SpiderMonkey installation.  
+
+Wed Sep 22 15:46:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Only check HTTP Status header field when handling CGI requests. It
+	is not a standard field and breaks redirects when downloading from
+	www.php.net reported by saviles. The check was introduced in 1.214
+	one december night.  
+
+Wed Sep 22 15:25:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* INSTALL:
+
+	~/.links -> ~/.elinks. Man, that file is dusty.  
+
+Wed Sep 22 15:22:34 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/ecmascript/Makefile.am,
+	src/ecmascript/ecmascript.c, src/ecmascript/njs.c,
+	src/ecmascript/njs.h, src/ecmascript/spidermonkey.c,
+	src/ecmascript/spidermonkey.h:
+
+	Replaced njs ECMAScript backend by Mozilla SpiderMonkey backend. njs
+	is much smaller but just sucks when you want to do anything with it,
+	and isn't under active development. SpiderMonkey OTOH is not so easy
+	to install.  
+
+Wed Sep 22 12:28:27 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Location header is valid for status 201 too.  
+
+Wed Sep 22 10:42:55 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/: ecmascript.c, njs.c:
+
+	Oops, #include elinks.h. I *knew* I forgot something.  
+
+Wed Sep 22 10:33:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/njs.c:
+
+	Somehow implemented decodeURI, decodeURIComponent, encodeURI and
+	encodeURIComponent global methods.  
+
+Wed Sep 22 07:49:38 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Tue Sep 21 22:37:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/Makefile.am, src/document/renderer.c,
+	src/document/view.h, src/document/html/frames.c,
+	src/viewer/text/view.c:
+
+	Cleanup the ecmascript build-system integration. Now a
+	CONFIG_ECMASCRIPT is defined that can be used outside of the
+	ecmascript directory.  
+
+Tue Sep 21 22:11:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/Makefile.am, src/document/renderer.c,
+	src/document/view.h, src/document/html/frames.c,
+	src/ecmascript/Makefile.am, src/ecmascript/ecmascript.c,
+	src/ecmascript/ecmascript.h, src/ecmascript/njs.c,
+	src/ecmascript/njs.h, src/viewer/text/view.c:
+
+	Some basic stubby ECMAScript support, consisting of
+	get_interpreter/put_interpreter and a njs backend of the similar
+	scope; the interpreter is bound to {struct doc_view}. So it does
+	nothing but taking up your memory so far, and surely breaking
+	compilation on all systems but mine.  
+
 Tue Sep 21 21:26:01 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/ecmascript/: .cvsignore, .vimrc:

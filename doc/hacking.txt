@@ -408,7 +408,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.20 2004/12/16 08:16:34 pasky Exp $ */
+	/* $Id: hacking.txt,v 1.21 2004/12/16 13:36:36 jonas Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -432,7 +432,7 @@ initializers are going to be spread widely (so that we can grep for them
 easily), there are massive typecasts needed in most of the initializers,
 you feel that order of the fields in structure is unstable yet and it is
 likely to change (and you don't want to change the initializers everytime
-you do so), or in similiar cases.
+you do so), or in similar cases.
 
   You can do it like:
 
@@ -515,10 +515,10 @@ more...
 
 In 0.5 versions --enable-debug add some fancy things:
 - many data integrity checking (see lists.h)
-- hotkey debugging: especially cool for translaters, it highlights redundant
+- hotkey debugging: especially cool for translators, it highlights redundant
   hotkeys in a menu.
 - more errors messages
-- low bug tolerance: it will coredump on some errors, instead of just writing
+- low bug tolerance: it will core dump on some errors, instead of just writing
   an error description.
 - internal backtrace feature (always enabled if possible)
 - and more...
@@ -530,4 +530,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.20 2004/12/16 08:16:34 pasky Exp $
+$Id: hacking.txt,v 1.21 2004/12/16 13:36:36 jonas Exp $

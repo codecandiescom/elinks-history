@@ -96,7 +96,7 @@ Enjoy.
 		The ECMAScript support is buggy! Shall I blame Mozilla people?
 
 Likely not. The ECMAScript engine provides only the language compiler and some
-basic builtin objects, and it's more than likely that the problem is on our
+basic built-in objects, and it's more than likely that the problem is on our
 side in implementation of some of the HTML/DOM objects (perhaps we just didn't
 bother to implement it at all yet). So better tell us first, and if we think
 it's not our fault we will tell you to go complain to Mozilla (better yet if
@@ -115,4 +115,4 @@ easy. We await your patches eagerly.
 
 
 
-$Id: ecmascript.txt,v 1.6 2004/12/16 09:33:23 pasky Exp $
+$Id: ecmascript.txt,v 1.7 2004/12/16 13:36:36 jonas Exp $

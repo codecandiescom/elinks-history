@@ -54,7 +54,7 @@ Marks lifespan
 
 I already hinted something about another restriction regarding the aimless
 browsing. The lifespan of document marks depends on rather ill-defined and
-(for an average mortal) mostly non-deterministical technical conditions.
+(for an average mortal) mostly non-deterministic technical conditions.
 
 Generally, marks _always_ survive when not moving away from the document or
 when moving only in the session history (and unhistory). That means, if you go
@@ -82,4 +82,4 @@ under a single user on a single system, they "join" together and you must quit
 
 
 
-$Id: marks.txt,v 1.2 2004/12/16 09:33:23 pasky Exp $
+$Id: marks.txt,v 1.3 2004/12/16 13:36:36 jonas Exp $

@@ -1,21 +1,21 @@
 		Managing remote ELinks instances with -remote
 
-Some programs provide the ability to pass URIs to external progams. When
-stumbling upon a reference to a page you want to see it is sometimes a cludge
+Some programs provide the ability to pass URIs to external programs. When
+stumbling upon a reference to a page you want to see it is sometimes a kludge
 to copy and paste it into ELinks. This is where -remote can be a nifty
 solution.
 
 When invoking ELinks with the -remote argument, it does not start a new
-instance, but instead connects to an already running ELinks, making it possible
-to control that ELinks instance. The -remote command line switch takes a command
-consisting of the action to invoke and any parameters to the action.
-Here is an example for opening freshmeat.net in a new tab:
+instance, but instead connects to an already running ELinks, making it
+possible to control that ELinks instance. The -remote command line switch
+takes a command consisting of the action to invoke and any parameters to the
+action.  Here is an example for opening freshmeat.net in a new tab:
 
 	$ elinks -remote "openURL(http://freshmeat.net/, new-tab)"
 
-When running this command in a terminal you will see a small delay before
-the ELinks returns. If no running instance was found it will return with
-the error message:
+When running this command in a terminal you will see a small delay before the
+ELinks returns. If no running instance was found it will return with the error
+message:
 
 	ELinks: No remote session to connect to.
 
@@ -33,13 +33,13 @@ system that supports socket files, which rules out usage of -remote over NFS.
 This also implies that the ELinks instance you want to control should be
 started without passing neither -no-home nor -no-connect.
 
-The builtin -remote support is to some degree compatible with the one Mozilla
-provides (http://www.mozilla.org/unix/remote.html), but with some homebrew
+The built-in -remote support is to some degree compatible with the one Mozilla
+provides (http://www.mozilla.org/unix/remote.html), but with some home brew
 extensions added and a few unsupported features. All support actions are
 documented below.
 
 Under some circumstances the use of -remote controlling can cause ELinks to
-become unresponsive. This is cause by the current keypress and mouse focus
+become unresponsive. This is cause by the current key press and mouse focus
 being redirected to new tabs or dialogs opened by the -remote action.
 
 
@@ -93,4 +93,4 @@ new tabs containing slashdot.org, freshmeat.net and a google search of elinks
 will be opened.
 
 
-$Id: remote.txt,v 1.1 2004/12/16 13:11:18 jonas Exp $
+$Id: remote.txt,v 1.2 2004/12/16 13:36:36 jonas Exp $

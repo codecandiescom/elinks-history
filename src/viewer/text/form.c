@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.62 2003/11/28 04:58:25 jonas Exp $ */
+/* $Id: form.c,v 1.63 2003/11/28 04:59:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -657,14 +657,14 @@ static void
 do_reset_form(struct document_view *doc_view, int form_num)
 {
 	struct form_control *frm;
- 
+
 	assert(doc_view && doc_view->document);
 	if_assert_failed return;
- 
+
 	foreach (frm, doc_view->document->forms)
 		if (frm->form_num == form_num) {
 			struct form_state *fs = find_form_state(doc_view, frm);
- 
+
 			if (fs) init_ctrl(frm, fs);
 		}
 }

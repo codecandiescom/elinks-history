@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.6 2004/01/26 04:16:31 jonas Exp $ */
+/* $Id: exmode.c,v 1.7 2004/01/26 04:42:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,8 +38,9 @@
 
 struct exmode_data {
 	struct widget_data *inpfield_data;
-	struct widget inpfield;
+	struct widget *inpfield;
 	struct dialog_data dlg_data;
+	struct dialog dlg;
 	struct session *ses;
 };
 
@@ -52,7 +53,7 @@ exmode_exec(struct exmode_data *data)
 	 * off for now). Then try to evaluate it as configfile command. Then at
 	 * least pop up an error. */
 	enum main_action action;
-	unsigned char *command = data->inpfield.data;
+	unsigned char *command = data->inpfield->data;
 	unsigned char *end = command;
 	unsigned char end_char = 0;
 
@@ -137,7 +138,7 @@ exmode_func(struct window *win, struct term_event *ev, int fwd)
 			break;
 
 		case EV_ABORT:
-			mem_free(data->inpfield.data);
+			mem_free(data->inpfield->data);
 			break;
 	}
 }
@@ -157,20 +158,19 @@ exmode_start(struct session *ses)
 
 	data->ses = ses;
 
-	data->inpfield.ops = &field_ops;
-	data->inpfield.text = ":";
-	data->inpfield.info.field.float_label = 1;
-	data->inpfield.datalen = 80; /* Completely arbitrary. */
-	data->inpfield.data = mem_alloc(81);
-	if (!data->inpfield.data) {
+	data->inpfield = data->dlg.widgets;
+	data->inpfield->ops = &field_ops;
+	data->inpfield->info.field.float_label = 1;
+	add_dlg_field(&data->dlg, ":", 0, 0, NULL, 80, mem_alloc(81), NULL);
+	if (!data->inpfield->data) {
 		mem_free(data);
 		return;
 	}
-	*data->inpfield.data = 0;
+	*data->inpfield->data = 0;
 
 	data->inpfield_data = selected_widget(&data->dlg_data);
-	data->inpfield_data->widget = &data->inpfield;
-	data->inpfield_data->cdata = data->inpfield.data;
+	data->inpfield_data->widget = data->inpfield;
+	data->inpfield_data->cdata = data->inpfield->data;
 
 	add_window(ses->tab->term, exmode_func, data);
 }

@@ -1,6 +1,10 @@
 Primary site:
 	http://elinks.pld.org.pl/
 
+RPMs:
+	ftp://ftp.pld.org.pl/pool/e/elinks/
+	http://ftp.pld.org.pl/pool/e/elinks/
+
 CVS root:
 	:pserver:anonymous@cvs.pld.org.pl:/cvsroot
 	:pserver:anoncvs@pasky.ji.cz:/home/cvs/elinks
@@ -37,4 +41,4 @@ RPMs:
 	ftp://ftp.scripty.com/pub/redhat/6.x/i386/links-0.95-1.i386.rpm
 	ftp://ftp.scripty.com/pub/redhat/6.x/SRPMS/links-0.95-1.src.rpm
 
-$Id: SITES,v 1.8 2002/05/01 09:00:24 pasky Exp $
+$Id: SITES,v 1.9 2002/05/12 20:28:41 pasky Exp $

@@ -1516,6 +1516,7 @@ struct session {
 
 extern struct list_head sessions;
 
+time_t parse_http_date(const char *);
 unsigned char *encode_url(unsigned char *);
 unsigned char *decode_url(unsigned char *);
 unsigned char *subst_file(unsigned char *, unsigned char *);

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.105 2004/12/16 10:31:23 zas Exp $ */
+/* $Id: cmdline.c,v 1.106 2004/12/19 15:54:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -679,15 +679,15 @@ struct option_info cmdline_options_info[] = {
 		"help", 0, printhelp_cmd,
 		N_("Print usage help and exit.")),
 
-	INIT_OPT_COMMAND("", N_("Print detailed usage help and exit"),
-		"long-help", 0, printhelp_cmd,
-		N_("Print detailed usage help and exit.")),
-
 	INIT_OPT_BOOL("", N_("Only permit local connections"),
 		"localhost", 0, 0,
 		N_("Restrict ELinks so that it can only open connections to\n"
 		"local addresses (ie. 127.0.0.1), it will prevent any connection\n"
 		"to distant servers.")),
+
+	INIT_OPT_COMMAND("", N_("Print detailed usage help and exit"),
+		"long-help", 0, printhelp_cmd,
+		N_("Print detailed usage help and exit.")),
 
 	INIT_OPT_COMMAND("", N_("Look up specified host"),
 		"lookup", 0, lookup_cmd,
@@ -702,7 +702,10 @@ struct option_info cmdline_options_info[] = {
 
 	INIT_OPT_BOOL("", N_("Don't use files in ~/.elinks"),
 		"no-home", 0, 0,
-		N_("Don't attempt to create and/or use home rc directory (~/.elinks).")),
+		N_("Disables creation and use of files in the user specific home\n"
+		"configuration directory (~/.elinks). It forces default configuration\n"
+		"values to be used and disables saving of changed configuration\n"
+		"option and state files (e.g. cookies).")),
 
 	INIT_OPT_BOOL("", N_("Do not number links in dump output"),
 		"no-numbering", 0, 0,

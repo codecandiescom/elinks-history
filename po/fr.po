@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-14 19:44+0100\n"
-"PO-Revision-Date: 2005-01-14 19:45+0100\n"
+"POT-Creation-Date: 2005-01-19 09:53+0100\n"
+"PO-Revision-Date: 2005-01-19 09:55+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:348
 msgid "Close"
@@ -54,12 +54,13 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/sched/session.c:240 src/sched/session.c:707 src/sched/session.c:731
 #: src/sched/session.c:748 src/scripting/lua/core.c:395
 #: src/scripting/lua/core.c:476 src/scripting/lua/core.c:593
-#: src/scripting/lua/core.c:717 src/viewer/text/draw.c:67
-#: src/viewer/text/form.c:857 src/viewer/text/search.c:953
-#: src/viewer/text/search.c:1014 src/viewer/text/search.c:1459
-#: src/viewer/text/search.c:1570 src/viewer/text/textarea.c:366
-#: src/viewer/text/textarea.c:375 src/viewer/text/view.c:730
-#: src/viewer/text/view.c:1283
+#: src/scripting/lua/core.c:717 src/scripting/ruby/core.c:63
+#: src/scripting/ruby/core.c:155 src/scripting/ruby/core.c:195
+#: src/viewer/text/draw.c:67 src/viewer/text/form.c:857
+#: src/viewer/text/search.c:953 src/viewer/text/search.c:1014
+#: src/viewer/text/search.c:1459 src/viewer/text/search.c:1570
+#: src/viewer/text/textarea.c:366 src/viewer/text/textarea.c:375
+#: src/viewer/text/view.c:730 src/viewer/text/view.c:1283
 msgid "OK"
 msgstr "OK"
 
@@ -7014,8 +7015,16 @@ msgstr "Console Lua"
 msgid "Enter expression"
 msgstr "Entrez une expression"
 
+#: src/scripting/ruby/core.c:60
+msgid "Ruby Error"
+msgstr "Erreur Ruby"
+
+#: src/scripting/ruby/core.c:152 src/scripting/ruby/core.c:192
+msgid "Ruby Message"
+msgstr "Message Ruby"
+
 #. name:
-#: src/scripting/scripting.c:36
+#: src/scripting/scripting.c:40
 msgid "Scripting"
 msgstr "Scripting"
 

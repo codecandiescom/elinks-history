@@ -1,3 +1,16 @@
+Thu Jun 19 12:22:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Fix for bug 209: do not call copy_chars() if not needed.  
+
+Thu Jun 19 09:32:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/af_unix.c:
+
+	struct s_addr_info was introduced, it permit to get rid of s_unix,
+	s_unix_l, s_unix_fd.  
+
 Wed Jun 18 21:16:11 2003  Laurent Monin <zas@norz.org>:
 
 	* src/lowlevel/af_unix.c:

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.563 2004/07/28 10:43:37 jonas Exp $ */
+/* $Id: view.c,v 1.564 2004/07/28 10:50:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -541,7 +541,7 @@ frame_ev_kbd_number(struct session *ses, struct document_view *doc_view,
 	struct document *document = doc_view->document;
 	struct document_options *doc_opts = &document->options;
 
-	if (ev->y
+	if (get_kbd_modifier(ev)
 	    || !doc_opts->num_links_key
 	    || (doc_opts->num_links_key == 1 && !doc_opts->num_links_display)) {
 		/* Repeat count.
@@ -560,7 +560,7 @@ frame_ev_kbd_number(struct session *ses, struct document_view *doc_view,
 		return FRAME_EVENT_OK;
 	}
 
-	if (ev->x >= '1' && !ev->y) {
+	if (ev->x >= '1' && !get_kbd_modifier(ev)) {
 		int nlinks = document->nlinks, length;
 		unsigned char d[2] = { ev->x, 0 };
 
@@ -974,7 +974,7 @@ quit:
 		if (get_kbd_modifier(ev) & KBD_ALT) {
 			struct window *m;
 
-			ev->y &= ~KBD_ALT;
+			get_kbd_modifier(ev) &= ~KBD_ALT;
 			activate_bfu_technology(ses, -1);
 			m = ses->tab->term->windows.next;
 			m->handler(m, ev, 0);
@@ -992,7 +992,7 @@ quit:
 			} else {
 				goto x;
 			}
-			ev->y |= KBD_ALT;
+			get_kbd_modifier(ev) |= KBD_ALT;
 		}
 	}
 #ifdef CONFIG_MOUSE

@@ -1,5 +1,5 @@
 /* Event handling functions */
-/* $Id: event.c,v 1.1 2003/09/19 13:14:49 jonas Exp $ */
+/* $Id: event.c,v 1.2 2003/09/19 14:43:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,6 +65,12 @@ static struct hash *event_hash = NULL;
 	mem_align_alloc(&events, eventssize, eventssize + 1, \
 			sizeof(struct event), EVENT_GRANULARITY)
 
+static inline int
+invalid_event_id(register int id)
+{
+	return (id == EVENT_NONE || id < 0 || id >= eventssize);
+}
+
 int
 register_event(unsigned char *name)
 {
@@ -72,18 +78,14 @@ register_event(unsigned char *name)
 	struct event *event;
 	int namelen;
 
-	if (id != EVENT_NONE)
-		return id;
-
-	if (!realloc_events())
-		return EVENT_NONE;
+	if (id != EVENT_NONE) return id;
+	if (!realloc_events()) return EVENT_NONE;
 
 	event = &events[eventssize];
 
 	namelen = strlen(name);
 	event->name = memacpy(name, namelen);
-	if (!event->name)
-		return EVENT_NONE;
+	if (!event->name) return EVENT_NONE;
 
 	if (!add_hash_item(event_hash, event->name, namelen, event)) {
 		mem_free(event->name);
@@ -107,8 +109,7 @@ get_event_id(unsigned char *name)
 	assertm(name && name[0], "Empty or missing event name");
 	if_assert_failed return EVENT_NONE;
 
-	if (!event_hash)
-		return EVENT_NONE;
+	if (!event_hash) return EVENT_NONE;
 
 	namelen = strlen(name);
 	item = get_hash_item(event_hash, name, namelen);
@@ -127,22 +128,19 @@ get_event_id(unsigned char *name)
 unsigned char *
 get_event_name(int id)
 {
-	if (id == EVENT_NONE || id < 0 || id >= eventssize)
-		return NULL;
+	if (invalid_event_id(id)) return NULL;
 
 	return events[id].name;
-	
 }
 
 void
 trigger_event(int id, ...)
 {
-	int i;
+	register int i;
 	struct event_handler *ev_handler;
 	va_list ap;
 
-	if (id == EVENT_NONE || id < 0 || id >= eventssize)
-		return;
+	if (invalid_event_id(id)) return;
 
 	ev_handler = events[id].handlers;
 	for (i = 0; i < events[id].count; i++, ev_handler++) {
@@ -152,56 +150,54 @@ trigger_event(int id, ...)
 		ret = ev_handler->callback(ap);
 		va_end(ap);
 
-		if (ret)
-			return;
+		if (ret) return;
 	}
 }
 
 static inline void
-move_event_handler(struct event *ev, int to, int from)
+move_event_handler(struct event *event, int to, int from)
 {
 	int d = int_max(to, from);
 
-	memmove(&ev->handlers[to], &ev->handlers[from], 
-		(ev->count - d) * sizeof(struct event_handler));
+	memmove(&event->handlers[to], &event->handlers[from],
+		(event->count - d) * sizeof(struct event_handler));
 }
 
 int
 register_event_hook(int id, int (*callback)(va_list ap), int priority)
 {
-	struct event *ev;
-	int i;
+	struct event *event;
+	register int i;
 
 	assert(callback);
 	if_assert_failed return EVENT_NONE;
-	if (id == EVENT_NONE || id < 0 || id >= eventssize)
-		return EVENT_NONE;
 
-	ev = &events[id];
+	if (invalid_event_id(id)) return EVENT_NONE;
 
-	for (i = 0; i < ev->count && ev->handlers[i].callback != callback; i++);
+	event = &events[id];
 
-	if (i == ev->count) {
+	for (i = 0; i < event->count && event->handlers[i].callback != callback; i++);
+
+	if (i == event->count) {
 		struct event_handler *eh;
 
-		eh = mem_realloc(ev->handlers, 
-				 (ev->count + 1) * sizeof(struct event_handler));
+		eh = mem_realloc(event->handlers,
+				 (event->count + 1) * sizeof(struct event_handler));
 
-		if (!eh)
-			return EVENT_NONE;
+		if (!eh) return EVENT_NONE;
 
-		ev->handlers = eh;
-		ev->count++;
+		event->handlers = eh;
+		event->count++;
 	} else {
-		move_event_handler(ev, i, i + 1);
+		move_event_handler(event, i, i + 1);
 	}
 
-	for (i = 0; i < ev->count - 1 && priority <= ev->handlers[i].priority; i++);
+	for (i = 0; i < event->count - 1 && priority <= event->handlers[i].priority; i++);
 
-	move_event_handler(ev, i + 1, i);
+	move_event_handler(event, i + 1, i);
 
-	ev->handlers[i].callback = callback;
-	ev->handlers[i].priority = priority;
+	event->handlers[i].callback = callback;
+	event->handlers[i].priority = priority;
 
 	return id;
 }
@@ -209,34 +205,32 @@ register_event_hook(int id, int (*callback)(va_list ap), int priority)
 void
 unregister_event_hook(int id, int (*callback)(va_list ap))
 {
-	struct event *ev;
+	struct event *event;
 
 	assert(callback);
 	if_assert_failed return;
 
-	if (id == EVENT_NONE || id < 0 || id >= eventssize)
-		return;
+	if (invalid_event_id(id)) return;
 
-	ev = &events[id];
-	if (ev->handlers) {
-		int i;
+	event = &events[id];
+	if (event->handlers) {
+		register int i;
 
-		for (i = 0; i < ev->count; i++) {
-			if (ev->handlers[i].callback != callback)
+		for (i = 0; i < event->count; i++) {
+			if (event->handlers[i].callback != callback)
 				continue;
 
-			move_event_handler(ev, i, i + 1);
-			ev->count--;
-			if (!ev->count) {
-				mem_free(ev->handlers);
-				ev->handlers = NULL;
+			move_event_handler(event, i, i + 1);
+			event->count--;
+			if (!event->count) {
+				mem_free(event->handlers);
+				event->handlers = NULL;
 			} else {
 				struct event_handler *eh;
 
-				eh = mem_realloc(ev->handlers, 
-						 ev->count * sizeof(struct event_handler));
-				if (eh)
-					ev->handlers = eh;
+				eh = mem_realloc(event->handlers,
+						 event->count * sizeof(struct event_handler));
+				if (eh) event->handlers = eh;
 			}
 
 			break;
@@ -253,10 +247,9 @@ init_event(void)
 void
 done_event(void)
 {
-	int i;
+	register int i;
 
-	if (event_hash)
-		free_hash(event_hash);
+	if (event_hash)	free_hash(event_hash);
 
 	for (i = 0; i < eventssize; i++) {
 		if (events[i].handlers)
@@ -264,9 +257,6 @@ done_event(void)
 		mem_free(events[i].name);
 	}
 
-	if (events)
-		mem_free(events);
-
-	events = NULL;
+	if (events) mem_free(events), events = NULL;
 	eventssize = 0;
 }

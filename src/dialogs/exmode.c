@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.21 2004/01/26 18:52:02 jonas Exp $ */
+/* $Id: exmode.c,v 1.22 2004/01/28 05:05:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,6 @@
 #define EXMODE_BUFFER_SIZE 80
 
 struct exmode_data {
-	struct dialog_data *dlg_data;
 	struct dialog dlg;
 	unsigned char buffer[EXMODE_BUFFER_SIZE];
 };
@@ -238,7 +237,6 @@ void
 exmode_start(struct session *ses)
 {
 	struct exmode_data *data;
-	struct dialog_data *dlg_data;
 
 	assert(ses);
 
@@ -254,8 +252,7 @@ exmode_start(struct session *ses)
 
 	add_dlg_field(&data->dlg, ":", 0, 0, NULL, 80, data->buffer, &exmode_history);
 
-	dlg_data = do_dialog(ses->tab->term, &data->dlg, getml(data, NULL));
-	if (dlg_data) data->dlg_data = dlg_data;
+	do_dialog(ses->tab->term, &data->dlg, getml(data, NULL));
 }
 
 #endif /* CONFIG_EXMODE */

@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.94 2004/05/14 00:18:40 jonas Exp $ */
+/* $Id: text.c,v 1.95 2004/05/28 15:40:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,15 +79,15 @@ split_lines(struct widget_data *widget_data, int max_width)
 	unsigned char *text = widget_data->widget->text;
 	unsigned char **lines = (unsigned char **) widget_data->cdata;
 	int line = 0;
-	int width;
-
+	
 	if (widget_data->info.text.max_width == max_width) return lines;
 
 	/* We want to recalculate the max line width */
 	widget_data->box.width = 0;
 
-	for (; *text; text += width) {
-
+	while (*text) {
+		int width;
+		
 		/* Skip first leading \n or space. */
 		if (isspace(*text)) text++;
 		if (!*text) break;
@@ -105,6 +105,7 @@ split_lines(struct widget_data *widget_data, int max_width)
 			break;
 
 		lines[line++] = text;
+		text += width;
 	}
 
 	/* Yes it might be a bit ugly on the other hand it will be autofreed

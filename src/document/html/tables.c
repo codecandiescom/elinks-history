@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.293 2004/06/29 11:18:22 zas Exp $ */
+/* $Id: tables.c,v 1.294 2004/06/29 13:06:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -768,7 +768,7 @@ get_table_heights(struct table *table)
 }
 
 static inline void
-draw_table_cell(struct table *table, int col, int row, int xp, int yp)
+draw_table_cell(struct table *table, int col, int row, int x, int y)
 {
 	struct table_cell *cell = CELL(table, col, row);
 	int xw = 0;
@@ -796,9 +796,9 @@ draw_table_cell(struct table *table, int col, int row, int xp, int yp)
 		 * (/.) while other will look very ugly
 		 * and broken. */
 		par_format.bgcolor = table->bgcolor;
-		for (s = yp; s < yp + yw; s++) {
+		for (s = y; s < y + yw; s++) {
 			expand_lines(table->part, s);
-			expand_line(table->part, s, xp - 1);
+			expand_line(table->part, s, x - 1);
 		}
 	}
 
@@ -812,21 +812,21 @@ draw_table_cell(struct table *table, int col, int row, int xp, int yp)
 	{
 		struct document *document = table->part->document;
 		struct part *part;
-		int tmpy = yp;
+		int tmpy = y;
 
 		if (cell->valign == VALIGN_MIDDLE)
 			tmpy += (yw - cell->height)>>1;
 		else if (cell->valign == VALIGN_BOTTOM)
 			tmpy += (yw - cell->height);
 
-	   	part = format_cell(table, col, row, document, xp, tmpy, xw);
+	   	part = format_cell(table, col, row, document, x, tmpy, xw);
 		if (part) {
 			int yt;
 
 			for (yt = 0; yt < part->box.height; yt++) {
-				expand_lines(table->part, yp + yt);
-				expand_line(table->part, yp + yt,
-					    xp + table->cols_widths[col]);
+				expand_lines(table->part, y + yt);
+				expand_line(table->part, y + yt,
+					    x + table->cols_widths[col]);
 			}
 
 			if (cell->fragment_id)

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.30 2003/05/04 19:54:32 pasky Exp $ */
+/* $Id: dialog.c,v 1.31 2003/05/06 13:34:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,16 +46,17 @@ do_dialog(struct terminal *term, struct dialog *dlg,
 	struct widget *d;
 	int n = 0;
 
+	/* FIXME: maintain a counter, and don't recount each time. --Zas */
 	for (d = dlg->items; d->type != D_END; d++) n++;
 
 	dd = mem_alloc(sizeof(struct dialog_data) +
 		       sizeof(struct widget_data) * n);
-	if (!dd) return NULL;
-
-	dd->dlg = dlg;
-	dd->n = n;
-	dd->ml = ml;
-	add_window(term, dialog_func, dd);
+	if (dd) {
+		dd->dlg = dlg;
+		dd->n = n;
+		dd->ml = ml;
+		add_window(term, dialog_func, dd);
+	}
 
 	return dd;
 }
@@ -115,7 +116,7 @@ dialog_func(struct window *win, struct event *ev, int fwd)
 		return;
 	}
 
-	switch (ev->ev) {
+ 	switch (ev->ev) {
 		case EV_INIT:
 			for (i = 0; i < dlg->n; i++) {
 				struct widget_data *widget = &dlg->items[i];
@@ -134,6 +135,7 @@ dialog_func(struct window *win, struct event *ev, int fwd)
 					}
 				}
 				/* XXX: REMOVE THIS! --pasky */
+				/* XXX: YES YES ! GOOD IDEA ! --Zas */
 				{
 					struct widget_ops *w_o[] = {
 						NULL,
@@ -361,13 +363,16 @@ draw_dlg(struct dialog_data *dlg)
 
 	if (get_opt_bool("ui.dialogs.shadows")) {
 		/* Draw shadow */
+		int shadow_color = get_bfu_color(dlg->win->term, "=dialog.shadow");
+
 		/* (horizontal) */
 		fill_area(dlg->win->term, dlg->x + 2, dlg->y + dlg->yw,
 			  dlg->xw - 2, 1,
-			  get_bfu_color(dlg->win->term, "=dialog.shadow"));
+			  shadow_color);
+
 		/* (vertical) */
 		fill_area(dlg->win->term, dlg->x + dlg->xw, dlg->y + 1,
 			  2, dlg->yw,
-			  get_bfu_color(dlg->win->term, "=dialog.shadow"));
+			  shadow_color);
 	}
 }

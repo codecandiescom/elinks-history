@@ -1,3 +1,95 @@
+Mon Jul 19 22:09:49 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/text.c:
+
+	Let text scroller work when mouse is outside dialog borders, so it
+	is easier to use.  
+
+Mon Jul 19 21:16:39 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	menu_mouse_handler(): drop redundant test and reindent code.  
+
+Mon Jul 19 21:01:26 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: menu.c, menu.h:
+
+	Drop mi_is_unselectable() macro, just use !mi_is_selectable()
+	instead.  
+
+Mon Jul 19 16:43:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Optimize selectable items search by introducing search_selectable()
+	function.  
+
+Mon Jul 19 16:25:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	scroll_menu(): @w -> @height, drop useless int_lower_bound() calls.  
+
+Mon Jul 19 16:14:53 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	scroll_menu(): move @w, @scr_i calculations where they are needed.  
+
+Mon Jul 19 16:11:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	scroll_menu(): almost complete rewrite to fix issues revealed by
+	file completion menu. Home/end were not working when unselectable
+	menu items where at start or end of menu, page up/down were working
+	with some glitches. All issues should now be fixed, code was
+	commented.  
+
+Mon Jul 19 13:33:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	scroll_menu(): add a @wrap parameter, not yet used.  
+
+Mon Jul 19 13:29:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	scroll_menu(): @d -> @steps.  
+
+Mon Jul 19 12:57:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/color.c:
+
+	decode_color(): Stick a comment near the broken hexadecimal rgb
+	color workaround.  
+
+Mon Jul 19 12:45:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/color.c:
+
+	decode_color(): Looks like somebody b0rked up the color values in
+	the slashcode so treat hex digit string with length 3 or 6 as hex
+	colors if the color lookup didn't find a match.  
+
+Mon Jul 19 08:05:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	scroll_menu(): fix scroll up in menu, when first item is not
+	selectable, issue revealed by file completion menu.  
+
+Mon Jul 19 00:56:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	complete_file_menu(): Don't expand the form state value for
+	directories when there is only one entry. Open 'Empty directory'
+	menu for ... Use do_menu() since it does the same as the
+	do_menu_selected() call.  
+
 Sun Jul 18 18:29:54 2004  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/parser/parse.c:

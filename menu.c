@@ -280,20 +280,20 @@ void go_backwards(struct terminal *term, void *psteps, struct session *ses)
 
 	while (steps-- > 1) {
 		struct location *loc = ses->history.next;
+
+		/* First item in history/unhistory is something special and
+		 * precious... like... like... */
 		
 		if ((void *) loc == &ses->history) return;
 
-#if 1
-		/* Someone probably have to explain me this ;). --pasky */
 		loc = loc->next;
 		if ((void *) loc == &ses->history) return;
-#endif
 		
 		del_from_list(loc);
 		add_to_list(ses->unhistory, loc);
 	}
 
-	if (steps >= 0)
+	if (steps >= 0) /* => psteps >= 1 */
 		go_back(ses);
 }
 
@@ -307,7 +307,10 @@ void go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 	    	struct location *loc = ses->unhistory.next;
 		
 		if ((void *) loc == &ses->unhistory) return;
-		
+#if 0		
+		loc = loc->next;
+		if ((void *) loc == &ses->history) return;
+#endif
 		del_from_list(loc);
 		add_to_list(ses->history, loc);
 	}

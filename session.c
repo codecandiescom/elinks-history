@@ -275,25 +275,29 @@ void map_selected(struct terminal *term, struct link_def *ld, struct session *se
 void ses_back(struct session *ses)
 {
 	struct location *loc;
+	
 	free_files(ses);
+	
 	loc = ses->history.next;
 	if (ses->search_word) mem_free(ses->search_word), ses->search_word = NULL;
 	if ((void *)loc == &ses->history) return;
     	del_from_list(loc);
 	add_to_list(ses->unhistory, loc);
 	
-	/* XXX: What's the following?! --pasky */
 	loc = ses->history.next;
 	if ((void *)loc == &ses->history) return;
 	if (!strcmp(loc->vs.url, ses->loading_url)) return;
 	destroy_location(loc);
+	
 	ses_forward(ses);
 }
 
 void ses_unback(struct session *ses)
 {
 	struct location *loc;
-	free_files(ses); 
+	
+	free_files(ses);
+	
 	loc = ses->unhistory.next;
 	if (ses->search_word) mem_free(ses->search_word), ses->search_word = NULL;
 	if ((void *)loc == &ses->unhistory) return;

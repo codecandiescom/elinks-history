@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.23 2004/09/24 22:23:08 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.24 2004/09/24 22:53:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,8 +150,8 @@ jsval_to_value(JSContext *ctx, jsval *vp, JSType type, void *var)
 }
 
 
-static const JSClass global_class = {
-	"Compilation scope",
+static const JSClass window_class = {
+	"window",
 	JSCLASS_HAS_PRIVATE,
 	JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub,
 	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
@@ -361,7 +361,7 @@ void *
 spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 {
 	JSContext *ctx;
-	JSObject *global_obj, *document_obj, *location_obj;
+	JSObject *window_obj, *document_obj, *location_obj;
 
 	assert(interpreter);
 
@@ -372,20 +372,20 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 	JS_SetContextPrivate(ctx, interpreter);
 	JS_SetErrorReporter(ctx, error_reporter);
 
-	global_obj = JS_NewObject(ctx, (JSClass *) &global_class, NULL, NULL);
-	if (!global_obj) {
+	window_obj = JS_NewObject(ctx, (JSClass *) &window_class, NULL, NULL);
+	if (!window_obj) {
 		spidermonkey_put_interpreter(interpreter);
 		return NULL;
 	}
-	JS_InitStandardClasses(ctx, global_obj);
-	JS_SetPrivate(ctx, global_obj, interpreter->doc_view);
+	JS_InitStandardClasses(ctx, window_obj);
+	JS_SetPrivate(ctx, window_obj, interpreter->doc_view);
 
-	document_obj = JS_InitClass(ctx, global_obj, NULL,
+	document_obj = JS_InitClass(ctx, window_obj, NULL,
 				    (JSClass *) &document_class, NULL, 0,
 				    (JSPropertySpec *) document_props, NULL,
 				    NULL, NULL);
 
-	location_obj = JS_InitClass(ctx, global_obj, NULL,
+	location_obj = JS_InitClass(ctx, window_obj, NULL,
 				    (JSClass *) &location_class, NULL, 0,
 				    (JSPropertySpec *) location_props, NULL,
 				    NULL, NULL);

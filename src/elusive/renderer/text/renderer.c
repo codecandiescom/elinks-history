@@ -1,5 +1,5 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.1 2002/12/31 01:44:04 pasky Exp $ */
+/* $Id: renderer.c,v 1.2 2003/01/01 14:28:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,6 +8,12 @@
 #include <string.h>
 
 #include "elinks.h"
+
+/* TODO: Move that stuff to the viewer interface. We will first need to
+ * sanitize the viewer, though. Or, better, move that stuff here, so that
+ * multiple viewers (of other people using ELusive) could use this interface
+ * as well. --pasky */
+#include "document/html/renderer.h"
 
 #include "elusive/layouter/syntree/layouter.h"
 #include "elusive/parser/attrib.h"
@@ -27,7 +33,7 @@ text_init(struct renderer_state *state)
 }
 
 static void
-text_layout(struct renderer_state *state, unsigned char **str, int *len)
+text_render(struct renderer_state *state, unsigned char **str, int *len)
 {
 	elusive_layouter_layout(state->layouter_state, str, len);
 	/* TODO: Ehm. */
@@ -42,6 +48,6 @@ text_done(struct renderer_state *state)
 
 struct renderer_backend text_renderer_backend = {
 	text_init,
-	text_layout,
+	text_render,
 	text_done,
 };

@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.6 2002/03/26 17:39:48 pasky Exp $ */
+/* $Id: dns.c,v 1.7 2002/03/26 17:45:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #endif
 
 /* Go and say 'thanks' to BSD. */
+#include <netinet/in.h>
 #ifdef HAVE_ARPA_INET_H
 #include <arpa/inet.h>
 #endif

@@ -1,11 +1,12 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.6 2002/03/26 17:43:41 pasky Exp $ */
+/* $Id: select.c,v 1.7 2002/03/26 17:45:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <errno.h>
+#include <signal.h>
 #include <sys/signal.h>
 #include <sys/types.h>
 #ifdef HAVE_SYS_WAIT_H

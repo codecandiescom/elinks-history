@@ -1,3 +1,41 @@
+Thu Mar 28 00:46:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* BUGS, TODO, intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/czech.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/polish.lng,
+	intl/romanian.lng, intl/russian.lng, intl/slovak.lng,
+	intl/spanish.lng, intl/swedish.lng, intl/synclang,
+	intl/turkish.lng, intl/ukrainian.lng, src/intl/lang_defs.h,
+	src/intl/language.inc, src/lowlevel/sched.c, src/lowlevel/sched.h,
+	src/protocol/ftp.c:
+	
+	FTP doesn't send more commands at once - it's a bit slower, but
+	safe with MS IIS or Novell (by mikulas, from 0.97pre8). Also, it
+	fixes bugs reported by Zas, that we had problems with FTP servers
+	not supporting/requiring PASS command.
+
+Wed Mar 27 23:49:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/kbdbind.c:
+	
+	ACT_COPY_CLIPBOARD is ^C, not ^B (by mikulas, from 0.97pre8).
+
+Wed Mar 27 23:47:12 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/osdep/os_dep.c:
+	
+	Corrected xterm detection (by mikulas, from 0.97pre8).
+
+Wed Mar 27 23:39:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/bfu.c, document/html/parser.c,
+	document/html/renderer.c, util/error.c, util/memlist.c:
+	
+	Use va_end() (by mikulas, from 0.97pre8).
+
 Wed Mar 27 23:05:52 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/html/parser.c:

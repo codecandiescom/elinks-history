@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.8 2002/03/30 20:49:56 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.9 2002/03/30 20:50:42 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -504,14 +504,6 @@ unsigned char *bookmark_add_msg[] = {
 unsigned char *bookmark_dialog_msg[] = {
 	TEXT(T_BOOKMARKS),
 };
-
-
-/* Loads the selected bookmark */
-void
-menu_goto_bookmark(struct terminal *term, void *url, struct session *ses)
-{
-	goto_url(ses, (unsigned char*)url);
-}
 
 
 /* Gets the url of the requested bookmark.

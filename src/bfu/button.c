@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.58 2004/07/17 19:36:31 zas Exp $ */
+/* $Id: button.c,v 1.59 2004/07/17 20:10:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,10 @@ buttons_width(struct widget_data *widget_data, int n,
 {
 	int maxw = -BUTTON_HSPACING;
 
-	while (n-- > 0) {
+	assert(n > 0);
+	if_assert_failed return;
+
+	while (n--) {
 		int minw = strlen((widget_data++)->widget->text)
 			   + BUTTON_HSPACING + BUTTON_LR_LEN;
 

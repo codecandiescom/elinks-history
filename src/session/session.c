@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.10 2003/05/02 22:16:18 zas Exp $ */
+/* $Id: session.c,v 1.11 2003/05/02 23:59:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -292,13 +292,13 @@ print_screen_status(struct session *ses)
 						msglen = tab_width - 1;
 
 					fill_area(term,
-						  tab * tab_width, term->y - 2,
+						  tab * tab_width, term->y - (show_status_bar ? 2 : 1),
 						  tab_width, 1,
 						  (tab == term->current_tab)
 						  ? selected_color
 						  : normal_color);
 					print_text(term,
-						   tab * tab_width, term->y - 2,
+						   tab * tab_width, term->y - (show_status_bar ? 2 : 1),
 						   msglen, msg,
 						   (tab == term->current_tab)
 						   ? selected_color

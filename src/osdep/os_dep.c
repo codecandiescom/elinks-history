@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.32 2002/10/23 12:16:42 zas Exp $ */
+/* $Id: os_dep.c,v 1.33 2002/11/29 16:26:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1848,7 +1848,7 @@ struct open_in_new *
 get_open_in_new(int environment)
 {
 	int i;
-	struct open_in_new *oin = DUMMY;
+	struct open_in_new *oin = NULL;
 	int noin = 0;
 
 	for (i = 0; oinw[i].env; i++)
@@ -1867,8 +1867,6 @@ get_open_in_new(int environment)
 			oin[noin].hk = NULL;
 			oin[noin].fn = NULL;
 		}
-
-	if (oin == DUMMY) return NULL;
 
 	return oin;
 }

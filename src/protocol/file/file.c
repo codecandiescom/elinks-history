@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.29 2002/11/21 11:15:03 zas Exp $ */
+/* $Id: file.c,v 1.30 2002/11/29 16:26:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -422,7 +422,7 @@ file_func(struct connection *c)
 		close(h);
 
 dir:
-		dir = DUMMY;
+		dir = NULL;
 		dirl = 0;
 
 		if (name[0] && !dir_sep(name[namelen - 1])) {

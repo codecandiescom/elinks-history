@@ -1,9 +1,7 @@
-/* $Id: memory.h,v 1.3 2002/11/25 12:04:56 zas Exp $ */
+/* $Id: memory.h,v 1.4 2002/11/29 16:26:13 zas Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
-
-#define DUMMY ((void *) -1L)
 
 /* If defined, we'll crash if ALLOC_MAXTRIES is attained,
  * if not defined, we'll try to continue. */

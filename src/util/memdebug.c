@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.12 2002/11/29 11:42:45 zas Exp $ */
+/* $Id: memdebug.c,v 1.13 2002/11/29 16:26:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,14 +49,6 @@
 #define CHECK_AH_SANITY
 #define AH_SANITY_MAGIC 0xD3BA110C
 
-/* Check for realloc(NULL, size) ?
- * Glibc realloc() behaves like malloc(size) when passed pointer is NULL.
- * However, it looks we - for some reason - have DUMMY for this (TODO: we
- * should probably get rid of it) and behaviour would be inconsistent with
- * the non-debug one.
- * Default is defined. */
-#define CHECK_REALLOC_NULL
-
 /* Check for useless reallocation ?
  * If oldsize is equal to newsize, print a message to stderr.
  * It may help to find inefficient code.
@@ -74,7 +66,6 @@
  * Default is defined. */
 #define CHECK_XFLOWS
 #define XFLOW_MAGIC (char) 0xFA
-
 
 /* --------- end of debugger configuration section */
 
@@ -254,7 +245,7 @@ debug_mem_alloc(unsigned char *file, int line, size_t size)
 {
 	struct alloc_header *ah;
 
-	if (!size) return DUMMY;
+	if (!size) return NULL;
 
 	do {
 		ah = malloc(SIZE_BASE2AH(size));
@@ -290,8 +281,8 @@ debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 	struct alloc_header *ah;
 	size_t size = eltcount * eltsize;
 
-	if (!size) return DUMMY;
-
+	if (!size) return NULL;
+		
 	/* FIXME: Unfortunately, we can't pass eltsize through to calloc()
 	 * itself, because we add bloat like alloc_header to it, which is
 	 * difficult to be measured in eltsize. Maybe we should round it up to
@@ -332,7 +323,6 @@ debug_mem_free(unsigned char *file, int line, void *ptr)
 	struct alloc_header *ah;
 	int ok = 1;
 
-	if (ptr == DUMMY) return;
 	if (!ptr) {
 		errfile = file;
 		errline = line;
@@ -383,21 +373,12 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 {
 	struct alloc_header *ah, *ah2;
 
-#ifdef CHECK_REALLOC_NULL
-	if (!ptr) {
-		errfile = file;
-		errline = line;
-		int_error("mem_realloc(NULL, %d)", size);
-		return NULL;
-	}
-#endif
-
-	if (!ptr || ptr == DUMMY) return debug_mem_alloc(file, line, size);
+	if (!ptr) return debug_mem_alloc(file, line, size);
 
 	/* Frees memory if size is zero. */
 	if (!size) {
 		debug_mem_free(file, line, ptr);
-		return DUMMY;
+		return NULL;
 	}
 
 	ah = PTR_BASE2AH(ptr);

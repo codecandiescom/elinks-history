@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.29 2002/11/28 11:40:42 zas Exp $ */
+/* $Id: terminal.c,v 1.30 2002/11/29 16:26:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -414,12 +414,12 @@ init_term(int fdin, int fdout,
 	term->dirty = 1;
 	term->redrawing = 0;
 	term->blocked = -1;
-	term->screen = DUMMY;
-	term->last_screen = DUMMY;
+	term->screen = NULL;
+	term->last_screen = NULL;
 	term->spec = get_opt_rec(root_options, "terminal._template_");
 	term->term[0] = 0;
 	term->cwd[0] = 0;
-	term->input_queue = DUMMY;
+	term->input_queue = NULL;
 	term->qlen = 0;
 
 	init_list(term->windows);

@@ -1,11 +1,12 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.7 2002/11/29 11:15:34 pasky Exp $ */
+/* $Id: memory.c,v 1.8 2002/11/29 16:26:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "links.h"
 
@@ -47,7 +48,7 @@ mem_alloc(size_t size)
 {
 	void *p;
 
-	if (!size) return DUMMY;
+	if (!size) return NULL;
 
 	do {
 		p = malloc(size);
@@ -62,7 +63,7 @@ mem_calloc(size_t count, size_t eltsize)
 {
 	void *p;
 
-	if (!eltsize || !count) return DUMMY;
+	if (!eltsize || !count) return NULL;
 
 	do {
 		p = calloc(count, eltsize);
@@ -75,8 +76,6 @@ mem_calloc(size_t count, size_t eltsize)
 void
 mem_free(void *p)
 {
-	if (p == DUMMY) return;
-
 	if (!p) {
 		internal("mem_free(NULL)");
 		return;
@@ -90,11 +89,11 @@ mem_realloc(void *p, size_t size)
 {
 	void *p2;
 
-	if (!p || p == DUMMY) return mem_alloc(size);
+	if (!p) return mem_alloc(size);
 
 	if (!size) {
 		mem_free(p);
-		return DUMMY;
+		return NULL;
 	}
 
 	do {

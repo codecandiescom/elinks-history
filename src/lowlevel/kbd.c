@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.12 2002/09/17 14:29:44 zas Exp $ */
+/* $Id: kbd.c,v 1.13 2002/11/29 16:26:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -252,7 +252,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	itrm->blocked = 0;
 	itrm->qlen = 0;
 	itrm->tm = -1;
-	itrm->ev_queue = DUMMY;
+	itrm->ev_queue = NULL;
 	itrm->eqlen = 0;
 
 	if (ctl_in >= 0) setraw(ctl_in, &itrm->t);

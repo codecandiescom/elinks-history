@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.18 2002/09/17 14:53:21 zas Exp $ */
+/* $Id: tables.c,v 1.19 2002/11/29 16:26:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -211,9 +211,9 @@ new_table()
 		return NULL;
 	}
 
-	t->xcols = DUMMY;
+	t->xcols = NULL;
 	t->xc = 0;
-	t->r_heights = DUMMY;
+	t->r_heights = NULL;
 
 	return t;
 }
@@ -416,7 +416,7 @@ parse_table(unsigned char *html, unsigned char *eof,
 	*end = html;
 
 	if (bad_html) {
-		*bad_html = DUMMY;
+		*bad_html = NULL;
 		*bhp = 0;
 	}
 	t = new_table();

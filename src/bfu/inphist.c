@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.4 2002/09/10 11:13:32 zas Exp $ */
+/* $Id: inphist.c,v 1.5 2002/11/29 16:26:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,7 +54,7 @@ do_tab_compl(struct terminal *term, struct list_head *history,
 	int l = strlen(cdata);
 	int n = 0;
 	struct input_history_item *hi;
-	struct menu_item *items = DUMMY, *i;
+	struct menu_item *items = NULL, *i;
 
 	foreach(hi, *history) {
 		if (strncmp(cdata, hi->d, l)) continue;

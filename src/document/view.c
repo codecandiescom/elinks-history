@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.96 2002/11/29 15:02:46 zas Exp $ */
+/* $Id: view.c,v 1.97 2002/11/29 16:26:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,9 +63,9 @@ init_formatted(struct f_data *scr)
 {
 	memset(((struct f_data **)scr) + 2, 0,
 	       sizeof(struct f_data) - 2 * sizeof(struct f_data *));
-	scr->data = DUMMY;
+	scr->data = NULL;
 	scr->nlinks = 0;
-	scr->links = DUMMY;
+	scr->links = NULL;
 	init_list(scr->forms);
 	init_list(scr->tags);
 	init_list(scr->nodes);
@@ -255,7 +255,7 @@ struct line_info {
 struct line_info *
 format_text(unsigned char *text, int width, int wrap)
 {
-	struct line_info *ln = DUMMY;
+	struct line_info *ln = NULL;
 	int lnn = 0;
 	unsigned char *b = text;
 	int sk, ps = 0;
@@ -521,7 +521,7 @@ get_searched(struct f_data_c *scr, struct point **pt, int *pl)
 	struct search *s1, *s2;
 	int l;
 	unsigned char c;
-	struct point *points = DUMMY;
+	struct point *points = NULL;
 	int len = 0;
 
 	if (!scr->search_word || !*scr->search_word || !(*scr->search_word)[0])
@@ -1457,7 +1457,7 @@ encode_multipart(struct session *ses, struct list_head *l,
 		 unsigned char **data, int *len,
 		 unsigned char *bound, int cp_from, int cp_to)
 {
-	int *nbp, *bound_ptrs = DUMMY;
+	int *nbp, *bound_ptrs = NULL;
 	int nbound_ptrs = 0;
 	unsigned char *m1, *m2;
 	struct submitted_value *sv;

@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.11 2002/09/17 13:43:00 zas Exp $ */
+/* $Id: msgbox.c,v 1.12 2002/11/29 16:26:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,7 +106,7 @@ msg_box(struct terminal *term, struct memory_list *ml,
 	unsigned char *title, enum format_align align,
 	...)
 {
-	unsigned char **info = DUMMY;
+	unsigned char **info = NULL;
 	int info_n = 0;
 	int button;
 	int buttons;

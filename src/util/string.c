@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.13 2002/11/27 11:45:45 zas Exp $ */
+/* $Id: string.c,v 1.14 2002/11/29 16:26:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,7 @@ debug_stracpy(unsigned char *f, int l, unsigned char *src)
 {
 	if (!src) { warnfl("stracpy src=NULL"); return NULL; }
 
-	return debug_memacpy(f, l, src, (src != DUMMY) ? strlen(src) : 0);
+	return debug_memacpy(f, l, src, strlen(src));
 }
 
 unsigned char *
@@ -106,7 +106,7 @@ stracpy(unsigned char *src)
 {
 	if (!src) { warn("stracpy src=NULL"); return NULL; }
 
-	return memacpy(src, (src != DUMMY) ? strlen(src) : 0);
+	return memacpy(src, strlen(src));
 }
 
 unsigned char *

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.46 2002/11/29 15:02:46 zas Exp $ */
+/* $Id: renderer.c,v 1.47 2002/11/29 16:26:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,7 +111,7 @@ realloc_lines(struct part *p, int y)
 	for (i = p->data->y; i <= y; i++) {
 		p->data->data[i].l = 0;
 		p->data->data[i].c = p->bgcolor;
-		p->data->data[i].d = DUMMY;
+		p->data->data[i].d = NULL;
 	}
 
 	p->data->y = i;
@@ -792,7 +792,7 @@ x:;
 
 		link->num = format.tabindex + part->link_num - 1;
 		link->accesskey = format.accesskey;
-		link->pos = DUMMY;
+		link->pos = NULL;
 
 		link->title = format.title ? stracpy(format.title) : NULL;
 
@@ -1243,7 +1243,7 @@ uncached:
 	part->xp = xs; part->yp = ys;
 	part->xmax = part->xa = 0;
 	part->bgcolor = find_nearest_color(&par_format.bgcolor, 8);
-	part->spaces = DUMMY;
+	part->spaces = NULL;
 	part->spl = 0;
 	part->link_num = link_num;
 

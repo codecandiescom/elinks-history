@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.44 2002/11/23 19:23:49 zas Exp $ */
+/* $Id: parser.c,v 1.45 2002/11/29 16:26:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,7 +136,7 @@ unsigned char *
 get_attr_val(unsigned char *e, unsigned char *name)
 {
 	unsigned char *n;
-	unsigned char *a = DUMMY;
+	unsigned char *a = NULL;
 	int l = 0;
 	int f;
 
@@ -1721,7 +1721,7 @@ void
 init_menu()
 {
 	menu_stack_size = 0;
-	menu_stack = DUMMY;
+	menu_stack = NULL;
 	new_menu_item(stracpy(""), -1, 0);
 }
 
@@ -1750,7 +1750,7 @@ detach_menu()
 void
 destroy_menu()
 {
-	if (menu_stack && menu_stack != DUMMY) free_menu(menu_stack[0]);
+	if (menu_stack) free_menu(menu_stack[0]);
 	detach_menu();
 }
 
@@ -1824,7 +1824,7 @@ do_html_select(unsigned char *attr, unsigned char *html,
 	find_form_for_input(attr);
 	html_focusable(attr);
 	lbl = NULL;
-	val = DUMMY;
+	val = NULL;
 	order = 0, group = 0, preselect = -1;
 	init_menu();
 
@@ -2161,7 +2161,7 @@ parse_frame_widths(unsigned char *a, int ww, int www, int **op, int *olp)
 	int ol;
 
 	ol = 0;
-	o = DUMMY;
+	o = NULL;
 
 new_ch:
 	while (WHITECHAR(*a)) a++;

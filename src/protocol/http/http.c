@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.70 2002/11/29 00:32:53 pasky Exp $ */
+/* $Id: http.c,v 1.71 2002/11/29 16:26:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -676,7 +676,7 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 	/* If true, all stuff was written to pipe and only uncompression is
 	 * wanted now. */
 	int finishing = 0;
-	unsigned char *output = DUMMY; /* for mem_realloc */
+	unsigned char *output = NULL;
 
 	length_of_block = (info->length == LEN_CHUNKED ? &info->chunk_remaining
 						       : &info->length);
@@ -736,7 +736,7 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 		}
 		if (ret < 4096) {
 			/* Not enough data, try in next round. */
-			return (output == DUMMY ? NULL : output);
+			return output;
 		}
 
 		if (!conn->stream) {

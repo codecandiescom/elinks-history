@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.17 2002/12/05 13:16:34 pasky Exp $ */
+/* $Id: select.c,v 1.18 2002/12/05 21:46:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,21 +128,15 @@ register_bottom_half(void (*fn)(void *), void *data)
 void
 check_bottom_halves()
 {
-	struct bottom_half *bh;
-	void (*fn)(void *);
-	void *data;
+	while (!list_empty(bottom_halves)) {
+		struct bottom_half *bh = bottom_halves.prev;
+		void (*fn)(void *) = bh->fn;
+		void *data = bh->data;
 
-rep:
-	if (list_empty(bottom_halves)) return;
-
-	bh = bottom_halves.prev;
-	fn = bh->fn;
-	data = bh->data;
-	del_from_list(bh);
-	mem_free(bh);
-	fn(data);
-
-	goto rep;
+		del_from_list(bh);
+		mem_free(bh);
+		fn(data);
+	}
 }
 
 #define CHK_BH if (!list_empty(bottom_halves)) check_bottom_halves()

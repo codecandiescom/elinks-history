@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.482 2004/07/13 16:54:37 zas Exp $ */
+/* $Id: parser.c,v 1.483 2004/07/21 19:35:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -841,7 +841,7 @@ html_frame(unsigned char *a)
 
 	src = get_url_val(a, "src");
 	if (!src) {
-		url = stracpy("");
+		url = stracpy("about:blank");
 	} else {
 		url = join_urls(format.href_base, src);
 		mem_free(src);

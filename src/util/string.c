@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.64 2003/07/23 13:46:23 pasky Exp $ */
+/* $Id: string.c,v 1.65 2003/07/23 14:05:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -335,7 +335,7 @@ add_bytes_to_string(struct string *string, unsigned char *bytes, int length)
 {
 	int newlength;
 
-	assert(string && bytes && length);
+	assert(string && bytes && length >= 0);
 	if_assert_failed { return NULL; }
 
 	check_string_magic(string);

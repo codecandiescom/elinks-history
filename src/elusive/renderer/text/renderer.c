@@ -1,11 +1,10 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.15 2003/01/19 14:36:10 zas Exp $ */
+/* $Id: renderer.c,v 1.16 2003/01/19 14:42:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 

@@ -1,11 +1,12 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.44 2003/12/21 22:20:58 pasky Exp $ */
+/* $Id: options.inc,v 1.45 2003/12/22 04:14:11 miciah Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
 
 /* A few guidelines for this file: */
-/* 1. Keep options in alphabetical order.
+/* 1. Keep options in alphabetical order with trees as the first children
+ *    of their parents.
  * 2. Keep in mind that descriptions should be readable on 80 wide terminals
  *    so insert appropriate line breaks and newlines.
  * 3. If several command line options should share the same caption and

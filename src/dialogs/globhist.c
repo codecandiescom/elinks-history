@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: globhist.c,v 1.25 2002/08/11 18:07:35 pasky Exp $ */
+/* $Id: globhist.c,v 1.26 2002/08/11 18:25:49 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -52,7 +52,7 @@ static int
 history_dialog_list_update(struct list_head *list)
 {
 	struct global_history_item *historyitem;
-	struct box_item	*item;
+	struct listbox_item	*item;
 	int count = 0;
 
 	/* Empty the list */
@@ -66,13 +66,13 @@ history_dialog_list_update(struct list_head *list)
 			continue;
 
 		/* Deleted in history_dialog_clear_list() */
-		item = mem_alloc(sizeof(struct box_item)
+		item = mem_alloc(sizeof(struct listbox_item)
 				 + strlen(historyitem->url) + 1);
 		if (!item) {
 			return count;
 		}
 
-		item->text = ((unsigned char *) item + sizeof(struct box_item));
+		item->text = ((unsigned char *) item + sizeof(struct listbox_item));
 
 		item->data = (void *) historyitem;
 
@@ -120,7 +120,7 @@ history_dialog_box_build(struct listbox_data **box)
 static struct global_history_item *
 history_dialog_get_selected_history_item(struct listbox_data *box)
 {
-	struct box_item *citem;
+	struct listbox_item *citem;
 	int sel = box->sel;
 
 	if (sel == -1)

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.1 2002/08/08 18:01:46 pasky Exp $ */
+/* $Id: dialogs.c,v 1.2 2002/08/11 18:25:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -313,7 +313,7 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 		} else continue;
 
 		if (!mi) {
-			mi = new_menu(15);
+			mi = new_menu(FREE_LIST | FREE_TEXT | FREE_RTEXT | FREE_DATA);
 		       	if (!mi) { mem_free(translated); return; }
 		}
 		add_to_menu(&mi, translated,

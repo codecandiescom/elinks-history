@@ -1,10 +1,11 @@
-/* $Id: listbox.h,v 1.4 2002/08/11 18:07:34 pasky Exp $ */
+/* $Id: listbox.h,v 1.5 2002/08/11 18:25:48 pasky Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
 
 #include "bfu/align.h"
 #include "bfu/dialog.h"
+#include "bfu/menu.h"
 #include "bfu/widget.h"
 #include "lowlevel/terminal.h"
 #include "util/lists.h"
@@ -19,26 +20,19 @@ struct listbox_data {
 	int list_len;	/* Number of items in the list */
 };
 
-/* Which fields to free when zapping a box_item. Bitwise or these. */
-enum box_item_free {
-	NOTHING,
-	TEXT,
-	DATA
-};
-
 /* An item in a box */
-struct box_item {
-	struct box_item *next;
-	struct box_item *prev;
+struct listbox_item {
+	struct listbox_item *next;
+	struct listbox_item *prev;
 	/* Text to display */
 	unsigned char *text;
 	/* Run when this item is hilighted */
-	void (*on_hilight)(struct terminal *, struct listbox_data *, struct box_item *);
+	void (*on_hilight)(struct terminal *, struct listbox_data *, struct listbox_item *);
 	/* Run when the user selects on this item. Returns pointer to the
-	 * box_item that should be selected after execution. */
-	int (*on_selected)(struct terminal *, struct listbox_data *, struct box_item *);
+	 * listbox_item that should be selected after execution. */
+	int (*on_selected)(struct terminal *, struct listbox_data *, struct listbox_item *);
 	void *data;
-	enum box_item_free free_i;
+	enum item_free item_free;
 };
 
 extern struct widget_ops listbox_ops;

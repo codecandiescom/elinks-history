@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.42 2002/08/08 18:01:46 pasky Exp $ */
+/* $Id: menu.c,v 1.43 2002/08/11 18:25:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,7 +208,7 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 			unsigned char *url, *pc;
 
 			if (!mi) {
-				mi = new_menu(3);
+				mi = new_menu(FREE_LIST | FREE_TEXT);
 				if (!mi) return;
 			}
 
@@ -239,7 +239,7 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 		unsigned char *url, *pc;
 
 		if (!mi) {
-			mi = new_menu(3);
+			mi = new_menu(FREE_LIST | FREE_TEXT);
 			if (!mi) return;
 		}
 
@@ -275,7 +275,7 @@ downloads_menu(struct terminal *term, void *ddd, struct session *ses)
 		unsigned char *url, *pc;
 
 		if (!mi) {
-			mi = new_menu(3);
+			mi = new_menu(FREE_LIST | FREE_TEXT);
 			if (!mi) return;
 		}
 
@@ -398,7 +398,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 		e->func = MENU_FUNC open_in_new_window;
 		e->data = send_open_new_xterm;
 		e->in_m = o - 1;
-		e->free_i = 0;
+		e->item_free = FREE_NOTHING;
 		e++;
 	}
 
@@ -421,7 +421,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 		e->func = MENU_FUNC menu_shell;
 		e->data = NULL;
 		e->in_m = 0;
-		e->free_i = 0;
+		e->item_free = FREE_NOTHING;
 		e++;
 		x = 0;
 	}
@@ -433,7 +433,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 		e->func = MENU_FUNC dlg_resize_terminal;
 		e->data = NULL;
 		e->in_m = 0;
-		e->free_i = 0;
+		e->item_free = FREE_NOTHING;
 		e++;
 		x = 0;
 	}
@@ -441,7 +441,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	memcpy(e, file_menu3 + x, sizeof(file_menu3) - x * sizeof(struct menu_item));
 	e += sizeof(file_menu3) / sizeof(struct menu_item);
 
-	for (f = file_menu; f < e; f++) f->free_i = 1;
+	for (f = file_menu; f < e; f++) f->item_free = FREE_LIST;
 
 	do_menu(term, file_menu, ses);
 }

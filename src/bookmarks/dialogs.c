@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.16 2002/08/11 18:07:34 pasky Exp $ */
+/* $Id: dialogs.c,v 1.17 2002/08/11 18:25:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,7 +55,7 @@ int
 bookmark_dlg_list_update(struct list_head *bm_list)
 {
 	struct bookmark *bm;	/* Iterator over bm list */
-	struct box_item	*item;	/* New box item (one per displayed bookmark) */
+	struct listbox_item	*item;	/* New box item (one per displayed bookmark) */
 	unsigned char *text;
 	int count = 0;
 	bookmark_id id;
@@ -66,14 +66,14 @@ bookmark_dlg_list_update(struct list_head *bm_list)
 	/* Copy each bookmark into the display list */
 	foreach(bm, bookmarks) if (bm->selected) {
 		/* Deleted in bookmark_dlg_clear_list() */
-		item = mem_alloc( sizeof(struct box_item) + strlen(bm->title)
+		item = mem_alloc( sizeof(struct listbox_item) + strlen(bm->title)
 			+ 1);
 		if (!item) return count;
 
-		item->text = text = ((unsigned char *)item + sizeof(struct box_item));
+		item->text = text = ((unsigned char *)item + sizeof(struct listbox_item));
 		item->data = (void *)(id = bm->id);
 
-		/* Note that free_i is left at zero */
+		/* Note that item_free is left at zero */
 		/* XXX: ??? --Zas */
 
 		strcpy(text, bm->title);
@@ -108,7 +108,7 @@ bookmark_dlg_box_build(struct listbox_data **box)
 bookmark_id
 bookmark_dlg_box_id_get(struct listbox_data *box)
 {
-	struct box_item *citem;
+	struct listbox_item *citem;
 	int sel = box->sel;
 
 	if (sel == -1) return BAD_BOOKMARK_ID;

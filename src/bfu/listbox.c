@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.11 2002/08/11 18:07:33 pasky Exp $ */
+/* $Id: listbox.c,v 1.12 2002/08/11 18:25:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,13 +33,13 @@ void dlg_format_box(struct terminal *term, struct terminal *t2,
 
 
 /* Sets the selected item to one that is visible.*/
-void box_sel_set_visible(struct widget_data *box_item_data, int offset)
+void box_sel_set_visible(struct widget_data *listbox_item_data, int offset)
 {
 	struct listbox_data *box;
 	int sel;
 
-	box = (struct listbox_data *)(box_item_data->item->data);
-	if (offset > box_item_data->item->gid || offset < 0) {
+	box = (struct listbox_data *)(listbox_item_data->item->data);
+	if (offset > listbox_item_data->item->gid || offset < 0) {
 		return;
 	}
 
@@ -55,13 +55,13 @@ void box_sel_set_visible(struct widget_data *box_item_data, int offset)
 
 /* Moves the selected item [dist] thingies. If [dist] is out of the current
  * range, the selected item is moved to the extreme (ie, the top or bottom) */
-void box_sel_move(struct widget_data *box_item_data, int dist)
+void box_sel_move(struct widget_data *listbox_item_data, int dist)
 {
     struct listbox_data *box;
 	int new_sel;
 	int new_top;
 
-	box = (struct listbox_data *)(box_item_data->item->data);
+	box = (struct listbox_data *)(listbox_item_data->item->data);
 
 	new_sel = box->sel + dist;
 	new_top = box->box_top;
@@ -73,9 +73,9 @@ void box_sel_move(struct widget_data *box_item_data, int dist)
 		new_sel = box->list_len - 1;
 
 	/* Ensure that the display box is over the item */
-	if (new_sel >= (new_top + box_item_data->item->gid)) {
+	if (new_sel >= (new_top + listbox_item_data->item->gid)) {
 		/* Move it down */
-		new_top = new_sel - box_item_data->item->gid + 1;
+		new_top = new_sel - listbox_item_data->item->gid + 1;
 #ifdef DEBUG
 		if (new_top < 0)
 			debug("Newly calculated box_top is an extremely wrong value (%d). It should not be below zero.", new_top);
@@ -92,34 +92,34 @@ void box_sel_move(struct widget_data *box_item_data, int dist)
 
 /* Displays a dialog box */
 void
-display_listbox(struct widget_data *box_item_data, struct dialog_data *dlg,
+display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 		int sel)
 {
 	struct terminal *term = dlg->win->term;
 	struct listbox_data *box;
-	struct box_item *citem;	/* Item currently being shown */
+	struct listbox_item *citem;	/* Item currently being shown */
 	int n;	/* Index of item currently being displayed */
 
-	box = (struct listbox_data *)(box_item_data->item->data);
+	box = (struct listbox_data *)(listbox_item_data->item->data);
 	/* FIXME: Counting here SHOULD be unnecessary */
 	n = 0;
 
-	fill_area(term, box_item_data->x, box_item_data->y, box_item_data->l,
-		  box_item_data->item->gid, get_bfu_color(term, "menu.normal"));
+	fill_area(term, listbox_item_data->x, listbox_item_data->y, listbox_item_data->l,
+		  listbox_item_data->item->gid, get_bfu_color(term, "menu.normal"));
 
 	foreach (citem, box->items) {
 		int len; /* Length of the current text field. */
 
 		len = strlen(citem->text);
-		if (len > box_item_data->l) {
-			len = box_item_data->l;
+		if (len > listbox_item_data->l) {
+			len = listbox_item_data->l;
 		}
 
 		/* Is the current item in the region to be displayed? */
 		if ((n >= box->box_top)
-		    && (n < (box->box_top + box_item_data->item->gid))) {
-			print_text(term, box_item_data->x,
-				   box_item_data->y + n - box->box_top,
+		    && (n < (box->box_top + listbox_item_data->item->gid))) {
+			print_text(term, listbox_item_data->x,
+				   listbox_item_data->y + n - box->box_top,
 				   len, citem->text,
 				   n == box->sel ? get_bfu_color(term, "menu.selected")
 						 : get_bfu_color(term, "menu.normal"));

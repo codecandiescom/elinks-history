@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.13 2002/08/07 03:00:14 pasky Exp $ */
+/* $Id: menu.c,v 1.14 2002/08/11 18:25:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,17 @@
 
 
 /* Types and structures */
+
+struct menu {
+	int selected;
+	int view;
+	int xp, yp;
+	int x, y, xw, yw;
+	int ni;
+	void *data;
+	struct window *win;
+	struct menu_item *items;
+};
 
 struct mainmenu {
 	int selected;
@@ -43,13 +54,13 @@ free_menu_items(struct menu_item *items)
 {
 	int i;
 
-	/* Note that free_i & 8 applies only when menu is aborted; it is zeroed
-	 * when some menu field is selected. */
+	/* Note that item_free & FREE_DATA applies only when menu is aborted;
+	 * it is zeroed when some menu field is selected. */
 
 	for (i = 0; items[i].text; i++) {
-		if (items[i].free_i & 2) mem_free(items[i].text);
-		if (items[i].free_i & 4) mem_free(items[i].rtext);
-		if (items[i].free_i & 8) mem_free(items[i].data);
+		if (items[i].item_free & FREE_TEXT) mem_free(items[i].text);
+		if (items[i].item_free & FREE_RTEXT) mem_free(items[i].rtext);
+		if (items[i].item_free & FREE_DATA) mem_free(items[i].data);
 	}
 
 	mem_free(items);
@@ -68,7 +79,7 @@ void do_menu_selected(struct terminal *term, struct menu_item *items,
 		menu->items = items;
 		menu->data = data;
 		add_window(term, menu_func, menu);
-	} else if (items->free_i) {
+	} else if (items->item_free) {
 		free_menu_items(items);
 	}
 }
@@ -98,7 +109,7 @@ void select_menu(struct terminal *term,	struct menu *menu)
 		struct window *win, *win1;
 
 		/* Don't free data! */
-		it->free_i &= ~8;
+		it->item_free &= ~FREE_DATA;
 
 		win = term->windows.next;
 
@@ -456,7 +467,7 @@ break2:
 			break;
 
 		case EV_ABORT:
-			if (menu->items->free_i)
+			if (menu->items->item_free)
 				free_menu_items(menu->items);
 
 			break;
@@ -663,14 +674,16 @@ void mainmenu_func(struct window *win, struct event *ev, int fwd)
 }
 
 /* new_menu() */
-struct menu_item *new_menu(int free_i)
+struct menu_item *new_menu(enum item_free item_free)
 {
 	struct menu_item *mi;
 
 	mi = mem_alloc(sizeof(struct menu_item));
 	if (!mi) return NULL;
+
 	memset(mi, 0, sizeof(struct menu_item));
-	mi->free_i = free_i;
+	mi->item_free = item_free;
+
 	return mi;
 }
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.32 2002/08/08 18:01:46 pasky Exp $ */
+/* $Id: options.c,v 1.33 2002/08/11 18:25:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,7 @@ charset_list(struct terminal *term, void *xxx, struct session *ses)
 	unsigned char *n;
 	struct menu_item *mi;
 
-	if (!(mi = new_menu(1))) return;
+	if (!(mi = new_menu(FREE_LIST))) return;
 	for (i = 0; (n = get_cp_name(i)); i++) {
 		if (is_cp_special(i)) continue;
 		add_to_menu(&mi, get_cp_name(i), "", "", MENU_FUNC display_codepage, (void *)i, 0);
@@ -80,7 +80,7 @@ charset_sel_list(struct terminal *term, struct session *ses, int *ptr)
 	unsigned char *n;
 	struct menu_item *mi;
 
-	if (!(mi = new_menu(1))) return;
+	if (!(mi = new_menu(FREE_LIST))) return;
 	for (i = 0; (n = get_cp_name(i)); i++) {
 		add_to_menu(&mi, get_cp_name(i), "", "", MENU_FUNC set_val, (void *)i, 0);
 	}
@@ -893,7 +893,7 @@ menu_language_list(struct terminal *term, void *xxx, struct session *ses)
 	int i, sel;
 	unsigned char *n;
 	struct menu_item *mi;
-	if (!(mi = new_menu(1))) return;
+	if (!(mi = new_menu(FREE_LIST))) return;
 	for (i = 0; i < n_languages(); i++) {
 		n = language_name(i);
 		add_to_menu(&mi, n, "", "", MENU_FUNC menu_set_language, (void *)i, 0);

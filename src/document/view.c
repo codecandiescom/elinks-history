@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.64 2002/07/23 12:58:12 zas Exp $ */
+/* $Id: view.c,v 1.65 2002/08/11 18:25:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2771,7 +2771,7 @@ void open_in_new_window(struct terminal *term,
 		mem_free(oin);
 		return;
 	}
-	if (!(mi = new_menu(1))) {
+	if (!(mi = new_menu(FREE_LIST))) {
 		mem_free(oin);
 		return;
 	}
@@ -2872,7 +2872,7 @@ void link_menu(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct f_data_c *f = current_frame(ses);
 	struct link *link;
-	struct menu_item *mi = new_menu(1);
+	struct menu_item *mi = new_menu(FREE_LIST);
 	int l = 0;
 
 	if (!mi) return;

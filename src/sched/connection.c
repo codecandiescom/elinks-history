@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.19 2003/06/05 14:38:18 zas Exp $ */
+/* $Id: connection.c,v 1.20 2003/06/07 14:40:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,54 +55,6 @@ struct k_conn {
 	int conn;
 };
 
-
-/* Global variables */
-struct s_msg_dsc msg_dsc[] = {
-	{S_WAIT,		N_("Waiting in queue")},
-	{S_DNS,			N_("Looking up host")},
-	{S_CONN,		N_("Making connection")},
-	{S_SSL_NEG,		N_("SSL negotiation")},
-	{S_SENT,		N_("Request sent")},
-	{S_LOGIN,		N_("Logging in")},
-	{S_GETH,		N_("Getting headers")},
-	{S_PROC,		N_("Server is processing request")},
-	{S_TRANS,		N_("Transferring")},
-
-	{S_WAIT_REDIR,		N_("Waiting for redirect confirmation")},
-	{S_OK,			N_("OK")},
-	{S_INTERRUPTED,		N_("Interrupted")},
-	{S_EXCEPT,		N_("Socket exception")},
-	{S_INTERNAL,		N_("Internal error")},
-	{S_OUT_OF_MEM,		N_("Out of memory")},
-	{S_NO_DNS,		N_("Host not found")},
-	{S_CANT_WRITE,		N_("Error writing to socket")},
-	{S_CANT_READ,		N_("Error reading from socket")},
-	{S_MODIFIED,		N_("Data modified")},
-	{S_BAD_URL,		N_("Bad URL syntax")},
-	{S_TIMEOUT,		N_("Receive timeout")},
-	{S_RESTART,		N_("Request must be restarted")},
-	{S_STATE,		N_("Can't get socket state")},
-
-	{S_HTTP_ERROR,		N_("Bad HTTP response")},
-	{S_HTTP_100,		N_("HTTP 100 (\?\?\?)")},
-	{S_HTTP_204,		N_("No content")},
-
-	{S_FILE_TYPE,		N_("Unknown file type")},
-	{S_FILE_ERROR,		N_("Error opening file")},
-
-	{S_FTP_ERROR,		N_("Bad FTP response")},
-	{S_FTP_UNAVAIL,		N_("FTP service unavailable")},
-	{S_FTP_LOGIN,		N_("Bad FTP login")},
-	{S_FTP_PORT,		N_("FTP PORT command failed")},
-	{S_FTP_NO_FILE,		N_("File not found")},
-	{S_FTP_FILE_ERROR,	N_("FTP file error")},
-#ifdef HAVE_SSL
-	{S_SSL_ERROR,		N_("SSL error")},
-#else
-	{S_NO_SSL,		N_("This version of ELinks does not contain SSL/TSL support")},
-#endif
-	{0,			NULL}
-};
 
 static tcount connection_count = 0;
 static int active_connections = 0;

@@ -1,4 +1,4 @@
-/* $Id: sched.h,v 1.7 2003/05/08 21:50:08 zas Exp $ */
+/* $Id: sched.h,v 1.8 2003/06/07 14:40:01 pasky Exp $ */
 
 #ifndef EL__SCHED_SCHED_H
 #define EL__SCHED_SCHED_H
@@ -145,11 +145,6 @@ struct connection {
 #define S_SSL_ERROR		-10400
 #define S_NO_SSL		-10401
 
-
-extern struct s_msg_dsc {
-	int n;
-	unsigned char *msg;
-} msg_dsc[];
 
 struct status {
 	/* XXX: order matters there, there's some hard initialization in

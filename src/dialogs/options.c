@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.36 2002/09/17 13:56:15 zas Exp $ */
+/* $Id: options.c,v 1.37 2002/11/29 19:32:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -682,7 +682,8 @@ net_programs(struct terminal *term, void *xxx, void *yyy)
 	unsigned char *optname;
 
 	system_str = get_system_str(term->environment & ENV_XWIN);
-
+	if (!system_str) return;
+	
 	d = mem_calloc(1, sizeof(struct dialog) + 6 * sizeof(struct widget));
 	if (!d) return;
 
@@ -693,18 +694,30 @@ net_programs(struct terminal *term, void *xxx, void *yyy)
 	 * as this ought to disappear later anyway. --pasky */
 
 	optname = straconcat("protocol.user.mailto.", system_str, NULL);
+	if (!optname) {
+		mem_free(d);
+		return;
+	}
 	d->items[0].type = D_FIELD;
 	d->items[0].dlen = MAX_STR_LEN;
 	d->items[0].data = get_opt_str(optname);
 	mem_free(optname);
 
 	optname = straconcat("protocol.user.telnet.", system_str, NULL);
+	if (!optname) {
+		mem_free(d);
+		return;
+	}
 	d->items[1].type = D_FIELD;
 	d->items[1].dlen = MAX_STR_LEN;
 	d->items[1].data = get_opt_str(optname);
 	mem_free(optname);
 
 	optname = straconcat("protocol.user.tn3270.", system_str, NULL);
+	if (!optname) {
+		mem_free(d);
+		return;
+	}
 	d->items[2].type = D_FIELD;
 	d->items[2].dlen = MAX_STR_LEN;
 	d->items[2].data = get_opt_str(optname);

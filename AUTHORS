@@ -38,11 +38,6 @@ Andre Valente <a.valente@netcabo.pt>
 Anton Voloshin <vav@isv.ru>
 	Proper encoding of form entries
 
-Arkadiusz Miskiewicz <misiek@pld.org.pl>
-	Internationalization (GNU gettext)
-		(it's replaced by Mikulas' own code with support for
-		different charsets, but anyway ;)
-
 Arkadiusz Sochala <jojoro@priv2.onet.pl>
 	Polish translation
 
@@ -424,4 +419,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.112 2003/01/01 01:26:55 pasky Exp $
+$Id: AUTHORS,v 1.113 2003/01/02 15:01:35 pasky Exp $

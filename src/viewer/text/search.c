@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.198 2004/02/05 19:20:47 jonas Exp $ */
+/* $Id: search.c,v 1.199 2004/02/05 19:26:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1160,19 +1160,19 @@ link_typeahead_handler(struct input_line *line, int action)
 
 	/* Hack time .. should we change mode? */
 	if (!line->data) {
+		enum main_action action = ACT_MAIN_NONE;
+
 		switch (*buffer) {
 			case '#':
-				line->data = "#";
+				action = ACT_MAIN_SEARCH_TYPEAHEAD_LINK;
 				break;
 
 			case '?':
-				line->prompt = line->data = "?";
-				line->handler = text_typeahead_handler;
+				action = ACT_MAIN_SEARCH_TYPEAHEAD_TEXT_BACK;
 				break;
 
 			case '/':
-				line->prompt = line->data = "/";
-				line->handler = text_typeahead_handler;
+				action = ACT_MAIN_SEARCH_TYPEAHEAD_TEXT;
 				break;
 
 			default:
@@ -1180,12 +1180,8 @@ link_typeahead_handler(struct input_line *line, int action)
 		}
 
 		/* Should we reboot the input line .. (inefficient but easy) */
-		if (line->data) {
-			struct input_history *history = *line->prompt != '#'
-						      ? &search_history : NULL;
-
-			input_field_line(ses, line->prompt, line->data, history,
-					 line->handler);
+		if (action != ACT_MAIN_NONE) {
+			search_typeahead(ses, doc_view, action);
 			return INPUT_LINE_CANCEL;
 		}
 

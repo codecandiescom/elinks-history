@@ -1,8 +1,8 @@
 This is a super-simplistic CSS micro-engine.
 
-				  Phases
+				    Phases
 
-  The CSS handling is divided into:
+   The CSS handling is divided into:
 
 The scanner
 
@@ -56,7 +56,7 @@ The applier
    of format + par_format).
 
 
-			   What Is Gonna Be A FAQ
+			    What Is Gonna Be A FAQ
 
 Why isn't the CSS support compile-time optional?
 

@@ -53,6 +53,7 @@ See links.h for list of them ;-).
 If you want to have anything else documented here, write description and send
 me a patch.
 
+
 2.1, HTML parser
 ~~~~~~~~~~~~~~~~
 
@@ -82,6 +83,87 @@ part * from the parser. They render the text or calculate size of text (in case
 of tables). struct part has pointer to struct f_data - a stucture that holds
 actually formatted data. If the pointer is NULL, rendering functions only
 calculate size.
+
+
+2.2, Lua support
+~~~~~~~~~~~~~~~~
+
+Peter Wang wrote this on the mailing list:
+
+The parts of the Links-Lua and ELinks code that related to Lua are mostly
+wrapped inside #ifdef HAVE_LUA ...  #endif conditions, so they're easy to find.
+And also lua.c.
+
+In certain situations, I put some hooks into the C code.  These prepare the C
+code to run some Lua code, run it, then translate the return values to
+something meaningful to the C code.  They are really simple, but I had to put
+in some cruft.
+
+For example, the code implementing the Go To URL dialog box hook :-
+
+  void goto_url_with_hook(struct session *ses, unsigned char *url)
+  {
+  #ifndef HAVE_LUA
+          goto_url(ses, url);
+  #else
+          lua_State *L = lua_state;
+          int err;
+
+[1]       lua_getglobal(L, "goto_url_hook");
+          if (lua_isnil(L, -1)) {
+                  lua_pop(L, 1);
+                  goto_url(ses, url);
+                  return;
+          }
+
+[2]       lua_pushstring(L, url);
+          if (list_empty(ses->history)) lua_pushnil(L);
+          else lua_pushstring(L, cur_loc(ses)->vs.url);
+
+[3]       if (prepare_lua(ses)) return;
+[4]       err = lua_call(L, 2, 1);
+[5]       finish_lua();
+          if (err) return;
+
+[6]       if (lua_isstring(L, -1)) goto_url(ses, (unsigned char *) lua_tostring(L, -1));
+          else if (!lua_isnil(L, -1)) alert_lua_error("goto_url_hook must return a string or nil");
+          lua_pop(L, 1);
+  #endif
+  }
+
+Quick description of what it does:
+
+[1] Get the value named `goto_url_hook' from the Lua state.  If it doesn't
+    exist, the user hasn't installed a hook so continue the normal way.
+
+[2] Push the arguments onto the Lua stack for the function call.
+    `goto_url_hook' takes two parameters, the new URL and the current URL, so
+    we push them on.
+
+[3] Some stuff to prepare for running Lua.  This is in case for example the Lua
+    function contains bugs, we want to trap some of that.  It's supposed to
+    enable a mechanism where ^C will break out of infinite loops and such, but
+    that's not working so good.
+
+[4] Call the Lua function, ie. goto_url_hook
+
+[5] Disable the error trapping stuff.
+
+[6] Look at the return value of goto_url_hook and do something appropriate.
+
+[If you want to know the lua_* functions, you're gonna have to read the Lua API
+manual]
+
+
+That's basically all the Links-Lua stuff is, a bunch of hooks that pass
+arguments to some arbitrary Lua code, then read in return values and interpret
+it.  But it works because Lua is a programming language, and that enables you
+to do what you would from C, as long as you stick to the C<->Lua interface.
+
+The code to allow binding Lua code to a keypress is slightly different to the
+hooks, but not much.  Instead of branching off to some C code when a key is
+pressed, we branch off to some Lua code.
+
 
 
 3, Coding style
@@ -190,4 +272,4 @@ applies.
 
 Happy hacking!
 
-$Id: HACKING,v 1.11 2002/03/16 09:55:34 pasky Exp $
+$Id: HACKING,v 1.12 2002/03/16 21:02:48 pasky Exp $

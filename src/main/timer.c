@@ -1,5 +1,5 @@
 /* Timers. */
-/* $Id: timer.c,v 1.5 2005/03/04 18:33:24 zas Exp $ */
+/* $Id: timer.c,v 1.6 2005/03/04 18:54:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,6 @@ struct timer {
 	ttime interval;
 	void (*func)(void *);
 	void *data;
-	timer_id_T id;
 };
 
 static INIT_LIST_HEAD(timers);
@@ -58,25 +57,22 @@ check_timers(ttime *last_time)
 void
 install_timer(timer_id_T *id, ttime time, void (*func)(void *), void *data)
 {
-	static timer_id_T timer_id = 0;
 	struct timer *new_timer, *timer;
 
 	assert(id);
 
-	*id = TIMER_ID_UNDEF;
-
 	new_timer = mem_alloc(sizeof(*new_timer));
+	*id = (timer_id_T) new_timer; /* TIMER_ID_UNDEF is NULL */
 	if (!new_timer) return;
+
 	new_timer->interval = time;
 	new_timer->func = func;
 	new_timer->data = data;
-	new_timer->id = timer_id++;
+
 	foreach (timer, timers)
 		if (timer->interval >= time)
 			break;
 	add_at_pos(timer->prev, new_timer);
-
-	*id = new_timer->id;
 }
 
 void
@@ -87,9 +83,9 @@ kill_timer(timer_id_T *id)
 
 	assert(id != NULL);
 	if (*id == TIMER_ID_UNDEF) return;
-	
+
 	foreachsafe (timer, next, timers)
-		if (timer->id == *id) {
+		if ((timer_id_T) timer == *id) {
 			del_from_list(timer);
 			mem_free(timer);
 			k++;

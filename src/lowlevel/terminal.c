@@ -1,11 +1,12 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.35 2002/12/02 15:37:44 zas Exp $ */
+/* $Id: terminal.c,v 1.36 2002/12/05 11:18:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <errno.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #ifdef HAVE_UNISTD_H

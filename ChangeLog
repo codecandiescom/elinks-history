@@ -1,3 +1,24 @@
+Thu May  9 21:32:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/file.c:
+
+	One possible variant (disabled anyway) included.  
+
+Thu May  9 21:16:37 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, src/protocol/file.c, src/util/compress.c,
+	src/util/compress.h:
+
+	Complete rewrite and generalization of file decoding support. Now,
+	we always call decoding routines, possibly with ENCODING_NONE
+	parameter, thus invoking only dummy read routines. We have also gzip
+	and bzip2 decoders. Encoding type is determined on the level of
+	caller; sample use was introduced in protocol/file.c, where we guess
+	encoding from file name with guess_encoding(). This all must have
+	some bugs yet, as I wrote it just now, and I'm pretty surprised that
+	it works already (for second time I tried it), with only minimal
+	debugging ;).  
+
 Wed May  8 17:18:36 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, configure.in, src/protocol/file.c, src/util/Makefile.am,

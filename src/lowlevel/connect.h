@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.12 2003/01/26 17:34:47 pasky Exp $ */
+/* $Id: connect.h,v 1.13 2003/05/07 10:13:36 zas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -12,28 +12,35 @@
 
 struct conn_info {
 	struct sockaddr_storage *addr; /* array of addresses */
+
+	void (*func)(struct connection *);
+
+	int *sock;
+
 	int addrno; /* array len / sizeof(sockaddr_storage) */
 	int triedno; /* index of last tried address */
 	int port;
-	int *sock;
-	void (*func)(struct connection *);
 };
 
 struct read_buffer {
+	void (*done)(struct connection *, struct read_buffer *);
+
 	int sock;
 	int len;
 	int close;
 	int freespace;
-	void (*done)(struct connection *, struct read_buffer *);
-	unsigned char data[1];
+
+	unsigned char data[1]; /* must be at end of struct */
 };
 
 struct write_buffer {
+	void (*done)(struct connection *);
+
 	int sock;
 	int len;
 	int pos;
-	void (*done)(struct connection *);
-	unsigned char data[1];
+
+	unsigned char data[1]; /* must be at end of struct */
 };
 
 void close_socket(struct connection *, int *);

@@ -1,3 +1,94 @@
+Mon Oct 25 20:31:16 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	Trivial cleanup: tab/space fixes, move iterator initialization to
+	for(), move debug code from fastfind_done() to new
+	FF_DBG_dump_stats().  
+
+Mon Oct 25 20:08:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	fastfind_index(): minor cleanup, drop useless @j, move comment near
+	ifcase().  
+
+Mon Oct 25 19:41:01 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/tab.c:
+
+	How does it behave now? 
+
+Mon Oct 25 19:14:01 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/tab.c:
+
+	Keep tabs together in term->windows. Fixes problems with stuck
+	dialogs when new tab was opened over them. Hoefpully.  
+
+Mon Oct 25 19:10:14 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/: event.c, window.c:
+
+	Reverted my tab/window ordering hacks resulting in sometimes bad
+	behaviour, as suggested by Jonas. I figured a wrong solution to my
+	problem.  
+
+Mon Oct 25 16:00:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	Improve fastfind debug output a bit.  
+
+Mon Oct 25 15:52:32 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	Use memchr() in char2idx() and reduce code redundancy a bit.  
+
+Mon Oct 25 12:56:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: ecmascript/spidermonkey.c, terminal/terminal.h:
+
+	Define ENV_ANY value.  
+
+Mon Oct 25 12:41:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	window_open(): Simplify URI unreferencing and fix a bug.  
+
+Mon Oct 25 10:29:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/table.c:
+
+	Minor optimization: move @size test before the loop.  
+
+Mon Oct 25 10:20:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/table.c:
+
+	Drop useless parenthesis.  
+
+Mon Oct 25 10:16:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/table.c:
+
+	Move code from new_cell() to new copy_table().  
+
+Mon Oct 25 09:59:09 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/table.c:
+
+	Optimize copy of cells to new table in new_cell(): copy rows by rows
+	instead of cells by cells, it speedups things a lot.  
+
+Mon Oct 25 09:06:01 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
 Sat Oct 23 12:49:18 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* po/pl.po:

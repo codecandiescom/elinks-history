@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.76 2003/11/22 02:16:38 jonas Exp $ */
+/* $Id: dialogs.c,v 1.77 2003/11/22 02:28:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,7 +194,7 @@ listbox_delete_historyitem(struct terminal *term, struct listbox_data *box)
 {
 	struct delete_hierbox_item_info *ctx;
 
-	if (!box->sel) return;
+	if (!box->sel || !box->sel->udata) return;
 
  	ctx = mem_alloc(sizeof(struct delete_hierbox_item_info));
 	if (!ctx) return;

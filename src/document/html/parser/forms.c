@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.3 2004/04/29 13:09:38 zas Exp $ */
+/* $Id: forms.c,v 1.4 2004/04/29 13:15:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,6 @@ html_form(unsigned char *a)
 	was_br = 1;
 }
 
-
 static void
 get_html_form(unsigned char *a, struct form *form)
 {
@@ -55,13 +54,13 @@ get_html_form(unsigned char *a, struct form *form)
 	al = get_attr_val(a, "method");
 	if (al) {
 		if (!strcasecmp(al, "post")) {
-			char *ax = get_attr_val(a, "enctype");
+			unsigned char *enctype = get_attr_val(a, "enctype");
 
 			form->method = FM_POST;
-			if (ax) {
-				if (!strcasecmp(ax, "multipart/form-data"))
+			if (enctype) {
+				if (!strcasecmp(enctype, "multipart/form-data"))
 					form->method = FM_POST_MP;
-				mem_free(ax);
+				mem_free(enctype);
 			}
 		}
 		mem_free(al);
@@ -82,6 +81,7 @@ get_html_form(unsigned char *a, struct form *form)
 			 * up with two '?' otherwise. */
 			if (form->method == FM_GET) {
 				unsigned char *ch = strchr(form->action, '?');
+
 				if (ch) *ch = '\0';
 			}
 		}

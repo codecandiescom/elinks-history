@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.9 2003/12/26 23:53:24 zas Exp $ */
+/* $Id: proxy.c,v 1.10 2004/04/01 06:22:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,8 @@
 #include "elinks.h"
 
 #include "config/options.h"
+#include "protocol/protocol.h"
+#include "protocol/uri.h"
 #include "sched/event.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -44,9 +46,8 @@ proxy_probe_no_proxy(unsigned char *url, unsigned char *no_proxy)
 }
 
 static unsigned char *
-get_proxy_worker(unsigned char *url, unsigned char *proxy)
+get_proxy_worker(struct uri *uri, unsigned char *proxy)
 {
-	int l = strlen(url);
 	unsigned char *http_proxy, *https_proxy, *ftp_proxy, *no_proxy;
 
 	http_proxy = get_opt_str("protocol.http.proxy.host");
@@ -70,31 +71,29 @@ get_proxy_worker(unsigned char *url, unsigned char *proxy)
 	} else {
 		unsigned char *slash;
 
-		if (http_proxy && *http_proxy) {
+		if (http_proxy && *http_proxy && uri->protocol == PROTOCOL_HTTP) {
 			if (!strncasecmp(http_proxy, "http://", 7))
 				http_proxy += 7;
 
 			slash = strchr(http_proxy, '/');
 			if (slash) *slash = 0;
 
-			if (l >= 7 && !strncasecmp(url, "http://", 7)
-			    && !proxy_probe_no_proxy(url + 7, no_proxy))
+			if (!proxy_probe_no_proxy(uri->host, no_proxy))
 				proxy = http_proxy;
 		}
 
-		if (https_proxy && *https_proxy) {
+		if (https_proxy && *https_proxy && uri->protocol == PROTOCOL_HTTPS) {
 			if (!strncasecmp(https_proxy, "http://", 7))
 				https_proxy += 7;
 
 			slash = strchr(https_proxy, '/');
 			if (slash) *slash = 0;
 
-			if (l >= 8 && !strncasecmp(url, "https://", 8)
-			    && !proxy_probe_no_proxy(url + 8, no_proxy))
+			if (!proxy_probe_no_proxy(uri->host, no_proxy))
 				proxy = https_proxy;
 		}
 
-		if (ftp_proxy && *ftp_proxy) {
+		if (ftp_proxy && *ftp_proxy && uri->protocol == PROTOCOL_FTP) {
 			if (!strncasecmp(ftp_proxy, "ftp://", 6))
 				ftp_proxy += 6;
 			else if(!strncasecmp(ftp_proxy, "http://", 7))
@@ -103,21 +102,20 @@ get_proxy_worker(unsigned char *url, unsigned char *proxy)
 			slash = strchr(ftp_proxy, '/');
 			if (slash) *slash = 0;
 
-			if (l >= 6 && !strncasecmp(url, "ftp://", 6)
-			    && !proxy_probe_no_proxy(url + 6, no_proxy))
+			if (!proxy_probe_no_proxy(uri->host, no_proxy))
 				proxy = ftp_proxy;
 		}
 	}
 
 	if (proxy) {
-		return straconcat("proxy://", proxy, "/", url, NULL);
+		return straconcat("proxy://", proxy, "/", struri(uri), NULL);
 	}
 
-	return stracpy(url);
+	return stracpy(struri(uri));
 }
 
 unsigned char *
-get_proxy(unsigned char *url)
+get_proxy(struct uri *uri)
 {
 #ifdef HAVE_SCRIPTING
 	unsigned char *tmp = NULL;
@@ -125,11 +123,11 @@ get_proxy(unsigned char *url)
 	static int get_proxy_event_id = EVENT_NONE;
 
 	set_event_id(get_proxy_event_id, "get-proxy");
-	trigger_event(get_proxy_event_id, &tmp, url);
-	ret = get_proxy_worker(url, tmp);
+	trigger_event(get_proxy_event_id, &tmp, struri(uri));
+	ret = get_proxy_worker(uri, tmp);
 	if (tmp) mem_free(tmp);
 	return ret;
 #else
-	return get_proxy_worker(url, NULL);
+	return get_proxy_worker(uri, NULL);
 #endif
 }

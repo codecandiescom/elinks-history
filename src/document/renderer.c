@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.117 2004/10/10 23:09:24 pasky Exp $ */
+/* $Id: renderer.c,v 1.118 2004/10/13 21:50:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,16 +123,18 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 
 			unsigned char *url = memacpy((*current)->string.source + 1,
 			                             (*current)->string.length - 1);
-			struct uri *uri = get_uri(url, URI_BASE);
+			struct uri *uri = url ? get_uri(url, URI_BASE) : NULL;
 			struct cache_entry *cached = uri ? find_in_cache(uri) : NULL;
 			struct fragment *fragment;
 
+			if (url) mem_free(url);
+			if (!uri) continue;
 			if (!cached) {
 				/* At this time (!gradual_rerendering), we
 				 * should've already retrieved this though. So
 				 * it must've been that it went away because
 				 * unused and the cache was already too full. */
-				ERROR("The script of %s was lost in too full a cache!", url);
+				ERROR("The script of %s was lost in too full a cache!", struri(uri));
 				goto next_snippet;
 			}
 
@@ -145,7 +147,7 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 				ecmascript_eval(interpreter, &code);
 			}
 next_snippet:
-			done_uri(uri); mem_free(url);
+			done_uri(uri);
 			continue;
 		}
 

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.142 2004/12/14 17:00:29 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.143 2004/12/14 17:01:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -353,7 +353,7 @@ bookmark_terminal_tabs(struct terminal *term, unsigned char *foldername)
 		if (!get_current_url(ses, url, MAX_STR_LEN))
 			continue;
 
-		if (!get_current_title(tab->data, title, MAX_STR_LEN))
+		if (!get_current_title(ses, title, MAX_STR_LEN))
 			continue;
 
 		add_bookmark(folder, 1, title, url);

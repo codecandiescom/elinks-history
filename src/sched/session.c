@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.584 2004/11/19 16:54:21 zas Exp $ */
+/* $Id: session.c,v 1.585 2004/11/21 05:20:14 miciah Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -486,6 +486,10 @@ check_incomplete_redirects(struct cache_entry *cached)
 			 * matter here? */
 			return cached->incomplete;
 		}
+
+		/* Let's not loop forever when a page redirects to itself. */
+		if (compare_uri(cached->uri, cached->redirect, URI_BASE))
+			break;
 
 		cached = find_in_cache(cached->redirect);
 	}

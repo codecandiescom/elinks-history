@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.12 2002/04/27 13:15:53 pasky Exp $ */
+/* $Id: types.c,v 1.13 2002/04/27 20:47:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,21 +51,77 @@ void delete_extension(struct extension *del)
 	mem_free(del);
 }
 
-int is_in_list(unsigned char *list, unsigned char *str, int l)
+
+/* Comma-separated list managing functions. */
+/* TODO: Move to util/. --pasky */
+
+int
+is_in_list_iterate(unsigned char *list, unsigned char *str, int l,
+		   int (*cmp)(unsigned char *, unsigned char *,
+			      unsigned char *, int))
 {
-	unsigned char *l2, *l3;
+	unsigned char *tok_sep, *tok_end;
+
 	if (!l) return 0;
-	rep:
-	while (*list && *list <= ' ') list++;
-	if (!*list) return 0;
-	for (l2 = list; *l2 && *l2 != ','; l2++);
-	for (l3 = l2 - 1; l3 >= list && *l3 <= ' '; l3--);
-	l3++;
-	if (l3 - list == l && !casecmp(str, list, l)) return 1;
-	list = l2;
-	if (*list == ',') list++;
-	goto rep;
+
+	while (1) {
+		/* Skip leading whitespaces */
+		while (*list && *list <= ' ') list++;
+		if (!*list) return 0;
+
+		/* Move to token end */
+		for (tok_sep = list;
+		     *tok_sep && *tok_sep != ',';
+		     tok_sep++);
+
+		/* Move back to token start */
+		for (tok_end = tok_sep - 1;
+		     tok_end >= list && *tok_end <= ' ';
+		     tok_end--);
+		tok_end++;
+
+		/* Compare the token */
+		if (cmp(list, tok_end, str, l))
+			return 1;
+
+		/* Jump to next token */
+		list = tok_sep;
+		if (*list == ',') list++; /* It can be \0 as well. */
+	}
 }
+
+int
+is_in_list_cmp(unsigned char *start, unsigned char *end,
+	       unsigned char *str, int l)
+{
+	return (end - start == l && !casecmp(str, start, l));
+}
+
+int
+is_in_list(unsigned char *list, unsigned char *str, int l)
+{
+	return is_in_list_iterate(list, str, l, is_in_list_cmp);
+}
+
+int
+is_in_list_rear_cmp(unsigned char *start, unsigned char *end,
+		    unsigned char *str, int l)
+{
+	int l2 = end - start;
+
+	/* XXX: The '.' cmp is hack for extensions. That means this compare
+	 * function is not generally usable :(. But then again, who else than
+	 * extensions department would want to use it? */
+	return (l >= l2 && str[l - l2 - 1] == '.'
+		&& !casecmp(str + l - l2, start, l2));
+}
+
+int
+is_in_list_rear(unsigned char *list, unsigned char *str, int l)
+{
+	return is_in_list_iterate(list, str, l, is_in_list_rear_cmp);
+}
+
 
 /* Guess content type of the document. */
 unsigned char *
@@ -74,7 +130,7 @@ get_content_type(unsigned char *head, unsigned char *url)
 	struct extension *ext;
 	struct assoc *a;
 	unsigned char *pos, *extension, *exxt;
-	int ext_len, el;
+	int ext_len, el, url_len;
 
 	/* If there's one in header, it's simple.. */
 
@@ -111,14 +167,20 @@ get_content_type(unsigned char *head, unsigned char *url)
 		}
 	}
 
+	/* We can't use the extension string we got just now, because we want
+	 * to support also things like "ps.gz" - that'd never work, as we would
+	 * always compare only to "gz". */
+
 	/* Guess type accordingly to the extension */
 
-	if ((ext_len == 3 && !casecmp(extension, "htm", 3)) ||
-	    (ext_len == 4 && !casecmp(extension, "html", 4)))
+	url_len = strlen(url);
+
+	if ((!casecmp(url + url_len - 4, ".htm", 3)) ||
+	    (!casecmp(url + url_len - 5, ".html", 4)))
 		return stracpy("text/html");
 
 	foreach(ext, extensions) {
-		if (is_in_list(ext->ext, extension, ext_len))
+		if (is_in_list_rear(ext->ext, url, url_len))
 			return stracpy(ext->ct);
 	}
 

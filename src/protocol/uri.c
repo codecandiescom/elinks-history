@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.10 2003/07/12 20:42:39 jonas Exp $ */
+/* $Id: uri.c,v 1.11 2003/07/13 10:17:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,14 +185,15 @@ get_uri_port(struct uri *uri)
 	return port;
 }
 
+/* TODO The @no_data arg is a minimum solution. It should probably be
+ * using an enum. --jonas */
 unsigned char *
-get_uri_string(struct uri *uri)
+get_uri_string(struct uri *uri, int no_data)
 {
 	unsigned char *str = init_str();
 	int len = 0;
 	enum protocol protocol = check_protocol(uri->protocol,
 						uri->protocollen);
-
 
 	if (!str) return NULL;
 	assert(uri->protocol && uri->protocollen && uri->host && uri->hostlen);
@@ -233,9 +234,9 @@ get_uri_string(struct uri *uri)
 	if (get_protocol_need_slash_after_host(protocol))
 		add_chr_to_str(&str, &len, '/');
 
-	/* TODO Also add path and query info to the URI string but it has to be
-	 * configurable since http auth needs only the protocol and authority
-	 * part. */
+	if (no_data || !uri->datalen) return str;
+
+	add_bytes_to_str(&str, &len, uri->data, uri->datalen);
 
 	return str;
 }

@@ -392,6 +392,9 @@ Unai Uribarri <unai@telecable.es>
 Varga Balázs <vinnui@broadband.hu>
 	Hungarian translation updates
 
+Wiktor Grebla <greblus@poczta.onet.pl>
+	Keybinding for toggling of document.browse.links.numbering
+
 William Yodlowsky <wyodlows@andromeda.rutgers.edu>
 	OpenSSL fixes
 
@@ -416,4 +419,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.115 2003/01/04 00:54:43 pasky Exp $
+$Id: AUTHORS,v 1.116 2003/01/04 13:09:02 pasky Exp $

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.9 2003/01/03 02:23:57 pasky Exp $ */
+/* $Id: view.c,v 1.10 2003/01/04 13:09:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2967,6 +2967,12 @@ quit:
 				goto x;
 			case ACT_TOGGLE_HTML_PLAIN:
 				toggle(ses, ses->screen, 0);
+				goto x;
+			case ACT_TOGGLE_NUMBERED_LINKS:
+				get_opt_int("document.browse.links.numbering") =
+					!get_opt_int("document.browse.links.numbering");
+				html_interpret(ses);
+				draw_formatted(ses);
 				goto x;
 			case ACT_OPEN_NEW_WINDOW:
 				open_in_new_window(ses->term, send_open_new_xterm, ses);

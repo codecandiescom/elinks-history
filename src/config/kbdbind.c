@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.54 2003/01/01 01:58:39 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.55 2003/01/04 13:09:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -428,6 +428,7 @@ static struct strtonum action_table[] = {
 	{ "toggle-display-images", ACT_TOGGLE_DISPLAY_IMAGES, "Toggle displaying of links to images" },
 	{ "toggle-display-tables", ACT_TOGGLE_DISPLAY_TABLES, "Toggle rendering of tables" },
 	{ "toggle-html-plain", ACT_TOGGLE_HTML_PLAIN, "Toggle rendering page as HTML / plain text" },
+	{ "toggle-numbered-links", ACT_TOGGLE_NUMBERED_LINKS, "Toggle displaying of links numbers" },
 	{ "unback", ACT_UNBACK, "Go forward in the unhistory" },
 	{ "up", ACT_UP, "Move cursor upwards" },
 	{ "view-image", ACT_VIEW_IMAGE, "View the current image" },
@@ -712,6 +713,7 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_DOCUMENT_INFO, '=' },
 	{ ACT_HEADER_INFO, '|' },
 	{ ACT_TOGGLE_HTML_PLAIN, '\\' },
+	{ ACT_TOGGLE_NUMBERED_LINKS, '.' },
 	{ ACT_TOGGLE_DISPLAY_IMAGES, '*' },
 	{ ACT_NEXT_FRAME, KBD_TAB },
 	{ ACT_MENU, KBD_ESC },

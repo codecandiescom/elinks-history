@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.151 2004/12/30 23:50:40 jonas Exp $ */
+/* $Id: dump.c,v 1.152 2005/01/10 03:30:26 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,7 +114,7 @@ dump_formatted(int fd, struct download *status, struct cache_entry *cached)
 	width = get_opt_int("document.dump.width");
 	set_box(&o.box, 0, 1, width, DEFAULT_TERMINAL_HEIGHT);
 
-	o.cp = get_opt_int("document.dump.codepage");
+	o.cp = get_opt_codepage("document.dump.codepage");
 	o.color_mode = COLOR_MODE_DUMP;
 	o.plain = 0;
 	o.frames = 0;

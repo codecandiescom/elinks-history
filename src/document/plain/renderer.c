@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.11 2003/11/14 02:29:20 jonas Exp $ */
+/* $Id: renderer.c,v 1.12 2003/11/14 02:49:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,17 +66,30 @@ realloc_line(struct document *document, int y, int x)
 	return line->d;
 }
 
-static void
-add_document_link(struct document *document, int x, int y, int length,
-		  unsigned char *uri)
+static inline int
+add_document_link(struct document *document, unsigned char *uri, int length,
+		  int x, int y)
 {
 	struct link *link;
+	struct uri test_uri;
+	int keep = uri[length];
 
 	assert(document);
-	if_assert_failed return;
+	if_assert_failed return 0;
+
+	uri[length] = 0;
+
+	/* TODO: Handle email@adresses.to and maybe
+	 * <URL:...> too --jonas */
+	if (!parse_uri(&test_uri, uri)) {
+		uri[length] = keep;
+		return 0;
+	}
+
+	uri[length] = keep;
 
 	if (!ALIGN_LINK(&document->links, document->nlinks, document->nlinks + 1))
-		return;
+		return length;
 
 	link = &document->links[document->nlinks];
 
@@ -100,10 +113,12 @@ add_document_link(struct document *document, int x, int y, int length,
 
 		document->nlinks++;
 	}
+
+	return length - 1;
 }
 
 static inline int
-get_uri_end(unsigned char *line, int length)
+get_uri_length(unsigned char *line, int length)
 {
 	int uri_end = 0;
 
@@ -127,7 +142,6 @@ add_document_line(struct document *document, int lineno,
 {
 	struct screen_char *pos, *end;
 	int line_pos, expanded = 0;
-	struct uri uri;
 
 	for (line_pos = 0; line_pos < width; line_pos++) {
 		unsigned char line_char = line[line_pos];
@@ -144,28 +158,14 @@ add_document_line(struct document *document, int lineno,
 
 		} else 	if (document->options.plain_display_links
 			    && isalpha(line_char) ) {
-			int uri_end = get_uri_end(&line[line_pos], width - line_pos);
-			unsigned char keep;
+			unsigned char *start = &line[line_pos];
+			int len = get_uri_length(start, width - line_pos);
+			int x = line_pos + expanded;
 
-			if (!uri_end) continue;
+			if (!len) continue;
 
-			uri_end += line_pos;
-			keep = line[uri_end];
-			line[uri_end] = 0;
-
-			/* TODO: Handle email@adresses.to and maybe
-			 * <URL:...> too --jonas */
-			if (!parse_uri(&uri, &line[line_pos])) {
-				line[uri_end] = keep;
-				continue;
-			}
-
-			add_document_link(document, line_pos + expanded,
-					  lineno, uri_end - line_pos,
-					  struri(uri));
-
-			line[uri_end] = keep;
-			line_pos = uri_end;
+			if (add_document_link(document, start, len, x, lineno))
+				line_pos += len;
 		}
 	}
 

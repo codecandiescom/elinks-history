@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.12 2003/06/06 11:14:26 jonas Exp $ */
+/* $Id: mailcap.c,v 1.13 2003/06/06 11:41:46 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -69,12 +69,46 @@ done_mailcap_entry(struct mailcap_entry *entry)
 	mem_free(entry);
 }
 
-/* Clear memory to make freeing it safer laterand we get
+/* Takes care of all initialization of mailcap entries including adding it to
+ * the map. Clear memory to make freeing it safer later and we get
  * needsterminal and copiousoutput inialized for free. */
 static inline struct mailcap_entry *
-init_mailcap_entry(void)
+init_mailcap_entry(unsigned char *type, int priority)
 {
-	return mem_calloc(1, sizeof(struct mailcap_entry));
+	struct mailcap_entry *entry;
+	struct hash_item *item;
+	int typelen;
+
+	entry = mem_calloc(1, sizeof(struct mailcap_entry));
+	if (!entry)
+		return NULL;
+
+	typelen = strlen(type);
+	entry->type = memacpy(type, typelen);
+	entry->priority = priority;
+
+	/* Time to get the entry into the mailcap_map */
+
+	/* First check if the type is already checked in */
+	item = get_hash_item(mailcap_map, entry->type, typelen);
+	if (item) {
+		struct mailcap_entry *current = item->value;
+
+		if (!current)
+			return NULL;
+
+		/* Add as the last item */
+		while (current->next) current = current->next;
+		current->next = entry;
+	} else {
+		if (!add_hash_item(mailcap_map, entry->type, typelen, entry)) {
+			done_mailcap_entry(entry);
+			return NULL;
+		}
+	}
+
+	mailcap_map_entries++;
+	return entry;
 }
 
 
@@ -283,7 +317,6 @@ parse_optional_fields(struct mailcap_entry *entry, unsigned char *line)
 static void
 parse_mailcap_file(unsigned char *filename, unsigned int priority)
 {
-	struct mailcap_entry *entry = NULL;
 	FILE *file = fopen(filename, "r");
 	unsigned char *line = NULL;
 	size_t linelen;
@@ -292,80 +325,38 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 	if (!file) return;
 
 	while ((line = file_read_line(line, &linelen, file, &lineno))) {
-		unsigned char *field;	/* Points to the current field */
-		unsigned char *next;	/* Points to the next field */
+		struct mailcap_entry *entry;
+		unsigned char *type;
+		unsigned char *command;
+		unsigned char *linepos;
 
 		/* Ignore comments */
 		if (*line == '#') continue;
 
-		/* Clean up from previous iterations */
-		/* This could of course be better since we alloc right after */
-		if (entry)
-			done_mailcap_entry(entry);
-
-		/* Create the next entry */
-		entry = init_mailcap_entry();
-		if (!entry) break;
-
-		entry->needsterminal = 0; /* Redundant since mailcap_new_entry */
-		entry->copiousoutput = 0; /* clears all. Here for clairity */
-
-		next = line;
+		linepos = line;
 
 		/* Get type */
-		field = get_field(&next);
-		if (!field) continue;
-
-		entry->type = stracpy(field);
-		if (!entry->type) continue;
+		type = get_field(&linepos);
+		if (!type) continue;
 
 		/* Next field is the viewcommand */
-		field = get_field(&next);
-		if (!field) continue;
-		entry->command = field;
+		command = get_field(&linepos);
+		if (!command) continue;
 
-		if (!parse_optional_fields(entry, next)) {
+		entry = init_mailcap_entry(type, priority);
+
+		if (!parse_optional_fields(entry, linepos)) {
 			error("Bad formated entry for type %s in \"%s\" line %d",
 			      entry->type, filename, lineno);
 		}
 
 		/* Keep after parsing of optional fields (hint: copiousoutput) */
-		entry->command = convert_command(entry->command,
-						 entry->copiousoutput);
-
-		entry->priority = priority;
-
-		/* Time to get the entry into the mailcap_map */
-		if (entry->command) {
-			struct hash_item *item;
-			int typelen = strlen(entry->type);
-
-			/* First check if the type is already checked in */
-			item = get_hash_item(mailcap_map, entry->type, typelen);
-			if (!item) {
-				if (!add_hash_item(mailcap_map, entry->type, typelen, entry)) {
-					done_mailcap_entry(entry);
-					continue;
-				}
-			} else {
-				struct mailcap_entry *current = item->value;
-
-				if (!current) continue;
-
-				/* Add as the last item */
-				while (current->next) current = current->next;
-				current->next = entry;
-			}
-			mailcap_map_entries++;
-
-			/* XXX: Nothing should be 'auto'-freed */
-			entry = NULL;
+		entry->command = convert_command(command, entry->copiousoutput);
+		if (!entry->command) {
+			done_mailcap_entry(entry);
+			continue;
 		}
 	}
-
-	/* Clean up from previous iterations */
-	if (entry)
-		done_mailcap_entry(entry);
 
 	fclose(file);
 	if (line) mem_free(line); /* Alloced by file_read_line() */

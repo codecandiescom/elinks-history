@@ -413,6 +413,7 @@ struct translation translation_english [] = {
   {T_AFTER_RESUME, "after resume"},
   {T_TOGGLE_DISPLAY, "Toggle display"},
   {T_OPTIONS_MANAGER, "Options manager"},
+  {T_DELETE_FOLDER, "Delete folder content"},
   {0, NULL}
 };
 
@@ -829,6 +830,7 @@ struct translation translation_brazilian_portuguese [] = {
   {T_AFTER_RESUME, "Depois de resumido"},
   {T_TOGGLE_DISPLAY, "Trocar display"},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -1245,6 +1247,7 @@ struct translation translation_bulgarian [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -1661,6 +1664,7 @@ struct translation translation_catalan [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -2077,6 +2081,7 @@ struct translation translation_croatian [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -2493,6 +2498,7 @@ struct translation translation_czech [] = {
   {T_AFTER_RESUME, "po posledním navázání"},
   {T_TOGGLE_DISPLAY, "Pøepnout URL/název"},
   {T_OPTIONS_MANAGER, "Správce nastavení"},
+  {T_DELETE_FOLDER, "Smazat obsah slo¾ky"},
   {0, NULL}
 };
 
@@ -2909,6 +2915,7 @@ struct translation translation_danish [] = {
   {T_AFTER_RESUME, "efter fortsættelse"},
   {T_TOGGLE_DISPLAY, "Skifte mellem visning"},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -3325,6 +3332,7 @@ struct translation translation_dutch [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -3741,6 +3749,7 @@ struct translation translation_estonian [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -4157,6 +4166,7 @@ struct translation translation_finnish [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -4573,6 +4583,7 @@ struct translation translation_french [] = {
   {T_AFTER_RESUME, "après reprise"},
   {T_TOGGLE_DISPLAY, "Commuter affich."},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -4989,6 +5000,7 @@ struct translation translation_galician [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -5405,6 +5417,7 @@ struct translation translation_german [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -5821,6 +5834,7 @@ struct translation translation_greek [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -6237,6 +6251,7 @@ struct translation translation_hungarian [] = {
   {T_AFTER_RESUME, "a folytatás után"},
   {T_TOGGLE_DISPLAY, "Váltás URL/cím"},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -6653,6 +6668,7 @@ struct translation translation_icelandic [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -7069,6 +7085,7 @@ struct translation translation_indonesian [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -7485,6 +7502,7 @@ struct translation translation_italian [] = {
   {T_AFTER_RESUME, "dopo il resume"},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -7901,6 +7919,7 @@ struct translation translation_lithuanian [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -8317,6 +8336,7 @@ struct translation translation_norwegian [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -8733,6 +8753,7 @@ struct translation translation_polish [] = {
   {T_AFTER_RESUME, "po wznowieniu"},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -9149,6 +9170,7 @@ struct translation translation_portuguese [] = {
   {T_AFTER_RESUME, "depois de resumido"},
   {T_TOGGLE_DISPLAY, "Trocar display"},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -9565,6 +9587,7 @@ struct translation translation_romanian [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -9981,6 +10004,7 @@ struct translation translation_russian [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -10397,6 +10421,7 @@ struct translation translation_slovak [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, "Prepnú» URL/názov"},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -10813,6 +10838,7 @@ struct translation translation_spanish [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -11229,6 +11255,7 @@ struct translation translation_swedish [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -11645,6 +11672,7 @@ struct translation translation_turkish [] = {
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 
@@ -12061,6 +12089,7 @@ struct translation translation_ukrainian [] = {
   {T_AFTER_RESUME, "Ð¦ÓÌÑ ÐÒÏÄÏ×ÖÅÎÎÑ"},
   {T_TOGGLE_DISPLAY, "ðÅÒÅÍÉËÎÕÔÉ URL/ÎÁÚ×Á"},
   {T_OPTIONS_MANAGER, NULL},
+  {T_DELETE_FOLDER, NULL},
   {0, NULL}
 };
 

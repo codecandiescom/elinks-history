@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.56 2002/12/06 22:35:17 pasky Exp $ */
+/* $Id: dialogs.c,v 1.57 2002/12/06 23:22:21 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -242,35 +242,47 @@ struct push_del_button_hop_struct {
 };
 
 
-/* Called to _really_ delete a bookmark (a confirm in the delete dialog) */
+/* Do the job needed for really deleting a bookmark. */
 static void
-really_del_bookmark(void *vhop)
+do_del_bookmark(struct terminal *term, struct bookmark *bookmark)
 {
-	struct push_del_button_hop_struct *hop;
 	struct listbox_data *box;
 
-	hop = (struct push_del_button_hop_struct *) vhop;
-	hop->bm->refcount--;
-
-	if (hop->bm->refcount > 0) {
-		msg_box(hop->term, NULL,
-			TEXT(T_DELETE_BOOKMARK), AL_CENTER,
-			TEXT(T_BOOKMARK_USED),
+	if (bookmark->refcount > 0) {
+		if (bookmark->box_item->type == BI_FOLDER)
+		msg_box(term, NULL,
+			TEXT(T_DELETE_BOOKMARK), AL_CENTER | AL_EXTD_TEXT,
+			TEXT(T_BOOKMARK_USED), "\n\n",
+			TEXT(T_TITLE), ": \"", bookmark->title, NULL,
+			NULL, 1,
+			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+		else
+		msg_box(term, NULL,
+			TEXT(T_DELETE_BOOKMARK), AL_CENTER | AL_EXTD_TEXT,
+			TEXT(T_BOOKMARK_USED), "\n\n",
+			TEXT(T_TITLE), ": \"", bookmark->title, "\n",
+			TEXT(T_URL), ": \"", bookmark->url, NULL,
 			NULL, 1,
 			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
 		return;
 	}
 
+	if (bookmark->box_item->type == BI_FOLDER) {
+		while (!list_empty(bookmark->child)) {
+			do_del_bookmark(term, bookmark->child.next);
+		}
+	}
+
 	/* Take care about move of the selected item if we're deleting it. */
 
-	foreach (box, *hop->bm->box_item->box) {
+	foreach (box, *bookmark->box_item->box) {
 
 	/* Please. Don't. Reindent. This. Ask. Why. --pasky */
 
 	/* Remember that we have to take the reverse direction here in
 	 * traverse(), as we have different sort order than usual. */
 
-	if (box->sel && box->sel->udata == hop->bm) {
+	if (box->sel && box->sel->udata == bookmark) {
 		struct bookmark *bm = (struct bookmark *) box->sel->udata;
 
 		box->sel = traverse_listbox_items_list(bm->box_item, -1,
@@ -282,7 +294,7 @@ really_del_bookmark(void *vhop)
 			box->sel = NULL;
 	}
 
-	if (box->top && box->top->udata == hop->bm) {
+	if (box->top && box->top->udata == bookmark) {
 		struct bookmark *bm = (struct bookmark *) box->top->udata;
 
 		box->top = traverse_listbox_items_list(bm->box_item, -1,
@@ -293,11 +305,22 @@ really_del_bookmark(void *vhop)
 		if (bm->box_item == box->top)
 			box->top = NULL;
 	}
-
 	}
 
-	if (!delete_bookmark(hop->bm))
-		return;
+	if (list_empty(bookmark->child))
+		delete_bookmark(bookmark);
+}
+
+/* Called to _really_ delete a bookmark (a confirm in the delete dialog) */
+static void
+really_del_bookmark(void *vhop)
+{
+	struct push_del_button_hop_struct *hop;
+
+	hop = (struct push_del_button_hop_struct *) vhop;
+	if (hop->bm->refcount) hop->bm->refcount--;
+
+	do_del_bookmark(hop->term, hop->bm);
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
@@ -331,6 +354,14 @@ listbox_delete_bookmark(struct terminal *term, struct listbox_data *box)
 
 	bm->refcount++;
 
+	if (bm->box_item->type == BI_FOLDER)
+	msg_box(term, getml(hop, NULL),
+		TEXT(T_DELETE_BOOKMARK), AL_CENTER | AL_EXTD_TEXT,
+		TEXT(T_DELETE_FOLDER), " \"", bm->title, "\" ?", NULL,
+		hop, 2,
+		TEXT(T_YES), really_del_bookmark, B_ENTER,
+		TEXT(T_NO), cancel_del_bookmark, B_ESC);
+	else
 	msg_box(term, getml(hop, NULL),
 		TEXT(T_DELETE_BOOKMARK), AL_CENTER | AL_EXTD_TEXT,
 		TEXT(T_DELETE_BOOKMARK), " \"", bm->title, "\" ?\n\n",

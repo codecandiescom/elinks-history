@@ -1,3 +1,12 @@
+Mon Dec 24 13:42:03 2001  Petr Baudis <pasky@ji.cz>:
+
+	* links.h, terminal.c, view.c:
+	
+	
+	External textarea editor support code cleanup, sanity checks,
+	comments, bugfixes and only allow it for master terminal, as it
+	doesn't work for any else really.
+
 Sun Dec 23 23:42:23 2001  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, BUGS, TODO, config2.h, configure, configure.in,

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.62 2003/07/08 13:49:14 jonas Exp $ */
+/* $Id: cookies.c,v 1.63 2003/07/08 13:50:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,6 +90,7 @@ free_cookie(struct cookie *c)
 	if (c->server) mem_free(c->server);
 	if (c->path) mem_free(c->path);
 	if (c->domain) mem_free(c->domain);
+	mem_free(c);
 }
 
 
@@ -314,14 +315,12 @@ free_cookie_server:
 		debug("Dropped.");
 #endif
 		free_cookie(cookie);
-		mem_free(cookie);
 		return 0;
 	}
 
 	if (get_opt_int("cookies.accept_policy") != COOKIES_ACCEPT_ALL) {
 		/* TODO */
 		free_cookie(cookie);
-		mem_free(cookie);
 		return 1;
 	}
 
@@ -347,7 +346,6 @@ accept_cookie(struct cookie *c)
 		d = d->prev;
 		del_from_list(e);
 		free_cookie(e);
-		mem_free(e);
 	}
 
 	add_to_list(cookies, c);
@@ -388,7 +386,6 @@ delete_cookie(struct cookie *c)
 end:
 	del_from_list(c);
 	free_cookie(c);
-	mem_free(c);
 
 	if (get_opt_int("cookies.save") && get_opt_int("cookies.resave"))
 		save_cookies();
@@ -522,7 +519,6 @@ send_cookies(unsigned char **s, int *l, struct uri *uri)
 			c = c->prev;
 			del_from_list(d);
 			free_cookie(d);
-			mem_free(d);
 
 			cookies_dirty = 1;
 			continue;
@@ -638,7 +634,6 @@ load_cookies(void) {
 
 inv:
 		free_cookie(cookie);
-		mem_free(cookie);
 	}
 
 	fclose(fp);
@@ -695,7 +690,6 @@ cleanup_cookies(void)
 
 		del_from_list(cookie);
 		free_cookie(cookie);
-		mem_free(cookie);
 	}
 }
 

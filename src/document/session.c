@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.50 2002/07/11 11:14:53 pasky Exp $ */
+/* $Id: session.c,v 1.51 2002/07/24 08:54:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1133,6 +1133,8 @@ read_session_info(int fd, struct session *ses, void *data, int len)
 		if (!h || !*h)
 			h = WWW_HOME_URL;
 		if (!h || !*h) {
+			/* FIXME: wrong place to do it ?? It appears as black on
+			 * black on startup here --Zas */
 			if (get_opt_int("ui.startup_goto_dialog"))
 				dialog_goto_url(ses, "");
 		} else {
@@ -1400,19 +1402,22 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 {
 	struct location *l = cur_loc(ses);
 	struct frame *frm;
-
+	size_t url_len;
+	
 	if (!have_location(ses)) {
 		internal("ses_change_frame_url: no location yet");
 		return NULL;
 	}
 
+	url_len = strlen(url);
+
 	foreachback(frm, l->frames) if (!strcasecmp(frm->name, name)) {
-		if (strlen(url) > strlen(frm->vs.url)) {
+		if (url_len > strlen(frm->vs.url)) {
 			struct f_data_c *fd;
 			struct frame *nf = frm;
 
 			nf = mem_realloc(frm, sizeof(struct frame)
-					      + strlen(url) + 1);
+					      + url_len + 1);
 			if (!nf) return NULL;
 
 			nf->prev->next = nf->next->prev = nf;

@@ -113,3 +113,7 @@ int be_getsockopt(int, int, int, void *, int *);
 #if !defined(HAVE_BEGINTHREAD) && !defined(BEOS) && !defined(HAVE_PTHREADS) && !defined(HAVE_CLONE)
 #define THREAD_SAFE_LOOKUP
 #endif
+
+#ifndef HAVE_SA_STORAGE
+#define sockaddr_storage sockaddr
+#endif

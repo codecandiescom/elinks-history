@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.229 2003/06/15 17:06:57 jonas Exp $ */
+/* $Id: options.c,v 1.230 2003/06/15 17:21:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1457,7 +1457,9 @@ register_options(void)
 
 	add_opt_tree("mime", N_("Mimetypes files"),
 		"mimetypes", 0,
-		N_("Options for mime.types support."));
+		N_("Options for the support of mimetypes files. Mimetypes files\n"
+		"can be used to find the content type of an url by looking at the\n"
+		"extension of the file name."));
 
 	add_opt_bool("mime.mimetypes", N_("Enable"),
 		"enable", 0, 1,

@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.15 2004/01/26 06:26:11 jonas Exp $ */
+/* $Id: exmode.c,v 1.16 2004/01/26 07:00:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 #include "sched/action.h"
 #include "sched/session.h"
 #include "sched/task.h"
+#include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "util/error.h"
 #include "util/memory.h"
@@ -80,7 +81,38 @@ static int
 exmode_uri_rewrite_handler(struct session *ses, unsigned char *command,
 			   unsigned char *args)
 {
+	enum { CURRENT_TAB, NEW_TAB, BACKGROUNDED_TAB } open_mode = CURRENT_TAB;
 	unsigned char *url = NULL;
+	unsigned char *last_arg;
+	unsigned char saved_arg = 0;
+
+	/* Look for opening control chars */
+	if (*args) {
+		last_arg = args + strlen(args) - 1;
+	} else {
+		/* Check for control char in the command */
+		last_arg = command + strlen(command) - 1;
+	}
+
+	/* TODO: Maybe some '<' and '>' prefixes to control where the tab is
+	 * opened .. and if anyone have better ideas for control chars here
+	 * please change them. --jonas */
+	switch (*last_arg) {
+		case '&':
+			open_mode = BACKGROUNDED_TAB;
+			break;
+		case '+':
+			open_mode = NEW_TAB;
+			break;
+		default:
+			break;
+	}
+
+	/* Remove the control char */
+	if (open_mode != CURRENT_TAB) {
+		saved_arg = *last_arg;
+		*last_arg = 0;
+	}
 
 	if (*args) {
 		url = get_uri_rewrite_prefix(URI_REWRITE_SMART, command);
@@ -89,11 +121,20 @@ exmode_uri_rewrite_handler(struct session *ses, unsigned char *command,
 	if (!url && !*args)
 		url = get_uri_rewrite_prefix(URI_REWRITE_DUMB, command);
 
+	/* Restore control char */
+	if (saved_arg) *last_arg = saved_arg;
+
 	if (!url) return 0;
 
 	url = rewrite_uri(url, cur_loc(ses)->vs.url, args);
 	if (url) {
-		goto_url(ses, url);
+		if (open_mode == CURRENT_TAB) {
+			goto_url(ses, url);
+		} else {
+			int in_background = open_mode == BACKGROUNDED_TAB;
+
+			open_url_in_new_tab(ses, url, in_background);
+		}
 		mem_free(url);
 	}
 	return !!url;

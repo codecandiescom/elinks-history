@@ -1,5 +1,5 @@
 /* Color parser */
-/* $Id: color.c,v 1.22 2004/10/27 17:17:46 zas Exp $ */
+/* $Id: color.c,v 1.23 2004/10/27 22:35:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,6 @@ static struct color_spec color_specs[] = {
 
 #ifdef USE_FASTFIND
 
-static struct fastfind_info *ff_info_colors;
 static struct color_spec *internal_pointer;
 
 static void
@@ -60,16 +59,16 @@ colors_list_next(void)
 	return &kv;
 }
 
+static struct fastfind_index ff_colors_index
+	= INIT_FASTFIND_INDEX("colors_lookup", colors_list_reset, colors_list_next);
+
 #endif /* USE_FASTFIND */
 
 void
 init_colors_lookup(void)
 {
 #ifdef USE_FASTFIND
-	ff_info_colors = fastfind_index(&colors_list_reset,
-					&colors_list_next,
-					FF_COMPRESS,
-					"colors_lookup");
+	fastfind_index(&ff_colors_index, FF_COMPRESS);
 #endif
 }
 
@@ -77,7 +76,7 @@ void
 free_colors_lookup(void)
 {
 #ifdef USE_FASTFIND
-	fastfind_done(ff_info_colors);
+	fastfind_done(&ff_colors_index);
 #endif
 }
 
@@ -115,7 +114,7 @@ decode_hex_color:
 			if (!strlcasecmp(cs->name, -1, str, slen))
 				break;
 #else
-		cs = fastfind_search(str, slen, ff_info_colors);
+		cs = fastfind_search(&ff_colors_index, str, slen);
 #endif
 		if (cs && cs->name) {
 			*color = cs->rgb;

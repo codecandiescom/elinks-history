@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.68 2004/10/27 17:21:14 zas Exp $ */
+/* $Id: fastfind.c,v 1.69 2004/10/27 22:35:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,7 +134,7 @@ struct ff_node {
 #define FF_MAX_KEYS	(1  << POINTER_INDEX_BITS)
 #define FF_MAX_LEAFSETS ((1 << LEAFSET_INDEX_BITS) - 1)
 #define FF_MAX_CHARS	(1  << COMP_CHAR_INDEX_BITS)
-
+#define FF_MAX_KEYLEN	255
 
 struct ff_node_c {
 	unsigned int e:END_LEAF_BITS;
@@ -154,15 +154,19 @@ struct fastfind_info {
 	struct ff_node **leafsets;
 	struct ff_node *root_leafset;
 
-	int uniq_chars_count;
 	int min_key_len;
 	int max_key_len;
-	int count;
-	enum fastfind_flags flags;
-	int idxtab[FF_MAX_CHARS];
 
+	int uniq_chars_count;
+	int count;
 	int pointers_count;
 	int leafsets_count;
+
+	unsigned int case_aware:1;
+	unsigned int compress:1;
+
+	int idxtab[FF_MAX_CHARS];
+	unsigned char uniq_chars[FF_MAX_CHARS];
 
 #ifdef DEBUG_FASTFIND
 	struct {
@@ -181,12 +185,7 @@ struct fastfind_info {
 		unsigned char *comment;
 	} debug;
 #endif
-
-	unsigned char uniq_chars[FF_MAX_CHARS];
 };
-
-#define ff_flags_case_aware(info) (info->flags & FF_CASE_AWARE)
-#define ff_flags_compress(info) (info->flags & FF_COMPRESS)
 
 
 #ifdef DEBUG_FASTFIND
@@ -207,7 +206,7 @@ struct fastfind_info {
 			(x)->debug.testsmax = tests;					\
 		(x)->debug.found++;							\
 	} while (0)
-#define FF_DBG_comment(x, comment) do { (x)->debug.comment = empty_string_or_(comment); } while (0)
+#define FF_DBG_comment(x, str) do { (x)->debug.comment = empty_string_or_(str); } while (0)
 
 /* Update search stats. */
 static void
@@ -225,8 +224,8 @@ FF_DBG_dump_stats(struct fastfind_info *info)
 {
 	fprintf(stderr, "------ FastFind Statistics ------\n");
 	fprintf(stderr, "Comment     : %s\n", info->debug.comment);
-	fprintf(stderr, "Case-aware  : %s\n", ff_flags_case_aware(info) ? "yes" : "no");
-	fprintf(stderr, "Compress    : %s\n", ff_flags_compress(info) ? "yes" : "no");
+	fprintf(stderr, "Case-aware  : %s\n", info->case_aware ? "yes" : "no");
+	fprintf(stderr, "Compress    : %s\n", info->compress ? "yes" : "no");
 	fprintf(stderr, "Uniq_chars  : %s\n", info->uniq_chars);
 	fprintf(stderr, "Uniq_chars #: %d/%d max.\n", info->uniq_chars_count, FF_MAX_CHARS);
 	fprintf(stderr, "Min_key_len : %d\n", info->min_key_len);
@@ -270,19 +269,19 @@ FF_DBG_dump_stats(struct fastfind_info *info)
 
 
 static struct fastfind_info *
-init_fastfind(enum fastfind_flags flags, unsigned char *comment)
+init_fastfind(struct fastfind_index *index, enum fastfind_flags flags)
 {
 	struct fastfind_info *info = mem_calloc(1, sizeof(struct fastfind_info));
-
 	if (!info) return NULL;
 
+	info->min_key_len = FF_MAX_KEYLEN;
+	info->case_aware = !!(flags & FF_CASE_AWARE);
+	info->compress = !!(flags & FF_COMPRESS);
+
 	FF_DBG_mem(info, sizeof(struct fastfind_info) - sizeof(info->debug));
-	FF_DBG_comment(info, comment);
+	FF_DBG_comment(info, index->comment);
 
-	/* Non sense to use that code if key length > 255 so... */
-	info->min_key_len = 255;
-	info->flags = flags;
-
+	index->handle = info;
 	return info;
 }
 
@@ -422,27 +421,28 @@ fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
 	}
 }
 
-#define ifcase(c) (ff_flags_case_aware(info) ? (c) : toupper(c))
+#define ifcase(c) (info->case_aware ? (c) : toupper(c))
 
-struct fastfind_info *
-fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
-	       enum fastfind_flags flags, unsigned char *comment)
+struct fastfind_index *
+fastfind_index(struct fastfind_index *index, enum fastfind_flags flags)
 {
 	struct fastfind_key_value *p;
-	struct fastfind_info *info = init_fastfind(flags, comment);
+	struct fastfind_info *info;
 
-	if (!info) goto return_error;
-
-	assert(reset && next);
+	assert(index && index->reset && index->next);
 	if_assert_failed goto return_error;
 
+	info = init_fastfind(index, flags);
+	if (!info) goto return_error;
+
 	/* First search min, max, count and uniq_chars. */
-	(*reset)();
-	while ((p = (*next)())) {
+	index->reset();
+
+	while ((p = index->next())) {
 		int key_len = strlen(p->key);
 		int i;
 
-		assert(key_len); /* We do not want empty keys. */
+		assert(key_len > 0 && key_len <= FF_MAX_KEYLEN);
 		if_assert_failed goto return_error;
 
 		if (key_len < info->min_key_len)
@@ -484,8 +484,9 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 	if (!alloc_pointers(info)) goto return_error;
 
 	/* Build the tree */
-	(*reset)();
-	while ((p = (*next)())) {
+	index->reset();
+
+	while ((p = index->next())) {
 		int key_len = strlen(p->key);
 		struct ff_node *leafset = info->root_leafset;
 		int i;
@@ -519,13 +520,13 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 		add_to_pointers(p->data, key_len, info);
 	}
 
-	if (ff_flags_compress(info))
+	if (info->compress)
 		fastfind_node_compress(info->root_leafset, info);
 
-	return info;
+	return index;
 
 return_error:
-	fastfind_done(info);
+	fastfind_done(index);
 	return NULL;
 }
 
@@ -572,11 +573,17 @@ return_error:
 } while (0)
 
 void *
-fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
+fastfind_search(struct fastfind_index *index, unsigned char *key, int key_len)
 {
 	struct ff_node *current;
+	struct fastfind_info *info;
 
-	assert(info);
+	assert(index);
+	if_assert_failed return NULL;
+
+	info = index->handle;
+
+	assertm(info, "FastFind index %s not initialized", index->comment);
 	if_assert_failed return NULL;
 
 	FF_DBG_search_stats(info, key_len);
@@ -594,7 +601,7 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 	 * propose it and be prepared to defend it. --Zas */
 
 	FF_DBG_test(info);
-	if (ff_flags_case_aware(info))
+	if (info->case_aware)
 		FF_SEARCH(key[i]);
 	else
 		FF_SEARCH(toupper(key[i]));
@@ -605,8 +612,14 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 #undef FF_SEARCH
 
 void
-fastfind_done(struct fastfind_info *info)
+fastfind_done(struct fastfind_index *index)
 {
+	struct fastfind_info *info;
+
+	assert(index);
+	if_assert_failed return;
+
+	info = index->handle;
 	if (!info) return;
 
 	FF_DBG_dump_stats(info);
@@ -619,6 +632,8 @@ fastfind_done(struct fastfind_info *info)
 	}
 	mem_free_if(info->leafsets);
 	mem_free(info);
+
+	index->handle = NULL;
 }
 
 
@@ -728,13 +743,14 @@ next_in_list(void)
 	return &kv;
 }
 
+static struct fastfind_index ff_index
+	= INIT_FASTFIND_INDEX("example", reset_list, next_in_list);
 
 int
 main(int argc, char **argv)
 {
 	unsigned char *key = argv[1];
 	struct list *result;
-	struct fastfind_info *info;
 
 	if (!key || !*key) {
 		fprintf(stderr, "Usage: fastfind keyword\n");
@@ -743,14 +759,11 @@ main(int argc, char **argv)
 
 	fprintf(stderr, "---------- INDEX PHASE -----------\n");
 	/* Mandatory */
-	info = fastfind_index(&reset_list,
-			      &next_in_list,
-			      FF_COMPRESS,
-			      "sample");
+	fastfind_index(&ff_index, FF_COMPRESS);
 
 	fprintf(stderr, "---------- SEARCH PHASE ----------\n");
 	/* Without this one ... */
-	result = (struct list *) fastfind_search(key, strlen(key), info);
+	result = (struct list *) fastfind_search(&ff_index, key, strlen(key));
 
 	if (result)
 		fprintf(stderr, " Found: '%s' -> %d\n", result->tag, result->val);
@@ -758,7 +771,7 @@ main(int argc, char **argv)
 		fprintf(stderr, " Not found: '%s'\n", key);
 
 	fprintf(stderr, "---------- CLEANUP PHASE ----------\n");
-	fastfind_done(info);
+	fastfind_done(&ff_index);
 
 	exit(0);
 }

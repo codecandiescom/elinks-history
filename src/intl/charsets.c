@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.106 2004/10/27 17:17:46 zas Exp $ */
+/* $Id: charsets.c,v 1.107 2004/10/27 22:35:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -763,7 +763,6 @@ get_cp_index(unsigned char *name)
 
 #else
 
-static struct fastfind_info *ff_info_charsets;
 static unsigned int i_name = 0;
 static unsigned int i_alias = 0;
 
@@ -797,6 +796,9 @@ charsets_list_next(void)
 	return &kv;
 }
 
+static struct fastfind_index ff_charsets_index
+	= INIT_FASTFIND_INDEX("charsets_lookup", charsets_list_reset, charsets_list_next);
+
 /* It searchs for a charset named @name or one of its aliases and
  * returns index for it or -1 if not found. */
 int
@@ -814,7 +816,7 @@ get_cp_index(unsigned char *name)
 #endif
 	}
 
-	codepage = fastfind_search(name, strlen(name), ff_info_charsets);
+	codepage = fastfind_search(&ff_charsets_index, name, strlen(name));
 	if (codepage) {
 		assert(codepages <= codepage && codepage < codepages + N_CODEPAGES);
 		return (codepage - codepages) | syscp;
@@ -833,10 +835,7 @@ void
 init_charsets_lookup(void)
 {
 #ifdef USE_FASTFIND
-	ff_info_charsets = fastfind_index(&charsets_list_reset,
-					  &charsets_list_next,
-					  FF_COMPRESS,
-					  "charsets_lookup");
+	fastfind_index(&ff_charsets_index, FF_COMPRESS);
 #endif
 }
 
@@ -844,7 +843,7 @@ void
 free_charsets_lookup(void)
 {
 #ifdef USE_FASTFIND
-	fastfind_done(ff_info_charsets);
+	fastfind_done(&ff_charsets_index);
 #endif
 }
 

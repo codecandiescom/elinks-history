@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.97 2004/10/27 17:17:45 zas Exp $ */
+/* $Id: parse.c,v 1.98 2004/10/27 22:35:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -534,7 +534,6 @@ compar(const void *a, const void *b)
 
 #else
 
-static struct fastfind_info *ff_info_tags;
 static struct element_info *internal_pointer;
 
 /* Reset internal list pointer */
@@ -563,6 +562,9 @@ tags_list_next(void)
 	return &kv;
 }
 
+static struct fastfind_index ff_tags_index
+	= INIT_FASTFIND_INDEX("tags_lookup", tags_list_reset, tags_list_next);
+
 #endif /* USE_FASTFIND */
 
 
@@ -570,10 +572,7 @@ void
 init_tags_lookup(void)
 {
 #ifdef USE_FASTFIND
-	ff_info_tags = fastfind_index(&tags_list_reset,
-				      &tags_list_next,
-				      FF_COMPRESS,
-				      "tags_lookup");
+	fastfind_index(&ff_tags_index, FF_COMPRESS);
 #endif
 }
 
@@ -581,7 +580,7 @@ void
 free_tags_lookup(void)
 {
 #ifdef USE_FASTFIND
-	fastfind_done(ff_info_tags);
+	fastfind_done(&ff_tags_index);
 #endif
 }
 
@@ -965,7 +964,7 @@ process_element(unsigned char *name, int namelen, int endingtag,
 		name[namelen] = tmp;
 	}
 #else
-	ei = (struct element_info *) fastfind_search(name, namelen, ff_info_tags);
+	ei = (struct element_info *) fastfind_search(&ff_tags_index, name, namelen);
 #endif
 	if (!ei) return html;
 

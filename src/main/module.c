@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.15 2003/10/27 21:43:37 jonas Exp $ */
+/* $Id: module.c,v 1.16 2003/10/27 21:44:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,9 @@
 #include "mime/mime.h"
 #include "scripting/scripting.h"
 
+#ifdef HAVE_SSL
 extern struct module ssl_module;
+#endif
 
 /* This is also used for version string composing so keep NULL terminated */
 struct module *builtin_modules[] = {

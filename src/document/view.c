@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.104 2002/12/05 23:16:08 pasky Exp $ */
+/* $Id: view.c,v 1.105 2002/12/06 14:20:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -225,6 +225,7 @@ sort_links(struct f_data *f)
 			if (link->title) mem_free(link->title);
 			if (link->where_img) mem_free(link->where_img);
 			if (link->pos) mem_free(link->pos);
+			if (link->name) mem_free(link->name);
 			memmove(link, link + 1,
 				(f->nlinks - i - 1) * sizeof(struct link));
 			f->nlinks--;

@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.51 2004/06/13 03:49:35 jonas Exp $ */
+/* $Id: event.c,v 1.52 2004/06/13 03:57:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,11 +202,12 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 			ev->y = term->height;
 			term_send_event(term, ev);
 			break;
-		} else if (ev->x == KBD_CTRL_C) {
-			((struct window *) &term->windows)->prev->handler
-				(term->windows.prev, ev, 0);
-			break;
 
+		} else if (ev->x == KBD_CTRL_C) {
+			struct window *win = term->windows.prev;
+
+			win->handler(win, ev, 0);
+			break;
 		}
 
 		if (term->utf_8.len) {

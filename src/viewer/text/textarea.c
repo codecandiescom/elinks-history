@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.25 2003/10/31 22:18:16 pasky Exp $ */
+/* $Id: textarea.c,v 1.26 2003/11/18 10:38:32 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,34 +51,33 @@ format_text(unsigned char *text, int width, int wrap)
 	if_assert_failed return NULL;
 
 	while (*text) {
-		unsigned char *s;
-
 		if (*text == '\n') {
 			sk = 1;
 
-put:
-			if (!realloc_line_info(&ln, lnn)) {
-				if (ln) mem_free(ln);
-				return NULL;
-			}
-
-			ln[lnn].st = b;
-			ln[lnn++].en = text;
-			b = text += sk;
-			continue;
-		}
-		if (!wrap || text - b < width) {
+		} else if (!wrap || text - b < width) {
 			text++;
 			continue;
+
+		} else {
+			unsigned char *s;
+
+			sk = 0;
+			for (s = text; s >= b; s--) if (*s == ' ') {
+				if (wrap == 2) *s = '\n';
+				text = s;
+				sk = 1;
+				break;
+			}
 		}
-		for (s = text; s >= b; s--) if (*s == ' ') {
-			if (wrap == 2) *s = '\n';
-			text = s;
-			sk = 1;
-			goto put;
+put:
+		if (!realloc_line_info(&ln, lnn)) {
+			if (ln) mem_free(ln);
+			return NULL;
 		}
-		sk = 0;
-		goto put;
+
+		ln[lnn].st = b;
+		ln[lnn++].en = text;
+		b = text += sk;
 	}
 
 	if (ps < 2) {

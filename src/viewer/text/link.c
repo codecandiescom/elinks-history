@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.17 2003/07/27 17:23:53 jonas Exp $ */
+/* $Id: link.c,v 1.18 2003/07/27 17:51:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -188,10 +188,6 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 
 						if (link->type != L_FIELD && link->type != L_AREA) {
 							if (((co >> 8) & 0x38) != (link->sel_color & 0x38)) {
-								/* Temp. sanity check for set_cursor rewrite.
-								 * The +1 make up for what seems to be an
-								 * old off by one error. --jonas */
-								assert(xp + xw == t->x && yp + yw + 1 == t->y);
 								blockable = 1;
 							}
 						}

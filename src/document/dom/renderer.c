@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.11 2004/09/26 11:18:33 jonas Exp $ */
+/* $Id: renderer.c,v 1.12 2004/09/26 16:43:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -621,7 +621,7 @@ static dom_navigator_callback_T dom_source_renderer_callbacks[DOM_NODES] = {
 	/*				*/ NULL,
 	/* DOM_NODE_ELEMENT		*/ render_dom_element_source,
 	/* DOM_NODE_ATTRIBUTE		*/ render_dom_attribute_source,
-	/* DOM_NODE_TEXT		*/ NULL,
+	/* DOM_NODE_TEXT		*/ render_dom_node_source,
 	/* DOM_NODE_CDATA_SECTION	*/ render_dom_node_source,
 	/* DOM_NODE_ENTITY_REFERENCE	*/ render_dom_node_source,
 	/* DOM_NODE_ENTITY		*/ render_dom_node_source,

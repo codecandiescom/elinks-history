@@ -1,5 +1,5 @@
 /* SGML token scanner utilities */
-/* $Id: scanner.c,v 1.7 2004/09/26 01:24:10 jonas Exp $ */
+/* $Id: scanner.c,v 1.8 2004/09/26 16:43:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,7 +113,10 @@ scan_sgml_text_token(struct scanner *scanner, struct scanner_token *token)
 		}
 
 		foreach_sgml_cdata (scanner, string)
-			if (*string == ';') break;
+			if (*string == ';') {
+				string++;
+				break;
+			}
 
 	} else {
 		if (is_sgml_space(first_char)) {

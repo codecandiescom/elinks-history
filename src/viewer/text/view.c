@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.61 2003/05/06 10:10:11 zas Exp $ */
+/* $Id: view.c,v 1.63 2003/05/06 14:55:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,7 +178,8 @@ detach_formatted(struct f_data_c *scr)
 static inline void
 set_link(struct f_data_c *f)
 {
-	if (!c_in_view(f)) find_link(f, 1, 0);
+	if (c_in_view(f)) return;
+	find_link(f, 1, 0);
 }
 
 static inline int
@@ -316,29 +317,29 @@ _area_cursor(struct form_control *frm, struct form_state *fs)
 {
 	struct line_info *ln;
 	int q = 0;
+	int y;
 
 	ln = format_text(fs->value, frm->cols, frm->wrap);
-	if (ln) {
-		int y;
+	if (!ln) return 0;
 
-		for (y = 0; ln[y].st; y++) {
-			if (fs->value + fs->state >= ln[y].st &&
-			    fs->value + fs->state < ln[y].en + (ln[y + 1].st != ln[y].en)) {
-				int x = fs->value + fs->state - ln[y].st;
+	for (y = 0; ln[y].st; y++) {
+		int x = fs->value + fs->state - ln[y].st;
 
-				if (frm->wrap && x == frm->cols) x--;
-				if (x >= frm->cols + fs->vpos) fs->vpos = x - frm->cols + 1;
-				if (x < fs->vpos) fs->vpos = x;
-				if (y >= frm->rows + fs->vypos) fs->vypos = y - frm->rows + 1;
-				if (y < fs->vypos) fs->vypos = y;
-				x -= fs->vpos;
-				y -= fs->vypos;
-				q = y * frm->cols + x;
-				break;
-			}
-		}
-		mem_free(ln);
+		if (fs->value + fs->state < ln[y].st ||
+		    fs->value + fs->state >= ln[y].en + (ln[y + 1].st != ln[y].en))
+			continue;
+
+		if (frm->wrap && x == frm->cols) x--;
+		if (x >= frm->cols + fs->vpos) fs->vpos = x - frm->cols + 1;
+		if (x < fs->vpos) fs->vpos = x;
+		if (y >= frm->rows + fs->vypos) fs->vypos = y - frm->rows + 1;
+		if (y < fs->vypos) fs->vypos = y;
+		x -= fs->vpos;
+		y -= fs->vypos;
+		q = y * frm->cols + x;
+		break;
 	}
+	mem_free(ln);
 
 	return q;
 }
@@ -2533,10 +2534,9 @@ choose_mouse_link(struct f_data_c *f, struct event *ev)
 static void
 jump_to_link_number(struct session *ses, struct f_data_c *fd, int n)
 {
-	if (n >= 0 && n <= fd->f_data->nlinks) {
-		fd->vs->current_link = n;
-		check_vs(fd);
-	}
+	if (n < 0 && n > fd->f_data->nlinks) return;
+	fd->vs->current_link = n;
+	check_vs(fd);
 }
 
 /* This is common backend for goto_link_number() and try_document_key(). */
@@ -2558,7 +2558,8 @@ goto_link_number(struct session *ses, unsigned char *num)
 {
 	struct f_data_c *fd = current_frame(ses);
 
-	if (fd) goto_link_number_do(ses, fd, atoi(num) - 1);
+	if (!fd) return;
+	goto_link_number_do(ses, fd, atoi(num) - 1);
 }
 
 /* See if this document is interested in the key user pressed. */

@@ -1,5 +1,5 @@
 /* Text mode drawing functions */
-/* $Id: draw.c,v 1.3 2004/06/23 08:41:16 jonas Exp $ */
+/* $Id: draw.c,v 1.4 2004/06/23 08:50:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,40 +55,35 @@ find_tag(struct document *document, unsigned char *name, int namelen)
 static inline int
 check_document_fragment(struct session *ses, struct document_view *doc_view)
 {
-	unsigned char *tag = doc_view->vs->uri->fragment;
-	int taglen = doc_view->vs->uri->fragmentlen;
-	struct view_state *vs = doc_view->vs;
-	int vy = find_tag(doc_view->document, tag, taglen);
+	struct document *document = doc_view->document;
+	struct uri *uri = doc_view->vs->uri;
+	int vy = find_tag(document, uri->fragment, uri->fragmentlen);
 
-	switch (vy) {
-	case -1:
-	{
-		struct cache_entry *cached = find_in_cache(doc_view->document->uri);
+	if (vy == -1) {
+		struct cache_entry *cached = find_in_cache(document->uri);
+		unsigned char *fragment;
 
 		if (!cached || cached->incomplete)
-			break;
+			return -1;
 
-		vs->did_fragment = 1;
-		tag = memacpy(tag, taglen);
+		fragment = memacpy(uri->fragment, uri->fragmentlen);
 
 		msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 			N_("Missing fragment"), AL_CENTER,
 			msg_text(ses->tab->term, N_("The requested fragment "
 				"\"#%s\" doesn't exist."),
-				tag),
+				fragment),
 			NULL, 1,
 			N_("OK"), NULL, B_ENTER | B_ESC);
 
-		mem_free_if(tag);
-		break;
+		mem_free_if(fragment);
+	} else {
+		int_bounds(&vy, 0, document->height - 1);
+		doc_view->vs->y = vy;
+		set_link(doc_view);
 	}
 
-	default:
-		int_bounds(&vy, 0, doc_view->document->height - 1);
-		vs->y = vy;
-		set_link(doc_view);
-		vs->did_fragment = 1;
-	}
+	doc_view->vs->did_fragment = 1;
 
 	return vy;
 }

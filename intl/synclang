@@ -1,4 +1,6 @@
 #!/bin/sh
+# $Id: synclang,v 1.4 2002/12/07 23:10:05 pasky Exp $
+
 echo
 echo Syncing other languages.
 languages=`cat index.txt`

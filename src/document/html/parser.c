@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.163 2003/07/22 02:57:17 jonas Exp $ */
+/* $Id: parser.c,v 1.164 2003/07/22 03:00:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1973,12 +1973,12 @@ abort:
 		if (!value[(order) - 1])				\
 			value[(order) - 1] = memacpy((string).source,	\
 						     (string).length);	\
-		if (!(dont_add)) {					\
+		if (dont_add) {						\
+			done_string(&(string));				\
+		} else {						\
 			new_menu_item((string).source, (order) - 1, 1);	\
 			(string).source = NULL;				\
 			(string).length = 0;				\
-		} else {						\
-			done_string(&(string));				\
 		}							\
 	} while (0)
 

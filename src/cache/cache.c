@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.62 2003/11/08 01:06:32 pasky Exp $ */
+/* $Id: cache.c,v 1.63 2003/11/08 01:09:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -457,7 +457,7 @@ void
 garbage_collection(int whole)
 {
 	struct cache_entry *ce, *entry;
-	long ncs = cache_size;
+	long new_cache_size = cache_size;
 	long ccs = 0;
 	int no = 0;
 	long opt_cache_memory_size = get_opt_long("document.cache.memory.size");
@@ -479,10 +479,11 @@ garbage_collection(int whole)
 
 	foreach (ce, cache) {
 		if (ce->refcount || is_entry_used(ce)) {
-			ncs -= ce->data_size;
+			new_cache_size -= ce->data_size;
 
-			assertm(ncs >= 0, "cache_size underflow: %ld", ncs);
-			if_assert_failed { ncs = 0; }
+			assertm(new_cache_size >= 0,
+				"cache_size underflow: %ld", new_cache_size);
+			if_assert_failed { new_cache_size = 0; }
 		}
 
 		ccs += ce->data_size;
@@ -492,10 +493,10 @@ garbage_collection(int whole)
 		cache_size, ccs);
 	if_assert_failed { cache_size = ccs; }
 
-	if (!whole && ncs <= opt_cache_memory_size) return;
+	if (!whole && new_cache_size <= opt_cache_memory_size) return;
 
 	foreachback (ce, cache) {
-		if (!whole && ncs <= opt_cache_gc_size)
+		if (!whole && new_cache_size <= opt_cache_gc_size)
 			goto g;
 		if (ce->refcount || is_entry_used(ce)) {
 			no = 1;
@@ -503,14 +504,16 @@ garbage_collection(int whole)
 			continue;
 		}
 		ce->gc_target = 1;
-		ncs -= ce->data_size;
+		new_cache_size -= ce->data_size;
 
-		assertm(ncs >= 0, "cache_size underflow: %ld", ncs);
-		if_assert_failed { ncs = 0; }
+		assertm(new_cache_size >= 0, "cache_size underflow: %ld",
+						new_cache_size);
+		if_assert_failed { new_cache_size = 0; }
 	}
 
-	assertm(ncs == 0, "cache_size overflow: %ld", ncs);
-	if_assert_failed { ncs = 0; }
+	assertm(new_cache_size == 0, "cache_size overflow: %ld",
+					new_cache_size);
+	if_assert_failed { new_cache_size = 0; }
 
 g:
 	ce = ce->next;
@@ -518,10 +521,10 @@ g:
 
 	if (!whole) {
 		for (entry = ce; (void *)entry != &cache; entry = entry->next) {
-			long newncs = ncs + entry->data_size;
+			long newer_cache_size = new_cache_size + entry->data_size;
 
-			if (newncs <= opt_cache_gc_size) {
-				ncs = newncs;
+			if (newer_cache_size <= opt_cache_gc_size) {
+				new_cache_size = newer_cache_size;
 				entry->gc_target = 0;
 			}
 		}

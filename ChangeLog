@@ -1,3 +1,22 @@
+Fri Oct 10 20:32:27 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/search.c:
+
+	Also show a message if the search hits the top.  
+
+Fri Oct 10 19:55:25 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/search.c:
+
+	Fix a bug where '^.' matches every character, not only the first in
+	a line.  
+
+Fri Oct 10 19:49:12 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/search.c:
+
+	Sync is_in_range_regex to get_searched_regex.  
+
 Thu Oct  9 16:12:04 2003  Fabio Bonelli <fabiobonelli@libero.it>:
 
 	* AUTHORS:

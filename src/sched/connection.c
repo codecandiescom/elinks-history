@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.67 2003/07/04 18:57:15 jonas Exp $ */
+/* $Id: connection.c,v 1.68 2003/07/04 19:02:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,7 +55,7 @@ struct keepalive_connection {
 
 	int port;
 	int pf;
-	int conn;
+	int socket;
 };
 
 
@@ -350,7 +350,7 @@ static inline void
 done_keepalive_connection(struct keepalive_connection *kc)
 {
 	del_from_list(kc);
-	if (kc->conn != -1) close(kc->conn);
+	if (kc->socket != -1) close(kc->socket);
 	if (kc->host) mem_free(kc->host);
 	mem_free(kc);
 }
@@ -374,7 +374,7 @@ init_keepalive_connection(struct connection *c, ttime timeout)
 	k->port = port;
 	k->protocol = handler;
 	k->pf = c->pf;
-	k->conn = c->sock1;
+	k->socket = c->sock1;
 	k->timeout = timeout;
 	k->add_time = get_time();
 
@@ -410,11 +410,11 @@ has_keepalive_connection(struct connection *c)
 
 	if (!k) return 0;
 
-	c->sock1 = k->conn;
+	c->sock1 = k->socket;
 	c->pf = k->pf;
 
 	/* Mark that the socket should not be closed */
-	k->conn = -1;
+	k->socket = -1;
 	done_keepalive_connection(k);
 
 	return 1;
@@ -458,7 +458,7 @@ check_keepalive_connections(void)
 	}
 
 	foreach (kc, keepalive_connections) {
-		if (can_read(kc->conn) || ct - kc->add_time > kc->timeout) {
+		if (can_read(kc->socket) || ct - kc->add_time > kc->timeout) {
 			kc = kc->prev;
 			done_keepalive_connection(kc->next);
 		} else {

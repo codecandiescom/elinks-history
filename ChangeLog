@@ -1,3 +1,183 @@
+Sat Dec 20 23:06:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, src/config/options.inc, src/protocol/proxy.c,
+	src/protocol/http/http.c:
+
+	HTTPS proxy support, patch by Timo Lindfors <lindi@kurp.hut.fi>,
+	presumably also with some minor help of Jan Sembera
+	<jan.sembera@flexible.cz>. This will probably yet need some little
+	tuning, but seems generally ok.  
+
+Sat Dec 20 23:02:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Add missing values for meta key in default keybindings.  
+
+Sat Dec 20 22:42:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, INSTALL, configure.in, src/scripting/lua/core.h:
+
+	Lua5 support, patch by Christian Cornelssen <ccorn@cs.tu-berlin.de>.  
+
+Sat Dec 20 22:42:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* README:
+
+	HACKING -> doc/hacking.txt 
+
+Sat Dec 20 22:41:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/listbox.c, config/kbdbind.c, config/kbdbind.h:
+
+	Add ACT_MARK_ITEM used for hierbox browser item marking so it is
+	user configurable.  
+
+Sat Dec 20 22:18:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/listbox.c, config/kbdbind.c:
+
+	Bring keybinding to the listbox browser so people with a tendency to
+	weird keymappings can have their way.  
+
+Sat Dec 20 22:12:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/charsets.c:
+
+	cp2utf_8() optimization by witekfl from 2003-05-22. Chars < 128 are
+	never translated so may be returned right away w/o even looking for
+	the conversions. This should be quite measurable improvement. Again
+	thanks to Miciah for bringing this to my attention.  
+
+Sat Dec 20 22:07:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listbox.c:
+
+	Use macro to cleanup some builtin keyboard combos.  
+
+Sat Dec 20 22:06:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Finally commited witekfl's patch from 2003-05-22, removing redundant
+	ei->name tests (it is never NULL). Thanks to Miciah for refreshing
+	my memory.  
+
+Sat Dec 20 21:57:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, src/scripting/lua/core.c:
+
+	va_list may not be a pointer on all systems, so such a usage is
+	invalid. This fixes compilation on alpha-linux platform, bug 322,
+	and is work of Jakub Bogusz.  
+
+Sat Dec 20 21:49:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Do not proceed with html_frameset() when we already either
+	encountered the <body> tag or printed something to the document.
+	This should +/- fix conformance problem triggered by
+	
+	(http://www.w3.org/MarkUp/Test/HTML401/current/tests/16_2-BF-01.html) aka bug 171, reported by zardoz.
+
+Sat Dec 20 21:41:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/dialog.c:
+
+	In the dialog KBD handler, use KM_MENU instead of KM_MAIN. Should
+	fix various dialog navigation bugs. Introduced and reported by Jonas
+	;-))).  
+
+Sat Dec 20 21:22:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	SP_COLOR_LINK_LINES is triggered only for the first <body> tag in
+	the document. This should fix weird link coloring when multiple
+	<body> tags are in the document. This fixes bug 325.  
+
+Sat Dec 20 19:00:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/auth/Makefile.am:
+
+	Build dialogs.*.  
+
+Sat Dec 20 18:59:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Some minor tidyup.  
+
+Sat Dec 20 18:55:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Be more terse when babbling about SMB.  
+
+Sat Dec 20 18:53:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	--enable-smb -> --disable-smb (by default enabled now), we check for
+	smbclient presence (idea by zas).  
+
+Sat Dec 20 18:48:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: mime/mime.c, protocol/file/file.c, sched/connection.c,
+	sched/connection.h:
+
+	src/util/encoding.* -> src/encoding/encoding.* 
+
+Sat Dec 20 18:35:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/Makefile.am:
+
+	Adjusted a little the linking order to link libauth.a after
+	libhttp.a.  
+
+Sat Dec 20 18:35:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/Makefile.am, src/encoding/Makefile.am,
+	src/encoding/encoding.c, src/encoding/encoding.h,
+	src/util/Makefile.am, src/util/encoding.c, src/util/encoding.h:
+
+	src/util/encoding.* -> src/encoding/encoding.* 
+
+Sat Dec 20 18:30:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/Makefile.am:
+
+	src/dialogs/auth.* -> src/protocol/auth/dialogs.*,
+	src/protocol/http/auth.* -> src/protocol/auth/auth.*. And integrated
+	to the build system.  
+
+Sat Dec 20 17:01:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/encoding/: .cvsignore, .vimrc:
+
+	Fairies.  
+
+Sat Dec 20 16:59:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/Makefile.am, src/main.c,
+	src/dialogs/Makefile.am, src/dialogs/auth.c, src/dialogs/auth.h,
+	src/protocol/auth/Makefile.am, src/protocol/auth/auth.c,
+	src/protocol/auth/auth.h, src/protocol/auth/dialogs.c,
+	src/protocol/auth/dialogs.h, src/protocol/http/Makefile.am,
+	src/protocol/http/auth.c, src/protocol/http/auth.h,
+	src/protocol/http/http.c, src/viewer/text/view.c:
+
+	src/dialogs/auth.* -> src/protocol/auth/dialogs.*,
+	src/protocol/http/auth.* -> src/protocol/auth/auth.*. And integrated
+	to the build system.  
+
+Sat Dec 20 16:42:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/auth/: .cvsignore, .vimrc:
+
+	Fairies.  
+
 Fri Dec 19 23:37:07 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/sched/session.c:

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.265 2004/08/17 08:05:15 miciah Exp $ */
+/* $Id: menu.c,v 1.266 2004/09/12 00:38:28 miciah Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -607,10 +607,7 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 			menu->selected = sel;
 			scroll_menu(menu, 0, 1);
 			display_menu(win->term, menu);
-
-			if (check_mouse_action(ev, B_UP) ||
-			    mi_is_submenu(&menu->items[sel]))
-				select_menu(win->term, menu);
+			select_menu(win->term, menu);
 		}
 	}
 }
@@ -1068,10 +1065,7 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 	/* We need to select the menu item even if we didn't scroll
 	 * apparently because we will delete any drop down menus
 	 * in the clicking process. */
-	if (check_mouse_action(ev, B_UP)
-	    || mi_is_submenu(&menu->items[menu->selected])) {
-		select_menu(win->term, menu);
-	}
+	select_menu(win->term, menu);
 }
 #endif
 

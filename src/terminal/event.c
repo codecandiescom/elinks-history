@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.74 2004/07/31 11:23:44 miciah Exp $ */
+/* $Id: event.c,v 1.75 2004/09/12 00:38:28 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 #include "terminal/draw.h"
 #include "terminal/event.h"
 #include "terminal/kbd.h"
+#include "terminal/mouse.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "terminal/screen.h"
@@ -164,6 +165,27 @@ check_terminal_name(struct terminal *term, struct terminal_info *info)
 	object_lock(term->spec);
 }
 
+#ifdef CONFIG_MOUSE
+static int
+ignore_mouse_event(struct terminal *term, struct term_event *ev)
+{
+	struct term_event_mouse *prev = &term->prev_mouse_event;
+	struct term_event_mouse *current = &ev->info.mouse;
+
+	if (check_mouse_action(ev, B_UP)
+	    && current->y == prev->y
+	    && (current->button & ~BM_ACT) == (prev->button & ~BM_ACT)) {
+		do_not_ignore_next_mouse_event(term);
+
+		return 1;
+	}
+
+	memcpy(prev, current, sizeof(struct term_event_mouse));
+
+	return 0;
+}
+#endif
+
 static int
 handle_interlink_event(struct terminal *term, struct term_event *ev)
 {
@@ -211,7 +233,8 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 	case EVENT_MOUSE:
 #ifdef CONFIG_MOUSE
 		reset_timer();
-		term_send_event(term, ev);
+		if (!ignore_mouse_event(term, ev))
+			term_send_event(term, ev);
 #endif
 		break;
 

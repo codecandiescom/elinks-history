@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.42 2004/07/15 15:35:42 jonas Exp $ */
+/* $Id: terminal.h,v 1.43 2004/09/12 00:38:28 miciah Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -116,7 +116,12 @@ struct terminal {
 
 	/* For communication between instances */
 	struct terminal_interlink *interlink;
+
+	struct term_event_mouse prev_mouse_event;
 };
+
+#define do_not_ignore_next_mouse_event(term) \
+	memset(&term->prev_mouse_event, 0, sizeof(struct term_event_mouse))
 
 /* We keep track about all the terminals in this list. */
 extern struct list_head terminals;

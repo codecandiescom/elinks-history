@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.74 2004/07/27 16:11:42 jonas Exp $ */
+/* $Id: checkbox.c,v 1.75 2004/09/12 00:38:28 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,6 +87,8 @@ static int
 mouse_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	       struct term_event *ev)
 {
+	struct terminal *term = dlg_data->win->term;
+
 	if (check_mouse_wheel(ev)
 	    || !check_mouse_position(ev, &widget_data->box))
 		return EVENT_NOT_PROCESSED;
@@ -94,6 +96,8 @@ mouse_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
 	dlg_data->selected = widget_data - dlg_data->widgets_data;
 	display_dlg_item(dlg_data, widget_data, 1);
+
+	do_not_ignore_next_mouse_event(term);
 
 	if (check_mouse_action(ev, B_UP) && widget_data->widget->ops->select)
 		widget_data->widget->ops->select(widget_data, dlg_data);

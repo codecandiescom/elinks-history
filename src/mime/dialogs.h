@@ -1,7 +1,7 @@
-/* $Id: dialogs.h,v 1.2 2003/05/04 17:25:53 pasky Exp $ */
+/* $Id: dialogs.h,v 1.3 2003/12/31 12:53:40 pasky Exp $ */
 
-#ifndef EL__DIALOGS_TYPES_H
-#define EL__DIALOGS_TYPES_H
+#ifndef EL__MIME_DIALOGS_H
+#define EL__MIME_DIALOGS_H
 
 #include "terminal/terminal.h"
 

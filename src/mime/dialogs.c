@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.85 2003/12/26 12:55:11 zas Exp $ */
+/* $Id: dialogs.c,v 1.86 2003/12/31 12:53:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,7 @@
 #include "bfu/style.h"
 #include "bfu/text.h"
 #include "config/options.h"
-#include "dialogs/mime.h"
+#include "mime/dialogs.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/terminal.h"
 #include "util/color.h"

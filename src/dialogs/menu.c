@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.244 2003/12/30 19:58:19 jonas Exp $ */
+/* $Id: menu.c,v 1.245 2003/12/31 12:53:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,12 +26,12 @@
 #include "dialogs/download.h"
 #include "dialogs/info.h"
 #include "dialogs/menu.h"
-#include "dialogs/mime.h"
 #include "dialogs/options.h"
 #include "formhist/dialogs.h"
 #include "globhist/dialogs.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
+#include "mime/dialogs.h"
 #include "osdep/osdep.h"
 #include "osdep/newwin.h"
 #include "protocol/uri.h"

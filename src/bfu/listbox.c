@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.39 2002/10/08 20:48:00 pasky Exp $ */
+/* $Id: listbox.c,v 1.40 2002/10/08 22:07:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,6 +88,10 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 			offset = fn(item, d, offset);
 
 		if (offset > 0) {
+			/* Otherwise we climb back up when last item in root
+			 * is a folder. */
+			struct listbox_item *cragsman = NULL;
+
 			/* Direction DOWN. */
 
 			offset--;
@@ -104,12 +108,17 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 			       && (void *) item->next == &item->root->child) {
 				/* Last item in a non-root list, climb to your
 				 * root. */
+				if (!cragsman) cragsman = item;
 				item = item->root;
 			}
 
 			if (!item->root && (void *) item->next == box->items) {
-				/* Last item in the root list, quit. */
+				/* Last item in the root list, quit.. */
 				stop = 1;
+				if (cragsman) {
+					/* ..and fall back where we were. */
+					item = cragsman;
+				}
 			}
 
 			/* We're not at the end of anything, go on. */
@@ -276,7 +285,8 @@ display_listbox_item(struct listbox_item *item, void *data_, int offset)
 			root = root->root;
 		}
 
-		if (root && root->child.prev == child)
+		if (root ? root->child.prev == child
+			 : data->box->items->prev == child)
 			strcpy(str, "     "); /* We were the last branch. */
 
 		/* TODO: Don't draw this if there's no further child of

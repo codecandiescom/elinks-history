@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.48 2002/10/08 21:20:28 pasky Exp $ */
+/* $Id: dialogs.c,v 1.49 2002/10/08 22:07:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,7 +122,7 @@ do_add_folder(struct dialog_data *dlg, unsigned char *name)
 	box = (struct listbox_data *) box_widget_data->item->data;
 
 	if (box->sel) {
-		if (box->sel->type == BI_FOLDER) {
+		if (box->sel->type == BI_FOLDER && box->sel->expanded) {
 			bm = box->sel->udata;
 		} else if (box->sel->root) {
 			bm = box->sel->root->udata;

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.10 2002/05/17 21:59:59 pasky Exp $ */
+/* $Id: download.c,v 1.11 2002/05/17 22:13:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -484,7 +484,7 @@ end_store:
 				mem_free(down->prog);
 				down->prog = NULL;
 
-			} else if (down->remotetime && download_utime) {
+			} else if (down->remotetime && get_opt_int("download_utime")) {
 				struct utimbuf foo;
 
 				foo.actime = foo.modtime = down->remotetime;

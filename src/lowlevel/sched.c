@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.26 2002/05/17 15:43:37 pasky Exp $ */
+/* $Id: sched.c,v 1.27 2002/05/17 22:13:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -627,7 +627,7 @@ void run_connection(struct connection *c)
 void retry_connection(struct connection *c)
 {
 	interrupt_connection(c);
-	if (c->unrestartable >= 2 || ++c->tries >= max_tries) {
+	if (c->unrestartable >= 2 || ++c->tries >= get_opt_int("retries")) {
 		/*send_connection_info(c);*/
 		del_connection(c);
 #ifdef DEBUG
@@ -667,7 +667,7 @@ int try_connection(struct connection *c)
 	struct h_conn *hc = is_host_on_list(c);
 
 	if (hc) {
-		if (hc->conn >= max_connections_to_host) {
+		if (hc->conn >= get_opt_int("max_connections_to_host")) {
 			if (try_to_suspend_connection(c, hc->host))
 				return 0;
 			else
@@ -675,7 +675,7 @@ int try_connection(struct connection *c)
 		}
 	}
 
-	if (active_connections >= max_connections) {
+	if (active_connections >= get_opt_int("max_connections")) {
 		if (try_to_suspend_connection(c, NULL))
 			return 0;
 		else
@@ -1038,7 +1038,7 @@ void detach_connection(struct status *stat, int pos)
 			l = c->est_length;
 		}
 		
-		if (l < memory_cache_size * MAX_CACHED_OBJECT)
+		if (l < get_opt_long("memory_cache_size") * MAX_CACHED_OBJECT)
 			return;
 
 		l = 0;
@@ -1079,8 +1079,8 @@ void connection_timeout(struct connection *c)
 /* connection_timeout_1() */
 void connection_timeout_1(struct connection *c)
 {
-	c->timer = install_timer((c->unrestartable ? unrestartable_receive_timeout
-						   : receive_timeout)
+	c->timer = install_timer((c->unrestartable ? get_opt_int("unrestartable_receive_timeout")
+						   : get_opt_int("receive_timeout"))
 				 * 500, (void (*)(void *)) connection_timeout, c);
 }
 
@@ -1089,8 +1089,8 @@ void connection_timeout_1(struct connection *c)
 void set_timeout(struct connection *c)
 {
 	if (c->timer != -1) kill_timer(c->timer);
-	c->timer = install_timer((c->unrestartable ? unrestartable_receive_timeout
-						   : receive_timeout)
+	c->timer = install_timer((c->unrestartable ? get_opt_int("unrestartable_receive_timeout")
+						   : get_opt_int("receive_timeout"))
 				 * 500, (void (*)(void *))connection_timeout_1, c);
 }
 

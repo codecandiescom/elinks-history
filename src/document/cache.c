@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.8 2002/05/12 16:18:30 zas Exp $ */
+/* $Id: cache.c,v 1.9 2002/05/17 22:13:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -398,7 +398,7 @@ garbage_collection(int u)
 	long ccs = 0;
 	int no = 0;
 
-	if (!u && cache_size <= memory_cache_size) return;
+	if (!u && cache_size <= get_opt_long("memory_cache_size")) return;
 
 	foreach(e, cache) {
 		if (e->refcount || is_entry_used(e)) {
@@ -416,10 +416,10 @@ garbage_collection(int u)
 	       	cache_size = ccs;
 	}
 
-	if (!u && ncs <= memory_cache_size) return;
+	if (!u && ncs <= get_opt_long("memory_cache_size")) return;
 
 	for (e = cache.prev; (void *)e != &cache; e = e->prev) {
-		if (!u && ncs <= memory_cache_size * MEMORY_CACHE_GC_PERCENT)
+		if (!u && ncs <= get_opt_long("memory_cache_size") * MEMORY_CACHE_GC_PERCENT)
 			goto g;
 		if (e->refcount || is_entry_used(e)) {
 			no = 1;
@@ -443,7 +443,7 @@ g:
 
 	if (!u) {
 		for (f = e; (void *)f != &cache; f = f->next) {
-			if (ncs + f->data_size <= memory_cache_size * MEMORY_CACHE_GC_PERCENT) {
+			if (ncs + f->data_size <= get_opt_long("memory_cache_size") * MEMORY_CACHE_GC_PERCENT) {
 				ncs += f->data_size;
 				f->tgc = 0;
 			}
@@ -456,7 +456,7 @@ g:
 			delete_cache_entry(f->prev);
 	}
 #if 0
-	if (!no && cache_size > memory_cache_size * MEMORY_CACHE_GC_PERCENT) {
+	if (!no && cache_size > get_opt_long("memory_cache_size") * MEMORY_CACHE_GC_PERCENT) {
 		internal("garbage collection doesn't work, cache size %ld", cache_size);
 	}
 #endif

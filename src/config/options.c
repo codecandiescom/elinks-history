@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.15 2002/05/17 21:34:26 pasky Exp $ */
+/* $Id: options.c,v 1.16 2002/05/17 22:13:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -980,7 +980,7 @@ struct option links_options[] = {
 
 	{	"no_connect", OPT_CMDLINE,
 		no_connect_cmd, NULL, NULL,
-	 	0, 0, NULL,
+	 	0, 0, &no_connect,
 	 	"Run links as a separate instance - instead of connecting to\n"
 	 	"existing instance." },
 

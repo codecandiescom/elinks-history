@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.22 2002/05/10 13:26:55 pasky Exp $ */
+/* $Id: renderer.c,v 1.23 2002/05/17 22:13:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1702,7 +1702,7 @@ void shrink_format_cache(int u)
 	}
 
 	ce = format_cache.prev;
-	while ((u || format_cache_entries > max_format_cache_entries)
+	while ((u || format_cache_entries > get_opt_int("format_cache_size"))
 	       && (void *)ce != &format_cache) {
 
 		if (ce->refcount) {

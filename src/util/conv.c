@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.6 2002/06/16 23:13:18 pasky Exp $ */
+/* $Id: conv.c,v 1.7 2002/06/17 15:12:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,7 @@ snprint(unsigned char *str, int len, unsigned num)
 
 	while (threshold <= num / 10) threshold *= 10;
 
-	for (; len > 0 && threshold; len--) {
+	while (len-- > 0 && threshold) {
 		*str = num / threshold + '0';
 		str++;
 
@@ -49,7 +49,7 @@ int
 snzprint(unsigned char *str, int len, int num)
 {
 	if (len > 1 && num < 0) {
-		*str++ = '-';
+		*str = '-';
 		str++;
 
 		num = -num;

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.43 2004/04/22 17:46:12 pasky Exp $ */
+/* $Id: leds.c,v 1.44 2004/04/22 17:47:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,7 +120,7 @@ draw_leds(struct session *ses)
 	int i;
 	int xpos = term->width - LEDS_COUNT - 3;
 	int ypos = term->height - 1;
-	int l = 0;
+	int timerlen = 0;
 
 	/* This should be done elsewhere, but this is very nice place where we
 	 * could do that easily. */
@@ -128,12 +128,12 @@ draw_leds(struct session *ses)
 		char s[256];
 
 		snprintf(s, 256, "[%d]", timer_duration);
-		l = strlen(s);
+		timerlen = strlen(s);
 		led_color = get_bfu_color(term, "status.status-text");
 		if (!led_color) goto end;
 
-		for (i = l - 1; i >= 0; i--)
-			draw_char(term, xpos - (l - i), ypos, s[i], 0, led_color);
+		for (i = timerlen - 1; i >= 0; i--)
+			draw_char(term, xpos - (timerlen - i), ypos, s[i], 0, led_color);
 	}
 
 	if (!get_leds_enable()) return;
@@ -153,7 +153,7 @@ draw_leds(struct session *ses)
 		length = strftime(s, 30, get_opt_str("ui.timer.clock.format"), loctime);
 		s[length] = '\0';
 		for (i = length - 1; i >= 0; i--)
-			draw_char(term, xpos - l - 1 - (length - i), ypos, s[i], 0, led_color);
+			draw_char(term, xpos - timerlen - 1 - (length - i), ypos, s[i], 0, led_color);
 	}
 #endif
 

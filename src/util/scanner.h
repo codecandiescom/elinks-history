@@ -1,7 +1,9 @@
-/* $Id: scanner.h,v 1.11 2004/05/08 01:18:36 jonas Exp $ */
+/* $Id: scanner.h,v 1.12 2004/05/21 13:44:34 jonas Exp $ */
 
 #ifndef EL__UTIL_SCANNER_H
 #define EL__UTIL_SCANNER_H
+
+#include "util/error.h"
 
 /* Define if you want a talking scanner */
 /* #define SCANNER_DEBUG */
@@ -183,5 +185,60 @@ map_scanner_string(struct scanner *scanner,
 #ifdef SCANNER_DEBUG
 void dump_scanner(struct scanner *scanner);
 #endif
+
+/* The begin_token_scanning() and end_token_scanning() functions provide the
+ * basic setup and teardown for the rescan function made public via the
+ * scanner_info->scan member. */
+
+/* Returns NULL if it is not necessary to try to scan for more tokens */
+static inline struct scanner_token *
+begin_token_scanning(struct scanner *scanner)
+{
+	struct scanner_token *table = scanner->table;
+	struct scanner_token *table_end = table + scanner->tokens;
+	int move_to_front = int_max(table_end - scanner->current, 0);
+	struct scanner_token *current = move_to_front ? scanner->current : table;
+	size_t moved_size = 0;
+
+	assert(scanner->current);
+
+	/* Move any untouched tokens */
+	if (move_to_front) {
+		moved_size = move_to_front * sizeof(struct scanner_token);
+		memmove(table, current, moved_size);
+		current = &table[move_to_front];
+	}
+
+	/* Set all unused tokens to SGML_TOKEN_NONE */
+	memset(current, 0, SCANNER_TABLE_SIZE - moved_size);
+
+	if (!scanner->position) {
+		scanner->tokens = move_to_front ? move_to_front : -1;
+		scanner->current = table;
+		assert(check_scanner(scanner));
+		return NULL;
+	}
+
+	scanner->tokens = move_to_front;
+
+	return table;
+}
+
+/* Updates the @scanner struct after scanning has been done. The position
+ * _after_ the last valid token is taken as the @end argument. */
+static inline struct scanner_token *
+end_token_scanning(struct scanner *scanner, struct scanner_token *end)
+{
+	assert(scanner->table <= end && end <= scanner->table + SCANNER_TOKENS);
+
+	scanner->tokens = (end - scanner->table);
+	scanner->current = scanner->table;
+	if (scanner->position >= scanner->end)
+		scanner->position = NULL;
+
+	assert(check_scanner(scanner));
+
+	return get_scanner_token(scanner);
+}
 
 #endif

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.125 2004/05/08 01:18:36 jonas Exp $ */
+/* $Id: scanner.c,v 1.126 2004/05/21 13:44:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -324,37 +324,14 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 static struct scanner_token *
 scan_css_tokens(struct scanner *scanner)
 {
-	struct scanner_token *table = scanner->table;
-	struct scanner_token *table_end = table + scanner->tokens;
-	int move_to_front = int_max(table_end - scanner->current, 0);
-	struct scanner_token *current = move_to_front ? scanner->current : table;
-	size_t moved_size = 0;
+	struct scanner_token *table_end = scanner->table + SCANNER_TOKENS;
+	struct scanner_token *current;
 
-	assert(scanner->current);
-
-#ifdef SCANNER_DEBUG
-	if (scanner->tokens > 0) WDBG("Rescanning");
-#endif
-
-	/* Move any untouched tokens */
-	if (move_to_front) {
-		moved_size = move_to_front * sizeof(struct scanner_token);
-		memmove(table, current, moved_size);
-		current = &table[move_to_front];
-	}
-
-	/* Set all unused tokens to CSS_TOKEN_NONE */
-	memset(current, 0, SCANNER_TABLE_SIZE - moved_size);
-
-	if (!scanner->position) {
-		scanner->tokens = move_to_front ? move_to_front : -1;
-		scanner->current = table;
-		assert(check_scanner(scanner));
-		return move_to_front ? table : NULL;
-	}
+	if (!begin_token_scanning(scanner))
+		return get_scanner_token(scanner);
 
 	/* Scan tokens until we fill the table */
-	for (table_end = table + SCANNER_TOKENS;
+	for (current = scanner->table + scanner->tokens;
 	     current < table_end && scanner->position < scanner->end;
 	     current++) {
 		scan_css(scanner, scanner->position, CSS_CHAR_WHITESPACE);
@@ -375,11 +352,5 @@ scan_css_tokens(struct scanner *scanner)
 		}
 	}
 
-	scanner->tokens = (current - table);
-	scanner->current = table;
-	if (scanner->position >= scanner->end)
-		scanner->position = NULL;
-
-	assert(check_scanner(scanner));
-	return table;
+	return end_token_scanning(scanner, current);
 }

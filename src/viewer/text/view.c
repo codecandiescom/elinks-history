@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.175 2003/07/31 00:33:30 jonas Exp $ */
+/* $Id: view.c,v 1.176 2003/07/31 14:15:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -269,6 +269,10 @@ draw_doc(struct terminal *t, struct document_view *scr, int active)
 	yp = scr->yp;
 	xw = scr->xw;
 	yw = scr->yw;
+
+	/* The code in this function assumes that both width and height are
+	 * bigger than 1 so we have to bail out here. */
+	if (xw < 2 || yw < 2) return;
 
 	if (active) {
 		set_cursor(t, xp + xw - 1, yp + yw - 1, 0);

@@ -6,14 +6,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-11 07:32+0100\n"
+"POT-Creation-Date: 2003-12-12 23:58+0100\n"
 "PO-Revision-Date: 2003-07-21 00:32+0200\n"
 "Last-Translator: Fabio Bonelli <fabiobonelli@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:302
 msgid "Close"
@@ -42,8 +42,8 @@ msgstr "Info"
 #: src/formhist/dialogs.c:135 src/protocol/protocol.c:63
 #: src/protocol/user.c:158 src/protocol/user.c:174 src/sched/download.c:170
 #: src/sched/download.c:254 src/sched/download.c:280 src/sched/download.c:551
-#: src/sched/error.c:42 src/sched/session.c:121 src/sched/session.c:569
-#: src/sched/session.c:586 src/sched/session.c:610 src/sched/session.c:855
+#: src/sched/error.c:42 src/sched/session.c:121 src/sched/session.c:575
+#: src/sched/session.c:592 src/sched/session.c:616 src/sched/session.c:862
 #: src/scripting/lua/core.c:401 src/scripting/lua/core.c:482
 #: src/scripting/lua/core.c:589 src/scripting/lua/core.c:718
 #: src/viewer/text/form.c:657 src/viewer/text/search.c:856
@@ -432,8 +432,8 @@ msgid ""
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
 "## Ovviamente, se non ti piace quello che ELinks farà di questo file,\n"
-"## puoi cambiare il comportamento modificando l'opzione "
-"config.saving_style.\n"
+"## puoi cambiare il comportamento modificando l'opzione config."
+"saving_style.\n"
 "## Dai, siamo dei bravi ragazzi dopo tutto.\n"
 
 #: src/config/conf.c:645
@@ -530,7 +530,7 @@ msgstr ""
 "%s"
 
 #: src/config/dialogs.c:200 src/protocol/protocol.c:60 src/sched/session.c:118
-#: src/sched/session.c:851 src/viewer/text/textarea.c:269
+#: src/sched/session.c:858 src/viewer/text/textarea.c:269
 msgid "Error"
 msgstr "Errore"
 
@@ -627,8 +627,8 @@ msgstr ""
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
-"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap "
-"\"%s\")?"
+"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap \"%"
+"s\")?"
 
 #: src/config/dialogs.c:531 src/dialogs/info.c:126 src/globhist/dialogs.c:188
 msgid "Toggle display"
@@ -2594,8 +2594,8 @@ msgid ""
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 "Gestore (programma esterno) per questo protocollo. Chiama\n"
-"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, "
-"unix-xwin)."
+"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, unix-"
+"xwin)."
 
 #: src/config/options.inc:754
 msgid ""
@@ -3743,8 +3743,8 @@ msgid ""
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
-"Impostare a 1 per modificare i file runtime di stato (bookmark, cronologia, "
-"...)\n"
+"Impostare a 1 per modificare i file runtime di stato (bookmark, "
+"cronologia, ...)\n"
 "anche quando si usano -no-connect o -session-ring; non ha effetto\n"
 "se non è usato in combinazione con una di queste opzioni."
 
@@ -4141,7 +4141,8 @@ msgid "Go ~back"
 msgstr "Indietro"
 
 #: src/dialogs/menu.c:325
-msgid "Go forward"
+#, fuzzy
+msgid "Go for~ward"
 msgstr "Avanti"
 
 #: src/dialogs/menu.c:331 src/dialogs/menu.c:387
@@ -4571,8 +4572,8 @@ msgstr "Salva form per questo URL."
 #: src/formhist/dialogs.c:131
 msgid ""
 "No saved information for this URL.\n"
-"If you want to save passwords for this URL, enable it by the \"Toggle "
-"saving\" button."
+"If you want to save passwords for this URL, enable it by the \"Toggle saving"
+"\" button."
 msgstr ""
 "Non ci sono informazioni salvate per questo URL.\n"
 "Se desideri salvare le password per questo URL, abilitale tramite il "
@@ -4784,8 +4785,8 @@ msgstr ""
 "Associazione Gestore <-> tipo MIME. Il primo sotto albero è la\n"
 "classe MIME, mentre il secondo sotto albero è il tipo MIME (il\n"
 "gestore di image/gif risiedera in mime.type.image.gif). Ogni opzione\n"
-"del tipo MIME dovrebbe contenere il nome (considerando le "
-"maiuscole/minuscole)\n"
+"del tipo MIME dovrebbe contenere il nome (considerando le maiuscole/"
+"minuscole)\n"
 "del gestore MIME (le sue proprietà sono memorizzate in mime.handler.<nome>)."
 
 #: src/mime/backend/default.c:35
@@ -4925,8 +4926,8 @@ msgid ""
 "also be checked before deciding the handler."
 msgstr ""
 "Dà priorità alle voci per l'ordine dei file nel percorso di\n"
-"mailcap. Questo significa che anche le voci con metacaratteri (come "
-"image/*)\n"
+"mailcap. Questo significa che anche le voci con metacaratteri (come image/"
+"*)\n"
 "saranno controllate prima di decidere il gestore."
 
 #. name:
@@ -5082,6 +5083,7 @@ msgid "Dumb prefixes."
 msgstr "Prefissi semplici."
 
 #: src/protocol/rewrite/rewrite.c:64
+#, c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
 "%c in the string means the current URL\n"
@@ -5381,11 +5383,11 @@ msgstr "Questa versione di ELinks non contiene il supporto SSL/TSL"
 msgid "Unknown error"
 msgstr "Errore sconosciuto"
 
-#: src/sched/session.c:564
+#: src/sched/session.c:570
 msgid "Welcome"
 msgstr "Benvenuto"
 
-#: src/sched/session.c:565
+#: src/sched/session.c:571
 msgid ""
 "Welcome to ELinks!\n"
 "\n"
@@ -5394,11 +5396,11 @@ msgstr ""
 "Benvenuto in ELinks!\n"
 "Premi ESC per il menu. La documentazione è disponibile nel menu Aiuto."
 
-#: src/sched/session.c:574 src/sched/session.c:594 src/sched/task.c:166
+#: src/sched/session.c:580 src/sched/session.c:600 src/sched/task.c:166
 msgid "Warning"
 msgstr "Attenzione"
 
-#: src/sched/session.c:575
+#: src/sched/session.c:581
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -5417,7 +5419,7 @@ msgstr ""
 "questo modo l'impostazione predefinita corretta sarà usata. Le mie scuse per "
 "qualsiasi inconveniente causato."
 
-#: src/sched/session.c:595
+#: src/sched/session.c:601
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -5425,9 +5427,9 @@ msgid ""
 "saved to the configuration file, instead of just all the options. This "
 "simplifies our situation greatly when we see that some option has "
 "inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of "
-"config.saving_style option to 3 in order to get the \"right\" behaviour. "
-"Apologies for any inconvience caused."
+"a subtle way. Thus, we recommend you to change the value of config."
+"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
+"for any inconvience caused."
 msgstr ""
 "Hai l'opzione config.saving_style impostata a un valore obsoleto. Gli "
 "algoritmi di salvataggio della configurazione di ELinks sono stati cambiati "
@@ -5435,11 +5437,11 @@ msgstr ""
 "sono salvate nel file di configurazione, invece di tutte quante. Questo "
 "semplifica molto la situazione quando vediamo che delle opzioni hanno un "
 "valore predefinito inappropriato o abbiamo bisogno di cambiarne la "
-"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione "
-"config.saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le "
-"mie scuse per qualsiasi inconveniente causato."
+"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione config."
+"saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le mie "
+"scuse per qualsiasi inconveniente causato."
 
-#: src/sched/session.c:852
+#: src/sched/session.c:859
 msgid ""
 "This URL contains a protocol not yet known by ELinks.\n"
 "You can configure an external handler for it through options system."

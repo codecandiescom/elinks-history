@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.130 2003/12/26 13:15:45 zas Exp $ */
+/* $Id: link.c,v 1.131 2003/12/26 17:23:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -918,20 +918,20 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 					     (menu_func) open_in_new_window,
 					     send_open_in_new_window, c - 1 ? SUBMENU : 0);
 
-			add_to_menu(&mi, N_("Open in new ~tab"), "", ACT_OPEN_LINK_IN_NEW_TAB,
+			add_to_menu(&mi, N_("Open in new ~tab"), NULL, ACT_OPEN_LINK_IN_NEW_TAB,
 				     (menu_func) open_in_new_tab, (void *) 1, 0);
 
-			add_to_menu(&mi, N_("Open in new tab in ~background"), "",
+			add_to_menu(&mi, N_("Open in new tab in ~background"), NULL,
 				    ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND,
 				    (menu_func) open_in_new_tab_in_background, (void *) 1, 0);
 
 			if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 				add_separator_to_menu(&mi);
-				add_to_menu(&mi, N_("~Download link"), "d", ACT_DOWNLOAD,
+				add_to_menu(&mi, N_("~Download link"), NULL, ACT_DOWNLOAD,
 					    (menu_func) send_download, NULL, 0);
 
 #ifdef BOOKMARKS
-				add_to_menu(&mi, N_("~Add link to bookmarks"), "A", ACT_ADD_BOOKMARK_LINK,
+				add_to_menu(&mi, N_("~Add link to bookmarks"), NULL, ACT_ADD_BOOKMARK_LINK,
 					    (menu_func) launch_bm_add_link_dialog,
 					    NULL, 0);
 #endif
@@ -948,7 +948,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 			int c = can_open_in_new(term);
 
 			if (link->form->type == FC_TEXTAREA && !link->form->ro) {
-				add_to_menu(&mi, N_("Open in ~external editor"), "Ctrl-T", ACT_EDIT,
+				add_to_menu(&mi, N_("Open in ~external editor"), NULL, ACT_EDIT,
 					    (menu_func) menu_textarea_edit, NULL, 0);
 			}
 
@@ -977,7 +977,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 		add_to_menu(&mi, N_("V~iew image"), NULL, ACT_NONE,
 			    (menu_func) send_image, NULL, 0);
 		if (!get_opt_int_tree(cmdline_options, "anonymous"))
-			add_to_menu(&mi, N_("Download ima~ge"), "", ACT_DOWNLOAD_IMAGE,
+			add_to_menu(&mi, N_("Download ima~ge"), NULL, ACT_DOWNLOAD_IMAGE,
 				    (menu_func) send_download_image, NULL, 0);
 	}
 

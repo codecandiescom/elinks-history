@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.178 2004/04/06 09:36:10 zas Exp $ */
+/* $Id: main.c,v 1.179 2004/04/09 13:34:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,7 +116,7 @@ init(void)
 		goto end;
 	}
 
-	if (!isatty(0)) {
+	if (!isatty(STDIN_FILENO)) {
 		add_to_string_list(&url_list, "file:///dev/stdin", 17);
 		no_connect = 1;
 	}

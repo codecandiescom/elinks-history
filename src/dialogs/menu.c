@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.213 2003/12/10 11:21:20 fabio Exp $ */
+/* $Id: menu.c,v 1.214 2003/12/10 16:42:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,48 +89,6 @@ menu_close_other_tabs(struct terminal *term, void *d, struct session *ses)
 	}
 }
 #endif
-
-void
-tab_menu(struct terminal *term, void *d, struct session *ses)
-{
-	struct menu_item *menu;
-	struct window *tab = d;
-	int tabs = number_of_tabs(term);
-	int i = 0;
-
-	assert(term && ses && tab);
-	if_assert_failed return;
-
-	menu = new_menu(FREE_LIST);
-	if (!menu) return;
-
-#ifdef BOOKMARKS
-	add_to_menu(&menu, N_("Bookm~ark document"), "a",
-		    (menu_func) launch_bm_add_doc_dialog, NULL, 0);
-#endif
-
-	if (tabs > 1) {
-		add_to_menu(&menu, N_("Nex~t tab"), ">",
-			    (menu_func) menu_next_tab, NULL, 0);
-
-		add_to_menu(&menu, N_("Pre~v tab"), "<",
-			    (menu_func) menu_prev_tab, NULL, 0);
-	}
-
-	add_to_menu(&menu, N_("~Close tab"), "c",
-		    (menu_func) menu_close_tab, NULL, 0);
-#if 0
-	if (tabs > 1) {
-		add_to_menu(&menu, N_("Close ~all but this"), "c",
-			    (menu_func) menu_close_other_tabs, d, 0);
-	}
-#endif
-	/* Adjust the menu position taking the menu frame into account */
-	while (menu[i].text) i++;
-	set_window_ptr(tab, tab->x, int_max(tab->y - i - 1, 0));
-
-	do_menu(term, menu, ses, 1);
-}
 
 /* Helper for url items in help menu. */
 static void
@@ -338,6 +296,48 @@ static inline void
 menu_kill_background_connections(struct terminal *term, void *xxx, void *yyy)
 {
 	abort_background_connections();
+}
+
+void
+tab_menu(struct terminal *term, void *d, struct session *ses)
+{
+	struct menu_item *menu;
+	struct window *tab = d;
+	int tabs = number_of_tabs(term);
+	int i = 0;
+
+	assert(term && ses && tab);
+	if_assert_failed return;
+
+	menu = new_menu(FREE_LIST);
+	if (!menu) return;
+
+#ifdef BOOKMARKS
+	add_to_menu(&menu, N_("Bookm~ark document"), "a",
+		    (menu_func) launch_bm_add_doc_dialog, NULL, 0);
+#endif
+
+	if (tabs > 1) {
+		add_to_menu(&menu, N_("Nex~t tab"), ">",
+			    (menu_func) menu_next_tab, NULL, 0);
+
+		add_to_menu(&menu, N_("Pre~v tab"), "<",
+			    (menu_func) menu_prev_tab, NULL, 0);
+	}
+
+	add_to_menu(&menu, N_("~Close tab"), "c",
+		    (menu_func) menu_close_tab, NULL, 0);
+#if 0
+	if (tabs > 1) {
+		add_to_menu(&menu, N_("Close ~all but this"), "c",
+			    (menu_func) menu_close_other_tabs, d, 0);
+	}
+#endif
+	/* Adjust the menu position taking the menu frame into account */
+	while (menu[i].text) i++;
+	set_window_ptr(tab, tab->x, int_max(tab->y - i - 1, 0));
+
+	do_menu(term, menu, ses, 1);
 }
 
 static struct menu_item file_menu11[] = {

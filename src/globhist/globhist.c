@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.88 2004/12/02 16:34:01 zas Exp $ */
+/* $Id: globhist.c,v 1.89 2004/12/17 23:50:27 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -158,7 +158,6 @@ void
 add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 {
 	struct global_history_item *history_item;
-	unsigned char *text;
 	int max_globhist_items;
 
 	if (!url || !get_globhist_enable()) return;
@@ -202,10 +201,6 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 	object_nolock(history_item, "globhist");
 
 	add_to_history_list(&global_history, history_item);
-
-	text = get_globhist_display_type()
-		? history_item->title : history_item->url;
-	if (!*text) text = history_item->url;
 
 	history_item->box_item = add_listbox_leaf(&globhist_browser, NULL,
 						  history_item);

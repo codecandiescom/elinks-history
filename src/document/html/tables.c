@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.88 2003/09/25 20:13:19 zas Exp $ */
+/* $Id: tables.c,v 1.89 2003/10/04 12:01:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1354,12 +1354,19 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 					       get_hline_width(t, j + s + 1) >= 0);
 				}
 
+#if USE_256_COLORS
+				/* This is not working correctly. Some pages
+				 * will be rendered much better (/.) while
+				 * other will look very ugly and broken. */
+				/* For now it is enabled for 256 color builds
+				 * as it is still a bit experimental and
+				 * someone might feel encouraged to fix it. */
 				par_format.bgcolor = t->bgcolor;
 				for (s = yp; s < yp + yw; s++) {
 					expand_lines(t->p, s);
 					expand_line(t->p, s, xp);
 				}
-
+#endif
 				html_stack_dup();
 				html_top.dontkill = 1;
 

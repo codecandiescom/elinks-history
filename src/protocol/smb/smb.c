@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.62 2004/11/03 17:48:25 zas Exp $ */
+/* $Id: smb.c,v 1.63 2004/11/03 18:03:57 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -112,8 +112,10 @@ smb_read_text(struct connection *conn, int sock)
 	int r;
 	struct smb_connection_info *si = conn->info;
 
+	/* We add 2 here to handle LF and NUL chars that are added in
+	 * smb_end_connection(). */
 	si = mem_realloc(si, sizeof(struct smb_connection_info) + si->textlen
-			     + READ_SIZE + 2); /* XXX: why +2 ? --Zas */
+			     + READ_SIZE + 2);
 	if (!si) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
@@ -187,7 +189,7 @@ parse_smbclient_output(struct uri *uri, struct smb_connection_info *si,
 		SMB_TYPE_WORKGROUP
 	} type = SMB_TYPE_NONE;
 	int pos = 0;
-	int stop = 0;
+	int stop;
 
 	assert(uri && si && page);
 	if_assert_failed return;
@@ -197,6 +199,7 @@ parse_smbclient_output(struct uri *uri, struct smb_connection_info *si,
 	add_to_string(page, "</title></head><body><pre>");
 
 	line_start = si->text;
+	stop = !si->textlen;	/* Nothing to parse. */
 	while (!stop && (line_end = strchr(line_start, ASCII_LF))) {
 		unsigned char *line = line_start;
 		int line_len;
@@ -458,6 +461,8 @@ end_smb_connection(struct connection *conn)
 		goto bye;
 	}
 
+	/* Ensure termination by LF + NUL chars, memory for this
+	 * was reserved by smb_read_text(). */
 	if (si->textlen && si->text[si->textlen - 1] != ASCII_LF)
 		si->text[si->textlen++] = ASCII_LF;
 	si->text[si->textlen] = '\0';

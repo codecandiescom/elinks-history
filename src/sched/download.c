@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.190 2003/11/28 01:06:44 jonas Exp $ */
+/* $Id: download.c,v 1.191 2003/11/28 01:31:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -294,9 +294,11 @@ download_data_store(struct download *download, struct file_download *file_downlo
 				get_download_ses(file_download), 1,
 				N_("OK"), NULL, B_ENTER | B_ESC);
 		}
+	}
 
-		if (get_opt_int("document.download.notify_bell"))
-			beep_terminal(term);
+	if (get_opt_int("document.download.notify_bell")
+	    + file_download->notify >= 2) {
+		beep_terminal(get_download_ses(file_download)->tab->term);
 	}
 
 	if (file_download->remotetime

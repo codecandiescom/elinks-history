@@ -203,6 +203,8 @@ Jonas Fonseca <fonseca@diku.dk>
 	Danish translation
 	http://elinks.or.cz/ and doc/book keeper
 	Mailcap support
+	Major cleanups
+	BFU and document managment hacking
 	Random hacking
 
 John <martian202002@yahoo.com>
@@ -459,4 +461,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.147 2003/12/03 23:21:15 pasky Exp $
+$Id: AUTHORS,v 1.148 2003/12/03 23:23:12 pasky Exp $

@@ -4,7 +4,7 @@
  * (receive/expiration). */
 #define COOKIES_RESAVE	1
 
-#define COOKIES_DEBUG
+/* #define COOKIES_DEBUG */
 
 #define ACCEPT_NONE	0
 #define ACCEPT_ASK	1 /* TODO */

@@ -1,3 +1,17 @@
+Fri Sep 17 12:23:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/pl.po:
+
+	Fix bad reformatting introduced in fixing of untested translation
+	update. Please test changes after updating translations by running
+	make in po/.  
+
+Fri Sep 17 12:14:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, features.conf:
+
+	Disable finger support by default.  
+
 Thu Sep 16 21:03:48 2004  Laurent Monin <zas@norz.org>:
 
 	* po/pl.po:

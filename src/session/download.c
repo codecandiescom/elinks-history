@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.33 2003/05/16 19:05:24 zas Exp $ */
+/* $Id: download.c,v 1.34 2003/05/17 20:43:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -779,7 +779,11 @@ create_download_file_do(struct terminal *term, unsigned char *file, void *data,
 	wd = get_cwd();
 	set_cwd(term->cwd);
 
-	h = open(file, O_CREAT | O_WRONLY | (sf && !resume ? O_EXCL : 0),
+	/* O_APPEND means repositioning at the end of file before each write(),
+	 * thus ignoring seek()s and that can hide mysterious bugs. IMHO.
+	 * --pasky */
+	h = open(file, O_CREAT | O_WRONLY | (resume ? 0 : O_TRUNC)
+			| (sf && !resume ? O_EXCL : 0),
 		 sf ? 0600 : 0666);
 	saved_errno = errno; /* Saved in case of ... --Zas */
 

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.42 2002/09/07 09:32:50 zas Exp $ */
+/* $Id: http.c,v 1.43 2002/09/08 19:43:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,19 +150,19 @@ static int get_http_code(unsigned char *head, int *code, int *version)
 	} else {
 		*version = 0;
 	}
-	
+
 	/* \s+ */
 	for (head += 4; *head > ' '; head++);
 	if (*head++ != ' ')
 		return -1;
-	
+
 	/* \d\d\d */
 	if (head[0] < '1' || head[0] > '9' ||
 	    head[1] < '0' || head[1] > '9' ||
 	    head[2] < '0' || head[2] > '9')
 		return -1;
 	*code = (head[0] - '0') * 100 + (head[1] - '0') * 10 + head[2] - '0';
-	
+
 	return 0;
 }
 
@@ -230,16 +230,16 @@ void http_func(struct connection *c)
 {
 	/* setcstate(c, S_CONN); */
 	set_timeout(c);
-	
+
 	if (get_keepalive_socket(c)) {
 		int p = get_port(c->url);
-		
+
 		if (p == -1) {
 			setcstate(c, S_INTERNAL);
 			abort_connection(c);
 			return;
 		}
-		
+
 		make_connection(c, p, &c->sock1, http_send_header);
 	} else {
 		http_send_header(c);
@@ -266,6 +266,7 @@ void http_send_header(struct connection *c)
 	unsigned char *hdr;
 	unsigned char *host_data, *url_data;
 	int l = 0;
+	unsigned char *optstr;
 
 	set_timeout(c);
 
@@ -278,7 +279,8 @@ void http_send_header(struct connection *c)
 	memset(info, 0, sizeof(struct http_connection_info));
 	c->info = info;
 
-	if ((host_data = get_host_name(host))) {
+	host_data = get_host_name(host);
+	if (host_data) {
 		info->bl_flags = get_blacklist_flags(host_data);
 		mem_free(host_data);
 	}
@@ -325,7 +327,8 @@ void http_send_header(struct connection *c)
 		add_to_str(&hdr, &l, " HTTP/1.1\r\n");
 	}
 
-	if ((host_data = get_host_name(host))) {
+	host_data = get_host_name(host);
+	if (host_data) {
 		add_to_str(&hdr, &l, "Host: ");
 #ifdef IPV6
 		if (strchr(host_data, ':') != strrchr(host_data, ':')) {
@@ -339,7 +342,8 @@ void http_send_header(struct connection *c)
 
 		mem_free(host_data);
 
-		if ((host_data = get_port_str(host))) {
+		host_data = get_port_str(host);
+		if (host_data) {
 			add_to_str(&hdr, &l, ":");
 			add_to_str(&hdr, &l, host_data);
 			mem_free(host_data);
@@ -348,11 +352,11 @@ void http_send_header(struct connection *c)
 		add_to_str(&hdr, &l, "\r\n");
 	}
 
-	if (get_opt_str("protocol.http.proxy.user")[0]) {
+	optstr = get_opt_str("protocol.http.proxy.user");
+	if (optstr[0]) {
 		unsigned char *proxy_data;
 
-		proxy_data = straconcat(get_opt_str("protocol.http.proxy.user"),
-				        ":",
+		proxy_data = straconcat(optstr, ":",
 					get_opt_str("protocol.http.proxy.passwd"),
 					NULL);
 		if (proxy_data) {
@@ -367,9 +371,9 @@ void http_send_header(struct connection *c)
 			mem_free(proxy_data);
 		}
 	}
-	
-	if (*get_opt_str("protocol.http.user_agent") &&
-	    strcmp(get_opt_str("protocol.http.user_agent"), " ")) {
+
+	optstr = get_opt_str("protocol.http.user_agent");
+	if (*optstr && strcmp(optstr, " ")) {
 		unsigned char *ustr, ts[64] = "";
 
                 add_to_str(&hdr, &l, "User-Agent: ");
@@ -379,8 +383,8 @@ void http_send_header(struct connection *c)
 
 			snprintf(ts, 64, "%dx%d", term->x, term->y);
 		}
-		ustr = subst_user_agent(get_opt_str("protocol.http.user_agent"),
-					VERSION_STRING, system_name, ts);
+		ustr = subst_user_agent(optstr, VERSION_STRING, system_name,
+					ts);
                 add_to_str(&hdr, &l, ustr);
 		mem_free(ustr);
 
@@ -393,9 +397,12 @@ void http_send_header(struct connection *c)
 			break;
 
 		case REFERER_FAKE:
-			add_to_str(&hdr, &l, "Referer: ");
-			add_to_str(&hdr, &l, get_opt_str("protocol.http.referer.fake"));
-			add_to_str(&hdr, &l, "\r\n");
+			optstr = get_opt_str("protocol.http.referer.fake");
+			if (optstr && optstr[0]) {
+				add_to_str(&hdr, &l, "Referer: ");
+				add_to_str(&hdr, &l, optstr);
+				add_to_str(&hdr, &l, "\r\n");
+			}
 			break;
 
 		case REFERER_TRUE:
@@ -458,7 +465,7 @@ void http_send_header(struct connection *c)
 #endif
 	add_to_str(&hdr, &l, "\r\n");
 #endif
-	
+
 	if (!accept_charset) {
 		unsigned char *cs, *ac;
 		int aclen = 0;
@@ -492,12 +499,14 @@ void http_send_header(struct connection *c)
 		add_to_str(&hdr, &l, accept_charset);
 	}
 
-	if (get_opt_str("protocol.http.accept_language")[0]) {
+	optstr = get_opt_str("protocol.http.accept_language");
+	if (optstr[0]) {
 		add_to_str(&hdr, &l, "Accept-Language: ");
-		add_to_str(&hdr, &l, get_opt_str("protocol.http.accept_language"));
+		add_to_str(&hdr, &l, optstr);
 		add_to_str(&hdr, &l, "\r\n");
 	} else	if (get_opt_bool("protocol.http.accept_ui_language")) {
 			unsigned char *code;
+
 			code = language_iso639_code(current_language);
 			add_to_str(&hdr, &l, "Accept-Language: ");
 			add_to_str(&hdr, &l, code ? code : (unsigned char *) "");
@@ -518,7 +527,8 @@ void http_send_header(struct connection *c)
 		}
 	}
 
-	if ((e = c->cache)) {
+	e = c->cache;
+	if (e) {
 		if (!e->incomplete && e->head && e->last_modified
 		    && c->cache_mode <= NC_IF_MOD) {
 			add_to_str(&hdr, &l, "If-Modified-Since: ");
@@ -564,7 +574,7 @@ void http_send_header(struct connection *c)
 	send_cookies(&hdr, &l, host);
 	add_to_str(&hdr, &l, "\r\n");
 #endif
-	
+
 	if (post) {
 		while (post[0] && post[1]) {
 			int h1, h2;
@@ -601,9 +611,12 @@ void http_send_header(struct connection *c)
 int is_line_in_buffer(struct read_buffer *rb)
 {
 	int l;
+
 	for (l = 0; l < rb->len; l++) {
 		if (rb->data[l] == 10) return l + 1;
-		if (l < rb->len - 1 && rb->data[l] == 13 && rb->data[l + 1] == 10) return l + 2;
+		if (l < rb->len - 1 && rb->data[l] == 13
+		    && rb->data[l + 1] == 10)
+			return l + 2;
 		if (l == rb->len - 1 && rb->data[l] == 13) return 0;
 		if (rb->data[l] < ' ') return -1;
 	}
@@ -947,7 +960,7 @@ void http_got_header(struct connection *c, struct read_buffer *rb)
 		set_cookie(NULL, host, cookie);
 		mem_free(cookie);
 	}
-#endif	
+#endif
 	if (h == 100) {
 		mem_free(head);
 		state = S_PROC;

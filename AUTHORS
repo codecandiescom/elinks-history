@@ -119,6 +119,9 @@ Flemming Frandsen <ff@partyticket.net>
 Gianluca Montecchi <gianluca@pluto.linux.it>
 	Italian translation
 
+Ingo Blechschmidt <iblech@web.de>
+	German translation updates
+
 Ionel Mugurel Ciobica <I.M.Ciobica@TUe.nl>
 	Romanian translation
 
@@ -298,4 +301,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 <zimon@niksula.hut.fi>
 	RPM spec file in contrib/
 
-$Id: AUTHORS,v 1.50 2002/04/17 08:26:45 pasky Exp $
+$Id: AUTHORS,v 1.51 2002/04/17 08:33:19 pasky Exp $

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.133 2003/06/17 13:24:47 zas Exp $ */
+/* $Id: renderer.c,v 1.134 2003/06/17 13:29:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1050,6 +1050,7 @@ end:
 static void
 html_init(struct part *part)
 {
+	assert(part);
 	/* !!! FIXME: background */
 }
 
@@ -1057,6 +1058,8 @@ void
 destroy_fc(struct form_control *fc)
 {
 	int i;
+
+	assert(fc);
 
 	if (fc->action) mem_free(fc->action);
 	if (fc->target) mem_free(fc->target);
@@ -1077,6 +1080,8 @@ destroy_fc(struct form_control *fc)
 static void
 html_form_control(struct part *part, struct form_control *fc)
 {
+	assert(part && fc);
+
 	if (!part->data) {
 #if 0
 		destroy_fc(fc);
@@ -1124,7 +1129,7 @@ add_frameset_entry(struct frameset_desc *fsd,
 {
 	int idx;
 
-	if (fsd->yp >= fsd->y) return;
+	assert(fsd && fsd->yp < fsd->y);
 
 	idx = fsd->xp + fsd->yp * fsd->x;
 	fsd->f[idx].subframe = subframe;

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.162 2003/11/13 22:39:56 pasky Exp $ */
+/* $Id: download.c,v 1.163 2003/11/13 22:41:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,10 +145,11 @@ destroy_downloads(struct session *ses)
 	struct file_download *file_download;
 
 	foreach (file_download, downloads) {
-		if (file_download->ses == ses && file_download->prog) {
-			file_download = file_download->prev;
-			abort_download(file_download->next, 0);
-		}
+		if (file_download->ses != ses || !file_download->prog)
+			continue;
+
+		file_download = file_download->prev;
+		abort_download(file_download->next, 0);
 	}
 }
 

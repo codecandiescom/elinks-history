@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.438 2004/06/10 15:15:22 jonas Exp $ */
+/* $Id: session.c,v 1.439 2004/06/10 15:27:18 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -696,6 +696,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 {
 	struct initial_session_info *info;
 	struct session *base_session;
+	struct uri *current_uri, *uri;
 	unsigned char *str;
 	int magic;
 
@@ -707,6 +708,9 @@ decode_session_info(struct terminal *term, int len, const int *data)
 	 * only, rather) to the newly created session. */
 	base_session = get_session(*(data++));
 	magic = *(data++);
+
+	current_uri = base_session && have_location(base_session)
+		    ? cur_loc(base_session)->vs.uri : NULL;
 
 	switch (magic) {
 	case SESSION_MAGIC(1, 0):
@@ -732,7 +736,12 @@ decode_session_info(struct terminal *term, int len, const int *data)
 
 			if (!end) break;
 
-			add_to_string_list(&info->url_list, str, end - str);
+			uri = get_hooked_uri(str, current_uri, term->cwd);
+
+			if (uri) {
+				add_to_string_list(&info->url_list, struri(uri), -1);
+				done_uri(uri);
+			}
 
 			len -= end - str + 1;
 			str  = end + 1;
@@ -753,10 +762,16 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		len -= 2 * sizeof(int);
 
 		/* Extract URI containing @magic bytes */
-		if (magic <= 0 || len <= 0 || magic > len)
-			str = NULL;
+		if (magic > 0 || len > 0 || magic <= len)
+			str = memacpy(str, magic);
 
-		return init_session_info(base_session, 0, str, magic);
+		uri = get_hooked_uri(str, current_uri, term->cwd);
+		mem_free_if(str);
+
+		info = init_session_info(base_session, 0, uri ? struri(uri) : NULL, -1);
+		if (uri) done_uri(uri);
+
+		return info;
 	}
 
 	return NULL;

@@ -2,14 +2,14 @@
 # translation of hu.po to
 # ELinks Hungarian translation.
 # Suveg Gabor <gsuveg@sgmobil2000.hu>
-# Varga Balazs <vinnui@ent.hu>, 2003.
+# Varga Balazs <vinnui@ent.hu>, 2003, 2004.
 # Varga Balazs <vinnui@freemail.hu>, 2003.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2004-01-04 18:14+0100\n"
-"PO-Revision-Date: 2003-12-24 23:22+0100\n"
+"PO-Revision-Date: 2004-01-09 02:27+0100\n"
 "Last-Translator: Varga Balazs <vinnui@ent.hu>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,7 @@ msgstr "Információ"
 
 #: src/bfu/hierbox.c:445
 msgid "Press space to expand this folder."
-msgstr ""
+msgstr "A mappa kinyitásához nyomd meg a Space billentyût."
 
 #. if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty;
 #: src/bfu/hierbox.c:447 src/bfu/hierbox.c:469 src/bfu/hierbox.c:607
@@ -341,19 +341,16 @@ msgid "Add bookmark"
 msgstr "Hozzáfûzés a konyvjelzõkhöz"
 
 #: src/bookmarks/dialogs.c:583
-#, fuzzy
 msgid "Saved session"
-msgstr "Beállítások menté~se"
+msgstr ""
 
 #: src/bookmarks/dialogs.c:604
-#, fuzzy
 msgid "Bookmark tabs"
-msgstr "Könyvjelzõk"
+msgstr ""
 
 #: src/bookmarks/dialogs.c:604
-#, fuzzy
 msgid "Enter folder name"
-msgstr "Mappa neve"
+msgstr "Írd be a mappa nevét"
 
 #: src/cache/dialogs.c:65
 msgid "Redirect"
@@ -463,9 +460,9 @@ msgid "(default: %s)"
 msgstr "(alapértelmezett: %s)"
 
 #: src/config/cmdline.c:275
-#, fuzzy, c-format
+#, c-format
 msgid "(default: #%06lx)"
-msgstr "(alapértelmezett: #%06x)"
+msgstr "(alapértelmezett: #%06lx)"
 
 #: src/config/cmdline.c:401
 msgid "Configuration options:\n"
@@ -666,8 +663,7 @@ msgstr "Ne próbálja irni/használni a fáljokat a ~/.elinks könyvtárban."
 
 #: src/config/cmdline.c:515
 msgid "Connect to session ring with given ID"
-msgstr ""
-"Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
+msgstr "Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
 
 #: src/config/cmdline.c:517
 msgid ""
@@ -847,16 +843,17 @@ msgid "Cannot write the file"
 msgstr "A fáljt nem lehet írni"
 
 #: src/config/dialogs.c:41
-#, fuzzy
 msgid "Write config error"
-msgstr "Beállítási hiba"
+msgstr "Konfigurációs állomány írási hiba"
 
 #: src/config/dialogs.c:42
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to write to config file %s.\n"
 "%s"
-msgstr "Nem irható ez a konfigurációs fájl: %s: %s"
+msgstr ""
+"Nem irható ez a konfigurációs fájl: %s.\n"
+" %s"
 
 #: src/config/dialogs.c:53
 msgid "Write config success"
@@ -984,8 +981,7 @@ msgstr ""
 #: src/config/dialogs.c:594
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr ""
-"Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
+msgstr "Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
 
 #: src/config/dialogs.c:621 src/dialogs/info.c:126 src/globhist/dialogs.c:188
 msgid "Toggle display"
@@ -1020,9 +1016,8 @@ msgid "Add a new bookmark using current link"
 msgstr "A kijelölt link hozzáadáasa a könyvjelzõkhöz"
 
 #: src/config/kbdbind.c:396
-#, fuzzy
 msgid "Bookmark all open tabs"
-msgstr "Könyvjelzõk beállításai."
+msgstr "Az összes nyitott fül elmentése a könyvjelzõkhöz"
 
 #: src/config/kbdbind.c:397
 msgid "Attempt to auto-complete the input"
@@ -1041,9 +1036,8 @@ msgid "Delete character in front of the cursor"
 msgstr "A kurzor elõtti karakter törlése"
 
 #: src/config/kbdbind.c:401
-#, fuzzy
 msgid "Go to the first line of the buffer."
-msgstr "Ugrás az oldal/sor elejére"
+msgstr "Ugrás a buffer elesõ sorára."
 
 #: src/config/kbdbind.c:402
 msgid "Open bookmark manager"
@@ -1111,9 +1105,8 @@ msgid "Go to the end of the page/line"
 msgstr "Ugrás az oldal/sor végére"
 
 #: src/config/kbdbind.c:418
-#, fuzzy
 msgid "Go to the last line of the buffer."
-msgstr "Ugrás az oldal/sor elejére"
+msgstr "Ugrás a buffer utolsó sorára."
 
 #: src/config/kbdbind.c:419
 msgid "Follow the current link"
@@ -1140,9 +1133,8 @@ msgid "Forget authentication credentials"
 msgstr "Autentikációs okmányok elfelejtése"
 
 #: src/config/kbdbind.c:425
-#, fuzzy
 msgid "Open form history manager"
-msgstr "A látogatott oldalak listájának megnyitása"
+msgstr ""
 
 #: src/config/kbdbind.c:426
 msgid "Open \"Go to URL\" dialog box"
@@ -1154,8 +1146,7 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:428
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
-"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:429
 msgid "Go to the homepage"
@@ -1174,9 +1165,8 @@ msgid "Go to the start of the page/line"
 msgstr "Ugrás az oldal/sor elejére"
 
 #: src/config/kbdbind.c:433
-#, fuzzy
 msgid "Kill all backgrounded connections"
-msgstr "~Háttérben futó kapcsolatok megszakítása"
+msgstr "A háttérben futó kapcsolatok megszakítása"
 
 #: src/config/kbdbind.c:434
 msgid "Delete to beginning of line"
@@ -1260,9 +1250,8 @@ msgid "Open the current link in a new window"
 msgstr "A kijelölt link megnyitása új ablakban"
 
 #: src/config/kbdbind.c:459
-#, fuzzy
 msgid "Open an OS shell"
-msgstr "Parancss~or"
+msgstr ""
 
 #: src/config/kbdbind.c:460
 msgid "Open options manager"
@@ -1309,12 +1298,10 @@ msgid "Move the cursor right"
 msgstr "Kurzor mozgatása jobbra"
 
 #: src/config/kbdbind.c:471
-#, fuzzy
 msgid "Save as"
 msgstr "Menté~s másként"
 
 #: src/config/kbdbind.c:472
-#, fuzzy
 msgid "Save URL as"
 msgstr "~URL mentése másként"
 
@@ -1323,7 +1310,6 @@ msgid "Save formatted document"
 msgstr "Formázott dokumentum mentése"
 
 #: src/config/kbdbind.c:474
-#, fuzzy
 msgid "Save options"
 msgstr "Beállítások menté~se"
 
@@ -1360,23 +1346,20 @@ msgid "Select current highlighted item"
 msgstr ""
 
 #: src/config/kbdbind.c:483
-#, fuzzy
 msgid "Show terminal options dialog"
-msgstr "Terminál beállítások"
+msgstr "Terminál beállítási ablak megnyitása"
 
 #: src/config/kbdbind.c:484 src/terminal/tab.c:189 src/terminal/tab.c:225
 msgid "Close tab"
 msgstr "Böngészõfül bezárása"
 
 #: src/config/kbdbind.c:485
-#, fuzzy
 msgid "Close all tabs but the current one"
-msgstr "Mindegyiket bezárja, kivéve ezt"
+msgstr ""
 
 #: src/config/kbdbind.c:486
-#, fuzzy
 msgid "Open the tab menu"
-msgstr "Fájl menü megnyitása"
+msgstr ""
 
 #: src/config/kbdbind.c:487
 msgid "Next tab"
@@ -1407,9 +1390,8 @@ msgid "Toggle displaying of links numbers"
 msgstr "A linkek sorszámozásának váltogatása"
 
 #: src/config/kbdbind.c:494
-#, fuzzy
 msgid "Toggle plain renderer compression of empty lines"
-msgstr "A táblázatok megjelenítésének váltogatása"
+msgstr ""
 
 #: src/config/kbdbind.c:495
 msgid "Go forward in the unhistory"
@@ -1607,8 +1589,7 @@ msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
 #: src/config/options.inc:99
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr ""
-"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:105
@@ -1856,8 +1837,7 @@ msgstr "Színek invertálása"
 
 #: src/config/options.inc:218
 msgid "Invert the fore- and background color so the link stands out."
-msgstr ""
-"Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
+msgstr "Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
 
 #: src/config/options.inc:221 src/dialogs/options.c:189
 msgid "Underline"
@@ -1873,8 +1853,7 @@ msgstr "Alkönyvtárak kiemelése"
 
 #: src/config/options.inc:228
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr ""
-"Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
+msgstr "Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
 
 #: src/config/options.inc:230
 msgid "Number links"
@@ -1945,8 +1924,7 @@ msgstr "Linkek kiválasztása"
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
-msgstr ""
-"Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
+msgstr "Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.inc:265
 msgid "Searching"
@@ -1964,8 +1942,7 @@ msgstr "Kis/nagybetû érzékenység"
 msgid ""
 "Whether the search should match the document text while maintaining\n"
 "case sensitivity."
-msgstr ""
-"A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
+msgstr "A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
 
 #: src/config/options.inc:275 src/config/options.inc:282
 msgid "Regular expressions"
@@ -2035,9 +2012,8 @@ msgstr ""
 "vagy töltsön le egy másik lapot."
 
 #: src/config/options.inc:309
-#, fuzzy
 msgid "Document meta refresh minimum time"
-msgstr "Meta refresh tag-ek kezelése"
+msgstr ""
 
 #: src/config/options.inc:311
 msgid ""
@@ -2113,8 +2089,7 @@ msgstr ""
 
 #: src/config/options.inc:358
 msgid "Ignore cache-control info from server"
-msgstr ""
-"A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
+msgstr "A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
 
 #: src/config/options.inc:360
 msgid ""
@@ -2470,9 +2445,8 @@ msgstr ""
 "szükséges az olvasásához."
 
 #: src/config/options.inc:558
-#, fuzzy
 msgid "Default form input size"
-msgstr "Alapértelmezett színbeállítások"
+msgstr ""
 
 #: src/config/options.inc:560
 msgid "Default form input size if none is specified."
@@ -2840,8 +2814,7 @@ msgid "Local CGI specific options. (DISABLED)"
 msgstr "Helyi CGI-vel kapcsolatos beállítások. (LETILTVA)"
 
 #: src/config/options.inc:755
-msgid ""
-"Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
+msgid "Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
 msgstr ""
 "A CGI scriptek tárolására használt könyvtárak felsorolása, kettõsponttal "
 "elválasztva. (LETILTVA)"
@@ -3404,16 +3377,14 @@ msgid "Tabs bar colors."
 msgstr "Fülek sorának színei."
 
 #: src/config/options.inc:1088
-#, fuzzy
 msgid "Unvisited tab"
-msgstr "Fülek"
+msgstr ""
 
 #: src/config/options.inc:1090
-#, fuzzy
 msgid ""
 "Tab colors for tabs that have not been\n"
 "selected since they completed loading."
-msgstr "Letöltés közben lévõ fül színei."
+msgstr ""
 
 #: src/config/options.inc:1093
 msgid "Unselected tab"
@@ -3494,9 +3465,8 @@ msgstr ""
 "állítsd a keretek szélességét a setup.h-ban."
 
 #: src/config/options.inc:1137
-#, fuzzy
 msgid "Underline hotkeys"
-msgstr "Linkek aláhúzása"
+msgstr ""
 
 #: src/config/options.inc:1139
 msgid ""
@@ -3642,19 +3612,16 @@ msgid ""
 msgstr ""
 
 #: src/config/options.inc:1219
-#, fuzzy
 msgid "Sessions"
-msgstr "Kiterjesztés(ek)"
+msgstr ""
 
 #: src/config/options.inc:1221
-#, fuzzy
 msgid "Sessions settings."
-msgstr "Fülek beállításai."
+msgstr ""
 
 #: src/config/options.inc:1223
-#, fuzzy
 msgid "Auto save session"
-msgstr "Automatikus mentés"
+msgstr ""
 
 #: src/config/options.inc:1225
 msgid ""
@@ -4009,7 +3976,7 @@ msgid "Copying"
 msgstr "Szerzöi jogok"
 
 #: src/dialogs/info.c:134
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "ELinks %s\n"
 "\n"
@@ -4024,7 +3991,7 @@ msgstr ""
 "ELinks %s\n"
 "\n"
 "(C) 1999 - 2002 Mikulas Patocka\n"
-"(C) 2001 - 2003 Petr Baudis\n"
+"(C) 2001 - 2004 Petr Baudis\n"
 "\n"
 "Ez egy szabad program; terjesztheted és/vagy módosíthatod a Szabad Szoftver "
 "Alapitvány által készített GNU Licensz második vagy késõbbi verziója "
@@ -4113,14 +4080,12 @@ msgid "~Close tab"
 msgstr "Fül bezárása"
 
 #: src/dialogs/menu.c:348
-#, fuzzy
 msgid "C~lose all tabs but the current"
 msgstr "Mindegyiket bezárja, kivéve ezt"
 
 #: src/dialogs/menu.c:352
-#, fuzzy
 msgid "B~ookmark all tabs"
-msgstr "Könyvjelzõk"
+msgstr ""
 
 #: src/dialogs/menu.c:366
 msgid "Open new ~tab"
@@ -4207,9 +4172,8 @@ msgid "Find ~previous"
 msgstr "Elõzõ k~eresése"
 
 #: src/dialogs/menu.c:473
-#, fuzzy
 msgid "T~ypeahead search"
-msgstr "Bevitelkiegészítés"
+msgstr ""
 
 #: src/dialogs/menu.c:475
 msgid "Toggle ~html/plain"
@@ -4252,9 +4216,8 @@ msgid "~Bugs information"
 msgstr "Hibák infója"
 
 #: src/dialogs/menu.c:497
-#, fuzzy
 msgid "ELinks C~vsWeb"
-msgstr "~Elinks honlap"
+msgstr "Elinks CVSWeb honlap"
 
 #: src/dialogs/menu.c:500
 msgid "~Copying"
@@ -4763,8 +4726,7 @@ msgstr "Ukrán"
 
 #: src/lowlevel/home.c:121
 #, c-format
-msgid ""
-"Commandline options -confdir set to %s, but could not create directory %s."
+msgid "Commandline options -confdir set to %s, but could not create directory %s."
 msgstr ""
 "Parancssori opciók -konfig könyvtár %s, de nem lehet létrehozni a %s "
 "könyvtárat."
@@ -5700,9 +5662,8 @@ msgid "Do you really want to close the current tab?"
 msgstr "Biztos, hogy bezárod az aktuális fület?"
 
 #: src/terminal/tab.c:226
-#, fuzzy
 msgid "Do you really want to close all except the current tab?"
-msgstr "Biztos, hogy bezárod az aktuális fület?"
+msgstr ""
 
 #: src/viewer/dump/dump.c:79
 #, c-format
@@ -6341,3 +6302,4 @@ msgstr "Hiba a fájl irása közben"
 #, fuzzy
 #~ msgid "Cache redirect information"
 #~ msgstr "Várakozás az átirányítás elfogadására"
+

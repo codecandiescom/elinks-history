@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.124 2003/07/23 00:47:10 pasky Exp $ */
+/* $Id: menu.c,v 1.125 2003/07/24 10:26:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -500,6 +500,9 @@ static struct menu_item view_menu[] = {
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
+#if 0
+/* None of the items included in view_menu and excluded here seem dangerous,
+ * so I've commented out this and its use by do_view_menu. -- Miciah */
 static struct menu_item view_menu_anon[] = {
 	{N_("~Search"), "/", MENU_FUNC menu_for_frame, (void *)search_dlg, 0, 0},
 	{N_("Search ~backward"), "?", MENU_FUNC menu_for_frame, (void *)search_back_dlg, 0, 0},
@@ -511,6 +514,7 @@ static struct menu_item view_menu_anon[] = {
 	{N_("Frame at ~full-screen"), "f", MENU_FUNC menu_for_frame, (void *)set_frame, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
+#endif
 
 static struct menu_item help_menu[] = {
 	{N_("~ELinks homepage"), "", MENU_FUNC menu_url_shortcut, (void *)ELINKS_HOMEPAGE, 0, 0},
@@ -574,10 +578,14 @@ static struct menu_item setup_menu_anon[] = {
 static void
 do_view_menu(struct terminal *term, void *xxx, struct session *ses)
 {
+#if 0
 	if (!get_opt_int_tree(cmdline_options, "anonymous"))
 		do_menu(term, view_menu, ses, 1);
 	else
 		do_menu(term, view_menu_anon, ses, 1);
+#else
+	do_menu(term, view_menu, ses, 1);
+#endif
 }
 
 static void

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.201 2005/03/11 23:22:44 zas Exp $ */
+/* $Id: ftp.c,v 1.202 2005/03/11 23:35:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1281,8 +1281,9 @@ out_of_mem:
 	}
 
 	if (len > 0) {
+		conn->received += len;
+
 		if (!c_i->dir) {
-			conn->received += len;
 			if (add_fragment(conn->cached, conn->from,
 					 c_i->ftp_buffer, len) == 1)
 				conn->tries = 0;
@@ -1291,7 +1292,6 @@ out_of_mem:
 		} else {
 			int proceeded;
 
-			conn->received += len;
 			proceeded = ftp_process_dirlist(conn->cached,
 							&conn->from,
 							c_i->ftp_buffer,

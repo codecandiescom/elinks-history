@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.109 2003/11/26 23:01:05 jonas Exp $ */
+/* $Id: hierbox.c,v 1.110 2003/11/26 23:02:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -307,9 +307,9 @@ static int
 scan_for_marks(struct listbox_item *item, void *info_, int *offset)
 {
 	if (item->marked) {
-		struct listbox_context *action_info = info_;
+		struct listbox_context *context = info_;
 
-		action_info->item = NULL;
+		context->item = NULL;
 		*offset = 0;
 	}
 
@@ -319,10 +319,10 @@ scan_for_marks(struct listbox_item *item, void *info_, int *offset)
 static int
 scan_for_used(struct listbox_item *item, void *info_, int *offset)
 {
-	struct listbox_context *action_info = info_;
+	struct listbox_context *context = info_;
 
-	if (action_info->box->ops->is_used(item)) {
-		action_info->item = item;
+	if (context->box->ops->is_used(item)) {
+		context->item = item;
 		*offset = 0;
 	}
 
@@ -335,33 +335,33 @@ init_listbox_context(struct listbox_data *box, struct terminal *term,
 			 struct listbox_item *item,
 			 int (*scanner)(struct listbox_item *, void *, int *))
 {
-	struct listbox_context *action_info;
+	struct listbox_context *context;
 
-	action_info = mem_calloc(1, sizeof(struct listbox_context));
-	if (!action_info) return NULL;
+	context = mem_calloc(1, sizeof(struct listbox_context));
+	if (!context) return NULL;
 
-	action_info->item = item;;
-	action_info->term = term;
-	action_info->box = box;
+	context->item = item;;
+	context->term = term;
+	context->box = box;
 
-	if (!scanner) return action_info;
+	if (!scanner) return context;
 
 	/* Look if it wouldn't be more interesting to blast off the marked
 	 * item. */
 	assert(!list_empty(*box->items));
 	traverse_listbox_items_list(box->items->next, box, 0, 0,
-				    scanner, action_info);
+				    scanner, context);
 
-	return action_info;
+	return context;
 }
 
 static void
-done_listbox_context(void *action_info_)
+done_listbox_context(void *context_)
 {
-	struct listbox_context *action_info = action_info_;
+	struct listbox_context *context = context_;
 
-	if (action_info->item)
-		action_info->box->ops->unlock(action_info->item);
+	if (context->item)
+		context->box->ops->unlock(context->item);
 }
 
 /* Info action */
@@ -371,28 +371,28 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 {
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct terminal *term = dlg_data->win->term;
-	struct listbox_context *action_info;
+	struct listbox_context *context;
 	unsigned char *msg;
 
 	if (!box->sel || !box->sel->udata) return 0;
 
 	assert(box->ops);
 
-	action_info = init_listbox_context(box, term, box->sel, NULL);
-	if (!action_info) return 0;
+	context = init_listbox_context(box, term, box->sel, NULL);
+	if (!context) return 0;
 
-	msg = box->ops->get_info(action_info->item, term, LISTBOX_ALL);
+	msg = box->ops->get_info(context->item, term, LISTBOX_ALL);
 	if (!msg) {
-		mem_free(action_info);
+		mem_free(context);
 		return 0;
 	}
 
-	box->ops->lock(action_info->item);
+	box->ops->lock(context->item);
 
-	msg_box(term, getml(action_info, NULL), MSGBOX_FREE_TEXT,
+	msg_box(term, getml(context, NULL), MSGBOX_FREE_TEXT,
 		N_("Info"), AL_LEFT,
 		msg,
-		action_info, 1,
+		context, 1,
 		N_("OK"), done_listbox_context, B_ESC | B_ENTER);
 
 	return 0;
@@ -607,22 +607,22 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 static int
 delete_unused(struct listbox_item *item, void *data_, int *offset)
 {
-	struct listbox_context *action_info = data_;
+	struct listbox_context *context = data_;
 
-	if (action_info->box->ops->is_used(item)) return 0;
+	if (context->box->ops->is_used(item)) return 0;
 
-	do_delete_item(item, action_info, 0);
+	do_delete_item(item, context, 0);
 	return 1;
 }
 
 static void
-do_clear_browser(void *action_info_)
+do_clear_browser(void *context_)
 {
-	struct listbox_context *action_info = action_info_;
+	struct listbox_context *context = context_;
 
-	traverse_listbox_items_list(action_info->box->items->next,
-				    action_info->box, 0, 0,
-				    delete_unused, action_info);
+	traverse_listbox_items_list(context->box->items->next,
+				    context->box, 0, 0,
+				    delete_unused, context);
 }
 
 int
@@ -631,29 +631,29 @@ push_hierbox_clear_button(struct dialog_data *dlg_data,
 {
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct terminal *term = dlg_data->win->term;
-	struct listbox_context *action_info;
+	struct listbox_context *context;
 
 	if (!box->sel || !box->sel->udata) return 0;
 
 	assert(box->ops);
 
-	action_info = init_listbox_context(box, term, NULL, scan_for_used);
-	if (!action_info) return 0;
+	context = init_listbox_context(box, term, NULL, scan_for_used);
+	if (!context) return 0;
 
-	if (action_info->item) {
+	if (context->item) {
 		/* FIXME: If the clear button should be used for browsers where
 		 * not all items can be deleted scan_for_used() should also can
 		 * for undeletable and we should be able to pass either delete
 		 * error types. */
-		print_delete_error(action_info->item, term, box->ops, DELETE_LOCKED);
-		mem_free(action_info);
+		print_delete_error(context->item, term, box->ops, DELETE_LOCKED);
+		mem_free(context);
 		return 0;
 	}
 
-	msg_box(term, getml(action_info, NULL), 0,
+	msg_box(term, getml(context, NULL), 0,
 		N_("Clear all items"), AL_CENTER,
 		N_("Do you really want to remove all items?"),
-		action_info, 2,
+		context, 2,
 		N_("Yes"), do_clear_browser, B_ENTER,
 		N_("No"), NULL, B_ESC);
 

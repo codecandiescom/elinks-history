@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.36 2003/07/03 10:01:02 jonas Exp $ */
+/* $Id: connection.c,v 1.37 2003/07/03 10:32:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,18 +80,18 @@ static void check_queue_bugs(void);
 #endif
 
 
-static /* inline */ int
+static /* inline */ enum connection_priority
 getpri(struct connection *c)
 {
-	int i;
+	enum connection_priority priority;
 
-	for (i = 0; i < N_PRI; i++)
-		if (c->pri[i])
+	for (priority = 0; priority < PRIORITIES; priority++)
+		if (c->pri[priority])
 			break;
 
-	assertm(i != N_PRI, "connection has no owner");
+	assertm(priority != PRIORITIES, "Connection has no owner");
 
-	return i;
+	return priority;
 }
 
 long
@@ -479,10 +479,10 @@ static inline void
 add_to_queue(struct connection *c)
 {
 	struct connection *cc;
-	int pri = getpri(c);
+	enum connection_priority priority = getpri(c);
 
 	foreach (cc, queue)
-		if (getpri(cc) > pri)
+		if (getpri(cc) > priority)
 			break;
 
 	add_at_pos(cc->prev, c);
@@ -534,11 +534,11 @@ suspend_connection(struct connection *c)
 static int
 try_to_suspend_connection(struct connection *c, unsigned char *ho)
 {
-	int pri = getpri(c);
+	enum connection_priority priority = getpri(c);
 	struct connection *d;
 
 	foreachback (d, queue) {
-		if (getpri(d) <= pri) return -1;
+		if (getpri(d) <= priority) return -1;
 		if (d->state == S_WAIT) continue;
 		if (d->unrestartable == 2 && getpri(d) < PRI_CANCEL) continue;
 		if (ho) {
@@ -651,16 +651,17 @@ static void
 check_queue_bugs(void)
 {
 	struct connection *d;
-	int p = 0, ps = 0;
+	int ps = 0;
+	enum connection_priority prev_priority = 0;
 	int cc;
 
 again:
 	cc = 0;
 	foreach (d, queue) {
-		int q = getpri(d);
+		enum connection_priority priority = getpri(d);
 
 		cc += d->running;
-		if (q < p) {
+		if (priority < prev_priority) {
 			if (!ps) {
 				internal("queue is not sorted");
 				sort_queue();
@@ -671,7 +672,7 @@ again:
 				break;
 			}
 		} else {
-			p = q;
+			prev_priority = priority;
 		}
 
 		if (d->state < 0) {
@@ -721,7 +722,7 @@ again:
 
 	while (c != (struct connection *)&queue) {
 		struct connection *d;
-		int cp = getpri(c);
+		enum connection_priority cp = getpri(c);
 
 		/* No way to reduce code redundancy here ? --Zas */
 		for (d = c; d != (struct connection *)&queue && getpri(d) == cp;) {
@@ -856,8 +857,8 @@ get_proxy(unsigned char *url)
 }
 
 int
-load_url(unsigned char *url, unsigned char *ref_url,
-	 struct status *stat, int pri, enum cache_mode cache_mode, int start)
+load_url(unsigned char *url, unsigned char *ref_url, struct status *stat,
+	 enum connection_priority pri, enum cache_mode cache_mode, int start)
 {
 	struct cache_entry *e = NULL;
 	struct connection *c;

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.18 2003/07/03 10:01:02 jonas Exp $ */
+/* $Id: connection.h,v 1.19 2003/07/03 10:32:58 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -13,14 +13,16 @@
 #include "util/lists.h"
 #include "util/types.h"
 
-#define PRI_MAIN	0
-#define PRI_DOWNLOAD	0
-#define PRI_FRAME	1
-#define PRI_NEED_IMG	2
-#define PRI_IMG		3
-#define PRI_PRELOAD	4
-#define PRI_CANCEL	5
-#define N_PRI		6
+enum connection_priority {
+	PRI_MAIN	= 0,
+	PRI_DOWNLOAD	= 0,
+	PRI_FRAME	= 1,
+	PRI_NEED_IMG	= 2,
+	PRI_IMG		= 3,
+	PRI_PRELOAD	= 4,
+	PRI_CANCEL	= 5,
+	PRIORITIES	= 6,
+};
 
 struct remaining_info {
 	ttime elapsed;
@@ -95,7 +97,7 @@ struct connection {
 	 * the struct status it got to the connection, _and_ updates its @pri
 	 * array by the priority it has thus, sum of values in all fields of
 	 * @pri is also kinda refcount of the connection. */
-	int pri[N_PRI];
+	int pri[PRIORITIES];
 
 	enum cache_mode cache_mode;
 	enum stream_encoding content_encoding;
@@ -164,7 +166,7 @@ struct status {
 
 	int state;
 	int prev_error;
-	int pri;
+	enum connection_priority pri;
 };
 
 extern struct list_head queue;
@@ -194,6 +196,6 @@ void set_timeout(struct connection *);
  * should be probably something else than data, but... ;-) */
 /* Returns 0 on success and -1 on failure. */
 int load_url(unsigned char *url, unsigned char *ref_url, struct status *stat,
-	     int pri, enum cache_mode cache_mode, int start);
+	     enum connection_priority pri, enum cache_mode cache_mode, int start);
 
 #endif

@@ -1,3 +1,9 @@
+Mon Feb 23 11:20:33 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: main.c, config/cmdline.c, config/cmdline.h:
+
+	Fixed elinks --version.  
+
 Sun Feb 22 13:30:21 2004  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

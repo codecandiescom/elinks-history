@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.22 2002/04/28 11:48:26 pasky Exp $ */
+/* $Id: session.c,v 1.23 2002/05/04 07:57:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -987,46 +987,65 @@ unsigned char *follow_url_hook(struct session *ses, unsigned char *url)
 }
 #endif
 
-void goto_url_w(struct session *ses, unsigned char *url, unsigned char *target, enum session_wtd wtd)
+void
+goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
+	   enum session_wtd wtd)
 {
 	unsigned char *u;
 	unsigned char *pos;
 	void (*fn)(struct session *, unsigned char *);
 	struct f_data_c *fd = current_frame(ses);
 	int l = 0;
-
 #ifdef HAVE_LUA
 	unsigned char *tofree = NULL;
-	if (!(url = follow_url_hook(ses, url))) goto end;
+
+	url = follow_url_hook(ses, url);
+	if (!url) goto end;
 	tofree = url;
 #endif
-	if ((fn = get_external_protocol_function(url))) {
+
+	fn = get_external_protocol_function(url);
+	if (fn) {
 		fn(ses, url);
 		goto end;
 	}
+
 	ses->reloadlevel = NC_CACHE;
-	if (!(u = translate_url(url, ses->term->cwd))) {
-		struct status stat = { NULL, NULL, NULL, NULL, S_BAD_URL, PRI_CANCEL, 0, NULL, NULL };
+
+	u = translate_url(url, ses->term->cwd);
+	if (!u) {
+		struct status stat = { NULL, NULL, NULL, NULL, S_BAD_URL,
+				       PRI_CANCEL, 0, NULL, NULL };
+
 		print_error_dialog(ses, &stat, TEXT(T_ERROR));
 		goto end;
 	}
 	pos = extract_position(u);
+
 	if (ses->wtd == wtd) {
 		if (!strcmp(ses->loading_url, u)) {
+			/* We're already loading the URL. */
 			mem_free(u);
-			if (ses->goto_position) mem_free(ses->goto_position);
+
+			if (ses->goto_position)
+				mem_free(ses->goto_position);
 			ses->goto_position = pos;
+
 			goto end;
 		}
 	}
+
 	abort_loading(ses);
 	if (ses->ref_url) mem_free(ses->ref_url), ses->ref_url=NULL;
+
 	if (fd && fd->f_data && fd->f_data->url) {
  		ses->ref_url = init_str();
 		add_to_str(&ses->ref_url, &l, fd->f_data->url);
 	}
+
 	ses_goto(ses, u, target, PRI_MAIN, NC_CACHE, wtd, pos, end_load, 0);
-	/*abort_loading(ses);*/
+
+	/* abort_loading(ses); */
 
 end:
 	clean_unhistory(ses);

@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.41 2003/05/25 09:35:22 zas Exp $ */
+/* $Id: conv.c,v 1.42 2003/07/21 04:00:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "elinks.h"
 
 #include "util/conv.h"
+#include "util/error.h"
 #include "util/string.h"
 
 
@@ -228,6 +229,176 @@ add_time_to_str(unsigned char **s, int *l, ttime t)
 	add_to_str(s, l, q);
 }
 
+
+struct string *
+add_long_to_string(struct string *string, long number)
+{
+	unsigned char buffer[32];
+	int length = 0;
+	int width;
+
+	assert(string);
+	if_assert_failed { return NULL; }
+
+	width = longcat(buffer, &length, number, sizeof(buffer) - 1, 0);
+	if (width < 0 || !length) return NULL;
+
+	return add_bytes_to_string(string, buffer, length);
+}
+
+struct string *
+add_knum_to_string(struct string *string, long num)
+{
+	int ret;
+	unsigned char t[32];
+	int tlen = 0;
+
+	if (num && (num / (1024 * 1024)) * (1024 * 1024) == num) {
+		ret = longcat(&t, &tlen, num / (1024 * 1024), sizeof(t) - 2, 0);
+		t[tlen++] = 'M';
+		t[tlen] = '\0';
+	} else if (num && (num / 1024) * 1024 == num) {
+		ret = longcat(&t, &tlen, num / 1024, sizeof(t) - 2, 0);
+		t[tlen++] = 'k';
+		t[tlen] = '\0';
+	} else {
+		ret = longcat(&t, &tlen, num, sizeof(t) - 1, 0);
+	}
+
+	if (ret < 0 || !tlen) return NULL;
+
+	add_bytes_to_string(string, t, tlen);
+
+	return string;
+}
+
+struct string *
+add_xnum_to_string(struct string *string, int xnum)
+{
+	unsigned char suff[3] = "\0i";
+	int d = -1;
+
+	/* XXX: I don't completely like the computation of d here. --pasky */
+	/* Mebi (Mi), 2^20 */
+	if (xnum >= 1024*1024)  {
+		suff[0] = 'M';
+	       	d = (xnum / (int)((int)(1024*1024)/(int)10)) % 10;
+	       	xnum /= 1024*1024;
+	/* Kibi (Ki), 2^10 */
+	} else if (xnum >= 1024) {
+		suff[0] = 'K';
+	       	d = (xnum / (int)((int)1024/(int)10)) % 10;
+		xnum /= 1024;
+	}
+	add_long_to_string(string, xnum);
+
+	if (xnum < 10 && d != -1) {
+		add_char_to_string(string, '.');
+	       	add_long_to_string(string, d);
+	}
+	add_char_to_string(string, ' ');
+
+	if (suff[0]) add_to_string(string, suff);
+	add_char_to_string(string, 'B');
+	return string;
+}
+
+struct string *
+add_time_to_string(struct string *string, ttime time)
+{
+	unsigned char q[64];
+	int qlen = 0;
+
+	time /= 1000;
+	time &= 0xffffffff;
+
+	if (time < 0) time = 0;
+
+	/* Days */
+	if (time >= (24 * 3600)) {
+		ulongcat(q, &qlen, (time / (24 * 3600)), 5, 0);
+		q[qlen++] = 'd';
+		q[qlen++] = ' ';
+	}
+
+	/* Hours and minutes */
+	if (time >= 3600) {
+		time %= (24 * 3600);
+		ulongcat(q, &qlen, (time / 3600), 4, 0);
+		q[qlen++] = ':';
+		ulongcat(q, &qlen, ((time / 60) % 60), 2, '0');
+	} else {
+		/* Only minutes */
+		ulongcat(q, &qlen, (time / 60), 2, 0);
+	}
+
+	/* Seconds */
+	q[qlen++] = ':';
+	ulongcat(q, &qlen, (time % 60), 2, '0');
+
+	add_to_string(string, q);
+	return string;
+}
+
+
+/* Encoders and string changers */
+
+struct string *
+add_string_replace(struct string *string, unsigned char *src, int len,
+		   unsigned char replaceable, unsigned char replacement)
+{
+	int oldlength = string->length;
+
+	if (!add_bytes_to_string(string, src, len))
+		return NULL;
+
+	for (src = string->source + oldlength; len; len--, src++)
+		if (*src == replaceable)
+			*src = replacement;
+
+	return string;
+}
+
+struct string *
+add_html_to_string(struct string *string, unsigned char *src, int len)
+{
+
+#ifndef HAVE_ISALNUM
+#define isalphanum(q) isA(q)
+#else
+#define isalphanum(q) (isalnum(q) || (q) == '-' || (q) == '_')
+#endif
+
+	for (; len; len--, src++) {
+		if (isalphanum(*src) || *src == ' '
+		    || *src == '.' || *src == ':' || *src == ';') {
+			add_bytes_to_string(string, src, 1);
+		} else {
+			add_bytes_to_string(string, "&#", 2);
+			add_long_to_string(string, (long) *src);
+			add_char_to_string(string, ';');
+		}
+	}
+
+#undef isalphanum
+
+	return string;
+}
+
+/* TODO Optimize later --pasky */
+struct string *
+add_quoted_to_string(struct string *string, unsigned char *src, int len)
+{
+	for (; len; len--, src++) {
+		if (*src == '"' || *src == '\\')
+			add_char_to_string(string, '\\');
+		add_char_to_string(string, *src);
+	}
+
+	return string;
+}
+
+
 long
 strtolx(unsigned char *str, unsigned char **end)
 {
@@ -255,6 +426,7 @@ strtolx(unsigned char *str, unsigned char **end)
 	}
 
 	return num;
+
 }
 
 

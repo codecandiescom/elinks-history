@@ -1,10 +1,11 @@
 /* String handling functions */
-/* $Id: string.c,v 1.52 2003/06/08 22:26:12 pasky Exp $ */
+/* $Id: string.c,v 1.53 2003/07/21 04:00:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <ctype.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,6 +17,7 @@
 #include "util/memdebug.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "util/snprintf.h"
 
 #define fatalfl(x) errfile = f, errline = l, elinks_internal(x)
 #define fatal(x) internal(x)
@@ -499,3 +501,165 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
 
 	return s;
 }
+
+
+/* The new string utilities: */
+
+/* Below are functions similar to add_*_to_str() but using the struct string.
+ * It is the preferred way to handle strings now and the old functions will be
+ * hopefully removed ASAP.
+ *
+ * Currently most of the functions use add_bytes_to_string() as a backend but
+ * later we can optimize each function. */
+
+struct string *
+init_string(struct string *string)
+{
+	assert(string);
+	if_assert_failed { return NULL; }
+
+	string->length = 0;
+	string->source = mem_alloc(ALLOC_GR);
+	if (!string->source) return NULL;
+
+	*string->source = 0;
+
+	return string;
+}
+
+void
+done_string(struct string *string)
+{
+	assert(string);
+	if_assert_failed { return; }
+
+	if (string->source) {
+		mem_free(string->source);
+		string->source = NULL;
+	}
+}
+
+#define mask(x)	((x) & ~(ALLOC_GR - 1))
+
+/* General useful to check if @_string_ needs reallocation to fit @_length_. */
+#define realloc_string(_string_, _newlength_)				\
+	if (mask((_string_)->length) != mask(_newlength_)) {		\
+		unsigned char *tmp = (_string_)->source;		\
+		tmp = mem_realloc(tmp, mask((_newlength_) + ALLOC_GR));	\
+		if (!tmp) return NULL;					\
+		(_string_)->source = tmp;				\
+	}
+
+struct string *
+add_bytes_to_string(struct string *string, unsigned char *bytes, int length)
+{
+	int newlength;
+
+	assert(string && bytes && length);
+	if_assert_failed { return NULL; }
+
+	newlength = string->length + length;
+	realloc_string(string, newlength);
+
+	memcpy(string->source + string->length, bytes, length);
+	string->length = newlength;
+	string->source[newlength] = 0;
+
+	return string;
+}
+
+struct string *
+add_to_string(struct string *string, unsigned char *source)
+{
+	assert(string && source);
+	if_assert_failed { return NULL; }
+
+	return (*source ? add_bytes_to_string(string, source, strlen(source))
+			: string);
+}
+
+struct string *
+add_string_to_string(struct string *string, struct string *from)
+{
+	assert(string && from);
+	if_assert_failed { return NULL; }
+
+	return (*from->source
+		? add_bytes_to_string(string, from->source, from->length)
+		: string);
+}
+
+struct string *
+string_concat(struct string *string, ...)
+{
+	va_list ap;
+	unsigned char *source;
+
+	assert(string);
+	if_assert_failed { return NULL; }
+
+	va_start(ap, string);
+	while ((source = va_arg(ap, unsigned char *)))
+		if (*source)
+			add_to_string(string, source);
+
+	va_end(ap);
+
+	return string;
+}
+
+struct string *
+add_char_to_string(struct string *string, unsigned char character)
+{
+	assert(string && character);
+	if_assert_failed { return NULL; }
+
+	return add_bytes_to_string(string, &character, 1);
+}
+
+struct string *
+add_xchar_to_string(struct string *string, unsigned char character, int times)
+{
+	unsigned char buffer[MAX_STR_LEN];
+
+	assert(string && character && times > 0);
+	if_assert_failed { return NULL; }
+
+	if (times > MAX_STR_LEN - 1) return NULL;
+
+	memset(buffer, character, times);
+
+	return add_bytes_to_string(string, buffer, times);
+}
+
+/* Add printf-like format string to @string. */
+struct string *
+add_format_to_string(struct string *string, unsigned char *format, ...)
+{
+	int newlength;
+	int width;
+	va_list ap;
+	va_list ap2;
+
+	assert(string && format);
+	if_assert_failed { return NULL; }
+
+	va_start(ap, format);
+	VA_COPY(ap2, ap);
+
+	width = vsnprintf(NULL, 0, format, ap2);
+	if (width <= 0) return NULL;
+
+	newlength = string->length + width;
+	realloc_string(string, newlength);
+
+	vsnprintf(&string->source[string->length], newlength, format, ap);
+
+	va_end(ap);
+
+	string->length = newlength;
+	string->source[newlength] = 0;
+
+	return string;
+}
+

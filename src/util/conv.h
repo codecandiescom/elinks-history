@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.12 2003/06/18 01:55:24 jonas Exp $ */
+/* $Id: conv.h,v 1.13 2003/07/21 04:00:39 jonas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -31,6 +31,37 @@ int add_knum_to_str(unsigned char **str, int *len, long num);
 void add_xnum_to_str(unsigned char **s, int *l, int n);
 void add_time_to_str(unsigned char **s, int *l, ttime t);
 void add_htmlesc_str(unsigned char **, int *, unsigned char *, int);
+
+struct string *add_long_to_string(struct string *string, long number);
+struct string *add_knum_to_string(struct string *string, long number);
+struct string *add_xnum_to_string(struct string *string, int number);
+struct string *add_time_to_string(struct string *string, ttime time);
+
+
+/* Encoders: */
+/* They encode and add to the string. This way we don't need to first allocate
+ * and encode a temporary string, add it and then free it. Can be used as
+ * backends for encoder. */
+
+/* A simple generic encoder. Should maybe take @replaceable as a string so we
+ * could also use if for adding shell safe strings. */
+struct string *
+add_string_replace(struct string *string, unsigned char *src, int len,
+		   unsigned char replaceable, unsigned char replacement);
+
+#define add_optname_to_string(str, src, len) \
+	add_string_replace(str, src, len, '.', '*')
+
+/* Maybe a bad name but it is actually the real name, but you may also think of
+ * it as adding the decoded option name. */
+#define add_real_optname_to_string(str, src, len) \
+	add_string_replace(str, src, len, '*', '.')
+
+/* Convert reserved chars to html &#xx */
+struct string *add_html_to_string(struct string *string, unsigned char *html, int htmllen);
+
+/* Escapes \ and " with a \ */
+struct string *add_quoted_to_string(struct string *string, unsigned char *q, int qlen);
 
 
 /* These are fast functions to convert integers to string, or to hexadecimal string. */

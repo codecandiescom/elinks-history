@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.36 2003/06/08 14:45:55 zas Exp $ */
+/* $Id: string.h,v 1.37 2003/07/21 04:00:39 jonas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -7,6 +7,7 @@
  * straconcat(). */
 
 #include <string.h>
+
 #include "util/memdebug.h"
 #include "util/memory.h"
 
@@ -162,5 +163,27 @@ unsigned char *elinks_stpcpy(unsigned char *, unsigned const char *);
 void *elinks_mempcpy(void *, const void *, size_t);
 #endif
 
+
+struct string {
+	unsigned char *source;
+	int length;
+};
+
+struct string *init_string(struct string *string);
+void done_string(struct string *string);
+
+struct string *add_bytes_to_string(struct string *string, unsigned char *bytes, int length);
+struct string *add_to_string(struct string *string, unsigned char *text);
+struct string *add_char_to_string(struct string *string, unsigned char character);
+struct string *add_string_to_string(struct string *to, struct string *from);
+
+/* Adds each C string to @string until a terminating NULL is met. */
+struct string *string_concat(struct string *string, ...);
+
+/* Extends the string with @times number of @character. */
+struct string *add_xchar_to_string(struct string *string, unsigned char character, int times);
+
+/* Add printf-like format string to @string. */
+struct string *add_format_to_string(struct string *string, unsigned char *format, ...);
 
 #endif /* EL__UTIL_STRING_H */

@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.19 2002/12/30 02:39:33 pasky Exp $ */
+/* $Id: parser.c,v 1.20 2002/12/30 02:43:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -395,11 +395,10 @@ tag_name_parse(struct parser_state *state, unsigned char **str, int *len)
 				while (node) {
 					/* XXX: We rely on the fact that all
 					 * non-leaf nodes are tags here. */
-					if (node->str &&
-					    !strncmp(node->str, *str,
-						name_len > node->strlen
-							? node->strlen
-							: name_len))
+					if (node->str
+					    && node->strlen == name_len
+					    && !strncasecmp(node->str, *str,
+								name_len))
 						break;
 					node = node->root;
 				}

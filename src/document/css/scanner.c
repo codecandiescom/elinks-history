@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.86 2004/01/22 21:26:43 pasky Exp $ */
+/* $Id: scanner.c,v 1.87 2004/01/22 21:38:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -310,7 +310,7 @@ scan_css_tokens(struct css_scanner *scanner)
 		return move_to_front ? table : NULL;
 	}
 
-	/* Scan tokens til we have filled the table */
+	/* Scan tokens until we fill the table */
 	for (table_end = table + CSS_SCANNER_TOKENS;
 	     current < table_end && *scanner->position;
 	     current++) {

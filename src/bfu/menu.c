@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.143 2003/12/27 00:56:45 zas Exp $ */
+/* $Id: menu.c,v 1.144 2003/12/27 01:38:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -722,11 +722,21 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 	/* FIXME: menu horizontal scrolling do not work well yet, we need to cache
 	 * menu items width and recalculate them only when needed (ie. language change)
 	 * instead of looping and calculate them each time. --Zas */
-	if (menu->selected < menu->first_displayed)
+check:
+	if (menu->selected < menu->first_displayed) {
 		menu->first_displayed--;
-	else if (menu->selected > menu->last_displayed) {
+		menu->last_displayed--;
+		goto check;
+	} else if (menu->selected > menu->last_displayed) {
 		menu->first_displayed++;
+		menu->last_displayed++;
+		goto check;
 	}
+
+	if (menu->last_displayed <= 0)
+		menu->last_displayed = menu->ni - 1;
+
+	int_bounds(&menu->last_displayed, 0, menu->ni - 1);
 	int_bounds(&menu->first_displayed, 0, menu->last_displayed);
 
 	draw_area(term, 0, 0, term->width, 1, ' ', 0, normal_color);

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.60 2003/07/04 13:34:48 jonas Exp $ */
+/* $Id: connection.c,v 1.61 2003/07/04 14:11:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -321,6 +321,15 @@ del_connection(struct connection *c)
 }
 
 
+static inline void
+done_keepalive_connection(struct keepalive_connection *kc)
+{
+	del_from_list(kc);
+	if (kc->conn != -1) close(kc->conn);
+	if (kc->host) mem_free(kc->host);
+	mem_free(kc);
+}
+
 static struct keepalive_connection *
 get_keepalive_connection(struct connection *c)
 {
@@ -359,9 +368,9 @@ has_keepalive_connection(struct connection *c)
 	c->sock1 = k->conn;
 	c->pf = k->pf;
 
-	del_from_list(k);
-	if (k->host) mem_free(k->host);
-	mem_free(k);
+	/* Mark that the socket should not be closed */
+	k->conn = -1;
+	done_keepalive_connection(k);
 
 	return 1;
 }
@@ -408,15 +417,6 @@ close:
 	check_queue_bugs();
 #endif
 	register_bottom_half((void (*)(void *))check_queue, NULL);
-}
-
-static inline void
-done_keepalive_connection(struct keepalive_connection *kc)
-{
-	del_from_list(kc);
-	close(kc->conn);
-	if (kc->host) mem_free(kc->host);
-	mem_free(kc);
 }
 
 static void

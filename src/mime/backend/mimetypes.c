@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.45 2004/07/20 07:26:27 miciah Exp $ */
+/* $Id: mimetypes.c,v 1.46 2004/10/19 09:35:30 zas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-2004 The ELinks Project */
@@ -251,7 +251,7 @@ get_content_type_mimetypes(unsigned char *extension)
 
 	extension++; /* Skip the leading '.' */
 	extensionlen = strlen(extension);
-	while (1) {
+	while (extensionlen) {
 		unsigned char *trimmed;
 
 		/* First the given type is looked up. */

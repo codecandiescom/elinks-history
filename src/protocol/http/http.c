@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.373 2004/12/16 15:10:44 jonas Exp $ */
+/* $Id: http.c,v 1.374 2004/12/19 02:21:13 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,7 @@
 #include "intl/gettext/libintl.h"
 #include "lowlevel/connect.h"
 #include "lowlevel/sysname.h"
+#include "modules/module.h"
 #include "osdep/ascii.h"
 #include "osdep/osdep.h"
 #include "protocol/auth/auth.h"
@@ -48,6 +49,18 @@
 
 
 static struct auth_entry proxy_auth;
+
+
+struct module http_protocol_module = struct_module(
+	/* name: */		N_("HTTP"),
+	/* options: */		NULL,
+	/* hooks: */		NULL,
+	/* submodules: */	NULL,
+	/* data: */		NULL,
+	/* init: */		NULL,
+	/* done: */		NULL
+);
+
 
 static void decompress_shutdown(struct connection *);
 

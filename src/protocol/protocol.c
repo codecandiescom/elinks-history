@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.86 2004/12/19 01:47:17 miciah Exp $ */
+/* $Id: protocol.c,v 1.87 2004/12/19 02:21:13 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -257,6 +257,7 @@ static struct module *protocol_submodules[] = {
 #ifdef CONFIG_GOPHER
 	&gopher_protocol_module,
 #endif
+	&http_protocol_module,
 #ifdef CONFIG_NNTP
 	&nntp_protocol_module,
 #endif

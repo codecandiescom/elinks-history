@@ -1,3 +1,34 @@
+Wed Feb 16 22:58:38 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	.*[^.]\)"$/\1."/gc to check.  
+
+Wed Feb 16 20:29:40 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Usual post-Witek cleanups. ;-) 
+
+Wed Feb 16 20:18:30 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	history.back() impemented.  
+
+Wed Feb 16 17:35:08 2005  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	Add toggle html/plain to right click menu, and make it to not
+	display reload/bookmark when no document is available.  
+
+Wed Feb 16 16:46:06 2005  Adam Golebiowski <adamg@pld-linux.org>:
+
+	* po/pl.po:
+
+	Polish translation was updated 
+
 Tue Feb 15 21:02:46 2005  Varga Balázs <vinnui@ent.hu>:
 
 	* po/hu.po:

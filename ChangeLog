@@ -1,3 +1,70 @@
+Thu Dec 26 21:47:08 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: main.c, dialogs/mime.c, lowlevel/kbd.c, lowlevel/sched.c,
+	lowlevel/select.c, lowlevel/terminal.c, protocol/file.c,
+	protocol/http/http.c:
+
+	Some more destatification ;-).  
+
+Thu Dec 26 21:26:28 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Massive HTTP uncompression routine rewrite, patch by witekfl,
+	polished and slightly extended by me. This should hopefully fix
+	number of arcane uncompression bugs.  
+
+Thu Dec 26 18:04:21 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Hmm, that open_encoded() move didn't work out.  
+
+Thu Dec 26 12:26:36 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Use PIPE_BUF instead of 4096. I hope PIPE_BUF is everywhere ;-).  
+
+Thu Dec 26 12:20:17 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Moved encoded stream initialization before the loop - this could fix
+	some weird bugs when reading compressed pages.  
+
+Thu Dec 26 03:11:33 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/download.c:
+
+	Fixed unintentional aborting of some downloads - now abort really
+	only when pressing the abort button.  
+
+Thu Dec 26 03:06:34 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: download.c, history.c, session.c, view.c,
+	html/parser.c, html/renderer.c, html/tables.c:
+
+	Removed some nonsense inlines.  
+
+Thu Dec 26 02:46:10 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/: parser.c, parser.h:
+
+	Added a primitive parser multiplexer.  
+
+Thu Dec 26 02:31:48 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/: attrib.h, syntree.c:
+
+	Removed space for cached real values from struct attribute.  
+
+Thu Dec 26 02:29:46 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/: syntree.c, syntree.h:
+
+	Added get_syntree_attrib().  
+
 Wed Dec 25 00:30:11 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/elusive/parser/parser.h:

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.9 2002/10/13 17:41:12 zas Exp $ */
+/* $Id: globhist.c,v 1.10 2002/11/15 17:20:30 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -24,6 +24,7 @@
 #include "globhist/globhist.h"
 #include "lowlevel/home.h"
 #include "lowlevel/ttime.h"
+#include "util/hash.h"
 #include "util/memory.h"
 #include "util/secsave.h"
 #include "util/string.h"
@@ -39,6 +40,7 @@ struct list_head gh_box_items = { &gh_box_items, &gh_box_items };
 
 struct list_head gh_boxes = { &gh_boxes, &gh_boxes };
 
+
 /* GUI stuff. Declared here because finalize_global_history() frees it. */
 unsigned char *gh_last_searched_title = NULL;
 unsigned char *gh_last_searched_url = NULL;
@@ -46,10 +48,30 @@ unsigned char *gh_last_searched_url = NULL;
 
 #ifdef GLOBHIST
 
+struct globhist_cache_entry {
+	struct globhist_cache_entry *next;
+	struct globhist_cache_entry *prev;
+	struct global_history_item *item;
+};
+
+struct hash *globhist_cache = NULL;
+int globhist_cache_entries = 0;
+
 
 void
 free_global_history_item(struct global_history_item *historyitem)
 {
+	if (globhist_cache) {
+		struct hash_item *item;
+
+		item = get_hash_item(globhist_cache, historyitem->url, strlen(historyitem->url));
+		if (item) {
+			mem_free(item->value);
+			del_hash_item(globhist_cache, item);
+			globhist_cache_entries--;
+		}
+	}
+
 	del_from_list(historyitem->box_item);
 	mem_free(historyitem->box_item);
 
@@ -101,21 +123,37 @@ delete_global_history_item(struct global_history_item *historyitem)
 	update_all_history_dialogs();
 }
 
+/* Search global history for item matching url. */
+struct global_history_item *
+get_global_history_item(unsigned char *url)
+{
+	if (!url) return NULL;
+
+	if (globhist_cache) {
+		/* Search for cached entry. */
+		struct hash_item *item;
+
+		item = get_hash_item(globhist_cache, url, strlen(url));
+		if (item) {
+			return ((struct globhist_cache_entry *)item->value)->item;
+		}
+	}
+
+	return NULL;
+}
+
+#if 0
 /* Search global history for certain item. There must be full match with the
  * parameter or the parameter must be NULL/zero. */
 struct global_history_item *
-get_global_history_item(unsigned char *url, unsigned char *title, ttime time)
+multiget_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 {
 	struct global_history_item *historyitem;
 
 	/* Code duplication vs performance, since this function is called most
 	 * of time for url matching only... Execution time is divided by 2. */
 	if (url && !title && !time) {
-		foreach (historyitem, global_history.items) {
-			if (!strcmp(historyitem->url, url)) {
-				return historyitem;
-			}
-		}
+		return get_global_history_item(url);
 	} else {
 		foreach (historyitem, global_history.items) {
 			if ((!url || !strcmp(historyitem->url, url)) &&
@@ -128,7 +166,25 @@ get_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 
 	return NULL;
 }
+#endif
 
+static void
+free_globhist_cache()
+{
+	if (globhist_cache) {
+		struct hash_item *item;
+		int i;
+
+		foreach_hash_item(item, *globhist_cache, i)
+			if (item->value)
+				mem_free(item->value);
+
+		free_hash(globhist_cache);
+	}
+
+	globhist_cache = NULL;
+	globhist_cache_entries = 0;
+}
 
 /* Add a new entry in history list, take care of duplicate, respect history
  * size limit, and update any open history dialogs. */
@@ -136,6 +192,7 @@ void
 add_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 {
 	struct global_history_item *history_item;
+	int max_globhist_items;
 
 	if (!get_opt_int("document.history.global.enable"))
 		return;
@@ -143,14 +200,12 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 	if (!title || !url)
 		return;
 
-	foreach (history_item, global_history.items) {
-		if (!strcmp(history_item->url, url)) {
-			delete_global_history_item(history_item);
-			break;
-		}
-	}
+	max_globhist_items = get_opt_int("document.history.global.max_items");
 
-	while (global_history.n > get_opt_int("document.history.global.max_items")) {
+	history_item = get_global_history_item(url);
+	if (history_item) delete_global_history_item(history_item);
+
+	while (global_history.n >= max_globhist_items) {
 		history_item = global_history.items.prev;
 
 		if ((void *) history_item == &global_history.items) {
@@ -191,6 +246,24 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 	add_to_list(gh_box_items, history_item->box_item);
 
 	update_all_history_dialogs();
+
+	/* Hash creation if needed. */
+	if (!globhist_cache)
+		globhist_cache = init_hash(8, &strhash);
+
+	if (globhist_cache && globhist_cache_entries < max_globhist_items) {
+		/* Create a new entry. */
+		struct globhist_cache_entry *globhistce = mem_alloc(sizeof(struct globhist_cache_entry));
+
+		if (!globhistce) return;
+
+		globhistce->item = history_item;
+		if (!add_hash_item(globhist_cache, history_item->url, strlen(history_item->url), globhistce)) {
+			mem_free(globhistce);
+		} else {
+			globhist_cache_entries++;
+		}
+	}
 }
 
 
@@ -327,6 +400,7 @@ free_global_history()
 	}
 
 	free_list(global_history.items);
+	free_globhist_cache();
 }
 
 void

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.42 2002/09/17 14:44:09 zas Exp $ */
+/* $Id: parser.c,v 1.43 2002/11/15 17:20:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -722,7 +722,7 @@ html_a(unsigned char *a)
 			format.target = stracpy(format.target_base);
 		}
 #ifdef GLOBHIST
-		if (get_global_history_item(format.link, NULL, 0))
+		if (get_global_history_item(format.link))
 			memcpy(&format.fg, &format.vlink, sizeof(struct rgb));
 		else
 #endif

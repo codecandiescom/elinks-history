@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.91 2004/01/24 23:11:29 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.92 2004/01/24 23:14:24 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -20,7 +20,9 @@ enum keymap {
 /* Note: if you add anything here, please keep it in alphabetical order,
  * and also update the table action_table[] in kbdbind.c.  */
 enum action {
-	ACT_NONE = 0,	/* KEEP IT HERE. */
+	/* These two actions are common over all keymaps: */
+	ACT_NONE = 0,
+	ACT_SCRIPTING_FUNCTION,
 
 	ACT_ABORT_CONNECTION,
 	ACT_ADD_BOOKMARK,
@@ -102,7 +104,6 @@ enum action {
 	ACT_SAVE_FORMATTED,
 	ACT_SAVE_OPTIONS,
 	ACT_SAVE_URL_AS,
-	ACT_SCRIPTING_FUNCTION,
 	ACT_SCROLL_DOWN,
 	ACT_SCROLL_LEFT,
 	ACT_SCROLL_RIGHT,

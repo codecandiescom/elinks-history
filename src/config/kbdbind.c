@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.178 2004/01/24 23:11:29 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.179 2004/01/24 23:14:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -434,6 +434,7 @@ add_actions_to_string(struct string *string, enum action *actions,
 
 static struct strtonum main_action_table[] = {
 	{ "none", ACT_NONE, DACT(N_("Do nothing")) },
+	{ " *scripting-function*", ACT_SCRIPTING_FUNCTION, NULL }, /* internal use only */
 	{ "abort-connection", ACT_ABORT_CONNECTION, DACT(N_("Abort connection")) },
 	{ "add-bookmark", ACT_ADD_BOOKMARK, DACT(N_("Add a new bookmark")) },
 	{ "add-bookmark-link", ACT_ADD_BOOKMARK_LINK, DACT(N_("Add a new bookmark using current link")) },
@@ -518,7 +519,6 @@ static struct strtonum main_action_table[] = {
 	{ "save-formatted", ACT_SAVE_FORMATTED, DACT(N_("Save formatted document")) },
 	{ "save-options", ACT_SAVE_OPTIONS, DACT(N_("Save options")), },
 	{ "save-url-as", ACT_SAVE_URL_AS, DACT(N_("Save URL as")) },
-	{ " *scripting-function*", ACT_SCRIPTING_FUNCTION, NULL }, /* internal use only */
 	{ "scroll-down", ACT_SCROLL_DOWN, DACT(N_("Scroll down")) },
 	{ "scroll-left", ACT_SCROLL_LEFT, DACT(N_("Scroll left")) },
 	{ "scroll-right", ACT_SCROLL_RIGHT, DACT(N_("Scroll right")) },
@@ -553,6 +553,7 @@ static struct strtonum main_action_table[] = {
 
 static struct strtonum edit_action_table[] = {
 	{ "none", ACT_NONE, DACT(N_("Do nothing")) },
+	{ " *scripting-function*", ACT_SCRIPTING_FUNCTION, NULL }, /* internal use only */
 	{ "abort-connection", ACT_ABORT_CONNECTION, DACT(N_("Abort connection")) },
 	{ "add-bookmark", ACT_ADD_BOOKMARK, DACT(N_("Add a new bookmark")) },
 	{ "add-bookmark-link", ACT_ADD_BOOKMARK_LINK, DACT(N_("Add a new bookmark using current link")) },
@@ -637,7 +638,6 @@ static struct strtonum edit_action_table[] = {
 	{ "save-formatted", ACT_SAVE_FORMATTED, DACT(N_("Save formatted document")) },
 	{ "save-options", ACT_SAVE_OPTIONS, DACT(N_("Save options")), },
 	{ "save-url-as", ACT_SAVE_URL_AS, DACT(N_("Save URL as")) },
-	{ " *scripting-function*", ACT_SCRIPTING_FUNCTION, NULL }, /* internal use only */
 	{ "scroll-down", ACT_SCROLL_DOWN, DACT(N_("Scroll down")) },
 	{ "scroll-left", ACT_SCROLL_LEFT, DACT(N_("Scroll left")) },
 	{ "scroll-right", ACT_SCROLL_RIGHT, DACT(N_("Scroll right")) },
@@ -672,6 +672,7 @@ static struct strtonum edit_action_table[] = {
 
 static struct strtonum menu_action_table[] = {
 	{ "none", ACT_NONE, DACT(N_("Do nothing")) },
+	{ " *scripting-function*", ACT_SCRIPTING_FUNCTION, NULL }, /* internal use only */
 	{ "abort-connection", ACT_ABORT_CONNECTION, DACT(N_("Abort connection")) },
 	{ "add-bookmark", ACT_ADD_BOOKMARK, DACT(N_("Add a new bookmark")) },
 	{ "add-bookmark-link", ACT_ADD_BOOKMARK_LINK, DACT(N_("Add a new bookmark using current link")) },
@@ -756,7 +757,6 @@ static struct strtonum menu_action_table[] = {
 	{ "save-formatted", ACT_SAVE_FORMATTED, DACT(N_("Save formatted document")) },
 	{ "save-options", ACT_SAVE_OPTIONS, DACT(N_("Save options")), },
 	{ "save-url-as", ACT_SAVE_URL_AS, DACT(N_("Save URL as")) },
-	{ " *scripting-function*", ACT_SCRIPTING_FUNCTION, NULL }, /* internal use only */
 	{ "scroll-down", ACT_SCROLL_DOWN, DACT(N_("Scroll down")) },
 	{ "scroll-left", ACT_SCROLL_LEFT, DACT(N_("Scroll left")) },
 	{ "scroll-right", ACT_SCROLL_RIGHT, DACT(N_("Scroll right")) },

@@ -1,3 +1,58 @@
+Sat Mar 16 00:23:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* af_unix.c, bfu.c, bookmarks.c, cache.c, charsets.c, connect.c,
+	cookies.c, default.c, dns.c, error.c, file.c, ftp.c, html.c,
+	html_r.c, html_tbl.c, http.c, https.c, kbd.c, kbdbind.c,
+	language.c, links.h, lua.c, main.c, menu.c, os_dep.c, os_depx.h,
+	sched.c, select.c, session.c, terminal.c, types.c, url.c, view.c:
+	
+	
+	First part of source layout change. Moved all foreign includes to
+	specific files which use them. This is going to improve speed of
+	complication, simplify various things and break the compilation on
+	dozens of obscure OSes. But it's still far from the main fun which
+	will yet come.
+
+Fri Mar 15 22:28:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
+	configure.in, stamp-h.in:
+	
+	...and finish the removal of config2.h and Makefile.gen ;)
+
+Fri Mar 15 22:22:39 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.am:
+	
+	removal of config2.h and Makefile.gen
+
+Fri Mar 15 22:21:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* INSTALL, Makefile.gen, config2.h, links.h, wipe-out-ssl:
+	
+	removal of config2.h and Makefile.gen - sorry, too dirty; if
+	someone will start to cry, we may reincarnate it into something
+	more elegant
+
+Fri Mar 15 22:10:50 2002  Petr Baudis <pasky@ji.cz>:
+
+	* session.c:
+	
+	Compilation fix - thanks, Stepan
+
+Fri Mar 15 19:44:12 2002  Petr Baudis <pasky@ji.cz>:
+
+	* language.inc, intl/czech.lng, intl/english.lng, intl/french.lng:
+	
+	French translation updates by <zas@norz.org>; more links -> elinks
+	stuff
+
+Fri Mar 15 19:34:52 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/w3m2links.gawk:
+	
+	w3m2links.gawk, script by <stephane.chazelas@free.fr>
+
 Fri Mar 15 19:30:52 2002  Petr Baudis <pasky@ji.cz>:
 
 	* session.c:

@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.18 2003/11/29 13:01:24 pasky Exp $ */
+/* $Id: header.c,v 1.19 2003/11/29 13:02:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,14 +24,18 @@ parse_http_header(unsigned char *head, unsigned char *item,
 	if (!head) return NULL;
 
 	for (pos = head; *pos; pos++) {
-		unsigned char *i;
-
 		if (*pos != '\n') continue;
 
 		pos++;
-		for (i = item; *i && *pos; i++, pos++)
-			if (upcase(*i) != upcase(*pos))
-				goto cont;
+
+		{
+			unsigned char *i;
+
+			for (i = item; *i && *pos; i++, pos++)
+				if (upcase(*i) != upcase(*pos))
+					goto cont;
+		}
+
 		if (!*pos) break;
 
 		if (pos[0] == ':') {

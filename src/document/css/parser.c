@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.14 2004/01/18 03:01:06 jonas Exp $ */
+/* $Id: parser.c,v 1.15 2004/01/18 12:50:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,7 +39,7 @@ css_parse_decl(struct list_head *props, unsigned char *string)
 
 		pos = strcspn(string, ":;");
 		if (string[pos] != ':') {
-			string += (string[pos] == ';') + pos;
+			string += pos + (string[pos] == ';');
 			continue;
 		}
 
@@ -77,6 +77,6 @@ css_parse_decl(struct list_head *props, unsigned char *string)
 
 ride_on:
 		pos = strcspn(string, ";");
-		string += (string[pos] == ';') + pos;
+		string += pos + (string[pos] == ';');
 	}
 }

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.85 2004/01/08 18:37:46 jonas Exp $ */
+/* $Id: info.c,v 1.86 2004/01/11 18:18:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,9 +138,8 @@ menu_copying(struct terminal *term, void *d, struct session *ses)
 			"\n"
 			"This program is free software; you can redistribute it "
 			"and/or modify it under the terms of the GNU General Public "
-			"License as published by the Free Software Foundation; "
-			"either version 2 of the License, or (at your option) any "
-			"later version."),
+			"License as published by the Free Software Foundation, "
+			"specifically version 2 of the License."),
 			VERSION_STRING),
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);

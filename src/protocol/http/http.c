@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.282 2004/04/22 19:38:58 pasky Exp $ */
+/* $Id: http.c,v 1.283 2004/04/22 19:40:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1369,7 +1369,7 @@ again:
 	}
 
 	if (info->length == -1
-	    || (PRE_HTTP_1_1(info->recv_version) < 1 && info->close))
+	    || (PRE_HTTP_1_1(info->recv_version) && info->close))
 		rb->close = 1;
 
 	read_http_data(conn, rb);

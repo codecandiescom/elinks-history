@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.82 2003/07/22 14:17:58 pasky Exp $ */
+/* $Id: download.c,v 1.83 2003/07/23 00:47:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1194,10 +1194,10 @@ type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
 	} else {
 		unsigned char *description = handler->description;
 		unsigned char *desc_sep;
-		unsigned char *filename;
-		int filenamelen;
+		struct string filename;
 
-		get_filename_from_url(ses->tq_url, &filename, &filenamelen);
+		if (init_string(&filename))
+			add_string_uri_filename_to_string(&filename, ses->tq_url);
 
 		if (description) {
 			desc_sep = "; ";
@@ -1206,15 +1206,19 @@ type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
 			description = "";
 		}
 
+		/* @filename.source should be last in the getml()s !
+		 * (It terminates the pointers list in case of allocation
+		 * failure.) */
+
 		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 			/* TODO: Improve the dialog to let the user correct the
 			 * used program. */
-			msg_box(ses->tab->term, getml(content_type, NULL), MSGBOX_FREE_TEXT,
+			msg_box(ses->tab->term, getml(content_type, filename.source, NULL), MSGBOX_FREE_TEXT,
 				N_("What to do?"), AL_CENTER,
 				msg_text(ses->tab->term, N_("Would you like to "
 					 "open the file '%s' (type: %s%s%s)\n"
 					 "with '%s', save it or display it?"),
-					 filename, content_type, desc_sep,
+					 filename.source, content_type, desc_sep,
 					 description, handler->program),
 				ses, 4,
 				N_("Open"), tp_open, B_ENTER,
@@ -1222,12 +1226,12 @@ type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
 				N_("Display"), tp_display, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
-			msg_box(ses->tab->term, getml(content_type, NULL), MSGBOX_FREE_TEXT,
+			msg_box(ses->tab->term, getml(content_type, filename.source, NULL), MSGBOX_FREE_TEXT,
 				N_("What to do?"), AL_CENTER,
 				msg_text(ses->tab->term, N_("Would you like to "
 					 "open the file '%s' (type: %s%s%s)\n"
 					 "with '%s', or display it?"),
-					 filename, content_type, desc_sep,
+					 filename.source, content_type, desc_sep,
 					 description, handler->program),
 				ses, 3,
 				N_("Open"), tp_open, B_ENTER,

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.23 2003/07/23 00:30:15 pasky Exp $ */
+/* $Id: uri.h,v 1.24 2003/07/23 00:47:11 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -78,7 +78,7 @@ unsigned char *join_urls(unsigned char *, unsigned char *);
 unsigned char *translate_url(unsigned char *, unsigned char *);
 unsigned char *extract_position(unsigned char *);
 unsigned char *extract_proxy(unsigned char *);
-void get_filename_from_url(unsigned char *, unsigned char **, int *);
+struct string *add_string_uri_filename_to_string(struct string *string, unsigned char *);
 
 /* Returns allocated string containing the biggest possible extension.
  * If url is 'jabadaba.1.foo.gz' the returned extension is '1.foo.gz' */

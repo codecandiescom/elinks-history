@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.48 2003/11/13 17:56:00 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.49 2003/11/17 18:03:36 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -29,6 +29,7 @@ enum keyact {
 	ACT_BACK,
 	ACT_BACKSPACE,
 	ACT_BOOKMARK_MANAGER,
+	ACT_CACHE_MANAGER,
 	ACT_COOKIES_LOAD,
 	ACT_COPY_CLIPBOARD,
 	ACT_CUT_CLIPBOARD,

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.95 2003/11/17 11:06:36 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.96 2003/11/17 18:03:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -387,6 +387,7 @@ static struct strtonum action_table[] = {
 	{ "back", ACT_BACK, DACT(N_("Return to the previous document in history")) },
 	{ "backspace", ACT_BACKSPACE, DACT(N_("Delete character in front of the cursor")) },
 	{ "bookmark-manager", ACT_BOOKMARK_MANAGER, DACT(N_("Open bookmark manager")) },
+	{ "cache-manager", ACT_CACHE_MANAGER, DACT(N_("Open cache manager")) },
 	{ "cookies-load", ACT_COOKIES_LOAD, DACT(N_("Reload cookies file")) },
 	{ "copy-clipboard", ACT_COPY_CLIPBOARD, DACT(N_("Copy text to clipboard")) },
 	{ "cut-clipboard", ACT_CUT_CLIPBOARD, DACT(N_("Delete text from clipboard")) },
@@ -731,6 +732,7 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_ADD_BOOKMARK_LINK, 'A' },
 	{ ACT_BOOKMARK_MANAGER, 's' },
 	{ ACT_BOOKMARK_MANAGER, 'S' },
+	{ ACT_CACHE_MANAGER, 'C' },
 	{ ACT_HISTORY_MANAGER, 'h' },
 	{ ACT_OPTIONS_MANAGER, 'o' },
 	{ ACT_KEYBINDING_MANAGER, 'k' },

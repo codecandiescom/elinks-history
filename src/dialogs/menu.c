@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.187 2003/11/17 18:00:31 pasky Exp $ */
+/* $Id: menu.c,v 1.188 2003/11/17 18:03:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -328,7 +328,7 @@ static struct menu_item file_menu12[] = {
 #ifdef BOOKMARKS
 	INIT_MENU_ITEM(N_("Bookmark~s"), "s", menu_bookmark_manager, NULL, 0),
 #endif
-	INIT_MENU_ITEM(N_("~Cache"), "", menu_cache_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("~Cache"), "C", menu_cache_manager, NULL, 0),
 };
 
 static struct menu_item file_menu21[] = {

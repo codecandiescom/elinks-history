@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.29 2003/12/05 18:14:37 pasky Exp $ */
+/* $Id: cgi.c,v 1.30 2003/12/05 18:17:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 #ifdef ELINKS_LOCAL_CGI
 
 #include "config/options.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/sysname.h"
 #include "mime/backend/common.h"
 #include "osdep/osdep.h"
@@ -201,8 +202,16 @@ set_vars(struct connection *conn, unsigned char *script)
 	/* We do not set HTTP_ACCEPT_ENCODING. Yeah, let's let the CGI script
 	 * gzip the stuff so that the CPU doesn't at least sit idle. */
 
-	setenv("HTTP_ACCEPT_LANGUAGE",
-		get_opt_str("protocol.http.accept_language"), 1);
+	optstr = get_opt_str("protocol.http.accept_language");
+	if (optstr[0]) {
+		setenv("HTTP_ACCEPT_LANGUAGE", optstr, 1);
+	}
+#ifdef ENABLE_NLS
+	else if (get_opt_bool("protocol.http.accept_ui_language")) {
+		setenv("HTTP_ACCEPT_LANGUAGE",
+			language_to_iso639(current_language), 1);
+	}
+#endif
 
 	return 0;
 }
